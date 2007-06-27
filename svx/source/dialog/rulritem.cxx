@@ -4,9 +4,9 @@
  *
  *  $RCSfile: rulritem.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: vg $ $Date: 2006-11-21 17:07:56 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 17:37:27 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -40,7 +40,7 @@
 #include <tools/string.hxx>
 #endif
 
-#include "dialogs.hrc"
+#include <svx/dialogs.hrc>
 #include "rulritem.hxx"
 
 #ifndef _COM_SUN_STAR_AWT_RECTANGLE_HPP_
