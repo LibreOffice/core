@@ -4,9 +4,9 @@
  *
  *  $RCSfile: XMLTextHeaderFooterContext.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 12:59:20 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 14:44:09 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -37,7 +37,7 @@
 
 
 #ifndef _XMLOFF_XMLICTXT_HXX_
-#include "xmlictxt.hxx"
+#include <xmloff/xmlictxt.hxx>
 #endif
 
 namespace com { namespace sun { namespace star {
