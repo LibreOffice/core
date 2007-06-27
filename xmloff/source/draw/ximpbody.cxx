@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ximpbody.cxx,v $
  *
- *  $Revision: 1.32 $
+ *  $Revision: 1.33 $
  *
- *  last change: $Author: ihi $ $Date: 2006-11-14 14:16:04 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 15:09:01 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -40,7 +40,7 @@
 #endif
 
 #ifndef _XMLOFF_PRSTYLEI_HXX_
-#include "prstylei.hxx"
+#include <xmloff/prstylei.hxx>
 #endif
 
 #ifndef _XIMPNOTES_HXX
@@ -80,15 +80,15 @@
 #endif
 
 #ifndef _XMLOFF_XMLUCONV_HXX
-#include "xmluconv.hxx"
+#include <xmloff/xmluconv.hxx>
 #endif
 
 #ifndef _XMLOFF_PROPERTYSETMAPPER_HXX
-#include "xmlprmap.hxx"
+#include <xmloff/xmlprmap.hxx>
 #endif
 
 #ifndef _XMLOFF_FAMILIES_HXX_
-#include "families.hxx"
+#include <xmloff/families.hxx>
 #endif
 
 #ifndef _XMLOFF_XIMPSHOW_HXX
