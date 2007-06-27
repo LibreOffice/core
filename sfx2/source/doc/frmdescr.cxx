@@ -4,9 +4,9 @@
  *
  *  $RCSfile: frmdescr.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 16:41:16 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 23:21:48 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -50,8 +50,8 @@
 #ifndef GCC
 #endif
 
-#include "frmdescr.hxx"
-#include "app.hxx"
+#include <sfx2/frmdescr.hxx>
+#include <sfx2/app.hxx>
 
 DBG_NAME(SfxFrameDescriptor);
 
