@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ddeinf.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: vg $ $Date: 2007-03-26 14:46:42 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 21:59:25 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -40,7 +40,7 @@
 
 #include <string.h>
 #include "ddeimp.hxx"
-#include <svdde.hxx>
+#include <svtools/svdde.hxx>
 
 // --- DdeInternal::InfCallback() ----------------------------------
 
