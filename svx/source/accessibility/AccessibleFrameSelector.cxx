@@ -4,9 +4,9 @@
  *
  *  $RCSfile: AccessibleFrameSelector.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: rt $ $Date: 2007-04-26 07:24:17 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 16:37:23 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -76,17 +76,17 @@
 #endif
 
 #ifndef SVX_FRMSEL_HXX
-#include "frmsel.hxx"
+#include <svx/frmsel.hxx>
 #endif
 #ifndef _SVX_DIALMGR_HXX
-#include "dialmgr.hxx"
+#include <svx/dialmgr.hxx>
 #endif
 #ifndef _UNO_LINGU_HXX
 #include "unolingu.hxx"
 #endif
 
 #ifndef _SVX_DIALOGS_HRC
-#include "dialogs.hrc"
+#include <svx/dialogs.hrc>
 #endif
 #ifndef SVX_FRMSEL_HRC
 #include "frmsel.hrc"
