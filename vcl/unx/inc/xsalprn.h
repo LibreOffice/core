@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xsalprn.h,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 12:50:40 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 20:44:12 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -58,11 +58,11 @@ typedef int (*XSalPrinterCallback)( XSalPointer cb_data, XSalPointer client_data
 #ifndef _SV_SV_H
 #define _SV_SV_H
 #define USHORT unsigned short
-#include <prntypes.hxx>
+#include <vcl/prntypes.hxx>
 #undef USHORT
 #undef _SV_SV_H
 #else
-#include <prntypes.hxx>
+#include <vcl/prntypes.hxx>
 #endif
 
 typedef enum Orientation Orientation;
