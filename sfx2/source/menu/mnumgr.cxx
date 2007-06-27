@@ -4,9 +4,9 @@
  *
  *  $RCSfile: mnumgr.cxx,v $
  *
- *  $Revision: 1.39 $
+ *  $Revision: 1.40 $
  *
- *  last change: $Author: rt $ $Date: 2007-04-26 10:15:09 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 23:31:29 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -58,7 +58,7 @@
 #endif
 
 #include <unotools/streamwrap.hxx>
-#include <objsh.hxx>
+#include <sfx2/objsh.hxx>
 #include <framework/menuconfiguration.hxx>
 #include <framework/addonmenu.hxx>
 #include <comphelper/processfactory.hxx>
@@ -67,28 +67,28 @@
 #include <svtools/pathoptions.hxx>
 #include <toolkit/helper/vclunohelper.hxx>
 
-#include "mnumgr.hxx"
+#include <sfx2/mnumgr.hxx>
 
 #define _SVSTDARR_USHORTS
 #include <svtools/svstdarr.hxx>
 #include <svtools/menuoptions.hxx>
 
 #include "virtmenu.hxx"
-#include "msg.hxx"
-#include "dispatch.hxx"
-#include "minstack.hxx"
-#include "app.hxx"
+#include <sfx2/msg.hxx>
+#include <sfx2/dispatch.hxx>
+#include <sfx2/minstack.hxx>
+#include <sfx2/app.hxx>
 #include "sfxtypes.hxx"
-#include "bindings.hxx"
+#include <sfx2/bindings.hxx>
 #include "mnucfga.hxx"
 #include "sfxresid.hxx"
-#include "macrconf.hxx"
-#include "msgpool.hxx"
-#include "sfx.hrc"
+#include <sfx2/macrconf.hxx>
+#include <sfx2/msgpool.hxx>
+#include <sfx2/sfx.hrc>
 #include "menu.hrc"
-#include "viewfrm.hxx"
-#include "viewsh.hxx"
-#include "objface.hxx"
+#include <sfx2/viewfrm.hxx>
+#include <sfx2/viewsh.hxx>
+#include <sfx2/objface.hxx>
 
 static const USHORT nCompatVersion = 4;
 static const USHORT nVersion = 5;
