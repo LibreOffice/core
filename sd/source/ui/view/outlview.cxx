@@ -4,9 +4,9 @@
  *
  *  $RCSfile: outlview.cxx,v $
  *
- *  $Revision: 1.46 $
+ *  $Revision: 1.47 $
  *
- *  last change: $Author: kz $ $Date: 2007-05-10 15:36:34 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 15:47:47 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -178,7 +178,6 @@ OutlineView::OutlineView( DrawDocShell* pDocSh, ::Window* pWindow, OutlineViewSh
 , mpProgress(NULL)
 , mbHighContrastMode( false )
 , maDocColor( COL_WHITE )
-, mnIgnoreCurrentPageChangesLevel(0)
 {
     BOOL bInitOutliner = FALSE;
 
@@ -1466,7 +1465,7 @@ Paragraph* OutlineView::GetParagraphForPage( ::Outliner* pOutl, SdPage* pPage )
 /** selects the paragraph for the given page at the outliner view*/
 void OutlineView::SetActualPage( SdPage* pActual )
 {
-    if( pActual && mnIgnoreCurrentPageChangesLevel==0 && !mbFirstPaint)
+    if( pActual && mpOutliner && dynamic_cast<Outliner*> ( mpOutliner )->GetIgnoreCurrentPageChangesLevel()==0 && !mbFirstPaint)
     {
         // if we found a paragraph, select its text at the outliner view
         Paragraph* pPara = GetParagraphForPage( mpOutliner, pActual );
@@ -1690,7 +1689,7 @@ IMPL_LINK(OutlineView, EventMultiplexerListener, ::sd::tools::EventMultiplexerEv
                 break;
 
             case tools::EventMultiplexerEvent::EID_PAGE_ORDER:
-                if (mpOutliner != NULL && mpDoc!=NULL && mnIgnoreCurrentPageChangesLevel==0)
+                if (mpOutliner != NULL && mpDoc!=NULL && mpOutliner != NULL && dynamic_cast<Outliner*> ( mpOutliner )->GetIgnoreCurrentPageChangesLevel()==0)
                 {
                     if (((mpDoc->GetPageCount()-1)%2) == 0)
                     {
@@ -1709,10 +1708,13 @@ IMPL_LINK(OutlineView, EventMultiplexerListener, ::sd::tools::EventMultiplexerEv
 
 void OutlineView::IgnoreCurrentPageChanges (bool bIgnoreChanges)
 {
-    if (bIgnoreChanges)
-        mnIgnoreCurrentPageChangesLevel++;
-    else
-        mnIgnoreCurrentPageChangesLevel--;
+    if ( mpOutliner )
+    {
+        if (bIgnoreChanges)
+            dynamic_cast<Outliner*> ( mpOutliner )->IncreIgnoreCurrentPageChangesLevel();
+        else
+            dynamic_cast<Outliner*> ( mpOutliner )->DecreIgnoreCurrentPageChangesLevel();
+    }
 }
 
 /** call this method before you do anything that can modify the outliner
