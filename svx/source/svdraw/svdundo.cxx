@@ -4,9 +4,9 @@
  *
  *  $RCSfile: svdundo.cxx,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: kz $ $Date: 2006-12-12 16:02:19 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 19:12:54 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -36,25 +36,25 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_svx.hxx"
 
-#include "svdundo.hxx"
+#include <svx/svdundo.hxx>
 #include "svditext.hxx"
-#include "svdotext.hxx"
-#include "svdobj.hxx"
-#include "svdpage.hxx"
-#include "svdlayer.hxx"
-#include "svdmodel.hxx"
-#include "svdview.hxx"
+#include <svx/svdotext.hxx>
+#include <svx/svdobj.hxx>
+#include <svx/svdpage.hxx>
+#include <svx/svdlayer.hxx>
+#include <svx/svdmodel.hxx>
+#include <svx/svdview.hxx>
 #include "svdstr.hrc"   // Namen aus der Resource
 #include "svdglob.hxx"  // StringCache
-#include "scene3d.hxx"
+#include <svx/scene3d.hxx>
 
 #ifndef _OUTLOBJ_HXX //autogen
-#include <outlobj.hxx>
+#include <svx/outlobj.hxx>
 #endif
 
 // #i11426#
 #ifndef _SVDOGRP_HXX
-#include <svdogrp.hxx>
+#include <svx/svdogrp.hxx>
 #endif
 
 #ifndef _SDR_PROPERTIES_ITEMSETTOOLS_HXX
@@ -67,7 +67,7 @@
 
 // #109587#
 #ifndef _SVDCAPT_HXX
-#include <svdocapt.hxx>
+#include <svx/svdocapt.hxx>
 #endif
 
 // #109587#
