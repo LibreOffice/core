@@ -4,9 +4,9 @@
  *
  *  $RCSfile: sbxbase.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 10:07:56 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 14:27:50 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -45,9 +45,9 @@
 #include <tools/stream.hxx>
 #endif
 
-#include "sbx.hxx"
-#include "sbxfac.hxx"
-#include "sbxbase.hxx"
+#include <basic/sbx.hxx>
+#include <basic/sbxfac.hxx>
+#include <basic/sbxbase.hxx>
 
 // AppData-Struktur fuer SBX:
 
