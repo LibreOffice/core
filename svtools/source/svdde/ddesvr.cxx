@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ddesvr.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: vg $ $Date: 2007-05-25 11:07:34 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 21:59:57 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -38,8 +38,8 @@
 
 #define UNICODE
 #include "ddeimp.hxx"
-#include <svdde.hxx>
-#include <svarray.hxx>
+#include <svtools/svdde.hxx>
+#include <svtools/svarray.hxx>
 
 #ifndef _TOOLS_DEBUG_HXX //autogen
 #include <tools/debug.hxx>
