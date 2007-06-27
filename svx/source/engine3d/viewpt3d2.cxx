@@ -4,9 +4,9 @@
  *
  *  $RCSfile: viewpt3d2.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2006-12-05 12:11:11 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 18:07:03 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -37,11 +37,11 @@
 #include "precompiled_svx.hxx"
 
 #ifndef _VIEWPT3D_HXX
-#include "viewpt3d.hxx"
+#include <svx/viewpt3d.hxx>
 #endif
 
 #ifndef _VOLUME3D_HXX
-#include "volume3d.hxx"
+#include <svx/volume3d.hxx>
 #endif
 
 /*************************************************************************
