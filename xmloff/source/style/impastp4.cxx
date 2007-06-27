@@ -4,9 +4,9 @@
  *
  *  $RCSfile: impastp4.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: rt $ $Date: 2006-12-01 15:26:50 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 15:40:10 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -41,34 +41,34 @@
 #endif
 
 #ifndef _XMLOFF_XMLASTPLP_HXX
-#include "xmlaustp.hxx"
+#include <xmloff/xmlaustp.hxx>
 #endif
 #ifndef _XMLOFF_XMLTOKEN_HXX
-#include "xmltoken.hxx"
+#include <xmloff/xmltoken.hxx>
 #endif
 #ifndef _XMLOFF_NMSPMAP_HXX
-#include "nmspmap.hxx"
+#include <xmloff/nmspmap.hxx>
 #endif
 #ifndef _XMLOFF_XMLNMSPE_HXX
 #include "xmlnmspe.hxx"
 #endif
 #ifndef _XMLOFF_ATTRLIST_HXX
-#include "attrlist.hxx"
+#include <xmloff/attrlist.hxx>
 #endif
 #ifndef _XMLOFF_XMLASTPL_IMPL_HXX
 #include "impastpl.hxx"
 #endif
 #ifndef _XMLOFF_XMLEXPPR_HXX
-#include "xmlexppr.hxx"
+#include <xmloff/xmlexppr.hxx>
 #endif
 #ifndef _XMLOFF_XMLEXP_HXX
-#include "xmlexp.hxx"
+#include <xmloff/xmlexp.hxx>
 #endif
 #ifndef _XMLOFF_FAMILIES_HXX_
-#include "families.hxx"
+#include <xmloff/families.hxx>
 #endif
 #ifndef _XMLOFF_PAGEMASTERSTYLEMAP_HXX
-#include "PageMasterStyleMap.hxx"
+#include <xmloff/PageMasterStyleMap.hxx>
 #endif
 
 using namespace ::std;
