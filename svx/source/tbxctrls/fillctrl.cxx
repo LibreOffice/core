@@ -4,9 +4,9 @@
  *
  *  $RCSfile: fillctrl.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: kz $ $Date: 2007-05-10 15:00:53 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 19:16:12 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -54,7 +54,7 @@
 #endif
 #include <rtl/ustring.hxx>
 
-#include "dialogs.hrc"
+#include <svx/dialogs.hrc>
 
 #define DELAY_TIMEOUT           300
 
@@ -63,10 +63,10 @@
 
 #include "drawitem.hxx"
 #include "xattr.hxx"
-#include "xtable.hxx"
-#include "fillctrl.hxx"
-#include "itemwin.hxx"
-#include "dialmgr.hxx"
+#include <svx/xtable.hxx>
+#include <svx/fillctrl.hxx>
+#include <svx/itemwin.hxx>
+#include <svx/dialmgr.hxx>
 #include "helpid.hrc"
 
 using namespace ::com::sun::star::uno;
