@@ -4,9 +4,9 @@
  *
  *  $RCSfile: accessibilityoptions.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 14:20:29 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 21:09:48 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -41,7 +41,7 @@
 #endif
 #define SVT_DLLIMPLEMENTATION
 
-#include "accessibilityoptions.hxx"
+#include <svtools/accessibilityoptions.hxx>
 
 #ifndef _UTL_CONFIGMGR_HXX_
 #include <unotools/configmgr.hxx>
@@ -56,7 +56,7 @@
 #include <com/sun/star/uno/Sequence.hxx>
 #endif
 #ifndef _SFXSMPLHINT_HXX
-#include "smplhint.hxx"
+#include <svtools/smplhint.hxx>
 #endif
 
 #include <vcl/settings.hxx>
