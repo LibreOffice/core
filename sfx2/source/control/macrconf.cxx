@@ -4,9 +4,9 @@
  *
  *  $RCSfile: macrconf.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: obo $ $Date: 2006-10-12 15:50:52 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 23:05:58 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -76,22 +76,22 @@
 #include <unotools/intlwrapper.hxx>
 #endif
 
-#include "msgpool.hxx"
-#include "macrconf.hxx"
+#include <sfx2/msgpool.hxx>
+#include <sfx2/macrconf.hxx>
 #include "sfxbasic.hxx"
-#include "sfx.hrc"
-#include "app.hxx"
-#include "objsh.hxx"
-#include "dispatch.hxx"
+#include <sfx2/sfx.hrc>
+#include <sfx2/app.hxx>
+#include <sfx2/objsh.hxx>
+#include <sfx2/dispatch.hxx>
 #include "minfitem.hxx"
 #include "imgmgr.hxx"
-#include "evntconf.hxx"
-#include "docfile.hxx"
-#include "genlink.hxx"
-#include <viewfrm.hxx>
+#include <sfx2/evntconf.hxx>
+#include <sfx2/docfile.hxx>
+#include <sfx2/genlink.hxx>
+#include <sfx2/viewfrm.hxx>
 #include <appdata.hxx>
 #include "objshimp.hxx"
-#include "request.hxx"
+#include <sfx2/request.hxx>
 
 static const sal_uInt16 nCompatVersion = 2;
 static const sal_uInt16 nVersion = 3;
