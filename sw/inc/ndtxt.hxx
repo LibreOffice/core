@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ndtxt.hxx,v $
  *
- *  $Revision: 1.47 $
+ *  $Revision: 1.48 $
  *
- *  last change: $Author: hr $ $Date: 2007-01-02 16:45:28 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 13:13:59 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -50,6 +50,11 @@
 #ifndef _ERRHDL_HXX
 #include <errhdl.hxx>
 #endif
+#ifndef _MODELTOVIEWHELPER_HXX
+#include <modeltoviewhelper.hxx>
+#endif
+
+#include <vector>
 
 namespace utl {
     class TransliterationWrapper;
@@ -80,6 +85,7 @@ struct SwParaIdleData_Impl;
 namespace com { namespace sun { namespace star { namespace uno {
     template < class > class Sequence;
 }}}}
+
 
 // --------------------
 // SwTxtNode
@@ -575,6 +581,13 @@ public:
                         xub_StrLen nIdx = 0, xub_StrLen nLen = STRING_LEN,
                        BOOL bWithNum = FALSE, BOOL bWithFtn = TRUE,
                        BOOL bReplaceTabsWithSpaces = FALSE ) const;
+
+    /*
+     *
+     */
+    const ModelToViewHelper::ConversionMap*
+            BuildConversionMap( rtl::OUString& rExpandText ) const;
+
     XubString GetRedlineTxt( xub_StrLen nIdx = 0,
                           xub_StrLen nLen = STRING_LEN,
                           BOOL bExpandFlds = FALSE,
