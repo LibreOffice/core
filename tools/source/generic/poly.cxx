@@ -4,9 +4,9 @@
  *
  *  $RCSfile: poly.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: kz $ $Date: 2007-05-09 13:22:58 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 22:14:17 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -42,28 +42,28 @@
 #include <osl/endian.h>
 #endif
 #ifndef _BIGINT_HXX
-#include <bigint.hxx>
+#include <tools/bigint.hxx>
 #endif
 #ifndef _DEBUG_HXX
-#include <debug.hxx>
+#include <tools/debug.hxx>
 #endif
 #ifndef _STREAM_HXX
-#include <stream.hxx>
+#include <tools/stream.hxx>
 #endif
 #ifndef _VCOMPAT_HXX
-#include <vcompat.hxx>
+#include <tools/vcompat.hxx>
 #endif
 #ifndef _POLY_H
 #include <poly.h>
 #endif
 #ifndef _LINE_HXX
-#include <line.hxx>
+#include <tools/line.hxx>
 #endif
 #ifndef _VECTOR2D_H
-#include <vector2d.hxx>
+#include <tools/vector2d.hxx>
 #endif
 #ifndef _POLY_HXX
-#include <poly.hxx>
+#include <tools/poly.hxx>
 #endif
 
 #ifndef _BGFX_POLYGON_B2DPOLYGON_HXX
