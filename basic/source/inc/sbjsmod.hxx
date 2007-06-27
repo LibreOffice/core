@@ -4,9 +4,9 @@
  *
  *  $RCSfile: sbjsmod.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: hr $ $Date: 2005-09-29 16:31:39 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 14:22:46 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -36,7 +36,7 @@
 #ifndef _SB_SBJSMOD_HXX
 #define _SB_SBJSMOD_HXX
 
-#include <sbmod.hxx>
+#include <basic/sbmod.hxx>
 
 // Basic-Modul fuer JavaScript-Sourcen.
 // Alle Basic-spezifischen Methoden muessen virtuell ueberladen und deaktiviert
