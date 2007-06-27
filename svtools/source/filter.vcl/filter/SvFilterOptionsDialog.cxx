@@ -4,9 +4,9 @@
  *
  *  $RCSfile: SvFilterOptionsDialog.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 14:50:50 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 21:33:23 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -39,10 +39,10 @@
 #include "SvFilterOptionsDialog.hxx"
 
 #ifndef _FILTER_CONFIG_ITEM_HXX_
-#include "FilterConfigItem.hxx"
+#include <svtools/FilterConfigItem.hxx>
 #endif
 #ifndef _FILTER_HXX
-#include "filter.hxx"
+#include <svtools/filter.hxx>
 #endif
 #ifndef _FILTER_CONFIG_CACHE_HXX_
 #include "FilterConfigCache.hxx"
@@ -53,8 +53,8 @@
 #ifndef _OSL_MODULE_HXX_
 #include <osl/module.hxx>
 #endif
-#include "solar.hrc"
-#include "fltcall.hxx"
+#include <svtools/solar.hrc>
+#include <svtools/fltcall.hxx>
 #include "dlgexpor.hxx"
 #include "dlgejpg.hxx"
 #include "dlgepng.hxx"
@@ -79,7 +79,7 @@
 #include <com/sun/star/uno/Any.h>
 #endif
 #ifndef INCLUDED_SVTOOLS_SYSLOCALE_HXX
-#include <syslocale.hxx>
+#include <svtools/syslocale.hxx>
 #endif
 #ifndef _SV_SVAPP_HXX
 #include "vcl/svapp.hxx"
