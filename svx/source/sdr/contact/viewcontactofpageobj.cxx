@@ -4,9 +4,9 @@
  *
  *  $RCSfile: viewcontactofpageobj.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: hr $ $Date: 2007-06-26 12:06:06 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 18:45:36 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -41,7 +41,7 @@
 #endif
 
 #ifndef _SVDOPAGE_HXX
-#include <svdopage.hxx>
+#include <svx/svdopage.hxx>
 #endif
 
 #ifndef _SDR_CONTACT_DISPLAYINFO_HXX
@@ -53,11 +53,11 @@
 #endif
 
 #ifndef _SVDMODEL_HXX
-#include <svdmodel.hxx>
+#include <svx/svdmodel.hxx>
 #endif
 
 #ifndef _SVDPAGE_HXX
-#include <svdpage.hxx>
+#include <svx/svdpage.hxx>
 #endif
 
 #ifndef _SDR_CONTACT_OBJECTCONTACTOFOBJLISTPAINTER_HXX
@@ -65,7 +65,7 @@
 #endif
 
 #ifndef _XOUTX_HXX
-#include <xoutx.hxx>
+#include <svx/xoutx.hxx>
 #endif
 
 #ifndef _SDR_CONTACT_VIEWOBJECTCONTACT_HXX
