@@ -4,9 +4,9 @@
  *
  *  $RCSfile: scrwnd.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: ihi $ $Date: 2007-06-06 14:21:49 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 20:32:51 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -48,13 +48,13 @@
 #include <svids.hrc>
 #endif
 #ifndef _SV_SVDATA_HXX
-#include <svdata.hxx>
+#include <vcl/svdata.hxx>
 #endif
 #ifndef _VCL_TIMER_HXX
-#include <timer.hxx>
+#include <vcl/timer.hxx>
 #endif
 #ifndef _VCL_EVENT_HXX
-#include <event.hxx>
+#include <vcl/event.hxx>
 #endif
 #ifndef _VCL_SCRWND_HXX
 #include <scrwnd.hxx>
