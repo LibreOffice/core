@@ -4,9 +4,9 @@
  *
  *  $RCSfile: optlingu.cxx,v $
  *
- *  $Revision: 1.63 $
+ *  $Revision: 1.64 $
  *
- *  last change: $Author: ihi $ $Date: 2007-06-05 14:36:10 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 18:39:44 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -147,11 +147,11 @@
 #include "optlingu.hrc"
 
 //CHINA001 #include "optdict.hxx"
-#include "svxdlg.hxx" //CHINA001
+#include <svx/svxdlg.hxx> //CHINA001
 #include "optitems.hxx"
-#include "optlingu.hxx"
-#include "dialmgr.hxx"
-#include "dialogs.hrc"
+#include <svx/optlingu.hxx>
+#include <svx/dialmgr.hxx>
+#include <svx/dialogs.hrc>
 #include "helpid.hrc"
 
 #include <ucbhelper/content.hxx>
