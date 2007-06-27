@@ -4,9 +4,9 @@
  *
  *  $RCSfile: soicon.cxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: rt $ $Date: 2007-04-26 09:32:48 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 20:48:01 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -42,28 +42,28 @@
 #include <saldisp.hxx>
 #endif
 #ifndef _SV_SALBMP_HXX
-#include <salbmp.hxx>
+#include <vcl/salbmp.hxx>
 #endif
 #ifndef _SV_SALBTYPE_HXX
-#include <salbtype.hxx>
+#include <vcl/salbtype.hxx>
 #endif
 #ifndef _SV_IMPBMP_HXX
 #include <impbmp.hxx>
 #endif
 #ifndef _SV_BITMAP_HXX
-#include <bitmap.hxx>
+#include <vcl/bitmap.hxx>
 #endif
 #ifndef _SV_BITMAP_HXX
-#include <bitmapex.hxx>
+#include <vcl/bitmapex.hxx>
 #endif
 #ifndef _SV_GRAPH_HXX
-#include <graph.hxx>
+#include <vcl/graph.hxx>
 #endif
 #ifndef _SV_SOICON_HXX
 #include <soicon.hxx>
 #endif
 #ifndef _SV_SVDATA_HXX
-#include <svdata.hxx>
+#include <vcl/svdata.hxx>
 #endif
 #ifndef _SV_SALBMP_H
 #include <salbmp.h>
