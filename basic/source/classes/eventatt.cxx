@@ -4,9 +4,9 @@
  *
  *  $RCSfile: eventatt.cxx,v $
  *
- *  $Revision: 1.28 $
+ *  $Revision: 1.29 $
  *
- *  last change: $Author: rt $ $Date: 2007-01-29 16:27:08 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 14:17:52 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -103,8 +103,8 @@
 
 #include <xmlscript/dynload.hxx>
 #include <sbunoobj.hxx>
-#include <sbstar.hxx>
-#include <sbmeth.hxx>
+#include <basic/sbstar.hxx>
+#include <basic/sbmeth.hxx>
 #include <runtime.hxx>
 #include <sbintern.hxx>
 
