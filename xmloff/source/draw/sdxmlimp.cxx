@@ -4,9 +4,9 @@
  *
  *  $RCSfile: sdxmlimp.cxx,v $
  *
- *  $Revision: 1.52 $
+ *  $Revision: 1.53 $
  *
- *  last change: $Author: obo $ $Date: 2007-01-23 08:51:56 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 15:05:34 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -39,7 +39,7 @@
 #include <tools/string.hxx>
 
 #ifndef _XMLOFF_XMLMETAI_HXX
-#include "xmlscripti.hxx"
+#include <xmloff/xmlscripti.hxx>
 #endif
 
 #ifndef _SDXMLIMP_IMPL_HXX
@@ -51,7 +51,7 @@
 #endif
 
 #ifndef _SFX_XMLMETAI_HXX
-#include "xmlmetai.hxx"
+#include <xmloff/xmlmetai.hxx>
 #endif
 
 #ifndef _XIMPSTYLE_HXX
@@ -63,15 +63,15 @@
 #endif
 
 #ifndef _XMLOFF_XMLTOKEN_HXX
-#include "xmltoken.hxx"
+#include <xmloff/xmltoken.hxx>
 #endif
 
 #ifndef _XMLOFF_XMLUCONV_HXX
-#include "xmluconv.hxx"
+#include <xmloff/xmluconv.hxx>
 #endif
 
 #ifndef _XMLOFF_DOCUMENTSETTINGSCONTEXT_HXX
-#include "DocumentSettingsContext.hxx"
+#include <xmloff/DocumentSettingsContext.hxx>
 #endif
 
 #ifndef _COM_SUN_STAR_FORM_XFORMSSUPPLIER_HPP_
@@ -103,7 +103,7 @@
 #endif
 
 #ifndef _XMLOFF_XMLEXPPR_HXX
-#include "xmlexppr.hxx"
+#include <xmloff/xmlexppr.hxx>
 #endif
 
 #ifndef _XMLOFF_XMLERROR_HXX
@@ -118,7 +118,7 @@
 #include <com/sun/star/style/XStyle.hpp>
 #endif
 
-#include "XMLFontStylesContext.hxx"
+#include <xmloff/XMLFontStylesContext.hxx>
 
 using namespace ::rtl;
 using namespace ::com::sun::star;
