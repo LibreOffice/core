@@ -4,9 +4,9 @@
  *
  *  $RCSfile: optfltr.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: rt $ $Date: 2007-04-26 07:37:58 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 17:26:24 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -49,9 +49,9 @@
 #include <svtools/fltrcfg.hxx>
 #include "optfltr.hxx"
 #include "optfltr.hrc"
-#include "dialogs.hrc"
+#include <svx/dialogs.hrc>
 #include "helpid.hrc"
-#include "dialmgr.hxx"
+#include <svx/dialmgr.hxx>
 
 enum MSFltrPg2_CheckBoxEntries {
     Math,
