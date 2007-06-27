@@ -4,9 +4,9 @@
  *
  *  $RCSfile: charhiddenitem.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: kz $ $Date: 2007-05-10 14:49:26 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 18:26:22 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -40,8 +40,8 @@
 #ifndef _SVX_CHARHIDDENITEM_HXX
 #include <charhiddenitem.hxx>
 #endif
-#include "svxitems.hrc"
-#include "dialmgr.hxx"
+#include <svx/svxitems.hrc>
+#include <svx/dialmgr.hxx>
 
 TYPEINIT1_FACTORY(SvxCharHiddenItem, SfxBoolItem, new SvxCharHiddenItem(sal_False, 0));
 
