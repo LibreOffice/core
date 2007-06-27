@@ -4,9 +4,9 @@
  *
  *  $RCSfile: svdtrans.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: obo $ $Date: 2006-10-12 13:16:23 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 19:12:25 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -36,9 +36,9 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_svx.hxx"
 
-#include "svdtrans.hxx"
+#include <svx/svdtrans.hxx>
 #include <math.h>
-#include "xpoly.hxx"
+#include <svx/xpoly.hxx>
 
 #ifndef _VIRDEV_HXX //autogen
 #include <vcl/virdev.hxx>
