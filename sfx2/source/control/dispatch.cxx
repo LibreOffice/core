@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dispatch.cxx,v $
  *
- *  $Revision: 1.51 $
+ *  $Revision: 1.52 $
  *
- *  last change: $Author: vg $ $Date: 2007-05-22 20:17:44 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 23:05:46 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -93,28 +93,28 @@
 // wg. nAutoPageID
 #include "appdata.hxx"
 #include "sfxhelp.hxx"
-#include "dispatch.hxx"
-#include "minstack.hxx"
-#include "msg.hxx"
-#include "objface.hxx"
-#include "bindings.hxx"
-#include "request.hxx"
-#include "app.hxx"
-#include "hintpost.hxx"
+#include <sfx2/dispatch.hxx>
+#include <sfx2/minstack.hxx>
+#include <sfx2/msg.hxx>
+#include <sfx2/objface.hxx>
+#include <sfx2/bindings.hxx>
+#include <sfx2/request.hxx>
+#include <sfx2/app.hxx>
+#include <sfx2/hintpost.hxx>
 #include "slotserv.hxx"
-#include "ipclient.hxx"
+#include <sfx2/ipclient.hxx>
 #include "sfxtypes.hxx"
-#include "macrconf.hxx"
-#include "viewfrm.hxx"
-#include "viewsh.hxx"
-#include "childwin.hxx"
-#include "docfac.hxx"
-#include "msgpool.hxx"
-#include "module.hxx"
-#include "topfrm.hxx"
-#include "sfxuno.hxx"
-#include "docfile.hxx"
-#include "mnumgr.hxx"
+#include <sfx2/macrconf.hxx>
+#include <sfx2/viewfrm.hxx>
+#include <sfx2/viewsh.hxx>
+#include <sfx2/childwin.hxx>
+#include <sfx2/docfac.hxx>
+#include <sfx2/msgpool.hxx>
+#include <sfx2/module.hxx>
+#include <sfx2/topfrm.hxx>
+#include <sfx2/sfxuno.hxx>
+#include <sfx2/docfile.hxx>
+#include <sfx2/mnumgr.hxx>
 #include "workwin.hxx"
 
 namespace css = ::com::sun::star;
