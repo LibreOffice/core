@@ -4,9 +4,9 @@
  *
  *  $RCSfile: process.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: obo $ $Date: 2006-10-12 14:23:06 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 14:15:52 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -50,7 +50,7 @@
 #include <vos/process.hxx>
 #endif
 #ifndef _SBXCORE_HXX
-#include <sbxcore.hxx>
+#include <basic/sbxcore.hxx>
 #endif
 #ifndef _STRING_HXX
 #include <tools/string.hxx>
@@ -60,7 +60,7 @@
 #endif
 
 #ifndef _BASIC_TTRESHLP_HXX
-#include "ttstrhlp.hxx"
+#include <basic/ttstrhlp.hxx>
 #endif
 
 //#ifndef _BYTE_STRING_LIST
@@ -68,7 +68,7 @@
 //#define _BYTE_STRING_LIST
 //#endif
 
-#include "process.hxx"
+#include <basic/process.hxx>
 
 // Konstruktor für den Process
 Process::Process()
