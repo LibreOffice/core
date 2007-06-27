@@ -4,9 +4,9 @@
  *
  *  $RCSfile: DatabaseMetaData.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 07:21:08 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 14:38:54 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -42,6 +42,8 @@
 #include "TDatabaseMetaDataBase.hxx"
 #endif
 
+#include "java/sql/ConnectionLog.hxx"
+
 namespace connectivity
 {
     class java_sql_Connection;
@@ -52,17 +54,20 @@ namespace connectivity
     class java_sql_DatabaseMetaData :   public ODatabaseMetaDataBase,
                                         public java_lang_Object
     {
-        java_sql_Connection* m_pConnection;
+        java_sql_Connection*        m_pConnection;
+        java::sql::ConnectionLog    m_aLogger;
+
     protected:
     // statische Daten fuer die Klasse
         static jclass theClass;
         // der Destruktor um den Object-Counter zu aktualisieren
         static void saveClassRef( jclass pClass );
+
     public:
         static jclass getMyClass();
         virtual ~java_sql_DatabaseMetaData();
         // ein Konstruktor, der fuer das Returnen des Objektes benoetigt wird:
-        java_sql_DatabaseMetaData( JNIEnv * pEnv, jobject myObj,java_sql_Connection* _pConnection );
+        java_sql_DatabaseMetaData( JNIEnv * pEnv, jobject myObj, java_sql_Connection& _rConnection );
 
         virtual sal_Bool SAL_CALL allProceduresAreCallable(  ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
         virtual sal_Bool SAL_CALL allTablesAreSelectable(  ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
@@ -213,6 +218,18 @@ namespace connectivity
         virtual sal_Bool SAL_CALL supportsBatchUpdates(  ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
         virtual ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XResultSet > SAL_CALL getUDTs( const ::com::sun::star::uno::Any& catalog, const ::rtl::OUString& schemaPattern, const ::rtl::OUString& typeNamePattern, const ::com::sun::star::uno::Sequence< sal_Int32 >& types ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
         virtual ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection > SAL_CALL getConnection(  ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
+
+    private:
+        sal_Bool        impl_callBooleanMethod( const char* _pMethodName, jmethodID& _inout_MethodID );
+        ::rtl::OUString impl_callStringMethod( const char* _pMethodName, jmethodID& _inout_MethodID );
+        sal_Int32       impl_callIntMethod( const char* _pMethodName, jmethodID& _inout_MethodID );
+        sal_Bool        impl_callBooleanMethodWithIntArg( const char* _pMethodName, jmethodID& _inout_MethodID, sal_Int32 _nArgument );
+        ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XResultSet >
+                        impl_callResultSetMethod( const char* _pMethodName, jmethodID& _inout_MethodID );
+        ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XResultSet >
+                        impl_callResultSetMethodWithStrings( const char* _pMethodName, jmethodID& _inout_MethodID, const ::com::sun::star::uno::Any& _rCatalog,
+                            const ::rtl::OUString& _rSchemaPattern, const ::rtl::OUString& _rLeastPattern,
+                            const ::rtl::OUString* _pOptionalAdditionalString = NULL);
     };
 }
 #endif // _CONNECTIVITY_JAVA_SQL_DATABASEMETADATA_HXX_
