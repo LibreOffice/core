@@ -4,9 +4,9 @@
  *
  *  $RCSfile: EnhancedCustomShapeGeometry.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 20:27:22 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 16:44:12 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -40,7 +40,7 @@
 #include <sal/types.h>
 #endif
 #ifndef _MSDFFDEF_HXX
-#include "msdffdef.hxx"
+#include <svx/msdffdef.hxx>
 #endif
 
 struct SvxMSDffVertPair
