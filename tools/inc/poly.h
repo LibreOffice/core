@@ -4,9 +4,9 @@
  *
  *  $RCSfile: poly.h,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: obo $ $Date: 2006-07-13 09:58:14 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 22:08:40 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -37,7 +37,7 @@
 #define _POLY_H
 
 #ifndef _GEN_HXX
-#include <gen.hxx>
+#include <tools/gen.hxx>
 #endif
 
 #define MAX_64KPOINTS       ((((USHORT)0xFFFF)-32)/sizeof(Point))
