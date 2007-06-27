@@ -4,9 +4,9 @@
  *
  *  $RCSfile: e3dextrudeproperties.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 05:41:37 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 18:50:57 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -45,7 +45,7 @@
 #endif
 
 #ifndef _E3D_EXTRUD3D_HXX
-#include <extrud3d.hxx>
+#include <svx/extrud3d.hxx>
 #endif
 
 //////////////////////////////////////////////////////////////////////////////
