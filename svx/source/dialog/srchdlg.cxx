@@ -4,9 +4,9 @@
  *
  *  $RCSfile: srchdlg.cxx,v $
  *
- *  $Revision: 1.42 $
+ *  $Revision: 1.43 $
  *
- *  last change: $Author: kz $ $Date: 2007-05-10 14:41:29 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 17:39:58 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -102,18 +102,18 @@
 #define _SVX_SRCHDLG_CXX
 #include "srchdlg.hxx"
 
-#include "dialogs.hrc"
-#include "svxitems.hrc"
+#include <svx/dialogs.hrc>
+#include <svx/svxitems.hrc>
 #include "srchdlg.hrc"
 
 
 #define ITEMID_SETITEM      0
 
 #include <sfx2/srchitem.hxx>
-#include "pageitem.hxx"
+#include <svx/pageitem.hxx>
 #include "srchctrl.hxx"
 //CHINA001 #include "srchxtra.hxx"
-#include "dialmgr.hxx"
+#include <svx/dialmgr.hxx>
 #include "dlgutil.hxx"
 
 #ifndef _SVX_OPTJSEARCH_HXX_
@@ -121,13 +121,13 @@
 #endif
 
 #ifndef _SVX_BRSHITEM_HXX //autogen
-#include <brshitem.hxx>
+#include <svx/brshitem.hxx>
 #endif
 #ifndef _SVX_BACKGRND_HXX //autogen
 #include "backgrnd.hxx"
 #endif
 
-#include "svxdlg.hxx" //CHINA001
+#include <svx/svxdlg.hxx> //CHINA001
 
 using namespace com::sun::star::i18n;
 using namespace com::sun::star;
