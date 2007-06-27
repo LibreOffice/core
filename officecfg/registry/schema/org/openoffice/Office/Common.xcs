@@ -5,9 +5,9 @@
  *
  *  $RCSfile: Common.xcs,v $
  *
- *  $Revision: 1.134 $
+ *  $Revision: 1.135 $
  *
- *  last change: $Author: hr $ $Date: 2007-06-26 11:44:30 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 13:08:45 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -6049,5 +6049,30 @@ Dymamic border coloring means that when the mouse is hovered over a control, and
 				</info>
 			</set>
 		</group>
+		<group oor:name="SmartTags">
+			<info>
+				<author>FME</author>
+				<desc>Contains settings for smart tags.</desc>
+			</info>
+            <group oor:name="Writer">
+				<info>
+    				<author>FME</author>
+					<desc>Contains Writer specific settings for smart tags.</desc>
+				</info>
+                <prop oor:name="RecognizeSmartTags" oor:type="xs:boolean">
+                    <info>
+                        <author>FME</author>
+                        <desc>Specifies whether smart tag recognization is enabled.</desc>
+                    </info>
+                    <value>true</value>
+                </prop>
+                <prop oor:name="ExcludedSmartTagTypes" oor:type="oor:string-list">
+                    <info>
+                        <author>FME</author>
+                        <desc>A list of excluded smart tag types.</desc>
+                    </info>
+                </prop>
+            </group>
+        </group>
 	</component>
 </oor:component-schema>
