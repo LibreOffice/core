@@ -4,9 +4,9 @@
  *
  *  $RCSfile: unopool.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: ihi $ $Date: 2007-06-05 14:37:03 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 19:25:56 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -60,34 +60,34 @@
 #include "unopool.hxx"
 #endif
 #ifndef _SVDMODEL_HXX
-#include "svdmodel.hxx"
+#include <svx/svdmodel.hxx>
 #endif
 #ifndef _SVDPOOL_HXX
-#include "svdpool.hxx"
+#include <svx/svdpool.hxx>
 #endif
 #ifndef SVX_UNOPROV_HXX
-#include "unoprov.hxx"
+#include <svx/unoprov.hxx>
 #endif
 #ifndef _SVDOBJ_HXX
-#include "svdobj.hxx"
+#include <svx/svdobj.hxx>
 #endif
 #ifndef _SVX_UNOSHPRP_HXX
-#include "unoshprp.hxx"
+#include <svx/unoshprp.hxx>
 #endif
 #ifndef _SVX_XFLBSTIT_HXX
-#include "xflbstit.hxx"
+#include <svx/xflbstit.hxx>
 #endif
 #ifndef _SVX_XFLBMTIT_HXX
-#include "xflbmtit.hxx"
+#include <svx/xflbmtit.hxx>
 #endif
 #ifndef _SVX_UNOWPAGE_HXX
-#include "unopage.hxx"
+#include <svx/unopage.hxx>
 #endif
 #ifndef _SVDETC_HXX
-#include "svdetc.hxx"
+#include <svx/svdetc.hxx>
 #endif
 #ifndef _MyEDITENG_HXX
-#include "editeng.hxx"
+#include <svx/editeng.hxx>
 #endif
 
 #include "unoapi.hxx"
