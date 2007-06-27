@@ -4,9 +4,9 @@
  *
  *  $RCSfile: msgbox.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: ihi $ $Date: 2007-06-06 14:21:39 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 20:32:38 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -40,37 +40,37 @@
 #include <svids.hrc>
 #endif
 #ifndef _SV_SVDATA_HXX
-#include <svdata.hxx>
+#include <vcl/svdata.hxx>
 #endif
 #ifndef _SV_METRIC_HXX
-#include <metric.hxx>
+#include <vcl/metric.hxx>
 #endif
 #ifndef _SV_SVAPP_HXX
-#include <svapp.hxx>
+#include <vcl/svapp.hxx>
 #endif
 #ifndef _SV_WRKWIN_HXX
-#include <wrkwin.hxx>
+#include <vcl/wrkwin.hxx>
 #endif
 #ifndef _SV_FIXED_HXX
-#include <fixed.hxx>
+#include <vcl/fixed.hxx>
 #endif
 #ifndef _SV_SOUND_HXX
-#include <sound.hxx>
+#include <vcl/sound.hxx>
 #endif
 #ifndef _SV_BRDWIN_HXX
 #include <brdwin.hxx>
 #endif
 #ifndef _SV_MSGBOX_HXX
-#include <msgbox.hxx>
+#include <vcl/msgbox.hxx>
 #endif
 #ifndef _SV_BUTTON_HXX
-#include <button.hxx>
+#include <vcl/button.hxx>
 #endif
 #ifndef _SV_RC_H
 #include <tools/rc.h>
 #endif
 #ifndef _SV_MNEMONIC_HXX
-#include <mnemonic.hxx>
+#include <vcl/mnemonic.hxx>
 #endif
 #ifndef _SV_WINDOW_H
 #include <window.h>
