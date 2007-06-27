@@ -4,9 +4,9 @@
  *
  *  $RCSfile: inettbc.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: ihi $ $Date: 2007-06-05 18:25:35 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 21:25:33 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -42,7 +42,7 @@
 #endif
 
 
-#include "inettbc.hxx"
+#include <svtools/inettbc.hxx>
 
 #ifndef  _COM_SUN_STAR_UNO_ANY_HXX_
 #include <com/sun/star/uno/Any.hxx>
@@ -103,23 +103,23 @@
 #endif
 
 #ifndef INCLUDED_SVTOOLS_HISTORYOPTIONS_HXX
-#include "historyoptions.hxx"
+#include <svtools/historyoptions.hxx>
 #endif
 #ifndef _SFXENUMITEM_HXX //autogen
-#include "eitem.hxx"
+#include <svtools/eitem.hxx>
 #endif
 #ifndef _SFXSTRITEM_HXX //autogen
-#include "stritem.hxx"
+#include <svtools/stritem.hxx>
 #endif
 #ifndef _SFXCANCEL_HXX //autogen
-#include "cancel.hxx"
+#include <svtools/cancel.hxx>
 #endif
-#include "itemset.hxx"
+#include <svtools/itemset.hxx>
 #include "urihelper.hxx"
-#include "pathoptions.hxx"
+#include <svtools/pathoptions.hxx>
 
 #define _SVSTDARR_STRINGSDTOR
-#include "svstdarr.hxx"
+#include <svtools/svstdarr.hxx>
 
 #ifndef  _UCBHELPER_COMMANDENVIRONMENT_HXX
 #include <ucbhelper/commandenvironment.hxx>
@@ -139,7 +139,7 @@
 #include <asynclink.hxx>
 
 #ifndef SVTOOLS_URL_FILTER_HXX
-#include "urlfilter.hxx"
+#include <svtools/urlfilter.hxx>
 #endif
 
 #include <vector>
