@@ -4,9 +4,9 @@
  *
  *  $RCSfile: unofield.cxx,v $
  *
- *  $Revision: 1.29 $
+ *  $Revision: 1.30 $
  *
- *  last change: $Author: kz $ $Date: 2007-05-10 15:03:21 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 19:29:00 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -60,12 +60,12 @@
 #include <rtl/uuid.h>
 #include <rtl/memory.h>
 
-#include "eeitem.hxx"
-#include "flditem.hxx"
-#include "svdfield.hxx"
-#include "unofield.hxx"
-#include "unoprov.hxx"
-#include "unotext.hxx"
+#include <svx/eeitem.hxx>
+#include <svx/flditem.hxx>
+#include <svx/svdfield.hxx>
+#include <svx/unofield.hxx>
+#include <svx/unoprov.hxx>
+#include <svx/unotext.hxx>
 
 using namespace ::rtl;
 using namespace ::vos;
