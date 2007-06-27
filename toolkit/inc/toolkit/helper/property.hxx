@@ -4,9 +4,9 @@
  *
  *  $RCSfile: property.hxx,v $
  *
- *  $Revision: 1.28 $
+ *  $Revision: 1.29 $
  *
- *  last change: $Author: kz $ $Date: 2007-06-20 10:24:55 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 12:20:46 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -176,6 +176,17 @@ namespace rtl {
 #define BASEPROPERTY_GRAPHIC               117  // css.graphic.XGraphic
 #define BASEPROPERTY_STEP_TIME             118  // sal_Int32
 #define BASEPROPERTY_DECORATION            119  // sal_Bool
+
+#define BASEPROPERTY_TREE_START                     120
+#define BASEPROPERTY_TREE_SELECTIONTYPE             120
+#define BASEPROPERTY_TREE_EDITABLE                  121
+#define BASEPROPERTY_TREE_DATAMODEL                 122
+#define BASEPROPERTY_TREE_ROOTDISPLAYED             123
+#define BASEPROPERTY_TREE_SHOWSHANDLES              124
+#define BASEPROPERTY_TREE_SHOWSROOTHANDLES          125
+#define BASEPROPERTY_TREE_ROWHEIGHT                 126
+#define BASEPROPERTY_TREE_INVOKESSTOPNODEEDITING    127
+#define BASEPROPERTY_TREE_END                       127
 
 // Keine gebundenen Properties, werden immer aus der Property BASEPROPERTY_FONTDESCRIPTOR entnommen.
 #define BASEPROPERTY_FONTDESCRIPTORPART_START           1000
