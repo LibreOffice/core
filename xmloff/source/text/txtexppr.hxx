@@ -4,9 +4,9 @@
  *
  *  $RCSfile: txtexppr.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 15:29:14 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 16:14:23 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -37,7 +37,7 @@
 
 
 #ifndef _XMLOFF_XMLEXPPR_HXX
-#include "xmlexppr.hxx"
+#include <xmloff/xmlexppr.hxx>
 #endif
 #ifndef _XMLOFF_TXTDROPE_HXX
 #include "txtdrope.hxx"
