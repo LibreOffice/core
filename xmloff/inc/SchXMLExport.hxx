@@ -4,9 +4,9 @@
  *
  *  $RCSfile: SchXMLExport.hxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: vg $ $Date: 2007-05-22 16:03:17 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 14:37:03 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -36,22 +36,22 @@
 #define SCH_XMLEXPORT_HXX_
 
 #ifndef _XMLOFF_SCH_XMLEXPORTHELPER_HXX_
-#include "SchXMLExportHelper.hxx"
+#include <xmloff/SchXMLExportHelper.hxx>
 #endif
 #ifndef _SCH_XMLAUTOSTYLEPOOLP_HXX_
 #include "SchXMLAutoStylePoolP.hxx"
 #endif
 #ifndef _XMLOFF_XMLEXP_HXX
-#include "xmlexp.hxx"
+#include <xmloff/xmlexp.hxx>
 #endif
 #ifndef _UNIVERSALL_REFERENCE_HXX
-#include "uniref.hxx"
+#include <xmloff/uniref.hxx>
 #endif
 #ifndef _XMLOFF_PROPERTYSETMAPPER_HXX
-#include "xmlprmap.hxx"
+#include <xmloff/xmlprmap.hxx>
 #endif
 #ifndef _XMLOFF_PROPERTYHANDLERFACTORY_HXX
-#include "prhdlfac.hxx"
+#include <xmloff/prhdlfac.hxx>
 #endif
 
 namespace com { namespace sun { namespace star {
