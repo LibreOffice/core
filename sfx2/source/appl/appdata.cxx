@@ -4,9 +4,9 @@
  *
  *  $RCSfile: appdata.cxx,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: kz $ $Date: 2006-11-08 11:57:01 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 22:55:31 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -71,21 +71,21 @@
 #endif
 #include "comphelper/processfactory.hxx"
 
-#include "viewfrm.hxx"
+#include <sfx2/viewfrm.hxx>
 #include "appdata.hxx"
-#include "dispatch.hxx"
-#include "event.hxx"
+#include <sfx2/dispatch.hxx>
+#include <sfx2/event.hxx>
 #include "sfxtypes.hxx"
-#include "doctempl.hxx"
+#include <sfx2/doctempl.hxx>
 #include "arrdecl.hxx"
-#include "docfac.hxx"
-#include "docfile.hxx"
-#include "request.hxx"
+#include <sfx2/docfac.hxx>
+#include <sfx2/docfile.hxx>
+#include <sfx2/request.hxx>
 #include "referers.hxx"
 #include "app.hrc"
 #include "sfxresid.hxx"
 #include "objshimp.hxx"
-#include "appuno.hxx"
+#include <sfx2/appuno.hxx>
 #include "imestatuswindow.hxx"
 #include "appbaslib.hxx"
 
