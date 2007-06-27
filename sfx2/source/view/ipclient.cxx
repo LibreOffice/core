@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ipclient.cxx,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: vg $ $Date: 2007-05-22 20:18:18 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 23:34:03 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -92,14 +92,14 @@
 #include <svtools/embedhlp.hxx>
 #include <vcl/svapp.hxx>
 
-#include "ipclient.hxx"
-#include "viewsh.hxx"
-#include "viewfrm.hxx"
-#include "objsh.hxx"
-#include "dispatch.hxx"
+#include <sfx2/ipclient.hxx>
+#include <sfx2/viewsh.hxx>
+#include <sfx2/viewfrm.hxx>
+#include <sfx2/objsh.hxx>
+#include <sfx2/dispatch.hxx>
 #include "workwin.hxx"
 #include "guisaveas.hxx"
-#include "topfrm.hxx"
+#include <sfx2/topfrm.hxx>
 
 #ifndef _CPPUHELPER_IMPLBASE5_HXX_
 #include <cppuhelper/implbase5.hxx>
