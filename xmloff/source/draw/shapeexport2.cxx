@@ -4,9 +4,9 @@
  *
  *  $RCSfile: shapeexport2.cxx,v $
  *
- *  $Revision: 1.59 $
+ *  $Revision: 1.60 $
  *
- *  last change: $Author: rt $ $Date: 2007-04-18 07:48:58 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 15:06:20 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -89,7 +89,7 @@
 #endif
 
 #ifndef _XMLOFF_SHAPEEXPORT_HXX
-#include "shapeexport.hxx"
+#include <xmloff/shapeexport.hxx>
 #endif
 
 #ifndef _SDPROPLS_HXX
@@ -105,11 +105,11 @@
 #endif
 
 #ifndef _XMLOFF_XMLEXP_HXX
-#include "xmlexp.hxx"
+#include <xmloff/xmlexp.hxx>
 #endif
 
 #ifndef _XMLOFF_XMLUCONV_HXX
-#include "xmluconv.hxx"
+#include <xmloff/xmluconv.hxx>
 #endif
 
 #ifndef _XMLOFF_XMLIMAGEMAPEXPORT_HXX_
@@ -125,11 +125,11 @@
 #endif
 
 #ifndef _XMLOFF_XMLTOKEN_HXX
-#include "xmltoken.hxx"
+#include <xmloff/xmltoken.hxx>
 #endif
 
 #ifndef _XMLOFF_NMSPMAP_HXX
-#include "nmspmap.hxx"
+#include <xmloff/nmspmap.hxx>
 #endif
 
 #include "xmlnmspe.hxx"
