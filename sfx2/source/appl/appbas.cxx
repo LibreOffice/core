@@ -4,9 +4,9 @@
  *
  *  $RCSfile: appbas.cxx,v $
  *
- *  $Revision: 1.47 $
+ *  $Revision: 1.48 $
  *
- *  last change: $Author: obo $ $Date: 2007-03-15 17:01:53 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 22:54:43 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -114,28 +114,28 @@
 #ifndef GCC
 #endif
 
-#include "appuno.hxx"
-#include "module.hxx"
+#include <sfx2/appuno.hxx>
+#include <sfx2/module.hxx>
 #include "arrdecl.hxx"
-#include "app.hxx"
+#include <sfx2/app.hxx>
 #include "sfxtypes.hxx"
 #include "sfxresid.hxx"
-#include "msg.hxx"
-#include "msgpool.hxx"
-#include "progress.hxx"
-#include "objsh.hxx"
-#include "objitem.hxx"
-#include "viewfrm.hxx"
-#include "viewsh.hxx"
-#include "dispatch.hxx"
+#include <sfx2/msg.hxx>
+#include <sfx2/msgpool.hxx>
+#include <sfx2/progress.hxx>
+#include <sfx2/objsh.hxx>
+#include <sfx2/objitem.hxx>
+#include <sfx2/viewfrm.hxx>
+#include <sfx2/viewsh.hxx>
+#include <sfx2/dispatch.hxx>
 #include "tplpitem.hxx"
 #include "minfitem.hxx"
 #include "app.hrc"
-#include "evntconf.hxx"
-#include "macrconf.hxx"
-#include "request.hxx"
-#include "docinf.hxx"
-#include "dinfdlg.hxx"
+#include <sfx2/evntconf.hxx>
+#include <sfx2/macrconf.hxx>
+#include <sfx2/request.hxx>
+#include <sfx2/docinf.hxx>
+#include <sfx2/dinfdlg.hxx>
 #include "appdata.hxx"
 #include "appbas.hxx"
 #include "sfxhelp.hxx"
@@ -149,7 +149,7 @@
 
 #define ITEMID_SEARCH SID_SEARCH_ITEM
 
-#include "srchitem.hxx"
+#include <sfx2/srchitem.hxx>
 #ifndef _VOS_SOCKET_HXX_ //autogen
 #include <vos/socket.hxx>
 #endif
