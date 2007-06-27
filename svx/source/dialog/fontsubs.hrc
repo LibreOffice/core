@@ -4,9 +4,9 @@
  *
  *  $RCSfile: fontsubs.hrc,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 21:06:00 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 17:05:45 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -35,7 +35,7 @@
 #ifndef _SVX_FONT_SUBSTITUTION
 #define _SVX_FONT_SUBSTITUTION
 
-#include "dialogs.hrc"
+#include <svx/dialogs.hrc>
 
 // defines ------------------------------------------------------------------
 
