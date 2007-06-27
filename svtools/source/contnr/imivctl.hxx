@@ -4,9 +4,9 @@
  *
  *  $RCSfile: imivctl.hxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: obo $ $Date: 2006-10-12 15:09:28 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 14:50:51 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -50,6 +50,10 @@
 #endif
 #ifndef _TOOLS_DEBUG_HXX
 #include <tools/debug.hxx>
+#endif
+
+#ifndef SVTOOLS_ACCESSIBLE_FACTORY_ACCESS_HXX
+#include "svtaccessiblefactory.hxx"
 #endif
 
 #include <limits.h>
@@ -218,6 +222,7 @@ class SvxIconChoiceCtrl_Impl
     VirtualDevice*  pEntryPaintDev;
     SvxIconChoiceCtrlEntry* pAnchor;                    // fuer Selektion
     LocalFocus      aFocus;                             // Data for focusrect
+    ::svt::AccessibleFactoryAccess aAccFactory;
 
     List*           pDraggedSelection;
     SvxIconChoiceCtrlEntry* pCurEditedEntry;
@@ -549,6 +554,9 @@ public:
     BOOL            HandleShortCutKey( const KeyEvent& rKeyEvent );
 
     void            CallEventListeners( ULONG nEvent, void* pData = NULL );
+
+    inline ::svt::IAccessibleFactory&
+        GetAccessibleFactory() { return aAccFactory.getFactory(); }
 };
 
 // ----------------------------------------------------------------------------------------------
