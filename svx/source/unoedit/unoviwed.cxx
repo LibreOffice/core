@@ -4,9 +4,9 @@
  *
  *  $RCSfile: unoviwed.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 06:18:48 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 19:30:28 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -44,10 +44,10 @@
 #include <vcl/window.hxx>
 #endif
 
-#include "unoviwed.hxx"
-#include "editview.hxx"
-#include "editeng.hxx"
-#include "svdotext.hxx"
+#include <svx/unoviwed.hxx>
+#include <svx/editview.hxx>
+#include <svx/editeng.hxx>
+#include <svx/svdotext.hxx>
 
 
 SvxEditEngineViewForwarder::SvxEditEngineViewForwarder( EditView& rView ) :
