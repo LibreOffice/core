@@ -4,9 +4,9 @@
  *
  *  $RCSfile: JStatement.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: vg $ $Date: 2007-01-15 13:37:56 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 14:39:26 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -81,6 +81,8 @@
 #include <comphelper/broadcasthelper.hxx>
 #endif
 
+#include "java/sql/ConnectionLog.hxx"
+
 namespace connectivity
 {
 
@@ -126,6 +128,7 @@ namespace connectivity
     protected:
         ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XStatement>       m_xGeneratedStatement;
         java_sql_Connection*        m_pConnection;
+        java::sql::ConnectionLog    m_aLogger;
         ::rtl::OUString             m_sSqlStatement;
         // Properties
         sal_Int32                   m_nResultSetConcurrency;
@@ -169,7 +172,9 @@ namespace connectivity
         static jclass getMyClass();
 
         // ein Konstruktor, der fuer das Returnen des Objektes benoetigt wird:
-        java_sql_Statement_Base( JNIEnv * pEnv, java_sql_Connection* _pCon );
+        java_sql_Statement_Base( JNIEnv * pEnv, java_sql_Connection& _rCon );
+
+        sal_Int32   getStatementObjectID() const { return m_aLogger.getObjectID(); }
 
         // OComponentHelper
         virtual void SAL_CALL disposing(void);
@@ -211,8 +216,8 @@ namespace connectivity
     {
         friend class OSubComponent<OStatement_BASE2, java_sql_Statement_BASE>;
     public:
-        OStatement_BASE2(JNIEnv * pEnv, java_sql_Connection* _pCon ) : java_sql_Statement_Base( pEnv, _pCon ),
-                                OSubComponent<OStatement_BASE2, java_sql_Statement_BASE>((::cppu::OWeakObject*)_pCon, this){}
+        OStatement_BASE2(JNIEnv * pEnv, java_sql_Connection& _rCon ) : java_sql_Statement_Base( pEnv, _rCon ),
+                                OSubComponent<OStatement_BASE2, java_sql_Statement_BASE>((::cppu::OWeakObject*)(&_rCon), this){}
 
         // OComponentHelper
         virtual void SAL_CALL disposing(void);
@@ -238,7 +243,7 @@ namespace connectivity
         static jclass getMyClass();
 
         // ein Konstruktor, der fuer das Returnen des Objektes benoetigt wird:
-        java_sql_Statement( JNIEnv * pEnv, java_sql_Connection* _pCon ) : OStatement_BASE2( pEnv, _pCon){};
+        java_sql_Statement( JNIEnv * pEnv, java_sql_Connection& _rCon ) : OStatement_BASE2( pEnv, _rCon){};
 
         virtual ::com::sun::star::uno::Any SAL_CALL queryInterface( const ::com::sun::star::uno::Type & rType ) throw(::com::sun::star::uno::RuntimeException);
         virtual void SAL_CALL acquire() throw();
