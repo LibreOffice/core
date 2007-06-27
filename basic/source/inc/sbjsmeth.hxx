@@ -4,9 +4,9 @@
  *
  *  $RCSfile: sbjsmeth.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: hr $ $Date: 2005-09-29 16:31:39 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 14:22:32 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -38,7 +38,7 @@
 #define _SB_SBJSMETH_HXX
 
 #ifndef _SB_SBMETH_HXX
-#include <sbmeth.hxx>
+#include <basic/sbmeth.hxx>
 #endif
 
 // Basic-Modul fuer JavaScript-Sourcen.
