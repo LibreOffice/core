@@ -4,9 +4,9 @@
  *
  *  $RCSfile: restrictedpaths.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 15:12:48 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 21:52:00 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -37,7 +37,7 @@
 #include "precompiled_svtools.hxx"
 
 #ifndef SVTOOLS_RESTRICTEDPATHS_HXX
-#include "restrictedpaths.hxx"
+#include <svtools/restrictedpaths.hxx>
 #endif
 
 #include <algorithm>
@@ -52,7 +52,7 @@
 #include <unotools/localfilehelper.hxx>
 #endif
 #ifndef INCLUDED_SVTOOLS_SYSLOCALE_HXX
-#include "syslocale.hxx"
+#include <svtools/syslocale.hxx>
 #endif
 
 namespace svt
