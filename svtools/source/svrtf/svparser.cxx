@@ -4,9 +4,9 @@
  *
  *  $RCSfile: svparser.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: obo $ $Date: 2006-10-12 15:28:38 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 22:01:19 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -38,7 +38,7 @@
 /* -*- Mode: C; tab-width: 4; indent-tabs-mode: nil -*- */
 
 #include <stdio.h>
-#include "svparser.hxx"
+#include <svtools/svparser.hxx>
 #ifndef _STREAM_HXX //autogen
 #include <tools/stream.hxx>
 #endif
@@ -46,7 +46,7 @@
 #include <tools/debug.hxx>
 #endif
 #define _SVSTDARR_USHORTS
-#include <svstdarr.hxx>
+#include <svtools/svstdarr.hxx>
 #ifndef _RTL_TEXTCVT_H
 #include <rtl/textcvt.h>
 #endif
