@@ -4,9 +4,9 @@
  *
  *  $RCSfile: masktest.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: thb $ $Date: 2006-07-11 11:38:56 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 12:42:35 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -155,7 +155,7 @@ public:
     void testMaskBasics()
     {
         implTestMaskBasics( mpDevice32bpp, mpMask );
-        //implTestMaskBasics( mpDevice1bpp, mpMask );
+        implTestMaskBasics( mpDevice1bpp, mpMask );
     }
 
     void testMaskClip()
