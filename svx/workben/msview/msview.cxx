@@ -4,9 +4,9 @@
  *
  *  $RCSfile: msview.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 06:27:35 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 19:37:37 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -91,7 +91,7 @@
 #include <com/sun/star/awt/WindowAttribute.hpp>
 
 #ifndef _MSDFFDEF_HXX
-#include "msdffdef.hxx"
+#include <svx/msdffdef.hxx>
 #endif
 
 #include <unotools/localfilehelper.hxx>
