@@ -4,9 +4,9 @@
  *
  *  $RCSfile: saldata.hxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: hr $ $Date: 2006-08-11 17:47:00 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 20:40:31 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -43,20 +43,20 @@
 #include <salstd.hxx>
 #endif
 #ifndef _SV_SALFRAME_HXX
-#include <salframe.hxx>
+#include <vcl/salframe.hxx>
 #endif
 #ifndef _SV_SALINST_H
 #include <salinst.h>
 #endif
 #ifndef _SV_SALDATABASIC_HXX
-#include <saldatabasic.hxx>
+#include <vcl/saldatabasic.hxx>
 #endif
 #ifndef _OSL_MODULE_H
 #include <osl/module.h>
 #endif
 
 #ifndef _VCL_DLLAPI_H
-#include <dllapi.h>
+#include <vcl/dllapi.h>
 #endif
 
 // -=-= forwards -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
