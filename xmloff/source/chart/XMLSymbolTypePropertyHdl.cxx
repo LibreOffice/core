@@ -4,9 +4,9 @@
  *
  *  $RCSfile: XMLSymbolTypePropertyHdl.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 10:17:18 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 14:52:16 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -38,7 +38,7 @@
 #include "XMLSymbolTypePropertyHdl.hxx"
 
 #ifndef _XMLOFF_XMLUCONV_HXX
-#include "xmluconv.hxx"
+#include <xmloff/xmluconv.hxx>
 #endif
 #ifndef _COM_SUN_STAR_CHART_CHARTERRORINDICATORTYPE_HPP_
 #include <com/sun/star/chart/ChartErrorIndicatorType.hpp>
