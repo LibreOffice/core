@@ -4,9 +4,9 @@
  *
  *  $RCSfile: numitem.cxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: kz $ $Date: 2007-05-10 14:52:13 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 18:29:19 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -36,19 +36,19 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_svx.hxx"
 
-#include <numitem.hxx>
+#include <svx/numitem.hxx>
 
 #ifndef _SVX_BRSHITEM_HXX //autogen
-#include <brshitem.hxx>
+#include <svx/brshitem.hxx>
 #endif
 #ifndef _SV_FONT_HXX //autogen
 #include <vcl/font.hxx>
 #endif
 #ifndef _SVX_SVXIDS_HRC
-#include <svxids.hrc>
+#include <svx/svxids.hrc>
 #endif
 #ifndef _SVX_NUMDEF_HXX
-#include <numdef.hxx>
+#include <svx/numdef.hxx>
 #endif
 #ifndef _SV_GRAPH_HXX //autogen
 #include <vcl/graph.hxx>
