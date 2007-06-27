@@ -4,9 +4,9 @@
  *
  *  $RCSfile: contentenumeration.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: ihi $ $Date: 2007-06-05 18:24:41 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 21:18:57 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -41,10 +41,10 @@
 #endif
 
 #ifndef SVTOOLS_URL_FILTER_HXX
-#include "urlfilter.hxx"
+#include <svtools/urlfilter.hxx>
 #endif
 #ifndef _SVTOOLS_INETTBC_HXX
-#include "inettbc.hxx"
+#include <svtools/inettbc.hxx>
 #endif
 #ifndef _SVTOOLS_IMAGEMGR_HXX
 #include "imagemgr.hxx"
