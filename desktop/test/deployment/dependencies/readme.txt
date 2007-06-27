@@ -4,9 +4,9 @@
 #
 #   $RCSfile: readme.txt,v $
 #
-#   $Revision: 1.5 $
+#   $Revision: 1.6 $
 #
-#   last change: $Author: vg $ $Date: 2007-01-18 14:58:22 $
+#   last change: $Author: hr $ $Date: 2007-06-27 13:28:24 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -57,6 +57,14 @@ versionempty.oxt contains an empty value attribute and versionnone.oxt lacks the
 value attribute; neither is allowed by the spec, but the current implementation
 treats both as pre OOo 2.1 versions (and the extensions should thus install in
 OOo 2.1 or later).
+
+minattr22.oxt contains a (hypothetical, most probably never satisfied)
+UNSATISFIED dependency with an OpenOffice.org-minimal-version attribute of
+"2.2" (and should thus install in OOo 2.3 or later); minattr23.oxt is similar,
+but with an OpenOffice.org-minimal-version attribute of "2.3" (and should thus
+also install in OOo 2.3 or later); minattr24.oxt is similar, but with an
+OpenOffice.org-minimal-version attribute of "2.4" (and should thus only install
+in OOo 2.4 or later).
 
 All of the following testcases should result in the Unsatisfied Dependencies
 dialog being displayed and the extension not being installed:
