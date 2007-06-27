@@ -4,9 +4,9 @@
  *
  *  $RCSfile: gen.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 00:55:56 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 22:13:39 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -37,13 +37,13 @@
 #include "precompiled_tools.hxx"
 
 #ifndef _TOOLS_DEBUG_HXX
-#include <debug.hxx>
+#include <tools/debug.hxx>
 #endif
 #ifndef _SV_GEN_HXX
-#include <gen.hxx>
+#include <tools/gen.hxx>
 #endif
 #ifndef _STREAM_HXX
-#include <stream.hxx>
+#include <tools/stream.hxx>
 #endif
 
 // =======================================================================
