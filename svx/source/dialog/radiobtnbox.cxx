@@ -4,9 +4,9 @@
  *
  *  $RCSfile: radiobtnbox.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 04:35:45 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 17:35:38 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -45,7 +45,7 @@
 // include ---------------------------------------------------------------
 
 #include "radiobtnbox.hxx"
-#include "dialmgr.hxx"
+#include <svx/dialmgr.hxx>
 
 namespace svx {
 
