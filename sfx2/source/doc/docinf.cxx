@@ -4,9 +4,9 @@
  *
  *  $RCSfile: docinf.cxx,v $
  *
- *  $Revision: 1.47 $
+ *  $Revision: 1.48 $
  *
- *  last change: $Author: ihi $ $Date: 2007-04-19 09:28:00 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 23:19:56 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -59,16 +59,16 @@
 #include "rtl/tencinfo.h"
 #include <unotools/localfilehelper.hxx>
 
-#include "docfilt.hxx"
-#include "fcontnr.hxx"
+#include <sfx2/docfilt.hxx>
+#include <sfx2/fcontnr.hxx>
 #include "openflag.hxx"
-#include "app.hxx"
-#include "docinf.hxx"
-#include "docfile.hxx"
+#include <sfx2/app.hxx>
+#include <sfx2/docinf.hxx>
+#include <sfx2/docfile.hxx>
 #include "graphhelp.hxx"
 #include "sfxtypes.hxx"
 #include "appdata.hxx"
-#include "doctempl.hxx"
+#include <sfx2/doctempl.hxx>
 #include "sfxresid.hxx"
 
 #include "doc.hrc"
