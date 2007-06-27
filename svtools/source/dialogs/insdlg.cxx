@@ -4,9 +4,9 @@
  *
  *  $RCSfile: insdlg.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: rt $ $Date: 2007-04-26 09:43:22 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 21:27:53 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -41,13 +41,13 @@
 // include ---------------------------------------------------------------
 
 //#include <stdio.h>
-#include "insdlg.hxx"
+#include <svtools/insdlg.hxx>
 
 //#include <tools/urlobj.hxx>
 //#include <tools/debug.hxx>
 //#include <svtools/urihelper.hxx>
 #include "sores.hxx"
-#include "svtdata.hxx"
+#include <svtools/svtdata.hxx>
 
 #include <sot/clsids.hxx>
 #include <tools/rc.hxx>
@@ -83,7 +83,7 @@ using namespace ::com::sun::star::container;
 using namespace ::com::sun::star::ui::dialogs;
 
 #define _SVSTDARR_STRINGSDTOR
-#include <svstdarr.hxx>
+#include <svtools/svstdarr.hxx>
 
 //---------------------------------------------
 // this struct conforms to the Microsoft
