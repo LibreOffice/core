@@ -4,9 +4,9 @@
  *
  *  $RCSfile: SlsClipboard.cxx,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: rt $ $Date: 2007-04-03 16:16:50 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 15:45:20 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -74,6 +74,7 @@
 #include "DrawDocShell.hxx"
 #include "sdpage.hxx"
 
+#include <com/sun/star/datatransfer/dnd/DNDConstants.hpp>
 #include <sfx2/request.hxx>
 #include <sfx2/viewfrm.hxx>
 #include <sfx2/bindings.hxx>
@@ -510,6 +511,20 @@ sal_Int8 Clipboard::AcceptDrop (
         {
             // Accept a drop.
             nResult = rEvent.mnAction;
+
+            // Use the copy action when the drop action is the default, i.e. not
+            // explicitly set to move or link, and when the source and
+            // target models are not the same.
+            const SdTransferable* pDragTransferable = SD_MOD()->pTransferDrag;
+            if (pDragTransferable != NULL
+                && pDragTransferable->IsPageTransferable()
+                && ((rEvent.maDragEvent.DropAction
+                        & ::com::sun::star::datatransfer::dnd::DNDConstants::ACTION_DEFAULT) != 0)
+                && (mrController.GetModel().GetDocument()->GetDocSh()
+                    != pDragTransferable->GetPageDocShell()))
+            {
+                nResult = DND_ACTION_COPY;
+            }
 
             // Show the insertion marker and the substitution for a drop.
             Point aPosition = pTargetWindow->PixelToLogic (rEvent.maPosPixel);
