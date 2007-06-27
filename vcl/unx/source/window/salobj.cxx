@@ -4,9 +4,9 @@
  *
  *  $RCSfile: salobj.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: rt $ $Date: 2006-12-04 16:40:32 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 20:52:37 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -60,10 +60,10 @@
 #include <salobj.h>
 #endif
 #ifndef _SV_SALWTYPE_HXX
-#include <salwtype.hxx>
+#include <vcl/salwtype.hxx>
 #endif
 #ifndef _SV_KEYCODES_HXX
-#include <keycodes.hxx>
+#include <vcl/keycodes.hxx>
 #endif
 
 #include <tools/debug.hxx>
