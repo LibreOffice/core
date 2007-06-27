@@ -4,9 +4,9 @@
  *
  *  $RCSfile: crsrsh.hxx,v $
  *
- *  $Revision: 1.36 $
+ *  $Revision: 1.37 $
  *
- *  last change: $Author: rt $ $Date: 2007-04-25 08:51:49 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 13:13:02 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -117,6 +117,13 @@ namespace com { namespace sun { namespace star { namespace util {
     struct SearchOptions;
 } } } }
 
+namespace com { namespace sun { namespace star { namespace text {
+    class XTextRange;
+}}}};
+
+namespace com { namespace sun { namespace star { namespace container {
+    class XStringKeyMap;
+}}}};
 
 // enum und struktur, um ueber die Doc-Position Informationen zu erfragen
 
@@ -135,7 +142,8 @@ struct SwContentAtPos
         SW_TOXMARK          = 0x0080,
         SW_REFMARK          = 0x0100,
         SW_NUMLABEL         = 0x0200, // #i23726#
-        SW_CONTENT_CHECK    = 0x0400  // --> FME 2005-05-13 #i43742# <--
+        SW_CONTENT_CHECK    = 0x0400, // --> FME 2005-05-13 #i43742# <--
+        SW_SMARTTAG         = 0x0800
 #ifndef PRODUCT
         ,SW_CURR_ATTRS      = 0x4000        // nur zum Debuggen
         ,SW_TABLEBOXVALUE   = 0x8000        // nur zum Debuggen
@@ -797,6 +805,18 @@ public:
                             SwContentAtPos& rCntntAtPos,
                             FASTBOOL bSetCrsr = FALSE,
                             SwRect* pFldRect = 0 );
+
+    // get smart tags at point position
+    void GetSmartTagTerm( const Point& rPt,
+                          SwRect& rSelectRect,
+                          ::com::sun::star::uno::Sequence< rtl::OUString >& rSmartTagTypes,
+                          ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Reference< ::com::sun::star::container::XStringKeyMap > >& rStringKeyMaps,
+                          ::com::sun::star::uno::Reference<com::sun::star::text::XTextRange>& rRange );
+
+    // get smart tags at current cursor position
+    void GetSmartTagTerm( ::com::sun::star::uno::Sequence< rtl::OUString >& rSmartTagTypes,
+                          ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Reference< ::com::sun::star::container::XStringKeyMap > >& rStringKeyMaps,
+                          ::com::sun::star::uno::Reference<com::sun::star::text::XTextRange>& rRange ) const;
 
     FASTBOOL IsPageAtPos( const Point &rPt ) const;
 
