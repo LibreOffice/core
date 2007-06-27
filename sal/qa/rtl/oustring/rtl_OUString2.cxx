@@ -4,9 +4,9 @@
  *
  *  $RCSfile: rtl_OUString2.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: obo $ $Date: 2007-06-13 08:13:18 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 13:25:26 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1058,6 +1058,74 @@ public:
     CPPUNIT_TEST_SUITE_END();
 };
 
+class indexOfAscii: public CppUnit::TestFixture {
+public:
+    void test();
+
+    CPPUNIT_TEST_SUITE(indexOfAscii);
+    CPPUNIT_TEST(test);
+    CPPUNIT_TEST_SUITE_END();
+};
+
+void indexOfAscii::test() {
+    CPPUNIT_ASSERT_EQUAL(
+        sal_Int32(-1),
+        rtl::OUString().indexOfAsciiL(RTL_CONSTASCII_STRINGPARAM("")));
+    CPPUNIT_ASSERT_EQUAL(
+        sal_Int32(-1),
+        rtl::OUString().lastIndexOfAsciiL(RTL_CONSTASCII_STRINGPARAM("")));
+    CPPUNIT_ASSERT_EQUAL(
+        sal_Int32(0),
+        rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("foo")).indexOfAsciiL(
+            RTL_CONSTASCII_STRINGPARAM("foo")));
+    CPPUNIT_ASSERT_EQUAL(
+        sal_Int32(0),
+        rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("foo")).lastIndexOfAsciiL(
+            RTL_CONSTASCII_STRINGPARAM("foo")));
+    CPPUNIT_ASSERT_EQUAL(
+        sal_Int32(2),
+        rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("fofoobar")).indexOfAsciiL(
+            RTL_CONSTASCII_STRINGPARAM("foo")));
+    CPPUNIT_ASSERT_EQUAL(
+        sal_Int32(3),
+        rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("foofoofob")).
+        lastIndexOfAsciiL(RTL_CONSTASCII_STRINGPARAM("foo")));
+    CPPUNIT_ASSERT_EQUAL(
+        sal_Int32(3),
+        rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("foofoobar")).indexOfAsciiL(
+            RTL_CONSTASCII_STRINGPARAM("foo"), 1));
+}
+
+class endsWith: public CppUnit::TestFixture {
+public:
+    void test();
+
+    CPPUNIT_TEST_SUITE(endsWith);
+    CPPUNIT_TEST(test);
+    CPPUNIT_TEST_SUITE_END();
+};
+
+void endsWith::test() {
+    CPPUNIT_ASSERT_EQUAL(
+        true,
+        rtl::OUString().endsWithAsciiL(RTL_CONSTASCII_STRINGPARAM("")));
+    CPPUNIT_ASSERT_EQUAL(
+        false,
+        rtl::OUString().endsWithAsciiL(RTL_CONSTASCII_STRINGPARAM("foo")));
+    CPPUNIT_ASSERT_EQUAL(
+        true,
+        rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("bar")).endsWithAsciiL(
+            RTL_CONSTASCII_STRINGPARAM("bar")));
+    CPPUNIT_ASSERT_EQUAL(
+        true,
+        rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("foobar")).endsWithAsciiL(
+            RTL_CONSTASCII_STRINGPARAM("bar")));
+    CPPUNIT_ASSERT_EQUAL(
+        false,
+        rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("FOOBAR")).endsWithAsciiL(
+            RTL_CONSTASCII_STRINGPARAM("bar")));
+}
+
 // -----------------------------------------------------------------------------
 CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(rtl_OUString::valueOf, "rtl_OUString");
 CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(rtl_OUString::toDouble, "rtl_OUString");
@@ -1067,6 +1135,9 @@ CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(rtl_OUString::getToken, "rtl_OUString");
 CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(
     rtl_OUString::convertToString, "rtl_OUString");
 CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(rtl_OUString::construction, "rtl_OUString");
+CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(
+    rtl_OUString::indexOfAscii, "rtl_OUString");
+CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(rtl_OUString::endsWith, "rtl_OUString");
 
 } // namespace rtl_OUString
 
