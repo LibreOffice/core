@@ -4,9 +4,9 @@
  *
  *  $RCSfile: fucon3d.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: kz $ $Date: 2006-12-12 17:14:39 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 15:41:11 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -133,7 +133,7 @@ FunctionReference FuConstruct3dObject::Create( ViewShell* pViewSh, ::sd::Window*
 void FuConstruct3dObject::DoExecute( SfxRequest& rReq )
 {
     FuConstruct::DoExecute( rReq );
-    mpViewShell->GetViewShellBase().GetToolBarManager().SetToolBar(
+    mpViewShell->GetViewShellBase().GetToolBarManager()->SetToolBar(
         ToolBarManager::TBG_FUNCTION,
         ToolBarManager::msDrawingObjectToolBar);
 }
