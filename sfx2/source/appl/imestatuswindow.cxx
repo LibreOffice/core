@@ -4,9 +4,9 @@
  *
  *  $RCSfile: imestatuswindow.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 16:18:16 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 22:58:45 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -38,8 +38,8 @@
 
 #include "imestatuswindow.hxx"
 
-#include "app.hxx"
-#include "sfxsids.hrc"
+#include <sfx2/app.hxx>
+#include <sfx2/sfxsids.hrc>
 
 #include "com/sun/star/beans/PropertyState.hpp"
 #include "com/sun/star/beans/PropertyValue.hpp"
