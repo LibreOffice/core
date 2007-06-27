@@ -4,9 +4,9 @@
 #
 #   $RCSfile: download.pm,v $
 #
-#   $Revision: 1.30 $
+#   $Revision: 1.31 $
 #
-#   last change: $Author: kz $ $Date: 2007-05-10 15:03:30 $
+#   last change: $Author: hr $ $Date: 2007-06-27 17:48:32 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -1209,11 +1209,10 @@ sub get_path_to_nsis_sdk
     my $file;
     my $nsispath = "";
 
-    if ( $ENV{'ENV_ROOT'} ) {
-        $nsispath = $ENV{'ENV_ROOT'} . $installer::globals::separator . "NSIS";
-    }
-    elsif ( $ENV{'NSIS_PATH'} ) {
+    if ( $ENV{'NSIS_PATH'} ) {
         $nsispath = $ENV{'NSIS_PATH'};
+    } elsif ( $ENV{'SOLARROOT'} ) {
+        $nsispath = $ENV{'SOLARROOT'} . $installer::globals::separator . "NSIS";
     } else {
         # do we have nsis already in path ?
         @paths = split(/:/, $ENV{'PATH'});
@@ -1230,7 +1229,10 @@ sub get_path_to_nsis_sdk
             }
         }
     }
-    if ( $ENV{'NSISSDK_SOURCE'} ) { $nsispath = $ENV{'NSISSDK_SOURCE'}; }   # overriding the NSIS SDK with NSISSDK_SOURCE
+    if ( $ENV{'NSISSDK_SOURCE'} ) {
+        installer::logger::print_warning( "NSISSDK_SOURCE is deprecated. use NSIS_PATH instead.\n" );
+        $nsispath = $ENV{'NSISSDK_SOURCE'}; # overriding the NSIS SDK with NSISSDK_SOURCE
+    }
 
     if( ($^O =~ /cygwin/i) and $nsispath =~ /\\/ ) {
         # We need a POSIX path for W32-4nt-cygwin-perl
@@ -1240,7 +1242,7 @@ sub get_path_to_nsis_sdk
 
     if ( $nsispath eq "" )
     {
-        installer::logger::print_message( "... no Environment variable \"ENV_ROOT\", \"NSIS_PATH\" or \"NSISSDK_SOURCE\" found and NSIS not found in path!", "get_path_to_nsis_sdk");
+        installer::logger::print_message( "... no Environment variable \"SOLARROOT\", \"NSIS_PATH\" or \"NSISSDK_SOURCE\" found and NSIS not found in path!", "get_path_to_nsis_sdk");
     } elsif ( ! -d $nsispath )
     {
         installer::exiter::exit_program("ERROR: NSIS path $nsispath does not exist!", "get_path_to_nsis_sdk");
