@@ -4,9 +4,9 @@
  *
  *  $RCSfile: fuconuno.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: kz $ $Date: 2006-12-12 17:16:27 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 15:42:28 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -127,7 +127,7 @@ void FuConstructUnoControl::DoExecute( SfxRequest& rReq )
     if( pIdentifierItem )
         nIdentifier = pIdentifierItem->GetValue();
 
-    mpViewShell->GetViewShellBase().GetToolBarManager().SetToolBar(
+    mpViewShell->GetViewShellBase().GetToolBarManager()->SetToolBar(
         ToolBarManager::TBG_FUNCTION,
         ToolBarManager::msDrawingObjectToolBar);
 }
