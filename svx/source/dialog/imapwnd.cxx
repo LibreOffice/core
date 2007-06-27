@@ -4,9 +4,9 @@
  *
  *  $RCSfile: imapwnd.cxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: hr $ $Date: 2007-06-26 13:51:32 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 17:16:02 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -68,32 +68,32 @@
 #endif
 
 #include <xoutbmp.hxx>
-#include <dialmgr.hxx>
-#include <dialogs.hrc>
-#include <svxids.hrc>
+#include <svx/dialmgr.hxx>
+#include <svx/dialogs.hrc>
+#include <svx/svxids.hrc>
 #include <imapdlg.hrc>
 #include <imapwnd.hxx>
-#include "svdpage.hxx"
-#include "svdorect.hxx"
-#include "svdocirc.hxx"
-#include "svdopath.hxx"
-#include "xfltrit.hxx"
-#include "svdpagv.hxx"
+#include <svx/svdpage.hxx>
+#include <svx/svdorect.hxx>
+#include <svx/svdocirc.hxx>
+#include <svx/svdopath.hxx>
+#include <svx/xfltrit.hxx>
+#include <svx/svdpagv.hxx>
 
 #ifndef SVTOOLS_URIHELPER_HXX
 #include <svtools/urihelper.hxx>
 #endif
 #ifndef _SVX_FILLITEM_HXX //autogen
-#include <xfillit.hxx>
+#include <svx/xfillit.hxx>
 #endif
 #ifndef _SVX_XLINIIT_HXX //autogen
-#include <xlineit.hxx>
+#include <svx/xlineit.hxx>
 #endif
 
 #include <sot/formats.hxx>
 
-#include "svxdlg.hxx"
-#include "dialogs.hrc"
+#include <svx/svxdlg.hxx>
+#include <svx/dialogs.hrc>
 
 #ifndef _BGFX_POINT_B2DPOINT_HXX
 #include <basegfx/point/b2dpoint.hxx>
