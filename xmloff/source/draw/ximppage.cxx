@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ximppage.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 10:32:00 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 15:10:49 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -45,15 +45,15 @@
 #endif
 
 #ifndef _XMLOFF_XMLSTYLE_HXX
-#include "xmlstyle.hxx"
+#include <xmloff/xmlstyle.hxx>
 #endif
 
 #ifndef _XMLOFF_XMLTOKEN_HXX
-#include "xmltoken.hxx"
+#include <xmloff/xmltoken.hxx>
 #endif
 
 #ifndef _XMLOFF_XMLSTYLE_HXX
-#include "xmlstyle.hxx"
+#include <xmloff/xmlstyle.hxx>
 #endif
 
 #ifndef _XMLOFF_XMLNMSPE_HXX
@@ -73,11 +73,11 @@
 #endif
 
 #ifndef _XMLOFF_FORMSIMP_HXX
-#include "formsimp.hxx"
+#include <xmloff/formsimp.hxx>
 #endif
 
 #ifndef _XMLOFF_XMLICTXT_HXX
-#include "xmlictxt.hxx"
+#include <xmloff/xmlictxt.hxx>
 #endif
 
 #ifndef _XIMPSTYLE_HXX
@@ -85,7 +85,7 @@
 #endif
 
 #ifndef _XMLOFF_PRSTYLEI_HXX_
-#include "prstylei.hxx"
+#include <xmloff/prstylei.hxx>
 #endif
 
 #ifndef _XMLOFF_PROPERTYSETMERGER_HXX_
