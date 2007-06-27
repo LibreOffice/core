@@ -4,9 +4,9 @@
  *
  *  $RCSfile: bmpfast.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 11:59:00 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 20:11:24 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -42,7 +42,7 @@
 
 #include <tools/debug.hxx>
 #define _SOLAR__PRIVATE 1
-#include <bmpacc.hxx>
+#include <vcl/bmpacc.hxx>
 
 #define FAST_ARGB_BGRA
 
