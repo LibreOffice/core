@@ -4,9 +4,9 @@
  *
  *  $RCSfile: optsave.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: rt $ $Date: 2007-04-26 07:40:14 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 17:30:55 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -54,10 +54,10 @@
 #define _SVX_OPTSAVE_CXX
 
 #include "optsave.hrc"
-#include "dialogs.hrc"
+#include <svx/dialogs.hrc>
 
 #include "optsave.hxx"
-#include "dialmgr.hxx"
+#include <svx/dialmgr.hxx>
 
 #ifndef _COMPHELPER_PROCESSFACTORY_HXX_
 #include <comphelper/processfactory.hxx>
