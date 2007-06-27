@@ -4,9 +4,9 @@
  *
  *  $RCSfile: DrawAspectHdl.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: vg $ $Date: 2006-11-21 17:35:23 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 15:23:03 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -45,11 +45,11 @@
 #endif
 
 #ifndef _XMLOFF_XMLUCONV_HXX
-#include "xmluconv.hxx"
+#include <xmloff/xmluconv.hxx>
 #endif
 
 #ifndef _XMLOFF_XMLTOKEN_HXX
-#include <xmltoken.hxx>
+#include <xmloff/xmltoken.hxx>
 #endif
 
 #ifndef _XMLOFF_DRAWASPECTHDL_HXX
