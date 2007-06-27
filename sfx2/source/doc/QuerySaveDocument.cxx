@@ -4,9 +4,9 @@
  *
  *  $RCSfile: QuerySaveDocument.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 16:38:04 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 23:18:12 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -37,9 +37,9 @@
 #include "precompiled_sfx2.hxx"
 #include "QuerySaveDocument.hxx"
 
-#include "sfx.hrc"
+#include <sfx2/sfx.hrc>
 #include "sfxresid.hxx"
-#include "sfxuno.hxx"
+#include <sfx2/sfxuno.hxx>
 #include "doc.hrc"
 #ifndef _MSGBOX_HXX //autogen
 #include <vcl/msgbox.hxx>
