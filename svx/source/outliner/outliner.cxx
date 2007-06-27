@@ -4,9 +4,9 @@
  *
  *  $RCSfile: outliner.cxx,v $
  *
- *  $Revision: 1.69 $
+ *  $Revision: 1.70 $
  *
- *  last change: $Author: obo $ $Date: 2006-10-12 13:02:06 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 18:41:40 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -47,17 +47,17 @@
 #include <vcl/wrkwin.hxx>
 #endif
 #define _OUTLINER_CXX
-#include <outliner.hxx>
+#include <svx/outliner.hxx>
 #include <paralist.hxx>
-#include <outlobj.hxx>
+#include <svx/outlobj.hxx>
 #include <outleeng.hxx>
 #include <outlundo.hxx>
-#include <eeitem.hxx>
+#include <svx/eeitem.hxx>
 #include <editstat.hxx>
-#include <scripttypeitem.hxx>
+#include <svx/scripttypeitem.hxx>
 
 #ifndef _EDITOBJ_HXX //autogen
-#include <editobj.hxx>
+#include <svx/editobj.hxx>
 #endif
 
 #ifndef _SFXITEMSET_HXX //autogen
@@ -73,11 +73,11 @@
 #endif
 
 #ifndef _SVX_NUMITEM_HXX
-#include <numitem.hxx>
+#include <svx/numitem.hxx>
 #endif
 
 #ifndef _SVX_ADJITEM_HXX
-#include <adjitem.hxx>
+#include <svx/adjitem.hxx>
 #endif
 
 #ifndef _SV_GRAPH_HXX //autogen
@@ -95,11 +95,11 @@
 #endif
 
 #ifndef _SVX_SVXFONT_HXX
-#include <svxfont.hxx>
+#include <svx/svxfont.hxx>
 #endif
 
 #ifndef _SVX_BRSHITEM_HXX
-#include <brshitem.hxx>
+#include <svx/brshitem.hxx>
 #endif
 
 #ifndef _SFXITEMPOOL_HXX
