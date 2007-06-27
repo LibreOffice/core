@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dlelstnr.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 23:28:37 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 13:27:51 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -147,7 +147,7 @@ void SwLinguServiceEventListener::processDictionaryListEvent(
     sal_Bool bIsSpellAll    =  0 != (nEvt & nSpellAllFlags);
 
     if (bIsSpellWrong || bIsSpellAll)
-        SW_MOD()->CheckSpellChanges( sal_False, bIsSpellWrong, bIsSpellAll );
+        SW_MOD()->CheckSpellChanges( sal_False, bIsSpellWrong, bIsSpellAll, sal_False );
 }
 
 
@@ -165,7 +165,7 @@ void SAL_CALL SwLinguServiceEventListener::processLinguServiceEvent(
                 0 != (rLngSvcEvent.nEvent & SPELL_CORRECT_WORDS_AGAIN);
         if (bIsSpellWrong || bIsSpellAll)
         {
-            SW_MOD()->CheckSpellChanges( sal_False, bIsSpellWrong, bIsSpellAll );
+            SW_MOD()->CheckSpellChanges( sal_False, bIsSpellWrong, bIsSpellAll, sal_False );
         }
         if (rLngSvcEvent.nEvent & HYPHENATE_AGAIN)
         {
