@@ -4,9 +4,9 @@
  *
  *  $RCSfile: viewcontactofmasterpagedescriptor.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: hr $ $Date: 2007-06-26 12:05:51 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 18:45:23 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -45,7 +45,7 @@
 #endif
 
 #ifndef _SVDPAGE_HXX
-#include <svdpage.hxx>
+#include <svx/svdpage.hxx>
 #endif
 
 #ifndef _SDR_CONTACT_DISPLAYINFO_HXX
@@ -53,7 +53,7 @@
 #endif
 
 #ifndef _SVDOBJ_HXX
-#include <svdobj.hxx>
+#include <svx/svdobj.hxx>
 #endif
 
 #ifndef _SDR_CONTACT_OBJECTCONTACTOFOBJLISTPAINTER_HXX
@@ -77,11 +77,11 @@
 #endif
 
 #ifndef _SVDPAGV_HXX
-#include <svdpagv.hxx>
+#include <svx/svdpagv.hxx>
 #endif
 
 #ifndef _SVDVIEW_HXX
-#include <svdview.hxx>
+#include <svx/svdview.hxx>
 #endif
 
 #ifndef _SDR_CONTACT_VIEWCONTACTOFSDRPAGE_HXX
