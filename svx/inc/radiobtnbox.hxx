@@ -4,9 +4,9 @@
  *
  *  $RCSfile: radiobtnbox.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: obo $ $Date: 2006-10-12 11:48:06 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 16:33:18 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -38,7 +38,7 @@
 // include ---------------------------------------------------------------
 
 #ifndef _SVX_SIMPTABL_HXX
-#include "simptabl.hxx"
+#include <svx/simptabl.hxx>
 #endif
 #ifndef INCLUDED_SVXDLLAPI_H
 #include "svx/svxdllapi.h"
