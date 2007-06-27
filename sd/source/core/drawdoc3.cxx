@@ -4,9 +4,9 @@
  *
  *  $RCSfile: drawdoc3.cxx,v $
  *
- *  $Revision: 1.47 $
+ *  $Revision: 1.48 $
  *
- *  last change: $Author: kz $ $Date: 2007-02-12 14:31:33 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 12:42:06 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -199,7 +199,10 @@ SdDrawDocument* SdDrawDocument::OpenBookmarkDoc(SfxMedium& rMedium)
     String aBookmarkName = rMedium.GetName();
     const SfxFilter* pFilter = rMedium.GetFilter();
     if ( !pFilter )
+    {
+        rMedium.UseInteractionHandler( TRUE );
         SFX_APP()->GetFilterMatcher().GuessFilter( rMedium, &pFilter );
+    }
 
     if ( !pFilter )
     {
