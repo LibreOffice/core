@@ -4,9 +4,9 @@
  *
  *  $RCSfile: MutableAttrList.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 11:25:45 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 16:21:27 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -40,13 +40,13 @@
 #include <osl/mutex.hxx>
 #endif
 #ifndef _XMLOFF_XMLTOKEN_HXX
-#include "xmltoken.hxx"
+#include <xmloff/xmltoken.hxx>
 #endif
 #include <rtl/uuid.h>
 #include <rtl/memory.h>
 
 #ifndef _XMLOFF_ATTRLIST_HXX
-#include "attrlist.hxx"
+#include <xmloff/attrlist.hxx>
 #endif
 #ifndef _XMLOFF_MUTABLEATTRLIST_HXX
 #include "MutableAttrList.hxx"
