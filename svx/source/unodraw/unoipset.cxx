@@ -4,9 +4,9 @@
  *
  *  $RCSfile: unoipset.cxx,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: ihi $ $Date: 2007-06-05 14:36:51 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 19:24:31 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -55,14 +55,14 @@
 #include <svtools/itemprop.hxx>
 #endif
 
-#include "unoipset.hxx"
-#include "svdpool.hxx"
-#include "svxids.hrc"
-#include "deflt3d.hxx"
-#include "unoshprp.hxx"
-#include "editeng.hxx"
+#include <svx/unoipset.hxx>
+#include <svx/svdpool.hxx>
+#include <svx/svxids.hrc>
+#include <svx/deflt3d.hxx>
+#include <svx/unoshprp.hxx>
+#include <svx/editeng.hxx>
 #include "unoapi.hxx"
-#include "svdobj.hxx"
+#include <svx/svdobj.hxx>
 
 #include <algorithm>
 
