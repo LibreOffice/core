@@ -4,9 +4,9 @@
  *
  *  $RCSfile: galbrws1.cxx,v $
  *
- *  $Revision: 1.32 $
+ *  $Revision: 1.33 $
  *
- *  last change: $Author: ihi $ $Date: 2007-06-05 14:35:05 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 18:19:29 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -54,8 +54,8 @@
 
 #include <algorithm>
 
-#include "svxdlg.hxx" //CHINA001
-//CHINA001 #include "dialogs.hrc" //CHINA001
+#include <svx/svxdlg.hxx> //CHINA001
+//CHINA001 #include <svx/dialogs.hrc> //CHINA001
 
 // --------------
 // - Namespaces -
