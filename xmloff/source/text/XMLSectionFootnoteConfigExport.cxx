@@ -4,9 +4,9 @@
  *
  *  $RCSfile: XMLSectionFootnoteConfigExport.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 11:10:53 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 16:04:39 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -41,11 +41,11 @@
 #endif
 
 #ifndef _XMLOFF_XMLEXP_HXX
-#include "xmlexp.hxx"
+#include <xmloff/xmlexp.hxx>
 #endif
 
 #ifndef _XMLOFF_PROPERTYSETMAPPER_HXX
-#include "xmlprmap.hxx"
+#include <xmloff/xmlprmap.hxx>
 #endif
 
 #ifndef _COM_SUN_STAR_STYLE_NUMBERINGTYPE_HPP_
@@ -53,15 +53,15 @@
 #endif
 
 #ifndef _XMLOFF_PROPMAPPINGTYPES_HXX
-#include "maptype.hxx"
+#include <xmloff/maptype.hxx>
 #endif
 
 #ifndef _XMLOFF_TXTPRMAP_HXX
-#include "txtprmap.hxx"
+#include <xmloff/txtprmap.hxx>
 #endif
 
 #ifndef _XMLOFF_NMSPMAP_HXX
-#include "nmspmap.hxx"
+#include <xmloff/nmspmap.hxx>
 #endif
 
 #ifndef _XMLOFF_XMLNMSPE_HXX
@@ -69,15 +69,15 @@
 #endif
 
 #ifndef _XMLOFF_XMLUCONV_HXX
-#include "xmluconv.hxx"
+#include <xmloff/xmluconv.hxx>
 #endif
 
 #ifndef _XMLOFF_XMLTOKEN_HXX
-#include "xmltoken.hxx"
+#include <xmloff/xmltoken.hxx>
 #endif
 
 #ifndef _XMLOFF_XMLNUME_HXX
-#include "xmlnume.hxx"
+#include <xmloff/xmlnume.hxx>
 #endif
 
 #ifndef _TOOLS_DEBUG_HXX
