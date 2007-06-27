@@ -4,9 +4,9 @@
  *
  *  $RCSfile: contextmenuhelper.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: kz $ $Date: 2007-05-10 16:37:43 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 22:01:58 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -37,8 +37,8 @@
 #include "precompiled_svtools.hxx"
 
 #include "contextmenuhelper.hxx"
-#include "menuoptions.hxx"
-#include "miscopt.hxx"
+#include <svtools/menuoptions.hxx>
+#include <svtools/miscopt.hxx>
 
 #include <com/sun/star/frame/XDispatch.hpp>
 #include <com/sun/star/frame/XDispatchProvider.hpp>
