@@ -4,9 +4,9 @@
  *
  *  $RCSfile: javachild.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 12:19:00 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 20:31:31 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -45,7 +45,7 @@
 #include <comphelper/processfactory.hxx>
 #endif
 
-#include <unohelp.hxx>
+#include <vcl/unohelp.hxx>
 #include <rtl/process.h>
 #include <rtl/ref.hxx>
 #include <jvmaccess/virtualmachine.hxx>
@@ -57,17 +57,17 @@
 #include <svsys.h>
 #endif
 #ifndef _SV_SALINST_HXX
-#include <salinst.hxx>
+#include <vcl/salinst.hxx>
 #endif
 #ifndef _SV_SALFRAME_HXX
-#include <salframe.hxx>
+#include <vcl/salframe.hxx>
 #endif
-#include <window.hxx>
+#include <vcl/window.hxx>
 #ifndef _SV_SALOBJ_HXX
-#include <salobj.hxx>
+#include <vcl/salobj.hxx>
 #endif
-#include "javachild.hxx"
-#include <svdata.hxx>
+#include <vcl/javachild.hxx>
+#include <vcl/svdata.hxx>
 #include <sysdata.hxx>
 
 using namespace ::com::sun::star;
