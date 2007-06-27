@@ -4,9 +4,9 @@
  *
  *  $RCSfile: svxacorr.cxx,v $
  *
- *  $Revision: 1.59 $
+ *  $Revision: 1.60 $
  *
- *  last change: $Author: ihi $ $Date: 2007-06-05 14:34:41 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 18:00:19 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -108,16 +108,16 @@
 #endif
 
 #ifndef _SVX_SVXIDS_HRC
-#include <svxids.hrc>
+#include <svx/svxids.hrc>
 #endif
 
 #include <sot/storage.hxx>
 #include <comphelper/storagehelper.hxx>
 
-#include "udlnitem.hxx"
-#include "wghtitem.hxx"
-#include "escpitem.hxx"
-#include "svxacorr.hxx"
+#include <svx/udlnitem.hxx>
+#include <svx/wghtitem.hxx>
+#include <svx/escpitem.hxx>
+#include <svx/svxacorr.hxx>
 #include "unolingu.hxx"
 
 #ifndef _SVX_HELPID_HRC
