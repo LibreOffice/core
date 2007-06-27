@@ -4,9 +4,9 @@
  *
  *  $RCSfile: sdxmlexp_impl.hxx,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 13:49:57 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 15:05:18 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -37,7 +37,7 @@
 #define _SDXMLEXP_IMPL_HXX
 
 #ifndef _XMLOFF_XMLEXP_HXX
-#include "xmlexp.hxx"
+#include <xmloff/xmlexp.hxx>
 #endif
 
 
