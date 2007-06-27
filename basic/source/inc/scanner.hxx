@@ -4,9 +4,9 @@
  *
  *  $RCSfile: scanner.hxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: hr $ $Date: 2005-09-29 18:41:38 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 14:23:24 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -40,7 +40,7 @@
 #include <tools/string.hxx>
 #endif
 #ifndef _SBERRORS_HXX
-#include "sberrors.hxx"
+#include <basic/sberrors.hxx>
 #endif
 
 // Der Scanner ist stand-alone, d.h. er kann von ueberallher verwendet
