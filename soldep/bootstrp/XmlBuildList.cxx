@@ -9,7 +9,7 @@
 #endif
 #undef Copy                     /* from Perl handy.h */
 
-#include "XmlBuildList.hxx"
+#include <soldep/XmlBuildList.hxx>
 
 #ifdef __cplusplus
 #  define EXTERN_C extern "C"

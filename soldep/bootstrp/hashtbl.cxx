@@ -9,8 +9,8 @@
 #*                      Beschreibung des Moduls
 #*
 #*    Ersterstellung    XX  TT.MM.JJ
-#*    Letzte Aenderung  $Author: obo $ $Date: 2006-04-26 12:25:22 $
-#*    $Revision: 1.1 $
+#*    Letzte Aenderung  $Author: hr $ $Date: 2007-06-27 23:37:39 $
+#*    $Revision: 1.2 $
 #*
 #*    $Logfile:$
 #*
@@ -20,11 +20,17 @@
 
       Source Code Control System - Header
 
-      $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/soldep/bootstrp/hashtbl.cxx,v 1.1 2006-04-26 12:25:22 obo Exp $
+      $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/soldep/bootstrp/hashtbl.cxx,v 1.2 2007-06-27 23:37:39 hr Exp $
 
       Source Code Control System - Update
 
       $Log: not supported by cvs2svn $
+      Revision 1.1.22.1  2007/06/04 13:35:21  vg
+      #i76605# Remove -I .../inc/module hack introduced by hedaburemove01
+
+      Revision 1.1  2006/04/26 12:25:22  obo
+      initial revision
+
       Revision 1.3  2001/09/14 13:14:56  nf
       Handling of invisible objects
 
@@ -39,7 +45,7 @@
 
 #include <tools/gen.hxx>
 #include <tools/debug.hxx>
-#include "hashtbl.hxx"
+#include <soldep/hashtbl.hxx>
 
 // -------------------------------------------------------------
 // class HashItem
