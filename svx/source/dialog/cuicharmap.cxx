@@ -4,9 +4,9 @@
  *
  *  $RCSfile: cuicharmap.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: obo $ $Date: 2007-06-11 14:23:31 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 16:57:15 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -76,12 +76,12 @@
 #endif
 
 #include <rtl/textenc.h>
-#include <ucsubset.hxx>
+#include <svx/ucsubset.hxx>
 
-#include "dialogs.hrc"
+#include <svx/dialogs.hrc>
 #include "charmap.hrc"
-#include "charmap.hxx" //add CHINA001
-#include "dialmgr.hxx"
+#include <svx/charmap.hxx> //add CHINA001
+#include <svx/dialmgr.hxx>
 #include "cuicharmap.hxx"
 //CHINA001 #include "charmapacc.hxx"
 //CHINA001 #ifndef _COM_SUN_STAR_ACCESSIBILITY_ACCESSIBLEEVENTOBJECT_HPP_
