@@ -4,9 +4,9 @@
  *
  *  $RCSfile: Driver.hxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 07:21:23 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 14:39:10 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -52,15 +52,21 @@
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #endif
 
+#include <comphelper/logging.hxx>
+#include <comphelper/componentcontext.hxx>
+
 namespace connectivity
 {
     ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > SAL_CALL java_sql_Driver_CreateInstance(const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& _rxFactory) throw( ::com::sun::star::uno::Exception );
 
     class java_sql_Driver : public ::cppu::WeakImplHelper2< ::com::sun::star::sdbc::XDriver,::com::sun::star::lang::XServiceInfo>
     {
-        const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > m_xORB;
+        ::comphelper::ComponentContext          m_aContext;
+        ::comphelper::ResourceBasedEventLogger  m_aLogger;
+
     protected:
         virtual ~java_sql_Driver();
+
     public:
         java_sql_Driver(const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& _rxFactory);
 
@@ -79,7 +85,8 @@ namespace connectivity
         virtual sal_Int32 SAL_CALL getMajorVersion(  ) throw(::com::sun::star::uno::RuntimeException) ;
         virtual sal_Int32 SAL_CALL getMinorVersion(  ) throw(::com::sun::star::uno::RuntimeException);
 
-        const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > getORB() const { return m_xORB; }
+        const ::comphelper::ComponentContext&           getContext() const { return m_aContext; }
+        const ::comphelper::ResourceBasedEventLogger&   getLogger() const { return m_aLogger; }
     };
 
 }
