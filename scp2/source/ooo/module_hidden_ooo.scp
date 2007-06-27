@@ -4,9 +4,9 @@
  *
  *  $RCSfile: module_hidden_ooo.scp,v $
  *
- *  $Revision: 1.65 $
+ *  $Revision: 1.66 $
  *
- *  last change: $Author: hr $ $Date: 2007-06-27 15:43:57 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 15:51:58 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -602,6 +602,17 @@ Module gid_Module_Root_Files_6
 	gid_File_Extra_Show_Pl,
 	gid_File_Extra_Webcast_Asp,
 	gid_File_Extra_Webcast_Pl,
+	gid_File_Extra_Square_Yellow_Zip,
+	gid_File_Extra_Square_Red_Zip,
+	gid_File_Extra_Square_Green_Zip,
+	gid_File_Extra_Square_Gray_Zip,
+	gid_File_Extra_Square_Blue_Zip,
+	gid_File_Extra_Simple_Zip,
+	gid_File_Extra_Round_White_Zip,
+	gid_File_Extra_Round_Gorilla_Zip,
+	gid_File_Extra_Glas_Red_Zip,
+	gid_File_Extra_Glas_Green_Zip,
+	gid_File_Extra_Glas_Blue_Zip,	
 	gid_File_Zip_Writingaids,
         gid_File_Zip_Writingaids_So,
 	gid_File_Share_Config_Sofficecfg_uiconfig_Zip,
