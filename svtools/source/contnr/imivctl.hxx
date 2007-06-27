@@ -4,9 +4,9 @@
  *
  *  $RCSfile: imivctl.hxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: hr $ $Date: 2007-06-27 14:50:51 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 21:19:41 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -59,7 +59,7 @@
 #include <limits.h>
 
 #include "ivctrl.hxx"
-#include "svarray.hxx"
+#include <svtools/svarray.hxx>
 
 class IcnCursor_Impl;
 class SvtIconChoiceCtrl;
