@@ -4,9 +4,9 @@
  *
  *  $RCSfile: animate.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 11:56:24 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 20:09:16 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -39,7 +39,7 @@
 #define ENABLE_BYTESTRING_STREAM_OPERATORS
 
 #ifndef _SV_ANIMATE_HXX
-#include <animate.hxx>
+#include <vcl/animate.hxx>
 #endif
 
 #ifndef _DEBUG_HXX
@@ -53,10 +53,10 @@
 #endif
 
 #ifndef _SV_VIRDEV_HXX
-#include <virdev.hxx>
+#include <vcl/virdev.hxx>
 #endif
 #ifndef _SV_WINDOW_HXX
-#include <window.hxx>
+#include <vcl/window.hxx>
 #endif
 
 #ifndef _SV_IMPANMVW_HXX

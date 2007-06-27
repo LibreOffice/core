@@ -4,9 +4,9 @@
  *
  *  $RCSfile: alpha.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 11:56:10 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 20:09:03 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -39,13 +39,13 @@
 #include <tools/debug.hxx>
 #endif
 #ifndef _SV_BMPACC_HXX
-#include <bmpacc.hxx>
+#include <vcl/bmpacc.hxx>
 #endif
 #ifndef _TOOLS_COLOR_HXX
 #include <tools/color.hxx>
 #endif
 #ifndef _SV_ALPHA_HXX
-#include <alpha.hxx>
+#include <vcl/alpha.hxx>
 #endif
 
 // -------------
