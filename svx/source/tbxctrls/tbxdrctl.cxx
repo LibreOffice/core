@@ -4,9 +4,9 @@
  *
  *  $RCSfile: tbxdrctl.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: obo $ $Date: 2006-10-12 13:22:32 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 19:19:54 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -55,8 +55,8 @@
 #include <sfx2/viewfrm.hxx>
 #include <vcl/toolbox.hxx>
 
-#include "dialmgr.hxx"
-#include "dialogs.hrc"
+#include <svx/dialmgr.hxx>
+#include <svx/dialogs.hrc>
 
 #include "tbxctl.hxx"
 #include "tbxdraw.hxx"
