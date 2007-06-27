@@ -4,9 +4,9 @@
  *
  *  $RCSfile: salframe.cxx,v $
  *
- *  $Revision: 1.215 $
+ *  $Revision: 1.216 $
  *
- *  last change: $Author: obo $ $Date: 2007-03-05 15:26:51 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 20:52:25 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -61,7 +61,7 @@
 #include <saldisp.hxx>
 #endif
 #ifndef _SV_SALINST_HXX
-#include <salinst.hxx>
+#include <vcl/salinst.hxx>
 #endif
 #ifndef _SV_SALGDI_H
 #include <salgdi.h>
@@ -70,7 +70,7 @@
 #include <salframe.h>
 #endif
 #ifndef _SV_KEYCOES_HXX
-#include <keycodes.hxx>
+#include <vcl/keycodes.hxx>
 #endif
 #ifndef _SV_SOICON_HXX
 #include <soicon.hxx>
@@ -85,7 +85,7 @@
 #include <sm.hxx>
 #endif
 #ifndef _SV_SETTINGS_HXX
-#include <settings.hxx>
+#include <vcl/settings.hxx>
 #endif
 #ifndef _VCL_WMADAPTOR_HXX_
 #include <wmadaptor.hxx>
@@ -97,12 +97,12 @@
 #include <salprn.h>
 #endif
 #ifndef _SV_FLOATWIN_HXX
-#include <floatwin.hxx>
+#include <vcl/floatwin.hxx>
 #endif
 #ifndef _SV_SALLAYOUT_HXX
-#include <sallayout.hxx>
+#include <vcl/sallayout.hxx>
 #endif
-#include <svapp.hxx>
+#include <vcl/svapp.hxx>
 
 #ifndef _SV_SALBMP_H
 #include <salbmp.h>
