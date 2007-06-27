@@ -4,9 +4,9 @@
  *
  *  $RCSfile: SchXMLPlotAreaContext.hxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: vg $ $Date: 2007-05-22 16:06:52 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 14:49:11 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -38,10 +38,10 @@
 #include "SchXMLChartContext.hxx"
 
 #ifndef _XMLOFF_XMLICTXT_HXX
-#include "xmlictxt.hxx"
+#include <xmloff/xmlictxt.hxx>
 #endif
 #ifndef _XMLOFF_SHAPEIMPORT_HXX_
-#include "shapeimport.hxx"
+#include <xmloff/shapeimport.hxx>
 #endif
 
 #ifndef _COM_SUN_STAR_UNO_SEQUENCE_HXX_
