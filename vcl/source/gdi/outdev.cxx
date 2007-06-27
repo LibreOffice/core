@@ -4,9 +4,9 @@
  *
  *  $RCSfile: outdev.cxx,v $
  *
- *  $Revision: 1.48 $
+ *  $Revision: 1.49 $
  *
- *  last change: $Author: kz $ $Date: 2007-05-10 09:16:24 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 20:18:55 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -41,79 +41,79 @@
 #include <svsys.h>
 #endif
 #ifndef _SV_SALGDI_HXX
-#include <salgdi.hxx>
+#include <vcl/salgdi.hxx>
 #endif
 #ifndef _SV_SALLAYOUT_HXX
-#include <sallayout.hxx>
+#include <vcl/sallayout.hxx>
 #endif
 #ifndef _SV_SALFRAME_HXX
-#include <salframe.hxx>
+#include <vcl/salframe.hxx>
 #endif
 #ifndef _SV_SALVD_HXX
-#include <salvd.hxx>
+#include <vcl/salvd.hxx>
 #endif
 #ifndef _SV_SALPRN_HXX
-#include <salprn.hxx>
+#include <vcl/salprn.hxx>
 #endif
 #ifndef _DEBUG_HXX
 #include <tools/debug.hxx>
 #endif
 #ifndef _SV_SVDATA_HXX
-#include <svdata.hxx>
+#include <vcl/svdata.hxx>
 #endif
 #ifndef _SV_SVAPP_HXX
-#include <svapp.hxx>
+#include <vcl/svapp.hxx>
 #endif
 #ifndef _POLY_HXX
 #include <tools/poly.hxx>
 #endif
 #ifndef _SV_REGION_HXX
-#include <region.hxx>
+#include <vcl/region.hxx>
 #endif
 #ifndef _SV_REGION_H
 #include <region.h>
 #endif
 #ifndef _SV_VIRDEV_HXX
-#include <virdev.hxx>
+#include <vcl/virdev.hxx>
 #endif
 #ifndef _SV_WINDOW_H
 #include <window.h>
 #endif
 #ifndef _SV_WINDOW_HXX
-#include <window.hxx>
+#include <vcl/window.hxx>
 #endif
 #ifndef _SV_METAACT_HXX
-#include <metaact.hxx>
+#include <vcl/metaact.hxx>
 #endif
 #ifndef _SV_GDIMTF_HXX
-#include <gdimtf.hxx>
+#include <vcl/gdimtf.hxx>
 #endif
 #ifndef _SV_OUTDATA_HXX
 #include <outdata.hxx>
 #endif
 #ifndef _SV_PRINT_HXX
-#include <print.hxx>
+#include <vcl/print.hxx>
 #endif
 #ifndef _SV_SALOTYPE_HXX
-#include <salotype.hxx>
+#include <vcl/salotype.hxx>
 #endif
 #ifndef _SV_OPENGL_HXX
-#include <opengl.hxx>
+#include <vcl/opengl.hxx>
 #endif
 #ifndef _VCL_IMPLNCVT_HXX
 #include <implncvt.hxx>
 #endif
 #ifndef _SV_OUTDEV3D_HXX
-#include <outdev3d.hxx>
+#include <vcl/outdev3d.hxx>
 #endif
 #ifndef _SV_OUTDEV_H
 #include <outdev.h>
 #endif
 #ifndef _SV_OUTDEV_HXX
-#include <outdev.hxx>
+#include <vcl/outdev.hxx>
 #endif
 #ifndef _VCL_UNOWRAP_HXX
-#include <unowrap.hxx>
+#include <vcl/unowrap.hxx>
 #endif
 
 // #i75163#
