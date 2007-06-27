@@ -4,9 +4,9 @@
  *
  *  $RCSfile: optjava.hxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: ihi $ $Date: 2007-03-26 12:07:15 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 17:29:06 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -55,7 +55,7 @@
 #include <sfx2/tabdlg.hxx>
 #endif
 #ifndef _SVX_SIMPTABL_HXX
-#include "simptabl.hxx"
+#include <svx/simptabl.hxx>
 #endif
 #ifndef _COM_SUN_STAR_UI_XFOLDERPICKER_HPP_
 #include <com/sun/star/ui/dialogs/XFolderPicker.hpp>
