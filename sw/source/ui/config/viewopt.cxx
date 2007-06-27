@@ -4,9 +4,9 @@
  *
  *  $RCSfile: viewopt.cxx,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 22:42:27 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 13:23:39 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -104,6 +104,7 @@ Color SwViewOption::aVisitedLinksColor(COL_RED);
 Color SwViewOption::aDirectCursorColor(COL_BLUE);
 Color SwViewOption::aTextGridColor(COL_LIGHTGRAY);
 Color SwViewOption::aSpellColor(COL_LIGHTRED);
+Color SwViewOption::aSmarttagColor(COL_LIGHTMAGENTA);
 Color SwViewOption::aFontColor(COL_BLACK);
 Color SwViewOption::aFieldShadingsColor(COL_LIGHTGRAY);
 Color SwViewOption::aSectionBoundColor(COL_LIGHTGRAY);
@@ -259,7 +260,7 @@ SwViewOption::SwViewOption() :
                     VIEWOPT_1_PAGEBACK |
                     VIEWOPT_1_SOLIDMARKHDL | VIEWOPT_1_POSTITS;
     nCore2Options = VIEWOPT_CORE2_BLACKFONT | VIEWOPT_CORE2_HIDDENPARA;
-    nUIOptions    = VIEWOPT_2_MODIFIED | VIEWOPT_2_EXECHYPERLINKS | VIEWOPT_2_GRFKEEPZOOM |VIEWOPT_2_ANY_RULER;
+    nUIOptions    = VIEWOPT_2_MODIFIED | VIEWOPT_2_GRFKEEPZOOM |VIEWOPT_2_ANY_RULER;
 
     if(MEASURE_METRIC != GetAppLocaleData().getMeasurementSystemEnum())
         aSnapSize.Width() = aSnapSize.Height() = 720;   // 1/2"
@@ -505,6 +506,13 @@ Color&   SwViewOption::GetSpellColor()
 {
     return aSpellColor;
 }
+/*-- 24.04.2007 10:50:14---------------------------------------------------
+
+  -----------------------------------------------------------------------*/
+Color&   SwViewOption::GetSmarttagColor()
+{
+    return aSmarttagColor;
+}
 /*-- 06.12.2002 10:50:11---------------------------------------------------
 
   -----------------------------------------------------------------------*/
@@ -579,6 +587,8 @@ void SwViewOption::ApplyColorConfigValues(const svtools::ColorConfig& rConfig )
     aTextGridColor.SetColor(rConfig.GetColorValue(svtools::WRITERTEXTGRID).nColor);
 
     aSpellColor.SetColor(rConfig.GetColorValue(svtools::SPELL).nColor);
+
+    aSmarttagColor.SetColor(rConfig.GetColorValue(svtools::SMARTTAGS).nColor);
 
     aFontColor.SetColor(rConfig.GetColorValue(svtools::FONTCOLOR).nColor);
 
