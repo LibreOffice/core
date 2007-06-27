@@ -4,9 +4,9 @@
  *
  *  $RCSfile: filtergrouping.cxx,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 16:32:11 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 23:12:12 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -40,13 +40,13 @@
 #include "filtergrouping.hxx"
 #endif
 #ifndef _SFX_FCONTNR_HXX
-#include <fcontnr.hxx>
+#include <sfx2/fcontnr.hxx>
 #endif
 #ifndef _FILEDLGHELPER_HXX
-#include "filedlghelper.hxx"
+#include <sfx2/filedlghelper.hxx>
 #endif
 #ifndef _SFX_HRC
-#include "sfx.hrc"
+#include <sfx2/sfx.hrc>
 #endif
 #ifndef _SFX_SFXRESID_HXX
 #include "sfxresid.hxx"
@@ -90,7 +90,7 @@
 #include <algorithm>
 #endif
 #ifndef _SFX_OBJFAC_HXX
-#include <docfac.hxx>
+#include <sfx2/docfac.hxx>
 #endif
 
 //........................................................................
