@@ -4,9 +4,9 @@
  *
  *  $RCSfile: fontsubstconfig.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 14:23:53 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 21:12:09 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -44,7 +44,7 @@
 #include "fontsubstconfig.hxx"
 
 #ifndef _SVARRAY_HXX //autogen
-#include "svarray.hxx"
+#include <svtools/svarray.hxx>
 #endif
 
 #ifndef _COM_SUN_STAR_BEANS_PROPERTYVALUE_HPP_
