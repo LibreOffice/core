@@ -4,9 +4,9 @@
  *
  *  $RCSfile: cuifmsearch.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 20:50:38 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 16:57:47 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -40,7 +40,7 @@
 #include <com/sun/star/sdbc/XResultSet.hpp>
 #endif
 
-#include "fmsearch.hxx" //CHINA001
+#include <svx/fmsearch.hxx> //CHINA001
 
 #define _SVSTDARR_STRINGSDTOR
 #include <svtools/svstdarr.hxx>
