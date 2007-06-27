@@ -4,9 +4,9 @@
  *
  *  $RCSfile: grfflt.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: rt $ $Date: 2007-04-26 07:31:32 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 17:08:40 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -55,11 +55,11 @@
 #include <sfx2/request.hxx>
 #endif
 
-#include "dialmgr.hxx"
-#include "grfflt.hxx"
+#include <svx/dialmgr.hxx>
+#include <svx/grfflt.hxx>
 #include "grfflt.hrc"
-#include "dialogs.hrc"
-#include "svxdlg.hxx" //CHINA001
+#include <svx/dialogs.hrc>
+#include <svx/svxdlg.hxx> //CHINA001
 
 // --------------------
 // - SvxGraphicFilter -
