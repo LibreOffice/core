@@ -4,9 +4,9 @@
  *
  *  $RCSfile: databaseregistrationui.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 04:15:56 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 16:59:44 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -46,10 +46,10 @@
 
 // === includes (project) ================================================
 #ifndef _SVX_DIALOG_HXX
-#include "svxdlg.hxx"
+#include <svx/svxdlg.hxx>
 #endif
 #ifndef _SVX_DIALOGS_HRC
-#include "dialogs.hrc"
+#include <svx/dialogs.hrc>
 #endif
 #ifndef _OFFAPP_CONNPOOLOPTIONS_HXX_
 #include "connpooloptions.hxx"
