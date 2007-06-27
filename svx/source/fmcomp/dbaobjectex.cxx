@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dbaobjectex.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: obo $ $Date: 2006-10-12 12:42:28 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 18:07:53 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -37,7 +37,7 @@
 #include "precompiled_svx.hxx"
 
 #ifndef SVX_DBAOBJECTEX_HXX
-#include "dbaobjectex.hxx"
+#include <svx/dbaobjectex.hxx>
 #endif
 #ifndef _OSL_DIAGNOSE_H_
 #include <osl/diagnose.h>
