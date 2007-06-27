@@ -4,9 +4,9 @@
  *
  *  $RCSfile: attributeproperties.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: vg $ $Date: 2006-11-23 12:56:26 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 18:49:18 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -65,63 +65,63 @@
 #endif
 
 #ifndef _SVDOBJ_HXX
-#include <svdobj.hxx>
+#include <svx/svdobj.hxx>
 #endif
 
 #ifndef _SVDDEF_HXX
-#include <svddef.hxx>
+#include <svx/svddef.hxx>
 #endif
 
 #ifndef _SVX_XIT_HXX
-#include <xit.hxx>
+#include <svx/xit.hxx>
 #endif
 
 #ifndef _SVX_XBTMPIT_HXX
-#include <xbtmpit.hxx>
+#include <svx/xbtmpit.hxx>
 #endif
 
 #ifndef _SVX_XLNDSIT_HXX
-#include <xlndsit.hxx>
+#include <svx/xlndsit.hxx>
 #endif
 
 #ifndef _SVX_XLNSTIT_HXX
-#include <xlnstit.hxx>
+#include <svx/xlnstit.hxx>
 #endif
 
 #ifndef _SVX_XLNEDIT_HXX
-#include <xlnedit.hxx>
+#include <svx/xlnedit.hxx>
 #endif
 
 #ifndef _SVX_XFLGRIT_HXX
-#include <xflgrit.hxx>
+#include <svx/xflgrit.hxx>
 #endif
 
 #ifndef _SVX_XFLFTRIT_HXX
-#include <xflftrit.hxx>
+#include <svx/xflftrit.hxx>
 #endif
 
 #ifndef _SVX_XFLHTIT_HXX
-#include <xflhtit.hxx>
+#include <svx/xflhtit.hxx>
 #endif
 
 #ifndef _SVX_XLNASIT_HXX
-#include <xlnasit.hxx>
+#include <svx/xlnasit.hxx>
 #endif
 
 #ifndef _SVX_XFLASIT_HXX
-#include <xflasit.hxx>
+#include <svx/xflasit.hxx>
 #endif
 
 #ifndef _SVDMODEL_HXX
-#include <svdmodel.hxx>
+#include <svx/svdmodel.hxx>
 #endif
 
 #ifndef _SVDTRANS_HXX
-#include <svdtrans.hxx>
+#include <svx/svdtrans.hxx>
 #endif
 
 #ifndef _SVDPAGE_HXX
-#include <svdpage.hxx>
+#include <svx/svdpage.hxx>
 #endif
 
 // #114265#
