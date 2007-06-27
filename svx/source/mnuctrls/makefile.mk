@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.4 $
+#   $Revision: 1.5 $
 #
-#   last change: $Author: rt $ $Date: 2005-09-08 23:43:23 $
+#   last change: $Author: hr $ $Date: 2007-06-27 13:41:26 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -38,6 +38,8 @@ PROJECTPCH4DLL=TRUE
 PROJECTPCH=svxpch
 PROJECTPCHSOURCE=$(PRJ)$/util$/svxpch
 
+ENABLE_EXCEPTIONS=TRUE
+
 PRJNAME=svx
 TARGET=mnuctrls
 VERSION=$(UPD)
@@ -58,7 +60,8 @@ SRC1FILES =  \
 SLOFILES=	\
         $(SLO)$/clipboardctl.obj \
         $(SLO)$/fntctl.obj \
-        $(SLO)$/fntszctl.obj
+        $(SLO)$/fntszctl.obj \
+        $(SLO)$/SmartTagCtl.obj
 
 HXX1TARGET=mnuctrls
 HXX1EXT=   hxx
@@ -66,7 +69,11 @@ HXX1EXCL=  -E:*include*
 HXX1DEPN=\
         $(INC)$/clipboardctl.hxx \
         $(INC)$/fntctl.hxx	\
-        $(INC)$/fntszctl.hxx
+        $(INC)$/fntszctl.hxx \
+        $(INC)$/SmartTagCtl.hxx
+
+EXCEPTIONSFILES= \
+        $(SLO)$/SmartTagCtl.obj
 
 
 # --- Targets -------------------------------------------------------
