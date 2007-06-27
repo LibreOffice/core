@@ -4,9 +4,9 @@
  *
  *  $RCSfile: multisel.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 00:58:51 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 22:16:07 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -43,8 +43,8 @@
 #include <stdio.h>
 #endif
 
-#include <debug.hxx>
-#include <multisel.hxx>
+#include <tools/debug.hxx>
+#include <tools/multisel.hxx>
 
 #ifdef MI_DEBUG
 #define DBG(x) x

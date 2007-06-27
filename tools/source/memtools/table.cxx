@@ -4,9 +4,9 @@
  *
  *  $RCSfile: table.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 00:59:03 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 22:16:19 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -41,13 +41,13 @@
 // -----------------------------------------------------------------------
 
 #ifndef _DEBUG_HXX
-#include <debug.hxx>
+#include <tools/debug.hxx>
 #endif
 #ifndef _IMPCONT_HXX
 #include <impcont.hxx>
 #endif
 #ifndef _TOOLS_TABLE_HXX
-#include <table.hxx>
+#include <tools/table.hxx>
 #endif
 
 // =======================================================================

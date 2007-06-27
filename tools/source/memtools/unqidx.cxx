@@ -4,9 +4,9 @@
  *
  *  $RCSfile: unqidx.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 00:59:16 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 22:16:31 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -41,11 +41,11 @@
 #endif
 
 #ifndef _UNQIDX_HXX
-#include <unqidx.hxx>
+#include <tools/unqidx.hxx>
 #endif
 
 #ifndef _UNQID_HXX
-#include <unqid.hxx>
+#include <tools/unqid.hxx>
 #endif
 
 /*************************************************************************
