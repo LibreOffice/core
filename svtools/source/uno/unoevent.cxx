@@ -4,9 +4,9 @@
  *
  *  $RCSfile: unoevent.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: kz $ $Date: 2007-05-10 16:37:54 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 22:02:46 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -58,7 +58,7 @@
 #endif
 
 #ifndef _SFXMACITEM_HXX
-#include "macitem.hxx"
+#include <svtools/macitem.hxx>
 #endif
 
 using namespace ::com::sun::star;
