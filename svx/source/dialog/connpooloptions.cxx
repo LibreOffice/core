@@ -4,9 +4,9 @@
  *
  *  $RCSfile: connpooloptions.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: rt $ $Date: 2007-04-26 07:27:19 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 16:55:09 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -57,9 +57,9 @@
 #include <svtools/eitem.hxx>
 #endif
 
-#include "dialogs.hrc"
+#include <svx/dialogs.hrc>
 #include "helpid.hrc"
-#include "dialmgr.hxx"
+#include <svx/dialmgr.hxx>
 
 //........................................................................
 namespace offapp
