@@ -4,9 +4,9 @@
  *
  *  $RCSfile: extrusioncontrols.hrc,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: obo $ $Date: 2006-10-12 13:19:50 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 19:15:42 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -32,7 +32,7 @@
  *    MA  02111-1307  USA
  *
  ************************************************************************/
-#include "dialogs.hrc"
+#include <svx/dialogs.hrc>
 
 // enum to index light images
 #define FROM_TOP_LEFT       0
