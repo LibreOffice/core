@@ -4,9 +4,9 @@
  *
  *  $RCSfile: hltpbase.cxx,v $
  *
- *  $Revision: 1.35 $
+ *  $Revision: 1.36 $
  *
- *  last change: $Author: ihi $ $Date: 2007-06-05 14:33:12 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 17:11:35 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -69,8 +69,8 @@
 #endif //CHINA001
 #include "hltpbase.hxx"
 
-#include "svxdlg.hxx" //CHINA001
-#include <dialogs.hrc> //CHINA001
+#include <svx/svxdlg.hxx> //CHINA001
+#include <svx/dialogs.hrc> //CHINA001
 
 using namespace ::ucbhelper;
 
