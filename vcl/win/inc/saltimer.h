@@ -4,9 +4,9 @@
  *
  *  $RCSfile: saltimer.h,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2006-05-03 16:37:45 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 20:55:49 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -37,7 +37,7 @@
 #define _SV_SALTIMER_H
 
 #ifndef _SV_SALTIMER_HXX
-#include <saltimer.hxx>
+#include <vcl/saltimer.hxx>
 #endif
 
 class WinSalTimer : public SalTimer
