@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.29 $
+#   $Revision: 1.30 $
 #
-#   last change: $Author: ihi $ $Date: 2006-12-20 13:52:19 $
+#   last change: $Author: hr $ $Date: 2007-06-27 15:07:59 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -48,37 +48,7 @@ ENABLE_EXCEPTIONS=TRUE
 # --- Files --------------------------------------------------------
 
 SLOFILES=   \
-            $(SLO)$/accessiblemenubasecomponent.obj		\
-            $(SLO)$/accessiblemenucomponent.obj			\
-            $(SLO)$/accessiblemenuitemcomponent.obj		\
-            $(SLO)$/vclxaccessiblebox.obj				\
-            $(SLO)$/vclxaccessiblebutton.obj			\
-            $(SLO)$/vclxaccessiblecheckbox.obj			\
-            $(SLO)$/vclxaccessiblecombobox.obj			\
-            $(SLO)$/vclxaccessiblecomponent.obj 		\
-            $(SLO)$/vclxaccessibledropdowncombobox.obj	\
-            $(SLO)$/vclxaccessibledropdownlistbox.obj	\
-            $(SLO)$/vclxaccessibleedit.obj				\
-            $(SLO)$/vclxaccessiblefixedtext.obj			\
-            $(SLO)$/vclxaccessiblelist.obj				\
-            $(SLO)$/vclxaccessiblelistbox.obj			\
-            $(SLO)$/vclxaccessiblelistitem.obj			\
-            $(SLO)$/vclxaccessiblemenu.obj				\
-            $(SLO)$/vclxaccessiblemenubar.obj			\
-            $(SLO)$/vclxaccessiblemenuitem.obj			\
-            $(SLO)$/vclxaccessiblemenuseparator.obj		\
-            $(SLO)$/vclxaccessiblepopupmenu.obj			\
-            $(SLO)$/vclxaccessibleradiobutton.obj		\
-            $(SLO)$/vclxaccessiblescrollbar.obj			\
-            $(SLO)$/vclxaccessiblestatusbar.obj			\
-            $(SLO)$/vclxaccessiblestatusbaritem.obj		\
-            $(SLO)$/vclxaccessibletabcontrol.obj		\
-            $(SLO)$/vclxaccessibletabpage.obj			\
-            $(SLO)$/vclxaccessibletabpagewindow.obj		\
-            $(SLO)$/vclxaccessibletextcomponent.obj		\
-            $(SLO)$/vclxaccessibletextfield.obj			\
-            $(SLO)$/vclxaccessibletoolbox.obj			\
-            $(SLO)$/vclxaccessibletoolboxitem.obj		\
+            $(SLO)$/vclxaccessiblecomponent.obj         \
             $(SLO)$/vclxbitmap.obj 						\
             $(SLO)$/vclxcontainer.obj 					\
             $(SLO)$/vclxdevice.obj 						\
@@ -100,7 +70,6 @@ SLOFILES=   \
 
 SRS1NAME=$(TARGET)
 SRC1FILES=\
-            accessiblestrings.src        \
             xthrobber.src
 
 # --- Targets ------------------------------------------------------
