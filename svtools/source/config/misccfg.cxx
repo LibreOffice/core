@@ -4,9 +4,9 @@
  *
  *  $RCSfile: misccfg.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 14:26:57 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 21:14:28 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -44,7 +44,7 @@
 #include "misccfg.hxx"
 
 #ifndef _ZFORLIST_HXX //autogen
-#include "zforlist.hxx"
+#include <svtools/zforlist.hxx>
 #endif
 
 #ifndef _TOOLS_DEBUG_HXX
