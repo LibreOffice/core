@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dbregister.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: kz $ $Date: 2007-05-10 14:36:45 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 16:59:59 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -47,11 +47,11 @@
 #ifndef SVTOOLS_FILENOTATION_HXX_
 #include <svtools/filenotation.hxx>
 #endif
-#include "dialogs.hrc"
-#include "svxids.hrc"
+#include <svx/dialogs.hrc>
+#include <svx/svxids.hrc>
 #include "helpid.hrc"
 #include <svtools/editbrowsebox.hxx>
-#include "dialogs.hrc"
+#include <svx/dialogs.hrc>
 
 #ifndef _SV_FIELD_HXX
 #include <vcl/field.hxx>
@@ -103,7 +103,7 @@
 #ifndef _SFX_DOCFILT_HACK_HXX
 #include <sfx2/docfilt.hxx>
 #endif
-#include "dialmgr.hxx"
+#include <svx/dialmgr.hxx>
 
 #ifndef SVX_DBREGISTEREDNAMESCONFIG_HXX
 #include "dbregisterednamesconfig.hxx"
