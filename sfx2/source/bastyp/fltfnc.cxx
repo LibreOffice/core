@@ -4,9 +4,9 @@
  *
  *  $RCSfile: fltfnc.cxx,v $
  *
- *  $Revision: 1.75 $
+ *  $Revision: 1.76 $
  *
- *  last change: $Author: hr $ $Date: 2007-06-27 12:54:56 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 23:02:20 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -223,25 +223,25 @@ using namespace ::vos;
 
 #include "sfxhelp.hxx"
 #include "sfxbasic.hxx"
-#include "docfilt.hxx"
-#include "docfac.hxx"
+#include <sfx2/docfilt.hxx>
+#include <sfx2/docfac.hxx>
 #include "sfxtypes.hxx"
-#include "sfxuno.hxx"
-#include "docfile.hxx"
-#include "progress.hxx"
+#include <sfx2/sfxuno.hxx>
+#include <sfx2/docfile.hxx>
+#include <sfx2/progress.hxx>
 #include "openflag.hxx"
 #include "bastyp.hrc"
 #include "sfxresid.hxx"
-#include "doctempl.hxx"
-#include "frame.hxx"
-#include "dispatch.hxx"
-#include "topfrm.hxx"
+#include <sfx2/doctempl.hxx>
+#include <sfx2/frame.hxx>
+#include <sfx2/dispatch.hxx>
+#include <sfx2/topfrm.hxx>
 #include "helper.hxx"
 #include "fltlst.hxx"
-#include "request.hxx"
+#include <sfx2/request.hxx>
 #include "arrdecl.hxx"
-#include "appuno.hxx"
-#include "viewfrm.hxx"
+#include <sfx2/appuno.hxx>
+#include <sfx2/viewfrm.hxx>
 
 static SfxFilterList_Impl* pFilterArr = 0;
 static BOOL bFirstRead = TRUE;
