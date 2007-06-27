@@ -4,9 +4,9 @@
  *
  *  $RCSfile: childwin.cxx,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: obo $ $Date: 2006-10-12 15:47:38 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 22:57:42 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -63,13 +63,13 @@
 #ifndef GCC
 #endif
 
-#include "childwin.hxx"
-#include "app.hxx"
+#include <sfx2/childwin.hxx>
+#include <sfx2/app.hxx>
 #include "arrdecl.hxx"
-#include "bindings.hxx"
-#include "module.hxx"
-#include "dockwin.hxx"
-#include "dispatch.hxx"
+#include <sfx2/bindings.hxx>
+#include <sfx2/module.hxx>
+#include <sfx2/dockwin.hxx>
+#include <sfx2/dispatch.hxx>
 #include "workwin.hxx"
 
 static const sal_uInt16 nVersion = 2;
