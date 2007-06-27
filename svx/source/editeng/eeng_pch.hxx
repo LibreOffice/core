@@ -4,9 +4,9 @@
  *
  *  $RCSfile: eeng_pch.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: kz $ $Date: 2007-05-10 14:46:16 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 17:57:46 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -39,10 +39,10 @@
 #include <vcl/msgbox.hxx>
 #include <vcl/svapp.hxx>
 
-#include <svxids.hrc>
-#include <dialogs.hrc>
+#include <svx/svxids.hrc>
+#include <svx/dialogs.hrc>
 
 #ifndef SVX_LIGHT
-#include <thesdlg.hxx>
+#include <svx/thesdlg.hxx>
 #endif
 
