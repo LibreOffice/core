@@ -4,9 +4,9 @@
  *
  *  $RCSfile: viewling.cxx,v $
  *
- *  $Revision: 1.32 $
+ *  $Revision: 1.33 $
  *
- *  last change: $Author: kz $ $Date: 2007-06-19 15:52:02 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 13:27:36 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -180,6 +180,7 @@ using namespace ::com::sun::star;
 using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::linguistic2;
+using namespace ::com::sun::star::smarttags;
 
 #define C2U(cChar) rtl::OUString::createFromAscii(cChar)
 /*--------------------------------------------------------------------
@@ -379,12 +380,9 @@ void SwView::StartTextConversion(
             SwHHCWrapper aWrap( this, xMgr, nSourceLang, nTargetLang, pTargetFont,
                                 nOptions, bIsInteractive,
                                 bStart, bOther, bSelection );
-            SwCrsrShell *pCrsrSh = ((SwCrsrShell*) pWrtShell);
-
             aWrap.Convert();
         }
     }
-
 
     pWrtShell->SetInsMode( bOldIns );
     pVOpt->SetIdle( bOldIdle );
@@ -650,7 +648,7 @@ void SwView::StartThesaurus()
     //
     LanguageType eLang = pWrtShell->GetCurLang();
     if( LANGUAGE_SYSTEM == eLang )
-        eLang = GetAppLanguage();
+       eLang = GetAppLanguage();
 
     if( eLang == LANGUAGE_DONTKNOW || eLang == LANGUAGE_NONE )
     {
@@ -839,53 +837,39 @@ sal_Bool SwView::ExecSpellPopup(const Point& rPt)
     return bRet;
 }
 
-// SMARTTAGS
-
-/** Function: IsOverSmartTag
-
-   This function returns true in given point lies over
-   a smarttag word.
-*/
-sal_Bool SwView::IsOverSmartTag(const Point& rPt)
-{
-        return pWrtShell->IsOverSmartTag(&rPt);
-}
-
 /** Function: ExecSmartTagPopup
 
    This function shows the popup menu for smarttag
    actions.
 */
 
-sal_Bool SwView::ExecSmartTagPopup(const Point& rPt)
+sal_Bool SwView::ExecSmartTagPopup( const Point& rPt )
 {
-   sal_Bool bRet = sal_False;
-   const sal_Bool bOldViewLock = pWrtShell->IsViewLocked();
-   pWrtShell->LockView( sal_True );
-   pWrtShell->Push();
+    sal_Bool bRet = sal_False;
+    const sal_Bool bOldViewLock = pWrtShell->IsViewLocked();
+    pWrtShell->LockView( sal_True );
+    pWrtShell->Push();
 
-   SwRect aToFill;
-   // get word that was clicked on
-   Reference<XTextRange> xRange = pWrtShell->GetSmartTagTerm(&rPt, aToFill);
-   if ( xRange.is() ) {
-     // get references to smarttags which provide actions for
-     // this word
-     SmartTagMgr& rSmartTagMgr = SmartTagMgr::getSmartTagMgr();
-     std::vector <ActionReference> aRefs;
-     aRefs = rSmartTagMgr.getActionRefsByWord(xRange->getString());
 
-     // if the word is actionable open popup menu
-     if (aRefs.size() > 0) {
-       bRet = sal_True;
-       pWrtShell->SttSelect();
-       SwSmartTagPopup aPopup(this, aRefs, xRange);
-       aPopup.Execute(pEditWin, aToFill.SVRect());
-     }
-   }
+    // get word that was clicked on
+    // This data structure maps a smart tag type string to the property bag
+    SwRect aToFill;
+    Sequence< rtl::OUString > aSmartTagTypes;
+    Sequence< Reference< container::XStringKeyMap > > aStringKeyMaps;
+    Reference<text::XTextRange> xRange;
 
-   pWrtShell->Pop( sal_False );
-   pWrtShell->LockView( bOldViewLock );
+    pWrtShell->GetSmartTagTerm( rPt, aToFill, aSmartTagTypes, aStringKeyMaps, xRange);
+    if ( xRange.is() && aSmartTagTypes.getLength() )
+    {
+        bRet = sal_True;
+        pWrtShell->SttSelect();
+        SwSmartTagPopup aPopup( this, aSmartTagTypes, aStringKeyMaps, xRange );
+        aPopup.Execute( pEditWin, aToFill.SVRect() );
+    }
 
-   return bRet;
+    pWrtShell->Pop( sal_False );
+    pWrtShell->LockView( bOldViewLock );
+
+    return bRet;
 }
 
