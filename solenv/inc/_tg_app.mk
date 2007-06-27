@@ -119,18 +119,18 @@ $(APP1TARGETN): $(APP1OBJS) $(APP1LIBS) \
     $(RC) -DWIN32 $(APP1PRODUCTDEF) -I$(SOLARRESDIR) $(INCLUDE) $(RCLINKFLAGS) $(MISC)$/$(APP1LINKRES:b).rc
 .ENDIF			# "$(APP1LINKRES)" != ""
 .IF "$(COM)" == "GCC"
-    @+echo mingw
+    @echo mingw
 .IF "$(APP1LINKRES)" != "" || "$(APP1RES)" != ""
-    @cat $(APP1LINKRES) $(subst,$/res$/,$/res{$(subst,$(BIN), $(@:d))} $(APP1RES)) >  $(MISC)$/$(@:b)_all.RES
-    windres $(MISC)$/$(@:b)_all.RES $(APP1RESO)
+    @cat $(APP1LINKRES) $(subst,$/res$/,$/res{$(subst,$(BIN), $(@:d))} $(APP1RES)) >  $(MISC)$/$(@:b)_all.res
+    windres $(MISC)$/$(@:b)_all.res $(APP1RESO)
 .ENDIF
-    @+echo $(LINK) $(LINKFLAGS) $(LINKFLAGSAPP) -L$(PRJ)$/$(INPATH)$/lib $(SOLARLIB) $(STDSLO) \
+    @echo $(LINK) $(LINKFLAGS) $(LINKFLAGSAPP) -L$(PRJ)$/$(INPATH)$/lib $(SOLARLIB) $(STDSLO) \
         $(APP1BASEX) $(APP1STACKN) -o $@ $(APP1OBJS) \
         -Wl,-Map,$(MISC)$/$(@:b).map $(STDOBJ) $(APP1RESO) \
         `$(TYPE) /dev/null $(APP1LIBS) | sed s#$(ROUT)#$(OUT)#g` \
-        $(APP_LINKTYPE) $(APP1LIBSALCPPRT) $(APP1STDLIBS) $(APP1STDLIB) $(STDLIB1) > $(MISC)$/$(@:b).cmd
-    @+$(TYPE)  $(MISC)$/$(@:b).cmd
-    @+source $(MISC)$/$(@:b).cmd
+        $(APP_LINKTYPE) $(APP1LIBSALCPPRT) $(APP1STDLIBS) $(APP1STDLIB) $(STDLIB1) > $(MISC)$/$(TARGET).$(@:b)_1.cmd
+    @$(TYPE)  $(MISC)$/$(TARGET).$(@:b)_1.cmd
+    @+source $(MISC)$/$(TARGET).$(@:b)_1.cmd
     @ls -l $@
 .ELSE	# "$(COM)" == "GCC"
 .IF "$(linkinc)" == ""
@@ -149,8 +149,14 @@ $(APP1TARGETN): $(APP1OBJS) $(APP1LIBS) \
         $(APP1STDLIB) $(STDLIB1) \
         )
     @-echo linking $@.manifest ...
+.IF "$(VISTA_MANIFEST)"!=""
+    $(IFEXIST) $@.manifest $(THEN) mt.exe -manifest $@.manifest -manifest $(TRUSTED_MANIFEST_LOCATION)$/trustedinfo.manifest -out:$@.tmanifest$(EMQ) $(FI)
+    $(IFEXIST) $@.manifest $(THEN) mt.exe -manifest $@.tmanifest -outputresource:$@$(EMQ);1 $(FI)
+.ELSE
     $(IFEXIST) $@.manifest $(THEN) mt.exe -manifest $@.manifest -outputresource:$@$(EMQ);1 $(FI)
+.ENDIF # "$(VISTA_MANIFEST)"!=""
     $(IFEXIST) $@.manifest $(THEN) $(RM:s/+//) $@.manifest $(FI)
+    $(IFEXIST) $@.tmanifest $(THEN) $(RM:s/+//) $@.tmanifest $(FI)
 .ELSE
         -$(RM) $(MISC)\$(APP1TARGET).lnk
         -$(RM) $(MISC)\$(APP1TARGET).lst
@@ -311,18 +317,18 @@ $(APP2TARGETN): $(APP2OBJS) $(APP2LIBS) \
     $(RC) -DWIN32 $(APP2PRODUCTDEF) -I$(SOLARRESDIR) $(INCLUDE) $(RCLINKFLAGS) $(MISC)$/$(APP2LINKRES:b).rc
 .ENDIF			# "$(APP2LINKRES)" != ""
 .IF "$(COM)" == "GCC"
-    @+echo mingw
+    @echo mingw
 .IF "$(APP2LINKRES)" != "" || "$(APP2RES)" != ""
-    @cat $(APP2LINKRES) $(subst,$/res$/,$/res{$(subst,$(BIN), $(@:d))} $(APP2RES)) >  $(MISC)$/$(@:b)_all.RES
-    windres $(MISC)$/$(@:b)_all.RES $(APP2RESO)
+    @cat $(APP2LINKRES) $(subst,$/res$/,$/res{$(subst,$(BIN), $(@:d))} $(APP2RES)) >  $(MISC)$/$(@:b)_all.res
+    windres $(MISC)$/$(@:b)_all.res $(APP2RESO)
 .ENDIF
-    @+echo $(LINK) $(LINKFLAGS) $(LINKFLAGSAPP) -L$(PRJ)$/$(INPATH)$/lib $(SOLARLIB) $(STDSLO) \
+    @echo $(LINK) $(LINKFLAGS) $(LINKFLAGSAPP) -L$(PRJ)$/$(INPATH)$/lib $(SOLARLIB) $(STDSLO) \
         $(APP2BASEX) $(APP2STACKN) -o $@ $(APP2OBJS) \
         -Wl,-Map,$(MISC)$/$(@:b).map $(STDOBJ) $(APP2RESO) \
         `$(TYPE) /dev/null $(APP2LIBS) | sed s#$(ROUT)#$(OUT)#g` \
-        $(APP_LINKTYPE) $(APP2LIBSALCPPRT) $(APP2STDLIBS) $(APP2STDLIB) $(STDLIB2) > $(MISC)$/$(@:b).cmd
-    @+$(TYPE)  $(MISC)$/$(@:b).cmd
-    @+source $(MISC)$/$(@:b).cmd
+        $(APP_LINKTYPE) $(APP2LIBSALCPPRT) $(APP2STDLIBS) $(APP2STDLIB) $(STDLIB2) > $(MISC)$/$(TARGET).$(@:b)_2.cmd
+    @$(TYPE)  $(MISC)$/$(TARGET).$(@:b)_2.cmd
+    @+source $(MISC)$/$(TARGET).$(@:b)_2.cmd
     @ls -l $@
 .ELSE	# "$(COM)" == "GCC"
 .IF "$(linkinc)" == ""
@@ -341,8 +347,14 @@ $(APP2TARGETN): $(APP2OBJS) $(APP2LIBS) \
         $(APP2STDLIB) $(STDLIB2) \
         )
     @-echo linking $@.manifest ...
+.IF "$(VISTA_MANIFEST)"!=""
+    $(IFEXIST) $@.manifest $(THEN) mt.exe -manifest $@.manifest -manifest $(TRUSTED_MANIFEST_LOCATION)$/trustedinfo.manifest -out:$@.tmanifest$(EMQ) $(FI)
+    $(IFEXIST) $@.manifest $(THEN) mt.exe -manifest $@.tmanifest -outputresource:$@$(EMQ);1 $(FI)
+.ELSE
     $(IFEXIST) $@.manifest $(THEN) mt.exe -manifest $@.manifest -outputresource:$@$(EMQ);1 $(FI)
+.ENDIF # "$(VISTA_MANIFEST)"!=""
     $(IFEXIST) $@.manifest $(THEN) $(RM:s/+//) $@.manifest $(FI)
+    $(IFEXIST) $@.tmanifest $(THEN) $(RM:s/+//) $@.tmanifest $(FI)
 .ELSE
         -$(RM) $(MISC)\$(APP2TARGET).lnk
         -$(RM) $(MISC)\$(APP2TARGET).lst
@@ -503,18 +515,18 @@ $(APP3TARGETN): $(APP3OBJS) $(APP3LIBS) \
     $(RC) -DWIN32 $(APP3PRODUCTDEF) -I$(SOLARRESDIR) $(INCLUDE) $(RCLINKFLAGS) $(MISC)$/$(APP3LINKRES:b).rc
 .ENDIF			# "$(APP3LINKRES)" != ""
 .IF "$(COM)" == "GCC"
-    @+echo mingw
+    @echo mingw
 .IF "$(APP3LINKRES)" != "" || "$(APP3RES)" != ""
-    @cat $(APP3LINKRES) $(subst,$/res$/,$/res{$(subst,$(BIN), $(@:d))} $(APP3RES)) >  $(MISC)$/$(@:b)_all.RES
-    windres $(MISC)$/$(@:b)_all.RES $(APP3RESO)
+    @cat $(APP3LINKRES) $(subst,$/res$/,$/res{$(subst,$(BIN), $(@:d))} $(APP3RES)) >  $(MISC)$/$(@:b)_all.res
+    windres $(MISC)$/$(@:b)_all.res $(APP3RESO)
 .ENDIF
-    @+echo $(LINK) $(LINKFLAGS) $(LINKFLAGSAPP) -L$(PRJ)$/$(INPATH)$/lib $(SOLARLIB) $(STDSLO) \
+    @echo $(LINK) $(LINKFLAGS) $(LINKFLAGSAPP) -L$(PRJ)$/$(INPATH)$/lib $(SOLARLIB) $(STDSLO) \
         $(APP3BASEX) $(APP3STACKN) -o $@ $(APP3OBJS) \
         -Wl,-Map,$(MISC)$/$(@:b).map $(STDOBJ) $(APP3RESO) \
         `$(TYPE) /dev/null $(APP3LIBS) | sed s#$(ROUT)#$(OUT)#g` \
-        $(APP_LINKTYPE) $(APP3LIBSALCPPRT) $(APP3STDLIBS) $(APP3STDLIB) $(STDLIB3) > $(MISC)$/$(@:b).cmd
-    @+$(TYPE)  $(MISC)$/$(@:b).cmd
-    @+source $(MISC)$/$(@:b).cmd
+        $(APP_LINKTYPE) $(APP3LIBSALCPPRT) $(APP3STDLIBS) $(APP3STDLIB) $(STDLIB3) > $(MISC)$/$(TARGET).$(@:b)_3.cmd
+    @$(TYPE)  $(MISC)$/$(TARGET).$(@:b)_3.cmd
+    @+source $(MISC)$/$(TARGET).$(@:b)_3.cmd
     @ls -l $@
 .ELSE	# "$(COM)" == "GCC"
 .IF "$(linkinc)" == ""
@@ -533,8 +545,14 @@ $(APP3TARGETN): $(APP3OBJS) $(APP3LIBS) \
         $(APP3STDLIB) $(STDLIB3) \
         )
     @-echo linking $@.manifest ...
+.IF "$(VISTA_MANIFEST)"!=""
+    $(IFEXIST) $@.manifest $(THEN) mt.exe -manifest $@.manifest -manifest $(TRUSTED_MANIFEST_LOCATION)$/trustedinfo.manifest -out:$@.tmanifest$(EMQ) $(FI)
+    $(IFEXIST) $@.manifest $(THEN) mt.exe -manifest $@.tmanifest -outputresource:$@$(EMQ);1 $(FI)
+.ELSE
     $(IFEXIST) $@.manifest $(THEN) mt.exe -manifest $@.manifest -outputresource:$@$(EMQ);1 $(FI)
+.ENDIF # "$(VISTA_MANIFEST)"!=""
     $(IFEXIST) $@.manifest $(THEN) $(RM:s/+//) $@.manifest $(FI)
+    $(IFEXIST) $@.tmanifest $(THEN) $(RM:s/+//) $@.tmanifest $(FI)
 .ELSE
         -$(RM) $(MISC)\$(APP3TARGET).lnk
         -$(RM) $(MISC)\$(APP3TARGET).lst
@@ -695,18 +713,18 @@ $(APP4TARGETN): $(APP4OBJS) $(APP4LIBS) \
     $(RC) -DWIN32 $(APP4PRODUCTDEF) -I$(SOLARRESDIR) $(INCLUDE) $(RCLINKFLAGS) $(MISC)$/$(APP4LINKRES:b).rc
 .ENDIF			# "$(APP4LINKRES)" != ""
 .IF "$(COM)" == "GCC"
-    @+echo mingw
+    @echo mingw
 .IF "$(APP4LINKRES)" != "" || "$(APP4RES)" != ""
-    @cat $(APP4LINKRES) $(subst,$/res$/,$/res{$(subst,$(BIN), $(@:d))} $(APP4RES)) >  $(MISC)$/$(@:b)_all.RES
-    windres $(MISC)$/$(@:b)_all.RES $(APP4RESO)
+    @cat $(APP4LINKRES) $(subst,$/res$/,$/res{$(subst,$(BIN), $(@:d))} $(APP4RES)) >  $(MISC)$/$(@:b)_all.res
+    windres $(MISC)$/$(@:b)_all.res $(APP4RESO)
 .ENDIF
-    @+echo $(LINK) $(LINKFLAGS) $(LINKFLAGSAPP) -L$(PRJ)$/$(INPATH)$/lib $(SOLARLIB) $(STDSLO) \
+    @echo $(LINK) $(LINKFLAGS) $(LINKFLAGSAPP) -L$(PRJ)$/$(INPATH)$/lib $(SOLARLIB) $(STDSLO) \
         $(APP4BASEX) $(APP4STACKN) -o $@ $(APP4OBJS) \
         -Wl,-Map,$(MISC)$/$(@:b).map $(STDOBJ) $(APP4RESO) \
         `$(TYPE) /dev/null $(APP4LIBS) | sed s#$(ROUT)#$(OUT)#g` \
-        $(APP_LINKTYPE) $(APP4LIBSALCPPRT) $(APP4STDLIBS) $(APP4STDLIB) $(STDLIB4) > $(MISC)$/$(@:b).cmd
-    @+$(TYPE)  $(MISC)$/$(@:b).cmd
-    @+source $(MISC)$/$(@:b).cmd
+        $(APP_LINKTYPE) $(APP4LIBSALCPPRT) $(APP4STDLIBS) $(APP4STDLIB) $(STDLIB4) > $(MISC)$/$(TARGET).$(@:b)_4.cmd
+    @$(TYPE)  $(MISC)$/$(TARGET).$(@:b)_4.cmd
+    @+source $(MISC)$/$(TARGET).$(@:b)_4.cmd
     @ls -l $@
 .ELSE	# "$(COM)" == "GCC"
 .IF "$(linkinc)" == ""
@@ -725,8 +743,14 @@ $(APP4TARGETN): $(APP4OBJS) $(APP4LIBS) \
         $(APP4STDLIB) $(STDLIB4) \
         )
     @-echo linking $@.manifest ...
+.IF "$(VISTA_MANIFEST)"!=""
+    $(IFEXIST) $@.manifest $(THEN) mt.exe -manifest $@.manifest -manifest $(TRUSTED_MANIFEST_LOCATION)$/trustedinfo.manifest -out:$@.tmanifest$(EMQ) $(FI)
+    $(IFEXIST) $@.manifest $(THEN) mt.exe -manifest $@.tmanifest -outputresource:$@$(EMQ);1 $(FI)
+.ELSE
     $(IFEXIST) $@.manifest $(THEN) mt.exe -manifest $@.manifest -outputresource:$@$(EMQ);1 $(FI)
+.ENDIF # "$(VISTA_MANIFEST)"!=""
     $(IFEXIST) $@.manifest $(THEN) $(RM:s/+//) $@.manifest $(FI)
+    $(IFEXIST) $@.tmanifest $(THEN) $(RM:s/+//) $@.tmanifest $(FI)
 .ELSE
         -$(RM) $(MISC)\$(APP4TARGET).lnk
         -$(RM) $(MISC)\$(APP4TARGET).lst
@@ -887,18 +911,18 @@ $(APP5TARGETN): $(APP5OBJS) $(APP5LIBS) \
     $(RC) -DWIN32 $(APP5PRODUCTDEF) -I$(SOLARRESDIR) $(INCLUDE) $(RCLINKFLAGS) $(MISC)$/$(APP5LINKRES:b).rc
 .ENDIF			# "$(APP5LINKRES)" != ""
 .IF "$(COM)" == "GCC"
-    @+echo mingw
+    @echo mingw
 .IF "$(APP5LINKRES)" != "" || "$(APP5RES)" != ""
-    @cat $(APP5LINKRES) $(subst,$/res$/,$/res{$(subst,$(BIN), $(@:d))} $(APP5RES)) >  $(MISC)$/$(@:b)_all.RES
-    windres $(MISC)$/$(@:b)_all.RES $(APP5RESO)
+    @cat $(APP5LINKRES) $(subst,$/res$/,$/res{$(subst,$(BIN), $(@:d))} $(APP5RES)) >  $(MISC)$/$(@:b)_all.res
+    windres $(MISC)$/$(@:b)_all.res $(APP5RESO)
 .ENDIF
-    @+echo $(LINK) $(LINKFLAGS) $(LINKFLAGSAPP) -L$(PRJ)$/$(INPATH)$/lib $(SOLARLIB) $(STDSLO) \
+    @echo $(LINK) $(LINKFLAGS) $(LINKFLAGSAPP) -L$(PRJ)$/$(INPATH)$/lib $(SOLARLIB) $(STDSLO) \
         $(APP5BASEX) $(APP5STACKN) -o $@ $(APP5OBJS) \
         -Wl,-Map,$(MISC)$/$(@:b).map $(STDOBJ) $(APP5RESO) \
         `$(TYPE) /dev/null $(APP5LIBS) | sed s#$(ROUT)#$(OUT)#g` \
-        $(APP_LINKTYPE) $(APP5LIBSALCPPRT) $(APP5STDLIBS) $(APP5STDLIB) $(STDLIB5) > $(MISC)$/$(@:b).cmd
-    @+$(TYPE)  $(MISC)$/$(@:b).cmd
-    @+source $(MISC)$/$(@:b).cmd
+        $(APP_LINKTYPE) $(APP5LIBSALCPPRT) $(APP5STDLIBS) $(APP5STDLIB) $(STDLIB5) > $(MISC)$/$(TARGET).$(@:b)_5.cmd
+    @$(TYPE)  $(MISC)$/$(TARGET).$(@:b)_5.cmd
+    @+source $(MISC)$/$(TARGET).$(@:b)_5.cmd
     @ls -l $@
 .ELSE	# "$(COM)" == "GCC"
 .IF "$(linkinc)" == ""
@@ -917,8 +941,14 @@ $(APP5TARGETN): $(APP5OBJS) $(APP5LIBS) \
         $(APP5STDLIB) $(STDLIB5) \
         )
     @-echo linking $@.manifest ...
+.IF "$(VISTA_MANIFEST)"!=""
+    $(IFEXIST) $@.manifest $(THEN) mt.exe -manifest $@.manifest -manifest $(TRUSTED_MANIFEST_LOCATION)$/trustedinfo.manifest -out:$@.tmanifest$(EMQ) $(FI)
+    $(IFEXIST) $@.manifest $(THEN) mt.exe -manifest $@.tmanifest -outputresource:$@$(EMQ);1 $(FI)
+.ELSE
     $(IFEXIST) $@.manifest $(THEN) mt.exe -manifest $@.manifest -outputresource:$@$(EMQ);1 $(FI)
+.ENDIF # "$(VISTA_MANIFEST)"!=""
     $(IFEXIST) $@.manifest $(THEN) $(RM:s/+//) $@.manifest $(FI)
+    $(IFEXIST) $@.tmanifest $(THEN) $(RM:s/+//) $@.tmanifest $(FI)
 .ELSE
         -$(RM) $(MISC)\$(APP5TARGET).lnk
         -$(RM) $(MISC)\$(APP5TARGET).lst
@@ -1079,18 +1109,18 @@ $(APP6TARGETN): $(APP6OBJS) $(APP6LIBS) \
     $(RC) -DWIN32 $(APP6PRODUCTDEF) -I$(SOLARRESDIR) $(INCLUDE) $(RCLINKFLAGS) $(MISC)$/$(APP6LINKRES:b).rc
 .ENDIF			# "$(APP6LINKRES)" != ""
 .IF "$(COM)" == "GCC"
-    @+echo mingw
+    @echo mingw
 .IF "$(APP6LINKRES)" != "" || "$(APP6RES)" != ""
-    @cat $(APP6LINKRES) $(subst,$/res$/,$/res{$(subst,$(BIN), $(@:d))} $(APP6RES)) >  $(MISC)$/$(@:b)_all.RES
-    windres $(MISC)$/$(@:b)_all.RES $(APP6RESO)
+    @cat $(APP6LINKRES) $(subst,$/res$/,$/res{$(subst,$(BIN), $(@:d))} $(APP6RES)) >  $(MISC)$/$(@:b)_all.res
+    windres $(MISC)$/$(@:b)_all.res $(APP6RESO)
 .ENDIF
-    @+echo $(LINK) $(LINKFLAGS) $(LINKFLAGSAPP) -L$(PRJ)$/$(INPATH)$/lib $(SOLARLIB) $(STDSLO) \
+    @echo $(LINK) $(LINKFLAGS) $(LINKFLAGSAPP) -L$(PRJ)$/$(INPATH)$/lib $(SOLARLIB) $(STDSLO) \
         $(APP6BASEX) $(APP6STACKN) -o $@ $(APP6OBJS) \
         -Wl,-Map,$(MISC)$/$(@:b).map $(STDOBJ) $(APP6RESO) \
         `$(TYPE) /dev/null $(APP6LIBS) | sed s#$(ROUT)#$(OUT)#g` \
-        $(APP_LINKTYPE) $(APP6LIBSALCPPRT) $(APP6STDLIBS) $(APP6STDLIB) $(STDLIB6) > $(MISC)$/$(@:b).cmd
-    @+$(TYPE)  $(MISC)$/$(@:b).cmd
-    @+source $(MISC)$/$(@:b).cmd
+        $(APP_LINKTYPE) $(APP6LIBSALCPPRT) $(APP6STDLIBS) $(APP6STDLIB) $(STDLIB6) > $(MISC)$/$(TARGET).$(@:b)_6.cmd
+    @$(TYPE)  $(MISC)$/$(TARGET).$(@:b)_6.cmd
+    @+source $(MISC)$/$(TARGET).$(@:b)_6.cmd
     @ls -l $@
 .ELSE	# "$(COM)" == "GCC"
 .IF "$(linkinc)" == ""
@@ -1109,8 +1139,14 @@ $(APP6TARGETN): $(APP6OBJS) $(APP6LIBS) \
         $(APP6STDLIB) $(STDLIB6) \
         )
     @-echo linking $@.manifest ...
+.IF "$(VISTA_MANIFEST)"!=""
+    $(IFEXIST) $@.manifest $(THEN) mt.exe -manifest $@.manifest -manifest $(TRUSTED_MANIFEST_LOCATION)$/trustedinfo.manifest -out:$@.tmanifest$(EMQ) $(FI)
+    $(IFEXIST) $@.manifest $(THEN) mt.exe -manifest $@.tmanifest -outputresource:$@$(EMQ);1 $(FI)
+.ELSE
     $(IFEXIST) $@.manifest $(THEN) mt.exe -manifest $@.manifest -outputresource:$@$(EMQ);1 $(FI)
+.ENDIF # "$(VISTA_MANIFEST)"!=""
     $(IFEXIST) $@.manifest $(THEN) $(RM:s/+//) $@.manifest $(FI)
+    $(IFEXIST) $@.tmanifest $(THEN) $(RM:s/+//) $@.tmanifest $(FI)
 .ELSE
         -$(RM) $(MISC)\$(APP6TARGET).lnk
         -$(RM) $(MISC)\$(APP6TARGET).lst
@@ -1271,18 +1307,18 @@ $(APP7TARGETN): $(APP7OBJS) $(APP7LIBS) \
     $(RC) -DWIN32 $(APP7PRODUCTDEF) -I$(SOLARRESDIR) $(INCLUDE) $(RCLINKFLAGS) $(MISC)$/$(APP7LINKRES:b).rc
 .ENDIF			# "$(APP7LINKRES)" != ""
 .IF "$(COM)" == "GCC"
-    @+echo mingw
+    @echo mingw
 .IF "$(APP7LINKRES)" != "" || "$(APP7RES)" != ""
-    @cat $(APP7LINKRES) $(subst,$/res$/,$/res{$(subst,$(BIN), $(@:d))} $(APP7RES)) >  $(MISC)$/$(@:b)_all.RES
-    windres $(MISC)$/$(@:b)_all.RES $(APP7RESO)
+    @cat $(APP7LINKRES) $(subst,$/res$/,$/res{$(subst,$(BIN), $(@:d))} $(APP7RES)) >  $(MISC)$/$(@:b)_all.res
+    windres $(MISC)$/$(@:b)_all.res $(APP7RESO)
 .ENDIF
-    @+echo $(LINK) $(LINKFLAGS) $(LINKFLAGSAPP) -L$(PRJ)$/$(INPATH)$/lib $(SOLARLIB) $(STDSLO) \
+    @echo $(LINK) $(LINKFLAGS) $(LINKFLAGSAPP) -L$(PRJ)$/$(INPATH)$/lib $(SOLARLIB) $(STDSLO) \
         $(APP7BASEX) $(APP7STACKN) -o $@ $(APP7OBJS) \
         -Wl,-Map,$(MISC)$/$(@:b).map $(STDOBJ) $(APP7RESO) \
         `$(TYPE) /dev/null $(APP7LIBS) | sed s#$(ROUT)#$(OUT)#g` \
-        $(APP_LINKTYPE) $(APP7LIBSALCPPRT) $(APP7STDLIBS) $(APP7STDLIB) $(STDLIB7) > $(MISC)$/$(@:b).cmd
-    @+$(TYPE)  $(MISC)$/$(@:b).cmd
-    @+source $(MISC)$/$(@:b).cmd
+        $(APP_LINKTYPE) $(APP7LIBSALCPPRT) $(APP7STDLIBS) $(APP7STDLIB) $(STDLIB7) > $(MISC)$/$(TARGET).$(@:b)_7.cmd
+    @$(TYPE)  $(MISC)$/$(TARGET).$(@:b)_7.cmd
+    @+source $(MISC)$/$(TARGET).$(@:b)_7.cmd
     @ls -l $@
 .ELSE	# "$(COM)" == "GCC"
 .IF "$(linkinc)" == ""
@@ -1301,8 +1337,14 @@ $(APP7TARGETN): $(APP7OBJS) $(APP7LIBS) \
         $(APP7STDLIB) $(STDLIB7) \
         )
     @-echo linking $@.manifest ...
+.IF "$(VISTA_MANIFEST)"!=""
+    $(IFEXIST) $@.manifest $(THEN) mt.exe -manifest $@.manifest -manifest $(TRUSTED_MANIFEST_LOCATION)$/trustedinfo.manifest -out:$@.tmanifest$(EMQ) $(FI)
+    $(IFEXIST) $@.manifest $(THEN) mt.exe -manifest $@.tmanifest -outputresource:$@$(EMQ);1 $(FI)
+.ELSE
     $(IFEXIST) $@.manifest $(THEN) mt.exe -manifest $@.manifest -outputresource:$@$(EMQ);1 $(FI)
+.ENDIF # "$(VISTA_MANIFEST)"!=""
     $(IFEXIST) $@.manifest $(THEN) $(RM:s/+//) $@.manifest $(FI)
+    $(IFEXIST) $@.tmanifest $(THEN) $(RM:s/+//) $@.tmanifest $(FI)
 .ELSE
         -$(RM) $(MISC)\$(APP7TARGET).lnk
         -$(RM) $(MISC)\$(APP7TARGET).lst
@@ -1463,18 +1505,18 @@ $(APP8TARGETN): $(APP8OBJS) $(APP8LIBS) \
     $(RC) -DWIN32 $(APP8PRODUCTDEF) -I$(SOLARRESDIR) $(INCLUDE) $(RCLINKFLAGS) $(MISC)$/$(APP8LINKRES:b).rc
 .ENDIF			# "$(APP8LINKRES)" != ""
 .IF "$(COM)" == "GCC"
-    @+echo mingw
+    @echo mingw
 .IF "$(APP8LINKRES)" != "" || "$(APP8RES)" != ""
-    @cat $(APP8LINKRES) $(subst,$/res$/,$/res{$(subst,$(BIN), $(@:d))} $(APP8RES)) >  $(MISC)$/$(@:b)_all.RES
-    windres $(MISC)$/$(@:b)_all.RES $(APP8RESO)
+    @cat $(APP8LINKRES) $(subst,$/res$/,$/res{$(subst,$(BIN), $(@:d))} $(APP8RES)) >  $(MISC)$/$(@:b)_all.res
+    windres $(MISC)$/$(@:b)_all.res $(APP8RESO)
 .ENDIF
-    @+echo $(LINK) $(LINKFLAGS) $(LINKFLAGSAPP) -L$(PRJ)$/$(INPATH)$/lib $(SOLARLIB) $(STDSLO) \
+    @echo $(LINK) $(LINKFLAGS) $(LINKFLAGSAPP) -L$(PRJ)$/$(INPATH)$/lib $(SOLARLIB) $(STDSLO) \
         $(APP8BASEX) $(APP8STACKN) -o $@ $(APP8OBJS) \
         -Wl,-Map,$(MISC)$/$(@:b).map $(STDOBJ) $(APP8RESO) \
         `$(TYPE) /dev/null $(APP8LIBS) | sed s#$(ROUT)#$(OUT)#g` \
-        $(APP_LINKTYPE) $(APP8LIBSALCPPRT) $(APP8STDLIBS) $(APP8STDLIB) $(STDLIB8) > $(MISC)$/$(@:b).cmd
-    @+$(TYPE)  $(MISC)$/$(@:b).cmd
-    @+source $(MISC)$/$(@:b).cmd
+        $(APP_LINKTYPE) $(APP8LIBSALCPPRT) $(APP8STDLIBS) $(APP8STDLIB) $(STDLIB8) > $(MISC)$/$(TARGET).$(@:b)_8.cmd
+    @$(TYPE)  $(MISC)$/$(TARGET).$(@:b)_8.cmd
+    @+source $(MISC)$/$(TARGET).$(@:b)_8.cmd
     @ls -l $@
 .ELSE	# "$(COM)" == "GCC"
 .IF "$(linkinc)" == ""
@@ -1493,8 +1535,14 @@ $(APP8TARGETN): $(APP8OBJS) $(APP8LIBS) \
         $(APP8STDLIB) $(STDLIB8) \
         )
     @-echo linking $@.manifest ...
+.IF "$(VISTA_MANIFEST)"!=""
+    $(IFEXIST) $@.manifest $(THEN) mt.exe -manifest $@.manifest -manifest $(TRUSTED_MANIFEST_LOCATION)$/trustedinfo.manifest -out:$@.tmanifest$(EMQ) $(FI)
+    $(IFEXIST) $@.manifest $(THEN) mt.exe -manifest $@.tmanifest -outputresource:$@$(EMQ);1 $(FI)
+.ELSE
     $(IFEXIST) $@.manifest $(THEN) mt.exe -manifest $@.manifest -outputresource:$@$(EMQ);1 $(FI)
+.ENDIF # "$(VISTA_MANIFEST)"!=""
     $(IFEXIST) $@.manifest $(THEN) $(RM:s/+//) $@.manifest $(FI)
+    $(IFEXIST) $@.tmanifest $(THEN) $(RM:s/+//) $@.tmanifest $(FI)
 .ELSE
         -$(RM) $(MISC)\$(APP8TARGET).lnk
         -$(RM) $(MISC)\$(APP8TARGET).lst
@@ -1655,18 +1703,18 @@ $(APP9TARGETN): $(APP9OBJS) $(APP9LIBS) \
     $(RC) -DWIN32 $(APP9PRODUCTDEF) -I$(SOLARRESDIR) $(INCLUDE) $(RCLINKFLAGS) $(MISC)$/$(APP9LINKRES:b).rc
 .ENDIF			# "$(APP9LINKRES)" != ""
 .IF "$(COM)" == "GCC"
-    @+echo mingw
+    @echo mingw
 .IF "$(APP9LINKRES)" != "" || "$(APP9RES)" != ""
-    @cat $(APP9LINKRES) $(subst,$/res$/,$/res{$(subst,$(BIN), $(@:d))} $(APP9RES)) >  $(MISC)$/$(@:b)_all.RES
-    windres $(MISC)$/$(@:b)_all.RES $(APP9RESO)
+    @cat $(APP9LINKRES) $(subst,$/res$/,$/res{$(subst,$(BIN), $(@:d))} $(APP9RES)) >  $(MISC)$/$(@:b)_all.res
+    windres $(MISC)$/$(@:b)_all.res $(APP9RESO)
 .ENDIF
-    @+echo $(LINK) $(LINKFLAGS) $(LINKFLAGSAPP) -L$(PRJ)$/$(INPATH)$/lib $(SOLARLIB) $(STDSLO) \
+    @echo $(LINK) $(LINKFLAGS) $(LINKFLAGSAPP) -L$(PRJ)$/$(INPATH)$/lib $(SOLARLIB) $(STDSLO) \
         $(APP9BASEX) $(APP9STACKN) -o $@ $(APP9OBJS) \
         -Wl,-Map,$(MISC)$/$(@:b).map $(STDOBJ) $(APP9RESO) \
         `$(TYPE) /dev/null $(APP9LIBS) | sed s#$(ROUT)#$(OUT)#g` \
-        $(APP_LINKTYPE) $(APP9LIBSALCPPRT) $(APP9STDLIBS) $(APP9STDLIB) $(STDLIB9) > $(MISC)$/$(@:b).cmd
-    @+$(TYPE)  $(MISC)$/$(@:b).cmd
-    @+source $(MISC)$/$(@:b).cmd
+        $(APP_LINKTYPE) $(APP9LIBSALCPPRT) $(APP9STDLIBS) $(APP9STDLIB) $(STDLIB9) > $(MISC)$/$(TARGET).$(@:b)_9.cmd
+    @$(TYPE)  $(MISC)$/$(TARGET).$(@:b)_9.cmd
+    @+source $(MISC)$/$(TARGET).$(@:b)_9.cmd
     @ls -l $@
 .ELSE	# "$(COM)" == "GCC"
 .IF "$(linkinc)" == ""
@@ -1685,8 +1733,14 @@ $(APP9TARGETN): $(APP9OBJS) $(APP9LIBS) \
         $(APP9STDLIB) $(STDLIB9) \
         )
     @-echo linking $@.manifest ...
+.IF "$(VISTA_MANIFEST)"!=""
+    $(IFEXIST) $@.manifest $(THEN) mt.exe -manifest $@.manifest -manifest $(TRUSTED_MANIFEST_LOCATION)$/trustedinfo.manifest -out:$@.tmanifest$(EMQ) $(FI)
+    $(IFEXIST) $@.manifest $(THEN) mt.exe -manifest $@.tmanifest -outputresource:$@$(EMQ);1 $(FI)
+.ELSE
     $(IFEXIST) $@.manifest $(THEN) mt.exe -manifest $@.manifest -outputresource:$@$(EMQ);1 $(FI)
+.ENDIF # "$(VISTA_MANIFEST)"!=""
     $(IFEXIST) $@.manifest $(THEN) $(RM:s/+//) $@.manifest $(FI)
+    $(IFEXIST) $@.tmanifest $(THEN) $(RM:s/+//) $@.tmanifest $(FI)
 .ELSE
         -$(RM) $(MISC)\$(APP9TARGET).lnk
         -$(RM) $(MISC)\$(APP9TARGET).lst
@@ -1847,18 +1901,18 @@ $(APP10TARGETN): $(APP10OBJS) $(APP10LIBS) \
     $(RC) -DWIN32 $(APP10PRODUCTDEF) -I$(SOLARRESDIR) $(INCLUDE) $(RCLINKFLAGS) $(MISC)$/$(APP10LINKRES:b).rc
 .ENDIF			# "$(APP10LINKRES)" != ""
 .IF "$(COM)" == "GCC"
-    @+echo mingw
+    @echo mingw
 .IF "$(APP10LINKRES)" != "" || "$(APP10RES)" != ""
-    @cat $(APP10LINKRES) $(subst,$/res$/,$/res{$(subst,$(BIN), $(@:d))} $(APP10RES)) >  $(MISC)$/$(@:b)_all.RES
-    windres $(MISC)$/$(@:b)_all.RES $(APP10RESO)
+    @cat $(APP10LINKRES) $(subst,$/res$/,$/res{$(subst,$(BIN), $(@:d))} $(APP10RES)) >  $(MISC)$/$(@:b)_all.res
+    windres $(MISC)$/$(@:b)_all.res $(APP10RESO)
 .ENDIF
-    @+echo $(LINK) $(LINKFLAGS) $(LINKFLAGSAPP) -L$(PRJ)$/$(INPATH)$/lib $(SOLARLIB) $(STDSLO) \
+    @echo $(LINK) $(LINKFLAGS) $(LINKFLAGSAPP) -L$(PRJ)$/$(INPATH)$/lib $(SOLARLIB) $(STDSLO) \
         $(APP10BASEX) $(APP10STACKN) -o $@ $(APP10OBJS) \
         -Wl,-Map,$(MISC)$/$(@:b).map $(STDOBJ) $(APP10RESO) \
         `$(TYPE) /dev/null $(APP10LIBS) | sed s#$(ROUT)#$(OUT)#g` \
-        $(APP_LINKTYPE) $(APP10LIBSALCPPRT) $(APP10STDLIBS) $(APP10STDLIB) $(STDLIB10) > $(MISC)$/$(@:b).cmd
-    @+$(TYPE)  $(MISC)$/$(@:b).cmd
-    @+source $(MISC)$/$(@:b).cmd
+        $(APP_LINKTYPE) $(APP10LIBSALCPPRT) $(APP10STDLIBS) $(APP10STDLIB) $(STDLIB10) > $(MISC)$/$(TARGET).$(@:b)_10.cmd
+    @$(TYPE)  $(MISC)$/$(TARGET).$(@:b)_10.cmd
+    @+source $(MISC)$/$(TARGET).$(@:b)_10.cmd
     @ls -l $@
 .ELSE	# "$(COM)" == "GCC"
 .IF "$(linkinc)" == ""
@@ -1877,8 +1931,14 @@ $(APP10TARGETN): $(APP10OBJS) $(APP10LIBS) \
         $(APP10STDLIB) $(STDLIB10) \
         )
     @-echo linking $@.manifest ...
+.IF "$(VISTA_MANIFEST)"!=""
+    $(IFEXIST) $@.manifest $(THEN) mt.exe -manifest $@.manifest -manifest $(TRUSTED_MANIFEST_LOCATION)$/trustedinfo.manifest -out:$@.tmanifest$(EMQ) $(FI)
+    $(IFEXIST) $@.manifest $(THEN) mt.exe -manifest $@.tmanifest -outputresource:$@$(EMQ);1 $(FI)
+.ELSE
     $(IFEXIST) $@.manifest $(THEN) mt.exe -manifest $@.manifest -outputresource:$@$(EMQ);1 $(FI)
+.ENDIF # "$(VISTA_MANIFEST)"!=""
     $(IFEXIST) $@.manifest $(THEN) $(RM:s/+//) $@.manifest $(FI)
+    $(IFEXIST) $@.tmanifest $(THEN) $(RM:s/+//) $@.tmanifest $(FI)
 .ELSE
         -$(RM) $(MISC)\$(APP10TARGET).lnk
         -$(RM) $(MISC)\$(APP10TARGET).lst
