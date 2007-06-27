@@ -4,9 +4,9 @@
  *
  *  $RCSfile: postdlg.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: kz $ $Date: 2007-05-10 14:40:47 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 17:34:45 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -76,7 +76,7 @@
 
 #define _SVX_POSTDLG_CXX
 
-#include "dialogs.hrc"
+#include <svx/dialogs.hrc>
 #include "postdlg.hrc"
 
 
@@ -85,7 +85,7 @@
 
 #include "postattr.hxx"
 #include "postdlg.hxx"
-#include "dialmgr.hxx"
+#include <svx/dialmgr.hxx>
 
 #include "helpid.hrc"
 
