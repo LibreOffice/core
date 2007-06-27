@@ -4,9 +4,9 @@
  *
  *  $RCSfile: comdep.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 00:52:49 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 22:10:11 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -39,13 +39,13 @@
 #include "comdep.hxx"
 
 #ifndef _DEBUG_HXX
-#include <debug.hxx>
+#include <tools/debug.hxx>
 #endif
 #ifndef _LIST_HXX
-#include <list.hxx>
+#include <tools/list.hxx>
 #endif
 #ifndef _FSYS_HXX
-#include <fsys.hxx>
+#include <tools/fsys.hxx>
 #endif
 
 DBG_NAMEEX( DirEntry )

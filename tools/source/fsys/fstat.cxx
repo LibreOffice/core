@@ -4,9 +4,9 @@
  *
  *  $RCSfile: fstat.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 00:53:29 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 22:11:00 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -49,7 +49,7 @@
 #include <string.h>
 
 #include "comdep.hxx"
-#include <fsys.hxx>
+#include <tools/fsys.hxx>
 
 /*************************************************************************
 |*

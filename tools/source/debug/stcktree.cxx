@@ -4,9 +4,9 @@
  *
  *  $RCSfile: stcktree.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 00:52:37 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 22:09:53 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -38,7 +38,7 @@
 
 #include <string.h>
 
-#include <debug.hxx>
+#include <tools/debug.hxx>
 
 // -----------------------------------------------------------------------
 
