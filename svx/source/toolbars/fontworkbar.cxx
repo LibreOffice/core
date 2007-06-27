@@ -4,9 +4,9 @@
  *
  *  $RCSfile: fontworkbar.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: kz $ $Date: 2007-05-10 15:02:29 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 19:20:56 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -36,7 +36,7 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_svx.hxx"
 #ifndef _SVDUNDO_HXX
-#include <svdundo.hxx>
+#include <svx/svdundo.hxx>
 #endif
 #ifndef _SFXAPP_HXX
 #include <sfx2/app.hxx>
@@ -52,22 +52,22 @@
 #endif
 
 #ifndef _SVX_DIALMGR_HXX
-#include "dialmgr.hxx"
+#include <svx/dialmgr.hxx>
 #endif
 #ifndef _SVDOASHP_HXX
-#include "svdoashp.hxx"
+#include <svx/svdoashp.hxx>
 #endif
 #ifndef _SVX_DIALOGS_HRC
-#include "dialogs.hrc"
+#include <svx/dialogs.hrc>
 #endif
 #ifndef _SVDVIEW_HXX
-#include "svdview.hxx"
+#include <svx/svdview.hxx>
 #endif
 #ifndef _SDASITM_HXX
-#include <sdasitm.hxx>
+#include <svx/sdasitm.hxx>
 #endif
 #ifndef _SVDOASHP_HXX
-#include <svdoashp.hxx>
+#include <svx/svdoashp.hxx>
 #endif
 #ifndef _COM_SUN_STAR_DRAWING_ENHANCEDCUSTOMSHAPEADJUSTMENTVALUE_HPP_
 #include <com/sun/star/drawing/EnhancedCustomShapeAdjustmentValue.hpp>
@@ -77,21 +77,21 @@
 #endif
 
 #ifndef _EEITEM_HXX //autogen
-#include <eeitem.hxx>
+#include <svx/eeitem.hxx>
 #endif
 #ifndef _SVX_CHARSCALEITEM_HXX
-#include <charscaleitem.hxx>
+#include <svx/charscaleitem.hxx>
 #endif
 #ifndef _SVX_KERNITEM_HXX
-#include <kernitem.hxx>
+#include <svx/kernitem.hxx>
 #endif
 
 #ifndef _SDRPAINTWINDOW_HXX
 #include <sdrpaintwindow.hxx>
 #endif
 
-#include "svxids.hrc"
-#include "fontworkbar.hxx"
+#include <svx/svxids.hrc>
+#include <svx/fontworkbar.hxx>
 #include "fontworkgallery.hxx"
 
 using namespace ::svx;
@@ -388,8 +388,8 @@ static void impl_execute( SdrView*, SfxRequest& rReq, SdrCustomShapeGeometryItem
 }
 
 #include "gallery.hxx"
-#include "fmmodel.hxx"
-#include "fmpage.hxx"
+#include <svx/fmmodel.hxx>
+#include <svx/fmpage.hxx>
 #include <svtools/itempool.hxx>
 
 
