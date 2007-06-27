@@ -4,9 +4,9 @@
  *
  *  $RCSfile: unoatrcn.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: obo $ $Date: 2006-10-12 14:39:04 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 14:56:37 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -56,7 +56,7 @@
 #include <rtl/memory.h>
 #endif
 
-#include "xmlcnimp.hxx"
+#include <xmloff/xmlcnimp.hxx>
 
 #include "unoatrcn.hxx"
 
