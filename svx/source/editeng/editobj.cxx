@@ -4,9 +4,9 @@
  *
  *  $RCSfile: editobj.cxx,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: obo $ $Date: 2006-10-12 12:36:10 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 17:55:35 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -43,17 +43,17 @@
 #include <tools/stream.hxx>
 
 #include <editobj2.hxx>
-#include <editdata.hxx>
+#include <svx/editdata.hxx>
 #include <editattr.hxx>
-#include <editeng.hxx>
+#include <svx/editeng.hxx>
 #include <fontitem.hxx>
-#include <cscoitem.hxx>
-#include <flditem.hxx>
-#include <lrspitem.hxx>
-#include <tstpitem.hxx>
+#include <svx/cscoitem.hxx>
+#include <svx/flditem.hxx>
+#include <svx/lrspitem.hxx>
+#include <svx/tstpitem.hxx>
 #include <bulitem.hxx>
-#include <numitem.hxx>
-#include <brshitem.hxx>
+#include <svx/numitem.hxx>
+#include <svx/brshitem.hxx>
 #include <vcl/graph.hxx>
 #include <svtools/intitem.hxx>
 #include <vcl/fontcvt.hxx>
