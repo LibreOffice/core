@@ -4,9 +4,9 @@
  *
  *  $RCSfile: XMLIsPercentagePropertyHandler.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 12:52:22 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 14:40:46 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -37,7 +37,7 @@
 #define _XMLOFF_XMLISPERCENTAGEPROPERTYHANDLER_HXX
 
 #ifndef _XMLOFF_PROPERTYHANDLERBASE_HXX
-#include <xmlprhdl.hxx>
+#include <xmloff/xmlprhdl.hxx>
 #endif
 
 /**
