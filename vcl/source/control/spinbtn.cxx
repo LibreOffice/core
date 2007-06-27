@@ -4,9 +4,9 @@
  *
  *  $RCSfile: spinbtn.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 11:55:25 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 20:08:14 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -40,13 +40,13 @@
 #include <tools/rcid.h>
 #endif
 #ifndef _SV_SPIN_H
-#include <spin.h>
+#include <vcl/spin.h>
 #endif
 #ifndef _SV_EVENT_HXX
-#include <event.hxx>
+#include <vcl/event.hxx>
 #endif
 #ifndef _SV_SPIN_HXX
-#include <spin.hxx>
+#include <vcl/spin.hxx>
 #endif
 
 // =======================================================================
