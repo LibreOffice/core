@@ -4,9 +4,9 @@
  *
  *  $RCSfile: wntmsc.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 00:54:50 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 22:12:26 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -43,22 +43,22 @@
 #pragma warning (pop)
 
 #include "wntmsc.hxx"
-#include "errinf.hxx"
+#include <tools/errinf.hxx>
 
 #ifndef _DEBUG_HXX
-#include <debug.hxx>
+#include <tools/debug.hxx>
 #endif
 #ifndef _LIST_HXX
-#include <list.hxx>
+#include <tools/list.hxx>
 #endif
 #ifndef _WLDCRD_HXX
-#include <wldcrd.hxx>
+#include <tools/wldcrd.hxx>
 #endif
 #ifndef _FSYS_HXX
-#include <fsys.hxx>
+#include <tools/fsys.hxx>
 #endif
 #ifndef _BIGINT_HXX
-#include "bigint.hxx"
+#include <tools/bigint.hxx>
 #endif
 
 DECLARE_LIST( DirEntryList, DirEntry* );
