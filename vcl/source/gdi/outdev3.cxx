@@ -4,9 +4,9 @@
  *
  *  $RCSfile: outdev3.cxx,v $
  *
- *  $Revision: 1.227 $
+ *  $Revision: 1.228 $
  *
- *  last change: $Author: kz $ $Date: 2007-05-09 13:35:35 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 20:19:25 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -47,11 +47,11 @@
 #endif
 
 #ifndef _SV_SALGDI_HXX
-#include <salgdi.hxx>
+#include <vcl/salgdi.hxx>
 #endif
 
 #ifndef _SV_SALLAYOUT_HXX
-#include <sallayout.hxx>
+#include <vcl/sallayout.hxx>
 #endif
 
 #ifndef _RTL_TENCINFO_H
@@ -62,25 +62,25 @@
 #endif
 
 #ifndef _SV_SVDATA_HXX
-#include <svdata.hxx>
+#include <vcl/svdata.hxx>
 #endif
 #ifndef _SV_METRIC_HXX
-#include <metric.hxx>
+#include <vcl/metric.hxx>
 #endif
 #ifndef _SV_IMPFONT_HXX
-#include <impfont.hxx>
+#include <vcl/impfont.hxx>
 #endif
 #ifndef _SV_METAACT_HXX
-#include <metaact.hxx>
+#include <vcl/metaact.hxx>
 #endif
 #ifndef _SV_GDIMTF_HXX
-#include <gdimtf.hxx>
+#include <vcl/gdimtf.hxx>
 #endif
 #ifndef _SV_OUTDATA_HXX
 #include <outdata.hxx>
 #endif
 #ifndef _SV_OUTFONT_HXX
-#include <outfont.hxx>
+#include <vcl/outfont.hxx>
 #endif
 #ifndef _BGFX_POLYGON_B2DPOLYGON_HXX
 #include <basegfx/polygon/b2dpolygon.hxx>
@@ -98,34 +98,34 @@
 #include <outdev.h>
 #endif
 #ifndef _SV_VIRDEV_HXX
-#include <virdev.hxx>
+#include <vcl/virdev.hxx>
 #endif
 #ifndef _SV_PRINT_HXX
-#include <print.hxx>
+#include <vcl/print.hxx>
 #endif
 #ifndef _SV_EVENT_HXX
-#include <event.hxx>
+#include <vcl/event.hxx>
 #endif
 #ifndef _SV_WINDOW_H
 #include <window.h>
 #endif
 #ifndef _SV_WINDOW_HXX
-#include <window.hxx>
+#include <vcl/window.hxx>
 #endif
 #ifndef _SV_SVAPP_HXX
-#include <svapp.hxx>
+#include <vcl/svapp.hxx>
 #endif
 #ifndef _SV_BMPACC_HXX
-#include <bmpacc.hxx>
+#include <vcl/bmpacc.hxx>
 #endif
 #ifndef _SV_FONTCVT_HXX
-#include <fontcvt.hxx>
+#include <vcl/fontcvt.hxx>
 #endif
 #ifndef _SV_OUTDEV_HXX
-#include <outdev.hxx>
+#include <vcl/outdev.hxx>
 #endif
 #ifndef _SV_EDIT_HXX
-#include <edit.hxx>
+#include <vcl/edit.hxx>
 #endif
 #ifndef _VCL_FONTCFG_HXX
 #include <fontcfg.hxx>
@@ -134,12 +134,12 @@
 #include <osl/file.h>
 #endif
 
-#include <unohelp.hxx>
+#include <vcl/unohelp.hxx>
 #ifndef _VCL_PDFWRITER_IMPL_HXX
 #include <pdfwriter_impl.hxx>
 #endif
 #ifndef _VCL_CONTROLLAYOUT_HXX
-#include <controllayout.hxx>
+#include <vcl/controllayout.hxx>
 #endif
 
 #ifndef _RTL_LOGFILE_HXX_
