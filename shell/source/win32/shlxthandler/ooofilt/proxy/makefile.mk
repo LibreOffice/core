@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.4 $
+#   $Revision: 1.5 $
 #
-#   last change: $Author: vg $ $Date: 2007-03-26 13:51:01 $
+#   last change: $Author: hr $ $Date: 2007-06-27 14:04:39 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -46,7 +46,7 @@ UWINAPILIB=
 
 .INCLUDE :  settings.mk
 
-CFLAGS+=-DWIN32_LEAN_AND_MEAN -D_NTSDK -DUNICODE -D_UNICODE -D_WIN32_WINNT=0x0501 
+CFLAGS+=-DWIN32_LEAN_AND_MEAN -D_NTSDK -DUNICODE -D_UNICODE -D_WIN32_WINNT=0x0501
 CDEFS+=-D_WIN32_IE=0x501
 
 # --- Files --------------------------------------------------------
@@ -59,15 +59,14 @@ SHL1STDLIBS=$(OLE32LIB)\
      $(UUIDLIB)\
      $(SHELL32LIB)\
      $(KERNEL32LIB)
-     
-SHL1DEPN=        
+
+SHL1DEPN=
 SHL1OBJS=$(SLOFILES)
 SHL1DEF=$(MISC)$/$(SHL1TARGET).def
 DEF1NAME=$(SHL1TARGET)
 DEF1EXPORTFILE=exports.dxp
-     
+
 # --- Targets ------------------------------------------------------
 
 .INCLUDE :	target.mk
 
-    
