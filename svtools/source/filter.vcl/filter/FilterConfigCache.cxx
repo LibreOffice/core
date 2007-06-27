@@ -4,9 +4,9 @@
  *
  *  $RCSfile: FilterConfigCache.cxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: obo $ $Date: 2006-10-12 15:17:09 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 21:32:57 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -40,7 +40,7 @@
 #include "FilterConfigCache.hxx"
 #endif
 #ifndef _FILTER_HXX
-#include <filter.hxx>
+#include <svtools/filter.hxx>
 #endif
 #ifndef _TOOLS_DEBUG_HXX
 #include <tools/debug.hxx>
