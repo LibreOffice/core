@@ -4,9 +4,9 @@
  *
  *  $RCSfile: SpellDialog.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: kz $ $Date: 2007-05-10 14:35:01 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 12:52:25 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -302,6 +302,13 @@ SpellDialog::SpellDialog(
 
 SpellDialog::~SpellDialog()
 {
+    // save possibly modified user-dictionaries
+    Reference< XDictionaryList >  xDicList( SvxGetDictionaryList() );
+    if (xDicList.is())
+    {
+        SvxSaveDictionaries( xDicList );
+    }
+
     delete aAddToDictMB.GetPopupMenu();
     delete pImpl;
 }
