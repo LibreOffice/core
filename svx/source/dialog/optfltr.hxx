@@ -4,9 +4,9 @@
  *
  *  $RCSfile: optfltr.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: obo $ $Date: 2006-10-12 12:21:10 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 17:26:39 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -48,7 +48,7 @@
 #include <sfx2/tabdlg.hxx>
 #endif
 #ifndef _SVX_SIMPTABL_HXX //autogen
-#include "simptabl.hxx"
+#include <svx/simptabl.hxx>
 #endif
 
 
