@@ -4,9 +4,9 @@
  *
  *  $RCSfile: elementimport.cxx,v $
  *
- *  $Revision: 1.56 $
+ *  $Revision: 1.57 $
  *
- *  last change: $Author: obo $ $Date: 2007-03-09 13:05:34 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 15:14:07 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -42,13 +42,13 @@
 #include "elementimport.hxx"
 #endif
 #ifndef _XMLOFF_XMLIMP_HXX
-#include "xmlimp.hxx"
+#include <xmloff/xmlimp.hxx>
 #endif
 #ifndef _XMLOFF_NMSPMAP_HXX
-#include "nmspmap.hxx"
+#include <xmloff/nmspmap.hxx>
 #endif
 #ifndef _XMLOFF_XMLUCONV_HXX
-#include "xmluconv.hxx"
+#include <xmloff/xmluconv.hxx>
 #endif
 #ifndef _XMLOFF_FORMS_STRINGS_HXX_
 #include "strings.hxx"
@@ -66,13 +66,13 @@
 #include "eventimport.hxx"
 #endif
 #ifndef _XMLOFF_TXTSTYLI_HXX_
-#include "txtstyli.hxx"
+#include <xmloff/txtstyli.hxx>
 #endif
 #ifndef _XMLOFF_FORMENUMS_HXX_
 #include "formenums.hxx"
 #endif
 #ifndef _XMLOFF_XMLTOKEN_HXX
-#include "xmltoken.hxx"
+#include <xmloff/xmltoken.hxx>
 #endif
 #ifndef XMLOFF_SOURCE_FORMS_GRIDCOLUMNPROPTRANSLATOR_HXX
 #include "gridcolumnproptranslator.hxx"
