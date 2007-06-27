@@ -4,9 +4,9 @@
  *
  *  $RCSfile: AccessibleImageBullet.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 04:01:06 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 16:37:53 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -101,12 +101,12 @@
 #endif
 
 #ifndef _SVX_DIALMGR_HXX
-#include "dialmgr.hxx"
+#include <svx/dialmgr.hxx>
 #endif
 
-#include "editdata.hxx"
-#include "editeng.hxx"
-#include "outliner.hxx"
+#include <svx/editdata.hxx>
+#include <svx/editeng.hxx>
+#include <svx/outliner.hxx>
 #include "accessibility.hrc"
 #ifndef INCLUDED_SVTOOLS_COLORCFG_HXX
 #include <svtools/colorcfg.hxx>
