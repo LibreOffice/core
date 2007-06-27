@@ -5759,20 +5759,20 @@ fi
 done
 
       COMPATH=`echo $_cc | $SED -n "s/\/cc//p"`
-      echo "$as_me:$LINENO: checking the SUN Workshop C compiler version" >&5
-echo $ECHO_N "checking the SUN Workshop C compiler version... $ECHO_C" >&6
-            _workshop_string=`$CC -V 2>&1 | grep '^cc' | sed -e 's/.* C //'`
-      _workshop_version=`echo $_workshop_string | $AWK '{ print $1 }'`
-      _workshop_major=`echo $_workshop_version | $AWK -F. '{ print $1 }'`
-      if test "$_workshop_major" != "5"; then
-         { { echo "$as_me:$LINENO: error: found version \"$_workshop_version\", use version 5.5, 5.7 or 5.8 of the Sun Workshop C compiler" >&5
-echo "$as_me: error: found version \"$_workshop_version\", use version 5.5, 5.7 or 5.8 of the Sun Workshop C compiler" >&2;}
+      echo "$as_me:$LINENO: checking the SunStudio C/C++ compiler version" >&5
+echo $ECHO_N "checking the SunStudio C/C++ compiler version... $ECHO_C" >&6
+            _sunstudio_string=`$CC -V 2>&1 | grep '^cc' | sed -e 's/.* C //'`
+      _sunstudio_version=`echo $_sunstudio_string | $AWK '{ print $1 }'`
+      _sunstudio_major=`echo $_sunstudio_version | $AWK -F. '{ print $1 }'`
+      if test "$_sunstudio_major" != "5"; then
+         { { echo "$as_me:$LINENO: error: found version \"$_sunstudio_version\", use version 5.5, 5.7, 5.8 or 5.9 of the SunStudio C/C++ compiler" >&5
+echo "$as_me: error: found version \"$_sunstudio_version\", use version 5.5, 5.7, 5.8 or 5.9 of the SunStudio C/C++ compiler" >&2;}
    { (exit 1); exit 1; }; }
       else
-         _workshop_minor=`echo $_workshop_version | $AWK -F. '{ if ($2 == 5) print "true"; else if ($2 == 7) print "true"; else if ($2 == 8) print "true"; else print "false" }'`
-         if test "$_workshop_minor" = "false"; then
-            { { echo "$as_me:$LINENO: error: found version \"$_workshop_version\", use version 5.5, 5.7 or 5.8 of the Sun Workshop C compiler" >&5
-echo "$as_me: error: found version \"$_workshop_version\", use version 5.5, 5.7 or 5.8 of the Sun Workshop C compiler" >&2;}
+         _sunstudio_minor=`echo $_sunstudio_version | $AWK -F. '{ if ($2 == 5) print "true"; else if ($2 == 7) print "true"; else if ($2 == 8) print "true"; else if ($2 == 9) print "true"; else print "false" }'`
+         if test "$_sunstudio_minor" = "false"; then
+            { { echo "$as_me:$LINENO: error: found version \"$_sunstudio_version\", use version 5.5, 5.7, 5.8 or 5.9 of the SunStudio C/C++ compiler" >&5
+echo "$as_me: error: found version \"$_sunstudio_version\", use version 5.5, 5.7, 5.8 or 5.9 of the SunStudio C/C++ compiler" >&2;}
    { (exit 1); exit 1; }; }
          else
                         echo "$as_me:$LINENO: result: checked" >&5
@@ -8109,12 +8109,12 @@ fi
 
 if test "$_os" = "SunOS"; then
       if test "$CC" = "cc"; then
-   echo "$as_me:$LINENO: checking Sun Workshop C++ Compiler" >&5
-echo $ECHO_N "checking Sun Workshop C++ Compiler... $ECHO_C" >&6
+   echo "$as_me:$LINENO: checking SunStudio C++ Compiler" >&5
+echo $ECHO_N "checking SunStudio C++ Compiler... $ECHO_C" >&6
       if test "$CXX" != "CC"; then
-         { echo "$as_me:$LINENO: WARNING: Sun Workshop C++ was not found" >&5
-echo "$as_me: WARNING: Sun Workshop C++ was not found" >&2;}
-         echo "Sun Workshop C++ was not found" >> warn
+         { echo "$as_me:$LINENO: WARNING: SunStudio C++ was not found" >&5
+echo "$as_me: WARNING: SunStudio C++ was not found" >&2;}
+         echo "SunStudio C++ was not found" >> warn
       else
          echo "$as_me:$LINENO: result: checked" >&5
 echo "${ECHO_T}checked" >&6
@@ -10386,7 +10386,7 @@ else
     echo "$as_me:$LINENO: checking whether the found dmake is the right dmake" >&5
 echo $ECHO_N "checking whether the found dmake is the right dmake... $ECHO_C" >&6
     # we need to find out whether that dmake we found is "our" dmake
-    # or the dmake from Sun's Workshop Compiler which is something
+    # or the dmake from Sun's SunStudio Compiler which is something
     # different
     # This test _should_ work because the one accepts -V (ours) and one
     # (the other) not...
@@ -19033,6 +19033,7 @@ fi
 echo "$as_me:$LINENO: checking whether to enable portaudio/sndfile support" >&5
 echo $ECHO_N "checking whether to enable portaudio/sndfile support... $ECHO_C" >&6
 if test "$_os" != "WINNT" && \
+  test "$_os" != "SunOS" && \
   test -n "$enable_pasf" && test "$enable_pasf" != "no"; then
 	echo "$as_me:$LINENO: result: yes" >&5
 echo "${ECHO_T}yes" >&6
