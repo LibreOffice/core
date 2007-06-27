@@ -4,9 +4,9 @@
  *
  *  $RCSfile: macropg.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: kz $ $Date: 2007-05-10 14:38:07 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 17:20:23 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -63,12 +63,12 @@
 #include <com/sun/star/container/NoSuchElementException.hpp>
 #include <com/sun/star/lang/IllegalArgumentException.hpp>
 
-#include "dialmgr.hxx"
+#include <svx/dialmgr.hxx>
 #include "selector.hxx"
 #include "cfg.hxx"
 #include "macropg.hrc"
 #include "helpid.hrc"
-#include "dialogs.hrc"
+#include <svx/dialogs.hrc>
 
 #ifndef _HEADERTABLISTBOX_HXX
 #include "headertablistbox.hxx"
