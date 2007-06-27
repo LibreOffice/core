@@ -4,9 +4,9 @@
  *
  *  $RCSfile: pszctrl.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: kz $ $Date: 2007-05-10 14:56:40 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 18:55:06 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -80,12 +80,12 @@
 
 #define PAINT_OFFSET    5
 
-#include "sizeitem.hxx"
-#include "dialmgr.hxx"
+#include <svx/sizeitem.hxx>
+#include <svx/dialmgr.hxx>
 #include "dlgutil.hxx"
 #include "stbctrls.h"
 
-#include "dialogs.hrc"
+#include <svx/dialogs.hrc>
 
 #ifndef _UNOTOOLS_LOCALEDATAWRAPPER_HXX
 #include <unotools/localedatawrapper.hxx>
