@@ -4,9 +4,9 @@
  *
  *  $RCSfile: viewopt.hxx,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: hr $ $Date: 2006-08-14 15:38:11 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 13:15:07 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -111,7 +111,6 @@ namespace svtools{ class ColorConfig;}
 #define VIEWOPT_2_MODIFIED          0x00010000L
 #define VIEWOPT_2_KEEPASPECTRATIO   0x00020000L
 #define VIEWOPT_2_GRFKEEPZOOM       0x00040000L
-#define VIEWOPT_2_EXECHYPERLINKS    0x00080000L
 #define VIEWOPT_2_PREVENT_TIPS      0x00100000L
 #define VIEWOPT_2_RESERVED3         0x00200000L
 #define VIEWOPT_2_RESERVED4         0x00400000L
@@ -151,6 +150,7 @@ class SwViewOption
     static Color    aDirectCursorColor;
     static Color    aTextGridColor;
     static Color    aSpellColor;     // mark color of online spell checking
+    static Color    aSmarttagColor;
     static Color    aFieldShadingsColor;
     static Color    aSectionBoundColor;
     static Color    aPageBreakColor;
@@ -476,8 +476,6 @@ public:
         { return nUIOptions & VIEWOPT_2_KEEPASPECTRATIO ? TRUE : FALSE;   }
     BOOL    IsGrfKeepZoom()    const
         { return nUIOptions & VIEWOPT_2_GRFKEEPZOOM ? TRUE : FALSE;   }
-    BOOL    IsExecHyperlinks() const
-        { return nUIOptions & VIEWOPT_2_EXECHYPERLINKS ? TRUE : FALSE; }
     BOOL    IsPreventTips() const
         { return nUIOptions & VIEWOPT_2_PREVENT_TIPS ? TRUE : FALSE; }
     BOOL    IsPrtFormat() const
@@ -495,8 +493,6 @@ public:
         { b ? (nUIOptions |= VIEWOPT_2_KEEPASPECTRATIO ) : ( nUIOptions &= ~VIEWOPT_2_KEEPASPECTRATIO); }
     void   SetGrfKeepZoom   (BOOL b)
         { b ? (nUIOptions |= VIEWOPT_2_GRFKEEPZOOM ) : ( nUIOptions &= ~VIEWOPT_2_GRFKEEPZOOM); }
-    void SetExecHyperlinks( BOOL b)
-        { b ? (nUIOptions |= VIEWOPT_2_EXECHYPERLINKS) : (nUIOptions &= ~VIEWOPT_2_EXECHYPERLINKS); }
     void SetPreventTips( BOOL b)
         { b ? (nUIOptions |= VIEWOPT_2_PREVENT_TIPS) : (nUIOptions &= ~VIEWOPT_2_PREVENT_TIPS); }
     void SetPrtFormat( BOOL b)
@@ -573,6 +569,7 @@ public:
     static Color&   GetDirectCursorColor();
     static Color&   GetTextGridColor();
     static Color&   GetSpellColor();
+    static Color&   GetSmarttagColor();
     SW_DLLPUBLIC static Color&   GetFontColor();
     static Color&   GetFieldShadingsColor();
     static Color&   GetSectionBoundColor();
