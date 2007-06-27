@@ -4,9 +4,9 @@
  *
  *  $RCSfile: textproperties.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: kz $ $Date: 2007-05-10 14:56:27 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 18:54:07 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -57,57 +57,57 @@
 #endif
 
 #ifndef _SVDDEF_HXX
-#include <svddef.hxx>
+#include <svx/svddef.hxx>
 #endif
 
 //#ifndef _EEITEM_HXX
-//#include <eeitem.hxx>
+//#include <svx/eeitem.hxx>
 //#endif
 
 #ifndef _SVDOTEXT_HXX
-#include <svdotext.hxx>
+#include <svx/svdotext.hxx>
 #endif
 
 #ifndef _SVDOUTL_HXX
-#include <svdoutl.hxx>
+#include <svx/svdoutl.hxx>
 #endif
 
 #ifndef _SVX_WRITINGMODEITEM_HXX
-#include <writingmodeitem.hxx>
+#include <svx/writingmodeitem.hxx>
 #endif
 
 #ifndef _SVDMODEL_HXX
-#include <svdmodel.hxx>
+#include <svx/svdmodel.hxx>
 #endif
 
 #ifndef _OUTLOBJ_HXX
-#include <outlobj.hxx>
+#include <svx/outlobj.hxx>
 #endif
 
 #ifndef _SVX_XFLCLIT_HXX
-#include <xflclit.hxx>
+#include <svx/xflclit.hxx>
 #endif
 
 
 #ifndef _SVX_ADJITEM_HXX
-#include <adjitem.hxx>
+#include <svx/adjitem.hxx>
 #endif
 
 #ifndef _SVDETC_HXX
-#include <svdetc.hxx>
+#include <svx/svdetc.hxx>
 #endif
 
 #ifndef _MyEDITENG_HXX
-#include <editeng.hxx>
+#include <svx/editeng.hxx>
 #endif
 
 #ifndef _SVX_FLDITEM_HXX
-#include <flditem.hxx>
+#include <svx/flditem.hxx>
 #endif
 
 // #i25616#
 #ifndef _SVX_XLNWTIT_HXX //autogen
-#include <xlnwtit.hxx>
+#include <svx/xlnwtit.hxx>
 #endif
 
 //////////////////////////////////////////////////////////////////////////////
