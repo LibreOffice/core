@@ -4,9 +4,9 @@
  *
  *  $RCSfile: pubdlg.hxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: obo $ $Date: 2006-01-19 18:10:36 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 15:44:50 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -69,6 +69,8 @@
 #include "assclass.hxx"
 #endif
 
+#include <boost/scoped_ptr.hpp>
+
 #define NOOFPAGES 6
 
 enum HtmlPublishMode { PUBLISH_HTML, PUBLISH_FRAMES, PUBLISH_WEBCAST, PUBLISH_KIOSK };
@@ -85,6 +87,7 @@ class ValueSet;
 class SdHtmlAttrPreview;
 class List;
 class SdPublishingDesign;
+class ButtonSet;
 
 // *********************************************************************
 // Html-Export Autopilot
@@ -138,6 +141,7 @@ private:
     // page 3 controls
     FixedBitmap*    pPage3_Bmp;
     FixedLine*      pPage3_Titel1;
+    RadioButton*    pPage3_Png;
     RadioButton*    pPage3_Gif;
     RadioButton*    pPage3_Jpg;
     FixedText*      pPage3_Quality_txt;
@@ -184,6 +188,8 @@ private:
     PushButton*     pPage6_ALink;
     RadioButton*    pPage6_DocColors;
     SdHtmlAttrPreview*  pPage6_Preview;
+
+    boost::scoped_ptr< ButtonSet > mpButtonSet;
 
 //  CheckBox*       pPage6_Sound;
 
