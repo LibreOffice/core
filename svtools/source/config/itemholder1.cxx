@@ -4,9 +4,9 @@
  *
  *  $RCSfile: itemholder1.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 14:25:14 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 21:13:12 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -49,40 +49,40 @@
 #include <com/sun/star/lang/XComponent.hpp>
 #endif
 
-#include <accelcfg.hxx>
-#include <addxmltostorageoptions.hxx>
+#include <svtools/accelcfg.hxx>
+#include <svtools/addxmltostorageoptions.hxx>
 #include <cacheoptions.hxx>
-#include <cmdoptions.hxx>
-#include <compatibility.hxx>
-#include <defaultoptions.hxx>
-#include <dynamicmenuoptions.hxx>
+#include <svtools/cmdoptions.hxx>
+#include <svtools/compatibility.hxx>
+#include <svtools/defaultoptions.hxx>
+#include <svtools/dynamicmenuoptions.hxx>
 #include <eventcfg.hxx>
-#include <extendedsecurityoptions.hxx>
+#include <svtools/extendedsecurityoptions.hxx>
 #include <fltrcfg.hxx>
-#include <fontoptions.hxx>
-#include <historyoptions.hxx>
-#include <inetoptions.hxx>
-#include <internaloptions.hxx>
+#include <svtools/fontoptions.hxx>
+#include <svtools/historyoptions.hxx>
+#include <svtools/inetoptions.hxx>
+#include <svtools/internaloptions.hxx>
 #include <javaoptions.hxx>
-#include <lingucfg.hxx>
-#include <localisationoptions.hxx>
-#include <menuoptions.hxx>
-#include <miscopt.hxx>
-#include <moduleoptions.hxx>
-#include <options3d.hxx>
-#include <pathoptions.hxx>
-#include <printwarningoptions.hxx>
+#include <svtools/lingucfg.hxx>
+#include <svtools/localisationoptions.hxx>
+#include <svtools/menuoptions.hxx>
+#include <svtools/miscopt.hxx>
+#include <svtools/moduleoptions.hxx>
+#include <svtools/options3d.hxx>
+#include <svtools/pathoptions.hxx>
+#include <svtools/printwarningoptions.hxx>
 #include <regoptions.hxx>
-#include <optionsdlg.hxx>
-#include <saveopt.hxx>
+#include <svtools/optionsdlg.hxx>
+#include <svtools/saveopt.hxx>
 #include <searchopt.hxx>
-#include <securityoptions.hxx>
-#include <sourceviewconfig.hxx>
-#include <startoptions.hxx>
-#include <viewoptions.hxx>
-#include <workingsetoptions.hxx>
+#include <svtools/securityoptions.hxx>
+#include <svtools/sourceviewconfig.hxx>
+#include <svtools/startoptions.hxx>
+#include <svtools/viewoptions.hxx>
+#include <svtools/workingsetoptions.hxx>
 #include <xmlaccelcfg.hxx>
-#include "options.hxx"
+#include <svtools/options.hxx>
 
 //-----------------------------------------------
 // namespaces

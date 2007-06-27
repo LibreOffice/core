@@ -4,9 +4,9 @@
  *
  *  $RCSfile: itemholder2.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 14:25:28 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 21:13:25 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -54,20 +54,20 @@
 #include <com/sun/star/lang/XComponent.hpp>
 #endif
 
-#include <accessibilityoptions.hxx>
+#include <svtools/accessibilityoptions.hxx>
 #include <apearcfg.hxx>
-#include <cjkoptions.hxx>
-#include <colorcfg.hxx>
-#include <ctloptions.hxx>
+#include <svtools/cjkoptions.hxx>
+#include <svtools/colorcfg.hxx>
+#include <svtools/ctloptions.hxx>
 #include <fontsubstconfig.hxx>
-#include <helpopt.hxx>
-#include <languageoptions.hxx>
+#include <svtools/helpopt.hxx>
+#include <svtools/languageoptions.hxx>
 #include <misccfg.hxx>
-#include <printoptions.hxx>
-#include <syslocaleoptions.hxx>
-#include <undoopt.hxx>
-#include <useroptions.hxx>
-#include "options.hxx"
+#include <svtools/printoptions.hxx>
+#include <svtools/syslocaleoptions.hxx>
+#include <svtools/undoopt.hxx>
+#include <svtools/useroptions.hxx>
+#include <svtools/options.hxx>
 
 #include <tools/debug.hxx>
 
