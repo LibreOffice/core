@@ -4,9 +4,9 @@
  *
  *  $RCSfile: XMLAnchorTypePropHdl.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: obo $ $Date: 2006-10-12 14:53:18 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 15:50:00 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -41,7 +41,7 @@
 #endif
 
 #ifndef _XMLOFF_PROPERTYHANDLERBASE_HXX
-#include "xmlprhdl.hxx"
+#include <xmloff/xmlprhdl.hxx>
 #endif
 
 
