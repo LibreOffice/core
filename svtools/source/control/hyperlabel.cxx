@@ -4,9 +4,9 @@
  *
  *  $RCSfile: hyperlabel.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 14:38:51 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 21:25:09 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -36,7 +36,7 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_svtools.hxx"
 #ifndef SVTOOLS_ROADMAP_HXX
-#include "hyperlabel.hxx"
+#include <svtools/hyperlabel.hxx>
 #endif
 
 #ifndef _SV_BITMAP_HXX
