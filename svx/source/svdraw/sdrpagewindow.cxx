@@ -4,9 +4,9 @@
  *
  *  $RCSfile: sdrpagewindow.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: hr $ $Date: 2007-06-26 12:08:07 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 18:57:52 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -37,7 +37,7 @@
 #include "precompiled_svx.hxx"
 
 #ifndef _SDRPAGEWINDOW_HXX
-#include <sdrpagewindow.hxx>
+#include <svx/sdrpagewindow.hxx>
 #endif
 
 #ifndef _COM_SUN_STAR_AWT_XWINDOW_HPP_
@@ -66,18 +66,18 @@
 #endif
 
 #ifndef _SVDOUNO_HXX
-#include <svdouno.hxx>
+#include <svx/svdouno.hxx>
 #endif
 #ifndef _SVDPAGE_HXX
-#include <svdpage.hxx>
+#include <svx/svdpage.hxx>
 #endif
 
 #ifndef _SVDVIEW_HXX
-#include <svdview.hxx>
+#include <svx/svdview.hxx>
 #endif
 
 #ifndef _SVDPAGV_HXX
-#include <svdpagv.hxx>
+#include <svx/svdpagv.hxx>
 #endif
 
 #ifndef _SDRPAINTWINDOW_HXX
@@ -89,7 +89,7 @@
 #endif
 
 #ifndef _XOUTX_HXX
-#include <xoutx.hxx>
+#include <svx/xoutx.hxx>
 #endif
 
 #ifndef _SDR_CONTACT_DISPLAYINFO_HXX
@@ -101,7 +101,7 @@
 #endif
 
 #ifndef _SVX_FMVIEW_HXX
-#include <fmview.hxx>
+#include <svx/fmview.hxx>
 #endif
 
 using namespace ::rtl;
@@ -348,7 +348,7 @@ void SdrPageWindow::PrepareRedraw(const Region& rReg)
 #ifdef CLIPPER_TEST
 
 #ifndef _SVDOPATH_HXX
-#include <svdopath.hxx>
+#include <svx/svdopath.hxx>
 #endif
 
 #ifndef _BGFX_POLYGON_B2DPOLYGON_HXX
