@@ -4,9 +4,9 @@
  *
  *  $RCSfile: unoshape.cxx,v $
  *
- *  $Revision: 1.157 $
+ *  $Revision: 1.158 $
  *
- *  last change: $Author: hr $ $Date: 2007-06-26 16:00:55 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 19:27:08 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -69,10 +69,10 @@
 #include <vos/mutex.hxx>
 #endif
 #ifndef _SVX_UNOTEXT_HXX
-#include <unotext.hxx>
+#include <svx/unotext.hxx>
 #endif
 #ifndef _SVDOBJ_HXX
-#include <svdobj.hxx>
+#include <svx/svdobj.hxx>
 #endif
 #ifndef _OSL_MUTEX_HXX_
 #include <osl/mutex.hxx>
@@ -94,85 +94,85 @@
 #include <sfx2/viewsh.hxx>
 #endif
 #ifndef _SVDOPAGE_HXX
-#include "svdopage.hxx"
+#include <svx/svdopage.hxx>
 #endif
 #ifndef _SVX_XFLBSTIT_HXX
-#include "xflbstit.hxx"
+#include <svx/xflbstit.hxx>
 #endif
 #ifndef _SVX_XFLBMTIT_HXX
-#include "xflbmtit.hxx"
+#include <svx/xflbmtit.hxx>
 #endif
 #ifndef _SVX_XLNSTIT_HXX
-#include "xlnstit.hxx"
+#include <svx/xlnstit.hxx>
 #endif
 #ifndef _SVX_XLNEDIT_HXX
-#include "xlnedit.hxx"
+#include <svx/xlnedit.hxx>
 #endif
 #ifndef _SVDOGRP_HXX
-#include "svdogrp.hxx"
+#include <svx/svdogrp.hxx>
 #endif
 #ifndef _E3D_SCENE3D_HXX
-#include "scene3d.hxx"
+#include <svx/scene3d.hxx>
 #endif
-#include "svdmodel.hxx"
+#include <svx/svdmodel.hxx>
 #include "globl3d.hxx"
-#include "fmglob.hxx"
-#include "unopage.hxx"
-#include "view3d.hxx"
-#include "unoshape.hxx"
-#include "svxids.hrc"
-#include "unoshtxt.hxx"
-#include "svdpage.hxx"
-#include "unoshprp.hxx"
-#include "svdoole2.hxx"
-#include "sxciaitm.hxx" // todo: remove
-#include "svdograf.hxx"
+#include <svx/fmglob.hxx>
+#include <svx/unopage.hxx>
+#include <svx/view3d.hxx>
+#include <svx/unoshape.hxx>
+#include <svx/svxids.hrc>
+#include <svx/unoshtxt.hxx>
+#include <svx/svdpage.hxx>
+#include <svx/unoshprp.hxx>
+#include <svx/svdoole2.hxx>
+#include <svx/sxciaitm.hxx> // todo: remove
+#include <svx/svdograf.hxx>
 #include "unoapi.hxx"
-#include "svdomeas.hxx"
-#include <svdpagv.hxx>
+#include <svx/svdomeas.hxx>
+#include <svx/svdpagv.hxx>
 
 #include <tools/shl.hxx>    //
-#include "dialmgr.hxx"      // not nice, we need our own resources some day
-#include "dialogs.hrc"      //
+#include <svx/dialmgr.hxx>      // not nice, we need our own resources some day
+#include <svx/dialogs.hrc>      //
 
 #ifndef _SVDCAPT_HXX
-#include "svdocapt.hxx"
+#include <svx/svdocapt.hxx>
 #endif
 
 #ifndef _E3D_OBJ3D_HXX
-#include <obj3d.hxx>
+#include <svx/obj3d.hxx>
 #endif
 
 #ifndef _SVX_XFLFTRIT_HXX
-#include "xflftrit.hxx"
+#include <svx/xflftrit.hxx>
 #endif
 
 #ifndef _XTABLE_HXX
-#include "xtable.hxx"
+#include <svx/xtable.hxx>
 #endif
 
 #ifndef _SVX_XBTMPIT_HXX
-#include "xbtmpit.hxx"
+#include <svx/xbtmpit.hxx>
 #endif
 
 #ifndef _SVX_XFLGRIT_HXX
-#include "xflgrit.hxx"
+#include <svx/xflgrit.hxx>
 #endif
 
 #ifndef _SVX_XFLHTIT_HXX
-#include "xflhtit.hxx"
+#include <svx/xflhtit.hxx>
 #endif
 
 #ifndef _SVX_XLNEDIT_HXX
-#include "xlnedit.hxx"
+#include <svx/xlnedit.hxx>
 #endif
 
 #ifndef _SVX_XLNSTIT_HXX
-#include "xlnstit.hxx"
+#include <svx/xlnstit.hxx>
 #endif
 
 #ifndef _SVX_XLNDSIT_HXX
-#include "xlndsit.hxx"
+#include <svx/xlndsit.hxx>
 #endif
 
 #ifndef _SVDGLOB_HXX
@@ -182,7 +182,7 @@
 #include "unomaster.hxx"
 
 #ifndef _OUTLOBJ_HXX //autogen
-#include <outlobj.hxx>
+#include <svx/outlobj.hxx>
 #endif
 
 #ifndef _BGFX_MATRIX_B2DHOMMATRIX_HXX
@@ -193,10 +193,10 @@
 
 // #i68523#
 #ifndef _E3D_LATHE3D_HXX
-#include "lathe3d.hxx"
+#include <svx/lathe3d.hxx>
 #endif
 #ifndef _E3D_EXTRUD3D_HXX
-#include "extrud3d.hxx"
+#include <svx/extrud3d.hxx>
 #endif
 
 #include <comphelper/scopeguard.hxx>
