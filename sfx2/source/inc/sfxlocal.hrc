@@ -4,9 +4,9 @@
  *
  *  $RCSfile: sfxlocal.hrc,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2006-05-02 16:53:15 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 23:29:04 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -36,13 +36,13 @@
 // Lokale  Resourcen
 //
 // (C) 1996 - 2000 Star Division GmbH, Hamburg, Germany
-// $Author: rt $ $Date: 2006-05-02 16:53:15 $ $Revision: 1.5 $
+// $Author: hr $ $Date: 2007-06-27 23:29:04 $ $Revision: 1.6 $
 // $Logfile:   T:/sfx2/source/inc/sfxlocal.hrv  $ $Workfile:   SFXLOCAL.HRC  $
 //----------------------------------------------------------------------------
 #ifndef _SFXLOCAL_HRC
 #define _SFXLOCAL_HRC
 
-#include <sfx.hrc>
+#include <sfx2/sfx.hrc>
 
 // Strings ---------------------------------------------------------------
 
