@@ -4,9 +4,9 @@
  *
  *  $RCSfile: slider.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 11:55:12 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 20:08:01 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -40,13 +40,13 @@
 #include <tools/rc.h>
 #endif
 #ifndef _SV_EVENT_HXX
-#include <event.hxx>
+#include <vcl/event.hxx>
 #endif
 #ifndef _SV_DECOVIEW_HXX
-#include <decoview.hxx>
+#include <vcl/decoview.hxx>
 #endif
 #ifndef _SV_SLIDER_HXX
-#include <slider.hxx>
+#include <vcl/slider.hxx>
 #endif
 
 
