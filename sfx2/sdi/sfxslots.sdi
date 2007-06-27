@@ -2,7 +2,7 @@
     module StarApplicationFrame
 
     (C) 1994-1995 StarDivision GmbH, Hamburg, Germany
-    $Author: obo $ $Date: 2007-03-15 17:01:21 $ $Revision: 1.16 $
+    $Author: hr $ $Date: 2007-06-27 22:53:52 $ $Revision: 1.17 $
     $Logfile:   T:/sfx2/sdi/sfxslots.sdv  $ $Workfile:   SFXSLOTS.SDI  $
 =========================================================================*/
 
@@ -12,7 +12,7 @@ module
 StarApplicationFrame
 [
 HelpText( "StarDivision Application Framework" ),
-SlotIdFile( "sfx.hrc" )
+SlotIdFile( "sfx2/sfx.hrc" )
 TypeLibFile( "sfxslots.tlb" )
 ]
 {
