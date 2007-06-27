@@ -4,9 +4,9 @@
  *
  *  $RCSfile: mkcreate.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 00:48:57 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 22:06:52 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -43,8 +43,8 @@
 #include "bootstrp/mkcreate.hxx"
 #include "bootstrp/inimgr.hxx"
 #include "bootstrp/appdef.hxx"
-#include "geninfo.hxx"
-#include "iparser.hxx"
+#include <tools/geninfo.hxx>
+#include <tools/iparser.hxx>
 #include "bootstrp/prj.hxx"
 
 char const *NoBuildProject[] = {
@@ -691,9 +691,9 @@ BOOL SourceDirectory::CreateRecursiveMakefile( BOOL bAllChilds )
         "#\n"
         "#  $RCSfile: mkcreate.cxx,v $\n"
         "#\n"
-        "#  $Revision: 1.15 $\n"
+        "#  $Revision: 1.16 $\n"
         "#\n"
-        "#  last change: $Author: obo $ $Date: 2006-09-17 00:48:57 $\n"
+        "#  last change: $Author: hr $ $Date: 2007-06-27 22:06:52 $\n"
         "#\n"
         "#  The Contents of this file are made available subject to\n"
         "#  the terms of GNU Lesser General Public License Version 2.1.\n"
