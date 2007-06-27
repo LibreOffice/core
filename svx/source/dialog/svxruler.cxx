@@ -4,9 +4,9 @@
  *
  *  $RCSfile: svxruler.cxx,v $
  *
- *  $Revision: 1.36 $
+ *  $Revision: 1.37 $
  *
- *  last change: $Author: rt $ $Date: 2007-05-29 15:57:55 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 17:42:41 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -63,13 +63,13 @@
 
 
 
-#include "dialogs.hrc"
-#include "dialmgr.hxx"
-#include "ruler.hxx"
+#include <svx/dialogs.hrc>
+#include <svx/dialmgr.hxx>
+#include <svx/ruler.hxx>
 #include "rlrcitem.hxx"
 #include "rulritem.hxx"
-#include "tstpitem.hxx"
-#include "lrspitem.hxx"
+#include <svx/tstpitem.hxx>
+#include <svx/lrspitem.hxx>
 #include "protitem.hxx"
 #ifndef _APP_HXX
 #include <vcl/svapp.hxx>
