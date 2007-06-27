@@ -4,9 +4,9 @@
  *
  *  $RCSfile: filtnav.cxx,v $
  *
- *  $Revision: 1.45 $
+ *  $Revision: 1.46 $
  *
- *  last change: $Author: ihi $ $Date: 2006-12-20 14:12:23 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 18:10:48 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -63,7 +63,7 @@
 #endif
 
 #ifndef _SVX_SVXIDS_HRC
-#include "svxids.hrc"
+#include <svx/svxids.hrc>
 #endif
 
 #ifndef _SVX_FMPROP_HRC
@@ -75,7 +75,7 @@
 #endif
 
 #ifndef _SVX_DIALMGR_HXX //autogen
-#include "dialmgr.hxx"
+#include <svx/dialmgr.hxx>
 #endif
 
 #ifndef _SFXDISPATCH_HXX //autogen
@@ -103,7 +103,7 @@
 #endif
 
 #ifndef _SVX_FMSHELL_HXX //autogen
-#include <fmshell.hxx>
+#include <svx/fmshell.hxx>
 #endif
 
 #ifndef _SVX_FMSHIMP_HXX
