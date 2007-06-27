@@ -4,9 +4,9 @@
  *
  *  $RCSfile: topfrm.cxx,v $
  *
- *  $Revision: 1.89 $
+ *  $Revision: 1.90 $
  *
- *  last change: $Author: rt $ $Date: 2007-04-26 10:15:44 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 23:35:07 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -38,7 +38,7 @@
 #ifndef GCC
 #endif
 
-#include "topfrm.hxx"
+#include <sfx2/topfrm.hxx>
 
 #ifndef _COM_SUN_STAR_FRAME_XMODULEMANAGER_HPP_
 #include <com/sun/star/frame/XModuleManager.hpp>
@@ -124,27 +124,27 @@
 
 // wg. pTopFrames
 #include "appdata.hxx"
-#include "app.hxx"
-#include "sfx.hrc"
-#include "objsh.hxx"
-#include "docfile.hxx"
-#include "viewsh.hxx"
-#include "bindings.hxx"
-#include "dispatch.hxx"
-#include "request.hxx"
-#include "objitem.hxx"
-#include "objface.hxx"
-#include "msg.hxx"
+#include <sfx2/app.hxx>
+#include <sfx2/sfx.hrc>
+#include <sfx2/objsh.hxx>
+#include <sfx2/docfile.hxx>
+#include <sfx2/viewsh.hxx>
+#include <sfx2/bindings.hxx>
+#include <sfx2/dispatch.hxx>
+#include <sfx2/request.hxx>
+#include <sfx2/objitem.hxx>
+#include <sfx2/objface.hxx>
+#include <sfx2/msg.hxx>
 #include "objshimp.hxx"
 #include "workwin.hxx"
 #include "sfxtypes.hxx"
 #include "splitwin.hxx"
 #include "arrdecl.hxx"
 #include "sfxhelp.hxx"
-#include "fcontnr.hxx"
-#include "docfac.hxx"
+#include <sfx2/fcontnr.hxx>
+#include <sfx2/docfac.hxx>
 #include "statcach.hxx"
-#include "event.hxx"
+#include <sfx2/event.hxx>
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
