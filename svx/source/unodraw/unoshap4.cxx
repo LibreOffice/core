@@ -4,9 +4,9 @@
  *
  *  $RCSfile: unoshap4.cxx,v $
  *
- *  $Revision: 1.29 $
+ *  $Revision: 1.30 $
  *
- *  last change: $Author: hr $ $Date: 2007-06-26 16:00:38 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 19:26:50 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -54,10 +54,10 @@
 #define _SVX_USE_UNOGLOBALS_
 
 #ifndef _SVDOOLE2_HXX
-#include "svdoole2.hxx"
+#include <svx/svdoole2.hxx>
 #endif
 #ifndef _SVDOMEDIA_HXX
-#include "svdomedia.hxx"
+#include <svx/svdomedia.hxx>
 #endif
 
 #ifndef SVX_LIGHT
@@ -79,14 +79,14 @@
 #include <sfx2/docfile.hxx>
 
 #ifndef _SVDMODEL_HXX
-#include "svdmodel.hxx"
+#include <svx/svdmodel.hxx>
 #endif
 
 #ifndef _SVX_SHAPEIMPL_HXX
 #include "shapeimpl.hxx"
 #endif
 
-#include "unoshprp.hxx"
+#include <svx/unoshprp.hxx>
 #include "unoapi.hxx"
 
 #ifndef _SVDGLOB_HXX
