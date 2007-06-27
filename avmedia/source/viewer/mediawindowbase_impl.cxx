@@ -4,9 +4,9 @@
  *
  *  $RCSfile: mediawindowbase_impl.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-07 19:44:11 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 22:24:17 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -34,7 +34,7 @@
  ************************************************************************/
 
 #include "mediawindowbase_impl.hxx"
-#include "mediaitem.hxx"
+#include <avmedia/mediaitem.hxx>
 #include "mediamisc.hxx"
 #include "mediawindow.hrc"
 #include <tools/urlobj.hxx>
