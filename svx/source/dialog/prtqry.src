@@ -4,9 +4,9 @@
  *
  *  $RCSfile: prtqry.src,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: ihi $ $Date: 2007-04-19 14:18:24 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 17:35:25 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -33,7 +33,7 @@
  *
  ************************************************************************/
 
-#include <dialogs.hrc>
+#include <svx/dialogs.hrc>
 
 
 String RID_SVXSTR_QRY_PRINT_TITLE
