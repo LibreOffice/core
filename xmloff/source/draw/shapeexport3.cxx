@@ -4,9 +4,9 @@
  *
  *  $RCSfile: shapeexport3.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: ihi $ $Date: 2006-12-19 17:26:22 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 15:06:34 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -69,7 +69,7 @@
 #endif
 
 #ifndef _XMLOFF_SHAPEEXPORT_HXX
-#include "shapeexport.hxx"
+#include <xmloff/shapeexport.hxx>
 #endif
 
 #ifndef _SDPROPLS_HXX
@@ -85,11 +85,11 @@
 #endif
 
 #ifndef _XMLOFF_XMLEXP_HXX
-#include "xmlexp.hxx"
+#include <xmloff/xmlexp.hxx>
 #endif
 
 #ifndef _XMLOFF_XMLUCONV_HXX
-#include "xmluconv.hxx"
+#include <xmloff/xmluconv.hxx>
 #endif
 
 #ifndef _XEXPTRANSFORM_HXX
@@ -97,7 +97,7 @@
 #endif
 
 #ifndef _XMLOFF_XMLTOKEN_HXX
-#include "xmltoken.hxx"
+#include <xmloff/xmltoken.hxx>
 #endif
 
 #ifndef _BGFX_VECTOR_B3DVECTOR_HXX
