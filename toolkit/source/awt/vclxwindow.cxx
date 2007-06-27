@@ -4,9 +4,9 @@
  *
  *  $RCSfile: vclxwindow.cxx,v $
  *
- *  $Revision: 1.74 $
+ *  $Revision: 1.75 $
  *
- *  last change: $Author: kz $ $Date: 2007-06-20 10:25:32 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 15:15:34 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -82,21 +82,6 @@
 #ifndef _TOOLKIT_AWT_VCLXPOINTER_HXX_
 #include <toolkit/awt/vclxpointer.hxx>
 #endif
-#ifndef _TOOLKIT_AWT_VCLXACCESSIBLECOMPONENT_HXX_
-#include <toolkit/awt/vclxaccessiblecomponent.hxx>
-#endif
-#ifndef _TOOLKIT_AWT_VCLXACCESSIBLESTATUSBAR_HXX_
-#include <toolkit/awt/vclxaccessiblestatusbar.hxx>
-#endif
-#ifndef _TOOLKIT_AWT_VCLXACCESSIBLETABCONTROL_HXX_
-#include <toolkit/awt/vclxaccessibletabcontrol.hxx>
-#endif
-#ifndef _TOOLKIT_AWT_VCLXACCESSIBLETABPAGEWINDOW_HXX_
-#include <toolkit/awt/vclxaccessibletabpagewindow.hxx>
-#endif
-#ifndef _TOOLKIT_AWT_VCLXACCESSIBLEFIXEDTEXT_HXX_
-#include <toolkit/awt/vclxaccessiblefixedtext.hxx>
-#endif
 #ifndef _TOOLKIT_HELPER_MACROS_HXX_
 #include <toolkit/helper/macros.hxx>
 #endif
@@ -111,6 +96,9 @@
 #endif
 #ifndef _TOOLKIT_HELPER_PROPERTY_HXX_
 #include <toolkit/helper/property.hxx>
+#endif
+#ifndef TOOLKIT_HELPER_ACCESSIBILITY_CLIENT_HXX
+#include <toolkit/helper/accessibilityclient.hxx>
 #endif
 #ifndef _CPPUHELPER_TYPEPROVIDER_HXX_
 #include <cppuhelper/typeprovider.hxx>
@@ -288,6 +276,7 @@ private:
     oslInterlockedCount                 m_refCount;
     VCLXWindow&                         mrAntiImpl;
     ::vos::IMutex&                      mrMutex;
+    ::toolkit::AccessibilityClient      maAccFactory;
     bool                                mbDisposed;
     ::osl::Mutex                        maListenerContainerMutex;
     ::cppu::OInterfaceContainerHelper   maWindow2Listeners;
@@ -321,6 +310,11 @@ public:
     /** notifies the object that its VCLXWindow is being disposed
     */
     void    disposing();
+
+    inline ::toolkit::AccessibilityClient& getAccessibleFactory()
+    {
+        return maAccFactory;
+    }
 
     /** returns the container of registered XWindowListener2 listeners
     */
@@ -651,6 +645,11 @@ VCLXWindow::~VCLXWindow()
         GetWindow()->SetWindowPeer( NULL, NULL );
         GetWindow()->SetAccessible( NULL );
     }
+}
+
+::toolkit::IAccessibleFactory& VCLXWindow::getAccessibleFactory()
+{
+    return mpImpl->getAccessibleFactory().getFactory();
 }
 
 void VCLXWindow::SetWindow( Window* pWindow )
@@ -1100,49 +1099,8 @@ void VCLXWindow::ProcessWindowEvent( const VclWindowEvent& rVclWindowEvent )
 
 uno::Reference< accessibility::XAccessibleContext > VCLXWindow::CreateAccessibleContext()
 {
-    uno::Reference< accessibility::XAccessibleContext > xContext;
-
-    Window* pWindow = GetWindow();
-    if ( pWindow )
-    {
-        WindowType nType = pWindow->GetType();
-
-        if ( nType == WINDOW_MENUBARWINDOW || pWindow->IsMenuFloatingWindow() || pWindow->IsToolbarFloatingWindow() )
-        {
-            uno::Reference< accessibility::XAccessible > xAcc( pWindow->GetAccessible() );
-            if ( xAcc.is() )
-            {
-                uno::Reference< accessibility::XAccessibleContext > xCont( xAcc->getAccessibleContext() );
-                if ( pWindow->GetType() == WINDOW_MENUBARWINDOW ||
-                     ( xCont.is() && xCont->getAccessibleRole() == accessibility::AccessibleRole::POPUP_MENU ) )
-                {
-                    xContext = xCont;
-                }
-            }
-        }
-        else if ( nType == WINDOW_STATUSBAR )
-        {
-            xContext = (accessibility::XAccessibleContext*) new VCLXAccessibleStatusBar( this );
-        }
-        else if ( nType == WINDOW_TABCONTROL )
-        {
-            xContext = (accessibility::XAccessibleContext*) new VCLXAccessibleTabControl( this );
-        }
-        else if ( nType == WINDOW_TABPAGE && pWindow->GetAccessibleParentWindow() && pWindow->GetAccessibleParentWindow()->GetType() == WINDOW_TABCONTROL )
-        {
-            xContext = (accessibility::XAccessibleContext*) new VCLXAccessibleTabPageWindow( this );
-        }
-        else if ( nType == WINDOW_HELPTEXTWINDOW )
-        {
-            xContext = (accessibility::XAccessibleContext*) new VCLXAccessibleFixedText( this );
-        }
-        else
-        {
-            xContext = (accessibility::XAccessibleContext*) new VCLXAccessibleComponent( this );
-        }
-    }
-
-    return xContext;
+    ::vos::OGuard aGuard( GetMutex() );
+    return getAccessibleFactory().createAccessibleContext( this );
 }
 
 /*
