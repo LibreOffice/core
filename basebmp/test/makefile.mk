@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.6 $
+#   $Revision: 1.7 $
 #
-#   last change: $Author: thb $ $Date: 2006-07-27 11:35:32 $
+#   last change: $Author: hr $ $Date: 2007-06-27 12:42:18 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -65,20 +65,26 @@ CFLAGS += -fno-inline
 # auto generated Target:tests by codegen.pl 
 SHL1OBJS=  \
     $(SLO)$/basictest.obj		\
-    $(SLO)$/bmptest.obj		    \
     $(SLO)$/bmpmasktest.obj		\
+    $(SLO)$/bmptest.obj		    \
     $(SLO)$/cliptest.obj		\
     $(SLO)$/filltest.obj		\
     $(SLO)$/linetest.obj		\
     $(SLO)$/masktest.obj		\
     $(SLO)$/polytest.obj		\
-    $(SLO)$/tools.obj
+    $(SLO)$/tools.obj		    \
+    $(SLO)$/bitmapdevice.obj    \
+    $(SLO)$/debug.obj			\
+    $(SLO)$/polypolygonrenderer.obj
+# last three objs are a bit of a hack: cannot link against LIBBASEBMP
+# here, because not yet delivered. Need the functionality to test, so
+# we're linking it in statically. Need to keep this in sync with
+# source/makefile.mk
 
 SHL1TARGET= tests
 SHL1STDLIBS= 	$(SALLIB)		 \
                 $(CPPUNITLIB)	 \
-                $(BASEGFXLIB)	 \
-                $(BASEBMPLIB)	
+                $(BASEGFXLIB)	
 
 SHL1IMPLIB= i$(SHL1TARGET)
 
@@ -114,3 +120,13 @@ SLOFILES=$(SHL1OBJS)
 
 .INCLUDE : target.mk
 .INCLUDE : _cppunit.mk 
+
+# --- Enable test execution in normal build ------------------------
+
+unittest : $(SHL1TARGETN)
+        @echo ----------------------------------------------------------
+        @echo - start unit test on library $(SHL1TARGETN)
+        @echo ----------------------------------------------------------
+        testshl2 $(SHL1TARGETN)
+
+ALLTAR : unittest
