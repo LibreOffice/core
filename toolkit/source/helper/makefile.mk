@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.11 $
+#   $Revision: 1.12 $
 #
-#   last change: $Author: vg $ $Date: 2007-02-06 12:52:09 $
+#   last change: $Author: hr $ $Date: 2007-06-27 15:16:31 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -54,15 +54,15 @@ SLOFILES=   \
             $(SLO)$/property.obj 					\
             $(SLO)$/registerservices.obj 			\
             $(SLO)$/servicenames.obj 				\
-            $(SLO)$/tkresmgr.obj					\
+            $(SLO)$/tkresmgr.obj                    \
             $(SLO)$/unomemorystream.obj 			\
             $(SLO)$/unopropertyarrayhelper.obj		\
             $(SLO)$/unowrapper.obj 					\
             $(SLO)$/vclunohelper.obj				\
-            $(SLO)$/externallock.obj				\
-            $(SLO)$/characterattributeshelper.obj   \
+            $(SLO)$/externallock.obj                \
             $(SLO)$/imagealign.obj                  \
-            $(SLO)$/throbberimpl.obj
+            $(SLO)$/throbberimpl.obj                \
+            $(SLO)$/accessibilityclient.obj
 
 # --- Targets ------------------------------------------------------
 
