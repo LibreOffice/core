@@ -4,9 +4,9 @@
  *
  *  $RCSfile: tabdlg.cxx,v $
  *
- *  $Revision: 1.34 $
+ *  $Revision: 1.35 $
  *
- *  last change: $Author: rt $ $Date: 2007-04-26 10:12:55 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 23:17:05 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -56,16 +56,16 @@
 // wg. nAutoPageID
 #include "appdata.hxx"
 #include "sfxtypes.hxx"
-#include "minarray.hxx"
-#include "tabdlg.hxx"
-#include "viewfrm.hxx"
-#include "app.hxx"
+#include <sfx2/minarray.hxx>
+#include <sfx2/tabdlg.hxx>
+#include <sfx2/viewfrm.hxx>
+#include <sfx2/app.hxx>
 #include "sfxresid.hxx"
 #include "sfxhelp.hxx"
-#include "ctrlitem.hxx"
-#include "bindings.hxx"
-#include "sfxdlg.hxx"
-#include "itemconnect.hxx"
+#include <sfx2/ctrlitem.hxx>
+#include <sfx2/bindings.hxx>
+#include <sfx2/sfxdlg.hxx>
+#include <sfx2/itemconnect.hxx>
 
 #include "dialog.hrc"
 #include "helpid.hrc"
