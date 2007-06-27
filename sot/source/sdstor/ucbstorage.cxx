@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ucbstorage.cxx,v $
  *
- *  $Revision: 1.94 $
+ *  $Revision: 1.95 $
  *
- *  last change: $Author: ihi $ $Date: 2007-06-05 18:34:27 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 22:50:03 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -124,9 +124,9 @@
 
 #include "stg.hxx"
 #include "storinfo.hxx"
-#include "storage.hxx"
-#include "exchange.hxx"
-#include "formats.hxx"
+#include <sot/storage.hxx>
+#include <sot/exchange.hxx>
+#include <sot/formats.hxx>
 #include "clsids.hxx"
 
 #include "unostorageholder.hxx"
