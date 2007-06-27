@@ -4,9 +4,9 @@
  *
  *  $RCSfile: winlayout.cxx,v $
  *
- *  $Revision: 1.106 $
+ *  $Revision: 1.107 $
  *
- *  last change: $Author: vg $ $Date: 2007-03-27 09:53:30 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 20:57:59 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -51,7 +51,7 @@
 #endif // _SV_SALDATA_HXX
 
 #ifndef _SV_SALLAYOUT_HXX
-#include <sallayout.hxx>
+#include <vcl/sallayout.hxx>
 #endif // _SV_SALLAYOUT_HXX
 
 #include <cstdio>
