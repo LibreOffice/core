@@ -4,9 +4,9 @@
  *
  *  $RCSfile: fmctrler.cxx,v $
  *
- *  $Revision: 1.63 $
+ *  $Revision: 1.64 $
  *
- *  last change: $Author: kz $ $Date: 2007-05-10 10:05:49 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 18:11:37 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -48,7 +48,7 @@
 #include "fmprop.hrc"
 #endif
 #ifndef _SVX_FMSHELL_HXX
-#include "fmshell.hxx"
+#include <svx/fmshell.hxx>
 #endif
 #ifndef SVX_FORM_CONFIRMDELETE_HXX
 #include "confirmdelete.hxx"
@@ -143,7 +143,7 @@
 #endif
 
 #ifndef _SVDPAGV_HXX //autogen
-#include <svdpagv.hxx>
+#include <svx/svdpagv.hxx>
 #endif
 
 #ifndef _SVX_FMSHIMP_HXX
@@ -151,7 +151,7 @@
 #endif
 
 #ifndef _SVX_FMVIEW_HXX
-#include <fmview.hxx>
+#include <svx/fmview.hxx>
 #endif
 
 #ifndef _SV_MSGBOX_HXX //autogen wg. RET_YES
@@ -177,7 +177,7 @@
 #endif
 
 #ifndef _SVX_DIALMGR_HXX
-#include "dialmgr.hxx"
+#include <svx/dialmgr.hxx>
 #endif
 
 #ifndef _SVX_FMSERVS_HXX
@@ -225,7 +225,7 @@
 #endif
 
 #ifndef _SDRPAGEWINDOW_HXX
-#include <sdrpagewindow.hxx>
+#include <svx/sdrpagewindow.hxx>
 #endif
 
 #include <algorithm>
