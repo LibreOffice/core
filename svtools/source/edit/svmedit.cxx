@@ -4,9 +4,9 @@
  *
  *  $RCSfile: svmedit.cxx,v $
  *
- *  $Revision: 1.39 $
+ *  $Revision: 1.40 $
  *
- *  last change: $Author: hr $ $Date: 2007-06-27 14:52:29 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 21:30:25 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -42,14 +42,14 @@
 #include <vcl/decoview.hxx>
 #include <vcl/svapp.hxx>
 
-#include <svmedit.hxx>
-#include <xtextedt.hxx>
-#include <brdcst.hxx>
-#include <lstner.hxx>
+#include <svtools/svmedit.hxx>
+#include <svtools/xtextedt.hxx>
+#include <svtools/brdcst.hxx>
+#include <svtools/lstner.hxx>
 #include "unoiface.hxx"
 
 #ifndef _UNDO_HXX
-#include <undo.hxx>
+#include <svtools/undo.hxx>
 #endif
 
 #include "textwindowpeer.hxx"
