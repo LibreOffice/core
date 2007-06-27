@@ -4,9 +4,9 @@
  *
  *  $RCSfile: prhdlfac.cxx,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 10:56:24 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 15:42:57 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -50,15 +50,15 @@
 #include <tools/debug.hxx>
 #endif
 #ifndef _XMLOFF_PROPERTYHANDLERFACTORY_HXX
-#include <prhdlfac.hxx>
+#include <xmloff/prhdlfac.hxx>
 #endif
 
 #ifndef _XMLOFF_XMLTYPES_HXX
-#include "xmltypes.hxx"
+#include <xmloff/xmltypes.hxx>
 #endif
 
 #ifndef _XMLOFF_XMLTOKEN_HXX
-#include "xmltoken.hxx"
+#include <xmloff/xmltoken.hxx>
 #endif
 
 #ifndef _XMLOFF_PROPERTYHANDLER_BASICTYPES_HXX
@@ -66,11 +66,11 @@
 #endif
 
 #ifndef _XMLOFF_NAMEDBOOLPROPERTYHANDLER_HXX
-#include "NamedBoolPropertyHdl.hxx"
+#include <xmloff/NamedBoolPropertyHdl.hxx>
 #endif
 
 #ifndef _XMLOFF_XMLCONSTANTSPROPERTYHANDLER_HXX
-#include "XMLConstantsPropertyHandler.hxx"
+#include <xmloff/XMLConstantsPropertyHandler.hxx>
 #endif
 
 #ifndef _XMLOFF_PROPERTYHANDLER_CROSSEDOUTTYPES_HXX
@@ -125,7 +125,7 @@
 #include <tabsthdl.hxx>
 #endif
 #ifndef _XMLOFF_ENUMPROPERTYHANDLER_HXX
-#include "EnumPropertyHdl.hxx"
+#include <xmloff/EnumPropertyHdl.hxx>
 #endif
 #ifndef _XMLOFF_ATTRIBUTECONTAINERHANDLER_HXX
 #include "AttributeContainerHandler.hxx"
