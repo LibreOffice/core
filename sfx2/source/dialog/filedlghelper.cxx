@@ -4,9 +4,9 @@
  *
  *  $RCSfile: filedlghelper.cxx,v $
  *
- *  $Revision: 1.130 $
+ *  $Revision: 1.131 $
  *
- *  last change: $Author: ihi $ $Date: 2007-06-05 18:36:46 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 23:11:43 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -37,7 +37,7 @@
 #include "precompiled_sfx2.hxx"
 
 #ifndef _FILEDLGHELPER_HXX
-#include "filedlghelper.hxx"
+#include <sfx2/filedlghelper.hxx>
 #endif
 
 #ifndef _SAL_TYPES_H_
@@ -199,25 +199,25 @@
 #endif
 
 #ifndef _SFXAPP_HXX
-#include "app.hxx"
+#include <sfx2/app.hxx>
 #endif
 #ifndef _SFXDOCFILE_HXX
-#include "docfile.hxx"
+#include <sfx2/docfile.hxx>
 #endif
 #ifndef _SFX_OBJFAC_HXX
-#include "docfac.hxx"
+#include <sfx2/docfac.hxx>
 #endif
 #ifndef _SFX_OPENFLAG_HXX
 #include "openflag.hxx"
 #endif
 #ifndef _SFX_PASSWD_HXX
-#include "passwd.hxx"
+#include <sfx2/passwd.hxx>
 #endif
 #ifndef _SFX_SFXRESID_HXX
 #include "sfxresid.hxx"
 #endif
 #ifndef _SFXSIDS_HRC
-#include "sfxsids.hrc"
+#include <sfx2/sfxsids.hrc>
 #endif
 #ifndef _SFX_FILEDLGHELPER_HRC
 #include "filedlghelper.hrc"
@@ -226,7 +226,7 @@
 #include "filtergrouping.hxx"
 #endif
 #ifndef SFX2_REQUEST_HXX
-#include "request.hxx"
+#include <sfx2/request.hxx>
 #endif
 #ifndef _SFX_FILEDLGIMPL_HXX
 #include "filedlgimpl.hxx"
