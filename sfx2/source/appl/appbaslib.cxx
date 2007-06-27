@@ -4,9 +4,9 @@
  *
  *  $RCSfile: appbaslib.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: obo $ $Date: 2007-03-15 17:02:10 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 22:54:55 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -37,9 +37,9 @@
 #include "appbaslib.hxx"
 #endif
 
-#include "sfxuno.hxx"
+#include <sfx2/sfxuno.hxx>
 #include "sfxtypes.hxx"
-#include "app.hxx"
+#include <sfx2/app.hxx>
 
 #include <basic/basmgr.hxx>
 #include <tools/diagnose_ex.h>
