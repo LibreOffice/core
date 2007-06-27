@@ -4,9 +4,9 @@
  *
  *  $RCSfile: salframe.h,v $
  *
- *  $Revision: 1.52 $
+ *  $Revision: 1.53 $
  *
- *  last change: $Author: vg $ $Date: 2006-11-01 15:29:54 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 20:41:10 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -40,17 +40,17 @@
 #include <salstd.hxx>
 #endif
 #ifndef _SV_SALFRAME_HXX
-#include <salframe.hxx>
+#include <vcl/salframe.hxx>
 #endif
 #ifndef _SV_SALWTYPE_HXX
-#include <salwtype.hxx>
+#include <vcl/salwtype.hxx>
 #endif
 #ifndef _SV_PTRSTYLE_HXX
-#include <ptrstyle.hxx>
+#include <vcl/ptrstyle.hxx>
 #endif
 
 #ifndef _SV_SALINST_HXX
-#include <salinst.hxx>
+#include <vcl/salinst.hxx>
 #endif
 
 #ifndef _SV_SYSDATA_HXX
@@ -58,11 +58,11 @@
 #endif
 
 #ifndef _SV_TIMER_HXX
-#include <timer.hxx>
+#include <vcl/timer.hxx>
 #endif
 
 #ifndef _VCL_DLLAPI_H
-#include "dllapi.h"
+#include <vcl/dllapi.h>
 #endif
 
 #include <salunx.h>
