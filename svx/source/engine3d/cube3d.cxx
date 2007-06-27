@@ -4,9 +4,9 @@
  *
  *  $RCSfile: cube3d.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: ihi $ $Date: 2006-11-14 13:18:22 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 18:01:48 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -40,7 +40,7 @@
 #include "svdglob.hxx"
 
 #ifndef _E3D_CUBE3D_HXX
-#include "cube3d.hxx"
+#include <svx/cube3d.hxx>
 #endif
 
 #ifndef _E3D_GLOBL3D_HXX
