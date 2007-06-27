@@ -4,9 +4,9 @@
  *
  *  $RCSfile: basicmanagerrepository.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: obo $ $Date: 2007-03-15 15:37:48 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 14:17:08 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -37,10 +37,10 @@
 #include "precompiled_basic.hxx"
 
 #ifndef BASICMANAGERREPOSITORY_HXX
-#include "basicmanagerrepository.hxx"
+#include <basic/basicmanagerrepository.hxx>
 #endif
 #ifndef _BASMGR_HXX
-#include "basmgr.hxx"
+#include <basic/basmgr.hxx>
 #endif
 #ifndef BASIC_SCRIPTCONTAINER_HXX
 #include "scriptcont.hxx"
@@ -49,7 +49,7 @@
 #include "dlgcont.hxx"
 #endif
 #ifndef _SB_SBUNO_HXX
-#include "sbuno.hxx"
+#include <basic/sbuno.hxx>
 #endif
 #ifndef _SB_INTERN_HXX
 #include "sbintern.hxx"
