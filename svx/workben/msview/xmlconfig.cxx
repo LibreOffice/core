@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xmlconfig.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 06:27:47 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 19:37:50 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -50,7 +50,7 @@
 #include "cppuhelper/exc_hlp.hxx"
 #include "rtl/ref.hxx"
 
-#include "msdffimp.hxx"
+#include <svx/msdffimp.hxx>
 
 #include "xmlconfig.hxx"
 
