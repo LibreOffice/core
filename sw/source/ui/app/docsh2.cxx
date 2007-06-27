@@ -4,9 +4,9 @@
  *
  *  $RCSfile: docsh2.cxx,v $
  *
- *  $Revision: 1.94 $
+ *  $Revision: 1.95 $
  *
- *  last change: $Author: hr $ $Date: 2007-06-26 15:56:08 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 13:22:57 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -86,6 +86,9 @@
 #ifndef _TRANSFER_HXX
 #include <svtools/transfer.hxx>
 #endif
+#ifndef _SFXSIDS_HRC //autogen
+#include <sfx2/dialogs.hrc>
+#endif
 #ifndef _SFXDOCINF_HXX //autogen
 #include <sfx2/docinf.hxx>
 #endif
@@ -137,6 +140,7 @@
 
 #include <svx/htmlcfg.hxx>
 #include <svx/ofaitem.hxx>
+#include <SwSmartTagMgr.hxx>
 #include <sfx2/app.hxx>
 
 #ifndef _SB_SBSTAR_HXX //autogen
@@ -748,7 +752,6 @@ void SwDocShell::Execute(SfxRequest& rReq)
     {
         case SID_AUTO_CORRECT_DLG:
         {
-            SfxBoolItem aSwOptions( SID_AUTO_CORRECT_DLG, TRUE );
             SvxSwAutoFmtFlags* pAFlags = &SvxAutoCorrCfg::Get()->GetAutoCorrect()->GetSwFlags();
             SwAutoCompleteWord& rACW = SwDoc::GetAutoCompleteWords();
 
@@ -763,8 +766,25 @@ void SwDocShell::Execute(SfxRequest& rReq)
 
             SfxApplication* pApp = SFX_APP();
             SfxRequest aAppReq(SID_AUTO_CORRECT_DLG, SFX_CALLMODE_SYNCHRON, pApp->GetPool());
+            SfxBoolItem aSwOptions( SID_AUTO_CORRECT_DLG, TRUE );
             aAppReq.AppendItem(aSwOptions);
-            pApp->ExecuteSlot(aAppReq);
+
+            // SMARTTAGS
+            pAFlags->pSmartTagMgr = &SwSmartTagMgr::Get();
+
+            //pApp->ExecuteSlot(aAppReq);
+
+            SfxItemSet aSet( pApp->GetPool(), SID_AUTO_CORRECT_DLG, SID_AUTO_CORRECT_DLG, SID_OPEN_SMARTTAGOPTIONS, SID_OPEN_SMARTTAGOPTIONS, 0 );
+            aSet.Put( aSwOptions );
+
+            const SfxPoolItem* pOpenSmartTagOptionsItem = 0;
+            if( pArgs && SFX_ITEM_SET == pArgs->GetItemState( SID_OPEN_SMARTTAGOPTIONS, FALSE, &pOpenSmartTagOptionsItem ) )
+                aSet.Put( *static_cast<const SfxBoolItem*>(pOpenSmartTagOptionsItem) );
+
+            SfxAbstractDialogFactory* pFact = SfxAbstractDialogFactory::Create();
+              SfxAbstractTabDialog* pDlg = pFact->CreateTabDialog( RID_OFA_AUTOCORR_DLG, NULL, &aSet, NULL );
+              pDlg->Execute();
+              delete pDlg;
 
             rACW.SetLockWordLstLocked( bOldLocked );
 
@@ -1249,7 +1269,7 @@ void SwDocShell::Execute(SfxRequest& rReq)
             break;
             case SID_SPELLCHECKER_CHANGED:
                 //! FALSE, TRUE, TRUE is on the save side but a probably overdone
-                SW_MOD()->CheckSpellChanges(FALSE, TRUE, TRUE );
+                SW_MOD()->CheckSpellChanges(FALSE, TRUE, TRUE, FALSE );
             break;
 
             case SID_BROWSER_MODE:
@@ -1295,7 +1315,6 @@ void SwDocShell::Execute(SfxRequest& rReq)
                                         FN_VIEW_TABLEGRID,  /*20227*/
                                         FN_PRINT_LAYOUT, /*20237*/
                                         FN_QRY_MERGE,   /*20364*/
-                                        FN_STAT_HYPERLINKS, /*21186*/
                                         0
                                     };
                 // the view must not exist!
