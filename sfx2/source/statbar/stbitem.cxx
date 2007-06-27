@@ -4,9 +4,9 @@
  *
  *  $RCSfile: stbitem.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: vg $ $Date: 2006-11-21 17:50:13 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 23:32:34 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -66,18 +66,18 @@
 
 #include <vcl/status.hxx>
 
-#include "app.hxx"
+#include <sfx2/app.hxx>
 #include "stbitem.hxx"
 #include "sfxtypes.hxx"
-#include "msg.hxx"
+#include <sfx2/msg.hxx>
 #include "arrdecl.hxx"
-#include "bindings.hxx"
-#include "msgpool.hxx"
-#include "module.hxx"
-#include "dispatch.hxx"
-#include "unoctitm.hxx"
-#include "objsh.hxx"
-#include "sfx.hrc"
+#include <sfx2/bindings.hxx>
+#include <sfx2/msgpool.hxx>
+#include <sfx2/module.hxx>
+#include <sfx2/dispatch.hxx>
+#include <sfx2/unoctitm.hxx>
+#include <sfx2/objsh.hxx>
+#include <sfx2/sfx.hrc>
 
 #include <comphelper/processfactory.hxx>
 #ifndef _SFXENUMITEM_HXX //autogen
