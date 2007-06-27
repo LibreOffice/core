@@ -4,9 +4,9 @@
  *
  *  $RCSfile: AccessibleTextEventQueue.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 04:03:28 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 16:40:09 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -41,7 +41,7 @@
 #endif
 
 #ifndef _SVX_UNOSHAPE_HXX
-#include "unoshape.hxx"
+#include <svx/unoshape.hxx>
 #endif
 
 #ifndef _UNO_LINGU_HXX
@@ -49,16 +49,16 @@
 #endif
 
 #ifndef _SVX_UNOTEXT_HXX
-#include "unotext.hxx"
+#include <svx/unotext.hxx>
 #endif
 
 #include "unoedhlp.hxx"
 #include "unopracc.hxx"
-#include "svdmodel.hxx"
-#include "svdpntv.hxx"
-#include "editdata.hxx"
-#include "editeng.hxx"
-#include "editview.hxx"
+#include <svx/svdmodel.hxx>
+#include <svx/svdpntv.hxx>
+#include <svx/editdata.hxx>
+#include <svx/editeng.hxx>
+#include <svx/editview.hxx>
 
 namespace accessibility
 {
