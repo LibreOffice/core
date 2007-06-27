@@ -4,9 +4,9 @@
  *
  *  $RCSfile: unostorageholder.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 07:44:54 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 22:50:18 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -45,7 +45,7 @@
 #endif
 
 #include <unotools/tempfile.hxx>
-#include "storage.hxx"
+#include <sot/storage.hxx>
 
 class SotStorage;
 class UNOStorageHolder : public ::cppu::WeakImplHelper1<
