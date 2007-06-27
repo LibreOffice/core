@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xtabhtch.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: ihi $ $Date: 2006-11-14 13:58:33 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 19:36:13 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -62,23 +62,23 @@
 #include <vcl/virdev.hxx>
 #include <svtools/itemset.hxx>
 #include <sfx2/docfile.hxx>
-#include "dialogs.hrc"
-#include "dialmgr.hxx"
-#include "xtable.hxx"
-#include "xpool.hxx"
-#include "xoutx.hxx"
+#include <svx/dialogs.hrc>
+#include <svx/dialmgr.hxx>
+#include <svx/xtable.hxx>
+#include <svx/xpool.hxx>
+#include <svx/xoutx.hxx>
 #include "dlgutil.hxx"
 
 #ifndef _SVX_XFLHTIT_HXX //autogen
-#include <xflhtit.hxx>
+#include <svx/xflhtit.hxx>
 #endif
 
 #ifndef _SVX_XFLCLIT_HXX //autogen
-#include <xflclit.hxx>
+#include <svx/xflclit.hxx>
 #endif
 
 #ifndef SVX_XFILLIT0_HXX //autogen
-#include <xfillit0.hxx>
+#include <svx/xfillit0.hxx>
 #endif
 
 using namespace ::com::sun::star;
