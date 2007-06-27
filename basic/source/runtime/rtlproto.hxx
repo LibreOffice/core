@@ -4,9 +4,9 @@
  *
  *  $RCSfile: rtlproto.hxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: vg $ $Date: 2006-11-02 16:33:30 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 14:26:27 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -33,7 +33,7 @@
  *
  ************************************************************************/
 
-#include "sbstar.hxx"
+#include <basic/sbstar.hxx>
 
 #define RTLFUNC( name ) void SbRtl_##name( StarBASIC* pBasic, SbxArray& rPar, BOOL bWrite )
 #define RTLNAME( name ) &SbRtl_##name
