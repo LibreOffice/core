@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ctrlitem.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 16:26:07 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 23:05:33 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -42,12 +42,12 @@
 #ifndef GCC
 #endif
 
-#include "ctrlitem.hxx"
-#include "bindings.hxx"
-#include "dispatch.hxx"
-#include "msgpool.hxx"
+#include <sfx2/ctrlitem.hxx>
+#include <sfx2/bindings.hxx>
+#include <sfx2/dispatch.hxx>
+#include <sfx2/msgpool.hxx>
 #include "statcach.hxx"
-#include "viewfrm.hxx"
+#include <sfx2/viewfrm.hxx>
 
 //====================================================================
 
