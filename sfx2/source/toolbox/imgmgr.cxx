@@ -4,9 +4,9 @@
  *
  *  $RCSfile: imgmgr.cxx,v $
  *
- *  $Revision: 1.30 $
+ *  $Revision: 1.31 $
  *
- *  last change: $Author: ihi $ $Date: 2007-06-06 14:09:15 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 23:32:46 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -40,12 +40,12 @@
 #include <hash_map>
 
 #include "imgmgr.hxx"
-#include "sfx.hrc"
-#include "app.hxx"
+#include <sfx2/sfx.hrc>
+#include <sfx2/app.hxx>
 #include "sfxresid.hxx"
-#include "bindings.hxx"
+#include <sfx2/bindings.hxx>
 #include "statcach.hxx"
-#include "module.hxx"
+#include <sfx2/module.hxx>
 
 #ifndef _SV_BITMAP_HXX
 #include <vcl/bitmap.hxx>
