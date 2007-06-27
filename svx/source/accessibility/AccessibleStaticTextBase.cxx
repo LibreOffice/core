@@ -4,9 +4,9 @@
  *
  *  $RCSfile: AccessibleStaticTextBase.cxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: rt $ $Date: 2007-01-29 14:44:34 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 16:39:36 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -84,7 +84,7 @@
 //
 //------------------------------------------------------------------------
 
-#include "editdata.hxx"
+#include <svx/editdata.hxx>
 #include "unopracc.hxx"
 #include "unoedprx.hxx"
 #include "AccessibleStaticTextBase.hxx"
