@@ -4,9 +4,9 @@
  *
  *  $RCSfile: cuifmsearch.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: rt $ $Date: 2007-04-26 07:27:53 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 16:57:30 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -62,7 +62,7 @@
 #endif
 
 #ifndef _SVX_DIALMGR_HXX //autogen
-#include <dialmgr.hxx>
+#include <svx/dialmgr.hxx>
 #endif
 
 //CHINA001 #ifndef _SVX_SRCHXTRA_HXX
@@ -77,7 +77,7 @@
 #include <sfx2/app.hxx>
 #endif
 #ifndef _SVX_DIALOGS_HRC
-#include "dialogs.hrc"
+#include <svx/dialogs.hrc>
 #endif
 
 #ifndef _SFXFILEREC_HXX //autogen
@@ -116,7 +116,7 @@
 #include <comphelper/processfactory.hxx>
 #endif
 
-#include "svxdlg.hxx" //CHINA001
+#include <svx/svxdlg.hxx> //CHINA001
 
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::i18n;
