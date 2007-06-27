@@ -4,9 +4,9 @@
  *
  *  $RCSfile: emfwr.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: ihi $ $Date: 2006-11-14 15:41:54 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 21:36:42 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -41,7 +41,7 @@
 #include <vcl/graph.hxx>
 #include <vcl/gdimtf.hxx>
 #include <vcl/virdev.hxx>
-#include "fltcall.hxx"
+#include <svtools/fltcall.hxx>
 
 // -------------
 // - EMFWriter -
