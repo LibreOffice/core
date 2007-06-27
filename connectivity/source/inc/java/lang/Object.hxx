@@ -4,9 +4,9 @@
  *
  *  $RCSfile: Object.hxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: hr $ $Date: 2006-06-20 02:03:30 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 14:37:56 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -76,6 +76,10 @@ inline jlong Make_Os2_Int64( sal_Int32 hi, sal_Int32 lo ) {jlong x = CONST64( hi
 #endif //Os2
 #endif //HAVE_64BIT_POINTERS
 
+namespace comphelper
+{
+    class ResourceBasedEventLogger;
+}
 
 namespace connectivity
 {
@@ -132,7 +136,13 @@ namespace connectivity
 
         virtual ::rtl::OUString toString() const;
         ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > getORB() { return m_xFactory; }
-        static void ThrowSQLException(JNIEnv * pEnv,const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface> & _rContext) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
+
+        static void ThrowSQLException(JNIEnv * pEnv,const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface> & _rContext);
+        static void ThrowLoggedSQLException(
+            const ::comphelper::ResourceBasedEventLogger& _rLogger,
+            JNIEnv* pEnvironment,
+            const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >& _rxContext
+        );
 
         static ::rtl::Reference< jvmaccess::VirtualMachine > getVM(const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& _rxFactory=NULL);
     };
