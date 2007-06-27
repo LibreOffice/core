@@ -4,9 +4,9 @@
  *
  *  $RCSfile: verttexttbxctrl.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 06:08:00 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 19:20:09 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -36,8 +36,8 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_svx.hxx"
 
-#include "dialmgr.hxx"
-#include "dialogs.hrc"
+#include <svx/dialmgr.hxx>
+#include <svx/dialogs.hrc>
 
 #ifndef _SVX_VERT_TEXT_TBXCTRL_HXX
 #include <verttexttbxctrl.hxx>
