@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ustring.hxx,v $
  *
- *  $Revision: 1.28 $
+ *  $Revision: 1.29 $
  *
- *  last change: $Author: rt $ $Date: 2007-04-03 14:04:29 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 13:24:20 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -646,6 +646,26 @@ public:
     }
 
     /**
+      Check whether this string ends with a given ASCII string.
+
+      @param asciiStr a sequence of at least asciiStrLength ASCII characters
+          (bytes in the range 0x00--0x7F)
+      @param asciiStrLen the length of asciiStr; must be non-negative
+      @return true if this string ends with asciiStr; otherwise, false is
+      returned
+
+      @since UDK 3.2.7
+     */
+    inline bool endsWithAsciiL(char const * asciiStr, sal_Int32 asciiStrLength)
+        const
+    {
+        return asciiStrLength <= pData->length
+            && rtl_ustr_asciil_reverseEquals_WithLength(
+                pData->buffer + pData->length - asciiStrLength, asciiStr,
+                asciiStrLength);
+    }
+
+    /**
       Check whether this string ends with a given ASCII string, ignoring the
       case of ASCII letters.
 
@@ -771,6 +791,38 @@ public:
     }
 
     /**
+       Returns the index within this string of the first occurrence of the
+       specified ASCII substring, starting at the specified index.
+
+       @param str
+       the substring to be searched for.  Need not be null-terminated, but must
+       be at least as long as the specified len.  Must only contain characters
+       in the ASCII range 0x00--7F.
+
+       @param len
+       the length of the substring; must be non-negative.
+
+       @param fromIndex
+       the index to start the search from.  Must be in the range from zero to
+       the length of this string, inclusive.
+
+       @return
+       the index (starting at 0) of the first character of the first occurrence
+       of the substring within this string starting at the given fromIndex, or
+       -1 if the substring does not occur.  If len is zero, -1 is returned.
+
+       @since UDK 3.2.7
+    */
+    sal_Int32 indexOfAsciiL(
+        char const * str, sal_Int32 len, sal_Int32 fromIndex = 0) const
+        SAL_THROW(())
+    {
+        sal_Int32 ret = rtl_ustr_indexOfAscii_WithLength(
+            pData->buffer + fromIndex, pData->length - fromIndex, str, len);
+        return ret < 0 ? ret : ret + fromIndex;
+    }
+
+    /**
       Returns the index within this string of the last occurrence of
       the specified substring, searching backward starting at the end.
 
@@ -812,6 +864,32 @@ public:
     {
         return rtl_ustr_lastIndexOfStr_WithLength( pData->buffer, fromIndex,
                                                    str.pData->buffer, str.pData->length );
+    }
+
+    /**
+       Returns the index within this string of the last occurrence of the
+       specified ASCII substring.
+
+       @param str
+       the substring to be searched for.  Need not be null-terminated, but must
+       be at least as long as the specified len.  Must only contain characters
+       in the ASCII range 0x00--7F.
+
+       @param len
+       the length of the substring; must be non-negative.
+
+       @return
+       the index (starting at 0) of the first character of the last occurrence
+       of the substring within this string, or -1 if the substring does not
+       occur.  If len is zero, -1 is returned.
+
+       @since UDK 3.2.7
+    */
+    sal_Int32 lastIndexOfAsciiL(char const * str, sal_Int32 len) const
+        SAL_THROW(())
+    {
+        return rtl_ustr_lastIndexOfAscii_WithLength(
+            pData->buffer, pData->length, str, len);
     }
 
     /**
