@@ -4,9 +4,9 @@
  *
  *  $RCSfile: scfuncs.hrc,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: obo $ $Date: 2006-07-10 12:31:00 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 13:42:50 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -299,6 +299,7 @@
 #define HID_FUNC_TABELLE            (HID_SC_FUNC_DUMMY+(ID_FUNCTION_GRP_TABLE*ID_FUNCTION_OFFSET)+18)
 #define HID_FUNC_TABELLEN           (HID_SC_FUNC_DUMMY+(ID_FUNCTION_GRP_TABLE*ID_FUNCTION_OFFSET)+19)
 #define HID_FUNC_HYPERLINK          (HID_SC_FUNC_DUMMY+(ID_FUNCTION_GRP_TABLE*ID_FUNCTION_OFFSET)+20)
+#define HID_FUNC_GETPIVOTDATA       (HID_SC_FUNC_DUMMY+(ID_FUNCTION_GRP_TABLE*ID_FUNCTION_OFFSET)+21)
 
 #define HID_FUNC_CODE               (HID_SC_FUNC_DUMMY+(ID_FUNCTION_GRP_TEXT*ID_FUNCTION_OFFSET)+1)
 #define HID_FUNC_DM                 (HID_SC_FUNC_DUMMY+(ID_FUNCTION_GRP_TEXT*ID_FUNCTION_OFFSET)+2)
