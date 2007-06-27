@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dragmt3d.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: ihi $ $Date: 2006-11-14 13:18:47 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 18:02:18 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -46,35 +46,35 @@
 #endif
 
 #ifndef _SVDPAGV_HXX //autogen
-#include "svdpagv.hxx"
+#include <svx/svdpagv.hxx>
 #endif
 
 #ifndef _SVX_DIALMGR_HXX //autogen
-#include <dialmgr.hxx>
+#include <svx/dialmgr.hxx>
 #endif
 
 #ifndef _XOUTX_HXX //autogen
-#include <xoutx.hxx>
+#include <svx/xoutx.hxx>
 #endif
 
 #ifndef _SVDDRGMT_HXX //autogen
-#include <svddrgmt.hxx>
+#include <svx/svddrgmt.hxx>
 #endif
 
 #ifndef _SVDTRANS_HXX
-#include "svdtrans.hxx"
+#include <svx/svdtrans.hxx>
 #endif
 
 #ifndef _E3D_OBJ3D_HXX
-#include "obj3d.hxx"
+#include <svx/obj3d.hxx>
 #endif
 
 #ifndef _E3D_POLYSC3D_HXX
-#include "polysc3d.hxx"
+#include <svx/polysc3d.hxx>
 #endif
 
 #ifndef _E3D_UNDO_HXX
-#include "e3dundo.hxx"
+#include <svx/e3dundo.hxx>
 #endif
 
 #ifndef _E3D_DRAGMT3D_HXX
@@ -82,7 +82,7 @@
 #endif
 
 #ifndef _SVX_DIALOGS_HRC
-#include "dialogs.hrc"
+#include <svx/dialogs.hrc>
 #endif
 
 #ifndef _SDR_OVERLAY_OVERLAYPOLYPOLYGON_HXX
