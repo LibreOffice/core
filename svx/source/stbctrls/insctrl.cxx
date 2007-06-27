@@ -4,9 +4,9 @@
  *
  *  $RCSfile: insctrl.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: obo $ $Date: 2006-10-12 13:04:36 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 18:54:37 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -56,10 +56,10 @@
 
 #define _SVX_INSCTRL_CXX
 
-#include "dialogs.hrc"
+#include <svx/dialogs.hrc>
 
 #include "insctrl.hxx"
-#include "dialmgr.hxx"
+#include <svx/dialmgr.hxx>
 
 #define PAINT_OFFSET    5
 
