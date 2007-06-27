@@ -4,9 +4,9 @@
  *
  *  $RCSfile: shapeexport.cxx,v $
  *
- *  $Revision: 1.76 $
+ *  $Revision: 1.77 $
  *
- *  last change: $Author: kz $ $Date: 2006-12-12 15:49:10 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 15:06:04 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -81,7 +81,7 @@
 #include <com/sun/star/drawing/EscapeDirection.hpp>
 #endif
 #ifndef _XMLOFF_XMLUCONV_HXX
-#include "xmluconv.hxx"
+#include <xmloff/xmluconv.hxx>
 #endif
 
 #ifndef _XMLOFF_PROPERTYSETMERGER_HXX_
@@ -89,7 +89,7 @@
 #endif
 
 #ifndef _XMLOFF_SHAPEEXPORT_HXX
-#include "shapeexport.hxx"
+#include <xmloff/shapeexport.hxx>
 #endif
 
 #ifndef _SDPROPLS_HXX
@@ -101,7 +101,7 @@
 #endif
 
 #ifndef _XMLOFF_FAMILIES_HXX_
-#include "families.hxx"
+#include <xmloff/families.hxx>
 #endif
 
 #ifndef _TOOLS_DEBUG_HXX
@@ -109,11 +109,11 @@
 #endif
 
 #ifndef _XMLOFF_CONTEXTID_HXX_
-#include "contextid.hxx"
+#include <xmloff/contextid.hxx>
 #endif
 
 #ifndef _XMLOFF_XMLTOKEN_HXX
-#include "xmltoken.hxx"
+#include <xmloff/xmltoken.hxx>
 #endif
 
 #ifndef _STRING_HXX //autogen
