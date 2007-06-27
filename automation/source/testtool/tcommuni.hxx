@@ -4,9 +4,9 @@
  *
  *  $RCSfile: tcommuni.hxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: hr $ $Date: 2006-06-20 00:27:36 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 21:02:11 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -33,7 +33,7 @@
  *
  ************************************************************************/
 
-#include "communi.hxx"
+#include <automation/communi.hxx>
 #include <tools/link.hxx>
 #include <svtools/svarray.hxx>
 
