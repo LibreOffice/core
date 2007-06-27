@@ -1,0 +1,93 @@
+/*************************************************************************
+ *
+ *  OpenOffice.org - a multi-platform office productivity suite
+ *
+ *  $RCSfile: XMutableTreeDataModel.idl,v $
+ *
+ *  $Revision: 1.2 $
+ *
+ *  last change: $Author: hr $ $Date: 2007-06-27 12:27:39 $
+ *
+ *  The Contents of this file are made available subject to
+ *  the terms of GNU Lesser General Public License Version 2.1.
+ *
+ *
+ *    GNU Lesser General Public License Version 2.1
+ *    =============================================
+ *    Copyright 2005 by Sun Microsystems, Inc.
+ *    901 San Antonio Road, Palo Alto, CA 94303, USA
+ *
+ *    This library is free software; you can redistribute it and/or
+ *    modify it under the terms of the GNU Lesser General Public
+ *    License version 2.1, as published by the Free Software Foundation.
+ *
+ *    This library is distributed in the hope that it will be useful,
+ *    but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ *    Lesser General Public License for more details.
+ *
+ *    You should have received a copy of the GNU Lesser General Public
+ *    License along with this library; if not, write to the Free Software
+ *    Foundation, Inc., 59 Temple Place, Suite 330, Boston,
+ *    MA  02111-1307  USA
+ *
+ ************************************************************************/
+#ifndef __com_sun_star_awt_tree_XMutableTreeDataModel_idl__
+#define __com_sun_star_awt_tree_XMutableTreeDataModel_idl__
+
+#ifndef __com_sun_star_awt_tree_XTreeDataModel_idl__
+#include <com/sun/star/awt/tree/XTreeDataModel.idl>
+#endif
+
+#ifndef __com_sun_star_awt_tree_XMutableTreeNode_idl__
+#include <com/sun/star/awt/tree/XMutableTreeNode.idl>
+#endif
+
+//=============================================================================
+
+module com {  module sun {  module star {  module awt {  module tree {
+
+//=============================================================================
+
+/** This is the editable version of the <type>XTreeDataModel</type>.
+
+    <p>Note that only <type>XTreeNode</type> created from the same instance with <member>createNode</member>
+    are valids nodes for this instance.</p>
+ */
+interface XMutableTreeDataModel : XTreeDataModel
+{
+    /** creates a new tree node with the given value and given settings.
+
+        @param DisplayValue
+            should be convertable to a string and is used by the <type>XTreeControl</type>
+            as a textual represenation of the created node.
+
+        @param ChildsOnDemand
+            if <TRUE/> is used as a parameter, the created node will be treated as a non-leaf
+            node by the <type>XTreeControl</type>, even when it has no child nodes.
+
+        @returns
+            a new <type>XMutableTreeNode</type> that can be used for this model.
+
+        @see XTreeNode::getDisplayValue()
+        @see XTreeNode::hasChildsOnDemand()
+    */
+    XMutableTreeNode createNode( [in] any DisplayValue, [in] boolean ChildsOnDemand );
+
+    /** changes the root node of this model to <var>RootNode</var>.
+
+        @param RootNode
+            the <type>XMutableTreeNode</type> that becomes the new root node of this model.
+
+        @throws ::com::sun::star::lang::IllegalArgumentException
+            if <var>RootNode</var> is not a valid node of this <type>XTreeDataModel</type>.
+    */
+    void setRoot( [in] XMutableTreeNode RootNode )
+        raises( ::com::sun::star::lang::IllegalArgumentException );
+};
+
+//=============================================================================
+
+}; }; }; }; };
+
+#endif
