@@ -4,9 +4,9 @@
  *
  *  $RCSfile: opengrf.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: ihi $ $Date: 2007-06-05 14:34:02 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 17:23:46 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -95,7 +95,7 @@
 #include <svtools/transfer.hxx>
 #endif
 #ifndef _SVDOGRAF_HXX //autogen
-#include "svdograf.hxx"
+#include <svx/svdograf.hxx>
 #endif
 #ifndef _SOT_FORMATS_HXX //autogen
 #include <sot/formats.hxx>
@@ -113,14 +113,14 @@
 #include <svtools/pathoptions.hxx>
 #endif
 #ifndef _SVX_DIALMGR_HXX
-#include "dialmgr.hxx"
+#include <svx/dialmgr.hxx>
 #endif
 
 #ifndef _SVX_OPENGRF_HXX
 #include "opengrf.hxx"
 #endif
 
-#include "dialogs.hrc"
+#include <svx/dialogs.hrc>
 #include "impgrf.hrc"
 
 
