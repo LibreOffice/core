@@ -4,9 +4,9 @@
  *
  *  $RCSfile: acccfg.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: hr $ $Date: 2006-06-19 22:32:07 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 23:25:44 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -50,7 +50,7 @@
 #ifndef _SV_LSTBOX_HXX //autogen
 #include <vcl/lstbox.hxx>
 #endif
-#include "minarray.hxx"
+#include <sfx2/minarray.hxx>
 
 // forward ******************************************************************
 
