@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xlformula.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: obo $ $Date: 2007-06-13 09:11:29 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 13:45:55 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -347,6 +347,7 @@ const sal_Char* const EXC_FUNCNAME_BAHTTEXT = EXC_FUNCNAME_PREFIX "BAHTTEXT";
 /** Functions new in BIFF8. Unsupported functions: PHONETIC. */
 static const XclFunctionInfo saFuncTable_8[] =
 {
+    { ocGetPivotData,       358,    2,  30, V, { V, R, V }, 0, 0 },
     { ocHyperLink,          359,    1,  2,  V, { V }, 0, 0 },
     { ocNoName,             360,    1,  1,  V, { R }, EXC_FUNCFLAG_IMPORTONLY, 0 },    // PHONETIC
     { ocAverageA,           361,    1,  30, V, { R }, 0, 0 },
