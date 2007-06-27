@@ -4,9 +4,9 @@
  *
  *  $RCSfile: collelem.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: hr $ $Date: 2005-09-29 16:31:37 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 14:21:14 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -37,7 +37,7 @@
 #define _SAMPLE_COLLELEM_HXX
 
 #ifndef _SBX_SBXOBJECT_HXX //autogen
-#include <sbxobj.hxx>
+#include <basic/sbxobj.hxx>
 #endif
 
 // Das Sample-Element ist ein kleines Objekt, das die Properties
