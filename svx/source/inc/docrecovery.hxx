@@ -4,9 +4,9 @@
  *
  *  $RCSfile: docrecovery.hxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: ihi $ $Date: 2006-12-20 17:52:48 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 18:22:03 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -57,7 +57,7 @@
 #ifndef _SVTREEBOX_HXX
 #include <svtools/svtreebx.hxx>
 #endif
-#include <simptabl.hxx>
+#include <svx/simptabl.hxx>
 
 #include <cppuhelper/implbase1.hxx>
 #include <cppuhelper/implbase2.hxx>
