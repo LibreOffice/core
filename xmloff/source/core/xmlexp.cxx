@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xmlexp.cxx,v $
  *
- *  $Revision: 1.129 $
+ *  $Revision: 1.130 $
  *
- *  last change: $Author: vg $ $Date: 2007-05-22 16:09:34 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 14:57:25 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -78,14 +78,14 @@
 #include <comphelper/processfactory.hxx>
 #endif
 #ifndef _XMLOFF_ATTRLIST_HXX
-#include "attrlist.hxx"
+#include <xmloff/attrlist.hxx>
 #endif
 
 #ifndef _XMLOFF_NMSPMAP_HXX
-#include "nmspmap.hxx"
+#include <xmloff/nmspmap.hxx>
 #endif
 #ifndef _XMLOFF_XMLUCONV_HXX
-#include "xmluconv.hxx"
+#include <xmloff/xmluconv.hxx>
 #endif
 
 #ifndef _XMLOFF_XMLNMSPE_HXX
@@ -93,27 +93,27 @@
 #endif
 
 #ifndef _XMLOFF_XMLTOKEN_HXX
-#include "xmltoken.hxx"
+#include <xmloff/xmltoken.hxx>
 #endif
 
 #ifndef _XMLOFF_XMLEXP_HXX
-#include "xmlexp.hxx"
+#include <xmloff/xmlexp.hxx>
 #endif
 
 #ifndef _XMLOFF_XMLNUMFE_HXX
-#include "xmlnumfe.hxx"
+#include <xmloff/xmlnumfe.hxx>
 #endif
 
 #ifndef _XMLOFF_XMLMETAE_HXX
-#include "xmlmetae.hxx"
+#include <xmloff/xmlmetae.hxx>
 #endif
 
 #ifndef _XMLOFF_FAMILIES_HXX_
-#include "families.hxx"
+#include <xmloff/families.hxx>
 #endif
 
 #ifndef _XMLOFF_XMLEVENTEXPORT_HXX
-#include "XMLEventExport.hxx"
+#include <xmloff/XMLEventExport.hxx>
 #endif
 
 #ifndef _XMLOFF_XMLSTARBASICEXPORTHANDLER_HXX
@@ -125,7 +125,7 @@
 #endif
 
 #ifndef _XMLOFF_SETTINGSEXPORTHELPER_HXX
-#include "SettingsExportHelper.hxx"
+#include <xmloff/SettingsExportHelper.hxx>
 #endif
 
 #ifndef _COM_SUN_STAR_CONTAINER_XNAMEACCESS_HPP_
@@ -160,7 +160,7 @@
 #include <DashStyle.hxx>
 #endif
 #ifndef _XMLOFF_XMLFONTAUTOSTYLEPOOL_HXX
-#include "XMLFontAutoStylePool"
+#include <xmloff/XMLFontAutoStylePool>
 #endif
 #ifndef _XMLOFF_XMLIMAGEMAPEXPORT_HXX_
 #include "XMLImageMapExport.hxx"
