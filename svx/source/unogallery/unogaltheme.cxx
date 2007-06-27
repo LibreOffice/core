@@ -4,9 +4,9 @@
  *
  *  $RCSfile: unogaltheme.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: obo $ $Date: 2007-01-23 09:00:46 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 19:31:23 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -43,7 +43,7 @@
 #include "galtheme.hxx"
 #include "gallery1.hxx"
 #include "galmisc.hxx"
-#include "fmmodel.hxx"
+#include <svx/fmmodel.hxx>
 
 #ifndef _RTL_UUID_H_
 #include <rtl/uuid.h>
