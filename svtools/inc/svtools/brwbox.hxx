@@ -4,9 +4,9 @@
  *
  *  $RCSfile: brwbox.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: kz $ $Date: 2007-05-11 11:52:06 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 14:41:18 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -80,13 +80,8 @@ class MultiSelection;
 class BrowserHeader;
 
 namespace svt {
-    class AccessibleBrowseBoxBase;
-    class AccessibleBrowseBox;
-    class AccessibleBrowseBoxAccess;
-    class AccessibleBrowseBoxTableBase;
-    class AccessibleBrowseBoxTable;
-    class AccessibleBrowseBoxHeaderBar;
     class BrowseBoxImpl;
+    class IAccessibleFactory;
 }
 namespace utl {
     class AccessibleStateSetHelper;
@@ -273,11 +268,6 @@ class SVT_DLLPUBLIC BrowseBox
 
     friend class BrowserDataWin;
     friend class ::svt::BrowseBoxImpl;
-    friend class ::svt::AccessibleBrowseBoxBase;
-    friend class ::svt::AccessibleBrowseBox;
-    friend class ::svt::AccessibleBrowseBoxTableBase;
-    friend class ::svt::AccessibleBrowseBoxTable;
-    friend class ::svt::AccessibleBrowseBoxHeaderBar;
 
 #ifdef DBG_MI
     friend void DoLog_Impl( const BrowseBox *pThis, const char *pWhat, const char *pWho );
@@ -385,7 +375,7 @@ private:
 
 protected:
     /// retrieves the XAccessible implementation associated with the BrowseBox instance
-    ::svt::AccessibleBrowseBoxAccess*  getBrowseBoxAccessible();
+    ::svt::IAccessibleFactory&   getAccessibleFactory();
 
 protected:
     USHORT          ColCount() const;
