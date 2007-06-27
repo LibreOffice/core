@@ -4,9 +4,9 @@
  *
  *  $RCSfile: msoleexp.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: ihi $ $Date: 2006-12-19 13:59:44 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 18:35:44 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -103,7 +103,7 @@
 #include <svtools/embedhlp.hxx>
 
 #ifndef _MSDFFIMP_HXX
-#include "msdffimp.hxx" // extern sichtbare Header-Datei
+#include <svx/msdffimp.hxx> // extern sichtbare Header-Datei
 #endif
 
 #include "msoleexp.hxx"
