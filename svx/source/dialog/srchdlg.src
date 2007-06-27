@@ -4,9 +4,9 @@
  *
  *  $RCSfile: srchdlg.src,v $
  *
- *  $Revision: 1.73 $
+ *  $Revision: 1.74 $
  *
- *  last change: $Author: ihi $ $Date: 2007-04-19 14:20:09 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 17:40:22 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -35,7 +35,7 @@
 
  // include ---------------------------------------------------------------
 
-#include "dialogs.hrc"
+#include <svx/dialogs.hrc>
 #include "srchdlg.hrc"
 
 #define MASKCOLOR   MaskColor = Color { Red = 0xFFFF; Green = 0x0000; Blue = 0xFFFF; } ;
