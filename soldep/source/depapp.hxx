@@ -4,9 +4,9 @@
  *
  *  $RCSfile: depapp.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: obo $ $Date: 2006-10-27 07:54:00 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 23:38:13 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -50,9 +50,9 @@
 #include <vcl/help.hxx>
 #include <vcl/button.hxx>
 #include <vcl/menu.hxx>
-#include "soldep.hxx"
-//#include "soldlg.hrc"
-//#include "tbox.hxx"
+#include <soldep/soldep.hxx>
+//#include <soldep/soldlg.hrc>
+//#include <soldep/tbox.hxx>
 // -----------------------------------------------------------------------
 #include <sal/main.h>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
@@ -60,7 +60,7 @@
 #include <cppuhelper/servicefactory.hxx>
 #include <cppuhelper/bootstrap.hxx>
 #include <cppuhelper/weak.hxx>
-#include "soldep.hxx"
+#include <soldep/soldep.hxx>
 
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::lang;

@@ -4,9 +4,9 @@
  *
  *  $RCSfile: objwin.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: obo $ $Date: 2006-04-20 15:15:01 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 23:39:13 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -38,12 +38,12 @@
 #include <vcl/svapp.hxx>
 #include <vcl/help.hxx>
 
-#include "objwin.hxx"
-#include "depwin.hxx"
+#include <soldep/objwin.hxx>
+#include <soldep/depwin.hxx>
 //#include "depapp.hxx"
-#include "depper.hxx"
+#include <soldep/depper.hxx>
 //#include "prjdep.hxx"
-#include "connctr.hxx"
+#include <soldep/connctr.hxx>
 #include <stdio.h>
 
 static Color aDefaultColor = 0L;
