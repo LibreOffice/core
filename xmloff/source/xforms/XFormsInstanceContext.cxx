@@ -4,9 +4,9 @@
  *
  *  $RCSfile: XFormsInstanceContext.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 11:31:12 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 16:28:07 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -50,10 +50,10 @@
 #include <tools/debug.hxx>
 
 #include <xmlnmspe.hxx>
-#include <xmltoken.hxx>
-#include <xmlimp.hxx>
+#include <xmloff/xmltoken.hxx>
+#include <xmloff/xmlimp.hxx>
 #include <xmlerror.hxx>
-#include <nmspmap.hxx>
+#include <xmloff/nmspmap.hxx>
 
 
 using rtl::OUString;
