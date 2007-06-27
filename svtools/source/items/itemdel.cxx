@@ -4,9 +4,9 @@
  *
  *  $RCSfile: itemdel.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 14:59:51 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 21:39:24 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -46,9 +46,9 @@
 #endif
 #include <limits.h>
 
-#include "svtdata.hxx"
-#include "svarray.hxx"
-#include "itempool.hxx"
+#include <svtools/svtdata.hxx>
+#include <svtools/svarray.hxx>
+#include <svtools/itempool.hxx>
 
 // STATIC DATA -----------------------------------------------------------
 

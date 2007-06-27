@@ -4,9 +4,9 @@
  *
  *  $RCSfile: intitem.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 14:59:37 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 21:39:11 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -36,7 +36,7 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_svtools.hxx"
 
-#include "intitem.hxx"
+#include <svtools/intitem.hxx>
 
 #ifndef _COM_SUN_STAR_UNO_ANY_HXX_
 #include <com/sun/star/uno/Any.hxx>
@@ -50,7 +50,7 @@
 #endif
 
 #ifndef _SFXMETRICITEM_HXX
-#include <metitem.hxx>
+#include <svtools/metitem.hxx>
 #endif
 
 //============================================================================
