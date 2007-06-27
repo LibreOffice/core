@@ -4,9 +4,9 @@
  *
  *  $RCSfile: eventimport.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2006-07-25 09:23:48 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 15:14:23 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -37,7 +37,7 @@
 #define _XMLOFF_FORMS_EVENTIMPORT_HXX_
 
 #ifndef _XMLOFF_XMLEVENTSIMPORTCONTEXT_HXX
-#include "XMLEventsImportContext.hxx"
+#include <xmloff/XMLEventsImportContext.hxx>
 #endif
 #ifndef _XMLOFF_FORMS_CALLBACKS_HXX_
 #include "callbacks.hxx"
