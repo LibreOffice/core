@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ListTable.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: os $ $Date: 2007-04-25 11:31:49 $
+ *  last change: $Author: os $ $Date: 2007-06-27 08:54:25 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -180,7 +180,7 @@ uno::Sequence< beans::PropertyValue >  ListPropertyMap::GetPropertyValues()
         for( ; aMapIter != aEndIter; ++aMapIter )
         {
             aNumberingProperties.push_back(
-                    beans::PropertyValue(aMapIter->first, 0, aMapIter->second, beans::PropertyState_DIRECT_VALUE ));
+                    beans::PropertyValue( aPropNameSupplier.GetName( aMapIter->first.eId ), 0, aMapIter->second, beans::PropertyState_DIRECT_VALUE ));
         }
     }
     uno::Sequence< beans::PropertyValue > aRet(aNumberingProperties.size());

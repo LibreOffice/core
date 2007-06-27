@@ -4,9 +4,9 @@
  *
  *  $RCSfile: DomainMapper_Impl.hxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: os $ $Date: 2007-06-14 08:22:49 $
+ *  last change: $Author: os $ $Date: 2007-06-27 08:54:25 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -364,7 +364,7 @@ public:
 
     void AddBookmark( const ::rtl::OUString& rBookmarkName );
 
-    TableManager_t & getTableManager() { return m_TableManager; }
+    DomainMapperTableManager& getTableManager() { return m_TableManager; }
 
     void SetLineNumbering( sal_Int32 nLnnMod, sal_Int32 nLnc, sal_Int32 ndxaLnn );
     bool IsLineNumberingSet() const {return m_bLineNumberingSet;}

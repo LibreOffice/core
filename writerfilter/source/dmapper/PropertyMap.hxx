@@ -4,9 +4,9 @@
  *
  *  $RCSfile: PropertyMap.hxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: os $ $Date: 2007-06-18 12:31:12 $
+ *  last change: $Author: os $ $Date: 2007-06-27 08:54:25 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -89,7 +89,21 @@ enum BorderPosition
 /*-- 15.06.2006 08:22:33---------------------------------------------------
 
   -----------------------------------------------------------------------*/
-typedef std::map < ::rtl::OUString, ::com::sun::star::uno::Any > _PropertyMap;
+struct PropertyDefinition
+{
+    PropertyIds eId;
+    bool        bIsTextProperty;
+
+    PropertyDefinition( PropertyIds _eId, bool _bIsTextProperty ) :
+        eId( _eId ),
+        bIsTextProperty( _bIsTextProperty ){}
+
+    bool    operator== (const PropertyDefinition& rDef) const
+            {   return rDef.eId == eId; }
+    bool    operator< (const PropertyDefinition& rDef) const
+            {   return eId < rDef.eId; }
+};
+typedef std::map < PropertyDefinition, ::com::sun::star::uno::Any > _PropertyMap;
 class PropertyMap : public _PropertyMap
 {
     ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >   m_aValues;
@@ -107,7 +121,7 @@ class PropertyMap : public _PropertyMap
     ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue > GetPropertyValues();
     /** Add property, usually overwrites already available attributes. It shouldn't overwrite in case of default attributes
      */
-    void Insert( PropertyIds eId, const ::com::sun::star::uno::Any& rAny, bool bOverwrite = true );
+    void Insert( PropertyIds eId, bool bIsTextProperty, const ::com::sun::star::uno::Any& rAny, bool bOverwrite = true );
     using _PropertyMap::insert;
     void insert(const boost::shared_ptr<PropertyMap> pMap, bool bOverwrite = true);
 

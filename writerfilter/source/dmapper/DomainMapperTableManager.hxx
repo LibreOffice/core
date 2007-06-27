@@ -4,9 +4,9 @@
  *
  *  $RCSfile: DomainMapperTableManager.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: os $ $Date: 2007-06-18 12:31:12 $
+ *  last change: $Author: os $ $Date: 2007-06-27 08:54:24 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -60,7 +60,7 @@ class DomainMapperTableManager : public DomainMapperTableManager_Base_t
     sal_Int32       m_nLeftMargin; // to-be-combined width m_nGapHalf
     sal_Int32       m_nTableWidth; //might be set directly or has to be calculated from the column positions
     bool            m_bFullWidth; //width is set to full, disable setting of different orientation values
-
+    ::rtl::OUString m_sTableStyleName;
     ::std::vector<sal_Int32>  m_aCellWidths;
 
     virtual void clearData();
@@ -74,6 +74,8 @@ public:
 
     virtual void endOfCellAction();
     virtual void endOfRowAction();
+
+    const ::rtl::OUString& getTableStyleName() const { return m_sTableStyleName; }
 };
 
 }

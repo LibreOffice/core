@@ -4,9 +4,9 @@
  *
  *  $RCSfile: DomainMapper_Impl.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: os $ $Date: 2007-06-14 08:22:49 $
+ *  last change: $Author: os $ $Date: 2007-06-27 08:54:24 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -633,7 +633,7 @@ uno::Any DomainMapper_Impl::GetPropertyFromStyleSheet(PropertyIds eId)
         if(pEntry->pProperties)
         {
             PropertyMap::const_iterator aPropertyIter =
-                    pEntry->pProperties->find(PropertyNameSupplier::GetPropertyNameSupplier().GetName((eId)));
+                    pEntry->pProperties->find(PropertyDefinition(eId, false ));
             if( aPropertyIter != pEntry->pProperties->end())
             {
                 return aPropertyIter->second;
@@ -901,15 +901,15 @@ void DomainMapper_Impl::PushFootOrEndnote( bool bIsFootnote )
         {
             const FontEntry* pFontEntry = pFontTable->getFontEntry(sal_uInt32(pTopContext->GetFootnoteFontId()));
             PropertyMapPtr aFontProps( new PropertyMap );
-            aFontProps->Insert(PROP_CHAR_FONT_NAME, uno::makeAny( pFontEntry->sFontName  ));
-            aFontProps->Insert(PROP_CHAR_FONT_CHAR_SET, uno::makeAny( (sal_Int16)pFontEntry->nTextEncoding  ));
-            aFontProps->Insert(PROP_CHAR_FONT_PITCH, uno::makeAny( pFontEntry->nPitchRequest  ));
+            aFontProps->Insert(PROP_CHAR_FONT_NAME, true, uno::makeAny( pFontEntry->sFontName  ));
+            aFontProps->Insert(PROP_CHAR_FONT_CHAR_SET, true, uno::makeAny( (sal_Int16)pFontEntry->nTextEncoding  ));
+            aFontProps->Insert(PROP_CHAR_FONT_PITCH, true, uno::makeAny( pFontEntry->nPitchRequest  ));
             aFontProperties = aFontProps->GetPropertyValues();
         }
         else if(pTopContext->GetFootnoteFontName().getLength())
         {
             PropertyMapPtr aFontProps( new PropertyMap );
-            aFontProps->Insert(PROP_CHAR_FONT_NAME, uno::makeAny( pTopContext->GetFootnoteFontName()  ));
+            aFontProps->Insert(PROP_CHAR_FONT_NAME, true, uno::makeAny( pTopContext->GetFootnoteFontName()  ));
             aFontProperties = aFontProps->GetPropertyValues();
         }
 
@@ -1781,15 +1781,15 @@ bool lcl_FindInCommand(
   -----------------------------------------------------------------------*/
 void DomainMapper_Impl::GetCurrentLocale(lang::Locale& rLocale)
 {
-    ::rtl::OUString sCharLocale = PropertyNameSupplier::GetPropertyNameSupplier().GetName(PROP_CHAR_LOCALE);
     PropertyMapPtr pTopContext = GetTopContext();
-    PropertyMap::iterator aLocaleIter = pTopContext->find(sCharLocale);
+    PropertyDefinition aCharLocale( PROP_CHAR_LOCALE, true );
+    PropertyMap::iterator aLocaleIter = pTopContext->find( aCharLocale );
     if( aLocaleIter != pTopContext->end())
         aLocaleIter->second >>= rLocale;
     else
     {
         PropertyMapPtr pParaContext = GetTopContextOfType(CONTEXT_PARAGRAPH);
-        aLocaleIter = pParaContext->find(sCharLocale);
+        aLocaleIter = pParaContext->find(aCharLocale);
         if( aLocaleIter != pParaContext->end())
         {
             aLocaleIter->second >>= rLocale;

@@ -4,9 +4,9 @@
  *
  *  $RCSfile: PropertyMap.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: os $ $Date: 2007-06-18 12:31:12 $
+ *  last change: $Author: os $ $Date: 2007-06-27 08:54:25 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -94,20 +94,18 @@ uno::Sequence< beans::PropertyValue > PropertyMap::GetPropertyValues()
         //otherwise they will overwrite 'hard' attributes
         sal_Int32 nValue = 0;
         PropertyNameSupplier& rPropNameSupplier = PropertyNameSupplier::GetPropertyNameSupplier();
-        const ::rtl::OUString& rParaStyle = rPropNameSupplier.GetName( PROP_PARA_STYLE_NAME );
-        PropertyMap::iterator aParaStyleIter = find(rParaStyle);
+        PropertyMap::iterator aParaStyleIter = find(PropertyDefinition( PROP_PARA_STYLE_NAME, false ) );
         if( aParaStyleIter != end())
         {
-            pValues[nValue].Name = aParaStyleIter->first;
+            pValues[nValue].Name = rPropNameSupplier.GetName( aParaStyleIter->first.eId );
             pValues[nValue].Value = aParaStyleIter->second;
             ++nValue;
         }
 
-        const ::rtl::OUString& rCharStyle = rPropNameSupplier.GetName( PROP_CHAR_STYLE_NAME );
-        PropertyMap::iterator aCharStyleIter = find(rCharStyle);
+        PropertyMap::iterator aCharStyleIter = find(PropertyDefinition( PROP_CHAR_STYLE_NAME, false ));
         if( aCharStyleIter != end())
         {
-            pValues[nValue].Name = aCharStyleIter->first;
+            pValues[nValue].Name = rPropNameSupplier.GetName( aCharStyleIter->first.eId );
             pValues[nValue].Value = aCharStyleIter->second;
             ++nValue;
         }
@@ -116,7 +114,7 @@ uno::Sequence< beans::PropertyValue > PropertyMap::GetPropertyValues()
         {
             if( aMapIter != aParaStyleIter && aMapIter != aCharStyleIter)
             {
-                pValues[nValue].Name = aMapIter->first;
+                pValues[nValue].Name = rPropNameSupplier.GetName( aMapIter->first.eId );
                 pValues[nValue].Value = aMapIter->second;
                 ++nValue;
             }
@@ -127,11 +125,11 @@ uno::Sequence< beans::PropertyValue > PropertyMap::GetPropertyValues()
 /*-------------------------------------------------------------------------
 
   -----------------------------------------------------------------------*/
-void PropertyMap::Insert( PropertyIds eId, const uno::Any& rAny, bool bOverwrite )
+void PropertyMap::Insert( PropertyIds eId, bool bIsTextProperty, const uno::Any& rAny, bool bOverwrite )
 {
-    const ::rtl::OUString& rInsert = PropertyNameSupplier::
-                           GetPropertyNameSupplier().GetName(eId);
-    PropertyMap::iterator aElement = find(rInsert);
+//    const ::rtl::OUString& rInsert = PropertyNameSupplier::
+//                           GetPropertyNameSupplier().GetName(eId);
+    PropertyMap::iterator aElement = find(PropertyDefinition( eId, bIsTextProperty ) );
     if( aElement != end())
     {
         if(!bOverwrite)
@@ -139,8 +137,8 @@ void PropertyMap::Insert( PropertyIds eId, const uno::Any& rAny, bool bOverwrite
         erase( aElement );
     }
     _PropertyMap::insert( PropertyMap::value_type
-                          (rInsert,
-                           rAny));
+                          (PropertyDefinition( eId, bIsTextProperty),
+                           rAny ));
     Invalidate();
 }
 /*-- 13.12.2006 10:46:42---------------------------------------------------
@@ -218,20 +216,20 @@ SectionPropertyMap::SectionPropertyMap(bool bIsFirstSection) :
     //todo: set defaults in ApplyPropertiesToPageStyles
     //initialize defaults
     //page height, todo: rounded to default values, default: 0x3dc0 (15808) twip  27883 1/100 mm
-    Insert( PROP_HEIGHT, uno::makeAny( (sal_Int32) 27883 ) );
+    Insert( PROP_HEIGHT, false, uno::makeAny( (sal_Int32) 27883 ) );
     //page width, todo: rounded to default values, default 0x2fd0 (12240) twip -> 21590 1/100 mm
-    Insert( PROP_WIDTH, uno::makeAny( (sal_Int32)21590 ) );
+    Insert( PROP_WIDTH, false, uno::makeAny( (sal_Int32)21590 ) );
     //page left margin, default 0x708 (1800) twip -> 3175 1/100 mm
-    Insert( PROP_LEFT_MARGIN, uno::makeAny( (sal_Int32) 3175 ) );
+    Insert( PROP_LEFT_MARGIN, false, uno::makeAny( (sal_Int32) 3175 ) );
     //page right margin, default 0x708 (1800) twip -> 3175 1/100 mm
-    Insert( PROP_RIGHT_MARGIN, uno::makeAny( (sal_Int32) 3175 ) );
+    Insert( PROP_RIGHT_MARGIN, false, uno::makeAny( (sal_Int32) 3175 ) );
     //page top margin, default 0x5a0 (1440) twip -> 2540 1/100 mm
-    Insert( PROP_TOP_MARGIN, uno::makeAny( (sal_Int32)2540 ) );
+    Insert( PROP_TOP_MARGIN, false, uno::makeAny( (sal_Int32)2540 ) );
     //page bottom margin, default 0x5a0 (1440) twip -> 2540 1/100 mm
-    Insert( PROP_BOTTOM_MARGIN, uno::makeAny( (sal_Int32) 2540 ) );
+    Insert( PROP_BOTTOM_MARGIN, false, uno::makeAny( (sal_Int32) 2540 ) );
     uno::Any aFalse( ::uno::makeAny( false ) );
-    Insert( PROP_GRID_DISPLAY, aFalse);
-    Insert( PROP_GRID_PRINT, aFalse);
+    Insert( PROP_GRID_DISPLAY, false, aFalse);
+    Insert( PROP_GRID_PRINT, false, aFalse);
 
 
 
@@ -559,7 +557,6 @@ bool SectionPropertyMap::HasFooter(bool bFirstPage) const
 
 void SectionPropertyMap::PrepareHeaderFooterProperties( bool bFirstPage )
 {
-    PropertyNameSupplier& rPropNameSupplier = PropertyNameSupplier::GetPropertyNameSupplier();
     sal_Int32 nTopMargin = m_nTopMargin;
     if(HasHeader(bFirstPage))
     {
@@ -577,20 +574,20 @@ void SectionPropertyMap::PrepareHeaderFooterProperties( bool bFirstPage )
 
     if( nTopMargin >= 0 ) //fixed height header -> see WW8Par6.hxx
     {
-        operator[]( rPropNameSupplier.GetName( PROP_HEADER_IS_DYNAMIC_HEIGHT )) = uno::makeAny( true );
-        operator[]( rPropNameSupplier.GetName( PROP_HEADER_DYNAMIC_SPACING )) = uno::makeAny( true );
-        operator[]( rPropNameSupplier.GetName( PROP_HEADER_BODY_DISTANCE )) = uno::makeAny( m_nHeaderTop - MIN_HEAD_FOOT_HEIGHT );// ULSpace.Top()
-        operator[]( rPropNameSupplier.GetName( PROP_HEADER_HEIGHT )) =  uno::makeAny( m_nHeaderTop );
+        operator[]( PropertyDefinition( PROP_HEADER_IS_DYNAMIC_HEIGHT, false )) = uno::makeAny( true );
+        operator[]( PropertyDefinition( PROP_HEADER_DYNAMIC_SPACING, false )) = uno::makeAny( true );
+        operator[]( PropertyDefinition( PROP_HEADER_BODY_DISTANCE, false )) = uno::makeAny( m_nHeaderTop - MIN_HEAD_FOOT_HEIGHT );// ULSpace.Top()
+        operator[]( PropertyDefinition( PROP_HEADER_HEIGHT, false )) =  uno::makeAny( m_nHeaderTop );
 
     }
     else
     {
         //todo: old filter fakes a frame into the header/footer to support overlapping
         //current setting is completely wrong!
-        operator[]( rPropNameSupplier.GetName( PROP_HEADER_HEIGHT )) =  uno::makeAny( m_nHeaderTop );
-        operator[]( rPropNameSupplier.GetName( PROP_HEADER_BODY_DISTANCE )) = uno::makeAny( nTopMargin - m_nHeaderTop );
-        operator[]( rPropNameSupplier.GetName( PROP_HEADER_IS_DYNAMIC_HEIGHT)) = uno::makeAny( false );
-        operator[]( rPropNameSupplier.GetName( PROP_HEADER_DYNAMIC_SPACING)) = uno::makeAny( false );
+        operator[]( PropertyDefinition( PROP_HEADER_HEIGHT, false )) =  uno::makeAny( m_nHeaderTop );
+        operator[]( PropertyDefinition( PROP_HEADER_BODY_DISTANCE, false )) = uno::makeAny( nTopMargin - m_nHeaderTop );
+        operator[]( PropertyDefinition( PROP_HEADER_IS_DYNAMIC_HEIGHT, false)) = uno::makeAny( false );
+        operator[]( PropertyDefinition( PROP_HEADER_DYNAMIC_SPACING, false)) = uno::makeAny( false );
     }
 
     sal_Int32 nBottomMargin = m_nBottomMargin;
@@ -607,24 +604,24 @@ void SectionPropertyMap::PrepareHeaderFooterProperties( bool bFirstPage )
 
     if( nBottomMargin >= 0 ) //fixed height footer -> see WW8Par6.hxx
     {
-        operator[]( rPropNameSupplier.GetName( PROP_FOOTER_IS_DYNAMIC_HEIGHT )) = uno::makeAny( true );
-        operator[]( rPropNameSupplier.GetName( PROP_FOOTER_DYNAMIC_SPACING )) = uno::makeAny( true );
-        operator[]( rPropNameSupplier.GetName( PROP_FOOTER_BODY_DISTANCE )) = uno::makeAny( m_nHeaderBottom - MIN_HEAD_FOOT_HEIGHT);
-        operator[]( rPropNameSupplier.GetName( PROP_FOOTER_HEIGHT )) =  uno::makeAny( m_nHeaderBottom );
+        operator[]( PropertyDefinition( PROP_FOOTER_IS_DYNAMIC_HEIGHT, false )) = uno::makeAny( true );
+        operator[]( PropertyDefinition( PROP_FOOTER_DYNAMIC_SPACING, false )) = uno::makeAny( true );
+        operator[]( PropertyDefinition( PROP_FOOTER_BODY_DISTANCE, false )) = uno::makeAny( m_nHeaderBottom - MIN_HEAD_FOOT_HEIGHT);
+        operator[]( PropertyDefinition( PROP_FOOTER_HEIGHT, false )) =  uno::makeAny( m_nHeaderBottom );
     }
     else
     {
         //todo: old filter fakes a frame into the header/footer to support overlapping
         //current setting is completely wrong!
-        operator[]( rPropNameSupplier.GetName( PROP_FOOTER_IS_DYNAMIC_HEIGHT)) = uno::makeAny( false );
-        operator[]( rPropNameSupplier.GetName( PROP_FOOTER_DYNAMIC_SPACING)) = uno::makeAny( false );
-        operator[]( rPropNameSupplier.GetName( PROP_FOOTER_HEIGHT )) =  uno::makeAny( nBottomMargin - m_nHeaderBottom );
-        operator[]( rPropNameSupplier.GetName( PROP_FOOTER_BODY_DISTANCE )) = uno::makeAny( m_nHeaderBottom );
+        operator[]( PropertyDefinition( PROP_FOOTER_IS_DYNAMIC_HEIGHT, false)) = uno::makeAny( false );
+        operator[]( PropertyDefinition( PROP_FOOTER_DYNAMIC_SPACING, false)) = uno::makeAny( false );
+        operator[]( PropertyDefinition( PROP_FOOTER_HEIGHT, false )) =  uno::makeAny( nBottomMargin - m_nHeaderBottom );
+        operator[]( PropertyDefinition( PROP_FOOTER_BODY_DISTANCE, false )) = uno::makeAny( m_nHeaderBottom );
     }
 
     //now set the top/bottom margin for the follow page style
-    operator[]( rPropNameSupplier.GetName( PROP_TOP_MARGIN )) = uno::makeAny( nTopMargin );
-    operator[]( rPropNameSupplier.GetName( PROP_BOTTOM_MARGIN )) = uno::makeAny( nBottomMargin );
+    operator[]( PropertyDefinition( PROP_TOP_MARGIN, false )) = uno::makeAny( nTopMargin );
+    operator[]( PropertyDefinition( PROP_BOTTOM_MARGIN, false )) = uno::makeAny( nBottomMargin );
 }
 /*-- 11.12.2006 08:31:46---------------------------------------------------
 
@@ -686,8 +683,8 @@ void SectionPropertyMap::CloseSectionGroup( DomainMapper_Impl& rDM_Impl )
             else
                 m_nLeftMargin += m_nDzaGutter;
         }
-        operator[]( rPropNameSupplier.GetName( PROP_LEFT_MARGIN )) =  uno::makeAny( m_nLeftMargin  );
-        operator[]( rPropNameSupplier.GetName( PROP_RIGHT_MARGIN )) = uno::makeAny( m_nRightMargin );
+        operator[]( PropertyDefinition( PROP_LEFT_MARGIN, false )) =  uno::makeAny( m_nLeftMargin  );
+        operator[]( PropertyDefinition( PROP_RIGHT_MARGIN, false )) = uno::makeAny( m_nRightMargin );
 
 //        if( iGutterPos && fRTLGutter )
 //        m_nTopMargin += nGutter
@@ -706,17 +703,17 @@ void SectionPropertyMap::CloseSectionGroup( DomainMapper_Impl& rDM_Impl )
 
         //prepare text grid properties
         sal_Int32 nHeight = 1;
-        PropertyMap::iterator aElement = find(rPropNameSupplier.GetName( PROP_HEIGHT ));
+        PropertyMap::iterator aElement = find(PropertyDefinition( PROP_HEIGHT, false ));
         if( aElement != end())
             aElement->second >>= nHeight;
 
         sal_Int32 nWidth = 1;
-        aElement = find(rPropNameSupplier.GetName( PROP_WIDTH ));
+        aElement = find(PropertyDefinition( PROP_WIDTH, false ));
         if( aElement != end())
             aElement->second >>= nWidth;
 
         text::WritingMode eWritingMode = text::WritingMode_LR_TB;
-        aElement = find(rPropNameSupplier.GetName( PROP_WRITING_MODE ));
+        aElement = find(PropertyDefinition( PROP_WRITING_MODE, false ));
         if( aElement != end())
             aElement->second >>= eWritingMode;
 
@@ -726,7 +723,7 @@ void SectionPropertyMap::CloseSectionGroup( DomainMapper_Impl& rDM_Impl )
             nHeight - m_nTopMargin - m_nBottomMargin :
             nWidth - m_nLeftMargin - m_nRightMargin;
 
-        operator[]( rPropNameSupplier.GetName( PROP_GRID_LINES )) =
+        operator[]( PropertyDefinition( PROP_GRID_LINES, false )) =
                 uno::makeAny( static_cast<sal_Int16>(nTextAreaHeight/m_nGridLinePitch));
 
         sal_Int32 nCharWidth = 423; //240 twip/ 12 pt
@@ -734,7 +731,7 @@ void SectionPropertyMap::CloseSectionGroup( DomainMapper_Impl& rDM_Impl )
         const StyleSheetEntry* pEntry = rDM_Impl.GetStyleSheetTable()->FindStyleSheetByISTD(::rtl::OUString::valueOf(static_cast<sal_Int32>(0), 16));
         if( pEntry )
         {
-            PropertyMap::iterator aElement_ = pEntry->pProperties->find(rPropNameSupplier.GetName( PROP_CHAR_HEIGHT_ASIAN ));
+            PropertyMap::iterator aElement_ = pEntry->pProperties->find(PropertyDefinition( PROP_CHAR_HEIGHT_ASIAN, false ));
             if( aElement_ != pEntry->pProperties->end())
             {
                 double fHeight;
@@ -756,11 +753,11 @@ void SectionPropertyMap::CloseSectionGroup( DomainMapper_Impl& rDM_Impl )
             nFraction = (nFraction * 20)/0xFFF;
             nCharWidth += ConversionHelper::convertToMM100( nFraction );
         }
-        operator[]( rPropNameSupplier.GetName( PROP_GRID_BASE_HEIGHT )) = uno::makeAny( nCharWidth );
+        operator[]( PropertyDefinition( PROP_GRID_BASE_HEIGHT, false )) = uno::makeAny( nCharWidth );
         sal_Int32 nRubyHeight = m_nGridLinePitch - nCharWidth;
         if(nRubyHeight < 0 )
             nRubyHeight = 0;
-        operator[]( rPropNameSupplier.GetName( PROP_GRID_RUBY_HEIGHT )) = uno::makeAny( nRubyHeight );
+        operator[]( PropertyDefinition( PROP_GRID_RUBY_HEIGHT, false )) = uno::makeAny( nRubyHeight );
 
         _ApplyProperties( xFollowPageStyle );
 
@@ -814,12 +811,13 @@ void SectionPropertyMap::CloseSectionGroup( DomainMapper_Impl& rDM_Impl )
   -----------------------------------------------------------------------*/
 void SectionPropertyMap::_ApplyProperties( uno::Reference< beans::XPropertySet > xStyle )
 {
+    PropertyNameSupplier& rPropNameSupplier = PropertyNameSupplier::GetPropertyNameSupplier();
     PropertyMap::iterator aMapIter = begin();
     try
     {
         while( aMapIter != end())
         {
-            xStyle->setPropertyValue( aMapIter->first, aMapIter->second );
+            xStyle->setPropertyValue( rPropNameSupplier.GetName( aMapIter->first.eId ), aMapIter->second );
             ++aMapIter;
         }
     }

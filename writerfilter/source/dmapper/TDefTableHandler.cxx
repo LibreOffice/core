@@ -4,9 +4,9 @@
  *
  *  $RCSfile: TDefTableHandler.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: os $ $Date: 2007-05-24 11:32:50 $
+ *  last change: $Author: os $ $Date: 2007-06-27 08:54:25 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -208,7 +208,7 @@ PropertyMapPtr  TDefTableHandler::getRowProperties() const
             pSeparators[nBorder - 1].Position =  nRelPos;
             pSeparators[nBorder - 1].IsVisible = sal_True;
         }
-        pPropertyMap->Insert( PROP_TABLE_COLUMN_SEPARATORS, uno::makeAny( aSeparators ) );
+        pPropertyMap->Insert( PROP_TABLE_COLUMN_SEPARATORS, false, uno::makeAny( aSeparators ) );
     }
 
     return pPropertyMap;
@@ -228,16 +228,16 @@ PropertyMapPtr  TDefTableHandler::getRowProperties() const
             case 2: nVertOrient = text::VertOrientation::BOTTOM; break;
             default:;
         }
-        pPropertyMap->Insert( PROP_VERT_ORIENT, uno::makeAny( nVertOrient ) );
+        pPropertyMap->Insert( PROP_VERT_ORIENT, false, uno::makeAny( nVertOrient ) );
     }
     if( m_aTopBorderLines.size() > nCell )
-        pPropertyMap->Insert( PROP_TOP_BORDER, uno::makeAny( m_aTopBorderLines[nCell] ) );
+        pPropertyMap->Insert( PROP_TOP_BORDER, false, uno::makeAny( m_aTopBorderLines[nCell] ) );
     if( m_aLeftBorderLines.size() > nCell )
-        pPropertyMap->Insert( PROP_LEFT_BORDER, uno::makeAny( m_aLeftBorderLines[nCell] ) );
+        pPropertyMap->Insert( PROP_LEFT_BORDER, false, uno::makeAny( m_aLeftBorderLines[nCell] ) );
     if( m_aBottomBorderLines.size() > nCell )
-        pPropertyMap->Insert( PROP_BOTTOM_BORDER, uno::makeAny( m_aBottomBorderLines[nCell] ) );
+        pPropertyMap->Insert( PROP_BOTTOM_BORDER, false, uno::makeAny( m_aBottomBorderLines[nCell] ) );
     if( m_aRightBorderLines.size() > nCell )
-        pPropertyMap->Insert( PROP_RIGHT_BORDER, uno::makeAny( m_aRightBorderLines[nCell] ) );
+        pPropertyMap->Insert( PROP_RIGHT_BORDER, false, uno::makeAny( m_aRightBorderLines[nCell] ) );
     return pPropertyMap;
 }
 /*-- 09.05.2007 13:14:17---------------------------------------------------

@@ -4,9 +4,9 @@
  *
  *  $RCSfile: BorderHandler.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: os $ $Date: 2007-05-24 11:31:43 $
+ *  last change: $Author: os $ $Date: 2007-06-27 08:54:24 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -170,7 +170,7 @@ PropertyMapPtr  BorderHandler::getProperties()
     if( m_nCurrentBorderPosition )
     {
         for( sal_Int32 nProp = 0; nProp < BORDER_COUNT; ++nProp)
-            pPropertyMap->Insert( aPropNames[nProp], uno::makeAny( m_aBorderLines[nProp] ) );
+            pPropertyMap->Insert( aPropNames[nProp], false, uno::makeAny( m_aBorderLines[nProp] ) );
     }
     return pPropertyMap;
 }
