@@ -4,9 +4,9 @@
  *
  *  $RCSfile: optgdlg.cxx,v $
  *
- *  $Revision: 1.42 $
+ *  $Revision: 1.43 $
  *
- *  last change: $Author: ihi $ $Date: 2007-06-04 14:54:52 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 17:27:09 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -140,10 +140,10 @@
 #include "optsave.hxx"
 #endif
 #ifndef _SVX_OPTLINGU_HXX
-#include "optlingu.hxx"
+#include <svx/optlingu.hxx>
 #endif
 #ifndef _XPOOL_HXX
-#include "xpool.hxx"
+#include <svx/xpool.hxx>
 #endif
 #ifndef _SVX_DLGUTIL_HXX
 #include "dlgutil.hxx"
@@ -155,17 +155,17 @@
 #include "langtab.hxx"
 #endif
 #ifndef _SVX_DIALOGS_HRC
-#include "dialogs.hrc"
+#include <svx/dialogs.hrc>
 #endif
 #ifndef _UNO_LINGU_HXX
 #include "unolingu.hxx"
 #endif
 #ifndef _SVX_SVXIDS_HRC
-#include "svxids.hrc"
+#include <svx/svxids.hrc>
 #endif
 
 #ifndef _SVX_LANGITEM_HXX
-#include "langitem.hxx"
+#include <svx/langitem.hxx>
 #endif
 #ifndef _UNOTOOLS_PROCESSFACTORY_HXX
 #include <comphelper/processfactory.hxx>
@@ -175,7 +175,7 @@
 #endif
 
 
-#include "dialmgr.hxx"
+#include <svx/dialmgr.hxx>
 #ifndef INCLUDED_SVTOOLS_HELPOPT_HXX
 #include <svtools/helpopt.hxx>
 #endif
