@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dockingarea.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 12:17:52 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 20:30:26 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -40,16 +40,16 @@
 #endif
 
 #ifndef _SV_DOCKINGAREA_HXX
-#include <dockingarea.hxx>
+#include <vcl/dockingarea.hxx>
 #endif
 #ifndef _SV_SYSWIN_HXX
-#include <syswin.hxx>
+#include <vcl/syswin.hxx>
 #endif
 #ifndef _SV_MENU_HXX
-#include <menu.hxx>
+#include <vcl/menu.hxx>
 #endif
 #ifndef _SV_SVDATA_HXX
-#include <svdata.hxx>
+#include <vcl/svdata.hxx>
 #endif
 
 #include <map>

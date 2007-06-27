@@ -4,9 +4,9 @@
  *
  *  $RCSfile: introwin.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 12:18:47 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 20:31:20 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -40,7 +40,7 @@
 #include <svsys.h>
 #endif
 #ifndef _SV_SALFRAME_HXX
-#include <salframe.hxx>
+#include <vcl/salframe.hxx>
 #endif
 
 #ifndef _DEBUG_HXX
@@ -48,15 +48,15 @@
 #endif
 
 #ifndef _SV_SVDATA_HXX
-#include <svdata.hxx>
+#include <vcl/svdata.hxx>
 #endif
 #ifndef _SV_WRKWIN_HXX
-#include <wrkwin.hxx>
+#include <vcl/wrkwin.hxx>
 #endif
 
-#include <bitmap.hxx>
+#include <vcl/bitmap.hxx>
 #include <impbmp.hxx>
-#include <introwin.hxx>
+#include <vcl/introwin.hxx>
 
 
 
