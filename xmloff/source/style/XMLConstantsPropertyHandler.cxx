@@ -4,9 +4,9 @@
  *
  *  $RCSfile: XMLConstantsPropertyHandler.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: vg $ $Date: 2006-11-21 17:36:25 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 15:31:52 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -41,7 +41,7 @@
 #endif
 
 #ifndef _XMLOFF_XMLUCONV_HXX
-#include "xmluconv.hxx"
+#include <xmloff/xmluconv.hxx>
 #endif
 
 #ifndef _RTL_USTRBUF_HXX_
@@ -53,7 +53,7 @@
 #endif
 
 #ifndef _XMLOFF_XMLCONSTANTSPROPERTYHANDLER_HXX
-#include "XMLConstantsPropertyHandler.hxx"
+#include <xmloff/XMLConstantsPropertyHandler.hxx>
 #endif
 
 using namespace ::com::sun::star::uno;
