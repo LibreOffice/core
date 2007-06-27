@@ -4,9 +4,9 @@
  *
  *  $RCSfile: cfg.cxx,v $
  *
- *  $Revision: 1.39 $
+ *  $Revision: 1.40 $
  *
- *  last change: $Author: rt $ $Date: 2007-04-26 07:26:08 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 16:50:41 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -70,14 +70,14 @@
 
 #include <algorithm>
 
-#include "dialogs.hrc"
+#include <svx/dialogs.hrc>
 #include "cfg.hrc"
 #include "helpid.hrc"
 
 #include "cfg.hxx"
 #include "eventdlg.hxx"
-#include "dialmgr.hxx"
-#include "svxdlg.hxx"
+#include <svx/dialmgr.hxx>
+#include <svx/svxdlg.hxx>
 
 #ifndef _COMPHELPER_PROCESSFACTORY_HXX_
 #include <comphelper/processfactory.hxx>
