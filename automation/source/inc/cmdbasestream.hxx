@@ -4,9 +4,9 @@
  *
  *  $RCSfile: cmdbasestream.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-07 19:17:09 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 20:59:32 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -44,7 +44,7 @@
 #ifndef _CMDBASESTREAM_HXX_
 #define _CMDBASESTREAM_HXX_
 
-#include "commtypes.hxx"
+#include <automation/commtypes.hxx>
 #include "icommstream.hxx"
 
 class CmdBaseStream
