@@ -4,9 +4,9 @@
  *
  *  $RCSfile: pdfwriter_impl.cxx,v $
  *
- *  $Revision: 1.110 $
+ *  $Revision: 1.111 $
  *
- *  last change: $Author: obo $ $Date: 2007-06-11 14:25:14 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 20:21:16 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -48,16 +48,16 @@
 #include <tools/debug.hxx>
 #include <tools/zcodec.hxx>
 #include <tools/stream.hxx>
-#include <virdev.hxx>
-#include <bmpacc.hxx>
-#include <bitmapex.hxx>
-#include <image.hxx>
+#include <vcl/virdev.hxx>
+#include <vcl/bmpacc.hxx>
+#include <vcl/bitmapex.hxx>
+#include <vcl/image.hxx>
 #include <outdev.h>
-#include <sallayout.hxx>
-#include <metric.hxx>
+#include <vcl/sallayout.hxx>
+#include <vcl/metric.hxx>
 #include <svsys.h>
-#include <salgdi.hxx>
-#include <svapp.hxx>
+#include <vcl/salgdi.hxx>
+#include <vcl/svapp.hxx>
 #include <osl/thread.h>
 #include <osl/file.h>
 #include <rtl/crc.h>
