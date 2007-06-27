@@ -4,9 +4,9 @@
  *
  *  $RCSfile: optcolor.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: hr $ $Date: 2007-06-27 13:40:16 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 17:25:17 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -55,7 +55,7 @@
 #include <vcl/scrbar.hxx>
 #endif
 #ifndef _XTABLE_HXX
-#include <xtable.hxx>
+#include <svx/xtable.hxx>
 #endif
 #ifndef INCLUDED_SVTOOLS_MODULEOPTIONS_HXX
 #include <svtools/moduleoptions.hxx>
@@ -69,14 +69,14 @@
 //CHINA001 #ifndef _SVX_DLG_NAME_HXX
 //CHINA001 #include <dlgname.hxx>
 //CHINA001 #endif
-#include "svxdlg.hxx" //CHINA001
+#include <svx/svxdlg.hxx> //CHINA001
 #ifndef _SVX_HELPID_HRC
 #include <helpid.hrc>
 #endif
-#include "svxids.hrc"
-#include "dialmgr.hxx"
+#include <svx/svxids.hrc>
+#include <svx/dialmgr.hxx>
 #include "optcolor.hxx"
-#include "dialogs.hrc"
+#include <svx/dialogs.hrc>
 #include "optcolor.hrc"
 #include "dlgutil.hxx"
 
