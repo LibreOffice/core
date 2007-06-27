@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xmlnumi.cxx,v $
  *
- *  $Revision: 1.39 $
+ *  $Revision: 1.40 $
  *
- *  last change: $Author: rt $ $Date: 2006-10-30 09:06:43 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 15:48:17 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -49,12 +49,12 @@
 #include <vcl/vclenum.hxx>
 #endif
 
-#include "xmltkmap.hxx"
-#include "nmspmap.hxx"
+#include <xmloff/xmltkmap.hxx>
+#include <xmloff/nmspmap.hxx>
 #include "xmlnmspe.hxx"
-#include "xmlimp.hxx"
+#include <xmloff/xmlimp.hxx>
 #ifndef _XMLOFF_XMLBASE64IMPORTCONTEXT_HXX
-#include "XMLBase64ImportContext.hxx"
+#include <xmloff/XMLBase64ImportContext.hxx>
 #endif
 
 #ifndef _COM_SUN_STAR_BEANS_PROPERTYVALUE_HPP_
@@ -89,26 +89,26 @@
 #endif
 
 #ifndef _XMLOFF_XMLTOKEN_HXX
-#include "xmltoken.hxx"
+#include <xmloff/xmltoken.hxx>
 #endif
 
 #include "i18nmap.hxx"
-#include "xmluconv.hxx"
+#include <xmloff/xmluconv.hxx>
 #ifndef _XMLOFF_PROPERTYHANDLER_FONTTYPES_HXX
 #include "fonthdl.hxx"
 #endif
 #ifndef _XMLOFF_XMLFONTSTYLESCONTEXT_HXX
-#include "XMLFontStylesContext.hxx"
+#include <xmloff/XMLFontStylesContext.hxx>
 #endif
 #ifndef _XMLOFF_FAMILIES_HXX
-#include "families.hxx"
+#include <xmloff/families.hxx>
 #endif
 #ifndef _XMLOFF_PROPMAPPINGTYPES_HXX
-#include "maptype.hxx"
+#include <xmloff/maptype.hxx>
 #endif
 
 
-#include "xmlnumi.hxx"
+#include <xmloff/xmlnumi.hxx>
 
 #define _SVSTDARR_USHORTS
 #include <svtools/svstdarr.hxx>
