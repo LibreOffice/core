@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xmltxtimp.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: ihi $ $Date: 2007-06-05 14:37:30 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 19:32:25 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -108,7 +108,7 @@
 #endif
 
 #ifndef _SVX_UNOTEXT_HXX
-#include "unotext.hxx"
+#include <svx/unotext.hxx>
 #endif
 
 using namespace com::sun::star;
