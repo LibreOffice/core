@@ -4,9 +4,9 @@
  *
  *  $RCSfile: file_impress.scp,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: kz $ $Date: 2007-05-09 13:23:03 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 15:50:55 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -179,7 +179,7 @@ End
 
 File gid_File_Oo_Office_Ui_Effects_Xcu
 	TXT_FILE_BODY;
-	Styles = (PACKED);
+	Styles = (PACKED,PATCH);
 	Dir = gid_Dir_Share_Registry_Data_Org_Openoffice_Office_Ui;
 	Name = "/registry/data/org/openoffice/Office/UI/Effects.xcu";
 End
