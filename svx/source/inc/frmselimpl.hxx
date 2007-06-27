@@ -4,9 +4,9 @@
  *
  *  $RCSfile: frmselimpl.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: ihi $ $Date: 2007-06-06 14:07:34 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 18:23:50 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -43,13 +43,13 @@
 #include <vcl/image.hxx>
 #endif
 #ifndef SVX_FRMSEL_HXX
-#include "frmsel.hxx"
+#include <svx/frmsel.hxx>
 #endif
 #ifndef SVX_FRAMELINKARRAY_HXX
-#include "framelinkarray.hxx"
+#include <svx/framelinkarray.hxx>
 #endif
 #ifndef SVX_BORDERLINE_HXX
-#include "borderline.hxx"
+#include <svx/borderline.hxx>
 #endif
 
 namespace svx {
