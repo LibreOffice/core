@@ -4,9 +4,9 @@
  *
  *  $RCSfile: vclxwindow.hxx,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 12:47:13 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 15:04:43 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -97,6 +97,11 @@ class VclWindowEvent;
 struct AccessibilityInfos;
 struct SystemParentData;
 
+namespace toolkit
+{
+    class IAccessibleFactory;
+}
+
 
 //  ----------------------------------------------------
 //  class VCLXWINDOW
@@ -151,6 +156,8 @@ protected:
     void            SetSynthesizingVCLEvent( sal_Bool b )   { mbSynthesizingVCLEvent = b; }
     BOOL            IsSynthesizingVCLEvent() const          { return mbSynthesizingVCLEvent; }
     void        SetSystemParent_Impl( sal_Int64 nHandle );
+
+    ::toolkit::IAccessibleFactory&  getAccessibleFactory();
 
 public:
     VCLXWindow();
