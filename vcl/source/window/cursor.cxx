@@ -4,9 +4,9 @@
  *
  *  $RCSfile: cursor.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 12:16:20 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 20:28:56 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -37,16 +37,16 @@
 #include "precompiled_vcl.hxx"
 
 #ifndef _SV_SVAPP_HXX
-#include <svapp.hxx>
+#include <vcl/svapp.hxx>
 #endif
 #ifndef _SV_TIMER_HXX
-#include <timer.hxx>
+#include <vcl/timer.hxx>
 #endif
 #ifndef _SV_SETTINGS_HXX
-#include <settings.hxx>
+#include <vcl/settings.hxx>
 #endif
 #ifndef _SV_WINDOW_HXX
-#include <window.hxx>
+#include <vcl/window.hxx>
 #endif
 #ifndef _SV_WINDOW_H
 #include <window.h>
@@ -55,7 +55,7 @@
 #include <tools/poly.hxx>
 #endif
 #ifndef _SV_CURSOR_HXX
-#include <cursor.hxx>
+#include <vcl/cursor.hxx>
 #endif
 
 
