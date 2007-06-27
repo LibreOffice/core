@@ -4,9 +4,9 @@
  *
  *  $RCSfile: app.hxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: hr $ $Date: 2006-06-19 17:33:05 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 14:11:43 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -59,7 +59,7 @@
 #endif
 
 class BasicFrame;
-#include "mybasic.hxx"
+#include <basic/mybasic.hxx>
 
 class EditList;
 class AppWin;
