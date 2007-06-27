@@ -4,9 +4,9 @@
  *
  *  $RCSfile: sm.cxx,v $
  *
- *  $Revision: 1.30 $
+ *  $Revision: 1.31 $
  *
- *  last change: $Author: rt $ $Date: 2007-04-26 10:41:56 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 20:47:48 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -69,7 +69,7 @@
 #include <salframe.h>
 #endif
 #ifndef _SV_SVAPP_HXX
-#include <svapp.hxx>
+#include <vcl/svapp.hxx>
 #endif
 #ifndef _SV_SALINST_H
 #include <salinst.h>
