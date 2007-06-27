@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dialogs.hrc,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: vg $ $Date: 2007-05-22 15:15:15 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 13:37:29 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1470,6 +1470,7 @@
 #define RID_OFAPAGE_CONNPOOLOPTIONS     (RID_OFA_START + 122)
 #define RID_SFXPAGE_DBREGISTER          (RID_OFA_START + 123)
 #define DLG_DOCUMENTLINK                (RID_OFA_START + 124)
+#define RID_OFAPAGE_SMARTTAG_OPTIONS    (RID_OFA_START + 125)
 
 // TabPages --------------------------------------------------------------
 
