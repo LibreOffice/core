@@ -4,9 +4,9 @@
  *
  *  $RCSfile: imap.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: hr $ $Date: 2007-06-26 13:33:34 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 21:50:55 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -44,11 +44,11 @@
 #include <vcl/window.hxx>
 
 #include "urihelper.hxx"
-#include "imap.hxx"
-#include "imapobj.hxx"
-#include "imapcirc.hxx"
-#include "imaprect.hxx"
-#include "imappoly.hxx"
+#include <svtools/imap.hxx>
+#include <svtools/imapobj.hxx>
+#include <svtools/imapcirc.hxx>
+#include <svtools/imaprect.hxx>
+#include <svtools/imappoly.hxx>
 
 
 DBG_NAME( ImageMap )
