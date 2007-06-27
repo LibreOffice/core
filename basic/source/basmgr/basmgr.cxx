@@ -4,9 +4,9 @@
  *
  *  $RCSfile: basmgr.cxx,v $
  *
- *  $Revision: 1.40 $
+ *  $Revision: 1.41 $
  *
- *  last change: $Author: ihi $ $Date: 2007-06-05 15:10:13 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 14:17:23 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -61,7 +61,7 @@
 #include <vcl/msgbox.hxx>
 #endif
 #ifndef _SBXCLASS_HXX //autogen
-#include <sbx.hxx>
+#include <basic/sbx.hxx>
 #endif
 #ifndef _SOT_STORINFO_HXX //autogen
 #include <sot/storinfo.hxx>
@@ -77,11 +77,11 @@
 #endif
 
 #ifndef _SB_SBMOD_HXX
-#include <sbmod.hxx>
+#include <basic/sbmod.hxx>
 #endif
 
-#include "sbuno.hxx"
-#include "basmgr.hxx"
+#include <basic/sbuno.hxx>
+#include <basic/basmgr.hxx>
 #include "basrid.hxx"
 #include "sbintern.hxx"
 #include <sb.hrc>
