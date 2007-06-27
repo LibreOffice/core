@@ -4,9 +4,9 @@
  *
  *  $RCSfile: zcodec.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 01:05:42 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 22:20:44 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -37,7 +37,7 @@
 #include "precompiled_tools.hxx"
 
 #ifndef _STREAM_HXX
-#include "stream.hxx"
+#include <tools/stream.hxx>
 #endif
 #ifndef _ZLIB_H
 #ifdef SYSTEM_ZLIB
@@ -47,7 +47,7 @@
 #endif
 #endif
 #ifndef _ZCODEC_HXX
-#include "zcodec.hxx"
+#include <tools/zcodec.hxx>
 #endif
 #ifndef _RTL_CRC_H_
 #include <rtl/crc.h>
