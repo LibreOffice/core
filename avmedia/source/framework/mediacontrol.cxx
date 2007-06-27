@@ -4,9 +4,9 @@
  *
  *  $RCSfile: mediacontrol.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: hr $ $Date: 2006-06-19 13:57:53 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 22:23:06 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -36,8 +36,8 @@
 #include "mediacontrol.hxx"
 #include "mediacontrol.hrc"
 #include "mediamisc.hxx"
-#include "mediawindow.hxx"
-#include "mediaplayer.hxx"
+#include <avmedia/mediawindow.hxx>
+#include <avmedia/mediaplayer.hxx>
 #include "helpids.hrc"
 #include <tools/time.hxx>
 #include <vcl/svapp.hxx>
