@@ -4,9 +4,9 @@
  *
  *  $RCSfile: PrintManager.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: rt $ $Date: 2007-04-03 16:27:36 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 15:46:21 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1538,20 +1538,26 @@ void PrintManager::PrintStdOrNotes (
                         // For pages larger then the printable area there
                         // are three options:
                         // 1. Scale down to the page to the printable area.
-                        // 2. Print only the upper left part of the page.
+                        // 2. Print only the upper left part of the page
+                        //    (without the unprintable borders).
                         // 3. Split the page into parts of the size of the
                         // printable area.
                         if (bPrint)
                         {
-                            if (bScalePage
-                                || (rInfo.mpPrintOpts && rInfo.mpPrintOpts->GetOptionsPrint().IsCutPage()))
+                            const bool bCutPage (rInfo.mpPrintOpts && rInfo.mpPrintOpts->GetOptionsPrint().IsCutPage());
+                            if (bScalePage || bCutPage)
                             {
-                                // Handlee 1 and 2.
+                                // Handle 1 and 2.
+
+                                // if CutPage is set then do not move
+                                // it, otherwise move the scaled page
+                                // to printable area
+
                                 PrintPagePart(
                                     rInfo,
                                     pPage,
                                     *pPrintView,
-                                    Point(0,0),
+                                    bCutPage ? Point(-aPageOfs.X(), -aPageOfs.Y()) : Point(0,0),
                                     bPrintMarkedOnly,
                                     aPageStr,
                                     aPageOfs);
@@ -1561,7 +1567,12 @@ void PrintManager::PrintStdOrNotes (
                                 // Handle 3.  Print parts of the page in the
                                 // size of the printable area until the
                                 // whole page is covered.
-                                Point aOrigin (-aPageOfs.X(), -aPageOfs.Y());
+
+                                // keep the page content at its
+                                // position if it fits, otherwise move
+                                // it to the printable area
+                                Point aOrigin (aPageWidth < aPrintWidth ? -aPageOfs.X() : 0, aPageHeight < aPrintHeight ? -aPageOfs.Y() : 0);
+
                                 for (aPageOrigin = aOrigin;
                                      -aPageOrigin.Y()<aPageHeight;
                                          aPageOrigin.Y() -= aPrintHeight)
