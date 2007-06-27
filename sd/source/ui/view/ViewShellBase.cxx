@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ViewShellBase.cxx,v $
  *
- *  $Revision: 1.36 $
+ *  $Revision: 1.37 $
  *
- *  last change: $Author: rt $ $Date: 2007-04-03 16:28:12 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 15:46:50 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -187,7 +187,7 @@ namespace sd {
 class ViewShellBase::Implementation
 {
 public:
-    ::std::auto_ptr<ToolBarManager> mpToolBarManager;
+    ::boost::shared_ptr<ToolBarManager> mpToolBarManager;
 
     /** Main controller of the view shell.  During the switching from one
         stacked shell to another this pointer may be NULL.
@@ -933,7 +933,7 @@ void ViewShellBase::Activate (BOOL bIsMDIActivate)
         if (xConfigurationController.is())
             xConfigurationController->update();
     }
-    GetToolBarManager().RequestUpdate();
+    GetToolBarManager()->RequestUpdate();
 }
 
 
@@ -1195,9 +1195,9 @@ const Rectangle& ViewShellBase::getClientRectangle (void) const
 
 
 
-ToolBarManager& ViewShellBase::GetToolBarManager (void) const
+::boost::shared_ptr<ToolBarManager> ViewShellBase::GetToolBarManager (void) const
 {
-    return *mpImpl->mpToolBarManager;
+    return mpImpl->mpToolBarManager;
 }
 
 
