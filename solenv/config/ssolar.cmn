@@ -189,6 +189,7 @@ common
 		TFDIR
 		TIMELOG
 		truetime
+		TRUSTED_MANIFEST_LOCATION
 		UDKSTAMP
 		URD_ONLY
 		USE_MAPFILES
@@ -198,6 +199,7 @@ common
 		use_cygcp
 		use_shl_versions
         VCL
+		VISTA_MANIFEST
 		WINDOWS_VISTA_PSDK
         WITH_LDAP
 		WST
