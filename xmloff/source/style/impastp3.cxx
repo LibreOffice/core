@@ -4,9 +4,9 @@
  *
  *  $RCSfile: impastp3.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: rt $ $Date: 2006-12-01 15:26:36 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 15:39:55 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -40,7 +40,7 @@
 #include "impastpl.hxx"
 #endif
 #ifndef _XMLOFF_PROPERTYSETMAPPER_HXX
-#include "xmlprmap.hxx"
+#include <xmloff/xmlprmap.hxx>
 #endif
 
 using namespace std;
