@@ -4,9 +4,9 @@
  *
  *  $RCSfile: objectcontactofobjlistpainter.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: hr $ $Date: 2007-06-26 12:05:07 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 18:44:14 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -49,11 +49,11 @@
 #endif
 
 #ifndef _SVDPAGE_HXX
-#include <svdpage.hxx>
+#include <svx/svdpage.hxx>
 #endif
 
 #ifndef _SVDOBJ_HXX
-#include <svdobj.hxx>
+#include <svx/svdobj.hxx>
 #endif
 
 #ifndef _SDR_CONTACT_VIEWCONTACT_HXX
@@ -61,7 +61,7 @@
 #endif
 
 #ifndef _SVDMODEL_HXX
-#include <svdmodel.hxx>
+#include <svx/svdmodel.hxx>
 #endif
 
 //////////////////////////////////////////////////////////////////////////////
