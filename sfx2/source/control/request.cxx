@@ -4,9 +4,9 @@
  *
  *  $RCSfile: request.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: obo $ $Date: 2006-10-12 15:51:40 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 23:07:18 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -40,7 +40,7 @@
 // class SfxRequest
 //
 // (C) 1996 - 2000 StarDivision GmbH, Hamburg, Germany
-// $Author: obo $ $Date: 2006-10-12 15:51:40 $ $Revision: 1.19 $
+// $Author: hr $ $Date: 2007-06-27 23:07:18 $ $Revision: 1.20 $
 // $Logfile:   T:/sfx2/source/control/request.cxv  $ $Workfile:   REQUEST.CXX  $
 //------------------------------------------------------------------*/
 
@@ -91,13 +91,13 @@
 
 #include <svtools/smplhint.hxx>
 
-#include "request.hxx"
-#include "dispatch.hxx"
-#include "msg.hxx"
-#include "viewfrm.hxx"
+#include <sfx2/request.hxx>
+#include <sfx2/dispatch.hxx>
+#include <sfx2/msg.hxx>
+#include <sfx2/viewfrm.hxx>
 #include "macro.hxx"
-#include "objface.hxx"
-#include "appuno.hxx"
+#include <sfx2/objface.hxx>
+#include <sfx2/appuno.hxx>
 
 //===================================================================
 
