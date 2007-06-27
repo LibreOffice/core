@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dragmt3d.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: ihi $ $Date: 2006-11-14 12:35:14 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 16:31:40 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -37,11 +37,11 @@
 #define _E3D_DRAGMT3D_HXX
 
 #ifndef _SVDDRGMT_HXX
-#include "svddrgmt.hxx"
+#include <svx/svddrgmt.hxx>
 #endif
 
 #ifndef _E3D_VIEW3D_HXX
-#include "view3d.hxx"
+#include <svx/view3d.hxx>
 #endif
 
 #ifndef _BGFX_POLYGON_B3DPOLYGON_HXX
