@@ -4,9 +4,9 @@
  *
  *  $RCSfile: colormisc.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: thb $ $Date: 2006-07-21 20:57:05 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 12:39:54 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -76,13 +76,36 @@ template<bool polarity> struct outputMaskFunctorSelector< Color, sal_uInt8, pola
     typedef ColorBitmaskOutputMaskFunctor<polarity> type;
 };
 
-template< bool polarity > struct ColorBlendFunctor
+template< bool polarity > struct ColorBlendFunctor8
   : public TernaryFunctorBase<sal_uInt8,Color,Color,Color>
 {
     Color operator()( sal_uInt8 alpha,
                       Color     v1,
                       Color     v2 ) const
     {
+        alpha = polarity ? alpha : 255 - alpha;
+
+        const sal_uInt8 v1_red( v1.getRed() );
+        const sal_uInt8 v1_green( v1.getGreen() );
+        const sal_uInt8 v1_blue( v1.getBlue() );
+
+        // using '>> 8' instead of '/ 0x100' is ill-advised (shifted
+        // value might be negative). Better rely on decent optimizer
+        // here...
+        return Color(((((sal_Int32)v2.getRed() - v1_red)*alpha) / 0x100) + v1_red,
+                     ((((sal_Int32)v2.getGreen() - v1_green)*alpha) / 0x100) + v1_green,
+                     ((((sal_Int32)v2.getBlue() - v1_blue)*alpha) / 0x100) + v1_blue);
+    }
+};
+
+template< bool polarity > struct ColorBlendFunctor32
+  : public TernaryFunctorBase<Color,Color,Color,Color>
+{
+    Color operator()( Color input,
+                      Color v1,
+                      Color v2 ) const
+    {
+        sal_uInt8 alpha = input.getGreyscale();
         alpha = polarity ? alpha : 255 - alpha;
 
         const sal_uInt8 v1_red( v1.getRed() );
@@ -129,10 +152,16 @@ template<> struct ColorTraits< Color >
     }
 };
 
-/// Only defined for 8 bit alpha, currently
+/// The version for plain 8 bit alpha
 template<bool polarity> struct ColorTraits< Color >::blend_functor< sal_uInt8, polarity >
 {
-    typedef ColorBlendFunctor<polarity> type;
+    typedef ColorBlendFunctor8<polarity> type;
+};
+
+/// The version taking grey value of a Color
+template<bool polarity> struct ColorTraits< Color >::blend_functor< Color, polarity >
+{
+    typedef ColorBlendFunctor32<polarity> type;
 };
 
 } // namespace basebmp
