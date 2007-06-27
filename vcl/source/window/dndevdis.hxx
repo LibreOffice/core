@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dndevdis.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 12:24:03 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 20:30:00 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -53,7 +53,7 @@
 #endif
 
 #ifndef _SV_WINDOW_HXX
-#include <window.hxx>
+#include <vcl/window.hxx>
 #endif
 
 class DNDEventDispatcher: public ::cppu::WeakImplHelper3<

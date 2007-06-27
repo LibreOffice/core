@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dndlcon.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 12:24:43 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 20:30:14 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -60,7 +60,7 @@
 #include <cppuhelper/compbase4.hxx>
 #endif
 
-#include <unohelp2.hxx>
+#include <vcl/unohelp2.hxx>
 
 class DNDListenerContainer :    public ::vcl::unohelper::MutexHelper,
                                 public ::cppu::WeakComponentImplHelper4<
