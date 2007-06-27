@@ -4,9 +4,9 @@
  *
  *  $RCSfile: textdata.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: obo $ $Date: 2006-10-12 15:15:14 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 21:31:04 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -36,7 +36,7 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_svtools.hxx"
 
-#include <textdata.hxx>
+#include <svtools/textdata.hxx>
 #include <textdat2.hxx>
 
 #include <tools/debug.hxx>
