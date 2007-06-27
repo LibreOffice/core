@@ -4,9 +4,9 @@
  *
  *  $RCSfile: fmsrcimp.cxx,v $
  *
- *  $Revision: 1.34 $
+ *  $Revision: 1.35 $
  *
- *  last change: $Author: obo $ $Date: 2006-10-12 12:46:29 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 18:15:19 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -68,7 +68,7 @@
 #endif
 
 #ifndef _SVX_DIALMGR_HXX //autogen
-#include <dialmgr.hxx>
+#include <svx/dialmgr.hxx>
 #endif
 
 #ifndef _CPPUHELPER_SERVICEFACTORY_HXX_
@@ -136,7 +136,7 @@
 #endif
 
 #ifndef _FMSEARCH_HXX
-#include "fmsearch.hxx"
+#include <svx/fmsearch.hxx>
 #endif
 
 #ifndef _FMSEARCH_HRC
