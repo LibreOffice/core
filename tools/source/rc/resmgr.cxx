@@ -4,9 +4,9 @@
  *
  *  $RCSfile: resmgr.cxx,v $
  *
- *  $Revision: 1.45 $
+ *  $Revision: 1.46 $
  *
- *  last change: $Author: rt $ $Date: 2007-04-26 09:48:23 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 22:17:20 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -45,22 +45,22 @@
 #endif
 
 #ifndef _DEBUG_HXX
-#include <debug.hxx>
+#include <tools/debug.hxx>
 #endif
 #ifndef _TABLE_HXX
-#include <table.hxx>
+#include <tools/table.hxx>
 #endif
 #ifndef _STREAM_HXX
-#include <stream.hxx>
+#include <tools/stream.hxx>
 #endif
 #ifndef _TOOLS_RESMGR_HXX
-#include <resmgr.hxx>
+#include <tools/resmgr.hxx>
 #endif
 #ifndef _TOOLS_RC_HXX
-#include <rc.hxx>
+#include <tools/rc.hxx>
 #endif
 #ifndef _TOOLS_RCID_H
-#include <rcid.h>
+#include <tools/rcid.h>
 #endif
 #ifndef _OSL_ENDIAN_H_
 #include <osl/endian.h>
@@ -84,7 +84,7 @@
 #include <rtl/ustrbuf.hxx>
 #endif
 #ifndef _URLOBJ_HXX
-#include <urlobj.hxx>
+#include <tools/urlobj.hxx>
 #endif
 #ifndef INCLUDED_RTL_INSTANCE_HXX
 #include <rtl/instance.hxx>
@@ -95,10 +95,10 @@
 #endif
 
 #ifndef _TOOLS_SIMPLERESMGR_HXX_
-#include "simplerm.hxx"
+#include <tools/simplerm.hxx>
 #endif
 
-#include "isofallback.hxx"
+#include <tools/isofallback.hxx>
 
 #include <functional>
 #include <algorithm>
