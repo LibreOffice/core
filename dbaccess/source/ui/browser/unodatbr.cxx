@@ -4,9 +4,9 @@
  *
  *  $RCSfile: unodatbr.cxx,v $
  *
- *  $Revision: 1.187 $
+ *  $Revision: 1.188 $
  *
- *  last change: $Author: obo $ $Date: 2007-06-12 05:34:02 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 14:50:55 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -114,6 +114,9 @@
 
 #ifndef _SFXINTITEM_HXX //autogen
 #include <svtools/intitem.hxx>
+#endif
+#ifndef _UNOTOOLS_CONFIGNODE_HXX_
+#include <unotools/confignode.hxx>
 #endif
 #ifndef INCLUDED_SVTOOLS_MODULEOPTIONS_HXX
 #include <svtools/moduleoptions.hxx>
@@ -3517,10 +3520,11 @@ sal_Bool SbaTableQueryBrowser::requestContextMenu( const CommandEvent& _rEvent )
     }
     aContextMenu.EnableItem(SID_COPY,   sal_False);
 
-    if ( !SvtModuleOptions().IsModuleInstalled( SvtModuleOptions::E_SDATABASE ) )
-    {
-        aContextMenu.EnableItem( ID_TREE_EDIT_DATABASE, sal_False );
-    }
+    ::utl::OConfigurationTreeRoot aConfig( ::utl::OConfigurationTreeRoot::createWithServiceFactory( getORB(),
+        ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "/org.openoffice.Office.DataAccess/ApplicationIntegration/InstalledFeatures/Common" ) ) ) );
+    sal_Bool bHaveEditDatabase( sal_True );
+    OSL_VERIFY( aConfig.getNodeValue( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "EditDatabaseFromDataSourceView" ) ) ) >>= bHaveEditDatabase );
+    aContextMenu.EnableItem( ID_TREE_EDIT_DATABASE, bHaveEditDatabase );
 
     if ( pEntry )
     {
