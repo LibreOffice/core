@@ -4,9 +4,9 @@
  *
  *  $RCSfile: bmpacc3.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 11:58:34 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 20:11:00 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -37,19 +37,19 @@
 #include "precompiled_vcl.hxx"
 
 #ifndef _SV_SALBTYPE_HXX
-#include <salbtype.hxx>
+#include <vcl/salbtype.hxx>
 #endif
 #ifndef _SV_BITMAP_HXX
-#include <bitmap.hxx>
+#include <vcl/bitmap.hxx>
 #endif
 #ifndef _TL_POLY_HXX
 #include <tools/poly.hxx>
 #endif
 #ifndef _SV_REGION_HXX
-#include <region.hxx>
+#include <vcl/region.hxx>
 #endif
 #ifndef _SV_BMPACC_HXX
-#include <bmpacc.hxx>
+#include <vcl/bmpacc.hxx>
 #endif
 #ifndef _SV_BMPFAST_HXX
 #include <bmpfast.hxx>

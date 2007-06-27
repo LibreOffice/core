@@ -4,9 +4,9 @@
  *
  *  $RCSfile: bitmap3.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 11:57:26 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 20:09:54 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -38,22 +38,22 @@
 
 #include <stdlib.h>
 #ifndef _SV_BMPACC_HXX
-#include <bmpacc.hxx>
+#include <vcl/bmpacc.hxx>
 #endif
 #ifndef _SV_IMPOCT_HXX
 #include <impoct.hxx>
 #endif
 #ifndef _SV_OCTREE_HXX
-#include <octree.hxx>
+#include <vcl/octree.hxx>
 #endif
 #ifndef _SV_IMPVECT_HXX
 #include <impvect.hxx>
 #endif
 #ifndef _SV_BITMAPEX_HXX
-#include <bitmapex.hxx>
+#include <vcl/bitmapex.hxx>
 #endif
 #ifndef _SV_BITMAP_HXX
-#include <bitmap.hxx>
+#include <vcl/bitmap.hxx>
 #endif
 
 // -----------
