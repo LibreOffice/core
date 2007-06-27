@@ -4,9 +4,9 @@
  *
  *  $RCSfile: prnsetup.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: ihi $ $Date: 2006-12-20 18:30:02 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 21:28:58 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -46,9 +46,9 @@
 #ifndef GCC
 #endif
 
-#include <svtdata.hxx>
+#include <svtools/svtdata.hxx>
 #include "prnsetup.hrc"
-#include <prnsetup.hxx>
+#include <svtools/prnsetup.hxx>
 
 // =======================================================================
 
