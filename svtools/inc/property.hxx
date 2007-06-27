@@ -4,9 +4,9 @@
  *
  *  $RCSfile: property.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: hr $ $Date: 2006-06-19 20:25:42 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 21:05:30 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -65,11 +65,11 @@
 #endif
 
 #ifndef _SVARRAY_HXX //autogen
-#include <svarray.hxx>
+#include <svtools/svarray.hxx>
 #endif
 
 #define _SVSTDARR_USHORTS
-#include <svstdarr.hxx>
+#include <svtools/svstdarr.hxx>
 
 #ifndef _SV_VIRDEV_HXX //autogen
 #include <vcl/virdev.hxx>
@@ -80,12 +80,12 @@
 #endif
 
 #ifndef _SVARRAY_HXX //autogen
-#include <svarray.hxx>
+#include <svtools/svarray.hxx>
 #endif
 
 #ifndef _SVSTDARR_STRINGS
 #define _SVSTDARR_STRINGS
-#include <svstdarr.hxx>
+#include <svtools/svstdarr.hxx>
 #endif
 
 #ifndef _SV_TABPAGE_HXX //autogen
