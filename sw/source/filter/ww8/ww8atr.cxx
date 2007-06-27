@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ww8atr.cxx,v $
  *
- *  $Revision: 1.105 $
+ *  $Revision: 1.106 $
  *
- *  last change: $Author: hr $ $Date: 2007-06-26 10:44:17 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 12:25:49 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -2792,7 +2792,10 @@ static Writer& OutWW8_SwField( Writer& rWrt, const SfxPoolItem& rHt )
             }
 
             if (eFld != ww::eNONE)
+            {
+                sStr = FieldString(eFld);
                 rWW8Wrt.OutField(pFld, eFld, sStr);
+            }
             else
                 bWriteExpand = true;
         }
