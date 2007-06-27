@@ -4,9 +4,9 @@
  *
  *  $RCSfile: unoshcol.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 06:15:37 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 19:27:22 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -41,7 +41,7 @@
 #endif
 
 #include "unoshcol.hxx"
-#include "unoprov.hxx"
+#include <svx/unoprov.hxx>
 
 using namespace ::rtl;
 using namespace ::cppu;
