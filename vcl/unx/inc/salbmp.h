@@ -4,9 +4,9 @@
  *
  *  $RCSfile: salbmp.h,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: ihi $ $Date: 2006-11-14 15:24:13 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 20:40:18 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -40,17 +40,17 @@
 #include <salstd.hxx>
 #endif
 #ifndef _SV_SALGTYPE
-#include <salgtype.hxx>
+#include <vcl/salgtype.hxx>
 #endif
 #ifndef _SV_SALDISP_HXX
 #include <saldisp.hxx>
 #endif
 #ifndef _SV_SALBMP_HXX
-#include <salbmp.hxx>
+#include <vcl/salbmp.hxx>
 #endif
 
 #ifndef _VCL_DLLAPI_H
-#include "dllapi.h"
+#include <vcl/dllapi.h>
 #endif
 
 struct  BitmapBuffer;
