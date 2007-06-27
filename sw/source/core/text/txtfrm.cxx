@@ -4,9 +4,9 @@
  *
  *  $RCSfile: txtfrm.cxx,v $
  *
- *  $Revision: 1.97 $
+ *  $Revision: 1.98 $
  *
- *  last change: $Author: vg $ $Date: 2007-05-22 16:32:18 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 13:20:06 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -63,6 +63,7 @@
 #ifndef _SVX_PGRDITEM_HXX
 #include <svx/pgrditem.hxx>
 #endif
+#include <SwSmartTagMgr.hxx>
 
 #ifndef _DOC_HXX
 #include <doc.hxx>      // GetDoc()
@@ -182,7 +183,6 @@
 #include <fmtcntnt.hxx>     // SwFmtCntnt
 #endif
 // <--
-#include <SmartTagMgr.hxx>
 
 #include <swtable.hxx>
 #include <fldupde.hxx>
@@ -1132,7 +1132,7 @@ void SwTxtFrm::Modify( SfxPoolItem *pOld, SfxPoolItem *pNew )
             }
             bSetFldsDirty = sal_True;
             // ST2
-            if ( SmartTagMgr::getSmartTagMgr().HasRecognizers() )
+            if ( SwSmartTagMgr::Get().IsSmartTagsEnabled() )
                 SET_WRONG( nPos, nPos + 1, Invalidate )
         }
         break;
