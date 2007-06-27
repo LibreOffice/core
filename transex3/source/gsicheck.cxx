@@ -4,9 +4,9 @@
  *
  *  $RCSfile: gsicheck.cxx,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: kz $ $Date: 2007-05-11 09:12:10 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 17:53:17 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -673,7 +673,7 @@ void Help()
 }
 
 /*****************************************************************************/
-#if defined( UNX ) || defined( MAC )
+#if defined( UNX )
 int main( int argc, char *argv[] )
 #else
 int _cdecl main( int argc, char *argv[] )
