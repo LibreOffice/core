@@ -4,9 +4,9 @@
  *
  *  $RCSfile: XMLTextListItemContext.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 15:23:08 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 16:10:22 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -37,7 +37,7 @@
 #define _XMLTEXTLISTITEMCONTEXT_HXX
 
 #ifndef _XMLOFF_XMLICTXT_HXX
-#include "xmlictxt.hxx"
+#include <xmloff/xmlictxt.hxx>
 #endif
 
 class XMLTextImportHelper;
