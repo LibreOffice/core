@@ -4,9 +4,9 @@
  *
  *  $RCSfile: unonrule.cxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: kz $ $Date: 2007-05-10 15:03:08 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 19:25:27 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -40,7 +40,7 @@
 
 
 #ifndef _SVX_BRSHITEM_HXX //autogen
-#include <brshitem.hxx>
+#include <svx/brshitem.hxx>
 #endif
 
 #ifndef _COM_SUN_STAR_TEXT_HORIORIENTATION_HPP_
@@ -81,14 +81,14 @@
 #include <rtl/uuid.h>
 #include <rtl/memory.h>
 
-#include "unoprnms.hxx"
-#include "numitem.hxx"
-#include "eeitem.hxx"
+#include <svx/unoprnms.hxx>
+#include <svx/numitem.hxx>
+#include <svx/eeitem.hxx>
 #include "unofdesc.hxx"
 #include "unonrule.hxx"
-#include "unotext.hxx"
-#include "svdmodel.hxx"
-#include "numitem.hxx"
+#include <svx/unotext.hxx>
+#include <svx/svdmodel.hxx>
+#include <svx/numitem.hxx>
 #include "unoapi.hxx"
 
 using namespace ::com::sun::star;
