@@ -4,9 +4,9 @@
  *
  *  $RCSfile: formlayerexport.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 10:35:46 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 15:15:36 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -39,7 +39,7 @@
 #include <stdio.h>
 
 #ifndef _XMLOFF_FORMLAYEREXPORT_HXX_
-#include "formlayerexport.hxx"
+#include <xmloff/formlayerexport.hxx>
 #endif
 #ifndef _XMLOFF_FORMS_STRINGS_HXX_
 #include "strings.hxx"
@@ -51,7 +51,7 @@
 #include "xmlnmspe.hxx"
 #endif
 #ifndef _XMLOFF_XMLEXP_HXX
-#include "xmlexp.hxx"
+#include <xmloff/xmlexp.hxx>
 #endif
 #ifndef _XMLOFF_FORMS_LAYEREXPORT_HXX_
 #include "layerexport.hxx"
