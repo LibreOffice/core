@@ -4,9 +4,9 @@
  *
  *  $RCSfile: editsel.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 04:49:33 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 17:56:05 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -40,7 +40,7 @@
 
 #include <editsel.hxx>
 #include <impedit.hxx>
-#include <editview.hxx>
+#include <svx/editview.hxx>
 
 //  ----------------------------------------------------------------------
 //  class EditSelFunctionSet
