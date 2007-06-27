@@ -4,9 +4,9 @@
 #
 #   $RCSfile: settings.mk,v $
 #
-#   $Revision: 1.216 $
+#   $Revision: 1.217 $
 #
-#   last change: $Author: hr $ $Date: 2007-06-27 14:02:22 $
+#   last change: $Author: hr $ $Date: 2007-06-27 17:49:47 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -702,25 +702,6 @@ SHELLLIB=gdi32.lib shell32.lib advapi32.lib comdlg32.lib
 .ENDIF
 .ENDIF
 
-.IF "$(GUI)" != "MAC"
-SOLARLIBDEPN=\
-    $(L)$/basic.lib\
-    $(L)$/dg.lib\
-    $(L)$/sfxdebug.lib\
-    $(L)$/so2.lib\
-    $(SVLIBDEPEND)\
-    $(L)$/sfx.lib\
-    $(L)$/isfx.lib\
-    $(L)$/svmem.lib\
-    $(L)$/svtool.lib\
-    $(L)$/svx.lib\
-    $(L)$/tools.lib
-.ELSE
-SOLARLIBDEPN=\
-    $(SOLARLIB)
-.ENDIF
-
-
 # BIN-Pfad
 .IF "$(UNR)"!=""
 BIN=$(OUT)$/ubin
@@ -815,14 +796,6 @@ JARDIR=$(OUT)$/class
 .ELSE
 JARDIR=$(PRE)$/class
 .ENDIF
-
-#now mess around with SOLARINC, SOLARINCLUDES, SOLARLIB and LIB
-.IF "$(UDKVERSION)"!=""
-SOLARINC!:=-I$(SOLARROOT)$/udk$/$(UDKVERSION)$/$(OUTPATH)$/inc $(SOLARINC)
-SOLARINCLUDES!:=-I$(SOLARROOT)$/udk$/$(UDKVERSION)$/$(OUTPATH)$/inc $(SOLARINCLUDES)
-SOLARLIB!:=-L$(SOLARROOT)$/udk$/$(UDKVERSION)$/$(OUTPATH)$/lib $(SOLARLIB)
-ILIB!:=$(SOLARROOT)$/udk$/$(UDKVERSION)$/$(OUTPATH)$/lib;$(ILIB)
-.ENDIF			# "$(UDKVERSION)"!=""
 
 # needs to be expanded!!!
 
