@@ -4,9 +4,9 @@
  *
  *  $RCSfile: poly2.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 00:56:53 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 22:14:29 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -56,16 +56,16 @@ extern "C"
 #include <poly.h>
 #endif
 #ifndef _POLY_HXX
-#include <poly.hxx>
+#include <tools/poly.hxx>
 #endif
 #ifndef _DEBUG_HXX //autogen
-#include <debug.hxx>
+#include <tools/debug.hxx>
 #endif
 #ifndef _STREAM_HXX //autogen
-#include <stream.hxx>
+#include <tools/stream.hxx>
 #endif
 #ifndef _VCOMPAT_HXX
-#include <vcompat.hxx>
+#include <tools/vcompat.hxx>
 #endif
 
 #ifndef _BGFX_POLYGON_B2DPOLYPOLYGON_HXX
