@@ -4,9 +4,9 @@
  *
  *  $RCSfile: extrud3d.cxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: kz $ $Date: 2007-02-12 14:40:02 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 18:02:46 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -40,7 +40,7 @@
 #include "svdglob.hxx"
 
 #ifndef _SVDPAGE_HXX
-#include "svdpage.hxx"
+#include <svx/svdpage.hxx>
 #endif
 
 #ifndef _E3D_GLOBL3D_HXX
@@ -48,31 +48,31 @@
 #endif
 
 #ifndef _E3D_EXTRUD3D_HXX
-#include "extrud3d.hxx"
+#include <svx/extrud3d.hxx>
 #endif
 
 #ifndef _E3D_SCENE3D_HXX
-#include "scene3d.hxx"
+#include <svx/scene3d.hxx>
 #endif
 
 #ifndef _SVX_SVXIDS_HRC
-#include "svxids.hrc"
+#include <svx/svxids.hrc>
 #endif
 
 #ifndef _XPOLY_HXX
-#include "xpoly.hxx"
+#include <svx/xpoly.hxx>
 #endif
 
 #ifndef _SVDOPATH_HXX
-#include "svdopath.hxx"
+#include <svx/svdopath.hxx>
 #endif
 
 #ifndef _SVDMODEL_HXX
-#include "svdmodel.hxx"
+#include <svx/svdmodel.hxx>
 #endif
 
 #ifndef _SVX3DITEMS_HXX
-#include "svx3ditems.hxx"
+#include <svx/svx3ditems.hxx>
 #endif
 
 #ifndef _SDR_PROPERTIES_E3DEXTRUDEPROPERTIES_HXX
