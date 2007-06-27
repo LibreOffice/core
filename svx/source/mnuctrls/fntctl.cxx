@@ -4,9 +4,9 @@
  *
  *  $RCSfile: fntctl.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: kz $ $Date: 2007-05-10 14:54:35 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 18:32:27 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -51,8 +51,8 @@
 #include <sfx2/dispatch.hxx>
 #endif
 
-#include "fntctl.hxx"       //
-#include "svxids.hrc"
+#include <svx/fntctl.hxx>       //
+#include <svx/svxids.hrc>
 
 #ifndef _SVX_FLSTITEM_HXX //autogen
 #include "flstitem.hxx"
