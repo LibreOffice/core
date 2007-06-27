@@ -4,9 +4,9 @@
  *
  *  $RCSfile: UnoDocumentSettings.cxx,v $
  *
- *  $Revision: 1.33 $
+ *  $Revision: 1.34 $
  *
- *  last change: $Author: vg $ $Date: 2007-01-09 11:34:17 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 15:45:34 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -311,25 +311,26 @@ void DocumentSettings::_setPropertyValues( const PropertyMapEntry** ppEntries, c
     if( NULL == pDoc || NULL == pDocSh )
         throw UnknownPropertyException();
 
-    sal_Bool bOk, bChanged = sal_False, bValue = sal_False;
+    sal_Bool bOk, bChanged = sal_False, bValue = sal_False, bOptionsChanged = false;
 
-    SfxPrinter* pPrinter = NULL;
-    SdOptionsPrintItem* pPrinterOptions = NULL;
+    SdOptionsPrintItem aOptionsPrintItem( ATTR_OPTIONS_PRINT );
+
+    SfxPrinter* pPrinter = pDocSh->GetPrinter( FALSE );
+    if( pPrinter )
+    {
+        SdOptionsPrintItem* pPrinterOptions = NULL;
+        if(pPrinter->GetOptions().GetItemState( ATTR_OPTIONS_PRINT, FALSE, (const SfxPoolItem**) &pPrinterOptions) == SFX_ITEM_SET)
+            aOptionsPrintItem.GetOptionsPrint() = pPrinterOptions->GetOptionsPrint();
+    }
+    else
+    {
+        aOptionsPrintItem.SetOptions( SD_MOD()->GetSdOptions(pDoc->GetDocumentType()) );
+    }
+    SdOptionsPrint& aPrintOpts = aOptionsPrintItem.GetOptionsPrint();
 
     for( ; *ppEntries; ppEntries++, pValues++ )
     {
         bOk = sal_False;
-        if( ((*ppEntries)->mnMemberId == MID_PRINTER) && (pPrinter == NULL) )
-        {
-            pPrinter = pDocSh->GetPrinter( sal_True );
-            if(pPrinter->GetOptions().GetItemState( ATTR_OPTIONS_PRINT, FALSE, (const SfxPoolItem**) &pPrinterOptions) != SFX_ITEM_SET)
-            {
-                DBG_ERROR( "could not get printer options!" );
-                pPrinter = NULL;
-                pPrinterOptions = NULL;
-                continue;
-            }
-        }
 
         switch( (*ppEntries)->mnHandle )
         {
@@ -488,91 +489,146 @@ void DocumentSettings::_setPropertyValues( const PropertyMapEntry** ppEntries, c
             case HANDLE_PRINTDRAWING:
                 if( *pValues >>= bValue )
                 {
-                    pPrinterOptions->GetOptionsPrint().SetDraw( bValue );
+                    if( aPrintOpts.IsDraw() != bValue )
+                    {
+                        aPrintOpts.SetDraw( bValue );
+                        bOptionsChanged = true;
+                    }
+
                     bOk = sal_True;
                 }
                 break;
             case HANDLE_PRINTNOTES:
                 if( *pValues >>= bValue )
                 {
-                    pPrinterOptions->GetOptionsPrint().SetNotes( bValue );
+                    if( aPrintOpts.IsNotes() != bValue )
+                    {
+                        aPrintOpts.SetNotes( bValue );
+                        bOptionsChanged = true;
+                    }
+
                     bOk = sal_True;
                 }
                 break;
             case HANDLE_PRINTHANDOUT:
                 if( *pValues >>= bValue )
                 {
-                    pPrinterOptions->GetOptionsPrint().SetHandout( bValue );
+                    if( aPrintOpts.IsHandout() != bValue)
+                    {
+                        aPrintOpts.SetHandout( bValue );
+                        bOptionsChanged = true;
+                    }
+
                     bOk = sal_True;
                 }
                 break;
             case HANDLE_PRINTOUTLINE:
                 if( *pValues >>= bValue )
                 {
-                    pPrinterOptions->GetOptionsPrint().SetOutline( bValue );
+                    if( aPrintOpts.IsOutline() != bValue)
+                    {
+                        aPrintOpts.SetOutline( bValue );
+                        bOptionsChanged = true;
+                    }
                     bOk = sal_True;
                 }
                 break;
             case HANDLE_PRINTPAGENAME:
                 if( *pValues >>= bValue )
                 {
-                    pPrinterOptions->GetOptionsPrint().SetPagename( bValue );
+                    if( aPrintOpts.IsPagename() != bValue)
+                    {
+                        aPrintOpts.SetPagename( bValue );
+                        bOptionsChanged = true;
+                    }
                     bOk = sal_True;
                 }
                 break;
             case HANDLE_PRINTDATE:
                 if( *pValues >>= bValue )
                 {
-                    pPrinterOptions->GetOptionsPrint().SetDate( bValue );
+                    if( aPrintOpts.IsDate() != bValue)
+                    {
+                        aPrintOpts.SetDate( bValue );
+                        bOptionsChanged = true;
+                    }
                     bOk = sal_True;
                 }
                 break;
             case HANDLE_PRINTTIME:
                 if( *pValues >>= bValue )
                 {
-                    pPrinterOptions->GetOptionsPrint().SetTime( bValue );
+                    if( aPrintOpts.IsDate() != bValue)
+                    {
+                        aPrintOpts.SetTime( bValue );
+                        bOptionsChanged = true;
+                    }
                     bOk = sal_True;
                 }
                 break;
             case HANDLE_PRINTHIDENPAGES:
                 if( *pValues >>= bValue )
                 {
-                    pPrinterOptions->GetOptionsPrint().SetHiddenPages( bValue );
+                    if( aPrintOpts.IsHiddenPages() != bValue)
+                    {
+                        aPrintOpts.SetHiddenPages( bValue );
+                        bOptionsChanged = true;
+                    }
                     bOk = sal_True;
                 }
                 break;
             case HANDLE_PRINTFITPAGE:
                 if( *pValues >>= bValue )
                 {
-                    pPrinterOptions->GetOptionsPrint().SetPagesize( bValue );
+                    if( aPrintOpts.IsPagesize() != bValue)
+                    {
+                        aPrintOpts.SetPagesize( bValue );
+                        bOptionsChanged = true;
+                    }
                     bOk = sal_True;
                 }
                 break;
             case HANDLE_PRINTTILEPAGE:
                 if( *pValues >>= bValue )
                 {
-                    pPrinterOptions->GetOptionsPrint().SetPagetile( bValue );
+                    if( aPrintOpts.IsPagetile() != bValue)
+                    {
+                        aPrintOpts.SetPagetile( bValue );
+                        bOptionsChanged = true;
+                    }
                     bOk = sal_True;
                 }
                 break;
             case HANDLE_PRINTBOOKLET:
                 if( *pValues >>= bValue )
                 {
-                    pPrinterOptions->GetOptionsPrint().SetBooklet( bValue );
+                    if( aPrintOpts.IsBooklet() != bValue)
+                    {
+                        aPrintOpts.SetBooklet( bValue );
+                        bOptionsChanged = true;
+                    }
                     bOk = sal_True;
                 }
                 break;
             case HANDLE_PRINTBOOKLETFRONT:
                 if( *pValues >>= bValue )
                 {
-                    pPrinterOptions->GetOptionsPrint().SetFrontPage( bValue );
+                    if( aPrintOpts.IsFrontPage() != bValue)
+                    {
+                        aPrintOpts.SetFrontPage( bValue );
+                        bOptionsChanged = true;
+                    }
                     bOk = sal_True;
                 }
                 break;
             case HANDLE_PRINTBOOKLETBACK:
                 if( *pValues >>= bValue )
                 {
-                    pPrinterOptions->GetOptionsPrint().SetBackPage( bValue );
+                    if( aPrintOpts.IsBackPage() != bValue)
+                    {
+                        aPrintOpts.SetBackPage( bValue );
+                        bOptionsChanged = true;
+                    }
                     bOk = sal_True;
                 }
                 break;
@@ -581,7 +637,11 @@ void DocumentSettings::_setPropertyValues( const PropertyMapEntry** ppEntries, c
                     sal_Int32 nValue = 0;
                     if( *pValues >>= nValue )
                     {
-                        pPrinterOptions->GetOptionsPrint().SetOutputQuality( (sal_uInt16)nValue );
+                        if( aPrintOpts.GetOutputQuality() != nValue)
+                        {
+                            aPrintOpts.SetOutputQuality( (sal_uInt16)nValue );
+                            bOptionsChanged = true;
+                        }
                         bOk = sal_True;
                     }
                 }
@@ -653,11 +713,14 @@ void DocumentSettings::_setPropertyValues( const PropertyMapEntry** ppEntries, c
                     if( *pValues >>= aPrinterName )
                     {
                         bOk = sal_True;
-                        SfxPrinter *pTempPrinter = pDocSh->GetPrinter( sal_True );
-                        if (pTempPrinter)
+                        if( aPrinterName.getLength() )
                         {
-                            SfxPrinter *pNewPrinter = new SfxPrinter ( pTempPrinter->GetOptions().Clone(), aPrinterName );
-                            pDocSh->SetPrinter( pNewPrinter );
+                            SfxPrinter *pTempPrinter = pDocSh->GetPrinter( sal_True );
+                            if (pTempPrinter)
+                            {
+                                SfxPrinter *pNewPrinter = new SfxPrinter( pTempPrinter->GetOptions().Clone(), aPrinterName );
+                                pDocSh->SetPrinter( pNewPrinter );
+                            }
                         }
                     }
                 }
@@ -669,32 +732,35 @@ void DocumentSettings::_setPropertyValues( const PropertyMapEntry** ppEntries, c
                     {
                         bOk = sal_True;
                         sal_uInt32 nSize = aSequence.getLength();
-                        SvMemoryStream aStream (aSequence.getArray(), nSize, STREAM_READ );
-                        aStream.Seek ( STREAM_SEEK_TO_BEGIN );
-                        SfxItemSet* pItemSet;
-
-                        if( pPrinter )
+                        if( nSize )
                         {
-                            pItemSet = pPrinter->GetOptions().Clone();
+                            SvMemoryStream aStream (aSequence.getArray(), nSize, STREAM_READ );
+                            aStream.Seek ( STREAM_SEEK_TO_BEGIN );
+                            SfxItemSet* pItemSet;
+
+                            if( pPrinter )
+                            {
+                                pItemSet = pPrinter->GetOptions().Clone();
+                            }
+                            else
+                            {
+                                pItemSet = new SfxItemSet(pDoc->GetPool(),
+                                            SID_PRINTER_NOTFOUND_WARN,  SID_PRINTER_NOTFOUND_WARN,
+                                            SID_PRINTER_CHANGESTODOC,   SID_PRINTER_CHANGESTODOC,
+                                            ATTR_OPTIONS_PRINT,         ATTR_OPTIONS_PRINT,
+                                            0 );
+                            }
+
+                            pPrinter = SfxPrinter::Create ( aStream, pItemSet );
+
+                            MapMode aMM (pPrinter->GetMapMode());
+                            aMM.SetMapUnit(MAP_100TH_MM);
+                            pPrinter->SetMapMode(aMM);
+
+                            pDocSh->SetPrinter( pPrinter );
+
+                            pPrinter = NULL;
                         }
-                        else
-                        {
-                            pItemSet = new SfxItemSet(pDoc->GetPool(),
-                                        SID_PRINTER_NOTFOUND_WARN,  SID_PRINTER_NOTFOUND_WARN,
-                                        SID_PRINTER_CHANGESTODOC,   SID_PRINTER_CHANGESTODOC,
-                                        ATTR_OPTIONS_PRINT,         ATTR_OPTIONS_PRINT,
-                                        0 );
-                        }
-
-                        pPrinter = SfxPrinter::Create ( aStream, pItemSet );
-
-                        MapMode aMM (pPrinter->GetMapMode());
-                        aMM.SetMapUnit(MAP_100TH_MM);
-                        pPrinter->SetMapMode(aMM);
-
-                        pDocSh->SetPrinter( pPrinter );
-
-                        pPrinter = NULL;
                     }
                 }
                 break;
@@ -830,25 +896,22 @@ void DocumentSettings::_setPropertyValues( const PropertyMapEntry** ppEntries, c
 
             default:
                 throw UnknownPropertyException();
-
         }
 
         if( !bOk )
             throw IllegalArgumentException();
     }
 
-    if( pPrinter && pPrinterOptions )
+    if( bOptionsChanged )
     {
+        if( !pPrinter )
+            pPrinter = pDocSh->GetPrinter( TRUE );
         SfxItemSet aNewOptions( pPrinter->GetOptions() );
-        SdOptionsPrintItem aOpts( *pPrinterOptions );
-        aNewOptions.Put( aOpts );
+        aNewOptions.Put( aOptionsPrintItem );
         pPrinter->SetOptions( aNewOptions );
-
-        SdOptions* pOptions = SD_MOD()->GetSdOptions( pDoc->GetDocumentType() );
-        pOptions->SetPrinterOptions( &aOpts.GetOptionsPrint() );
     }
 
-    if( bChanged )
+    if( bChanged || bOptionsChanged )
         mpModel->SetModified( sal_True );
 }
 
@@ -861,24 +924,23 @@ void DocumentSettings::_getPropertyValues( const PropertyMapEntry** ppEntries, A
     if( NULL == pDoc || NULL == pDocSh )
         throw UnknownPropertyException();
 
-    SfxPrinter* pPrinter = NULL;
-    SdOptionsPrintItem* pPrinterOptions = NULL;
+    SdOptionsPrintItem aOptionsPrintItem( ATTR_OPTIONS_PRINT );
+
+    SfxPrinter* pPrinter = pDocSh->GetPrinter( FALSE );
+    if( pPrinter )
+    {
+        SdOptionsPrintItem* pPrinterOptions = NULL;
+        if(pPrinter->GetOptions().GetItemState( ATTR_OPTIONS_PRINT, FALSE, (const SfxPoolItem**) &pPrinterOptions) == SFX_ITEM_SET)
+            aOptionsPrintItem.GetOptionsPrint() = pPrinterOptions->GetOptionsPrint();
+    }
+    else
+    {
+        aOptionsPrintItem.SetOptions( SD_MOD()->GetSdOptions(pDoc->GetDocumentType()) );
+    }
+    SdOptionsPrint& aPrintOpts = aOptionsPrintItem.GetOptionsPrint();
 
     for( ; *ppEntries; ppEntries++, pValue++ )
     {
-
-        if( (*ppEntries)->mnMemberId == MID_PRINTER && pPrinter == NULL )
-        {
-            pPrinter = pDocSh->GetPrinter( sal_True );
-            if(pPrinter->GetOptions().GetItemState( ATTR_OPTIONS_PRINT, FALSE, (const SfxPoolItem**) &pPrinterOptions) != SFX_ITEM_SET)
-            {
-                DBG_ERROR( "could not get printer options!" );
-                pPrinter = NULL;
-                pPrinterOptions = NULL;
-                continue;
-            }
-        }
-
         switch( (*ppEntries)->mnHandle )
         {
             case HANDLE_COLORTABLEURL:
@@ -950,46 +1012,46 @@ void DocumentSettings::_getPropertyValues( const PropertyMapEntry** ppEntries, A
                 break;
 
             case HANDLE_PRINTDRAWING:
-                *pValue <<= (sal_Bool)pPrinterOptions->GetOptionsPrint().IsDraw();
+                *pValue <<= (sal_Bool)aPrintOpts.IsDraw();
                 break;
             case HANDLE_PRINTNOTES:
-                *pValue <<= (sal_Bool)pPrinterOptions->GetOptionsPrint().IsNotes();
+                *pValue <<= (sal_Bool)aPrintOpts.IsNotes();
                 break;
             case HANDLE_PRINTHANDOUT:
-                *pValue <<= (sal_Bool)pPrinterOptions->GetOptionsPrint().IsHandout();
+                *pValue <<= (sal_Bool)aPrintOpts.IsHandout();
                 break;
             case HANDLE_PRINTOUTLINE:
-                *pValue <<= (sal_Bool)pPrinterOptions->GetOptionsPrint().IsOutline();
+                *pValue <<= (sal_Bool)aPrintOpts.IsOutline();
                 break;
             case HANDLE_PRINTPAGENAME:
-                *pValue <<= (sal_Bool)pPrinterOptions->GetOptionsPrint().IsPagename();
+                *pValue <<= (sal_Bool)aPrintOpts.IsPagename();
                 break;
             case HANDLE_PRINTDATE:
-                *pValue <<= (sal_Bool)pPrinterOptions->GetOptionsPrint().IsDate();
+                *pValue <<= (sal_Bool)aPrintOpts.IsDate();
                 break;
             case HANDLE_PRINTTIME:
-                *pValue <<= (sal_Bool)pPrinterOptions->GetOptionsPrint().IsTime();
+                *pValue <<= (sal_Bool)aPrintOpts.IsTime();
                 break;
             case HANDLE_PRINTHIDENPAGES:
-                *pValue <<= (sal_Bool)pPrinterOptions->GetOptionsPrint().IsHiddenPages();
+                *pValue <<= (sal_Bool)aPrintOpts.IsHiddenPages();
                 break;
             case HANDLE_PRINTFITPAGE:
-                *pValue <<= (sal_Bool)pPrinterOptions->GetOptionsPrint().IsPagesize();
+                *pValue <<= (sal_Bool)aPrintOpts.IsPagesize();
                 break;
             case HANDLE_PRINTTILEPAGE:
-                *pValue <<= (sal_Bool)pPrinterOptions->GetOptionsPrint().IsPagetile();
+                *pValue <<= (sal_Bool)aPrintOpts.IsPagetile();
                 break;
             case HANDLE_PRINTBOOKLET:
-                *pValue <<= (sal_Bool)pPrinterOptions->GetOptionsPrint().IsBooklet();
+                *pValue <<= (sal_Bool)aPrintOpts.IsBooklet();
                 break;
             case HANDLE_PRINTBOOKLETFRONT:
-                *pValue <<= (sal_Bool)pPrinterOptions->GetOptionsPrint().IsFrontPage();
+                *pValue <<= (sal_Bool)aPrintOpts.IsFrontPage();
                 break;
             case HANDLE_PRINTBOOKLETBACK:
-                *pValue <<= (sal_Bool)pPrinterOptions->GetOptionsPrint().IsBackPage();
+                *pValue <<= (sal_Bool)aPrintOpts.IsBackPage();
                 break;
             case HANDLE_PRINTQUALITY:
-                *pValue <<= (sal_Int32)pPrinterOptions->GetOptionsPrint().GetOutputQuality();
+                *pValue <<= (sal_Int32)aPrintOpts.GetOutputQuality();
                 break;
             case HANDLE_MEASUREUNIT:
                 {
@@ -1028,6 +1090,11 @@ void DocumentSettings::_getPropertyValues( const PropertyMapEntry** ppEntries, A
                         aStream.Seek ( STREAM_SEEK_TO_BEGIN );
                         Sequence < sal_Int8 > aSequence ( nSize );
                         memcpy ( aSequence.getArray(), aStream.GetData(), nSize );
+                        *pValue <<= aSequence;
+                    }
+                    else
+                    {
+                        Sequence < sal_Int8 > aSequence;
                         *pValue <<= aSequence;
                     }
                 }
