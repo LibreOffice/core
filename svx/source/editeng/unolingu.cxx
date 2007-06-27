@@ -4,9 +4,9 @@
  *
  *  $RCSfile: unolingu.cxx,v $
  *
- *  $Revision: 1.35 $
+ *  $Revision: 1.36 $
  *
- *  last change: $Author: ihi $ $Date: 2007-06-05 14:34:53 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 18:01:18 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -134,9 +134,9 @@
 #endif
 
 #ifndef _SVX_DIALMGR_HXX
-#include <dialmgr.hxx>
+#include <svx/dialmgr.hxx>
 #endif
-#include "dialogs.hrc"
+#include <svx/dialogs.hrc>
 
 using namespace ::rtl;
 using namespace ::comphelper;
