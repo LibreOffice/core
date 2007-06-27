@@ -4,9 +4,9 @@
  *
  *  $RCSfile: unomod.cxx,v $
  *
- *  $Revision: 1.28 $
+ *  $Revision: 1.29 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 23:30:46 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 13:28:06 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -143,7 +143,6 @@ enum SwViewSettingsPropertyHandles
     HANDLE_VIEWSET_HELP_URL,
     HANDLE_VIEWSET_VRULER_RIGHT,
     HANDLE_VIEWSET_SHOW_RULER,
-    HANDLE_VIEWSET_EXEC_HYPERLINKS,
     HANDLE_VIEWSET_IS_RASTER_VISIBLE,
     HANDLE_VIEWSET_IS_SNAP_TO_RASTER,
     HANDLE_VIEWSET_RASTER_RESOLUTION_X,
@@ -175,7 +174,6 @@ static ChainablePropertySetInfo * lcl_createViewSettingsInfo()
     static PropertyInfo aViewSettingsMap_Impl[] =
     {
         { RTL_CONSTASCII_STRINGPARAM ( "HelpURL" ),             HANDLE_VIEWSET_HELP_URL             , CPPUTYPE_OUSTRING,    PROPERTY_NONE,  0},
-        { RTL_CONSTASCII_STRINGPARAM ( "IsExecuteHyperlinks" ), HANDLE_VIEWSET_EXEC_HYPERLINKS      , CPPUTYPE_BOOLEAN,    PROPERTY_NONE,  0},
         { RTL_CONSTASCII_STRINGPARAM ( "IsRasterVisible"),      HANDLE_VIEWSET_IS_RASTER_VISIBLE,       CPPUTYPE_BOOLEAN,   PROPERTY_NONE, 0},
         { RTL_CONSTASCII_STRINGPARAM ( "IsSnapToRaster"),       HANDLE_VIEWSET_IS_SNAP_TO_RASTER,       CPPUTYPE_BOOLEAN,   PROPERTY_NONE, 0},
         { RTL_CONSTASCII_STRINGPARAM ( "IsVertRulerRightAligned"),HANDLE_VIEWSET_VRULER_RIGHT         , CPPUTYPE_BOOLEAN, PROPERTY_NONE, 0},
@@ -682,7 +680,6 @@ void SwXViewSettings::_setSingleValue( const comphelper::PropertyInfo & rInfo, c
     // the API flag should not be set to the application's view settings
     switch( rInfo.mnHandle )
     {
-        case  HANDLE_VIEWSET_EXEC_HYPERLINKS       :   mpViewOption->SetExecHyperlinks(bVal);break;
         case  HANDLE_VIEWSET_SHOW_RULER            :   mpViewOption->SetViewAnyRuler(bVal); break;
         case  HANDLE_VIEWSET_HRULER                :   mpViewOption->SetViewHRuler(bVal);   break;
         case  HANDLE_VIEWSET_VRULER                :   mpViewOption->SetViewVRuler(bVal);break;
@@ -852,7 +849,6 @@ void SwXViewSettings::_getSingleValue( const comphelper::PropertyInfo & rInfo, :
     sal_Bool bBoolVal;
     switch( rInfo.mnHandle )
     {
-        case  HANDLE_VIEWSET_EXEC_HYPERLINKS       :    bBoolVal = mpConstViewOption->IsExecHyperlinks(); break;
         case  HANDLE_VIEWSET_SHOW_RULER:                bBoolVal = mpConstViewOption->IsViewAnyRuler();   break;
         case  HANDLE_VIEWSET_HRULER :                   bBoolVal = mpConstViewOption->IsViewHRuler(TRUE);   break;
         case  HANDLE_VIEWSET_VRULER :                   bBoolVal = mpConstViewOption->IsViewVRuler(TRUE);break;
