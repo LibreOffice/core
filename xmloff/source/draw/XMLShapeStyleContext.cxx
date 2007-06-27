@@ -4,9 +4,9 @@
  *
  *  $RCSfile: XMLShapeStyleContext.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: rt $ $Date: 2007-01-29 14:48:30 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 15:00:31 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -39,14 +39,14 @@
 #include <tools/debug.hxx>
 
 #ifndef _XMLOFF_XMLSHAPESTYLECONTEXT_HXX
-#include "XMLShapeStyleContext.hxx"
+#include <xmloff/XMLShapeStyleContext.hxx>
 #endif
 #ifndef _XMLOFF_XMLSHAPEPROPERTYSETCONTEXT_HXX
 #include "XMLShapePropertySetContext.hxx"
 #endif
 
 #ifndef _XMLOFF_CONTEXTID_HXX_
-#include "contextid.hxx"
+#include <xmloff/contextid.hxx>
 #endif
 
 #ifndef _COM_SUN_STAR_DRAWING_XCONTROLSHAPE_HPP_
@@ -60,11 +60,11 @@
 #endif
 
 #ifndef _XMLOFF_XMLIMP_HXX
-#include "xmlimp.hxx"
+#include <xmloff/xmlimp.hxx>
 #endif
 
 #ifndef _XMLOFF_XMLNUMI_HXX
-#include "xmlnumi.hxx"
+#include <xmloff/xmlnumi.hxx>
 #endif
 
 #ifndef _XMLOFF_XMLNMSPE_HXX
@@ -72,14 +72,14 @@
 #endif
 
 #ifndef _XMLOFF_XMLTOKEN_HXX
-#include "xmltoken.hxx"
+#include <xmloff/xmltoken.hxx>
 #endif
 
 #ifndef _XMLOFF_XMLERROR_HXX
 #include "xmlerror.hxx"
 #endif
 #ifndef _XMLOFF_PROPMAPPINGTYPES_HXX
-#include "maptype.hxx"
+#include <xmloff/maptype.hxx>
 #endif
 
 #include "sdpropls.hxx"
