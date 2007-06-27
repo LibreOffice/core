@@ -4,9 +4,9 @@
  *
  *  $RCSfile: stream.cxx,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: kz $ $Date: 2006-11-07 14:44:28 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 22:18:34 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -55,7 +55,7 @@
 #endif
 */
 
-#include <solar.h>
+#include <tools/solar.h>
 
 #if defined(BLC)
 #define SWAPNIBBLES(c) c=_crotl(c,4);
@@ -67,9 +67,9 @@ c >>= 4;                    \
 c |= nSwapTmp;
 #endif
 
-#include <debug.hxx>
+#include <tools/debug.hxx>
 #define ENABLE_BYTESTRING_STREAM_OPERATORS
-#include <stream.hxx>
+#include <tools/stream.hxx>
 #include <osl/thread.h>
 #include <algorithm>
 
