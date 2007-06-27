@@ -4,9 +4,9 @@
  *
  *  $RCSfile: colorcfg.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: hr $ $Date: 2007-06-27 13:44:29 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 21:10:39 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -41,7 +41,7 @@
 #endif
 #define SVT_DLLIMPLEMENTATION
 
-#include "colorcfg.hxx"
+#include <svtools/colorcfg.hxx>
 
 #ifndef _COM_SUN_STAR_UNO_ANY_HXX_
 #include <com/sun/star/uno/Any.hxx>
@@ -71,10 +71,10 @@
 #include <com/sun/star/uno/Sequence.h>
 #endif
 #ifndef _SFXPOOLITEM_HXX
-#include <poolitem.hxx> //Any2Bool
+#include <svtools/poolitem.hxx> //Any2Bool
 #endif
 #ifndef _SFXSMPLHINT_HXX
-#include <smplhint.hxx>
+#include <svtools/smplhint.hxx>
 #endif
 #ifndef _VOS_MUTEX_HXX_
 #include <vos/mutex.hxx>
