@@ -4,9 +4,9 @@
  *
  *  $RCSfile: sfxbasemodel.src,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-07 18:49:47 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 23:25:06 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -33,7 +33,7 @@
  *
  ************************************************************************/
 
-#include "sfx.hrc"
+#include <sfx2/sfx.hrc>
 #include "sfxlocal.hrc"
 
 /*
