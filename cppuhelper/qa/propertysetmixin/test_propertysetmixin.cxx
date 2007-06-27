@@ -4,9 +4,9 @@
  *
  *  $RCSfile: test_propertysetmixin.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: hr $ $Date: 2007-01-03 11:37:08 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 13:21:06 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -381,6 +381,16 @@ void Test::testEmpty2(
     empty2p->addPropertyChangeListener(rtl::OUString(), boundListener2.get());
     empty2p->addVetoableChangeListener(rtl::OUString(), vetoListener1.get());
     empty2p->addVetoableChangeListener(rtl::OUString(), vetoListener2.get());
+    try {
+        empty2p->addPropertyChangeListener(
+            rtl::OUString(),
+            css::uno::Reference< css::beans::XPropertyChangeListener >());
+    } catch (css::uno::RuntimeException &) {}
+    try {
+        empty2p->addVetoableChangeListener(
+            rtl::OUString(),
+            css::uno::Reference< css::beans::XVetoableChangeListener >());
+    } catch (css::uno::RuntimeException &) {}
     CPPUNIT_ASSERT_EQUAL(3, boundListener1->count());
     CPPUNIT_ASSERT_EQUAL(1, boundListener2->count());
     CPPUNIT_ASSERT_EQUAL(3, vetoListener1->count());
