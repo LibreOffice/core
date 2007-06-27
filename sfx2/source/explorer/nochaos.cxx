@@ -4,9 +4,9 @@
  *
  *  $RCSfile: nochaos.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: vg $ $Date: 2006-11-01 18:28:02 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 23:25:31 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -40,7 +40,7 @@
 #include <svtools/poolitem.hxx>
 #include <svtools/stritem.hxx>
 #include <nochaos.hxx>
-#include "sfxuno.hxx"
+#include <sfx2/sfxuno.hxx>
 
 
 #define WID_CHAOS_START 500
