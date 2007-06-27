@@ -4,9 +4,9 @@
  *
  *  $RCSfile: settings.cxx,v $
  *
- *  $Revision: 1.69 $
+ *  $Revision: 1.70 $
  *
- *  last change: $Author: vg $ $Date: 2007-06-07 10:11:52 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 20:01:56 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -44,30 +44,30 @@
 #endif
 
 #ifndef _SV_SVAPP_HXX
-#include <svapp.hxx>
+#include <vcl/svapp.hxx>
 #endif
 #ifndef _SV_SVDATA_HXX
-#include <svdata.hxx>
+#include <vcl/svdata.hxx>
 #endif
 #ifndef _SV_EVENT_HXX
-#include <event.hxx>
+#include <vcl/event.hxx>
 #endif
 #ifndef _SV_SETTINGS_HXX
-#include <settings.hxx>
+#include <vcl/settings.hxx>
 #endif
 
 #ifndef _VCL_I18NHELP_HXX
-#include <i18nhelp.hxx>
+#include <vcl/i18nhelp.hxx>
 #endif
 
 #ifndef _VCL_FONTCFG_HXX
 #include <fontcfg.hxx>
 #endif
 #ifndef VCL_INC_CONFIGSETTINGS_HXX
-#include <configsettings.hxx>
+#include <vcl/configsettings.hxx>
 #endif
 
-#include <unohelp.hxx>
+#include <vcl/unohelp.hxx>
 #ifndef _UNOTOOLS_LOCALEDATAWRAPPER_HXX
 #include <unotools/localedatawrapper.hxx>
 #endif
