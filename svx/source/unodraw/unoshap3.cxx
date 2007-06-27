@@ -4,9 +4,9 @@
  *
  *  $RCSfile: unoshap3.cxx,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: ihi $ $Date: 2006-11-14 13:54:46 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 19:26:36 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -64,18 +64,18 @@
 #include <rtl/uuid.h>
 #include <rtl/memory.h>
 
-#include "unoshape.hxx"
-#include "unopage.hxx"
-#include "unoprnms.hxx"
-#include "polysc3d.hxx"
+#include <svx/unoshape.hxx>
+#include <svx/unopage.hxx>
+#include <svx/unoprnms.hxx>
+#include <svx/polysc3d.hxx>
 #include "globl3d.hxx"
-#include "cube3d.hxx"
-#include "sphere3d.hxx"
-#include "lathe3d.hxx"
-#include "extrud3d.hxx"
-#include "polygn3d.hxx"
+#include <svx/cube3d.hxx>
+#include <svx/sphere3d.hxx>
+#include <svx/lathe3d.hxx>
+#include <svx/extrud3d.hxx>
+#include <svx/polygn3d.hxx>
 //#include "poly3d.hxx"
-#include "svdmodel.hxx"
+#include <svx/svdmodel.hxx>
 
 #ifndef _BGFX_POLYGON_B3DPOLYGON_HXX
 #include <basegfx/polygon/b3dpolygon.hxx>
