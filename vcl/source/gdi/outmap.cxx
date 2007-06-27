@@ -4,9 +4,9 @@
  *
  *  $RCSfile: outmap.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: kz $ $Date: 2007-05-09 13:35:49 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 20:20:21 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -50,16 +50,16 @@
 #endif
 
 #ifndef _SV_VIRDEV_HXX
-#include <virdev.hxx>
+#include <vcl/virdev.hxx>
 #endif
 #ifndef _SV_SVDATA_HXX
-#include <svdata.hxx>
+#include <vcl/svdata.hxx>
 #endif
 #ifndef _TL_POLY_HXX
 #include <tools/poly.hxx>
 #endif
 #ifndef _SV_REGION_HXX
-#include <region.hxx>
+#include <vcl/region.hxx>
 #endif
 #ifndef _SV_REGION_H
 #include <region.h>
@@ -68,25 +68,25 @@
 #include <window.h>
 #endif
 #ifndef _SV_WRKWIN_HXX
-#include <wrkwin.hxx>
+#include <vcl/wrkwin.hxx>
 #endif
 #ifndef _SV_CURSOR_HXX
-#include <cursor.hxx>
+#include <vcl/cursor.hxx>
 #endif
 #ifndef _SV_METAACT_HXX
-#include <metaact.hxx>
+#include <vcl/metaact.hxx>
 #endif
 #ifndef _SV_GDIMTF_HXX
-#include <gdimtf.hxx>
+#include <vcl/gdimtf.hxx>
 #endif
 #ifndef _SV_LINEINFO_HXX
-#include <lineinfo.hxx>
+#include <vcl/lineinfo.hxx>
 #endif
 #ifndef _SV_OUTDEV_HXX
-#include <outdev.hxx>
+#include <vcl/outdev.hxx>
 #endif
 #ifndef _SV_SALGDI_HXX
-#include <salgdi.hxx>
+#include <vcl/salgdi.hxx>
 #endif
 
 // #i75163#
