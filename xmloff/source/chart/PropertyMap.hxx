@@ -4,9 +4,9 @@
  *
  *  $RCSfile: PropertyMap.hxx,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: obo $ $Date: 2007-06-11 14:52:12 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 14:46:23 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -36,22 +36,22 @@
 #define _PROPERTYMAP_HXX_
 
 #ifndef _XMLOFF_PROPMAPPINGTYPES_HXX
-#include "maptype.hxx"
+#include <xmloff/maptype.hxx>
 #endif
 #ifndef _XMLOFF_XMLNMSPE_HXX
 #include "xmlnmspe.hxx"
 #endif
 #ifndef _XMLOFF_XMLTOKEN_HXX
-#include "xmltoken.hxx"
+#include <xmloff/xmltoken.hxx>
 #endif
 #ifndef _XMLOFF_XMLTYPES_HXX
-#include "xmltypes.hxx"
+#include <xmloff/xmltypes.hxx>
 #endif
 #ifndef _XMLOFF_CONTEXTID_HXX_
-#include "contextid.hxx"
+#include <xmloff/contextid.hxx>
 #endif
 #ifndef _XMLOFF_XMLEMENT_HXX
-#include "xmlement.hxx"
+#include <xmloff/xmlement.hxx>
 #endif
 
 #ifndef _COM_SUN_STAR_CHART_CHARTAXISARRANGEORDERTYPE_HPP_
