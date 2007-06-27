@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ctredlin.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: rt $ $Date: 2007-04-26 07:27:42 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 16:56:46 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -61,9 +61,9 @@
 #ifndef _UNO_LINGU_HXX
 #include <unolingu.hxx>
 #endif
-#include <dialmgr.hxx>
+#include <svx/dialmgr.hxx>
 #include "ctredlin.hrc"
-#include "ctredlin.hxx"
+#include <svx/ctredlin.hxx>
 #include "helpid.hrc"
 
 //============================================================================
