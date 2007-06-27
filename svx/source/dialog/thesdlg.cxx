@@ -4,9 +4,9 @@
  *
  *  $RCSfile: thesdlg.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: rt $ $Date: 2007-04-26 07:45:05 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 17:47:34 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -62,19 +62,19 @@
 
 #define _SVX_THESDLG_CXX
 
-#include "thesdlg.hxx"
+#include <svx/thesdlg.hxx>
 #include "dlgutil.hxx"
-#include "dialmgr.hxx"
+#include <svx/dialmgr.hxx>
 #include "svxerr.hxx"
 
-#include "dialogs.hrc"
+#include <svx/dialogs.hrc>
 #include "thesdlg.hrc"
 
 #ifndef _UNO_LINGU_HXX
 #include <unolingu.hxx>
 #endif
 #ifndef _SVX_LANGBOX_HXX
-#include <langbox.hxx>
+#include <svx/langbox.hxx>
 #endif
 
 
