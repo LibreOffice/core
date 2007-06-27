@@ -4,9 +4,9 @@
  *
  *  $RCSfile: SvXMLAutoCorrectImport.hxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 22:24:58 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 17:53:22 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -55,7 +55,7 @@
 #include <xmloff/xmlnmspe.hxx>
 #endif
 #ifndef _MySVXACORR_HXX
-#include "svxacorr.hxx"
+#include <svx/svxacorr.hxx>
 #endif
 
 class SvXMLAutoCorrectImport : public SvXMLImport
