@@ -4,9 +4,9 @@
  *
  *  $RCSfile: optitems.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: kz $ $Date: 2007-05-10 14:55:19 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 18:39:17 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -51,8 +51,8 @@
 #endif
 
 #include "optitems.hxx"
-#include "dialmgr.hxx"
-#include "svxitems.hrc"
+#include <svx/dialmgr.hxx>
+#include <svx/svxitems.hrc>
 
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::linguistic2;
