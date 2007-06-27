@@ -4,9 +4,9 @@
  *
  *  $RCSfile: viewoptions.cxx,v $
  *
- *  $Revision: 1.28 $
+ *  $Revision: 1.29 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 14:31:06 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 21:18:07 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -39,7 +39,7 @@
 //  includes
 //_________________________________________________________________________________________________________________
 
-#include "viewoptions.hxx"
+#include <svtools/viewoptions.hxx>
 
 #ifndef _COM_SUN_STAR_UNO_ANY_HXX_
 #include <com/sun/star/uno/Any.hxx>
