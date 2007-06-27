@@ -4,9 +4,9 @@
  *
  *  $RCSfile: gradtrns.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: ihi $ $Date: 2006-11-14 13:37:46 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 18:56:31 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -37,7 +37,7 @@
 #include "precompiled_svx.hxx"
 
 #include "gradtrns.hxx"
-#include "svdobj.hxx"
+#include <svx/svdobj.hxx>
 
 #ifndef _B3D_B3DCOLOR_HXX
 #include <goodies/b3dcolor.hxx>
