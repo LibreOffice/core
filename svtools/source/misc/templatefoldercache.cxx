@@ -4,9 +4,9 @@
  *
  *  $RCSfile: templatefoldercache.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: ihi $ $Date: 2007-06-05 18:26:57 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 21:52:29 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -82,7 +82,7 @@
 #include <tools/debug.hxx>
 #endif
 #ifndef INCLUDED_SVTOOLS_PATHOPTIONS_HXX
-#include "pathoptions.hxx"
+#include <svtools/pathoptions.hxx>
 #endif
 
 #include "comphelper/processfactory.hxx"
