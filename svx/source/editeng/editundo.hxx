@@ -4,9 +4,9 @@
  *
  *  $RCSfile: editundo.hxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: obo $ $Date: 2006-10-12 12:36:56 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 17:56:45 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -38,7 +38,7 @@
 
 #include <editdoc.hxx>
 #include <editund2.hxx>
-#include <editdata.hxx>
+#include <svx/editdata.hxx>
 
 #define UNDO_NOACTION           0
 #define UNDO_NEWUNDO            1
