@@ -4,9 +4,9 @@
  *
  *  $RCSfile: sbxdate.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: obo $ $Date: 2006-10-12 14:32:40 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 14:29:19 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -51,7 +51,7 @@
 #ifndef INCLUDED_I18NPOOL_LANG_H
 #include <i18npool/lang.h>
 #endif
-#include "sbx.hxx"
+#include <basic/sbx.hxx>
 #include "sbxconv.hxx"
 #include "math.h"
 
