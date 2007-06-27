@@ -4,9 +4,9 @@
  *
  *  $RCSfile: sdxmlexp.cxx,v $
  *
- *  $Revision: 1.112 $
+ *  $Revision: 1.113 $
  *
- *  last change: $Author: hr $ $Date: 2007-06-27 15:05:03 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 15:32:18 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -2046,15 +2046,10 @@ void SdXMLExport::_ExportContent()
             if( IsImpress() )
                 ImplExportHeaderFooterDeclAttributes( maDrawPagesHeaderFooterSettings[nPageInd] );
 
-            // write page
-            SvXMLElementExport aDPG(*this, XML_NAMESPACE_DRAW, XML_PAGE, sal_True, sal_True);
-
-            // write optional office:forms
-            exportFormsElement( xDrawPage );
-
             UniReference< xmloff::AnimationsExporter >  xAnimationsExporter;
             uno::Reference< ::com::sun::star::animations::XAnimationNodeSupplier > xAnimNodeSupplier;
 
+            // prepare animation export
             if(IsImpress())
             {
                 if( getExportFlags() & EXPORT_OASIS )
@@ -2065,7 +2060,7 @@ void SdXMLExport::_ExportContent()
                     // prepare animations exporter if impress
                     if(xAnimNodeSupplier.is())
                     {
-                        xAnimationsExporter = new xmloff::AnimationsExporter( *this );
+                        xAnimationsExporter = new xmloff::AnimationsExporter( *this, xProps );
                         xAnimationsExporter->prepare( xAnimNodeSupplier->getAnimationNode() );
                     }
                 }
@@ -2076,6 +2071,17 @@ void SdXMLExport::_ExportContent()
                     GetShapeExport()->setAnimationsExporter( xAnimExport );
                 }
             }
+
+            // write draw:id
+            const OUString aPageId = getInterfaceToIdentifierMapper().getIdentifier( xDrawPage );
+            if( aPageId.getLength() != 0 )
+                AddAttribute ( XML_NAMESPACE_DRAW, XML_ID, aPageId );
+
+            // write page
+            SvXMLElementExport aDPG(*this, XML_NAMESPACE_DRAW, XML_PAGE, sal_True, sal_True);
+
+            // write optional office:forms
+            exportFormsElement( xDrawPage );
 
             // write graphic objects on this page (if any)
             Reference< drawing::XShapes > xExportShapes(xDrawPage, UNO_QUERY);
