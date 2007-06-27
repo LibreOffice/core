@@ -4,9 +4,9 @@
  *
  *  $RCSfile: modctrl.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: obo $ $Date: 2006-10-12 13:04:51 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 18:54:52 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -50,10 +50,10 @@
 
 #define _SVX_MODCTRL_CXX
 
-#include "dialogs.hrc"
+#include <svx/dialogs.hrc>
 
 #include "modctrl.hxx"
-#include "dialmgr.hxx"
+#include <svx/dialmgr.hxx>
 
 SFX_IMPL_STATUSBAR_CONTROL(SvxModifyControl, SfxBoolItem);
 

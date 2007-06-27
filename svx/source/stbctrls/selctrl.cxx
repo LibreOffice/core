@@ -4,9 +4,9 @@
  *
  *  $RCSfile: selctrl.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: obo $ $Date: 2006-10-12 13:05:20 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 18:55:20 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -55,9 +55,9 @@
 #define _SVX_SELCTRL_CXX
 
 #include "selctrl.hxx"
-#include "dialmgr.hxx"
+#include <svx/dialmgr.hxx>
 
-#include "dialogs.hrc"
+#include <svx/dialogs.hrc>
 
 #define PAINT_OFFSET    5
 
