@@ -4,9 +4,9 @@
  *
  *  $RCSfile: hyperdlg.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: rt $ $Date: 2007-04-26 07:34:00 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 17:12:06 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -48,7 +48,7 @@
 #include "cuihyperdlg.hxx"  //CHINA001
 #endif   //CHINA001
 #include "hyperdlg.hxx"
-#include "svxdlg.hxx" //CHINA001
+#include <svx/svxdlg.hxx> //CHINA001
 
 #include <sfx2/app.hxx>
 
