@@ -4,9 +4,9 @@
  *
  *  $RCSfile: hlnkitem.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: kz $ $Date: 2007-05-10 14:51:29 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 18:28:22 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -40,14 +40,14 @@
 #define _SVX_HLNKITEM_CXX
 
 #ifndef _SVX_SVXIDS_HRC
-#include <svxids.hrc>
+#include <svx/svxids.hrc>
 #endif
 #ifndef _STREAM_HXX
 #include <tools/stream.hxx>
 #endif
 
 #ifndef _MEMBERID_HRC
-#include <memberid.hrc>
+#include <svx/memberid.hrc>
 #endif
 
 #ifndef __SBX_SBXVARIABLE_HXX

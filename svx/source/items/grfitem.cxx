@@ -4,9 +4,9 @@
  *
  *  $RCSfile: grfitem.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: kz $ $Date: 2007-05-10 14:51:15 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 18:28:01 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -41,10 +41,10 @@
 #include <tools/stream.hxx>
 #endif
 #ifndef _SVX_GRFCROP_HXX
-#include <grfcrop.hxx>
+#include <svx/grfcrop.hxx>
 #endif
 #ifndef _SVX_ITEMTYPE_HXX //autogen
-#include <itemtype.hxx>
+#include <svx/itemtype.hxx>
 #endif
 #ifndef _COM_SUN_STAR_TEXT_GRAPHICCROP_HPP_
 #include <com/sun/star/text/GraphicCrop.hpp>
