@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xtabcolr.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: rt $ $Date: 2007-04-26 07:53:48 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 19:35:29 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -57,11 +57,11 @@
 
 #include <sfx2/docfile.hxx>
 #include <tools/urlobj.hxx>
-#include "dialogs.hrc"
-#include "dialmgr.hxx"
-#include "xtable.hxx"
-#include "xpool.hxx"
-#include "xoutx.hxx"
+#include <svx/dialogs.hrc>
+#include <svx/dialmgr.hxx>
+#include <svx/xtable.hxx>
+#include <svx/xpool.hxx>
+#include <svx/xoutx.hxx>
 
 #define GLOBALOVERFLOW
 
