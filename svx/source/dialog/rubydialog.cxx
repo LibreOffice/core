@@ -4,9 +4,9 @@
  *
  *  $RCSfile: rubydialog.cxx,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: rt $ $Date: 2007-04-26 07:41:53 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 17:36:45 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -42,8 +42,8 @@
 #ifndef _SHL_HXX
 #include <tools/shl.hxx>
 #endif
-#include <dialmgr.hxx>
-#include <dialogs.hrc>
+#include <svx/dialmgr.hxx>
+#include <svx/dialogs.hrc>
 #include <rubydialog.hrc>
 #ifndef _SFXAPP_HXX
 #include <sfx2/app.hxx>
