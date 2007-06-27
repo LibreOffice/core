@@ -4,9 +4,9 @@
  *
  *  $RCSfile: svdhlpln.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: ihi $ $Date: 2006-11-14 13:42:47 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 19:02:30 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -36,7 +36,7 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_svx.hxx"
 
-#include "svdhlpln.hxx"
+#include <svx/svdhlpln.hxx>
 
 #ifndef _TOOLS_COLOR_HXX
 #include <tools/color.hxx>
