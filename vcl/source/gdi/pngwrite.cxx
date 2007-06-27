@@ -4,9 +4,9 @@
  *
  *  $RCSfile: pngwrite.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: obo $ $Date: 2007-01-25 10:59:19 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 20:21:55 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -36,7 +36,7 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_vcl.hxx"
 
-#include "pngwrite.hxx"
+#include <vcl/pngwrite.hxx>
 
 #include <cmath>
 #include <limits>
@@ -45,9 +45,9 @@
 #include <rtl/alloc.h>
 #include <tools/zcodec.hxx>
 #include <tools/stream.hxx>
-#include "bmpacc.hxx"
-#include "svapp.hxx"
-#include "alpha.hxx"
+#include <vcl/bmpacc.hxx>
+#include <vcl/svapp.hxx>
+#include <vcl/alpha.hxx>
 
 #ifndef _OSL_ENDIAN_H_
 #include <osl/endian.h>
