@@ -4,9 +4,9 @@
  *
  *  $RCSfile: weak.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 12:43:37 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 13:22:10 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -44,6 +44,7 @@
 #ifndef _CPPU_HELPER_INTERFACECONTAINER_HXX_
 #include <cppuhelper/interfacecontainer.hxx>
 #endif
+#include "cppuhelper/exc_hlp.hxx"
 
 using namespace osl;
 using namespace com::sun::star::uno;
@@ -126,9 +127,24 @@ void SAL_CALL OWeakConnectionPoint::release() throw()
 
 void SAL_CALL OWeakConnectionPoint::dispose() throw(::com::sun::star::uno::RuntimeException)
 {
+    Any ex;
     OInterfaceIteratorHelper aIt( m_aReferences );
     while( aIt.hasMoreElements() )
-        ((XReference *)aIt.next())->dispose();
+    {
+        try
+        {
+            ((XReference *)aIt.next())->dispose();
+        }
+        catch (com::sun::star::lang::DisposedException &) {}
+        catch (RuntimeException &)
+        {
+            ex = cppu::getCaughtException();
+        }
+    }
+    if (ex.hasValue())
+    {
+        cppu::throwException(ex);
+    }
 }
 
 // XInterface
