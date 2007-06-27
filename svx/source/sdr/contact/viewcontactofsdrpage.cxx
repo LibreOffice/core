@@ -4,9 +4,9 @@
  *
  *  $RCSfile: viewcontactofsdrpage.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: kz $ $Date: 2006-12-12 16:38:56 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 18:46:36 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -45,7 +45,7 @@
 #endif
 
 #ifndef _SVDPAGE_HXX
-#include <svdpage.hxx>
+#include <svx/svdpage.hxx>
 #endif
 
 #ifndef _SDR_CONTACT_DISPLAYINFO_HXX
@@ -53,11 +53,11 @@
 #endif
 
 #ifndef _SVDPAGV_HXX
-#include <svdpagv.hxx>
+#include <svx/svdpagv.hxx>
 #endif
 
 #ifndef _SVDVIEW_HXX
-#include <svdview.hxx>
+#include <svx/svdview.hxx>
 #endif
 
 #ifndef _SDR_CONTACT_VIEWCONTACTPAINTHELPER_HXX
