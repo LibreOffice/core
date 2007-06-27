@@ -4,9 +4,9 @@
  *
  *  $RCSfile: urltest.cxx,v $
  *
- *  $Revision: 1.36 $
+ *  $Revision: 1.37 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 01:10:18 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 22:22:35 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -37,10 +37,10 @@
 #include "precompiled_tools.hxx"
 
 #ifndef TOOLS_INETMIME_HXX
-#include "inetmime.hxx"
+#include <tools/inetmime.hxx>
 #endif
 #ifndef _URLOBJ_HXX
-#include "urlobj.hxx"
+#include <tools/urlobj.hxx>
 #endif
 
 #ifndef _COM_SUN_STAR_UTIL_XSTRINGWIDTH_HPP_
