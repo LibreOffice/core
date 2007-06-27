@@ -4,9 +4,9 @@
  *
  *  $RCSfile: logindlg.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: rt $ $Date: 2007-04-26 09:43:35 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 21:28:07 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -44,18 +44,18 @@
 #endif
 
 #ifndef _SVTOOLS_LOGINDLG_HXX_
-#include "logindlg.hxx"
+#include <svtools/logindlg.hxx>
 #endif
 
 #ifndef _SVTOOLS_LOGINDLG_HRC_
 #include "logindlg.hrc"
 #endif
 #ifndef _SVTOOLS_HRC
-#include "svtools.hrc"
+#include <svtools/svtools.hrc>
 #endif
 
 #ifndef _SVTOOLS_SVTDATA_HXX
-#include "svtdata.hxx"
+#include <svtools/svtdata.hxx>
 #endif
 
 #ifdef UNX
