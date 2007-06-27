@@ -4,9 +4,9 @@
  *
  *  $RCSfile: SpellDialog.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: obo $ $Date: 2006-10-12 12:50:07 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 18:21:34 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -78,10 +78,10 @@
 
 
 #ifndef _SVX_BOX_HXX //autogen
-#include "svxbox.hxx"
+#include <svx/svxbox.hxx>
 #endif
 #ifndef _SVX_LANGBOX_HXX
-#include <langbox.hxx>
+#include <svx/langbox.hxx>
 #endif
 #include <memory>
 #ifndef _SVEDIT_HXX
@@ -95,7 +95,7 @@
 #include <svtools/xtextedt.hxx>
 #endif
 #ifndef SVX_SPELL_PORTIONS_HXX
-#include <SpellPortions.hxx>
+#include <svx/SpellPortions.hxx>
 #endif
 
 class ScrollBar;
