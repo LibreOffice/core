@@ -4,9 +4,9 @@
  *
  *  $RCSfile: optdict.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 21:41:10 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 17:26:10 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -79,10 +79,10 @@
 
 
 #ifndef _SVX_SIMPTABL_HXX
-#include "simptabl.hxx"
+#include <svx/simptabl.hxx>
 #endif
 #ifndef _SVX_LANGBOX_HXX
-#include <langbox.hxx>
+#include <svx/langbox.hxx>
 #endif
 
 namespace com{namespace sun{namespace star{
