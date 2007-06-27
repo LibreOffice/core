@@ -4,9 +4,9 @@
  *
  *  $RCSfile: bitmapdevice.cxx,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: thb $ $Date: 2006-07-28 12:43:20 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 12:42:01 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -57,7 +57,7 @@
 #include "basebmp/scaleimage.hxx"
 #include "basebmp/clippedlinerenderer.hxx"
 #include "basebmp/polypolygonrenderer.hxx"
-//#include "basebmp/genericintegerimageaccessor.hxx"
+#include "basebmp/genericcolorimageaccessor.hxx"
 
 #include "basebmp/tools.hxx"
 #include "intconversion.hxx"
@@ -80,8 +80,6 @@
 #include <vigra/copyimage.hxx>
 #include <vigra/tuple.hxx>
 
-#include <boost/mpl/identity.hpp>
-
 namespace vigra
 {
 /// componentwise xor of an RGBValue (missing from rgbvalue.hxx)
@@ -103,44 +101,6 @@ namespace basebmp
 
 namespace
 {
-    // xxx TODO
-
-    // TEMP TEMP TEMP
-
-    class GenericImageAccessor
-    {
-    public:
-        typedef Color value_type;
-
-        BitmapDeviceSharedPtr mpDevice;
-
-        explicit GenericImageAccessor( BitmapDeviceSharedPtr const& rTarget ) :
-            mpDevice(rTarget)
-        {}
-
-        template< typename Iterator >
-        Color operator()( Iterator const& i ) const
-        { return mpDevice->getPixel( basegfx::B2IPoint( i->x,i->y ) ); }
-
-        template< typename Iterator, typename Difference >
-        Color operator()( Iterator const& i, Difference const& diff) const
-        { return mpDevice->getPixel( basegfx::B2IPoint( i[diff]->x,
-                                                        i[diff]->y ) ); }
-
-        template< typename Iterator >
-        void set(Color const& value, Iterator const& i) const
-        { return mpDevice->setPixel( basegfx::B2IPoint( i->x,i->y ),
-                                     value, DrawMode_PAINT ); }
-
-        template< class Iterator, class Difference >
-        void set(value_type const& value, Iterator const& i, Difference const& diff) const
-        { return mpDevice->setPixel( basegfx::B2IPoint( i[diff]->x,
-                                                        i[diff]->y ),
-                                     value, DrawMode_PAINT ); }
-    };
-
-
-
     /** Create the type for an accessor that takes the (mask,bitmap)
         input value generated from a JoinImageAccessorAdapter, and
         pipe that through a mask functor.
@@ -189,6 +149,13 @@ namespace
         template metafunction wrap_accessor to one of the raw bitmap
         accessors, yields a member type named 'type', which is a
         wrapped accessor that map color values.
+
+        @tpl Masks
+        Traits template, containing nested traits
+        clipmask_format_traits and alphamask_format_traits, which
+        determine what specialized formats are to be used for clip and
+        alpha masks. With those mask formats, clipping and alpha
+        blending is handled natively.
      */
     template< class DestIterator,
               class RawAccessor,
@@ -288,10 +255,23 @@ namespace
 
         // -------------------------------------------------------
 
+        typedef ConstantColorBlendSetterAccessorAdapter<
+            dest_accessor_type,
+            Color,
+            Masks::alphamask_polarity>                                     colorblend_generic_accessor_type;
+        typedef AccessorTraits<colorblend_generic_accessor_type>           colorblend_generic_accessor_traits;
+        typedef typename colorblend_generic_accessor_traits::template masked_accessor<
+            mask_rawaccessor_type,
+            dest_iterator_type,
+            mask_iterator_type,
+            Masks::clipmask_polarity>::type                                masked_colorblend_generic_accessor_type;
+
+        // -------------------------------------------------------
+
         typedef JoinImageAccessorAdapter< dest_accessor_type,
                                           mask_rawaccessor_type >          joined_image_accessor_type;
-        typedef JoinImageAccessorAdapter< GenericImageAccessor,
-                                          GenericImageAccessor >           joined_generic_image_accessor_type;
+        typedef JoinImageAccessorAdapter< GenericColorImageAccessor,
+                                          GenericColorImageAccessor >      joined_generic_image_accessor_type;
 
         // -------------------------------------------------------
 
@@ -300,15 +280,19 @@ namespace
         to_uint32_functor                       maToUInt32Converter;
         dest_accessor_type                      maAccessor;
         colorblend_accessor_type                maColorBlendAccessor;
+        colorblend_generic_accessor_type        maGenericColorBlendAccessor;
         raw_accessor_type                       maRawAccessor;
         xor_accessor_type                       maXorAccessor;
         raw_xor_accessor_type                   maRawXorAccessor;
         masked_accessor_type                    maMaskedAccessor;
         masked_colorblend_accessor_type         maMaskedColorBlendAccessor;
+        masked_colorblend_generic_accessor_type maGenericMaskedColorBlendAccessor;
         masked_xoraccessor_type                 maMaskedXorAccessor;
         raw_maskedaccessor_type                 maRawMaskedAccessor;
         raw_maskedxor_accessor_type             maRawMaskedXorAccessor;
         raw_maskedmask_accessor_type            maRawMaskedMaskAccessor;
+
+        // -------------------------------------------------------
 
         BitmapRenderer( const basegfx::B2IRange&         rBounds,
                         sal_Int32                        nScanlineFormat,
@@ -326,11 +310,13 @@ namespace
             maToUInt32Converter(),
             maAccessor( accessor ),
             maColorBlendAccessor( accessor ),
+            maGenericColorBlendAccessor( accessor ),
             maRawAccessor( rawAccessor ),
             maXorAccessor( accessor ),
             maRawXorAccessor( rawAccessor ),
             maMaskedAccessor( accessor ),
             maMaskedColorBlendAccessor( maColorBlendAccessor ),
+            maGenericMaskedColorBlendAccessor( maGenericColorBlendAccessor ),
             maMaskedXorAccessor( accessor ),
             maRawMaskedAccessor( rawAccessor ),
             maRawMaskedXorAccessor( rawAccessor ),
@@ -657,18 +643,16 @@ namespace
             boost::shared_ptr<BitmapRenderer> pSrcBmp( getCompatibleBitmap(rSrcBitmap) );
             OSL_ASSERT( pSrcBmp );
 
-            // since scaleImage() internally copyies
-            // to a temporary buffer, also works with *this == rSrcBitmap
             scaleImage(
                 srcIterRange(pSrcBmp->maBegin,
                              pSrcBmp->maRawAccessor,
                              rSrcRect),
                 destIterRange(begin,
                               acc,
-                              rDstRect));
+                              rDstRect),
+                rSrcBitmap.get() == this );
         }
 
-        // xxx TODO
         template< typename Iterator, typename Acc >
         void implDrawBitmapGeneric(const BitmapDeviceSharedPtr& rSrcBitmap,
                                    const basegfx::B2IRange&     rSrcRect,
@@ -676,10 +660,8 @@ namespace
                                    const Iterator&              begin,
                                    const Acc&                   acc)
         {
-            GenericImageAccessor aSrcAcc( rSrcBitmap );
+            GenericColorImageAccessor aSrcAcc( rSrcBitmap );
 
-            // since scaleImage() internally copyies
-            // to a temporary buffer, also works with *this == rSrcBitmap
             scaleImage(
                 srcIterRange(vigra::Diff2D(),
                              aSrcAcc,
@@ -694,7 +676,6 @@ namespace
                                   const basegfx::B2IRange&     rDstRect,
                                   DrawMode                     drawMode )
         {
-            // xxx TODO
             if( isCompatibleBitmap( rSrcBitmap ) )
             {
                 if( drawMode == DrawMode_XOR )
@@ -725,7 +706,6 @@ namespace
                                   DrawMode                     drawMode,
                                   const BitmapDeviceSharedPtr& rClip )
         {
-            // xxx TODO
             if( isCompatibleBitmap( rSrcBitmap ) )
             {
                 if( drawMode == DrawMode_XOR )
@@ -757,7 +737,6 @@ namespace
         {
             boost::shared_ptr<mask_bitmap_type>      pMask( getCompatibleClipMask(rAlphaMask) );
             boost::shared_ptr<alphamask_bitmap_type> pAlpha( getCompatibleAlphaMask(rAlphaMask) );
-            OSL_ASSERT( pAlpha || pMask );
 
             if( pAlpha )
             {
@@ -785,6 +764,18 @@ namespace
                               maAccessor,
                               aSrcColor) );
             }
+            else
+            {
+                GenericColorImageAccessor aSrcAcc( rAlphaMask );
+                maGenericColorBlendAccessor.setColor( aSrcColor );
+
+                vigra::copyImage( srcIterRange(vigra::Diff2D(),
+                                               aSrcAcc,
+                                               rSrcRect),
+                                  destIter(maBegin,
+                                           maGenericColorBlendAccessor,
+                                           rDstPoint) );
+            }
         }
 
         virtual void drawMaskedColor_i(Color                        aSrcColor,
@@ -795,7 +786,6 @@ namespace
         {
             boost::shared_ptr<mask_bitmap_type>      pMask( getCompatibleClipMask(rAlphaMask) );
             boost::shared_ptr<alphamask_bitmap_type> pAlpha( getCompatibleAlphaMask(rAlphaMask) );
-            OSL_ASSERT( pAlpha || pMask );
 
             if( pAlpha )
             {
@@ -834,6 +824,20 @@ namespace
                               maAccessor,
                               aSrcColor) );
             }
+            else
+            {
+                GenericColorImageAccessor aSrcAcc( rAlphaMask );
+                const composite_iterator_type aBegin( getMaskedIter(rClip) );
+                maGenericMaskedColorBlendAccessor.get1stWrappedAccessor().setColor(
+                    aSrcColor );
+
+                vigra::copyImage( srcIterRange(vigra::Diff2D(),
+                                               aSrcAcc,
+                                               rSrcRect),
+                                  destIter(aBegin,
+                                           maGenericMaskedColorBlendAccessor,
+                                           rDstPoint) );
+            }
         }
 
         template< typename Iterator, typename Acc >
@@ -848,8 +852,6 @@ namespace
             boost::shared_ptr<mask_bitmap_type> pMask( getCompatibleClipMask(rMask) );
             OSL_ASSERT( pMask && pSrcBmp );
 
-            // since scaleImage() internally copyies
-            // to a temporary buffer, also works with *this == rSrcBitmap
             scaleImage(
                 srcIterRange(composite_iterator_type(
                                  pSrcBmp->maBegin,
@@ -864,10 +866,10 @@ namespace
                                        joined_image_accessor_type,
                                        Masks::clipmask_polarity,
                                        FastMask >::type(acc),
-                              rDstRect));
+                              rDstRect),
+                rSrcBitmap.get() == this);
         }
 
-        // xxx TODO
         template< typename Iterator, typename Acc >
         void implDrawMaskedBitmapGeneric(const BitmapDeviceSharedPtr& rSrcBitmap,
                                          const BitmapDeviceSharedPtr& rMask,
@@ -876,15 +878,13 @@ namespace
                                          const Iterator&              begin,
                                          const Acc&                   acc)
         {
-            GenericImageAccessor aSrcAcc( rSrcBitmap );
-            GenericImageAccessor aMaskAcc( rMask );
+            GenericColorImageAccessor aSrcAcc( rSrcBitmap );
+            GenericColorImageAccessor aMaskAcc( rMask );
 
             const vigra::Diff2D aTopLeft(rSrcRect.getMinX(),
                                          rSrcRect.getMinY());
             const vigra::Diff2D aBottomRight(rSrcRect.getMaxX(),
                                              rSrcRect.getMaxY());
-            // since scaleImage() internally copyies
-            // to a temporary buffer, also works with *this == rSrcBitmap
             scaleImage(
                 vigra::make_triple(
                     generic_composite_iterator_type(
@@ -909,7 +909,6 @@ namespace
                                         const basegfx::B2IRange&     rDstRect,
                                         DrawMode                     drawMode )
         {
-            // xxx TODO
             if( isCompatibleClipMask(rMask) &&
                 isCompatibleBitmap(rSrcBitmap) )
             {
@@ -946,7 +945,6 @@ namespace
                                         DrawMode                     drawMode,
                                         const BitmapDeviceSharedPtr& rClip )
         {
-            // xxx TODO
             if( isCompatibleClipMask(rMask) &&
                 isCompatibleBitmap(rSrcBitmap) )
             {
@@ -993,7 +991,8 @@ struct ImplBitmapDevice
 
         maBounds.getWidth()/getHeight() yield the true size of the
         device (i.e. the rectangle given by maBounds covers the device
-        area under the excluding-bottommost-and-rightmost-pixels fill rule)
+        area under the excluding-bottommost-and-rightmost-pixels fill
+        rule)
      */
     basegfx::B2IRange         maBounds;
 
@@ -1021,6 +1020,16 @@ struct ImplBitmapDevice
     /** (Optional) device sharing the same memory, and used for input
         clip masks/alpha masks/bitmaps that don't match our exact
         bitmap format.
+
+        This is to avoid the combinatorical explosion when dealing
+        with n bitmap formats, which could be combined with n clip
+        masks, alpha masks and bitmap masks (yielding a total of n^4
+        combinations). Since each BitmapRenderer is specialized for
+        one specific combination of said formats, a lot of duplicate
+        code would be generated, most of which probably never
+        used. Therefore, only the most common combinations are
+        specialized templates, the remainder gets handled by this
+        generic renderer (via runtime polymorphism).
      */
     BitmapDeviceSharedPtr     mpGenericRenderer;
 };
@@ -1389,15 +1398,7 @@ void BitmapDevice::drawBitmap( const BitmapDeviceSharedPtr& rSrcBitmap,
         assertImageRange(aDestRange,mpImpl->maBounds);
         assertImageRange(aSrcRange,aSrcBounds);
 
-#if 0
-        if( isCompatibleBitmap( rSrcBitmap ) )
-            drawBitmap_i( rSrcBitmap, aSrcRange, aDestRange, drawMode );
-        else
-            getGenericRenderer()->drawBitmap( rSrcBitmap, rSrcRect,
-                                              rDstRect, drawMode );
-#else
         drawBitmap_i( rSrcBitmap, aSrcRange, aDestRange, drawMode );
-#endif
     }
 }
 
@@ -1426,18 +1427,6 @@ void BitmapDevice::drawBitmap( const BitmapDeviceSharedPtr& rSrcBitmap,
         assertImageRange(aDestRange,mpImpl->maBounds);
         assertImageRange(aSrcRange,aSrcBounds);
 
-#if 0
-        if( isCompatibleBitmap( rSrcBitmap ) &&
-            isCompatibleClipMask( rClip ) )
-        {
-            drawBitmap_i( rSrcBitmap, aSrcRange, aDestRange, drawMode, rClip );
-        }
-        else
-        {
-            getGenericRenderer()->drawBitmap( rSrcBitmap, rSrcRect,
-                                              rDstRect, drawMode, rClip );
-        }
-#else
         if( isCompatibleClipMask( rClip ) )
         {
             drawBitmap_i( rSrcBitmap, aSrcRange, aDestRange, drawMode, rClip );
@@ -1447,11 +1436,10 @@ void BitmapDevice::drawBitmap( const BitmapDeviceSharedPtr& rSrcBitmap,
             getGenericRenderer()->drawBitmap( rSrcBitmap, rSrcRect,
                                               rDstRect, drawMode, rClip );
         }
-#endif
     }
 }
 
-void BitmapDevice::drawMaskedColor( Color                        rSrcColor,
+void BitmapDevice::drawMaskedColor( Color                        aSrcColor,
                                     const BitmapDeviceSharedPtr& rAlphaMask,
                                     const basegfx::B2IRange&     rSrcRect,
                                     const basegfx::B2IPoint&     rDstPoint )
@@ -1461,7 +1449,6 @@ void BitmapDevice::drawMaskedColor( Color                        rSrcColor,
     basegfx::B2IRange         aSrcRange( rSrcRect );
     basegfx::B2IPoint         aDestPoint( rDstPoint );
 
-#if 0
     if( clipAreaImpl( aSrcRange,
                       aDestPoint,
                       aSrcBounds,
@@ -1470,35 +1457,29 @@ void BitmapDevice::drawMaskedColor( Color                        rSrcColor,
         assertImagePoint(aDestPoint,mpImpl->maBounds);
         assertImageRange(aSrcRange,aSrcBounds);
 
-        if( isCompatibleClipMask( rAlphaMask ) || isCompatibleAlphaMask( rAlphaMask ) )
-            drawMaskedColor_i( rSrcColor, rAlphaMask, aSrcRange, aDestPoint );
-        else
-            getGenericRenderer()->drawMaskedColor( rSrcColor, rAlphaMask,
-                                                   rSrcRect, rDstPoint );
-    }
-#else
-    // drawMaskedColor is also used for OutputDevice::DrawMask
-    if( clipAreaImpl( aSrcRange,
-                      aDestPoint,
-                      aSrcBounds,
-                      mpImpl->maBounds ))
-    {
-        assertImagePoint(aDestPoint,mpImpl->maBounds);
-        assertImageRange(aSrcRange,aSrcBounds);
+        if( rAlphaMask.get() == this )
+        {
+            // src == dest, copy rAlphaMask beforehand
+            // ---------------------------------------------------
 
-        if( isCompatibleClipMask( rAlphaMask ) || isCompatibleAlphaMask( rAlphaMask ) )
-            drawMaskedColor_i( rSrcColor, rAlphaMask, aSrcRange, aDestPoint );
+            const basegfx::B2ITuple aSize( aSrcRange.getWidth(),
+                                           aSrcRange.getHeight() );
+            BitmapDeviceSharedPtr pAlphaCopy(
+                cloneBitmapDevice( aSize,
+                                   shared_from_this()) );
+            const basegfx::B2IRange aAlphaRange( basegfx::B2ITuple(),
+                                                 aSize );
+            pAlphaCopy->drawBitmap(rAlphaMask,
+                                   aSrcRange,
+                                   aAlphaRange,
+                                   DrawMode_PAINT);
+            drawMaskedColor_i( aSrcColor, pAlphaCopy, aAlphaRange, aDestPoint );
+        }
         else
         {
-            OSL_ENSURE( false, "drawMaskedColor(): Generic output not yet implemented #1!" );
-            drawBitmap( rAlphaMask, aSrcRange, basegfx::B2IRange(aDestPoint.getX(),
-                                                                 aDestPoint.getY(),
-                                                                 aDestPoint.getX()+aSrcRange.getWidth(),
-                                                                 aDestPoint.getY()+aSrcRange.getHeight()),
-                        DrawMode_PAINT );
+            drawMaskedColor_i( aSrcColor, rAlphaMask, aSrcRange, aDestPoint );
         }
     }
-#endif
 }
 
 void BitmapDevice::drawMaskedColor( Color                        aSrcColor,
@@ -1526,37 +1507,36 @@ void BitmapDevice::drawMaskedColor( Color                        aSrcColor,
         assertImagePoint(aDestPoint,mpImpl->maBounds);
         assertImageRange(aSrcRange,aSrcBounds);
 
-#if 0
-        if( (isCompatibleClipMask( rAlphaMask ) ||
-             isCompatibleAlphaMask( rAlphaMask )) &&
-            isCompatibleClipMask( rClip ) )
+        if( isCompatibleClipMask( rClip ) )
         {
-            drawMaskedColor_i( aSrcColor, rAlphaMask, aSrcRange, aDestPoint, rClip );
+            if( rAlphaMask.get() == this )
+            {
+                // src == dest, copy rAlphaMask beforehand
+                // ---------------------------------------------------
+
+                const basegfx::B2ITuple aSize( aSrcRange.getWidth(),
+                                               aSrcRange.getHeight() );
+                BitmapDeviceSharedPtr pAlphaCopy(
+                    cloneBitmapDevice( aSize,
+                                       shared_from_this()) );
+                const basegfx::B2IRange aAlphaRange( basegfx::B2ITuple(),
+                                                     aSize );
+                pAlphaCopy->drawBitmap(rAlphaMask,
+                                       aSrcRange,
+                                       aAlphaRange,
+                                       DrawMode_PAINT);
+                drawMaskedColor_i( aSrcColor, pAlphaCopy, aAlphaRange, aDestPoint, rClip );
+            }
+            else
+            {
+                drawMaskedColor_i( aSrcColor, rAlphaMask, aSrcRange, aDestPoint, rClip );
+            }
         }
         else
         {
             getGenericRenderer()->drawMaskedColor( aSrcColor, rAlphaMask,
                                                    rSrcRect, rDstPoint, rClip );
         }
-#else
-        // drawMaskedColor is also used for OutputDevice::DrawMask
-        if( (isCompatibleClipMask( rAlphaMask ) ||
-             isCompatibleAlphaMask( rAlphaMask )) &&
-            isCompatibleClipMask( rClip ) )
-        {
-            drawMaskedColor_i( aSrcColor, rAlphaMask, aSrcRange, aDestPoint, rClip );
-        }
-        else
-        {
-            OSL_ENSURE(false, "drawMaskedColor(): Generic output not yet implemented #2!");
-            drawBitmap( rAlphaMask, aSrcRange, basegfx::B2IRange(aDestPoint.getX(),
-                                                                 aDestPoint.getY(),
-                                                                 aDestPoint.getX()+aSrcRange.getWidth(),
-                                                                 aDestPoint.getY()+aSrcRange.getHeight()),
-                        DrawMode_PAINT,
-                        rClip );
-        }
-#endif
     }
 }
 
@@ -1581,20 +1561,7 @@ void BitmapDevice::drawMaskedBitmap( const BitmapDeviceSharedPtr& rSrcBitmap,
         assertImageRange(aDestRange,mpImpl->maBounds);
         assertImageRange(aSrcRange,aSrcBounds);
 
-#if 0
-        if( isCompatibleBitmap( rSrcBitmap ) &&
-            isCompatibleClipMask( rMask ) )
-        {
-            drawMaskedBitmap_i( rSrcBitmap, rMask, aSrcRange, aDestRange, drawMode );
-        }
-        else
-        {
-            getGenericRenderer()->drawMaskedBitmap( rSrcBitmap, rMask,
-                                                    rSrcRect, rDstRect, drawMode );
-        }
-#else
         drawMaskedBitmap_i( rSrcBitmap, rMask, aSrcRange, aDestRange, drawMode );
-#endif
     }
 }
 
@@ -1626,10 +1593,7 @@ void BitmapDevice::drawMaskedBitmap( const BitmapDeviceSharedPtr& rSrcBitmap,
         assertImageRange(aDestRange,mpImpl->maBounds);
         assertImageRange(aSrcRange,aSrcBounds);
 
-#if 0
-        if( isCompatibleBitmap( rSrcBitmap ) &&
-            isCompatibleClipMask( rMask ) &&
-            isCompatibleClipMask( rClip ) )
+        if( isCompatibleClipMask( rClip ) )
         {
             drawMaskedBitmap_i( rSrcBitmap, rMask, aSrcRange, aDestRange, drawMode, rClip );
         }
@@ -1638,16 +1602,6 @@ void BitmapDevice::drawMaskedBitmap( const BitmapDeviceSharedPtr& rSrcBitmap,
             getGenericRenderer()->drawMaskedBitmap( rSrcBitmap, rMask, rSrcRect,
                                                     rDstRect, drawMode, rClip );
         }
-#else
-        if( isCompatibleClipMask( rClip ) )
-        {
-            drawMaskedBitmap_i( rSrcBitmap, rMask, aSrcRange, aDestRange, drawMode, rClip );
-        }
-        else
-        {
-            OSL_ENSURE(false, "drawMaskedBitmap(): Generic output not yet implemented #2!");
-        }
-#endif
     }
 }
 
