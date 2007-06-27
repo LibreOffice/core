@@ -4,9 +4,9 @@
  *
  *  $RCSfile: appserv.cxx,v $
  *
- *  $Revision: 1.68 $
+ *  $Revision: 1.69 $
  *
- *  last change: $Author: rt $ $Date: 2007-04-26 10:06:30 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 22:57:17 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -174,44 +174,44 @@
 
 #include "about.hxx"
 #include "referers.hxx"
-#include "app.hxx"
-#include "request.hxx"
-#include "dispatch.hxx"
-#include "bindings.hxx"
-#include "msg.hxx"
-#include "objface.hxx"
-#include "objitem.hxx"
-#include "objsh.hxx"
-#include "hintpost.hxx"
-#include "viewsh.hxx"
-#include "docfac.hxx"
-#include "docfile.hxx"
-#include "docfilt.hxx"
+#include <sfx2/app.hxx>
+#include <sfx2/request.hxx>
+#include <sfx2/dispatch.hxx>
+#include <sfx2/bindings.hxx>
+#include <sfx2/msg.hxx>
+#include <sfx2/objface.hxx>
+#include <sfx2/objitem.hxx>
+#include <sfx2/objsh.hxx>
+#include <sfx2/hintpost.hxx>
+#include <sfx2/viewsh.hxx>
+#include <sfx2/docfac.hxx>
+#include <sfx2/docfile.hxx>
+#include <sfx2/docfilt.hxx>
 #include "docvor.hxx"
-#include "new.hxx"
-#include "docinf.hxx"
-#include "templdlg.hxx"
+#include <sfx2/new.hxx>
+#include <sfx2/docinf.hxx>
+#include <sfx2/templdlg.hxx>
 #include "sfxtypes.hxx"
 #include "sfxbasic.hxx"
-#include "tabdlg.hxx"
+#include <sfx2/tabdlg.hxx>
 #include "arrdecl.hxx"
 #include "fltfnc.hxx"
-#include "sfx.hrc"
+#include <sfx2/sfx.hrc>
 #include "app.hrc"
-#include "passwd.hxx"
+#include <sfx2/passwd.hxx>
 #include "sfxresid.hxx"
 #include "arrdecl.hxx"
-#include "childwin.hxx"
+#include <sfx2/childwin.hxx>
 #include "appdata.hxx"
-#include "macrconf.hxx"
+#include <sfx2/macrconf.hxx>
 #include "minfitem.hxx"
-#include "event.hxx"
-#include "module.hxx"
-#include "topfrm.hxx"
+#include <sfx2/event.hxx>
+#include <sfx2/module.hxx>
+#include <sfx2/topfrm.hxx>
 #include "sfxpicklist.hxx"
 #include "imestatuswindow.hxx"
-#include "sfxdlg.hxx"
-#include "dialogs.hrc"
+#include <sfx2/sfxdlg.hxx>
+#include <sfx2/dialogs.hrc>
 #include "sorgitm.hxx"
 #include "sfxhelp.hxx"
 #include "updatedlg.hxx"
