@@ -4,9 +4,9 @@
  *
  *  $RCSfile: svdhdl.cxx,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: rt $ $Date: 2007-04-26 07:52:14 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 19:02:15 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -36,11 +36,11 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_svx.hxx"
 
-#include "svdhdl.hxx"
+#include <svx/svdhdl.hxx>
 #include "svdtouch.hxx"
-#include "svdpagv.hxx"
-#include "svdetc.hxx"
-#include "svdmrkv.hxx"
+#include <svx/svdpagv.hxx>
+#include <svx/svdetc.hxx>
+#include <svx/svdmrkv.hxx>
 
 #ifndef _WINDOW_HXX //autogen
 #include <vcl/window.hxx>
@@ -62,20 +62,20 @@
 #include <goodies/b3dcolor.hxx>
 #endif
 
-#include "sxekitm.hxx"
+#include <svx/sxekitm.hxx>
 #include "svdstr.hrc"
 #include "svdglob.hxx"
 
-#include "svdmodel.hxx"
+#include <svx/svdmodel.hxx>
 #include "gradtrns.hxx"
-#include "xflgrit.hxx"
-#include "svdundo.hxx"
-#include "dialmgr.hxx"
-#include "xflftrit.hxx"
+#include <svx/xflgrit.hxx>
+#include <svx/svdundo.hxx>
+#include <svx/dialmgr.hxx>
+#include <svx/xflftrit.hxx>
 
 // #105678#
 #ifndef _SVDOPATH_HXX
-#include "svdopath.hxx"
+#include <svx/svdopath.hxx>
 #endif
 
 #ifndef _BGFX_VECTOR_B2DVECTOR_HXX
@@ -111,7 +111,7 @@
 #endif
 
 #ifndef _SDRPAGEWINDOW_HXX
-#include <sdrpagewindow.hxx>
+#include <svx/sdrpagewindow.hxx>
 #endif
 
 #ifndef _SDRPAINTWINDOW_HXX
