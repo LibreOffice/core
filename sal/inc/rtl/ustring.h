@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ustring.h,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: rt $ $Date: 2007-04-03 14:04:17 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 13:24:06 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -665,6 +665,34 @@ sal_Int32 SAL_CALL rtl_ustr_indexOfStr( const sal_Unicode * str, const sal_Unico
  */
 sal_Int32 SAL_CALL rtl_ustr_indexOfStr_WithLength( const sal_Unicode * str, sal_Int32 len, const sal_Unicode * subStr, sal_Int32 subLen ) SAL_THROW_EXTERN_C();
 
+/** Search for the first occurrence of an ASCII substring within a string.
+
+    @param str
+    a string.  Need not be null-terminated, but must be at least as long as
+    the specified len.
+
+    @param len
+    the length of the string; must be non-negative.
+
+    @param subStr
+    the substring to be searched for.  Need not be null-terminated, but must
+    be at least as long as the specified subLen.  Must only contain characters
+    in the ASCII range 0x00--7F.
+
+    @param subLen
+    the length of the substring; must be non-negative.
+
+    @return
+    the index (starting at 0) of the first character of the first occurrence
+    of the substring within the string, or -1 if the substring does not occur.
+    If subLen is zero, -1 is returned.
+
+    @since UDK 3.2.7
+*/
+sal_Int32 SAL_CALL rtl_ustr_indexOfAscii_WithLength(
+    sal_Unicode const * str, sal_Int32 len,
+    char const * subStr, sal_Int32 subLen) SAL_THROW_EXTERN_C();
+
 /** Search for the last occurrence of a substring within a string.
 
     If subStr is empty, or both str and subStr are empty, -1 is returned.
@@ -705,6 +733,34 @@ sal_Int32 SAL_CALL rtl_ustr_lastIndexOfStr( const sal_Unicode * str, const sal_U
     of the substring within the string, or -1 if the substring does not occur.
  */
 sal_Int32 SAL_CALL rtl_ustr_lastIndexOfStr_WithLength( const sal_Unicode * str, sal_Int32 len, const sal_Unicode * subStr, sal_Int32 subLen ) SAL_THROW_EXTERN_C();
+
+/** Search for the last occurrence of an ASCII substring within a string.
+
+    @param str
+    a string.  Need not be null-terminated, but must be at least as long as
+    the specified len.
+
+    @param len
+    the length of the string; must be non-negative.
+
+    @param subStr
+    the substring to be searched for.  Need not be null-terminated, but must
+    be at least as long as the specified subLen.  Must only contain characters
+    in the ASCII range 0x00--7F.
+
+    @param subLen
+    the length of the substring; must be non-negative.
+
+    @return
+    the index (starting at 0) of the first character of the last occurrence
+    of the substring within the string, or -1 if the substring does not occur.
+    If subLen is zero, -1 is returned.
+
+    @since UDK 3.2.7
+*/
+sal_Int32 SAL_CALL rtl_ustr_lastIndexOfAscii_WithLength(
+    sal_Unicode const * str, sal_Int32 len,
+    char const * subStr, sal_Int32 subLen) SAL_THROW_EXTERN_C();
 
 /** Replace all occurrences of a single character within a string.
 
