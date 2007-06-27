@@ -4,9 +4,9 @@
  *
  *  $RCSfile: XLogger.idl,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 16:42:41 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 14:52:18 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -45,81 +45,27 @@
 module com { module sun { module star { module util { module logging {
 
 //=============================================================================
-/** Local logging interface derived from the final 1.4 j2sdk java.util.logging
-    interface. For speedup the XLoggerRemote interface should be used by any
-    component implementing this interface for remote communication.
-    This will enable some prechecks before the costly remote logging call is
-    made.
 
+/** deprecated API - use <type scope="com::sun::star::logging">XLogger</type> instead
+
+    @deprecated
     @since OOo 1.1.2
 */
-
 published interface XLogger: com::sun::star::uno::XInterface
 {
-    /** Just to adhere to the API known from the standalone scenario.
-        You can use it to create a new Logger, but to bootstrap the first
-        logger you need a createInstanceWithArguments(string logger)
-        or equivalent.
-
-        @param host
-        host of the caller
-
-        @returns XLogger instance
-    */
-
+    /// @deprecated
     XLogger getLogger( [in] string name );
 
-    //-------------------------------------------------------------------------
-
-    /** gets logging level of this XLogger
-
-        @returns logging level of this XLogger
-    */
-
+    /// @deprecated
     long getLevel();
 
-    //-------------------------------------------------------------------------
-
-    /** gets name of this XLogger
-
-        @returns name of this XLogger
-    */
-
+    /// @deprecated
     string getName();
 
-    //-------------------------------------------------------------------------
-
-    /** will this XLogger instance produce any output for the given level?
-        can be used to optimize performance as maybe complex parameter evaluation
-        in the logp call can be omitted if isLoggable evaluates to false
-
-        @param level
-        level to be checked against
-
-        @returns true if there will be some output for this XLogger for the given level,
-                 false otherwise
-    */
-
+    /// @deprecated
     boolean isLoggable( [in] long level );
 
-    //-------------------------------------------------------------------------
-
-    /** Log a message. The p in logp is derived from "precise" as given
-        is the java.util.logging API
-
-        @param level
-        the log level of this message
-
-        @param sourceClass
-        name of class that issued the logging request
-
-        @param sourceMethod
-        name of method that issued the logging request
-
-        @param msg
-        the string message
-    */
-
+    /// @deprecated
     [oneway] void logp( [in] long   level,
                         [in] string sourceClass,
                         [in] string sourceMethod,
