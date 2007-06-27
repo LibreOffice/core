@@ -4,9 +4,9 @@
  *
  *  $RCSfile: pngread.cxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: obo $ $Date: 2007-06-11 14:25:42 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 20:21:43 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -36,7 +36,7 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_vcl.hxx"
 
-#include "pngread.hxx"
+#include <vcl/pngread.hxx>
 
 #include <cmath>
 #include <rtl/crc.h>
@@ -44,9 +44,9 @@
 #include <rtl/alloc.h>
 #include <tools/zcodec.hxx>
 #include <tools/stream.hxx>
-#include "bmpacc.hxx"
-#include "svapp.hxx"
-#include "alpha.hxx"
+#include <vcl/bmpacc.hxx>
+#include <vcl/svapp.hxx>
+#include <vcl/alpha.hxx>
 
 #ifndef _OSL_ENDIAN_H_
 #include <osl/endian.h>
