@@ -4,9 +4,9 @@
  *
  *  $RCSfile: svtreebx.cxx,v $
  *
- *  $Revision: 1.49 $
+ *  $Revision: 1.50 $
  *
- *  last change: $Author: ihi $ $Date: 2006-12-20 14:17:33 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 12:18:12 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1044,6 +1044,7 @@ BOOL SvTreeListBox::Expand( SvLBoxEntry* pParent )
             bExpanded = TRUE;
             SvListView::Expand( pParent );
             pImp->EntryExpanded( pParent );
+            pHdlEntry = pParent;
             ExpandedHdl();
         }
         nFlags = pParent->GetFlags();
@@ -1074,6 +1075,7 @@ BOOL SvTreeListBox::Collapse( SvLBoxEntry* pParent )
         pImp->CollapsingEntry( pParent );
         SvListView::Collapse( pParent );
         pImp->EntryCollapsed( pParent );
+        pHdlEntry = pParent;
         ExpandedHdl();
     }
     return bCollapsed;
