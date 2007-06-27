@@ -4,9 +4,9 @@
  *
  *  $RCSfile: unoobj.cxx,v $
  *
- *  $Revision: 1.99 $
+ *  $Revision: 1.100 $
  *
- *  last change: $Author: rt $ $Date: 2006-12-04 15:10:00 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 12:49:24 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -2346,12 +2346,48 @@ void SAL_CALL SwXTextCursor::setAllPropertiesToDefault()
     throw (RuntimeException)
 {
     vos::OGuard aGuard(Application::GetSolarMutex());
+
     SwUnoCrsr* pUnoCrsr = GetCrsr();
-    if(pUnoCrsr)
-        lcl_SelectParaAndReset ( *pUnoCrsr, pUnoCrsr->GetDoc());
+    if (pUnoCrsr)
+    {
+        // para specific attribut ranges
+        USHORT aParaResetableSetRange[] = {
+            RES_FRMATR_BEGIN, RES_FRMATR_END-1,
+            RES_PARATR_BEGIN, RES_PARATR_END-1,
+            RES_UNKNOWNATR_BEGIN, RES_UNKNOWNATR_END-1,
+            0
+        };
+        // selection specific attribut ranges
+        USHORT aResetableSetRange[] = {
+            RES_CHRATR_BEGIN, RES_CHRATR_END-1,
+            RES_TXTATR_CHARFMT, RES_TXTATR_CHARFMT,
+            RES_TXTATR_INETFMT, RES_TXTATR_INETFMT,
+            RES_TXTATR_CJK_RUBY, RES_TXTATR_UNKNOWN_CONTAINER,
+            0
+        };
+        SvUShortsSort   aParaWhichIds;
+        SvUShortsSort   aWhichIds;
+        for (USHORT k = 0;  k < 2;  ++k)
+        {
+            SvUShortsSort &rWhichIds    = k == 0? aParaWhichIds : aWhichIds;
+            USHORT *pResetableSetRange  = k == 0? aParaResetableSetRange : aResetableSetRange;
+            while (*pResetableSetRange)
+            {
+                USHORT nStart   = sal::static_int_cast< USHORT >(*pResetableSetRange++);
+                USHORT nEnd     = sal::static_int_cast< USHORT >(*pResetableSetRange++);
+                for (USHORT nId = nStart + 1;  nId <= nEnd;  ++nId)
+                    rWhichIds.Insert( nId );
+            }
+        }
+        if (aParaWhichIds.Count())
+            lcl_SelectParaAndReset( *pUnoCrsr, pUnoCrsr->GetDoc(), &aParaWhichIds );
+        if (aWhichIds.Count() )
+            pUnoCrsr->GetDoc()->ResetAttr( *pUnoCrsr, sal_True, &aWhichIds );
+    }
     else
         throw uno::RuntimeException();
 }
+
 void SAL_CALL SwXTextCursor::setPropertiesToDefault( const Sequence< OUString >& aPropertyNames )
     throw (UnknownPropertyException, RuntimeException)
 {
