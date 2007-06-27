@@ -4,9 +4,9 @@
  *
  *  $RCSfile: frmload.hxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-07 16:56:05 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 22:52:23 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -113,7 +113,7 @@ namespace com
     }
 }
 
-#include "sfxuno.hxx"
+#include <sfx2/sfxuno.hxx>
 
 #define REFERENCE ::com::sun::star::uno::Reference
 #define SEQUENCE ::com::sun::star::uno::Sequence
