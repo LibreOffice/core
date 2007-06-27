@@ -4,9 +4,9 @@
  *
  *  $RCSfile: sbxdec.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: vg $ $Date: 2007-03-26 14:34:29 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 14:29:48 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -40,7 +40,7 @@
 #include <tools/errcode.hxx>
 #endif
 
-#include "sbx.hxx"
+#include <basic/sbx.hxx>
 #include "sbxconv.hxx"
 
 #include <com/sun/star/bridge/oleautomation/Decimal.hpp>
