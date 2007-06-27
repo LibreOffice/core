@@ -4,9 +4,9 @@
  *
  *  $RCSfile: cmdevt.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 12:16:05 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 20:28:34 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -41,7 +41,7 @@
 #endif
 
 #ifndef _SV_CMDEVT_HXX
-#include <cmdevt.hxx>
+#include <vcl/cmdevt.hxx>
 #endif
 
 // =======================================================================
