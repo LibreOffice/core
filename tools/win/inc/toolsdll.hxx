@@ -4,9 +4,9 @@
  *
  *  $RCSfile: toolsdll.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 14:46:28 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 22:21:22 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -43,15 +43,15 @@
 #endif
 
 #ifndef _SVWIN_H
-#include <svwin.h>
+#include <tools/svwin.h>
 #endif
 
 #ifndef _SOLAR_H
-#include <solar.h>
+#include <tools/solar.h>
 #endif
 
 #ifndef _SHL_HXX
-#include <shl.hxx>
+#include <tools/shl.hxx>
 #endif
 
 // ----------------
