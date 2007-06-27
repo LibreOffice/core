@@ -5,9 +5,9 @@
  *
  *  $RCSfile: Effects.xcu,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: ihi $ $Date: 2007-04-19 11:23:28 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 15:30:26 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1485,6 +1485,81 @@
                 <prop oor:name="Label" oor:type="xs:string">
                     <value xml:lang="en-US">To top-right</value>
 
+                </prop>
+            </node>
+            <node oor:name="clockwise" oor:op="replace">
+                <prop oor:name="Label" oor:type="xs:string">
+                    <value xml:lang="en-US">Clockwise</value>
+                </prop>
+            </node>
+            <node oor:name="counter-clockwise" oor:op="replace">
+                <prop oor:name="Label" oor:type="xs:string">
+                    <value xml:lang="en-US">Counter-clockwise</value>
+                </prop>
+            </node>
+            <node oor:name="downward" oor:op="replace">
+                <prop oor:name="Label" oor:type="xs:string">
+                    <value xml:lang="en-US">Downward</value>
+                </prop>
+            </node>
+            <node oor:name="from-bottom-right-horizontal" oor:op="replace">
+                <prop oor:name="Label" oor:type="xs:string">
+                    <value xml:lang="en-US">From bottom-right horizontal</value>
+                </prop>
+            </node>
+            <node oor:name="from-bottom-right-vertical" oor:op="replace">
+                <prop oor:name="Label" oor:type="xs:string">
+                    <value xml:lang="en-US">From bottom-right vertical</value>
+                </prop>
+            </node>
+            <node oor:name="from-center-clockwise" oor:op="replace">
+                <prop oor:name="Label" oor:type="xs:string">
+                    <value xml:lang="en-US">From center clockwise</value>
+                </prop>
+            </node>
+            <node oor:name="from-center-counter-clockwise" oor:op="replace">
+                <prop oor:name="Label" oor:type="xs:string">
+                    <value xml:lang="en-US">From center counter-clockwise</value>
+                </prop>
+            </node>
+            <node oor:name="from-top-left-clockwise" oor:op="replace">
+                <prop oor:name="Label" oor:type="xs:string">
+                    <value xml:lang="en-US">From top-left clockwise</value>
+                </prop>
+            </node>
+            <node oor:name="from-top-left-horizontal" oor:op="replace">
+                <prop oor:name="Label" oor:type="xs:string">
+                    <value xml:lang="en-US">From top-left horizontal</value>
+                </prop>
+            </node>
+            <node oor:name="from-top-left-vertical" oor:op="replace">
+                <prop oor:name="Label" oor:type="xs:string">
+                    <value xml:lang="en-US">From top-left vertical</value>
+                </prop>
+            </node>
+            <node oor:name="from-top-right-counter-clockwise" oor:op="replace">
+                <prop oor:name="Label" oor:type="xs:string">
+                    <value xml:lang="en-US">From top-right counter-clockwise</value>
+                </prop>
+            </node>
+            <node oor:name="left-to-bottom" oor:op="replace">
+                <prop oor:name="Label" oor:type="xs:string">
+                    <value xml:lang="en-US">From left to bottom</value>
+                </prop>
+            </node>
+            <node oor:name="left-to-top" oor:op="replace">
+                <prop oor:name="Label" oor:type="xs:string">
+                    <value xml:lang="en-US">From left to top</value>
+                </prop>
+            </node>
+            <node oor:name="right-to-bottom" oor:op="replace">
+                <prop oor:name="Label" oor:type="xs:string">
+                    <value xml:lang="en-US">From right to bottom</value>
+                </prop>
+            </node>
+            <node oor:name="right-to-top" oor:op="replace">
+                <prop oor:name="Label" oor:type="xs:string">
+                    <value xml:lang="en-US">From right to top</value>
                 </prop>
             </node>
         </node>
