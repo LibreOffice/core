@@ -4,9 +4,9 @@
  *
  *  $RCSfile: contexts.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 10:17:46 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 14:53:20 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -41,16 +41,16 @@
 #endif
 
 #ifndef _XMLOFF_XMLTOKEN_HXX
-#include "xmltoken.hxx"
+#include <xmloff/xmltoken.hxx>
 #endif
 #ifndef _XMLOFF_XMLNMSPE_HXX
 #include "xmlnmspe.hxx"
 #endif
 #ifndef _XMLOFF_XMLMETAI_HXX
-#include "xmlmetai.hxx"
+#include <xmloff/xmlmetai.hxx>
 #endif
 #ifndef _XMLOFF_XMLSTYLE_HXX
-#include "xmlstyle.hxx"
+#include <xmloff/xmlstyle.hxx>
 #endif
 #ifndef SCH_XMLIMPORT_HXX_
 #include "SchXMLImport.hxx"
