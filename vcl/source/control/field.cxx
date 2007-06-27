@@ -4,9 +4,9 @@
  *
  *  $RCSfile: field.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: rt $ $Date: 2007-04-26 10:36:49 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 20:05:24 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -54,11 +54,11 @@
 #ifndef _SV_SVIDS_HRC
 #include <svids.hrc>
 #endif
-#include <field.hxx>
-#include <event.hxx>
-#include <svapp.hxx>
-#include <svdata.hxx>
-#include <unohelp.hxx>
+#include <vcl/field.hxx>
+#include <vcl/event.hxx>
+#include <vcl/svapp.hxx>
+#include <vcl/svdata.hxx>
+#include <vcl/unohelp.hxx>
 
 
 
