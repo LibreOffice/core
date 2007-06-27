@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xtablend.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: ihi $ $Date: 2006-11-14 13:58:46 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 19:36:44 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -75,43 +75,43 @@
 #include <sfx2/docfile.hxx>
 #endif
 
-#include "dialogs.hrc"
-#include "dialmgr.hxx"
+#include <svx/dialogs.hrc>
+#include <svx/dialmgr.hxx>
 
-#include "xtable.hxx"
-#include "xpool.hxx"
-#include "xoutx.hxx"
+#include <svx/xtable.hxx>
+#include <svx/xpool.hxx>
+#include <svx/xoutx.hxx>
 
 #ifndef SVX_XFILLIT0_HXX //autogen
-#include <xfillit0.hxx>
+#include <svx/xfillit0.hxx>
 #endif
 
 #ifndef _SVX_XFLCLIT_HXX //autogen
-#include <xflclit.hxx>
+#include <svx/xflclit.hxx>
 #endif
 
 #ifndef _SVX_XLNSTWIT_HXX //autogen
-#include <xlnstwit.hxx>
+#include <svx/xlnstwit.hxx>
 #endif
 
 #ifndef _SVX_XLNEDWIT_HXX //autogen
-#include <xlnedwit.hxx>
+#include <svx/xlnedwit.hxx>
 #endif
 
 #ifndef _SVX_XLNCLIT_HXX //autogen
-#include <xlnclit.hxx>
+#include <svx/xlnclit.hxx>
 #endif
 
 #ifndef _SVX_XLINEIT0_HXX //autogen
-#include <xlineit0.hxx>
+#include <svx/xlineit0.hxx>
 #endif
 
 #ifndef _SVX_XLNSTIT_HXX //autogen
-#include <xlnstit.hxx>
+#include <svx/xlnstit.hxx>
 #endif
 
 #ifndef _SVX_XLNEDIT_HXX //autogen
-#include <xlnedit.hxx>
+#include <svx/xlnedit.hxx>
 #endif
 
 #ifndef _BGFX_POINT_B2DPOINT_HXX
