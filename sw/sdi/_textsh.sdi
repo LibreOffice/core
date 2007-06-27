@@ -4,9 +4,9 @@
  *
  *  $RCSfile: _textsh.sdi,v $
  *
- *  $Revision: 1.37 $
+ *  $Revision: 1.38 $
  *
- *  last change: $Author: rt $ $Date: 2007-04-04 15:14:52 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 13:15:35 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1499,6 +1499,11 @@ interface BaseText
                 StateMethod = GetState ;
         ]
     SID_OPEN_HYPERLINK
+    [
+        ExecMethod = Execute ;
+        StateMethod = GetState ;
+    ]
+    SID_OPEN_SMARTTAGMENU
     [
         ExecMethod = Execute ;
         StateMethod = GetState ;
