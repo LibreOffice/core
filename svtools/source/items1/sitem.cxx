@@ -4,9 +4,9 @@
  *
  *  $RCSfile: sitem.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 15:07:01 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 21:45:47 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -43,8 +43,8 @@
 #include <tools/string.hxx>
 #include <tools/stream.hxx>
 
-#include "poolitem.hxx"
-#include "itemset.hxx"
+#include <svtools/poolitem.hxx>
+#include <svtools/itemset.hxx>
 
 
 // STATIC DATA -----------------------------------------------------------

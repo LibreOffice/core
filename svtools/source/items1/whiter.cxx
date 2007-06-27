@@ -4,9 +4,9 @@
  *
  *  $RCSfile: whiter.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 15:08:08 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 21:46:59 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -40,7 +40,7 @@
 #endif
 
 #include "whiter.hxx"
-#include "itemset.hxx"
+#include <svtools/itemset.hxx>
 
 DBG_NAME(SfxWhichIter)
 
