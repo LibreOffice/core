@@ -4,9 +4,9 @@
  *
  *  $RCSfile: unopage.cxx,v $
  *
- *  $Revision: 1.40 $
+ *  $Revision: 1.41 $
  *
- *  last change: $Author: ihi $ $Date: 2006-11-14 13:54:12 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 19:25:42 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -63,27 +63,27 @@
 #include <rtl/memory.h>
 #include <sfx2/objsh.hxx>
 
-#include "svdobj.hxx"
-#include "svdoole2.hxx"
-#include "svdpage.hxx"
-#include "svdmodel.hxx"
-#include "svdview.hxx"
-#include "svdpagv.hxx"
-#include "unopage.hxx"
+#include <svx/svdobj.hxx>
+#include <svx/svdoole2.hxx>
+#include <svx/svdpage.hxx>
+#include <svx/svdmodel.hxx>
+#include <svx/svdview.hxx>
+#include <svx/svdpagv.hxx>
+#include <svx/unopage.hxx>
 #include "shapeimpl.hxx"
 #include "globl3d.hxx"
-#include "polysc3d.hxx"
-#include "unoprov.hxx"
-#include "svdopath.hxx"
+#include <svx/polysc3d.hxx>
+#include <svx/unoprov.hxx>
+#include <svx/svdopath.hxx>
 #include "unoapi.hxx"
-#include "svdomeas.hxx"
+#include <svx/svdomeas.hxx>
 
 #ifndef _E3D_EXTRUD3D_HXX
-#include <extrud3d.hxx>
+#include <svx/extrud3d.hxx>
 #endif
 
 #ifndef _E3D_LATHE3D_HXX
-#include <lathe3d.hxx>
+#include <svx/lathe3d.hxx>
 #endif
 
 #ifndef _SV_SVAPP_HXX
