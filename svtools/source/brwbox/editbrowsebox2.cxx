@@ -4,9 +4,9 @@
  *
  *  $RCSfile: editbrowsebox2.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: obo $ $Date: 2006-10-12 15:07:05 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 14:49:34 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -44,9 +44,6 @@
 #ifndef _COM_SUN_STAR_ACCESSIBILITY_ACCESSIBLEEVENTID_HPP_
 #include <com/sun/star/accessibility/AccessibleEventId.hpp>
 #endif
-#ifndef _SVTOOLS_ACCESSIBILEEDITBROWSEBOXTABLECELL_HXX
-#include "editbrowseboxcell.hxx"
-#endif
 #ifndef SVTOOLS_EDITBROWSEBOX_IMPL_HXX
 #include "editbrowseboximpl.hxx"
 #endif
@@ -56,10 +53,9 @@
 #ifndef _TOOLKIT_HELPER_VCLUNOHELPER_HXX_
 #include <toolkit/helper/vclunohelper.hxx>
 #endif
-#ifndef _SVTOOLS_ACCESSIBLEBROWSEBOXCHECKBOXCELL_HXX
-#include "AccessibleBrowseBoxCheckBoxCell.hxx"
-#endif // _SVTOOLS_ACCESSIBLEBROWSEBOXCHECKBOXCELL_HXX
-
+#ifndef SVTOOLS_ACCESSIBLE_FACTORY_ACCESS_HXX
+#include "svtaccessiblefactory.hxx"
+#endif
 
 namespace svt
 {
@@ -70,15 +66,26 @@ namespace svt
 // -----------------------------------------------------------------------------
 Reference< XAccessible > EditBrowseBox::CreateAccessibleCheckBoxCell(long _nRow, USHORT _nColumnPos,const TriState& eState,sal_Bool _bEnabled)
 {
-    XACC xAcc = GetAccessible();
-    Reference<XAccessibleContext> xAccContext = xAcc->getAccessibleContext();
-    return new AccessibleCheckBoxCell(xAccContext->getAccessibleChild( ::svt::BBINDEX_TABLE )
-        ,*this
-        ,NULL
-        ,_nRow
-        ,_nColumnPos
-        ,eState
-        ,_bEnabled);
+    Reference< XAccessible > xAccessible( GetAccessible() );
+    Reference< XAccessibleContext > xAccContext;
+    if ( xAccessible.is() )
+        xAccContext = xAccessible->getAccessibleContext();
+
+    Reference< XAccessible > xReturn;
+    if ( xAccContext.is() )
+    {
+        xReturn = getAccessibleFactory().createAccessibleCheckBoxCell(
+            xAccContext->getAccessibleChild( ::svt::BBINDEX_TABLE ),
+            *this,
+            NULL,
+            _nRow,
+            _nColumnPos,
+            eState,
+            _bEnabled,
+            sal_True
+        );
+    }
+    return xReturn;
 }
 // -----------------------------------------------------------------------------
 Reference< XAccessible > EditBrowseBox::CreateAccessibleCell( sal_Int32 _nRow, sal_uInt16 _nColumnPos )
@@ -102,7 +109,7 @@ void EditBrowseBox::implCreateActiveAccessible( )
          Reference< XAccessible > xMy = GetAccessible();
          if ( xMy.is() && xCont.is() )
           {
-             m_aImpl->m_xActiveCell = m_aImpl->m_pActiveCell = new EditBrowseBoxTableCellAccess(
+             m_aImpl->m_xActiveCell = getAccessibleFactory().createEditBrowseBoxTableCellAccess(
                  xMy,                                                       // parent accessible
                  xCont,                                                     // control accessible
                  VCLUnoHelper::GetInterface( &aController->GetWindow() ),   // focus window (for notifications)
@@ -150,7 +157,6 @@ void EditBrowseBoxImpl::clearActiveCell()
         OSL_ENSURE( sal_False, "EditBrowseBoxImpl::clearActiveCell: caught an exception while disposing the AccessibleCell!" );
     }
 
-    m_pActiveCell = NULL;
     m_xActiveCell = NULL;
 }
 // -----------------------------------------------------------------------------
