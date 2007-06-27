@@ -4,9 +4,9 @@
  *
  *  $RCSfile: unogalitem.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 01:13:55 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 19:31:10 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -37,7 +37,7 @@
 #define _SVX_UNOGALITEM_HXX
 
 #ifndef SVX_UNOMODEL_HXX
-#include "unomodel.hxx"
+#include <svx/unomodel.hxx>
 #endif
 #ifndef _UTL_SERVICEHELPER_HXX_
 #include <comphelper/servicehelper.hxx>
