@@ -4,9 +4,9 @@
  *
  *  $RCSfile: circleproperties.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: ihi $ $Date: 2006-11-14 13:35:58 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 18:49:46 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -49,27 +49,27 @@
 #endif
 
 #ifndef _SVDDEF_HXX
-#include <svddef.hxx>
+#include <svx/svddef.hxx>
 #endif
 
 #ifndef _EEITEM_HXX
-#include <eeitem.hxx>
+#include <svx/eeitem.hxx>
 #endif
 
 #ifndef _SVDOCIRC_HXX
-#include <svdocirc.hxx>
+#include <svx/svdocirc.hxx>
 #endif
 
 #ifndef _SXCIKITM_HXX
-#include <sxcikitm.hxx>
+#include <svx/sxcikitm.hxx>
 #endif
 
 #ifndef _SXCIAITM_HXX
-#include <sxciaitm.hxx>
+#include <svx/sxciaitm.hxx>
 #endif
 
 #ifndef _SXCIAITM_HXX
-#include <sxciaitm.hxx>
+#include <svx/sxciaitm.hxx>
 #endif
 
 //////////////////////////////////////////////////////////////////////////////

@@ -4,9 +4,9 @@
  *
  *  $RCSfile: defaultproperties.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: ihi $ $Date: 2006-11-14 13:36:26 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 18:50:30 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -55,19 +55,19 @@
 #include <vector>
 
 #ifndef _SVDOBJ_HXX
-#include <svdobj.hxx>
+#include <svx/svdobj.hxx>
 #endif
 
 #ifndef _SVDDEF_HXX
-#include <svddef.hxx>
+#include <svx/svddef.hxx>
 #endif
 
 #ifndef _SVDPOOL_HXX
-#include <svdpool.hxx>
+#include <svx/svdpool.hxx>
 #endif
 
 #ifndef _EEITEM_HXX
-#include <eeitem.hxx>
+#include <svx/eeitem.hxx>
 #endif
 
 //////////////////////////////////////////////////////////////////////////////
