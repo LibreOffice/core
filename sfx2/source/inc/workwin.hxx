@@ -4,9 +4,9 @@
  *
  *  $RCSfile: workwin.hxx,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: rt $ $Date: 2007-04-26 10:14:57 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 23:30:34 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -71,12 +71,12 @@
 #include <vos/mutex.hxx>
 #endif
 
-#include "sfx.hrc"
-#include "childwin.hxx"
-#include "shell.hxx"
-#include "minarray.hxx"
-#include "ctrlitem.hxx"
-#include "viewfrm.hxx"
+#include <sfx2/sfx.hrc>
+#include <sfx2/childwin.hxx>
+#include <sfx2/shell.hxx>
+#include <sfx2/minarray.hxx>
+#include <sfx2/ctrlitem.hxx>
+#include <sfx2/viewfrm.hxx>
 
 class SfxInPlaceEnv_Impl;
 class SfxPlugInEnv_Impl;
