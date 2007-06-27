@@ -4,9 +4,9 @@
  *
  *  $RCSfile: EnhancedCustomShape3d.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: vg $ $Date: 2006-11-21 17:07:05 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 16:43:14 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -40,13 +40,13 @@
 #include "EnhancedCustomShape3d.hxx"
 #endif
 #ifndef _SVDETC_HXX
-#include <svdetc.hxx>
+#include <svx/svdetc.hxx>
 #endif
 #ifndef _SVDMODEL_HXX
-#include <svdmodel.hxx>
+#include <svx/svdmodel.hxx>
 #endif
 #ifndef _XOUTX_HXX
-#include <xoutx.hxx>
+#include <svx/xoutx.hxx>
 #endif
 #ifndef _SV_POLY_HXX
 #include <tools/poly.hxx>
@@ -55,10 +55,10 @@
 #include <svditer.hxx>
 #endif
 #ifndef _SVDOBJ_HXX
-#include <svdobj.hxx>
+#include <svx/svdobj.hxx>
 #endif
 #ifndef _SVDOASHP_HXX
-#include <svdoashp.hxx>
+#include <svx/svdoashp.hxx>
 #endif
 #ifndef _SFXPOOLITEM_HXX
 #include <svtools/poolitem.hxx>
@@ -67,52 +67,52 @@
 #include <svtools/itemset.hxx>
 #endif
 #ifndef SVX_XFILLIT0_HXX
-#include <xfillit0.hxx>
+#include <svx/xfillit0.hxx>
 #endif
 #ifndef SVX_XSFLCLIT_HXX
-#include <xsflclit.hxx>
+#include <svx/xsflclit.hxx>
 #endif
 #ifndef _SVX_XIT_HXX
-#include <xit.hxx>
+#include <svx/xit.hxx>
 #endif
 #ifndef _SVX_XBTMPIT_HXX
-#include <xbtmpit.hxx>
+#include <svx/xbtmpit.hxx>
 #endif
 #ifndef _SVX_XFLCLIT_HXX
-#include <xflclit.hxx>
+#include <svx/xflclit.hxx>
 #endif
 #ifndef _SVDOPATH_HXX
-#include <svdopath.hxx>
+#include <svx/svdopath.hxx>
 #endif
 #ifndef _SVDOGRP_HXX
-#include <svdogrp.hxx>
+#include <svx/svdogrp.hxx>
 #endif
 #ifndef _SVDPAGE_HXX
-#include <svdpage.hxx>
+#include <svx/svdpage.hxx>
 #endif
 #ifndef _E3D_POLYSC3D_HXX
-#include "polysc3d.hxx"
+#include <svx/polysc3d.hxx>
 #endif
 #ifndef _SVDDEF_HXX
-#include "svddef.hxx"
+#include <svx/svddef.hxx>
 #endif
 #ifndef _SVX3DITEMS_HXX
-#include "svx3ditems.hxx"
+#include <svx/svx3ditems.hxx>
 #endif
 #ifndef _E3D_EXTRUD3D_HXX
-#include "extrud3d.hxx"
+#include <svx/extrud3d.hxx>
 #endif
 #ifndef _SVX_XFLBMTIT_HXX
-#include <xflbmtit.hxx>
+#include <svx/xflbmtit.hxx>
 #endif
 #ifndef _SV_SVAPP_HXX
 #include <vcl/svapp.hxx>
 #endif
 #ifndef _SVX_XLNCLIT_HXX
-#include <xlnclit.hxx>
+#include <svx/xlnclit.hxx>
 #endif
 #ifndef _SDASITM_HXX
-#include <sdasitm.hxx>
+#include <svx/sdasitm.hxx>
 #endif
 #ifndef _COM_SUN_STAR_AWT_POINT_HPP_
 #include <com/sun/star/awt/Point.hpp>
