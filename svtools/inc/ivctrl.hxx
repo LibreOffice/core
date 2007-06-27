@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ivctrl.hxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: hr $ $Date: 2006-06-19 20:21:37 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 14:38:11 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -152,7 +152,7 @@ public:
     Image                   GetImageHC () const { return aImageHC; }
     void                    SetText ( const String& rText ) { aText = rText; }
     String                  GetText () const { return aText; }
-    String                  GetDisplayText() const;
+    String SVT_DLLPUBLIC                    GetDisplayText() const;
     void                    SetQuickHelpText( const String& rText ) { aQuickHelpText = rText; }
     String                  GetQuickHelpText() const { return aQuickHelpText; }
     void                    SetUserData ( void* _pUserData ) { pUserData = _pUserData; }
