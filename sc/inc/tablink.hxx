@@ -4,9 +4,9 @@
  *
  *  $RCSfile: tablink.hxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: vg $ $Date: 2007-02-27 11:58:22 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 12:44:24 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -133,7 +133,7 @@ public:
         @return TRUE if a filter could be found, FALSE otherwise. */
     static BOOL         GetFilterName( const String& rFileName,
                                         String& rFilter, String& rOptions,
-                                        BOOL bWithContent );
+                                        BOOL bWithContent, BOOL bWithInteraction );
 
     static void         RemoveAppPrefix( String& rFilterName );
 };
