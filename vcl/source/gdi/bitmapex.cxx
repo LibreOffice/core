@@ -4,9 +4,9 @@
  *
  *  $RCSfile: bitmapex.cxx,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: ihi $ $Date: 2007-06-06 14:10:59 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 20:10:21 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -41,7 +41,7 @@
 #include <rtl/crc.h>
 #endif
 #ifndef _SV_SALBTYPE_HXX
-#include <salbtype.hxx>
+#include <vcl/salbtype.hxx>
 #endif
 #ifndef _STREAM_HXX
 #include <tools/stream.hxx>
@@ -50,19 +50,19 @@
 #include <tools/debug.hxx>
 #endif
 #ifndef _SV_OUTDEV_HXX
-#include <outdev.hxx>
+#include <vcl/outdev.hxx>
 #endif
 #ifndef _SV_ALPHA_HXX
-#include <alpha.hxx>
+#include <vcl/alpha.hxx>
 #endif
 #ifndef _SV_IMAGE_H
 #include <image.h>
 #endif
 #ifndef _SV_BITMAPEX_HXX
-#include <bitmapex.hxx>
+#include <vcl/bitmapex.hxx>
 #endif
 #ifndef _SV_PNGREAD_HXX
-#include <pngread.hxx>
+#include <vcl/pngread.hxx>
 #endif
 #ifndef _SV_IMPIMAGETREE_H
 #include <impimagetree.hxx>
@@ -71,7 +71,7 @@
 #include <tools/rc.h>
 #endif
 #ifndef _SV_SVAPP_HXX
-#include <svapp.hxx>
+#include <vcl/svapp.hxx>
 #endif
 
 // ------------
