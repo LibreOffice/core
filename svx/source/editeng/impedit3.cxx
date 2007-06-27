@@ -4,9 +4,9 @@
  *
  *  $RCSfile: impedit3.cxx,v $
  *
- *  $Revision: 1.116 $
+ *  $Revision: 1.117 $
  *
- *  last change: $Author: hr $ $Date: 2007-06-27 12:53:35 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 17:59:31 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -52,29 +52,29 @@
 #include <vcl/wrkwin.hxx>
 #endif
 
-#include <adjitem.hxx>
-#include <tstpitem.hxx>
-#include <lspcitem.hxx>
+#include <svx/adjitem.hxx>
+#include <svx/tstpitem.hxx>
+#include <svx/lspcitem.hxx>
 
-#include <flditem.hxx>
+#include <svx/flditem.hxx>
 
 #include <impedit.hxx>
-#include <editeng.hxx>
-#include <editview.hxx>
+#include <svx/editeng.hxx>
+#include <svx/editview.hxx>
 #include <txtrange.hxx>
-#include <cscoitem.hxx>
-#include <colritem.hxx>
-#include <udlnitem.hxx>
-#include <fhgtitem.hxx>
-#include <kernitem.hxx>
-#include <lrspitem.hxx>
-#include <ulspitem.hxx>
+#include <svx/cscoitem.hxx>
+#include <svx/colritem.hxx>
+#include <svx/udlnitem.hxx>
+#include <svx/fhgtitem.hxx>
+#include <svx/kernitem.hxx>
+#include <svx/lrspitem.hxx>
+#include <svx/ulspitem.hxx>
 #include <fontitem.hxx>
-#include <wghtitem.hxx>
-#include <postitem.hxx>
-#include <langitem.hxx>
-#include <scriptspaceitem.hxx>
-#include <charscaleitem.hxx>
+#include <svx/wghtitem.hxx>
+#include <svx/postitem.hxx>
+#include <svx/langitem.hxx>
+#include <svx/scriptspaceitem.hxx>
+#include <svx/charscaleitem.hxx>
 
 #include <svtools/colorcfg.hxx>
 #include <svtools/ctloptions.hxx>
