@@ -4,9 +4,9 @@
  *
  *  $RCSfile: fileview.cxx,v $
  *
- *  $Revision: 1.69 $
+ *  $Revision: 1.70 $
  *
- *  last change: $Author: ihi $ $Date: 2007-06-05 18:25:08 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 21:19:11 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -37,12 +37,12 @@
 #include "precompiled_svtools.hxx"
 
 #include "fileview.hxx"
-#include "svtdata.hxx"
+#include <svtools/svtdata.hxx>
 #include "imagemgr.hxx"
-#include "headbar.hxx"
-#include "svtabbx.hxx"
+#include <svtools/headbar.hxx>
+#include <svtools/svtabbx.hxx>
 
-#include "svtools.hrc"
+#include <svtools/svtools.hrc>
 #include "fileview.hrc"
 
 #ifndef SVTOOLS_SOURCE_CONTNR_CONTENTENUMERATION_HXX
@@ -50,7 +50,7 @@
 #endif
 
 #ifndef _SVTOOLS_ACCESSIBLEBROWSEBOXOBJTYPE_HXX
-#include "AccessibleBrowseBoxObjType.hxx"
+#include <svtools/AccessibleBrowseBoxObjType.hxx>
 #endif
 
 #ifndef _COM_SUN_STAR_UTIL_DATETIME_HPP_
@@ -159,10 +159,10 @@
 #include <unotools/intlwrapper.hxx>
 #endif
 #ifndef INCLUDED_SVTOOLS_SYSLOCALE_HXX
-#include "syslocale.hxx"
+#include <svtools/syslocale.hxx>
 #endif
 #ifndef SVTOOLS_URL_FILTER_HXX
-#include "urlfilter.hxx"
+#include <svtools/urlfilter.hxx>
 #endif
 
 using namespace ::com::sun::star::lang;
