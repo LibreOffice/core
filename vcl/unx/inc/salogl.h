@@ -4,9 +4,9 @@
  *
  *  $RCSfile: salogl.h,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: kz $ $Date: 2006-10-06 10:01:37 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 20:42:16 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -50,7 +50,7 @@ typedef XID   GLXDrawable;
 #endif
 
 #ifndef _SV_SALOGL_HXX
-#include <salogl.hxx>
+#include <vcl/salogl.hxx>
 #endif
 
 #ifndef _OSL_MODULE_H
