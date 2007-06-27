@@ -4,9 +4,9 @@
  *
  *  $RCSfile: window3.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 12:24:10 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 20:36:17 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -46,20 +46,20 @@
 #include <window.h>
 #endif
 #ifndef _SV_WINDOW_HXX
-#include <window.hxx>
+#include <vcl/window.hxx>
 #endif
 #ifndef _SV_WAITOBJ_HXX
-#include <waitobj.hxx>
+#include <vcl/waitobj.hxx>
 #endif
 
 #ifndef _SV_SALGDI_HXX
-#include <salgdi.hxx>
+#include <vcl/salgdi.hxx>
 #endif
 #ifndef _SV_NATIVEWIDGETS_HXX
-#include <salnativewidgets.hxx>
+#include <vcl/salnativewidgets.hxx>
 #endif
 #ifndef _SV_SALCTRLHANDLE_HXX
-#include <salctrlhandle.hxx>
+#include <vcl/salctrlhandle.hxx>
 #endif
 #ifndef _RTL_USTRING_HXX_
 #include <rtl/ustring.hxx>
