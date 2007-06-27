@@ -4,9 +4,9 @@
  *
  *  $RCSfile: fmpage.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: rt $ $Date: 2007-04-25 14:52:32 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 18:13:48 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -39,7 +39,7 @@
 #define ENABLE_BYTESTRING_STREAM_OPERATORS
 
 #ifndef _SVX_FMPAGE_HXX
-#include "fmpage.hxx"
+#include <svx/fmpage.hxx>
 #endif
 
 #ifndef _COM_SUN_STAR_BEANS_XPROPERTYSET_HPP_
@@ -51,7 +51,7 @@
 
 
 #ifndef _SVX_FMMODEL_HXX
-#include "fmmodel.hxx"
+#include <svx/fmmodel.hxx>
 #endif
 
 #ifndef SVX_LIGHT
@@ -71,7 +71,7 @@
 #endif
 
 #ifndef _SVX_DIALMGR_HXX
-#include "dialmgr.hxx"
+#include <svx/dialmgr.hxx>
 #endif
 
 #ifndef SVX_LIGHT
@@ -91,7 +91,7 @@
 #endif
 
 #ifndef _SVDVIEW_HXX //autogen
-#include <svdview.hxx>
+#include <svx/svdview.hxx>
 #endif
 
 #ifndef _URLOBJ_HXX //autogen
@@ -105,7 +105,7 @@
 
 #ifndef SVX_LIGHT
 #ifndef _SVX_FMGLOB_HXX
-#include "fmglob.hxx"
+#include <svx/fmglob.hxx>
 #endif
 #ifndef _SVX_FMPROP_HRC
 #include "fmprop.hrc"
