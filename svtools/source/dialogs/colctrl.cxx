@@ -4,9 +4,9 @@
  *
  *  $RCSfile: colctrl.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: obo $ $Date: 2006-10-12 15:13:42 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 21:27:16 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -44,7 +44,7 @@
 #include <vcl/bmpacc.hxx>
 #endif
 
-#include <colctrl.hxx>
+#include <svtools/colctrl.hxx>
 
 // ----------------
 // - ColorControl -
