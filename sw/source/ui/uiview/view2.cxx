@@ -4,9 +4,9 @@
  *
  *  $RCSfile: view2.cxx,v $
  *
- *  $Revision: 1.75 $
+ *  $Revision: 1.76 $
  *
- *  last change: $Author: hr $ $Date: 2007-06-27 12:50:38 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 13:27:21 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1527,12 +1527,6 @@ void SwView::StateStatusLine(SfxItemSet &rSet)
                     rSet.Put(SfxBoolItem(SID_ATTR_INSERT,rShell.IsInsMode()));
                 }
                 break;
-            case FN_STAT_HYPERLINKS:
-            {
-                rSet.Put(SfxBoolItem(FN_STAT_HYPERLINKS,
-                            pWrtShell->GetViewOptions()->IsExecHyperlinks()));
-            }
-            break;
         }
         nWhich = aIter.NextWhich();
     }
@@ -1710,23 +1704,6 @@ void SwView::ExecuteStatusLine(SfxRequest &rReq)
             bUp = TRUE;
         break;
 
-        case FN_STAT_HYPERLINKS:
-        {
-            SwViewOption aOpt( *rSh.GetViewOptions() );
-            BOOL bIs = aOpt.IsExecHyperlinks();
-            BOOL bSet;
-            if(pArgs && SFX_ITEM_SET == pArgs->GetItemState(nWhich, FALSE, &pItem))
-                bSet = ((const SfxBoolItem*)pItem)->GetValue();
-            else
-                bSet = !bIs;
-            if(bIs != bSet)
-            {
-                aOpt.SetExecHyperlinks(bSet);
-                SW_MOD()->ApplyUsrPref(aOpt, this);
-                bUp = TRUE;
-            }
-        }
-        break;
     }
     if ( bUp )
     {
