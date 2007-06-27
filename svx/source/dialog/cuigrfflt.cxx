@@ -4,9 +4,9 @@
  *
  *  $RCSfile: cuigrfflt.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: obo $ $Date: 2006-10-12 12:09:38 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 16:58:01 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -59,10 +59,10 @@
 #include <sfx2/request.hxx>
 #endif
 
-#include "dialmgr.hxx"
+#include <svx/dialmgr.hxx>
 #include "cuigrfflt.hxx"
 #include "grfflt.hrc"
-#include "dialogs.hrc"
+#include <svx/dialogs.hrc>
 
 // --------------------
 // - SvxGraphicFilter -
