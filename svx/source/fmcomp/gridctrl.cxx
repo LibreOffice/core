@@ -4,9 +4,9 @@
  *
  *  $RCSfile: gridctrl.cxx,v $
  *
- *  $Revision: 1.81 $
+ *  $Revision: 1.82 $
  *
- *  last change: $Author: kz $ $Date: 2007-05-10 10:05:07 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 18:09:00 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -41,7 +41,7 @@
 #endif
 
 #ifndef _SVX_GRIDCTRL_HXX
-#include "gridctrl.hxx"
+#include <svx/gridctrl.hxx>
 #endif
 #ifndef _SVX_GRIDCELL_HXX
 #include "gridcell.hxx"
@@ -122,7 +122,7 @@
 #endif
 
 #ifndef _SVX_SVXIDS_HRC
-#include "svxids.hrc"
+#include <svx/svxids.hrc>
 #endif
 
 #ifndef _SHL_HXX
@@ -130,7 +130,7 @@
 #endif
 
 #ifndef _SVX_DIALMGR_HXX
-#include "dialmgr.hxx"
+#include <svx/dialmgr.hxx>
 #endif
 #ifndef _SVX_FMSERVS_HXX
 #include "fmservs.hxx"
