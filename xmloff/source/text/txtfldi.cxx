@@ -4,9 +4,9 @@
  *
  *  $RCSfile: txtfldi.cxx,v $
  *
- *  $Revision: 1.63 $
+ *  $Revision: 1.64 $
  *
- *  last change: $Author: kz $ $Date: 2007-05-09 13:21:59 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 16:15:02 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -51,15 +51,15 @@
 #endif
 
 #ifndef _XMLOFF_XMLIMP_HXX
-#include "xmlimp.hxx"
+#include <xmloff/xmlimp.hxx>
 #endif
 
 #ifndef _XMLOFF_XMLNUMI_HXX
-#include "xmlnumi.hxx"
+#include <xmloff/xmlnumi.hxx>
 #endif
 
 #ifndef _XMLOFF_TEXTIMP_HXX_
-#include "txtimp.hxx"
+#include <xmloff/txtimp.hxx>
 #endif
 
 #ifndef _XMLOFF_XMLNMSPE_HXX
@@ -67,19 +67,19 @@
 #endif
 
 #ifndef _XMLOFF_NMSPMAP_HXX
-#include "nmspmap.hxx"
+#include <xmloff/nmspmap.hxx>
 #endif
 
 #ifndef _XMLOFF_XMLTOKEN_HXX
-#include "xmltoken.hxx"
+#include <xmloff/xmltoken.hxx>
 #endif
 
 #ifndef _XMLOFF_XMLUCONV_HXX
-#include "xmluconv.hxx"
+#include <xmloff/xmluconv.hxx>
 #endif
 
 #ifndef _XMLOFF_XMLEMENT_HXX
-#include "xmlement.hxx"
+#include <xmloff/xmlement.hxx>
 #endif
 
 #ifndef _XMLOFF_XMLSTRINGBUFFERIMPORTCONTEXT_HXX
@@ -87,7 +87,7 @@
 #endif
 
 #ifndef _XMLOFF_XMLEVENTSIMPORTCONTEXT_HXX
-#include "XMLEventsImportContext.hxx"
+#include <xmloff/XMLEventsImportContext.hxx>
 #endif
 
 #ifndef _COM_SUN_STAR_XML_SAX_XATTRIBUTELIST_HPP_
