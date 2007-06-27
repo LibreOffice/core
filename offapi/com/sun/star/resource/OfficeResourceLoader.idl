@@ -4,9 +4,9 @@
  *
  *  $RCSfile: OfficeResourceLoader.idl,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: obo $ $Date: 2006-03-29 12:27:14 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 14:49:14 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -50,7 +50,7 @@ module com { module sun { module star { module resource {
     <p>An OpenOffice.org installation comes with a number of resource files in an proprietary
     format, located insisde the installation's program/resource directory. The <type>OfficeResoureLoader</type>
     singleton (available at a component context as value with the key
-    <code>/singletons/com/sun/star/resource/OfficeResoureLoader</code>), provides access to some
+    <code>/singletons/com.sun.star.resource.OfficeResourceLoader</code>), provides access to some
     types of resources within those files.</p>
 
     <p>Clients have to specifiy the resource file base name in the call to
