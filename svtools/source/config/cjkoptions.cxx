@@ -4,9 +4,9 @@
  *
  *  $RCSfile: cjkoptions.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 14:21:26 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 21:10:13 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -41,9 +41,9 @@
 #endif
 #define SVT_DLLIMPLEMENTATION
 
-#include "cjkoptions.hxx"
+#include <svtools/cjkoptions.hxx>
 
-#include "languageoptions.hxx"
+#include <svtools/languageoptions.hxx>
 
 #ifndef INCLUDED_I18NPOOL_LANG_H
 #include <i18npool/lang.h>
