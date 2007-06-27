@@ -4,9 +4,9 @@
  *
  *  $RCSfile: apphdl.cxx,v $
  *
- *  $Revision: 1.65 $
+ *  $Revision: 1.66 $
  *
- *  last change: $Author: ihi $ $Date: 2007-06-06 11:06:27 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 13:22:40 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -983,59 +983,6 @@ void SwModule::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
             DELETEZ(pUndoOptions);
         }
     }
-}
-void SwModule::FillStatusBar( StatusBar& rStatusBar )
-{
-    // Hier den StatusBar initialisieren
-    // und Elemente reinschieben
-
-    // Anzeige Seite
-    String aTmp; aTmp.Fill( 10, 'X' );
-    rStatusBar.InsertItem( FN_STAT_PAGE, rStatusBar.GetTextWidth(
-                                    aTmp ), SIB_AUTOSIZE | SIB_LEFT);
-    rStatusBar.SetHelpId(FN_STAT_PAGE, FN_STAT_PAGE);
-
-    // Seitenvorlage
-    aTmp.Fill( 15, 'X' );
-    rStatusBar.InsertItem( FN_STAT_TEMPLATE, rStatusBar.GetTextWidth(
-                                    aTmp ), SIB_AUTOSIZE | SIB_LEFT );
-    rStatusBar.SetHelpId(FN_STAT_TEMPLATE, FN_STAT_TEMPLATE);
-
-    // Zoomeinstellungen
-    rStatusBar.InsertItem( SID_ATTR_ZOOM, rStatusBar.GetTextWidth(
-                                                            C2S("1000%")) );
-    rStatusBar.SetHelpId(SID_ATTR_ZOOM, SID_ATTR_ZOOM);
-
-    // Insert/Overwrite
-    rStatusBar.InsertItem( SID_ATTR_INSERT,
-        SvxInsertStatusBarControl::GetDefItemWidth(rStatusBar));
-    rStatusBar.SetHelpId(SID_ATTR_INSERT, SID_ATTR_INSERT);
-
-    // awt::Selection-Modus
-    rStatusBar.InsertItem( FN_STAT_SELMODE,
-            SvxSelectionModeControl::GetDefItemWidth(rStatusBar));
-
-    rStatusBar.SetHelpId(FN_STAT_SELMODE, FN_STAT_SELMODE);
-
-    // Hyperlink ausfuehren/bearbeiten
-    rStatusBar.InsertItem( FN_STAT_HYPERLINKS, rStatusBar.GetTextWidth(
-                                                            C2S("HYP")) );
-    rStatusBar.SetHelpId(FN_STAT_HYPERLINKS, FN_STAT_HYPERLINKS);
-
-    // Dokument geaendert
-    rStatusBar.InsertItem( SID_DOC_MODIFIED, rStatusBar.GetTextWidth(
-                                                                C2S("*")));
-    rStatusBar.SetHelpId(SID_DOC_MODIFIED, SID_DOC_MODIFIED);
-
-    // signatures
-    rStatusBar.InsertItem( SID_SIGNATURE, XmlSecStatusBarControl::GetDefItemWidth( rStatusBar ), SIB_USERDRAW );
-    rStatusBar.SetHelpId(SID_SIGNATURE, SID_SIGNATURE);
-
-    // den aktuellen Context anzeigen Uhrzeit / FrmPos / TabellenInfo
-    aTmp.Fill( 25, sal_Unicode('X') );
-    rStatusBar.InsertItem( SID_ATTR_SIZE, rStatusBar.GetTextWidth(
-                    aTmp ), SIB_AUTOSIZE | SIB_LEFT | SIB_USERDRAW);
-    rStatusBar.SetHelpId(SID_ATTR_SIZE, SID_ATTR_SIZE);
 }
 
 /* -----------------------------20.02.01 12:43--------------------------------
