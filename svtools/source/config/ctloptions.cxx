@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ctloptions.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 14:22:19 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 21:11:06 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -41,9 +41,9 @@
 #endif
 #define SVT_DLLIMPLEMENTATION
 
-#include "ctloptions.hxx"
+#include <svtools/ctloptions.hxx>
 
-#include "languageoptions.hxx"
+#include <svtools/languageoptions.hxx>
 
 #ifndef INCLUDED_I18NPOOL_LANG_H
 #include <i18npool/lang.h>
@@ -68,7 +68,7 @@
 #include <vos/mutex.hxx>
 #endif
 #ifndef _SFXSMPLHINT_HXX
-#include <smplhint.hxx>
+#include <svtools/smplhint.hxx>
 #endif
 #ifndef _SV_SVAPP_HXX
 #include <vcl/svapp.hxx>

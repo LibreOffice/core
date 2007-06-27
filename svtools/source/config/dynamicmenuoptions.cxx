@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dynamicmenuoptions.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 14:22:45 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 21:11:32 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -42,10 +42,10 @@
 //  includes
 //_________________________________________________________________________________________________________________
 
-#include "dynamicmenuoptions.hxx"
+#include <svtools/dynamicmenuoptions.hxx>
 
 #ifndef INCLUDED_SVTOOLS_MODULEOPTIONS_HXX
-#include "moduleoptions.hxx"
+#include <svtools/moduleoptions.hxx>
 #endif
 
 #ifndef _UTL_CONFIGMGR_HXX_
