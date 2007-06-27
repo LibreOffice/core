@@ -4,9 +4,9 @@
  *
  *  $RCSfile: svddrgv.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: kz $ $Date: 2006-12-12 16:39:47 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 18:59:28 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -36,23 +36,23 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_svx.hxx"
 
-#include "svddrgv.hxx"
+#include <svx/svddrgv.hxx>
 #include "xattr.hxx"
-#include "xpoly.hxx"
+#include <svx/xpoly.hxx>
 #include "svdxout.hxx"
-#include "svdetc.hxx"
-#include "svdtrans.hxx"
-#include "svdundo.hxx"
-#include "svdocapt.hxx"
-#include "svdpagv.hxx"
-#include "svdopath.hxx" // wg. Sonderbehandlung in SetDragPolys()
-#include "svdoedge.hxx" // wg. Sonderbehandlung in IsInsGluePossible()
+#include <svx/svdetc.hxx>
+#include <svx/svdtrans.hxx>
+#include <svx/svdundo.hxx>
+#include <svx/svdocapt.hxx>
+#include <svx/svdpagv.hxx>
+#include <svx/svdopath.hxx> // wg. Sonderbehandlung in SetDragPolys()
+#include <svx/svdoedge.hxx> // wg. Sonderbehandlung in IsInsGluePossible()
 #include "svdstr.hrc"   // Namen aus der Resource
 #include "svdglob.hxx"  // StringCache
 #include "svddrgm1.hxx"
-#include "obj3d.hxx"
+#include <svx/obj3d.hxx>
 #ifndef _SVDOASHP_HXX
-#include "svdoashp.hxx"
+#include <svx/svdoashp.hxx>
 #endif
 
 #ifndef _SDRPAINTWINDOW_HXX
