@@ -665,4 +665,40 @@
         <supported-service>com.sun.star.awt.UnoControl</supported-service>
         <supported-service>com.sun.star.awt.UnoThrobberControl</supported-service>
     </component-description>
+    <component-description>
+        <author>Christian Lippka</author>
+        <name>stardiv.Toolkit.UnoTreeModel</name>
+        <description>specifies the model of a tree control</description>
+        <loader-name>com.sun.star.loader.SharedLibrary</loader-name>
+        <language>c++</language>
+        <status value="beta" />
+        <supported-service>com.sun.star.awt.tree.TreeControlModel</supported-service>
+    </component-description>
+    <component-description>
+        <author>Christian Lippka</author>
+        <name>stardiv.Toolkit.UnoTreeControl</name>
+        <description>specifies a tree control</description>
+        <loader-name>com.sun.star.loader.SharedLibrary</loader-name>
+        <language>c++</language>
+        <status value="beta" />
+        <supported-service>com.sun.star.awt.tree.TreeControl</supported-service>
+    </component-description>
+    <component-description>
+        <author>Christian Lippka</author>
+        <name>toolkit.MutableTreeDataModel</name>
+        <description>specifies the mutable data model of a tree control</description>
+        <loader-name>com.sun.star.loader.SharedLibrary</loader-name>
+        <language>c++</language>
+        <status value="beta" />
+        <supported-service>com.sun.star.awt.tree.MutableTreeDataModel</supported-service>
+    </component-description>
+    <component-description>
+        <author>Christian Lippka</author>
+        <name>toolkit.MutableTreeNode</name>
+        <description>specifies a mutable tree node</description>
+        <loader-name>com.sun.star.loader.SharedLibrary</loader-name>
+        <language>c++</language>
+        <status value="beta" />
+        <supported-service>com.sun.star.awt.tree.MutableTreeNode</supported-service>
+    </component-description>
 </module-description>
