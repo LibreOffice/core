@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ProcAddAttrTContext.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 11:27:15 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 16:22:59 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -46,7 +46,7 @@
 #include "TransformerBase.hxx"
 #endif
 #ifndef _XMLOFF_NMSPMAP_HXX
-#include "nmspmap.hxx"
+#include <xmloff/nmspmap.hxx>
 #endif
 
 using namespace ::rtl;
