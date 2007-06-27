@@ -4,9 +4,9 @@
  *
  *  $RCSfile: inetmsg.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 00:57:50 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 22:15:20 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -41,16 +41,16 @@
 #endif
 
 #ifndef _DATETIME_HXX
-#include <datetime.hxx>
+#include <tools/datetime.hxx>
 #endif
 #ifndef _TOOLS_INETMIME_HXX
-#include <inetmime.hxx>
+#include <tools/inetmime.hxx>
 #endif
 #ifndef _TOOLS_INETMSG_HXX
-#include <inetmsg.hxx>
+#include <tools/inetmsg.hxx>
 #endif
 #ifndef _TOOLS_INETSTRM_HXX
-#include <inetstrm.hxx>
+#include <tools/inetstrm.hxx>
 #endif
 #ifndef INCLUDED_RTL_INSTANCE_HXX
 #include <rtl/instance.hxx>
