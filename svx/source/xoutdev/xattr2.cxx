@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xattr2.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: vg $ $Date: 2006-11-21 17:14:57 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 19:33:38 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -47,13 +47,13 @@
 #include <com/sun/star/uno/Any.hxx>
 #endif
 
-#include "dialogs.hrc"
+#include <svx/dialogs.hrc>
 #include "xattr.hxx"
-#include "xtable.hxx"
-#include "xoutx.hxx"
-#include "dialmgr.hxx"
-#include "itemtype.hxx"
-#include "xdef.hxx"
+#include <svx/xtable.hxx>
+#include <svx/xoutx.hxx>
+#include <svx/dialmgr.hxx>
+#include <svx/itemtype.hxx>
+#include <svx/xdef.hxx>
 
 #define GLOBALOVERFLOW
 
