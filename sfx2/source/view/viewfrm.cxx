@@ -4,9 +4,9 @@
  *
  *  $RCSfile: viewfrm.cxx,v $
  *
- *  $Revision: 1.128 $
+ *  $Revision: 1.129 $
  *
- *  last change: $Author: rt $ $Date: 2007-04-26 10:16:23 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 23:35:58 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -38,7 +38,7 @@
 
 #include <stdio.h>
 
-#include "viewfrm.hxx"
+#include <sfx2/viewfrm.hxx>
 
 #ifndef _COM_SUN_STAR_DOCUMENT_MACROEXECMODE_HPP_
 #include <com/sun/star/document/MacroExecMode.hpp>
@@ -174,36 +174,36 @@ namespace css = ::com::sun::star;
 
 // wg. ViewFrame::Current
 #include "appdata.hxx"
-#include "app.hxx"
-#include "objface.hxx"
+#include <sfx2/app.hxx>
+#include <sfx2/objface.hxx>
 #include "openflag.hxx"
 #include "objshimp.hxx"
-#include "viewsh.hxx"
-#include "objsh.hxx"
-#include "bindings.hxx"
-#include "dispatch.hxx"
+#include <sfx2/viewsh.hxx>
+#include <sfx2/objsh.hxx>
+#include <sfx2/bindings.hxx>
+#include <sfx2/dispatch.hxx>
 #include "arrdecl.hxx"
 #include "sfxtypes.hxx"
-#include "request.hxx"
-#include "docfac.hxx"
-#include "ipclient.hxx"
+#include <sfx2/request.hxx>
+#include <sfx2/docfac.hxx>
+#include <sfx2/ipclient.hxx>
 #include "sfxresid.hxx"
 #include "appbas.hxx"
-#include "objitem.hxx"
+#include <sfx2/objitem.hxx>
 #include "viewfac.hxx"
-#include "event.hxx"
+#include <sfx2/event.hxx>
 #include "fltfnc.hxx"
-#include "docfile.hxx"
-#include "module.hxx"
-#include "msgpool.hxx"
-#include "topfrm.hxx"
+#include <sfx2/docfile.hxx>
+#include <sfx2/module.hxx>
+#include <sfx2/msgpool.hxx>
+#include <sfx2/topfrm.hxx>
 #include "viewimp.hxx"
-#include "sfxbasecontroller.hxx"
-#include "sfx.hrc"
+#include <sfx2/sfxbasecontroller.hxx>
+#include <sfx2/sfx.hrc>
 #include "view.hrc"
-#include "frmdescr.hxx"
-#include "sfxuno.hxx"
-#include "progress.hxx"
+#include <sfx2/frmdescr.hxx>
+#include <sfx2/sfxuno.hxx>
+#include <sfx2/progress.hxx>
 #include "workwin.hxx"
 #include "helper.hxx"
 #include "macro.hxx"
