@@ -4,9 +4,9 @@
  *
  *  $RCSfile: layerexport.cxx,v $
  *
- *  $Revision: 1.34 $
+ *  $Revision: 1.35 $
  *
- *  last change: $Author: kz $ $Date: 2007-05-10 09:41:38 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 15:16:49 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -45,34 +45,34 @@
 #include "strings.hxx"
 #endif
 #ifndef _XMLOFF_XMLEXP_HXX
-#include "xmlexp.hxx"
+#include <xmloff/xmlexp.hxx>
 #endif
 #ifndef _XMLOFF_NMSPMAP_HXX
-#include "nmspmap.hxx"
+#include <xmloff/nmspmap.hxx>
 #endif
 #ifndef _XMLOFF_XMLNMSPE_HXX
 #include "xmlnmspe.hxx"
 #endif
 #ifndef _XMLOFF_XMLUCONV_HXX
-#include "xmluconv.hxx"
+#include <xmloff/xmluconv.hxx>
 #endif
 #ifndef _XMLOFF_PROPERTYSETMAPPER_HXX
-#include "xmlprmap.hxx"
+#include <xmloff/xmlprmap.hxx>
 #endif
 #ifndef _XMLOFF_PROPERTYHANDLERFACTORY_HXX
-#include "prhdlfac.hxx"
+#include <xmloff/prhdlfac.hxx>
 #endif
 #ifndef _XMLOFF_ELEMENTEXPORT_HXX_
 #include "elementexport.hxx"
 #endif
 #ifndef _XMLOFF_FAMILIES_HXX_
-#include "families.hxx"
+#include <xmloff/families.hxx>
 #endif
 #ifndef _XMLOFF_CONTEXTID_HXX_
-#include "contextid.hxx"
+#include <xmloff/contextid.hxx>
 #endif
 #ifndef _XMLOFF_FORMS_CONTROLPROPERTYHDL_HXX_
-#include "controlpropertyhdl.hxx"
+#include <xmloff/controlpropertyhdl.hxx>
 #endif
 #ifndef TOOLS_DIAGNOSE_EX_H
 #include <tools/diagnose_ex.h>
@@ -106,13 +106,13 @@
 #include "eventexport.hxx"
 #endif
 #ifndef _XMLOFF_XMLEVENTEXPORT_HXX
-#include "XMLEventExport.hxx"
+#include <xmloff/XMLEventExport.hxx>
 #endif
 #ifndef _XMLOFF_FORMS_FORMEVENTS_HXX_
 #include "formevents.hxx"
 #endif
 #ifndef _XMLOFF_XMLNUMFE_HXX
-#include "xmlnumfe.hxx"
+#include <xmloff/xmlnumfe.hxx>
 #endif
 #ifndef _XMLOFF_XFORMSEXPORT_HXX
 #include "xformsexport.hxx"
