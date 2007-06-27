@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ttbasic.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 09:58:43 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 14:16:54 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -35,7 +35,7 @@
 
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_basic.hxx"
-#include "mybasic.hxx"
+#include <basic/mybasic.hxx>
 #include "ttbasic.hxx"
 
 MyBasic* TTBasic::CreateMyBasic()
