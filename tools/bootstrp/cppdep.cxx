@@ -4,9 +4,9 @@
  *
  *  $RCSfile: cppdep.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 00:48:05 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 22:06:03 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -42,7 +42,7 @@
 #include <unistd.h>
 
 #include <sys/stat.h>
-#include <stream.hxx>
+#include <tools/stream.hxx>
 #include "cppdep.hxx"
 
 //#define TEST
