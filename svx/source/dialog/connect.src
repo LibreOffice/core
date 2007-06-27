@@ -4,9 +4,9 @@
  *
  *  $RCSfile: connect.src,v $
  *
- *  $Revision: 1.31 $
+ *  $Revision: 1.32 $
  *
- *  last change: $Author: ihi $ $Date: 2007-04-19 14:01:00 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 16:54:40 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -37,7 +37,7 @@
  // include ---------------------------------------------------------------
 #include <svtools/controldims.hrc>
 #include "connect.hrc"
-#include "dialogs.hrc"
+#include <svx/dialogs.hrc>
 #include "helpid.hrc"
  // RID_SVXPAGE_CONNECTION ------------------------------------------------
 TabPage RID_SVXPAGE_CONNECTION
