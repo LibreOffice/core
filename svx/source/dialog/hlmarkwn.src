@@ -4,9 +4,9 @@
  *
  *  $RCSfile: hlmarkwn.src,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: ihi $ $Date: 2007-04-19 14:06:00 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 17:11:20 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -33,7 +33,7 @@
  *
  ************************************************************************/
 
-#include "dialogs.hrc"
+#include <svx/dialogs.hrc>
 #include "helpid.hrc"
 #include "hlmarkwn.hrc"
 
