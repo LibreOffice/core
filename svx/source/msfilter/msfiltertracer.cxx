@@ -4,9 +4,9 @@
  *
  *  $RCSfile: msfiltertracer.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 05:27:27 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 18:35:14 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -37,7 +37,7 @@
 #include "precompiled_svx.hxx"
 
 #ifndef _MS_FILTERTRACER_HXX
-#include "msfiltertracer.hxx"
+#include <svx/msfiltertracer.hxx>
 #endif
 #ifndef _SV_SVAPP_HXX
 #include <vcl/svapp.hxx>
