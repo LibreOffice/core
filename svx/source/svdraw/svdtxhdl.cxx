@@ -4,9 +4,9 @@
  *
  *  $RCSfile: svdtxhdl.cxx,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: rt $ $Date: 2006-12-01 14:23:30 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 19:12:39 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -39,35 +39,35 @@
 #include "svdtxhdl.hxx"
 #include <limits.h>
 #include "svditext.hxx"
-#include "svdmodel.hxx"
-#include "svdpage.hxx"
-#include "svdogrp.hxx"
-#include "svdotext.hxx"
+#include <svx/svdmodel.hxx>
+#include <svx/svdpage.hxx>
+#include <svx/svdogrp.hxx>
+#include <svx/svdotext.hxx>
 #include "svdxout.hxx"
-#include "svdoutl.hxx"
+#include <svx/svdoutl.hxx>
 
 #ifndef _OUTLINER_HXX //autogen
-#include "outliner.hxx"
+#include <svx/outliner.hxx>
 #endif
 
 #ifndef _OUTLOBJ_HXX //autogen
-#include <outlobj.hxx>
+#include <svx/outlobj.hxx>
 #endif
 
 #ifndef _SVX_SVXFONT_HXX //autogen
-#include "svxfont.hxx"
+#include <svx/svxfont.hxx>
 #endif
 
 #ifndef _SVX_XLNCLIT_HXX //autogen
-#include "xlnclit.hxx"
+#include <svx/xlnclit.hxx>
 #endif
 
 #ifndef _SVX_XLNWTIT_HXX //autogen
-#include "xlnwtit.hxx"
+#include <svx/xlnwtit.hxx>
 #endif
 
 #ifndef _SVX_XFLCLIT_HXX //autogen
-#include "xflclit.hxx"
+#include <svx/xflclit.hxx>
 #endif
 
 #ifndef _SV_METRIC_HXX //autogen
