@@ -4,9 +4,9 @@
  *
  *  $RCSfile: connect.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: rt $ $Date: 2007-04-26 07:27:08 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 16:54:24 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -56,18 +56,18 @@
 #include <sfx2/request.hxx> // add CHINA001
 #define _SVX_CONNECT_CXX
 
-#include "svdoedge.hxx"
-#include "svdattr.hxx"
-#include "svdattrx.hxx"
-#include "svdview.hxx"
+#include <svx/svdoedge.hxx>
+#include <svx/svdattr.hxx>
+#include <svx/svdattrx.hxx>
+#include <svx/svdview.hxx>
 
 #include "connctrl.hxx"
 #include "connect.hxx"
 #include "connect.hrc"
-#include "dialmgr.hxx"
+#include <svx/dialmgr.hxx>
 #include "dlgutil.hxx"
 
-#include "dialogs.hrc"
+#include <svx/dialogs.hrc>
 
 static USHORT pRanges[] =
 {
