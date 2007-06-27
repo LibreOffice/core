@@ -4,9 +4,9 @@
  *
  *  $RCSfile: tabbar.hxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: hr $ $Date: 2006-06-19 20:32:09 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 14:38:40 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -345,6 +345,7 @@ typedef USHORT TabBarPageBits;
 // ----------
 // - TabBar -
 // ----------
+struct TabBar_Impl;
 
 class SVT_DLLPUBLIC TabBar : public Window
 {
@@ -357,7 +358,7 @@ private:
     ImplTabButton*  mpPrevBtn;
     ImplTabButton*  mpNextBtn;
     ImplTabButton*  mpLastBtn;
-    ImplTabSizer*   mpSizer;
+    TabBar_Impl*    mpImpl;
     TabBarEdit*     mpEdit;
     XubString       maEditText;
     Color           maSelColor;
