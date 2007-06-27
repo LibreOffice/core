@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.40 $
+#   $Revision: 1.41 $
 #
-#   last change: $Author: vg $ $Date: 2007-05-25 10:48:51 $
+#   last change: $Author: hr $ $Date: 2007-06-27 17:46:49 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -95,10 +95,6 @@ LDFLAGS:=-Wl,-rpath,'$$$$ORIGIN' -Wl,-z,noexecstack
 LDFLAGS:=-R\''$$$$ORIGIN'\'
 .EXPORT: LDFLAGS
 .ENDIF                  # "$(OS)$(COM)"=="SOLARISC52"
-# just pass ARCH_FLAGS to native build
-CFLAGS+:=$(ARCH_FLAGS)
-CXXFLAGS+:=$(ARCH_FLAGS)
-.EXPORT : CFLAGS CXXFLAGS
 CONFIGURE_DIR=out
 #relative to CONFIGURE_DIR
 CONFIGURE_ACTION= \
@@ -106,7 +102,12 @@ CONFIGURE_ACTION= \
 CONFIGURE_FLAGS=--disable-cxx --enable-dynamic --enable-shared --enable-compat185
 .IF "$(SOLAR_JAVA)"!=""
 CONFIGURE_FLAGS+=--enable-java
+ARCH_FLAGS+=-I$(JAVA_HOME)/include
 .ENDIF
+# just pass ARCH_FLAGS to native build
+CFLAGS+:=$(ARCH_FLAGS)
+CXXFLAGS+:=$(ARCH_FLAGS)
+.EXPORT : CFLAGS CXXFLAGS
 
 BUILD_DIR=$(CONFIGURE_DIR)
 BUILD_DIR_OUT=$(CONFIGURE_DIR)
