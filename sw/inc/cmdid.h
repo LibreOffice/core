@@ -4,9 +4,9 @@
  *
  *  $RCSfile: cmdid.h,v $
  *
- *  $Revision: 1.71 $
+ *  $Revision: 1.72 $
  *
- *  last change: $Author: obo $ $Date: 2007-01-23 07:35:51 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 13:12:47 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1191,7 +1191,6 @@ Achtung: Ab sofort sind in diesem File keine C++-Kommentare (//) mehr
 #define FN_STAT_ZOOM                (FN_STAT + 3)
 #define FN_STAT_INSOVER             (FN_STAT + 4)
 #define FN_STAT_SELMODE             (FN_STAT + 5)
-#define FN_STAT_HYPERLINKS          (FN_STAT + 6)  /* Hyperlinks ausfuehren */
 #define FN_STAT_CONTEXT             (FN_STAT + 7)
 #define FN_STAT_BOOKMARK            (FN_STAT + 8)  /* Fuer Popup Bookmarks*/
 
