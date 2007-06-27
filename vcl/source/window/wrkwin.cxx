@@ -4,9 +4,9 @@
  *
  *  $RCSfile: wrkwin.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: rt $ $Date: 2007-04-26 09:32:22 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 20:36:45 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -40,7 +40,7 @@
 #include <svsys.h>
 #endif
 #ifndef _SV_SALFRAME_HXX
-#include <salframe.hxx>
+#include <vcl/salframe.hxx>
 #endif
 
 #ifndef _DEBUG_HXX
@@ -51,10 +51,10 @@
 #include <tools/rc.h>
 #endif
 #ifndef _SV_SVDATA_HXX
-#include <svdata.hxx>
+#include <vcl/svdata.hxx>
 #endif
 #ifndef _SV_SVAPP_HXX
-#include <svapp.hxx>
+#include <vcl/svapp.hxx>
 #endif
 #ifndef _SV_BRDWIN_HXX
 #include <brdwin.hxx>
@@ -63,10 +63,10 @@
 #include <window.h>
 #endif
 #ifndef _SV_WRKWIN_HXX
-#include <wrkwin.hxx>
+#include <vcl/wrkwin.hxx>
 #endif
 #ifndef _SV_OPENGL_HXX
-#include <opengl.hxx>
+#include <vcl/opengl.hxx>
 #endif
 #ifndef _SV_SYSDATA_HXX
 #include <sysdata.hxx>
