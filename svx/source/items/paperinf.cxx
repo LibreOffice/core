@@ -4,9 +4,9 @@
  *
  *  $RCSfile: paperinf.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: vg $ $Date: 2006-11-01 15:25:13 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 18:29:47 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -51,13 +51,13 @@
 #endif
 
 #ifndef _SVX_DIALOGS_HRC
-#include "dialogs.hrc"
+#include <svx/dialogs.hrc>
 #endif
 #ifndef _SVX_PAPERINF_HXX
-#include "paperinf.hxx"
+#include <svx/paperinf.hxx>
 #endif
 #ifndef _SVX_DIALMGR_HXX
-#include "dialmgr.hxx"
+#include <svx/dialmgr.hxx>
 #endif
 
 #define SVX_PAPER_OFFSET    3   // Anfang: enum Paper A3 - SvxPaper A0; Diff=3
