@@ -4,9 +4,9 @@
  *
  *  $RCSfile: JDriver.cxx,v $
  *
- *  $Revision: 1.37 $
+ *  $Revision: 1.38 $
  *
- *  last change: $Author: kz $ $Date: 2006-12-13 16:18:59 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 14:36:14 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -35,6 +35,7 @@
 
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_connectivity.hxx"
+
 #ifndef _CONNECTIVITY_JAVA_SQL_DRIVER_HXX_
 #include "java/sql/Driver.hxx"
 #endif
@@ -66,23 +67,28 @@
 #ifndef CONNECTIVITY_DIAGNOSE_EX_H
 #include "diagnose_ex.h"
 #endif
+#include "resource/jdbc_log.hrc"
+
+#include <comphelper/componentcontext.hxx>
 
 using namespace connectivity;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::beans;
-//  using namespace ::com::sun::star::sdbcx;
 using namespace ::com::sun::star::sdbc;
 using namespace ::com::sun::star::container;
 using namespace ::com::sun::star::lang;
 
 // -------------------------------------------------------------------------
 java_sql_Driver::java_sql_Driver(const Reference< ::com::sun::star::lang::XMultiServiceFactory >& _rxFactory)
-    : m_xORB(_rxFactory)
+    :m_aContext( _rxFactory )
+    ,m_aLogger( m_aContext.getUNOContext(), "sdbcl", "org.openoffice.sdbc.jdbcBridge" )
 {
 }
 // --------------------------------------------------------------------------------
 java_sql_Driver::~java_sql_Driver()
-{}
+{
+}
+
 // static ServiceInfo
 //------------------------------------------------------------------------------
 rtl::OUString java_sql_Driver::getImplementationName_Static(  ) throw(RuntimeException)
@@ -130,13 +136,17 @@ Sequence< ::rtl::OUString > SAL_CALL java_sql_Driver::getSupportedServiceNames( 
 Reference< XConnection > SAL_CALL java_sql_Driver::connect( const ::rtl::OUString& url, const
                                                          Sequence< PropertyValue >& info ) throw(SQLException, RuntimeException)
 {
+    m_aLogger.log( LogLevel::INFO, STR_LOG_DRIVER_CONNECTING_URL, url );
+
     Reference< XConnection > xOut;
     if ( acceptsURL(url ) )
     {
-        java_sql_Connection* pConnection = new java_sql_Connection(this );
+        java_sql_Connection* pConnection = new java_sql_Connection( *this );
         xOut = pConnection;
         if ( !pConnection->construct(url,info) )
-            xOut = NULL; // an error occured and the java driver doesn't throw an exception
+            xOut = NULL; // an error occured and the java driver didn't throw an exception
+        else
+            m_aLogger.log( LogLevel::INFO, STR_LOG_DRIVER_SUCCESS );
     }
     return xOut;
 }
