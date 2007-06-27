@@ -4,9 +4,9 @@
  *
  *  $RCSfile: numinf.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: kz $ $Date: 2007-05-10 14:51:58 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 18:29:05 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -38,7 +38,7 @@
 
 #define _SVX_NUMINF_CXX
 
-#include "numinf.hxx"
+#include <svx/numinf.hxx>
 
 // -----------------------------------------------------------------------
 
