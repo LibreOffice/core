@@ -4,9 +4,9 @@
  *
  *  $RCSfile: fmobj.hxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: vg $ $Date: 2006-11-21 16:44:22 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 18:22:36 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -36,7 +36,7 @@
 #define _SVX_FMOBJ_HXX
 
 #ifndef _SVDOUNO_HXX
-#include "svdouno.hxx"
+#include <svx/svdouno.hxx>
 #endif
 
 #ifndef _COM_SUN_STAR_SCRIPT_SCRIPTEVENTDESCRIPTOR_HPP_
