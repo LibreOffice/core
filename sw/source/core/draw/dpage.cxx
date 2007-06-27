@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dpage.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 21:03:20 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 13:18:11 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -62,6 +62,9 @@
 #endif
 #ifndef _DOCSH_HXX
 #include <docsh.hxx>
+#endif
+#ifndef _SHELLRES_HXX
+#include <shellres.hxx>
 #endif
 #ifndef _VIEWIMP_HXX
 #include <viewimp.hxx>
@@ -270,25 +273,19 @@ BOOL SwDPage::RequestHelp( Window* pWindow, SdrView* pView,
 
             if ( sTxt.Len() )
             {
-                if( rEvt.GetMode() & HELPMODE_QUICK )
-                {
-                    // dann zeige die Hilfe mal an:
-                    Rectangle aRect( rEvt.GetMousePosPixel(), Size(1,1) );
-/*
-Bug 29593: QuickHelp immer an der MausPosition anzeigen (besonders unter OS/2)
+                sTxt.InsertAscii( ": ", 0 );
+                sTxt.Insert( ViewShell::GetShellRes()->aHyperlinkClick, 0 );
 
-                    Rectangle aRect( pObj->GetSnapRect() );
-                    Point aPt( pWindow->OutputToScreenPixel( pWindow->LogicToPixel( aRect.TopLeft() )));
-                    aRect.Left()   = aPt.X();
-                    aRect.Top()    = aPt.Y();
-                    aPt = pWindow->OutputToScreenPixel( pWindow->LogicToPixel( aRect.BottomRight() ));
-                    aRect.Right()  = aPt.X();
-                    aRect.Bottom() = aPt.Y();
-*/
-                    Help::ShowQuickHelp( pWindow, aRect, sTxt );
+                if( rEvt.GetMode() & HELPMODE_BALLOON )
+                {
+                    Help::ShowBalloon( pWindow, rEvt.GetMousePosPixel(), sTxt );
                 }
                 else
-                    Help::ShowBalloon( pWindow, rEvt.GetMousePosPixel(), sTxt );
+                {
+            // dann zeige die Hilfe mal an:
+                    Rectangle aRect( rEvt.GetMousePosPixel(), Size(1,1) );
+                    Help::ShowQuickHelp( pWindow, aRect, sTxt );
+                }
                 bWeiter = FALSE;
             }
         }
