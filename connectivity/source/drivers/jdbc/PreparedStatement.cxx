@@ -4,9 +4,9 @@
  *
  *  $RCSfile: PreparedStatement.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 02:47:47 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 14:36:57 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -65,6 +65,7 @@
 #ifndef _DBHELPER_DBEXCEPTION_HXX_
 #include "connectivity/dbexception.hxx"
 #endif
+#include "resource/jdbc_log.hrc"
 
 using namespace connectivity;
 using namespace ::com::sun::star::uno;
@@ -78,8 +79,8 @@ using namespace ::com::sun::star::lang;
 //**************************************************************
 IMPLEMENT_SERVICE_INFO(java_sql_PreparedStatement,"com.sun.star.sdbcx.JPreparedStatement","com.sun.star.sdbc.PreparedStatement");
 
-java_sql_PreparedStatement::java_sql_PreparedStatement( JNIEnv * pEnv, java_sql_Connection* _pCon,const ::rtl::OUString& sql )
-    : OStatement_BASE2( pEnv, _pCon )
+java_sql_PreparedStatement::java_sql_PreparedStatement( JNIEnv * pEnv, java_sql_Connection& _rCon, const ::rtl::OUString& sql )
+    : OStatement_BASE2( pEnv, _rCon )
 {
     m_sSqlStatement = sql;
 }
@@ -141,6 +142,8 @@ void java_sql_PreparedStatement::saveClassRef( jclass pClass )
 
 sal_Bool SAL_CALL java_sql_PreparedStatement::execute(  ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException)
 {
+    m_aLogger.log( LogLevel::INFO, STR_LOG_EXECUTING_PREPARED );
+
     jboolean out(sal_False);
     SDBThreadAttach t; OSL_ENSURE(t.pEnv,"Java Enviroment geloescht worden!");
     if( t.pEnv ){
@@ -155,7 +158,7 @@ sal_Bool SAL_CALL java_sql_PreparedStatement::execute(  ) throw(::com::sun::star
             mID  = t.pEnv->GetMethodID( getMyClass(), cMethodName, cSignature );OSL_ENSURE(mID,"Unknown method id!");
         if( mID ){
             out = t.pEnv->CallBooleanMethod( object, mID);
-            ThrowSQLException(t.pEnv,*this);
+            ThrowLoggedSQLException( m_aLogger, t.pEnv, *this );
         } //mID
     } //t.pEnv
     return out;
@@ -164,6 +167,8 @@ sal_Bool SAL_CALL java_sql_PreparedStatement::execute(  ) throw(::com::sun::star
 
 sal_Int32 SAL_CALL java_sql_PreparedStatement::executeUpdate(  ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException)
 {
+    m_aLogger.log( LogLevel::INFO, STR_LOG_EXECUTING_PREPARED_UPDATE );
+
     jint out(0);
     SDBThreadAttach t; OSL_ENSURE(t.pEnv,"Java Enviroment geloescht worden!");
     if( t.pEnv ){
@@ -178,7 +183,7 @@ sal_Int32 SAL_CALL java_sql_PreparedStatement::executeUpdate(  ) throw(::com::su
             mID  = t.pEnv->GetMethodID( getMyClass(), cMethodName, cSignature );OSL_ENSURE(mID,"Unknown method id!");
         if( mID ){
             out = t.pEnv->CallIntMethod( object, mID);
-            ThrowSQLException(t.pEnv,*this);
+            ThrowLoggedSQLException( m_aLogger, t.pEnv, *this );
         } //mID
     } //t.pEnv
     return (sal_Int32)out;
@@ -187,6 +192,8 @@ sal_Int32 SAL_CALL java_sql_PreparedStatement::executeUpdate(  ) throw(::com::su
 
 void SAL_CALL java_sql_PreparedStatement::setString( sal_Int32 parameterIndex, const ::rtl::OUString& x ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException)
 {
+    m_aLogger.log( LogLevel::FINER, STR_LOG_STRING_PARAMETER, parameterIndex, x );
+
     SDBThreadAttach t; OSL_ENSURE(t.pEnv,"Java Enviroment geloescht worden!");
     if( t.pEnv ){       // temporaere Variable initialisieren
         createStatement(t.pEnv);
@@ -201,7 +208,7 @@ void SAL_CALL java_sql_PreparedStatement::setString( sal_Int32 parameterIndex, c
             t.pEnv->CallVoidMethod( object, mID, parameterIndex,str);
             // und aufraeumen
             t.pEnv->DeleteLocalRef(str);
-            ThrowSQLException(t.pEnv,*this);
+            ThrowLoggedSQLException( m_aLogger, t.pEnv, *this );
         } //mID
     } //t.pEnv
 }
@@ -215,6 +222,8 @@ void SAL_CALL java_sql_PreparedStatement::setString( sal_Int32 parameterIndex, c
 
 ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XResultSet > SAL_CALL java_sql_PreparedStatement::executeQuery(  ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException)
 {
+    m_aLogger.log( LogLevel::INFO, STR_LOG_EXECUTING_PREPARED_QUERY );
+
     jobject out(0);
     SDBThreadAttach t; OSL_ENSURE(t.pEnv,"Java Enviroment geloescht worden!");
     if( t.pEnv ){
@@ -229,16 +238,18 @@ void SAL_CALL java_sql_PreparedStatement::setString( sal_Int32 parameterIndex, c
             mID  = t.pEnv->GetMethodID( getMyClass(), cMethodName, cSignature );OSL_ENSURE(mID,"Unknown method id!");
         if( mID ){
             out = t.pEnv->CallObjectMethod( object, mID);
-            ThrowSQLException(t.pEnv,*this);
-        } //mID
-    } //t.pEnv
-    // ACHTUNG: der Aufrufer wird Eigentuemer des zurueckgelieferten Zeigers !!!
-    return out==0 ? 0 : new java_sql_ResultSet( t.pEnv, out );
+            ThrowLoggedSQLException( m_aLogger, t.pEnv, *this );
+        }
+    }
+
+    return out==0 ? 0 : new java_sql_ResultSet( t.pEnv, out, m_aLogger );
 }
 // -------------------------------------------------------------------------
 
 void SAL_CALL java_sql_PreparedStatement::setBoolean( sal_Int32 parameterIndex, sal_Bool x ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException)
 {
+    m_aLogger.log( LogLevel::FINER, STR_LOG_BOOLEAN_PARAMETER, parameterIndex, x );
+
     SDBThreadAttach t; OSL_ENSURE(t.pEnv,"Java Enviroment geloescht worden!");
     if( t.pEnv ){
         createStatement(t.pEnv);
@@ -251,7 +262,7 @@ void SAL_CALL java_sql_PreparedStatement::setBoolean( sal_Int32 parameterIndex, 
             mID  = t.pEnv->GetMethodID( getMyClass(), cMethodName, cSignature );OSL_ENSURE(mID,"Unknown method id!");
         if( mID ){
             t.pEnv->CallVoidMethod( object, mID, parameterIndex,x);
-            ThrowSQLException(t.pEnv,*this);
+            ThrowLoggedSQLException( m_aLogger, t.pEnv, *this );
             // und aufraeumen
         } //mID
     } //t.pEnv
@@ -260,6 +271,8 @@ void SAL_CALL java_sql_PreparedStatement::setBoolean( sal_Int32 parameterIndex, 
 
 void SAL_CALL java_sql_PreparedStatement::setByte( sal_Int32 parameterIndex, sal_Int8 x ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException)
 {
+    m_aLogger.log( LogLevel::FINER, STR_LOG_BYTE_PARAMETER, parameterIndex, (sal_Int32)x );
+
     SDBThreadAttach t; OSL_ENSURE(t.pEnv,"Java Enviroment geloescht worden!");
     if( t.pEnv ){
         createStatement(t.pEnv);
@@ -272,7 +285,7 @@ void SAL_CALL java_sql_PreparedStatement::setByte( sal_Int32 parameterIndex, sal
             mID  = t.pEnv->GetMethodID( getMyClass(), cMethodName, cSignature );OSL_ENSURE(mID,"Unknown method id!");
         if( mID ){
             t.pEnv->CallVoidMethod( object, mID, parameterIndex,x);
-            ThrowSQLException(t.pEnv,*this);
+            ThrowLoggedSQLException( m_aLogger, t.pEnv, *this );
             // und aufraeumen
         } //mID
     } //t.pEnv
@@ -281,6 +294,8 @@ void SAL_CALL java_sql_PreparedStatement::setByte( sal_Int32 parameterIndex, sal
 
 void SAL_CALL java_sql_PreparedStatement::setDate( sal_Int32 parameterIndex, const ::com::sun::star::util::Date& x ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException)
 {
+    m_aLogger.log( LogLevel::FINER, STR_LOG_DATE_PARAMETER, parameterIndex, x );
+
     SDBThreadAttach t; OSL_ENSURE(t.pEnv,"Java Enviroment geloescht worden!");
     if( t.pEnv ){
         createStatement(t.pEnv);
@@ -298,7 +313,7 @@ void SAL_CALL java_sql_PreparedStatement::setDate( sal_Int32 parameterIndex, con
             java_sql_Date aT(x);
             args[0].l = aT.getJavaObject();
             t.pEnv->CallVoidMethod( object, mID, parameterIndex,args[0].l);
-            ThrowSQLException(t.pEnv,*this);
+            ThrowLoggedSQLException( m_aLogger, t.pEnv, *this );
             // und aufraeumen
         } //mID
     } //t.pEnv
@@ -308,6 +323,8 @@ void SAL_CALL java_sql_PreparedStatement::setDate( sal_Int32 parameterIndex, con
 
 void SAL_CALL java_sql_PreparedStatement::setTime( sal_Int32 parameterIndex, const ::com::sun::star::util::Time& x ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException)
 {
+    m_aLogger.log( LogLevel::FINER, STR_LOG_TIME_PARAMETER, parameterIndex, x );
+
     SDBThreadAttach t; OSL_ENSURE(t.pEnv,"Java Enviroment geloescht worden!");
     if( t.pEnv ){
         createStatement(t.pEnv);
@@ -326,7 +343,7 @@ void SAL_CALL java_sql_PreparedStatement::setTime( sal_Int32 parameterIndex, con
             java_sql_Time aT(x);
             args[1].l = aT.getJavaObject();
             t.pEnv->CallVoidMethod( object, mID, parameterIndex,args[1].l);
-            ThrowSQLException(t.pEnv,*this);
+            ThrowLoggedSQLException( m_aLogger, t.pEnv, *this );
             // und aufraeumen
         } //mID
     } //t.pEnv
@@ -335,6 +352,8 @@ void SAL_CALL java_sql_PreparedStatement::setTime( sal_Int32 parameterIndex, con
 
 void SAL_CALL java_sql_PreparedStatement::setTimestamp( sal_Int32 parameterIndex, const ::com::sun::star::util::DateTime& x ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException)
 {
+    m_aLogger.log( LogLevel::FINER, STR_LOG_TIMESTAMP_PARAMETER, parameterIndex, x );
+
     SDBThreadAttach t; OSL_ENSURE(t.pEnv,"Java Enviroment geloescht worden!");
     if( t.pEnv ){
         createStatement(t.pEnv);
@@ -352,7 +371,7 @@ void SAL_CALL java_sql_PreparedStatement::setTimestamp( sal_Int32 parameterIndex
             java_sql_Timestamp aT(x);
             args[0].l = aT.getJavaObject();
             t.pEnv->CallVoidMethod( object, mID, parameterIndex,args[0].l);
-            ThrowSQLException(t.pEnv,*this);
+            ThrowLoggedSQLException( m_aLogger, t.pEnv, *this );
             // und aufraeumen
         } //mID
     } //t.pEnv
@@ -360,6 +379,8 @@ void SAL_CALL java_sql_PreparedStatement::setTimestamp( sal_Int32 parameterIndex
 // -------------------------------------------------------------------------
 void SAL_CALL java_sql_PreparedStatement::setDouble( sal_Int32 parameterIndex, double x ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException)
 {
+    m_aLogger.log( LogLevel::FINER, STR_LOG_DOUBLE_PARAMETER, parameterIndex, x );
+
     SDBThreadAttach t; OSL_ENSURE(t.pEnv,"Java Enviroment geloescht worden!");
     if( t.pEnv ){
         createStatement(t.pEnv);
@@ -372,7 +393,7 @@ void SAL_CALL java_sql_PreparedStatement::setDouble( sal_Int32 parameterIndex, d
             mID  = t.pEnv->GetMethodID( getMyClass(), cMethodName, cSignature );OSL_ENSURE(mID,"Unknown method id!");
         if( mID ){
             t.pEnv->CallVoidMethod( object, mID, parameterIndex,x);
-            ThrowSQLException(t.pEnv,*this);
+            ThrowLoggedSQLException( m_aLogger, t.pEnv, *this );
             // und aufraeumen
         } //mID
     } //t.pEnv
@@ -381,6 +402,8 @@ void SAL_CALL java_sql_PreparedStatement::setDouble( sal_Int32 parameterIndex, d
 
 void SAL_CALL java_sql_PreparedStatement::setFloat( sal_Int32 parameterIndex, float x ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException)
 {
+    m_aLogger.log( LogLevel::FINER, STR_LOG_FLOAT_PARAMETER, parameterIndex, x );
+
     SDBThreadAttach t; OSL_ENSURE(t.pEnv,"Java Enviroment geloescht worden!");
     if( t.pEnv ){
         createStatement(t.pEnv);
@@ -393,7 +416,7 @@ void SAL_CALL java_sql_PreparedStatement::setFloat( sal_Int32 parameterIndex, fl
             mID  = t.pEnv->GetMethodID( getMyClass(), cMethodName, cSignature );OSL_ENSURE(mID,"Unknown method id!");
         if( mID ){
             t.pEnv->CallVoidMethod( object, mID, parameterIndex,x);
-            ThrowSQLException(t.pEnv,*this);
+            ThrowLoggedSQLException( m_aLogger, t.pEnv, *this );
             // und aufraeumen
         } //mID
     } //t.pEnv
@@ -402,6 +425,8 @@ void SAL_CALL java_sql_PreparedStatement::setFloat( sal_Int32 parameterIndex, fl
 
 void SAL_CALL java_sql_PreparedStatement::setInt( sal_Int32 parameterIndex, sal_Int32 x ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException)
 {
+    m_aLogger.log( LogLevel::FINER, STR_LOG_INT_PARAMETER, parameterIndex, x );
+
     SDBThreadAttach t; OSL_ENSURE(t.pEnv,"Java Enviroment geloescht worden!");
     if( t.pEnv ){
         createStatement(t.pEnv);
@@ -414,7 +439,7 @@ void SAL_CALL java_sql_PreparedStatement::setInt( sal_Int32 parameterIndex, sal_
             mID  = t.pEnv->GetMethodID( getMyClass(), cMethodName, cSignature );OSL_ENSURE(mID,"Unknown method id!");
         if( mID ){
             t.pEnv->CallVoidMethod( object, mID, parameterIndex,x);
-            ThrowSQLException(t.pEnv,*this);
+            ThrowLoggedSQLException( m_aLogger, t.pEnv, *this );
             // und aufraeumen
         } //mID
     } //t.pEnv
@@ -423,6 +448,8 @@ void SAL_CALL java_sql_PreparedStatement::setInt( sal_Int32 parameterIndex, sal_
 
 void SAL_CALL java_sql_PreparedStatement::setLong( sal_Int32 parameterIndex, sal_Int64 x ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException)
 {
+    m_aLogger.log( LogLevel::FINER, STR_LOG_LONG_PARAMETER, parameterIndex, x );
+
     SDBThreadAttach t; OSL_ENSURE(t.pEnv,"Java Enviroment geloescht worden!");
     if( t.pEnv ){
         createStatement(t.pEnv);
@@ -435,7 +462,7 @@ void SAL_CALL java_sql_PreparedStatement::setLong( sal_Int32 parameterIndex, sal
             mID  = t.pEnv->GetMethodID( getMyClass(), cMethodName, cSignature );OSL_ENSURE(mID,"Unknown method id!");
         if( mID ){
             t.pEnv->CallVoidMethod( object, mID, parameterIndex,x);
-            ThrowSQLException(t.pEnv,*this);
+            ThrowLoggedSQLException( m_aLogger, t.pEnv, *this );
             // und aufraeumen
         } //mID
     } //t.pEnv
@@ -444,6 +471,8 @@ void SAL_CALL java_sql_PreparedStatement::setLong( sal_Int32 parameterIndex, sal
 
 void SAL_CALL java_sql_PreparedStatement::setNull( sal_Int32 parameterIndex, sal_Int32 sqlType ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException)
 {
+    m_aLogger.log( LogLevel::FINER, STR_LOG_NULL_PARAMETER, parameterIndex, sqlType );
+
     SDBThreadAttach t; OSL_ENSURE(t.pEnv,"Java Enviroment geloescht worden!");
     if( t.pEnv ){
         createStatement(t.pEnv);
@@ -456,7 +485,7 @@ void SAL_CALL java_sql_PreparedStatement::setNull( sal_Int32 parameterIndex, sal
             mID  = t.pEnv->GetMethodID( getMyClass(), cMethodName, cSignature );OSL_ENSURE(mID,"Unknown method id!");
         if( mID ){
             t.pEnv->CallVoidMethod( object, mID, parameterIndex,sqlType);
-            ThrowSQLException(t.pEnv,*this);
+            ThrowLoggedSQLException( m_aLogger, t.pEnv, *this );
             // und aufraeumen
         } //mID
     } //t.pEnv
@@ -495,6 +524,8 @@ void SAL_CALL java_sql_PreparedStatement::setObjectWithInfo( sal_Int32 /*paramet
 
 void SAL_CALL java_sql_PreparedStatement::setObjectNull( sal_Int32 parameterIndex, sal_Int32 /*sqlType*/, const ::rtl::OUString& /*typeName*/ ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException)
 {
+    m_aLogger.log( LogLevel::FINER, STR_LOG_OBJECT_NULL_PARAMETER, parameterIndex );
+
     SDBThreadAttach t; OSL_ENSURE(t.pEnv,"Java Enviroment geloescht worden!");
     if( t.pEnv ){
         createStatement(t.pEnv);
@@ -508,7 +539,7 @@ void SAL_CALL java_sql_PreparedStatement::setObjectNull( sal_Int32 parameterInde
             mID  = t.pEnv->GetMethodID( getMyClass(), cMethodName, cSignature );OSL_ENSURE(mID,"Unknown method id!");
         if( mID ){
             t.pEnv->CallVoidMethod( object, mID, parameterIndex,0);
-            ThrowSQLException(t.pEnv,*this);
+            ThrowLoggedSQLException( m_aLogger, t.pEnv, *this );
             // und aufraeumen
         } //mID
     } //t.pEnv
@@ -529,6 +560,8 @@ void SAL_CALL java_sql_PreparedStatement::setObject( sal_Int32 parameterIndex, c
 
 void SAL_CALL java_sql_PreparedStatement::setShort( sal_Int32 parameterIndex, sal_Int16 x ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException)
 {
+    m_aLogger.log( LogLevel::FINER, STR_LOG_SHORT_PARAMETER, parameterIndex, x );
+
     SDBThreadAttach t; OSL_ENSURE(t.pEnv,"Java Enviroment geloescht worden!");
     if( t.pEnv ){
         createStatement(t.pEnv);
@@ -541,7 +574,7 @@ void SAL_CALL java_sql_PreparedStatement::setShort( sal_Int32 parameterIndex, sa
             mID  = t.pEnv->GetMethodID( getMyClass(), cMethodName, cSignature );OSL_ENSURE(mID,"Unknown method id!");
         if( mID ){
             t.pEnv->CallVoidMethod( object, mID, parameterIndex,x);
-            ThrowSQLException(t.pEnv,*this);
+            ThrowLoggedSQLException( m_aLogger, t.pEnv, *this );
             // und aufraeumen
         } //mID
     } //t.pEnv
@@ -550,6 +583,8 @@ void SAL_CALL java_sql_PreparedStatement::setShort( sal_Int32 parameterIndex, sa
 
 void SAL_CALL java_sql_PreparedStatement::setBytes( sal_Int32 parameterIndex, const ::com::sun::star::uno::Sequence< sal_Int8 >& x ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException)
 {
+    m_aLogger.log( LogLevel::FINER, STR_LOG_BYTES_PARAMETER, parameterIndex );
+
     SDBThreadAttach t; OSL_ENSURE(t.pEnv,"Java Enviroment geloescht worden!");
     if( t.pEnv ){
         createStatement(t.pEnv);
@@ -566,7 +601,7 @@ void SAL_CALL java_sql_PreparedStatement::setBytes( sal_Int32 parameterIndex, co
             t.pEnv->SetByteArrayRegion(pByteArray,0,x.getLength(),(jbyte*)x.getConstArray());
             t.pEnv->CallVoidMethod( object, mID, parameterIndex,pByteArray);
             t.pEnv->DeleteLocalRef(pByteArray);
-            ThrowSQLException(t.pEnv,*this);
+            ThrowLoggedSQLException( m_aLogger, t.pEnv, *this );
             // und aufraeumen
         } //mID
     } //t.pEnv
@@ -575,6 +610,8 @@ void SAL_CALL java_sql_PreparedStatement::setBytes( sal_Int32 parameterIndex, co
 
 void SAL_CALL java_sql_PreparedStatement::setCharacterStream( sal_Int32 parameterIndex, const ::com::sun::star::uno::Reference< ::com::sun::star::io::XInputStream >& x, sal_Int32 length ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException)
 {
+    m_aLogger.log( LogLevel::FINER, STR_LOG_CHARSTREAM_PARAMETER, parameterIndex );
+
     SDBThreadAttach t; OSL_ENSURE(t.pEnv,"Java Enviroment geloescht worden!");
     if( t.pEnv ){
         createStatement(t.pEnv);
@@ -613,7 +650,7 @@ void SAL_CALL java_sql_PreparedStatement::setCharacterStream( sal_Int32 paramete
             t.pEnv->DeleteLocalRef(pByteArray);
             t.pEnv->DeleteLocalRef(tempObj);
             t.pEnv->DeleteLocalRef(aClass);
-            ThrowSQLException(t.pEnv,*this);
+            ThrowLoggedSQLException( m_aLogger, t.pEnv, *this );
         }
 
     } //t.pEnv
@@ -622,6 +659,8 @@ void SAL_CALL java_sql_PreparedStatement::setCharacterStream( sal_Int32 paramete
 
 void SAL_CALL java_sql_PreparedStatement::setBinaryStream( sal_Int32 parameterIndex, const ::com::sun::star::uno::Reference< ::com::sun::star::io::XInputStream >& x, sal_Int32 length ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException)
 {
+    m_aLogger.log( LogLevel::FINER, STR_LOG_BINARYSTREAM_PARAMETER, parameterIndex );
+
     SDBThreadAttach t; OSL_ENSURE(t.pEnv,"Java Enviroment geloescht worden!");
     if( t.pEnv ){
         createStatement(t.pEnv);
@@ -658,7 +697,7 @@ void SAL_CALL java_sql_PreparedStatement::setBinaryStream( sal_Int32 parameterIn
             t.pEnv->DeleteLocalRef(pByteArray);
             t.pEnv->DeleteLocalRef(tempObj);
             t.pEnv->DeleteLocalRef(aClass);
-            ThrowSQLException(t.pEnv,*this);
+            ThrowLoggedSQLException( m_aLogger, t.pEnv, *this );
         }
     } //t.pEnv
 }
@@ -666,6 +705,8 @@ void SAL_CALL java_sql_PreparedStatement::setBinaryStream( sal_Int32 parameterIn
 
 void SAL_CALL java_sql_PreparedStatement::clearParameters(  ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException)
 {
+    m_aLogger.log( LogLevel::FINER, STR_LOG_CLEAR_PARAMETERS );
+
     SDBThreadAttach t;
     if( t.pEnv ){
         createStatement(t.pEnv);
@@ -679,7 +720,7 @@ void SAL_CALL java_sql_PreparedStatement::clearParameters(  ) throw(::com::sun::
             mID  = t.pEnv->GetMethodID( getMyClass(), cMethodName, cSignature );OSL_ENSURE(mID,"Unknown method id!");
         if( mID ){
             t.pEnv->CallVoidMethod( object, mID);
-            ThrowSQLException(t.pEnv,*this);
+            ThrowLoggedSQLException( m_aLogger, t.pEnv, *this );
         } //mID
     } //t.pEnv
 }
@@ -699,7 +740,7 @@ void SAL_CALL java_sql_PreparedStatement::clearBatch(  ) throw(::com::sun::star:
             mID  = t.pEnv->GetMethodID( getMyClass(), cMethodName, cSignature );OSL_ENSURE(mID,"Unknown method id!");
         if( mID ){
             t.pEnv->CallVoidMethod( object, mID);
-            ThrowSQLException(t.pEnv,*this);
+            ThrowLoggedSQLException( m_aLogger, t.pEnv, *this );
         } //mID
     } //t.pEnv
 }
@@ -719,7 +760,7 @@ void SAL_CALL java_sql_PreparedStatement::addBatch( ) throw(::com::sun::star::sd
             mID  = t.pEnv->GetMethodID( getMyClass(), cMethodName, cSignature );OSL_ENSURE(mID,"Unknown method id!");
         if( mID ){
             t.pEnv->CallVoidMethod( object, mID );
-            ThrowSQLException(t.pEnv,*this);
+            ThrowLoggedSQLException( m_aLogger, t.pEnv, *this );
         } //mID
     } //t.pEnv
 }
@@ -740,7 +781,7 @@ void SAL_CALL java_sql_PreparedStatement::addBatch( ) throw(::com::sun::star::sd
             mID  = t.pEnv->GetMethodID( getMyClass(), cMethodName, cSignature );OSL_ENSURE(mID,"Unknown method id!");
         if( mID ){
             jintArray out = (jintArray)t.pEnv->CallObjectMethod( object, mID );
-            ThrowSQLException(t.pEnv,*this);
+            ThrowLoggedSQLException( m_aLogger, t.pEnv, *this );
             if(out)
             {
                 jboolean p = sal_False;
@@ -769,11 +810,11 @@ void SAL_CALL java_sql_PreparedStatement::addBatch( ) throw(::com::sun::star::sd
             mID  = t.pEnv->GetMethodID( getMyClass(), cMethodName, cSignature );OSL_ENSURE(mID,"Unknown method id!");
         if( mID ){
             out = t.pEnv->CallObjectMethod( object, mID );
-            ThrowSQLException(t.pEnv,*this);
-        } //mID
-    } //t.pEnv
-    // ACHTUNG: der Aufrufer wird Eigentuemer des zurueckgelieferten Zeigers !!!
-    return out==0 ? 0 : new java_sql_ResultSetMetaData( t.pEnv, out );
+            ThrowLoggedSQLException( m_aLogger, t.pEnv, *this );
+        }
+    }
+
+    return out==0 ? 0 : new java_sql_ResultSetMetaData( t.pEnv, out, m_aLogger );
 }
 // -----------------------------------------------------------------------------
 // -----------------------------------------------------------------------------
@@ -819,7 +860,7 @@ void java_sql_PreparedStatement::createStatement(JNIEnv* _pEnv)
                 out = _pEnv->CallObjectMethod( m_pConnection->getJavaObject(), mID2, args[0].l );
         }
         _pEnv->DeleteLocalRef((jstring)args[0].l);
-        ThrowSQLException(_pEnv,*this);
+        ThrowLoggedSQLException( m_aLogger, _pEnv, *this );
         if ( out )
             object = _pEnv->NewGlobalRef( out );
     } //t.pEnv
