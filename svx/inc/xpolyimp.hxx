@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xpolyimp.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: obo $ $Date: 2006-10-12 12:00:02 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 16:34:47 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -40,7 +40,7 @@
 #include <tools/gen.hxx>
 #endif
 #ifndef _XPOLY_HXX
-#include <xpoly.hxx>
+#include <svx/xpoly.hxx>
 #endif
 
 /*************************************************************************
