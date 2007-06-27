@@ -4,9 +4,9 @@
  *
  *  $RCSfile: fntctrl.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: obo $ $Date: 2007-06-11 14:23:44 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 17:05:06 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -82,8 +82,8 @@
 #include <svtools/colorcfg.hxx>
 #endif
 
-#include "fntctrl.hxx"
-#include "dialogs.hrc"
+#include <svx/fntctrl.hxx>
+#include <svx/dialogs.hrc>
 #define TEXT_WIDTH  20
 
 using namespace ::com::sun::star::uno;
