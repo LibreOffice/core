@@ -4,9 +4,9 @@
  *
  *  $RCSfile: TransformerTokenMap.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 15:59:34 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 16:26:24 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -44,7 +44,7 @@
 #endif
 #include <hash_map>
 #ifndef _XMLOFF_XMLTOKEN_HXX
-#include "xmltoken.hxx"
+#include <xmloff/xmltoken.hxx>
 #endif
 #ifndef _XMLOFF_TRANSFORMERTOKENMAP_HXX
 #include "TransformerTokenMap.hxx"
