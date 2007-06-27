@@ -4,9 +4,9 @@
  *
  *  $RCSfile: filedlg2.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: obo $ $Date: 2006-10-12 15:13:55 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 21:27:41 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -51,7 +51,7 @@
 #ifndef _SV_LSTBOX_HXX //autogen
 #include <vcl/lstbox.hxx>
 #endif
-#include <svtdata.hxx>
+#include <svtools/svtdata.hxx>
 
 #include <filedlg2.hxx>
 #include <filedlg.hxx>
@@ -69,13 +69,13 @@
 #include <com/sun/star/i18n/XCollator.hpp>
 #endif
 
-#include <stdctrl.hxx>
+#include <svtools/stdctrl.hxx>
 
 #if defined (WNT) && defined (MSC)
 #pragma optimize ("", off)
 #endif
 
-#include <helpid.hrc>
+#include <svtools/helpid.hrc>
 
 using namespace com::sun::star;
 using namespace com::sun::star::uno;
