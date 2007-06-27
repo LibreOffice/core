@@ -4,9 +4,9 @@
  *
  *  $RCSfile: border.cxx,v $
  *
- *  $Revision: 1.33 $
+ *  $Revision: 1.34 $
  *
- *  last change: $Author: kz $ $Date: 2007-05-10 14:35:40 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 16:49:27 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -53,25 +53,25 @@
 
 #define _SVX_BORDER_CXX
 
-#include "dialogs.hrc"
-#include "svxitems.hrc"
+#include <svx/dialogs.hrc>
+#include <svx/svxitems.hrc>
 #include "border.hrc"
 #include "helpid.hrc"
 
 #define LINESTYLE_HTML_MAX 5
 
-#include "xtable.hxx"               // XColorTable
+#include <svx/xtable.hxx>               // XColorTable
 #include "drawitem.hxx"
-#include "boxitem.hxx"
-#include "shaditem.hxx"
+#include <svx/boxitem.hxx>
+#include <svx/shaditem.hxx>
 #include "border.hxx"
 #include "dlgutil.hxx"
-#include "dialmgr.hxx"
+#include <svx/dialmgr.hxx>
 #include "htmlmode.hxx"
 #ifndef _SV_MSGBOX_HXX //autogen
 #include <vcl/msgbox.hxx>
 #endif
-#include "svxids.hrc" //CHINA001
+#include <svx/svxids.hrc> //CHINA001
 #include "flagsdef.hxx" //CHINA001
 #include <sfx2/request.hxx>
 #ifndef _SFXINTITEM_HXX //CHINA001
