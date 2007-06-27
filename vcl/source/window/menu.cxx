@@ -4,9 +4,9 @@
  *
  *  $RCSfile: menu.cxx,v $
  *
- *  $Revision: 1.151 $
+ *  $Revision: 1.152 $
  *
- *  last change: $Author: hr $ $Date: 2007-06-27 13:43:19 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 20:32:12 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -40,7 +40,7 @@
 #include <svsys.h>
 #endif
 #ifndef _SV_SALINST_HXX
-#include <salinst.hxx>
+#include <vcl/salinst.hxx>
 #endif
 #ifndef _LIST_HXX
 #include <tools/list.hxx>
@@ -50,80 +50,80 @@
 #endif
 
 #ifndef _SV_SVDATA_HXX
-#include <svdata.hxx>
+#include <vcl/svdata.hxx>
 #endif
 #ifndef _SV_SVAPP_HXX
-#include <svapp.hxx>
+#include <vcl/svapp.hxx>
 #endif
 #ifndef _SV_MNEMONIC_HXX
-#include <mnemonic.hxx>
+#include <vcl/mnemonic.hxx>
 #endif
 #ifndef _SV_IMAGE_HXX
-#include <image.hxx>
+#include <vcl/image.hxx>
 #endif
 #ifndef _SV_EVENT_HXX
-#include <event.hxx>
+#include <vcl/event.hxx>
 #endif
 #ifndef _SV_HELP_HXX
-#include <help.hxx>
+#include <vcl/help.hxx>
 #endif
 #ifndef _SV_SVIDS_HRC
 #include <svids.hrc>
 #endif
 #ifndef _SV_FLOATWIN_HXX
-#include <floatwin.hxx>
+#include <vcl/floatwin.hxx>
 #endif
 #ifndef _SV_WRKWIN_HXX
-#include <wrkwin.hxx>
+#include <vcl/wrkwin.hxx>
 #endif
 #ifndef _SV_TIMER_HXX
-#include <timer.hxx>
+#include <vcl/timer.hxx>
 #endif
 #ifndef _SV_SOUND_HXX
-#include <sound.hxx>
+#include <vcl/sound.hxx>
 #endif
 #ifndef _SV_DECOVIEW_HXX
-#include <decoview.hxx>
+#include <vcl/decoview.hxx>
 #endif
 #ifndef _SV_BITMAP_HXX
-#include <bitmap.hxx>
+#include <vcl/bitmap.hxx>
 #endif
 #ifndef _SV_RC_H
 #include <tools/rc.h>
 #endif
 #ifndef _SV_MENU_HXX
-#include <menu.hxx>
+#include <vcl/menu.hxx>
 #endif
 #ifndef _SV_BUTTON_HXX
-#include <button.hxx>
+#include <vcl/button.hxx>
 #endif
 #ifndef _SV_GRADIENT_HXX
-#include <gradient.hxx>
+#include <vcl/gradient.hxx>
 #endif
 #ifndef _VCL_I18NHELP_HXX
-#include <i18nhelp.hxx>
+#include <vcl/i18nhelp.hxx>
 #endif
 #ifndef _SV_TASKPANELIST_HXX
-#include <taskpanelist.hxx>
+#include <vcl/taskpanelist.hxx>
 #endif
 #ifndef _SV_WINDOW_H
 #include <window.h>
 #endif
 #ifndef _VCL_CONTROLLAYOUT_HXX
-#include <controllayout.hxx>
+#include <vcl/controllayout.hxx>
 #endif
 #ifndef _SV_TOOLBOX_HXX
-#include <toolbox.hxx>
+#include <vcl/toolbox.hxx>
 #endif
 #include <tools/stream.hxx>
 #ifndef _SV_SALMENU_HXX
 #include <salmenu.hxx>
 #endif
 #ifndef _SV_SALFRAME_HXX
-#include <salframe.hxx>
+#include <vcl/salframe.hxx>
 #endif
 #ifndef _SV_DOCKINGAREA_HXX
-#include <dockingarea.hxx>
+#include <vcl/dockingarea.hxx>
 #endif
 
 
@@ -145,12 +145,12 @@
 #endif
 
 #ifndef _VCL_UNOWRAP_HXX
-#include <unowrap.hxx>
+#include <vcl/unowrap.hxx>
 #endif
 
-#include <unohelp.hxx>
+#include <vcl/unohelp.hxx>
 #ifndef VCL_INC_CONFIGSETTINGS_HXX
-#include <configsettings.hxx>
+#include <vcl/configsettings.hxx>
 #endif
 
 #include "lazydelete.hxx"
