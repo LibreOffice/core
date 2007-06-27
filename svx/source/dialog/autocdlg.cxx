@@ -4,9 +4,9 @@
  *
  *  $RCSfile: autocdlg.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: hr $ $Date: 2007-06-27 13:39:13 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 16:47:00 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -98,10 +98,10 @@
 #include "autocdlg.hrc"
 #include "helpid.hrc"
 #include "acorrcfg.hxx"
-#include "svxacorr.hxx"
-#include "charmap.hxx"
+#include <svx/svxacorr.hxx>
+#include <svx/charmap.hxx>
 #include "unolingu.hxx"
-#include "dialmgr.hxx"
+#include <svx/dialmgr.hxx>
 #include "cuicharmap.hxx" // add CHINA001
 static LanguageType eLastDialogLanguage = LANGUAGE_SYSTEM;
 
