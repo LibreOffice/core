@@ -4,9 +4,9 @@
  *
  *  $RCSfile: EnhancedCustomShape3d.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: ihi $ $Date: 2006-11-14 13:13:53 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 16:43:28 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -37,7 +37,7 @@
 #define _ENHANCEDCUSTOMSHAPE3D_HXX
 
 #ifndef _MSDFFIMP_HXX
-#include <msdffimp.hxx>
+#include <svx/msdffimp.hxx>
 #endif
 #include <vector>
 //#include <poly3d.hxx>
