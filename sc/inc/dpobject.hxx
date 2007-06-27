@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dpobject.hxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: hr $ $Date: 2005-09-28 11:26:37 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 13:41:57 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -52,10 +52,13 @@
 #include "collect.hxx"
 #endif
 
+#ifndef SC_DPOUTPUT_HXX
+#include "dpoutput.hxx"
+#endif
+
 #ifndef _COM_SUN_STAR_SHEET_XDIMENSIONSSUPPLIER_HPP_
 #include <com/sun/star/sheet/XDimensionsSupplier.hpp>
 #endif
-
 
 //------------------------------------------------------------------
 
@@ -178,6 +181,12 @@ public:
                                         long nDragDim,
                                         Rectangle& rPosRect, USHORT& rOrient, long& rDimPos );
     BOOL                IsFilterButton( const ScAddress& rPos );
+
+    BOOL                GetPivotData( ScDPGetPivotDataField& rTarget, /* returns result */
+                                      const std::vector< ScDPGetPivotDataField >& rFilters );
+    BOOL                ParseFilters( ScDPGetPivotDataField& rTarget,
+                                      std::vector< ScDPGetPivotDataField >& rFilters,
+                                      const String& rFilterList );
 
     void                GetMemberResultNames( StrCollection& rNames, long nDimension );
 
