@@ -4,9 +4,9 @@
  *
  *  $RCSfile: statemnt.hxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: kz $ $Date: 2007-06-19 14:36:58 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 21:00:57 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -88,7 +88,7 @@
 #include <vcl/smartid.hxx>
 #endif
 #ifndef _COMMTYPES_HXX
-#include "commtypes.hxx"
+#include <automation/commtypes.hxx>
 #endif
 
 class Window;
