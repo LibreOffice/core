@@ -4,9 +4,9 @@
  *
  *  $RCSfile: CallableStatement.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 02:44:46 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 14:35:19 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -78,8 +78,8 @@ IMPLEMENT_SERVICE_INFO(java_sql_CallableStatement,"com.sun.star.sdbcx.ACallableS
 //**************************************************************
 //************ Class: java.sql.CallableStatement
 //**************************************************************
-java_sql_CallableStatement::java_sql_CallableStatement( JNIEnv * pEnv, java_sql_Connection* _pCon,const ::rtl::OUString& sql )
-    : java_sql_PreparedStatement( pEnv, _pCon,sql )
+java_sql_CallableStatement::java_sql_CallableStatement( JNIEnv * pEnv, java_sql_Connection& _rCon,const ::rtl::OUString& sql )
+    : java_sql_PreparedStatement( pEnv, _rCon, sql )
 {
 }
 // -----------------------------------------------------------------------------
@@ -119,7 +119,7 @@ sal_Bool SAL_CALL java_sql_CallableStatement::wasNull(  ) throw(starsdbc::SQLExc
             mID  = t.pEnv->GetMethodID( getMyClass(), cMethodName, cSignature );OSL_ENSURE(mID,"Unknown method id!");
         if( mID ){
             out = t.pEnv->CallBooleanMethod( object, mID );
-            ThrowSQLException(t.pEnv,*this);
+            ThrowLoggedSQLException( m_aLogger, t.pEnv, *this );
         } //mID
     } //t.pEnv
     return out;
@@ -142,7 +142,7 @@ sal_Bool SAL_CALL java_sql_CallableStatement::getBoolean( sal_Int32 columnIndex 
             mID  = t.pEnv->GetMethodID( getMyClass(), cMethodName, cSignature );OSL_ENSURE(mID,"Unknown method id!");
         if( mID ){
             out = t.pEnv->CallBooleanMethod( object, mID, columnIndex );
-            ThrowSQLException(t.pEnv,*this);
+            ThrowLoggedSQLException( m_aLogger, t.pEnv, *this );
             // und aufraeumen
         } //mID
     } //t.pEnv
@@ -165,7 +165,7 @@ sal_Int8 SAL_CALL java_sql_CallableStatement::getByte( sal_Int32 columnIndex ) t
             mID  = t.pEnv->GetMethodID( getMyClass(), cMethodName, cSignature );OSL_ENSURE(mID,"Unknown method id!");
         if( mID ){
             out = t.pEnv->CallByteMethod( object, mID, columnIndex);
-            ThrowSQLException(t.pEnv,*this);
+            ThrowLoggedSQLException( m_aLogger, t.pEnv, *this );
             // und aufraeumen
         } //mID
     } //t.pEnv
@@ -188,7 +188,7 @@ Sequence< sal_Int8 > SAL_CALL java_sql_CallableStatement::getBytes( sal_Int32 co
         if( mID ){
             jbyteArray out(0);
             out = (jbyteArray)t.pEnv->CallObjectMethod( object, mID, columnIndex);
-            ThrowSQLException(t.pEnv,*this);
+            ThrowLoggedSQLException( m_aLogger, t.pEnv, *this );
             if (out)
             {
                 jboolean p = sal_False;
@@ -218,7 +218,7 @@ Sequence< sal_Int8 > SAL_CALL java_sql_CallableStatement::getBytes( sal_Int32 co
             mID  = t.pEnv->GetMethodID( getMyClass(), cMethodName, cSignature );OSL_ENSURE(mID,"Unknown method id!");
         if( mID ){
             out = t.pEnv->CallObjectMethod( object, mID, columnIndex );
-            ThrowSQLException(t.pEnv,*this);
+            ThrowLoggedSQLException( m_aLogger, t.pEnv, *this );
             // und aufraeumen
         } //mID
     } //t.pEnv
@@ -241,7 +241,7 @@ double SAL_CALL java_sql_CallableStatement::getDouble( sal_Int32 columnIndex ) t
             mID  = t.pEnv->GetMethodID( getMyClass(), cMethodName, cSignature );OSL_ENSURE(mID,"Unknown method id!");
         if( mID ){
             out = t.pEnv->CallDoubleMethod( object, mID, columnIndex);
-            ThrowSQLException(t.pEnv,*this);
+            ThrowLoggedSQLException( m_aLogger, t.pEnv, *this );
             // und aufraeumen
         } //mID
     } //t.pEnv
@@ -265,7 +265,7 @@ float SAL_CALL java_sql_CallableStatement::getFloat( sal_Int32 columnIndex ) thr
             mID  = t.pEnv->GetMethodID( getMyClass(), cMethodName, cSignature );OSL_ENSURE(mID,"Unknown method id!");
         if( mID ){
             out = t.pEnv->CallFloatMethod( object, mID, columnIndex );
-            ThrowSQLException(t.pEnv,*this);
+            ThrowLoggedSQLException( m_aLogger, t.pEnv, *this );
             // und aufraeumen
         } //mID
     } //t.pEnv
@@ -289,7 +289,7 @@ sal_Int32 SAL_CALL java_sql_CallableStatement::getInt( sal_Int32 columnIndex ) t
             mID  = t.pEnv->GetMethodID( getMyClass(), cMethodName, cSignature );OSL_ENSURE(mID,"Unknown method id!");
         if( mID ){
             out = t.pEnv->CallIntMethod( object, mID, columnIndex );
-            ThrowSQLException(t.pEnv,*this);
+            ThrowLoggedSQLException( m_aLogger, t.pEnv, *this );
             // und aufraeumen
         } //mID
     } //t.pEnv
@@ -311,7 +311,7 @@ sal_Int64 SAL_CALL java_sql_CallableStatement::getLong( sal_Int32 columnIndex ) 
             mID  = t.pEnv->GetMethodID( getMyClass(), cMethodName, cSignature );OSL_ENSURE(mID,"Unknown method id!");
         if( mID ){
             out = t.pEnv->CallLongMethod( object, mID, columnIndex );
-            ThrowSQLException(t.pEnv,*this);
+            ThrowLoggedSQLException( m_aLogger, t.pEnv, *this );
             // und aufraeumen
         } //mID
     } //t.pEnv
@@ -333,7 +333,7 @@ Any SAL_CALL java_sql_CallableStatement::getObject( sal_Int32 columnIndex, const
             mID  = t.pEnv->GetMethodID( getMyClass(), cMethodName, cSignature );OSL_ENSURE(mID,"Unknown method id!");
         if( mID ){
             out = t.pEnv->CallObjectMethod( object, mID, columnIndex);
-            ThrowSQLException(t.pEnv,*this);
+            ThrowLoggedSQLException( m_aLogger, t.pEnv, *this );
             // und aufraeumen
         } //mID
     } //t.pEnv
@@ -356,7 +356,7 @@ sal_Int16 SAL_CALL java_sql_CallableStatement::getShort( sal_Int32 columnIndex )
             mID  = t.pEnv->GetMethodID( getMyClass(), cMethodName, cSignature );OSL_ENSURE(mID,"Unknown method id!");
         if( mID ){
             out = t.pEnv->CallShortMethod( object, mID, columnIndex);
-            ThrowSQLException(t.pEnv,*this);
+            ThrowLoggedSQLException( m_aLogger, t.pEnv, *this );
             // und aufraeumen
         } //mID
     } //t.pEnv
@@ -378,7 +378,7 @@ sal_Int16 SAL_CALL java_sql_CallableStatement::getShort( sal_Int32 columnIndex )
             mID  = t.pEnv->GetMethodID( getMyClass(), cMethodName, cSignature );OSL_ENSURE(mID,"Unknown method id!");
         if( mID ){
             jstring out = (jstring)t.pEnv->CallObjectMethod( object, mID, columnIndex );
-            ThrowSQLException(t.pEnv,*this);
+            ThrowLoggedSQLException( m_aLogger, t.pEnv, *this );
             aStr = JavaString2String(t.pEnv,out);
             // und aufraeumen
         } //mID
@@ -403,7 +403,7 @@ sal_Int16 SAL_CALL java_sql_CallableStatement::getShort( sal_Int32 columnIndex )
             mID  = t.pEnv->GetMethodID( getMyClass(), cMethodName, cSignature );OSL_ENSURE(mID,"Unknown method id!");
         if( mID ){
             out = t.pEnv->CallObjectMethod( object, mID, columnIndex);
-            ThrowSQLException(t.pEnv,*this);
+            ThrowLoggedSQLException( m_aLogger, t.pEnv, *this );
             // und aufraeumen
         } //mID
     } //t.pEnv
@@ -426,7 +426,7 @@ sal_Int16 SAL_CALL java_sql_CallableStatement::getShort( sal_Int32 columnIndex )
             mID  = t.pEnv->GetMethodID( getMyClass(), cMethodName, cSignature );OSL_ENSURE(mID,"Unknown method id!");
         if( mID ){
             out = t.pEnv->CallObjectMethod( object, mID, columnIndex);
-            ThrowSQLException(t.pEnv,*this);
+            ThrowLoggedSQLException( m_aLogger, t.pEnv, *this );
             // und aufraeumen
         } //mID
     } //t.pEnv
@@ -454,7 +454,7 @@ void SAL_CALL java_sql_CallableStatement::registerOutParameter( sal_Int32 parame
             jstring str = convertwchar_tToJavaString(t.pEnv,typeName);
             t.pEnv->CallVoidMethod( object, mID, parameterIndex,sqlType,str);
             t.pEnv->DeleteLocalRef(str);
-            ThrowSQLException(t.pEnv,*this);
+            ThrowLoggedSQLException( m_aLogger, t.pEnv, *this );
         }
     }
 }
@@ -474,7 +474,7 @@ void SAL_CALL java_sql_CallableStatement::registerNumericOutParameter( sal_Int32
         if( mID )
         {
             t.pEnv->CallVoidMethod( object, mID, parameterIndex,sqlType,scale);
-            ThrowSQLException(t.pEnv,*this);
+            ThrowLoggedSQLException( m_aLogger, t.pEnv, *this );
         }
     }
 }
@@ -529,7 +529,7 @@ Reference< starsdbc::XArray > SAL_CALL java_sql_CallableStatement::getArray( sal
             mID  = t.pEnv->GetMethodID( getMyClass(), cMethodName, cSignature );OSL_ENSURE(mID,"Unknown method id!");
         if( mID ){
             out = t.pEnv->CallObjectMethod( object, mID, columnIndex);
-            ThrowSQLException(t.pEnv,*this);
+            ThrowLoggedSQLException( m_aLogger, t.pEnv, *this );
             // und aufraeumen
         } //mID
     } //t.pEnv
@@ -552,7 +552,7 @@ Reference< starsdbc::XClob > SAL_CALL java_sql_CallableStatement::getClob( sal_I
             mID  = t.pEnv->GetMethodID( getMyClass(), cMethodName, cSignature );OSL_ENSURE(mID,"Unknown method id!");
         if( mID ){
             out = t.pEnv->CallObjectMethod( object, mID, columnIndex);
-            ThrowSQLException(t.pEnv,*this);
+            ThrowLoggedSQLException( m_aLogger, t.pEnv, *this );
             // und aufraeumen
         } //mID
     } //t.pEnv
@@ -574,7 +574,7 @@ Reference< starsdbc::XBlob > SAL_CALL java_sql_CallableStatement::getBlob( sal_I
             mID  = t.pEnv->GetMethodID( getMyClass(), cMethodName, cSignature );OSL_ENSURE(mID,"Unknown method id!");
         if( mID ){
             out = t.pEnv->CallObjectMethod( object, mID, columnIndex);
-            ThrowSQLException(t.pEnv,*this);
+            ThrowLoggedSQLException( m_aLogger, t.pEnv, *this );
             // und aufraeumen
         } //mID
     } //t.pEnv
@@ -597,7 +597,7 @@ Reference< starsdbc::XRef > SAL_CALL java_sql_CallableStatement::getRef( sal_Int
             mID  = t.pEnv->GetMethodID( getMyClass(), cMethodName, cSignature );OSL_ENSURE(mID,"Unknown method id!");
         if( mID ){
             out = t.pEnv->CallObjectMethod( object, mID, columnIndex);
-            ThrowSQLException(t.pEnv,*this);
+            ThrowLoggedSQLException( m_aLogger, t.pEnv, *this );
             // und aufraeumen
         } //mID
     } //t.pEnv
@@ -646,7 +646,7 @@ void java_sql_CallableStatement::createStatement(JNIEnv* /*_pEnv*/)
             } //mID
         }
         t.pEnv->DeleteLocalRef(str);
-        ThrowSQLException(t.pEnv,*this);
+        ThrowLoggedSQLException( m_aLogger, t.pEnv, *this );
 
         if ( out )
             object = t.pEnv->NewGlobalRef( out );
