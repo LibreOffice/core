@@ -4,9 +4,9 @@
  *
  *  $RCSfile: fmundo.cxx,v $
  *
- *  $Revision: 1.40 $
+ *  $Revision: 1.41 $
  *
- *  last change: $Author: hr $ $Date: 2006-10-24 15:12:39 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 18:16:17 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -71,19 +71,19 @@
 /** === end UNO includes === **/
 
 #ifndef _FM_FMMODEL_HXX
-#include "fmmodel.hxx"
+#include <svx/fmmodel.hxx>
 #endif
 #ifndef _SVX_FMTOOLS_HXX
 #include "fmtools.hxx"
 #endif
 #ifndef _SVX_FMPAGE_HXX //autogen
-#include "fmpage.hxx"
+#include <svx/fmpage.hxx>
 #endif
 #ifndef _SVX_FMRESIDS_HRC
 #include "fmresids.hrc"
 #endif
 #ifndef _SVX_DIALMGR_HXX
-#include "dialmgr.hxx"
+#include <svx/dialmgr.hxx>
 #endif
 #ifndef _SVX_FMUNOPGE_HXX
 #include "fmpgeimp.hxx"
@@ -137,7 +137,7 @@
 #endif
 
 #ifndef _SVX_FMGLOB_HXX
-#include "fmglob.hxx"
+#include <svx/fmglob.hxx>
 #endif
 #ifndef _SVX_FMPROP_HRC
 #include "fmprop.hrc"
