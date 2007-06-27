@@ -4,9 +4,9 @@
  *
  *  $RCSfile: appmisc.cxx,v $
  *
- *  $Revision: 1.56 $
+ *  $Revision: 1.57 $
  *
- *  last change: $Author: rt $ $Date: 2007-04-26 10:06:15 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 22:56:24 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -111,31 +111,31 @@
 #include <osl/file.hxx>
 
 #include "sfxresid.hxx"
-#include "app.hxx"
+#include <sfx2/app.hxx>
 #include "appdata.hxx"
 #include "arrdecl.hxx"
-#include "tbxctrl.hxx"
+#include <sfx2/tbxctrl.hxx>
 #include "stbitem.hxx"
-#include "mnuitem.hxx"
-#include "docfac.hxx"
-#include "docfile.hxx"
-#include "docfilt.hxx"
-#include "request.hxx"
-#include "bindings.hxx"
-#include "dispatch.hxx"
+#include <sfx2/mnuitem.hxx>
+#include <sfx2/docfac.hxx>
+#include <sfx2/docfile.hxx>
+#include <sfx2/docfilt.hxx>
+#include <sfx2/request.hxx>
+#include <sfx2/bindings.hxx>
+#include <sfx2/dispatch.hxx>
 #include "workwin.hxx"
 #include "intro.hxx"
-#include "fcontnr.hxx"
+#include <sfx2/fcontnr.hxx>
 #include "sfxlocal.hrc"
-#include "sfx.hrc"
+#include <sfx2/sfx.hrc>
 #include "app.hrc"
-#include "templdlg.hxx"
-#include "module.hxx"
-#include "msgpool.hxx"
-#include "topfrm.hxx"
+#include <sfx2/templdlg.hxx>
+#include <sfx2/module.hxx>
+#include <sfx2/msgpool.hxx>
+#include <sfx2/topfrm.hxx>
 #include "openflag.hxx"
-#include "viewsh.hxx"
-#include "objface.hxx"
+#include <sfx2/viewsh.hxx>
+#include <sfx2/objface.hxx>
 #include "helper.hxx"   // SfxContentHelper::Kill()
 
 using namespace ::vos;
