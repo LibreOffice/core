@@ -4,9 +4,9 @@
  *
  *  $RCSfile: printer.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: obo $ $Date: 2007-01-25 11:48:50 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 23:34:29 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -59,12 +59,12 @@
 #ifndef GCC
 #endif
 
-#include "printer.hxx"
-#include "printopt.hxx"
+#include <sfx2/printer.hxx>
+#include <sfx2/printopt.hxx>
 #include "sfxtypes.hxx"
-#include "prnmon.hxx"
-#include "viewsh.hxx"
-#include "tabdlg.hxx"
+#include <sfx2/prnmon.hxx>
+#include <sfx2/viewsh.hxx>
+#include <sfx2/tabdlg.hxx>
 #include "sfxresid.hxx"
 #include "view.hrc"
 
