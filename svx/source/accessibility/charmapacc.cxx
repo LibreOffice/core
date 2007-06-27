@@ -4,9 +4,9 @@
  *
  *  $RCSfile: charmapacc.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: obo $ $Date: 2006-10-12 12:01:24 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 16:42:19 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -45,7 +45,7 @@
 #include <vcl/svapp.hxx>
 #endif
 #include <stdio.h>
-#include "charmap.hxx"
+#include <svx/charmap.hxx>
 #include "charmapacc.hxx"
 
 #ifndef _COM_SUN_STAR_ACCESSIBILITY_ACCESSIBLEROLE_HPP_
@@ -64,7 +64,7 @@
 #include <osl/interlck.h>
 #endif
 #ifndef _SVX_DIALMGR_HXX
-#include "dialmgr.hxx"
+#include <svx/dialmgr.hxx>
 #endif
 #include "accessibility.hrc"
 #ifndef _COMPHELPER_TYPES_HXX_
