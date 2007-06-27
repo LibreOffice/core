@@ -4,9 +4,9 @@
  *
  *  $RCSfile: acccfg.cxx,v $
  *
- *  $Revision: 1.37 $
+ *  $Revision: 1.38 $
  *
- *  last change: $Author: rt $ $Date: 2007-04-26 10:10:02 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 23:09:02 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -42,10 +42,10 @@
 #include "acccfg.hxx"
 #include "cfg.hxx"
 #include "sfxresid.hxx"
-#include "msg.hxx"
-#include "macrconf.hxx"
-#include "app.hxx"
-#include "filedlghelper.hxx"
+#include <sfx2/msg.hxx>
+#include <sfx2/macrconf.hxx>
+#include <sfx2/app.hxx>
+#include <sfx2/filedlghelper.hxx>
 
 #include "dialog.hrc"
 #include "cfg.hrc"
