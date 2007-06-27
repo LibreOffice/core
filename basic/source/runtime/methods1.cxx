@@ -4,9 +4,9 @@
  *
  *  $RCSfile: methods1.cxx,v $
  *
- *  $Revision: 1.32 $
+ *  $Revision: 1.33 $
  *
- *  last change: $Author: vg $ $Date: 2006-11-02 16:33:19 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 14:26:12 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -55,10 +55,10 @@
 #include <vcl/timer.hxx>
 #endif
 #ifndef _SBXVAR_HXX
-#include <sbxvar.hxx>
+#include <basic/sbxvar.hxx>
 #endif
 #ifndef _SBX_HXX
-#include <sbx.hxx>
+#include <basic/sbx.hxx>
 #endif
 #ifndef _ZFORLIST_HXX //autogen
 #include <svtools/zforlist.hxx>
