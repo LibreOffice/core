@@ -4,9 +4,9 @@
  *
  *  $RCSfile: checklbx.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: ihi $ $Date: 2006-12-20 14:10:46 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 16:52:58 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -44,11 +44,11 @@
 
 #define _SVX_CHECKLBX_CXX
 
-#include "dialogs.hrc"
+#include <svx/dialogs.hrc>
 #include "checklbx.hrc"
 
-#include "checklbx.hxx"
-#include "dialmgr.hxx"
+#include <svx/checklbx.hxx>
+#include <svx/dialmgr.hxx>
 
 // class SvxCheckListBox -------------------------------------------------
 
