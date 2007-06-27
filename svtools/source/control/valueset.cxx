@@ -4,9 +4,9 @@
  *
  *  $RCSfile: valueset.cxx,v $
  *
- *  $Revision: 1.30 $
+ *  $Revision: 1.31 $
  *
- *  last change: $Author: vg $ $Date: 2007-05-22 19:33:21 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 21:26:38 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -72,7 +72,7 @@
 #include "valueimp.hxx"
 
 #define _SV_VALUESET_CXX
-#include <valueset.hxx>
+#include <svtools/valueset.hxx>
 
 // ------------
 // - ValueSet -
