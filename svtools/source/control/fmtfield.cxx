@@ -4,9 +4,9 @@
  *
  *  $RCSfile: fmtfield.cxx,v $
  *
- *  $Revision: 1.37 $
+ *  $Revision: 1.38 $
  *
- *  last change: $Author: vg $ $Date: 2007-04-11 19:45:37 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 21:24:43 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -51,10 +51,10 @@
 #include <vcl/svapp.hxx>
 #endif
 #ifndef _ZFORMAT_HXX //autogen
-#include "zformat.hxx"
+#include <svtools/zformat.hxx>
 #endif
 #ifndef _FMTFIELD_HXX_
-#include "fmtfield.hxx"
+#include <svtools/fmtfield.hxx>
 #endif
 #ifndef INCLUDED_I18NPOOL_MSLANGID_HXX
 #include <i18npool/mslangid.hxx>
@@ -79,7 +79,7 @@
 #include <com/sun/star/lang/Locale.hpp>
 #endif
 #ifndef INCLUDED_SVTOOLS_SYSLOCALE_HXX
-#include "syslocale.hxx"
+#include <svtools/syslocale.hxx>
 #endif
 
 #ifndef REGEXP_SUPPORT
