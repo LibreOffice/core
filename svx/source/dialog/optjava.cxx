@@ -4,9 +4,9 @@
  *
  *  $RCSfile: optjava.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: rt $ $Date: 2007-04-26 07:39:14 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 17:28:51 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -43,10 +43,10 @@
 // include ---------------------------------------------------------------
 
 #include "optjava.hxx"
-#include "dialmgr.hxx"
+#include <svx/dialmgr.hxx>
 
 #include "optjava.hrc"
-#include "dialogs.hrc"
+#include <svx/dialogs.hrc>
 #include "helpid.hrc"
 
 #ifndef _SV_SVAPP_HXX
