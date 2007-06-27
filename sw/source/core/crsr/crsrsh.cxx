@@ -4,9 +4,9 @@
  *
  *  $RCSfile: crsrsh.cxx,v $
  *
- *  $Revision: 1.64 $
+ *  $Revision: 1.65 $
  *
- *  last change: $Author: hr $ $Date: 2007-06-26 11:56:12 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 13:17:30 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -38,6 +38,10 @@
 #ifndef _COM_SUN_STAR_UTIL_SEARCHOPTIONS_HPP_
 #include <com/sun/star/util/SearchOptions.hpp>
 #endif
+#ifndef _COM_SUN_STAR_TEXT_XTEXTRANGE_HPP_
+#include <com/sun/star/text/XTextRange.hpp>
+#endif
+
 #ifndef _HINTIDS_HXX
 #include <hintids.hxx>
 #endif
@@ -49,6 +53,8 @@
 #ifndef _SVX_FRMDIRITEM_HXX
 #include <svx/frmdiritem.hxx>
 #endif
+
+#include <SwSmartTagMgr.hxx>
 
 #ifndef _DOC_HXX
 #include <doc.hxx>
@@ -92,11 +98,9 @@
 #ifndef _TXTFRM_HXX
 #include <txtfrm.hxx>
 #endif
-// --> FME 2004-06-22 #114856# edit in readonly sections
 #ifndef _SECTFRM_HXX
 #include <sectfrm.hxx>
 #endif
-// <--
 #ifndef _SWTABLE_HXX
 #include <swtable.hxx>
 #endif
@@ -127,6 +131,8 @@
 #ifndef _FMTEIRO_HXX //autogen
 #include <fmteiro.hxx>
 #endif
+#include <wrong.hxx> // SMARTTAGS
+#include <unoobj.hxx> // SMARTTAGS
 
 #ifndef _SV_SVAPP_HXX
 #include <vcl/svapp.hxx>
@@ -3102,3 +3108,194 @@ String SwCrsrShell::GetCrsrDescr() const
 
     return aResult;
 }
+
+// SMARTTAGS
+
+void lcl_FillRecognizerData( uno::Sequence< rtl::OUString >& rSmartTagTypes,
+                             uno::Sequence< uno::Reference< container::XStringKeyMap > >& rStringKeyMaps,
+                             const SwWrongList& rSmartTagList, xub_StrLen nCurrent )
+{
+    // Insert smart tag information
+    std::vector< rtl::OUString > aSmartTagTypes;
+    std::vector< uno::Reference< container::XStringKeyMap > > aStringKeyMaps;
+
+    for ( USHORT i = 0; i < rSmartTagList.Count(); ++i )
+    {
+        const xub_StrLen nSTPos = rSmartTagList.Pos( i );
+        const xub_StrLen nSTLen = rSmartTagList.Len( i );
+
+        if ( nSTPos <= nCurrent && nCurrent < nSTPos + nSTLen )
+        {
+            const SwWrongArea* pArea = rSmartTagList.GetElement( i );
+            if ( pArea )
+            {
+                aSmartTagTypes.push_back( pArea->maType );
+                aStringKeyMaps.push_back( pArea->mxPropertyBag );
+            }
+        }
+    }
+
+    if ( aSmartTagTypes.size() )
+    {
+        rSmartTagTypes.realloc( aSmartTagTypes.size() );
+        rStringKeyMaps.realloc( aSmartTagTypes.size() );
+
+        std::vector< rtl::OUString >::const_iterator aTypesIter = aSmartTagTypes.begin();
+        USHORT i = 0;
+        for ( aTypesIter = aSmartTagTypes.begin(); aTypesIter != aSmartTagTypes.end(); ++aTypesIter )
+            rSmartTagTypes[i++] = *aTypesIter;
+
+        std::vector< uno::Reference< container::XStringKeyMap > >::const_iterator aMapsIter = aStringKeyMaps.begin();
+        i = 0;
+        for ( aMapsIter = aStringKeyMaps.begin(); aMapsIter != aStringKeyMaps.end(); ++aMapsIter )
+            rStringKeyMaps[i++] = *aMapsIter;
+    }
+}
+
+void lcl_FillTextRange( uno::Reference<text::XTextRange>& rRange,
+                   SwTxtNode& rNode, xub_StrLen nBegin, xub_StrLen nLen )
+{
+    // create SwPosition for nStartIndex
+    SwIndex aIndex( &rNode, nBegin );
+    SwPosition aStartPos( rNode, aIndex );
+
+    // create SwPosition for nEndIndex
+    SwPosition aEndPos( aStartPos );
+    aEndPos.nContent = nBegin + nLen;
+
+    uno::Reference<text::XTextRange> xRange =
+        SwXTextRange::CreateTextRangeFromPosition( rNode.GetDoc(), aStartPos, &aEndPos);
+
+    rRange = xRange;
+}
+
+void SwCrsrShell::GetSmartTagTerm( uno::Sequence< rtl::OUString >& rSmartTagTypes,
+                                   uno::Sequence< uno::Reference< container::XStringKeyMap > >& rStringKeyMaps,
+                                   uno::Reference< text::XTextRange>& rRange ) const
+{
+    if ( !SwSmartTagMgr::Get().IsSmartTagsEnabled() )
+        return;
+
+    SwPaM* pCrsr = GetCrsr();
+    SwPosition aPos( *pCrsr->GetPoint() );
+    SwTxtNode *pNode = aPos.nNode.GetNode().GetTxtNode();
+    if ( pNode && !pNode->IsInProtectSect() )
+    {
+        const SwWrongList *pSmartTagList = pNode->GetSmartTags();
+        if ( pSmartTagList )
+        {
+            xub_StrLen nCurrent = aPos.nContent.GetIndex();
+            xub_StrLen nBegin = nCurrent;
+            xub_StrLen nLen = 1;
+
+            if( pSmartTagList->InWrongWord( nBegin, nLen ) && !pNode->IsSymbol(nBegin) )
+            {
+                const USHORT nIndex = pSmartTagList->GetWrongPos( nBegin );
+                const SwWrongList* pSubList = pSmartTagList->SubList( nIndex );
+                if ( pSubList )
+                {
+                    pSmartTagList = pSubList;
+                    nCurrent = 0;
+                }
+
+                lcl_FillRecognizerData( rSmartTagTypes, rStringKeyMaps, *pSmartTagList, nCurrent );
+                lcl_FillTextRange( rRange, *pNode, nBegin, nLen );
+            }
+        }
+    }
+}
+
+// see also SwEditShell::GetCorrection( const Point* pPt, SwRect& rSelectRect )
+void SwCrsrShell::GetSmartTagTerm( const Point& rPt, SwRect& rSelectRect,
+                                   uno::Sequence< rtl::OUString >& rSmartTagTypes,
+                                   uno::Sequence< uno::Reference< container::XStringKeyMap > >& rStringKeyMaps,
+                                   uno::Reference<text::XTextRange>& rRange )
+{
+    if ( !SwSmartTagMgr::Get().IsSmartTagsEnabled() )
+        return;
+
+    SwPaM* pCrsr = GetCrsr();
+    SwPosition aPos( *pCrsr->GetPoint() );
+    Point aPt( rPt );
+    SwCrsrMoveState eTmpState( MV_SETONLYTEXT );
+    SwSpecialPos aSpecialPos;
+    eTmpState.pSpecialPos = &aSpecialPos;
+    SwTxtNode *pNode;
+    const SwWrongList *pSmartTagList;
+
+    if( GetLayout()->GetCrsrOfst( &aPos, aPt, &eTmpState ) &&
+        0 != (pNode = aPos.nNode.GetNode().GetTxtNode()) &&
+        0 != (pSmartTagList = pNode->GetSmartTags()) &&
+        !pNode->IsInProtectSect() )
+    {
+        xub_StrLen nCurrent = aPos.nContent.GetIndex();
+        xub_StrLen nBegin = nCurrent;
+        xub_StrLen nLen = 1;
+
+        if( pSmartTagList->InWrongWord( nBegin, nLen ) && !pNode->IsSymbol(nBegin) )
+        {
+            const USHORT nIndex = pSmartTagList->GetWrongPos( nBegin );
+            const SwWrongList* pSubList = pSmartTagList->SubList( nIndex );
+            if ( pSubList )
+            {
+                pSmartTagList = pSubList;
+                nCurrent = eTmpState.pSpecialPos->nCharOfst;
+            }
+
+            lcl_FillRecognizerData( rSmartTagTypes, rStringKeyMaps, *pSmartTagList, nCurrent );
+            lcl_FillTextRange( rRange, *pNode, nBegin, nLen );
+
+            // get smarttag word
+            String aText( pNode->GetTxt().Copy( nBegin, nLen ) );
+
+            //save the start and end positons of the line and the starting point
+            Push();
+            LeftMargin();
+            xub_StrLen nLineStart = GetCrsr()->GetPoint()->nContent.GetIndex();
+            RightMargin();
+            xub_StrLen nLineEnd = GetCrsr()->GetPoint()->nContent.GetIndex();
+            Pop(FALSE);
+
+            // make sure the selection build later from the
+            // data below does not include footnotes and other
+            // "in word" character to the left and right in order
+            // to preserve those. Therefore count those "in words"
+            // in order to modify the selection accordingly.
+            const sal_Unicode* pChar = aText.GetBuffer();
+            xub_StrLen nLeft = 0;
+            while (pChar && *pChar++ == CH_TXTATR_INWORD)
+                ++nLeft;
+            pChar = aText.Len() ? aText.GetBuffer() + aText.Len() - 1 : 0;
+            xub_StrLen nRight = 0;
+            while (pChar && *pChar-- == CH_TXTATR_INWORD)
+                ++nRight;
+
+            aPos.nContent = nBegin + nLeft;
+            pCrsr = GetCrsr();
+            *pCrsr->GetPoint() = aPos;
+            pCrsr->SetMark();
+            ExtendSelection( sal_True, nLen - nLeft - nRight );
+            //no determine the rectangle in the current line
+            xub_StrLen nWordStart = (nBegin + nLeft) < nLineStart ? nLineStart : nBegin + nLeft;
+            //take one less than the line end - otherwise the next line would be calculated
+            xub_StrLen nWordEnd = (nBegin + nLen - nLeft - nRight) > nLineEnd ? nLineEnd - 1: (nBegin + nLen - nLeft - nRight);
+            Push();
+            pCrsr->DeleteMark();
+            SwIndex& rContent = GetCrsr()->GetPoint()->nContent;
+            rContent = nWordStart;
+            SwRect aStartRect;
+            SwCrsrMoveState aState;
+            aState.bRealWidth = TRUE;
+            SwCntntNode* pCntntNode = pCrsr->GetCntntNode();
+            SwCntntFrm *pCntntFrame = pCntntNode->GetFrm( &rPt, pCrsr->GetPoint(), FALSE);
+
+            pCntntFrame->GetCharRect( aStartRect, *pCrsr->GetPoint(), &aState );
+            rContent = nWordEnd;
+            SwRect aEndRect;
+            pCntntFrame->GetCharRect( aEndRect, *pCrsr->GetPoint(),&aState );
+            rSelectRect = aStartRect.Union( aEndRect );
+            Pop(FALSE);
+        }
+    }
+}
+
