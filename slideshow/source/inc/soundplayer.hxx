@@ -4,9 +4,9 @@
  *
  *  $RCSfile: soundplayer.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: kz $ $Date: 2006-12-13 16:04:20 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 15:50:29 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -96,6 +96,8 @@ namespace slideshow
 
             bool startPlayback();
             bool stopPlayback();
+
+            void setPlaybackLoop( bool bLoop );
 
             // PauseEventHandler:
             virtual bool handlePause( bool bPauseShow );
