@@ -4,9 +4,9 @@
  *
  *  $RCSfile: e3dundo.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 04:55:45 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 18:02:32 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -37,23 +37,23 @@
 #include "precompiled_svx.hxx"
 
 #ifndef _E3D_UNDO_HXX
-#include "e3dundo.hxx"
+#include <svx/e3dundo.hxx>
 #endif
 
 #ifndef _SVDMODEL_HXX
-#include "svdmodel.hxx"
+#include <svx/svdmodel.hxx>
 #endif
 
 #ifndef _OUTLOBJ_HXX
-#include "outlobj.hxx"
+#include <svx/outlobj.hxx>
 #endif
 
 #ifndef _E3D_VIEW3D_HXX
-#include "view3d.hxx"
+#include <svx/view3d.hxx>
 #endif
 
 #ifndef _E3D_SCENE3D_HXX
-#include "scene3d.hxx"
+#include <svx/scene3d.hxx>
 #endif
 
 /************************************************************************/
