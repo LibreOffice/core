@@ -4,9 +4,9 @@
  *
  *  $RCSfile: CreateElemTContext.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 11:22:01 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 16:19:44 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -58,7 +58,7 @@
 #include "AttrTransformerAction.hxx"
 #endif
 #ifndef _XMLOFF_NMSPMAP_HXX
-#include "nmspmap.hxx"
+#include <xmloff/nmspmap.hxx>
 #endif
 
 using ::rtl::OUString;

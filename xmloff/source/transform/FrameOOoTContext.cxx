@@ -4,9 +4,9 @@
  *
  *  $RCSfile: FrameOOoTContext.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 11:24:45 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 16:20:56 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -49,7 +49,7 @@
 #include "xmlnmspe.hxx"
 #endif
 #ifndef _XMLOFF_NMSPMAP_HXX
-#include "nmspmap.hxx"
+#include <xmloff/nmspmap.hxx>
 #endif
 #ifndef _XMLOFF_ACTIONMAPTYPESOOO_HXX
 #include "ActionMapTypesOOo.hxx"
