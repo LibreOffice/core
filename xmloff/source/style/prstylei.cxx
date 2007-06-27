@@ -4,9 +4,9 @@
  *
  *  $RCSfile: prstylei.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: rt $ $Date: 2006-12-01 15:27:17 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 15:43:12 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -47,10 +47,10 @@
 #include "xmlnmspe.hxx"
 #endif
 #ifndef _XMLOFF_XMLTOKEN_HXX
-#include "xmltoken.hxx"
+#include <xmloff/xmltoken.hxx>
 #endif
 #ifndef _XMLOFF_XMLPROPERTYSETCONTEXT_HXX
-#include "xmlprcon.hxx"
+#include <xmloff/xmlprcon.hxx>
 #endif
 #ifndef _COM_SUN_STAR_STYLE_XSTYLE_HPP_
 #include <com/sun/star/style/XStyle.hpp>
@@ -72,14 +72,14 @@
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #endif
 #ifndef _XMLOFF_XMLIMP_HXX
-#include "xmlimp.hxx"
+#include <xmloff/xmlimp.hxx>
 #endif
 
 #ifndef _XMLOFF_PRSTYLEI_HXX
-#include "prstylei.hxx"
+#include <xmloff/prstylei.hxx>
 #endif
 #ifndef _XMLOFF_ATTRLIST_HXX
-#include "attrlist.hxx"
+#include <xmloff/attrlist.hxx>
 #endif
 #ifndef _XMLOFF_XMLERROR_HXX
 #include "xmlerror.hxx"
