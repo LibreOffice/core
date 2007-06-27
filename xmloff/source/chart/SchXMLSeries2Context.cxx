@@ -4,9 +4,9 @@
  *
  *  $RCSfile: SchXMLSeries2Context.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: vg $ $Date: 2007-05-22 16:07:02 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 14:49:26 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -83,17 +83,17 @@
 #include "xmlnmspe.hxx"
 #endif
 #ifndef _XMLOFF_XMLIMP_HXX
-#include "xmlimp.hxx"
+#include <xmloff/xmlimp.hxx>
 #endif
 #ifndef _XMLOFF_NMSPMAP_HX
-#include "nmspmap.hxx"
+#include <xmloff/nmspmap.hxx>
 #endif
 #ifndef SCH_XMLIMPORT_HXX_
 #include "SchXMLImport.hxx"
 #endif
 // header for class XMLPropStyleContext
 #ifndef _XMLOFF_PRSTYLEI_HXX_
-#include "prstylei.hxx"
+#include <xmloff/prstylei.hxx>
 #endif
 
 #include <typeinfo>
