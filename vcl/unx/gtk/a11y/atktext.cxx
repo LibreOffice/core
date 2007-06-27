@@ -4,9 +4,9 @@
  *
  *  $RCSfile: atktext.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: rt $ $Date: 2007-01-29 14:23:23 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 12:26:35 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -100,10 +100,14 @@ adjust_boundaries( accessibility::XAccessibleText* pText,
 
         // the OOo break iterator behaves as SENTENCE_START
         case ATK_TEXT_BOUNDARY_SENTENCE_END:
-            if( rTextSegment.SegmentStart > 0 )
-                start = rTextSegment.SegmentStart - 1;
-            if( rTextSegment.SegmentEnd > 0 )
-                end = rTextSegment.SegmentEnd - 1;
+            start = rTextSegment.SegmentStart;
+            end = rTextSegment.SegmentEnd;
+
+            if( start > 0 )
+                --start;
+            if( end > 0 && end < pText->getCharacterCount() - 1 )
+                --end;
+
             aString = pText->getTextRange(start, end);
             break;
 
@@ -251,7 +255,7 @@ text_wrapper_get_text (AtkText *text,
     }
 
 #ifdef ENABLE_TRACING
-    fprintf(stderr, "text_wrapper_get_text( %d,%d ) returns %s\n", start_offset, end_offset, ret);
+    fprintf(stderr, "text_wrapper_get_text( %d,%d ) returns %s\n", start_offset, end_offset, ret ? ret : "null" );
 #endif
     return ret;
 }
