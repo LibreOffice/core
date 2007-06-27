@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dlgfact.cxx,v $
  *
- *  $Revision: 1.39 $
+ *  $Revision: 1.40 $
  *
- *  last change: $Author: hr $ $Date: 2007-06-26 13:50:17 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 17:01:48 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -46,8 +46,8 @@
 #include <tools/rc.hxx>
 #include <sfx2/basedlgs.hxx>
 
-//#include "dialmgr.hxx"
-#include "dialogs.hrc"
+//#include <svx/dialmgr.hxx>
+#include <svx/dialogs.hrc>
 #include "fmresids.hrc"
 #include "gallery.hrc"
 #include "imapdlg.hrc"
