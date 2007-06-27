@@ -4,9 +4,9 @@
  *
  *  $RCSfile: tbxalign.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 06:06:50 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 19:19:12 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -40,8 +40,8 @@
 #include <svtools/aeitem.hxx>
 #endif
 
-#include "dialmgr.hxx"
-#include "dialogs.hrc"
+#include <svx/dialmgr.hxx>
+#include <svx/dialogs.hrc>
 
 #include "tbxalign.hxx"
 #include "tbxdraw.hxx"
