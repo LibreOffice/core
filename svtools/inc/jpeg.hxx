@@ -4,9 +4,9 @@
  *
  *  $RCSfile: jpeg.hxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: ihi $ $Date: 2006-11-14 15:38:19 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 21:05:06 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -40,7 +40,7 @@
 #include <vcl/graph.hxx>
 #endif
 #ifndef _FLTCALL_HXX
-#include "fltcall.hxx"
+#include <svtools/fltcall.hxx>
 #endif
 #ifndef _COM_SUN_STAR_UNO_SEQUENCE_H_
 #include <com/sun/star/uno/Sequence.h>
