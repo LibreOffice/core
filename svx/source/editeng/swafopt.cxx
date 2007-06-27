@@ -4,9 +4,9 @@
  *
  *  $RCSfile: swafopt.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: hr $ $Date: 2007-06-27 13:40:32 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 18:00:35 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -43,7 +43,7 @@
 #include <tools/string.hxx>
 #endif
 
-#include "swafopt.hxx"
+#include <svx/swafopt.hxx>
 
 /*------------------------------------------------------------------------
  Beschreibung:
