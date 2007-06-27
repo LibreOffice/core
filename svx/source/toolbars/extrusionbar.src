@@ -1,5 +1,5 @@
-#include <svxids.hrc>
-#include <dialogs.hrc>
+#include <svx/svxids.hrc>
+#include <svx/dialogs.hrc>
 
 ToolBox RID_SVX_EXTRUSION_BAR
 {
