@@ -4,9 +4,9 @@
  *
  *  $RCSfile: macros.hxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: hr $ $Date: 2006-06-19 22:57:21 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 12:20:31 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -197,8 +197,7 @@ void ClassName::disposing( const ::com::sun::star::lang::EventObject& ) throw(::
     #define DISPLAY_EXCEPTION( ClassName, MethodName, e )
 #endif
 
-#define IMPL_LISTENERMULTIPLEXER_LISTENERMETHOD( ClassName, InterfaceName, MethodName, EventType ) \
-void ClassName::MethodName( const EventType& evt ) throw(::com::sun::star::uno::RuntimeException) \
+#define IMPL_LISTENERMULTIPLEXER_LISTENERMETHOD_BODY( ClassName, InterfaceName, MethodName, EventType ) \
 { \
     EventType aMulti( evt ); \
     aMulti.Source = &GetContext(); \
@@ -223,6 +222,14 @@ void ClassName::MethodName( const EventType& evt ) throw(::com::sun::star::uno::
         } \
     } \
 }
+
+#define IMPL_LISTENERMULTIPLEXER_LISTENERMETHOD_EXCEPTION( ClassName, InterfaceName, MethodName, EventType, Exception ) \
+void ClassName::MethodName( const EventType& evt ) throw(::com::sun::star::uno::RuntimeException, Exception) \
+IMPL_LISTENERMULTIPLEXER_LISTENERMETHOD_BODY( ClassName, InterfaceName, MethodName, EventType )
+
+#define IMPL_LISTENERMULTIPLEXER_LISTENERMETHOD( ClassName, InterfaceName, MethodName, EventType ) \
+void ClassName::MethodName( const EventType& evt ) throw(::com::sun::star::uno::RuntimeException) \
+IMPL_LISTENERMULTIPLEXER_LISTENERMETHOD_BODY( ClassName, InterfaceName, MethodName, EventType )
 
 // -------------------------------------------------------------------------------------
 
