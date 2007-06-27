@@ -20,10 +20,11 @@ ex	extensions\source\xmlextract			nmake	-	all	ex_xmlextr ex_svg ex_inc NULL
 ex	extensions\source\propctrlr			nmake	-	all	ex_propctrlr ex_bib ex_inc NULL
 ex	extensions\source\dbpilots			nmake	-	all	ex_dbpilots ex_inc NULL
 ex	extensions\source\abpilot			nmake	-	all	ex_abpilot ex_inc NULL
+ex  extensions\source\logging           nmake   -   all ex_logging ex_inc NULL
 ex	extensions\source\preload			nmake	-	all	ex_preload	ex_inc NULL
 ex	extensions\source\config\ldap		nmake 	-	all ex_ldap ex_inc NULL
 ex	extensions\source\nsplugin\source	nmake	-	all	ex_nsplugin ex_inc NULL
 ex	extensions\source\update\feed    	nmake	-	all	ex_updchkfeed ex_inc NULL
 ex	extensions\source\update\check      	nmake	-	all	ex_updchk ex_inc NULL
 ex	extensions\source\update\ui      	nmake	-	all	ex_updchkui ex_inc NULL
-ex  extensions\util                        nmake   -   all ex_util ex_preload ex_abpilot ex_dbpilots ex_ldap ex_propctrlr ex_bib ex_plutil NULL
+ex  extensions\util                        nmake   -   all ex_util ex_preload ex_abpilot ex_dbpilots ex_logging ex_ldap ex_propctrlr ex_bib ex_plutil NULL
