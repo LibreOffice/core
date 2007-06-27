@@ -4,9 +4,9 @@
  *
  *  $RCSfile: fract.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: vg $ $Date: 2006-09-27 10:50:16 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 22:13:27 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -41,18 +41,18 @@
 #endif
 
 #ifndef _DEBUG_HXX
-#include <debug.hxx>
+#include <tools/debug.hxx>
 #endif
 
 #ifndef _FRACT_HXX
-#include <fract.hxx>
+#include <tools/fract.hxx>
 #endif
 
 #ifndef _STREAM_HXX
-#include <stream.hxx>
+#include <tools/stream.hxx>
 #endif
 
-#include <bigint.hxx>
+#include <tools/bigint.hxx>
 
 /*************************************************************************
 |*
