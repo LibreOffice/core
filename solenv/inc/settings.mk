@@ -4,9 +4,9 @@
 #
 #   $RCSfile: settings.mk,v $
 #
-#   $Revision: 1.215 $
+#   $Revision: 1.216 $
 #
-#   last change: $Author: ihi $ $Date: 2007-06-04 14:49:38 $
+#   last change: $Author: hr $ $Date: 2007-06-27 14:02:22 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -1261,6 +1261,11 @@ UNOUCRBASE*=UCR
 UNOUCROUT*=$(OUT)$/inc$/$(TARGET)
 INCPRE+=-I$(UNOUCROUT)
 UNOUCRRDB*=$(SOLARBINDIR)$/types.rdb
+
+# location of trustedinfo.manifest for Windows Vista
+.IF "$(COM)"=="MSC"
+TRUSTED_MANIFEST_LOCATION*=$(SOLARENV)$/inc
+.ENDIF # "$(COM)"=="MSC"
 
 # --- Compiler -----------------------------------------------------
 .INCLUDE : rules.mk
