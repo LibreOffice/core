@@ -4,9 +4,9 @@
  *
  *  $RCSfile: fmtextcontroldialogs.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: kz $ $Date: 2007-05-10 14:47:57 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 18:15:34 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -41,10 +41,10 @@
 #endif
 
 #ifndef _SVX_DIALMGR_HXX
-#include "dialmgr.hxx"
+#include <svx/dialmgr.hxx>
 #endif
 #ifndef _SVX_DIALOGS_HRC
-#include "dialogs.hrc"
+#include <svx/dialogs.hrc>
 #endif
 
 #ifndef _SVX_CHARDLG_HXX
@@ -54,7 +54,7 @@
 //#include "paragrph.hxx"
 #endif
 #ifndef _EEITEM_HXX
-#include "eeitem.hxx"
+#include <svx/eeitem.hxx>
 #endif
 #ifndef _SVX_TABSTPGE_HXX
 //#include "tabstpge.hxx"
