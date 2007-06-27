@@ -4,9 +4,9 @@
  *
  *  $RCSfile: svddrgmt.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: ihi $ $Date: 2006-11-14 13:40:07 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 18:59:14 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -48,18 +48,18 @@
 #endif
 
 #include "xattr.hxx"
-#include "xpoly.hxx"
+#include <svx/xpoly.hxx>
 #include "svdxout.hxx"
-#include "svdetc.hxx"
-#include "svdtrans.hxx"
-#include "svdundo.hxx"
-#include "svdmark.hxx"
-#include "svdocapt.hxx"
-#include "svdpagv.hxx"
+#include <svx/svdetc.hxx>
+#include <svx/svdtrans.hxx>
+#include <svx/svdundo.hxx>
+#include <svx/svdmark.hxx>
+#include <svx/svdocapt.hxx>
+#include <svx/svdpagv.hxx>
 #include "svdstr.hrc"   // Namen aus der Resource
 #include "svdglob.hxx"  // StringCache
-#include "svddrgv.hxx"
-#include "svdundo.hxx"
+#include <svx/svddrgv.hxx>
+#include <svx/svdundo.hxx>
 
 #ifndef _BGFX_POLYGON_B2DPOLYGON_HXX
 #include <basegfx/polygon/b2dpolygon.hxx>
@@ -82,7 +82,7 @@
 #endif
 
 #ifndef _SDRPAGEWINDOW_HXX
-#include <sdrpagewindow.hxx>
+#include <svx/sdrpagewindow.hxx>
 #endif
 
 #ifndef _SDRPAINTWINDOW_HXX
