@@ -4,9 +4,9 @@
  *
  *  $RCSfile: templwin.hxx,v $
  *
- *  $Revision: 1.34 $
+ *  $Revision: 1.35 $
  *
- *  last change: $Author: obo $ $Date: 2006-07-13 12:07:05 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 21:22:06 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -49,7 +49,7 @@
 #endif
 
 #ifndef _HEADBAR_HXX
-#include "headbar.hxx"
+#include <svtools/headbar.hxx>
 #endif
 #ifndef _SVT_FILEVIEW_HXX
 #include "fileview.hxx"
@@ -58,10 +58,10 @@
 #include "ivctrl.hxx"
 #endif
 #ifndef _SVTOOLS_SVMEDIT2_HXX
-#include "svmedit2.hxx"
+#include <svtools/svmedit2.hxx>
 #endif
 #ifndef SVTOOLS_RESTRICTEDPATHS_HXX
-#include "restrictedpaths.hxx"
+#include <svtools/restrictedpaths.hxx>
 #endif
 
 #ifndef _COM_SUN_STAR_FRAME_XDISPATCH_HPP_
