@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ChildrenManagerImpl.hxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 20:20:51 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 16:41:08 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -36,16 +36,16 @@
 #ifndef _SVX_ACCESSIBILITY_CHILDREN_MANAGER_IMPL_HXX
 
 #ifndef _SVX_ACCESSIBILITY_IACCESSIBLE_VIEW_FORWARDER_LISTENER_HXX
-#include "IAccessibleViewForwarderListener.hxx"
+#include <svx/IAccessibleViewForwarderListener.hxx>
 #endif
 #ifndef _SVX_ACCESSIBILITY_IACCESSIBLE_PARENT_HXX
-#include "IAccessibleParent.hxx"
+#include <svx/IAccessibleParent.hxx>
 #endif
 #ifndef _SVX_ACCESSIBILITY_ACCESSIBLE_SHAPE_TREE_INFO_HXX
-#include "AccessibleShapeTreeInfo.hxx"
+#include <svx/AccessibleShapeTreeInfo.hxx>
 #endif
 #ifndef _SVX_ACCESSIBILITY_ACCESSIBLE_CONTEXT_BASE_HXX
-#include "AccessibleContextBase.hxx"
+#include <svx/AccessibleContextBase.hxx>
 #endif
 
 #ifndef _CPPUHELPER_COMPBASE2_HXX_
