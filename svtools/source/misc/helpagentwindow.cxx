@@ -4,9 +4,9 @@
  *
  *  $RCSfile: helpagentwindow.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 15:10:24 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 21:50:13 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -50,14 +50,14 @@
 #include <vcl/bitmap.hxx>
 #endif
 #ifndef _SVTOOLS_SVTDATA_HXX
-#include <svtdata.hxx>
+#include <svtools/svtdata.hxx>
 #endif
 
 #ifndef _SVTOOLS_HRC
-#include "svtools.hrc"
+#include <svtools/svtools.hrc>
 #endif
 #ifndef _SVT_HELPID_HRC
-#include "helpid.hrc"
+#include <svtools/helpid.hrc>
 #endif
 
 #define WB_AGENT_STYLE  0
