@@ -4,9 +4,9 @@
  *
  *  $RCSfile: module_hidden_ooo.scp,v $
  *
- *  $Revision: 1.64 $
+ *  $Revision: 1.65 $
  *
- *  last change: $Author: hr $ $Date: 2007-06-27 12:31:22 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 15:43:57 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -248,6 +248,7 @@ Module gid_Module_Root_Files_4
 	gid_File_Lib_Sw,
 	gid_File_Lib_TextConversionDlgs,
 	gid_File_Lib_Tk,
+    gid_File_Lib_Acc,
 	gid_File_Lib_Tools,
 	gid_File_Lib_Utl,
 	gid_File_Lib_Uui,
@@ -975,7 +976,7 @@ Module gid_Module_Root_Files_8
 	gid_File_Res_TextConversionDlgs,
 	gid_File_Res_Sw,
 	gid_File_Res_Tab,
-	gid_File_Res_Tk,
+	gid_File_Res_Acc,
 	gid_File_Res_Tpl,
 	gid_File_Res_Uui,
 	gid_File_Res_Vcl,
