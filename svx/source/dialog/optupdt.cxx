@@ -4,9 +4,9 @@
  *
  *  $RCSfile: optupdt.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: rt $ $Date: 2007-04-27 08:44:37 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 17:31:10 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -56,8 +56,8 @@
 #include "optupdt.hxx"
 #include "optupdt.hrc"
 
-#include "dialmgr.hxx"
-#include "dialogs.hrc"
+#include <svx/dialmgr.hxx>
+#include <svx/dialogs.hrc>
 
 
 #ifndef _COMPHELPER_PROCESSFACTORY_HXX_
