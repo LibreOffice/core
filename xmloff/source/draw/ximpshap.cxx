@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ximpshap.cxx,v $
  *
- *  $Revision: 1.119 $
+ *  $Revision: 1.120 $
  *
- *  last change: $Author: vg $ $Date: 2007-05-22 16:10:13 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 15:11:25 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -89,15 +89,15 @@
 #endif
 
 #ifndef _XMLOFF_XMLBASE64IMPORTCONTEXT_HXX
-#include "XMLBase64ImportContext.hxx"
+#include <xmloff/XMLBase64ImportContext.hxx>
 #endif
 
 #ifndef _XMLOFF_XMLSHAPESTYLECONTEXT_HXX
-#include "XMLShapeStyleContext.hxx"
+#include <xmloff/XMLShapeStyleContext.hxx>
 #endif
 
 #ifndef _XMLOFF_XMLUCONV_HXX
-#include "xmluconv.hxx"
+#include <xmloff/xmluconv.hxx>
 #endif
 
 #ifndef _COM_SUN_STAR_CONTAINER_XNAMED_HPP_
@@ -168,7 +168,7 @@
 #endif
 
 #ifndef _XMLOFF_FAMILIES_HXX_
-#include "families.hxx"
+#include <xmloff/families.hxx>
 #endif
 
 #ifndef _XIMPSTYLE_HXX
@@ -180,7 +180,7 @@
 #endif
 
 #ifndef _XMLOFF_XMLTOKEN_HXX
-#include "xmltoken.hxx"
+#include <xmloff/xmltoken.hxx>
 #endif
 
 #ifndef _ENHANCED_CUSTOMSHAPE_TOKEN_HXX
