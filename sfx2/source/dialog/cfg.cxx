@@ -4,9 +4,9 @@
  *
  *  $RCSfile: cfg.cxx,v $
  *
- *  $Revision: 1.59 $
+ *  $Revision: 1.60 $
  *
- *  last change: $Author: rt $ $Date: 2007-04-26 10:10:27 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 23:09:39 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -72,22 +72,22 @@
 #include "helpid.hrc"
 #endif
 
-#include "app.hxx"
-#include "msg.hxx"
-#include "msgpool.hxx"
+#include <sfx2/app.hxx>
+#include <sfx2/msg.hxx>
+#include <sfx2/msgpool.hxx>
 #include "sfxresid.hxx"
-#include "macrconf.hxx"
+#include <sfx2/macrconf.hxx>
 #include "minfitem.hxx"
 #include "sfxresid.hxx"
-#include "objsh.hxx"
-#include "dispatch.hxx"
+#include <sfx2/objsh.hxx>
+#include <sfx2/dispatch.hxx>
 #include "sfxtypes.hxx"
 #include "eventdlg.hxx"
 #include "minfitem.hxx"
-#include "viewfrm.hxx"
+#include <sfx2/viewfrm.hxx>
 #include "workwin.hxx"
-#include "filedlghelper.hxx"
-#include "request.hxx"
+#include <sfx2/filedlghelper.hxx>
+#include <sfx2/request.hxx>
 
 #ifndef _UNOTOOLS_PROCESSFACTORY_HXX_
 #include <unotools/processfactory.hxx>
