@@ -4,9 +4,9 @@
  *
  *  $RCSfile: fntcache.cxx,v $
  *
- *  $Revision: 1.87 $
+ *  $Revision: 1.88 $
  *
- *  last change: $Author: hr $ $Date: 2007-01-04 10:51:18 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 13:20:37 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -276,7 +276,6 @@ void lcl_calcLinePos( SwDrawTextInfo& rInf, Font& rFont, Point& rStart, Point& r
                       xub_StrLen nWrLen, xub_StrLen nCnt, const BOOL bSwitchH2V, const BOOL bSwitchL2R,
                       long nHalfSpace, sal_Int32* pKernArray, const BOOL bBidiPor)
 {
-   rStart = Point( rInf.GetPos() );
    long nBlank = 0;
    const xub_StrLen nEnd = nStart + nWrLen;
    const long nTmpSpaceAdd = rInf.GetSpace() / SPACING_PRECISION_FACTOR;
@@ -1750,7 +1749,7 @@ void SwFntObj::DrawText( SwDrawTextInfo &rInf )
 
                             const Color aCol( rInf.GetOut().GetLineColor() );
                             const Color lineColor = SwViewOption::GetSpellColor();
-                            BOOL bColSave = aCol != lineColor;
+                            const BOOL bColSave = aCol != lineColor;
                             if ( bColSave )
                                 rInf.GetOut().SetLineColor( lineColor );
 
@@ -1760,7 +1759,9 @@ void SwFntObj::DrawText( SwDrawTextInfo &rInf )
                                 nStart -= rInf.GetIdx();
 
                                 //determine line pos
-                                Point aStart, aEnd;
+                                Point aStart( rInf.GetPos() );
+                                Point aEnd;
+
                                 const xub_StrLen nEnd = nStart + nWrLen;
                                 lcl_calcLinePos(rInf, *GetFont(), aStart, aEnd, nStart, nWrLen,
                                                 nCnt, bSwitchH2V, bSwitchL2R,
@@ -1784,7 +1785,7 @@ void SwFntObj::DrawText( SwDrawTextInfo &rInf )
 
                 if (rInf.GetSmartTags())
                 {
-                    Color lineColor = Color( RGB_COLORDATA(150, 50, 255) );
+                    const Color lineColor = SwViewOption::GetSmarttagColor();
                     xub_StrLen nStart = rInf.GetIdx();
                     xub_StrLen nWrLen = rInf.GetLen();
                     // check if a smarttag word is available in the current text range
@@ -1793,8 +1794,8 @@ void SwFntObj::DrawText( SwDrawTextInfo &rInf )
                         if ( rInf.GetOut().GetConnectMetaFile() )
                             rInf.GetOut().Push();
 
-                        Color aCol( rInf.GetOut().GetLineColor() );
-                        BOOL bColSave = aCol != lineColor;
+                        const Color aCol( rInf.GetOut().GetLineColor() );
+                        const BOOL bColSave = aCol != lineColor;
                         if ( bColSave )
                             rInf.GetOut().SetLineColor( lineColor );
 
@@ -1804,22 +1805,23 @@ void SwFntObj::DrawText( SwDrawTextInfo &rInf )
                             nStart -= rInf.GetIdx();
 
                             //determine line pos
-                            Point aStart, aEnd;
+                            Point aStart( aPos );
+                            Point aEnd;
                             const xub_StrLen nEnd = nStart + nWrLen;
                             lcl_calcLinePos(rInf, *GetFont(), aStart, aEnd, nStart, nWrLen,
                                             nCnt, bSwitchH2V, bSwitchL2R,
                                             nHalfSpace, pKernArray, bBidiPor);
 
-                            aStart.Y() +=25;
-                            aEnd.Y() +=25;
+                            aStart.Y() +=30;
+                            aEnd.Y() +=30;
 
-                            LineInfo aInfo = LineInfo(LINE_DASH);
-                            aInfo.SetDistance( 25 );
-                            aInfo.SetDashLen( 5 );
-                            aInfo.SetDashCount(1);
+                            LineInfo aLineInfo( LINE_DASH );
+                            aLineInfo.SetDistance( 40 );
+                            aLineInfo.SetDashLen( 1 );
+                            aLineInfo.SetDashCount(1);
 
                             // draw line
-                            rInf.GetOut().DrawLine( aStart, aEnd, aInfo );
+                            rInf.GetOut().DrawLine( aStart, aEnd, aLineInfo );
                             nStart = nEnd + rInf.GetIdx();
                             nWrLen = rInf.GetIdx() + rInf.GetLen() - nStart;
                         }
