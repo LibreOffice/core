@@ -4,9 +4,9 @@
  *
  *  $RCSfile: svdpage.cxx,v $
  *
- *  $Revision: 1.58 $
+ *  $Revision: 1.59 $
  *
- *  last change: $Author: vg $ $Date: 2006-11-21 16:56:53 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 19:10:58 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -36,7 +36,7 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_svx.hxx"
 
-#include "svdpage.hxx"
+#include <svx/svdpage.hxx>
 
 // HACK
 #ifdef SVX_LIGHT
@@ -53,7 +53,7 @@
 #include <sot/storage.hxx>
 #endif
 #ifndef _SVDVIEW_HXX
-#include "svdview.hxx"
+#include <svx/svdview.hxx>
 #endif
 #include <string.h>
 #ifndef _STRING_H
@@ -63,26 +63,26 @@
 #include <vcl/svapp.hxx>
 #endif
 
-#include "svdetc.hxx"
+#include <svx/svdetc.hxx>
 #include "svdxout.hxx"
-#include "svdobj.hxx"
-#include "svdogrp.hxx"
-#include "svdograf.hxx" // fuer SwapInAll()
-#include "svdoedge.hxx" // Zum kopieren der Konnektoren
-#include "svdoole2.hxx" // Sonderbehandlung OLE beim SdrExchangeFormat
+#include <svx/svdobj.hxx>
+#include <svx/svdogrp.hxx>
+#include <svx/svdograf.hxx> // fuer SwapInAll()
+#include <svx/svdoedge.hxx> // Zum kopieren der Konnektoren
+#include <svx/svdoole2.hxx> // Sonderbehandlung OLE beim SdrExchangeFormat
 #include "svditer.hxx"
-#include "svdmodel.hxx"
-#include "svdlayer.hxx"
-#include "svdotext.hxx"
-#include "svdpagv.hxx"
-#include "svdundo.hxx"
-#include "fmglob.hxx"
-#include "polysc3d.hxx"
+#include <svx/svdmodel.hxx>
+#include <svx/svdlayer.hxx>
+#include <svx/svdotext.hxx>
+#include <svx/svdpagv.hxx>
+#include <svx/svdundo.hxx>
+#include <svx/fmglob.hxx>
+#include <svx/polysc3d.hxx>
 
 #ifndef SVX_LIGHT
-#include "fmdpage.hxx"
+#include <svx/fmdpage.hxx>
 #else
-#include "unopage.hxx"
+#include <svx/unopage.hxx>
 #endif
 
 #include <sfx2/objsh.hxx>
