@@ -4,9 +4,9 @@
  *
  *  $RCSfile: object.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 16:08:41 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 22:49:25 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -39,8 +39,8 @@
 #define _SOT_OBJECT_CXX
 
 #include <tools/debug.hxx>
-#include <object.hxx>
-#include <factory.hxx>
+#include <sot/object.hxx>
+#include <sot/factory.hxx>
 #include <agg.hxx>
 
 /************** class SvAggregateMemberList *****************************/
