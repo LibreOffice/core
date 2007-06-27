@@ -7,9 +7,9 @@
 #
 #   $RCSfile: build.pl,v $
 #
-#   $Revision: 1.156 $
+#   $Revision: 1.157 $
 #
-#   last change: $Author: hr $ $Date: 2007-06-26 17:33:08 $
+#   last change: $Author: hr $ $Date: 2007-06-27 17:47:49 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -78,7 +78,7 @@
 
     ( $script_name = $0 ) =~ s/^.*\b(\w+)\.pl$/$1/;
 
-    $id_str = ' $Revision: 1.156 $ ';
+    $id_str = ' $Revision: 1.157 $ ';
     $id_str =~ /Revision:\s+(\S+)\s+\$/
       ? ($script_rev = $1) : ($script_rev = "-");
 
@@ -906,7 +906,6 @@ sub CheckPlatform {
     return 1 if ($Platform eq 'all');
     return 1 if (($ENV{GUI} eq 'WIN') && ($Platform eq 'w'));
     return 1 if (($ENV{GUI} eq 'UNX') && ($Platform eq 'u'));
-    return 1 if (($ENV{GUI} eq 'MAC') && ($Platform eq 'm'));
     return 1 if (($ENV{GUI} eq 'OS2') && ($Platform eq 'p'));
     return 1 if (($ENV{GUI} eq 'WNT') &&
                        (($Platform eq 'w') || ($Platform eq 'n')));
