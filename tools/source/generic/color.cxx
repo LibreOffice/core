@@ -4,9 +4,9 @@
  *
  *  $RCSfile: color.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: rt $ $Date: 2007-04-26 09:47:30 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 22:13:02 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -43,25 +43,25 @@
 #endif
 
 #ifndef _TOOLS_COLOR_HXX
-#include <color.hxx>
+#include <tools/color.hxx>
 #endif
 #ifndef _TOOLS_DEBUG_HXX
-#include <debug.hxx>
+#include <tools/debug.hxx>
 #endif
 #ifndef _STREAM_HXX
-#include <stream.hxx>
+#include <tools/stream.hxx>
 #endif
 #ifndef _TOOLS_RC_HXX
-#include <rc.hxx>
+#include <tools/rc.hxx>
 #endif
 #ifndef _TOOLS_RCID_H
-#include <rcid.h>
+#include <tools/rcid.h>
 #endif
 #ifndef _TOOLS_RESID_HXX
-#include <resid.hxx>
+#include <tools/resid.hxx>
 #endif
 #ifndef _SV_RC_H
-#include <rc.h>
+#include <tools/rc.h>
 #endif
 
 // -----------
