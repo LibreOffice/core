@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xilink.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: vg $ $Date: 2007-02-27 12:27:06 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 12:44:39 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -524,7 +524,7 @@ void XclImpSupbook::CreateTables( sal_uInt16 nSBTabFirst, sal_uInt16 nSBTabLast 
 
         // get filter name for external document
         if( !maFilterName.Len() )
-            ScDocumentLoader::GetFilterName( aAbsUrl, maFilterName, maFilterOpt, FALSE );
+            ScDocumentLoader::GetFilterName( aAbsUrl, maFilterName, maFilterOpt, FALSE, FALSE );
 
         // create tables
         for( sal_uInt16 nSBTab = nSBTabFirst; nSBTab <= nSBTabLast; ++nSBTab )
