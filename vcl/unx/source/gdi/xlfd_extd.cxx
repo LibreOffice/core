@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xlfd_extd.cxx,v $
  *
- *  $Revision: 1.29 $
+ *  $Revision: 1.30 $
  *
- *  last change: $Author: rt $ $Date: 2007-04-04 08:07:28 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 20:51:07 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -49,7 +49,7 @@
 #include "xlfd_extd.hxx"
 #endif
 #ifndef _SV_OUTFONT_HXX
-#include <outfont.hxx>
+#include <vcl/outfont.hxx>
 #endif
 
 #ifndef _RTL_ALLOC_H_
