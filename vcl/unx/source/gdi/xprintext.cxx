@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xprintext.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 12:41:06 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 20:51:46 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -58,22 +58,22 @@
 #include <saldisp.hxx>
 #endif
 #ifndef _SV_SALINST_HXX
-#include <salinst.hxx>
+#include <vcl/salinst.hxx>
 #endif
 #ifndef _SV_SALPRN_HXX
-#include <salprn.hxx>
+#include <vcl/salprn.hxx>
 #endif
 #ifndef _SV_SALGDI_HXX
-#include <salgdi.hxx>
+#include <vcl/salgdi.hxx>
 #endif
 #ifndef _SV_SALPRN_H
 #include <salprn.h>
 #endif
 #ifndef _SV_PRINT_H
-#include <print.h>
+#include <vcl/print.h>
 #endif
 #ifndef _SV_JOBSET_H
-#include <jobset.h>
+#include <vcl/jobset.h>
 #endif
 
 #ifndef _SAL_I18N_INPUTMETHOD_HXX
