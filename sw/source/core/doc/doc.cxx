@@ -4,9 +4,9 @@
  *
  *  $RCSfile: doc.cxx,v $
  *
- *  $Revision: 1.56 $
+ *  $Revision: 1.57 $
  *
- *  last change: $Author: kz $ $Date: 2007-06-20 10:11:04 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 13:17:58 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1381,6 +1381,25 @@ BOOL lcl_SpellAgain( const SwNodePtr& rpNd, void* pArgs )
     return TRUE;
 }
 
+BOOL lcl_CheckSmartTagsAgain( const SwNodePtr& rpNd, void*  )
+{
+    SwTxtNode *pTxtNode = (SwTxtNode*)rpNd->GetTxtNode();
+//  BOOL bOnlyWrong = *(BOOL*)pArgs;
+    if( pTxtNode )
+    {
+        pTxtNode->SetSmartTagDirty( true );
+        if( pTxtNode->GetSmartTags() )
+        {
+//            if ( bOnlyWrong ) // only some smart tag types have been enabled or disabled
+//              pTxtNode->GetSmartTags()->SetInvalid( 0, STRING_LEN );
+//            else // smart tags all have been enabled or disabled
+                pTxtNode->SetSmartTags( NULL );
+        }
+    }
+    return TRUE;
+}
+
+
 /*************************************************************************
  *      SwDoc::SpellItAgainSam( BOOL bInvalid, BOOL bOnlyWrong )
  *
@@ -1392,7 +1411,7 @@ BOOL lcl_SpellAgain( const SwNodePtr& rpNd, void* pArgs )
  * Woertern oder die kompletten Bereiche neu ueberprueft werden muessen.
  ************************************************************************/
 
-void SwDoc::SpellItAgainSam( BOOL bInvalid, BOOL bOnlyWrong )
+void SwDoc::SpellItAgainSam( BOOL bInvalid, BOOL bOnlyWrong, BOOL bSmartTags )
 {
     ASSERT( GetRootFrm(), "SpellAgain: Where's my RootFrm?" );
     if( bInvalid )
@@ -1400,11 +1419,19 @@ void SwDoc::SpellItAgainSam( BOOL bInvalid, BOOL bOnlyWrong )
         SwPageFrm *pPage = (SwPageFrm*)GetRootFrm()->Lower();
         while ( pPage )
         {
+            if ( bSmartTags )
+                pPage->InvalidateSmartTags();
+
             pPage->InvalidateSpelling();
             pPage = (SwPageFrm*)pPage->GetNext();
         }
+
+        if ( bSmartTags )
+            GetNodes().ForEach( lcl_CheckSmartTagsAgain, &bOnlyWrong );
+
         GetNodes().ForEach( lcl_SpellAgain, &bOnlyWrong );
     }
+
     GetRootFrm()->SetIdleFlags();
 }
 
