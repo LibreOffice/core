@@ -4,9 +4,9 @@
  *
  *  $RCSfile: fontworkgallery.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: kz $ $Date: 2007-05-10 15:01:06 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 19:16:26 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -47,23 +47,23 @@
 #endif
 
 #ifndef _SVX_FMMODEL_HXX
-#include <fmmodel.hxx>
+#include <svx/fmmodel.hxx>
 #endif
 #ifndef _SFXDISPATCH_HXX //autogen
 #include <sfx2/dispatch.hxx>
 #endif
 #include <dlgutil.hxx>
 
-#include "svxids.hrc"
-#include "dialmgr.hxx"
-#include "dialogs.hrc"
+#include <svx/svxids.hrc>
+#include <svx/dialmgr.hxx>
+#include <svx/dialogs.hrc>
 #include "gallery.hxx"
-#include "svdpage.hxx"
-#include "svdobj.hxx"
-#include "svdview.hxx"
-#include "svdoutl.hxx"
-#include "eeitem.hxx"
-#include "frmdiritem.hxx"
+#include <svx/svdpage.hxx>
+#include <svx/svdobj.hxx>
+#include <svx/svdview.hxx>
+#include <svx/svdoutl.hxx>
+#include <svx/eeitem.hxx>
+#include <svx/frmdiritem.hxx>
 #include "toolbarmenu.hxx"
 
 #include "fontworkgallery.hxx"

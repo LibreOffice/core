@@ -4,9 +4,9 @@
  *
  *  $RCSfile: extrusioncontrols.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: kz $ $Date: 2007-05-10 15:00:40 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 19:15:27 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -62,26 +62,26 @@
 #include <svtools/intitem.hxx>
 #endif
 #ifndef _SVX_COLRITEM_HXX
-#include "colritem.hxx"
+#include <svx/colritem.hxx>
 #endif
 #ifndef _SVX_CHRTITEM_HXX
 #include "chrtitem.hxx"
 #endif
 #include <tools/urlobj.hxx>
 
-#include "dialogs.hrc"
+#include <svx/dialogs.hrc>
 #include "helpid.hrc"
 
 //#include "drawitem.hxx"
 //#include "xattr.hxx"
-//#include "xtable.hxx"
+//#include <svx/xtable.hxx>
 //#include "linectrl.hxx"
-//#include "itemwin.hxx"
-#include "svdtrans.hxx"
-#include "dialmgr.hxx"
+//#include <svx/itemwin.hxx>
+#include <svx/svdtrans.hxx>
+#include <svx/dialmgr.hxx>
 #include "extrusioncontrols.hxx"
 #include "extrusioncontrols.hrc"
-#include "sdasitm.hxx"
+#include <svx/sdasitm.hxx>
 #include "toolbarmenu.hxx"
 #include "colorwindow.hxx"
 
