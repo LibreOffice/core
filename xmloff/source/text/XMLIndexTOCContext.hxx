@@ -4,9 +4,9 @@
  *
  *  $RCSfile: XMLIndexTOCContext.hxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 15:09:15 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 15:59:51 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -37,7 +37,7 @@
 #define _XMLOFF_XMLINDEXTOCCONTEXT_HXX_
 
 #ifndef _XMLOFF_XMLICTXT_HXX
-#include "xmlictxt.hxx"
+#include <xmloff/xmlictxt.hxx>
 #endif
 
 #ifndef _COM_SUN_STAR_UNO_REFERENCE_H_
