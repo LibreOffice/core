@@ -4,9 +4,9 @@
  *
  *  $RCSfile: svdview.cxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: kz $ $Date: 2007-05-10 14:59:46 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 19:13:08 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -37,31 +37,31 @@
 #include "precompiled_svx.hxx"
 
 #ifndef _EEITEM_HXX //autogen
-#include <eeitem.hxx>
+#include <svx/eeitem.hxx>
 #endif
 
 #include "svdstr.hrc"   // Namen aus der Resource
 #include "svdglob.hxx"  // StringCache
-#include "svdpagv.hxx"
-#include "svdmrkv.hxx"
-#include "svdedxv.hxx"
-#include "svdobj.hxx"
-#include "svdopath.hxx" // fuer GetContext
-#include "svdograf.hxx" // fuer GetContext
-#include "svdomedia.hxx" // fuer GetContext
-#include "svdetc.hxx"   // Fuer SdrEngineDefaults
+#include <svx/svdpagv.hxx>
+#include <svx/svdmrkv.hxx>
+#include <svx/svdedxv.hxx>
+#include <svx/svdobj.hxx>
+#include <svx/svdopath.hxx> // fuer GetContext
+#include <svx/svdograf.hxx> // fuer GetContext
+#include <svx/svdomedia.hxx> // fuer GetContext
+#include <svx/svdetc.hxx>   // Fuer SdrEngineDefaults
 
 #ifdef DBG_UTIL
 #include <svdibrow.hxx>
 #endif
 
-#include "svdoutl.hxx"
-#include "svdview.hxx"
-#include "editview.hxx" // fuer GetField
-#include "flditem.hxx"  // fuer URLField
-#include "obj3d.hxx"
-#include "svddrgmt.hxx"
-#include "svdoutl.hxx"
+#include <svx/svdoutl.hxx>
+#include <svx/svdview.hxx>
+#include <svx/editview.hxx> // fuer GetField
+#include <svx/flditem.hxx>  // fuer URLField
+#include <svx/obj3d.hxx>
+#include <svx/svddrgmt.hxx>
+#include <svx/svdoutl.hxx>
 
 // #90477#
 #ifndef _TOOLS_TENCCVT_HXX
@@ -81,7 +81,7 @@
 #endif
 
 #ifndef _SDRPAGEWINDOW_HXX
-#include <sdrpagewindow.hxx>
+#include <svx/sdrpagewindow.hxx>
 #endif
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -878,7 +878,7 @@ BOOL SdrView::DoMouseEvent(const SdrViewEvent& rVEvt)
 }
 
 #ifndef _OUTLOBJ_HXX
-#include "outlobj.hxx"
+#include <svx/outlobj.hxx>
 #endif
 
 Pointer SdrView::GetPreferedPointer(const Point& rMousePos, const OutputDevice* pOut, USHORT nModifier, BOOL bLeftDown) const
