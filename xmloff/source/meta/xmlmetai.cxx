@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xmlmetai.cxx,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: vg $ $Date: 2007-05-22 16:10:37 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 15:19:39 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -50,20 +50,20 @@
 #include <rtl/ustrbuf.hxx>
 #endif
 
-#include <xmluconv.hxx>
+#include <xmloff/xmluconv.hxx>
 
-#include "xmlmetai.hxx"
-#include "xmltkmap.hxx"
+#include <xmloff/xmlmetai.hxx>
+#include <xmloff/xmltkmap.hxx>
 #include "xmlnmspe.hxx"
-#include "xmlimp.hxx"
-#include "nmspmap.hxx"
+#include <xmloff/xmlimp.hxx>
+#include <xmloff/nmspmap.hxx>
 
 #ifndef _XMLOFF_XMLTOKEN_HXX
-#include "xmltoken.hxx"
+#include <xmloff/xmltoken.hxx>
 #endif
 
 #ifndef _XMLOFF_XMLUCONV_HXX
-#include "xmluconv.hxx"
+#include <xmloff/xmluconv.hxx>
 #endif
 
 using ::rtl::OUString;
