@@ -4,9 +4,9 @@
  *
  *  $RCSfile: lnkbase2.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: vg $ $Date: 2006-11-23 12:02:26 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 22:59:46 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -37,13 +37,13 @@
 #include "precompiled_sfx2.hxx"
 
 
-#include "lnkbase.hxx"
+#include <sfx2/lnkbase.hxx>
 #include <sot/exchange.hxx>
 #include <com/sun/star/uno/Any.hxx>
 #include <com/sun/star/uno/Sequence.hxx>
 #include <vcl/msgbox.hxx>
 
-#include "linkmgr.hxx"
+#include <sfx2/linkmgr.hxx>
 //#include "svuidlg.hrc"
 //#include "iface.hxx"
 #include <vcl/svapp.hxx>
@@ -51,7 +51,7 @@
 
 #include "app.hrc"
 #include "sfxresid.hxx"
-#include "filedlghelper.hxx"
+#include <sfx2/filedlghelper.hxx>
 
 #include <tools/debug.hxx>
 
