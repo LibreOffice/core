@@ -4,9 +4,9 @@
  *
  *  $RCSfile: jobset.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 12:04:33 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 20:17:14 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -47,10 +47,10 @@
 #endif
 
 #ifndef _SV_JOBSET_HXX
-#include <jobset.hxx>
+#include <vcl/jobset.hxx>
 #endif
 #ifndef _SV_JOBSET_H
-#include <jobset.h>
+#include <vcl/jobset.h>
 #endif
 
 // =======================================================================
