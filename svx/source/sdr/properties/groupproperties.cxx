@@ -4,9 +4,9 @@
  *
  *  $RCSfile: groupproperties.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: vg $ $Date: 2006-11-21 16:45:36 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 18:52:37 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -49,23 +49,23 @@
 #endif
 
 #ifndef _SVDDEF_HXX
-#include <svddef.hxx>
+#include <svx/svddef.hxx>
 #endif
 
 #ifndef _EEITEM_HXX
-#include <eeitem.hxx>
+#include <svx/eeitem.hxx>
 #endif
 
 #ifndef _SVDOGRP_HXX
-#include <svdogrp.hxx>
+#include <svx/svdogrp.hxx>
 #endif
 
 #ifndef _SVDPOOL_HXX
-#include <svdpool.hxx>
+#include <svx/svdpool.hxx>
 #endif
 
 #ifndef _SVDPAGE_HXX
-#include <svdpage.hxx>
+#include <svx/svdpage.hxx>
 #endif
 
 //////////////////////////////////////////////////////////////////////////////
