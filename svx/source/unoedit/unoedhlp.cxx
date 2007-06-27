@@ -4,9 +4,9 @@
  *
  *  $RCSfile: unoedhlp.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 06:16:39 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 19:28:17 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -41,8 +41,8 @@
 #endif
 
 #include "unoedhlp.hxx"
-#include "editdata.hxx"
-#include "editeng.hxx"
+#include <svx/editdata.hxx>
+#include <svx/editeng.hxx>
 
 //------------------------------------------------------------------------
 
