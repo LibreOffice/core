@@ -4,9 +4,9 @@
  *
  *  $RCSfile: impedit2.cxx,v $
  *
- *  $Revision: 1.116 $
+ *  $Revision: 1.117 $
  *
- *  last change: $Author: hr $ $Date: 2007-06-27 12:53:19 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 17:59:13 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -38,11 +38,11 @@
 
 #include <eeng_pch.hxx>
 
-#include <lspcitem.hxx>
-#include <flditem.hxx>
+#include <svx/lspcitem.hxx>
+#include <svx/flditem.hxx>
 #include <impedit.hxx>
-#include <editeng.hxx>
-#include <editview.hxx>
+#include <svx/editeng.hxx>
+#include <svx/editview.hxx>
 #include <editdbg.hxx>
 #include <eerdll2.hxx>
 #include <eerdll.hxx>
@@ -54,15 +54,15 @@
 #include <svtools/ctloptions.hxx>
 #include <acorrcfg.hxx>
 
-#include <fhgtitem.hxx>
-#include <lrspitem.hxx>
-#include <ulspitem.hxx>
-#include <wghtitem.hxx>
-#include <postitem.hxx>
-#include <udlnitem.hxx>
-#include <adjitem.hxx>
-#include <scripttypeitem.hxx>
-#include <frmdiritem.hxx>
+#include <svx/fhgtitem.hxx>
+#include <svx/lrspitem.hxx>
+#include <svx/ulspitem.hxx>
+#include <svx/wghtitem.hxx>
+#include <svx/postitem.hxx>
+#include <svx/udlnitem.hxx>
+#include <svx/adjitem.hxx>
+#include <svx/scripttypeitem.hxx>
+#include <svx/frmdiritem.hxx>
 #include <fontitem.hxx>
 
 #ifndef _SFXVIEWFRM_HXX //autogen
