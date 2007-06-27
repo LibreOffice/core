@@ -4,9 +4,9 @@
  *
  *  $RCSfile: szitem.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: vg $ $Date: 2007-01-18 14:13:15 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 21:41:20 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -36,7 +36,7 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_svtools.hxx"
 
-#include "szitem.hxx"
+#include <svtools/szitem.hxx>
 
 #ifndef _COM_SUN_STAR_UNO_ANY_HXX_
 #include <com/sun/star/uno/Any.hxx>
@@ -53,7 +53,7 @@
 #include <tools/gen.hxx>
 #endif
 
-#include "poolitem.hxx"
+#include <svtools/poolitem.hxx>
 #include "memberid.hrc"
 
 // STATIC DATA -----------------------------------------------------------
