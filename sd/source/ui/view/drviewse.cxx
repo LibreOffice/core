@@ -4,9 +4,9 @@
  *
  *  $RCSfile: drviewse.cxx,v $
  *
- *  $Revision: 1.66 $
+ *  $Revision: 1.67 $
  *
- *  last change: $Author: kz $ $Date: 2007-05-10 15:35:18 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 15:47:33 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -846,7 +846,7 @@ void DrawViewShell::FuSupport(SfxRequest& rReq)
             if( dynamic_cast< FuSelection* >( GetCurrentFunction().get() ) || dynamic_cast< FuConstructBezierPolygon* >( GetCurrentFunction().get() ) )
             {
                 // Tell the tool bar manager about the context change.
-                GetViewShellBase().GetToolBarManager().SelectionHasChanged(*this,*mpDrawView);
+                GetViewShellBase().GetToolBarManager()->SelectionHasChanged(*this,*mpDrawView);
             }
 
             Invalidate(SID_BEZIER_EDIT);
