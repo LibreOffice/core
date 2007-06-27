@@ -4,9 +4,9 @@
  *
  *  $RCSfile: object.hxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: obo $ $Date: 2006-10-12 14:28:58 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 14:21:45 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -37,13 +37,13 @@
 #define _SAMPLE_OBJECT_HXX
 
 #ifndef __SBX_SBX_FACTORY_HXX //autogen
-#include <sbxfac.hxx>
+#include <basic/sbxfac.hxx>
 #endif
 #ifndef __SBX_SBXVARIABLE_HXX //autogen
-#include <sbxvar.hxx>
+#include <basic/sbxvar.hxx>
 #endif
 #ifndef _SBX_SBXOBJECT_HXX //autogen
-#include <sbxobj.hxx>
+#include <basic/sbxobj.hxx>
 #endif
 
 // 1) Properties:
