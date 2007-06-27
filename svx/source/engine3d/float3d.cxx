@@ -4,9 +4,9 @@
  *
  *  $RCSfile: float3d.cxx,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: rt $ $Date: 2007-04-03 16:56:03 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 18:03:01 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -63,40 +63,40 @@
 #endif
 
 #ifndef _SVX_XFLCLIT_HXX
-#include <xflclit.hxx>
+#include <svx/xflclit.hxx>
 #endif
 #ifndef _SVDMODEL_HXX
-#include <svdmodel.hxx>
+#include <svx/svdmodel.hxx>
 #endif
 #ifndef _E3D_GLOBL3D_HXX
 #include <globl3d.hxx>
 #endif
 #ifndef _E3D_VIEW3D_HXX
-#include <view3d.hxx>
+#include <svx/view3d.hxx>
 #endif
 #ifndef _E3D_OBJ3D_HXX
-#include <obj3d.hxx>
+#include <svx/obj3d.hxx>
 #endif
 #ifndef _E3D_SPHERE3D_HXX
-#include <sphere3d.hxx>
+#include <svx/sphere3d.hxx>
 #endif
 #ifndef _E3D_SCENE3D_HXX
-#include <scene3d.hxx>
+#include <svx/scene3d.hxx>
 #endif
 #ifndef _CAMERA3D_HXX
-#include <camera3d.hxx>
+#include <svx/camera3d.hxx>
 #endif
 #ifndef _SVX_FMMODEL_HXX
-#include <fmmodel.hxx>
+#include <svx/fmmodel.hxx>
 #endif
 #ifndef _SVX_FMPAGE_HXX
-#include <fmpage.hxx>
+#include <svx/fmpage.hxx>
 #endif
 #ifndef _E3D_POLYSC3D_HXX
-#include <polysc3d.hxx>
+#include <svx/polysc3d.hxx>
 #endif
 #ifndef _EEITEM_HXX //autogen
-#include <eeitem.hxx>
+#include <svx/eeitem.hxx>
 #endif
 #ifndef _SFXSTYLE_HXX
 #include <svtools/style.hxx>
@@ -104,14 +104,14 @@
 
 
 #include <dlgutil.hxx>
-#include <dialmgr.hxx>
-#include <viewpt3d.hxx> // ProjectionType
+#include <svx/dialmgr.hxx>
+#include <svx/viewpt3d.hxx> // ProjectionType
 
-#include <svxids.hrc>
-#include <dialogs.hrc>
+#include <svx/svxids.hrc>
+#include <svx/dialogs.hrc>
 
-#include <colritem.hxx>
-#include <e3ditem.hxx>
+#include <svx/colritem.hxx>
+#include <svx/e3ditem.hxx>
 
 #include <gallery.hxx>
 #define GALLERY_THEME "3D"
@@ -120,7 +120,7 @@
 #include <svtools/whiter.hxx>
 #endif
 
-#include "float3d.hxx"
+#include <svx/float3d.hxx>
 #include "float3d.hrc"
 
 SFX_IMPL_DOCKINGWINDOW( Svx3DChildWindow, SID_3D_WIN )
