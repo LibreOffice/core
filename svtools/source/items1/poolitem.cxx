@@ -4,9 +4,9 @@
  *
  *  $RCSfile: poolitem.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 15:06:35 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 21:45:22 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -36,7 +36,7 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_svtools.hxx"
 
-#include "poolitem.hxx"
+#include <svtools/poolitem.hxx>
 
 #ifndef _STREAM_HXX
 #include <tools/stream.hxx>
