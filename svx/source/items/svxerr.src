@@ -4,9 +4,9 @@
  *
  *  $RCSfile: svxerr.src,v $
  *
- *  $Revision: 1.53 $
+ *  $Revision: 1.54 $
  *
- *  last change: $Author: ihi $ $Date: 2007-04-19 14:32:43 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 18:30:45 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -35,7 +35,7 @@
  // include ---------------------------------------------------------------
 #define __RSC
 #include "svxerr.hxx"
-#include "dialogs.hrc"
+#include <svx/dialogs.hrc>
  // pragma ----------------------------------------------------------------
 
  // Error-Context ---------------------------------------------------------
