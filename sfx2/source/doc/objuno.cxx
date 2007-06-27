@@ -4,9 +4,9 @@
  *
  *  $RCSfile: objuno.cxx,v $
  *
- *  $Revision: 1.33 $
+ *  $Revision: 1.34 $
  *
- *  last change: $Author: obo $ $Date: 2007-01-23 07:39:52 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 23:24:14 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -85,21 +85,21 @@
 #include <comphelper/sequenceasvector.hxx>
 #include <comphelper/storagehelper.hxx>
 
-#include "objuno.hxx"
-#include "sfx.hrc"
-#include "sfxsids.hrc"
-#include "viewsh.hxx"
-#include "viewfrm.hxx"
-#include "printer.hxx"
-#include "objsh.hxx"
-#include "docinf.hxx"
-#include "docfile.hxx"
-#include "dispatch.hxx"
+#include <sfx2/objuno.hxx>
+#include <sfx2/sfx.hrc>
+#include <sfx2/sfxsids.hrc>
+#include <sfx2/viewsh.hxx>
+#include <sfx2/viewfrm.hxx>
+#include <sfx2/printer.hxx>
+#include <sfx2/objsh.hxx>
+#include <sfx2/docinf.hxx>
+#include <sfx2/docfile.hxx>
+#include <sfx2/dispatch.hxx>
 #include "openflag.hxx"
-#include "app.hxx"
-#include "fcontnr.hxx"
-#include "request.hxx"
-#include "sfxuno.hxx"
+#include <sfx2/app.hxx>
+#include <sfx2/fcontnr.hxx>
+#include <sfx2/request.hxx>
+#include <sfx2/sfxuno.hxx>
 #include <objshimp.hxx>
 
 #include <osl/mutex.hxx>
