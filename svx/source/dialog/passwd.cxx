@@ -4,9 +4,9 @@
  *
  *  $RCSfile: passwd.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: rt $ $Date: 2007-04-26 07:41:17 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 17:33:44 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -48,8 +48,8 @@
 #define _SVX_PASSWD_CXX
 
 #include "passwd.hxx"
-#include "dialmgr.hxx"
-#include "dialogs.hrc"
+#include <svx/dialmgr.hxx>
+#include <svx/dialogs.hrc>
 #include "passwd.hrc"
 
 // class SvxPasswordDialog -----------------------------------------------
