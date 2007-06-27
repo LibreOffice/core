@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.51 $
+#   $Revision: 1.52 $
 #
-#   last change: $Author: ihi $ $Date: 2007-06-05 14:38:08 $
+#   last change: $Author: hr $ $Date: 2007-06-27 13:42:19 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -78,7 +78,8 @@ LIB2FILES=\
     $(SLB)$/options.lib   \
     $(SLB)$/stbctrls.lib  \
     $(SLB)$/tbxctrls.lib  \
-    $(SLB)$/unoedit.lib
+    $(SLB)$/unoedit.lib   \
+    $(SLB)$/smarttags.lib
 
 LIB3TARGET= $(SLB)$/$(TARGET)_3.lib
 LIB3FILES=\
@@ -91,7 +92,7 @@ LIB3FILES=\
     $(SLB)$/properties.lib \
     $(SLB)$/contact.lib \
     $(SLB)$/mixer.lib \
-    $(SLB)$/event.lib
+        $(SLB)$/event.lib
 
 LIB4TARGET= $(SLB)$/$(TARGET)_4.lib
 LIB4FILES=\
@@ -180,7 +181,7 @@ SHL2STDLIBS= \
             $(JVMFWKLIB) \
             $(ICUUCLIB)
 
-.IF "$(GUI)"=="WNT"	
+.IF "$(GUI)"=="WNT"
 SHL2STDLIBS+= \
              $(SHLWAPILIB) \
              $(ADVAPI32LIB)
