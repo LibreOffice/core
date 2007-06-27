@@ -4,9 +4,9 @@
  *
  *  $RCSfile: svdedtv1.cxx,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: ihi $ $Date: 2006-12-19 17:46:29 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 18:59:56 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -36,7 +36,7 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_svx.hxx"
 
-#include "svdedtv.hxx"
+#include <svx/svdedtv.hxx>
 #include <math.h>
 
 #ifndef _MATH_H
@@ -56,26 +56,26 @@
 #endif
 
 #ifndef _SVX_RECTENUM_HXX //autogen
-#include <rectenum.hxx>
+#include <svx/rectenum.hxx>
 #endif
 
-#include "svxids.hrc"   // fuer SID_ATTR_TRANSFORM_...
-#include "svdattr.hxx"  // fuer Get/SetGeoAttr
+#include <svx/svxids.hrc>   // fuer SID_ATTR_TRANSFORM_...
+#include <svx/svdattr.hxx>  // fuer Get/SetGeoAttr
 #include "svditext.hxx"
 #include "svditer.hxx"
-#include "svdtrans.hxx"
-#include "svdundo.hxx"
-#include "svdpage.hxx"
-#include "svdpagv.hxx"
-#include "svdlayer.hxx" // fuer MergeNotPersistAttr
-#include "svdattrx.hxx" // fuer MergeNotPersistAttr
-#include "svdetc.hxx"   // fuer SearchOutlinerItems
-#include "svdopath.hxx"  // fuer Crook
+#include <svx/svdtrans.hxx>
+#include <svx/svdundo.hxx>
+#include <svx/svdpage.hxx>
+#include <svx/svdpagv.hxx>
+#include <svx/svdlayer.hxx> // fuer MergeNotPersistAttr
+#include <svx/svdattrx.hxx> // fuer MergeNotPersistAttr
+#include <svx/svdetc.hxx>   // fuer SearchOutlinerItems
+#include <svx/svdopath.hxx>  // fuer Crook
 #include "svdstr.hrc"   // Namen aus der Resource
 #include "svdglob.hxx"  // StringCache
 
 #ifndef _EEITEM_HXX //autogen
-#include <eeitem.hxx>
+#include <svx/eeitem.hxx>
 #endif
 
 #ifndef _AEITEM_HXX //autogen
