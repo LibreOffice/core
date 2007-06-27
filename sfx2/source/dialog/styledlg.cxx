@@ -4,9 +4,9 @@
  *
  *  $RCSfile: styledlg.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 16:36:41 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 23:16:52 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -50,10 +50,10 @@
 #ifndef GCC
 #endif
 
-#include "styledlg.hxx"
-#include "mgetempl.hxx"
+#include <sfx2/styledlg.hxx>
+#include <sfx2/mgetempl.hxx>
 #include "sfxresid.hxx"
-#include "sfxuno.hxx"
+#include <sfx2/sfxuno.hxx>
 
 #include "dialog.hrc"
 
