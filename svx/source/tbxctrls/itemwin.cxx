@@ -4,9 +4,9 @@
  *
  *  $RCSfile: itemwin.cxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: kz $ $Date: 2007-05-10 15:01:35 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 19:17:21 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -59,19 +59,19 @@
 
 #include <vcl/svapp.hxx>
 
-#include "dialogs.hrc"
+#include <svx/dialogs.hrc>
 
 #define DELAY_TIMEOUT           100
 
-#include "xlnclit.hxx"
-#include "xlnwtit.hxx"
-#include "xlineit0.hxx"
-#include "xlndsit.hxx"
-#include "xtable.hxx"
+#include <svx/xlnclit.hxx>
+#include <svx/xlnwtit.hxx>
+#include <svx/xlineit0.hxx>
+#include <svx/xlndsit.hxx>
+#include <svx/xtable.hxx>
 #include "drawitem.hxx"
-#include "dialmgr.hxx"
+#include <svx/dialmgr.hxx>
 #include "dlgutil.hxx"
-#include "itemwin.hxx"
+#include <svx/itemwin.hxx>
 #include "linectrl.hxx"
 #ifndef INCLUDED_SVTOOLS_COLORCFG_HXX
 #include <svtools/colorcfg.hxx>
