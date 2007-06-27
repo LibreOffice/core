@@ -4,9 +4,9 @@
  *
  *  $RCSfile: rectangleproperties.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 05:44:30 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 18:53:52 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -41,7 +41,7 @@
 #endif
 
 #ifndef _SVDORECT_HXX
-#include <svdorect.hxx>
+#include <svx/svdorect.hxx>
 #endif
 
 //////////////////////////////////////////////////////////////////////////////
