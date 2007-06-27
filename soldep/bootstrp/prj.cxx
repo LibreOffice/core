@@ -4,9 +4,9 @@
  *
  *  $RCSfile: prj.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: ihi $ $Date: 2006-12-21 12:21:23 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 23:37:51 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -40,7 +40,7 @@
 #define ENABLE_BYTESTRING_STREAM_OPERATORS
 #include <tools/stream.hxx>
 #include <tools/geninfo.hxx>
-#include "prj.hxx"
+#include <soldep/prj.hxx>
 #include <bootstrp/inimgr.hxx>
 
 #pragma hdrstop
