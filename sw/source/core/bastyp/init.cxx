@@ -4,9 +4,9 @@
  *
  *  $RCSfile: init.cxx,v $
  *
- *  $Revision: 1.60 $
+ *  $Revision: 1.61 $
  *
- *  last change: $Author: kz $ $Date: 2007-05-10 15:54:56 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 13:17:00 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -334,7 +334,6 @@
 #ifndef _CHECKIT_HXX
 #include <checkit.hxx>
 #endif
-#include <SmartTagMgr.hxx>
 
 #ifndef _SWCALWRP_HXX
 #include <swcalwrp.hxx>
@@ -940,7 +939,6 @@ void _FinitCore()
     _TextFinit();
 
     SwBreakIt::_Delete();
-    SmartTagMgr::_Delete(); // SMARTTAGS
     delete pCheckIt;
     delete pAppCharClass;
     delete pCalendarWrapper;
@@ -1098,4 +1096,3 @@ const ::utl::TransliterationWrapper& GetAppCmpStrIgnore()
     }
     return *pTransWrp;
 }
-
