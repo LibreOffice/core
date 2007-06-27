@@ -4,9 +4,9 @@
  *
  *  $RCSfile: customshapeitem.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: kz $ $Date: 2007-05-10 14:50:04 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 18:26:38 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -37,9 +37,9 @@
 #include "precompiled_svx.hxx"
 
 #ifndef _SDASITM_HXX
-#include "sdasitm.hxx"
+#include <svx/sdasitm.hxx>
 #endif
-#include "svdattr.hxx"
+#include <svx/svdattr.hxx>
 
 using namespace ::std;
 using namespace com::sun::star;

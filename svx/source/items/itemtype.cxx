@@ -4,9 +4,9 @@
  *
  *  $RCSfile: itemtype.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: kz $ $Date: 2007-05-10 14:51:44 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 18:28:37 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -48,7 +48,7 @@
 #include <sfx2/objsh.hxx>
 #endif
 
-#include "svxids.hrc"
+#include <svx/svxids.hrc>
 
 
 #ifndef _UNOTOOLS_INTLWRAPPER_HXX
@@ -57,9 +57,9 @@
 #ifndef _UNOTOOLS_LOCALEDATAWRAPPER_HXX
 #include <unotools/localedatawrapper.hxx>
 #endif
-#include "xtable.hxx"
+#include <svx/xtable.hxx>
 #include "drawitem.hxx"
-#include "itemtype.hxx"
+#include <svx/itemtype.hxx>
 
 // -----------------------------------------------------------------------
 

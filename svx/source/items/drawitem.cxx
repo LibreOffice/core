@@ -4,9 +4,9 @@
  *
  *  $RCSfile: drawitem.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: kz $ $Date: 2007-05-10 14:50:18 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 18:27:00 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -38,12 +38,12 @@
 
 // include ---------------------------------------------------------------
 
-#include "svxids.hrc"
+#include <svx/svxids.hrc>
 
 
-#include "xoutx.hxx"
+#include <svx/xoutx.hxx>
 #include "drawitem.hxx"
-#include "xtable.hxx"
+#include <svx/xtable.hxx>
 
 using namespace ::com::sun::star;
 
