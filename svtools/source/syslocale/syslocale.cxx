@@ -4,9 +4,9 @@
  *
  *  $RCSfile: syslocale.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 15:28:36 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 22:01:32 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -38,7 +38,7 @@
 #ifndef GCC
 #endif
 
-#include "syslocale.hxx"
+#include <svtools/syslocale.hxx>
 
 #ifndef _SVT_BROADCAST_HXX
 #include <broadcast.hxx>
@@ -47,7 +47,7 @@
 #include <listener.hxx>
 #endif
 #ifndef _SFXSMPLHINT_HXX
-#include <smplhint.hxx>
+#include <svtools/smplhint.hxx>
 #endif
 #ifndef _SV_SVAPP_HXX
 #include <vcl/svapp.hxx>
@@ -56,7 +56,7 @@
 #include <tools/string.hxx>
 #endif
 #ifndef INCLUDED_SVTOOLS_SYSLOCALEOPTIONS_HXX
-#include "syslocaleoptions.hxx"
+#include <svtools/syslocaleoptions.hxx>
 #endif
 #ifndef _UNOTOOLS_LOCALEDATAWRAPPER_HXX
 #include <unotools/localedatawrapper.hxx>
