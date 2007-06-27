@@ -4,9 +4,9 @@
  *
  *  $RCSfile: gcach_xpeer.hxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: ihi $ $Date: 2006-11-14 15:24:59 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 20:48:54 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -36,14 +36,14 @@
 #ifndef _SV_GCACH_XPEER_HXX
 #define _SV_GCACH_XPEER_HXX
 
-#include <glyphcache.hxx>
+#include <vcl/glyphcache.hxx>
 
 #include <prex.h>
 #include <X11/extensions/Xrender.h>
 #include <postx.h>
 
 #ifndef _VCL_DLLAPI_H
-#include "dllapi.h"
+#include <vcl/dllapi.h>
 #endif
 
 
