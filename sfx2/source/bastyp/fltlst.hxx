@@ -4,9 +4,9 @@
  *
  *  $RCSfile: fltlst.hxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-07 17:53:53 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 23:02:58 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -40,7 +40,7 @@
 //  includes
 //*****************************************************************************************************************
 #ifndef _SFX_FCONTNR_HXX
-#include <fcontnr.hxx>
+#include <sfx2/fcontnr.hxx>
 #endif
 
 #ifndef _CPPUHELPER_IMPLBASE1_HXX_
