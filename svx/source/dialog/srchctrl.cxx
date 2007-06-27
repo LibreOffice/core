@@ -4,9 +4,9 @@
  *
  *  $RCSfile: srchctrl.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: kz $ $Date: 2007-05-10 14:41:15 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 17:39:43 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -45,7 +45,7 @@
 #include <sfx2/objsh.hxx>
 #endif
 
-#include "svxids.hrc"
+#include <svx/svxids.hrc>
 
 #define _SVX_SRCHDLG_CXX // damit private-Methoden vom SrchDlg bekannt sind
 
