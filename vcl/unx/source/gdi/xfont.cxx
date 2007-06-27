@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xfont.cxx,v $
  *
- *  $Revision: 1.46 $
+ *  $Revision: 1.47 $
  *
- *  last change: $Author: ihi $ $Date: 2006-12-21 12:05:12 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 20:50:42 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -51,7 +51,7 @@
 #include <tools/string.hxx>
 #endif
 #ifndef _SV_OUTFONT_HXX
-#include <outfont.hxx>
+#include <vcl/outfont.hxx>
 #endif
 #ifndef _SV_SALDISP_HXX
 #include <saldisp.hxx>
