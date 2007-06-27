@@ -4,9 +4,9 @@
  *
  *  $RCSfile: svdedtv.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: kz $ $Date: 2006-12-12 16:40:13 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 18:59:42 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -37,18 +37,18 @@
 #include "precompiled_svx.hxx"
 
 #include <vcl/metaact.hxx>
-#include "svdedtv.hxx"
+#include <svx/svdedtv.hxx>
 #include "svdxout.hxx"
-#include "svdundo.hxx"
-#include "svdograf.hxx"  // fuer Possibilities
-#include "svdopath.hxx"
-#include "svdoole2.hxx"
-#include "svdopage.hxx"
-#include "svdoedge.hxx"
-#include "svdlayer.hxx"
-#include "svdpagv.hxx"
-#include "svdpage.hxx"
-#include "svdpoev.hxx"  // fuer die PolyPossiblities
+#include <svx/svdundo.hxx>
+#include <svx/svdograf.hxx>  // fuer Possibilities
+#include <svx/svdopath.hxx>
+#include <svx/svdoole2.hxx>
+#include <svx/svdopage.hxx>
+#include <svx/svdoedge.hxx>
+#include <svx/svdlayer.hxx>
+#include <svx/svdpagv.hxx>
+#include <svx/svdpage.hxx>
+#include <svx/svdpoev.hxx>  // fuer die PolyPossiblities
 #include "svdstr.hrc"   // Namen aus der Resource
 #include "svdglob.hxx"  // StringCache
 
@@ -147,8 +147,8 @@ SdrLayer* SdrEditView::InsertNewLayer(const XubString& rName, USHORT nPos)
     return pNewLayer;
 }
 
-#include "svdogrp.hxx"
-#include "scene3d.hxx"
+#include <svx/svdogrp.hxx>
+#include <svx/scene3d.hxx>
 
 BOOL SdrEditView::ImpDelLayerCheck(SdrObjList* pOL, SdrLayerID nDelID) const
 {
