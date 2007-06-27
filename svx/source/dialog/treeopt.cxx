@@ -4,9 +4,9 @@
  *
  *  $RCSfile: treeopt.cxx,v $
  *
- *  $Revision: 1.43 $
+ *  $Revision: 1.44 $
  *
- *  last change: $Author: kz $ $Date: 2007-06-20 10:36:55 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 17:51:14 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -166,13 +166,13 @@
 #include <sfx2/app.hxx>
 
 #ifndef _XDEF_HXX //autogen
-#include "xdef.hxx"
+#include <svx/xdef.hxx>
 #endif
 #ifndef _SVX_XFLCLIT_HXX //autogen
-#include "xflclit.hxx"
+#include <svx/xflclit.hxx>
 #endif
 #ifndef _XPOOL_HXX //autogen
-#include "xpool.hxx"
+#include <svx/xpool.hxx>
 #endif
 #ifndef _SVX_TAB_AREA_HXX //autogen
 #include "cuitabarea.hxx"
@@ -202,7 +202,7 @@
 #include "cuioptgenrl.hxx"
 #endif
 #ifndef _SVX_OPTLINGU_HXX //autogen
-#include "optlingu.hxx"
+#include <svx/optlingu.hxx>
 #endif
 #ifndef _SVX_TAB_AREA_HXX //autogen
 #include "cuitabarea.hxx"
@@ -232,14 +232,14 @@
 #include "optgdlg.hxx"
 #include "optmemory.hxx"
 #include "optfltr.hxx"
-#include "dialogs.hrc"
+#include <svx/dialogs.hrc>
 #include "helpid.hrc"
-#include "dialmgr.hxx"
+#include <svx/dialmgr.hxx>
 #include "treeopt.hxx"
 #include "treeopt.hrc"
 #include "fontsubs.hxx"
 #include "unolingu.hxx"
-#include "xtable.hxx"
+#include <svx/xtable.hxx>
 #include "connpoolconfig.hxx"
 #include "dbregister.hxx"
 #include "dbregisterednamesconfig.hxx"
@@ -247,7 +247,7 @@
 
 #ifndef _SVX_LANGITEM_HXX
 #define ITEMID_LANGUAGE SID_ATTR_CHAR_LANGUAGE
-#include <langitem.hxx>
+#include <svx/langitem.hxx>
 #endif
 #ifndef _SVX_OPTITEMS_HXX
 
