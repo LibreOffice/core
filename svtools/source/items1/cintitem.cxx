@@ -4,9 +4,9 @@
  *
  *  $RCSfile: cintitem.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: vg $ $Date: 2007-01-18 14:13:54 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 21:42:09 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -45,7 +45,7 @@
 #endif
 
 #ifndef _SVTOOLS_CINTITEM_HXX
-#include <cintitem.hxx>
+#include <svtools/cintitem.hxx>
 #endif
 
 //============================================================================
