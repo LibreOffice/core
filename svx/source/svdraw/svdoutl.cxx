@@ -4,9 +4,9 @@
  *
  *  $RCSfile: svdoutl.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: ihi $ $Date: 2006-11-14 13:48:19 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 19:10:15 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -37,22 +37,22 @@
 #include "precompiled_svx.hxx"
 
 #ifndef _SVDOUTL_HXX //autogen
-#include "svdoutl.hxx"
+#include <svx/svdoutl.hxx>
 #endif
 #ifndef _OUTLINER_HXX //autogen
-#include "outliner.hxx"
+#include <svx/outliner.hxx>
 #endif
 #ifndef _SVDOTEXT_HXX //autogen
-#include "svdotext.hxx"
+#include <svx/svdotext.hxx>
 #endif
 #ifndef _EDITSTAT_HXX //autogen wg. EE_CNTRL_STRETCHING
 #include <editstat.hxx>
 #endif
 #ifndef _SVDMODEL_HXX //autogen wg. SdrModel
-#include <svdmodel.hxx>
+#include <svx/svdmodel.hxx>
 #endif
 #ifndef _EEITEM_HXX //autogen wg. EE_ITEMS_START
-#include <eeitem.hxx>
+#include <svx/eeitem.hxx>
 #endif
 #ifndef _SFXITEMPOOL_HXX //autogen wg. SfxItemPool
 #include <svtools/itempool.hxx>
