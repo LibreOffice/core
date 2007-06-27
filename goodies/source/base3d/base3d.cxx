@@ -4,9 +4,9 @@
  *
  *  $RCSfile: base3d.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: kz $ $Date: 2007-05-09 13:25:57 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 22:28:16 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -41,11 +41,11 @@
 #endif
 
 #ifndef _B3D_BASE3D_HXX
-#include "base3d.hxx"
+#include <goodies/base3d.hxx>
 #endif
 
 #ifndef _B3D_B3DENTITY_HXX
-#include "b3dentty.hxx"
+#include <goodies/b3dentty.hxx>
 #endif
 
 #ifndef _B3D_B3DTEX_HXX
@@ -65,7 +65,7 @@
 //#endif
 
 #ifndef _B3D_B3DGEOM_HXX
-#include "b3dgeom.hxx"
+#include <goodies/b3dgeom.hxx>
 #endif
 
 #ifndef _B3D_B3DTRANS_HXX
