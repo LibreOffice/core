@@ -4,9 +4,9 @@
  *
  *  $RCSfile: zformat.cxx,v $
  *
- *  $Revision: 1.73 $
+ *  $Revision: 1.74 $
  *
- *  last change: $Author: ihi $ $Date: 2006-12-19 17:59:16 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 21:57:03 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -77,11 +77,11 @@
 #endif
 
 #define _ZFORMAT_CXX
-#include "zformat.hxx"
+#include <svtools/zformat.hxx>
 #include "zforscan.hxx"
 
 #include "zforfind.hxx"
-#include "zforlist.hxx"
+#include <svtools/zforlist.hxx>
 #include "numhead.hxx"
 
 #ifndef INCLUDED_SVTOOLS_NFSYMBOL_HXX
