@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.18 $
+#   $Revision: 1.19 $
 #
-#   last change: $Author: vg $ $Date: 2007-05-22 16:33:36 $
+#   last change: $Author: hr $ $Date: 2007-06-27 13:22:03 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -72,6 +72,7 @@ EXCEPTIONSFILES=	\
     $(SLO)$/unosrch.obj\
     $(SLO)$/unostyle.obj\
     $(SLO)$/unotbl.obj \
+    $(SLO)$/unotextmarkup.obj\
     $(SLO)$/TextCursorHelper.obj \
     $(SLO)$/unotext.obj
 
@@ -110,10 +111,11 @@ SLOFILES =	\
     $(SLO)$/unoport.obj\
     $(SLO)$/unoredline.obj\
     $(SLO)$/unoredlines.obj\
-    $(SLO)$/unosrch.obj\
+        $(SLO)$/unosrch.obj\
     $(SLO)$/unostyle.obj\
     $(SLO)$/unotbl.obj \
-    $(SLO)$/TextCursorHelper.obj \
+        $(SLO)$/unotextmarkup.obj\
+        $(SLO)$/TextCursorHelper.obj \
     $(SLO)$/unotext.obj\
     $(SLO)$/unoclbck.obj\
     $(SLO)$/unomap.obj\
