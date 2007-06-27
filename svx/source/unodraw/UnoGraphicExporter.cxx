@@ -4,9 +4,9 @@
  *
  *  $RCSfile: UnoGraphicExporter.cxx,v $
  *
- *  $Revision: 1.37 $
+ *  $Revision: 1.38 $
  *
- *  last change: $Author: vg $ $Date: 2007-05-22 15:20:46 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 19:21:23 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -164,19 +164,19 @@
 #endif
 
 #ifndef _SVX_NUMITEM_HXX
-#include <numitem.hxx>
+#include <svx/numitem.hxx>
 #endif
 
 #ifndef _SVDPAGV_HXX
-#include "svdpagv.hxx"
+#include <svx/svdpagv.hxx>
 #endif
 
 #ifndef _SVDOGRAF_HXX
-#include "svdograf.hxx"
+#include <svx/svdograf.hxx>
 #endif
 
 #ifndef _XOUTX_HXX
-#include "xoutx.hxx"
+#include <svx/xoutx.hxx>
 #endif
 
 #ifndef _XOUTBMP_HXX
@@ -192,39 +192,39 @@
 #endif
 
 #ifndef _SVDPAGE_HXX
-#include "svdpage.hxx"
+#include <svx/svdpage.hxx>
 #endif
 
 #ifndef _SVDMODEL_HXX
-#include "svdmodel.hxx"
+#include <svx/svdmodel.hxx>
 #endif
 
 #ifndef _SVX_FMVIEW_HXX
-#include "fmview.hxx"
+#include <svx/fmview.hxx>
 #endif
 
 #ifndef _SVX_FMMODEL_HXX
-#include "fmmodel.hxx"
+#include <svx/fmmodel.hxx>
 #endif
 
 #ifndef _SVX_UNOWPAGE_HXX
-#include "unopage.hxx"
+#include <svx/unopage.hxx>
 #endif
 
 #ifndef _SVX_PAGEITEM_HXX
-#include "pageitem.hxx"
+#include <svx/pageitem.hxx>
 #endif
 
 #ifndef _EEITEM_HXX
-#include "eeitem.hxx"
+#include <svx/eeitem.hxx>
 #endif
 
 #ifndef _SVDOUTL_HXX
-#include "svdoutl.hxx"
+#include <svx/svdoutl.hxx>
 #endif
 
 #ifndef _SVX_FLDITEM_HXX
-#include "flditem.hxx"
+#include <svx/flditem.hxx>
 #endif
 
 #include "boost/scoped_ptr.hpp"
