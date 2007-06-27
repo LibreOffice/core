@@ -4,9 +4,9 @@
  *
  *  $RCSfile: componentcontext.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 17:10:11 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 14:54:21 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -137,7 +137,7 @@ namespace comphelper
     }
 
     //------------------------------------------------------------------------
-    Reference< XInterface > ComponentContext::getSingleton( const ::rtl::OUString& _rInstanceName )
+    Reference< XInterface > ComponentContext::getSingleton( const ::rtl::OUString& _rInstanceName ) const
     {
         ::rtl::OUString sKey( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "/singletons/" ) ) );
         sKey += _rInstanceName;
