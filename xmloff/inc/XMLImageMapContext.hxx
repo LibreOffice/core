@@ -4,9 +4,9 @@
  *
  *  $RCSfile: XMLImageMapContext.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 12:51:29 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 14:40:17 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -37,7 +37,7 @@
 #define _XMLOFF_XMLIMAGEMAPCONTEXT_HXX_
 
 #ifndef _XMLOFF_XMLICTXT_HXX
-#include "xmlictxt.hxx"
+#include <xmloff/xmlictxt.hxx>
 #endif
 
 #ifndef _RTL_USTRING_HXX_
