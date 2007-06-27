@@ -4,9 +4,9 @@
  *
  *  $RCSfile: svditer.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 05:51:46 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 19:02:58 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -41,20 +41,20 @@
 #endif
 
 #ifndef _SVDPAGE_HXX
-#include "svdpage.hxx"
+#include <svx/svdpage.hxx>
 #endif
 
 #ifndef _SVDOGRP_HXX
-#include "svdogrp.hxx"
+#include <svx/svdogrp.hxx>
 #endif
 
 #ifndef _SVDOBJ_HXX
-#include "svdobj.hxx"
+#include <svx/svdobj.hxx>
 #endif
 
 // #99190#
 #ifndef _E3D_SCENE3D_HXX
-#include "scene3d.hxx"
+#include <svx/scene3d.hxx>
 #endif
 
 SdrObjListIter::SdrObjListIter(const SdrObjList& rObjList, SdrIterMode eMode, BOOL bReverse)
