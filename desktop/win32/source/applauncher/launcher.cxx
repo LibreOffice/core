@@ -4,9 +4,9 @@
  *
  *  $RCSfile: launcher.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: kz $ $Date: 2007-05-09 13:24:12 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 17:55:43 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -36,7 +36,6 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_desktop.hxx"
 
-#define UNICODE
 #include "launcher.hxx"
 
 
