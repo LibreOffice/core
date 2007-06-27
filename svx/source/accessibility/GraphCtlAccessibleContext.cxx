@@ -4,9 +4,9 @@
  *
  *  $RCSfile: GraphCtlAccessibleContext.cxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: ihi $ $Date: 2006-11-14 13:13:03 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 16:41:37 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -98,31 +98,31 @@
 //===== local includes ========================================================
 
 #ifndef _SVX_ACCESSIBILITY_SHAPE_TYPE_HANDLER_HXX
-#include "ShapeTypeHandler.hxx"
+#include <svx/ShapeTypeHandler.hxx>
 #endif
 #ifndef _SVX_ACCESSIBILITY_ACCESSIBLE_SHAPE_INFO_HXX
-#include "AccessibleShapeInfo.hxx"
+#include <svx/AccessibleShapeInfo.hxx>
 #endif
 #ifndef _SVXGRAPHACCESSIBLECONTEXT_HXX
 #include "GraphCtlAccessibleContext.hxx"
 #endif
 #ifndef _GRAPHCTL_HXX
-#include "graphctl.hxx"
+#include <svx/graphctl.hxx>
 #endif
 #ifndef _SVX_DIALOGS_HRC
-#include "dialogs.hrc"
+#include <svx/dialogs.hrc>
 #endif
 #ifndef _SVX_ACCESSIBILITY_HRC
 #include "accessibility.hrc"
 #endif
 #ifndef _SVDPAGE_HXX
-#include "svdpage.hxx"
+#include <svx/svdpage.hxx>
 #endif
 #ifndef SVX_UNOMOD_HXX
-#include "unomod.hxx"
+#include <svx/unomod.hxx>
 #endif
 #ifndef _SVX_DIALMGR_HXX
-#include "dialmgr.hxx"
+#include <svx/dialmgr.hxx>
 #endif
 
 //=====  namespaces ===========================================================
