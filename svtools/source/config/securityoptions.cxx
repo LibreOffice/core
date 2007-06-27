@@ -4,9 +4,9 @@
  *
  *  $RCSfile: securityoptions.cxx,v $
  *
- *  $Revision: 1.29 $
+ *  $Revision: 1.30 $
  *
- *  last change: $Author: vg $ $Date: 2007-01-18 14:12:37 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 21:16:47 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -42,7 +42,7 @@
 //  includes
 //_________________________________________________________________________________________________________________
 
-#include "securityoptions.hxx"
+#include <svtools/securityoptions.hxx>
 
 #ifndef _UTL_CONFIGMGR_HXX_
 #include <unotools/configmgr.hxx>
@@ -74,7 +74,7 @@
 #include <tools/wldcrd.hxx>
 #endif
 
-#include <pathoptions.hxx>
+#include <svtools/pathoptions.hxx>
 
 #include <rtl/logfile.hxx>
 #include "itemholder1.hxx"
