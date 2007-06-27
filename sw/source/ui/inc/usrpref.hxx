@@ -4,9 +4,9 @@
  *
  *  $RCSfile: usrpref.hxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 10:13:31 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 12:50:12 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -63,7 +63,10 @@ class SwContentViewConfig : public utl::ConfigItem
         SwContentViewConfig(BOOL bWeb, SwMasterUsrPref& rParent);
         ~SwContentViewConfig();
 
-    virtual void            Commit();
+    // utl::ConfigItem
+    virtual void    Notify( const com::sun::star::uno::Sequence< rtl::OUString > &rPropertyNames );
+    virtual void    Commit();
+
     void                    Load();
     void                    SetModified(){ConfigItem::SetModified();}
 };
