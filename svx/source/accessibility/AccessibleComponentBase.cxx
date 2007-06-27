@@ -4,9 +4,9 @@
  *
  *  $RCSfile: AccessibleComponentBase.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 03:59:15 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 16:35:55 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -37,7 +37,7 @@
 #include "precompiled_svx.hxx"
 
 
-#include "AccessibleComponentBase.hxx"
+#include <svx/AccessibleComponentBase.hxx>
 
 #ifndef _COM_SUN_STAR_ACCESSIBILITY_ACCESSIBLE_ROLE_HPP_
 #include <com/sun/star/accessibility/AccessibleRole.hpp>
