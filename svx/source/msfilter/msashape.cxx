@@ -4,9 +4,9 @@
  *
  *  $RCSfile: msashape.cxx,v $
  *
- *  $Revision: 1.42 $
+ *  $Revision: 1.43 $
  *
- *  last change: $Author: kz $ $Date: 2007-05-09 13:31:37 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 18:33:57 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -43,49 +43,49 @@
 #include <msashape.hxx>
 #endif
 #ifndef _SVDOCIRC_HXX
-#include <svdocirc.hxx>
+#include <svx/svdocirc.hxx>
 #endif
 #ifndef _SVDOGRP_HXX
-#include <svdogrp.hxx>
+#include <svx/svdogrp.hxx>
 #endif
 #ifndef _SVDOPATH_HXX
-#include <svdopath.hxx>
+#include <svx/svdopath.hxx>
 #endif
 #ifndef _SVDPAGE_HXX
-#include <svdpage.hxx>
+#include <svx/svdpage.hxx>
 #endif
 #ifndef _SVX_XFLCLIT_HXX
-#include <xflclit.hxx>
+#include <svx/xflclit.hxx>
 #endif
 #ifndef _SDASAITM_HXX
-#include <sdasaitm.hxx>
+#include <svx/sdasaitm.hxx>
 #endif
 #ifndef _SFXITEMSET_HXX
 #include <svtools/itemset.hxx>
 #endif
 #ifndef _SVDMODEL_HXX
-#include <svdmodel.hxx>
+#include <svx/svdmodel.hxx>
 #endif
 #ifndef _RTL_CRC_H_
 #include <rtl/crc.h>
 #endif
 #ifndef _SVX_XLNSTIT_HXX
-#include <xlnstit.hxx>
+#include <svx/xlnstit.hxx>
 #endif
 #ifndef _SVX_XLNEDIT_HXX
-#include <xlnedit.hxx>
+#include <svx/xlnedit.hxx>
 #endif
 #ifndef _SVX_XLNSTWIT_HXX
-#include <xlnstwit.hxx>
+#include <svx/xlnstwit.hxx>
 #endif
 #ifndef _SVX_XLNEDWIT_HXX
-#include <xlnedwit.hxx>
+#include <svx/xlnedwit.hxx>
 #endif
 #ifndef _SVX_XLNSTCIT_HXX
-#include <xlnstcit.hxx>
+#include <svx/xlnstcit.hxx>
 #endif
 #ifndef _SVX_XLNEDCIT_HXX
-#include <xlnedcit.hxx>
+#include <svx/xlnedcit.hxx>
 #endif
 
 #include <math.h>
