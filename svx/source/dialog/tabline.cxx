@@ -4,9 +4,9 @@
  *
  *  $RCSfile: tabline.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: kz $ $Date: 2007-05-10 14:42:34 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 17:44:30 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -59,7 +59,7 @@
 #endif
 
 #define _SVX_TABLINE_CXX
-#include "dialogs.hrc"
+#include <svx/dialogs.hrc>
 #include "tabline.hrc"
 #include "dlgname.hrc"
 
@@ -69,9 +69,9 @@
 
 #include "cuitabline.hxx"
 #include "dlgname.hxx"
-#include "dialmgr.hxx"
-#include "svdmodel.hxx"
-#include "xtable.hxx"
+#include <svx/dialmgr.hxx>
+#include <svx/svdmodel.hxx>
+#include <svx/xtable.hxx>
 #include "drawitem.hxx"
 
 #define DLGWIN this->GetParent()->GetParent()
