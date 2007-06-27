@@ -4,9 +4,9 @@
  *
  *  $RCSfile: TableWindowAccess.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 07:25:42 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 12:25:46 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -135,19 +135,40 @@ namespace dbaui
     // XAccessibleContext
     sal_Int32 SAL_CALL OTableWindowAccess::getAccessibleChildCount(  ) throw (RuntimeException)
     {
-        return 2;
+        ::osl::MutexGuard aGuard( m_aMutex );
+        sal_Int32 nCount = 0;
+        if(m_pTable)
+        {
+            if(m_pTable->GetTitleCtrl())
+                ++nCount;
+            if(m_pTable->GetListBox())
+                ++nCount;
+        }
+        return nCount;
     }
     // -----------------------------------------------------------------------------
     Reference< XAccessible > SAL_CALL OTableWindowAccess::getAccessibleChild( sal_Int32 i ) throw (IndexOutOfBoundsException,RuntimeException)
     {
-        ::osl::MutexGuard aGuard( m_aMutex  );
+        ::osl::MutexGuard aGuard( m_aMutex );
         Reference< XAccessible > aRet;
-        if(i == 0 && m_pTable)
-            aRet = m_pTable->GetTitleCtrl()->GetAccessible();
-        else if(i == 1 && m_pTable)
-            aRet = m_pTable->GetListBox()->GetAccessible();
-        else
-            throw IndexOutOfBoundsException();
+        if(m_pTable)
+        {
+            switch(i)
+            {
+                case 0:
+                    if(m_pTable->GetTitleCtrl())
+                    {
+                        aRet = m_pTable->GetTitleCtrl()->GetAccessible();
+                        break;
+                    } // fall through if title control does not exist
+                case 1:
+                    if(m_pTable->GetListBox())
+                        aRet = m_pTable->GetListBox()->GetAccessible();
+                    break;
+                default:
+                    throw IndexOutOfBoundsException();
+            }
+        }
         return aRet;
     }
     // -----------------------------------------------------------------------------
