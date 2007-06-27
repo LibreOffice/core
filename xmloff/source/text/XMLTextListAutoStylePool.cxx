@@ -4,9 +4,9 @@
  *
  *  $RCSfile: XMLTextListAutoStylePool.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 11:13:40 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 16:09:25 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -60,13 +60,13 @@
 #endif
 
 #ifndef _XMLOFF_XMLNUME_HXX
-#include "xmlnume.hxx"
+#include <xmloff/xmlnume.hxx>
 #endif
 #ifndef _XMLOFF_XMLTEXTLISTAUTOSTYLEPOOL_HXX
 #include "XMLTextListAutoStylePool.hxx"
 #endif
 #ifndef _XMLOFF_XMLEXP_HXX
-#include "xmlexp.hxx"
+#include <xmloff/xmlexp.hxx>
 #endif
 
 using namespace ::rtl;
