@@ -4,9 +4,9 @@
  *
  *  $RCSfile: opengl.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 12:06:09 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 20:18:33 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -37,32 +37,32 @@
 #include "precompiled_vcl.hxx"
 
 #include <svsys.h>
-#include <window.hxx>
+#include <vcl/window.hxx>
 
 #ifndef _SV_OUTDEV_HXX
-#include <outdev.hxx>
+#include <vcl/outdev.hxx>
 #endif
 #ifndef _SV_SALOGL_HXX
-#include <salogl.hxx>
+#include <vcl/salogl.hxx>
 #endif
 #ifndef _SV_OPENGL_HXX
-#include <opengl.hxx>
+#include <vcl/opengl.hxx>
 #endif
 #ifndef _SV_SALGDI_HXX
-#include <salgdi.hxx>
+#include <vcl/salgdi.hxx>
 #endif
 #ifndef _SV_SVDATA_HXX
-#include <svdata.hxx>
+#include <vcl/svdata.hxx>
 #endif
 #ifndef _SV_SALINST_HXX
-#include <salinst.hxx>
+#include <vcl/salinst.hxx>
 #endif
 #ifndef _SV_WINDOW_H
 #include <window.h>
 #endif
 
 
-#include <svapp.hxx>
+#include <vcl/svapp.hxx>
 #include <vos/mutex.hxx>
 
 // -----------
