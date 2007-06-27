@@ -4,9 +4,9 @@
  *
  *  $RCSfile: doctdlg.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: rt $ $Date: 2007-04-26 10:13:43 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 23:20:22 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -45,17 +45,17 @@
 #ifndef GCC
 #endif
 
-#include "doctdlg.hxx"
+#include <sfx2/doctdlg.hxx>
 #include "docvor.hxx"
 #include "sfxresid.hxx"
 #include "sfxtypes.hxx"
-#include "dispatch.hxx"
-#include "app.hxx"
+#include <sfx2/dispatch.hxx>
+#include <sfx2/app.hxx>
 
-#include "sfx.hrc"
+#include <sfx2/sfx.hrc>
 #include "doc.hrc"
 #include "doctdlg.hrc"
-#include "basedlgs.hxx"
+#include <sfx2/basedlgs.hxx>
 
 //=========================================================================
 
