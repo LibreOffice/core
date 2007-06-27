@@ -4,9 +4,9 @@
  *
  *  $RCSfile: swpossizetabpage.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: rt $ $Date: 2007-04-26 07:44:04 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 17:43:27 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -46,7 +46,7 @@
 #include <swpossizetabpage.hxx>
 #endif
 #ifndef _SVX_DIALMGR_HXX
-#include <dialmgr.hxx>
+#include <svx/dialmgr.hxx>
 #endif
 #ifndef _SVX_DLGUTIL_HXX
 #include <dlgutil.hxx>
@@ -61,19 +61,19 @@
 #include <swframevalidation.hxx>
 #endif
 #include <tools/debug.hxx>
-#include <dialogs.hrc>
+#include <svx/dialogs.hrc>
 #include <swpossizetabpage.hrc>
 #ifndef _SVX_HTMLMODE_HXX //autogen
 #include <htmlmode.hxx>
 #endif
 #ifndef _SVDVIEW_HXX //autogen
-#include "svdview.hxx"
+#include <svx/svdview.hxx>
 #endif
 #ifndef _SVDPAGV_HXX
-#include "svdpagv.hxx"
+#include <svx/svdpagv.hxx>
 #endif
 #ifndef _SVX_RECTENUM_HXX
-#include <rectenum.hxx>
+#include <svx/rectenum.hxx>
 #endif
 #ifndef _COM_SUN_STAR_TEXT_TEXTCONTENTANCHORTYPE_HPP_
 #include <com/sun/star/text/TextContentAnchorType.hpp>
