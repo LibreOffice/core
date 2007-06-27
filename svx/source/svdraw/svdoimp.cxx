@@ -4,9 +4,9 @@
  *
  *  $RCSfile: svdoimp.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: ihi $ $Date: 2006-11-14 13:45:53 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 19:06:36 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -45,35 +45,35 @@
 #endif
 
 #ifndef _SVX_XLNSTIT_HXX
-#include <xlnstit.hxx>
+#include <svx/xlnstit.hxx>
 #endif
 
 #ifndef _SVX_XLNEDIT_HXX
-#include "xlnedit.hxx"
+#include <svx/xlnedit.hxx>
 #endif
 
 #ifndef _SVX_XLNWTIT_HXX
-#include <xlnwtit.hxx>
+#include <svx/xlnwtit.hxx>
 #endif
 
 #ifndef _SVX_XLINEIT0_HXX
-#include <xlineit0.hxx>
+#include <svx/xlineit0.hxx>
 #endif
 
 #ifndef _SVX_XLNSTWIT_HXX
-#include <xlnstwit.hxx>
+#include <svx/xlnstwit.hxx>
 #endif
 
 #ifndef _SVX_XLNEDWIT_HXX
-#include <xlnedwit.hxx>
+#include <svx/xlnedwit.hxx>
 #endif
 
 #ifndef _SVX_XLNSTCIT_HXX
-#include <xlnstcit.hxx>
+#include <svx/xlnstcit.hxx>
 #endif
 
 #ifndef _SVX_XLNEDCIT_HXX
-#include <xlnedcit.hxx>
+#include <svx/xlnedcit.hxx>
 #endif
 
 #ifndef _SVX_XLINJOIT_HXX
@@ -81,7 +81,7 @@
 #endif
 
 #ifndef _SVX_XLNDSIT_HXX
-#include <xlndsit.hxx>
+#include <svx/xlndsit.hxx>
 #endif
 
 #ifndef _BGFX_POLYGON_B2DPOLYGON_HXX
