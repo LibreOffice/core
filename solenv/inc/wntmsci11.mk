@@ -4,9 +4,9 @@
 #
 #   $RCSfile: wntmsci11.mk,v $
 #
-#   $Revision: 1.12 $
+#   $Revision: 1.13 $
 #
-#   last change: $Author: ihi $ $Date: 2007-06-05 11:27:49 $
+#   last change: $Author: hr $ $Date: 2007-06-27 14:03:25 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -138,13 +138,14 @@ CDEFSOBJMT+=-DWIN32 -D_MT -D_DLL
 .ELSE
 CDEFSOBJMT+=-DWIN32 -D_MT
 CDEFSOBJMT+=-DWIN32 -D_MT
-.ENDIF
+.ENDIF # "$(NO_DYNAMIC_OBJ)"==""
 .ELSE
 CDEFSSLOMT+=-DWIN32 -D_MT
 CDEFSSLOMT+=-DWIN32 -D_MT
 CDEFSOBJMT+=-DWIN32 -D_MT
 CDEFSOBJMT+=-DWIN32 -D_MT
-.ENDIF
+.ENDIF # "$(DYNAMIC_CRT)"!=""
+
 CFLAGSPROF=-Gh -Zd -Fd$(MISC)\_ooo_st_$(TARGET).PDB
 .IF "$(PDBTARGET)"!=""
 CFLAGSDEBUG=-Zi -Fd$(MISC)\$(PDBTARGET).PDB
@@ -325,13 +326,14 @@ LIBCMT=msvcrtd.lib
 .ELSE  # "$(USE_STLP_DEBUG)" != ""
 LIBCMT=msvcrt.lib
 .ENDIF # "$(USE_STLP_DEBUG)" != ""
-.ELSE
+.ELSE # "$(DYNAMIC_CRT)"!=""
 .IF "$(USE_STLP_DEBUG)" != ""
 LIBCMT=libcmtd.lib
+CDEFS+=-D_DEBUG
 .ELSE  # "$(USE_STLP_DEBUG)" != ""
 LIBCMT=libcmt.lib
 .ENDIF # "$(USE_STLP_DEBUG)" != ""
-.ENDIF
+.ENDIF # "$(DYNAMIC_CRT)"!=""
 
 STDOBJVCL=$(L)$/salmain.obj
 STDOBJGUI=
@@ -345,7 +347,6 @@ STDSHLGUIMT=$(LIBCMT) $(UWINAPILIB) kernel32.lib user32.lib oldnames.lib
 STDSHLCUIMT=$(LIBCMT) $(UWINAPILIB) kernel32.lib user32.lib oldnames.lib
 
 .IF "$(USE_STLP_DEBUG)" != ""
-CFLAGS+=-MTd
 LIBSTLPORT=stlport_vc8_stldebug.lib
 LIBSTLPORTST=stlport_vc8_stldebug_static.lib
 .ELSE
@@ -416,4 +417,3 @@ UNICOWSLIB=unicows.lib
 WININETLIB=wininet.lib
 OLDNAMESLIB=oldnames.lib
 MSIMG32LIB=msimg32.lib
-
