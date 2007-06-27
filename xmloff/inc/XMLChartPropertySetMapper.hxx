@@ -4,9 +4,9 @@
  *
  *  $RCSfile: XMLChartPropertySetMapper.hxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: obo $ $Date: 2006-01-20 11:39:48 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 14:38:16 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -36,19 +36,19 @@
 #define _XMLOFF_CHARTPROPERTYSETMAPPER_HXX_
 
 #ifndef _UNIVERSALL_REFERENCE_HXX
-#include "uniref.hxx"
+#include <xmloff/uniref.hxx>
 #endif
 #ifndef _XMLOFF_PROPERTYSETMAPPER_HXX
-#include "xmlprmap.hxx"
+#include <xmloff/xmlprmap.hxx>
 #endif
 #ifndef _XMLOFF_XMLEXPPR_HXX
-#include "xmlexppr.hxx"
+#include <xmloff/xmlexppr.hxx>
 #endif
 #ifndef _XMLOFF_XMLIMPPR_HXX
-#include "xmlimppr.hxx"
+#include <xmloff/xmlimppr.hxx>
 #endif
 #ifndef _XMLOFF_XMLIMP_HXX
-#include "xmlimp.hxx"
+#include <xmloff/xmlimp.hxx>
 #endif
 
 namespace rtl { class OUString; }
