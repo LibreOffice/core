@@ -4,9 +4,9 @@
  *
  *  $RCSfile: fmdpage.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: obo $ $Date: 2006-10-12 12:45:12 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 18:12:06 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -37,7 +37,7 @@
 #include "precompiled_svx.hxx"
 
 #ifndef _SVX_FMPAGE_HXX
-#include "fmpage.hxx"
+#include <svx/fmpage.hxx>
 #endif
 
 #ifndef _SVX_FMOBJ_HXX
@@ -45,15 +45,15 @@
 #endif
 
 #ifndef _SVX_FMGLOB_HXX
-#include "fmglob.hxx"
+#include <svx/fmglob.hxx>
 #endif
 
 #ifndef _SVX_FMDPAGE_HXX
-#include "fmdpage.hxx"
+#include <svx/fmdpage.hxx>
 #endif
 
 #ifndef _SVX_UNOSHAPE_HXX //autogen
-#include "unoshape.hxx"
+#include <svx/unoshape.hxx>
 #endif
 #ifndef _CPPUHELPER_QUERYINTERFACE_HXX_
 #include <cppuhelper/queryinterface.hxx>
