@@ -4,9 +4,9 @@
  *
  *  $RCSfile: document.cxx,v $
  *
- *  $Revision: 1.89 $
+ *  $Revision: 1.90 $
  *
- *  last change: $Author: hr $ $Date: 2007-06-26 16:03:31 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 12:39:58 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -366,6 +366,7 @@ void SmDocShell::Parse()
 
     if (pTree)
         delete pTree;
+    ReplaceBadChars();
     pTree = aInterpreter.Parse(aText);
     nModifyCount++;
     SetFormulaArranged( FALSE );
@@ -966,7 +967,7 @@ BOOL SmDocShell::Save()
 
     if ( SfxObjectShell::Save() )
     {
-        if( !pTree )
+        if (!pTree)
             Parse();
         if( pTree && !IsFormulaArranged() )
             ArrangeFormula();
@@ -978,6 +979,40 @@ BOOL SmDocShell::Save()
     }
 
     return FALSE;
+}
+
+/*
+ * replace bad characters that can not be saved. (#i74144)
+ * */
+sal_Bool SmDocShell::ReplaceBadChars()
+{
+    sal_Bool bReplace = sal_False;
+    if (pEditEngine)
+    {
+        String aEngTxt( pEditEngine->GetText( LINEEND_LF ) );
+        const sal_Unicode *pEngTxt = aEngTxt.GetBuffer();
+        xub_StrLen nLen = aEngTxt.Len();
+        for (xub_StrLen i = 0;  i < nLen && !bReplace;  ++i)
+        {
+            const sal_Unicode c = *pEngTxt++;
+            if (c < ' ' && c != '\r' && c != '\n' && c != '\t')
+                bReplace = sal_True;
+        }
+        if (bReplace)
+        {
+            sal_Unicode *pChgTxt = aEngTxt.GetBufferAccess();
+            for (xub_StrLen i = 0;  i < nLen;  ++i)
+            {
+                sal_Unicode &rc = *pChgTxt++;
+                if (rc < ' ' && rc != '\r' && rc != '\n' && rc != '\t')
+                    rc = ' ';
+            }
+            aEngTxt.ReleaseBufferAccess( nLen );
+
+            aText = aEngTxt;
+        }
+    }
+    return bReplace;
 }
 
 
@@ -1005,7 +1040,7 @@ BOOL SmDocShell::SaveAs( SfxMedium& rMedium )
 
     if ( SfxObjectShell::SaveAs( rMedium ) )
     {
-        if( !pTree )
+        if (!pTree)
             Parse();
         if( pTree && !IsFormulaArranged() )
             ArrangeFormula();
