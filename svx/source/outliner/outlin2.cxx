@@ -4,9 +4,9 @@
  *
  *  $RCSfile: outlin2.cxx,v $
  *
- *  $Revision: 1.33 $
+ *  $Revision: 1.34 $
  *
- *  last change: $Author: ihi $ $Date: 2006-11-14 13:30:02 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 18:41:26 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -51,12 +51,12 @@
 
 #define _OUTLINER_CXX
 
-#include <outliner.hxx>
+#include <svx/outliner.hxx>
 #include <paralist.hxx>
-#include <outlobj.hxx>
+#include <svx/outlobj.hxx>
 #include <outleeng.hxx>
 #include <outlundo.hxx>
-#include <eeitem.hxx>
+#include <svx/eeitem.hxx>
 #include <editstat.hxx>
 
 DBG_NAMEEX(Outliner)
