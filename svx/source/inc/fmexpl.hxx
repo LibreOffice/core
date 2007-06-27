@@ -4,9 +4,9 @@
  *
  *  $RCSfile: fmexpl.hxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: hr $ $Date: 2006-06-19 16:05:31 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 18:22:21 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -120,7 +120,7 @@
 #endif
 
 #ifndef _SVX_FMVIEW_HXX
-#include "fmview.hxx"
+#include <svx/fmview.hxx>
 #endif
 
 #include "fmexch.hxx"
