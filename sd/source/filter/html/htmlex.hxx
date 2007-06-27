@@ -4,9 +4,9 @@
  *
  *  $RCSfile: htmlex.hxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: kz $ $Date: 2006-12-12 16:42:51 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 15:39:23 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -85,6 +85,8 @@
 #include "pubdlg.hxx"
 #endif
 
+#include <boost/scoped_ptr.hpp>
+
 #define NUM_BUTTONS 12
 
 #define PUB_LOWRES_WIDTH    640
@@ -104,6 +106,7 @@ class HtmlState;
 class SdrTextObj;
 class SdrPage;
 class SdDrawDocument;
+class ButtonSet;
 
 namespace sd {
 class View;
@@ -192,6 +195,8 @@ class HtmlExport
 
     const String maHTMLHeader;
 
+    boost::scoped_ptr< ButtonSet > mpButtonSet;
+
     SdrTextObj* GetLayoutTextObject(SdrPage* pPage);
 
     void SetDocColors( SdPage* pPage = NULL );
@@ -215,8 +220,6 @@ class HtmlExport
     bool    checkForExistingFiles();
     bool    checkFileExists( ::com::sun::star::uno::Reference< ::com::sun::star::ucb::XSimpleFileAccess >& xFileAccess, String const & aFileName );
 
-    ULONG   CreateBitmap( ULONG nThemeId, INT16 nImage, const String& aName ) const;
-    void    SmoothBitmap( BitmapEx& aBmp, Color aBackCol ) const;
     String getDocumentTitle();
     bool    SavePresentation();
 
@@ -255,12 +258,8 @@ class HtmlExport
     void ExportKiosk();
     void ExportWebCast();
 
-    List aSpecialObjects;
-    void HideSpecialObjects( SdPage* pPage );
-    void ShowSpecialObjects();
-
     bool WriteHtml( const String& rFileName, bool bAddExtension, const String& rHtmlData );
-    String GetButtonName( USHORT nButton ) const;
+    String GetButtonName( int nButton ) const;
 
  public:
      HtmlExport( rtl::OUString aPath, const com::sun::star::uno::Sequence< com::sun::star::beans::PropertyValue >& rParams, SdDrawDocument* pExpDoc, ::sd::DrawDocShell* pDocShell );
