@@ -4,9 +4,9 @@
  *
  *  $RCSfile: Oasis2OOo.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 11:26:35 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 16:22:13 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -46,13 +46,13 @@
 #include <rtl/ustrbuf.hxx>
 #endif
 #ifndef _XMLOFF_NMSPMAP_HXX
-#include "nmspmap.hxx"
+#include <xmloff/nmspmap.hxx>
 #endif
 #ifndef _XMLOFF_XMLNMSPE_HXX
 #include "xmlnmspe.hxx"
 #endif
 #ifndef _XMLOFF_XMLTOKEN_HXX
-#include "xmltoken.hxx"
+#include <xmloff/xmltoken.hxx>
 #endif
 #ifndef _XMLOFF_DEEPTCONTEXT_HXX
 #include "DeepTContext.hxx"
@@ -106,7 +106,7 @@
 #include "FamilyType.hxx"
 #endif
 #ifndef _XMLOFF_XMLUCONV_HXX
-#include "xmluconv.hxx"
+#include <xmloff/xmluconv.hxx>
 #endif
 #ifndef _XMLOFF_OASIS2OOO_HXX
 #include "Oasis2OOo.hxx"
