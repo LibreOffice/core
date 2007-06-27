@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.18 $
+#   $Revision: 1.19 $
 #
-#   last change: $Author: vg $ $Date: 2007-03-26 13:05:35 $
+#   last change: $Author: hr $ $Date: 2007-06-27 14:00:32 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -61,6 +61,9 @@ INCPRE+=$(ATL_INCLUDE) \
 .IF "$(PRODUCT)"!=""
 RC+=-DPRODUCT
 .ENDIF
+.IF "$(USE_STLP_DEBUG)"!=""
+CDEFS+=-D_DEBUG
+.ENDIF # "$(USE_STLP_DEBUG)"!=""
 
 RCFILES=\
         $(TARGET).rc
