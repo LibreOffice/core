@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ximpshap.hxx,v $
  *
- *  $Revision: 1.44 $
+ *  $Revision: 1.45 $
  *
- *  last change: $Author: ihi $ $Date: 2006-12-19 17:27:30 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 15:11:41 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -49,7 +49,7 @@
 #endif
 
 #ifndef _XMLOFF_XMLICTXT_HXX
-#include "xmlictxt.hxx"
+#include <xmloff/xmlictxt.hxx>
 #endif
 
 #ifndef _SDXMLIMP_IMPL_HXX
@@ -57,7 +57,7 @@
 #endif
 
 #ifndef _XMLOFF_NMSPMAP_HXX
-#include "nmspmap.hxx"
+#include <xmloff/nmspmap.hxx>
 #endif
 
 #ifndef _COM_SUN_STAR_DRAWING_XSHAPES_HPP_
@@ -83,7 +83,7 @@
 #include <vector>
 
 #ifndef _XMLOFF_SHAPEIMPORT_HXX_
-#include "shapeimport.hxx"
+#include <xmloff/shapeimport.hxx>
 #endif
 
 //////////////////////////////////////////////////////////////////////////////
