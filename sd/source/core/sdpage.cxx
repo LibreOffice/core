@@ -4,9 +4,9 @@
  *
  *  $RCSfile: sdpage.cxx,v $
  *
- *  $Revision: 1.59 $
+ *  $Revision: 1.60 $
  *
- *  last change: $Author: kz $ $Date: 2007-05-10 15:22:46 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 15:37:33 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -178,6 +178,8 @@ SdPage::SdPage(SdDrawDocument& rNewDoc, StarBASIC* pBasic, BOOL bMasterPage)
 ,   mnTime(1)
 ,   mbSoundOn(FALSE)
 ,   mbExcluded(FALSE)
+,   mbLoopSound(FALSE)
+,   mbStopSound(FALSE)
 ,   mbScaleObjects(TRUE)
 ,   mbBackgroundFullSize( FALSE )
 ,   meCharSet(gsl_getSystemTextEncoding())
