@@ -4,9 +4,9 @@
  *
  *  $RCSfile: sbxcurr.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 10:09:03 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 14:29:03 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -36,7 +36,7 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_basic.hxx"
 
-#include <sbx.hxx>
+#include <basic/sbx.hxx>
 
 #ifndef _ERRCODE_HXX //autogen
 #include <tools/errcode.hxx>
@@ -47,7 +47,7 @@
 #include <tools/bigint.hxx>
 #endif
 
-#include "sbxvar.hxx"
+#include <basic/sbxvar.hxx>
 #include "sbxconv.hxx"
 
 static String   ImpCurrencyToString( const SbxINT64& );
