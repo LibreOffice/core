@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.33 $
+#   $Revision: 1.34 $
 #
-#   last change: $Author: ihi $ $Date: 2007-06-05 10:45:54 $
+#   last change: $Author: hr $ $Date: 2007-06-27 12:12:12 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -105,16 +105,20 @@ python_CFLAGS+=$(C_RESTRICTIONFLAGS)
 python_LDFLAGS+=-Wl,-z,noexecstack
 .ENDIF
 
+# SunStudio on Solaris 10 and above needs the -xc99=all flag already 
+# during the configuration tests, otherwise the HAVE_LIMITS_H check will
+# be wrong resulting in a build breaker.
+.IF "$(SYSBASE)"==""
+.IF "$(COMNAME)"=="sunpro5"
+CC+=-xc99=all
+.ENDIF          # "$(COMNAME)"=="sunpro5"
+.ENDIF
+
+
 CONFIGURE_ACTION=./configure --prefix=$(MYCWD)/python-inst --enable-shared CFLAGS="$(python_CFLAGS)" LDFLAGS="$(python_LDFLAGS)"
 .IF "$(OS)$(CPU)" == "SOLARISI"
 CONFIGURE_ACTION += --disable-ipv6
 .ENDIF
-.IF "$(COMNAME)"=="sunpro5"
-#.IF "$(BUILD_TOOLS)$/cc"=="$(shell +-which cc)"
-#CC:=$(COMPATH)$/bin$/cc
-#.ENDIF          # "$(BUILD_TOOLS)$/cc"=="$(shell +-which cc)"
-.ENDIF          # "$(COMNAME)"=="sunpro5"
-
 .IF "$(OS)" == "IRIX"
 BUILD_ACTION=$(ENV_BUILD) gmake -j$(EXTMAXPROCESS) ; gmake install
 .ELSE
