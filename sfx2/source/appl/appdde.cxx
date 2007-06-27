@@ -4,9 +4,9 @@
  *
  *  $RCSfile: appdde.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 16:14:41 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 22:55:44 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -59,10 +59,10 @@
 #endif
 
 #ifndef _LNKBASE_HXX //autogen
-#include "lnkbase.hxx"
+#include <sfx2/lnkbase.hxx>
 #endif
 #ifndef _LINKMGR_HXX //autogen
-#include "linkmgr.hxx"
+#include <sfx2/linkmgr.hxx>
 #endif
 
 #include <tools/urlobj.hxx>
@@ -70,16 +70,16 @@
 #ifndef GCC
 #endif
 
-#include "app.hxx"
+#include <sfx2/app.hxx>
 #include "appdata.hxx"
-#include "objsh.hxx"
-#include "viewfrm.hxx"
-#include "topfrm.hxx"
-#include "dispatch.hxx"
+#include <sfx2/objsh.hxx>
+#include <sfx2/viewfrm.hxx>
+#include <sfx2/topfrm.hxx>
+#include <sfx2/dispatch.hxx>
 #include "sfxtypes.hxx"
-#include "sfxsids.hrc"
+#include <sfx2/sfxsids.hrc>
 #include "helper.hxx"
-#include "docfile.hxx"
+#include <sfx2/docfile.hxx>
 
 //========================================================================
 
