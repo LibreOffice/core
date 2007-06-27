@@ -4,9 +4,9 @@
  *
  *  $RCSfile: fmobj.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: obo $ $Date: 2007-01-22 15:14:15 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 18:13:19 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -49,7 +49,7 @@
 #endif
 
 #ifndef _MyEDITENG_HXX
-#include "editeng.hxx"
+#include <svx/editeng.hxx>
 #endif
 
 /** === begin UNO includes === **/
@@ -68,7 +68,7 @@
 /** === end UNO includes === **/
 
 #ifndef _SVX_FMMODEL_HXX
-#include "fmmodel.hxx"
+#include <svx/fmmodel.hxx>
 #endif
 
 #ifndef _SVX_FMTOOLS_HXX
@@ -80,7 +80,7 @@
 #endif
 
 #ifndef _SVX_DIALMGR_HXX
-#include "dialmgr.hxx"
+#include <svx/dialmgr.hxx>
 #endif
 
 #ifndef _SVX_FMRESIDS_HRC
@@ -88,11 +88,11 @@
 #endif
 
 #ifndef _SVX_FMVIEW_HXX //autogen
-#include <fmview.hxx>
+#include <svx/fmview.hxx>
 #endif
 
 #ifndef _SVX_FMGLOB_HXX
-#include "fmglob.hxx"
+#include <svx/fmglob.hxx>
 #endif
 
 #ifndef _SVX_FMPGEIMP_HXX
@@ -100,7 +100,7 @@
 #endif
 
 #ifndef _SVX_FMPAGE_HXX
-#include "fmpage.hxx"
+#include <svx/fmpage.hxx>
 #endif
 #ifndef _COMPHELPER_PROPERTY_HXX_
 #include <comphelper/property.hxx>
