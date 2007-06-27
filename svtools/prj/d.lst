@@ -73,6 +73,9 @@ mkdir: %_DEST%\inc%_EXT%\svtools
 ..\inc\svtools\fmtfield.hxx %_DEST%\inc%_EXT%\svtools\fmtfield.hxx
 ..\inc\svtools\hint.hxx %_DEST%\inc%_EXT%\svtools\hint.hxx
 ..\inc\svtools\accessibletableprovider.hxx %_DEST%\inc%_EXT%\svtools\accessibletableprovider.hxx
+..\inc\svtools\AccessibleBrowseBoxObjType.hxx %_DEST%\inc%_EXT%\svtools\AccessibleBrowseBoxObjType.hxx
+..\inc\svtools\accessiblefactory.hxx %_DEST%\inc%_EXT%\svtools\accessiblefactory.hxx
+..\inc\svtools\textwindowpeer.hxx %_DEST%\inc%_EXT%\svtools\textwindowpeer.hxx
 ..\inc\imgdef.hxx %_DEST%\inc%_EXT%\svtools\imgdef.hxx
 ..\inc\inetdef.hxx %_DEST%\inc%_EXT%\svtools\inetdef.hxx
 ..\inc\svtools\inethist.hxx %_DEST%\inc%_EXT%\svtools\inethist.hxx
@@ -294,14 +297,6 @@ mkdir: %_DEST%\inc%_EXT%\svtools
 ..\inc\svtools\urlfilter.hxx %_DEST%\inc%_EXT%\svtools\urlfilter.hxx
 
 ..\inc\controldims.hrc %_DEST%\inc%_EXT%\svtools\controldims.hrc
-
-..\inc\svtools\AccessibleBrowseBoxObjType.hxx %_DEST%\inc%_EXT%\svtools\AccessibleBrowseBoxObjType.hxx
-..\inc\svtools\AccessibleBrowseBoxBase.hxx %_DEST%\inc%_EXT%\svtools\AccessibleBrowseBoxBase.hxx
-..\inc\svtools\AccessibleBrowseBox.hxx %_DEST%\inc%_EXT%\svtools\AccessibleBrowseBox.hxx
-..\inc\svtools\AccessibleBrowseBoxTableBase.hxx %_DEST%\inc%_EXT%\svtools\AccessibleBrowseBoxTableBase.hxx
-..\inc\svtools\AccessibleBrowseBoxTable.hxx %_DEST%\inc%_EXT%\svtools\AccessibleBrowseBoxTable.hxx
-..\inc\svtools\AccessibleBrowseBoxHeaderBar.hxx %_DEST%\inc%_EXT%\svtools\AccessibleBrowseBoxHeaderBar.hxx
-..\inc\svtools\AccessibleBrowseBoxHeaderCell.hxx %_DEST%\inc%_EXT%\svtools\AccessibleBrowseBoxHeaderCell.hxx
 
 ..\inc\svtools\helpid.hrc %_DEST%\inc%_EXT%\svtools\helpid.hrc
 ..\inc\wizardheader.hxx %_DEST%\inc%_EXT%\svtools\wizardheader.hxx
