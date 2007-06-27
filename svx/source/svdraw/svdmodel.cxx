@@ -4,9 +4,9 @@
  *
  *  $RCSfile: svdmodel.cxx,v $
  *
- *  $Revision: 1.73 $
+ *  $Revision: 1.74 $
  *
- *  last change: $Author: vg $ $Date: 2007-05-22 15:20:23 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 19:03:54 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -36,7 +36,7 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_svx.hxx"
 
-#include "svdmodel.hxx"
+#include <svx/svdmodel.hxx>
 
 #ifndef _COM_SUN_STAR_CONTAINER_XNAMECONTAINER_HPP_
 #include <com/sun/star/container/XNameContainer.hpp>
@@ -64,49 +64,49 @@
 #endif
 
 #ifndef _SVX_XIT_HXX
-#include "xit.hxx"
+#include <svx/xit.hxx>
 #endif
 #ifndef _SVX_XBTMPIT_HXX
-#include "xbtmpit.hxx"
+#include <svx/xbtmpit.hxx>
 #endif
 #ifndef _SVX_XLNDSIT_HXX
-#include "xlndsit.hxx"
+#include <svx/xlndsit.hxx>
 #endif
 #ifndef _SVX_XLNEDIT_HXX //autogen
-#include "xlnedit.hxx"
+#include <svx/xlnedit.hxx>
 #endif
 #ifndef _SVX_XFLGRIT_HXX
-#include "xflgrit.hxx"
+#include <svx/xflgrit.hxx>
 #endif
 #ifndef _SVX_XFLFTRIT_HXX
-#include "xflftrit.hxx"
+#include <svx/xflftrit.hxx>
 #endif
 #ifndef _SVX_XFLHTIT_HXX //autogen
-#include "xflhtit.hxx"
+#include <svx/xflhtit.hxx>
 #endif
 #ifndef _SVX_XLNSTIT_HXX
-#include "xlnstit.hxx"
+#include <svx/xlnstit.hxx>
 #endif
 
 #include <sfx2/objsh.hxx>
 
 #include "svditext.hxx"
-#include "editeng.hxx"   // Fuer EditEngine::CreatePool()
+#include <svx/editeng.hxx>   // Fuer EditEngine::CreatePool()
 
-#include "xtable.hxx"
-#include "xoutx.hxx"
+#include <svx/xtable.hxx>
+#include <svx/xoutx.hxx>
 
 #include "svditer.hxx"
-#include "svdtrans.hxx"
-#include "svdpage.hxx"
-#include "svdlayer.hxx"
-#include "svdundo.hxx"
-#include "svdpool.hxx"
-#include "svdobj.hxx"
-#include "svdotext.hxx"  // fuer ReformatAllTextObjects und CalcFieldValue
-#include "svdetc.hxx"
-#include "svdoutl.hxx"
-#include "svdoole2.hxx"
+#include <svx/svdtrans.hxx>
+#include <svx/svdpage.hxx>
+#include <svx/svdlayer.hxx>
+#include <svx/svdundo.hxx>
+#include <svx/svdpool.hxx>
+#include <svx/svdobj.hxx>
+#include <svx/svdotext.hxx>  // fuer ReformatAllTextObjects und CalcFieldValue
+#include <svx/svdetc.hxx>
+#include <svx/svdoutl.hxx>
+#include <svx/svdoole2.hxx>
 #include "svdglob.hxx"  // Stringcache
 #include "svdstr.hrc"   // Objektname
 #include "svdoutlinercache.hxx"
@@ -121,11 +121,11 @@
 #endif
 
 #ifndef _SVX_COLRITEM_HXX //autogen
-#include "colritem.hxx"
+#include <svx/colritem.hxx>
 #endif
 
 #ifndef _SVX_FHGTITEM_HXX //autogen
-#include "fhgtitem.hxx"
+#include <svx/fhgtitem.hxx>
 #endif
 
 #ifndef _SFXSTYLE_HXX //autogen
@@ -137,7 +137,7 @@
 #endif
 
 #ifndef _SVX_NUMITEM_HXX //autogen
-#include <numitem.hxx>
+#include <svx/numitem.hxx>
 #endif
 
 #ifndef _SVX_BULITEM_HXX //autogen
@@ -145,7 +145,7 @@
 #endif
 
 #ifndef _OUTLOBJ_HXX
-#include <outlobj.hxx>
+#include <svx/outlobj.hxx>
 #endif
 
 #ifndef _FORBIDDENCHARACTERSTABLE_HXX
