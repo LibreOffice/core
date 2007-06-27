@@ -4,9 +4,9 @@
  *
  *  $RCSfile: saldisp.cxx,v $
  *
- *  $Revision: 1.88 $
+ *  $Revision: 1.89 $
  *
- *  last change: $Author: rt $ $Date: 2007-04-26 10:41:42 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 20:46:44 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -112,7 +112,7 @@ Status XineramaGetInfo(Display*, int, XRectangle*, unsigned char*, int*);
 #include <saldata.hxx>
 #endif
 #ifndef _SV_SALINST_HXX
-#include <salinst.hxx>
+#include <vcl/salinst.hxx>
 #endif
 #ifndef _SV_SALGDI_H
 #include <salgdi.h>
@@ -121,10 +121,10 @@ Status XineramaGetInfo(Display*, int, XRectangle*, unsigned char*, int*);
 #include <salframe.h>
 #endif
 #ifndef _SV_KEYCODES_HXX
-#include <keycodes.hxx>
+#include <vcl/keycodes.hxx>
 #endif
 #ifndef _SV_SALBTYPE_HXX
-#include <salbtype.hxx>
+#include <vcl/salbtype.hxx>
 #endif
 #ifndef _SV_SALBMP_H
 #include <salbmp.h>
