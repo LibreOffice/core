@@ -4,9 +4,9 @@
  *
  *  $RCSfile: htmlex.cxx,v $
  *
- *  $Revision: 1.30 $
+ *  $Revision: 1.31 $
  *
- *  last change: $Author: kz $ $Date: 2007-05-10 15:24:14 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 15:39:09 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -127,9 +127,6 @@
 #ifndef _SV_CVTGRF_HXX
 #include <vcl/cvtgrf.hxx>
 #endif
-#ifndef _GALLERY_HXX_
-#include <svx/gallery.hxx>
-#endif
 #ifndef INCLUDED_SVTOOLS_COLORCFG_HXX
 #include <svtools/colorcfg.hxx>
 #endif
@@ -204,6 +201,7 @@
 #include "anminfo.hxx"
 #include "imapinfo.hxx"
 #include "sdresid.hxx"
+#include "buttonset.hxx"
 
 #ifndef _BGFX_POLYGON_B2DPOLYGON_HXX
 #include <basegfx/polygon/b2dpolygon.hxx>
@@ -226,11 +224,20 @@ using namespace ::com::sun::star::document;
 #define S2H( str ) StringToHTMLString( str )
 
 // bei Aenderungen auch NUM_BUTTONS in pubdlg.hxx aendern!!
-static const char *pButtonNames[NUM_BUTTONS] =
+const char *pButtonNames[NUM_BUTTONS] =
 {
-    "first0.gif", "first1.gif", "prev0.gif", "prev1.gif",
-    "next0.gif", "next1.gif", "last0.gif", "last1.gif",
-    "index.gif", "text.gif", "more.gif", "less.gif"
+    "first-inactive.png",
+    "first.png",
+    "left-inactive.png",
+    "left.png",
+    "right-inactive.png",
+    "right.png",
+    "last-inactive.png",
+    "last.png",
+    "home.png",
+    "text.png",
+    "expand.png",
+    "collapse.png",
 };
 
 #define BTN_FIRST_0 0
@@ -495,7 +502,8 @@ HtmlExport::HtmlExport(
         maHTMLHeader( RTL_CONSTASCII_USTRINGPARAM(
             "<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.01 Transitional//EN\"\r\n"
             "     \"http://www.w3.org/TR/html4/transitional.dtd\">\r\n"
-            "<html>\r\n<head>\r\n" ) )
+            "<html>\r\n<head>\r\n" ) ),
+        mpButtonSet( new ButtonSet() )
 {
     bool bChange = mpDoc->IsChanged();
 
@@ -1079,7 +1087,15 @@ bool HtmlExport::CreateImagesForPresPages()
         Sequence< PropertyValue > aDescriptor( 3 );
         aDescriptor[0].Name = OUString( RTL_CONSTASCII_USTRINGPARAM("URL") );
         aDescriptor[1].Name = OUString( RTL_CONSTASCII_USTRINGPARAM("FilterName") );
-        aDescriptor[1].Value <<= OUString( RTL_CONSTASCII_USTRINGPARAM(meFormat==FORMAT_GIF ? "GIF" : "JPG") );
+        OUString sFormat;
+        if( meFormat == FORMAT_PNG )
+            sFormat = OUString( RTL_CONSTASCII_USTRINGPARAM("PNG") );
+        else if( meFormat == FORMAT_GIF )
+            sFormat = OUString( RTL_CONSTASCII_USTRINGPARAM("GIF") );
+        else
+            sFormat = OUString( RTL_CONSTASCII_USTRINGPARAM("JPG") );
+
+        aDescriptor[1].Value <<= sFormat;
         aDescriptor[2].Name = OUString( RTL_CONSTASCII_USTRINGPARAM("FilterData") );
         aDescriptor[2].Value <<= aFilterData;
 
@@ -2159,8 +2175,10 @@ void HtmlExport::CreateFileNames()
         *pName += String::CreateFromInt32(nSdPage);
         if( meFormat==FORMAT_GIF )
             pName->AppendAscii( ".gif" );
-        else
+        else if( meFormat==FORMAT_JPG )
             pName->AppendAscii( ".jpg" );
+        else
+            pName->AppendAscii( ".png" );
 
         mpImageFiles[nSdPage] = pName;
 
@@ -2563,7 +2581,7 @@ bool HtmlExport::CreateNavBarFrames()
 
         aButton = String(SdResId(STR_HTMLEXP_OUTLINE));
         if(mnButtonThema != -1)
-            aButton = CreateImage(GetButtonName(BTN_LESS), aButton);
+            aButton = CreateImage(GetButtonName(BTN_MORE), aButton);
 
         aStr += CreateLink(String(RTL_CONSTASCII_USTRINGPARAM("JavaScript:parent.ExpandOutline()")), aButton);
         aStr.AppendAscii( "</body>\r\n</html>" );
@@ -2588,7 +2606,7 @@ bool HtmlExport::CreateNavBarFrames()
 
         aButton = String(SdResId(STR_HTMLEXP_NOOUTLINE));
         if(mnButtonThema != -1)
-            aButton = CreateImage(GetButtonName(BTN_MORE), aButton);
+            aButton = CreateImage(GetButtonName(BTN_LESS), aButton);
 
         aStr += CreateLink(String(RTL_CONSTASCII_USTRINGPARAM("JavaScript:parent.CollapseOutline()")), aButton);
         aStr.AppendAscii( "</body>\r\n</html>" );
@@ -2707,221 +2725,25 @@ String HtmlExport::CreateNavBar( USHORT nSdPage, bool bIsText ) const
     return aStr;
 }
 
-// ====================================================================
-// Schaltflaechen aus der Gallery exportieren
-// ====================================================================
+/** export navigation graphics from button set */
 bool HtmlExport::CreateBitmaps()
 {
-    ULONG nErr = 0;
-
-    meEC.SetContext( STR_HTMLEXP_ERROR_GALLERY );
-
-    if(mnButtonThema != -1)
+    if(mnButtonThema != -1 && mpButtonSet.get() )
     {
-        if( GalleryExplorer::BeginLocking( GALLERY_THEME_HTMLBUTTONS ) )
+        for( int nButton = 0; nButton < NUM_BUTTONS; nButton++ )
         {
-            Graphic aButton;
-            INT16 nButtons = mnButtonThema * NUM_BUTTONS;
-            for( INT16 nButton = 0; nButton < NUM_BUTTONS && nErr == 0; nButton++ )
-            {
-                if(!mbFrames && (nButton == BTN_MORE || nButton == BTN_LESS))
-                    continue;
+            if(!mbFrames && (nButton == BTN_MORE || nButton == BTN_LESS))
+                continue;
 
-                if(!mbImpress && (nButton == BTN_TEXT || nButton == BTN_MORE || nButton == BTN_LESS ))
-                    continue;
+            if(!mbImpress && (nButton == BTN_TEXT || nButton == BTN_MORE || nButton == BTN_LESS ))
+                continue;
 
-                nErr = CreateBitmap(GALLERY_THEME_HTMLBUTTONS, nButtons + nButton, GetButtonName(nButton));
-            }
-
-            GalleryExplorer::EndLocking( GALLERY_THEME_HTMLBUTTONS );
+            OUString aFull(maExportPath);
+            aFull += GetButtonName(nButton);
+            mpButtonSet->exportButton( mnButtonThema, aFull, GetButtonName(nButton) );
         }
     }
-
-    if( nErr != 0 )
-        ErrorHandler::HandleError( nErr );
-
-    return nErr == 0;
-}
-
-// ====================================================================
-// Eine beliebige Schaltflaeche aus der Gallery exportieren
-// ====================================================================
-ULONG HtmlExport::CreateBitmap( ULONG nThemeId, INT16 nImage, const String& aName ) const
-{
-    String aFull(maExportPath);
-    aFull += aName;
-
-    Graphic aGraphic;
-    EasyFile aFile;
-    String aJPG;
-    SvStream* pStrm;
-    ULONG nErr = aFile.createStream(aFull, pStrm);
-    if(nErr == 0)
-    {
-        nErr = GalleryExplorer::GetGraphicObj( nThemeId, nImage, &aGraphic )?0:1;
-        if( nErr == 0 )
-        {
-            if( mbUserAttr || mbDocColors )
-            {
-                BitmapEx aBitmap( aGraphic.GetBitmapEx() );
-
-                if( aBitmap.GetTransparentType() != TRANSPARENT_NONE )
-                    SmoothBitmap( aBitmap, mbUserAttr?maBackColor:maFirstPageColor );
-                aGraphic = Graphic( aBitmap );
-            }
-            nErr = GraphicConverter::Export( *pStrm, aGraphic, CVT_GIF );
-        }
-
-        if( nErr == 0 )
-            nErr = aFile.close();
-        else
-            aFile.close();
-    }
-
-    return nErr;
-}
-
-/** Kantengl�ttung der �bergebennen BitmapEx mit der angegebennen Hintergrundfarbe
- */
-void HtmlExport::SmoothBitmap( BitmapEx& aBmp, Color aBackCol ) const
-{
-    BYTE                cBackR = aBackCol.GetRed();
-    BYTE                cBackG = aBackCol.GetGreen();
-    BYTE                cBackB = aBackCol.GetBlue();
-
-    Bitmap              aSrcBmp( aBmp.GetBitmap() );
-    Bitmap              aMask( aBmp.GetMask() );
-
-    BitmapReadAccess*   pRAcc = aSrcBmp.AcquireReadAccess();
-    BitmapReadAccess*   pMAcc = aMask.AcquireReadAccess();
-
-    if( !pRAcc || !pMAcc )
-        return;
-
-    const long          nWidth = pRAcc->Width();
-    const long          nHeight = pRAcc->Height();
-    const long          nLastX = nWidth - 1;
-    const long          nLastY = nWidth - 1;
-
-    BYTE*               pAlpha = new BYTE[nWidth*nHeight];
-    BYTE*               pAlphaLine;
-
-    memset( pAlpha, 0, nWidth*nHeight );
-
-    // Alpha Maske fuellen
-    const BitmapColor   aWhite( pMAcc->GetBestMatchingColor( Color( COL_WHITE ) ));
-
-    for( long nY = 0; nY < nHeight; nY++ )
-    {
-        for( long nX = 0; nX < nWidth; nX++ )
-        {
-            if( pMAcc->GetPixel( nY, nX ) == aWhite )
-            {
-                if( nY > 0 )
-                {
-                    pAlphaLine = &pAlpha[(nY-1) * nWidth + nX];
-                    if( nX > 0 )
-                        pAlphaLine[-1] +=1;
-                    *pAlphaLine += 1;
-                    if( nX < nLastX)
-                        pAlphaLine[1] += 1;
-                    pAlphaLine += nWidth;
-                }
-                else
-                    pAlphaLine = &pAlpha[nY * nWidth + nX];
-
-                if( nX > 0 )
-                    pAlphaLine[-1] +=1;
-                if( nX < nLastX)
-                    pAlphaLine[1] += 1;
-
-                pAlphaLine += nWidth;
-
-                if( nY < nLastY )
-                {
-                    if( nX > 0 )
-                        pAlphaLine[-1] +=1;
-                    *pAlphaLine += 1;
-                    if( nX < nLastX)
-                        pAlphaLine[1] += 1;
-                }
-            }
-
-            if( nX == 0 || nX == nLastX || nY == 0 || nY == nLastY  )
-            {
-                pAlpha[nY * nWidth + nX] += 3;
-            }
-        }
-    }
-
-    // Kanten gl�tten
-    const Size          aSize( nWidth, nHeight );
-    Bitmap              aDstBmp( aSize, 24 );
-    BitmapWriteAccess*  pWAcc = aDstBmp.AcquireWriteAccess();
-
-    pAlphaLine = pAlpha;
-    if( !pRAcc->HasPalette() )
-    {
-        for( long nY = 0; nY < nHeight; nY++ )
-        {
-            for( long nX = 0; nX < nWidth; nX++ )
-            {
-                USHORT nAlpha = *pAlphaLine++;
-                if( pMAcc->GetPixel( nY, nX ) != aWhite )
-                {
-                    BitmapColor aPixel = pRAcc->GetPixel( nY, nX );
-                    if( nAlpha != 0)
-                    {
-                        nAlpha <<= 4;
-                        aPixel.SetRed( (BYTE)(((USHORT)cBackR * nAlpha + (USHORT)aPixel.GetRed() * (128-nAlpha)) >> 7) );
-                        aPixel.SetGreen( (BYTE)(((USHORT)cBackG * nAlpha + (USHORT)aPixel.GetRed() * (128-nAlpha)) >> 7) );
-                        aPixel.SetBlue( (BYTE)(((USHORT)cBackB * nAlpha + (USHORT)aPixel.GetRed() * (128-nAlpha)) >> 7) );
-                    }
-                    pWAcc->SetPixel( nY, nX, aPixel );
-                }
-                else
-                {
-                    pWAcc->SetPixel( nY, nX, aBackCol );
-                }
-
-            }
-        }
-    }
-    else
-    {
-        for( long nY = 0; nY < nHeight; nY++ )
-        {
-            for( long nX = 0; nX < nWidth; nX++ )
-            {
-                USHORT nAlpha = *pAlphaLine++;
-                if( pMAcc->GetPixel( nY, nX ) != aWhite )
-                {
-                    BitmapColor aPixel = pRAcc->GetPaletteColor( pRAcc->GetPixel( nY, nX ) );
-                    if( nAlpha != 0)
-                    {
-                        nAlpha <<= 4;
-                        aPixel.SetRed( (BYTE)(((USHORT)cBackR * nAlpha + (USHORT)aPixel.GetRed() * (128-nAlpha)) >> 7) );
-                        aPixel.SetGreen( (BYTE)(((USHORT)cBackR * nAlpha + (USHORT)aPixel.GetRed() * (128-nAlpha)) >> 7) );
-                        aPixel.SetBlue( (BYTE)(((USHORT)cBackR * nAlpha + (USHORT)aPixel.GetRed() * (128-nAlpha)) >> 7) );
-                    }
-                    pWAcc->SetPixel( nY, nX, aPixel );
-                }
-                else
-                {
-                    pWAcc->SetPixel( nY, nX, aBackCol );
-                }
-
-            }
-        }
-    }
-
-    delete[] pAlpha;
-    aMask.ReleaseAccess( pMAcc );
-    aSrcBmp.ReleaseAccess( pRAcc );
-    aDstBmp.ReleaseAccess( pWAcc );
-
-
-    aBmp = BitmapEx( aDstBmp, aMask );
+    return true;
 }
 
 // =====================================================================
@@ -3445,129 +3267,6 @@ bool HtmlExport::checkForExistingFiles()
 
 // ---------------------------------------------------------------------
 
-
-class HideSpecialObjectsInfo
-{
-public:
-    HideSpecialObjectsInfo( SdrObject* pObj ) : mpObj( pObj ) {}
-
-    SdrObject* mpObj;
-    USHORT mnLineStyleState;
-    USHORT mnFillStyleState;
-    XLineStyle meLineStyle;
-    XFillStyle meFillStyle;
-};
-
-// ---
-
-void HtmlExport::HideSpecialObjects( SdPage* pPage )
-{
-    DBG_ASSERT( aSpecialObjects.Count() == 0, "SpecialObjects not shown after hide!" );
-
-    SdrObject* pObj = NULL;
-    SdAnimationInfo* pInfo = NULL;
-
-    SdrObjListIter aIter(*pPage, IM_DEEPWITHGROUPS);
-
-    while(aIter.IsMore())
-    {
-        pObj = aIter.Next();
-
-        pInfo = mpDoc->GetAnimationInfo(pObj);
-        if(pInfo)
-        {
-            SdrPathObj* pPath = pInfo->mpPathObj;
-
-            if( pPath )
-            {
-                HideSpecialObjectsInfo* pHSOI = (HideSpecialObjectsInfo*)aSpecialObjects.First();
-                while( pHSOI )
-                {
-                    if( pHSOI->mpObj == pPath )
-                        break;
-                    pHSOI = (HideSpecialObjectsInfo*)aSpecialObjects.Next();
-                }
-
-                if( pHSOI == NULL )
-                {
-                    SfxItemSet aSet(mpDoc->GetPool());
-
-                    aSet.Put(pPath->GetMergedItemSet());
-
-                    // not hided yet, so hide it
-                    pHSOI = new HideSpecialObjectsInfo( pPath );
-
-                    // remember LineStyle and FillStyle state and value
-                    pHSOI->mnLineStyleState = aSet.GetItemState( XATTR_FILLSTYLE, false );
-                    if( pHSOI->mnLineStyleState == SFX_ITEM_SET )
-                        pHSOI->meLineStyle = ( (const XLineStyleItem&) aSet.Get( XATTR_LINESTYLE ) ).GetValue();
-
-
-                    pHSOI->mnFillStyleState = aSet.GetItemState( XATTR_LINESTYLE, false );
-                    if( pHSOI->mnFillStyleState == SFX_ITEM_SET )
-                        pHSOI->meFillStyle = ( (const XFillStyleItem&) aSet.Get( XATTR_FILLSTYLE ) ).GetValue();
-
-                    // enter stealth mode
-                    XFillStyleItem aFillStyleItem(XFILL_NONE);
-                    aSet.Put(aFillStyleItem);
-
-                    XLineStyleItem aLineStyleItem(XLINE_NONE);
-                    aSet.Put(aLineStyleItem);
-
-                    aSpecialObjects.Insert( (void*)pHSOI );
-
-                    pPath->SetMergedItemSetAndBroadcast(aSet);
-                }
-            }
-        }
-    }
-
-}
-
-// =====================================================================
-
-void HtmlExport::ShowSpecialObjects()
-{
-    HideSpecialObjectsInfo* pHSOI = (HideSpecialObjectsInfo*)aSpecialObjects.First();
-    while( pHSOI )
-    {
-        SdrObject* pPath = pHSOI->mpObj;
-
-        SfxItemSet aSet(mpDoc->GetPool());
-        aSet.Put(pPath->GetMergedItemSet());
-
-        if( pHSOI->mnLineStyleState == SFX_ITEM_SET )
-        {
-            XLineStyleItem aLineStyleItem( pHSOI->meLineStyle );
-            aSet.Put( aLineStyleItem );
-        }
-        else
-        {
-            aSet.ClearItem( XATTR_LINESTYLE );
-        }
-
-        if( pHSOI->mnFillStyleState == SFX_ITEM_SET )
-        {
-            XFillStyleItem aFillStyleItem( pHSOI->meFillStyle );
-            aSet.Put( aFillStyleItem );
-        }
-        else
-        {
-            aSet.ClearItem( XATTR_LINESTYLE );
-        }
-
-        pPath->SetMergedItemSetAndBroadcast(aSet);
-
-        delete pHSOI;
-
-        pHSOI = (HideSpecialObjectsInfo*)aSpecialObjects.Next();
-    }
-
-    aSpecialObjects.Clear();
-}
-
-// =====================================================================
-
 String HtmlExport::StringToURL( const String& rURL )
 {
     return rURL;
@@ -3580,7 +3279,7 @@ String HtmlExport::StringToURL( const String& rURL )
 */
 }
 
-String HtmlExport::GetButtonName( USHORT nButton ) const
+String HtmlExport::GetButtonName( int nButton ) const
 {
     String aName;
     aName.AssignAscii( pButtonNames[nButton] );
