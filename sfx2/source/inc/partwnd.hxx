@@ -4,9 +4,9 @@
  *
  *  $RCSfile: partwnd.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: hr $ $Date: 2006-06-19 22:33:35 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 23:28:15 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -53,8 +53,8 @@ namespace com
     }
 }
 
-#include "childwin.hxx"
-#include "dockwin.hxx"
+#include <sfx2/childwin.hxx>
+#include <sfx2/dockwin.hxx>
 
 // forward ---------------------------------------------------------------
 
