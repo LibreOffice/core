@@ -4,9 +4,9 @@
  *
  *  $RCSfile: sb.cxx,v $
  *
- *  $Revision: 1.31 $
+ *  $Revision: 1.32 $
  *
- *  last change: $Author: rt $ $Date: 2007-04-26 08:33:02 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 14:18:35 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -49,7 +49,7 @@
 #include <tools/errinf.hxx>
 #endif
 #ifndef _SBXCLASS_HXX //autogen
-#include <sbx.hxx>
+#include <basic/sbx.hxx>
 #endif
 #ifndef _LIST_HXX //autogen
 #include <tools/list.hxx>
@@ -69,7 +69,7 @@
 #include "sbintern.hxx"
 #include "disas.hxx"
 #include "runtime.hxx"
-#include "sbuno.hxx"
+#include <basic/sbuno.hxx>
 #include "stdobj.hxx"
 #include "filefmt.hxx"
 #include "sb.hrc"
