@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.12 $
+#   $Revision: 1.13 $
 #
-#   last change: $Author: hr $ $Date: 2006-06-19 21:01:14 $
+#   last change: $Author: hr $ $Date: 2007-06-27 14:52:07 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -55,16 +55,16 @@ SLOFILES=   \
             $(SLO)$/xtextedt.obj	\
             $(SLO)$/sychconv.obj	\
             $(SLO)$/svmedit.obj		\
-            $(SLO)$/svmedit2.obj \
-            $(SLO)$/textwindowaccessibility.obj
+            $(SLO)$/svmedit2.obj    \
+            $(SLO)$/textwindowpeer.obj
 
 EXCEPTIONSFILES=	\
             $(SLO)$/textview.obj	\
-            $(SLO)$/textdoc.obj		\
-            $(SLO)$/texteng.obj		\
-            $(OBJ)$/textview.obj \
-            $(SLO)$/textwindowaccessibility.obj \
-            $(OBJ)$/textwindowaccessibility.obj
+            $(SLO)$/textdoc.obj     \
+            $(SLO)$/texteng.obj     \
+            $(OBJ)$/textview.obj    \
+            $(SLO)$/textwindowpeer.obj  \
+            $(OBJ)$/textwindowpeer.obj
 
 # --- Targets ------------------------------------------------------
 
