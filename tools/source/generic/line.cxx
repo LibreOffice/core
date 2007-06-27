@@ -4,9 +4,9 @@
  *
  *  $RCSfile: line.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 00:56:12 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 22:13:51 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -39,15 +39,15 @@
 #define _LINE_CXX
 
 #ifndef _LINK_HXX
-#include <link.hxx>
+#include <tools/link.hxx>
 #endif
 
 #ifndef _LINE_HXX
-#include <line.hxx>
+#include <tools/line.hxx>
 #endif
 
 #ifndef _DEBUG_HXX
-#include <debug.hxx>
+#include <tools/debug.hxx>
 #endif
 
 #include <cstdlib>
