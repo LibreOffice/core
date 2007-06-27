@@ -4,9 +4,9 @@
  *
  *  $RCSfile: fmPropBrw.cxx,v $
  *
- *  $Revision: 1.30 $
+ *  $Revision: 1.31 $
  *
- *  last change: $Author: kz $ $Date: 2007-05-10 10:05:34 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 18:11:20 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -39,10 +39,10 @@
 #include "fmPropBrw.hxx"
 #endif
 #ifndef _SVX_SVXIDS_HRC
-#include "svxids.hrc"
+#include <svx/svxids.hrc>
 #endif
 #ifndef _SVX_FMSHELL_HXX
-#include "fmshell.hxx"
+#include <svx/fmshell.hxx>
 #endif
 #ifndef _SVX_FMSHIMP_HXX
 #include "fmshimp.hxx"
@@ -54,7 +54,7 @@
 #include "fmhelp.hrc"
 #endif
 #ifndef _SVX_DIALMGR_HXX //autogen
-#include "dialmgr.hxx"
+#include <svx/dialmgr.hxx>
 #endif
 #ifndef _SVX_FMRESIDS_HRC
 #include "fmresids.hrc"
@@ -63,7 +63,7 @@
 #include "fmservs.hxx"
 #endif
 #ifndef _SVDPAGV_HXX
-#include "svdpagv.hxx"
+#include <svx/svdpagv.hxx>
 #endif
 
 /** === begin UNO includes === **/
@@ -155,7 +155,7 @@
 #endif
 
 #ifndef _SDRPAGEWINDOW_HXX
-#include <sdrpagewindow.hxx>
+#include <svx/sdrpagewindow.hxx>
 #endif
 
 #include <algorithm>
