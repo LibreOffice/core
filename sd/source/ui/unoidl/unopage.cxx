@@ -4,9 +4,9 @@
  *
  *  $RCSfile: unopage.cxx,v $
  *
- *  $Revision: 1.86 $
+ *  $Revision: 1.87 $
  *
- *  last change: $Author: vg $ $Date: 2007-01-09 11:35:12 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 15:45:50 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -193,7 +193,7 @@ enum WID_PAGE
     WID_PAGE_HEADERVISIBLE, WID_PAGE_HEADERTEXT, WID_PAGE_FOOTERVISIBLE, WID_PAGE_FOOTERTEXT,
     WID_PAGE_PAGENUMBERVISIBLE, WID_PAGE_DATETIMEVISIBLE, WID_PAGE_DATETIMEFIXED,
     WID_PAGE_DATETIMETEXT, WID_PAGE_DATETIMEFORMAT, WID_TRANSITION_TYPE, WID_TRANSITION_SUBTYPE,
-    WID_TRANSITION_DIRECTION, WID_TRANSITION_FADE_COLOR, WID_TRANSITION_DURATION
+    WID_TRANSITION_DIRECTION, WID_TRANSITION_FADE_COLOR, WID_TRANSITION_DURATION, WID_LOOP_SOUND
 };
 
 #ifndef SEQTYPE
@@ -230,7 +230,7 @@ const SfxItemPropertyMap* ImplGetDrawPagePropertyMap( sal_Bool bImpress, PageKin
         { MAP_CHAR_LEN(UNO_NAME_PAGE_PREVIEW),          WID_PAGE_PREVIEW,   SEQTYPE(::getCppuType((::com::sun::star::uno::Sequence<sal_Int8>*)0)), ::com::sun::star::beans::PropertyAttribute::READONLY, 0},
         { MAP_CHAR_LEN(UNO_NAME_PAGE_PREVIEWBITMAP),    WID_PAGE_PREVIEWBITMAP, SEQTYPE(::getCppuType((::com::sun::star::uno::Sequence<sal_Int8>*)0)), ::com::sun::star::beans::PropertyAttribute::READONLY, 0},
         { MAP_CHAR_LEN(UNO_NAME_PAGE_VISIBLE),          WID_PAGE_VISIBLE,   &::getBooleanCppuType(),                        0, 0},
-        { MAP_CHAR_LEN(UNO_NAME_OBJ_SOUNDFILE),         WID_PAGE_SOUNDFILE, &::getCppuType((const OUString*)0),             0, 0},
+        { MAP_CHAR_LEN(UNO_NAME_OBJ_SOUNDFILE),         WID_PAGE_SOUNDFILE, &::getCppuType((const Any*)0),              0, 0},
         { MAP_CHAR_LEN(sUNO_Prop_IsBackgroundVisible),  WID_PAGE_BACKVIS,   &::getBooleanCppuType(),                        0, 0},
         { MAP_CHAR_LEN(sUNO_Prop_IsBackgroundObjectsVisible),   WID_PAGE_BACKOBJVIS,    &::getBooleanCppuType(),                        0, 0},
         { MAP_CHAR_LEN(sUNO_Prop_UserDefinedAttributes),WID_PAGE_USERATTRIBS, &::getCppuType((const Reference< ::com::sun::star::container::XNameContainer >*)0)  ,         0,     0},
@@ -248,6 +248,7 @@ const SfxItemPropertyMap* ImplGetDrawPagePropertyMap( sal_Bool bImpress, PageKin
         { MAP_CHAR_LEN("TransitionDirection"),          WID_TRANSITION_DIRECTION, &::getCppuType((const sal_Bool*)0),           0,  0},
         { MAP_CHAR_LEN("TransitionFadeColor"),          WID_TRANSITION_FADE_COLOR, &::getCppuType((const sal_Int32*)0),         0,  0},
         { MAP_CHAR_LEN("TransitionDuration"),           WID_TRANSITION_DURATION, &::getCppuType((const double*)0),          0,  0},
+        { MAP_CHAR_LEN("LoopSound"),                    WID_LOOP_SOUND, &::getBooleanCppuType(),                    0, 0},
         {0,0,0,0,0,0}
     };
 
@@ -690,11 +691,32 @@ void SAL_CALL SdGenericDrawPage::setPropertyValue( const OUString& aPropertyName
         case WID_PAGE_SOUNDFILE :
         {
             OUString aURL;
-            if( ! ( aValue >>= aURL ) )
+            if( aValue >>= aURL )
+            {
+                GetPage()->SetSoundFile( aURL );
+                GetPage()->SetSound( aURL.getLength() != 0 ? sal_True : sal_False );
+                break;
+            }
+            else
+            {
+                sal_Bool bStopSound;
+                if( aValue >>= bStopSound )
+                {
+                    GetPage()->SetStopSound( bStopSound ? true : false );
+                    break;
+                }
+            }
+
+
+            throw lang::IllegalArgumentException();
+        }
+        case WID_LOOP_SOUND:
+        {
+            sal_Bool bLoop;
+            if( ! (aValue >>= bLoop) )
                 throw lang::IllegalArgumentException();
 
-            GetPage()->SetSoundFile( aURL );
-            GetPage()->SetSound( sal_True );
+            GetPage()->SetLoopSound( bLoop ? true : false );
             break;
         }
         case WID_PAGE_BACKFULL:
@@ -1081,10 +1103,22 @@ Any SAL_CALL SdGenericDrawPage::getPropertyValue( const OUString& PropertyName )
 
     case WID_PAGE_SOUNDFILE :
     {
-        OUString aURL;
-        if( GetPage()->IsSoundOn() )
-            aURL = GetPage()->GetSoundFile();
-        aAny <<= aURL;
+        if( GetPage()->IsStopSound() )
+        {
+            aAny <<= sal_True;
+        }
+        else
+        {
+            OUString aURL;
+            if( GetPage()->IsSoundOn() )
+                aURL = GetPage()->GetSoundFile();
+            aAny <<= aURL;
+        }
+        break;
+    }
+    case WID_LOOP_SOUND:
+    {
+        aAny <<= (sal_Bool)GetPage()->IsLoopSound();
         break;
     }
     case WID_PAGE_BACKFULL:
