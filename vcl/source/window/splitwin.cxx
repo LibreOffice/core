@@ -4,9 +4,9 @@
  *
  *  $RCSfile: splitwin.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: ihi $ $Date: 2007-06-06 14:22:03 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 20:33:43 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -49,34 +49,34 @@
 #include <tools/rcid.h>
 #endif
 #ifndef _SV_EVENT_HXX
-#include <event.hxx>
+#include <vcl/event.hxx>
 #endif
 #ifndef _SV_WALL_HXX
-#include <wall.hxx>
+#include <vcl/wall.hxx>
 #endif
 #ifndef _SV_BITMAP_HXX
-#include <bitmap.hxx>
+#include <vcl/bitmap.hxx>
 #endif
 #ifndef _SV_DECOVIEW_HXX
-#include <decoview.hxx>
+#include <vcl/decoview.hxx>
 #endif
 #ifndef _SV_SYMBOL_HXX
-#include <symbol.hxx>
+#include <vcl/symbol.hxx>
 #endif
 #ifndef _SV_SVIDS_HRC
 #include <svids.hrc>
 #endif
 #ifndef _SV_IMAGE_HXX
-#include <image.hxx>
+#include <vcl/image.hxx>
 #endif
 #ifndef _SV_SVDATA_HXX
-#include <svdata.hxx>
+#include <vcl/svdata.hxx>
 #endif
 #ifndef _SV_HELP_HXX
-#include <help.hxx>
+#include <vcl/help.hxx>
 #endif
 #ifndef _SV_SPLITWIN_HXX
-#include <splitwin.hxx>
+#include <vcl/splitwin.hxx>
 #endif
 
 
