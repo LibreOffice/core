@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.22 $
+#   $Revision: 1.23 $
 #
-#   last change: $Author: vg $ $Date: 2007-03-26 14:00:33 $
+#   last change: $Author: hr $ $Date: 2007-06-27 13:56:39 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -133,6 +133,9 @@ CDEFS +=    -DWINVER=0x400 -DMOZILLA_CLIENT \
         -DNETSCAPE -DMOZILLA_CLIENT -DJS_THREADSAFE -DNECKO -DINCLUDE_XUL	\
         -UDEBUG
 CFLAGS +=   -Zi -GR- -W3 -Gy -MDd -UDEBUG
+.IF "$(CCNUMVER)" >= "001399999999"
+CDEFS  +=   -D_STL_NOFORCE_MANIFEST
+.ENDIF
 .ENDIF
 .ENDIF
 .ENDIF
