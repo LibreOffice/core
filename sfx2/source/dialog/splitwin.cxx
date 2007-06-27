@@ -4,9 +4,9 @@
  *
  *  $RCSfile: splitwin.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 16:35:59 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 23:16:14 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -56,14 +56,14 @@
 
 #include "splitwin.hxx"
 #include "workwin.hxx"
-#include "dockwin.hxx"
-#include "app.hxx"
+#include <sfx2/dockwin.hxx>
+#include <sfx2/app.hxx>
 #include "dialog.hrc"
 #include "sfxresid.hxx"
-#include "mnumgr.hxx"
+#include <sfx2/mnumgr.hxx>
 #include "virtmenu.hxx"
-#include "msgpool.hxx"
-#include "viewfrm.hxx"
+#include <sfx2/msgpool.hxx>
+#include <sfx2/viewfrm.hxx>
 
 using namespace ::com::sun::star::uno;
 using namespace ::rtl;
