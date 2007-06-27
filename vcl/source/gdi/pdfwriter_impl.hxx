@@ -4,9 +4,9 @@
  *
  *  $RCSfile: pdfwriter_impl.hxx,v $
  *
- *  $Revision: 1.47 $
+ *  $Revision: 1.48 $
  *
- *  last change: $Author: obo $ $Date: 2007-06-11 14:25:28 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 20:21:30 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -36,7 +36,7 @@
 #define _VCL_PDFWRITER_IMPL_HXX
 
 #ifndef _VCL_PDFWRITER_HXX
-#include <pdfwriter.hxx>
+#include <vcl/pdfwriter.hxx>
 #endif
 
 #ifndef _RTL_USTRING_HXX
@@ -52,19 +52,19 @@
 #include <tools/stream.hxx>
 #endif
 #ifndef _SV_OUTDEV_HXX
-#include <outdev.hxx>
+#include <vcl/outdev.hxx>
 #endif
 #ifndef _SV_BITMAPEX_HXX
-#include <bitmapex.hxx>
+#include <vcl/bitmapex.hxx>
 #endif
 #ifndef _SV_GRADIENT_HXX
-#include <gradient.hxx>
+#include <vcl/gradient.hxx>
 #endif
 #ifndef _SV_HATCH_HXX
-#include <hatch.hxx>
+#include <vcl/hatch.hxx>
 #endif
 #ifndef _SV_WALL_HXX
-#include <wall.hxx>
+#include <vcl/wall.hxx>
 #endif
 #ifndef _SV_OUTDATA_HXX
 #include <outdata.hxx>
