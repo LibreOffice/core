@@ -4,9 +4,9 @@
  *
  *  $RCSfile: svtreebx.cxx,v $
  *
- *  $Revision: 1.50 $
+ *  $Revision: 1.51 $
  *
- *  last change: $Author: hr $ $Date: 2007-06-27 12:18:12 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 14:51:35 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -53,9 +53,6 @@ class TabBar;
 #include <svtreebx.hxx>
 #ifndef _SVIMPLBOX_HXX
 #include <svimpbox.hxx>
-#endif
-#ifndef _SVTOOLS_ACCESSIBLELISTBOX_HXX_
-#include "accessiblelistbox.hxx"
 #endif
 #ifndef _UTL_ACCESSIBLESTATESETHELPER_HXX_
 #include <unotools/accessiblestatesethelper.hxx>
@@ -2591,7 +2588,7 @@ void SvTreeListBox::EnableList( bool _bEnable )
         {
             // need to be done here to get the vclxwindow later on in the accessbile
             ::com::sun::star::uno::Reference< ::com::sun::star::awt::XWindowPeer > xTemp(GetComponentInterface());
-            xAccessible = new svt::AccessibleListBox( *this, xAccParent );
+            xAccessible = pImp->m_aFactoryAccess.getFactory().createAccessibleTreeListBox( *this, xAccParent );
         }
     }
     return xAccessible;
