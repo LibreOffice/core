@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dstribut.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: rt $ $Date: 2007-04-26 07:30:23 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 17:03:55 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -44,12 +44,12 @@
 #include <sfx2/basedlgs.hxx>
 #endif
 
-#include "dialogs.hrc"
+#include <svx/dialogs.hrc>
 #include "dstribut.hxx"
 #include "dstribut.hrc"
 
-#include "svddef.hxx"
-#include "dialmgr.hxx"
+#include <svx/svddef.hxx>
+#include <svx/dialmgr.hxx>
 
 #ifndef _SHL_HXX
 #include <tools/shl.hxx>
