@@ -4,9 +4,9 @@
  *
  *  $RCSfile: b3dgeom.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: vg $ $Date: 2007-05-22 20:16:05 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 22:27:14 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -37,11 +37,11 @@
 #include "precompiled_goodies.hxx"
 
 #ifndef _B3D_B3DGEOM_HXX
-#include "b3dgeom.hxx"
+#include <goodies/b3dgeom.hxx>
 #endif
 
 #ifndef _B3D_B3DCOMPO_HXX
-#include "b3dcompo.hxx"
+#include <goodies/b3dcompo.hxx>
 #endif
 
 //#ifndef _B3D_HMATRIX_HXX
@@ -49,7 +49,7 @@
 //#endif
 
 #ifndef _B3D_BASE3D_HXX
-#include "base3d.hxx"
+#include <goodies/base3d.hxx>
 #endif
 
 #ifndef _TOOLS_DEBUG_HXX
