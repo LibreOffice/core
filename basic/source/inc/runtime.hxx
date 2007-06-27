@@ -4,9 +4,9 @@
  *
  *  $RCSfile: runtime.hxx,v $
  *
- *  $Revision: 1.33 $
+ *  $Revision: 1.34 $
  *
- *  last change: $Author: vg $ $Date: 2006-11-02 16:32:35 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 14:21:59 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -37,7 +37,7 @@
 #define _SBRUNTIME_HXX
 
 #ifndef _SBX_HXX
-#include "sbx.hxx"
+#include <basic/sbx.hxx>
 #endif
 
 #include "sb.hxx"
