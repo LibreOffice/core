@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xformsexport.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: vg $ $Date: 2006-11-21 17:39:18 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 16:29:06 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -39,12 +39,12 @@
 #include "XFormsModelExport.hxx"
 #include "xformsapi.hxx"
 
-#include "xmlexp.hxx"
-#include "xmltoken.hxx"
+#include <xmloff/xmlexp.hxx>
+#include <xmloff/xmltoken.hxx>
 #include "xmlnmspe.hxx"
-#include "nmspmap.hxx"
+#include <xmloff/nmspmap.hxx>
 #include "DomExport.hxx"
-#include "xmluconv.hxx"
+#include <xmloff/xmluconv.hxx>
 
 #include "tools/debug.hxx"
 #include <com/sun/star/container/XIndexAccess.hpp>
