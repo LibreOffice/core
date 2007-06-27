@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dinfedt.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: rt $ $Date: 2007-04-26 10:10:51 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 23:11:03 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -42,7 +42,7 @@
 #include "dinfedt.hxx"
 #include "sfxresid.hxx"
 
-#include "sfx.hrc"
+#include <sfx2/sfx.hrc>
 #include "dinfedt.hrc"
 
 // class InfoEdit_Impl ---------------------------------------------------
