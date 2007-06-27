@@ -4,9 +4,9 @@
  *
  *  $RCSfile: namedvaluecollection.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: vg $ $Date: 2007-01-15 14:44:35 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 14:55:20 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -118,11 +118,23 @@ namespace comphelper
     }
 
     //--------------------------------------------------------------------
+    size_t NamedValueCollection::size() const
+    {
+        return m_pImpl->aValues.size();
+    }
+
+    //--------------------------------------------------------------------
+    bool NamedValueCollection::empty() const
+    {
+        return m_pImpl->aValues.empty();
+    }
+
+    //--------------------------------------------------------------------
     void NamedValueCollection::impl_assign( const Sequence< Any >& _rArguments )
     {
         {
-            NamedValueRepository empty;
-            m_pImpl->aValues.swap( empty );
+            NamedValueRepository aEmpty;
+            m_pImpl->aValues.swap( aEmpty );
         }
 
         PropertyValue aPropertyValue;
@@ -145,8 +157,8 @@ namespace comphelper
     void NamedValueCollection::impl_assign( const Sequence< PropertyValue >& _rArguments )
     {
         {
-            NamedValueRepository empty;
-            m_pImpl->aValues.swap( empty );
+            NamedValueRepository aEmpty;
+            m_pImpl->aValues.swap( aEmpty );
         }
 
         const PropertyValue* pArgument = _rArguments.getConstArray();
@@ -159,8 +171,8 @@ namespace comphelper
     void NamedValueCollection::impl_assign( const Sequence< NamedValue >& _rArguments )
     {
         {
-            NamedValueRepository empty;
-            m_pImpl->aValues.swap( empty );
+            NamedValueRepository aEmpty;
+            m_pImpl->aValues.swap( aEmpty );
         }
 
         const NamedValue* pArgument = _rArguments.getConstArray();
@@ -216,6 +228,16 @@ namespace comphelper
     {
         NamedValueRepository::const_iterator pos = m_pImpl->aValues.find( _rValueName );
         return ( pos != m_pImpl->aValues.end() );
+    }
+
+    //--------------------------------------------------------------------
+    bool NamedValueCollection::impl_remove( const ::rtl::OUString& _rValueName )
+    {
+        NamedValueRepository::iterator pos = m_pImpl->aValues.find( _rValueName );
+        if ( pos == m_pImpl->aValues.end() )
+            return false;
+        m_pImpl->aValues.erase( pos );
+        return true;
     }
 
 //........................................................................
