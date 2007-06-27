@@ -4,9 +4,9 @@
  *
  *  $RCSfile: EnhancedCustomShapeEngine.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: vg $ $Date: 2007-04-11 17:03:47 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 16:43:42 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -55,7 +55,7 @@
 #include "EnhancedCustomShapeGeometry.hxx"
 #endif
 #ifndef _SVX_UNOSHAPE_HXX
-#include "unoshape.hxx"
+#include <svx/unoshape.hxx>
 #endif
 #ifndef _SVX_UNOPAGE_HXX
 #include "svx/unopage.hxx"
@@ -64,36 +64,36 @@
 #include "unoapi.hxx"
 #endif
 #ifndef _SVDOBJ_HXX
-#include "svdobj.hxx"
+#include <svx/svdobj.hxx>
 #endif
 #ifndef _SVDOASHP_HXX
-#include "svdoashp.hxx"
+#include <svx/svdoashp.hxx>
 #endif
 #ifndef _SVDOGRP_HXX
-#include "svdogrp.hxx"
+#include <svx/svdogrp.hxx>
 #endif
 #ifndef _SVDORECT_HXX
-#include "svdorect.hxx"
+#include <svx/svdorect.hxx>
 #endif
 #ifndef _OUTLOBJ_HXX
-#include "outlobj.hxx"
+#include <svx/outlobj.hxx>
 #endif
 #ifndef _OUTLINER_HXX
-#include "outliner.hxx"
+#include <svx/outliner.hxx>
 #endif
 #ifndef _SVDOUTL_HXX
-#include "svdoutl.hxx"
+#include <svx/svdoutl.hxx>
 #endif
 #ifndef _SFXITEMSET_HXX
 #include <svtools/itemset.hxx>
 #endif
 #ifndef _SVDOPATH_HXX
-#include "svdopath.hxx"
+#include <svx/svdopath.hxx>
 #endif
-#include "svdpage.hxx"
-#include "svdmodel.hxx"
+#include <svx/svdpage.hxx>
+#include <svx/svdmodel.hxx>
 #ifndef _XOUTX_HXX
-#include "xoutx.hxx"
+#include <svx/xoutx.hxx>
 #endif
 #ifndef _SVDITER_HXX
 #include "svditer.hxx"
