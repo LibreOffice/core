@@ -4,9 +4,9 @@
  *
  *  $RCSfile: svdata.cxx,v $
  *
- *  $Revision: 1.52 $
+ *  $Revision: 1.53 $
  *
- *  last change: $Author: rt $ $Date: 2007-04-26 09:26:46 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 20:02:48 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -41,10 +41,10 @@
 #include <svsys.h>
 #endif
 #ifndef _SV_SALINST_HXX
-#include <salinst.hxx>
+#include <vcl/salinst.hxx>
 #endif
 #ifndef _SV_SALFRAME_HXX
-#include <salframe.hxx>
+#include <vcl/salframe.hxx>
 #endif
 
 #ifndef _VOS_MUTEX_HXX
@@ -69,37 +69,37 @@
 #include <fontcfg.hxx>
 #endif
 #ifndef VCL_INC_CONFIGSETTINGS_HXX
-#include <configsettings.hxx>
+#include <vcl/configsettings.hxx>
 #endif
 #ifndef _SV_SVDATA_HXX
-#include <svdata.hxx>
+#include <vcl/svdata.hxx>
 #endif
 #ifndef _SV_WINDOW_H
 #include <window.h>
 #endif
 #ifndef _SV_SVAPP_HXX
-#include <svapp.hxx>
+#include <vcl/svapp.hxx>
 #endif
 #ifndef _SV_WRKWIN_HXX
-#include <wrkwin.hxx>
+#include <vcl/wrkwin.hxx>
 #endif
 #ifndef _SV_MSGBOX_HXX
-#include <msgbox.hxx>
+#include <vcl/msgbox.hxx>
 #endif
 
 #ifndef _VCL_UNOHELP_HXX
-#include <unohelp.hxx>
+#include <vcl/unohelp.hxx>
 #endif
 
 #ifndef _SV_BUTTON_HXX
-#include <button.hxx> // for Button::GetStandardText
+#include <vcl/button.hxx> // for Button::GetStandardText
 #endif
 #ifndef _SV_DOCKWIN_HXX
-#include <dockwin.hxx>  // for DockingManager
+#include <vcl/dockwin.hxx>  // for DockingManager
 #endif
 
 #ifndef _SV_SALIMESTATUS_HXX
-#include <salimestatus.hxx>
+#include <vcl/salimestatus.hxx>
 #endif
 
 #ifndef _COM_SUN_STAR_LANG_XMULTISERVICEFACTORY_HPP_
@@ -124,7 +124,7 @@
 #include <com/sun/star/lang/XComponent.hpp>
 
 #include <stdio.h>
-#include <salsys.hxx>
+#include <vcl/salsys.hxx>
 #include <svids.hrc>
 #ifndef INCLUDED_RTL_INSTANCE_HXX
 #include <rtl/instance.hxx>
