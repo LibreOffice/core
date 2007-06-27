@@ -4,9 +4,9 @@
  *
  *  $RCSfile: PageMasterPropHdl.hxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: obo $ $Date: 2006-10-12 14:46:02 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 15:27:37 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -37,7 +37,7 @@
 #define _XMLOFF_PAGEMASTERPROPHDL_HXX_
 
 #ifndef _XMLOFF_PROPERTYHANDLERBASE_HXX
-#include "xmlprhdl.hxx"
+#include <xmloff/xmlprhdl.hxx>
 #endif
 
 #ifndef _RTL_USTRING_
@@ -45,7 +45,7 @@
 #endif
 
 #ifndef _XMLOFF_XMLTOKEN_HXX
-#include "xmltoken.hxx"
+#include <xmloff/xmltoken.hxx>
 #endif
 
 
