@@ -4,9 +4,9 @@
  *
  *  $RCSfile: polysc3d.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: kz $ $Date: 2007-05-09 13:30:54 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 18:04:57 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -41,15 +41,15 @@
 #endif
 
 #ifndef _SVX_FILLITEM_HXX
-#include "xfillit.hxx"
+#include <svx/xfillit.hxx>
 #endif
 
 #ifndef _SVDOPATH_HXX //autogen
-#include "svdopath.hxx"
+#include <svx/svdopath.hxx>
 #endif
 
 #ifndef _SVDOGRP_HXX //autogen
-#include "svdogrp.hxx"
+#include <svx/svdogrp.hxx>
 #endif
 
 #ifndef _SVDITER_HXX //autogen
@@ -57,7 +57,7 @@
 #endif
 
 #ifndef _SVDETC_HXX //autogen
-#include "svdetc.hxx"
+#include <svx/svdetc.hxx>
 #endif
 
 #ifndef _VIRDEV_HXX //autogen
@@ -69,15 +69,15 @@
 #endif
 
 #ifndef _XOUTX_HXX
-#include "xoutx.hxx"
+#include <svx/xoutx.hxx>
 #endif
 
 #ifndef _SVDPAGE_HXX
-#include "svdpage.hxx"
+#include <svx/svdpage.hxx>
 #endif
 
 #ifndef _SVDPOOL_HXX
-#include "svdpool.hxx"
+#include <svx/svdpool.hxx>
 #endif
 
 #ifndef _SFXSTYLE_HXX
@@ -89,7 +89,7 @@
 #endif
 
 #ifndef _E3D_POLYSC3D_HXX
-#include "polysc3d.hxx"
+#include <svx/polysc3d.hxx>
 #endif
 
 #ifndef _B3D_BASE3D_HXX
@@ -101,7 +101,7 @@
 #endif
 
 #ifndef _SVX_XLNCLIT_HXX
-#include "xlnclit.hxx"
+#include <svx/xlnclit.hxx>
 #endif
 
 #ifndef _SFXMETRICITEM_HXX
@@ -109,11 +109,11 @@
 #endif
 
 #ifndef _XTABLE_HXX
-#include "xtable.hxx"
+#include <svx/xtable.hxx>
 #endif
 
 #ifndef _SVX_XLNWTIT_HXX
-#include "xlnwtit.hxx"
+#include <svx/xlnwtit.hxx>
 #endif
 
 #define ITEMVALUE(ItemSet,Id,Cast)  ((const Cast&)(ItemSet).Get(Id)).GetValue()
