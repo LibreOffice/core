@@ -4,9 +4,9 @@
  *
  *  $RCSfile: fontsubs.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: obo $ $Date: 2006-10-12 12:12:28 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 17:06:00 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -42,7 +42,7 @@
 #include <vcl/fixed.hxx>
 #endif
 #ifndef _SVX_SIMPTABL_HXX //autogen
-#include "simptabl.hxx"
+#include <svx/simptabl.hxx>
 #endif
 #ifndef _SV_TOOLBOX_HXX //autogen
 #include <vcl/toolbox.hxx>
