@@ -4,9 +4,9 @@
  *
  *  $RCSfile: statcach.cxx,v $
  *
- *  $Revision: 1.33 $
+ *  $Revision: 1.34 $
  *
- *  last change: $Author: vg $ $Date: 2006-11-21 17:48:52 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 23:08:22 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -76,16 +76,16 @@
 #ifndef GCC
 #endif
 
-#include "app.hxx"
+#include <sfx2/app.hxx>
 #include "statcach.hxx"
-#include "msg.hxx"
-#include "ctrlitem.hxx"
-#include "dispatch.hxx"
+#include <sfx2/msg.hxx>
+#include <sfx2/ctrlitem.hxx>
+#include <sfx2/dispatch.hxx>
 #include "sfxtypes.hxx"
-#include "sfxuno.hxx"
-#include "unoctitm.hxx"
-#include "msgpool.hxx"
-#include "viewfrm.hxx"
+#include <sfx2/sfxuno.hxx>
+#include <sfx2/unoctitm.hxx>
+#include <sfx2/msgpool.hxx>
+#include <sfx2/viewfrm.hxx>
 
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::util;
