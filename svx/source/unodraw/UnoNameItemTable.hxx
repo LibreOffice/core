@@ -4,9 +4,9 @@
  *
  *  $RCSfile: UnoNameItemTable.hxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 01:01:17 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 19:21:54 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -52,10 +52,10 @@
 #endif
 
 #ifndef _SVX_XIT_HXX
-#include "xit.hxx"
+#include <svx/xit.hxx>
 #endif
 
-#include "xdef.hxx"
+#include <svx/xdef.hxx>
 
 class SdrModel;
 class SfxItemPool;
