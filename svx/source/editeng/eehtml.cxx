@@ -4,9 +4,9 @@
  *
  *  $RCSfile: eehtml.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: kz $ $Date: 2007-05-10 14:46:02 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 17:57:30 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -40,13 +40,13 @@
 
 #include <eehtml.hxx>
 #include <impedit.hxx>
-#include <adjitem.hxx>
-#include <flditem.hxx>
+#include <svx/adjitem.hxx>
+#include <svx/flditem.hxx>
 #include <tools/urlobj.hxx>
-#include "fhgtitem.hxx"
+#include <svx/fhgtitem.hxx>
 #include "fontitem.hxx"
-#include "ulspitem.hxx"
-#include "wghtitem.hxx"
+#include <svx/ulspitem.hxx>
+#include <svx/wghtitem.hxx>
 #include <svtools/htmltokn.h>
 #include <svtools/htmlkywd.hxx>
 
