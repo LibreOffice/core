@@ -4,9 +4,9 @@
  *
  *  $RCSfile: virtmenu.hxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: hr $ $Date: 2006-06-19 22:34:51 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 23:30:21 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -40,7 +40,7 @@
 #include <svtools/svarray.hxx>
 #endif
 #ifndef _SFXMNUITEM_HXX
-#include "mnuitem.hxx"
+#include <sfx2/mnuitem.hxx>
 #endif
 
 #ifndef _SFXMNUCFGA_HXX
