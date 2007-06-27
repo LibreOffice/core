@@ -551,12 +551,14 @@ UDK_3.5 {
         rtl_cache_free;
 } UDK_3.4;
 
-UDK_3.6 {   # OOo 2.3
+UDK_3.6 { # OOo 2.3
     global:
         osl_getAsciiFunctionSymbol;
         osl_getModuleHandle;
         rtl_uString_intern;
         rtl_uString_internConvert;
+        rtl_ustr_indexOfAscii_WithLength;
+        rtl_ustr_lastIndexOfAscii_WithLength;
 } UDK_3.5;
 
 PRIVATE_1.0 {
