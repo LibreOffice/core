@@ -4,9 +4,9 @@
  *
  *  $RCSfile: svdotxln.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: ihi $ $Date: 2007-06-05 14:36:24 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 19:09:30 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -49,10 +49,10 @@
 #include <unotools/datetime.hxx>
 #endif
 
-#include "svdotext.hxx"
+#include <svx/svdotext.hxx>
 #include "svditext.hxx"
-#include "svdmodel.hxx"
-#include "editdata.hxx"
+#include <svx/svdmodel.hxx>
+#include <svx/editdata.hxx>
 
 #ifndef SVX_LIGHT
 #ifndef _LNKBASE_HXX //autogen
