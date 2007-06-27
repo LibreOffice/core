@@ -562,6 +562,9 @@ mkdir: %_DEST%\inc%_EXT%\svx
 ..\inc\tbxcolor.hxx %_DEST%\inc%_EXT%\svx\tbxcolor.hxx
 ..\inc\svx\svxdllapi.h %_DEST%\inc%_EXT%\svx\svxdllapi.h
 ..\inc\svdstr.hrc %_DEST%\inc%_EXT%\svx\svdstr.hrc
+..\inc\svx\SmartTagMgr.hxx %_DEST%\inc%_EXT%\svx\SmartTagMgr.hxx
+..\inc\svx\SmartTagItem.hxx %_DEST%\inc%_EXT%\svx\SmartTagItem.hxx
+..\inc\svx\SmartTagCtl.hxx %_DEST%\inc%_EXT%\svx\SmartTagCtl.hxx
 
 mkdir: %_DEST%\inc%_EXT%\svx\sdr
 mkdir: %_DEST%\inc%_EXT%\svx\sdr\properties
