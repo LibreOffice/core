@@ -4,9 +4,9 @@
  *
  *  $RCSfile: txtedt.cxx,v $
  *
- *  $Revision: 1.78 $
+ *  $Revision: 1.79 $
  *
- *  last change: $Author: vg $ $Date: 2007-05-25 13:23:20 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 13:21:50 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -69,6 +69,7 @@
 #ifndef SVX_HANGUL_HANJA_CONVERSION_HXX
 #include <svx/hangulhanja.hxx>
 #endif
+#include <SwSmartTagMgr.hxx>
 #ifndef _LINGUISTIC_LNGPROPS_HHX_
 #include <linguistic/lngprops.hxx>
 #endif
@@ -165,23 +166,21 @@
 #ifndef _DOCSTAT_HXX //autogen
 #include <docstat.hxx>
 #endif
-#include <fmtautofmt.hxx>
-#include <istyleaccess.hxx>
-#ifndef _SMARTTAGMGR_HXX
-#include <SmartTagMgr.hxx>
-#endif
-
 #ifndef _EDITSH_HXX
 #include <editsh.hxx>
 #endif
+#ifndef _UNOTEXTMARKUP_HXX
+#include <unotextmarkup.hxx>
+#endif
+
+#include <fmtautofmt.hxx>
+#include <istyleaccess.hxx>
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::i18n;
 using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::linguistic2;
-
-#define C2U(cChar) rtl::OUString::createFromAscii(cChar)
 
 // Wir ersparen uns in Hyphenate ein GetFrm()
 // Achtung: in edlingu.cxx stehen die Variablen!
@@ -276,6 +275,132 @@ USHORT lcl_MaskRedlinesAndHiddenText( const SwTxtNode& rNode, XubString& rText,
 
     return nRedlinesMasked + nHiddenCharsMasked;
 }
+
+/*
+ * Used for spell checking. Calculates a rectangle for repaint.
+ */
+
+static SwRect lcl_CalculateRepaintRect( SwTxtFrm& rTxtFrm, xub_StrLen nChgStart, xub_StrLen nChgEnd )
+{
+    SwRect aRect;
+
+    SwTxtNode *pNode = rTxtFrm.GetTxtNode();
+
+    SwNodeIndex aNdIdx( *pNode );
+    SwPosition aPos( aNdIdx, SwIndex( pNode, nChgEnd ) );
+    SwCrsrMoveState aTmpState( MV_NONE );
+    aTmpState.b2Lines = sal_True;
+    rTxtFrm.GetCharRect( aRect, aPos, &aTmpState );
+    // information about end of repaint area
+    Sw2LinesPos* pEnd2Pos = aTmpState.p2Lines;
+
+    const SwTxtFrm *pEndFrm = &rTxtFrm;
+
+    while( pEndFrm->HasFollow() &&
+           nChgEnd >= pEndFrm->GetFollow()->GetOfst() )
+        pEndFrm = pEndFrm->GetFollow();
+
+    if ( pEnd2Pos )
+    {
+        // we are inside a special portion, take left border
+        SWRECTFN( pEndFrm )
+        (aRect.*fnRect->fnSetTop)( (pEnd2Pos->aLine.*fnRect->fnGetTop)() );
+        if ( pEndFrm->IsRightToLeft() )
+            (aRect.*fnRect->fnSetLeft)( (pEnd2Pos->aPortion.*fnRect->fnGetLeft)() );
+        else
+            (aRect.*fnRect->fnSetLeft)( (pEnd2Pos->aPortion.*fnRect->fnGetRight)() );
+        (aRect.*fnRect->fnSetWidth)( 1 );
+        (aRect.*fnRect->fnSetHeight)( (pEnd2Pos->aLine.*fnRect->fnGetHeight)() );
+        delete pEnd2Pos;
+    }
+
+    aTmpState.p2Lines = NULL;
+    SwRect aTmp;
+    aPos = SwPosition( aNdIdx, SwIndex( pNode, nChgStart ) );
+    rTxtFrm.GetCharRect( aTmp, aPos, &aTmpState );
+
+    // i63141: GetCharRect(..) could cause a formatting,
+    // during the formatting SwTxtFrms could be joined, deleted, created...
+    // => we have to reinit pStartFrm and pEndFrm after the formatting
+    const SwTxtFrm* pStartFrm = &rTxtFrm;
+    while( pStartFrm->HasFollow() &&
+           nChgStart >= pStartFrm->GetFollow()->GetOfst() )
+        pStartFrm = pStartFrm->GetFollow();
+    pEndFrm = pStartFrm;
+    while( pEndFrm->HasFollow() &&
+           nChgEnd >= pEndFrm->GetFollow()->GetOfst() )
+        pEndFrm = pEndFrm->GetFollow();
+
+    // information about start of repaint area
+    Sw2LinesPos* pSt2Pos = aTmpState.p2Lines;
+    if ( pSt2Pos )
+    {
+        // we are inside a special portion, take right border
+        SWRECTFN( pStartFrm )
+        (aTmp.*fnRect->fnSetTop)( (pSt2Pos->aLine.*fnRect->fnGetTop)() );
+        if ( pStartFrm->IsRightToLeft() )
+            (aTmp.*fnRect->fnSetLeft)( (pSt2Pos->aPortion.*fnRect->fnGetRight)() );
+        else
+            (aTmp.*fnRect->fnSetLeft)( (pSt2Pos->aPortion.*fnRect->fnGetLeft)() );
+        (aTmp.*fnRect->fnSetWidth)( 1 );
+        (aTmp.*fnRect->fnSetHeight)( (pSt2Pos->aLine.*fnRect->fnGetHeight)() );
+        delete pSt2Pos;
+    }
+
+    BOOL bSameFrame = TRUE;
+
+    if( rTxtFrm.HasFollow() )
+    {
+        if( pEndFrm != pStartFrm )
+        {
+            bSameFrame = FALSE;
+            SwRect aStFrm( pStartFrm->PaintArea() );
+            {
+                SWRECTFN( pStartFrm )
+                (aTmp.*fnRect->fnSetLeft)( (aStFrm.*fnRect->fnGetLeft)() );
+                (aTmp.*fnRect->fnSetRight)( (aStFrm.*fnRect->fnGetRight)() );
+                (aTmp.*fnRect->fnSetBottom)( (aStFrm.*fnRect->fnGetBottom)() );
+            }
+            aStFrm = pEndFrm->PaintArea();
+            {
+                SWRECTFN( pEndFrm )
+                (aRect.*fnRect->fnSetTop)( (aStFrm.*fnRect->fnGetTop)() );
+                (aRect.*fnRect->fnSetLeft)( (aStFrm.*fnRect->fnGetLeft)() );
+                (aRect.*fnRect->fnSetRight)( (aStFrm.*fnRect->fnGetRight)() );
+            }
+            aRect.Union( aTmp );
+            while( TRUE )
+            {
+                pStartFrm = pStartFrm->GetFollow();
+                if( pStartFrm == pEndFrm )
+                    break;
+                aRect.Union( pStartFrm->PaintArea() );
+            }
+        }
+    }
+    if( bSameFrame )
+    {
+        SWRECTFN( pStartFrm )
+        if( (aTmp.*fnRect->fnGetTop)() == (aRect.*fnRect->fnGetTop)() )
+            (aRect.*fnRect->fnSetLeft)( (aTmp.*fnRect->fnGetLeft)() );
+        else
+        {
+            SwRect aStFrm( pStartFrm->PaintArea() );
+            (aRect.*fnRect->fnSetLeft)( (aStFrm.*fnRect->fnGetLeft)() );
+            (aRect.*fnRect->fnSetRight)( (aStFrm.*fnRect->fnGetRight)() );
+            (aRect.*fnRect->fnSetTop)( (aTmp.*fnRect->fnGetTop)() );
+        }
+
+        if( aTmp.Height() > aRect.Height() )
+            aRect.Height( aTmp.Height() );
+    }
+
+    return aRect;
+}
+
+/*
+ * Used for automatic styles. Used during RstAttr.
+ */
 
 static bool lcl_HaveCommonAttributes( IStyleAccess& rStyleAccess,
                                       const SfxItemSet* pSet1,
@@ -1058,6 +1183,8 @@ USHORT SwTxtNode::Convert( SwConversionArgs &rArgs )
     return rArgs.aConvText.getLength() ? 1 : 0;
 }
 
+// Die Aehnlichkeiten zu SwTxtNode::Spell sind beabsichtigt ...
+// ACHTUNG: Ev. Bugs in beiden Routinen fixen!
 SwRect SwTxtFrm::_AutoSpell( const SwCntntNode* pActNode, const SwViewOption& rViewOpt, xub_StrLen nActPos )
 {
     SwRect aRect;
@@ -1080,31 +1207,28 @@ SwRect SwTxtFrm::_AutoSpell( const SwCntntNode* pActNode, const SwViewOption& rV
             lcl_MaskRedlinesAndHiddenText( *pNode, pNode->aText, 0, pNode->aText.Len() ) > 0;
 
     // a change of data indicates that at least one word has been modified
-    sal_Bool bRedlineChg = ( pNode->aText.GetBuffer() != aOldTxt.GetBuffer() );
+    const sal_Bool bRedlineChg = ( pNode->aText.GetBuffer() != aOldTxt.GetBuffer() );
 
-    xub_StrLen nBegin;
-    xub_StrLen nEnd;
-    xub_StrLen nLen;
-    xub_StrLen nInsertPos = pNode->aText.Len();
+    xub_StrLen nBegin = 0;
+    xub_StrLen nEnd = pNode->aText.Len();
+    xub_StrLen nInsertPos = 0;
     xub_StrLen nChgStart = STRING_LEN;
     xub_StrLen nChgEnd = 0;
     xub_StrLen nInvStart = STRING_LEN;
     xub_StrLen nInvEnd = 0;
 
-    BOOL bAddAutoCmpl = pNode->IsAutoCompleteWordDirty() &&
-                        rViewOpt.IsAutoCompleteWords();
+    const sal_Bool bAddAutoCmpl = pNode->IsAutoCompleteWordDirty() &&
+                                  rViewOpt.IsAutoCompleteWords();
 
     if( pNode->GetWrong() )
     {
-        if( STRING_LEN != ( nBegin = pNode->GetWrong()->GetBeginInv() ) )
+        nBegin = pNode->GetWrong()->GetBeginInv();
+        if( STRING_LEN != nBegin )
         {
-//          nBegin = pNode->GetWrong()->GetBeginInv();
             nEnd = pNode->GetWrong()->GetEndInv();
-            if ( nEnd > nInsertPos )
-                nEnd = nInsertPos;
+            if ( nEnd > pNode->aText.Len() )
+                nEnd = pNode->aText.Len();
         }
-        else
-            nEnd = nInsertPos;
 
         // get word around nBegin, we start at nBegin - 1
         if ( STRING_LEN != nBegin )
@@ -1119,7 +1243,7 @@ SwRect SwTxtFrm::_AutoSpell( const SwCntntNode* pActNode, const SwViewOption& rV
         }
 
         // get the position in the wrong list
-        nInsertPos = pNode->GetWrong()->GetPos( nBegin );
+        nInsertPos = pNode->GetWrong()->GetWrongPos( nBegin );
 
         // sometimes we have to skip one entry
         if( nInsertPos < pNode->GetWrong()->Count() &&
@@ -1127,15 +1251,8 @@ SwRect SwTxtFrm::_AutoSpell( const SwCntntNode* pActNode, const SwViewOption& rV
                       pNode->GetWrong()->Len( nInsertPos ) )
                 nInsertPos++;
     }
-    else
-    {
-        nBegin = 0;
-        nEnd = nInsertPos;
-        nInsertPos = 0;
-    }
 
     BOOL bFresh = nBegin < nEnd;
-    BOOL bACWDirty = FALSE;
 
     if( nBegin < nEnd )
     {
@@ -1150,11 +1267,12 @@ SwRect SwTxtFrm::_AutoSpell( const SwCntntNode* pActNode, const SwViewOption& rV
 
         SwScanner aScanner( *pNode, WordType::DICTIONARY_WORD,
                             nBegin, nEnd);
+
         while( aScanner.NextWord() )
         {
             const XubString& rWord = aScanner.GetWord();
             nBegin = aScanner.GetBegin();
-            nLen = aScanner.GetLen();
+            xub_StrLen nLen = aScanner.GetLen();
 
             // get next language for next word, consider language attributes
             // within the word
@@ -1170,19 +1288,23 @@ SwRect SwTxtFrm::_AutoSpell( const SwCntntNode* pActNode, const SwViewOption& rV
 
                 if( !xSpell->isValid( rWord, eActLang, Sequence< PropertyValue >() ) )
                 {
-                    bACWDirty = TRUE;
-                    if( !pNode->GetWrong() )
+                    xub_StrLen nSmartTagStt = nBegin;
+                    xub_StrLen nDummy = 1;
+                    if ( !pNode->GetSmartTags() || !pNode->GetSmartTags()->InWrongWord( nSmartTagStt, nDummy ) )
                     {
-                        pNode->SetWrong( new SwWrongList() );
-                        pNode->GetWrong()->SetInvalid( 0, nEnd );
-                    }
-                    if( pNode->GetWrong()->Fresh( nChgStart, nChgEnd,
-                        nBegin, nLen, nInsertPos, nActPos ) )
-                        pNode->GetWrong()->Insert( nBegin, nLen, nInsertPos++ );
-                    else
-                    {
-                        nInvStart = nBegin;
-                        nInvEnd = nBegin + nLen;
+                        if( !pNode->GetWrong() )
+                        {
+                            pNode->SetWrong( new SwWrongList() );
+                            pNode->GetWrong()->SetInvalid( 0, nEnd );
+                        }
+                        if( pNode->GetWrong()->Fresh( nChgStart, nChgEnd,
+                            nBegin, nLen, nInsertPos, nActPos ) )
+                            pNode->GetWrong()->Insert( rtl::OUString(), 0, nBegin, nLen, nInsertPos++ );
+                        else
+                        {
+                            nInvStart = nBegin;
+                            nInvEnd = nBegin + nLen;
+                        }
                     }
                 }
                 else if( bAddAutoCmpl && rACW.GetMinWordLen() <= rWord.Len() )
@@ -1198,6 +1320,7 @@ SwRect SwTxtFrm::_AutoSpell( const SwCntntNode* pActNode, const SwViewOption& rV
             }
         }
     }
+
     // reset original text
     // i63141 before calling GetCharRect(..) with formatting!
     if ( bRestoreString )
@@ -1207,117 +1330,15 @@ SwRect SwTxtFrm::_AutoSpell( const SwCntntNode* pActNode, const SwViewOption& rV
         if( bFresh )
             pNode->GetWrong()->Fresh( nChgStart, nChgEnd,
                                       nEnd, 0, nInsertPos, nActPos );
+
+        //
+        // Calculate repaint area:
+        //
         if( nChgStart < nChgEnd && !rViewOpt.IsHideSpell() )
         {
-            SwNodeIndex aNdIdx( *pNode );
-            SwPosition aPos( aNdIdx, SwIndex( pNode, nChgEnd ) );
-            SwCrsrMoveState aTmpState( MV_NONE );
-            aTmpState.b2Lines = sal_True;
-            GetCharRect( aRect, aPos, &aTmpState );
-            // information about end of repaint area
-            Sw2LinesPos* pEnd2Pos = aTmpState.p2Lines;
-
-            SwTxtFrm *pEndFrm = this;
-
-            while( pEndFrm->HasFollow() &&
-                   nChgEnd >= pEndFrm->GetFollow()->GetOfst() )
-                pEndFrm = pEndFrm->GetFollow();
-
-            if ( pEnd2Pos )
-            {
-                // we are inside a special portion, take left border
-                SWRECTFN( pEndFrm )
-                (aRect.*fnRect->fnSetTop)( (pEnd2Pos->aLine.*fnRect->fnGetTop)() );
-                if ( pEndFrm->IsRightToLeft() )
-                    (aRect.*fnRect->fnSetLeft)( (pEnd2Pos->aPortion.*fnRect->fnGetLeft)() );
-                else
-                    (aRect.*fnRect->fnSetLeft)( (pEnd2Pos->aPortion.*fnRect->fnGetRight)() );
-                (aRect.*fnRect->fnSetWidth)( 1 );
-                (aRect.*fnRect->fnSetHeight)( (pEnd2Pos->aLine.*fnRect->fnGetHeight)() );
-                delete pEnd2Pos;
-            }
-
-            aTmpState.p2Lines = NULL;
-            SwRect aTmp;
-            aPos = SwPosition( aNdIdx, SwIndex( pNode, nChgStart ) );
-            GetCharRect( aTmp, aPos, &aTmpState );
-
-            // i63141: GetCharRect(..) could cause a formatting,
-            // during the formatting SwTxtFrms could be joined, deleted, created...
-            // => we have to reinit pStartFrm and pEndFrm after the formatting
-            SwTxtFrm* pStartFrm = this;
-            while( pStartFrm->HasFollow() &&
-                   nChgStart >= pStartFrm->GetFollow()->GetOfst() )
-                pStartFrm = pStartFrm->GetFollow();
-            pEndFrm = pStartFrm;
-            while( pEndFrm->HasFollow() &&
-                   nChgEnd >= pEndFrm->GetFollow()->GetOfst() )
-                pEndFrm = pEndFrm->GetFollow();
-
-            // information about start of repaint area
-            Sw2LinesPos* pSt2Pos = aTmpState.p2Lines;
-            if ( pSt2Pos )
-            {
-                // we are inside a special portion, take right border
-                SWRECTFN( pStartFrm )
-                (aTmp.*fnRect->fnSetTop)( (pSt2Pos->aLine.*fnRect->fnGetTop)() );
-                if ( pStartFrm->IsRightToLeft() )
-                    (aTmp.*fnRect->fnSetLeft)( (pSt2Pos->aPortion.*fnRect->fnGetRight)() );
-                else
-                    (aTmp.*fnRect->fnSetLeft)( (pSt2Pos->aPortion.*fnRect->fnGetLeft)() );
-                (aTmp.*fnRect->fnSetWidth)( 1 );
-                (aTmp.*fnRect->fnSetHeight)( (pSt2Pos->aLine.*fnRect->fnGetHeight)() );
-                delete pSt2Pos;
-            }
-
-            BOOL bSameFrame = TRUE;
-
-            if( HasFollow() )
-            {
-                if( pEndFrm != pStartFrm )
-                {
-                    bSameFrame = FALSE;
-                    SwRect aStFrm( pStartFrm->PaintArea() );
-                    {
-                        SWRECTFN( pStartFrm )
-                        (aTmp.*fnRect->fnSetLeft)( (aStFrm.*fnRect->fnGetLeft)() );
-                        (aTmp.*fnRect->fnSetRight)( (aStFrm.*fnRect->fnGetRight)() );
-                        (aTmp.*fnRect->fnSetBottom)( (aStFrm.*fnRect->fnGetBottom)() );
-                    }
-                    aStFrm = pEndFrm->PaintArea();
-                    {
-                        SWRECTFN( pEndFrm )
-                        (aRect.*fnRect->fnSetTop)( (aStFrm.*fnRect->fnGetTop)() );
-                        (aRect.*fnRect->fnSetLeft)( (aStFrm.*fnRect->fnGetLeft)() );
-                        (aRect.*fnRect->fnSetRight)( (aStFrm.*fnRect->fnGetRight)() );
-                    }
-                    aRect.Union( aTmp );
-                    while( TRUE )
-                    {
-                        pStartFrm = pStartFrm->GetFollow();
-                        if( pStartFrm == pEndFrm )
-                            break;
-                        aRect.Union( pStartFrm->PaintArea() );
-                    }
-                }
-            }
-            if( bSameFrame )
-            {
-                SWRECTFN( pStartFrm )
-                if( (aTmp.*fnRect->fnGetTop)() == (aRect.*fnRect->fnGetTop)() )
-                    (aRect.*fnRect->fnSetLeft)( (aTmp.*fnRect->fnGetLeft)() );
-                else
-                {
-                    SwRect aStFrm( pStartFrm->PaintArea() );
-                    (aRect.*fnRect->fnSetLeft)( (aStFrm.*fnRect->fnGetLeft)() );
-                    (aRect.*fnRect->fnSetRight)( (aStFrm.*fnRect->fnGetRight)() );
-                    (aRect.*fnRect->fnSetTop)( (aTmp.*fnRect->fnGetTop)() );
-                }
-
-                if( aTmp.Height() > aRect.Height() )
-                    aRect.Height( aTmp.Height() );
-            }
+            aRect = lcl_CalculateRepaintRect( *this, nChgStart, nChgEnd );
         }
+
         pNode->GetWrong()->SetInvalid( nInvStart, nInvEnd );
         pNode->SetWrongDirty( STRING_LEN != pNode->GetWrong()->GetBeginInv() );
         if( !pNode->GetWrong()->Count() && ! pNode->IsWrongDirty() )
@@ -1328,113 +1349,9 @@ SwRect SwTxtFrm::_AutoSpell( const SwCntntNode* pActNode, const SwViewOption& rV
 
     if( bAddAutoCmpl )
         pNode->SetAutoCompleteWordDirty( false );
+
     return aRect;
 }
-
-// ST2
-SwWrongList* SwTxtFrm::_SmartTagScan( OUString aTxtToScan, SwWrongList *pSmartTagList,
-                                      xub_StrLen nBegin, xub_StrLen nEnd,
-                                      xub_StrLen nInsertPos, xub_StrLen nActPos,
-                                      xub_StrLen &nChgStart, xub_StrLen &nChgEnd,
-                                      xub_StrLen &nInvStart, xub_StrLen &nInvEnd )
-{
-    SwTxtNode *pNode = GetTxtNode();
-    xub_StrLen nLen;
-    SwWrongList* pNewSmartTagList = NULL;
-
-    BOOL bFresh = nBegin < nEnd;
-    // replace different whitespace characters by blanks
-    aTxtToScan = aTxtToScan.replace('\t', ' ');
-    aTxtToScan = aTxtToScan.replace(0x0a, ' ');
-    aTxtToScan = aTxtToScan.replace(0x3000, ' ');
-
-    sal_Int32 nIndex = nBegin;
-    sal_Int32 nTokIdx = nBegin;
-
-    const CharClass& rCC = GetAppCharClass();
-    // split text into words separated by whitespace characters
-    do
-    {
-        OUString rWord = aTxtToScan.getToken( 0, ' ', nIndex );
-
-        // cut away leading non alphanumeric characters
-        while (rWord.getLength()>0 && !rCC.isAlphaNumeric(rWord, 0))
-        {
-            rWord = rWord.copy(1, rWord.getLength()-1);
-        }
-
-        // cut away trailing non alphanumeric characters
-        while (rWord.getLength()>0 &&  !rCC.isAlphaNumeric(rWord, rWord.getLength()-1))
-        {
-            rWord = rWord.copy(0, rWord.getLength()-1);
-        }
-
-        if( rWord.getLength() > 1 )
-        {
-            nBegin = aTxtToScan.indexOf(rWord, nTokIdx);
-            nLen = rWord.getLength();
-            nTokIdx = nIndex;
-
-            // Prev text position mustn't be a field or another recognized smarttag word
-            if (nBegin > 0)
-            {
-                SwIndex aTmpIdx( pNode, nBegin-1 );
-                if (pNode->GetTxtFld( aTmpIdx ))
-                {
-                    continue;
-                }
-            }
-
-            // Next text position mustn't be a field or another recognized smarttag word
-            if ((nBegin+nLen) < aTxtToScan.getLength())
-            {
-                SwIndex aTmpIdx( pNode, nBegin+nLen );
-                if (pNode->GetTxtFld( aTmpIdx ))
-                {
-                    continue;
-                }
-            }
-
-            // get smarttag manager
-            SmartTagMgr& rSmartTagMgr = SmartTagMgr::getSmartTagMgr();
-
-            // check if current word is recongnized by any loaded
-            // smarttag library
-            Reference <XController> xController;
-            if (pNode->GetDoc()->GetDocShell())
-            {
-                xController = pNode->GetDoc()->GetDocShell()->GetController();
-            }
-
-            if (rSmartTagMgr.Recognize(rWord, xController))
-            {
-                //store word bounds in smarttag list
-                if( !pSmartTagList )
-                {
-                    pNewSmartTagList = pSmartTagList =  new SwWrongList();
-                    pSmartTagList->SetInvalid( 0, nEnd );
-                }
-
-                if( pSmartTagList->Fresh( nChgStart, nChgEnd, nBegin, nLen, nInsertPos, nActPos ) )
-                {
-                    pSmartTagList->Insert( nBegin, nLen, nInsertPos++ );
-                }
-                else
-                {
-                    nInvStart = nBegin;
-                    nInvEnd = nBegin + nLen;
-                }
-            }
-        }
-    }
-    while ( nIndex >= 0 && nIndex <= nEnd );  // BUGFIX: jl 2007-01-22
-
-    if( pSmartTagList && bFresh )
-        pSmartTagList->Fresh( nChgStart, nChgEnd, nEnd, 0, nInsertPos, nActPos );
-
-    return pNewSmartTagList;
-}
-
 
 /** Function: SmartTagScan
 
@@ -1451,305 +1368,116 @@ SwWrongList* SwTxtFrm::_SmartTagScan( OUString aTxtToScan, SwWrongList *pSmartTa
 */
 SwRect SwTxtFrm::SmartTagScan( SwCntntNode* pActNode, xub_StrLen nActPos )
 {
-    SwRect aRect;
-#if OSL_DEBUG_LEVEL > 1
-    static BOOL bStop = FALSE;
-    if ( bStop )
-        return aRect;
-#endif
+    SwRect aRet;
     SwTxtNode *pNode = GetTxtNode();
-    if( pNode != pActNode || !nActPos )
-        nActPos = STRING_LEN;
+    const rtl::OUString& rText = pNode->GetTxt();
 
-    xub_StrLen nBegin;
-    xub_StrLen nEnd;
-    xub_StrLen nInsertPos = pNode->aText.Len();
-    xub_StrLen nChgStart = STRING_LEN;
-    xub_StrLen nChgEnd = 0;
-    xub_StrLen nInvStart = STRING_LEN;
-    xub_StrLen nInvEnd = 0;
+    // Iterate over language portions
+    SmartTagMgr& rSmartTagMgr = SwSmartTagMgr::Get();
 
     SwWrongList* pSmartTagList = pNode->GetSmartTags();
-    if( pSmartTagList )
+
+    xub_StrLen nBegin = 0;
+    xub_StrLen nEnd = rText.getLength();
+
+    if ( pSmartTagList )
     {
-        if( STRING_LEN != ( nBegin = pSmartTagList->GetBeginInv() ) )
+        if ( pSmartTagList->GetBeginInv() != STRING_LEN )
         {
             nBegin = pSmartTagList->GetBeginInv();
-            nEnd = pSmartTagList->GetEndInv();
-            if ( nEnd > nInsertPos )
-                nEnd = nInsertPos;
-        }
-        else
-        {
-            nEnd = nInsertPos;
-        }
+            nEnd = Min( pSmartTagList->GetEndInv(), (xub_StrLen)rText.getLength() );
 
-        /*        if ( STRING_LEN != nBegin )
-        {
-        if ( nBegin )
-        --nBegin;
-
-        LanguageType eActLang = pNode->GetLang( nBegin );
-        Boundary aBound = pBreakIt->xBreak->getWordBoundary( pNode->aText, nBegin,
-        pBreakIt->GetLocale( eActLang ), WordType::DICTIONARY_WORD, TRUE );
-        nBegin = xub_StrLen(aBound.startPos);
-        }*/
-
-        if (nBegin != STRING_LEN)
-        {
-            OUString aSubString = pNode->GetTxt();
-            aSubString = aSubString.copy(0, nBegin);
-            aSubString = aSubString.replace('\t', ' ');
-            aSubString = aSubString.replace(0x0a, ' ');
-            aSubString = aSubString.replace(0x3000, ' ');
-            sal_Int32 nWhiteSpaceIndex = aSubString.lastIndexOf(' ');
-            if (nWhiteSpaceIndex != -1)
-                nBegin = nWhiteSpaceIndex;
-            else
-                nBegin = 0;
-        }
-
-        // get the position in the smarttag list
-        nInsertPos = pSmartTagList->GetPos( nBegin );
-
-        // sometimes we have to skip one entry
-        if( nInsertPos < pSmartTagList->Count() &&
-            nBegin == pSmartTagList->Pos( nInsertPos ) + pSmartTagList->Len( nInsertPos ) )
-        {
-            nInsertPos++;
-        }
-    }
-    else
-    {
-        nBegin = 0;
-        nEnd = nInsertPos;
-        nInsertPos = 0;
-    }
-
-    if( nBegin < nEnd )
-    {
-        OUString aTxtToScan = pNode->GetTxt();
-        SwWrongList* pNewSmartTagList = _SmartTagScan(aTxtToScan, pSmartTagList, nBegin, nEnd, nInsertPos,
-                                                      nActPos, nChgStart, nChgEnd, nInvStart, nInvEnd);
-
-        if (pNewSmartTagList)
-        {
-            pNode->SetSmartTags(pNewSmartTagList);
-            pSmartTagList = pNewSmartTagList;
-        }
-
-        // check fields
-        for (int nIdx=nBegin; nIdx<=nEnd; nIdx++)
-        {
-            SwIndex aIdx( pNode, nIdx );
-            SwTxtFld* pTxtFld = pNode->GetTxtFld( aIdx );
-            if (pTxtFld)
+            if ( nBegin < nEnd )
             {
-                // Prev text position mustn't be a field or another recognized smarttag word
-                if (nIdx > 0)
-                {
-                    SwIndex aTmpIdx( pNode, nIdx-1 );
-                    if (pNode->GetTxtFld( aTmpIdx ))
-                    {
-                        continue;
-                    }
-
-                    if (pSmartTagList)
-                    {
-                        sal_Int32 nTmpPos = pSmartTagList->Pos(pSmartTagList->GetPos(nIdx-1));
-                        sal_Int32 nTmpLen = pSmartTagList->Len(pSmartTagList->GetPos(nIdx-1));
-                        if ((nTmpPos + nTmpLen) == nIdx)
-                        {
-                            continue;
-                        }
-                    }
-                }
-
-                // Next text position mustn't be a field or another recognized smarttag word
-                if (nIdx < aTxtToScan.getLength()-1)
-                {
-                    SwIndex aTmpIdx( pNode, nIdx+1 );
-                    if (pNode->GetTxtFld( aTmpIdx ))
-                    {
-                        continue;
-                    }
-
-                    if (pSmartTagList)
-                    {
-                        sal_Int32 nTmpPos = pSmartTagList->Pos(pSmartTagList->GetPos(nIdx+1));
-                        if (nTmpPos == (nIdx+1))
-                        {
-                            continue;
-                        }
-                    }
-                }
-
-                OUString sFieldText = pTxtFld->GetFld().GetFld()->GetCntnt();
-
-                SwWrongList* pSubList = NULL;
-                if (pSmartTagList)
-                {
-                    sal_Int32 nSubPos = pSmartTagList->Pos(pSmartTagList->GetPos(nIdx));
-                    if (nSubPos == nIdx)
-                        pSubList = pSmartTagList->SubList(pSmartTagList->GetPos(nIdx));
-                }
-
-                xub_StrLen nChgStart2 = STRING_LEN;
-                xub_StrLen nChgEnd2 = 0;
-                xub_StrLen nInvStart2 = STRING_LEN;
-                xub_StrLen nInvEnd2 = 0;
-                SwWrongList* pNewSmartTagList = _SmartTagScan( sFieldText, pSubList, 0, sFieldText.getLength(), 0,
-                                                               STRING_LEN, nChgStart2, nChgEnd2, nInvStart2, nInvEnd2);
-
-                if (nChgStart2 != STRING_LEN && nChgStart > nIdx) nChgStart = nIdx;
-                if (nChgEnd2 != 0 && nChgEnd < nIdx+1) nChgEnd = nIdx+1;
-
-                if (pNewSmartTagList)
-                {
-                    if (!pSmartTagList)
-                    {
-                        pSmartTagList = new SwWrongList();
-                        pNode->SetSmartTags(pSmartTagList);
-                    }
-
-                    USHORT nInsertPos = pNode->GetSmartTags()->GetPos(nIdx);
-                    pNode->GetSmartTags()->InsertSubList(nIdx, 1, nInsertPos, pNewSmartTagList);
-                }
+                const LanguageType aCurrLang = pNode->GetLang( nBegin );
+                const com::sun::star::lang::Locale aCurrLocale = pBreakIt->GetLocale( aCurrLang );
+                nBegin = pBreakIt->xBreak->beginOfSentence( rText, nBegin, aCurrLocale );
+                nEnd = Min( rText.getLength(), pBreakIt->xBreak->endOfSentence( rText, nEnd, aCurrLocale ) );
             }
         }
     }
 
-    // compute repaint area
-    if( pNode->GetSmartTags() )
+    const USHORT nNumberOfEntries = pSmartTagList ? pSmartTagList->Count() : 0;
+    USHORT nNumberOfRemovedEntries = 0;
+    USHORT nNumberOfInsertedEntries = 0;
+
+    // clear smart tag list between nBegin and nEnd:
+    if ( 0 != nNumberOfEntries )
     {
-        if( nChgStart < nChgEnd )
+        xub_StrLen nChgStart = STRING_LEN;
+        xub_StrLen nChgEnd = 0;
+        const USHORT nCurrentIndex = pSmartTagList->GetWrongPos( nBegin );
+        pSmartTagList->Fresh( nChgStart, nChgEnd, nBegin, nEnd - nBegin, nCurrentIndex, STRING_LEN );
+        nNumberOfRemovedEntries = nNumberOfEntries - pSmartTagList->Count();
+    }
+
+    if ( nBegin < nEnd )
+    {
+        // Expand the string:
+        rtl::OUString aExpandText;
+        const ModelToViewHelper::ConversionMap* pConversionMap =
+                pNode->BuildConversionMap( aExpandText );
+
+        // Ownership ov ConversionMap is passed to SwXTextMarkup object!
+        Reference< com::sun::star::text::XTextMarkup > xTextMarkup =
+             new SwXTextMarkup( *pNode, pConversionMap );
+
+        Reference< ::com::sun::star::frame::XController > xController = pNode->GetDoc()->GetDocShell()->GetController();
+
+        xub_StrLen nLangBegin = nBegin;
+        xub_StrLen nLangEnd = nEnd;
+
+        // smart tag recognization has to be done for each language portion:
+        SwLanguageIterator aIter( *pNode, nLangBegin );
+
+        do
         {
-            SwNodeIndex aNdIdx( *pNode );
-            SwPosition aPos( aNdIdx, SwIndex( pNode, nChgEnd ) );
-            SwCrsrMoveState aTmpState( MV_NONE );
-            aTmpState.b2Lines = sal_True;
-            GetCharRect( aRect, aPos, &aTmpState );
-            // information about end of repaint area
-            Sw2LinesPos* pEnd2Pos = aTmpState.p2Lines;
+            const LanguageType nLang = aIter.GetLanguage();
+            const com::sun::star::lang::Locale aLocale = pBreakIt->GetLocale( nLang );
+            nLangEnd = Min( nEnd, aIter.GetChgPos() );
 
-            SwTxtFrm* pStartFrm = this;
+            const sal_uInt32 nExpandBegin = ModelToViewHelper::ConvertToViewPosition( pConversionMap, nLangBegin );
+            const sal_uInt32 nExpandEnd   = ModelToViewHelper::ConvertToViewPosition( pConversionMap, nLangEnd );
 
-            while( pStartFrm->HasFollow() &&
-                nChgStart >= pStartFrm->GetFollow()->GetOfst() )
-                pStartFrm = pStartFrm->GetFollow();
+            rSmartTagMgr.Recognize( aExpandText, xTextMarkup, xController, aLocale, nExpandBegin, nExpandEnd - nExpandBegin );
 
-            SwTxtFrm *pEndFrm = pStartFrm;
-
-            while( pEndFrm->HasFollow() &&
-                nChgEnd >= pEndFrm->GetFollow()->GetOfst() )
-                pEndFrm = pEndFrm->GetFollow();
-
-            if ( pEnd2Pos )
-            {
-                // we are inside a special portion, take left border
-                SWRECTFN( pEndFrm )
-                (aRect.*fnRect->fnSetTop)( (pEnd2Pos->aLine.*fnRect->fnGetTop)() );
-                if ( pEndFrm->IsRightToLeft() )
-                {
-                    (aRect.*fnRect->fnSetLeft)( (pEnd2Pos->aPortion.*fnRect->fnGetLeft)() );
-                }
-                else
-                {
-                    (aRect.*fnRect->fnSetLeft)( (pEnd2Pos->aPortion.*fnRect->fnGetRight)() );
-                }
-                (aRect.*fnRect->fnSetWidth)( 1 );
-                (aRect.*fnRect->fnSetHeight)( (pEnd2Pos->aLine.*fnRect->fnGetHeight)() );
-                delete pEnd2Pos;
-            }
-
-            aTmpState.p2Lines = NULL;
-            SwRect aTmp;
-            aPos = SwPosition( aNdIdx, SwIndex( pNode, nChgStart ) );
-            GetCharRect( aTmp, aPos, &aTmpState );
-            // information about start of repaint area
-            Sw2LinesPos* pSt2Pos = aTmpState.p2Lines;
-            if ( pSt2Pos )
-            {
-                // we are inside a special portion, take right border
-                SWRECTFN( pStartFrm )
-                (aTmp.*fnRect->fnSetTop)( (pSt2Pos->aLine.*fnRect->fnGetTop)() );
-                if ( pStartFrm->IsRightToLeft() )
-                {
-                    (aTmp.*fnRect->fnSetLeft)( (pSt2Pos->aPortion.*fnRect->fnGetRight)() );
-                }
-                else
-                {
-                    (aTmp.*fnRect->fnSetLeft)( (pSt2Pos->aPortion.*fnRect->fnGetLeft)() );
-                }
-                (aTmp.*fnRect->fnSetWidth)( 1 );
-                (aTmp.*fnRect->fnSetHeight)( (pSt2Pos->aLine.*fnRect->fnGetHeight)() );
-                delete pSt2Pos;
-            }
-
-            BOOL bSameFrame = TRUE;
-
-            if ( HasFollow() )
-            {
-                if( pEndFrm != pStartFrm )
-                {
-                    bSameFrame = FALSE;
-                    SwRect aStFrm( pStartFrm->PaintArea() );
-                    {
-                        SWRECTFN( pStartFrm )
-                        (aTmp.*fnRect->fnSetLeft)( (aStFrm.*fnRect->fnGetLeft)() );
-                        (aTmp.*fnRect->fnSetRight)( (aStFrm.*fnRect->fnGetRight)() );
-                        (aTmp.*fnRect->fnSetBottom)( (aStFrm.*fnRect->fnGetBottom)() );
-                    }
-                    aStFrm = pEndFrm->PaintArea();
-                    {
-                        SWRECTFN( pEndFrm )
-                        (aRect.*fnRect->fnSetTop)( (aStFrm.*fnRect->fnGetTop)() );
-                        (aRect.*fnRect->fnSetLeft)( (aStFrm.*fnRect->fnGetLeft)() );
-                        (aRect.*fnRect->fnSetRight)( (aStFrm.*fnRect->fnGetRight)() );
-                    }
-                    aRect.Union( aTmp );
-                    while( TRUE )
-                    {
-                        pStartFrm = pStartFrm->GetFollow();
-                        if( pStartFrm == pEndFrm )
-                            break;
-                        aRect.Union( pStartFrm->PaintArea() );
-                    }
-                }
-            }
-            if( bSameFrame )
-            {
-                SWRECTFN( pStartFrm )
-                if( (aTmp.*fnRect->fnGetTop)() == (aRect.*fnRect->fnGetTop)() )
-                {
-                    (aRect.*fnRect->fnSetLeft)( (aTmp.*fnRect->fnGetLeft)() );
-                }
-                else
-                {
-                    SwRect aStFrm( pStartFrm->PaintArea() );
-                    (aRect.*fnRect->fnSetLeft)( (aStFrm.*fnRect->fnGetLeft)() );
-                    (aRect.*fnRect->fnSetRight)( (aStFrm.*fnRect->fnGetRight)() );
-                    (aRect.*fnRect->fnSetTop)( (aTmp.*fnRect->fnGetTop)() );
-                }
-
-                if( aTmp.Height() > aRect.Height() )
-                    aRect.Height( aTmp.Height() );
-            }
+            nLangBegin = nLangEnd;
         }
-        pNode->GetSmartTags()->SetInvalid( nInvStart, nInvEnd );
-        pNode->SetSmartTagDirty( STRING_LEN != pNode->GetSmartTags()->GetBeginInv() );
-        if( !pNode->GetSmartTags()->Count() && ! pNode->IsSmartTagDirty() )
-        {
+        while ( aIter.Next() && nLangEnd < nEnd );
+
+        pSmartTagList = pNode->GetSmartTags();
+
+        const USHORT nNumberOfEntriesAfterRecognize = pSmartTagList ? pSmartTagList->Count() : 0;
+        nNumberOfInsertedEntries = nNumberOfEntriesAfterRecognize - ( nNumberOfEntries - nNumberOfRemovedEntries );
+    }
+
+    if( pSmartTagList )
+    {
+        //
+        // Update WrongList stuff
+        //
+        pSmartTagList->SetInvalid( STRING_LEN, 0 );
+        pNode->SetSmartTagDirty( STRING_LEN != pSmartTagList->GetBeginInv() );
+
+        if( !pSmartTagList->Count() && !pNode->IsSmartTagDirty() )
             pNode->SetSmartTags( NULL );
+
+        //
+        // Calculate repaint area:
+        //
+        const USHORT nNumberOfEntriesAfterRecognize = pSmartTagList->Count();
+        if ( nBegin < nEnd && ( 0 != nNumberOfRemovedEntries ||
+                                0 != nNumberOfInsertedEntries ) )
+        {
+            aRet = lcl_CalculateRepaintRect( *this, nBegin, nEnd );
         }
     }
     else
-    {
         pNode->SetSmartTagDirty( false );
-    }
 
-    return aRect;
+    return aRet;
 }
+
 
 // Wird vom CollectAutoCmplWords gerufen
 void SwTxtFrm::CollectAutoCmplWrds( SwCntntNode* pActNode, xub_StrLen nActPos )
@@ -1758,7 +1486,6 @@ void SwTxtFrm::CollectAutoCmplWrds( SwCntntNode* pActNode, xub_StrLen nActPos )
     if( pNode != pActNode || !nActPos )
         nActPos = STRING_LEN;
 
-    const XubString& rTxt = pNode->aText;
     SwDoc* pDoc = pNode->GetDoc();
     SwAutoCompleteWord& rACW = SwDoc::GetAutoCompleteWords();
 
@@ -2142,7 +1869,7 @@ SwWrongList* SwTxtNode::GetWrong()
 
 void SwTxtNode::SetSmartTags( SwWrongList* pNew, bool bDelete )
 {
-    ASSERT( !pNew || SmartTagMgr::getSmartTagMgr().HasRecognizers(),
+    ASSERT( !pNew || SwSmartTagMgr::Get().IsSmartTagsEnabled(),
             "Weird - we have a smart tag list without any recognizers?" )
 
     if ( pParaIdleData_Impl )
