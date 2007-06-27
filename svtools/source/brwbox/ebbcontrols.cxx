@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ebbcontrols.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: obo $ $Date: 2006-10-12 15:06:38 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 21:08:36 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -37,18 +37,18 @@
 #include "precompiled_svtools.hxx"
 
 #ifndef _SVTOOLS_EDITBROWSEBOX_HXX_
-#include "editbrowsebox.hxx"
+#include <svtools/editbrowsebox.hxx>
 #endif
 
 #ifndef _SV_DECOVIEW_HXX
 #include <vcl/decoview.hxx>
 #endif
 #ifndef _FMTFIELD_HXX_
-#include "fmtfield.hxx"
+#include <svtools/fmtfield.hxx>
 #endif
 
 #ifndef _XTEXTEDT_HXX
-#include "xtextedt.hxx"
+#include <svtools/xtextedt.hxx>
 #endif
 
 #include <algorithm>
