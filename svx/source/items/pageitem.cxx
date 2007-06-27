@@ -4,9 +4,9 @@
  *
  *  $RCSfile: pageitem.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: kz $ $Date: 2007-05-10 14:52:41 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 18:29:33 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -43,9 +43,9 @@
 #endif
 
 
-#include "pageitem.hxx"
-#include "itemtype.hxx"
-#include <unomid.hxx>
+#include <svx/pageitem.hxx>
+#include <svx/itemtype.hxx>
+#include <svx/unomid.hxx>
 
 #ifndef _COM_SUN_STAR_STYLE_PAGESTYLELAYOUT_HPP_
 #include <com/sun/star/style/PageStyleLayout.hpp>
