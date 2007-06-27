@@ -4,9 +4,9 @@
  *
  *  $RCSfile: controlpropertyhdl.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: vg $ $Date: 2006-11-21 17:34:18 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 15:12:57 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -37,7 +37,7 @@
 #include "precompiled_xmloff.hxx"
 
 #ifndef _XMLOFF_FORMS_CONTROLPROPERTYHDL_HXX_
-#include "controlpropertyhdl.hxx"
+#include <xmloff/controlpropertyhdl.hxx>
 #endif
 #ifndef _COM_SUN_STAR_AWT_TEXTALIGN_HPP_
 #include <com/sun/star/awt/TextAlign.hpp>
@@ -49,16 +49,16 @@
 #include <com/sun/star/awt/FontEmphasisMark.hpp>
 #endif
 #ifndef _XMLOFF_XMLTYPES_HXX
-#include "xmltypes.hxx"
+#include <xmloff/xmltypes.hxx>
 #endif
 #ifndef _XMLOFF_FORMENUMS_HXX_
 #include "formenums.hxx"
 #endif
 #ifndef _XMLOFF_XMLUCONV_HXX
-#include "xmluconv.hxx"
+#include <xmloff/xmluconv.hxx>
 #endif
 #ifndef _XMLOFF_XMLTOKEN_HXX
-#include "xmltoken.hxx"
+#include <xmloff/xmltoken.hxx>
 #endif
 #ifndef _RTL_USTRBUF_HXX_
 #include <rtl/ustrbuf.hxx>
@@ -70,7 +70,7 @@
 #include "callbacks.hxx"
 #endif
 #ifndef _XMLOFF_XMLCONSTANTSPROPERTYHANDLER_HXX
-#include "XMLConstantsPropertyHandler.hxx"
+#include <xmloff/XMLConstantsPropertyHandler.hxx>
 #endif
 
 //.........................................................................
