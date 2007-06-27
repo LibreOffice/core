@@ -4,9 +4,9 @@
  *
  *  $RCSfile: gloshdl.cxx,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: kz $ $Date: 2007-05-10 16:16:21 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 12:49:56 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -986,6 +986,7 @@ BOOL SwGlossaryHdl::ImportGlossaries( const String& rName )
         const SfxFilter* pFilter = 0;
         SfxMedium* pMed = new SfxMedium( rName, STREAM_READ, TRUE, 0, 0 );
         SfxFilterMatcher aMatcher( String::CreateFromAscii("swriter") );
+        pMed->UseInteractionHandler( TRUE );
         if( !aMatcher.GuessFilter( *pMed, &pFilter, FALSE ) )
         {
             SwTextBlocks *pGlossary;
