@@ -4,9 +4,9 @@
  *
  *  $RCSfile: thread.c,v $
  *
- *  $Revision: 1.28 $
+ *  $Revision: 1.29 $
  *
- *  last change: $Author: kz $ $Date: 2006-07-06 14:42:32 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 13:24:36 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -366,13 +366,9 @@ oslThread osl_createSuspendedThread (
 /*****************************************************************************/
 void SAL_CALL osl_destroyThread(oslThread Thread)
 {
-    Thread_Impl* pImpl= (Thread_Impl*)Thread;
-
-    OSL_ASSERT(pImpl);
-    if (!pImpl)
-        return; /* EINVAL */
-
-    osl_thread_cleanup_Impl (pImpl);
+    if (Thread != NULL) {
+        osl_thread_cleanup_Impl(Thread);
+    }
 }
 
 /*****************************************************************************/
@@ -436,9 +432,8 @@ sal_Bool SAL_CALL osl_isThreadRunning(const oslThread Thread)
     sal_Bool active;
     Thread_Impl* pImpl= (Thread_Impl*)Thread;
 
-    OSL_ASSERT(pImpl);
     if (!pImpl)
-        return sal_False; /* EINVAL */
+        return sal_False;
 
     pthread_mutex_lock (&(pImpl->m_Lock));
     active = ((pImpl->m_Flags & THREADIMPL_FLAGS_ACTIVE) > 0);
@@ -455,9 +450,8 @@ void SAL_CALL osl_joinWithThread(oslThread Thread)
     int attached;
     Thread_Impl* pImpl= (Thread_Impl*)Thread;
 
-    OSL_ASSERT(pImpl);
     if (!pImpl)
-        return; /* EINVAL */
+        return;
 
     pthread_mutex_lock (&(pImpl->m_Lock));
 
