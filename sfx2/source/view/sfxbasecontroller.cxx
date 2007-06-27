@@ -4,9 +4,9 @@
  *
  *  $RCSfile: sfxbasecontroller.cxx,v $
  *
- *  $Revision: 1.71 $
+ *  $Revision: 1.72 $
  *
- *  last change: $Author: rt $ $Date: 2007-01-29 15:51:10 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 23:34:53 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -43,7 +43,7 @@
 #include <time.h>
 
 #ifndef _SFX_SFXBASECONTROLLER_HXX_
-#include <sfxbasecontroller.hxx>
+#include <sfx2/sfxbasecontroller.hxx>
 #endif
 
 //________________________________________________________________________________________________________
@@ -131,35 +131,35 @@
 #endif
 
 #ifndef _SFXVIEWSH_HXX
-#include <viewsh.hxx>
+#include <sfx2/viewsh.hxx>
 #endif
 
 #ifndef _SFXVIEWFRM_HXX
-#include <viewfrm.hxx>
+#include <sfx2/viewfrm.hxx>
 #endif
 
 #ifndef _SFX_OBJSH_HXX
-#include <objsh.hxx>
+#include <sfx2/objsh.hxx>
 #endif
 
 #ifndef _SFXAPP_HXX
-#include <app.hxx>
+#include <sfx2/app.hxx>
 #endif
 
 #ifndef _SFXMSGPOOL_HXX
-#include <msgpool.hxx>
+#include <sfx2/msgpool.hxx>
 #endif
 
 #ifndef _SFXDISPATCH_HXX
-#include <dispatch.hxx>
+#include <sfx2/dispatch.hxx>
 #endif
 
 #include <viewimp.hxx>
-#include <unoctitm.hxx>
-#include <childwin.hxx>
-#include <sfxsids.hrc>
+#include <sfx2/unoctitm.hxx>
+#include <sfx2/childwin.hxx>
+#include <sfx2/sfxsids.hrc>
 #include <workwin.hxx>
-#include <objface.hxx>
+#include <sfx2/objface.hxx>
 
 #include <vos/mutex.hxx>
 #include <osl/mutex.hxx>
@@ -169,7 +169,7 @@
 
 #include <hash_map>
 
-#include "event.hxx"
+#include <sfx2/event.hxx>
 
 #define OMULTITYPEINTERFACECONTAINERHELPER      ::cppu::OMultiTypeInterfaceContainerHelper
 #define OINTERFACECONTAINERHELPER               ::cppu::OInterfaceContainerHelper
