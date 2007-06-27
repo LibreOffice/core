@@ -4,9 +4,9 @@
  *
  *  $RCSfile: compositeiterator.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: thb $ $Date: 2006-06-08 00:01:47 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 12:40:09 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -69,22 +69,22 @@ namespace detail
         void operator-=(int d) {*mpVal1-=d; *mpVal2-=d; }
 
         bool operator==(ArithmeticProxy const & rhs) const
-        { return *mpVal1==*rhs.mpVal1 && *mpVal2==*rhs.mpVal2_; }
+        { return *mpVal1==*rhs.mpVal1 && *mpVal2==*rhs.mpVal2; }
 
         bool operator!=(ArithmeticProxy const & rhs) const
-        { return *mpVal1!=*rhs.mpVal1 || *mpVal2!=*rhs.mpVal2_; }
+        { return *mpVal1!=*rhs.mpVal1 || *mpVal2!=*rhs.mpVal2; }
 
         bool operator<(ArithmeticProxy const & rhs) const
-        { return *mpVal1<*rhs.mpVal1 && *mpVal2<*rhs.mpVal2_; }
+        { return *mpVal1<*rhs.mpVal1 && *mpVal2<*rhs.mpVal2; }
 
         bool operator<=(ArithmeticProxy const & rhs) const
-        { return *mpVal1<=*rhs.mpVal1 && *mpVal2<=*rhs.mpVal2_; }
+        { return *mpVal1<=*rhs.mpVal1 && *mpVal2<=*rhs.mpVal2; }
 
         bool operator>(ArithmeticProxy const & rhs) const
-        { return *mpVal1>*rhs.mpVal1 && *mpVal2>*rhs.mpVal2_; }
+        { return *mpVal1>*rhs.mpVal1 && *mpVal2>*rhs.mpVal2; }
 
         bool operator>=(ArithmeticProxy const & rhs) const
-        { return *mpVal1>=*rhs.mpVal1 && *mpVal2>=*rhs.mpVal2_; }
+        { return *mpVal1>=*rhs.mpVal1 && *mpVal2>=*rhs.mpVal2; }
 
         int operator-(ArithmeticProxy const & rhs) const
         { return *mpVal1 - *rhs.mpVal1; }
