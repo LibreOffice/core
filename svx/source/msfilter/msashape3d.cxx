@@ -4,9 +4,9 @@
  *
  *  $RCSfile: msashape3d.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: ihi $ $Date: 2006-11-14 13:29:22 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 18:34:27 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -47,7 +47,7 @@
 #include <svditer.hxx>
 #endif
 #ifndef _SVDOBJ_HXX
-#include <svdobj.hxx>
+#include <svx/svdobj.hxx>
 #endif
 #ifndef _SFXPOOLITEM_HXX
 #include <svtools/poolitem.hxx>
@@ -56,46 +56,46 @@
 #include <svtools/itemset.hxx>
 #endif
 #ifndef SVX_XFILLIT0_HXX
-#include <xfillit0.hxx>
+#include <svx/xfillit0.hxx>
 #endif
 #ifndef _SVX_XIT_HXX
-#include <xit.hxx>
+#include <svx/xit.hxx>
 #endif
 #ifndef _SVX_XBTMPIT_HXX
-#include <xbtmpit.hxx>
+#include <svx/xbtmpit.hxx>
 #endif
 #ifndef _SVX_XFLCLIT_HXX
-#include <xflclit.hxx>
+#include <svx/xflclit.hxx>
 #endif
 #ifndef _SVDOPATH_HXX
-#include <svdopath.hxx>
+#include <svx/svdopath.hxx>
 #endif
 #ifndef _SVDOGRP_HXX
-#include <svdogrp.hxx>
+#include <svx/svdogrp.hxx>
 #endif
 #ifndef _SVDPAGE_HXX
-#include <svdpage.hxx>
+#include <svx/svdpage.hxx>
 #endif
 #ifndef _E3D_POLYSC3D_HXX
-#include "polysc3d.hxx"
+#include <svx/polysc3d.hxx>
 #endif
 #ifndef _SVDDEF_HXX
-#include "svddef.hxx"
+#include <svx/svddef.hxx>
 #endif
 #ifndef _SVX3DITEMS_HXX
-#include "svx3ditems.hxx"
+#include <svx/svx3ditems.hxx>
 #endif
 #ifndef _E3D_EXTRUD3D_HXX
-#include "extrud3d.hxx"
+#include <svx/extrud3d.hxx>
 #endif
 #ifndef _SVX_XFLBMTIT_HXX
-#include <xflbmtit.hxx>
+#include <svx/xflbmtit.hxx>
 #endif
 #ifndef _SV_SVAPP_HXX
 #include <vcl/svapp.hxx>
 #endif
 #ifndef _SVX_XLNCLIT_HXX
-#include <xlnclit.hxx>
+#include <svx/xlnclit.hxx>
 #endif
 
 #define ITEMVALUE(ItemSet,Id,Cast)  ((const Cast&)(ItemSet).Get(Id)).GetValue()
