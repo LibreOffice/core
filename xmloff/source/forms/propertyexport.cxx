@@ -4,9 +4,9 @@
  *
  *  $RCSfile: propertyexport.cxx,v $
  *
- *  $Revision: 1.35 $
+ *  $Revision: 1.36 $
  *
- *  last change: $Author: kz $ $Date: 2007-05-10 09:42:02 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 15:17:48 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -42,7 +42,7 @@
 #include "propertyexport.hxx"
 #endif
 #ifndef _XMLOFF_XMLEXP_HXX
-#include "xmlexp.hxx"
+#include <xmloff/xmlexp.hxx>
 #endif
 #ifndef _XMLOFF_FORMS_STRINGS_HXX_
 #include "strings.hxx"
@@ -51,10 +51,10 @@
 #include "xmlnmspe.hxx"
 #endif
 #ifndef _XMLOFF_XMLUCONV_HXX
-#include "xmluconv.hxx"
+#include <xmloff/xmluconv.hxx>
 #endif
 #ifndef _XMLOFF_FAMILIES_HXX_
-#include "families.hxx"
+#include <xmloff/families.hxx>
 #endif
 #ifndef _OSL_DIAGNOSE_H_
 #include <osl/diagnose.h>
