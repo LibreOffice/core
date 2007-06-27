@@ -4,9 +4,9 @@
  *
  *  $RCSfile: opthtml.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: rt $ $Date: 2007-04-26 07:38:50 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 17:28:08 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -45,9 +45,9 @@
 #include "htmlcfg.hxx"
 #include "opthtml.hxx"
 #include "opthtml.hrc"
-#include "dialogs.hrc"
+#include <svx/dialogs.hrc>
 #include "helpid.hrc"
-#include "dialmgr.hxx"
+#include <svx/dialmgr.hxx>
 #include "langtab.hxx"
 
 // Umwandlung der Modi zu den Positionen in der Listbox
