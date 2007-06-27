@@ -4,9 +4,9 @@
  *
  *  $RCSfile: unowrapper.hxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: hr $ $Date: 2006-06-19 22:57:32 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 15:06:01 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -48,6 +48,9 @@
 #ifndef _COM_SUN_STAR_ACCESSIBILITY_XACCESSIBLE_HPP_
 #include <com/sun/star/accessibility/XAccessible.hpp>
 #endif
+#ifndef TOOLKIT_HELPER_ACCESSIBILITY_CLIENT_HXX
+#include <toolkit/helper/accessibilityclient.hxx>
+#endif
 
 #include <vcl/unowrap.hxx>
 #include <vcl/window.hxx>
@@ -59,13 +62,13 @@
 class UnoWrapper : public UnoWrapperBase
 {
 private:
-    ::com::sun::star::uno::Reference< ::com::sun::star::awt::XToolkit> mxToolkit;
+    ::com::sun::star::uno::Reference< ::com::sun::star::awt::XToolkit>  mxToolkit;
+    ::toolkit::AccessibilityClient                                      maAccessibleFactoryAccess;
 
 public:
     UnoWrapper( const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XToolkit>& rxToolkit );
-    virtual ~UnoWrapper();
 
-    void                                Destroy();
+    virtual void        Destroy();
 
     // Toolkit
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::awt::XToolkit> GetVCLToolkit();
@@ -98,7 +101,10 @@ public:
 
     // Accessibility
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible >
-                                CreateAccessible( Menu* pMenu, sal_Bool bIsMenuBar );
+                        CreateAccessible( Menu* pMenu, sal_Bool bIsMenuBar );
+
+private:
+    virtual ~UnoWrapper();
 };
 
 #endif // _TOOLKIT_HELPER_UNOWRAPPER_HXX_
