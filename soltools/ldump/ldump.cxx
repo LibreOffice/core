@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ldump.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: rt $ $Date: 2007-04-26 14:01:35 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 17:46:28 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -52,6 +52,7 @@ int bFilter = 0;
 int bLdump3 = 0;
 int bUseDirectives = 0;
 int bVerbose = 0;
+int bExportByName = 0;
 
 class ExportSet : public HashTable
 {
@@ -109,7 +110,6 @@ bool LibDump::Dump()
     int   nLen;
     char  aName[MAX_MAN];
 
-#ifndef ICC
     pList = fopen( cLibName, "rb");
     if (!pList)
         DumpError(10);
@@ -194,7 +194,7 @@ bool LibDump::Dump()
                 }
             }
             // und raus damit
-            PrintSym( aName );
+            PrintSym( aName, bExportByName );
         }
         else if ( bAll == true )
         {
@@ -239,68 +239,10 @@ bool LibDump::Dump()
                     }
                 }
                 // und raus damit
-                PrintSym( aBuf, false );
+                PrintSym( aBuf, true );
             }
         }
     }
-#else
-    pList = fopen( sLibName.GetBuffer(), "rb");
-    if (!pList)
-        DumpError(10);
-
-    char c = fgetc( pList );
-
-    while( !feof( pList ) )
-    {
-        int bBreakOut = 0;
-
-        int i=0;
-        bool bStop = false;
-
-        while ( c != '\0' )
-        {
-            if(c == 0x0d || c == 0x20)
-            {
-                c = fgetc( pList );
-                continue;
-            }
-
-            if(c == '@')
-            {
-                bStop = true;
-                c = fgetc( pList );
-                continue;
-            }
-
-            if(c != 0x0a)
-            {
-                if(!bStop)
-                    aBuf[i++] = c;
-            }
-            else
-            {
-                aBuf[i] = '\0';
-                c = fgetc( pList );
-                break;
-            }
-
-            c = fgetc( pList );
-        }
-
-
-        //wenn erstes Zeichen kein Semikolon ist, wird die Zeile bernommen
-        if(aBuf[0] != ';' && aBuf[0] != 0)
-        {
-            //cdecl Methoden werden ohne NONAME expotiert
-            if(aBuf[0] == '_' && aBuf[1] != '_' && sAPrefix.Len())
-                  PrintSym( aBuf, false );
-            else if(ByteString(aBuf).Search(sAPrefix) == 0)
-                  PrintSym( aBuf, false );
-            else
-                PrintSym( aBuf );
-        }
-    }
-#endif
     fclose(pList);
     return true;
 }
@@ -535,12 +477,12 @@ bool LibDump::PrintDefFile()
         {
             if ( pData->bByName )
             {
-                fprintf(stdout,"\t%s\t\t@%d NONAME\n",
+                fprintf(stdout,"\t%s\t\t@%d\n",
                     pData->sExportName.GetBuffer(), pData->nOrdinal+nBegin);
             }
             else
             {
-                fprintf(stdout,"\t%s\t\t@%d\n",
+                fprintf(stdout,"\t%s\t\t@%d NONAME\n",
                     pData->sExportName.GetBuffer(), pData->nOrdinal+nBegin);
             }
         }
@@ -560,13 +502,13 @@ bool LibDump::PrintDefFile()
                 if ( pData->bByName )
                 {
                     if ( strlen( pData->cExportName ))
-                        fprintf(stdout,"\t%s\t\t@%d NONAME\n",
+                        fprintf(stdout,"\t%s\t\t@%d\n",
                             pData->cExportName, pData->nOrdinal+nBegin);
                 }
                 else
                 {
                     if ( strlen( pData->cExportName ))
-                        fprintf(stdout,"\t%s\t\t@%d\n",
+                        fprintf(stdout,"\t%s\t\t@%d NONAME\n",
                             pData->cExportName, pData->nOrdinal+nBegin);
                 }
             }
@@ -645,12 +587,13 @@ void LibDump::DumpError( unsigned long n )
         case 11: p = "No valid library file"; break;
 #endif
         case 98: p = "Out of memory"; break;
-        case 99: p = "LDUMP [-LD3] [-D] [-A] [-E nn] [-F name] Filename[.LIB]\n"
+        case 99: p = "LDUMP [-LD3] [-D] [-N] [-A] [-E nn] [-F name] Filename[.LIB]\n"
                      "-LD3   : Supports feature set of ldump3 (default: ldump/ldump2)\n"
                      "-A     : all symbols (default: only C++)\n"
                      "-E nn  : gerenration of export table beginning with number nn\n"
                      "-F name: Filter file\n"
                      "-D     : file contains \"dumpbin\" directives\n"
+                     "-N     : export by name\n"
                      "-V     : be verbose\n"; break;
         case 500: p = "Unable to open filter file\n"; break;
         case 510: p = "Overflow of filter table\n"; break;
@@ -733,6 +676,12 @@ main( int argc, char **argv )
                 usage();
             }
             bUseDirectives = 1;
+        }
+        else if (( !strcmp( argv[ i ], "-N" )) || ( !strcmp( argv[ i ], "-n" ))) {
+            if ( nState != STATE_NON ) {
+                usage();
+            }
+            bExportByName = 1;
         }
         else if (( !strcmp( argv[ i ], "-V" )) || ( !strcmp( argv[ i ], "-v" ))) {
             if ( nState != STATE_NON ) {
