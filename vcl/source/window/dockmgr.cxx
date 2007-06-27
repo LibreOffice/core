@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dockmgr.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 12:18:06 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 20:30:40 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -46,37 +46,37 @@
 #include <tools/rc.h>
 #endif
 #ifndef _SV_EVENT_HXX
-#include <event.hxx>
+#include <vcl/event.hxx>
 #endif
 #ifndef _SV_BRDWIN_HXX
 #include <brdwin.hxx>
 #endif
 #ifndef _SV_FLOATWIN_HXX
-#include <floatwin.hxx>
+#include <vcl/floatwin.hxx>
 #endif
 #ifndef _SV_DOCKWIN_HXX
-#include <dockwin.hxx>
+#include <vcl/dockwin.hxx>
 #endif
 #ifndef _SV_TOOLBOX_HXX
-#include <toolbox.hxx>
+#include <vcl/toolbox.hxx>
 #endif
 #ifndef _SV_SVAPP_HXX
-#include <svapp.hxx>
+#include <vcl/svapp.hxx>
 #endif
 #ifndef _SV_SVDATA_HXX
-#include <svdata.hxx>
+#include <vcl/svdata.hxx>
 #endif
 #ifndef _SV_TIMER_HXX
-#include <timer.hxx>
+#include <vcl/timer.hxx>
 #endif
 #ifndef _SV_LINEINFO_HXX
-#include <lineinfo.hxx>
+#include <vcl/lineinfo.hxx>
 #endif
 #ifndef _SV_WINDOW_H
 #include <window.h>
 #endif
-#include <unowrap.hxx>
-#include <salframe.hxx>
+#include <vcl/unowrap.hxx>
+#include <vcl/salframe.hxx>
 
 
 // =======================================================================
