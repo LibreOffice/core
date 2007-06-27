@@ -4,9 +4,9 @@
  *
  *  $RCSfile: unohelp2.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 11:50:58 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 20:03:38 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -37,7 +37,7 @@
 #include "precompiled_vcl.hxx"
 
 #ifndef _VCL_UNOHELP2_HXX
-#include <unohelp2.hxx>
+#include <vcl/unohelp2.hxx>
 #endif
 
 #ifndef _SOT_EXCHANGE_HXX
@@ -52,7 +52,7 @@
 #include <tools/debug.hxx>
 #endif
 #ifndef _SV_SVAPP_HXX
-#include <svapp.hxx>
+#include <vcl/svapp.hxx>
 #endif
 #ifndef _COM_SUN_STAR_DATATRANSFER_CLIPBOARD_XCLIPBOARD_HPP_
 #include <com/sun/star/datatransfer/clipboard/XClipboard.hpp>
