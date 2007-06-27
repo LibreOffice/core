@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xlinjoit.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 19:45:42 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 16:34:32 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -40,7 +40,7 @@
 #include <svtools/eitem.hxx>
 #endif
 #ifndef _XENUM_HXX
-#include "xenum.hxx"
+#include <svx/xenum.hxx>
 #endif
 
 #ifndef INCLUDED_SVXDLLAPI_H
