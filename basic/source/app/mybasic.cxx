@@ -4,9 +4,9 @@
  *
  *  $RCSfile: mybasic.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: rt $ $Date: 2007-04-26 08:32:20 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 14:15:25 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -40,7 +40,7 @@
 #include <vcl/msgbox.hxx>
 #endif
 #ifndef _SBXCLASS_HXX //autogen
-#include <sbx.hxx>
+#include <basic/sbx.hxx>
 #endif
 
 // AB-Uno-Test
@@ -49,16 +49,16 @@
 #ifndef _USR_UNO_HXX
 #include <usr/uno.hxx>
 #endif
-#include <sbuno.hxx>
+#include <basic/sbuno.hxx>
 #include <sbunoobj.hxx>
 #endif
 
 #include "sbintern.hxx"
 
 #ifndef _BASIC_TTRESHLP_HXX
-#include "ttstrhlp.hxx"
+#include <basic/ttstrhlp.hxx>
 #endif
-#include "mybasic.hxx"
+#include <basic/mybasic.hxx>
 #include "basic.hrc"
 #include "appbased.hxx"
 
