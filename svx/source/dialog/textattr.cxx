@@ -4,9 +4,9 @@
  *
  *  $RCSfile: textattr.cxx,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: rt $ $Date: 2007-04-26 07:44:53 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 17:46:51 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -53,37 +53,37 @@
 #include <tools/shl.hxx>
 #endif
 
-#include "dialogs.hrc"
+#include <svx/dialogs.hrc>
 
 #ifndef _SVDDEF_HXX //autogen
-#include "svddef.hxx"
+#include <svx/svddef.hxx>
 #endif
 #ifndef SDTMITM_HXX //autogen
-#include "sdtditm.hxx"
+#include <svx/sdtditm.hxx>
 #endif
 #ifndef _SDTAGITM_HXX //autogen
-#include "sdtagitm.hxx"
+#include <svx/sdtagitm.hxx>
 #endif
 #ifndef _SDTAITM_HXX //autogen
-#include "sdtaitm.hxx"
+#include <svx/sdtaitm.hxx>
 #endif
 #ifndef _SDTFSITM_HXX //autogen
-#include "sdtfsitm.hxx"
+#include <svx/sdtfsitm.hxx>
 #endif
 #ifndef _SDTCFITM_HXX //autogen
-#include "sdtcfitm.hxx"
+#include <svx/sdtcfitm.hxx>
 #endif
 #ifndef _SVDOBJ_HXX //autogen
-#include "svdobj.hxx"
+#include <svx/svdobj.hxx>
 #endif
 #ifndef _SVDMARK_HXX //autogen
-#include "svdmark.hxx"
+#include <svx/svdmark.hxx>
 #endif
 #ifndef _SVDVIEW_HXX //autogen
-#include "svdview.hxx"
+#include <svx/svdview.hxx>
 #endif
 #ifndef _SVDOTEXT_HXX //autogen
-#include "svdotext.hxx"
+#include <svx/svdotext.hxx>
 #endif
 
 
@@ -92,13 +92,13 @@
 #endif
 #include "textattr.hxx"
 #include "textattr.hrc"
-#include "dialmgr.hxx"
+#include <svx/dialmgr.hxx>
 #include "dlgutil.hxx"
 #include <sfx2/request.hxx> //add CHINA001
 #include <ofaitem.hxx> //add CHINA001
-#include <svxids.hrc> //add CHINA001
+#include <svx/svxids.hrc> //add CHINA001
 #ifndef _SVX_WRITINGMODEITEM_HXX
-#include <writingmodeitem.hxx>
+#include <svx/writingmodeitem.hxx>
 #endif
 
 static USHORT pRanges[] =
