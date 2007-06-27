@@ -4,9 +4,9 @@
  *
  *  $RCSfile: accelcfg.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 14:20:15 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 21:09:35 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -77,9 +77,9 @@
 #include <unotools/ucbstreamhelper.hxx>
 #include <comphelper/processfactory.hxx>
 
-#include "accelcfg.hxx"
+#include <svtools/accelcfg.hxx>
 #include "xmlaccelcfg.hxx"
-#include "pathoptions.hxx"
+#include <svtools/pathoptions.hxx>
 #include "itemholder1.hxx"
 
 

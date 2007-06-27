@@ -4,9 +4,9 @@
  *
  *  $RCSfile: extendedsecurityoptions.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 14:23:12 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 21:11:45 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -40,7 +40,7 @@
 //  includes
 //_________________________________________________________________________________________________________________
 
-#include "extendedsecurityoptions.hxx"
+#include <svtools/extendedsecurityoptions.hxx>
 
 #ifndef _UTL_CONFIGMGR_HXX_
 #include <unotools/configmgr.hxx>
@@ -74,7 +74,7 @@
 #include <rtl/ustrbuf.hxx>
 #endif
 
-#include <pathoptions.hxx>
+#include <svtools/pathoptions.hxx>
 
 #include <hash_map>
 
