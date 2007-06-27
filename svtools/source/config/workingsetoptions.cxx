@@ -4,9 +4,9 @@
  *
  *  $RCSfile: workingsetoptions.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 14:31:20 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 21:18:19 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -42,7 +42,7 @@
 //  includes
 //_________________________________________________________________________________________________________________
 
-#include "workingsetoptions.hxx"
+#include <svtools/workingsetoptions.hxx>
 
 #ifndef _UTL_CONFIGMGR_HXX_
 #include <unotools/configmgr.hxx>
