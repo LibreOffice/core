@@ -4,9 +4,9 @@
  *
  *  $RCSfile: cfg.hxx,v $
  *
- *  $Revision: 1.37 $
+ *  $Revision: 1.38 $
  *
- *  last change: $Author: ihi $ $Date: 2006-12-20 14:19:10 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 23:26:09 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -94,8 +94,8 @@
 #define _SVSTDARR_USHORTS
 #define _SVSTDARR_STRINGSDTOR
 #include <svtools/svstdarr.hxx>     // SvUShorts
-#include "minarray.hxx"
-#include "tabdlg.hxx"
+#include <sfx2/minarray.hxx>
+#include <sfx2/tabdlg.hxx>
 
 class SfxMacroInfoArr_Impl;
 class SfxMacroInfoItem;
