@@ -4,9 +4,9 @@
  *
  *  $RCSfile: controlpropertymap.cxx,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 10:33:35 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 15:13:13 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -40,13 +40,13 @@
 #include "xmlnmspe.hxx"
 #endif
 #ifndef _XMLOFF_XMLTOKEN_HXX
-#include "xmltoken.hxx"
+#include <xmloff/xmltoken.hxx>
 #endif
 #ifndef _XMLOFF_PROPMAPPINGTYPES_HXX
-#include "maptype.hxx"
+#include <xmloff/maptype.hxx>
 #endif
 #ifndef _XMLOFF_XMLTYPES_HXX
-#include "xmltypes.hxx"
+#include <xmloff/xmltypes.hxx>
 #endif
 #ifndef __SGI_STL_ALGORITHM
 #include <algorithm>
@@ -56,7 +56,7 @@
 #include "strings.hxx"
 #endif
 #ifndef _XMLOFF_CONTEXTID_HXX_
-#include "contextid.hxx"
+#include <xmloff/contextid.hxx>
 #endif
 
 #ifndef _XMLOFF_FORMS_CONTROLPROPERTYMAP_HXX_
