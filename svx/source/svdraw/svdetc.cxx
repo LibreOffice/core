@@ -4,9 +4,9 @@
  *
  *  $RCSfile: svdetc.cxx,v $
  *
- *  $Revision: 1.29 $
+ *  $Revision: 1.30 $
  *
- *  last change: $Author: rt $ $Date: 2007-04-26 07:52:03 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 19:00:45 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -40,22 +40,22 @@
 #include "forbiddencharacterstable.hxx"
 #endif
 
-#include "svdetc.hxx"
+#include <svx/svdetc.hxx>
 #include "svditext.hxx"
-#include "svdmodel.hxx"
-#include "svdtrans.hxx"
+#include <svx/svdmodel.hxx>
+#include <svx/svdtrans.hxx>
 #include "svdglob.hxx"
 #include "svdstr.hrc"
 #include "svdviter.hxx"
-#include "svdview.hxx"
-#include "svdoutl.hxx"
+#include <svx/svdview.hxx>
+#include <svx/svdoutl.hxx>
 
 #ifndef _SV_BMPACC_HXX //autogen
 #include <vcl/bmpacc.hxx>
 #endif
 
 #ifndef _EEITEM_HXX //autogen
-#include <eeitem.hxx>
+#include <svx/eeitem.hxx>
 #endif
 
 #ifndef _SFXITEMSET_HXX //autogen
@@ -83,39 +83,39 @@
 #endif
 
 #ifndef _SVX_COLRITEM_HXX //autogen
-#include "colritem.hxx"
+#include <svx/colritem.hxx>
 #endif
 
 #ifndef _SVX_FHGTITEM_HXX //autogen
-#include "fhgtitem.hxx"
+#include <svx/fhgtitem.hxx>
 #endif
 
 #ifndef _SVX__XGRADIENT_HXX //autogen
-#include "xgrad.hxx"
+#include <svx/xgrad.hxx>
 #endif
 
 #ifndef SVX_XFILLIT0_HXX //autogen
-#include "xfillit0.hxx"
+#include <svx/xfillit0.hxx>
 #endif
 
 #ifndef _SVX_XFLCLIT_HXX //autogen
-#include "xflclit.hxx"
+#include <svx/xflclit.hxx>
 #endif
 
 #ifndef _SVX_XFLHTIT_HXX //autogen
-#include "xflhtit.hxx"
+#include <svx/xflhtit.hxx>
 #endif
 
 #ifndef _SVX_XBTMPIT_HXX //autogen
-#include "xbtmpit.hxx"
+#include <svx/xbtmpit.hxx>
 #endif
 
 #ifndef _SVX_XFLGRIT_HXX //autogen
-#include "xflgrit.hxx"
+#include <svx/xflgrit.hxx>
 #endif
 
 #ifndef _SVDOOLE2_HXX //autogen
-#include "svdoole2.hxx"
+#include <svx/svdoole2.hxx>
 #endif
 
 #ifndef _SFXITEMPOOL_HXX
@@ -144,13 +144,13 @@
 
 // #97870#
 #ifndef _SVX_XFLBCKIT_HXX
-#include "xflbckit.hxx"
+#include <svx/xflbckit.hxx>
 #endif
 #ifndef _SVX_EXTRUSION_BAR_HXX
-#include "extrusionbar.hxx"
+#include <svx/extrusionbar.hxx>
 #endif
 #ifndef _SVX_FONTWORK_BAR_HXX
-#include "fontworkbar.hxx"
+#include <svx/fontworkbar.hxx>
 #endif
 
 #ifndef _B3D_B3DCOLOR_HXX
