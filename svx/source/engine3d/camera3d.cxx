@@ -4,9 +4,9 @@
  *
  *  $RCSfile: camera3d.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: ihi $ $Date: 2006-11-14 13:17:56 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 18:01:34 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -37,7 +37,7 @@
 #include "precompiled_svx.hxx"
 
 #ifndef _CAMERA3D_HXX
-#include "camera3d.hxx"
+#include <svx/camera3d.hxx>
 #endif
 
 #ifndef _STREAM_HXX
