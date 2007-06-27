@@ -4,9 +4,9 @@
  *
  *  $RCSfile: SchemaSimpleTypeContext.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 11:30:29 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 16:27:08 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -39,11 +39,11 @@
 #include "SchemaSimpleTypeContext.hxx"
 
 #include "SchemaRestrictionContext.hxx"
-#include <xmltoken.hxx>
-#include <nmspmap.hxx>
+#include <xmloff/xmltoken.hxx>
+#include <xmloff/nmspmap.hxx>
 #include <xmlnmspe.hxx>
-#include <xmltkmap.hxx>
-#include <xmluconv.hxx>
+#include <xmloff/xmltkmap.hxx>
+#include <xmloff/xmluconv.hxx>
 
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/xsd/WhiteSpaceTreatment.hpp>
