@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xattr.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 19:34:31 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 16:34:17 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -38,16 +38,16 @@
 // include ---------------------------------------------------------------
 
 #ifndef _XDEF_HXX
-//#include <xdef.hxx>
+//#include <svx/xdef.hxx>
 #endif
 #ifndef _XENUM_HXX
-//#include <xenum.hxx>
+//#include <svx/xenum.hxx>
 #endif
 #ifndef _XPOLY_HXX
-//#include <xpoly.hxx>
+//#include <svx/xpoly.hxx>
 #endif
 #ifndef _SVX_RECTENUM_HXX
-//#include <rectenum.hxx>
+//#include <svx/rectenum.hxx>
 #endif
 
 class XColorTable;
@@ -57,17 +57,17 @@ class XHatchTable;
 class XBitmapTable;
 class XGradientTable;
 
-#include <xit.hxx>
-#include <xcolit.hxx>
-#include <xgrad.hxx>
-#include <xhatch.hxx>
-#include <xlineit.hxx>
-#include <xfillit.hxx>
-#include <xtextit.hxx>
-#include <xlineit0.hxx>
-#include <xfillit0.hxx>
-#include <xtextit0.hxx>
-#include <xsetit.hxx>
+#include <svx/xit.hxx>
+#include <svx/xcolit.hxx>
+#include <svx/xgrad.hxx>
+#include <svx/xhatch.hxx>
+#include <svx/xlineit.hxx>
+#include <svx/xfillit.hxx>
+#include <svx/xtextit.hxx>
+#include <svx/xlineit0.hxx>
+#include <svx/xfillit0.hxx>
+#include <svx/xtextit0.hxx>
+#include <svx/xsetit.hxx>
 #include <xlinjoit.hxx>
 
 
