@@ -4,9 +4,9 @@
  *
  *  $RCSfile: textenc.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 09:08:36 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 13:25:55 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -140,7 +140,7 @@ static sal_uInt16 const aImplDoubleByteIdentifierTab[1] = { 0 };
 #include "convertadobe.tab"
 
 ImplTextEncodingData const *
-Impl_getTextEncodingData(rtl_TextEncoding nEncoding)
+Impl_getTextEncodingData(rtl_TextEncoding nEncoding) SAL_THROW_EXTERN_C()
 {
     static ImplTextEncodingData const * const aData[]
         = { NULL, /* DONTKNOW */
