@@ -4,9 +4,9 @@
  *
  *  $RCSfile: fontcfg.cxx,v $
  *
- *  $Revision: 1.44 $
+ *  $Revision: 1.45 $
  *
- *  last change: $Author: rt $ $Date: 2006-12-04 16:35:50 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 20:12:29 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -40,19 +40,19 @@
 #include <fontcfg.hxx>
 #endif
 #ifndef VCL_INC_CONFIGSETTINGS_HXX
-#include <configsettings.hxx>
+#include <vcl/configsettings.hxx>
 #endif
 #ifndef _SV_OUTDEV_HXX
-#include <outdev.hxx>
+#include <vcl/outdev.hxx>
 #endif
 #ifndef _SV_SVDATA_HXX
-#include <svdata.hxx>
+#include <vcl/svdata.hxx>
 #endif
 #ifndef _SV_SVAPP_HXX
-#include <svapp.hxx>
+#include <vcl/svapp.hxx>
 #endif
 #ifndef _VCL_UNOHELP_HXX
-#include <unohelp.hxx>
+#include <vcl/unohelp.hxx>
 #endif
 #ifndef _COM_SUN_STAR_UNO_ANY_HXX_
 #include <com/sun/star/uno/Any.hxx>
