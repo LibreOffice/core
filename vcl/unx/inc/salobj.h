@@ -4,9 +4,9 @@
  *
  *  $RCSfile: salobj.h,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: kz $ $Date: 2005-11-02 13:33:42 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 20:42:00 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -37,17 +37,17 @@
 #define _SV_SALOBJ_H
 
 #ifndef _SV_SV_H
-#include <sv.h>
+#include <vcl/sv.h>
 #endif
 #ifndef _SV_SYSDATA_HXX
 #include <sysdata.hxx>
 #endif
 #ifndef _SV_SALOBJ_HXX
-#include <salobj.hxx>
+#include <vcl/salobj.hxx>
 #endif
 
 #ifndef _VCL_DLLAPI_H
-#include "dllapi.h"
+#include <vcl/dllapi.h>
 #endif
 
 class SalClipRegion
