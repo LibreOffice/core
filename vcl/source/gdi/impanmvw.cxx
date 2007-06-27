@@ -4,9 +4,9 @@
  *
  *  $RCSfile: impanmvw.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 12:02:38 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 20:14:50 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -37,9 +37,9 @@
 #include "precompiled_vcl.hxx"
 
 #include "impanmvw.hxx"
-#include "virdev.hxx"
-#include "window.hxx"
-#include "salbtype.hxx"
+#include <vcl/virdev.hxx>
+#include <vcl/window.hxx>
+#include <vcl/salbtype.hxx>
 
 // ----------------
 // - ImplAnimView -
