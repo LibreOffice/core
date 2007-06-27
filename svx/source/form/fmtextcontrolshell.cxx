@@ -4,9 +4,9 @@
  *
  *  $RCSfile: fmtextcontrolshell.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: kz $ $Date: 2007-05-10 14:48:08 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 18:15:48 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -140,22 +140,22 @@
 #endif
 
 #ifndef _SVX_SVXIDS_HRC
-#include "svxids.hrc"
+#include <svx/svxids.hrc>
 #endif
 #ifndef _SVX_FMGLOB_HXX
-#include "fmglob.hxx"
+#include <svx/fmglob.hxx>
 #endif
 #ifndef _SVX_DIALMGR_HXX
-#include "dialmgr.hxx"
+#include <svx/dialmgr.hxx>
 #endif
 #ifndef _SVX_FMRESIDS_HRC
 #include "fmresids.hrc"
 #endif
 #ifndef _MyEDITENG_HXX
-#include "editeng.hxx"
+#include <svx/editeng.hxx>
 #endif
 #ifndef _EEITEM_HXX
-#include "eeitem.hxx"
+#include <svx/eeitem.hxx>
 #endif
 #ifndef _SVX_FMPROP_HRC
 #include "fmprop.hrc"
@@ -166,11 +166,11 @@
 #endif
 
 #ifndef _SVX_SRIPTSPACEITEM_HXX
-#include "scriptspaceitem.hxx"
+#include <svx/scriptspaceitem.hxx>
 #endif
 
-#include "udlnitem.hxx"
-#include "crsditem.hxx"
+#include <svx/udlnitem.hxx>
+#include <svx/crsditem.hxx>
 
 #ifndef _VOS_MUTEX_HXX_
 #include <vos/mutex.hxx>
