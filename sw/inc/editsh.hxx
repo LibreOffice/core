@@ -4,9 +4,9 @@
  *
  *  $RCSfile: editsh.hxx,v $
  *
- *  $Revision: 1.56 $
+ *  $Revision: 1.57 $
  *
- *  last change: $Author: vg $ $Date: 2007-05-22 16:19:09 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 13:13:32 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -67,9 +67,6 @@
 
 #ifndef _COM_SUN_STAR_LINGUISTIC2_XSPELLALTERNATIVES_HPP_
 #include <com/sun/star/linguistic2/XSpellAlternatives.hpp>
-#endif
-#ifndef _COM_SUN_STAR_TEXT_XTEXTRANGE_HPP_
-#include <com/sun/star/text/XTextRange.hpp>
 #endif
 
 #include <vector>
@@ -747,11 +744,6 @@ public:
     ::com::sun::star::uno::Reference<
         ::com::sun::star::linguistic2::XSpellAlternatives >
             GetCorrection( const Point* pPt, SwRect& rSelectRect );
-
-    // SMARTTAGS
-    sal_Bool IsOverSmartTag(const Point* pPt);
-    ::com::sun::star::uno::Reference<
-      ::com::sun::star::text::XTextRange> GetSmartTagTerm( const Point* pPt, SwRect& rSelectRect );
 
     void SetLinguRange( SwDocPositions eStart, SwDocPositions eEnde );
 
