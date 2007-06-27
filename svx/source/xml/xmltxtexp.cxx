@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xmltxtexp.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: ihi $ $Date: 2007-06-05 14:37:15 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 19:32:06 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -103,7 +103,7 @@
 #endif
 
 #ifndef _MyEDITENG_HXX
-#include "editeng.hxx"
+#include <svx/editeng.hxx>
 #endif
 
 #ifndef _XMLOFF_XMLEXP_HXX
@@ -111,15 +111,15 @@
 #endif
 
 #ifndef _SVX_UNOEDSRC_HXX
-#include "unoedsrc.hxx"
+#include <svx/unoedsrc.hxx>
 #endif
 
 #ifndef _SVX_UNOFORED_HXX
-#include "unofored.hxx"
+#include <svx/unofored.hxx>
 #endif
 
 #ifndef _SVX_UNOTEXT_HXX
-#include "unotext.hxx"
+#include <svx/unotext.hxx>
 #endif
 
 #ifndef _SVX_EDITSOURCE_HXX
@@ -129,11 +129,11 @@
 #include <cppuhelper/implbase4.hxx>
 
 #ifndef _SVX_UNOFIELD_HXX
-#include "unofield.hxx"
+#include <svx/unofield.hxx>
 #endif
 
 #ifndef SVX_UNOMOD_HXX
-#include "unomod.hxx"
+#include <svx/unomod.hxx>
 #endif
 #include "unonrule.hxx"
 
