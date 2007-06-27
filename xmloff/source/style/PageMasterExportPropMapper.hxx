@@ -4,9 +4,9 @@
  *
  *  $RCSfile: PageMasterExportPropMapper.hxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 14:26:07 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 15:26:29 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -37,7 +37,7 @@
 #define _XMLOFF_PAGEMASTEREXPORTPROPMAPPER_HXX
 
 #ifndef _XMLOFF_XMLEXPPR_HXX
-#include "xmlexppr.hxx"
+#include <xmloff/xmlexppr.hxx>
 #endif
 #ifndef _XMLBACKGROUNDIMAGEEXPORT_HXX
 #include "XMLBackgroundImageExport.hxx"
