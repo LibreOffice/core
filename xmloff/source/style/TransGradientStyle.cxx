@@ -4,9 +4,9 @@
  *
  *  $RCSfile: TransGradientStyle.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: obo $ $Date: 2006-10-12 14:46:16 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 15:29:46 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -45,15 +45,15 @@
 #endif
 
 #ifndef _XMLOFF_ATTRLIST_HXX
-#include "attrlist.hxx"
+#include <xmloff/attrlist.hxx>
 #endif
 
 #ifndef _XMLOFF_NMSPMAP_HXX
-#include "nmspmap.hxx"
+#include <xmloff/nmspmap.hxx>
 #endif
 
 #ifndef _XMLOFF_XMLUCONV_HXX
-#include "xmluconv.hxx"
+#include <xmloff/xmluconv.hxx>
 #endif
 
 #ifndef _XMLOFF_XMLNMSPE_HXX
@@ -73,15 +73,15 @@
 #endif
 
 #ifndef _XMLOFF_XMLTKMAP_HXX
-#include "xmltkmap.hxx"
+#include <xmloff/xmltkmap.hxx>
 #endif
 
 #ifndef _XMLOFF_XMLEXP_HXX
-#include "xmlexp.hxx"
+#include <xmloff/xmlexp.hxx>
 #endif
 
 #ifndef _XMLOFF_XMLIMP_HXX
-#include "xmlimp.hxx"
+#include <xmloff/xmlimp.hxx>
 #endif
 
 
