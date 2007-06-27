@@ -4,9 +4,9 @@
  *
  *  $RCSfile: appopen.cxx,v $
  *
- *  $Revision: 1.111 $
+ *  $Revision: 1.112 $
  *
- *  last change: $Author: hr $ $Date: 2007-06-27 12:54:40 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 22:56:38 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -129,7 +129,7 @@
 #include <svtools/eitem.hxx>
 #endif
 #ifndef _SFXDOCTEMPL_HXX //autogen
-#include <doctempl.hxx>
+#include <sfx2/doctempl.hxx>
 #endif
 #ifndef _SFXECODE_HXX
 #include <svtools/sfxecode.hxx>
@@ -165,29 +165,29 @@
 #ifndef GCC
 #endif
 
-#include "app.hxx"
-#include "bindings.hxx"
-#include "dispatch.hxx"
-#include "docfile.hxx"
-#include "docinf.hxx"
-#include "fcontnr.hxx"
-#include "new.hxx"
-#include "objitem.hxx"
-#include "objsh.hxx"
+#include <sfx2/app.hxx>
+#include <sfx2/bindings.hxx>
+#include <sfx2/dispatch.hxx>
+#include <sfx2/docfile.hxx>
+#include <sfx2/docinf.hxx>
+#include <sfx2/fcontnr.hxx>
+#include <sfx2/new.hxx>
+#include <sfx2/objitem.hxx>
+#include <sfx2/objsh.hxx>
 #include "objshimp.hxx"
 #include "openflag.hxx"
-#include "passwd.hxx"
+#include <sfx2/passwd.hxx>
 #include "referers.hxx"
-#include "request.hxx"
+#include <sfx2/request.hxx>
 #include "sfxresid.hxx"
-#include "viewsh.hxx"
+#include <sfx2/viewsh.hxx>
 #include "app.hrc"
-#include "topfrm.hxx"
-#include "sfxuno.hxx"
-#include "objface.hxx"
-#include "filedlghelper.hxx"
-#include "docfac.hxx"
-#include "event.hxx"
+#include <sfx2/topfrm.hxx>
+#include <sfx2/sfxuno.hxx>
+#include <sfx2/objface.hxx>
+#include <sfx2/filedlghelper.hxx>
+#include <sfx2/docfac.hxx>
+#include <sfx2/event.hxx>
 
 #define _SVSTDARR_STRINGSDTOR
 #include <svtools/svstdarr.hxx>
