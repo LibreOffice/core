@@ -4,9 +4,9 @@
  *
  *  $RCSfile: typemap.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: kz $ $Date: 2007-05-10 14:48:24 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 18:19:15 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -50,73 +50,73 @@
 #endif
 
 #ifndef _SVX_WGHTITEM_HXX
-#include "wghtitem.hxx"
+#include <svx/wghtitem.hxx>
 #endif
 #ifndef _SVX_UDLNITEM_HXX
-#include "udlnitem.hxx"
+#include <svx/udlnitem.hxx>
 #endif
 #ifndef _SVX_CRSDITEM_HXX
-#include "crsditem.hxx"
+#include <svx/crsditem.hxx>
 #endif
 #ifndef _SVX_ITEM_HXX
-#include "cntritem.hxx"
+#include <svx/cntritem.hxx>
 #endif
 #ifndef _SVX_SHDDITEM_HXX
-#include "shdditem.hxx"
+#include <svx/shdditem.hxx>
 #endif
 #ifndef _SVX_POSTITEM_HXX
-#include "postitem.hxx"
+#include <svx/postitem.hxx>
 #endif
 #ifndef _SVX_CLIPBOARDCTL_HXX_
 #include "clipfmtitem.hxx"
 #endif
 #ifndef _SVX_FHGTITEM_HXX
-#include "fhgtitem.hxx"
+#include <svx/fhgtitem.hxx>
 #endif
 #ifndef _SVX_FONTITEM_HXX
 #include "fontitem.hxx"
 #endif
 #ifndef _SVX_CHARRELIEFITEM_HXX
-#include "charreliefitem.hxx"
+#include <svx/charreliefitem.hxx>
 #endif
 #ifndef _SVX_ESCPITEM_HXX
-#include "escpitem.hxx"
+#include <svx/escpitem.hxx>
 #endif
 #ifndef _SVX_COLRITEM_HXX
-#include "colritem.hxx"
+#include <svx/colritem.hxx>
 #endif
 #ifndef _SVX_WRLMITEM_HXX
-#include "wrlmitem.hxx"
+#include <svx/wrlmitem.hxx>
 #endif
 #ifndef _SVX_CHARSCALEITEM_HXX
-#include "charscaleitem.hxx"
+#include <svx/charscaleitem.hxx>
 #endif
 #ifndef _SVX_AKRNITEM_HXX
-#include "akrnitem.hxx"
+#include <svx/akrnitem.hxx>
 #endif
 #ifndef _SVX_ULSPITEM_HXX
-#include "ulspitem.hxx"
+#include <svx/ulspitem.hxx>
 #endif
 #ifndef _SVX_LRSPITEM_HXX
-#include "lrspitem.hxx"
+#include <svx/lrspitem.hxx>
 #endif
 #ifndef _SVX_LSPCITEM_HXX
-#include "lspcitem.hxx"
+#include <svx/lspcitem.hxx>
 #endif
 #ifndef _SVX_LANGITEM_HXX
-#include "langitem.hxx"
+#include <svx/langitem.hxx>
 #endif
 #ifndef _SVX_KERNITEM_HXX
-#include "kernitem.hxx"
+#include <svx/kernitem.hxx>
 #endif
 #ifndef _SVX_TSPTITEM_HXX
-#include "tstpitem.hxx"
+#include <svx/tstpitem.hxx>
 #endif
 #ifndef _SVX_ADJITEM_HXX
-#include "adjitem.hxx"
+#include <svx/adjitem.hxx>
 #endif
 #ifndef _SVX_EMPHITEM_HXX
-#include "emphitem.hxx"
+#include <svx/emphitem.hxx>
 #endif
 
 #define SFX_TYPEMAP
