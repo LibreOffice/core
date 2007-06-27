@@ -4,9 +4,9 @@
  *
  *  $RCSfile: regband.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 12:10:08 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 20:22:47 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -40,10 +40,10 @@
 #include <tools/debug.hxx>
 #endif
 #ifndef _SV_SALBTYPE_HXX
-#include <salbtype.hxx>
+#include <vcl/salbtype.hxx>
 #endif
 #ifndef _SV_REGBAND_HXX
-#include <regband.hxx>
+#include <vcl/regband.hxx>
 #endif
 
 #include <algorithm>
