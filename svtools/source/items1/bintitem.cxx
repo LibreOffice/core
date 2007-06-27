@@ -4,9 +4,9 @@
  *
  *  $RCSfile: bintitem.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: vg $ $Date: 2007-01-18 14:13:29 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 21:41:45 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -49,7 +49,7 @@
 #endif
 
 #ifndef _BINTITEM_HXX
-#include <bintitem.hxx>
+#include <svtools/bintitem.hxx>
 #endif
 
 // STATIC DATA
