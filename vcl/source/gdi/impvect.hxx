@@ -4,9 +4,9 @@
  *
  *  $RCSfile: impvect.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 12:03:06 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 20:17:02 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -40,7 +40,7 @@
 #include <tools/poly.hxx>
 #endif
 #ifndef _SV_GDIMTF_HXX
-#include <gdimtf.hxx>
+#include <vcl/gdimtf.hxx>
 #endif
 
 // --------------
