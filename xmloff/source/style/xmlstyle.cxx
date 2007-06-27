@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xmlstyle.cxx,v $
  *
- *  $Revision: 1.41 $
+ *  $Revision: 1.42 $
  *
- *  last change: $Author: rt $ $Date: 2006-12-01 15:27:58 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 15:49:16 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -82,7 +82,7 @@
 #endif
 
 #ifndef _XMLOFF_NMSPMAP_HXX
-#include "nmspmap.hxx"
+#include <xmloff/nmspmap.hxx>
 #endif
 
 #ifndef _XMLOFF_XMLNMSPE_HXX
@@ -90,34 +90,34 @@
 #endif
 
 #ifndef _XMLOFF_XMLTOKEN_HXX
-#include "xmltoken.hxx"
+#include <xmloff/xmltoken.hxx>
 #endif
 
 #ifndef _XMLOFF_FAMILIES_HXX
-#include "families.hxx"
+#include <xmloff/families.hxx>
 #endif
 
 #ifndef _XMLOFF_XMLIMP_HXX
-#include "xmlimp.hxx"
+#include <xmloff/xmlimp.hxx>
 #endif
 #ifndef _XMLOFF_XMLNUMI_HXX
-#include "xmlnumi.hxx"
+#include <xmloff/xmlnumi.hxx>
 #endif
 
 #ifndef _XMLOFF_XMLIMPPR_HXX
-#include "xmlimppr.hxx"
+#include <xmloff/xmlimppr.hxx>
 #endif
 #ifndef _XMLOFF_XMLSTYLE_HXX
-#include "xmlstyle.hxx"
+#include <xmloff/xmlstyle.hxx>
 #endif
 #ifndef _XMLOFF_TXTSTYLI_HXX
-#include "txtstyli.hxx"
+#include <xmloff/txtstyli.hxx>
 #endif
 #ifndef _XMLOFF_TXTPRMAP_HXX
-#include "txtprmap.hxx"
+#include <xmloff/txtprmap.hxx>
 #endif
 #ifndef _XMLOFF_XMLNUMFI_HXX
-#include "xmlnumfi.hxx"
+#include <xmloff/xmlnumfi.hxx>
 #endif
 #ifndef _XMLOFF_XMLCHARTSTYLECONTEXT_HXX_
 #include "XMLChartStyleContext.hxx"
@@ -127,7 +127,7 @@
 #endif
 
 #ifndef _XMLOFF_XMLSHAPESTYLECONTEXT_HXX
-#include "XMLShapeStyleContext.hxx"
+#include <xmloff/XMLShapeStyleContext.hxx>
 #endif
 
 #ifndef _XMLOFF_FILLSTYLECONTEXTS_HXX_
