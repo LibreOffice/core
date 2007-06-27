@@ -4,9 +4,9 @@
  *
  *  $RCSfile: SchXMLTableContext.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: vg $ $Date: 2007-05-22 16:07:57 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 14:50:12 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -36,7 +36,7 @@
 #define _SCH_XMLTABLECONTEXT_HXX_
 
 #ifndef _XMLOFF_XMLICTXT_HXX
-#include "xmlictxt.hxx"
+#include <xmloff/xmlictxt.hxx>
 #endif
 #ifndef SCH_XMLIMPORT_HXX_
 #include "SchXMLImport.hxx"
