@@ -4,9 +4,9 @@
  *
  *  $RCSfile: SchXMLImport.hxx,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: vg $ $Date: 2007-05-22 16:03:28 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 14:37:17 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -36,22 +36,22 @@
 #define SCH_XMLIMPORT_HXX_
 
 #ifndef _XMLOFF_SCH_XMLIMPORTHELPER_HXX_
-#include "SchXMLImportHelper.hxx"
+#include <xmloff/SchXMLImportHelper.hxx>
 #endif
 #ifndef _XMLOFF_XMLIMP_HXX
-#include "xmlimp.hxx"
+#include <xmloff/xmlimp.hxx>
 #endif
 #ifndef _XMLOFF_XMLTKMAP_HXX
-#include "xmltkmap.hxx"
+#include <xmloff/xmltkmap.hxx>
 #endif
 #ifndef _XMLOFF_XMLICTXT_HXX
-#include "xmlictxt.hxx"
+#include <xmloff/xmlictxt.hxx>
 #endif
 #ifndef _XMLOFF_PROPERTYHANDLERFACTORY_HXX
-#include "prhdlfac.hxx"
+#include <xmloff/prhdlfac.hxx>
 #endif
 #ifndef _XMLOFF_FAMILIES_HXX_
-#include "families.hxx"
+#include <xmloff/families.hxx>
 #endif
 
 /* ----------------------------------------
