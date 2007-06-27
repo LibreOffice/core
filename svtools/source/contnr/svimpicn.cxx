@@ -4,9 +4,9 @@
  *
  *  $RCSfile: svimpicn.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: obo $ $Date: 2006-10-12 15:10:13 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 21:20:53 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -47,16 +47,16 @@
 #include <vcl/sound.hxx>
 #endif
 
-#include <svlbox.hxx>
-#include <svicnvw.hxx>
+#include <svtools/svlbox.hxx>
+#include <svtools/svicnvw.hxx>
 #ifndef _SVIMPICN_HXX
 #include <svimpicn.hxx>
 #endif
 #ifndef _SVLBITM_HXX
-#include <svlbitm.hxx>
+#include <svtools/svlbitm.hxx>
 #endif
 #ifndef _SVARRAY_HXX
-#include "svarray.hxx"
+#include <svtools/svarray.hxx>
 #endif
 
 
