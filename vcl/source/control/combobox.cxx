@@ -4,9 +4,9 @@
  *
  *  $RCSfile: combobox.cxx,v $
  *
- *  $Revision: 1.41 $
+ *  $Revision: 1.42 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 11:51:42 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 20:04:44 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -47,31 +47,31 @@
 #include <tools/rc.h>
 #endif
 #ifndef _SV_SVDATA_HXX
-#include <svdata.hxx>
+#include <vcl/svdata.hxx>
 #endif
 #ifndef _SV_DECOVIEW_HXX
-#include <decoview.hxx>
+#include <vcl/decoview.hxx>
 #endif
 #ifndef _SV_ILSTBOX_HXX
 #include <ilstbox.hxx>
 #endif
 #ifndef _SV_LSTBOX_H
-#include <lstbox.h>
+#include <vcl/lstbox.h>
 #endif
 #ifndef _SV_BUTTON_HXX
-#include <button.hxx>
+#include <vcl/button.hxx>
 #endif
 #ifndef _SV_SUBEDIT_HXX
 #include <subedit.hxx>
 #endif
 #ifndef _SV_EVENT_HXX
-#include <event.hxx>
+#include <vcl/event.hxx>
 #endif
 #ifndef _SV_COMBOBOX_HXX
-#include <combobox.hxx>
+#include <vcl/combobox.hxx>
 #endif
 #ifndef _VCL_CONTROLLAYOUT_HXX
-#include <controllayout.hxx>
+#include <vcl/controllayout.hxx>
 #endif
 
 
