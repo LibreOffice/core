@@ -4,9 +4,9 @@
  *
  *  $RCSfile: helpopt.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: vg $ $Date: 2007-01-18 14:10:49 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 21:12:23 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -41,7 +41,7 @@
 #endif
 #define SVT_DLLIMPLEMENTATION
 
-#include "helpopt.hxx"
+#include <svtools/helpopt.hxx>
 
 #ifndef _UTL_CONFIGMGR_HXX_
 #include <unotools/configmgr.hxx>
