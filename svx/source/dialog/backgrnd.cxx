@@ -4,9 +4,9 @@
  *
  *  $RCSfile: backgrnd.cxx,v $
  *
- *  $Revision: 1.37 $
+ *  $Revision: 1.38 $
  *
- *  last change: $Author: kz $ $Date: 2007-05-10 14:35:28 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 16:47:57 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -72,9 +72,9 @@
 
 #define _SVX_BACKGRND_CXX
 
-#include "dialogs.hrc"
+#include <svx/dialogs.hrc>
 #include "backgrnd.hrc"
-#include "svxitems.hrc"
+#include <svx/svxitems.hrc>
 
 
 
@@ -84,20 +84,20 @@
 #define TBL_DEST_ROW    1
 #define TBL_DEST_TBL    2
 
-#include "brshitem.hxx"
+#include <svx/brshitem.hxx>
 #include "backgrnd.hxx"
 
-#include "xtable.hxx"
+#include <svx/xtable.hxx>
 #include "opengrf.hxx"
 #include "impgrf.hxx"
 #include "svxerr.hxx"
 #include "drawitem.hxx"
-#include "dialmgr.hxx"
+#include <svx/dialmgr.hxx>
 #include "htmlmode.hxx"
 #ifndef _SVT_CONTROLDIMS_HRC_
 #include <svtools/controldims.hrc>
 #endif
-#include "svxids.hrc" //CHINA001
+#include <svx/svxids.hrc> //CHINA001
 #include "flagsdef.hxx" //CHINA001
 #include <svtools/intitem.hxx> //CHINA001
 #include <sfx2/request.hxx> //CHINA001
