@@ -4,9 +4,9 @@
  *
  *  $RCSfile: virtmenu.cxx,v $
  *
- *  $Revision: 1.46 $
+ *  $Revision: 1.47 $
  *
- *  last change: $Author: obo $ $Date: 2006-10-12 15:58:07 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 23:31:55 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -65,26 +65,26 @@
 #endif
 
 #include "virtmenu.hxx"
-#include "msgpool.hxx"
+#include <sfx2/msgpool.hxx>
 #include "statcach.hxx"
-#include "msg.hxx"
+#include <sfx2/msg.hxx>
 #include "idpool.hxx"
-#include "mnuitem.hxx"
-#include "mnumgr.hxx"
-#include "bindings.hxx"
-#include "dispatch.hxx"
-#include "app.hxx"
+#include <sfx2/mnuitem.hxx>
+#include <sfx2/mnumgr.hxx>
+#include <sfx2/bindings.hxx>
+#include <sfx2/dispatch.hxx>
+#include <sfx2/app.hxx>
 #include "sfxtypes.hxx"
 #include "arrdecl.hxx"
-#include "sfx.hrc"
-#include "viewsh.hxx"
+#include <sfx2/sfx.hrc>
+#include <sfx2/viewsh.hxx>
 #include "sfxpicklist.hxx"
-#include "macrconf.hxx"
+#include <sfx2/macrconf.hxx>
 #include "sfxresid.hxx"
 #include "menu.hrc"
 #include "imagemgr.hxx"
-#include "viewfrm.hxx"
-#include "objsh.hxx"
+#include <sfx2/viewfrm.hxx>
+#include <sfx2/objsh.hxx>
 
 #ifndef __FRAMEWORK_CLASSES_ADDONSOPTIONS_HXX_
 #include <framework/addonsoptions.hxx>
