@@ -4,9 +4,9 @@
  *
  *  $RCSfile: fntszctl.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: kz $ $Date: 2007-05-10 14:54:47 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 18:32:41 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -60,11 +60,11 @@
 #include <sfx2/dispatch.hxx>
 #endif
 
-#include "fntszctl.hxx"     //
-#include "dialogs.hrc"
+#include <svx/fntszctl.hxx>     //
+#include <svx/dialogs.hrc>
 
 #ifndef _SVX_FHGTITEM_HXX //autogen
-#include "fhgtitem.hxx"
+#include <svx/fhgtitem.hxx>
 #endif
 #ifndef _SVX_FONTITEM_HXX //autogen
 #include "fontitem.hxx"
@@ -74,7 +74,7 @@
 #endif
 
 #include "dlgutil.hxx"
-#include "dialmgr.hxx"
+#include <svx/dialmgr.hxx>
 
 #define LOGIC   OutputDevice::LogicToLogic
 
