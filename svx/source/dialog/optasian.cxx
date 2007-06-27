@@ -4,9 +4,9 @@
  *
  *  $RCSfile: optasian.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: kz $ $Date: 2007-05-10 14:38:50 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 17:24:17 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -44,14 +44,14 @@
 #include <optasian.hxx>
 #endif
 #ifndef _SVX_LANGITEM_HXX
-#include <langitem.hxx>
+#include <svx/langitem.hxx>
 #endif
 #ifndef _UNO_LINGU_HXX
 #include <unolingu.hxx>
 #endif
 #include <optasian.hrc>
-#include <dialmgr.hxx>
-#include "dialogs.hrc"
+#include <svx/dialmgr.hxx>
+#include <svx/dialogs.hrc>
 #ifndef _TABLE_HXX //autogen
 #include <tools/table.hxx>
 #endif
