@@ -4,9 +4,9 @@
  *
  *  $RCSfile: sdpropls.hxx,v $
  *
- *  $Revision: 1.37 $
+ *  $Revision: 1.38 $
  *
- *  last change: $Author: ihi $ $Date: 2007-04-16 13:10:40 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 15:04:48 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -41,27 +41,27 @@
 #endif
 
 #ifndef _XMLOFF_XMLNUME_HXX
-#include "xmlnume.hxx"
+#include <xmloff/xmlnume.hxx>
 #endif
 
 #ifndef _XMLOFF_PROPMAPPINGTYPES_HXX
-#include "maptype.hxx"
+#include <xmloff/maptype.hxx>
 #endif
 
 #ifndef _XMLOFF_XMLTYPES_HXX
-#include "xmltypes.hxx"
+#include <xmloff/xmltypes.hxx>
 #endif
 
 #ifndef _SVTOOLS_XMLEMENT_HXX
-#include "xmlement.hxx"
+#include <xmloff/xmlement.hxx>
 #endif
 
 #ifndef _XMLOFF_PROPERTYHANDLERFACTORY_HXX
-#include <prhdlfac.hxx>
+#include <xmloff/prhdlfac.hxx>
 #endif
 
 #ifndef _XMLOFF_PROPERTYSETMAPPER_HXX
-#include "xmlprmap.hxx"
+#include <xmloff/xmlprmap.hxx>
 #endif
 
 #ifndef _XMLOFF_XMLTEXTLISTAUTOSTYLEPOOL_HXX
@@ -69,7 +69,7 @@
 #endif
 
 #ifndef _XMLOFF_XMLEXPPR_HXX
-#include "xmlexppr.hxx"
+#include <xmloff/xmlexppr.hxx>
 #endif
 
 //////////////////////////////////////////////////////////////////////////////
