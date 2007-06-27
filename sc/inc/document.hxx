@@ -4,9 +4,9 @@
  *
  *  $RCSfile: document.hxx,v $
  *
- *  $Revision: 1.100 $
+ *  $Revision: 1.101 $
  *
- *  last change: $Author: vg $ $Date: 2007-05-22 19:38:56 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 13:41:42 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -487,6 +487,7 @@ SC_DLLPUBLIC    ScDBCollection* GetDBCollection() const;
 
     ScDPCollection*     GetDPCollection();
     ScDPObject*         GetDPAtCursor(SCCOL nCol, SCROW nRow, SCTAB nTab) const;
+    ScDPObject*         GetDPAtBlock( const ScRange& rBlock ) const;
 
     ScPivotCollection*  GetPivotCollection() const;
     void                SetPivotCollection(ScPivotCollection* pNewPivotCollection);
