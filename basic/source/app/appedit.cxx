@@ -4,9 +4,9 @@
  *
  *  $RCSfile: appedit.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 09:55:15 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 14:12:35 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -53,7 +53,7 @@
 #endif
 
 #ifndef _BASIC_TTRESHLP_HXX
-#include "ttstrhlp.hxx"
+#include <basic/ttstrhlp.hxx>
 #endif
 
 #include "basic.hrc"
