@@ -4,9 +4,9 @@
  *
  *  $RCSfile: svtreebx.cxx,v $
  *
- *  $Revision: 1.51 $
+ *  $Revision: 1.52 $
  *
- *  last change: $Author: hr $ $Date: 2007-06-27 14:51:35 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 21:21:40 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -48,9 +48,9 @@ class TabBar;
 
 // #102891# -----------------------
 
-#include <svlbox.hxx>
-#include <svlbitm.hxx>
-#include <svtreebx.hxx>
+#include <svtools/svlbox.hxx>
+#include <svtools/svlbitm.hxx>
+#include <svtools/svtreebx.hxx>
 #ifndef _SVIMPLBOX_HXX
 #include <svimpbox.hxx>
 #endif
