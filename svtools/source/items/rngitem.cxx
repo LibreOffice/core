@@ -4,9 +4,9 @@
  *
  *  $RCSfile: rngitem.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: kz $ $Date: 2007-05-10 16:37:15 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 21:40:40 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -45,13 +45,13 @@
 #define NUMTYPE USHORT
 #define SfxXRangeItem SfxRangeItem
 #define SfxXRangesItem SfxUShortRangesItem
-#include "rngitem.hxx"
+#include <svtools/rngitem.hxx>
 #include "rngitem_inc.cxx"
 
 #define NUMTYPE sal_uInt32
 #define SfxXRangeItem SfxULongRangeItem
 #define SfxXRangesItem SfxULongRangesItem
-#include "rngitem.hxx"
+#include <svtools/rngitem.hxx>
 #include "rngitem_inc.cxx"
 
 #else
