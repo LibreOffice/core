@@ -4,9 +4,9 @@
  *
  *  $RCSfile: grafctrl.cxx,v $
  *
- *  $Revision: 1.38 $
+ *  $Revision: 1.39 $
  *
- *  last change: $Author: kz $ $Date: 2007-05-10 15:01:21 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 19:16:53 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -80,20 +80,20 @@
 #include <tools/urlobj.hxx>
 #include <comphelper/processfactory.hxx>
 
-#include "svxids.hrc"
+#include <svx/svxids.hrc>
 #include "grafctrl.hrc"
-#include "dialogs.hrc"
-#include "brshitem.hxx"
-#include "sizeitem.hxx"
-#include "sdgcpitm.hxx"
+#include <svx/dialogs.hrc>
+#include <svx/brshitem.hxx>
+#include <svx/sizeitem.hxx>
+#include <svx/sdgcpitm.hxx>
 //CHINA001 #include "../dialog/grfpage.hxx"
-#include "itemwin.hxx"
-#include "dialmgr.hxx"
-#include "svdview.hxx"
-#include "svdmodel.hxx"
-#include "svdograf.hxx"
-#include "svdundo.hxx"
-#include "svdtrans.hxx"
+#include <svx/itemwin.hxx>
+#include <svx/dialmgr.hxx>
+#include <svx/svdview.hxx>
+#include <svx/svdmodel.hxx>
+#include <svx/svdograf.hxx>
+#include <svx/svdundo.hxx>
+#include <svx/svdtrans.hxx>
 #include "grafctrl.hxx"
 #include "tbxcolor.hxx"
 
@@ -105,7 +105,7 @@ using namespace ::com::sun::star::util;
 using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::lang;
 
-#include "svxdlg.hxx" //CHINA001
+#include <svx/svxdlg.hxx> //CHINA001
 // -----------
 // - Defines -
 // -----------
