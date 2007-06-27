@@ -4,9 +4,9 @@
  *
  *  $RCSfile: slotadd.cxx,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: kz $ $Date: 2007-05-10 16:23:37 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 13:25:54 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -66,6 +66,9 @@
 #endif
 #ifndef _SVX_HLNKITEM_HXX //autogen
 #include <svx/hlnkitem.hxx>
+#endif
+#ifndef _SVX_SMARTTAGITEM_HXX
+#include <svx/SmartTagItem.hxx>
 #endif
 #ifndef _SFXPTITEM_HXX //autogen
 #include <svtools/ptitem.hxx>
