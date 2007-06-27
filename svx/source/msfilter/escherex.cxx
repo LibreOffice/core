@@ -4,9 +4,9 @@
  *
  *  $RCSfile: escherex.cxx,v $
  *
- *  $Revision: 1.71 $
+ *  $Revision: 1.72 $
  *
- *  last change: $Author: vg $ $Date: 2007-05-22 15:19:12 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 18:33:11 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -43,22 +43,22 @@
 #include "eschesdo.hxx"
 #endif
 #ifndef _SVX_ESCHEREX_HXX
-#include "escherex.hxx"
+#include <svx/escherex.hxx>
 #endif
 #ifndef _SVX_UNOAPI_HXX_
 #include <unoapi.hxx>
 #endif
 #ifndef _SVDOBJ_HXX
-#include <svdobj.hxx>
+#include <svx/svdobj.hxx>
 #endif
 #ifndef _SVDOASHP_HXX
-#include <svdoashp.hxx>
+#include <svx/svdoashp.hxx>
 #endif
 #ifndef _SVDOOLE2_HXX
-#include <svdoole2.hxx>
+#include <svx/svdoole2.hxx>
 #endif
 #ifndef _SVDMODEL_HXX
-#include <svdmodel.hxx>
+#include <svx/svdmodel.hxx>
 #endif
 #ifndef _SV_GRADIENT_HXX
 #include <vcl/gradient.hxx>
@@ -82,7 +82,7 @@
 #include <tools/zcodec.hxx>
 #endif
 #ifndef _SVDOPATH_HXX
-#include <svdopath.hxx>
+#include <svx/svdopath.hxx>
 #endif
 #ifndef _INC_STDLIB
 #include <stdlib.h>
