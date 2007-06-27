@@ -4,9 +4,9 @@
  *
  *  $RCSfile: fmvwimp.cxx,v $
  *
- *  $Revision: 1.61 $
+ *  $Revision: 1.62 $
  *
- *  last change: $Author: kz $ $Date: 2007-05-10 10:07:07 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 18:16:56 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -44,10 +44,10 @@
 #include "fmvwimp.hxx"
 #endif
 #ifndef _SVX_FMGLOB_HXX
-#include "fmglob.hxx"
+#include <svx/fmglob.hxx>
 #endif
 #ifndef _SVX_DIALMGR_HXX //autogen
-#include "dialmgr.hxx"
+#include <svx/dialmgr.hxx>
 #endif
 #ifndef _SVX_FMRESIDS_HRC
 #include "fmresids.hrc"
@@ -56,7 +56,7 @@
 #include "fmobj.hxx"
 #endif
 #ifndef _SVDOGRP_HXX
-#include "svdogrp.hxx"
+#include <svx/svdogrp.hxx>
 #endif
 #ifndef _SVDITER_HXX
 #include "svditer.hxx"
@@ -156,7 +156,7 @@
 /** === end UNO includes === **/
 
 #ifndef _SVX_FMMODEL_HXX
-#include "fmmodel.hxx"
+#include <svx/fmmodel.hxx>
 #endif
 
 #ifndef _SVX_FMUNDO_HXX
@@ -164,16 +164,16 @@
 #endif
 
 #ifndef _SVX_FMPAGE_HXX
-#include "fmpage.hxx"
+#include <svx/fmpage.hxx>
 #endif
 #ifndef _SVX_FMUNOPGE_HXX
 #include "fmpgeimp.hxx"
 #endif
 #ifndef _SVX_FMVIEW_HXX
-#include "fmview.hxx"
+#include <svx/fmview.hxx>
 #endif
 #ifndef _SVX_FMSHELL_HXX
-#include "fmshell.hxx"
+#include <svx/fmshell.hxx>
 #endif
 #ifndef _SVX_FMSHIMP_HXX
 #include "fmshimp.hxx"
@@ -188,13 +188,13 @@
 #include <vcl/msgbox.hxx>
 #endif
 #ifndef _SVDPAGV_HXX
-#include "svdpagv.hxx"
+#include <svx/svdpagv.hxx>
 #endif
 #ifndef _SVX_XMLEXCHG_HXX_
 #include "xmlexchg.hxx"
 #endif
 #ifndef _SVX_DATACCESSDESCRIPTOR_HXX_
-#include "dataaccessdescriptor.hxx"
+#include <svx/dataaccessdescriptor.hxx>
 #endif
 #ifndef _COMPHELPER_EXTRACT_HXX_
 #include <comphelper/extract.hxx>
@@ -216,7 +216,7 @@
 #endif
 
 #ifndef _SDRPAGEWINDOW_HXX
-#include "sdrpagewindow.hxx"
+#include <svx/sdrpagewindow.hxx>
 #endif
 #ifndef _SDRPAINTWINDOW_HXX
 #include "sdrpaintwindow.hxx"
