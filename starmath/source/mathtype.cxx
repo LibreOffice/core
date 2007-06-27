@@ -4,9 +4,9 @@
  *
  *  $RCSfile: mathtype.cxx,v $
  *
- *  $Revision: 1.38 $
+ *  $Revision: 1.39 $
  *
- *  last change: $Author: vg $ $Date: 2007-05-25 12:13:42 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 12:40:16 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1924,7 +1924,7 @@ int MathType::HandleRecords(int nLevel,sal_uInt8 nSelector,
                 break;
         }
     }
-    while (nRecord != END);
+    while (nRecord != END && !pS->IsEof());
     while (nSetSize)
     {
         rRet += '}';
