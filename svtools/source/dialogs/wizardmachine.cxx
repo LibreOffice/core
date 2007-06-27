@@ -4,9 +4,9 @@
  *
  *  $RCSfile: wizardmachine.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: vg $ $Date: 2007-05-22 19:33:44 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 21:29:43 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -37,9 +37,9 @@
 #include "precompiled_svtools.hxx"
 
 #ifndef _SVTOOLS_WIZARDMACHINE_HXX_
-#include "wizardmachine.hxx"
+#include <svtools/wizardmachine.hxx>
 #endif
-#include "helpid.hrc"
+#include <svtools/helpid.hrc>
 #ifndef _TOOLS_DEBUG_HXX
 #include <tools/debug.hxx>
 #endif
@@ -47,10 +47,10 @@
 #include <vcl/msgbox.hxx>
 #endif
 #ifndef _SVTOOLS_SVTDATA_HXX
-#include "svtdata.hxx"
+#include <svtools/svtdata.hxx>
 #endif
 #ifndef _SVTOOLS_HRC
-#include "svtools.hrc"
+#include <svtools/svtools.hrc>
 #endif
 #ifndef SVTOOLS_WIZARDHEADER_HXX
 #include "wizardheader.hxx"
