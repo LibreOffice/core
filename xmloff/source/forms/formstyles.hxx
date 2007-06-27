@@ -4,9 +4,9 @@
  *
  *  $RCSfile: formstyles.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 14:11:35 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 15:16:35 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -37,7 +37,7 @@
 #define XMLOFF_FORMSTYLES_HXX
 
 #ifndef _XMLOFF_PRSTYLEI_HXX_
-#include "prstylei.hxx"
+#include <xmloff/prstylei.hxx>
 #endif
 
 //.........................................................................
