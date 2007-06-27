@@ -4,9 +4,9 @@
  *
  *  $RCSfile: SpellDialogChildWindow.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 04:08:58 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 16:45:34 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -37,10 +37,10 @@
 #include "precompiled_svx.hxx"
 
 #ifndef SVX_SPELL_DIALOG_CHILD_WINDOW_HXX
-#include <SpellDialogChildWindow.hxx>
+#include <svx/SpellDialogChildWindow.hxx>
 #endif
 
-#include "svxdlg.hxx"
+#include <svx/svxdlg.hxx>
 
 namespace svx {
 
