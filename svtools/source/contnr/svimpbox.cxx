@@ -4,9 +4,9 @@
  *
  *  $RCSfile: svimpbox.cxx,v $
  *
- *  $Revision: 1.51 $
+ *  $Revision: 1.52 $
  *
- *  last change: $Author: obo $ $Date: 2006-10-12 15:09:58 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 21:20:38 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -52,9 +52,9 @@
 #endif
 
 #define _SVTREEBX_CXX
-#include <svtreebx.hxx>
+#include <svtools/svtreebx.hxx>
 #ifndef _SVLBOX_HXX
-#include <svlbox.hxx>
+#include <svtools/svlbox.hxx>
 #endif
 #ifndef _SVIMPLBOX_HXX
 #include <svimpbox.hxx>
@@ -64,11 +64,11 @@
 #endif
 
 #ifndef _SVTOOLS_SVTDATA_HXX
-#include "svtdata.hxx"
+#include <svtools/svtdata.hxx>
 #endif
 
 #ifndef _SVTOOLS_HRC
-#include "svtools.hrc"
+#include <svtools/svtools.hrc>
 #endif
 
 // #102891# --------------------
