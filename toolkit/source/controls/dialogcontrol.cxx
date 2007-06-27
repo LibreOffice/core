@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dialogcontrol.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: kz $ $Date: 2007-06-20 10:25:44 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 12:21:36 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -36,6 +36,8 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_toolkit.hxx"
 
+#include <vcl/svapp.hxx>
+#include <vos/mutex.hxx>
 #ifndef TOOLKIT_DIALOG_CONTROL_HXX
 #include <toolkit/controls/dialogcontrol.hxx>
 #endif
@@ -96,6 +98,8 @@
 #ifndef _COMPHELPER_TYPES_HXX_
 #include <comphelper/types.hxx>
 #endif
+
+#include "tree/treecontrol.hxx"
 
 #include <map>
 #include <algorithm>
@@ -396,6 +400,8 @@ UnoControlDialogModel::UnoControlModelHolderList::iterator UnoControlDialogModel
 // ::XMultiServiceFactory
 Reference< XInterface > UnoControlDialogModel::createInstance( const ::rtl::OUString& aServiceSpecifier ) throw(Exception, RuntimeException)
 {
+    vos::OGuard aSolarGuard( Application::GetSolarMutex() );
+
     OGeometryControlModel_Base* pNewModel = NULL;
 
     if ( aServiceSpecifier.compareToAscii( szServiceName2_UnoControlEditModel ) == 0 )
@@ -438,6 +444,8 @@ Reference< XInterface > UnoControlDialogModel::createInstance( const ::rtl::OUSt
         pNewModel = new OGeometryControlModel< UnoControlFixedLineModel >;
     else if ( aServiceSpecifier.compareToAscii( szServiceName2_UnoControlRoadmapModel ) == 0 )
         pNewModel = new OGeometryControlModel< UnoControlRoadmapModel >;
+    else if ( aServiceSpecifier.compareToAscii( szServiceName_TreeControlModel ) == 0 )
+        pNewModel = new OGeometryControlModel< UnoTreeModel >;
 
     if ( !pNewModel )
     {
@@ -477,7 +485,7 @@ Sequence< ::rtl::OUString > UnoControlDialogModel::getAvailableServiceNames() th
     static Sequence< ::rtl::OUString >* pNamesSeq = NULL;
     if ( !pNamesSeq )
     {
-        pNamesSeq = new Sequence< ::rtl::OUString >( 20 );
+        pNamesSeq = new Sequence< ::rtl::OUString >( 21 );
         ::rtl::OUString* pNames = pNamesSeq->getArray();
         pNames[0] = ::rtl::OUString::createFromAscii( szServiceName2_UnoControlEditModel );
         pNames[1] = ::rtl::OUString::createFromAscii( szServiceName2_UnoControlFormattedFieldModel );
@@ -499,6 +507,7 @@ Sequence< ::rtl::OUString > UnoControlDialogModel::getAvailableServiceNames() th
         pNames[17] = ::rtl::OUString::createFromAscii( szServiceName2_UnoControlScrollBarModel );
         pNames[18] = ::rtl::OUString::createFromAscii( szServiceName2_UnoControlFixedLineModel );
         pNames[19] = ::rtl::OUString::createFromAscii( szServiceName2_UnoControlRoadmapModel );
+        pNames[20] = ::rtl::OUString::createFromAscii( szServiceName_TreeControlModel );
 
     }
     return *pNamesSeq;
@@ -530,6 +539,8 @@ sal_Bool UnoControlDialogModel::hasElements() throw(RuntimeException)
 // XNameContainer, XNameReplace, XNameAccess
 void UnoControlDialogModel::replaceByName( const ::rtl::OUString& aName, const Any& aElement ) throw(IllegalArgumentException, NoSuchElementException, WrappedTargetException, RuntimeException)
 {
+    vos::OGuard aSolarGuard( Application::GetSolarMutex() );
+
     Reference< XControlModel > xNewModel;
     aElement >>= xNewModel;
     if ( !xNewModel.is() )
@@ -588,6 +599,8 @@ sal_Bool UnoControlDialogModel::hasByName( const ::rtl::OUString& aName ) throw(
 
 void UnoControlDialogModel::insertByName( const ::rtl::OUString& aName, const Any& aElement ) throw(IllegalArgumentException, ElementExistException, WrappedTargetException, RuntimeException)
 {
+    vos::OGuard aSolarGuard( Application::GetSolarMutex() );
+
     Reference< XControlModel > xM;
     aElement >>= xM;
 
@@ -614,6 +627,8 @@ void UnoControlDialogModel::insertByName( const ::rtl::OUString& aName, const An
 
 void UnoControlDialogModel::removeByName( const ::rtl::OUString& aName ) throw(NoSuchElementException, WrappedTargetException, RuntimeException)
 {
+    vos::OGuard aSolarGuard( Application::GetSolarMutex() );
+
     UnoControlModelHolderList::iterator aElementPos = ImplFindElement( aName );
     if ( maModels.end() == aElementPos )
         lcl_throwNoSuchElementException();
@@ -655,6 +670,8 @@ void SAL_CALL UnoControlDialogModel::setGroupControl( sal_Bool ) throw (RuntimeE
 // ----------------------------------------------------------------------------
 void SAL_CALL UnoControlDialogModel::setControlModels( const Sequence< Reference< XControlModel > >& _rControls ) throw (RuntimeException)
 {
+    vos::OGuard aSolarGuard( Application::GetSolarMutex() );
+
     // set the tab indexes according to the order of models in the sequence
     const Reference< XControlModel >* pControls = _rControls.getConstArray( );
     const Reference< XControlModel >* pControlsEnd = _rControls.getConstArray( ) + _rControls.getLength();
@@ -690,6 +707,8 @@ typedef ::std::multimap< sal_Int32, Reference< XControlModel >, ::std::less< sal
 // ----------------------------------------------------------------------------
 Sequence< Reference< XControlModel > > SAL_CALL UnoControlDialogModel::getControlModels(  ) throw (RuntimeException)
 {
+    vos::OGuard aSolarGuard( Application::GetSolarMutex() );
+
     MapIndexToModel aSortedModels;
         // will be the sorted container of all models which have a tab index property
     ::std::vector< Reference< XControlModel > > aUnindexedModels;
@@ -772,6 +791,8 @@ namespace
 // ----------------------------------------------------------------------------
 sal_Int32 SAL_CALL UnoControlDialogModel::getGroupCount(  ) throw (RuntimeException)
 {
+    vos::OGuard aSolarGuard( Application::GetSolarMutex() );
+
     implUpdateGroupStructure();
 
     return maGroups.size();
@@ -780,6 +801,8 @@ sal_Int32 SAL_CALL UnoControlDialogModel::getGroupCount(  ) throw (RuntimeExcept
 // ----------------------------------------------------------------------------
 void SAL_CALL UnoControlDialogModel::getGroup( sal_Int32 _nGroup, Sequence< Reference< XControlModel > >& _rGroup, ::rtl::OUString& _rName ) throw (RuntimeException)
 {
+    vos::OGuard aSolarGuard( Application::GetSolarMutex() );
+
     implUpdateGroupStructure();
 
     if ( ( _nGroup < 0 ) || ( _nGroup >= (sal_Int32)maGroups.size() ) )
@@ -802,6 +825,8 @@ void SAL_CALL UnoControlDialogModel::getGroup( sal_Int32 _nGroup, Sequence< Refe
 // ----------------------------------------------------------------------------
 void SAL_CALL UnoControlDialogModel::getGroupByName( const ::rtl::OUString& _rName, Sequence< Reference< XControlModel > >& _rGroup ) throw (RuntimeException)
 {
+    vos::OGuard aSolarGuard( Application::GetSolarMutex() );
+
     ::rtl::OUString sDummyName;
     getGroup( _rName.toInt32( ), _rGroup, sDummyName );
 }
@@ -980,6 +1005,8 @@ void UnoControlDialogModel::implUpdateGroupStructure()
 // ----------------------------------------------------------------------------
 void SAL_CALL UnoControlDialogModel::propertyChange( const PropertyChangeEvent& _rEvent ) throw (RuntimeException)
 {
+    vos::OGuard aSolarGuard( Application::GetSolarMutex() );
+
     DBG_ASSERT( 0 == _rEvent.PropertyName.compareToAscii( "TabIndex" ),
         "UnoControlDialogModel::propertyChange: not listening for this property!" );
 
@@ -1009,6 +1036,8 @@ void SAL_CALL UnoControlDialogModel::disposing( const EventObject& /*rEvent*/ ) 
 // ----------------------------------------------------------------------------
 void UnoControlDialogModel::startControlListening( const Reference< XControlModel >& _rxChildModel )
 {
+    vos::OGuard aSolarGuard( Application::GetSolarMutex() );
+
     Reference< XPropertySet > xModelProps( _rxChildModel, UNO_QUERY );
     Reference< XPropertySetInfo > xPSI;
     if ( xModelProps.is() )
@@ -1021,6 +1050,8 @@ void UnoControlDialogModel::startControlListening( const Reference< XControlMode
 // ----------------------------------------------------------------------------
 void UnoControlDialogModel::stopControlListening( const Reference< XControlModel >& _rxChildModel )
 {
+    vos::OGuard aSolarGuard( Application::GetSolarMutex() );
+
     Reference< XPropertySet > xModelProps( _rxChildModel, UNO_QUERY );
     Reference< XPropertySetInfo > xPSI;
     if ( xModelProps.is() )
@@ -1396,6 +1427,8 @@ void UnoDialogControl::ImplSetPosSize( Reference< XControl >& rxCtrl )
 
 void UnoDialogControl::dispose() throw(RuntimeException)
 {
+    vos::OGuard aSolarGuard( Application::GetSolarMutex() );
+
     EventObject aEvt;
     aEvt.Source = static_cast< ::cppu::OWeakObject* >( this );
     maTopWindowListeners.disposeAndClear( aEvt );
@@ -1440,6 +1473,8 @@ throw(RuntimeException)
 
 sal_Bool UnoDialogControl::setModel( const Reference< XControlModel >& rxModel ) throw(RuntimeException)
 {
+    vos::OGuard aSolarGuard( Application::GetSolarMutex() );
+
     // destroy the old tab controller, if existent
     if ( mxTabController.is() )
     {
@@ -1512,6 +1547,7 @@ sal_Bool UnoDialogControl::setModel( const Reference< XControlModel >& rxModel )
 
 void UnoDialogControl::setDesignMode( sal_Bool bOn ) throw(RuntimeException)
 {
+    vos::OGuard aSolarGuard( Application::GetSolarMutex() );
     ::osl::Guard< ::osl::Mutex > aGuard( GetMutex() );
 
     UnoControl::setDesignMode( bOn );
@@ -1531,6 +1567,8 @@ void UnoDialogControl::setDesignMode( sal_Bool bOn ) throw(RuntimeException)
 
 void UnoDialogControl::createPeer( const Reference< XToolkit > & rxToolkit, const Reference< XWindowPeer >  & rParentPeer ) throw(RuntimeException)
 {
+    vos::OGuard aSolarGuard( Application::GetSolarMutex() );
+
     UnoControlContainer::createPeer( rxToolkit, rParentPeer );
 
     Reference < XTopWindow > xTW( getPeer(), UNO_QUERY );
@@ -1555,6 +1593,8 @@ void UnoDialogControl::PrepareWindowDescriptor( ::com::sun::star::awt::WindowDes
 
 void UnoDialogControl::elementInserted( const ContainerEvent& Event ) throw(RuntimeException)
 {
+    vos::OGuard aSolarGuard( Application::GetSolarMutex() );
+
     Reference< XControlModel > xModel;
     ::rtl::OUString aName;
 
@@ -1565,6 +1605,8 @@ void UnoDialogControl::elementInserted( const ContainerEvent& Event ) throw(Runt
 
 void UnoDialogControl::elementRemoved( const ContainerEvent& Event ) throw(RuntimeException)
 {
+    vos::OGuard aSolarGuard( Application::GetSolarMutex() );
+
     Reference< XControlModel > xModel;
     Event.Element >>= xModel;
     if ( xModel.is() )
@@ -1573,6 +1615,8 @@ void UnoDialogControl::elementRemoved( const ContainerEvent& Event ) throw(Runti
 
 void UnoDialogControl::elementReplaced( const ContainerEvent& Event ) throw(RuntimeException)
 {
+    vos::OGuard aSolarGuard( Application::GetSolarMutex() );
+
     Reference< XControlModel > xModel;
     Event.ReplacedElement >>= xModel;
     if ( xModel.is() )
@@ -1606,6 +1650,7 @@ void UnoDialogControl::removeTopWindowListener( const Reference< XTopWindowListe
 
 void UnoDialogControl::toFront(  ) throw (RuntimeException)
 {
+    vos::OGuard aSolarGuard( Application::GetSolarMutex() );
     if ( getPeer().is() )
     {
         Reference< XTopWindow > xTW( getPeer(), UNO_QUERY );
@@ -1616,6 +1661,7 @@ void UnoDialogControl::toFront(  ) throw (RuntimeException)
 
 void UnoDialogControl::toBack(  ) throw (RuntimeException)
 {
+    vos::OGuard aSolarGuard( Application::GetSolarMutex() );
     if ( getPeer().is() )
     {
         Reference< XTopWindow > xTW( getPeer(), UNO_QUERY );
@@ -1626,6 +1672,7 @@ void UnoDialogControl::toBack(  ) throw (RuntimeException)
 
 void UnoDialogControl::setMenuBar( const Reference< XMenuBar >& rxMenuBar ) throw (RuntimeException)
 {
+    vos::OGuard aSolarGuard( Application::GetSolarMutex() );
     mxMenuBar = rxMenuBar;
     if ( getPeer().is() )
     {
@@ -1754,6 +1801,7 @@ void UnoDialogControl::ImplUpdateResourceResolver()
 
 void UnoDialogControl::setTitle( const ::rtl::OUString& Title ) throw(RuntimeException)
 {
+    vos::OGuard aSolarGuard( Application::GetSolarMutex() );
     Any aAny;
     aAny <<= Title;
     ImplSetPropertyValue( GetPropertyName( BASEPROPERTY_TITLE ), aAny, sal_True );
@@ -1761,11 +1809,13 @@ void UnoDialogControl::setTitle( const ::rtl::OUString& Title ) throw(RuntimeExc
 
 ::rtl::OUString UnoDialogControl::getTitle() throw(RuntimeException)
 {
+    vos::OGuard aSolarGuard( Application::GetSolarMutex() );
     return ImplGetPropertyValue_UString( BASEPROPERTY_TITLE );
 }
 
 sal_Int16 UnoDialogControl::execute() throw(RuntimeException)
 {
+    vos::OGuard aSolarGuard( Application::GetSolarMutex() );
     sal_Int16 nDone = -1;
     if ( getPeer().is() )
     {
@@ -1782,6 +1832,7 @@ sal_Int16 UnoDialogControl::execute() throw(RuntimeException)
 
 void UnoDialogControl::endExecute() throw(RuntimeException)
 {
+    vos::OGuard aSolarGuard( Application::GetSolarMutex() );
     if ( getPeer().is() )
     {
         Reference< XDialog > xDlg( getPeer(), UNO_QUERY );
@@ -1795,6 +1846,7 @@ void UnoDialogControl::endExecute() throw(RuntimeException)
 
 void UnoDialogControl::addingControl( const Reference< XControl >& _rxControl )
 {
+    vos::OGuard aSolarGuard( Application::GetSolarMutex() );
     UnoControlContainer::addingControl( _rxControl );
 
     if ( _rxControl.is() )
@@ -1816,6 +1868,7 @@ void UnoDialogControl::addingControl( const Reference< XControl >& _rxControl )
 
 void UnoDialogControl::removingControl( const Reference< XControl >& _rxControl )
 {
+    vos::OGuard aSolarGuard( Application::GetSolarMutex() );
     UnoControlContainer::removingControl( _rxControl );
 
     if ( _rxControl.is() )
@@ -1829,6 +1882,7 @@ void UnoDialogControl::removingControl( const Reference< XControl >& _rxControl 
 
 void SAL_CALL UnoDialogControl::changesOccurred( const ChangesEvent& ) throw (RuntimeException)
 {
+    vos::OGuard aSolarGuard( Application::GetSolarMutex() );
     // a tab controller model may have changed
 
     // #109067# in design mode don't notify the tab controller
