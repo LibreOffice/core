@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dp_version.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: kz $ $Date: 2006-11-06 14:54:56 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 13:27:33 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -47,10 +47,12 @@ namespace {
 
 namespace css = ::com::sun::star;
 
-::sal_Int64 getElement(::rtl::OUString const & version, ::sal_Int32 * index) {
-    // If getToken returns an empty string (because *index is outside the range
-    // of version) toInt64 will conveniently return 0:
-    return version.getToken(0, '.', *index).toInt64(); // TODO: value too large
+::rtl::OUString getElement(::rtl::OUString const & version, ::sal_Int32 * index)
+{
+    while (*index < version.getLength() && version[*index] == '0') {
+        ++*index;
+    }
+    return version.getToken(0, '.', *index);
 }
 
 }
@@ -61,9 +63,13 @@ namespace dp_misc {
     ::rtl::OUString const & version1, ::rtl::OUString const & version2)
 {
     for (::sal_Int32 i1 = 0, i2 = 0; i1 >= 0 || i2 >= 0;) {
-        ::sal_Int64 e1(getElement(version1, &i1));
-        ::sal_Int64 e2(getElement(version2, &i2));
-        if (e1 < e2) {
+        ::rtl::OUString e1(getElement(version1, &i1));
+        ::rtl::OUString e2(getElement(version2, &i2));
+        if (e1.getLength() < e2.getLength()) {
+            return ::dp_misc::LESS;
+        } else if (e1.getLength() > e2.getLength()) {
+            return ::dp_misc::GREATER;
+        } else if (e1 < e2) {
             return ::dp_misc::LESS;
         } else if (e1 > e2) {
             return ::dp_misc::GREATER;
