@@ -4,9 +4,9 @@
  *
  *  $RCSfile: mailmodelapi.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 16:33:19 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 23:13:16 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -117,14 +117,14 @@
 #endif
 
 #include "mailmodelapi.hxx"
-#include "docfilt.hxx"
-#include "docfac.hxx"
+#include <sfx2/docfilt.hxx>
+#include <sfx2/docfac.hxx>
 #include "sfxtypes.hxx"
 
 #include "dialog.hrc"
 #include "sfxresid.hxx"
-#include "sfxuno.hxx"
-#include "fcontnr.hxx"
+#include <sfx2/sfxuno.hxx>
+#include <sfx2/fcontnr.hxx>
 #include "guisaveas.hxx"
 
 #include <unotools/tempfile.hxx>

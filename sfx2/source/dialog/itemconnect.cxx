@@ -4,9 +4,9 @@
  *
  *  $RCSfile: itemconnect.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 16:32:38 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 23:12:37 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -37,7 +37,7 @@
 #include "precompiled_sfx2.hxx"
 
 #ifndef SFX_ITEMCONNECT_HXX
-#include "itemconnect.hxx"
+#include <sfx2/itemconnect.hxx>
 #endif
 
 #include <boost/shared_ptr.hpp>
