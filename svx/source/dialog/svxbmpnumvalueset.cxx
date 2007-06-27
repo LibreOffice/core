@@ -4,9 +4,9 @@
  *
  *  $RCSfile: svxbmpnumvalueset.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: kz $ $Date: 2007-05-10 14:41:55 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 17:41:50 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -37,10 +37,10 @@
 #include "precompiled_svx.hxx"
 
 #ifndef _SVX_DIALMGR_HXX //autogen
-#include <dialmgr.hxx>
+#include <svx/dialmgr.hxx>
 #endif
 #ifndef _SVX_DIALOGS_HRC
-#include <dialogs.hrc>
+#include <svx/dialogs.hrc>
 #endif
 #ifndef _SHL_HXX
 #include <tools/shl.hxx>
@@ -58,7 +58,7 @@
 #include <helpid.hrc>
 #endif
 #ifndef _SVX_NUMITEM_HXX
-#include <numitem.hxx>
+#include <svx/numitem.hxx>
 #endif
 #ifndef _SFXENUMITEM_HXX //autogen
 #include <svtools/eitem.hxx>
@@ -74,7 +74,7 @@
 #endif
 
 #ifndef _SVX_BRSHITEM_HXX //autogen
-#include <brshitem.hxx>
+#include <svx/brshitem.hxx>
 #endif
 #ifndef _SFXINTITEM_HXX //autogen
 #include <svtools/intitem.hxx>
@@ -89,7 +89,7 @@
 #include <vcl/msgbox.hxx>
 #endif
 #ifndef _SVX_CHARMAP_HXX //autogen
-#include <charmap.hxx>
+#include <svx/charmap.hxx>
 #endif
 #ifndef _SVX_FLSTITEM_HXX
 #include <flstitem.hxx>
@@ -99,7 +99,7 @@
 #endif
 #ifndef _XTABLE_HXX //autogen
 
-#include <xtable.hxx>
+#include <svx/xtable.hxx>
 #endif
 #ifndef _SVX_DRAWITEM_HXX //autogen
 #include <drawitem.hxx>
