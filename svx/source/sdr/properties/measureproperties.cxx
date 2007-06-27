@@ -4,9 +4,9 @@
  *
  *  $RCSfile: measureproperties.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: ihi $ $Date: 2006-11-14 13:37:22 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 18:53:06 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -49,35 +49,35 @@
 #endif
 
 #ifndef _SVDDEF_HXX
-#include <svddef.hxx>
+#include <svx/svddef.hxx>
 #endif
 
 #ifndef _EEITEM_HXX
-#include <eeitem.hxx>
+#include <svx/eeitem.hxx>
 #endif
 
 #ifndef _SVDOMEAS_HXX
-#include <svdomeas.hxx>
+#include <svx/svdomeas.hxx>
 #endif
 
 #ifndef _SXMSUITM_HXX
-#include <sxmsuitm.hxx>
+#include <svx/sxmsuitm.hxx>
 #endif
 
 #ifndef _SVX_XLNSTIT_HXX
-#include <xlnstit.hxx>
+#include <svx/xlnstit.hxx>
 #endif
 
 #ifndef _SVX_XLNSTWIT_HXX
-#include <xlnstwit.hxx>
+#include <svx/xlnstwit.hxx>
 #endif
 
 #ifndef _SVX_XLNEDIT_HXX
-#include <xlnedit.hxx>
+#include <svx/xlnedit.hxx>
 #endif
 
 #ifndef _SVX_XLNEDWIT_HXX
-#include <xlnedwit.hxx>
+#include <svx/xlnedwit.hxx>
 #endif
 
 #ifndef _BGFX_POINT_B2DPOINT_HXX
