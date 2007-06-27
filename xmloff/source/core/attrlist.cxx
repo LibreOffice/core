@@ -4,9 +4,9 @@
  *
  *  $RCSfile: attrlist.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: obo $ $Date: 2006-10-12 14:38:51 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 14:56:01 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -42,7 +42,7 @@
 #include <osl/mutex.hxx>
 #endif
 #ifndef _XMLOFF_XMLTOKEN_HXX
-#include "xmltoken.hxx"
+#include <xmloff/xmltoken.hxx>
 #endif
 #include <rtl/uuid.h>
 #include <rtl/memory.h>
@@ -54,7 +54,7 @@
 #endif
 #include <assert.h>
 
-#include "attrlist.hxx"
+#include <xmloff/attrlist.hxx>
 
 using namespace ::rtl;
 using namespace ::osl;
