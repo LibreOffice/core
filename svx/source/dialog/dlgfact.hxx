@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dlgfact.hxx,v $
  *
- *  $Revision: 1.29 $
+ *  $Revision: 1.30 $
  *
- *  last change: $Author: hr $ $Date: 2007-06-26 13:50:32 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 17:02:03 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -35,7 +35,7 @@
 #ifndef _CUI_DLGFACT_HXX
 #define _CUI_DLGFACT_HXX
 // include ---------------------------------------------------------------
-#include "svxdlg.hxx" //CHINA001 #include <svx/svxdlg.hxx>
+#include <svx/svxdlg.hxx> //CHINA001 #include <svx/svxdlg.hxx>
 
 #ifndef _COM_SUN_STAR_CONTAINER_XNAMEREPLACE_HPP_
 #include <com/sun/star/container/XNameReplace.hpp>
