@@ -4,9 +4,9 @@
  *
  *  $RCSfile: gtkframe.cxx,v $
  *
- *  $Revision: 1.63 $
+ *  $Revision: 1.64 $
  *
- *  last change: $Author: vg $ $Date: 2007-05-22 16:43:13 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 20:38:26 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -40,23 +40,23 @@
 #include <plugins/gtk/gtkdata.hxx>
 #include <plugins/gtk/gtkinst.hxx>
 #include <plugins/gtk/gtkgdi.hxx>
-#include <keycodes.hxx>
+#include <vcl/keycodes.hxx>
 #include <wmadaptor.hxx>
 #include <sm.hxx>
 #include <salbmp.h>
 #include <salprn.h>
-#include <floatwin.hxx>
+#include <vcl/floatwin.hxx>
 #include <salprn.h>
-#include <svapp.hxx>
-#include <window.hxx>
+#include <vcl/svapp.hxx>
+#include <vcl/window.hxx>
 
 #include <prex.h>
 #include <X11/Xatom.h>
 #include <postx.h>
 
 #include <dlfcn.h>
-#include <salbtype.hxx>
-#include <bitmapex.hxx>
+#include <vcl/salbtype.hxx>
+#include <vcl/bitmapex.hxx>
 #include <impbmp.hxx>
 #include <svids.hrc>
 
