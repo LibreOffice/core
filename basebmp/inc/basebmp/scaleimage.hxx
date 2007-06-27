@@ -4,9 +4,9 @@
  *
  *  $RCSfile: scaleimage.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: thb $ $Date: 2006-07-28 12:43:20 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 12:41:07 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -39,6 +39,7 @@
 #include <osl/diagnose.h>
 
 #include <vigra/tuple.hxx>
+#include <vigra/copyimage.hxx>
 #include <vigra/basicimage.hxx>
 #include <vigra/iteratortraits.hxx>
 
@@ -119,6 +120,10 @@ void scaleLine( SourceIter      s_begin,
 
     @param d_acc
     Destination accessor
+
+    @param bMustCopy
+    When true, scaleImage always copies source, even when doing 1:1
+    copy
  */
 template< class SourceIter, class SourceAcc,
           class DestIter, class DestAcc >
@@ -127,13 +132,24 @@ void scaleImage( SourceIter      s_begin,
                  SourceAcc       s_acc,
                  DestIter        d_begin,
                  DestIter        d_end,
-                 DestAcc         d_acc )
+                 DestAcc         d_acc,
+                 bool            bMustCopy=false )
 {
     const int src_width ( s_end.x - s_begin.x );
     const int src_height( s_end.y - s_begin.y );
 
     const int dest_width ( d_end.x - d_begin.x );
     const int dest_height( d_end.y - d_begin.y );
+
+    if( !bMustCopy &&
+        src_width == dest_width &&
+        src_height == dest_height )
+    {
+        // no scaling involved, can simply copy
+        vigra::copyImage( s_begin, s_end, s_acc,
+                          d_begin, d_acc );
+        return;
+    }
 
     typedef vigra::BasicImage<typename SourceAcc::value_type> TmpImage;
     typedef typename TmpImage::traverser TmpImageIter;
@@ -166,14 +182,20 @@ void scaleImage( SourceIter      s_begin,
 }
 
 /** Scale an image, range tuple version
+
+    @param bMustCopy
+    When true, scaleImage always copies source, even when doing 1:1
+    copy
  */
 template< class SourceIter, class SourceAcc,
           class DestIter, class DestAcc >
 inline void scaleImage( vigra::triple<SourceIter,SourceIter,SourceAcc> const& src,
-                        vigra::triple<DestIter,DestIter,DestAcc> const&       dst )
+                        vigra::triple<DestIter,DestIter,DestAcc> const&       dst,
+                        bool                                                  bMustCopy=false )
 {
     scaleImage(src.first,src.second,src.third,
-               dst.first,dst.second,dst.third);
+               dst.first,dst.second,dst.third,
+               bMustCopy);
 }
 
 }
