@@ -4,9 +4,9 @@
  *
  *  $RCSfile: edtspell.hxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: ihi $ $Date: 2006-11-14 12:36:26 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 16:31:54 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -36,10 +36,10 @@
 #ifndef _EDTSPELL_HXX
 #define _EDTSPELL_HXX
 
-#include <svxbox.hxx>
-#include <svxenum.hxx>
-#include <splwrap.hxx>
-#include <svxacorr.hxx>
+#include <svx/svxbox.hxx>
+#include <svx/svxenum.hxx>
+#include <svx/splwrap.hxx>
+#include <svx/svxacorr.hxx>
 
 #ifndef _COM_SUN_STAR_UNO_REFERENCE_H_
 #include <com/sun/star/uno/Reference.h>
