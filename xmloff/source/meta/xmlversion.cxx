@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xmlversion.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: obo $ $Date: 2006-10-12 14:44:29 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 15:19:54 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -53,10 +53,10 @@
 #endif
 
 #ifndef  _XMLOFF_XMLMETAE_HXX
-#include <xmlmetae.hxx>
+#include <xmloff/xmlmetae.hxx>
 #endif
 
-#include "xmltoken.hxx"
+#include <xmloff/xmltoken.hxx>
 
 #ifndef  _COMPHELPER_PROCESSFACTORY_HXX_
 #include <comphelper/processfactory.hxx>
