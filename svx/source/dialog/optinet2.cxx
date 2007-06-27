@@ -4,9 +4,9 @@
  *
  *  $RCSfile: optinet2.cxx,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: rt $ $Date: 2007-04-26 07:39:03 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 17:28:37 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -135,7 +135,7 @@
 #define _SVX_OPTINET2_CXX
 
 #ifndef _SVX_DIALMGR_HXX
-#include "dialmgr.hxx"
+#include <svx/dialmgr.hxx>
 #endif
 #ifndef _SVX_OPTINET_HXX
 #include "optinet2.hxx"
@@ -143,9 +143,9 @@
 //CHINA001 #ifndef _SVX_MULTIFIL_HXX
 //CHINA001 #include "multifil.hxx"
 //CHINA001 #endif
-#include "svxdlg.hxx" //CHINA001
+#include <svx/svxdlg.hxx> //CHINA001
 #ifndef _SVX_DIALOGS_HRC
-#include "dialogs.hrc"
+#include <svx/dialogs.hrc>
 #endif
 #ifndef _SVX_OPTINET_HRC
 #include "optinet2.hrc"
