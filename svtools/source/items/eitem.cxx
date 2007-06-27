@@ -4,9 +4,9 @@
  *
  *  $RCSfile: eitem.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 14:58:35 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 21:38:20 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -37,7 +37,7 @@
 #include "precompiled_svtools.hxx"
 
 #ifndef _SFXENUMITEM_HXX
-#include <eitem.hxx>
+#include <svtools/eitem.hxx>
 #endif
 //============================================================================
 //
