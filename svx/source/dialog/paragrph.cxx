@@ -4,9 +4,9 @@
  *
  *  $RCSfile: paragrph.cxx,v $
  *
- *  $Revision: 1.49 $
+ *  $Revision: 1.50 $
  *
- *  last change: $Author: kz $ $Date: 2007-05-10 14:40:33 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 17:32:41 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -80,28 +80,28 @@
 #ifndef _SVX_PGRDITEM_HXX
 #include <pgrditem.hxx>
 #endif
-#include "dialogs.hrc"
+#include <svx/dialogs.hrc>
 #include "paragrph.hrc"
 #include "paragrph.hxx"
-#include "frmdiritem.hxx"
+#include <svx/frmdiritem.hxx>
 
-#include "lspcitem.hxx"
-#include "adjitem.hxx"
-#include "orphitem.hxx"
-#include "widwitem.hxx"
-#include "tstpitem.hxx"
-#include "pmdlitem.hxx"
-#include "spltitem.hxx"
-#include "hyznitem.hxx"
-#include "ulspitem.hxx"
-#include "lrspitem.hxx"
-#include "brkitem.hxx"
-#include "keepitem.hxx"
+#include <svx/lspcitem.hxx>
+#include <svx/adjitem.hxx>
+#include <svx/orphitem.hxx>
+#include <svx/widwitem.hxx>
+#include <svx/tstpitem.hxx>
+#include <svx/pmdlitem.hxx>
+#include <svx/spltitem.hxx>
+#include <svx/hyznitem.hxx>
+#include <svx/ulspitem.hxx>
+#include <svx/lrspitem.hxx>
+#include <svx/brkitem.hxx>
+#include <svx/keepitem.hxx>
 #include "dlgutil.hxx"
-#include "dialmgr.hxx"
+#include <svx/dialmgr.hxx>
 #include "htmlmode.hxx"
 #ifndef _SVX_PARAVERTALIGNITEM_HXX
-#include <paravertalignitem.hxx>
+#include <svx/paravertalignitem.hxx>
 #endif
 #include <svtools/eitem.hxx> //add CHINA001
 #include <sfx2/request.hxx> //add CHINA001
