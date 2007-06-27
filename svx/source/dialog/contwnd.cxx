@@ -4,9 +4,9 @@
  *
  *  $RCSfile: contwnd.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: hr $ $Date: 2007-06-26 12:04:10 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 16:56:17 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -37,19 +37,19 @@
 #include "precompiled_svx.hxx"
 
 #ifndef _XOUTX_HXX //autogen
-#include <xoutx.hxx>
+#include <svx/xoutx.hxx>
 #endif
 #include <xoutbmp.hxx>
-#include <dialogs.hrc>
-#include <svxids.hrc>
+#include <svx/dialogs.hrc>
+#include <svx/svxids.hrc>
 #include <contdlg.hrc>
 #include <contwnd.hxx>
-#include "svdpage.hxx"
-#include "svdopath.hxx"
-#include "xfltrit.hxx"
+#include <svx/svdpage.hxx>
+#include <svx/svdopath.hxx>
+#include <svx/xfltrit.hxx>
 
 #ifndef _SVX_FILLITEM_HXX //autogen
-#include <xfillit.hxx>
+#include <svx/xfillit.hxx>
 #endif
 
 #ifndef _BGFX_POLYGON_B2DPOLYGON_HXX
