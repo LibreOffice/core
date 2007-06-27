@@ -4,9 +4,9 @@
  *
  *  $RCSfile: formtoolbars.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: ihi $ $Date: 2007-04-16 16:21:44 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 18:17:39 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -47,7 +47,7 @@
 /** === end UNO includes === **/
 
 #ifndef _SVX_SVXIDS_HRC
-#include "svxids.hrc"
+#include <svx/svxids.hrc>
 #endif
 
 //........................................................................
