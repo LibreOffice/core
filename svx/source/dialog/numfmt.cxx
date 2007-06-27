@@ -4,9 +4,9 @@
  *
  *  $RCSfile: numfmt.cxx,v $
  *
- *  $Revision: 1.28 $
+ *  $Revision: 1.29 $
  *
- *  last change: $Author: kz $ $Date: 2007-05-10 14:38:24 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 17:22:21 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -71,15 +71,15 @@
 
 #define _SVX_NUMFMT_CXX
 
-#include "dialogs.hrc"
+#include <svx/dialogs.hrc>
 #include "numfmt.hrc"
 
 
-#include "numinf.hxx"
+#include <svx/numinf.hxx>
 
 #include "numfmt.hxx"
-#include "numfmtsh.hxx"
-#include "dialmgr.hxx"
+#include <svx/numfmtsh.hxx>
+#include <svx/dialmgr.hxx>
 #ifndef _SFXREQUEST_HXX //CHINA001
 #include <sfx2/request.hxx> //CHINA001
 #endif //CHINA001
