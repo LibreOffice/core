@@ -4,9 +4,9 @@
  *
  *  $RCSfile: SlideTransitionPane.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: rt $ $Date: 2007-04-03 15:38:08 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 15:40:26 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -162,6 +162,8 @@ struct TransitionEffect
         mePresChange = rPage.GetPresChange();
         mbSoundOn = rPage.IsSoundOn();
         maSound = rPage.GetSoundFile();
+        mbLoopSound = rPage.IsLoopSound();
+        mbStopSound = rPage.IsStopSound();
     }
 
     void init()
@@ -170,13 +172,15 @@ struct TransitionEffect
         mnTime = 0;
         mePresChange = PRESCHANGE_MANUAL;
         mbSoundOn = FALSE;
+        mbLoopSound = FALSE;
+        mbStopSound = FALSE;
 
         mbEffectAmbiguous = false;
         mbDurationAmbiguous = false;
         mbTimeAmbiguous = false;
         mbPresChangeAmbiguous = false;
-        mbSoundOnAmbiguous = false;
         mbSoundAmbiguous = false;
+        mbLoopSoundAmbiguous = false;
     }
 
     void setAllAmbiguous()
@@ -185,8 +189,8 @@ struct TransitionEffect
         mbDurationAmbiguous = true;
         mbTimeAmbiguous = true;
         mbPresChangeAmbiguous = true;
-        mbSoundOnAmbiguous = true;
         mbSoundAmbiguous = true;
+        mbLoopSoundAmbiguous = true;
     }
 
     bool operator == ( const ::sd::TransitionPreset & rPreset ) const
@@ -214,21 +218,39 @@ struct TransitionEffect
             rOutPage.SetTime( mnTime );
         if( ! mbPresChangeAmbiguous )
             rOutPage.SetPresChange( mePresChange );
-        if( ! mbSoundOnAmbiguous )
-            rOutPage.SetSound( mbSoundOn );
         if( ! mbSoundAmbiguous )
-            rOutPage.SetSoundFile( maSound );
+        {
+            if( mbStopSound )
+            {
+                rOutPage.SetStopSound( TRUE );
+                rOutPage.SetSound( FALSE );
+            }
+            else
+            {
+                rOutPage.SetStopSound( FALSE );
+                rOutPage.SetSound( mbSoundOn );
+                rOutPage.SetSoundFile( maSound );
+            }
+        }
+        if( ! mbLoopSoundAmbiguous )
+            rOutPage.SetLoopSound( mbLoopSound );
     }
 
     void compareWith( const SdPage & rPage )
     {
         TransitionEffect aOtherEffect( rPage );
-        mbEffectAmbiguous = mbEffectAmbiguous || aOtherEffect.mbEffectAmbiguous;
-        mbDurationAmbiguous = mbDurationAmbiguous || aOtherEffect.mbDurationAmbiguous;
-        mbTimeAmbiguous = mbTimeAmbiguous || aOtherEffect.mbTimeAmbiguous;
-        mbPresChangeAmbiguous = mbPresChangeAmbiguous || aOtherEffect.mbPresChangeAmbiguous;
-        mbSoundOnAmbiguous = mbSoundOnAmbiguous || aOtherEffect.mbSoundOnAmbiguous;
-        mbSoundAmbiguous = mbSoundAmbiguous || aOtherEffect.mbSoundAmbiguous;
+        mbEffectAmbiguous = mbEffectAmbiguous || aOtherEffect.mbEffectAmbiguous
+                                              || (mnType != aOtherEffect.mnType)
+                                              || (mnSubType != aOtherEffect.mnSubType)
+                                              || (mbDirection != aOtherEffect.mbDirection)
+                                              || (mnFadeColor != aOtherEffect.mnFadeColor);
+
+        mbDurationAmbiguous = mbDurationAmbiguous || aOtherEffect.mbDurationAmbiguous || mfDuration != aOtherEffect.mfDuration;
+        mbTimeAmbiguous = mbTimeAmbiguous || aOtherEffect.mbTimeAmbiguous || mnTime != aOtherEffect.mnTime;
+        mbPresChangeAmbiguous = mbPresChangeAmbiguous || aOtherEffect.mbPresChangeAmbiguous || mePresChange != aOtherEffect.mePresChange;
+        mbSoundAmbiguous = mbSoundAmbiguous || aOtherEffect.mbSoundAmbiguous || mbSoundOn != aOtherEffect.mbSoundOn;
+                        (!mbStopSound && !aOtherEffect.mbStopSound && maSound != aOtherEffect.maSound) || (mbStopSound != aOtherEffect.mbStopSound);
+        mbLoopSoundAmbiguous = mbLoopSoundAmbiguous || aOtherEffect.mbLoopSoundAmbiguous || mbLoopSound != aOtherEffect.mbLoopSound;
     }
 
     // effect
@@ -243,13 +265,15 @@ struct TransitionEffect
     PresChange  mePresChange;
     BOOL        mbSoundOn;
     String      maSound;
+    bool        mbLoopSound;
+    bool        mbStopSound;
 
     bool mbEffectAmbiguous;
     bool mbDurationAmbiguous;
     bool mbTimeAmbiguous;
     bool mbPresChangeAmbiguous;
-    bool mbSoundOnAmbiguous;
     bool mbSoundAmbiguous;
+    bool mbLoopSoundAmbiguous;
 };
 
 } // namespace impl
@@ -824,16 +848,19 @@ void SlideTransitionPane::updateControls()
             ? 0 : (aEffect.mfDuration < 2.0)
             ? 2 : 1 );       // else FADE_SPEED_FAST
 
-    if( aEffect.mbSoundOnAmbiguous ||
-        aEffect.mbSoundAmbiguous )
+    if( aEffect.mbSoundAmbiguous )
     {
         maLB_SOUND.SetNoSelection();
         maCurrentSoundFile.Erase();
     }
     else
     {
-        if( aEffect.mbSoundOn &&
-            aEffect.maSound.Len() > 0 )
+        maCurrentSoundFile.Erase();
+        if( aEffect.mbStopSound )
+        {
+            maLB_SOUND.SelectEntryPos( 1 );
+        }
+        else if( aEffect.mbSoundOn && aEffect.maSound.Len() > 0 )
         {
             tSoundListType::size_type nPos = 0;
             if( lcl_findSoundInList( maSoundList, aEffect.maSound, nPos ))
@@ -842,16 +869,20 @@ void SlideTransitionPane::updateControls()
                 maLB_SOUND.SelectEntryPos( (USHORT)nPos + 3 );
                 maCurrentSoundFile = aEffect.maSound;
             }
-            else
-            {
-                maCurrentSoundFile.Erase();
-            }
         }
         else
         {
             maLB_SOUND.SelectEntryPos( 0 );
-            maCurrentSoundFile.Erase();
         }
+    }
+
+    if( aEffect.mbLoopSoundAmbiguous )
+    {
+        maCB_LOOP_SOUND.SetState( STATE_DONTKNOW );
+    }
+    else
+    {
+        maCB_LOOP_SOUND.Check( aEffect.mbLoopSound );
     }
 
     if( aEffect.mbPresChangeAmbiguous )
@@ -1050,19 +1081,31 @@ impl::TransitionEffect SlideTransitionPane::getTransitionEffectFromControls() co
     // sound
     if( maLB_SOUND.IsEnabled())
     {
+        maCurrentSoundFile.Erase();
         if( maLB_SOUND.GetSelectEntryCount() > 0 )
         {
             sal_uInt16 nPos = maLB_SOUND.GetSelectEntryPos();
-            aResult.mbSoundOn = (nPos != 0);
-            aResult.maSound = lcl_getSoundFileURL( maSoundList, maLB_SOUND );
-            aResult.mbSoundOnAmbiguous = false;
-            aResult.mbSoundAmbiguous = false;
-            maCurrentSoundFile = aResult.maSound;
+            aResult.mbStopSound = nPos == 1;
+            aResult.mbSoundOn = nPos > 1;
+            if( aResult.mbStopSound )
+            {
+                aResult.maSound = OUString();
+                aResult.mbSoundAmbiguous = false;
+            }
+            else
+            {
+                aResult.maSound = lcl_getSoundFileURL( maSoundList, maLB_SOUND );
+                aResult.mbSoundAmbiguous = false;
+                maCurrentSoundFile = aResult.maSound;
+            }
         }
-        else
-        {
-            maCurrentSoundFile.Erase();
-        }
+    }
+
+    // sound loop
+    if( maCB_LOOP_SOUND.IsEnabled() )
+    {
+        aResult.mbLoopSound = maCB_LOOP_SOUND.IsChecked();
+        aResult.mbLoopSoundAmbiguous = false;
     }
 
     return aResult;
