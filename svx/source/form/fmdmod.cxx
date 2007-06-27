@@ -4,9 +4,9 @@
  *
  *  $RCSfile: fmdmod.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 05:05:53 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 18:11:51 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -37,7 +37,7 @@
 #include "precompiled_svx.hxx"
 
 #ifndef _SVX_FMDMOD_HXX
-#include "fmdmod.hxx"
+#include <svx/fmdmod.hxx>
 #endif
 
 #ifndef _SVX_FMSERVS_HXX
@@ -47,12 +47,12 @@
 #include <fmobj.hxx>
 #endif
 #ifndef _SVX_UNOSHAPE_HXX
-#include <unoshape.hxx>
+#include <svx/unoshape.hxx>
 #endif
 #ifndef _COMPHELPER_PROCESSFACTORY_HXX_
 #include <comphelper/processfactory.hxx>
 #endif
-#include "fmglob.hxx"
+#include <svx/fmglob.hxx>
 
 using namespace ::svxform;
 
