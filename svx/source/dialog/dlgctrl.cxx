@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dlgctrl.cxx,v $
  *
- *  $Revision: 1.31 $
+ *  $Revision: 1.32 $
  *
- *  last change: $Author: hr $ $Date: 2007-06-26 12:04:26 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 17:01:18 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -45,14 +45,14 @@
 #include <vcl/svapp.hxx>
 #endif
 
-#include "xoutx.hxx"
-#include "xtable.hxx"
-#include "xpool.hxx"
+#include <svx/xoutx.hxx>
+#include <svx/xtable.hxx>
+#include <svx/xpool.hxx>
 
-#include "dialogs.hrc"
+#include <svx/dialogs.hrc>
 #include "accessibility.hrc"
-#include "dlgctrl.hxx"
-#include "dialmgr.hxx"
+#include <svx/dlgctrl.hxx>
+#include <svx/dialmgr.hxx>
 
 #ifndef _TL_POLY_HXX
 #include <tools/poly.hxx>
@@ -1915,11 +1915,11 @@ void LineEndLB::Modify( XLineEndEntry* pEntry, USHORT nPos, Bitmap* pBmp,
 *************************************************************************/
 
 #ifndef _SVDMODEL_HXX
-#include <svdmodel.hxx>
+#include <svx/svdmodel.hxx>
 #endif
 
 #ifndef _SVDOPATH_HXX
-#include <svdopath.hxx>
+#include <svx/svdopath.hxx>
 #endif
 
 #ifndef _SDR_CONTACT_OBJECTCONTACTOFOBJLISTPAINTER_HXX
