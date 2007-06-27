@@ -4,9 +4,9 @@
  *
  *  $RCSfile: fmvwimp.hxx,v $
  *
- *  $Revision: 1.30 $
+ *  $Revision: 1.31 $
  *
- *  last change: $Author: kz $ $Date: 2007-05-10 10:08:46 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 18:23:36 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -85,7 +85,7 @@
 #endif
 
 #ifndef _SVDMARK_HXX
-#include "svdmark.hxx"
+#include <svx/svdmark.hxx>
 #endif
 
 //class SdrPageViewWinRec;
