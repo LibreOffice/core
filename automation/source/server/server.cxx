@@ -4,9 +4,9 @@
  *
  *  $RCSfile: server.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: kz $ $Date: 2007-06-19 14:36:27 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 21:00:16 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -123,7 +123,7 @@
 #include "testtool.hxx"
 #endif
 #ifndef AUTOMATION_HXX
-#include "automation.hxx"
+#include <automation/automation.hxx>
 #endif
 
 #include "basic/svtmsg.hrc"
