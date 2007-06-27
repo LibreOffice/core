@@ -4,9 +4,9 @@
  *
  *  $RCSfile: FilterConfigItem.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: ihi $ $Date: 2006-11-14 15:40:18 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 21:33:10 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -37,7 +37,7 @@
 #include "precompiled_svtools.hxx"
 
 #ifndef _FILTER_CONFIG_ITEM_HXX_
-#include "FilterConfigItem.hxx"
+#include <svtools/FilterConfigItem.hxx>
 #endif
 
 #include <tools/debug.hxx>
