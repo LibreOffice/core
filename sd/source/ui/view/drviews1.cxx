@@ -4,9 +4,9 @@
  *
  *  $RCSfile: drviews1.cxx,v $
  *
- *  $Revision: 1.75 $
+ *  $Revision: 1.76 $
  *
- *  last change: $Author: rt $ $Date: 2007-04-03 16:29:15 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 15:47:19 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -328,7 +328,7 @@ void DrawViewShell::SelectionHasChanged (void)
     }
     else
     {
-        GetViewShellBase().GetToolBarManager().SelectionHasChanged(*this,*mpDrawView);
+        GetViewShellBase().GetToolBarManager()->SelectionHasChanged(*this,*mpDrawView);
     }
 
     // #96124# Invalidate for every subshell
@@ -448,7 +448,7 @@ void DrawViewShell::ChangeEditMode(EditMode eEMode, bool bIsLayerModeActive)
             && IsMainViewShell()
             && ! bShowMasterViewToolbar)
         {
-            GetViewShellBase().GetToolBarManager().ResetToolBars(ToolBarManager::TBG_MASTER_MODE);
+            GetViewShellBase().GetToolBarManager()->ResetToolBars(ToolBarManager::TBG_MASTER_MODE);
         }
 
         if (meEditMode == EM_PAGE)
@@ -521,7 +521,7 @@ void DrawViewShell::ChangeEditMode(EditMode eEMode, bool bIsLayerModeActive)
             && IsMainViewShell()
             && bShowMasterViewToolbar)
         {
-            GetViewShellBase().GetToolBarManager().SetToolBar(
+            GetViewShellBase().GetToolBarManager()->SetToolBar(
                 ToolBarManager::TBG_MASTER_MODE,
                 ToolBarManager::msMasterViewToolBar);
         }
