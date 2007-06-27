@@ -4,9 +4,9 @@
  *
  *  $RCSfile: svdibrow.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: kz $ $Date: 2007-05-10 14:57:32 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 19:02:43 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -37,7 +37,7 @@
 #include "precompiled_svx.hxx"
 
 #ifndef _EEITEM_HXX //autogen
-#include <eeitem.hxx>
+#include <svx/eeitem.hxx>
 #endif
 
 #include "svdibrow.hxx"
@@ -48,55 +48,55 @@
 #endif
 
 #include "svditext.hxx"
-#include "flditem.hxx"
-#include "editdata.hxx"
-#include "svdpool.hxx"
-#include "svdattr.hxx"
-#include "svdattrx.hxx"
-#include "svdview.hxx"
+#include <svx/flditem.hxx>
+#include <svx/editdata.hxx>
+#include <svx/svdpool.hxx>
+#include <svx/svdattr.hxx>
+#include <svx/svdattrx.hxx>
+#include <svx/svdview.hxx>
 
 #ifndef _XENUM_HXX //autogen
-#include "xenum.hxx"
+#include <svx/xenum.hxx>
 #endif
 
 #ifndef _SVX_XLINEIT0_HXX //autogen
-#include "xlineit0.hxx"
+#include <svx/xlineit0.hxx>
 #endif
 
 #ifndef _SVX_XLNSTWIT_HXX //autogen
-#include "xlnstwit.hxx"
+#include <svx/xlnstwit.hxx>
 #endif
 
 #ifndef _SVX_XLNEDWIT_HXX //autogen
-#include "xlnedwit.hxx"
+#include <svx/xlnedwit.hxx>
 #endif
 
 #ifndef SVX_XFILLIT0_HXX //autogen
-#include "xfillit0.hxx"
+#include <svx/xfillit0.hxx>
 #endif
 
 #ifndef _SVX_XFLBMTIT_HXX //autogen
-#include "xflbmtit.hxx"
+#include <svx/xflbmtit.hxx>
 #endif
 
 #ifndef _SVX_TEXTIT0_HXX //autogen
-#include "xtextit0.hxx"
+#include <svx/xtextit0.hxx>
 #endif
 
 #ifndef _SVX_XFLBSTIT_HXX //autogen
-#include "xflbstit.hxx"
+#include <svx/xflbstit.hxx>
 #endif
 
 #ifndef _SVX_XFLBTOXY_HXX //autogen
-#include "xflbtoxy.hxx"
+#include <svx/xflbtoxy.hxx>
 #endif
 
 #ifndef _SVX_XFTSHIT_HXX //autogen
-#include "xftshit.hxx"
+#include <svx/xftshit.hxx>
 #endif
 
 #ifndef _SVX_COLRITEM_HXX //autogen
-#include "colritem.hxx"
+#include <svx/colritem.hxx>
 #endif
 
 
@@ -105,10 +105,10 @@
 #endif
 
 #ifndef _SVX_FHGTITEM_HXX //autogen
-#include "fhgtitem.hxx"
+#include <svx/fhgtitem.hxx>
 #endif
 
-#include <charscaleitem.hxx>
+#include <svx/charscaleitem.hxx>
 
 #ifndef _SFX_WHITER_HXX //autogen
 #include <svtools/whiter.hxx>
