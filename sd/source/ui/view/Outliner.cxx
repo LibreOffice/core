@@ -4,9 +4,9 @@
  *
  *  $RCSfile: Outliner.cxx,v $
  *
- *  $Revision: 1.32 $
+ *  $Revision: 1.33 $
  *
- *  last change: $Author: kz $ $Date: 2007-05-10 15:33:01 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 15:46:05 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -224,6 +224,7 @@ Outliner::Outliner( SdDrawDocument* pDoc, USHORT nMode )
       mpWindow(NULL),
       mpDrawDocument(pDoc),
       mnConversionLanguage(LANGUAGE_NONE),
+      mnIgnoreCurrentPageChangesLevel(0),
       mbStringFound(FALSE),
       mbMatchMayExist(false),
       mnPageCount(0),
@@ -1008,7 +1009,7 @@ void Outliner::RestoreStartPosition (void)
                 // Turn on the text toolbar as it is done in FuText so that
                 // undo manager setting/restoring in
                 // sd::View::{Beg,End}TextEdit() works on the same view shell.
-                mpViewShell->GetViewShellBase().GetToolBarManager().SetToolBarShell(
+                mpViewShell->GetViewShellBase().GetToolBarManager()->SetToolBarShell(
                     ToolBarManager::TBG_FUNCTION,
                     RID_DRAW_TEXT_TOOLBOX);
 
