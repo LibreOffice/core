@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dim.cxx,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: vg $ $Date: 2006-11-01 16:13:55 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 14:20:05 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -35,7 +35,7 @@
 
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_basic.hxx"
-#include <sbx.hxx>
+#include <basic/sbx.hxx>
 #include "sbcomp.hxx"
 
 // Deklaration einer Variablen
