@@ -4,9 +4,9 @@
  *
  *  $RCSfile: swafopt.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 04:53:29 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 13:40:32 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -88,7 +88,7 @@ SvxSwAutoFmtFlags::SvxSwAutoFmtFlags()
     bAutoCmpltCollectWords =
     bAutoCmpltKeepList = TRUE;
 
-    bDummy5 = bDummy6 = bDummy7 = bDummy8 =
+    bDummy6 = bDummy7 = bDummy8 =
          FALSE;
 
     nRightMargin = 50;      // dflt. 50 %
@@ -107,6 +107,7 @@ SvxSwAutoFmtFlags::SvxSwAutoFmtFlags()
     nAutoCmpltWordLen = 10;
     nAutoCmpltListLen = 500;
     pAutoCmpltList = 0;
+    pSmartTagMgr = 0;
 }
 
 
@@ -139,7 +140,6 @@ SvxSwAutoFmtFlags& SvxSwAutoFmtFlags::operator=( const SvxSwAutoFmtFlags& rAFFla
 
     bDummy = rAFFlags.bDummy;
 
-    bDummy5 = rAFFlags.bDummy5;
     bDummy6 = rAFFlags.bDummy6;
     bDummy7 = rAFFlags.bDummy7;
     bDummy8 = rAFFlags.bDummy8;
@@ -162,6 +162,7 @@ SvxSwAutoFmtFlags& SvxSwAutoFmtFlags::operator=( const SvxSwAutoFmtFlags& rAFFla
     bAutoCmpltAppendBlanc = rAFFlags.bAutoCmpltAppendBlanc;
     bAutoCmpltShowAsTip = rAFFlags.bAutoCmpltShowAsTip;
     pAutoCmpltList = rAFFlags.pAutoCmpltList;
+    pSmartTagMgr = rAFFlags.pSmartTagMgr;
     nAutoCmpltExpandKey = rAFFlags.nAutoCmpltExpandKey;
 
     nAutoCmpltWordLen = rAFFlags.nAutoCmpltWordLen;
