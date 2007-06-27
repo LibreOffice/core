@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.19 $
+#   $Revision: 1.20 $
 #
-#   last change: $Author: vg $ $Date: 2007-05-22 19:43:27 $
+#   last change: $Author: hr $ $Date: 2007-06-27 13:45:00 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -119,6 +119,7 @@ EXCEPTIONSFILES= \
         $(SLO)$/chartarr.obj \
         $(SLO)$/compiler.obj \
         $(SLO)$/interpr1.obj \
+        $(SLO)$/interpr2.obj \
         $(SLO)$/interpr3.obj \
         $(SLO)$/interpr4.obj \
         $(SLO)$/interpr5.obj \
