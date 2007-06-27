@@ -4,9 +4,9 @@
  *
  *  $RCSfile: propimp0.hxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 13:47:46 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 15:04:16 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -37,7 +37,7 @@
 #define _PROPIMP0_HXX
 
 #ifndef _XMLOFF_PROPERTYHANDLERBASE_HXX
-#include <xmlprhdl.hxx>
+#include <xmloff/xmlprhdl.hxx>
 #endif
 
 //////////////////////////////////////////////////////////////////////////////
