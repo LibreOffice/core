@@ -4,9 +4,9 @@
  *
  *  $RCSfile: newstyle.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: rt $ $Date: 2007-04-26 10:11:30 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 23:14:20 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -44,7 +44,7 @@
 #ifndef GCC
 #endif
 
-#include "newstyle.hxx"
+#include <sfx2/newstyle.hxx>
 #include "dialog.hrc"
 #include "newstyle.hrc"
 #include "sfxresid.hxx"
