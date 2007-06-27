@@ -4,9 +4,9 @@
  *
  *  $RCSfile: AccessibleOLEShape.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 04:01:21 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 16:38:25 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -39,11 +39,11 @@
 
 
 #ifndef _SVX_ACCESSIBILITY_ACCESSIBLE_OLE_SHAPE_HXX
-#include "AccessibleOLEShape.hxx"
+#include <svx/AccessibleOLEShape.hxx>
 #endif
 
-#include "ShapeTypeHandler.hxx"
-#include "SvxShapeTypes.hxx"
+#include <svx/ShapeTypeHandler.hxx>
+#include <svx/SvxShapeTypes.hxx>
 
 using namespace accessibility;
 using namespace ::rtl;
