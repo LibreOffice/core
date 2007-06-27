@@ -4,9 +4,9 @@
  *
  *  $RCSfile: OutlineView.hxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: kz $ $Date: 2006-12-12 17:35:42 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 15:43:26 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -208,11 +208,6 @@ private:
         this is changed in onUpdateStyleSettings()
     */
     Color maDocColor;
-
-    /** While the value of this flag is greater than 0 changes of the current page
-        do not lead to selecting the corresponding text in the outliner.
-    */
-    int mnIgnoreCurrentPageChangesLevel;
 
     /** updates the high contrast settings and document color if they changed.
         @param bForceUpdate forces the method to set all style settings
