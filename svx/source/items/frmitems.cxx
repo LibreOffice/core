@@ -4,9 +4,9 @@
  *
  *  $RCSfile: frmitems.cxx,v $
  *
- *  $Revision: 1.47 $
+ *  $Revision: 1.48 $
  *
- *  last change: $Author: kz $ $Date: 2007-05-10 14:50:59 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 18:27:47 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -82,31 +82,31 @@
 #include <rtl/ustrbuf.hxx>
 
 #include <impgrf.hxx>
-#include "svxids.hrc"
-#include "svxitems.hrc"
-#include "dialogs.hrc"
+#include <svx/svxids.hrc>
+#include <svx/svxitems.hrc>
+#include <svx/dialogs.hrc>
 
-#include "pbinitem.hxx"
-#include "sizeitem.hxx"
-#include "lrspitem.hxx"
-#include "ulspitem.hxx"
+#include <svx/pbinitem.hxx>
+#include <svx/sizeitem.hxx>
+#include <svx/lrspitem.hxx>
+#include <svx/ulspitem.hxx>
 #include "prntitem.hxx"
 #include "opaqitem.hxx"
 #include "protitem.hxx"
-#include "shaditem.hxx"
-#include "boxitem.hxx"
-#include "brkitem.hxx"
-#include "keepitem.hxx"
+#include <svx/shaditem.hxx>
+#include <svx/boxitem.hxx>
+#include <svx/brkitem.hxx>
+#include <svx/keepitem.hxx>
 #include "bolnitem.hxx"
-#include "brshitem.hxx"
+#include <svx/brshitem.hxx>
 //CHINA001 #include "backgrnd.hxx"
-#include "frmdiritem.hxx"
+#include <svx/frmdiritem.hxx>
 
-#include "itemtype.hxx"
-#include "dialmgr.hxx"
+#include <svx/itemtype.hxx>
+#include <svx/dialmgr.hxx>
 #include "svxerr.hxx"
 #ifndef _SVX_UNOPRNMS_HXX
-#include "unoprnms.hxx"
+#include <svx/unoprnms.hxx>
 #endif
 
 #ifndef _COM_SUN_STAR_TABLE_BORDERLINE_HPP_
@@ -176,7 +176,7 @@
 #include <comphelper/types.hxx>
 
 #ifndef _SVX_UNOMID_HXX
-#include <unomid.hxx>
+#include <svx/unomid.hxx>
 #endif
 
 using namespace ::rtl;
