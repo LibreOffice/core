@@ -4,9 +4,9 @@
  *
  *  $RCSfile: querystatus.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: vg $ $Date: 2006-11-21 17:48:10 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 23:07:04 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -37,7 +37,7 @@
 #include "precompiled_sfx2.hxx"
 
 #ifndef _SFXQUERYSTATUS_HXX
-#include <querystatus.hxx>
+#include <sfx2/querystatus.hxx>
 #endif
 #ifndef _SFXPOOLITEM_HXX //autogen
 #include <svtools/poolitem.hxx>
