@@ -4,9 +4,9 @@
 #
 #   $RCSfile: tg_app.mk,v $
 #
-#   $Revision: 1.64 $
+#   $Revision: 1.65 $
 #
-#   last change: $Author: vg $ $Date: 2007-05-25 10:51:53 $
+#   last change: $Author: hr $ $Date: 2007-06-27 14:02:35 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -186,8 +186,14 @@ $(APP$(TNR)TARGETN): $(APP$(TNR)OBJS) $(APP$(TNR)LIBS) \
         $(APP$(TNR)STDLIB) $(STDLIB$(TNR)) \
         )
     @-echo linking $@.manifest ...
+.IF "$(VISTA_MANIFEST)"!=""
+    $(IFEXIST) $@.manifest $(THEN) mt.exe -manifest $@.manifest -manifest $(TRUSTED_MANIFEST_LOCATION)$/trustedinfo.manifest -out:$@.tmanifest$(EMQ) $(FI)
+    $(IFEXIST) $@.manifest $(THEN) mt.exe -manifest $@.tmanifest -outputresource:$@$(EMQ);1 $(FI)
+.ELSE
     $(IFEXIST) $@.manifest $(THEN) mt.exe -manifest $@.manifest -outputresource:$@$(EMQ);1 $(FI)
+.ENDIF # "$(VISTA_MANIFEST)"!=""
     $(IFEXIST) $@.manifest $(THEN) $(RM:s/+//) $@.manifest $(FI)
+    $(IFEXIST) $@.tmanifest $(THEN) $(RM:s/+//) $@.tmanifest $(FI)
 .ELSE
         -$(RM) $(MISC)\$(APP$(TNR)TARGET).lnk
         -$(RM) $(MISC)\$(APP$(TNR)TARGET).lst
