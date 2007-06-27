@@ -4,9 +4,9 @@
  *
  *  $RCSfile: langbox.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: obo $ $Date: 2006-10-12 12:17:14 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 17:18:46 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -65,7 +65,7 @@
 #include <i18npool/lang.h>
 #endif
 #ifndef _SVX_SCRIPTTYPEITEM_HXX
-#include <scripttypeitem.hxx>
+#include <svx/scripttypeitem.hxx>
 #endif
 #ifndef _UNO_LINGU_HXX
 #include <unolingu.hxx>
@@ -73,10 +73,10 @@
 #ifndef _SVX_LANGTAB_HXX
 #include <langtab.hxx>
 #endif
-#include "langbox.hxx"
+#include <svx/langbox.hxx>
 #include "langtab.hxx"
-#include "dialmgr.hxx"
-#include "dialogs.hrc"
+#include <svx/dialmgr.hxx>
+#include <svx/dialogs.hrc>
 #include "unolingu.hxx"
 
 using namespace ::rtl;
