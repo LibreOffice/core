@@ -4,9 +4,9 @@
  *
  *  $RCSfile: svdtouch.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: ihi $ $Date: 2006-11-14 13:50:05 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 19:12:09 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -37,8 +37,8 @@
 #include "precompiled_svx.hxx"
 
 #include "svdtouch.hxx"
-#include "xoutx.hxx"
-#include "xpoly.hxx"
+#include <svx/xoutx.hxx>
+#include <svx/xpoly.hxx>
 
 #ifndef _BIGINT_HXX //autogen
 #include <tools/bigint.hxx>
