@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ehdl.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: rt $ $Date: 2007-04-26 09:45:07 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 21:48:39 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -63,9 +63,9 @@
 #ifndef GCC
 #endif
 
-#include "ehdl.hxx"
-#include "svtdata.hxx"
-#include "svtools.hrc"
+#include <svtools/ehdl.hxx>
+#include <svtools/svtdata.hxx>
+#include <svtools/svtools.hrc>
 #include "sfxecode.hxx"
 
 //=========================================================================
