@@ -4,9 +4,9 @@
  *
  *  $RCSfile: app.cxx,v $
  *
- *  $Revision: 1.72 $
+ *  $Revision: 1.73 $
  *
- *  last change: $Author: kz $ $Date: 2007-06-19 14:37:58 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 14:11:29 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -58,11 +58,11 @@
 #include <vcl/font.hxx>
 
 #ifndef _BASIC_TTRESHLP_HXX
-#include "ttstrhlp.hxx"
+#include <basic/ttstrhlp.hxx>
 #endif
 
 #ifndef _SBXCLASS_HXX //autogen
-#include <sbx.hxx>
+#include <basic/sbx.hxx>
 #endif
 #include <svtools/filedlg.hxx>
 
@@ -75,10 +75,10 @@
 #include "appedit.hxx"
 #include "appbased.hxx"
 #include "apperror.hxx"
-#include "mybasic.hxx"
+#include <basic/mybasic.hxx>
 #include "ttbasic.hxx"
 #include "dialogs.hxx"
-#include "basrdll.hxx"
+#include <basic/basrdll.hxx>
 #include "basrid.hxx"
 
 #ifndef _RUNTIME_HXX
