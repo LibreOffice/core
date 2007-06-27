@@ -4,9 +4,9 @@
  *
  *  $RCSfile: style.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: obo $ $Date: 2007-01-23 08:28:06 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 21:41:07 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -53,15 +53,15 @@
 #ifndef _UNOTOOLS_INTLWRAPPER_HXX
 #include <unotools/intlwrapper.hxx>
 #endif
-#include <smplhint.hxx>
-#include <poolitem.hxx>
-#include <itemset.hxx>
-#include <itempool.hxx>
+#include <svtools/smplhint.hxx>
+#include <svtools/poolitem.hxx>
+#include <svtools/itemset.hxx>
+#include <svtools/itempool.hxx>
 #include <poolio.hxx>
-#include <filerec.hxx>
-#include <itemiter.hxx>
-#include "style.hxx"
-#include "svstdarr.hxx"
+#include <svtools/filerec.hxx>
+#include <svtools/itemiter.hxx>
+#include <svtools/style.hxx>
+#include <svtools/svstdarr.hxx>
 #ifndef _SV_SVAPP_HXX
 #include <vcl/svapp.hxx>
 #endif
