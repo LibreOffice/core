@@ -4,9 +4,9 @@
  *
  *  $RCSfile: linksrc.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: ihi $ $Date: 2006-12-19 14:08:37 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 22:59:33 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -36,8 +36,8 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_sfx2.hxx"
 
-#include "linksrc.hxx"
-#include "lnkbase.hxx"
+#include <sfx2/linksrc.hxx>
+#include <sfx2/lnkbase.hxx>
 //#include <sot/exchange.hxx>
 #include <com/sun/star/uno/Any.hxx>
 #include <com/sun/star/uno/Sequence.hxx>
