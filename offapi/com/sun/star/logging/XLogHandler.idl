@@ -1,0 +1,118 @@
+/*************************************************************************
+ *
+ *  OpenOffice.org - a multi-platform office productivity suite
+ *
+ *  $RCSfile: XLogHandler.idl,v $
+ *
+ *  $Revision: 1.2 $
+ *
+ *  last change: $Author: hr $ $Date: 2007-06-27 14:48:22 $
+ *
+ *  The Contents of this file are made available subject to
+ *  the terms of GNU Lesser General Public License Version 2.1.
+ *
+ *
+ *    GNU Lesser General Public License Version 2.1
+ *    =============================================
+ *    Copyright 2005 by Sun Microsystems, Inc.
+ *    901 San Antonio Road, Palo Alto, CA 94303, USA
+ *
+ *    This library is free software; you can redistribute it and/or
+ *    modify it under the terms of the GNU Lesser General Public
+ *    License version 2.1, as published by the Free Software Foundation.
+ *
+ *    This library is distributed in the hope that it will be useful,
+ *    but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ *    Lesser General Public License for more details.
+ *
+ *    You should have received a copy of the GNU Lesser General Public
+ *    License along with this library; if not, write to the Free Software
+ *    Foundation, Inc., 59 Temple Place, Suite 330, Boston,
+ *    MA  02111-1307  USA
+ *
+ ************************************************************************/
+
+#ifndef __com_sun_star_logging_XLogHandler_idl__
+#define __com_sun_star_logging_XLogHandler_idl__
+
+#ifndef __com_sun_star_lang_XComponent_idl__
+#include <com/sun/star/lang/XComponent.idl>
+#endif
+
+#ifndef __com_sun_star_logging_LogRecord_idl__
+#include <com/sun/star/logging/LogRecord.idl>
+#endif
+
+#ifndef __com_sun_star_logging_XLogFormatter_idl__
+#include <com/sun/star/logging/XLogFormatter.idl>
+#endif
+
+//=============================================================================
+
+module com { module sun { module star { module logging {
+
+//=============================================================================
+
+/** provides possibilites to send <type>LogRecord</type>s to an arbitrary output
+    channel.
+
+    @see XLogger
+
+    @since OOo 2.3
+ */
+interface XLogHandler
+{
+    /** allows life time control for the handler
+
+        <p>Disposing the handler effectively means closing the channel
+        to which the handler forwards the log records.
+    */
+    interface ::com::sun::star::lang::XComponent;
+
+    /** specifies MIME charset name for the encoding to be used by this handler
+
+        <p>It depends on the concrete handler implementation whether or not this
+        parameter is needed.<p>
+
+        @see http://www.iana.org/assignments/character-sets
+    */
+    [attribute] string Encoding;
+
+    /** specifies the formatter to be used by this handler.
+    */
+    [attribute] XLogFormatter   Formatter;
+
+    /** specifies the log level of this handler
+
+        <p>Different handlers can have different log levels, which again might be
+        different from the log level of the <type>XLogger</type> for which the handlers
+        are used.</p>
+    */
+    [attribute] long    Level;
+
+    /** flushes all buffered output of the handler
+
+        <p>Log handlers are allowed to buffer their output. Upon <code>flush</code>
+        being called, they must flush all their buffers.</p>
+    */
+    void    flush();
+
+    /** publish the given log record at the handler's output channel.
+
+        @return
+            <TRUE/> if and only if the record was actually published. A handler
+            will not publish a record if its log level doesn't meet the handler's
+            log level, if the record is filtered, or if any other handler-specified
+            restrictions apply.
+    */
+    boolean publish( [in] LogRecord Record );
+};
+
+//=============================================================================
+
+}; }; }; };
+
+//=============================================================================
+
+#endif
