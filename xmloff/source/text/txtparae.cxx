@@ -4,9 +4,9 @@
  *
  *  $RCSfile: txtparae.cxx,v $
  *
- *  $Revision: 1.136 $
+ *  $Revision: 1.137 $
  *
- *  last change: $Author: vg $ $Date: 2007-05-25 13:20:13 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 16:16:14 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -192,22 +192,22 @@
 #include "xmlnmspe.hxx"
 #endif
 #ifndef _XMLOFF_XMLASTPLP_HXX
-#include "xmlaustp.hxx"
+#include <xmloff/xmlaustp.hxx>
 #endif
 #ifndef _XMLOFF_FAMILIES_HXX_
-#include "families.hxx"
+#include <xmloff/families.hxx>
 #endif
 #ifndef _XMLOFF_TXTEXPPR_HXX
 #include "txtexppr.hxx"
 #endif
 #ifndef _XMLOFF_XMLNUMFE_HXX
-#include "xmlnumfe.hxx"
+#include <xmloff/xmlnumfe.hxx>
 #endif
 #ifndef _XMLOFF_XMLNUME_HXX
-#include "xmlnume.hxx"
+#include <xmloff/xmlnume.hxx>
 #endif
 #ifndef _XMLOFF_XMLUCONV_HXX
-#include "xmluconv.hxx"
+#include <xmloff/xmluconv.hxx>
 #endif
 #ifndef _XMLOFF_XMLANCHORTYPEPROPHDL_HXX
 #include "XMLAnchorTypePropHdl.hxx"
@@ -216,20 +216,20 @@
 #include "xexptran.hxx"
 #endif
 #ifndef _XMLOFF_PROGRESSBARHELPER_HXX
-#include "ProgressBarHelper.hxx"
+#include <xmloff/ProgressBarHelper.hxx>
 #endif
 
 #ifndef _XMLOFF_NMSPMAP_HXX
-#include "nmspmap.hxx"
+#include <xmloff/nmspmap.hxx>
 #endif
 #ifndef _XMLOFF_XMLEXP_HXX
-#include "xmlexp.hxx"
+#include <xmloff/xmlexp.hxx>
 #endif
 #ifndef _XMLOFF_TXTFLDE_HXX
 #include "txtflde.hxx"
 #endif
 #ifndef _XMLOFF_TXTPRMAP_HXX
-#include "txtprmap.hxx"
+#include <xmloff/txtprmap.hxx>
 #endif
 #ifndef _XMLOFF_XMLIMAGEMAPEXPORT_HXX_
 #include "XMLImageMapExport.hxx"
@@ -242,7 +242,7 @@
 #include "XMLTextListAutoStylePool.hxx"
 #endif
 #ifndef _XMLOFF_TXTPARAE_HXX
-#include "txtparae.hxx"
+#include <xmloff/txtparae.hxx>
 #endif
 #ifndef _XMLOFF_XMLSECTIONEXPORT_HXX_
 #include "XMLSectionExport.hxx"
@@ -251,7 +251,7 @@
 #include "XMLIndexMarkExport.hxx"
 #endif
 #ifndef _XMLOFF_XMLEVENTEXPORT_HXX
-#include "XMLEventExport.hxx"
+#include <xmloff/XMLEventExport.hxx>
 #endif
 #ifndef _XMLOFF_XMLREDLINEEXPORT_HXX
 #include "XMLRedlineExport.hxx"
@@ -260,7 +260,7 @@
 #include "MultiPropertySetHelper.hxx"
 #endif
 #ifndef _XMLOFF_FORMLAYEREXPORT_HXX_
-#include "formlayerexport.hxx"
+#include <xmloff/formlayerexport.hxx>
 #endif
 #ifndef _XMLOFF_XMLTEXTCHARSTYLENAMESELEMENTEXPORT_HXX
 #include "XMLTextCharStyleNamesElementExport.hxx"
