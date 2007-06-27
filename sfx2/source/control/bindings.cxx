@@ -4,9 +4,9 @@
  *
  *  $RCSfile: bindings.cxx,v $
  *
- *  $Revision: 1.49 $
+ *  $Revision: 1.50 $
  *
- *  last change: $Author: vg $ $Date: 2006-11-21 17:47:45 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 23:05:21 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -92,23 +92,23 @@
 
 // wg. nInReschedule
 #include "appdata.hxx"
-#include "bindings.hxx"
-#include "msg.hxx"
+#include <sfx2/bindings.hxx>
+#include <sfx2/msg.hxx>
 #include "statcach.hxx"
-#include "ctrlitem.hxx"
-#include "app.hxx"
-#include "dispatch.hxx"
-#include "request.hxx"
-#include "objface.hxx"
+#include <sfx2/ctrlitem.hxx>
+#include <sfx2/app.hxx>
+#include <sfx2/dispatch.hxx>
+#include <sfx2/request.hxx>
+#include <sfx2/objface.hxx>
 #include "sfxtypes.hxx"
 #include "workwin.hxx"
-#include "macrconf.hxx"
-#include "unoctitm.hxx"
-#include "sfx.hrc"
-#include "sfxuno.hxx"
-#include "topfrm.hxx"
-#include "objsh.hxx"
-#include "msgpool.hxx"
+#include <sfx2/macrconf.hxx>
+#include <sfx2/unoctitm.hxx>
+#include <sfx2/sfx.hrc>
+#include <sfx2/sfxuno.hxx>
+#include <sfx2/topfrm.hxx>
+#include <sfx2/objsh.hxx>
+#include <sfx2/msgpool.hxx>
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
