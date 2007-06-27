@@ -4,9 +4,9 @@
  *
  *  $RCSfile: depwin.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: obo $ $Date: 2006-04-20 15:15:01 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 23:38:38 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -35,10 +35,10 @@
 
 #include <tools/debug.hxx>
 
-#include "depwin.hxx"
-#include "depper.hxx"
-#include "connctr.hxx"
-#include "objwin.hxx"
+#include <soldep/depwin.hxx>
+#include <soldep/depper.hxx>
+#include <soldep/connctr.hxx>
+#include <soldep/objwin.hxx>
 
 Bitmap* pWinCopy;
 

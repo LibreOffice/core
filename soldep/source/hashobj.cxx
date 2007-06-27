@@ -4,9 +4,9 @@
  *
  *  $RCSfile: hashobj.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: obo $ $Date: 2006-04-20 15:15:01 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 23:39:02 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -33,7 +33,7 @@
  *
  ************************************************************************/
 
-#include "hashobj.hxx"
+#include <soldep/hashobj.hxx>
 
 class ObjectWin;
 
