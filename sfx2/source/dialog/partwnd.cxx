@@ -4,9 +4,9 @@
  *
  *  $RCSfile: partwnd.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: vg $ $Date: 2007-02-26 16:00:46 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 23:14:46 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -83,13 +83,13 @@
 
 #include <toolkit/helper/vclunohelper.hxx>
 
-#include "sfxsids.hrc"
+#include <sfx2/sfxsids.hrc>
 #include "partwnd.hxx"
-#include "bindings.hxx"
-#include "dispatch.hxx"
-#include "viewfrm.hxx"
-#include "frame.hxx"
-#include "sfxuno.hxx"
+#include <sfx2/bindings.hxx>
+#include <sfx2/dispatch.hxx>
+#include <sfx2/viewfrm.hxx>
+#include <sfx2/frame.hxx>
+#include <sfx2/sfxuno.hxx>
 
 //****************************************************************************
 // SfxPartChildWnd_Impl
