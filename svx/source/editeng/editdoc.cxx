@@ -4,9 +4,9 @@
  *
  *  $RCSfile: editdoc.cxx,v $
  *
- *  $Revision: 1.45 $
+ *  $Revision: 1.46 $
  *
- *  last change: $Author: obo $ $Date: 2006-10-12 12:34:59 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 17:54:37 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -38,25 +38,25 @@
 
 #include <eeng_pch.hxx>
 
-#include <tstpitem.hxx>
-#include <colritem.hxx>
+#include <svx/tstpitem.hxx>
+#include <svx/colritem.hxx>
 #include <fontitem.hxx>
-#include <crsditem.hxx>
-#include <fhgtitem.hxx>
-#include <postitem.hxx>
-#include <kernitem.hxx>
-#include <wrlmitem.hxx>
-#include <wghtitem.hxx>
-#include <udlnitem.hxx>
-#include <cntritem.hxx>
-#include <escpitem.hxx>
-#include <shdditem.hxx>
-#include <akrnitem.hxx>
-#include <cscoitem.hxx>
-#include <langitem.hxx>
-#include <emphitem.hxx>
-#include <charscaleitem.hxx>
-#include <charreliefitem.hxx>
+#include <svx/crsditem.hxx>
+#include <svx/fhgtitem.hxx>
+#include <svx/postitem.hxx>
+#include <svx/kernitem.hxx>
+#include <svx/wrlmitem.hxx>
+#include <svx/wghtitem.hxx>
+#include <svx/udlnitem.hxx>
+#include <svx/cntritem.hxx>
+#include <svx/escpitem.hxx>
+#include <svx/shdditem.hxx>
+#include <svx/akrnitem.hxx>
+#include <svx/cscoitem.hxx>
+#include <svx/langitem.hxx>
+#include <svx/emphitem.hxx>
+#include <svx/charscaleitem.hxx>
+#include <svx/charreliefitem.hxx>
 #include <xmlcnitm.hxx>
 
 #include <editdoc.hxx>
