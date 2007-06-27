@@ -1,0 +1,100 @@
+/*************************************************************************
+ *
+ *  OpenOffice.org - a multi-platform office productivity suite
+ *
+ *  $RCSfile: XTreeDataModel.idl,v $
+ *
+ *  $Revision: 1.2 $
+ *
+ *  last change: $Author: hr $ $Date: 2007-06-27 12:28:16 $
+ *
+ *  The Contents of this file are made available subject to
+ *  the terms of GNU Lesser General Public License Version 2.1.
+ *
+ *
+ *    GNU Lesser General Public License Version 2.1
+ *    =============================================
+ *    Copyright 2005 by Sun Microsystems, Inc.
+ *    901 San Antonio Road, Palo Alto, CA 94303, USA
+ *
+ *    This library is free software; you can redistribute it and/or
+ *    modify it under the terms of the GNU Lesser General Public
+ *    License version 2.1, as published by the Free Software Foundation.
+ *
+ *    This library is distributed in the hope that it will be useful,
+ *    but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ *    Lesser General Public License for more details.
+ *
+ *    You should have received a copy of the GNU Lesser General Public
+ *    License along with this library; if not, write to the Free Software
+ *    Foundation, Inc., 59 Temple Place, Suite 330, Boston,
+ *    MA  02111-1307  USA
+ *
+ ************************************************************************/
+#ifndef __com_sun_star_awt_tree_XTreeDataModel_idl__
+#define __com_sun_star_awt_tree_XTreeDataModel_idl__
+
+#ifndef __com_sun_star_awt_tree_XTreeDataModelListener_idl__
+#include <com/sun/star/awt/tree/XTreeDataModelListener.idl>
+#endif
+
+#ifndef __com_sun_star_lang_IllegalArgumentException_idl__
+#include <com/sun/star/lang/IllegalArgumentException.idl>
+#endif
+
+#ifndef __com_sun_star_lang_XComponent_idl__
+#include <com/sun/star/lang/XComponent.idl>
+#endif
+
+#ifndef __com_sun_star_awt_tree_XTreeNode_idl__
+#include <com/sun/star/awt/tree/XTreeNode.idl>
+#endif
+
+//=============================================================================
+
+module com {  module sun {  module star {  module awt {  module tree {
+
+//=============================================================================
+
+/** An instance of this interface is used by the <type>TreeControl</type> to
+    retrieve the hierarchical outline data that is displayed in the actual control.
+
+    <p>If you implement your own <type>XTreeDataModel</type> you need to notify registered
+    <type>XTreeDataModelListener</type> if your model changes after the control is created.
+    If this is not done correctly the <type>TreeControl</type> will not update the data properly.</p>
+
+    If you do not need your own model implementation, you can also use the <type>MutableTreeDataModel</type>.
+*/
+interface XTreeDataModel : ::com::sun::star::lang::XComponent
+{
+    /** Returns the root of the tree.
+        <p>Returns null only if the tree has no nodes.
+
+        @returns
+            the root of the tree
+    */
+    XTreeNode getRoot();
+
+    /** Adds a listener for the <type>TreeDataModelEvent</type> posted after the tree changes.
+
+        @param Listener
+            the listener to add.
+    */
+    void addTreeDataModelListener( [in] XTreeDataModelListener Listener );
+
+
+    /** Removes a listener previously added with <method>addTreeDataModelListener()</method>.
+
+        @param Listener
+            the listener to remove.
+    */
+    void removeTreeDataModelListener( [in] XTreeDataModelListener Listener );
+
+};
+
+//=============================================================================
+
+}; }; }; }; };
+
+#endif
