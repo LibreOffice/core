@@ -4,9 +4,9 @@
  *
  *  $RCSfile: scrbar.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 11:54:58 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 20:07:48 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -37,19 +37,19 @@
 #include "precompiled_vcl.hxx"
 
 #ifndef _SV_EVENT_HXX
-#include <event.hxx>
+#include <vcl/event.hxx>
 #endif
 #ifndef _SV_SOUND_HXX
-#include <sound.hxx>
+#include <vcl/sound.hxx>
 #endif
 #ifndef _SV_DECOVIEW_HXX
-#include <decoview.hxx>
+#include <vcl/decoview.hxx>
 #endif
 #ifndef _SV_SCRBAR_HXX
-#include <scrbar.hxx>
+#include <vcl/scrbar.hxx>
 #endif
 #ifndef _SV_TIMER_HXX
-#include <timer.hxx>
+#include <vcl/timer.hxx>
 #endif
 
 #ifndef _RTL_STRING_HXX_
