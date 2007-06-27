@@ -4,9 +4,9 @@
  *
  *  $RCSfile: unoiface.cxx,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: vg $ $Date: 2007-01-18 14:14:08 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 12:19:05 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -32,9 +32,6 @@
  *    MA  02111-1307  USA
  *
  ************************************************************************/
-
-// MARKER(update_precomp.py): autogen include statement, do not remove
-#include "precompiled_svtools.hxx"
 
 #define _SVT_UNOIFACE_CXX
 
@@ -90,6 +87,9 @@
 #ifndef _PRGSBAR_HXX
 #include <prgsbar.hxx>
 #endif
+
+#include <svtreebx.hxx>
+#include "treecontrolpeer.hxx"
 
 namespace
 {
@@ -181,6 +181,12 @@ SAL_DLLPUBLIC_EXPORT Window* CreateWindow( VCLXWindow** ppNewComp, const ::com::
             *ppNewComp = NULL;
             return NULL;
         }
+    }
+    else if ( aServiceName.EqualsIgnoreCaseAscii( "Tree" ) )
+    {
+        TreeControlPeer* pPeer = new TreeControlPeer;
+        *ppNewComp = pPeer;
+        pWindow = pPeer->createVclControl( pParent, nWinBits );
     }
     return pWindow;
 }
