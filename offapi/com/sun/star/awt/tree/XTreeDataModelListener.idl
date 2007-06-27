@@ -1,0 +1,103 @@
+/*************************************************************************
+ *
+ *  OpenOffice.org - a multi-platform office productivity suite
+ *
+ *  $RCSfile: XTreeDataModelListener.idl,v $
+ *
+ *  $Revision: 1.2 $
+ *
+ *  last change: $Author: hr $ $Date: 2007-06-27 12:28:27 $
+ *
+ *  The Contents of this file are made available subject to
+ *  the terms of GNU Lesser General Public License Version 2.1.
+ *
+ *
+ *    GNU Lesser General Public License Version 2.1
+ *    =============================================
+ *    Copyright 2005 by Sun Microsystems, Inc.
+ *    901 San Antonio Road, Palo Alto, CA 94303, USA
+ *
+ *    This library is free software; you can redistribute it and/or
+ *    modify it under the terms of the GNU Lesser General Public
+ *    License version 2.1, as published by the Free Software Foundation.
+ *
+ *    This library is distributed in the hope that it will be useful,
+ *    but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ *    Lesser General Public License for more details.
+ *
+ *    You should have received a copy of the GNU Lesser General Public
+ *    License along with this library; if not, write to the Free Software
+ *    Foundation, Inc., 59 Temple Place, Suite 330, Boston,
+ *    MA  02111-1307  USA
+ *
+ ************************************************************************/
+#ifndef __com_sun_star_awt_tree_XTreeDataModelListener_idl__
+#define __com_sun_star_awt_tree_XTreeDataModelListener_idl__
+
+#ifndef __com_sun_star_lang_XEventListener_idl__
+#include <com/sun/star/lang/XEventListener.idl>
+#endif
+
+#ifndef __com_sun_star_awt_tree_TreeDataModelEvent_idl__
+#include <com/sun/star/awt/tree/TreeDataModelEvent.idl>
+#endif
+
+
+//=============================================================================
+
+module com {  module sun {  module star {  module awt {  module tree {
+
+//=============================================================================
+
+/** An instance of this interface is used by the <service>TreeControl</service> to
+    get notifications about data model changes.
+
+    <p>Usually you must not implement this interface yourself as it is already handled
+    by the <service>TreeControl</service>, but you must notify it correctly if
+    you implement the <type>XTreeDataModel</type> yourself</p>.
+ */
+interface XTreeDataModelListener: com::sun::star::lang::XEventListener
+{
+    /** Invoked after a node (or a set of siblings) has changed in some way.
+        The node(s) have not changed locations in the tree or altered their
+        children arrays, but other attributes have changed and may affect
+        presentation.
+
+        Example: the name of a file has changed, but it is in the same location in the file system.
+
+        To indicate the root has changed, <member>TreeDataModelEvent::Nodes</member> will contain
+        the root node and and <member>TreeDataModelEvent::ParentNode</member will be empty.
+    */
+    void treeNodesChanged( [in] TreeDataModelEvent Event );
+
+    /** Invoked after nodes have been inserted into the tree.
+
+        Use <member>TreeDataModelEvent::ParentNode</member> to get the parent of the new node(s).
+        <member>TreeDataModelEvent::Nodes</member> contains the new node(s).
+    */
+    void treeNodesInserted( [in] TreeDataModelEvent Event );
+
+    /** Invoked after nodes have been removed from the tree.
+        <p>Note that if a subtree is removed from the tree,
+        this method may only be invoked once for the root of the removed subtree,
+        not once for each individual set of siblings removed.
+
+        Use <member>TreeDataModelEvent::ParentNode</member> to get the former parent of the deleted node(s).
+        <member>TreeDataModelEvent::Nodes</member> contains the removed node(s).
+    */
+    void treeNodesRemoved( [in] TreeDataModelEvent Event );
+
+    /** Invoked after the tree has drastically changed structure from a given node down.
+
+        Use <member>TreeDataModelEvent::ParentNode</member> to get the node which
+        structure has changed. <member>TreeDataModelEvent::Nodes</member> is empty.
+    */
+    void treeStructureChanged( [in] TreeDataModelEvent Event );
+};
+
+//=============================================================================
+
+}; }; }; }; };
+
+#endif
