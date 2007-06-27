@@ -4,9 +4,9 @@
  *
  *  $RCSfile: sdrpaintwindow.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: hr $ $Date: 2007-06-26 12:08:22 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 18:58:06 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -45,7 +45,7 @@
 #endif
 
 #ifndef _SVDPNTV_HXX
-#include <svdpntv.hxx>
+#include <svx/svdpntv.hxx>
 #endif
 
 #ifndef _SV_GDIMTF_HXX
