@@ -4,9 +4,9 @@
  *
  *  $RCSfile: iframe.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: hr $ $Date: 2006-06-19 22:32:58 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 23:27:26 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -78,8 +78,8 @@
 #include <svtools/ownlist.hxx>
 #include <svtools/itemprop.hxx>
 
-#include "sfxuno.hxx"
-#include "frmdescr.hxx"
+#include <sfx2/sfxuno.hxx>
+#include <sfx2/frmdescr.hxx>
 
 namespace sfx2
 {
