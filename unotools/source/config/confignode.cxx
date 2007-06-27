@@ -4,9 +4,9 @@
  *
  *  $RCSfile: confignode.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 01:23:34 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 14:44:51 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -40,6 +40,9 @@
 
 #ifndef UNOTOOLS_CONFIGPATHES_HXX_INCLUDED
 #include <unotools/configpathes.hxx>
+#endif
+#ifndef TOOLS_DIAGNOSE_EX_H
+#include <tools/diagnose_ex.h>
 #endif
 #ifndef _OSL_DIAGNOSE_H_
 #include <osl/diagnose.h>
@@ -267,21 +270,9 @@ namespace utl
                 // if we're here, all was ok ...
                 return OConfigurationNode(_xNode, m_xProvider);
             }
-            catch (IllegalArgumentException&)
+            catch(const Exception&)
             {
-                OSL_ENSURE(sal_False, "OConfigurationNode::createNode: caught an IllegalArgumentException!");
-            }
-            catch (ElementExistException&)
-            {
-                OSL_ENSURE(sal_False, "OConfigurationNode::createNode: caught an ElementExistException!");
-            }
-            catch (WrappedTargetException&)
-            {
-                OSL_ENSURE(sal_False, "OConfigurationNode::createNode: caught a WrappedTargetException!");
-            }
-            catch(Exception&)
-            {
-                OSL_ENSURE(sal_False, "OConfigurationNode::createNode: caught a generic exception!");
+                DBG_UNHANDLED_EXCEPTION();
             }
 
             // dispose the child if it has already been created, but could not be inserted
@@ -305,9 +296,9 @@ namespace utl
             {
                 xNewChild = xChildFactory->createInstance();
             }
-            catch(Exception&)
+            catch(const Exception&)
             {
-                OSL_ENSURE(sal_False, "OConfigurationNode::createNode: caught a generic exception!");
+                DBG_UNHANDLED_EXCEPTION();
             }
             return insertNode(_rName,xNewChild);
         }
