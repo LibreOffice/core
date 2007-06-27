@@ -4,9 +4,9 @@
  *
  *  $RCSfile: unoshtxt.cxx,v $
  *
- *  $Revision: 1.57 $
+ *  $Revision: 1.58 $
  *
- *  last change: $Author: ihi $ $Date: 2006-11-14 13:55:12 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 19:27:36 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -44,7 +44,7 @@
 #include <vcl/svapp.hxx>
 #endif
 
-#include <unoshtxt.hxx>
+#include <svx/unoshtxt.hxx>
 #include <unoedhlp.hxx>
 
 #ifndef _SFXLSTNER_HXX //autogen
@@ -66,40 +66,40 @@
 #include <svtools/style.hxx>
 #endif
 #ifndef _SVDMODEL_HXX //autogen
-#include <svdmodel.hxx>
+#include <svx/svdmodel.hxx>
 #endif
 #ifndef _SVDOUTL_HXX //autogen
-#include <svdoutl.hxx>
+#include <svx/svdoutl.hxx>
 #endif
 #ifndef _SVDOBJ_HXX
-#include <svdobj.hxx>
+#include <svx/svdobj.hxx>
 #endif
 #ifndef _SVDVIEW_HXX
-#include <svdview.hxx>
+#include <svx/svdview.hxx>
 #endif
 #ifndef _SVDETC_HXX
-#include <svdetc.hxx>
+#include <svx/svdetc.hxx>
 #endif
 #ifndef _OUTLINER_HXX
-#include <outliner.hxx>
+#include <svx/outliner.hxx>
 #endif
 #ifndef _SVX_UNOFOROU_HXX
-#include <unoforou.hxx>
+#include <svx/unoforou.hxx>
 #endif
 #ifndef _SVX_UNOVIWOU_HXX
-#include <unoviwou.hxx>
+#include <svx/unoviwou.hxx>
 #endif
 #ifndef _OUTLOBJ_HXX
-#include "outlobj.hxx"
+#include <svx/outlobj.hxx>
 #endif
-#include "svdotext.hxx"
-#include "svdpage.hxx"
-#include "editeng.hxx"
+#include <svx/svdotext.hxx>
+#include <svx/svdpage.hxx>
+#include <svx/editeng.hxx>
 #ifndef _EDITOBJ_HXX
-#include "editobj.hxx"
+#include <svx/editobj.hxx>
 #endif
 
-#include "unotext.hxx"
+#include <svx/unotext.hxx>
 #ifndef _COM_SUN_STAR_LINGUISTIC2_XLINGUSERVICEMANAGER_HPP_
 #include <com/sun/star/linguistic2/XLinguServiceManager.hpp>
 #endif
