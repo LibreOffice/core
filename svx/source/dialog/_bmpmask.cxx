@@ -4,9 +4,9 @@
  *
  *  $RCSfile: _bmpmask.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: rt $ $Date: 2007-04-26 07:24:43 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 16:45:48 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -60,11 +60,11 @@
 
 #define BMPMASK_PRIVATE
 
-#include <dialmgr.hxx>
-#include <bmpmask.hxx>
-#include <dialogs.hrc>
+#include <svx/dialmgr.hxx>
+#include <svx/bmpmask.hxx>
+#include <svx/dialogs.hrc>
 #include <bmpmask.hrc>
-#include <svxids.hrc>
+#include <svx/svxids.hrc>
 
 //-------------------------------------------------------------------------
 
