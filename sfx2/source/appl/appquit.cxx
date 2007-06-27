@@ -4,9 +4,9 @@
  *
  *  $RCSfile: appquit.cxx,v $
  *
- *  $Revision: 1.43 $
+ *  $Revision: 1.44 $
  *
- *  last change: $Author: obo $ $Date: 2007-03-15 17:02:25 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 22:56:51 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -65,29 +65,29 @@
 #endif
 
 #include "app.hrc"
-#include "app.hxx"
-#include "unoctitm.hxx"
+#include <sfx2/app.hxx>
+#include <sfx2/unoctitm.hxx>
 #include "appdata.hxx"
-#include "viewsh.hxx"
-#include "dispatch.hxx"
-#include "printer.hxx"
+#include <sfx2/viewsh.hxx>
+#include <sfx2/dispatch.hxx>
+#include <sfx2/printer.hxx>
 #include "arrdecl.hxx"
 #include "sfxresid.hxx"
-#include "event.hxx"
-#include "macrconf.hxx"
-#include "mnumgr.hxx"
-#include "templdlg.hxx"
-#include "msgpool.hxx"
-#include "docfile.hxx"
+#include <sfx2/event.hxx>
+#include <sfx2/macrconf.hxx>
+#include <sfx2/mnumgr.hxx>
+#include <sfx2/templdlg.hxx>
+#include <sfx2/msgpool.hxx>
+#include <sfx2/docfile.hxx>
 #include "sfxtypes.hxx"
 #include "sfxlocal.hrc"
-#include "fcontnr.hxx"
+#include <sfx2/fcontnr.hxx>
 #include "nochaos.hxx"
-#include "appuno.hxx"
-#include "doctempl.hxx"
-#include "viewfrm.hxx"
-#include "objsh.hxx"
-#include "docfac.hxx"
+#include <sfx2/appuno.hxx>
+#include <sfx2/doctempl.hxx>
+#include <sfx2/viewfrm.hxx>
+#include <sfx2/objsh.hxx>
+#include <sfx2/docfac.hxx>
 #include "appbaslib.hxx"
 
 #ifndef BASICMANAGERREPOSITORY_HXX
