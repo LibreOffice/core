@@ -4,9 +4,9 @@
  *
  *  $RCSfile: svditext.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: kz $ $Date: 2007-05-10 14:57:46 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 19:03:11 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -39,7 +39,7 @@
 // SvxItem-Mapping. Wird benoetigt um die SvxItem-Header erfolgreich zu includen
 
 #ifndef _EDITDATA_HXX
-#include <editdata.hxx>
+#include <svx/editdata.hxx>
 #endif
 
 
