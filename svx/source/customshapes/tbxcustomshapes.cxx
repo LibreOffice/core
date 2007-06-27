@@ -4,9 +4,9 @@
  *
  *  $RCSfile: tbxcustomshapes.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: obo $ $Date: 2006-10-12 12:03:15 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 16:44:42 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -39,7 +39,7 @@
 #include <string> // HACK: prevent conflict between STLPORT and Workshop headers
 
 #ifndef _SVX_SVXIDS_HRC
-#include <svxids.hrc>
+#include <svx/svxids.hrc>
 #endif
 #ifndef _SHL_HXX
 #include <tools/shl.hxx>
