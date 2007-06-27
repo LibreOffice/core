@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ivctrl.cxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 14:33:25 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 14:51:06 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -41,9 +41,6 @@
 
 #include "ivctrl.hxx"
 #include "imivctl.hxx"
-#ifndef _SVTOOLS_ACCESSIBLEICONCHOICECTRL_HXX_
-#include "accessibleiconchoicectrl.hxx"
-#endif
 #ifndef _SV_BITMAPEX_HXX
 #include <vcl/bitmapex.hxx>
 #endif
@@ -652,7 +649,7 @@ void SvtIconChoiceCtrl::CallImplEventListeners(ULONG nEvent, void* pData)
         if ( xAccParent.is() )
         {
             ::com::sun::star::uno::Reference< ::com::sun::star::awt::XWindowPeer > xTemp(GetComponentInterface());
-            xAccessible = new svt::AccessibleIconChoiceCtrl( *this, xAccParent );
+            xAccessible = _pImp->GetAccessibleFactory().createAccessibleIconChoiceCtrl( *this, xAccParent );
         }
     }
     return xAccessible;
