@@ -4,9 +4,9 @@
  *
  *  $RCSfile: _contdlg.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: rt $ $Date: 2007-04-26 07:24:56 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 16:46:04 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -77,16 +77,16 @@
 #define _SDR_NOXOUTDEV
 #define _XOUTBMP_STATICS_ONLY
 
-#include "dialmgr.hxx"
+#include <svx/dialmgr.hxx>
 #include "xoutbmp.hxx"
-#include "dialogs.hrc"
-#include "svxids.hrc"
-#include "contdlg.hxx"
+#include <svx/dialogs.hrc>
+#include <svx/svxids.hrc>
+#include <svx/contdlg.hxx>
 #include "contimp.hxx"
 #include "contdlg.hrc"
 #include "contwnd.hxx"
-#include "svdtrans.hxx"
-#include "svdopath.hxx"
+#include <svx/svdtrans.hxx>
+#include <svx/svdopath.hxx>
 #include "dlgutil.hxx"
 
 #ifndef _SV_SVAPP_HXX
