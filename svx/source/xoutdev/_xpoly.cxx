@@ -4,9 +4,9 @@
  *
  *  $RCSfile: _xpoly.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: kz $ $Date: 2007-05-09 13:33:39 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 19:33:09 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -43,8 +43,8 @@
 #include <tools/debug.hxx>
 #include <tools/poly.hxx>
 
-#include "xoutx.hxx"
-#include "xpoly.hxx"
+#include <svx/xoutx.hxx>
+#include <svx/xpoly.hxx>
 #include "xpolyimp.hxx"
 
 #ifndef _BGFX_POLYGON_B2DPOLYGON_HXX
