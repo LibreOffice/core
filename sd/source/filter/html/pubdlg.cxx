@@ -4,9 +4,9 @@
  *
  *  $RCSfile: pubdlg.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: kz $ $Date: 2007-05-10 15:24:27 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 15:39:55 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -82,9 +82,6 @@
 #ifndef _VALUESET_HXX
 #include <svtools/valueset.hxx>
 #endif
-#ifndef _GALLERY_HXX_
-#include <svx/gallery.hxx>
-#endif
 #ifndef _SV_GRAPH_HXX
 #include <vcl/graph.hxx>
 #endif
@@ -124,6 +121,7 @@
 #include "htmlattr.hxx"
 #include "htmlex.hxx"
 #include "helpids.h"
+#include "buttonset.hxx"
 
 using namespace std;
 using namespace rtl;
@@ -214,7 +212,7 @@ SdPublishingDesign::SdPublishingDesign()
     m_bContentPage = TRUE;
     m_bNotes = TRUE;
 
-    m_eFormat = FORMAT_JPG;
+    m_eFormat = FORMAT_PNG;
 
     String  aFilterConfigPath( RTL_CONSTASCII_USTRINGPARAM( "Office.Common/Filter/Graphic/Export/JPG" ) );
     FilterConfigItem aFilterConfigItem( aFilterConfigPath );
@@ -435,6 +433,7 @@ public:
 // =====================================================================
 SdPublishingDlg::SdPublishingDlg(Window* pWindow, DocumentType eDocType)
 :   ModalDialog(pWindow, SdResId( DLG_PUBLISHING ))
+,   mpButtonSet( new ButtonSet() )
 ,   aBottomLine( this, SdResId( BOTTOM_LINE ) )
 ,   aHelpButton(this,SdResId(BUT_HELP))
 ,   aCancelButton(this,SdResId(BUT_CANCEL))
@@ -483,6 +482,7 @@ SdPublishingDlg::SdPublishingDlg(Window* pWindow, DocumentType eDocType)
     pPage2_Index->SetText(aText);
     pPage2_CGI->SetText( UniString::CreateFromAscii( RTL_CONSTASCII_STRINGPARAM( "/cgi-bin/" ) ) );
 
+    pPage3_Png->SetClickHdl(LINK(this,SdPublishingDlg, GfxFormatHdl));
     pPage3_Gif->SetClickHdl(LINK(this,SdPublishingDlg, GfxFormatHdl));
     pPage3_Jpg->SetClickHdl(LINK(this,SdPublishingDlg, GfxFormatHdl));
 
@@ -495,6 +495,7 @@ SdPublishingDlg::SdPublishingDlg(Window* pWindow, DocumentType eDocType)
     pPage2_Duration->SetFormat( TIMEF_SEC );
 
     pPage5_Buttons->SetSelectHdl(LINK(this,SdPublishingDlg, ButtonsHdl ));
+    pPage5_Buttons->SetStyle( pPage5_Buttons->GetStyle() | WB_VSCROLL );
 
     pPage6_Back->SetClickHdl(LINK(this,SdPublishingDlg, ColorHdl ));
     pPage6_Text->SetClickHdl(LINK(this,SdPublishingDlg, ColorHdl ));
@@ -511,7 +512,6 @@ SdPublishingDlg::SdPublishingDlg(Window* pWindow, DocumentType eDocType)
     pPage3_Quality->InsertEntry( UniString::CreateFromAscii( RTL_CONSTASCII_STRINGPARAM( "75%" ) ) );
     pPage3_Quality->InsertEntry( UniString::CreateFromAscii( RTL_CONSTASCII_STRINGPARAM( "100%" ) ) );
 
-    // Ueber die Gallery werden die Moeglichen Buttonsets eingelesen
     pPage5_Buttons->SetColCount( 1 );
     pPage5_Buttons->SetLineCount( 4 );
     pPage5_Buttons->SetExtraSpacing( 1 );
@@ -636,6 +636,8 @@ void SdPublishingDlg::CreatePages()
         pPage3_Bmp = new FixedBitmap(this,SdResId(PAGE3_BMP)));
     aAssistentFunc.InsertControl(3,
         pPage3_Titel1 = new FixedLine(this,SdResId(PAGE3_TITEL_1)));
+    aAssistentFunc.InsertControl(3,
+        pPage3_Png = new RadioButton(this,SdResId(PAGE3_PNG)));
     aAssistentFunc.InsertControl(3,
         pPage3_Gif = new RadioButton(this,SdResId(PAGE3_GIF)));
     aAssistentFunc.InsertControl(3,
@@ -784,6 +786,7 @@ void SdPublishingDlg::RemovePages()
 
     delete pPage3_Bmp;
     delete pPage3_Titel1;
+    delete pPage3_Png;
     delete pPage3_Gif;
     delete pPage3_Jpg;
     delete pPage3_Quality_txt;
@@ -914,7 +917,14 @@ void SdPublishingDlg::GetParameterSequence( Sequence< PropertyValue >& rParams )
     aProps.push_back( aValue );
 
     aValue.Name = OUString( RTL_CONSTASCII_USTRINGPARAM( "Format" ) );
-    aValue.Value <<= (sal_Int32)(pPage3_Gif->IsChecked()?FORMAT_GIF:FORMAT_JPG);
+    sal_Int32 nFormat;
+    if( pPage3_Png->IsChecked() )
+        nFormat = static_cast<sal_Int32>(FORMAT_PNG);
+    else if( pPage3_Gif->IsChecked() )
+        nFormat = static_cast<sal_Int32>(FORMAT_GIF);
+    else
+        nFormat = static_cast<sal_Int32>(FORMAT_JPG);
+    aValue.Value <<= nFormat;
     aProps.push_back( aValue );
 
     // Page 4
@@ -1098,11 +1108,9 @@ IMPL_LINK( SdPublishingDlg, WebServerHdl, RadioButton *, pButton )
 // =====================================================================
 IMPL_LINK( SdPublishingDlg, GfxFormatHdl, RadioButton *, pButton )
 {
-    if(pButton == pPage3_Gif)
-        pPage3_Jpg->Check(FALSE);
-    else
-        pPage3_Gif->Check(FALSE);
-
+    pPage3_Png->Check( pButton == pPage3_Png );
+    pPage3_Gif->Check( pButton == pPage3_Gif );
+    pPage3_Jpg->Check( pButton == pPage3_Jpg );
     pPage3_Quality->Enable(pButton == pPage3_Jpg);
     return 0;
 }
@@ -1304,8 +1312,6 @@ IMPL_LINK( SdPublishingDlg, FinishHdl, OKButton *, EMPTYARG )
     return 0;
 }
 
-static UINT16 nPreviewBitmapOffests[] = { 0,2,4,6,7,8,9,10 };
-
 // =====================================================================
 // Refresh des Dialogs beim wechsel der Seite
 // =====================================================================
@@ -1431,47 +1437,46 @@ void SdPublishingDlg::UpdatePage()
     }
 }
 
-/** loads the html buttons from the Gallery, creates a preview and fills the
+/** loads the html buttons from the button sets, creates a preview and fills the
     itemset for page 5
  */
 void SdPublishingDlg::LoadPreviewButtons()
 {
-    if( GalleryExplorer::BeginLocking( GALLERY_THEME_HTMLBUTTONS ) )
+    if( mpButtonSet.get() )
     {
-        UINT16 nFavCount = (UINT16) GalleryExplorer::GetObjCount( GALLERY_THEME_HTMLBUTTONS );
-
-        USHORT nItem = 1;
-        Graphic aThumb;
-        Size aSize( (8*40) - 8, 32 );
-        Point aOrigin( 0,0 );
-        Size aDestSize( 32, 32 );
-
-        for( UINT16 nModelPos = 1; nModelPos < nFavCount; nModelPos+= NUM_BUTTONS )
+        const int nButtonCount = 8;
+        static const char *pButtonNames[nButtonCount] =
         {
-            VirtualDevice aVDev;
-            aVDev.SetMapMode(MapMode(MAP_PIXEL));
-            aVDev.SetOutputSizePixel( aSize );
+            "first.png",
+            "left.png",
+            "right.png",
+            "last.png",
+            "home.png",
+            "text.png",
+            "expand.png",
+            "collapse.png",
+        };
 
-            for( UINT16 nImage = 0; nImage < 8; nImage++ )
+        std::vector< rtl::OUString > aButtonNames;
+        for( int i = 0; i < nButtonCount; ++i )
+            aButtonNames.push_back( rtl::OUString::createFromAscii( pButtonNames[i] ) );
+
+        int nSetCount = mpButtonSet->getCount();
+
+        int nHeight = 32;
+        Image aImage;
+        for( int nSet = 0; nSet < nSetCount; ++nSet )
+        {
+            if( mpButtonSet->getPreview( nSet, aButtonNames, aImage ) )
             {
-                if(!GalleryExplorer::GetGraphicObj( GALLERY_THEME_HTMLBUTTONS, nModelPos + nPreviewBitmapOffests[nImage], &aThumb ) )
-                    continue;
-
-                // ValueSet fuellen
-                Bitmap aBitmap( aThumb.GetBitmap() );
-
-                Point aDestPt( nImage * 40, 0 );
-                aVDev.DrawBitmap( aDestPt, aDestSize, aBitmap );
+                pPage5_Buttons->InsertItem( (USHORT)nSet+1, aImage );
+                if( nHeight < aImage.GetSizePixel().Height() )
+                    nHeight = aImage.GetSizePixel().Height();
             }
-
-            String aStr = UniString::CreateFromInt32( nItem );
-            Bitmap aBitmap( aVDev.GetBitmap( aOrigin, aSize ) );
-
-            pPage5_Buttons->InsertItem( (USHORT)nItem++, aBitmap, aStr );
         }
-        m_bButtonsDirty = FALSE;
 
-        GalleryExplorer::EndLocking( GALLERY_THEME_HTMLBUTTONS );
+        pPage5_Buttons->SetItemHeight( nHeight );
+        m_bButtonsDirty = FALSE;
     }
 }
 
@@ -1521,6 +1526,7 @@ void SdPublishingDlg::SetDesign( SdPublishingDesign* pDesign )
 
     pPage2_Endless->Check( pDesign->m_bEndless );
 
+    pPage3_Png->Check(pDesign->m_eFormat == FORMAT_PNG);
     pPage3_Gif->Check(pDesign->m_eFormat == FORMAT_GIF);
     pPage3_Jpg->Check(pDesign->m_eFormat == FORMAT_JPG);
 
@@ -1581,7 +1587,14 @@ void SdPublishingDlg::GetDesign( SdPublishingDesign* pDesign )
     pDesign->m_bContentPage = pPage2_Content->IsChecked();
     if(m_bImpress)
         pDesign->m_bNotes = pPage2_Notes->IsChecked();
-    pDesign->m_eFormat = pPage3_Gif->IsChecked()?FORMAT_GIF:FORMAT_JPG;
+
+    if( pPage3_Gif->IsChecked() )
+        pDesign->m_eFormat = FORMAT_GIF;
+    else if( pPage3_Jpg->IsChecked() )
+        pDesign->m_eFormat = FORMAT_JPG;
+    else
+        pDesign->m_eFormat = FORMAT_PNG;
+
     pDesign->m_aCompression = pPage3_Quality->GetText();
 
     pDesign->m_nResolution = pPage3_Resolution_1->IsChecked()?PUB_LOWRES_WIDTH:
