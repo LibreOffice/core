@@ -4,9 +4,9 @@
  *
  *  $RCSfile: gfxlink.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: ihi $ $Date: 2007-06-05 17:47:38 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 20:13:09 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -42,9 +42,9 @@
 #include <unotools/ucbstreamhelper.hxx>
 #include <unotools/tempfile.hxx>
 #include <ucbhelper/content.hxx>
-#include "graph.hxx"
-#include "gfxlink.hxx"
-#include "cvtgrf.hxx"
+#include <vcl/graph.hxx>
+#include <vcl/gfxlink.hxx>
+#include <vcl/cvtgrf.hxx>
 
 #ifndef _COM_SUN_STAR_UCB_COMMANDABORTEDEXCEPTION_HPP_
 #include <com/sun/star/ucb/CommandAbortedException.hpp>
