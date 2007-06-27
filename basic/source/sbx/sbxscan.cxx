@@ -4,9 +4,9 @@
  *
  *  $RCSfile: sbxscan.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: rt $ $Date: 2007-04-26 08:33:49 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 14:31:47 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -39,7 +39,7 @@
 #ifndef _ERRCODE_HXX //autogen
 #include <tools/errcode.hxx>
 #endif
-#include "sbx.hxx"
+#include <basic/sbx.hxx>
 #include "sbxconv.hxx"
 
 #include "svtools/syslocale.hxx"
@@ -56,8 +56,8 @@
 #include <ctype.h>
 
 #include "sbxres.hxx"
-#include "sbxbase.hxx"
-#include "sbxform.hxx"
+#include <basic/sbxbase.hxx>
+#include <basic/sbxform.hxx>
 #include <svtools/svtools.hrc>
 
 #include "basrid.hxx"
