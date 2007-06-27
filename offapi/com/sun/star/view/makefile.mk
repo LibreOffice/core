@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.10 $
+#   $Revision: 1.11 $
 #
-#   last change: $Author: kz $ $Date: 2007-05-10 10:02:22 $
+#   last change: $Author: hr $ $Date: 2007-06-27 12:30:15 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -76,6 +76,8 @@ IDLFILES=\
     XPrintJob.idl\
     XPrintJobBroadcaster.idl\
     XPrintJobListener.idl\
+    XMultiSelectionSupplier.idl\
+    SelectionType.idl
 
 # ------------------------------------------------------------------
 
