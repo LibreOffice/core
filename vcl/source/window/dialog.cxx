@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dialog.cxx,v $
  *
- *  $Revision: 1.37 $
+ *  $Revision: 1.38 $
  *
- *  last change: $Author: kz $ $Date: 2007-06-20 10:38:21 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 20:29:22 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -44,44 +44,44 @@
 #include <tools/rc.h>
 #endif
 #ifndef _SV_SVDATA_HXX
-#include <svdata.hxx>
+#include <vcl/svdata.hxx>
 #endif
 #ifndef _SV_SVAPP_HXX
-#include <svapp.hxx>
+#include <vcl/svapp.hxx>
 #endif
 #ifndef _SV_WINDOW_H
 #include <window.h>
 #endif
 #ifndef _SV_EVENT_HXX
-#include <event.hxx>
+#include <vcl/event.hxx>
 #endif
 #ifndef _SV_BRDWIN_HXX
 #include <brdwin.hxx>
 #endif
 #ifndef _SV_WRKWIN_HXX
-#include <wrkwin.hxx>
+#include <vcl/wrkwin.hxx>
 #endif
 #ifndef _SV_BUTTON_HXX
-#include <button.hxx>
+#include <vcl/button.hxx>
 #endif
 #ifndef _SV_MNEMONIC_HXX
-#include <mnemonic.hxx>
+#include <vcl/mnemonic.hxx>
 #endif
 #ifndef _SV_DIALOG_HXX
-#include <dialog.hxx>
+#include <vcl/dialog.hxx>
 #endif
 
 #ifndef _SV_DECOVIEW_HXX
-#include <decoview.hxx>
+#include <vcl/decoview.hxx>
 #endif
 
 #ifdef DBG_UTIL
 #ifndef _SV_MSGBOX_HXX
-#include <msgbox.hxx>
+#include <vcl/msgbox.hxx>
 #endif
 #endif
 
-#include <unowrap.hxx>
+#include <vcl/unowrap.hxx>
 
 
 
