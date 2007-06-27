@@ -4,9 +4,9 @@
  *
  *  $RCSfile: cfgchart.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: vg $ $Date: 2007-05-22 15:16:37 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 16:51:11 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -53,8 +53,8 @@
 #endif
 
 #include "cfgchart.hxx"
-#include "dialmgr.hxx"
-#include "dialogs.hrc"
+#include <svx/dialmgr.hxx>
+#include <svx/dialogs.hrc>
 
 #define ROW_COLOR_COUNT 12
 
