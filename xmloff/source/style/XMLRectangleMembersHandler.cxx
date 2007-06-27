@@ -4,9 +4,9 @@
  *
  *  $RCSfile: XMLRectangleMembersHandler.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 10:51:35 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 15:34:06 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -37,7 +37,7 @@
 #include "precompiled_xmloff.hxx"
 
 #ifndef _XMLOFF_XMLUCONV_HXX
-#include "xmluconv.hxx"
+#include <xmloff/xmluconv.hxx>
 #endif
 
 #ifndef _RTL_USTRBUF_HXX_
@@ -57,7 +57,7 @@
 #endif
 
 #ifndef _XMLOFF_XMLTYPES_HXX
-#include "xmltypes.hxx"
+#include <xmloff/xmltypes.hxx>
 #endif
 
 using namespace ::com::sun::star;
