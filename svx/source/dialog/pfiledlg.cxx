@@ -4,9 +4,9 @@
  *
  *  $RCSfile: pfiledlg.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: obo $ $Date: 2006-10-12 12:25:08 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 17:34:30 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -52,9 +52,9 @@
 #include <comphelper/processfactory.hxx>
 
 #include "pfiledlg.hxx"
-#include "dialogs.hrc"
+#include <svx/dialogs.hrc>
 
-#include "dialmgr.hxx"
+#include <svx/dialmgr.hxx>
 #include <list>
 
 using namespace ::rtl;
