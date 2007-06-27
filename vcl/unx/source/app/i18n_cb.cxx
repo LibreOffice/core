@@ -4,9 +4,9 @@
  *
  *  $RCSfile: i18n_cb.cxx,v $
  *
- *  $Revision: 1.30 $
+ *  $Revision: 1.31 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 12:31:43 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 20:45:40 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -66,7 +66,7 @@
 #endif
 
 #ifndef _SV_SALFRAME_HXX
-#include <salframe.hxx>
+#include <vcl/salframe.hxx>
 #endif
 
 // -------------------------------------------------------------------------
