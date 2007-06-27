@@ -4,9 +4,9 @@
  *
  *  $RCSfile: svdotxfl.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 05:57:59 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 19:09:16 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -37,11 +37,11 @@
 #include "precompiled_svx.hxx"
 
 #ifndef _EEITEM_HXX //autogen
-#include <eeitem.hxx>
+#include <svx/eeitem.hxx>
 #endif
 
-#include "svdfield.hxx"
-#include "svdotext.hxx"
+#include <svx/svdfield.hxx>
+#include <svx/svdotext.hxx>
 
 static BOOL bInit = FALSE;
 
