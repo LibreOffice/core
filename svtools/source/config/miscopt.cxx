@@ -4,9 +4,9 @@
  *
  *  $RCSfile: miscopt.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: ihi $ $Date: 2007-06-04 14:48:22 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 21:14:41 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -39,7 +39,7 @@
 //  includes
 //_________________________________________________________________________________________________________________
 
-#include "miscopt.hxx"
+#include <svtools/miscopt.hxx>
 
 #ifndef _UTL_CONFIGMGR_HXX_
 #include <unotools/configmgr.hxx>
