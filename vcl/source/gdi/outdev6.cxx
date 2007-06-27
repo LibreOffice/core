@@ -4,9 +4,9 @@
  *
  *  $RCSfile: outdev6.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: vg $ $Date: 2007-05-22 16:43:01 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 20:20:06 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -41,7 +41,7 @@
 #include <svsys.h>
 #endif
 #ifndef _SV_SALGDI_HXX
-#include <salgdi.hxx>
+#include <vcl/salgdi.hxx>
 #endif
 #ifndef _DEBUG_HXX
 #include <tools/debug.hxx>
@@ -50,28 +50,28 @@
 #include <outdev.h>
 #endif
 #ifndef _SV_OUTDEV_HXX
-#include <outdev.hxx>
+#include <vcl/outdev.hxx>
 #endif
 #ifndef _SV_VIRDEV_HXX
-#include <virdev.hxx>
+#include <vcl/virdev.hxx>
 #endif
 #ifndef _SV_BMPACC_HXX
-#include <bmpacc.hxx>
+#include <vcl/bmpacc.hxx>
 #endif
 #ifndef _SV_METAACT_HXX
-#include <metaact.hxx>
+#include <vcl/metaact.hxx>
 #endif
 #ifndef _SV_GDIMTF_HXX
-#include <gdimtf.hxx>
+#include <vcl/gdimtf.hxx>
 #endif
 #ifndef _SV_SVAPP_HXX
-#include <svapp.hxx>
+#include <vcl/svapp.hxx>
 #endif
 #ifndef _SV_WRKWIN_HXX
-#include <wrkwin.hxx>
+#include <vcl/wrkwin.hxx>
 #endif
 #ifndef _SV_GRAPH_HXX
-#include <graph.hxx>
+#include <vcl/graph.hxx>
 #endif
 #ifndef _SV_WALL2_HXX
 #include <wall2.hxx>
