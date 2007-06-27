@@ -4,9 +4,9 @@
  *
  *  $RCSfile: gtkdata.cxx,v $
  *
- *  $Revision: 1.33 $
+ *  $Revision: 1.34 $
  *
- *  last change: $Author: rt $ $Date: 2007-04-26 10:39:17 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 12:27:01 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -85,6 +85,8 @@
 #endif
 
 #include "../../unx/source/inc/salcursors.h"
+
+#include <svapp.hxx>
 
 using namespace rtl;
 using namespace vcl_sal;
@@ -543,6 +545,14 @@ void GtkXLib::Init()
     nParams++;
 
     g_set_application_name(X11SalData::getFrameClassName());
+
+    // Set consistant name of the root accessible
+    rtl::OUString aAppName = Application::GetAppName();
+    if( aAppName.getLength() > 0 )
+    {
+        rtl::OString aPrgName = rtl::OUStringToOString(aAppName, aEnc);
+        g_set_prgname(aPrgName);
+    }
 
     // init gtk/gdk
     gtk_init_check( &nParams, &pCmdLineAry );
