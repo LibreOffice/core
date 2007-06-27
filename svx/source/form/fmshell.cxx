@@ -4,9 +4,9 @@
  *
  *  $RCSfile: fmshell.cxx,v $
  *
- *  $Revision: 1.73 $
+ *  $Revision: 1.74 $
  *
- *  last change: $Author: kz $ $Date: 2007-05-10 10:06:17 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 18:14:47 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -41,7 +41,7 @@
 #endif
 
 #ifndef _SVX_FMSHELL_HXX
-#include "fmshell.hxx"
+#include <svx/fmshell.hxx>
 #endif
 #ifndef _SVX_FMTOOLS_HXX
 #include "fmtools.hxx"
@@ -144,11 +144,11 @@
 #endif
 
 #ifndef _SVDOBJ_HXX //autogen
-#include "svdobj.hxx"
+#include <svx/svdobj.hxx>
 #endif
 
 #ifndef _SVX_FMPAGE_HXX
-#include "fmpage.hxx"
+#include <svx/fmpage.hxx>
 #endif
 
 #ifndef _SVDITER_HXX //autogen
@@ -160,7 +160,7 @@
 #endif
 
 #ifndef _SVX_SVXIDS_HRC
-#include "svxids.hrc"
+#include <svx/svxids.hrc>
 #endif
 
 #ifndef _SVX_FMRESIDS_HRC
@@ -172,7 +172,7 @@
 #endif
 
 #ifndef _SVX_FMGLOB_HXX
-#include "fmglob.hxx"
+#include <svx/fmglob.hxx>
 #endif
 
 #ifndef _SFXENUMITEM_HXX //autogen
@@ -184,15 +184,15 @@
 #endif
 
 #ifndef _SVDPAGE_HXX //autogen
-#include <svdpage.hxx>
+#include <svx/svdpage.hxx>
 #endif
 
 #ifndef _SVX_FMMODEL_HXX
-#include "fmmodel.hxx"
+#include <svx/fmmodel.hxx>
 #endif
 
 #ifndef _SVX_DIALMGR_HXX
-#include "dialmgr.hxx"
+#include <svx/dialmgr.hxx>
 #endif
 
 #ifndef _SVX_FMSHIMP_HXX
@@ -200,7 +200,7 @@
 #endif
 
 #ifndef _SVDPAGV_HXX //autogen
-#include "svdpagv.hxx"
+#include <svx/svdpagv.hxx>
 #endif
 
 #ifndef _SFX_OBJITEM_HXX //autogen
@@ -242,8 +242,8 @@
 #include "formtoolbars.hxx"
 #endif
 
-#include "svxdlg.hxx" //CHINA001
-#include <dialogs.hrc> //CHINA001
+#include <svx/svxdlg.hxx> //CHINA001
+#include <svx/dialogs.hrc> //CHINA001
 
 #define HANDLE_SQL_ERRORS( action, successflag, context, message )          \
     try                                                                     \
@@ -270,7 +270,7 @@
 #include "svxslots.hxx"
 
 #ifndef _SVX_SVXIDS_HRC
-#include <svxids.hrc>
+#include <svx/svxids.hrc>
 #endif
 
 #ifndef _SVX_TBXFORM_HXX
