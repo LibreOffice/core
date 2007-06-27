@@ -4,9 +4,9 @@
  *
  *  $RCSfile: viewsh.cxx,v $
  *
- *  $Revision: 1.72 $
+ *  $Revision: 1.73 $
  *
- *  last change: $Author: rt $ $Date: 2007-05-29 14:59:59 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 23:36:36 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -100,30 +100,30 @@
 #ifndef GCC
 #endif
 
-#include "app.hxx"
+#include <sfx2/app.hxx>
 #include "view.hrc"
-#include "viewsh.hxx"
+#include <sfx2/viewsh.hxx>
 #include "viewimp.hxx"
 #include "sfxresid.hxx"
-#include "request.hxx"
-#include "templdlg.hxx"
-#include "printer.hxx"
-#include "docfile.hxx"
-#include "dispatch.hxx"
+#include <sfx2/request.hxx>
+#include <sfx2/templdlg.hxx>
+#include <sfx2/printer.hxx>
+#include <sfx2/docfile.hxx>
+#include <sfx2/dispatch.hxx>
 #include "arrdecl.hxx"
-#include "docfac.hxx"
+#include <sfx2/docfac.hxx>
 #include "view.hrc"
-#include "objuno.hxx"
+#include <sfx2/objuno.hxx>
 #include "sfxlocal.hrc"
-#include "sfxbasecontroller.hxx"
-#include "topfrm.hxx"
+#include <sfx2/sfxbasecontroller.hxx>
+#include <sfx2/topfrm.hxx>
 #include "mailmodelapi.hxx"
-#include "event.hxx"
-#include "fcontnr.hxx"
-#include "ipclient.hxx"
+#include <sfx2/event.hxx>
+#include <sfx2/fcontnr.hxx>
+#include <sfx2/ipclient.hxx>
 #include "workwin.hxx"
-#include "objface.hxx"
-#include "docfilt.hxx"
+#include <sfx2/objface.hxx>
+#include <sfx2/docfilt.hxx>
 
 // #110897#
 #ifndef _UNOTOOLS_PROCESSFACTORY_HXX
