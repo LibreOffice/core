@@ -4,9 +4,9 @@
  *
  *  $RCSfile: gtkdata.hxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: kz $ $Date: 2007-02-12 14:52:26 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 20:44:37 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -44,7 +44,7 @@
 
 #include <saldisp.hxx>
 #include <saldata.hxx>
-#include <ptrstyle.hxx>
+#include <vcl/ptrstyle.hxx>
 
 #include <list>
 
