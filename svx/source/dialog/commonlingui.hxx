@@ -4,9 +4,9 @@
  *
  *  $RCSfile: commonlingui.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 20:43:11 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 16:53:40 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -46,7 +46,7 @@
 #include <vcl/edit.hxx>
 #endif
 #ifndef _SVX_BOX_HXX
-#include "svxbox.hxx"
+#include <svx/svxbox.hxx>
 #endif
 #ifndef _SV_BUTTON_HXX
 #include <vcl/button.hxx>
