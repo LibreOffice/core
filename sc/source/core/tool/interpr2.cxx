@@ -4,9 +4,9 @@
  *
  *  $RCSfile: interpr2.cxx,v $
  *
- *  $Revision: 1.31 $
+ *  $Revision: 1.32 $
  *
- *  last change: $Author: gm $ $Date: 2007-04-26 07:38:41 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 13:44:28 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -61,6 +61,7 @@
 #include "unitconv.hxx"
 #include "globstr.hrc"
 #include "hints.hxx"
+#include "dpobject.hxx"
 
 // STATIC DATA -----------------------------------------------------------
 
@@ -2491,4 +2492,96 @@ void ScInterpreter::ScBahtText()
 }
 
 // ============================================================================
+
+void ScInterpreter::ScGetPivotData()
+{
+    BYTE nParamCount = GetByte();
+
+    if ( MustHaveParamCount( nParamCount, 2, 30 ) )
+    {
+        // there must be an even number of args
+        //      target, ref, then field/item pairs
+        if( (nParamCount % 2) == 1)
+            goto failed;
+
+        bool bOldSyntax = false;
+        if ( nParamCount == 2 )
+        {
+            // if the first parameter is a ref, assume old syntax
+            StackVar eFirstType = GetStackType( 2 );
+            if ( eFirstType == svSingleRef || eFirstType == svDoubleRef )
+                bOldSyntax = true;
+        }
+
+        ScDPGetPivotDataField aTarget;                  // target field, and returns result
+        std::vector< ScDPGetPivotDataField > aFilters;
+        String aFilterList;
+        if ( bOldSyntax )
+            aFilterList = GetString();      // old syntax: second parameter is list of constraints
+        else
+        {
+            // new syntax: separate name/value pairs
+
+            USHORT nFilterCount = nParamCount / 2 - 1;
+            aFilters.resize( nFilterCount );
+
+            USHORT i = nFilterCount;
+            while( i-- > 0 )
+            {
+                //! should allow numeric constraint values
+                aFilters[i].mbValIsStr = TRUE;
+                aFilters[i].maValStr = GetString();
+
+                aFilters[i].maFieldName = GetString();
+            }
+        }
+
+        // common to both syntaxes: a reference to the data pilot table
+
+        ScRange aBlock;
+        switch ( GetStackType() )
+        {
+            case svDoubleRef :
+                PopDoubleRef( aBlock );
+                break;
+
+            case svSingleRef :
+                {
+                    ScAddress aAddr;
+                    PopSingleRef( aAddr );
+                    aBlock = aAddr;
+                    break;
+                }
+            default:
+                goto failed;
+        }
+        // NOTE : MS Excel docs claim to use the 'most recent' which is not
+        // exactly the same as what we do in ScDocument::GetDPAtBlock
+        // However we do need to use GetDPABlock
+        ScDPObject* pDPObj = pDok->GetDPAtBlock ( aBlock );
+        if( NULL == pDPObj)
+            goto failed;
+
+        if ( bOldSyntax )
+        {
+            // fill aFilters / aTarget from aFilterList string
+            if ( !pDPObj->ParseFilters( aTarget, aFilters, aFilterList ) )
+                goto failed;
+        }
+        else
+            aTarget.maFieldName = GetString();      // new syntax: first parameter is data field name
+
+        if( pDPObj->GetPivotData( aTarget, aFilters ) )
+        {
+            if( aTarget.mbValIsStr )
+                PushString( aTarget.maValStr );
+            else
+                PushDouble( aTarget.mnValNum );
+            return;
+        }
+    }
+
+failed :
+    SetError( errNoRef );
+}
 
