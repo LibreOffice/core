@@ -4,9 +4,9 @@
  *
  *  $RCSfile: impgrf.cxx,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: ihi $ $Date: 2007-06-05 14:33:24 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 17:16:34 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -82,13 +82,13 @@
 using namespace ::ucbhelper;
 using namespace com::sun::star::uno;
 
-#include "dialogs.hrc"
+#include <svx/dialogs.hrc>
 #include "impgrf.hrc"
 
 #define _SVX_IMPGRF_CXX
 #include "impgrf.hxx"
 
-#include "dialmgr.hxx"
+#include <svx/dialmgr.hxx>
 #include "svxerr.hxx"
 #include "helpid.hrc"
 
