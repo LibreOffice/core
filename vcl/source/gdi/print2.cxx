@@ -4,9 +4,9 @@
  *
  *  $RCSfile: print2.cxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 12:09:54 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 20:22:34 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -48,31 +48,31 @@
 #include <tools/debug.hxx>
 #endif
 #ifndef _SV_VIRDEV_HXX
-#include <virdev.hxx>
+#include <vcl/virdev.hxx>
 #endif
 #ifndef _SV_METAACT_HXX
-#include <metaact.hxx>
+#include <vcl/metaact.hxx>
 #endif
 #ifndef _SV_GDIMTF_HXX
-#include <gdimtf.hxx>
+#include <vcl/gdimtf.hxx>
 #endif
 #ifndef _SV_PRINT_H
-#include <print.h>
+#include <vcl/print.h>
 #endif
 #ifndef _SV_SALBTYPE_HXX
-#include <salbtype.hxx>
+#include <vcl/salbtype.hxx>
 #endif
 #ifndef _SV_PRINT_HXX
-#include <print.hxx>
+#include <vcl/print.hxx>
 #endif
 #ifndef _SV_SVAPP_HXX
-#include <svapp.hxx>
+#include <vcl/svapp.hxx>
 #endif
 #ifndef _SV_SALLAYOUT_HXX
-#include <sallayout.hxx>
+#include <vcl/sallayout.hxx>
 #endif
 #ifndef _SV_BMPACC_HXX
-#include "bmpacc.hxx"
+#include <vcl/bmpacc.hxx>
 #endif
 
 // -----------
