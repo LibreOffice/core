@@ -4,9 +4,9 @@
  *
  *  $RCSfile: svarray.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: obo $ $Date: 2006-10-12 15:23:09 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 21:48:00 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -64,7 +64,7 @@
 #define _SVSTDARR_XUB_STRLEN
 #define _SVSTDARR_XUB_STRLENSORT
 
-#include <svstdarr.hxx>
+#include <svtools/svstdarr.hxx>
 
 #ifndef _STRING_HXX //autogen
 #include <tools/string.hxx>
