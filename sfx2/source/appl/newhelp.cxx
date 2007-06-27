@@ -4,9 +4,9 @@
  *
  *  $RCSfile: newhelp.cxx,v $
  *
- *  $Revision: 1.124 $
+ *  $Revision: 1.125 $
  *
- *  last change: $Author: ihi $ $Date: 2007-06-05 18:35:49 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 23:00:16 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -37,12 +37,12 @@
 #include "precompiled_sfx2.hxx"
 
 #include "newhelp.hxx"
-#include "sfxuno.hxx"
+#include <sfx2/sfxuno.hxx>
 #include "sfxresid.hxx"
 #include "helpinterceptor.hxx"
 #include "helper.hxx"
-#include "msgpool.hxx"
-#include "app.hxx"
+#include <sfx2/msgpool.hxx>
+#include <sfx2/app.hxx>
 #include "sfxtypes.hxx"
 #include "panelist.hxx"
 #include "imgmgr.hxx"
@@ -226,9 +226,9 @@
 #include <vcl/waitobj.hxx>
 #include <unotools/ucbhelper.hxx>
 
-#include <viewfrm.hxx>
-#include <objsh.hxx>
-#include <docfac.hxx>
+#include <sfx2/viewfrm.hxx>
+#include <sfx2/objsh.hxx>
+#include <sfx2/docfac.hxx>
 
 using namespace ::ucbhelper;
 using namespace ::com::sun::star::ucb;
