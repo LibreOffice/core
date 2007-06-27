@@ -4,9 +4,9 @@
  *
  *  $RCSfile: appcfg.cxx,v $
  *
- *  $Revision: 1.69 $
+ *  $Revision: 1.70 $
  *
- *  last change: $Author: kz $ $Date: 2006-11-07 15:30:53 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 22:55:07 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -105,7 +105,7 @@
 #include <svtools/ttprops.hxx>
 #endif
 #ifndef _SFXSIDS_HRC // handmade
-#include <sfxsids.hrc>
+#include <sfx2/sfxsids.hrc>
 #endif
 #ifndef _SOT_EXCHANGE_HXX //autogen
 #include <sot/exchange.hxx>
@@ -137,21 +137,21 @@
 #include <rtl/ustrbuf.hxx>
 #include <svtools/misccfg.hxx>
 
-#include "app.hxx"
-#include "docfile.hxx"
-#include "viewfrm.hxx"
+#include <sfx2/app.hxx>
+#include <sfx2/docfile.hxx>
+#include <sfx2/viewfrm.hxx>
 #include "sfxhelp.hxx"
 #include "sfxtypes.hxx"
-#include "dispatch.hxx"
-#include "objsh.hxx"
+#include <sfx2/dispatch.hxx>
+#include <sfx2/objsh.hxx>
 #include "objshimp.hxx"
-#include "viewsh.hxx"
-#include "request.hxx"
-#include "evntconf.hxx"
-#include "docinf.hxx"
+#include <sfx2/viewsh.hxx>
+#include <sfx2/request.hxx>
+#include <sfx2/evntconf.hxx>
+#include <sfx2/docinf.hxx>
 #include "appdata.hxx"
 #include "workwin.hxx"
-#include "macrconf.hxx"
+#include <sfx2/macrconf.hxx>
 #include "helper.hxx"   // SfxContentHelper::...
 #include "app.hrc"
 #include "sfxresid.hxx"
