@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ximpstyl.cxx,v $
  *
- *  $Revision: 1.49 $
+ *  $Revision: 1.50 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 10:32:42 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 15:12:27 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -43,7 +43,7 @@
 #endif
 
 #ifndef _XMLOFF_XMLSHAPESTYLECONTEXT_HXX
-#include "XMLShapeStyleContext.hxx"
+#include <xmloff/XMLShapeStyleContext.hxx>
 #endif
 
 #ifndef _XMLOFF_XMLNMSPE_HXX
@@ -51,11 +51,11 @@
 #endif
 
 #ifndef _XMLOFF_XMLTOKEN_HXX
-#include "xmltoken.hxx"
+#include <xmloff/xmltoken.hxx>
 #endif
 
 #ifndef _XMLOFF_XMLUCONV_HXX
-#include "xmluconv.hxx"
+#include <xmloff/xmluconv.hxx>
 #endif
 
 #ifndef _XIMPNOTES_HXX
@@ -104,11 +104,11 @@
 //#endif
 
 #ifndef _XMLOFF_XMLPROPERTYSETCONTEXT_HXX
-#include "xmlprcon.hxx"
+#include <xmloff/xmlprcon.hxx>
 #endif
 
 #ifndef _XMLOFF_FAMILIES_HXX_
-#include "families.hxx"
+#include <xmloff/families.hxx>
 #endif
 
 #ifndef _COM_SUN_STAR_CONTAINER_XNAMECONTAINER_HPP_
@@ -132,7 +132,7 @@
 #endif
 
 #ifndef _XMLOFF_XMLGRAPHICSDEFAULTSTYLE_HXX
-#include "XMLGraphicsDefaultStyle.hxx"
+#include <xmloff/XMLGraphicsDefaultStyle.hxx>
 #endif
 
 #ifndef _XMLOFF_NUMBERSTYLESIMPORT_HXX
