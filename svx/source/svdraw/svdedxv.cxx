@@ -4,9 +4,9 @@
  *
  *  $RCSfile: svdedxv.cxx,v $
  *
- *  $Revision: 1.56 $
+ *  $Revision: 1.57 $
  *
- *  last change: $Author: kz $ $Date: 2007-05-09 13:32:31 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 19:00:30 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -39,7 +39,7 @@
 #include <svtools/accessibilityoptions.hxx>
 #endif
 
-#include "svdedxv.hxx"
+#include <svx/svdedxv.hxx>
 #include <svtools/solar.hrc>
 
 #ifndef _STRING_H
@@ -79,38 +79,38 @@
 #endif
 
 #ifndef _SVX_UNOTEXT_HXX
-#include "unotext.hxx"
+#include <svx/unotext.hxx>
 #endif
 
-#include "editobj.hxx"
-#include "outlobj.hxx"
-#include "scripttypeitem.hxx"
+#include <svx/editobj.hxx>
+#include <svx/outlobj.hxx>
+#include <svx/scripttypeitem.hxx>
 #include "svditext.hxx"
-#include "svdoutl.hxx"
-#include "sdtfchim.hxx"
+#include <svx/svdoutl.hxx>
+#include <svx/sdtfchim.hxx>
 #include "svdxout.hxx"
-#include "svdotext.hxx"
-#include "svdundo.hxx"
+#include <svx/svdotext.hxx>
+#include <svx/svdundo.hxx>
 #include "svditer.hxx"
-#include "svdpagv.hxx"
-#include "svdpage.hxx"
-#include "svdetc.hxx"   // fuer GetDraftFillColor
+#include <svx/svdpagv.hxx>
+#include <svx/svdpage.hxx>
+#include <svx/svdetc.hxx>   // fuer GetDraftFillColor
 
 #ifdef DBG_UTIL
 #include <svdibrow.hxx>
 #endif
 
-#include "svdoutl.hxx"
-#include "svddrgv.hxx"  // fuer SetSolidDragging()
+#include <svx/svdoutl.hxx>
+#include <svx/svddrgv.hxx>  // fuer SetSolidDragging()
 #include "svdstr.hrc"   // Namen aus der Resource
 #include "svdglob.hxx"  // StringCache
 
 #ifndef _OUTLINER_HXX //autogen
-#include "outliner.hxx"
+#include <svx/outliner.hxx>
 #endif
 
 #ifndef _SVX_ADJITEM_HXX //autogen
-#include "adjitem.hxx"
+#include <svx/adjitem.hxx>
 #endif
 
 // #98988#
