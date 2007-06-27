@@ -4,9 +4,9 @@
  *
  *  $RCSfile: editeng.cxx,v $
  *
- *  $Revision: 1.105 $
+ *  $Revision: 1.106 $
  *
- *  last change: $Author: kz $ $Date: 2007-05-10 14:45:50 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 12:52:48 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1038,7 +1038,10 @@ sal_Bool EditEngine::PostKeyEvent( const KeyEvent& rKeyEvent, EditView* pEditVie
                     {
                         pImpEditEngine->UndoActionStart( EDITUNDO_INSERT );
                         if ( rKeyEvent.GetKeyCode().IsShift() )
+                        {
+                            aCurSel = pImpEditEngine->AutoCorrect( aCurSel, 0, !pEditView->IsInsertMode() );
                             aCurSel = pImpEditEngine->InsertLineBreak( aCurSel );
+                        }
                         else
                         {
                             if ( !aAutoText.Len() )
