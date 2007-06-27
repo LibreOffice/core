@@ -4,9 +4,9 @@
  *
  *  $RCSfile: salsys.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: obo $ $Date: 2007-01-25 11:25:53 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 20:47:35 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -37,11 +37,11 @@
 #include "precompiled_vcl.hxx"
 
 #include <salunx.h>
-#include <salsys.hxx>
+#include <vcl/salsys.hxx>
 #include <dtint.hxx>
-#include <msgbox.hxx>
-#include <button.hxx>
-#include <svdata.hxx>
+#include <vcl/msgbox.hxx>
+#include <vcl/button.hxx>
+#include <vcl/svdata.hxx>
 #include <saldata.hxx>
 #include <salinst.h>
 #include <saldisp.hxx>
