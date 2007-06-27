@@ -4,9 +4,9 @@
  *
  *  $RCSfile: versdlg.hxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: obo $ $Date: 2006-10-12 15:57:28 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 23:30:08 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -50,7 +50,7 @@
 #ifndef _SVEDIT_HXX //autogen
 #include <svtools/svmedit.hxx>
 #endif
-#include "basedlgs.hxx"
+#include <sfx2/basedlgs.hxx>
 
 class SfxObjectShell;
 class SfxViewFrame;
