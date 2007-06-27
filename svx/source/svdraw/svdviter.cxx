@@ -4,9 +4,9 @@
  *
  *  $RCSfile: svdviter.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: vg $ $Date: 2006-11-23 10:11:56 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 19:13:22 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -37,12 +37,12 @@
 #include "precompiled_svx.hxx"
 
 #include "svdviter.hxx"
-#include "svdobj.hxx"
-#include "svdpage.hxx"
-#include "svdmodel.hxx"
-#include "svdview.hxx"
-#include "svdpagv.hxx"
-#include "svdsob.hxx"
+#include <svx/svdobj.hxx>
+#include <svx/svdpage.hxx>
+#include <svx/svdmodel.hxx>
+#include <svx/svdview.hxx>
+#include <svx/svdpagv.hxx>
+#include <svx/svdsob.hxx>
 
 #ifndef _SFXBRDCST_HXX //autogen
 #include <svtools/brdcst.hxx>
