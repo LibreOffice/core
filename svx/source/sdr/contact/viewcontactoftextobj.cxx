@@ -4,9 +4,9 @@
  *
  *  $RCSfile: viewcontactoftextobj.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 05:37:25 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 18:46:49 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -41,7 +41,7 @@
 #endif
 
 #ifndef _SVDOTEXT_HXX
-#include <svdotext.hxx>
+#include <svx/svdotext.hxx>
 #endif
 
 //////////////////////////////////////////////////////////////////////////////
