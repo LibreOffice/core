@@ -4,9 +4,9 @@
  *
  *  $RCSfile: tempfile.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 00:53:56 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 22:11:24 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -36,7 +36,7 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_tools.hxx"
 
-#include "tempfile.hxx"
+#include <tools/tempfile.hxx>
 #include "comdep.hxx"
 
 #include <rtl/ustring.hxx>
@@ -47,9 +47,9 @@
 #include <rtl/instance.hxx>
 #endif
 #ifndef _TOOLS_TIME_HXX
-#include <time.hxx>
+#include <tools/time.hxx>
 #endif
-#include <debug.hxx>
+#include <tools/debug.hxx>
 #include <stdio.h>
 
 #ifdef UNX
