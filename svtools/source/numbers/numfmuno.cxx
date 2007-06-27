@@ -4,9 +4,9 @@
  *
  *  $RCSfile: numfmuno.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 15:20:27 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 21:55:54 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -50,9 +50,9 @@
 
 #include "numfmuno.hxx"
 #include "numuno.hxx"
-#include "zforlist.hxx"
-#include "zformat.hxx"
-#include "itemprop.hxx"
+#include <svtools/zforlist.hxx>
+#include <svtools/zformat.hxx>
+#include <svtools/itemprop.hxx>
 
 using namespace com::sun::star;
 
