@@ -4,9 +4,9 @@
  *
  *  $RCSfile: i18nhelp.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 11:48:03 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 20:01:02 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -38,7 +38,7 @@
 
 
 
-#include <i18nhelp.hxx>
+#include <vcl/i18nhelp.hxx>
 
 /*
 #ifndef _COM_SUN_STAR_LANG_XSINGLESERVICEFACTORY_HPP_
