@@ -4,9 +4,9 @@
  *
  *  $RCSfile: excimp8.cxx,v $
  *
- *  $Revision: 1.118 $
+ *  $Revision: 1.119 $
  *
- *  last change: $Author: vg $ $Date: 2007-05-22 19:45:08 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 13:45:16 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -348,8 +348,8 @@ void ImportExcel8::PostDocLoad( void )
         }
     }
 
-    // building pivot tables
-    GetPivotTableManager().ConvertPivotTables();
+    // #i45843# Pivot tables are now handled outside of PostDocLoad, so they are available
+    // when formula cells are calculated, for the GETPIVOTDATA function.
 }
 
 
