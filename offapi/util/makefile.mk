@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.104 $
+#   $Revision: 1.105 $
 #
-#   last change: $Author: vg $ $Date: 2007-05-22 15:12:04 $
+#   last change: $Author: hr $ $Date: 2007-06-27 12:30:43 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -48,6 +48,7 @@ TARGET=offapi_db
 UNOIDLDBFILES= \
     $(UCR)$/cssauth.db \
     $(UCR)$/cssawt.db \
+    $(UCR)$/cssawttree.db \
     $(UCR)$/csschart.db \
     $(UCR)$/csschart2.db \
     $(UCR)$/csschart2data.db \
