@@ -4,9 +4,9 @@
  *
  *  $RCSfile: printoptions.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: obo $ $Date: 2006-10-12 15:08:12 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 21:16:09 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -45,7 +45,7 @@
 //  includes
 //_________________________________________________________________________________________________________________
 
-#include "printoptions.hxx"
+#include <svtools/printoptions.hxx>
 
 #ifndef _UTL_CONFIGMGR_HXX_
 #include <unotools/configmgr.hxx>
