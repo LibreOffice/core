@@ -4,9 +4,9 @@
  *
  *  $RCSfile: sdpropls.cxx,v $
  *
- *  $Revision: 1.95 $
+ *  $Revision: 1.96 $
  *
- *  last change: $Author: ihi $ $Date: 2007-04-16 13:10:18 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 15:04:32 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -89,11 +89,11 @@
 #endif
 
 #ifndef _XMLOFF_ENUMPROPERTYHANDLER_HXX
-#include <EnumPropertyHdl.hxx>
+#include <xmloff/EnumPropertyHdl.hxx>
 #endif
 
 #ifndef _XMLOFF_NAMEDBOOLPROPERTYHANDLER_HXX
-#include <NamedBoolPropertyHdl.hxx>
+#include <xmloff/NamedBoolPropertyHdl.hxx>
 #endif
 
 #ifndef _XMLOFF_PROPERTYHANDLER_NUMRULE_HXX
@@ -141,11 +141,11 @@
 #endif
 
 #ifndef _XMLOFF_CONTROLBORDERHDL_HXX_
-#include "ControlBorderHandler.hxx"
+#include <xmloff/ControlBorderHandler.hxx>
 #endif
 
 #ifndef _XMLOFF_XMLTOKEN_HXX
-#include <xmltoken.hxx>
+#include <xmloff/xmltoken.hxx>
 #endif
 
 #ifndef _SDPROPLS_HXX
@@ -157,7 +157,7 @@
 #endif
 
 #ifndef _XMLOFF_XMLEXP_HXX
-#include "xmlexp.hxx"
+#include <xmloff/xmlexp.hxx>
 #endif
 
 #ifndef _XMLOFF_XMLNMSPE_HXX
@@ -181,7 +181,7 @@
 #endif
 
 #ifndef _XMLOFF_TEXTPRMAP_HXX_
-#include "txtprmap.hxx"
+#include <xmloff/txtprmap.hxx>
 #endif
 
 #ifndef _XMLOFF_XMLCLIPPROPERTYHANDLER_HXX
@@ -201,7 +201,7 @@
 #endif
 
 #ifndef _XMLOFF_XMLUCONV_HXX
-#include "xmluconv.hxx"
+#include <xmloff/xmluconv.hxx>
 #endif
 
 #include "sdxmlexp_impl.hxx"
