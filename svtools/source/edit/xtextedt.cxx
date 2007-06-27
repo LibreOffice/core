@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xtextedt.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: obo $ $Date: 2006-10-12 15:16:42 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 21:32:31 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -36,7 +36,7 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_svtools.hxx"
 
-#include <xtextedt.hxx>
+#include <svtools/xtextedt.hxx>
 #include <vcl/svapp.hxx>  // International
 #include <unotools/textsearch.hxx>
 #ifndef _COM_SUN_STAR_UTIL_SEARCHOPTIONS_HPP_
