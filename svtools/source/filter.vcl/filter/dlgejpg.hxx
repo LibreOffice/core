@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dlgejpg.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 15:34:28 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 21:34:02 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -43,8 +43,8 @@
 #include <vcl/field.hxx>
 #include <vcl/lstbox.hxx>
 #include <vcl/msgbox.hxx>
-#include "stdctrl.hxx"
-#include <fltcall.hxx>
+#include <svtools/stdctrl.hxx>
+#include <svtools/fltcall.hxx>
 
 /*************************************************************************
 |*
