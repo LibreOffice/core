@@ -4,9 +4,9 @@
  *
  *  $RCSfile: btndlg.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 12:15:50 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 20:28:22 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -42,13 +42,13 @@
 #endif
 
 #ifndef _SV_SVDATA_HXX
-#include <svdata.hxx>
+#include <vcl/svdata.hxx>
 #endif
 #ifndef _SV_BUTTON_HXX
-#include <button.hxx>
+#include <vcl/button.hxx>
 #endif
 #ifndef _SV_BTNDLG_HXX
-#include <btndlg.hxx>
+#include <vcl/btndlg.hxx>
 #endif
 
 #ifndef _SV_RC_H
