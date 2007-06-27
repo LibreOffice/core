@@ -4,9 +4,9 @@
  *
  *  $RCSfile: export.hxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: ihi $ $Date: 2007-04-19 15:17:26 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 22:28:48 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -38,7 +38,7 @@
 
 #ifndef TRANSEX_DIRECTORY_HXX
 #define TRANSEX_DIRECTORY_HXX
-#include "directory.hxx"
+#include <transex3/directory.hxx>
 #endif
 
 
