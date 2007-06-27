@@ -5,9 +5,9 @@
  *
  *  $RCSfile: image.cxx,v $
  *
- *  $Revision: 1.30 $
+ *  $Revision: 1.31 $
  *
- *  last change: $Author: kz $ $Date: 2007-06-20 10:54:44 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 20:14:13 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -58,16 +58,16 @@
 #include <tools/resmgr.hxx>
 #endif
 #ifndef _SV_SETTINGS_HXX
-#include <settings.hxx>
+#include <vcl/settings.hxx>
 #endif
 #ifndef _SV_OUTDEV_HXX
-#include <outdev.hxx>
+#include <vcl/outdev.hxx>
 #endif
 #ifndef _SV_GRAPH_HXX
-#include <graph.hxx>
+#include <vcl/graph.hxx>
 #endif
 #ifndef _SV_SVAPP_HXX
-#include <svapp.hxx>
+#include <vcl/svapp.hxx>
 #endif
 #ifndef _SV_IMPIMAGETREE_H
 #include <impimagetree.hxx>
@@ -76,7 +76,7 @@
 #include <image.h>
 #endif
 #ifndef _SV_IMAGE_HXX
-#include <image.hxx>
+#include <vcl/image.hxx>
 #endif
 
 DBG_NAME( Image )
