@@ -4,9 +4,9 @@
  *
  *  $RCSfile: borderconn.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: kz $ $Date: 2007-05-10 14:35:52 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 16:50:10 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -41,7 +41,7 @@
 #endif
 
 #ifndef SVX_FRMSEL_HXX
-#include "frmsel.hxx"
+#include <svx/frmsel.hxx>
 #endif
 
 
@@ -54,13 +54,13 @@
 #include "bolnitem.hxx"
 #endif
 #ifndef _SVX_BOXITEM_HXX
-#include "boxitem.hxx"
+#include <svx/boxitem.hxx>
 #endif
 #ifndef _SVX_ALGITEM_HXX
-#include "algitem.hxx"
+#include <svx/algitem.hxx>
 #endif
 #ifndef _SVX_SHADITEM_HXX
-#include "shaditem.hxx"
+#include <svx/shaditem.hxx>
 #endif
 
 namespace svx {
