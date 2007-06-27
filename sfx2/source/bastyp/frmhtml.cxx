@@ -4,9 +4,9 @@
  *
  *  $RCSfile: frmhtml.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 16:23:09 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 23:03:11 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -49,20 +49,20 @@
 #ifndef GCC
 #endif
 
-#include "docinf.hxx"
+#include <sfx2/docinf.hxx>
 
 #define _SVSTDARR_USHORTS
 #define _SVSTDARR_ULONGS
 #include <svtools/svstdarr.hxx>
 
-#include "sfx.hrc"
+#include <sfx2/sfx.hrc>
 
-#include "frmhtml.hxx"
-#include "docfile.hxx"
-#include "viewfrm.hxx"
-#include "evntconf.hxx"
-#include "request.hxx"
-#include "fcontnr.hxx"
+#include <sfx2/frmhtml.hxx>
+#include <sfx2/docfile.hxx>
+#include <sfx2/viewfrm.hxx>
+#include <sfx2/evntconf.hxx>
+#include <sfx2/request.hxx>
+#include <sfx2/fcontnr.hxx>
 #include "sfxtypes.hxx"
 
 #define SFX_HTMLFRMSIZE_REL 0x0001
