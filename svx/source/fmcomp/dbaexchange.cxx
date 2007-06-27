@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dbaexchange.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: obo $ $Date: 2006-10-12 12:42:13 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 18:07:36 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -37,7 +37,7 @@
 #include "precompiled_svx.hxx"
 
 #ifndef _SVX_DBAEXCHANGE_HXX_
-#include "dbaexchange.hxx"
+#include <svx/dbaexchange.hxx>
 #endif
 #ifndef _OSL_DIAGNOSE_H_
 #include <osl/diagnose.h>
