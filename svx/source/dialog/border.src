@@ -4,9 +4,9 @@
  *
  *  $RCSfile: border.src,v $
  *
- *  $Revision: 1.62 $
+ *  $Revision: 1.63 $
  *
- *  last change: $Author: ihi $ $Date: 2007-04-19 13:59:40 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 16:49:54 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -34,7 +34,7 @@
  ************************************************************************/
  // include ---------------------------------------------------------------
 #include "helpid.hrc"
-#include "dialogs.hrc"
+#include <svx/dialogs.hrc>
 #include "border.hrc"
  // pragma ----------------------------------------------------------------
 
