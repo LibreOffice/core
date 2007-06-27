@@ -4,9 +4,9 @@
  *
  *  $RCSfile: canvastools.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: rt $ $Date: 2007-01-29 15:48:29 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 20:26:17 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -109,12 +109,12 @@
 #include <tools/poly.hxx>
 #include <rtl/uuid.h>
 
-#include <salbtype.hxx>
-#include <bmpacc.hxx>
-#include <bitmapex.hxx>
+#include <vcl/salbtype.hxx>
+#include <vcl/bmpacc.hxx>
+#include <vcl/bitmapex.hxx>
 
 #include <canvasbitmap.hxx>
-#include <canvastools.hxx>
+#include <vcl/canvastools.hxx>
 #include <hash_map>
 
 
