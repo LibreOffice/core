@@ -4,9 +4,9 @@
  *
  *  $RCSfile: communi.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: vg $ $Date: 2006-11-02 12:16:58 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 20:59:20 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -61,7 +61,7 @@
 #include <tools/fsys.hxx>
 #endif
 
-#include "communi.hxx"
+#include <automation/communi.hxx>
 
 
 /*  Um den Destruktor protected zu machen wurde unten das delete entfernt.
