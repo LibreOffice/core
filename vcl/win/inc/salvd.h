@@ -4,9 +4,9 @@
  *
  *  $RCSfile: salvd.h,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: obo $ $Date: 2006-03-29 11:29:40 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 20:56:01 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -37,11 +37,11 @@
 #define _SV_SALVD_H
 
 #ifndef _SV_SV_H
-#include <sv.h>
+#include <vcl/sv.h>
 #endif
 
 #ifndef _SV_SALVD_HXX
-#include <salvd.hxx>
+#include <vcl/salvd.hxx>
 #endif
 
 class WinSalGraphics;
