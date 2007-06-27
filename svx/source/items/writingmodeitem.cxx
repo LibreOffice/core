@@ -4,9 +4,9 @@
  *
  *  $RCSfile: writingmodeitem.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: kz $ $Date: 2007-05-10 14:54:04 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 18:31:40 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -40,15 +40,15 @@
 
 
 #ifndef _SVX_WRITINGMODEITEM_HXX
-#include "writingmodeitem.hxx"
+#include <svx/writingmodeitem.hxx>
 #endif
 
 #ifndef _SVX_DIALMGR_HXX
-#include "dialmgr.hxx"
+#include <svx/dialmgr.hxx>
 #endif
 
 #ifndef _SVXITEMS_HRC
-#include "svxitems.hrc"
+#include <svx/svxitems.hrc>
 #endif
 
 using namespace ::com::sun::star::uno;
