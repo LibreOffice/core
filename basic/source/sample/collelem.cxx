@@ -4,9 +4,9 @@
  *
  *  $RCSfile: collelem.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 10:07:16 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 14:27:08 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -43,7 +43,7 @@
 #include <vcl/msgbox.hxx>
 #endif
 #ifndef _SBXCLASS_HXX //autogen
-#include <sbx.hxx>
+#include <basic/sbx.hxx>
 #endif
 #include "collelem.hxx"
 
