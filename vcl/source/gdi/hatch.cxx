@@ -4,9 +4,9 @@
  *
  *  $RCSfile: hatch.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 12:01:47 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 20:14:00 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -46,7 +46,7 @@
 #include <tools/debug.hxx>
 #endif
 #ifndef _SV_HATCX_HXX
-#include <hatch.hxx>
+#include <vcl/hatch.hxx>
 #endif
 
 DBG_NAME( Hatch )
