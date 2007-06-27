@@ -4,9 +4,9 @@
  *
  *  $RCSfile: unx.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: vg $ $Date: 2006-11-21 17:46:35 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 22:11:37 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -67,9 +67,9 @@ struct mnttab
 #define MAXPATHLEN 1024
 #endif
 
-#include <debug.hxx>
-#include <list.hxx>
-#include <fsys.hxx>
+#include <tools/debug.hxx>
+#include <tools/list.hxx>
+#include <tools/fsys.hxx>
 #include "comdep.hxx"
 
 #ifndef INCLUDED_RTL_INSTANCE_HXX
