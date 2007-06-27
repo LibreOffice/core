@@ -4,9 +4,9 @@
  *
  *  $RCSfile: svimpbox.hxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: hr $ $Date: 2006-06-19 20:29:40 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 14:38:25 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -51,6 +51,10 @@
 #endif
 // #97680# -----------------
 #include <vector>
+
+#ifndef SVTOOLS_ACCESSIBLE_FACTORY_ACCESS_HXX
+#include "svtaccessiblefactory.hxx"
+#endif
 
 class SvTreeListBox;
 class Point;
@@ -119,6 +123,9 @@ private:
     ScrollBar           aVerSBar;
     ScrollBar           aHorSBar;
     ScrollBarBox        aScrBarBox;
+
+    ::svt::AccessibleFactoryAccess
+                        m_aFactoryAccess;
 
     static Image*       s_pDefCollapsed;
     static Image*       s_pDefExpanded;
