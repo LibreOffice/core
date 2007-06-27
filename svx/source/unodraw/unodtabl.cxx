@@ -4,9 +4,9 @@
  *
  *  $RCSfile: unodtabl.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 06:11:47 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 19:23:32 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -55,15 +55,15 @@
 #endif
 
 #ifndef _SVX_XLNDSIT_HXX
-#include "xlndsit.hxx"
+#include <svx/xlndsit.hxx>
 #endif
 
 #ifndef _SVX_UNOMID_HXX
-#include "unomid.hxx"
+#include <svx/unomid.hxx>
 #endif
 
-#include "xdash.hxx"
-#include "svdmodel.hxx"
+#include <svx/xdash.hxx>
+#include <svx/svdmodel.hxx>
 #include "unofill.hxx"
 
 using namespace ::com::sun::star;
