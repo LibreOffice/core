@@ -4,9 +4,9 @@
  *
  *  $RCSfile: filedlghelper.hrc,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-07 16:53:51 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 22:52:10 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -36,7 +36,7 @@
 #ifndef _SFX_FILEDLGHELPER_HRC
 #define _SFX_FILEDLGHELPER_HRC
 
-#include <sfx.hrc>
+#include <sfx2/sfx.hrc>
 
 //#define STR_SFX_IMPORT_ALL          (RID_SFX_EXPLORER_START + 50)
 #define STR_CB_AUTO_EXTENSION       (RID_SFX_EXPLORER_START + 51)
