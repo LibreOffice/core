@@ -4,9 +4,9 @@
  *
  *  $RCSfile: tpgradnt.cxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: kz $ $Date: 2007-05-10 14:43:48 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 17:48:54 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -69,19 +69,19 @@
 
 
 
-#include "dialogs.hrc"
+#include <svx/dialogs.hrc>
 #include "helpid.hrc"
 
 #include "xattr.hxx"
-#include "xtable.hxx"
-#include "xpool.hxx"
+#include <svx/xtable.hxx>
+#include <svx/xpool.hxx>
 #include "drawitem.hxx"
 #include "cuitabarea.hxx"
 #include "tabarea.hrc"
 #include "defdlgname.hxx" //CHINA001 #include "dlgname.hxx"
 #include "dlgname.hrc"
-#include "svxdlg.hxx" //CHINA001
-#include "dialmgr.hxx"
+#include <svx/svxdlg.hxx> //CHINA001
+#include <svx/dialmgr.hxx>
 
 #define DLGWIN this->GetParent()->GetParent()
 
