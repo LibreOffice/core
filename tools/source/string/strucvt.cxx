@@ -4,9 +4,9 @@
  *
  *  $RCSfile: strucvt.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: kz $ $Date: 2007-05-10 16:39:39 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 22:19:35 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -179,10 +179,10 @@ UniString UniString::intern() const
 // =======================================================================
 
 #ifndef _TOOLS_RC_HXX
-#include <rc.hxx>
+#include <tools/rc.hxx>
 #endif
 #ifndef _TOOLS_RCID_H
-#include <rcid.h>
+#include <tools/rcid.h>
 #endif
 
 UniString::UniString( const ResId& rResId )

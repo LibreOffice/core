@@ -4,9 +4,9 @@
  *
  *  $RCSfile: strmunx.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: kz $ $Date: 2007-05-10 16:38:38 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 22:18:46 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -44,9 +44,9 @@
 #include <limits.h>
 #include <stdlib.h> // fuer getenv()
 
-#include <debug.hxx>
-#include <fsys.hxx>
-#include <stream.hxx>
+#include <tools/debug.hxx>
+#include <tools/fsys.hxx>
+#include <tools/stream.hxx>
 
 #include <vos/mutex.hxx>
 #include <osl/thread.h> // osl_getThreadTextEncoding
