@@ -3,7 +3,7 @@ dnl *     vi:set sw=3 ts=3 et:
 dnl *
 dnl * Name: configure.in
 dnl * Auth: Willem van Dorp, Ross Nicholson, Oisin Boydell - Sun Microsystems Ireland
-dnl * Date: $Date: 2007-06-27 12:11:48 $
+dnl * Date: $Date: 2007-06-27 13:59:09 $
 dnl *
 dnl * Desc: This file serves as input for the GNU autoconf package
 dnl *       in order to create a configure script.
@@ -12,7 +12,7 @@ dnl *       necessary to build OpenOffice.org
 dnl *
 dnl *
 dnl ******************************************************************/
-AC_REVISION( $Revision: 1.211 $ )
+AC_REVISION( $Revision: 1.212 $ )
 AC_PREREQ(2.50)
 AC_INIT()
 echo "$@" >config.parms
@@ -583,6 +583,12 @@ AC_ARG_WITH(vendor,
 [  --with-vendor           Set vendor of the build.
 
                           Usage: --with-vendor="John the Builder"
+],,)
+AC_ARG_WITH(unix-wrapper,
+[  --with-unix-wrapper    Redefines the name of the UNIX wrapper that will be used
+                          in the desktop files and in the desktop-integration RPMs.
+
+                          Usage: --with-unix-wrapper=ooffice
 ],,)
 AC_ARG_WITH(asm-home,
 [  --with-asm-home         For Windows users, please supply the path for the
@@ -5264,6 +5270,16 @@ else
    AC_MSG_RESULT([$OOO_VENDOR])
 fi
 AC_SUBST(OOO_VENDOR)
+
+UNIXWRAPPERNAME=
+AC_MSG_CHECKING([for UNIX wrapper name])
+if test -z "$with_unix_wrapper" -o "$with_unix_wrapper" = "no"  -o "$with_unix_wrapper" = "yes" ; then
+   AC_MSG_RESULT([not set])
+else
+   UNIXWRAPPERNAME="$with_unix_wrapper"
+   AC_MSG_RESULT([$UNIXWRAPPERNAME])
+fi
+AC_SUBST(UNIXWRAPPERNAME)
 
 AC_MSG_CHECKING([whether to statically link to Gtk])
 if test -n "$enable_static_gtk" && test "$enable_static_gtk" != "no"; then
