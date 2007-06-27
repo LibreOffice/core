@@ -4,9 +4,9 @@
  *
  *  $RCSfile: fmgridif.cxx,v $
  *
- *  $Revision: 1.56 $
+ *  $Revision: 1.57 $
  *
- *  last change: $Author: rt $ $Date: 2007-04-25 14:52:18 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 18:08:27 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -84,7 +84,7 @@
 #endif
 
 #ifndef _SVX_FMGRIDCL_HXX
-#include "fmgridcl.hxx"
+#include <svx/fmgridcl.hxx>
 #endif
 
 #ifndef _SVX_GRIDCELL_HXX
@@ -96,7 +96,7 @@
 #endif
 
 #ifndef _SVX_SVXIDS_HRC
-#include "svxids.hrc"
+#include <svx/svxids.hrc>
 #endif
 
 #ifndef _TOOLKIT_UNOHLP_HXX
