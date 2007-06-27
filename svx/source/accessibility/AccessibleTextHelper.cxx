@@ -4,9 +4,9 @@
  *
  *  $RCSfile: AccessibleTextHelper.cxx,v $
  *
- *  $Revision: 1.45 $
+ *  $Revision: 1.46 $
  *
- *  last change: $Author: ihi $ $Date: 2006-11-14 13:12:51 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 16:40:25 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -138,11 +138,11 @@
 #endif
 
 #ifndef _SVX_ACCESSILE_TEXT_HELPER_HXX_
-#include "AccessibleTextHelper.hxx"
+#include <svx/AccessibleTextHelper.hxx>
 #endif
 
 #ifndef _SVX_UNOSHAPE_HXX
-#include "unoshape.hxx"
+#include <svx/unoshape.hxx>
 #endif
 
 #ifndef _UNO_LINGU_HXX
@@ -150,18 +150,18 @@
 #endif
 
 #ifndef _SVX_UNOTEXT_HXX
-#include "unotext.hxx"
+#include <svx/unotext.hxx>
 #endif
 
 #include "unoedhlp.hxx"
 #include "unopracc.hxx"
 #include "AccessibleParaManager.hxx"
 #include "AccessibleEditableTextPara.hxx"
-#include "svdmodel.hxx"
-#include "svdpntv.hxx"
-#include "editdata.hxx"
-#include "editeng.hxx"
-#include "editview.hxx"
+#include <svx/svdmodel.hxx>
+#include <svx/svdpntv.hxx>
+#include <svx/editdata.hxx>
+#include <svx/editeng.hxx>
+#include <svx/editview.hxx>
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::accessibility;
