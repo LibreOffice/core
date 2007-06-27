@@ -4,9 +4,9 @@
  *
  *  $RCSfile: timer.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 11:50:32 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 20:03:13 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -41,7 +41,7 @@
 #endif
 
 #ifndef _SV_SALTIMER_HXX
-#include <saltimer.hxx>
+#include <vcl/saltimer.hxx>
 #endif
 
 #ifndef _TIME_HXX
@@ -49,20 +49,20 @@
 #endif
 
 #ifndef _SV_SVDATA_HXX
-#include <svdata.hxx>
+#include <vcl/svdata.hxx>
 #endif
 #ifndef _SV_SVAPP_HXX
-#include <svapp.hxx>
+#include <vcl/svapp.hxx>
 #endif
 #ifndef _SV_SALINST_HXX
-#include <salinst.hxx>
+#include <vcl/salinst.hxx>
 #endif
 #ifndef _DEBUG_HXX
 #include <tools/debug.hxx>
 #endif
 
 #ifndef _SV_TIMER_HXX
-#include <timer.hxx>
+#include <vcl/timer.hxx>
 #endif
 
 
