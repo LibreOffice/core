@@ -4,9 +4,9 @@
 #
 #   $RCSfile: target.mk,v $
 #
-#   $Revision: 1.197 $
+#   $Revision: 1.198 $
 #
-#   last change: $Author: hr $ $Date: 2007-06-26 17:33:48 $
+#   last change: $Author: hr $ $Date: 2007-06-27 17:50:05 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -210,7 +210,9 @@ DEPIDLFILES:=$(foreach,i,$(IDLFILES) $(!null,$(shell $(FIND) . -name $i -print) 
 
 .IF "$(L10N_framework)"==""
 .IF "$(JARFILES)"!=""
-NEWCLASS:=$(foreach,i,$(JARFILES) $(null,$(shell -ls -1 $(JARDIR) | $(GREP) "^$i") $(SOLARBINDIR)$/$i $(JARDIR)$/$i))
+LOCALJARS:=$(foreach,i,$(shell @@-cd $(JARDIR) && ls -1 $(JARFILES) ) $(JARDIR)$/$i)
+NEWCLASS:=$(LOCALJARS)
+NEWCLASS+:=$(foreach,i,$(JARFILES) $(eq,$(LOCALJARS),$(subst,$i, $(LOCALJARS)) $(SOLARBINDIR)$/$i $(NULL)))
 .ENDIF			# "$(JARFILES)"!=""
 .IF "$(EXTRAJARFILES)"!=""
 NEWCLASS+=$(foreach,i,$(EXTRAJARFILES) $(COMMON_BUILD_TOOLS)$/$i)
@@ -2002,7 +2004,7 @@ $(subst,$(OUTPATH),$(COMMON_OUTDIR) $(BIN))$/hid.lst .PHONY :
     @echo Making $@ :
     @echo ---------------
     @$(IFEXIST) $@ $(THEN) $(RM:s/+//) $@ $(FI)
-    @echo $(WORK_STAMP).$(LAST_MINOR) 010101010101010> $@.$(ROUT).tmp
+    @echo $(WORK_STAMP).$(LAST_MINOR) 010101010101010 > $@.$(ROUT).tmp
     $(TYPE) $(SOLARCOMMONBINDIR)$/hid$/*.hid | $(SORT) -u >> $@.$(ROUT).tmp 
     @$(RENAME) $@.$(ROUT).tmp $@
 
