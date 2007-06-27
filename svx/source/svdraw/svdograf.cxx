@@ -4,9 +4,9 @@
  *
  *  $RCSfile: svdograf.cxx,v $
  *
- *  $Revision: 1.79 $
+ *  $Revision: 1.80 $
  *
- *  last change: $Author: kz $ $Date: 2007-05-10 14:58:43 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 19:06:08 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -60,28 +60,28 @@
 
 #include "linkmgr.hxx"
 #include "svdxout.hxx"
-#include "svdetc.hxx"
+#include <svx/svdetc.hxx>
 #include "svdglob.hxx"
 #include "svdstr.hrc"
-#include "svdpool.hxx"
-#include "svdmodel.hxx"
-#include "svdpage.hxx"
-#include "svdmrkv.hxx"
-#include "svdpagv.hxx"
+#include <svx/svdpool.hxx>
+#include <svx/svdmodel.hxx>
+#include <svx/svdpage.hxx>
+#include <svx/svdmrkv.hxx>
+#include <svx/svdpagv.hxx>
 #include "svdviter.hxx"
-#include "svdview.hxx"
+#include <svx/svdview.hxx>
 #include "impgrf.hxx"
-#include "svdograf.hxx"
-#include "svdogrp.hxx"
-#include "xbitmap.hxx"
-#include "xbtmpit.hxx"
-#include "xflbmtit.hxx"
-#include "svdundo.hxx"
+#include <svx/svdograf.hxx>
+#include <svx/svdogrp.hxx>
+#include <svx/xbitmap.hxx>
+#include <svx/xbtmpit.hxx>
+#include <svx/xflbmtit.hxx>
+#include <svx/svdundo.hxx>
 #include "svdfmtf.hxx"
-#include "sdgcpitm.hxx"
+#include <svx/sdgcpitm.hxx>
 
 #ifndef _EEITEM_HXX
-#include "eeitem.hxx"
+#include <svx/eeitem.hxx>
 #endif
 
 #ifndef _SDR_PROPERTIES_GRAPHICPROPERTIES_HXX
