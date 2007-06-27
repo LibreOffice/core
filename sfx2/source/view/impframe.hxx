@@ -4,9 +4,9 @@
  *
  *  $RCSfile: impframe.hxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: hr $ $Date: 2006-06-19 22:37:55 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 23:33:52 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -40,8 +40,8 @@
 #include <svtools/cancel.hxx>
 #endif
 
-#include "frame.hxx"
-#include "viewfrm.hxx"                  // SvBorder
+#include <sfx2/frame.hxx>
+#include <sfx2/viewfrm.hxx>                  // SvBorder
 
 class SfxViewFrame;
 class SfxObjectShell;
@@ -62,8 +62,8 @@ class SfxObjectShell;
 #include <cppuhelper/weak.hxx>
 #endif
 
-#include <viewsh.hxx>
-#include <sfxuno.hxx>
+#include <sfx2/viewsh.hxx>
+#include <sfx2/sfxuno.hxx>
 
 #ifndef FRAME_SEARCH_PARENT
 #define FRAME_SEARCH_PARENT     0x00000001
