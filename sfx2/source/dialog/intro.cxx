@@ -4,9 +4,9 @@
  *
  *  $RCSfile: intro.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 16:32:24 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 23:12:25 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -49,7 +49,7 @@
 #include <com/sun/star/uno/Any.h>
 #endif
 
-#include "sfxuno.hxx"
+#include <sfx2/sfxuno.hxx>
 
 // -----------------------------------------------------------------------
 
