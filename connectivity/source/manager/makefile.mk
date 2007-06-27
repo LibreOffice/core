@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.12 $
+#   $Revision: 1.13 $
 #
-#   last change: $Author: kz $ $Date: 2007-05-10 14:11:33 $
+#   last change: $Author: hr $ $Date: 2007-06-27 14:41:09 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -52,8 +52,8 @@ ENVCFLAGS+=/FR$(SLO)$/
 # --- Files -------------------------------------
 
 SLOFILES=\
-        $(SLO)$/mdrivermanager.obj			\
-        $(SLO)$/registration.obj
+        $(SLO)$/mdrivermanager.obj  \
+        $(SLO)$/mregistration.obj   \
 
 # --- Library -----------------------------------
 
@@ -65,7 +65,7 @@ SHL1OBJS=$(SLOFILES)
 SHL1STDLIBS=\
     $(CPPULIB)					\
     $(CPPUHELPERLIB)			\
-    $(COMPHELPERLIB)			\
+    $(COMPHELPERLIB)            \
     $(VOSLIB)					\
     $(SALLIB)
 
