@@ -4,9 +4,9 @@
  *
  *  $RCSfile: frmload.cxx,v $
  *
- *  $Revision: 1.87 $
+ *  $Revision: 1.88 $
  *
- *  last change: $Author: vg $ $Date: 2006-11-01 18:28:51 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 23:33:26 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -124,18 +124,18 @@
 namespace css = ::com::sun::star;
 #endif
 
-#include "app.hxx"
-#include "request.hxx"
-#include "sfxsids.hrc"
-#include "dispatch.hxx"
-#include "sfxuno.hxx"
-#include "viewfrm.hxx"
-#include "topfrm.hxx"
-#include "frame.hxx"
-#include "docfac.hxx"
-#include "fcontnr.hxx"
-#include "docfile.hxx"
-#include "docfilt.hxx"
+#include <sfx2/app.hxx>
+#include <sfx2/request.hxx>
+#include <sfx2/sfxsids.hrc>
+#include <sfx2/dispatch.hxx>
+#include <sfx2/sfxuno.hxx>
+#include <sfx2/viewfrm.hxx>
+#include <sfx2/topfrm.hxx>
+#include <sfx2/frame.hxx>
+#include <sfx2/docfac.hxx>
+#include <sfx2/fcontnr.hxx>
+#include <sfx2/docfile.hxx>
+#include <sfx2/docfilt.hxx>
 #include "brokenpackageint.hxx"
 #include "objshimp.hxx"
 
