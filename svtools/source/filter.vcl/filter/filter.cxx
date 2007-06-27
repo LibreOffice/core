@@ -4,9 +4,9 @@
  *
  *  $RCSfile: filter.cxx,v $
  *
- *  $Revision: 1.67 $
+ *  $Revision: 1.68 $
  *
- *  last change: $Author: ihi $ $Date: 2007-06-05 18:25:51 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 21:35:23 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -50,18 +50,18 @@
 #include <vcl/virdev.hxx>
 #include <vcl/svapp.hxx>
 #include <osl/file.hxx>
-#include "filter.hxx"
+#include <svtools/filter.hxx>
 #ifndef _FILTER_CONFIG_CACHE_HXX_
 #include "FilterConfigCache.hxx"
 #endif
-#include <FilterConfigItem.hxx>
-#include "fltcall.hxx"
-#include "wmf.hxx"
+#include <svtools/FilterConfigItem.hxx>
+#include <svtools/fltcall.hxx>
+#include <svtools/wmf.hxx>
 #include "gifread.hxx"
 #include "jpeg.hxx"
 #include "xbmread.hxx"
 #include "xpmread.hxx"
-#include "solar.hrc"
+#include <svtools/solar.hrc>
 #include "strings.hrc"
 #include "sgffilt.hxx"
 #include "osl/module.hxx"
@@ -109,7 +109,7 @@
 #include <unotools/localfilehelper.hxx>
 #endif
 #ifndef INCLUDED_SVTOOLS_PATHOPTIONS_HXX
-#include <pathoptions.hxx>
+#include <svtools/pathoptions.hxx>
 #endif
 #ifndef _COMPHELPER_PROCESSFACTORY_HXX_
 #include <comphelper/processfactory.hxx>
