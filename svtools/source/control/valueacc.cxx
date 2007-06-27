@@ -4,9 +4,9 @@
  *
  *  $RCSfile: valueacc.cxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: vg $ $Date: 2007-05-22 19:32:57 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 21:26:24 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -40,7 +40,7 @@
 
 #include <unotools/accessiblestatesethelper.hxx>
 #include <vcl/svapp.hxx>
-#include "valueset.hxx"
+#include <svtools/valueset.hxx>
 #include "valueimp.hxx"
 
 #ifndef _COM_SUN_STAR_ACCESSIBILITY_ACCESSIBLEROLE_HPP_
