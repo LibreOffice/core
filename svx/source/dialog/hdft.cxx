@@ -4,9 +4,9 @@
  *
  *  $RCSfile: hdft.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: kz $ $Date: 2007-05-10 14:37:25 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 17:10:37 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -56,7 +56,7 @@
 #include <vcl/msgbox.hxx>
 #include <vcl/graph.hxx>
 
-#include "dialogs.hrc"
+#include <svx/dialogs.hrc>
 #include "hdft.hrc"
 
 
@@ -72,22 +72,22 @@
 
 #define _SVX_HDFT_CXX
 
-#include "hdft.hxx"
-#include "pageitem.hxx"
+#include <svx/hdft.hxx>
+#include <svx/pageitem.hxx>
 //CHINA001 #include "bbdlg.hxx"
 #include "dlgutil.hxx"
-#include "dialmgr.hxx"
+#include <svx/dialmgr.hxx>
 #include "htmlmode.hxx"
 
-#include "brshitem.hxx"
-#include "lrspitem.hxx"
-#include "ulspitem.hxx"
-#include "shaditem.hxx"
-#include "sizeitem.hxx"
-#include "boxitem.hxx"
+#include <svx/brshitem.hxx>
+#include <svx/lrspitem.hxx>
+#include <svx/ulspitem.hxx>
+#include <svx/shaditem.hxx>
+#include <svx/sizeitem.hxx>
+#include <svx/boxitem.hxx>
 
-#include "svxdlg.hxx" //CHINA001
-#include "dialogs.hrc" //CHINA001
+#include <svx/svxdlg.hxx> //CHINA001
+#include <svx/dialogs.hrc> //CHINA001
 // static ----------------------------------------------------------------
 
 // --> OD 2004-06-18 #i19922#
