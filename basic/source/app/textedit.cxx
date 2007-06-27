@@ -4,9 +4,9 @@
  *
  *  $RCSfile: textedit.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: obo $ $Date: 2006-10-12 14:24:03 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 14:16:40 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -50,17 +50,17 @@
 #include <svtools/txtattr.hxx>
 #endif
 #ifndef __SBX_SBXMETHOD_HXX //autogen
-#include <sbxmeth.hxx>
+#include <basic/sbxmeth.hxx>
 #endif
 #ifndef _BASIC_TTRESHLP_HXX
-#include "ttstrhlp.hxx"
+#include <basic/ttstrhlp.hxx>
 #endif
 
 #include "basic.hrc"
 #include "textedit.hxx"
 #include "appedit.hxx"
 #include "brkpnts.hxx"
-#include "testtool.hxx"     // defines für das Syntaxhighlighting
+#include <basic/testtool.hxx>       // defines für das Syntaxhighlighting
 
 TextEditImp::TextEditImp( AppEdit* pParent, const WinBits& aBits )
 : Window( pParent, aBits )
