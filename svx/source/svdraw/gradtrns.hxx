@@ -4,9 +4,9 @@
  *
  *  $RCSfile: gradtrns.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: ihi $ $Date: 2006-11-14 13:37:59 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 18:56:45 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -36,7 +36,7 @@
 #ifndef _GRADTRANS_HXX
 #define _GRADTRANS_HXX
 
-#include "xgrad.hxx"
+#include <svx/xgrad.hxx>
 
 #ifndef _SV_GEN_HXX
 #include <tools/gen.hxx>
