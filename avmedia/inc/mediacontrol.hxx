@@ -4,9 +4,9 @@
  *
  *  $RCSfile: mediacontrol.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: hr $ $Date: 2006-06-19 13:57:28 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 22:22:54 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -36,7 +36,7 @@
 #ifndef _AVMEDIA_MEDIACONTROL_HXX
 #define _AVMEDIA_MEDIACONTROL_HXX
 
-#include "mediaitem.hxx"
+#include <avmedia/mediaitem.hxx>
 
 #include <vcl/timer.hxx>
 #include <vcl/slider.hxx>

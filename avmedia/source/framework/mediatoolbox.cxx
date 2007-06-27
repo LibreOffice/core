@@ -4,9 +4,9 @@
  *
  *  $RCSfile: mediatoolbox.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: hr $ $Date: 2006-06-19 13:58:29 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 22:23:42 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -33,8 +33,8 @@
  *
  ************************************************************************/
 
-#include "mediatoolbox.hxx"
-#include "mediaitem.hxx"
+#include <avmedia/mediatoolbox.hxx>
+#include <avmedia/mediaitem.hxx>
 #include "mediacontrol.hxx"
 
 #include <sfx2/app.hxx>

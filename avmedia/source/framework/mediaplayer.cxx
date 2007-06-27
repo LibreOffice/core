@@ -4,9 +4,9 @@
  *
  *  $RCSfile: mediaplayer.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: hr $ $Date: 2006-06-19 13:58:18 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 22:23:30 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -33,9 +33,9 @@
  *
  ************************************************************************/
 
-#include "mediaplayer.hxx"
-#include "mediawindow.hxx"
-#include "mediaitem.hxx"
+#include <avmedia/mediaplayer.hxx>
+#include <avmedia/mediawindow.hxx>
+#include <avmedia/mediaitem.hxx>
 #include "mediamisc.hxx"
 #include "mediacontrol.hrc"
 #include "helpids.hrc"
