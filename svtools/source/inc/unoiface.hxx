@@ -4,9 +4,9 @@
  *
  *  $RCSfile: unoiface.hxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: ihi $ $Date: 2006-10-18 13:12:47 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 21:37:54 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -45,8 +45,8 @@
 #include <com/sun/star/awt/XTextArea.hpp>
 #include <com/sun/star/awt/XTextComponent.hpp>
 #include <com/sun/star/awt/XTextLayoutConstrains.hpp>
-#include <svmedit.hxx>
-#include <fmtfield.hxx>
+#include <svtools/svmedit.hxx>
+#include <svtools/fmtfield.hxx>
 
 #ifndef _COM_SUN_STAR_AWT_XIMAGECONSUMER_HPP_
 #include <com/sun/star/awt/XImageConsumer.hpp>
