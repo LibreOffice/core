@@ -4,9 +4,9 @@
  *
  *  $RCSfile: inettbc.hxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-07 16:58:37 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 22:52:50 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -49,7 +49,7 @@
 
 #if _SOLAR__PRIVATE
 
-#include "tbxctrl.hxx"
+#include <sfx2/tbxctrl.hxx>
 class SvtURLBox;
 
 class SfxURLToolBoxControl_Impl : public SfxToolBoxControl
