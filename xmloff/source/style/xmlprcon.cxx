@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xmlprcon.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 11:00:14 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 15:48:31 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -37,12 +37,12 @@
 #include "precompiled_xmloff.hxx"
 
 #ifndef _XMLOFF_XMLIMP_HXX
-#include "xmlimp.hxx"
+#include <xmloff/xmlimp.hxx>
 #endif
 
 
 #ifndef _XMLOFF_XMLPROPERTYSETCONTEXT_HXX
-#include "xmlprcon.hxx"
+#include <xmloff/xmlprcon.hxx>
 #endif
 
 using namespace ::rtl;
