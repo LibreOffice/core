@@ -4,9 +4,9 @@
  *
  *  $RCSfile: svx.sdi,v $
  *
- *  $Revision: 1.70 $
+ *  $Revision: 1.71 $
  *
- *  last change: $Author: hr $ $Date: 2007-01-02 15:46:49 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 13:38:42 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -14150,5 +14150,31 @@ SfxStringItem CurrentLanguage SID_BASICIDE_CURRENT_LANG
     StatusBarConfig = FALSE,
     ToolBoxConfig = TRUE,
     GroupId = GID_CONTROLS;
+]
+
+//--------------------------------------------------------------------------
+SfxVoidItem OpenSmartTagMenuOnCursor SID_OPEN_SMARTTAGMENU
+()
+[
+        /* flags: */
+        AutoUpdate = FALSE,
+        Cachable = Cachable,
+        FastCall = FALSE,
+        HasCoreId = FALSE,
+        HasDialog = FALSE,
+        ReadOnlyDoc = TRUE,
+        Toggle = FALSE,
+        Container = FALSE,
+        RecordAbsolute = FALSE,
+        RecordPerSet;
+        Synchron;
+        SlotType = SvxSmartTagItem;
+
+        /* config: */
+        AccelConfig = FALSE,
+        MenuConfig = TRUE,
+        StatusBarConfig = FALSE,
+        ToolBoxConfig = FALSE,
+        GroupId = GID_EDIT;
 ]
 
