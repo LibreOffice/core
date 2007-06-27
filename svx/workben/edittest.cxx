@@ -4,9 +4,9 @@
  *
  *  $RCSfile: edittest.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: kz $ $Date: 2007-05-10 15:04:22 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 19:37:23 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -36,17 +36,17 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_svx.hxx"
 
-#include <editeng.hxx>
-#include <eeitem.hxx>
-#include <editview.hxx>
-#include <editobj.hxx>
+#include <svx/editeng.hxx>
+#include <svx/eeitem.hxx>
+#include <svx/editview.hxx>
+#include <svx/editobj.hxx>
 #include <editstat.hxx>
 #include <eerdll.hxx>
-#include <flditem.hxx>
+#include <svx/flditem.hxx>
 #include <tools/urlobj.hxx>
-#include <svxacorr.hxx>
+#include <svx/svxacorr.hxx>
 #include <tools/fsys.hxx>
-#include <xpoly.hxx>
+#include <svx/xpoly.hxx>
 #include <svtools/filedlg.hxx>
 
 #include <vcl/window.hxx>
@@ -81,22 +81,22 @@
 #include <sfx2/sfxuno.hxx>
 
 // SVX
-#include <lrspitem.hxx>
-#include <shdditem.hxx>
-#include <cntritem.hxx>
-#include <crsditem.hxx>
-#include <udlnitem.hxx>
-#include <lspcitem.hxx>
-#include <escpitem.hxx>
-#include <kernitem.hxx>
-#include <akrnitem.hxx>
-#include <wrlmitem.hxx>
-#include <colritem.hxx>
-#include <ulspitem.hxx>
-#include <postitem.hxx>
-#include <adjitem.hxx>
-#include <wghtitem.hxx>
-#include <fhgtitem.hxx>
+#include <svx/lrspitem.hxx>
+#include <svx/shdditem.hxx>
+#include <svx/cntritem.hxx>
+#include <svx/crsditem.hxx>
+#include <svx/udlnitem.hxx>
+#include <svx/lspcitem.hxx>
+#include <svx/escpitem.hxx>
+#include <svx/kernitem.hxx>
+#include <svx/akrnitem.hxx>
+#include <svx/wrlmitem.hxx>
+#include <svx/colritem.hxx>
+#include <svx/ulspitem.hxx>
+#include <svx/postitem.hxx>
+#include <svx/adjitem.hxx>
+#include <svx/wghtitem.hxx>
+#include <svx/fhgtitem.hxx>
 #include <fontitem.hxx>
 #include <fwdtitem.hxx>
 
