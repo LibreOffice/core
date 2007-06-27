@@ -4,9 +4,9 @@
  *
  *  $RCSfile: chardlg.cxx,v $
  *
- *  $Revision: 1.94 $
+ *  $Revision: 1.95 $
  *
- *  last change: $Author: kz $ $Date: 2007-05-10 14:36:05 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 16:51:41 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -82,8 +82,8 @@
 #include <svtools/languageoptions.hxx>
 #endif
 
-#include "dialogs.hrc"
-#include "svxitems.hrc"
+#include <svx/dialogs.hrc>
+#include <svx/svxitems.hrc>
 #include "chardlg.hrc"
 
 //Erstmal definieren, damit die Klassendeklarionen angezogen werden.
@@ -114,48 +114,48 @@
 
 
 
-#include "xtable.hxx"       // XColorTable
+#include <svx/xtable.hxx>       // XColorTable
 #include "chardlg.hxx"
 #include "fontitem.hxx"
-#include "postitem.hxx"
-#include "udlnitem.hxx"
-#include "crsditem.hxx"
-#include "cntritem.hxx"
-#include "langitem.hxx"
-#include "wghtitem.hxx"
-#include "fhgtitem.hxx"
-#include "shdditem.hxx"
-#include "escpitem.hxx"
-#include "prszitem.hxx"
-#include "wrlmitem.hxx"
-#include "cmapitem.hxx"
-#include "kernitem.hxx"
-#include "blnkitem.hxx"
+#include <svx/postitem.hxx>
+#include <svx/udlnitem.hxx>
+#include <svx/crsditem.hxx>
+#include <svx/cntritem.hxx>
+#include <svx/langitem.hxx>
+#include <svx/wghtitem.hxx>
+#include <svx/fhgtitem.hxx>
+#include <svx/shdditem.hxx>
+#include <svx/escpitem.hxx>
+#include <svx/prszitem.hxx>
+#include <svx/wrlmitem.hxx>
+#include <svx/cmapitem.hxx>
+#include <svx/kernitem.hxx>
+#include <svx/blnkitem.hxx>
 #include "flstitem.hxx"
-#include "akrnitem.hxx"
-#include "brshitem.hxx"
-#include "colritem.hxx"
+#include <svx/akrnitem.hxx>
+#include <svx/brshitem.hxx>
+#include <svx/colritem.hxx>
 #include "drawitem.hxx"
 #include "dlgutil.hxx"
-#include "dialmgr.hxx"
+#include <svx/dialmgr.hxx>
 #include "htmlmode.hxx"
-#include "charmap.hxx"
+#include <svx/charmap.hxx>
 #include "chardlg.h"
-#include "emphitem.hxx"
-#include <charreliefitem.hxx>
-#include "twolinesitem.hxx"
+#include <svx/emphitem.hxx>
+#include <svx/charreliefitem.hxx>
+#include <svx/twolinesitem.hxx>
 #ifndef _SVX_CHARHIDDENITEM_HXX
 #include <charhiddenitem.hxx>
 #endif
 
 #ifndef _SVX_CHARSCALEITEM_HXX
-#include <charscaleitem.hxx>
+#include <svx/charscaleitem.hxx>
 #endif
 #ifndef _SVX_CHARROTATEITEM_HXX
-#include <charrotateitem.hxx>
+#include <svx/charrotateitem.hxx>
 #endif
-#include "svxdlg.hxx" //CHINA001
-#include "dialogs.hrc" //CHINA001
+#include <svx/svxdlg.hxx> //CHINA001
+#include <svx/dialogs.hrc> //CHINA001
 #ifndef _SFXINTITEM_HXX //CHINA001
 #include <svtools/intitem.hxx> //CHINA001
 #endif //CHINA001
