@@ -4,9 +4,9 @@
  *
  *  $RCSfile: extoutdevdata.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 11:59:41 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 20:12:01 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -37,7 +37,7 @@
 #include "precompiled_vcl.hxx"
 
 #ifndef _VCL_EXTOUTDEVDATA_HXX
-#include "extoutdevdata.hxx"
+#include <vcl/extoutdevdata.hxx>
 #endif
 
 #ifndef _RTTI_HXX
