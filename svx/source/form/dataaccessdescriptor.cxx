@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dataaccessdescriptor.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 05:03:19 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 18:10:16 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -37,7 +37,7 @@
 #include "precompiled_svx.hxx"
 
 #ifndef _SVX_DATACCESSDESCRIPTOR_HXX_
-#include "dataaccessdescriptor.hxx"
+#include <svx/dataaccessdescriptor.hxx>
 #endif
 #ifndef _COMPHELPER_STLTYPES_HXX_
 #include <comphelper/stl_types.hxx>
