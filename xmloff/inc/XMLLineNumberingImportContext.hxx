@@ -4,9 +4,9 @@
  *
  *  $RCSfile: XMLLineNumberingImportContext.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 12:52:39 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 14:41:01 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -37,7 +37,7 @@
 #define _XMLOFF_XMLLINENUMBERINGIMPORTCONTEXT_HXX_
 
 #ifndef _XMLOFF_XMLSTYLE_HXX
-#include "xmlstyle.hxx"
+#include <xmloff/xmlstyle.hxx>
 #endif
 
 #ifndef _RTL_USTRING_HXX_
