@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.19 $
+#   $Revision: 1.20 $
 #
-#   last change: $Author: ihi $ $Date: 2006-12-20 13:55:07 $
+#   last change: $Author: hr $ $Date: 2007-06-27 12:24:08 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -52,6 +52,7 @@ USE_DEFFILE=TRUE
 
 LIB1TARGET= $(SLB)$/$(TARGET).lib
 LIB1FILES=	$(SLB)$/awt.lib \
+            $(SLB)$/tree.lib \
             $(SLB)$/controls.lib \
             $(SLB)$/helper.lib
 SHL1TARGET= tk$(VERSION)$(DLLPOSTFIX)
