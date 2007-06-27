@@ -4,9 +4,9 @@
  *
  *  $RCSfile: fontworkbar.src,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: ihi $ $Date: 2007-04-19 14:44:36 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 19:21:09 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -33,7 +33,7 @@
  *
  ************************************************************************/
 
-#include <dialogs.hrc>
+#include <svx/dialogs.hrc>
 
 ToolBox RID_SVX_FONTWORK_BAR
 {
