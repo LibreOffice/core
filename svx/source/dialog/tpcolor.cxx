@@ -5,9 +5,9 @@
  *
  *  $RCSfile: tpcolor.cxx,v $
  *
- *  $Revision: 1.28 $
+ *  $Revision: 1.29 $
  *
- *  last change: $Author: kz $ $Date: 2007-05-10 14:43:36 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 17:48:39 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -72,19 +72,19 @@
 #define _SVX_TPCOLOR_CXX
 
 
-#include "dialogs.hrc"
+#include <svx/dialogs.hrc>
 #include "helpid.hrc"
 
 #include "xattr.hxx"
-#include "xpool.hxx"
-#include "xtable.hxx"
+#include <svx/xpool.hxx>
+#include <svx/xtable.hxx>
 #include "drawitem.hxx"
 #include "cuitabarea.hxx"
 #include "tabarea.hrc"
 #include "defdlgname.hxx" //CHINA001 #include "dlgname.hxx"
 #include "dlgname.hrc"
-#include "svxdlg.hxx" //CHINA001
-#include "dialmgr.hxx"
+#include <svx/svxdlg.hxx> //CHINA001
+#include <svx/dialmgr.hxx>
 
 #define DLGWIN GetParentDialog( this )
 
