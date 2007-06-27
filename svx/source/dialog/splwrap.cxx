@@ -4,9 +4,9 @@
  *
  *  $RCSfile: splwrap.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: rt $ $Date: 2007-04-26 07:42:52 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 17:39:28 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -90,13 +90,13 @@
 
 
 
-#include "svxenum.hxx"
+#include <svx/svxenum.hxx>
 #include "hyphen.hxx"       // Der HyphenDialog
-#include "splwrap.hxx"      // Der Wrapper
-#include "thesdlg.hxx"      // ThesaurusDlg
-#include "dialmgr.hxx"
+#include <svx/splwrap.hxx>      // Der Wrapper
+#include <svx/thesdlg.hxx>      // ThesaurusDlg
+#include <svx/dialmgr.hxx>
 
-#include "dialogs.hrc"
+#include <svx/dialogs.hrc>
 
 //#define WAIT_ON() pWin->EnterWait()
 //#define WAIT_OFF()    pWin->LeaveWait()
