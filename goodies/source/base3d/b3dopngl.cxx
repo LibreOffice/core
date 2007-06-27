@@ -4,9 +4,9 @@
  *
  *  $RCSfile: b3dopngl.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: ihi $ $Date: 2006-11-14 16:08:00 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 22:27:38 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -65,7 +65,7 @@
 #endif
 
 #ifndef _B3D_B3DGEOM_HXX
-#include "b3dgeom.hxx"
+#include <goodies/b3dgeom.hxx>
 #endif
 
 /*************************************************************************
