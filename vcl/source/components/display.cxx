@@ -4,9 +4,9 @@
  *
  *  $RCSfile: display.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: obo $ $Date: 2007-01-25 11:23:19 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 20:04:02 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -55,7 +55,7 @@
 #include <com/sun/star/lang/DisposedException.hpp>
 #endif
 
-#include <svapp.hxx>
+#include <vcl/svapp.hxx>
 
 #include <cppuhelper/implbase3.hxx>
 #include <cppuhelper/implbase4.hxx>
