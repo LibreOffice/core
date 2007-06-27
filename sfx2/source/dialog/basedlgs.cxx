@@ -4,9 +4,9 @@
  *
  *  $RCSfile: basedlgs.cxx,v $
  *
- *  $Revision: 1.28 $
+ *  $Revision: 1.29 $
  *
- *  last change: $Author: obo $ $Date: 2007-01-23 07:14:31 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 23:09:26 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -55,14 +55,14 @@
 #ifndef GCC
 #endif
 
-#include "basedlgs.hxx"
-#include "viewfrm.hxx"
-#include "tabdlg.hxx"
-#include "app.hxx"
-#include "bindings.hxx"
-#include "dispatch.hxx"
-#include "childwin.hxx"
-#include "viewsh.hxx"
+#include <sfx2/basedlgs.hxx>
+#include <sfx2/viewfrm.hxx>
+#include <sfx2/tabdlg.hxx>
+#include <sfx2/app.hxx>
+#include <sfx2/bindings.hxx>
+#include <sfx2/dispatch.hxx>
+#include <sfx2/childwin.hxx>
+#include <sfx2/viewsh.hxx>
 #include "sfxhelp.hxx"
 #include "workwin.hxx"
 
