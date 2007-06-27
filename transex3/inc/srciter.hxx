@@ -4,9 +4,9 @@
  *
  *  $RCSfile: srciter.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: hr $ $Date: 2006-08-14 17:08:40 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 22:29:01 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -35,7 +35,7 @@
 
 #ifndef TRANSEX_DIRECTORY_HXX
 #define TRANSEX_DIRECTORY_HXX
-#include "directory.hxx"
+#include <transex3/directory.hxx>
 #endif
 
 // class SourceTreeIterator
