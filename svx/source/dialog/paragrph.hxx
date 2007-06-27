@@ -4,9 +4,9 @@
  *
  *  $RCSfile: paragrph.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: obo $ $Date: 2006-10-12 12:24:29 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 17:32:56 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -50,10 +50,10 @@
 #include "relfld.hxx"       // SvxRelativeField
 #endif
 #ifndef _SVX_PARAPREV_HXX
-#include "paraprev.hxx"     // Preview
+#include <svx/paraprev.hxx>     // Preview
 #endif
 #ifndef _SVX_FRMDIRLBOX_HXX
-#include "frmdirlbox.hxx"
+#include <svx/frmdirlbox.hxx>
 #endif
 
 #ifndef _LSTBOX_HXX //autogen
