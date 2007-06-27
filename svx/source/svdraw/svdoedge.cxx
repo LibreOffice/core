@@ -4,9 +4,9 @@
  *
  *  $RCSfile: svdoedge.cxx,v $
  *
- *  $Revision: 1.40 $
+ *  $Revision: 1.41 $
  *
- *  last change: $Author: vg $ $Date: 2006-11-21 16:56:14 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 19:05:54 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -36,23 +36,23 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_svx.hxx"
 
-#include "svdoedge.hxx"
-#include "xpool.hxx"
-#include "xpoly.hxx"
-#include "svdattrx.hxx"
-#include "svdpool.hxx"
-#include "svdmodel.hxx"
-#include "svdpage.hxx"
-#include "svdpagv.hxx"
-#include "svdview.hxx"
+#include <svx/svdoedge.hxx>
+#include <svx/xpool.hxx>
+#include <svx/xpoly.hxx>
+#include <svx/svdattrx.hxx>
+#include <svx/svdpool.hxx>
+#include <svx/svdmodel.hxx>
+#include <svx/svdpage.hxx>
+#include <svx/svdpagv.hxx>
+#include <svx/svdview.hxx>
 #include "svdxout.hxx"
-#include "svddrag.hxx"
-#include "svddrgv.hxx"
+#include <svx/svddrag.hxx>
+#include <svx/svddrgv.hxx>
 #include "svddrgm1.hxx"
-#include "svdhdl.hxx"
+#include <svx/svdhdl.hxx>
 #include "svdtouch.hxx"
-#include "svdtrans.hxx"
-#include "svdetc.hxx"
+#include <svx/svdtrans.hxx>
+#include <svx/svdetc.hxx>
 #include "svdglob.hxx"   // StringCache
 #include "svdstr.hrc"    // Objektname
 
@@ -65,7 +65,7 @@
 #endif
 
 #ifndef _EEITEM_HXX
-#include "eeitem.hxx"
+#include <svx/eeitem.hxx>
 #endif
 
 #ifndef _SVX_SVDOIMP_HXX
