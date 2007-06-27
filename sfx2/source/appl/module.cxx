@@ -4,9 +4,9 @@
  *
  *  $RCSfile: module.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: rt $ $Date: 2007-04-26 10:06:57 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 22:59:59 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -43,19 +43,19 @@
 #include <tools/rcid.h>
 
 #include <cstdarg>
-#include "module.hxx"
-#include "app.hxx"
+#include <sfx2/module.hxx>
+#include <sfx2/app.hxx>
 #include "arrdecl.hxx"
 #include "sfxresid.hxx"
-#include "msgpool.hxx"
-#include "tbxctrl.hxx"
+#include <sfx2/msgpool.hxx>
+#include <sfx2/tbxctrl.hxx>
 #include "stbitem.hxx"
-#include "mnuitem.hxx"
-#include "childwin.hxx"
-#include "mnumgr.hxx"
-#include "docfac.hxx"
-#include "objface.hxx"
-#include "viewfrm.hxx"
+#include <sfx2/mnuitem.hxx>
+#include <sfx2/childwin.hxx>
+#include <sfx2/mnumgr.hxx>
+#include <sfx2/docfac.hxx>
+#include <sfx2/objface.hxx>
+#include <sfx2/viewfrm.hxx>
 
 #define SfxModule
 #include "sfxslots.hxx"
