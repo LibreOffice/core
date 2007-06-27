@@ -4,9 +4,9 @@
  *
  *  $RCSfile: applet.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: obo $ $Date: 2007-03-12 11:00:19 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 23:18:24 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -37,8 +37,8 @@
 #include "precompiled_sfx2.hxx"
 
 #include "applet.hxx"
-#include "sfxdlg.hxx"
-#include "sfxsids.hrc"
+#include <sfx2/sfxdlg.hxx>
+#include <sfx2/sfxsids.hrc>
 
 #include "com/sun/star/uno/XComponentContext.hpp"
 #include "cppuhelper/factory.hxx"
