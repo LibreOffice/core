@@ -1,0 +1,96 @@
+/*************************************************************************
+ *
+ *  OpenOffice.org - a multi-platform office productivity suite
+ *
+ *  $RCSfile: XLogFormatter.idl,v $
+ *
+ *  $Revision: 1.2 $
+ *
+ *  last change: $Author: hr $ $Date: 2007-06-27 14:48:06 $
+ *
+ *  The Contents of this file are made available subject to
+ *  the terms of GNU Lesser General Public License Version 2.1.
+ *
+ *
+ *    GNU Lesser General Public License Version 2.1
+ *    =============================================
+ *    Copyright 2005 by Sun Microsystems, Inc.
+ *    901 San Antonio Road, Palo Alto, CA 94303, USA
+ *
+ *    This library is free software; you can redistribute it and/or
+ *    modify it under the terms of the GNU Lesser General Public
+ *    License version 2.1, as published by the Free Software Foundation.
+ *
+ *    This library is distributed in the hope that it will be useful,
+ *    but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ *    Lesser General Public License for more details.
+ *
+ *    You should have received a copy of the GNU Lesser General Public
+ *    License along with this library; if not, write to the Free Software
+ *    Foundation, Inc., 59 Temple Place, Suite 330, Boston,
+ *    MA  02111-1307  USA
+ *
+ ************************************************************************/
+
+#ifndef __com_sun_star_logging_XLogFormatter_idl__
+#define __com_sun_star_logging_XLogFormatter_idl__
+
+#ifndef __com_sun_star_uno_XInterface_idl__
+#include <com/sun/star/uno/XInterface.idl>
+#endif
+
+#ifndef __com_sun_star_logging_LogRecord_idl__
+#include <com/sun/star/logging/LogRecord.idl>
+#endif
+
+//=============================================================================
+
+module com { module sun { module star { module logging {
+
+//=============================================================================
+
+/** specifies the interface to be used for formatting log records
+
+    @see XLogHandler
+
+    @since OOo 2.3
+*/
+interface XLogFormatter
+{
+    /** returns the header string for the log
+
+        <p>This can be used to generate a header string, which by the <type>XLogHandler</type>
+        is emitted to its output channel before actually logging any concrete
+        <type>LogRecord</type>.</p>
+
+        <p>For instance, a formatter might produce table-like plain text output,
+        and could return a table-head string (potentially including line breaks)
+        here.</p>
+    */
+    string  getHead();
+
+    /** formats the given log record for output
+
+        <p>A <type>XLogHandler</type> will call this method to format a given
+        log record. The resulting string will be emitted to the handler's output
+        channel, without processing it any further (except possibly encoding it with
+        the handler's <code>Encoding</code>).</p>
+    */
+    string  format( [in] LogRecord Record );
+
+    /** returns the footer string for the log
+
+        <p>This can be used to generate a footer string, which by the <type>XLogHandler</type>
+        is emitted to its output channel before it is finally being closed.</p>
+    */
+    string  getTail();
+};
+
+//=============================================================================
+
+}; }; }; };
+
+//=============================================================================
+
+#endif
