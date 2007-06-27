@@ -4,9 +4,9 @@
  *
  *  $RCSfile: Bootstrap.java,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: obo $ $Date: 2006-01-20 10:11:54 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 13:22:42 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -286,7 +286,7 @@ public class Bootstrap {
                 ";urp;StarOffice.ComponentContext";
 
             // wait until office is started
-            for ( ; ; ) {
+            for (int i = 0;; ++i) {
                 try {
                     // try to connect to office
                     Object context = xUrlResolver.resolve( sConnect );
@@ -296,7 +296,11 @@ public class Bootstrap {
                         throw new BootstrapException( "no component context!" );
                     break;
                 } catch ( com.sun.star.connection.NoConnectException ex ) {
-                    // wait 500 ms, then try to connect again
+                    // Wait 500 ms, then try to connect again, but do not wait
+                    // longer than 5 min (= 600 * 500 ms) total:
+                    if (i == 600) {
+                        throw new BootstrapException(ex.toString());
+                    }
                     Thread.currentThread().sleep( 500 );
                 }
             }
