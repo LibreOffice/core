@@ -4,9 +4,9 @@
  *
  *  $RCSfile: stmenu.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: hr $ $Date: 2007-01-02 16:54:04 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 13:26:22 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -40,91 +40,128 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_sw.hxx"
 
-#ifndef _HINTIDS_HXX
-#include <hintids.hxx>
-#endif
-#ifndef _HELPID_H
-#include <helpid.h>
-#endif
-#ifndef _SWTYPES_HXX
-#include <swtypes.hxx>
-#endif
-
 #ifndef _STMENU_HXX
 #include <stmenu.hxx>
 #endif
+
+#ifndef _COM_SUN_STAR_UNO_SEQUENCE_HXX_
+#include <com/sun/star/uno/Sequence.hxx>
+#endif
+#ifndef _SFXENUMITEM_HXX //autogen
+#include <svtools/eitem.hxx>
+#endif
+#ifndef _SFXDISPATCH_HXX //autogen
+#include <sfx2/dispatch.hxx>
+#endif
+
+#include <SwSmartTagMgr.hxx>
+
 #ifndef _STMENU_HRC
 #include <stmenu.hrc>
 #endif
 #ifndef _VIEW_HXX
 #include <view.hxx>
 #endif
-
-#ifndef _COM_SUN_STAR_TEXT_XTEXTDOCUMENT_HPP_
-#include <com/sun/star/text/XTextDocument.hpp>
-#endif
-#ifndef _COM_SUN_STAR_FRAME_XMODEL_HPP_
-#include "com/sun/star/frame/XModel.hpp"
-#endif
-#ifndef _SWDOCSH_HXX //autogen
-#include <docsh.hxx>
+#ifndef _BREAKIT_HXX
+#include <breakit.hxx>
 #endif
 
-#define C2U(cChar) OUString::createFromAscii(cChar)
+#define C2U(cChar) rtl::OUString::createFromAscii(cChar)
 
-using namespace ::com::sun::star::frame;
+using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
-using namespace ::com::sun::star::text;
 
-SwSmartTagPopup::SwSmartTagPopup( SwView* _pSwView, std::vector <ActionReference> _aActionRefs, Reference<XTextRange> _xTextRange ) :
-   PopupMenu(SW_RES(MN_SMARTTAG_POPUP)),
-   pSwView ( _pSwView ),
-   aActionRefs(_aActionRefs), xTextRange (_xTextRange)
+SwSmartTagPopup::SwSmartTagPopup( SwView* pSwView,
+                                  Sequence< rtl::OUString >& rSmartTagTypes,
+                                  Sequence< Reference< container::XStringKeyMap > >& rStringKeyMaps,
+                                  Reference< text::XTextRange > xTextRange ) :
+    PopupMenu( SW_RES(MN_SMARTTAG_POPUP) ),
+    mpSwView ( pSwView ),
+    mxTextRange( xTextRange )
 {
-    CreateAutoMnemonics();
+    //CreateAutoMnemonics();
 
-    PopupMenu *pMenu = GetPopupMenu(MN_SMARTTAG);
-   if (!pMenu) {
-       return;
-   }
+    Reference <frame::XController> xController = mpSwView->GetController();
+    const lang::Locale aLocale( SW_BREAKITER()->GetLocale( (LanguageType)GetAppLanguage() ) );
 
+    USHORT nMenuPos = 0;
+    USHORT nSubMenuPos = 0;
+    USHORT nMenuId = 1;
+    USHORT nSubMenuId = MN_ST_INSERT_START;
 
-   pMenu->SetMenuFlags(MENU_FLAG_NOAUTOMNEMONICS);
-   sal_Bool bEnable = sal_True;
+    const rtl::OUString aRangeText = mxTextRange->getString();
 
-   Reference <XController> xController = pSwView->GetController();
+    SmartTagMgr& rSmartTagMgr = SwSmartTagMgr::Get();
+    const rtl::OUString aApplicationName( rSmartTagMgr.GetApplicationName() );
 
-   nMaxVerbCount=0;
-   for (int i=0; i<aActionRefs.size(); i++) {
-       Reference<XSmartTagAction> aSmartTagAction = aActionRefs[i].aSmartTagAction;
-       sal_Int32 nSmartTagIndex = aActionRefs[i].nSmartTagIndex;
-       if (aSmartTagAction->getActionCount(nSmartTagIndex, xController)>nMaxVerbCount)
-           nMaxVerbCount = aSmartTagAction->getActionCount(nSmartTagIndex, xController);
-   }
+    Sequence < Sequence< Reference< smarttags::XSmartTagAction > > > aActionComponentsSequence;
+    Sequence < Sequence< sal_Int32 > > aActionIndicesSequence;
 
-   // add menuitem for every smarttag
-   for (sal_uInt16 i=0; i<aActionRefs.size(); i++) {
-       Reference<XSmartTagAction> aSmartTagAction = aActionRefs[i].aSmartTagAction;
-       sal_Int32 nSmartTagIndex = aActionRefs[i].nSmartTagIndex;
+    rSmartTagMgr.GetActionSequences( rSmartTagTypes,
+                                     aActionComponentsSequence,
+                                     aActionIndicesSequence );
 
-       InsertItem(i+1, aSmartTagAction->getSmartTagCaption(nSmartTagIndex, xController));
-       PopupMenu* pSubMenu = new PopupMenu;
-       SetPopupMenu(i+1, pSubMenu);
+    InsertSeparator(0);
 
+    for ( USHORT j = 0; j < aActionComponentsSequence.getLength(); ++j )
+    {
+        Reference< container::XStringKeyMap > xSmartTagProperties = rStringKeyMaps[j];
 
-       // add subitem for every action of current smarttag
-       for (int j=0; j<aSmartTagAction->getActionCount(nSmartTagIndex, xController); j++) {
-           // compute the unique id that comprises the information in which
-           // smarttag library the action can be found and which action is actually meant
-           // This id is needed later in the execute method to invoke the correct
-           // action in the smarttag object
-           sal_uInt16 nId = (i*nMaxVerbCount + j) + MN_ST_INSERT_START;
-           pSubMenu->InsertItem(nId, aSmartTagAction->getActionCaption(nSmartTagIndex, j, xController));
-       }
-   }
-   EnableItem( MN_SMARTTAG, bEnable );
+        // Get all actions references associated with the current smart tag type:
+        const Sequence< Reference< smarttags::XSmartTagAction > >& rActionComponents = aActionComponentsSequence[j];
+        const Sequence< sal_Int32 >& rActionIndices = aActionIndicesSequence[j];
 
-   RemoveDisabledEntries( TRUE, TRUE );
+        if ( 0 == rActionComponents.getLength() || 0 == rActionIndices.getLength() )
+            continue;
+
+        // Ask first entry for the smart tag type caption:
+        Reference< smarttags::XSmartTagAction > xAction = rActionComponents[0];
+
+        if ( !xAction.is() )
+            continue;
+
+        const sal_Int32 nSmartTagIndex = rActionIndices[0];
+        const rtl::OUString aSmartTagType = xAction->getSmartTagName( nSmartTagIndex );
+        const rtl::OUString aSmartTagCaption = xAction->getSmartTagCaption( nSmartTagIndex, aLocale );
+
+        // no sub-menues if there's only one smart tag type listed:
+        PopupMenu* pSbMenu = this;
+        if ( 1 < aActionComponentsSequence.getLength() )
+        {
+            InsertItem( nMenuId, aSmartTagCaption, 0, nMenuPos++);
+            pSbMenu = new PopupMenu;
+            SetPopupMenu( nMenuId++, pSbMenu );
+        }
+
+        // sub-menu starts with smart tag caption and separator
+        const rtl::OUString aSmartTagCaption2 = aSmartTagCaption + C2U(": ") + aRangeText;
+        nSubMenuPos = 0;
+        pSbMenu->InsertItem( nMenuId++, aSmartTagCaption2, MIB_NOSELECT, nSubMenuPos++ );
+        pSbMenu->InsertSeparator( nSubMenuPos++ );
+
+        // Add subitem for every action reference for the current smart tag type:
+        for ( USHORT i = 0; i < rActionComponents.getLength(); ++i )
+        {
+            xAction = rActionComponents[i];
+
+            for ( sal_Int32 k = 0; k < xAction->getActionCount( aSmartTagType, xController ); ++k )
+            {
+                const sal_uInt32 nActionID = xAction->getActionID( aSmartTagType, k, xController  );
+                rtl::OUString aActionCaption = xAction->getActionCaptionFromID( nActionID,
+                                                                                aApplicationName,
+                                                                                aLocale,
+                                                                                xSmartTagProperties,
+                                                                                aRangeText,
+                                                                                rtl::OUString(),
+                                                                                xController,
+                                                                                mxTextRange );
+
+                pSbMenu->InsertItem( nSubMenuId++, aActionCaption, 0, nSubMenuPos++ );
+                InvokeAction aEntry( xAction, xSmartTagProperties, nActionID );
+                maInvokeActions.push_back( aEntry );
+            }
+        }
+    }
 }
 
 /** Function: Execute
@@ -133,26 +170,39 @@ SwSmartTagPopup::SwSmartTagPopup( SwView* _pSwView, std::vector <ActionReference
    smarttag library.
 
 */
-sal_uInt16  SwSmartTagPopup::Execute( Window* pWin, const Rectangle& rWordPos )
+sal_uInt16 SwSmartTagPopup::Execute( Window* pWin, const Rectangle& rWordPos )
 {
-  SetMenuFlags(MENU_FLAG_NOAUTOMNEMONICS);
-  sal_uInt16 nRet = PopupMenu::Execute(pWin, pWin->LogicToPixel(rWordPos));
+    sal_uInt16 nId = PopupMenu::Execute(pWin, pWin->LogicToPixel(rWordPos));
 
-  if (nRet < MN_ST_INSERT_START) return nRet;
+    if ( nId == MN_SMARTTAG_OPTIONS )
+    {
+        SfxBoolItem aBool(SID_OPEN_SMARTTAGOPTIONS, TRUE);
+        mpSwView->GetViewFrame()->GetDispatcher()->Execute( SID_AUTO_CORRECT_DLG, SFX_CALLMODE_ASYNCHRON, &aBool, 0L );
+    }
 
-  // compute smarttag lib index and action index
-  nRet -= MN_ST_INSERT_START;
-  sal_Int32 nRefIndex  = nRet / nMaxVerbCount;
-  sal_Int32 nActionIndex =  nRet % nMaxVerbCount;
+    if ( nId < MN_ST_INSERT_START) return nId;
+    nId -= MN_ST_INSERT_START;
 
-  Reference<XSmartTagAction> aSmartTagAction = aActionRefs[nRefIndex].aSmartTagAction;
-  sal_Int32 nSmartTagIndex = aActionRefs[nRefIndex].nSmartTagIndex;
+    // compute smarttag lib index and action index
+    if ( nId < maInvokeActions.size() )
+    {
+        Reference< smarttags::XSmartTagAction > xSmartTagAction = maInvokeActions[ nId ].mxAction;
 
-  Reference <XController> xController = pSwView->GetController();
+        // execute action
+        if ( xSmartTagAction.is() )
+        {
+            SmartTagMgr& rSmartTagMgr = SwSmartTagMgr::Get();
 
-  // execute action
-  aSmartTagAction->invokeAction(nSmartTagIndex, nActionIndex, xTextRange, xController);
+            xSmartTagAction->invokeAction( maInvokeActions[ nId ].mnActionID,
+                                           rSmartTagMgr.GetApplicationName(),
+                                           mpSwView->GetController(),
+                                           mxTextRange,
+                                           maInvokeActions[ nId ].mxSmartTagProperties,
+                                           mxTextRange->getString(),
+                                           rtl::OUString(),
+                                           SW_BREAKITER()->GetLocale( (LanguageType)GetAppLanguage() )  );
+        }
+    }
 
-  return nRet;
+    return nId;
 }
-
