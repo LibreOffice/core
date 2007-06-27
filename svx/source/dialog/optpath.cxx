@@ -4,9 +4,9 @@
  *
  *  $RCSfile: optpath.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: kz $ $Date: 2007-05-10 14:39:51 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 17:30:40 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -42,7 +42,7 @@
 
 // include ---------------------------------------------------------------
 
-#include "svxdlg.hxx" //CHINA001
+#include <svx/svxdlg.hxx> //CHINA001
 
 #ifndef _SHL_HXX
 #include <tools/shl.hxx>
@@ -84,10 +84,10 @@
 #define _SVX_OPTPATH_CXX
 
 #include "optpath.hxx"
-#include "dialmgr.hxx"
+#include <svx/dialmgr.hxx>
 //CHINA001 #include "multipat.hxx"
 #include "optpath.hrc"
-#include "dialogs.hrc"
+#include <svx/dialogs.hrc>
 #include "helpid.hrc"
 
 #ifndef _COMPHELPER_PROCESSFACTORY_HXX_
