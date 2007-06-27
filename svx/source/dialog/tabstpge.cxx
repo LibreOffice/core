@@ -4,9 +4,9 @@
  *
  *  $RCSfile: tabstpge.cxx,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: kz $ $Date: 2007-05-10 14:42:54 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 17:44:59 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -58,12 +58,12 @@
 
 #define _SVX_TABSTPGE_CXX
 
-#include "dialogs.hrc"
+#include <svx/dialogs.hrc>
 #include "tabstpge.hrc"
 
-#include "lrspitem.hxx"
+#include <svx/lrspitem.hxx>
 #include "tabstpge.hxx"
-#include "dialmgr.hxx"
+#include <svx/dialmgr.hxx>
 #include "dlgutil.hxx"
 
 #ifndef _SFXMODULE_HXX
@@ -80,7 +80,7 @@
 #include <comphelper/processfactory.hxx>
 #endif
 #include <sfx2/request.hxx> //CHINA001
-#include <svxids.hrc> //add CHINA001
+#include <svx/svxids.hrc> //add CHINA001
 #include <svtools/intitem.hxx> //add CHINA001
 
 
