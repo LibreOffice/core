@@ -4,9 +4,9 @@
  *
  *  $RCSfile: page.cxx,v $
  *
- *  $Revision: 1.36 $
+ *  $Revision: 1.37 $
  *
- *  last change: $Author: kz $ $Date: 2007-05-10 14:40:04 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 17:31:38 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -85,7 +85,7 @@
 
 #define _SVX_PAGE_CXX
 
-#include "dialogs.hrc"
+#include <svx/dialogs.hrc>
 #include "page.hrc"
 #include "helpid.hrc"
 
@@ -94,20 +94,20 @@
 
 
 #include "page.hxx"
-#include "pageitem.hxx"
-#include "brshitem.hxx"
-#include "boxitem.hxx"
-#include "shaditem.hxx"
-#include "pbinitem.hxx"
-#include "lrspitem.hxx"
-#include "ulspitem.hxx"
-#include "sizeitem.hxx"
-#include "frmdiritem.hxx"
+#include <svx/pageitem.hxx>
+#include <svx/brshitem.hxx>
+#include <svx/boxitem.hxx>
+#include <svx/shaditem.hxx>
+#include <svx/pbinitem.hxx>
+#include <svx/lrspitem.hxx>
+#include <svx/ulspitem.hxx>
+#include <svx/sizeitem.hxx>
+#include <svx/frmdiritem.hxx>
 //CHINA001 #include "bbdlg.hxx"
 #include "dlgutil.hxx"
-#include "dialmgr.hxx"
-#include "paperinf.hxx"
-#include "dialmgr.hxx"
+#include <svx/dialmgr.hxx>
+#include <svx/paperinf.hxx>
+#include <svx/dialmgr.hxx>
 
 #ifndef _SFXMODULE_HXX
 #include <sfx2/module.hxx>
@@ -118,7 +118,7 @@
 #include <svtools/stritem.hxx>
 #endif
 
-#include "svxids.hrc" //CHINA001
+#include <svx/svxids.hrc> //CHINA001
 #ifndef _SFXSLSTITM_HXX //CHINA001
 #include <svtools/slstitm.hxx> //CHINA001
 #endif //CHINA001
