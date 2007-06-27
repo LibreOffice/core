@@ -4,9 +4,9 @@
  *
  *  $RCSfile: swmodule.hxx,v $
  *
- *  $Revision: 1.30 $
+ *  $Revision: 1.31 $
  *
- *  last change: $Author: kz $ $Date: 2007-06-19 15:51:15 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 13:14:42 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -152,8 +152,6 @@ class SwModule: public SfxModule, public SfxListener
     sal_Bool                bAuthorInitialised : 1;
     sal_Bool                bEmbeddedLoadSave : 1;
 
-    virtual void    FillStatusBar( StatusBar& );
-
     // Hint abfangen fuer DocInfo
     virtual void        Notify( SfxBroadcaster& rBC, const SfxHint& rHint );
 
@@ -260,7 +258,7 @@ public:
 
     // Invalidiert ggf. OnlineSpell-WrongListen
     void    CheckSpellChanges( sal_Bool bOnlineSpelling,
-                    sal_Bool bIsSpellWrongAgain, sal_Bool bIsSpellAllAgain );
+                    sal_Bool bIsSpellWrongAgain, sal_Bool bIsSpellAllAgain, sal_Bool bSmartTags );
 
     inline ::com::sun::star::uno::Reference<
         ::com::sun::star::linguistic2::XLinguServiceEventListener >
