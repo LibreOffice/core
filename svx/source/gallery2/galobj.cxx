@@ -4,9 +4,9 @@
  *
  *  $RCSfile: galobj.cxx,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: rt $ $Date: 2007-04-26 07:49:51 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 18:20:34 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -42,9 +42,9 @@
 #include <tools/vcompat.hxx>
 #include <vcl/virdev.hxx>
 #include <svtools/itempool.hxx>
-#include "fmmodel.hxx"
-#include "fmview.hxx"
-#include "fmpage.hxx"
+#include <svx/fmmodel.hxx>
+#include <svx/fmview.hxx>
+#include <svx/fmpage.hxx>
 #include "gallery.hrc"
 #include "galmisc.hxx"
 #include "galobj.hxx"
