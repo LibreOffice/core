@@ -4,9 +4,9 @@
  *
  *  $RCSfile: matril3d.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: ihi $ $Date: 2006-11-14 16:09:58 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 22:28:29 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -37,7 +37,7 @@
 #include "precompiled_goodies.hxx"
 
 #ifndef _B3D_MATRIL3D_HXX
-#include "matril3d.hxx"
+#include <goodies/matril3d.hxx>
 #endif
 
 #ifndef _TOOLS_DEBUG_HXX

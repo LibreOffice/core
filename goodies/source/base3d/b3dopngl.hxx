@@ -4,9 +4,9 @@
  *
  *  $RCSfile: b3dopngl.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: ihi $ $Date: 2006-11-14 16:08:13 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 22:27:50 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -37,7 +37,7 @@
 #define _B3D_B3DOPNGL_HXX
 
 #ifndef _B3D_BASE3D_HXX
-#include "base3d.hxx"
+#include <goodies/base3d.hxx>
 #endif
 
 #ifndef _SV_OPENGL_HXX
