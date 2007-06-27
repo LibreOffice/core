@@ -4,9 +4,9 @@
 #
 #   $RCSfile: productversion.mk,v $
 #
-#   $Revision: 1.22 $
+#   $Revision: 1.23 $
 #
-#   last change: $Author: kz $ $Date: 2007-05-10 15:18:33 $
+#   last change: $Author: hr $ $Date: 2007-06-27 13:55:42 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -32,13 +32,6 @@
 #     MA  02111-1307  USA
 #
 #*************************************************************************
-# NOTE: remove $(UPD) for final releases
-PRODUCTNAME     = OpenOffice.org
-PRODUCTVERSION  = 2.3
-LONGPRODUCTNAME = OpenOffice.org 2.3
-UNIXFILENAME    = openoffice.org2.3
-PKGVERSION      = 2.3
-
 .IF "$(OS)"=="LINUX"
 PKGREV          = $(BUILD)
 .ELSE
@@ -61,7 +54,7 @@ PKGDIR=$(BIN)
 PRODUCTLIST = openoffice.org broffice.org
 
 # default values to minimize maintainance effort 
-PRODUCTVERSION = 2.2
+PRODUCTVERSION = 2.3
 PKGVERSION = $(PRODUCTVERSION)
 # gnome-vfs treats everything behind the last '.' as an icon extension, 
 # even though the "icon_filename" in '.keys' is specified as filename 
@@ -69,6 +62,11 @@ PKGVERSION = $(PRODUCTVERSION)
 # type icons :-), we are stripping all '.' for now.
 # ToDo: maybe we use a product major later ??
 ICONVERSION = $(PRODUCTVERSION:s/.//g)
+# UNIXWRAPPERNAME variable is used to generate the common desktop files below share/xdg;
+# the default values get replaced by make_installer.pl at (core0x) packaging time;
+# another wrapper name can be forced by --with-unix-wrapper configure option
+# which is need by other distributors, see http://www.openoffice.org/issues/show_bug.cgi?id=75366
+UNIXWRAPPERNAME *= '$${{UNIXPRODUCTNAME}}$${{PRODUCTVERSION}}'
 
 PRODUCTNAME.openoffice.org = OpenOffice.org
 PRODUCTVERSION.openoffice.org = $(PRODUCTVERSION)
