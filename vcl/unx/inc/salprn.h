@@ -4,9 +4,9 @@
  *
  *  $RCSfile: salprn.h,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: kz $ $Date: 2007-06-20 10:14:34 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 20:42:29 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -46,7 +46,7 @@
 #include <psprint/printerjob.hxx>
 #endif
 #ifndef _SV_SALPRN_HXX
-#include <salprn.hxx>
+#include <vcl/salprn.hxx>
 #endif
 
 class PspGraphics;
