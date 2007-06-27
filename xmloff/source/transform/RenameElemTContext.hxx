@@ -4,9 +4,9 @@
  *
  *  $RCSfile: RenameElemTContext.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 15:55:03 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 16:23:57 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -37,7 +37,7 @@
 #define _XMLOFF_RENAMEELEMTCONTEXT_HXX
 
 #ifndef _XMLOFF_XMLTOKEN_HXX
-#include "xmltoken.hxx"
+#include <xmloff/xmltoken.hxx>
 #endif
 #ifndef _XMLOFF_TRANSFORMERCONTEXT_HXX
 #include "TransformerContext.hxx"
