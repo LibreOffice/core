@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dtint.hxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: obo $ $Date: 2006-10-11 08:20:39 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 20:38:51 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -44,7 +44,7 @@
 #ifndef _TOOLS_COLOR_HXX
 #include <tools/color.hxx>
 #endif
-#include <font.hxx>
+#include <vcl/font.hxx>
 
 class SalBitmap;
 class SalDisplay;
