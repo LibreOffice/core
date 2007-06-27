@@ -4,9 +4,9 @@
  *
  *  $RCSfile: poolio.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: rt $ $Date: 2007-04-25 14:55:51 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 21:45:11 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -43,11 +43,11 @@
 #endif
 
 #include <tools/solar.h>
-#include "itempool.hxx"
+#include <svtools/itempool.hxx>
 #include "whassert.hxx"
-#include "brdcst.hxx"
-#include "filerec.hxx"
-#include "svtdata.hxx"
+#include <svtools/brdcst.hxx>
+#include <svtools/filerec.hxx>
+#include <svtools/svtdata.hxx>
 #include "poolio.hxx"
 
 // STATIC DATA -----------------------------------------------------------
