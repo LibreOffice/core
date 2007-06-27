@@ -4,9 +4,9 @@
  *
  *  $RCSfile: config.src,v $
  *
- *  $Revision: 1.45 $
+ *  $Revision: 1.46 $
  *
- *  last change: $Author: ihi $ $Date: 2007-04-19 17:07:51 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 23:04:54 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -35,7 +35,7 @@
 
 //#include "config.hrc"
 //#include "sfxlocal.hrc"
-#include "sfx.hrc"
+#include <sfx2/sfx.hrc>
 
 String STR_FILTERNAME_CFG
 {
