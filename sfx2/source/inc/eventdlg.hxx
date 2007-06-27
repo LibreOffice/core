@@ -4,9 +4,9 @@
  *
  *  $RCSfile: eventdlg.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-07 19:00:26 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 23:26:35 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -39,8 +39,8 @@
 #include <vcl/menubtn.hxx>
 #endif
 
-#include "evntconf.hxx"
-#include "macropg.hxx"
+#include <sfx2/evntconf.hxx>
+#include <sfx2/macropg.hxx>
 
 class Menu;
 class SfxMacroInfoItem;
