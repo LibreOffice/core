@@ -4,9 +4,9 @@
  *
  *  $RCSfile: fmscriptingenv.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: kz $ $Date: 2006-11-06 14:41:06 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 18:14:18 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -40,7 +40,7 @@
 #include "fmscriptingenv.hxx"
 #endif
 #ifndef _SVX_FMMODEL_HXX
-#include "fmmodel.hxx"
+#include <svx/fmmodel.hxx>
 #endif
 
 /** === begin UNO includes === **/
