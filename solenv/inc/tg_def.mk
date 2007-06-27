@@ -4,9 +4,9 @@
 #
 #   $RCSfile: tg_def.mk,v $
 #
-#   $Revision: 1.40 $
+#   $Revision: 1.41 $
 #
-#   last change: $Author: hr $ $Date: 2007-06-26 17:34:03 $
+#   last change: $Author: hr $ $Date: 2007-06-27 17:50:23 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -125,7 +125,7 @@ $(DEF$(TNR)TARGETN) .PHONY :
     tail --lines +3 $(MISC)$/$(SHL$(TNR)TARGET).exp | sed '/^;/d' >>$@.tmpfile
     @-$(EXPORT$(TNR)_PROTECT) $(RM) $(MISC)$/$(SHL$(TNR)TARGET).exp
 .ELSE
-.IF "$(SHL$(TNR)USE_EXPORTS)"!="ordinal"
+.IF "$(SHL$(TNR)USE_EXPORTS)"==""
     @-$(EXPORT$(TNR)_PROTECT) $(RMHACK$(TNR)) $(MISC)$/$(SHL$(TNR)TARGET).exp
     @$(EXPORT$(TNR)_PROTECT) $(LIBMGR) -EXTRACT:/ /OUT:$(MISC)$/$(SHL$(TNR)TARGET).exp $(SLB)$/$(DEFLIB$(TNR)NAME).lib
 .IF "$(DEF$(TNR)CEXP)"!=""
@@ -134,14 +134,22 @@ $(DEF$(TNR)TARGETN) .PHONY :
     @$(EXPORT$(TNR)_PROTECT) $(LDUMP2) -E 20 -F $(MISC)$/$(SHL$(TNR)TARGET).flt $(MISC)$/$(SHL$(TNR)TARGET).exp			   >>$@.tmpfile
 .ENDIF
     $(EXPORT$(TNR)_PROTECT) $(RMHACK$(TNR)) $(MISC)$/$(SHL$(TNR)TARGET).exp
-.ELSE			# "$(SHL$(TNR)USE_EXPORTS)"!="ordinal"
+.ELSE			# "$(SHL$(TNR)USE_EXPORTS)"==""
     @$(EXPORT$(TNR)_PROTECT) $(DUMPBIN) -DIRECTIVES  $(foreach,i,$(DEFLIB$(TNR)NAME) $(SLB)$/$(i).lib) | $(GREP) EXPORT: > $(MISC)$/$(SHL$(TNR)TARGET).direct
+.IF "$(SHL$(TNR)USE_EXPORTS)"!="name"
 .IF "$(DEF$(TNR)CEXP)"!=""
     @$(EXPORT$(TNR)_PROTECT) $(LDUMP2) -D -A $(DEF$(TNR)CEXP) -E 20 -F $(DEF$(TNR)FILTER) $(MISC)$/$(SHL$(TNR)TARGET).direct >>$@.tmpfile
 .ELSE
     @$(EXPORT$(TNR)_PROTECT) $(LDUMP2) -D -E 20 -F $(DEF$(TNR)FILTER) $(MISC)$/$(SHL$(TNR)TARGET).direct >>$@.tmpfile
 .ENDIF
-.ENDIF			# "$(SHL$(TNR)USE_EXPORTS)"!="ordinal"
+.ELSE			# "$(SHL$(TNR)USE_EXPORTS)"!="name"
+.IF "$(DEF$(TNR)CEXP)"!=""
+    @$(EXPORT$(TNR)_PROTECT) $(LDUMP2) -N -D -A $(DEF$(TNR)CEXP) -E 20 -F $(DEF$(TNR)FILTER) $(MISC)$/$(SHL$(TNR)TARGET).direct >>$@.tmpfile
+.ELSE
+    @$(EXPORT$(TNR)_PROTECT) $(LDUMP2) -N -D -E 20 -F $(DEF$(TNR)FILTER) $(MISC)$/$(SHL$(TNR)TARGET).direct >>$@.tmpfile
+.ENDIF
+.ENDIF			# "$(SHL$(TNR)USE_EXPORTS)"!="name"
+.ENDIF			# "$(SHL$(TNR)USE_EXPORTS)"==""
 .ENDIF
 # now *\defs\$(OUTPATH)	exists, commit it
 .IF "$(MWS_BUILD)"!=""
