@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.6 $
+#   $Revision: 1.7 $
 #
-#   last change: $Author: rt $ $Date: 2005-09-08 16:37:39 $
+#   last change: $Author: hr $ $Date: 2007-06-27 13:51:41 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -51,6 +51,13 @@ CDEFS += -DENABLE_FONTCONFIG
 
 # --- Files --------------------------------------------------------
 
+.IF "$(GUIBASE)"=="aqua"
+
+dummy:
+    @echo "Nothing to build for GUIBASE $(GUIBASE)"
+
+.ELSE		# "$(GUIBASE)"=="aqua"
+
 SLOFILES=\
     $(SLO)$/fontmanager.obj		\
     $(SLO)$/fontcache.obj		\
@@ -59,6 +66,8 @@ SLOFILES=\
 
 .IF "$(OS)$(CPU)"=="SOLARISI"
 NOOPTFILES=$(SLO)$/fontmanager.obj
+.ENDIF
+
 .ENDIF
 
 # --- Targets ------------------------------------------------------
