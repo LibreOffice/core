@@ -4,9 +4,9 @@
  *
  *  $RCSfile: sfxhelp.cxx,v $
  *
- *  $Revision: 1.74 $
+ *  $Revision: 1.75 $
  *
- *  last change: $Author: ihi $ $Date: 2007-06-05 18:36:01 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 23:00:47 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -126,13 +126,13 @@
 #define _SVSTDARR_ULONGSSORT
 #include <svtools/svstdarr.hxx>
 
-#include "sfxsids.hrc"
-#include "app.hxx"
-#include "viewfrm.hxx"
-#include "msgpool.hxx"
+#include <sfx2/sfxsids.hrc>
+#include <sfx2/app.hxx>
+#include <sfx2/viewfrm.hxx>
+#include <sfx2/msgpool.hxx>
 #include "newhelp.hxx"
-#include "objsh.hxx"
-#include "docfac.hxx"
+#include <sfx2/objsh.hxx>
+#include <sfx2/docfac.hxx>
 #include "sfxresid.hxx"
 #include "helper.hxx"
 #include "app.hrc"
