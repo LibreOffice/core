@@ -4,9 +4,9 @@
 #
 #   $RCSfile: tg_shl.mk,v $
 #
-#   $Revision: 1.111 $
+#   $Revision: 1.112 $
 #
-#   last change: $Author: hr $ $Date: 2007-06-26 17:34:20 $
+#   last change: $Author: hr $ $Date: 2007-06-27 14:02:59 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -115,7 +115,7 @@ USE_SHL$(TNR)VERSIONMAP=$(MISC)$/$(SHL$(TNR)TARGET).vmap
 .IF "$(SHL$(TNR)VERSIONMAP)"!=""
 #eine von beiden ist zuviel
 USE_SHL$(TNR)VERSIONMAP=$(MISC)$/$(SHL$(TNR)TARGET).vmap
-$(USE_SHL$(TNR)VERSIONMAP) .PHONY: 
+$(USE_SHL$(TNR)VERSIONMAP) .PHONY:
     @echo -----------------------------
     @echo you should only use versionmap OR exportfile
     @echo -----------------------------
@@ -145,7 +145,7 @@ $(USE_SHL$(TNR)VERSIONMAP): \
 
 .ELSE			# "$(SHL$(TNR)FILTERFILE)"!=""
 USE_SHL$(TNR)VERSIONMAP=$(MISC)$/$(SHL$(TNR)TARGET).vmap
-$(USE_SHL$(TNR)VERSIONMAP) : 
+$(USE_SHL$(TNR)VERSIONMAP) :
     @echo -----------------------------
     @echo SHL$(TNR)FILTERFILE not set!
     @echo -----------------------------
@@ -174,7 +174,7 @@ $(USE_SHL$(TNR)VERSIONMAP): $(SHL$(TNR)VERSIONMAP)
     @-$(RM) -f $@.symregexp >& $(NULLDEV)
     @-$(RM) -f $@.expsymlist >& $(NULLDEV)
 .ENDIF
-# Its questionable if the following condition '.IF "$(COMID)"=="gcc3"' makes sense and what 
+# Its questionable if the following condition '.IF "$(COMID)"=="gcc3"' makes sense and what
 # happens if somebody will change it in the future
 .IF "$(COMID)"=="gcc3"
     tr -d "\015" < $(SHL$(TNR)VERSIONMAP) | $(AWK) -f $(SOLARENV)$/bin$/addsym.awk > $@
@@ -192,12 +192,12 @@ $(USE_SHL$(TNR)VERSIONMAP): $(SHL$(TNR)VERSIONMAP)
 .IF "$(SHL$(TNR)OBJS)"!=""
     -echo $(foreach,i,$(SHL$(TNR)OBJS:s/.obj/.o/) $i) | xargs -n1 nm -gx | $(SOLARENV)$/bin$/addsym-macosx.sh $@.symbols-regexp $(MISC)$/symbols-regexp.tmp >> $@.exported-symbols
 .ENDIF
-.IF "$(SHL$(TNR)LIBS)"!=""	
+.IF "$(SHL$(TNR)LIBS)"!=""
     -$(TYPE) $(foreach,j,$(SHL$(TNR)LIBS) $j) | $(SED) s\#$(ROUT)\#$(PRJ)$/$(ROUT)\#g | xargs -n1 nm -gx | $(SOLARENV)$/bin$/addsym-macosx.sh $@.symbols-regexp $(MISC)$/symbols-regexp.tmp >> $@.exported-symbols
 .ENDIF
-# overwrite the map file generate into the local output tree with the generated 
+# overwrite the map file generate into the local output tree with the generated
 # exported symbols list
-    cp $@.exported-symbols $@ 
+    cp $@.exported-symbols $@
 .ENDIF # .IF "$(OS)"=="MACOSX"
 .ENDIF			# "$(SHL$(TNR)VERSIONMAP)"!=""
 .ENDIF			# "$(USE_SHL$(TNR)VERSIONMAP)"!=""
@@ -277,7 +277,7 @@ $(SHL$(TNR)TARGETN) : \
 .ELSE			# "$(SHL$(TNR)ADD_VERINFO)"!=""
     @echo $(EMQ)#define ADDITIONAL_VERINFO1 >> $(MISC)$/$(SHL$(TNR)DEFAULTRES:b).rc
     @echo $(EMQ)#define ADDITIONAL_VERINFO2 >> $(MISC)$/$(SHL$(TNR)DEFAULTRES:b).rc
-    @echo $(EMQ)#define ADDITIONAL_VERINFO3 >> $(MISC)$/$(SHL$(TNR)DEFAULTRES:b).rc	
+    @echo $(EMQ)#define ADDITIONAL_VERINFO3 >> $(MISC)$/$(SHL$(TNR)DEFAULTRES:b).rc
 .ENDIF			# "$(SHL$(TNR)ADD_VERINFO)"!=""
     @echo $(EMQ)#define VERVARIANT	$(BUILD) >> $(MISC)$/$(SHL$(TNR)DEFAULTRES:b).rc
     @echo $(EMQ)#define ORG_NAME	$(SHL$(TNR)TARGET)$(DLLPOST) >> $(MISC)$/$(SHL$(TNR)DEFAULTRES:b).rc
@@ -340,8 +340,14 @@ $(SHL$(TNR)TARGETN) : \
 # double check if target was really written... still making sense?
     @@$(LS) $@
     @echo linking $@.manifest ...
+.IF "$(VISTA_MANIFEST)"!=""
+    $(IFEXIST) $@.manifest $(THEN) mt.exe -manifest $@.manifest -manifest $(TRUSTED_MANIFEST_LOCATION)$/trustedinfo.manifest -out:$@.tmanifest$(EMQ) $(FI)
+    $(IFEXIST) $@.manifest $(THEN) mt.exe -manifest $@.tmanifest -outputresource:$@$(EMQ);2 $(FI)
+.ELSE
     $(IFEXIST) $@.manifest $(THEN) mt.exe -manifest $@.manifest -outputresource:$@$(EMQ);2 $(FI)
+.ENDIF # "$(VISTA_MANIFEST)"!=""
     $(IFEXIST) $@.manifest $(THEN) $(RM:s/+//) $@.manifest $(FI)
+    $(IFEXIST) $@.tmanifest $(THEN) $(RM:s/+//) $@.tmanifest $(FI)
 .ELSE			# "$(USE_DEFFILE)"!=""
     $(SHL$(TNR)LINKER) @$(mktmp	$(SHL$(TNR)LINKFLAGS)			\
         $(LINKFLAGSSHL) $(SHL$(TNR)BASEX)		\
@@ -358,8 +364,14 @@ $(SHL$(TNR)TARGETN) : \
 # double check if target was really written... still making sense?
     @@$(LS) $@
     @echo linking $@.manifest ...
+.IF "$(VISTA_MANIFEST)"!=""
+    $(IFEXIST) $@.manifest $(THEN) mt.exe -manifest $@.manifest -manifest $(TRUSTED_MANIFEST_LOCATION)$/trustedinfo.manifest -out:$@.tmanifest$(EMQ) $(FI)
+    $(IFEXIST) $@.manifest $(THEN) mt.exe -manifest $@.tmanifest -outputresource:$@$(EMQ);2 $(FI)
+.ELSE
     $(IFEXIST) $@.manifest $(THEN) mt.exe -manifest $@.manifest -outputresource:$@$(EMQ);2 $(FI)
+.ENDIF # "$(VISTA_MANIFEST)"!=""
     $(IFEXIST) $@.manifest $(THEN) $(RM:s/+//) $@.manifest $(FI)
+    $(IFEXIST) $@.tmanifest $(THEN) $(RM:s/+//) $@.tmanifest $(FI)
 .ENDIF			# "$(USE_DEFFILE)"!=""
 .ELSE			# "$(SHL$(TNR)USE_EXPORTS)"!="name"
     $(SHL$(TNR)LINKER) @$(mktmp	$(SHL$(TNR)LINKFLAGS)			\
@@ -375,8 +387,14 @@ $(SHL$(TNR)TARGETN) : \
         $(SHL$(TNR)LINKRES) \
     )
     @echo linking $@.manifest ...
+.IF "$(VISTA_MANIFEST)"!=""
+    $(IFEXIST) $@.manifest $(THEN) mt.exe -manifest $@.manifest -manifest $(TRUSTED_MANIFEST_LOCATION)$/trustedinfo.manifest -out:$@.tmanifest$(EMQ) $(FI)
+    $(IFEXIST) $@.manifest $(THEN) mt.exe -manifest $@.tmanifest -outputresource:$@$(EMQ);2 $(FI)
+.ELSE
     $(IFEXIST) $@.manifest $(THEN) mt.exe -manifest $@.manifest -outputresource:$@$(EMQ);2 $(FI)
+.ENDIF # "$(VISTA_MANIFEST)"!=""
     $(IFEXIST) $@.manifest $(THEN) $(RM:s/+//) $@.manifest $(FI)
+    $(IFEXIST) $@.tmanifest $(THEN) $(RM:s/+//) $@.tmanifest $(FI)
 .ENDIF			# "$(SHL$(TNR)USE_EXPORTS)"!="name"
 .ELSE			# "$(linkinc)"==""
         -$(RM) del $(MISC)$/$(SHL$(TNR)TARGET).lnk
@@ -396,8 +414,14 @@ $(SHL$(TNR)TARGETN) : \
         $(TYPE) $(MISC)$/$(SHL$(TNR)TARGETN:b)_linkinc.ls  >> $(MISC)$/$(SHL$(TNR)TARGET).lnk
         $(SHL$(TNR)LINKER) @$(MISC)$/$(SHL$(TNR)TARGET).lnk
         @echo linking $@.manifest ...
+.IF "$(VISTA_MANIFEST)"!=""
+        $(IFEXIST) $@.manifest $(THEN) mt.exe -manifest $@.manifest -manifest $(TRUSTED_MANIFEST_LOCATION)$/trustedinfo.manifest -out:$@.tmanifest$(EMQ) $(FI)
+        $(IFEXIST) $@.manifest $(THEN) mt.exe -manifest $@.tmanifest -outputresource:$@$(EMQ);2 $(FI)
+.ELSE
         $(IFEXIST) $@.manifest $(THEN) mt.exe -manifest $@.manifest -outputresource:$@$(EMQ);2 $(FI)
+.ENDIF # "$(VISTA_MANIFEST)"!=""
         $(IFEXIST) $@.manifest $(THEN) $(RM:s/+//) $@.manifest $(FI)
+        $(IFEXIST) $@.tmanifest $(THEN) $(RM:s/+//) $@.tmanifest $(FI)
 .ENDIF			# "$(linkinc)"==""
 .ENDIF			# "$(COM)"=="GCC"
 .ENDIF			# "$(GUI)" == "WNT"
@@ -509,3 +533,4 @@ $(SHL$(TNR)IMPLIBN):	\
 
 # unroll end
 #######################################################
+
