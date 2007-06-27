@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.5 $
+#   $Revision: 1.6 $
 #
-#   last change: $Author: obo $ $Date: 2007-03-09 09:00:54 $
+#   last change: $Author: hr $ $Date: 2007-06-27 12:51:20 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -35,7 +35,7 @@
 
 PRJ = ..
 
-PRJNAME	= lingu
+PRJNAME = linguistic
 TARGET	= lex
 ENABLE_EXCEPTIONS=TRUE
 USE_DEFFILE=TRUE
