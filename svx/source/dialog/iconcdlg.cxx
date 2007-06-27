@@ -4,9 +4,9 @@
  *
  *  $RCSfile: iconcdlg.cxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: rt $ $Date: 2007-04-04 15:23:37 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 17:13:56 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -55,7 +55,7 @@
 #include <svtools/svstdarr.hxx>
 
 #ifndef _SVX_DIALMGR_HXX
-#include "dialmgr.hxx"
+#include <svx/dialmgr.hxx>
 #endif
 
 #include "iconcdlg.hxx"
@@ -64,7 +64,7 @@
 #include "helpid.hrc"
 #endif
 #ifndef _SVX_DIALOGS_HRC
-#include "dialogs.hrc"
+#include <svx/dialogs.hrc>
 #endif
 
 #ifndef INCLUDED_SVTOOLS_VIEWOPTIONS_HXX
