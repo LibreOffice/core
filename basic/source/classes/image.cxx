@@ -4,9 +4,9 @@
  *
  *  $RCSfile: image.cxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: obo $ $Date: 2006-11-03 07:39:47 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 14:18:06 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -40,7 +40,7 @@
 #include <tools/stream.hxx>
 #endif
 #include <tools/tenccvt.hxx>
-#include <sbx.hxx>
+#include <basic/sbx.hxx>
 #include "sb.hxx"
 #include <string.h>     // memset() etc
 #include "image.hxx"

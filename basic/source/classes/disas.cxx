@@ -4,9 +4,9 @@
  *
  *  $RCSfile: disas.cxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: obo $ $Date: 2006-11-03 07:19:02 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 14:17:37 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -42,7 +42,7 @@
 #ifndef _STREAM_HXX //autogen
 #include <tools/stream.hxx>
 #endif
-#include <sbx.hxx>
+#include <basic/sbx.hxx>
 #include "sb.hxx"
 #include "iosys.hxx"
 #include "disas.hxx"
