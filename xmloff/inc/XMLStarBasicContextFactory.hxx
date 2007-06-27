@@ -4,9 +4,9 @@
  *
  *  $RCSfile: XMLStarBasicContextFactory.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 12:55:56 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 14:42:59 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -41,7 +41,7 @@
 #endif
 
 #ifndef _XMLOFF_XMLEVENT_HXX
-#include "xmlevent.hxx"
+#include <xmloff/xmlevent.hxx>
 #endif
 
 

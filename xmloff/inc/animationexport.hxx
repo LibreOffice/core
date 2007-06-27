@@ -4,9 +4,9 @@
  *
  *  $RCSfile: animationexport.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 13:02:25 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 14:44:37 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -41,7 +41,7 @@
 #endif
 
 #ifndef _UNIVERSALL_REFERENCE_HXX
-#include <uniref.hxx>
+#include <xmloff/uniref.hxx>
 #endif
 
 class SvXMLExport;
