@@ -4,9 +4,9 @@
  *
  *  $RCSfile: objitem.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 16:42:52 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 23:23:18 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -39,9 +39,9 @@
 #ifndef GCC
 #endif
 
-#include "objsh.hxx"
+#include <sfx2/objsh.hxx>
 //#include "objshimp.hxx"
-#include "objitem.hxx"
+#include <sfx2/objitem.hxx>
 
 #ifndef _COM_SUN_STAR_LANG_XUNOTUNNEL_HPP_
 #include <com/sun/star/lang/XUnoTunnel.hpp>
