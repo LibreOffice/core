@@ -4,9 +4,9 @@
  *
  *  $RCSfile: XMLStarBasicExportHandler.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: hr $ $Date: 2006-06-19 17:54:45 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 14:43:13 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -49,7 +49,7 @@
 #endif
 
 #ifndef _XMLOFF_XMLEVENT_HXX
-#include "xmlevent.hxx"
+#include <xmloff/xmlevent.hxx>
 #endif
 
 #include <map>
