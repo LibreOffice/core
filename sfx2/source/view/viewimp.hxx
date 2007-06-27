@@ -4,9 +4,9 @@
  *
  *  $RCSfile: viewimp.hxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: hr $ $Date: 2006-06-19 22:39:43 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 23:36:11 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -41,8 +41,8 @@
 #ifndef __SBX_SBXOBJ_HXX
 #include <basic/sbxobj.hxx>
 #endif
-#include "viewsh.hxx"
-#include "viewfrm.hxx"                  // SvBorder
+#include <sfx2/viewsh.hxx>
+#include <sfx2/viewfrm.hxx>                  // SvBorder
 #include <osl/mutex.hxx>
 #ifndef _CPPUHELPER_INTERFACECONTAINER_HXX_
 #include <cppuhelper/interfacecontainer.hxx>
