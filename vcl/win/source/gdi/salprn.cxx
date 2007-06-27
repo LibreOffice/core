@@ -57,17 +57,17 @@
 #include <salframe.h>
 #endif
 #ifndef _SV_SALPTYPE_HXX
-#include <salptype.hxx>
+#include <vcl/salptype.hxx>
 #endif
 #ifndef _SV_SALPRN_H
 #include <salprn.h>
 #endif
 
 #ifndef _SV_PRINT_H
-#include <print.h>
+#include <vcl/print.h>
 #endif
 #ifndef _SV_JOBSET_H
-#include <jobset.h>
+#include <vcl/jobset.h>
 #endif
 
 #include <tools/urlobj.hxx>
