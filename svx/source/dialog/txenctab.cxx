@@ -4,9 +4,9 @@
  *
  *  $RCSfile: txenctab.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: obo $ $Date: 2006-10-12 12:33:04 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 17:52:04 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -36,8 +36,8 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_svx.hxx"
 
-#include "dialogs.hrc" // -> RID_SVXSTR_TEXTENCODING_TABLE
-#include "dialmgr.hxx"
+#include <svx/dialogs.hrc> // -> RID_SVXSTR_TEXTENCODING_TABLE
+#include <svx/dialmgr.hxx>
 #include "txenctab.hxx"
 
 #ifndef _SHL_HXX //autogen
