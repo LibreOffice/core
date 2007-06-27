@@ -4,9 +4,9 @@
  *
  *  $RCSfile: workwin.cxx,v $
  *
- *  $Revision: 1.69 $
+ *  $Revision: 1.70 $
  *
- *  last change: $Author: vg $ $Date: 2007-05-22 20:17:32 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 23:01:52 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -39,22 +39,22 @@
 #ifndef GCC
 #endif
 
-#include "docfile.hxx"
-#include "objsh.hxx"
-#include "app.hxx"
+#include <sfx2/docfile.hxx>
+#include <sfx2/objsh.hxx>
+#include <sfx2/app.hxx>
 #include "workwin.hxx"
-#include "topfrm.hxx"
+#include <sfx2/topfrm.hxx>
 #include "arrdecl.hxx"
-#include "viewfrm.hxx"
-#include "module.hxx"
-#include "dispatch.hxx"
-#include "dockwin.hxx"
-#include "viewsh.hxx"
+#include <sfx2/viewfrm.hxx>
+#include <sfx2/module.hxx>
+#include <sfx2/dispatch.hxx>
+#include <sfx2/dockwin.hxx>
+#include <sfx2/viewsh.hxx>
 #include "splitwin.hxx"
-#include "msgpool.hxx"
+#include <sfx2/msgpool.hxx>
 #include "sfxresid.hxx"
-#include "objsh.hxx"
-#include "request.hxx"      // SFX_ITEMSET_SET
+#include <sfx2/objsh.hxx>
+#include <sfx2/request.hxx>      // SFX_ITEMSET_SET
 #include <vcl/taskpanelist.hxx>
 #include <vcl/toolbox.hxx>
 #include <tools/rcid.h>
