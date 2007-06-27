@@ -4,9 +4,9 @@
  *
  *  $RCSfile: XMLIndexBibliographyConfigurationContext.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 12:52:06 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 14:40:32 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -37,7 +37,7 @@
 #define _XMLOFF_XMLINDEXBIBLIOGRAPHYCONFIGURATIONCONTEXT_HXX_
 
 #ifndef _XMLOFF_XMLSTYLE_HXX
-#include "xmlstyle.hxx"
+#include <xmloff/xmlstyle.hxx>
 #endif
 
 #ifndef _COM_SUN_STAR_UNO_REFERENCE_H_

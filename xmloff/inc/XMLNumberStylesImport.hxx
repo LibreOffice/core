@@ -4,9 +4,9 @@
  *
  *  $RCSfile: XMLNumberStylesImport.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 12:52:57 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 14:41:17 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -37,7 +37,7 @@
 #define _XMLOFF_NUMBERSTYLESIMPORT_HXX
 
 #ifndef _XMLOFF_XMLNUMFI_HXX
-#include "xmlnumfi.hxx"
+#include <xmloff/xmlnumfi.hxx>
 #endif
 
 #ifndef _COM_SUN_STAR_CONTAINER_XNAMEACCESS_HPP_
