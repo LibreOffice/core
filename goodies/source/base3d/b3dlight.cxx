@@ -4,9 +4,9 @@
  *
  *  $RCSfile: b3dlight.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: ihi $ $Date: 2006-11-14 16:07:46 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 22:27:25 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -37,7 +37,7 @@
 #include "precompiled_goodies.hxx"
 
 #ifndef _B3D_B3DLIGHT_HXX
-#include "b3dlight.hxx"
+#include <goodies/b3dlight.hxx>
 #endif
 
 #ifndef _TOOLS_DEBUG_HXX
