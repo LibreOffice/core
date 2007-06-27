@@ -4,9 +4,9 @@
  *
  *  $RCSfile: docfile.cxx,v $
  *
- *  $Revision: 1.190 $
+ *  $Revision: 1.191 $
  *
- *  last change: $Author: ihi $ $Date: 2007-06-05 18:37:13 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 23:19:29 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -35,7 +35,7 @@
 
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_sfx2.hxx"
-#include "docfile.hxx"
+#include <sfx2/docfile.hxx>
 
 #include <uno/mapping.hxx>
 #include <com/sun/star/task/XInteractionHandler.hpp>
@@ -216,17 +216,17 @@ using namespace ::com::sun::star::io;
 
 #include "opostponedtruncationstream.hxx"
 #include "helper.hxx"
-#include "request.hxx"      // SFX_ITEMSET_SET
-#include "app.hxx"          // GetFilterMatcher
-#include "frame.hxx"        // LoadTargetFrame
+#include <sfx2/request.hxx>      // SFX_ITEMSET_SET
+#include <sfx2/app.hxx>          // GetFilterMatcher
+#include <sfx2/frame.hxx>        // LoadTargetFrame
 #include "fltfnc.hxx"       // SfxFilterMatcher
-#include "docfilt.hxx"      // SfxFilter
-#include "objsh.hxx"        // CheckOpenMode
-#include "docfac.hxx"       // GetFilterContainer
+#include <sfx2/docfilt.hxx>      // SfxFilter
+#include <sfx2/objsh.hxx>        // CheckOpenMode
+#include <sfx2/docfac.hxx>       // GetFilterContainer
 #include "doc.hrc"
 #include "openflag.hxx"     // SFX_STREAM_READONLY etc.
 #include "sfxresid.hxx"
-#include "appuno.hxx"
+#include <sfx2/appuno.hxx>
 
 //#include "xmlversion.hxx"
 
