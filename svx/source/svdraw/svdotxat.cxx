@@ -4,9 +4,9 @@
  *
  *  $RCSfile: svdotxat.cxx,v $
  *
- *  $Revision: 1.29 $
+ *  $Revision: 1.30 $
  *
- *  last change: $Author: kz $ $Date: 2007-05-10 14:59:34 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 19:08:37 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -37,22 +37,22 @@
 #include "precompiled_svx.hxx"
 
 #include <svtools/style.hxx>
-#include "svdotext.hxx"
+#include <svx/svdotext.hxx>
 #include "svditext.hxx"
-#include "svdmodel.hxx" // fuer GetMaxObjSize und GetStyleSheetPool
-#include "svdoutl.hxx"
-#include "svdorect.hxx" // fuer SetDirty bei NbcAdjustTextFrameWidthAndHeight
-#include "svdocapt.hxx" // fuer SetDirty bei NbcAdjustTextFrameWidthAndHeight
-#include <svdetc.hxx>
-#include "writingmodeitem.hxx"
-#include "editeng.hxx"
-#include "eeitem.hxx"
-#include "flditem.hxx"
-#include "sdtfchim.hxx"
+#include <svx/svdmodel.hxx> // fuer GetMaxObjSize und GetStyleSheetPool
+#include <svx/svdoutl.hxx>
+#include <svx/svdorect.hxx> // fuer SetDirty bei NbcAdjustTextFrameWidthAndHeight
+#include <svx/svdocapt.hxx> // fuer SetDirty bei NbcAdjustTextFrameWidthAndHeight
+#include <svx/svdetc.hxx>
+#include <svx/writingmodeitem.hxx>
+#include <svx/editeng.hxx>
+#include <svx/eeitem.hxx>
+#include <svx/flditem.hxx>
+#include <svx/sdtfchim.hxx>
 
 
 #ifndef _MyEDITVIEW_HXX
-#include "editview.hxx"
+#include <svx/editview.hxx>
 #endif
 
 #ifndef _SFXSMPLHINT_HXX //autogen
@@ -64,26 +64,26 @@
 #endif
 
 #ifndef _OUTLOBJ_HXX //autogen
-#include <outlobj.hxx>
+#include <svx/outlobj.hxx>
 #endif
 
 #ifndef _OUTLINER_HXX //autogen
-#include "outliner.hxx"
+#include <svx/outliner.hxx>
 #endif
 
 #ifndef _EEITEM_HXX //autogen
-#include "eeitem.hxx"
+#include <svx/eeitem.hxx>
 #endif
 
 #ifndef _EDITOBJ_HXX //autogen
-#include <editobj.hxx>
+#include <svx/editobj.hxx>
 #endif
 
 #ifndef _SVX_FHGTITEM_HXX //autogen
-#include "fhgtitem.hxx"
+#include <svx/fhgtitem.hxx>
 #endif
 
-#include <charscaleitem.hxx>
+#include <svx/charscaleitem.hxx>
 
 #ifndef _SFXSTYLE_HXX //autogen
 #include <svtools/style.hxx>
@@ -94,7 +94,7 @@
 #endif
 
 #ifndef _SVX_LRSPITEM_HXX //autogen
-#include <lrspitem.hxx>
+#include <svx/lrspitem.hxx>
 #endif
 
 #ifndef _SFXITEMPOOL_HXX //autogen
@@ -102,15 +102,15 @@
 #endif
 
 #ifndef _SVX_NUMITEM_HXX //autogen
-#include <numitem.hxx>
+#include <svx/numitem.hxx>
 #endif
 
 #ifndef _MyEDITENG_HXX //autogen
-#include <editeng.hxx>
+#include <svx/editeng.hxx>
 #endif
 
 #ifndef _SVX_POSTITEM_HXX //autogen
-#include <postitem.hxx>
+#include <svx/postitem.hxx>
 #endif
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
