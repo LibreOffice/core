@@ -4,9 +4,9 @@
  *
  *  $RCSfile: EnhancedCustomShape2d.hxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: obo $ $Date: 2006-07-10 11:26:32 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 16:43:00 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -37,13 +37,13 @@
 #define _ENHANCEDCUSTOMSHAPE2D_HXX
 
 #ifndef _MSDFFDEF_HXX
-#include <msdffdef.hxx>
+#include <svx/msdffdef.hxx>
 #endif
 #ifndef _MSDFFIMP_HXX
-#include <msdffimp.hxx>
+#include <svx/msdffimp.hxx>
 #endif
 #ifndef _SDASITM_HXX
-#include <sdasitm.hxx>
+#include <svx/sdasitm.hxx>
 #endif
 #ifndef _COM_SUN_STAR_UNO_SEQUENCE_H_
 #include <com/sun/star/uno/Sequence.h>
