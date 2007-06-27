@@ -4,9 +4,9 @@
  *
  *  $RCSfile: impedit4.cxx,v $
  *
- *  $Revision: 1.69 $
+ *  $Revision: 1.70 $
  *
- *  last change: $Author: kz $ $Date: 2007-05-10 14:46:29 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 17:59:45 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -44,14 +44,14 @@
 #include <vcl/svapp.hxx>
 
 #include <sfx2/srchitem.hxx>
-#include <lspcitem.hxx>
-#include <adjitem.hxx>
-#include <tstpitem.hxx>
+#include <svx/lspcitem.hxx>
+#include <svx/adjitem.hxx>
+#include <svx/tstpitem.hxx>
 
 #include <eertfpar.hxx>
-#include <editeng.hxx>
+#include <svx/editeng.hxx>
 #include <impedit.hxx>
-#include <editview.hxx>
+#include <svx/editview.hxx>
 #include <eehtml.hxx>
 #include <editobj2.hxx>
 #include <i18npool/lang.h>
@@ -59,24 +59,24 @@
 #include <editxml.hxx>
 
 
-#include "akrnitem.hxx"
-#include "cntritem.hxx"
-#include "colritem.hxx"
-#include "crsditem.hxx"
-#include "escpitem.hxx"
-#include "fhgtitem.hxx"
+#include <svx/akrnitem.hxx>
+#include <svx/cntritem.hxx>
+#include <svx/colritem.hxx>
+#include <svx/crsditem.hxx>
+#include <svx/escpitem.hxx>
+#include <svx/fhgtitem.hxx>
 #include "fontitem.hxx"
-#include "kernitem.hxx"
-#include "lrspitem.hxx"
-#include "postitem.hxx"
-#include "shdditem.hxx"
-#include "udlnitem.hxx"
-#include "ulspitem.hxx"
-#include "wghtitem.hxx"
-#include "langitem.hxx"
-#include <charreliefitem.hxx>
-#include <frmdiritem.hxx>
-#include <emphitem.hxx>
+#include <svx/kernitem.hxx>
+#include <svx/lrspitem.hxx>
+#include <svx/postitem.hxx>
+#include <svx/shdditem.hxx>
+#include <svx/udlnitem.hxx>
+#include <svx/ulspitem.hxx>
+#include <svx/wghtitem.hxx>
+#include <svx/langitem.hxx>
+#include <svx/charreliefitem.hxx>
+#include <svx/frmdiritem.hxx>
+#include <svx/emphitem.hxx>
 #ifndef _TEXTCONV_HXX
 #include <textconv.hxx>
 #endif
@@ -89,7 +89,7 @@
 #include <edtspell.hxx>
 #endif
 #ifndef _SVX_SCRIPTTYPEITEM_HXX
-#include <scripttypeitem.hxx>
+#include <svx/scripttypeitem.hxx>
 #endif
 #ifndef _UNO_LINGU_HXX
 #include <unolingu.hxx>
