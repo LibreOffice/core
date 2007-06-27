@@ -4,9 +4,9 @@
  *
  *  $RCSfile: scrwnd.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: ihi $ $Date: 2007-04-16 14:22:16 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 20:33:04 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -33,9 +33,9 @@
  *
  ************************************************************************/
 
-#include <floatwin.hxx>
-#include <bitmap.hxx>
-#include <image.hxx>
+#include <vcl/floatwin.hxx>
+#include <vcl/bitmap.hxx>
+#include <vcl/image.hxx>
 
 // -----------
 // - Defines -
