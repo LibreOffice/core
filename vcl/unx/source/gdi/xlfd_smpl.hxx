@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xlfd_smpl.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 13:10:32 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 20:51:33 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -39,7 +39,7 @@
 #include <salunx.h>
 #endif
 #ifndef _VCL_VCLENUM_HXX
-#include <vclenum.hxx>
+#include <vcl/vclenum.hxx>
 #endif
 #ifndef _STRING_HXX
 #include <tools/string.hxx>
