@@ -4,9 +4,9 @@
  *
  *  $RCSfile: splitwin.hxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: hr $ $Date: 2006-06-19 22:34:20 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 23:29:16 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -38,7 +38,7 @@
 #ifndef _SPLITWIN_HXX //autogen
 #include <vcl/splitwin.hxx>
 #endif
-#include "childwin.hxx"
+#include <sfx2/childwin.hxx>
 
 class SfxWorkWindow;
 class SfxDockingWindow;
