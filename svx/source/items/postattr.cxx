@@ -4,9 +4,9 @@
  *
  *  $RCSfile: postattr.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: kz $ $Date: 2007-05-10 14:53:07 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 18:30:16 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -40,7 +40,7 @@
 
 #define _SVX_POSTATTR_CXX
 #include "postattr.hxx"
-#include "itemtype.hxx"
+#include <svx/itemtype.hxx>
 
 // -----------------------------------------------------------------------
 
