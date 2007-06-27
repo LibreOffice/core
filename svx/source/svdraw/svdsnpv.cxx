@@ -4,9 +4,9 @@
  *
  *  $RCSfile: svdsnpv.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: ihi $ $Date: 2006-11-14 13:49:52 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 19:11:55 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -36,13 +36,13 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_svx.hxx"
 
-#include "svdsnpv.hxx"
+#include <svx/svdsnpv.hxx>
 #include <math.h>
 
-#include "svdetc.hxx"
-#include "svdobj.hxx"
-#include "svdpagv.hxx"
-#include "svdpage.hxx"
+#include <svx/svdetc.hxx>
+#include <svx/svdobj.hxx>
+#include <svx/svdpagv.hxx>
+#include <svx/svdpage.hxx>
 #include "svditer.hxx"
 
 #ifndef _SDR_OVERLAY_OVERLAYOBJECTLIST_HXX
