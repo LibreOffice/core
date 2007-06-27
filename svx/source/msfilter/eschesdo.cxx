@@ -4,9 +4,9 @@
  *
  *  $RCSfile: eschesdo.cxx,v $
  *
- *  $Revision: 1.36 $
+ *  $Revision: 1.37 $
  *
- *  last change: $Author: obo $ $Date: 2007-01-22 13:26:40 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 18:33:27 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -41,16 +41,16 @@
 #endif
 
 #ifndef _SVDOBJ_HXX //autogen wg. SdrObject
-#include "svdobj.hxx"
+#include <svx/svdobj.hxx>
 #endif
 #ifndef _SVX_UNOAPI_HXX_
 #include <unoapi.hxx>
 #endif
 #ifndef _SVDOASHP_HXX
-#include <svdoashp.hxx>
+#include <svx/svdoashp.hxx>
 #endif
 #ifndef _SVX_UNOSHAPE_HXX //autogen wg. SvxShape
-#include "unoshape.hxx"
+#include <svx/unoshape.hxx>
 #endif
 
 #ifndef _SV_OUTDEV_HXX //autogen wg. OutputDevice
@@ -70,7 +70,7 @@
 #endif
 
 #ifndef _SVX_FMDPAGE_HXX //autogen wg. SvxFmDrawPage
-#include <fmdpage.hxx>
+#include <svx/fmdpage.hxx>
 #endif
 
 #ifndef _TOOLKIT_UNOHLP_HXX //autogen wg. VCLXBitmap
