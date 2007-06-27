@@ -4,9 +4,9 @@
  *
  *  $RCSfile: errinf.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: kz $ $Date: 2006-12-13 15:07:03 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 22:17:34 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -37,10 +37,10 @@
 #include "precompiled_tools.hxx"
 
 #include <limits.h>
-#include <shl.hxx>
-#include <debug.hxx>
-#include <errinf.hxx>
-#include <string.hxx>
+#include <tools/shl.hxx>
+#include <tools/debug.hxx>
+#include <tools/errinf.hxx>
+#include <tools/string.hxx>
 
 class ErrorHandler;
 
