@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.18 $
+#   $Revision: 1.19 $
 #
-#   last change: $Author: kz $ $Date: 2007-05-10 15:34:33 $
+#   last change: $Author: hr $ $Date: 2007-06-27 13:58:07 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -144,7 +144,7 @@ $(LAUNCHERFLAGFILE) : $(LAUNCHERDEPN)
     @$(MKDIRHIER) $(@:db).$(INPATH)
     @echo Creating desktop entries for $(@:f) ..
     @echo ---------------------------------
-    @$(PERL) brand.pl -p '$${{PRODUCTNAME}} $${{PRODUCTVERSION}}' -u '$${{UNIXPRODUCTNAME}}$${{PRODUCTVERSION}}' --iconprefix '$${{WITHOUTDOTUNIXPRODUCTNAME}}${ICONVERSION}-' $< $(@:db).$(INPATH)
+    @$(PERL) brand.pl -p '$${{PRODUCTNAME}} $${{PRODUCTVERSION}}' -u $(UNIXWRAPPERNAME) --iconprefix '$${{WITHOUTDOTUNIXPRODUCTNAME}}${ICONVERSION}-' $< $(@:db).$(INPATH)
     @$(PERL) translate.pl -p '$${{PRODUCTNAME}} $${{PRODUCTVERSION}}' -d $(@:db).$(INPATH) --ext "desktop" --key "Name" $(ULFDIR)$/launcher_name.ulf
     @$(PERL) translate.pl -p '$${{PRODUCTNAME}} $${{PRODUCTVERSION}}' -d $(@:db).$(INPATH) --ext "desktop" --key "Comment" $(ULFDIR)$/launcher_comment.ulf
 .IF "$(WITH_LIBSN)"=="YES"
