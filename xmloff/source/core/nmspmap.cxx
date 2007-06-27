@@ -4,9 +4,9 @@
  *
  *  $RCSfile: nmspmap.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 10:21:13 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 14:56:21 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -49,11 +49,11 @@
 #endif
 
 #ifndef _XMLTOKEN_HXX
-#include <xmltoken.hxx>
+#include <xmloff/xmltoken.hxx>
 #endif
 
 #ifndef _XMLOFF_NMSPMAP_HXX
-#include <nmspmap.hxx>
+#include <xmloff/nmspmap.hxx>
 #endif
 
 using ::rtl::OUString;

@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ProgressBarHelper.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 10:18:41 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 14:54:44 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -43,7 +43,7 @@
 //___________________________________________________________________
 
 #ifndef _XMLOFF_PROGRESSBARHELPER_HXX
-#include "ProgressBarHelper.hxx"
+#include <xmloff/ProgressBarHelper.hxx>
 #endif
 
 #ifndef _TOOLS_DEBUG_HXX
@@ -51,7 +51,7 @@
 #endif
 
 #ifndef _XMLOFF_XMLTOKEN_HXX
-#include "xmltoken.hxx"
+#include <xmloff/xmltoken.hxx>
 #endif
 
 using namespace ::com::sun::star;
