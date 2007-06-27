@@ -4,9 +4,9 @@
  *
  *  $RCSfile: tabbar.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 14:41:20 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 14:51:52 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -64,8 +64,8 @@
 #include <vcl/edit.hxx>
 #endif
 
-#ifndef _SVTOOLS_ACCESSIBLETABBAR_HXX_
-#include <accessibletabbar.hxx>
+#ifndef SVTOOLS_ACCESSIBLE_FACTORY_ACCESS_HXX
+#include "svtaccessiblefactory.hxx"
 #endif
 
 // =======================================================================
@@ -360,6 +360,22 @@ IMPL_LINK( TabBarEdit, ImplEndTimerHdl, void*, EMPTYARG )
 }
 
 // =======================================================================
+struct TabBar_Impl
+{
+    ImplTabSizer*                   mpSizer;
+    ::svt::AccessibleFactoryAccess  maAccessibleFactory;
+
+    TabBar_Impl()
+        :mpSizer( NULL )
+    {
+    }
+    ~TabBar_Impl()
+    {
+        delete mpSizer;
+    }
+};
+
+// =======================================================================
 
 void TabBar::ImplInit( WinBits nWinStyle )
 {
@@ -368,7 +384,7 @@ void TabBar::ImplInit( WinBits nWinStyle )
     mpPrevBtn       = NULL;
     mpNextBtn       = NULL;
     mpLastBtn       = NULL;
-    mpSizer         = NULL;
+    mpImpl          = new TabBar_Impl;
     mpEdit          = NULL;
     mnMaxPageWidth  = 0;
     mnCurMaxWidth   = 0;
@@ -427,8 +443,7 @@ TabBar::~TabBar()
         delete mpFirstBtn;
     if ( mpLastBtn )
         delete mpLastBtn;
-    if ( mpSizer )
-        delete mpSizer;
+    delete mpImpl;
 
     // Alle Items loeschen
     ImplTabBarItem* pItem = mpItemList->First();
@@ -650,13 +665,13 @@ void TabBar::ImplInitControls()
 {
     if ( mnWinStyle & WB_SIZEABLE )
     {
-        if ( !mpSizer )
-            mpSizer = new ImplTabSizer( this, mnWinStyle & (WB_DRAG | WB_3DLOOK) );
-        mpSizer->Show();
+        if ( !mpImpl->mpSizer )
+            mpImpl->mpSizer = new ImplTabSizer( this, mnWinStyle & (WB_DRAG | WB_3DLOOK) );
+        mpImpl->mpSizer->Show();
     }
     else
     {
-        DELETEZ( mpSizer );
+        DELETEZ( mpImpl->mpSizer );
     }
 
     Link aLink = LINK( this, TabBar, ImplClickHdl );
@@ -1234,12 +1249,12 @@ void TabBar::Resize()
     long nButtonWidth = 0;
 
     // Sizer anordnen
-    if ( mpSizer )
+    if ( mpImpl->mpSizer )
     {
-        Size    aSizerSize = mpSizer->GetSizePixel();
+        Size    aSizerSize = mpImpl->mpSizer->GetSizePixel();
         Point   aNewSizerPos( mbMirrored ? 0 : (aNewSize.Width()-aSizerSize.Width()), 0 );
         Size    aNewSizerSize( aSizerSize.Width(), aNewSize.Height() );
-        mpSizer->SetPosSizePixel( aNewSizerPos, aNewSizerSize );
+        mpImpl->mpSizer->SetPosSizePixel( aNewSizerPos, aNewSizerSize );
         nSizerWidth = aSizerSize.Width();
     }
 
@@ -2629,7 +2644,7 @@ Rectangle TabBar::GetPageArea() const
 
 ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible > TabBar::CreateAccessible()
 {
-    return (::com::sun::star::accessibility::XAccessible*) new svt::AccessibleTabBar( this );
+    return mpImpl->maAccessibleFactory.getFactory().createAccessibleTabBar( *this );
 }
 
 // -----------------------------------------------------------------------
