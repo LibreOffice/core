@@ -4,9 +4,9 @@
  *
  *  $RCSfile: initui.src,v $
  *
- *  $Revision: 1.39 $
+ *  $Revision: 1.40 $
  *
- *  last change: $Author: ihi $ $Date: 2007-04-19 13:30:58 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 13:28:53 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -143,6 +143,10 @@ Resource RID_SW_SHELLRES
     String STR_TOX_ILL
     {
         Text [ en-US ] = "Illustration Index";
+    };
+    String STR_HYPERLINK_CLICK
+    {
+        Text [ en-US ] = "CTRL + click to open hyperlink";
     };
 
 
