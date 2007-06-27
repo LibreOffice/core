@@ -4,9 +4,9 @@
  *
  *  $RCSfile: vclxwindows.cxx,v $
  *
- *  $Revision: 1.62 $
+ *  $Revision: 1.63 $
  *
- *  last change: $Author: kz $ $Date: 2007-05-10 09:40:11 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 15:15:51 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -47,45 +47,6 @@
 #include <com/sun/star/graphic/XGraphic.hpp>
 #endif
 
-#ifndef _TOOLKIT_AWT_VCLXACCESSIBLEBUTTON_HXX_
-#include <toolkit/awt/vclxaccessiblebutton.hxx>
-#endif
-#ifndef _TOOLKIT_AWT_VCLXACCESSIBLECHECKBOX_HXX_
-#include <toolkit/awt/vclxaccessiblecheckbox.hxx>
-#endif
-#ifndef _TOOLKIT_AWT_VCLXACCESSIBLEDROPDOWCOMBOBOX_HXX_
-#include <toolkit/awt/vclxaccessibledropdowncombobox.hxx>
-#endif
-#ifndef _TOOLKIT_AWT_VCLXACCESSIBLECOMBOBOX_HXX_
-#include <toolkit/awt/vclxaccessiblecombobox.hxx>
-#endif
-#ifndef _TOOLKIT_AWT_VCLXACCESSIBLEDROPDOWLISTBOX_HXX_
-#include <toolkit/awt/vclxaccessibledropdownlistbox.hxx>
-#endif
-#ifndef _TOOLKIT_AWT_VCLXACCESSIBLEEDIT_HXX_
-#include <toolkit/awt/vclxaccessibleedit.hxx>
-#endif
-#ifndef _TOOLKIT_AWT_VCLXACCESSIBLEFIXEDTEXT_HXX_
-#include <toolkit/awt/vclxaccessiblefixedtext.hxx>
-#endif
-#ifndef _TOOLKIT_AWT_VCLXACCESSIBLELISTBOX_HXX_
-#include <toolkit/awt/vclxaccessiblelistbox.hxx>
-#endif
-#ifndef _TOOLKIT_AWT_VCLXACCESSIBLEMENU_HXX_
-#include <toolkit/awt/vclxaccessiblemenu.hxx>
-#endif
-#ifndef _TOOLKIT_AWT_VCLXACCESSIBLERADIOBUTTON_HXX_
-#include <toolkit/awt/vclxaccessibleradiobutton.hxx>
-#endif
-#ifndef _TOOLKIT_AWT_VCLXACCESSIBLESCROLLBAR_HXX_
-#include <toolkit/awt/vclxaccessiblescrollbar.hxx>
-#endif
-#ifndef _TOOLKIT_AWT_VCLXACCESSIBLETEXTCOMPONENT_HXX_
-#include <toolkit/awt/vclxaccessibletextcomponent.hxx>
-#endif
-#ifndef _TOOLKIT_AWT_VCLXACCESSIBLETOOLBOX_HXX_
-#include <toolkit/awt/vclxaccessibletoolbox.hxx>
-#endif
 #ifndef _TOOLKIT_HELPER_VCLUNOHELPER_HXX_
 #include <toolkit/helper/vclunohelper.hxx>
 #endif
@@ -100,6 +61,9 @@
 #endif
 #ifndef TOOLKIT_INC_TOOLKIT_HELPER_IMAGEALIGN_HXX
 #include <toolkit/helper/imagealign.hxx>
+#endif
+#ifndef TOOLKIT_HELPER_ACCESSIBILITY_CLIENT_HXX
+#include <toolkit/helper/accessibilityclient.hxx>
 #endif
 #ifndef _CPPUHELPER_TYPEPROVIDER_HXX_
 #include <cppuhelper/typeprovider.hxx>
@@ -460,7 +424,7 @@ VCLXButton::VCLXButton()
 
 ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessibleContext > VCLXButton::CreateAccessibleContext()
 {
-    return (::com::sun::star::accessibility::XAccessibleContext*) new VCLXAccessibleButton( this );
+    return getAccessibleFactory().createAccessibleContext( this );
 }
 
 void VCLXButton::dispose() throw(::com::sun::star::uno::RuntimeException)
@@ -807,7 +771,7 @@ IMPL_XTYPEPROVIDER_END
 
 ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessibleContext > VCLXCheckBox::CreateAccessibleContext()
 {
-    return (::com::sun::star::accessibility::XAccessibleContext*) new VCLXAccessibleCheckBox( this );
+    return getAccessibleFactory().createAccessibleContext( this );
 }
 
 void VCLXCheckBox::dispose() throw(::com::sun::star::uno::RuntimeException)
@@ -1079,7 +1043,7 @@ IMPL_XTYPEPROVIDER_END
 
 ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessibleContext > VCLXRadioButton::CreateAccessibleContext()
 {
-    return (::com::sun::star::accessibility::XAccessibleContext*) new VCLXAccessibleRadioButton( this );
+    return getAccessibleFactory().createAccessibleContext( this );
 }
 
 void VCLXRadioButton::dispose() throw(::com::sun::star::uno::RuntimeException)
@@ -1795,15 +1759,7 @@ void VCLXListBox::ProcessWindowEvent( const VclWindowEvent& rVclWindowEvent )
 {
     ::vos::OGuard aGuard( GetMutex() );
 
-    sal_Bool bIsDropDownBox = sal_False;
-    ListBox* pBox = static_cast< ListBox* >( GetWindow() );
-    if ( pBox )
-        bIsDropDownBox = ( ( pBox->GetStyle() & WB_DROPDOWN ) == WB_DROPDOWN );
-
-    if ( bIsDropDownBox )
-        return (::com::sun::star::accessibility::XAccessibleContext*) new VCLXAccessibleDropDownListBox( this );
-    else
-        return (::com::sun::star::accessibility::XAccessibleContext*) new VCLXAccessibleListBox( this );
+    return getAccessibleFactory().createAccessibleContext( this );
 }
 
 void VCLXListBox::setProperty( const ::rtl::OUString& PropertyName, const ::com::sun::star::uno::Any& Value) throw(::com::sun::star::uno::RuntimeException)
@@ -2211,7 +2167,7 @@ IMPL_XTYPEPROVIDER_END
 
 ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessibleContext > VCLXFixedText::CreateAccessibleContext()
 {
-    return (::com::sun::star::accessibility::XAccessibleContext*) new VCLXAccessibleFixedText( this );
+    return getAccessibleFactory().createAccessibleContext( this );
 }
 
 void VCLXFixedText::setText( const ::rtl::OUString& Text ) throw(::com::sun::star::uno::RuntimeException)
@@ -2325,7 +2281,7 @@ IMPL_XTYPEPROVIDER_END
 
 ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessibleContext > VCLXScrollBar::CreateAccessibleContext()
 {
-    return (::com::sun::star::accessibility::XAccessibleContext*) new VCLXAccessibleScrollBar( this );
+    return getAccessibleFactory().createAccessibleContext( this );
 }
 
 // ::com::sun::star::lang::XComponent
@@ -2766,7 +2722,7 @@ IMPL_XTYPEPROVIDER_END
 
 ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessibleContext > VCLXEdit::CreateAccessibleContext()
 {
-    return (::com::sun::star::accessibility::XAccessibleContext*) new VCLXAccessibleEdit( this );
+    return getAccessibleFactory().createAccessibleContext( this );
 }
 
 void VCLXEdit::dispose() throw(::com::sun::star::uno::RuntimeException)
@@ -3107,15 +3063,7 @@ IMPL_XTYPEPROVIDER_END
 {
     ::vos::OGuard aGuard( GetMutex() );
 
-    sal_Bool bIsDropDownBox = sal_False;
-    ComboBox* pBox = static_cast< ComboBox* >( GetWindow() );
-    if ( pBox )
-        bIsDropDownBox = ( ( pBox->GetStyle() & WB_DROPDOWN ) == WB_DROPDOWN );
-
-    if ( bIsDropDownBox )
-        return (::com::sun::star::accessibility::XAccessibleContext*) new VCLXAccessibleDropDownComboBox( this );
-    else
-        return (::com::sun::star::accessibility::XAccessibleContext*) new VCLXAccessibleComboBox( this );
+    return getAccessibleFactory().createAccessibleContext( this );
 }
 
 void VCLXComboBox::dispose() throw(::com::sun::star::uno::RuntimeException)
@@ -4906,6 +4854,6 @@ VCLXToolBox::~VCLXToolBox()
 
 ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessibleContext > VCLXToolBox::CreateAccessibleContext()
 {
-    return (::com::sun::star::accessibility::XAccessibleContext*) new VCLXAccessibleToolBox( this );
+    return getAccessibleFactory().createAccessibleContext( this );
 }
 
