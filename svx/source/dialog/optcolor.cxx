@@ -4,9 +4,9 @@
  *
  *  $RCSfile: optcolor.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: rt $ $Date: 2007-04-26 07:37:22 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 13:40:16 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -147,6 +147,9 @@ class ColorConfigWindow_Impl : public Window
     FixedText       aSpellFT;
     ColorListBox    aSpellLB;
     Window          aSpellWN;
+    FixedText       aSmarttagsFT;
+    ColorListBox    aSmarttagsLB;
+    Window          aSmarttagsWN;
     Window          aWriterBackWN;
     SvxExtFixedText_Impl    aWriterFT;
     FixedText       aWrtTextGridFT;
@@ -308,6 +311,7 @@ sal_Int16 lcl_getGroup( sal_Int16 _nFeature )
         case LINKSVISITED :
         case ANCHOR :
         case SPELL :
+        case SMARTTAGS :
         {
             nRet = GROUP_GENERAL;
             break;
@@ -406,6 +410,9 @@ ColorConfigWindow_Impl::ColorConfigWindow_Impl(Window* pParent, const ResId& rRe
         aSpellFT(this, ResId(        FT_SPELL, *rResId.GetResMgr())),
         aSpellLB(this, ResId(        LB_SPELL, *rResId.GetResMgr())),
         aSpellWN(this, ResId(        WN_SPELL, *rResId.GetResMgr())),
+        aSmarttagsFT(this, ResId(        FT_SMARTTAGS, *rResId.GetResMgr() )),
+        aSmarttagsLB(this, ResId(        LB_SMARTTAGS, *rResId.GetResMgr() )),
+        aSmarttagsWN(this, ResId(        WN_SMARTTAGS, *rResId.GetResMgr() )),
         aWriterBackWN(this),
         aWriterFT(this, ResId(FT_WRITER, *rResId.GetResMgr())),
         aWrtTextGridFT(this, ResId(     FT_WRITERTEXTGRID, *rResId.GetResMgr())),
@@ -519,6 +526,7 @@ ColorConfigWindow_Impl::ColorConfigWindow_Impl(Window* pParent, const ResId& rRe
     aCheckBoxes[LINKS               ] = &aLinksCB                ;
     aCheckBoxes[LINKSVISITED        ] = &aLinksVisitedCB         ;
     aFixedTexts[SPELL            ]=& aSpellFT;
+    aFixedTexts[SMARTTAGS        ]=& aSmarttagsFT;
     aFixedTexts[WRITERTEXTGRID   ]=& aWrtTextGridFT;
     aCheckBoxes[WRITERFIELDSHADINGS ] = &aWrtFieldCB             ;
     aCheckBoxes[WRITERIDXSHADINGS   ] = &aWrtIdxShadingBackCB       ;
@@ -556,6 +564,7 @@ ColorConfigWindow_Impl::ColorConfigWindow_Impl(Window* pParent, const ResId& rRe
     aColorBoxes[LINKS               ] = &aLinksLB                ;
     aColorBoxes[LINKSVISITED        ] = &aLinksVisitedLB         ;
     aColorBoxes[SPELL               ] = &aSpellLB             ;
+    aColorBoxes[SMARTTAGS           ] = &aSmarttagsLB             ;
     aColorBoxes[WRITERTEXTGRID      ] = &aWrtTextGridLB          ;
     aColorBoxes[WRITERFIELDSHADINGS ] = &aWrtFieldLB             ;
     aColorBoxes[WRITERIDXSHADINGS   ] = &aWrtIdxShadingBackLB       ;
@@ -593,6 +602,7 @@ ColorConfigWindow_Impl::ColorConfigWindow_Impl(Window* pParent, const ResId& rRe
     aWindows[LINKS               ] = &aLinksWN                ;
     aWindows[LINKSVISITED        ] = &aLinksVisitedWN         ;
     aWindows[SPELL               ] = &aSpellWN             ;
+    aWindows[SMARTTAGS           ] = &aSmarttagsWN             ;
     aWindows[WRITERTEXTGRID      ] = &aWrtTextGridWN          ;
     aWindows[WRITERFIELDSHADINGS ] = &aWrtFieldWN             ;
     aWindows[WRITERIDXSHADINGS   ] = &aWrtIdxShadingBackWN       ;
