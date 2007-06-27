@@ -4,9 +4,9 @@
  *
  *  $RCSfile: shutdownicon.cxx,v $
  *
- *  $Revision: 1.57 $
+ *  $Revision: 1.58 $
  *
- *  last change: $Author: rt $ $Date: 2007-04-26 10:07:39 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 23:01:13 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -38,7 +38,7 @@
 
 #include <shutdownicon.hxx>
 #include <app.hrc>
-#include <app.hxx>
+#include <sfx2/app.hxx>
 #include <vos/mutex.hxx>
 #include <svtools/imagemgr.hxx>
 // #include <cmdlineargs.hxx>
@@ -89,10 +89,10 @@
 #include <com/sun/star/document/UpdateDocMode.hpp>
 #endif
 #ifndef _FILEDLGHELPER_HXX
-#include <filedlghelper.hxx>
+#include <sfx2/filedlghelper.hxx>
 #endif
 #ifndef _SFX_FCONTNR_HXX
-#include "fcontnr.hxx"
+#include <sfx2/fcontnr.hxx>
 #endif
 #ifndef _UNOTOOLS_PROCESSFACTORY_HXX
 #include <comphelper/processfactory.hxx>
@@ -100,7 +100,7 @@
 #ifndef _CPPUHELPER_COMPBASE1_HXX_
 #include <cppuhelper/compbase1.hxx>
 #endif
-#include "dispatch.hxx"
+#include <sfx2/dispatch.hxx>
 #include <comphelper/extract.hxx>
 #ifndef _URLOBJ_HXX
 #include <tools/urlobj.hxx>
