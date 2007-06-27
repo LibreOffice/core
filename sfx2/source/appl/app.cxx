@@ -4,9 +4,9 @@
  *
  *  $RCSfile: app.cxx,v $
  *
- *  $Revision: 1.107 $
+ *  $Revision: 1.108 $
  *
- *  last change: $Author: obo $ $Date: 2007-03-15 17:01:36 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 22:54:05 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -43,8 +43,8 @@
 #define PATH_MAX _MAX_PATH
 #endif // UNX
 
-#include "app.hxx"
-#include "frame.hxx"
+#include <sfx2/app.hxx>
+#include <sfx2/frame.hxx>
 
 #ifndef _VOS_PROCESS_HXX_
 #include <vos/process.hxx>
@@ -147,42 +147,42 @@
 
 #include <rtl/logfile.hxx>
 
-#include "appuno.hxx"
+#include <sfx2/appuno.hxx>
 #include "sfxhelp.hxx"
-#include "request.hxx"
+#include <sfx2/request.hxx>
 #include "sfxtypes.hxx"
 #include "sfxresid.hxx"
 #include "arrdecl.hxx"
-#include "progress.hxx"
-#include "objsh.hxx"
-#include "docfac.hxx"
-#include "docfile.hxx"
-#include "docfilt.hxx"
+#include <sfx2/progress.hxx>
+#include <sfx2/objsh.hxx>
+#include <sfx2/docfac.hxx>
+#include <sfx2/docfile.hxx>
+#include <sfx2/docfilt.hxx>
 #include "fltfnc.hxx"
 #include "nfltdlg.hxx"
-#include "new.hxx"
-#include "bindings.hxx"
-#include "dispatch.hxx"
-#include "viewsh.hxx"
-#include "genlink.hxx"
-#include "topfrm.hxx"
+#include <sfx2/new.hxx>
+#include <sfx2/bindings.hxx>
+#include <sfx2/dispatch.hxx>
+#include <sfx2/viewsh.hxx>
+#include <sfx2/genlink.hxx>
+#include <sfx2/topfrm.hxx>
 #include "appdata.hxx"
 #include "openflag.hxx"
 #include "app.hrc"
 #include "virtmenu.hxx"
-#include "module.hxx"
-#include "event.hxx"
+#include <sfx2/module.hxx>
+#include <sfx2/event.hxx>
 #include "imestatuswindow.hxx"
 #include "workwin.hxx"
-#include "module.hxx"
-#include "tbxctrl.hxx"
-#include "sfxdlg.hxx"
+#include <sfx2/module.hxx>
+#include <sfx2/tbxctrl.hxx>
+#include <sfx2/sfxdlg.hxx>
 #include "stbitem.hxx"
 #include "eventsupplier.hxx"
 
 #ifdef DBG_UTIL
-#include "tbxctrl.hxx"
-#include "mnuitem.hxx"
+#include <sfx2/tbxctrl.hxx>
+#include <sfx2/mnuitem.hxx>
 #endif
 
 #if defined( WIN ) || defined( WNT ) || defined( OS2 )
