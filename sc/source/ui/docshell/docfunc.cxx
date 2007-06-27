@@ -4,9 +4,9 @@
  *
  *  $RCSfile: docfunc.cxx,v $
  *
- *  $Revision: 1.65 $
+ *  $Revision: 1.66 $
  *
- *  last change: $Author: kz $ $Date: 2007-05-10 16:55:25 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 12:45:25 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -3935,7 +3935,7 @@ BOOL ScDocFunc::ResizeMatrix( const ScRange& rOldRange, const ScAddress& rNewEnd
 BOOL ScDocFunc::InsertAreaLink( const String& rFile, const String& rFilter,
                                 const String& rOptions, const String& rSource,
                                 const ScRange& rDestRange, ULONG nRefresh,
-                                BOOL bFitBlock, BOOL /* bApi */ )
+                                BOOL bFitBlock, BOOL bApi )
 {
     //! auch fuer ScViewFunc::InsertAreaLink benutzen!
 
@@ -3983,7 +3983,7 @@ BOOL ScDocFunc::InsertAreaLink( const String& rFile, const String& rFilter,
     String aFilterName = rFilter;
     String aNewOptions = rOptions;
     if (!aFilterName.Len())
-        ScDocumentLoader::GetFilterName( rFile, aFilterName, aNewOptions, TRUE );
+        ScDocumentLoader::GetFilterName( rFile, aFilterName, aNewOptions, TRUE, !bApi );
 
     //  remove application prefix from filter name here, so the filter options
     //  aren't reset when the filter name is changed in ScAreaLink::DataChanged
