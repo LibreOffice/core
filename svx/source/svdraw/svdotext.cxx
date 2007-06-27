@@ -4,9 +4,9 @@
  *
  *  $RCSfile: svdotext.cxx,v $
  *
- *  $Revision: 1.81 $
+ *  $Revision: 1.82 $
  *
- *  last change: $Author: kz $ $Date: 2007-05-10 14:59:11 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 19:08:23 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -36,28 +36,28 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_svx.hxx"
 
-#include "svdotext.hxx"
+#include <svx/svdotext.hxx>
 #include "svditext.hxx"
-#include "svdpagv.hxx"  // fuer Abfrage im Paint, ob das
-#include "svdview.hxx"  // Objekt gerade editiert wird
-#include "svdpage.hxx"  // und fuer AnimationHandler (Laufschrift)
+#include <svx/svdpagv.hxx>  // fuer Abfrage im Paint, ob das
+#include <svx/svdview.hxx>  // Objekt gerade editiert wird
+#include <svx/svdpage.hxx>  // und fuer AnimationHandler (Laufschrift)
 #include "svdxout.hxx"
 #include "svdtouch.hxx"
-#include "svdetc.hxx"
-#include "svdoutl.hxx"
+#include <svx/svdetc.hxx>
+#include <svx/svdoutl.hxx>
 #include "svdscrol.hxx"  // fuer Laufschrift
-#include "svdmodel.hxx"  // OutlinerDefaults
+#include <svx/svdmodel.hxx>  // OutlinerDefaults
 #include "svdglob.hxx"  // Stringcache
 #include "svdstr.hrc"   // Objektname
 #include "svdtxhdl.hxx"  // DrawTextToPath
-#include "writingmodeitem.hxx"
-#include "sdtfchim.hxx"
+#include <svx/writingmodeitem.hxx>
+#include <svx/sdtfchim.hxx>
 #ifndef INCLUDED_SVTOOLS_COLORCFG_HXX
 #include <svtools/colorcfg.hxx>
 #endif
 
 #ifndef _EEITEM_HXX //autogen
-#include <eeitem.hxx>
+#include <svx/eeitem.hxx>
 #endif
 
 #ifndef _EDITSTAT_HXX //autogen
@@ -65,19 +65,19 @@
 #endif
 
 #ifndef _OUTLOBJ_HXX //autogen
-#include <outlobj.hxx>
+#include <svx/outlobj.hxx>
 #endif
 
 #ifndef _EDITOBJ_HXX //autogen
-#include <editobj.hxx>
+#include <svx/editobj.hxx>
 #endif
 
 #ifndef _OUTLINER_HXX //autogen
-#include "outliner.hxx"
+#include <svx/outliner.hxx>
 #endif
 
 #ifndef _SVX_FHGTITEM_HXX //autogen
-#include "fhgtitem.hxx"
+#include <svx/fhgtitem.hxx>
 #endif
 
 #ifndef _SFXITEMPOOL_HXX //autogen
@@ -85,12 +85,12 @@
 #endif
 
 #ifndef _SVX_ADJITEM_HXX //autogen
-#include "adjitem.hxx"
+#include <svx/adjitem.hxx>
 #endif
-#include "flditem.hxx"
+#include <svx/flditem.hxx>
 
 #ifndef _SVX_XFTOUIT_HXX
-#include "xftouit.hxx"
+#include <svx/xftouit.hxx>
 #endif
 
 #ifndef _SV_SALBTYPE_HXX
@@ -98,15 +98,15 @@
 #endif
 
 #ifndef _SVX_XFLGRIT_HXX
-#include "xflgrit.hxx"
+#include <svx/xflgrit.hxx>
 #endif
 
 #ifndef _SVDPOOL_HXX
-#include <svdpool.hxx>
+#include <svx/svdpool.hxx>
 #endif
 
 #ifndef _SVX_XFLCLIT_HXX
-#include <xflclit.hxx>
+#include <svx/xflclit.hxx>
 #endif
 
 #ifndef _SFXSTYLE_HXX
@@ -114,7 +114,7 @@
 #endif
 
 #ifndef _MyEDITENG_HXX
-#include <editeng.hxx>
+#include <svx/editeng.hxx>
 #endif
 
 #ifndef _SFXITEMITER_HXX
