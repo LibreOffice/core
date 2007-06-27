@@ -4,9 +4,9 @@
  *
  *  $RCSfile: svtdata.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 15:17:33 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 21:54:11 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -49,7 +49,7 @@
 #endif
 
 #ifndef _SVTOOLS_SVTDATA_HXX
-#include <svtdata.hxx>
+#include <svtools/svtdata.hxx>
 #endif
 
 namespace unnamed_svtools_svtdata {}
