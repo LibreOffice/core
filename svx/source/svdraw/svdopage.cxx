@@ -4,9 +4,9 @@
  *
  *  $RCSfile: svdopage.cxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: ihi $ $Date: 2006-11-14 13:46:33 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 19:07:39 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -36,16 +36,16 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_svx.hxx"
 
-#include "svdopage.hxx"
+#include <svx/svdopage.hxx>
 #include "svdglob.hxx"  // Stringcache
 #include "svdstr.hrc"   // Objektname
-#include "svdtrans.hxx"
-#include "svdetc.hxx"
+#include <svx/svdtrans.hxx>
+#include <svx/svdetc.hxx>
 #include "svdxout.hxx"
-#include "svdmodel.hxx"
-#include "svdpage.hxx"
-#include "svdpagv.hxx"
-#include "svdoutl.hxx"
+#include <svx/svdmodel.hxx>
+#include <svx/svdpage.hxx>
+#include <svx/svdpagv.hxx>
+#include <svx/svdoutl.hxx>
 
 #ifndef INCLUDED_SVTOOLS_COLORCFG_HXX
 #include <svtools/colorcfg.hxx>
