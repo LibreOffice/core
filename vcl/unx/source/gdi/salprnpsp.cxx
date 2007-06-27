@@ -4,9 +4,9 @@
  *
  *  $RCSfile: salprnpsp.cxx,v $
  *
- *  $Revision: 1.48 $
+ *  $Revision: 1.49 $
  *
- *  last change: $Author: kz $ $Date: 2007-06-20 10:15:23 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 20:50:16 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -54,10 +54,10 @@
 #include <sys/stat.h>
 
 #ifndef _SV_SVAPP_HXX
-#include <svapp.hxx>
+#include <vcl/svapp.hxx>
 #endif
 #ifndef _SV_JOBSET_H
-#include <jobset.h>
+#include <vcl/jobset.h>
 #endif
 #ifndef _SV_SALDISP_HXX
 #include <saldisp.hxx>
@@ -69,10 +69,10 @@
 #include <salprn.h>
 #endif
 #ifndef _SV_PRINT_H
-#include <print.h>
+#include <vcl/print.h>
 #endif
 #ifndef _SV_SALPTYPE_HXX
-#include <salptype.hxx>
+#include <vcl/salptype.hxx>
 #endif
 #ifndef _SV_SALFRAME_H
 #include <salframe.h>
