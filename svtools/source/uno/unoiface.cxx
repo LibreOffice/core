@@ -4,9 +4,9 @@
  *
  *  $RCSfile: unoiface.cxx,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: hr $ $Date: 2007-06-27 12:19:05 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 22:03:12 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -43,7 +43,7 @@
 #include <vcl/svapp.hxx>
 #endif
 
-#include <svmedit.hxx>
+#include <svtools/svmedit.hxx>
 #ifndef _SVT_UNOIFACE_HXX
 #include <unoiface.hxx>
 #endif
@@ -73,7 +73,7 @@
 #endif
 
 #ifndef _FMTFIELD_HXX_
-#include <fmtfield.hxx>
+#include <svtools/fmtfield.hxx>
 #endif
 
 #ifndef _NUMUNO_HXX
