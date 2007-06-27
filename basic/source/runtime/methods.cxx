@@ -4,9 +4,9 @@
  *
  *  $RCSfile: methods.cxx,v $
  *
- *  $Revision: 1.75 $
+ *  $Revision: 1.76 $
  *
- *  last change: $Author: vg $ $Date: 2007-04-11 12:56:46 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 14:25:56 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -41,7 +41,7 @@
 #include <tools/date.hxx>
 #endif
 #ifndef _SBXVAR_HXX
-#include <sbxvar.hxx>
+#include <basic/sbxvar.hxx>
 #endif
 #ifndef _VOS_PROCESS_HXX
 #include <vos/process.hxx>
@@ -62,7 +62,7 @@
 #include <vcl/msgbox.hxx>
 #endif
 #ifndef _SBXCLASS_HXX //autogen
-#include <sbx.hxx>
+#include <basic/sbx.hxx>
 #endif
 #ifndef _ZFORLIST_HXX //autogen
 #include <svtools/zforlist.hxx>
@@ -115,7 +115,7 @@ using namespace com::sun::star::io;
 //#define _ENABLE_CUR_DIR
 
 #include "stdobj.hxx"
-#include "sbstdobj.hxx"
+#include <basic/sbstdobj.hxx>
 #include "rtlproto.hxx"
 #include "basrid.hxx"
 #include "image.hxx"
