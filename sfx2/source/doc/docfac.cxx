@@ -4,9 +4,9 @@
  *
  *  $RCSfile: docfac.cxx,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 16:39:06 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 23:19:15 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -57,17 +57,17 @@
 #include <unotools/ucbstreamhelper.hxx>
 #include <comphelper/sequenceashashmap.hxx>
 
-#include "sfx.hrc"
-#include "docfilt.hxx"
-#include "docfac.hxx"
+#include <sfx2/sfx.hrc>
+#include <sfx2/docfilt.hxx>
+#include <sfx2/docfac.hxx>
 #include "viewfac.hxx"
 #include "fltfnc.hxx"
 #include "arrdecl.hxx"
-#include "app.hxx"
-#include "module.hxx"
-#include "mnumgr.hxx"
+#include <sfx2/app.hxx>
+#include <sfx2/module.hxx>
+#include <sfx2/mnumgr.hxx>
 #include "sfxresid.hxx"
-#include "sfxuno.hxx"
+#include <sfx2/sfxuno.hxx>
 #include "doc.hrc"
 
 namespace css = ::com::sun::star;
