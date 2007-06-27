@@ -4,9 +4,9 @@
  *
  *  $RCSfile: svtools.hrc,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: vg $ $Date: 2007-04-11 19:38:31 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 14:41:49 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -382,8 +382,8 @@
 
 // String-Ids for accessibility
 #define STR_SVT_ACC_BEGIN                   (STR_SVT_FILEPICKER_END+1)
-#define STR_SVT_ACC_ACTION_EXPAND           (STR_SVT_ACC_BEGIN+0)
-#define STR_SVT_ACC_ACTION_COLLAPSE         (STR_SVT_ACC_BEGIN+1)
+    // FREE
+    // FREE
 #define STR_SVT_ACC_DESC_TABLISTBOX         (STR_SVT_ACC_BEGIN+2)
 #define STR_SVT_ACC_DESC_FILEVIEW           (STR_SVT_ACC_BEGIN+3)
 #define STR_SVT_ACC_DESC_FOLDER             (STR_SVT_ACC_BEGIN+4)
