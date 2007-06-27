@@ -4,9 +4,9 @@
  *
  *  $RCSfile: XMLTextCharStyleNamesElementExport.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: rt $ $Date: 2006-12-01 15:28:13 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 16:07:16 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -43,10 +43,10 @@
 #include "xmlnmspe.hxx"
 #endif
 #ifndef _XMLOFF_NMSPMAP_HXX
-#include "nmspmap.hxx"
+#include <xmloff/nmspmap.hxx>
 #endif
 #ifndef _XMLOFF_XMLEXP_HXX
-#include "xmlexp.hxx"
+#include <xmloff/xmlexp.hxx>
 #endif
 
 namespace com { namespace sun { namespace star {
