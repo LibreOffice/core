@@ -4,9 +4,9 @@
  *
  *  $RCSfile: impcont.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: vg $ $Date: 2006-11-21 17:46:12 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 22:08:17 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -37,11 +37,11 @@
 #define _IMPCONT_HXX
 
 #ifndef _TOOLS_H
-#include <tools.h>
+#include <tools/tools.h>
 #endif
 
 #ifndef _CONTNR_HXX
-#include <contnr.hxx>
+#include <tools/contnr.hxx>
 #endif
 
 typedef void* PVOID;
