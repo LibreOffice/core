@@ -4,9 +4,9 @@
  *
  *  $RCSfile: font.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: ihi $ $Date: 2007-03-26 11:20:37 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 20:12:15 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -48,10 +48,10 @@
 #include <psprint/sft.h>
 
 #ifndef _SV_FONT_HXX
-#include <font.hxx>
+#include <vcl/font.hxx>
 #endif
 #ifndef _SV_IMPFONT_HXX
-#include <impfont.hxx>
+#include <vcl/impfont.hxx>
 #endif
 #ifndef _VCL_FONTCFG_HXX
 #include <fontcfg.hxx>
