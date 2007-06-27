@@ -4,9 +4,9 @@
  *
  *  $RCSfile: htmlsupp.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: obo $ $Date: 2006-10-12 15:27:55 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 22:00:38 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -41,10 +41,10 @@
 #include <tools/urlobj.hxx>
 #ifndef _SVSTDARR_HXX
 #define _SVSTDARR_ULONGS
-#include <svstdarr.hxx>
+#include <svtools/svstdarr.hxx>
 #endif
 
-#include "parhtml.hxx"
+#include <svtools/parhtml.hxx>
 #include "htmltokn.h"
 #include "htmlkywd.hxx"
 
