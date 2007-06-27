@@ -4,9 +4,9 @@
  *
  *  $RCSfile: view3d.cxx,v $
  *
- *  $Revision: 1.28 $
+ *  $Revision: 1.29 $
  *
- *  last change: $Author: kz $ $Date: 2007-05-10 14:47:33 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 18:06:11 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -46,11 +46,11 @@
 #endif
 
 #ifndef _SVDOGRP_HXX
-#include "svdogrp.hxx"
+#include <svx/svdogrp.hxx>
 #endif
 
 #ifndef _SVDOPATH_HXX
-#include "svdopath.hxx"
+#include <svx/svdopath.hxx>
 #endif
 
 #ifndef _SHL_HXX
@@ -62,47 +62,47 @@
 #endif
 
 #ifndef _SVDPOOL_HXX
-#include "svdpool.hxx"
+#include <svx/svdpool.hxx>
 #endif
 
 #ifndef _SVDORECT_HXX
-#include "svdorect.hxx"
+#include <svx/svdorect.hxx>
 #endif
 
 #ifndef _SVDMODEL_HXX
-#include "svdmodel.hxx"
+#include <svx/svdmodel.hxx>
 #endif
 
 #ifndef _SVDPAGV_HXX
-#include "svdpagv.hxx"
+#include <svx/svdpagv.hxx>
 #endif
 
 #ifndef _XOUTX_HXX
-#include "xoutx.hxx"
+#include <svx/xoutx.hxx>
 #endif
 
 #ifndef _SVX_SVXIDS_HRC
-#include <svxids.hrc>
+#include <svx/svxids.hrc>
 #endif
 
 #ifndef _SVX_COLRITEM_HXX
-#include "colritem.hxx"
+#include <svx/colritem.hxx>
 #endif
 
 #ifndef _XTABLE_HXX
-#include "xtable.hxx"
+#include <svx/xtable.hxx>
 #endif
 
 #ifndef _SVDVIEW_HXX
-#include "svdview.hxx"
+#include <svx/svdview.hxx>
 #endif
 
 #ifndef _SVX_DIALOGS_HRC
-#include "dialogs.hrc"
+#include <svx/dialogs.hrc>
 #endif
 
 #ifndef _SVX_DIALMGR_HXX
-#include "dialmgr.hxx"
+#include <svx/dialmgr.hxx>
 #endif
 
 #ifndef _E3D_GLOBL3D_HXX
@@ -110,27 +110,27 @@
 #endif
 
 #ifndef _E3D_OBJ3D_HXX
-#include "obj3d.hxx"
+#include <svx/obj3d.hxx>
 #endif
 
 #ifndef _E3D_LATHE3D_HXX
-#include "lathe3d.hxx"
+#include <svx/lathe3d.hxx>
 #endif
 
 #ifndef _E3D_SPHERE3D_HXX
-#include "sphere3d.hxx"
+#include <svx/sphere3d.hxx>
 #endif
 
 #ifndef _E3D_EXTRUD3D_HXX
-#include "extrud3d.hxx"
+#include <svx/extrud3d.hxx>
 #endif
 
 #ifndef _E3D_CUBE3D_HXX
-#include "cube3d.hxx"
+#include <svx/cube3d.hxx>
 #endif
 
 #ifndef _E3D_POLYSC3D_HXX
-#include "polysc3d.hxx"
+#include <svx/polysc3d.hxx>
 #endif
 
 #ifndef _E3D_DRAGMT3D_HXX
@@ -138,31 +138,31 @@
 #endif
 
 #ifndef _E3D_VIEW3D_HXX
-#include "view3d.hxx"
+#include <svx/view3d.hxx>
 #endif
 
 #ifndef _SVDUNDO_HXX
-#include "svdundo.hxx"
+#include <svx/svdundo.hxx>
 #endif
 
 #ifndef _SVX_XFLCLIT_HXX
-#include "xflclit.hxx"
+#include <svx/xflclit.hxx>
 #endif
 
 #ifndef _SVX_XLNCLIT_HXX
-#include "xlnclit.hxx"
+#include <svx/xlnclit.hxx>
 #endif
 
 #ifndef _SVDOGRAF_HXX
-#include <svdograf.hxx>
+#include <svx/svdograf.hxx>
 #endif
 
 #ifndef _SVX_XBTMPIT_HXX
-#include <xbtmpit.hxx>
+#include <svx/xbtmpit.hxx>
 #endif
 
 #ifndef _SVX_XFLBMTIT_HXX
-#include <xflbmtit.hxx>
+#include <svx/xflbmtit.hxx>
 #endif
 
 #ifndef _BGFX_RANGE_B2DRANGE_HXX
@@ -177,7 +177,7 @@
 #include <basegfx/polygon/b2dpolypolygontools.hxx>
 #endif
 
-#include "xlnwtit.hxx"
+#include <svx/xlnwtit.hxx>
 
 #ifndef _SDR_OVERLAY_OVERLAYPOLYPOLYGON_HXX
 #include <svx/sdr/overlay/overlaypolypolygon.hxx>
@@ -853,7 +853,7 @@ void E3dView::ImpIsConvertTo3DPossible(SdrObject* pObj, BOOL& rAny3D,
 \************************************************************************/
 
 #ifndef _EEITEM_HXX
-#include "eeitem.hxx"
+#include <svx/eeitem.hxx>
 #endif
 
 void E3dView::ImpChangeSomeAttributesFor3DConversion(SdrObject* pObj)
