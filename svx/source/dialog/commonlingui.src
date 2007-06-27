@@ -4,9 +4,9 @@
  *
  *  $RCSfile: commonlingui.src,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: ihi $ $Date: 2007-04-19 14:00:48 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 16:53:55 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -33,7 +33,7 @@
  *
  ************************************************************************/
  // include ---------------------------------------------------------------
-#include "dialogs.hrc"
+#include <svx/dialogs.hrc>
 #include "helpid.hrc"
 #include "hangulhanjadlg.hrc"
 
