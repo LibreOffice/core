@@ -4,9 +4,9 @@
  *
  *  $RCSfile: swmodul1.cxx,v $
  *
- *  $Revision: 1.38 $
+ *  $Revision: 1.39 $
  *
- *  last change: $Author: kz $ $Date: 2007-05-10 16:14:13 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 13:23:11 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -673,7 +673,7 @@ void SwModule::ApplyLinkMode(sal_Int32 nNewLinkMode)
 
  ---------------------------------------------------------------------------*/
 void SwModule::CheckSpellChanges( sal_Bool bOnlineSpelling,
-        sal_Bool bIsSpellWrongAgain, sal_Bool bIsSpellAllAgain )
+        sal_Bool bIsSpellWrongAgain, sal_Bool bIsSpellAllAgain, sal_Bool bSmartTags )
 {
     sal_Bool bOnlyWrong = bIsSpellWrongAgain && !bIsSpellAllAgain;
     sal_Bool bInvalid = bOnlyWrong || bIsSpellAllAgain;
@@ -686,10 +686,15 @@ void SwModule::CheckSpellChanges( sal_Bool bOnlineSpelling,
         {
             SwDoc* pTmp = pDocSh->GetDoc();
             if ( pTmp->GetRootFrm() )
-                pTmp->SpellItAgainSam( bInvalid, bOnlyWrong );
+            {
+                pTmp->SpellItAgainSam( bInvalid, bOnlyWrong, bSmartTags );
+                ViewShell* pViewShell = 0;
+                pTmp->GetEditShell( &pViewShell );
+                if ( bSmartTags && pViewShell && pViewShell->GetWin() )
+                    pViewShell->GetWin()->Invalidate();
+            }
         }
 //      pSpell->SetSpellWrongAgain( sal_False );
 //      pSpell->SetSpellAllAgain( sal_False );
     }
 }
-
