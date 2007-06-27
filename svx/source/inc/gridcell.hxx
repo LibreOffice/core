@@ -4,9 +4,9 @@
  *
  *  $RCSfile: gridcell.hxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: vg $ $Date: 2007-01-15 14:27:59 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 18:24:06 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -37,7 +37,7 @@
 #define _SVX_GRIDCELL_HXX
 
 #ifndef _SVX_GRIDCTRL_HXX
-#include "gridctrl.hxx"
+#include <svx/gridctrl.hxx>
 #endif
 
 #ifndef _SVX_FMTOOLS_HXX
