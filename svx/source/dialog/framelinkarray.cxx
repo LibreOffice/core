@@ -4,9 +4,9 @@
  *
  *  $RCSfile: framelinkarray.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 04:20:42 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 17:07:12 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -37,7 +37,7 @@
 #include "precompiled_svx.hxx"
 
 #ifndef SVX_FRAMELINKARRAY_HXX
-#include "framelinkarray.hxx"
+#include <svx/framelinkarray.hxx>
 #endif
 
 #include <math.h>
