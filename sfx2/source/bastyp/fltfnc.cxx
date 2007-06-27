@@ -4,9 +4,9 @@
  *
  *  $RCSfile: fltfnc.cxx,v $
  *
- *  $Revision: 1.74 $
+ *  $Revision: 1.75 $
  *
- *  last change: $Author: obo $ $Date: 2007-01-23 07:39:12 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 12:54:56 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -545,7 +545,7 @@ sal_uInt32  SfxFilterMatcher::GuessFilterControlDefaultUI( SfxMedium& rMedium, c
     {
         // open the stream one times only ...
         // Otherwhise it will be tried more then once and show the same interaction more then once ...
-        rMedium.UseInteractionHandler( bDefUI );
+
         ::rtl::OUString sURL( rMedium.GetURLObject().GetMainURL( INetURLObject::NO_DECODE ) );
         ::com::sun::star::uno::Reference< ::com::sun::star::io::XInputStream > xInStream = rMedium.GetInputStream();
 
