@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dlgctrl.cxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: kz $ $Date: 2007-05-09 13:22:37 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 20:29:34 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -41,28 +41,28 @@
 #endif
 
 #ifndef _SV_SVDATA_HXX
-#include <svdata.hxx>
+#include <vcl/svdata.hxx>
 #endif
 #ifndef _SV_EVENT_HXX
-#include <event.hxx>
+#include <vcl/event.hxx>
 #endif
 #ifndef _SV_SVAPP_HXX
-#include <svapp.hxx>
+#include <vcl/svapp.hxx>
 #endif
 #ifndef _SV_TABPAGE_HXX
-#include <tabpage.hxx>
+#include <vcl/tabpage.hxx>
 #endif
 #ifndef _SV_TABCTRL_HXX
-#include <tabctrl.hxx>
+#include <vcl/tabctrl.hxx>
 #endif
 #ifndef _SV_BUTTON_HXX
-#include <button.hxx>
+#include <vcl/button.hxx>
 #endif
 #ifndef _SV_WINDOW_H
 #include <window.h>
 #endif
 
-#include <unohelp.hxx>
+#include <vcl/unohelp.hxx>
 
 #ifndef _COM_SUN_STAR_I18N_XCHARACTERCLASSIFICATION_HPP_
 #include <com/sun/star/i18n/XCharacterClassification.hpp>
