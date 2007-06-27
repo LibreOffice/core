@@ -4,9 +4,9 @@
  *
  *  $RCSfile: rscdep.cxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 00:49:23 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 22:07:17 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -45,10 +45,10 @@
 
 #include "bootstrp/prj.hxx"
 
-#include <string.hxx>
-#include <list.hxx>
-#include <fsys.hxx>
-#include <stream.hxx>
+#include <tools/string.hxx>
+#include <tools/list.hxx>
+#include <tools/fsys.hxx>
+#include <tools/stream.hxx>
 
 #include "cppdep.hxx"
 
