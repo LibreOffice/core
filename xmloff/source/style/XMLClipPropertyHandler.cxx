@@ -4,9 +4,9 @@
  *
  *  $RCSfile: XMLClipPropertyHandler.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: obo $ $Date: 2006-10-12 14:46:41 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 15:31:38 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -53,14 +53,14 @@
 #endif
 
 #ifndef _XMLOFF_XMLUCONV_HXX
-#include "xmluconv.hxx"
+#include <xmloff/xmluconv.hxx>
 #endif
 
 #ifndef _XMLOFF_XMLKYWD_HXX
 #include <xmlkywd.hxx>
 #endif
 #ifndef _XMLOFF_XMLTOKEN_HXX
-#include <xmltoken.hxx>
+#include <xmloff/xmltoken.hxx>
 #endif
 
 using namespace ::rtl;
