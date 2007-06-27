@@ -4,9 +4,9 @@
  *
  *  $RCSfile: svxbox.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 04:40:43 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 17:42:06 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -43,7 +43,7 @@
 #include <vcl/svapp.hxx>
 #endif
 
-#include "svxbox.hxx"
+#include <svx/svxbox.hxx>
 
 #ifndef _UNOTOOLS_CHARCLASS_HXX
 #include <unotools/charclass.hxx>
