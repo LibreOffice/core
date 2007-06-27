@@ -4,9 +4,9 @@
  *
  *  $RCSfile: winmtf.hxx,v $
  *
- *  $Revision: 1.32 $
+ *  $Revision: 1.33 $
  *
- *  last change: $Author: ihi $ $Date: 2006-11-14 15:42:37 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 21:36:54 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -78,7 +78,7 @@
 #include <vcl/lineinfo.hxx>
 #endif
 #ifndef _FLTCALL_HXX
-#include <fltcall.hxx>
+#include <svtools/fltcall.hxx>
 #endif
 
 #define ERROR                   0
