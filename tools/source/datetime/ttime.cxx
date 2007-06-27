@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ttime.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 00:51:59 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 22:09:28 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -40,7 +40,7 @@
 
 #if defined WNT
 #pragma warning (push,1)
-#include <svwin.h>
+#include <tools/svwin.h>
 #pragma warning (pop)
 #elif defined UNX
 #include <unistd.h>
@@ -50,7 +50,7 @@
 #endif
 
 #include <time.h>
-#include <time.hxx>
+#include <tools/time.hxx>
 
 #if defined(SOLARIS) && defined(__GNUC__)
 extern long altzone;
