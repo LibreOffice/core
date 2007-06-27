@@ -4,9 +4,9 @@
  *
  *  $RCSfile: atkbridge.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: hr $ $Date: 2006-05-11 13:32:48 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 20:44:25 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -37,7 +37,7 @@
 #define __ATK_BRIDGE_HXX__
 
 #ifndef _VCL_DLLAPI_H
-#include <dllapi.h>
+#include <vcl/dllapi.h>
 #endif
 
 bool VCL_DLLPUBLIC InitAtkBridge(void);
