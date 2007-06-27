@@ -4,9 +4,9 @@
  *
  *  $RCSfile: object.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: obo $ $Date: 2006-10-12 14:31:40 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 14:27:22 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -40,13 +40,13 @@
 #include <tools/errcode.hxx>
 #endif
 #ifndef _SBX_SBXOBJECT_HXX //autogen
-#include <sbxobj.hxx>
+#include <basic/sbxobj.hxx>
 #endif
 #ifndef _SBXCLASS_HXX //autogen
-#include <sbx.hxx>
+#include <basic/sbx.hxx>
 #endif
 #ifndef __SBX_SBXVARIABLE_HXX //autogen
-#include <sbxvar.hxx>
+#include <basic/sbxvar.hxx>
 #endif
 #ifndef _MSGBOX_HXX //autogen
 #include <vcl/msgbox.hxx>

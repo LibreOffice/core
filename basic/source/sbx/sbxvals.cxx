@@ -4,9 +4,9 @@
  *
  *  $RCSfile: sbxvals.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: obo $ $Date: 2006-10-12 14:34:34 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 14:33:02 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -41,7 +41,7 @@
 #ifndef _BIGINT_HXX //autogen
 #include <tools/bigint.hxx>
 #endif
-#include "sbx.hxx"
+#include <basic/sbx.hxx>
 
 ///////////////////////////// BigInt/Currency //////////////////////////////
 
