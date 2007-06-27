@@ -4,9 +4,9 @@
  *
  *  $RCSfile: Connection.hxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: kz $ $Date: 2006-12-13 16:23:25 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 14:38:25 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -54,6 +54,7 @@
 #include "AutoRetrievingBase.hxx"
 #endif
 
+#include "java/sql/ConnectionLog.hxx"
 
 namespace connectivity
 {
@@ -78,6 +79,8 @@ namespace connectivity
         jclass                  m_Driver_theClass;
         ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >
                                 m_aConnectionInfo;
+        java::sql::ConnectionLog
+                                m_aLogger;
         sal_Bool                m_bParameterSubstitution;
         sal_Bool                m_bIgnoreDriverPrivileges;
 
@@ -101,7 +104,7 @@ namespace connectivity
 
         DECLARE_SERVICE_INFO();
         // ein Konstruktor, der fuer das Returnen des Objektes benoetigt wird:
-        java_sql_Connection(const java_sql_Driver* _pDriver);
+        java_sql_Connection( const java_sql_Driver& _rDriver );
         sal_Bool construct( const ::rtl::OUString& url,
                         const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >& info);
 
@@ -109,6 +112,9 @@ namespace connectivity
             getConnectionInfo() const { return m_aConnectionInfo; }
 
         inline  sal_Bool isIgnoreDriverPrivilegesEnabled() const { return   m_bIgnoreDriverPrivileges;}
+
+        const java::sql::ConnectionLog& getLogger() const { return m_aLogger; }
+
         // OComponentHelper
         virtual void SAL_CALL disposing(void);
         // XInterface
