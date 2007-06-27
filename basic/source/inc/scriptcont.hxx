@@ -4,9 +4,9 @@
  *
  *  $RCSfile: scriptcont.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: obo $ $Date: 2007-03-15 15:38:46 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 14:23:39 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -41,7 +41,7 @@
 #endif
 
 #ifndef _BASMGR_HXX
-#include "basmgr.hxx"
+#include <basic/basmgr.hxx>
 #endif
 
 class BasicManager;
