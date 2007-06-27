@@ -4,9 +4,9 @@
  *
  *  $RCSfile: graphctl.cxx,v $
  *
- *  $Revision: 1.29 $
+ *  $Revision: 1.30 $
  *
- *  last change: $Author: hr $ $Date: 2007-06-26 12:04:40 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 17:08:26 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -68,11 +68,11 @@
 #include <osl/mutex.hxx>
 #endif
 
-#include "graphctl.hxx"
+#include <svx/graphctl.hxx>
 #include "GraphCtlAccessibleContext.hxx"
 #include "xoutbmp.hxx"
-#include "svxids.hrc"
-#include "svdpage.hxx"
+#include <svx/svxids.hrc>
+#include <svx/svdpage.hxx>
 
 // #i72889#
 #ifndef _SDRPAINTWINDOW_HXX
