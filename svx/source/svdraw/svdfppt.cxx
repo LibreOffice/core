@@ -4,9 +4,9 @@
  *
  *  $RCSfile: svdfppt.cxx,v $
  *
- *  $Revision: 1.151 $
+ *  $Revision: 1.152 $
  *
- *  last change: $Author: kz $ $Date: 2007-05-10 14:57:20 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 19:01:30 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -48,7 +48,7 @@
 #include <math.h>
 
 #ifndef _EEITEM_HXX //autogen
-#include <eeitem.hxx>
+#include <svx/eeitem.hxx>
 #endif
 #include <sot/storage.hxx>
 #ifndef _SOT_STORINFO_HXX
@@ -64,30 +64,30 @@
 
 #include <unotools/streamwrap.hxx>
 
-#include "svdfppt.hxx"
-#include "xpoly.hxx"
-#include "svdtrans.hxx"
-#include "svdmodel.hxx"
-#include "svdpage.hxx"
-#include "svdobj.hxx"
-#include "svdogrp.hxx"
-#include "svdorect.hxx"
-#include "svdopage.hxx"
-#include "svdograf.hxx"
-#include "svdopath.hxx"
-#include "svdocirc.hxx"
-#include "svdocapt.hxx"
-#include "outlobj.hxx"
-#include "svdattr.hxx"
+#include <svx/svdfppt.hxx>
+#include <svx/xpoly.hxx>
+#include <svx/svdtrans.hxx>
+#include <svx/svdmodel.hxx>
+#include <svx/svdpage.hxx>
+#include <svx/svdobj.hxx>
+#include <svx/svdogrp.hxx>
+#include <svx/svdorect.hxx>
+#include <svx/svdopage.hxx>
+#include <svx/svdograf.hxx>
+#include <svx/svdopath.hxx>
+#include <svx/svdocirc.hxx>
+#include <svx/svdocapt.hxx>
+#include <svx/outlobj.hxx>
+#include <svx/svdattr.hxx>
 #include "xattr.hxx"
 #include "svditext.hxx"
-#include "svdetc.hxx"
+#include <svx/svdetc.hxx>
 #include <bulitem.hxx>
-#include "polysc3d.hxx"
-#include "extrud3d.hxx"
-#include "svdoashp.hxx"
+#include <svx/polysc3d.hxx>
+#include <svx/extrud3d.hxx>
+#include <svx/svdoashp.hxx>
 #ifndef _SVX_TSPTITEM_HXX
-#include "tstpitem.hxx"
+#include <svx/tstpitem.hxx>
 #endif
 #if defined(JOEENV) && defined(JOEDEBUG)
 #include "impinccv.h" // etwas Testkram
@@ -104,52 +104,52 @@
 
 #define ITEMVALUE(ItemSet,Id,Cast)  ((const Cast&)(ItemSet).Get(Id)).GetValue()
 #ifndef _SVX_ADJITEM_HXX //autogen
-#include <adjitem.hxx>
+#include <svx/adjitem.hxx>
 #endif
 #ifndef _SVX_ESCPITEM_HXX //autogen
-#include <escpitem.hxx>
+#include <svx/escpitem.hxx>
 #endif
 #ifndef _SVX_COLRITEM_HXX //autogen
-#include <colritem.hxx>
+#include <svx/colritem.hxx>
 #endif
 #ifndef _SVX_FHGTITEM_HXX //autogen
-#include <fhgtitem.hxx>
+#include <svx/fhgtitem.hxx>
 #endif
 #ifndef _SVX_WGHTITEM_HXX //autogen
-#include <wghtitem.hxx>
+#include <svx/wghtitem.hxx>
 #endif
 #ifndef _SVX_POSTITEM_HXX //autogen
-#include <postitem.hxx>
+#include <svx/postitem.hxx>
 #endif
 #ifndef _SVX_UDLNITEM_HXX //autogen
-#include <udlnitem.hxx>
+#include <svx/udlnitem.hxx>
 #endif
 #ifndef _SVX_CRSDITEM_HXX //autogen
-#include <crsditem.hxx>
+#include <svx/crsditem.hxx>
 #endif
 #ifndef _SVX_SHDDITEM_HXX //autogen
-#include <shdditem.hxx>
+#include <svx/shdditem.hxx>
 #endif
 #ifndef _SVX_CHARRELIEFITEM_HXX
-#include <charreliefitem.hxx>
+#include <svx/charreliefitem.hxx>
 #endif
 #ifndef _SVX_FONTITEM_HXX
 #include <fontitem.hxx>
 #endif
 #ifndef _SVDOUTL_HXX
-#include <svdoutl.hxx>
+#include <svx/svdoutl.hxx>
 #endif
 #ifndef _EDITENG_HXX
-#include <editeng.hxx>
+#include <svx/editeng.hxx>
 #endif
 #ifndef _SVX_LSPCITEM_HXX //autogen
-#include <lspcitem.hxx>
+#include <svx/lspcitem.hxx>
 #endif
 #ifndef _SVX_ULSPITEM_HXX //autogen
-#include <ulspitem.hxx>
+#include <svx/ulspitem.hxx>
 #endif
 #ifndef _SVX_LRSPITEM_HXX
-#include <lrspitem.hxx>
+#include <svx/lrspitem.hxx>
 #endif
 #ifndef _SV_METRIC_HXX //autogen
 #include <vcl/metric.hxx>
@@ -161,13 +161,13 @@
 #include <svditer.hxx>
 #endif
 #ifndef _SVDOEDGE_HXX
-#include <svdoedge.hxx>
+#include <svx/svdoedge.hxx>
 #endif
 #ifndef _SXEKITM_HXX
-#include <sxekitm.hxx>
+#include <svx/sxekitm.hxx>
 #endif
 #ifndef _SVX_FLDITEM_HXX
-#include <flditem.hxx>
+#include <svx/flditem.hxx>
 #endif
 #ifndef _SYCHCONV_HXX
 #include <svtools/sychconv.hxx>
@@ -182,13 +182,13 @@
 #include <sfx2/objsh.hxx>
 #endif
 #ifndef _SVX_BRSHITEM_HXX
-#include <brshitem.hxx>
+#include <svx/brshitem.hxx>
 #endif
 #ifndef _SVX_LANGITEM_HXX
-#include <langitem.hxx>
+#include <svx/langitem.hxx>
 #endif
 #ifndef _SVDOOLE2_HXX
-#include <svdoole2.hxx>
+#include <svx/svdoole2.hxx>
 #endif
 #ifndef _SVX_UNOAPI_HXX_
 #include <unoapi.hxx>
@@ -227,25 +227,25 @@
 #include <com/sun/star/awt/Point.hpp>
 #endif
 #ifndef _SVX_WRITINGMODEITEM_HXX
-#include "writingmodeitem.hxx"
+#include <svx/writingmodeitem.hxx>
 #endif
 #ifndef _SV_PRINT_HXX
 #include <vcl/print.hxx>
 #endif
 #ifndef _SVX_SVXFONT_HXX
-#include <svxfont.hxx>
+#include <svx/svxfont.hxx>
 #endif
 #ifndef _SVX_FRMDIRITEM_HXX
-#include <frmdiritem.hxx>
+#include <svx/frmdiritem.hxx>
 #endif
 #ifndef _SDTFCHIM_HXX
-#include <sdtfchim.hxx>
+#include <svx/sdtfchim.hxx>
 #endif
 #ifndef _UNTOOLS_UCBSTREAMHELPER_HXX
 #include <unotools/ucbstreamhelper.hxx>
 #endif
 #ifndef _SVX_SCRIPTTYPEITEM_HXX
-#include <scripttypeitem.hxx>
+#include <svx/scripttypeitem.hxx>
 #endif
 #include <vcl/virdev.hxx>
 #include <algorithm>
