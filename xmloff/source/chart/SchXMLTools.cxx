@@ -4,9 +4,9 @@
  *
  *  $RCSfile: SchXMLTools.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: vg $ $Date: 2007-05-22 16:08:05 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 14:50:27 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -51,11 +51,11 @@
 #endif
 // header for class SvXMLUnitConverter
 #ifndef _XMLOFF_XMLUCONV_HXX
-#include "xmluconv.hxx"
+#include <xmloff/xmluconv.hxx>
 #endif
 // header for struct SvXMLEnumMapEntry
 #ifndef _XMLOFF_XMLEMENT_HXX
-#include "xmlement.hxx"
+#include <xmloff/xmlement.hxx>
 #endif
 // header for define __FAR_DATA
 #ifndef _SOLAR_H
@@ -74,16 +74,16 @@
 #include "xmlnmspe.hxx"
 #endif
 #ifndef _XMLOFF_XMLUCONV_HXX
-#include "xmluconv.hxx"
+#include <xmloff/xmluconv.hxx>
 #endif
 #ifndef _XMLOFF_NMSPMAP_HXX
-#include "nmspmap.hxx"
+#include <xmloff/nmspmap.hxx>
 #endif
 #ifndef _XMLOFF_XMLICTXT_HXX
-#include "xmlictxt.hxx"
+#include <xmloff/xmlictxt.hxx>
 #endif
 #ifndef _XMLOFF_XMLSTYLE_HXX
-#include "xmlstyle.hxx"
+#include <xmloff/xmlstyle.hxx>
 #endif
 
 #ifndef _COM_SUN_STAR_TASK_XSTATUSINDICATORSUPPLIER_HPP_
