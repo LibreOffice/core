@@ -4,9 +4,9 @@
  *
  *  $RCSfile: FNoException.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 02:33:06 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 14:06:26 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -51,7 +51,7 @@
 #include "file/FPreparedStatement.hxx"
 #endif
 #ifndef _CONNECTIVITY_FILE_VALUE_HXX_
-#include "FValue.hxx"
+#include <connectivity/FValue.hxx>
 #endif
 #ifndef _TOOLS_DEBUG_HXX
 #include <tools/debug.hxx>
