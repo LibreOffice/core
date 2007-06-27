@@ -4,9 +4,9 @@
  *
  *  $RCSfile: singletonref.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 16:59:58 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 13:23:11 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -45,6 +45,10 @@
 
 #ifndef INCLUDED_RTL_INSTANCE_HXX
 #include "rtl/instance.hxx"
+#endif
+
+#ifndef _OSL_DIAGNOSE_H_
+#include "osl/diagnose.h"
 #endif
 
 #ifndef INCLUDED_OSL_GETGLOBALMUTEX_HXX
