@@ -4,9 +4,9 @@
  *
  *  $RCSfile: alienwarn.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: rt $ $Date: 2007-04-26 10:10:14 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 23:09:13 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -38,7 +38,7 @@
 
 #include "alienwarn.hxx"
 #include "sfxresid.hxx"
-#include "sfxuno.hxx"
+#include <sfx2/sfxuno.hxx>
 
 #include "alienwarn.hrc"
 #include "dialog.hrc"
