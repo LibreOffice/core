@@ -4,9 +4,9 @@
  *
  *  $RCSfile: cliplistener.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 15:09:16 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 21:48:13 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -43,7 +43,7 @@
 #include <vos/mutex.hxx>
 
 #include "cliplistener.hxx"
-#include "transfer.hxx"
+#include <svtools/transfer.hxx>
 
 using namespace ::com::sun::star;
 
