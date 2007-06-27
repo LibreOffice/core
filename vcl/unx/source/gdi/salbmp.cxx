@@ -4,9 +4,9 @@
  *
  *  $RCSfile: salbmp.cxx,v $
  *
- *  $Revision: 1.28 $
+ *  $Revision: 1.29 $
  *
- *  last change: $Author: rt $ $Date: 2006-12-04 16:39:15 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 20:49:34 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -52,7 +52,7 @@
 #include <rtl/memory.h>
 #endif
 #ifndef _SV_SALBTYPE_HXX
-#include <salbtype.hxx>
+#include <vcl/salbtype.hxx>
 #endif
 #ifndef _SV_SALDATA_HXX
 #include <saldata.hxx>
@@ -70,7 +70,7 @@
 #include <salinst.h>
 #endif
 #ifndef _SV_BITMAP_HXX
-#include <bitmap.hxx>
+#include <vcl/bitmap.hxx>
 #endif
 
 // -----------
