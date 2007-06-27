@@ -4,9 +4,9 @@
  *
  *  $RCSfile: SvxShapeTypes.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: ihi $ $Date: 2006-11-14 13:13:15 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 16:42:05 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -36,19 +36,19 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_svx.hxx"
 
-#include "SvxShapeTypes.hxx"
+#include <svx/SvxShapeTypes.hxx>
 
 #ifndef _SVX_ACCESSIBILITY_ACCESSIBLE_SHAPE_HXX
-#include "AccessibleShape.hxx"
+#include <svx/AccessibleShape.hxx>
 #endif
 #ifndef _SVX_ACCESSIBILITY_ACCESSIBLE_GRAPHIC_SHAPE_HXX
-#include "AccessibleGraphicShape.hxx"
+#include <svx/AccessibleGraphicShape.hxx>
 #endif
 #ifndef _SVX_ACCESSIBILITY_ACCESSIBLE_OLE_SHAPE_HXX
-#include "AccessibleOLEShape.hxx"
+#include <svx/AccessibleOLEShape.hxx>
 #endif
 #ifndef _SVX_ACCESSIBILITY_ACCESSIBLE_CONTROL_SHAPE_HXX
-#include "AccessibleControlShape.hxx"
+#include <svx/AccessibleControlShape.hxx>
 #endif
 
 namespace accessibility {
