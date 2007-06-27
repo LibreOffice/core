@@ -4,9 +4,9 @@
  *
  *  $RCSfile: linkmgr.cxx,v $
  *
- *  $Revision: 1.30 $
+ *  $Revision: 1.31 $
  *
- *  last change: $Author: obo $ $Date: 2006-10-12 13:18:52 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 19:14:33 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -98,8 +98,8 @@
 
 #include "linkmgr.hxx"
 #include "fileobj.hxx"
-#include "dialmgr.hxx"
-#include "dialogs.hrc"
+#include <svx/dialmgr.hxx>
+#include <svx/dialogs.hrc>
 #include "unolingu.hxx"
 
 class SvxInternalLink : public sfx2::SvLinkSource
