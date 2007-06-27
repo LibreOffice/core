@@ -4,9 +4,9 @@
  *
  *  $RCSfile: cenumitm.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: vg $ $Date: 2007-01-18 14:13:41 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 21:41:57 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -44,7 +44,7 @@
 #endif
 
 #ifndef _SVTOOLS_CENUMITM_HXX
-#include <cenumitm.hxx>
+#include <svtools/cenumitm.hxx>
 #endif
 
 #ifndef _SFX_WHASSERT_HXX
