@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dndtest.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 12:24:51 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 20:36:58 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -35,11 +35,11 @@
 
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_vcl.hxx"
-#include <event.hxx>
-#include <svapp.hxx>
-#include <wrkwin.hxx>
-#include <msgbox.hxx>
-#include <lstbox.hxx>
+#include <vcl/event.hxx>
+#include <vcl/svapp.hxx>
+#include <vcl/wrkwin.hxx>
+#include <vcl/msgbox.hxx>
+#include <vcl/lstbox.hxx>
 
 #ifndef _COMPHELPER_PROCESSFACTORY_HXX_
 #include <comphelper/processfactory.hxx>
