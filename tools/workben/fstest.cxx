@@ -4,9 +4,9 @@
  *
  *  $RCSfile: fstest.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 01:09:24 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 22:21:58 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -36,28 +36,28 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_tools.hxx"
 
-#define _FSTEST_CXX "$Revision: 1.3 $"
+#define _FSTEST_CXX "$Revision: 1.4 $"
 
 #ifndef _SOLAR_H
-#include <solar.h>
+#include <tools/solar.h>
 #endif
 
 #include <stdio.h>
 
 #ifndef _STREAM_HXX
-#include <stream.hxx>
+#include <tools/stream.hxx>
 #endif
 
 #ifndef _FSYS_HXX
-#include <fsys.hxx>
+#include <tools/fsys.hxx>
 #endif
 
 #ifndef _DATE_HXX
-#include <date.hxx>
+#include <tools/date.hxx>
 #endif
 
 #ifndef _TIME_HXX
-#include <time.hxx>
+#include <tools/time.hxx>
 #endif
 
 void CheckTimes(DirEntry aDE);
