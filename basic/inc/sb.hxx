@@ -4,9 +4,9 @@
  *
  *  $RCSfile: sb.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-07 21:01:48 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 14:10:46 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -37,14 +37,14 @@
 #define _SB_HXX
 
 #ifndef _SBERRORS_HXX
- #include "sberrors.hxx"
+ #include <basic/sberrors.hxx>
 #endif
 
 
-#include <sbdef.hxx>
-#include <sbmeth.hxx>
-#include <sbmod.hxx>
-#include <sbprop.hxx>
-#include <sbstar.hxx>
+#include <basic/sbdef.hxx>
+#include <basic/sbmeth.hxx>
+#include <basic/sbmod.hxx>
+#include <basic/sbprop.hxx>
+#include <basic/sbstar.hxx>
 
 #endif
