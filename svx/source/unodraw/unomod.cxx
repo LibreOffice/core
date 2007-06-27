@@ -4,9 +4,9 @@
  *
  *  $RCSfile: unomod.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: ihi $ $Date: 2006-11-14 13:54:01 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 19:24:58 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -87,14 +87,14 @@
 #endif
 
 #ifndef _SVX_FMDPAGE_HXX
-#include <fmdpage.hxx>
+#include <svx/fmdpage.hxx>
 #endif
 #ifndef _SVX_FMMODEL_HXX
-#include <fmmodel.hxx>
+#include <svx/fmmodel.hxx>
 #endif
 
 #ifndef _SVX_FMPAGE_HXX
-#include <fmpage.hxx>
+#include <svx/fmpage.hxx>
 #endif
 
 #ifndef _SFX_HRC
@@ -105,17 +105,17 @@
 #include <unoapi.hxx>
 #endif
 
-#include "svdmodel.hxx"
+#include <svx/svdmodel.hxx>
 #include "globl3d.hxx"
-#include "svdtypes.hxx"
-#include "unoprov.hxx"
-#include "unopage.hxx"
-#include "unofield.hxx"
-#include "unomod.hxx"
-#include "unomodel.hxx"
-#include "svdobj.hxx"
-#include "svdpage.hxx"
-#include "unoshape.hxx"
+#include <svx/svdtypes.hxx>
+#include <svx/unoprov.hxx>
+#include <svx/unopage.hxx>
+#include <svx/unofield.hxx>
+#include <svx/unomod.hxx>
+#include <svx/unomodel.hxx>
+#include <svx/svdobj.hxx>
+#include <svx/svdpage.hxx>
+#include <svx/unoshape.hxx>
 
 extern UHashMapEntry pSdrShapeIdentifierMap[];
 
