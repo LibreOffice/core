@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.5 $
+#   $Revision: 1.6 $
 #
-#   last change: $Author: rt $ $Date: 2005-09-09 03:00:39 $
+#   last change: $Author: hr $ $Date: 2007-06-27 13:17:15 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -61,7 +61,8 @@ CXXFILES = \
         swrect.cxx \
         swregion.cxx \
         swtypes.cxx \
-        tabcol.cxx
+        tabcol.cxx \
+        SwSmartTagMgr.cxx
 
 SLOFILES =  \
         $(SLO)$/SwBitArray.obj \
@@ -76,7 +77,8 @@ SLOFILES =  \
         $(SLO)$/swrect.obj \
         $(SLO)$/swregion.obj \
         $(SLO)$/swtypes.obj \
-        $(SLO)$/tabcol.obj
+        $(SLO)$/tabcol.obj \
+        $(SLO)$/SwSmartTagMgr.obj
 
 # --- Tagets -------------------------------------------------------
 
