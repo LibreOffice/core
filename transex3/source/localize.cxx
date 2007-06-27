@@ -4,9 +4,9 @@
  *
  *  $RCSfile: localize.cxx,v $
  *
- *  $Revision: 1.45 $
+ *  $Revision: 1.46 $
  *
- *  last change: $Author: hr $ $Date: 2007-06-27 17:54:14 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 22:29:37 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -44,7 +44,7 @@
 
 #ifndef TRANSEX_FILE_HXX
 #define TRANSEX_FILE_HXX
-#include "file.hxx"
+#include <transex3/file.hxx>
 #endif
 
 
