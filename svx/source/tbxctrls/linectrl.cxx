@@ -4,9 +4,9 @@
  *
  *  $RCSfile: linectrl.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: kz $ $Date: 2007-05-10 15:01:49 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 19:18:29 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -53,15 +53,15 @@
 #include <sfx2/objsh.hxx>
 #endif
 
-#include "dialogs.hrc"
+#include <svx/dialogs.hrc>
 #include "helpid.hrc"
 
 #include "drawitem.hxx"
 #include "xattr.hxx"
-#include "xtable.hxx"
+#include <svx/xtable.hxx>
 #include "linectrl.hxx"
-#include "itemwin.hxx"
-#include "dialmgr.hxx"
+#include <svx/itemwin.hxx>
+#include <svx/dialmgr.hxx>
 
 using namespace ::rtl;
 using namespace ::com::sun::star::uno;
