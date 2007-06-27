@@ -4,9 +4,9 @@
  *
  *  $RCSfile: about.cxx,v $
  *
- *  $Revision: 1.32 $
+ *  $Revision: 1.33 $
  *
- *  last change: $Author: obo $ $Date: 2007-06-11 14:01:47 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 23:08:48 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -60,11 +60,11 @@
 #include <unotools/configmgr.hxx>
 #endif
 
-#include "sfxuno.hxx"
+#include <sfx2/sfxuno.hxx>
 #include "about.hxx"
 #include "sfxresid.hxx"
-#include "sfxdefs.hxx"
-#include "app.hxx"
+#include <sfx2/sfxdefs.hxx>
+#include <sfx2/app.hxx>
 
 #include "dialog.hrc"
 
