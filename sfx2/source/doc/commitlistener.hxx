@@ -4,9 +4,9 @@
  *
  *  $RCSfile: commitlistener.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-07 18:37:06 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 23:18:35 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -48,7 +48,7 @@
 #include <osl/mutex.hxx>
 #endif
 
-#include <sfxbasemodel.hxx>
+#include <sfx2/sfxbasemodel.hxx>
 
 class OChildCommitListen_Impl : public ::cppu::WeakImplHelper1 < ::com::sun::star::embed::XTransactionListener >
 {
