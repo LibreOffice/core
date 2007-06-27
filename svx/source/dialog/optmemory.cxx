@@ -4,9 +4,9 @@
  *
  *  $RCSfile: optmemory.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: kz $ $Date: 2007-05-10 14:39:37 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 17:29:49 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -121,7 +121,7 @@
 #endif
 
 #ifndef _SVX_LANGITEM_HXX
-#include "langitem.hxx"
+#include <svx/langitem.hxx>
 #endif
 #ifndef _SVX_CUIOPTGENRL_HXX
 #include "cuioptgenrl.hxx"
@@ -133,10 +133,10 @@
 #include "optsave.hxx"
 #endif
 #ifndef _SVX_OPTLINGU_HXX
-#include "optlingu.hxx"
+#include <svx/optlingu.hxx>
 #endif
 #ifndef _XPOOL_HXX
-#include "xpool.hxx"
+#include <svx/xpool.hxx>
 #endif
 #ifndef _SVX_DLGUTIL_HXX
 #include "dlgutil.hxx"
@@ -148,16 +148,16 @@
 #include "langtab.hxx"
 #endif
 #ifndef _SVX_DIALOGS_HRC
-#include "dialogs.hrc"
+#include <svx/dialogs.hrc>
 #endif
 
 
 #include "optmemory.hrc"
 #include "optmemory.hxx"
 #include "ofaitem.hxx"
-#include "dialogs.hrc"
+#include <svx/dialogs.hrc>
 #include "helpid.hrc"
-#include "dialmgr.hxx"
+#include <svx/dialmgr.hxx>
 
 #define CONFIG_LANGUAGES "OfficeLanguages"
 
