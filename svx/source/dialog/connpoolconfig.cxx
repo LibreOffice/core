@@ -4,9 +4,9 @@
  *
  *  $RCSfile: connpoolconfig.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 04:12:47 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 16:54:55 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -68,7 +68,7 @@
 #include "sdbcdriverenum.hxx"
 #endif
 
-#include "svxids.hrc"
+#include <svx/svxids.hrc>
 
 //........................................................................
 namespace offapp
