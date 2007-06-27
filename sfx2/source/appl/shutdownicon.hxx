@@ -45,13 +45,13 @@
 #include <osl/module.hxx>
 #endif
 #ifndef _SFX_SFXUNO_HXX
-#include <sfxuno.hxx>
+#include <sfx2/sfxuno.hxx>
 #endif
 #ifndef _CPPUHELPER_COMPBASE4_HXX_
 #include <cppuhelper/compbase4.hxx>
 #endif
 #ifndef INCLUDED_SFX2_DLLAPI_H
-#include "dllapi.h"
+#include <sfx2/dllapi.h>
 #endif
 
 class ResMgr;
