@@ -4,9 +4,9 @@
  *
  *  $RCSfile: datwin.hxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: hr $ $Date: 2006-06-19 20:40:19 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 21:08:23 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -37,11 +37,11 @@
 #define _SFXDATWIN_HXX
 
 #ifndef _BRWBOX_HXX
-#include <brwbox.hxx>
+#include <svtools/brwbox.hxx>
 #endif
 
 #ifndef _BRWHEAD_HXX
-#include <brwhead.hxx>
+#include <svtools/brwhead.hxx>
 #endif
 
 #ifndef _TIMER_HXX //autogen
@@ -54,7 +54,7 @@
 #include <tools/list.hxx>
 #endif
 #ifndef _TRANSFER_HXX
-#include "transfer.hxx"
+#include <svtools/transfer.hxx>
 #endif
 
 //===================================================================
