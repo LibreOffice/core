@@ -4,9 +4,9 @@
  *
  *  $RCSfile: imagemgr.cxx,v $
  *
- *  $Revision: 1.46 $
+ *  $Revision: 1.47 $
  *
- *  last change: $Author: ihi $ $Date: 2007-06-06 14:03:15 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 21:50:27 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -95,9 +95,9 @@
 #include <unotools/configmgr.hxx>
 #endif
 
-#include "svtools.hrc"
+#include <svtools/svtools.hrc>
 #include "imagemgr.hrc"
-#include "svtdata.hxx"
+#include <svtools/svtdata.hxx>
 
 // globals *******************************************************************
 
