@@ -4,9 +4,9 @@
  *
  *  $RCSfile: htmlout.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: hr $ $Date: 2007-06-26 13:34:02 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 22:00:25 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -39,11 +39,11 @@
 #include <tools/urlobj.hxx>
 
 #ifndef _ZFORMAT_HXX //autogen
-#include <zformat.hxx>
+#include <svtools/zformat.hxx>
 #endif
 
 #ifndef _SFXMACITEM_HXX
-#include <macitem.hxx>
+#include <svtools/macitem.hxx>
 #endif
 #ifndef _CACHESTR_HXX //autogen
 #include <tools/cachestr.hxx>
@@ -53,15 +53,15 @@
 #endif
 
 #ifndef _ZFORLIST_HXX //autogen
-#include <zforlist.hxx>
+#include <svtools/zforlist.hxx>
 #endif
 
-#include "htmlout.hxx"
+#include <svtools/htmlout.hxx>
 #include "htmlkywd.hxx"
-#include "imap.hxx"
-#include "imaprect.hxx"
-#include "imapcirc.hxx"
-#include "imappoly.hxx"
+#include <svtools/imap.hxx>
+#include <svtools/imaprect.hxx>
+#include <svtools/imapcirc.hxx>
+#include <svtools/imappoly.hxx>
 #include "urihelper.hxx"
 
 #ifndef RTL_CONSTASCII_STRINGPARAM
