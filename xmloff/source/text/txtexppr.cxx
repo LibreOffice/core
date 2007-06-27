@@ -4,9 +4,9 @@
  *
  *  $RCSfile: txtexppr.cxx,v $
  *
- *  $Revision: 1.36 $
+ *  $Revision: 1.37 $
  *
- *  last change: $Author: rt $ $Date: 2007-04-18 07:50:03 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 16:14:03 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -41,7 +41,7 @@
 #endif
 
 #ifndef _XMLOFF_TEXTPRMAP_HXX_
-#include "txtprmap.hxx"
+#include <xmloff/txtprmap.hxx>
 #endif
 
 #ifndef _COM_SUN_STAR_TABLE_BORDERLINE_HPP_
@@ -72,7 +72,7 @@
 #include "txtexppr.hxx"
 #endif
 #ifndef _XMLOFF_XMLEXP_HXX
-#include "xmlexp.hxx"
+#include <xmloff/xmlexp.hxx>
 #endif
 #ifndef _XMLOFF_XMLSECTIONFOOTNOTECONFIGEXPORT_HXX
 #include "XMLSectionFootnoteConfigExport.hxx"
