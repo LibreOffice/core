@@ -4,9 +4,9 @@
  *
  *  $RCSfile: brdwin.cxx,v $
  *
- *  $Revision: 1.28 $
+ *  $Revision: 1.29 $
  *
- *  last change: $Author: ihi $ $Date: 2007-06-06 14:21:28 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 20:28:10 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -39,40 +39,40 @@
 #include <svids.hrc>
 #endif
 #ifndef _SV_SVDATA_HXX
-#include <svdata.hxx>
+#include <vcl/svdata.hxx>
 #endif
 #ifndef _SV_EVENT_HXX
-#include <event.hxx>
+#include <vcl/event.hxx>
 #endif
 #ifndef _SV_DECOVIEW_HXX
-#include <decoview.hxx>
+#include <vcl/decoview.hxx>
 #endif
 #ifndef _SV_SYSWIN_HXX
-#include <syswin.hxx>
+#include <vcl/syswin.hxx>
 #endif
 #ifndef _SV_DOCKWIN_HXX
-#include <dockwin.hxx>
+#include <vcl/dockwin.hxx>
 #endif
 #ifndef _SV_FLOATWIN_HXX
-#include <floatwin.hxx>
+#include <vcl/floatwin.hxx>
 #endif
 #ifndef _SV_BITMAP_HXX
-#include <bitmap.hxx>
+#include <vcl/bitmap.hxx>
 #endif
 #ifndef _SV_GRADIENT_HXX
-#include <gradient.hxx>
+#include <vcl/gradient.hxx>
 #endif
 #ifndef _SV_IMAGE_HXX
-#include <image.hxx>
+#include <vcl/image.hxx>
 #endif
 #ifndef _SV_VIRDEV_HXX
-#include <virdev.hxx>
+#include <vcl/virdev.hxx>
 #endif
 #ifndef _SV_HELP_HXX
-#include <help.hxx>
+#include <vcl/help.hxx>
 #endif
 #ifndef _SV_EDIT_HXX
-#include <edit.hxx>
+#include <vcl/edit.hxx>
 #endif
 #ifndef _SV_BRDWIN_HXX
 #include <brdwin.hxx>
@@ -81,7 +81,7 @@
 #include <window.h>
 #endif
 #ifndef _SV_METRIC_HXX
-#include <metric.hxx>
+#include <vcl/metric.hxx>
 #endif
 #include <tools/debug.hxx>
 
