@@ -4,9 +4,9 @@
  *
  *  $RCSfile: impframe.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 16:49:22 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 23:33:39 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -43,9 +43,9 @@
 
 #include <svtools/smplhint.hxx>
 
-#include "frame.hxx"
-#include "bindings.hxx"
-#include "viewfrm.hxx"
+#include <sfx2/frame.hxx>
+#include <sfx2/bindings.hxx>
+#include <sfx2/viewfrm.hxx>
 
 void SfxFrame_Impl::Notify( SfxBroadcaster& /*rBC*/, const SfxHint& rHint )
 {
