@@ -4,9 +4,9 @@
  *
  *  $RCSfile: macitem.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: kz $ $Date: 2007-05-10 16:37:04 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 21:39:36 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -43,7 +43,7 @@
 #ifndef GCC
 #endif
 
-#include "macitem.hxx"
+#include <svtools/macitem.hxx>
 
 // STATIC DATA -----------------------------------------------------------
 
