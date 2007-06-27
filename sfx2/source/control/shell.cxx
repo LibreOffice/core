@@ -4,9 +4,9 @@
  *
  *  $RCSfile: shell.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: rt $ $Date: 2007-04-25 15:03:19 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 23:07:43 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -68,22 +68,22 @@
 #ifndef GCC
 #endif
 
-#include "app.hxx"
-#include "shell.hxx"
-#include "bindings.hxx"
-#include "dispatch.hxx"
-#include "viewfrm.hxx"
+#include <sfx2/app.hxx>
+#include <sfx2/shell.hxx>
+#include <sfx2/bindings.hxx>
+#include <sfx2/dispatch.hxx>
+#include <sfx2/viewfrm.hxx>
 #include "sfxbasic.hxx"
-#include "objface.hxx"
-#include "objsh.hxx"
-#include "viewsh.hxx"
-#include "dispatch.hxx"
+#include <sfx2/objface.hxx>
+#include <sfx2/objsh.hxx>
+#include <sfx2/viewsh.hxx>
+#include <sfx2/dispatch.hxx>
 #include "sfxtypes.hxx"
-#include "request.hxx"
-#include "mnumgr.hxx"
+#include <sfx2/request.hxx>
+#include <sfx2/mnumgr.hxx>
 #include "statcach.hxx"
-#include "macrconf.hxx"
-#include "msgpool.hxx"
+#include <sfx2/macrconf.hxx>
+#include <sfx2/msgpool.hxx>
 
 //====================================================================
 
