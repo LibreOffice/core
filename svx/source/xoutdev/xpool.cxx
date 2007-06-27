@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xpool.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: ihi $ $Date: 2006-11-14 13:57:21 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 19:35:01 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -36,11 +36,11 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_svx.hxx"
 
-#include "xtable.hxx"
+#include <svx/xtable.hxx>
 #include "xattr.hxx"
-#include "xpool.hxx"
-#include "svdattr.hxx"
-#include "svxids.hrc"
+#include <svx/xpool.hxx>
+#include <svx/svdattr.hxx>
+#include <svx/svxids.hrc>
 
 #ifndef _SFXITEMSET_HXX //autogen
 #include <svtools/itemset.hxx>
