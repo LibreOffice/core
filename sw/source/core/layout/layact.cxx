@@ -4,9 +4,9 @@
  *
  *  $RCSfile: layact.cxx,v $
  *
- *  $Revision: 1.67 $
+ *  $Revision: 1.68 $
  *
- *  last change: $Author: hr $ $Date: 2007-06-26 11:57:10 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 13:18:51 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -77,6 +77,7 @@
 #ifndef _SVX_BRSHITEM_HXX //autogen
 #include <svx/brshitem.hxx>
 #endif
+#include <SwSmartTagMgr.hxx>
 
 #define _SVSTDARR_BOOLS
 #include <svtools/svstdarr.hxx>
@@ -123,7 +124,6 @@
 #include <objectformatter.hxx>
 #endif
 // <--
-#include <SmartTagMgr.hxx>
 //#pragma optimize("ity",on)
 
 /*************************************************************************
@@ -2663,7 +2663,7 @@ BOOL SwLayIdle::DoIdleJob( IdleJobType eJob, BOOL bVisAreaOnly )
                 return FALSE;
             break;
         case SMART_TAGS :
-            if ( !SmartTagMgr::getSmartTagMgr().HasRecognizers() )
+            if ( !SwSmartTagMgr::Get().IsSmartTagsEnabled() )
                 return FALSE;
             break;
         default: ASSERT( false, "Unknown idle job type" )
@@ -2794,9 +2794,9 @@ SwLayIdle::SwLayIdle( SwRootFrm *pRt, SwViewImp *pI ) :
 
     //Zuerst den Sichtbaren Bereich Spellchecken, nur wenn dort nichts
     //zu tun war wird das IdleFormat angestossen.
-    if ( !DoIdleJob( ONLINE_SPELLING, TRUE ) &&
-         !DoIdleJob( AUTOCOMPLETE_WORDS, TRUE ) &&
-         !DoIdleJob( SMART_TAGS, TRUE ) ) // SMARTTAGS
+    if ( !DoIdleJob( SMART_TAGS, TRUE ) &&
+         !DoIdleJob( ONLINE_SPELLING, TRUE ) &&
+         !DoIdleJob( AUTOCOMPLETE_WORDS, TRUE ) ) // SMARTTAGS
     {
         //Formatieren und ggf. Repaint-Rechtecke an der ViewShell vormerken.
         //Dabei muessen kuenstliche Actions laufen, damit es z.B. bei
@@ -2920,9 +2920,9 @@ SwLayIdle::SwLayIdle( SwRootFrm *pRt, SwViewImp *pI ) :
         if ( !aAction.IsInterrupt() )
         {
             if ( !DoIdleJob( WORD_COUNT, FALSE ) )
-                if ( !DoIdleJob( ONLINE_SPELLING, FALSE ) )
-                    if ( !DoIdleJob( AUTOCOMPLETE_WORDS, FALSE ) )
-                        DoIdleJob( SMART_TAGS, FALSE ); // SMARTTAGS
+                if ( !DoIdleJob( SMART_TAGS, FALSE ) )
+                    if ( !DoIdleJob( ONLINE_SPELLING, FALSE ) )
+                        DoIdleJob( AUTOCOMPLETE_WORDS, FALSE ); // SMARTTAGS
         }
 
         bool bInValid = false;
@@ -2931,7 +2931,7 @@ SwLayIdle::SwLayIdle( SwRootFrm *pRt, SwViewImp *pI ) :
         const BOOL bSpell = rVOpt.IsOnlineSpell();
         const BOOL bACmplWrd = rVOpt.IsAutoCompleteWords();
         const BOOL bWordCount = pImp->GetShell()->getIDocumentStatistics()->GetDocStat().bModified;
-        const BOOL bSmartTags = SmartTagMgr::getSmartTagMgr().HasRecognizers(); // SMARTTAGS
+        const BOOL bSmartTags = SwSmartTagMgr::Get().IsSmartTagsEnabled(); // SMARTTAGS
 
         SwPageFrm *pPg = (SwPageFrm*)pRoot->Lower();
         do
