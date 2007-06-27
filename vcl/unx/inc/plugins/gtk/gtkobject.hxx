@@ -4,9 +4,9 @@
  *
  *  $RCSfile: gtkobject.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 12:52:22 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 20:45:02 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -37,13 +37,13 @@
 #define _VCL_GTKOBJECT_HXX
 
 #ifndef _SV_SV_H
-#include <sv.h>
+#include <vcl/sv.h>
 #endif
 #ifndef _SV_SYSDATA_HXX
 #include <sysdata.hxx>
 #endif
 #ifndef _SV_SALOBJ_HXX
-#include <salobj.hxx>
+#include <vcl/salobj.hxx>
 #endif
 #ifndef _VCL_GTKFRAME_HXX
 #include <plugins/gtk/gtkframe.hxx>
