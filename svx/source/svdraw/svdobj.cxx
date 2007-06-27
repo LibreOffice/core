@@ -4,9 +4,9 @@
  *
  *  $RCSfile: svdobj.cxx,v $
  *
- *  $Revision: 1.89 $
+ *  $Revision: 1.90 $
  *
- *  last change: $Author: hr $ $Date: 2007-06-26 12:08:37 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 19:05:11 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -47,68 +47,68 @@
 #include <tools/line.hxx>
 #include <tools/bigint.hxx>
 #include <vector>
-#include "svdobj.hxx"
-#include "xpoly.hxx"
+#include <svx/svdobj.hxx>
+#include <svx/xpoly.hxx>
 #include "svdxout.hxx"
-#include "svdetc.hxx"
-#include "svdtrans.hxx"
-#include "svdhdl.hxx"
-#include "svddrag.hxx"
-#include "svdmodel.hxx"
-#include "svdpage.hxx"
-#include "svdovirt.hxx"  // Fuer Add/Del Ref
-#include "svdview.hxx"   // fuer Dragging (Ortho abfragen)
+#include <svx/svdetc.hxx>
+#include <svx/svdtrans.hxx>
+#include <svx/svdhdl.hxx>
+#include <svx/svddrag.hxx>
+#include <svx/svdmodel.hxx>
+#include <svx/svdpage.hxx>
+#include <svx/svdovirt.hxx>  // Fuer Add/Del Ref
+#include <svx/svdview.hxx>   // fuer Dragging (Ortho abfragen)
 #include "svdscrol.hxx"
 #include "svdglob.hxx"   // StringCache
 #include "svdstr.hrc"    // Objektname
-#include "svdogrp.hxx"   // Factory
-#include "svdopath.hxx"  // Factory
-#include "svdoedge.hxx"  // Factory
-#include "svdorect.hxx"  // Factory
-#include "svdocirc.hxx"  // Factory
-#include "svdotext.hxx"  // Factory
-#include "svdomeas.hxx"  // Factory
-#include "svdograf.hxx"  // Factory
-#include "svdoole2.hxx"  // Factory
-#include "svdocapt.hxx"  // Factory
-#include "svdopage.hxx"  // Factory
-#include "svdouno.hxx"   // Factory
-#include "svdattrx.hxx" // NotPersistItems
-#include "svdoashp.hxx"
-#include "svdomedia.hxx"
+#include <svx/svdogrp.hxx>   // Factory
+#include <svx/svdopath.hxx>  // Factory
+#include <svx/svdoedge.hxx>  // Factory
+#include <svx/svdorect.hxx>  // Factory
+#include <svx/svdocirc.hxx>  // Factory
+#include <svx/svdotext.hxx>  // Factory
+#include <svx/svdomeas.hxx>  // Factory
+#include <svx/svdograf.hxx>  // Factory
+#include <svx/svdoole2.hxx>  // Factory
+#include <svx/svdocapt.hxx>  // Factory
+#include <svx/svdopage.hxx>  // Factory
+#include <svx/svdouno.hxx>   // Factory
+#include <svx/svdattrx.hxx> // NotPersistItems
+#include <svx/svdoashp.hxx>
+#include <svx/svdomedia.hxx>
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 
-#include "xlnwtit.hxx"
-#include "xlnstwit.hxx"
-#include "xlnedwit.hxx"
-#include "xlnstit.hxx"
-#include "xlnedit.hxx"
-#include "xlnstcit.hxx"
-#include "xlnedcit.hxx"
-#include "xlndsit.hxx"
-#include "xlnclit.hxx"
-#include "xflclit.hxx"
+#include <svx/xlnwtit.hxx>
+#include <svx/xlnstwit.hxx>
+#include <svx/xlnedwit.hxx>
+#include <svx/xlnstit.hxx>
+#include <svx/xlnedit.hxx>
+#include <svx/xlnstcit.hxx>
+#include <svx/xlnedcit.hxx>
+#include <svx/xlndsit.hxx>
+#include <svx/xlnclit.hxx>
+#include <svx/xflclit.hxx>
 #include "svditer.hxx"
-#include "xlntrit.hxx"
-#include "xfltrit.hxx"
-#include "xfltrit.hxx"
-#include "xflftrit.hxx"
+#include <svx/xlntrit.hxx>
+#include <svx/xfltrit.hxx>
+#include <svx/xfltrit.hxx>
+#include <svx/xflftrit.hxx>
 #include "xlinjoit.hxx"
-#include "unopage.hxx"
-#include "eeitem.hxx"
-#include "xenum.hxx"
-#include "xgrad.hxx"
-#include "xhatch.hxx"
-#include "xflhtit.hxx"
-#include "xbtmpit.hxx"
+#include <svx/unopage.hxx>
+#include <svx/eeitem.hxx>
+#include <svx/xenum.hxx>
+#include <svx/xgrad.hxx>
+#include <svx/xhatch.hxx>
+#include <svx/xflhtit.hxx>
+#include <svx/xbtmpit.hxx>
 
 #ifndef _SVDPOOL_HXX
-#include "svdpool.hxx"
+#include <svx/svdpool.hxx>
 #endif
 
 #ifndef _MyEDITENG_HXX
-#include "editeng.hxx"
+#include <svx/editeng.hxx>
 #endif
 
 #ifndef _SV_SALBTYPE_HXX
@@ -121,7 +121,7 @@
 
 // #97849#
 #ifndef _SVX_FMMODEL_HXX
-#include "fmmodel.hxx"
+#include <svx/fmmodel.hxx>
 #endif
 
 #ifndef _SFX_OBJSH_HXX
@@ -185,7 +185,7 @@
 #include <basegfx/range/b2drange.hxx>
 #endif
 #ifndef _SVX_UNOSHAPE_HXX
-#include "unoshape.hxx"
+#include <svx/unoshape.hxx>
 #endif
 
 #ifndef _SV_VIRDEV_HXX
