@@ -4,9 +4,9 @@
  *
  *  $RCSfile: salinfo.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: vg $ $Date: 2007-05-25 11:03:45 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 20:56:40 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -60,8 +60,8 @@
 #include <salinst.h>
 #include <saldata.hxx>
 #include <tools/debug.hxx>
-#include <svdata.hxx>
-#include <window.hxx>
+#include <vcl/svdata.hxx>
+#include <vcl/window.hxx>
 
 SalSystem* WinSalInstance::CreateSalSystem()
 {
