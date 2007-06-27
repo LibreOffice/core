@@ -4,9 +4,9 @@
  *
  *  $RCSfile: unottabl.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 06:16:05 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 19:28:00 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -49,16 +49,16 @@
 #endif
 
 #ifndef _SVX__XGRADIENT_HXX //autogen
-#include "xgrad.hxx"
+#include <svx/xgrad.hxx>
 #endif
 #ifndef _SVX_XFLFTRIT_HXX
-#include "xflftrit.hxx"
+#include <svx/xflftrit.hxx>
 #endif
 
-#include "svdmodel.hxx"
-#include "xflhtit.hxx"
+#include <svx/svdmodel.hxx>
+#include <svx/xflhtit.hxx>
 #include "unofill.hxx"
-#include "unomid.hxx"
+#include <svx/unomid.hxx>
 
 #ifndef _SVX_UNONAMEITEMTABLE_HXX_
 #include "UnoNameItemTable.hxx"
