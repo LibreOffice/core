@@ -4,9 +4,9 @@
  *
  *  $RCSfile: impastpl.hxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: rt $ $Date: 2006-12-01 15:27:04 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 15:40:26 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -60,10 +60,10 @@
 #endif
 
 #ifndef _XMLOFF_PROPMAPPINGTYPES_HXX
-#include <maptype.hxx>
+#include <xmloff/maptype.hxx>
 #endif
 #ifndef _XMLOFF_XMLEXPPR_HXX
-#include <xmlexppr.hxx>
+#include <xmloff/xmlexppr.hxx>
 #endif
 
 class SvXMLAutoStylePoolP;
