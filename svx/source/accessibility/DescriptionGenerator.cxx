@@ -4,9 +4,9 @@
  *
  *  $RCSfile: DescriptionGenerator.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: vg $ $Date: 2006-11-21 17:06:38 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 16:41:22 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -96,13 +96,13 @@
 #endif
 #include "svdstr.hrc"
 #ifndef _SVX_DIALMGR_HXX
-#include "dialmgr.hxx"
+#include <svx/dialmgr.hxx>
 #endif
 #ifndef _STRING_HXX
 #include <tools/string.hxx>
 #endif
 
-#include "xdef.hxx"
+#include <svx/xdef.hxx>
 #include "unoapi.hxx"
 #include "accessibility.hrc"
 #include "DGColorNameLookUp.hxx"
