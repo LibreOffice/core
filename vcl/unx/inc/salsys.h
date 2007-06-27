@@ -4,9 +4,9 @@
  *
  *  $RCSfile: salsys.h,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: obo $ $Date: 2007-01-25 11:25:27 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 20:43:05 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -38,7 +38,7 @@
 #define _SV_SALSYS_H
 
 #ifndef _SV_SV_H
-#include <sv.h>
+#include <vcl/sv.h>
 #endif
 #ifndef _VOS_MUTEX_HXX
 #include <vos/mutex.hxx>
@@ -47,10 +47,10 @@
 #include <vos/thread.hxx>
 #endif
 #ifndef _SV_SALSYS_HXX
-#include <salsys.hxx>
+#include <vcl/salsys.hxx>
 #endif
 #ifndef _VCL_DLLAPI_H
-#include "dllapi.h"
+#include <vcl/dllapi.h>
 #endif
 
 #include <list>
