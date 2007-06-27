@@ -4,9 +4,9 @@
  *
  *  $RCSfile: svdoashp.cxx,v $
  *
- *  $Revision: 1.40 $
+ *  $Revision: 1.41 $
  *
- *  last change: $Author: kz $ $Date: 2007-05-10 14:58:14 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 19:04:40 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -36,13 +36,13 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_svx.hxx"
 #ifndef _SVDOASHP_HXX
-#include "svdoashp.hxx"
+#include <svx/svdoashp.hxx>
 #endif
 #ifndef _SVX_UNOAPI_HXX_
 #include "unoapi.hxx"
 #endif
 #ifndef _SVX_UNOSHAPE_HXX
-#include "unoshape.hxx"
+#include <svx/unoshape.hxx>
 #endif
 #ifndef _UCBHELPER_CONTENT_HXX_
 #include <ucbhelper/content.hxx>
@@ -89,32 +89,32 @@
 #include <com/sun/star/uno/Sequence.h>
 #endif
 #ifndef _SVDOGRP_HXX
-#include "svdogrp.hxx"
+#include <svx/svdogrp.hxx>
 #endif
 #ifndef _SV_SALBTYPE_HXX
 #include <vcl/salbtype.hxx>     // FRound
 #endif
 #ifndef _SVDDRAG_HXX
-#include "svddrag.hxx"
+#include <svx/svddrag.hxx>
 #endif
-#include "xpool.hxx"
-#include "xpoly.hxx"
+#include <svx/xpool.hxx>
+#include <svx/xpoly.hxx>
 #include "svdxout.hxx"
-#include "svdmodel.hxx"
-#include "svdpage.hxx"
+#include <svx/svdmodel.hxx>
+#include <svx/svdpage.hxx>
 #include "svditer.hxx"
-#include "svdobj.hxx"
-#include "svdtrans.hxx"
-#include "svdetc.hxx"
-#include "svdattrx.hxx"  // NotPersistItems
-#include "svdoedge.hxx"  // #32383# Die Verbinder nach Move nochmal anbroadcasten
+#include <svx/svdobj.hxx>
+#include <svx/svdtrans.hxx>
+#include <svx/svdetc.hxx>
+#include <svx/svdattrx.hxx>  // NotPersistItems
+#include <svx/svdoedge.hxx>  // #32383# Die Verbinder nach Move nochmal anbroadcasten
 #include "svdglob.hxx"   // StringCache
 #include "svdstr.hrc"    // Objektname
-#include "eeitem.hxx"
+#include <svx/eeitem.hxx>
 #include "editstat.hxx"
-#include "svdoutl.hxx"
-#include "outlobj.hxx"
-#include "sdtfchim.hxx"
+#include <svx/svdoutl.hxx>
+#include <svx/outlobj.hxx>
+#include <svx/sdtfchim.hxx>
 
 #ifndef _ENHANCEDCUSTOMSHAPEGEOMETRY_HXX
 #include "../customshapes/EnhancedCustomShapeGeometry.hxx"
@@ -144,16 +144,16 @@
 #include <com/sun/star/drawing/EnhancedCustomShapeSegmentCommand.hpp>
 #endif
 #ifndef _SVX_WRITINGMODEITEM_HXX
-#include <writingmodeitem.hxx>
+#include <svx/writingmodeitem.hxx>
 #endif
 
 //      textitem.hxx        editdata.hxx
-#include "xlnclit.hxx"
+#include <svx/xlnclit.hxx>
 
 
 
 #ifndef _SVX_SVXIDS_HRC
-#include "svxids.hrc"
+#include <svx/svxids.hrc>
 #endif
 
 #ifndef _SFX_WHITER_HXX
@@ -169,31 +169,31 @@
 
 // #i37011#
 #ifndef _SVX_XLNCLIT_HXX //autogen
-#include <xlnclit.hxx>
+#include <svx/xlnclit.hxx>
 #endif
 
 #ifndef _SVX_XLNTRIT_HXX
-#include <xlntrit.hxx>
+#include <svx/xlntrit.hxx>
 #endif
 
 #ifndef _SVX_XFLTRIT_HXX
-#include <xfltrit.hxx>
+#include <svx/xfltrit.hxx>
 #endif
 
 #ifndef _SVX_XFLCLIT_HXX
-#include <xflclit.hxx>
+#include <svx/xflclit.hxx>
 #endif
 
 #ifndef _SVX_XFLGRIT_HXX
-#include <xflgrit.hxx>
+#include <svx/xflgrit.hxx>
 #endif
 
 #ifndef _SVX_XFLHTIT_HXX
-#include <xflhtit.hxx>
+#include <svx/xflhtit.hxx>
 #endif
 
 #ifndef _SVX_XBTMPIT_HXX
-#include <xbtmpit.hxx>
+#include <svx/xbtmpit.hxx>
 #endif
 
 #ifndef _SV_BMPACC_HXX
@@ -202,7 +202,7 @@
 
 // #i37448#
 #ifndef _SVDVIEW_HXX
-#include <svdview.hxx>
+#include <svx/svdview.hxx>
 #endif
 
 #ifndef _BGFX_POLYPOLYGON_B2DPOLYGONTOOLS_HXX
