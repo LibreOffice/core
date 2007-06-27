@@ -4,9 +4,9 @@
  *
  *  $RCSfile: paralist.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: obo $ $Date: 2006-10-12 13:03:24 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 18:42:51 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -37,8 +37,8 @@
 #include "precompiled_svx.hxx"
 
 #include <paralist.hxx>
-#include <outliner.hxx>     // nur wegen Paragraph, muss geaendert werden!
-#include <numdef.hxx>
+#include <svx/outliner.hxx>     // nur wegen Paragraph, muss geaendert werden!
+#include <svx/numdef.hxx>
 
 DBG_NAME(Paragraph)
 
