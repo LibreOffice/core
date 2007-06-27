@@ -4,9 +4,9 @@
  *
  *  $RCSfile: winshell.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: hr $ $Date: 2006-06-19 13:56:22 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 22:21:33 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -38,11 +38,11 @@
 
 #if defined WNT
 
-#include <prewin.h>
+#include <tools/prewin.h>
 #include "shutil.h"
-#include <postwin.h>
+#include <tools/postwin.h>
 
-#include <string.hxx>
+#include <tools/string.hxx>
 
 //----------------------------------------------------------------------------
 // CItemIDList
