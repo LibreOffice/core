@@ -4,12 +4,12 @@
  *
  *  $RCSfile: XSmartTagRecognizer.idl,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: hr $ $Date: 2007-01-02 16:56:33 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 13:33:36 $
  *
  *  The Contents of this file are made available subject to
- *  the terms of GNU Lesser General Public License Version 2.1.
+ *  the ternSms of GNU Lesser General Public License Version 2.1.
  *
  *
  *    GNU Lesser General Public License Version 2.1
@@ -34,104 +34,207 @@
  *    MA  02111-1307  USA
  *
  ************************************************************************/
+
 #ifndef __com_sun_star_smarttags_XSmartTagRecognizer_idl__
 #define __com_sun_star_smarttags_XSmartTagRecognizer_idl__
 
-#ifndef __com_sun_star_uno_XInterface_idl__
-#include <com/sun/star/uno/XInterface.idl>
-#endif
 #ifndef __com_sun_star_uno_XInitialization_idl__
 #include <com/sun/star/lang/XInitialization.idl>
 #endif
-#ifndef __com_sun_star_text_XTextRange_idl__
-#include <com/sun/star/text/XTextRange.idl>
+
+#ifndef __com_sun_star_lang_Locale_idl__
+#include <com/sun/star/lang/Locale.idl>
 #endif
+
+#ifndef __com_sun_star_i18n_XBreakIterator_idl__
+#include <com/sun/star/i18n/XBreakIterator.idl>
+#endif
+
+#ifndef __com_sun_star_smarttags_SmartTagRecognizerMode_idl__
+#include <com/sun/star/smarttags/SmartTagRecognizerMode.idl>
+#endif
+
+#ifndef __com_sun_star_text_XTextMarkup_idl__
+#include <com/sun/star/text/XTextMarkup.idl>
+#endif
+
 #ifndef __com_sun_star_frame_XController_idl__
 #include <com/sun/star/frame/XController.idl>
 #endif
 
+#ifndef __com_sun_star_lang_IndexOutOfBoundsException_idl__
+#include <com/sun/star/lang/IndexOutOfBoundsException.idl>
+#endif
+
+//=============================================================================
 
 module com {  module sun {  module star {  module smarttags {
 
+//=============================================================================
 
-  interface XSmartTagRecognizer: com::sun::star::uno::XInterface
-  {
-    /**
-       Function: getName
+/**
+    provides access to a smart tag recognizer.
 
-       @return Name of the smarttag recognizer
+    @since OOo 2.3.0
+ */
+
+interface XSmartTagRecognizer: com::sun::star::lang::XInitialization
+{
+    //-------------------------------------------------------------------------
+    /** obtains a name that describes this recognizer component.
+
+        @param aLocale
+                Is used for localization of the name.
+
+        @return
+                the name of the recognizer component.
+     */
+    string getName( [in] ::com::sun::star::lang::Locale aLocale );
+
+
+    //-------------------------------------------------------------------------
+    /** obtains a detailed description of this recognizer component.
+
+        @param aLocale
+                Is used for localization of the description.
+
+        @return
+                the description of the recognizer component.
+     */
+    string getDescription( [in] ::com::sun::star::lang::Locale aLocale );
+
+
+    //-------------------------------------------------------------------------
+    /** The number of smart tag types supported by this recognizer
+        component.
+     */
+    [attribute, readonly] long SmartTagCount;
+
+
+    //-------------------------------------------------------------------------
+    /** obtains the name of one specific smart tag type supported by
+        this recognizer component.
+
+        @param nSmartTagIndex
+                Index of the wanted smart tag type. Value needs to be
+                between 0 and the number of smarttags available
+                (exclusively).
+
+        @return
+                the unique name of the smart tag type. Smart tag type
+                names are always in the format of namespaceURI#tagname.
+
+        @throws com::sun::star::lang::IndexOutOfBoundsException
+                if nSmartTagIndex is greater than SmartTagCount
+     */
+    string getSmartTagName( [in] long nSmartTagIndex )
+        raises( com::sun::star::lang::IndexOutOfBoundsException );
+
+
+    //-------------------------------------------------------------------------
+    /** obtains the URL that can be used to download new or updated
+        recognizers.
+
+        @param nSmartTagIndex
+                Index of the wanted smart tag type. Value needs to be
+                between 0 and the number of smarttags available
+                (exclusively).
+
+        @return
+                the download URL.
+
+        @throws com::sun::star::lang::IndexOutOfBoundsException
+                if nSmartTagIndex is greater than SmartTagCount
+     */
+    string getSmartTagDownloadURL( [in] long nSmartTagIndex )
+        raises( com::sun::star::lang::IndexOutOfBoundsException );
+
+
+    //-------------------------------------------------------------------------
+    /** recognizes smart tags.
+
+        @param aText
+                The text that should be scanned by the recognizer. aText
+                is UFT16 encoded.
+
+        @param nStart
+                Denotes the start position of the region to scan.
+
+        @param nLength
+                Denotes the length of the text to scan.
+
+        @param eDataType
+                This value indicates the type of the passed text.
+
+        @param aLocale
+                Is used to indicate the language of the passed text.
+
+        @param xTextMarkup
+                This object is used to submit any recognized smart tags
+                to the calling application.
+
+        @param aApplicationName
+                A string containing the name of the calling application.
+
+        @param xController
+                The current controller of the document.
+
+        @param xTokenizer
+                This can be used to tokenize the string to recognize.
+     */
+    void recognize( [in] string aText,
+                    [in] long nStart,
+                    [in] long nLength,
+                    [in] SmartTagRecognizerMode eDataType,
+                    [in] com::sun::star::lang::Locale aLocale,
+                    [in] com::sun::star::text::XTextMarkup xTextMarkup,
+                    [in] string aApplicationName,
+                    [in] com::sun::star::frame::XController xController,
+                    [in] com::sun::star::i18n::XBreakIterator xTokenizer );
+
+
+    //-------------------------------------------------------------------------
+    /** indicates whether there is a property page for a smart tag type.
+
+        @param nSmartTagIndex
+                Index of the wanted smart tag type. Value needs to be
+                between 0 and the number of smarttags available
+                (exclusively).
+
+        @param aLocale
+                Is used for localization of the property page.
+
+        @return
+                true if there is a property page matching the requested
+                smart tag type and locale.
+
+        @throws com::sun::star::lang::IndexOutOfBoundsException
+                if nSmartTagIndex is greater than SmartTagCount
     */
-    string getName();
+    boolean hasPropertyPage( [in] long nSmartTagIndex,
+                             [in] ::com::sun::star::lang::Locale aLocale )
+        raises( com::sun::star::lang::IndexOutOfBoundsException );
 
-    /**
-       Function: getDescription
 
-       @return Description of the smarttag recognizer
+    //-------------------------------------------------------------------------
+    /** launches the property page for a smart tag type.
+
+        @param nSmartTagIndex
+                Index of the wanted smart tag type. Value needs to be
+                between 0 and the number of smarttags available
+                (exclusively).
+
+        @param aLocale
+                Is used for localization of the property page.
+
+        @throws com::sun::star::lang::IndexOutOfBoundsException
+                if nSmartTagIndex is greater than SmartTagCount
     */
-    string getDescription();
+    void displayPropertyPage( [in] long nSmartTagIndex,
+                              [in] ::com::sun::star::lang::Locale aLocale )
+        raises( com::sun::star::lang::IndexOutOfBoundsException );
 
-    /**
-       Function: getSmartTagCount
-
-       @return Number of available smarttags of this recognizer
-    */
-    long getSmartTagCount();
-
-    /**
-       Function: getSmartTagName
-
-       @param sal_Int32 nSmartTagIndex
-       Index of the wanted smarttag. Value needs to
-       be between 0 and the number of smarttags available (exclusively).
-
-       @return Returns the name of one specific smarttag in this
-       recognizer. This name is needed to associate the recognizer part of a smarttag
-       with the action part.
-    */
-    string getSmartTagName([in] long nSmartTagIndex);
-
-    /**
-       Function: getSmartTagCaption
-
-       @param sal_Int32 nSmartTagIndex
-       Index of the wanted smarttag. Value needs to
-       be between 0 and the number of smarttags available (exclusively).
-
-       @return Returns the caption of one specific smarttag in this
-       recognizer.
-    */
-    string getSmartTagCaption([in] long nSmartTagIndex,
-                  [in] com::sun::star::frame::XController xController);
-
-    /**
-       Function: Recognize
-
-       @param OUString aWord
-       Word that shall be checked by smarttag.
-
-       @param sal_Int32 nSmartTagIndex
-       Index of the wanted smarttag. Value needs to
-       be between 0 and the number of smarttags available (exclusively).
-
-       @return Returns true if the specified word is recognized by smarttag.
-    */
-    boolean Recognize([in] string aWord, [in] long nSmartTagIndex,
-              [in] com::sun::star::frame::XController xController);
-
-    /** initializes the object.
-
-    <p>It should be called directly after the object is created.
-    */
-    void initialize( [in] sequence<any> aArguments );
-
-  };
-
-  service SmartTagRecognizer
-  {
-    // exported interfaces:
-    interface XSmartTagRecognizer;
-  };
-
+};
 
 }; }; }; };
 
