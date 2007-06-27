@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dbggui.cxx,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: kz $ $Date: 2007-05-10 13:18:10 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 20:00:23 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -45,7 +45,7 @@
 #include <cmath>
 #include <limits.h>
 
-#include "svdata.hxx"
+#include <vcl/svdata.hxx>
 #include <svsys.h>
 
 #ifdef WNT
@@ -57,42 +57,42 @@
 #endif
 
 #ifndef _SV_SVDATA_HXX
-#include <svdata.hxx>
+#include <vcl/svdata.hxx>
 #endif
 #ifndef _SV_SVAPP_HXX
-#include <svapp.hxx>
+#include <vcl/svapp.hxx>
 #endif
 #ifndef _SV_EVENT_HXX
-#include <event.hxx>
+#include <vcl/event.hxx>
 #endif
 #ifndef _SV_LSTBOX_HXX
-#include <lstbox.hxx>
+#include <vcl/lstbox.hxx>
 #endif
 #ifndef _SV_BUTTON_HXX
-#include <button.hxx>
+#include <vcl/button.hxx>
 #endif
 #ifndef _SV_EDIT_HXX
-#include <edit.hxx>
+#include <vcl/edit.hxx>
 #endif
 #ifndef _SV_FIXED_HXX
-#include <fixed.hxx>
+#include <vcl/fixed.hxx>
 #endif
 #ifndef _SV_GROUP_HXX
-#include <group.hxx>
+#include <vcl/group.hxx>
 #endif
 #ifndef _SV_FIELD_HXX
-#include <field.hxx>
+#include <vcl/field.hxx>
 #endif
 #ifndef _SV_MSGBOX_HXX
-#include <msgbox.hxx>
+#include <vcl/msgbox.hxx>
 #endif
 #ifndef _SV_WRKWIN_HXX
-#include <wrkwin.hxx>
+#include <vcl/wrkwin.hxx>
 #endif
 #ifndef _SV_SOUND_HXX
-#include <sound.hxx>
+#include <vcl/sound.hxx>
 #endif
-#include <threadex.hxx>
+#include <vcl/threadex.hxx>
 
 #ifndef _SV_DBGGUI_HXX
 #include <dbggui.hxx>
@@ -102,9 +102,9 @@
 #include <com/sun/star/i18n/XCharacterClassification.hpp>
 #endif
 
-#include <unohelp.hxx>
+#include <vcl/unohelp.hxx>
 #ifndef _VCL_UNOHELP2_HXX
-#include "unohelp2.hxx"
+#include <vcl/unohelp2.hxx>
 #endif
 #include <vos/mutex.hxx>
 
