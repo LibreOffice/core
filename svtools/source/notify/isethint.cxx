@@ -4,9 +4,9 @@
  *
  *  $RCSfile: isethint.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 15:18:48 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 21:55:15 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -39,8 +39,8 @@
 #ifndef GCC
 #endif
 
-#include "isethint.hxx"
-#include "itemset.hxx"
+#include <svtools/isethint.hxx>
+#include <svtools/itemset.hxx>
 
 //====================================================================
 

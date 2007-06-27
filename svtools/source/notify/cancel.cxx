@@ -4,9 +4,9 @@
  *
  *  $RCSfile: cancel.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 15:18:21 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 21:54:49 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -36,13 +36,13 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_svtools.hxx"
 #define _SFX_CANCEL_CXX
-#include "cancel.hxx"
+#include <svtools/cancel.hxx>
 
 #include <vos/mutex.hxx>
 #include <tools/debug.hxx>
 
-#include "smplhint.hxx"
-#include "cnclhint.hxx"
+#include <svtools/smplhint.hxx>
+#include <svtools/cnclhint.hxx>
 
 #ifndef INCLUDED_RTL_INSTANCE_HXX
 #include <rtl/instance.hxx>
