@@ -4,9 +4,9 @@
  *
  *  $RCSfile: swmodule.cxx,v $
  *
- *  $Revision: 1.60 $
+ *  $Revision: 1.61 $
  *
- *  last change: $Author: kz $ $Date: 2007-06-19 15:51:28 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 13:23:25 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -64,6 +64,9 @@
 #endif
 #ifndef _SVX_FNTCTL_HXX //autogen
 #include <svx/fntctl.hxx>
+#endif
+#ifndef _SVX_SMARTTAGSCONTROL_HXX
+#include <svx/SmartTagCtl.hxx>
 #endif
 #ifndef _SVX_PSZCTRL_HXX //autogen
 #include <svx/pszctrl.hxx>
@@ -257,9 +260,6 @@
 #endif
 #ifndef _ZOOMCTRL_HXX
 #include <zoomctrl.hxx>
-#endif
-#ifndef _SWSTBCTL_HXX
-#include <swstbctl.hxx>
 #endif
 #ifndef _WORKCTRL_HXX
 #include <workctrl.hxx>
@@ -594,7 +594,6 @@ void SwDLL::RegisterControls()
 
     SwZoomControl::RegisterControl(SID_ATTR_ZOOM, pMod );
     SwPreviewZoomControl::RegisterControl(FN_PREVIEW_ZOOM, pMod);
-    SwHyperlinkControl::RegisterControl(FN_STAT_HYPERLINKS, pMod );
     SvxPosSizeStatusBarControl::RegisterControl(0, pMod );
     SvxInsertStatusBarControl::RegisterControl(SID_ATTR_INSERT, pMod );
     SvxSelectionModeControl::RegisterControl(FN_STAT_SELMODE, pMod );
@@ -651,6 +650,8 @@ void SwDLL::RegisterControls()
 
     ::avmedia::MediaToolBoxControl::RegisterControl(SID_AVMEDIA_TOOLBOX, pMod);
     ::avmedia::MediaPlayer::RegisterChildWindow(0, pMod);
+
+    SvxSmartTagsControl::RegisterControl(SID_OPEN_SMARTTAGMENU, pMod);
 }
 
 
