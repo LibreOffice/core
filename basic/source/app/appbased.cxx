@@ -4,9 +4,9 @@
  *
  *  $RCSfile: appbased.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: rt $ $Date: 2007-04-26 08:31:09 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 14:11:58 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -40,7 +40,7 @@
 #include <vcl/msgbox.hxx>
 #endif
 #ifndef _SBXCLASS_HXX //autogen
-#include <sbx.hxx>
+#include <basic/sbx.hxx>
 #endif
 #ifndef _TEXTENG_HXX //autogen
 #include <svtools/texteng.hxx>
@@ -49,7 +49,7 @@
 #include <svtools/textview.hxx>
 #endif
 #ifndef _SB_SBMETH_HXX //autogen
-#include <sbmeth.hxx>
+#include <basic/sbmeth.hxx>
 #endif
 
 #ifndef _SVTOOLS_STRINGTRANSFER_HXX_
@@ -57,14 +57,14 @@
 #endif
 
 #ifndef _BASIC_TTRESHLP_HXX
-#include "ttstrhlp.hxx"
+#include <basic/ttstrhlp.hxx>
 #endif
 
 #include "basic.hrc"
 #include "status.hxx"
 #include "appbased.hxx"
 #include "brkpnts.hxx"
-#include "testtool.hxx"     // defines für das Syntaxhighlighting
+#include <basic/testtool.hxx>       // defines für das Syntaxhighlighting
 #include "basrid.hxx"
 
 
