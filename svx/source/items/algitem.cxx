@@ -4,9 +4,9 @@
  *
  *  $RCSfile: algitem.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: kz $ $Date: 2007-05-10 14:49:02 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 18:26:07 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -36,7 +36,7 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_svx.hxx"
 
-#include "svxitems.hrc"
+#include <svx/svxitems.hrc>
 
 
 #include <tools/stream.hxx>
@@ -84,10 +84,10 @@
 #include <com/sun/star/table/CellAddress.hpp>
 #endif
 
-#include "algitem.hxx"
-#include "dialmgr.hxx"
-#include "itemtype.hxx"
-#include "unomid.hxx"
+#include <svx/algitem.hxx>
+#include <svx/dialmgr.hxx>
+#include <svx/itemtype.hxx>
+#include <svx/unomid.hxx>
 
 using namespace ::rtl;
 using namespace ::com::sun::star;
