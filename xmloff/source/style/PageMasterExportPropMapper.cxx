@@ -4,9 +4,9 @@
  *
  *  $RCSfile: PageMasterExportPropMapper.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: vg $ $Date: 2006-11-21 17:35:52 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 15:26:14 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -40,7 +40,7 @@
 #include "PageMasterExportPropMapper.hxx"
 #endif
 #ifndef _XMLOFF_XMLTOKEN_HXX
-#include "xmltoken.hxx"
+#include <xmloff/xmltoken.hxx>
 #endif
 
 #ifndef _COMPHELPER_TYPES_HXX_
@@ -51,7 +51,7 @@
 #include <com/sun/star/table/BorderLine.hpp>
 #endif
 #ifndef _XMLOFF_PAGEMASTERSTYLEMAP_HXX
-#include "PageMasterStyleMap.hxx"
+#include <xmloff/PageMasterStyleMap.hxx>
 #endif
 
 #ifndef _TOOLS_DEBUG_HXX
