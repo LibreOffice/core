@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ustring.c,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: vg $ $Date: 2007-04-13 16:02:04 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 13:25:42 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -98,6 +98,40 @@ static void internRelease (rtl_uString *pThis);
 /* Include String/UString template code */
 
 #include "strtmpl.c"
+
+sal_Int32 rtl_ustr_indexOfAscii_WithLength(
+    sal_Unicode const * str, sal_Int32 len,
+    char const * subStr, sal_Int32 subLen)
+{
+    if (subLen > 0 && subLen <= len) {
+        sal_Int32 i;
+        for (i = 0; i <= len - subLen; ++i) {
+            if (rtl_ustr_asciil_reverseEquals_WithLength(
+                    str + i, subStr, subLen))
+            {
+                return i;
+            }
+        }
+    }
+    return -1;
+}
+
+sal_Int32 rtl_ustr_lastIndexOfAscii_WithLength(
+    sal_Unicode const * str, sal_Int32 len,
+    char const * subStr, sal_Int32 subLen)
+{
+    if (subLen > 0 && subLen <= len) {
+        sal_Int32 i;
+        for (i = len - subLen; i >= 0; --i) {
+            if (rtl_ustr_asciil_reverseEquals_WithLength(
+                    str + i, subStr, subLen))
+            {
+                return i;
+            }
+        }
+    }
+    return -1;
+}
 
 sal_Int32 SAL_CALL rtl_ustr_valueOfFloat(sal_Unicode * pStr, float f)
 {
@@ -711,12 +745,11 @@ void SAL_CALL rtl_uString_intern( rtl_uString ** newStr,
     }
     else
     {
-        if (*newStr)
-        {
-            rtl_uString_release (*newStr);
-            *newStr = NULL;
-        }
+        rtl_uString *pOrg = *newStr;
+        *newStr = NULL;
         rtl_ustring_intern_internal( newStr, str, CANNOT_RETURN );
+        if (pOrg)
+            rtl_uString_release (pOrg);
     }
 }
 
