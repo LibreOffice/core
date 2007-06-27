@@ -5,4 +5,5 @@ ti	toolkit\inc								nmake	-	all	ti_inc NULL
 ti	toolkit\source\helper					nmake	-	all	ti_helper  ti_inc NULL
 ti	toolkit\source\awt						nmake	-	all	ti_awt  ti_inc NULL
 ti	toolkit\source\controls					nmake	-	all	ti_controls  ti_inc NULL
-ti	toolkit\util							nmake	-	all	ti_util ti_awt ti_controls ti_helper NULL
+ti	toolkit\source\controls\tree			nmake	-	all	ti_tree  NULL
+ti	toolkit\util							nmake	-	all	ti_util ti_awt ti_controls ti_helper ti_tree NULL
