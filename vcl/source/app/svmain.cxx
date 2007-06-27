@@ -4,9 +4,9 @@
  *
  *  $RCSfile: svmain.cxx,v $
  *
- *  $Revision: 1.68 $
+ *  $Revision: 1.69 $
  *
- *  last change: $Author: ihi $ $Date: 2007-04-19 09:19:06 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 20:03:01 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -55,16 +55,16 @@
 #include <svsys.h>
 #endif
 #ifndef _SV_SALINST_HXX
-#include <salinst.hxx>
+#include <vcl/salinst.hxx>
 #endif
 #ifndef _SV_SALSOUND_HXX
-#include <salsound.hxx>
+#include <vcl/salsound.hxx>
 #endif
 #ifndef _SV_SALOGL_HXX
-#include <salogl.hxx>
+#include <vcl/salogl.hxx>
 #endif
 #ifndef _SV_SALWTYPE_HXX
-#include <salwtype.hxx>
+#include <vcl/salwtype.hxx>
 #endif
 #ifndef _VOS_SIGNAL_HXX
 #include <vos/signal.hxx>
@@ -82,22 +82,22 @@
 #include <tools/unqid.hxx>
 #endif
 #ifndef _SV_SVDATA_HXX
-#include <svdata.hxx>
+#include <vcl/svdata.hxx>
 #endif
 #ifndef _SV_DBGGUI_HXX
 #include <dbggui.hxx>
 #endif
 #ifndef _SV_SVAPP_HXX
-#include <svapp.hxx>
+#include <vcl/svapp.hxx>
 #endif
 #ifndef _SV_WRKWIN_HXX
-#include <wrkwin.hxx>
+#include <vcl/wrkwin.hxx>
 #endif
 #ifndef _SV_CVTGRF_HXX
-#include <cvtgrf.hxx>
+#include <vcl/cvtgrf.hxx>
 #endif
 #ifndef _SV_IMAGE_HXX
-#include <image.hxx>
+#include <vcl/image.hxx>
 #endif
 #ifndef _SV_RESMGR_HXX
 #include <tools/resmgr.hxx>
@@ -112,25 +112,25 @@
 #include <outdev.h>
 #endif
 #ifndef _SV_OUTFONT_HXX
-#include <outfont.hxx>
+#include <vcl/outfont.hxx>
 #endif
 #ifndef _SV_PRINT_H
-#include <print.h>
+#include <vcl/print.h>
 #endif
 #ifndef _SV_SETTINGS_HXX
-#include <settings.hxx>
+#include <vcl/settings.hxx>
 #endif
 #ifndef _VCL_UNOWRAP_HXX
-#include <unowrap.hxx>
+#include <vcl/unowrap.hxx>
 #endif
 #ifndef _SV_SALSYS_HXX
-#include <salsys.hxx>
+#include <vcl/salsys.hxx>
 #endif
 #ifndef _SV_SALTIMER_HXX
-#include <saltimer.hxx>
+#include <vcl/saltimer.hxx>
 #endif
 #ifndef _SV_SALIMESTATUS_HXX
-#include <salimestatus.hxx>
+#include <vcl/salimestatus.hxx>
 #endif
 #ifndef _SV_IMPIMAGETREE_HXX
 #include <impimagetree.hxx>
@@ -164,7 +164,7 @@ using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::lang;
 
 #include <fontcfg.hxx>
-#include <configsettings.hxx>
+#include <vcl/configsettings.hxx>
 
 #ifndef _CPPUHELPER_IMPLBASE1_HXX_
 #include <cppuhelper/implbase1.hxx>
