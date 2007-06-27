@@ -4,9 +4,9 @@
  *
  *  $RCSfile: tplcitem.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-07 19:14:13 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 23:29:54 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -35,7 +35,7 @@
 #ifndef _TPLCITEM_HXX
 #define _TPLCITEM_HXX
 
-#include "ctrlitem.hxx"
+#include <sfx2/ctrlitem.hxx>
 #ifndef _LINK_HXX
 #include <tools/link.hxx>
 #endif
