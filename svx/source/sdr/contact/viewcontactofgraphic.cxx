@@ -4,9 +4,9 @@
  *
  *  $RCSfile: viewcontactofgraphic.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: rt $ $Date: 2007-04-26 07:51:06 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 18:44:55 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -41,7 +41,7 @@
 #endif
 
 #ifndef _SVDOGRAF_HXX
-#include <svdograf.hxx>
+#include <svx/svdograf.hxx>
 #endif
 
 #ifndef _SDR_ANIMATION_AINFOGRAPHIC_HXX
