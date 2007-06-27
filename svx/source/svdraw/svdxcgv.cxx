@@ -4,9 +4,9 @@
  *
  *  $RCSfile: svdxcgv.cxx,v $
  *
- *  $Revision: 1.30 $
+ *  $Revision: 1.31 $
  *
- *  last change: $Author: obo $ $Date: 2007-01-22 15:17:36 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 19:13:35 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -37,23 +37,23 @@
 #include "precompiled_svx.hxx"
 
 #include <vector>
-#include "editeng.hxx"
+#include <svx/editeng.hxx>
 #include "xexch.hxx"
-#include "xflclit.hxx"
-#include "svdxcgv.hxx"
-#include "svdoutl.hxx"
+#include <svx/xflclit.hxx>
+#include <svx/svdxcgv.hxx>
+#include <svx/svdoutl.hxx>
 #include "svditext.hxx"
-#include "svdetc.hxx"
+#include <svx/svdetc.hxx>
 #include "svdxout.hxx"
-#include "svdundo.hxx"
-#include "svdograf.hxx"
-#include "svdoole2.hxx" // fuer kein OLE im SdrClipboardFormat
-#include "svdorect.hxx"
-#include "svdoedge.hxx" // fuer Konnektoren uebers Clipboard
-#include "svdopage.hxx" // fuer Konnektoren uebers Clipboard
-#include "svdpage.hxx"
-#include "svdpagv.hxx"
-#include "svdtrans.hxx" // Fuer GetMapFactor zum umskalieren bei PasteModel
+#include <svx/svdundo.hxx>
+#include <svx/svdograf.hxx>
+#include <svx/svdoole2.hxx> // fuer kein OLE im SdrClipboardFormat
+#include <svx/svdorect.hxx>
+#include <svx/svdoedge.hxx> // fuer Konnektoren uebers Clipboard
+#include <svx/svdopage.hxx> // fuer Konnektoren uebers Clipboard
+#include <svx/svdpage.hxx>
+#include <svx/svdpagv.hxx>
+#include <svx/svdtrans.hxx> // Fuer GetMapFactor zum umskalieren bei PasteModel
 #include "svdstr.hrc"   // Namen aus der Resource
 #include "svdglob.hxx"  // StringCache
 #include "xoutbmp.hxx"
