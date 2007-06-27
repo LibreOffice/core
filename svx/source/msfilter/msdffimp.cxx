@@ -4,9 +4,9 @@
  *
  *  $RCSfile: msdffimp.cxx,v $
  *
- *  $Revision: 1.149 $
+ *  $Revision: 1.150 $
  *
- *  last change: $Author: vg $ $Date: 2007-05-22 15:19:25 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 18:35:00 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -67,10 +67,10 @@
 
 // SvxItem-Mapping. Wird benoetigt um die SvxItem-Header erfolgreich zu includen
 #ifndef _EEITEM_HXX //autogen
-#include <eeitem.hxx>
+#include <svx/eeitem.hxx>
 #endif
 #ifndef _EDITDATA_HXX
-#include <editdata.hxx>
+#include <svx/editdata.hxx>
 #endif
 
 #include <svtools/urihelper.hxx>
@@ -112,7 +112,7 @@
 #include <unotools/localfilehelper.hxx>
 #endif
 #ifndef _SVX_ESCHEREX_HXX
-#include <escherex.hxx>
+#include <svx/escherex.hxx>
 #endif
 #ifndef _BGFX_RANGE_B2IRANGE_HXX
 #include <basegfx/range/b2drange.hxx>
@@ -136,10 +136,10 @@
 #include <com/sun/star/drawing/XShapes.hpp>
 #endif
 #ifndef _SVX_CHARSCALEITEM_HXX
-#include <charscaleitem.hxx>
+#include <svx/charscaleitem.hxx>
 #endif
 #ifndef _SVX_KERNITEM_HXX
-#include <kernitem.hxx>
+#include <svx/kernitem.hxx>
 #endif
 #ifndef _FILTER_HXX //autogen
 #include <svtools/filter.hxx>
@@ -182,117 +182,117 @@
 #ifndef _SDGCPITM_HXX
 
 //#endif
-#include <sdgcpitm.hxx>
+#include <svx/sdgcpitm.hxx>
 #endif
 
 #ifndef _SDGMOITM_HXX
-#include <sdgmoitm.hxx>
+#include <svx/sdgmoitm.hxx>
 #endif
 #ifndef _SVX_TSPTITEM_HXX
-#include "tstpitem.hxx"
+#include <svx/tstpitem.hxx>
 #endif
 #ifndef _SVX_FMMODEL_HXX
-#include "fmmodel.hxx"
+#include <svx/fmmodel.hxx>
 #endif
 #ifndef _SVDMODEL_HXX
-#include "svdmodel.hxx"
+#include <svx/svdmodel.hxx>
 #endif
 #ifndef _SVDOBJ_HXX
-#include "svdobj.hxx"
+#include <svx/svdobj.hxx>
 #endif
 #ifndef _SVDPAGE_HXX
-#include "svdpage.hxx"
+#include <svx/svdpage.hxx>
 #endif
 #ifndef _SVDOGRP_HXX
-#include "svdogrp.hxx"
+#include <svx/svdogrp.hxx>
 #endif
 #ifndef _SVDOGRAF_HXX
-#include "svdograf.hxx"
+#include <svx/svdograf.hxx>
 #endif
 #ifndef _SVDOTEXT_HXX
-#include "svdotext.hxx"
+#include <svx/svdotext.hxx>
 #endif
 #ifndef _SVDORECT_HXX
-#include "svdorect.hxx"
+#include <svx/svdorect.hxx>
 #endif
 #ifndef _SVDOCAPT_HXX
-#include "svdocapt.hxx"
+#include <svx/svdocapt.hxx>
 #endif
 
 #ifndef _SVDOEDGE_HXX
-#include "svdoedge.hxx"
+#include <svx/svdoedge.hxx>
 #endif
 
 #ifndef _SVDOCIRC_HXX
-#include "svdocirc.hxx"
+#include <svx/svdocirc.hxx>
 #endif
 #ifndef _SVDOUTL_HXX
-#include "svdoutl.hxx"
+#include <svx/svdoutl.hxx>
 #endif
 #ifndef _SVDOOLE2_HXX
-#include <svdoole2.hxx>
+#include <svx/svdoole2.hxx>
 #endif
 #ifndef _SVDOPATH_HXX
-#include <svdopath.hxx>
+#include <svx/svdopath.hxx>
 #endif
 #ifndef _SVX_FRMDIR_HXX
-#include <frmdir.hxx>
+#include <svx/frmdir.hxx>
 #endif
 #ifndef _SVX_FRMDIRITEM_HXX
-#include <frmdiritem.hxx>
+#include <svx/frmdiritem.hxx>
 #endif
 #ifndef _SVDTRANS_HXX
-#include <svdtrans.hxx>
+#include <svx/svdtrans.hxx>
 #endif
 #ifndef _SXENDITM_HXX
-#include <sxenditm.hxx>
+#include <svx/sxenditm.hxx>
 #endif
 #ifndef _SDGLUITM_HXX
-#include <sdgluitm.hxx>
+#include <svx/sdgluitm.hxx>
 #endif
 #ifndef _SVX_FHGTITEM_HXX //autogen
-#include <fhgtitem.hxx>
+#include <svx/fhgtitem.hxx>
 #endif
 #ifndef _SVX_WGHTITEM_HXX //autogen
-#include <wghtitem.hxx>
+#include <svx/wghtitem.hxx>
 #endif
 #ifndef _SVX_POSTITEM_HXX //autogen
-#include <postitem.hxx>
+#include <svx/postitem.hxx>
 #endif
 #ifndef _SVX_UDLNITEM_HXX //autogen
-#include <udlnitem.hxx>
+#include <svx/udlnitem.hxx>
 #endif
 #ifndef _SVX_CRSDITEM_HXX //autogen
-#include <crsditem.hxx>
+#include <svx/crsditem.hxx>
 #endif
 #ifndef _SVX_SHDDITEM_HXX //autogen
-#include <shdditem.hxx>
+#include <svx/shdditem.hxx>
 #endif
 #ifndef _SVX_FONTITEM_HXX //autogen
 #include <fontitem.hxx>
 #endif
 #ifndef _SVX_COLRITEM_HXX //autogen
-#include <colritem.hxx>
+#include <svx/colritem.hxx>
 #endif
 #ifndef _SXEKITM_HXX
-#include <sxekitm.hxx>
+#include <svx/sxekitm.hxx>
 #endif
 
 #ifndef _SVX_BULITEM_HXX
 #include <bulitem.hxx>
 #endif
 #ifndef _E3D_POLYSC3D_HXX
-#include "polysc3d.hxx"
+#include <svx/polysc3d.hxx>
 #endif
 #ifndef _E3D_EXTRUD3D_HXX
-#include "extrud3d.hxx"
+#include <svx/extrud3d.hxx>
 #endif
 #ifndef _SVDITER_HXX
 #include "svditer.hxx"
 #endif
 
 #ifndef _XPOLY_HXX
-#include "xpoly.hxx"
+#include <svx/xpoly.hxx>
 #endif
 
 #ifndef _XATTR_HXX
@@ -304,12 +304,12 @@
 #endif
 
 #ifndef _MSDFFIMP_HXX
-#include "msdffimp.hxx" // extern sichtbare Header-Datei
+#include <svx/msdffimp.hxx> // extern sichtbare Header-Datei
 #endif
-#include "outliner.hxx"
-#include "outlobj.hxx"
-#include "editobj.hxx"
-#include "editeng.hxx"
+#include <svx/outliner.hxx>
+#include <svx/outlobj.hxx>
+#include <svx/editobj.hxx>
+#include <svx/editeng.hxx>
 #ifndef _MSASHAPE_HXX
 #include "msashape.hxx"
 #endif
@@ -330,13 +330,13 @@
 #endif
 
 #ifndef _SVX3DITEMS_HXX
-#include <svx3ditems.hxx>
+#include <svx/svx3ditems.hxx>
 #endif
 #ifndef _SVDOASHP_HXX
-#include "svdoashp.hxx"
+#include <svx/svdoashp.hxx>
 #endif
 #ifndef _SDASAITM_HXX
-#include <sdasaitm.hxx>
+#include <svx/sdasaitm.hxx>
 #endif
 #ifndef _UCBHELPER_CONTENT_HXX_
 #include <ucbhelper/content.hxx>
