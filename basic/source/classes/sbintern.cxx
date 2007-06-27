@@ -4,9 +4,9 @@
  *
  *  $RCSfile: sbintern.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 10:00:19 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 14:19:05 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -46,7 +46,7 @@
 #include "symtbl.hxx"               // Symbolverwaltung
 #include "parser.hxx"               // Parser
 #include "codegen.hxx"              // Code-Generator
-#include "basmgr.hxx"
+#include <basic/basmgr.hxx>
 
 SV_IMPL_PTRARR(SbErrorStack, SbErrorStackEntry*)
 
