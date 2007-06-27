@@ -4,9 +4,9 @@
  *
  *  $RCSfile: fmundo.hxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: hr $ $Date: 2006-10-24 15:13:06 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 18:23:20 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -37,10 +37,10 @@
 #define _SVX_FMUNDO_HXX
 
 #ifndef _SVDUNDO_HXX
-#include "svdundo.hxx"
+#include <svx/svdundo.hxx>
 #endif
 #ifndef _SVDOUNO_HXX
-#include "svdouno.hxx"
+#include <svx/svdouno.hxx>
 #endif
 #ifndef SVX_FMSCRIPTINGENV_HXX
 #include "fmscriptingenv.hxx"
