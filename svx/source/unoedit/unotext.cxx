@@ -4,9 +4,9 @@
  *
  *  $RCSfile: unotext.cxx,v $
  *
- *  $Revision: 1.60 $
+ *  $Revision: 1.61 $
  *
- *  last change: $Author: kz $ $Date: 2007-05-10 15:03:35 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 19:29:57 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -64,7 +64,7 @@
 #include <svtools/itemset.hxx>
 #endif
 
-#include <eeitem.hxx>
+#include <svx/eeitem.hxx>
 
 #ifndef _SFXITEMPOOL_HXX
 #include <svtools/itempool.hxx>
@@ -75,11 +75,11 @@
 #endif
 
 #ifndef _SVX_TSPTITEM_HXX //autogen
-#include <tstpitem.hxx>
+#include <svx/tstpitem.hxx>
 #endif
 
 #ifndef _SVDOBJ_HXX
-#include "svdobj.hxx"
+#include <svx/svdobj.hxx>
 #endif
 
 #ifndef _SFXINTITEM_HXX //autogen
@@ -89,19 +89,19 @@
 #include <rtl/uuid.h>
 #include <rtl/memory.h>
 
-#include "unoshtxt.hxx"
-#include "unoprnms.hxx"
-#include "unotext.hxx"
-#include "unoedsrc.hxx"
-#include "unomid.hxx"
+#include <svx/unoshtxt.hxx>
+#include <svx/unoprnms.hxx>
+#include <svx/unotext.hxx>
+#include <svx/unoedsrc.hxx>
+#include <svx/unomid.hxx>
 #include "unonrule.hxx"
 #include "unofdesc.hxx"
 #include "unoapi.hxx"
-#include "unofield.hxx"
-#include "flditem.hxx"
-#include "unoshprp.hxx"
-#include "numitem.hxx"
-#include "editeng.hxx"
+#include <svx/unofield.hxx>
+#include <svx/flditem.hxx>
+#include <svx/unoshprp.hxx>
+#include <svx/numitem.hxx>
+#include <svx/editeng.hxx>
 
 using namespace ::rtl;
 using namespace ::vos;
