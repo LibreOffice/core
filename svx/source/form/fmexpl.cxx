@@ -4,9 +4,9 @@
  *
  *  $RCSfile: fmexpl.cxx,v $
  *
- *  $Revision: 1.36 $
+ *  $Revision: 1.37 $
  *
- *  last change: $Author: obo $ $Date: 2006-10-12 12:45:27 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 18:12:20 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -54,7 +54,7 @@
 #endif
 
 #ifndef _SVX_FMGLOB_HXX
-#include "fmglob.hxx"
+#include <svx/fmglob.hxx>
 #endif
 
 #ifndef _SVX_FMSERVS_HXX
@@ -62,7 +62,7 @@
 #endif
 
 #ifndef _SVX_FMMODEL_HXX
-#include "fmmodel.hxx"
+#include <svx/fmmodel.hxx>
 #endif
 
 #ifndef _SVX_FMEXCH_HXX
@@ -78,7 +78,7 @@
 #endif
 
 #ifndef _SVX_SVXIDS_HRC
-#include "svxids.hrc"
+#include <svx/svxids.hrc>
 #endif
 
 #ifndef _SVX_FMPROP_HRC
@@ -86,7 +86,7 @@
 #endif
 
 #ifndef _SVX_DIALMGR_HXX //autogen
-#include "dialmgr.hxx"
+#include <svx/dialmgr.hxx>
 #endif
 
 #ifndef _SVDITER_HXX //autogen
@@ -94,7 +94,7 @@
 #endif
 
 #ifndef _SVDOUNO_HXX
-#include <svdouno.hxx>
+#include <svx/svdouno.hxx>
 #endif
 
 #ifndef _SVX_FMUNDO_HXX
@@ -102,7 +102,7 @@
 #endif
 
 #ifndef _SVDOBJ_HXX
-#include <svdobj.hxx>
+#include <svx/svdobj.hxx>
 #endif
 
 #ifndef _SV_MSGBOX_HXX //autogen
@@ -158,7 +158,7 @@
 #endif
 
 #ifndef _SVX_FMSHELL_HXX
-#include "fmshell.hxx"
+#include <svx/fmshell.hxx>
 #endif
 
 #ifndef _SVX_FMSHIMP_HXX
@@ -166,7 +166,7 @@
 #endif
 
 #ifndef _SVX_FMPAGE_HXX
-#include "fmpage.hxx"
+#include <svx/fmpage.hxx>
 #endif
 
 #ifndef _COM_SUN_STAR_IO_XPERSISTOBJECT_HPP_
