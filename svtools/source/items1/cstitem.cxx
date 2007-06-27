@@ -4,9 +4,9 @@
  *
  *  $RCSfile: cstitem.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: obo $ $Date: 2006-10-12 15:21:03 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 21:42:33 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -46,10 +46,10 @@
 #include <tools/debug.hxx>
 #include <tools/datetime.hxx>
 
-#include "svtdata.hxx"
-#include "cstitem.hxx"
+#include <svtools/svtdata.hxx>
+#include <svtools/cstitem.hxx>
 
-#include "svtools.hrc"
+#include <svtools/svtools.hrc>
 
 #ifndef _COM_SUN_STAR_LANG_LOCALE_HPP_
 #include <com/sun/star/lang/Locale.hpp>
