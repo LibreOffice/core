@@ -4,9 +4,9 @@
  *
  *  $RCSfile: textanim.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: obo $ $Date: 2006-10-12 12:29:26 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 17:46:22 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -46,7 +46,7 @@
 #endif
 
 #ifndef _SVDATTR_HXX
-#include "svdattr.hxx"
+#include <svx/svdattr.hxx>
 #endif
 
 #ifndef _SV_FIXED_HXX
