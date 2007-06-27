@@ -4,9 +4,9 @@
  *
  *  $RCSfile: property.cxx,v $
  *
- *  $Revision: 1.35 $
+ *  $Revision: 1.36 $
  *
- *  last change: $Author: kz $ $Date: 2007-06-20 10:26:57 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 12:23:09 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -74,6 +74,13 @@
 #ifndef _COM_SUN_STAR_AWT_FONTPITCH_HPP_
 #include <com/sun/star/awt/FontPitch.hpp>
 #endif
+#ifndef _COM_SUN_STAR_AWT_TREE_XTREEDATAMODEL_HPP_
+#include <com/sun/star/awt/tree/XTreeDataModel.hpp>
+#endif
+#ifndef _COM_SUN_STAR_VIEW_SELECTIONTYPE_HPP_
+#include <com/sun/star/view/SelectionType.hpp>
+#endif
+
 #ifndef _COM_SUN_STAR_STYLE_VERTICALALIGNMENT_HPP_
 #include <com/sun/star/style/VerticalAlignment.hpp>
 #endif
@@ -294,6 +301,14 @@ ImplPropertyInfo* ImplGetPropertyInfos( sal_uInt16& rElementCount )
             DECL_PROP_2     ( "StepTime",               STEP_TIME,              sal_Int32,      BOUND, MAYBEDEFAULT ),
             DECL_PROP_2     ( "Decoration",             DECORATION,             sal_Bool,       BOUND, MAYBEDEFAULT ),
 
+            DECL_PROP_2     ( "SelectionType",          TREE_SELECTIONTYPE,     ::com::sun::star::view::SelectionType,      BOUND, MAYBEDEFAULT ),
+            DECL_PROP_2     ( "Editable",               TREE_EDITABLE,          sal_Bool,       BOUND, MAYBEDEFAULT ),
+            DECL_PROP_3     ( "DataModel",              TREE_DATAMODEL,         Reference< ::com::sun::star::awt::tree::XTreeDataModel >,       BOUND, MAYBEDEFAULT, MAYBEVOID ),
+            DECL_PROP_2     ( "RootDisplayed",          TREE_ROOTDISPLAYED,     sal_Bool,           BOUND, MAYBEDEFAULT ),
+            DECL_PROP_2     ( "ShowsHandles",           TREE_SHOWSHANDLES,      sal_Bool,           BOUND, MAYBEDEFAULT ),
+            DECL_PROP_2     ( "ShowsRootHandles",       TREE_SHOWSROOTHANDLES,  sal_Bool,           BOUND, MAYBEDEFAULT ),
+            DECL_PROP_3     ( "RowHeight",              TREE_ROWHEIGHT,         sal_Int32,          BOUND, MAYBEDEFAULT, MAYBEVOID ),
+            DECL_PROP_2     ( "InvokesStopNodeEditing", TREE_INVOKESSTOPNODEEDITING, sal_Bool,      BOUND, MAYBEDEFAULT )
             };
             pPropertyInfos = aImplPropertyInfos;
             nElements = sizeof( aImplPropertyInfos ) / sizeof( ImplPropertyInfo );
