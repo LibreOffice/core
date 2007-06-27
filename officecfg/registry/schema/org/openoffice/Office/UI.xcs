@@ -5,9 +5,9 @@
  *
  *  $RCSfile: UI.xcs,v $
  *
- *  $Revision: 1.28 $
+ *  $Revision: 1.29 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 15:27:39 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 13:08:59 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -194,6 +194,16 @@
 				<prop oor:name="Color" oor:type="xs:int">
 					<info>
 						<desc>Specifies the color of incorrect text found with AutoSpellcheck.</desc>
+					</info>
+				</prop>
+			</group>
+			<group oor:name="SmartTags">
+				<info>
+					<desc>Specifies the settings for smart tags.</desc>
+				</info>
+				<prop oor:name="Color" oor:type="xs:int">
+					<info>
+						<desc>Specifies the color of smart tags.</desc>
 					</info>
 				</prop>
 			</group>
