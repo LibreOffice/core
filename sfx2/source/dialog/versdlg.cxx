@@ -4,9 +4,9 @@
  *
  *  $RCSfile: versdlg.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: rt $ $Date: 2007-04-26 10:13:20 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 23:17:59 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -55,15 +55,15 @@
 
 #include "versdlg.hrc"
 #include "versdlg.hxx"
-#include "viewfrm.hxx"
+#include <sfx2/viewfrm.hxx>
 #include "sfxresid.hxx"
-#include "docfile.hxx"
-#include "objsh.hxx"
-#include "sfxsids.hrc"
-#include "dispatch.hxx"
-#include "request.hxx"
+#include <sfx2/docfile.hxx>
+#include <sfx2/objsh.hxx>
+#include <sfx2/sfxsids.hrc>
+#include <sfx2/dispatch.hxx>
+#include <sfx2/request.hxx>
 
-#include <sfxuno.hxx>
+#include <sfx2/sfxuno.hxx>
 
 using namespace com::sun::star;
 
