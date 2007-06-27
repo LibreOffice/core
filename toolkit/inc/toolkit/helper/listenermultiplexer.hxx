@@ -4,9 +4,9 @@
  *
  *  $RCSfile: listenermultiplexer.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: hr $ $Date: 2006-06-19 22:57:10 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 12:20:17 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -87,6 +87,18 @@
 #endif
 #ifndef _COM_SUN_STAR_AWT_XMENULISTENER_HPP_
 #include <com/sun/star/awt/XMenuListener.hpp>
+#endif
+#ifndef _COM_SUN_STAR_AWT_TREE_XTREEEXPANSIONLISTENER_HPP_
+#include <com/sun/star/awt/tree/XTreeExpansionListener.hpp>
+#endif
+#ifndef _COM_SUN_STAR_AWT_TREE_XTREEEDITLISTENER_HPP_
+#include <com/sun/star/awt/tree/XTreeEditListener.hpp>
+#endif
+#ifndef _COM_SUN_STAR_VIEW_XSELECTIONCHANGELISTENER_HPP_
+#include <com/sun/star/view/XSelectionChangeListener.hpp>
+#endif
+#ifndef _COM_SUN_STAR_UTIL_VETOEXCEPTION_HPP_
+#include <com/sun/star/util/VetoException.hpp>
 #endif
 
 #ifndef _CPPUHELPER_WEAK_HXX_
@@ -270,6 +282,32 @@ DECL_LISTENERMULTIPLEXER_START( MenuListenerMultiplexer, ::com::sun::star::awt::
     void SAL_CALL select( const ::com::sun::star::awt::MenuEvent& rEvent ) throw(::com::sun::star::uno::RuntimeException);
     void SAL_CALL activate( const ::com::sun::star::awt::MenuEvent& rEvent ) throw(::com::sun::star::uno::RuntimeException);
     void SAL_CALL deactivate( const ::com::sun::star::awt::MenuEvent& rEvent ) throw(::com::sun::star::uno::RuntimeException);
+DECL_LISTENERMULTIPLEXER_END
+
+//  ----------------------------------------------------
+//  class TreeSelectionListenerMultiplexer
+//  ----------------------------------------------------
+DECL_LISTENERMULTIPLEXER_START_DLLPUB( TreeSelectionListenerMultiplexer, ::com::sun::star::view::XSelectionChangeListener )
+    virtual void SAL_CALL selectionChanged( const ::com::sun::star::lang::EventObject& aEvent ) throw (::com::sun::star::uno::RuntimeException);
+DECL_LISTENERMULTIPLEXER_END
+
+//  ----------------------------------------------------
+//  class TreeExpansionListenerMultiplexer
+//  ----------------------------------------------------
+DECL_LISTENERMULTIPLEXER_START_DLLPUB( TreeExpansionListenerMultiplexer, ::com::sun::star::awt::tree::XTreeExpansionListener )
+    virtual void SAL_CALL requestChildNodes( const ::com::sun::star::awt::tree::TreeExpansionEvent& aEvent ) throw (::com::sun::star::uno::RuntimeException);
+    virtual void SAL_CALL treeExpanding( const ::com::sun::star::awt::tree::TreeExpansionEvent& aEvent ) throw (::com::sun::star::awt::tree::ExpandVetoException, ::com::sun::star::uno::RuntimeException);
+    virtual void SAL_CALL treeCollapsing( const ::com::sun::star::awt::tree::TreeExpansionEvent& aEvent ) throw (::com::sun::star::awt::tree::ExpandVetoException, ::com::sun::star::uno::RuntimeException);
+    virtual void SAL_CALL treeExpanded( const ::com::sun::star::awt::tree::TreeExpansionEvent& aEvent ) throw (::com::sun::star::uno::RuntimeException);
+    virtual void SAL_CALL treeCollapsed( const ::com::sun::star::awt::tree::TreeExpansionEvent& aEvent ) throw (::com::sun::star::uno::RuntimeException);
+DECL_LISTENERMULTIPLEXER_END
+
+//  ----------------------------------------------------
+//  class TreeEditListenerMultiplexer
+//  ----------------------------------------------------
+DECL_LISTENERMULTIPLEXER_START_DLLPUB( TreeEditListenerMultiplexer, ::com::sun::star::awt::tree::XTreeEditListener )
+    virtual void SAL_CALL nodeEditing( const ::com::sun::star::uno::Reference< ::com::sun::star::awt::tree::XTreeNode >& Node ) throw (::com::sun::star::uno::RuntimeException,::com::sun::star::util::VetoException);
+    virtual void SAL_CALL nodeEdited( const ::com::sun::star::uno::Reference< ::com::sun::star::awt::tree::XTreeNode >& Node, const ::rtl::OUString& NewText ) throw (::com::sun::star::uno::RuntimeException);
 DECL_LISTENERMULTIPLEXER_END
 
 
