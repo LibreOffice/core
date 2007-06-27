@@ -4,9 +4,9 @@
  *
  *  $RCSfile: formenums.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 10:35:10 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 15:14:53 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -86,7 +86,7 @@
 #include <vcl/wintypes.hxx>     // for check states
 #endif
 #ifndef _XMLOFF_XMLTOKEN_HXX
-#include "xmltoken.hxx"
+#include <xmloff/xmltoken.hxx>
 #endif
 
 //.........................................................................
