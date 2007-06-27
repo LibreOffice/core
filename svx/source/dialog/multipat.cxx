@@ -4,9 +4,9 @@
  *
  *  $RCSfile: multipat.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: rt $ $Date: 2007-04-26 07:36:13 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 17:22:03 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -56,10 +56,10 @@
 #endif
 
 #include "multipat.hxx"
-#include "dialmgr.hxx"
+#include <svx/dialmgr.hxx>
 
 #include "multipat.hrc"
-#include "dialogs.hrc"
+#include <svx/dialogs.hrc>
 
 #ifndef _COMPHELPER_PROCESSFACTORY_HXX_
 #include <comphelper/processfactory.hxx>
