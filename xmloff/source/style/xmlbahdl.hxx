@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xmlbahdl.hxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 14:51:50 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 15:46:47 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -37,7 +37,7 @@
 #define _XMLOFF_PROPERTYHANDLER_BASICTYPES_HXX
 
 #ifndef _XMLOFF_PROPERTYHANDLERBASE_HXX
-#include <xmlprhdl.hxx>
+#include <xmloff/xmlprhdl.hxx>
 #endif
 
 #ifndef _RTL_USTRBUF_HXX_
@@ -45,7 +45,7 @@
 #endif
 
 #ifndef _XMLOFF_XMLTOKEN_HXX
-#include "xmltoken.hxx"
+#include <xmloff/xmltoken.hxx>
 #endif
 
 
