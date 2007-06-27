@@ -4,9 +4,9 @@
  *
  *  $RCSfile: EnhancedCustomShape2d.cxx,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: kz $ $Date: 2007-05-09 13:30:26 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 16:42:46 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -48,37 +48,37 @@
 #include "EnhancedCustomShapeFunctionParser.hxx"
 #endif
 #ifndef _SVDOASHP_HXX
-#include "svdoashp.hxx"
+#include <svx/svdoashp.hxx>
 #endif
 #ifndef _SVDTRANS_HXX
-#include "svdtrans.hxx"
+#include <svx/svdtrans.hxx>
 #endif
 #ifndef _SVDOCIRC_HXX
-#include <svdocirc.hxx>
+#include <svx/svdocirc.hxx>
 #endif
 #ifndef _SVDOGRP_HXX
-#include <svdogrp.hxx>
+#include <svx/svdogrp.hxx>
 #endif
 #ifndef _SVDOPATH_HXX
-#include <svdopath.hxx>
+#include <svx/svdopath.hxx>
 #endif
 #ifndef _SVDOCAPT_HXX
-#include "svdocapt.hxx"
+#include <svx/svdocapt.hxx>
 #endif
 #ifndef _SVDPAGE_HXX
-#include <svdpage.hxx>
+#include <svx/svdpage.hxx>
 #endif
 #ifndef _SVX_XFLCLIT_HXX
-#include <xflclit.hxx>
+#include <svx/xflclit.hxx>
 #endif
 #ifndef _SDASAITM_HXX
-#include <sdasaitm.hxx>
+#include <svx/sdasaitm.hxx>
 #endif
 #ifndef _SVDMODEL_HXX
-#include <svdmodel.hxx>
+#include <svx/svdmodel.hxx>
 #endif
 #ifndef _XOUTX_HXX
-#include <xoutx.hxx>
+#include <svx/xoutx.hxx>
 #endif
 #ifndef _RTL_CRC_H_
 #include <rtl/crc.h>
@@ -88,25 +88,25 @@
 #endif
 
 #ifndef SVX_XFILLIT0_HXX
-#include <xfillit0.hxx>
+#include <svx/xfillit0.hxx>
 #endif
 #ifndef _SVX_XLNSTIT_HXX
-#include <xlnstit.hxx>
+#include <svx/xlnstit.hxx>
 #endif
 #ifndef _SVX_XLNEDIT_HXX
-#include <xlnedit.hxx>
+#include <svx/xlnedit.hxx>
 #endif
 #ifndef _SVX_XLNSTWIT_HXX
-#include <xlnstwit.hxx>
+#include <svx/xlnstwit.hxx>
 #endif
 #ifndef _SVX_XLNEDWIT_HXX
-#include <xlnedwit.hxx>
+#include <svx/xlnedwit.hxx>
 #endif
 #ifndef _SVX_XLNSTCIT_HXX
-#include <xlnstcit.hxx>
+#include <svx/xlnstcit.hxx>
 #endif
 #ifndef _SVX_XLNEDCIT_HXX
-#include <xlnedcit.hxx>
+#include <svx/xlnedcit.hxx>
 #endif
 #ifndef _COM_SUN_STAR_AWT_SIZE_HPP_
 #include <com/sun/star/awt/Size.hpp>
