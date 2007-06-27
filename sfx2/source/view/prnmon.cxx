@@ -4,9 +4,9 @@
  *
  *  $RCSfile: prnmon.cxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: rt $ $Date: 2007-04-26 10:15:31 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 23:34:41 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -73,18 +73,18 @@
 #ifndef GCC
 #endif
 
-#include "prnmon.hxx"
-#include "viewsh.hxx"
-#include "viewfrm.hxx"
-#include "objsh.hxx"
-#include "docfile.hxx"
+#include <sfx2/prnmon.hxx>
+#include <sfx2/viewsh.hxx>
+#include <sfx2/viewfrm.hxx>
+#include <sfx2/objsh.hxx>
+#include <sfx2/docfile.hxx>
 #include "sfxtypes.hxx"
-#include "progress.hxx"
-#include "bindings.hxx"
+#include <sfx2/progress.hxx>
+#include <sfx2/bindings.hxx>
 #include "sfxresid.hxx"
-#include "event.hxx"
-#include "request.hxx"
-#include "app.hxx"
+#include <sfx2/event.hxx>
+#include <sfx2/request.hxx>
+#include <sfx2/app.hxx>
 
 #include "view.hrc"
 
