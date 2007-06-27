@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dialogs.cxx,v $
  *
- *  $Revision: 1.33 $
+ *  $Revision: 1.34 $
  *
- *  last change: $Author: kz $ $Date: 2007-05-11 11:43:47 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 14:14:14 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -98,9 +98,9 @@
 
 
 #ifndef _BASIC_DISPDEFS_HXX
-#include "dispdefs.hxx"
+#include <basic/dispdefs.hxx>
 #endif
-#include "testtool.hxx"
+#include <basic/testtool.hxx>
 #include "dialogs.hxx"
 #include "resids.hrc"
 #include "basic.hrc"
