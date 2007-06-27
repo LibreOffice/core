@@ -4,9 +4,9 @@
  *
  *  $RCSfile: i18n_xkb.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: hr $ $Date: 2006-06-19 19:46:19 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 20:39:51 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -41,7 +41,7 @@
 #endif
 
 #ifndef _VCL_DLLAPI_H
-#include <dllapi.h>
+#include <vcl/dllapi.h>
 #endif
 
 class VCL_DLLPUBLIC SalI18N_KeyboardExtension
