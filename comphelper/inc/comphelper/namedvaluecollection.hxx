@@ -4,9 +4,9 @@
  *
  *  $RCSfile: namedvaluecollection.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: vg $ $Date: 2007-01-15 14:44:08 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 14:54:05 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -111,6 +111,12 @@ namespace comphelper
             impl_assign( _rArguments );
         }
 
+        /// returns the number of elements in the collection
+        size_t  size() const;
+
+        /// determines whether the collection is empty
+        bool    empty() const;
+
         /** retrieves a value with a given name from the collection, if it is present
 
             @param _pAsciiValueName
@@ -169,6 +175,11 @@ namespace comphelper
             return get( ::rtl::OUString::createFromAscii( _pAsciiValueName ) );
         }
 
+        /** retrieves a (untyped) value with a given name
+
+            If the collection does not contain a value with the given name, an empty
+            Any is returned.
+        */
         const ::com::sun::star::uno::Any& get( const ::rtl::OUString& _rValueName ) const
         {
             return impl_get( _rValueName );
@@ -186,6 +197,24 @@ namespace comphelper
             return impl_has( _rValueName );
         }
 
+        /** removes the value with the given name from the collection
+
+            @return <TRUE/> if and only if a value with the given name existed in the collection.
+        */
+        inline bool remove( const sal_Char* _pAsciiValueName )
+        {
+            return impl_remove( ::rtl::OUString::createFromAscii( _pAsciiValueName ) );
+        }
+
+        /** removes the value with the given name from the collection
+
+            @return <TRUE/> if and only if a value with the given name existed in the collection.
+        */
+        inline bool remove( const ::rtl::OUString& _rValueName )
+        {
+            return impl_remove( _rValueName );
+        }
+
     private:
         void    impl_assign( const ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any >& _rArguments );
         void    impl_assign( const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >& _rArguments );
@@ -201,6 +230,8 @@ namespace comphelper
                 impl_get( const ::rtl::OUString& _rValueName ) const;
 
         bool    impl_has( const ::rtl::OUString& _rValueName ) const;
+
+        bool    impl_remove( const ::rtl::OUString& _rValueName );
     };
 
 //........................................................................
