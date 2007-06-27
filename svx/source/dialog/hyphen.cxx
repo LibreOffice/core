@@ -4,9 +4,9 @@
  *
  *  $RCSfile: hyphen.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: rt $ $Date: 2007-04-26 07:34:16 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 17:12:41 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -57,14 +57,14 @@
 
 #define _SVX_HYPHEN_CXX
 
-#include "dialogs.hrc"
+#include <svx/dialogs.hrc>
 #include "hyphen.hrc"
 
-#include "svxenum.hxx"
+#include <svx/svxenum.hxx>
 #include "hyphen.hxx"
-#include "splwrap.hxx"
+#include <svx/splwrap.hxx>
 #include "dlgutil.hxx"
-#include "dialmgr.hxx"
+#include <svx/dialmgr.hxx>
 #ifndef _UNO_LINGU_HXX
 #include <unolingu.hxx>
 #endif
