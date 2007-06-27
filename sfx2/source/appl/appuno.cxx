@@ -4,9 +4,9 @@
  *
  *  $RCSfile: appuno.cxx,v $
  *
- *  $Revision: 1.122 $
+ *  $Revision: 1.123 $
  *
- *  last change: $Author: ihi $ $Date: 2007-03-26 11:18:02 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 22:57:30 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -45,7 +45,7 @@
 
 #include "sal/config.h"
 
-#include "appuno.hxx"
+#include <sfx2/appuno.hxx>
 #include "appbaslib.hxx"
 
 #include "sfx2/dllapi.h"
@@ -197,27 +197,27 @@ using namespace ::com::sun::star::io;
 #endif
 
 #include "sfxtypes.hxx"
-#include "sfxuno.hxx"
-#include "app.hxx"
-#include "sfxsids.hrc"
-#include "msg.hxx"
-#include "msgpool.hxx"
-#include "request.hxx"
-#include "module.hxx"
-#include "fcontnr.hxx"
+#include <sfx2/sfxuno.hxx>
+#include <sfx2/app.hxx>
+#include <sfx2/sfxsids.hrc>
+#include <sfx2/msg.hxx>
+#include <sfx2/msgpool.hxx>
+#include <sfx2/request.hxx>
+#include <sfx2/module.hxx>
+#include <sfx2/fcontnr.hxx>
 #include "frmload.hxx"
-#include "frame.hxx"
+#include <sfx2/frame.hxx>
 #include "sfxbasic.hxx"
-#include "objsh.hxx"
-#include "objuno.hxx"
-#include "unoctitm.hxx"
-#include "dispatch.hxx"
+#include <sfx2/objsh.hxx>
+#include <sfx2/objuno.hxx>
+#include <sfx2/unoctitm.hxx>
+#include <sfx2/dispatch.hxx>
 #include "doctemplates.hxx"
 #include "shutdownicon.hxx"
 #include "objshimp.hxx"
 #include "fltoptint.hxx"
-#include "docfile.hxx"
-#include "sfxbasecontroller.hxx"
+#include <sfx2/docfile.hxx>
+#include <sfx2/sfxbasecontroller.hxx>
 #include "brokenpackageint.hxx"
 #include "eventsupplier.hxx"
 #include "xpackcreator.hxx"
