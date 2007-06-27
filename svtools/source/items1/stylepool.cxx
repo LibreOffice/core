@@ -4,9 +4,9 @@
  *
  *  $RCSfile: stylepool.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: obo $ $Date: 2007-01-22 11:50:09 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 21:46:10 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -41,8 +41,8 @@
 #include <map>
 
 #include "stylepool.hxx"
-#include "itemiter.hxx"
-#include "itempool.hxx"
+#include <svtools/itemiter.hxx>
+#include <svtools/itempool.hxx>
 
 
 using namespace boost;
