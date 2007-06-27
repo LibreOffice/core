@@ -4,9 +4,9 @@
  *
  *  $RCSfile: templwin.src,v $
  *
- *  $Revision: 1.61 $
+ *  $Revision: 1.62 $
  *
- *  last change: $Author: ihi $ $Date: 2007-04-19 16:09:03 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 21:22:20 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -35,9 +35,9 @@
 
  // includes ------------------------------------------------------------------
 
-#include "svtools.hrc"
+#include <svtools/svtools.hrc>
 #include "templwin.hrc"
-#include "helpid.hrc"
+#include <svtools/helpid.hrc>
 
 // Magenta and Grey as mask colors
 #define MASK_COL_MAGENTA    Color { Red = 0xFFFF ; Green = 0x0000 ; Blue = 0xFFFF ; };
