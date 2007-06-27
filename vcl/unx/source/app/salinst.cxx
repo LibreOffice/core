@@ -4,9 +4,9 @@
  *
  *  $RCSfile: salinst.cxx,v $
  *
- *  $Revision: 1.31 $
+ *  $Revision: 1.32 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 12:35:13 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 20:47:09 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -58,10 +58,10 @@
 #include <salframe.h>
 #endif
 #ifndef _SV_SALWTYPE_HXX
-#include <salwtype.hxx>
+#include <vcl/salwtype.hxx>
 #endif
 #ifndef _SV_SALATYPE_HXX
-#include <salatype.hxx>
+#include <vcl/salatype.hxx>
 #endif
 #ifndef _SV_DTINT_HXX
 #include <dtint.hxx>
