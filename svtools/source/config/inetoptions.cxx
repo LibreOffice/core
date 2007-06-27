@@ -4,9 +4,9 @@
  *
  *  $RCSfile: inetoptions.cxx,v $
  *
- *  $Revision: 1.31 $
+ *  $Revision: 1.32 $
  *
- *  last change: $Author: vg $ $Date: 2007-01-18 14:11:03 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 21:12:48 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -37,7 +37,7 @@
 #include "precompiled_svtools.hxx"
 
 #ifndef _SVTOOLS_INETOPTIONS_HXX_
-#include <inetoptions.hxx>
+#include <svtools/inetoptions.hxx>
 #endif
 
 #ifndef INCLUDED_RTL_INSTANCE_HXX
