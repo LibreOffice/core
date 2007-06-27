@@ -4,9 +4,9 @@
  *
  *  $RCSfile: obj3d.cxx,v $
  *
- *  $Revision: 1.43 $
+ *  $Revision: 1.44 $
  *
- *  last change: $Author: kz $ $Date: 2007-05-10 14:47:07 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 18:03:58 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -41,19 +41,19 @@
 #include "svdglob.hxx"
 
 #ifndef _SVDVIEW_HXX
-#include "svdview.hxx"
+#include <svx/svdview.hxx>
 #endif
 
 #ifndef _SVDATTR_HXX
-#include "svdattr.hxx"
+#include <svx/svdattr.hxx>
 #endif
 
 #ifndef _SVDPAGE_HXX
-#include "svdpage.hxx"
+#include <svx/svdpage.hxx>
 #endif
 
 #ifndef _SVDMODEL_HXX
-#include "svdmodel.hxx"
+#include <svx/svdmodel.hxx>
 #endif
 
 #ifndef _SVDITER_HXX
@@ -65,47 +65,47 @@
 #endif
 
 #ifndef _CAMERA3D_HXX
-#include "camera3d.hxx"
+#include <svx/camera3d.hxx>
 #endif
 
 #ifndef _E3D_SCENE3D_HXX
-#include "scene3d.hxx"
+#include <svx/scene3d.hxx>
 #endif
 
 #ifndef _E3D_POLYSC3D_HXX
-#include "polysc3d.hxx"
+#include <svx/polysc3d.hxx>
 #endif
 
 #ifndef _E3D_CUBE3D_HXX
-#include "cube3d.hxx"
+#include <svx/cube3d.hxx>
 #endif
 
 #ifndef _E3D_LATHE3D_HXX
-#include "lathe3d.hxx"
+#include <svx/lathe3d.hxx>
 #endif
 
 #ifndef _E3D_SPHERE3D_HXX
-#include "sphere3d.hxx"
+#include <svx/sphere3d.hxx>
 #endif
 
 #ifndef _E3D_EXTRUD3D_HXX
-#include "extrud3d.hxx"
+#include <svx/extrud3d.hxx>
 #endif
 
 #ifndef _E3D_OBJ3D_HXX
-#include "obj3d.hxx"
+#include <svx/obj3d.hxx>
 #endif
 
 #ifndef _XOUTX_HXX
-#include "xoutx.hxx"
+#include <svx/xoutx.hxx>
 #endif
 
 #ifndef _XTABLE_HXX
-#include "xtable.hxx"
+#include <svx/xtable.hxx>
 #endif
 
 #ifndef _SVX_XFLCLIT_HXX
-#include "xflclit.hxx"
+#include <svx/xflclit.hxx>
 #endif
 
 #ifndef _SVAPP_HXX
@@ -125,7 +125,7 @@
 #endif
 
 #ifndef _SVX_XLNCLIT_HXX
-#include "xlnclit.hxx"
+#include <svx/xlnclit.hxx>
 #endif
 
 #ifndef _SFXMETRICITEM_HXX
@@ -133,15 +133,15 @@
 #endif
 
 #ifndef _XTABLE_HXX
-#include "xtable.hxx"
+#include <svx/xtable.hxx>
 #endif
 
 #ifndef _SVX_FILLITEM_HXX
-#include "xfillit.hxx"
+#include <svx/xfillit.hxx>
 #endif
 
 #ifndef _SVX_XLNWTIT_HXX
-#include "xlnwtit.hxx"
+#include <svx/xlnwtit.hxx>
 #endif
 
 #ifndef _SV_VIRDEV_HXX
@@ -157,27 +157,27 @@
 #endif
 
 #ifndef _SVX_SVXIDS_HRC
-#include "svxids.hrc"
+#include <svx/svxids.hrc>
 #endif
 
 #ifndef _SVX_COLRITEM_HXX
-#include "colritem.hxx"
+#include <svx/colritem.hxx>
 #endif
 
 #ifndef _SVXE3DITEM_HXX
-#include "e3ditem.hxx"
+#include <svx/e3ditem.hxx>
 #endif
 
 #ifndef _SVX_XLNTRIT_HXX
-#include "xlntrit.hxx"
+#include <svx/xlntrit.hxx>
 #endif
 
 #ifndef _SVX_XFLTRIT_HXX
-#include "xfltrit.hxx"
+#include <svx/xfltrit.hxx>
 #endif
 
 #ifndef _SVDPAGV_HXX
-#include "svdpagv.hxx"
+#include <svx/svdpagv.hxx>
 #endif
 
 #ifndef _SV_GRADIENT_HXX
@@ -189,7 +189,7 @@
 #endif
 
 #ifndef _SVX3DITEMS_HXX
-#include "svx3ditems.hxx"
+#include <svx/svx3ditems.hxx>
 #endif
 
 #ifndef _SFX_WHITER_HXX
@@ -201,11 +201,11 @@
 #endif
 
 #ifndef _EEITEM_HXX
-#include "eeitem.hxx"
+#include <svx/eeitem.hxx>
 #endif
 
 #ifndef _SVX_XGRSCIT_HXX
-#include "xgrscit.hxx"
+#include <svx/xgrscit.hxx>
 #endif
 
 #ifndef _SVX_SVDOIMP_HXX
@@ -233,7 +233,7 @@
 #endif
 
 #ifndef _SVX_XLNDSIT_HXX
-#include <xlndsit.hxx>
+#include <svx/xlndsit.hxx>
 #endif
 
 #ifndef _BGFX_POLYGON_B3DPOLYGON_HXX
