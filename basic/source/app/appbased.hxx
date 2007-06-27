@@ -4,9 +4,9 @@
  *
  *  $RCSfile: appbased.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: hr $ $Date: 2006-06-19 17:33:28 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 14:12:21 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -37,7 +37,7 @@
 #define _APPBASED_HXX
 
 #ifndef _SB_SBMOD_HXX //autogen
-#include <sbmod.hxx>
+#include <basic/sbmod.hxx>
 #endif
 #ifndef _SB_APPEDIT_HXX
 #include "appedit.hxx"
