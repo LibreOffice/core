@@ -4,9 +4,9 @@
  *
  *  $RCSfile: sphere3d.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: ihi $ $Date: 2006-11-14 13:22:07 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 18:05:27 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -40,11 +40,11 @@
 #include "svdglob.hxx"
 
 #ifndef _SVDMODEL_HXX
-#include "svdmodel.hxx"
+#include <svx/svdmodel.hxx>
 #endif
 
 #ifndef _SVDPAGE_HXX
-#include "svdpage.hxx"
+#include <svx/svdpage.hxx>
 #endif
 
 #ifndef _E3D_GLOBL3D_HXX
@@ -52,15 +52,15 @@
 #endif
 
 #ifndef _E3D_SPHERE3D_HXX
-#include "sphere3d.hxx"
+#include <svx/sphere3d.hxx>
 #endif
 
 #ifndef _SVX_SVXIDS_HRC
-#include "svxids.hrc"
+#include <svx/svxids.hrc>
 #endif
 
 #ifndef _SVX3DITEMS_HXX
-#include "svx3ditems.hxx"
+#include <svx/svx3ditems.hxx>
 #endif
 
 #ifndef _SDR_PROPERTIES_E3DSPHEREPROPERTIES_HXX
