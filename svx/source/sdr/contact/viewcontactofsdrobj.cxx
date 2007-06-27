@@ -4,9 +4,9 @@
  *
  *  $RCSfile: viewcontactofsdrobj.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: ihi $ $Date: 2006-11-14 13:31:17 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 18:46:04 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -45,7 +45,7 @@
 #endif
 
 #ifndef _SVDOBJ_HXX
-#include <svdobj.hxx>
+#include <svx/svdobj.hxx>
 #endif
 
 #ifndef _SDR_CONTACT_DISPLAYINFO_HXX
@@ -57,11 +57,11 @@
 #endif
 
 #ifndef _SVDOOLE2_HXX
-#include <svdoole2.hxx>
+#include <svx/svdoole2.hxx>
 #endif
 
 #ifndef _SVDPAGE_HXX
-#include <svdpage.hxx>
+#include <svx/svdpage.hxx>
 #endif
 
 #ifndef _SDR_CONTACT_VOCBITMAPBUFFER_HXX
