@@ -4,9 +4,9 @@
  *
  *  $RCSfile: frame.cxx,v $
  *
- *  $Revision: 1.53 $
+ *  $Revision: 1.54 $
  *
- *  last change: $Author: vg $ $Date: 2007-05-22 20:18:07 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 23:33:13 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -95,32 +95,32 @@
 
 // wg. pTopFrames
 #include "appdata.hxx"
-#include "app.hxx"
-#include "event.hxx"
-#include "unoctitm.hxx"
-#include "frame.hxx"
+#include <sfx2/app.hxx>
+#include <sfx2/event.hxx>
+#include <sfx2/unoctitm.hxx>
+#include <sfx2/frame.hxx>
 #include "arrdecl.hxx"
-#include "objsh.hxx"
-#include "dispatch.hxx"
-#include "docfile.hxx"
-#include "docfilt.hxx"
-#include "frmdescr.hxx"
+#include <sfx2/objsh.hxx>
+#include <sfx2/dispatch.hxx>
+#include <sfx2/docfile.hxx>
+#include <sfx2/docfilt.hxx>
+#include <sfx2/frmdescr.hxx>
 #include "openflag.hxx"
-#include "viewsh.hxx"
-#include "viewfrm.hxx"
-#include "request.hxx"
-#include "fcontnr.hxx"
+#include <sfx2/viewsh.hxx>
+#include <sfx2/viewfrm.hxx>
+#include <sfx2/request.hxx>
+#include <sfx2/fcontnr.hxx>
 #include "impframe.hxx"
-#include "appuno.hxx"
-#include "topfrm.hxx"
+#include <sfx2/appuno.hxx>
+#include <sfx2/topfrm.hxx>
 #include "workwin.hxx"
-#include "sfxuno.hxx"
-#include "msgpool.hxx"
+#include <sfx2/sfxuno.hxx>
+#include <sfx2/msgpool.hxx>
 #include "objshimp.hxx"
-#include "ipclient.hxx"
+#include <sfx2/ipclient.hxx>
 
 #ifdef DBG_UTIL
-#include "frmhtmlw.hxx"
+#include <sfx2/frmhtmlw.hxx>
 #endif
 
 using namespace com::sun::star;
