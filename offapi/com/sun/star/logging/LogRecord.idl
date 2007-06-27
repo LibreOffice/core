@@ -1,0 +1,104 @@
+/*************************************************************************
+ *
+ *  OpenOffice.org - a multi-platform office productivity suite
+ *
+ *  $RCSfile: LogRecord.idl,v $
+ *
+ *  $Revision: 1.2 $
+ *
+ *  last change: $Author: hr $ $Date: 2007-06-27 14:47:19 $
+ *
+ *  The Contents of this file are made available subject to
+ *  the terms of GNU Lesser General Public License Version 2.1.
+ *
+ *
+ *    GNU Lesser General Public License Version 2.1
+ *    =============================================
+ *    Copyright 2005 by Sun Microsystems, Inc.
+ *    901 San Antonio Road, Palo Alto, CA 94303, USA
+ *
+ *    This library is free software; you can redistribute it and/or
+ *    modify it under the terms of the GNU Lesser General Public
+ *    License version 2.1, as published by the Free Software Foundation.
+ *
+ *    This library is distributed in the hope that it will be useful,
+ *    but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ *    Lesser General Public License for more details.
+ *
+ *    You should have received a copy of the GNU Lesser General Public
+ *    License along with this library; if not, write to the Free Software
+ *    Foundation, Inc., 59 Temple Place, Suite 330, Boston,
+ *    MA  02111-1307  USA
+ *
+ ************************************************************************/
+
+#ifndef __com_sun_star_logging_LogRecord_idl__
+#define __com_sun_star_logging_LogRecord_idl__
+
+#ifndef __com_sun_star_util_DateTime_idl__
+#include <com/sun/star/util/DateTime.idl>
+#endif
+
+//=============================================================================
+
+module com { module sun { module star { module logging {
+
+//=============================================================================
+
+/** assembles the complete information about a to-be-logged event
+
+    @seealso XLogger
+
+    @since OOo 2.3
+ */
+struct LogRecord
+{
+    /// specifies the name of the logger at which the record is logged
+    string  LoggerName;
+
+    /** specifies the name of the class, in which the record was logged.
+
+        This name might be empty, in case the caller to one of the various
+        <code>log</code> methods of <type>XLogger</type> did not specify it.
+    */
+    string  SourceClassName;
+
+    /** specifies the name of the method, in which the record was logged.
+
+        This name might be empty, in case the caller to one of the various
+        <code>log</code> methods of <type>XLogger</type> did not specify it.
+    */
+    string  SourceMethodName;
+
+    /// specifies the to-be-logged message
+    string  Message;
+
+    /// specifies the time at which the event was logged
+    ::com::sun::star::util::DateTime
+            LogTime;
+
+    /** specifies the number of the log event.
+
+        Subsequent events get assigned increasing sequence numbers by the <type>XLogger</type>
+        at which they're logged.
+    */
+    hyper   SequenceNumber;
+
+    /// specifies the ID of the thread in which the event was logged
+    string  ThreadID;
+
+    /** specifies the level of the log event
+
+        @see LogLevel
+    */
+    long    Level;
+};
+
+//=============================================================================
+
+}; }; }; };
+
+//=============================================================================
+
+#endif
