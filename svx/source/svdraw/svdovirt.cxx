@@ -4,9 +4,9 @@
  *
  *  $RCSfile: svdovirt.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: obo $ $Date: 2007-01-22 15:16:57 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 19:10:43 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -36,12 +36,12 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_svx.hxx"
 
-#include "svdovirt.hxx"
-#include "xpool.hxx"
+#include <svx/svdovirt.hxx>
+#include <svx/xpool.hxx>
 #include "svdxout.hxx"
-#include "svdtrans.hxx"
-#include "svdetc.hxx"
-#include "svdhdl.hxx"
+#include <svx/svdtrans.hxx>
+#include <svx/svdetc.hxx>
+#include <svx/svdhdl.hxx>
 
 #ifndef _SDR_CONTACT_VIEWCONTACTOFVIRTOBJ_HXX
 #include <svx/sdr/contact/viewcontactofvirtobj.hxx>
