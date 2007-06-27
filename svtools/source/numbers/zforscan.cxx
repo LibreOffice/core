@@ -4,9 +4,9 @@
  *
  *  $RCSfile: zforscan.cxx,v $
  *
- *  $Revision: 1.46 $
+ *  $Revision: 1.47 $
  *
- *  last change: $Author: obo $ $Date: 2006-10-12 15:26:37 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 21:57:15 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -59,8 +59,8 @@
 #include <rtl/instance.hxx>
 #endif
 
-#include "zforlist.hxx"
-#include "zformat.hxx"
+#include <svtools/zforlist.hxx>
+#include <svtools/zformat.hxx>
 
 #define _ZFORSCAN_CXX
 #include "zforscan.hxx"
