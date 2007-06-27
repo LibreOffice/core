@@ -4,9 +4,9 @@
  *
  *  $RCSfile: svdouno.cxx,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: vg $ $Date: 2007-01-15 14:28:27 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 19:10:00 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -91,29 +91,29 @@
 #endif
 
 #ifndef _SVDOUNO_HXX
-#include "svdouno.hxx"
+#include <svx/svdouno.hxx>
 #endif
 #ifndef _SVDXOUT_HXX
 #include "svdxout.hxx"
 #endif
 #ifndef _SVDPAGV_HXX
-#include "svdpagv.hxx"
+#include <svx/svdpagv.hxx>
 #endif
 #ifndef _SVDMODEL_HXX
-#include "svdmodel.hxx"
+#include <svx/svdmodel.hxx>
 #endif
 #ifndef _SVDGLOB_HXX
 #include "svdglob.hxx"  // Stringcache
 #endif
 #include "svdstr.hrc"   // Objektname
 #ifndef _SVDETC_HXX
-#include "svdetc.hxx"
+#include <svx/svdetc.hxx>
 #endif
 #ifndef _SVDVIEW_HXX
-#include "svdview.hxx"
+#include <svx/svdview.hxx>
 #endif
 #ifndef _SVDORECT_HXX
-#include "svdorect.hxx"
+#include <svx/svdorect.hxx>
 #endif
 #ifndef _SVDVITER_HXX
 #include "svdviter.hxx"
@@ -129,7 +129,7 @@
 #include <memory>
 
 #ifndef _SDRPAGEWINDOW_HXX
-#include <sdrpagewindow.hxx>
+#include <svx/sdrpagewindow.hxx>
 #endif
 
 #ifndef _SDRPAINTWINDOW_HXX
