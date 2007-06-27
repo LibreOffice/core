@@ -4,9 +4,9 @@
  *
  *  $RCSfile: outlundo.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: obo $ $Date: 2006-10-12 13:02:55 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 18:42:24 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -36,10 +36,10 @@
 #ifndef _OUTLUNDO_HXX
 #define _OUTLUNDO_HXX
 
-#include <outliner.hxx>
+#include <svx/outliner.hxx>
 
 #ifndef _EDITDATA_HXX
-#include <editdata.hxx>
+#include <svx/editdata.hxx>
 #endif
 
 #ifndef _EDITUND2_HXX
