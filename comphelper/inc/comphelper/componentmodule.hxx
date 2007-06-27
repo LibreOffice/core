@@ -4,9 +4,9 @@
  *
  *  $RCSfile: componentmodule.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: kz $ $Date: 2006-11-08 12:01:16 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 14:53:24 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -54,15 +54,12 @@
 #endif
 /** === end UNO includes === **/
 
-#ifndef _OSL_MUTEX_HXX_
-#include <osl/mutex.hxx>
-#endif
-#ifndef _CPPUHELPER_FACTORY_HXX_
 #include <cppuhelper/factory.hxx>
-#endif
-#ifndef _RTL_STRING_HXX_
+
+#include <osl/mutex.hxx>
+
 #include <rtl/string.hxx>
-#endif
+#include <rtl/instance.hxx>
 
 //........................................................................
 namespace comphelper
@@ -84,23 +81,38 @@ namespace comphelper
     //=========================================================================
     struct COMPHELPER_DLLPUBLIC ComponentDescription
     {
+        /// the implementation name of the component
         ::rtl::OUString                                     sImplementationName;
+        /// the services supported by the component implementation
         ::com::sun::star::uno::Sequence< ::rtl::OUString >  aSupportedServices;
+        /** the name under which the component implementation should be registered as singleton,
+            or empty if the component does not implement a singleton.
+        */
+        ::rtl::OUString                                     sSingletonName;
+        /// the function to create an instance of the component
         ::cppu::ComponentFactoryFunc                        pComponentCreationFunc;
+        /// the function to create a factory for the component (usually <code>::cppu::createSingleComponentFactory</code>)
         FactoryInstantiation                                pFactoryCreationFunc;
 
         ComponentDescription()
             :sImplementationName()
             ,aSupportedServices()
+            ,sSingletonName()
             ,pComponentCreationFunc( NULL )
             ,pFactoryCreationFunc( NULL )
         {
         }
 
-        ComponentDescription( const ::rtl::OUString& _rImplementationName, const ::com::sun::star::uno::Sequence< ::rtl::OUString >& _rSupportedServices,
-                ::cppu::ComponentFactoryFunc _pComponentCreationFunc, FactoryInstantiation _pFactoryCreationFunc )
+        ComponentDescription(
+                const ::rtl::OUString& _rImplementationName,
+                const ::com::sun::star::uno::Sequence< ::rtl::OUString >& _rSupportedServices,
+                const ::rtl::OUString& _rSingletonName,
+                ::cppu::ComponentFactoryFunc _pComponentCreationFunc,
+                FactoryInstantiation _pFactoryCreationFunc
+            )
             :sImplementationName( _rImplementationName )
             ,aSupportedServices( _rSupportedServices )
+            ,sSingletonName( _rSingletonName )
             ,pComponentCreationFunc( _pComponentCreationFunc )
             ,pFactoryCreationFunc( _pFactoryCreationFunc )
         {
@@ -243,10 +255,9 @@ namespace comphelper
                         Create(const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >&)</code>
                         </li>
                 <ul/>
-            the instantiation of this object will automatically register the class via <method>OModule::registerImplementation</method>.
+            the instantiation of this object will automatically register the class via <member>OModule::registerImplementation</member>.
             <p/>
             The factory creation function used is <code>::cppu::createSingleComponentFactory</code>.
-            @see OOneInstanceAutoRegistration
         */
         OAutoRegistration( OModule& _rModule );
     };
@@ -259,6 +270,43 @@ namespace comphelper
             TYPE::getSupportedServiceNames_static(),
             TYPE::Create
         );
+    }
+
+    //==========================================================================
+    //= OSingletonRegistration
+    //==========================================================================
+    template <class TYPE>
+    class OSingletonRegistration
+    {
+    public:
+        /** automatically provides all component information to an OModule instance,
+            for a singleton component
+
+            <p>Assumed that the template argument has the three methods
+                <ul>
+                    <li><code>static ::rtl::OUString getImplementationName_static()</code><li/>
+                    <li><code>static ::com::sun::star::uno::Sequence< ::rtl::OUString > getSupportedServiceNames_static()</code><li/>
+                    <li><code>static ::rtl::OUString getSingletonName_static()</code></li>
+                    <li><code>static ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >
+                        Create(const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >&)</code>
+                        </li>
+                <ul/>
+            the instantiation of this object will automatically register the class via <member>OModule::registerImplementation</member>.
+            </p>
+        */
+        OSingletonRegistration( OModule& _rModule );
+    };
+
+    template <class TYPE>
+    OSingletonRegistration<TYPE>::OSingletonRegistration( OModule& _rModule )
+    {
+        _rModule.registerImplementation( ComponentDescription(
+            TYPE::getImplementationName_static(),
+            TYPE::getSupportedServiceNames_static(),
+            TYPE::getSingletonName_static(),
+            &TYPE::Create,
+            &::cppu::createSingleComponentFactory
+        ) );
     }
 
     //==========================================================================
@@ -305,7 +353,19 @@ namespace comphelper
         OAutoRegistration() : BaseClass( ModuleClass::getInstance() ) \
         { \
         } \
-    };
+    }; \
+    /* -------------------------------------------------------------------- */ \
+    template < class TYPE > \
+    class OSingletonRegistration : public ::comphelper::OSingletonRegistration< TYPE > \
+    { \
+    private: \
+        typedef ::comphelper::OSingletonRegistration< TYPE >    BaseClass; \
+    \
+    public: \
+        OSingletonRegistration() : BaseClass( ModuleClass::getInstance() ) \
+        { \
+        } \
+    }; \
 
     //==========================================================================
     //= implementing a OModule for a component library
