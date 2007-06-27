@@ -4,9 +4,9 @@
  *
  *  $RCSfile: AccessibleEditableTextPara.cxx,v $
  *
- *  $Revision: 1.51 $
+ *  $Revision: 1.52 $
  *
- *  last change: $Author: kz $ $Date: 2006-12-13 14:58:16 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 16:36:40 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -127,7 +127,7 @@
 #include <com/sun/star/beans/PropertyState.hpp>
 
 #ifndef _SVX_UNOSHAPE_HXX
-#include "unoshape.hxx"
+#include <svx/unoshape.hxx>
 #endif
 
 #ifndef _UNO_LINGU_HXX
@@ -143,7 +143,7 @@
 #endif
 
 #ifndef _SVX_DIALMGR_HXX
-#include "dialmgr.hxx"
+#include <svx/dialmgr.hxx>
 #endif
 
 #include "accessibility.hrc"
