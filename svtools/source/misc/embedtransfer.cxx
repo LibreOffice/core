@@ -4,9 +4,9 @@
  *
  *  $RCSfile: embedtransfer.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: obo $ $Date: 2006-10-13 11:28:11 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 21:49:16 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -58,7 +58,7 @@
 #include <com/sun/star/embed/Aspects.hpp>
 #endif
 
-#include <embedtransfer.hxx>
+#include <svtools/embedtransfer.hxx>
 #include <vcl/mapunit.hxx>
 #include <vcl/outdev.hxx>
 #include <comphelper/storagehelper.hxx>
