@@ -4,9 +4,9 @@
  *
  *  $RCSfile: vcompat.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 01:02:29 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 22:19:11 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -39,10 +39,10 @@
 #define _VCOMPAT_CXX
 
 #ifndef _STREAM_HXX
-#include "stream.hxx"
+#include <tools/stream.hxx>
 #endif
 #ifndef _VCOMPAT_HXX
-#include "vcompat.hxx"
+#include <tools/vcompat.hxx>
 #endif
 
 // -----------------
