@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dpoutput.hxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 17:35:15 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 13:42:13 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -48,6 +48,10 @@
 #include <com/sun/star/sheet/MemberResult.hpp>
 #endif
 
+#ifndef _COM_SUN_STAR_SHEET_GENERALFUNCTION_HPP_
+#include <com/sun/star/sheet/GeneralFunction.hpp>
+#endif
+
 #ifndef SC_SCGLOB_HXX
 #include "global.hxx"
 #endif
@@ -55,6 +59,8 @@
 #ifndef SC_ADDRESS_HXX
 #include "address.hxx"
 #endif
+
+#include <vector>
 
 class Rectangle;
 class SvStream;
@@ -75,6 +81,23 @@ struct ScDPPositionData
     String  aMemberName;
 
     ScDPPositionData() { nDimension = nHierarchy = nLevel = -1; nFlags = 0; }   // invalid
+};
+
+struct ScDPGetPivotDataField
+{
+    String maFieldName;
+    com::sun::star::sheet::GeneralFunction meFunction;
+
+    bool   mbValIsStr;
+    String maValStr;
+    double mnValNum;
+
+        ScDPGetPivotDataField() :
+            meFunction( com::sun::star::sheet::GeneralFunction_NONE ),
+            mbValIsStr( false ),
+            mnValNum( 0.0 )
+        {
+        }
 };
 
 
@@ -143,6 +166,8 @@ public:
     BOOL            HasError();         // range overflow or exception from source
 
     void            GetPositionData( ScDPPositionData& rData, const ScAddress& rPos );
+    BOOL            GetPivotData( ScDPGetPivotDataField& rTarget, /* returns result */
+                                  const std::vector< ScDPGetPivotDataField >& rFilters );
     long            GetHeaderDim( const ScAddress& rPos, USHORT& rOrient );
     BOOL            GetHeaderDrag( const ScAddress& rPos, BOOL bMouseLeft, BOOL bMouseTop,
                                     long nDragDim,
@@ -150,6 +175,10 @@ public:
     BOOL            IsFilterButton( const ScAddress& rPos );
 
     void            GetMemberResultNames( StrCollection& rNames, long nDimension );
+
+    static void     GetDataDimensionNames( String& rSourceName, String& rGivenName,
+                                           const com::sun::star::uno::Reference<
+                                               com::sun::star::uno::XInterface>& xDim );
 };
 
 
