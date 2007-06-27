@@ -4,9 +4,9 @@
  *
  *  $RCSfile: headbar.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: rt $ $Date: 2007-04-26 09:42:41 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 21:24:56 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -39,7 +39,7 @@
 #define _SV_HEADBAR_CXX
 
 #ifndef _HEADBAR_HXX
-#include <headbar.hxx>
+#include <svtools/headbar.hxx>
 #endif
 
 #ifndef _TOOLS_DEBUG_HXX
