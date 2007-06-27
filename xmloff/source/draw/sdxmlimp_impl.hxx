@@ -4,9 +4,9 @@
  *
  *  $RCSfile: sdxmlimp_impl.hxx,v $
  *
- *  $Revision: 1.28 $
+ *  $Revision: 1.29 $
  *
- *  last change: $Author: obo $ $Date: 2007-01-23 08:52:11 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 15:05:50 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -49,7 +49,7 @@
 #endif
 
 #ifndef _XMLOFF_XMLTKMAP_HXX
-#include "xmltkmap.hxx"
+#include <xmloff/xmltkmap.hxx>
 #endif
 
 #ifndef _COM_SUN_STAR_CONTAINER_XNAMEACCESS_HPP_
@@ -61,7 +61,7 @@
 #endif
 
 #ifndef _XMLOFF_XMLIMP_HXX
-#include "xmlimp.hxx"
+#include <xmloff/xmlimp.hxx>
 #endif
 
 //////////////////////////////////////////////////////////////////////////////
