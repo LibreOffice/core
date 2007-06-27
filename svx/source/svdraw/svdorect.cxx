@@ -4,9 +4,9 @@
  *
  *  $RCSfile: svdorect.cxx,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: vg $ $Date: 2006-11-21 16:56:36 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 19:08:06 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -36,38 +36,38 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_svx.hxx"
 
-#include "svdorect.hxx"
+#include <svx/svdorect.hxx>
 #include <math.h>
 #include <stdlib.h>
-#include "xpool.hxx"
-#include "xpoly.hxx"
+#include <svx/xpool.hxx>
+#include <svx/xpoly.hxx>
 #include "svdxout.hxx"
-#include "svdattr.hxx"
-#include "svdpool.hxx"
+#include <svx/svdattr.hxx>
+#include <svx/svdpool.hxx>
 #include "svdtouch.hxx"
-#include "svdtrans.hxx"
-#include "svdetc.hxx"
-#include "svddrag.hxx"
-#include "svdmodel.hxx"
-#include "svdpage.hxx"
-#include "svdocapt.hxx" // fuer Import von SdrFileVersion 2
-#include "svdpagv.hxx" // fuer
-#include "svdview.hxx" // das
-#include "svdundo.hxx" // Macro-Beispiel
-#include "svdopath.hxx"
+#include <svx/svdtrans.hxx>
+#include <svx/svdetc.hxx>
+#include <svx/svddrag.hxx>
+#include <svx/svdmodel.hxx>
+#include <svx/svdpage.hxx>
+#include <svx/svdocapt.hxx> // fuer Import von SdrFileVersion 2
+#include <svx/svdpagv.hxx> // fuer
+#include <svx/svdview.hxx> // das
+#include <svx/svdundo.hxx> // Macro-Beispiel
+#include <svx/svdopath.hxx>
 #include "svdglob.hxx"  // Stringcache
 #include "svdstr.hrc"   // Objektname
 
 #ifndef _SVX_XFLCLIT_HXX //autogen
-#include <xflclit.hxx>
+#include <svx/xflclit.hxx>
 #endif
 
 #ifndef _SVX_XLNCLIT_HXX //autogen
-#include <xlnclit.hxx>
+#include <svx/xlnclit.hxx>
 #endif
 
 #ifndef _SVX_XLNWTIT_HXX //autogen
-#include <xlnwtit.hxx>
+#include <svx/xlnwtit.hxx>
 #endif
 
 #ifndef _SVX_SVDOIMP_HXX
