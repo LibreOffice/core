@@ -4,9 +4,9 @@
  *
  *  $RCSfile: factory.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 16:08:01 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 22:48:47 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -39,11 +39,11 @@
 #define _SOT_FACTORY_CXX
 #define SOT_STRING_LIST
 
-#include <factory.hxx>
+#include <sot/factory.hxx>
 #include <tools/debug.hxx>
 #include <tools/string.hxx>
-#include <object.hxx>
-#include <sotdata.hxx>
+#include <sot/object.hxx>
+#include <sot/sotdata.hxx>
 #include <clsids.hxx>
 #ifndef INCLUDED_RTL_INSTANCE_HXX
 #include <rtl/instance.hxx>
