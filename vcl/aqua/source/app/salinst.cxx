@@ -4,9 +4,9 @@
  *
  *  $RCSfile: salinst.cxx,v $
  *
- *  $Revision: 1.34 $
+ *  $Revision: 1.35 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 11:42:16 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 19:51:24 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -42,22 +42,22 @@
 #include <saldata.hxx>
 #endif
 #ifndef _SV_SALINST_HXX
-#include <salinst.hxx>
+#include <vcl/salinst.hxx>
 #endif
 #ifndef _SV_SALFRAME_HXX
-#include <salframe.hxx>
+#include <vcl/salframe.hxx>
 #endif
 #ifndef _SV_SALOBJ_HXX
-#include <salobj.hxx>
+#include <vcl/salobj.hxx>
 #endif
 #ifndef _SV_SALSYS_HXX
-#include <salsys.hxx>
+#include <vcl/salsys.hxx>
 #endif
 #ifndef _SV_SALVD_HXX
-#include <salvd.hxx>
+#include <vcl/salvd.hxx>
 #endif
 #ifndef _SV_DIALOG_HXX
-#include <dialog.hxx>
+#include <vcl/dialog.hxx>
 #endif
 #ifndef _SV_VCLAPPLICATION_H
 #include <VCLApplication.h>
