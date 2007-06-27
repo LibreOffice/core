@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.4 $
+#   $Revision: 1.5 $
 #
-#   last change: $Author: vg $ $Date: 2007-05-16 12:07:07 $
+#   last change: $Author: hr $ $Date: 2007-06-27 17:55:08 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -49,7 +49,7 @@ ENABLE_EXCEPTIONS=YES
 
 # --- static lib --------------------------
 
-# don't do thin in the source file. breaks pch
+# don't do this in the source file. breaks pch
 CDEFS+=-DUNICODE
 
 SLOFILES=$(SLO)$/MtaOleClipb.obj
