@@ -4,9 +4,9 @@
  *
  *  $RCSfile: exchange.cxx,v $
  *
- *  $Revision: 1.40 $
+ *  $Revision: 1.41 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 16:07:48 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 22:48:34 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -47,9 +47,9 @@
 #endif
 #include <tools/globname.hxx>
 #include <tools/string.hxx>
-#include <sotdata.hxx>
-#include <exchange.hxx>
-#include <formats.hxx>
+#include <sot/sotdata.hxx>
+#include <sot/exchange.hxx>
+#include <sot/formats.hxx>
 #include <clsids.hxx>
 
 #ifndef INCLUDED_RTL_INSTANCE_HXX
