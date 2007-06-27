@@ -4,9 +4,9 @@
  *
  *  $RCSfile: unoforou.cxx,v $
  *
- *  $Revision: 1.29 $
+ *  $Revision: 1.30 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 06:17:50 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 19:29:30 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -46,11 +46,11 @@
 #endif
 
 #include <svtools/itemset.hxx>
-#include <editeng.hxx>
-#include <editdata.hxx>
-#include <outliner.hxx>
+#include <svx/editeng.hxx>
+#include <svx/editdata.hxx>
+#include <svx/outliner.hxx>
 #include <unoedhlp.hxx>
-#include <svdobj.hxx>
+#include <svx/svdobj.hxx>
 
 #ifndef _SFXPOOLITEM_HXX
 #include <svtools/poolitem.hxx>
@@ -61,11 +61,11 @@
 #endif
 
 #ifndef _EEITEM_HXX //autogen
-#include <eeitem.hxx>
+#include <svx/eeitem.hxx>
 #endif
 
-#include "unoforou.hxx"
-#include "unofored.hxx"
+#include <svx/unoforou.hxx>
+#include <svx/unofored.hxx>
 
 using namespace ::com::sun::star;
 
