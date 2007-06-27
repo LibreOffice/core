@@ -4,9 +4,9 @@
  *
  *  $RCSfile: framelink.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 04:20:29 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 17:06:58 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -37,7 +37,7 @@
 #include "precompiled_svx.hxx"
 
 #ifndef SVX_FRAMELINK_HXX
-#include "framelink.hxx"
+#include <svx/framelink.hxx>
 #endif
 
 #include <math.h>
@@ -46,7 +46,7 @@
 #include <vcl/outdev.hxx>
 #endif
 #ifndef SVX_BORDERLINE_HXX
-#include "borderline.hxx"
+#include <svx/borderline.hxx>
 #endif
 
 // ----------------------------------------------------------------------------
