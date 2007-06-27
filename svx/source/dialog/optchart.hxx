@@ -4,9 +4,9 @@
  *
  *  $RCSfile: optchart.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: vg $ $Date: 2007-05-22 15:17:32 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 17:25:03 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -49,7 +49,7 @@
 #endif
 // header for ColorLB
 #ifndef _SVX_DLG_CTRL_HXX
-#include "dlgctrl.hxx"
+#include <svx/dlgctrl.hxx>
 #endif
 // header for PushButton
 #ifndef _SV_BUTTON_HXX
@@ -57,7 +57,7 @@
 #endif
 // header for XColorTable
 #ifndef _XTABLE_HXX
-#include <xtable.hxx>
+#include <svx/xtable.hxx>
 #endif
 
 #include "cfgchart.hxx"
