@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.61 $
+#   $Revision: 1.62 $
 #
-#   last change: $Author: vg $ $Date: 2007-03-27 09:58:14 $
+#   last change: $Author: hr $ $Date: 2007-06-27 14:56:07 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -67,7 +67,6 @@ LIB7TARGET= $(SLB)$/svt.lib
 LIB7FILES=	\
         $(SLB)$/misc.lib		\
         $(SLB)$/items.lib		\
-        $(SLB)$/accessibility.lib	\
         $(SLB)$/browse.lib		\
         $(SLB)$/ctrl.lib		\
         $(SLB)$/dialogs.lib 	\
@@ -116,7 +115,6 @@ RESLIB1SRSFILES= \
         $(SRS)$/svcontnr.srs    \
         $(SRS)$/uno.srs         \
         $(SRS)$/browse.srs		\
-        $(SRS)$/accessibility.srs 	\
         $(SRS)$/javaerror.srs
 
 RESLIB2NAME=	$(RESTARGETSIMPLE)
@@ -205,6 +203,7 @@ SHL2STDLIBS= \
         $(CPPUHELPERLIB)	\
         $(CPPULIB)			\
         $(VOSLIB)			\
+        $(VCLLIB)			\
         $(SALLIB)
 
 .IF "$(GUI)"=="WNT"
