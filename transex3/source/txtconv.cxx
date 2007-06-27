@@ -4,9 +4,9 @@
  *
  *  $RCSfile: txtconv.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 08:20:02 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 17:54:29 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -75,7 +75,7 @@ void Help()
 }
 
 /*****************************************************************************/
-#if defined( UNX ) || defined( MAC )
+#if defined( UNX )
 int main( int argc, char *argv[] )
 #else
 int _cdecl main( int argc, char *argv[] )
