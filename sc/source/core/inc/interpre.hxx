@@ -4,9 +4,9 @@
  *
  *  $RCSfile: interpre.hxx,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: ihi $ $Date: 2006-12-19 13:16:55 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 13:43:58 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -452,6 +452,7 @@ BOOL SetSbxVariable( SbxVariable* pVar, SCCOL nCol, SCROW nRow, SCTAB nTab );
 void ScErrorType();
 void ScDBArea();
 void ScColRowNameAuto();
+void ScGetPivotData();
 void ScHyperLink();
 void ScBahtText();
 void ScCalcTeam();
