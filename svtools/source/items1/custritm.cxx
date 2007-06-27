@@ -4,9 +4,9 @@
  *
  *  $RCSfile: custritm.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 15:03:52 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 21:43:10 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -47,7 +47,7 @@
 #endif
 
 #ifndef _SVTOOLS_CUSTRITM_HXX
-#include <custritm.hxx>
+#include <svtools/custritm.hxx>
 #endif
 
 //============================================================================
