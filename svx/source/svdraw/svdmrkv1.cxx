@@ -4,9 +4,9 @@
  *
  *  $RCSfile: svdmrkv1.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: kz $ $Date: 2006-12-12 16:41:36 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 19:04:27 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -36,12 +36,12 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_svx.hxx"
 
-#include "svdmrkv.hxx"
-#include "svdetc.hxx"
-#include "svdoedge.hxx"
+#include <svx/svdmrkv.hxx>
+#include <svx/svdetc.hxx>
+#include <svx/svdoedge.hxx>
 #include "svdglob.hxx"
-#include "svdpagv.hxx"
-#include "svdpage.hxx"
+#include <svx/svdpagv.hxx>
+#include <svx/svdpage.hxx>
 #include "svddrgm1.hxx"
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
