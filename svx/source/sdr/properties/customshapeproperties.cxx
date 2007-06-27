@@ -4,9 +4,9 @@
  *
  *  $RCSfile: customshapeproperties.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: kz $ $Date: 2007-05-10 14:55:58 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 18:50:15 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -47,13 +47,13 @@
 #include <svtools/style.hxx>
 #endif
 #ifndef _SVDOASHP_HXX
-#include <svdoashp.hxx>
+#include <svx/svdoashp.hxx>
 #endif
 #ifndef _EEITEM_HXX
-#include <eeitem.hxx>
+#include <svx/eeitem.hxx>
 #endif
 #ifndef _SDTAGITM_HXX
-#include <sdtagitm.hxx>
+#include <svx/sdtagitm.hxx>
 #endif
 #ifndef _SFX_WHITER_HXX
 #include <svtools/whiter.hxx>
