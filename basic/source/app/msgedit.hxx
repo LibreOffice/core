@@ -4,9 +4,9 @@
  *
  *  $RCSfile: msgedit.hxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: ihi $ $Date: 2006-12-20 13:59:54 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 14:15:11 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -41,7 +41,7 @@
 #endif
 
 #include "dataedit.hxx"
-#include "testtool.hxx"
+#include <basic/testtool.hxx>
 class BasicFrame;
 class AppError;
 
