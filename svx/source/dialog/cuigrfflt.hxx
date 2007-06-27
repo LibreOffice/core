@@ -4,9 +4,9 @@
  *
  *  $RCSfile: cuigrfflt.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: obo $ $Date: 2007-01-23 11:33:35 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 16:58:15 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -62,13 +62,13 @@
 #endif
 
 #ifndef _GRAPHCTL_HXX
-#include "graphctl.hxx"
+#include <svx/graphctl.hxx>
 #endif
 #ifndef _SVX_DLG_CTRL_HXX
-#include "dlgctrl.hxx"
+#include <svx/dlgctrl.hxx>
 #endif
 #ifndef _SVX_RECTENUM_HXX
-#include "rectenum.hxx"
+#include <svx/rectenum.hxx>
 #endif
 /*
 // ---------------
