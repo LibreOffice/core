@@ -4,9 +4,9 @@
  *
  *  $RCSfile: glyphcache.cxx,v $
  *
- *  $Revision: 1.41 $
+ *  $Revision: 1.42 $
  *
- *  last change: $Author: obo $ $Date: 2007-01-25 10:59:59 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 20:25:52 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -39,12 +39,12 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <math.h>
-#include <salbtype.hxx>
+#include <vcl/salbtype.hxx>
 #include <gcach_ftyp.hxx>
 
-#include <svapp.hxx>
-#include <bitmap.hxx>
-#include <outfont.hxx>
+#include <vcl/svapp.hxx>
+#include <vcl/bitmap.hxx>
+#include <vcl/outfont.hxx>
 
 #include <rtl/ustring.hxx>      // used only for string=>hashvalue
 #include <osl/file.hxx>
