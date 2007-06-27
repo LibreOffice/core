@@ -4,9 +4,9 @@
  *
  *  $RCSfile: session.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: kz $ $Date: 2006-10-06 09:58:00 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 20:01:40 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -37,13 +37,13 @@
 #include "precompiled_vcl.hxx"
 
 #ifndef _SV_SVAPP_HXX
-#include <svapp.hxx>
+#include <vcl/svapp.hxx>
 #endif
 #ifndef _SV_SVDATA_HXX
-#include <svdata.hxx>
+#include <vcl/svdata.hxx>
 #endif
 #ifndef _SV_SALINST_HXX
-#include <salinst.hxx>
+#include <vcl/salinst.hxx>
 #endif
 #ifndef _VCL_SALSESSION_HXX
 #include <salsession.hxx>
