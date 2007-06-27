@@ -4,9 +4,9 @@
  *
  *  $RCSfile: polygn3d.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: ihi $ $Date: 2006-11-14 13:21:01 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 18:04:42 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -37,11 +37,11 @@
 #include "precompiled_svx.hxx"
 
 #ifndef _E3D_POLYGON3D_HXX
-#include "polygn3d.hxx"
+#include <svx/polygn3d.hxx>
 #endif
 
 #ifndef _SVDPAGE_HXX
-#include "svdpage.hxx"
+#include <svx/svdpage.hxx>
 #endif
 
 #ifndef _E3D_GLOBL3D_HXX
