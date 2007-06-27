@@ -4,9 +4,9 @@
  *
  *  $RCSfile: unohelp.cxx,v $
  *
- *  $Revision: 1.34 $
+ *  $Revision: 1.35 $
  *
- *  last change: $Author: obo $ $Date: 2007-06-11 14:24:43 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 20:03:25 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -38,7 +38,7 @@
 
 
 
-#include <unohelp.hxx>
+#include <vcl/unohelp.hxx>
 
 #ifndef _COM_SUN_STAR_LANG_XSINGLESERVICEFACTORY_HPP_
 #include <com/sun/star/lang/XSingleServiceFactory.hpp>
@@ -84,8 +84,8 @@
 #include <tools/tempfile.hxx>
 #include <osl/file.hxx>
 
-#include <svdata.hxx>
-#include <svapp.hxx>
+#include <vcl/svdata.hxx>
+#include <vcl/svapp.hxx>
 
 using namespace ::com::sun::star;
 using namespace ::rtl;
