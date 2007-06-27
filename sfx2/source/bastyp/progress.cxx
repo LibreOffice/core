@@ -4,9 +4,9 @@
  *
  *  $RCSfile: progress.cxx,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 16:24:46 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 23:04:00 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -36,7 +36,7 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_sfx2.hxx"
 
-#include "progress.hxx"
+#include <sfx2/progress.hxx>
 
 #ifndef _COM_SUN_STAR_UNO_REFERENCE_HXX_
 #include <com/sun/star/uno/Reference.hxx>
@@ -53,19 +53,19 @@
 
 // wg. nRescheduleLocks
 #include "appdata.hxx"
-#include "request.hxx"
-#include "frame.hxx"
-#include "viewfrm.hxx"
-#include "viewsh.hxx"
-#include "objsh.hxx"
-#include "app.hxx"
-#include "dispatch.hxx"
+#include <sfx2/request.hxx>
+#include <sfx2/frame.hxx>
+#include <sfx2/viewfrm.hxx>
+#include <sfx2/viewsh.hxx>
+#include <sfx2/objsh.hxx>
+#include <sfx2/app.hxx>
+#include <sfx2/dispatch.hxx>
 #include "sfxtypes.hxx"
-#include "docfile.hxx"
+#include <sfx2/docfile.hxx>
 #include "workwin.hxx"
 #include "sfxresid.hxx"
 #include "bastyp.hrc"
-#include "msg.hxx"
+#include <sfx2/msg.hxx>
 
 #include <time.h>
 
