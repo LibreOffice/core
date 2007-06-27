@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ttprops.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 15:22:52 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 21:58:10 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -37,7 +37,7 @@
 #include "precompiled_svtools.hxx"
 
 #ifndef _SVTOOLS_TTPROPS_HXX // handmade
-#include "ttprops.hxx"
+#include <svtools/ttprops.hxx>
 #endif
 #ifndef _SV_SVAPP_HXX
 #include <vcl/svapp.hxx>
