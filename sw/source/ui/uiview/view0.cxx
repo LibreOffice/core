@@ -4,9 +4,9 @@
  *
  *  $RCSfile: view0.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: rt $ $Date: 2007-04-26 09:39:57 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 13:27:06 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -556,8 +556,7 @@ void SwView::ExecViewOptions(SfxRequest &rReq)
         //Die UsrPref muessen als Modified gekennzeichnet werden.
         //call for initialization
         pModule->GetUsrPref(bWebView);
-        pModule->CheckSpellChanges( pOpt->IsOnlineSpell(), sal_False, sal_False );
-
+        pModule->CheckSpellChanges( pOpt->IsOnlineSpell(), sal_False, sal_False, sal_False );
     }
     //OS:   Modified wieder zuruecksetzen, weil Ansicht/Felder
     //      das Doc modified setzt.
