@@ -4,9 +4,9 @@
  *
  *  $RCSfile: mediawindowbase_impl.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-07 19:44:26 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 22:24:29 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -36,7 +36,7 @@
 #ifndef _AVMEDIA_MEDIAWINDOWBASE_IMPL_HXX
 #define _AVMEDIA_MEDIAWINDOWBASE_IMPL_HXX
 
-#include "mediawindow.hxx"
+#include <avmedia/mediawindow.hxx>
 
 #ifndef _COM_SUN_STAR_MEDIA_XPLAYER_HPP_
 #include <com/sun/star/media/XPlayer.hpp>
