@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ndtxt.cxx,v $
  *
- *  $Revision: 1.70 $
+ *  $Revision: 1.71 $
  *
- *  last change: $Author: vg $ $Date: 2007-05-22 16:32:55 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 13:21:21 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -2978,6 +2978,43 @@ BOOL SwTxtNode::GetExpandTxt( SwTxtNode& rDestNd, const SwIndex* pDestIdx,
     return TRUE;
 }
 
+const ModelToViewHelper::ConversionMap*
+        SwTxtNode::BuildConversionMap( rtl::OUString& rRetText ) const
+{
+    const rtl::OUString& rNodeText = GetTxt();
+    rRetText = rNodeText;
+    ModelToViewHelper::ConversionMap* pConversionMap = 0;
+
+    SwpHints* pSwpHints = const_cast<SwTxtNode*>(this)->GetpSwpHints();
+    xub_StrLen nPos = 0;
+
+    for ( USHORT i = 0; pSwpHints && i < pSwpHints->Count(); ++i )
+    {
+        const SwTxtAttr* pAttr = pSwpHints->GetHt(i);
+        if ( RES_TXTATR_FIELD == pAttr->Which() )
+        {
+            const XubString aExpand( ((SwTxtFld*)pAttr)->GetFld().GetFld()->Expand() );
+            if ( aExpand.Len() > 0 )
+            {
+                const xub_StrLen nFieldPos = *pAttr->GetStart();
+                rRetText = rRetText.replaceAt( nPos + nFieldPos, 1, aExpand );
+                if ( !pConversionMap )
+                    pConversionMap = new ModelToViewHelper::ConversionMap;
+                pConversionMap->push_back(
+                        ModelToViewHelper::ConversionMapEntry(
+                            nFieldPos, nPos + nFieldPos ) );
+                nPos += ( aExpand.Len() - 1 );
+            }
+        }
+    }
+
+    if ( pConversionMap && pConversionMap->size() )
+        pConversionMap->push_back(
+            ModelToViewHelper::ConversionMapEntry(
+                rNodeText.getLength(), rRetText.getLength() ) );
+
+    return pConversionMap;
+}
 
 XubString SwTxtNode::GetRedlineTxt( xub_StrLen nIdx, xub_StrLen nLen,
                                 BOOL bExpandFlds, BOOL bWithNum ) const
@@ -3515,4 +3552,3 @@ bool SwTxtNode::IsHidden() const
     return false;
 }
 // <--
-
