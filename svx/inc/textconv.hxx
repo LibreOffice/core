@@ -4,9 +4,9 @@
  *
  *  $RCSfile: textconv.hxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: rt $ $Date: 2005-11-08 09:13:33 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 16:34:03 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -35,8 +35,8 @@
 #ifndef _TEXTCONV_HXX
 #define _TEXTCONV_HXX
 
-#include <splwrap.hxx>
-#include <svxacorr.hxx>
+#include <svx/splwrap.hxx>
+#include <svx/svxacorr.hxx>
 
 #ifndef _COM_SUN_STAR_UNO_REFERENCE_H_
 #include <com/sun/star/uno/Reference.h>
@@ -46,7 +46,7 @@
 #endif
 
 #ifndef SVX_HANGUL_HANJA_CONVERSION_HXX
-#include "hangulhanja.hxx"
+#include <svx/hangulhanja.hxx>
 #endif
 
 class EditView;
