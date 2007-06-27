@@ -4,9 +4,9 @@
  *
  *  $RCSfile: parser.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: vg $ $Date: 2006-11-02 16:32:13 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 14:20:42 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -37,7 +37,7 @@
 #include "precompiled_basic.hxx"
 
 #ifndef _SBXCLASS_HXX //autogen
-#include <sbx.hxx>
+#include <basic/sbx.hxx>
 #endif
 #include "sbcomp.hxx"
 
