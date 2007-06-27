@@ -4,9 +4,9 @@
  *
  *  $RCSfile: svdpoev.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: kz $ $Date: 2007-05-09 13:33:12 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 19:11:41 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -36,15 +36,15 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_svx.hxx"
 
-#include "svdpoev.hxx"
+#include <svx/svdpoev.hxx>
 #include <math.h>
-#include "svdpagv.hxx"
-#include "svdpage.hxx"
-#include "svdopath.hxx"
-#include "svdundo.hxx"
+#include <svx/svdpagv.hxx>
+#include <svx/svdpage.hxx>
+#include <svx/svdopath.hxx>
+#include <svx/svdundo.hxx>
 #include "svdstr.hrc"   // Namen aus der Resource
 #include "svdglob.hxx"  // StringCache
-#include "svdtrans.hxx"
+#include <svx/svdtrans.hxx>
 
 #ifndef _BGFX_POLYGON_B2DPOLYGON_HXX
 #include <basegfx/polygon/b2dpolygon.hxx>
