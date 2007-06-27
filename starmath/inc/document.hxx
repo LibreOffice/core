@@ -4,9 +4,9 @@
  *
  *  $RCSfile: document.hxx,v $
  *
- *  $Revision: 1.31 $
+ *  $Revision: 1.32 $
  *
- *  last change: $Author: vg $ $Date: 2007-05-25 12:08:57 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 12:39:43 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -208,6 +208,9 @@ public:
     void        SetPrinter( SfxPrinter * );
 
     const String &GetComment() const;
+
+    // to replace chars that can not be saved with the document...
+    sal_Bool    ReplaceBadChars();
 
     void        UpdateText();
     void        SetText(const String& rBuffer);
