@@ -4,9 +4,9 @@
  *
  *  $RCSfile: TransformerBase.hxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 15:58:19 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 16:25:35 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -55,7 +55,7 @@
 #include <com/sun/star/frame/XModel.hpp>
 #endif
 #ifndef _XMLOFF_XMLTOKEN_HXX
-#include "xmltoken.hxx"
+#include <xmloff/xmltoken.hxx>
 #endif
 
 #ifndef _XMLOFF_TRANSFORMER_HXX_
