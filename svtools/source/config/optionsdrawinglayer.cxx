@@ -4,9 +4,9 @@
  *
  *  $RCSfile: optionsdrawinglayer.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: hr $ $Date: 2007-06-26 11:43:43 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 21:15:43 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -41,7 +41,7 @@
 //_________________________________________________________________________________________________________________
 
 #ifndef INCLUDED_SVTOOLS_OPTIONSDRAWINGLAYER_HXX
-#include "optionsdrawinglayer.hxx"
+#include <svtools/optionsdrawinglayer.hxx>
 #endif
 
 #ifndef _UTL_CONFIGMGR_HXX_
