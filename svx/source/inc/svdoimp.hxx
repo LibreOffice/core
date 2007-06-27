@@ -4,9 +4,9 @@
  *
  *  $RCSfile: svdoimp.hxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: ihi $ $Date: 2006-11-14 13:27:59 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 18:24:24 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -56,23 +56,23 @@
 #endif
 
 #ifndef _SVDSOB_HXX //autogen
-#include "svdsob.hxx"
+#include <svx/svdsob.hxx>
 #endif
 
 #ifndef _SVDTYPES_HXX
-#include "svdtypes.hxx" // fuer SdrLayerID
+#include <svx/svdtypes.hxx> // fuer SdrLayerID
 #endif
 
 #ifndef _SVDGLUE_HXX
-#include "svdglue.hxx" // Klebepunkte
+#include <svx/svdglue.hxx> // Klebepunkte
 #endif
 
 #ifndef _SVX_XDASH_HXX
-#include "xdash.hxx"
+#include <svx/xdash.hxx>
 #endif
 
 #ifndef _XPOLY_HXX
-#include "xpoly.hxx"
+#include <svx/xpoly.hxx>
 #endif
 
 //#ifndef _POLY3D_HXX
@@ -80,7 +80,7 @@
 //#endif
 
 #ifndef _XENUM_HXX
-#include "xenum.hxx"
+#include <svx/xenum.hxx>
 #endif
 
 #ifndef _BGFX_VECTOR_B2DVECTOR_HXX
@@ -88,7 +88,7 @@
 #endif
 
 #ifndef _SVX_RECTENUM_HXX
-#include "rectenum.hxx"
+#include <svx/rectenum.hxx>
 #endif
 
 #ifndef _BGFX_POLYGON_B2DPOLYPOLYGON_HXX
