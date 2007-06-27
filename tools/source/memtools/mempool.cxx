@@ -4,9 +4,9 @@
  *
  *  $RCSfile: mempool.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 00:58:37 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 22:15:56 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -36,7 +36,7 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_tools.hxx"
 
-#include "mempool.hxx"
+#include <tools/mempool.hxx>
 
 #ifndef _RTL_ALLOC_H_
 #include "rtl/alloc.h"
