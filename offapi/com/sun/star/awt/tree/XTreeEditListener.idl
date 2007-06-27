@@ -1,0 +1,97 @@
+/*************************************************************************
+ *
+ *  OpenOffice.org - a multi-platform office productivity suite
+ *
+ *  $RCSfile: XTreeEditListener.idl,v $
+ *
+ *  $Revision: 1.2 $
+ *
+ *  last change: $Author: hr $ $Date: 2007-06-27 12:28:38 $
+ *
+ *  The Contents of this file are made available subject to
+ *  the terms of GNU Lesser General Public License Version 2.1.
+ *
+ *
+ *    GNU Lesser General Public License Version 2.1
+ *    =============================================
+ *    Copyright 2005 by Sun Microsystems, Inc.
+ *    901 San Antonio Road, Palo Alto, CA 94303, USA
+ *
+ *    This library is free software; you can redistribute it and/or
+ *    modify it under the terms of the GNU Lesser General Public
+ *    License version 2.1, as published by the Free Software Foundation.
+ *
+ *    This library is distributed in the hope that it will be useful,
+ *    but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ *    Lesser General Public License for more details.
+ *
+ *    You should have received a copy of the GNU Lesser General Public
+ *    License along with this library; if not, write to the Free Software
+ *    Foundation, Inc., 59 Temple Place, Suite 330, Boston,
+ *    MA  02111-1307  USA
+ *
+ ************************************************************************/
+#ifndef __com_sun_star_awt_tree_XTreeEditListener_idl__
+#define __com_sun_star_awt_tree_XTreeEditListener_idl__
+
+#ifndef __com_sun_star_awt_tree_XTreeNode_idl__
+#include <com/sun/star/awt/tree/XTreeNode.idl>
+#endif
+
+#ifndef __com_sun_star_lang_XEventListener_idl__
+#include <com/sun/star/lang/XEventListener.idl>
+#endif
+
+#ifndef __com_sun_star_util_VetoException_idl__
+#include <com/sun/star/util/VetoException.idl>
+#endif
+
+//=============================================================================
+
+module com {  module sun {  module star {  module awt {  module tree {
+
+//=============================================================================
+
+/** You can implement this interface and register with <method scope="XTreeControl">addTreeEditListener</method>
+    to get notifcaitons when editing of a node starts and ends.
+
+    <p>You have to set the <member>TreeControlModel::Editable</member> property to
+    <TRUE/> before a tree supports editing.</p>
+ */
+interface XTreeEditListener : ::com::sun::star::lang::XEventListener
+{
+    /** This method is called from the <type>TreeControl</type> implementation when editing of
+        <var>Node</var> is requested by calling <member>XTreeControl::startEditingAtNode()</member>.
+
+        @param Node
+            the <type>XTreeNode</type> for that an edit request was fired by calling
+            <method scope="XTreeControl">startEditingAtNode</method>
+
+        @throws VetoException
+            if thrown the editing will not start.
+    */
+    void nodeEditing( [in] XTreeNode Node )
+        raises ( ::com::sun::star::util::VetoException );
+
+    /** This method is called from the <service>TreeControl</service> implementation when editing
+        of <var>Node</var> is finished and was not canceled.
+
+        <p>Implementations that register a <type>XTreeEditListener</type> must update the
+        display value at the Node.</p>
+
+        @param Node
+            the <type>XTreeNode</type> for that an edit request was fired by calling
+            <method scope="XTreeControl">startEditingAtNode</method>
+
+        @param NewText
+            the text that was entered by the user.
+    */
+    void nodeEdited( [in] XTreeNode Node, [in] string NewText );
+};
+
+//=============================================================================
+
+}; }; }; }; };
+
+#endif
