@@ -4,9 +4,9 @@
  *
  *  $RCSfile: editdbg.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: obo $ $Date: 2006-10-12 12:34:45 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 17:54:23 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -42,35 +42,35 @@
 #include <vcl/msgbox.hxx>
 #endif
 
-#include <lspcitem.hxx>
+#include <svx/lspcitem.hxx>
 
-#include <lrspitem.hxx>
-#include <ulspitem.hxx>
-#include <cntritem.hxx>
-#include <colritem.hxx>
-#include <fhgtitem.hxx>
+#include <svx/lrspitem.hxx>
+#include <svx/ulspitem.hxx>
+#include <svx/cntritem.hxx>
+#include <svx/colritem.hxx>
+#include <svx/fhgtitem.hxx>
 #include <fontitem.hxx>
-#include <adjitem.hxx>
-#include <wghtitem.hxx>
-#include <postitem.hxx>
-#include <udlnitem.hxx>
-#include <crsditem.hxx>
-#include <shdditem.hxx>
-#include <escpitem.hxx>
-#include <kernitem.hxx>
-#include <wrlmitem.hxx>
-#include <akrnitem.hxx>
-#include <langitem.hxx>
-#include <emphitem.hxx>
-#include <numitem.hxx>
-#include <tstpitem.hxx>
-#include <charscaleitem.hxx>
-#include <charreliefitem.hxx>
-#include <frmdiritem.hxx>
+#include <svx/adjitem.hxx>
+#include <svx/wghtitem.hxx>
+#include <svx/postitem.hxx>
+#include <svx/udlnitem.hxx>
+#include <svx/crsditem.hxx>
+#include <svx/shdditem.hxx>
+#include <svx/escpitem.hxx>
+#include <svx/kernitem.hxx>
+#include <svx/wrlmitem.hxx>
+#include <svx/akrnitem.hxx>
+#include <svx/langitem.hxx>
+#include <svx/emphitem.hxx>
+#include <svx/numitem.hxx>
+#include <svx/tstpitem.hxx>
+#include <svx/charscaleitem.hxx>
+#include <svx/charreliefitem.hxx>
+#include <svx/frmdiritem.hxx>
 
 #include <impedit.hxx>
-#include <editeng.hxx>
-#include <editview.hxx>
+#include <svx/editeng.hxx>
+#include <svx/editview.hxx>
 #include <editdoc.hxx>
 #include <editdbg.hxx>
 
