@@ -4,9 +4,9 @@
  *
  *  $RCSfile: e3ditem.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: kz $ $Date: 2007-05-10 14:50:32 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 18:27:16 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -43,7 +43,7 @@
 #include <tools/stream.hxx>
 #endif
 
-#include "e3ditem.hxx"
+#include <svx/e3ditem.hxx>
 
 using namespace ::rtl;
 using namespace ::com::sun::star;
