@@ -4,9 +4,9 @@
  *
  *  $RCSfile: svxrectctaccessiblecontext.hxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: hr $ $Date: 2006-06-19 16:08:49 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 18:24:40 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -106,7 +106,7 @@
 #endif
 
 #ifndef _SVX_RECTENUM_HXX //autogen
-#include <rectenum.hxx>
+#include <svx/rectenum.hxx>
 #endif
 
 namespace com { namespace sun { namespace star { namespace awt {
