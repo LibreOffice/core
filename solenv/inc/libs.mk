@@ -4,9 +4,9 @@
 #
 #   $RCSfile: libs.mk,v $
 #
-#   $Revision: 1.113 $
+#   $Revision: 1.114 $
 #
-#   last change: $Author: rt $ $Date: 2007-06-08 07:07:10 $
+#   last change: $Author: hr $ $Date: 2007-06-27 17:49:31 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -32,9 +32,9 @@
 #     MA  02111-1307  USA
 #
 #*************************************************************************
-LIBSMKREV!:="$$Revision: 1.113 $$"
+LIBSMKREV!:="$$Revision: 1.114 $$"
 
-.IF "$(GUI)"=="UNX" || "$(GUI)"=="MAC" || "$(COM)"=="GCC"
+.IF "$(GUI)"=="UNX" || "$(COM)"=="GCC"
 
 #
 #externe libs in plattform.mk
@@ -330,7 +330,7 @@ ULINGULIB=-lulingu
 MYTHESLIB=-lmythes
 PYUNOLIB=-lpyuno
 
-.ELSE				# "$(GUI)"=="UNX" || "$(GUI)"=="MAC"
+.ELSE				# "$(GUI)"=="UNX"
 AWTLIB*=jawt.lib
 AVMEDIALIB=iavmedia.lib
 ICUINLIB=icuin.lib
