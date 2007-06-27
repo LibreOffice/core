@@ -4,9 +4,9 @@
  *
  *  $RCSfile: inidef.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 09:45:51 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 21:04:40 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -45,7 +45,7 @@ class SfxIniDefaulterList;
 class SfxIniDefaultManager;
 
 #if _SOLAR__PRIVATE
-#include "svarray.hxx"
+#include <svtools/svarray.hxx>
 
 class SfxIniDefaulter;
 SV_DECL_PTRARR( SfxIniDefaulterList, SfxIniDefaulter*, 0, 2 );
