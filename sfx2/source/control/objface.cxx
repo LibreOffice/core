@@ -4,9 +4,9 @@
  *
  *  $RCSfile: objface.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: rt $ $Date: 2007-05-29 15:55:06 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 23:06:52 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -48,14 +48,14 @@
 #include <tools/stream.hxx>
 #endif
 
-#include "module.hxx"
-#include "objface.hxx"
-#include "msg.hxx"
-#include "app.hxx"
-#include "msgpool.hxx"
+#include <sfx2/module.hxx>
+#include <sfx2/objface.hxx>
+#include <sfx2/msg.hxx>
+#include <sfx2/app.hxx>
+#include <sfx2/msgpool.hxx>
 #include "sfxresid.hxx"
-#include "minarray.hxx"
-#include "objsh.hxx"
+#include <sfx2/minarray.hxx>
+#include <sfx2/objsh.hxx>
 
 DBG_NAME(SfxInterface)
 
