@@ -4,9 +4,9 @@
  *
  *  $RCSfile: appinit.cxx,v $
  *
- *  $Revision: 1.58 $
+ *  $Revision: 1.59 $
  *
- *  last change: $Author: kz $ $Date: 2007-02-12 14:49:52 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 22:55:56 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -36,7 +36,7 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_sfx2.hxx"
 
-#include "app.hxx"
+#include <sfx2/app.hxx>
 
 #ifndef _COM_SUN_STAR_FRAME_XTERMINATELISTENER_HPP_
 #include <com/sun/star/frame/XTerminateListener.hpp>
@@ -112,25 +112,25 @@
 #ifndef GCC
 #endif
 
-#include "unoctitm.hxx"
+#include <sfx2/unoctitm.hxx>
 #include "app.hrc"
 #include "sfxlocal.hrc"
 #include "appdata.hxx"
 #include "arrdecl.hxx"
-#include "dispatch.hxx"
-#include "docfac.hxx"
-#include "evntconf.hxx"
+#include <sfx2/dispatch.hxx>
+#include <sfx2/docfac.hxx>
+#include <sfx2/evntconf.hxx>
 #include "intro.hxx"
-#include "macrconf.hxx"
-#include "mnumgr.hxx"
-#include "msgpool.hxx"
-#include "progress.hxx"
+#include <sfx2/macrconf.hxx>
+#include <sfx2/mnumgr.hxx>
+#include <sfx2/msgpool.hxx>
+#include <sfx2/progress.hxx>
 #include "sfxhelp.hxx"
 #include "sfxresid.hxx"
 #include "sfxtypes.hxx"
-#include "viewsh.hxx"
+#include <sfx2/viewsh.hxx>
 #include "nochaos.hxx"
-#include "fcontnr.hxx"
+#include <sfx2/fcontnr.hxx>
 #include "helper.hxx"   // SfxContentHelper::Kill()
 #include "sfxpicklist.hxx"
 
