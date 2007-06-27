@@ -4,9 +4,9 @@
  *
  *  $RCSfile: fileurlbox.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 14:38:11 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 21:24:30 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -37,7 +37,7 @@
 #include "precompiled_svtools.hxx"
 
 #ifndef SVTOOLS_FILEURLBOX_HXX
-#include "fileurlbox.hxx"
+#include <svtools/fileurlbox.hxx>
 #endif
 #ifndef _OSL_FILE_H_
 #include <osl/file.h>
