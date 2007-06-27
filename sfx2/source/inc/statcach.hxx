@@ -4,9 +4,9 @@
  *
  *  $RCSfile: statcach.hxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-07 19:13:04 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 23:29:29 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -64,14 +64,14 @@
 #endif
 
 #ifndef _SFXBINDINGS_HXX
-#include "bindings.hxx"
+#include <sfx2/bindings.hxx>
 #endif
 
 #ifndef _SFXMSGSERV_HXX
 #include "slotserv.hxx"
 #endif
 
-#include "sfxuno.hxx"
+#include <sfx2/sfxuno.hxx>
 
 class SfxControllerItem;
 class SfxDispatcher;
