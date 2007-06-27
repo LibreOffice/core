@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.12 $
+#   $Revision: 1.13 $
 #
-#   last change: $Author: vg $ $Date: 2007-03-27 09:10:13 $
+#   last change: $Author: hr $ $Date: 2007-06-27 13:58:24 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -92,7 +92,11 @@ BUILD_DIR=$(CONFIGURE_DIR)
 .ELSE
 CONFIGURE_DIR=win32
 CONFIGURE_ACTION=cscript configure.js
+.IF "$(product)"!="full" && "$(CCNUMVER)" >= "001399999999"
+CONFIGURE_FLAGS=crypto=$(CRYPTOLIB) debug=yes xslt=no iconv=no static=no include=$(BASEINC) lib=$(BASELIB)
+.ELSE
 CONFIGURE_FLAGS=crypto=$(CRYPTOLIB) xslt=no iconv=no static=no include=$(BASEINC) lib=$(BASELIB)
+.ENDIF
 BUILD_ACTION=nmake
 BUILD_DIR=$(CONFIGURE_DIR)
 .ENDIF
