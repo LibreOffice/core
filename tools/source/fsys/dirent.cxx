@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dirent.cxx,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: vg $ $Date: 2007-03-26 13:44:52 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 22:10:36 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -55,21 +55,21 @@
 #include <string.h>
 
 #ifndef _DEBUG_HXX
-#include <debug.hxx>
+#include <tools/debug.hxx>
 #endif
 #ifndef _LIST_HXX
-#include <list.hxx>
+#include <tools/list.hxx>
 #endif
 
 #ifndef _COMDEP_HXX
 #include "comdep.hxx"
 #endif
 #ifndef _FSYS_HXX
-#include "fsys.hxx"
+#include <tools/fsys.hxx>
 #endif
 #define _TOOLS_HXX
 #ifndef _URLOBJ_HXX
-#include <urlobj.hxx>
+#include <tools/urlobj.hxx>
 #endif
 
 #ifdef UNX
@@ -77,7 +77,7 @@
 #endif
 
 #ifndef _STREAM_HXX
-#include <stream.hxx>
+#include <tools/stream.hxx>
 #endif
 
 #ifndef _VOS_MUTEX_HXX
