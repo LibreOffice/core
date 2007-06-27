@@ -4,9 +4,9 @@
  *
  *  $RCSfile: svcommstream.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: hr $ $Date: 2006-04-19 13:57:39 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 20:59:59 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -35,7 +35,7 @@
 
 #include <tools/stream.hxx>
 
-#include "commtypes.hxx"
+#include <automation/commtypes.hxx>
 #include "icommstream.hxx"
 
 
