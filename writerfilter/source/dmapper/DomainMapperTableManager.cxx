@@ -4,9 +4,9 @@
  *
  *  $RCSfile: DomainMapperTableManager.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: os $ $Date: 2007-06-27 08:54:24 $
+ *  last change: $Author: hbrinkm $ $Date: 2007-06-27 13:22:01 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -247,12 +247,12 @@ bool DomainMapperTableManager::sprm(doctok::Sprm & rSprm)
                     case 2: nVertOrient = text::VertOrientation::BOTTOM; break;
                     default:;
                 };
-                PropertyMapPtr pPropMap( new PropertyMap );
+                PropertyMapPtr pPropMap( new PropertyMap() );
                 pPropMap->Insert( PROP_VERT_ORIENT, false, uno::makeAny( nVertOrient ) );
                 //todo: in ooxml import the value of m_ncell is wrong
-                OSL_ENSURE( m_nCell > 0, "illegal cell index");
-                cellPropsByCell( m_nCell - 1, pPropMap );
+                cellProps( pPropMap );
             }
+            break;
             case 0xD605: // sprmTTableBorders
             {
                 /* WRITERFILTERSTATUS: done: 0, planned: 2, spent: 0 */
