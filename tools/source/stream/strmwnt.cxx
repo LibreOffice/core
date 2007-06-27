@@ -4,9 +4,9 @@
  *
  *  $RCSfile: strmwnt.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: kz $ $Date: 2007-05-10 16:38:49 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 22:18:59 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -42,11 +42,11 @@
 #include <string.h>
 #include <limits.h>
 
-#include <svwin.h>
+#include <tools/svwin.h>
 
-#include <debug.hxx>
-#include <fsys.hxx>
-#include <stream.hxx>
+#include <tools/debug.hxx>
+#include <tools/fsys.hxx>
+#include <tools/stream.hxx>
 
 // class FileBase
 #ifndef _OSL_FILE_HXX_
