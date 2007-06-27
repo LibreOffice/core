@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xtabdash.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: ihi $ $Date: 2006-11-14 13:58:09 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 19:35:43 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -63,26 +63,26 @@
 #include <vcl/window.hxx>
 #include <svtools/itemset.hxx>
 #include <sfx2/docfile.hxx>
-#include "dialogs.hrc"
-#include "dialmgr.hxx"
-#include "xtable.hxx"
-#include "xpool.hxx"
-#include "xoutx.hxx"
+#include <svx/dialogs.hrc>
+#include <svx/dialmgr.hxx>
+#include <svx/xtable.hxx>
+#include <svx/xpool.hxx>
+#include <svx/xoutx.hxx>
 
 #ifndef _SVX_XLINEIT0_HXX //autogen
-#include <xlineit0.hxx>
+#include <svx/xlineit0.hxx>
 #endif
 
 #ifndef _SVX_XLNCLIT_HXX //autogen
-#include <xlnclit.hxx>
+#include <svx/xlnclit.hxx>
 #endif
 
 #ifndef _SVX_XLNWTIT_HXX //autogen
-#include <xlnwtit.hxx>
+#include <svx/xlnwtit.hxx>
 #endif
 
 #ifndef _SVX_XLNDSIT_HXX //autogen
-#include <xlndsit.hxx>
+#include <svx/xlndsit.hxx>
 #endif
 
 using namespace com::sun::star;
