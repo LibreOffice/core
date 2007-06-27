@@ -31,7 +31,7 @@ export KDEMAINDIR=/usr
 export GNOMEDIR=/usr
 export GNOME_MIME_THEME=hicolor
 
-create_tree.sh
+./create_tree.sh
 
 # legacy redhat KDE location for .desktop files
 mkdir -p $RPM_BUILD_ROOT/usr/share/applnk-redhat/Office
