@@ -4,9 +4,9 @@
  *
  *  $RCSfile: lstbox.cxx,v $
  *
- *  $Revision: 1.37 $
+ *  $Revision: 1.38 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 11:54:15 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 20:07:09 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -40,22 +40,22 @@
 #include <tools/rc.h>
 #endif
 #ifndef _SV_SVDATA_HXX
-#include <svdata.hxx>
+#include <vcl/svdata.hxx>
 #endif
 #ifndef _SV_DECOVIEW_HXX
-#include <decoview.hxx>
+#include <vcl/decoview.hxx>
 #endif
 #ifndef _SV_EVENT_HXX
-#include <event.hxx>
+#include <vcl/event.hxx>
 #endif
 #ifndef _SV_SCRBAR_HXX
-#include <scrbar.hxx>
+#include <vcl/scrbar.hxx>
 #endif
 #ifndef _SV_BUTTON_HXX
-#include <button.hxx>
+#include <vcl/button.hxx>
 #endif
 #ifndef _SV_EDIT_HXX
-#include <edit.hxx>
+#include <vcl/edit.hxx>
 #endif
 #ifndef _SV_SUBEDIT_HXX
 #include <subedit.hxx>
@@ -64,13 +64,13 @@
 #include <ilstbox.hxx>
 #endif
 #ifndef _SV_LSTBOX_HXX
-#include <lstbox.hxx>
+#include <vcl/lstbox.hxx>
 #endif
 #ifndef _SV_COMBOBOX_HXX
-#include <combobox.hxx>
+#include <vcl/combobox.hxx>
 #endif
 #ifndef _VCL_CONTROLLAYOUT_HXX
-#include <controllayout.hxx>
+#include <vcl/controllayout.hxx>
 #endif
 #ifndef _DEBUG_HXX
 #include <tools/debug.hxx>
