@@ -1,0 +1,80 @@
+/*************************************************************************
+ *
+ *  OpenOffice.org - a multi-platform office productivity suite
+ *
+ *  $RCSfile: accessiblestrings.src,v $
+ *
+ *  $Revision: 1.2 $
+ *
+ *  last change: $Author: hr $ $Date: 2007-06-27 15:35:20 $
+ *
+ *  The Contents of this file are made available subject to
+ *  the terms of GNU Lesser General Public License Version 2.1.
+ *
+ *
+ *    GNU Lesser General Public License Version 2.1
+ *    =============================================
+ *    Copyright 2005 by Sun Microsystems, Inc.
+ *    901 San Antonio Road, Palo Alto, CA 94303, USA
+ *
+ *    This library is free software; you can redistribute it and/or
+ *    modify it under the terms of the GNU Lesser General Public
+ *    License version 2.1, as published by the Free Software Foundation.
+ *
+ *    This library is distributed in the hope that it will be useful,
+ *    but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ *    Lesser General Public License for more details.
+ *
+ *    You should have received a copy of the GNU Lesser General Public
+ *    License along with this library; if not, write to the Free Software
+ *    Foundation, Inc., 59 Temple Place, Suite 330, Boston,
+ *    MA  02111-1307  USA
+ *
+ ************************************************************************/
+
+#ifndef ACCESSIBILITY_HELPER_ACCESSIBLESTRINGS_HRC_
+#include <accessibility/helper/accessiblestrings.hrc>
+#endif
+
+
+String RID_STR_ACC_ACTION_CLICK
+{
+    Text = "click";
+};
+
+String RID_STR_ACC_ACTION_TOGGLEPOPUP
+{
+    Text = "togglePopup";
+};
+
+String RID_STR_ACC_ACTION_SELECT
+{
+    Text = "select";
+};
+
+String RID_STR_ACC_ACTION_INCLINE
+{
+    Text = "incrementLine";
+};
+
+String RID_STR_ACC_ACTION_DECLINE
+{
+    Text = "decrementLine";
+};
+
+String RID_STR_ACC_ACTION_INCBLOCK
+{
+    Text = "incrementBlock";
+};
+
+String RID_STR_ACC_ACTION_DECBLOCK
+{
+    Text = "decrementBlock";
+};
+
+String RID_STR_ACC_NAME_BROWSEBUTTON
+{
+    Text [ en-US ] = "Browse";
+};
+
