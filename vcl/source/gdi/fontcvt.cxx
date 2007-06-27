@@ -4,9 +4,9 @@
  *
  *  $RCSfile: fontcvt.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: obo $ $Date: 2006-10-11 08:20:19 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 20:12:42 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -37,7 +37,7 @@
 #include "precompiled_vcl.hxx"
 
 #ifndef _SV_FONTCVT_HXX
-#include <fontcvt.hxx>
+#include <vcl/fontcvt.hxx>
 #endif
 
 #ifndef _SV_OUTDEV_H
