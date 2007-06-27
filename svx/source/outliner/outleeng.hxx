@@ -4,9 +4,9 @@
  *
  *  $RCSfile: outleeng.hxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: obo $ $Date: 2006-10-12 13:01:38 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 18:41:12 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -36,10 +36,10 @@
 #define _OUTLEENG_HXX
 
 #ifndef _OUTLINER_HXX
-#include <outliner.hxx>
+#include <svx/outliner.hxx>
 #endif
 #ifndef _EDITENG_HXX
-#include <editeng.hxx>
+#include <svx/editeng.hxx>
 #endif
 
 typedef EENotify* EENotifyPtr;
