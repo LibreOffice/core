@@ -4,9 +4,9 @@
  *
  *  $RCSfile: doc.src,v $
  *
- *  $Revision: 1.89 $
+ *  $Revision: 1.90 $
  *
- *  last change: $Author: ihi $ $Date: 2007-04-19 18:41:10 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 23:19:01 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -32,7 +32,7 @@
  *    MA  02111-1307  USA
  *
  ************************************************************************/
-#include "sfx.hrc"
+#include <sfx2/sfx.hrc>
 #include "doc.hrc"
 #define __RSC
 #include <svtools/inetdef.hxx>
