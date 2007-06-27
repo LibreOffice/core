@@ -4,9 +4,9 @@
  *
  *  $RCSfile: saldisp.hxx,v $
  *
- *  $Revision: 1.40 $
+ *  $Revision: 1.41 $
  *
- *  last change: $Author: kz $ $Date: 2007-02-12 14:52:11 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 20:40:43 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -47,10 +47,10 @@ class   SalXLib;
 #include <salunx.h>
 #endif
 #ifndef _SV_SALGTYPE_HXX
-#include <salgtype.hxx>
+#include <vcl/salgtype.hxx>
 #endif
 #ifndef _SV_PTRSTYLE_HXX
-#include <ptrstyle.hxx>
+#include <vcl/ptrstyle.hxx>
 #endif
 #ifndef _SAL_TYPES_H_
 #include <sal/types.h>
@@ -65,11 +65,11 @@ class   SalXLib;
 #include <tools/gen.hxx>
 #endif
 #ifndef _SV_SALWTYPE_HXX
-#include <salwtype.hxx>
+#include <vcl/salwtype.hxx>
 #endif
 
 #ifndef _VCL_DLLAPI_H
-#include <dllapi.h>
+#include <vcl/dllapi.h>
 #endif
 
 // -=-= forwards -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
