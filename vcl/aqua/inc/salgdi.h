@@ -4,9 +4,9 @@
  *
  *  $RCSfile: salgdi.h,v $
  *
- *  $Revision: 1.28 $
+ *  $Revision: 1.29 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 10:34:10 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 19:49:01 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -41,7 +41,7 @@
 #include <postmac.h>
 
 #ifndef _SV_SV_H
-    #include <sv.h>
+    #include <vcl/sv.h>
 #endif
 
 #ifndef _SV_VCLWINDOW_H
