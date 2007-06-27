@@ -4,9 +4,9 @@
  *
  *  $RCSfile: eerdll.cxx,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: kz $ $Date: 2007-06-19 15:58:01 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 17:58:16 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -52,13 +52,13 @@
 #include <svtools/solar.hrc>
 #include <eerdll.hxx>
 #include <eerdll2.hxx>
-#include <lspcitem.hxx>
-#include <adjitem.hxx>
-#include <tstpitem.hxx>
+#include <svx/lspcitem.hxx>
+#include <svx/adjitem.hxx>
+#include <svx/tstpitem.hxx>
 #include <bulitem.hxx>
-#include <flditem.hxx>
-#include <emphitem.hxx>
-#include <scriptspaceitem.hxx>
+#include <svx/flditem.hxx>
+#include <svx/emphitem.hxx>
+#include <svx/scriptspaceitem.hxx>
 
 #ifndef _SFXITEMPOOL_HXX
 #include <svtools/itempool.hxx>
@@ -72,27 +72,27 @@
 #include <vcl/svapp.hxx>
 #endif
 
-#include <akrnitem.hxx>
-#include <cntritem.hxx>
-#include <colritem.hxx>
-#include <crsditem.hxx>
-#include <cscoitem.hxx>
-#include <escpitem.hxx>
-#include <fhgtitem.hxx>
+#include <svx/akrnitem.hxx>
+#include <svx/cntritem.hxx>
+#include <svx/colritem.hxx>
+#include <svx/crsditem.hxx>
+#include <svx/cscoitem.hxx>
+#include <svx/escpitem.hxx>
+#include <svx/fhgtitem.hxx>
 #include <fontitem.hxx>
-#include <kernitem.hxx>
-#include <lrspitem.hxx>
-#include <postitem.hxx>
-#include <shdditem.hxx>
-#include <udlnitem.hxx>
-#include <ulspitem.hxx>
-#include <wghtitem.hxx>
-#include <wrlmitem.hxx>
-#include <numitem.hxx>
-#include <langitem.hxx>
-#include <charscaleitem.hxx>
-#include <charreliefitem.hxx>
-#include <frmdiritem.hxx>
+#include <svx/kernitem.hxx>
+#include <svx/lrspitem.hxx>
+#include <svx/postitem.hxx>
+#include <svx/shdditem.hxx>
+#include <svx/udlnitem.hxx>
+#include <svx/ulspitem.hxx>
+#include <svx/wghtitem.hxx>
+#include <svx/wrlmitem.hxx>
+#include <svx/numitem.hxx>
+#include <svx/langitem.hxx>
+#include <svx/charscaleitem.hxx>
+#include <svx/charreliefitem.hxx>
+#include <svx/frmdiritem.hxx>
 #include <xmlcnitm.hxx>
 
 #include <forbiddencharacterstable.hxx>
