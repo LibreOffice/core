@@ -4,9 +4,9 @@
  *
  *  $RCSfile: txtfldi.hxx,v $
  *
- *  $Revision: 1.34 $
+ *  $Revision: 1.35 $
  *
- *  last change: $Author: kz $ $Date: 2007-05-09 13:21:41 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 14:45:52 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -59,11 +59,11 @@
 #endif
 
 #ifndef _XMLOFF_XMLICTXT_HXX
-#include "xmlictxt.hxx"
+#include <xmloff/xmlictxt.hxx>
 #endif
 
 #ifndef _XMLOFF_TEXTIMP_HXX_
-#include "txtimp.hxx"
+#include <xmloff/txtimp.hxx>
 #endif
 
 #ifndef _RTL_USTRBUF_HXX_
