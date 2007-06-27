@@ -4,9 +4,9 @@
  *
  *  $RCSfile: layerimport.cxx,v $
  *
- *  $Revision: 1.30 $
+ *  $Revision: 1.31 $
  *
- *  last change: $Author: vg $ $Date: 2006-09-25 13:21:28 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 15:17:04 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -55,31 +55,31 @@
 #include "formstyles.hxx"
 #endif
 #ifndef _XMLOFF_XMLICTXT_HXX
-#include "xmlictxt.hxx"
+#include <xmloff/xmlictxt.hxx>
 #endif
 #ifndef _XMLOFF_XMLSTYLE_HXX
-#include "xmlstyle.hxx"
+#include <xmloff/xmlstyle.hxx>
 #endif
 #ifndef _XMLOFF_FAMILIES_HXX_
-#include "families.hxx"
+#include <xmloff/families.hxx>
 #endif
 #ifndef _XMLOFF_PROPERTYSETMAPPER_HXX
-#include "xmlprmap.hxx"
+#include <xmloff/xmlprmap.hxx>
 #endif
 #ifndef _XMLOFF_PRSTYLEI_HXX_
-#include "prstylei.hxx"
+#include <xmloff/prstylei.hxx>
 #endif
 #ifndef _XMLOFF_XMLIMP_HXX
-#include "xmlimp.hxx"
+#include <xmloff/xmlimp.hxx>
 #endif
 #ifndef _XMLOFF_EVENTIMPORTHELPER_HXX
 #include "XMLEventImportHelper.hxx"
 #endif
 #ifndef _XMLOFF_XMLIMPPR_HXX
-#include "xmlimppr.hxx"
+#include <xmloff/xmlimppr.hxx>
 #endif
 #ifndef _XMLOFF_XMLNUMFI_HXX
-#include "xmlnumfi.hxx"
+#include <xmloff/xmlnumfi.hxx>
 #endif
 #ifndef _COM_SUN_STAR_UTIL_XNUMBERFORMATSSUPPLIER_HPP_
 #include <com/sun/star/util/XNumberFormatsSupplier.hpp>
@@ -119,7 +119,7 @@
 #include <com/sun/star/lang/Locale.hpp>
 #endif
 #ifndef _XMLOFF_FORMS_CONTROLPROPERTYHDL_HXX_
-#include "controlpropertyhdl.hxx"
+#include <xmloff/controlpropertyhdl.hxx>
 #endif
 #ifndef _XMLOFF_FORMS_CONTROLPROPERTYMAP_HXX_
 #include "controlpropertymap.hxx"
@@ -134,7 +134,7 @@
 #include "xformsimport.hxx"
 #endif
 #ifndef _XMLOFF_XMLTOKEN_HXX
-#include "xmltoken.hxx"
+#include <xmloff/xmltoken.hxx>
 #endif
 #ifndef _XMLOFF_XMLNMSPE_HXX
 #include "xmlnmspe.hxx"
