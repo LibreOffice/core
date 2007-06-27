@@ -4,9 +4,9 @@
  *
  *  $RCSfile: hltpbase.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: kz $ $Date: 2006-11-07 14:50:03 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 17:11:51 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -92,9 +92,9 @@
 #include <vcl/timer.hxx>
 #endif
 
-#include "dialmgr.hxx"
+#include <svx/dialmgr.hxx>
 #include <sfx2/docfile.hxx>
-#include "dialogs.hrc"
+#include <svx/dialogs.hrc>
 
 #ifndef _SVX_HELPID_HRC
 #include "helpid.hrc"
