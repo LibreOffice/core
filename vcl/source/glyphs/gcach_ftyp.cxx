@@ -39,11 +39,11 @@
 
 #include <gcach_ftyp.hxx>
 
-#include <svapp.hxx>
-#include <outfont.hxx>
-#include <impfont.hxx>
-#include <bitmap.hxx>
-#include <bmpacc.hxx>
+#include <vcl/svapp.hxx>
+#include <vcl/outfont.hxx>
+#include <vcl/impfont.hxx>
+#include <vcl/bitmap.hxx>
+#include <vcl/bmpacc.hxx>
 
 #include <tools/poly.hxx>
 #include <basegfx/matrix/b2dhommatrix.hxx>
@@ -98,8 +98,8 @@ typedef FT_Vector* FT_Vector_CPtr;
     #define strncasecmp strnicmp
 #endif
 
-#include <svapp.hxx>
-#include <settings.hxx>
+#include <vcl/svapp.hxx>
+#include <vcl/settings.hxx>
 #include <i18npool/lang.h>
 
 typedef const unsigned char* CPU8;
