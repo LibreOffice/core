@@ -4,9 +4,9 @@
  *
  *  $RCSfile: hangulhanjadlg.src,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: ihi $ $Date: 2007-04-19 14:05:21 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 17:10:21 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -32,7 +32,7 @@
  *    MA  02111-1307  USA
  *
  ************************************************************************/
-#include "dialogs.hrc"
+#include <svx/dialogs.hrc>
 #include "helpid.hrc"
 
 #ifndef SVX_HANGUL_HANJA_DLG_HRC
