@@ -4,9 +4,9 @@
  *
  *  $RCSfile: brwbox2.cxx,v $
  *
- *  $Revision: 1.37 $
+ *  $Revision: 1.38 $
  *
- *  last change: $Author: obo $ $Date: 2006-10-12 15:06:11 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 21:07:41 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -41,7 +41,7 @@
 #endif
 
 #ifndef _SVX_BRWBOX_HXX
-#include "brwbox.hxx"
+#include <svtools/brwbox.hxx>
 #endif
 
 #ifndef _SFXDATWIN_HXX
@@ -49,7 +49,7 @@
 #endif
 
 #ifndef INCLUDED_SVTOOLS_COLORCFG_HXX
-#include "colorcfg.hxx"
+#include <svtools/colorcfg.hxx>
 #endif
 
 #ifndef _SV_SALGTYPE_HXX
