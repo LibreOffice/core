@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dstribut.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 21:03:25 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 17:04:09 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -36,7 +36,7 @@
 #define _SVX_DSTRIBUT_HXX
 
 #ifndef _SVX_DLG_CTRL_HXX
-#include <dlgctrl.hxx>
+#include <svx/dlgctrl.hxx>
 #endif
 
 #ifndef _SV_GROUP_HXX
@@ -48,7 +48,7 @@
 #endif
 
 #ifndef _SVX_DSTRIBUT_ENUM_HXX
-#include "dstribut_enum.hxx" //CHINA001
+#include <svx/dstribut_enum.hxx> //CHINA001
 #endif
 /*************************************************************************
 |*
