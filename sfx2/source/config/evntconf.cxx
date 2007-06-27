@@ -4,9 +4,9 @@
  *
  *  $RCSfile: evntconf.cxx,v $
  *
- *  $Revision: 1.28 $
+ *  $Revision: 1.29 $
  *
- *  last change: $Author: rt $ $Date: 2006-12-04 08:17:25 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 23:05:07 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -72,20 +72,20 @@
 #include <framework/eventsconfiguration.hxx>
 #include <comphelper/processfactory.hxx>
 
-#include "evntconf.hxx"
+#include <sfx2/evntconf.hxx>
 
-#include "macrconf.hxx"
-#include "docfile.hxx"
-#include "app.hxx"
-#include "objsh.hxx"
-#include "dispatch.hxx"
+#include <sfx2/macrconf.hxx>
+#include <sfx2/docfile.hxx>
+#include <sfx2/app.hxx>
+#include <sfx2/objsh.hxx>
+#include <sfx2/dispatch.hxx>
 #include "config.hrc"
 #include "sfxresid.hxx"
-#include "macropg.hxx"
-#include "docinf.hxx"
+#include <sfx2/macropg.hxx>
+#include <sfx2/docinf.hxx>
 #include "eventsupplier.hxx"
 
-//#include "sfxsids.hrc"
+//#include <sfx2/sfxsids.hrc>
 //#include "sfxlocal.hrc"
 
 #ifndef _COM_SUN_STAR_BEANS_PROPERTYVALUE_HPP_
