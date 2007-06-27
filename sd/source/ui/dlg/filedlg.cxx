@@ -4,9 +4,9 @@
  *
  *  $RCSfile: filedlg.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: vg $ $Date: 2007-04-13 08:49:46 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 15:40:41 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -468,9 +468,12 @@ SdOpenSoundFileDialog::SdOpenSoundFileDialog() :
         new SdFileDialog_Imp(
             css::ui::dialogs::TemplateDescription::FILEOPEN_PLAY, sal_False ) )
 {
+    String aDescr;
+    aDescr = String(SdResId(STR_ALL_FILES));
+    mpImpl->AddFilter( aDescr, UniString::CreateFromAscii( RTL_CONSTASCII_STRINGPARAM( "*.*" ) ) );
+
     // setup filter
 #if defined UNX
-    String aDescr;
     aDescr = String(SdResId(STR_AU_FILE));
     mpImpl->AddFilter( aDescr, UniString::CreateFromAscii( RTL_CONSTASCII_STRINGPARAM( "*.au;*.snd" ) ) );
     aDescr = String(SdResId(STR_VOC_FILE));
@@ -482,9 +485,8 @@ SdOpenSoundFileDialog::SdOpenSoundFileDialog() :
     aDescr = String(SdResId(STR_SVX_FILE));
     mpImpl->AddFilter( aDescr, UniString::CreateFromAscii( RTL_CONSTASCII_STRINGPARAM( "*.svx" ) ) );
 #else
-    String aDescr;
     aDescr = String(SdResId(STR_WAV_FILE));
-    mpImpl->AddFilter( aDescr, UniString::CreateFromAscii( RTL_CONSTASCII_STRINGPARAM( "*.wav" ) ) );
+    mpImpl->AddFilter( aDescr, UniString::CreateFromAscii( RTL_CONSTASCII_STRINGPARAM( "*.wav;*.mp3;*.ogg" ) ) );
     aDescr = String(SdResId(STR_MIDI_FILE));
     mpImpl->AddFilter( aDescr, UniString::CreateFromAscii( RTL_CONSTASCII_STRINGPARAM( "*.mid" ) ) );
 #endif
