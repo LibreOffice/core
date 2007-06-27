@@ -4,9 +4,9 @@
  *
  *  $RCSfile: appmain.cxx,v $
  *
- *  $Revision: 1.31 $
+ *  $Revision: 1.32 $
  *
- *  last change: $Author: vg $ $Date: 2007-02-06 14:34:18 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 22:56:12 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -71,20 +71,20 @@
 
 #include "sfxtypes.hxx"
 #include "appdata.hxx"
-#include "docfac.hxx"
-#include "app.hxx"
+#include <sfx2/docfac.hxx>
+#include <sfx2/app.hxx>
 #include "arrdecl.hxx"
-#include "dispatch.hxx"
+#include <sfx2/dispatch.hxx>
 #include "sfxresid.hxx"
-#include "fcontnr.hxx"
-#include "viewsh.hxx"
+#include <sfx2/fcontnr.hxx>
+#include <sfx2/viewsh.hxx>
 #include "intro.hxx"
-#include "msgpool.hxx"
-#include "mnumgr.hxx"
-#include "appuno.hxx"
-#include "objuno.hxx"
+#include <sfx2/msgpool.hxx>
+#include <sfx2/mnumgr.hxx>
+#include <sfx2/appuno.hxx>
+#include <sfx2/objuno.hxx>
 #include "app.hrc"
-#include "docfile.hxx"
+#include <sfx2/docfile.hxx>
 #include "workwin.hxx"
 
 #ifdef UNX
