@@ -4,9 +4,9 @@
  *
  *  $RCSfile: fmview.cxx,v $
  *
- *  $Revision: 1.48 $
+ *  $Revision: 1.49 $
  *
- *  last change: $Author: kz $ $Date: 2007-05-10 10:06:51 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 18:16:32 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -112,22 +112,22 @@
 #include "svditer.hxx"
 #endif
 #ifndef _SVDPAGV_HXX //autogen
-#include "svdpagv.hxx"
+#include <svx/svdpagv.hxx>
 #endif
 #ifndef _SVDOGRP_HXX //autogen
-#include <svdogrp.hxx>
+#include <svx/svdogrp.hxx>
 #endif
 #ifndef _FM_FMVIEW_HXX
-#include "fmview.hxx"
+#include <svx/fmview.hxx>
 #endif
 #ifndef _FM_FMMODEL_HXX
-#include "fmmodel.hxx"
+#include <svx/fmmodel.hxx>
 #endif
 #ifndef _FM_FMPAGE_HXX
-#include "fmpage.hxx"
+#include <svx/fmpage.hxx>
 #endif
 #ifndef _SVX_FMSHELL_HXX
-#include "fmshell.hxx"
+#include <svx/fmshell.hxx>
 #endif
 #ifndef _SVX_FMPGEIMP_HXX
 #include "fmpgeimp.hxx"
@@ -148,7 +148,7 @@
 #include "fmundo.hxx"
 #endif
 #ifndef _SVX_DATACCESSDESCRIPTOR_HXX_
-#include "dataaccessdescriptor.hxx"
+#include <svx/dataaccessdescriptor.hxx>
 #endif
 
 #ifndef _COMPHELPER_PROCESSFACTORY_HXX_
@@ -179,10 +179,10 @@
 #ifndef _VCL_STDTEXT_HXX
 #include <vcl/stdtext.hxx>
 #endif
-#include "fmglob.hxx"
+#include <svx/fmglob.hxx>
 
 #ifndef _SDRPAGEWINDOW_HXX
-#include "sdrpagewindow.hxx"
+#include <svx/sdrpagewindow.hxx>
 #endif
 
 #ifndef _SDRPAINTWINDOW_HXX
