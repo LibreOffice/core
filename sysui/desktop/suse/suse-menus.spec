@@ -36,7 +36,7 @@ export KDEMAINDIR=/opt/kde3
 export GNOMEDIR=/opt/gnome
 export GNOME_MIME_THEME=hicolor
 
-create_tree.sh
+./create_tree.sh
 
 %clean
 rm -rf $RPM_BUILD_ROOT/*
