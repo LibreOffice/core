@@ -2,5 +2,7 @@
 ..\%__SRC%\class\java_accessibility.jar %_DEST%\bin%_EXT%\java_accessibility.jar
 
 ..\%__SRC%\bin\*.dll %_DEST%\bin%_EXT%\*.dll
+..\%__SRC%\bin\*.res %_DEST%\bin%_EXT%\*.res
 ..\%__SRC%\lib\lib*.so %_DEST%\lib%_EXT%
+..\%__SRC%\lib\*.dylib %_DEST%\lib%_EXT%\*.dylib
 
