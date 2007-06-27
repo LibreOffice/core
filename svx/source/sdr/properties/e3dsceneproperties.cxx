@@ -4,9 +4,9 @@
  *
  *  $RCSfile: e3dsceneproperties.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: ihi $ $Date: 2006-11-14 13:36:36 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 18:51:39 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -49,11 +49,11 @@
 #endif
 
 #ifndef _SVDDEF_HXX
-#include <svddef.hxx>
+#include <svx/svddef.hxx>
 #endif
 
 #ifndef _E3D_SCENE3D_HXX
-#include <scene3d.hxx>
+#include <svx/scene3d.hxx>
 #endif
 
 #ifndef _SVDITER_HXX
