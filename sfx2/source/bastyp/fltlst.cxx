@@ -4,9 +4,9 @@
  *
  *  $RCSfile: fltlst.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 16:22:53 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 23:02:46 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -53,8 +53,8 @@
 #include <comphelper/processfactory.hxx>
 #endif
 
-#include "sfxuno.hxx"
-#include "docfac.hxx"
+#include <sfx2/sfxuno.hxx>
+#include <sfx2/docfac.hxx>
 
 #include <vcl/svapp.hxx>
 #include <vos/mutex.hxx>
