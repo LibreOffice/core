@@ -4,9 +4,9 @@
  *
  *  $RCSfile: cvtgrf.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 11:59:14 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 20:11:36 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -40,16 +40,16 @@
 #include <svsys.h>
 #endif
 #ifndef _SV_METAACT_HXX
-#include <metaact.hxx>
+#include <vcl/metaact.hxx>
 #endif
 #ifndef _SV_SALINST_HXX
-#include <salinst.hxx>
+#include <vcl/salinst.hxx>
 #endif
 #ifndef _SV_SVDATA_HXX
-#include <svdata.hxx>
+#include <vcl/svdata.hxx>
 #endif
 #ifndef _SV_CVTGRF_HXX
-#include <cvtgrf.hxx>
+#include <vcl/cvtgrf.hxx>
 #endif
 
 // --------------
