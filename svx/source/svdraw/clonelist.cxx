@@ -4,9 +4,9 @@
  *
  *  $RCSfile: clonelist.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 05:46:24 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 18:56:15 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -45,11 +45,11 @@
 #endif
 
 #ifndef _SVDOEDGE_HXX
-#include <svdoedge.hxx>
+#include <svx/svdoedge.hxx>
 #endif
 
 #ifndef _E3D_SCENE3D_HXX
-#include "scene3d.hxx"
+#include <svx/scene3d.hxx>
 #endif
 
 CloneList::CloneList()
