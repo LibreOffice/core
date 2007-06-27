@@ -4,9 +4,9 @@
  *
  *  $RCSfile: lightdlg.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: ihi $ $Date: 2006-11-14 12:40:03 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 16:33:03 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -37,7 +37,7 @@
 #ifndef _SVX_LIGHT3D_HXX_
 #define _SVX_LIGHT3D_HXX_
 
-#include "dlgctl3d.hxx"
+#include <svx/dlgctl3d.hxx>
 
 #ifndef _SV_FIXED_HXX //autogen
 #include <vcl/fixed.hxx>
@@ -60,7 +60,7 @@
 #endif
 
 #ifndef _SVX_DLG_CTRL_HXX //autogen
-#include "dlgctrl.hxx"
+#include <svx/dlgctrl.hxx>
 #endif
 
 /*************************************************************************
