@@ -4,9 +4,9 @@
  *
  *  $RCSfile: statemnt.cxx,v $
  *
- *  $Revision: 1.33 $
+ *  $Revision: 1.34 $
  *
- *  last change: $Author: vg $ $Date: 2007-06-21 07:31:54 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 21:00:43 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -204,7 +204,7 @@
 #endif
 
 #ifndef _COMMUNI_HXX
-#include "communi.hxx"
+#include <automation/communi.hxx>
 #endif
 
 #ifndef SVTOOLS_TESTTOOL_HXX
