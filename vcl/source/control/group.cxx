@@ -4,9 +4,9 @@
  *
  *  $RCSfile: group.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 11:53:20 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 20:06:18 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -37,13 +37,13 @@
 #include "precompiled_vcl.hxx"
 
 #ifndef _SV_EVENT_HXX
-#include <event.hxx>
+#include <vcl/event.hxx>
 #endif
 #ifndef _SV_GROUP_HXX
-#include <group.hxx>
+#include <vcl/group.hxx>
 #endif
 #ifndef _VCL_CONTROLLAYOUT_HXX
-#include <controllayout.hxx>
+#include <vcl/controllayout.hxx>
 #endif
 
 #ifndef _SV_RC_H
