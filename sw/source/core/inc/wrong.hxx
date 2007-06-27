@@ -4,9 +4,9 @@
  *
  *  $RCSfile: wrong.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: rt $ $Date: 2007-04-25 09:06:52 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 13:18:38 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -36,6 +36,10 @@
 #ifndef _WRONG_HXX
 #define _WRONG_HXX
 
+#ifndef _COM_SUN_STAR_SMARTTAGS_XSMARTTAGPROPERTIES_HPP_
+#include <com/sun/star/container/XStringKeyMap.hpp>
+#endif
+
 #include <vector>
 
 class SwWrongList;
@@ -44,12 +48,19 @@ class SwWrongList;
 class SwWrongArea
 {
 public:
+    rtl::OUString maType;
+    com::sun::star::uno::Reference< com::sun::star::container::XStringKeyMap > mxPropertyBag;
     xub_StrLen mnPos;
     xub_StrLen mnLen;
     SwWrongList* mpSubList;
+
     SwWrongArea() : mnPos(0), mnLen(0), mpSubList(NULL) {}
-    SwWrongArea( xub_StrLen pos, xub_StrLen len, SwWrongList* pSubList )
-        : mnPos(pos), mnLen(len), mpSubList(pSubList) {}
+    SwWrongArea( const rtl::OUString& rType,
+                 com::sun::star::uno::Reference< com::sun::star::container::XStringKeyMap > xPropertyBag,
+                 xub_StrLen nPos,
+                 xub_StrLen nLen,
+                 SwWrongList* pSubList )
+        : maType(rType), mxPropertyBag(xPropertyBag), mnPos(nPos), mnLen(nLen), mpSubList(pSubList) {}
 };
 
 class SwWrongList
@@ -98,7 +109,7 @@ public:
     BOOL InvalidateWrong();
     BOOL Fresh( xub_StrLen &rStart, xub_StrLen &rEnd, xub_StrLen nPos,
             xub_StrLen nLen, USHORT nIndex, xub_StrLen nCursorPos );
-    USHORT GetPos( xub_StrLen nValue ) const;
+    USHORT GetWrongPos( xub_StrLen nValue ) const;
 
     sal_Bool Check( xub_StrLen &rChk, xub_StrLen &rLn ) const;
     sal_Bool InWrongWord( xub_StrLen &rChk, xub_StrLen &rLn ) const;
@@ -125,15 +136,21 @@ public:
 
     inline USHORT Count() const { return (USHORT)maList.size(); }
 
-    inline void Insert( xub_StrLen nNewPos, xub_StrLen nNewLen, USHORT nWhere )
+    inline void Insert( const rtl::OUString& rType,
+                        com::sun::star::uno::Reference< com::sun::star::container::XStringKeyMap > xPropertyBag,
+                        xub_StrLen nNewPos, xub_StrLen nNewLen, USHORT nWhere )
     {
         std::vector<SwWrongArea>::iterator i = maList.begin();
         if ( nWhere >= maList.size() )
             i = maList.end(); // robust
         else
             i += nWhere;
-        maList.insert(i, SwWrongArea( nNewPos, nNewLen, 0 ) );
+        maList.insert(i, SwWrongArea( rType, xPropertyBag, nNewPos, nNewLen, 0 ) );
     }
+
+    void Insert( const rtl::OUString& rType,
+                 com::sun::star::uno::Reference< com::sun::star::container::XStringKeyMap > xPropertyBag,
+                 xub_StrLen nNewPos, xub_StrLen nNewLen );
 
     inline SwWrongList* SubList( USHORT nIdx ) const
     {
@@ -147,11 +164,13 @@ public:
             i = maList.end(); // robust
         else
             i += nWhere;
-        maList.insert(i, SwWrongArea( nNewPos, nNewLen, pSubList ) );
+        maList.insert(i, SwWrongArea( rtl::OUString(), 0, nNewPos, nNewLen, pSubList ) );
     }
 
+    inline const SwWrongArea* GetElement( USHORT nIdx ) const
+    {
+        return nIdx < maList.size() ? &maList[nIdx] : 0;
+    }
 };
 
-
 #endif
-
