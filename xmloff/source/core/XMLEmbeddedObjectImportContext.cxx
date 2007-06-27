@@ -4,9 +4,9 @@
  *
  *  $RCSfile: XMLEmbeddedObjectImportContext.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: hr $ $Date: 2007-06-26 15:52:11 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 14:55:45 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -68,22 +68,22 @@
 #endif
 
 #ifndef _XMLOFF_NMSPMAP_HXX
-#include "nmspmap.hxx"
+#include <xmloff/nmspmap.hxx>
 #endif
 #ifndef _XMLOFF_XMLIMP_HXX
-#include "xmlimp.hxx"
+#include <xmloff/xmlimp.hxx>
 #endif
 #ifndef _XMLOFF_XMLNMSPE_HXX
 #include "xmlnmspe.hxx"
 #endif
 #ifndef _XMLOFF_XMLTOKEN_HXX
-#include "xmltoken.hxx"
+#include <xmloff/xmltoken.hxx>
 #endif
 #ifndef _XMLOFF_XMLERROR_HXX
 #include "xmlerror.hxx"
 #endif
 #ifndef _XMLOFF_ATTRLIST_HXX
-#include "attrlist.hxx"
+#include <xmloff/attrlist.hxx>
 #endif
 
 #ifndef _XMLOFF_XMLFILTERSERVICENAMES_H
