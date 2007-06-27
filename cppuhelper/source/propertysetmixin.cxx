@@ -4,9 +4,9 @@
  *
  *  $RCSfile: propertysetmixin.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: hr $ $Date: 2007-01-03 11:37:19 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 13:21:55 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1223,7 +1223,8 @@ void PropertySetMixinImpl::addPropertyChangeListener(
         css::beans::UnknownPropertyException, css::lang::WrappedTargetException,
         css::uno::RuntimeException)
 {
-    OSL_ASSERT(listener.is());
+    css::uno::Reference< css::beans::XPropertyChangeListener >(
+        listener, css::uno::UNO_QUERY_THROW); // reject NULL listener
     checkUnknown(propertyName);
     try {
         bool disposed;
@@ -1279,7 +1280,8 @@ void PropertySetMixinImpl::addVetoableChangeListener(
         css::beans::UnknownPropertyException, css::lang::WrappedTargetException,
         css::uno::RuntimeException)
 {
-    OSL_ASSERT(listener.is());
+    css::uno::Reference< css::beans::XVetoableChangeListener >(
+        listener, css::uno::UNO_QUERY_THROW); // reject NULL listener
     checkUnknown(propertyName);
     try {
         bool disposed;
