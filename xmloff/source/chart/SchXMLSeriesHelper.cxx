@@ -4,9 +4,9 @@
  *
  *  $RCSfile: SchXMLSeriesHelper.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: vg $ $Date: 2007-05-22 16:07:22 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 13:57:15 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -70,6 +70,7 @@
 #include <typeinfo>
 
 using namespace ::com::sun::star;
+using namespace rtl;
 
 using ::com::sun::star::uno::Reference;
 using ::com::sun::star::uno::Sequence;
@@ -105,11 +106,13 @@ using ::rtl::OUString;
     catch( uno::Exception & ex )
     {
         (void)ex; // avoid warning for pro build
-        OSL_ENSURE( false, OUStringToOString(
+
+        OSL_ENSURE( false, OUStringToOString( OUString(
                         OUString( RTL_CONSTASCII_USTRINGPARAM( "Exception caught. Type: " )) +
                         OUString::createFromAscii( typeid( ex ).name()) +
                         OUString( RTL_CONSTASCII_USTRINGPARAM( ", Message: " )) +
-                        ex.Message, RTL_TEXTENCODING_ASCII_US ).getStr());
+                        ex.Message), RTL_TEXTENCODING_ASCII_US ).getStr());
+
     }
 
     return aResult;
@@ -320,3 +323,4 @@ uno::Reference< beans::XPropertySet > SchXMLSeriesHelper::createOldAPIDataPointP
 
     return xRet;
 }
+
