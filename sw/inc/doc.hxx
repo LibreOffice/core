@@ -4,9 +4,9 @@
  *
  *  $RCSfile: doc.hxx,v $
  *
- *  $Revision: 1.137 $
+ *  $Revision: 1.138 $
  *
- *  last change: $Author: kz $ $Date: 2007-06-20 10:10:52 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 13:13:17 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1737,7 +1737,7 @@ public:
     sal_Bool DeleteSelection( SwDrawView& );
 
     // Invalidiert OnlineSpell-WrongListen
-    void SpellItAgainSam( sal_Bool bInvalid, sal_Bool bOnlyWrong );
+    void SpellItAgainSam( sal_Bool bInvalid, sal_Bool bOnlyWrong, sal_Bool bSmartTags );
     void InvalidateAutoCompleteFlag();
 
     // <--
