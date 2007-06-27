@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.19 $
+#   $Revision: 1.20 $
 #
-#   last change: $Author: obo $ $Date: 2007-03-09 08:59:04 $
+#   last change: $Author: hr $ $Date: 2007-06-27 14:37:42 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -60,6 +60,7 @@ SLOFILES=\
         $(SLO)$/CallableStatement.obj				\
         $(SLO)$/Class.obj							\
         $(SLO)$/Clob.obj							\
+        $(SLO)$/ConnectionLog.obj                   \
         $(SLO)$/DatabaseMetaData.obj				\
         $(SLO)$/Date.obj							\
         $(SLO)$/DriverManager.obj					\
