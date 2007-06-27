@@ -4,9 +4,9 @@
  *
  *  $RCSfile: XMLImageMapExport.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: hr $ $Date: 2007-06-26 13:35:30 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 14:59:27 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -93,7 +93,7 @@
 #endif
 
 #ifndef _XMLOFF_XMLEXP_HXX
-#include "xmlexp.hxx"
+#include <xmloff/xmlexp.hxx>
 #endif
 
 #ifndef _XMLOFF_XMLNMSPE_HXX
@@ -101,15 +101,15 @@
 #endif
 
 #ifndef _XMLOFF_XMLTOKEN_HXX
-#include "xmltoken.hxx"
+#include <xmloff/xmltoken.hxx>
 #endif
 
 #ifndef _XMLOFF_XMLEVENTEXPORT_HXX
-#include "XMLEventExport.hxx"
+#include <xmloff/XMLEventExport.hxx>
 #endif
 
 #ifndef _XMLOFF_XMLUCONV_HXX
-#include "xmluconv.hxx"
+#include <xmloff/xmluconv.hxx>
 #endif
 
 #ifndef _XEXPTRANSFORM_HXX
