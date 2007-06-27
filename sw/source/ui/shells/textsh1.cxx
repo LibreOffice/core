@@ -4,9 +4,9 @@
  *
  *  $RCSfile: textsh1.cxx,v $
  *
- *  $Revision: 1.56 $
+ *  $Revision: 1.57 $
  *
- *  last change: $Author: kz $ $Date: 2007-05-10 16:24:35 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 13:26:08 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -114,6 +114,9 @@
 #endif
 #ifndef _SVX_FONTITEM_HXX
 #include <svx/fontitem.hxx>
+#endif
+#ifndef _SVX_SMARTTAGITEM_HXX
+#include <svx/SmartTagItem.hxx>
 #endif
 #ifndef _SVX_DIALMGR_HXX
 #include <svx/dialmgr.hxx>
@@ -246,11 +249,19 @@
 #include <vcl/svapp.hxx>
 #include <sfx2/app.hxx>
 
+#ifndef _BREAKIT_HXX
+#include <breakit.hxx>
+#endif
+
+#include <SwSmartTagMgr.hxx>
+
 #include <svx/acorrcfg.hxx>
 #include "swabstdlg.hxx" //CHINA001
 #include "misc.hrc" //CHINA001
 #include "chrdlg.hrc" //CHINA001
 #include <IDocumentStatistics.hxx>
+
+using namespace ::com::sun::star;
 
 /*--------------------------------------------------------------------
     Beschreibung:
@@ -1187,9 +1198,7 @@ void SwTextShell::Execute(SfxRequest &rReq)
             rWrtSh.ClickToINetAttr((const SwFmtINetFmt&)rItem, URLLOAD_NOFILTER);
         }
     }
-
     break;
-
     case SID_OPEN_XML_FILTERSETTINGS:
     {
         try
@@ -1471,6 +1480,46 @@ void SwTextShell::GetState( SfxItemSet &rSet )
                 rSh.GetAttr(aSet);
                 if(SFX_ITEM_SET > aSet.GetItemState( RES_TXTATR_INETFMT, FALSE ))
                     rSet.DisableItem(nWhich);
+            }
+            break;
+            case  SID_OPEN_SMARTTAGMENU:
+            {
+                 uno::Sequence< rtl::OUString > aSmartTagTypes;
+                 uno::Sequence< uno::Reference< container::XStringKeyMap > > aStringKeyMaps;
+                 uno::Reference<text::XTextRange> xRange;
+
+                 rSh.GetSmartTagTerm( aSmartTagTypes, aStringKeyMaps, xRange );
+
+                 if ( xRange.is() && aSmartTagTypes.getLength() )
+                 {
+                     uno::Sequence < uno::Sequence< uno::Reference< smarttags::XSmartTagAction > > > aActionComponentsSequence;
+                     uno::Sequence < uno::Sequence< sal_Int32 > > aActionIndicesSequence;
+
+                     const SmartTagMgr& rSmartTagMgr = SwSmartTagMgr::Get();
+                     rSmartTagMgr.GetActionSequences( aSmartTagTypes,
+                                                      aActionComponentsSequence,
+                                                      aActionIndicesSequence );
+
+                     SwView& rView = GetView();
+                     uno::Reference <frame::XController> xController = rView.GetController();
+                     const lang::Locale aLocale( SW_BREAKITER()->GetLocale( (LanguageType)GetAppLanguage() ) );
+                     const rtl::OUString aApplicationName( rSmartTagMgr.GetApplicationName() );
+                     const rtl::OUString aRangeText = xRange->getString();
+
+                     const SvxSmartTagItem aItem( nWhich,
+                                                  aActionComponentsSequence,
+                                                  aActionIndicesSequence,
+                                                  aStringKeyMaps,
+                                                  xRange,
+                                                  xController,
+                                                  aLocale,
+                                                  aApplicationName,
+                                                  aRangeText );
+
+                     rSet.Put( aItem );
+                 }
+                 else
+                     rSet.DisableItem(nWhich);
             }
             break;
             case FN_NUM_CONTINUE:
