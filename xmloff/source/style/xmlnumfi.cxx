@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xmlnumfi.cxx,v $
  *
- *  $Revision: 1.45 $
+ *  $Revision: 1.46 $
  *
- *  last change: $Author: obo $ $Date: 2006-10-12 14:52:27 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 15:48:03 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -51,17 +51,17 @@
 // #110680#
 //#include <comphelper/processfactory.hxx>
 
-#include "xmlnumfi.hxx"
-#include "xmltkmap.hxx"
+#include <xmloff/xmlnumfi.hxx>
+#include <xmloff/xmltkmap.hxx>
 #include "xmlnmspe.hxx"
-#include "xmlictxt.hxx"
-#include "xmlimp.hxx"
-#include "xmluconv.hxx"
-#include "nmspmap.hxx"
-#include "families.hxx"
+#include <xmloff/xmlictxt.hxx>
+#include <xmloff/xmlimp.hxx>
+#include <xmloff/xmluconv.hxx>
+#include <xmloff/nmspmap.hxx>
+#include <xmloff/families.hxx>
 
 #ifndef _XMLOFF_XMLTOKEN_HXX
-#include "xmltoken.hxx"
+#include <xmloff/xmltoken.hxx>
 #endif
 
 using namespace ::rtl;
