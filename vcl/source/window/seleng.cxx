@@ -4,9 +4,9 @@
  *
  *  $RCSfile: seleng.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 12:20:46 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 20:33:17 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -37,8 +37,8 @@
 #include "precompiled_vcl.hxx"
 
 #include <tools/ref.hxx>
-#include <window.hxx>
-#include <seleng.hxx>
+#include <vcl/window.hxx>
+#include <vcl/seleng.hxx>
 #include <tools/debug.hxx>
 
 
