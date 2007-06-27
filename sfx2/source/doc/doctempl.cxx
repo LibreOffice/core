@@ -4,9 +4,9 @@
  *
  *  $RCSfile: doctempl.cxx,v $
  *
- *  $Revision: 1.73 $
+ *  $Revision: 1.74 $
  *
- *  last change: $Author: hr $ $Date: 2007-06-27 12:55:12 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 23:20:54 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -191,15 +191,15 @@ using namespace ::rtl;
 using namespace ::ucbhelper;
 
 
-#include "doctempl.hxx"
-#include "docfac.hxx"
-#include "docfile.hxx"
-#include "objsh.hxx"
+#include <sfx2/doctempl.hxx>
+#include <sfx2/docfac.hxx>
+#include <sfx2/docfile.hxx>
+#include <sfx2/objsh.hxx>
 #include "sfxtypes.hxx"
-#include "app.hxx"
+#include <sfx2/app.hxx>
 #include "sfxresid.hxx"
 #include "doc.hrc"
-#include "fcontnr.hxx"
+#include <sfx2/fcontnr.hxx>
 
 #ifndef SFX2_TEMPLATEFOLDERCACHE_HXX
 #include <svtools/templatefoldercache.hxx>
