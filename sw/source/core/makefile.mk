@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.13 $
+#   $Revision: 1.14 $
 #
-#   last change: $Author: kz $ $Date: 2007-05-10 15:54:32 $
+#   last change: $Author: hr $ $Date: 2007-06-27 13:16:34 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -74,7 +74,6 @@ SUBLIBS3= \
         $(SLB)$/docnode.lib \
                 $(SLB)$/unocore.lib \
                 $(SLB)$/objectpositioning.lib \
-                $(SLB)$/smarttags.lib \
                 $(SLB)$/SwNumberTree.lib \
                 $(SLB)$/tablecore.lib
 
