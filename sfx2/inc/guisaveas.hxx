@@ -4,9 +4,9 @@
  *
  *  $RCSfile: guisaveas.hxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: rt $ $Date: 2005-11-11 12:21:54 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 22:52:35 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -68,7 +68,7 @@
 
 
 #include <comphelper/sequenceashashmap.hxx>
-#include "docinf.hxx"
+#include <sfx2/docinf.hxx>
 
 class Window;
 class ModelData_Impl;
