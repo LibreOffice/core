@@ -4,9 +4,9 @@
  *
  *  $RCSfile: atkutil.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2007-01-29 14:23:57 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 12:26:48 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -470,7 +470,7 @@ static void handle_get_focus(::VclWindowEvent const * pEvent)
     Window *pWindow = pEvent->GetWindow();
 
     // The menu bar is handled through VCLEVENT_MENU_HIGHLIGHTED
-    if( ! pWindow || !pWindow->IsVisible() || pWindow->GetType() == WINDOW_MENUBARWINDOW )
+    if( ! pWindow || !pWindow->IsReallyVisible() || pWindow->GetType() == WINDOW_MENUBARWINDOW )
         return;
 
     // ToolBoxes are handled through VCLEVENT_TOOLBOX_HIGHLIGHT
