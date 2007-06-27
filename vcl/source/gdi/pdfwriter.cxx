@@ -4,9 +4,9 @@
  *
  *  $RCSfile: pdfwriter.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: obo $ $Date: 2007-06-11 14:24:57 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 20:20:59 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -37,8 +37,8 @@
 #include "precompiled_vcl.hxx"
 
 #include <pdfwriter_impl.hxx>
-#include <bitmapex.hxx>
-#include <image.hxx>
+#include <vcl/bitmapex.hxx>
+#include <vcl/image.hxx>
 
 using namespace vcl;
 
