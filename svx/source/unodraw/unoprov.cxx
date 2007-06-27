@@ -4,9 +4,9 @@
  *
  *  $RCSfile: unoprov.cxx,v $
  *
- *  $Revision: 1.67 $
+ *  $Revision: 1.68 $
  *
- *  last change: $Author: vg $ $Date: 2007-05-22 15:21:31 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 19:26:10 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -73,15 +73,15 @@
 #include <comphelper/propertysetinfo.hxx>
 
 #ifndef _SVX_DIALMGR_HXX
-#include "dialmgr.hxx"
+#include <svx/dialmgr.hxx>
 #endif
 
 #include "unoapi.hxx"
-#include "unotext.hxx"
-#include "unoshprp.hxx"
-#include "svdobj.hxx"
+#include <svx/unotext.hxx>
+#include <svx/unoshprp.hxx>
+#include <svx/svdobj.hxx>
 #include "globl3d.hxx"
-#include "dialogs.hrc"
+#include <svx/dialogs.hrc>
 
 using namespace ::rtl;
 using namespace ::com::sun::star;
