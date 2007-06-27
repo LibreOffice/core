@@ -4,9 +4,9 @@
  *
  *  $RCSfile: unocontrolmodel.cxx,v $
  *
- *  $Revision: 1.54 $
+ *  $Revision: 1.55 $
  *
- *  last change: $Author: kz $ $Date: 2007-06-20 10:26:37 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 12:21:50 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1384,7 +1384,10 @@ void UnoControlModel::setPropertyValue( const ::rtl::OUString& rPropertyName, co
         nPropId = (sal_Int32) GetPropertyId( rPropertyName );
         DBG_ASSERT( nPropId, "Invalid ID in UnoControlModel::setPropertyValue" );
     }
-    setFastPropertyValue( nPropId, rValue );
+    if( nPropId )
+        setFastPropertyValue( nPropId, rValue );
+    else
+        throw ::com::sun::star::beans::UnknownPropertyException();
 }
 
 // ::com::sun::star::beans::XFastPropertySet
