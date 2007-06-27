@@ -4,9 +4,9 @@
  *
  *  $RCSfile: Object.cxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 02:47:32 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 14:36:43 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -63,10 +63,15 @@
 #include <com/sun/star/uno/Sequence.hxx>
 #endif
 
+#include "resource/jdbc_log.hrc"
+
+#include <comphelper/logging.hxx>
+
+#include <memory>
+
 using namespace connectivity;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::beans;
-//  using namespace ::com::sun::star::sdbcx;
 using namespace ::com::sun::star::sdbc;
 using namespace ::com::sun::star::container;
 using namespace ::com::sun::star::lang;
@@ -240,39 +245,62 @@ java_lang_Class * java_lang_Object::getClass()
     } //pEnv
     return  aStr;
 }
+
 // --------------------------------------------------------------------------------
-void java_lang_Object::ThrowSQLException(JNIEnv * pEnv,const Reference< XInterface> & _rContext) throw(SQLException, RuntimeException)
+namespace
 {
-    jthrowable jThrow = pEnv ? pEnv->ExceptionOccurred() : NULL;
-    if ( jThrow )
+    bool    lcl_translateJNIExceptionToUNOException(
+        JNIEnv* _pEnvironment, const Reference< XInterface >& _rxContext, SQLException& _out_rException )
     {
-        pEnv->ExceptionClear();// we have to clear the exception here because we want to handle it itself
-        if(pEnv->IsInstanceOf(jThrow,java_sql_SQLException_BASE::getMyClass()))
+        jthrowable jThrow = _pEnvironment ? _pEnvironment->ExceptionOccurred() : NULL;
+        if ( !jThrow )
+            return false;
+
+        _pEnvironment->ExceptionClear();
+            // we have to clear the exception here because we want to handle it itself
+
+        if ( _pEnvironment->IsInstanceOf( jThrow, java_sql_SQLException_BASE::getMyClass() ) )
         {
-            java_sql_SQLException_BASE* pException = new java_sql_SQLException_BASE(pEnv,jThrow);
-            SQLException e( pException->getMessage(),
-                                _rContext,
-                                pException->getSQLState(),
-                                pException->getErrorCode(),
-                                Any()
-                            );
-            delete pException;
-            throw  e;
+            ::std::auto_ptr< java_sql_SQLException_BASE > pException( new java_sql_SQLException_BASE( _pEnvironment, jThrow ) );
+            _out_rException = SQLException( pException->getMessage(), _rxContext,
+                pException->getSQLState(), pException->getErrorCode(), Any() );
+            return true;
         }
-        else if(pEnv->IsInstanceOf(jThrow,java_lang_Throwable::getMyClass()))
+        else if ( _pEnvironment->IsInstanceOf( jThrow, java_lang_Throwable::getMyClass() ) )
         {
-            java_lang_Throwable *pThrow = new java_lang_Throwable(pEnv,jThrow);
-            ::rtl::OUString aMsg = pThrow->getMessage();
-            if(!aMsg.getLength())
-                aMsg = pThrow->getLocalizedMessage();
-            if(!aMsg.getLength())
-                aMsg = pThrow->toString();
-            delete pThrow;
-            throw SQLException(aMsg,_rContext,::rtl::OUString(),-1,Any());
+            ::std::auto_ptr< java_lang_Throwable > pThrow( new java_lang_Throwable( _pEnvironment, jThrow ) );
+            ::rtl::OUString sMessage = pThrow->getMessage();
+            if ( !sMessage.getLength() )
+                sMessage = pThrow->getLocalizedMessage();
+            if(  !sMessage.getLength() )
+                sMessage = pThrow->toString();
+            _out_rException = SQLException( sMessage, _rxContext, ::rtl::OUString(), -1, Any() );
+            return true;
         }
         else
-            pEnv->DeleteLocalRef( jThrow );
+            _pEnvironment->DeleteLocalRef( jThrow );
+        return false;
     }
+}
+
+// --------------------------------------------------------------------------------
+void java_lang_Object::ThrowLoggedSQLException( const ::comphelper::ResourceBasedEventLogger& _rLogger, JNIEnv* _pEnvironment,
+    const Reference< XInterface >& _rxContext )
+{
+    SQLException aException;
+    if ( lcl_translateJNIExceptionToUNOException( _pEnvironment, _rxContext, aException ) )
+    {
+        _rLogger.log( ::com::sun::star::logging::LogLevel::SEVERE, STR_LOG_THROWING_EXCEPTION, aException.Message, aException.SQLState, aException.ErrorCode );
+        throw aException;
+    }
+}
+
+// --------------------------------------------------------------------------------
+void java_lang_Object::ThrowSQLException( JNIEnv* _pEnvironment, const Reference< XInterface>& _rxContext )
+{
+    SQLException aException;
+    if ( lcl_translateJNIExceptionToUNOException( _pEnvironment, _rxContext, aException ) )
+        throw aException;
 }
 
 
