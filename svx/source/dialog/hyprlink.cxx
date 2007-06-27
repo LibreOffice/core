@@ -4,9 +4,9 @@
  *
  *  $RCSfile: hyprlink.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: rt $ $Date: 2007-04-26 07:34:29 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 17:13:11 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -79,9 +79,9 @@
 #endif
 
 #include "hlnkitem.hxx"
-#include "dialogs.hrc"
+#include <svx/dialogs.hrc>
 #include "hyprlink.hrc"
-#include "dialmgr.hxx"
+#include <svx/dialmgr.hxx>
 #include "hyprlink.hxx"
 #include "hyprdlg.hxx"
 
