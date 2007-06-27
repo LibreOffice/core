@@ -4,9 +4,9 @@
  *
  *  $RCSfile: selector.cxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: rt $ $Date: 2007-04-26 07:42:29 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 17:38:32 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -47,11 +47,11 @@
 #endif
 
 #include "selector.hxx"
-#include "dialmgr.hxx"
+#include <svx/dialmgr.hxx>
 
 #include "selector.hrc"
 #include "fmresids.hrc"
-#include "dialogs.hrc"
+#include <svx/dialogs.hrc>
 
 #include <sfx2/app.hxx>
 #include <sfx2/msg.hxx>
