@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ximpbody.cxx,v $
  *
- *  $Revision: 1.33 $
+ *  $Revision: 1.34 $
  *
- *  last change: $Author: hr $ $Date: 2007-06-27 15:09:01 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 15:32:47 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -79,6 +79,8 @@
 #include <com/sun/star/animations/XAnimationNodeSupplier.hpp>
 #endif
 
+#include "unointerfacetouniqueidentifiermapper.hxx"
+
 #ifndef _XMLOFF_XMLUCONV_HXX
 #include <xmloff/xmluconv.hxx>
 #endif
@@ -117,9 +119,8 @@ SdXMLDrawPageContext::SdXMLDrawPageContext( SdXMLImport& rImport,
     const com::sun::star::uno::Reference< com::sun::star::xml::sax::XAttributeList>& xAttrList,
     uno::Reference< drawing::XShapes >& rShapes)
 :   SdXMLGenericPageContext( rImport, nPrfx, rLocalName, xAttrList, rShapes )
+,   mbHadSMILNodes( false )
 {
-    sal_Int32 nPageId = -1;
-
     sal_Int16 nAttrCount = xAttrList.is() ? xAttrList->getLength() : 0;
 
     for(sal_Int16 i=0; i < nAttrCount; i++)
@@ -170,9 +171,8 @@ SdXMLDrawPageContext::SdXMLDrawPageContext( SdXMLImport& rImport,
 
             case XML_TOK_DRAWPAGE_ID:
             {
-                sal_Int32 nId;
-                if( SvXMLUnitConverter::convertNumber( nId, sValue ) )
-                    nPageId = nId;
+                uno::Reference< uno::XInterface > xRef( rShapes.get() );
+                GetImport().getInterfaceToIdentifierMapper().registerReference( sValue, xRef );
                 break;
             }
             case XML_TOK_DRAWPAGE_HREF:
@@ -316,7 +316,10 @@ SvXMLImportContext *SdXMLDrawPageContext::CreateChildContext( USHORT nPrefix,
             {
                 uno::Reference< animations::XAnimationNodeSupplier > xNodeSupplier(GetLocalShapesContext(), uno::UNO_QUERY);
                 if(xNodeSupplier.is())
+                {
                     pContext = new xmloff::AnimationNodeContext( xNodeSupplier->getAnimationNode(), GetSdImport(), nPrefix, rLocalName, xAttrList );
+                    mbHadSMILNodes = true;
+                }
             }
             break;
         }
@@ -333,6 +336,14 @@ void SdXMLDrawPageContext::EndElement()
 {
     SdXMLGenericPageContext::EndElement();
     GetImport().GetShapeImport()->endPage(GetLocalShapesContext());
+
+    if( mbHadSMILNodes )
+    {
+        uno::Reference< animations::XAnimationNodeSupplier > xNodeSupplier(GetLocalShapesContext(), uno::UNO_QUERY);
+        uno::Reference< beans::XPropertySet > xPageProps( GetLocalShapesContext(), uno::UNO_QUERY );
+        if(xNodeSupplier.is())
+            xmloff::AnimationNodeContext::postProcessRootNode( GetSdImport(), xNodeSupplier->getAnimationNode(), xPageProps );
+    }
 }
 
 //////////////////////////////////////////////////////////////////////////////
