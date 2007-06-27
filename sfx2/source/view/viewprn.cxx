@@ -4,9 +4,9 @@
  *
  *  $RCSfile: viewprn.cxx,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: obo $ $Date: 2007-01-25 11:52:16 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 23:36:24 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -69,25 +69,25 @@
 #include <svtools/eitem.hxx>
 #endif
 #ifndef _SFXAPP_HXX
-#include <app.hxx>
+#include <sfx2/app.hxx>
 #endif
 #include <svtools/useroptions.hxx>
 #include <svtools/printwarningoptions.hxx>
 #ifndef GCC
 #endif
 
-#include "viewsh.hxx"
+#include <sfx2/viewsh.hxx>
 #include "viewimp.hxx"
-#include "viewfrm.hxx"
-#include "prnmon.hxx"
+#include <sfx2/viewfrm.hxx>
+#include <sfx2/prnmon.hxx>
 #include "sfxresid.hxx"
-#include "request.hxx"
-#include "objsh.hxx"
+#include <sfx2/request.hxx>
+#include <sfx2/objsh.hxx>
 #include "sfxtypes.hxx"
-#include "docinf.hxx"
-#include "event.hxx"
-#include "docfile.hxx"
-#include "docfilt.hxx"
+#include <sfx2/docinf.hxx>
+#include <sfx2/event.hxx>
+#include <sfx2/docfile.hxx>
+#include <sfx2/docfilt.hxx>
 
 #include "view.hrc"
 #include "helpid.hrc"
