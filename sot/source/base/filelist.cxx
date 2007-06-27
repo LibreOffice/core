@@ -4,9 +4,9 @@
  *
  *  $RCSfile: filelist.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 16:08:14 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 22:49:00 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -40,7 +40,7 @@
 #include<tools/stream.hxx>
 #include<tools/string.hxx>
 #include<tools/rtti.hxx>
-#include<exchange.hxx>
+#include<sot/exchange.hxx>
 #include<filelist.hxx>
 
 #ifndef _OSL_THREAD_H_
