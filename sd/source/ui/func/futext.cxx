@@ -4,9 +4,9 @@
  *
  *  $RCSfile: futext.cxx,v $
  *
- *  $Revision: 1.59 $
+ *  $Revision: 1.60 $
  *
- *  last change: $Author: kz $ $Date: 2007-05-10 15:31:59 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 15:43:12 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -270,7 +270,7 @@ void FuText::disposing()
 \************************************************************************/
 void FuText::DoExecute( SfxRequest& )
 {
-    mpViewShell->GetViewShellBase().GetToolBarManager().SetToolBarShell(
+    mpViewShell->GetViewShellBase().GetToolBarManager()->SetToolBarShell(
         ToolBarManager::TBG_FUNCTION,
         RID_DRAW_TEXT_TOOLBOX);
 
