@@ -4,9 +4,9 @@
  *
  *  $RCSfile: viewobjectcontactofunocontrol.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: kz $ $Date: 2007-05-10 13:16:32 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 16:35:25 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -50,7 +50,7 @@
 #include <rtl/ref.hxx>
 #endif
 #ifndef INCLUDED_SVXDLLAPI_H
-#include "svxdllapi.h"
+#include <svx/svxdllapi.h>
 #endif
 
 class OutputDevice;
