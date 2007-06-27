@@ -4,9 +4,9 @@
  *
  *  $RCSfile: EnhancedCustomShapeFontWork.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: kz $ $Date: 2007-05-10 14:34:48 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 16:43:58 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -43,31 +43,31 @@
 #include <tools/solar.h>               // UINTXX
 #endif
 #ifndef _XOUTX_HXX
-#include "xoutx.hxx"
+#include <svx/xoutx.hxx>
 #endif
 #ifndef _SVDDEF_HXX
-#include "svddef.hxx"
+#include <svx/svddef.hxx>
 #endif
 #ifndef _SVDOGRP_HXX
-#include <svdogrp.hxx>
+#include <svx/svdogrp.hxx>
 #endif
 #ifndef _SVDOPATH_HXX
-#include <svdopath.hxx>
+#include <svx/svdopath.hxx>
 #endif
 #ifndef _SV_METRIC_HXX
 #include <vcl/metric.hxx>
 #endif
 #ifndef _SVDPAGE_HXX
-#include <svdpage.hxx>
+#include <svx/svdpage.hxx>
 #endif
 #ifndef _SDASITM_HXX
-#include <sdasitm.hxx>
+#include <svx/sdasitm.hxx>
 #endif
 #ifndef _SDASAITM_HXX
-#include <sdasaitm.hxx>
+#include <svx/sdasaitm.hxx>
 #endif
 #ifndef _SDTFSITM_HXX
-#include <sdtfsitm.hxx>
+#include <svx/sdtfsitm.hxx>
 #endif
 #ifndef _SV_VIRDEV_HXX //autogen
 #include <vcl/virdev.hxx>
@@ -79,33 +79,33 @@
 #include <vcl/metric.hxx>
 #endif
 #ifndef _EEITEM_HXX //autogen
-#include <eeitem.hxx>
+#include <svx/eeitem.hxx>
 #endif
 #ifndef _SVX_FRMDIRITEM_HXX
-#include <frmdiritem.hxx>
+#include <svx/frmdiritem.hxx>
 #endif
 #ifndef _SVX_FONTITEM_HXX //autogen
 #include <fontitem.hxx>
 #endif
 #ifndef _SVX_POSTITEM_HXX
-#include <postitem.hxx>
+#include <svx/postitem.hxx>
 #endif
 #ifndef _SVX_WGHTITEM_HXX
-#include <wghtitem.hxx>
+#include <svx/wghtitem.hxx>
 #endif
 #ifndef _SVX_CHARSCALEITEM_HXX
-#include <charscaleitem.hxx>
+#include <svx/charscaleitem.hxx>
 #endif
 #ifndef _ENHANCED_CUSTOMSHAPE_TYPE_NAMES_HXX
 #include "EnhancedCustomShapeTypeNames.hxx"
 #endif
-#include "svdorect.hxx"
-#include "svdoashp.hxx"
-#include "outliner.hxx"
-#include "outlobj.hxx"
-#include "editobj.hxx"
-#include "editeng.hxx"
-#include "svdmodel.hxx"
+#include <svx/svdorect.hxx>
+#include <svx/svdoashp.hxx>
+#include <svx/outliner.hxx>
+#include <svx/outlobj.hxx>
+#include <svx/editobj.hxx>
+#include <svx/editeng.hxx>
+#include <svx/svdmodel.hxx>
 #include <vector>
 #include <numeric>
 #include <algorithm>
