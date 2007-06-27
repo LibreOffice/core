@@ -4,9 +4,9 @@
  *
  *  $RCSfile: zoomitem.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: kz $ $Date: 2007-05-10 14:54:22 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 18:31:54 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -43,7 +43,7 @@
 #include <basic/sbxvar.hxx>
 #endif
 
-#include "zoomitem.hxx"
+#include <svx/zoomitem.hxx>
 
 #ifndef _COM_SUN_STAR_UNO_SEQUENCE_HXX_
 #include <com/sun/star/uno/Sequence.hxx>
