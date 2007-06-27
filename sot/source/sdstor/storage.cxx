@@ -4,9 +4,9 @@
  *
  *  $RCSfile: storage.cxx,v $
  *
- *  $Revision: 1.47 $
+ *  $Revision: 1.48 $
  *
- *  last change: $Author: ihi $ $Date: 2007-06-05 18:34:11 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 22:49:38 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -56,9 +56,9 @@
 #include <osl/file.hxx>
 #include <stg.hxx>
 #include <storinfo.hxx>
-#include <storage.hxx>
-#include <formats.hxx>
-#include <exchange.hxx>
+#include <sot/storage.hxx>
+#include <sot/formats.hxx>
+#include <sot/exchange.hxx>
 
 #ifndef _UNTOOLS_UCBSTREAMHELPER_HXX
 #include <unotools/ucbstreamhelper.hxx>
