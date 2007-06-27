@@ -4,9 +4,9 @@
  *
  *  $RCSfile: impedit.cxx,v $
  *
- *  $Revision: 1.61 $
+ *  $Revision: 1.62 $
  *
- *  last change: $Author: obo $ $Date: 2006-10-12 12:38:43 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 17:58:45 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -39,8 +39,8 @@
 #include <eeng_pch.hxx>
 
 #include <impedit.hxx>
-#include <editeng.hxx>
-#include <editview.hxx>
+#include <svx/editeng.hxx>
+#include <svx/editview.hxx>
 
 #ifndef _TL_POLY_HXX
 #include <tools/poly.hxx>
@@ -96,7 +96,7 @@
 
 #include <vos/mutex.hxx>
 
-#include <flditem.hxx>
+#include <svx/flditem.hxx>
 #include <svtools/intitem.hxx>
 #include <svtools/transfer.hxx>
 
