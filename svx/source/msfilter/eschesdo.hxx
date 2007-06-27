@@ -4,9 +4,9 @@
  *
  *  $RCSfile: eschesdo.hxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: hr $ $Date: 2006-06-19 16:18:25 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 18:33:41 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -35,10 +35,10 @@
 #ifndef _ESCHESDO_HXX
 #define _ESCHESDO_HXX
 #ifndef _SVX_ESCHEREX_HXX
-#include "escherex.hxx"
+#include <svx/escherex.hxx>
 #endif
 #ifndef _SVX_UNOWPAGE_HXX //autogen wg. SvxDrawPage
-#include "unopage.hxx"
+#include <svx/unopage.hxx>
 #endif
 
 #ifndef _SV_MAPMOD_HXX //autogen wg. MapMode
