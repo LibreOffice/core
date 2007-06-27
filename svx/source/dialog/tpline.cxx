@@ -4,9 +4,9 @@
  *
  *  $RCSfile: tpline.cxx,v $
  *
- *  $Revision: 1.39 $
+ *  $Revision: 1.40 $
  *
- *  last change: $Author: vg $ $Date: 2007-05-22 15:17:57 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 17:49:22 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -44,7 +44,7 @@
 
 #ifndef _SVX_SIZEITEM_HXX //autogen
 
-#include <sizeitem.hxx>
+#include <svx/sizeitem.hxx>
 #endif
 #ifndef _SHL_HXX //autogen
 #include <tools/shl.hxx>
@@ -61,7 +61,7 @@
 
 #define _SVX_TPLINE_CXX
 
-#include "dialogs.hrc"
+#include <svx/dialogs.hrc>
 #include "tabline.hrc"
 #include "dlgname.hrc"
 
@@ -70,16 +70,16 @@
 
 
 #include "xattr.hxx"
-#include "xpool.hxx"
-#include "xtable.hxx"
-#include "xoutx.hxx"
+#include <svx/xpool.hxx>
+#include <svx/xtable.hxx>
+#include <svx/xoutx.hxx>
 
 #include "drawitem.hxx"
 #include "cuitabline.hxx"
 #include "dlgname.hxx"
-#include "dialmgr.hxx"
+#include <svx/dialmgr.hxx>
 #include "dlgutil.hxx"
-#include "svdmodel.hxx"
+#include <svx/svdmodel.hxx>
 #include "svxgrahicitem.hxx"
 #include "linectrl.hrc"
 #include <sfx2/request.hxx> //add CHINA001
@@ -104,13 +104,13 @@
 
 
 #ifndef _SVDOBJ_HXX //autogen
-#include <svdobj.hxx>
+#include <svx/svdobj.hxx>
 #endif
 #ifndef _SVDVIEW_HXX //autogen
-#include <svdview.hxx>
+#include <svx/svdview.hxx>
 #endif
 #ifndef _SVDMODEL_HXX //autogen
-#include <svdmodel.hxx>
+#include <svx/svdmodel.hxx>
 #endif
 
 #ifndef _SVX_NUMVSET_HXX //autogen
@@ -120,23 +120,23 @@
 #include <vcl/msgbox.hxx>
 #endif
 #ifndef _SVX_NUMITEM_HXX //autogen
-#include <numitem.hxx>
+#include <svx/numitem.hxx>
 #endif
 #ifndef _SVX_SVXENUM_HXX //autogen
-#include <svxenum.hxx>
+#include <svx/svxenum.hxx>
 #endif
 #ifndef _SFX_OBJSH_HXX //autogen
 #include <sfx2/objsh.hxx>
 #endif
 
 #ifndef _SVX_BRSHITEM_HXX //autogen
-#include <brshitem.hxx>
+#include <svx/brshitem.hxx>
 #endif
 #ifndef _GALLERY_HXX_ //autogen
 #include <gallery.hxx>
 #endif
 #ifndef _SVX_XBITMAP_HXX //autogen
-#include <xbitmap.hxx>
+#include <svx/xbitmap.hxx>
 #endif
 #ifndef _UNOTOOLS_LOCALFILEHELPER_HXX
 #include <unotools/localfilehelper.hxx>
