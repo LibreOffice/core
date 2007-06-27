@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dbregister.src,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: ihi $ $Date: 2007-04-19 14:02:06 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 17:00:17 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -34,12 +34,12 @@
  ************************************************************************/
 
 #include "dbregister.hrc"
-#include <dialogs.hrc>
+#include <svx/dialogs.hrc>
 #ifndef _SVX_SVXIDS_HRC //autogen
-#include <svxids.hrc>
+#include <svx/svxids.hrc>
 #endif
 #ifndef _SVX_DIALOGS_HRC //autogen
-#include <dialogs.hrc>
+#include <svx/dialogs.hrc>
 #endif
 
 // RID_SFXPAGE_PATH -----------------------------------------------------
