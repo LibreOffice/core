@@ -51,6 +51,8 @@ mkdir: %_DEST%\pck%_EXT%
 ..\res\webview\webview.asp %_DEST%\pck%_EXT%\webcast.asp
 ..\res\webview\webview.pl %_DEST%\pck%_EXT%\webcast.pl
 
+..\res\buttons\*.zip %_DEST%\pck%_EXT%\*.zip
+
 mkdir: %_DEST%\inc%_EXT%\sd
 ..\inc\sddll.hxx %_DEST%\inc%_EXT%\sd\sddll.hxx
 
