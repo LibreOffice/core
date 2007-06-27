@@ -4,9 +4,9 @@
  *
  *  $RCSfile: impbmp.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: kz $ $Date: 2006-12-13 15:01:44 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 20:15:19 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -40,15 +40,15 @@
 #include <svsys.h>
 #endif
 #ifndef _SV_SALBMP_HXX
-#include <salbmp.hxx>
+#include <vcl/salbmp.hxx>
 #endif
 #ifndef _DEBUG_HXX
 #include <tools/debug.hxx>
 #endif
 #include <impbmp.hxx>
-#include <bitmap.hxx>
-#include <svdata.hxx>
-#include <salinst.hxx>
+#include <vcl/bitmap.hxx>
+#include <vcl/svdata.hxx>
+#include <vcl/salinst.hxx>
 
 // --------------
 // - ImpBitmap  -
