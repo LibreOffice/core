@@ -4,9 +4,9 @@
  *
  *  $RCSfile: menu.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: vg $ $Date: 2007-04-11 18:00:17 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 13:43:04 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -119,6 +119,8 @@ typedef USHORT MenuItemBits;
 #define MIB_ABOUT               ((MenuItemBits)0x0008)
 #define MIB_HELP                ((MenuItemBits)0x0010)
 #define MIB_POPUPSELECT         ((MenuItemBits)0x0020)
+// not in rsc/vclsrc.hxx because only a prelimitary solution
+#define MIB_NOSELECT            ((MenuItemBits)0x0040)
 
 #define MENU_FLAG_NOAUTOMNEMONICS       0x0001
 #define MENU_FLAG_HIDEDISABLEDENTRIES   0x0002
@@ -193,6 +195,7 @@ protected:
     SAL_DLLPRIVATE Menu*            ImplFindMenu( USHORT nId );
     SAL_DLLPRIVATE Size             ImplCalcSize( Window* pWin );
     SAL_DLLPRIVATE BOOL             ImplIsVisible( USHORT nPos ) const;
+    SAL_DLLPRIVATE BOOL             ImplIsSelectable( USHORT nPos ) const;
     SAL_DLLPRIVATE USHORT           ImplGetVisibleItemCount() const;
     SAL_DLLPRIVATE USHORT           ImplGetFirstVisible() const;
     SAL_DLLPRIVATE USHORT           ImplGetPrevVisible( USHORT nPos ) const;
