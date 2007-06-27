@@ -4,9 +4,9 @@
  *
  *  $RCSfile: propertyimport.cxx,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 10:38:10 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 15:18:22 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -40,13 +40,13 @@
 #include "propertyimport.hxx"
 #endif
 #ifndef _XMLOFF_XMLIMP_HXX
-#include "xmlimp.hxx"
+#include <xmloff/xmlimp.hxx>
 #endif
 #ifndef _XMLOFF_XMLUCONV_HXX
-#include "xmluconv.hxx"
+#include <xmloff/xmluconv.hxx>
 #endif
 #ifndef _XMLOFF_NMSPMAP_HXX
-#include "nmspmap.hxx"
+#include <xmloff/nmspmap.hxx>
 #endif
 #ifndef _OSL_DIAGNOSE_H_
 #include <osl/diagnose.h>
