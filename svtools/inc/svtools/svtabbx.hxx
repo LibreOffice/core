@@ -4,9 +4,9 @@
  *
  *  $RCSfile: svtabbx.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: vg $ $Date: 2007-04-11 19:38:01 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 14:41:33 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -139,6 +139,8 @@ inline long SvTabListBox::GetTab( USHORT nTab ) const
 class HeaderBar;
 namespace svt {
     class AccessibleTabListBox;
+    class IAccessibleTabListBox;
+    struct SvHeaderTabListBoxImpl;
 }
 
 class SVT_DLLPUBLIC SvHeaderTabListBox : public SvTabListBox, public svt::IAccessibleTableProvider
@@ -146,10 +148,10 @@ class SVT_DLLPUBLIC SvHeaderTabListBox : public SvTabListBox, public svt::IAcces
 private:
     typedef ::std::vector< ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible > > AccessibleChildren;
 
-    sal_Bool                    m_bFirstPaint;
-    HeaderBar*                  m_pHeaderBar;
-    svt::AccessibleTabListBox*  m_pAccessible;
-    AccessibleChildren          m_aAccessibleChildren;
+    sal_Bool                        m_bFirstPaint;
+    ::svt::SvHeaderTabListBoxImpl*  m_pImpl;
+    ::svt::IAccessibleTabListBox*   m_pAccessible;
+    AccessibleChildren              m_aAccessibleChildren;
 
     DECL_DLLPRIVATE_LINK( ScrollHdl_Impl, SvTabListBox* );
     DECL_DLLPRIVATE_LINK( CreateAccessibleHdl_Impl, HeaderBar* );
