@@ -4,9 +4,9 @@
  *
  *  $RCSfile: accessibletableprovider.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: vg $ $Date: 2007-04-11 19:11:19 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 14:41:04 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -45,20 +45,40 @@
 #ifndef _SVTOOLS_ACCESSIBLEBROWSEBOXOBJTYPE_HXX
 #include <svtools/AccessibleBrowseBoxObjType.hxx>
 #endif
-
-class MultiSelection;
+#ifndef _COM_SUN_STAR_LANG_INDEXOUTOFBOUNDSEXCEPTION_HPP_
+#include <com/sun/star/lang/IndexOutOfBoundsException.hpp>
+#endif
 
 // ============================================================================
 
-namespace svt {
+namespace svt
+{
+
+// ============================================================================
+
+#define OFFSET_DEFAULT  ((sal_Int32)-1)
+#define OFFSET_NONE     ((sal_Int32)0)
+
+// ============================================================================
+
+enum AccessibleTableChildIndex
+{
+    /** Child index of the column header bar (first row). Exists always. */
+    BBINDEX_COLUMNHEADERBAR = 0,
+    /** Child index of the row header bar ("handle column"). Exists always. */
+    BBINDEX_ROWHEADERBAR    = 1,
+    /** Child index of the data table. */
+    BBINDEX_TABLE           = 2,
+    /** Child index of the first additional control. */
+    BBINDEX_FIRSTCONTROL    = 3
+};
 
 // ============================================================================
 
 #define XACC ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible >
 
 /** This abstract class provides methods to implement an accessible table object.
-    The classes BrowseBox and SvHeaderTabListBox will derived from this class. */
-
+*/
 class IAccessibleTableProvider
 {
 public:
@@ -137,6 +157,106 @@ public:
     virtual Rectangle               GetFieldCharacterBounds(sal_Int32 _nRow,sal_Int32 _nColumnPos,sal_Int32 nIndex) = 0;
     virtual sal_Int32               GetFieldIndexAtPoint(sal_Int32 _nRow,sal_Int32 _nColumnPos,const Point& _rPoint) = 0;
 };
+
+// ----------------------------------------------------------------------------
+
+/** interface for an implementation of a table control's Accesible component
+*/
+class IAccessibleTabListBox
+{
+public:
+    /** returns the XAccessible object itself
+
+        The reference returned here can be used to control the life time of the
+        IAccessibleTableImplementation object.
+
+        The returned reference is guaranteed to not be <NULL/>.
+    */
+    virtual ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible >
+        getMyself() = 0;
+
+    virtual ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible >
+        SAL_CALL getAccessibleChild( sal_Int32 nChildIndex )
+            throw ( ::com::sun::star::lang::IndexOutOfBoundsException, ::com::sun::star::uno::RuntimeException ) = 0;
+
+    /** returns the accessible object for the row or the column header bar
+    */
+    virtual ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible >
+        getHeaderBar( ::svt::AccessibleBrowseBoxObjType _eObjType ) = 0;
+};
+
+/** interface for an implementation of a browse box's Accesible component
+*/
+class IAccessibleBrowseBox
+{
+public:
+    /** returns the XAccessible object itself
+
+        The reference returned here can be used to control the life time of the
+        IAccessibleTableImplementation object.
+
+        The returned reference is guaranteed to not be <NULL/>.
+    */
+    virtual ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible >
+        getMyself() = 0;
+
+    /** disposes the accessible implementation, so that it becomes defunc
+    */
+    virtual void dispose() = 0;
+
+    /** checks whether the accessible implementation, and its context, are still alive
+        @return  <TRUE/>, if the object is not disposed or disposing.
+    */
+    virtual sal_Bool isAlive() const = 0;
+
+    /** returns the accessible object for the row or the column header bar
+    */
+    virtual ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible >
+        getHeaderBar( ::svt::AccessibleBrowseBoxObjType _eObjType ) = 0;
+
+    /** returns the accessible object for the table representation
+    */
+    virtual ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible >
+        getTable() = 0;
+
+    /** commits the event at all listeners of the column/row header bar
+        @param nEventId
+            the event id
+        @param rNewValue
+            the new value
+        @param rOldValue
+            the old value
+    */
+    virtual void commitHeaderBarEvent(
+        sal_Int16 nEventId,
+        const ::com::sun::star::uno::Any& rNewValue,
+        const ::com::sun::star::uno::Any& rOldValue,
+        sal_Bool _bColumnHeaderBar
+    ) = 0;
+
+    /** commits the event at all listeners of the table
+        @param nEventId
+            the event id
+        @param rNewValue
+            the new value
+        @param rOldValue
+            the old value
+    */
+    virtual void commitTableEvent(
+        sal_Int16 nEventId,
+        const ::com::sun::star::uno::Any& rNewValue,
+        const ::com::sun::star::uno::Any& rOldValue
+    ) = 0;
+
+    /** Commits an event to all listeners. */
+    virtual void commitEvent(
+        sal_Int16 nEventId,
+        const ::com::sun::star::uno::Any& rNewValue,
+        const ::com::sun::star::uno::Any& rOldValue
+    ) = 0;
+};
+
+// ----------------------------------------------------------------------------
 
 // ============================================================================
 
