@@ -4,9 +4,9 @@
  *
  *  $RCSfile: galbrws2.cxx,v $
  *
- *  $Revision: 1.54 $
+ *  $Revision: 1.55 $
  *
- *  last change: $Author: kz $ $Date: 2007-05-10 14:48:37 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 18:19:43 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -50,7 +50,7 @@
 #include <sfx2/viewfrm.hxx>
 #include <sfx2/sfxsids.hrc>
 #include "impgrf.hxx"
-#include "brshitem.hxx"
+#include <svx/brshitem.hxx>
 #include "helpid.hrc"
 #include "gallery1.hxx"
 #include "galtheme.hxx"
@@ -58,8 +58,8 @@
 #include "galdlg.hxx"
 #include "galbrws2.hxx"
 #include <vcl/svapp.hxx>
-#include "svxdlg.hxx" //CHINA001
-//CHINA001 #include "dialogs.hrc" //CHINA001
+#include <svx/svxdlg.hxx> //CHINA001
+//CHINA001 #include <svx/dialogs.hrc> //CHINA001
 
 // -----------
 // - Defines -
