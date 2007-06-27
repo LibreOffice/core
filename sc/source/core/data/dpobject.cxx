@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dpobject.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: vg $ $Date: 2007-02-27 12:03:42 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 13:43:19 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -803,6 +803,15 @@ void ScDPObject::GetPositionData( ScDPPositionData& rData, const ScAddress& rPos
     pOutput->GetPositionData( rData, rPos );
 }
 
+// Returns TRUE on success and stores the result in rTarget
+BOOL ScDPObject::GetPivotData( ScDPGetPivotDataField& rTarget,
+                               const std::vector< ScDPGetPivotDataField >& rFilters )
+{
+    CreateOutput();             // create xSource and pOutput if not already done
+
+    return pOutput->GetPivotData( rTarget, rFilters );
+}
+
 BOOL ScDPObject::IsFilterButton( const ScAddress& rPos )
 {
     CreateOutput();             // create xSource and pOutput if not already done
@@ -830,6 +839,443 @@ void ScDPObject::GetMemberResultNames( StrCollection& rNames, long nDimension )
     CreateOutput();             // create xSource and pOutput if not already done
 
     pOutput->GetMemberResultNames( rNames, nDimension );    // used only with table data -> level not needed
+}
+
+bool lcl_Dequote( const String& rSource, xub_StrLen nStartPos, xub_StrLen& rEndPos, String& rResult )
+{
+    // nStartPos has to point to opening quote
+
+    bool bRet = false;
+    const sal_Unicode cQuote = '\'';
+
+    if ( rSource.GetChar(nStartPos) == cQuote )
+    {
+        rtl::OUStringBuffer aBuffer;
+        xub_StrLen nPos = nStartPos + 1;
+        const xub_StrLen nLen = rSource.Len();
+
+        while ( nPos < nLen )
+        {
+            const sal_Unicode cNext = rSource.GetChar(nPos);
+            if ( cNext == cQuote )
+            {
+                if ( nPos+1 < nLen && rSource.GetChar(nPos+1) == cQuote )
+                {
+                    // double quote is used for an embedded quote
+                    aBuffer.append( cNext );    // append one quote
+                    ++nPos;                     // skip the next one
+                }
+                else
+                {
+                    // end of quoted string
+                    rResult = aBuffer.makeStringAndClear();
+                    rEndPos = nPos + 1;         // behind closing quote
+                    return true;
+                }
+            }
+            else
+                aBuffer.append( cNext );
+
+            ++nPos;
+        }
+        // no closing quote before the end of the string -> error (bRet still false)
+    }
+
+    return bRet;
+}
+
+struct ScGetPivotDataFunctionEntry
+{
+    const sal_Char*         pName;
+    sheet::GeneralFunction  eFunc;
+};
+
+bool lcl_ParseFunction( const String& rList, xub_StrLen nStartPos, xub_StrLen& rEndPos, sheet::GeneralFunction& rFunc )
+{
+    static const ScGetPivotDataFunctionEntry aFunctions[] =
+    {
+        // our names
+        { "Sum",        sheet::GeneralFunction_SUM       },
+        { "Count",      sheet::GeneralFunction_COUNT     },
+        { "Average",    sheet::GeneralFunction_AVERAGE   },
+        { "Max",        sheet::GeneralFunction_MAX       },
+        { "Min",        sheet::GeneralFunction_MIN       },
+        { "Product",    sheet::GeneralFunction_PRODUCT   },
+        { "CountNums",  sheet::GeneralFunction_COUNTNUMS },
+        { "StDev",      sheet::GeneralFunction_STDEV     },
+        { "StDevp",     sheet::GeneralFunction_STDEVP    },
+        { "Var",        sheet::GeneralFunction_VAR       },
+        { "VarP",       sheet::GeneralFunction_VARP      },
+        // compatibility names
+        { "Count Nums", sheet::GeneralFunction_COUNTNUMS },
+        { "StdDev",     sheet::GeneralFunction_STDEV     },
+        { "StdDevp",    sheet::GeneralFunction_STDEVP    }
+    };
+
+    const xub_StrLen nListLen = rList.Len();
+    while ( nStartPos < nListLen && rList.GetChar(nStartPos) == ' ' )
+        ++nStartPos;
+
+    bool bParsed = false;
+    bool bFound = false;
+    String aFuncStr;
+    xub_StrLen nFuncEnd = 0;
+    if ( nStartPos < nListLen && rList.GetChar(nStartPos) == '\'' )
+        bParsed = lcl_Dequote( rList, nStartPos, nFuncEnd, aFuncStr );
+    else
+    {
+        nFuncEnd = rList.Search( static_cast<sal_Unicode>(']'), nStartPos );
+        if ( nFuncEnd != STRING_NOTFOUND )
+        {
+            aFuncStr = rList.Copy( nStartPos, nFuncEnd - nStartPos );
+            bParsed = true;
+        }
+    }
+
+    if ( bParsed )
+    {
+        aFuncStr.EraseLeadingAndTrailingChars( ' ' );
+
+        const sal_Int32 nFuncCount = sizeof(aFunctions) / sizeof(aFunctions[0]);
+        for ( sal_Int32 nFunc=0; nFunc<nFuncCount && !bFound; nFunc++ )
+        {
+            if ( aFuncStr.EqualsIgnoreCaseAscii( aFunctions[nFunc].pName ) )
+            {
+                rFunc = aFunctions[nFunc].eFunc;
+                bFound = true;
+
+                while ( nFuncEnd < nListLen && rList.GetChar(nFuncEnd) == ' ' )
+                    ++nFuncEnd;
+                rEndPos = nFuncEnd;
+            }
+        }
+    }
+
+    return bFound;
+}
+
+bool lcl_IsAtStart( const String& rList, const String& rSearch, sal_Int32& rMatched,
+                    bool bAllowBracket, sheet::GeneralFunction* pFunc )
+{
+    sal_Int32 nMatchList = 0;
+    sal_Int32 nMatchSearch = 0;
+    sal_Unicode cFirst = rList.GetChar(0);
+    if ( cFirst == '\'' || cFirst == '[' )
+    {
+        // quoted string or string in brackets must match completely
+
+        String aDequoted;
+        xub_StrLen nQuoteEnd = 0;
+        bool bParsed = false;
+
+        if ( cFirst == '\'' )
+            bParsed = lcl_Dequote( rList, 0, nQuoteEnd, aDequoted );
+        else if ( cFirst == '[' )
+        {
+            // skip spaces after the opening bracket
+
+            xub_StrLen nStartPos = 1;
+            const xub_StrLen nListLen = rList.Len();
+            while ( nStartPos < nListLen && rList.GetChar(nStartPos) == ' ' )
+                ++nStartPos;
+
+            if ( rList.GetChar(nStartPos) == '\'' )         // quoted within the brackets?
+            {
+                if ( lcl_Dequote( rList, nStartPos, nQuoteEnd, aDequoted ) )
+                {
+                    // after the quoted string, there must be the closing bracket, optionally preceded by spaces,
+                    // and/or a function name
+                    while ( nQuoteEnd < nListLen && rList.GetChar(nQuoteEnd) == ' ' )
+                        ++nQuoteEnd;
+
+                    // semicolon separates function name
+                    if ( nQuoteEnd < nListLen && rList.GetChar(nQuoteEnd) == ';' && pFunc )
+                    {
+                        xub_StrLen nFuncEnd = 0;
+                        if ( lcl_ParseFunction( rList, nQuoteEnd + 1, nFuncEnd, *pFunc ) )
+                            nQuoteEnd = nFuncEnd;
+                    }
+                    if ( nQuoteEnd < nListLen && rList.GetChar(nQuoteEnd) == ']' )
+                    {
+                        ++nQuoteEnd;        // include the closing bracket for the matched length
+                        bParsed = true;
+                    }
+                }
+            }
+            else
+            {
+                // implicit quoting to the closing bracket
+
+                xub_StrLen nClosePos = rList.Search( static_cast<sal_Unicode>(']'), nStartPos );
+                if ( nClosePos != STRING_NOTFOUND )
+                {
+                    xub_StrLen nNameEnd = nClosePos;
+                    xub_StrLen nSemiPos = rList.Search( static_cast<sal_Unicode>(';'), nStartPos );
+                    if ( nSemiPos != STRING_NOTFOUND && nSemiPos < nClosePos && pFunc )
+                    {
+                        xub_StrLen nFuncEnd = 0;
+                        if ( lcl_ParseFunction( rList, nSemiPos + 1, nFuncEnd, *pFunc ) )
+                            nNameEnd = nSemiPos;
+                    }
+
+                    aDequoted = rList.Copy( nStartPos, nNameEnd - nStartPos );
+                    aDequoted.EraseTrailingChars( ' ' );        // spaces before the closing bracket or semicolon
+                    nQuoteEnd = nClosePos + 1;
+                    bParsed = true;
+                }
+            }
+        }
+
+        if ( bParsed && ScGlobal::pTransliteration->isEqual( aDequoted, rSearch ) )
+        {
+            nMatchList = nQuoteEnd;             // match count in the list string, including quotes
+            nMatchSearch = rSearch.Len();
+        }
+    }
+    else
+    {
+        // otherwise look for search string at the start of rList
+        ScGlobal::pTransliteration->equals( rList, 0, rList.Len(), nMatchList,
+                                            rSearch, 0, rSearch.Len(), nMatchSearch );
+    }
+
+    if ( nMatchSearch == rSearch.Len() )
+    {
+        // search string is at start of rList - look for following space or end of string
+
+        bool bValid = false;
+        if ( sal::static_int_cast<xub_StrLen>(nMatchList) >= rList.Len() )
+            bValid = true;
+        else
+        {
+            sal_Unicode cNext = rList.GetChar(sal::static_int_cast<xub_StrLen>(nMatchList));
+            if ( cNext == ' ' || ( bAllowBracket && cNext == '[' ) )
+                bValid = true;
+        }
+
+        if ( bValid )
+        {
+            rMatched = nMatchList;
+            return true;
+        }
+    }
+
+    return false;
+}
+
+BOOL ScDPObject::ParseFilters( ScDPGetPivotDataField& rTarget,
+                               std::vector< ScDPGetPivotDataField >& rFilters,
+                               const String& rFilterList )
+{
+    // parse the string rFilterList into parameters for GetPivotData
+
+    CreateObjects();            // create xSource if not already done
+
+    std::vector<String> aDataNames;     // data fields (source name)
+    std::vector<String> aGivenNames;    // data fields (compound name)
+    std::vector<String> aFieldNames;    // column/row/data fields
+    std::vector< uno::Sequence<rtl::OUString> > aFieldValues;
+
+    //
+    // get all the field and item names
+    //
+
+    uno::Reference<container::XNameAccess> xDimsName = xSource->getDimensions();
+    uno::Reference<container::XIndexAccess> xIntDims = new ScNameToIndexAccess( xDimsName );
+    sal_Int32 nDimCount = xIntDims->getCount();
+    for ( sal_Int32 nDim = 0; nDim<nDimCount; nDim++ )
+    {
+        uno::Reference<uno::XInterface> xIntDim = ScUnoHelpFunctions::AnyToInterface( xIntDims->getByIndex(nDim) );
+        uno::Reference<container::XNamed> xDim( xIntDim, uno::UNO_QUERY );
+        uno::Reference<beans::XPropertySet> xDimProp( xDim, uno::UNO_QUERY );
+        uno::Reference<sheet::XHierarchiesSupplier> xDimSupp( xDim, uno::UNO_QUERY );
+        BOOL bDataLayout = ScUnoHelpFunctions::GetBoolProperty( xDimProp,
+                            rtl::OUString::createFromAscii(DP_PROP_ISDATALAYOUT) );
+        sal_Int32 nOrient = ScUnoHelpFunctions::GetEnumProperty(
+                            xDimProp, rtl::OUString::createFromAscii(DP_PROP_ORIENTATION),
+                            sheet::DataPilotFieldOrientation_HIDDEN );
+        if ( !bDataLayout )
+        {
+            if ( nOrient == sheet::DataPilotFieldOrientation_DATA )
+            {
+                String aSourceName;
+                String aGivenName;
+                ScDPOutput::GetDataDimensionNames( aSourceName, aGivenName, xIntDim );
+                aDataNames.push_back( aSourceName );
+                aGivenNames.push_back( aGivenName );
+            }
+            else if ( nOrient != sheet::DataPilotFieldOrientation_HIDDEN )
+            {
+                // get level names, as in ScDPOutput
+
+                uno::Reference<container::XIndexAccess> xHiers = new ScNameToIndexAccess( xDimSupp->getHierarchies() );
+                sal_Int32 nHierarchy = ScUnoHelpFunctions::GetLongProperty( xDimProp,
+                                                    rtl::OUString::createFromAscii(DP_PROP_USEDHIERARCHY) );
+                if ( nHierarchy >= xHiers->getCount() )
+                    nHierarchy = 0;
+
+                uno::Reference<uno::XInterface> xHier = ScUnoHelpFunctions::AnyToInterface(
+                                                    xHiers->getByIndex(nHierarchy) );
+                uno::Reference<sheet::XLevelsSupplier> xHierSupp( xHier, uno::UNO_QUERY );
+                if ( xHierSupp.is() )
+                {
+                    uno::Reference<container::XIndexAccess> xLevels = new ScNameToIndexAccess( xHierSupp->getLevels() );
+                    sal_Int32 nLevCount = xLevels->getCount();
+                    for (sal_Int32 nLev=0; nLev<nLevCount; nLev++)
+                    {
+                        uno::Reference<uno::XInterface> xLevel = ScUnoHelpFunctions::AnyToInterface(
+                                                            xLevels->getByIndex(nLev) );
+                        uno::Reference<container::XNamed> xLevNam( xLevel, uno::UNO_QUERY );
+                        uno::Reference<sheet::XMembersSupplier> xLevSupp( xLevel, uno::UNO_QUERY );
+                        if ( xLevNam.is() && xLevSupp.is() )
+                        {
+                            uno::Reference<container::XNameAccess> xMembers = xLevSupp->getMembers();
+
+                            String aFieldName( xLevNam->getName() );
+                            uno::Sequence<rtl::OUString> aMemberNames( xMembers->getElementNames() );
+
+                            aFieldNames.push_back( aFieldName );
+                            aFieldValues.push_back( aMemberNames );
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    //
+    // compare and build filters
+    //
+
+    SCSIZE nDataFields = aDataNames.size();
+    SCSIZE nFieldCount = aFieldNames.size();
+    DBG_ASSERT( aGivenNames.size() == nDataFields && aFieldValues.size() == nFieldCount, "wrong count" );
+
+    bool bError = false;
+    bool bHasData = false;
+    String aRemaining( rFilterList );
+    aRemaining.EraseLeadingAndTrailingChars( ' ' );
+    while ( aRemaining.Len() && !bError )
+    {
+        bool bUsed = false;
+
+        // look for data field name
+
+        for ( SCSIZE nDataPos=0; nDataPos<nDataFields && !bUsed; nDataPos++ )
+        {
+            String aFound;
+            sal_Int32 nMatched = 0;
+            if ( lcl_IsAtStart( aRemaining, aDataNames[nDataPos], nMatched, false, NULL ) )
+                aFound = aDataNames[nDataPos];
+            else if ( lcl_IsAtStart( aRemaining, aGivenNames[nDataPos], nMatched, false, NULL ) )
+                aFound = aGivenNames[nDataPos];
+
+            if ( aFound.Len() )
+            {
+                rTarget.maFieldName = aFound;
+                aRemaining.Erase( 0, sal::static_int_cast<xub_StrLen>(nMatched) );
+                bHasData = true;
+                bUsed = true;
+            }
+        }
+
+        // look for field name
+
+        String aSpecField;
+        bool bHasFieldName = false;
+        if ( !bUsed )
+        {
+            sal_Int32 nMatched = 0;
+            for ( SCSIZE nField=0; nField<nFieldCount && !bHasFieldName; nField++ )
+            {
+                if ( lcl_IsAtStart( aRemaining, aFieldNames[nField], nMatched, true, NULL ) )
+                {
+                    aSpecField = aFieldNames[nField];
+                    aRemaining.Erase( 0, sal::static_int_cast<xub_StrLen>(nMatched) );
+                    aRemaining.EraseLeadingChars( ' ' );
+
+                    // field name has to be followed by item name in brackets
+                    if ( aRemaining.GetChar(0) == '[' )
+                    {
+                        bHasFieldName = true;
+                        // bUsed remains false - still need the item
+                    }
+                    else
+                    {
+                        bUsed = true;
+                        bError = true;
+                    }
+                }
+            }
+        }
+
+        // look for field item
+
+        if ( !bUsed )
+        {
+            bool bItemFound = false;
+            sal_Int32 nMatched = 0;
+            String aFoundName;
+            String aFoundValue;
+            sheet::GeneralFunction eFunc = sheet::GeneralFunction_NONE;
+            sheet::GeneralFunction eFoundFunc = sheet::GeneralFunction_NONE;
+
+            for ( SCSIZE nField=0; nField<nFieldCount; nField++ )
+            {
+                // If a field name is given, look in that field only, otherwise in all fields.
+                // aSpecField is initialized from aFieldNames array, so exact comparison can be used.
+                if ( !bHasFieldName || aFieldNames[nField] == aSpecField )
+                {
+                    const uno::Sequence<rtl::OUString>& rItems = aFieldValues[nField];
+                    sal_Int32 nItemCount = rItems.getLength();
+                    const rtl::OUString* pItemArr = rItems.getConstArray();
+                    for ( sal_Int32 nItem=0; nItem<nItemCount; nItem++ )
+                    {
+                        if ( lcl_IsAtStart( aRemaining, pItemArr[nItem], nMatched, false, &eFunc ) )
+                        {
+                            if ( bItemFound )
+                                bError = true;      // duplicate (also across fields)
+                            else
+                            {
+                                aFoundName = aFieldNames[nField];
+                                aFoundValue = pItemArr[nItem];
+                                eFoundFunc = eFunc;
+                                bItemFound = true;
+                                bUsed = true;
+                            }
+                        }
+                    }
+                }
+            }
+
+            if ( bItemFound && !bError )
+            {
+                ScDPGetPivotDataField aField;
+                aField.maFieldName = aFoundName;
+                aField.meFunction = eFoundFunc;
+                aField.mbValIsStr = true;
+                aField.maValStr = aFoundValue;
+                aField.mnValNum = 0.0;
+                rFilters.push_back( aField );
+
+                aRemaining.Erase( 0, sal::static_int_cast<xub_StrLen>(nMatched) );
+            }
+        }
+
+        if ( !bUsed )
+            bError = true;
+
+        aRemaining.EraseLeadingChars( ' ' );        // remove any number of spaces between entries
+    }
+
+    if ( !bError && !bHasData && aDataNames.size() == 1 )
+    {
+        // if there's only one data field, its name need not be specified
+        rTarget.maFieldName = aDataNames[0];
+        bHasData = true;
+    }
+
+    return bHasData && !bError;
 }
 
 void ScDPObject::ToggleDetails( ScDPPositionData& rElemDesc, ScDPObject* pDestObj )
