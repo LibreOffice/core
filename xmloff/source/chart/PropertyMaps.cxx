@@ -4,9 +4,9 @@
  *
  *  $RCSfile: PropertyMaps.cxx,v $
  *
- *  $Revision: 1.48 $
+ *  $Revision: 1.49 $
  *
- *  last change: $Author: vg $ $Date: 2007-05-22 16:05:25 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 14:46:37 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -47,31 +47,31 @@
 #include "XMLChartPropertySetMapper.hxx"
 
 #ifndef _XMLOFF_ENUMPROPERTYHANDLER_HXX
-#include "EnumPropertyHdl.hxx"
+#include <xmloff/EnumPropertyHdl.hxx>
 #endif
 #ifndef _XMLOFF_XMLCONSTANTSPROPERTYHANDLER_HXX
-#include "XMLConstantsPropertyHandler.hxx"
+#include <xmloff/XMLConstantsPropertyHandler.hxx>
 #endif
 #ifndef _XMLOFF_ATTRLIST_HXX
-#include "attrlist.hxx"
+#include <xmloff/attrlist.hxx>
 #endif
 #ifndef _XMLOFF_NMSPMAP_HXX
-#include "nmspmap.hxx"
+#include <xmloff/nmspmap.hxx>
 #endif
 #ifndef _XMLOFF_XMLUCONV_HXX
-#include "xmluconv.hxx"
+#include <xmloff/xmluconv.hxx>
 #endif
 #ifndef _XMLOFF_SHAPEIMPORT_HXX_
-#include "shapeimport.hxx"
+#include <xmloff/shapeimport.hxx>
 #endif
 #ifndef _XMLOFF_NAMEDBOOLPROPERTYHANDLER_HXX
-#include "NamedBoolPropertyHdl.hxx"
+#include <xmloff/NamedBoolPropertyHdl.hxx>
 #endif
 #ifndef _XMLOFF_XMLEXP_HXX
-#include "xmlexp.hxx"
+#include <xmloff/xmlexp.hxx>
 #endif
 #ifndef _XMLOFF_XMLTOKEN_HXX
-#include "xmltoken.hxx"
+#include <xmloff/xmltoken.hxx>
 #endif
 
 #ifndef _XMLERRORINDICATORPROPERTYHDL_HXX_
