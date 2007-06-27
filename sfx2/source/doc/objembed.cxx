@@ -4,9 +4,9 @@
  *
  *  $RCSfile: objembed.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: hr $ $Date: 2007-06-26 16:09:52 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 23:23:05 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -55,11 +55,11 @@
 #include <com/sun/star/embed/EmbedStates.hpp>
 #endif
 
-#include "objsh.hxx"
-#include "app.hxx"
+#include <sfx2/objsh.hxx>
+#include <sfx2/app.hxx>
 #include "objshimp.hxx"
-#include "sfx.hrc"
-#include "event.hxx"
+#include <sfx2/sfx.hrc>
+#include <sfx2/event.hxx>
 
 #include <comphelper/seqstream.hxx>
 #include <comphelper/processfactory.hxx>
