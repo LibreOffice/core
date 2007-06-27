@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ddectrl.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 10:04:22 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 14:24:57 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -44,7 +44,7 @@
 #endif
 #include "ddectrl.hxx"
 #ifndef _SBERRORS_HXX
-#include <sberrors.hxx>
+#include <basic/sberrors.hxx>
 #endif
 
 #define DDE_FREECHANNEL ((DdeConnection*)0xffffffff)
