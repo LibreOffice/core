@@ -4,9 +4,9 @@
  *
  *  $RCSfile: textview.cxx,v $
  *
- *  $Revision: 1.53 $
+ *  $Revision: 1.54 $
  *
- *  last change: $Author: obo $ $Date: 2006-10-12 15:16:20 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 21:32:13 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -35,13 +35,13 @@
 
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_svtools.hxx"
-#include <textview.hxx>
-#include <texteng.hxx>
+#include <svtools/textview.hxx>
+#include <svtools/texteng.hxx>
 #include <textdoc.hxx>
-#include <textdata.hxx>
+#include <svtools/textdata.hxx>
 #include <textdat2.hxx>
 
-#include <undo.hxx>
+#include <svtools/undo.hxx>
 
 #ifndef _SV_CURSOR_HXX //autogen
 #include <vcl/cursor.hxx>
