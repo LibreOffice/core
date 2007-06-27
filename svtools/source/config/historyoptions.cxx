@@ -4,9 +4,9 @@
  *
  *  $RCSfile: historyoptions.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: obo $ $Date: 2007-01-23 07:12:21 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 21:12:35 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -42,7 +42,7 @@
 //  includes
 //_________________________________________________________________________________________________________________
 
-#include "historyoptions.hxx"
+#include <svtools/historyoptions.hxx>
 
 #ifndef _UTL_CONFIGMGR_HXX_
 #include <unotools/configmgr.hxx>
