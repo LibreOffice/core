@@ -4,9 +4,9 @@
  *
  *  $RCSfile: hangulhanjadlg.hxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: rt $ $Date: 2006-01-13 17:18:54 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 17:10:06 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -54,10 +54,10 @@
 #include <vcl/scrbar.hxx>
 #endif
 #ifndef _SVX_CHECKLBX_HXX
-#include "checklbx.hxx"
+#include <svx/checklbx.hxx>
 #endif
 #ifndef SVX_HANGUL_HANJA_CONVERSION_HXX
-#include "hangulhanja.hxx"
+#include <svx/hangulhanja.hxx>
 #endif
 #ifndef _COM_SUN_STAR_UNO_SEQUENCE_HXX_
 #include <com/sun/star/uno/Sequence.hxx>
