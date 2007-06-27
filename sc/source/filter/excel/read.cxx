@@ -4,9 +4,9 @@
  *
  *  $RCSfile: read.cxx,v $
  *
- *  $Revision: 1.67 $
+ *  $Revision: 1.68 $
  *
- *  last change: $Author: vg $ $Date: 2007-05-22 19:46:18 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 13:45:32 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1192,6 +1192,11 @@ FltError ImportExcel8::Read( void )
 
     if( eLastErr == eERR_OK )
     {
+        // #i45843# Convert pivot tables before calculation, so they are available
+        // for the GETPIVOTDATA function.
+        if( GetBiff() == EXC_BIFF8 )
+            GetPivotTableManager().ConvertPivotTables();
+
         pD->CalcAfterLoad();
 
         pProgress.reset();
