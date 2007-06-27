@@ -4,9 +4,9 @@
  *
  *  $RCSfile: contexts.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 13:30:43 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 14:53:45 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -39,10 +39,10 @@
 #include "SchXMLTableContext.hxx"
 
 #ifndef _XMLOFF_XMLICTXT_HXX
-#include "xmlictxt.hxx"
+#include <xmloff/xmlictxt.hxx>
 #endif
 #ifndef _XMLOFF_XMLTKMAP_HXX
-#include "xmltkmap.hxx"
+#include <xmloff/xmltkmap.hxx>
 #endif
 
 namespace com { namespace sun { namespace star { namespace xml { namespace sax {
