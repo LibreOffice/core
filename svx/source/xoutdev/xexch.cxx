@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xexch.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 06:23:44 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 19:34:06 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -42,10 +42,10 @@
 #include <tools/vcompat.hxx>
 
 #ifndef _SVX_XFLASIT_HXX
-#include <xflasit.hxx>
+#include <svx/xflasit.hxx>
 #endif
 #ifndef SVX_XFILLIT0_HXX
-#include <xfillit0.hxx>
+#include <svx/xfillit0.hxx>
 #endif
 #ifndef _SFXIPOOL_HXX
 #include <svtools/itempool.hxx>
@@ -59,7 +59,7 @@
 #ifndef _SFXITEMSET_HXX
 #include <svtools/itemset.hxx>
 #endif
-#include "xdef.hxx"
+#include <svx/xdef.hxx>
 #include "xexch.hxx"
 
 
