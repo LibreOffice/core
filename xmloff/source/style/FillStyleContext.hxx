@@ -4,9 +4,9 @@
  *
  *  $RCSfile: FillStyleContext.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: hr $ $Date: 2006-06-19 18:24:26 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 15:24:03 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -41,7 +41,7 @@
 #endif
 
 #ifndef _XMLOFF_XMLSTYLE_HXX //autogen
-#include <xmlstyle.hxx>
+#include <xmloff/xmlstyle.hxx>
 #endif
 
 #ifndef _RTL_USTRING_
