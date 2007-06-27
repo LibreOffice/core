@@ -4,9 +4,9 @@
  *
  *  $RCSfile: mediaitem.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: vg $ $Date: 2006-11-21 17:47:09 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 22:23:18 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -33,7 +33,7 @@
  *
  ************************************************************************/
 
-#include "mediaitem.hxx"
+#include <avmedia/mediaitem.hxx>
 #include <com/sun/star/uno/Sequence.hxx>
 
 using namespace ::com::sun::star;
