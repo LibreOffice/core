@@ -4,9 +4,9 @@
  *
  *  $RCSfile: reqitem.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 10:10:13 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 21:05:43 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -44,7 +44,7 @@
 #endif
 
 #if _SOLAR__PRIVATE
-#include "poolitem.hxx"
+#include <svtools/poolitem.hxx>
 #else
 #include <sfxipool.hxx>
 #endif
