@@ -4,9 +4,9 @@
  *
  *  $RCSfile: tabpage.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: kz $ $Date: 2007-06-20 10:38:36 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 20:34:50 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -42,19 +42,19 @@
 #include <tools/rc.h>
 #endif
 #ifndef _SV_SVDATA_HXX
-#include <svdata.hxx>
+#include <vcl/svdata.hxx>
 #endif
 #ifndef _SV_SVAPP_HXX
-#include <svapp.hxx>
+#include <vcl/svapp.hxx>
 #endif
 #ifndef _SV_EVENT_HXX
-#include <event.hxx>
+#include <vcl/event.hxx>
 #endif
 #ifndef _SV_TABPAGE_HXX
-#include <tabpage.hxx>
+#include <vcl/tabpage.hxx>
 #endif
 #ifndef _SV_TABCTRL_HXX
-#include <tabctrl.hxx>
+#include <vcl/tabctrl.hxx>
 #endif
 
 #ifndef _COM_SUN_STAR_ACCESSIBILITY_XACCESSIBLE_HPP_
