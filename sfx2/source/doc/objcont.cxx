@@ -4,9 +4,9 @@
  *
  *  $RCSfile: objcont.cxx,v $
  *
- *  $Revision: 1.66 $
+ *  $Revision: 1.67 $
  *
- *  last change: $Author: vg $ $Date: 2006-11-01 18:27:34 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 12:55:26 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1491,6 +1491,7 @@ SfxObjectShellRef MakeObjectShellForOrganizer_Impl( const String& aTargetURL, BO
     StreamMode nMode = bForWriting ? SFX_STREAM_READWRITE : SFX_STREAM_READONLY;
     SfxMedium *pMed = new SfxMedium( aTargetURL, nMode, FALSE, 0 );
     const SfxFilter* pFilter = NULL;
+    pMed->UseInteractionHandler(TRUE);
     if( SFX_APP()->GetFilterMatcher().GuessFilter( *pMed, &pFilter ) == ERRCODE_NONE && pFilter && pFilter->IsOwnFormat() )
     {
         // create document
