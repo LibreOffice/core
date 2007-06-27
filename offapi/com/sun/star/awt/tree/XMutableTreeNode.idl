@@ -1,0 +1,130 @@
+/*************************************************************************
+ *
+ *  OpenOffice.org - a multi-platform office productivity suite
+ *
+ *  $RCSfile: XMutableTreeNode.idl,v $
+ *
+ *  $Revision: 1.2 $
+ *
+ *  last change: $Author: hr $ $Date: 2007-06-27 12:27:50 $
+ *
+ *  The Contents of this file are made available subject to
+ *  the terms of GNU Lesser General Public License Version 2.1.
+ *
+ *
+ *    GNU Lesser General Public License Version 2.1
+ *    =============================================
+ *    Copyright 2005 by Sun Microsystems, Inc.
+ *    901 San Antonio Road, Palo Alto, CA 94303, USA
+ *
+ *    This library is free software; you can redistribute it and/or
+ *    modify it under the terms of the GNU Lesser General Public
+ *    License version 2.1, as published by the Free Software Foundation.
+ *
+ *    This library is distributed in the hope that it will be useful,
+ *    but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ *    Lesser General Public License for more details.
+ *
+ *    You should have received a copy of the GNU Lesser General Public
+ *    License along with this library; if not, write to the Free Software
+ *    Foundation, Inc., 59 Temple Place, Suite 330, Boston,
+ *    MA  02111-1307  USA
+ *
+ ************************************************************************/
+#ifndef __com_sun_star_awt_tree_XMutableTreeNode_idl__
+#define __com_sun_star_awt_tree_XMutableTreeNode_idl__
+
+#ifndef __com_sun_star_awt_tree_XTreeNode_idl__
+#include <com/sun/star/awt/tree/XTreeNode.idl>
+#endif
+
+#ifndef __com_sun_star_lang_IllegalArgumentException_idl__
+#include <com/sun/star/lang/IllegalArgumentException.idl>
+#endif
+
+#ifndef __com_sun_star_lang_IndexOutOfBoundsException_idl__
+#include <com/sun/star/lang/IndexOutOfBoundsException.idl>
+#endif
+
+//=============================================================================
+
+module com {  module sun {  module star {  module awt { module tree {
+
+//=============================================================================
+
+/** Represents a mutable tree node as used by the <type>MutableTreeDataModel</type>
+ */
+interface XMutableTreeNode : XTreeNode
+{
+    /** appends <var>ChildNode</var> to this instance.
+
+        @throws ::com::sun::star::lang::IllegalArgumentException
+            if <var>ChildNode</var> is not a valid node of the corresponding <type>XTreeDataModel</type>.
+    */
+    void appendChild( [in] XMutableTreeNode ChildNode )
+        raises( com::sun::star::lang::IllegalArgumentException );
+
+    /** inserts <var>ChildNode</var> to this instance at the given index.
+
+        @param Index
+            the index where the node will be inserted to this instance.
+
+        @throws ::com::sun::star::lang::IllegalArgumentException
+            if <var>ChildNode</var> is not a valid node of the corresponding <type>XTreeDataModel</type>.
+
+        @throws ::com::sun::star::lang::IndexOutOfBoundsException
+            if <var>Index</var> is less than 0 or greater then <member>XTreeNode::getChildCount()</member>.
+    */
+    void insertChildByIndex( [in] long Index, [in] XMutableTreeNode ChildNode )
+        raises( com::sun::star::lang::IllegalArgumentException,
+                    com::sun::star::lang::IndexOutOfBoundsException );
+
+    /** removes the node from this instance at the specified index.
+
+        @param Index
+            the index of the node to be removed from this instance.
+
+        @throws ::com::sun::star::lang::IndexOutOfBoundsException
+            if <var>Index</var> is less than 0 or greater then <member>XTreeNode::getChildCount()</member>.
+     */
+    void removeChildByIndex( [in] long Index )
+            raises( com::sun::star::lang::IndexOutOfBoundsException );
+
+    /** Changes if the childs of this node are created on demand.
+
+        @see XTreeNode::hasChildsOnDemand()
+    */
+    void setHasChildsOnDemand( [in] boolean ChildsOnDemand );
+
+    /** sets the display value of this node */
+    void setDisplayValue( [in] any Value );
+
+    /** Stores an implementation dependend value.
+
+        <p>You can use this attribute to store data for this node that
+        is independend of the display value</p>
+    */
+    [attribute] any DataValue;
+
+    /** The URL for a graphic that is rendered before the text part of this node.
+        <p>If this URL is empty, no graphic is rendered.
+    */
+    void setNodeGraphicURL( [in] string URL );
+
+    /** The URL for a graphic that is rendered to visualize expanded non leaf nodes.
+        <p>If <var>URL</var> is empty, <member>XTreeControl::DefaultExpandedGraphicURL</member> is used.
+    */
+    void setExpandedGraphicURL( [in] string URL );
+
+    /** The URL for a graphic that is rendered to visualize collapsed non leaf nodes.
+        <p>If <var>URL</var> is empty, <member>XTreeControl::DefaultCollapsedGraphicURL</member> is used.
+    */
+    void setCollapsedGraphicURL( [in] string URL );
+};
+
+//=============================================================================
+
+}; }; }; }; };
+
+#endif
