@@ -4,9 +4,9 @@
  *
  *  $RCSfile: impedit5.cxx,v $
  *
- *  $Revision: 1.31 $
+ *  $Revision: 1.32 $
  *
- *  last change: $Author: rt $ $Date: 2007-01-30 15:26:36 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 18:00:01 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -39,14 +39,14 @@
 #include <eeng_pch.hxx>
 
 #include <impedit.hxx>
-#include <editeng.hxx>
+#include <svx/editeng.hxx>
 #include <editdbg.hxx>
 
 #include <svtools/smplhint.hxx>
 
 
 #ifndef _SVX_LRSPITEM_HXX
-#include <lrspitem.hxx>
+#include <svx/lrspitem.hxx>
 #endif
 
 void ImpEditEngine::SetStyleSheetPool( SfxStyleSheetPool* pSPool )
