@@ -4,9 +4,9 @@
  *
  *  $RCSfile: syswin.cxx,v $
  *
- *  $Revision: 1.47 $
+ *  $Revision: 1.48 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 12:21:58 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 20:34:24 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -44,20 +44,20 @@
 #include <svsys.h>
 #endif
 #ifndef _SV_SALFRAME_HXX
-#include <salframe.hxx>
+#include <vcl/salframe.hxx>
 #endif
 
 #ifndef _SV_SVDATA_HXX
-#include <svdata.hxx>
+#include <vcl/svdata.hxx>
 #endif
 #ifndef _SV_SVAPP_HXX
-#include <svapp.hxx>
+#include <vcl/svapp.hxx>
 #endif
 #ifndef _SV_BRDWIN_HXX
 #include <brdwin.hxx>
 #endif
 #ifndef _SV_MENU_HXX
-#include <menu.hxx>
+#include <vcl/menu.hxx>
 #endif
 #ifndef _SV_WINDOW_H
 #include <window.h>
@@ -66,21 +66,21 @@
 #include <brdwin.hxx>
 #endif
 #ifndef _SV_SOUND_HXX
-#include <sound.hxx>
+#include <vcl/sound.hxx>
 #endif
 #ifndef _SV_SVAPP_HXX
-#include <svapp.hxx>
+#include <vcl/svapp.hxx>
 #endif
 #ifndef _SV_EVENT_HXX
-#include <event.hxx>
+#include <vcl/event.hxx>
 #endif
 #ifndef _SV_SYSWIN_HXX
-#include <syswin.hxx>
+#include <vcl/syswin.hxx>
 #endif
 #ifndef _SV_TASKPANELIST_HXX
-#include <taskpanelist.hxx>
+#include <vcl/taskpanelist.hxx>
 #endif
-#include <unowrap.hxx>
+#include <vcl/unowrap.hxx>
 
 
 using namespace ::com::sun::star::uno;
