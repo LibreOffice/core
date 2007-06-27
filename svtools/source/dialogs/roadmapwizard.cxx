@@ -4,9 +4,9 @@
  *
  *  $RCSfile: roadmapwizard.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: vg $ $Date: 2007-05-22 19:33:33 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 21:29:23 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -37,7 +37,7 @@
 #include "precompiled_svtools.hxx"
 
 #ifndef SVTOOLS_INC_ROADMAPWIZARD_HXX
-#include "roadmapwizard.hxx"
+#include <svtools/roadmapwizard.hxx>
 #endif
 
 #ifndef _SVTOOLS_ROADMAP_HXX
