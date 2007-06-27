@@ -4,9 +4,9 @@
  *
  *  $RCSfile: fmshimp.hxx,v $
  *
- *  $Revision: 1.31 $
+ *  $Revision: 1.32 $
  *
- *  last change: $Author: vg $ $Date: 2006-11-22 11:27:04 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 18:22:51 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -103,11 +103,11 @@
 #endif
 
 #ifndef _SVDMARK_HXX
-#include "svdmark.hxx"
+#include <svx/svdmark.hxx>
 #endif
 
 #ifndef _SVX_SVXIDS_HRC
-#include "svxids.hrc"
+#include <svx/svxids.hrc>
 #endif
 
 #ifndef _SVARRAY_HXX //autogen
@@ -131,7 +131,7 @@
 #include "fmtools.hxx"
 #endif
 #ifndef _FMSEARCH_HXX
-#include "fmsearch.hxx"
+#include <svx/fmsearch.hxx>
 #endif
 #ifndef _FMSRCCF_HXX_
 #include "fmsrccfg.hxx"
