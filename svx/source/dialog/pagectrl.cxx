@@ -4,9 +4,9 @@
  *
  *  $RCSfile: pagectrl.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: kz $ $Date: 2007-05-10 14:40:19 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 17:32:26 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -44,11 +44,11 @@
 #include <vcl/bitmap.hxx>
 #endif
 #ifndef _SVX_FRMDIRITEM_HXX
-#include <frmdiritem.hxx>
+#include <svx/frmdiritem.hxx>
 #endif
-#include "pageitem.hxx"
-#include "pagectrl.hxx"
-#include "boxitem.hxx"
+#include <svx/pageitem.hxx>
+#include <svx/pagectrl.hxx>
+#include <svx/boxitem.hxx>
 
 #include <algorithm>
 
