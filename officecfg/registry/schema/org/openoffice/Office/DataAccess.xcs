@@ -5,9 +5,9 @@
  *
  *  $RCSfile: DataAccess.xcs,v $
  *
- *  $Revision: 1.36 $
+ *  $Revision: 1.37 $
  *
- *  last change: $Author: obo $ $Date: 2006-01-19 15:34:03 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 14:43:47 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -187,11 +187,22 @@
                 </info>
                 <group oor:name="Writer">
                     <info>
-                        <desc>Specifies which data-access related features areavailable in OpenOffice.org Writer.</desc>
+                        <desc>Specifies which data-access related features are available in OpenOffice.org Writer.</desc>
                     </info>
                     <prop oor:name="DatabaseFields" oor:type="xs:boolean">
                         <info>
                             <desc>Specifies that the Database tab page should be available in the fields dialog.</desc>
+                        </info>
+                        <value>true</value>
+                    </prop>
+                </group>
+                <group oor:name="Common">
+                    <info>
+                        <desc>Specifies which data-access related features, usually existent in all applications, are available.</desc>
+                    </info>
+                    <prop oor:name="EditDatabaseFromDataSourceView" oor:type="xs:boolean">
+                        <info>
+                            <desc>Specifies that the data source view (also known as data source browser) should offer the "Edit database file" context menu entry.</desc>
                         </info>
                         <value>true</value>
                     </prop>
