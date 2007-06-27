@@ -4,9 +4,9 @@
  *
  *  $RCSfile: PageMasterImportContext.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 12:38:48 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 14:36:49 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -37,11 +37,11 @@
 #define _XMLOFF_PAGEMASTERIMPORTCONTEXT_HXX
 
 #ifndef _XMLOFF_PRSTYLEI_HXX_
-#include "prstylei.hxx"
+#include <xmloff/prstylei.hxx>
 #endif
 
 #ifndef _XMLOFF_XMLIMP_HXX
-#include "xmlimp.hxx"
+#include <xmloff/xmlimp.hxx>
 #endif
 
 class PageStyleContext : public XMLPropStyleContext
