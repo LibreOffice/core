@@ -4,9 +4,9 @@
  *
  *  $RCSfile: about.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: obo $ $Date: 2006-03-29 08:42:40 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 22:51:31 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -52,7 +52,7 @@
 #ifndef _STDCTRL_HXX //autogen
 #include <svtools/stdctrl.hxx>
 #endif
-#include "basedlgs.hxx"     // SfxModalDialog
+#include <sfx2/basedlgs.hxx>        // SfxModalDialog
 
 DECLARE_LIST( AccelList, Accelerator* )
 
