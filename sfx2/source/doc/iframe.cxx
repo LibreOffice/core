@@ -4,9 +4,9 @@
  *
  *  $RCSfile: iframe.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: vg $ $Date: 2006-11-21 17:49:35 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 23:22:13 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -37,8 +37,8 @@
 #include "precompiled_sfx2.hxx"
 
 #include "iframe.hxx"
-#include "sfxdlg.hxx"
-#include "sfxsids.hrc"
+#include <sfx2/sfxdlg.hxx>
+#include <sfx2/sfxsids.hrc>
 
 #ifndef _COM_SUN_STAR_FRAME_XDISPATCHPROVIDER_HPP_
 #include <com/sun/star/frame/XDispatchProvider.hpp>
