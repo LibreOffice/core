@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ResultSet.hxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: vg $ $Date: 2007-01-15 13:38:26 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 14:39:55 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -80,6 +80,7 @@
 #ifndef _COM_SUN_STAR_LANG_XSERVICEINFO_HPP_
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #endif
+#include "java/sql/ConnectionLog.hxx"
 
 namespace connectivity
 {
@@ -106,6 +107,7 @@ namespace connectivity
     {
         ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface>            m_xStatement;
         ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XResultSetMetaData>   m_xMetaData;
+        java::sql::ConnectionLog                                                        m_aLogger;
 
         sal_Int32 getResultSetConcurrency() const throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
         sal_Int32 getResultSetType()        const throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
@@ -146,7 +148,8 @@ namespace connectivity
         DECLARE_SERVICE_INFO();
         static jclass getMyClass();
         // ein Konstruktor, der fuer das Returnen des Objektes benoetigt wird:
-        java_sql_ResultSet( JNIEnv * pEnv, jobject myObj,java_sql_Statement_Base* pStmt=NULL );
+        java_sql_ResultSet( JNIEnv * pEnv, jobject myObj, const java::sql::ConnectionLog& _rParentLogger,
+            java_sql_Statement_Base* pStmt = NULL );
 
         // ::cppu::OComponentHelper
         virtual void SAL_CALL disposing(void);
