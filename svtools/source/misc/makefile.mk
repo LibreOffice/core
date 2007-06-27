@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.39 $
+#   $Revision: 1.40 $
 #
-#   last change: $Author: vg $ $Date: 2007-02-06 14:25:41 $
+#   last change: $Author: hr $ $Date: 2007-06-27 14:55:37 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -72,6 +72,7 @@ SLOFILES=\
     $(SLO)$/transfer2.obj           \
     $(SLO)$/stringtransfer.obj      \
     $(SLO)$/urihelper.obj           \
+    $(SLO)$/svtaccessiblefactory.obj \
     $(SLO)$/ehdl.obj                \
     $(SLO)$/flbytes.obj             \
     $(SLO)$/helpagentwindow.obj     \
