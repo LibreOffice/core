@@ -4,9 +4,9 @@
  *
  *  $RCSfile: outl_pch.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: kz $ $Date: 2007-05-10 14:55:45 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 18:40:44 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -34,10 +34,10 @@
  ************************************************************************/
 #include <svtools/intitem.hxx>
 
-#include <editeng.hxx>
-#include <editview.hxx>
-#include <editdata.hxx>
+#include <svx/editeng.hxx>
+#include <svx/editview.hxx>
+#include <svx/editdata.hxx>
 #include <eerdll.hxx>
 
-#include <lrspitem.hxx>
-#include <fhgtitem.hxx>
+#include <svx/lrspitem.hxx>
+#include <svx/fhgtitem.hxx>
