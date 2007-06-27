@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xmlprmap.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 11:00:40 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 15:49:00 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -41,7 +41,7 @@
 #endif
 
 #ifndef _XMLOFF_PROPERTYHANDLERBASE_HXX
-#include "xmlprhdl.hxx"
+#include <xmloff/xmlprhdl.hxx>
 #endif
 
 #ifndef _XMLOFF_PROPERTYHANDLER_BASICTYPES_HXX
@@ -49,11 +49,11 @@
 #endif
 
 #ifndef _XMLOFF_PROPERTYSETMAPPER_HXX
-#include "xmlprmap.hxx"
+#include <xmloff/xmlprmap.hxx>
 #endif
 
 #ifndef _XMLOFF_XMLTYPES_HXX
-#include "xmltypes.hxx"
+#include <xmloff/xmltypes.hxx>
 #endif
 
 #ifndef _COM_SUN_STAR_BEANS_XPROPERTYSET_HPP_
@@ -69,7 +69,7 @@
 #endif
 
 #ifndef _XMLOFF_XMLTOKEN_HXX
-#include "xmltoken.hxx"
+#include <xmloff/xmltoken.hxx>
 #endif
 
 
