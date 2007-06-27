@@ -4,9 +4,9 @@
  *
  *  $RCSfile: brwimpl.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 14:29:55 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 14:49:01 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -35,12 +35,14 @@
 #ifndef _SVTOOLS_BRWIMPL_HXX
 #define _SVTOOLS_BRWIMPL_HXX
 
-#ifndef _SVTOOLS_ACCESSIBLEBROWSEBOX_HXX
-#include "AccessibleBrowseBox.hxx"
+#ifndef SVTOOLS_ACCESSIBLE_FACTORY_ACCESS_HXX
+#include "svtaccessiblefactory.hxx"
 #endif
-#ifndef _SVTOOLS_ACCESSIBLEBROWSEBOXHEADERCELL_HXX
-#include "AccessibleBrowseBoxHeaderCell.hxx"
+
+#ifndef _COM_SUN_STAR_LANG_XCOMPONENT_HPP_
+#include <com/sun/star/lang/XComponent.hpp>
 #endif
+
 #include <map>
 #include <functional>
 
@@ -50,19 +52,33 @@ namespace svt
     {
     // member
     public:
-        typedef ::std::map< sal_Int32,AccessibleBrowseBoxHeaderCell*> THeaderCellMap;
+        typedef ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible >    AccessibleRef;
+        typedef ::std::map< sal_Int32, AccessibleRef >                                              THeaderCellMap;
+
         struct  THeaderCellMapFunctorDispose : ::std::unary_function<THeaderCellMap::value_type,void>
         {
             inline void operator()(const THeaderCellMap::value_type& _aType)
             {
-                _aType.second->dispose();
+                ::com::sun::star::uno::Reference< ::com::sun::star::lang::XComponent > xComp(
+                    _aType.second, ::com::sun::star::uno::UNO_QUERY );
+                OSL_ENSURE( xComp.is() || !_aType.second.is(), "THeaderCellMapFunctorDispose: invalid accessible cell (no XComponent)!" );
+                if ( xComp.is() )
+                    try
+                    {
+                        xComp->dispose();
+                    }
+                    catch( const ::com::sun::star::uno::Exception& )
+                    {
+                        OSL_ENSURE( sal_False, "THeaderCellMapFunctorDispose: caught an exception!" );
+                    }
             }
         };
 
     public:
-        AccessibleBrowseBoxAccess*  m_pAccessible;
-        THeaderCellMap              m_aColHeaderCellMap;
-        THeaderCellMap              m_aRowHeaderCellMap;
+        AccessibleFactoryAccess m_aFactoryAccess;
+        IAccessibleBrowseBox*   m_pAccessible;
+        THeaderCellMap          m_aColHeaderCellMap;
+        THeaderCellMap          m_aRowHeaderCellMap;
 
     public:
         BrowseBoxImpl() : m_pAccessible(NULL)
