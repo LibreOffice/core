@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dllmgr.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: kz $ $Date: 2007-05-10 15:18:37 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 14:25:27 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -55,10 +55,10 @@
 #include <tools/errcode.hxx>
 #endif
 #ifndef _SBXVAR_HXX //autogen
-#include <sbxvar.hxx>
+#include <basic/sbxvar.hxx>
 #endif
 #ifndef _SBXCLASS_HXX //autogen
-#include <sbx.hxx>
+#include <basic/sbx.hxx>
 #endif
 
 #if defined(WIN)
@@ -74,7 +74,7 @@ typedef void* SbiDllProc;
 
 #define _DLLMGR_CXX
 #include "dllmgr.hxx"
-#include <sberrors.hxx>
+#include <basic/sberrors.hxx>
 
 #ifndef WINAPI
 #ifdef WNT
