@@ -4,9 +4,9 @@
  *
  *  $RCSfile: numehelp.cxx,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 10:55:44 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 15:41:42 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -38,15 +38,15 @@
 
 #include "numehelp.hxx"
 
-#include "nmspmap.hxx"
+#include <xmloff/nmspmap.hxx>
 #include "xmlnmspe.hxx"
-#include "xmluconv.hxx"
+#include <xmloff/xmluconv.hxx>
 
 #ifndef _XMLOFF_XMLTOKEN_HXX
-#include "xmltoken.hxx"
+#include <xmloff/xmltoken.hxx>
 #endif
 #ifndef _XMLOFF_XMLEXP_HXX
-#include "xmlexp.hxx"
+#include <xmloff/xmlexp.hxx>
 #endif
 #ifndef _COM_SUN_STAR_UNO_REFERENCE_H_
 #include <com/sun/star/uno/Reference.h>
