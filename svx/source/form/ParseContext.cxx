@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ParseContext.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: kz $ $Date: 2007-05-10 10:05:21 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 18:09:44 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -47,7 +47,7 @@
 #ifndef _SVX_FMRESIDS_HRC
 #include "fmresids.hrc"
 #endif
-#include "dialmgr.hxx"
+#include <svx/dialmgr.hxx>
 #ifndef _SV_SVAPP_HXX
 #include <vcl/svapp.hxx>
 #endif
