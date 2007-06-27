@@ -4,9 +4,9 @@
  *
  *  $RCSfile: printer.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: rt $ $Date: 2007-04-26 08:32:33 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 14:15:38 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -49,7 +49,7 @@
 #include <vcl/button.hxx>
 #endif
 #ifndef _BASIC_TTRESHLP_HXX
-#include "ttstrhlp.hxx"
+#include <basic/ttstrhlp.hxx>
 #endif
 
 #include <algorithm>
