@@ -4,9 +4,9 @@
  *
  *  $RCSfile: pubdlg.hrc,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 05:51:05 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 15:44:34 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -82,6 +82,7 @@
 
 #define PAGE3_BMP           50
 #define PAGE3_TITEL_1       51
+#define PAGE3_PNG           51
 #define PAGE3_GIF           52
 #define PAGE3_JPG           53
 #define PAGE3_QUALITY_TXT   54
