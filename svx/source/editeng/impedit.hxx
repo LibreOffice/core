@@ -4,9 +4,9 @@
  *
  *  $RCSfile: impedit.hxx,v $
  *
- *  $Revision: 1.83 $
+ *  $Revision: 1.84 $
  *
- *  last change: $Author: kz $ $Date: 2006-12-12 15:58:14 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 17:58:59 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -40,8 +40,8 @@
 #include <editundo.hxx>
 #include <editobj2.hxx>
 #include <editstt2.hxx>
-#include <editdata.hxx>
-#include <svxacorr.hxx>
+#include <svx/editdata.hxx>
+#include <svx/svxacorr.hxx>
 
 #ifndef _SV_VIRDEV_HXX //autogen
 #include <vcl/virdev.hxx>
@@ -139,7 +139,7 @@ class SvKeyValueIterator;
 class SvxForbiddenCharactersTable;
 class SvtCTLOptions;
 #ifndef SVX_SPELL_PORTIONS_HXX
-#include <SpellPortions.hxx>
+#include <svx/SpellPortions.hxx>
 #endif
 
 
