@@ -4,9 +4,9 @@
  *
  *  $RCSfile: salvtables.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 11:48:29 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 20:01:29 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -36,19 +36,19 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_vcl.hxx"
 
-#include <salframe.hxx>
-#include <salinst.hxx>
-#include <salvd.hxx>
-#include <salprn.hxx>
-#include <saltimer.hxx>
-#include <salsound.hxx>
-#include <salogl.hxx>
-#include <salimestatus.hxx>
-#include <salsys.hxx>
-#include <salbmp.hxx>
-#include <salobj.hxx>
+#include <vcl/salframe.hxx>
+#include <vcl/salinst.hxx>
+#include <vcl/salvd.hxx>
+#include <vcl/salprn.hxx>
+#include <vcl/saltimer.hxx>
+#include <vcl/salsound.hxx>
+#include <vcl/salogl.hxx>
+#include <vcl/salimestatus.hxx>
+#include <vcl/salsys.hxx>
+#include <vcl/salbmp.hxx>
+#include <vcl/salobj.hxx>
 #include <salmenu.hxx>
-#include <salctrlhandle.hxx>
+#include <vcl/salctrlhandle.hxx>
 
 // this file contains the virtual destructors of the sal interface
 // compilers ususally put their vtables where the destructor is
