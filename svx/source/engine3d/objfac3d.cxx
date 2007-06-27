@@ -4,9 +4,9 @@
  *
  *  $RCSfile: objfac3d.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: ihi $ $Date: 2006-11-14 13:20:20 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 18:04:13 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -37,7 +37,7 @@
 #include "precompiled_svx.hxx"
 
 #ifndef _SVDPAGE_HXX
-#include "svdpage.hxx"
+#include <svx/svdpage.hxx>
 #endif
 
 #ifndef _E3D_GLOBL3D_HXX
@@ -45,27 +45,27 @@
 #endif
 
 #ifndef _E3D_POLYSC3D_HXX
-#include "polysc3d.hxx"
+#include <svx/polysc3d.hxx>
 #endif
 
 #ifndef _E3D_CUBE3D_HXX
-#include "cube3d.hxx"
+#include <svx/cube3d.hxx>
 #endif
 
 #ifndef _E3D_SPHERE3D_HXX
-#include "sphere3d.hxx"
+#include <svx/sphere3d.hxx>
 #endif
 
 #ifndef _E3D_EXTRUD3D_HXX
-#include "extrud3d.hxx"
+#include <svx/extrud3d.hxx>
 #endif
 
 #ifndef _E3D_LATHE3D_HXX
-#include "lathe3d.hxx"
+#include <svx/lathe3d.hxx>
 #endif
 
 #ifndef _E3D_POLYGON3D_HXX
-#include "polygn3d.hxx"
+#include <svx/polygn3d.hxx>
 #endif
 
 #ifndef _OBJFAC3D_HXX
@@ -73,7 +73,7 @@
 #endif
 
 #ifndef _SVDOBJ_HXX
-#include "svdobj.hxx"
+#include <svx/svdobj.hxx>
 #endif
 
 /*************************************************************************
