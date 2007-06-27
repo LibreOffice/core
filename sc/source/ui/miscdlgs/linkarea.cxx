@@ -4,9 +4,9 @@
  *
  *  $RCSfile: linkarea.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: vg $ $Date: 2007-02-27 13:32:17 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 12:46:08 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -142,7 +142,7 @@ IMPL_LINK( ScLinkedAreaDlg, FileHdl, ComboBox*, EMPTYARG )
     String aOptions;
     //  get filter name by looking at the file content (bWithContent = TRUE)
     // Break operation if any error occured inside.
-    if (!ScDocumentLoader::GetFilterName( aEntered, aFilter, aOptions, TRUE ))
+    if (!ScDocumentLoader::GetFilterName( aEntered, aFilter, aOptions, TRUE, TRUE ))
         return 0;
 
     // #i53241# replace HTML filter with DataQuery filter
