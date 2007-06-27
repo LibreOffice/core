@@ -4,9 +4,9 @@
  *
  *  $RCSfile: XMLAutoTextEventExport.hxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 14:57:32 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 15:51:29 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -37,7 +37,7 @@
 #define _XMLOFF_XMLAUTOTEXTEVENTEXPORT_HXX
 
 #ifndef _XMLOFF_XMLEXP_HXX
-#include "xmlexp.hxx"
+#include <xmloff/xmlexp.hxx>
 #endif
 
 #include <set>
