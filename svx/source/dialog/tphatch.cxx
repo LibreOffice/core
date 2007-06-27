@@ -4,9 +4,9 @@
  *
  *  $RCSfile: tphatch.cxx,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: kz $ $Date: 2007-05-10 14:44:02 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 17:49:08 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -67,7 +67,7 @@
 
 #define _SVX_TPHATCH_CXX
 
-#include "dialogs.hrc"
+#include <svx/dialogs.hrc>
 #include "tabarea.hrc"
 #include "dlgname.hrc"
 #include "helpid.hrc"
@@ -76,15 +76,15 @@
 
 
 #include "xattr.hxx"
-#include "xpool.hxx"
-#include "xtable.hxx"
-#include "xoutx.hxx"
+#include <svx/xpool.hxx>
+#include <svx/xtable.hxx>
+#include <svx/xoutx.hxx>
 
 #include "drawitem.hxx"
 #include "cuitabarea.hxx"
 #include "defdlgname.hxx" //CHINA001 #include "dlgname.hxx"
-#include "svxdlg.hxx" //CHINA001
-#include "dialmgr.hxx"
+#include <svx/svxdlg.hxx> //CHINA001
+#include <svx/dialmgr.hxx>
 #include "dlgutil.hxx"
 
 #define DLGWIN this->GetParent()->GetParent()
