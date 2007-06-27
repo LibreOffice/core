@@ -4,9 +4,9 @@
  *
  *  $RCSfile: printdlg.cxx,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: ihi $ $Date: 2006-12-20 18:29:51 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 21:28:32 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -54,16 +54,16 @@
 #include <tools/urlobj.hxx>
 
 #include "printdlg.hrc"
-#include <prnsetup.hxx>
-#include <printdlg.hxx>
-#include <svtdata.hxx>
+#include <svtools/prnsetup.hxx>
+#include <svtools/printdlg.hxx>
+#include <svtools/svtdata.hxx>
 #include <filedlg.hxx>
 
 #ifndef _PICKERHELPER_HXX
 #include "pickerhelper.hxx"
 #endif
 #ifndef _SVT_HELPID_HRC
-#include "helpid.hrc"
+#include <svtools/helpid.hrc>
 #endif
 
 #ifndef  _COM_SUN_STAR_UI_DIALOGS_TEMPLATEDESCRIPTION_HPP_
