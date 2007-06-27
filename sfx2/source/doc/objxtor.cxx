@@ -4,9 +4,9 @@
  *
  *  $RCSfile: objxtor.cxx,v $
  *
- *  $Revision: 1.71 $
+ *  $Revision: 1.72 $
  *
- *  last change: $Author: ihi $ $Date: 2007-04-16 16:56:33 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 23:24:27 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -87,7 +87,7 @@
 #include <basic/sbx.hxx>
 #endif
 
-#include "objsh.hxx"
+#include <sfx2/objsh.hxx>
 
 #ifndef _BASIC_SBUNO_HXX
 #include <basic/sbuno.hxx>
@@ -118,30 +118,30 @@
 #include <tools/diagnose_ex.h>
 #include <sot/clsids.hxx>
 
-#include "app.hxx"
-#include "docfac.hxx"
-#include "docfile.hxx"
-#include "event.hxx"
-#include "dispatch.hxx"
-#include "viewsh.hxx"
-#include "viewfrm.hxx"
+#include <sfx2/app.hxx>
+#include <sfx2/docfac.hxx>
+#include <sfx2/docfile.hxx>
+#include <sfx2/event.hxx>
+#include <sfx2/dispatch.hxx>
+#include <sfx2/viewsh.hxx>
+#include <sfx2/viewfrm.hxx>
 #include "sfxresid.hxx"
 #include "objshimp.hxx"
 #include "appbas.hxx"
 #include "sfxtypes.hxx"
-#include "evntconf.hxx"
-#include "request.hxx"
+#include <sfx2/evntconf.hxx>
+#include <sfx2/request.hxx>
 #include "doc.hrc"
 #include "sfxlocal.hrc"
-#include "docinf.hxx"
-#include "objuno.hxx"
+#include <sfx2/docinf.hxx>
+#include <sfx2/objuno.hxx>
 #include "appdata.hxx"
-#include "appuno.hxx"
-#include "sfxsids.hrc"
+#include <sfx2/appuno.hxx>
+#include <sfx2/sfxsids.hrc>
 #include "basmgr.hxx"
 #include "QuerySaveDocument.hxx"
 #include "helpid.hrc"
-#include "msg.hxx"
+#include <sfx2/msg.hxx>
 #include "appbaslib.hxx"
 
 #include <basic/basicmanagerrepository.hxx>
