@@ -4,9 +4,9 @@
  *
  *  $RCSfile: componentcontext.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: ihi $ $Date: 2006-08-28 15:10:14 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 14:53:10 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -180,14 +180,14 @@ namespace comphelper
             Singletons are collected below the <code>/singletons</code> key in a component context,
             so accessing them means retrieving the value under <code>/singletons/&lt;instance_name&gt;</code>.
         */
-        ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > getSingleton( const ::rtl::OUString& _rInstanceName );
+        ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > getSingleton( const ::rtl::OUString& _rInstanceName ) const;
 
         /** retrieves a singleton instance from the context
 
             Singletons are collected below the <code>/singletons</code> key in a component context,
             so accessing them means retrieving the value under <code>/singletons/&lt;instance_name&gt;</code>.
         */
-        ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > getSingleton( const sal_Char* _pAsciiInstanceName )
+        ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > getSingleton( const sal_Char* _pAsciiInstanceName ) const
         {
             return getSingleton( ::rtl::OUString::createFromAscii( _pAsciiInstanceName ) );
         }
