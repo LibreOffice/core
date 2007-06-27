@@ -4,9 +4,9 @@
  *
  *  $RCSfile: sfxpicklist.cxx,v $
  *
- *  $Revision: 1.29 $
+ *  $Revision: 1.30 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 16:21:01 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 23:00:59 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -80,21 +80,21 @@
 
 // ----------------------------------------------------------------------------
 
-#include "app.hxx"
+#include <sfx2/app.hxx>
 #include "sfxpicklist.hxx"
-#include "sfxuno.hxx"
+#include <sfx2/sfxuno.hxx>
 #include "sfxtypes.hxx"
-#include "request.hxx"
-#include "sfxsids.hrc"
-#include "sfx.hrc"
-#include "event.hxx"
-#include "objsh.hxx"
-#include "docinf.hxx"
-#include "bindings.hxx"
+#include <sfx2/request.hxx>
+#include <sfx2/sfxsids.hrc>
+#include <sfx2/sfx.hrc>
+#include <sfx2/event.hxx>
+#include <sfx2/objsh.hxx>
+#include <sfx2/docinf.hxx>
+#include <sfx2/bindings.hxx>
 #include "referers.hxx"
-#include "docfile.hxx"
+#include <sfx2/docfile.hxx>
 #include "objshimp.hxx"
-#include "docfilt.hxx"
+#include <sfx2/docfilt.hxx>
 
 #include <algorithm>
 
