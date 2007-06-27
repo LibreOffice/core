@@ -4,9 +4,9 @@
  *
  *  $RCSfile: sfxstatuslistener.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: vg $ $Date: 2006-11-21 17:48:28 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 23:07:30 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -37,7 +37,7 @@
 #include "precompiled_sfx2.hxx"
 
 #ifndef _SFXSTATUSLISTENER_HXX
-#include <sfxstatuslistener.hxx>
+#include <sfx2/sfxstatuslistener.hxx>
 #endif
 #ifndef _SFXPOOLITEM_HXX //autogen
 #include <svtools/poolitem.hxx>
@@ -76,10 +76,10 @@
 #include <com/sun/star/frame/status/Visibility.hpp>
 #endif
 
-#include "viewfrm.hxx"
-#include "dispatch.hxx"
-#include "unoctitm.hxx"
-#include "msgpool.hxx"
+#include <sfx2/viewfrm.hxx>
+#include <sfx2/dispatch.hxx>
+#include <sfx2/unoctitm.hxx>
+#include <sfx2/msgpool.hxx>
 
 using namespace ::rtl;
 using namespace ::cppu;
