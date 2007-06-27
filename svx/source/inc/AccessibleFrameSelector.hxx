@@ -4,9 +4,9 @@
  *
  *  $RCSfile: AccessibleFrameSelector.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 23:09:20 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 18:21:06 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -66,7 +66,7 @@
 #endif
 
 #ifndef SVX_FRAMEBORDERTYPE_HXX
-#include "framebordertype.hxx"
+#include <svx/framebordertype.hxx>
 #endif
 
 namespace svx {
