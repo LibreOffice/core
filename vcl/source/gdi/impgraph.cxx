@@ -5,9 +5,9 @@
  *
  *  $RCSfile: impgraph.cxx,v $
  *
- *  $Revision: 1.29 $
+ *  $Revision: 1.30 $
  *
- *  last change: $Author: ihi $ $Date: 2007-06-05 17:47:53 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 20:15:32 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -56,10 +56,10 @@
 #include <unotools/tempfile.hxx>
 #endif
 #ifndef _SV_OUTDEV_HXX
-#include <outdev.hxx>
+#include <vcl/outdev.hxx>
 #endif
 #ifndef _SV_VIRDEV_HXX
-#include <virdev.hxx>
+#include <vcl/virdev.hxx>
 #endif
 #ifndef _DEBUG_HXX
 #include <tools/debug.hxx>
@@ -69,19 +69,19 @@
 #endif
 #include <impgraph.hxx>
 #ifndef _GFXLINK_HXX
-#include <gfxlink.hxx>
+#include <vcl/gfxlink.hxx>
 #endif
 #ifndef _SV_CVTGRF_HXX
-#include <cvtgrf.hxx>
+#include <vcl/cvtgrf.hxx>
 #endif
 #ifndef _SV_SALBTYPE_HXX
-#include <salbtype.hxx>
+#include <vcl/salbtype.hxx>
 #endif
 #ifndef _SV_GRAPH_HXX
-#include <graph.hxx>
+#include <vcl/graph.hxx>
 #endif
 #ifndef _SV_METAACT_HXX
-#include <metaact.hxx>
+#include <vcl/metaact.hxx>
 #endif
 
 #ifndef _COM_SUN_STAR_UCB_COMMANDABORTEDEXCEPTION_HPP_
