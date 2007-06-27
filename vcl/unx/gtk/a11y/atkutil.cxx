@@ -4,9 +4,9 @@
  *
  *  $RCSfile: atkutil.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: hr $ $Date: 2007-06-27 12:26:48 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 20:37:59 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -69,12 +69,12 @@
 #endif
 
 #ifndef _SV_SVAPP_HXX
-#include "svapp.hxx"
+#include <vcl/svapp.hxx>
 #endif
 
-#include <window.hxx>
-#include <menu.hxx>
-#include <toolbox.hxx>
+#include <vcl/window.hxx>
+#include <vcl/menu.hxx>
+#include <vcl/toolbox.hxx>
 
 #include "atkwrapper.hxx"
 #include "atkutil.hxx"
