@@ -4,9 +4,9 @@
  *
  *  $RCSfile: galtheme.cxx,v $
  *
- *  $Revision: 1.46 $
+ *  $Revision: 1.47 $
  *
- *  last change: $Author: ihi $ $Date: 2007-06-05 14:35:44 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 18:20:50 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -53,12 +53,12 @@
 #include <svtools/itempool.hxx>
 #include <sfx2/docfile.hxx>
 #include <avmedia/mediawindow.hxx>
-#include "svdograf.hxx"
-#include "fmpage.hxx"
+#include <svx/svdograf.hxx>
+#include <svx/fmpage.hxx>
 #include "codec.hxx"
-#include "unomodel.hxx"
-#include "fmmodel.hxx"
-#include "fmview.hxx"
+#include <svx/unomodel.hxx>
+#include <svx/fmmodel.hxx>
+#include <svx/fmview.hxx>
 #include "galmisc.hxx"
 #include "galtheme.hxx"
 
