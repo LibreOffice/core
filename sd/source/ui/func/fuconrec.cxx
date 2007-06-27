@@ -4,9 +4,9 @@
  *
  *  $RCSfile: fuconrec.cxx,v $
  *
- *  $Revision: 1.30 $
+ *  $Revision: 1.31 $
  *
- *  last change: $Author: kz $ $Date: 2007-05-10 15:29:32 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 15:42:14 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -179,7 +179,7 @@ void FuConstructRectangle::DoExecute( SfxRequest& rReq )
 {
     FuConstruct::DoExecute( rReq );
 
-    mpViewShell->GetViewShellBase().GetToolBarManager().SetToolBar(
+    mpViewShell->GetViewShellBase().GetToolBarManager()->SetToolBar(
         ToolBarManager::TBG_FUNCTION,
         ToolBarManager::msDrawingObjectToolBar);
 
