@@ -4,9 +4,9 @@
  *
  *  $RCSfile: tabwin.cxx,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: obo $ $Date: 2006-10-12 12:48:24 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 18:18:32 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -42,13 +42,13 @@
 #include "fmtools.hxx"
 #endif
 #ifndef _SVX_SVXIDS_HRC
-#include "svxids.hrc"
+#include <svx/svxids.hrc>
 #endif
 #ifndef _SVX_FMSERVS_HXX
 #include "fmservs.hxx"
 #endif
 #ifndef _SVX_DBAEXCHANGE_HXX_
-#include "dbaexchange.hxx"
+#include <svx/dbaexchange.hxx>
 #endif
 
 #ifndef _COM_SUN_STAR_SDB_COMMANDTYPE_HPP_
@@ -83,7 +83,7 @@
 #endif
 
 #ifndef _SVX_FMSHELL_HXX
-#include "fmshell.hxx"
+#include <svx/fmshell.hxx>
 #endif
 #ifndef _SVX_FMSHIMP_HXX
 #include "fmshimp.hxx"
@@ -94,7 +94,7 @@
 #endif
 
 #ifndef _SVX_FMPAGE_HXX
-#include "fmpage.hxx"
+#include <svx/fmpage.hxx>
 #endif
 
 #ifndef _SVX_FMPGEIMP_HXX
@@ -110,7 +110,7 @@
 #endif
 
 #ifndef _SVX_DIALMGR_HXX
-#include "dialmgr.hxx"
+#include <svx/dialmgr.hxx>
 #endif
 
 #ifndef _SHL_HXX
@@ -118,7 +118,7 @@
 #endif
 
 #ifndef _SVDPAGV_HXX
-#include <svdpagv.hxx>
+#include <svx/svdpagv.hxx>
 #endif
 
 #ifndef _SFX_OBJITEM_HXX //autogen
@@ -136,7 +136,7 @@
 #include <sfx2/frame.hxx>
 #endif
 #ifndef _SVX_DATACCESSDESCRIPTOR_HXX_
-#include <dataaccessdescriptor.hxx>
+#include <svx/dataaccessdescriptor.hxx>
 #endif
 
 const long STD_WIN_POS_X = 50;
