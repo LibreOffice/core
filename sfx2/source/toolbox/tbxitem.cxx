@@ -4,9 +4,9 @@
  *
  *  $RCSfile: tbxitem.cxx,v $
  *
- *  $Revision: 1.65 $
+ *  $Revision: 1.66 $
  *
- *  last change: $Author: obo $ $Date: 2007-01-25 11:48:37 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 23:33:00 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -153,33 +153,33 @@
 #ifndef GCC
 #endif
 
-#include "tbxctrl.hxx"
-#include "mnumgr.hxx"
-#include "dispatch.hxx"
+#include <sfx2/tbxctrl.hxx>
+#include <sfx2/mnumgr.hxx>
+#include <sfx2/dispatch.hxx>
 #include "fltfnc.hxx"
-#include "msg.hxx"
-#include "msgpool.hxx"
+#include <sfx2/msg.hxx>
+#include <sfx2/msgpool.hxx>
 #include "statcach.hxx"
-#include "viewfrm.hxx"
+#include <sfx2/viewfrm.hxx>
 #include "arrdecl.hxx"
 #include "sfxtypes.hxx"
-#include "macrconf.hxx"
-#include "genlink.hxx"
+#include <sfx2/macrconf.hxx>
+#include <sfx2/genlink.hxx>
 #include "sfxresid.hxx"
-#include "sfx.hrc"
-#include "module.hxx"
-#include "docfile.hxx"
-#include "docfac.hxx"
+#include <sfx2/sfx.hrc>
+#include <sfx2/module.hxx>
+#include <sfx2/docfile.hxx>
+#include <sfx2/docfac.hxx>
 #include "referers.hxx"
-#include "frmhtmlw.hxx"
-#include "app.hxx"
-#include "unoctitm.hxx"
+#include <sfx2/frmhtmlw.hxx>
+#include <sfx2/app.hxx>
+#include <sfx2/unoctitm.hxx>
 #include "helpid.hrc"
 #include "workwin.hxx"
 #include "imgmgr.hxx"
 #include "virtmenu.hxx"
-#include "viewfrm.hxx"
-#include "module.hxx"
+#include <sfx2/viewfrm.hxx>
+#include <sfx2/module.hxx>
 #include "imagemgr.hxx"
 
 //using namespace ::com::sun::star::awt;
