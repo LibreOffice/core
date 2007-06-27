@@ -4,9 +4,9 @@
  *
  *  $RCSfile: multifil.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: ihi $ $Date: 2007-06-05 14:33:38 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 17:21:45 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -57,10 +57,10 @@
 
 #include "multipat.hxx"
 #include "multifil.hxx"
-#include "dialmgr.hxx"
+#include <svx/dialmgr.hxx>
 
 #include "multipat.hrc"
-#include "dialogs.hrc"
+#include <svx/dialogs.hrc>
 
 // #97807# -------------
 #ifndef _COM_SUN_STAR_UCB_XCONTENTPROVIDER_HPP_
