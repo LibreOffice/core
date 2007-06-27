@@ -4,9 +4,9 @@
  *
  *  $RCSfile: XMLIndexBodyContext.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 11:05:42 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 15:57:02 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -42,15 +42,15 @@
 #endif
 
 #ifndef _XMLOFF_XMLICTXT_HXX
-#include "xmlictxt.hxx"
+#include <xmloff/xmlictxt.hxx>
 #endif
 
 #ifndef _XMLOFF_XMLIMP_HXX
-#include "xmlimp.hxx"
+#include <xmloff/xmlimp.hxx>
 #endif
 
 #ifndef _XMLOFF_TEXTIMP_HXX_
-#include "txtimp.hxx"
+#include <xmloff/txtimp.hxx>
 #endif
 
 #ifndef _TOOLS_DEBUG_HXX
