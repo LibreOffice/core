@@ -4,9 +4,9 @@
  *
  *  $RCSfile: lboxctrl.cxx,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: rt $ $Date: 2007-04-26 07:52:49 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 19:18:02 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -83,7 +83,7 @@
 #endif
 
 #ifndef _SVX_DIALMGR_HXX
-#include <dialmgr.hxx>
+#include <svx/dialmgr.hxx>
 #endif
 #ifndef _SVX_LBOXCTRL_HXX_
 #include <lboxctrl.hxx>
@@ -93,8 +93,8 @@
 #endif
 #include <tools/urlobj.hxx>
 
-#include <svxids.hrc>
-#include <dialogs.hrc>
+#include <svx/svxids.hrc>
+#include <svx/dialogs.hrc>
 
 #include "lboxctrl.hrc"
 
