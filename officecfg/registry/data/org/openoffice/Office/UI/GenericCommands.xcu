@@ -5,9 +5,9 @@
  *
  *  $RCSfile: GenericCommands.xcu,v $
  *
- *  $Revision: 1.57 $
+ *  $Revision: 1.58 $
  *
- *  last change: $Author: hr $ $Date: 2007-06-26 16:40:59 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 13:08:27 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -2612,6 +2612,11 @@
             <node oor:name=".uno:OpenHyperlinkOnCursor" oor:op="replace">
                 <prop oor:name="Label" oor:type="xs:string">
                     <value xml:lang="en-US">Open Hyperlink</value>
+                </prop>
+            </node>
+            <node oor:name=".uno:OpenSmartTagMenuOnCursor" oor:op="replace">
+                <prop oor:name="Label" oor:type="xs:string">
+                    <value xml:lang="en-US">Open Smart Tag Menu</value>
                 </prop>
             </node>
             <node oor:name=".uno:StyleCatalog" oor:op="replace">
