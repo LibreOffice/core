@@ -4,9 +4,9 @@
  *
  *  $RCSfile: imap2.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: hr $ $Date: 2007-06-26 13:33:49 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 21:51:08 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -56,12 +56,12 @@
 #endif
 
 #include "urihelper.hxx"
-#include "imap.hxx"
-#include "imap.hxx"
-#include "imapobj.hxx"
-#include "imaprect.hxx"
-#include "imapcirc.hxx"
-#include "imappoly.hxx"
+#include <svtools/imap.hxx>
+#include <svtools/imap.hxx>
+#include <svtools/imapobj.hxx>
+#include <svtools/imaprect.hxx>
+#include <svtools/imapcirc.hxx>
+#include <svtools/imappoly.hxx>
 
 #define NOTEOL(c) ((c)!='\0')
 
