@@ -4,9 +4,9 @@
  *
  *  $RCSfile: txtprhdl.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 15:32:43 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 16:17:27 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -37,7 +37,7 @@
 
 
 #ifndef _XMLOFF_PROPERTYHANDLERFACTORY_HXX
-#include "prhdlfac.hxx"
+#include <xmloff/prhdlfac.hxx>
 #endif
 
 class XMLTextPropertyHandlerFactory_Impl;
