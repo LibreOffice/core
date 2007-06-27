@@ -4,9 +4,9 @@
  *
  *  $RCSfile: extrusionbar.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: kz $ $Date: 2007-05-10 15:02:17 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 19:20:28 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -55,7 +55,7 @@
 #include <com/sun/star/drawing/ProjectionMode.hpp>
 #endif
 #ifndef _SVDUNDO_HXX
-#include <svdundo.hxx>
+#include <svx/svdundo.hxx>
 #endif
 #ifndef _SFXAPP_HXX
 #include <sfx2/app.hxx>
@@ -73,26 +73,26 @@
 #include <sfx2/bindings.hxx>
 #endif
 #ifndef _SVX_XSFLCLIT_HXX
-#include "xsflclit.hxx"
+#include <svx/xsflclit.hxx>
 #endif
 #ifndef _SVX_DIALMGR_HXX
-#include "dialmgr.hxx"
+#include <svx/dialmgr.hxx>
 #endif
 #ifndef _SVDOASHP_HXX
-#include "svdoashp.hxx"
+#include <svx/svdoashp.hxx>
 #endif
 #ifndef _SVX_DIALOGS_HRC
-#include "dialogs.hrc"
+#include <svx/dialogs.hrc>
 #endif
 #ifndef _SVDVIEW_HXX
-#include "svdview.hxx"
+#include <svx/svdview.hxx>
 #endif
 #ifndef _SVX_COLRITEM_HXX
-#include "colritem.hxx"
+#include <svx/colritem.hxx>
 #endif
 #include "chrtitem.hxx"
 
-#include "extrusionbar.hxx"
+#include <svx/extrusionbar.hxx>
 #include "extrusioncontrols.hxx"
 
 using namespace ::svx;
