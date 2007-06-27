@@ -40,7 +40,7 @@ export KDEMAINDIR=/usr
 export GNOMEDIR=/usr
 export GNOME_MIME_THEME=hicolor
 
-create_tree.sh
+./create_tree.sh
 
 cd $RPM_BUILD_ROOT
 

@@ -208,7 +208,7 @@ export DESTDIR=$RPM_BUILD_ROOT
 export KDEMAINDIR=/usr
 export GNOMEDIR=/usr
 
-create_tree.sh
+./create_tree.sh
 
 #
 # Mandriva menus fun
