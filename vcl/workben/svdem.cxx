@@ -4,9 +4,9 @@
  *
  *  $RCSfile: svdem.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: rt $ $Date: 2006-12-05 11:38:47 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 20:58:52 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -39,10 +39,10 @@
 #include <sal/main.h>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 
-#include <event.hxx>
-#include <svapp.hxx>
-#include <wrkwin.hxx>
-#include <msgbox.hxx>
+#include <vcl/event.hxx>
+#include <vcl/svapp.hxx>
+#include <vcl/wrkwin.hxx>
+#include <vcl/msgbox.hxx>
 
 #include <comphelper/processfactory.hxx>
 #include <cppuhelper/servicefactory.hxx>
