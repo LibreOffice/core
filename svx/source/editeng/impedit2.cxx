@@ -4,9 +4,9 @@
  *
  *  $RCSfile: impedit2.cxx,v $
  *
- *  $Revision: 1.115 $
+ *  $Revision: 1.116 $
  *
- *  last change: $Author: rt $ $Date: 2007-01-30 15:26:23 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 12:53:19 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1762,11 +1762,14 @@ USHORT ImpEditEngine::GetScriptType( const EditSelection& rSel ) const
 
         ScriptTypePosInfos& rTypes = pParaPortion->aScriptInfos;
 
+        // find the first(!) script type position that holds the
+        // complete selection. Thus it will work for selections as
+        // well as with just moving the cursor from char to char.
         USHORT nS = ( nPara == nStartPara ) ? aSel.Min().GetIndex() : 0;
         USHORT nE = ( nPara == nEndPara ) ? aSel.Max().GetIndex() : pParaPortion->GetNode()->Len();
         for ( USHORT n = 0; n < rTypes.Count(); n++ )
         {
-            if ( ( rTypes[n].nStartPos <= nE ) && ( rTypes[n].nEndPos >= nS ) )
+            if (rTypes[n].nStartPos <= nS  &&  nE <= rTypes[n].nEndPos)
                {
                 if ( rTypes[n].nScriptType != i18n::ScriptType::WEAK )
                 {
@@ -1780,6 +1783,7 @@ USHORT ImpEditEngine::GetScriptType( const EditSelection& rSel ) const
                         nScriptType = rTypes[n-1].nScriptType;
                     }
                 }
+                break;
             }
         }
     }
