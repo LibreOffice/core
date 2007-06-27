@@ -78,7 +78,7 @@ USE_SHL1VERSIONMAP=$(MISC)$/$(SHL1TARGET).vmap
 .IF "$(SHL1VERSIONMAP)"!=""
 #eine von beiden ist zuviel
 USE_SHL1VERSIONMAP=$(MISC)$/$(SHL1TARGET).vmap
-$(USE_SHL1VERSIONMAP) .PHONY: 
+$(USE_SHL1VERSIONMAP) .PHONY:
     @echo -----------------------------
     @echo you should only use versionmap OR exportfile
     @echo -----------------------------
@@ -108,7 +108,7 @@ $(USE_SHL1VERSIONMAP): \
 
 .ELSE			# "$(SHL1FILTERFILE)"!=""
 USE_SHL1VERSIONMAP=$(MISC)$/$(SHL1TARGET).vmap
-$(USE_SHL1VERSIONMAP) : 
+$(USE_SHL1VERSIONMAP) :
     @echo -----------------------------
     @echo SHL1FILTERFILE not set!
     @echo -----------------------------
@@ -137,7 +137,7 @@ $(USE_SHL1VERSIONMAP): $(SHL1VERSIONMAP)
     @-$(RM) -f $@.symregexp >& $(NULLDEV)
     @-$(RM) -f $@.expsymlist >& $(NULLDEV)
 .ENDIF
-# Its questionable if the following condition '.IF "$(COMID)"=="gcc3"' makes sense and what 
+# Its questionable if the following condition '.IF "$(COMID)"=="gcc3"' makes sense and what
 # happens if somebody will change it in the future
 .IF "$(COMID)"=="gcc3"
     tr -d "\015" < $(SHL1VERSIONMAP) | $(AWK) -f $(SOLARENV)$/bin$/addsym.awk > $@
@@ -155,12 +155,12 @@ $(USE_SHL1VERSIONMAP): $(SHL1VERSIONMAP)
 .IF "$(SHL1OBJS)"!=""
     -echo $(foreach,i,$(SHL1OBJS:s/.obj/.o/) $i) | xargs -n1 nm -gx | $(SOLARENV)$/bin$/addsym-macosx.sh $@.symbols-regexp $(MISC)$/symbols-regexp.tmp >> $@.exported-symbols
 .ENDIF
-.IF "$(SHL1LIBS)"!=""	
+.IF "$(SHL1LIBS)"!=""
     -$(TYPE) $(foreach,j,$(SHL1LIBS) $j) | $(SED) s\#$(ROUT)\#$(PRJ)$/$(ROUT)\#g | xargs -n1 nm -gx | $(SOLARENV)$/bin$/addsym-macosx.sh $@.symbols-regexp $(MISC)$/symbols-regexp.tmp >> $@.exported-symbols
 .ENDIF
-# overwrite the map file generate into the local output tree with the generated 
+# overwrite the map file generate into the local output tree with the generated
 # exported symbols list
-    cp $@.exported-symbols $@ 
+    cp $@.exported-symbols $@
 .ENDIF # .IF "$(OS)"=="MACOSX"
 .ENDIF			# "$(SHL1VERSIONMAP)"!=""
 .ENDIF			# "$(USE_SHL1VERSIONMAP)"!=""
@@ -240,7 +240,7 @@ $(SHL1TARGETN) : \
 .ELSE			# "$(SHL1ADD_VERINFO)"!=""
     @echo $(EMQ)#define ADDITIONAL_VERINFO1 >> $(MISC)$/$(SHL1DEFAULTRES:b).rc
     @echo $(EMQ)#define ADDITIONAL_VERINFO2 >> $(MISC)$/$(SHL1DEFAULTRES:b).rc
-    @echo $(EMQ)#define ADDITIONAL_VERINFO3 >> $(MISC)$/$(SHL1DEFAULTRES:b).rc	
+    @echo $(EMQ)#define ADDITIONAL_VERINFO3 >> $(MISC)$/$(SHL1DEFAULTRES:b).rc
 .ENDIF			# "$(SHL1ADD_VERINFO)"!=""
     @echo $(EMQ)#define VERVARIANT	$(BUILD) >> $(MISC)$/$(SHL1DEFAULTRES:b).rc
     @echo $(EMQ)#define ORG_NAME	$(SHL1TARGET)$(DLLPOST) >> $(MISC)$/$(SHL1DEFAULTRES:b).rc
@@ -303,8 +303,14 @@ $(SHL1TARGETN) : \
 # double check if target was really written... still making sense?
     @@$(LS) $@
     @echo linking $@.manifest ...
+.IF "$(VISTA_MANIFEST)"!=""
+    $(IFEXIST) $@.manifest $(THEN) mt.exe -manifest $@.manifest -manifest $(TRUSTED_MANIFEST_LOCATION)$/trustedinfo.manifest -out:$@.tmanifest$(EMQ) $(FI)
+    $(IFEXIST) $@.manifest $(THEN) mt.exe -manifest $@.tmanifest -outputresource:$@$(EMQ);2 $(FI)
+.ELSE
     $(IFEXIST) $@.manifest $(THEN) mt.exe -manifest $@.manifest -outputresource:$@$(EMQ);2 $(FI)
+.ENDIF # "$(VISTA_MANIFEST)"!=""
     $(IFEXIST) $@.manifest $(THEN) $(RM:s/+//) $@.manifest $(FI)
+    $(IFEXIST) $@.tmanifest $(THEN) $(RM:s/+//) $@.tmanifest $(FI)
 .ELSE			# "$(USE_DEFFILE)"!=""
     $(SHL1LINKER) @$(mktmp	$(SHL1LINKFLAGS)			\
         $(LINKFLAGSSHL) $(SHL1BASEX)		\
@@ -321,8 +327,14 @@ $(SHL1TARGETN) : \
 # double check if target was really written... still making sense?
     @@$(LS) $@
     @echo linking $@.manifest ...
+.IF "$(VISTA_MANIFEST)"!=""
+    $(IFEXIST) $@.manifest $(THEN) mt.exe -manifest $@.manifest -manifest $(TRUSTED_MANIFEST_LOCATION)$/trustedinfo.manifest -out:$@.tmanifest$(EMQ) $(FI)
+    $(IFEXIST) $@.manifest $(THEN) mt.exe -manifest $@.tmanifest -outputresource:$@$(EMQ);2 $(FI)
+.ELSE
     $(IFEXIST) $@.manifest $(THEN) mt.exe -manifest $@.manifest -outputresource:$@$(EMQ);2 $(FI)
+.ENDIF # "$(VISTA_MANIFEST)"!=""
     $(IFEXIST) $@.manifest $(THEN) $(RM:s/+//) $@.manifest $(FI)
+    $(IFEXIST) $@.tmanifest $(THEN) $(RM:s/+//) $@.tmanifest $(FI)
 .ENDIF			# "$(USE_DEFFILE)"!=""
 .ELSE			# "$(SHL1USE_EXPORTS)"!="name"
     $(SHL1LINKER) @$(mktmp	$(SHL1LINKFLAGS)			\
@@ -338,8 +350,14 @@ $(SHL1TARGETN) : \
         $(SHL1LINKRES) \
     )
     @echo linking $@.manifest ...
+.IF "$(VISTA_MANIFEST)"!=""
+    $(IFEXIST) $@.manifest $(THEN) mt.exe -manifest $@.manifest -manifest $(TRUSTED_MANIFEST_LOCATION)$/trustedinfo.manifest -out:$@.tmanifest$(EMQ) $(FI)
+    $(IFEXIST) $@.manifest $(THEN) mt.exe -manifest $@.tmanifest -outputresource:$@$(EMQ);2 $(FI)
+.ELSE
     $(IFEXIST) $@.manifest $(THEN) mt.exe -manifest $@.manifest -outputresource:$@$(EMQ);2 $(FI)
+.ENDIF # "$(VISTA_MANIFEST)"!=""
     $(IFEXIST) $@.manifest $(THEN) $(RM:s/+//) $@.manifest $(FI)
+    $(IFEXIST) $@.tmanifest $(THEN) $(RM:s/+//) $@.tmanifest $(FI)
 .ENDIF			# "$(SHL1USE_EXPORTS)"!="name"
 .ELSE			# "$(linkinc)"==""
         -$(RM) del $(MISC)$/$(SHL1TARGET).lnk
@@ -359,8 +377,14 @@ $(SHL1TARGETN) : \
         $(TYPE) $(MISC)$/$(SHL1TARGETN:b)_linkinc.ls  >> $(MISC)$/$(SHL1TARGET).lnk
         $(SHL1LINKER) @$(MISC)$/$(SHL1TARGET).lnk
         @echo linking $@.manifest ...
+.IF "$(VISTA_MANIFEST)"!=""
+        $(IFEXIST) $@.manifest $(THEN) mt.exe -manifest $@.manifest -manifest $(TRUSTED_MANIFEST_LOCATION)$/trustedinfo.manifest -out:$@.tmanifest$(EMQ) $(FI)
+        $(IFEXIST) $@.manifest $(THEN) mt.exe -manifest $@.tmanifest -outputresource:$@$(EMQ);2 $(FI)
+.ELSE
         $(IFEXIST) $@.manifest $(THEN) mt.exe -manifest $@.manifest -outputresource:$@$(EMQ);2 $(FI)
+.ENDIF # "$(VISTA_MANIFEST)"!=""
         $(IFEXIST) $@.manifest $(THEN) $(RM:s/+//) $@.manifest $(FI)
+        $(IFEXIST) $@.tmanifest $(THEN) $(RM:s/+//) $@.tmanifest $(FI)
 .ENDIF			# "$(linkinc)"==""
 .ENDIF			# "$(COM)"=="GCC"
 .ENDIF			# "$(GUI)" == "WNT"
@@ -497,7 +521,7 @@ USE_SHL2VERSIONMAP=$(MISC)$/$(SHL2TARGET).vmap
 .IF "$(SHL2VERSIONMAP)"!=""
 #eine von beiden ist zuviel
 USE_SHL2VERSIONMAP=$(MISC)$/$(SHL2TARGET).vmap
-$(USE_SHL2VERSIONMAP) .PHONY: 
+$(USE_SHL2VERSIONMAP) .PHONY:
     @echo -----------------------------
     @echo you should only use versionmap OR exportfile
     @echo -----------------------------
@@ -527,7 +551,7 @@ $(USE_SHL2VERSIONMAP): \
 
 .ELSE			# "$(SHL2FILTERFILE)"!=""
 USE_SHL2VERSIONMAP=$(MISC)$/$(SHL2TARGET).vmap
-$(USE_SHL2VERSIONMAP) : 
+$(USE_SHL2VERSIONMAP) :
     @echo -----------------------------
     @echo SHL2FILTERFILE not set!
     @echo -----------------------------
@@ -556,7 +580,7 @@ $(USE_SHL2VERSIONMAP): $(SHL2VERSIONMAP)
     @-$(RM) -f $@.symregexp >& $(NULLDEV)
     @-$(RM) -f $@.expsymlist >& $(NULLDEV)
 .ENDIF
-# Its questionable if the following condition '.IF "$(COMID)"=="gcc3"' makes sense and what 
+# Its questionable if the following condition '.IF "$(COMID)"=="gcc3"' makes sense and what
 # happens if somebody will change it in the future
 .IF "$(COMID)"=="gcc3"
     tr -d "\015" < $(SHL2VERSIONMAP) | $(AWK) -f $(SOLARENV)$/bin$/addsym.awk > $@
@@ -574,12 +598,12 @@ $(USE_SHL2VERSIONMAP): $(SHL2VERSIONMAP)
 .IF "$(SHL2OBJS)"!=""
     -echo $(foreach,i,$(SHL2OBJS:s/.obj/.o/) $i) | xargs -n1 nm -gx | $(SOLARENV)$/bin$/addsym-macosx.sh $@.symbols-regexp $(MISC)$/symbols-regexp.tmp >> $@.exported-symbols
 .ENDIF
-.IF "$(SHL2LIBS)"!=""	
+.IF "$(SHL2LIBS)"!=""
     -$(TYPE) $(foreach,j,$(SHL2LIBS) $j) | $(SED) s\#$(ROUT)\#$(PRJ)$/$(ROUT)\#g | xargs -n1 nm -gx | $(SOLARENV)$/bin$/addsym-macosx.sh $@.symbols-regexp $(MISC)$/symbols-regexp.tmp >> $@.exported-symbols
 .ENDIF
-# overwrite the map file generate into the local output tree with the generated 
+# overwrite the map file generate into the local output tree with the generated
 # exported symbols list
-    cp $@.exported-symbols $@ 
+    cp $@.exported-symbols $@
 .ENDIF # .IF "$(OS)"=="MACOSX"
 .ENDIF			# "$(SHL2VERSIONMAP)"!=""
 .ENDIF			# "$(USE_SHL2VERSIONMAP)"!=""
@@ -659,7 +683,7 @@ $(SHL2TARGETN) : \
 .ELSE			# "$(SHL2ADD_VERINFO)"!=""
     @echo $(EMQ)#define ADDITIONAL_VERINFO1 >> $(MISC)$/$(SHL2DEFAULTRES:b).rc
     @echo $(EMQ)#define ADDITIONAL_VERINFO2 >> $(MISC)$/$(SHL2DEFAULTRES:b).rc
-    @echo $(EMQ)#define ADDITIONAL_VERINFO3 >> $(MISC)$/$(SHL2DEFAULTRES:b).rc	
+    @echo $(EMQ)#define ADDITIONAL_VERINFO3 >> $(MISC)$/$(SHL2DEFAULTRES:b).rc
 .ENDIF			# "$(SHL2ADD_VERINFO)"!=""
     @echo $(EMQ)#define VERVARIANT	$(BUILD) >> $(MISC)$/$(SHL2DEFAULTRES:b).rc
     @echo $(EMQ)#define ORG_NAME	$(SHL2TARGET)$(DLLPOST) >> $(MISC)$/$(SHL2DEFAULTRES:b).rc
@@ -722,8 +746,14 @@ $(SHL2TARGETN) : \
 # double check if target was really written... still making sense?
     @@$(LS) $@
     @echo linking $@.manifest ...
+.IF "$(VISTA_MANIFEST)"!=""
+    $(IFEXIST) $@.manifest $(THEN) mt.exe -manifest $@.manifest -manifest $(TRUSTED_MANIFEST_LOCATION)$/trustedinfo.manifest -out:$@.tmanifest$(EMQ) $(FI)
+    $(IFEXIST) $@.manifest $(THEN) mt.exe -manifest $@.tmanifest -outputresource:$@$(EMQ);2 $(FI)
+.ELSE
     $(IFEXIST) $@.manifest $(THEN) mt.exe -manifest $@.manifest -outputresource:$@$(EMQ);2 $(FI)
+.ENDIF # "$(VISTA_MANIFEST)"!=""
     $(IFEXIST) $@.manifest $(THEN) $(RM:s/+//) $@.manifest $(FI)
+    $(IFEXIST) $@.tmanifest $(THEN) $(RM:s/+//) $@.tmanifest $(FI)
 .ELSE			# "$(USE_DEFFILE)"!=""
     $(SHL2LINKER) @$(mktmp	$(SHL2LINKFLAGS)			\
         $(LINKFLAGSSHL) $(SHL2BASEX)		\
@@ -740,8 +770,14 @@ $(SHL2TARGETN) : \
 # double check if target was really written... still making sense?
     @@$(LS) $@
     @echo linking $@.manifest ...
+.IF "$(VISTA_MANIFEST)"!=""
+    $(IFEXIST) $@.manifest $(THEN) mt.exe -manifest $@.manifest -manifest $(TRUSTED_MANIFEST_LOCATION)$/trustedinfo.manifest -out:$@.tmanifest$(EMQ) $(FI)
+    $(IFEXIST) $@.manifest $(THEN) mt.exe -manifest $@.tmanifest -outputresource:$@$(EMQ);2 $(FI)
+.ELSE
     $(IFEXIST) $@.manifest $(THEN) mt.exe -manifest $@.manifest -outputresource:$@$(EMQ);2 $(FI)
+.ENDIF # "$(VISTA_MANIFEST)"!=""
     $(IFEXIST) $@.manifest $(THEN) $(RM:s/+//) $@.manifest $(FI)
+    $(IFEXIST) $@.tmanifest $(THEN) $(RM:s/+//) $@.tmanifest $(FI)
 .ENDIF			# "$(USE_DEFFILE)"!=""
 .ELSE			# "$(SHL2USE_EXPORTS)"!="name"
     $(SHL2LINKER) @$(mktmp	$(SHL2LINKFLAGS)			\
@@ -757,8 +793,14 @@ $(SHL2TARGETN) : \
         $(SHL2LINKRES) \
     )
     @echo linking $@.manifest ...
+.IF "$(VISTA_MANIFEST)"!=""
+    $(IFEXIST) $@.manifest $(THEN) mt.exe -manifest $@.manifest -manifest $(TRUSTED_MANIFEST_LOCATION)$/trustedinfo.manifest -out:$@.tmanifest$(EMQ) $(FI)
+    $(IFEXIST) $@.manifest $(THEN) mt.exe -manifest $@.tmanifest -outputresource:$@$(EMQ);2 $(FI)
+.ELSE
     $(IFEXIST) $@.manifest $(THEN) mt.exe -manifest $@.manifest -outputresource:$@$(EMQ);2 $(FI)
+.ENDIF # "$(VISTA_MANIFEST)"!=""
     $(IFEXIST) $@.manifest $(THEN) $(RM:s/+//) $@.manifest $(FI)
+    $(IFEXIST) $@.tmanifest $(THEN) $(RM:s/+//) $@.tmanifest $(FI)
 .ENDIF			# "$(SHL2USE_EXPORTS)"!="name"
 .ELSE			# "$(linkinc)"==""
         -$(RM) del $(MISC)$/$(SHL2TARGET).lnk
@@ -778,8 +820,14 @@ $(SHL2TARGETN) : \
         $(TYPE) $(MISC)$/$(SHL2TARGETN:b)_linkinc.ls  >> $(MISC)$/$(SHL2TARGET).lnk
         $(SHL2LINKER) @$(MISC)$/$(SHL2TARGET).lnk
         @echo linking $@.manifest ...
+.IF "$(VISTA_MANIFEST)"!=""
+        $(IFEXIST) $@.manifest $(THEN) mt.exe -manifest $@.manifest -manifest $(TRUSTED_MANIFEST_LOCATION)$/trustedinfo.manifest -out:$@.tmanifest$(EMQ) $(FI)
+        $(IFEXIST) $@.manifest $(THEN) mt.exe -manifest $@.tmanifest -outputresource:$@$(EMQ);2 $(FI)
+.ELSE
         $(IFEXIST) $@.manifest $(THEN) mt.exe -manifest $@.manifest -outputresource:$@$(EMQ);2 $(FI)
+.ENDIF # "$(VISTA_MANIFEST)"!=""
         $(IFEXIST) $@.manifest $(THEN) $(RM:s/+//) $@.manifest $(FI)
+        $(IFEXIST) $@.tmanifest $(THEN) $(RM:s/+//) $@.tmanifest $(FI)
 .ENDIF			# "$(linkinc)"==""
 .ENDIF			# "$(COM)"=="GCC"
 .ENDIF			# "$(GUI)" == "WNT"
@@ -916,7 +964,7 @@ USE_SHL3VERSIONMAP=$(MISC)$/$(SHL3TARGET).vmap
 .IF "$(SHL3VERSIONMAP)"!=""
 #eine von beiden ist zuviel
 USE_SHL3VERSIONMAP=$(MISC)$/$(SHL3TARGET).vmap
-$(USE_SHL3VERSIONMAP) .PHONY: 
+$(USE_SHL3VERSIONMAP) .PHONY:
     @echo -----------------------------
     @echo you should only use versionmap OR exportfile
     @echo -----------------------------
@@ -946,7 +994,7 @@ $(USE_SHL3VERSIONMAP): \
 
 .ELSE			# "$(SHL3FILTERFILE)"!=""
 USE_SHL3VERSIONMAP=$(MISC)$/$(SHL3TARGET).vmap
-$(USE_SHL3VERSIONMAP) : 
+$(USE_SHL3VERSIONMAP) :
     @echo -----------------------------
     @echo SHL3FILTERFILE not set!
     @echo -----------------------------
@@ -975,7 +1023,7 @@ $(USE_SHL3VERSIONMAP): $(SHL3VERSIONMAP)
     @-$(RM) -f $@.symregexp >& $(NULLDEV)
     @-$(RM) -f $@.expsymlist >& $(NULLDEV)
 .ENDIF
-# Its questionable if the following condition '.IF "$(COMID)"=="gcc3"' makes sense and what 
+# Its questionable if the following condition '.IF "$(COMID)"=="gcc3"' makes sense and what
 # happens if somebody will change it in the future
 .IF "$(COMID)"=="gcc3"
     tr -d "\015" < $(SHL3VERSIONMAP) | $(AWK) -f $(SOLARENV)$/bin$/addsym.awk > $@
@@ -993,12 +1041,12 @@ $(USE_SHL3VERSIONMAP): $(SHL3VERSIONMAP)
 .IF "$(SHL3OBJS)"!=""
     -echo $(foreach,i,$(SHL3OBJS:s/.obj/.o/) $i) | xargs -n1 nm -gx | $(SOLARENV)$/bin$/addsym-macosx.sh $@.symbols-regexp $(MISC)$/symbols-regexp.tmp >> $@.exported-symbols
 .ENDIF
-.IF "$(SHL3LIBS)"!=""	
+.IF "$(SHL3LIBS)"!=""
     -$(TYPE) $(foreach,j,$(SHL3LIBS) $j) | $(SED) s\#$(ROUT)\#$(PRJ)$/$(ROUT)\#g | xargs -n1 nm -gx | $(SOLARENV)$/bin$/addsym-macosx.sh $@.symbols-regexp $(MISC)$/symbols-regexp.tmp >> $@.exported-symbols
 .ENDIF
-# overwrite the map file generate into the local output tree with the generated 
+# overwrite the map file generate into the local output tree with the generated
 # exported symbols list
-    cp $@.exported-symbols $@ 
+    cp $@.exported-symbols $@
 .ENDIF # .IF "$(OS)"=="MACOSX"
 .ENDIF			# "$(SHL3VERSIONMAP)"!=""
 .ENDIF			# "$(USE_SHL3VERSIONMAP)"!=""
@@ -1078,7 +1126,7 @@ $(SHL3TARGETN) : \
 .ELSE			# "$(SHL3ADD_VERINFO)"!=""
     @echo $(EMQ)#define ADDITIONAL_VERINFO1 >> $(MISC)$/$(SHL3DEFAULTRES:b).rc
     @echo $(EMQ)#define ADDITIONAL_VERINFO2 >> $(MISC)$/$(SHL3DEFAULTRES:b).rc
-    @echo $(EMQ)#define ADDITIONAL_VERINFO3 >> $(MISC)$/$(SHL3DEFAULTRES:b).rc	
+    @echo $(EMQ)#define ADDITIONAL_VERINFO3 >> $(MISC)$/$(SHL3DEFAULTRES:b).rc
 .ENDIF			# "$(SHL3ADD_VERINFO)"!=""
     @echo $(EMQ)#define VERVARIANT	$(BUILD) >> $(MISC)$/$(SHL3DEFAULTRES:b).rc
     @echo $(EMQ)#define ORG_NAME	$(SHL3TARGET)$(DLLPOST) >> $(MISC)$/$(SHL3DEFAULTRES:b).rc
@@ -1141,8 +1189,14 @@ $(SHL3TARGETN) : \
 # double check if target was really written... still making sense?
     @@$(LS) $@
     @echo linking $@.manifest ...
+.IF "$(VISTA_MANIFEST)"!=""
+    $(IFEXIST) $@.manifest $(THEN) mt.exe -manifest $@.manifest -manifest $(TRUSTED_MANIFEST_LOCATION)$/trustedinfo.manifest -out:$@.tmanifest$(EMQ) $(FI)
+    $(IFEXIST) $@.manifest $(THEN) mt.exe -manifest $@.tmanifest -outputresource:$@$(EMQ);2 $(FI)
+.ELSE
     $(IFEXIST) $@.manifest $(THEN) mt.exe -manifest $@.manifest -outputresource:$@$(EMQ);2 $(FI)
+.ENDIF # "$(VISTA_MANIFEST)"!=""
     $(IFEXIST) $@.manifest $(THEN) $(RM:s/+//) $@.manifest $(FI)
+    $(IFEXIST) $@.tmanifest $(THEN) $(RM:s/+//) $@.tmanifest $(FI)
 .ELSE			# "$(USE_DEFFILE)"!=""
     $(SHL3LINKER) @$(mktmp	$(SHL3LINKFLAGS)			\
         $(LINKFLAGSSHL) $(SHL3BASEX)		\
@@ -1159,8 +1213,14 @@ $(SHL3TARGETN) : \
 # double check if target was really written... still making sense?
     @@$(LS) $@
     @echo linking $@.manifest ...
+.IF "$(VISTA_MANIFEST)"!=""
+    $(IFEXIST) $@.manifest $(THEN) mt.exe -manifest $@.manifest -manifest $(TRUSTED_MANIFEST_LOCATION)$/trustedinfo.manifest -out:$@.tmanifest$(EMQ) $(FI)
+    $(IFEXIST) $@.manifest $(THEN) mt.exe -manifest $@.tmanifest -outputresource:$@$(EMQ);2 $(FI)
+.ELSE
     $(IFEXIST) $@.manifest $(THEN) mt.exe -manifest $@.manifest -outputresource:$@$(EMQ);2 $(FI)
+.ENDIF # "$(VISTA_MANIFEST)"!=""
     $(IFEXIST) $@.manifest $(THEN) $(RM:s/+//) $@.manifest $(FI)
+    $(IFEXIST) $@.tmanifest $(THEN) $(RM:s/+//) $@.tmanifest $(FI)
 .ENDIF			# "$(USE_DEFFILE)"!=""
 .ELSE			# "$(SHL3USE_EXPORTS)"!="name"
     $(SHL3LINKER) @$(mktmp	$(SHL3LINKFLAGS)			\
@@ -1176,8 +1236,14 @@ $(SHL3TARGETN) : \
         $(SHL3LINKRES) \
     )
     @echo linking $@.manifest ...
+.IF "$(VISTA_MANIFEST)"!=""
+    $(IFEXIST) $@.manifest $(THEN) mt.exe -manifest $@.manifest -manifest $(TRUSTED_MANIFEST_LOCATION)$/trustedinfo.manifest -out:$@.tmanifest$(EMQ) $(FI)
+    $(IFEXIST) $@.manifest $(THEN) mt.exe -manifest $@.tmanifest -outputresource:$@$(EMQ);2 $(FI)
+.ELSE
     $(IFEXIST) $@.manifest $(THEN) mt.exe -manifest $@.manifest -outputresource:$@$(EMQ);2 $(FI)
+.ENDIF # "$(VISTA_MANIFEST)"!=""
     $(IFEXIST) $@.manifest $(THEN) $(RM:s/+//) $@.manifest $(FI)
+    $(IFEXIST) $@.tmanifest $(THEN) $(RM:s/+//) $@.tmanifest $(FI)
 .ENDIF			# "$(SHL3USE_EXPORTS)"!="name"
 .ELSE			# "$(linkinc)"==""
         -$(RM) del $(MISC)$/$(SHL3TARGET).lnk
@@ -1197,8 +1263,14 @@ $(SHL3TARGETN) : \
         $(TYPE) $(MISC)$/$(SHL3TARGETN:b)_linkinc.ls  >> $(MISC)$/$(SHL3TARGET).lnk
         $(SHL3LINKER) @$(MISC)$/$(SHL3TARGET).lnk
         @echo linking $@.manifest ...
+.IF "$(VISTA_MANIFEST)"!=""
+        $(IFEXIST) $@.manifest $(THEN) mt.exe -manifest $@.manifest -manifest $(TRUSTED_MANIFEST_LOCATION)$/trustedinfo.manifest -out:$@.tmanifest$(EMQ) $(FI)
+        $(IFEXIST) $@.manifest $(THEN) mt.exe -manifest $@.tmanifest -outputresource:$@$(EMQ);2 $(FI)
+.ELSE
         $(IFEXIST) $@.manifest $(THEN) mt.exe -manifest $@.manifest -outputresource:$@$(EMQ);2 $(FI)
+.ENDIF # "$(VISTA_MANIFEST)"!=""
         $(IFEXIST) $@.manifest $(THEN) $(RM:s/+//) $@.manifest $(FI)
+        $(IFEXIST) $@.tmanifest $(THEN) $(RM:s/+//) $@.tmanifest $(FI)
 .ENDIF			# "$(linkinc)"==""
 .ENDIF			# "$(COM)"=="GCC"
 .ENDIF			# "$(GUI)" == "WNT"
@@ -1335,7 +1407,7 @@ USE_SHL4VERSIONMAP=$(MISC)$/$(SHL4TARGET).vmap
 .IF "$(SHL4VERSIONMAP)"!=""
 #eine von beiden ist zuviel
 USE_SHL4VERSIONMAP=$(MISC)$/$(SHL4TARGET).vmap
-$(USE_SHL4VERSIONMAP) .PHONY: 
+$(USE_SHL4VERSIONMAP) .PHONY:
     @echo -----------------------------
     @echo you should only use versionmap OR exportfile
     @echo -----------------------------
@@ -1365,7 +1437,7 @@ $(USE_SHL4VERSIONMAP): \
 
 .ELSE			# "$(SHL4FILTERFILE)"!=""
 USE_SHL4VERSIONMAP=$(MISC)$/$(SHL4TARGET).vmap
-$(USE_SHL4VERSIONMAP) : 
+$(USE_SHL4VERSIONMAP) :
     @echo -----------------------------
     @echo SHL4FILTERFILE not set!
     @echo -----------------------------
@@ -1394,7 +1466,7 @@ $(USE_SHL4VERSIONMAP): $(SHL4VERSIONMAP)
     @-$(RM) -f $@.symregexp >& $(NULLDEV)
     @-$(RM) -f $@.expsymlist >& $(NULLDEV)
 .ENDIF
-# Its questionable if the following condition '.IF "$(COMID)"=="gcc3"' makes sense and what 
+# Its questionable if the following condition '.IF "$(COMID)"=="gcc3"' makes sense and what
 # happens if somebody will change it in the future
 .IF "$(COMID)"=="gcc3"
     tr -d "\015" < $(SHL4VERSIONMAP) | $(AWK) -f $(SOLARENV)$/bin$/addsym.awk > $@
@@ -1412,12 +1484,12 @@ $(USE_SHL4VERSIONMAP): $(SHL4VERSIONMAP)
 .IF "$(SHL4OBJS)"!=""
     -echo $(foreach,i,$(SHL4OBJS:s/.obj/.o/) $i) | xargs -n1 nm -gx | $(SOLARENV)$/bin$/addsym-macosx.sh $@.symbols-regexp $(MISC)$/symbols-regexp.tmp >> $@.exported-symbols
 .ENDIF
-.IF "$(SHL4LIBS)"!=""	
+.IF "$(SHL4LIBS)"!=""
     -$(TYPE) $(foreach,j,$(SHL4LIBS) $j) | $(SED) s\#$(ROUT)\#$(PRJ)$/$(ROUT)\#g | xargs -n1 nm -gx | $(SOLARENV)$/bin$/addsym-macosx.sh $@.symbols-regexp $(MISC)$/symbols-regexp.tmp >> $@.exported-symbols
 .ENDIF
-# overwrite the map file generate into the local output tree with the generated 
+# overwrite the map file generate into the local output tree with the generated
 # exported symbols list
-    cp $@.exported-symbols $@ 
+    cp $@.exported-symbols $@
 .ENDIF # .IF "$(OS)"=="MACOSX"
 .ENDIF			# "$(SHL4VERSIONMAP)"!=""
 .ENDIF			# "$(USE_SHL4VERSIONMAP)"!=""
@@ -1497,7 +1569,7 @@ $(SHL4TARGETN) : \
 .ELSE			# "$(SHL4ADD_VERINFO)"!=""
     @echo $(EMQ)#define ADDITIONAL_VERINFO1 >> $(MISC)$/$(SHL4DEFAULTRES:b).rc
     @echo $(EMQ)#define ADDITIONAL_VERINFO2 >> $(MISC)$/$(SHL4DEFAULTRES:b).rc
-    @echo $(EMQ)#define ADDITIONAL_VERINFO3 >> $(MISC)$/$(SHL4DEFAULTRES:b).rc	
+    @echo $(EMQ)#define ADDITIONAL_VERINFO3 >> $(MISC)$/$(SHL4DEFAULTRES:b).rc
 .ENDIF			# "$(SHL4ADD_VERINFO)"!=""
     @echo $(EMQ)#define VERVARIANT	$(BUILD) >> $(MISC)$/$(SHL4DEFAULTRES:b).rc
     @echo $(EMQ)#define ORG_NAME	$(SHL4TARGET)$(DLLPOST) >> $(MISC)$/$(SHL4DEFAULTRES:b).rc
@@ -1560,8 +1632,14 @@ $(SHL4TARGETN) : \
 # double check if target was really written... still making sense?
     @@$(LS) $@
     @echo linking $@.manifest ...
+.IF "$(VISTA_MANIFEST)"!=""
+    $(IFEXIST) $@.manifest $(THEN) mt.exe -manifest $@.manifest -manifest $(TRUSTED_MANIFEST_LOCATION)$/trustedinfo.manifest -out:$@.tmanifest$(EMQ) $(FI)
+    $(IFEXIST) $@.manifest $(THEN) mt.exe -manifest $@.tmanifest -outputresource:$@$(EMQ);2 $(FI)
+.ELSE
     $(IFEXIST) $@.manifest $(THEN) mt.exe -manifest $@.manifest -outputresource:$@$(EMQ);2 $(FI)
+.ENDIF # "$(VISTA_MANIFEST)"!=""
     $(IFEXIST) $@.manifest $(THEN) $(RM:s/+//) $@.manifest $(FI)
+    $(IFEXIST) $@.tmanifest $(THEN) $(RM:s/+//) $@.tmanifest $(FI)
 .ELSE			# "$(USE_DEFFILE)"!=""
     $(SHL4LINKER) @$(mktmp	$(SHL4LINKFLAGS)			\
         $(LINKFLAGSSHL) $(SHL4BASEX)		\
@@ -1578,8 +1656,14 @@ $(SHL4TARGETN) : \
 # double check if target was really written... still making sense?
     @@$(LS) $@
     @echo linking $@.manifest ...
+.IF "$(VISTA_MANIFEST)"!=""
+    $(IFEXIST) $@.manifest $(THEN) mt.exe -manifest $@.manifest -manifest $(TRUSTED_MANIFEST_LOCATION)$/trustedinfo.manifest -out:$@.tmanifest$(EMQ) $(FI)
+    $(IFEXIST) $@.manifest $(THEN) mt.exe -manifest $@.tmanifest -outputresource:$@$(EMQ);2 $(FI)
+.ELSE
     $(IFEXIST) $@.manifest $(THEN) mt.exe -manifest $@.manifest -outputresource:$@$(EMQ);2 $(FI)
+.ENDIF # "$(VISTA_MANIFEST)"!=""
     $(IFEXIST) $@.manifest $(THEN) $(RM:s/+//) $@.manifest $(FI)
+    $(IFEXIST) $@.tmanifest $(THEN) $(RM:s/+//) $@.tmanifest $(FI)
 .ENDIF			# "$(USE_DEFFILE)"!=""
 .ELSE			# "$(SHL4USE_EXPORTS)"!="name"
     $(SHL4LINKER) @$(mktmp	$(SHL4LINKFLAGS)			\
@@ -1595,8 +1679,14 @@ $(SHL4TARGETN) : \
         $(SHL4LINKRES) \
     )
     @echo linking $@.manifest ...
+.IF "$(VISTA_MANIFEST)"!=""
+    $(IFEXIST) $@.manifest $(THEN) mt.exe -manifest $@.manifest -manifest $(TRUSTED_MANIFEST_LOCATION)$/trustedinfo.manifest -out:$@.tmanifest$(EMQ) $(FI)
+    $(IFEXIST) $@.manifest $(THEN) mt.exe -manifest $@.tmanifest -outputresource:$@$(EMQ);2 $(FI)
+.ELSE
     $(IFEXIST) $@.manifest $(THEN) mt.exe -manifest $@.manifest -outputresource:$@$(EMQ);2 $(FI)
+.ENDIF # "$(VISTA_MANIFEST)"!=""
     $(IFEXIST) $@.manifest $(THEN) $(RM:s/+//) $@.manifest $(FI)
+    $(IFEXIST) $@.tmanifest $(THEN) $(RM:s/+//) $@.tmanifest $(FI)
 .ENDIF			# "$(SHL4USE_EXPORTS)"!="name"
 .ELSE			# "$(linkinc)"==""
         -$(RM) del $(MISC)$/$(SHL4TARGET).lnk
@@ -1616,8 +1706,14 @@ $(SHL4TARGETN) : \
         $(TYPE) $(MISC)$/$(SHL4TARGETN:b)_linkinc.ls  >> $(MISC)$/$(SHL4TARGET).lnk
         $(SHL4LINKER) @$(MISC)$/$(SHL4TARGET).lnk
         @echo linking $@.manifest ...
+.IF "$(VISTA_MANIFEST)"!=""
+        $(IFEXIST) $@.manifest $(THEN) mt.exe -manifest $@.manifest -manifest $(TRUSTED_MANIFEST_LOCATION)$/trustedinfo.manifest -out:$@.tmanifest$(EMQ) $(FI)
+        $(IFEXIST) $@.manifest $(THEN) mt.exe -manifest $@.tmanifest -outputresource:$@$(EMQ);2 $(FI)
+.ELSE
         $(IFEXIST) $@.manifest $(THEN) mt.exe -manifest $@.manifest -outputresource:$@$(EMQ);2 $(FI)
+.ENDIF # "$(VISTA_MANIFEST)"!=""
         $(IFEXIST) $@.manifest $(THEN) $(RM:s/+//) $@.manifest $(FI)
+        $(IFEXIST) $@.tmanifest $(THEN) $(RM:s/+//) $@.tmanifest $(FI)
 .ENDIF			# "$(linkinc)"==""
 .ENDIF			# "$(COM)"=="GCC"
 .ENDIF			# "$(GUI)" == "WNT"
@@ -1754,7 +1850,7 @@ USE_SHL5VERSIONMAP=$(MISC)$/$(SHL5TARGET).vmap
 .IF "$(SHL5VERSIONMAP)"!=""
 #eine von beiden ist zuviel
 USE_SHL5VERSIONMAP=$(MISC)$/$(SHL5TARGET).vmap
-$(USE_SHL5VERSIONMAP) .PHONY: 
+$(USE_SHL5VERSIONMAP) .PHONY:
     @echo -----------------------------
     @echo you should only use versionmap OR exportfile
     @echo -----------------------------
@@ -1784,7 +1880,7 @@ $(USE_SHL5VERSIONMAP): \
 
 .ELSE			# "$(SHL5FILTERFILE)"!=""
 USE_SHL5VERSIONMAP=$(MISC)$/$(SHL5TARGET).vmap
-$(USE_SHL5VERSIONMAP) : 
+$(USE_SHL5VERSIONMAP) :
     @echo -----------------------------
     @echo SHL5FILTERFILE not set!
     @echo -----------------------------
@@ -1813,7 +1909,7 @@ $(USE_SHL5VERSIONMAP): $(SHL5VERSIONMAP)
     @-$(RM) -f $@.symregexp >& $(NULLDEV)
     @-$(RM) -f $@.expsymlist >& $(NULLDEV)
 .ENDIF
-# Its questionable if the following condition '.IF "$(COMID)"=="gcc3"' makes sense and what 
+# Its questionable if the following condition '.IF "$(COMID)"=="gcc3"' makes sense and what
 # happens if somebody will change it in the future
 .IF "$(COMID)"=="gcc3"
     tr -d "\015" < $(SHL5VERSIONMAP) | $(AWK) -f $(SOLARENV)$/bin$/addsym.awk > $@
@@ -1831,12 +1927,12 @@ $(USE_SHL5VERSIONMAP): $(SHL5VERSIONMAP)
 .IF "$(SHL5OBJS)"!=""
     -echo $(foreach,i,$(SHL5OBJS:s/.obj/.o/) $i) | xargs -n1 nm -gx | $(SOLARENV)$/bin$/addsym-macosx.sh $@.symbols-regexp $(MISC)$/symbols-regexp.tmp >> $@.exported-symbols
 .ENDIF
-.IF "$(SHL5LIBS)"!=""	
+.IF "$(SHL5LIBS)"!=""
     -$(TYPE) $(foreach,j,$(SHL5LIBS) $j) | $(SED) s\#$(ROUT)\#$(PRJ)$/$(ROUT)\#g | xargs -n1 nm -gx | $(SOLARENV)$/bin$/addsym-macosx.sh $@.symbols-regexp $(MISC)$/symbols-regexp.tmp >> $@.exported-symbols
 .ENDIF
-# overwrite the map file generate into the local output tree with the generated 
+# overwrite the map file generate into the local output tree with the generated
 # exported symbols list
-    cp $@.exported-symbols $@ 
+    cp $@.exported-symbols $@
 .ENDIF # .IF "$(OS)"=="MACOSX"
 .ENDIF			# "$(SHL5VERSIONMAP)"!=""
 .ENDIF			# "$(USE_SHL5VERSIONMAP)"!=""
@@ -1916,7 +2012,7 @@ $(SHL5TARGETN) : \
 .ELSE			# "$(SHL5ADD_VERINFO)"!=""
     @echo $(EMQ)#define ADDITIONAL_VERINFO1 >> $(MISC)$/$(SHL5DEFAULTRES:b).rc
     @echo $(EMQ)#define ADDITIONAL_VERINFO2 >> $(MISC)$/$(SHL5DEFAULTRES:b).rc
-    @echo $(EMQ)#define ADDITIONAL_VERINFO3 >> $(MISC)$/$(SHL5DEFAULTRES:b).rc	
+    @echo $(EMQ)#define ADDITIONAL_VERINFO3 >> $(MISC)$/$(SHL5DEFAULTRES:b).rc
 .ENDIF			# "$(SHL5ADD_VERINFO)"!=""
     @echo $(EMQ)#define VERVARIANT	$(BUILD) >> $(MISC)$/$(SHL5DEFAULTRES:b).rc
     @echo $(EMQ)#define ORG_NAME	$(SHL5TARGET)$(DLLPOST) >> $(MISC)$/$(SHL5DEFAULTRES:b).rc
@@ -1979,8 +2075,14 @@ $(SHL5TARGETN) : \
 # double check if target was really written... still making sense?
     @@$(LS) $@
     @echo linking $@.manifest ...
+.IF "$(VISTA_MANIFEST)"!=""
+    $(IFEXIST) $@.manifest $(THEN) mt.exe -manifest $@.manifest -manifest $(TRUSTED_MANIFEST_LOCATION)$/trustedinfo.manifest -out:$@.tmanifest$(EMQ) $(FI)
+    $(IFEXIST) $@.manifest $(THEN) mt.exe -manifest $@.tmanifest -outputresource:$@$(EMQ);2 $(FI)
+.ELSE
     $(IFEXIST) $@.manifest $(THEN) mt.exe -manifest $@.manifest -outputresource:$@$(EMQ);2 $(FI)
+.ENDIF # "$(VISTA_MANIFEST)"!=""
     $(IFEXIST) $@.manifest $(THEN) $(RM:s/+//) $@.manifest $(FI)
+    $(IFEXIST) $@.tmanifest $(THEN) $(RM:s/+//) $@.tmanifest $(FI)
 .ELSE			# "$(USE_DEFFILE)"!=""
     $(SHL5LINKER) @$(mktmp	$(SHL5LINKFLAGS)			\
         $(LINKFLAGSSHL) $(SHL5BASEX)		\
@@ -1997,8 +2099,14 @@ $(SHL5TARGETN) : \
 # double check if target was really written... still making sense?
     @@$(LS) $@
     @echo linking $@.manifest ...
+.IF "$(VISTA_MANIFEST)"!=""
+    $(IFEXIST) $@.manifest $(THEN) mt.exe -manifest $@.manifest -manifest $(TRUSTED_MANIFEST_LOCATION)$/trustedinfo.manifest -out:$@.tmanifest$(EMQ) $(FI)
+    $(IFEXIST) $@.manifest $(THEN) mt.exe -manifest $@.tmanifest -outputresource:$@$(EMQ);2 $(FI)
+.ELSE
     $(IFEXIST) $@.manifest $(THEN) mt.exe -manifest $@.manifest -outputresource:$@$(EMQ);2 $(FI)
+.ENDIF # "$(VISTA_MANIFEST)"!=""
     $(IFEXIST) $@.manifest $(THEN) $(RM:s/+//) $@.manifest $(FI)
+    $(IFEXIST) $@.tmanifest $(THEN) $(RM:s/+//) $@.tmanifest $(FI)
 .ENDIF			# "$(USE_DEFFILE)"!=""
 .ELSE			# "$(SHL5USE_EXPORTS)"!="name"
     $(SHL5LINKER) @$(mktmp	$(SHL5LINKFLAGS)			\
@@ -2014,8 +2122,14 @@ $(SHL5TARGETN) : \
         $(SHL5LINKRES) \
     )
     @echo linking $@.manifest ...
+.IF "$(VISTA_MANIFEST)"!=""
+    $(IFEXIST) $@.manifest $(THEN) mt.exe -manifest $@.manifest -manifest $(TRUSTED_MANIFEST_LOCATION)$/trustedinfo.manifest -out:$@.tmanifest$(EMQ) $(FI)
+    $(IFEXIST) $@.manifest $(THEN) mt.exe -manifest $@.tmanifest -outputresource:$@$(EMQ);2 $(FI)
+.ELSE
     $(IFEXIST) $@.manifest $(THEN) mt.exe -manifest $@.manifest -outputresource:$@$(EMQ);2 $(FI)
+.ENDIF # "$(VISTA_MANIFEST)"!=""
     $(IFEXIST) $@.manifest $(THEN) $(RM:s/+//) $@.manifest $(FI)
+    $(IFEXIST) $@.tmanifest $(THEN) $(RM:s/+//) $@.tmanifest $(FI)
 .ENDIF			# "$(SHL5USE_EXPORTS)"!="name"
 .ELSE			# "$(linkinc)"==""
         -$(RM) del $(MISC)$/$(SHL5TARGET).lnk
@@ -2035,8 +2149,14 @@ $(SHL5TARGETN) : \
         $(TYPE) $(MISC)$/$(SHL5TARGETN:b)_linkinc.ls  >> $(MISC)$/$(SHL5TARGET).lnk
         $(SHL5LINKER) @$(MISC)$/$(SHL5TARGET).lnk
         @echo linking $@.manifest ...
+.IF "$(VISTA_MANIFEST)"!=""
+        $(IFEXIST) $@.manifest $(THEN) mt.exe -manifest $@.manifest -manifest $(TRUSTED_MANIFEST_LOCATION)$/trustedinfo.manifest -out:$@.tmanifest$(EMQ) $(FI)
+        $(IFEXIST) $@.manifest $(THEN) mt.exe -manifest $@.tmanifest -outputresource:$@$(EMQ);2 $(FI)
+.ELSE
         $(IFEXIST) $@.manifest $(THEN) mt.exe -manifest $@.manifest -outputresource:$@$(EMQ);2 $(FI)
+.ENDIF # "$(VISTA_MANIFEST)"!=""
         $(IFEXIST) $@.manifest $(THEN) $(RM:s/+//) $@.manifest $(FI)
+        $(IFEXIST) $@.tmanifest $(THEN) $(RM:s/+//) $@.tmanifest $(FI)
 .ENDIF			# "$(linkinc)"==""
 .ENDIF			# "$(COM)"=="GCC"
 .ENDIF			# "$(GUI)" == "WNT"
@@ -2173,7 +2293,7 @@ USE_SHL6VERSIONMAP=$(MISC)$/$(SHL6TARGET).vmap
 .IF "$(SHL6VERSIONMAP)"!=""
 #eine von beiden ist zuviel
 USE_SHL6VERSIONMAP=$(MISC)$/$(SHL6TARGET).vmap
-$(USE_SHL6VERSIONMAP) .PHONY: 
+$(USE_SHL6VERSIONMAP) .PHONY:
     @echo -----------------------------
     @echo you should only use versionmap OR exportfile
     @echo -----------------------------
@@ -2203,7 +2323,7 @@ $(USE_SHL6VERSIONMAP): \
 
 .ELSE			# "$(SHL6FILTERFILE)"!=""
 USE_SHL6VERSIONMAP=$(MISC)$/$(SHL6TARGET).vmap
-$(USE_SHL6VERSIONMAP) : 
+$(USE_SHL6VERSIONMAP) :
     @echo -----------------------------
     @echo SHL6FILTERFILE not set!
     @echo -----------------------------
@@ -2232,7 +2352,7 @@ $(USE_SHL6VERSIONMAP): $(SHL6VERSIONMAP)
     @-$(RM) -f $@.symregexp >& $(NULLDEV)
     @-$(RM) -f $@.expsymlist >& $(NULLDEV)
 .ENDIF
-# Its questionable if the following condition '.IF "$(COMID)"=="gcc3"' makes sense and what 
+# Its questionable if the following condition '.IF "$(COMID)"=="gcc3"' makes sense and what
 # happens if somebody will change it in the future
 .IF "$(COMID)"=="gcc3"
     tr -d "\015" < $(SHL6VERSIONMAP) | $(AWK) -f $(SOLARENV)$/bin$/addsym.awk > $@
@@ -2250,12 +2370,12 @@ $(USE_SHL6VERSIONMAP): $(SHL6VERSIONMAP)
 .IF "$(SHL6OBJS)"!=""
     -echo $(foreach,i,$(SHL6OBJS:s/.obj/.o/) $i) | xargs -n1 nm -gx | $(SOLARENV)$/bin$/addsym-macosx.sh $@.symbols-regexp $(MISC)$/symbols-regexp.tmp >> $@.exported-symbols
 .ENDIF
-.IF "$(SHL6LIBS)"!=""	
+.IF "$(SHL6LIBS)"!=""
     -$(TYPE) $(foreach,j,$(SHL6LIBS) $j) | $(SED) s\#$(ROUT)\#$(PRJ)$/$(ROUT)\#g | xargs -n1 nm -gx | $(SOLARENV)$/bin$/addsym-macosx.sh $@.symbols-regexp $(MISC)$/symbols-regexp.tmp >> $@.exported-symbols
 .ENDIF
-# overwrite the map file generate into the local output tree with the generated 
+# overwrite the map file generate into the local output tree with the generated
 # exported symbols list
-    cp $@.exported-symbols $@ 
+    cp $@.exported-symbols $@
 .ENDIF # .IF "$(OS)"=="MACOSX"
 .ENDIF			# "$(SHL6VERSIONMAP)"!=""
 .ENDIF			# "$(USE_SHL6VERSIONMAP)"!=""
@@ -2335,7 +2455,7 @@ $(SHL6TARGETN) : \
 .ELSE			# "$(SHL6ADD_VERINFO)"!=""
     @echo $(EMQ)#define ADDITIONAL_VERINFO1 >> $(MISC)$/$(SHL6DEFAULTRES:b).rc
     @echo $(EMQ)#define ADDITIONAL_VERINFO2 >> $(MISC)$/$(SHL6DEFAULTRES:b).rc
-    @echo $(EMQ)#define ADDITIONAL_VERINFO3 >> $(MISC)$/$(SHL6DEFAULTRES:b).rc	
+    @echo $(EMQ)#define ADDITIONAL_VERINFO3 >> $(MISC)$/$(SHL6DEFAULTRES:b).rc
 .ENDIF			# "$(SHL6ADD_VERINFO)"!=""
     @echo $(EMQ)#define VERVARIANT	$(BUILD) >> $(MISC)$/$(SHL6DEFAULTRES:b).rc
     @echo $(EMQ)#define ORG_NAME	$(SHL6TARGET)$(DLLPOST) >> $(MISC)$/$(SHL6DEFAULTRES:b).rc
@@ -2398,8 +2518,14 @@ $(SHL6TARGETN) : \
 # double check if target was really written... still making sense?
     @@$(LS) $@
     @echo linking $@.manifest ...
+.IF "$(VISTA_MANIFEST)"!=""
+    $(IFEXIST) $@.manifest $(THEN) mt.exe -manifest $@.manifest -manifest $(TRUSTED_MANIFEST_LOCATION)$/trustedinfo.manifest -out:$@.tmanifest$(EMQ) $(FI)
+    $(IFEXIST) $@.manifest $(THEN) mt.exe -manifest $@.tmanifest -outputresource:$@$(EMQ);2 $(FI)
+.ELSE
     $(IFEXIST) $@.manifest $(THEN) mt.exe -manifest $@.manifest -outputresource:$@$(EMQ);2 $(FI)
+.ENDIF # "$(VISTA_MANIFEST)"!=""
     $(IFEXIST) $@.manifest $(THEN) $(RM:s/+//) $@.manifest $(FI)
+    $(IFEXIST) $@.tmanifest $(THEN) $(RM:s/+//) $@.tmanifest $(FI)
 .ELSE			# "$(USE_DEFFILE)"!=""
     $(SHL6LINKER) @$(mktmp	$(SHL6LINKFLAGS)			\
         $(LINKFLAGSSHL) $(SHL6BASEX)		\
@@ -2416,8 +2542,14 @@ $(SHL6TARGETN) : \
 # double check if target was really written... still making sense?
     @@$(LS) $@
     @echo linking $@.manifest ...
+.IF "$(VISTA_MANIFEST)"!=""
+    $(IFEXIST) $@.manifest $(THEN) mt.exe -manifest $@.manifest -manifest $(TRUSTED_MANIFEST_LOCATION)$/trustedinfo.manifest -out:$@.tmanifest$(EMQ) $(FI)
+    $(IFEXIST) $@.manifest $(THEN) mt.exe -manifest $@.tmanifest -outputresource:$@$(EMQ);2 $(FI)
+.ELSE
     $(IFEXIST) $@.manifest $(THEN) mt.exe -manifest $@.manifest -outputresource:$@$(EMQ);2 $(FI)
+.ENDIF # "$(VISTA_MANIFEST)"!=""
     $(IFEXIST) $@.manifest $(THEN) $(RM:s/+//) $@.manifest $(FI)
+    $(IFEXIST) $@.tmanifest $(THEN) $(RM:s/+//) $@.tmanifest $(FI)
 .ENDIF			# "$(USE_DEFFILE)"!=""
 .ELSE			# "$(SHL6USE_EXPORTS)"!="name"
     $(SHL6LINKER) @$(mktmp	$(SHL6LINKFLAGS)			\
@@ -2433,8 +2565,14 @@ $(SHL6TARGETN) : \
         $(SHL6LINKRES) \
     )
     @echo linking $@.manifest ...
+.IF "$(VISTA_MANIFEST)"!=""
+    $(IFEXIST) $@.manifest $(THEN) mt.exe -manifest $@.manifest -manifest $(TRUSTED_MANIFEST_LOCATION)$/trustedinfo.manifest -out:$@.tmanifest$(EMQ) $(FI)
+    $(IFEXIST) $@.manifest $(THEN) mt.exe -manifest $@.tmanifest -outputresource:$@$(EMQ);2 $(FI)
+.ELSE
     $(IFEXIST) $@.manifest $(THEN) mt.exe -manifest $@.manifest -outputresource:$@$(EMQ);2 $(FI)
+.ENDIF # "$(VISTA_MANIFEST)"!=""
     $(IFEXIST) $@.manifest $(THEN) $(RM:s/+//) $@.manifest $(FI)
+    $(IFEXIST) $@.tmanifest $(THEN) $(RM:s/+//) $@.tmanifest $(FI)
 .ENDIF			# "$(SHL6USE_EXPORTS)"!="name"
 .ELSE			# "$(linkinc)"==""
         -$(RM) del $(MISC)$/$(SHL6TARGET).lnk
@@ -2454,8 +2592,14 @@ $(SHL6TARGETN) : \
         $(TYPE) $(MISC)$/$(SHL6TARGETN:b)_linkinc.ls  >> $(MISC)$/$(SHL6TARGET).lnk
         $(SHL6LINKER) @$(MISC)$/$(SHL6TARGET).lnk
         @echo linking $@.manifest ...
+.IF "$(VISTA_MANIFEST)"!=""
+        $(IFEXIST) $@.manifest $(THEN) mt.exe -manifest $@.manifest -manifest $(TRUSTED_MANIFEST_LOCATION)$/trustedinfo.manifest -out:$@.tmanifest$(EMQ) $(FI)
+        $(IFEXIST) $@.manifest $(THEN) mt.exe -manifest $@.tmanifest -outputresource:$@$(EMQ);2 $(FI)
+.ELSE
         $(IFEXIST) $@.manifest $(THEN) mt.exe -manifest $@.manifest -outputresource:$@$(EMQ);2 $(FI)
+.ENDIF # "$(VISTA_MANIFEST)"!=""
         $(IFEXIST) $@.manifest $(THEN) $(RM:s/+//) $@.manifest $(FI)
+        $(IFEXIST) $@.tmanifest $(THEN) $(RM:s/+//) $@.tmanifest $(FI)
 .ENDIF			# "$(linkinc)"==""
 .ENDIF			# "$(COM)"=="GCC"
 .ENDIF			# "$(GUI)" == "WNT"
@@ -2592,7 +2736,7 @@ USE_SHL7VERSIONMAP=$(MISC)$/$(SHL7TARGET).vmap
 .IF "$(SHL7VERSIONMAP)"!=""
 #eine von beiden ist zuviel
 USE_SHL7VERSIONMAP=$(MISC)$/$(SHL7TARGET).vmap
-$(USE_SHL7VERSIONMAP) .PHONY: 
+$(USE_SHL7VERSIONMAP) .PHONY:
     @echo -----------------------------
     @echo you should only use versionmap OR exportfile
     @echo -----------------------------
@@ -2622,7 +2766,7 @@ $(USE_SHL7VERSIONMAP): \
 
 .ELSE			# "$(SHL7FILTERFILE)"!=""
 USE_SHL7VERSIONMAP=$(MISC)$/$(SHL7TARGET).vmap
-$(USE_SHL7VERSIONMAP) : 
+$(USE_SHL7VERSIONMAP) :
     @echo -----------------------------
     @echo SHL7FILTERFILE not set!
     @echo -----------------------------
@@ -2651,7 +2795,7 @@ $(USE_SHL7VERSIONMAP): $(SHL7VERSIONMAP)
     @-$(RM) -f $@.symregexp >& $(NULLDEV)
     @-$(RM) -f $@.expsymlist >& $(NULLDEV)
 .ENDIF
-# Its questionable if the following condition '.IF "$(COMID)"=="gcc3"' makes sense and what 
+# Its questionable if the following condition '.IF "$(COMID)"=="gcc3"' makes sense and what
 # happens if somebody will change it in the future
 .IF "$(COMID)"=="gcc3"
     tr -d "\015" < $(SHL7VERSIONMAP) | $(AWK) -f $(SOLARENV)$/bin$/addsym.awk > $@
@@ -2669,12 +2813,12 @@ $(USE_SHL7VERSIONMAP): $(SHL7VERSIONMAP)
 .IF "$(SHL7OBJS)"!=""
     -echo $(foreach,i,$(SHL7OBJS:s/.obj/.o/) $i) | xargs -n1 nm -gx | $(SOLARENV)$/bin$/addsym-macosx.sh $@.symbols-regexp $(MISC)$/symbols-regexp.tmp >> $@.exported-symbols
 .ENDIF
-.IF "$(SHL7LIBS)"!=""	
+.IF "$(SHL7LIBS)"!=""
     -$(TYPE) $(foreach,j,$(SHL7LIBS) $j) | $(SED) s\#$(ROUT)\#$(PRJ)$/$(ROUT)\#g | xargs -n1 nm -gx | $(SOLARENV)$/bin$/addsym-macosx.sh $@.symbols-regexp $(MISC)$/symbols-regexp.tmp >> $@.exported-symbols
 .ENDIF
-# overwrite the map file generate into the local output tree with the generated 
+# overwrite the map file generate into the local output tree with the generated
 # exported symbols list
-    cp $@.exported-symbols $@ 
+    cp $@.exported-symbols $@
 .ENDIF # .IF "$(OS)"=="MACOSX"
 .ENDIF			# "$(SHL7VERSIONMAP)"!=""
 .ENDIF			# "$(USE_SHL7VERSIONMAP)"!=""
@@ -2754,7 +2898,7 @@ $(SHL7TARGETN) : \
 .ELSE			# "$(SHL7ADD_VERINFO)"!=""
     @echo $(EMQ)#define ADDITIONAL_VERINFO1 >> $(MISC)$/$(SHL7DEFAULTRES:b).rc
     @echo $(EMQ)#define ADDITIONAL_VERINFO2 >> $(MISC)$/$(SHL7DEFAULTRES:b).rc
-    @echo $(EMQ)#define ADDITIONAL_VERINFO3 >> $(MISC)$/$(SHL7DEFAULTRES:b).rc	
+    @echo $(EMQ)#define ADDITIONAL_VERINFO3 >> $(MISC)$/$(SHL7DEFAULTRES:b).rc
 .ENDIF			# "$(SHL7ADD_VERINFO)"!=""
     @echo $(EMQ)#define VERVARIANT	$(BUILD) >> $(MISC)$/$(SHL7DEFAULTRES:b).rc
     @echo $(EMQ)#define ORG_NAME	$(SHL7TARGET)$(DLLPOST) >> $(MISC)$/$(SHL7DEFAULTRES:b).rc
@@ -2817,8 +2961,14 @@ $(SHL7TARGETN) : \
 # double check if target was really written... still making sense?
     @@$(LS) $@
     @echo linking $@.manifest ...
+.IF "$(VISTA_MANIFEST)"!=""
+    $(IFEXIST) $@.manifest $(THEN) mt.exe -manifest $@.manifest -manifest $(TRUSTED_MANIFEST_LOCATION)$/trustedinfo.manifest -out:$@.tmanifest$(EMQ) $(FI)
+    $(IFEXIST) $@.manifest $(THEN) mt.exe -manifest $@.tmanifest -outputresource:$@$(EMQ);2 $(FI)
+.ELSE
     $(IFEXIST) $@.manifest $(THEN) mt.exe -manifest $@.manifest -outputresource:$@$(EMQ);2 $(FI)
+.ENDIF # "$(VISTA_MANIFEST)"!=""
     $(IFEXIST) $@.manifest $(THEN) $(RM:s/+//) $@.manifest $(FI)
+    $(IFEXIST) $@.tmanifest $(THEN) $(RM:s/+//) $@.tmanifest $(FI)
 .ELSE			# "$(USE_DEFFILE)"!=""
     $(SHL7LINKER) @$(mktmp	$(SHL7LINKFLAGS)			\
         $(LINKFLAGSSHL) $(SHL7BASEX)		\
@@ -2835,8 +2985,14 @@ $(SHL7TARGETN) : \
 # double check if target was really written... still making sense?
     @@$(LS) $@
     @echo linking $@.manifest ...
+.IF "$(VISTA_MANIFEST)"!=""
+    $(IFEXIST) $@.manifest $(THEN) mt.exe -manifest $@.manifest -manifest $(TRUSTED_MANIFEST_LOCATION)$/trustedinfo.manifest -out:$@.tmanifest$(EMQ) $(FI)
+    $(IFEXIST) $@.manifest $(THEN) mt.exe -manifest $@.tmanifest -outputresource:$@$(EMQ);2 $(FI)
+.ELSE
     $(IFEXIST) $@.manifest $(THEN) mt.exe -manifest $@.manifest -outputresource:$@$(EMQ);2 $(FI)
+.ENDIF # "$(VISTA_MANIFEST)"!=""
     $(IFEXIST) $@.manifest $(THEN) $(RM:s/+//) $@.manifest $(FI)
+    $(IFEXIST) $@.tmanifest $(THEN) $(RM:s/+//) $@.tmanifest $(FI)
 .ENDIF			# "$(USE_DEFFILE)"!=""
 .ELSE			# "$(SHL7USE_EXPORTS)"!="name"
     $(SHL7LINKER) @$(mktmp	$(SHL7LINKFLAGS)			\
@@ -2852,8 +3008,14 @@ $(SHL7TARGETN) : \
         $(SHL7LINKRES) \
     )
     @echo linking $@.manifest ...
+.IF "$(VISTA_MANIFEST)"!=""
+    $(IFEXIST) $@.manifest $(THEN) mt.exe -manifest $@.manifest -manifest $(TRUSTED_MANIFEST_LOCATION)$/trustedinfo.manifest -out:$@.tmanifest$(EMQ) $(FI)
+    $(IFEXIST) $@.manifest $(THEN) mt.exe -manifest $@.tmanifest -outputresource:$@$(EMQ);2 $(FI)
+.ELSE
     $(IFEXIST) $@.manifest $(THEN) mt.exe -manifest $@.manifest -outputresource:$@$(EMQ);2 $(FI)
+.ENDIF # "$(VISTA_MANIFEST)"!=""
     $(IFEXIST) $@.manifest $(THEN) $(RM:s/+//) $@.manifest $(FI)
+    $(IFEXIST) $@.tmanifest $(THEN) $(RM:s/+//) $@.tmanifest $(FI)
 .ENDIF			# "$(SHL7USE_EXPORTS)"!="name"
 .ELSE			# "$(linkinc)"==""
         -$(RM) del $(MISC)$/$(SHL7TARGET).lnk
@@ -2873,8 +3035,14 @@ $(SHL7TARGETN) : \
         $(TYPE) $(MISC)$/$(SHL7TARGETN:b)_linkinc.ls  >> $(MISC)$/$(SHL7TARGET).lnk
         $(SHL7LINKER) @$(MISC)$/$(SHL7TARGET).lnk
         @echo linking $@.manifest ...
+.IF "$(VISTA_MANIFEST)"!=""
+        $(IFEXIST) $@.manifest $(THEN) mt.exe -manifest $@.manifest -manifest $(TRUSTED_MANIFEST_LOCATION)$/trustedinfo.manifest -out:$@.tmanifest$(EMQ) $(FI)
+        $(IFEXIST) $@.manifest $(THEN) mt.exe -manifest $@.tmanifest -outputresource:$@$(EMQ);2 $(FI)
+.ELSE
         $(IFEXIST) $@.manifest $(THEN) mt.exe -manifest $@.manifest -outputresource:$@$(EMQ);2 $(FI)
+.ENDIF # "$(VISTA_MANIFEST)"!=""
         $(IFEXIST) $@.manifest $(THEN) $(RM:s/+//) $@.manifest $(FI)
+        $(IFEXIST) $@.tmanifest $(THEN) $(RM:s/+//) $@.tmanifest $(FI)
 .ENDIF			# "$(linkinc)"==""
 .ENDIF			# "$(COM)"=="GCC"
 .ENDIF			# "$(GUI)" == "WNT"
@@ -3011,7 +3179,7 @@ USE_SHL8VERSIONMAP=$(MISC)$/$(SHL8TARGET).vmap
 .IF "$(SHL8VERSIONMAP)"!=""
 #eine von beiden ist zuviel
 USE_SHL8VERSIONMAP=$(MISC)$/$(SHL8TARGET).vmap
-$(USE_SHL8VERSIONMAP) .PHONY: 
+$(USE_SHL8VERSIONMAP) .PHONY:
     @echo -----------------------------
     @echo you should only use versionmap OR exportfile
     @echo -----------------------------
@@ -3041,7 +3209,7 @@ $(USE_SHL8VERSIONMAP): \
 
 .ELSE			# "$(SHL8FILTERFILE)"!=""
 USE_SHL8VERSIONMAP=$(MISC)$/$(SHL8TARGET).vmap
-$(USE_SHL8VERSIONMAP) : 
+$(USE_SHL8VERSIONMAP) :
     @echo -----------------------------
     @echo SHL8FILTERFILE not set!
     @echo -----------------------------
@@ -3070,7 +3238,7 @@ $(USE_SHL8VERSIONMAP): $(SHL8VERSIONMAP)
     @-$(RM) -f $@.symregexp >& $(NULLDEV)
     @-$(RM) -f $@.expsymlist >& $(NULLDEV)
 .ENDIF
-# Its questionable if the following condition '.IF "$(COMID)"=="gcc3"' makes sense and what 
+# Its questionable if the following condition '.IF "$(COMID)"=="gcc3"' makes sense and what
 # happens if somebody will change it in the future
 .IF "$(COMID)"=="gcc3"
     tr -d "\015" < $(SHL8VERSIONMAP) | $(AWK) -f $(SOLARENV)$/bin$/addsym.awk > $@
@@ -3088,12 +3256,12 @@ $(USE_SHL8VERSIONMAP): $(SHL8VERSIONMAP)
 .IF "$(SHL8OBJS)"!=""
     -echo $(foreach,i,$(SHL8OBJS:s/.obj/.o/) $i) | xargs -n1 nm -gx | $(SOLARENV)$/bin$/addsym-macosx.sh $@.symbols-regexp $(MISC)$/symbols-regexp.tmp >> $@.exported-symbols
 .ENDIF
-.IF "$(SHL8LIBS)"!=""	
+.IF "$(SHL8LIBS)"!=""
     -$(TYPE) $(foreach,j,$(SHL8LIBS) $j) | $(SED) s\#$(ROUT)\#$(PRJ)$/$(ROUT)\#g | xargs -n1 nm -gx | $(SOLARENV)$/bin$/addsym-macosx.sh $@.symbols-regexp $(MISC)$/symbols-regexp.tmp >> $@.exported-symbols
 .ENDIF
-# overwrite the map file generate into the local output tree with the generated 
+# overwrite the map file generate into the local output tree with the generated
 # exported symbols list
-    cp $@.exported-symbols $@ 
+    cp $@.exported-symbols $@
 .ENDIF # .IF "$(OS)"=="MACOSX"
 .ENDIF			# "$(SHL8VERSIONMAP)"!=""
 .ENDIF			# "$(USE_SHL8VERSIONMAP)"!=""
@@ -3173,7 +3341,7 @@ $(SHL8TARGETN) : \
 .ELSE			# "$(SHL8ADD_VERINFO)"!=""
     @echo $(EMQ)#define ADDITIONAL_VERINFO1 >> $(MISC)$/$(SHL8DEFAULTRES:b).rc
     @echo $(EMQ)#define ADDITIONAL_VERINFO2 >> $(MISC)$/$(SHL8DEFAULTRES:b).rc
-    @echo $(EMQ)#define ADDITIONAL_VERINFO3 >> $(MISC)$/$(SHL8DEFAULTRES:b).rc	
+    @echo $(EMQ)#define ADDITIONAL_VERINFO3 >> $(MISC)$/$(SHL8DEFAULTRES:b).rc
 .ENDIF			# "$(SHL8ADD_VERINFO)"!=""
     @echo $(EMQ)#define VERVARIANT	$(BUILD) >> $(MISC)$/$(SHL8DEFAULTRES:b).rc
     @echo $(EMQ)#define ORG_NAME	$(SHL8TARGET)$(DLLPOST) >> $(MISC)$/$(SHL8DEFAULTRES:b).rc
@@ -3236,8 +3404,14 @@ $(SHL8TARGETN) : \
 # double check if target was really written... still making sense?
     @@$(LS) $@
     @echo linking $@.manifest ...
+.IF "$(VISTA_MANIFEST)"!=""
+    $(IFEXIST) $@.manifest $(THEN) mt.exe -manifest $@.manifest -manifest $(TRUSTED_MANIFEST_LOCATION)$/trustedinfo.manifest -out:$@.tmanifest$(EMQ) $(FI)
+    $(IFEXIST) $@.manifest $(THEN) mt.exe -manifest $@.tmanifest -outputresource:$@$(EMQ);2 $(FI)
+.ELSE
     $(IFEXIST) $@.manifest $(THEN) mt.exe -manifest $@.manifest -outputresource:$@$(EMQ);2 $(FI)
+.ENDIF # "$(VISTA_MANIFEST)"!=""
     $(IFEXIST) $@.manifest $(THEN) $(RM:s/+//) $@.manifest $(FI)
+    $(IFEXIST) $@.tmanifest $(THEN) $(RM:s/+//) $@.tmanifest $(FI)
 .ELSE			# "$(USE_DEFFILE)"!=""
     $(SHL8LINKER) @$(mktmp	$(SHL8LINKFLAGS)			\
         $(LINKFLAGSSHL) $(SHL8BASEX)		\
@@ -3254,8 +3428,14 @@ $(SHL8TARGETN) : \
 # double check if target was really written... still making sense?
     @@$(LS) $@
     @echo linking $@.manifest ...
+.IF "$(VISTA_MANIFEST)"!=""
+    $(IFEXIST) $@.manifest $(THEN) mt.exe -manifest $@.manifest -manifest $(TRUSTED_MANIFEST_LOCATION)$/trustedinfo.manifest -out:$@.tmanifest$(EMQ) $(FI)
+    $(IFEXIST) $@.manifest $(THEN) mt.exe -manifest $@.tmanifest -outputresource:$@$(EMQ);2 $(FI)
+.ELSE
     $(IFEXIST) $@.manifest $(THEN) mt.exe -manifest $@.manifest -outputresource:$@$(EMQ);2 $(FI)
+.ENDIF # "$(VISTA_MANIFEST)"!=""
     $(IFEXIST) $@.manifest $(THEN) $(RM:s/+//) $@.manifest $(FI)
+    $(IFEXIST) $@.tmanifest $(THEN) $(RM:s/+//) $@.tmanifest $(FI)
 .ENDIF			# "$(USE_DEFFILE)"!=""
 .ELSE			# "$(SHL8USE_EXPORTS)"!="name"
     $(SHL8LINKER) @$(mktmp	$(SHL8LINKFLAGS)			\
@@ -3271,8 +3451,14 @@ $(SHL8TARGETN) : \
         $(SHL8LINKRES) \
     )
     @echo linking $@.manifest ...
+.IF "$(VISTA_MANIFEST)"!=""
+    $(IFEXIST) $@.manifest $(THEN) mt.exe -manifest $@.manifest -manifest $(TRUSTED_MANIFEST_LOCATION)$/trustedinfo.manifest -out:$@.tmanifest$(EMQ) $(FI)
+    $(IFEXIST) $@.manifest $(THEN) mt.exe -manifest $@.tmanifest -outputresource:$@$(EMQ);2 $(FI)
+.ELSE
     $(IFEXIST) $@.manifest $(THEN) mt.exe -manifest $@.manifest -outputresource:$@$(EMQ);2 $(FI)
+.ENDIF # "$(VISTA_MANIFEST)"!=""
     $(IFEXIST) $@.manifest $(THEN) $(RM:s/+//) $@.manifest $(FI)
+    $(IFEXIST) $@.tmanifest $(THEN) $(RM:s/+//) $@.tmanifest $(FI)
 .ENDIF			# "$(SHL8USE_EXPORTS)"!="name"
 .ELSE			# "$(linkinc)"==""
         -$(RM) del $(MISC)$/$(SHL8TARGET).lnk
@@ -3292,8 +3478,14 @@ $(SHL8TARGETN) : \
         $(TYPE) $(MISC)$/$(SHL8TARGETN:b)_linkinc.ls  >> $(MISC)$/$(SHL8TARGET).lnk
         $(SHL8LINKER) @$(MISC)$/$(SHL8TARGET).lnk
         @echo linking $@.manifest ...
+.IF "$(VISTA_MANIFEST)"!=""
+        $(IFEXIST) $@.manifest $(THEN) mt.exe -manifest $@.manifest -manifest $(TRUSTED_MANIFEST_LOCATION)$/trustedinfo.manifest -out:$@.tmanifest$(EMQ) $(FI)
+        $(IFEXIST) $@.manifest $(THEN) mt.exe -manifest $@.tmanifest -outputresource:$@$(EMQ);2 $(FI)
+.ELSE
         $(IFEXIST) $@.manifest $(THEN) mt.exe -manifest $@.manifest -outputresource:$@$(EMQ);2 $(FI)
+.ENDIF # "$(VISTA_MANIFEST)"!=""
         $(IFEXIST) $@.manifest $(THEN) $(RM:s/+//) $@.manifest $(FI)
+        $(IFEXIST) $@.tmanifest $(THEN) $(RM:s/+//) $@.tmanifest $(FI)
 .ENDIF			# "$(linkinc)"==""
 .ENDIF			# "$(COM)"=="GCC"
 .ENDIF			# "$(GUI)" == "WNT"
@@ -3430,7 +3622,7 @@ USE_SHL9VERSIONMAP=$(MISC)$/$(SHL9TARGET).vmap
 .IF "$(SHL9VERSIONMAP)"!=""
 #eine von beiden ist zuviel
 USE_SHL9VERSIONMAP=$(MISC)$/$(SHL9TARGET).vmap
-$(USE_SHL9VERSIONMAP) .PHONY: 
+$(USE_SHL9VERSIONMAP) .PHONY:
     @echo -----------------------------
     @echo you should only use versionmap OR exportfile
     @echo -----------------------------
@@ -3460,7 +3652,7 @@ $(USE_SHL9VERSIONMAP): \
 
 .ELSE			# "$(SHL9FILTERFILE)"!=""
 USE_SHL9VERSIONMAP=$(MISC)$/$(SHL9TARGET).vmap
-$(USE_SHL9VERSIONMAP) : 
+$(USE_SHL9VERSIONMAP) :
     @echo -----------------------------
     @echo SHL9FILTERFILE not set!
     @echo -----------------------------
@@ -3489,7 +3681,7 @@ $(USE_SHL9VERSIONMAP): $(SHL9VERSIONMAP)
     @-$(RM) -f $@.symregexp >& $(NULLDEV)
     @-$(RM) -f $@.expsymlist >& $(NULLDEV)
 .ENDIF
-# Its questionable if the following condition '.IF "$(COMID)"=="gcc3"' makes sense and what 
+# Its questionable if the following condition '.IF "$(COMID)"=="gcc3"' makes sense and what
 # happens if somebody will change it in the future
 .IF "$(COMID)"=="gcc3"
     tr -d "\015" < $(SHL9VERSIONMAP) | $(AWK) -f $(SOLARENV)$/bin$/addsym.awk > $@
@@ -3507,12 +3699,12 @@ $(USE_SHL9VERSIONMAP): $(SHL9VERSIONMAP)
 .IF "$(SHL9OBJS)"!=""
     -echo $(foreach,i,$(SHL9OBJS:s/.obj/.o/) $i) | xargs -n1 nm -gx | $(SOLARENV)$/bin$/addsym-macosx.sh $@.symbols-regexp $(MISC)$/symbols-regexp.tmp >> $@.exported-symbols
 .ENDIF
-.IF "$(SHL9LIBS)"!=""	
+.IF "$(SHL9LIBS)"!=""
     -$(TYPE) $(foreach,j,$(SHL9LIBS) $j) | $(SED) s\#$(ROUT)\#$(PRJ)$/$(ROUT)\#g | xargs -n1 nm -gx | $(SOLARENV)$/bin$/addsym-macosx.sh $@.symbols-regexp $(MISC)$/symbols-regexp.tmp >> $@.exported-symbols
 .ENDIF
-# overwrite the map file generate into the local output tree with the generated 
+# overwrite the map file generate into the local output tree with the generated
 # exported symbols list
-    cp $@.exported-symbols $@ 
+    cp $@.exported-symbols $@
 .ENDIF # .IF "$(OS)"=="MACOSX"
 .ENDIF			# "$(SHL9VERSIONMAP)"!=""
 .ENDIF			# "$(USE_SHL9VERSIONMAP)"!=""
@@ -3592,7 +3784,7 @@ $(SHL9TARGETN) : \
 .ELSE			# "$(SHL9ADD_VERINFO)"!=""
     @echo $(EMQ)#define ADDITIONAL_VERINFO1 >> $(MISC)$/$(SHL9DEFAULTRES:b).rc
     @echo $(EMQ)#define ADDITIONAL_VERINFO2 >> $(MISC)$/$(SHL9DEFAULTRES:b).rc
-    @echo $(EMQ)#define ADDITIONAL_VERINFO3 >> $(MISC)$/$(SHL9DEFAULTRES:b).rc	
+    @echo $(EMQ)#define ADDITIONAL_VERINFO3 >> $(MISC)$/$(SHL9DEFAULTRES:b).rc
 .ENDIF			# "$(SHL9ADD_VERINFO)"!=""
     @echo $(EMQ)#define VERVARIANT	$(BUILD) >> $(MISC)$/$(SHL9DEFAULTRES:b).rc
     @echo $(EMQ)#define ORG_NAME	$(SHL9TARGET)$(DLLPOST) >> $(MISC)$/$(SHL9DEFAULTRES:b).rc
@@ -3655,8 +3847,14 @@ $(SHL9TARGETN) : \
 # double check if target was really written... still making sense?
     @@$(LS) $@
     @echo linking $@.manifest ...
+.IF "$(VISTA_MANIFEST)"!=""
+    $(IFEXIST) $@.manifest $(THEN) mt.exe -manifest $@.manifest -manifest $(TRUSTED_MANIFEST_LOCATION)$/trustedinfo.manifest -out:$@.tmanifest$(EMQ) $(FI)
+    $(IFEXIST) $@.manifest $(THEN) mt.exe -manifest $@.tmanifest -outputresource:$@$(EMQ);2 $(FI)
+.ELSE
     $(IFEXIST) $@.manifest $(THEN) mt.exe -manifest $@.manifest -outputresource:$@$(EMQ);2 $(FI)
+.ENDIF # "$(VISTA_MANIFEST)"!=""
     $(IFEXIST) $@.manifest $(THEN) $(RM:s/+//) $@.manifest $(FI)
+    $(IFEXIST) $@.tmanifest $(THEN) $(RM:s/+//) $@.tmanifest $(FI)
 .ELSE			# "$(USE_DEFFILE)"!=""
     $(SHL9LINKER) @$(mktmp	$(SHL9LINKFLAGS)			\
         $(LINKFLAGSSHL) $(SHL9BASEX)		\
@@ -3673,8 +3871,14 @@ $(SHL9TARGETN) : \
 # double check if target was really written... still making sense?
     @@$(LS) $@
     @echo linking $@.manifest ...
+.IF "$(VISTA_MANIFEST)"!=""
+    $(IFEXIST) $@.manifest $(THEN) mt.exe -manifest $@.manifest -manifest $(TRUSTED_MANIFEST_LOCATION)$/trustedinfo.manifest -out:$@.tmanifest$(EMQ) $(FI)
+    $(IFEXIST) $@.manifest $(THEN) mt.exe -manifest $@.tmanifest -outputresource:$@$(EMQ);2 $(FI)
+.ELSE
     $(IFEXIST) $@.manifest $(THEN) mt.exe -manifest $@.manifest -outputresource:$@$(EMQ);2 $(FI)
+.ENDIF # "$(VISTA_MANIFEST)"!=""
     $(IFEXIST) $@.manifest $(THEN) $(RM:s/+//) $@.manifest $(FI)
+    $(IFEXIST) $@.tmanifest $(THEN) $(RM:s/+//) $@.tmanifest $(FI)
 .ENDIF			# "$(USE_DEFFILE)"!=""
 .ELSE			# "$(SHL9USE_EXPORTS)"!="name"
     $(SHL9LINKER) @$(mktmp	$(SHL9LINKFLAGS)			\
@@ -3690,8 +3894,14 @@ $(SHL9TARGETN) : \
         $(SHL9LINKRES) \
     )
     @echo linking $@.manifest ...
+.IF "$(VISTA_MANIFEST)"!=""
+    $(IFEXIST) $@.manifest $(THEN) mt.exe -manifest $@.manifest -manifest $(TRUSTED_MANIFEST_LOCATION)$/trustedinfo.manifest -out:$@.tmanifest$(EMQ) $(FI)
+    $(IFEXIST) $@.manifest $(THEN) mt.exe -manifest $@.tmanifest -outputresource:$@$(EMQ);2 $(FI)
+.ELSE
     $(IFEXIST) $@.manifest $(THEN) mt.exe -manifest $@.manifest -outputresource:$@$(EMQ);2 $(FI)
+.ENDIF # "$(VISTA_MANIFEST)"!=""
     $(IFEXIST) $@.manifest $(THEN) $(RM:s/+//) $@.manifest $(FI)
+    $(IFEXIST) $@.tmanifest $(THEN) $(RM:s/+//) $@.tmanifest $(FI)
 .ENDIF			# "$(SHL9USE_EXPORTS)"!="name"
 .ELSE			# "$(linkinc)"==""
         -$(RM) del $(MISC)$/$(SHL9TARGET).lnk
@@ -3711,8 +3921,14 @@ $(SHL9TARGETN) : \
         $(TYPE) $(MISC)$/$(SHL9TARGETN:b)_linkinc.ls  >> $(MISC)$/$(SHL9TARGET).lnk
         $(SHL9LINKER) @$(MISC)$/$(SHL9TARGET).lnk
         @echo linking $@.manifest ...
+.IF "$(VISTA_MANIFEST)"!=""
+        $(IFEXIST) $@.manifest $(THEN) mt.exe -manifest $@.manifest -manifest $(TRUSTED_MANIFEST_LOCATION)$/trustedinfo.manifest -out:$@.tmanifest$(EMQ) $(FI)
+        $(IFEXIST) $@.manifest $(THEN) mt.exe -manifest $@.tmanifest -outputresource:$@$(EMQ);2 $(FI)
+.ELSE
         $(IFEXIST) $@.manifest $(THEN) mt.exe -manifest $@.manifest -outputresource:$@$(EMQ);2 $(FI)
+.ENDIF # "$(VISTA_MANIFEST)"!=""
         $(IFEXIST) $@.manifest $(THEN) $(RM:s/+//) $@.manifest $(FI)
+        $(IFEXIST) $@.tmanifest $(THEN) $(RM:s/+//) $@.tmanifest $(FI)
 .ENDIF			# "$(linkinc)"==""
 .ENDIF			# "$(COM)"=="GCC"
 .ENDIF			# "$(GUI)" == "WNT"
@@ -3849,7 +4065,7 @@ USE_SHL10VERSIONMAP=$(MISC)$/$(SHL10TARGET).vmap
 .IF "$(SHL10VERSIONMAP)"!=""
 #eine von beiden ist zuviel
 USE_SHL10VERSIONMAP=$(MISC)$/$(SHL10TARGET).vmap
-$(USE_SHL10VERSIONMAP) .PHONY: 
+$(USE_SHL10VERSIONMAP) .PHONY:
     @echo -----------------------------
     @echo you should only use versionmap OR exportfile
     @echo -----------------------------
@@ -3879,7 +4095,7 @@ $(USE_SHL10VERSIONMAP): \
 
 .ELSE			# "$(SHL10FILTERFILE)"!=""
 USE_SHL10VERSIONMAP=$(MISC)$/$(SHL10TARGET).vmap
-$(USE_SHL10VERSIONMAP) : 
+$(USE_SHL10VERSIONMAP) :
     @echo -----------------------------
     @echo SHL10FILTERFILE not set!
     @echo -----------------------------
@@ -3908,7 +4124,7 @@ $(USE_SHL10VERSIONMAP): $(SHL10VERSIONMAP)
     @-$(RM) -f $@.symregexp >& $(NULLDEV)
     @-$(RM) -f $@.expsymlist >& $(NULLDEV)
 .ENDIF
-# Its questionable if the following condition '.IF "$(COMID)"=="gcc3"' makes sense and what 
+# Its questionable if the following condition '.IF "$(COMID)"=="gcc3"' makes sense and what
 # happens if somebody will change it in the future
 .IF "$(COMID)"=="gcc3"
     tr -d "\015" < $(SHL10VERSIONMAP) | $(AWK) -f $(SOLARENV)$/bin$/addsym.awk > $@
@@ -3926,12 +4142,12 @@ $(USE_SHL10VERSIONMAP): $(SHL10VERSIONMAP)
 .IF "$(SHL10OBJS)"!=""
     -echo $(foreach,i,$(SHL10OBJS:s/.obj/.o/) $i) | xargs -n1 nm -gx | $(SOLARENV)$/bin$/addsym-macosx.sh $@.symbols-regexp $(MISC)$/symbols-regexp.tmp >> $@.exported-symbols
 .ENDIF
-.IF "$(SHL10LIBS)"!=""	
+.IF "$(SHL10LIBS)"!=""
     -$(TYPE) $(foreach,j,$(SHL10LIBS) $j) | $(SED) s\#$(ROUT)\#$(PRJ)$/$(ROUT)\#g | xargs -n1 nm -gx | $(SOLARENV)$/bin$/addsym-macosx.sh $@.symbols-regexp $(MISC)$/symbols-regexp.tmp >> $@.exported-symbols
 .ENDIF
-# overwrite the map file generate into the local output tree with the generated 
+# overwrite the map file generate into the local output tree with the generated
 # exported symbols list
-    cp $@.exported-symbols $@ 
+    cp $@.exported-symbols $@
 .ENDIF # .IF "$(OS)"=="MACOSX"
 .ENDIF			# "$(SHL10VERSIONMAP)"!=""
 .ENDIF			# "$(USE_SHL10VERSIONMAP)"!=""
@@ -4011,7 +4227,7 @@ $(SHL10TARGETN) : \
 .ELSE			# "$(SHL10ADD_VERINFO)"!=""
     @echo $(EMQ)#define ADDITIONAL_VERINFO1 >> $(MISC)$/$(SHL10DEFAULTRES:b).rc
     @echo $(EMQ)#define ADDITIONAL_VERINFO2 >> $(MISC)$/$(SHL10DEFAULTRES:b).rc
-    @echo $(EMQ)#define ADDITIONAL_VERINFO3 >> $(MISC)$/$(SHL10DEFAULTRES:b).rc	
+    @echo $(EMQ)#define ADDITIONAL_VERINFO3 >> $(MISC)$/$(SHL10DEFAULTRES:b).rc
 .ENDIF			# "$(SHL10ADD_VERINFO)"!=""
     @echo $(EMQ)#define VERVARIANT	$(BUILD) >> $(MISC)$/$(SHL10DEFAULTRES:b).rc
     @echo $(EMQ)#define ORG_NAME	$(SHL10TARGET)$(DLLPOST) >> $(MISC)$/$(SHL10DEFAULTRES:b).rc
@@ -4074,8 +4290,14 @@ $(SHL10TARGETN) : \
 # double check if target was really written... still making sense?
     @@$(LS) $@
     @echo linking $@.manifest ...
+.IF "$(VISTA_MANIFEST)"!=""
+    $(IFEXIST) $@.manifest $(THEN) mt.exe -manifest $@.manifest -manifest $(TRUSTED_MANIFEST_LOCATION)$/trustedinfo.manifest -out:$@.tmanifest$(EMQ) $(FI)
+    $(IFEXIST) $@.manifest $(THEN) mt.exe -manifest $@.tmanifest -outputresource:$@$(EMQ);2 $(FI)
+.ELSE
     $(IFEXIST) $@.manifest $(THEN) mt.exe -manifest $@.manifest -outputresource:$@$(EMQ);2 $(FI)
+.ENDIF # "$(VISTA_MANIFEST)"!=""
     $(IFEXIST) $@.manifest $(THEN) $(RM:s/+//) $@.manifest $(FI)
+    $(IFEXIST) $@.tmanifest $(THEN) $(RM:s/+//) $@.tmanifest $(FI)
 .ELSE			# "$(USE_DEFFILE)"!=""
     $(SHL10LINKER) @$(mktmp	$(SHL10LINKFLAGS)			\
         $(LINKFLAGSSHL) $(SHL10BASEX)		\
@@ -4092,8 +4314,14 @@ $(SHL10TARGETN) : \
 # double check if target was really written... still making sense?
     @@$(LS) $@
     @echo linking $@.manifest ...
+.IF "$(VISTA_MANIFEST)"!=""
+    $(IFEXIST) $@.manifest $(THEN) mt.exe -manifest $@.manifest -manifest $(TRUSTED_MANIFEST_LOCATION)$/trustedinfo.manifest -out:$@.tmanifest$(EMQ) $(FI)
+    $(IFEXIST) $@.manifest $(THEN) mt.exe -manifest $@.tmanifest -outputresource:$@$(EMQ);2 $(FI)
+.ELSE
     $(IFEXIST) $@.manifest $(THEN) mt.exe -manifest $@.manifest -outputresource:$@$(EMQ);2 $(FI)
+.ENDIF # "$(VISTA_MANIFEST)"!=""
     $(IFEXIST) $@.manifest $(THEN) $(RM:s/+//) $@.manifest $(FI)
+    $(IFEXIST) $@.tmanifest $(THEN) $(RM:s/+//) $@.tmanifest $(FI)
 .ENDIF			# "$(USE_DEFFILE)"!=""
 .ELSE			# "$(SHL10USE_EXPORTS)"!="name"
     $(SHL10LINKER) @$(mktmp	$(SHL10LINKFLAGS)			\
@@ -4109,8 +4337,14 @@ $(SHL10TARGETN) : \
         $(SHL10LINKRES) \
     )
     @echo linking $@.manifest ...
+.IF "$(VISTA_MANIFEST)"!=""
+    $(IFEXIST) $@.manifest $(THEN) mt.exe -manifest $@.manifest -manifest $(TRUSTED_MANIFEST_LOCATION)$/trustedinfo.manifest -out:$@.tmanifest$(EMQ) $(FI)
+    $(IFEXIST) $@.manifest $(THEN) mt.exe -manifest $@.tmanifest -outputresource:$@$(EMQ);2 $(FI)
+.ELSE
     $(IFEXIST) $@.manifest $(THEN) mt.exe -manifest $@.manifest -outputresource:$@$(EMQ);2 $(FI)
+.ENDIF # "$(VISTA_MANIFEST)"!=""
     $(IFEXIST) $@.manifest $(THEN) $(RM:s/+//) $@.manifest $(FI)
+    $(IFEXIST) $@.tmanifest $(THEN) $(RM:s/+//) $@.tmanifest $(FI)
 .ENDIF			# "$(SHL10USE_EXPORTS)"!="name"
 .ELSE			# "$(linkinc)"==""
         -$(RM) del $(MISC)$/$(SHL10TARGET).lnk
@@ -4130,8 +4364,14 @@ $(SHL10TARGETN) : \
         $(TYPE) $(MISC)$/$(SHL10TARGETN:b)_linkinc.ls  >> $(MISC)$/$(SHL10TARGET).lnk
         $(SHL10LINKER) @$(MISC)$/$(SHL10TARGET).lnk
         @echo linking $@.manifest ...
+.IF "$(VISTA_MANIFEST)"!=""
+        $(IFEXIST) $@.manifest $(THEN) mt.exe -manifest $@.manifest -manifest $(TRUSTED_MANIFEST_LOCATION)$/trustedinfo.manifest -out:$@.tmanifest$(EMQ) $(FI)
+        $(IFEXIST) $@.manifest $(THEN) mt.exe -manifest $@.tmanifest -outputresource:$@$(EMQ);2 $(FI)
+.ELSE
         $(IFEXIST) $@.manifest $(THEN) mt.exe -manifest $@.manifest -outputresource:$@$(EMQ);2 $(FI)
+.ENDIF # "$(VISTA_MANIFEST)"!=""
         $(IFEXIST) $@.manifest $(THEN) $(RM:s/+//) $@.manifest $(FI)
+        $(IFEXIST) $@.tmanifest $(THEN) $(RM:s/+//) $@.tmanifest $(FI)
 .ENDIF			# "$(linkinc)"==""
 .ENDIF			# "$(COM)"=="GCC"
 .ENDIF			# "$(GUI)" == "WNT"
