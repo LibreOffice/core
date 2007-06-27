@@ -4,9 +4,9 @@
  *
  *  $RCSfile: threadex.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: vg $ $Date: 2006-11-01 14:56:44 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 20:27:06 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -37,8 +37,8 @@
 #include "precompiled_vcl.hxx"
 
 #define THREADEX_IMPLEMENTATION
-#include <threadex.hxx>
-#include <svapp.hxx>
+#include <vcl/threadex.hxx>
+#include <vcl/svapp.hxx>
 
 using namespace vcl;
 
