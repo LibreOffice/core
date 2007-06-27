@@ -4,9 +4,9 @@
  *
  *  $RCSfile: optgrid.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: rt $ $Date: 2007-04-26 07:50:30 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 18:38:35 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -50,10 +50,10 @@
 
 #define _SVX_OPTGRID_CXX
 
-#include "svxids.hrc"
-#include "dialmgr.hxx"
+#include <svx/svxids.hrc>
+#include <svx/dialmgr.hxx>
 #include "optgrid.hxx"
-#include "dialogs.hrc"
+#include <svx/dialogs.hrc>
 #include "optgrid.hrc"
 #include "dlgutil.hxx"
 
