@@ -4,9 +4,9 @@
  *
  *  $RCSfile: sfxbasemodel.cxx,v $
  *
- *  $Revision: 1.124 $
+ *  $Revision: 1.125 $
  *
- *  last change: $Author: hr $ $Date: 2007-06-26 16:10:07 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 23:24:53 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -41,7 +41,7 @@
 //________________________________________________________________________________________________________
 
 #ifndef _SFX_SFXBASEMODEL_HXX_
-#include <sfxbasemodel.hxx>
+#include <sfx2/sfxbasemodel.hxx>
 #endif
 
 //________________________________________________________________________________________________________
@@ -226,7 +226,7 @@
 //________________________________________________________________________________________________________
 
 #ifndef _SFX_SFXUNO_HXX
-#include <sfxuno.hxx>
+#include <sfx2/sfxuno.hxx>
 #endif
 
 #ifndef _SFX_OBJSHIMP_HXX
@@ -234,31 +234,31 @@
 #endif
 
 #ifndef _SFXVIEWFRM_HXX
-#include <viewfrm.hxx>
+#include <sfx2/viewfrm.hxx>
 #endif
 
 #ifndef _SFXVIEWSH_HXX
-#include <viewsh.hxx>
+#include <sfx2/viewsh.hxx>
 #endif
 
 #ifndef _SFXDOCFILE_HXX
-#include <docfile.hxx>
+#include <sfx2/docfile.hxx>
 #endif
 
 #ifndef _SFXDISPATCH_HXX
-#include <dispatch.hxx>
+#include <sfx2/dispatch.hxx>
 #endif
 
 #ifndef _SFXREQUEST_HXX
-#include <request.hxx>
+#include <sfx2/request.hxx>
 #endif
 
 #ifndef _SFX_OBJUNO_HXX
-#include <objuno.hxx>
+#include <sfx2/objuno.hxx>
 #endif
 
 #ifndef _SFX_PRINTER_HXX
-#include <printer.hxx>
+#include <sfx2/printer.hxx>
 #endif
 
 #ifndef _SFX_BASMGR_HXX
@@ -266,7 +266,7 @@
 #endif
 
 #ifndef _SFXEVENT_HXX
-#include <event.hxx>
+#include <sfx2/event.hxx>
 #endif
 
 #ifndef _SFX_EVENTSUPPLIER_HXX_
@@ -274,25 +274,25 @@
 #endif
 
 #ifndef _SFX_EVENTCONF_HXX
-#include <evntconf.hxx>
+#include <sfx2/evntconf.hxx>
 #endif
 
 #ifndef _SFX_HRC
-#include "sfx.hrc"
+#include <sfx2/sfx.hrc>
 #endif
 
 
-#include "app.hxx"
-#include "topfrm.hxx"
+#include <sfx2/app.hxx>
+#include <sfx2/topfrm.hxx>
 #include "appdata.hxx"
-#include "docfac.hxx"
-#include "fcontnr.hxx"
+#include <sfx2/docfac.hxx>
+#include <sfx2/fcontnr.hxx>
 #include "commitlistener.hxx"
 #include "stormodifylistener.hxx"
 #include "openflag.hxx"
 #include "brokenpackageint.hxx"
 #include "graphhelp.hxx"
-#include "msgpool.hxx"
+#include <sfx2/msgpool.hxx>
 
 using namespace com::sun::star;
 namespace css = ::com::sun::star;
