@@ -4,9 +4,9 @@
  *
  *  $RCSfile: b3ddeflt.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: kz $ $Date: 2007-05-09 13:25:44 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 22:26:48 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -53,7 +53,7 @@
 #endif
 
 #ifndef _BXD_INTERPOLATOR_HXX
-#include "bxdintpo.hxx"
+#include <goodies/bxdintpo.hxx>
 #endif
 
 /*************************************************************************
