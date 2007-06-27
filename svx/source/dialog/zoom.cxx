@@ -4,9 +4,9 @@
  *
  *  $RCSfile: zoom.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: rt $ $Date: 2007-04-26 07:48:00 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 17:52:39 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -60,12 +60,12 @@
 
 #define _SVX_ZOOM_CXX
 
-#include "dialogs.hrc"
+#include <svx/dialogs.hrc>
 #include "zoom.hrc"
 
 #include "zoom.hxx"
-#include "zoomitem.hxx"
-#include "dialmgr.hxx"
+#include <svx/zoomitem.hxx>
+#include <svx/dialmgr.hxx>
 
 #ifndef _SVX_ZOOM_DEF_HXX
 #include "zoom_def.hxx"
