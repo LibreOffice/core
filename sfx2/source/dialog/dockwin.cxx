@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dockwin.cxx,v $
  *
- *  $Revision: 1.43 $
+ *  $Revision: 1.44 $
  *
- *  last change: $Author: vg $ $Date: 2007-02-26 16:00:32 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 23:11:30 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -45,13 +45,13 @@
 
 #include <vcl/svapp.hxx>
 
-#include "dockwin.hxx"
-#include "bindings.hxx"
-#include "viewfrm.hxx"
-#include "dispatch.hxx"
+#include <sfx2/dockwin.hxx>
+#include <sfx2/bindings.hxx>
+#include <sfx2/viewfrm.hxx>
+#include <sfx2/dispatch.hxx>
 #include "workwin.hxx"
 #include "splitwin.hxx"
-#include "viewsh.hxx"
+#include <sfx2/viewsh.hxx>
 #include "sfxhelp.hxx"
 
 #define MAX_TOGGLEAREA_WIDTH        20
