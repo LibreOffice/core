@@ -4,9 +4,9 @@
  *
  *  $RCSfile: inettbc.cxx,v $
  *
- *  $Revision: 1.34 $
+ *  $Revision: 1.35 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 16:46:24 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 23:30:46 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -87,10 +87,10 @@
 #include <unotools/localfilehelper.hxx>
 #include <comphelper/processfactory.hxx>
 
-#include "sfx.hrc"
-#include "dispatch.hxx"
-#include "viewfrm.hxx"
-#include "objsh.hxx"
+#include <sfx2/sfx.hrc>
+#include <sfx2/dispatch.hxx>
+#include <sfx2/viewfrm.hxx>
+#include <sfx2/objsh.hxx>
 #include "referers.hxx"
 #include "sfxtypes.hxx"
 #include "helper.hxx"
