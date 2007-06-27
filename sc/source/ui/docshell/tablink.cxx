@@ -4,9 +4,9 @@
  *
  *  $RCSfile: tablink.cxx,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: vg $ $Date: 2007-02-27 13:09:55 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 12:45:54 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -476,7 +476,8 @@ String ScDocumentLoader::GetOptions( SfxMedium& rMedium )       // static
 }
 
 BOOL ScDocumentLoader::GetFilterName( const String& rFileName,
-                                    String& rFilter, String& rOptions, BOOL bWithContent )  // static
+                                    String& rFilter, String& rOptions,
+                                    BOOL bWithContent, BOOL bWithInteraction )  // static
 {
     TypeId aScType = TYPE(ScDocShell);
     SfxObjectShell* pDocSh = SfxObjectShell::GetFirst( &aScType );
@@ -501,6 +502,9 @@ BOOL ScDocumentLoader::GetFilterName( const String& rFileName,
     SfxMedium* pMedium = new SfxMedium( rFileName, STREAM_STD_READ, FALSE );
     if ( pMedium->GetError() == ERRCODE_NONE )
     {
+        if ( bWithInteraction )
+            pMedium->UseInteractionHandler(TRUE);   // #i73992# no longer called from GuessFilter
+
         SfxFilterMatcher aMatcher( String::CreateFromAscii("scalc") );
         if( bWithContent )
             aMatcher.GuessFilter( *pMedium, &pSfxFilter );
@@ -538,7 +542,7 @@ ScDocumentLoader::ScDocumentLoader( const String& rFileName,
         pMedium(0)
 {
     if ( !rFilterName.Len() )
-        GetFilterName( rFileName, rFilterName, rOptions, TRUE );
+        GetFilterName( rFileName, rFilterName, rOptions, TRUE, bWithInteraction );
 
     const SfxFilter* pFilter = ScDocShell::Factory().GetFilterContainer()->GetFilter4FilterName( rFilterName );
 
