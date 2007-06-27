@@ -4,9 +4,9 @@
  *
  *  $RCSfile: galmisc.cxx,v $
  *
- *  $Revision: 1.42 $
+ *  $Revision: 1.43 $
  *
- *  last change: $Author: ihi $ $Date: 2007-06-05 14:35:31 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 18:20:18 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -54,11 +54,11 @@
 #endif
 
 #include "impgrf.hxx"
-#include "svdpage.hxx"
-#include "svdograf.hxx"
-#include "fmmodel.hxx"
-#include "fmview.hxx"
-#include "unomodel.hxx"
+#include <svx/svdpage.hxx>
+#include <svx/svdograf.hxx>
+#include <svx/fmmodel.hxx>
+#include <svx/fmview.hxx>
+#include <svx/unomodel.hxx>
 #include "codec.hxx"
 #include "gallery.hrc"
 #include "gallery1.hxx"
