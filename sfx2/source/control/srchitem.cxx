@@ -4,9 +4,9 @@
  *
  *  $RCSfile: srchitem.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: kz $ $Date: 2007-05-10 17:07:55 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 23:08:10 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -74,11 +74,11 @@
 
 #define _SVX_SRCHITEM_CXX
 
-#include "sfxsids.hrc"
+#include <sfx2/sfxsids.hrc>
 #define ITEMID_SEARCH   SID_SEARCH_ITEM
-#include "srchitem.hxx"
+#include <sfx2/srchitem.hxx>
 
-#include <sfxuno.hxx>
+#include <sfx2/sfxuno.hxx>
 
 //using namespace uno;
 using namespace rtl;
