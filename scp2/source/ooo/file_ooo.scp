@@ -4,9 +4,9 @@
  *
  *  $RCSfile: file_ooo.scp,v $
  *
- *  $Revision: 1.198 $
+ *  $Revision: 1.199 $
  *
- *  last change: $Author: hr $ $Date: 2007-06-27 13:45:43 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 14:56:22 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1658,6 +1658,13 @@ File gid_File_Oo_Office_Paths_Xcs
     Name = "/registry/schema/org/openoffice/Office/Paths.xcs";
 End
 
+File gid_File_Oo_Office_Logging_Xcs
+    TXT_FILE_BODY;
+    Styles = (PACKED,PATCH);
+    Dir = gid_Dir_Share_Registry_Schema_Org_Openoffice_Office;
+    Name = "/registry/schema/org/openoffice/Office/Logging.xcs";
+End
+
 File gid_File_Oo_Office_OptionsDialog_Xcs
     TXT_FILE_BODY;
     Styles = (PACKED,PATCH);
@@ -1684,6 +1691,13 @@ File gid_File_Oo_Office_Paths_Xcu
     Styles = (PACKED, SCPZIP_REPLACE, PATCH);
     Dir = gid_Dir_Share_Registry_Data_Org_Openoffice_Office;
     Name = "/registry/data/org/openoffice/Office/Paths.xcu";
+End
+
+File gid_File_Oo_Office_Logging_Xcu
+    TXT_FILE_BODY;
+    Styles = (PACKED, SCPZIP_REPLACE, PATCH);
+    Dir = gid_Dir_Share_Registry_Data_Org_Openoffice_Office;
+    Name = "/registry/data/org/openoffice/Office/Logging.xcu";
 End
 
 File gid_File_Oo_Office_Views_Xcu
