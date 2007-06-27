@@ -4,9 +4,9 @@
  *
  *  $RCSfile: unomtabl.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 06:13:26 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 19:25:12 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -71,14 +71,14 @@
 #endif
 
 #ifndef _SVX_XLNEDIT_HXX //autogen
-#include <xlnedit.hxx>
+#include <svx/xlnedit.hxx>
 #endif
 #ifndef _SVX_XLNSTIT_HXX
-#include <xlnstit.hxx>
+#include <svx/xlnstit.hxx>
 #endif
-#include "svdmodel.hxx"
-#include "xdef.hxx"
-#include "xflhtit.hxx"
+#include <svx/svdmodel.hxx>
+#include <svx/xdef.hxx>
+#include <svx/xflhtit.hxx>
 
 #include <vector>
 
