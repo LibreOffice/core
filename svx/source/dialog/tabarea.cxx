@@ -4,9 +4,9 @@
  *
  *  $RCSfile: tabarea.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: kz $ $Date: 2007-05-10 14:42:20 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 17:43:58 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -56,33 +56,33 @@
 #include <svtools/pathoptions.hxx>
 #endif
 #ifndef _SVDMARK_HXX //autogen
-#include <svdmark.hxx>
+#include <svx/svdmark.hxx>
 #endif
 #ifndef _SVDOBJ_HXX //autogen
-#include <svdobj.hxx>
+#include <svx/svdobj.hxx>
 #endif
 #ifndef _SVDVIEW_HXX //autogen
-#include <svdview.hxx>
+#include <svx/svdview.hxx>
 #endif
 
 #define _SVX_TABAREA_CXX
 
-#include "dialogs.hrc"
+#include <svx/dialogs.hrc>
 
 
 
 
 
 
-#include "xtable.hxx"
+#include <svx/xtable.hxx>
 #include "globl3d.hxx"
-#include "svdmodel.hxx"
+#include <svx/svdmodel.hxx>
 #include "drawitem.hxx"
 #include "cuitabarea.hxx"
 #include "tabarea.hrc"
 #include "dlgname.hxx"
 #include "dlgname.hrc"
-#include "dialmgr.hxx"
+#include <svx/dialmgr.hxx>
 
 #define DLGWIN this->GetParent()->GetParent()
 
