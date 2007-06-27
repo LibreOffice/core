@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.16 $
+#   $Revision: 1.17 $
 #
-#   last change: $Author: obo $ $Date: 2006-10-12 12:54:39 $
+#   last change: $Author: hr $ $Date: 2007-06-27 13:41:00 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -84,7 +84,9 @@ SLOFILES=	\
         $(SLO)$/svxempty.obj \
         $(SLO)$/xmlcnitm.obj \
         $(SLO)$/customshapeitem.obj \
-        $(SLO)$/charhiddenitem.obj
+        $(SLO)$/charhiddenitem.obj \
+        $(SLO)$/SmartTagItem.obj
+
 
 EXCEPTIONSFILES= \
         $(SLO)$/paraitem.obj \
