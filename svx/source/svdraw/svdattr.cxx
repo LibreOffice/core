@@ -4,9 +4,9 @@
  *
  *  $RCSfile: svdattr.cxx,v $
  *
- *  $Revision: 1.31 $
+ *  $Revision: 1.32 $
  *
- *  last change: $Author: kz $ $Date: 2007-05-10 14:56:53 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 18:58:21 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -82,9 +82,9 @@
 #include <vcl/svapp.hxx>
 #endif
 
-#include "svdattr.hxx"
-#include "svdattrx.hxx"
-#include "svdpool.hxx"
+#include <svx/svdattr.hxx>
+#include <svx/svdattrx.hxx>
+#include <svx/svdpool.hxx>
 
 #ifndef _SOLAR_HRC
 #include <svtools/solar.hrc>
@@ -94,17 +94,17 @@
 #include "xmlcnitm.hxx"
 #endif
 
-#include "svxids.hrc"
-#include "xtable.hxx"    // fuer RGB_Color()
+#include <svx/svxids.hrc>
+#include <svx/xtable.hxx>    // fuer RGB_Color()
 #include "svditext.hxx"
-#include "svdmodel.hxx"  // fuer DEGREE_CHAR
-#include "svdtrans.hxx"
+#include <svx/svdmodel.hxx>  // fuer DEGREE_CHAR
+#include <svx/svdtrans.hxx>
 #include "svdglob.hxx"  // Stringcache
 #include "svdstr.hrc"
-#include "sdgcpitm.hxx"
-#include "adjitem.hxx"
-#include "sdtfchim.hxx"
-#include "writingmodeitem.hxx"
+#include <svx/sdgcpitm.hxx>
+#include <svx/adjitem.hxx>
+#include <svx/sdtfchim.hxx>
+#include <svx/writingmodeitem.hxx>
 
 #ifndef _BIGINT_HXX //autogen
 #include <tools/bigint.hxx>
@@ -114,12 +114,12 @@
 #include <tools/stream.hxx>
 #endif
 
-#include <xfillit0.hxx>
-#include <xflclit.hxx>
-#include <xlineit0.hxx>
+#include <svx/xfillit0.hxx>
+#include <svx/xflclit.hxx>
+#include <svx/xlineit0.hxx>
 
 #ifndef _SVX3DITEMS_HXX
-#include <svx3ditems.hxx>
+#include <svx/svx3ditems.hxx>
 #endif
 
 using namespace ::rtl;
