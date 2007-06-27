@@ -4,9 +4,9 @@
  *
  *  $RCSfile: PageMasterPropMapper.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 14:28:44 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 15:28:33 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -37,7 +37,7 @@
 #define _XMLOFF_PAGEMASTERPROPMAPPER_HXX_
 
 #ifndef _XMLOFF_PROPERTYSETMAPPER_HXX
-#include "xmlprmap.hxx"
+#include <xmloff/xmlprmap.hxx>
 #endif
 
 
