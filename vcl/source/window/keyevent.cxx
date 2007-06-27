@@ -4,9 +4,9 @@
  *
  *  $RCSfile: keyevent.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 12:19:27 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 20:31:57 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -39,7 +39,7 @@
 #ifndef _DEBUG_HXX
 #include <tools/debug.hxx>
 #endif
-#include <event.hxx>
+#include <vcl/event.hxx>
 
 KeyEvent::KeyEvent (const KeyEvent& rKeyEvent) :
     maKeyCode (rKeyEvent.maKeyCode),
