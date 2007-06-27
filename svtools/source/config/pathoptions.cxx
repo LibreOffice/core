@@ -4,9 +4,9 @@
  *
  *  $RCSfile: pathoptions.cxx,v $
  *
- *  $Revision: 1.78 $
+ *  $Revision: 1.79 $
  *
- *  last change: $Author: kz $ $Date: 2007-06-19 15:59:31 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 21:15:56 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -38,7 +38,7 @@
 #ifndef GCC
 #endif
 
-#include "pathoptions.hxx"
+#include <svtools/pathoptions.hxx>
 
 #ifndef _UTL_CONFIGITEM_HXX_
 #include <unotools/configitem.hxx>
