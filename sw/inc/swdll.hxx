@@ -4,9 +4,9 @@
  *
  *  $RCSfile: swdll.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: hr $ $Date: 2006-08-14 15:33:06 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 13:14:27 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -71,8 +71,6 @@ public:
 
     static void     Init();     // called directly after loading the DLL
     static void     Exit();     // called directly befor unloading the DLL
-
-    static void     FillStatusBar(StatusBar &rBar);
 };
 
 //-------------------------------------------------------------------------
