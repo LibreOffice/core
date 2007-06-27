@@ -4,9 +4,9 @@
  *
  *  $RCSfile: XMLAutoTextEventImport.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 14:58:05 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 15:51:57 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -37,7 +37,7 @@
 #define _XMLOFF_XMLAUTOTEXTEVENTIMPORT_HXX
 
 #ifndef _XMLOFF_XMLIMP_HXX
-#include "xmlimp.hxx"
+#include <xmloff/xmlimp.hxx>
 #endif
 
 #ifndef _COM_SUN_STAR_UNO_REFERENCE_HXX_
