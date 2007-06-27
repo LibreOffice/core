@@ -4,9 +4,9 @@
  *
  *  $RCSfile: outlundo.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: obo $ $Date: 2006-10-12 13:02:41 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 18:42:10 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -39,7 +39,7 @@
 #include <outl_pch.hxx>
 
 #define _OUTLINER_CXX
-#include <outliner.hxx>
+#include <svx/outliner.hxx>
 #include <outlundo.hxx>
 
 
