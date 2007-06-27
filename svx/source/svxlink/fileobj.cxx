@@ -4,9 +4,9 @@
  *
  *  $RCSfile: fileobj.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: vg $ $Date: 2006-11-22 10:37:16 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 19:14:20 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -93,8 +93,8 @@
 
 #include "fileobj.hxx"
 #include "linkmgr.hxx"
-#include "dialmgr.hxx"
-#include "dialogs.hrc"
+#include <svx/dialmgr.hxx>
+#include <svx/dialogs.hrc>
 #include "xoutbmp.hxx"
 #include "opengrf.hxx"
 #include "impgrf.hxx"
