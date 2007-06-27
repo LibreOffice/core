@@ -4,9 +4,9 @@
  *
  *  $RCSfile: appreg.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 16:16:04 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 22:57:04 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -41,23 +41,23 @@
 #ifndef GCC
 #endif
 
-#include "app.hxx"
+#include <sfx2/app.hxx>
 #include "appdata.hxx"
 #include "arrdecl.hxx"
 #include "sfxhelp.hxx"
-#include "templdlg.hxx"
+#include <sfx2/templdlg.hxx>
 #include "objmnctl.hxx"
 #include "inettbc.hxx"
 #include "stbitem.hxx"
-#include "navigat.hxx"
-#include "module.hxx"
-#include "topfrm.hxx"
+#include <sfx2/navigat.hxx>
+#include <sfx2/module.hxx>
+#include <sfx2/topfrm.hxx>
 #include "partwnd.hxx"
-#include "sfxsids.hrc"
+#include <sfx2/sfxsids.hrc>
 #include "recfloat.hxx"
-#include "objsh.hxx"
-#include "viewsh.hxx"
-#include "objface.hxx"
+#include <sfx2/objsh.hxx>
+#include <sfx2/viewsh.hxx>
+#include <sfx2/objface.hxx>
 
 //===================================================================
 
