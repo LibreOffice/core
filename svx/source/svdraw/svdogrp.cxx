@@ -4,9 +4,9 @@
  *
  *  $RCSfile: svdogrp.cxx,v $
  *
- *  $Revision: 1.35 $
+ *  $Revision: 1.36 $
  *
- *  last change: $Author: kz $ $Date: 2007-02-12 14:36:41 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 19:06:23 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -50,7 +50,7 @@
 #include <unotools/datetime.hxx>
 #endif
 
-#include "svdogrp.hxx"
+#include <svx/svdogrp.hxx>
 
 #ifndef SVX_LIGHT
 #ifndef _LNKBASE_HXX //autogen
@@ -64,23 +64,23 @@
 
 #include <svtools/urihelper.hxx>
 
-#include "xpool.hxx"
-#include "xpoly.hxx"
+#include <svx/xpool.hxx>
+#include <svx/xpoly.hxx>
 
 #include "svdxout.hxx"
-#include "svdmodel.hxx"
-#include "svdpage.hxx"
+#include <svx/svdmodel.hxx>
+#include <svx/svdpage.hxx>
 #include "svditer.hxx"
-#include "svdobj.hxx"
-#include "svdtrans.hxx"
-#include "svdetc.hxx"
-#include "svdattrx.hxx"  // NotPersistItems
-#include "svdoedge.hxx"  // #32383# Die Verbinder nach Move nochmal anbroadcasten
+#include <svx/svdobj.hxx>
+#include <svx/svdtrans.hxx>
+#include <svx/svdetc.hxx>
+#include <svx/svdattrx.hxx>  // NotPersistItems
+#include <svx/svdoedge.hxx>  // #32383# Die Verbinder nach Move nochmal anbroadcasten
 #include "svdglob.hxx"   // StringCache
 #include "svdstr.hrc"    // Objektname
 
 #ifndef _SVX_SVXIDS_HRC
-#include "svxids.hrc"
+#include <svx/svxids.hrc>
 #endif
 
 #ifndef _SFX_WHITER_HXX
@@ -88,7 +88,7 @@
 #endif
 
 #ifndef _SVDPOOL_HXX
-#include <svdpool.hxx>
+#include <svx/svdpool.hxx>
 #endif
 
 #ifndef _SDR_PROPERTIES_GROUPPROPERTIES_HXX
