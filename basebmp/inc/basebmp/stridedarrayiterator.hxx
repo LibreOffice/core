@@ -4,9 +4,9 @@
  *
  *  $RCSfile: stridedarrayiterator.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: obo $ $Date: 2006-10-12 13:47:26 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 12:41:22 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -41,19 +41,36 @@
 namespace basebmp
 {
 
-// changed semantics re. DirectionSelector<StridedArrayTag>: stride
-// now counts in <em>raw</em> bytes!
+/** Like vigra::StridedArrayIterator
+
+    Changed semantics re. DirectionSelector<StridedArrayTag>: stride
+    now counts in <em>raw</em> bytes
+
+    Adapts given ptr, in a way that iterator increments move forward
+    in strided steps. Stride can, by the way, also be negative
+ */
 template< typename T > class StridedArrayIterator
 {
 public:
     typedef typename clone_const<T, unsigned char>::type  internal_type;
 
-    StridedArrayIterator(int stride, T* ptr = 0) :
+    /** Create iterator
+
+        @param stride
+
+        Stride in bytes. Given value should better match memory layout
+        of T, as memory gets reinterpret-casted.
+     */
+    explicit StridedArrayIterator(int stride, T* ptr = 0) :
         stride_(stride),
         current_(reinterpret_cast<internal_type*>(ptr))
     {}
 
-    /// Copy from other StridedArrayIterator, plus given offset
+    /** Copy from other StridedArrayIterator, plus given offset
+
+        @param offset
+        Offset in bytes
+     */
     StridedArrayIterator( StridedArrayIterator const& rSrc,
                           int                         offset ) :
         stride_(rSrc.stride_),
@@ -61,12 +78,15 @@ public:
                      reinterpret_cast<T*>(rSrc.current_)+offset))
     {}
 
-    void operator++()       { current_ += stride_; }
+    void operator++()       {current_ += stride_; }
     void operator++(int)    {current_ += stride_; }
     void operator--()       {current_ -= stride_; }
     void operator--(int)    {current_ -= stride_; }
     void operator+=(int dy) {current_ += dy*stride_; }
     void operator-=(int dy) {current_ -= dy*stride_; }
+
+    int operator-(StridedArrayIterator const & rhs) const
+    { return (current_ - rhs.current_) / stride_; }
 
     bool operator==(StridedArrayIterator const & rhs) const
     { return current_ == rhs.current_; }
@@ -75,19 +95,16 @@ public:
     { return current_ != rhs.current_; }
 
     bool operator<(StridedArrayIterator const & rhs) const
-    { return current_ < rhs.current_; }
+    { return *this - rhs < 0; }
 
     bool operator<=(StridedArrayIterator const & rhs) const
-    { return current_ <= rhs.current_; }
+    { return *this - rhs <= 0; }
 
     bool operator>(StridedArrayIterator const & rhs) const
-    { return current_ > rhs.current_; }
+    { return *this - rhs > 0; }
 
     bool operator>=(StridedArrayIterator const & rhs) const
-    { return current_ >= rhs.current_; }
-
-    int operator-(StridedArrayIterator const & rhs) const
-    { return (current_ - rhs.current_) / stride_; }
+    { return *this - rhs >= 0; }
 
     T* operator()() const
     { return reinterpret_cast<T*>(current_); }
