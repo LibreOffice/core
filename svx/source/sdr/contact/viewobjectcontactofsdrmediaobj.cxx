@@ -4,9 +4,9 @@
  *
  *  $RCSfile: viewobjectcontactofsdrmediaobj.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: hr $ $Date: 2007-06-26 12:06:59 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 18:48:06 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -40,15 +40,15 @@
 #include <svx/sdr/contact/viewobjectcontactofsdrmediaobj.hxx>
 #include <svx/sdr/contact/viewcontactofsdrmediaobj.hxx>
 #include <svx/sdr/contact/displayinfo.hxx>
-#include "svdomedia.hxx"
-#include "svdpagv.hxx"
+#include <svx/svdomedia.hxx>
+#include <svx/svdpagv.hxx>
 #include <vcl/outdev.hxx>
 #include <vcl/window.hxx>
 #include <avmedia/mediaitem.hxx>
 #include "sdrmediawindow.hxx"
 
 #ifndef _SDRPAGEWINDOW_HXX
-#include <sdrpagewindow.hxx>
+#include <svx/sdrpagewindow.hxx>
 #endif
 
 #ifndef _SDRPAINTWINDOW_HXX
