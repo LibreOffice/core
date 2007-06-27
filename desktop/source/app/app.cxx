@@ -4,9 +4,9 @@
  *
  *  $RCSfile: app.cxx,v $
  *
- *  $Revision: 1.204 $
+ *  $Revision: 1.205 $
  *
- *  last change: $Author: kz $ $Date: 2007-06-19 16:18:20 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 12:28:08 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1370,8 +1370,6 @@ void Desktop::Main()
             return;
         }
 #endif
-
-        SetAppName( DEFINE_CONST_UNICODE("soffice") );
 
         // check user installation directory for lockfile so we can be sure
         // there is no other instance using our data files from a remote host
