@@ -4,9 +4,9 @@
  *
  *  $RCSfile: scfuncs.src,v $
  *
- *  $Revision: 1.90 $
+ *  $Revision: 1.91 $
  *
- *  last change: $Author: ihi $ $Date: 2007-04-19 16:46:47 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 13:46:14 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -7492,6 +7492,44 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
         String 5 // Description of Parameter 2
         {
             Text [ en-US ] = "Cell Text";
+        };
+    };
+     // -=*# Resource for function GETPIVOTDATA #*=-
+    Resource SC_OPCODE_GET_PIVOT_DATA
+    {
+        String 1 // Description
+        {
+            Text [ en-US ] = "Extracts value(s) from a DataPilot table.";
+        };
+        ExtraData =
+        {
+            ID_FUNCTION_GRP_TABLE;
+            U2S( HID_FUNC_GETPIVOTDATA );
+            VAR_ARGS+2;      0; 0;  1;
+        };
+        String 2 // Name of Parameter 1
+        {
+            Text [ en-US ] = "Data Field";
+        };
+        String 3 // Description of Parameter 1
+        {
+            Text [ en-US ] = "The name of the data pilot field to extract.";
+        };
+        String 4 // Name of Parameter 2
+        {
+            Text [ en-US ] = "DataPilot";
+        };
+        String 5 // Description of Parameter 2
+        {
+            Text [ en-US ] = "A reference to a cell or range in the DataPilot table.";
+        };
+        String 6 // Name of Parameter 3
+        {
+            Text [ en-US ] = "Field Name / Item";
+        };
+        String 7 // Description of Parameter 3
+        {
+            Text [ en-US ] = "Field name/value pair to filter the target data.";
         };
     };
      // -=*# Resource for function BAHTTEXT #*=-
