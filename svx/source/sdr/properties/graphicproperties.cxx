@@ -4,9 +4,9 @@
  *
  *  $RCSfile: graphicproperties.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: kz $ $Date: 2007-05-10 14:56:14 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 18:52:23 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -49,19 +49,19 @@
 #endif
 
 #ifndef _SVDDEF_HXX
-#include <svddef.hxx>
+#include <svx/svddef.hxx>
 #endif
 
 #ifndef _EEITEM_HXX
-#include <eeitem.hxx>
+#include <svx/eeitem.hxx>
 #endif
 
 #ifndef _SVDOGRAF_HXX
-#include <svdograf.hxx>
+#include <svx/svdograf.hxx>
 #endif
 
 #ifndef _SDGCPITM_HXX
-#include <sdgcpitm.hxx>
+#include <svx/sdgcpitm.hxx>
 #endif
 
 //////////////////////////////////////////////////////////////////////////////
