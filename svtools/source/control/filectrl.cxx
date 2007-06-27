@@ -4,9 +4,9 @@
  *
  *  $RCSfile: filectrl.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: obo $ $Date: 2006-10-12 15:12:03 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 21:24:17 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -42,7 +42,7 @@
 #include <tools/urlobj.hxx>
 #endif
 #ifndef _SVTOOLS_SVTDATA_HXX
-#include <svtdata.hxx>
+#include <svtools/svtdata.hxx>
 #endif
 
 #ifndef _SV_FILECTRL_HXX
