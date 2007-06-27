@@ -4,9 +4,9 @@
  *
  *  $RCSfile: saveopt.cxx,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: vg $ $Date: 2007-01-18 14:12:25 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 21:16:34 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -39,7 +39,7 @@
 #ifndef GCC
 #endif
 
-#include "saveopt.hxx"
+#include <svtools/saveopt.hxx>
 
 #ifndef INCLUDED_RTL_INSTANCE_HXX
 #include "rtl/instance.hxx"
