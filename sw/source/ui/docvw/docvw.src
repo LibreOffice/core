@@ -4,9 +4,9 @@
  *
  *  $RCSfile: docvw.src,v $
  *
- *  $Revision: 1.46 $
+ *  $Revision: 1.47 $
  *
- *  last change: $Author: ihi $ $Date: 2007-04-19 13:03:35 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 13:24:08 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -303,3 +303,7 @@ String STR_TABLE_SELECT_COL
     Text [ en-US ] = "Select table column" ;
 };
 
+String STR_SMARTTAG_CLICK
+{
+    Text [ en-US ] = "CTRL + click to open Smart Tag menu" ;
+};
