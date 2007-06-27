@@ -4,9 +4,9 @@
  *
  *  $RCSfile: javacontext.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: jl $ $Date: 2006-12-06 14:40:23 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 21:47:11 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -43,13 +43,13 @@
 #include "com/sun/star/uno/Type.hxx"
 #endif
 #ifndef _SVTOOLS_SVTDATA_HXX
-#include "svtdata.hxx"
+#include <svtools/svtdata.hxx>
 #endif
 #ifndef _SVTOOLS_JAVACONTEXT_HXX_
-#include "javacontext.hxx"
+#include <svtools/javacontext.hxx>
 #endif
 #ifndef _SVTOOLS_JAVAINTERACTION_HXX_
-#include "javainteractionhandler.hxx"
+#include <svtools/javainteractionhandler.hxx>
 #endif
 
 
