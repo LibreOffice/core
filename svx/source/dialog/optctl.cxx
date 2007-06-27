@@ -4,9 +4,9 @@
  *
  *  $RCSfile: optctl.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: rt $ $Date: 2007-04-26 07:37:33 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 17:25:32 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -44,14 +44,14 @@
 #include "optctl.hxx"
 #endif
 #ifndef _SVX_DIALMGR_HXX
-#include "dialmgr.hxx"
+#include <svx/dialmgr.hxx>
 #endif
 
 #ifndef _SVX_OPTCTL_HRC
 #include "optctl.hrc"
 #endif
 #ifndef _SVX_DIALOGS_HRC
-#include "dialogs.hrc"
+#include <svx/dialogs.hrc>
 #endif
 
 #ifndef _SVTOOLS_CTLOPTIONS_HXX
