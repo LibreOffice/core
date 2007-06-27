@@ -4,9 +4,9 @@
  *
  *  $RCSfile: statusbarcontroller.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 15:29:59 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 22:02:21 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -72,7 +72,7 @@
 #include <imgdef.hxx>
 #endif
 #ifndef INCLUDED_SVTOOLS_MISCOPT_HXX
-#include <miscopt.hxx>
+#include <svtools/miscopt.hxx>
 #endif
 #ifndef _TOOLKIT_HELPER_VCLUNOHELPER_HXX_
 #include <toolkit/unohlp.hxx>
