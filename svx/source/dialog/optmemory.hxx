@@ -4,9 +4,9 @@
  *
  *  $RCSfile: optmemory.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: obo $ $Date: 2006-10-12 12:22:48 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 17:30:05 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -51,7 +51,7 @@
 #include <sfx2/tabdlg.hxx>
 #endif
 #ifndef _SVX_LANGBOX_HXX
-#include <langbox.hxx>
+#include <svx/langbox.hxx>
 #endif
 #define FOLDERWEBVIEW_DEFAULTFILE   "folder.so"
 
