@@ -4,9 +4,9 @@
  *
  *  $RCSfile: docvor.cxx,v $
  *
- *  $Revision: 1.51 $
+ *  $Revision: 1.52 $
  *
- *  last change: $Author: rt $ $Date: 2007-04-26 10:13:56 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 23:21:22 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -94,21 +94,21 @@
 
 #include "helpid.hrc"
 #include "docvor.hxx"
-#include "docfac.hxx"
+#include <sfx2/docfac.hxx>
 #include "orgmgr.hxx"
-#include "doctempl.hxx"
-#include "templdlg.hxx"
+#include <sfx2/doctempl.hxx>
+#include <sfx2/templdlg.hxx>
 #include "sfxtypes.hxx"
-#include "app.hxx"
-#include "dispatch.hxx"
+#include <sfx2/app.hxx>
+#include <sfx2/dispatch.hxx>
 #include "sfxresid.hxx"
 #include "doc.hrc"
-#include "sfx.hrc"
+#include <sfx2/sfx.hrc>
 #include "docvor.hrc"
-#include "docfilt.hxx"
-#include "filedlghelper.hxx"
-#include "docfilt.hxx"
-#include "fcontnr.hxx"
+#include <sfx2/docfilt.hxx>
+#include <sfx2/filedlghelper.hxx>
+#include <sfx2/docfilt.hxx>
+#include <sfx2/fcontnr.hxx>
 
 #ifndef _SVTOOLS_LOCALRESACCESS_HXX_
 #include <svtools/localresaccess.hxx>
