@@ -4,9 +4,9 @@
  *
  *  $RCSfile: swafopt.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: vg $ $Date: 2007-04-11 16:31:19 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 13:37:58 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -44,6 +44,7 @@
 #endif
 
 class SvStringsISortDtor;
+class SmartTagMgr;
 
 // Klasse fuer Optionen vom Autoformat
 struct SVX_DLLPUBLIC SvxSwAutoFmtFlags
@@ -51,6 +52,7 @@ struct SVX_DLLPUBLIC SvxSwAutoFmtFlags
     Font aBulletFont;
     Font aByInputBulletFont;
     const SvStringsISortDtor* pAutoCmpltList;  // only valid inside the Dialog!!!
+    SmartTagMgr* pSmartTagMgr;
 
     sal_Unicode cBullet;
     sal_Unicode cByInputBullet;
@@ -103,8 +105,7 @@ struct SVX_DLLPUBLIC SvxSwAutoFmtFlags
     BOOL bAutoCmpltKeepList : 1;
 
     // some dummies for any new options
-    BOOL bDummy5 : 1,
-         bDummy6 : 1,
+    BOOL bDummy6 : 1,
          bDummy7 : 1,
          bDummy8 : 1
          ;
