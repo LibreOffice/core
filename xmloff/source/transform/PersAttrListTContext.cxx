@@ -4,9 +4,9 @@
  *
  *  $RCSfile: PersAttrListTContext.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 11:26:47 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 16:22:29 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -49,7 +49,7 @@
 #include "MutableAttrList.hxx"
 #endif
 #ifndef _XMLOFF_NMSPMAP_HXX
-#include "nmspmap.hxx"
+#include <xmloff/nmspmap.hxx>
 #endif
 
 #ifndef _XMLOFF_PERSATTRLISTTCONTEXT_HXX
