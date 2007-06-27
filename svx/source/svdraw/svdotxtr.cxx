@@ -4,9 +4,9 @@
  *
  *  $RCSfile: svdotxtr.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: vg $ $Date: 2006-11-21 16:56:47 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 19:09:42 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -36,18 +36,18 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_svx.hxx"
 
-#include "svdotext.hxx"
+#include <svx/svdotext.hxx>
 #include "svditext.hxx"
-#include "svdtrans.hxx"
-#include "svdogrp.hxx"
-#include "svdopath.hxx"
-#include "svdoutl.hxx"
+#include <svx/svdtrans.hxx>
+#include <svx/svdogrp.hxx>
+#include <svx/svdopath.hxx>
+#include <svx/svdoutl.hxx>
 #include "svdtxhdl.hxx"  // DrawTextToPath fuer Convert
-#include "svdpage.hxx"   // fuer Convert
-#include "svdmodel.hxx"  // fuer Convert
+#include <svx/svdpage.hxx>   // fuer Convert
+#include <svx/svdmodel.hxx>  // fuer Convert
 
 #ifndef _OUTLINER_HXX //autogen
-#include "outliner.hxx"
+#include <svx/outliner.hxx>
 #endif
 
 #ifndef _SDR_PROPERTIES_ITEMSETTOOLS_HXX
