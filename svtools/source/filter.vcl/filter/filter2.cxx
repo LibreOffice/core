@@ -4,9 +4,9 @@
  *
  *  $RCSfile: filter2.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: obo $ $Date: 2006-10-12 15:17:51 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 21:35:35 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -44,7 +44,7 @@
 #ifndef _CONFIG_HXX
 #include <tools/config.hxx>
 #endif
-#include "filter.hxx"
+#include <svtools/filter.hxx>
 #include "FilterConfigCache.hxx"
 #ifndef _UNTOOLS_UCBSTREAMHELPER_HXX
 #include <unotools/ucbstreamhelper.hxx>
