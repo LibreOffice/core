@@ -4,9 +4,9 @@
  *
  *  $RCSfile: menu.cxx,v $
  *
- *  $Revision: 1.150 $
+ *  $Revision: 1.151 $
  *
- *  last change: $Author: obo $ $Date: 2007-06-11 14:25:58 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 13:43:19 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1066,9 +1066,17 @@ void Menu::CreateAutoMnemonics()
     MnemonicGenerator aMnemonicGenerator;
     ULONG n;
     for ( n = 0; n < pItemList->Count(); n++ )
-        aMnemonicGenerator.RegisterMnemonic( pItemList->GetDataFromPos(n)->aText );
+    {
+        MenuItemData* pData = pItemList->GetDataFromPos(n);
+        if ( ! (pData->nBits & MIB_NOSELECT ) )
+            aMnemonicGenerator.RegisterMnemonic( pData->aText );
+    }
     for ( n = 0; n < pItemList->Count(); n++ )
-        aMnemonicGenerator.CreateMnemonic( pItemList->GetDataFromPos(n)->aText );
+    {
+        MenuItemData* pData = pItemList->GetDataFromPos(n);
+        if ( ! (pData->nBits & MIB_NOSELECT ) )
+            aMnemonicGenerator.CreateMnemonic( pData->aText );
+    }
 }
 
 void Menu::Activate()
@@ -2182,6 +2190,18 @@ BOOL Menu::IsItemPosVisible( USHORT nItemPos ) const
 BOOL Menu::IsMenuVisible() const
 {
     return pWindow && pWindow->IsReallyVisible();
+}
+
+BOOL Menu::ImplIsSelectable( USHORT nPos ) const
+{
+    BOOL bSelectable = TRUE;
+
+    MenuItemData* pData = pItemList->GetDataFromPos( nPos );
+    // check general visibility first
+    if ( pData && ( pData->nBits & MIB_NOSELECT ) )
+        bSelectable = FALSE;
+
+    return bSelectable;
 }
 
 void Menu::SelectItem( USHORT nItemId )
@@ -3592,7 +3612,7 @@ USHORT PopupMenu::ImplExecute( Window* pW, const Rectangle& rRect, ULONG nPopupM
         {
             MenuItemData* pData = pItemList->GetDataFromPos( n );
             if (   ( pData->bEnabled || !Application::GetSettings().GetStyleSettings().GetSkipDisabledInMenus() )
-                && ( pData->eType != MENUITEM_SEPARATOR ) && ImplIsVisible( n ) )
+                && ( pData->eType != MENUITEM_SEPARATOR ) && ImplIsVisible( n ) && ImplIsSelectable( n ) )
             {
                 pWin->ChangeHighlightItem( n, FALSE );
                 break;
@@ -3880,7 +3900,7 @@ void MenuFloatingWindow::ImplHighlightItem( const MouseEvent& rMEvt, BOOL bMBDow
                 MenuItemData* pItemData = pMenu->pItemList->GetDataFromPos( n );
                 long nOldY = nY;
                 nY += pItemData->aSz.Height();
-                if ( ( nOldY <= nMouseY ) && ( nY > nMouseY ) )
+                if ( ( nOldY <= nMouseY ) && ( nY > nMouseY ) && pMenu->ImplIsSelectable( n ) )
                 {
                     BOOL bPopupArea = TRUE;
                     if ( pItemData->nBits & MIB_POPUPSELECT )
@@ -4628,7 +4648,7 @@ void MenuFloatingWindow::ImplCursorUpDown( BOOL bUp, BOOL bHomeEnd )
 
         MenuItemData* pData = (MenuItemData*)pMenu->GetItemList()->GetDataFromPos( n );
         if ( ( pData->bEnabled || !rSettings.GetSkipDisabledInMenus() )
-              && ( pData->eType != MENUITEM_SEPARATOR ) && pMenu->ImplIsVisible( n ) )
+              && ( pData->eType != MENUITEM_SEPARATOR ) && pMenu->ImplIsVisible( n ) && pMenu->ImplIsSelectable( n ) )
         {
             // Selektion noch im sichtbaren Bereich?
             if ( IsScrollMenu() )
