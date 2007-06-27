@@ -4,9 +4,9 @@
  *
  *  $RCSfile: navigat.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 16:34:00 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 23:14:07 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -41,9 +41,9 @@
 #ifndef GCC
 #endif
 
-#include "navigat.hxx"
-#include "sfx.hrc"
-#include "app.hxx"
+#include <sfx2/navigat.hxx>
+#include <sfx2/sfx.hrc>
+#include <sfx2/app.hxx>
 #include "sfxresid.hxx"
 #include "helpid.hrc"
 
