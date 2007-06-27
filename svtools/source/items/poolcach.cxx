@@ -4,9 +4,9 @@
  *
  *  $RCSfile: poolcach.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 15:00:17 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 21:39:56 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -41,8 +41,8 @@
 #ifndef GCC
 #endif
 
-#include "itempool.hxx"
-#include "itemset.hxx"
+#include <svtools/itempool.hxx>
+#include <svtools/itemset.hxx>
 #include "poolcach.hxx"
 
 // STATIC DATA -----------------------------------------------------------
