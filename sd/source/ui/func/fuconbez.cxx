@@ -4,9 +4,9 @@
  *
  *  $RCSfile: fuconbez.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: kz $ $Date: 2006-12-12 17:15:07 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 15:41:41 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -353,7 +353,7 @@ void FuConstructBezierPolygon::SelectionHasChanged()
 {
     FuDraw::SelectionHasChanged();
 
-    mpViewShell->GetViewShellBase().GetToolBarManager().SelectionHasChanged(
+    mpViewShell->GetViewShellBase().GetToolBarManager()->SelectionHasChanged(
         *mpViewShell,
         *mpView);
 }
