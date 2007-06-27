@@ -4,9 +4,9 @@
  *
  *  $RCSfile: rlrcitem.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: kz $ $Date: 2007-05-10 14:41:00 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 17:36:31 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -47,12 +47,12 @@
 
 
 
-#include "dialogs.hrc"
+#include <svx/dialogs.hrc>
 
-#include "ruler.hxx"
-#include "lrspitem.hxx"
-#include "ulspitem.hxx"
-#include "tstpitem.hxx"
+#include <svx/ruler.hxx>
+#include <svx/lrspitem.hxx>
+#include <svx/ulspitem.hxx>
+#include <svx/tstpitem.hxx>
 #include "protitem.hxx"
 #include "rlrcitem.hxx"
 #include "rulritem.hxx"
