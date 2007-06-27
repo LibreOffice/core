@@ -4,9 +4,9 @@
  *
  *  $RCSfile: usrpref.cxx,v $
  *
- *  $Revision: 1.31 $
+ *  $Revision: 1.32 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 22:42:13 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 12:49:41 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -151,17 +151,25 @@ Sequence<OUString> SwContentViewConfig::GetPropertyNames()
 
   -----------------------------------------------------------------------*/
 SwContentViewConfig::SwContentViewConfig(BOOL bIsWeb, SwMasterUsrPref& rPar) :
-    ConfigItem(bIsWeb ? C2U("Office.WriterWeb/Content") :  C2U("Office.Writer/Content"),
-        CONFIG_MODE_DELAYED_UPDATE|CONFIG_MODE_RELEASE_TREE),
+    ConfigItem(bIsWeb ? C2U("Office.WriterWeb/Content") :  C2U("Office.Writer/Content")),
     rParent(rPar),
     bWeb(bIsWeb)
 {
+    Load();
+    EnableNotification( GetPropertyNames() );
 }
 /*-- 28.09.00 09:55:33---------------------------------------------------
 
   -----------------------------------------------------------------------*/
 SwContentViewConfig::~SwContentViewConfig()
 {
+}
+/*-- 09.02.07 09:55:33---------------------------------------------------
+
+  -----------------------------------------------------------------------*/
+void SwContentViewConfig::Notify( const Sequence< OUString > &rPropertyNames )
+{
+    Load();
 }
 /*-- 28.09.00 09:55:33---------------------------------------------------
 
