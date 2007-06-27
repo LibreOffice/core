@@ -4,9 +4,9 @@
  *
  *  $RCSfile: unowrapper.cxx,v $
  *
- *  $Revision: 1.29 $
+ *  $Revision: 1.30 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 12:23:44 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 12:23:54 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -201,7 +201,12 @@ void UnoWrapper::SetWindowInterface( Window* pWindow, ::com::sun::star::uno::Ref
     DBG_ASSERT( pVCLXWindow, "SetComponentInterface - unsupported type" );
     if ( pVCLXWindow )
     {
-        DBG_ASSERT( !pWindow->GetWindowPeer(), "UnoWrapper::SetWindowInterface: there already *is* a WindowInterface for this window!" );
+        if( pWindow->GetWindowPeer() )
+        {
+            int i = 0;
+            i++;
+            //          DBG_ERROR( "UnoWrapper::SetWindowInterface: there already *is* a WindowInterface for this window!" );
+        }
         pVCLXWindow->SetWindow( pWindow );
         pWindow->SetWindowPeer( xIFace, pVCLXWindow );
     }
