@@ -4,9 +4,9 @@
  *
  *  $RCSfile: macropg.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: obo $ $Date: 2006-10-13 09:46:46 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 23:12:50 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -43,7 +43,7 @@
 #endif
 
 #define ITEMID_MACRO 0
-#include "macropg.hxx"
+#include <sfx2/macropg.hxx>
 #undef ITEMID_MACRO
 
 #define _SVSTDARR_STRINGSDTOR
@@ -53,13 +53,13 @@
 #endif
 
 #include "cfg.hxx"
-#include "app.hxx"
-#include "objsh.hxx"
+#include <sfx2/app.hxx>
+#include <sfx2/objsh.hxx>
 #include "macropg.hrc"
 #include "sfxresid.hxx"
 #include "dialog.hrc"
-#include "macrconf.hxx"
-#include "sfxdefs.hxx"
+#include <sfx2/macrconf.hxx>
+#include <sfx2/sfxdefs.hxx>
 #include "helpid.hrc"
 
 #ifndef _HEADERTABLISTBOX_HXX
