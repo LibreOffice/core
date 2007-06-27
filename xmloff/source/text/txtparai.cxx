@@ -4,9 +4,9 @@
  *
  *  $RCSfile: txtparai.cxx,v $
  *
- *  $Revision: 1.58 $
+ *  $Revision: 1.59 $
  *
- *  last change: $Author: rt $ $Date: 2006-10-30 09:07:29 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 16:16:29 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -86,22 +86,22 @@
 
 
 #ifndef _XMLOFF_XMLICTXT_HXX
-#include "xmlictxt.hxx"
+#include <xmloff/xmlictxt.hxx>
 #endif
 #ifndef _XMLOFF_XMLIMP_HXX
-#include "xmlimp.hxx"
+#include <xmloff/xmlimp.hxx>
 #endif
 #ifndef _XMLOFF_XMLTOKEN_HXX
-#include "xmltoken.hxx"
+#include <xmloff/xmltoken.hxx>
 #endif
 #ifndef _XMLOFF_NMSPMAP_HXX
-#include "nmspmap.hxx"
+#include <xmloff/nmspmap.hxx>
 #endif
 #ifndef _XMLOFF_XMLNMSPE_HXX
 #include "xmlnmspe.hxx"
 #endif
 #ifndef _XMLOFF_TXTIMP_HXX
-#include "txtimp.hxx"
+#include <xmloff/txtimp.hxx>
 #endif
 #ifndef _XMLOFF_TXTPARAI_HXX
 #include "txtparai.hxx"
@@ -110,7 +110,7 @@
 #include "txtfldi.hxx"
 #endif
 #ifndef _XMLOFF_XMLUCONV_HXX
-#include "xmluconv.hxx"
+#include <xmloff/xmluconv.hxx>
 #endif
 #ifndef _XMLOFF_XMLFOOTNOTEIMPORTCONTEXT_HXX
 #include "XMLFootnoteImportContext.hxx"
@@ -125,7 +125,7 @@
 #include "XMLTextFrameHyperlinkContext.hxx"
 #endif
 #ifndef _XMLOFF_XMLEVENTSIMPORTCONTEXT_HXX
-#include "XMLEventsImportContext.hxx"
+#include <xmloff/XMLEventsImportContext.hxx>
 #endif
 #ifndef _XMLOFF_XMLCHANGEIMPORTCONTEXT_HXX
 #include "XMLChangeImportContext.hxx"
