@@ -4,9 +4,9 @@
  *
  *  $RCSfile: imagerepository.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: kz $ $Date: 2006-11-07 14:52:21 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 20:14:25 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -37,11 +37,11 @@
 #include "precompiled_vcl.hxx"
 
 #ifndef VCL_IMAGEREPOSITORY_HXX
-#include "imagerepository.hxx"
+#include <vcl/imagerepository.hxx>
 #endif
 
 #ifndef _SV_SVAPP_HXX
-#include "svapp.hxx"
+#include <vcl/svapp.hxx>
 #endif
 #ifndef _SV_IMPIMAGETREE_H
 #include "impimagetree.hxx"
