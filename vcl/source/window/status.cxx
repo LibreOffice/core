@@ -4,9 +4,9 @@
  *
  *  $RCSfile: status.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 12:21:30 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 20:33:57 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -47,25 +47,25 @@
 #include <tools/rc.h>
 #endif
 #ifndef _SV_SVDATA_HXX
-#include <svdata.hxx>
+#include <vcl/svdata.hxx>
 #endif
 #ifndef _SV_EVENT_HXX
-#include <event.hxx>
+#include <vcl/event.hxx>
 #endif
 #ifndef _SV_DECOVIEW_HXX
-#include <decoview.hxx>
+#include <vcl/decoview.hxx>
 #endif
 #ifndef _SV_SVAPP_HXX
-#include <svapp.hxx>
+#include <vcl/svapp.hxx>
 #endif
 #ifndef _SV_HELP_HXX
-#include <help.hxx>
+#include <vcl/help.hxx>
 #endif
 #ifndef _SV_STATUS_HXX
-#include <status.hxx>
+#include <vcl/status.hxx>
 #endif
 #ifndef _SV_VIRDEV_HXX
-#include <virdev.hxx>
+#include <vcl/virdev.hxx>
 #endif
 
 
