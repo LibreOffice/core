@@ -4,9 +4,9 @@
  *
  *  $RCSfile: contimp.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: obo $ $Date: 2006-10-12 12:08:15 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 16:56:01 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -36,7 +36,7 @@
 #define _CONTIMP_HXX_
 
 #ifndef _CONTDLG_HXX
-#include "contdlg.hxx"
+#include <svx/contdlg.hxx>
 #endif
 #ifndef _CONTWND_HXX
 #include "contwnd.hxx"
