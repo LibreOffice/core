@@ -4,9 +4,9 @@
  *
  *  $RCSfile: JoinTableView.cxx,v $
  *
- *  $Revision: 1.55 $
+ *  $Revision: 1.56 $
  *
- *  last change: $Author: ihi $ $Date: 2006-10-18 13:32:10 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 12:25:30 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -246,7 +246,11 @@ OJoinTableView::OJoinTableView( Window* pParent, OJoinDesignView* pView )
 OJoinTableView::~OJoinTableView()
 {
     DBG_DTOR(OJoinTableView,NULL);
-    m_pAccessible = NULL;
+    if( m_pAccessible )
+    {
+        m_pAccessible->clearTableView();
+        m_pAccessible = NULL;
+    }
     //////////////////////////////////////////////////////////////////////
     // Listen loeschen
     clearLayoutInformation();
