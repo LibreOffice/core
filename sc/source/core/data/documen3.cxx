@@ -4,9 +4,9 @@
  *
  *  $RCSfile: documen3.cxx,v $
  *
- *  $Revision: 1.35 $
+ *  $Revision: 1.36 $
  *
- *  last change: $Author: vg $ $Date: 2007-05-22 19:41:52 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 13:43:05 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -266,6 +266,21 @@ ScDPObject* ScDocument::GetDPAtCursor(SCCOL nCol, SCROW nRow, SCTAB nTab) const
     ScAddress aPos( nCol, nRow, nTab );
     for (USHORT i=0; i<nCount; i++)
         if ( (*pDPCollection)[i]->GetOutRange().In( aPos ) )
+            return (*pDPCollection)[i];
+
+    return NULL;
+}
+
+ScDPObject* ScDocument::GetDPAtBlock( const ScRange & rBlock ) const
+{
+    if (!pDPCollection)
+        return NULL;
+
+    /* Walk the collection in reverse order to get something of an
+     * approximation of MS Excels 'most recent' effect. */
+    USHORT i = pDPCollection->GetCount();
+    while ( i-- > 0 )
+        if ( (*pDPCollection)[i]->GetOutRange().In( rBlock ) )
             return (*pDPCollection)[i];
 
     return NULL;
