@@ -4,9 +4,9 @@
  *
  *  $RCSfile: txtimp.cxx,v $
  *
- *  $Revision: 1.127 $
+ *  $Revision: 1.128 $
  *
- *  last change: $Author: ihi $ $Date: 2007-04-16 13:13:41 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 16:15:30 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -100,39 +100,39 @@
 #endif
 
 #ifndef _XMLOFF_XMLTOKEN_HXX
-#include "xmltoken.hxx"
+#include <xmloff/xmltoken.hxx>
 #endif
 #ifndef _XMLOFF_XMLNMSPE_HXX
 #include "xmlnmspe.hxx"
 #endif
 #ifndef _XMLOFF_TXTSTYLI_HXX_
-#include "txtstyli.hxx"
+#include <xmloff/txtstyli.hxx>
 #endif
 #ifndef _XMLOFF_FAMILIES_HXX_
-#include "families.hxx"
+#include <xmloff/families.hxx>
 #endif
 
 #ifndef _XMLOFF_XMLNUMFI_HXX
-#include "xmlnumfi.hxx"
+#include <xmloff/xmlnumfi.hxx>
 #endif
 #ifndef _XMLOFF_XMLNUMI_HXX
-#include "xmlnumi.hxx"
+#include <xmloff/xmlnumi.hxx>
 #endif
 
 #ifndef _XMLOFF_TXTPARAI_HXX
 #include "txtparai.hxx"
 #endif
 #ifndef _XMLOFF_TXTIMP_HXX
-#include "txtimp.hxx"
+#include <xmloff/txtimp.hxx>
 #endif
 #ifndef _XMLOFF_TXTPRMAP_HXX
-#include "txtprmap.hxx"
+#include <xmloff/txtprmap.hxx>
 #endif
 #ifndef _XMLOFF_TXTIMPPR_HXX
 #include "txtimppr.hxx"
 #endif
 #ifndef _XMLOFF_XMLIMP_HXX
-#include "xmlimp.hxx"
+#include <xmloff/xmlimp.hxx>
 #endif
 #ifndef _XMLOFF_TXTVFLDI_HXX
 #include "txtvfldi.hxx"
@@ -162,16 +162,16 @@
 #include "XMLIndexTOCContext.hxx"
 #endif
 #ifndef _XMLOFF_XMLFONTSTYLESCONTEXT_HXX
-#include "XMLFontStylesContext.hxx"
+#include <xmloff/XMLFontStylesContext.hxx>
 #endif
 #ifndef _XMLOFF_PROGRESSBARHELPER_HXX
-#include "ProgressBarHelper.hxx"
+#include <xmloff/ProgressBarHelper.hxx>
 #endif
 #ifndef _XMLOFF_NMSPMAP_HXX
-#include "nmspmap.hxx"
+#include <xmloff/nmspmap.hxx>
 #endif
 #ifndef _XMLOFF_XMLEVENTSIMPORTCONTEXT_HXX
-#include "XMLEventsImportContext.hxx"
+#include <xmloff/XMLEventsImportContext.hxx>
 #endif
 #ifndef _XMLOFF_XMLTRACKEDCHANGESIMPORTCONTEXT_HXX
 #include "XMLTrackedChangesImportContext.hxx"
@@ -187,7 +187,7 @@
 #include "XMLCalculationSettingsContext.hxx"
 #endif
 #ifndef _XMLOFF_FORMSIMP_HXX
-#include "formsimp.hxx"
+#include <xmloff/formsimp.hxx>
 #endif
 #ifndef _XMLOFF_NUMBERSTYLESIMPORT_HXX
 #include "XMLNumberStylesImport.hxx"
