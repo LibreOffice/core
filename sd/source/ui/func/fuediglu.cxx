@@ -4,9 +4,9 @@
  *
  *  $RCSfile: fuediglu.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: kz $ $Date: 2006-12-12 17:17:33 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 15:42:43 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -106,7 +106,7 @@ void FuEditGluePoints::DoExecute( SfxRequest& rReq )
 {
     FuDraw::DoExecute( rReq );
     mpView->SetInsGluePointMode(FALSE);
-    mpViewShell->GetViewShellBase().GetToolBarManager().AddToolBar(
+    mpViewShell->GetViewShellBase().GetToolBarManager()->AddToolBar(
         ToolBarManager::TBG_FUNCTION,
         ToolBarManager::msGluePointsToolBar);
 }
