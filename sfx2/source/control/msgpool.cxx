@@ -4,9 +4,9 @@
  *
  *  $RCSfile: msgpool.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: rt $ $Date: 2007-04-26 10:09:11 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 23:06:39 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -47,18 +47,18 @@
 
 // wg. pSlotPool
 #include "appdata.hxx"
-#include "msgpool.hxx"
-#include "minarray.hxx"
-#include "msg.hxx"
-#include "app.hxx"
-#include "objface.hxx"
+#include <sfx2/msgpool.hxx>
+#include <sfx2/minarray.hxx>
+#include <sfx2/msg.hxx>
+#include <sfx2/app.hxx>
+#include <sfx2/objface.hxx>
 #include "sfxtypes.hxx"
-#include "macrconf.hxx"
+#include <sfx2/macrconf.hxx>
 #include "sfxresid.hxx"
 #include "arrdecl.hxx"
-#include "module.hxx"
+#include <sfx2/module.hxx>
 
-#include "sfx.hrc"
+#include <sfx2/sfx.hrc>
 
 //====================================================================
 
