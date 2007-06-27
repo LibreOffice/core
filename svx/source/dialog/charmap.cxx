@@ -4,9 +4,9 @@
  *
  *  $RCSfile: charmap.cxx,v $
  *
- *  $Revision: 1.41 $
+ *  $Revision: 1.42 $
  *
- *  last change: $Author: obo $ $Date: 2007-06-11 14:23:19 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 16:52:28 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -72,13 +72,13 @@
 #endif
 
 #include <rtl/textenc.h>
-#include <ucsubset.hxx>
+#include <svx/ucsubset.hxx>
 
-#include "dialogs.hrc"
+#include <svx/dialogs.hrc>
 #include "charmap.hrc"
 
-#include "charmap.hxx"
-#include "dialmgr.hxx"
+#include <svx/charmap.hxx>
+#include <svx/dialmgr.hxx>
 
 #include "charmapacc.hxx"
 #ifndef _COM_SUN_STAR_ACCESSIBILITY_ACCESSIBLEEVENTOBJECT_HPP_
