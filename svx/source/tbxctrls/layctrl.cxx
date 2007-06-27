@@ -4,9 +4,9 @@
  *
  *  $RCSfile: layctrl.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: rt $ $Date: 2007-05-29 15:50:45 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 19:17:46 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -56,10 +56,10 @@
 #include <sfx2/app.hxx>
 #endif
 
-#include "dialogs.hrc"
+#include <svx/dialogs.hrc>
 #include "layctrl.hxx"
 #ifndef _SVX_DIALMGR_HXX
-#include <dialmgr.hxx>
+#include <svx/dialmgr.hxx>
 #endif
 #include <comphelper/processfactory.hxx>
 
