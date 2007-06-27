@@ -4,9 +4,9 @@
  *
  *  $RCSfile: svapp.cxx,v $
  *
- *  $Revision: 1.77 $
+ *  $Revision: 1.78 $
  *
- *  last change: $Author: kz $ $Date: 2007-05-11 09:13:42 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 20:02:34 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -41,13 +41,13 @@
 #include <svsys.h>
 #endif
 #ifndef _SV_SALINST_HXX
-#include <salinst.hxx>
+#include <vcl/salinst.hxx>
 #endif
 #ifndef _SV_SALFRAME_HXX
-#include <salframe.hxx>
+#include <vcl/salframe.hxx>
 #endif
 #ifndef _SV_SALSYS_HXX
-#include <salsys.hxx>
+#include <vcl/salsys.hxx>
 #endif
 #ifndef _VOS_PROCESS_HXX
 #include <vos/process.hxx>
@@ -69,22 +69,22 @@
 #include <i18npool/mslangid.hxx>
 #endif
 #ifndef _SV_SVDATA_HXX
-#include <svdata.hxx>
+#include <vcl/svdata.hxx>
 #endif
 #ifndef _SV_SETTINGS_HXX
-#include <settings.hxx>
+#include <vcl/settings.hxx>
 #endif
 #ifndef _ACCMGR_HXX
 #include <accmgr.hxx>
 #endif
 #ifndef _SV_KEYCOD_HXX
-#include <keycod.hxx>
+#include <vcl/keycod.hxx>
 #endif
 #ifndef _SV_EVENT_HXX
-#include <event.hxx>
+#include <vcl/event.hxx>
 #endif
 #ifndef _SV_VIRDEV_HXX
-#include <virdev.hxx>
+#include <vcl/virdev.hxx>
 #endif
 #ifndef _SV_WINDATA_HXX
 #include <windata.hxx>
@@ -93,19 +93,19 @@
 #include <window.h>
 #endif
 #ifndef _SV_WRKWIN_HXX
-#include <wrkwin.hxx>
+#include <vcl/wrkwin.hxx>
 #endif
 #ifndef _SV_IDLEMGR_HXX
 #include <idlemgr.hxx>
 #endif
 #ifndef _SV_SVAPP_HXX
-#include <svapp.hxx>
+#include <vcl/svapp.hxx>
 #endif
 #ifndef _SV_CVTGRF_HXX
-#include <cvtgrf.hxx>
+#include <vcl/cvtgrf.hxx>
 #endif
 #ifndef _VCL_UNOWRAP_HXX
-#include <unowrap.hxx>
+#include <vcl/unowrap.hxx>
 #endif
 #ifndef _VCL_XCONNECTION_HXX
 #include <xconnection.hxx>
@@ -114,10 +114,10 @@
 #include <svids.hrc>
 #endif
 #ifndef _SV_TIMER_HXX
-#include <timer.hxx>
+#include <vcl/timer.hxx>
 #endif
 
-#include <unohelp.hxx>
+#include <vcl/unohelp.hxx>
 
 #include <com/sun/star/uno/Reference.h>
 #include <com/sun/star/awt/XToolkit.hpp>
@@ -139,7 +139,7 @@
 #endif
 
 #ifndef _SV_SALIMESTATUS_HXX
-#include <salimestatus.hxx>
+#include <vcl/salimestatus.hxx>
 #endif
 
 #include <utility>
