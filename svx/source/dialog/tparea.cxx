@@ -4,9 +4,9 @@
  *
  *  $RCSfile: tparea.cxx,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: kz $ $Date: 2007-05-10 14:43:08 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 17:48:05 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -58,8 +58,8 @@
 #endif
 
 #include "xattr.hxx"
-#include "xpool.hxx"
-#include "dialogs.hrc"
+#include <svx/xpool.hxx>
+#include <svx/dialogs.hrc>
 #include "tabarea.hrc"
 #include "dlgname.hrc"
 
@@ -68,17 +68,17 @@
 
 
 
-#include "xflbckit.hxx"
+#include <svx/xflbckit.hxx>
 
-#include "svdattr.hxx"
-#include "xoutx.hxx"
-#include "xtable.hxx"
-#include "xlineit0.hxx"
+#include <svx/svdattr.hxx>
+#include <svx/xoutx.hxx>
+#include <svx/xtable.hxx>
+#include <svx/xlineit0.hxx>
 
 #include "drawitem.hxx"
 #include "cuitabarea.hxx"
 #include "dlgname.hxx"
-#include "dialmgr.hxx"
+#include <svx/dialmgr.hxx>
 #include "dlgutil.hxx"
 #include <svtools/intitem.hxx> //add CHINA001
 #include <sfx2/request.hxx>//add CHINA001
