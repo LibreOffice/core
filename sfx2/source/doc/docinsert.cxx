@@ -4,9 +4,9 @@
  *
  *  $RCSfile: docinsert.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2006-12-05 12:15:22 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 23:20:11 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -36,15 +36,15 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_sfx2.hxx"
 
-#include "app.hxx"
+#include <sfx2/app.hxx>
 #include "docinsert.hxx"
-#include "docfile.hxx"
-#include "fcontnr.hxx"
-#include "filedlghelper.hxx"
+#include <sfx2/docfile.hxx>
+#include <sfx2/fcontnr.hxx>
+#include <sfx2/filedlghelper.hxx>
 #include "openflag.hxx"
-#include "passwd.hxx"
+#include <sfx2/passwd.hxx>
 
-#include "sfxsids.hrc"
+#include <sfx2/sfxsids.hrc>
 
 #ifndef _COM_SUN_STAR_UI_DIALOGS_CONTROLACTIONS_HPP_
 #include <com/sun/star/ui/dialogs/ControlActions.hpp>
