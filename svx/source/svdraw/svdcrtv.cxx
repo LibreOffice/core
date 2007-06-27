@@ -4,9 +4,9 @@
  *
  *  $RCSfile: svdcrtv.cxx,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: kz $ $Date: 2007-05-09 13:32:03 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 18:58:35 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -36,22 +36,22 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_svx.hxx"
 
-#include "svdcrtv.hxx"
+#include <svx/svdcrtv.hxx>
 #include "xattr.hxx"
 #include "svdxout.hxx"
-#include "svdundo.hxx"
-#include "svdocapt.hxx" // Spezialbehandlung: Nach dem Create transparente Fuellung
-#include "svdoedge.hxx"
-#include "svdpagv.hxx"
-#include "svdpage.hxx"
-#include "svdetc.hxx"
+#include <svx/svdundo.hxx>
+#include <svx/svdocapt.hxx> // Spezialbehandlung: Nach dem Create transparente Fuellung
+#include <svx/svdoedge.hxx>
+#include <svx/svdpagv.hxx>
+#include <svx/svdpage.hxx>
+#include <svx/svdetc.hxx>
 
 #ifndef _E3D_SCENE3D_HXX
-#include "scene3d.hxx"
+#include <svx/scene3d.hxx>
 #endif
 
 #ifndef _E3D_VIEW3D_HXX
-#include "view3d.hxx"
+#include <svx/view3d.hxx>
 #endif
 
 // #116425#
@@ -65,17 +65,17 @@
 #endif
 
 //#ifndef _SVX_FMGLOB_HXX
-//#include "fmglob.hxx"
+//#include <svx/fmglob.hxx>
 //#endif
 
 #ifndef _SVDOUNO_HXX
-#include "svdouno.hxx"
+#include <svx/svdouno.hxx>
 #endif
 
 #define XOR_CREATE_PEN          PEN_SOLID
 
 #ifndef _SVDOPATH_HXX
-#include "svdopath.hxx"
+#include <svx/svdopath.hxx>
 #endif
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -103,7 +103,7 @@
 
 // #i68562#
 #ifndef _SVDOCIRC_HXX
-#include <svdocirc.hxx>
+#include <svx/svdocirc.hxx>
 #endif
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
