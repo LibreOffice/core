@@ -4,9 +4,9 @@
  *
  *  $RCSfile: registerservices.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: ihi $ $Date: 2006-12-20 13:54:20 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 12:23:24 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -259,6 +259,9 @@ IMPL_CREATEINSTANCE( UnoSimpleAnimationControlModel )
 IMPL_CREATEINSTANCE( UnoThrobberControl )
 IMPL_CREATEINSTANCE( UnoThrobberControlModel )
 
+extern ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > SAL_CALL TreeControl_CreateInstance( const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& );
+extern ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > SAL_CALL TreeControlModel_CreateInstance( const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& );
+extern ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > SAL_CALL MutableTreeDataModel_CreateInstance( const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& );
 
 extern "C"
 {
@@ -330,6 +333,9 @@ TOOLKIT_DLLPUBLIC sal_Bool SAL_CALL component_writeInfo( void* /*_pServiceManage
         registerServices( xRegistryKey, "VCLXPrinterServer", szServiceName_PrinterServer, szServiceName2_PrinterServer );
         registerServices( xRegistryKey, "UnoRoadmapControl", szServiceName_UnoControlRoadmap, szServiceName2_UnoControlRoadmap );
         registerServices( xRegistryKey, "UnoControlRoadmapModel", szServiceName_UnoControlRoadmapModel, szServiceName2_UnoControlRoadmapModel );
+        registerServices( xRegistryKey, "TreeControl", szServiceName_TreeControl );
+        registerServices( xRegistryKey, "TreeControlModel", szServiceName_TreeControlModel );
+        registerServices( xRegistryKey, "MutableTreeDataModel", szServiceName_MutableTreeDataModel );
         registerServices( xRegistryKey, "UnoSimpleAnimationControlModel", szServiceName_UnoSimpleAnimationControlModel );
         registerServices( xRegistryKey, "UnoSimpleAnimationControl", szServiceName_UnoSimpleAnimationControl );
         registerServices( xRegistryKey, "UnoThrobberControlModel", szServiceName_UnoThrobberControlModel );
@@ -404,6 +410,9 @@ TOOLKIT_DLLPUBLIC void* SAL_CALL component_getFactory( const sal_Char* sImplemen
         CHECKANDCREATEFACTORY( UnoControlRoadmapModel, szServiceName_UnoControlRoadmapModel, szServiceName2_UnoControlRoadmapModel )
         CHECKANDCREATEFACTORY( UnoSpinButtonModel, szServiceName_UnoSpinButtonModel, NULL )
         CHECKANDCREATEFACTORY( UnoSpinButtonControl, szServiceName_UnoSpinButtonControl, NULL )
+        CHECKANDCREATEFACTORY( TreeControl, szServiceName_TreeControl, NULL )
+        CHECKANDCREATEFACTORY( TreeControlModel, szServiceName_TreeControlModel, NULL )
+        CHECKANDCREATEFACTORY( MutableTreeDataModel, szServiceName_MutableTreeDataModel, NULL )
         CHECKANDCREATEFACTORY( UnoSimpleAnimationControlModel, szServiceName_UnoSimpleAnimationControlModel, NULL )
         CHECKANDCREATEFACTORY( UnoSimpleAnimationControl, szServiceName_UnoSimpleAnimationControl, NULL )
         CHECKANDCREATEFACTORY( UnoThrobberControlModel, szServiceName_UnoThrobberControlModel, NULL )
