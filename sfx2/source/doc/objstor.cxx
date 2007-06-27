@@ -4,9 +4,9 @@
  *
  *  $RCSfile: objstor.cxx,v $
  *
- *  $Revision: 1.193 $
+ *  $Revision: 1.194 $
  *
- *  last change: $Author: ihi $ $Date: 2007-06-05 18:37:56 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 23:24:00 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -205,28 +205,28 @@
 #include <rtl/logfile.hxx>
 #include <basic/modsizeexceeded.hxx>
 
-#include "app.hxx"
-#include "objsh.hxx"
-#include "childwin.hxx"
-#include "request.hxx"
+#include <sfx2/app.hxx>
+#include <sfx2/objsh.hxx>
+#include <sfx2/childwin.hxx>
+#include <sfx2/request.hxx>
 #include "sfxresid.hxx"
-#include "docfile.hxx"
+#include <sfx2/docfile.hxx>
 #include "fltfnc.hxx"
-#include "docfilt.hxx"
-#include "docinf.hxx"
-#include "docfac.hxx"
+#include <sfx2/docfilt.hxx>
+#include <sfx2/docinf.hxx>
+#include <sfx2/docfac.hxx>
 #include "objshimp.hxx"
 #include "sfxtypes.hxx"
 #include "doc.hrc"
-#include "sfxsids.hrc"
-#include "module.hxx"
-#include "dispatch.hxx"
+#include <sfx2/sfxsids.hrc>
+#include <sfx2/module.hxx>
+#include <sfx2/dispatch.hxx>
 #include "openflag.hxx"
 #include "helper.hxx"
-#include "filedlghelper.hxx"
-#include "event.hxx"
+#include <sfx2/filedlghelper.hxx>
+#include <sfx2/event.hxx>
 #include "fltoptint.hxx"
-#include "viewfrm.hxx"
+#include <sfx2/viewfrm.hxx>
 #include "graphhelp.hxx"
 #include "appbaslib.hxx"
 
