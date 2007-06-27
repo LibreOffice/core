@@ -4,9 +4,9 @@
  *
  *  $RCSfile: cvtsvm.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 11:59:28 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 20:11:49 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -51,18 +51,18 @@
 #include <tools/stream.hxx>
 #endif
 #ifndef _SV_VIRDEV_HXX
-#include <virdev.hxx>
+#include <vcl/virdev.hxx>
 #endif
 #ifndef _SV_GRAPH_HXX
-#include <graph.hxx>
+#include <vcl/graph.hxx>
 #endif
 #ifndef _SV_LINEINFO_HXX
-#include <lineinfo.hxx>
+#include <vcl/lineinfo.hxx>
 #endif
 #ifndef _SV_SALBTYPE_HXX
-#include <salbtype.hxx>
+#include <vcl/salbtype.hxx>
 #endif
-#include <cvtsvm.hxx>
+#include <vcl/cvtsvm.hxx>
 
 // -----------
 // - Defines -
