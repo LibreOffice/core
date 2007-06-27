@@ -17,9 +17,11 @@ sub reg_get_value($)
     $value = (split /\0/, <$fhandle>)[0];
     close ($fhandle);
 
-    chomp ($value);
-    $value =~ s|\r\n||;
+    if ( defined $value ) {
+        chomp ($value);
+        $value =~ s|\r\n||;
 #    print "Value '$value' at '$key'\n";
+    }
 
     return $value;
 }
@@ -59,6 +61,7 @@ sub cygpath($$$)
 {
     my ($path, $input_format, $format) = @_;
 
+    return $path if ( ! defined $path );
     # Strip trailing path separators
     if ($input_format eq 'u') {
 	$path =~ s|/*\s*$||;
@@ -213,7 +216,7 @@ sub print_jdk_dir()
 sub print_nsis_dir()
 {
     my $dir = reg_get_value ("HKEY_LOCAL_MACHINE/SOFTWARE/NSIS/@");
-    print cygpath ($dir, 'w', $output_format);
+    print cygpath ($dir, 'w', $output_format) if defined $dir;
 }
 
 sub copy_dll($$$)
