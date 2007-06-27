@@ -4,9 +4,9 @@
  *
  *  $RCSfile: chrhghdl.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: obo $ $Date: 2006-10-12 14:48:21 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 15:37:01 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -42,7 +42,7 @@
 #endif
 
 #ifndef _XMLOFF_XMLUCONV_HXX
-#include "xmluconv.hxx"
+#include <xmloff/xmluconv.hxx>
 #endif
 
 #ifndef _XMLOFF_XMLEHELP_HXX
@@ -58,7 +58,7 @@
 #endif
 
 #ifndef _XMLOFF_XMLEMENT_HXX
-#include "xmlelement.hxx"
+#include <xmloff/xmlelement.hxx>
 #endif
 
 using namespace ::rtl;
