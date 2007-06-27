@@ -4,9 +4,9 @@
  *
  *  $RCSfile: mnuitem.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: obo $ $Date: 2006-10-12 15:57:41 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 23:31:17 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -90,22 +90,22 @@
 #ifndef GCC
 #endif
 
-#include "app.hxx"
-#include "sfx.hrc"
-#include "msgpool.hxx"
-#include "msg.hxx"
-#include "bindings.hxx"
-#include "dispatch.hxx"
+#include <sfx2/app.hxx>
+#include <sfx2/sfx.hrc>
+#include <sfx2/msgpool.hxx>
+#include <sfx2/msg.hxx>
+#include <sfx2/bindings.hxx>
+#include <sfx2/dispatch.hxx>
 #include "idpool.hxx"
 #include "sfxtypes.hxx"
-#include "macrconf.hxx"
+#include <sfx2/macrconf.hxx>
 #include "virtmenu.hxx"
-#include "mnuitem.hxx"
-#include "tbxctrl.hxx"
+#include <sfx2/mnuitem.hxx>
+#include <sfx2/tbxctrl.hxx>
 #include "arrdecl.hxx"
-#include "module.hxx"
-#include "unoctitm.hxx"
-#include "viewfrm.hxx"
+#include <sfx2/module.hxx>
+#include <sfx2/unoctitm.hxx>
+#include <sfx2/viewfrm.hxx>
 #include "imgmgr.hxx"
 #include "imagemgr.hxx"
 #include "sfxresid.hxx"
