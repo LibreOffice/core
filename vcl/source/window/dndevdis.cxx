@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dndevdis.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 12:17:14 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 20:29:48 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -41,9 +41,9 @@
 #include <window.h>
 
 #include <vos/mutex.hxx>
-#include <svapp.hxx>
+#include <vcl/svapp.hxx>
 #ifndef _SV_SVDATA_HXX
-#include <svdata.hxx>
+#include <vcl/svdata.hxx>
 #endif
 using namespace ::osl;
 using namespace ::vos;
