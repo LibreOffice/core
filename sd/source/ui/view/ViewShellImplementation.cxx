@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ViewShellImplementation.cxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: rt $ $Date: 2007-04-03 16:28:40 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 15:47:05 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -403,10 +403,10 @@ class ViewShell::Implementation::ToolBarManagerLock::Deleter { public:
 
 ::boost::shared_ptr<ViewShell::Implementation::ToolBarManagerLock>
     ViewShell::Implementation::ToolBarManagerLock::Create (
-        ::sd::ToolBarManager& rManager)
+        const ::boost::shared_ptr<ToolBarManager>& rpManager)
 {
     ::boost::shared_ptr<ToolBarManagerLock> pLock (
-        new ViewShell::Implementation::ToolBarManagerLock(rManager),
+        new ViewShell::Implementation::ToolBarManagerLock(rpManager),
         ViewShell::Implementation::ToolBarManagerLock::Deleter());
     pLock->mpSelf = pLock;
     return pLock;
@@ -415,8 +415,9 @@ class ViewShell::Implementation::ToolBarManagerLock::Deleter { public:
 
 
 
-ViewShell::Implementation::ToolBarManagerLock::ToolBarManagerLock (ToolBarManager& rManager)
-    : mpLock(new ToolBarManager::UpdateLock(rManager)),
+ViewShell::Implementation::ToolBarManagerLock::ToolBarManagerLock (
+    const ::boost::shared_ptr<ToolBarManager>& rpManager)
+    : mpLock(new ToolBarManager::UpdateLock(rpManager)),
       maTimer()
 {
     // Start a timer that will unlock the ToolBarManager update lock when
@@ -434,9 +435,13 @@ IMPL_LINK(ViewShell::Implementation::ToolBarManagerLock,TimeoutCallback,Timer*,E
     // If possible then release the lock now.  Otherwise start the timer
     // and try again later.
     if (Application::IsUICaptured())
+    {
         maTimer.Start();
+    }
     else
+    {
         mpSelf.reset();
+    }
     return 0;
 }
 
@@ -448,7 +453,9 @@ void ViewShell::Implementation::ToolBarManagerLock::Release (bool bForce)
     // If possible then release the lock now.  Otherwise try again when the
     // timer expires.
     if (bForce || ! Application::IsUICaptured())
+    {
         mpSelf.reset();
+    }
 }
 
 
