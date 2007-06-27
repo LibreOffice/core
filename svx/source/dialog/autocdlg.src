@@ -4,9 +4,9 @@
  *
  *  $RCSfile: autocdlg.src,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: ihi $ $Date: 2007-04-19 13:58:33 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 13:39:58 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -84,6 +84,11 @@ TabDialog RID_OFA_AUTOCORR_DLG
             {
                 Identifier = RID_OFAPAGE_AUTOCOMPLETE_OPTIONS ;
                 Text [ en-US ] = "Word Completion";
+            };
+            PageItem
+            {
+                Identifier = RID_OFAPAGE_SMARTTAG_OPTIONS ;
+                Text [ en-US ] = "Smart Tags";
             };
         };
     };
@@ -766,6 +771,51 @@ TabPage RID_OFAPAGE_AUTOCOMPLETE_OPTIONS
     Text [ en-US ] = "Word Completion";
 };
 
+
+/**************************************************************************/
+/*                                                                        */
+/*  Beschreibung: Smart Tag Options                                       */
+/*                                                                        */
+/**************************************************************************/
+TabPage RID_OFAPAGE_SMARTTAG_OPTIONS
+{
+    HelpId = HID_OFAPAGE_SMARTTAG_OPTIONS ;
+    OutputSize = TRUE ;
+    Size = MAP_APPFONT ( 260 , 185 ) ;
+    SVLook = TRUE ;
+    Hide = TRUE ;
+    Text [ en-US ] = "Smart Tags";
+
+    CheckBox CB_SMARTTAGS
+    {
+        Pos = MAP_APPFONT( 4, 3 );
+        Size = MAP_APPFONT( 116, 10 );
+        Text [ en-US ] = "Label text with smart tags";
+    };
+
+    FixedText FT_SMARTTAGS
+    {
+        Pos = MAP_APPFONT( 12, 15 );
+        Size = MAP_APPFONT( 116, 8 );
+        Text [ en-US ] = "Currently installed smart tags";
+    };
+
+    Control LB_SMARTTAGS
+    {
+        Pos = MAP_APPFONT ( 12 , 25 ) ;
+        Size = MAP_APPFONT ( 172 , 154 ) ;
+        Border = TRUE ;
+        TabStop = TRUE ;
+    };
+
+    PushButton PB_SMARTTAGS
+    {
+        Pos = MAP_APPFONT ( 188 , 25 ) ;
+        Size = MAP_APPFONT ( 60 , 14 ) ;
+        Text [ en-US ] = "Properties...";
+    };
+
+};
 
 
 
