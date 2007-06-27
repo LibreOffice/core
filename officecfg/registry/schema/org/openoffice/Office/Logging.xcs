@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--***********************************************************************
+ *
+ *  OpenOffice.org - a multi-platform office productivity suite
+ *
+ *  $RCSfile: Logging.xcs,v $
+ *
+ *  $Revision: 1.2 $
+ *
+ *  last change: $Author: hr $ $Date: 2007-06-27 14:43:58 $
+ *
+ *  The Contents of this file are made available subject to
+ *  the terms of GNU Lesser General Public License Version 2.1.
+ *
+ *
+ *    GNU Lesser General Public License Version 2.1
+ *    =============================================
+ *    Copyright 2005 by Sun Microsystems, Inc.
+ *    901 San Antonio Road, Palo Alto, CA 94303, USA
+ *
+ *    This library is free software; you can redistribute it and/or
+ *    modify it under the terms of the GNU Lesser General Public
+ *    License version 2.1, as published by the Free Software Foundation.
+ *
+ *    This library is distributed in the hope that it will be useful,
+ *    but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ *    Lesser General Public License for more details.
+ *
+ *    You should have received a copy of the GNU Lesser General Public
+ *    License along with this library; if not, write to the Free Software
+ *    Foundation, Inc., 59 Temple Place, Suite 330, Boston,
+ *    MA  02111-1307  USA
+ *
+ ************************************************************************ -->
+<!DOCTYPE oor:component-schema SYSTEM "../../../../component-schema.dtd">
+<oor:component-schema xmlns:oor="http://openoffice.org/2001/registry" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" oor:name="Logging" oor:package="org.openoffice.Office" xml:lang="en-US">
+  <info>
+    <author>FS</author>
+    <desc >Contains preferences the Logger components.</desc>
+  </info>
+  <templates>
+    <group oor:name="LoggerSettings">
+      <info>
+        <desc>contains preferences for a single Logger.</desc>
+      </info>
+      <prop oor:name="LogLevel" oor:type="xs:int" oor:nillable="false">
+        <info>
+          <desc>Specifies the log level of the logger.</desc>
+        </info>
+        <value>2147483647</value>
+      </prop>
+      <prop oor:name="DefaultHandler" oor:type="xs:string" oor:nillable="true">
+        <info>
+          <desc>Specifies the UNO service name of the default handler for the logger.</desc>
+        </info>
+        <value>com.sun.star.logging.FileHandler</value>
+      </prop>
+      <group oor:name="HandlerSettings" oor:extensible="true">
+        <info>
+          <desc>Specifies the settings for the default handler (DefaultHandler property) of
+            the logger. Plain properties below the HandlerSettings node are passed to
+            the log handler upon creation, as sequence of NamedValues.</desc>
+        </info>
+        <prop oor:name="FileURL" oor:type="xs:string">
+          <info>
+            <desc>Specifies the file URL for the log handler. The default value here will expand to a file
+            with the same name as the logger for which the handler is used, with extension &quot;.log&quot;.
+            It will be located in the user's OOo data folder.</desc>
+          </info>
+          <value>$(userurl)/$(loggername).log</value>
+        </prop>
+      </group>
+      <prop oor:name="DefaultFormatter" oor:type="xs:string" oor:nillable="true">
+        <info>
+          <desc>Specifies the UNO service name of the default formatter for the logger.</desc>
+        </info>
+        <value>com.sun.star.logging.PlainTextFormatter</value>
+      </prop>
+      <group oor:name="FormatterSettings" oor:extensible="true">
+        <info>
+          <desc>Specifies the settings for the default formatter (DefaultFormatter property) of
+            the logger. Plain properties below the FormatterSettings node are passed to
+            the log formatter upon creation, as sequence of NamedValues.</desc>
+        </info>
+      </group>
+    </group>
+  </templates>
+  <component>
+    <set oor:name="Settings" oor:node-type="LoggerSettings">
+      <info>
+        <desc>contains the settings for all known loggers in OpenOffice.org.</desc>
+      </info>
+    </set>
+  </component>
+</oor:component-schema>
