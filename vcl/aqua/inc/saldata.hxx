@@ -4,9 +4,9 @@
  *
  *  $RCSfile: saldata.hxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 10:33:28 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 19:48:19 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -37,19 +37,19 @@
 #define _SV_SALDATA_HXX
 
 #ifndef _SV_SV_H
-    #include <sv.h>
+    #include <vcl/sv.h>
 #endif
 
 #ifdef __cplusplus
 
     #ifndef _SV_SVDATA_HXX
-        #include <svdata.hxx>
+        #include <vcl/svdata.hxx>
     #endif
 
 #endif // __cplusplus
 
 #ifndef _SV_SALWTYPE_HXX
-    #include <salwtype.hxx>
+    #include <vcl/salwtype.hxx>
 #endif
 
 #ifndef _SV_VCLWINDOW_H
