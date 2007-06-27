@@ -4,9 +4,9 @@
  *
  *  $RCSfile: arrdecl.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: hr $ $Date: 2006-06-19 21:57:15 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 22:51:44 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -40,7 +40,7 @@
 #ifndef _SVARRAY_HXX
 #include <svtools/svarray.hxx>
 #endif
-#include "minarray.hxx"
+#include <sfx2/minarray.hxx>
 
 struct CntUpdateResult;
 
