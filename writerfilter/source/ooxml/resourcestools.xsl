@@ -5,9 +5,9 @@
  *
  *  $RCSfile: resourcestools.xsl,v $
  *
- *  $Revision: 1.40 $
+ *  $Revision: 1.41 $
  *
- *  last change: $Author: hbrinkm $ $Date: 2007-06-15 09:30:48 $
+ *  last change: $Author: hbrinkm $ $Date: 2007-06-27 09:21:44 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1322,6 +1322,130 @@ bool </xsl:text>
   </xsl:template>
 
   <!--
+      Chooses the action for the current <action> element.
+  -->
+  <xsl:template name="chooseaction">
+    <xsl:choose>
+      <xsl:when test="@action='sendTableDepth'">
+        <xsl:text>
+    sendTableDepth();</xsl:text>
+      </xsl:when>
+      <xsl:when test="@action='startCell'">
+        <xsl:text>
+    startCell();</xsl:text>
+      </xsl:when>
+      <xsl:when test="@action='startParagraphGroup'">
+        <xsl:text>
+    startParagraphGroup();</xsl:text>
+      </xsl:when>
+      <xsl:when test="@action='startCharacterGroup'">
+        <xsl:text>
+    startCharacterGroup();</xsl:text>
+      </xsl:when>
+      <xsl:when test="@action='startSectionGroup'">
+        <xsl:text>
+    startSectionGroup();</xsl:text>
+      </xsl:when>
+      <xsl:when test="@action='ftnednref'">
+        <xsl:text>
+    if (isForwardEvents())        
+        mrStream.utext(sFtnEdnRef, 1);</xsl:text>
+      </xsl:when>
+      <xsl:when test="@action='ftnednsep'">
+        <xsl:text>
+    if (isForwardEvents())        
+        mrStream.utext(sFtnEdnSep, 1);</xsl:text>
+      </xsl:when>
+      <xsl:when test="@action='ftnedncont'">
+        <xsl:text>
+    if (isForwardEvents())        
+        mrStream.utext(sFtnEdnCont, 1);</xsl:text>
+      </xsl:when>
+      <xsl:when test="@action='pgNum'">
+        <xsl:text>
+    if (isForwardEvents())        
+        mrStream.utext(sPgNum, 1);</xsl:text>
+      </xsl:when>
+      <xsl:when test="@action='tab'">
+        <xsl:text>
+    if (isForwardEvents())        
+        mrStream.utext(sTab, 1);</xsl:text>
+      </xsl:when>
+      <xsl:when test="@action='endOfParagraph'">
+        <xsl:text>
+    if (isForwardEvents())        
+        mrStream.utext(sCR, 1);</xsl:text>
+      </xsl:when>
+      <xsl:when test="@action='setLastParagraphInSection'">
+        <xsl:text>
+    setLastParagraphInSection();</xsl:text>
+      </xsl:when>
+      <xsl:when test="@action='endCell'">
+        <xsl:text>
+    endCell();</xsl:text>
+      </xsl:when>
+      <xsl:when test="@action='endParagraphGroup'">
+        <xsl:text>
+    endParagraphGroup();</xsl:text>
+      </xsl:when>
+      <xsl:when test="@action='endCharacterGroup'">
+        <xsl:text>
+    endCharacterGroup();</xsl:text>
+      </xsl:when>
+      <xsl:when test="@action='endSectionGroup'">
+        <xsl:text>
+    endSectionGroup();</xsl:text>
+      </xsl:when>
+        <xsl:when test="@action='handleXNotes'">
+          <xsl:text>
+    switch (meToken)
+    {
+    case OOXML_ELEMENT_wordprocessingml_footnoteReference:
+        {
+            OOXMLFootnoteHandler aFootnoteHandler(this);
+            mpPropertySet->resolve(aFootnoteHandler);
+        }
+        break;
+    case OOXML_ELEMENT_wordprocessingml_endnoteReference:
+        {
+            OOXMLEndnoteHandler aEndnoteHandler(this);
+            mpPropertySet->resolve(aEndnoteHandler);
+        }
+        break;
+    default:
+        break;
+    }</xsl:text>
+        </xsl:when>
+        <xsl:when test="@action='handleHdrFtr'">
+          <xsl:text>
+    switch (meToken)
+    {
+    case OOXML_ELEMENT_wordprocessingml_footerReference:
+        {
+            OOXMLFooterHandler aFooterHandler(this);
+            mpPropertySet->resolve(aFooterHandler);
+        }
+        break;
+    case OOXML_ELEMENT_wordprocessingml_headerReference:
+        {
+            OOXMLHeaderHandler aHeaderHandler(this);
+            mpPropertySet->resolve(aHeaderHandler);
+        }
+        break;
+    default:
+        break;
+    }</xsl:text>
+        </xsl:when>
+        <xsl:when test="@action='handleComment'">
+    {
+        OOXMLCommentHandler aCommentHandler(this);
+        mpPropertySet->resolve(aCommentHandler);
+    }
+        </xsl:when>
+    </xsl:choose>
+  </xsl:template>
+
+  <!--
       Generates the definition of ::startAction of the context class
       for the current <define>.
   -->
@@ -1338,28 +1462,7 @@ void </xsl:text>
     <xsl:text>::startAction()
 {</xsl:text>
     <xsl:for-each select="$resource/action[@name='start']">
-      <xsl:choose>
-        <xsl:when test="@action='sendTableDepth'">
-          <xsl:text>
-    sendTableDepth();</xsl:text>
-        </xsl:when>
-        <xsl:when test="@action='startCell'">
-          <xsl:text>
-    startCell();</xsl:text>
-        </xsl:when>
-        <xsl:when test="@action='startParagraphGroup'">
-          <xsl:text>
-    startParagraphGroup();</xsl:text>
-        </xsl:when>
-        <xsl:when test="@action='startCharacterGroup'">
-          <xsl:text>
-    startCharacterGroup();</xsl:text>
-        </xsl:when>
-        <xsl:when test="@action='startSectionGroup'">
-          <xsl:text>
-    startSectionGroup();</xsl:text>
-        </xsl:when>
-      </xsl:choose>
+      <xsl:call-template name="chooseaction"/>
     </xsl:for-each>
     <xsl:if test="$resource/@resource='Properties'">
       <xsl:for-each select="$resource//attribute[@default]">
@@ -1409,104 +1512,7 @@ void </xsl:text>
     <xsl:text>::endAction()
 {</xsl:text>
     <xsl:for-each select="$resource/action[@name='end']">
-      <xsl:choose>
-        <xsl:when test="@action='ftnednref'">
-          <xsl:text>
-    if (isForwardEvents())        
-        mrStream.utext(sFtnEdnRef, 1);</xsl:text>
-        </xsl:when>
-        <xsl:when test="@action='ftnednsep'">
-          <xsl:text>
-    if (isForwardEvents())        
-        mrStream.utext(sFtnEdnSep, 1);</xsl:text>
-        </xsl:when>
-        <xsl:when test="@action='ftnedncont'">
-          <xsl:text>
-    if (isForwardEvents())        
-        mrStream.utext(sFtnEdnCont, 1);</xsl:text>
-        </xsl:when>
-        <xsl:when test="@action='pgNum'">
-          <xsl:text>
-    if (isForwardEvents())        
-        mrStream.utext(sPgNum, 1);</xsl:text>
-        </xsl:when>
-        <xsl:when test="@action='tab'">
-          <xsl:text>
-    if (isForwardEvents())        
-        mrStream.utext(sTab, 1);</xsl:text>
-        </xsl:when>
-        <xsl:when test="@action='endOfParagraph'">
-          <xsl:text>
-    if (isForwardEvents())        
-        mrStream.utext(sCR, 1);</xsl:text>
-        </xsl:when>
-        <xsl:when test="@action='setLastParagraphInSection'">
-      <xsl:text>
-    setLastParagraphInSection();</xsl:text>
-        </xsl:when>
-        <xsl:when test="@action='endCell'">
-        <xsl:text>
-    endCell();</xsl:text>
-        </xsl:when>
-        <xsl:when test="@action='endParagraphGroup'">
-        <xsl:text>
-    endParagraphGroup();</xsl:text>
-        </xsl:when>
-        <xsl:when test="@action='endCharacterGroup'">
-        <xsl:text>
-    endCharacterGroup();</xsl:text>
-        </xsl:when>
-        <xsl:when test="@action='endSectionGroup'">
-        <xsl:text>
-    endSectionGroup();</xsl:text>
-        </xsl:when>
-        <xsl:when test="@action='handleXNotes'">
-          <xsl:text>
-    switch (meToken)
-    {
-    case OOXML_ELEMENT_wordprocessingml_footnoteReference:
-        {
-            OOXMLFootnoteHandler aFootnoteHandler(this);
-            mpPropertySet->resolve(aFootnoteHandler);
-        }
-        break;
-    case OOXML_ELEMENT_wordprocessingml_endnoteReference:
-        {
-            OOXMLEndnoteHandler aEndnoteHandler(this);
-            mpPropertySet->resolve(aEndnoteHandler);
-        }
-        break;
-    default:
-        break;
-    }</xsl:text>
-        </xsl:when>
-        <xsl:when test="@action='handleHdrFtr'">
-          <xsl:text>
-    switch (meToken)
-    {
-    case OOXML_ELEMENT_wordprocessingml_footerReference:
-        {
-            OOXMLFooterHandler aFooterHandler(this);
-            mpPropertySet->resolve(aFooterHandler);
-        }
-        break;
-    case OOXML_ELEMENT_wordprocessingml_headerReference:
-        {
-            OOXMLHeaderHandler aHeaderHandler(this);
-            mpPropertySet->resolve(aHeaderHandler);
-        }
-        break;
-    default:
-        break;
-    }</xsl:text>
-        </xsl:when>
-        <xsl:when test="@action='handleComment'">
-    {
-        OOXMLCommentHandler aCommentHandler(this);
-        mpPropertySet->resolve(aCommentHandler);
-    }
-        </xsl:when>
-      </xsl:choose>
+      <xsl:call-template name="chooseaction"/>
     </xsl:for-each>
     <xsl:text>
 }</xsl:text>
