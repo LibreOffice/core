@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xattrbmp.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 06:23:16 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 19:33:53 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -46,18 +46,18 @@
 #include <svtools/style.hxx>
 #endif
 
-#include "dialogs.hrc"
+#include <svx/dialogs.hrc>
 #include "xattr.hxx"
-#include "xtable.hxx"
-#include "xoutx.hxx"
-#include "xdef.hxx"
-#include "unomid.hxx"
-#include "unoprnms.hxx"
+#include <svx/xtable.hxx>
+#include <svx/xoutx.hxx>
+#include <svx/xdef.hxx>
+#include <svx/unomid.hxx>
+#include <svx/unoprnms.hxx>
 
 #include "unoapi.hxx"
 
 #ifndef _SVDMODEL_HXX
-#include "svdmodel.hxx"
+#include <svx/svdmodel.hxx>
 #endif
 
 #ifndef _COM_SUN_STAR_BEANS_PROPERTYVALUE_HPP_
