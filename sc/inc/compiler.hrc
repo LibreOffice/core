@@ -4,9 +4,9 @@
  *
  *  $RCSfile: compiler.hrc,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: obo $ $Date: 2007-06-13 09:04:34 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 13:41:27 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -368,9 +368,10 @@
 #define SC_OPCODE_HYPERLINK         387
 #define SC_OPCODE_INDIRECT_XL       388     /* See also INDIRECT for OOO variant */
 #define SC_OPCODE_ADDRESS_XL        389     /* See also ADRESS for OOO variant */
-#define SC_OPCODE_END_2_PAR         390
+#define SC_OPCODE_GET_PIVOT_DATA    390
+#define SC_OPCODE_END_2_PAR         391
 
-#define SC_OPCODE_LAST_OPCODE_ID    389      /* last OpCode */
+#define SC_OPCODE_LAST_OPCODE_ID    390      /* last OpCode */
 
 /*** Interna ***/
 #define SC_OPCODE_INTERNAL_BEGIN   9995
