@@ -4,9 +4,9 @@
  *
  *  $RCSfile: sbunoobj.cxx,v $
  *
- *  $Revision: 1.47 $
+ *  $Revision: 1.48 $
  *
- *  last change: $Author: ihi $ $Date: 2007-06-05 15:10:44 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 14:19:21 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -101,12 +101,12 @@ using namespace cppu;
 using namespace rtl;
 
 
-#include<sbstar.hxx>
-#include<sbuno.hxx>
-#include<sberrors.hxx>
+#include<basic/sbstar.hxx>
+#include<basic/sbuno.hxx>
+#include<basic/sberrors.hxx>
 #include<sbunoobj.hxx>
 #include"sbjsmod.hxx"
-#include<basmgr.hxx>
+#include<basic/basmgr.hxx>
 #include<sbintern.hxx>
 #include<runtime.hxx>
 
