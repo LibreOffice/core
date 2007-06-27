@@ -4,9 +4,9 @@
  *
  *  $RCSfile: txtimppr.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: rt $ $Date: 2006-10-30 09:07:17 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 16:15:45 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -61,11 +61,11 @@
 #endif
 
 #ifndef _XMLOFF_XMLFONTSTYLESCONTEXT_HXX_
-#include "XMLFontStylesContext.hxx"
+#include <xmloff/XMLFontStylesContext.hxx>
 #endif
 
 #ifndef _XMLOFF_TEXTPRMAP_HXX_
-#include "txtprmap.hxx"
+#include <xmloff/txtprmap.hxx>
 #endif
 
 #ifndef _XMLOFF_TXTIMPPR_HXX
