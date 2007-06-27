@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xformsapi.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: obo $ $Date: 2006-10-12 14:56:34 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 16:28:52 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -51,10 +51,10 @@
 #include <unotools/processfactory.hxx>
 #include <tools/debug.hxx>
 
-#include <xmltoken.hxx>
-#include <nmspmap.hxx>
+#include <xmloff/xmltoken.hxx>
+#include <xmloff/nmspmap.hxx>
 #include <xmlnmspe.hxx>
-#include <xmltkmap.hxx>
+#include <xmloff/xmltkmap.hxx>
 
 using rtl::OUString;
 using com::sun::star::uno::Reference;
