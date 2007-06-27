@@ -4,9 +4,9 @@
  *
  *  $RCSfile: unoimap.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: hr $ $Date: 2007-06-26 13:34:18 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 22:03:24 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -97,10 +97,10 @@
 
 #include "unoevent.hxx"
 #include "unoimap.hxx"
-#include "imap.hxx"
-#include "imapcirc.hxx"
-#include "imaprect.hxx"
-#include "imappoly.hxx"
+#include <svtools/imap.hxx>
+#include <svtools/imapcirc.hxx>
+#include <svtools/imaprect.hxx>
+#include <svtools/imappoly.hxx>
 
 #ifndef SEQTYPE
  #if defined(__SUNPRO_CC) && (__SUNPRO_CC == 0x500)
