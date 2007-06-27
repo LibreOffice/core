@@ -4,9 +4,9 @@
  *
  *  $RCSfile: textitem.cxx,v $
  *
- *  $Revision: 1.70 $
+ *  $Revision: 1.71 $
  *
- *  last change: $Author: kz $ $Date: 2007-05-10 14:53:50 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 18:31:25 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -60,15 +60,15 @@
 #include <rtl/math.hxx>
 #endif
 
-#include <eeitem.hxx>
+#include <svx/eeitem.hxx>
 
 #include <basic/sbx.hxx>
 #define GLOBALOVERFLOW3
 
 
 #include <svtools/memberid.hrc>
-#include "svxids.hrc"
-#include "svxitems.hrc"
+#include <svx/svxids.hrc>
+#include <svx/svxitems.hrc>
 
 #ifndef _VCL_VCLENUM_HXX
 #include <vcl/vclenum.hxx>
@@ -151,41 +151,41 @@
 #endif
 
 #ifndef _SVX_UNOMID_HXX
-#include <unomid.hxx>
+#include <svx/unomid.hxx>
 #endif
 
 
 #include "flstitem.hxx"
 #include "fontitem.hxx"
-#include "postitem.hxx"
-#include "wghtitem.hxx"
-#include "fhgtitem.hxx"
+#include <svx/postitem.hxx>
+#include <svx/wghtitem.hxx>
+#include <svx/fhgtitem.hxx>
 #include "fwdtitem.hxx"
-#include "udlnitem.hxx"
-#include "crsditem.hxx"
-#include "shdditem.hxx"
-#include "akrnitem.hxx"
-#include "wrlmitem.hxx"
-#include "cntritem.hxx"
-#include "prszitem.hxx"
-#include "colritem.hxx"
-#include "cscoitem.hxx"
-#include "kernitem.hxx"
-#include "cmapitem.hxx"
-#include "escpitem.hxx"
-#include "langitem.hxx"
+#include <svx/udlnitem.hxx>
+#include <svx/crsditem.hxx>
+#include <svx/shdditem.hxx>
+#include <svx/akrnitem.hxx>
+#include <svx/wrlmitem.hxx>
+#include <svx/cntritem.hxx>
+#include <svx/prszitem.hxx>
+#include <svx/colritem.hxx>
+#include <svx/cscoitem.hxx>
+#include <svx/kernitem.hxx>
+#include <svx/cmapitem.hxx>
+#include <svx/escpitem.hxx>
+#include <svx/langitem.hxx>
 #include "nlbkitem.hxx"
-#include "nhypitem.hxx"
-#include "lcolitem.hxx"
-#include "blnkitem.hxx"
-#include "emphitem.hxx"
-#include "twolinesitem.hxx"
-#include "scripttypeitem.hxx"
-#include "charrotateitem.hxx"
-#include "charscaleitem.hxx"
-#include "charreliefitem.hxx"
-#include "itemtype.hxx"
-#include "dialmgr.hxx"
+#include <svx/nhypitem.hxx>
+#include <svx/lcolitem.hxx>
+#include <svx/blnkitem.hxx>
+#include <svx/emphitem.hxx>
+#include <svx/twolinesitem.hxx>
+#include <svx/scripttypeitem.hxx>
+#include <svx/charrotateitem.hxx>
+#include <svx/charscaleitem.hxx>
+#include <svx/charreliefitem.hxx>
+#include <svx/itemtype.hxx>
+#include <svx/dialmgr.hxx>
 #include "langtab.hxx"
 #include "dlgutil.hxx"
 
