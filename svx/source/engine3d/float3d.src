@@ -4,9 +4,9 @@
  *
  *  $RCSfile: float3d.src,v $
  *
- *  $Revision: 1.64 $
+ *  $Revision: 1.65 $
  *
- *  last change: $Author: vg $ $Date: 2007-05-22 15:18:38 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 18:03:15 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -33,7 +33,7 @@
  *
  ************************************************************************/
 
-#include "dialogs.hrc"
+#include <svx/dialogs.hrc>
 #include "float3d.hrc"
 #define WIDTH               158
 #define HEIGHT              209
