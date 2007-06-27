@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.10 $
+#   $Revision: 1.11 $
 #
-#   last change: $Author: obo $ $Date: 2006-07-10 16:13:48 $
+#   last change: $Author: hr $ $Date: 2007-06-27 13:45:16 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -80,6 +80,7 @@ IDLFILES=\
     XNamed.idl\
     XNameReplace.idl\
     XSet.idl\
+    XStringKeyMap.idl\
 
 # ------------------------------------------------------------------
 
