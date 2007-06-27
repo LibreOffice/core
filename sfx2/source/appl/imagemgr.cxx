@@ -4,9 +4,9 @@
  *
  *  $RCSfile: imagemgr.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: rt $ $Date: 2007-01-29 15:50:58 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 22:58:33 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -65,15 +65,15 @@
 #endif
 
 #include "imgmgr.hxx"
-#include "app.hxx"
-#include "unoctitm.hxx"
-#include "dispatch.hxx"
-#include "msg.hxx"
-#include "msgpool.hxx"
-#include "viewfrm.hxx"
-#include "module.hxx"
-#include "objsh.hxx"
-#include "docfac.hxx"
+#include <sfx2/app.hxx>
+#include <sfx2/unoctitm.hxx>
+#include <sfx2/dispatch.hxx>
+#include <sfx2/msg.hxx>
+#include <sfx2/msgpool.hxx>
+#include <sfx2/viewfrm.hxx>
+#include <sfx2/module.hxx>
+#include <sfx2/objsh.hxx>
+#include <sfx2/docfac.hxx>
 
 #include <hash_map>
 
