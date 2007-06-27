@@ -4,9 +4,9 @@
  *
  *  $RCSfile: passwordcontainer.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 15:22:24 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 21:57:42 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -38,7 +38,7 @@
 
 #include "passwordcontainer.hxx"
 
-#include "pathoptions.hxx"
+#include <svtools/pathoptions.hxx>
 
 #ifndef _CPPUHELPER_FACTORY_HXX_
 #include "cppuhelper/factory.hxx"
