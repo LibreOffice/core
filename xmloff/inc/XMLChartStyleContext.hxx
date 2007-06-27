@@ -4,9 +4,9 @@
  *
  *  $RCSfile: XMLChartStyleContext.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 12:46:56 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 14:38:30 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -36,7 +36,7 @@
 #define _XMLOFF_XMLCHARTSTYLECONTEXT_HXX_
 
 #ifndef _XMLOFF_XMLSHAPESTYLECONTEXT_HXX
-#include "XMLShapeStyleContext.hxx"
+#include <xmloff/XMLShapeStyleContext.hxx>
 #endif
 
 class XMLChartStyleContext : public XMLShapeStyleContext
