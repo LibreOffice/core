@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dp_dependencies.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: vg $ $Date: 2007-01-18 14:55:15 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 13:27:18 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -63,6 +63,13 @@ namespace css = ::com::sun::star;
 static char const xmlNamespace[] =
     "http://openoffice.org/extensions/description/2006";
 
+bool satisfiesMinimalVersion(::rtl::OUString const & version) {
+    return
+        ::dp_misc::compareVersions(
+            version, ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("2.2")))
+        != ::dp_misc::GREATER;
+};
+
 }
 
 namespace dp_misc {
@@ -78,22 +85,34 @@ check(::dp_misc::DescriptionInfoset const & infoset) {
         unsatisfied(n);
     ::sal_Int32 unsat = 0;
     for (::sal_Int32 i = 0; i < n; ++i) {
+        static char const minimalVersion[] = "OpenOffice.org-minimal-version";
         css::uno::Reference< css::xml::dom::XElement > e(
             deps->item(i), css::uno::UNO_QUERY_THROW);
+        bool sat = false;
         // Currently, the only satisfied dependency is OpenOffice.org-minimal-
         // version with a value of the current OOo release or less (the actual
         // version string has to be updated here for every OOo release):
-        if (!(e->getNamespaceURI().equalsAsciiL(
-                  RTL_CONSTASCII_STRINGPARAM(xmlNamespace))
-              && e->getTagName().equalsAsciiL(
-                  RTL_CONSTASCII_STRINGPARAM("OpenOffice.org-minimal-version"))
-              && (::dp_misc::compareVersions(
-                      e->getAttribute(
-                          ::rtl::OUString(
-                              RTL_CONSTASCII_USTRINGPARAM("value"))),
-                      ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("2.2")))
-                  != ::dp_misc::GREATER)))
+        if (e->getNamespaceURI().equalsAsciiL(
+                RTL_CONSTASCII_STRINGPARAM(xmlNamespace))
+            && e->getTagName().equalsAsciiL(
+                RTL_CONSTASCII_STRINGPARAM(minimalVersion)))
         {
+            sat = satisfiesMinimalVersion(
+                e->getAttribute(
+                    ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("value"))));
+        } else if (e->hasAttributeNS(
+                       ::rtl::OUString(
+                           RTL_CONSTASCII_USTRINGPARAM(xmlNamespace)),
+                       ::rtl::OUString(
+                           RTL_CONSTASCII_USTRINGPARAM(minimalVersion))))
+        {
+            sat = satisfiesMinimalVersion(
+                e->getAttributeNS(
+                    ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(xmlNamespace)),
+                    ::rtl::OUString(
+                        RTL_CONSTASCII_USTRINGPARAM(minimalVersion))));
+        }
+        if (!sat) {
             unsatisfied[unsat++] = e;
         }
     }
