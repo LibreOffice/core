@@ -4,9 +4,9 @@
  *
  *  $RCSfile: new.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: rt $ $Date: 2007-04-26 10:14:08 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 23:22:26 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -37,7 +37,7 @@
 #include "precompiled_sfx2.hxx"
 
 #ifndef _SFXNEW_HXX
-#include "new.hxx"
+#include <sfx2/new.hxx>
 #endif
 
 #ifndef _SV_GDIMTF_HXX //autogen
@@ -77,28 +77,28 @@
 #include "doc.hrc"
 #endif
 #ifndef _SFX_HRC
-#include "sfx.hrc"
+#include <sfx2/sfx.hrc>
 #endif
 #include "helpid.hrc"
 #include "sfxtypes.hxx"
 #ifndef _SFXAPP_HXX
-#include "app.hxx"
+#include <sfx2/app.hxx>
 #endif
 #ifndef _SFXDOCINF_HXX
-#include "docinf.hxx"
+#include <sfx2/docinf.hxx>
 #endif
 #ifndef _SFXVIEWFRM_HXX
-#include "viewfrm.hxx"
+#include <sfx2/viewfrm.hxx>
 #endif
 #ifndef _SFX_OBJFAC_HXX
-#include "docfac.hxx"
+#include <sfx2/docfac.hxx>
 #endif
 #ifndef _SFX_OBJSH_HXX
-#include "objsh.hxx"
+#include <sfx2/objsh.hxx>
 #endif
 #include "fltfnc.hxx"
 #ifndef _SFXVIEWSH_HXX
-#include "viewsh.hxx"
+#include <sfx2/viewsh.hxx>
 #endif
 #ifndef _VIEWFAC_HXX
 #include "viewfac.hxx"
@@ -107,10 +107,10 @@
 #include "sfxresid.hxx"
 #endif
 #ifndef _SFXDOCFILE_HXX
-#include "docfile.hxx"
+#include <sfx2/docfile.hxx>
 #endif
 #include "preview.hxx"
-#include "printer.hxx"
+#include <sfx2/printer.hxx>
 #ifndef _SV_WAITOBJ_HXX
 #include <vcl/waitobj.hxx>
 #endif
