@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dlgctl3d.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: kz $ $Date: 2006-12-14 17:37:46 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 17:01:03 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -36,37 +36,37 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_svx.hxx"
 
-#include "dialogs.hrc"
+#include <svx/dialogs.hrc>
 
 #ifndef _SVX_XFLCLIT_HXX //autogen
-#include <xflclit.hxx>
+#include <svx/xflclit.hxx>
 #endif
 #ifndef _SVX_FMMODEL_HXX
-#include <fmmodel.hxx>
+#include <svx/fmmodel.hxx>
 #endif
 #ifndef _SVX_FMPAGE_HXX
-#include <fmpage.hxx>
+#include <svx/fmpage.hxx>
 #endif
 #ifndef _E3D_VIEW3D_HXX //autogen
-#include <view3d.hxx>
+#include <svx/view3d.hxx>
 #endif
 #ifndef _E3D_POLYSC3D_HXX //autogen
-#include <polysc3d.hxx>
+#include <svx/polysc3d.hxx>
 #endif
 #ifndef _E3D_OBJ3D_HXX //autogen
-#include <obj3d.hxx>
+#include <svx/obj3d.hxx>
 #endif
 #ifndef _CAMERA3D_HXX //autogen
-#include <camera3d.hxx>
+#include <svx/camera3d.hxx>
 #endif
 #ifndef _VOLUME3D_HXX //autogen
-#include <volume3d.hxx>
+#include <svx/volume3d.hxx>
 #endif
 #ifndef _E3D_SPHERE3D_HXX //autogen
-#include <sphere3d.hxx>
+#include <svx/sphere3d.hxx>
 #endif
 #ifndef _E3D_CUBE3D_HXX //autogen
-#include <cube3d.hxx>
+#include <svx/cube3d.hxx>
 #endif
 #ifndef _SV_EVENT_HXX //autogen
 #include <vcl/event.hxx>
@@ -78,7 +78,7 @@
 #include <svtools/style.hxx>
 #endif
 
-#include "dlgctl3d.hxx"
+#include <svx/dlgctl3d.hxx>
 #include <goodies/base3d.hxx>
 #include <tools/link.hxx>
 
