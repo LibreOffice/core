@@ -4,9 +4,9 @@
  *
  *  $RCSfile: lineinfo.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 12:04:47 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 20:17:26 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -46,7 +46,7 @@
 #include <tools/debug.hxx>
 #endif
 #ifndef _SV_LINEINFO_HXX
-#include <lineinfo.hxx>
+#include <vcl/lineinfo.hxx>
 #endif
 
 DBG_NAME( LineInfo )

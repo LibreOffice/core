@@ -4,9 +4,9 @@
  *
  *  $RCSfile: octree.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 12:05:50 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 20:18:20 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -37,12 +37,12 @@
 #include "precompiled_vcl.hxx"
 #include <limits.h>
 #ifndef _SV_BMPACC_HXX
-#include <bmpacc.hxx>
+#include <vcl/bmpacc.hxx>
 #endif
 #ifndef _SV_IMPOCT_HXX
 #include <impoct.hxx>
 #endif
-#include <octree.hxx>
+#include <vcl/octree.hxx>
 
 // ---------
 // - pMask -
