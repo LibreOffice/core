@@ -4,9 +4,9 @@
  *
  *  $RCSfile: eertfpar.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: obo $ $Date: 2006-10-12 12:38:11 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 17:58:31 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -41,12 +41,12 @@
 #include <eertfpar.hxx>
 #include <impedit.hxx>
 #include <svtools/intitem.hxx>
-#include "escpitem.hxx"
-#include "fhgtitem.hxx"
+#include <svx/escpitem.hxx>
+#include <svx/fhgtitem.hxx>
 #include "fontitem.hxx"
 
 #ifndef _SVX_FLDITEM_HXX
-#include <flditem.hxx>
+#include <svx/flditem.hxx>
 #endif
 
 #include <svtools/rtftoken.h>
