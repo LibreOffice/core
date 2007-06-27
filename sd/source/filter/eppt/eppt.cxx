@@ -4,9 +4,9 @@
  *
  *  $RCSfile: eppt.cxx,v $
  *
- *  $Revision: 1.57 $
+ *  $Revision: 1.58 $
  *
- *  last change: $Author: kz $ $Date: 2007-05-10 15:23:48 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 15:38:30 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1528,13 +1528,29 @@ sal_Bool PPTWriter::ImplCreateSlide( sal_uInt32 nPageNum )
         aAny >>= eFe;
 
     sal_uInt32  nSoundRef = 0;
-    sal_Bool    bIsSound = GetPropertyValue( aAny, mXPagePropSet, String( RTL_CONSTASCII_USTRINGPARAM( "Sound" ) ) );
-    if ( bIsSound )
-        nSoundRef = maSoundCollection.GetId( *(::rtl::OUString*)aAny.getValue() );
+    sal_Bool    bIsSound = sal_False;
+    sal_Bool    bStopSound = sal_False;
+    sal_Bool    bLoopSound = sal_False;
+
+    if ( GetPropertyValue( aAny, mXPagePropSet, String( RTL_CONSTASCII_USTRINGPARAM( "Sound" ) ) ) )
+    {
+        rtl::OUString aSoundURL;
+        if ( aAny >>= aSoundURL )
+        {
+            nSoundRef = maSoundCollection.GetId( aSoundURL );
+            bIsSound = sal_True;
+        }
+        else
+            aAny >>= bStopSound;
+    }
+    if ( GetPropertyValue( aAny, mXPagePropSet, String( RTL_CONSTASCII_USTRINGPARAM( "LoopSound" ) ) ) )
+        aAny >>= bLoopSound;
+
 
     sal_Bool bNeedsSSSlideInfoAtom = ( bVisible == FALSE )
                                     || ( mnDiaMode == 2 )
                                     || ( bIsSound )
+                                    || ( bStopSound )
                                     || ( eFe != ::com::sun::star::presentation::FadeEffect_NONE );
     if ( bNeedsSSSlideInfoAtom )
     {
@@ -1747,6 +1763,10 @@ sal_Bool PPTWriter::ImplCreateSlide( sal_uInt32 nPageNum )
             nBuildFlags |= 4;
         if ( bIsSound )
             nBuildFlags |= 16;
+        if ( bLoopSound )
+            nBuildFlags |= 64;
+        if ( bStopSound )
+            nBuildFlags |= 256;
 
         if ( GetPropertyValue( aAny, mXPagePropSet, String( RTL_CONSTASCII_USTRINGPARAM( "Duration" ) ) ) )// duration of this slide
             nSlideTime = *(INT32*)aAny.getValue() << 10;        // in ticks
