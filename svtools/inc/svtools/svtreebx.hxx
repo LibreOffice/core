@@ -4,9 +4,9 @@
  *
  *  $RCSfile: svtreebx.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: obo $ $Date: 2007-06-12 05:28:52 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 12:17:57 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -78,6 +78,7 @@ class SVT_DLLPUBLIC SvTreeListBox : public SvLBox
 {
     friend class SvImpLBox;
     friend class ImpLBSelEng;
+    friend class TreeControlPeer;
 
     SvImpLBox*      pImp;
     Link            aCheckButtonHdl;
@@ -332,6 +333,8 @@ public:
     SvLBoxEntry*    GetEntry( ULONG nRootPos ) const { return SvLBox::GetEntry(nRootPos);}
 
     void            SetWindowBits( WinBits nWinStyle );
+    WinBits         GetWindowBits() const { return nWindowStyle; }
+
     void            PaintEntry( SvLBoxEntry* );
     long            PaintEntry( SvLBoxEntry*, long nLine,
                                 USHORT nTabFlagMask=0xffff );
