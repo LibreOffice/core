@@ -4,9 +4,9 @@
  *
  *  $RCSfile: objmnctl.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 16:47:03 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 23:31:42 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -53,12 +53,12 @@
 #ifndef GCC
 #endif
 
-#include "sfxsids.hrc"
+#include <sfx2/sfxsids.hrc>
 #include "objmnctl.hxx"
-#include "dispatch.hxx"
-#include "viewsh.hxx"
-#include "viewfrm.hxx"
-#include "objsh.hxx"
+#include <sfx2/dispatch.hxx>
+#include <sfx2/viewsh.hxx>
+#include <sfx2/viewfrm.hxx>
+#include <sfx2/objsh.hxx>
 
 // STATIC DATA -----------------------------------------------------------
 
