@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ChildrenManager.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 04:04:01 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 16:40:39 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -37,13 +37,13 @@
 #include "precompiled_svx.hxx"
 
 #ifndef _SVX_ACCESSIBILITY_CHILDREN_MANAGER_HXX
-#include "ChildrenManager.hxx"
+#include <svx/ChildrenManager.hxx>
 #endif
 #ifndef _SVX_ACCESSIBILITY_CHILDREN_MANAGER_IMPL_HXX
 #include "ChildrenManagerImpl.hxx"
 #endif
 #ifndef _SVX_ACCESSIBILITY_ACCESSIBLE_SHAPE_HXX
-#include "AccessibleShape.hxx"
+#include <svx/AccessibleShape.hxx>
 #endif
 
 using namespace ::rtl;

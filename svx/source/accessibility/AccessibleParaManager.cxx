@@ -4,9 +4,9 @@
  *
  *  $RCSfile: AccessibleParaManager.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 04:01:37 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 16:38:39 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -70,7 +70,7 @@
 
 #include "unoedhlp.hxx"
 #include "unopracc.hxx"
-#include "unoedsrc.hxx"
+#include <svx/unoedsrc.hxx>
 #include "AccessibleParaManager.hxx"
 #include "AccessibleEditableTextPara.hxx"
 
