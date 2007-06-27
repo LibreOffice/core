@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ilstbox.cxx,v $
  *
- *  $Revision: 1.58 $
+ *  $Revision: 1.59 $
  *
- *  last change: $Author: vg $ $Date: 2007-01-15 14:38:40 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 20:06:30 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -41,37 +41,37 @@
 #endif
 
 #ifndef _SV_SVDATA_HXX
-#include <svdata.hxx>
+#include <vcl/svdata.hxx>
 #endif
 #ifndef _SV_SVAPP_HXX
-#include <svapp.hxx>
+#include <vcl/svapp.hxx>
 #endif
 #ifndef _SV_SETTINGS_HXX
-#include <settings.hxx>
+#include <vcl/settings.hxx>
 #endif
 #ifndef _SV_EVENT_HXX
-#include <event.hxx>
+#include <vcl/event.hxx>
 #endif
 #ifndef _SV_SCRBAR_HXX
-#include <scrbar.hxx>
+#include <vcl/scrbar.hxx>
 #endif
 #ifndef _SV_HELP_HXX
-#include <help.hxx>
+#include <vcl/help.hxx>
 #endif
 #ifndef _SV_LSTBOX_H
-#include <lstbox.h>
+#include <vcl/lstbox.h>
 #endif
 #ifndef _SV_ILSTBOX_HXX
 #include <ilstbox.hxx>
 #endif
 #ifndef _VCL_I18NHELP_HXX
-#include <i18nhelp.hxx>
+#include <vcl/i18nhelp.hxx>
 #endif
 #ifndef _VCL_CONTROLLAYOUT_HXX
-#include <controllayout.hxx>
+#include <vcl/controllayout.hxx>
 #endif
 #ifndef _VCL_UNOHELP_HXX
-#include <unohelp.hxx>
+#include <vcl/unohelp.hxx>
 #endif
 #ifndef _COM_SUN_STAR_UTIL_XCOLLATOR_HPP_
 #include <com/sun/star/i18n/XCollator.hpp>
