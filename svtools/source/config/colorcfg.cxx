@@ -4,9 +4,9 @@
  *
  *  $RCSfile: colorcfg.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: obo $ $Date: 2006-10-12 15:07:43 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 13:44:29 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -195,6 +195,7 @@ uno::Sequence< OUString> ColorConfig_Impl::GetPropertyNames(const rtl::OUString&
         { RTL_CONSTASCII_USTRINGPARAM("/LinksVisited")    ,sal_True },
         { RTL_CONSTASCII_USTRINGPARAM("/Anchor")          ,sal_False },
         { RTL_CONSTASCII_USTRINGPARAM("/Spell")     ,sal_False },
+        { RTL_CONSTASCII_USTRINGPARAM("/SmartTags")     ,sal_False },
         { RTL_CONSTASCII_USTRINGPARAM("/WriterTextGrid")  ,sal_False },
         { RTL_CONSTASCII_USTRINGPARAM("/WriterFieldShadings"),sal_True },
         { RTL_CONSTASCII_USTRINGPARAM("/WriterIdxShadings")     ,sal_True },
@@ -563,6 +564,7 @@ Color ColorConfig::GetDefaultColor(ColorConfigEntry eEntry)
         0x80, // LINKSVISITED
         0, // ANCHOR
         0xff0000, // SPELL
+        COL_LIGHTMAGENTA,// SMARTTAGS
         0xc0c0c0, // WRITERTEXTGRID
         0xc0c0c0, // WRITERFIELDSHADIN
         0xc0c0c0, // WRITERIDXSHADINGS
@@ -607,6 +609,7 @@ Color ColorConfig::GetDefaultColor(ColorConfigEntry eEntry)
 
         case SPELL :
         case DRAWDRAWING :
+        case SMARTTAGS :
         {
             const StyleSettings& rStyleSettings = Application::GetSettings().GetStyleSettings();
                 aRet = rStyleSettings.GetHighContrastMode() ?
