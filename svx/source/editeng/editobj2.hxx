@@ -4,9 +4,9 @@
  *
  *  $RCSfile: editobj2.hxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: obo $ $Date: 2006-10-12 12:36:26 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 17:55:49 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -36,7 +36,7 @@
 #ifndef _EDITOBJ2_HXX
 #define _EDITOBJ2_HXX
 
-#include <editobj.hxx>
+#include <svx/editobj.hxx>
 #include <editdoc.hxx>
 
 #include <vcl/fontcvt.hxx>
