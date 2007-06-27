@@ -4,9 +4,9 @@
  *
  *  $RCSfile: salgdi.h,v $
  *
- *  $Revision: 1.40 $
+ *  $Revision: 1.41 $
  *
- *  last change: $Author: rt $ $Date: 2007-04-04 08:06:50 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 20:41:23 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -45,17 +45,17 @@ class   SalFontCacheItem;
 #include <salstd.hxx>
 #endif
 #ifndef _SV_SALGDI_HXX
-#include <salgdi.hxx>
+#include <vcl/salgdi.hxx>
 #endif
 #ifndef _SV_SALGTYPE_HXX
-#include <salgtype.hxx>
+#include <vcl/salgtype.hxx>
 #endif
 #ifndef _FRACT_HXX
 #include <tools/fract.hxx>
 #endif
 
 #ifndef _VCL_DLLAPI_H
-#include <dllapi.h>
+#include <vcl/dllapi.h>
 #endif
 
 #include "xfont.hxx"
