@@ -4,9 +4,9 @@
  *
  *  $RCSfile: moduleoptions.cxx,v $
  *
- *  $Revision: 1.33 $
+ *  $Revision: 1.34 $
  *
- *  last change: $Author: vg $ $Date: 2007-05-22 19:32:45 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 21:14:55 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -42,7 +42,7 @@
 //  includes
 //_________________________________________________________________________________________________________________
 
-#include "moduleoptions.hxx"
+#include <svtools/moduleoptions.hxx>
 
 #ifndef _COMPHELPER_SEQUENCEASHASHMAP_HXX_
 #include <comphelper/sequenceashashmap.hxx>
