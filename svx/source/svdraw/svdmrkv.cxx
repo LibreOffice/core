@@ -4,9 +4,9 @@
  *
  *  $RCSfile: svdmrkv.cxx,v $
  *
- *  $Revision: 1.32 $
+ *  $Revision: 1.33 $
  *
- *  last change: $Author: kz $ $Date: 2006-12-12 16:41:15 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 19:04:07 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -36,44 +36,44 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_svx.hxx"
 
-#include "svdmrkv.hxx"
-#include "svdetc.hxx"
-#include "svdoedge.hxx"
+#include <svx/svdmrkv.hxx>
+#include <svx/svdetc.hxx>
+#include <svx/svdoedge.hxx>
 #include "svdglob.hxx"
 #include "svditext.hxx"
-#include "svdview.hxx"
-#include "svdpagv.hxx"
-#include "svdpage.hxx"
+#include <svx/svdview.hxx>
+#include <svx/svdpagv.hxx>
+#include <svx/svdpage.hxx>
 #include "svddrgm1.hxx"
 
 #ifdef DBG_UTIL
 #include <svdibrow.hxx>
 #endif
 
-#include "svdoole2.hxx"
-#include "xgrad.hxx"
-#include "xflgrit.hxx"
+#include <svx/svdoole2.hxx>
+#include <svx/xgrad.hxx>
+#include <svx/xflgrit.hxx>
 
 #include "gradtrns.hxx"
-#include "xflftrit.hxx"
+#include <svx/xflftrit.hxx>
 
-#include "dialmgr.hxx"
+#include <svx/dialmgr.hxx>
 #include "svdstr.hrc"
-#include "svdundo.hxx"
+#include <svx/svdundo.hxx>
 
 // #105722#
 #ifndef _SVDOPATH_HXX
-#include "svdopath.hxx"
+#include <svx/svdopath.hxx>
 #endif
 
 // #i13033#
 #ifndef _E3D_SCENE3D_HXX
-#include "scene3d.hxx"
+#include <svx/scene3d.hxx>
 #endif
 
 // OD 30.06.2003 #108784#
 #ifndef _SVDOVIRT_HXX
-#include <svdovirt.hxx>
+#include <svx/svdovirt.hxx>
 #endif
 
 #ifndef _SDR_OVERLAY_OVERLAYROOLINGRECTANGLE_HXX
@@ -89,7 +89,7 @@
 #endif
 
 #ifndef _SDRPAGEWINDOW_HXX
-#include <sdrpagewindow.hxx>
+#include <svx/sdrpagewindow.hxx>
 #endif
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
