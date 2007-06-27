@@ -4,9 +4,9 @@
  *
  *  $RCSfile: JAccess.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 07:20:03 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 12:25:16 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -81,6 +81,12 @@ namespace dbaui
     ::rtl::OUString OJoinDesignViewAccess::getImplementationName_Static(void) throw( RuntimeException )
     {
         return ::rtl::OUString::createFromAscii("org.openoffice.comp.dbu.JoinViewAccessibility");
+    }
+    // -----------------------------------------------------------------------------
+    void OJoinDesignViewAccess::clearTableView()
+    {
+        ::osl::MutexGuard aGuard( m_aMutex );
+        m_pTableView = NULL;
     }
     // -----------------------------------------------------------------------------
     // XAccessibleContext
