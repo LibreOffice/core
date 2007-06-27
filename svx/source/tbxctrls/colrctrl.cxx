@@ -4,9 +4,9 @@
  *
  *  $RCSfile: colrctrl.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: kz $ $Date: 2007-05-10 15:00:27 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 19:14:59 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -36,7 +36,7 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_svx.hxx"
 
-#include "dialogs.hrc"
+#include <svx/dialogs.hrc>
 
 
 #include <tools/list.hxx>
@@ -52,14 +52,14 @@
 #endif
 #include <vcl/image.hxx>
 
-#include "colrctrl.hxx"
+#include <svx/colrctrl.hxx>
 
-#include "svdview.hxx"
+#include <svx/svdview.hxx>
 #include "drawitem.hxx"
-#include "colritem.hxx"
+#include <svx/colritem.hxx>
 #include "xattr.hxx"
-#include "xtable.hxx"
-#include "dialmgr.hxx"
+#include <svx/xtable.hxx>
+#include <svx/dialmgr.hxx>
 #include "xexch.hxx"
 
 #ifndef _SV_SVAPP_HXX
