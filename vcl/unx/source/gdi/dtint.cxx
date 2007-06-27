@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dtint.cxx,v $
  *
- *  $Revision: 1.29 $
+ *  $Revision: 1.30 $
  *
- *  last change: $Author: obo $ $Date: 2006-10-11 08:22:27 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 20:48:41 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -56,7 +56,7 @@
 #include <saldata.hxx>
 #include <wmadaptor.hxx>
 
-#include <svapp.hxx>
+#include <vcl/svapp.hxx>
 #include <dtsetenum.hxx>
 
 #include <osl/file.h>
