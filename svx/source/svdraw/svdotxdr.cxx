@@ -4,9 +4,9 @@
  *
  *  $RCSfile: svdotxdr.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: ihi $ $Date: 2006-11-14 13:47:21 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 19:08:50 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -36,14 +36,14 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_svx.hxx"
 
-#include "svdotext.hxx"
-#include "svdhdl.hxx"
-#include "svddrag.hxx"
-#include "svdview.hxx"
-#include "svdorect.hxx" // fuer SetXPolyDirty in MovCreate bei SolidDragging
+#include <svx/svdotext.hxx>
+#include <svx/svdhdl.hxx>
+#include <svx/svddrag.hxx>
+#include <svx/svdview.hxx>
+#include <svx/svdorect.hxx> // fuer SetXPolyDirty in MovCreate bei SolidDragging
 #include "svdglob.hxx"  // Stringcache
 #include "svdstr.hrc"   // Objektname
-#include "svdoashp.hxx"
+#include <svx/svdoashp.hxx>
 
 #ifndef _BIGINT_HXX //autogen
 #include <tools/bigint.hxx>
