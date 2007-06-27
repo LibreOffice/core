@@ -4,9 +4,9 @@
  *
  *  $RCSfile: msocximex.cxx,v $
  *
- *  $Revision: 1.32 $
+ *  $Revision: 1.33 $
  *
- *  last change: $Author: kz $ $Date: 2007-06-20 08:56:51 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 18:35:29 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -124,7 +124,7 @@
 #endif
 #include <xmlscript/xmldlg_imexp.hxx>
 #ifndef _MSOCXIMEX_HXX
-#include "msocximex.hxx"
+#include <svx/msocximex.hxx>
 #endif
 
 #include <osl/file.hxx>
