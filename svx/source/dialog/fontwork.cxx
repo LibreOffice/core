@@ -4,9 +4,9 @@
  *
  *  $RCSfile: fontwork.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: rt $ $Date: 2007-04-26 07:30:57 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 17:06:28 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -51,28 +51,28 @@
 #define _SVX_FONTWORK_CXX
 
 #ifndef _SVDOBJ_HXX
-#include "svdobj.hxx"
+#include <svx/svdobj.hxx>
 #endif
 #ifndef _SVDOPATH_HXX
-#include "svdopath.hxx"
+#include <svx/svdopath.hxx>
 #endif
 #ifndef _SVDVIEW_HXX
-#include "svdview.hxx"
+#include <svx/svdview.hxx>
 #endif
 #ifndef _SVDOCIRC_HXX
-#include "svdocirc.hxx"
+#include <svx/svdocirc.hxx>
 #endif
 #ifndef _SVX_XTEXTITEM_HXX //autogen
-#include "xtextit.hxx"
+#include <svx/xtextit.hxx>
 #endif
 
-#include "dialmgr.hxx"
+#include <svx/dialmgr.hxx>
 #include "dlgutil.hxx"
 
-#include "dialogs.hrc"
+#include <svx/dialogs.hrc>
 #include "fontwork.hrc"
-#include "fontwork.hxx"
-#include "outlobj.hxx"
+#include <svx/fontwork.hxx>
+#include <svx/outlobj.hxx>
 
 #ifndef _BGFX_POLYGON_B2DPOLYGON_HXX
 #include <basegfx/polygon/b2dpolygon.hxx>
