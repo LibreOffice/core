@@ -4,9 +4,9 @@
  *
  *  $RCSfile: paraitem.cxx,v $
  *
- *  $Revision: 1.38 $
+ *  $Revision: 1.39 $
  *
- *  last change: $Author: kz $ $Date: 2007-05-10 14:52:54 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 18:30:01 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -73,30 +73,30 @@ using namespace ::com::sun::star;
 #endif
 
 #include <svtools/memberid.hrc>
-#include "svxitems.hrc"
+#include <svx/svxitems.hrc>
 
-#include "lspcitem.hxx"
-#include "adjitem.hxx"
-#include "orphitem.hxx"
-#include "widwitem.hxx"
-#include "tstpitem.hxx"
-#include "pmdlitem.hxx"
-#include "spltitem.hxx"
-#include "hyznitem.hxx"
-#include "scriptspaceitem.hxx"
-#include "hngpnctitem.hxx"
-#include "forbiddenruleitem.hxx"
-#include "paravertalignitem.hxx"
+#include <svx/lspcitem.hxx>
+#include <svx/adjitem.hxx>
+#include <svx/orphitem.hxx>
+#include <svx/widwitem.hxx>
+#include <svx/tstpitem.hxx>
+#include <svx/pmdlitem.hxx>
+#include <svx/spltitem.hxx>
+#include <svx/hyznitem.hxx>
+#include <svx/scriptspaceitem.hxx>
+#include <svx/hngpnctitem.hxx>
+#include <svx/forbiddenruleitem.hxx>
+#include <svx/paravertalignitem.hxx>
 #include "pgrditem.hxx"
 
 
 #include <rtl/ustring.hxx>
 
-#include <unomid.hxx>
+#include <svx/unomid.hxx>
 
-#include "itemtype.hxx"
-#include "dialmgr.hxx"
-#include "paperinf.hxx"
+#include <svx/itemtype.hxx>
+#include <svx/dialmgr.hxx>
+#include <svx/paperinf.hxx>
 
 #ifndef _SV_SVAPP_HXX //autogen
 #include <vcl/svapp.hxx>
