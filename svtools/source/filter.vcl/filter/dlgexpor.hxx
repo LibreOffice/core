@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dlgexpor.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 15:36:53 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 21:35:09 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -37,7 +37,7 @@
 #ifndef _DLGEXPOR_HXX_
 #define _DLGEXPOR_HXX_
 
-#include "fltcall.hxx"
+#include <svtools/fltcall.hxx>
 #include <vcl/dialog.hxx>
 #include <vcl/button.hxx>
 #include <vcl/fixed.hxx>
