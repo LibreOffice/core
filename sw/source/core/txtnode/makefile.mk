@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.9 $
+#   $Revision: 1.10 $
 #
-#   last change: $Author: vg $ $Date: 2006-11-22 11:46:56 $
+#   last change: $Author: hr $ $Date: 2007-06-27 13:20:54 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -62,7 +62,8 @@ SLOFILES =  \
         $(SLO)$/fntcap.obj \
         $(SLO)$/fntcache.obj \
         $(SLO)$/swfntcch.obj \
-        $(SLO)$/ndhints.obj \
+                $(SLO)$/modeltoviewhelper.obj \
+                $(SLO)$/ndhints.obj \
         $(SLO)$/ndtxt.obj \
         $(SLO)$/swfont.obj \
         $(SLO)$/thints.obj \
