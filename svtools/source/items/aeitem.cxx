@@ -4,9 +4,9 @@
  *
  *  $RCSfile: aeitem.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 14:58:07 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 21:38:06 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -41,9 +41,9 @@
 #include <tools/string.hxx>
 
 #define _SVSTDARR_USHORTS
-#include <svstdarr.hxx>
-#include <svarray.hxx>
-#include "aeitem.hxx"
+#include <svtools/svstdarr.hxx>
+#include <svtools/svarray.hxx>
+#include <svtools/aeitem.hxx>
 
 // STATIC DATA -----------------------------------------------------------
 
