@@ -4,9 +4,9 @@
  *
  *  $RCSfile: outdevgrind.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: ihi $ $Date: 2007-06-05 17:48:08 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 20:58:39 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -49,19 +49,19 @@
 #include <ucbhelper/contentbroker.hxx>
 #include <ucbhelper/configurationkeys.hxx>
 
-#include <svapp.hxx>
-#include <dialog.hxx>
-#include <outdev.hxx>
-#include <virdev.hxx>
-#include <hatch.hxx>
-#include <bitmap.hxx>
-#include <wall.hxx>
-#include <image.hxx>
-#include <gdimtf.hxx>
-#include <metaact.hxx>
-#include <bitmapex.hxx>
-#include <gradient.hxx>
-#include <lineinfo.hxx>
+#include <vcl/svapp.hxx>
+#include <vcl/dialog.hxx>
+#include <vcl/outdev.hxx>
+#include <vcl/virdev.hxx>
+#include <vcl/hatch.hxx>
+#include <vcl/bitmap.hxx>
+#include <vcl/wall.hxx>
+#include <vcl/image.hxx>
+#include <vcl/gdimtf.hxx>
+#include <vcl/metaact.hxx>
+#include <vcl/bitmapex.hxx>
+#include <vcl/gradient.hxx>
+#include <vcl/lineinfo.hxx>
 #include <tools/string.hxx>
 
 #include <osl/time.h>
