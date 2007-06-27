@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xattr.cxx,v $
  *
- *  $Revision: 1.38 $
+ *  $Revision: 1.39 $
  *
- *  last change: $Author: obo $ $Date: 2007-01-22 15:18:01 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 19:33:24 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -100,18 +100,18 @@
 
 #include <tools/bigint.hxx>
 #include <svtools/itemset.hxx>
-#include "dialogs.hrc"
+#include <svx/dialogs.hrc>
 #include "svdstr.hrc"
 #include "xattr.hxx"
-#include "xtable.hxx"
-#include "xoutx.hxx"
-#include "dialmgr.hxx"
-#include "itemtype.hxx"
-#include "xdef.hxx"
-#include "unomid.hxx"
+#include <svx/xtable.hxx>
+#include <svx/xoutx.hxx>
+#include <svx/dialmgr.hxx>
+#include <svx/itemtype.hxx>
+#include <svx/xdef.hxx>
+#include <svx/unomid.hxx>
 
 #ifndef _SVDMODEL_HXX
-#include "svdmodel.hxx"
+#include <svx/svdmodel.hxx>
 #endif
 
 #ifndef _BGFX_POLYGON_B2DPOLYGON_HXX
