@@ -4,9 +4,9 @@
  *
  *  $RCSfile: edlingu.cxx,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: kz $ $Date: 2007-05-10 15:58:33 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 13:18:24 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -66,8 +66,6 @@
 #ifndef _SVX_SCRIPTTYPEITEM_HXX
 #include <svx/scripttypeitem.hxx>
 #endif
-#include <svx/acorrcfg.hxx>
-
 #ifndef _FMTHBSH_HXX //autogen
 #include <fmthbsh.hxx>
 #endif
@@ -116,9 +114,6 @@
 #ifndef _SPLARGS_HXX
 #include <splargs.hxx>
 #endif
-#ifndef _UNOOBJ_HXX
-#include <unoobj.hxx>
-#endif
 #ifndef _REDLINE_HXX
 #include <redline.hxx>      // SwRedline
 #endif
@@ -126,13 +121,13 @@
 #include <docary.hxx>       // SwRedlineTbl
 #endif
 
-#include <SmartTagMgr.hxx>
-
 using namespace ::svx;
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::linguistic2;
+
+#define C2U(cChar) rtl::OUString::createFromAscii(cChar)
 
 /*************************************************************************
  *                     class SwLinguIter
@@ -1062,8 +1057,6 @@ uno::Reference< XSpellAlternatives >
             String aWord( aText );
             aWord.EraseAllChars( CH_TXTATR_BREAKWORD ).EraseAllChars( CH_TXTATR_INWORD );
 
-            sal_Bool bSpell = sal_True;
-
             uno::Reference< XSpellChecker1 >  xSpell( ::GetSpellChecker() );
             if( xSpell.is() )
             {
@@ -1092,7 +1085,6 @@ uno::Reference< XSpellAlternatives >
             if ( xSpellAlt.is() )
             {
                 //save the start and end positons of the line and the starting point
-                xub_StrLen nStartPos = GetCrsr()->GetPoint()->nContent.GetIndex();
                 Push();
                 LeftMargin();
                 xub_StrLen nLineStart = GetCrsr()->GetPoint()->nContent.GetIndex();
@@ -1147,140 +1139,6 @@ uno::Reference< XSpellAlternatives >
         }
     }
     return xSpellAlt;
-}
-
-// SMARTTAGS
-
-/** Function: IsOverSmartTag
-
-   Returns true if the given point is positioned over a smarttag word.
-
-   @param Point* pPt
-       Pointer to the cursor position
-   @return Returns true if the given point is positioned over a smarttag word.
-
-*/
-sal_Bool SwEditShell::IsOverSmartTag(const Point* pPt)
-{
-    if ( !SmartTagMgr::getSmartTagMgr().HasRecognizers() )
-        return sal_False;
-
-   SwPaM* pCrsr = GetCrsr();
-   SwPosition aPos( *pCrsr->GetPoint() );
-   Point aPt( *pPt );
-   SwCrsrMoveState eTmpState( MV_SETONLYTEXT );
-   SwTxtNode *pNode;
-   SwWrongList *pSmartTagList;
-   if( GetLayout()->GetCrsrOfst( &aPos, aPt, &eTmpState ) &&
-       0 != (pNode = aPos.nNode.GetNode().GetTxtNode()) &&
-       0 != (pSmartTagList = pNode->GetSmartTags()) &&
-       !pNode->IsInProtectSect() )
-   {
-       xub_StrLen nBegin = aPos.nContent.GetIndex();
-       xub_StrLen nLen = 1;
-       if( pSmartTagList->InWrongWord(nBegin,nLen) && !pNode->IsSymbol(nBegin) )
-       {
-           return sal_True;
-       }
-   }
-   return sal_False;
-}
-
-/** Function: GetSmartTagTerm
-
-   Retrieves the smarttag word if the user clicked on any.
-
-   @return Smarttag word
-
-*/
-Reference<text::XTextRange>
-    SwEditShell::GetSmartTagTerm( const Point* pPt, SwRect& rSelectRect )
-{
-   Reference<text::XTextRange> xRange;
-
-   SwPaM* pCrsr = GetCrsr();
-   SwPosition aPos( *pCrsr->GetPoint() );
-   Point aPt( *pPt );
-   SwCrsrMoveState eTmpState( MV_SETONLYTEXT );
-   SwTxtNode *pNode;
-   SwWrongList *pSmartTagList;
-   if( GetLayout()->GetCrsrOfst( &aPos, aPt, &eTmpState ) &&
-       0 != (pNode = aPos.nNode.GetNode().GetTxtNode()) &&
-       0 != (pSmartTagList = pNode->GetSmartTags()) &&
-       !pNode->IsInProtectSect() )
-   {
-       xub_StrLen nBegin = aPos.nContent.GetIndex();
-       xub_StrLen nLen = 1;
-       if( pSmartTagList->InWrongWord(nBegin,nLen) && !pNode->IsSymbol(nBegin) )
-       {
-         // create SwPosition for nStartIndex
-         SwIndex aIndex( pNode, nBegin );
-         SwPosition aStartPos( *pNode, aIndex );
-
-         // create SwPosition for nEndIndex
-         SwPosition aEndPos( aStartPos );
-         aEndPos.nContent = nBegin + nLen;
-
-         xRange = SwXTextRange::CreateTextRangeFromPosition(pNode->GetDoc(), aStartPos, &aEndPos);
-
-         // get smarttag word
-         String aText( pNode->GetTxt().Copy( nBegin, nLen ) );
-
-         sal_Bool bSpell = sal_True;
-
-
-         //save the start and end positons of the line and the starting point
-         xub_StrLen nStartPos = GetCrsr()->GetPoint()->nContent.GetIndex();
-         Push();
-         LeftMargin();
-         xub_StrLen nLineStart = GetCrsr()->GetPoint()->nContent.GetIndex();
-         RightMargin();
-         xub_StrLen nLineEnd = GetCrsr()->GetPoint()->nContent.GetIndex();
-         Pop(FALSE);
-
-         // make sure the selection build later from the
-         // data below does not include footnotes and other
-         // "in word" character to the left and right in order
-         // to preserve those. Therefore count those "in words"
-         // in order to modify the selection accordingly.
-         const sal_Unicode* pChar = aText.GetBuffer();
-         xub_StrLen nLeft = 0;
-         while (pChar && *pChar++ == CH_TXTATR_INWORD)
-           ++nLeft;
-         pChar = aText.Len() ? aText.GetBuffer() + aText.Len() - 1 : 0;
-         xub_StrLen nRight = 0;
-         while (pChar && *pChar-- == CH_TXTATR_INWORD)
-           ++nRight;
-
-         aPos.nContent = nBegin + nLeft;
-         pCrsr = GetCrsr();
-         *pCrsr->GetPoint() = aPos;
-         pCrsr->SetMark();
-         ExtendSelection( sal_True, nLen - nLeft - nRight );
-         //no determine the rectangle in the current line
-         xub_StrLen nWordStart = (nBegin + nLeft) < nLineStart ? nLineStart : nBegin + nLeft;
-         //take one less than the line end - otherwise the next line would be calculated
-         xub_StrLen nWordEnd = (nBegin + nLen - nLeft - nRight) > nLineEnd ? nLineEnd - 1: (nBegin + nLen - nLeft - nRight);
-         Push();
-         pCrsr->DeleteMark();
-         SwIndex& rContent = GetCrsr()->GetPoint()->nContent;
-         rContent = nWordStart;
-         SwRect aStartRect;
-         SwCrsrMoveState aState;
-         aState.bRealWidth = TRUE;
-         SwCntntNode* pCntntNode = pCrsr->GetCntntNode();
-         SwCntntFrm *pCntntFrame = pCntntNode->GetFrm(pPt, pCrsr->GetPoint(), FALSE);
-
-         pCntntFrame->GetCharRect( aStartRect, *pCrsr->GetPoint(), &aState );
-         rContent = nWordEnd;
-         SwRect aEndRect;
-         pCntntFrame->GetCharRect( aEndRect, *pCrsr->GetPoint(),&aState );
-         rSelectRect = aStartRect.Union( aEndRect );
-         Pop(FALSE);
-
-       }
-   }
-   return xRange;
 }
 
 /*-- 18.09.2003 15:08:18---------------------------------------------------
@@ -1571,7 +1429,7 @@ bool SwSpellIter::SpellSentence(::svx::SpellPortions& rPortions)
         //set the mark to the left if necessary
         if ( *pCrsr->GetPoint() < *pCrsr->GetMark() )
             pCrsr->Exchange();
-        BOOL bStartSent = pSh->GoStartSentence();
+        BOOL bStartSent = 0 != pSh->GoStartSentence();
         SpellContentPositions aDeletedRedlines = lcl_CollectDeletedRedlines(pSh);
         if(bStartSent)
         {
@@ -1591,7 +1449,6 @@ bool SwSpellIter::SpellSentence(::svx::SpellPortions& rPortions)
         //save the end position of the error to continue from here
         SwPosition aSaveStartPos = *pCrsr->GetMark();
 
-        BOOL bEndSent = pSh->GoEndSentence();
         lcl_CutRedlines( aDeletedRedlines, pSh );
         //save the 'global' end of the spellchecking
         const SwPosition aSaveEndPos = *GetEnd();
