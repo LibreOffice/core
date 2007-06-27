@@ -4,9 +4,9 @@
  *
  *  $RCSfile: propacc.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: ihi $ $Date: 2007-06-05 15:10:29 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 14:18:20 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -41,7 +41,7 @@
 #include <tools/urlobj.hxx>
 #include <tools/errcode.hxx>
 #include <svtools/svarray.hxx>
-#include <sbstar.hxx>
+#include <basic/sbstar.hxx>
 #include <sbunoobj.hxx>
 
 using com::sun::star::uno::Reference;
