@@ -4,9 +4,9 @@
  *
  *  $RCSfile: outlvw.cxx,v $
  *
- *  $Revision: 1.29 $
+ *  $Revision: 1.30 $
  *
- *  last change: $Author: obo $ $Date: 2006-10-12 13:03:10 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 18:42:38 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -42,15 +42,15 @@
 #endif
 
 #define _OUTLINER_CXX
-#include <outliner.hxx>
+#include <svx/outliner.hxx>
 #include <outleeng.hxx>
 #include <paralist.hxx>
 #include <outlundo.hxx>
-#include <outlobj.hxx>
-#include <flditem.hxx>
-#include <flditem.hxx>
-#include <eeitem.hxx>
-#include <numitem.hxx>
+#include <svx/outlobj.hxx>
+#include <svx/flditem.hxx>
+#include <svx/flditem.hxx>
+#include <svx/eeitem.hxx>
+#include <svx/numitem.hxx>
 
 #ifndef _SV_WINDOW_HXX //autogen
 #include <vcl/window.hxx>
