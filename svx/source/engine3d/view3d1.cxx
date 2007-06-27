@@ -4,9 +4,9 @@
  *
  *  $RCSfile: view3d1.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: kz $ $Date: 2007-05-10 14:47:44 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 18:06:25 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -46,35 +46,35 @@
 #endif
 
 #ifndef _SVDPOOL_HXX
-#include "svdpool.hxx"
+#include <svx/svdpool.hxx>
 #endif
 
 #ifndef _SVDMODEL_HXX
-#include "svdmodel.hxx"
+#include <svx/svdmodel.hxx>
 #endif
 
 #ifndef _XOUTX_HXX
-#include "xoutx.hxx"
+#include <svx/xoutx.hxx>
 #endif
 
 #ifndef _SVX_SVXIDS_HRC
-#include "svxids.hrc"
+#include <svx/svxids.hrc>
 #endif
 
 #ifndef _XTABLE_HXX
-#include "xtable.hxx"
+#include <svx/xtable.hxx>
 #endif
 
 #ifndef _FM_FMVIEW_HXX
-#include "fmview.hxx"
+#include <svx/fmview.hxx>
 #endif
 
 #ifndef _SVX_DIALOGS_HRC
-#include "dialogs.hrc"
+#include <svx/dialogs.hrc>
 #endif
 
 #ifndef _SVX_DIALMGR_HXX
-#include "dialmgr.hxx"
+#include <svx/dialmgr.hxx>
 #endif
 
 #ifndef _E3D_GLOBL3D_HXX
@@ -82,51 +82,51 @@
 #endif
 
 #ifndef _E3D_OBJ3D_HXX
-#include "obj3d.hxx"
+#include <svx/obj3d.hxx>
 #endif
 
 #ifndef _E3D_POLYSC3D_HXX
-#include "polysc3d.hxx"
+#include <svx/polysc3d.hxx>
 #endif
 
 #ifndef _SVXE3DITEM_HXX
-#include "e3ditem.hxx"
+#include <svx/e3ditem.hxx>
 #endif
 
 #ifndef _SVX_COLRITEM_HXX
-#include "colritem.hxx"
+#include <svx/colritem.hxx>
 #endif
 
 #ifndef _E3D_LATHE3D_HXX
-#include "lathe3d.hxx"
+#include <svx/lathe3d.hxx>
 #endif
 
 #ifndef _E3D_SPHERE3D_HXX
-#include "sphere3d.hxx"
+#include <svx/sphere3d.hxx>
 #endif
 
 #ifndef _E3D_EXTRUD3D_HXX
-#include "extrud3d.hxx"
+#include <svx/extrud3d.hxx>
 #endif
 
 #ifndef _E3D_UNDO_HXX
-#include "e3dundo.hxx"
+#include <svx/e3dundo.hxx>
 #endif
 
 #ifndef _E3D_VIEW3D_HXX
-#include "view3d.hxx"
+#include <svx/view3d.hxx>
 #endif
 
 #ifndef _E3D_CUBE3D_HXX
-#include "cube3d.hxx"
+#include <svx/cube3d.hxx>
 #endif
 
 #ifndef _SVX_XFLCLIT_HXX
-#include "xflclit.hxx"
+#include <svx/xflclit.hxx>
 #endif
 
 #ifndef _SVDOGRP_HXX
-#include "svdogrp.hxx"
+#include <svx/svdogrp.hxx>
 #endif
 
 /*************************************************************************
