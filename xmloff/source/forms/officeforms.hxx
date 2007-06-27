@@ -4,9 +4,9 @@
  *
  *  $RCSfile: officeforms.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 14:14:59 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 15:17:34 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -40,7 +40,7 @@
 #include "formattributes.hxx"
 #endif
 #ifndef _XMLOFF_XMLICTXT_HXX
-#include "xmlictxt.hxx"
+#include <xmloff/xmlictxt.hxx>
 #endif
 #ifndef XMLOFF_FORMS_LOGGING_HXX
 #include "logging.hxx"
