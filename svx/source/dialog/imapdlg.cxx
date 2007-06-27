@@ -4,9 +4,9 @@
  *
  *  $RCSfile: imapdlg.cxx,v $
  *
- *  $Revision: 1.34 $
+ *  $Revision: 1.35 $
  *
- *  last change: $Author: hr $ $Date: 2007-06-26 13:50:47 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 17:14:24 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -103,15 +103,15 @@
 #define _IMAPDLG_PRIVATE
 #include "imapdlg.hxx"
 
-#include "dialmgr.hxx"
-#include "dialogs.hrc"
-#include "svxids.hrc"
+#include <svx/dialmgr.hxx>
+#include <svx/dialogs.hrc>
+#include <svx/svxids.hrc>
 #include "imapdlg.hrc"
 #include "imapwnd.hxx"
 #include "imapimp.hxx"
 #include "dlgutil.hxx"
-#include "svdtrans.hxx"
-#include "svdopath.hxx"
+#include <svx/svdtrans.hxx>
+#include <svx/svdopath.hxx>
 
 #ifndef _SV_SVAPP_HXX
 #include <vcl/svapp.hxx>
