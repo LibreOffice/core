@@ -4,9 +4,9 @@
  *
  *  $RCSfile: salgdi3.cxx,v $
  *
- *  $Revision: 1.146 $
+ *  $Revision: 1.147 $
  *
- *  last change: $Author: kz $ $Date: 2007-06-20 10:15:04 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 20:50:01 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -69,7 +69,7 @@
 #include <pspgraphics.h>
 #endif
 #ifndef _SV_SALFRAME_HXX
-#include <salframe.hxx>
+#include <vcl/salframe.hxx>
 #endif
 #ifndef _SV_SALVD_H
 #include <salvd.h>
@@ -93,7 +93,7 @@
 #include "xfont.hxx"
 #endif
 #ifndef _SV_IMPFONT_HXX
-#include <impfont.hxx>
+#include <vcl/impfont.hxx>
 #endif
 
 
@@ -104,7 +104,7 @@
 #include <psprint/fontmanager.hxx>
 #include <psprint/jobdata.hxx>
 #include <psprint/printerinfomanager.hxx>
-#include <svapp.hxx>
+#include <vcl/svapp.hxx>
 
 #ifndef XLFD_ATTRIBUTE_HXX
 #include "xlfd_attr.hxx"
