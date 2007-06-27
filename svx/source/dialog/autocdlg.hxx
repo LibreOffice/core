@@ -4,9 +4,9 @@
  *
  *  $RCSfile: autocdlg.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: ihi $ $Date: 2006-12-21 11:59:41 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 13:39:43 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -63,6 +63,7 @@
 class SvxAutoCorrect;
 class CharClass;
 class CollatorWrapper;
+class SmartTagMgr;
 
 // class OfaAutoCorrDlg --------------------------------------------------
 
@@ -473,8 +474,71 @@ public:
     DECL_LINK( DeleteHdl, PushButton* );
 };
 
-#endif // _OFA_AUTOCDLG_CXX
+// class OfaSmartTagOptionsTabPage ---------------------------------------------
 
+/** Smart tag options tab page
+
+    This tab page is used to enable/disable smart tag types
+*/
+class OfaSmartTagOptionsTabPage : public SfxTabPage
+{
+    using TabPage::ActivatePage;
+
+private:
+
+    // controls
+    CheckBox                m_aMainCB;
+    SvxCheckListBox         m_aSmartTagTypesLB;
+    PushButton              m_aPropertiesPB;
+    FixedText               m_aTitleFT;
+
+    // construction via Create()
+    OfaSmartTagOptionsTabPage( Window* pParent, const SfxItemSet& rSet );
+
+    /** Inserts items into m_aSmartTagTypesLB
+
+        Reads out the smart tag types supported by the SmartTagMgr and
+        inserts the associated strings into the list box.
+    */
+    void FillListBox( const SmartTagMgr& rSmartTagMgr );
+
+    /** Clears the m_aSmartTagTypesLB
+    */
+    void ClearListBox();
+
+    /** Handler for the check box
+
+        Enables/disables all controls in the tab page (except from the
+        check box.
+    */
+    DECL_LINK( CheckHdl, CheckBox* );
+
+    /** Handler for the push button
+
+        Calls the displayPropertyPage function of the smart tag recognizer
+        associated with the currently selected smart tag type.
+    */
+    DECL_LINK( ClickHdl, PushButton* );
+
+    /** Handler for the list box
+
+        Enables/disables the properties push button if selection in the
+        smart tag types list box changes.
+    */
+    DECL_LINK( SelectHdl, SvxCheckListBox* );
+
+public:
+
+    virtual ~OfaSmartTagOptionsTabPage();
+
+    static SfxTabPage*  Create( Window* pParent, const SfxItemSet& rAttrSet);
+
+    virtual BOOL        FillItemSet( SfxItemSet& rSet );
+    virtual void        Reset( const SfxItemSet& rSet );
+    virtual void        ActivatePage( const SfxItemSet& );
+};
+
+#endif // _OFA_AUTOCDLG_CXX
 
 #endif //
 
