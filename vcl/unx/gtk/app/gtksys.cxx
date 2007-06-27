@@ -4,9 +4,9 @@
  *
  *  $RCSfile: gtksys.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 12:29:37 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 20:38:12 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -37,8 +37,8 @@
 #include "precompiled_vcl.hxx"
 
 #include <svunx.h>
-#include <svdata.hxx>
-#include <window.hxx>
+#include <vcl/svdata.hxx>
+#include <vcl/window.hxx>
 #include <plugins/gtk/gtkinst.hxx>
 #include <cstdio>
 #include <gdk/gdk.h>
