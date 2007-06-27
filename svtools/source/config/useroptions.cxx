@@ -4,9 +4,9 @@
  *
  *  $RCSfile: useroptions.cxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: ihi $ $Date: 2006-12-19 14:03:18 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 21:17:53 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -40,7 +40,7 @@
 #endif
 #define SVT_DLLIMPLEMENTATION
 
-#include "useroptions.hxx"
+#include <svtools/useroptions.hxx>
 
 #ifndef _UTL_CONFIGMGR_HXX_
 #include <unotools/configmgr.hxx>
@@ -55,7 +55,7 @@
 #include <com/sun/star/uno/Sequence.hxx>
 #endif
 #ifndef _SFXSMPLHINT_HXX
-#include <smplhint.hxx>
+#include <svtools/smplhint.hxx>
 #endif
 #ifndef _VOS_MUTEX_HXX_
 #include <vos/mutex.hxx>
