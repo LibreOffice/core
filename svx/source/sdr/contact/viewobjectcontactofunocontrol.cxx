@@ -4,9 +4,9 @@
  *
  *  $RCSfile: viewobjectcontactofunocontrol.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: hr $ $Date: 2007-06-26 12:07:12 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 18:48:23 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -98,22 +98,22 @@
 /** === end UNO includes === **/
 
 #ifndef _SVDOUNO_HXX
-#include "svdouno.hxx"
+#include <svx/svdouno.hxx>
 #endif
 #ifndef _SVDPAGV_HXX
-#include "svdpagv.hxx"
+#include <svx/svdpagv.hxx>
 #endif
 #ifndef _SVDVIEW_HXX
-#include "svdview.hxx"
+#include <svx/svdview.hxx>
 #endif
 #ifndef _SDRPAGEWINDOW_HXX
-#include "sdrpagewindow.hxx"
+#include <svx/sdrpagewindow.hxx>
 #endif
 #ifndef _SDRPAINTWINDOW_HXX
 #include "sdrpaintwindow.hxx"
 #endif
 #ifndef _XOUTX_HXX
-#include "xoutx.hxx"
+#include <svx/xoutx.hxx>
 #endif
 #ifndef SVX_SOURCE_FORM_FORMPDFEXPORT_HXX
 #include "formpdfexport.hxx"
