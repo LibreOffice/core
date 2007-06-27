@@ -4,9 +4,9 @@
  *
  *  $RCSfile: AccessibleShape.cxx,v $
  *
- *  $Revision: 1.50 $
+ *  $Revision: 1.51 $
  *
- *  last change: $Author: ihi $ $Date: 2006-11-14 13:12:38 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 16:38:53 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -37,13 +37,13 @@
 #include "precompiled_svx.hxx"
 
 #ifndef _SVX_ACCESSIBILITY_ACCESSIBLE_SHAPE_HXX
-#include "AccessibleShape.hxx"
+#include <svx/AccessibleShape.hxx>
 #endif
 #ifndef _SVX_ACCESSIBILITY_DESCRIPTION_GENERATOR_HXX
 #include "DescriptionGenerator.hxx"
 #endif
 #ifndef _SVX_ACCESSIBILITY_ACCESSIBLE_SHAPE_INFO_HXX
-#include "AccessibleShapeInfo.hxx"
+#include <svx/AccessibleShapeInfo.hxx>
 #endif
 #ifndef _COM_SUN_STAR_VIEW_XSELECTIONSUPPLIER_HPP_
 #include <com/sun/star/view/XSelectionSupplier.hpp>
@@ -80,19 +80,19 @@
 #include <com/sun/star/text/XText.hpp>
 #endif
 #ifndef _SVX_UNOEDSRC_HXX
-#include "unoedsrc.hxx"
+#include <svx/unoedsrc.hxx>
 #endif
 #ifndef SVX_UNOSHTXT_HXX
-#include "unoshtxt.hxx"
+#include <svx/unoshtxt.hxx>
 #endif
-#include "svdobj.hxx"
-#include "svdmodel.hxx"
+#include <svx/svdobj.hxx>
+#include <svx/svdmodel.hxx>
 #ifndef _SVX_UNOAPI_HXX_
 #include "unoapi.hxx"
 #endif
 #include <com/sun/star/uno/Exception.hpp>
-#include "ShapeTypeHandler.hxx"
-#include "SvxShapeTypes.hxx"
+#include <svx/ShapeTypeHandler.hxx>
+#include <svx/SvxShapeTypes.hxx>
 
 #ifndef _SVX_ACCESSIBILITY_HRC
 #include "accessibility.hrc"
@@ -100,7 +100,7 @@
 #include "svdstr.hrc"
 
 #ifndef _SVX_DIALMGR_HXX
-#include "dialmgr.hxx"
+#include <svx/dialmgr.hxx>
 #endif
 #ifndef _SV_SVAPP_HXX
 #include <vcl/svapp.hxx>
@@ -108,7 +108,7 @@
 #ifndef _UTL_ACCESSIBLESTATESETHELPER_HXX_
 #include <unotools/accessiblestatesethelper.hxx>
 #endif
-#include "svdview.hxx"
+#include <svx/svdview.hxx>
 #include "AccessibleEmptyEditSource.hxx"
 
 using namespace ::rtl;
