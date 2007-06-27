@@ -4,9 +4,9 @@
  *
  *  $RCSfile: svdoattr.cxx,v $
  *
- *  $Revision: 1.49 $
+ *  $Revision: 1.50 $
  *
- *  last change: $Author: kz $ $Date: 2007-05-10 14:58:28 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 19:04:55 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -36,23 +36,23 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_svx.hxx"
 
-#include "svdoattr.hxx"
-#include "xpool.hxx"
+#include <svx/svdoattr.hxx>
+#include <svx/xpool.hxx>
 #include "svditext.hxx"
 #include "svdtouch.hxx"
-#include "svdmodel.hxx"
+#include <svx/svdmodel.hxx>
 #include "svdxout.hxx"
-#include "svdpage.hxx"
-#include "svdattr.hxx"
-#include "svdattrx.hxx"
-#include "svdpool.hxx"
-#include "svdotext.hxx"
-#include "svdocapt.hxx"
-#include "svdograf.hxx"
-#include "svdoole2.hxx"
-#include "svdorect.hxx"
-#include "svdocirc.hxx"
-#include "svdomeas.hxx"
+#include <svx/svdpage.hxx>
+#include <svx/svdattr.hxx>
+#include <svx/svdattrx.hxx>
+#include <svx/svdpool.hxx>
+#include <svx/svdotext.hxx>
+#include <svx/svdocapt.hxx>
+#include <svx/svdograf.hxx>
+#include <svx/svdoole2.hxx>
+#include <svx/svdorect.hxx>
+#include <svx/svdocirc.hxx>
+#include <svx/svdomeas.hxx>
 
 #ifndef _SFXSMPLHINT_HXX //autogen
 #include <svtools/smplhint.hxx>
@@ -63,48 +63,48 @@
 #endif
 
 #ifndef _XENUM_HXX //autogen
-#include "xenum.hxx"
+#include <svx/xenum.hxx>
 #endif
 
 #ifndef _SVX_XLINEIT0_HXX //autogen
-#include "xlineit0.hxx"
+#include <svx/xlineit0.hxx>
 #endif
 
 #ifndef _SVX_XLNSTWIT_HXX //autogen
-#include "xlnstwit.hxx"
+#include <svx/xlnstwit.hxx>
 #endif
 
 #ifndef _SVX_XLNEDWIT_HXX //autogen
-#include "xlnedwit.hxx"
+#include <svx/xlnedwit.hxx>
 #endif
 
 #ifndef SVX_XFILLIT0_HXX //autogen
-#include "xfillit0.hxx"
+#include <svx/xfillit0.hxx>
 #endif
 
 #ifndef _SVX_XFLBMTIT_HXX //autogen
-#include "xflbmtit.hxx"
+#include <svx/xflbmtit.hxx>
 #endif
 
 #ifndef _SVX_TEXTIT0_HXX //autogen
-#include "xtextit0.hxx"
+#include <svx/xtextit0.hxx>
 #endif
 
 #ifndef _SVX_XFLBSTIT_HXX //autogen
-#include "xflbstit.hxx"
+#include <svx/xflbstit.hxx>
 #endif
 
 #ifndef _SVX_XFLBTOXY_HXX //autogen
-#include "xflbtoxy.hxx"
+#include <svx/xflbtoxy.hxx>
 #endif
 
 #ifndef _SVX_XFTSHIT_HXX //autogen
-#include "xftshit.hxx"
+#include <svx/xftshit.hxx>
 #endif
 
 
 #ifndef _SVX_COLRITEM_HXX //autogen
-#include "colritem.hxx"
+#include <svx/colritem.hxx>
 #endif
 
 #ifndef _SVX_FONTITEM_HXX //autogen
@@ -112,17 +112,17 @@
 #endif
 
 #ifndef _SVX_FHGTITEM_HXX //autogen
-#include "fhgtitem.hxx"
+#include <svx/fhgtitem.hxx>
 #endif
 
-//#include <charscaleitem.hxx>
+//#include <svx/charscaleitem.hxx>
 
 #ifndef _SVX_XLNSTCIT_HXX //autogen
-#include <xlnstcit.hxx>
+#include <svx/xlnstcit.hxx>
 #endif
 
 #ifndef _SVX_XLNWTIT_HXX //autogen
-#include <xlnwtit.hxx>
+#include <svx/xlnwtit.hxx>
 #endif
 
 #ifndef _SFXSTYLE_HXX //autogen
@@ -138,57 +138,57 @@
 #endif
 
 #ifndef _SVX_XLNCLIT_HXX //autogen
-#include <xlnclit.hxx>
+#include <svx/xlnclit.hxx>
 #endif
 
 #ifndef _SVX_XFLCLIT_HXX //autogen
-#include <xflclit.hxx>
+#include <svx/xflclit.hxx>
 #endif
 
 #ifndef _SVX_XLNTRIT_HXX //autogen
-#include <xlntrit.hxx>
+#include <svx/xlntrit.hxx>
 #endif
 
 #ifndef _SVX_XFLTRIT_HXX //autogen
-#include <xfltrit.hxx>
+#include <svx/xfltrit.hxx>
 #endif
 
 #ifndef _SVX_XLNEDCIT_HXX //autogen
-#include <xlnedcit.hxx>
+#include <svx/xlnedcit.hxx>
 #endif
 
 #ifndef _SVX_ADJITEM_HXX
-#include <adjitem.hxx>
+#include <svx/adjitem.hxx>
 #endif
 
 #ifndef _SVX_XFLBCKIT_HXX
-#include "xflbckit.hxx"
+#include <svx/xflbckit.hxx>
 #endif
 
 #ifndef _XTABLE_HXX
-#include "xtable.hxx"
+#include <svx/xtable.hxx>
 #endif
 
 #ifndef _SVX_XBTMPIT_HXX
-#include "xbtmpit.hxx"
+#include <svx/xbtmpit.hxx>
 #endif
 #ifndef _SVX_XLNDSIT_HXX
-#include "xlndsit.hxx"
+#include <svx/xlndsit.hxx>
 #endif
 #ifndef _SVX_XLNEDIT_HXX //autogen
-#include "xlnedit.hxx"
+#include <svx/xlnedit.hxx>
 #endif
 #ifndef _SVX_XFLGRIT_HXX
-#include "xflgrit.hxx"
+#include <svx/xflgrit.hxx>
 #endif
 #ifndef _SVX_XFLFTRIT_HXX
-#include "xflftrit.hxx"
+#include <svx/xflftrit.hxx>
 #endif
 #ifndef _SVX_XFLHTIT_HXX //autogen
-#include "xflhtit.hxx"
+#include <svx/xflhtit.hxx>
 #endif
 #ifndef _SVX_XLNSTIT_HXX
-#include "xlnstit.hxx"
+#include <svx/xlnstit.hxx>
 #endif
 
 #ifndef _SDR_PROPERTIES_ATTRIBUTEPROPERTIES_HXX
