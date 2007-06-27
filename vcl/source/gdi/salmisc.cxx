@@ -4,9 +4,9 @@
  *
  *  $RCSfile: salmisc.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 12:11:13 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 20:23:39 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -39,8 +39,8 @@
 #ifndef _RTL_MEMORY_H_
 #include <rtl/memory.h>
 #endif
-#include <bmpacc.hxx>
-#include <salbtype.hxx>
+#include <vcl/bmpacc.hxx>
+#include <vcl/salbtype.hxx>
 #include <bmpfast.hxx>
 
 // -----------
