@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dlgutil.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: obo $ $Date: 2007-01-23 11:33:59 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 17:02:46 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -55,10 +55,10 @@
 #include <sfx2/viewfrm.hxx>
 #include <sfx2/objsh.hxx>
 
-#include "dialogs.hrc"
+#include <svx/dialogs.hrc>
 
 #include "dlgutil.hxx"
-#include "dialmgr.hxx"
+#include <svx/dialmgr.hxx>
 #include "langtab.hxx"
 
 // -----------------------------------------------------------------------
