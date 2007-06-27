@@ -4,9 +4,9 @@
  *
  *  $RCSfile: fmgridcl.cxx,v $
  *
- *  $Revision: 1.59 $
+ *  $Revision: 1.60 $
  *
- *  last change: $Author: rt $ $Date: 2007-04-26 07:48:36 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 18:08:12 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -37,7 +37,7 @@
 #include "precompiled_svx.hxx"
 
 #ifndef _SVX_FMGRIDCL_HXX
-#include "fmgridcl.hxx"
+#include <svx/fmgridcl.hxx>
 #endif
 #ifndef _SVX_GRIDCELL_HXX
 #include "gridcell.hxx"
@@ -155,7 +155,7 @@
 #endif
 
 #ifndef _SVX_SVXIDS_HRC
-#include "svxids.hrc"
+#include <svx/svxids.hrc>
 #endif
 
 #ifndef _SHL_HXX
@@ -163,7 +163,7 @@
 #endif
 
 #ifndef _SVX_DIALMGR_HXX
-#include "dialmgr.hxx"
+#include <svx/dialmgr.hxx>
 #endif
 
 #ifndef _SVX_GRIDCOLS_HXX
@@ -207,14 +207,14 @@
 #endif
 
 #ifndef _SVX_DBAEXCHANGE_HXX_
-#include "dbaexchange.hxx"
+#include <svx/dbaexchange.hxx>
 #endif
 #ifndef _SV_MULTISEL_HXX
 #include <tools/multisel.hxx>
 #endif
 
-#include "svxdlg.hxx" //CHINA001
-#include <dialogs.hrc> //CHINA001
+#include <svx/svxdlg.hxx> //CHINA001
+#include <svx/dialogs.hrc> //CHINA001
 
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::view;
