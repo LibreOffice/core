@@ -4,9 +4,9 @@
  *
  *  $RCSfile: rc.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: rt $ $Date: 2007-04-26 09:47:56 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 22:16:55 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -41,17 +41,17 @@
 #include <string.h>
 
 #ifndef _DATE_HXX
-#include <date.hxx>
+#include <tools/date.hxx>
 #endif
 #ifndef _TIME_HXX
-#include <time.hxx>
+#include <tools/time.hxx>
 #endif
 
 #ifndef _TOOLS_RC_HXX
-#include <rc.hxx>
+#include <tools/rc.hxx>
 #endif
 #ifndef _TOOLS_RCID_H
-#include <rcid.h>
+#include <tools/rcid.h>
 #endif
 
 // =======================================================================
