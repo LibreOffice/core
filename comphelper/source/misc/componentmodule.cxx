@@ -4,9 +4,9 @@
  *
  *  $RCSfile: componentmodule.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: kz $ $Date: 2006-11-08 12:01:30 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 14:54:36 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -145,7 +145,7 @@ namespace comphelper
     void OModule::registerImplementation( const ::rtl::OUString& _rImplementationName, const ::com::sun::star::uno::Sequence< ::rtl::OUString >& _rServiceNames,
         ::cppu::ComponentFactoryFunc _pCreateFunction, FactoryInstantiation _pFactoryFunction )
     {
-        ComponentDescription aComponent( _rImplementationName, _rServiceNames, _pCreateFunction, _pFactoryFunction );
+        ComponentDescription aComponent( _rImplementationName, _rServiceNames, ::rtl::OUString(), _pCreateFunction, _pFactoryFunction );
         registerImplementation( aComponent );
     }
 
@@ -162,7 +162,7 @@ namespace comphelper
             const Reference< XMultiServiceFactory >& /*_rxServiceManager*/,
             const Reference< XRegistryKey >& _rxRootKey )
     {
-        OSL_ENSURE(_rxRootKey.is(), "OModule::writeComponentInfos : invalid argument !");
+        OSL_ENSURE( _rxRootKey.is(), "OModule::writeComponentInfos: invalid argument!" );
 
         ::rtl::OUString sRootKey( "/", 1, RTL_TEXTENCODING_ASCII_US );
 
@@ -183,6 +183,19 @@ namespace comphelper
                 const ::rtl::OUString* pServiceEnd = component->aSupportedServices.getConstArray() + component->aSupportedServices.getLength();
                 for ( ; pService != pServiceEnd; ++pService )
                     xNewKey->createKey( *pService );
+
+                if ( component->sSingletonName.getLength() )
+                {
+                    OSL_ENSURE( component->aSupportedServices.getLength() == 1, "OModule::writeComponentInfos: singletons should support exactly one service, shouldn't they?" );
+
+                    ::rtl::OUString sSingletonKeyName( sRootKey );
+                    sSingletonKeyName += component->sImplementationName;
+                    sSingletonKeyName += ::rtl::OUString::createFromAscii( "/UNO/SINGLETONS/" );
+                    sSingletonKeyName += component->sSingletonName;
+
+                    xNewKey = _rxRootKey->createKey( sSingletonKeyName );
+                    xNewKey->setStringValue( component->aSupportedServices[ 0 ] );
+                }
             }
             catch( Exception& )
             {
