@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xmlscripti.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 10:41:59 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 15:22:32 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -36,12 +36,12 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_xmloff.hxx"
 
-#include "xmlscripti.hxx"
+#include <xmloff/xmlscripti.hxx>
 #include "xmlnmspe.hxx"
-#include "xmltoken.hxx"
-#include "xmlimp.hxx"
-#include "nmspmap.hxx"
-#include "XMLEventsImportContext.hxx"
+#include <xmloff/xmltoken.hxx>
+#include <xmloff/xmlimp.hxx>
+#include <xmloff/nmspmap.hxx>
+#include <xmloff/XMLEventsImportContext.hxx>
 #include "xmlbasici.hxx"
 
 #include <com/sun/star/document/XEventsSupplier.hpp>
