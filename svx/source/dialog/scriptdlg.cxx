@@ -4,9 +4,9 @@
  *
  *  $RCSfile: scriptdlg.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: rt $ $Date: 2007-04-26 07:42:17 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 17:37:42 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -46,11 +46,11 @@
 #include <vos/mutex.hxx>
 #endif
 
-#include "dialogs.hrc"
+#include <svx/dialogs.hrc>
 #include "scriptdlg.hrc"
 #include "fmresids.hrc"
 #include "scriptdlg.hxx"
-#include "dialmgr.hxx"
+#include <svx/dialmgr.hxx>
 #include "selector.hxx"
 
 #include <com/sun/star/uno/XComponentContext.hpp>
