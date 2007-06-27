@@ -4,9 +4,9 @@
  *
  *  $RCSfile: parser.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: hr $ $Date: 2006-06-19 13:55:30 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 22:21:10 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -37,7 +37,7 @@
 
 #if defined WNT
 
-#include <string.hxx>
+#include <tools/string.hxx>
 #include <winshell.hxx>
 
 void * NewBinaryFromString( const String & rBinStr );
