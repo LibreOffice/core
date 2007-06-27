@@ -1,0 +1,75 @@
+/*************************************************************************
+ *
+ *  OpenOffice.org - a multi-platform office productivity suite
+ *
+ *  $RCSfile: XConsoleHandler.idl,v $
+ *
+ *  $Revision: 1.2 $
+ *
+ *  last change: $Author: hr $ $Date: 2007-06-27 14:47:55 $
+ *
+ *  The Contents of this file are made available subject to
+ *  the terms of GNU Lesser General Public License Version 2.1.
+ *
+ *
+ *    GNU Lesser General Public License Version 2.1
+ *    =============================================
+ *    Copyright 2005 by Sun Microsystems, Inc.
+ *    901 San Antonio Road, Palo Alto, CA 94303, USA
+ *
+ *    This library is free software; you can redistribute it and/or
+ *    modify it under the terms of the GNU Lesser General Public
+ *    License version 2.1, as published by the Free Software Foundation.
+ *
+ *    This library is distributed in the hope that it will be useful,
+ *    but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ *    Lesser General Public License for more details.
+ *
+ *    You should have received a copy of the GNU Lesser General Public
+ *    License along with this library; if not, write to the Free Software
+ *    Foundation, Inc., 59 Temple Place, Suite 330, Boston,
+ *    MA  02111-1307  USA
+ *
+ ************************************************************************/
+
+#ifndef __offapi_com_sun_star_logging_XConsoleHandler_idl__
+#define __offapi_com_sun_star_logging_XConsoleHandler_idl__
+
+#ifndef __com_sun_star_logging_XLogHandler_idl__
+#include <com/sun/star/logging/XLogHandler.idl>
+#endif
+
+//=============================================================================
+
+module com { module sun { module star { module logging {
+
+//=============================================================================
+
+/** implemented by a log handler whose output channel is the processes console.
+
+    <p>Note that a console handler will ignore its formatter's head and tail, since
+    it cannot decided whether they should be emitted on <code>stdout</code> or <code>stderr</code>.</p>
+
+    @since OOo 2.3
+ */
+interface XConsoleHandler : XLogHandler
+{
+    /** renotes the <type>LogLevel</type> threshold used to determine to which
+        console the events should be logged.
+
+        <p>Events with a level greater or equal to <code>Threshold</code> will be
+        logged to <code>stderr</code>, all others to <code>stdout</code>.</p>
+
+        <p>The default value for this attribute is <member>LogLevel::SEVERE</member>.</p>
+    */
+    [attribute] long    Threshold;
+};
+
+//=============================================================================
+
+}; }; }; };
+
+//=============================================================================
+
+#endif
