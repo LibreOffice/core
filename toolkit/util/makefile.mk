@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.20 $
+#   $Revision: 1.21 $
 #
-#   last change: $Author: hr $ $Date: 2007-06-27 12:24:08 $
+#   last change: $Author: hr $ $Date: 2007-06-27 15:17:08 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -39,6 +39,7 @@ PRJ=..
 
 PRJNAME=toolkit
 TARGET=tk
+TARGET2=tka
 VERSION=$(UPD)
 USE_DEFFILE=TRUE
 
@@ -49,6 +50,9 @@ USE_DEFFILE=TRUE
 
 
 # --- Allgemein ----------------------------------------------------------
+
+# ========================================================================
+# = tk lib: the "classic" toolkit library
 
 LIB1TARGET= $(SLB)$/$(TARGET).lib
 LIB1FILES=	$(SLB)$/awt.lib \
@@ -100,4 +104,5 @@ RES1FILELIST=$(SRS)$/awt.srs
 RESLIB1NAME=$(TARGET)
 RESLIB1SRSFILES=$(RES1FILELIST)
 
+# --- Footer -------------------------------------------------------------
 .INCLUDE :	target.mk
