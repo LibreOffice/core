@@ -4,9 +4,9 @@
  *
  *  $RCSfile: debug.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 00:52:23 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 22:09:41 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -52,11 +52,11 @@
 
 #if defined ( WNT )
 #pragma warning (push,1)
-#include <svwin.h>
+#include <tools/svwin.h>
 #pragma warning (pop)
 #endif
 
-#include <debug.hxx>
+#include <tools/debug.hxx>
 #include <rtl/string.h>
 
 #include <vector>
