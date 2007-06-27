@@ -4,9 +4,9 @@
  *
  *  $RCSfile: abstdlg.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: vg $ $Date: 2006-11-22 10:39:50 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 20:27:32 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -36,7 +36,7 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_vcl.hxx"
 
-#include "abstdlg.hxx"
+#include <vcl/abstdlg.hxx>
 #include "cuilib.hxx"
 
 #include <osl/module.hxx>
