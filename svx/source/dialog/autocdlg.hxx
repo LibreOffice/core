@@ -4,9 +4,9 @@
  *
  *  $RCSfile: autocdlg.hxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: hr $ $Date: 2007-06-27 13:39:43 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 16:47:29 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -45,7 +45,7 @@
 #include <tools/table.hxx>
 #endif
 #ifndef _SVX_CHECKLBX_HXX //autogen
-#include "checklbx.hxx"
+#include <svx/checklbx.hxx>
 #endif
 #ifndef _SV_FIXED_HXX
 #include <vcl/fixed.hxx>
@@ -57,7 +57,7 @@
 #include <vcl/metric.hxx>
 #endif
 #ifndef _SVX_LANGBOX_HXX
-#include "langbox.hxx"
+#include <svx/langbox.hxx>
 #endif
 
 class SvxAutoCorrect;
@@ -98,7 +98,7 @@ public:
 #include <svtools/svtabbx.hxx>
 #endif
 #ifndef _SVX_SIMPTABL_HXX //autogen
-#include "simptabl.hxx"
+#include <svx/simptabl.hxx>
 #endif
 
 class SvStringsISortDtor;
