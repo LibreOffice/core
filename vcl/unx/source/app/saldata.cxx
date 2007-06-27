@@ -4,9 +4,9 @@
  *
  *  $RCSfile: saldata.cxx,v $
  *
- *  $Revision: 1.51 $
+ *  $Revision: 1.52 $
  *
- *  last change: $Author: rt $ $Date: 2007-04-17 13:57:30 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 20:46:31 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -80,7 +80,7 @@
 #include <saldata.hxx>
 #endif
 #ifndef _SV_SALINST_HXX
-#include <salinst.hxx>
+#include <vcl/salinst.hxx>
 #endif
 #ifndef _SV_SALFRAME_H
 #include <salframe.h>
@@ -103,7 +103,7 @@
 
 #include <tools/debug.hxx>
 #include <sm.hxx>
-#include <svapp.hxx>
+#include <vcl/svapp.hxx>
 
 #ifndef _SAL_I18N_INPUTMETHOD_HXX
 #include "i18n_im.hxx"
