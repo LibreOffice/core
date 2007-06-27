@@ -15051,9 +15051,9 @@
     <resource name="CT_TcPr" resource="Properties"/>
     <resource name="CT_TcPrInner" resource="Properties"/>
     <resource name="CT_Tc" resource="TextTableCell">
+      <action name="start" action="startParagraphGroup"/>
       <action name="start" action="startCell"/>
       <action name="end" action="endCell"/>
-      <action name="end" action="endCharacterGroup"/>
       <action name="end" action="endParagraphGroup"/>
     </resource>
     <resource name="CT_Cnf" resource="StringValue" generated="yes"/>
