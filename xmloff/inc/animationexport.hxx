@@ -4,9 +4,9 @@
  *
  *  $RCSfile: animationexport.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: hr $ $Date: 2007-06-27 14:44:37 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 15:31:01 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -39,6 +39,7 @@
 #ifndef _COM_SUN_STAR_ANIMATIONS_XANIMATIONNODE_HPP_
 #include <com/sun/star/animations/XAnimationNode.hpp>
 #endif
+#include <com/sun/star/beans/XPropertySet.hpp>
 
 #ifndef _UNIVERSALL_REFERENCE_HXX
 #include <xmloff/uniref.hxx>
@@ -55,7 +56,7 @@ class AnimationsExporter : public UniRefBase
     AnimationsExporterImpl* mpImpl;
 
 public:
-    AnimationsExporter( SvXMLExport& rExport );
+    AnimationsExporter( SvXMLExport& rExport, const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& xPageProps  );
     virtual ~AnimationsExporter();
 
     void prepare( ::com::sun::star::uno::Reference< ::com::sun::star::animations::XAnimationNode > xRootNode );
