@@ -4,9 +4,9 @@
  *
  *  $RCSfile: b3dcolor.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 15:36:39 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 22:26:12 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -39,7 +39,7 @@
 #endif
 
 #ifndef _B3D_B3DCOLOR_HXX
-#include "b3dcolor.hxx"
+#include <goodies/b3dcolor.hxx>
 #endif
 
 /*************************************************************************
