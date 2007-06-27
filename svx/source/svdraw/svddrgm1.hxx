@@ -4,9 +4,9 @@
  *
  *  $RCSfile: svddrgm1.hxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: ihi $ $Date: 2006-11-14 13:39:51 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 18:59:01 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -37,19 +37,19 @@
 #define _SVDDRGM1_HXX
 
 #ifndef _XPOLY_HXX
-#include "xpoly.hxx"
+#include <svx/xpoly.hxx>
 #endif
 
 #ifndef _SVDHDL_HXX
-#include "svdhdl.hxx"
+#include <svx/svdhdl.hxx>
 #endif
 
 #ifndef _SVDDRGV_HXX
-#include "svddrgv.hxx"
+#include <svx/svddrgv.hxx>
 #endif
 
 #ifndef _SVDDRGMT_HXX
-#include "svddrgmt.hxx"
+#include <svx/svddrgmt.hxx>
 #endif
 
 //************************************************************
