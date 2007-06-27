@@ -4,9 +4,9 @@
  *
  *  $RCSfile: orgmgr.cxx,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: hr $ $Date: 2007-06-27 12:55:40 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 23:34:17 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -62,17 +62,17 @@
 
 #include <comphelper/storagehelper.hxx>
 
-#include "app.hxx"
-#include "objsh.hxx"
-#include "docfile.hxx"
-#include "docfac.hxx"
-#include "doctempl.hxx"
+#include <sfx2/app.hxx>
+#include <sfx2/objsh.hxx>
+#include <sfx2/docfile.hxx>
+#include <sfx2/docfac.hxx>
+#include <sfx2/doctempl.hxx>
 #include "docvor.hxx"
 #include "orgmgr.hxx"
 #include "sfxtypes.hxx"
 #include "sfxresid.hxx"
 #include "view.hrc"
-#include "docfilt.hxx"
+#include <sfx2/docfilt.hxx>
 #include "fltfnc.hxx"
 
 using namespace ::com::sun::star;
