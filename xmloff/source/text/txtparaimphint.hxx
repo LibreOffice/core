@@ -4,9 +4,9 @@
  *
  *  $RCSfile: txtparaimphint.hxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: hr $ $Date: 2006-06-19 18:51:04 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 16:16:57 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -51,13 +51,13 @@
 #endif
 
 #ifndef _XMLOFF_XMLIMP_HXX
-#include "xmlimp.hxx"
+#include <xmloff/xmlimp.hxx>
 #endif
 #ifndef _XMLTEXTFRAMECONTEXT_HXX
 #include "XMLTextFrameContext.hxx"
 #endif
 #ifndef _XMLOFF_XMLEVENTSIMPORTCONTEXT_HXX
-#include "XMLEventsImportContext.hxx"
+#include <xmloff/XMLEventsImportContext.hxx>
 #endif
 
 using namespace ::rtl;
