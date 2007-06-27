@@ -4,9 +4,9 @@
  *
  *  $RCSfile: navigatr.cxx,v $
  *
- *  $Revision: 1.35 $
+ *  $Revision: 1.36 $
  *
- *  last change: $Author: rt $ $Date: 2007-04-03 15:42:17 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 12:42:23 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -556,6 +556,7 @@ BOOL SdNavigatorWin::InsertFile(const String& rFileName)
         {
             SfxMedium aMed(aFileName, (STREAM_READ | STREAM_SHARE_DENYNONE), FALSE);
             SfxFilterMatcher aMatch( String::CreateFromAscii("simpress") );
+            aMed.UseInteractionHandler( TRUE );
             nErr = aMatch.GuessFilter(aMed, &pFilter);
         }
 
