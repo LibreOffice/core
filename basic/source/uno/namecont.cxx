@@ -4,9 +4,9 @@
  *
  *  $RCSfile: namecont.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: ihi $ $Date: 2007-06-05 15:11:49 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 14:33:56 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -76,7 +76,7 @@
 #endif
 
 #include "namecont.hxx"
-#include "basicmanagerrepository.hxx"
+#include <basic/basicmanagerrepository.hxx>
 
 #ifndef TOOLS_DIAGNOSE_EX_H
 #include <tools/diagnose_ex.h>
@@ -97,7 +97,7 @@
 #include <svtools/ehdl.hxx>
 #endif
 #ifndef _BASMGR_HXX
-#include "basmgr.hxx"
+#include <basic/basmgr.hxx>
 #endif
 
 #ifndef _COM_SUN_STAR_XML_SAX_XEXTENDEDDOCUMENTHANDLER_HPP_
@@ -137,7 +137,7 @@
 #ifndef _CPPUHELPER_EXC_HLP_HXX_
 #include <cppuhelper/exc_hlp.hxx>
 #endif
-#include "sbmod.hxx"
+#include <basic/sbmod.hxx>
 
 
 namespace basic
