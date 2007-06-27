@@ -4,9 +4,9 @@
  *
  *  $RCSfile: eventdlg.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: rt $ $Date: 2007-04-26 07:30:35 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 17:04:36 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -74,8 +74,8 @@
 #include "macropg_impl.hxx"
 #endif
 
-#include "dialmgr.hxx"
-#include "dialogs.hrc"
+#include <svx/dialmgr.hxx>
+#include <svx/dialogs.hrc>
 #include "eventdlg.hrc"
 #include "helpid.hrc"
 #include "selector.hxx"
