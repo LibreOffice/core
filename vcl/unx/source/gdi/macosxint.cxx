@@ -4,9 +4,9 @@
  *
  *  $RCSfile: macosxint.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 12:37:50 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 20:49:13 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -38,7 +38,7 @@
 
 #include <macosxint.hxx>
 #include <tools/config.hxx>
-#include <settings.hxx>
+#include <vcl/settings.hxx>
 #include <osl/thread.h>
 #include <osl/file.hxx>
 #include <rtl/bootstrap.hxx>
