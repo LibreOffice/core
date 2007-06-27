@@ -4,9 +4,9 @@
  *
  *  $RCSfile: token.hxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: rt $ $Date: 2006-05-05 10:12:47 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 14:24:27 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -40,7 +40,7 @@
 #include "scanner.hxx"
 #endif
 #ifndef _SBDEF_HXX
-#include "sbdef.hxx"
+#include <basic/sbdef.hxx>
 #endif
 
 #if defined( SHARED )
