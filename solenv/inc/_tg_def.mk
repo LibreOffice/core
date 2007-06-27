@@ -88,7 +88,7 @@ $(DEF1TARGETN) .PHONY :
     tail --lines +3 $(MISC)$/$(SHL1TARGET).exp | sed '/^;/d' >>$@.tmpfile
     @-$(EXPORT1_PROTECT) $(RM) $(MISC)$/$(SHL1TARGET).exp
 .ELSE
-.IF "$(SHL1USE_EXPORTS)"!="ordinal"
+.IF "$(SHL1USE_EXPORTS)"==""
     @-$(EXPORT1_PROTECT) $(RMHACK1) $(MISC)$/$(SHL1TARGET).exp
     @$(EXPORT1_PROTECT) $(LIBMGR) -EXTRACT:/ /OUT:$(MISC)$/$(SHL1TARGET).exp $(SLB)$/$(DEFLIB1NAME).lib
 .IF "$(DEF1CEXP)"!=""
@@ -97,14 +97,22 @@ $(DEF1TARGETN) .PHONY :
     @$(EXPORT1_PROTECT) $(LDUMP2) -E 20 -F $(MISC)$/$(SHL1TARGET).flt $(MISC)$/$(SHL1TARGET).exp			   >>$@.tmpfile
 .ENDIF
     $(EXPORT1_PROTECT) $(RMHACK1) $(MISC)$/$(SHL1TARGET).exp
-.ELSE			# "$(SHL1USE_EXPORTS)"!="ordinal"
+.ELSE			# "$(SHL1USE_EXPORTS)"==""
     @$(EXPORT1_PROTECT) $(DUMPBIN) -DIRECTIVES  $(foreach,i,$(DEFLIB1NAME) $(SLB)$/$(i).lib) | $(GREP) EXPORT: > $(MISC)$/$(SHL1TARGET).direct
+.IF "$(SHL1USE_EXPORTS)"!="name"
 .IF "$(DEF1CEXP)"!=""
     @$(EXPORT1_PROTECT) $(LDUMP2) -D -A $(DEF1CEXP) -E 20 -F $(DEF1FILTER) $(MISC)$/$(SHL1TARGET).direct >>$@.tmpfile
 .ELSE
     @$(EXPORT1_PROTECT) $(LDUMP2) -D -E 20 -F $(DEF1FILTER) $(MISC)$/$(SHL1TARGET).direct >>$@.tmpfile
 .ENDIF
-.ENDIF			# "$(SHL1USE_EXPORTS)"!="ordinal"
+.ELSE			# "$(SHL1USE_EXPORTS)"!="name"
+.IF "$(DEF1CEXP)"!=""
+    @$(EXPORT1_PROTECT) $(LDUMP2) -N -D -A $(DEF1CEXP) -E 20 -F $(DEF1FILTER) $(MISC)$/$(SHL1TARGET).direct >>$@.tmpfile
+.ELSE
+    @$(EXPORT1_PROTECT) $(LDUMP2) -N -D -E 20 -F $(DEF1FILTER) $(MISC)$/$(SHL1TARGET).direct >>$@.tmpfile
+.ENDIF
+.ENDIF			# "$(SHL1USE_EXPORTS)"!="name"
+.ENDIF			# "$(SHL1USE_EXPORTS)"==""
 .ENDIF
 # now *\defs\$(OUTPATH)	exists, commit it
 .IF "$(MWS_BUILD)"!=""
@@ -293,7 +301,7 @@ $(DEF2TARGETN) .PHONY :
     tail --lines +3 $(MISC)$/$(SHL2TARGET).exp | sed '/^;/d' >>$@.tmpfile
     @-$(EXPORT2_PROTECT) $(RM) $(MISC)$/$(SHL2TARGET).exp
 .ELSE
-.IF "$(SHL2USE_EXPORTS)"!="ordinal"
+.IF "$(SHL2USE_EXPORTS)"==""
     @-$(EXPORT2_PROTECT) $(RMHACK2) $(MISC)$/$(SHL2TARGET).exp
     @$(EXPORT2_PROTECT) $(LIBMGR) -EXTRACT:/ /OUT:$(MISC)$/$(SHL2TARGET).exp $(SLB)$/$(DEFLIB2NAME).lib
 .IF "$(DEF2CEXP)"!=""
@@ -302,14 +310,22 @@ $(DEF2TARGETN) .PHONY :
     @$(EXPORT2_PROTECT) $(LDUMP2) -E 20 -F $(MISC)$/$(SHL2TARGET).flt $(MISC)$/$(SHL2TARGET).exp			   >>$@.tmpfile
 .ENDIF
     $(EXPORT2_PROTECT) $(RMHACK2) $(MISC)$/$(SHL2TARGET).exp
-.ELSE			# "$(SHL2USE_EXPORTS)"!="ordinal"
+.ELSE			# "$(SHL2USE_EXPORTS)"==""
     @$(EXPORT2_PROTECT) $(DUMPBIN) -DIRECTIVES  $(foreach,i,$(DEFLIB2NAME) $(SLB)$/$(i).lib) | $(GREP) EXPORT: > $(MISC)$/$(SHL2TARGET).direct
+.IF "$(SHL2USE_EXPORTS)"!="name"
 .IF "$(DEF2CEXP)"!=""
     @$(EXPORT2_PROTECT) $(LDUMP2) -D -A $(DEF2CEXP) -E 20 -F $(DEF2FILTER) $(MISC)$/$(SHL2TARGET).direct >>$@.tmpfile
 .ELSE
     @$(EXPORT2_PROTECT) $(LDUMP2) -D -E 20 -F $(DEF2FILTER) $(MISC)$/$(SHL2TARGET).direct >>$@.tmpfile
 .ENDIF
-.ENDIF			# "$(SHL2USE_EXPORTS)"!="ordinal"
+.ELSE			# "$(SHL2USE_EXPORTS)"!="name"
+.IF "$(DEF2CEXP)"!=""
+    @$(EXPORT2_PROTECT) $(LDUMP2) -N -D -A $(DEF2CEXP) -E 20 -F $(DEF2FILTER) $(MISC)$/$(SHL2TARGET).direct >>$@.tmpfile
+.ELSE
+    @$(EXPORT2_PROTECT) $(LDUMP2) -N -D -E 20 -F $(DEF2FILTER) $(MISC)$/$(SHL2TARGET).direct >>$@.tmpfile
+.ENDIF
+.ENDIF			# "$(SHL2USE_EXPORTS)"!="name"
+.ENDIF			# "$(SHL2USE_EXPORTS)"==""
 .ENDIF
 # now *\defs\$(OUTPATH)	exists, commit it
 .IF "$(MWS_BUILD)"!=""
@@ -498,7 +514,7 @@ $(DEF3TARGETN) .PHONY :
     tail --lines +3 $(MISC)$/$(SHL3TARGET).exp | sed '/^;/d' >>$@.tmpfile
     @-$(EXPORT3_PROTECT) $(RM) $(MISC)$/$(SHL3TARGET).exp
 .ELSE
-.IF "$(SHL3USE_EXPORTS)"!="ordinal"
+.IF "$(SHL3USE_EXPORTS)"==""
     @-$(EXPORT3_PROTECT) $(RMHACK3) $(MISC)$/$(SHL3TARGET).exp
     @$(EXPORT3_PROTECT) $(LIBMGR) -EXTRACT:/ /OUT:$(MISC)$/$(SHL3TARGET).exp $(SLB)$/$(DEFLIB3NAME).lib
 .IF "$(DEF3CEXP)"!=""
@@ -507,14 +523,22 @@ $(DEF3TARGETN) .PHONY :
     @$(EXPORT3_PROTECT) $(LDUMP2) -E 20 -F $(MISC)$/$(SHL3TARGET).flt $(MISC)$/$(SHL3TARGET).exp			   >>$@.tmpfile
 .ENDIF
     $(EXPORT3_PROTECT) $(RMHACK3) $(MISC)$/$(SHL3TARGET).exp
-.ELSE			# "$(SHL3USE_EXPORTS)"!="ordinal"
+.ELSE			# "$(SHL3USE_EXPORTS)"==""
     @$(EXPORT3_PROTECT) $(DUMPBIN) -DIRECTIVES  $(foreach,i,$(DEFLIB3NAME) $(SLB)$/$(i).lib) | $(GREP) EXPORT: > $(MISC)$/$(SHL3TARGET).direct
+.IF "$(SHL3USE_EXPORTS)"!="name"
 .IF "$(DEF3CEXP)"!=""
     @$(EXPORT3_PROTECT) $(LDUMP2) -D -A $(DEF3CEXP) -E 20 -F $(DEF3FILTER) $(MISC)$/$(SHL3TARGET).direct >>$@.tmpfile
 .ELSE
     @$(EXPORT3_PROTECT) $(LDUMP2) -D -E 20 -F $(DEF3FILTER) $(MISC)$/$(SHL3TARGET).direct >>$@.tmpfile
 .ENDIF
-.ENDIF			# "$(SHL3USE_EXPORTS)"!="ordinal"
+.ELSE			# "$(SHL3USE_EXPORTS)"!="name"
+.IF "$(DEF3CEXP)"!=""
+    @$(EXPORT3_PROTECT) $(LDUMP2) -N -D -A $(DEF3CEXP) -E 20 -F $(DEF3FILTER) $(MISC)$/$(SHL3TARGET).direct >>$@.tmpfile
+.ELSE
+    @$(EXPORT3_PROTECT) $(LDUMP2) -N -D -E 20 -F $(DEF3FILTER) $(MISC)$/$(SHL3TARGET).direct >>$@.tmpfile
+.ENDIF
+.ENDIF			# "$(SHL3USE_EXPORTS)"!="name"
+.ENDIF			# "$(SHL3USE_EXPORTS)"==""
 .ENDIF
 # now *\defs\$(OUTPATH)	exists, commit it
 .IF "$(MWS_BUILD)"!=""
@@ -703,7 +727,7 @@ $(DEF4TARGETN) .PHONY :
     tail --lines +3 $(MISC)$/$(SHL4TARGET).exp | sed '/^;/d' >>$@.tmpfile
     @-$(EXPORT4_PROTECT) $(RM) $(MISC)$/$(SHL4TARGET).exp
 .ELSE
-.IF "$(SHL4USE_EXPORTS)"!="ordinal"
+.IF "$(SHL4USE_EXPORTS)"==""
     @-$(EXPORT4_PROTECT) $(RMHACK4) $(MISC)$/$(SHL4TARGET).exp
     @$(EXPORT4_PROTECT) $(LIBMGR) -EXTRACT:/ /OUT:$(MISC)$/$(SHL4TARGET).exp $(SLB)$/$(DEFLIB4NAME).lib
 .IF "$(DEF4CEXP)"!=""
@@ -712,14 +736,22 @@ $(DEF4TARGETN) .PHONY :
     @$(EXPORT4_PROTECT) $(LDUMP2) -E 20 -F $(MISC)$/$(SHL4TARGET).flt $(MISC)$/$(SHL4TARGET).exp			   >>$@.tmpfile
 .ENDIF
     $(EXPORT4_PROTECT) $(RMHACK4) $(MISC)$/$(SHL4TARGET).exp
-.ELSE			# "$(SHL4USE_EXPORTS)"!="ordinal"
+.ELSE			# "$(SHL4USE_EXPORTS)"==""
     @$(EXPORT4_PROTECT) $(DUMPBIN) -DIRECTIVES  $(foreach,i,$(DEFLIB4NAME) $(SLB)$/$(i).lib) | $(GREP) EXPORT: > $(MISC)$/$(SHL4TARGET).direct
+.IF "$(SHL4USE_EXPORTS)"!="name"
 .IF "$(DEF4CEXP)"!=""
     @$(EXPORT4_PROTECT) $(LDUMP2) -D -A $(DEF4CEXP) -E 20 -F $(DEF4FILTER) $(MISC)$/$(SHL4TARGET).direct >>$@.tmpfile
 .ELSE
     @$(EXPORT4_PROTECT) $(LDUMP2) -D -E 20 -F $(DEF4FILTER) $(MISC)$/$(SHL4TARGET).direct >>$@.tmpfile
 .ENDIF
-.ENDIF			# "$(SHL4USE_EXPORTS)"!="ordinal"
+.ELSE			# "$(SHL4USE_EXPORTS)"!="name"
+.IF "$(DEF4CEXP)"!=""
+    @$(EXPORT4_PROTECT) $(LDUMP2) -N -D -A $(DEF4CEXP) -E 20 -F $(DEF4FILTER) $(MISC)$/$(SHL4TARGET).direct >>$@.tmpfile
+.ELSE
+    @$(EXPORT4_PROTECT) $(LDUMP2) -N -D -E 20 -F $(DEF4FILTER) $(MISC)$/$(SHL4TARGET).direct >>$@.tmpfile
+.ENDIF
+.ENDIF			# "$(SHL4USE_EXPORTS)"!="name"
+.ENDIF			# "$(SHL4USE_EXPORTS)"==""
 .ENDIF
 # now *\defs\$(OUTPATH)	exists, commit it
 .IF "$(MWS_BUILD)"!=""
@@ -908,7 +940,7 @@ $(DEF5TARGETN) .PHONY :
     tail --lines +3 $(MISC)$/$(SHL5TARGET).exp | sed '/^;/d' >>$@.tmpfile
     @-$(EXPORT5_PROTECT) $(RM) $(MISC)$/$(SHL5TARGET).exp
 .ELSE
-.IF "$(SHL5USE_EXPORTS)"!="ordinal"
+.IF "$(SHL5USE_EXPORTS)"==""
     @-$(EXPORT5_PROTECT) $(RMHACK5) $(MISC)$/$(SHL5TARGET).exp
     @$(EXPORT5_PROTECT) $(LIBMGR) -EXTRACT:/ /OUT:$(MISC)$/$(SHL5TARGET).exp $(SLB)$/$(DEFLIB5NAME).lib
 .IF "$(DEF5CEXP)"!=""
@@ -917,14 +949,22 @@ $(DEF5TARGETN) .PHONY :
     @$(EXPORT5_PROTECT) $(LDUMP2) -E 20 -F $(MISC)$/$(SHL5TARGET).flt $(MISC)$/$(SHL5TARGET).exp			   >>$@.tmpfile
 .ENDIF
     $(EXPORT5_PROTECT) $(RMHACK5) $(MISC)$/$(SHL5TARGET).exp
-.ELSE			# "$(SHL5USE_EXPORTS)"!="ordinal"
+.ELSE			# "$(SHL5USE_EXPORTS)"==""
     @$(EXPORT5_PROTECT) $(DUMPBIN) -DIRECTIVES  $(foreach,i,$(DEFLIB5NAME) $(SLB)$/$(i).lib) | $(GREP) EXPORT: > $(MISC)$/$(SHL5TARGET).direct
+.IF "$(SHL5USE_EXPORTS)"!="name"
 .IF "$(DEF5CEXP)"!=""
     @$(EXPORT5_PROTECT) $(LDUMP2) -D -A $(DEF5CEXP) -E 20 -F $(DEF5FILTER) $(MISC)$/$(SHL5TARGET).direct >>$@.tmpfile
 .ELSE
     @$(EXPORT5_PROTECT) $(LDUMP2) -D -E 20 -F $(DEF5FILTER) $(MISC)$/$(SHL5TARGET).direct >>$@.tmpfile
 .ENDIF
-.ENDIF			# "$(SHL5USE_EXPORTS)"!="ordinal"
+.ELSE			# "$(SHL5USE_EXPORTS)"!="name"
+.IF "$(DEF5CEXP)"!=""
+    @$(EXPORT5_PROTECT) $(LDUMP2) -N -D -A $(DEF5CEXP) -E 20 -F $(DEF5FILTER) $(MISC)$/$(SHL5TARGET).direct >>$@.tmpfile
+.ELSE
+    @$(EXPORT5_PROTECT) $(LDUMP2) -N -D -E 20 -F $(DEF5FILTER) $(MISC)$/$(SHL5TARGET).direct >>$@.tmpfile
+.ENDIF
+.ENDIF			# "$(SHL5USE_EXPORTS)"!="name"
+.ENDIF			# "$(SHL5USE_EXPORTS)"==""
 .ENDIF
 # now *\defs\$(OUTPATH)	exists, commit it
 .IF "$(MWS_BUILD)"!=""
@@ -1113,7 +1153,7 @@ $(DEF6TARGETN) .PHONY :
     tail --lines +3 $(MISC)$/$(SHL6TARGET).exp | sed '/^;/d' >>$@.tmpfile
     @-$(EXPORT6_PROTECT) $(RM) $(MISC)$/$(SHL6TARGET).exp
 .ELSE
-.IF "$(SHL6USE_EXPORTS)"!="ordinal"
+.IF "$(SHL6USE_EXPORTS)"==""
     @-$(EXPORT6_PROTECT) $(RMHACK6) $(MISC)$/$(SHL6TARGET).exp
     @$(EXPORT6_PROTECT) $(LIBMGR) -EXTRACT:/ /OUT:$(MISC)$/$(SHL6TARGET).exp $(SLB)$/$(DEFLIB6NAME).lib
 .IF "$(DEF6CEXP)"!=""
@@ -1122,14 +1162,22 @@ $(DEF6TARGETN) .PHONY :
     @$(EXPORT6_PROTECT) $(LDUMP2) -E 20 -F $(MISC)$/$(SHL6TARGET).flt $(MISC)$/$(SHL6TARGET).exp			   >>$@.tmpfile
 .ENDIF
     $(EXPORT6_PROTECT) $(RMHACK6) $(MISC)$/$(SHL6TARGET).exp
-.ELSE			# "$(SHL6USE_EXPORTS)"!="ordinal"
+.ELSE			# "$(SHL6USE_EXPORTS)"==""
     @$(EXPORT6_PROTECT) $(DUMPBIN) -DIRECTIVES  $(foreach,i,$(DEFLIB6NAME) $(SLB)$/$(i).lib) | $(GREP) EXPORT: > $(MISC)$/$(SHL6TARGET).direct
+.IF "$(SHL6USE_EXPORTS)"!="name"
 .IF "$(DEF6CEXP)"!=""
     @$(EXPORT6_PROTECT) $(LDUMP2) -D -A $(DEF6CEXP) -E 20 -F $(DEF6FILTER) $(MISC)$/$(SHL6TARGET).direct >>$@.tmpfile
 .ELSE
     @$(EXPORT6_PROTECT) $(LDUMP2) -D -E 20 -F $(DEF6FILTER) $(MISC)$/$(SHL6TARGET).direct >>$@.tmpfile
 .ENDIF
-.ENDIF			# "$(SHL6USE_EXPORTS)"!="ordinal"
+.ELSE			# "$(SHL6USE_EXPORTS)"!="name"
+.IF "$(DEF6CEXP)"!=""
+    @$(EXPORT6_PROTECT) $(LDUMP2) -N -D -A $(DEF6CEXP) -E 20 -F $(DEF6FILTER) $(MISC)$/$(SHL6TARGET).direct >>$@.tmpfile
+.ELSE
+    @$(EXPORT6_PROTECT) $(LDUMP2) -N -D -E 20 -F $(DEF6FILTER) $(MISC)$/$(SHL6TARGET).direct >>$@.tmpfile
+.ENDIF
+.ENDIF			# "$(SHL6USE_EXPORTS)"!="name"
+.ENDIF			# "$(SHL6USE_EXPORTS)"==""
 .ENDIF
 # now *\defs\$(OUTPATH)	exists, commit it
 .IF "$(MWS_BUILD)"!=""
@@ -1318,7 +1366,7 @@ $(DEF7TARGETN) .PHONY :
     tail --lines +3 $(MISC)$/$(SHL7TARGET).exp | sed '/^;/d' >>$@.tmpfile
     @-$(EXPORT7_PROTECT) $(RM) $(MISC)$/$(SHL7TARGET).exp
 .ELSE
-.IF "$(SHL7USE_EXPORTS)"!="ordinal"
+.IF "$(SHL7USE_EXPORTS)"==""
     @-$(EXPORT7_PROTECT) $(RMHACK7) $(MISC)$/$(SHL7TARGET).exp
     @$(EXPORT7_PROTECT) $(LIBMGR) -EXTRACT:/ /OUT:$(MISC)$/$(SHL7TARGET).exp $(SLB)$/$(DEFLIB7NAME).lib
 .IF "$(DEF7CEXP)"!=""
@@ -1327,14 +1375,22 @@ $(DEF7TARGETN) .PHONY :
     @$(EXPORT7_PROTECT) $(LDUMP2) -E 20 -F $(MISC)$/$(SHL7TARGET).flt $(MISC)$/$(SHL7TARGET).exp			   >>$@.tmpfile
 .ENDIF
     $(EXPORT7_PROTECT) $(RMHACK7) $(MISC)$/$(SHL7TARGET).exp
-.ELSE			# "$(SHL7USE_EXPORTS)"!="ordinal"
+.ELSE			# "$(SHL7USE_EXPORTS)"==""
     @$(EXPORT7_PROTECT) $(DUMPBIN) -DIRECTIVES  $(foreach,i,$(DEFLIB7NAME) $(SLB)$/$(i).lib) | $(GREP) EXPORT: > $(MISC)$/$(SHL7TARGET).direct
+.IF "$(SHL7USE_EXPORTS)"!="name"
 .IF "$(DEF7CEXP)"!=""
     @$(EXPORT7_PROTECT) $(LDUMP2) -D -A $(DEF7CEXP) -E 20 -F $(DEF7FILTER) $(MISC)$/$(SHL7TARGET).direct >>$@.tmpfile
 .ELSE
     @$(EXPORT7_PROTECT) $(LDUMP2) -D -E 20 -F $(DEF7FILTER) $(MISC)$/$(SHL7TARGET).direct >>$@.tmpfile
 .ENDIF
-.ENDIF			# "$(SHL7USE_EXPORTS)"!="ordinal"
+.ELSE			# "$(SHL7USE_EXPORTS)"!="name"
+.IF "$(DEF7CEXP)"!=""
+    @$(EXPORT7_PROTECT) $(LDUMP2) -N -D -A $(DEF7CEXP) -E 20 -F $(DEF7FILTER) $(MISC)$/$(SHL7TARGET).direct >>$@.tmpfile
+.ELSE
+    @$(EXPORT7_PROTECT) $(LDUMP2) -N -D -E 20 -F $(DEF7FILTER) $(MISC)$/$(SHL7TARGET).direct >>$@.tmpfile
+.ENDIF
+.ENDIF			# "$(SHL7USE_EXPORTS)"!="name"
+.ENDIF			# "$(SHL7USE_EXPORTS)"==""
 .ENDIF
 # now *\defs\$(OUTPATH)	exists, commit it
 .IF "$(MWS_BUILD)"!=""
@@ -1523,7 +1579,7 @@ $(DEF8TARGETN) .PHONY :
     tail --lines +3 $(MISC)$/$(SHL8TARGET).exp | sed '/^;/d' >>$@.tmpfile
     @-$(EXPORT8_PROTECT) $(RM) $(MISC)$/$(SHL8TARGET).exp
 .ELSE
-.IF "$(SHL8USE_EXPORTS)"!="ordinal"
+.IF "$(SHL8USE_EXPORTS)"==""
     @-$(EXPORT8_PROTECT) $(RMHACK8) $(MISC)$/$(SHL8TARGET).exp
     @$(EXPORT8_PROTECT) $(LIBMGR) -EXTRACT:/ /OUT:$(MISC)$/$(SHL8TARGET).exp $(SLB)$/$(DEFLIB8NAME).lib
 .IF "$(DEF8CEXP)"!=""
@@ -1532,14 +1588,22 @@ $(DEF8TARGETN) .PHONY :
     @$(EXPORT8_PROTECT) $(LDUMP2) -E 20 -F $(MISC)$/$(SHL8TARGET).flt $(MISC)$/$(SHL8TARGET).exp			   >>$@.tmpfile
 .ENDIF
     $(EXPORT8_PROTECT) $(RMHACK8) $(MISC)$/$(SHL8TARGET).exp
-.ELSE			# "$(SHL8USE_EXPORTS)"!="ordinal"
+.ELSE			# "$(SHL8USE_EXPORTS)"==""
     @$(EXPORT8_PROTECT) $(DUMPBIN) -DIRECTIVES  $(foreach,i,$(DEFLIB8NAME) $(SLB)$/$(i).lib) | $(GREP) EXPORT: > $(MISC)$/$(SHL8TARGET).direct
+.IF "$(SHL8USE_EXPORTS)"!="name"
 .IF "$(DEF8CEXP)"!=""
     @$(EXPORT8_PROTECT) $(LDUMP2) -D -A $(DEF8CEXP) -E 20 -F $(DEF8FILTER) $(MISC)$/$(SHL8TARGET).direct >>$@.tmpfile
 .ELSE
     @$(EXPORT8_PROTECT) $(LDUMP2) -D -E 20 -F $(DEF8FILTER) $(MISC)$/$(SHL8TARGET).direct >>$@.tmpfile
 .ENDIF
-.ENDIF			# "$(SHL8USE_EXPORTS)"!="ordinal"
+.ELSE			# "$(SHL8USE_EXPORTS)"!="name"
+.IF "$(DEF8CEXP)"!=""
+    @$(EXPORT8_PROTECT) $(LDUMP2) -N -D -A $(DEF8CEXP) -E 20 -F $(DEF8FILTER) $(MISC)$/$(SHL8TARGET).direct >>$@.tmpfile
+.ELSE
+    @$(EXPORT8_PROTECT) $(LDUMP2) -N -D -E 20 -F $(DEF8FILTER) $(MISC)$/$(SHL8TARGET).direct >>$@.tmpfile
+.ENDIF
+.ENDIF			# "$(SHL8USE_EXPORTS)"!="name"
+.ENDIF			# "$(SHL8USE_EXPORTS)"==""
 .ENDIF
 # now *\defs\$(OUTPATH)	exists, commit it
 .IF "$(MWS_BUILD)"!=""
@@ -1728,7 +1792,7 @@ $(DEF9TARGETN) .PHONY :
     tail --lines +3 $(MISC)$/$(SHL9TARGET).exp | sed '/^;/d' >>$@.tmpfile
     @-$(EXPORT9_PROTECT) $(RM) $(MISC)$/$(SHL9TARGET).exp
 .ELSE
-.IF "$(SHL9USE_EXPORTS)"!="ordinal"
+.IF "$(SHL9USE_EXPORTS)"==""
     @-$(EXPORT9_PROTECT) $(RMHACK9) $(MISC)$/$(SHL9TARGET).exp
     @$(EXPORT9_PROTECT) $(LIBMGR) -EXTRACT:/ /OUT:$(MISC)$/$(SHL9TARGET).exp $(SLB)$/$(DEFLIB9NAME).lib
 .IF "$(DEF9CEXP)"!=""
@@ -1737,14 +1801,22 @@ $(DEF9TARGETN) .PHONY :
     @$(EXPORT9_PROTECT) $(LDUMP2) -E 20 -F $(MISC)$/$(SHL9TARGET).flt $(MISC)$/$(SHL9TARGET).exp			   >>$@.tmpfile
 .ENDIF
     $(EXPORT9_PROTECT) $(RMHACK9) $(MISC)$/$(SHL9TARGET).exp
-.ELSE			# "$(SHL9USE_EXPORTS)"!="ordinal"
+.ELSE			# "$(SHL9USE_EXPORTS)"==""
     @$(EXPORT9_PROTECT) $(DUMPBIN) -DIRECTIVES  $(foreach,i,$(DEFLIB9NAME) $(SLB)$/$(i).lib) | $(GREP) EXPORT: > $(MISC)$/$(SHL9TARGET).direct
+.IF "$(SHL9USE_EXPORTS)"!="name"
 .IF "$(DEF9CEXP)"!=""
     @$(EXPORT9_PROTECT) $(LDUMP2) -D -A $(DEF9CEXP) -E 20 -F $(DEF9FILTER) $(MISC)$/$(SHL9TARGET).direct >>$@.tmpfile
 .ELSE
     @$(EXPORT9_PROTECT) $(LDUMP2) -D -E 20 -F $(DEF9FILTER) $(MISC)$/$(SHL9TARGET).direct >>$@.tmpfile
 .ENDIF
-.ENDIF			# "$(SHL9USE_EXPORTS)"!="ordinal"
+.ELSE			# "$(SHL9USE_EXPORTS)"!="name"
+.IF "$(DEF9CEXP)"!=""
+    @$(EXPORT9_PROTECT) $(LDUMP2) -N -D -A $(DEF9CEXP) -E 20 -F $(DEF9FILTER) $(MISC)$/$(SHL9TARGET).direct >>$@.tmpfile
+.ELSE
+    @$(EXPORT9_PROTECT) $(LDUMP2) -N -D -E 20 -F $(DEF9FILTER) $(MISC)$/$(SHL9TARGET).direct >>$@.tmpfile
+.ENDIF
+.ENDIF			# "$(SHL9USE_EXPORTS)"!="name"
+.ENDIF			# "$(SHL9USE_EXPORTS)"==""
 .ENDIF
 # now *\defs\$(OUTPATH)	exists, commit it
 .IF "$(MWS_BUILD)"!=""
@@ -1933,7 +2005,7 @@ $(DEF10TARGETN) .PHONY :
     tail --lines +3 $(MISC)$/$(SHL10TARGET).exp | sed '/^;/d' >>$@.tmpfile
     @-$(EXPORT10_PROTECT) $(RM) $(MISC)$/$(SHL10TARGET).exp
 .ELSE
-.IF "$(SHL10USE_EXPORTS)"!="ordinal"
+.IF "$(SHL10USE_EXPORTS)"==""
     @-$(EXPORT10_PROTECT) $(RMHACK10) $(MISC)$/$(SHL10TARGET).exp
     @$(EXPORT10_PROTECT) $(LIBMGR) -EXTRACT:/ /OUT:$(MISC)$/$(SHL10TARGET).exp $(SLB)$/$(DEFLIB10NAME).lib
 .IF "$(DEF10CEXP)"!=""
@@ -1942,14 +2014,22 @@ $(DEF10TARGETN) .PHONY :
     @$(EXPORT10_PROTECT) $(LDUMP2) -E 20 -F $(MISC)$/$(SHL10TARGET).flt $(MISC)$/$(SHL10TARGET).exp			   >>$@.tmpfile
 .ENDIF
     $(EXPORT10_PROTECT) $(RMHACK10) $(MISC)$/$(SHL10TARGET).exp
-.ELSE			# "$(SHL10USE_EXPORTS)"!="ordinal"
+.ELSE			# "$(SHL10USE_EXPORTS)"==""
     @$(EXPORT10_PROTECT) $(DUMPBIN) -DIRECTIVES  $(foreach,i,$(DEFLIB10NAME) $(SLB)$/$(i).lib) | $(GREP) EXPORT: > $(MISC)$/$(SHL10TARGET).direct
+.IF "$(SHL10USE_EXPORTS)"!="name"
 .IF "$(DEF10CEXP)"!=""
     @$(EXPORT10_PROTECT) $(LDUMP2) -D -A $(DEF10CEXP) -E 20 -F $(DEF10FILTER) $(MISC)$/$(SHL10TARGET).direct >>$@.tmpfile
 .ELSE
     @$(EXPORT10_PROTECT) $(LDUMP2) -D -E 20 -F $(DEF10FILTER) $(MISC)$/$(SHL10TARGET).direct >>$@.tmpfile
 .ENDIF
-.ENDIF			# "$(SHL10USE_EXPORTS)"!="ordinal"
+.ELSE			# "$(SHL10USE_EXPORTS)"!="name"
+.IF "$(DEF10CEXP)"!=""
+    @$(EXPORT10_PROTECT) $(LDUMP2) -N -D -A $(DEF10CEXP) -E 20 -F $(DEF10FILTER) $(MISC)$/$(SHL10TARGET).direct >>$@.tmpfile
+.ELSE
+    @$(EXPORT10_PROTECT) $(LDUMP2) -N -D -E 20 -F $(DEF10FILTER) $(MISC)$/$(SHL10TARGET).direct >>$@.tmpfile
+.ENDIF
+.ENDIF			# "$(SHL10USE_EXPORTS)"!="name"
+.ENDIF			# "$(SHL10USE_EXPORTS)"==""
 .ENDIF
 # now *\defs\$(OUTPATH)	exists, commit it
 .IF "$(MWS_BUILD)"!=""
