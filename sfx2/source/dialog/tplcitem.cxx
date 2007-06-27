@@ -4,9 +4,9 @@
  *
  *  $RCSfile: tplcitem.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 16:37:24 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 23:17:46 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -44,13 +44,13 @@
 #ifndef GCC
 #endif
 
-#include "templdlg.hxx"
-#include "bindings.hxx"
+#include <sfx2/templdlg.hxx>
+#include <sfx2/bindings.hxx>
 #include "tplpitem.hxx"
 #include "tplcitem.hxx"
 #include "templdgi.hxx"
 
-#include "sfx.hrc"
+#include <sfx2/sfx.hrc>
 #include "dialog.hrc"
 
 // STATIC DATA -----------------------------------------------------------
