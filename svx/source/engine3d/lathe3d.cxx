@@ -4,9 +4,9 @@
  *
  *  $RCSfile: lathe3d.cxx,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: kz $ $Date: 2007-02-12 14:40:17 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 18:03:44 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -44,11 +44,11 @@
 #endif
 
 #ifndef _SVDPAGE_HXX
-#include "svdpage.hxx"
+#include <svx/svdpage.hxx>
 #endif
 
 #ifndef _XOUTX_HXX
-#include "xoutx.hxx"
+#include <svx/xoutx.hxx>
 #endif
 
 #ifndef _E3D_GLOBL3D_HXX
@@ -56,27 +56,27 @@
 #endif
 
 #ifndef _E3D_LATHE3D_HXX
-#include "lathe3d.hxx"
+#include <svx/lathe3d.hxx>
 #endif
 
 #ifndef _XPOLY_HXX
-#include "xpoly.hxx"
+#include <svx/xpoly.hxx>
 #endif
 
 #ifndef _SVX_SVXIDS_HRC
-#include "svxids.hrc"
+#include <svx/svxids.hrc>
 #endif
 
 #ifndef _SVDOPATH_HXX
-#include "svdopath.hxx"
+#include <svx/svdopath.hxx>
 #endif
 
 #ifndef _SVDMODEL_HXX
-#include "svdmodel.hxx"
+#include <svx/svdmodel.hxx>
 #endif
 
 #ifndef _SVX3DITEMS_HXX
-#include "svx3ditems.hxx"
+#include <svx/svx3ditems.hxx>
 #endif
 
 #ifndef _SDR_PROPERTIES_E3DLATHEPROPERTIES_HXX
