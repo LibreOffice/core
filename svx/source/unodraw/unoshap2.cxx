@@ -4,9 +4,9 @@
  *
  *  $RCSfile: unoshap2.cxx,v $
  *
- *  $Revision: 1.62 $
+ *  $Revision: 1.63 $
  *
- *  last change: $Author: kz $ $Date: 2007-05-10 09:16:48 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 19:26:23 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -90,22 +90,22 @@
 #include <rtl/memory.h>
 #include <tools/urlobj.hxx>
 
-#include "unoprnms.hxx"
-#include "unoshape.hxx"
-#include "unopage.hxx"
-#include "svdobj.hxx"
-#include "svdpage.hxx"
-#include "svdmodel.hxx"
-#include "svdouno.hxx"
+#include <svx/unoprnms.hxx>
+#include <svx/unoshape.hxx>
+#include <svx/unopage.hxx>
+#include <svx/svdobj.hxx>
+#include <svx/svdpage.hxx>
+#include <svx/svdmodel.hxx>
+#include <svx/svdouno.hxx>
 #include "shapeimpl.hxx"
-#include "svdoashp.hxx"
+#include <svx/svdoashp.hxx>
 
 // #i29181#
 #ifndef _SVDVITER_HXX
 #include "svdviter.hxx"
 #endif
 #ifndef _SVDVIEW_HXX //autogen
-#include "svdview.hxx"
+#include <svx/svdview.hxx>
 #endif
 
 #ifndef _BGFX_MATRIX_B2DHOMMATRIX_HXX
@@ -1092,7 +1092,7 @@ uno::Sequence< OUString > SAL_CALL SvxShapeCircle::getSupportedServiceNames() th
 *                                                                      *
 ***********************************************************************/
 
-#include "svdopath.hxx"
+#include <svx/svdopath.hxx>
 
 //----------------------------------------------------------------------
 SvxShapePolyPolygon::SvxShapePolyPolygon( SdrObject* pObj , drawing::PolygonKind eNew )
@@ -1679,7 +1679,7 @@ uno::Sequence< OUString > SAL_CALL SvxShapePolyPolygonBezier::getSupportedServic
 #include <vcl/cvtgrf.hxx>
 #endif
 #ifndef _SVDOGRAF_HXX
-#include <svdograf.hxx>
+#include <svx/svdograf.hxx>
 #endif
 #ifndef SVX_LIGHT
 #ifndef _SFXDOCFILE_HXX
