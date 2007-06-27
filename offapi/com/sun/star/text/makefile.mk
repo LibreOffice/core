@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.41 $
+#   $Revision: 1.42 $
 #
-#   last change: $Author: rt $ $Date: 2006-12-01 17:16:45 $
+#   last change: $Author: hr $ $Date: 2007-06-27 13:34:30 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -171,6 +171,7 @@ IDLFILES=\
      TextGraphicObjects.idl\
      TextGridMode.idl\
       TextLayoutCursor.idl\
+    TextMarkupType.idl \
       TextPageStyle.idl\
       TextPortion.idl\
       TextPortionEnumeration.idl\
@@ -247,6 +248,7 @@ IDLFILES=\
       XTextFrame.idl\
       XTextFramesSupplier.idl\
       XTextGraphicObjectsSupplier.idl\
+    XTextMarkup.idl\
       XTextRange.idl\
       XTextRangeCompare.idl\
       XTextRangeMover.idl\
