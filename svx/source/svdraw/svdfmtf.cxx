@@ -4,9 +4,9 @@
  *
  *  $RCSfile: svdfmtf.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: kz $ $Date: 2007-05-10 14:57:05 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 19:00:59 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -37,58 +37,58 @@
 #include "precompiled_svx.hxx"
 
 #include "svdfmtf.hxx"
-#include "editdata.hxx"
+#include <svx/editdata.hxx>
 #include <math.h>
-#include "xpoly.hxx"
+#include <svx/xpoly.hxx>
 
 #ifndef _SV_SVAPP_HXX
 #include <vcl/svapp.hxx>
 #endif
 #ifndef _EEITEM_HXX
-#include <eeitem.hxx>
+#include <svx/eeitem.hxx>
 #endif
 #ifndef _SVX_FHGTITEM_HXX //autogen
-#include <fhgtitem.hxx>
+#include <svx/fhgtitem.hxx>
 #endif
 
 #ifndef _SVX_WGHTITEM_HXX //autogen
-#include <wghtitem.hxx>
+#include <svx/wghtitem.hxx>
 #endif
 
 #ifndef _SVX_POSTITEM_HXX //autogen
-#include <postitem.hxx>
+#include <svx/postitem.hxx>
 #endif
 
 #ifndef _SVX_UDLNITEM_HXX //autogen
-#include <udlnitem.hxx>
+#include <svx/udlnitem.hxx>
 #endif
 
 #ifndef _SVX_CRSDITEM_HXX //autogen
-#include <crsditem.hxx>
+#include <svx/crsditem.hxx>
 #endif
 
 #ifndef _SVX_SHDDITEM_HXX //autogen
-#include <shdditem.hxx>
+#include <svx/shdditem.hxx>
 #endif
 
 #ifndef _SVX_XLNCLIT_HXX //autogen
-#include <xlnclit.hxx>
+#include <svx/xlnclit.hxx>
 #endif
 
 #ifndef _SVX_XLNWTIT_HXX //autogen
-#include <xlnwtit.hxx>
+#include <svx/xlnwtit.hxx>
 #endif
 
 #ifndef _SVX_XFLCLIT_HXX //autogen
-#include <xflclit.hxx>
+#include <svx/xflclit.hxx>
 #endif
 
 #ifndef _SVX_XGRAD_HXX //autogen
-#include <xgrad.hxx>
+#include <svx/xgrad.hxx>
 #endif
 
 #ifndef _SVX_XFLGRIT_HXX //autogen
-#include <xflgrit.hxx>
+#include <svx/xflgrit.hxx>
 #endif
 
 #ifndef _SVX_FONTITEM_HXX //autogen
@@ -96,39 +96,39 @@
 #endif
 
 #ifndef _SVX_AKRNITEM_HXX //autogen
-#include <akrnitem.hxx>
+#include <svx/akrnitem.hxx>
 #endif
 
 #ifndef _SVX_WRLMITEM_HXX //autogen
-#include <wrlmitem.hxx>
+#include <svx/wrlmitem.hxx>
 #endif
 
 #ifndef _SVX_ITEM_HXX //autogen
-#include <cntritem.hxx>
+#include <svx/cntritem.hxx>
 #endif
 
 #ifndef _SVX_COLRITEM_HXX //autogen
-#include <colritem.hxx>
+#include <svx/colritem.hxx>
 #endif
 
 #ifndef _SV_METRIC_HXX //autogen
 #include <vcl/metric.hxx>
 #endif
 
-#include <charscaleitem.hxx>
+#include <svx/charscaleitem.hxx>
 
-#include "xflhtit.hxx"
-#include "svdattr.hxx"
-#include "svdmodel.hxx"
-#include "svdpage.hxx"
-#include "svdobj.hxx"
+#include <svx/xflhtit.hxx>
+#include <svx/svdattr.hxx>
+#include <svx/svdmodel.hxx>
+#include <svx/svdpage.hxx>
+#include <svx/svdobj.hxx>
 #include "svditext.hxx"
-#include "svdotext.hxx"
-#include "svdorect.hxx"
-#include "svdocirc.hxx"
-#include "svdograf.hxx"
-#include "svdopath.hxx"
-#include "svdetc.hxx"
+#include <svx/svdotext.hxx>
+#include <svx/svdorect.hxx>
+#include <svx/svdocirc.hxx>
+#include <svx/svdograf.hxx>
+#include <svx/svdopath.hxx>
+#include <svx/svdetc.hxx>
 
 #ifndef _SFXITEMSET_HXX
 #include <svtools/itemset.hxx>
