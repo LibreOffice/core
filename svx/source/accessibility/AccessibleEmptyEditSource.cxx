@@ -4,9 +4,9 @@
  *
  *  $RCSfile: AccessibleEmptyEditSource.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: vg $ $Date: 2006-11-22 10:34:31 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 16:36:55 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -47,19 +47,19 @@
 #endif
 
 #ifndef _MyEDITDATA_HXX
-#include "editdata.hxx"
+#include <svx/editdata.hxx>
 #endif
 
 #ifndef _OUTLINER_HXX
-#include "outliner.hxx"
+#include <svx/outliner.hxx>
 #endif
 
 #ifndef _SVDMODEL_HXX
-#include "svdmodel.hxx"
+#include <svx/svdmodel.hxx>
 #endif
 
 #ifndef _SVDOBJ_HXX
-#include "svdobj.hxx"
+#include <svx/svdobj.hxx>
 #endif
 
 //------------------------------------------------------------------------
@@ -69,7 +69,7 @@
 //------------------------------------------------------------------------
 
 #include "AccessibleEmptyEditSource.hxx"
-#include "unoshtxt.hxx"
+#include <svx/unoshtxt.hxx>
 
 namespace accessibility
 {
