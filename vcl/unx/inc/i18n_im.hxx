@@ -4,9 +4,9 @@
  *
  *  $RCSfile: i18n_im.hxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 12:40:19 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 20:39:26 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -37,7 +37,7 @@
 #define _SAL_I18N_INPUTMETHOD_HXX
 
 #ifndef _VCL_DLLAPI_H
-#include "dllapi.h"
+#include <vcl/dllapi.h>
 #endif
 
 extern "C" char* GetMethodName( XIMStyle nStyle, char *pBuf, int nBufSize);
