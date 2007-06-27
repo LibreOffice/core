@@ -4,9 +4,9 @@
  *
  *  $RCSfile: wall.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 12:12:08 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 20:24:18 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -46,19 +46,19 @@
 #include <tools/debug.hxx>
 #endif
 #ifndef _SV_BITMAPEX_HXX
-#include <bitmapex.hxx>
+#include <vcl/bitmapex.hxx>
 #endif
 #ifndef _SV_GRADIENT_HXX
-#include <gradient.hxx>
+#include <vcl/gradient.hxx>
 #endif
 #ifndef _SV_WALL_HXX
-#include <wall.hxx>
+#include <vcl/wall.hxx>
 #endif
 #ifndef _SV_WALL2_HXX
 #include <wall2.hxx>
 #endif
 #ifndef _SV_SVAPP_HXX
-#include <svapp.hxx>
+#include <vcl/svapp.hxx>
 #endif
 
 
