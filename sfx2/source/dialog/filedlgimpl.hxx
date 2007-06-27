@@ -4,9 +4,9 @@
  *
  *  $RCSfile: filedlgimpl.hxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: vg $ $Date: 2006-11-22 10:57:11 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 23:11:56 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -63,13 +63,13 @@
 #endif
 
 #ifndef _SFX_FCONTNR_HXX
-#include "fcontnr.hxx"
+#include <sfx2/fcontnr.hxx>
 #endif
 
 #define _SVSTDARR_STRINGSDTOR
 #include <svtools/svstdarr.hxx>
 
-#include "filedlghelper.hxx"
+#include <sfx2/filedlghelper.hxx>
 
 class SfxFilterMatcher;
 class GraphicFilter;
