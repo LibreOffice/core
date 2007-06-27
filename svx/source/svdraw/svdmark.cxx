@@ -4,9 +4,9 @@
  *
  *  $RCSfile: svdmark.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: obo $ $Date: 2006-10-12 13:10:39 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 19:03:40 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -38,26 +38,26 @@
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 
-#include "svdmark.hxx"
-#include "svdetc.hxx"
-#include "svdobj.hxx"
-#include "svdpage.hxx"
+#include <svx/svdmark.hxx>
+#include <svx/svdetc.hxx>
+#include <svx/svdobj.hxx>
+#include <svx/svdpage.hxx>
 #include "svditer.hxx"
-#include "svdpagv.hxx"
-#include "svdopath.hxx" // zur Abschaltung
-#include "svdogrp.hxx"  // des Cache bei
-#include "svdorect.hxx" // GetMarkDescription
+#include <svx/svdpagv.hxx>
+#include <svx/svdopath.hxx> // zur Abschaltung
+#include <svx/svdogrp.hxx>  // des Cache bei
+#include <svx/svdorect.hxx> // GetMarkDescription
 #include "svdstr.hrc"   // Namen aus der Resource
 #include "svdglob.hxx"  // StringCache
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 
 #ifndef _E3D_OBJ3D_HXX //autogen
-#include <obj3d.hxx>
+#include <svx/obj3d.hxx>
 #endif
 
 #ifndef _E3D_SCENE3D_HXX
-#include <scene3d.hxx>
+#include <svx/scene3d.hxx>
 #endif
 
 #ifndef _SFXBRDCST_HXX //autogen
@@ -65,7 +65,7 @@
 #endif
 
 #ifndef _SVDOEDGE_HXX
-#include <svdoedge.hxx>
+#include <svx/svdoedge.hxx>
 #endif
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
