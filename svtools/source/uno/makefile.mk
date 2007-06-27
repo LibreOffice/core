@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.19 $
+#   $Revision: 1.20 $
 #
-#   last change: $Author: obo $ $Date: 2006-10-13 09:45:08 $
+#   last change: $Author: hr $ $Date: 2007-06-27 12:18:26 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -58,7 +58,8 @@ SLOFILES= \
             $(SLO)$/statusbarcontroller.obj \
             $(SLO)$/genericunodialog.obj \
             $(SLO)$/generictoolboxcontroller.obj \
-            $(SLO)$/registerservices.obj \
+            $(SLO)$/treecontrolpeer.obj \
+            $(SLO)$/registerservices.obj\
             $(SLO)$/contextmenuhelper.obj
 
 # --- Targets ------------------------------------------------------
