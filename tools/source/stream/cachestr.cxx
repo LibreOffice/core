@@ -4,9 +4,9 @@
  *
  *  $RCSfile: cachestr.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 01:01:19 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 22:18:23 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -36,10 +36,10 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_tools.hxx"
 
-#include <debug.hxx>
-#include <stream.hxx>
-#include <cachestr.hxx>
-#include <tempfile.hxx>
+#include <tools/debug.hxx>
+#include <tools/stream.hxx>
+#include <tools/cachestr.hxx>
+#include <tools/tempfile.hxx>
 
 /*************************************************************************
 |*
