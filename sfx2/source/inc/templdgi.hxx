@@ -4,9 +4,9 @@
  *
  *  $RCSfile: templdgi.hxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: ihi $ $Date: 2007-04-16 16:57:27 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 23:29:41 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -62,8 +62,8 @@ class SfxTemplateControllerItem;
 #include <rsc/rscsfx.hxx>
 #include <tools/rtti.hxx>
 
-#include "childwin.hxx"
-#include "templdlg.hxx"
+#include <sfx2/childwin.hxx>
+#include <sfx2/templdlg.hxx>
 
 class SfxStyleFamilies;
 class SfxStyleFamilyItem;
