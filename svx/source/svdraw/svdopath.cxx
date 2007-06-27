@@ -4,9 +4,9 @@
  *
  *  $RCSfile: svdopath.cxx,v $
  *
- *  $Revision: 1.41 $
+ *  $Revision: 1.42 $
  *
- *  last change: $Author: kz $ $Date: 2007-05-09 13:32:59 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 19:07:53 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -37,21 +37,21 @@
 #include "precompiled_svx.hxx"
 
 #include <tools/bigint.hxx>
-#include "svdopath.hxx"
+#include <svx/svdopath.hxx>
 #include <math.h>
-#include "xpool.hxx"
-#include "xpoly.hxx"
-#include "xoutx.hxx"
+#include <svx/xpool.hxx>
+#include <svx/xpoly.hxx>
+#include <svx/xoutx.hxx>
 #include "svdxout.hxx"
-#include "svdattr.hxx"
+#include <svx/svdattr.hxx>
 #include "svdtouch.hxx"
-#include "svdtrans.hxx"
-#include "svdetc.hxx"
-#include "svddrag.hxx"
-#include "svdmodel.hxx"
-#include "svdpage.hxx"
-#include "svdhdl.hxx"
-#include "svdview.hxx"  // fuer MovCreate bei Freihandlinien
+#include <svx/svdtrans.hxx>
+#include <svx/svdetc.hxx>
+#include <svx/svddrag.hxx>
+#include <svx/svdmodel.hxx>
+#include <svx/svdpage.hxx>
+#include <svx/svdhdl.hxx>
+#include <svx/svdview.hxx>  // fuer MovCreate bei Freihandlinien
 #include "svdglob.hxx"  // Stringcache
 #include "svdstr.hrc"   // Objektname
 
@@ -59,13 +59,13 @@
 #pragma optimize ("",off)
 #endif
 
-#include "xlnwtit.hxx"
-#include "xlnclit.hxx"
-#include "xflclit.hxx"
-#include "svdogrp.hxx"
+#include <svx/xlnwtit.hxx>
+#include <svx/xlnclit.hxx>
+#include <svx/xflclit.hxx>
+#include <svx/svdogrp.hxx>
 
 #ifndef _SVX_XLNTRIT_HXX
-#include "xlntrit.hxx"
+#include <svx/xlntrit.hxx>
 #endif
 
 #ifndef _SV_SALBTYPE_HXX
