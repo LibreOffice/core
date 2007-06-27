@@ -4,9 +4,9 @@
  *
  *  $RCSfile: eventsupplier.cxx,v $
  *
- *  $Revision: 1.32 $
+ *  $Revision: 1.33 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 16:47:31 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 23:32:08 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -59,16 +59,16 @@
 #endif
 
 #ifndef _SFX_APPUNO_HXX
-#include <appuno.hxx>
+#include <sfx2/appuno.hxx>
 #endif
 #ifndef _SFX_OBJSH_HXX
-#include <objsh.hxx>
+#include <sfx2/objsh.hxx>
 #endif
 #ifndef _SFX_SFXBASEMODEL_HXX_
-#include <sfxbasemodel.hxx>
+#include <sfx2/sfxbasemodel.hxx>
 #endif
 #ifndef _SFX_EVENTCONF_HXX
-#include <evntconf.hxx>
+#include <sfx2/evntconf.hxx>
 #endif
 #include <svtools/eventcfg.hxx>
 
@@ -79,14 +79,14 @@
 #include "eventsupplier.hxx"
 #endif
 
-#include "app.hxx"
+#include <sfx2/app.hxx>
 #include "sfxresid.hxx"
 
-#include "sfxsids.hrc"
+#include <sfx2/sfxsids.hrc>
 #include "sfxlocal.hrc"
-#include "docfile.hxx"
-#include "viewfrm.hxx"
-#include "frame.hxx"
+#include <sfx2/docfile.hxx>
+#include <sfx2/viewfrm.hxx>
+#include <sfx2/frame.hxx>
 
 //--------------------------------------------------------------------------------------------------------
 
