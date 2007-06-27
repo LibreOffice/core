@@ -4,9 +4,9 @@
  *
  *  $RCSfile: mgetempl.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: rt $ $Date: 2007-04-26 10:11:18 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 23:13:42 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -56,16 +56,16 @@
 #ifndef GCC
 #endif
 
-#include "styfitem.hxx"
-#include "styledlg.hxx"
-#include "app.hxx"
-#include "mgetempl.hxx"
-#include "objsh.hxx"
+#include <sfx2/styfitem.hxx>
+#include <sfx2/styledlg.hxx>
+#include <sfx2/app.hxx>
+#include <sfx2/mgetempl.hxx>
+#include <sfx2/objsh.hxx>
 #include "sfxtypes.hxx"
 #include "sfxresid.hxx"
-#include "module.hxx"
+#include <sfx2/module.hxx>
 
-#include "sfx.hrc"
+#include <sfx2/sfx.hrc>
 #include "dialog.hrc"
 #include "mgetempl.hrc"
 
