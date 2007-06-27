@@ -4,9 +4,9 @@
  *
  *  $RCSfile: sfxhtml.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: hr $ $Date: 2007-06-26 13:52:58 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 23:04:15 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -41,9 +41,9 @@
 
 #include <tools/urlobj.hxx>
 
-#include "objsh.hxx"
-#include "docinf.hxx"
-#include "docfile.hxx"
+#include <sfx2/objsh.hxx>
+#include <sfx2/docinf.hxx>
+#include <sfx2/docfile.hxx>
 #include "openflag.hxx"
 
 #ifndef _HTMLKYWD_HXX
@@ -85,7 +85,7 @@
 #include <tools/tenccvt.hxx>
 #endif
 
-#include "sfxhtml.hxx"
+#include <sfx2/sfxhtml.hxx>
 sal_Char __FAR_DATA sHTML_MIME_text[] = "text/";
 sal_Char __FAR_DATA sHTML_MIME_application[] = "application/";
 sal_Char __FAR_DATA sHTML_MIME_experimental[] = "x-";
