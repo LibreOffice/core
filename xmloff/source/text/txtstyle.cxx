@@ -4,9 +4,9 @@
  *
  *  $RCSfile: txtstyle.cxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 11:19:55 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 16:18:11 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -58,29 +58,29 @@
 
 
 #ifndef _XMLOFF_XMLTOKEN_HXX
-#include "xmltoken.hxx"
+#include <xmloff/xmltoken.hxx>
 #endif
 
 #ifndef _XMLOFF_PROPERTYSETMAPPER_HXX
-//#include "xmlprmap.hxx"
+//#include <xmloff/xmlprmap.hxx>
 #endif
 #ifndef _XMLOFF_XMLSMSPE_HXX
 #include "xmlnmspe.hxx"
 #endif
 #ifndef _XMLOFF_FAMILIES_HXX
-#include "families.hxx"
+#include <xmloff/families.hxx>
 #endif
 #ifndef _XMLOFF_TXTPRMAP_HXX
-//#include "txtprmap.hxx"
+//#include <xmloff/txtprmap.hxx>
 #endif
 #ifndef _XMLOFF_TXTPARAE_HXX
-#include "txtparae.hxx"
+#include <xmloff/txtparae.hxx>
 #endif
 #ifndef _XMLOFF_XMLNUME_HXX
-#include "xmlnume.hxx"
+#include <xmloff/xmlnume.hxx>
 #endif
 #ifndef _XMLOFF_XMLEXP_HXX
-#include "xmlexp.hxx"
+#include <xmloff/xmlexp.hxx>
 #endif
 #ifndef _XMLOFF_XMLSECTIONEXPORT_HXX
 #include "XMLSectionExport.hxx"
@@ -92,11 +92,11 @@
 #include "txtexppr.hxx"
 #endif
 #ifndef _XMLOFF_TXTPRMAP_HXX
-#include "txtprmap.hxx"
+#include <xmloff/txtprmap.hxx>
 #endif
 
 #ifndef _XMLOFF_STYLEEXP_HXX
-//#include "styleexp.hxx"
+//#include <xmloff/styleexp.hxx>
 #endif
 
 using namespace ::rtl;
