@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xlfd_attr.cxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: rt $ $Date: 2006-12-05 12:26:21 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 20:50:55 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -47,7 +47,7 @@
 #include <rtl/tencinfo.h>
 #endif
 #ifndef _VCL_VCLENUM_HXX
-#include <vclenum.hxx>
+#include <vcl/vclenum.hxx>
 #endif
 
 // ---------------------------------------------------------------------------
