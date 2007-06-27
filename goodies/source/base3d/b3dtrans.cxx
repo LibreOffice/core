@@ -4,9 +4,9 @@
  *
  *  $RCSfile: b3dtrans.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: ihi $ $Date: 2006-11-14 16:09:06 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 22:28:02 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -41,7 +41,7 @@
 #endif
 
 #ifndef _B3D_BASE3D_HXX
-#include "base3d.hxx"
+#include <goodies/base3d.hxx>
 #endif
 
 #ifndef _TOOLS_DEBUG_HXX
