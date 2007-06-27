@@ -4,9 +4,9 @@
  *
  *  $RCSfile: unogtabl.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 06:12:16 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 19:24:01 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -52,12 +52,12 @@
 #include "UnoNameItemTable.hxx"
 #endif
 
-#include "xgrad.hxx"
-#include "svdmodel.hxx"
-#include "xdef.hxx"
-#include "xflgrit.hxx"
+#include <svx/xgrad.hxx>
+#include <svx/svdmodel.hxx>
+#include <svx/xdef.hxx>
+#include <svx/xflgrit.hxx>
 #include "unofill.hxx"
-#include "unomid.hxx"
+#include <svx/unomid.hxx>
 
 using namespace ::com::sun::star;
 using namespace ::rtl;

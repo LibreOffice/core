@@ -4,9 +4,9 @@
  *
  *  $RCSfile: unohtabl.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 06:12:30 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 19:24:16 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -52,11 +52,11 @@
 #include "UnoNameItemTable.hxx"
 #endif
 
-#include "xhatch.hxx"
-#include "svdmodel.hxx"
-#include "xdef.hxx"
-#include "xflhtit.hxx"
-#include "unomid.hxx"
+#include <svx/xhatch.hxx>
+#include <svx/svdmodel.hxx>
+#include <svx/xdef.hxx>
+#include <svx/xflhtit.hxx>
+#include <svx/unomid.hxx>
 #include "unofill.hxx"
 
 using namespace ::com::sun::star;
