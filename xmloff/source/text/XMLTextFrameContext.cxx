@@ -4,9 +4,9 @@
  *
  *  $RCSfile: XMLTextFrameContext.cxx,v $
  *
- *  $Revision: 1.71 $
+ *  $Revision: 1.72 $
  *
- *  last change: $Author: ihi $ $Date: 2006-12-19 17:27:43 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 16:08:02 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -77,10 +77,10 @@
 #include <com/sun/star/text/VertOrientation.hpp>
 #endif
 #ifndef _XMLOFF_XMLIMP_HXX
-#include "xmlimp.hxx"
+#include <xmloff/xmlimp.hxx>
 #endif
 #ifndef _XMLOFF_XMLTOKEN_HXX
-#include "xmltoken.hxx"
+#include <xmloff/xmltoken.hxx>
 #endif
 #ifndef _XMLOFF_XMLNMSPE_HXX
 #include "xmlnmspe.hxx"
@@ -89,10 +89,10 @@
 #include "xmlkywd.hxx"
 #endif
 #ifndef _XMLOFF_NMSPMAP_HXX
-#include "nmspmap.hxx"
+#include <xmloff/nmspmap.hxx>
 #endif
 #ifndef _XMLOFF_XMLUCONV_HXX
-#include "xmluconv.hxx"
+#include <xmloff/xmluconv.hxx>
 #endif
 #ifndef _XMLOFF_XMLANCHORTYPEPROPHDL_HXX
 #include "XMLAnchorTypePropHdl.hxx"
@@ -101,13 +101,13 @@
 #include "XMLEmbeddedObjectImportContext.hxx"
 #endif
 #ifndef _XMLOFF_XMLBASE64IMPORTCONTEXT_HXX
-#include "XMLBase64ImportContext.hxx"
+#include <xmloff/XMLBase64ImportContext.hxx>
 #endif
 #ifndef _XMLOFF_XMLREPLACEMENTIMAGECONTEXT_HXX
 #include "XMLReplacementImageContext.hxx"
 #endif
 #ifndef _XMLOFF_PRSTYLEI_HXX_
-#include "prstylei.hxx"
+#include <xmloff/prstylei.hxx>
 #endif
 #ifndef _XMLOFF_I18NMAP_HXX
 #include "i18nmap.hxx"
@@ -116,10 +116,10 @@
 #include "xexptran.hxx"
 #endif
 #ifndef _XMLOFF_SHAPEIMPORT_HXX_
-#include "shapeimport.hxx"
+#include <xmloff/shapeimport.hxx>
 #endif
 #ifndef _XMLOFF_XMLEVENTSIMPORTCONTEXT_HXX
-#include "XMLEventsImportContext.hxx"
+#include <xmloff/XMLEventsImportContext.hxx>
 #endif
 #ifndef _XMLOFF_XMLIMAGEMAPCONTEXT_HXX_
 #include "XMLImageMapContext.hxx"
@@ -137,7 +137,7 @@
 #include "XMLTextListItemContext.hxx"
 #endif
 #ifndef _XMLOFF_ATTRLIST_HXX
-#include "attrlist.hxx"
+#include <xmloff/attrlist.hxx>
 #endif
 
 #ifndef _COMPHELPER_STLTYPES_HXX_
