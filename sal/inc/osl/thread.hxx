@@ -4,9 +4,9 @@
  *
  *  $RCSfile: thread.hxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: obo $ $Date: 2007-03-05 15:27:39 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 13:23:50 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -81,8 +81,7 @@ public:
 
     virtual  ~Thread()
     {
-        if( m_hThread )
-            osl_destroyThread( m_hThread);
+        osl_destroyThread( m_hThread);
     }
 
     sal_Bool SAL_CALL create()
@@ -128,13 +127,12 @@ public:
 
     virtual void SAL_CALL join()
     {
-        if( m_hThread )
-            osl_joinWithThread(m_hThread);
+        osl_joinWithThread(m_hThread);
     }
 
     sal_Bool SAL_CALL isRunning()
     {
-        return m_hThread != 0 && osl_isThreadRunning(m_hThread);
+        return osl_isThreadRunning(m_hThread);
     }
 
     void SAL_CALL setPriority( oslThreadPriority Priority)
