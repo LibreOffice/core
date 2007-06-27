@@ -4,9 +4,9 @@
  *
  *  $RCSfile: embedhlp.cxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: vg $ $Date: 2007-05-22 19:34:28 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 21:49:05 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -38,9 +38,9 @@
 
 #include "embedhlp.hxx"
 
-#include "filter.hxx"
-#include "svtools.hrc"
-#include "svtdata.hxx"
+#include <svtools/filter.hxx>
+#include <svtools/svtools.hrc>
+#include <svtools/svtdata.hxx>
 
 #include <comphelper/embeddedobjectcontainer.hxx>
 #include <comphelper/seqstream.hxx>
