@@ -4,9 +4,9 @@
  *
  *  $RCSfile: fuconcs.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: kz $ $Date: 2007-05-10 15:29:19 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 15:41:56 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -199,7 +199,7 @@ void FuConstructCustomShape::DoExecute( SfxRequest& rReq )
         aCustomShape = rItm.GetValue();
     }
 
-    mpViewShell->GetViewShellBase().GetToolBarManager().SetToolBar(
+    mpViewShell->GetViewShellBase().GetToolBarManager()->SetToolBar(
         ToolBarManager::TBG_FUNCTION,
         ToolBarManager::msDrawingObjectToolBar);
 }
