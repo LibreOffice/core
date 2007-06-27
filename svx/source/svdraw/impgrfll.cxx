@@ -4,9 +4,9 @@
  *
  *  $RCSfile: impgrfll.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: vg $ $Date: 2007-01-09 11:38:38 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 18:57:02 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -80,19 +80,19 @@
 #include <basegfx/polygon/b2dpolypolygontools.hxx>
 #endif
 
-#include "svdobj.hxx"
-#include "xpoly.hxx"
+#include <svx/svdobj.hxx>
+#include <svx/xpoly.hxx>
 #include "xattr.hxx"
 #include "xoutbmp.hxx"
-#include "xoutx.hxx"
+#include <svx/xoutx.hxx>
 
-#include "xenum.hxx"
-#include "xgrad.hxx"
-#include "xhatch.hxx"
-#include "xflhtit.hxx"
-#include "xbtmpit.hxx"
+#include <svx/xenum.hxx>
+#include <svx/xgrad.hxx>
+#include <svx/xhatch.hxx>
+#include <svx/xflhtit.hxx>
+#include <svx/xbtmpit.hxx>
 #include "svdoimp.hxx"
-#include "svdattr.hxx"
+#include <svx/svdattr.hxx>
 
 ///////////////////////////////////////////////////////////////////////////////
 
