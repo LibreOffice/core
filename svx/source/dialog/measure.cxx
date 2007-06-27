@@ -4,9 +4,9 @@
  *
  *  $RCSfile: measure.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: rt $ $Date: 2007-04-26 07:35:50 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 17:21:05 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -54,21 +54,21 @@
 #include <tools/shl.hxx>
 #endif
 
-#include "dialogs.hrc"
+#include <svx/dialogs.hrc>
 
 #define _SVX_MEASURE_CXX
 
-#include "svdomeas.hxx"
-#include "svdattr.hxx"
-#include "svdattrx.hxx"
-#include "svdview.hxx"
+#include <svx/svdomeas.hxx>
+#include <svx/svdattr.hxx>
+#include <svx/svdattrx.hxx>
+#include <svx/svdview.hxx>
 
 #include "measctrl.hxx"
 #include "measure.hxx"
 #include "measure.hrc"
-#include "dialmgr.hxx"
+#include <svx/dialmgr.hxx>
 #include "dlgutil.hxx"
-#include "strarray.hxx"
+#include <svx/strarray.hxx>
 #include <sfx2/request.hxx> //add CHINA001
 #include "ofaitem.hxx" //add CHINA001
 
