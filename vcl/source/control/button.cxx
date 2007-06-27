@@ -4,9 +4,9 @@
  *
  *  $RCSfile: button.cxx,v $
  *
- *  $Revision: 1.49 $
+ *  $Revision: 1.50 $
  *
- *  last change: $Author: ihi $ $Date: 2007-06-06 14:21:07 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 20:04:30 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -42,49 +42,49 @@
 #include <svids.hrc>
 #endif
 #ifndef _SV_SVDATA_HXX
-#include <svdata.hxx>
+#include <vcl/svdata.hxx>
 #endif
 #ifndef _SV_IAMGE_HXX
-#include <image.hxx>
+#include <vcl/image.hxx>
 #endif
 #ifndef _SV_BITMAP_HXX
-#include <bitmap.hxx>
+#include <vcl/bitmap.hxx>
 #endif
 #ifndef _SV_BITMAPEX_HXX
-#include <bitmapex.hxx>
+#include <vcl/bitmapex.hxx>
 #endif
 #ifndef _SV_DECOVIEW_HXX
-#include <decoview.hxx>
+#include <vcl/decoview.hxx>
 #endif
 #ifndef _SV_EVENT_HXX
-#include <event.hxx>
+#include <vcl/event.hxx>
 #endif
 #ifndef _SV_SVAPP_HXX
-#include <svapp.hxx>
+#include <vcl/svapp.hxx>
 #endif
 #ifndef _SV_DIALOG_HXX
-#include <dialog.hxx>
+#include <vcl/dialog.hxx>
 #endif
 #ifndef _SV_FIXED_HXX
-#include <fixed.hxx>
+#include <vcl/fixed.hxx>
 #endif
 #ifndef _TL_POLY_HXX
 #include <tools/poly.hxx>
 #endif
 #ifndef _SV_BUTTON_HXX
-#include <button.hxx>
+#include <vcl/button.hxx>
 #endif
 #ifndef _SV_WINDOW_H
 #include <window.h>
 #endif
 #ifndef _VCL_CONTROLLAYOUT_HXX
-#include <controllayout.hxx>
+#include <vcl/controllayout.hxx>
 #endif
 #ifndef _SV_NATIVEWIDGET_HXX
-#include <salnativewidgets.hxx>
+#include <vcl/salnativewidgets.hxx>
 #endif
 #ifndef _SV_EDIT_HXX
-#include <edit.hxx>
+#include <vcl/edit.hxx>
 #endif
 
 #ifndef _SV_RC_H
