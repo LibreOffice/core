@@ -4,9 +4,9 @@
  *
  *  $RCSfile: fmmodel.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 05:07:17 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 18:13:05 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -49,17 +49,17 @@ class SfxObjectShell;
 #endif
 
 #ifndef _FM_FMMODEL_HXX
-#include "fmmodel.hxx"
+#include <svx/fmmodel.hxx>
 #endif
 
 #ifndef _FM_PAGE_HXX
-#include "fmpage.hxx"
+#include <svx/fmpage.hxx>
 #endif
 #ifndef _SVX_FMUNDO_HXX
 #include "fmundo.hxx"
 #endif
 #ifndef _SVX_SVDOBJ_HXX
-#include "svdobj.hxx"
+#include <svx/svdobj.hxx>
 #endif
 
 using ::com::sun::star::uno::Reference;
