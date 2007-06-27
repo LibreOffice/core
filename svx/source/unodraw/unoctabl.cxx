@@ -4,9 +4,9 @@
  *
  *  $RCSfile: unoctabl.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: vg $ $Date: 2007-05-22 15:21:08 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 19:23:04 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -53,7 +53,7 @@
 
 #include "../customshapes/EnhancedCustomShapeEngine.hxx"
 
-#include "xtable.hxx"
+#include <svx/xtable.hxx>
 #include "unoshcol.hxx"
 #include "recoveryui.hxx"
 #include "xmlgrhlp.hxx"
