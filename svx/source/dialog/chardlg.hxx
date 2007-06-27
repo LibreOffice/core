@@ -4,9 +4,9 @@
  *
  *  $RCSfile: chardlg.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: obo $ $Date: 2006-10-12 12:06:51 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 16:51:56 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -47,10 +47,10 @@
 #include <sfx2/tabdlg.hxx>
 #endif
 #ifndef _SVX_FNTCTRL_HXX
-#include <fntctrl.hxx>
+#include <svx/fntctrl.hxx>
 #endif
-#include "checklbx.hxx"
-#include "langbox.hxx"
+#include <svx/checklbx.hxx>
+#include <svx/langbox.hxx>
 
 // forward ---------------------------------------------------------------
 
