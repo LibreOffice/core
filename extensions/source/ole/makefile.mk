@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.24 $
+#   $Revision: 1.25 $
 #
-#   last change: $Author: ihi $ $Date: 2007-06-05 10:55:30 $
+#   last change: $Author: hr $ $Date: 2007-06-27 14:00:46 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -54,6 +54,10 @@ INCPRE+= -I$(ATL_INCLUDE)
 # --- Settings -----------------------------------------------------
 
 .IF "$(GUI)" == "WNT" && "$(DISABLE_ATL)"==""
+
+.IF "$(USE_STLP_DEBUG)"!=""
+CDEFS+=-D_DEBUG
+.ENDIF # "$(USE_STLP_DEBUG)"!=""
 
 SLOFILES= \
             $(SLO)$/servreg.obj		\
