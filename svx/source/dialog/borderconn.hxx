@@ -4,9 +4,9 @@
  *
  *  $RCSfile: borderconn.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 20:38:33 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 16:50:25 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -40,7 +40,7 @@
 #include <sfx2/itemconnect.hxx>
 #endif
 #ifndef SVX_FRAMEBORDERTYPE_HXX
-#include "framebordertype.hxx"
+#include <svx/framebordertype.hxx>
 #endif
 
 #ifndef INCLUDED_SVXDLLAPI_H
