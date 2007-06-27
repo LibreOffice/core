@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.10 $
+#   $Revision: 1.11 $
 #
-#   last change: $Author: vg $ $Date: 2007-03-26 14:31:58 $
+#   last change: $Author: hr $ $Date: 2007-06-27 14:05:29 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -50,6 +50,10 @@ ENABLE_EXCEPTIONS	=	TRUE
 # --- Allgemein -----------------------------------------------------------
 
 INCPRE+=$(MFC_INCLUDE)
+
+.IF "$(USE_STLP_DEBUG)"!=""
+CDEFS+=-D_DEBUG
+.ENDIF # "$(USE_STLP_DEBUG)"!=""
 
 RCFILES=	$(RES)$/$(TARGET).rc
 
