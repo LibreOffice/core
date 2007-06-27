@@ -4,9 +4,9 @@
  *
  *  $RCSfile: cont_pch.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 14:32:02 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 21:18:44 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -37,13 +37,13 @@
 #include "precompiled_svtools.hxx"
 
 #include <sv.hxx>
-#include "treelist.hxx"
-#include "svtabbx.hxx"
-#include "svtreebx.hxx"
-#include "svicnvw.hxx"
+#include <svtools/treelist.hxx>
+#include <svtools/svtabbx.hxx>
+#include <svtools/svtreebx.hxx>
+#include <svtools/svicnvw.hxx>
 #include "svimpbox.hxx"
 #include "svimpicn.hxx"
-#include "svlbox.hxx"
-#include "svlbitm.hxx"
+#include <svtools/svlbox.hxx>
+#include <svtools/svlbitm.hxx>
 
 
