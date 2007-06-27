@@ -4,9 +4,9 @@
  *
  *  $RCSfile: PreparedStatement.hxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: vg $ $Date: 2007-01-15 13:38:08 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 14:39:40 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -81,7 +81,7 @@ namespace connectivity
         static jclass getMyClass();
 
         // ein Konstruktor, der fuer das Returnen des Objektes benoetigt wird:
-        java_sql_PreparedStatement( JNIEnv * pEnv, java_sql_Connection* _pCon,const ::rtl::OUString& sql );
+        java_sql_PreparedStatement( JNIEnv * pEnv, java_sql_Connection& _rCon,const ::rtl::OUString& sql );
 
         virtual ::com::sun::star::uno::Any SAL_CALL queryInterface( const ::com::sun::star::uno::Type & rType ) throw(::com::sun::star::uno::RuntimeException);
         virtual void SAL_CALL acquire() throw();
