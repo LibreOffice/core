@@ -4,9 +4,9 @@
  *
  *  $RCSfile: parrtf.cxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: obo $ $Date: 2006-10-12 15:28:24 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 22:01:06 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -51,7 +51,7 @@
 #endif
 #include "rtftoken.h"
 #include "rtfkeywd.hxx"
-#include "parrtf.hxx"
+#include <svtools/parrtf.hxx>
 
 const int MAX_STRING_LEN = 1024;
 const int MAX_TOKEN_LEN = 128;
