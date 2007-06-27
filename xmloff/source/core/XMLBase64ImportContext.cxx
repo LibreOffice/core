@@ -4,9 +4,9 @@
  *
  *  $RCSfile: XMLBase64ImportContext.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 10:19:35 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 14:55:31 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -37,10 +37,10 @@
 #include "precompiled_xmloff.hxx"
 
 #ifndef _XMLOFF_XMLIMP_HXX
-#include "xmlimp.hxx"
+#include <xmloff/xmlimp.hxx>
 #endif
 #ifndef _XMLOFF_XMLUCONV_HXX
-#include "xmluconv.hxx"
+#include <xmloff/xmluconv.hxx>
 #endif
 
 #ifndef _COM_SUN_STAR_IO_XOUTPUTSTREAM_HPP_
@@ -48,7 +48,7 @@
 #endif
 
 #ifndef _XMLOFF_XMLBASE64IMPORTCONTEXT_HXX
-#include "XMLBase64ImportContext.hxx"
+#include <xmloff/XMLBase64ImportContext.hxx>
 #endif
 
 using namespace ::rtl;
