@@ -4,9 +4,9 @@
  *
  *  $RCSfile: svdoole2.cxx,v $
  *
- *  $Revision: 1.78 $
+ *  $Revision: 1.79 $
  *
- *  last change: $Author: vg $ $Date: 2007-05-22 15:20:35 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 19:07:18 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -36,7 +36,7 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_svx.hxx"
 
-#include "svdoole2.hxx"
+#include <svx/svdoole2.hxx>
 
 #ifndef _COM_SUN_STAR_UTIL_XMODIFYBROADCASTER_HPP_
 #include <com/sun/star/util/XModifyBroadcaster.hpp>
@@ -83,7 +83,7 @@
 #include <comphelper/anytostring.hxx>
 
 #ifndef _SVDPAGV_HXX
-#include <svdpagv.hxx>
+#include <svx/svdpagv.hxx>
 #endif
 #ifndef _GLOBNAME_HXX
 #include <tools/globname.hxx>
@@ -119,12 +119,12 @@
 #include <vcl/svapp.hxx>
 #endif
 
-#include "svdpagv.hxx"
-#include "svdmodel.hxx"
+#include <svx/svdpagv.hxx>
+#include <svx/svdmodel.hxx>
 #include "svdglob.hxx"  // Stringcache
 #include "svdstr.hrc"   // Objektname
-#include "svdetc.hxx"
-#include "svdview.hxx"
+#include <svx/svdetc.hxx>
+#include <svx/svdview.hxx>
 #include "unomlstr.hxx"
 #include "impgrf.hxx"
 
