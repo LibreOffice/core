@@ -4,9 +4,9 @@
  *
  *  $RCSfile: animationimport.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: hr $ $Date: 2007-06-27 15:01:02 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 15:32:04 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -118,6 +118,9 @@
 #ifndef _COM_SUN_STAR_CONTAINER_XENUMERATIONACCESS_HPP_
 #include <com/sun/star/container/XEnumerationAccess.hpp>
 #endif
+#include <com/sun/star/beans/XPropertySet.hpp>
+#include <com/sun/star/animations/EventTrigger.hpp>
+#include <com/sun/star/presentation/EffectCommands.hpp>
 
 #ifndef _COMPHELPER_PROCESSFACTORY_HXX_
 #include <comphelper/processfactory.hxx>
@@ -168,6 +171,7 @@
 using namespace ::rtl;
 using namespace ::std;
 using namespace ::cppu;
+using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::animations;
 using namespace ::com::sun::star::presentation;
 using namespace ::com::sun::star::drawing;
@@ -377,6 +381,7 @@ const SvXMLTokenMap& AnimationsImportHelperImpl::getAnimationNodeAttributeTokenM
             { XML_NAMESPACE_ANIMATION, XML_ITERATE_INTERVAL,    (sal_uInt16)ANA_IterateInterval },
             { XML_NAMESPACE_ANIMATION, XML_FORMULA,             (sal_uInt16)ANA_Formula },
             { XML_NAMESPACE_ANIMATION, XML_ID,                  (sal_uInt16)ANA_ID },
+            { XML_NAMESPACE_XML, XML_ID,                        (sal_uInt16)ANA_ID },
             { XML_NAMESPACE_PRESENTATION, XML_GROUP_ID,         (sal_uInt16)ANA_Group_Id },
             { XML_NAMESPACE_ANIMATION, XML_AUDIO_LEVEL,         (sal_uInt16)ANA_Volume },
             { XML_NAMESPACE_ANIMATION, XML_COMMAND,             (sal_uInt16)ANA_Command },
@@ -1469,6 +1474,85 @@ SvXMLImportContext *AnimationsImport::CreateContext(USHORT nPrefix, const OUStri
 Reference< XAnimationNode > SAL_CALL AnimationsImport::getAnimationNode() throw (RuntimeException)
 {
     return mxRootNode;
+}
+
+void AnimationNodeContext::postProcessRootNode( SvXMLImport& /*rImport*/, const Reference< XAnimationNode >& xRootNode, Reference< XPropertySet >& xPageProps )
+{
+    if( xRootNode.is() && xPageProps.is() ) try
+    {
+        Reference< XEnumerationAccess > xEnumerationAccess( xRootNode, UNO_QUERY_THROW );
+        Reference< XEnumeration > xEnumeration( xEnumerationAccess->createEnumeration(), UNO_QUERY_THROW );
+        if( xEnumeration->hasMoreElements() )
+        {
+            Reference< XAnimationNode > xNode( xEnumeration->nextElement(), UNO_QUERY_THROW );
+            if( xNode->getType() == AnimationNodeType::PAR )
+            {
+                Event aEvent;
+                if( (xNode->getBegin() >>= aEvent) && (aEvent.Trigger == EventTrigger::BEGIN_EVENT) )
+                {
+                    // found transition node
+                    Reference< XEnumerationAccess > xChildEnumerationAccess( xNode, UNO_QUERY_THROW );
+                    Reference< XEnumeration > xChildEnumeration( xChildEnumerationAccess->createEnumeration(), UNO_QUERY_THROW );
+                    while( xChildEnumeration->hasMoreElements() )
+                    {
+                        Reference< XAnimationNode > xChildNode( xChildEnumeration->nextElement(), UNO_QUERY_THROW );
+                        switch( xChildNode->getType() )
+                        {
+                        case AnimationNodeType::TRANSITIONFILTER:
+                        {
+                            Reference< XTransitionFilter > xTransFilter( xChildNode, UNO_QUERY_THROW );
+
+
+                            xPageProps->setPropertyValue( OUString( RTL_CONSTASCII_USTRINGPARAM( "TransitionType" ) ), Any( xTransFilter->getTransition() ) );
+                            xPageProps->setPropertyValue( OUString( RTL_CONSTASCII_USTRINGPARAM( "TransitionSubtype" ) ), Any( xTransFilter->getSubtype() ) );
+                            xPageProps->setPropertyValue( OUString( RTL_CONSTASCII_USTRINGPARAM( "TransitionDirection" ) ), Any( xTransFilter->getDirection() ) );
+                            xPageProps->setPropertyValue( OUString( RTL_CONSTASCII_USTRINGPARAM( "TransitionFadeColor" ) ), Any( xTransFilter->getFadeColor() ) );
+
+                            double fDuration;
+                            if( xTransFilter->getDuration() >>= fDuration )
+                                xPageProps->setPropertyValue( OUString( RTL_CONSTASCII_USTRINGPARAM( "TransitionDuration" ) ), Any( fDuration ) );
+
+                        }
+                        break;
+
+                        case AnimationNodeType::COMMAND:
+                        {
+                            Reference< XCommand > xCommand( xChildNode, UNO_QUERY_THROW );
+                            if( xCommand->getCommand() == EffectCommands::STOPAUDIO )
+                            {
+                                xPageProps->setPropertyValue( OUString( RTL_CONSTASCII_USTRINGPARAM( "Sound" ) ), Any(sal_True) );
+                            }
+                        }
+                        break;
+
+                        case AnimationNodeType::AUDIO:
+                        {
+                            Reference< XAudio > xAudio( xChildNode, UNO_QUERY_THROW );
+                            OUString sSoundURL;
+                            if( (xAudio->getSource() >>= sSoundURL) && (sSoundURL.getLength() != 0) )
+                            {
+                                xPageProps->setPropertyValue( OUString( RTL_CONSTASCII_USTRINGPARAM( "Sound" ) ), Any(sSoundURL) );
+
+                                Timing eTiming;
+                                if( (xAudio->getRepeatCount() >>= eTiming) && (eTiming == Timing_INDEFINITE) )
+                                    xPageProps->setPropertyValue( OUString( RTL_CONSTASCII_USTRINGPARAM( "LoopSound" ) ), Any( sal_True ) );
+                            }
+                        }
+                        break;
+
+                        }
+                    }
+
+                    Reference< XTimeContainer > xRootContainer( xRootNode, UNO_QUERY_THROW );
+                    xRootContainer->removeChild( xNode );
+                }
+            }
+        }
+    }
+    catch( Exception& )
+    {
+        DBG_ERROR("xmloff::AnimationsImport::postProcessRootNode(), exception caught!");
+    }
 }
 
 } // namespace xmloff
