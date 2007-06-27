@@ -4,9 +4,9 @@
  *
  *  $RCSfile: zforlist.cxx,v $
  *
- *  $Revision: 1.66 $
+ *  $Revision: 1.67 $
  *
- *  last change: $Author: obo $ $Date: 2006-10-12 15:26:07 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 21:56:48 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -78,23 +78,23 @@
 #endif
 
 #define _SVSTDARR_USHORTS
-#include "svstdarr.hxx"
+#include <svtools/svstdarr.hxx>
 
 #define _ZFORLIST_CXX
 #ifndef _OSL_MUTEX_HXX_
 #include <osl/mutex.hxx>
 #endif
-#include "zforlist.hxx"
+#include <svtools/zforlist.hxx>
 #undef _ZFORLIST_CXX
 
 #include "zforscan.hxx"
 #include "zforfind.hxx"
-#include "zformat.hxx"
+#include <svtools/zformat.hxx>
 #include "numhead.hxx"
 
-#include "syslocaleoptions.hxx"
+#include <svtools/syslocaleoptions.hxx>
 #include "listener.hxx"
-#include "smplhint.hxx"
+#include <svtools/smplhint.hxx>
 
 #ifndef _RTL_LOGFILE_HXX_
 #include <rtl/logfile.hxx>
