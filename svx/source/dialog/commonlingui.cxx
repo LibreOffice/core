@@ -4,9 +4,9 @@
  *
  *  $RCSfile: commonlingui.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: rt $ $Date: 2007-04-26 07:26:56 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 16:53:26 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -40,11 +40,11 @@
 #endif
 
 #ifndef _SVX_DIALOGS_HRC
-#include "dialogs.hrc"
+#include <svx/dialogs.hrc>
 #endif
 
 #ifndef _SVX_DIALMGR_HXX
-#include "dialmgr.hxx"
+#include <svx/dialmgr.hxx>
 #endif
 
 #ifndef _SV_DECOVIEW_HXX
