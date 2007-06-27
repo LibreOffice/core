@@ -4,9 +4,9 @@
  *
  *  $RCSfile: taskstat.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 14:42:13 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 21:25:59 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -62,7 +62,7 @@
 #include <unotools/calendarwrapper.hxx>
 #endif
 
-#include <syslocale.hxx>
+#include <svtools/syslocale.hxx>
 #include <taskbar.hxx>
 
 // =======================================================================
