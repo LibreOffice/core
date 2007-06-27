@@ -4,9 +4,9 @@
  *
  *  $RCSfile: svdpagv.cxx,v $
  *
- *  $Revision: 1.58 $
+ *  $Revision: 1.59 $
  *
- *  last change: $Author: hr $ $Date: 2007-06-26 12:08:50 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 19:11:13 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -37,7 +37,7 @@
 #include "precompiled_svx.hxx"
 
 #ifndef _SVDPAGV_HXX
-#include <svdpagv.hxx>
+#include <svx/svdpagv.hxx>
 #endif
 #ifndef _COM_SUN_STAR_AWT_XWINDOW_HPP_
 #include <com/sun/star/awt/XWindow.hpp>
@@ -49,41 +49,41 @@
 #include <comphelper/processfactory.hxx>
 #endif
 #ifndef _SVDOUTL_HXX
-#include <svdoutl.hxx>
+#include <svx/svdoutl.hxx>
 #endif
 #ifndef _XPOLY_HXX
-#include <xpoly.hxx>
+#include <svx/xpoly.hxx>
 #endif
 
 #ifndef _SVDOUNO_HXX
-#include <svdouno.hxx>
+#include <svx/svdouno.hxx>
 #endif
 
 #ifndef _SVDPAGE_HXX
-#include <svdpage.hxx>
+#include <svx/svdpage.hxx>
 #endif
 
 #ifndef _SVDVIEW_HXX
-#include <svdview.hxx>
+#include <svx/svdview.hxx>
 #endif
 
-#include "svdedxv.hxx"
-#include "svdpagv.hxx"
-#include "svdoutl.hxx"
-#include "svdpagv.hxx"
-#include "outliner.hxx"
+#include <svx/svdedxv.hxx>
+#include <svx/svdpagv.hxx>
+#include <svx/svdoutl.hxx>
+#include <svx/svdpagv.hxx>
+#include <svx/outliner.hxx>
 #include "svdxout.hxx"
-#include "svdetc.hxx"
-#include "svdobj.hxx"
-#include "svdouno.hxx"
-#include "svdpage.hxx"
-#include "svdview.hxx"
+#include <svx/svdetc.hxx>
+#include <svx/svdobj.hxx>
+#include <svx/svdouno.hxx>
+#include <svx/svdpage.hxx>
+#include <svx/svdview.hxx>
 #include "svditer.hxx"
-#include "svdogrp.hxx"
-#include "svdtypes.hxx"
+#include <svx/svdogrp.hxx>
+#include <svx/svdtypes.hxx>
 
-#include "svdotext.hxx" // fuer PaintOutlinerView
-#include "svdoole2.hxx"
+#include <svx/svdotext.hxx> // fuer PaintOutlinerView
+#include <svx/svdoole2.hxx>
 
 // #110094#
 #ifndef _SDR_CONTACT_OBJECTCONTACTOFPAGEVIEW_HXX
@@ -91,7 +91,7 @@
 #endif
 
 #ifndef _SVDOGRP_HXX
-#include <svdogrp.hxx>
+#include <svx/svdogrp.hxx>
 #endif
 
 #ifndef _SDR_CONTACT_VIEWOBJECTCONTACTREDIRECTOR_HXX
@@ -99,7 +99,7 @@
 #endif
 
 #ifndef _SVX_FMVIEW_HXX
-#include <fmview.hxx>
+#include <svx/fmview.hxx>
 #endif
 
 // for search on vector
@@ -109,7 +109,7 @@ using namespace ::rtl;
 using namespace ::com::sun::star;
 
 #ifndef _SDRPAGEWINDOW_HXX
-#include <sdrpagewindow.hxx>
+#include <svx/sdrpagewindow.hxx>
 #endif
 
 #ifndef _SDRPAINTWINDOW_HXX
