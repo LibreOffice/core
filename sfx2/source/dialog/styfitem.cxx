@@ -4,9 +4,9 @@
  *
  *  $RCSfile: styfitem.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: rt $ $Date: 2007-04-26 10:12:44 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 23:16:39 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -41,7 +41,7 @@
 #ifndef GCC
 #endif
 
-#include "styfitem.hxx"
+#include <sfx2/styfitem.hxx>
 
 #ifndef _SVTOOLS_LOCALRESACCESS_HXX_
 #include <svtools/localresaccess.hxx>

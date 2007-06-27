@@ -4,9 +4,9 @@
  *
  *  $RCSfile: srchdlg.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: rt $ $Date: 2007-04-26 10:12:33 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 23:16:26 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -38,7 +38,7 @@
 
 #include "srchdlg.hxx"
 #include "sfxresid.hxx"
-#include "sfxuno.hxx"
+#include <sfx2/sfxuno.hxx>
 
 #include "srchdlg.hrc"
 #include "dialog.hrc"
