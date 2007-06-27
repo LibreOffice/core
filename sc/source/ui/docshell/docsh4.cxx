@@ -4,9 +4,9 @@
  *
  *  $RCSfile: docsh4.cxx,v $
  *
- *  $Revision: 1.54 $
+ *  $Revision: 1.55 $
  *
- *  last change: $Author: vg $ $Date: 2007-05-22 20:05:52 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 12:45:39 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -792,7 +792,7 @@ void ScDocShell::Execute( SfxRequest& rReq )
 
                     //  kein Filter angegeben -> Detection
                     if ( !aFilterName.Len() )
-                        ScDocumentLoader::GetFilterName( aFileName, aFilterName, aOptions, TRUE );
+                        ScDocumentLoader::GetFilterName( aFileName, aFilterName, aOptions, TRUE, FALSE );
 
                     //  filter name from dialog contains application prefix,
                     //  GetFilter needs name without the prefix.
