@@ -4,9 +4,9 @@
  *
  *  $RCSfile: edit.cxx,v $
  *
- *  $Revision: 1.85 $
+ *  $Revision: 1.86 $
  *
- *  last change: $Author: rt $ $Date: 2007-04-26 10:36:22 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 20:05:10 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -40,25 +40,25 @@
 #include <tools/rc.h>
 #endif
 #ifndef _SV_SVDATA_HXX
-#include <svdata.hxx>
+#include <vcl/svdata.hxx>
 #endif
 #ifndef _SV_DECOVIEW_HXX
-#include <decoview.hxx>
+#include <vcl/decoview.hxx>
 #endif
 #ifndef _SV_EVENT_HXX
-#include <event.hxx>
+#include <vcl/event.hxx>
 #endif
 #ifndef _SV_CURSOR_HXX
-#include <cursor.hxx>
+#include <vcl/cursor.hxx>
 #endif
 #ifndef _SV_VIRDEV_HXX
-#include <virdev.hxx>
+#include <vcl/virdev.hxx>
 #endif
 #ifndef _SV_SVIDS_HRC
 #include <svids.hrc>
 #endif
 #ifndef _SV_MENU_HXX
-#include <menu.hxx>
+#include <vcl/menu.hxx>
 #endif
 #ifndef _VCL_CMDEVT_H
 #include <cmdevt.h>
@@ -67,13 +67,13 @@
 #include <subedit.hxx>
 #endif
 #ifndef _SV_EDIT_HXX
-#include <edit.hxx>
+#include <vcl/edit.hxx>
 #endif
 #ifndef _SV_SVAPP_HXX
-#include <svapp.hxx>
+#include <vcl/svapp.hxx>
 #endif
 #ifndef _VCL_CONTROLLAYOUT_HXX
-#include <controllayout.hxx>
+#include <vcl/controllayout.hxx>
 #endif
 
 #include <vos/mutex.hxx>
@@ -144,10 +144,10 @@
 #include <sot/formats.hxx>
 #include <rtl/memory.h>
 
-#include <unohelp.hxx>
+#include <vcl/unohelp.hxx>
 
 #ifndef _VCL_UNOHELP2_HXX
-#include <unohelp2.hxx>
+#include <vcl/unohelp2.hxx>
 #endif
 
 
