@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ResultSetMetaData.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 07:23:13 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 14:40:13 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -44,6 +44,7 @@
 #ifndef _CPPUHELPER_IMPLBASE1_HXX_
 #include <cppuhelper/implbase1.hxx>
 #endif
+#include "java/sql/ConnectionLog.hxx"
 
 namespace connectivity
 {
@@ -55,7 +56,9 @@ namespace connectivity
                                         public java_lang_Object
     {
     protected:
-    // statische Daten fuer die Klasse
+        java::sql::ConnectionLog    m_aLogger;
+
+        // statische Daten fuer die Klasse
         static jclass theClass;
         // der Destruktor um den Object-Counter zu aktualisieren
         static void saveClassRef( jclass pClass );
@@ -64,7 +67,7 @@ namespace connectivity
         static jclass getMyClass();
 
         // ein Konstruktor, der fuer das Returnen des Objektes benoetigt wird:
-        java_sql_ResultSetMetaData( JNIEnv * pEnv, jobject myObj );
+        java_sql_ResultSetMetaData( JNIEnv * pEnv, jobject myObj, const java::sql::ConnectionLog& _rResultSetLogger );
 
         virtual sal_Int32 SAL_CALL getColumnCount(  ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
         virtual sal_Bool SAL_CALL isAutoIncrement( sal_Int32 column ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
