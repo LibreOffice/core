@@ -4,9 +4,9 @@
  *
  *  $RCSfile: inftxt.cxx,v $
  *
- *  $Revision: 1.109 $
+ *  $Revision: 1.110 $
  *
- *  last change: $Author: rt $ $Date: 2007-01-29 16:54:46 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 13:19:34 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -74,6 +74,9 @@
 #ifndef _SVX_PGRDITEM_HXX
 #include <svx/pgrditem.hxx>
 #endif
+
+#include <SwSmartTagMgr.hxx>
+
 #ifndef _LINGUISTIC_LNGPROPS_HHX_
 #include <linguistic/lngprops.hxx>
 #endif
@@ -716,7 +719,7 @@ void SwTxtPaintInfo::_DrawText( const XubString &rText, const SwLinePortion &rPo
     const sal_Bool bBullet = OnWin() && GetOpt().IsBlank() && IsNoSymbol();
     const sal_Bool bTmpWrong = bWrong && OnWin() && GetOpt().IsOnlineSpell() &&
                                !GetOpt().IsHideSpell();
-    const sal_Bool bTmpSmart = bSmartTag && OnWin(); // SMARTTAGS
+    const sal_Bool bTmpSmart = bSmartTag && OnWin() && SwSmartTagMgr::Get().IsSmartTagsEnabled(); // SMARTTAGS
 
     SwParaPortion* pPara = GetParaPortion();
     ASSERT( pPara, "No paragraph!");
@@ -1719,7 +1722,7 @@ SwTxtSlot::SwTxtSlot( const SwTxtSizeInfo *pNew, const SwLinePortion *pPor,
             pOldSmartTagList = static_cast<SwTxtPaintInfo*>(pInf)->GetSmartTags();
             if ( pOldSmartTagList )
             {
-                const sal_Int32 nPos = pOldSmartTagList->GetPos(nIdx);
+                const sal_Int32 nPos = pOldSmartTagList->GetWrongPos(nIdx);
                 if ( pOldSmartTagList->Pos(nPos) == nIdx )
                     ((SwTxtPaintInfo*)pInf)->SetSmartTags( pOldSmartTagList->SubList( nPos ) );
                 else
