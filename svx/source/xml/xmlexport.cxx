@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xmlexport.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: obo $ $Date: 2006-10-12 13:29:16 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 19:31:53 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -97,7 +97,7 @@
 #endif
 
 #ifndef _SVDMODEL_HXX
-#include <svdmodel.hxx>
+#include <svx/svdmodel.hxx>
 #endif
 
 #ifndef _XMLEOHLP_HXX
@@ -107,7 +107,7 @@
 #include <xmlgrhlp.hxx>
 #endif
 
-#include "unomodel.hxx"
+#include <svx/unomodel.hxx>
 
 using namespace ::rtl;
 using namespace ::com::sun::star;
