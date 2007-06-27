@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ximpshap.cxx,v $
  *
- *  $Revision: 1.120 $
+ *  $Revision: 1.121 $
  *
- *  last change: $Author: hr $ $Date: 2007-06-27 15:11:25 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 15:33:18 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -962,6 +962,13 @@ void SdXMLShapeContext::processAttribute( sal_uInt16 nPrefix, const ::rtl::OUStr
         else if( IsXMLToken( rLocalName, XML_DESC ) )
         {
             maShapeDescription = rValue;
+        }
+    }
+    else if( XML_NAMESPACE_NONE == nPrefix )
+    {
+        if( IsXMLToken( rLocalName, XML_ID ) )
+        {
+            maShapeId = rValue;
         }
     }
 }
