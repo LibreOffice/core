@@ -4,9 +4,9 @@
  *
  *  $RCSfile: svdomeas.cxx,v $
  *
- *  $Revision: 1.30 $
+ *  $Revision: 1.31 $
  *
- *  last change: $Author: kz $ $Date: 2007-05-10 14:58:57 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 19:06:50 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -36,20 +36,20 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_svx.hxx"
 
-#include "svdomeas.hxx"
+#include <svx/svdomeas.hxx>
 #include <math.h>
 #include "svditext.hxx" //
-#include "xpoly.hxx"
-#include "xoutx.hxx"
-#include "svdtrans.hxx"
+#include <svx/xpoly.hxx>
+#include <svx/xoutx.hxx>
+#include <svx/svdtrans.hxx>
 #include "svdtouch.hxx"
-#include "svdhdl.hxx"
-#include "svdoutl.hxx"
-#include "svddrag.hxx"
-#include "svdpool.hxx"
-#include "svdattrx.hxx"
-#include "svdmodel.hxx"
-#include "svdview.hxx"
+#include <svx/svdhdl.hxx>
+#include <svx/svdoutl.hxx>
+#include <svx/svddrag.hxx>
+#include <svx/svdpool.hxx>
+#include <svx/svdattrx.hxx>
+#include <svx/svdmodel.hxx>
+#include <svx/svdview.hxx>
 #include "svdglob.hxx"   // StringCache
 #include "svdstr.hrc"    // Objektname
 
@@ -62,55 +62,55 @@
 #endif
 
 #ifndef _EEITEM_HXX //autogen
-#include <eeitem.hxx>
+#include <svx/eeitem.hxx>
 #endif
 
 #ifndef _SVX_XLNSTIT_HXX //autogen
-#include "xlnstit.hxx"
+#include <svx/xlnstit.hxx>
 #endif
 
 #ifndef _SVX_XLNSTWIT_HXX //autogen
-#include "xlnstwit.hxx"
+#include <svx/xlnstwit.hxx>
 #endif
 
 #ifndef _SVX_XLNEDIT_HXX //autogen
-#include "xlnedit.hxx"
+#include <svx/xlnedit.hxx>
 #endif
 
 #ifndef _SVX_XLNWTIT_HXX //autogen
-#include "xlnwtit.hxx"
+#include <svx/xlnwtit.hxx>
 #endif
 
 #ifndef _SVX_XLNEDWIT_HXX //autogen
-#include "xlnedwit.hxx"
+#include <svx/xlnedwit.hxx>
 #endif
 
 #ifndef _SVX_XLNSTCIT_HXX //autogen
-#include "xlnstcit.hxx"
+#include <svx/xlnstcit.hxx>
 #endif
 
 #ifndef _SVX_XLNEDCIT_HXX //autogen
-#include "xlnedcit.hxx"
+#include <svx/xlnedcit.hxx>
 #endif
 
 #ifndef _OUTLOBJ_HXX //autogen
-#include <outlobj.hxx>
+#include <svx/outlobj.hxx>
 #endif
 
 #ifndef _OUTLINER_HXX //autogen
-#include "outliner.hxx"
+#include <svx/outliner.hxx>
 #endif
 
 #ifndef _EDITOBJ_HXX //autogen
-#include <editobj.hxx>
+#include <svx/editobj.hxx>
 #endif
 
-#include "svdfield.hxx"
-#include "flditem.hxx"
+#include <svx/svdfield.hxx>
+#include <svx/flditem.hxx>
 
-#include "svdogrp.hxx"
-#include "svdopath.hxx"
-#include "svdpage.hxx"
+#include <svx/svdogrp.hxx>
+#include <svx/svdopath.hxx>
+#include <svx/svdpage.hxx>
 
 #ifndef INCLUDED_SVTOOLS_SYSLOCALE_HXX
 #include <svtools/syslocale.hxx>
