@@ -4,9 +4,9 @@
  *
  *  $RCSfile: stmenu.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: hr $ $Date: 2007-01-02 16:53:20 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 13:24:53 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -45,35 +45,20 @@
 #endif
 
 #include <vector>
-#include <map>
 
-#ifndef _STRING_HXX //autogen
-#include <tools/string.hxx>
+#ifndef _COM_SUN_STAR_SMARTTAGS_XSMARTTAGACTION_HPP_
+#include <com/sun/star/smarttags/XSmartTagAction.hpp>
 #endif
 
-#ifndef _RTL_USTRING_HXX_
-#include <rtl/ustring.hxx>
-#endif
-
-#ifndef _SMARTTAGMGR_HXX
-#include "SmartTagMgr.hxx"
+#ifndef _COM_SUN_STAR_SMARTTAGS_XSTRINGKEYMAP_HPP_
+#include <com/sun/star/container/XStringKeyMap.hpp>
 #endif
 
 #ifndef _COM_SUN_STAR_TEXT_XTEXTRANGE_HPP_
 #include <com/sun/star/text/XTextRange.hpp>
 #endif
 
-#ifndef _VIEW_HXX
-#include <view.hxx>
-#endif
-
-using rtl::OUString;
-using rtl::OString;
-using com::sun::star::uno::Reference;
-using com::sun::star::text::XTextRange;
-
-class SwWrtShell;
-class SvStringsDtor;
+class SwView;
 
 /** Class: SwSmartTagPopup
 
@@ -83,16 +68,31 @@ class SvStringsDtor;
    The menu is built in the constructor and the actions for each
    menu entry are invoked in the excute-method.
 */
+
 class SwSmartTagPopup : public PopupMenu
 {
-  SwView*  pSwView;
-  sal_Int32    nMaxVerbCount;
-  std::vector <ActionReference> aActionRefs;
-  Reference<XTextRange> xTextRange;
+    SwView*  mpSwView;
+    com::sun::star::uno::Reference< com::sun::star::text::XTextRange > mxTextRange;
+
+    struct InvokeAction
+    {
+        com::sun::star::uno::Reference< com::sun::star::smarttags::XSmartTagAction > mxAction;
+        com::sun::star::uno::Reference< com::sun::star::container::XStringKeyMap > mxSmartTagProperties;
+        sal_uInt32 mnActionID;
+        InvokeAction( com::sun::star::uno::Reference< com::sun::star::smarttags::XSmartTagAction > xAction,
+                      com::sun::star::uno::Reference< com::sun::star::container::XStringKeyMap > xSmartTagProperties,
+                      sal_uInt32 nActionID ) : mxAction( xAction ), mxSmartTagProperties( xSmartTagProperties ), mnActionID( nActionID ) {}
+    };
+
+    std::vector< InvokeAction > maInvokeActions;
 
 public:
-  SwSmartTagPopup( SwView* _pSwView, std::vector <ActionReference> _aActionRefs, Reference<XTextRange> _xTextRange );
-  sal_uInt16  Execute( Window* pWin, const Rectangle& rPopupPos );
+    SwSmartTagPopup( SwView* _pSwView,
+                     ::com::sun::star::uno::Sequence< rtl::OUString >& rSmartTagTypes,
+                     ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Reference< ::com::sun::star::container::XStringKeyMap > >& rStringKeyMaps,
+                     ::com::sun::star::uno::Reference< com::sun::star::text::XTextRange > xTextRange );
+
+    sal_uInt16  Execute( Window* pWin, const Rectangle& rPopupPos );
 };
 
 #endif
