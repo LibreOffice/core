@@ -4,9 +4,9 @@
  *
  *  $RCSfile: wrong.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: vg $ $Date: 2007-05-22 16:32:43 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 13:20:22 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -48,12 +48,12 @@
 #include "wrong.hxx"
 
 /*************************************************************************
- * sal_Bool SwWrongList::InWrongWord() gibt den Anfang und die Laenge des Wortes
- * zurueck, wenn es als falsch markiert ist.
+ * sal_Bool SwWrongList::InWrongWord() gibt den Anfang und die Laenge des
+ * Wortes zurueck, wenn es als falsch markiert ist.
  *************************************************************************/
 sal_Bool SwWrongList::InWrongWord( xub_StrLen &rChk, xub_StrLen &rLn ) const
 {
-    MSHORT nPos = GetPos( rChk );
+    MSHORT nPos = GetWrongPos( rChk );
     xub_StrLen nWrPos;
     if( nPos < Count() && ( nWrPos = Pos( nPos ) ) <= rChk )
     {
@@ -71,7 +71,7 @@ sal_Bool SwWrongList::InWrongWord( xub_StrLen &rChk, xub_StrLen &rLn ) const
  *************************************************************************/
 sal_Bool SwWrongList::Check( xub_StrLen &rChk, xub_StrLen &rLn ) const
 {
-    MSHORT nPos = GetPos( rChk );
+    MSHORT nPos = GetWrongPos( rChk );
     rLn += rChk;
     xub_StrLen nWrPos;
 
@@ -110,7 +110,7 @@ sal_Bool SwWrongList::Check( xub_StrLen &rChk, xub_StrLen &rLn ) const
 xub_StrLen SwWrongList::NextWrong( xub_StrLen nChk ) const
 {
     xub_StrLen nRet;
-    xub_StrLen nPos = GetPos( nChk );
+    xub_StrLen nPos = GetWrongPos( nChk );
     if( nPos < Count() )
     {
         nRet = Pos( nPos );
@@ -130,35 +130,69 @@ xub_StrLen SwWrongList::NextWrong( xub_StrLen nChk ) const
 }
 
 /*************************************************************************
- *                 MSHORT SwWrongList::GetPos( xub_StrLen nValue )
+ *                 MSHORT SwWrongList::GetWrongPos( xub_StrLen nValue )
  *  sucht die erste Position im Array, die groessergleich nValue ist,
  * dies kann natuerlich auch hinter dem letzten Element sein!
  *************************************************************************/
 
-MSHORT SwWrongList::GetPos( xub_StrLen nValue ) const
+MSHORT SwWrongList::GetWrongPos( xub_StrLen nValue ) const
 {
     register MSHORT nOben = Count(), nMitte, nUnten = 0;
+
     if( nOben > 0 )
     {
+        // For smart tag lists, we may not use a binary search. We return the
+        // position of the first smart tag which coveres nValue
+        if ( 0 != maList[0].maType.getLength() || maList[0].mpSubList )
+        {
+            std::vector<SwWrongArea>::const_iterator aIter = maList.begin();
+            while ( aIter != maList.end() )
+            {
+                const xub_StrLen nSTPos = (*aIter).mnPos;
+                const xub_StrLen nSTLen = (*aIter).mnLen;
+                if ( nSTPos <= nValue && nValue < nSTPos + nSTLen )
+                    break;
+                else if ( nSTPos > nValue )
+                    break;
+
+                ++aIter;
+                ++nUnten;
+            }
+            return nUnten;
+        }
+
         --nOben;
         while( nUnten <= nOben )
         {
             nMitte = nUnten + ( nOben - nUnten ) / 2;
             xub_StrLen nTmp = Pos( nMitte );
             if( nTmp == nValue )
-                return nMitte;
+            {
+                nUnten = nMitte;
+                break;
+            }
             else if( nTmp < nValue )
             {
                 if( nTmp + Len( nMitte ) >= nValue )
-                    return nMitte;
+                {
+                    nUnten = nMitte;
+                    break;
+                }
                 nUnten = nMitte + 1;
             }
             else if( nMitte == 0 )
-                return nUnten;
+            {
+                break;
+            }
             else
                 nOben = nMitte - 1;
         }
     }
+
+    // nUnten now points to an index i into the wrong list which
+    // 1. nValue is inside [ Area[i].pos, Area[i].pos + Area[i].len ] (inkl!!!)
+    // 2. nValue < Area[i].pos
+
     return nUnten;
 }
 
@@ -182,7 +216,7 @@ void SwWrongList::_Invalidate( xub_StrLen nBegin, xub_StrLen nEnd )
 
 void SwWrongList::Move( xub_StrLen nPos, long nDiff )
 {
-    MSHORT i = GetPos( nPos );
+    MSHORT i = GetWrongPos( nPos );
     if( nDiff < 0 )
     {
         xub_StrLen nEnd = nPos + xub_StrLen( -nDiff );
@@ -252,29 +286,28 @@ void SwWrongList::Move( xub_StrLen nPos, long nDiff )
 /*************************************************************************
  *                      SwWrongList::Fresh
  *
- * In this method the wrong list is updated, new wrong words are inserted,
- * and by evaluating the postiztion of wrong words, we also know, which
- * words are not wrong any longer and have to be removed.
- * Note: Fresh has to be called at the end of the check of the invalid region,
- * in order to find words, which are behind the last wrong word but not wrong
- * any longer
+ * For a given range [nPos, nPos + nLen[ and an index nIndex, this function
+ * basically counts the number of SwWrongArea entries starting with nIndex
+ * up to nPos + nLen. All these entries are removed.
  *************************************************************************/
 sal_Bool SwWrongList::Fresh( xub_StrLen &rStart, xub_StrLen &rEnd, xub_StrLen nPos,
                              xub_StrLen nLen, MSHORT nIndex, xub_StrLen nCursorPos )
 {
-  // length of word must be greater than 0 and cursor position must be outside the word
+    // length of word must be greater than 0 and cursor position must be outside the word
     sal_Bool bRet = nLen && ( nCursorPos > nPos + nLen || nCursorPos < nPos );
+
     xub_StrLen nWrPos;
     xub_StrLen nWrEnd = rEnd;
     MSHORT nCnt = nIndex;
-    if( nIndex < Count() && ( nWrPos = Pos( nIndex ) ) < nPos )
+    if( nCnt < Count() && ( nWrPos = Pos( nIndex ) ) < nPos )
     {
-        nWrEnd = nWrPos + Len( nCnt++ );
         if( rStart > nWrPos )
             rStart = nWrPos;
     }
+
     while( nCnt < Count() && ( nWrPos = Pos( nCnt ) ) < nPos )
         nWrEnd = nWrPos + Len( nCnt++ );
+
     if( nCnt < Count() && nWrPos == nPos && Len( nCnt ) == nLen )
     {
         ++nCnt;
@@ -289,17 +322,21 @@ sal_Bool SwWrongList::Fresh( xub_StrLen &rStart, xub_StrLen &rEnd, xub_StrLen nP
             nWrEnd = nPos + nLen;
         }
     }
+
     nPos += nLen;
+
     if( nCnt < Count() && ( nWrPos = Pos( nCnt ) ) < nPos )
     {
-        nWrEnd = nWrPos + Len( nCnt++ );
         if( rStart > nWrPos )
             rStart = nWrPos;
     }
+
     while( nCnt < Count() && ( nWrPos = Pos( nCnt ) ) < nPos )
         nWrEnd = nWrPos + Len( nCnt++ );
+
     if( rEnd < nWrEnd )
         rEnd = nWrEnd;
+
     Remove( nIndex, nCnt - nIndex );
 
     return bRet;
@@ -441,3 +478,44 @@ void SwWrongList::Remove(USHORT nIdx, USHORT nLen )
     ASSERT( Count() + nLen == nOldSize, "SwWrongList::Remove() trouble" )
 #endif
 }
+
+void SwWrongList::Insert( const rtl::OUString& rType,
+                          com::sun::star::uno::Reference< com::sun::star::container::XStringKeyMap > xPropertyBag,
+                          xub_StrLen nNewPos, xub_StrLen nNewLen )
+{
+    std::vector<SwWrongArea>::iterator aIter = maList.begin();
+
+    while ( aIter != maList.end() )
+    {
+        const xub_StrLen nSTPos = (*aIter).mnPos;
+
+        if ( nNewPos < nSTPos )
+        {
+            // insert at current position
+            break;
+        }
+        else if ( nNewPos == nSTPos )
+        {
+            while ( aIter != maList.end() && (*aIter).mnPos == nSTPos )
+            {
+                const xub_StrLen nSTLen = (*aIter).mnLen;
+
+                if ( nNewLen < nSTLen )
+                {
+                    // insert at current position
+                    break;
+                }
+
+                ++aIter;
+            }
+
+            break;
+        }
+
+        ++aIter;
+    }
+
+    maList.insert(aIter, SwWrongArea( rType, xPropertyBag, nNewPos, nNewLen, 0 ) );
+}
+
+
