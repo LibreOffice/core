@@ -4,9 +4,9 @@
  *
  *  $RCSfile: XMLFootnoteConfigurationImportContext.hxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: obo $ $Date: 2006-01-19 18:06:24 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 14:40:01 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -37,7 +37,7 @@
 #define _XMLOFF_XMLFOOTNOTECONFIGURATIONIMPORTCONTEXT_HXX
 
 #ifndef _XMLOFF_XMLSTYLE_HXX
-#include "xmlstyle.hxx"
+#include <xmloff/xmlstyle.hxx>
 #endif
 
 namespace com { namespace sun { namespace star {
