@@ -4,9 +4,9 @@
  *
  *  $RCSfile: propertyimport.hxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: rt $ $Date: 2006-07-26 07:34:38 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 15:18:37 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -37,7 +37,7 @@
 #define _XMLOFF_FORMS_PROPERTYIMPORT_HXX_
 
 #ifndef _XMLOFF_XMLICTXT_HXX
-#include "xmlictxt.hxx"
+#include <xmloff/xmlictxt.hxx>
 #endif
 #ifndef _XMLOFF_FORMATTRIBUTES_HXX_
 #include "formattributes.hxx"
