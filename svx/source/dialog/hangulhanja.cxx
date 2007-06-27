@@ -4,9 +4,9 @@
  *
  *  $RCSfile: hangulhanja.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: rt $ $Date: 2007-04-26 07:31:54 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 17:09:37 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -36,7 +36,7 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_svx.hxx"
 #ifndef SVX_HANGUL_HANJA_CONVERSION_HXX
-#include "hangulhanja.hxx"
+#include <svx/hangulhanja.hxx>
 #endif
 #ifndef _SV_MSGBOX_HXX
 #include <vcl/msgbox.hxx> //add CHINA001
@@ -87,8 +87,8 @@
 #include <unotools/charclass.hxx>
 #endif
 
-#include "svxdlg.hxx" //CHINA001
-#include <dialogs.hrc> //CHINA001
+#include <svx/svxdlg.hxx> //CHINA001
+#include <svx/dialogs.hrc> //CHINA001
 
 #ifndef _UNO_LINGU_HXX
 #include <unolingu.hxx>
