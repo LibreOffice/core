@@ -4,9 +4,9 @@
  *
  *  $RCSfile: undoopt.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: vg $ $Date: 2007-01-18 14:12:49 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 21:17:40 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -40,7 +40,7 @@
 #endif
 #define SVT_DLLIMPLEMENTATION
 
-#include "undoopt.hxx"
+#include <svtools/undoopt.hxx>
 
 #ifndef INCLUDED_RTL_INSTANCE_HXX
 #include "rtl/instance.hxx"
@@ -65,7 +65,7 @@
 #include <vos/mutex.hxx>
 #endif
 #ifndef _SFXSMPLHINT_HXX
-#include <smplhint.hxx>
+#include <svtools/smplhint.hxx>
 #endif
 #ifndef _SV_SVAPP_HXX
 #include <vcl/svapp.hxx>
