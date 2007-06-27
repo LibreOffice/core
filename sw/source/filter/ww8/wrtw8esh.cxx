@@ -4,9 +4,9 @@
  *
  *  $RCSfile: wrtw8esh.cxx,v $
  *
- *  $Revision: 1.98 $
+ *  $Revision: 1.99 $
  *
- *  last change: $Author: kz $ $Date: 2007-05-10 16:09:19 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 12:25:32 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -821,7 +821,17 @@ void PlcDrawObj::WritePlc(SwWW8Writer& rWrt) const
                 if( aLayRect.IsEmpty() )
                     aRect.SetSize( rFmt.GetFrmSize().GetSize() );
                 else
+                {
+                    // --> FME 2007-06-20 #i56090# Do not only consider the first client
+                    // Note that we actually would have to find the maximum size of the
+                    // frame format clients. However, this already should work in most cases.
+                    const SwRect aSizeRect(rFmt.FindLayoutRect());
+                    if ( aSizeRect.Width() > aLayRect.Width() )
+                        aLayRect.Width( aSizeRect.Width() );
+                    // <--
+
                     aRect = aLayRect.SVRect();
+                }
             }
             else
             {
