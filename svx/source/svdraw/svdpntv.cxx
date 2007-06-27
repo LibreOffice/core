@@ -4,9 +4,9 @@
  *
  *  $RCSfile: svdpntv.cxx,v $
  *
- *  $Revision: 1.35 $
+ *  $Revision: 1.36 $
  *
- *  last change: $Author: hr $ $Date: 2007-06-26 12:09:03 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 19:11:27 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -41,7 +41,7 @@
 #endif
 
 #ifndef _SVDPNTV_HXX
-#include <svdpntv.hxx>
+#include <svx/svdpntv.hxx>
 #endif
 
 #ifndef _SV_MSGBOX_HXX //autogen
@@ -57,11 +57,11 @@
 #endif
 
 #ifndef _SVDMODEL_HXX
-#include <svdmodel.hxx>
+#include <svx/svdmodel.hxx>
 #endif
 
 #ifndef _XOUTX_HXX
-#include <xoutx.hxx>
+#include <svx/xoutx.hxx>
 #endif
 
 #ifdef DBG_UTIL
@@ -69,33 +69,33 @@
 #endif
 
 #ifndef _SVDPAGE_HXX
-#include <svdpage.hxx>
+#include <svx/svdpage.hxx>
 #endif
 
 #ifndef _SVDPAGV_HXX
-#include <svdpagv.hxx>
+#include <svx/svdpagv.hxx>
 #endif
 
 #ifndef _SFXSMPLHINT_HXX
 #include <svtools/smplhint.hxx>
 #endif
 
-#include "svdpntv.hxx"
-#include "editdata.hxx"
-#include "svdmrkv.hxx"
+#include <svx/svdpntv.hxx>
+#include <svx/editdata.hxx>
+#include <svx/svdmrkv.hxx>
 #include "svdxout.hxx"
-#include "svdpagv.hxx"
-#include "svdpage.hxx"
-#include "svdmodel.hxx"
-#include "svdundo.hxx"
-#include "svdview.hxx"
-#include "svdglue.hxx"
-#include "svdobj.hxx"
-#include "svdograf.hxx"
-#include "svdattrx.hxx"
+#include <svx/svdpagv.hxx>
+#include <svx/svdpage.hxx>
+#include <svx/svdmodel.hxx>
+#include <svx/svdundo.hxx>
+#include <svx/svdview.hxx>
+#include <svx/svdglue.hxx>
+#include <svx/svdobj.hxx>
+#include <svx/svdograf.hxx>
+#include <svx/svdattrx.hxx>
 #include "svdibrow.hxx"
 #include "svditer.hxx"
-#include "svdouno.hxx"
+#include <svx/svdouno.hxx>
 
 #ifndef _SDR_OVERLAY_OVERLAYOBJECTLIST_HXX
 #include <svx/sdr/overlay/overlayobjectlist.hxx>
@@ -110,19 +110,19 @@
 #endif
 
 #ifndef _SVDGLUE_HXX
-#include <svdglue.hxx>
+#include <svx/svdglue.hxx>
 #endif
 
 #ifndef _SVDOBJ_HXX
-#include <svdobj.hxx>
+#include <svx/svdobj.hxx>
 #endif
 
 #ifndef _SVDVIEW_HXX
-#include <svdview.hxx>
+#include <svx/svdview.hxx>
 #endif
 
 #ifndef _SYLAYITM_HXX
-#include <sxlayitm.hxx>
+#include <svx/sxlayitm.hxx>
 #endif
 
 #ifndef _SFXITEMITER_HXX //autogen
@@ -130,7 +130,7 @@
 #endif
 
 #ifndef _EEITEM_HXX
-#include <eeitem.hxx>
+#include <svx/eeitem.hxx>
 #endif
 
 #ifndef _SFX_WHITER_HXX
@@ -142,11 +142,11 @@
 #endif
 
 #ifndef _SDRPAGEWINDOW_HXX
-#include <sdrpagewindow.hxx>
+#include <svx/sdrpagewindow.hxx>
 #endif
 
 #ifndef _SVDOUNO_HXX
-#include <svdouno.hxx>
+#include <svx/svdouno.hxx>
 #endif
 
 #ifndef _SV_SVAPP_HXX
