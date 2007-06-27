@@ -4,9 +4,9 @@
  *
  *  $RCSfile: svlbox.cxx,v $
  *
- *  $Revision: 1.29 $
+ *  $Revision: 1.30 $
  *
- *  last change: $Author: obo $ $Date: 2007-06-12 05:29:28 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 21:21:18 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -45,7 +45,7 @@
 #include <string.h>
 
 #ifndef _SVLBOX_HXX
-#include "svlbox.hxx"
+#include <svtools/svlbox.hxx>
 #endif
 
 #ifndef _COM_SUN_STAR_ACCESSIBILITY_ACCESSIBLESTATETYPE_HPP_
@@ -72,13 +72,13 @@
 #endif
 
 #define _SVSTDARR_ULONGSSORT
-#include "svstdarr.hxx"
+#include <svtools/svstdarr.hxx>
 
 #ifndef _SVEDI_HXX
-#include "svmedit.hxx"
+#include <svtools/svmedit.hxx>
 #endif
 #ifndef _SVLBOXITM_HXX
-#include "svlbitm.hxx"
+#include <svtools/svlbitm.hxx>
 #endif
 
 using namespace ::com::sun::star::accessibility;
