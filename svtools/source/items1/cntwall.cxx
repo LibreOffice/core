@@ -4,9 +4,9 @@
  *
  *  $RCSfile: cntwall.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 15:03:14 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 21:42:20 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -44,7 +44,7 @@
 #include <tools/vcompat.hxx>
 #endif
 
-#include "cntwall.hxx"
+#include <svtools/cntwall.hxx>
 
 #define CNTWALLPAPERITEM_STREAM_MAGIC   ( (UINT32)0xfefefefe )
 #define CNTWALLPAPERITEM_STREAM_SEEKREL (-( (long)( sizeof( UINT32 ) ) ) )
