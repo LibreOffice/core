@@ -4,9 +4,9 @@
  *
  *  $RCSfile: recfloat.hxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-07 19:09:50 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 23:28:53 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -38,8 +38,8 @@
 
 // includes *******************************************************************
 
-#include "childwin.hxx"
-#include "basedlgs.hxx"
+#include <sfx2/childwin.hxx>
+#include <sfx2/basedlgs.hxx>
 
 class SfxRecordingFloatWrapper_Impl : public SfxChildWindow
 {
