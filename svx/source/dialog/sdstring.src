@@ -4,9 +4,9 @@
  *
  *  $RCSfile: sdstring.src,v $
  *
- *  $Revision: 1.39 $
+ *  $Revision: 1.40 $
  *
- *  last change: $Author: ihi $ $Date: 2007-04-19 14:19:44 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 17:38:16 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -33,7 +33,7 @@
  *
  ************************************************************************/
  // include ------------------------------------------------------------------
-#include "dialogs.hrc"
+#include <svx/dialogs.hrc>
  // pragma -------------------------------------------------------------------
 
  // Strings fuer die Draw-Dialoge --------------------------------------------
