@@ -4,9 +4,9 @@
  *
  *  $RCSfile: mdrivermanager.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 03:08:25 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 14:41:24 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -38,9 +38,7 @@
 
 #include <stdio.h>
 
-#ifndef _CONNECTIVITY_DRIVERMANAGER_HXX_
-#include "drivermanager.hxx"
-#endif
+#include "mdrivermanager.hxx"
 
 #ifndef _COM_SUN_STAR_SDBC_XDRIVER_HPP_
 #include <com/sun/star/sdbc/XDriver.hpp>
@@ -51,29 +49,24 @@
 #ifndef _COM_SUN_STAR_CONTAINER_ELEMENTEXISTEXCEPTION_HPP_
 #include <com/sun/star/container/ElementExistException.hpp>
 #endif
+#ifndef _COM_SUN_STAR_BEANS_NAMEDVALUE_HPP_
+#include <com/sun/star/beans/NamedValue.hpp>
+#endif
+#ifndef _COM_SUN_STAR_LANG_SERVICENOTREGISTEREDEXCEPTION_HPP_
+#include <com/sun/star/lang/ServiceNotRegisteredException.hpp>
+#endif
 
-#ifndef _COMPHELPER_EXTRACT_HXX_
+#include <tools/diagnose_ex.h>
 #include <comphelper/extract.hxx>
-#endif
-#ifndef _COMPHELPER_STLTYPES_HXX_
 #include <comphelper/stl_types.hxx>
-#endif
-#ifndef _CPPUHELPER_IMPLBASE1_HXX_
 #include <cppuhelper/implbase1.hxx>
-#endif
-#ifndef _OSL_DIAGNOSE_H_
+#include <cppuhelper/weakref.hxx>
 #include <osl/diagnose.h>
-#endif
-#ifndef CONNECTIVITY_DIAGNOSE_EX_H
-#include "diagnose_ex.h"
-#endif
 
 #include <algorithm>
 #include <functional>
 
-namespace connectivity
-{
-namespace sdbc
+namespace drivermanager
 {
 
 using namespace ::com::sun::star::uno;
@@ -81,6 +74,7 @@ using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::sdbc;
 using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::container;
+using namespace ::com::sun::star::logging;
 using namespace ::osl;
 
 #define SERVICE_SDBC_DRIVER     ::rtl::OUString::createFromAscii("com.sun.star.sdbc.Driver")
@@ -220,7 +214,7 @@ Any SAL_CALL ODriverEnumeration::nextElement(  ) throw(NoSuchElementException, W
     //---------------------------------------------------------------------
     //--- 24.08.01 12:51:54 -----------------------------------------------
 
-    static sal_Int32 lcl_getDriverPrecedence( const Reference< XMultiServiceFactory >&  _rxFactory, Sequence< ::rtl::OUString >& _rPrecedence )
+    static sal_Int32 lcl_getDriverPrecedence( const ::comphelper::ComponentContext& _rContext, Sequence< ::rtl::OUString >& _rPrecedence )
     {
         _rPrecedence.realloc( 0 );
         try
@@ -238,36 +232,32 @@ Any SAL_CALL ODriverEnumeration::nextElement(  ) throw(NoSuchElementException, W
                 ::rtl::OUString::createFromAscii("com.sun.star.configuration.ConfigurationAccess");
 
             // create a configuration provider
-            Reference< XMultiServiceFactory > xConfigurationProvider(
-                _rxFactory->createInstance(sConfigurationProviderServiceName),
-                UNO_QUERY);
-            OSL_ENSURE(xConfigurationProvider.is(), "lcl_getDriverPrecedence: could not instantiate the configuration provider!");
-            if (xConfigurationProvider.is())
+            Reference< XMultiServiceFactory > xConfigurationProvider;
+            if ( !_rContext.createComponent( sConfigurationProviderServiceName, xConfigurationProvider ) )
+                throw ServiceNotRegisteredException( sConfigurationProviderServiceName, NULL );
+
+            // one argument for creating the node access: the path to the configuration node
+            Sequence< Any > aCreationArgs(1);
+            aCreationArgs[0] <<= NamedValue( sNodePathArgumentName, makeAny( sDriverManagerConfigLocation ) );
+
+            // create the node access
+            Reference< XNameAccess > xDriverManagerNode(xConfigurationProvider->createInstanceWithArguments(sNodeAccessServiceName, aCreationArgs), UNO_QUERY);
+
+            OSL_ENSURE(xDriverManagerNode.is(), "lcl_getDriverPrecedence: could not open my configuration node!");
+            if (xDriverManagerNode.is())
             {
-                // one argument for creating the node access: the path to the configuration node
-                Sequence< Any > aCreationArgs(1);
-                aCreationArgs[0] <<= PropertyValue(sNodePathArgumentName, 0, makeAny(sDriverManagerConfigLocation), PropertyState_DIRECT_VALUE);
-
-                // create the node access
-                Reference< XNameAccess > xDriverManagerNode(xConfigurationProvider->createInstanceWithArguments(sNodeAccessServiceName, aCreationArgs), UNO_QUERY);
-
-                OSL_ENSURE(xDriverManagerNode.is(), "lcl_getDriverPrecedence: could not open my configuration node!");
-                if (xDriverManagerNode.is())
-                {
-                    // obtain the preference list
-                    Any aPreferences = xDriverManagerNode->getByName(sDriverPreferenceLocation);
-    #if OSL_DEBUG_LEVEL > 0
-                    sal_Bool bSuccess =
-    #endif
-                    aPreferences >>= _rPrecedence;
-                    OSL_ENSURE(bSuccess || !aPreferences.hasValue(), "lcl_getDriverPrecedence: invalid value for the preferences node (no string sequence but not NULL)!");
-                }
+                // obtain the preference list
+                Any aPreferences = xDriverManagerNode->getByName(sDriverPreferenceLocation);
+#if OSL_DEBUG_LEVEL > 0
+                sal_Bool bSuccess =
+#endif
+                aPreferences >>= _rPrecedence;
+                OSL_ENSURE(bSuccess || !aPreferences.hasValue(), "lcl_getDriverPrecedence: invalid value for the preferences node (no string sequence but not NULL)!");
             }
         }
-        catch( const Exception& e)
+        catch( const Exception& )
         {
-            OSL_UNUSED( e );
-            OSL_ENSURE( sal_False, "lcl_getDriverPrecedence: caught an exception!" );
+            DBG_UNHANDLED_EXCEPTION();
         }
 
         return _rPrecedence.getLength();
@@ -308,8 +298,9 @@ Any SAL_CALL ODriverEnumeration::nextElement(  ) throw(NoSuchElementException, W
 //= OSDBCDriverManager
 //==========================================================================
 //--------------------------------------------------------------------------
-OSDBCDriverManager::OSDBCDriverManager(const Reference< XMultiServiceFactory >& _rxFactory)
-    :m_xServiceFactory(_rxFactory)
+    OSDBCDriverManager::OSDBCDriverManager( const Reference< XComponentContext >& _rxContext )
+    :m_aContext( _rxContext )
+    ,m_aEventLogger( _rxContext, "org.openoffice.logging.sdbc.DriverManager" )
     ,m_nLoginTimeout(0)
 {
     // bootstrap all objects supporting the .sdb.Driver service
@@ -320,11 +311,16 @@ OSDBCDriverManager::OSDBCDriverManager(const Reference< XMultiServiceFactory >& 
 }
 
 //---------------------------------------------------------------------
+OSDBCDriverManager::~OSDBCDriverManager()
+{
+}
+
+//---------------------------------------------------------------------
 //--- 24.08.01 11:15:32 -----------------------------------------------
 
 void OSDBCDriverManager::bootstrapDrivers()
 {
-    Reference< XContentEnumerationAccess > xEnumAccess(m_xServiceFactory, UNO_QUERY);
+    Reference< XContentEnumerationAccess > xEnumAccess( m_aContext.getLegacyServiceFactory(), UNO_QUERY );
     Reference< XEnumeration > xEnumDrivers;
     if (xEnumAccess.is())
         xEnumDrivers = xEnumAccess->createContentEnumeration(SERVICE_SDBC_DRIVER);
@@ -352,6 +348,11 @@ void OSDBCDriverManager::bootstrapDrivers()
                     aDriverDescriptor.sImplementationName = xSI->getImplementationName();
                     aDriverDescriptor.xComponentFactory = xFactory;
                     bValidDescriptor = sal_True;
+
+                    m_aEventLogger.log( LogLevel::CONFIG,
+                        "found SDBC driver $1$, no need to load it",
+                        aDriverDescriptor.sImplementationName
+                    );
                 }
                 else
                 {
@@ -369,6 +370,11 @@ void OSDBCDriverManager::bootstrapDrivers()
                         {
                             aDriverDescriptor.sImplementationName = xSI->getImplementationName();
                             bValidDescriptor = sal_True;
+
+                            m_aEventLogger.log( LogLevel::CONFIG,
+                                "found SDBC driver $1$, needed to load it",
+                                aDriverDescriptor.sImplementationName
+                            );
                         }
                     }
                 }
@@ -393,11 +399,21 @@ void OSDBCDriverManager::initializeDriverPrecedence()
     {
         // get the precedence of the drivers from the configuration
         Sequence< ::rtl::OUString > aDriverOrder;
-        if ( 0 == lcl_getDriverPrecedence( m_xServiceFactory, aDriverOrder ) )
+        if ( 0 == lcl_getDriverPrecedence( m_aContext, aDriverOrder ) )
             // nothing to do
             return;
 
         // aDriverOrder now is the list of driver implementation names in the order they should be used
+
+        if ( m_aEventLogger.isLoggable( LogLevel::CONFIG ) )
+        {
+            sal_Int32 nOrderedCount = aDriverOrder.getLength();
+            for ( sal_Int32 i=0; i<nOrderedCount; ++i )
+            m_aEventLogger.log( LogLevel::CONFIG,
+                "configuration's driver order: driver $1$ of $2$: $3$",
+                (sal_Int32)(i + 1), nOrderedCount, aDriverOrder[i]
+            );
+        }
 
         // sort our bootstrapped drivers
         ::std::sort( m_aDriversBS.begin(), m_aDriversBS.end(), CompareDriverAccessByName() );
@@ -446,12 +462,23 @@ Reference< XConnection > SAL_CALL OSDBCDriverManager::getConnection( const ::rtl
 {
     MutexGuard aGuard(m_aMutex);
 
+    m_aEventLogger.log( LogLevel::INFO,
+        "connection requested for URL $1$",
+        _rURL
+    );
+
     Reference< XConnection > xConnection;
     Reference< XDriver > xDriver = implGetDriverForURL(_rURL);
     if (xDriver.is())
+    {
         // TODO : handle the login timeout
         xConnection = xDriver->connect(_rURL, Sequence< PropertyValue >());
         // may throw an exception
+        m_aEventLogger.log( LogLevel::INFO,
+            "connection retrieved for URL $1$",
+            _rURL
+        );
+    }
 
     return xConnection;
 }
@@ -461,12 +488,23 @@ Reference< XConnection > SAL_CALL OSDBCDriverManager::getConnectionWithInfo( con
 {
     MutexGuard aGuard(m_aMutex);
 
+    m_aEventLogger.log( LogLevel::INFO,
+        "connection with info requested for URL $1$",
+        _rURL
+    );
+
     Reference< XConnection > xConnection;
     Reference< XDriver > xDriver = implGetDriverForURL(_rURL);
     if (xDriver.is())
+    {
         // TODO : handle the login timeout
         xConnection = xDriver->connect(_rURL, _rInfo);
         // may throw an exception
+        m_aEventLogger.log( LogLevel::INFO,
+            "connection with info retrieved for URL $1$",
+            _rURL
+        );
+    }
 
     return xConnection;
 }
@@ -530,7 +568,7 @@ sal_Bool SAL_CALL OSDBCDriverManager::hasElements(  ) throw(::com::sun::star::un
 //--------------------------------------------------------------------------
 ::rtl::OUString SAL_CALL OSDBCDriverManager::getImplementationName(  ) throw(RuntimeException)
 {
-    return getImplementationName_Static();
+    return getImplementationName_static();
 }
 
 //--------------------------------------------------------------------------
@@ -548,27 +586,34 @@ sal_Bool SAL_CALL OSDBCDriverManager::supportsService( const ::rtl::OUString& _r
 //--------------------------------------------------------------------------
 Sequence< ::rtl::OUString > SAL_CALL OSDBCDriverManager::getSupportedServiceNames(  ) throw(RuntimeException)
 {
-    return getSupportedServiceNames_Static();
+    return getSupportedServiceNames_static();
 }
 
 //--------------------------------------------------------------------------
-Reference< XInterface > SAL_CALL OSDBCDriverManager::CreateInstance(const Reference< XMultiServiceFactory >& _rxFactory)
+Reference< XInterface > SAL_CALL OSDBCDriverManager::Create( const Reference< XMultiServiceFactory >& _rxFactory )
 {
-    return static_cast<XDriverManager*>(new OSDBCDriverManager(_rxFactory));
+    ::comphelper::ComponentContext aContext( _rxFactory );
+    return *( new OSDBCDriverManager( aContext.getUNOContext() ) );
 }
 
 //--------------------------------------------------------------------------
-::rtl::OUString SAL_CALL OSDBCDriverManager::getImplementationName_Static(  ) throw(RuntimeException)
+::rtl::OUString SAL_CALL OSDBCDriverManager::getImplementationName_static(  ) throw(RuntimeException)
 {
-    return ::rtl::OUString::createFromAscii("com.sun.star.sdbc.OSDBCDriverManager");
+    return ::rtl::OUString::createFromAscii("com.sun.star.comp.sdbc.OSDBCDriverManager");
 }
 
 //--------------------------------------------------------------------------
-Sequence< ::rtl::OUString > SAL_CALL OSDBCDriverManager::getSupportedServiceNames_Static(  ) throw(RuntimeException)
+Sequence< ::rtl::OUString > SAL_CALL OSDBCDriverManager::getSupportedServiceNames_static(  ) throw(RuntimeException)
 {
     Sequence< ::rtl::OUString > aSupported(1);
-    aSupported[0] = ::rtl::OUString::createFromAscii("com.sun.star.sdbc.DriverManager");
+    aSupported[0] = getSingletonName_static();
     return aSupported;
+}
+
+//--------------------------------------------------------------------------
+::rtl::OUString SAL_CALL OSDBCDriverManager::getSingletonName_static(  ) throw(RuntimeException)
+{
+    return ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.sdbc.DriverManager" ) );
 }
 
 //--------------------------------------------------------------------------
@@ -586,6 +631,12 @@ Reference< XInterface > SAL_CALL OSDBCDriverManager::getRegisteredObject( const 
 void SAL_CALL OSDBCDriverManager::registerObject( const ::rtl::OUString& _rName, const Reference< XInterface >& _rxObject ) throw(Exception, RuntimeException)
 {
     MutexGuard aGuard(m_aMutex);
+
+    m_aEventLogger.log( LogLevel::INFO,
+        "attempt to register new driver for name $1$",
+        _rName
+    );
+
     ConstDriverCollectionIterator aSearch = m_aDriversRT.find(_rName);
     if (aSearch == m_aDriversRT.end())
     {
@@ -597,23 +648,52 @@ void SAL_CALL OSDBCDriverManager::registerObject( const ::rtl::OUString& _rName,
     }
     else
         throw ElementExistException();
+
+    m_aEventLogger.log( LogLevel::INFO,
+        "new driver registered for name $1$",
+        _rName
+    );
 }
 
 //--------------------------------------------------------------------------
 void SAL_CALL OSDBCDriverManager::revokeObject( const ::rtl::OUString& _rName ) throw(Exception, RuntimeException)
 {
     MutexGuard aGuard(m_aMutex);
+
+    m_aEventLogger.log( LogLevel::INFO,
+        "attempt to revoke driver for name $1$",
+        _rName
+    );
+
     DriverCollectionIterator aSearch = m_aDriversRT.find(_rName);
     if (aSearch == m_aDriversRT.end())
         throwNoSuchElementException();
 
     m_aDriversRT.erase(aSearch); // we already have the iterator so we could use it
+
+    m_aEventLogger.log( LogLevel::INFO,
+        "driver revoked for name $1$",
+        _rName
+    );
 }
 
 //--------------------------------------------------------------------------
 Reference< XDriver > SAL_CALL OSDBCDriverManager::getDriverByURL( const ::rtl::OUString& _rURL ) throw(RuntimeException)
 {
-    return implGetDriverForURL(_rURL);
+    m_aEventLogger.log( LogLevel::INFO,
+        "driver requested for URL $1$",
+        _rURL
+    );
+
+    Reference< XDriver > xDriver( implGetDriverForURL( _rURL ) );
+
+    if ( xDriver.is() )
+        m_aEventLogger.log( LogLevel::INFO,
+            "driver obtained for URL $1$",
+            _rURL
+        );
+
+    return xDriver;
 }
 
 //--------------------------------------------------------------------------
@@ -652,7 +732,4 @@ Reference< XDriver > OSDBCDriverManager::implGetDriverForURL(const ::rtl::OUStri
     return xReturn;
 }
 
-}   // namespace connectivity
-}   // namespace sdbc
-
-
+}   // namespace drivermanager
