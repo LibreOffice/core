@@ -4,9 +4,9 @@
  *
  *  $RCSfile: b3dcompo.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: ihi $ $Date: 2006-11-14 16:06:31 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 22:26:37 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -37,15 +37,15 @@
 #include "precompiled_goodies.hxx"
 
 #ifndef _B3D_B3DCOMPO_HXX
-#include "b3dcompo.hxx"
+#include <goodies/b3dcompo.hxx>
 #endif
 
 #ifndef _B3D_BASE3D_HXX
-#include "base3d.hxx"
+#include <goodies/base3d.hxx>
 #endif
 
 #ifndef _B3D_B3DGEOM_HXX
-#include "b3dgeom.hxx"
+#include <goodies/b3dgeom.hxx>
 #endif
 
 #ifndef _INC_FLOAT

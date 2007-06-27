@@ -4,9 +4,9 @@
  *
  *  $RCSfile: b3dentty.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: ihi $ $Date: 2006-11-14 16:07:22 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 22:27:02 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -37,7 +37,7 @@
 #include "precompiled_goodies.hxx"
 
 #ifndef _B3D_B3DENTITY_HXX
-#include "b3dentty.hxx"
+#include <goodies/b3dentty.hxx>
 #endif
 
 #ifndef _B3D_B3DCOMMN_HXX
