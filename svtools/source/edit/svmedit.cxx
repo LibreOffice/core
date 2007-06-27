@@ -4,9 +4,9 @@
  *
  *  $RCSfile: svmedit.cxx,v $
  *
- *  $Revision: 1.38 $
+ *  $Revision: 1.39 $
  *
- *  last change: $Author: rt $ $Date: 2007-04-26 09:43:48 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 14:52:29 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -52,7 +52,7 @@
 #include <undo.hxx>
 #endif
 
-#include "textwindowaccessibility.hxx"
+#include "textwindowpeer.hxx"
 
 // IDs erstmal aus VCL geklaut, muss mal richtig delivert werden...
 #define SV_MENU_EDIT_UNDO           1
@@ -979,7 +979,7 @@ TextWindow::GetComponentInterface(BOOL bCreate)
         Window::GetComponentInterface(false));
     if (!xPeer.is() && bCreate)
     {
-        xPeer = new ::svtools::TextWindowAccessibility(*GetTextView(), true);
+        xPeer = new ::svt::TextWindowPeer(*GetTextView(), true);
         SetComponentInterface(xPeer);
     }
     return xPeer;
