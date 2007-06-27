@@ -4,9 +4,9 @@
  *
  *  $RCSfile: svdoutlinercache.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 05:59:07 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 19:10:29 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -38,8 +38,8 @@
 
 
 #include "svdoutlinercache.hxx"
-#include "svdoutl.hxx"
-#include "svdmodel.hxx"
+#include <svx/svdoutl.hxx>
+#include <svx/svdmodel.hxx>
 
 extern SdrOutliner* SdrMakeOutliner( USHORT nOutlinerMode, SdrModel* pModel );
 
