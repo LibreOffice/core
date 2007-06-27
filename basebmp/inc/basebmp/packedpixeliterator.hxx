@@ -4,9 +4,9 @@
  *
  *  $RCSfile: packedpixeliterator.hxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: thb $ $Date: 2006-07-13 12:03:25 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 12:40:38 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -205,7 +205,7 @@ public:
 
     bool operator<=(PackedPixelColumnIterator const & rhs) const
     {
-        return !less(rhs);
+        return !rhs.less(*this);
     }
 
     bool operator>(PackedPixelColumnIterator const & rhs) const
@@ -215,7 +215,7 @@ public:
 
     bool operator>=(PackedPixelColumnIterator const & rhs) const
     {
-        return !rhs.less(*this);
+        return !less(rhs);
     }
 
     difference_type operator-(PackedPixelColumnIterator const & rhs) const
@@ -436,7 +436,7 @@ public:
 
     bool operator<=(PackedPixelRowIterator const & rhs) const
     {
-        return !less(rhs);
+        return !rhs.less(*this);
     }
 
     bool operator>(PackedPixelRowIterator const & rhs) const
@@ -446,7 +446,7 @@ public:
 
     bool operator>=(PackedPixelRowIterator const & rhs) const
     {
-        return !rhs.less(*this);
+        return !less(rhs);
     }
 
     difference_type operator-(PackedPixelRowIterator const & rhs) const
