@@ -4,9 +4,9 @@
  *
  *  $RCSfile: initui.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: rt $ $Date: 2007-04-26 09:23:37 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 13:28:26 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -195,6 +195,7 @@ ShellResource::ShellResource()
     aTOXObjectsName(        SW_RES(STR_TOX_OBJ)),
     aTOXTablesName(         SW_RES(STR_TOX_TBL)),
     aTOXAuthoritiesName(    SW_RES(STR_TOX_AUTH)),
+    aHyperlinkClick( SW_RES( STR_HYPERLINK_CLICK)),
     sPageDescFirstName(     SW_RES(STR_PAGEDESC_FIRSTNAME)),
     sPageDescFollowName(    SW_RES(STR_PAGEDESC_FOLLOWNAME)),
     sPageDescName(          SW_RES(STR_PAGEDESC_NAME)),
