@@ -4,9 +4,9 @@
  *
  *  $RCSfile: galctrl.cxx,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: obo $ $Date: 2006-10-12 12:48:53 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 18:19:59 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -46,7 +46,7 @@
 #include "galmisc.hxx"
 #include "galctrl.hxx"
 #include "AccessibleStringWrap.hxx"
-#include "svxfont.hxx"
+#include <svx/svxfont.hxx>
 
 // -----------
 // - Defines -
