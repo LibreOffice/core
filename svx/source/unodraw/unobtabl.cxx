@@ -4,9 +4,9 @@
  *
  *  $RCSfile: unobtabl.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 06:11:20 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 19:22:50 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -48,7 +48,7 @@
 #include <svtools/itemset.hxx>
 #endif
 #ifndef _SVX_XIT_HXX
-#include <xit.hxx>
+#include <svx/xit.hxx>
 #endif
 #ifndef SVX_LIGHT
 #ifndef _SFXDOCFILE_HXX
@@ -60,13 +60,13 @@
 #include "UnoNameItemTable.hxx"
 #endif
 
-#include "xbtmpit.hxx"
-#include "svdmodel.hxx"
-#include "xflhtit.hxx"
+#include <svx/xbtmpit.hxx>
+#include <svx/svdmodel.hxx>
+#include <svx/xflhtit.hxx>
 #include "unoapi.hxx"
 #include "impgrf.hxx"
-#include "unomid.hxx"
-#include "unoprnms.hxx"
+#include <svx/unomid.hxx>
+#include <svx/unoprnms.hxx>
 #include "unofill.hxx"
 
 using namespace ::com::sun::star;
