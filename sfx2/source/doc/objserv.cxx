@@ -4,9 +4,9 @@
  *
  *  $RCSfile: objserv.cxx,v $
  *
- *  $Revision: 1.97 $
+ *  $Revision: 1.98 $
  *
- *  last change: $Author: rt $ $Date: 2006-11-09 11:01:38 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 23:23:45 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -150,33 +150,33 @@
 #ifndef GCC
 #endif
 
-#include "app.hxx"
+#include <sfx2/app.hxx>
 #include "sfxresid.hxx"
-#include "event.hxx"
-#include "request.hxx"
-#include "printer.hxx"
-#include "viewsh.hxx"
-#include "doctdlg.hxx"
-#include "docfilt.hxx"
-#include "docfile.hxx"
-#include "docinf.hxx"
-#include "dispatch.hxx"
-#include "dinfdlg.hxx"
-#include "objitem.hxx"
-#include "objsh.hxx"
+#include <sfx2/event.hxx>
+#include <sfx2/request.hxx>
+#include <sfx2/printer.hxx>
+#include <sfx2/viewsh.hxx>
+#include <sfx2/doctdlg.hxx>
+#include <sfx2/docfilt.hxx>
+#include <sfx2/docfile.hxx>
+#include <sfx2/docinf.hxx>
+#include <sfx2/dispatch.hxx>
+#include <sfx2/dinfdlg.hxx>
+#include <sfx2/objitem.hxx>
+#include <sfx2/objsh.hxx>
 #include "objshimp.hxx"
 #include "sfxtypes.hxx"
 //#include "interno.hxx"
-#include "module.hxx"
-#include "topfrm.hxx"
+#include <sfx2/module.hxx>
+#include <sfx2/topfrm.hxx>
 #include "versdlg.hxx"
 #include "doc.hrc"
-#include "docfac.hxx"
-#include "fcontnr.hxx"
-#include "filedlghelper.hxx"
+#include <sfx2/docfac.hxx>
+#include <sfx2/fcontnr.hxx>
+#include <sfx2/filedlghelper.hxx>
 #include "sfxhelp.hxx"
-#include "msgpool.hxx"
-#include "objface.hxx"
+#include <sfx2/msgpool.hxx>
+#include <sfx2/objface.hxx>
 
 #include "../appl/app.hrc"
 #include <com/sun/star/document/XDocumentSubStorageSupplier.hpp>
