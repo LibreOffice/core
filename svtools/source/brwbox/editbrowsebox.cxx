@@ -4,9 +4,9 @@
  *
  *  $RCSfile: editbrowsebox.cxx,v $
  *
- *  $Revision: 1.28 $
+ *  $Revision: 1.29 $
  *
- *  last change: $Author: obo $ $Date: 2006-10-12 15:06:51 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 14:49:18 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -92,12 +92,6 @@
 #endif
 #ifndef _COMPHELPER_TYPES_HXX_
 #include <comphelper/types.hxx>
-#endif
-#ifndef _SVTOOLS_ACCESSIBILEEDITBROWSEBOXTABLECELL_HXX
-#include "editbrowseboxcell.hxx"
-#endif
-#ifndef _SVTOOLS_ACCESSIBLEBROWSEBOX_HXX
-#include "AccessibleBrowseBox.hxx"
 #endif
 
 // .......................................................................
@@ -197,7 +191,6 @@ namespace svt
     void EditBrowseBox::impl_construct()
     {
         m_aImpl = ::std::auto_ptr<EditBrowseBoxImpl>(new EditBrowseBoxImpl());
-        m_aImpl->m_pActiveCell = NULL;
         m_aImpl->m_bHiContrast = isHiContrast(&GetDataWindow());
 
         SetCompoundControl(sal_True);
