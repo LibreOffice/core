@@ -4,9 +4,9 @@
  *
  *  $RCSfile: mnemonic.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 12:19:57 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 20:32:25 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -37,11 +37,11 @@
 #include "precompiled_vcl.hxx"
 
 #include <string.h>
-#include <svapp.hxx>
-#include <settings.hxx>
-#include <mnemonic.hxx>
+#include <vcl/svapp.hxx>
+#include <vcl/settings.hxx>
+#include <vcl/mnemonic.hxx>
 
-#include <unohelp.hxx>
+#include <vcl/unohelp.hxx>
 
 #ifndef _COM_SUN_STAR_I18N_XCHARACTERCLASSIFICATION_HPP_
 #include <com/sun/star/i18n/XCharacterClassification.hpp>
