@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ViewShellImplementation.hxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: hr $ $Date: 2006-10-24 13:36:21 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 15:44:10 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -80,7 +80,8 @@ public:
         /** Create a new instance.  This allows the mpSelf member to be set
             automatically.
         */
-        static ::boost::shared_ptr<ToolBarManagerLock> Create (::sd::ToolBarManager& rManager);
+        static ::boost::shared_ptr<ToolBarManagerLock> Create (
+            const ::boost::shared_ptr<ToolBarManager>& rpManager);
         /** Release the lock.  When the UI is captured
             (Application::IsUICaptured() returns <TRUE/>) then the lock is
             released later asynchronously.
@@ -103,7 +104,7 @@ public:
             holds another shared_ptr longer than only temporary.
         */
         ::boost::shared_ptr<ToolBarManagerLock> mpSelf;
-        ToolBarManagerLock (::sd::ToolBarManager& rManager);
+        ToolBarManagerLock (const ::boost::shared_ptr<ToolBarManager>& rpManager);
         ~ToolBarManagerLock (void);
 
         class Deleter;
