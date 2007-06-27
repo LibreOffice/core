@@ -4,9 +4,9 @@
  *
  *  $RCSfile: inetstrm.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 00:58:10 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 22:15:31 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -45,16 +45,16 @@
 #endif
 
 #ifndef _CACHESTR_HXX
-#include <cachestr.hxx>
+#include <tools/cachestr.hxx>
 #endif
 #ifndef _TOOLS_DEBUG_HXX
-#include <debug.hxx>
+#include <tools/debug.hxx>
 #endif
 #ifndef _TOOLS_INETMSG_HXX
-#include <inetmsg.hxx>
+#include <tools/inetmsg.hxx>
 #endif
 #ifndef _TOOLS_INETSTRM_HXX
-#include <inetstrm.hxx>
+#include <tools/inetstrm.hxx>
 #endif
 
 #include <ctype.h> // toupper
