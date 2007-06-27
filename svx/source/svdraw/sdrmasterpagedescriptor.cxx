@@ -4,9 +4,9 @@
  *
  *  $RCSfile: sdrmasterpagedescriptor.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 05:47:10 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 18:57:38 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -37,7 +37,7 @@
 #include "precompiled_svx.hxx"
 
 #ifndef _SDR_MASTERPAGEDESCRIPTOR_HXX
-#include <sdrmasterpagedescriptor.hxx>
+#include <svx/sdrmasterpagedescriptor.hxx>
 #endif
 
 #ifndef _SDR_CONTACT_VIEWCONTACTOFMASTERPAGEDESCRIPTOR_HXX
@@ -45,12 +45,12 @@
 #endif
 
 #ifndef _SVDPAGE_HXX
-#include <svdpage.hxx>
+#include <svx/svdpage.hxx>
 #endif
 
 // #i42075#
 #ifndef _SVDOBJ_HXX
-#include <svdobj.hxx>
+#include <svx/svdobj.hxx>
 #endif
 
 //////////////////////////////////////////////////////////////////////////////
