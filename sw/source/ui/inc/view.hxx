@@ -4,9 +4,9 @@
  *
  *  $RCSfile: view.hxx,v $
  *
- *  $Revision: 1.50 $
+ *  $Revision: 1.51 $
  *
- *  last change: $Author: rt $ $Date: 2007-04-25 14:48:32 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 13:25:39 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -247,7 +247,7 @@ class SW_DLLPUBLIC SwView: public SfxViewShell
     SwScrollbar         *pHScrollbar,   // MDI Bedienelemente
                         *pVScrollbar;
 
-    Window              *pScrollFill;   // Dummy-Window zum FÅllen der rechten
+    Window              *pScrollFill;   // Dummy-Window zum Fuellen der rechten
                                         // unteren Ecke, wenn beide Scrollbars
                                         // aktiv sind
 
@@ -485,7 +485,6 @@ public:
 
     // SMARTTAGS
     BOOL            ExecSmartTagPopup( const Point& rPt );
-    BOOL            IsOverSmartTag( const Point& rPt );
 
     BOOL            ExecDrwTxtSpellPopup(const Point& rPt);
 
