@@ -4,9 +4,9 @@
  *
  *  $RCSfile: brwbox1.cxx,v $
  *
- *  $Revision: 1.41 $
+ *  $Revision: 1.42 $
  *
- *  last change: $Author: vg $ $Date: 2007-04-11 19:45:23 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 14:48:30 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -65,15 +65,15 @@
 #ifndef _COM_SUN_STAR_ACCESSIBILITY_ACCESSIBLEEVENTID_HPP_
 #include <com/sun/star/accessibility/AccessibleEventId.hpp>
 #endif
+#ifndef _COM_SUN_STAR_ACCESSIBILITY_XACCESSIBLE_HPP_
+#include <com/sun/star/accessibility/XAccessible.hpp>
+#endif
 
 #ifndef _SV_MULTISEL_HXX
 #include <tools/multisel.hxx>
 #endif
 #ifndef _SVTOOLS_BRWIMPL_HXX
 #include "brwimpl.hxx"
-#endif
-#ifndef _SVTOOLS_ACCESSIBLEBROWSEBOXHEADERCELL_HXX
-#include "AccessibleBrowseBoxHeaderCell.hxx"
 #endif
 
 DBG_NAME(BrowseBox)
