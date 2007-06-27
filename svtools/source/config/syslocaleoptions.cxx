@@ -4,9 +4,9 @@
  *
  *  $RCSfile: syslocaleoptions.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 14:30:23 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 21:17:26 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -41,7 +41,7 @@
 #endif
 #define SVT_DLLIMPLEMENTATION
 
-#include "syslocaleoptions.hxx"
+#include <svtools/syslocaleoptions.hxx>
 
 #ifndef _SVT_BROADCAST_HXX
 #include <broadcast.hxx>
@@ -50,7 +50,7 @@
 #include <listener.hxx>
 #endif
 #ifndef _SFXSMPLHINT_HXX
-#include <smplhint.hxx>
+#include <svtools/smplhint.hxx>
 #endif
 #ifndef INCLUDED_I18NPOOL_MSLANGID_HXX
 #include <i18npool/mslangid.hxx>
