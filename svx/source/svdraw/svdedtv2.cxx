@@ -4,9 +4,9 @@
  *
  *  $RCSfile: svdedtv2.cxx,v $
  *
- *  $Revision: 1.29 $
+ *  $Revision: 1.30 $
  *
- *  last change: $Author: kz $ $Date: 2007-05-09 13:32:18 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 19:00:15 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -36,21 +36,21 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_svx.hxx"
 
-#include "svdedtv.hxx"
-#include "outliner.hxx"
-#include "svdundo.hxx"
-#include "svdogrp.hxx"   // fuer's Gruppieren
-#include "svdovirt.hxx"  // fuer VirtualObject-Bundling (Writer)
-#include "svdopath.hxx"  // fuer CombineObjects
-#include "svdpage.hxx"
-#include "svdpagv.hxx"
+#include <svx/svdedtv.hxx>
+#include <svx/outliner.hxx>
+#include <svx/svdundo.hxx>
+#include <svx/svdogrp.hxx>   // fuer's Gruppieren
+#include <svx/svdovirt.hxx>  // fuer VirtualObject-Bundling (Writer)
+#include <svx/svdopath.hxx>  // fuer CombineObjects
+#include <svx/svdpage.hxx>
+#include <svx/svdpagv.hxx>
 #include "svditer.hxx"
-#include "svdograf.hxx"  // fuer Possibilities
-#include "svdoole2.hxx"  // und Mtf-Import
+#include <svx/svdograf.hxx>  // fuer Possibilities
+#include <svx/svdoole2.hxx>  // und Mtf-Import
 #include "svdstr.hrc"   // Namen aus der Resource
 #include "svdglob.hxx"  // StringCache
 #include "svdfmtf.hxx"
-#include "svdetc.hxx"
+#include <svx/svdetc.hxx>
 
 #ifndef _BASEDLGS_HXX
 #include <sfx2/basedlgs.hxx>
@@ -61,11 +61,11 @@
 #endif
 
 #ifndef _OUTLOBJ_HXX //autogen
-#include <outlobj.hxx>
+#include <svx/outlobj.hxx>
 #endif
 
 #ifndef _EEITEM_HXX
-#include "eeitem.hxx"
+#include <svx/eeitem.hxx>
 #endif
 
 #ifndef _BGFX_POLYGON_B2DPOLYPOLYGON_HXX
@@ -76,12 +76,12 @@
 #include <basegfx/polygon/b2dpolypolygontools.hxx>
 #endif
 
-#include "svxdlg.hxx" //CHINA001
-#include <dialogs.hrc> //CHINA001
+#include <svx/svxdlg.hxx> //CHINA001
+#include <svx/dialogs.hrc> //CHINA001
 
 // #i37011#
 #ifndef _SVDOASHP_HXX
-#include "svdoashp.hxx"
+#include <svx/svdoashp.hxx>
 #endif
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
