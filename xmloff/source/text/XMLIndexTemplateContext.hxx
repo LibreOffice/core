@@ -4,9 +4,9 @@
  *
  *  $RCSfile: XMLIndexTemplateContext.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 15:12:23 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 16:01:42 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -37,11 +37,11 @@
 #define _XMLOFF_XMLINDEXTEMPLATECONTEXT_HXX_
 
 #ifndef _XMLOFF_XMLICTXT_HXX
-#include "xmlictxt.hxx"
+#include <xmloff/xmlictxt.hxx>
 #endif
 
 #ifndef _XMLOFF_XMLTOKEN_HXX
-#include "xmltoken.hxx"
+#include <xmloff/xmltoken.hxx>
 #endif
 
 #include <vector>
