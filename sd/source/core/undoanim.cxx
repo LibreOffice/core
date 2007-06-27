@@ -4,9 +4,9 @@
  *
  *  $RCSfile: undoanim.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: kz $ $Date: 2006-12-12 16:34:41 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 15:38:01 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -148,12 +148,20 @@ struct UndoTransitionImpl
     sal_Bool mbNewTransitionDirection;
     sal_Int32 mnNewTransitionFadeColor;
     double mfNewTransitionDuration;
+    String maNewSoundFile;
+    bool mbNewSoundOn;
+    bool mbNewLoopSound;
+    bool mbNewStopSound;
 
     sal_Int16 mnOldTransitionType;
     sal_Int16 mnOldTransitionSubtype;
     sal_Bool mbOldTransitionDirection;
     sal_Int32 mnOldTransitionFadeColor;
     double mfOldTransitionDuration;
+    String maOldSoundFile;
+    bool mbOldSoundOn;
+    bool mbOldLoopSound;
+    bool mbOldStopSound;
 };
 
 UndoTransition::UndoTransition( SdDrawDocument* _pDoc, SdPage* pThePage )
@@ -167,6 +175,10 @@ UndoTransition::UndoTransition( SdDrawDocument* _pDoc, SdPage* pThePage )
     mpImpl->mbOldTransitionDirection = pThePage->mbTransitionDirection;
     mpImpl->mnOldTransitionFadeColor = pThePage->mnTransitionFadeColor;
     mpImpl->mfOldTransitionDuration = pThePage->mfTransitionDuration;
+    mpImpl->maOldSoundFile = pThePage->maSoundFile;
+    mpImpl->mbOldSoundOn = pThePage->mbSoundOn;
+    mpImpl->mbOldLoopSound = pThePage->mbLoopSound;
+    mpImpl->mbOldStopSound = pThePage->mbStopSound;
 }
 
 UndoTransition::~UndoTransition()
@@ -183,6 +195,10 @@ void UndoTransition::Undo()
         mpImpl->mbNewTransitionDirection = mpImpl->mpPage->mbTransitionDirection;
         mpImpl->mnNewTransitionFadeColor = mpImpl->mpPage->mnTransitionFadeColor;
         mpImpl->mfNewTransitionDuration = mpImpl->mpPage->mfTransitionDuration;
+        mpImpl->maNewSoundFile = mpImpl->mpPage->maSoundFile;
+        mpImpl->mbNewSoundOn = mpImpl->mpPage->mbSoundOn;
+        mpImpl->mbNewLoopSound = mpImpl->mpPage->mbLoopSound;
+        mpImpl->mbNewStopSound = mpImpl->mpPage->mbStopSound;
     }
 
     mpImpl->mpPage->mnTransitionType = mpImpl->mnOldTransitionType;
@@ -190,6 +206,10 @@ void UndoTransition::Undo()
     mpImpl->mpPage->mbTransitionDirection = mpImpl->mbOldTransitionDirection;
     mpImpl->mpPage->mnTransitionFadeColor = mpImpl->mnOldTransitionFadeColor;
     mpImpl->mpPage->mfTransitionDuration = mpImpl->mfOldTransitionDuration;
+    mpImpl->mpPage->maSoundFile = mpImpl->maOldSoundFile;
+    mpImpl->mpPage->mbSoundOn = mpImpl->mbOldSoundOn;
+    mpImpl->mpPage->mbLoopSound = mpImpl->mbOldLoopSound;
+    mpImpl->mpPage->mbStopSound = mpImpl->mbOldStopSound;
 }
 
 void UndoTransition::Redo()
@@ -199,6 +219,10 @@ void UndoTransition::Redo()
     mpImpl->mpPage->mbTransitionDirection = mpImpl->mbNewTransitionDirection;
     mpImpl->mpPage->mnTransitionFadeColor = mpImpl->mnNewTransitionFadeColor;
     mpImpl->mpPage->mfTransitionDuration = mpImpl->mfNewTransitionDuration;
+    mpImpl->mpPage->maSoundFile = mpImpl->maNewSoundFile;
+    mpImpl->mpPage->mbSoundOn = mpImpl->mbNewSoundOn;
+    mpImpl->mpPage->mbLoopSound = mpImpl->mbNewLoopSound;
+    mpImpl->mpPage->mbStopSound = mpImpl->mbNewStopSound;
 }
 
 String UndoTransition::GetComment() const
