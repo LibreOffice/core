@@ -4,9 +4,9 @@
  *
  *  $RCSfile: wmadaptor.hxx,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: kz $ $Date: 2006-10-06 10:02:31 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 20:43:44 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -43,7 +43,7 @@
 #include <tools/gen.hxx>
 #endif
 #ifndef _VCL_DLLAPI_H
-#include "dllapi.h"
+#include <vcl/dllapi.h>
 #endif
 #ifndef _PREX_H
 #include <prex.h>
