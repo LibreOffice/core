@@ -4,9 +4,9 @@
  *
  *  $RCSfile: lingucfg.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: vg $ $Date: 2007-01-18 14:11:15 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 21:13:50 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -52,7 +52,7 @@
 #endif
 
 #ifndef _SVTOOLS_LINGUCFG_HXX_
-#include <lingucfg.hxx>
+#include <svtools/lingucfg.hxx>
 #endif
 #ifndef _SVTOOLS_LINGUPROPS_HXX_
 #include <linguprops.hxx>
