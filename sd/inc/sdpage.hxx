@@ -4,9 +4,9 @@
  *
  *  $RCSfile: sdpage.hxx,v $
  *
- *  $Revision: 1.29 $
+ *  $Revision: 1.30 $
  *
- *  last change: $Author: kz $ $Date: 2006-12-12 16:25:58 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 15:34:54 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -168,6 +168,8 @@ protected:
                                           // angezeigt (TRUE/FALSE)
     String      maLayoutName;             // Name des Layouts
     String      maSoundFile;               // Pfad zum Soundfile (MSDOS-Notation)
+    bool        mbLoopSound;
+    bool        mbStopSound;
     String      maCreatedPageName;         // von GetPageName erzeugter Seitenname
     String      maFileName;                // Filename
     String      maBookmarkName;           // Bookmarkname
@@ -283,6 +285,12 @@ public:
 
     void        SetSoundFile(const String& rStr)    { maSoundFile = rStr; }
     String      GetSoundFile() const                { return maSoundFile; }
+
+    void        SetLoopSound( bool bLoopSound ) { mbLoopSound = bLoopSound; }
+    bool        IsLoopSound() const                 { return mbLoopSound; }
+
+    void        SetStopSound( bool bStopSound ) { mbStopSound = bStopSound; }
+    bool        IsStopSound() const             { return mbStopSound; }
 
     sal_Int16   getTransitionType() const;
     void        setTransitionType( sal_Int16 nTransitionType );
