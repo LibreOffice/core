@@ -4,9 +4,9 @@
  *
  *  $RCSfile: wmfwr.hxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: ihi $ $Date: 2006-11-14 15:43:41 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 21:37:19 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -42,7 +42,7 @@
 #include <vcl/graph.hxx>
 #include <vcl/gdimtf.hxx>
 #include <vcl/virdev.hxx>
-#include "fltcall.hxx"
+#include <svtools/fltcall.hxx>
 
 // -----------------------------------------------------------------------------
 
