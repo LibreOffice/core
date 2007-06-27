@@ -4,9 +4,9 @@
  *
  *  $RCSfile: editeng.cxx,v $
  *
- *  $Revision: 1.106 $
+ *  $Revision: 1.107 $
  *
- *  last change: $Author: hr $ $Date: 2007-06-27 12:52:48 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 17:55:21 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -47,44 +47,44 @@
 #include <svtools/ctloptions.hxx>
 #endif
 
-#include <svxfont.hxx>
+#include <svx/svxfont.hxx>
 #include <impedit.hxx>
-#include <editeng.hxx>
-#include <editview.hxx>
+#include <svx/editeng.hxx>
+#include <svx/editview.hxx>
 #include <editstat.hxx>
 #include <editdbg.hxx>
 #include <eerdll2.hxx>
 #include <eerdll.hxx>
 #include <editeng.hrc>
-#include <flditem.hxx>
+#include <svx/flditem.hxx>
 #include <txtrange.hxx>
 #include <vcl/graph.hxx>
 
-#include "akrnitem.hxx"
-#include "cntritem.hxx"
-#include "colritem.hxx"
-#include "crsditem.hxx"
-#include "escpitem.hxx"
-#include "fhgtitem.hxx"
+#include <svx/akrnitem.hxx>
+#include <svx/cntritem.hxx>
+#include <svx/colritem.hxx>
+#include <svx/crsditem.hxx>
+#include <svx/escpitem.hxx>
+#include <svx/fhgtitem.hxx>
 #include "fontitem.hxx"
-#include "kernitem.hxx"
-#include "lrspitem.hxx"
-#include "postitem.hxx"
-#include "shdditem.hxx"
-#include "udlnitem.hxx"
-#include "wghtitem.hxx"
-#include "wrlmitem.hxx"
-#include "brshitem.hxx"
-#include "cscoitem.hxx"
-#include "langitem.hxx"
-#include <emphitem.hxx>
-#include <charscaleitem.hxx>
-#include <charreliefitem.hxx>
+#include <svx/kernitem.hxx>
+#include <svx/lrspitem.hxx>
+#include <svx/postitem.hxx>
+#include <svx/shdditem.hxx>
+#include <svx/udlnitem.hxx>
+#include <svx/wghtitem.hxx>
+#include <svx/wrlmitem.hxx>
+#include <svx/brshitem.hxx>
+#include <svx/cscoitem.hxx>
+#include <svx/langitem.hxx>
+#include <svx/emphitem.hxx>
+#include <svx/charscaleitem.hxx>
+#include <svx/charreliefitem.hxx>
 
 #include <sot/exchange.hxx>
 #include <sot/formats.hxx>
 
-#include <numitem.hxx>
+#include <svx/numitem.hxx>
 #include <bulitem.hxx>
 
 #ifndef _UNO_LINGU_HXX
@@ -106,7 +106,7 @@
 #endif
 
 #ifndef _XPOLY_HXX //autogen
-#include <xpoly.hxx>
+#include <svx/xpoly.hxx>
 #endif
 
 #ifndef _COM_SUN_STAR_DATATRANSFER_CLIPBOARD_XCLIPBOARD_HPP_
@@ -119,7 +119,7 @@
 #include <srchdlg.hxx>
 
 #if OSL_DEBUG_LEVEL > 1
-#include <frmdiritem.hxx>
+#include <svx/frmdiritem.hxx>
 #endif
 
 #ifndef _BGFX_POLYGON_B2DPOLYGON_HXX
