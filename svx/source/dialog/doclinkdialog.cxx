@@ -4,9 +4,9 @@
  *
  *  $RCSfile: doclinkdialog.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: ihi $ $Date: 2007-06-05 14:32:46 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 17:03:00 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -46,8 +46,8 @@
 #ifndef _SVX_DOCLINKDIALOG_HRC_
 #include "doclinkdialog.hrc"
 #endif
-#include "dialogs.hrc"
-#include "svxids.hrc"
+#include <svx/dialogs.hrc>
+#include <svx/svxids.hrc>
 #ifndef _TOOLS_DEBUG_HXX
 #include <tools/debug.hxx>
 #endif
@@ -60,7 +60,7 @@
 #ifndef _UCBHELPER_CONTENT_HXX
 #include <ucbhelper/content.hxx>
 #endif
-#include "dialmgr.hxx"
+#include <svx/dialmgr.hxx>
 #ifndef _URLOBJ_HXX
 #include <tools/urlobj.hxx>
 #endif
