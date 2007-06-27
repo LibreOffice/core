@@ -4,9 +4,9 @@
  *
  *  $RCSfile: opcode.hxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: obo $ $Date: 2007-06-13 09:05:27 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 13:42:28 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -385,6 +385,7 @@ enum OpCodeEnum
         ocConvert           = SC_OPCODE_CONVERT,
         ocRoman             = SC_OPCODE_ROMAN,
         ocHyperLink         = SC_OPCODE_HYPERLINK,
+        ocGetPivotData      = SC_OPCODE_GET_PIVOT_DATA,
         ocEnd2Par           = SC_OPCODE_END_2_PAR,
     // internes Allerlei
         ocInternalBegin     = SC_OPCODE_INTERNAL_BEGIN,
