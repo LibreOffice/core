@@ -4,9 +4,9 @@
  *
  *  $RCSfile: JConnection.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: obo $ $Date: 2007-03-12 10:41:12 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 14:35:59 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -70,6 +70,7 @@
 #include "connectivity/dbexception.hxx"
 #endif
 #include "java/util/Property.hxx"
+#include "resource/jdbc_log.hrc"
 #include "com/sun/star/uno/XComponentContext.hpp"
 #include "jvmaccess/classpath.hxx"
 
@@ -81,7 +82,6 @@
 using namespace connectivity;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::beans;
-//  using namespace ::com::sun::star::sdbcx;
 using namespace ::com::sun::star::sdbc;
 using namespace ::com::sun::star::container;
 using namespace ::com::sun::star::lang;
@@ -197,13 +197,14 @@ IMPLEMENT_SERVICE_INFO(java_sql_Connection,"com.sun.star.sdbcx.JConnection","com
 //**************************************************************
 jclass java_sql_Connection::theClass = 0;
 
-java_sql_Connection::java_sql_Connection( const java_sql_Driver* _pDriver)
-    :java_lang_Object( _pDriver->getORB() )
-    ,OSubComponent<java_sql_Connection, java_sql_Connection_BASE>((::cppu::OWeakObject*)_pDriver, this)
+java_sql_Connection::java_sql_Connection( const java_sql_Driver& _rDriver )
+    :java_lang_Object( _rDriver.getContext().getLegacyServiceFactory() )
+    ,OSubComponent<java_sql_Connection, java_sql_Connection_BASE>((::cppu::OWeakObject*)(&_rDriver), this)
     ,m_xMetaData(NULL)
-    ,m_pDriver(_pDriver)
+    ,m_pDriver( &_rDriver )
     ,m_pDriverobject(NULL)
     ,m_Driver_theClass(NULL)
+    ,m_aLogger( _rDriver.getLogger() )
     ,m_bParameterSubstitution(sal_False)
     ,m_bIgnoreDriverPrivileges(sal_True)
 {
@@ -239,6 +240,9 @@ void SAL_CALL java_sql_Connection::release() throw()
 void java_sql_Connection::disposing()
 {
     ::osl::MutexGuard aGuard(m_aMutex);
+
+    m_aLogger.log( LogLevel::INFO, STR_LOG_SHUTDOWN_CONNECTION );
+
     dispose_ChildImpl();
     java_sql_Connection_BASE::disposing();
 
@@ -268,7 +272,7 @@ void java_sql_Connection::disposing()
                 mID  = t.pEnv->GetMethodID( getMyClass(), cMethodName, cSignature );OSL_ENSURE(mID,"Unknown method id!");
             if( mID )
                 t.pEnv->CallVoidMethod( object, mID);
-            ThrowSQLException(t.pEnv,*this);
+            ThrowLoggedSQLException( m_aLogger, t.pEnv, *this );
         } //t.pEnv
     }
 }
@@ -314,7 +318,7 @@ void java_sql_Connection::saveClassRef( jclass pClass )
             mID  = t.pEnv->GetMethodID( getMyClass(), cMethodName, cSignature );OSL_ENSURE(mID,"Unknown method id!");
         if( mID ){
             jstring out = (jstring)t.pEnv->CallObjectMethod( object, mID);
-            ThrowSQLException(t.pEnv,*this);
+            ThrowLoggedSQLException( m_aLogger, t.pEnv, *this );
             aStr = JavaString2String(t.pEnv,out);
         } //mID
     } //t.pEnv
@@ -344,12 +348,12 @@ Reference< XDatabaseMetaData > SAL_CALL java_sql_Connection::getMetaData(  ) thr
                 mID  = t.pEnv->GetMethodID( getMyClass(), cMethodName, cSignature );OSL_ENSURE(mID,"Unknown method id!");
             if( mID )
                 out = t.pEnv->CallObjectMethod( object, mID);
-                ThrowSQLException(t.pEnv,*this);
+                ThrowLoggedSQLException( m_aLogger, t.pEnv, *this );
         } //t.pEnv
         if(out)
         {
 
-            xMetaData = new java_sql_DatabaseMetaData( t.pEnv, out,this );
+            xMetaData = new java_sql_DatabaseMetaData( t.pEnv, out, *this );
             m_xMetaData = xMetaData;
         }
     }
@@ -380,7 +384,7 @@ void SAL_CALL java_sql_Connection::commit(  ) throw(SQLException, RuntimeExcepti
             mID  = t.pEnv->GetMethodID( getMyClass(), cMethodName, cSignature );OSL_ENSURE(mID,"Unknown method id!");
         if( mID ){
             t.pEnv->CallVoidMethod( object, mID );
-            ThrowSQLException(t.pEnv,*this);
+            ThrowLoggedSQLException( m_aLogger, t.pEnv, *this );
         } //mID
     } //t.pEnv
 }
@@ -402,7 +406,7 @@ sal_Bool SAL_CALL java_sql_Connection::isClosed(  ) throw(SQLException, RuntimeE
             mID  = t.pEnv->GetMethodID( getMyClass(), cMethodName, cSignature );OSL_ENSURE(mID,"Unknown method id!");
         if( mID ){
             out = t.pEnv->CallBooleanMethod( object, mID);
-            ThrowSQLException(t.pEnv,*this);
+            ThrowLoggedSQLException( m_aLogger, t.pEnv, *this );
         } //mID
     } //t.pEnv
     return out && java_sql_Connection_BASE::rBHelper.bDisposed;
@@ -426,7 +430,7 @@ sal_Bool SAL_CALL java_sql_Connection::isReadOnly(  ) throw(SQLException, Runtim
             mID  = t.pEnv->GetMethodID( getMyClass(), cMethodName, cSignature );OSL_ENSURE(mID,"Unknown method id!");
         if( mID ){
             out = t.pEnv->CallBooleanMethod( object, mID);
-            ThrowSQLException(t.pEnv,*this);
+            ThrowLoggedSQLException( m_aLogger, t.pEnv, *this );
         } //mID
     } //t.pEnv
     return out;
@@ -454,7 +458,7 @@ void SAL_CALL java_sql_Connection::setCatalog( const ::rtl::OUString& catalog ) 
             t.pEnv->CallVoidMethod( object, mID, str );
 
             t.pEnv->DeleteLocalRef(str);
-            ThrowSQLException(t.pEnv,*this);
+            ThrowLoggedSQLException( m_aLogger, t.pEnv, *this );
         }
     } //t.pEnv
 }
@@ -476,7 +480,7 @@ void SAL_CALL java_sql_Connection::rollback(  ) throw(SQLException, RuntimeExcep
             mID  = t.pEnv->GetMethodID( getMyClass(), cMethodName, cSignature );OSL_ENSURE(mID,"Unknown method id!");
         if( mID ){
             t.pEnv->CallVoidMethod( object, mID);
-            ThrowSQLException(t.pEnv,*this);
+            ThrowLoggedSQLException( m_aLogger, t.pEnv, *this );
         } //mID
     } //t.pEnv
 }
@@ -500,7 +504,7 @@ sal_Bool SAL_CALL java_sql_Connection::getAutoCommit(  ) throw(SQLException, Run
             mID  = t.pEnv->GetMethodID( getMyClass(), cMethodName, cSignature );OSL_ENSURE(mID,"Unknown method id!");
         if( mID )
             out = t.pEnv->CallBooleanMethod( object, mID );
-            ThrowSQLException(t.pEnv,*this);
+            ThrowLoggedSQLException( m_aLogger, t.pEnv, *this );
     } //t.pEnv
     return out;
 }
@@ -523,7 +527,7 @@ void SAL_CALL java_sql_Connection::setReadOnly( sal_Bool readOnly ) throw(SQLExc
             mID  = t.pEnv->GetMethodID( getMyClass(), cMethodName, cSignature );OSL_ENSURE(mID,"Unknown method id!");
         if( mID ){
             t.pEnv->CallVoidMethod( object, mID, (jboolean)readOnly );
-            ThrowSQLException(t.pEnv,*this);
+            ThrowLoggedSQLException( m_aLogger, t.pEnv, *this );
             // und aufraeumen
         } //mID
     } //t.pEnv
@@ -547,7 +551,7 @@ void SAL_CALL java_sql_Connection::setAutoCommit( sal_Bool autoCommit ) throw(SQ
             mID  = t.pEnv->GetMethodID( getMyClass(), cMethodName, cSignature );OSL_ENSURE(mID,"Unknown method id!");
         if( mID ){
             t.pEnv->CallVoidMethod( object, mID, (jboolean)autoCommit );
-            ThrowSQLException(t.pEnv,*this);
+            ThrowLoggedSQLException( m_aLogger, t.pEnv, *this );
             // und aufraeumen
         } //mID
     } //t.pEnv
@@ -572,7 +576,7 @@ Reference< ::com::sun::star::container::XNameAccess > SAL_CALL java_sql_Connecti
             mID  = t.pEnv->GetMethodID( getMyClass(), cMethodName, cSignature );OSL_ENSURE(mID,"Unknown method id!");
         if( mID ){
             out = t.pEnv->CallObjectMethod( object, mID );
-            ThrowSQLException(t.pEnv,*this);
+            ThrowLoggedSQLException( m_aLogger, t.pEnv, *this );
         } //mID
     } //t.pEnv
     // ACHTUNG: der Aufrufer wird Eigentuemer des zurueckgelieferten Zeigers !!!
@@ -607,7 +611,7 @@ sal_Int32 SAL_CALL java_sql_Connection::getTransactionIsolation(  ) throw(SQLExc
             mID  = t.pEnv->GetMethodID( getMyClass(), cMethodName, cSignature );OSL_ENSURE(mID,"Unknown method id!");
         if( mID )
             out = t.pEnv->CallIntMethod( object, mID );
-            ThrowSQLException(t.pEnv,*this);
+            ThrowLoggedSQLException( m_aLogger, t.pEnv, *this );
     } //t.pEnv
     return out;
 }
@@ -629,7 +633,7 @@ void SAL_CALL java_sql_Connection::setTransactionIsolation( sal_Int32 level ) th
             mID  = t.pEnv->GetMethodID( getMyClass(), cMethodName, cSignature );OSL_ENSURE(mID,"Unknown method id!");
         if( mID ){
             t.pEnv->CallVoidMethod( object, mID, level );
-            ThrowSQLException(t.pEnv,*this);
+            ThrowLoggedSQLException( m_aLogger, t.pEnv, *this );
             // und aufraeumen
         } //mID
     } //t.pEnv
@@ -639,10 +643,14 @@ Reference< XStatement > SAL_CALL java_sql_Connection::createStatement(  ) throw(
 {
     ::osl::MutexGuard aGuard( m_aMutex );
     checkDisposed(java_sql_Connection_BASE::rBHelper.bDisposed);
+    m_aLogger.log( LogLevel::FINE, STR_LOG_CREATE_STATEMENT );
 
     SDBThreadAttach t;
-    Reference< XStatement > xStmt = new java_sql_Statement( t.pEnv,this );
-    m_aStatements.push_back(WeakReferenceHelper(xStmt));
+    java_sql_Statement* pStatement = new java_sql_Statement( t.pEnv, *this );
+    Reference< XStatement > xStmt = pStatement;
+    m_aStatements.push_back( WeakReferenceHelper( xStmt ) );
+
+    m_aLogger.log( LogLevel::FINE, STR_LOG_CREATED_STATEMENT_ID, pStatement->getStatementObjectID() );
     return xStmt;
 }
 // -----------------------------------------------------------------------------
@@ -653,7 +661,7 @@ Reference< XStatement > SAL_CALL java_sql_Connection::createStatement(  ) throw(
     {
         try
         {
-            OSQLParser aParser(m_pDriver->getORB());
+            OSQLParser aParser( m_pDriver->getContext().getLegacyServiceFactory() );
             ::rtl::OUString sErrorMessage;
             ::rtl::OUString sNewSql;
             OSQLParseNode* pNode = aParser.parseTree(sErrorMessage,_sSQL);
@@ -676,12 +684,17 @@ Reference< XPreparedStatement > SAL_CALL java_sql_Connection::prepareStatement( 
 {
     ::osl::MutexGuard aGuard( m_aMutex );
     checkDisposed(java_sql_Connection_BASE::rBHelper.bDisposed);
+    m_aLogger.log( LogLevel::FINE, STR_LOG_PREPARE_STATEMENT, sql );
 
     SDBThreadAttach t;
     ::rtl::OUString sSqlStatement = sql;
-    sSqlStatement = transFormPreparedStatement(sSqlStatement);
-    Reference< XPreparedStatement > xReturn = new java_sql_PreparedStatement( t.pEnv, this,sSqlStatement );
+    sSqlStatement = transFormPreparedStatement( sSqlStatement );
+
+    java_sql_PreparedStatement* pStatement = new java_sql_PreparedStatement( t.pEnv, *this, sSqlStatement );
+    Reference< XPreparedStatement > xReturn( pStatement );
     m_aStatements.push_back(WeakReferenceHelper(xReturn));
+
+    m_aLogger.log( LogLevel::FINE, STR_LOG_PREPARED_STATEMENT_ID, pStatement->getStatementObjectID() );
     return xReturn;
 }
 // -------------------------------------------------------------------------
@@ -689,13 +702,17 @@ Reference< XPreparedStatement > SAL_CALL java_sql_Connection::prepareCall( const
 {
     ::osl::MutexGuard aGuard( m_aMutex );
     checkDisposed(java_sql_Connection_BASE::rBHelper.bDisposed);
+    m_aLogger.log( LogLevel::FINE, STR_LOG_PREPARE_CALL, sql );
 
     SDBThreadAttach t;
     ::rtl::OUString sSqlStatement = sql;
-    sSqlStatement = transFormPreparedStatement(sSqlStatement);
-    Reference< XPreparedStatement > xStmt = new java_sql_CallableStatement( t.pEnv, this,sSqlStatement );
+    sSqlStatement = transFormPreparedStatement( sSqlStatement );
 
+    java_sql_CallableStatement* pStatement = new java_sql_CallableStatement( t.pEnv, *this, sSqlStatement );
+    Reference< XPreparedStatement > xStmt( pStatement );
     m_aStatements.push_back(WeakReferenceHelper(xStmt));
+
+    m_aLogger.log( LogLevel::FINE, STR_LOG_PREPARED_CALL_ID, pStatement->getStatementObjectID() );
     return xStmt;
 }
 // -------------------------------------------------------------------------
@@ -703,7 +720,6 @@ Reference< XPreparedStatement > SAL_CALL java_sql_Connection::prepareCall( const
 {
     ::osl::MutexGuard aGuard( m_aMutex );
     checkDisposed(java_sql_Connection_BASE::rBHelper.bDisposed);
-
 
     ::rtl::OUString aStr;
     SDBThreadAttach t; OSL_ENSURE(t.pEnv,"Java Enviroment geloescht worden!");
@@ -724,11 +740,13 @@ Reference< XPreparedStatement > SAL_CALL java_sql_Connection::prepareCall( const
             jobject out = t.pEnv->CallObjectMethod( object, mID, str );
             t.pEnv->DeleteLocalRef(str);
             aStr = JavaString2String(t.pEnv, (jstring)out );
-            ThrowSQLException(t.pEnv,*this);
+            ThrowLoggedSQLException( m_aLogger, t.pEnv, *this );
         } //mID
 
     } //t.pEnv
-    // ACHTUNG: der Aufrufer wird Eigentuemer des zurueckgelieferten Zeigers !!!
+
+    m_aLogger.log( LogLevel::FINER, STR_LOG_NATIVE_SQL, sql, aStr );
+
     return aStr;
 }
 // -------------------------------------------------------------------------
@@ -736,7 +754,6 @@ void SAL_CALL java_sql_Connection::clearWarnings(  ) throw(SQLException, Runtime
 {
     ::osl::MutexGuard aGuard( m_aMutex );
     checkDisposed(java_sql_Connection_BASE::rBHelper.bDisposed);
-
 
     SDBThreadAttach t;
     if( t.pEnv )
@@ -750,7 +767,7 @@ void SAL_CALL java_sql_Connection::clearWarnings(  ) throw(SQLException, Runtime
             mID  = t.pEnv->GetMethodID( getMyClass(), cMethodName, cSignature );OSL_ENSURE(mID,"Unknown method id!");
         if( mID ){
             t.pEnv->CallVoidMethod( object, mID);
-            ThrowSQLException(t.pEnv,*this);
+            ThrowLoggedSQLException( m_aLogger, t.pEnv, *this );
         }
     }
 }
@@ -759,7 +776,6 @@ Any SAL_CALL java_sql_Connection::getWarnings(  ) throw(SQLException, RuntimeExc
 {
     ::osl::MutexGuard aGuard( m_aMutex );
     checkDisposed(java_sql_Connection_BASE::rBHelper.bDisposed);
-
 
     jobject out(NULL);
     SDBThreadAttach t;
@@ -774,7 +790,7 @@ Any SAL_CALL java_sql_Connection::getWarnings(  ) throw(SQLException, RuntimeExc
             mID  = t.pEnv->GetMethodID( getMyClass(), cMethodName, cSignature );OSL_ENSURE(mID,"Unknown method id!");
         if( mID ){
             out =           t.pEnv->CallObjectMethod( object, mID);
-            ThrowSQLException(t.pEnv,*this);
+            ThrowLoggedSQLException( m_aLogger, t.pEnv, *this );
         } //mID
     } //t.pEnv
     // ACHTUNG: der Aufrufer wird Eigentuemer des zurueckgelieferten Zeigers !!!
@@ -789,11 +805,9 @@ Any SAL_CALL java_sql_Connection::getWarnings(  ) throw(SQLException, RuntimeExc
     return Any();
 }
 // -----------------------------------------------------------------------------
-void java_sql_Connection::loadDriverFromProperties(const Sequence< PropertyValue >& info,
-                                                   ::rtl::OUString& _rsGeneratedValueStatement,
-                                                   sal_Bool& _rbAutoRetrievingEnabled,
-                                                   sal_Bool& _bParameterSubstitution,
-            sal_Bool& _bIgnoreDriverPrivileges)
+void java_sql_Connection::loadDriverFromProperties(
+        const Sequence< PropertyValue >& info, ::rtl::OUString& _rsGeneratedValueStatement,
+        sal_Bool& _rbAutoRetrievingEnabled, sal_Bool& _bParameterSubstitution, sal_Bool& _bIgnoreDriverPrivileges )
 {
     // first try if the jdbc driver is alraedy registered at the driver manager
     SDBThreadAttach t; OSL_ENSURE(t.pEnv,"Java Enviroment geloescht worden!");
@@ -839,8 +853,13 @@ void java_sql_Connection::loadDriverFromProperties(const Sequence< PropertyValue
             ::rtl::OUString aStr;
             OSL_VERIFY( pJavaDriverClass->Value >>= aStr );
             OSL_ASSERT( aStr.getLength());
-            if ( aStr.getLength() )
+            if ( !aStr.getLength() )
             {
+                m_aLogger.log( LogLevel::SEVERE, STR_LOG_NO_DRIVER_CLASS );
+            }
+            else
+            {
+                m_aLogger.log( LogLevel::INFO, STR_LOG_LOADING_DRIVER, aStr );
                 // the driver manager holds the class of the driver for later use
                 ::std::auto_ptr< java_lang_Class > pDrvClass;
                 if ( pJavaDriverClassPath == 0 )
@@ -852,20 +871,17 @@ void java_sql_Connection::loadDriverFromProperties(const Sequence< PropertyValue
                 {
                     ::rtl::OUString classpath;
                     OSL_VERIFY( pJavaDriverClassPath->Value >>= classpath );
+
                     pDrvClass.reset(
                         new java_lang_Class(
                             t.pEnv,
                             loadClass(
-                                Reference< XComponentContext >(
-                                    Reference< XPropertySet >(
-                                        m_pDriver->getORB(),
-                                        UNO_QUERY_THROW)->getPropertyValue(
-                                            ::rtl::OUString(
-                                                RTL_CONSTASCII_USTRINGPARAM(
-                                                    "DefaultContext"))),
-                                    UNO_QUERY_THROW),
-                                t.pEnv, classpath, aStr)));
-                    ThrowSQLException(t.pEnv, *this);
+                                m_pDriver->getContext().getUNOContext(),
+                                t.pEnv, classpath, aStr
+                            )
+                        )
+                    );
+                    ThrowLoggedSQLException( m_aLogger, t.pEnv, *this );
                 }
                 if ( pDrvClass.get() )
                 {
@@ -882,6 +898,7 @@ void java_sql_Connection::loadDriverFromProperties(const Sequence< PropertyValue
                         }
                     }
                 }
+                m_aLogger.log( LogLevel::INFO, STR_LOG_CONN_SUCCESS );
             }
         }
     }
@@ -915,7 +932,6 @@ sal_Bool java_sql_Connection::construct(const ::rtl::OUString& url,
     enableAutoRetrievingEnabled(bAutoRetrievingEnabled);
     setAutoRetrievingStatement(sGeneratedValueStatement);
 
-
     if ( t.pEnv && m_Driver_theClass && m_pDriverobject )
     {
         // temporaere Variable initialisieren
@@ -925,7 +941,7 @@ sal_Bool java_sql_Connection::construct(const ::rtl::OUString& url,
         jmethodID mID = NULL;
         if ( !mID  )
             mID  = t.pEnv->GetMethodID( m_Driver_theClass, cMethodName, cSignature );OSL_ENSURE(mID,"Unknown method id!");
-        ThrowSQLException(t.pEnv,*this);
+        ThrowLoggedSQLException( m_aLogger, t.pEnv, *this );
         if( mID )
         {
             jvalue args[2];
@@ -935,9 +951,12 @@ sal_Bool java_sql_Connection::construct(const ::rtl::OUString& url,
             args[1].l = pProps->getJavaObject();
 
             jobject out = t.pEnv->CallObjectMethod( m_pDriverobject, mID, args[0].l,args[1].l );
+            if ( !out )
+                m_aLogger.log( LogLevel::SEVERE, STR_LOG_NO_SYSTEM_CONNECTION );
+
             try
             {
-                ThrowSQLException(t.pEnv,*this);
+                ThrowLoggedSQLException( m_aLogger, t.pEnv, *this );
             }
             catch(const SQLException& )
             {
@@ -948,10 +967,13 @@ sal_Bool java_sql_Connection::construct(const ::rtl::OUString& url,
             // und aufraeumen
             t.pEnv->DeleteLocalRef((jstring)args[0].l);
             delete pProps;
-            ThrowSQLException(t.pEnv,*this);
+            ThrowLoggedSQLException( m_aLogger, t.pEnv, *this );
 
             if ( out )
                 object = t.pEnv->NewGlobalRef( out );
+
+            if ( object )
+                m_aLogger.log( LogLevel::FINE, STR_LOG_GOT_JDBC_CONNECTION, url );
 
             m_aConnectionInfo = info;
         } //mID
