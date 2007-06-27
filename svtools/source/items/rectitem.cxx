@@ -4,9 +4,9 @@
  *
  *  $RCSfile: rectitem.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: obo $ $Date: 2006-10-12 15:20:36 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 21:40:27 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -36,7 +36,7 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_svtools.hxx"
 
-#include "rectitem.hxx"
+#include <svtools/rectitem.hxx>
 
 #ifndef _COM_SUN_STAR_UNO_ANY_HXX_
 #include <com/sun/star/uno/Any.hxx>
@@ -50,7 +50,7 @@
 #include <tools/stream.hxx>
 #endif
 
-#include "poolitem.hxx"
+#include <svtools/poolitem.hxx>
 #include "memberid.hrc"
 
 // STATIC DATA -----------------------------------------------------------
