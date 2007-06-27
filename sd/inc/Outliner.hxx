@@ -4,9 +4,9 @@
  *
  *  $RCSfile: Outliner.hxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: rt $ $Date: 2007-04-03 15:34:53 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 15:34:24 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -198,6 +198,10 @@ public:
     */
     void HandleOutsideChange (ChangeHint eHint);
 
+    int         GetIgnoreCurrentPageChangesLevel() const     { return mnIgnoreCurrentPageChangesLevel; };
+    void        IncreIgnoreCurrentPageChangesLevel()     { mnIgnoreCurrentPageChangesLevel++; };
+    void        DecreIgnoreCurrentPageChangesLevel()     { mnIgnoreCurrentPageChangesLevel--; };
+
 private:
     class Implementation;
     ::std::auto_ptr<Implementation> mpImpl;
@@ -219,6 +223,11 @@ private:
         Only valid if meMode is TEXT_CONVERSION.
     */
     INT16 mnConversionLanguage;
+
+    /** While the value of this flag is greater than 0 changes of the current page
+        do not lead to selecting the corresponding text in the outliner.
+    */
+    int mnIgnoreCurrentPageChangesLevel;
 
     /// Specifies whether the search string has been found so far.
     bool mbStringFound;
