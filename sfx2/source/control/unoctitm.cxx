@@ -4,9 +4,9 @@
  *
  *  $RCSfile: unoctitm.cxx,v $
  *
- *  $Revision: 1.56 $
+ *  $Revision: 1.57 $
  *
- *  last change: $Author: vg $ $Date: 2006-11-21 17:49:03 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 23:08:36 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -92,19 +92,19 @@
 #include <uno/current_context.hxx>
 #include <vcl/svapp.hxx>
 
-#include "app.hxx"
-#include "unoctitm.hxx"
-#include "viewfrm.hxx"
-#include "frame.hxx"
-#include "ctrlitem.hxx"
-#include "sfxuno.hxx"
-#include "bindings.hxx"
-#include "dispatch.hxx"
-#include "sfxsids.hrc"
-#include "request.hxx"
+#include <sfx2/app.hxx>
+#include <sfx2/unoctitm.hxx>
+#include <sfx2/viewfrm.hxx>
+#include <sfx2/frame.hxx>
+#include <sfx2/ctrlitem.hxx>
+#include <sfx2/sfxuno.hxx>
+#include <sfx2/bindings.hxx>
+#include <sfx2/dispatch.hxx>
+#include <sfx2/sfxsids.hrc>
+#include <sfx2/request.hxx>
 #include "statcach.hxx"
-#include "msgpool.hxx"
-#include "objsh.hxx"
+#include <sfx2/msgpool.hxx>
+#include <sfx2/objsh.hxx>
 
 namespace css = ::com::sun::star;
 using namespace ::com::sun::star::uno;
