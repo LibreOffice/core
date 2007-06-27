@@ -4,9 +4,9 @@
  *
  *  $RCSfile: datanavi.hxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: hr $ $Date: 2006-06-19 16:04:12 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 18:21:48 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -75,7 +75,7 @@
 #include <sfx2/ctrlitem.hxx>
 #endif
 #ifndef _SVX_SIMPTABL_HXX
-#include "simptabl.hxx"
+#include <svx/simptabl.hxx>
 #endif
 
 #ifndef _RTL_REF_HXX_
