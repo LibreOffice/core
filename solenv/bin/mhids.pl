@@ -7,9 +7,9 @@ eval 'exec perl -wS $0 ${1+"$@"}'
 #
 #   $RCSfile: mhids.pl,v $
 #
-#   $Revision: 1.8 $
+#   $Revision: 1.9 $
 #
-#   last change: $Author: obo $ $Date: 2006-10-12 13:49:53 $
+#   last change: $Author: hr $ $Date: 2007-06-27 17:48:16 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -182,7 +182,7 @@ if ( defined $ENV{"NO_HID_FILES"} ) {
 #call  perl5 -p -e "s/=[ \t]*\".*\"/=\"\"/go; s/\".*\"[ \t]*;/\"\" ;/go ; s/(\".*)\/\/(.*\")/$1\/\\\/$2/go ;" < %filename% > %srs%\%workfile%.c0
 
 print  "hidc $filename ${shell_workfile}.c1 $prjname \n";
-$ret = system "hidc $filename ${shell_workfile}.c1 $prjname";
+$ret = system "$ENV{WRAPCMD} hidc $filename ${shell_workfile}.c1 $prjname";
 if ( $ret ) {
     push @cleanuplist, ".c1";
     cleandie("ERROR - calling \"hidc\" failed");
