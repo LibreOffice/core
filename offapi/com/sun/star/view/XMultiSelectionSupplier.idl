@@ -1,0 +1,139 @@
+/*************************************************************************
+ *
+ *  OpenOffice.org - a multi-platform office productivity suite
+ *
+ *  $RCSfile: XMultiSelectionSupplier.idl,v $
+ *
+ *  $Revision: 1.2 $
+ *
+ *  last change: $Author: hr $ $Date: 2007-06-27 12:30:00 $
+ *
+ *  The Contents of this file are made available subject to
+ *  the terms of GNU Lesser General Public License Version 2.1.
+ *
+ *
+ *    GNU Lesser General Public License Version 2.1
+ *    =============================================
+ *    Copyright 2005 by Sun Microsystems, Inc.
+ *    901 San Antonio Road, Palo Alto, CA 94303, USA
+ *
+ *    This library is free software; you can redistribute it and/or
+ *    modify it under the terms of the GNU Lesser General Public
+ *    License version 2.1, as published by the Free Software Foundation.
+ *
+ *    This library is distributed in the hope that it will be useful,
+ *    but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ *    Lesser General Public License for more details.
+ *
+ *    You should have received a copy of the GNU Lesser General Public
+ *    License along with this library; if not, write to the Free Software
+ *    Foundation, Inc., 59 Temple Place, Suite 330, Boston,
+ *    MA  02111-1307  USA
+ *
+ ************************************************************************/
+#ifndef __com_sun_star_view_XMultiSelectionSupplier_idl__
+#define __com_sun_star_view_XMultiSelectionSupplier_idl__
+
+#ifndef __com_sun_star_view_XSelectionSupplier_idl__
+#include <com/sun/star/view/XSelectionSupplier.idl>
+#endif
+#ifndef __com_sun_star_container_XEnumeration_idl__
+#include <com/sun/star/container/XEnumeration.idl>
+#endif
+
+//=============================================================================
+
+module com {  module sun {  module star {  module view {
+
+//=============================================================================
+
+/** makes it possible to append and remove objects from a selection.
+
+    <p>The method <method>XSelectionSupplier::setSelection</method> for an
+    instance that also supports <type>XMultiSelectionSupplier</method> should
+    be implemented that it also takes either a selectable object or a sequence
+    of selectable objects.</p>
+
+    <p>Adding an object more than once to a selection should not toggle the
+    selection for that object but only select it once</p>
+ */
+interface XMultiSelectionSupplier: XSelectionSupplier
+{
+    //-------------------------------------------------------------------------
+
+    /** adds the object or the objects represented by <var>Selection</var> to the selection
+        of this <type>XMultiSelectionSupplier</type>.
+
+        @param Selection
+            either an Object that is selectable or a sequence of objects that are selectable.
+
+        @returns
+            <TRUE>/, if <var>Selection</var> was added to the current selection.
+            <FALSE/>, if <var>Selection</var> or parts of <var>Selection</var> could not be
+            added to the current selection. For example, if the selection already contains
+            objects that are forbidden to be selected together with <var>Selection</var>
+
+        @raises com::sun::star::lang::IllegalArgumentException
+            If <var>Selection</var> is not a selectable object for this <type>XMultiSelectionSupplier</type>.
+            <p>Adding an object to the selection that is already part of the selection should not raise this exception</p>
+     */
+    boolean addSelection( [in] any Selection )
+                raises( com::sun::star::lang::IllegalArgumentException );
+
+    //-------------------------------------------------------------------------
+
+    /** remove the object or objects represented by <var>Selection</var> from the
+        selection of this <type>XMultiSelectionSupplier</type>.
+
+        @param Selection
+            either an Object that is selectable or a sequence of objects that are selectable.
+
+        @returns
+            <TRUE>/, if <var>Selection</var> was added to the current selection.
+            <FALSE/>, if <var>Selection</var> or parts of <var>Selection</var> could not be
+            added to the current selection. For example, if the selection already contains
+            objects that are forbidden to be selected together with <var>Selection</var>.
+
+        @raises com::sun::star::lang::IllegalArgumentException
+            If <var>Selection</var> is not a selectable object for this <type>XMultiSelectionSupplier</type>.
+            <p>Removing an object from the selection that is not part of the selection should not raise this exception</p>
+     */
+    void removeSelection( [in] any Selection )
+                raises( com::sun::star::lang::IllegalArgumentException );
+
+    //-------------------------------------------------------------------------
+
+    /** clears the selection of this <type>XMultiSelectionSupplier</type>.
+    */
+    void clearSelection();
+
+    //-------------------------------------------------------------------------
+
+    /** returns the number of selected objects of this <type>XMultiSelectionSupplier</type>.
+    */
+    long getSelectionCount();
+
+    //-------------------------------------------------------------------------
+
+    /** @returns
+            a new object to enumerate the selection of this <type>XMultiSelectionSupplier</type>.
+            It returns NULL if there are no objects in the selection.
+     */
+    com::sun::star::container::XEnumeration createSelectionEnumeration();
+
+
+    /** @returns
+            a new object to enumerate the selection of this <type>XMultiSelectionSupplier</type>
+            in reverse order. If the order of the selected objects
+            It returns NULL if there are no objects in the selection.
+     */
+    com::sun::star::container::XEnumeration createReverseSelectionEnumeration();
+
+};
+
+//=============================================================================
+
+}; }; }; };
+
+#endif
