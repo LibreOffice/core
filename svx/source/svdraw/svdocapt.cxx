@@ -4,9 +4,9 @@
  *
  *  $RCSfile: svdocapt.cxx,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: obo $ $Date: 2007-03-06 14:42:34 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 19:05:26 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -41,45 +41,45 @@
 #endif
 
 #ifndef _SVX_XLNWTIT_HXX //autogen
-#include <xlnwtit.hxx>
+#include <svx/xlnwtit.hxx>
 #endif
 
 #ifndef _SFXSTYLE_HXX //autogen
 #include <svtools/style.hxx>
 #endif
 
-#include "svdocapt.hxx"
-#include "xpool.hxx"
-#include "xpoly.hxx"
-#include "svdattrx.hxx"
-#include "svdpool.hxx"
+#include <svx/svdocapt.hxx>
+#include <svx/xpool.hxx>
+#include <svx/xpoly.hxx>
+#include <svx/svdattrx.hxx>
+#include <svx/svdpool.hxx>
 #include "svdxout.hxx"
-#include "svdetc.hxx"
-#include "svdtrans.hxx"
+#include <svx/svdetc.hxx>
+#include <svx/svdtrans.hxx>
 #include "svdtouch.hxx"
-#include "svdhdl.hxx"
-#include "svddrag.hxx"
-#include "svdmodel.hxx"
-#include "svdview.hxx"   // fuer RectSnap
+#include <svx/svdhdl.hxx>
+#include <svx/svddrag.hxx>
+#include <svx/svdmodel.hxx>
+#include <svx/svdview.hxx>   // fuer RectSnap
 #include "svdglob.hxx"   // StringCache
 #include "svdstr.hrc"    // Objektname
-#include "svdogrp.hxx"
-#include "svdpage.hxx"
+#include <svx/svdogrp.hxx>
+#include <svx/svdpage.hxx>
 
 #ifndef _SVX_XFLHTIT_HXX
-#include <xflhtit.hxx>
+#include <svx/xflhtit.hxx>
 #endif
 
 #ifndef _SVX_XFLCLIT_HXX
-#include <xflclit.hxx>
+#include <svx/xflclit.hxx>
 #endif
 
 #ifndef _SVX_XFLTRIT_HXX
-#include <xfltrit.hxx>
+#include <svx/xfltrit.hxx>
 #endif
 
 #ifndef _EEITEM_HXX
-#include "eeitem.hxx"
+#include <svx/eeitem.hxx>
 #endif
 
 #ifndef _SDR_PROPERTIES_CAPTIONPROPERTIES_HXX
