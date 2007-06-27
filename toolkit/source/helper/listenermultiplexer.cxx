@@ -4,9 +4,9 @@
  *
  *  $RCSfile: listenermultiplexer.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: ihi $ $Date: 2006-12-21 16:16:06 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 12:22:55 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -196,5 +196,24 @@ IMPL_LISTENERMULTIPLEXER_LISTENERMETHOD( MenuListenerMultiplexer, ::com::sun::st
 IMPL_LISTENERMULTIPLEXER_LISTENERMETHOD( MenuListenerMultiplexer, ::com::sun::star::awt::XMenuListener, activate, ::com::sun::star::awt::MenuEvent )
 IMPL_LISTENERMULTIPLEXER_LISTENERMETHOD( MenuListenerMultiplexer, ::com::sun::star::awt::XMenuListener, deactivate, ::com::sun::star::awt::MenuEvent )
 
+//  ----------------------------------------------------
+//  class TreeSelectionListenerMultiplexer
+//  ----------------------------------------------------
+IMPL_LISTENERMULTIPLEXER_BASEMETHODS( TreeSelectionListenerMultiplexer, ::com::sun::star::view::XSelectionChangeListener )
+IMPL_LISTENERMULTIPLEXER_LISTENERMETHOD( TreeSelectionListenerMultiplexer, ::com::sun::star::view::XSelectionChangeListener, selectionChanged,  ::com::sun::star::lang::EventObject )
 
+//  ----------------------------------------------------
+//  class TreeSelectionListenerMultiplexer
+//  ----------------------------------------------------
+IMPL_LISTENERMULTIPLEXER_BASEMETHODS( TreeExpansionListenerMultiplexer, ::com::sun::star::awt::tree::XTreeExpansionListener )
+IMPL_LISTENERMULTIPLEXER_LISTENERMETHOD( TreeExpansionListenerMultiplexer, ::com::sun::star::awt::tree::XTreeExpansionListener, requestChildNodes, ::com::sun::star::awt::tree::TreeExpansionEvent )
+IMPL_LISTENERMULTIPLEXER_LISTENERMETHOD_EXCEPTION( TreeExpansionListenerMultiplexer, ::com::sun::star::awt::tree::XTreeExpansionListener, treeExpanding, ::com::sun::star::awt::tree::TreeExpansionEvent, ::com::sun::star::awt::tree::ExpandVetoException )
+IMPL_LISTENERMULTIPLEXER_LISTENERMETHOD_EXCEPTION( TreeExpansionListenerMultiplexer, ::com::sun::star::awt::tree::XTreeExpansionListener, treeCollapsing, ::com::sun::star::awt::tree::TreeExpansionEvent, ::com::sun::star::awt::tree::ExpandVetoException )
+IMPL_LISTENERMULTIPLEXER_LISTENERMETHOD( TreeExpansionListenerMultiplexer, ::com::sun::star::awt::tree::XTreeExpansionListener, treeExpanded, ::com::sun::star::awt::tree::TreeExpansionEvent )
+IMPL_LISTENERMULTIPLEXER_LISTENERMETHOD( TreeExpansionListenerMultiplexer, ::com::sun::star::awt::tree::XTreeExpansionListener, treeCollapsed, ::com::sun::star::awt::tree::TreeExpansionEvent )
+
+//  ----------------------------------------------------
+//  class TreeEditListenerMultiplexer
+//  ----------------------------------------------------
+IMPL_LISTENERMULTIPLEXER_BASEMETHODS( TreeEditListenerMultiplexer, ::com::sun::star::awt::tree::XTreeEditListener )
 
