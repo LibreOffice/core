@@ -4,9 +4,9 @@
  *
  *  $RCSfile: evntpost.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 12:14:02 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 20:26:30 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -38,8 +38,8 @@
 
 
 
-#include "evntpost.hxx"
-#include "svapp.hxx"
+#include <vcl/evntpost.hxx>
+#include <vcl/svapp.hxx>
 
 namespace vcl
 {
