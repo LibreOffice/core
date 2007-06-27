@@ -4,9 +4,9 @@
  *
  *  $RCSfile: codegen.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: vg $ $Date: 2006-11-03 15:11:02 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 14:19:50 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -36,7 +36,7 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_basic.hxx"
 
-#include <sbx.hxx>
+#include <basic/sbx.hxx>
 #include "sbcomp.hxx"
 #include "image.hxx"
 #include <limits>
