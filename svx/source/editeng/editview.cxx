@@ -4,9 +4,9 @@
  *
  *  $RCSfile: editview.cxx,v $
  *
- *  $Revision: 1.45 $
+ *  $Revision: 1.46 $
  *
- *  last change: $Author: kz $ $Date: 2007-06-19 15:57:47 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 12:53:04 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -64,6 +64,8 @@
 #ifndef _UNO_LINGU_HXX
 #include <unolingu.hxx>
 #endif
+
+#include <com/sun/star/frame/XStorable.hpp>
 
 #ifndef _COM_SUN_STAR_LINGUISTIC2_XDICTIONARY1_HPP_
 #include <com/sun/star/linguistic2/XDictionary1.hpp>
@@ -1294,6 +1296,11 @@ void EditView::ExecuteSpellPopup( const Point& rPosPixel, Link* pCallBack )
             Reference< XDictionary1 >  xDic( pDic[nId - MN_DICTSTART], UNO_QUERY );
             if (xDic.is())
                 xDic->add( aSelected, sal_False, String() );
+            // save modified user-dictionary if it is persistent
+            Reference< frame::XStorable >  xSavDic( xDic, UNO_QUERY );
+            if (xSavDic.is())
+                xSavDic->store();
+
             aPaM.GetNode()->GetWrongList()->GetInvalidStart() = 0;
             aPaM.GetNode()->GetWrongList()->GetInvalidEnd() = aPaM.GetNode()->Len();
             PIMPEE->StartOnlineSpellTimer();
