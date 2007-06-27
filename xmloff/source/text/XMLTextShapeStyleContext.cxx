@@ -4,9 +4,9 @@
  *
  *  $RCSfile: XMLTextShapeStyleContext.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 11:16:05 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 16:12:35 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -46,16 +46,16 @@
 #include "xmlnmspe.hxx"
 #endif
 #ifndef _XMLOFF_XMLTOKEN_HXX
-#include "xmltoken.hxx"
+#include <xmloff/xmltoken.hxx>
 #endif
 #ifndef _XMLOFF_XMLTEXTPROPERTYSETCONTEXT_HXX
 #include "XMLTextPropertySetContext.hxx"
 #endif
 #ifndef _XMLOFF_XMLIMP_HXX
-#include "xmlimp.hxx"
+#include <xmloff/xmlimp.hxx>
 #endif
 #ifndef _XMLOFF_XMLEVENTSIMPORTCONTEXT_HXX
-#include "XMLEventsImportContext.hxx"
+#include <xmloff/XMLEventsImportContext.hxx>
 #endif
 #ifndef _XMLOFF_XMLSHAPEPROPERTYSETCONTEXT_HXX
 #include "XMLShapePropertySetContext.hxx"
@@ -67,11 +67,11 @@
 #include "XMLBackgroundImageContext.hxx"
 #endif
 #ifndef _XMLOFF_TXTPRMAP_HXX
-#include "txtprmap.hxx"
+#include <xmloff/txtprmap.hxx>
 #endif
 
 #ifndef _XMLOFF_XMLTEXTSHAPESTYLECONTEXT_HXX
-#include "XMLTextShapeStyleContext.hxx"
+#include <xmloff/XMLTextShapeStyleContext.hxx>
 #endif
 
 using namespace ::rtl;
