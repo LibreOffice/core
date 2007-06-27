@@ -4,9 +4,9 @@
  *
  *  $RCSfile: longcurr.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: rt $ $Date: 2007-04-26 09:28:31 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 20:06:56 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -51,10 +51,10 @@
 #include <tools/rc.h>
 #endif
 
-#include <event.hxx>
-#include <svapp.hxx>
-#include <svdata.hxx>
-#include <longcurr.hxx>
+#include <vcl/event.hxx>
+#include <vcl/svapp.hxx>
+#include <vcl/svdata.hxx>
+#include <vcl/longcurr.hxx>
 
 
 
