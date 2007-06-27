@@ -1,0 +1,162 @@
+/*************************************************************************
+ *
+ *  OpenOffice.org - a multi-platform office productivity suite
+ *
+ *  $RCSfile: XStringKeyMap.idl,v $
+ *
+ *  $Revision: 1.2 $
+ *
+ *  last change: $Author: hr $ $Date: 2007-06-27 13:45:02 $
+ *
+ *  The Contents of this file are made available subject to
+ *  the terms of GNU Lesser General Public License Version 2.1.
+ *
+ *
+ *    GNU Lesser General Public License Version 2.1
+ *    =============================================
+ *    Copyright 2005 by Sun Microsystems, Inc.
+ *    901 San Antonio Road, Palo Alto, CA 94303, USA
+ *
+ *    This library is free software; you can redistribute it and/or
+ *    modify it under the terms of the GNU Lesser General Public
+ *    License version 2.1, as published by the Free Software Foundation.
+ *
+ *    This library is distributed in the hope that it will be useful,
+ *    but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ *    Lesser General Public License for more details.
+ *
+ *    You should have received a copy of the GNU Lesser General Public
+ *    License along with this library; if not, write to the Free Software
+ *    Foundation, Inc., 59 Temple Place, Suite 330, Boston,
+ *    MA  02111-1307  USA
+ *
+ ************************************************************************/
+
+#ifndef __com_sun_star_container_XStringKeyMap_idl__
+#define __com_sun_star_container_XStringKeyMap_idl__
+
+#ifndef __com_sun_star_uno_XInterface_idl__
+#include <com/sun/star/uno/XInterface.idl>
+#endif
+
+#ifndef __com_sun_star_lang_IndexOutOfBoundsException_idl__
+#include <com/sun/star/lang/IndexOutOfBoundsException.idl>
+#endif
+
+#ifndef __com_sun_star_container_ElementExistException_idl__
+#include <com/sun/star/container/ElementExistException.idl>
+#endif
+
+#ifndef __com_sun_star_lang_IllegalArgumentException_idl__
+#include <com/sun/star/lang/IllegalArgumentException.idl>
+#endif
+
+#ifndef __com_sun_star_container_NoSuchElementException_idl__
+#include <com/sun/star/container/NoSuchElementException.idl>
+#endif
+
+//=============================================================================
+
+module com {  module sun {  module star {  module container {
+
+//=============================================================================
+
+/** maps strings to anys.
+
+    @since OOo 2.3.0
+ */
+
+interface XStringKeyMap
+{
+    //-------------------------------------------------------------------------
+    /** reads data from the map.
+
+        @param aKey
+                The key string which should be searched for.
+
+        @return
+                the value matching aKey.
+
+        @throws com::sun::star::container::NoSuchElementException
+                if an element under aKey does not exist.
+     */
+    any getValue( [in] string aKey )
+        raises( com::sun::star::container::NoSuchElementException );
+
+
+    //-------------------------------------------------------------------------
+    /** checks for element existence.
+
+        @param aKey
+                The key string which should be searched for.
+
+        @return
+                true if an element with key aKey exists.
+     */
+    boolean hasValue( [in] string aKey );
+
+
+    //-------------------------------------------------------------------------
+    /** writes data to the map.
+
+        @param aKey
+                The key string which should be used to store the value.
+
+        @param aValue
+                The value that should be stored.
+
+        @throws com::sun::star::lang::IllegalArgumentException
+                if the element could not be inserted.
+
+        @throws com::sun::star::container::ElementExistException
+                if there is already a value stored under the key aKey.
+     */
+    void insertValue( [in] string aKey, [in] any aValue )
+        raises( com::sun::star::lang::IllegalArgumentException,
+                com::sun::star::container::ElementExistException );
+
+
+    //-------------------------------------------------------------------------
+    /** the number of elements in the map.
+     */
+    [attribute, readonly] long Count;
+
+
+    //-------------------------------------------------------------------------
+    /** obtains the key of an element by index.
+
+        @param nIndex
+                is the index of the element.
+
+        @return
+                the key string matching the given index.
+
+        @throws com::sun::star::lang::IndexOutOfBoundsException
+                if the specified index is greater than the number of
+                elements
+     */
+    string getKeyByIndex( [in] long nIndex )
+        raises( com::sun::star::lang::IndexOutOfBoundsException );
+
+
+    //-------------------------------------------------------------------------
+    /** obtains the value of an element by index.
+
+        @param nIndex
+                is the index of the key.
+
+        @return
+                the value matching the given index.
+
+        @throws com::sun::star::lang::IndexOutOfBoundsException
+                if the specified index is greater than the number of
+                elements
+     */
+    any getValueByIndex( [in] long nIndex )
+        raises( com::sun::star::lang::IndexOutOfBoundsException );
+};
+
+}; }; }; };
+
+#endif
