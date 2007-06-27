@@ -4,9 +4,9 @@
  *
  *  $RCSfile: fmshimp.cxx,v $
  *
- *  $Revision: 1.83 $
+ *  $Revision: 1.84 $
  *
- *  last change: $Author: ihi $ $Date: 2007-04-16 16:21:12 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 18:15:05 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -40,7 +40,7 @@
 #include "gridcols.hxx"
 #endif
 #ifndef _E3D_OBJ3D_HXX
-#include "obj3d.hxx"
+#include <svx/obj3d.hxx>
 #endif
 #ifndef _SVX_FMVWIMP_HXX
 #include "fmvwimp.hxx"
@@ -52,13 +52,13 @@
 #include "fmtextcontrolshell.hxx"
 #endif
 #ifndef _SVDPAGV_HXX
-#include "svdpagv.hxx"
+#include <svx/svdpagv.hxx>
 #endif
 #ifndef _SVX_FMPAGE_HXX
-#include "fmpage.hxx"
+#include <svx/fmpage.hxx>
 #endif
 #ifndef _SVX_DIALMGR_HXX
-#include "dialmgr.hxx"
+#include <svx/dialmgr.hxx>
 #endif
 #ifndef _SVX_FMRESIDS_HRC
 #include "fmresids.hrc"
@@ -73,7 +73,7 @@
 #include "formtoolbars.hxx"
 #endif
 #ifndef _SVX_FMGLOB_HXX
-#include "fmglob.hxx"
+#include <svx/fmglob.hxx>
 #endif
 #ifndef _SVDITER_HXX
 #include "svditer.hxx"
@@ -91,13 +91,13 @@
 #include "fmprop.hrc"
 #endif
 #ifndef _SVX_FMSHELL_HXX
-#include "fmshell.hxx"
+#include <svx/fmshell.hxx>
 #endif
 #ifndef _SVX_SVXIDS_HRC
-#include "svxids.hrc"
+#include <svx/svxids.hrc>
 #endif
 #ifndef _SVX_FMMODEL_HXX
-#include "fmmodel.hxx"
+#include <svx/fmmodel.hxx>
 #endif
 #ifndef _SVX_FMUNDO_HXX
 #include "fmundo.hxx"
@@ -108,8 +108,8 @@
 #ifndef SVX_FORMCONTROLLING_HXX
 #include "formcontrolling.hxx"
 #endif
-#include "svxdlg.hxx"
-#include "dialogs.hrc"
+#include <svx/svxdlg.hxx>
+#include <svx/dialogs.hrc>
 
 #ifndef _COM_SUN_STAR_FRAME_FRAMESEARCHFLAG_HPP_
 #include <com/sun/star/frame/FrameSearchFlag.hpp>
@@ -252,7 +252,7 @@
 #endif
 
 #ifndef _SDRPAGEWINDOW_HXX
-#include <sdrpagewindow.hxx>
+#include <svx/sdrpagewindow.hxx>
 #endif
 
 #include <algorithm>
