@@ -4,9 +4,9 @@
  *
  *  $RCSfile: mailmodel.cxx,v $
  *
- *  $Revision: 1.47 $
+ *  $Revision: 1.48 $
  *
- *  last change: $Author: ihi $ $Date: 2007-06-05 18:36:58 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 23:13:04 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -135,7 +135,7 @@
 #include <mailmodelapi.hxx>
 #include "sfxtypes.hxx"
 #include "sfxresid.hxx"
-#include "sfxsids.hrc"
+#include <sfx2/sfxsids.hrc>
 #include "mailwindow.hrc"
 #include "dialog.hrc"
 
