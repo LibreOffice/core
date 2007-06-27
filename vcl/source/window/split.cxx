@@ -4,9 +4,9 @@
  *
  *  $RCSfile: split.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 12:20:59 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 20:33:30 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -40,28 +40,28 @@
 #include <tools/rc.h>
 #endif
 #ifndef _SV_EVENT_HXX
-#include <event.hxx>
+#include <vcl/event.hxx>
 #endif
 #ifndef _SV_SPLIT_HXX
-#include <split.hxx>
+#include <vcl/split.hxx>
 #endif
 #ifndef _SV_SVAPP_HXX
-#include <svapp.hxx>
+#include <vcl/svapp.hxx>
 #endif
 #ifndef _SV_SYSWIN_HXX
-#include <syswin.hxx>
+#include <vcl/syswin.hxx>
 #endif
 #ifndef _SV_TASKPANELIST_HXX
-#include <taskpanelist.hxx>
+#include <vcl/taskpanelist.hxx>
 #endif
 #ifndef _SV_GRADIENT_HXX
-#include <gradient.hxx>
+#include <vcl/gradient.hxx>
 #endif
 #ifndef _TL_POLY_HXX
 #include <tools/poly.hxx>
 #endif
 #ifndef _SV_LINEINFO_HXX
-#include <lineinfo.hxx>
+#include <vcl/lineinfo.hxx>
 #endif
 #ifndef INCLUDED_RTL_INSTANCE_HXX
 #include <rtl/instance.hxx>
