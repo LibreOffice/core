@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xmlmetae.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: vg $ $Date: 2007-05-22 16:10:25 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 15:19:24 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -46,12 +46,12 @@
 #endif
 #include <unotools/configmgr.hxx>
 
-#include "xmlmetae.hxx"
-#include "attrlist.hxx"
-#include "nmspmap.hxx"
+#include <xmloff/xmlmetae.hxx>
+#include <xmloff/attrlist.hxx>
+#include <xmloff/nmspmap.hxx>
 
 #ifndef _XMLOFF_XMLUCONV_HXX
-#include <xmluconv.hxx>
+#include <xmloff/xmluconv.hxx>
 #endif
 
 #ifndef _RTL_USTRBUF_HXX_
@@ -71,11 +71,11 @@
 #endif
 
 #ifndef _XMLOFF_XMLEXP_HXX
-#include "xmlexp.hxx"
+#include <xmloff/xmlexp.hxx>
 #endif
 
 #ifndef _XMLOFF_XMLUCONV_HXX
-#include "xmluconv.hxx"
+#include <xmloff/xmluconv.hxx>
 #endif
 
 #ifndef _COM_SUN_STAR_DOCUMENT_XDOCUMENTINFOSUPPLIER_HPP_
