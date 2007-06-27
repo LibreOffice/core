@@ -4,9 +4,9 @@
  *
  *  $RCSfile: controlpropertymap.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 14:05:04 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 15:13:27 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -37,10 +37,10 @@
 #define _XMLOFF_FORMS_CONTROLPROPERTYMAP_HXX_
 
 #ifndef _XMLOFF_PROPERTYSETMAPPER_HXX
-#include "xmlprmap.hxx"
+#include <xmloff/xmlprmap.hxx>
 #endif
 #ifndef _XMLOFF_XMLEXPPR_HXX
-#include "xmlexppr.hxx"
+#include <xmloff/xmlexppr.hxx>
 #endif
 
 struct XMLPropertyMapEntry;
