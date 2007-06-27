@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xmlnumfe.cxx,v $
  *
- *  $Revision: 1.47 $
+ *  $Revision: 1.48 $
  *
- *  last change: $Author: vg $ $Date: 2007-05-22 16:10:49 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 15:47:47 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -56,13 +56,13 @@
 
 #include <com/sun/star/i18n/NativeNumberXmlAttributes.hpp>
 
-#include "xmlnumfe.hxx"
+#include <xmloff/xmlnumfe.hxx>
 #include "xmlnmspe.hxx"
-#include "xmluconv.hxx"
-#include "attrlist.hxx"
-#include "nmspmap.hxx"
-#include "families.hxx"
-#include "xmlnumfi.hxx"     // SvXMLNumFmtDefaults
+#include <xmloff/xmluconv.hxx>
+#include <xmloff/attrlist.hxx>
+#include <xmloff/nmspmap.hxx>
+#include <xmloff/families.hxx>
+#include <xmloff/xmlnumfi.hxx>      // SvXMLNumFmtDefaults
 
 #define _SVSTDARR_USHORTS
 #include <svtools/svstdarr.hxx>
@@ -72,11 +72,11 @@
 #endif
 
 #ifndef _XMLOFF_XMLTOKEN_HXX
-#include "xmltoken.hxx"
+#include <xmloff/xmltoken.hxx>
 #endif
 
 #ifndef _XMLOFF_XMLEXP_HXX
-#include "xmlexp.hxx"
+#include <xmloff/xmlexp.hxx>
 #endif
 
 #include <set>
