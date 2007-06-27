@@ -4,9 +4,9 @@
  *
  *  $RCSfile: unofored.cxx,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 06:17:36 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 19:29:14 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -39,21 +39,21 @@
 #include <algorithm>
 
 #ifndef _EEITEM_HXX //autogen
-#include "eeitem.hxx"
+#include <svx/eeitem.hxx>
 #endif
 #ifndef _COM_SUN_STAR_I18N_WORDTYPE_HPP_
 #include <com/sun/star/i18n/WordType.hpp>
 #endif
 
 #include <svtools/itemset.hxx>
-#include <editeng.hxx>
-#include <editview.hxx>
+#include <svx/editeng.hxx>
+#include <svx/editview.hxx>
 #include <unoedhlp.hxx>
-#include <editdata.hxx>
-#include <outliner.hxx>
-#include <editobj.hxx>      // nur fuer die GetText-Kruecke
+#include <svx/editdata.hxx>
+#include <svx/outliner.hxx>
+#include <svx/editobj.hxx>      // nur fuer die GetText-Kruecke
 
-#include "unofored.hxx"
+#include <svx/unofored.hxx>
 
 using namespace ::com::sun::star;
 
