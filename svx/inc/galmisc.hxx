@@ -4,9 +4,9 @@
  *
  *  $RCSfile: galmisc.hxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: rt $ $Date: 2007-04-26 07:23:09 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 16:32:49 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -41,7 +41,7 @@
 #include <svtools/imap.hxx>
 #include <svtools/hint.hxx>
 #include <svtools/transfer.hxx>
-#include "svdobj.hxx"
+#include <svx/svdobj.hxx>
 #include "galobj.hxx"
 
 #ifndef _COM_SUN_STAR_UNO_REFERENCE_H_
