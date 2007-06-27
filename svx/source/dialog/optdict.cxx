@@ -4,9 +4,9 @@
  *
  *  $RCSfile: optdict.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: kz $ $Date: 2007-05-10 14:39:12 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 17:25:48 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -78,13 +78,13 @@
 
 #define _SVX_OPTDICT_CXX
 
-#include "dialogs.hrc"
+#include <svx/dialogs.hrc>
 #include "optdict.hrc"
 
 
 
 #include "optdict.hxx"
-#include "dialmgr.hxx"
+#include <svx/dialmgr.hxx>
 #include "svxerr.hxx"
 
 using namespace ::com::sun::star;
