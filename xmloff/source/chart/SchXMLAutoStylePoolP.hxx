@@ -4,9 +4,9 @@
  *
  *  $RCSfile: SchXMLAutoStylePoolP.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 13:23:56 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 14:47:05 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -36,7 +36,7 @@
 #define _SCH_XMLAUTOSTYLEPOOLP_HXX_
 
 #ifndef _XMLOFF_XMLASTPLP_HXX
-#include "xmlaustp.hxx"
+#include <xmloff/xmlaustp.hxx>
 #endif
 
 class SchXMLExport;
