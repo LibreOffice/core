@@ -4,9 +4,9 @@
  *
  *  $RCSfile: grfpage.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: kz $ $Date: 2007-05-10 14:37:11 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 17:09:09 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -63,33 +63,33 @@
 
 
 #ifndef _SVX_DIALMGR_HXX //autogen
-#include <dialmgr.hxx>
+#include <svx/dialmgr.hxx>
 #endif
 #ifndef _SVX_DLGUTIL_HXX
 #include <dlgutil.hxx>
 #endif
 #ifndef _SVX_SIZEITEM_HXX //autogen
-#include <sizeitem.hxx>
+#include <svx/sizeitem.hxx>
 #endif
 #ifndef _SVX_BRSHITEM_HXX //autogen
-#include <brshitem.hxx>
+#include <svx/brshitem.hxx>
 #endif
 
 #ifndef _GRFPAGE_HXX
 #include <grfpage.hxx>
 #endif
 #ifndef _SVX_GRFCROP_HXX
-#include <grfcrop.hxx>
+#include <svx/grfcrop.hxx>
 #endif
 
 #ifndef _GRFPAGE_HRC
 #include <grfpage.hrc>
 #endif
 #ifndef _SVX_DIALOGS_HRC
-#include <dialogs.hrc>
+#include <svx/dialogs.hrc>
 #endif
 #ifndef _SVX_SVXIDS_HRC
-#include <svxids.hrc>
+#include <svx/svxids.hrc>
 #endif
 
 
