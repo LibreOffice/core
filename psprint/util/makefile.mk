@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.19 $
+#   $Revision: 1.20 $
 #
-#   last change: $Author: kz $ $Date: 2007-06-20 10:08:08 $
+#   last change: $Author: hr $ $Date: 2007-06-27 13:51:57 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -42,19 +42,14 @@ TARGET=psp
 
 .INCLUDE :	settings.mk
 
-# --- Allgemein ----------------------------------------------------------
+# --- Windows and Mac OS X Aqua Targets ----------------------------------
 
-.IF "$(GUIBASE)"=="aqua"
-
-dummy:
-    @echo "Nothing to build for GUIBASE $(GUIBASE)"
-
-.ELSE		# "$(GUIBASE)"=="aqua"
-
-.IF "$(OS)"=="WNT"
+.IF "$(OS)"=="WNT" || "$(GUIBASE)"=="aqua"
 LIB1ARCHIV=$(LB)$/lib$(TARGET).a
 LIB1TARGET= $(SLB)$/a$(TARGET).lib
 LIB1FILES=	$(SLB)$/fontsubset.lib
+
+# --- Other Targets ---
 .ELSE
 
 LIB1TARGET= $(SLB)$/$(TARGET).lib
@@ -92,8 +87,6 @@ SHL1STDLIBS += -lpaper
 SHL1DEF=	$(MISC)$/$(SHL1TARGET).def
 
 .ENDIF      # "$(OS)"=="WNT"
-
-.ENDIF # GUIBASE = aqua
 
 # --- Targets ------------------------------------------------------------
 
