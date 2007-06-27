@@ -4,9 +4,9 @@
  *
  *  $RCSfile: baside2b.cxx,v $
  *
- *  $Revision: 1.57 $
+ *  $Revision: 1.58 $
  *
- *  last change: $Author: obo $ $Date: 2007-03-15 15:52:48 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 15:43:02 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -59,7 +59,7 @@
 #include <vcl/sound.hxx>
 #include <svtools/xtextedt.hxx>
 #include <svtools/txtattr.hxx>
-#include <svtools/textwindowaccessibility.hxx>
+#include <svtools/textwindowpeer.hxx>
 #include <basic/sbuno.hxx>
 
 #include <helpid.hrc>
@@ -1779,7 +1779,7 @@ EditorWindow::GetComponentInterface(BOOL bCreate)
         if (!pEditEngine)
             CreateEditEngine();
 
-        xPeer = new svtools::TextWindowAccessibility(*GetEditView());
+        xPeer = new ::svt::TextWindowPeer(*GetEditView());
         SetComponentInterface(xPeer);
     }
     return xPeer;
