@@ -4,9 +4,9 @@
  *
  *  $RCSfile: shapeimport.cxx,v $
  *
- *  $Revision: 1.64 $
+ *  $Revision: 1.65 $
  *
- *  last change: $Author: ihi $ $Date: 2007-04-16 13:11:50 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 15:07:03 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -51,11 +51,11 @@
 #include <list>
 
 #ifndef _XMLOFF_SHAPEIMPORT_HXX
-#include "shapeimport.hxx"
+#include <xmloff/shapeimport.hxx>
 #endif
 
 #ifndef _XMLOFF_XMLTKMAP_HXX
-#include "xmltkmap.hxx"
+#include <xmloff/xmltkmap.hxx>
 #endif
 
 #ifndef _XMLOFF_XMLNMSPE_HXX
@@ -63,7 +63,7 @@
 #endif
 
 #ifndef _XMLOFF_XMLTOKEN_HXX
-#include "xmltoken.hxx"
+#include <xmloff/xmltoken.hxx>
 #endif
 
 #ifndef _XIMPSTYLE_HXX
@@ -79,7 +79,7 @@
 #endif
 
 #ifndef _XMLOFF_PROPERTYSETMAPPER_HXX
-#include "xmlprmap.hxx"
+#include <xmloff/xmlprmap.hxx>
 #endif
 
 #ifndef _XIMP3DSCENE_HXX
