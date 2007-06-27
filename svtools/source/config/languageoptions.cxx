@@ -4,9 +4,9 @@
  *
  *  $RCSfile: languageoptions.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 14:26:02 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 21:13:38 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -41,13 +41,13 @@
 #endif
 #define SVT_DLLIMPLEMENTATION
 
-#include "languageoptions.hxx"
+#include <svtools/languageoptions.hxx>
 
 #ifndef _SVTOOLS_CJKOPTIONS_HXX
-#include <cjkoptions.hxx>
+#include <svtools/cjkoptions.hxx>
 #endif
 #ifndef _SVTOOLS_CTLOPTIONS_HXX
-#include <ctloptions.hxx>
+#include <svtools/ctloptions.hxx>
 #endif
 #ifndef _SV_SVAPP_HXX
 #include <vcl/svapp.hxx>
