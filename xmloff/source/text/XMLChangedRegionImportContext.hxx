@@ -4,9 +4,9 @@
  *
  *  $RCSfile: XMLChangedRegionImportContext.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 15:00:49 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 15:54:22 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -38,7 +38,7 @@
 #define _XMLOFF_XMLCHANGEDREGIONIMPORTCONTEXT_HXX
 
 #ifndef _XMLOFF_XMLICTXT_HXX
-#include "xmlictxt.hxx"
+#include <xmloff/xmlictxt.hxx>
 #endif
 
 #ifndef _COM_SUN_STAR_UNO_REFERENCE_H_
