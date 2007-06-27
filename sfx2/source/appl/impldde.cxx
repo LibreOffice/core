@@ -4,9 +4,9 @@
  *
  *  $RCSfile: impldde.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: rt $ $Date: 2007-04-26 10:06:44 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 22:58:58 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -51,8 +51,8 @@
 #include <rtl/ustring.hxx>
 
 #include "dde.hrc"
-#include "lnkbase.hxx"
-#include "linkmgr.hxx"
+#include <sfx2/lnkbase.hxx>
+#include <sfx2/linkmgr.hxx>
 #include "sfxresid.hxx"
 
 #include <com/sun/star/uno/Any.hxx>
