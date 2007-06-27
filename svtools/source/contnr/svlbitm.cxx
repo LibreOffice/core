@@ -4,9 +4,9 @@
  *
  *  $RCSfile: svlbitm.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: obo $ $Date: 2007-06-12 05:29:16 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 21:21:05 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -37,8 +37,8 @@
 #include "precompiled_svtools.hxx"
 
 
-#include <svlbox.hxx>
-#include <svlbitm.hxx>
+#include <svtools/svlbox.hxx>
+#include <svtools/svlbitm.hxx>
 
 #ifndef _SV_SVAPP_HXX
 #include <vcl/svapp.hxx>
