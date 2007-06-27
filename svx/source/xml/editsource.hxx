@@ -4,9 +4,9 @@
  *
  *  $RCSfile: editsource.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 01:15:02 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 19:31:39 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -37,7 +37,7 @@
 #define _SVX_EDITSOURCE_HXX
 
 #ifndef _SVX_UNOEDSRC_HXX
-#include <unoedsrc.hxx>
+#include <svx/unoedsrc.hxx>
 #endif
 
 class EditEngine;
