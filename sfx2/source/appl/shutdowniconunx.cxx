@@ -19,7 +19,7 @@
 #include <vcl/bmpacc.hxx>
 #endif
 #ifndef _SFXAPP_HXX
-#include "app.hxx"
+#include <sfx2/app.hxx>
 #endif
 #ifndef _SFX_APP_HRC
 #include "app.hrc"
