@@ -4,9 +4,9 @@
  *
  *  $RCSfile: salgdi2.cxx,v $
  *
- *  $Revision: 1.39 $
+ *  $Revision: 1.40 $
  *
- *  last change: $Author: ihi $ $Date: 2007-04-16 14:23:07 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 20:49:47 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -51,7 +51,7 @@
 #include <salbmp.h>
 #endif
 #ifndef _SV_SALBTYPE_HXX
-#include <salbtype.hxx>
+#include <vcl/salbtype.hxx>
 #endif
 #ifndef _SV_SALGDI_H
 #include <salgdi.h>
@@ -68,7 +68,7 @@
 
 #ifndef _USE_PRINT_EXTENSION_
 #include <psprint/printergfx.hxx>
-#include <bmpacc.hxx>
+#include <vcl/bmpacc.hxx>
 #endif
 
 #undef SALGDI2_TESTTRANS
