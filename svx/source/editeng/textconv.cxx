@@ -4,9 +4,9 @@
  *
  *  $RCSfile: textconv.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: obo $ $Date: 2006-10-12 12:40:36 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 18:00:49 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -38,8 +38,8 @@
 #include <eeng_pch.hxx>
 
 #include <impedit.hxx>
-#include <editview.hxx>
-#include <editeng.hxx>
+#include <svx/editview.hxx>
+#include <svx/editeng.hxx>
 
 #ifndef _UNO_LINGU_HXX
 #include <unolingu.hxx>
@@ -52,7 +52,7 @@
 #endif
 
 #ifndef _SVX_LANGITEM_HXX
-#include <langitem.hxx>
+#include <svx/langitem.hxx>
 #endif
 #ifndef _SVX_FONTITEM_HXX
 #include <fontitem.hxx>
