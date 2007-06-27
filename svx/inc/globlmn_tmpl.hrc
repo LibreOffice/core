@@ -4,9 +4,9 @@
  *
  *  $RCSfile: globlmn_tmpl.hrc,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: ihi $ $Date: 2007-04-19 13:56:07 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 13:36:06 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1393,6 +1393,12 @@
     Identifier = SID_OPEN_HYPERLINK ; \
     HelpID = SID_OPEN_HYPERLINK ; \
     Text [ en-US ] = "~Open Hyperlink" ;    \
+
+#define ITEM_OPEN_SMARTTAGMENU \
+    Identifier = SID_OPEN_SMARTTAGMENU ; \
+    HelpID = SID_OPEN_SMARTTAGMENU ; \
+    Text [ en-US ] = "Open ~Smart Tag Menu" ;   \
+
 
 #define ITEM_OPEN_XML_FILTERSETTINGS \
     Identifier = SID_OPEN_XML_FILTERSETTINGS ; \
