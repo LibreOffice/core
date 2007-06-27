@@ -4,9 +4,9 @@
  *
  *  $RCSfile: unomlstr.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: vg $ $Date: 2007-05-22 15:21:19 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 19:24:46 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -37,7 +37,7 @@
 #include "precompiled_svx.hxx"
 
 #ifndef _SVDOBJ_HXX
-#include <svdobj.hxx>
+#include <svx/svdobj.hxx>
 #endif
 // header for class OGuard
 #ifndef _VOS_MUTEX_HXX_
