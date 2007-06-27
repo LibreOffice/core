@@ -4,9 +4,9 @@
  *
  *  $RCSfile: command.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 00:47:53 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 22:05:51 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -44,10 +44,10 @@
 #include "first.hxx"
 #endif
 
-#include "fsys.hxx"
-#include "stream.hxx"
+#include <tools/fsys.hxx>
+#include <tools/stream.hxx>
 #include "bootstrp/command.hxx"
-#include "debug.hxx"
+#include <tools/debug.hxx>
 #include "bootstrp/appdef.hxx"
 
 #if defined WNT
@@ -85,7 +85,7 @@
 #endif
 
 #if defined WNT
-#include <svwin.h>
+#include <tools/svwin.h>
 #endif
 
 #if defined WNT
