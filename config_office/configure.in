@@ -3,7 +3,7 @@ dnl *     vi:set sw=3 ts=3 et:
 dnl *
 dnl * Name: configure.in
 dnl * Auth: Willem van Dorp, Ross Nicholson, Oisin Boydell - Sun Microsystems Ireland
-dnl * Date: $Date: 2007-06-26 17:48:38 $
+dnl * Date: $Date: 2007-06-27 12:11:48 $
 dnl *
 dnl * Desc: This file serves as input for the GNU autoconf package
 dnl *       in order to create a configure script.
@@ -12,7 +12,7 @@ dnl *       necessary to build OpenOffice.org
 dnl *
 dnl *
 dnl ******************************************************************/
-AC_REVISION( $Revision: 1.210 $ )
+AC_REVISION( $Revision: 1.211 $ )
 AC_PREREQ(2.50)
 AC_INIT()
 echo "$@" >config.parms
@@ -1328,17 +1328,17 @@ if test "$_os" = "SunOS"; then
    if test "$CC" = "cc"; then
       AC_PATH_PROGS(_cc, cc)
       COMPATH=`echo $_cc | $SED -n "s/\/cc//p"`
-      AC_MSG_CHECKING([the SUN Workshop C compiler version])
+      AC_MSG_CHECKING([the SunStudio C/C++ compiler version])
       dnl cc -V outputs to standard error!!!!
-      _workshop_string=`$CC -V 2>&1 | grep '^cc' | sed -e 's/.* C //'`
-      _workshop_version=`echo $_workshop_string | $AWK '{ print $1 }'`
-      _workshop_major=`echo $_workshop_version | $AWK -F. '{ print $1 }'` 
-      if test "$_workshop_major" != "5"; then
-         AC_MSG_ERROR([found version "$_workshop_version", use version 5.5, 5.7 or 5.8 of the Sun Workshop C compiler])
+      _sunstudio_string=`$CC -V 2>&1 | grep '^cc' | sed -e 's/.* C //'`
+      _sunstudio_version=`echo $_sunstudio_string | $AWK '{ print $1 }'`
+      _sunstudio_major=`echo $_sunstudio_version | $AWK -F. '{ print $1 }'` 
+      if test "$_sunstudio_major" != "5"; then
+         AC_MSG_ERROR([found version "$_sunstudio_version", use version 5.5, 5.7, 5.8 or 5.9 of the SunStudio C/C++ compiler])
       else
-         _workshop_minor=`echo $_workshop_version | $AWK -F. '{ if ($2 == 5) print "true"; else if ($2 == 7) print "true"; else if ($2 == 8) print "true"; else print "false" }'` 
-         if test "$_workshop_minor" = "false"; then
-            AC_MSG_ERROR([found version "$_workshop_version", use version 5.5, 5.7 or 5.8 of the Sun Workshop C compiler])
+         _sunstudio_minor=`echo $_sunstudio_version | $AWK -F. '{ if ($2 == 5) print "true"; else if ($2 == 7) print "true"; else if ($2 == 8) print "true"; else if ($2 == 9) print "true"; else print "false" }'` 
+         if test "$_sunstudio_minor" = "false"; then
+            AC_MSG_ERROR([found version "$_sunstudio_version", use version 5.5, 5.7, 5.8 or 5.9 of the SunStudio C/C++ compiler])
          else
             dnl compiler will do
             AC_MSG_RESULT([checked])
@@ -1829,12 +1829,12 @@ dnl ===================================================================
 dnl Extra checking for the SUN OS compiler
 dnl ===================================================================
 if test "$_os" = "SunOS"; then
-   dnl Workshop C++ compiler packaged with Workshop C compiler
+   dnl SunStudio C++ compiler packaged with SunStudio C compiler
    if test "$CC" = "cc"; then
-   AC_MSG_CHECKING([Sun Workshop C++ Compiler])
+   AC_MSG_CHECKING([SunStudio C++ Compiler])
       if test "$CXX" != "CC"; then
-         AC_MSG_WARN([Sun Workshop C++ was not found])
-         echo "Sun Workshop C++ was not found" >> warn
+         AC_MSG_WARN([SunStudio C++ was not found])
+         echo "SunStudio C++ was not found" >> warn
       else
          AC_MSG_RESULT([checked]) 
       fi
@@ -1910,7 +1910,7 @@ EXCEPTIONS="$exceptions_type"
 AC_SUBST(EXCEPTIONS)
 
 dnl **************************************************************
-dnl Testing for required  Solaris and workshop compiler patches...
+dnl Testing for required  Solaris and SunStudio compiler patches...
 dnl **************************************************************
 dnl Check whether the OS is SunOS.
 if test "$_os" = "SunOS"; then
@@ -2011,7 +2011,7 @@ if test "$_os" = "SunOS"; then
 fi
 
 dnl ===================================================================
-dnl When using Sun Workshop compiler, there is a bug with the cc
+dnl When using SunStudio compiler, there is a bug with the cc
 dnl preprocessor, so use CC preprocessor for the following tests.
 dnl See Issuezilla #445.
 dnl ===================================================================
@@ -2525,7 +2525,7 @@ if test "$DMAKE" = "no"; then
 else
     AC_MSG_CHECKING([whether the found dmake is the right dmake])
     # we need to find out whether that dmake we found is "our" dmake
-    # or the dmake from Sun's Workshop Compiler which is something
+    # or the dmake from Sun's SunStudio Compiler which is something
     # different
     # This test _should_ work because the one accepts -V (ours) and one
     # (the other) not...
@@ -3937,6 +3937,7 @@ AC_SUBST(ENABLE_NAS)
 
 AC_MSG_CHECKING([whether to enable portaudio/sndfile support])
 if test "$_os" != "WINNT" && \
+  test "$_os" != "SunOS" && \
   test -n "$enable_pasf" && test "$enable_pasf" != "no"; then
 	AC_MSG_RESULT([yes])
    ENABLE_PASF=YES
