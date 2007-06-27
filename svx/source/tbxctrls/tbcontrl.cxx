@@ -4,9 +4,9 @@
  *
  *  $RCSfile: tbcontrl.cxx,v $
  *
- *  $Revision: 1.77 $
+ *  $Revision: 1.78 $
  *
- *  last change: $Author: kz $ $Date: 2007-05-10 15:02:03 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 19:18:43 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -139,8 +139,8 @@
 #include <com/sun/star/frame/status/FontHeight.hpp>
 #endif
 
-#include "dialogs.hrc"
-#include "svxitems.hrc"
+#include <svx/dialogs.hrc>
+#include <svx/svxitems.hrc>
 #include "helpid.hrc"
 
 
@@ -154,18 +154,18 @@
 
 
 #include "htmlmode.hxx"
-#include "xtable.hxx"
+#include <svx/xtable.hxx>
 #include "fontitem.hxx"
-#include "fhgtitem.hxx"
-#include "brshitem.hxx"
-#include "boxitem.hxx"
-#include "colritem.hxx"
+#include <svx/fhgtitem.hxx>
+#include <svx/brshitem.hxx>
+#include <svx/boxitem.hxx>
+#include <svx/colritem.hxx>
 #include "flstitem.hxx"
 #include "bolnitem.hxx"
 #include "drawitem.hxx"
-#include "tbcontrl.hxx"
+#include <svx/tbcontrl.hxx>
 #include "dlgutil.hxx"
-#include "dialmgr.hxx"
+#include <svx/dialmgr.hxx>
 #include "colorwindow.hxx"
 
 // ------------------------------------------------------------------------
