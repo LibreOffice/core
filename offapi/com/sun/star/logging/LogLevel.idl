@@ -1,0 +1,95 @@
+/*************************************************************************
+ *
+ *  OpenOffice.org - a multi-platform office productivity suite
+ *
+ *  $RCSfile: LogLevel.idl,v $
+ *
+ *  $Revision: 1.2 $
+ *
+ *  last change: $Author: hr $ $Date: 2007-06-27 14:47:09 $
+ *
+ *  The Contents of this file are made available subject to
+ *  the terms of GNU Lesser General Public License Version 2.1.
+ *
+ *
+ *    GNU Lesser General Public License Version 2.1
+ *    =============================================
+ *    Copyright 2005 by Sun Microsystems, Inc.
+ *    901 San Antonio Road, Palo Alto, CA 94303, USA
+ *
+ *    This library is free software; you can redistribute it and/or
+ *    modify it under the terms of the GNU Lesser General Public
+ *    License version 2.1, as published by the Free Software Foundation.
+ *
+ *    This library is distributed in the hope that it will be useful,
+ *    but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ *    Lesser General Public License for more details.
+ *
+ *    You should have received a copy of the GNU Lesser General Public
+ *    License along with this library; if not, write to the Free Software
+ *    Foundation, Inc., 59 Temple Place, Suite 330, Boston,
+ *    MA  02111-1307  USA
+ *
+ ************************************************************************/
+
+#ifndef __com_sun_star_logging_LogLevel_idl__
+#define __com_sun_star_logging_LogLevel_idl__
+
+//=============================================================================
+
+module com { module sun { module star { module logging {
+
+//=============================================================================
+
+/** specifies levels to distinguish between severities of logged events
+
+    @see XLogger
+
+    @since OOo 2.3
+ */
+constants LogLevel
+{
+    /** specifies that no messages are to be logged at all
+
+        <p>This level can be set at an <type>XLogger</type> to completely prevent
+        logging. You will usually not use it with a concrete log event.</p>
+    */
+    const long  OFF       = 0x7FFFFFFF;
+
+    /// denotes a serious failure to be logged
+    const long  SEVERE    =       1000;
+
+    /// denotes a potential problem to be logged
+    const long  WARNING   =        900;
+
+    /// denotes an informational message to be logged
+    const long  INFO      =        800;
+
+    /// denotes a static configuration message to be logged
+    const long  CONFIG    =        700;
+
+    /// denotes basic tracing information to be logged
+    const long  FINE      =        500;
+
+    /// denotes more fine-grained tracing information to be logged
+    const long  FINER     =        400;
+
+    /// denotes highly detailed tracing information to be logged
+    const long  FINEST    =        300;
+
+    /** specifies that all messages should be logged
+
+        <p>This level can be set at an <type>XLogger</type> to enable logging
+        of absolutely all events. You will usually not use it with a concrete log event.</p>
+    */
+    const long  ALL       = -0x80000000;
+};
+
+//=============================================================================
+
+}; }; }; };
+
+//=============================================================================
+
+#endif
