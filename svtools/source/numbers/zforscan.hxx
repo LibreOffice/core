@@ -4,9 +4,9 @@
  *
  *  $RCSfile: zforscan.hxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: vg $ $Date: 2006-04-07 16:04:05 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 21:57:28 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -49,7 +49,7 @@
 #endif
 
 #ifndef INCLUDED_SVTOOLS_NFKEYTAB_HXX
-#include "nfkeytab.hxx"
+#include <svtools/nfkeytab.hxx>
 #endif
 
 class SvNumberFormatter;
