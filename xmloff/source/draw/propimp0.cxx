@@ -4,9 +4,9 @@
  *
  *  $RCSfile: propimp0.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: vg $ $Date: 2006-11-21 17:33:07 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 15:04:01 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -61,11 +61,11 @@
 #endif
 
 #ifndef _XMLOFF_XMLUCONV_HXX
-#include <xmluconv.hxx>
+#include <xmloff/xmluconv.hxx>
 #endif
 
 #ifndef _XMLOFF_XMLIMP_HXX
-#include <xmlimp.hxx>
+#include <xmloff/xmlimp.hxx>
 #endif
 
 using namespace ::rtl;
