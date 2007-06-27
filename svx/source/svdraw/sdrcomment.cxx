@@ -4,9 +4,9 @@
  *
  *  $RCSfile: sdrcomment.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2006-12-05 12:13:46 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 18:57:14 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -37,7 +37,7 @@
 #include "precompiled_svx.hxx"
 
 #ifndef _SDR_COMMENT_HXX
-#include "sdrcomment.hxx"
+#include <svx/sdrcomment.hxx>
 #endif
 
 //////////////////////////////////////////////////////////////////////////////
