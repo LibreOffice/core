@@ -4,9 +4,9 @@
  *
  *  $RCSfile: saldata.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 12:42:56 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 20:56:27 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -44,7 +44,7 @@
 #ifndef _SV_SALDATA_HXX
 #include <saldata.hxx>
 #endif
-#include <svapp.hxx>
+#include <vcl/svapp.hxx>
 
 
 // =======================================================================
