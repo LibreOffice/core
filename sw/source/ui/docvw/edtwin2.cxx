@@ -4,9 +4,9 @@
  *
  *  $RCSfile: edtwin2.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: kz $ $Date: 2007-05-10 16:16:47 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 13:24:38 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -104,6 +104,9 @@
 #endif
 #ifndef _DPAGE_HXX
 #include <dpage.hxx>
+#endif
+#ifndef _SHELLRES_HXX
+#include <shellres.hxx>
 #endif
 #ifndef _DOCUFLD_HXX
 #include <docufld.hxx>
@@ -213,6 +216,7 @@ void SwEditWin::RequestHelp(const HelpEvent &rEvt)
                                     SwContentAtPos::SW_REDLINE |
                                     SwContentAtPos::SW_TOXMARK |
                                     SwContentAtPos::SW_REFMARK |
+                                    SwContentAtPos::SW_SMARTTAG |
 #ifndef PRODUCT
                                     SwContentAtPos::SW_TABLEBOXVALUE |
                         ( bBalloon ? SwContentAtPos::SW_CURR_ATTRS : 0) |
@@ -246,7 +250,12 @@ void SwEditWin::RequestHelp(const HelpEvent &rEvt)
                 sTxt = URIHelper::removePassword( sTxt,
                                         INetURLObject::WAS_ENCODED,
                                            INetURLObject::DECODE_UNAMBIGUOUS);
+                sTxt.InsertAscii( ": ", 0 );
+                sTxt.Insert( ViewShell::GetShellRes()->aHyperlinkClick, 0 );
+                break;
 
+            case SwContentAtPos::SW_SMARTTAG:
+                sTxt = SW_RESSTR(STR_SMARTTAG_CLICK);
                 break;
 
             case SwContentAtPos::SW_FTN:
