@@ -4,9 +4,9 @@
  *
  *  $RCSfile: region.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 12:10:22 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 20:23:01 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -42,7 +42,7 @@
 #include <tools/vcompat.hxx>
 #endif
 #ifndef _SV_SALBTYPE_HXX
-#include <salbtype.hxx>
+#include <vcl/salbtype.hxx>
 #endif
 #ifndef _STREAM_HXX
 #include <tools/stream.hxx>
@@ -54,10 +54,10 @@
 #include <region.h>
 #endif
 #ifndef _REGION_HXX
-#include <region.hxx>
+#include <vcl/region.hxx>
 #endif
 #ifndef _REGBAND_HXX
-#include <regband.hxx>
+#include <vcl/regband.hxx>
 #endif
 
 // =======================================================================
