@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.105 $
+#   $Revision: 1.106 $
 #
-#   last change: $Author: hr $ $Date: 2007-06-27 12:30:43 $
+#   last change: $Author: hr $ $Date: 2007-06-27 14:49:57 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -83,6 +83,7 @@ UNOIDLDBFILES= \
     $(UCR)$/cssi18n.db \
     $(UCR)$/cssldap.db \
     $(UCR)$/csslinguistic2.db \
+    $(UCR)$/csslogging.db \
     $(UCR)$/cssmail.db \
     $(UCR)$/cssmedia.db \
     $(UCR)$/cssmozilla.db \
