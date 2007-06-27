@@ -4,9 +4,9 @@
  *
  *  $RCSfile: inputhdl.cxx,v $
  *
- *  $Revision: 1.69 $
+ *  $Revision: 1.70 $
  *
- *  last change: $Author: kz $ $Date: 2007-05-10 16:53:46 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 12:45:09 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -2767,8 +2767,11 @@ BOOL ScInputHandler::KeyInput( const KeyEvent& rKEvt, BOOL bStartEdit /* = FALSE
                 if ( bUsed && bAutoComplete )
                 {
                     bUseTab = FALSE;
-                    nAutoPos = SCPOS_INVALID;                       // nicht weitersuchen
-                    if ( nChar && nChar != 8 && nChar != 127 )      // nicht BS und Delete
+                    nAutoPos = SCPOS_INVALID;                       // do not search further
+
+                    KeyFuncType eFunc = rKEvt.GetKeyCode().GetFunction();
+                    if ( nChar && nChar != 8 && nChar != 127 &&     // no 'backspace', no 'delete'
+                         KEYFUNC_CUT != eFunc)                      // and no 'CTRL-X'
                     {
                         if (bFormulaMode)
                             UseFormulaData();
