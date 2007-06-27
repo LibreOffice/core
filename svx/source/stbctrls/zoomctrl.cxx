@@ -4,9 +4,9 @@
  *
  *  $RCSfile: zoomctrl.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: obo $ $Date: 2006-10-12 13:06:20 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 18:55:59 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -50,13 +50,13 @@
 #endif
 #include <tools/urlobj.hxx>
 
-#include "dialogs.hrc"
+#include <svx/dialogs.hrc>
 
 #include "zoomctrl.hxx"
 //CHINA001 #include "zoom.hxx"
-#include "zoomitem.hxx"
+#include <svx/zoomitem.hxx>
 #include "stbctrls.h"
-#include "dialmgr.hxx"
+#include <svx/dialmgr.hxx>
 
 SFX_IMPL_STATUSBAR_CONTROL(SvxZoomStatusBarControl,SvxZoomItem);
 

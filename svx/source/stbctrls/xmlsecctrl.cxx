@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xmlsecctrl.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: obo $ $Date: 2006-10-12 13:05:35 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 18:55:46 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -73,19 +73,19 @@
 
 #include <svtools/eitem.hxx>
 
-#include "dialogs.hrc"
-#include "dialmgr.hxx"
+#include <svx/dialogs.hrc>
+#include <svx/dialmgr.hxx>
 #include "xmlsecctrl.hxx"
 #include <tools/urlobj.hxx>
 
 #define PAINT_OFFSET    5
 
-//#include "sizeitem.hxx"
-//#include "dialmgr.hxx"
+//#include <svx/sizeitem.hxx>
+//#include <svx/dialmgr.hxx>
 //#include "dlgutil.hxx"
 //#include "stbctrls.h"
 
-//#include "dialogs.hrc"
+//#include <svx/dialogs.hrc>
 
 /*#ifndef _UNOTOOLS_LOCALEDATAWRAPPER_HXX
 #include <unotools/localedatawrapper.hxx>
