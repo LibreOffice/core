@@ -4,9 +4,9 @@
  *
  *  $RCSfile: eeobj.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 04:50:59 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 17:58:00 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -42,7 +42,7 @@
 #include <eeobj.hxx>
 #include <sot/exchange.hxx>
 #include <sot/formats.hxx>
-#include <editeng.hxx>
+#include <svx/editeng.hxx>
 #include <svtools/itempool.hxx>
 #include <vos/mutex.hxx>
 #include <vcl/svapp.hxx>
