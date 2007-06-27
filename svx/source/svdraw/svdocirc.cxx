@@ -4,9 +4,9 @@
  *
  *  $RCSfile: svdocirc.cxx,v $
  *
- *  $Revision: 1.32 $
+ *  $Revision: 1.33 $
  *
- *  last change: $Author: kz $ $Date: 2007-05-09 13:32:45 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 19:05:40 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -45,45 +45,45 @@
 #endif
 
 #ifndef _SVX_XLNWTIT_HXX //autogen
-#include <xlnwtit.hxx>
+#include <svx/xlnwtit.hxx>
 #endif
 
 #ifndef _SVX_XLNEDWIT_HXX //autogen
-#include <xlnedwit.hxx>
+#include <svx/xlnedwit.hxx>
 #endif
 
 #ifndef _SVX_XLNSTWIT_HXX //autogen
-#include <xlnstwit.hxx>
+#include <svx/xlnstwit.hxx>
 #endif
 
 #ifndef _SVX_XLNSTIT_HXX //autogen
-#include <xlnstit.hxx>
+#include <svx/xlnstit.hxx>
 #endif
 
 #ifndef _SVX_XLNEDIT_HXX //autogen
-#include <xlnedit.hxx>
+#include <svx/xlnedit.hxx>
 #endif
 
-#include "svdocirc.hxx"
+#include <svx/svdocirc.hxx>
 #include <math.h>
-#include "xpool.hxx"
+#include <svx/xpool.hxx>
 #include "svdtouch.hxx"
 #include "svdxout.hxx"
-#include "svdattr.hxx"
-#include "svdpool.hxx"
-#include "svdattrx.hxx"
-#include "svdtrans.hxx"
-#include "svdetc.hxx"
-#include "svddrag.hxx"
-#include "svdmodel.hxx"
-#include "svdpage.hxx"
-#include "svdopath.hxx" // fuer die Objektkonvertierung
-#include "svdview.hxx"  // Zum Draggen (Ortho)
+#include <svx/svdattr.hxx>
+#include <svx/svdpool.hxx>
+#include <svx/svdattrx.hxx>
+#include <svx/svdtrans.hxx>
+#include <svx/svdetc.hxx>
+#include <svx/svddrag.hxx>
+#include <svx/svdmodel.hxx>
+#include <svx/svdpage.hxx>
+#include <svx/svdopath.hxx> // fuer die Objektkonvertierung
+#include <svx/svdview.hxx>  // Zum Draggen (Ortho)
 #include "svdglob.hxx"   // StringCache
 #include "svdstr.hrc"    // Objektname
 
 #ifndef _EEITEM_HXX
-#include "eeitem.hxx"
+#include <svx/eeitem.hxx>
 #endif
 
 #ifndef _SVX_SVDOIMP_HXX
