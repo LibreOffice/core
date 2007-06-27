@@ -4,9 +4,9 @@
  *
  *  $RCSfile: SchXMLExport.cxx,v $
  *
- *  $Revision: 1.87 $
+ *  $Revision: 1.88 $
  *
- *  last change: $Author: obo $ $Date: 2007-06-11 14:52:38 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 14:47:51 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -36,7 +36,7 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_xmloff.hxx"
 
-#include <xmlprmap.hxx>
+#include <xmloff/xmlprmap.hxx>
 
 #include "SchXMLExport.hxx"
 #include "XMLChartPropertySetMapper.hxx"
@@ -62,25 +62,25 @@
 #endif
 
 #ifndef _SVTOOLS_NMSPMAP_HXX
-#include "nmspmap.hxx"
+#include <xmloff/nmspmap.hxx>
 #endif
 #ifndef _XMLOFF_XMLNMSPE_HXX
 #include "xmlnmspe.hxx"
 #endif
 #ifndef _XMLOFF_XMLTOKEN_HXX
-#include "xmltoken.hxx"
+#include <xmloff/xmltoken.hxx>
 #endif
 #ifndef _XMLOFF_FAMILIES_HXX_
-#include "families.hxx"
+#include <xmloff/families.hxx>
 #endif
 #ifndef _XMLOFF_XMLASTPLP_HXX
-#include "xmlaustp.hxx"
+#include <xmloff/xmlaustp.hxx>
 #endif
 #ifndef _XMLOFF_XMLUCONV_HXX
-#include "xmluconv.hxx"
+#include <xmloff/xmluconv.hxx>
 #endif
 #ifndef _XMLOFF_XMLMETAE_HXX
-#include "xmlmetae.hxx"
+#include <xmloff/xmlmetae.hxx>
 #endif
 #ifndef _XEXPTRANSFORM_HXX
 #include "xexptran.hxx"
