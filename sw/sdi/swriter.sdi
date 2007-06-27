@@ -1754,33 +1754,6 @@ SfxVoidItem Escape FN_ESCAPE
 ]
 
 //--------------------------------------------------------------------------
-SfxBoolItem ExecHyperlinks FN_STAT_HYPERLINKS
-
-[
-    /* flags: */
-    AutoUpdate = FALSE,
-    Cachable = Cachable,
-    FastCall = FALSE,
-    HasCoreId = FALSE,
-    HasDialog = FALSE,
-    ReadOnlyDoc = TRUE,
-    Toggle = FALSE,
-    Container = FALSE,
-    RecordAbsolute = FALSE,
-    RecordPerSet;
-    Synchron;
-
-    Readonly = FALSE,
-
-    /* config: */
-    AccelConfig = FALSE,
-    MenuConfig = FALSE,
-    StatusBarConfig = TRUE,
-    ToolBoxConfig = FALSE,
-    GroupId = GID_VIEW;
-]
-
-//--------------------------------------------------------------------------
 SfxVoidItem ExecuteMacroField FN_EXECUTE_MACROFIELD
 ()
 [
