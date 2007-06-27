@@ -4,9 +4,9 @@
  *
  *  $RCSfile: wizdlg.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 14:46:44 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 21:30:13 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -52,7 +52,7 @@
 #endif
 
 #ifndef _SVT_WIZDLG_HXX
-#include <wizdlg.hxx>
+#include <svtools/wizdlg.hxx>
 #endif
 
 // =======================================================================
