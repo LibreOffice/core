@@ -4,9 +4,9 @@
  *
  *  $RCSfile: sbxmod.cxx,v $
  *
- *  $Revision: 1.36 $
+ *  $Revision: 1.37 $
  *
- *  last change: $Author: vg $ $Date: 2006-11-03 15:10:25 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 14:19:36 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -50,7 +50,7 @@
 #ifndef _SHL_HXX //autogen
 #include <tools/shl.hxx>
 #endif
-#include <sbx.hxx>
+#include <basic/sbx.hxx>
 #include "sb.hxx"
 #include <sbjsmeth.hxx>
 #include "sbjsmod.hxx"
@@ -60,8 +60,8 @@
 #include "runtime.hxx"
 #include "token.hxx"
 #include "sbunoobj.hxx"
-#include <hilight.hxx>
-#include <basrdll.hxx>
+#include <basic/hilight.hxx>
+#include <basic/basrdll.hxx>
 
 #ifndef _VOS_MUTEX_HXX_
 #include <vos/mutex.hxx>
