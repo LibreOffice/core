@@ -4,9 +4,9 @@
  *
  *  $RCSfile: flditem.cxx,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: kz $ $Date: 2007-05-10 14:50:45 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 18:27:31 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -52,9 +52,9 @@
 #include <unotools/localfilehelper.hxx>
 #endif
 
-#include "flditem.hxx"
+#include <svx/flditem.hxx>
 
-#include "svdfield.hxx"
+#include <svx/svdfield.hxx>
 
 // #90477#
 #ifndef _TOOLS_TENCCVT_HXX
