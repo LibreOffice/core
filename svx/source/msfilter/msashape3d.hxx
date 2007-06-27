@@ -4,9 +4,9 @@
  *
  *  $RCSfile: msashape3d.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: ihi $ $Date: 2006-11-14 13:29:34 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 18:34:42 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -37,7 +37,7 @@
 #define _MSASHAPE3D_HXX
 
 #ifndef _MSDFFIMP_HXX
-#include <msdffimp.hxx>
+#include <svx/msdffimp.hxx>
 #endif
 
 #ifndef _BGFX_POINT_B3DPOINT_HXX
