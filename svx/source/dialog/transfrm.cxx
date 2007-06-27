@@ -4,9 +4,9 @@
  *
  *  $RCSfile: transfrm.cxx,v $
  *
- *  $Revision: 1.29 $
+ *  $Revision: 1.30 $
  *
- *  last change: $Author: kz $ $Date: 2007-05-10 14:45:11 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 17:50:27 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -53,30 +53,30 @@
 #endif
 
 #ifndef _SVDVIEW_HXX //autogen
-#include "svdview.hxx"
+#include <svx/svdview.hxx>
 #endif
 #ifndef _SVDOBJ_HXX //autogen
-#include "svdobj.hxx"
+#include <svx/svdobj.hxx>
 #endif
 #ifndef _SVDPAGV_HXX //autogen
-#include "svdpagv.hxx"
+#include <svx/svdpagv.hxx>
 #endif
 #ifndef _SVDOTEXT_HXX //autogen
-#include "svdotext.hxx"
+#include <svx/svdotext.hxx>
 #endif
 #ifndef _SDERITM_HXX //autogen
-#include "sderitm.hxx"
+#include <svx/sderitm.hxx>
 #endif
 
-#include <svxids.hrc>
-#include "dialogs.hrc"
+#include <svx/svxids.hrc>
+#include <svx/dialogs.hrc>
 #include "transfrm.hrc"
-#include "sizeitem.hxx"
+#include <svx/sizeitem.hxx>
 
 #include "transfrm.hxx"
-#include "dialmgr.hxx"
+#include <svx/dialmgr.hxx>
 #include "dlgutil.hxx"
-#include "svxenum.hxx"
+#include <svx/svxenum.hxx>
 #include "anchorid.hxx"
 
 #ifndef _SFXMODULE_HXX
