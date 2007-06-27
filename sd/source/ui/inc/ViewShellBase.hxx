@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ViewShellBase.hxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: rt $ $Date: 2007-04-03 16:08:36 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 15:43:56 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -257,7 +257,7 @@ public:
 
     ::boost::shared_ptr<UpdateLockManager> GetUpdateLockManager (void) const;
 
-    ToolBarManager& GetToolBarManager (void) const;
+    ::boost::shared_ptr<ToolBarManager> GetToolBarManager (void) const;
 
     FormShellManager& GetFormShellManager (void) const;
 
