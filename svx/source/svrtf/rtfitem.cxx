@@ -4,9 +4,9 @@
  *
  *  $RCSfile: rtfitem.cxx,v $
  *
- *  $Revision: 1.32 $
+ *  $Revision: 1.33 $
  *
- *  last change: $Author: rt $ $Date: 2007-05-29 15:49:28 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 19:13:49 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -40,59 +40,59 @@
 
 #include "flstitem.hxx"
 #include "fontitem.hxx"
-#include "postitem.hxx"
-#include "wghtitem.hxx"
-#include "fhgtitem.hxx"
+#include <svx/postitem.hxx>
+#include <svx/wghtitem.hxx>
+#include <svx/fhgtitem.hxx>
 #include "fwdtitem.hxx"
-#include "udlnitem.hxx"
-#include "crsditem.hxx"
-#include "shdditem.hxx"
-#include "akrnitem.hxx"
-#include "wrlmitem.hxx"
-#include "cntritem.hxx"
-#include "prszitem.hxx"
-#include "colritem.hxx"
-#include "cscoitem.hxx"
-#include "kernitem.hxx"
-#include "cmapitem.hxx"
-#include "escpitem.hxx"
-#include "langitem.hxx"
+#include <svx/udlnitem.hxx>
+#include <svx/crsditem.hxx>
+#include <svx/shdditem.hxx>
+#include <svx/akrnitem.hxx>
+#include <svx/wrlmitem.hxx>
+#include <svx/cntritem.hxx>
+#include <svx/prszitem.hxx>
+#include <svx/colritem.hxx>
+#include <svx/cscoitem.hxx>
+#include <svx/kernitem.hxx>
+#include <svx/cmapitem.hxx>
+#include <svx/escpitem.hxx>
+#include <svx/langitem.hxx>
 #include "nlbkitem.hxx"
-#include "nhypitem.hxx"
-#include "lcolitem.hxx"
-#include "blnkitem.hxx"
-#include "emphitem.hxx"
-#include "twolinesitem.hxx"
+#include <svx/nhypitem.hxx>
+#include <svx/lcolitem.hxx>
+#include <svx/blnkitem.hxx>
+#include <svx/emphitem.hxx>
+#include <svx/twolinesitem.hxx>
 
-#include "pbinitem.hxx"
-#include "sizeitem.hxx"
-#include "lrspitem.hxx"
-#include "ulspitem.hxx"
+#include <svx/pbinitem.hxx>
+#include <svx/sizeitem.hxx>
+#include <svx/lrspitem.hxx>
+#include <svx/ulspitem.hxx>
 #include "prntitem.hxx"
 #include "opaqitem.hxx"
 #include "protitem.hxx"
-#include "shaditem.hxx"
-#include "boxitem.hxx"
-#include "brkitem.hxx"
-#include "keepitem.hxx"
+#include <svx/shaditem.hxx>
+#include <svx/boxitem.hxx>
+#include <svx/brkitem.hxx>
+#include <svx/keepitem.hxx>
 #include "bolnitem.hxx"
-#include "brshitem.hxx"
-#include "lspcitem.hxx"
-#include "adjitem.hxx"
-#include "orphitem.hxx"
-#include "widwitem.hxx"
-#include "tstpitem.hxx"
-#include "pmdlitem.hxx"
-#include "spltitem.hxx"
-#include "hyznitem.hxx"
-#include "charscaleitem.hxx"
-#include "charrotateitem.hxx"
-#include "charreliefitem.hxx"
-#include "paravertalignitem.hxx"
-#include "forbiddenruleitem.hxx"
-#include "hngpnctitem.hxx"
-#include "scriptspaceitem.hxx"
-#include "frmdiritem.hxx"
+#include <svx/brshitem.hxx>
+#include <svx/lspcitem.hxx>
+#include <svx/adjitem.hxx>
+#include <svx/orphitem.hxx>
+#include <svx/widwitem.hxx>
+#include <svx/tstpitem.hxx>
+#include <svx/pmdlitem.hxx>
+#include <svx/spltitem.hxx>
+#include <svx/hyznitem.hxx>
+#include <svx/charscaleitem.hxx>
+#include <svx/charrotateitem.hxx>
+#include <svx/charreliefitem.hxx>
+#include <svx/paravertalignitem.hxx>
+#include <svx/forbiddenruleitem.hxx>
+#include <svx/hngpnctitem.hxx>
+#include <svx/scriptspaceitem.hxx>
+#include <svx/frmdiritem.hxx>
 #include "charhiddenitem.hxx"
 
 
