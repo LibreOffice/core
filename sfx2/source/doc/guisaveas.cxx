@@ -4,9 +4,9 @@
  *
  *  $RCSfile: guisaveas.cxx,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: ihi $ $Date: 2007-04-16 16:56:18 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 23:22:01 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -122,15 +122,15 @@
 #include <vcl/window.hxx>
 #include <toolkit/awt/vclxwindow.hxx>
 
-#include <sfxsids.hrc>
+#include <sfx2/sfxsids.hrc>
 #include <doc.hrc>
 #include <sfxresid.hxx>
-#include <docfilt.hxx>
-#include <filedlghelper.hxx>
-#include <app.hxx>
-#include <objuno.hxx>
-#include <objsh.hxx>
-#include <dinfdlg.hxx>
+#include <sfx2/docfilt.hxx>
+#include <sfx2/filedlghelper.hxx>
+#include <sfx2/app.hxx>
+#include <sfx2/objuno.hxx>
+#include <sfx2/objsh.hxx>
+#include <sfx2/dinfdlg.hxx>
 #include <sfxtypes.hxx>
 #include "alienwarn.hxx"
 
