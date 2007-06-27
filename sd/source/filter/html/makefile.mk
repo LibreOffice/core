@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.9 $
+#   $Revision: 1.10 $
 #
-#   last change: $Author: kz $ $Date: 2006-12-12 16:43:12 $
+#   last change: $Author: hr $ $Date: 2007-06-27 15:39:39 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -49,6 +49,7 @@ INCPRE += ..$/..$/ui$/inc
 # --- Files --------------------------------------------------------
 
 SLOFILES =	$(SLO)$/HtmlOptionsDialog.obj\
+            $(SLO)$/buttonset.obj \
             $(SLO)$/sdhtmlfilter.obj	\
             $(SLO)$/htmlex.obj			\
             $(SLO)$/htmlattr.obj		\
@@ -61,11 +62,13 @@ LIB1TARGET= $(SLB)$/$(TARGET).lib
 LIB1OBJFILES = \
             $(SLO)$/HtmlOptionsDialog.obj\
             $(SLO)$/sdhtmlfilter.obj	\
+            $(SLO)$/buttonset.obj \
             $(SLO)$/htmlex.obj
 
 LIB2TARGET= $(SLB)$/$(TARGET)_ui.lib
 LIB2OBJFILES = \
             $(SLO)$/htmlattr.obj \
+            $(SLO)$/buttonset.obj \
             $(SLO)$/pubdlg.obj
 
 # --- Targets --------------------------------------------------------------
