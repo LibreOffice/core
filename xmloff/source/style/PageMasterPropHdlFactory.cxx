@@ -4,9 +4,9 @@
  *
  *  $RCSfile: PageMasterPropHdlFactory.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 10:45:49 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 15:27:50 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -41,29 +41,29 @@
 #endif
 
 #ifndef _XMLOFF_XMLTYPES_HXX
-#include "xmltypes.hxx"
+#include <xmloff/xmltypes.hxx>
 #endif
 #ifndef _XMLOFF_XMLTOKEN_HXX
-#include "xmltoken.hxx"
+#include <xmloff/xmltoken.hxx>
 #endif
 #ifndef _XMLOFF_PROPERTYHANDLER_BASICTYPES_HXX
 #include "xmlbahdl.hxx"
 #endif
 #ifndef _XMLOFF_NAMEDBOOLPROPERTYHANDLER_HXX
-#include "NamedBoolPropertyHdl.hxx"
+#include <xmloff/NamedBoolPropertyHdl.hxx>
 #endif
 #ifndef _XMLOFF_XMLTEXTCOLUMNSPPROPERTYHANDLER_HXX
 #include "XMLTextColumnsPropertyHandler.hxx"
 #endif
 #ifndef _XMLOFF_XMLCONSTANTSPROPERTYHANDLER_HXX
-#include "XMLConstantsPropertyHandler.hxx"
+#include <xmloff/XMLConstantsPropertyHandler.hxx>
 #endif
 
 #ifndef _XMLOFF_PAGEMASTERPROPHDL_HXX_
 #include "PageMasterPropHdl.hxx"
 #endif
 #ifndef _XMLOFF_PAGEMASTERSTYLEMAP_HXX
-#include "PageMasterStyleMap.hxx"
+#include <xmloff/PageMasterStyleMap.hxx>
 #endif
 
 #ifndef _COM_SUN_STAR_TEXT_TEXTGRIDMODE_HPP_
