@@ -4,9 +4,9 @@
  *
  *  $RCSfile: viewfun4.cxx,v $
  *
- *  $Revision: 1.35 $
+ *  $Revision: 1.36 $
  *
- *  last change: $Author: kz $ $Date: 2007-05-10 17:04:20 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 12:46:44 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -534,6 +534,9 @@ BOOL ScViewFunc::PasteFile( const Point& rPos, const String& rFile, BOOL bLink )
         // nur nach eigenen Filtern suchen, ohne Auswahlbox (wie in ScDocumentLoader)
         SfxFilterMatcher aMatcher( ScDocShell::Factory().GetFilterContainer()->GetName() );
         SfxMedium aSfxMedium( aStrURL, (STREAM_READ | STREAM_SHARE_DENYNONE), FALSE );
+        // #i73992# GuessFilter no longer calls UseInteractionHandler.
+        // This is UI, so it can be called here.
+        aSfxMedium.UseInteractionHandler(TRUE);
         ErrCode nErr = aMatcher.GuessFilter( aSfxMedium, &pFlt );
 
         if ( pFlt && !nErr )
