@@ -4,9 +4,9 @@
  *
  *  $RCSfile: texteng.cxx,v $
  *
- *  $Revision: 1.47 $
+ *  $Revision: 1.48 $
  *
- *  last change: $Author: obo $ $Date: 2006-10-12 15:15:50 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 21:31:32 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -41,13 +41,13 @@
 #include <tools/stream.hxx>
 #endif
 
-#include <texteng.hxx>
-#include <textview.hxx>
+#include <svtools/texteng.hxx>
+#include <svtools/textview.hxx>
 #include <textdoc.hxx>
 #include <textdat2.hxx>
 #include <textundo.hxx>
 #include <textund2.hxx>
-#include <ctloptions.hxx>
+#include <svtools/ctloptions.hxx>
 
 #ifndef _SV_WINDOW_HXX //autogen
 #include <vcl/window.hxx>
