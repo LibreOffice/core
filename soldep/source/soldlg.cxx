@@ -4,9 +4,9 @@
  *
  *  $RCSfile: soldlg.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: ihi $ $Date: 2006-12-21 12:22:58 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 23:39:48 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -35,9 +35,9 @@
 
 #include <tools/geninfo.hxx>
 //#include "depapp.hxx"
-#include "soldep.hxx"
-#include "soldlg.hxx"
-#include "soldlg.hrc"
+#include <soldep/soldep.hxx>
+#include <soldep/soldlg.hxx>
+#include <soldep/soldlg.hrc>
 
 #ifndef SOLARIS
 #define SIZE( nX, nY)   \

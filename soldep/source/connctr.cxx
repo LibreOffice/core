@@ -4,9 +4,9 @@
  *
  *  $RCSfile: connctr.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: ihi $ $Date: 2006-12-21 12:22:21 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 23:38:02 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -35,9 +35,9 @@
 #ifdef _MSC_VER
 #pragma warning(disable:4100)
 #endif
-#include "connctr.hxx"
-#include "objwin.hxx"
-#include "depwin.hxx"
+#include <soldep/connctr.hxx>
+#include <soldep/objwin.hxx>
+#include <soldep/depwin.hxx>
 #include "math.h"
 
 BOOL Connector::msbHideMode = FALSE;
