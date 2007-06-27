@@ -4,9 +4,9 @@
  *
  *  $RCSfile: objcont.cxx,v $
  *
- *  $Revision: 1.67 $
+ *  $Revision: 1.68 $
  *
- *  last change: $Author: hr $ $Date: 2007-06-27 12:55:26 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 23:22:52 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -90,26 +90,26 @@
 #include <unotools/localfilehelper.hxx>
 #include <vcl/virdev.hxx>
 
-#include "app.hxx"
+#include <sfx2/app.hxx>
 #include "sfxresid.hxx"
-#include "dinfdlg.hxx"
+#include <sfx2/dinfdlg.hxx>
 #include "fltfnc.hxx"
-#include "docfac.hxx"
-#include "viewsh.hxx"
-#include "objsh.hxx"
+#include <sfx2/docfac.hxx>
+#include <sfx2/viewsh.hxx>
+#include <sfx2/objsh.hxx>
 #include "objshimp.hxx"
-#include "evntconf.hxx"
+#include <sfx2/evntconf.hxx>
 #include "sfxhelp.hxx"
-#include "dispatch.hxx"
-#include "printer.hxx"
-#include "topfrm.hxx"
+#include <sfx2/dispatch.hxx>
+#include <sfx2/printer.hxx>
+#include <sfx2/topfrm.hxx>
 #include "basmgr.hxx"
-#include "doctempl.hxx"
+#include <sfx2/doctempl.hxx>
 #include "doc.hrc"
-#include "sfxbasemodel.hxx"
-#include "docfile.hxx"
-#include "objuno.hxx"
-#include "request.hxx"
+#include <sfx2/sfxbasemodel.hxx>
+#include <sfx2/docfile.hxx>
+#include <sfx2/objuno.hxx>
+#include <sfx2/request.hxx>
 #include "openflag.hxx"
 
 using namespace ::com::sun::star;
