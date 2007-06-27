@@ -4,9 +4,9 @@
  *
  *  $RCSfile: i18n_status.cxx,v $
  *
- *  $Revision: 1.37 $
+ *  $Revision: 1.38 $
  *
- *  last change: $Author: obo $ $Date: 2007-03-05 15:26:14 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 20:45:53 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -51,12 +51,12 @@
 #include <i18n_status.hxx>
 #include <i18n_ic.hxx>
 
-#include <wrkwin.hxx>
-#include <fixed.hxx>
-#include <menubtn.hxx>
-#include <menu.hxx>
-#include <svdata.hxx>
-#include <svapp.hxx>
+#include <vcl/wrkwin.hxx>
+#include <vcl/fixed.hxx>
+#include <vcl/menubtn.hxx>
+#include <vcl/menu.hxx>
+#include <vcl/svdata.hxx>
+#include <vcl/svapp.hxx>
 #include <saldisp.hxx>
 #include <salframe.h>
 #include <saldata.hxx>
