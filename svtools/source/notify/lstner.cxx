@@ -4,9 +4,9 @@
  *
  *  $RCSfile: lstner.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 15:19:43 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 21:55:28 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -42,13 +42,13 @@
 #include <tools/debug.hxx>
 #endif
 
-#include "hint.hxx"
-#include "brdcst.hxx"
+#include <svtools/hint.hxx>
+#include <svtools/brdcst.hxx>
 
 SV_DECL_PTRARR( SfxBroadcasterArr_Impl, SfxBroadcaster*, 0, 2 )
 
 #define _SFX_LSTNER_CXX
-#include "lstner.hxx"
+#include <svtools/lstner.hxx>
 
 //====================================================================
 DBG_NAME(SfxListener)
