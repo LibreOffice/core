@@ -4,9 +4,9 @@
  *
  *  $RCSfile: tustring.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 01:04:54 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 22:20:20 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -56,10 +56,10 @@
 #include <rtl/instance.hxx>
 #endif
 
-#include <string.hxx>
+#include <tools/string.hxx>
 #include <impstrg.hxx>
 
-#include <debug.hxx>
+#include <tools/debug.hxx>
 
 // =======================================================================
 
