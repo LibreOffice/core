@@ -4,9 +4,9 @@
  *
  *  $RCSfile: connctrl.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: hr $ $Date: 2007-06-26 12:03:56 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 16:54:09 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -38,22 +38,22 @@
 
 // include ---------------------------------------------------------------
 
-#include "xoutx.hxx"
+#include <svx/xoutx.hxx>
 
-#include "svdoedge.hxx"
-#include "svdattrx.hxx"
+#include <svx/svdoedge.hxx>
+#include <svx/svdattrx.hxx>
 
 #ifndef _SVDMARK_HXX //autogen
-#include "svdmark.hxx"
+#include <svx/svdmark.hxx>
 #endif
 #ifndef _SVDVIEW_HXX //autogen
-#include "svdview.hxx"
+#include <svx/svdview.hxx>
 #endif
 
-#include "svdpage.hxx" // SdrObjList
+#include <svx/svdpage.hxx> // SdrObjList
 
 #include "connctrl.hxx"
-#include "dialmgr.hxx"
+#include <svx/dialmgr.hxx>
 #include "dlgutil.hxx"
 
 // #110094#
