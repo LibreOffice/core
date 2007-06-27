@@ -4,9 +4,9 @@
  *
  *  $RCSfile: MetaExportComponent.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: vg $ $Date: 2006-11-01 14:50:39 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 15:18:54 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -86,15 +86,15 @@
 #endif
 
 #ifndef _XMLOFF_NMSPMAP_HXX
-#include "nmspmap.hxx"
+#include <xmloff/nmspmap.hxx>
 #endif
 
 #ifndef _XMLOFF_XMLTOKEN_HXX
-#include "xmltoken.hxx"
+#include <xmloff/xmltoken.hxx>
 #endif
 
 #ifndef _XMLOFF_XMLMETAE_HXX
-#include "xmlmetae.hxx"
+#include <xmloff/xmlmetae.hxx>
 #endif
 
 #ifndef _XMLOFF_PROPERTYSETMERGER_HXX_
