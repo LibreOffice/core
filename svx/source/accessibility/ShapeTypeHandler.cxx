@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ShapeTypeHandler.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 04:05:12 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 16:41:52 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -36,11 +36,11 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_svx.hxx"
 
-#include "ShapeTypeHandler.hxx"
-#include "SvxShapeTypes.hxx"
+#include <svx/ShapeTypeHandler.hxx>
+#include <svx/SvxShapeTypes.hxx>
 
 #ifndef _SVX_ACCESSIBILITY_ACCESSIBLE_SHAPE_INFO_HXX
-#include "AccessibleShapeInfo.hxx"
+#include <svx/AccessibleShapeInfo.hxx>
 #endif
 #ifndef _COM_SUN_STAR_DRAWING_XSHAPEDESCRIPTOR_HPP_
 #include <com/sun/star/drawing/XShapeDescriptor.hpp>
@@ -54,7 +54,7 @@
 #endif
 
 #ifndef _SVX_DIALMGR_HXX
-#include "dialmgr.hxx"
+#include <svx/dialmgr.hxx>
 #endif
 #include "svdstr.hrc"
 
