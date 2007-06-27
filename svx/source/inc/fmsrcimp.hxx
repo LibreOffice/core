@@ -4,9 +4,9 @@
  *
  *  $RCSfile: fmsrcimp.hxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: obo $ $Date: 2006-10-12 12:51:04 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 18:23:05 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -49,7 +49,7 @@
 #endif
 
 #ifndef _FMSEARCH_HXX
-#include "fmsearch.hxx"
+#include <svx/fmsearch.hxx>
 #endif // _FMSEARCH_HXX
 
 #ifndef _COM_SUN_STAR_AWT_XTEXTCOMPONENT_HPP_
