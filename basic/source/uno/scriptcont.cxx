@@ -4,9 +4,9 @@
  *
  *  $RCSfile: scriptcont.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: ihi $ $Date: 2007-06-05 15:12:04 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 14:34:11 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -110,8 +110,8 @@
 #include <svtools/pathoptions.hxx>
 #include <svtools/sfxecode.hxx>
 #include <svtools/ehdl.hxx>
-#include "basmgr.hxx"
-#include "sbmod.hxx"
+#include <basic/basmgr.hxx>
+#include <basic/sbmod.hxx>
 #include "modsizeexceeded.hxx"
 #include <xmlscript/xmlmod_imexp.hxx>
 #include <cppuhelper/factory.hxx>
