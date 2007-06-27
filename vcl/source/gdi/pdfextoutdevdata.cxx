@@ -4,9 +4,9 @@
  *
  *  $RCSfile: pdfextoutdevdata.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: rt $ $Date: 2006-12-04 08:31:53 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 20:20:34 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -37,16 +37,16 @@
 #include "precompiled_vcl.hxx"
 
 #ifndef _VCL_PDFEXTOUTDEVDATA_HXX
-#include "pdfextoutdevdata.hxx"
+#include <vcl/pdfextoutdevdata.hxx>
 #endif
 #ifndef _SV_GRAPH_HXX
-#include <graph.hxx>
+#include <vcl/graph.hxx>
 #endif
 #ifndef _SV_OUTDEV_HXX
-#include "outdev.hxx"
+#include <vcl/outdev.hxx>
 #endif
 #ifndef _SV_GFXLINK_HXX
-#include "gfxlink.hxx"
+#include <vcl/gfxlink.hxx>
 #endif
 
 
