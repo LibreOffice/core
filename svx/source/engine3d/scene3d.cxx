@@ -4,9 +4,9 @@
  *
  *  $RCSfile: scene3d.cxx,v $
  *
- *  $Revision: 1.30 $
+ *  $Revision: 1.31 $
  *
- *  last change: $Author: kz $ $Date: 2007-05-10 14:47:20 $
+ *  last change: $Author: hr $ $Date: 2007-06-27 18:05:11 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -53,7 +53,7 @@
 #endif
 
 #ifndef _SVDPAGE_HXX
-#include "svdpage.hxx"
+#include <svx/svdpage.hxx>
 #endif
 
 #ifndef _SFXSTYLE_HXX
@@ -61,11 +61,11 @@
 #endif
 
 #ifndef _E3D_SCENE3D_HXX
-#include "scene3d.hxx"
+#include <svx/scene3d.hxx>
 #endif
 
 #ifndef _E3D_UNDO_HXX
-#include "e3dundo.hxx"
+#include <svx/e3dundo.hxx>
 #endif
 
 #ifndef _B3D_BASE3D_HXX
@@ -73,31 +73,31 @@
 #endif
 
 #ifndef _SVDTRANS_HXX
-#include "svdtrans.hxx"
+#include <svx/svdtrans.hxx>
 #endif
 
 #ifndef _SVX_SVXIDS_HRC
-#include "svxids.hrc"
+#include <svx/svxids.hrc>
 #endif
 
 #ifndef _SVX_COLRITEM_HXX
-#include "colritem.hxx"
+#include <svx/colritem.hxx>
 #endif
 
 #ifndef _SVXE3DITEM_HXX
-#include "e3ditem.hxx"
+#include <svx/e3ditem.hxx>
 #endif
 
 #ifndef _SVX_XLNTRIT_HXX
-#include "xlntrit.hxx"
+#include <svx/xlntrit.hxx>
 #endif
 
 #ifndef _SVX_XFLTRIT_HXX
-#include "xfltrit.hxx"
+#include <svx/xfltrit.hxx>
 #endif
 
 #ifndef _SVX3DITEMS_HXX
-#include "svx3ditems.hxx"
+#include <svx/svx3ditems.hxx>
 #endif
 
 #ifndef _SFX_WHITER_HXX
@@ -105,7 +105,7 @@
 #endif
 
 #ifndef _SVX_XFLFTRIT_HXX
-#include "xflftrit.hxx"
+#include <svx/xflftrit.hxx>
 #endif
 
 #ifndef _SDR_PROPERTIES_E3DSCENEPROPERTIES_HXX
@@ -118,7 +118,7 @@
 #endif
 
 #ifndef _SVDDRAG_HXX //autogen
-#include "svddrag.hxx"
+#include <svx/svddrag.hxx>
 #endif
 
 // for ::std::sort
