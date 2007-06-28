@@ -4,9 +4,9 @@
  *
  *  $RCSfile: svtabbx.cxx,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: hr $ $Date: 2007-06-27 14:51:20 $
+ *  last change: $Author: hr $ $Date: 2007-06-28 10:37:44 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -37,16 +37,16 @@
 #include "precompiled_svtools.hxx"
 
 #ifndef _SVTABBX_HXX
-#include "svtabbx.hxx"
+#include <svtools/svtabbx.hxx>
 #endif
 #ifndef _HEADBAR_HXX
-#include "headbar.hxx"
+#include <svtools/headbar.hxx>
 #endif
 #ifndef _SVTOOLS_SVTDATA_HXX
-#include "svtdata.hxx"
+#include <svtools/svtdata.hxx>
 #endif
 #ifndef _SVTOOLS_HRC
-#include "svtools.hrc"
+#include <svtools/svtools.hrc>
 #endif
 
 #ifndef _COM_SUN_STAR_ACCESSIBILITY_ACCESSIBLESTATETYPE_HPP_
