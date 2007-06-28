@@ -4,9 +4,9 @@
  *
  *  $RCSfile: textwindowaccessibility.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: hr $ $Date: 2007-06-27 15:21:55 $
+ *  last change: $Author: hr $ $Date: 2007-06-28 16:31:27 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -121,6 +121,7 @@
 
 #include <memory>
 #include <queue>
+#include <hash_map>
 
 class TextEngine;
 class TextView;
