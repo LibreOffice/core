@@ -4,9 +4,9 @@
  *
  *  $RCSfile: precompiled_toolkit.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: kz $ $Date: 2007-05-10 14:16:35 $
+ *  last change: $Author: hr $ $Date: 2007-06-28 12:58:21 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -286,18 +286,6 @@
 #include "sot/formats.hxx"
 
 
-#include "toolkit/awt/accessiblemenubasecomponent.hxx"
-#include "toolkit/awt/accessiblemenucomponent.hxx"
-#include "toolkit/awt/accessiblemenuitemcomponent.hxx"
-#include "toolkit/awt/vclxaccessiblelistitem.hxx"
-#include "toolkit/awt/vclxaccessiblemenu.hxx"
-#include "toolkit/awt/vclxaccessiblemenubar.hxx"
-#include "toolkit/awt/vclxaccessiblemenuitem.hxx"
-#include "toolkit/awt/vclxaccessiblemenuseparator.hxx"
-#include "toolkit/awt/vclxaccessiblepopupmenu.hxx"
-#include "toolkit/awt/vclxaccessiblestatusbaritem.hxx"
-#include "toolkit/awt/vclxaccessibletabpage.hxx"
-#include "toolkit/awt/vclxaccessibletoolboxitem.hxx"
 #include "toolkit/awt/vclxbitmap.hxx"
 #include "toolkit/awt/vclxgraphics.hxx"
 #include "toolkit/awt/vclxpointer.hxx"
@@ -307,7 +295,6 @@
 #include "toolkit/controls/stdtabcontroller.hxx"
 #include "toolkit/controls/stdtabcontrollermodel.hxx"
 #include "toolkit/dllapi.h"
-#include "toolkit/helper/characterattributeshelper.hxx"
 #include "toolkit/helper/convert.hxx"
 #include "toolkit/helper/emptyfontdescriptor.hxx"
 #include "toolkit/helper/macros.hxx"
