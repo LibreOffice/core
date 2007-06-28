@@ -4,9 +4,9 @@
  *
  *  $RCSfile: brwbox1.cxx,v $
  *
- *  $Revision: 1.42 $
+ *  $Revision: 1.43 $
  *
- *  last change: $Author: hr $ $Date: 2007-06-27 14:48:30 $
+ *  last change: $Author: hr $ $Date: 2007-06-28 10:31:51 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -37,10 +37,10 @@
 #include "precompiled_svtools.hxx"
 
 #ifndef _SVX_BRWBOX_HXX
-#include "brwbox.hxx"
+#include <svtools/brwbox.hxx>
 #endif
 #ifndef _BRWHEAD_HXX
-#include "brwhead.hxx"
+#include <svtools/brwhead.hxx>
 #endif
 #ifndef _SFXDATWIN_HXX
 #include "datwin.hxx"
