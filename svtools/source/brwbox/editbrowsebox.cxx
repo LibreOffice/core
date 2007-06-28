@@ -4,9 +4,9 @@
  *
  *  $RCSfile: editbrowsebox.cxx,v $
  *
- *  $Revision: 1.29 $
+ *  $Revision: 1.30 $
  *
- *  last change: $Author: hr $ $Date: 2007-06-27 14:49:18 $
+ *  last change: $Author: hr $ $Date: 2007-06-28 10:35:51 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -37,7 +37,7 @@
 #include "precompiled_svtools.hxx"
 
 #ifndef _SVTOOLS_EDITBROWSEBOX_HXX_
-#include "editbrowsebox.hxx"
+#include <svtools/editbrowsebox.hxx>
 #endif
 
 #ifndef _SVTOOLS_EDITBROWSEBOX_HRC_
@@ -69,11 +69,11 @@
 #endif
 
 #ifndef _SVTOOLS_SVTDATA_HXX
-#include "svtdata.hxx"
+#include <svtools/svtdata.hxx>
 #endif
 
 #ifndef _SVTOOLS_HRC
-#include "svtools.hrc"
+#include <svtools/svtools.hrc>
 #endif
 
 #include <algorithm>
