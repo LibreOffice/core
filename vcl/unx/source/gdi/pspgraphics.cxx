@@ -4,9 +4,9 @@
  *
  *  $RCSfile: pspgraphics.cxx,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: kz $ $Date: 2007-06-20 10:14:46 $
+ *  last change: $Author: hr $ $Date: 2007-06-28 10:21:59 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -40,12 +40,12 @@
 #include <psprint/jobdata.hxx>
 #include <psprint/printergfx.hxx>
 #include <psprint/printerinfomanager.hxx>
-#include <bmpacc.hxx>
-#include <salbmp.hxx>
-#include <glyphcache.hxx>
-#include <impfont.hxx>
-#include <outfont.hxx>
-#include <svapp.hxx>
+#include <vcl/bmpacc.hxx>
+#include <vcl/salbmp.hxx>
+#include <vcl/glyphcache.hxx>
+#include <vcl/impfont.hxx>
+#include <vcl/outfont.hxx>
+#include <vcl/svapp.hxx>
 #include <vcl/salprn.hxx>
 
 #include <stdlib.h>
