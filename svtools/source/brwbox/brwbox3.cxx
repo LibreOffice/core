@@ -4,9 +4,9 @@
  *
  *  $RCSfile: brwbox3.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: hr $ $Date: 2007-06-27 14:48:46 $
+ *  last change: $Author: hr $ $Date: 2007-06-28 10:32:45 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -37,10 +37,10 @@
 #include "precompiled_svtools.hxx"
 
 #ifndef _SVX_BRWBOX_HXX
-#include "brwbox.hxx"
+#include <svtools/brwbox.hxx>
 #endif
 #ifndef _SVTOOLS_ACCESSIBLEBROWSEBOXOBJTYPE_HXX
-#include "AccessibleBrowseBoxObjType.hxx"
+#include <svtools/AccessibleBrowseBoxObjType.hxx>
 #endif
 
 #ifndef _TOOLS_DEBUG_HXX
