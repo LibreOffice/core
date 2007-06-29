@@ -5,9 +5,9 @@
  *
  *  $RCSfile: resourcestools.xsl,v $
  *
- *  $Revision: 1.41 $
+ *  $Revision: 1.42 $
  *
- *  last change: $Author: hbrinkm $ $Date: 2007-06-27 09:21:44 $
+ *  last change: $Author: hbrinkm $ $Date: 2007-06-29 08:13:45 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -885,11 +885,12 @@ OOXMLContext::Pointer_t
       <xsl:call-template name="contextresource"/>
     </xsl:variable>
     <xsl:variable name="mydefine" select="@name"/>
+    <xsl:variable name="mynsid" select="generate-id(ancestor::namespace)"/>
     <xsl:variable name="switchbody">
       <!--
           Generates the body for the switch over the token id.
       -->
-      <xsl:if test="$resource = 'Properties' or $resource = 'Property' or $resource = 'SingleElement'">
+      <xsl:if test="$resource = 'Properties' or $resource = 'Property' or $resource = 'SingleElement' or $resource='Stream'">
         <xsl:for-each select="//resource[@name=$mydefine]">
           <xsl:for-each select="attribute|sprm">
             <xsl:variable name="sprmname" select="@name"/>
@@ -898,7 +899,9 @@ OOXMLContext::Pointer_t
               <xsl:call-template name="caselabelelement"/>
             </xsl:for-each>
             <xsl:for-each select="key('defines-with-name', $mydefine)//rng:attribute[@name=$sprmname]">
-              <xsl:call-template name="caselabelattribute"/>
+              <xsl:if test="$mynsid=generate-id(ancestor::namespace)">
+                <xsl:call-template name="caselabelattribute"/>
+              </xsl:if>
             </xsl:for-each>
             <xsl:text>
         nResult = </xsl:text>
@@ -1121,6 +1124,13 @@ doctok::Id
       break;</xsl:text>
   </xsl:template>
 
+  <xsl:template name="contextattributeimplstream">
+    <xsl:call-template name="caselabelattribute"/>
+    <xsl:call-template name="contextattributeimplpropcaseinner"/>
+    <xsl:text>
+      break;</xsl:text>
+  </xsl:template>
+
   <!--
       Generates the inner of the switch over the given token id in the
       ::attribute method of the class for the current <define>.
@@ -1159,6 +1169,9 @@ doctok::Id
         </xsl:when>
         <xsl:when test="$resource = 'XNote'">
           <xsl:call-template name="contextattributeimplxnote"/>
+        </xsl:when>
+        <xsl:when test="$resource = 'Stream'">
+          <xsl:call-template name="contextattributeimplstream"/>
         </xsl:when>
         <xsl:otherwise/>
       </xsl:choose>
@@ -1346,6 +1359,27 @@ bool </xsl:text>
         <xsl:text>
     startSectionGroup();</xsl:text>
       </xsl:when>
+      <xsl:when test="@action='fieldstart'">
+        <xsl:text>
+    startCharacterGroup();
+    if (isForwardEvents())        
+        mrStream.utext(sFieldStart, 1);</xsl:text>
+    endCharacterGroup();
+      </xsl:when>
+      <xsl:when test="@action='fieldsep'">
+        <xsl:text>
+    startCharacterGroup();
+    if (isForwardEvents())        
+        mrStream.utext(sFieldSep, 1);</xsl:text>
+    endCharacterGroup();
+      </xsl:when>
+      <xsl:when test="@action='fieldend'">
+        <xsl:text>
+    startCharacterGroup();
+    if (isForwardEvents())        
+        mrStream.utext(sFieldEnd, 1);</xsl:text>
+    endCharacterGroup();
+      </xsl:when>
       <xsl:when test="@action='ftnednref'">
         <xsl:text>
     if (isForwardEvents())        
@@ -1373,6 +1407,8 @@ bool </xsl:text>
       </xsl:when>
       <xsl:when test="@action='endOfParagraph'">
         <xsl:text>
+    if (! mpParserState->isInCharacterGroup())
+       startCharacterGroup();
     if (isForwardEvents())        
         mrStream.utext(sCR, 1);</xsl:text>
       </xsl:when>
@@ -1441,6 +1477,21 @@ bool </xsl:text>
         OOXMLCommentHandler aCommentHandler(this);
         mpPropertySet->resolve(aCommentHandler);
     }
+        </xsl:when>
+        <xsl:when test="@action='printproperty'">
+          <xsl:text>
+    {
+        OOXMLPropertySetEntryToString aHandler(</xsl:text>
+        <xsl:call-template name="idtoqname">
+          <xsl:with-param name="id" select="@tokenid"/>
+        </xsl:call-template>
+        <xsl:text>);
+        getPropertySetAttrs()->resolve(aHandler);
+        const ::rtl::OUString &amp; sText = aHandler.getString();
+        mrStream.utext(reinterpret_cast &lt; const sal_uInt8 * &gt; 
+                   (sText.getStr()), 
+                   sText.getLength());        
+    }</xsl:text>
         </xsl:when>
     </xsl:choose>
   </xsl:template>
