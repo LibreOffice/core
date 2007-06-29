@@ -3,7 +3,6 @@ CAN_1_0 {
         component_getImplementationEnvironment;
         component_writeInfo;
         component_getFactory;
-        component_getDescriptionFunc;
     local:
         *;
 };
