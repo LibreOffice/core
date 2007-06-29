@@ -4,9 +4,9 @@
  *
  *  $RCSfile: olmenu.cxx,v $
  *
- *  $Revision: 1.32 $
+ *  $Revision: 1.33 $
  *
- *  last change: $Author: hr $ $Date: 2007-06-27 13:06:07 $
+ *  last change: $Author: hr $ $Date: 2007-06-29 16:19:45 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -597,7 +597,7 @@ void SwSpellPopup::Execute( USHORT nId )
                         INT16 nAddRes = SvxAddEntryToDic( xDic,
                             aWord, FALSE, aEmptyStr, LANGUAGE_NONE );
                         // save modified user-dictionary if it is persistent
-                        Reference< frame::XStorable >  xSavDic( xDic, UNO_QUERY );
+                        uno::Reference< frame::XStorable >  xSavDic( xDic, uno::UNO_QUERY );
                         if (xSavDic.is())
                             xSavDic->store();
 
