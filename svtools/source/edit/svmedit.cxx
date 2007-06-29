@@ -4,9 +4,9 @@
  *
  *  $RCSfile: svmedit.cxx,v $
  *
- *  $Revision: 1.40 $
+ *  $Revision: 1.41 $
  *
- *  last change: $Author: hr $ $Date: 2007-06-27 21:30:25 $
+ *  last change: $Author: hr $ $Date: 2007-06-29 12:21:13 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -52,7 +52,7 @@
 #include <svtools/undo.hxx>
 #endif
 
-#include "textwindowpeer.hxx"
+#include <svtools/textwindowpeer.hxx>
 
 // IDs erstmal aus VCL geklaut, muss mal richtig delivert werden...
 #define SV_MENU_EDIT_UNDO           1

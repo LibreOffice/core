@@ -2,9 +2,9 @@
  *
  *  $RCSfile: textwindowpeer.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: hr $ $Date: 2007-06-27 14:52:56 $
+ *  last change: $Author: hr $ $Date: 2007-06-29 12:21:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -59,10 +59,10 @@
  *
  ************************************************************************/
 
-#include "textwindowpeer.hxx"
+#include <svtools/textwindowpeer.hxx>
 
 #ifndef _TEXTVIEW_HXX
-#include "textview.hxx"
+#include <svtools/textview.hxx>
 #endif
 
 #ifndef SVTOOLS_ACCESSIBLE_FACTORY_ACCESS_HXX
