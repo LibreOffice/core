@@ -4,9 +4,9 @@
  *
  *  $RCSfile: StyleSheetTable.cxx,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: os $ $Date: 2007-06-27 08:54:25 $
+ *  last change: $Author: os $ $Date: 2007-06-29 12:43:00 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -32,41 +32,20 @@
  *    MA  02111-1307  USA
  *
  ************************************************************************/
-#ifndef INCLUDED_STYLESHEETTABLE_HXX
 #include <StyleSheetTable.hxx>
-#endif
-#ifndef INCLUDED_DOMAINMAPPER_HXX
 #include <dmapper/DomainMapper.hxx>
-#endif
-#ifndef INCLUDED_RESOURCESIDS
+#include <ConversionHelper.hxx>
 #include <doctok/resourceids.hxx>
 #include <ooxml/resourceids.hxx>
-#endif
 #include <vector>
-#ifndef _COM_SUN_STAR_BEANS_XMULTIPROPERTYSET_HPP_
 #include <com/sun/star/beans/XMultiPropertySet.hpp>
-#endif
-#ifndef _COM_SUN_STAR_BEANS_XPROPERTYVALUE_HPP_
 #include <com/sun/star/beans/PropertyValue.hpp>
-#endif
-#ifndef _COM_SUN_STAR_CONTAINER_XNAMECONTAINER_HPP_
 #include <com/sun/star/container/XNameContainer.hpp>
-#endif
-#ifndef _COM_SUN_STAR_TEXT_XTEXTDOCUMENT_HPP_
 #include <com/sun/star/text/XTextDocument.hpp>
-#endif
-#ifndef _COM_SUN_STAR_STYLE_XSTYLEFAMILIESSUPPLIER_HPP_
 #include <com/sun/star/style/XStyleFamiliesSupplier.hpp>
-#endif
-#ifndef _COM_SUN_STAR_STYLE_XSTYLE_HPP_
 #include <com/sun/star/style/XStyle.hpp>
-#endif
-#ifndef _COM_SUN_STAR_TEXT_WRITINGMODE_HPP_
 #include <com/sun/star/text/WritingMode.hpp>
-#endif
-#ifndef _COM_SUN_STAR_LANG_XMULTISERVICEFACTORY_HPP_
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
-#endif
 #include <map>
 #include <stdio.h>
 #include <rtl/ustrbuf.hxx>
@@ -680,7 +659,11 @@ void StyleSheetTable::sprm(doctok::Sprm & rSprm)
         m_pImpl->m_rDMapper.sprm( rSprm );
         m_pImpl->m_rDMapper.PopStyleSheetProperties();
     break;
-    case NS_ooxml::LN_CT_TrPrBase_jc:     //table alignment
+    case NS_ooxml::LN_CT_TblPrBase_jc:     //table alignment - row properties!
+         m_pImpl->m_pCurrentEntry->pProperties->Insert( PROP_HORI_ORIENT, false,
+            uno::makeAny( ConversionHelper::convertTableJustification( nIntValue )));
+    break;
+    case NS_ooxml::LN_CT_TrPrBase_jc:     //table alignment - row properties!
             dynamic_cast< StyleSheetPropertyMap* >( m_pImpl->m_pCurrentEntry->pProperties.get() )->SetCT_TrPrBase_jc(nIntValue);
         break;
     case NS_ooxml::LN_CT_Style_pPr:

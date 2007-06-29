@@ -4,9 +4,9 @@
  *
  *  $RCSfile: StyleSheetTable.hxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: fridrich_strba $ $Date: 2007-05-30 10:43:21 $
+ *  last change: $Author: os $ $Date: 2007-06-29 12:43:00 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -110,6 +110,8 @@ private:
     void resolveAttributeProperties(doctok::Value & val);
     void resolveSprmProps(doctok::Sprm & sprm_);
 };
+typedef boost::shared_ptr< StyleSheetTable >    StyleSheetTablePtr;
+
 }
 
 #endif //

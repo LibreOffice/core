@@ -4,9 +4,9 @@
  *
  *  $RCSfile: DomainMapper_Impl.hxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: os $ $Date: 2007-06-27 08:54:25 $
+ *  last change: $Author: os $ $Date: 2007-06-29 12:43:00 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -150,7 +150,6 @@ typedef boost::shared_ptr<FieldContext>  FieldContextPtr;
 
 typedef std::stack<ContextType>                 ContextStack;
 typedef std::stack<PropertyMapPtr>              PropertyStack;
-typedef boost::shared_ptr< StyleSheetTable >    StyleSheetTablePtr;
 typedef std::stack< ::com::sun::star::uno::Reference< ::com::sun::star::text::XTextAppendAndConvert > >
                                                 TextAppendStack;
 typedef std::stack<FieldContextPtr>                FieldStack;
