@@ -4,9 +4,9 @@
  *
  *  $RCSfile: fixedhyper.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: kz $ $Date: 2007-06-20 13:58:27 $
+ *  last change: $Author: hr $ $Date: 2007-06-29 12:11:36 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -36,7 +36,7 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_svtools.hxx"
 
-#include "fixedhyper.hxx"
+#include <svtools/fixedhyper.hxx>
 
 //.........................................................................
 namespace svt

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svtaccessiblefactory.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: hr $ $Date: 2007-06-27 14:55:22 $
+ *  last change: $Author: hr $ $Date: 2007-06-29 12:15:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -63,7 +63,7 @@
 #define SVTOOLS_ACCESSIBLE_FACTORY_ACCESS_HXX
 
 #ifndef SVTOOLS_ACCESSIBLE_FACTORY_HXX
-#include "accessiblefactory.hxx"
+#include <svtools/accessiblefactory.hxx>
 #endif
 
 //........................................................................
