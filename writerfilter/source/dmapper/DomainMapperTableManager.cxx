@@ -4,9 +4,9 @@
  *
  *  $RCSfile: DomainMapperTableManager.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: hbrinkm $ $Date: 2007-06-27 13:22:01 $
+ *  last change: $Author: os $ $Date: 2007-06-29 12:43:44 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -92,16 +92,7 @@ bool DomainMapperTableManager::sprm(doctok::Sprm & rSprm)
             {
                 /* WRITERFILTERSTATUS: done: 0, planned: 2, spent: 0 */
                 //table justification 0: left, 1: center, 2: right
-                sal_Int16 nOrient = text::HoriOrientation::LEFT_AND_WIDTH;
-                switch( nIntValue )
-                {
-                    case 1 : nOrient = text::HoriOrientation::CENTER; break;
-                    case 2 : nOrient = text::HoriOrientation::RIGHT; break;
-                    case 0 :
-                    //no break
-                    default:;
-
-                }
+                sal_Int16 nOrient = ConversionHelper::convertTableJustification( nIntValue );
                 PropertyMapPtr pTableMap( new PropertyMap );
                 pTableMap->Insert( PROP_HORI_ORIENT, false, uno::makeAny( nOrient ) );
                 insertTableProps( pTableMap );
@@ -379,6 +370,42 @@ void DomainMapperTableManager::clearData()
     m_bFullWidth = false;
     m_aCellWidths.clear();
     m_sTableStyleName = ::rtl::OUString();
+    m_pTableStyleTextProperies.reset();
 }
+/*-- 27.06.2007 14:19:50---------------------------------------------------
 
+  -----------------------------------------------------------------------*/
+void lcl_CopyTextProperties(PropertyMapPtr pToFill,
+            const StyleSheetEntry* pStyleSheetEntry, StyleSheetTablePtr pStyleSheetTable)
+{
+    //fill base style properties first, recursively
+    if( pStyleSheetEntry->sBaseStyleIdentifier.getLength())
+    {
+        const StyleSheetEntry* pParentStyleSheet =
+            pStyleSheetTable->FindStyleSheetByISTD(pStyleSheetEntry->sBaseStyleIdentifier);
+        OSL_ENSURE( pParentStyleSheet, "table style not found" );
+        lcl_CopyTextProperties( pToFill, pParentStyleSheet, pStyleSheetTable);
+    }
+
+    PropertyMap::const_iterator aPropIter = pStyleSheetEntry->pProperties->begin();
+    while(aPropIter != pStyleSheetEntry->pProperties->end())
+    {
+        //copy all text properties form the table style to the current run attributes
+        if( aPropIter->first.bIsTextProperty )
+            pToFill->insert(*aPropIter);
+        ++aPropIter;
+    }
+}
+void DomainMapperTableManager::CopyTextProperties(PropertyMapPtr pContext, StyleSheetTablePtr pStyleSheetTable)
+{
+    if( !m_pTableStyleTextProperies.get())
+    {
+        m_pTableStyleTextProperies.reset( new PropertyMap );
+        const StyleSheetEntry* pStyleSheetEntry = pStyleSheetTable->FindStyleSheetByISTD(
+                                                        m_sTableStyleName);
+        OSL_ENSURE( pStyleSheetEntry, "table style not found" );
+        lcl_CopyTextProperties(m_pTableStyleTextProperies, pStyleSheetEntry, pStyleSheetTable);
+    }
+    pContext->insert( m_pTableStyleTextProperies );
+}
 }
