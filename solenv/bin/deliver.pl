@@ -7,9 +7,9 @@ eval 'exec perl -wS $0 ${1+"$@"}'
 #
 #   $RCSfile: deliver.pl,v $
 #
-#   $Revision: 1.118 $
+#   $Revision: 1.119 $
 #
-#   last change: $Author: obo $ $Date: 2007-06-12 05:09:13 $
+#   last change: $Author: rt $ $Date: 2007-06-29 08:28:27 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -51,7 +51,7 @@ use File::Spec;
 
 ( $script_name = $0 ) =~ s/^.*\b(\w+)\.pl$/$1/;
 
-$id_str = ' $Revision: 1.118 $ ';
+$id_str = ' $Revision: 1.119 $ ';
 $id_str =~ /Revision:\s+(\S+)\s+\$/
   ? ($script_rev = $1) : ($script_rev = "-");
 
@@ -119,7 +119,7 @@ if ($^O ne 'cygwin') {              # iz59477 - cygwin needes a dot "." at the e
   $maybedot     = '.';
 }
 
-($gui       = lc($ENV{GUI}))        || die "can't determine GUI";
+($gui       = lc($ENV{GUI}))        || die "Can't determine 'GUI'. Please set environment.\n";
 $tempcounter        = 0;
 
 # zip is default for RE master builds
