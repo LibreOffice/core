@@ -4,9 +4,9 @@
  *
  *  $RCSfile: baside3.cxx,v $
  *
- *  $Revision: 1.37 $
+ *  $Revision: 1.38 $
  *
- *  last change: $Author: hr $ $Date: 2007-06-26 16:51:32 $
+ *  last change: $Author: hr $ $Date: 2007-06-29 16:33:32 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -132,6 +132,8 @@ using namespace ::com::sun::star::ui::dialogs;
 #else
 #define FILTERMASK_ALL "*.*"
 #endif
+
+DBG_NAME( DialogWindow )
 
 TYPEINIT1( DialogWindow, IDEBaseWindow );
 
