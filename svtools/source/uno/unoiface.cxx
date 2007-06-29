@@ -4,9 +4,9 @@
  *
  *  $RCSfile: unoiface.cxx,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: hr $ $Date: 2007-06-27 22:03:12 $
+ *  last change: $Author: hr $ $Date: 2007-06-29 12:34:48 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -88,7 +88,7 @@
 #include <prgsbar.hxx>
 #endif
 
-#include <svtreebx.hxx>
+#include <svtools/svtreebx.hxx>
 #include "treecontrolpeer.hxx"
 
 namespace
