@@ -4,9 +4,9 @@
  *
  *  $RCSfile: SmartTagMgr.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: hr $ $Date: 2007-06-27 13:41:53 $
+ *  last change: $Author: hr $ $Date: 2007-06-29 15:14:16 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -41,7 +41,7 @@
 #include "precompiled_svx.hxx"
 
 #ifndef _SMARTTAGMGR_HXX
-#include <SmartTagMgr.hxx>
+#include <svx/SmartTagMgr.hxx>
 #endif
 
 #include <vos/mutex.hxx>

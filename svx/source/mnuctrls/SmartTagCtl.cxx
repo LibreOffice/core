@@ -4,9 +4,9 @@
  *
  *  $RCSfile: SmartTagCtl.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: hr $ $Date: 2007-06-27 13:41:12 $
+ *  last change: $Author: hr $ $Date: 2007-06-29 15:12:34 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -36,7 +36,7 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_svx.hxx"
 
-#include "SmartTagCtl.hxx"
+#include <svx/SmartTagCtl.hxx>
 
 #ifndef _COM_SUN_STAR_SMARTTAGS_XSMARTTAGACTION_HPP_
 #include <com/sun/star/smarttags/XSmartTagAction.hpp>
@@ -54,10 +54,10 @@
 #include <sfx2/dispatch.hxx>
 #endif
 #ifndef _SVX_SVXIDS_HRC
-#include "svxids.hrc"
+#include <svx/svxids.hrc>
 #endif
 
-#include "SmartTagItem.hxx"
+#include <svx/SmartTagItem.hxx>
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
