@@ -4,9 +4,9 @@
  *
  *  $RCSfile: mnemonicengine.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: obo $ $Date: 2007-06-12 05:36:37 $
+ *  last change: $Author: hr $ $Date: 2007-06-29 11:36:28 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -37,12 +37,12 @@
 #include "precompiled_vcl.hxx"
 
 #ifndef VCL_MNEMONICENGINE_HXX
-#include "mnemonicengine.hxx"
+#include <vcl/mnemonicengine.hxx>
 #endif
 
-#include "i18nhelp.hxx"
-#include "svapp.hxx"
-#include "event.hxx"
+#include <vcl/i18nhelp.hxx>
+#include <vcl/svapp.hxx>
+#include <vcl/event.hxx>
 
 //........................................................................
 namespace vcl
