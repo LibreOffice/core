@@ -4,9 +4,9 @@
  *
  *  $RCSfile: SmartTagItem.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: hr $ $Date: 2007-06-27 13:40:45 $
+ *  last change: $Author: hr $ $Date: 2007-06-29 14:11:08 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -38,7 +38,7 @@
 
 // include ---------------------------------------------------------------
 
-#include "SmartTagItem.hxx"
+#include <svx/SmartTagItem.hxx>
 
 #ifndef _COM_SUN_STAR_SMARTTAGS_XSMARTTAGPROPERTIES_HPP_
 #include <com/sun/star/container/XStringKeyMap.hpp>
