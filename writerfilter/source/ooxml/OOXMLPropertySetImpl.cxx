@@ -4,9 +4,9 @@
  *
  *  $RCSfile: OOXMLPropertySetImpl.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: fridrich_strba $ $Date: 2007-05-10 14:37:38 $
+ *  last change: $Author: hbrinkm $ $Date: 2007-06-29 07:59:54 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -561,4 +561,33 @@ OOXMLTable * OOXMLTableImpl::clone() const
     return new OOXMLTableImpl(*this);
 }
 
+/*
+  class: OOXMLPropertySetEntryToString
+*/
+
+OOXMLPropertySetEntryToString::OOXMLPropertySetEntryToString(Id nId)
+: mnId(nId)
+{
+}
+
+OOXMLPropertySetEntryToString::~OOXMLPropertySetEntryToString()
+{
+}
+
+void OOXMLPropertySetEntryToString::sprm(Sprm & /*rSprm*/)
+{
+}
+
+void OOXMLPropertySetEntryToString::attribute(Id nId, Value & rValue)
+{
+    clog << "OOXMLPropertySetEntryToString::attribute: " << nId << endl;
+
+    if (nId == mnId)
+        mStr = rValue.getString();
+}
+
+const ::rtl::OUString & OOXMLPropertySetEntryToString::getString() const
+{
+    return mStr;
+}
 }
