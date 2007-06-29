@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.7 $
+#   $Revision: 1.8 $
 #
-#   last change: $Author: hr $ $Date: 2007-06-27 12:42:18 $
+#   last change: $Author: hr $ $Date: 2007-06-29 11:01:52 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -93,24 +93,24 @@ SHL1VERSIONMAP = export.map
 
 # END ------------------------------------------------------------------
 
-APP2TARGET= bmpdemo
+#APP2TARGET= bmpdemo
 
-APP2OBJS=	\
-    $(OBJ)$/bmpdemo.obj
+#APP2OBJS=	\
+#	$(OBJ)$/bmpdemo.obj
 
-APP2STDLIBS=$(TOOLSLIB) 		\
-            $(COMPHELPERLIB)	\
-            $(BASEGFXLIB)	    \
-            $(BASEBMPLIB)	    \
-            $(CPPULIB)			\
-            $(CPPUHELPERLIB)	\
-            $(UCBHELPERLIB)		\
-            $(SALLIB)			\
-            $(VCLLIB)	
-
-.IF "$(GUI)"!="UNX"
-APP2DEF=	$(MISC)$/$(TARGET).def
-.ENDIF
+#APP2STDLIBS=$(TOOLSLIB) 		\
+#			$(COMPHELPERLIB)	\
+#			$(BASEGFXLIB)	    \
+#			$(BASEBMPLIB)	    \
+#			$(CPPULIB)			\
+#			$(CPPUHELPERLIB)	\
+#			$(UCBHELPERLIB)		\
+#			$(SALLIB)			\
+#			$(VCLLIB)	
+#
+#.IF "$(GUI)"!="UNX"
+#APP2DEF=	$(MISC)$/$(TARGET).def
+#.ENDIF
 
 #------------------------------- All object files -------------------------------
 # do this here, so we get right dependencies
