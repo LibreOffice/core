@@ -4,9 +4,9 @@
 #
 #  $RCSfile: makefile.mk,v $
 #
-#  $Revision: 1.6 $
+#  $Revision: 1.7 $
 #
-#  last change: $Author: hbrinkm $ $Date: 2007-06-15 09:26:53 $
+#  last change: $Author: hbrinkm $ $Date: 2007-06-29 07:57:05 $
 #
 #  The Contents of this file are made available subject to
 #  the terms of GNU Lesser General Public License Version 2.1.
@@ -98,6 +98,7 @@ WRITERFILTERINCDIR=..$/..$/inc
 
 OOXMLMODEL=model.xml
 OOXMLPREPROCESSXSL=modelpreprocess.xsl
+OOXMLRESOURCESTOOLSXSL=resourcestools.xsl
 OOXMLRESORUCETOKENSXSL=resourcestokens.xsl
 OOXMLRESOURCESXSL=resources.xsl
 OOXMLRESOURCESIMPLXSL=resourcesimpl.xsl
@@ -123,7 +124,7 @@ OOXMLGENHEADERS=$(OOXMLRESOURCESHXX) $(OOXMLTOKENSHXX) $(GPERFATTRIBUTESHXX) $(G
 XALANJAR=$(SOLARVER)$/$(INPATH)$/bin$(UPDMINOREXT)$/xalan.jar
 XALAN=$(JAVA) -jar $(XALANJAR)
 
-$(MODELPROCESSED): $(OOXMLPREPROCESSXSL) $(OOXMLMODEL)
+$(MODELPROCESSED): $(OOXMLPREPROCESSXSL) $(OOXMLMODEL) $(OOXMLRESOURCESTOOLSXSL)
     $(XALAN) -xsl $(OOXMLPREPROCESSXSL) -in $(OOXMLMODEL) > $(MODELPROCESSED)
 
 $(OOXMLTOKENSHXX): $(OOXMLRESORUCETOKENSXSL) $(MODELPROCESSED)
