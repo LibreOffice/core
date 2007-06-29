@@ -4,9 +4,9 @@
  *
  *  $RCSfile: gtkdata.cxx,v $
  *
- *  $Revision: 1.34 $
+ *  $Revision: 1.35 $
  *
- *  last change: $Author: hr $ $Date: 2007-06-27 12:27:01 $
+ *  last change: $Author: hr $ $Date: 2007-06-29 11:41:39 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -86,7 +86,7 @@
 
 #include "../../unx/source/inc/salcursors.h"
 
-#include <svapp.hxx>
+#include <vcl/svapp.hxx>
 
 using namespace rtl;
 using namespace vcl_sal;
