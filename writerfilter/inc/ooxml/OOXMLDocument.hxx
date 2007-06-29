@@ -4,9 +4,9 @@
  *
  *  $RCSfile: OOXMLDocument.hxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: hbrinkm $ $Date: 2007-06-29 15:38:16 $
+ *  last change: $Author: hbrinkm $ $Date: 2007-06-29 16:00:03 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -55,6 +55,8 @@
 #endif
 
 /**
+   @file OOXMLDocument.hxx
+
    <h1>Import of OOXML WordprocessingML Documents</h1>
 
    The following picture shows the classes involved in importing OOXML
