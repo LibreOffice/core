@@ -4,9 +4,9 @@
  *
  *  $RCSfile: HelpLinker.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: hr $ $Date: 2007-06-26 12:38:21 $
+ *  last change: $Author: hjs $ $Date: 2007-06-29 17:09:25 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -4753,11 +4753,11 @@ void JarOutputStream::commit()
     std::ofstream fos(perlfile.c_str());
     fos << perlline.str();
     fos.close();
-
-    std::string myperl;
-    if( myperl.empty() ) myperl = "perl";
-    std::string commandline;
-    const std::string is4nt ( getenv( "USE_SHELL" ) );
+    std::string myperl("perl");
+    std::string is4nt;
+    char* use_shell = getenv( "USE_SHELL" );
+    if ( use_shell )
+        is4nt = use_shell;
     if( !is4nt.empty() && is4nt == "4nt" )
     {
         // in SO windows environment perl isn't in the path and
@@ -4766,6 +4766,7 @@ void JarOutputStream::commit()
         // native shell (see system call).
         myperl = getenv( "PERL" );
     }
+    std::string commandline;
     commandline = myperl + " " + perlfile;
     HCDBG(std::cerr << "command line 3 is" << commandline << std::endl);
     // on windows, calling perl (either cygwin or native) from a native
