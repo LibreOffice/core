@@ -4,7 +4,6 @@ ac	accessibility\inc                                      	nmake	-	all	ac_inc NU
 ac	accessibility\bridge\org\openoffice\java\accessibility	nmake	-	w	ac_ooja NULL
 ac	accessibility\bridge\org\openoffice\accessibility   	nmake	-	w	ac_ooa ac_ooja.w NULL
 ac	accessibility\bridge\source\java                      	nmake   -	w	ac_ooan ac_ooa.w ac_inc NULL
-
 ac  accessibility\inc                                       get     -   all ac_inc NULL
 ac  accessibility\source\helper                             nmake   -   all ac_helper NULL
 ac  accessibility\source\standard                           nmake   -   all ac_standard ac_helper NULL
