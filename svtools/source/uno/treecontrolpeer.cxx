@@ -4,9 +4,9 @@
  *
  *  $RCSfile: treecontrolpeer.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: hr $ $Date: 2007-06-29 12:34:55 $
+ *  last change: $Author: hr $ $Date: 2007-07-02 09:29:44 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1359,14 +1359,14 @@ void TreeControlPeer::setProperty( const ::rtl::OUString& PropertyName, const An
             break;
         case BASEPROPERTY_TREE_ROWHEIGHT:
         {
-            sal_Int32 nHeight;
+            sal_Int32 nHeight = 0;
             if( aValue >>= nHeight )
                 rTree.SetEntryHeight( (short)nHeight );
             break;
         }
         case BASEPROPERTY_TREE_EDITABLE:
         {
-            sal_Bool bEnabled;
+            sal_Bool bEnabled = false;
             if( aValue >>= bEnabled )
                 rTree.EnableInplaceEditing( bEnabled ? TRUE : FALSE );
             break;
@@ -1374,15 +1374,17 @@ void TreeControlPeer::setProperty( const ::rtl::OUString& PropertyName, const An
         case BASEPROPERTY_TREE_INVOKESSTOPNODEEDITING:
             break; // @todo
         case BASEPROPERTY_TREE_ROOTDISPLAYED:
-            sal_Bool bDisplayed;
+        {
+            sal_Bool bDisplayed = false;
             if( (aValue >>= bDisplayed) && ( bDisplayed != mbIsRootDisplayed) )
             {
                 onChangeRootDisplayed(bDisplayed);
             }
             break;
+        }
         case BASEPROPERTY_TREE_SHOWSHANDLES:
         {
-            sal_Bool bEnabled;
+            sal_Bool bEnabled = false;
             if( aValue >>= bEnabled )
             {
                 WinBits nBits = rTree.GetWindowBits() & (~WB_HASLINES);
@@ -1395,7 +1397,7 @@ void TreeControlPeer::setProperty( const ::rtl::OUString& PropertyName, const An
         }
         case BASEPROPERTY_TREE_SHOWSROOTHANDLES:
         {
-            sal_Bool bEnabled;
+            sal_Bool bEnabled = false;
             if( aValue >>= bEnabled )
             {
                 WinBits nBits = rTree.GetWindowBits() & (~WB_HASLINESATROOT);
