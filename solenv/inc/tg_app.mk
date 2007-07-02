@@ -4,9 +4,9 @@
 #
 #   $RCSfile: tg_app.mk,v $
 #
-#   $Revision: 1.66 $
+#   $Revision: 1.67 $
 #
-#   last change: $Author: hr $ $Date: 2007-06-27 22:05:09 $
+#   last change: $Author: rt $ $Date: 2007-07-02 09:23:33 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -156,18 +156,18 @@ $(APP$(TNR)TARGETN): $(APP$(TNR)OBJS) $(APP$(TNR)LIBS) \
     $(RC) -DWIN32 $(APP$(TNR)PRODUCTDEF) -I$(SOLARRESDIR) $(INCLUDE) $(RCLINKFLAGS) $(MISC)$/$(APP$(TNR)LINKRES:b).rc
 .ENDIF			# "$(APP$(TNR)LINKRES)" != ""
 .IF "$(COM)" == "GCC"
-    @+echo mingw
+    @echo mingw
 .IF "$(APP$(TNR)LINKRES)" != "" || "$(APP$(TNR)RES)" != ""
-    @cat $(APP$(TNR)LINKRES) $(subst,$/res$/,$/res{$(subst,$(BIN), $(@:d))} $(APP$(TNR)RES)) >  $(MISC)$/$(@:b)_all.RES
-    windres $(MISC)$/$(@:b)_all.RES $(APP$(TNR)RESO)
+    @cat $(APP$(TNR)LINKRES) $(subst,$/res$/,$/res{$(subst,$(BIN), $(@:d))} $(APP$(TNR)RES)) >  $(MISC)$/$(@:b)_all.res
+    windres $(MISC)$/$(@:b)_all.res $(APP$(TNR)RESO)
 .ENDIF
-    @+echo $(LINK) $(LINKFLAGS) $(LINKFLAGSAPP) -L$(PRJ)$/$(INPATH)$/lib $(SOLARLIB) $(STDSLO) \
+    @echo $(LINK) $(LINKFLAGS) $(LINKFLAGSAPP) -L$(PRJ)$/$(INPATH)$/lib $(SOLARLIB) $(STDSLO) \
         $(APP$(TNR)BASEX) $(APP$(TNR)STACKN) -o $@ $(APP$(TNR)OBJS) \
         -Wl,-Map,$(MISC)$/$(@:b).map $(STDOBJ) $(APP$(TNR)RESO) \
         `$(TYPE) /dev/null $(APP$(TNR)LIBS) | sed s#$(ROUT)#$(OUT)#g` \
-        $(APP_LINKTYPE) $(APP$(TNR)LIBSALCPPRT) $(APP$(TNR)STDLIBS) $(APP$(TNR)STDLIB) $(STDLIB$(TNR)) > $(MISC)$/$(@:b).cmd
-    @+$(TYPE)  $(MISC)$/$(@:b).cmd
-    @+source $(MISC)$/$(@:b).cmd
+        $(APP_LINKTYPE) $(APP$(TNR)LIBSALCPPRT) $(APP$(TNR)STDLIBS) $(APP$(TNR)STDLIB) $(STDLIB$(TNR)) > $(MISC)$/$(TARGET).$(@:b)_$(TNR).cmd
+    @$(TYPE)  $(MISC)$/$(TARGET).$(@:b)_$(TNR).cmd
+    @+source $(MISC)$/$(TARGET).$(@:b)_$(TNR).cmd
     @ls -l $@
 .ELSE	# "$(COM)" == "GCC"
 .IF "$(linkinc)" == ""
