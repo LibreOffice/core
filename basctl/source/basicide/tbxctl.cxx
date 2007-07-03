@@ -4,9 +4,9 @@
  *
  *  $RCSfile: tbxctl.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: hr $ $Date: 2007-06-26 16:52:28 $
+ *  last change: $Author: rt $ $Date: 2007-07-03 13:02:47 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -182,6 +182,7 @@ void TbxControls::StateChanged( USHORT nSID, SfxItemState eState,
                 case SVX_SNAP_FORMATTEDFIELD:   nTemp = SID_INSERT_FORMATTEDFIELD; break;
                 case SVX_SNAP_PATTERNFIELD:     nTemp = SID_INSERT_PATTERNFIELD; break;
                 case SVX_SNAP_FILECONTROL:      nTemp = SID_INSERT_FILECONTROL; break;
+                case SVX_SNAP_TREECONTROL:      nTemp = SID_INSERT_TREECONTROL; break;
             }
             if( nTemp )
             {
