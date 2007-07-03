@@ -1,4 +1,4 @@
-/* RCS  $Id: vextern.h,v 1.5 2007-06-12 06:07:16 obo Exp $
+/* RCS  $Id: vextern.h,v 1.6 2007-07-03 11:30:13 rt Exp $
 --
 -- SYNOPSIS
 --      Global variable declarations.
@@ -60,6 +60,7 @@ EXTERN  char*   Escape_char;    /* Current escape character               */
 EXTERN  char*   LastMacName;    /* Last macro successfully parsed     */
 EXTERN  char*   UseDirCache;    /* The value of .DIRCACHE                 */
 EXTERN  char*   DcacheRespCase; /* TRUE if we are to respect dcache case  */
+EXTERN  char*   OOoDmMode;  /* Enable special behavior for OOo build. */
 EXTERN  int Target;     /* TRUE if a default target was found in  *
                  * a makefile or on the commandline       */
 EXTERN  int If_expand;  /* TRUE if calling Expand from getinp.c   */
