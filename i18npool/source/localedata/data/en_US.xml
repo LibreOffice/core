@@ -176,6 +176,38 @@
       <FormatCode>MM/DD/YYYY HH:MM:SS</FormatCode>
     </FormatElement>
   </LC_FORMAT>
+  <LC_FORMAT_1>
+    <FormatElement msgid="DateFormatskey22" default="false" type="medium" usage="DATE" formatindex="50">
+      <FormatCode>[~jewish]NNNND MMMM YYYY</FormatCode>
+    </FormatElement>
+    <FormatElement msgid="DateFormatskey23" default="false" type="long" usage="DATE" formatindex="51">
+      <FormatCode>[~jewish]NNNNMMMM D YYYY</FormatCode>
+    </FormatElement>
+    <FormatElement msgid="DateFormatskey24" default="false" type="long" usage="DATE" formatindex="52">
+      <FormatCode>[~jewish]NN MMMM D YYYY</FormatCode>
+    </FormatElement>
+    <FormatElement msgid="DateFormatskey25" default="false" type="long" usage="DATE" formatindex="53">
+      <FormatCode>[~jewish]NN D MMMM YYYY</FormatCode>
+    </FormatElement>
+    <FormatElement msgid="DateFormatskey26" default="false" type="long" usage="DATE" formatindex="54">
+      <FormatCode>[~jewish]D MMMM YYYY</FormatCode>
+    </FormatElement>
+    <FormatElement msgid="DateFormatskey27" default="false" type="long" usage="DATE" formatindex="55">
+      <FormatCode>[~jewish]MMMM D YYYY</FormatCode>
+    </FormatElement>
+    <FormatElement msgid="DateFormatskey28" default="false" type="medium" usage="DATE" formatindex="56">
+      <FormatCode>[~jewish]D MMMM</FormatCode>
+    </FormatElement>
+    <FormatElement msgid="DateFormatskey29" default="false" type="medium" usage="DATE" formatindex="57">
+      <FormatCode>[~jewish]MMMM D</FormatCode>
+    </FormatElement>
+    <FormatElement msgid="DateFormatskey30" default="false" type="medium" usage="DATE" formatindex="58">
+      <FormatCode>[~jewish]MMMM YYYY</FormatCode>
+    </FormatElement>
+    <FormatElement msgid="DateFormatskey31" default="false" type="medium" usage="DATE" formatindex="59">
+      <FormatCode>[~jewish]MMMM</FormatCode>
+    </FormatElement>
+  </LC_FORMAT_1>
   <LC_COLLATION>
     <Collator default="true" unoid="alphanumeric" />
     <CollationOptions>
@@ -310,6 +342,126 @@
       <StartDayOfWeek>
         <DayID>sun</DayID>
       </StartDayOfWeek>
+      <MinimalDaysInFirstWeek>1</MinimalDaysInFirstWeek>
+    </Calendar>
+    <Calendar unoid="jewish" default="false">
+      <DaysOfWeek>
+        <Day>
+          <DayID>sun</DayID>
+          <DefaultAbbrvName>Sun</DefaultAbbrvName>
+          <DefaultFullName>Sunday</DefaultFullName>
+        </Day>
+        <Day>
+          <DayID>mon</DayID>
+          <DefaultAbbrvName>Mon</DefaultAbbrvName>
+          <DefaultFullName>Monday</DefaultFullName>
+        </Day>
+        <Day>
+          <DayID>tue</DayID>
+          <DefaultAbbrvName>Tue</DefaultAbbrvName>
+          <DefaultFullName>Tuesday</DefaultFullName>
+        </Day>
+        <Day>
+          <DayID>wed</DayID>
+          <DefaultAbbrvName>Wed</DefaultAbbrvName>
+          <DefaultFullName>Wednesday</DefaultFullName>
+        </Day>
+        <Day>
+          <DayID>thu</DayID>
+          <DefaultAbbrvName>Thu</DefaultAbbrvName>
+          <DefaultFullName>Thursday</DefaultFullName>
+        </Day>
+        <Day>
+          <DayID>fri</DayID>
+          <DefaultAbbrvName>Fri</DefaultAbbrvName>
+          <DefaultFullName>Friday</DefaultFullName>
+        </Day>
+        <Day>
+          <DayID>sat</DayID>
+          <DefaultAbbrvName>Sat</DefaultAbbrvName>
+          <DefaultFullName>Shabbat</DefaultFullName>
+        </Day>
+      </DaysOfWeek>
+      <MonthsOfYear>
+        <Month>
+          <MonthID>Nissan</MonthID>
+          <DefaultAbbrvName>Nissan</DefaultAbbrvName>
+          <DefaultFullName>Nissan</DefaultFullName>
+        </Month>
+        <Month>
+          <MonthID>Iyar</MonthID>
+          <DefaultAbbrvName>Iyar</DefaultAbbrvName>
+          <DefaultFullName>Iyar</DefaultFullName>
+        </Month>
+        <Month>
+          <MonthID>Sivan</MonthID>
+          <DefaultAbbrvName>Sivan</DefaultAbbrvName>
+          <DefaultFullName>Sivan</DefaultFullName>
+        </Month>
+        <Month>
+          <MonthID>Tammuz</MonthID>
+          <DefaultAbbrvName>Tammuz</DefaultAbbrvName>
+          <DefaultFullName>Tammuz</DefaultFullName>
+        </Month>
+        <Month>
+          <MonthID>Av</MonthID>
+          <DefaultAbbrvName>Av</DefaultAbbrvName>
+          <DefaultFullName>Av</DefaultFullName>
+        </Month>
+        <Month>
+          <MonthID>Elul</MonthID>
+          <DefaultAbbrvName>Elul</DefaultAbbrvName>
+          <DefaultFullName>Elul</DefaultFullName>
+        </Month>
+        <Month>
+          <MonthID>Tishri</MonthID>
+          <DefaultAbbrvName>Tishri</DefaultAbbrvName>
+          <DefaultFullName>Tishri</DefaultFullName>
+        </Month>
+        <Month>
+          <MonthID>Heshvan</MonthID>
+          <DefaultAbbrvName>Heshvan</DefaultAbbrvName>
+          <DefaultFullName>Heshvan</DefaultFullName>
+        </Month>
+        <Month>
+          <MonthID>Kislev</MonthID>
+          <DefaultAbbrvName>Kislev</DefaultAbbrvName>
+          <DefaultFullName>Kislev</DefaultFullName>
+        </Month>
+        <Month>
+          <MonthID>Tevet</MonthID>
+          <DefaultAbbrvName>Tevet</DefaultAbbrvName>
+          <DefaultFullName>Tevet</DefaultFullName>
+        </Month>
+        <Month>
+          <MonthID>Shevat</MonthID>
+          <DefaultAbbrvName>Shevat</DefaultAbbrvName>
+          <DefaultFullName>Shevat</DefaultFullName>
+        </Month>
+        <Month>
+          <MonthID>Adar</MonthID>
+          <DefaultAbbrvName>Adar</DefaultAbbrvName>
+          <DefaultFullName>Adar</DefaultFullName>
+        </Month>
+        <Month>
+          <MonthID>ve-Adar</MonthID>
+          <DefaultAbbrvName>Adar B</DefaultAbbrvName>
+          <DefaultFullName>Adar B</DefaultFullName>
+        </Month>
+      </MonthsOfYear>
+      <Eras>
+        <Era>
+          <EraID>before</EraID>
+          <DefaultAbbrvName>BCE</DefaultAbbrvName>
+          <DefaultFullName>BCE</DefaultFullName>
+        </Era>
+        <Era>
+          <EraID>after</EraID>
+          <DefaultAbbrvName>CE</DefaultAbbrvName>
+          <DefaultFullName>CE</DefaultFullName>
+        </Era>
+      </Eras>
+      <StartDayOfWeek><DayID>sun</DayID></StartDayOfWeek>
       <MinimalDaysInFirstWeek>1</MinimalDaysInFirstWeek>
     </Calendar>
   </LC_CALENDAR>
