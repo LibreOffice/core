@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xiescher.cxx,v $
  *
- *  $Revision: 1.51 $
+ *  $Revision: 1.52 $
  *
- *  last change: $Author: vg $ $Date: 2007-05-22 19:49:27 $
+ *  last change: $Author: rt $ $Date: 2007-07-03 15:50:50 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1243,27 +1243,38 @@ void XclImpOleObj::ReadPictFmla( XclImpStream& rStrm, sal_uInt16 nRecSize )
             }
             else if( rStrm.GetRecLeft() > 8 )
             {
-                // read additional link data
-                rStrm.Ignore( 8 );
-                sal_uInt16 nDataSize;
+                // data size in 'Ctls'
+                rStrm.Ignore( 4 );
 
-                // cell link
-                rStrm >> nDataSize;
-                if( nDataSize )
+                // a class ID (16-bit string), e.g. for progress bar control
+                sal_uInt32 nClassIdSize;
+                rStrm >> nClassIdSize;
+                DBG_ASSERT( rStrm.GetRecLeft() >= nClassIdSize + 4, "XclImpOleObj::ReadPictFmla - missing data" );
+                if( rStrm.GetRecLeft() >= nClassIdSize + 4 )
                 {
-                    rStrm.PushPosition();
-                    ReadCellLinkFormula( rStrm );
-                    rStrm.PopPosition();
-                    rStrm.Ignore( nDataSize );
-                }
-                // source data range
-                rStrm >> nDataSize;
-                if( nDataSize )
-                {
-                    rStrm.PushPosition();
-                    ReadSrcRangeFormula( rStrm );
-                    rStrm.PopPosition();
-                    rStrm.Ignore( nDataSize );
+                    rStrm.Ignore( nClassIdSize );
+
+                    // read additional link data
+                    sal_uInt16 nDataSize;
+
+                    // cell link
+                    rStrm >> nDataSize;
+                    if( nDataSize )
+                    {
+                        rStrm.PushPosition();
+                        ReadCellLinkFormula( rStrm );
+                        rStrm.PopPosition();
+                        rStrm.Ignore( nDataSize );
+                    }
+                    // source data range
+                    rStrm >> nDataSize;
+                    if( nDataSize )
+                    {
+                        rStrm.PushPosition();
+                        ReadSrcRangeFormula( rStrm );
+                        rStrm.PopPosition();
+                        rStrm.Ignore( nDataSize );
+                    }
                 }
             }
         }
@@ -1405,7 +1416,7 @@ void XclImpChartObj::FinalizeTabChart()
 
     // calculate size of the chart object
     const XclPageData& rPageData = GetPageSettings().GetPageData();
-    Size aPaperSize( rPageData.GetScPaperSize( GetPrinter() ) );
+    Size aPaperSize( rPageData.GetScPaperSize() );
 
     long nWidth = XclTools::GetHmmFromTwips( aPaperSize.Width() );
     long nHeight = XclTools::GetHmmFromTwips( aPaperSize.Height() );
