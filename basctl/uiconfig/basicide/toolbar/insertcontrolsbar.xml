@@ -2,6 +2,7 @@
 <!DOCTYPE toolbar:toolbar PUBLIC "-//OpenOffice.org//DTD OfficeDocument 1.0//EN" "toolbar.dtd">
 <toolbar:toolbar xmlns:toolbar="http://openoffice.org/2001/toolbar" xmlns:xlink="http://www.w3.org/1999/xlink" toolbar:id="toolbar">
  <toolbar:toolbaritem xlink:href=".uno:SelectMode" toolbar:helpid="helpid:10198"  toolbar:style="radio" />
+ <toolbar:toolbaritem xlink:href=".uno:ManageLanguage" toolbar:helpid="helpid:30820" />
  <toolbar:toolbarbreak/>
  <toolbar:toolbaritem xlink:href=".uno:TestMode" toolbar:helpid="helpid:10199"  />
  <toolbar:toolbaritem xlink:href=".uno:ShowPropBrowser" toolbar:helpid="helpid:10943"  />
@@ -37,6 +38,6 @@
  <toolbar:toolbaritem xlink:href=".uno:InsertPatternField" toolbar:helpid="helpid:10941"  toolbar:style="radio" />
  <toolbar:toolbarbreak/>
  <toolbar:toolbaritem xlink:href=".uno:InsertFileControl" toolbar:helpid="helpid:10942"  toolbar:style="radio" />
- <toolbar:toolbaritem xlink:href=".uno:ManageLanguage" toolbar:helpid="helpid:30820" />
+ <toolbar:toolbaritem xlink:href=".uno:InsertTreeControl" toolbar:style="radio" />
  <toolbar:toolbarbreak/>
 </toolbar:toolbar>
