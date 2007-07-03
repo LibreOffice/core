@@ -4,9 +4,9 @@
  *
  *  $RCSfile: autocdlg.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: hr $ $Date: 2007-06-29 14:51:06 $
+ *  last change: $Author: rt $ $Date: 2007-07-03 14:24:25 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -530,12 +530,6 @@ OfaSwAutoFmtOptionsPage::OfaSwAutoFmtOptionsPage( Window* pParent,
     sReplaceTemplates   (SVX_RES(   STR_REPLACE_TEMPLATES)),
     sDelSpaceAtSttEnd   (SVX_RES(   STR_DEL_SPACES_AT_STT_END)),
     sDelSpaceBetweenLines(SVX_RES(STR_DEL_SPACES_BETWEEN_LINES)),
-    aChkunBmp           (SVX_RES(   CHKBUT_UNCHECKED)),
-    aChkchBmp           (SVX_RES(   CHKBUT_CHECKED  )),
-    aChkchhiBmp         (SVX_RES(   CHKBUT_HICHECKED)),
-    aChkunhiBmp         (SVX_RES(   CHKBUT_HIUNCHECKED)),
-    aChktriBmp          (SVX_RES(   CHKBUT_TRISTATE )),
-    aChktrihiBmp        (SVX_RES(   CHKBUT_HITRISTATE)),
 
     nPercent        ( 50 ),
     pCheckButtonData( NULL )
