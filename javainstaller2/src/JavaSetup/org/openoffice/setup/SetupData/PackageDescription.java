@@ -1,11 +1,40 @@
-/*
- * PackageDescription.java
+/*************************************************************************
  *
- * Created on November 28, 2005, 4:51 PM
+ *  OpenOffice.org - a multi-platform office productivity suite
  *
- */
+ *  $RCSfile: PackageDescription.java,v $
+ *
+ *  $Revision: 1.2 $
+ *
+ *  last change: $Author: rt $ $Date: 2007-07-03 11:59:00 $
+ *
+ *  The Contents of this file are made available subject to
+ *  the terms of GNU Lesser General Public License Version 2.1.
+ *
+ *
+ *    GNU Lesser General Public License Version 2.1
+ *    =============================================
+ *    Copyright 2005 by Sun Microsystems, Inc.
+ *    901 San Antonio Road, Palo Alto, CA 94303, USA
+ *
+ *    This library is free software; you can redistribute it and/or
+ *    modify it under the terms of the GNU Lesser General Public
+ *    License version 2.1, as published by the Free Software Foundation.
+ *
+ *    This library is distributed in the hope that it will be useful,
+ *    but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ *    Lesser General Public License for more details.
+ *
+ *    You should have received a copy of the GNU Lesser General Public
+ *    License along with this library; if not, write to the Free Software
+ *    Foundation, Inc., 59 Temple Place, Suite 330, Boston,
+ *    MA  02111-1307  USA
+ *
+ ************************************************************************/
 
 package org.openoffice.setup.SetupData;
+
 import org.openoffice.setup.Util.Parser;
 import java.io.Reader;
 import java.io.StringReader;
@@ -65,11 +94,13 @@ public class PackageDescription implements TreeNode {
     private String  pkgVersion = null;
     private String  pkgRelease = null;
     private String  pkgRealName = null;
+    private String  pkgSubdir = null;
     private int     pkgSize     = 0;
     private int     pkgType     = NOTA_UNIT;
     private boolean pkgExists = true;  // must be default, especially for uninstallation
     private boolean isRelocatable = true;
     private boolean isUpdatePackage = false;
+    private boolean isJavaPackage = false;
     private boolean isNewInstalled = false;
     private boolean wasAlreadyInstalled = false;
 
@@ -151,6 +182,10 @@ public class PackageDescription implements TreeNode {
 
     public boolean isUpdatePackage() {
         return isUpdatePackage;
+    }
+
+    public boolean isJavaPackage() {
+        return isJavaPackage;
     }
 
     public void setIsNewInstalled(boolean installed) {
@@ -269,6 +304,14 @@ public class PackageDescription implements TreeNode {
         pkgRealName = realName;
     }
 
+    public String getPkgSubdir() {
+        return pkgSubdir;
+    }
+
+    public void setPkgSubdir(String subdir) {
+        pkgSubdir = subdir;
+    }
+
     /**
      * extract the name and the description according to the locale
      */
@@ -350,6 +393,13 @@ public class PackageDescription implements TreeNode {
                 // isUpdatePackage = Boolean.parseBoolean(isUpdatePackageValue);
             }
 
+            subSection = section.getElement("isjavapackage");
+            if (subSection != null) {
+                String isJavaPackageValue = subSection.getValue();
+                isJavaPackage = Parser.parseBoolean(isJavaPackageValue);
+                // isJavaPackage = Boolean.parseBoolean(isJavaPackageValue);
+            }
+
         }
 
         /* query information about the physical (rpm/pkg/msi...) package itself */
@@ -384,6 +434,10 @@ public class PackageDescription implements TreeNode {
             subSection = section.getElement("pkgversion");
             if (subSection != null) {
                 pkgVersion = subSection.getValue();
+            }
+            subSection = section.getElement("subdir");
+            if (subSection != null) {
+                pkgSubdir = subSection.getValue();
             }
             subSection = section.getElement("relocatable");
             if (subSection != null) {
