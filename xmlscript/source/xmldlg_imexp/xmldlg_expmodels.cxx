@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xmldlg_expmodels.cxx,v $
  *
- *  $Revision: 1.32 $
+ *  $Revision: 1.33 $
  *
- *  last change: $Author: kz $ $Date: 2007-06-21 16:43:43 $
+ *  last change: $Author: rt $ $Date: 2007-07-03 12:57:19 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -595,6 +595,41 @@ void ElementDescriptor::readFileControlModel( StyleBag * all_styles )
                     OUString( RTL_CONSTASCII_USTRINGPARAM(XMLNS_DIALOGS_PREFIX ":value") ) );
     readBoolAttr( OUString( RTL_CONSTASCII_USTRINGPARAM("ReadOnly") ),
                   OUString( RTL_CONSTASCII_USTRINGPARAM(XMLNS_DIALOGS_PREFIX ":readonly") ) );
+    readEvents();
+}
+//__________________________________________________________________________________________________
+void ElementDescriptor::readTreeControlModel( StyleBag * all_styles )
+    SAL_THROW( (Exception) )
+{
+    // collect styles
+    Style aStyle( 0x1 | 0x2 | 0x4 | 0x8 | 0x20 );
+    if (readProp( OUString( RTL_CONSTASCII_USTRINGPARAM("BackgroundColor") ) ) >>= aStyle._backgroundColor)
+        aStyle._set |= 0x1;
+    if (readBorderProps( this, aStyle ))
+        aStyle._set |= 0x4;
+    if (aStyle._set)
+    {
+        addAttribute( OUString( RTL_CONSTASCII_USTRINGPARAM(XMLNS_DIALOGS_PREFIX ":style-id") ),
+                      all_styles->getStyleId( aStyle ) );
+    }
+
+    // collect elements
+    readDefaults();
+    readSelectionTypeAttr( OUString( RTL_CONSTASCII_USTRINGPARAM("SelectionType") ),
+                    OUString( RTL_CONSTASCII_USTRINGPARAM(XMLNS_DIALOGS_PREFIX ":selectiontype") ) );
+
+    readBoolAttr( OUString( RTL_CONSTASCII_USTRINGPARAM("RootDisplayed") ),
+                  OUString( RTL_CONSTASCII_USTRINGPARAM(XMLNS_DIALOGS_PREFIX ":rootdisplayed") ) );
+    readBoolAttr( OUString( RTL_CONSTASCII_USTRINGPARAM("ShowsHandles") ),
+                  OUString( RTL_CONSTASCII_USTRINGPARAM(XMLNS_DIALOGS_PREFIX ":showshandles") ) );
+    readBoolAttr( OUString( RTL_CONSTASCII_USTRINGPARAM("ShowsRootHandles") ),
+                  OUString( RTL_CONSTASCII_USTRINGPARAM(XMLNS_DIALOGS_PREFIX ":showsroothandles") ) );
+    readBoolAttr( OUString( RTL_CONSTASCII_USTRINGPARAM("Editable") ),
+                  OUString( RTL_CONSTASCII_USTRINGPARAM(XMLNS_DIALOGS_PREFIX ":editable") ) );
+    readBoolAttr( OUString( RTL_CONSTASCII_USTRINGPARAM("InvokesStopNodeEditing") ),
+                  OUString( RTL_CONSTASCII_USTRINGPARAM(XMLNS_DIALOGS_PREFIX ":invokesstopnodeediting") ) );
+    readLongAttr( OUString( RTL_CONSTASCII_USTRINGPARAM("RowHeight") ),
+                    OUString( RTL_CONSTASCII_USTRINGPARAM(XMLNS_DIALOGS_PREFIX ":rowheight") ) );
     readEvents();
 }
 //__________________________________________________________________________________________________
