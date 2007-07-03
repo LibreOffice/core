@@ -4,9 +4,9 @@
  *
  *  $RCSfile: salobj.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: hr $ $Date: 2007-06-27 20:52:37 $
+ *  last change: $Author: rt $ $Date: 2007-07-03 14:08:34 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -150,8 +150,8 @@ X11SalObject* X11SalObject::CreateObject( SalFrame* pParent, SystemWindowData* p
     {
         #if OSL_DEBUG_LEVEL > 1
         fprintf( stderr, "visual id of vcl %x, of visual %x\n",
-                    pSalDisp->GetVisual( nScreen ).GetVisualId(),
-                    aVisID );
+                 static_cast<unsigned int> (pSalDisp->GetVisual( nScreen ).GetVisualId()),
+                 static_cast<unsigned int> (aVisID) );
         #endif
         pSalDisp->GetXLib()->PushXErrorLevel( true );
         pObject->maSecondary =
