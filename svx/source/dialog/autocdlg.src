@@ -4,9 +4,9 @@
  *
  *  $RCSfile: autocdlg.src,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: hr $ $Date: 2007-06-27 16:47:43 $
+ *  last change: $Author: rt $ $Date: 2007-07-03 14:25:09 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -263,32 +263,8 @@ TabPage RID_OFAPAGE_AUTOFMT_APPLY
     {
         Text [ en-US ] = "Delete spaces and tabs at end and start of line";
     };
-
-    Bitmap CHKBUT_UNCHECKED
-    {
-        File = "chkun.bmp" ;
-    };
-    Bitmap CHKBUT_CHECKED
-    {
-        File = "chkch.bmp" ;
-    };
-    Bitmap CHKBUT_HICHECKED
-    {
-        File = "chkchhi.bmp" ;
-    };
-    Bitmap CHKBUT_HIUNCHECKED
-    {
-        File = "chkunhi.bmp" ;
-    };
-    Bitmap CHKBUT_TRISTATE
-    {
-        File = "chktri.bmp" ;
-    };
-    Bitmap CHKBUT_HITRISTATE
-    {
-        File = "chktrihi.bmp" ;
-    };
 };
+
 ModalDialog RID_OFADLG_PRCNT_SET
 {
     HelpID = SID_AUTOFORMAT ;
