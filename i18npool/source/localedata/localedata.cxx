@@ -4,9 +4,9 @@
  *
  *  $RCSfile: localedata.cxx,v $
  *
- *  $Revision: 1.47 $
+ *  $Revision: 1.48 $
  *
- *  last change: $Author: rt $ $Date: 2007-01-25 09:36:11 $
+ *  last change: $Author: rt $ $Date: 2007-07-03 14:05:34 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -63,7 +63,7 @@ static const sal_Char clocaledata[] = "com.sun.star.i18n.LocaleData";
 typedef sal_Unicode**   (SAL_CALL * MyFunc_Type)( sal_Int16&);
 typedef sal_Unicode***  (SAL_CALL * MyFunc_Type2)( sal_Int16&, sal_Int16& );
 typedef sal_Unicode**** (SAL_CALL * MyFunc_Type3)( sal_Int16&, sal_Int16&, sal_Int16& );
-typedef sal_Unicode**   (SAL_CALL * MyFunc_FormatCode)( sal_Int16&, sal_Unicode*&, sal_Unicode*& );
+typedef sal_Unicode const * const * (SAL_CALL * MyFunc_FormatCode)( sal_Int16&, sal_Unicode const *&, sal_Unicode const *& );
 
 static const char *lcl_DATA_EN = "localedata_en";
 static const char *lcl_DATA_ES = "localedata_es";
@@ -88,6 +88,7 @@ static const struct {
         { "en_ZA",  lcl_DATA_EN, NULL },
         { "en_ZW",  lcl_DATA_EN, NULL },
         { "en_NA",  lcl_DATA_EN, NULL },
+        { "en_GH",  lcl_DATA_EN, NULL },
 
         { "es_ES",  lcl_DATA_ES, "es" },
         { "es_AR",  lcl_DATA_ES, NULL },
@@ -167,7 +168,9 @@ static const struct {
         { "cv_RU",  lcl_DATA_EURO, "cv" },
         { "wa_BE",  lcl_DATA_EURO, "wa" },
         { "fur_IT", lcl_DATA_EURO, "fur" },
-        { "gsc_FR",  lcl_DATA_EURO, "gsc" },
+        { "gsc_FR", lcl_DATA_EURO, "gsc" },
+        { "fy_NL",  lcl_DATA_EURO, "fy" },
+        { "oc_FR",  lcl_DATA_EURO, "oc" },
 
         { "ja_JP",  lcl_DATA_OTHERS, "ja" },
         { "ko_KR",  lcl_DATA_OTHERS, "ko" },
@@ -229,6 +232,13 @@ static const struct {
         { "ky_KG",  lcl_DATA_OTHERS, "ky" },
         { "kk_KZ",  lcl_DATA_OTHERS, "kk" },
         { "fa_IR",  lcl_DATA_OTHERS, "fa" },
+        { "ha_GH",  lcl_DATA_OTHERS, "ha" },
+        { "ee_GH",  lcl_DATA_OTHERS, "ee" },
+        { "sg_CF",  lcl_DATA_OTHERS, "sg" },
+        { "lg_UG",  lcl_DATA_OTHERS, "lg" },
+        { "uz_UZ",  lcl_DATA_OTHERS, "uz" },
+        { "ln_CD",  lcl_DATA_OTHERS, "ln" },
+        { "hy_AM",  lcl_DATA_OTHERS, "hy" },
 };
 
 static const sal_Unicode under = sal_Unicode('_');
@@ -450,9 +460,9 @@ LocaleData::getAllCurrencies( const Locale& rLocale ) throw(RuntimeException)
 }
 
 
-// return a string resulting from replacing all occurrences of 'oldStr' string
-// in 'formatCode' string with 'newStr' string
-static sal_Unicode* SAL_CALL replace(sal_Unicode *formatCode, sal_Unicode* oldStr, sal_Unicode* newStr)
+// return a static (!) string resulting from replacing all occurrences of
+// 'oldStr' string in 'formatCode' string with 'newStr' string
+static sal_Unicode const * const replace( sal_Unicode const * const formatCode, sal_Unicode const * const oldStr, sal_Unicode const * const newStr)
 {
 // make reasonable assumption of maximum length of formatCode.
 #define MAX_FORMATCODE_LENTH 512
@@ -487,33 +497,49 @@ static sal_Unicode* SAL_CALL replace(sal_Unicode *formatCode, sal_Unicode* oldSt
 Sequence< FormatElement > SAL_CALL
 LocaleData::getAllFormats( const Locale& rLocale ) throw(RuntimeException)
 {
-        sal_Int16 formatCount = 0;
-        sal_Unicode *from, *to;
-        sal_Unicode **formatArray = NULL;
+    const int SECTIONS = 2;
+    struct FormatSection
+    {
+        MyFunc_FormatCode         func;
+        sal_Unicode const        *from;
+        sal_Unicode const        *to;
+        sal_Unicode const *const *formatArray;
+        sal_Int16                 formatCount;
 
-        MyFunc_FormatCode func = (MyFunc_FormatCode) getFunctionSymbol( rLocale, "getAllFormats" );
+        FormatSection() : func(0), from(0), to(0), formatArray(0), formatCount(0) {}
+        sal_Int16 getFunc( LocaleData& rLocaleData, const Locale& rL, const char* pName )
+        {
+            func = reinterpret_cast<MyFunc_FormatCode>( rLocaleData.getFunctionSymbol( rL, pName));
+            if (func)
+                formatArray = func( formatCount, from, to);
+            return formatCount;
+        }
+    } section[SECTIONS];
 
-        if ( func ) {
-            formatArray = func(formatCount, from, to);
-
-            Sequence< FormatElement > seq(formatCount);
-            for(int i = 0, nOff = 0; i < formatCount; i++, nOff += 7 ) {
-                FormatElement elem(replace(formatArray[nOff], from, to),
-                formatArray[nOff+ 1],
-                formatArray[nOff + 2],
-                formatArray[nOff + 3],
-                formatArray[nOff + 4],
-                formatArray[nOff + 5][0],
-                sal::static_int_cast<sal_Bool>(formatArray[nOff + 6][0]));
-                seq[i] = elem;
+    const sal_Int32 formatCount = section[0].getFunc( *this, rLocale, "getAllFormats0")
+                                + section[1].getFunc( *this, rLocale, "getAllFormats1");
+    Sequence< FormatElement > seq(formatCount);
+    sal_Int32 f = 0;
+    for (int s = 0; s < SECTIONS; ++s)
+    {
+        sal_Unicode const * const * const formatArray = section[s].formatArray;
+        if ( formatArray )
+        {
+            for (int i = 0, nOff = 0; i < section[s].formatCount; ++i, nOff += 7, ++f)
+            {
+                FormatElement elem(
+                        replace( formatArray[nOff], section[s].from, section[s].to),
+                        formatArray[nOff + 1],
+                        formatArray[nOff + 2],
+                        formatArray[nOff + 3],
+                        formatArray[nOff + 4],
+                        formatArray[nOff + 5][0],
+                        sal::static_int_cast<sal_Bool>(formatArray[nOff + 6][0]));
+                seq[f] = elem;
             }
-            return seq;
         }
-        else {
-            Sequence< FormatElement > seq1(0);
-            return seq1;
-        }
-
+    }
+    return seq;
 }
 
 Sequence< Implementation > SAL_CALL
