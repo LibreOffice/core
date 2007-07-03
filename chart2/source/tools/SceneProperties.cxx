@@ -4,9 +4,9 @@
  *
  *  $RCSfile: SceneProperties.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: vg $ $Date: 2007-05-22 19:05:30 $
+ *  last change: $Author: rt $ $Date: 2007-07-03 13:44:41 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -38,6 +38,8 @@
 
 #include "SceneProperties.hxx"
 #include "macros.hxx"
+#include "ChartTypeHelper.hxx"
+#include "ThreeDHelper.hxx"
 
 #ifndef _COM_SUN_STAR_BEANS_PROPERTYATTRIBUTE_HPP_
 #include <com/sun/star/beans/PropertyAttribute.hpp>
@@ -362,7 +364,7 @@ void SceneProperties::AddDefaultsToMap(
 
     rOutMap[ PROP_SCENE_SHADE_MODE ] = uno::makeAny( drawing::ShadeMode_SMOOTH );
 
-    sal_Int32 nDefaultAmbientColor = 0x666666;  // grey80
+    sal_Int32 nDefaultAmbientColor = ChartTypeHelper::getDefaultAmbientLightColor(ThreeDLookScheme_Simple,0);
     rOutMap[ PROP_SCENE_AMBIENT_COLOR ] = uno::makeAny( nDefaultAmbientColor );
 
     rOutMap[ PROP_SCENE_TWO_SIDED_LIGHTING ] = aTrue;
@@ -386,11 +388,9 @@ void SceneProperties::AddDefaultsToMap(
     rOutMap[ PROP_SCENE_LIGHT_ON_7 ] = aFalse;
     rOutMap[ PROP_SCENE_LIGHT_ON_8 ] = aFalse;
 
-    uno::Any aDefaultLightDirection;
-    aDefaultLightDirection <<= drawing::Direction3D(0.57735026918963, 0.57735026918963, 0.57735026918963);
+    uno::Any aDefaultLightDirection( uno::makeAny( drawing::Direction3D( 0.0, 0.0, 1.0 ) ) );
     rOutMap[ PROP_SCENE_LIGHT_DIRECTION_1 ] = aDefaultLightDirection;
-    rOutMap[ PROP_SCENE_LIGHT_DIRECTION_2 ] = aDefaultLightDirection;
-    aDefaultLightDirection <<= drawing::Direction3D( 0.0, 0.0, 1.0 );
+    rOutMap[ PROP_SCENE_LIGHT_DIRECTION_2 ] = uno::makeAny( ChartTypeHelper::getDefaultSimpleLightDirection(0) );
     rOutMap[ PROP_SCENE_LIGHT_DIRECTION_3 ] = aDefaultLightDirection;
     rOutMap[ PROP_SCENE_LIGHT_DIRECTION_4 ] = aDefaultLightDirection;
     rOutMap[ PROP_SCENE_LIGHT_DIRECTION_5 ] = aDefaultLightDirection;
@@ -399,7 +399,7 @@ void SceneProperties::AddDefaultsToMap(
     rOutMap[ PROP_SCENE_LIGHT_DIRECTION_8 ] = aDefaultLightDirection;
 
     uno::Any aDefaultLightColor;
-    aDefaultLightColor <<= static_cast< sal_Int32 >( 0xcccccc ); // grey20
+    aDefaultLightColor <<= ChartTypeHelper::getDefaultDirectLightColor(ThreeDLookScheme_Simple,0);
     rOutMap[ PROP_SCENE_LIGHT_COLOR_1 ] = aDefaultLightColor;
     rOutMap[ PROP_SCENE_LIGHT_COLOR_2 ] = aDefaultLightColor;
     rOutMap[ PROP_SCENE_LIGHT_COLOR_3 ] = aDefaultLightColor;
