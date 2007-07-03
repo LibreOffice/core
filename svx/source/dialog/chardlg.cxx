@@ -4,9 +4,9 @@
  *
  *  $RCSfile: chardlg.cxx,v $
  *
- *  $Revision: 1.95 $
+ *  $Revision: 1.96 $
  *
- *  last change: $Author: hr $ $Date: 2007-06-27 16:51:41 $
+ *  last change: $Author: rt $ $Date: 2007-07-03 14:01:08 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1234,16 +1234,7 @@ void SvxCharNamePage::Reset_Impl( const SfxItemSet& rSet, LanguageGroup eLangGrp
             LanguageType eLangType = (LanguageType)rItem.GetValue();
             DBG_ASSERT( eLangType != LANGUAGE_SYSTEM, "LANGUAGE_SYSTEM not allowed" );
             if ( eLangType != LANGUAGE_DONTKNOW )
-            {
-                for ( USHORT i = 0; i < pLangBox->GetEntryCount(); ++i )
-                {
-                    if ( (LanguageType)(ULONG)pLangBox->GetEntryData(i) == eLangType )
-                    {
-                        pLangBox->SelectEntryPos(i);
-                        break;
-                    }
-                }
-            }
+                pLangBox->SelectLanguage( eLangType );
             break;
         }
     }
