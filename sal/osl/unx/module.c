@@ -4,9 +4,9 @@
  *
  *  $RCSfile: module.c,v $
  *
- *  $Revision: 1.34 $
+ *  $Revision: 1.35 $
  *
- *  last change: $Author: kz $ $Date: 2007-06-19 16:16:39 $
+ *  last change: $Author: rt $ $Date: 2007-07-03 12:48:42 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -94,6 +94,8 @@ extern int UnicodeToText(char *, size_t, const sal_Unicode *, sal_Int32);
 
 oslModule SAL_CALL osl_psz_loadModule(const sal_Char *pszModuleName, sal_Int32 nRtldMode);
 
+oslProcessError SAL_CALL osl_bootstrap_getExecutableFile_Impl(rtl_uString ** ppFileURL);
+
 /*****************************************************************************/
 /* osl_loadModule */
 /*****************************************************************************/
@@ -115,8 +117,24 @@ oslModule SAL_CALL osl_loadModule(rtl_uString *ustrModuleName, sal_Int32 nRtldMo
 
         if (UnicodeToText(buffer, PATH_MAX, ustrTmp->buffer, ustrTmp->length))
             pModule = osl_psz_loadModule(buffer, nRtldMode);
+
+#ifdef MACOSX
+    /* dlopen expects absolute paths on Mac OS X */
+        if (!pModule && (0 == strchr(buffer, '/')))
+        {
+            rtl_uString* ustrExecutableFile = NULL;
+
+            if (osl_Process_E_None == osl_bootstrap_getExecutableFile_Impl(&ustrExecutableFile))
+            {
+                sal_Int32 n = rtl_ustr_lastIndexOfChar(ustrExecutableFile->buffer, (sal_Unicode) '/');
+                rtl_uString_newReplaceStrAt(&ustrTmp, ustrExecutableFile, n + 1, ustrExecutableFile->length - n - 1, ustrModuleName);
+                pModule = osl_loadModule(ustrTmp, nRtldMode);
+                rtl_uString_release(ustrExecutableFile);
+            }
+        }
+#endif
+        rtl_uString_release(ustrTmp);
     }
-    rtl_uString_release(ustrTmp);
 
     return pModule;
 }
@@ -136,10 +154,7 @@ oslModule SAL_CALL osl_psz_loadModule(const sal_Char *pszModuleName, sal_Int32 n
 
 #if OSL_DEBUG_LEVEL > 1
         if (pLib == 0)
-        {
-            /* module not found, give up */
-            fprintf (stderr, "Error osl_loadModule: %s\n", dlerror());
-        }
+            OSL_TRACE("Error osl_loadModule: %s\n", dlerror());
 #endif /* OSL_DEBUG_LEVEL */
 
         return ((oslModule)(pLib));
