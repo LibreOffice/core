@@ -1,3 +1,51 @@
+2007-06-25 18:11  vq
+
+	* Makefile.in, NEWS, configure, configure.in, man/dmake.nc,
+	  man/dmake.tf, readme/read1st.txt, win95/microsft/config.h,
+	  winnt/microsft/config.h:
+
+	#i78508# Release dmake 4.9.
+
+2007-06-22 16:47  vq
+
+	* man/dmake.nc, man/dmake.tf, tests/Makefile.am, tests/Makefile.in,
+	  tests/targets-19:
+
+	#i78061# Add testcase and documentation.
+
+2007-06-22 13:36  vq
+
+	* man/: dmake.nc, dmake.tf:
+
+	#i74007# Add documentation to manpage.
+
+2007-06-21 16:28  vq
+
+	* tests/: Makefile.am, Makefile.in, targets-18:
+
+	#i74007#  Add testcase.
+
+2007-06-20 18:26  vq
+
+	* dag.c, imacs.c, path.c, vextern.h:
+
+	#i74700# Add a new special macro OOODMAKEMODE that is used to toggle
+	OOo build specific behavior. If OOODMAKEMODE is set (i.e. it begins with y)
+	the leading ./ of a path will no longer be removed.
+	This patch also fixes iz78061.
+
+2007-06-20 18:07  vq
+
+	* configure.in:
+
+	#i78152# Make dmake buildable on GNU/kFreeBSD.
+
+2007-06-17 23:56  vq
+
+	* man/: dmake.nc, dmake.tf:
+
+	#i78033# Document :i macro expansion.
+
 2007-04-24 13:42  vq
 
 	* Makefile.in, NEWS, configure, configure.in, man/dmake.nc,
