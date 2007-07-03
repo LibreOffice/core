@@ -4,9 +4,9 @@
  *
  *  $RCSfile: msocximex.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: vg $ $Date: 2007-04-11 16:01:17 $
+ *  last change: $Author: rt $ $Date: 2007-07-03 16:00:02 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1309,6 +1309,26 @@ public:
 };
 
 
+class OCX_ProgressBar : public OCX_Control
+{
+public:
+    explicit            OCX_ProgressBar();
+
+    static OCX_Control* Create();
+
+    virtual sal_Bool    Read( SvStorageStream *pS );
+    using OCX_Control::Import; // to not hide the other two import methods
+    virtual sal_Bool Import(com::sun::star::uno::Reference<
+            com::sun::star::beans::XPropertySet> &rPropSet);
+        // No Font record
+    virtual sal_Bool ReadFontData(SvStorageStream* /*pS*/) { return sal_True; }
+private:
+    sal_Int32   nMin;
+    sal_Int32   nMax;
+    bool        bFixedSingle;
+    bool        bEnabled;
+    bool        b3d;
+};
 
 class OCX_SpinButton : public OCX_Control
 {
