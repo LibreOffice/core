@@ -4,9 +4,9 @@
  *
  *  $RCSfile: optfltr.src,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: hr $ $Date: 2007-06-27 17:26:55 $
+ *  last change: $Author: rt $ $Date: 2007-07-03 14:28:02 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -161,30 +161,6 @@ TabPage RID_OFAPAGE_MSFILTEROPT2
     String ST_CHG_IMPRESS
     {
         Text [ en-US ] = "PowerPoint to %PRODUCTNAME Impress / %PRODUCTNAME Impress to PowerPoint";
-    };
-    Bitmap CHKBUT_UNCHECKED
-    {
-        File = "chkun.bmp" ;
-    };
-    Bitmap CHKBUT_CHECKED
-    {
-        File = "chkch.bmp" ;
-    };
-    Bitmap CHKBUT_HICHECKED
-    {
-        File = "chkchhi.bmp" ;
-    };
-    Bitmap CHKBUT_HIUNCHECKED
-    {
-        File = "chkunhi.bmp" ;
-    };
-    Bitmap CHKBUT_TRISTATE
-    {
-        File = "chktri.bmp" ;
-    };
-    Bitmap CHKBUT_HITRISTATE
-    {
-        File = "chktrihi.bmp" ;
     };
 };
 
