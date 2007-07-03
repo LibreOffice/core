@@ -4,9 +4,9 @@
  *
  *  $RCSfile: NeonSession.cxx,v $
  *
- *  $Revision: 1.46 $
+ *  $Revision: 1.47 $
  *
- *  last change: $Author: kz $ $Date: 2007-06-19 16:13:02 $
+ *  last change: $Author: rt $ $Date: 2007-07-03 12:13:30 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -210,12 +210,10 @@ struct NeonRequestContext
 // ResponseBlockReader
 // A simple Neon response_block_reader for use with an XInputStream
 // -------------------------------------------------------------------
-#if NEON_VERSION >= 0250
-extern "C" int NeonSession_ResponseBlockReader
-#else
-extern "C" void NeonSession_ResponseBlockReader
-#endif
-    (void * inUserData, const char * inBuf, size_t inLen )
+
+extern "C" int NeonSession_ResponseBlockReader(void * inUserData,
+                                               const char * inBuf,
+                                               size_t inLen )
 {
     // neon calls this function with (inLen == 0)...
     if ( inLen > 0 )
@@ -229,21 +227,17 @@ extern "C" void NeonSession_ResponseBlockReader
         if ( xInputStream.is() )
             xInputStream->AddToStream( inBuf, inLen );
     }
-#if NEON_VERSION >= 0250
     return 0;
-#endif
 }
 
 // -------------------------------------------------------------------
 // ResponseBlockWriter
 // A simple Neon response_block_reader for use with an XOutputStream
 // -------------------------------------------------------------------
-#if NEON_VERSION >= 0250
-extern "C" int NeonSession_ResponseBlockWriter
-#else
-extern "C" void NeonSession_ResponseBlockWriter
-#endif
-    ( void *       inUserData, const char * inBuf, size_t inLen )
+
+extern "C" int NeonSession_ResponseBlockWriter( void * inUserData,
+                                                const char * inBuf,
+                                                size_t inLen )
 {
     // neon calls this function with (inLen == 0)...
     if ( inLen > 0 )
@@ -259,9 +253,7 @@ extern "C" void NeonSession_ResponseBlockWriter
             xOutputStream->writeBytes( aSeq );
         }
     }
-#if NEON_VERSION >= 0250
     return 0;
-#endif
 }
 
 // -------------------------------------------------------------------
@@ -307,20 +299,28 @@ extern "C" int NeonSession_NeonAuth( void *       inUserData,
         // neon does not handle username supplied with request URI (for
         // instance when doing FTP over proxy - last checked: 0.23.5 )
 
-        NeonUri uri( theSession->getRequestEnvironment().m_aRequestURI );
-        rtl::OUString aUserInfo( uri.GetUserInfo() );
-        if ( aUserInfo.getLength() )
+        try
         {
-            sal_Int32 nPos = aUserInfo.indexOf( '@' );
-            if ( nPos == -1 )
+            NeonUri uri( theSession->getRequestEnvironment().m_aRequestURI );
+            rtl::OUString aUserInfo( uri.GetUserInfo() );
+            if ( aUserInfo.getLength() )
             {
-                theUserName = aUserInfo;
+                sal_Int32 nPos = aUserInfo.indexOf( '@' );
+                if ( nPos == -1 )
+                {
+                    theUserName = aUserInfo;
+                }
+                else
+                {
+                    theUserName = aUserInfo.copy( 0, nPos );
+                    thePassWord = aUserInfo.copy( nPos + 1 );
+                }
             }
-            else
-            {
-                theUserName = aUserInfo.copy( 0, nPos );
-                thePassWord = aUserInfo.copy( nPos + 1 );
-            }
+        }
+        catch ( DAVException const & )
+        {
+            // abort
+            return -1;
         }
     }
     else
@@ -458,61 +458,6 @@ extern "C" void NeonSession_PreSendRequest( ne_request * req,
 
         ++it1;
     }
-    }
-}
-
-// -------------------------------------------------------------------
-extern "C" void NeonSession_ResponseHeaderCatcher( void * userdata,
-                                                   const char * value )
-{
-    rtl::OUString aHeader( rtl::OUString::createFromAscii( value ) );
-    sal_Int32 nPos = aHeader.indexOf( ':' );
-
-    if ( nPos != -1 )
-    {
-        rtl::OUString aHeaderName( aHeader.copy( 0, nPos ) );
-
-        NeonRequestContext * pCtx
-            = static_cast< NeonRequestContext * >( userdata );
-
-        // Note: Empty vector means that all headers are requested.
-        bool bIncludeIt = ( pCtx->pHeaderNames->size() == 0 );
-        if ( !bIncludeIt )
-        {
-            // Check whether this header was requested.
-            std::vector< ::rtl::OUString >::const_iterator it(
-                pCtx->pHeaderNames->begin() );
-            const std::vector< ::rtl::OUString >::const_iterator end(
-                pCtx->pHeaderNames->end() );
-
-            while ( it != end )
-            {
-                // header names are case insensitive
-                if ( (*it).equalsIgnoreAsciiCase( aHeaderName ) )
-                {
-                    aHeaderName = (*it);
-                    break;
-                }
-                ++it;
-            }
-
-            if ( it != end )
-                bIncludeIt = true;
-        }
-
-        if ( bIncludeIt )
-        {
-            // Create & set the PropertyValue
-            DAVPropertyValue thePropertyValue;
-            thePropertyValue.IsCaseSensitive = false;
-            thePropertyValue.Name = aHeaderName;
-
-            if ( nPos < aHeader.getLength() )
-                thePropertyValue.Value <<= aHeader.copy( nPos + 1 ).trim();
-
-            // Add the newly created PropertyValue
-            pCtx->pResource->properties.push_back( thePropertyValue );
-        }
     }
 }
 
@@ -716,12 +661,18 @@ void NeonSession::Init()
 // virtual
 sal_Bool NeonSession::CanUse( const rtl::OUString & inUri )
 {
-    NeonUri theUri( inUri );
-    if ( ( theUri.GetPort() == m_nPort ) &&
-         ( theUri.GetHost() == m_aHostName ) &&
-         ( theUri.GetScheme() == m_aScheme ) )
-        return sal_True;
-
+    try
+    {
+        NeonUri theUri( inUri );
+        if ( ( theUri.GetPort() == m_nPort ) &&
+             ( theUri.GetHost() == m_aHostName ) &&
+             ( theUri.GetScheme() == m_aScheme ) )
+            return sal_True;
+    }
+    catch ( DAVException const & )
+    {
+        return sal_False;
+    }
     return sal_False;
 }
 
@@ -991,7 +942,7 @@ NeonSession::GET( const rtl::OUString & inPath,
                          rtl::OUStringToOString(
                              inPath, RTL_TEXTENCODING_UTF8 ),
                          NeonSession_ResponseBlockReader,
-                         0,
+                         false,
                          &aCtx );
     HandleError( theRetVal );
     return uno::Reference< io::XInputStream >( xInputStream.get() );
@@ -1016,7 +967,7 @@ void NeonSession::GET( const rtl::OUString &                 inPath,
                          rtl::OUStringToOString(
                              inPath, RTL_TEXTENCODING_UTF8 ),
                          NeonSession_ResponseBlockWriter,
-                         0,
+                         false,
                          &aCtx );
     HandleError( theRetVal );
 }
@@ -1046,7 +997,7 @@ NeonSession::GET( const rtl::OUString & inPath,
                          rtl::OUStringToOString(
                              inPath, RTL_TEXTENCODING_UTF8 ),
                          NeonSession_ResponseBlockReader,
-                         NeonSession_ResponseHeaderCatcher,
+                         true,
                          &aCtx );
     HandleError( theRetVal );
     return uno::Reference< io::XInputStream >( xInputStream.get() );
@@ -1076,7 +1027,7 @@ void NeonSession::GET( const rtl::OUString & inPath,
                          rtl::OUStringToOString(
                              inPath, RTL_TEXTENCODING_UTF8 ),
                          NeonSession_ResponseBlockWriter,
-                         NeonSession_ResponseHeaderCatcher,
+                         true,
                          &aCtx );
     HandleError( theRetVal );
 }
@@ -1481,45 +1432,96 @@ void NeonSession::Lockit( const Lock & inLock, bool inLockit )
 }
 */
 
-#if NEON_VERSION >= 0250
-static void run_header_handler(ne_request *req, ne_header_handler handler, void *userdata)
+// -------------------------------------------------------------------
+namespace {
+
+void runResponseHeaderHandler( void * userdata,
+                               const char * value )
 {
-    void *cursor = NULL;
-    const char *name, *value;
+    rtl::OUString aHeader( rtl::OUString::createFromAscii( value ) );
+    sal_Int32 nPos = aHeader.indexOf( ':' );
 
-    while ((cursor = ne_response_header_iterate(req, cursor, &name, &value)) != NULL)
+    if ( nPos != -1 )
     {
-        char buffer[8192];
+        rtl::OUString aHeaderName( aHeader.copy( 0, nPos ) );
 
-        ne_snprintf(buffer, sizeof buffer, "%s: %s", name, value);
+        NeonRequestContext * pCtx
+            = static_cast< NeonRequestContext * >( userdata );
 
-        handler(userdata, buffer);
+        // Note: Empty vector means that all headers are requested.
+        bool bIncludeIt = ( pCtx->pHeaderNames->size() == 0 );
+
+        if ( !bIncludeIt )
+        {
+            // Check whether this header was requested.
+            std::vector< ::rtl::OUString >::const_iterator it(
+                pCtx->pHeaderNames->begin() );
+            const std::vector< ::rtl::OUString >::const_iterator end(
+                pCtx->pHeaderNames->end() );
+
+            while ( it != end )
+            {
+                // header names are case insensitive
+                if ( (*it).equalsIgnoreAsciiCase( aHeaderName ) )
+                {
+                    aHeaderName = (*it);
+                    break;
+                }
+                ++it;
+            }
+
+            if ( it != end )
+                bIncludeIt = true;
+        }
+
+        if ( bIncludeIt )
+        {
+            // Create & set the PropertyValue
+            DAVPropertyValue thePropertyValue;
+            thePropertyValue.IsCaseSensitive = false;
+            thePropertyValue.Name = aHeaderName;
+
+            if ( nPos < aHeader.getLength() )
+                thePropertyValue.Value <<= aHeader.copy( nPos + 1 ).trim();
+
+            // Add the newly created PropertyValue
+            pCtx->pResource->properties.push_back( thePropertyValue );
+        }
     }
 }
-#endif
+
+} // namespace
 
 // -------------------------------------------------------------------
 // static
 int NeonSession::GET( ne_session * sess,
                       const char * uri,
                       ne_block_reader reader,
-                      ne_header_handler handler,
+                      bool getheaders,
                       void * userdata )
 {
     //struct get_context ctx;
     ne_request * req = ne_request_create( sess, "GET", uri );
     int ret;
-#if NEON_VERSION < 0250
-    if ( handler != 0 )
-        ne_add_response_header_catcher( req, handler, userdata );
-#endif
+    void *cursor = NULL;
+    const char *name, *value;
+
     ne_add_response_body_reader( req, ne_accept_2xx, reader, userdata );
 
     ret = ne_request_dispatch( req );
-#if NEON_VERSION >= 0250
-    run_header_handler(req, handler, userdata);
-#endif
 
+    if ( getheaders )
+    {
+        while ((cursor = ne_response_header_iterate(req, cursor, &name, &value))
+           != NULL)
+        {
+            char buffer[8192];
+
+            ne_snprintf(buffer, sizeof buffer, "%s: %s", name, value);
+
+            runResponseHeaderHandler(userdata, buffer);
+        }
+    }
     if ( ret == NE_OK && ne_get_status( req )->klass != 2 )
         ret = NE_ERROR;
 
