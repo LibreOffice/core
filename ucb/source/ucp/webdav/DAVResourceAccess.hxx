@@ -4,9 +4,9 @@
  *
  *  $RCSfile: DAVResourceAccess.hxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: kz $ $Date: 2007-05-10 13:07:00 $
+ *  last change: $Author: rt $ $Date: 2007-07-03 12:11:47 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -258,7 +258,8 @@ public:
 
 private:
     const rtl::OUString & getRequestURI() const;
-    sal_Bool detectRedirectCycle( const rtl::OUString& rRedirectURL );
+    sal_Bool detectRedirectCycle( const rtl::OUString& rRedirectURL )
+        throw ( DAVException );
     sal_Bool handleException( DAVException & e )
         throw ( DAVException );
     void initialize()
