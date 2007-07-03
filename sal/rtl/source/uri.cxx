@@ -4,9 +4,9 @@
  *
  *  $RCSfile: uri.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 09:05:56 $
+ *  last change: $Author: rt $ $Date: 2007-07-03 14:20:27 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -603,7 +603,8 @@ void SAL_CALL rtl_uriEncode(rtl_uString * pText, sal_Bool const * pCharClass,
         sal_uInt32 nUtf32 = readUcs4(
             &p, pEnd,
             (eMechanism == rtl_UriEncodeKeepEscapes
-             || eMechanism == rtl_UriEncodeCheckEscapes),
+             || eMechanism == rtl_UriEncodeCheckEscapes
+             || eMechanism == rtl_UriEncodeStrictKeepEscapes),
             eCharset, &eType);
         switch (eType)
         {
@@ -613,7 +614,8 @@ void SAL_CALL rtl_uriEncode(rtl_uString * pText, sal_Bool const * pCharClass,
                              static_cast< sal_Unicode >(nUtf32));
             else if (!writeEscapeChar(
                          pResult, &nCapacity, nUtf32, eCharset,
-                         eMechanism == rtl_UriEncodeStrict))
+                         (eMechanism == rtl_UriEncodeStrict
+                          || eMechanism == rtl_UriEncodeStrictKeepEscapes)))
             {
                 rtl_uString_new(pResult);
                 return;
@@ -627,7 +629,8 @@ void SAL_CALL rtl_uriEncode(rtl_uString * pText, sal_Bool const * pCharClass,
                              static_cast< sal_Unicode >(nUtf32));
             else if (!writeEscapeChar(
                          pResult, &nCapacity, nUtf32, eCharset,
-                         eMechanism == rtl_UriEncodeStrict))
+                         (eMechanism == rtl_UriEncodeStrict
+                          || eMechanism == rtl_UriEncodeStrictKeepEscapes)))
             {
                 rtl_uString_new(pResult);
                 return;
