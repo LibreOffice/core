@@ -4,9 +4,9 @@
  *
  *  $RCSfile: saldisp.cxx,v $
  *
- *  $Revision: 1.89 $
+ *  $Revision: 1.90 $
  *
- *  last change: $Author: hr $ $Date: 2007-06-27 20:46:44 $
+ *  last change: $Author: rt $ $Date: 2007-07-03 14:07:57 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -2806,7 +2806,7 @@ if( XineramaIsActive( pDisp_ ) )
     if( m_bXinerama )
     {
         for( std::vector< Rectangle >::const_iterator it = m_aXineramaScreens.begin(); it != m_aXineramaScreens.end(); ++it )
-            fprintf( stderr, "Xinerama screen: %dx%d+%d+%d\n", it->GetWidth(), it->GetHeight(), it->Left(), it->Top() );
+            fprintf( stderr, "Xinerama screen: %ldx%ld+%ld+%ld\n", it->GetWidth(), it->GetHeight(), it->Left(), it->Top() );
     }
 #endif
 #endif // USE_XINERAMA
