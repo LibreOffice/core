@@ -4,9 +4,9 @@
  *
  *  $RCSfile: fontsubs.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: hr $ $Date: 2007-06-27 17:05:21 $
+ *  last change: $Author: rt $ $Date: 2007-07-03 14:26:00 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -104,12 +104,6 @@ SvxFontSubstTabPage::SvxFontSubstTabPage( Window* pParent,
     sHeader3            (SVX_RES( STR_HEADER3       )),
     sHeader4            (SVX_RES( STR_HEADER4       )),
 
-    aChkunBmp           (SVX_RES(   CHKBUT_UNCHECKED)),
-    aChkchBmp           (SVX_RES(   CHKBUT_CHECKED  )),
-    aChkchhiBmp         (SVX_RES(   CHKBUT_HICHECKED)),
-    aChkunhiBmp         (SVX_RES(   CHKBUT_HIUNCHECKED)),
-    aChktriBmp          (SVX_RES(   CHKBUT_TRISTATE )),
-    aChktrihiBmp        (SVX_RES(   CHKBUT_HITRISTATE)),
     sFontGroup          ("FontSubstitution"),
     pCheckButtonData(0)
 {
