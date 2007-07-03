@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.4 $
+#   $Revision: 1.5 $
 #
-#   last change: $Author: vg $ $Date: 2006-06-02 12:28:42 $
+#   last change: $Author: rt $ $Date: 2007-07-03 12:06:56 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -51,6 +51,9 @@ SCP_PRODUCT_TYPE=osl
 PARFILES =                   \
         module_kde.par     \
         file_kde.par
+
+ULFFILES= \
+        module_kde.ulf
 .ENDIF
 
 # --- File ---------------------------------------------------------
