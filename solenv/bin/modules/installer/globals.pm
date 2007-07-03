@@ -4,9 +4,9 @@
 #
 #   $RCSfile: globals.pm,v $
 #
-#   $Revision: 1.69 $
+#   $Revision: 1.70 $
 #
-#   last change: $Author: gm $ $Date: 2007-05-10 10:58:47 $
+#   last change: $Author: rt $ $Date: 2007-07-03 11:45:53 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -54,6 +54,7 @@ BEGIN
     $languagelist = "";
     $added_english = 0;
     $set_office_start_language = 0;
+    $solarjavaset = 0;
 
     $destdir = "";
     $rootpath = "";
@@ -193,6 +194,7 @@ BEGIN
     $createdxpddefaultlang = 0;
     $xpddir = "";
     $productxpdfile = "setup.xpd";
+    $xpd_files_prepared = 0;
     $defaultlanguage = "";
     # @emptyxpdparents = ();
     @createdxpdfiles = ();
