@@ -4,9 +4,9 @@
  *
  *  $RCSfile: tp_3D_SceneAppearance.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: vg $ $Date: 2007-05-22 17:41:33 $
+ *  last change: $Author: rt $ $Date: 2007-07-03 13:38:55 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -42,7 +42,7 @@
 #include "Strings.hrc"
 #include "NoWarningThisInCTOR.hxx"
 #include "ChartModelHelper.hxx"
-#include "Pseudo3DHelper.hxx"
+#include "ThreeDHelper.hxx"
 #include "macros.hxx"
 
 #ifndef INCLUDED_RTL_MATH_HXX
@@ -77,10 +77,11 @@ lcl_ModelProperties lcl_getPropertiesFromModel( uno::Reference< frame::XModel > 
     lcl_ModelProperties aProps;
     try
     {
-        uno::Reference< beans::XPropertySet > xDiaProp( ::chart::ChartModelHelper::findDiagram( xModel ), uno::UNO_QUERY_THROW );
+        uno::Reference< chart2::XDiagram > xDiagram( ::chart::ChartModelHelper::findDiagram( xModel ) );
+        uno::Reference< beans::XPropertySet > xDiaProp( xDiagram, uno::UNO_QUERY_THROW );
         xDiaProp->getPropertyValue( C2U("D3DSceneShadeMode")) >>= aProps.m_aShadeMode;
-        ::chart::Pseudo3DHelper::getRoundedEdgesAndObjectLines( xModel, aProps.m_nRoundedEdges, aProps.m_nObjectLines );
-        aProps.m_eScheme = ::chart::Pseudo3DHelper::detectScheme( xModel );
+        ::chart::ThreeDHelper::getRoundedEdgesAndObjectLines( xDiagram, aProps.m_nRoundedEdges, aProps.m_nObjectLines );
+        aProps.m_eScheme = ::chart::ThreeDHelper::detectScheme( xDiagram );
     }
     catch( const uno::Exception & ex )
     {
@@ -196,8 +197,8 @@ void ThreeD_SceneAppearance_TabPage::applyRoundedEdgeAndObjectLinesToModel()
 
     // /-- locked controllers
     ControllerLockHelperGuard aGuard( m_rControllerLockHelper );
-    Pseudo3DHelper::setRoundedEdgesAndObjectLines(
-        m_xChartModel, nCurrentRoundedEdges, nObjectLines );
+    ThreeDHelper::setRoundedEdgesAndObjectLines(
+        ::chart::ChartModelHelper::findDiagram( m_xChartModel ), nCurrentRoundedEdges, nObjectLines );
     // \-- locked controllers
 }
 
@@ -232,25 +233,52 @@ void ThreeD_SceneAppearance_TabPage::initControlsFromModel()
     lcl_ModelProperties aProps( lcl_getPropertiesFromModel( m_xChartModel ));
 
     if(aProps.m_aShadeMode == drawing::ShadeMode_FLAT)
+    {
+        m_aCB_Shading.EnableTriState( FALSE );
         m_aCB_Shading.Check(FALSE);
+    }
     else if(aProps.m_aShadeMode == drawing::ShadeMode_SMOOTH)
+    {
+        m_aCB_Shading.EnableTriState( FALSE );
         m_aCB_Shading.Check(TRUE);
+    }
     else
+    {
+        m_aCB_Shading.EnableTriState( TRUE );
         m_aCB_Shading.SetState( STATE_DONTKNOW );
+    }
 
     if(aProps.m_nObjectLines == 0)
+    {
+        m_aCB_ObjectLines.EnableTriState( FALSE );
         m_aCB_ObjectLines.Check(FALSE);
+    }
     else if(aProps.m_nObjectLines==1)
+    {
+        m_aCB_ObjectLines.EnableTriState( FALSE );
         m_aCB_ObjectLines.Check(TRUE);
+    }
     else
+    {
+        m_aCB_ObjectLines.EnableTriState( TRUE );
         m_aCB_ObjectLines.SetState( STATE_DONTKNOW );
+    }
 
     if(aProps.m_nRoundedEdges >= 5)
+    {
+        m_aCB_RoundedEdge.EnableTriState( FALSE );
         m_aCB_RoundedEdge.Check(TRUE);
+    }
     else if(aProps.m_nRoundedEdges<0)
+    {
+        m_aCB_RoundedEdge.EnableTriState( FALSE );
         m_aCB_RoundedEdge.SetState( STATE_DONTKNOW );
+    }
     else
+    {
+        m_aCB_RoundedEdge.EnableTriState( TRUE );
         m_aCB_RoundedEdge.Check(FALSE);
+    }
     m_aCB_RoundedEdge.Enable( !m_aCB_ObjectLines.IsChecked() );
 
     updateScheme();
@@ -295,10 +323,12 @@ IMPL_LINK( ThreeD_SceneAppearance_TabPage, SelectSchemeHdl, void*, EMPTYARG )
         // /-- locked controllers
         ControllerLockHelperGuard aGuard( m_rControllerLockHelper );
 
+        uno::Reference< chart2::XDiagram > xDiagram( ::chart::ChartModelHelper::findDiagram( m_xChartModel ) );
+
         if( m_aLB_Scheme.GetSelectEntryPos() == POS_3DSCHEME_REALISTIC )
-            Pseudo3DHelper::setScheme( m_xChartModel, ThreeDLookScheme_Realistic );
+            ThreeDHelper::setScheme( xDiagram, ThreeDLookScheme_Realistic );
         else if( m_aLB_Scheme.GetSelectEntryPos() == POS_3DSCHEME_SIMPLE )
-            Pseudo3DHelper::setScheme( m_xChartModel, ThreeDLookScheme_Simple );
+            ThreeDHelper::setScheme( xDiagram, ThreeDLookScheme_Simple );
         else
         {
             OSL_ENSURE( false, "Invalid Entry selected" );
@@ -316,6 +346,7 @@ IMPL_LINK( ThreeD_SceneAppearance_TabPage, SelectShading, void*, EMPTYARG )
     if( !m_bUpdateOtherControls )
         return 0;
 
+    m_aCB_Shading.EnableTriState( FALSE );
     applyShadeModeToModel();
     updateScheme();
     return 0;
@@ -327,12 +358,15 @@ IMPL_LINK( ThreeD_SceneAppearance_TabPage, SelectRoundedEdgeOrObjectLines, Check
 
     if( pCheckBox == &m_aCB_ObjectLines )
     {
+        m_aCB_ObjectLines.EnableTriState( FALSE );
         m_bUpdateOtherControls = false;
         m_aCB_RoundedEdge.Enable( !m_aCB_ObjectLines.IsChecked() );
         if(!m_aCB_RoundedEdge.IsEnabled())
             m_aCB_RoundedEdge.Check(FALSE);
         m_bUpdateOtherControls = true;
     }
+    else
+        m_aCB_RoundedEdge.EnableTriState( FALSE );
     applyRoundedEdgeAndObjectLinesToModel();
     updateScheme();
     return 0;
