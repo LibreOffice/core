@@ -4,9 +4,9 @@
  *
  *  $RCSfile: strucvt.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: hr $ $Date: 2007-06-27 22:19:35 $
+ *  last change: $Author: rt $ $Date: 2007-07-03 15:43:43 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -171,7 +171,7 @@ UniString UniString::intern() const
     UniString aStr;
 
     rtl_uString_intern( reinterpret_cast<rtl_uString **>(&aStr.mpData),
-                        (rtl_uString *)(&mpData) );
+                        (rtl_uString *)(mpData) );
 
     return aStr;
 }
