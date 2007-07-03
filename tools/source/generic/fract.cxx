@@ -4,9 +4,9 @@
  *
  *  $RCSfile: fract.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: hr $ $Date: 2007-06-27 22:13:27 $
+ *  last change: $Author: rt $ $Date: 2007-07-03 12:32:17 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -513,76 +513,131 @@ Fraction& Fraction::operator /= ( const Fraction& rVal )
 |*
 |*    Beschreibung      FRACT.SDW
 |*    Ersterstellung    JOE 17.09.95
-|*    Letzte Aenderung  JOE 17.09.95
+|*    Letzte Aenderung  kendy 2007-06-13
 |*
 *************************************************************************/
 
-// Funktioniert z.Zt. nur fuer 32-Bit Werte !!!
-// Fehlerbehaftetes Kuerzen einer Fraction.
-// nSignificantBits gibt an, wieviele signifikante Binaerstellen
-// in Zaehler/Nenner mindestens erhalten bleiben sollen.
-// Beispiel: ReduceInaccurate(8) hat einen Fehler <1% [1/2^(8-1)]
-// dabei tritt der groesste Fehler bei folgendem Wertepaar auf:
-// Binaer 1000000011111111111111111111111b/1000000000000000000000000000000b
-// =      1082130431/1073741824
-// = ca.  1.007812499
-// Nach ReduceInaccurate( 8 ) wird daraus 1/1.
 
+// Similar to clz_table that can be googled
+const char nbits_table[32] =
+{
+    32,  1, 23,  2, 29, 24, 14,  3,
+    30, 27, 25, 18, 20, 15, 10,  4,
+    31, 22, 28, 13, 26, 17, 19,  9,
+    21, 12, 16,  8, 11,  7,  6,  5
+};
+
+static int impl_NumberOfBits( unsigned long nNum )
+{
+    // http://en.wikipedia.org/wiki/De_Bruijn_sequence
+    //
+    // background paper: Using de Bruijn Sequences to Index a 1 in a
+    // Computer Word (1998) Charles E. Leiserson,
+    // Harald Prokop, Keith H. Randall
+    // (e.g. http://citeseer.ist.psu.edu/leiserson98using.html)
+    const sal_uInt32 nDeBruijn = 0x7DCD629;
+
+    if ( nNum == 0 )
+        return 0;
+
+    // Get it to form like 0000001111111111b
+    nNum |= ( nNum >>  1 );
+    nNum |= ( nNum >>  2 );
+    nNum |= ( nNum >>  4 );
+    nNum |= ( nNum >>  8 );
+    nNum |= ( nNum >> 16 );
+
+    sal_uInt32 nNumber;
+    int nBonus = 0;
+
+#if SAL_TYPES_SIZEOFLONG == 4
+    nNumber = nNum;
+#elif SAL_TYPES_SIZEOFLONG == 8
+    nNum |= ( nNum >> 32 );
+
+    if ( nNum & 0x80000000 )
+    {
+        nNumber = sal_uInt32( nNum >> 32 );
+        nBonus = 32;
+
+        if ( nNumber == 0 )
+            return 32;
+    }
+    else
+        nNumber = sal_uInt32( nNum & 0xFFFFFFFF );
+#else
+#error "Unknown size of long!"
+#endif
+
+    // De facto shift left of nDeBruijn using multiplication (nNumber
+    // is all ones from topmost bit, thus nDeBruijn + (nDeBruijn *
+    // nNumber) => nDeBruijn * (nNumber+1) clears all those bits to
+    // zero, sets the next bit to one, and thus effectively shift-left
+    // nDeBruijn by lg2(nNumber+1). This generates a distinct 5bit
+    // sequence in the msb for each distinct position of the last
+    // leading 0 bit - that's the property of a de Bruijn number.
+    nNumber = nDeBruijn + ( nDeBruijn * nNumber );
+
+    // 5-bit window indexes the result
+    return ( nbits_table[nNumber >> 27] ) + nBonus;
+}
+
+/** Inaccurate cancellation for a fraction.
+
+    Clip both nominator and denominator to said number of bits. If
+    either of those already have equal or less number of bits used,
+    this method does nothing.
+
+    @param nSignificantBits denotes, how many significant binary
+    digits to maintain, in both nominator and denominator.
+
+    @example ReduceInaccurate(8) has an error <1% [1/2^(8-1)] - the
+    largest error occurs with the following pair of values:
+
+    binary    1000000011111111111111111111111b/1000000000000000000000000000000b
+    =         1082130431/1073741824
+    = approx. 1.007812499
+
+    A ReduceInaccurate(8) yields 1/1.
+*/
 void Fraction::ReduceInaccurate( unsigned nSignificantBits )
 {
     if ( !nNumerator || !nDenominator )
         return;
 
-    // Zaehler und Nenner auf den Stack fuer schnelleren Zugriff
-    unsigned long nMul;
-    unsigned long nDiv;
-    BOOL   bNeg;
-    if ( nNumerator >= 0 )
-    {
-        nMul = (unsigned long)nNumerator;
-        bNeg = FALSE;
-    }
-    else
-    {
-        nMul = (unsigned long)(-nNumerator);
-        bNeg = TRUE;
-    }
-    nDiv=(unsigned long)nDenominator;
+    // Count with unsigned longs only
+    const bool bNeg = ( nNumerator < 0 );
+    unsigned long nMul = (unsigned long)( bNeg? -nNumerator: nNumerator );
+    unsigned long nDiv = (unsigned long)( nDenominator );
 
-    unsigned long a=nMul; unsigned nMulZ=0; // Fuehrende Nullen zaehlen
-    while (a<0x00800000) { nMulZ+=8; a<<=8; }
-    while (a<0x80000000) { nMulZ++; a<<=1; }
-    a=nDiv; unsigned nDivZ=0; // Fuehrende Nullen zaehlen
-    while (a<0x00800000) { nDivZ+=8; a<<=8; }
-    while (a<0x80000000) { nDivZ++; a<<=1; }
-    // Anzahl der verwendeten Digits bestimmen
-    // Auch hier gehe ich davon aus, dass es sich um 32Bit-Werte handelt
-    int nMulDigits=(sizeof(long) * 8)-nMulZ;
-    int nDivDigits=(sizeof(long) * 8)-nDivZ;
-    // Nun bestimmen, wieviele Stellen hinten weg koennen
-    // Hier koennte man das Ergebnis noch etwas optimieren...
-    int nMulWeg=nMulDigits-nSignificantBits; if (nMulWeg<0) nMulWeg=0;
-    int nDivWeg=nDivDigits-nSignificantBits; if (nDivWeg<0) nDivWeg=0;
-    int nWeg=Min(nMulWeg,nDivWeg);
-    nMul>>=nWeg;
-    nDiv>>=nWeg;
+    DBG_ASSERT(nSignificantBits<65, "More than 64 bit of significance is overkill!");
+
+    // How much bits can we lose?
+    const int nMulBitsToLose = Max( ( impl_NumberOfBits( nMul ) - int( nSignificantBits ) ), 0 );
+    const int nDivBitsToLose = Max( ( impl_NumberOfBits( nDiv ) - int( nSignificantBits ) ), 0 );
+
+    const int nToLose = Min( nMulBitsToLose, nDivBitsToLose );
+
+    // Remove the bits
+    nMul >>= nToLose;
+    nDiv >>= nToLose;
+
     if ( !nMul || !nDiv )
     {
-        DBG_ERROR( "Oups, beim kuerzen einer Fraction hat sich Joe verrechnet." );
+        // Return without reduction
+        DBG_ERROR( "Oops, we reduced too much..." );
         return;
     }
 
-    // Nun noch kuerzen ueber GGT
-    long n1=GetGGT( nMul, nDiv );
-    if ( n1!=1 )
+    // Reduce
+    long n1 = GetGGT( nMul, nDiv );
+    if ( n1 != 1 )
     {
-        nMul/=n1;
-        nDiv/=n1;
+        nMul /= n1;
+        nDiv /= n1;
     }
-    if ( !bNeg )
-        nNumerator = (long)nMul;
-    else
-        nNumerator = -(long)nMul;
+
+    nNumerator = bNeg? -long( nMul ): long( nMul );
     nDenominator = nDiv;
 }
 
