@@ -4,9 +4,9 @@
  *
  *  $RCSfile: tp_ChartType.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: vg $ $Date: 2007-05-22 17:44:05 $
+ *  last change: $Author: rt $ $Date: 2007-07-03 13:40:13 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -933,7 +933,7 @@ void ChartTypeTabPage::stateChanged( ChangingResource* pResource )
         commitToModel( aParameter );
 
     //detect the new ThreeDLookScheme
-    aParameter.eThreeDLookScheme = Pseudo3DHelper::detectScheme( uno::Reference< frame::XModel >( m_xChartModel, uno::UNO_QUERY) );
+    aParameter.eThreeDLookScheme = ThreeDHelper::detectScheme( ChartModelHelper::findDiagram( m_xChartModel ) );
     aParameter.bSortByXValues = lcl_getSortByXValues( m_xChartModel );
     //the controls have to be enabled/disabled accordingly
     this->fillAllControls( aParameter );
@@ -981,7 +981,10 @@ IMPL_LINK( ChartTypeTabPage, SelectMainTypeHdl, void *, EMPTYARG )
         if( m_bDoLiveUpdate )
             commitToModel( aParameter );
         //detect the new ThreeDLookScheme
-        aParameter.eThreeDLookScheme = Pseudo3DHelper::detectScheme( uno::Reference< frame::XModel >( m_xChartModel, uno::UNO_QUERY) );
+        aParameter.eThreeDLookScheme = ThreeDHelper::detectScheme( ChartModelHelper::findDiagram( m_xChartModel ) );
+        if(!aParameter.b3DLook && aParameter.eThreeDLookScheme!=ThreeDLookScheme_Simple )
+            aParameter.eThreeDLookScheme=ThreeDLookScheme_Simple;
+
         aParameter.bSortByXValues = lcl_getSortByXValues( m_xChartModel );
         this->fillAllControls( aParameter );
         m_pCurrentMainType->fillExtraControls(aParameter,m_xChartModel);
@@ -1099,7 +1102,10 @@ void ChartTypeTabPage::initializePage()
             m_pCurrentMainType = this->getSelectedMainType();
 
             //set ThreeDLookScheme
-            aParameter.eThreeDLookScheme = Pseudo3DHelper::detectScheme( xModel );
+            aParameter.eThreeDLookScheme = ThreeDHelper::detectScheme( xDiagram );
+            if(!aParameter.b3DLook && aParameter.eThreeDLookScheme!=ThreeDLookScheme_Simple )
+                aParameter.eThreeDLookScheme=ThreeDLookScheme_Simple;
+
             aParameter.bSortByXValues = lcl_getSortByXValues( m_xChartModel );
 
             this->fillAllControls( aParameter, xTemplateProps );
