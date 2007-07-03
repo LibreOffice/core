@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dlgedfac.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 00:31:06 $
+ *  last change: $Author: rt $ $Date: 2007-07-03 13:03:19 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -102,7 +102,7 @@ IMPL_LINK( DlgEdFactory, MakeObject, SdrObjFactory *, pObjFactory )
 
     if( (pObjFactory->nInventor == DlgInventor) &&
         (pObjFactory->nIdentifier >= OBJ_DLG_PUSHBUTTON) &&
-        (pObjFactory->nIdentifier <= OBJ_DLG_FILECONTROL)    )
+        (pObjFactory->nIdentifier <= OBJ_DLG_TREECONTROL)    )
     {
         switch( pObjFactory->nIdentifier )
         {
@@ -214,6 +214,77 @@ IMPL_LINK( DlgEdFactory, MakeObject, SdrObjFactory *, pObjFactory )
                  break;
             case OBJ_DLG_FILECONTROL:
                  pObjFactory->pNewObj = new DlgEdObj( ::rtl::OUString::createFromAscii("com.sun.star.awt.UnoControlFileControlModel") , xDialogSFact );
+                 break;
+            case OBJ_DLG_TREECONTROL:
+                 DlgEdObj* pNew = new DlgEdObj( ::rtl::OUString::createFromAscii("com.sun.star.awt.tree.TreeControlModel") , xDialogSFact );
+                 pObjFactory->pNewObj = pNew;
+                 /*
+                 try
+                 {
+                    uno::Reference< beans::XPropertySet >  xPSet(pNew->GetUnoControlModel(), uno::UNO_QUERY);
+                    if (xPSet.is())
+                    {
+                        // first create a data model for our tree control
+                        Reference< XComponentContext > xComponentContext;
+
+                        Reference< XPropertySet > xPropSet( xInterface, UNO_QUERY );
+                        xPropSet->getPropertyValue( OUString::createFromAscii("DefaultContext") ) >>= xComponentContext;
+
+                        // gets the service manager from the office
+                        Reference< XMultiComponentFactory > xMultiComponentFactoryServer( xComponentContext->getServiceManager() );
+
+
+                        // gets the TreeDataModel
+                        Reference< XMutableTreeDataModel > xTreeDataModel;
+
+                        xTreeDataModel = Reference< XMutableTreeDataModel >(
+                         xMultiComponentFactoryServer->createInstanceWithContext(
+                        OUString( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.awt.tree.MutableTreeDataModel" ) ), xComponentContext ), UNO_QUERY_THROW );
+
+                        // now fill it with some sample data
+                        const OUString sRoot( RTL_CONSTASCII_USTRINGPARAM( "Root" ) );
+
+                        Reference< XMutableTreeNode > xNode( mxTreeDataModel->createNode( sRoot, false ), UNO_QUERY_THROW );
+                        xNode->setDataValue( sRoot );
+                        xNode->setExpandedGraphicURL( OUString( RTL_CONSTASCII_USTRINGPARAM( "private:graphicrepository/sd/res/triangle_down.png" ) ) );
+                        xNode->setCollapsedGraphicURL( OUString( RTL_CONSTASCII_USTRINGPARAM( "private:graphicrepository/sd/res/triangle_right.png" ) ) );
+
+                        const OUString sNode_1( RTL_CONSTASCII_USTRINGPARAM( "Node_1" ) );
+
+                        Reference< XMutableTreeNode > xChildNode_1( mxTreeDataModel->createNode( sNode_1, true ), UNO_QUERY_THROW );
+                        xChildNode_1->setDataValue( sNode_1 );
+                        xChildNode_1->setExpandedGraphicURL( OUString( RTL_CONSTASCII_USTRINGPARAM( "private:graphicrepository/sd/res/triangle_down.png" ) ) );
+                        xChildNode_1->setCollapsedGraphicURL( OUString( RTL_CONSTASCII_USTRINGPARAM( "private:graphicrepository/sd/res/triangle_right.png" ) ) );
+
+                        xNode->appendChild( xChildNode_1 );
+
+                        const OUString sNode_1_1( RTL_CONSTASCII_USTRINGPARAM( "Node_1_1" ) );
+
+                        Reference< XMutableTreeNode > xChildNode_1_1( mxTreeDataModel->createNode( sNode_1_1, false ), UNO_QUERY_THROW );
+                        xChildNode_1_1->setDataValue( sNode_1_1 );
+                        xChildNode_1_1->setExpandedGraphicURL( OUString( RTL_CONSTASCII_USTRINGPARAM( "private:graphicrepository/sd/res/triangle_down.png" ) ) );
+                        xChildNode_1_1->setCollapsedGraphicURL( OUString( RTL_CONSTASCII_USTRINGPARAM( "private:graphicrepository/sd/res/triangle_right.png" ) ) );
+
+                        xChildNode_1->appendChild( xChildNode_1_1 );
+
+                        const OUString sNode_1_1( RTL_CONSTASCII_USTRINGPARAM( "Node_2" ) );
+
+                        Reference< XMutableTreeNode > xChildNode_2( mxTreeDataModel->createNode( sNode_2, false ), UNO_QUERY_THROW );
+                        xChildNode_2->setDataValue( sNode_2 );
+                        xChildNode_2->setNodeGraphicURL( OUString( RTL_CONSTASCII_USTRINGPARAM("private:graphicrepository/sw/imglst/nc20010.png") ) );
+                        xNode->appendChild( xChildNode_2 );
+
+                        xTreeDataModel->setRoot( xNode );
+
+
+                        const OUString sDataModel( RTL_CONSTASCII_USTRINGPARAM( "DataModel" ) );
+
+                        xPSet->setPropertyValue( sDataModel, xTreeDataModel );
+                    }
+                 }
+                 catch(...)
+                 {
+                 }*/
                  break;
         }
     }
