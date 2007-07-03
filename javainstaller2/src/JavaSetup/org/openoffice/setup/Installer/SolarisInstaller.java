@@ -1,3 +1,38 @@
+/*************************************************************************
+ *
+ *  OpenOffice.org - a multi-platform office productivity suite
+ *
+ *  $RCSfile: SolarisInstaller.java,v $
+ *
+ *  $Revision: 1.2 $
+ *
+ *  last change: $Author: rt $ $Date: 2007-07-03 11:54:27 $
+ *
+ *  The Contents of this file are made available subject to
+ *  the terms of GNU Lesser General Public License Version 2.1.
+ *
+ *
+ *    GNU Lesser General Public License Version 2.1
+ *    =============================================
+ *    Copyright 2005 by Sun Microsystems, Inc.
+ *    901 San Antonio Road, Palo Alto, CA 94303, USA
+ *
+ *    This library is free software; you can redistribute it and/or
+ *    modify it under the terms of the GNU Lesser General Public
+ *    License version 2.1, as published by the Free Software Foundation.
+ *
+ *    This library is distributed in the hope that it will be useful,
+ *    but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ *    Lesser General Public License for more details.
+ *
+ *    You should have received a copy of the GNU Lesser General Public
+ *    License along with this library; if not, write to the Free Software
+ *    Foundation, Inc., 59 Temple Place, Suite 330, Boston,
+ *    MA  02111-1307  USA
+ *
+ ************************************************************************/
+
 package org.openoffice.setup.Installer;
 
 import org.openoffice.setup.InstallData;
@@ -72,6 +107,19 @@ public class SolarisInstaller extends Installer {
         helper.removeSolarisLockFile();
     }
 
+    public void postInstall(PackageDescription packageData) {
+        InstallData data = InstallData.getInstance();
+
+        if ( ! data.isAbortedInstallation() ) {
+            data.setStillRunning(true);
+            // Collecting information about installed packages
+            // Creating a list containing pairs of package names and rpm file names
+            // that has to be used during uninstallation.
+            helper.saveModulesLogFile(data);
+            data.setStillRunning(false);
+        }
+    }
+
     public void postUninstallationOngoing() {
         helper.removeSolarisLockFile();
     }
@@ -109,6 +157,12 @@ public class SolarisInstaller extends Installer {
         String installDir = data.getInstallDir();
         String rootDir = data.getInstallRoot();
         String packagePath = data.getPackagePath();
+
+        if (( packageData.getPkgSubdir() != null ) && ( ! packageData.getPkgSubdir().equals("") )) {
+            File completePackageFile = new File(packagePath, packageData.getPkgSubdir());
+            packagePath = completePackageFile.getPath();
+        }
+
         String packageName = packageData.getPackageName();
 
         if (( packageName.equals("")) || ( packageName == null )) {
@@ -118,10 +172,9 @@ public class SolarisInstaller extends Installer {
             log = "<b>Package Name: " + packageName + "</b>";
             LogManager.addCommandsLogfileComment(log);
 
-            String completePackageName = packagePath + packageName;
-            boolean packageFound = SystemManager.find_file(completePackageName);
+            File completePackage = new File(packagePath, packageName);
 
-            if ( packageFound ) {
+            if ( completePackage.exists() ) {
 
                 String pkgCommand = "";
                 String[] pkgCommandArray;
