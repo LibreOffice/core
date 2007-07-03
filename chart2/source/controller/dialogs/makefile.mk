@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.10 $
+#   $Revision: 1.11 $
 #
-#   last change: $Author: vg $ $Date: 2007-05-22 17:38:53 $
+#   last change: $Author: rt $ $Date: 2007-07-03 13:38:39 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -57,7 +57,6 @@ GEN_HID_OTHER=TRUE
 SLOFILES=   	\
                 $(SLO)$/ObjectNameProvider.obj \
                 $(SLO)$/TimerTriggeredControllerLock.obj \
-                $(SLO)$/Pseudo3DHelper.obj \
                 $(SLO)$/ChangingResource.obj \
                 $(SLO)$/DataBrowser.obj \
                 $(SLO)$/DataBrowserModel.obj \
