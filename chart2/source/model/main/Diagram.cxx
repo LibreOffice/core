@@ -4,9 +4,9 @@
  *
  *  $RCSfile: Diagram.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: vg $ $Date: 2007-05-22 18:35:41 $
+ *  last change: $Author: rt $ $Date: 2007-07-03 13:42:45 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -43,7 +43,7 @@
 #include "UserDefinedProperties.hxx"
 #include "ConfigColorScheme.hxx"
 #include "ContainerHelper.hxx"
-#include "DiagramHelper.hxx"
+#include "ThreeDHelper.hxx"
 #include "CloneHelper.hxx"
 #include "AxisHelper.hxx"
 #include "SceneProperties.hxx"
@@ -88,7 +88,8 @@ enum
     PROP_DIAGRAM_REL_POS,
     PROP_DIAGRAM_REL_SIZE,
     PROP_DIAGRAM_SORT_BY_X_VALUES,
-    PROP_DIAGRAM_CONNECT_BARS
+    PROP_DIAGRAM_CONNECT_BARS,
+    PROP_DIAGRMA_RIGHT_ANGLED_AXES
 };
 
 void lcl_AddPropertiesToVector(
@@ -121,6 +122,13 @@ void lcl_AddPropertiesToVector(
                   ::getBooleanCppuType(),
                   beans::PropertyAttribute::BOUND
                   | beans::PropertyAttribute::MAYBEDEFAULT ));
+
+    rOutProperties.push_back(
+        Property( C2U("RightAngledAxes"),
+                  PROP_DIAGRMA_RIGHT_ANGLED_AXES,
+                  ::getBooleanCppuType(),
+                  beans::PropertyAttribute::BOUND
+                  | beans::PropertyAttribute::MAYBEDEFAULT ));
 }
 
 void lcl_AddDefaultsToMap(
@@ -132,6 +140,10 @@ void lcl_AddDefaultsToMap(
 
     OSL_ASSERT( rOutMap.end() == rOutMap.find( PROP_DIAGRAM_CONNECT_BARS ));
     rOutMap[ PROP_DIAGRAM_CONNECT_BARS ] =
+        uno::makeAny( false );
+
+    OSL_ASSERT( rOutMap.end() == rOutMap.find( PROP_DIAGRMA_RIGHT_ANGLED_AXES ));
+    rOutMap[ PROP_DIAGRMA_RIGHT_ANGLED_AXES ] =
         uno::makeAny( false );
 }
 
@@ -210,7 +222,7 @@ Diagram::Diagram( uno::Reference< uno::XComponentContext > const & xContext ) :
     // chart implemetation.
     setFastPropertyValue_NoBroadcast(
         SceneProperties::PROP_SCENE_CAMERA_GEOMETRY, uno::makeAny(
-            DiagramHelper::getDefaultCameraGeometry()));
+            ThreeDHelper::getDefaultCameraGeometry()));
 }
 
 Diagram::Diagram( const Diagram & rOther ) :
