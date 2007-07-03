@@ -4,9 +4,9 @@
  *
  *  $RCSfile: rscicpx.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 15:59:16 $
+ *  last change: $Author: rt $ $Date: 2007-07-03 14:00:24 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -791,10 +791,6 @@ RscTop * RscTypCont::InitClassComboBox( RscTop * pSuper, RscArray * pStrLst )
 
     return pClassComboBox;
 }
-
-#ifdef MAC
-#pragma segment rsctypcont
-#endif
 
 /*************************************************************************
 |*    RscTypCont::InitClassFixedText()
