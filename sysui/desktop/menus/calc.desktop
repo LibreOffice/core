@@ -9,4 +9,5 @@ Categories=Application;Office;X-Red-Hat-Base;X-SuSE-Core-Office;X-MandrivaLinux-
 Exec=openoffice -calc %U
 MimeType=application/vnd.oasis.opendocument.spreadsheet;application/vnd.oasis.opendocument.spreadsheet-template;application/vnd.sun.xml.calc;application/vnd.sun.xml.calc.template;application/vnd.stardivision.calc;application/vnd.stardivision.chart;application/msexcel;application/vnd.ms-excel
 Name=%PRODUCTNAME Calc
+GenericName=Spreadsheet
 Comment=Perform calculation, analyze information and manage lists in spreadsheets by using Calc.
