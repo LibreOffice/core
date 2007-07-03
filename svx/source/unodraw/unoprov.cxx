@@ -4,9 +4,9 @@
  *
  *  $RCSfile: unoprov.cxx,v $
  *
- *  $Revision: 1.68 $
+ *  $Revision: 1.69 $
  *
- *  last change: $Author: hr $ $Date: 2007-06-27 19:26:10 $
+ *  last change: $Author: rt $ $Date: 2007-07-03 13:35:05 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1299,7 +1299,8 @@ static USHORT __READONLY_DATA SvxUnoColorNameDefResId[] =
     RID_SVXSTR_DKVIOLET_DEF,
     RID_SVXSTR_SALMON_DEF,
     RID_SVXSTR_SEABLUE_DEF,
-    RID_SVXSTR_COLOR_SUN_DEF
+    RID_SVXSTR_COLOR_SUN_DEF,
+    RID_SVXSTR_COLOR_CHART_DEF
 };
 
 static USHORT __READONLY_DATA SvxUnoColorNameResId[] =
@@ -1329,7 +1330,8 @@ static USHORT __READONLY_DATA SvxUnoColorNameResId[] =
     RID_SVXSTR_DKVIOLET,
     RID_SVXSTR_SALMON,
     RID_SVXSTR_SEABLUE,
-    RID_SVXSTR_COLOR_SUN
+    RID_SVXSTR_COLOR_SUN,
+    RID_SVXSTR_COLOR_CHART
 };
 
 bool SvxUnoConvertResourceString( USHORT* pSourceResIds, USHORT* pDestResIds, int nCount, String& rString ) throw()
