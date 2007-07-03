@@ -4,9 +4,9 @@
  *
  *  $RCSfile: bcaslot.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 18:33:09 $
+ *  last change: $Author: rt $ $Date: 2007-07-03 15:48:24 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -37,6 +37,7 @@
 #define _SC_BCASLOT_HXX
 
 #include <set>
+#include <hash_set>
 #include <functional>
 
 #ifndef _SVT_BROADCAST_HXX
@@ -86,6 +87,7 @@ inline bool ScBroadcastArea::operator<( const ScBroadcastArea& rArea ) const
     return aRange < rArea.aRange;
 }
 
+//=============================================================================
 
 struct ScBroadcastAreaSort
 {
@@ -97,6 +99,28 @@ struct ScBroadcastAreaSort
 
 typedef ::std::set< ScBroadcastArea*, ScBroadcastAreaSort > ScBroadcastAreas;
 
+//=============================================================================
+
+struct ScBroadcastAreaBulkHash
+{
+    size_t operator()( const ScBroadcastArea* p ) const
+    {
+        return reinterpret_cast<size_t>(p);
+    }
+};
+
+struct ScBroadcastAreaBulkEqual
+{
+    bool operator()( const ScBroadcastArea* p1, const ScBroadcastArea* p2) const
+    {
+        return p1 == p2;
+    }
+};
+
+typedef ::std::hash_set< const ScBroadcastArea*, ScBroadcastAreaBulkHash,
+        ScBroadcastAreaBulkEqual > ScBroadcastAreasBulk;
+
+//=============================================================================
 
 class ScBroadcastAreaSlotMachine;
 
@@ -148,11 +172,13 @@ public:
 class  ScBroadcastAreaSlotMachine
 {
 private:
+    ScBroadcastAreasBulk    aBulkBroadcastAreas;
     ScBroadcastAreaSlot**   ppSlots;
     SvtBroadcaster*     pBCAlways;      // for the RC_ALWAYS special range
     ScDocument*         pDoc;
     ScBroadcastArea*    pUpdateChain;
     ScBroadcastArea*    pEOUpdateChain;
+    ULONG               nInBulkBroadcast;
 
     inline SCSIZE       ComputeSlotOffset( const ScAddress& rAddress ) const;
     void                ComputeAreaPoints( const ScRange& rRange,
@@ -173,12 +199,39 @@ public:
     void                UpdateBroadcastAreas( UpdateRefMode eUpdateRefMode,
                                             const ScRange& rRange,
                                             SCsCOL nDx, SCsROW nDy, SCsTAB nDz );
+    void                EnterBulkBroadcast();
+    void                LeaveBulkBroadcast();
+    bool                InsertBulkArea( const ScBroadcastArea* p );
     inline ScBroadcastArea* GetUpdateChain() const { return pUpdateChain; }
     inline void SetUpdateChain( ScBroadcastArea* p ) { pUpdateChain = p; }
     inline ScBroadcastArea* GetEOUpdateChain() const { return pEOUpdateChain; }
     inline void SetEOUpdateChain( ScBroadcastArea* p ) { pEOUpdateChain = p; }
+    inline bool IsInBulkBroadcast() const { return nInBulkBroadcast > 0; }
 };
 
 
+class ScBulkBroadcast
+{
+    ScBroadcastAreaSlotMachine* pBASM;
+public:
+    explicit ScBulkBroadcast( ScBroadcastAreaSlotMachine* p ) : pBASM(p)
+    {
+        if (pBASM)
+            pBASM->EnterBulkBroadcast();
+    }
+    ~ScBulkBroadcast()
+    {
+        if (pBASM)
+            pBASM->LeaveBulkBroadcast();
+    }
+    void LeaveBulkBroadcast()
+    {
+        if (pBASM)
+        {
+            pBASM->LeaveBulkBroadcast();
+            pBASM = NULL;
+        }
+    }
+};
 
 #endif
