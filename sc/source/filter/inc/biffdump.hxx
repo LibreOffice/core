@@ -4,9 +4,9 @@
  *
  *  $RCSfile: biffdump.hxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: obo $ $Date: 2006-03-22 12:06:27 $
+ *  last change: $Author: rt $ $Date: 2007-07-03 15:52:27 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -134,7 +134,7 @@ protected:
 public:
     virtual                 ~IdRangeList();
 
-    List::Count;
+    using List::Count;
 
     inline const IdRange*   First( void );
     inline const IdRange*   Next( void );
@@ -279,7 +279,7 @@ protected:
     BOOL                        FillIdRangeList( const UINT32 nLine, IdRangeList& rRangeList,
                                                 const ByteString& rVals );
     inline static UINT8         GetVal( const sal_Char c );
-    BOOL                        CreateOutStream( const UINT32 nL = 0xFFFFFFFF );
+    BOOL                        CreateOutStream();
     static SvFileStream*        CreateInStream( const sal_Char* pName );
     static SvFileStream*        CreateInStream( const sal_Char* pPath, const sal_Char* pName );
 
@@ -541,11 +541,13 @@ inline void Biff8RecDumper::AddError( const UINT32 n, const sal_Char* p, const B
 
 inline void Biff8RecDumper::AddError( const UINT32 nLine, const ByteString& rText )
 {
+    AddError( nLine, rText, ByteString::EmptyString() );
 }
 
 
 inline void Biff8RecDumper::AddError( const UINT32 nLine, const sal_Char* pText )
 {
+    AddError( nLine, ByteString( pText ), ByteString::EmptyString() );
 }
 
 
