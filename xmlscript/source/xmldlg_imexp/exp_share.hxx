@@ -4,9 +4,9 @@
  *
  *  $RCSfile: exp_share.hxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: ihi $ $Date: 2006-08-29 11:04:48 $
+ *  last change: $Author: rt $ $Date: 2007-07-03 12:56:50 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -163,6 +163,8 @@ public:
         ::rtl::OUString const & rPropName, ::rtl::OUString const & rAttrName );
     void readLineEndFormatAttr(
         ::rtl::OUString const & rPropName, ::rtl::OUString const & rAttrName );
+    void readSelectionTypeAttr(
+        ::rtl::OUString const & rPropName, ::rtl::OUString const & rAttrName );
     //
     inline void addBoolAttr(
         ::rtl::OUString const & rAttrName, sal_Bool bValue )
@@ -192,6 +194,8 @@ public:
     void readDateFieldModel( StyleBag * all_styles )
         SAL_THROW( (css::uno::Exception) );
     void readFileControlModel( StyleBag * all_styles )
+        SAL_THROW( (css::uno::Exception) );
+    void readTreeControlModel( StyleBag * all_styles )
         SAL_THROW( (css::uno::Exception) );
     void readFixedTextModel( StyleBag * all_styles )
         SAL_THROW( (css::uno::Exception) );
