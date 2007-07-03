@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xlformula.hxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: obo $ $Date: 2007-06-13 09:12:32 $
+ *  last change: $Author: rt $ $Date: 2007-07-03 15:52:41 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -444,8 +444,9 @@ public:
         @descr  Example: The formula ="abc\ndef\nghi" will be converted to the formula
         ="abc";"def";"ghi", if the LF character is specified as separator.
         @param rScTokArr  (in/out-parameter) The token array to modify.
-        @param cStringSep  The separator in the source string. */
-    static void         ConvertStringToList( ScTokenArray& rScTokArr, sal_Unicode cStringSep );
+        @param cStringSep  The separator in the source string.
+        @param bTrimLeadingSpaces  true = remove leading spaces from each token. */
+    static void         ConvertStringToList( ScTokenArray& rScTokArr, sal_Unicode cStringSep, bool bTrimLeadingSpaces );
 
     // shared formulas --------------------------------------------------------
 
