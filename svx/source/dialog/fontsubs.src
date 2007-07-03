@@ -4,9 +4,9 @@
  *
  *  $RCSfile: fontsubs.src,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: hr $ $Date: 2007-06-27 17:06:14 $
+ *  last change: $Author: rt $ $Date: 2007-07-03 14:26:45 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -201,65 +201,5 @@ TabPage RID_SVX_FONT_SUBSTITUTION
     {
         Text [ en-US ] = "Automatic";
     };
-    Bitmap CHKBUT_UNCHECKED
-    {
-        File = "chkun.bmp" ;
-    };
-    Bitmap CHKBUT_CHECKED
-    {
-        File = "chkch.bmp" ;
-    };
-    Bitmap CHKBUT_HICHECKED
-    {
-        File = "chkchhi.bmp" ;
-    };
-    Bitmap CHKBUT_HIUNCHECKED
-    {
-        File = "chkunhi.bmp" ;
-    };
-    Bitmap CHKBUT_TRISTATE
-    {
-        File = "chktri.bmp" ;
-    };
-    Bitmap CHKBUT_HITRISTATE
-    {
-        File = "chktrihi.bmp" ;
-    };
 };
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
