@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xistyle.cxx,v $
  *
- *  $Revision: 1.34 $
+ *  $Revision: 1.35 $
  *
- *  last change: $Author: vg $ $Date: 2007-05-22 19:50:45 $
+ *  last change: $Author: rt $ $Date: 2007-07-03 15:51:25 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -438,7 +438,7 @@ void XclImpFont::GuessScriptType()
     mbHasAsian = mbHasCmplx = false;
 
     // #91658# #113783# find the script types for which the font contains characters
-    if( SfxPrinter* pPrinter = GetPrinter() )
+    if( OutputDevice* pPrinter = GetPrinter() )
     {
         Font aFont( maData.maName, Size( 0, 10 ) );
         FontCharMap aCharMap;
