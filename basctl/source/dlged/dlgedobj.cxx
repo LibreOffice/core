@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dlgedobj.cxx,v $
  *
- *  $Revision: 1.50 $
+ *  $Revision: 1.51 $
  *
- *  last change: $Author: kz $ $Date: 2007-06-20 10:39:32 $
+ *  last change: $Author: rt $ $Date: 2007-07-03 13:03:35 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -873,6 +873,11 @@ sal_Bool DlgEdObj::supportsService( const sal_Char* _pServiceName ) const
     {
         nResId = RID_STR_CLASS_FILECONTROL;
     }
+    else if ( supportsService( "com.sun.star.awt.tree.TreeControlModel" ) )
+    {
+        nResId = RID_STR_CLASS_TREECONTROL;
+    }
+
     else
     {
         nResId = RID_STR_CLASS_CONTROL;
@@ -997,6 +1002,10 @@ sal_uInt16 DlgEdObj::GetObjIdentifier() const
     else if ( supportsService( "com.sun.star.awt.UnoControlFileControlModel" ))
     {
         return OBJ_DLG_FILECONTROL;
+    }
+    else if ( supportsService( "com.sun.star.awt.tree.TreeControlModel" ))
+    {
+        return OBJ_DLG_TREECONTROL;
     }
     else
     {
