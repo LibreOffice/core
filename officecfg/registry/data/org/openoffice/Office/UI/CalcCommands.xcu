@@ -433,7 +433,7 @@
             </node>
             <node oor:name=".uno:SetInputMode" oor:op="replace">
                 <prop oor:name="Label" oor:type="xs:string">
-                    <value xml:lang="en-US">Set Input Mode</value>
+                    <value xml:lang="en-US">Toggle Edit Mode</value>
                 </prop>
             </node>
             <node oor:name=".uno:ClearContents" oor:op="replace">
@@ -1498,7 +1498,7 @@
             </node>
             <node oor:name=".uno:GroupOutlineMenu" oor:op="replace">
                 <prop oor:name="Label" oor:type="xs:string">
-                    <value xml:lang="en-US">~Outline</value>
+                    <value xml:lang="en-US">~Group and Outline</value>
                 </prop>
             </node>
             <node oor:name=".uno:RowMenu" oor:op="replace">
