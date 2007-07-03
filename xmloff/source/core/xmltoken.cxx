@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xmltoken.cxx,v $
  *
- *  $Revision: 1.106 $
+ *  $Revision: 1.107 $
  *
- *  last change: $Author: hr $ $Date: 2007-06-27 14:58:26 $
+ *  last change: $Author: rt $ $Date: 2007-07-03 13:22:45 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -2871,6 +2871,7 @@ namespace xmloff { namespace token {
         TOKEN( "numbered-paragraph", XML_NUMBERED_PARAGRAPH),
         // <--
         TOKEN( "sort-by-x-values",      XML_SORT_BY_X_VALUES ),
+        TOKEN( "right-angled-axes",      XML_RIGHT_ANGLED_AXES ),
 
 #if OSL_DEBUG_LEVEL > 0
         { 0, NULL, NULL,                       XML_TOKEN_END }
