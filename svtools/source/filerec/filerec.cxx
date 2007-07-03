@@ -4,9 +4,9 @@
  *
  *  $RCSfile: filerec.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: hr $ $Date: 2007-06-27 21:32:44 $
+ *  last change: $Author: rt $ $Date: 2007-07-03 12:31:44 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -138,7 +138,7 @@ UINT32 SfxMiniRecordWriter::Close
         // Header auslesen, um Soll-Gr"o\se zu bestimmen
         UINT32 nEndPos = _pStream->Tell();
         _pStream->Seek( _nStartPos );
-        ULONG nHeader;
+        UINT32 nHeader;
         *_pStream >> nHeader;
         _pStream->Seek( nEndPos );
 
