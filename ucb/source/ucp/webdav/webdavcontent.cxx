@@ -4,9 +4,9 @@
  *
  *  $RCSfile: webdavcontent.cxx,v $
  *
- *  $Revision: 1.55 $
+ *  $Revision: 1.56 $
  *
- *  last change: $Author: kz $ $Date: 2007-06-19 16:13:29 $
+ *  last change: $Author: rt $ $Date: 2007-07-03 12:14:36 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -461,14 +461,14 @@ Content::Content(
                 rxSMgr,
                 rSessionFactory,
                 Identifier->getContentIdentifier() ) );
+
+        NeonUri aURI( Identifier->getContentIdentifier() );
+        m_aEscapedTitle = aURI.GetPathBaseName();
     }
     catch ( DAVException const & )
     {
         throw ucb::ContentCreationException();
     }
-
-    NeonUri aURI( Identifier->getContentIdentifier() );
-    m_aEscapedTitle = aURI.GetPathBaseName();
 }
 
 //=========================================================================
@@ -1743,21 +1743,32 @@ uno::Sequence< uno::Any > Content::setPropertyValues(
                 // No empty titles!
                 if ( aNewValue.getLength() > 0 )
                 {
-                    NeonUri aURI( xIdentifier->getContentIdentifier() );
-                    aOldTitle = aURI.GetPathBaseNameUnescaped();
-
-                    if ( aNewValue != aOldTitle )
+                    try
                     {
-                        // modified title -> modified URL -> exchange !
-                        if ( !bTransient )
-                            bExchange = sal_True;
+                        NeonUri aURI( xIdentifier->getContentIdentifier() );
+                        aOldTitle = aURI.GetPathBaseNameUnescaped();
 
-                        // new value will be set later...
-                        aNewTitle = aNewValue;
+                        if ( aNewValue != aOldTitle )
+                        {
+                            // modified title -> modified URL -> exchange !
+                            if ( !bTransient )
+                                bExchange = sal_True;
 
-                        // remember position within sequence of values (for
-                        // error handling).
-                        nTitlePos = n;
+                            // new value will be set later...
+                            aNewTitle = aNewValue;
+
+                            // remember position within sequence of values (for
+                            // error handling).
+                            nTitlePos = n;
+                        }
+                    }
+                    catch ( DAVException const & )
+                    {
+                        aRet[ n ] <<= lang::IllegalArgumentException(
+                            rtl::OUString::createFromAscii(
+                                "Invalid content identifier!" ),
+                            static_cast< cppu::OWeakObject * >( this ),
+                            -1 );
                     }
                 }
                 else
@@ -2488,9 +2499,15 @@ void Content::insert(
                     }
                     else
                     {
-                        NeonUri aURI( aURL );
-                        const rtl::OUString aTitle
-                            = aURI.GetPathBaseNameUnescaped();
+                        rtl::OUString aTitle;
+                        try
+                        {
+                            NeonUri aURI( aURL );
+                            aTitle = aURI.GetPathBaseNameUnescaped();
+                        }
+                        catch ( DAVException const & )
+                        {
+                        }
 
                         ucbhelper::cancelCommandExecution(
                             uno::makeAny(
@@ -2567,11 +2584,13 @@ void Content::transfer(
         xResAccess.reset( new DAVResourceAccess( *m_xResAccess.get() ) );
     }
 
-    NeonUri sourceURI( rArgs.SourceURL );
-    NeonUri targetURI( xIdentifier->getContentIdentifier() );
-
+    rtl::OUString aTargetURI;
     try
     {
+        NeonUri sourceURI( rArgs.SourceURL );
+        NeonUri targetURI( xIdentifier->getContentIdentifier() );
+        aTargetURI = targetURI.GetPathBaseNameUnescaped();
+
         // Check source's and target's URL scheme
         //
         const rtl::OUString aScheme = sourceURI.GetScheme().toAsciiLowerCase();
@@ -2740,7 +2759,7 @@ void Content::transfer(
                                 rtl::OUString(),
                                 static_cast< cppu::OWeakObject * >( this ),
                                 task::InteractionClassification_ERROR,
-                                targetURI.GetPathBaseNameUnescaped() ) ),
+                                aTargetURI ) ),
                         Environment );
                     // Unreachable
                 }
