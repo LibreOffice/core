@@ -4,9 +4,9 @@
  *
  *  $RCSfile: optlingu.src,v $
  *
- *  $Revision: 1.48 $
+ *  $Revision: 1.49 $
  *
- *  last change: $Author: hr $ $Date: 2007-06-27 18:39:58 $
+ *  last change: $Author: rt $ $Date: 2007-07-03 14:28:33 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -111,14 +111,6 @@ ModalDialog RID_SVXDLG_EDIT_MODULES
         Text [ en-US ] = "~Back";
     };
 
-        Bitmap BMP_CHKBUT_UNCHECKED
-    {
-        File = "chkun.bmp" ;
-    };
-    Bitmap BMP_CHKBUT_CHECKED
-    {
-        File = "chkch.bmp" ;
-    };
     String ST_SPELL
     {
         Text [ en-US ] = "Spelling";
@@ -331,15 +323,6 @@ TabPage RID_SFXPAGE_LINGU
     String STR_HYPH_SPECIAL
     {
         Text [ en-US ] = "Hyphenate special regions";
-    };
-
-    Bitmap BMP_CHKBUT_UNCHECKED
-    {
-        File = "chkun.bmp" ;
-    };
-    Bitmap BMP_CHKBUT_CHECKED
-    {
-        File = "chkch.bmp" ;
     };
 };
 // end: TabPage RID_SFXPAGE_LINGU
