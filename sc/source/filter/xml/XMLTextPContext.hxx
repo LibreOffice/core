@@ -4,9 +4,9 @@
  *
  *  $RCSfile: XMLTextPContext.hxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 20:01:37 $
+ *  last change: $Author: rt $ $Date: 2007-07-03 15:53:40 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -52,7 +52,8 @@ class ScXMLTextPContext : public SvXMLImportContext
     SvXMLImportContext*         pTextPContext;
     ScXMLTableRowCellContext*   pCellContext;
     rtl::OUString               sLName;
-    rtl::OUStringBuffer         sOUText;
+    rtl::OUString               sSimpleContent;     // copy of the first Character call's argument
+    rtl::OUStringBuffer*        pContentBuffer;     // used if there's more than one string
     USHORT                      nPrefix;
     sal_Bool                    bIsOwn;
 
