@@ -4,9 +4,9 @@
  *
  *  $RCSfile: langbox.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: hr $ $Date: 2007-06-27 17:18:46 $
+ *  last change: $Author: rt $ $Date: 2007-07-03 14:01:31 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -366,7 +366,7 @@ USHORT SvxLanguageBox::InsertLanguage( const LanguageType nLangType, USHORT nPos
         nAt = InsertEntry( aStrEntry, nPos );
 
     SetEntryData( nAt, (void*)(ULONG)nLangType );
-    return nPos;
+    return nAt;
 }
 
 //------------------------------------------------------------------------
@@ -381,7 +381,7 @@ USHORT SvxLanguageBox::InsertLanguage( const LanguageType nLangType,
     USHORT nAt = ImplInsertImgEntry( aStrEntry, nPos, bCheckEntry );
     SetEntryData( nAt, (void*)(ULONG)nLangType );
 
-    return nPos;
+    return nAt;
 }
 
 //------------------------------------------------------------------------
