@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xlroot.cxx,v $
  *
- *  $Revision: 1.30 $
+ *  $Revision: 1.31 $
  *
- *  last change: $Author: vg $ $Date: 2007-02-27 12:29:28 $
+ *  last change: $Author: rt $ $Date: 2007-07-03 15:52:14 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -240,7 +240,7 @@ void XclRoot::SetTextEncoding( rtl_TextEncoding eTextEnc )
 void XclRoot::SetCharWidth( const XclFontData& rFontData )
 {
     mrData.mnCharWidth = 0;
-    if( SfxPrinter* pPrinter = GetPrinter() )
+    if( OutputDevice* pPrinter = GetPrinter() )
     {
         Font aFont( rFontData.maName, Size( 0, rFontData.mnHeight ) );
         aFont.SetFamily( rFontData.GetScFamily( GetTextEncoding() ) );
@@ -309,9 +309,9 @@ ScModelObj* XclRoot::GetDocModelObj() const
     return pDocShell ? ScModelObj::getImplementation( pDocShell->GetModel() ) : 0;
 }
 
-SfxPrinter* XclRoot::GetPrinter() const
+OutputDevice* XclRoot::GetPrinter() const
 {
-    return GetDoc().GetPrinter();
+    return GetDoc().GetRefDevice();
 }
 
 ScStyleSheetPool& XclRoot::GetStyleSheetPool() const
