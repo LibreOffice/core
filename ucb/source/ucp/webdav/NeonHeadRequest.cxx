@@ -4,9 +4,9 @@
  *
  *  $RCSfile: NeonHeadRequest.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: kz $ $Date: 2007-06-19 16:12:34 $
+ *  last change: $Author: rt $ $Date: 2007-07-03 12:13:05 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -54,10 +54,11 @@
 using namespace webdav_ucp;
 using namespace com::sun::star;
 
-#if NEON_VERSION >= 0250
-static void process_headers(ne_request *req,
-                            DAVResource &rResource,
-                            const std::vector< ::rtl::OUString > &rHeaderNames)
+namespace {
+
+void process_headers(ne_request *req,
+                     DAVResource &rResource,
+                     const std::vector< ::rtl::OUString > &rHeaderNames)
 {
     void *cursor = NULL;
     const char *name, *value;
@@ -103,70 +104,8 @@ static void process_headers(ne_request *req,
         }
     }
 }
-#else
-struct NeonHeadRequestContext
-{
-    DAVResource * pResource;
-    const std::vector< ::rtl::OUString > * pHeaderNames;
 
-    NeonHeadRequestContext( DAVResource * p,
-                            const std::vector< ::rtl::OUString > * pHeaders )
-    : pResource( p ), pHeaderNames( pHeaders ) {}
-};
-
-extern "C" void NHR_ResponseHeaderCatcher( void * userdata,
-                                           const char * value )
-{
-    rtl::OUString aHeader( rtl::OUString::createFromAscii( value ) );
-    sal_Int32 nPos = aHeader.indexOf( ':' );
-
-    if ( nPos != -1 )
-    {
-        rtl::OUString aHeaderName( aHeader.copy( 0, nPos ) );
-
-        NeonHeadRequestContext * pCtx
-            = static_cast< NeonHeadRequestContext * >( userdata );
-
-        // Note: Empty vector means that all headers are requested.
-        bool bIncludeIt = ( pCtx->pHeaderNames->size() == 0 );
-
-        if ( !bIncludeIt )
-        {
-            // Check whether this header was requested.
-            std::vector< ::rtl::OUString >::const_iterator it(
-                pCtx->pHeaderNames->begin() );
-            const std::vector< ::rtl::OUString >::const_iterator end(
-                pCtx->pHeaderNames->end() );
-
-            while ( it != end )
-            {
-                if ( (*it) == aHeaderName )
-                    break;
-
-                ++it;
-            }
-
-            if ( it != end )
-                bIncludeIt = true;
-        }
-
-        if ( bIncludeIt )
-        {
-            // Create & set the PropertyValue
-            DAVPropertyValue thePropertyValue;
-            thePropertyValue.Name = aHeaderName;
-            thePropertyValue.IsCaseSensitive = false;
-
-            if ( nPos < aHeader.getLength() )
-                thePropertyValue.Value <<= aHeader.copy( nPos + 1 ).trim();
-
-            // Add the newly created PropertyValue
-            pCtx->pResource->properties.push_back( thePropertyValue );
-        }
-    }
-}
-#endif
-
+} // namespace
 
 // -------------------------------------------------------------------
 // Constructor
@@ -190,16 +129,9 @@ NeonHeadRequest::NeonHeadRequest( HttpSession* inSession,
                                             inPath,
                                             RTL_TEXTENCODING_UTF8 ) );
 
-#if NEON_VERSION < 0250
-    NeonHeadRequestContext aCtx( &ioResource, &inHeaderNames );
-    ne_add_response_header_catcher( req, NHR_ResponseHeaderCatcher, &aCtx );
-#endif
-
     nError = ne_request_dispatch( req );
 
-#if NEON_VERSION >= 0250
     process_headers(req, ioResource, inHeaderNames);
-#endif
 
     if ( nError == NE_OK && ne_get_status( req )->klass != 2 )
         nError = NE_ERROR;
