@@ -2,6 +2,16 @@ News file for the dmake version that is hosted on the OpenOffice.org
 cvs. #i<number># denote issues tracked by the OpenOffice.org issue tracking
 system, see <http://qa.openoffice.org/issue_handling/project_issues.html>.
 
+Version 4.9
+===========
+
+Volker Quetschke (vq@openoffice.org)
+#i74700#  Add a new special macro OOODMAKEMODE that is used to toggle
+OOo build specific behavior. If OOODMAKEMODE is set (i.e. it begins with y)
+a possible leading ./ of a path will no longer be removed during target
+normalization.
+
+
 Version 4.8
 ===========
 
