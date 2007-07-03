@@ -4,9 +4,9 @@
  *
  *  $RCSfile: miscdlgs.src,v $
  *
- *  $Revision: 1.72 $
+ *  $Revision: 1.73 $
  *
- *  last change: $Author: ihi $ $Date: 2007-04-19 16:44:30 $
+ *  last change: $Author: rt $ $Date: 2007-07-03 15:54:52 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -206,7 +206,7 @@ ModalDialog RID_SCDLG_DELCONT
     {
         Pos = MAP_APPFONT ( 12 , 30 ) ;
         Size = MAP_APPFONT ( 83 , 10 ) ;
-        Text [ en-US ] = "~Strings" ;
+        Text [ en-US ] = "~Text" ;
         TabStop = TRUE ;
     };
     CheckBox BTN_DELNUMBERS
@@ -299,7 +299,7 @@ ModalDialog RID_SCDLG_INSCONT
     {
         Pos = MAP_APPFONT ( 12 , 30 ) ;
         Size = MAP_APPFONT ( 84 , 10 ) ;
-        Text [ en-US ] = "~Strings" ;
+        Text [ en-US ] = "Te~xt" ;
         TabStop = TRUE ;
     };
     CheckBox BTN_INSNUMBERS
