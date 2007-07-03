@@ -4,9 +4,9 @@
 #
 #   $RCSfile: version.mk,v $
 #
-#   $Revision: 1.2 $
+#   $Revision: 1.3 $
 #
-#   last change: $Author: kz $ $Date: 2007-05-10 13:03:24 $
+#   last change: $Author: rt $ $Date: 2007-07-03 12:10:10 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -36,9 +36,9 @@
 # the major
 NEON_MAJOR=0
 # the minor
-NEON_MINOR=24
+NEON_MINOR=26
 # the micro
-NEON_MICRO=7
+NEON_MICRO=3
 
 # concat
 NEON_VERSION=$(NEON_MAJOR)$(NEON_MINOR)$(NEON_MICRO)
