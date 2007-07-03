@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xlpage.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: kz $ $Date: 2006-07-21 12:19:14 $
+ *  last change: $Author: rt $ $Date: 2007-07-03 15:51:58 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -48,6 +48,9 @@
 #endif
 #ifndef _SVX_PAPERINF_HXX
 #include <svx/paperinf.hxx>
+#endif
+#ifndef _SV_SVAPP_HXX
+#include <vcl/svapp.hxx>
 #endif
 
 #ifndef SC_ITEMS_HXX
@@ -211,7 +214,7 @@ void XclPageData::SetDefaults()
     mbHorCenter = mbVerCenter = mbPrintHeadings = mbPrintGrid = false;
 }
 
-Size XclPageData::GetScPaperSize( SfxPrinter* pPrinter ) const
+Size XclPageData::GetScPaperSize() const
 {
     const XclPaperSize* pEntry = pPaperSizeTable;
     if( mnPaperSize < STATIC_TABLE_SIZE( pPaperSizeTable ) )
@@ -225,7 +228,8 @@ Size XclPageData::GetScPaperSize( SfxPrinter* pPrinter ) const
 
     // invalid size -> back to default
     if( !aSize.Width() || !aSize.Height() )
-        aSize = SvxPaperInfo::GetPaperSize( pPrinter );
+        aSize = SvxPaperInfo::GetPaperSize( SvxPaperInfo::GetDefaultSvxPaper(
+                                            Application::GetSettings().GetLanguage() ) );
 
     if( !mbPortrait )
         ::std::swap( aSize.Width(), aSize.Height() );
