@@ -4,9 +4,9 @@
  *
  *  $RCSfile: tp_3D_SceneGeometry.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: vg $ $Date: 2007-05-22 17:42:31 $
+ *  last change: $Author: rt $ $Date: 2007-07-03 13:39:43 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -89,19 +89,17 @@ public:
     // is called immediately when a field changes
     DECL_LINK( PerspectiveEdited, void* );
     DECL_LINK( PerspectiveToggled, void* );
+    DECL_LINK( RightAngledAxesToggled, void* );
 
 private:
     void fillDialogAnglesFromModel() const;
     void applyAnglesToModel();
     void applyPerspectiveToModel();
 
-    double CameraDistanceToPerspective( double fCameraDistance );
-    double PerspectiveToCameraDistance( double fPerspective );
-
-    void shiftAngleToValidRange( double& rfAngleDegree );
-
     ::com::sun::star::uno::Reference<
             ::com::sun::star::beans::XPropertySet > m_xSceneProperties;
+
+    CheckBox        m_aCbxRightAngledAxes;
 
     FixedText       m_aFtXRotation;
     MetricField     m_aMFXRotation;
@@ -114,6 +112,11 @@ private:
 
     CheckBox        m_aCbxPerspective;
     MetricField     m_aMFPerspective;
+
+    //to keep old values when switching to right angled axes
+    sal_Int64       m_nXRotation;
+    sal_Int64       m_nYRotation;
+    sal_Int64       m_nZRotation;
 
     bool            m_bAngleChangePending;
     bool            m_bPerspectiveChangePending;
