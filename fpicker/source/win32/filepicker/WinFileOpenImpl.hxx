@@ -4,9 +4,9 @@
  *
  *  $RCSfile: WinFileOpenImpl.hxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: obo $ $Date: 2006-10-12 10:49:31 $
+ *  last change: $Author: rt $ $Date: 2007-07-03 13:57:47 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -75,6 +75,10 @@
 
 #ifndef _CUSTOMCONTROLFACTORY_HXX_
 #include "customcontrolfactory.hxx"
+#endif
+
+#ifndef _RESOURCEPROVIDER_HXX_
+#include "..\misc\resourceprovider.hxx"
 #endif
 
 #include <utility>
@@ -261,6 +265,7 @@ private:
     CFilePickerState*                       m_FilePickerState;
     CExecuteFilePickerState*                m_ExecuteFilePickerState;
     CNonExecuteFilePickerState*             m_NonExecuteFilePickerState;
+    CResourceProvider                       m_ResProvider;
 };
 
 
