@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ImplChartModel.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: obo $ $Date: 2007-06-11 15:00:38 $
+ *  last change: $Author: rt $ $Date: 2007-07-03 13:43:15 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -49,6 +49,7 @@
 #include "ModifyListenerHelper.hxx"
 #include "DataSourceHelper.hxx"
 #include "DisposeHelper.hxx"
+#include "ThreeDHelper.hxx"
 
 // header for class SvNumberFormatter
 #ifndef _ZFORLIST_HXX
@@ -90,11 +91,17 @@
 #include <com/sun/star/util/XModifyBroadcaster.hpp>
 #endif
 
+#ifndef _COM_SUN_STAR_DRAWING_FILLSTYLE_HPP_
+#include <com/sun/star/drawing/FillStyle.hpp>
+#endif
 #ifndef _COM_SUN_STAR_DRAWING_HATCH_HPP_
 #include <com/sun/star/drawing/Hatch.hpp>
 #endif
 #ifndef _COM_SUN_STAR_DRAWING_LINEDASH_HPP_
 #include <com/sun/star/drawing/LineDash.hpp>
+#endif
+#ifndef _COM_SUN_STAR_DRAWING_LINESTYLE_HPP_
+#include <com/sun/star/drawing/LineStyle.hpp>
 #endif
 #ifndef _COM_SUN_STAR_AWT_GRADIENT_HPP_
 #include <com/sun/star/awt/Gradient.hpp>
@@ -492,7 +499,46 @@ void ImplChartModel::CreateDefaultChart()
             Reference< chart2::XLegend > xLegend(
                 m_xContext->getServiceManager()->createInstanceWithContext(
                     C2U( "com.sun.star.chart2.Legend" ), m_xContext ), uno::UNO_QUERY_THROW );
-            xDiagram->setLegend( xLegend );
+            Reference< beans::XPropertySet > xLegendProperties( xLegend, uno::UNO_QUERY );
+            if( xLegendProperties.is() )
+            {
+                xLegendProperties->setPropertyValue( C2U( "FillStyle" ), uno::makeAny( drawing::FillStyle_NONE ));
+                xLegendProperties->setPropertyValue( C2U( "LineStyle" ), uno::makeAny( drawing::LineStyle_NONE ));
+                xLegendProperties->setPropertyValue( C2U( "LineColor" ), uno::makeAny( static_cast< sal_Int32 >( 0xb3b3b3 ) ));  // gray30
+                xLegendProperties->setPropertyValue( C2U( "FillColor" ), uno::makeAny( static_cast< sal_Int32 >( 0xe6e6e6 ) ) ); // gray10
+            }
+            if(xDiagram.is())
+                xDiagram->setLegend( xLegend );
+
+            // set simple 3D look
+            Reference< beans::XPropertySet > xDiagramProperties( xDiagram, uno::UNO_QUERY );
+            if( xDiagramProperties.is() )
+            {
+                xDiagramProperties->setPropertyValue( C2U("RightAngledAxes"), uno::makeAny( sal_True ));
+                ThreeDHelper::setScheme( xDiagram, ThreeDLookScheme_Simple );
+            }
+
+            //set some new 'defaults' for wall and floor
+            if( xDiagram.is() )
+            {
+                Reference< beans::XPropertySet > xWall( xDiagram->getWall() );
+                if( xWall.is() )
+                {
+                    xWall->setPropertyValue( C2U( "LineStyle" ), uno::makeAny( drawing::LineStyle_SOLID ) );
+                    xWall->setPropertyValue( C2U( "FillStyle" ), uno::makeAny( drawing::FillStyle_NONE ) );
+                    xWall->setPropertyValue( C2U( "LineColor" ), uno::makeAny( static_cast< sal_Int32 >( 0xb3b3b3 ) ) ); // gray30
+                    xWall->setPropertyValue( C2U( "FillColor" ), uno::makeAny( static_cast< sal_Int32 >( 0xe6e6e6 ) ) ); // gray10
+                }
+                Reference< beans::XPropertySet > xFloor( xDiagram->getFloor() );
+                if( xFloor.is() )
+                {
+                    xFloor->setPropertyValue( C2U( "LineStyle" ), uno::makeAny( drawing::LineStyle_NONE ) );
+                    xFloor->setPropertyValue( C2U( "FillStyle" ), uno::makeAny( drawing::FillStyle_SOLID ) );
+                    xFloor->setPropertyValue( C2U( "LineColor" ), uno::makeAny( static_cast< sal_Int32 >( 0xb3b3b3 ) ) ); // gray30
+                    xFloor->setPropertyValue( C2U( "FillColor" ), uno::makeAny( static_cast< sal_Int32 >( 0xcccccc ) ) ); // gray20
+                }
+
+            }
         }
         catch( uno::Exception & ex )
         {
