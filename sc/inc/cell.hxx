@@ -4,9 +4,9 @@
  *
  *  $RCSfile: cell.hxx,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: obo $ $Date: 2007-06-13 09:04:21 $
+ *  last change: $Author: rt $ $Date: 2007-07-03 15:45:51 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -576,7 +576,7 @@ inline ScStringCell::ScStringCell( const ScStringCell& rScStringCell, ScDocument
 
 inline ScStringCell::ScStringCell( const String& rString ) :
     ScBaseCell( CELLTYPE_STRING ),
-    aString( rString )
+    aString( rString.intern() )
 {
 }
 
