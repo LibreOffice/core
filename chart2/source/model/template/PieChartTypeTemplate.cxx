@@ -4,9 +4,9 @@
  *
  *  $RCSfile: PieChartTypeTemplate.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: vg $ $Date: 2007-05-22 18:51:11 $
+ *  last change: $Author: rt $ $Date: 2007-07-03 13:43:43 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -46,6 +46,7 @@
 #include "ContainerHelper.hxx"
 #include "BaseGFXHelper.hxx"
 #include "AxisHelper.hxx"
+#include "ThreeDHelper.hxx"
 
 #ifndef CHART_PROPERTYHELPER_HXX
 #include "PropertyHelper.hxx"
@@ -609,29 +610,6 @@ void SAL_CALL PieChartTypeTemplate::resetStyles( const Reference< chart2::XDiagr
 
     ChartTypeTemplate::resetStyles( xDiagram );
 
-    // reset wall filling
-    drawing::FillStyle aFillStyle;
-    Reference< beans::XPropertySet > xWallProp( xDiagram->getWall());
-    if( xWallProp.is())
-    {
-        if( ( xWallProp->getPropertyValue(C2U("FillStyle")) >>= aFillStyle ) &&
-            aFillStyle == drawing::FillStyle_NONE )
-        {
-            xWallProp->setPropertyValue( C2U("FillStyle"), uno::makeAny( drawing::FillStyle_SOLID ));
-        }
-    }
-
-    // reset floor filling
-    Reference< beans::XPropertySet > xFloorProp( xDiagram->getFloor());
-    if( xFloorProp.is())
-    {
-        if( ( xFloorProp->getPropertyValue(C2U("FillStyle")) >>= aFillStyle ) &&
-            aFillStyle == drawing::FillStyle_NONE )
-        {
-            xFloorProp->setPropertyValue( C2U("FillStyle"), uno::makeAny( drawing::FillStyle_SOLID ));
-        }
-    }
-
     // vary colors by point,
     // line style
     ::std::vector< Reference< chart2::XDataSeries > > aSeriesVec(
@@ -660,7 +638,7 @@ void SAL_CALL PieChartTypeTemplate::resetStyles( const Reference< chart2::XDiagr
     Reference< beans::XPropertySet > xDiagramProp( xDiagram, uno::UNO_QUERY );
     if( xDiagramProp.is() )
     {
-        drawing::CameraGeometry aCameraGeo( DiagramHelper::getDefaultCameraGeometry( false ) );
+        drawing::CameraGeometry aCameraGeo( ThreeDHelper::getDefaultCameraGeometry( false ) );
         xDiagramProp->setPropertyValue( C2U("D3DCameraGeometry"), uno::makeAny( aCameraGeo ));
 
         ::basegfx::B3DHomMatrix aSceneRotation;
@@ -680,26 +658,13 @@ void PieChartTypeTemplate::adaptDiagram( const uno::Reference< chart2::XDiagram 
     {
         //different default for scene geometry:
         {
-            drawing::CameraGeometry aCameraGeo( DiagramHelper::getDefaultCameraGeometry( true ) );
+            drawing::CameraGeometry aCameraGeo( ThreeDHelper::getDefaultCameraGeometry( true ) );
             xProp->setPropertyValue( C2U("D3DCameraGeometry"), uno::makeAny( aCameraGeo ));
 
             ::basegfx::B3DHomMatrix aSceneRotation;
             aSceneRotation.rotate( -F_PI/3.0, 0, 0 );
             xProp->setPropertyValue( C2U("D3DTransformMatrix"),
                 uno::makeAny( BaseGFXHelper::B3DHomMatrixToHomogenMatrix( aSceneRotation )));
-        }
-
-        // remove wall filling
-        Reference< beans::XPropertySet > xWallProp( xDiagram->getWall());
-        if( xWallProp.is())
-            xWallProp->setPropertyValue( C2U("FillStyle"), uno::makeAny( drawing::FillStyle_NONE ));
-
-        // remove floor filling
-        if( getDimension() == 3 )
-        {
-            Reference< beans::XPropertySet > xFloorProp( xDiagram->getFloor());
-            if( xFloorProp.is())
-                xFloorProp->setPropertyValue( C2U("FillStyle"), uno::makeAny( drawing::FillStyle_NONE ));
         }
     }
 }
