@@ -1,13 +1,12 @@
-#include <stdio.h>
 /*************************************************************************
  *
  *  OpenOffice.org - a multi-platform office productivity suite
  *
  *  $RCSfile: image.cxx,v $
  *
- *  $Revision: 1.31 $
+ *  $Revision: 1.32 $
  *
- *  last change: $Author: hr $ $Date: 2007-06-27 20:14:13 $
+ *  last change: $Author: rt $ $Date: 2007-07-03 14:05:24 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -575,7 +574,7 @@ void ImageAryData::Load(const rtl::OUString &rPrefix)
 
     rtl::OUString aFileName = rPrefix;
     aFileName += maName;
-#ifdef DEBUG
+#ifdef DBG_UTIL
     bool bSuccess = aImageTree->loadImage( aFileName, aSymbolsStyle, maBitmapEx, true );
     DBG_ASSERT (bSuccess, "ImageAryData::Failed to load image");
 #else
@@ -668,11 +667,14 @@ void ImageList::InsertFromHorizontalBitmap( const ResId& rResId,
                                             const Color *pReplaceColors,
                                             ULONG        nColorCount)
 {
-//  fprintf (stderr, "InsertFromHorizontalBitmap\n");
-
     BitmapEx aBmpEx( rResId );
-    if ( !aBmpEx.IsTransparent() && pMaskColor )
-        aBmpEx = BitmapEx( aBmpEx.GetBitmap(), *pMaskColor );
+    if (!aBmpEx.IsTransparent())
+    {
+        if( pMaskColor )
+            aBmpEx = BitmapEx( aBmpEx.GetBitmap(), *pMaskColor );
+        else
+            aBmpEx = BitmapEx( aBmpEx.GetBitmap() );
+    }
     if ( nColorCount && pSearchColors && pReplaceColors )
         aBmpEx.Replace( pSearchColors, pReplaceColors, nColorCount );
 
@@ -967,7 +969,11 @@ void ImageList::GetImageNames( ::std::vector< ::rtl::OUString >& rNames ) const
     if( mpImplData )
     {
         for( sal_uInt32 i = 0; i < mpImplData->maImages.size(); i++ )
-            rNames.push_back( mpImplData->maImages[ i ]->maName );
+        {
+            const rtl::OUString& rName( mpImplData->maImages[ i ]->maName );
+            if( rName.getLength() != 0 )
+                rNames.push_back( rName );
+        }
     }
 }
 
