@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.92 $
+#   $Revision: 1.93 $
 #
-#   last change: $Author: obo $ $Date: 2007-06-13 09:36:16 $
+#   last change: $Author: rt $ $Date: 2007-07-03 14:08:50 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -194,11 +194,10 @@ SHL1OBJS=   $(SLO)$/salshl.obj
 .ENDIF
 .ENDIF
 
-.IF "$(GUI)" != "MAC"
 .IF "$(GUI)" != "UNX"
 SHL1RES=    $(RES)$/salsrc.res
 .ENDIF
-.ENDIF
+
 SHL1DEF=    $(MISC)$/$(SHL1TARGET).def
 
 DEF1NAME    =$(SHL1TARGET)
