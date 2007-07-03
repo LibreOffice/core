@@ -4,9 +4,9 @@
  *
  *  $RCSfile: documen8.cxx,v $
  *
- *  $Revision: 1.47 $
+ *  $Revision: 1.48 $
  *
- *  last change: $Author: kz $ $Date: 2007-05-10 16:43:57 $
+ *  last change: $Author: rt $ $Date: 2007-07-03 15:47:40 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -499,7 +499,8 @@ void ScDocument::InvalidateTextWidth( const ScAddress* pAdrFrom, const ScAddress
 
 BOOL ScDocument::IdleCalcTextWidth()            // TRUE = demnaechst wieder versuchen
 {
-    if ( bIdleDisabled || IsInLinkUpdate() )
+    // #i75610# if a printer hasn't been set or created yet, don't create one for this
+    if ( bIdleDisabled || IsInLinkUpdate() || GetPrinter(FALSE) == NULL )
         return FALSE;
     bIdleDisabled = TRUE;
 
