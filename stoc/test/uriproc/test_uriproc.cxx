@@ -4,9 +4,9 @@
  *
  *  $RCSfile: test_uriproc.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: obo $ $Date: 2007-03-12 10:56:34 $
+ *  last change: $Author: rt $ $Date: 2007-07-03 14:19:05 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -855,47 +855,43 @@ void Test::testTranslator() {
     struct Data {
         char const * externalUriReference;
         char const * internalUriReference;
+        bool toInternal;
     };
     Data data[] = {
-        { "", "" },
-        { "#fragment", "#fragment" },
-        { "segment/segment?query#fragment", "segment/segment?query#fragment" },
-        { "/segment/segment?query#fragment",
-          "/segment/segment?query#fragment" },
+        { "", "", true },
+        { "#fragment", "#fragment", true },
+        { "segment/segment?query#fragment", "segment/segment?query#fragment",
+          true },
+        { "/segment/segment?query#fragment", "/segment/segment?query#fragment",
+          true },
         { "//authority/segment?query#fragment",
-          "//authority/segment?query#fragment" },
-        { "foo:bar#fragment", "foo:bar#fragment" },
-        { "file:///abc/def", "file:///abc/def" },
-        { 0, "file:///abc/%FEef" },
-        { 0, "file:///abc/%80%80ef" },
-        { 0, "file:///abc/%ED%A0%80%ED%B0%80ef" } };
+          "//authority/segment?query#fragment", true },
+        { "foo:bar#fragment", "foo:bar#fragment", true },
+        { "file:///abc/def", "file:///abc/def", true },
+        { "file:///abc/%FEef", "file:///abc/%feef", false },
+        { "file:///abc/%80%80ef", "file:///abc/%80%80ef", false },
+        { "file:///abc/%ED%A0%80%ED%B0%80ef",
+          "file:///abc/%ED%A0%80%ED%B0%80ef", false },
+        { "file:///abc/%25.ef", "file:///abc/%.ef", false },
+        { "file:///abc/%25ef", "file:///abc/%25ef", true } };
     css::uno::Reference< css::uri::XExternalUriReferenceTranslator >
         translator(css::uri::ExternalUriReferenceTranslator::create(m_context));
     for (std::size_t i = 0; i < sizeof data / sizeof data[0]; ++i) {
-        if (data[i].externalUriReference != 0) {
+        if (data[i].toInternal) {
             TEST_ASSERT_EQUAL(
                 "testTranslator, translateToInternal", i,
                 data[i].externalUriReference,
-                (data[i].internalUriReference == 0
-                 ? rtl::OUString()
-                 : rtl::OUString::createFromAscii(
-                     data[i].internalUriReference)),
+                rtl::OUString::createFromAscii(data[i].internalUriReference),
                 translator->translateToInternal(
                     rtl::OUString::createFromAscii(
                         data[i].externalUriReference)));
         }
-        if (data[i].internalUriReference != 0) {
-            TEST_ASSERT_EQUAL(
-                "testTranslator, translateToExternal", i,
-                data[i].internalUriReference,
-                (data[i].externalUriReference == 0
-                 ? rtl::OUString()
-                 : rtl::OUString::createFromAscii(
-                     data[i].externalUriReference)),
-                translator->translateToExternal(
-                    rtl::OUString::createFromAscii(
-                        data[i].internalUriReference)));
-        }
+        TEST_ASSERT_EQUAL(
+            "testTranslator, translateToExternal", i,
+            data[i].internalUriReference,
+            rtl::OUString::createFromAscii(data[i].externalUriReference),
+            translator->translateToExternal(
+                rtl::OUString::createFromAscii(data[i].internalUriReference)));
     }
 }
 
