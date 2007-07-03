@@ -4,9 +4,9 @@
  *
  *  $RCSfile: outdev3.cxx,v $
  *
- *  $Revision: 1.228 $
+ *  $Revision: 1.229 $
  *
- *  last change: $Author: hr $ $Date: 2007-06-27 20:19:25 $
+ *  last change: $Author: rt $ $Date: 2007-07-03 14:05:45 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1239,7 +1239,7 @@ Font OutputDevice::GetDefaultFont( USHORT nType, LanguageType eLang,
     case DEFAULTFONT_CTL_HEADING:   s = "DEFAULTFONT_CTL_HEADING"; break;
     case DEFAULTFONT_CTL_DISPLAY:   s = "DEFAULTFONT_CTL_DISPLAY"; break;
     }
-    fprintf( stderr, "   OutputDevice::GetDefaultFont() Type=\"%s\" lang=%d flags=%d FontName=\"%s\"\n",
+    fprintf( stderr, "   OutputDevice::GetDefaultFont() Type=\"%s\" lang=%d flags=%ld FontName=\"%s\"\n",
          s, eLang, nFlags,
          OUStringToOString( aFont.GetName(), RTL_TEXTENCODING_UTF8 ).getStr()
          );
@@ -5213,7 +5213,7 @@ void OutputDevice::SetFont( const Font& rNewFont )
     }
 
 #if (OSL_DEBUG_LEVEL > 2) || defined (HDU_DEBUG)
-    fprintf( stderr, "   OutputDevice::SetFont( name=\"%s\", h=%d)\n",
+    fprintf( stderr, "   OutputDevice::SetFont( name=\"%s\", h=%ld)\n",
          OUStringToOString( aFont.GetName(), RTL_TEXTENCODING_UTF8 ).getStr(),
          aFont.GetSize().Height() );
 #endif
