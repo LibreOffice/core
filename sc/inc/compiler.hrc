@@ -4,9 +4,9 @@
  *
  *  $RCSfile: compiler.hrc,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: hr $ $Date: 2007-06-27 13:41:27 $
+ *  last change: $Author: rt $ $Date: 2007-07-03 15:46:06 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -36,25 +36,24 @@
 #ifndef SC_COMPILER_HRC
 #define SC_COMPILER_HRC
 
-/* zentrale Definition der OpCodes fuer StarCalc-Funktionen */
-/* rj 15.07.96 */
+/* Central definition of OpCodes for spreadsheet functions */
 
-/*** Spezielle Kommandos ***/
-#define SC_OPCODE_PUSH                0     /* interne Kommandos */
+/*** Special commands ***/
+#define SC_OPCODE_PUSH                0     /* internal commands */
 #define SC_OPCODE_JUMP                1
 #define SC_OPCODE_STOP                2
 #define SC_OPCODE_EXTERNAL            3
 #define SC_OPCODE_NAME                4
-#define SC_OPCODE_IF                  5     /* Sprung Kommandos */
+#define SC_OPCODE_IF                  5     /* jump commands */
 #define SC_OPCODE_CHOSE               6
-#define SC_OPCODE_OPEN                7     /* Klammern und Seps */
+#define SC_OPCODE_OPEN                7     /* parentheses and separators */
 #define SC_OPCODE_CLOSE               8
 #define SC_OPCODE_SEP                 9
-#define SC_OPCODE_MISSING            10     /* Spezial-Opcodes */
+#define SC_OPCODE_MISSING            10     /* special OpCodes */
 #define SC_OPCODE_BAD                11
 #define SC_OPCODE_SPACES             12
 #define SC_OPCODE_MAT_REF            13
-#define SC_OPCODE_DB_AREA            14     /* weitere Zugriffs-Operanden */
+#define SC_OPCODE_DB_AREA            14     /* additional access operators */
 #define SC_OPCODE_MACRO              15
 #define SC_OPCODE_COL_ROW_NAME       16
 #define SC_OPCODE_COL_ROW_NAME_AUTO  17
@@ -65,7 +64,7 @@
 #define SC_OPCODE_ARRAY_COL_SEP      22     /* some convs use sep != col_sep */
 #define SC_OPCODE_END_DIV            23
 
-/*** Binaere Operatoren ***/
+/*** Binary operators ***/
 #define SC_OPCODE_ADD                25
 #define SC_OPCODE_SUB                26
 #define SC_OPCODE_MUL                27
@@ -85,13 +84,13 @@
 #define SC_OPCODE_RANGE              41
 #define SC_OPCODE_END_BIN_OP         44
 
-/*** Unaere Operatoren ***/
+/*** Unary operators ***/
 #define SC_OPCODE_NOT                45
 #define SC_OPCODE_NEG                46
 #define SC_OPCODE_NEG_SUB            47
 #define SC_OPCODE_END_UN_OP          48
 
-/*** Funktionen ohne Parameter ***/
+/*** Functions without parameters ***/
 #define SC_OPCODE_PI                 50
 #define SC_OPCODE_RANDOM             51
 #define SC_OPCODE_TRUE               52
@@ -102,8 +101,8 @@
 #define SC_OPCODE_CURRENT            57
 #define SC_OPCODE_END_NO_PAR         60
 
-/*** Funktionen mit einem Parameter ***/
-#define SC_OPCODE_DEG                61     /* Trigonometrie */
+/*** Functions with one parameter ***/
+#define SC_OPCODE_DEG                61     /* trigonometric */
 #define SC_OPCODE_RAD                62
 #define SC_OPCODE_SIN                63
 #define SC_OPCODE_COS                64
@@ -117,7 +116,7 @@
 #define SC_OPCODE_COS_HYP            72
 #define SC_OPCODE_TAN_HYP            73
 #define SC_OPCODE_COT_HYP            74
-#define SC_OPCODE_ARC_SIN_HYP        75     /* transzendente */
+#define SC_OPCODE_ARC_SIN_HYP        75     /* transcendent */
 #define SC_OPCODE_ARC_COS_HYP        76
 #define SC_OPCODE_ARC_TAN_HYP        77
 #define SC_OPCODE_ARC_COT_HYP        78
@@ -125,18 +124,18 @@
 #define SC_OPCODE_LN                 80
 #define SC_OPCODE_SQRT               81
 #define SC_OPCODE_FACT               82
-#define SC_OPCODE_GET_YEAR           83     /* Datum und Uhrzeit */
+#define SC_OPCODE_GET_YEAR           83     /* date and time */
 #define SC_OPCODE_GET_MONTH          84
 #define SC_OPCODE_GET_DAY            85
 #define SC_OPCODE_GET_HOUR           86
 #define SC_OPCODE_GET_MIN            87
 #define SC_OPCODE_GET_SEC            88
-#define SC_OPCODE_PLUS_MINUS         89     /* diverse */
+#define SC_OPCODE_PLUS_MINUS         89     /* miscellaneous */
 #define SC_OPCODE_ABS                90
 #define SC_OPCODE_INT                91
 #define SC_OPCODE_PHI                92
 #define SC_OPCODE_GAUSS              93
-#define SC_OPCODE_IS_EMPTY           94     /* Feldtyp abfragen */
+#define SC_OPCODE_IS_EMPTY           94     /* obtain type */
 #define SC_OPCODE_IS_STRING          95
 #define SC_OPCODE_IS_NON_STRING      96
 #define SC_OPCODE_IS_LOGICAL         97
@@ -150,7 +149,7 @@
 #define SC_OPCODE_IS_EVEN           105
 #define SC_OPCODE_IS_ODD            106
 #define SC_OPCODE_N                 107
-#define SC_OPCODE_GET_DATE_VALUE    108     /* String-Funktionen */
+#define SC_OPCODE_GET_DATE_VALUE    108     /* string functions */
 #define SC_OPCODE_GET_TIME_VALUE    109
 #define SC_OPCODE_CODE              110
 #define SC_OPCODE_TRIM              111
@@ -158,7 +157,7 @@
 #define SC_OPCODE_PROPPER           113
 #define SC_OPCODE_LOWER             114
 #define SC_OPCODE_LEN               115
-#define SC_OPCODE_T                 116     /* diverse, Teil 2 */
+#define SC_OPCODE_T                 116     /* miscellaneous, part 2 */
 #define SC_OPCODE_VALUE             117
 #define SC_OPCODE_CLEAN             118
 #define SC_OPCODE_CHAR              119
@@ -176,9 +175,11 @@
 #define SC_OPCODE_ARABIC            131
 #define SC_OPCODE_INFO              132
 #define SC_OPCODE_BAHTTEXT          133
+#define SC_OPCODE_JIS               134
+#define SC_OPCODE_ASC               135
 #define SC_OPCODE_END_1_PAR         200
 
-/*** Funktionen mit mehreren Parametern ***/
+/*** Functions with more than one p[arameters ***/
 #define SC_OPCODE_ARC_TAN_2         201
 #define SC_OPCODE_CEIL              202
 #define SC_OPCODE_FLOOR             203
@@ -244,8 +245,8 @@
 #define SC_OPCODE_KUM_KAP_Z         263
 #define SC_OPCODE_EFFEKTIV          264
 #define SC_OPCODE_NOMINAL           265
-#define SC_OPCODE_SUB_TOTAL         266     /* Spezialfunktion fuer Teilergebnisse */
-#define SC_OPCODE_DB_SUM            267     /* Datenbankfunktionen */
+#define SC_OPCODE_SUB_TOTAL         266
+#define SC_OPCODE_DB_SUM            267     /* database functions */
 #define SC_OPCODE_DB_COUNT          268
 #define SC_OPCODE_DB_COUNT_2        269
 #define SC_OPCODE_DB_AVERAGE        270
@@ -257,7 +258,7 @@
 #define SC_OPCODE_DB_STD_DEV_P      276
 #define SC_OPCODE_DB_VAR            277
 #define SC_OPCODE_DB_VAR_P          278
-#define SC_OPCODE_INDIRECT          279     /* Verwaltungsfunktionen */
+#define SC_OPCODE_INDIRECT          279     /* management functions */
 #define SC_OPCODE_ADDRESS           280
 #define SC_OPCODE_MATCH             281
 #define SC_OPCODE_COUNT_EMPTY_CELLS 282
@@ -270,7 +271,7 @@
 #define SC_OPCODE_OFFSET            289
 #define SC_OPCODE_INDEX             290
 #define SC_OPCODE_AREAS             291
-#define SC_OPCODE_CURRENCY          292     /* String-Funktionen */
+#define SC_OPCODE_CURRENCY          292     /* string functions */
 #define SC_OPCODE_REPLACE           293
 #define SC_OPCODE_FIXED             294
 #define SC_OPCODE_FIND              295
@@ -283,14 +284,14 @@
 #define SC_OPCODE_SUBSTITUTE        302
 #define SC_OPCODE_REPT              303
 #define SC_OPCODE_CONCAT            304
-#define SC_OPCODE_MAT_VALUE         305     /* Matrix-Funktionen */
+#define SC_OPCODE_MAT_VALUE         305     /* matrix functions */
 #define SC_OPCODE_MAT_DET           306
 #define SC_OPCODE_MAT_INV           307
 #define SC_OPCODE_MAT_MULT          308
 #define SC_OPCODE_MAT_TRANS         309
 #define SC_OPCODE_MATRIX_UNIT       310
 #define SC_OPCODE_BACK_SOLVER       311     /* BackSolver */
-#define SC_OPCODE_HYP_GEOM_DIST     312     /* Statistik-Funktionen */
+#define SC_OPCODE_HYP_GEOM_DIST     312     /* statistical functions */
 #define SC_OPCODE_LOG_NORM_DIST     313
 #define SC_OPCODE_T_DIST            314
 #define SC_OPCODE_F_DIST            315
@@ -343,7 +344,7 @@
 #define SC_OPCODE_TABLE_OP          362
 #define SC_OPCODE_BETA_DIST         363
 #define SC_OPCODE_BETA_INV          364
-#define SC_OPCODE_WEEK              365     /* sonstige */
+#define SC_OPCODE_WEEK              365     /* miscellaneous */
 #define SC_OPCODE_GET_DAY_OF_WEEK   366
 #define SC_OPCODE_NO_NAME           367
 #define SC_OPCODE_STYLE             368
@@ -382,7 +383,7 @@
 #define SC_OPCODE_ANSWER           9999
 #define SC_OPCODE_INTERNAL_END     9999
 
-/*** ab hier sind Extradaten drin **/
+/*** from here on ExtraData contained ***/
 #define SC_OPCODE_DATA_TOKEN_1    10000
 
 #define SC_OPCODE_NONE           0xFFFF
