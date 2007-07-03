@@ -4,9 +4,9 @@
  *
  *  $RCSfile: DragMethod_RotateDiagram.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: vg $ $Date: 2007-05-22 18:07:57 $
+ *  last change: $Author: rt $ $Date: 2007-07-03 13:40:41 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -42,6 +42,8 @@
 #include "ChartModelHelper.hxx"
 #include "macros.hxx"
 #include "DiagramHelper.hxx"
+#include "ChartTypeHelper.hxx"
+#include "ThreeDHelper.hxx"
 
 #ifndef _SDR_OVERLAY_OVERLAYPOLYPOLYGON_HXX
 #include <svx/sdr/overlay/overlaypolypolygon.hxx>
@@ -89,6 +91,7 @@ DragMethod_RotateDiagram::DragMethod_RotateDiagram( DrawViewWrapper& rDrawViewWr
     , m_fAdditionalYAngleRad(0.0)
     , m_fAdditionalZAngleRad(0.0)
     , m_eRotationDirection(eRotationDirection)
+    , m_bRightAngledAxes(sal_False)
 {
     m_pScene = SelectionHelper::getSceneToRotate( rDrawViewWrapper.getNamedSdrObject( rObjectCID ) );
     SdrObject* pObj = rDrawViewWrapper.getSelectedObject();
@@ -99,9 +102,22 @@ DragMethod_RotateDiagram::DragMethod_RotateDiagram( DrawViewWrapper& rDrawViewWr
 
         m_pScene->CreateWireframe(m_aWireframePoly, NULL );
 
-        DiagramHelper::getRotationAngleFromDiagram(
-                uno::Reference< beans::XPropertySet >( ChartModelHelper::findDiagram( this->getChartModel() ), uno::UNO_QUERY )
+        uno::Reference< chart2::XDiagram > xDiagram( ChartModelHelper::findDiagram(this->getChartModel()) );
+        uno::Reference< beans::XPropertySet > xDiagramProperties( xDiagram, uno::UNO_QUERY );
+        if( xDiagramProperties.is() )
+        {
+            ThreeDHelper::getRotationAngleFromDiagram( xDiagramProperties
                 , m_fInitialXAngleRad, m_fInitialYAngleRad, m_fInitialZAngleRad );
+            if( ChartTypeHelper::isSupportingRightAngledAxes(
+                DiagramHelper::getChartTypeByIndex( xDiagram, 0 ) ) )
+                xDiagramProperties->getPropertyValue(C2U( "RightAngledAxes" )) >>= m_bRightAngledAxes;
+            if(m_bRightAngledAxes)
+            {
+                if( m_eRotationDirection==ROTATIONDIRECTION_Z )
+                    m_eRotationDirection=ROTATIONDIRECTION_FREE;
+                ThreeDHelper::adaptRadAnglesForRightAngledAxes( m_fInitialXAngleRad, m_fInitialYAngleRad );
+            }
+        }
     }
 }
 DragMethod_RotateDiagram::~DragMethod_RotateDiagram()
@@ -163,9 +179,18 @@ void DragMethod_RotateDiagram::CreateOverlayGeometry(::sdr::overlay::OverlayMana
     aCurrentTransform.translate( -FIXED_SIZE_FOR_3D_CHART_VOLUME/2.0,
                                  -FIXED_SIZE_FOR_3D_CHART_VOLUME/2.0,
                                  -FIXED_SIZE_FOR_3D_CHART_VOLUME/2.0 );
-    aCurrentTransform.rotate( m_fInitialXAngleRad + m_fAdditionalXAngleRad
-                            , m_fInitialYAngleRad + m_fAdditionalYAngleRad
-                            , m_fInitialZAngleRad + m_fAdditionalZAngleRad );
+
+    double fResultX = m_fInitialXAngleRad + m_fAdditionalXAngleRad;
+    double fResultY = m_fInitialYAngleRad + m_fAdditionalYAngleRad;
+    double fResultZ = m_fInitialZAngleRad + m_fAdditionalZAngleRad;
+
+    if(!m_bRightAngledAxes)
+        aCurrentTransform.rotate( fResultX, fResultY, fResultZ );
+    else
+    {
+        ThreeDHelper::adaptRadAnglesForRightAngledAxes( fResultX, fResultY );
+        aCurrentTransform.shearXY(fResultY,-(fResultX));
+    }
 
     const sal_uInt32 nPntCnt(m_aWireframePoly.count());
      if(nPntCnt > 1L && m_pScene)
@@ -193,8 +218,16 @@ void DragMethod_RotateDiagram::CreateOverlayGeometry(::sdr::overlay::OverlayMana
 FASTBOOL DragMethod_RotateDiagram::End(FASTBOOL bCopy)
 {
     Hide();
-    DiagramHelper::setRotationAngleToDiagram( uno::Reference< beans::XPropertySet >( ChartModelHelper::findDiagram( this->getChartModel() ), uno::UNO_QUERY )
-        , m_fInitialXAngleRad + m_fAdditionalXAngleRad, m_fInitialYAngleRad + m_fAdditionalYAngleRad, m_fInitialZAngleRad + m_fAdditionalZAngleRad );
+
+    double fResultX = m_fInitialXAngleRad + m_fAdditionalXAngleRad;
+    double fResultY = m_fInitialYAngleRad + m_fAdditionalYAngleRad;
+    double fResultZ = m_fInitialZAngleRad + m_fAdditionalZAngleRad;
+
+    if(m_bRightAngledAxes)
+        ThreeDHelper::adaptRadAnglesForRightAngledAxes( fResultX, fResultY );
+
+    ThreeDHelper::setRotationAngleToDiagram( uno::Reference< beans::XPropertySet >( ChartModelHelper::findDiagram( this->getChartModel() ), uno::UNO_QUERY )
+        , fResultX, fResultY, fResultZ );
 
     return true;
 }
