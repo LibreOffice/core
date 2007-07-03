@@ -4,9 +4,9 @@
  *
  *  $RCSfile: lang.h,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: ihi $ $Date: 2006-12-19 18:03:57 $
+ *  last change: $Author: rt $ $Date: 2007-07-03 14:02:28 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -476,5 +476,12 @@ typedef unsigned short LanguageType;
 #define LANGUAGE_USER_GASCON                0x0636  /* Gascon France */
 #define LANGUAGE_USER_GERMAN_BELGIUM        0x8007  /* makeLangID( 0x20, getPrimaryLanguage( LANGUAGE_GERMAN)) */
 #define LANGUAGE_USER_CATALAN_VALENCIAN     0x8003  /* makeLangID( 0x20, getPrimaryLanguage( LANGUAGE_CATALAN)) */
+#define LANGUAGE_USER_HAUSA_GHANA           0x8068  /* makeLangID( 0x20, getPrimaryLanguage( LANGUAGE_HAUSA_NIGERIA)) */
+#define LANGUAGE_USER_EWE_GHANA             0x0637
+#define LANGUAGE_USER_ENGLISH_GHANA         0x8409  /* makeLangID( 0x21, getPrimaryLanguage( LANGUAGE_ENGLISH_US)) */
+#define LANGUAGE_USER_TAGALOG               0x0638
+#define LANGUAGE_USER_LINGALA_DRCONGO       0x0639
+#define LANGUAGE_USER_SANGO                 0x063A
+#define LANGUAGE_USER_GANDA                 0x063B
 
 #endif /* INCLUDED_I18NPOOL_LANG_H */
