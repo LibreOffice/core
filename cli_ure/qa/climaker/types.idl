@@ -4,9 +4,9 @@
  *
  *  $RCSfile: types.idl,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2006-03-09 10:50:25 $
+ *  last change: $Author: hr $ $Date: 2007-07-03 09:32:35 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -290,6 +290,32 @@ struct Struct2 {
     sequence< SequenceStruct > at16;
     sequence< SequenceXInterface > at17;
     sequence< SequenceXNamingService > at18;
+};
+
+struct Struct3
+{
+    XTest iTest;
+};
+
+struct Struct4: Struct3
+{
+    long n;
+};
+
+struct Struct5
+{
+    Struct3 m;
+    Struct4 n;
+};
+
+struct Struct6
+{
+    Struct4 m;
+};
+
+struct Struct7
+{
+    sequence<sequence<Struct6> > seqseqStruct6;
 };
 
 service S1: XTest {
