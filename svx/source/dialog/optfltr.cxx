@@ -4,9 +4,9 @@
  *
  *  $RCSfile: optfltr.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: hr $ $Date: 2007-06-27 17:26:24 $
+ *  last change: $Author: rt $ $Date: 2007-07-03 14:27:13 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -148,12 +148,6 @@ OfaMSFilterTabPage2::OfaMSFilterTabPage2( Window* pParent,
     aCheckLB            ( this, SVX_RES( CLB_SETTINGS   )),
     aHeader1FT          ( this, SVX_RES( FT_HEADER1_EXPLANATION )),
     aHeader2FT          ( this, SVX_RES( FT_HEADER2_EXPLANATION )),
-    aChkunBmp           ( SVX_RES( CHKBUT_UNCHECKED )),
-    aChkchBmp           ( SVX_RES( CHKBUT_CHECKED )),
-    aChkchhiBmp         ( SVX_RES( CHKBUT_HICHECKED )),
-    aChkunhiBmp         ( SVX_RES( CHKBUT_HIUNCHECKED )),
-    aChktriBmp          ( SVX_RES( CHKBUT_TRISTATE    )),
-    aChktrihiBmp        ( SVX_RES( CHKBUT_HITRISTATE )),
     sHeader1            ( SVX_RES( ST_HEADER1 )),
     sHeader2            ( SVX_RES( ST_HEADER2 )),
     sChgToFromMath      ( SVX_RES( ST_CHG_MATH  )),
