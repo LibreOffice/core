@@ -4,9 +4,9 @@
  *
  *  $RCSfile: Strings.src,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: vg $ $Date: 2007-05-22 17:30:11 $
+ *  last change: $Author: rt $ $Date: 2007-07-03 13:38:07 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -262,6 +262,10 @@ String STR_OBJECT_DATASERIES_PLURAL
 String STR_OBJECT_CURVE
 {
     Text [ en-US ] = "Regression Curve";
+};
+String STR_OBJECT_CURVE_WITH_PARAMETERS
+{
+    Text [ en-US ] = "Regression Curve %FORMULA with accuracy R² = %RSQUARED";
 };
 String STR_OBJECT_AVERAGE_LINE
 {
