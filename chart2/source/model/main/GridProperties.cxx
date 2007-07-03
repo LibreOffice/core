@@ -4,9 +4,9 @@
  *
  *  $RCSfile: GridProperties.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: vg $ $Date: 2007-05-22 18:37:34 $
+ *  last change: $Author: rt $ $Date: 2007-07-03 13:43:00 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -98,7 +98,7 @@ void lcl_addDefaultsToMap( ::chart::tPropertyValueMap & rOutMap )
 
     // override other defaults
     rOutMap[ ::chart::LineProperties::PROP_LINE_COLOR ] =
-        uno::makeAny( sal_Int32( 0xb3b3b3) ); // gray30
+        uno::makeAny( static_cast< sal_Int32 >( 0xb3b3b3 ) );  // gray30
 }
 
 const Sequence< Property > & lcl_getPropertySequence()
