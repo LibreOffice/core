@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.22 $
+#   $Revision: 1.23 $
 #
-#   last change: $Author: vg $ $Date: 2007-05-22 19:08:08 $
+#   last change: $Author: rt $ $Date: 2007-07-03 13:45:07 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -92,6 +92,7 @@ SLOFILES=	\
     $(SLO)$/RelativePositionHelper.obj \
     $(SLO)$/Scaling.obj \
     $(SLO)$/SceneProperties.obj \
+    $(SLO)$/ThreeDHelper.obj \
     $(SLO)$/StatisticsHelper.obj \
     $(SLO)$/ChartModelHelper.obj \
     $(SLO)$/ChartViewHelper.obj \
