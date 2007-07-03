@@ -4,9 +4,9 @@
  *
  *  $RCSfile: tp_3D_SceneGeometry.src,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: vg $ $Date: 2007-05-22 17:42:42 $
+ *  last change: $Author: rt $ $Date: 2007-07-03 13:39:56 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -50,13 +50,14 @@
 #define HEIGHT_FT 10
 
 #define POS_X_0 6
-#define POS_X_1 12
+#define POS_X_1 6
 #define POS_X_2 POS_X_1+WIDTH_FT+4
 
-#define POS_Y_1 8
+#define POS_Y_0 (8)
+#define POS_Y_1 (POS_Y_0+RSC_CD_FIXEDTEXT_HEIGHT+10)
 #define POS_Y_2 (POS_Y_1+RSC_CD_FIXEDTEXT_HEIGHT+8)
 #define POS_Y_3 (POS_Y_2+RSC_CD_FIXEDTEXT_HEIGHT+8)
-#define POS_Y_4 (POS_Y_3+RSC_CD_FIXEDTEXT_HEIGHT+14)
+#define POS_Y_4 (POS_Y_3+RSC_CD_FIXEDTEXT_HEIGHT+12)
 
 #define CUSTOMUNITTEXT_DEGREE \
 Border = TRUE ; \
@@ -69,7 +70,7 @@ StrictFormat = TRUE ; \
 DecimalDigits = 0 ; \
 First = -180 ; \
 Last = 180 ; \
-SpinSize = 5 ; \
+SpinSize = 1 ; \
 Unit = FUNIT_CUSTOM ; \
 CustomUnitText [ en-US ] = " degrees" ;
 
@@ -81,6 +82,13 @@ TabPage TP_3D_SCENEGEOMETRY
     Hide = TRUE ;
     Size = MAP_APPFONT ( VIEW3D_PAGE_WIDTH , VIEW3D_PAGE_HEIGHT ) ;
 
+    CheckBox CBX_RIGHT_ANGLED_AXES
+    {
+        Pos = MAP_APPFONT ( POS_X_1 , POS_Y_0  ) ;
+        Size = MAP_APPFONT ( (WIDTH_FT+WIDTH_MF) , HEIGHT_FT ) ;
+        TabStop = TRUE ;
+        Text [ en-US ] = "~Right-angled axes" ;
+    };
     FixedText FT_X_ROTATION
     {
         Pos = MAP_APPFONT ( POS_X_1 , POS_Y_1  ) ;
