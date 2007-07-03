@@ -4,9 +4,9 @@
  *
  *  $RCSfile: DataPointProperties.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: vg $ $Date: 2007-05-22 18:33:47 $
+ *  last change: $Author: rt $ $Date: 2007-07-03 13:42:30 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -504,7 +504,7 @@ void DataPointProperties::AddDefaultsToMap(
 
     OSL_ASSERT( rOutMap.end() == rOutMap.find( PROP_DATAPOINT_PERCENT_DIAGONAL ));
     rOutMap[ PROP_DATAPOINT_PERCENT_DIAGONAL ] =
-        uno::makeAny( static_cast< sal_Int16 >(5) );
+        uno::makeAny( static_cast< sal_Int16 >(0) );
 }
 
 } //  namespace chart
