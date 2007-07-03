@@ -4,9 +4,9 @@
  *
  *  $RCSfile: gtkgdi.hxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: kz $ $Date: 2006-10-06 10:03:07 $
+ *  last change: $Author: rt $ $Date: 2007-07-03 14:07:00 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -173,6 +173,9 @@ protected:
                             ControlState nState, const ImplControlValue& aValue,
                             SalControlHandle& rControlHandle, const OUString& rCaption );
 
+    BOOL drawNativeMixedStateCheck( ControlType nType, ControlPart nPart, const Region& rControlRegion,
+                                    ControlState nState, const ImplControlValue& aValue, SalControlHandle& rControlHandle,
+                                    const rtl::OUString& rCaption );
 };
 
 #endif // _VCL_GTKGDI_HXX
