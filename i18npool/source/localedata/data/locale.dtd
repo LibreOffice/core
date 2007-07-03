@@ -64,10 +64,13 @@
         'module                 CDATA           #IMPLIED'>
 <!-- The locale referred to for the sub categories -->
 
+<!ENTITY % replaceFrom  'replaceFrom    CDATA #IMPLIED'>
+<!ENTITY % replaceTo    'replaceTo      CDATA #IMPLIED'>
+
 <!ELEMENT DefaultName  (#PCDATA)>
 
 <!-- Locale is made of different sub categories -->
-<!ELEMENT Locale (LC_INFO, LC_CTYPE, LC_FORMAT, LC_COLLATION, LC_SEARCH, LC_INDEX, LC_CALENDAR, LC_CURRENCY,  LC_TRANSLITERATION, LC_MISC, LC_NumberingLevel, LC_OutLineNumberingLevel)>
+<!ELEMENT Locale (LC_INFO, LC_CTYPE, LC_FORMAT, LC_FORMAT_1?, LC_COLLATION, LC_SEARCH, LC_INDEX, LC_CALENDAR, LC_CURRENCY,  LC_TRANSLITERATION, LC_MISC, LC_NumberingLevel, LC_OutLineNumberingLevel)>
 <!ATTLIST Locale versionDTD CDATA #FIXED "2.0.3">
 <!-- Version identifier to prevent mismatching data files being submitted
      because of older files being copied as templates. The version should be
@@ -104,11 +107,32 @@
 
 <!ELEMENT Variant (#PCDATA) >
 
+<!-- The LC_FORMAT element contains number format codes and may actually appear
+     twice (with the second ocurrence named LC_FORMAT_1). One section is
+     mandatory and MUST contain at least all required format codes
+     formatindex="0" to formatindex="47", MUST NOT contain formatindex 48 and
+     49, and MAY contain other format codes. See below ATTLIST FormatElement
+     formatindex.
+
+     A second LC_FORMAT_1 section may follow containing other format codes. The
+     difference between the two sections is that they are inherited
+     independently if a locale uses the RefLocale mechanism (ref="..."). This
+     may be used to not offer locale dependent format codes to other locales
+     that otherwise inherit the format codes.
+
+-->
 <!ELEMENT LC_FORMAT (FormatElement*) >
 <!ATTLIST LC_FORMAT %RefLocale;>
-<!ATTLIST LC_FORMAT replaceFrom CDATA #IMPLIED>
+<!ATTLIST LC_FORMAT %replaceFrom;>
 <!-- Define placeholder for currency code -->
-<!ATTLIST LC_FORMAT replaceTo CDATA #IMPLIED>
+<!ATTLIST LC_FORMAT %replaceTo;>
+<!-- Currency code to be used to replace the placeholder -->
+
+<!ELEMENT LC_FORMAT_1 (FormatElement*) >
+<!ATTLIST LC_FORMAT_1 %RefLocale;>
+<!ATTLIST LC_FORMAT_1 %replaceFrom;>
+<!-- Define placeholder for currency code -->
+<!ATTLIST LC_FORMAT_1 %replaceTo;>
 <!-- Currency code to be used to replace the placeholder -->
 
 <!ELEMENT FormatElement   ( FormatCode, DefaultName?)>
@@ -313,22 +337,13 @@
     Entries that don't match a defined key are appended to the index list. Used
     in Writer textprocessor.
 
-    Syntax for indexKey string,
-
-    '-' (dash): Ellipsis, all letters elided by the ellipsis are included as index keys in
-        alphabetic order.
-    '[]' (square bracket): all letters included in square breacket are skipping letters. It is
-        used for CTL language to skip prefix vowels or signs. Example, if double quote is 
-        defined as skipping letter, index item '"Index"' will be under 'I', not '"'.
-    '{}' (curly bracket): it defines multiple letters index key, like 'Ch' is one of the index 
-        key for Czech.
-    '()' (parentheses): it defines optional description for index key. If defined, the description 
-        will be showed as delimiter, instead of index key itself.
-
     The initial data was setup according to the ICU collation chart at
     http://oss.software.ibm.com/icu/charts/collation/
+    Note: ICU site was moved to http://www.icu-project.org/ and as ICU per
+    default uses CLDR, collation charts are available at
+    http://unicode.org/cldr/comparison_charts.html#Collation
 
-    Possible notations in the syntax are:
+    Possible notations in the syntax of the IndexKey element are:
 
     '-' (dash): Ellipsis, all letters elided by the ellipsis are included as
     index keys in alphabetic order. For example, 'A-Z' includes all ASCII
@@ -340,13 +355,14 @@
     is defined as skipping letter, index item '"Index"' will be under 'I', not
     '"'.
 
-    '{}' (curly brackets): define multiple letters index key, for example 'Cs'
-    is one of the index keys for Hungarian (hu_HU).
+    '{}' (curly brackets): define multiple letters index key, for example
+    '{Cs}' is one of the index keys for Hungarian (hu_HU).
 
     '()' (parentheses): define optional description for index key. If defined,
     the description will be shown as index key title, instead of the index key
     itself. For example, 'E(E, É)' in Hungarian adds entries with 'E' to the
     description 'E, É'.
+
 -->
 <!ELEMENT IndexKey (#PCDATA)>
 <!ATTLIST IndexKey  %UNOModule;>
