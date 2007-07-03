@@ -4,9 +4,9 @@
  *
  *  $RCSfile: textsh1.cxx,v $
  *
- *  $Revision: 1.57 $
+ *  $Revision: 1.58 $
  *
- *  last change: $Author: hr $ $Date: 2007-06-27 13:26:08 $
+ *  last change: $Author: rt $ $Date: 2007-07-03 14:18:26 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -982,7 +982,12 @@ void SwTextShell::Execute(SfxRequest &rReq)
                     //if it's set to something different than USHRT_MAX
 
                     BOOL bStart = ((SfxBoolItem&)pSet->Get(FN_NUMBER_NEWSTART)).GetValue();
-                    USHORT nNumStart = 1;
+                    // --> OD 2007-06-11 #b6560525#
+                    // Default value for restart value has to be USHRT_MAX
+                    // in order to indicate that the restart value of the list
+                    // style has to be used on restart.
+                    USHORT nNumStart = USHRT_MAX;
+                    // <--
                     if( SFX_ITEM_SET == pSet->GetItemState(FN_NUMBER_NEWSTART_AT) )
                     {
                         nNumStart = ((SfxUInt16Item&)pSet->Get(FN_NUMBER_NEWSTART_AT)).GetValue();
