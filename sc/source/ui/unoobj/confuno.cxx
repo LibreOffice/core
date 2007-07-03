@@ -4,9 +4,9 @@
  *
  *  $RCSfile: confuno.cxx,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: obo $ $Date: 2007-03-05 14:45:41 $
+ *  last change: $Author: rt $ $Date: 2007-07-03 15:55:56 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -201,24 +201,28 @@ void SAL_CALL ScDocumentConfiguration::setPropertyValue(
                 pDoc->SetAutoCalc( ScUnoHelpFunctions::GetBoolFromAny( aValue ) );
             else if ( aPropertyName.compareToAscii( SC_UNO_PRINTERNAME ) == 0 )
             {
-                SfxPrinter* pPrinter = pDocShell->GetPrinter();
-                if (pPrinter)
+                rtl::OUString sPrinterName;
+                if (aValue >>= sPrinterName)
                 {
-                    rtl::OUString sPrinterName;
-                    if (aValue >>= sPrinterName)
+                    // #i75610# if the name is empty, do nothing (don't create any printer)
+                    if ( sPrinterName.getLength() != 0 )
                     {
-                        String aString(sPrinterName);
-                        SfxPrinter* pNewPrinter = new SfxPrinter( pPrinter->GetOptions().Clone(), aString );
-                        if (pNewPrinter->IsKnown())
-                            pDocShell->SetPrinter( pNewPrinter, SFX_PRINTER_PRINTER );
+                        SfxPrinter* pPrinter = pDocShell->GetPrinter();
+                        if (pPrinter)
+                        {
+                            String aString(sPrinterName);
+                            SfxPrinter* pNewPrinter = new SfxPrinter( pPrinter->GetOptions().Clone(), aString );
+                            if (pNewPrinter->IsKnown())
+                                pDocShell->SetPrinter( pNewPrinter, SFX_PRINTER_PRINTER );
+                            else
+                                delete pNewPrinter;
+                        }
                         else
-                            delete pNewPrinter;
+                            throw uno::RuntimeException();
                     }
-                    else
-                        throw lang::IllegalArgumentException();
                 }
                 else
-                    throw uno::RuntimeException();
+                    throw lang::IllegalArgumentException();
             }
             else if ( aPropertyName.compareToAscii( SC_UNO_PRINTERSETUP ) == 0 )
             {
@@ -226,14 +230,18 @@ void SAL_CALL ScDocumentConfiguration::setPropertyValue(
                 if ( aValue >>= aSequence )
                 {
                     sal_uInt32 nSize = aSequence.getLength();
-                    SvMemoryStream aStream (aSequence.getArray(), nSize, STREAM_READ );
-                    aStream.Seek ( STREAM_SEEK_TO_BEGIN );
-                    SfxItemSet* pSet = new SfxItemSet( *pDoc->GetPool(),
-                            SID_PRINTER_NOTFOUND_WARN, SID_PRINTER_NOTFOUND_WARN,
-                            SID_PRINTER_CHANGESTODOC,  SID_PRINTER_CHANGESTODOC,
-                            SID_SCPRINTOPTIONS,        SID_SCPRINTOPTIONS,
-                            NULL );
-                    pDocShell->SetPrinter( SfxPrinter::Create( aStream, pSet ) );
+                    // #i75610# if the sequence is empty, do nothing (don't create any printer)
+                    if ( nSize != 0 )
+                    {
+                        SvMemoryStream aStream (aSequence.getArray(), nSize, STREAM_READ );
+                        aStream.Seek ( STREAM_SEEK_TO_BEGIN );
+                        SfxItemSet* pSet = new SfxItemSet( *pDoc->GetPool(),
+                                SID_PRINTER_NOTFOUND_WARN, SID_PRINTER_NOTFOUND_WARN,
+                                SID_PRINTER_CHANGESTODOC,  SID_PRINTER_CHANGESTODOC,
+                                SID_SCPRINTOPTIONS,        SID_SCPRINTOPTIONS,
+                                NULL );
+                        pDocShell->SetPrinter( SfxPrinter::Create( aStream, pSet ) );
+                    }
                 }
             }
             else if ( aPropertyName.compareToAscii( SC_UNO_APPLYDOCINF ) == 0 )
@@ -347,15 +355,19 @@ uno::Any SAL_CALL ScDocumentConfiguration::getPropertyValue( const rtl::OUString
                 ScUnoHelpFunctions::SetBoolInAny( aRet, pDoc->GetAutoCalc() );
             else if ( aPropertyName.compareToAscii( SC_UNO_PRINTERNAME ) == 0 )
             {
-                SfxPrinter *pPrinter = pDoc->GetPrinter ();
+                // #i75610# don't create the printer, return empty string if no printer created yet
+                // (as in SwXDocumentSettings)
+                SfxPrinter* pPrinter = pDoc->GetPrinter( FALSE );
                 if (pPrinter)
                     aRet <<= rtl::OUString ( pPrinter->GetName());
                 else
-                    throw uno::RuntimeException();
+                    aRet <<= rtl::OUString();
             }
             else if ( aPropertyName.compareToAscii( SC_UNO_PRINTERSETUP ) == 0 )
             {
-                SfxPrinter *pPrinter = pDocShell->GetPrinter();
+                // #i75610# don't create the printer, return empty sequence if no printer created yet
+                // (as in SwXDocumentSettings)
+                SfxPrinter* pPrinter = pDoc->GetPrinter( FALSE );
                 if (pPrinter)
                 {
                     SvMemoryStream aStream;
@@ -367,6 +379,8 @@ uno::Any SAL_CALL ScDocumentConfiguration::getPropertyValue( const rtl::OUString
                     aStream.Read ( aSequence.getArray(), nSize );
                     aRet <<= aSequence;
                 }
+                else
+                    aRet <<= uno::Sequence<sal_Int8>();
             }
             else if ( aPropertyName.compareToAscii( SC_UNO_APPLYDOCINF ) == 0 )
                 ScUnoHelpFunctions::SetBoolInAny( aRet, pDocShell->GetDocInfo().IsUseUserData() );
