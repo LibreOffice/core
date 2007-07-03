@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xlroot.hxx,v $
  *
- *  $Revision: 1.29 $
+ *  $Revision: 1.30 $
  *
- *  last change: $Author: vg $ $Date: 2007-05-22 19:59:50 $
+ *  last change: $Author: rt $ $Date: 2007-07-03 15:53:10 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -140,7 +140,7 @@ struct XclRootData
 
 class SfxObjectShell;
 class ScModelObj;
-class SfxPrinter;
+class OutputDevice;
 class SvNumberFormatter;
 class SdrPage;
 class ScDocumentPool;
@@ -221,7 +221,7 @@ public:
     /** Returns the object model of the Calc document. */
     ScModelObj*         GetDocModelObj() const;
     /** Returns pointer to the printer of the Calc document. */
-    SfxPrinter*         GetPrinter() const;
+    OutputDevice*       GetPrinter() const;
     /** Returns the style sheet pool of the Calc document. */
     ScStyleSheetPool&   GetStyleSheetPool() const;
     /** Returns the defined names container of the Calc document. */
