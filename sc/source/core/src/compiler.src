@@ -4,9 +4,9 @@
  *
  *  $RCSfile: compiler.src,v $
  *
- *  $Revision: 1.53 $
+ *  $Revision: 1.54 $
  *
- *  last change: $Author: hr $ $Date: 2007-06-27 13:44:13 $
+ *  last change: $Author: rt $ $Date: 2007-07-03 15:48:53 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -357,6 +357,14 @@ Resource RID_SC_FUNCTION_NAMES
     String SC_OPCODE_CHAR
     {
         Text [ en-US ] = "CHAR" ;
+    };
+    String SC_OPCODE_JIS
+    {
+        Text [ en-US ] = "JIS" ;
+    };
+    String SC_OPCODE_ASC
+    {
+        Text [ en-US ] = "ASC" ;
     };
     String SC_OPCODE_LOG10
     {
@@ -1261,6 +1269,8 @@ Resource RID_SC_FUNCTION_NAMES_ENGLISH
     String SC_OPCODE_VALUE { Text = "VALUE" ; };
     String SC_OPCODE_CLEAN { Text = "CLEAN" ; };
     String SC_OPCODE_CHAR { Text = "CHAR" ; };
+    String SC_OPCODE_JIS { Text = "JIS" ; };
+    String SC_OPCODE_ASC { Text = "ASC" ; };
     String SC_OPCODE_LOG10 { Text = "LOG10" ; };
     String SC_OPCODE_EVEN { Text = "EVEN" ; };
     String SC_OPCODE_ODD { Text = "ODD" ; };
