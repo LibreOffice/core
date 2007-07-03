@@ -4,9 +4,9 @@
  *
  *  $RCSfile: DiagramWrapper.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: obo $ $Date: 2007-06-11 14:57:22 $
+ *  last change: $Author: rt $ $Date: 2007-07-03 13:36:19 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -140,6 +140,8 @@ enum
 
     PROP_DIAGRAM_SORT_BY_X_VALUES,
 
+    PROP_DIAGRMA_RIGHT_ANGLED_AXES,
+
     PROP_DIAGRAM_HAS_X_AXIS,
     PROP_DIAGRAM_HAS_X_AXIS_DESCR,
     PROP_DIAGRAM_HAS_X_AXIS_TITLE,
@@ -233,6 +235,14 @@ void lcl_AddPropertiesToVector(
     rOutProperties.push_back(
         Property( C2U( "SortByXValues" ),
                   PROP_DIAGRAM_SORT_BY_X_VALUES,
+                  ::getBooleanCppuType(),
+                  beans::PropertyAttribute::BOUND
+                  | beans::PropertyAttribute::MAYBEDEFAULT ));
+
+    //new for 3D charts
+    rOutProperties.push_back(
+        Property( C2U("RightAngledAxes"),
+                  PROP_DIAGRMA_RIGHT_ANGLED_AXES,
                   ::getBooleanCppuType(),
                   beans::PropertyAttribute::BOUND
                   | beans::PropertyAttribute::MAYBEDEFAULT ));
