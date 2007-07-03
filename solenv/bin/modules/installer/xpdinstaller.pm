@@ -4,9 +4,9 @@
 #
 #   $RCSfile: xpdinstaller.pm,v $
 #
-#   $Revision: 1.2 $
+#   $Revision: 1.3 $
 #
-#   last change: $Author: hr $ $Date: 2007-01-02 15:24:50 $
+#   last change: $Author: rt $ $Date: 2007-07-03 11:46:38 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -302,6 +302,24 @@ sub get_isupdatepackage_value
     my $styles = "";
     if ( $module->{'Styles'} ) { $styles = $module->{'Styles'}; }
     if ( $styles =~ /\bISUPDATEPACKAGE\b/ ) { $value = "true"; }
+
+    return $value;
+}
+
+###################################################
+# Asking module for java module entry
+# scp style: JAVAMODULE
+###################################################
+
+sub get_isjavamodule_value
+{
+    my ( $module ) = @_;
+
+    my $value = "false";
+
+    my $styles = "";
+    if ( $module->{'Styles'} ) { $styles = $module->{'Styles'}; }
+    if ( $styles =~ /\bJAVAMODULE\b/ ) { $value = "true"; }
 
     return $value;
 }
@@ -834,6 +852,10 @@ sub get_file_content
 
     $value = get_isupdatepackage_value($module);
     $line = get_tag_line($doubleindent, "isupdatepackage", $value);
+    push(@xpdfile, $line);
+
+    $value = get_isjavamodule_value($module);
+    $line = get_tag_line($doubleindent, "isjavapackage", $value);
     push(@xpdfile, $line);
 
     # iterating over all languages to get names and descriptions
