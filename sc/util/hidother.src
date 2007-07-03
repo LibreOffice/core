@@ -4,9 +4,9 @@
  *
  *  $RCSfile: hidother.src,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: hr $ $Date: 2007-06-27 13:46:29 $
+ *  last change: $Author: rt $ $Date: 2007-07-03 15:57:53 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -387,6 +387,8 @@ hidspecial HID_FUNC_ROEMISCH         { HelpID = HID_FUNC_ROEMISCH; };
 hidspecial HID_FUNC_ARABISCH         { HelpID = HID_FUNC_ARABISCH; };
 hidspecial HID_FUNC_INFO             { HelpID = HID_FUNC_INFO; };
 hidspecial HID_FUNC_BAHTTEXT         { HelpID = HID_FUNC_BAHTTEXT; };
+hidspecial HID_FUNC_JIS             { HelpID = HID_FUNC_JIS; };
+hidspecial HID_FUNC_ASC             { HelpID = HID_FUNC_ASC; };
 
 // ... and from Analysis Addin
 
