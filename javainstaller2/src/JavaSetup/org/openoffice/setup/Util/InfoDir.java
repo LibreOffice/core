@@ -1,3 +1,38 @@
+/*************************************************************************
+ *
+ *  OpenOffice.org - a multi-platform office productivity suite
+ *
+ *  $RCSfile: InfoDir.java,v $
+ *
+ *  $Revision: 1.2 $
+ *
+ *  last change: $Author: rt $ $Date: 2007-07-03 12:01:44 $
+ *
+ *  The Contents of this file are made available subject to
+ *  the terms of GNU Lesser General Public License Version 2.1.
+ *
+ *
+ *    GNU Lesser General Public License Version 2.1
+ *    =============================================
+ *    Copyright 2005 by Sun Microsystems, Inc.
+ *    901 San Antonio Road, Palo Alto, CA 94303, USA
+ *
+ *    This library is free software; you can redistribute it and/or
+ *    modify it under the terms of the GNU Lesser General Public
+ *    License version 2.1, as published by the Free Software Foundation.
+ *
+ *    This library is distributed in the hope that it will be useful,
+ *    but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ *    Lesser General Public License for more details.
+ *
+ *    You should have received a copy of the GNU Lesser General Public
+ *    License along with this library; if not, write to the Free Software
+ *    Foundation, Inc., 59 Temple Place, Suite 330, Boston,
+ *    MA  02111-1307  USA
+ *
+ ************************************************************************/
+
 package org.openoffice.setup.Util;
 
 import org.openoffice.setup.InstallData;
@@ -33,9 +68,22 @@ public class InfoDir {
     static private void copyInstallDirectoryWithExtension(File destBaseDir, String subDirName, String fileExtension) {
         InstallData data = InstallData.getInstance();
         File sourceDir = data.getInfoRoot(subDirName);
-        File destDir = new File(destBaseDir, subDirName);
-        destDir.mkdir();
-        SystemManager.copyAllFiles(sourceDir, destDir, fileExtension);
+        if ( sourceDir != null ) {
+            File destDir = new File(destBaseDir, subDirName);
+            destDir.mkdir();
+            SystemManager.copyAllFiles(sourceDir, destDir, fileExtension);
+        }
+    }
+
+    static private void copyInstallDirectoryWithExtension(File destBaseDir, String subDirName, String fileExtension, String unixRights) {
+        InstallData data = InstallData.getInstance();
+        File sourceDir = data.getInfoRoot(subDirName);
+        if ( sourceDir != null ) {
+            File destDir = new File(destBaseDir, subDirName);
+            destDir.mkdir();
+            SystemManager.copyAllFiles(sourceDir, destDir, fileExtension);
+            SystemManager.setUnixPrivilegesDirectory(destDir, fileExtension, unixRights);
+        }
     }
 
     static private void copyInstallDirectoryDoubleSubdir(File destBaseDir, String dir1, String dir2) {
@@ -70,6 +118,35 @@ public class InfoDir {
             String uidFileDest = destFile.getPath();
             boolean success = SystemManager.copy(uidFileSource, uidFileDest);
             data.setGetUidPath(uidFileDest);
+        }
+    }
+
+    static private void copyJreFile(File dir) {
+        InstallData data = InstallData.getInstance();
+        String jrefilename = System.getProperty("JRE_FILE");
+
+        if ( jrefilename != null ) {
+            // For Solaris, JRE_FILE can already contain the complete path.
+            // Otherwise it contains only the filename
+            File jreFile = new File(jrefilename);
+
+            if ( ! jreFile.exists()) {
+                jreFile = new File(data.getPackagePath(), jrefilename);
+            }
+
+            if ( jreFile.exists() ) {
+                String jreFileSource = jreFile.getPath();
+                File destDir = new File(dir, "jre");
+                destDir.mkdir();
+                String onlyFileName = jreFile.getName();
+                File destFile = new File(destDir, onlyFileName);
+
+                // In maintenance mode the file already exists
+                if ( ! destFile.exists() ) {
+                    String jreFileDest = destFile.getPath();
+                    boolean success = SystemManager.copy(jreFileSource, jreFileDest);
+                }
+            }
         }
     }
 
@@ -149,13 +226,21 @@ public class InfoDir {
         InstallData data = InstallData.getInstance();
         File subdir1 = data.getInfoRoot(dir1);
         File subdir2 = new File(subdir1, dir2);
-        SystemManager.removeDirectory(subdir2);
+        if (subdir2 != null) {
+            if ( subdir2.exists() ) {
+                SystemManager.removeDirectory(subdir2);
+            }
+        }
     }
 
     static private void removeInforootSubdir(String dir) {
         InstallData data = InstallData.getInstance();
         File subdir = data.getInfoRoot(dir);
-        SystemManager.removeDirectory(subdir);
+        if (subdir != null) {
+            if ( subdir.exists() ) {
+                SystemManager.removeDirectory(subdir);
+            }
+        }
     }
 
     static private void removeInforoot() {
@@ -177,6 +262,7 @@ public class InfoDir {
         copyInstallDirectoryWithExtension(uninstallDir, "images", "gif");
         copyInstallDirectoryDoubleSubdir(uninstallDir, "html", "images");
         copyGetUidSoFile(uninstallDir);
+        copyJreFile(uninstallDir);
         moveAdminFiles(uninstallDir);
         createInfoFile(uninstallDir);
     }
@@ -189,6 +275,7 @@ public class InfoDir {
         removeInforootSubdir("html");
         removeInforootSubdir("xpd");
         removeInforootSubdir("images");
+        removeInforootSubdir("jre");
         removeInforoot();
     }
 
