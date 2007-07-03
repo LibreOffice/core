@@ -4,9 +4,9 @@
  *
  *  $RCSfile: NeonUri.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 14:07:13 $
+ *  last change: $Author: rt $ $Date: 2007-07-03 12:13:56 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -55,22 +55,46 @@
 #include "DAVException.hxx"
 #endif
 
+#include "../inc/urihelper.hxx"
+
 using namespace webdav_ucp;
+
+    char *scheme;
+    char *host, *userinfo;
+    unsigned int port;
+    char *path, *query, *fragment;
 
 # if defined __SUNPRO_CC
 // FIXME: not sure whether initializing a ne_uri statically is supposed to work
 // the string fields of ne_uri are char*, not const char*
 # pragma disable_warn
 # endif
-#if NEON_VERSION >= 0260
-ne_uri NeonUri::sUriDefaultsHTTP  = { "http",  NULL, NULL, DEFAULT_HTTP_PORT };
-ne_uri NeonUri::sUriDefaultsHTTPS = { "https", NULL, NULL, DEFAULT_HTTPS_PORT };
-ne_uri NeonUri::sUriDefaultsFTP   = { "ftp",   NULL, NULL, DEFAULT_FTP_PORT };
-#else
-ne_uri NeonUri::sUriDefaultsHTTP  = { "http",  NULL, DEFAULT_HTTP_PORT,  NULL, NULL };
-ne_uri NeonUri::sUriDefaultsHTTPS = { "https", NULL, DEFAULT_HTTPS_PORT, NULL, NULL };
-ne_uri NeonUri::sUriDefaultsFTP   = { "ftp",   NULL, DEFAULT_FTP_PORT,   NULL, NULL };
-#endif
+
+namespace {
+
+const ne_uri g_sUriDefaultsHTTP  = { "http",
+                                     NULL,
+                                     NULL,
+                                     DEFAULT_HTTP_PORT,
+                                     NULL,
+                                     NULL,
+                                     NULL };
+const ne_uri g_sUriDefaultsHTTPS = { "https",
+                                     NULL,
+                                     NULL,
+                                     DEFAULT_HTTPS_PORT,
+                                     NULL,
+                                     NULL,
+                                     NULL };
+const ne_uri g_sUriDefaultsFTP   = { "ftp",
+                                     NULL,
+                                     NULL,
+                                     DEFAULT_FTP_PORT,
+                                     NULL,
+                                     NULL,
+                                     NULL };
+} // namespace
+
 # if defined __SUNPRO_CC
 # pragma enable_warn
 #endif
@@ -117,8 +141,11 @@ NeonUri::NeonUri( const rtl::OUString & inUri )
     if ( inUri.getLength() <= 0 )
         throw DAVException( DAVException::DAV_INVALID_ARG );
 
+    // #i77023#
+    rtl::OUString aEscapedUri( ucb_impl::urihelper::encodeURI( inUri ) );
+
     rtl::OString theInputUri(
-        inUri.getStr(), inUri.getLength(), RTL_TEXTENCODING_UTF8 );
+        aEscapedUri.getStr(), aEscapedUri.getLength(), RTL_TEXTENCODING_UTF8 );
 
     ne_uri theUri;
     if ( ne_uri_parse( theInputUri.getStr(), &theUri ) != 0 )
@@ -136,24 +163,20 @@ NeonUri::NeonUri( const rtl::OUString & inUri )
 void NeonUri::init( const rtl::OString & rUri, const ne_uri * pUri )
 {
     // Complete URI.
-    ne_uri * pUriDefs
+    const ne_uri * pUriDefs
         = matchIgnoreAsciiCase( rUri,
                                 RTL_CONSTASCII_STRINGPARAM( "ftp:" ) ) ?
-              &sUriDefaultsFTP :
+              &g_sUriDefaultsFTP :
           matchIgnoreAsciiCase( rUri,
                                 RTL_CONSTASCII_STRINGPARAM( "https:" ) ) ?
-              &sUriDefaultsHTTPS :
-              &sUriDefaultsHTTP;
+              &g_sUriDefaultsHTTPS :
+              &g_sUriDefaultsHTTP;
 
     mScheme   = rtl::OStringToOUString(
                     pUri->scheme ? pUri->scheme : pUriDefs->scheme,
                     RTL_TEXTENCODING_UTF8 );
     mUserInfo = rtl::OStringToOUString(
-#if NEON_VERSION >= 0260
                     pUri->userinfo ? pUri->userinfo : pUriDefs->userinfo,
-#else
-                    pUri->authinfo ? pUri->authinfo : pUriDefs->authinfo,
-#endif
                     RTL_TEXTENCODING_UTF8 );
     mHostName = rtl::OStringToOUString(
                     pUri->host ? pUri->host : pUriDefs->host,
@@ -240,12 +263,12 @@ bool NeonUri::operator== ( const NeonUri & rOther ) const
         return rtl::OUString::createFromAscii ("/");
 }
 
-void NeonUri::AppendPath (const rtl::OUString& path)
+void NeonUri::AppendPath (const rtl::OUString& rPath)
 {
     if (mPath.lastIndexOf ('/') != mPath.getLength () - 1)
         mPath += rtl::OUString::createFromAscii ("/");
 
-    mPath += path;
+    mPath += rPath;
     calculateURI ();
 };
 
