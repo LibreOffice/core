@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xmldlg_import.cxx,v $
  *
- *  $Revision: 1.34 $
+ *  $Revision: 1.35 $
  *
- *  last change: $Author: vg $ $Date: 2006-11-21 17:42:15 $
+ *  last change: $Author: rt $ $Date: 2007-07-03 12:58:01 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -63,6 +63,7 @@
 #include <com/sun/star/script/XScriptEventsSupplier.hpp>
 #include <com/sun/star/script/ScriptEventDescriptor.hpp>
 
+#include <com/sun/star/view/SelectionType.hpp>
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
@@ -1304,6 +1305,46 @@ bool ImportContext::importLineEndFormatProperty(
         }
 
         _xControlModel->setPropertyValue( rPropName, makeAny( nFormat ) );
+        return true;
+    }
+    return false;
+}
+//__________________________________________________________________________________________________
+bool ImportContext::importSelectionTypeProperty(
+    OUString const & rPropName, OUString const & rAttrName,
+    Reference< xml::input::XAttributes > const & xAttributes )
+{
+    OUString aSelectionType(
+        xAttributes->getValueByUidName(
+            _pImport->XMLNS_DIALOGS_UID, rAttrName ) );
+    if (aSelectionType.getLength())
+    {
+        view::SelectionType eSelectionType;
+
+        if (aSelectionType.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("none") ))
+        {
+            eSelectionType = view::SelectionType_NONE;
+        }
+        else if (aSelectionType.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("single") ))
+        {
+            eSelectionType = view::SelectionType_SINGLE;
+        }
+        else if (aSelectionType.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("multi") ))
+        {
+            eSelectionType = view::SelectionType_MULTI;
+        }
+        else  if (aSelectionType.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("range") ))
+        {
+            eSelectionType = view::SelectionType_RANGE;
+        }
+        else
+        {
+            throw xml::sax::SAXException(
+                OUString( RTL_CONSTASCII_USTRINGPARAM("invalid selection type value!") ),
+                Reference< XInterface >(), Any() );
+        }
+
+        _xControlModel->setPropertyValue( rPropName, makeAny( eSelectionType ) );
         return true;
     }
     return false;
