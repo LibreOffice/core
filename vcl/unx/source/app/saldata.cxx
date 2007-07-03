@@ -4,9 +4,9 @@
  *
  *  $RCSfile: saldata.cxx,v $
  *
- *  $Revision: 1.52 $
+ *  $Revision: 1.53 $
  *
- *  last change: $Author: hr $ $Date: 2007-06-27 20:46:31 $
+ *  last change: $Author: rt $ $Date: 2007-07-03 14:07:39 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -578,14 +578,21 @@ void SalXLib::XError( Display *pDisplay, XErrorEvent *pEvent )
             }
             return;
         }
-        else if( pEvent->request_code == X_SetInputFocus )
+        /* ignore
+        * X_SetInputFocus: it's a hint only anyway
+        * X_GetProperty: this is part of the XGetWindowProperty call and will
+        *                be handled by the return value of that function
+        */
+        else if( pEvent->request_code == X_SetInputFocus ||
+                 pEvent->request_code == X_GetProperty
+            )
             return;
 
-#if (OSL_DEBUG_LEVEL > 1) || defined DBG_UTIL
-        PrintXError( pDisplay, pEvent );
-#endif
+
         if( pDisplay != GetX11SalData()->GetDisplay()->GetDisplay() )
             return;
+
+        PrintXError( pDisplay, pEvent );
 
         oslSignalAction eToDo = osl_raiseSignal (OSL_SIGNAL_USER_X11SUBSYSTEMERROR, NULL);
         switch (eToDo)
@@ -593,10 +600,8 @@ void SalXLib::XError( Display *pDisplay, XErrorEvent *pEvent )
             case osl_Signal_ActIgnore       :
                 return;
             case osl_Signal_ActAbortApp     :
-                PrintXError( pDisplay, pEvent );
                 abort();
             case osl_Signal_ActKillApp      :
-                PrintXError( pDisplay, pEvent );
                 exit(0);
             case osl_Signal_ActCallNextHdl  :
                 break;
