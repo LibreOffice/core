@@ -4,9 +4,9 @@
  *
  *  $RCSfile: rsc.cxx,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 16:03:28 $
+ *  last change: $Author: rt $ $Date: 2007-07-03 14:01:06 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -38,36 +38,24 @@
 /****************************************************************/
 /*                  Include File                                */
 /****************************************************************/
-#ifdef MAC
-#include "mac_start.h"
-#endif
 
 #include <stdlib.h>
 #include <stdio.h>
 #include <fcntl.h>
+
 #ifdef UNX
 #include <unistd.h>
 #include <sys/wait.h>
 #include <sys/stat.h>
 #else
-#ifndef MAC
 #include <io.h>
 #include <process.h>
 #include <direct.h>
 #endif
-#endif
+
 #include <string.h>
 #include <ctype.h>
 #include <errno.h>
-
-#ifdef MAC
-#ifdef MAC_UNIVERSAL
-#ifndef _UNISTD
-  #include <unistd.h>
-#endif
-#endif
-#include "mac_end.h"
-#endif
 
 #if defined( PM2 ) && defined( ZTC )
 #include <svpm.h>
