@@ -188,7 +188,7 @@
     </SearchOptions>
   </LC_SEARCH>
   <LC_INDEX>
-    <IndexKey phonetic="false" default="true" unoid="alphanumeric">A-P R-V Z Č Š Ž</IndexKey>
+    <IndexKey phonetic="false" default="true" unoid="alphanumeric">A-C Č D-S Š T-Z Ž</IndexKey>
     <UnicodeScript>0</UnicodeScript>
     <UnicodeScript>1</UnicodeScript>
     <UnicodeScript>2</UnicodeScript>
