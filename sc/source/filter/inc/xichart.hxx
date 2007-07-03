@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xichart.hxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: vg $ $Date: 2007-05-22 19:57:09 $
+ *  last change: $Author: rt $ $Date: 2007-07-03 13:25:45 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -889,7 +889,7 @@ public:
     /** Returns true, if the data points are clustered on the X axis. */
     inline bool         IsClustered() const { return ::get_flag( maData.mnFlags, EXC_CHCHART3D_CLUSTER ); }
     /** Converts and writes the contained data to the passed property set. */
-    void                Convert( ScfPropertySet& rPropSet ) const;
+    void                Convert( ScfPropertySet& rPropSet, const XclChTypeInfo& rTypeInfo ) const;
 
 private:
     XclChChart3d        maData;             /// Contents of the CHCHART3D record.
