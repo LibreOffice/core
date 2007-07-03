@@ -4,9 +4,9 @@
  *
  *  $RCSfile: formmetadata.hxx,v $
  *
- *  $Revision: 1.31 $
+ *  $Revision: 1.32 $
  *
- *  last change: $Author: kz $ $Date: 2007-06-20 10:42:08 $
+ *  last change: $Author: rt $ $Date: 2007-07-03 13:06:35 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -342,6 +342,13 @@ namespace pcr
     #define PROPERTY_ID_VERTICAL_ALIGN       186
     #define PROPERTY_ID_BINDING_NAME         187
     #define PROPERTY_ID_DECORATION           188
+    #define PROPERTY_ID_SELECTION_TYPE               189
+    #define PROPERTY_ID_ROOT_DISPLAYED               190
+    #define PROPERTY_ID_SHOWS_HANDLES                191
+    #define PROPERTY_ID_SHOWS_ROOT_HANDLES           192
+    #define PROPERTY_ID_EDITABLE                     193
+    #define PROPERTY_ID_INVOKES_STOP_NOT_EDITING     194
+    #define PROPERTY_ID_ROW_HEIGHT                   195
 
 //............................................................................
 } // namespace pcr
