@@ -1,4 +1,4 @@
-/* RCS  $Id: path.c,v 1.3 2007-06-12 06:06:38 obo Exp $
+/* RCS  $Id: path.c,v 1.4 2007-07-03 11:29:59 rt Exp $
 --
 -- SYNOPSIS
 --      Pathname manipulation code
@@ -166,12 +166,14 @@ char *path;
    register char *p;
    register char *q;
    char *tpath;
+   int hasdriveletter = 0;
+
+   DB_ENTER( "Clean_path" );
 
    /* Skip the root part. */
    tpath=path;
+
 #ifdef HAVE_DRIVE_LETTERS
-   if( *tpath && tpath[1] == ':' && isalpha(*tpath) )
-     tpath+=2;
 
    /* Change all occurences from DirBrkStr to *DirSepStr. */
 #if __CYGWIN__
@@ -181,7 +183,28 @@ char *path;
    for( q = tpath; (q = strchr(q, '/')) != NIL(char); )
       *q = *DirSepStr;
 #endif
+   /* The following dosn't trigger often because _normalize_path() uses
+    * a cygwin function and bypasses Clean_path() if it encounters a path
+    * with a drive letter. */
+   if( *tpath && tpath[1] == ':' && isalpha(*tpath) ) {
+      hasdriveletter = 1;
+      tpath+=2;
+      if( *tpath != *DirSepStr )
+     Warning("Malformed DOS path %s", path);
+   }
+
 #endif
+
+   /* Collapse > 2 ( > 1 if its an absolute DOS path ) into one slash.
+    * Keep // as it is reserved in posix. */
+   q = tpath;
+   for( ; *q == *DirSepStr ; ++q )
+      ;
+   if( q - tpath > 2 - hasdriveletter ) {
+      strcpy(tpath+1, q);
+   }
+
+   /* Set tpath after leading slash / drive letter. */
    for( ; *tpath == *DirSepStr ; ++tpath )
       ;
    q = tpath;
@@ -204,8 +227,9 @@ char *path;
      continue;
       }
 
-      /* Remove './' */
-      if ( p-q == 1 && *q == '.' ) {
+      /* Remove './'. If OOODMAKEMODE is set do this only if it is not at
+       * the start of the path. */
+      if ( p-q == 1 && *q == '.' && (q != path || !STOBOOL(OOoDmMode)) ) {
      strcpy(q,p+1);
      q = tpath;
      continue;
@@ -230,6 +254,7 @@ char *path;
      q = p+1;
    }
 
-   DB_PRINT( "path", ("path: %s", path ));
-   return;
+   DB_PRINT( "path", ("Cleaned path: %s", path ));
+
+   DB_VOID_RETURN;
 }
