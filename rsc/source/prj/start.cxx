@@ -4,9 +4,9 @@
  *
  *  $RCSfile: start.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: vg $ $Date: 2007-03-26 15:01:17 $
+ *  last change: $Author: rt $ $Date: 2007-07-03 14:00:49 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -44,11 +44,12 @@
 #define _spawnvp spawnvp
 #define _P_WAIT P_WAIT
 #endif
+
 #ifdef UNX
 #include <unistd.h>
 #include <sys/wait.h>
-#else
-#ifndef MAC
+#else // UNX
+
 #include <io.h>
 #include <process.h>
 #if defined ( OS2 ) && !defined ( GCC )
@@ -57,8 +58,8 @@
 #ifndef CSET
 #include <dos.h>
 #endif
-#endif
-#endif
+
+#endif // UNX
 
 #ifndef _RSCTOOLS_HXX
 #include <rsctools.hxx>

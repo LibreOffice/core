@@ -4,9 +4,9 @@
  *
  *  $RCSfile: gui.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: vg $ $Date: 2007-03-26 15:01:06 $
+ *  last change: $Author: rt $ $Date: 2007-07-03 14:00:37 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -38,9 +38,6 @@
 
 #include <stdlib.h>
 #include <stdio.h>
-#ifdef MAC
-#include <cursorctl.h>
-#endif
 
 #ifndef _RSCRSC_HXX
 #include <rscrsc.hxx>
@@ -57,7 +54,7 @@ static RscCompiler * pRscCompiler = NULL;
 /*                                                              */
 /*  Description :   Gibt die Temporaeren Dateien frei.          */
 /****************************************************************/
-#if defined( UNX ) || ( defined( PM2 ) && ( defined( TCPP ) || defined ( GCC )) ) || defined( MAC ) || defined (WTC) || defined (MTW) || defined(__MINGW32__)
+#if defined( UNX ) || ( defined( PM2 ) && ( defined( TCPP ) || defined ( GCC )) ) ||  defined (WTC) || defined (MTW) || defined(__MINGW32__)
         void ExitProgram( void ){
 #else
 #if defined( CSET )
@@ -70,7 +67,7 @@ static RscCompiler * pRscCompiler = NULL;
         delete pRscCompiler;
 }
 
-#if defined( UNX ) || defined( MAC ) || ( defined( PM2 ) && ( defined( CSET ) || defined ( GCC ))) || defined (WTC) || defined(ICC) || defined(__MINGW32__)
+#if defined( UNX ) || ( defined( PM2 ) && ( defined( CSET ) || defined ( GCC ))) || defined (WTC) || defined(ICC) || defined(__MINGW32__)
 int main ( int argc, char ** argv) {
 #else
 #if defined( MTW )
@@ -85,9 +82,6 @@ int cdecl main ( int argc, char ** argv) {
 #else
     atexit( ExitProgram );
 #endif
-#endif
-#ifdef MAC
-    InitCursorCtl( 0 );
 #endif
 #if OSL_DEBUG_LEVEL > 1
     fprintf( stderr, "debugging %s\n", argv[0] );
