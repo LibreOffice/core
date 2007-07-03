@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xmldlg_export.cxx,v $
  *
- *  $Revision: 1.37 $
+ *  $Revision: 1.38 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 11:38:20 $
+ *  last change: $Author: rt $ $Date: 2007-07-03 12:57:34 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -61,6 +61,8 @@
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/lang/Locale.hpp>
 #include <com/sun/star/util/NumberFormat.hpp>
+
+#include <com/sun/star/view/SelectionType.hpp>
 
 
 using namespace ::com::sun::star;
@@ -944,6 +946,39 @@ void ElementDescriptor::readLineEndFormatAttr( OUString const & rPropName, OUStr
     }
 }
 //__________________________________________________________________________________________________
+void ElementDescriptor::readSelectionTypeAttr( OUString const & rPropName, OUString const & rAttrName )
+{
+    if (beans::PropertyState_DEFAULT_VALUE != _xPropState->getPropertyState( rPropName ))
+    {
+        Any aSelectionType ( _xProps->getPropertyValue( rPropName ) );
+
+        if (aSelectionType.getValueTypeClass() == TypeClass_ENUM && aSelectionType.getValueType() == ::getCppuType( (::view::SelectionType*)0 ))
+        {
+            ::view::SelectionType eSelectionType;
+            aSelectionType >>= eSelectionType;
+
+            switch (eSelectionType)
+            {
+                case ::view::SelectionType_NONE:
+                    addAttribute( rAttrName, OUString( RTL_CONSTASCII_USTRINGPARAM("none") ) );
+                    break;
+                case ::view::SelectionType_SINGLE:
+                    addAttribute( rAttrName, OUString( RTL_CONSTASCII_USTRINGPARAM("single") ) );
+                    break;
+                case ::view::SelectionType_MULTI:
+                    addAttribute( rAttrName, OUString( RTL_CONSTASCII_USTRINGPARAM("multi") ) );
+                    break;
+                case ::view::SelectionType_RANGE:
+                    addAttribute( rAttrName, OUString( RTL_CONSTASCII_USTRINGPARAM("range") ) );
+                    break;
+                default:
+                    OSL_ENSURE( 0, "### illegal selection type value!" );
+                    break;
+            }
+        }
+    }
+}
+//__________________________________________________________________________________________________
 void ElementDescriptor::readDefaults( bool supportPrintable )
 {
     Any a( _xProps->getPropertyValue( OUString( RTL_CONSTASCII_USTRINGPARAM("Name") ) ) );
@@ -1405,6 +1440,14 @@ void SAL_CALL exportDialogModel(
                     OUString( RTL_CONSTASCII_USTRINGPARAM(XMLNS_DIALOGS_PREFIX ":filecontrol") ) );
                 xElem = static_cast< xml::sax::XAttributeList * >( pElem );
                 pElem->readFileControlModel( &all_styles );
+            }
+            else if (xServiceInfo->supportsService( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.awt.tree.TreeControlModel") ) ) )
+            {
+                pElem = new ElementDescriptor(
+                    xProps, xPropState,
+                    OUString( RTL_CONSTASCII_USTRINGPARAM(XMLNS_DIALOGS_PREFIX ":treecontrol") ) );
+                xElem = static_cast< xml::sax::XAttributeList * >( pElem );
+                pElem->readTreeControlModel( &all_styles );
             }
             else if (xServiceInfo->supportsService( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.awt.UnoControlCurrencyFieldModel") ) ) )
             {
