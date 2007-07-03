@@ -4,9 +4,9 @@
  *
  *  $RCSfile: validate.src,v $
  *
- *  $Revision: 1.44 $
+ *  $Revision: 1.45 $
  *
- *  last change: $Author: ihi $ $Date: 2007-04-19 16:28:18 $
+ *  last change: $Author: rt $ $Date: 2007-07-03 15:54:24 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -188,7 +188,7 @@ TabPage TP_VALIDATION_VALUES
         Pos = MAP_APPFONT ( 80 , 90 ) ;
         Size = MAP_APPFONT ( 174 , 64 ) ;
         WordBreak = TRUE ;
-        Text [ en-US ] = "A valid source can only consist of a contiguous selection in a single row or single column. If several selections are made, only the first column of the first selected range will be used for validation." ;
+        Text [ en-US ] = "A valid source can only consist of a contiguous selection of rows and columns, or a formula that results in an area or array.";
     };
 };
 
