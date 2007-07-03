@@ -4,9 +4,9 @@
 #
 #   $RCSfile: scriptitems.pm,v $
 #
-#   $Revision: 1.36 $
+#   $Revision: 1.37 $
 #
-#   last change: $Author: ihi $ $Date: 2007-06-04 13:52:30 $
+#   last change: $Author: rt $ $Date: 2007-07-03 11:46:07 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -871,7 +871,7 @@ sub get_Source_Directory_For_Files_From_Includepathlist
         my $styles = "";
         my $file_can_miss = 0;
         if ( $onefile->{'Styles'} ) { $styles = $onefile->{'Styles'}; }
-        if ( $styles =~ /\bSTARREGISTRY\b/ ) { $file_can_miss = 1; }
+        if (( $styles =~ /\bSTARREGISTRY\b/ ) || ( $styles =~ /\bFILE_CAN_MISS\b/ )) { $file_can_miss = 1; }
 
         my $sourcepathref = "";
 
