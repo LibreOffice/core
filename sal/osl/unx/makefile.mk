@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.31 $
+#   $Revision: 1.32 $
 #
-#   last change: $Author: obo $ $Date: 2007-01-25 15:24:24 $
+#   last change: $Author: rt $ $Date: 2007-07-03 12:48:28 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -112,6 +112,10 @@ OBJFILES=   $(OBJ)$/conditn.obj  \
             $(OBJ)$/process_impl.obj\
             $(OBJ)$/file_stat.obj
 #.ENDIF
+
+.IF "$(OS)"=="MACOSX"
+SLOFILES += $(SLO)$/osxlocale.obj
+.ENDIF
 
 .IF "$(OS)"=="SOLARIS" || "$(OS)"=="FREEBSD" || "$(OS)"=="NETBSD" || "$(OS)$(CPU)"=="LINUXS"
 SLOFILES += $(SLO)$/backtrace.obj
