@@ -4,9 +4,9 @@
  *
  *  $RCSfile: loadenv.cxx,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: vg $ $Date: 2006-11-01 18:16:44 $
+ *  last change: $Author: rt $ $Date: 2007-07-03 14:16:25 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1590,7 +1590,11 @@ css::uno::Reference< css::frame::XFrame > LoadEnv::impl_searchRecycleTarget()
     if (aTasksAnalyzer.m_xBackingComponent.is())
     {
         if (!impl_isFrameAlreadyUsedForLoading(aTasksAnalyzer.m_xBackingComponent))
+        {
+            // bring it to front ...
+            impl_makeFrameWindowVisible(aTasksAnalyzer.m_xBackingComponent->getContainerWindow(), sal_True);
             return aTasksAnalyzer.m_xBackingComponent;
+        }
     }
 
     // These states indicates the wishing for creation of a new view in general.
@@ -1692,6 +1696,9 @@ css::uno::Reference< css::frame::XFrame > LoadEnv::impl_searchRecycleTarget()
     m_bReactivateControllerOnError = bReactivateOldControllerOnError;
     aWriteLock.unlock();
     // <- SAFE ..................................
+
+    // bring it to front ...
+    impl_makeFrameWindowVisible(xTask->getContainerWindow(), sal_True);
 
     return xTask;
 }
