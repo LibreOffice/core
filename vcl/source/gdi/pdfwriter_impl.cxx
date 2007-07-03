@@ -4,9 +4,9 @@
  *
  *  $RCSfile: pdfwriter_impl.cxx,v $
  *
- *  $Revision: 1.111 $
+ *  $Revision: 1.112 $
  *
- *  last change: $Author: hr $ $Date: 2007-06-27 20:21:16 $
+ *  last change: $Author: rt $ $Date: 2007-07-03 14:06:22 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -78,8 +78,6 @@ using namespace rtl;
 #if OSL_DEBUG_LEVEL < 2
 #define COMPRESS_PAGES
 #endif
-
-#define DEBUG_DISABLE_PDFCOMPRESSION
 
 #ifdef DO_TEST_PDF
 class PDFTestOutputStream : public PDFOutputStream
