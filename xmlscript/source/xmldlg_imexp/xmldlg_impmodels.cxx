@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xmldlg_impmodels.cxx,v $
  *
- *  $Revision: 1.38 $
+ *  $Revision: 1.39 $
  *
- *  last change: $Author: kz $ $Date: 2007-06-20 10:33:13 $
+ *  last change: $Author: rt $ $Date: 2007-07-03 12:57:47 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -894,6 +894,72 @@ void FileControlElement::endElement()
     ctx.importBooleanProperty( OUString( RTL_CONSTASCII_USTRINGPARAM("ReadOnly") ),
                                OUString( RTL_CONSTASCII_USTRINGPARAM("readonly") ),
                                _xAttributes );
+    ctx.importEvents( _events );
+    // avoid ring-reference:
+    // vector< event elements > holding event elements holding this (via _pParent)
+    _events.clear();
+}
+//##################################################################################################
+
+// treecontrol
+//__________________________________________________________________________________________________
+Reference< xml::input::XElement > TreeControlElement::startChildElement(
+    sal_Int32 nUid, OUString const & rLocalName,
+    Reference< xml::input::XAttributes > const & xAttributes )
+    throw (xml::sax::SAXException, RuntimeException)
+{
+    // event
+    if (_pImport->isEventElement( nUid, rLocalName ))
+    {
+        return new EventElement( nUid, rLocalName, xAttributes, this, _pImport );
+    }
+    else
+    {
+        throw xml::sax::SAXException(
+            OUString( RTL_CONSTASCII_USTRINGPARAM("expected event element!") ),
+            Reference< XInterface >(), Any() );
+    }
+}
+//__________________________________________________________________________________________________
+void TreeControlElement::endElement()
+    throw (xml::sax::SAXException, RuntimeException)
+{
+    ControlImportContext ctx(
+        _pImport, getControlId( _xAttributes ),
+        OUString( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.awt.tree.TreeControlModel") ) );
+
+    Reference< xml::input::XElement > xStyle( getStyle( _xAttributes ) );
+    if (xStyle.is())
+    {
+        StyleElement * pStyle = static_cast< StyleElement * >( xStyle.get () );
+        Reference< beans::XPropertySet > xControlModel( ctx.getControlModel() );
+        pStyle->importBackgroundColorStyle( xControlModel );
+        pStyle->importBorderStyle( xControlModel );
+    }
+
+    ctx.importDefaults( _nBasePosX, _nBasePosY, _xAttributes );
+    ctx.importSelectionTypeProperty( OUString( RTL_CONSTASCII_USTRINGPARAM("SelectionType") ),
+                              OUString( RTL_CONSTASCII_USTRINGPARAM("selectiontype") ),
+                              _xAttributes );
+    ctx.importBooleanProperty( OUString( RTL_CONSTASCII_USTRINGPARAM("RootDisplayed") ),
+                               OUString( RTL_CONSTASCII_USTRINGPARAM("rootdisplayed") ),
+                               _xAttributes );
+    ctx.importBooleanProperty( OUString( RTL_CONSTASCII_USTRINGPARAM("ShowsHandles") ),
+                               OUString( RTL_CONSTASCII_USTRINGPARAM("showshandles") ),
+                               _xAttributes );
+    ctx.importBooleanProperty( OUString( RTL_CONSTASCII_USTRINGPARAM("ShowsRootHandles") ),
+                               OUString( RTL_CONSTASCII_USTRINGPARAM("showsroothandles") ),
+                               _xAttributes );
+    ctx.importBooleanProperty( OUString( RTL_CONSTASCII_USTRINGPARAM("Editable") ),
+                               OUString( RTL_CONSTASCII_USTRINGPARAM("editable") ),
+                               _xAttributes );
+    ctx.importBooleanProperty( OUString( RTL_CONSTASCII_USTRINGPARAM("RowHeight") ),
+                               OUString( RTL_CONSTASCII_USTRINGPARAM("readonly") ),
+                               _xAttributes );
+    ctx.importBooleanProperty( OUString( RTL_CONSTASCII_USTRINGPARAM("InvokesStopNodeEditing") ),
+                             OUString( RTL_CONSTASCII_USTRINGPARAM("invokesstopnodeediting") ),
+                             _xAttributes );
+
     ctx.importEvents( _events );
     // avoid ring-reference:
     // vector< event elements > holding event elements holding this (via _pParent)
@@ -1910,6 +1976,11 @@ Reference< xml::input::XElement > BulletinBoardElement::startChildElement(
     else if (rLocalName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("filecontrol") ))
     {
         return new FileControlElement( rLocalName, xAttributes, this, _pImport );
+    }
+    // treecontrol
+    else if (rLocalName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("treecontrol") ))
+    {
+        return new TreeControlElement( rLocalName, xAttributes, this, _pImport );
     }
     // currencyfield
     else if (rLocalName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("currencyfield") ))
