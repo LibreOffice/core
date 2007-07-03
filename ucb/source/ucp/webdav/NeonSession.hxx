@@ -4,9 +4,9 @@
  *
  *  $RCSfile: NeonSession.hxx,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: ihi $ $Date: 2007-06-05 18:19:54 $
+ *  last change: $Author: rt $ $Date: 2007-07-03 12:13:43 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -47,10 +47,6 @@
 #endif
 #ifndef _NEONTYPES_HXX_
 #include "NeonTypes.hxx"
-#endif
-
-#if NEON_VERSION >= 0250
-typedef void (*ne_header_handler)(void *userdata, const char *value);
 #endif
 
 namespace ucbhelper { class ProxyDecider; }
@@ -256,7 +252,7 @@ class NeonSession : public DAVSession
         static int GET( ne_session * sess,
                         const char * uri,
                         ne_block_reader reader,
-                        ne_header_handler handler,
+                        bool getheaders,
                         void * userdata );
 
         // Buffer-based PUT implementation. Neon only has file descriptor-
