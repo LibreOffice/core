@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dlg_View3D.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: vg $ $Date: 2007-05-22 17:38:12 $
+ *  last change: $Author: rt $ $Date: 2007-07-03 13:38:25 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -47,7 +47,6 @@
 #include "tp_3D_SceneIllumination.hxx"
 #include "ChartModelHelper.hxx"
 #include "macros.hxx"
-#include "Pseudo3DHelper.hxx"
 #include "ControllerLockGuard.hxx"
 
 #ifndef _COM_SUN_STAR_BEANS_XPROPERTYSET_HPP_
