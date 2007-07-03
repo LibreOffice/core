@@ -1,13 +1,50 @@
+/*************************************************************************
+ *
+ *  OpenOffice.org - a multi-platform office productivity suite
+ *
+ *  $RCSfile: ModuleCtrl.java,v $
+ *
+ *  $Revision: 1.2 $
+ *
+ *  last change: $Author: rt $ $Date: 2007-07-03 12:02:36 $
+ *
+ *  The Contents of this file are made available subject to
+ *  the terms of GNU Lesser General Public License Version 2.1.
+ *
+ *
+ *    GNU Lesser General Public License Version 2.1
+ *    =============================================
+ *    Copyright 2005 by Sun Microsystems, Inc.
+ *    901 San Antonio Road, Palo Alto, CA 94303, USA
+ *
+ *    This library is free software; you can redistribute it and/or
+ *    modify it under the terms of the GNU Lesser General Public
+ *    License version 2.1, as published by the Free Software Foundation.
+ *
+ *    This library is distributed in the hope that it will be useful,
+ *    but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ *    Lesser General Public License for more details.
+ *
+ *    You should have received a copy of the GNU Lesser General Public
+ *    License along with this library; if not, write to the Free Software
+ *    Foundation, Inc., 59 Temple Place, Suite 330, Boston,
+ *    MA  02111-1307  USA
+ *
+ ************************************************************************/
+
 package org.openoffice.setup.Util;
 
-import org.openoffice.setup.InstallData;
-import org.openoffice.setup.Installer.Installer;
-import org.openoffice.setup.SetupData.PackageDescription;
 import java.io.File;
 import java.util.Enumeration;
+import org.openoffice.setup.InstallData;
+import org.openoffice.setup.Installer.Installer;
 import org.openoffice.setup.Installer.InstallerFactory;
 import org.openoffice.setup.Panel.ChooseDirectory;
+import org.openoffice.setup.ResourceManager;
+import org.openoffice.setup.SetupData.PackageDescription;
 import org.openoffice.setup.SetupData.SetupDataProvider;
+import org.openoffice.setup.Util.Informer;
 
 public class ModuleCtrl {
 
@@ -301,6 +338,24 @@ public class ModuleCtrl {
                 if ( isRequiredCoreModule ) {
                     packageData.setSelectionState(PackageDescription.INSTALL);
                     LogManager.addLogfileComment("<b>Adding required package:</b> " + packageData.getPackageName() + "</br>");
+                    // This package has to exist!
+                    if ( ! packageExists(packageData, installData) ) {
+
+                        String packagePath = installData.getPackagePath();
+                        if (( packageData.getPkgSubdir() != null ) && ( ! packageData.getPkgSubdir().equals("") )) {
+                            File completePackageFile = new File(packagePath, packageData.getPkgSubdir());
+                            packagePath = completePackageFile.getPath();
+                        }
+                        String packageName = packageData.getPackageName();
+                        File packageFile = new File(packagePath, packageName);
+
+                        String log = "<b>Error: Missing required package " + packageFile.getPath() + "</b><br>";
+                        System.err.println(log);
+                        String message = ResourceManager.getString("String_File_Not_Found") + ": " + packageFile.getPath();
+                        String title = ResourceManager.getString("String_Error");
+                        Informer.showErrorMessage(message, title);
+                        System.exit(1);
+                    }
                 }
             }
         }
@@ -331,11 +386,18 @@ public class ModuleCtrl {
         }
     }
 
-    static private boolean packageExists(String packageName, InstallData installData) {
+    static private boolean packageExists(PackageDescription packageData, InstallData installData) {
         boolean fileExists = false;
         String packagePath = installData.getPackagePath();
 
+        if (( packageData.getPkgSubdir() != null ) && ( ! packageData.getPkgSubdir().equals("") )) {
+            File completePackageFile = new File(packagePath, packageData.getPkgSubdir());
+            packagePath = completePackageFile.getPath();
+        }
+
+        String packageName = packageData.getPackageName();
         File packageFile = new File(packagePath, packageName);
+
         if ( packageFile.exists() ) {
             fileExists = true;
         }
@@ -347,7 +409,7 @@ public class ModuleCtrl {
         if ((( packageData.getPackageName() == null ) || ( packageData.getPackageName().equals("") ))
                && packageData.isLeaf() ) {
             packageData.setSelectionState(PackageDescription.IGNORE);
-        } else if ( ! packageExists(packageData.getPackageName(), installData) ) {
+        } else if ( ! packageExists(packageData, installData) ) {
             packageData.setSelectionState(PackageDescription.IGNORE);
         }
 
@@ -488,6 +550,13 @@ public class ModuleCtrl {
         if (( packageData.getPackageName() != null ) && ( ! packageData.getPackageName().equals(""))) {
             if ( installer.isPackageInstalled(packageData, data) ) {
                 packageData.setSelectionState(PackageDescription.INSTALL);
+
+                // Special handling for jre package, because this is not necessarily older, if an older product is updated.
+                if ( packageData.isJavaPackage() ) {
+                    if ( ! installer.isInstalledPackageOlder(packageData, data) ) {
+                        packageData.setSelectionState(PackageDescription.DONT_INSTALL);
+                    }
+                }
             } else {
                 packageData.setSelectionState(PackageDescription.DONT_INSTALL);
             }
