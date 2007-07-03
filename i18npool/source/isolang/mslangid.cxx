@@ -4,9 +4,9 @@
  *
  *  $RCSfile: mslangid.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: hr $ $Date: 2006-10-24 13:09:34 $
+ *  last change: $Author: rt $ $Date: 2007-07-03 14:04:45 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -268,7 +268,6 @@ sal_Int16 MsLangId::getScriptType( LanguageType nLang )
         case LANGUAGE_URDU_INDIA:
         case LANGUAGE_USER_KURDISH_IRAQ:
         case LANGUAGE_USER_KURDISH_IRAN:
-        case LANGUAGE_VIETNAMESE:
             nScript = ::com::sun::star::i18n::ScriptType::COMPLEX;
             break;
 
