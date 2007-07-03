@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dlgresid.src,v $
  *
- *  $Revision: 1.32 $
+ *  $Revision: 1.33 $
  *
- *  last change: $Author: ihi $ $Date: 2007-04-19 13:47:49 $
+ *  last change: $Author: rt $ $Date: 2007-07-03 13:03:55 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -120,6 +120,10 @@ String RID_STR_CLASS_PATTERNFIELD
 String RID_STR_CLASS_FILECONTROL
 {
     Text = "FileControl" ;
+};
+String RID_STR_CLASS_TREECONTROL
+{
+    Text = "TreeControl" ;
 };
 
 
