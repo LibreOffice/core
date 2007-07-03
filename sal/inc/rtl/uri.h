@@ -4,9 +4,9 @@
  *
  *  $RCSfile: uri.h,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 14:43:55 $
+ *  last change: $Author: rt $ $Date: 2007-07-03 14:19:53 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -171,6 +171,13 @@ typedef enum
         @since UDK 3.2.0
      */
     rtl_UriEncodeStrict,
+
+    /** Like rtl_UriEncodeKeepEscapes, but indicating failure when converting
+        unmappable characters.
+
+        @since UDK 3.2.7
+     */
+    rtl_UriEncodeStrictKeepEscapes,
 
     rtl_UriEncode_FORCE_EQUAL_SIZE = SAL_MAX_ENUM
 }
