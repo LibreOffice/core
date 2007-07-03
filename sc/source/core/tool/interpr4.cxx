@@ -4,9 +4,9 @@
  *
  *  $RCSfile: interpr4.cxx,v $
  *
- *  $Revision: 1.49 $
+ *  $Revision: 1.50 $
  *
- *  last change: $Author: hr $ $Date: 2007-06-27 13:44:43 $
+ *  last change: $Author: rt $ $Date: 2007-07-03 15:49:45 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -3550,6 +3550,8 @@ StackVar ScInterpreter::Interpret()
                 case ocHyperLink        : ScHyperLink();                break;
                 case ocBahtText         : ScBahtText();                 break;
                 case ocGetPivotData     : ScGetPivotData();             break;
+                case ocJis              : ScJis();                      break;
+                case ocAsc              : ScAsc();                      break;
                 case ocAnswer           : ScAnswer();                   break;
                 case ocTeam             : ScCalcTeam();                 break;
                 case ocTTT              : ScTTT();                      break;
