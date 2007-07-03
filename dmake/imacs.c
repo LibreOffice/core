@@ -1,4 +1,4 @@
-/* RCS  $Id: imacs.c,v 1.6 2007-06-12 06:05:57 obo Exp $
+/* RCS  $Id: imacs.c,v 1.7 2007-07-03 11:29:46 rt Exp $
 --
 -- SYNOPSIS
 --      Define default internal macros.
@@ -101,6 +101,7 @@ Create_macro_vars()
    _set_string_var("SHELLMETAS",   "",  M_DEFAULT, &Shell_metas );
    _set_string_var("GROUPSUFFIX",  "",  M_DEFAULT, &Grp_suff    );
    _set_string_var("AUGMAKE",NIL(char), M_DEFAULT, &Augmake     );
+   _set_string_var("OOODMAKEMODE", "",  M_DEFAULT, &OOoDmMode );
    _set_string_var(".KEEP_STATE",  "",  M_DEFAULT, &Keep_state  );
    _set_string_var(".NOTABS",      "",  M_MULTI, &Notabs );
    _set_string_var(".DIRCACHE",    "y", M_DEFAULT, &UseDirCache );
