@@ -4,9 +4,9 @@
  *
  *  $RCSfile: NeonUri.hxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: hr $ $Date: 2006-06-20 05:37:41 $
+ *  last change: $Author: rt $ $Date: 2007-07-03 12:14:10 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -67,9 +67,6 @@ class NeonUri
         ::rtl::OUString mHostName;
         sal_Int32       mPort;
         ::rtl::OUString mPath;
-        static ne_uri   sUriDefaultsHTTP;
-        static ne_uri   sUriDefaultsHTTPS;
-        static ne_uri   sUriDefaultsFTP;
 
         void init( const rtl::OString & rUri, const ne_uri * pUri );
         void calculateURI ();
@@ -104,7 +101,7 @@ class NeonUri
         void SetScheme (const ::rtl::OUString& scheme)
             { mScheme = scheme; calculateURI (); };
 
-        void AppendPath (const ::rtl::OUString& path);
+        void AppendPath (const ::rtl::OUString& rPath);
 
         static ::rtl::OUString escapeSegment( const ::rtl::OUString& segment );
         static ::rtl::OUString unescape( const ::rtl::OUString& string );
