@@ -4,9 +4,9 @@
  *
  *  $RCSfile: scfuncs.src,v $
  *
- *  $Revision: 1.91 $
+ *  $Revision: 1.92 $
  *
- *  last change: $Author: hr $ $Date: 2007-06-27 13:46:14 $
+ *  last change: $Author: rt $ $Date: 2007-07-03 15:55:38 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -33,39 +33,35 @@
  *
  ************************************************************************/
 
- // Resource-Datei fuer den Funktions-Autopiloten von StarCalc
- //
- // Alle Beschreibungen der Funktionen sind in der Resource
- // RID_SC_FUNCTION_DESCRIPTIONS zusammgefasst.
- // Zu jeder Funktion gibt es eine Sub-Resource, die die Nummer
- // des OpCodes der Funktion hat.
- // In diesen Sub-Resourcen steht unter dem Index 1 die Beschreibung
- // als String, dann folgen im ExtraData-Block zusaetzliche Angaben:
- // Gruppe;
- // Help-Id;
- // Anzahl der Parameter (auch VAR_ARGS f. var. Anzahl);
- // Je Parameter, Flag ob Parameter optional.
- // Zu jedem Parameter folgen dann zwei durchnummerierte
- // String-Resourcen mit dem Namen und der Beschreibung.
- //
- // 23.7.96 rj
+/* Resource file for the function wizard / autopilot.
+ *
+ * All descriptions of functions are collected within the resources
+ * RID_SC_FUNCTION_DESCRIPTIONS1 respectively RID_SC_FUNCTION_DESCRIPTIONS2,
+ * two blocks because otherwise we had a 64kb overflow.
+ *
+ *  For every function there is a sub resource with the number of the OpCode of
+ *  the function.
+ *
+ *      In this sub resource, with index 1 the description of the function is
+ *      given, after that follows an
+ *
+ *      ExtraData block with:
+ *
+ *          Function group (text, math, ...), one of ID_FUNCTION_GRP_...
+ *          Help ID, U2S(HID_FUNC_...)
+ *          Number of parameters (VAR_ARGS if variable number).
+ *          For every parameter a flag whether the parameter is optional.
+ *
+ *      Followed by two string resources for each parameter, first the type or
+ *      name of the parameter, second a description of the parameter.
+ */
 
- // Hack:
+// Hack:
 #define U2S(x)  ((x)-HID_START)
- // Makro U2S: Unsigned to signed
- // wird benoetigt, da der Resourcecompiler nur vorzeichenbehaftete Int
- // in ExtraData verkraftet, die HID_XXX aber vorzeichenlos sind und
- // den Bereich ueberschreiten (>32768)
- // Achtung:
- // In der Datei ???, die die Resourcen ausliest, muss dies wieder
- // rueckgaengig gemacht werden
- //
- // 27.9.96 rj
-
- // 27.11.96 ER
- // Beschreibungen wg. 64kB-Overflow auf zwei Bloecke aufgeteilt:
- // RID_SC_FUNCTION_DESCRIPTIONS1
- // RID_SC_FUNCTION_DESCRIPTIONS2
+// Macro U2S: unsigned to signed
+// is needed because the resource compiler only knows signed short int in
+// ExtraData, but the HID_XXX are unsigned and exceed 32k. Code reading the
+// resource entries must consider this and undo the conversion.
 
 #include "scfuncs.hrc" // ID_FUNCTION_GRP_XXX, HID_FUNC_XXX
 #include "compiler.hrc" // SC_OPCODE_XXX
@@ -77,7 +73,6 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
     {
         String 1 // Description
         {
-            /* ### ACHTUNG: Neuer Text in Resource? Zählt alle Zellen eines Datenbereichs, deren Inhalte den Suchkriterien entsprechen. : Zõhlt alle Zellen eines Datenbereichs, deren Inhalte den Suchkriterien entsprechen. */
             Text [ en-US ] = "Counts the cells of a data range whose contents match the search criteria." ;
         };
         ExtraData =
@@ -100,7 +95,6 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
         };
         String 5 // Description of Parameter 2
         {
-            /* ### ACHTUNG: Neuer Text in Resource? Legt das Datenbankfeld (Spalte) für die Suchkriterien fest. : Legt das Datenbankfeld (Spalte) f³r die Suchkriterien fest. */
             Text [ en-US ] = "Indicates which database field (column) is to be used for the search criteria." ;
         };
         String 6 // Name of Parameter 3
@@ -112,11 +106,11 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
             Text [ en-US ] = "Defines the cell range containing the search criteria." ;
         };
     };
+     // -=*# Resource for function DBANZAHL2 #*=-
     Resource SC_OPCODE_DB_COUNT_2
     {
         String 1 // Description
         {
-            /* ### ACHTUNG: Neuer Text in Resource? Zählt alle nichtleeren Zellen eines Datenbereichs, deren Inhalte den Suchkriterien entsprechen. : Zõhlt alle nichtleeren Zellen eines Datenbereichs, deren Inhalte den Suchkriterien entsprechen. */
             Text [ en-US ] = "Counts all non-blank cells of a data range where the content corresponds to the search criteria." ;
         };
         ExtraData =
@@ -139,7 +133,6 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
         };
         String 5 // Description of Parameter 2
         {
-            /* ### ACHTUNG: Neuer Text in Resource? Legt das Datenbankfeld (Spalte) für die Suchkriterien fest. : Legt das Datenbankfeld (Spalte) f³r die Suchkriterien fest. */
             Text [ en-US ] = "Indicates which database field (column) is to be used for the search criteria." ;
         };
         String 6 // Name of Parameter 3
@@ -178,7 +171,6 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
         };
         String 5 // Description of Parameter 2
         {
-            /* ### ACHTUNG: Neuer Text in Resource? Legt das Datenbankfeld (Spalte) für die Suchkriterien fest. : Legt das Datenbankfeld (Spalte) f³r die Suchkriterien fest. */
             Text [ en-US ] = "Indicates which database field (column) is to be used for the search criteria." ;
         };
         String 6 // Name of Parameter 3
@@ -217,7 +209,6 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
         };
         String 5 // Description of Parameter 2
         {
-            /* ### ACHTUNG: Neuer Text in Resource? Legt das Datenbankfeld (Spalte) für die Suchkriterien fest. : Legt das Datenbankfeld (Spalte) f³r die Suchkriterien fest. */
             Text [ en-US ] = "Indicates which database field (column) is to be used for the search criteria." ;
         };
         String 6 // Name of Parameter 3
@@ -256,7 +247,6 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
         };
         String 5 // Description of Parameter 2
         {
-            /* ### ACHTUNG: Neuer Text in Resource? Legt das Datenbankfeld (Spalte) für die Suchkriterien fest. : Legt das Datenbankfeld (Spalte) f³r die Suchkriterien fest. */
             Text [ en-US ] = "Indicates which database field (column) is to be used for the search criteria." ;
         };
         String 6 // Name of Parameter 3
@@ -295,7 +285,6 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
         };
         String 5 // Description of Parameter 2
         {
-            /* ### ACHTUNG: Neuer Text in Resource? Legt das Datenbankfeld (Spalte) für die Suchkriterien fest. : Legt das Datenbankfeld (Spalte) f³r die Suchkriterien fest. */
             Text [ en-US ] = "Indicates which database field (column) is to be used for the search criteria." ;
         };
         String 6 // Name of Parameter 3
@@ -334,7 +323,6 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
         };
         String 5 // Description of Parameter 2
         {
-            /* ### ACHTUNG: Neuer Text in Resource? Legt das Datenbankfeld (Spalte) für die Suchkriterien fest. : Legt das Datenbankfeld (Spalte) f³r die Suchkriterien fest. */
             Text [ en-US ] = "Indicates which database field (column) is to be used for the search criteria." ;
         };
         String 6 // Name of Parameter 3
@@ -373,7 +361,6 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
         };
         String 5 // Description of Parameter 2
         {
-            /* ### ACHTUNG: Neuer Text in Resource? Legt das Datenbankfeld (Spalte) für die Suchkriterien fest. : Legt das Datenbankfeld (Spalte) f³r die Suchkriterien fest. */
             Text [ en-US ] = "Indicates which database field (column) is to be used for the search criteria." ;
         };
         String 6 // Name of Parameter 3
@@ -412,7 +399,6 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
         };
         String 5 // Description of Parameter 2
         {
-            /* ### ACHTUNG: Neuer Text in Resource? Legt das Datenbankfeld (Spalte) für die Suchkriterien fest. : Legt das Datenbankfeld (Spalte) f³r die Suchkriterien fest. */
             Text [ en-US ] = "Indicates which database field (column) is to be used for the search criteria." ;
         };
         String 6 // Name of Parameter 3
@@ -451,7 +437,6 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
         };
         String 5 // Description of Parameter 2
         {
-            /* ### ACHTUNG: Neuer Text in Resource? Legt das Datenbankfeld (Spalte) für die Suchkriterien fest. : Legt das Datenbankfeld (Spalte) f³r die Suchkriterien fest. */
             Text [ en-US ] = "Indicates which database field (column) is to be used for the search criteria." ;
         };
         String 6 // Name of Parameter 3
@@ -490,7 +475,6 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
         };
         String 5 // Description of Parameter 2
         {
-            /* ### ACHTUNG: Neuer Text in Resource? Legt das Datenbankfeld (Spalte) für die Suchkriterien fest. : Legt das Datenbankfeld (Spalte) f³r die Suchkriterien fest. */
             Text [ en-US ] = "Indicates which database field (column) is to be used for the search criteria." ;
         };
         String 6 // Name of Parameter 3
@@ -529,7 +513,6 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
         };
         String 5 // Description of Parameter 2
         {
-            /* ### ACHTUNG: Neuer Text in Resource? Legt das Datenbankfeld (Spalte) für die Suchkriterien fest. : Legt das Datenbankfeld (Spalte) f³r die Suchkriterien fest. */
             Text [ en-US ] = "Indicates which database field (column) is to be used for the search criteria." ;
         };
         String 6 // Name of Parameter 3
@@ -546,7 +529,6 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
     {
         String 1 // Description
         {
-            /* ### ACHTUNG: Neuer Text in Resource? Liefert die interne Zahl für das angegebene Datum. : Liefert die interne Zahl f³r das angegebene Datum. */
             Text [ en-US ] = "Provides an internal number for the date given." ;
         };
         ExtraData =
@@ -561,7 +543,6 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
         };
         String 3 // Description of Parameter 1
         {
-            /* ### ACHTUNG: Neuer Text in Resource? Eine ganze Zahl zwischen 1583 und 9956, oder 0 und 99 (19xx oder 20xx gemäß eingestellter Option). : Eine ganze Zahl zwischen 1600 und 3000, 0 und 19 (-> 2000 bis 2019) oder 20 und 99 (-> 1920 - 1999). */
             Text [ en-US ] = "An integer between 1583 and 9956 or 0 and 99 (19xx or 20xx depending on the defined option)." ;
         };
         String 4 // Name of Parameter 2
@@ -570,7 +551,6 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
         };
         String 5 // Description of Parameter 2
         {
-            /* ### ACHTUNG: Neuer Text in Resource? Eine ganze Zahl zwischen 1 und 12 für den Monat. : Eine ganze Zahl zwischen 1 und 12 f³r den Monat. */
             Text [ en-US ] = "An integer between 1 and 12 representing the month." ;
         };
         String 6 // Name of Parameter 3
@@ -579,7 +559,6 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
         };
         String 7 // Description of Parameter 3
         {
-            /* ### ACHTUNG: Neuer Text in Resource? Eine ganze Zahl zwischen 1 und 31 für den Tag. : Eine ganze Zahl zwischen 1 und 31 f³r den Tag. */
             Text [ en-US ] = "An integer between 1 and 31 representing the day of the month." ;
         };
     };
@@ -588,7 +567,6 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
     {
         String 1 // Description
         {
-            /* ### ACHTUNG: Neuer Text in Resource? Bestimmt aus einem Text in einem möglichen Datumseingabeformat eine interne Zahl. : Bestimmt aus einem Text in einem m÷glichen Datumseingabeformat eine interne Zahl. */
             Text [ en-US ] = "Returns an internal number for a text having a possible date format." ;
         };
         ExtraData =
@@ -603,7 +581,6 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
         };
         String 3 // Description of Parameter 1
         {
-            /* ### ACHTUNG: Neuer Text in Resource? Ein in Anführungszeichen eingeschlossener Text, der ein Datum in einem StarCalc Datumsformat wiedergibt. : Ein in Anf³hrungszeichen eingeschlossener Text, der ein Datum in einem StarCalc Datumsformat wiedergibt. */
             Text [ en-US ] = "A text enclosed in quotation marks which returns a date in a %PRODUCTNAME date format." ;
         };
     };
@@ -774,7 +751,6 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
     {
         String 1 // Description
         {
-            /* ### ACHTUNG: Neuer Text in Resource? Bestimmt einen Zeitwert aus Zahlangaben für Stunde, Minute und Sekunde : Bestimmt einen Zeitwert aus Zahlangaben f³r Stunde, Minute und Sekunde */
             Text [ en-US ] = "Determines a time value from the details for hour, minute and second." ;
         };
         ExtraData =
@@ -789,7 +765,6 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
         };
         String 3 // Description of Parameter 1
         {
-            /* ### ACHTUNG: Neuer Text in Resource? Ganze Zahl für die Stunde. : Ganze Zahl f³r die Stunde. */
             Text [ en-US ] = "The integer for the hour." ;
         };
         String 4 // Name of Parameter 2
@@ -798,7 +773,6 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
         };
         String 5 // Description of Parameter 2
         {
-            /* ### ACHTUNG: Neuer Text in Resource? Ganze Zahl für die Minute. : Ganze Zahl f³r die Minute. */
             Text [ en-US ] = "The integer for the minute." ;
         };
         String 6 // Name of Parameter 3
@@ -807,7 +781,6 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
         };
         String 7 // Description of Parameter 3
         {
-            /* ### ACHTUNG: Neuer Text in Resource? Ganze Zahl für die Sekunde. : Ganze Zahl f³r die Sekunde. */
             Text [ en-US ] = "The integer for the second." ;
         };
     };
@@ -816,7 +789,6 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
     {
         String 1 // Description
         {
-            /* ### ACHTUNG: Neuer Text in Resource? Bestimmt aus einem Text in einem möglichen Zeiteingabeformat eine fortlaufende Zahl. : Bestimmt aus einem Text in einem m÷glichen Zeiteingabeformat eine fortlaufende Zahl. */
             Text [ en-US ] = "Returns a sequential number for a text shown in a possible time entry format." ;
         };
         ExtraData =
@@ -831,7 +803,6 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
         };
         String 3 // Description of Parameter 1
         {
-            /* ### ACHTUNG: Neuer Text in Resource? Ein in Anführungszeichen eingeschlossener Text, der eine Zeitangabe in einem StarCalc Zeitformat wiedergibt. : Ein in Anf³hrungszeichen eingeschlossener Text, der eine Zeitangabe in einem StarCalc Zeitformat wiedergibt. */
             Text [ en-US ] = "A text enclosed in quotation marks which returns a time in a %PRODUCTNAME time format." ;
         };
     };
@@ -1010,7 +981,6 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
         };
         String 5 // Description of Parameter 2
         {
-            /* ### ACHTUNG: Neuer Text in Resource? Zahlungszeitraum. Die Gesamtanzahl der Perioden, in denen die Annuität (Rente) gezahlt wird. : Zahlungszeitraum. Die Gesamtanzahl der Perioden, in denen die Annuitõt (Rente) gezahlt wird. */
             Text [ en-US ] = "The payment period. The total number of periods in which the annuity is paid." ;
         };
         String 6 // Name of Parameter 3
@@ -1019,7 +989,6 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
         };
         String 7 // Description of Parameter 3
         {
-            /* ### ACHTUNG: Neuer Text in Resource? Regelmäßige Zahlung. Die konstante Annuität, die in jeder Periode gezahlt wird. : Regelmõ˜ige Zahlung. Die konstante Annuitõt, die in jeder Periode gezahlt wird. */
             Text [ en-US ] = "Regular payments. The constant amount of annuity that is paid in each period." ;
         };
         String 8 // Name of Parameter 4
@@ -1028,7 +997,6 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
         };
         String 9 // Description of Parameter 4
         {
-            /* ### ACHTUNG: Neuer Text in Resource? Zukünftiger Wert. Der Wert (Endwert), der nach der letzten Zahlung erreicht werden soll. : Zuk³nftiger Wert. Der Wert (Endwert), der nach der letzten Zahlung erreicht werden soll. */
             Text [ en-US ] = "Future value. The value (final value) to be attained after the last payment." ;
         };
         String 10 // Name of Parameter 5
@@ -1037,7 +1005,6 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
         };
         String 11 // Description of Parameter 5
         {
-            /* ### ACHTUNG: Neuer Text in Resource? Fälligkeit. F = 1 heißt Fälligkeit am Anfang einer Periode, F = 0 am Ende. : Fõlligkeit. F = 1 hei˜t Fõlligkeit am Anfang einer Periode, F = 0 am Ende. */
             Text [ en-US ] = "Type = 1 denotes due at the beginning of the period, = 0 at the end." ;
         };
     };
@@ -1046,7 +1013,6 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
     {
         String 1 // Description
         {
-            /* ### ACHTUNG: Neuer Text in Resource? Zukünftiger Wert. Berechnet den Endwert einer Investition bei regelmäßigen Zahlungen und konstantem Zinssatz. : Zuk³nftiger Wert. Berechnet den Endwert einer Investition bei regelmõ˜igen Zahlungen und konstantem Zinssatz. */
             Text [ en-US ] = "Future value. Returns the future value of an investment based on regular payments and a constant interest rate." ;
         };
         ExtraData =
@@ -1069,7 +1035,6 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
         };
         String 5 // Description of Parameter 2
         {
-            /* ### ACHTUNG: Neuer Text in Resource? Zahlungszeitraum. Die Gesamtanzahl der Perioden, in denen die Annuität (Rente) gezahlt wird. : Zahlungszeitraum. Die Gesamtanzahl der Perioden, in denen die Annuitõt (Rente) gezahlt wird. */
             Text [ en-US ] = "Payment period. The total number of periods in which the annuity (pension) is paid." ;
         };
         String 6 // Name of Parameter 3
@@ -1078,7 +1043,6 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
         };
         String 7 // Description of Parameter 3
         {
-            /* ### ACHTUNG: Neuer Text in Resource? Regelmäßige Zahlung. Die konstante Annuität, die in jeder Periode gezahlt wird. : Regelmõ˜ige Zahlung. Die konstante Annuitõt, die in jeder Periode gezahlt wird. */
             Text [ en-US ] = "Regular payments. The constant annuity to be paid in each period." ;
         };
         String 8 // Name of Parameter 4
@@ -1095,7 +1059,6 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
         };
         String 11 // Description of Parameter 5
         {
-            /* ### ACHTUNG: Neuer Text in Resource? Fälligkeit. F = 1 heißt Fälligkeit am Anfang einer Periode, F = 0 am Ende. : Fõlligkeit. F = 1 hei˜t Fõlligkeit am Anfang einer Periode, F = 0 am Ende. */
             Text [ en-US ] = "Type = 1 denotes due at the beginning of the period, = 0 at the end." ;
         };
     };
@@ -1104,7 +1067,6 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
     {
         String 1 // Description
         {
-            /* ### ACHTUNG: Neuer Text in Resource? Zahlungszeitraum. Berechnet die Anzahl der Zahlungsperioden einer Investition bei regelmäßigen Zahlungen und konstantem Zinssatz. : Zahlungszeitraum. Berechnet die Anzahl der Zahlungsperioden einer Investition bei regelmõ˜igen Zahlungen und konstantem Zinssatz. */
             Text [ en-US ] = "Payment period. Calculates the number of payment periods for an investment based on regular payments and a constant interest rate." ;
         };
         ExtraData =
@@ -1127,7 +1089,6 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
         };
         String 5 // Description of Parameter 2
         {
-            /* ### ACHTUNG: Neuer Text in Resource? Regelmäßige Zahlung. Die konstante Annuität, die in jeder Periode gezahlt wird. : Regelmõ˜ige Zahlung. Die konstante Annuitõt, die in jeder Periode gezahlt wird. */
             Text [ en-US ] = "Regular payments. The constant annuity to be paid in each period." ;
         };
         String 6 // Name of Parameter 3
@@ -1144,7 +1105,6 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
         };
         String 9 // Description of Parameter 4
         {
-            /* ### ACHTUNG: Neuer Text in Resource? Zukünftiger Wert. Der Wert (Endwert), der nach der letzten Zahlung erreicht werden soll. : Zuk³nftiger Wert. Der Wert (Endwert), der nach der letzten Zahlung erreicht werden soll. */
             Text [ en-US ] = "Future value. The value (end value) to be attained after the final payment." ;
         };
         String 10 // Name of Parameter 5
@@ -1153,7 +1113,6 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
         };
         String 11 // Description of Parameter 5
         {
-            /* ### ACHTUNG: Neuer Text in Resource? Fälligkeit. F = 1 heißt Fälligkeit am Anfang einer Periode, F = 0 am Ende. : Fõlligkeit. F = 1 hei˜t Fõlligkeit am Anfang einer Periode, F = 0 am Ende. */
             Text [ en-US ] = "Type = 1 denotes due at the beginning of the period, = 0 at the end." ;
         };
     };
@@ -1162,7 +1121,6 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
     {
         String 1 // Description
         {
-            /* ### ACHTUNG: Neuer Text in Resource? Regelmäßige Zahlungen. Berechnet die regelmäßigen Zahlungen (Annuität) für eine Investition bei konstantem Zinssatz. : Regelmõ˜ige Zahlungen. Berechnet die regelmõ˜igen Zahlungen (Annuitõt) f³r eine Investition bei konstantem Zinssatz. */
             Text [ en-US ] = "Regular payments. Returns the periodic payment of an annuity, based on regular payments and a fixed periodic interest rate." ;
         };
         ExtraData =
@@ -1185,7 +1143,6 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
         };
         String 5 // Description of Parameter 2
         {
-            /* ### ACHTUNG: Neuer Text in Resource? Zahlungszeitraum. Die Gesamtanzahl der Perioden, in denen die Annuität (Rente) gezahlt wird. : Zahlungszeitraum. Die Gesamtanzahl der Perioden, in denen die Annuitõt (Rente) gezahlt wird. */
             Text [ en-US ] = "Payment period. The total number of periods in which the annuity (pension) is paid." ;
         };
         String 6 // Name of Parameter 3
@@ -1202,7 +1159,6 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
         };
         String 9 // Description of Parameter 4
         {
-            /* ### ACHTUNG: Neuer Text in Resource? Zukünftiger Wert. Der Wert (Endwert), der nach der letzten Zahlung erreicht werden soll. : Zuk³nftiger Wert. Der Wert (Endwert), der nach der letzten Zahlung erreicht werden soll. */
             Text [ en-US ] = "Future value. The value (end value) to be attained after the final payment." ;
         };
         String 10 // Name of Parameter 5
@@ -1211,7 +1167,6 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
         };
         String 11 // Description of Parameter 5
         {
-            /* ### ACHTUNG: Neuer Text in Resource? Fälligkeit. F = 1 heißt Fälligkeit am Anfang einer Periode, F = 0 am Ende. : Fõlligkeit. F = 1 hei˜t Fõlligkeit am Anfang einer Periode, F = 0 am Ende. */
             Text [ en-US ] = "Type = 1 denotes due at the beginning of the period, = 0 at the end." ;
         };
     };
@@ -1220,7 +1175,6 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
     {
         String 1 // Description
         {
-            /* ### ACHTUNG: Neuer Text in Resource? Berechnet den konstanten Zinssatz einer Investition bei regelmäßigen Zahlungen. : Berechnet den konstanten Zinssatz einer Investition bei regelmõ˜igen Zahlungen. */
             Text [ en-US ] = "Calculates the constant interest rate of an investment with regular payments." ;
         };
         ExtraData =
@@ -1235,7 +1189,6 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
         };
         String 3 // Description of Parameter 1
         {
-            /* ### ACHTUNG: Neuer Text in Resource? Zahlungszeitraum. Die Gesamtanzahl der Perioden, in denen die Annuität (Rente) gezahlt wird. : Zahlungszeitraum. Die Gesamtanzahl der Perioden, in denen die Annuitõt (Rente) gezahlt wird. */
             Text [ en-US ] = "Payment period. The total number of periods in which the annuity (pension) is paid." ;
         };
         String 4 // Name of Parameter 2
@@ -1244,7 +1197,6 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
         };
         String 5 // Description of Parameter 2
         {
-            /* ### ACHTUNG: Neuer Text in Resource? Regelmäßige Zahlung. Die konstante Annuität, die in jeder Periode gezahlt wird. : Regelmõ˜ige Zahlung. Die konstante Annuitõt, die in jeder Periode gezahlt wird. */
             Text [ en-US ] = "Regular payments. The constant annuity to be paid in each period." ;
         };
         String 6 // Name of Parameter 3
@@ -1261,7 +1213,6 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
         };
         String 9 // Description of Parameter 4
         {
-            /* ### ACHTUNG: Neuer Text in Resource? Zukünftiger Wert. Der Wert (Endwert), der nach der letzten Zahlung erreicht werden soll. : Zuk³nftiger Wert. Der Wert (Endwert), der nach der letzten Zahlung erreicht werden soll. */
             Text [ en-US ] = "Future value. The value (end value) to be attained after the final payment." ;
         };
         String 10 // Name of Parameter 5
@@ -1270,7 +1221,6 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
         };
         String 11 // Description of Parameter 5
         {
-            /* ### ACHTUNG: Neuer Text in Resource? Fälligkeit. F = 1 heißt Fälligkeit am Anfang einer Periode, F = 0 am Ende. : Fõlligkeit. F = 1 hei˜t Fõlligkeit am Anfang einer Periode, F = 0 am Ende. */
             Text [ en-US ] = "Type = 1 denotes due at the beginning of the period, = 0 at the end." ;
         };
         String 12 // Name of Parameter 6
@@ -1279,7 +1229,6 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
         };
         String 13 // Description of Parameter 6
         {
-            /* ### ACHTUNG: Neuer Text in Resource? Schätzwert. Schätzwert des Zinses für das iterative Berechnungsverfahren. : Schõtzwert. Schõtzwert des Zinses f³r das iterative Berechnungsverfahren. */
             Text [ en-US ] = "Guess. The estimate of the interest rate for the iterative calculating method." ;
         };
     };
@@ -1288,7 +1237,6 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
     {
         String 1 // Description
         {
-            /* ### ACHTUNG: Neuer Text in Resource? Zinseszins. Berechnet den Zinsbetrag einer Periode für eine Investition bei regelmäßigen Zahlungen und konstantem Zinssatz. : Zinseszins. Berechnet den Zinsbetrag einer Periode f³r eine Investition bei regelmõ˜igen Zahlungen und konstantem Zinssatz. */
             Text [ en-US ] = "Compounded interest. Calculates the interest payment on the principal for an investment with regular payments and a constant interest rate for a given period." ;
         };
         ExtraData =
@@ -1311,7 +1259,6 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
         };
         String 5 // Description of Parameter 2
         {
-            /* ### ACHTUNG: Neuer Text in Resource? Periode. Die Periode, für die die Zinseszinsen berechnet werden. P = 1 heißt für die erste Periode, P = ZZR für die letzte. : Periode. Die Periode, f³r die die Zinseszinsen berechnet werden. P = 1 hei˜t f³r die erste Periode, P = ZZR f³r die letzte. */
             Text [ en-US ] = "Periods. The periods for which the compounded interest is to be calculated. P = 1 denotes for the first period, P = NPER for the last one." ;
         };
         String 6 // Name of Parameter 3
@@ -1320,7 +1267,6 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
         };
         String 7 // Description of Parameter 3
         {
-            /* ### ACHTUNG: Neuer Text in Resource? Zahlungszeitraum. Die Gesamtanzahl der Perioden, in denen die Annuität (Rente) gezahlt wird. : Zahlungszeitraum. Die Gesamtanzahl der Perioden, in denen die Annuitõt (Rente) gezahlt wird. */
             Text [ en-US ] = "Payment period. The total number of periods in which the annuity (pension) is paid." ;
         };
         String 8 // Name of Parameter 4
@@ -1337,7 +1283,6 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
         };
         String 11 // Description of Parameter 5
         {
-            /* ### ACHTUNG: Neuer Text in Resource? Zukünftiger Wert. Der Wert (Endwert), der nach der letzten Zahlung erreicht werden soll. : Zuk³nftiger Wert. Der Wert (Endwert), der nach der letzten Zahlung erreicht werden soll. */
             Text [ en-US ] = "Future value. The value (end value) to be attained after the final payment." ;
         };
         String 12 // Name of Parameter 6
@@ -1346,7 +1291,6 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
         };
         String 13 // Description of Parameter 6
         {
-            /* ### ACHTUNG: Neuer Text in Resource? Fälligkeit. F = 1 heißt Fälligkeit am Anfang einer Periode, F = 0 am Ende. : Fõlligkeit. F = 1 hei˜t Fõlligkeit am Anfang einer Periode, F = 0 am Ende. */
             Text [ en-US ] = "Type = 1 denotes due at the beginning of the period, = 0 at the end." ;
         };
     };
@@ -1355,7 +1299,6 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
     {
         String 1 // Description
         {
-            /* ### ACHTUNG: Neuer Text in Resource? Tilgung. Berechnet den Tilgungsbetrag einer Periode für eine Investition bei regelmäßigen Zahlungen und konstantem Zinssatz. : Tilgung. Berechnet den Tilgungsbetrag einer Periode f³r eine Investition bei regelmõ˜igen Zahlungen und konstantem Zinssatz. */
             Text [ en-US ] = "Repayment. Calculates the repayment amount for a period for an investment whereby the payments are at regular intervals and the interest rate constant." ;
         };
         ExtraData =
@@ -1378,7 +1321,6 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
         };
         String 5 // Description of Parameter 2
         {
-            /* ### ACHTUNG: Neuer Text in Resource? Periode. Die Periode, für die die Tilgung berechnet wird. P = 1 heißt für die erste Periode, P = ZZR für die letzte. : Periode. Die Periode, f³r die die Tilgung berechnet wird. P = 1 hei˜t f³r die erste Periode, P = ZZR f³r die letzte. */
             Text [ en-US ] = "Period. The period for which the repayments are to be calculated. Per = 1 denotes for the first period, P = NPER for the last" ;
         };
         String 6 // Name of Parameter 3
@@ -1387,7 +1329,6 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
         };
         String 7 // Description of Parameter 3
         {
-            /* ### ACHTUNG: Neuer Text in Resource? Zahlungszeitraum. Die Gesamtanzahl der Perioden, in denen die Annuität (Rente) gezahlt wird. : Zahlungszeitraum. Die Gesamtanzahl der Perioden, in denen die Annuitõt (Rente) gezahlt wird. */
             Text [ en-US ] = "The payment period. The total number of periods in which the annuity (pension) is paid." ;
         };
         String 8 // Name of Parameter 4
@@ -1404,7 +1345,6 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
         };
         String 11 // Description of Parameter 5
         {
-            /* ### ACHTUNG: Neuer Text in Resource? Zukünftiger Wert. Der Wert (Endwert), der nach der letzten Zahlung erreicht werden soll. : Zuk³nftiger Wert. Der Wert (Endwert), der nach der letzten Zahlung erreicht werden soll. */
             Text [ en-US ] = "Future value. The value (end value) attained after the last payment has been made." ;
         };
         String 12 // Name of Parameter 6
@@ -1413,7 +1353,6 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
         };
         String 13 // Description of Parameter 6
         {
-            /* ### ACHTUNG: Neuer Text in Resource? Fälligkeit. F = 1 heißt Fälligkeit am Anfang einer Periode, F = 0 am Ende. : Fõlligkeit. F = 1 hei˜t Fõlligkeit am Anfang einer Periode, F = 0 am Ende. */
             Text [ en-US ] = "Type = 1 denotes due at the beginning of the period, = 0 at the end." ;
         };
     };
@@ -1422,7 +1361,6 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
     {
         String 1 // Description
         {
-            /* ### ACHTUNG: Neuer Text in Resource? Kumuliertes Kapitel. Berechnet den Gesamtbetrag der Tilgungsanteile in einem Zeitraum für eine Investition bei konstantem Zinssatz. : Kumuliertes Kapitel. Berechnet den Gesamtbetrag der Tilgungsanteile in einem Zeitraum f³r eine Investition bei konstantem Zinssatz. */
             Text [ en-US ] = "Cumulative Capital. Calculates the total amount of the repayment share in a period for an investment with constant interest rate." ;
         };
         ExtraData =
@@ -1445,7 +1383,6 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
         };
         String 5 // Description of Parameter 2
         {
-            /* ### ACHTUNG: Neuer Text in Resource? Zahlungszeitraum. Die Gesamtanzahl der Perioden, in denen die Annuität (Rente) gezahlt wird. : Zahlungszeitraum. Die Gesamtanzahl der Perioden, in denen die Annuitõt (Rente) gezahlt wird. */
             Text [ en-US ] = "Payment period. The total number of periods in which the annuity (pension) is paid." ;
         };
         String 6 // Name of Parameter 3
@@ -1462,7 +1399,6 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
         };
         String 9 // Description of Parameter 4
         {
-            /* ### ACHTUNG: Neuer Text in Resource? Anfangsperiode. Die erste Periode, die berücksichtigt wird. A = 1 heißt die allerserte Periode. : Anfangsperiode. Die erste Periode, die ber³cksichtigt wird. A = 1 hei˜t die allerserte Periode. */
             Text [ en-US ] = "The start period. The first period to be taken into account. A = 1 denotes the very first period." ;
         };
         String 10 // Name of Parameter 5
@@ -1471,7 +1407,6 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
         };
         String 11 // Description of Parameter 5
         {
-            /* ### ACHTUNG: Neuer Text in Resource? Endperiode. Die letzte Periode, die berücksichtigt wird. : Endperiode. Die letzte Periode, die ber³cksichtigt wird. */
             Text [ en-US ] = "End period. The last period to be taken into account." ;
         };
         String 12 // Name of Parameter 6
@@ -1480,7 +1415,6 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
         };
         String 13 // Description of Parameter 6
         {
-            /* ### ACHTUNG: Neuer Text in Resource? Fälligkeit. F = 1 heißt Fälligkeit am Anfang einer Periode, F = 0 am Ende. : Fõlligkeit. F = 1 hei˜t Fõlligkeit am Anfang einer Periode, F = 0 am Ende. */
             Text [ en-US ] = "Type = 1 denotes due at the beginning of the period, = 0 at the end." ;
         };
     };
@@ -1489,7 +1423,6 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
     {
         String 1 // Description
         {
-            /* ### ACHTUNG: Neuer Text in Resource? Kumulierte Zinseszinsen. Berechnet den Gesamtbetrag der Zinsanteile in einem Zeitraum für eine Investition bei konstantem Zinssatz. : Kumulierte Zinseszinsen. Berechnet den Gesamtbetrag der Zinsanteile in einem Zeitraum f³r eine Investition bei konstantem Zinssatz. */
             Text [ en-US ] = "Cumulative compounded interest. Calculates the total amount of the interest share in a period for an investment with a constant interest rate." ;
         };
         ExtraData =
@@ -1512,7 +1445,6 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
         };
         String 5 // Description of Parameter 2
         {
-            /* ### ACHTUNG: Neuer Text in Resource? Zahlungszeitraum. Die Gesamtanzahl der Perioden, in denen die Annuität (Rente) gezahlt wird. : Zahlungszeitraum. Die Gesamtanzahl der Perioden, in denen die Annuitõt (Rente) gezahlt wird. */
             Text [ en-US ] = "Payment period. The total number of periods in which the annuity (pension) is paid." ;
         };
         String 6 // Name of Parameter 3
@@ -1529,7 +1461,6 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
         };
         String 9 // Description of Parameter 4
         {
-            /* ### ACHTUNG: Neuer Text in Resource? Anfangsperiode. Die erste Periode, die berücksichtigt wird. A = 1 ist die allererste Periode. : Anfangsperiode. Die erste Periode, die ber³cksichtigt wird. A = 1 ist die allererste Periode. */
             Text [ en-US ] = "The start period. The first period to be taken into account. A = 1 denotes the very first period." ;
         };
         String 10 // Name of Parameter 5
@@ -1538,7 +1469,6 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
         };
         String 11 // Description of Parameter 5
         {
-            /* ### ACHTUNG: Neuer Text in Resource? Endperiode. Die letzte Periode, die berücksichtigt wird. : Endperiode. Die letzte Periode, die ber³cksichtigt wird. */
             Text [ en-US ] = "The end period. The last period to be taken into account." ;
         };
         String 12 // Name of Parameter 6
@@ -1547,7 +1477,6 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
         };
         String 13 // Description of Parameter 6
         {
-            /* ### ACHTUNG: Neuer Text in Resource? Fälligkeit. F = 1 heißt Fälligkeit am Anfang einer Periode, F = 0 am Ende. : Fõlligkeit. F = 1 hei˜t Fõlligkeit am Anfang einer Periode, F = 0 am Ende. */
             Text [ en-US ] = "Type = 1 denotes due at the beginning of the period, = 0 at the end." ;
         };
     };
@@ -1556,7 +1485,6 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
     {
         String 1 // Description
         {
-            /* ### ACHTUNG: Neuer Text in Resource? Berechnet die arithmetisch-degressive Abschreibung für eine bestimmte Periode : Berechnet die arithmetisch-degressive Abschreibung f³r eine bestimmte Periode */
             Text [ en-US ] = "Calulates the arithmetically declining value of an asset (depreciation) for a specified period." ;
         };
         ExtraData =
@@ -1587,7 +1515,6 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
         };
         String 7 // Description of Parameter 3
         {
-            /* ### ACHTUNG: Neuer Text in Resource? Nutzungsdauer. Die Anzahl der Perioden, über die das Wirtschaftsgut abgeschrieben wird. : Nutzungsdauer. Die Anzahl der Perioden, ³ber die das Wirtschaftsgut abgeschrieben wird. */
             Text [ en-US ] = "Useful life. The number of periods in the useful life of the asset." ;
         };
         String 8 // Name of Parameter 4
@@ -1634,7 +1561,6 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
         };
         String 7 // Description of Parameter 3
         {
-            /* ### ACHTUNG: Neuer Text in Resource? Nutzungsdauer. Die Anzahl der Perioden, über die das Wirtschaftsgut abgeschrieben wird. : Nutzungsdauer. Die Anzahl der Perioden, ³ber die das Wirtschaftsgut abgeschrieben wird. */
             Text [ en-US ] = "Useful life. The number of periods in the useful life of the asset." ;
         };
     };
@@ -1643,7 +1569,6 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
     {
         String 1 // Description
         {
-            /* ### ACHTUNG: Neuer Text in Resource? Berechnet die arithmetisch-degressive Abschreibung für eine bestimmte Periode : Berechnet die arithmetisch-degressive Abschreibung f³r eine bestimmte Periode */
             Text [ en-US ] = "Calculates the depreciation of an asset for a specific period using the double-declining balance method or declining balance factor." ;
         };
         ExtraData =
@@ -1674,7 +1599,6 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
         };
         String 7 // Description of Parameter 3
         {
-            /* ### ACHTUNG: Neuer Text in Resource? Nutzungsdauer. Die Anzahl der Perioden, über die das Wirtschaftsgut abgeschrieben wird. : Nutzungsdauer. Die Anzahl der Perioden, ³ber die das Wirtschaftsgut abgeschrieben wird. */
             Text [ en-US ] = "Useful life. The number of periods in the useful life of the asset." ;
         };
         String 8 // Name of Parameter 4
@@ -1691,7 +1615,6 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
         };
         String 11 // Description of Parameter 5
         {
-            /* ### ACHTUNG: Neuer Text in Resource? Faktor. Faktor für die Abnahme der Abschreibung. F = 2 heißt Doppelraten-Abschreibung. : Faktor. Faktor f³r die Abnahme der Abschreibung. F = 2 hei˜t Doppelraten-Abschreibung. */
             Text [ en-US ] = "Factor. The factor for balance decline. F = 2 means a double declining balance factor" ;
         };
     };
@@ -1700,7 +1623,6 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
     {
         String 1 // Description
         {
-            /* ### ACHTUNG: Neuer Text in Resource? Berechnet die geometrisch-degressive Abschreibung für eine bestimmte Periode : Berechnet die geometrisch-degressive Abschreibung f³r eine bestimmte Periode */
             Text [ en-US ] = "Returns the real depreciation of an asset for a specified period using the fixed-declining balance method." ;
         };
         ExtraData =
@@ -1731,7 +1653,6 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
         };
         String 7 // Description of Parameter 3
         {
-            /* ### ACHTUNG: Neuer Text in Resource? Nutzungsdauer. Die Anzahl der Perioden, über die das Wirtschaftsgut abgeschrieben wird. : Nutzungsdauer. Die Anzahl der Perioden, ³ber die das Wirtschaftsgut abgeschrieben wird. */
             Text [ en-US ] = "Useful life. The number of periods in the useful life of the asset." ;
         };
         String 8 // Name of Parameter 4
@@ -1756,7 +1677,6 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
     {
         String 1 // Description
         {
-            /* ### ACHTUNG: Neuer Text in Resource? Variable declining balance. Berechnet die arithmetisch-degressive Abschreibung für eine bestimmte Periode : Variable declining balance. Berechnet die arithmetisch-degressive Abschreibung f³r eine bestimmte Periode */
             Text [ en-US ] = "Variable declining balance. Returns the declining balance depreciation for a particular period." ;
         };
         ExtraData =
@@ -1787,7 +1707,6 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
         };
         String 7 // Description of Parameter 3
         {
-            /* ### ACHTUNG: Neuer Text in Resource? Nutzungsdauer. Die Anzahl der Perioden, über die das Wirtschaftsgut abgeschrieben wird. : Nutzungsdauer. Die Anzahl der Perioden, ³ber die das Wirtschaftsgut abgeschrieben wird. */
             Text [ en-US ] = "Useful life. The number of periods in the useful life of the asset." ;
         };
         String 8 // Name of Parameter 4
@@ -1812,7 +1731,6 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
         };
         String 13 // Description of Parameter 6
         {
-            /* ### ACHTUNG: Neuer Text in Resource? Faktor. Faktor für die Abnahme der Abschreibung. F = 2 heißt Doppelraten-Abschreibung. : Faktor. Faktor f³r die Abnahme der Abschreibung. F = 2 hei˜t Doppelraten-Abschreibung. */
             Text [ en-US ] = "Factor. The factor for the reduction of the depreciation. F = 2 denotes double rate depreciation." ;
         };
         String 14 // Name of Parameter 7
@@ -1821,7 +1739,6 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
         };
         String 15 // Description of Parameter 7
         {
-            /* ### ACHTUNG: Neuer Text in Resource? Nicht wechseln. Art = 1 heißt Umschalten auf lineare Abschreibung, Art = 0 heißt kein Umschalten. : Nicht wechseln. Art = 1 hei˜t Umschalten auf lineare Abschreibung, Art = 0 hei˜t kein Umschalten. */
             Text [ en-US ] = "Do not alter. Type = 1 denotes switch to linear depreciation, type = 0 do not switch." ;
         };
     };
@@ -1830,7 +1747,6 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
     {
         String 1 // Description
         {
-            /* ### ACHTUNG: Neuer Text in Resource? Berechnet die jährliche Effektivverzinsung zu einer Nominalverzinsung. : Berechnet die jõhrliche Effektivverzinsung zu einer Nominalverzinsung. */
             Text [ en-US ] = "Calculates the annual net interest rate for a nominal interest rate." ;
         };
         ExtraData =
@@ -1861,7 +1777,6 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
     {
         String 1 // Description
         {
-            /* ### ACHTUNG: Neuer Text in Resource? Berechnet die jährlichen Nominalzinsen zu einer Effektivverzinsung. : Berechnet die jõhrlichen Nominalzinsen zu einer Effektivverzinsung. */
             Text [ en-US ] = "Calculates the yearly nominal interest rate as an effective interest rate." ;
         };
         ExtraData =
@@ -1906,7 +1821,6 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
         };
         String 3 // Description of Parameter 1
         {
-            /* ### ACHTUNG: Neuer Text in Resource? Der Abzinsungssatz für eine Periode. : Der Abzinsungssatz f³r eine Periode. */
             Text [ en-US ] = "The rate of discount for one period." ;
         };
         String 4 // Name of Parameter 2
@@ -1915,7 +1829,6 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
         };
         String 5 // Description of Parameter 2
         {
-            /* ### ACHTUNG: Neuer Text in Resource? Wert 1;Wert 2;... Sind 1 bis 30 Werte für Ein- oder Auszahlungen. : Wert 1;Wert 2;... Sind 1 bis 30 Werte f³r Ein- oder Auszahlungen. */
             Text [ en-US ] = "Value 1, value 2,... are 1 to 30 arguments representing payments and income." ;
         };
     };
@@ -1924,7 +1837,6 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
     {
         String 1 // Description
         {
-            /* ### ACHTUNG: Neuer Text in Resource? Berechnet den internen Zinsfuß einer Investition ohne Kosten oder Gewinne. : Berechnet den internen Zinsfu˜ einer Investition ohne Kosten oder Gewinne. */
             Text [ en-US ] = "Returns the actuarial rate of interest of an investment excluding costs or profits." ;
         };
         ExtraData =
@@ -1947,7 +1859,6 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
         };
         String 5 // Description of Parameter 2
         {
-            /* ### ACHTUNG: Neuer Text in Resource? Schätzwert. Startwert des Zinsfußes für das Iterationsverfahren. : Schõtzwert. Startwert des Zinsfu˜es f³r das Iterationsverfahren. */
             Text [ en-US ] = "Guess. An estimated value of the rate of return to be used for the iteration calculation." ;
         };
     };
@@ -2070,7 +1981,6 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
         };
         String 7 // Description of Parameter 3
         {
-            /* ### ACHTUNG: Neuer Text in Resource? Zukünftiger Wert der Einlage. : Zuk³nftiger Wert der Einlage. */
             Text [ en-US ] = "The future value of the investment." ;
         };
     };
@@ -2093,7 +2003,6 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
         };
         String 3 // Description of Parameter 1
         {
-            /* ### ACHTUNG: Neuer Text in Resource? Anzahl der Perioden für die Berechnung : Anzahl der Perioden f³r die Berechnung */
             Text [ en-US ] = "The number of periods used in the calculation." ;
         };
         String 4 // Name of Parameter 2
@@ -2110,7 +2019,6 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
         };
         String 7 // Description of Parameter 3
         {
-            /* ### ACHTUNG: Neuer Text in Resource? Zukünftiger Wert der Einlage. : Zuk³nftiger Wert der Einlage. */
             Text [ en-US ] = "The future value of the investment." ;
         };
     };
@@ -2133,7 +2041,6 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
         };
         String 3 // Description of Parameter 1
         {
-            /* ### ACHTUNG: Neuer Text in Resource? Der Wert, der geprüft werden soll. : Der Wert, der gepr³ft werden soll. */
             Text [ en-US ] = "The value to be tested." ;
         };
     };
@@ -2156,7 +2063,6 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
         };
         String 3 // Description of Parameter 1
         {
-            /* ### ACHTUNG: Neuer Text in Resource? Der Wert, der geprüft werden soll. : Der Wert, der gepr³ft werden soll. */
             Text [ en-US ] = "The value to be tested." ;
         };
     };
@@ -2179,7 +2085,6 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
         };
         String 3 // Description of Parameter 1
         {
-            /* ### ACHTUNG: Neuer Text in Resource? Der Wert, der geprüft werden soll. : Der Wert, der gepr³ft werden soll. */
             Text [ en-US ] = "The value to be tested." ;
         };
     };
@@ -2202,7 +2107,6 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
         };
         String 3 // Description of Parameter 1
         {
-            /* ### ACHTUNG: Neuer Text in Resource? Der Wert, der geprüft werden soll. : Der Wert, der gepr³ft werden soll. */
             Text [ en-US ] = "The value to be tested." ;
         };
     };
@@ -2211,7 +2115,6 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
     {
         String 1 // Description
         {
-            /* ### ACHTUNG: Neuer Text in Resource? Liefert WAHR, wenn der Wert ein logisches Zahlformat trägt. : Liefert WAHR, wenn der Wert ein logisches Zahlformat trõgt. */
             Text [ en-US ] = "Returns TRUE if the value carries a logical number format." ;
         };
         ExtraData =
@@ -2226,7 +2129,6 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
         };
         String 3 // Description of Parameter 1
         {
-            /* ### ACHTUNG: Neuer Text in Resource? Der Wert, der geprüft werden soll. : Der Wert, der gepr³ft werden soll. */
             Text [ en-US ] = "The value to be tested." ;
         };
     };
@@ -2249,7 +2151,6 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
         };
         String 3 // Description of Parameter 1
         {
-            /* ### ACHTUNG: Neuer Text in Resource? Der Wert, der geprüft werden soll. : Der Wert, der gepr³ft werden soll. */
             Text [ en-US ] = "The value to be tested." ;
         };
     };
@@ -2272,7 +2173,6 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
         };
         String 3 // Description of Parameter 1
         {
-            /* ### ACHTUNG: Neuer Text in Resource? Der Wert, der geprüft werden soll. : Der Wert, der gepr³ft werden soll. */
             Text [ en-US ] = "The value to be tested." ;
         };
     };
@@ -2295,7 +2195,6 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
         };
         String 3 // Description of Parameter 1
         {
-            /* ### ACHTUNG: Neuer Text in Resource? Der Wert, der geprüft werden soll. : Der Wert, der gepr³ft werden soll. */
             Text [ en-US ] = "The value to be tested." ;
         };
     };
@@ -2318,7 +2217,6 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
         };
         String 3 // Description of Parameter 1
         {
-            /* ### ACHTUNG: Neuer Text in Resource? Der Wert, der geprüft werden soll. : Der Wert, der gepr³ft werden soll. */
             Text [ en-US ] = "The value to be tested." ;
         };
     };
@@ -2341,7 +2239,6 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
         };
         String 3 // Description of Parameter 1
         {
-            /* ### ACHTUNG: Neuer Text in Resource? Die Zelle, die überprüft werden soll. : Die Zelle, die ³berpr³ft werden soll. */
             Text [ en-US ] = "The cell to be checked." ;
         };
     };
@@ -2394,7 +2291,6 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
     {
         String 1 // Description
         {
-            /* ### ACHTUNG: Neuer Text in Resource? Nicht verfügbar. Setzt eine Zelle auf den Fehlerwert #NV. : Nicht verf³gbar. Setzt eine Zelle auf den Fehlerwert #NV. */
             Text [ en-US ] = "Not available. Returns the error value #N/A." ;
         };
         ExtraData =
@@ -2525,7 +2421,6 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
     {
         String 1 // Description
         {
-            /* ### ACHTUNG: Neuer Text in Resource? Gibt eine Wahrheitsprüfung an, die durchgeführt werden soll. : Gibt eine Wahrheitspr³fung an, die durchgef³hrt werden soll. */
             Text [ en-US ] = "Specifies a logical test to be performed." ;
         };
         ExtraData =
@@ -2536,7 +2431,6 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
         };
         String 2 // Name of Parameter 1
         {
-            /* ### ACHTUNG: Neuer Text in Resource? Prüfung : Pr³fung */
             Text [ en-US ] = "Test" ;
         };
         String 3 // Description of Parameter 1
@@ -2549,7 +2443,6 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
         };
         String 5 // Description of Parameter 2
         {
-            /* ### ACHTUNG: Neuer Text in Resource? Das Resultat der Funktion, wenn die Wahrheitsprüfung WAHR ergibt. : Das Resultat der Funktion, wenn die Wahrheitspr³fung WAHR ergibt. */
             Text [ en-US ] = "The result of the function if the logical test returns a TRUE." ;
         };
         String 6 // Name of Parameter 3
@@ -2558,7 +2451,6 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
         };
         String 7 // Description of Parameter 3
         {
-            /* ### ACHTUNG: Neuer Text in Resource? Das Resultat der Funktion, wenn die Wahrheitsprüfung FALSCH ergibt. : Das Resultat der Funktion, wenn die Wahrheitspr³fung FALSCH ergibt. */
             Text [ en-US ] = "The result of the function if the logical test returns FALSE." ;
         };
     };
@@ -2581,7 +2473,6 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
         };
         String 3 // Description of Parameter 1
         {
-            /* ### ACHTUNG: Neuer Text in Resource? Wahrheitswert 1;Wahrheitswert 2;... sind 1 bis 30 Bedingungen, die Überprüft werden sollen und jeweils entweder WAHR oder FALSCH liefern. : Wahrheitswert 1;Wahrheitswert 2;... sind 1 bis 30 Bedingungen, die šberpr³ft werden sollen und jeweils entweder WAHR oder FALSCH liefern. */
             Text [ en-US ] = "Logical value 1, logical value 2,... are 1 to 30 conditions to be tested and which return either TRUE or FALSE." ;
         };
     };
@@ -2604,7 +2495,6 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
         };
         String 3 // Description of Parameter 1
         {
-            /* ### ACHTUNG: Neuer Text in Resource? Wahrheitswert 1;Wahrheitswert 2;... sind 1 bis 30 Bedingungen, die Überprüft werden sollen und jeweils entweder WAHR oder FALSCH liefern. : Wahrheitswert 1;Wahrheitswert 2;... sind 1 bis 30 Bedingungen, die šberpr³ft werden sollen und jeweils entweder WAHR oder FALSCH liefern. */
             Text [ en-US ] = "Logical value 1, logical value 2;...are 1 to 30 conditions to be tested and each returns either TRUE or FALSE." ;
         };
     };
@@ -2767,7 +2657,6 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
     {
         String 1 // Description
         {
-            /* ### ACHTUNG: Neuer Text in Resource? Summiert die Argumente, die den Bedingungen genügen. : Summiert die Argumente, die den Bedingungen gen³gen. */
             Text [ en-US ] = "Totals the arguments that meet the conditions." ;
         };
         ExtraData =
@@ -2801,12 +2690,11 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
             Text [ en-US ] = "The range from which the values are to be totalled." ;
         };
     };
-     // -=*# Resource for function ZÄHLENWENN #*=-
+     // -=*# Resource for function ZÃ„HLENWENN #*=-
     Resource SC_OPCODE_COUNT_IF
     {
         String 1 // Description
         {
-            /* ### ACHTUNG: Neuer Text in Resource? Zählt die Argumente, die den Bedingungen genügen. : Zõhlt die Argumente, die den Bedingungen gen³gen. */
             Text [ en-US ] = "Counts the arguments which meet the set conditions." ;
         };
         ExtraData =
@@ -2837,7 +2725,6 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
     {
         String 1 // Description
         {
-            /* ### ACHTUNG: Neuer Text in Resource? Berechnet die Quadratwurzel einer Zahl. : Liefert die Quadratwurzel einer Zahl. */
             Text [ en-US ] = "Returns the square root of a number." ;
         };
         ExtraData =
@@ -2852,7 +2739,6 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
         };
         String 3 // Description of Parameter 1
         {
-            /* ### ACHTUNG: Neuer Text in Resource? Ein positiver Wert, dessen Quadratwurzel berechnet werden soll. : Die Zahl deren Quadratwurzel berechnet werden soll. */
             Text [ en-US ] = "A positive value for which the square root is to be calculated." ;
         };
     };
@@ -2889,7 +2775,6 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
         };
         String 3 // Description of Parameter 1
         {
-            /* ### ACHTUNG: Neuer Text in Resource? Der Wert, der geprüft werden soll. : Der Wert, der gepr³ft werden soll. */
             Text [ en-US ] = "The value to be tested." ;
         };
     };
@@ -2912,7 +2797,6 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
         };
         String 3 // Description of Parameter 1
         {
-            /* ### ACHTUNG: Neuer Text in Resource? Der Wert, der geprüft werden soll. : Der Wert, der gepr³ft werden soll. */
             Text [ en-US ] = "The value to be tested." ;
         };
     };
@@ -2981,7 +2865,6 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
     {
         String 1 // Description
         {
-            /* ### ACHTUNG: Neuer Text in Resource? Berechnet den Arkuskosinus einer Zahl. : Arcus Cosinus Funktion */
             Text [ en-US ] = "Returns the arccosine of a number." ;
         };
         ExtraData =
@@ -2996,7 +2879,6 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
         };
         String 3 // Description of Parameter 1
         {
-            /* ### ACHTUNG: Neuer Text in Resource? Ein Wert zwischen -1 und 1, dessen Arkuskosinus berechnet werden soll. : Der Cosinuswert zwischen -1 und 1 */
             Text [ en-US ] = "A value between -1 and 1 for which the arccosine is to be returned." ;
         };
     };
@@ -3005,7 +2887,6 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
     {
         String 1 // Description
         {
-            /* ### ACHTUNG: Neuer Text in Resource? Berechnet den Arkussinus einer Zahl. : Arcus Sinus Funktion */
             Text [ en-US ] = "Returns the arcsine of a number." ;
         };
         ExtraData =
@@ -3020,7 +2901,6 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
         };
         String 3 // Description of Parameter 1
         {
-            /* ### ACHTUNG: Neuer Text in Resource? Ein Wert zwischen -1 und 1, dessen Arkussinus berechnet werden soll. : Der Sinuswert zwischen -1 und 1 */
             Text [ en-US ] = "A value between -1 and 1 for which the arcsine is to be returned." ;
         };
     };
@@ -3029,7 +2909,6 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
     {
         String 1 // Description
         {
-            /* ### ACHTUNG: Neuer Text in Resource? Berechnet den Areakosinus (inverser hyperbolischer Kosinus) einer Zahl. : Area Cosinus Funktion */
             Text [ en-US ] = "Returns the inverse hyperbolic cosine of a number." ;
         };
         ExtraData =
@@ -3044,8 +2923,6 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
         };
         String 3 // Description of Parameter 1
         {
-            /* ### ACHTUNG: Neuer Text in Resource? Ein Wert größer oder gleich 1, dessen Areakosinus berechnet werden soll. : Der hyperbolische Cosinuswert */
-            /* ### ACHTUNG: Neuer Text in Resource? Ein Wert größer oder gleich 1, dessen Areakosinus berechnet werden soll. : Ein Wert gr÷˜er oder gleich 1, dessen Areakosinus berechnet werden soll. */
             Text [ en-US ] = "A value greater than or equal to 1 for which the hyperbolic cosine is to be returned." ;
         };
     };
@@ -3054,7 +2931,6 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
     {
         String 1 // Description
         {
-            /* ### ACHTUNG: Neuer Text in Resource? Berechnet den Areasinus (inverser hyperbolischer Sinus) einer Zahl. : Area Sinus Funktion */
             Text [ en-US ] = "Returns the inverse hyperbolic sine of a number." ;
         };
         ExtraData =
@@ -3069,7 +2945,6 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
         };
         String 3 // Description of Parameter 1
         {
-            /* ### ACHTUNG: Neuer Text in Resource? Der Wert, dessen Areasinus berechnet werden soll. : Der hyperbolische Sinuswert */
             Text [ en-US ] = "The value for which the inverse hyperbolic sine is to be returned." ;
         };
     };
@@ -3078,7 +2953,6 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
     {
         String 1 // Description
         {
-            /* ### ACHTUNG: Neuer Text in Resource? Berechnet den Arkuskotangens einer Zahl. : Arcus Cotangens Funktion */
             Text [ en-US ] = "Returns the inverse cotangent of a number." ;
         };
         ExtraData =
@@ -3093,7 +2967,6 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
         };
         String 3 // Description of Parameter 1
         {
-            /* ### ACHTUNG: Neuer Text in Resource? Der Wert, dessen Arkuskotangens berechnet werden soll. : Der Cotangenswert */
             Text [ en-US ] = "The value for which the inverse cotangent is to be returned." ;
         };
     };
@@ -3102,7 +2975,6 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
     {
         String 1 // Description
         {
-            /* ### ACHTUNG: Neuer Text in Resource? Berechnet den Arkustangens einer Zahl. : Arcus Tangens Funktion */
             Text [ en-US ] = "Returns the arctangent of a number." ;
         };
         ExtraData =
@@ -3117,7 +2989,6 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
         };
         String 3 // Description of Parameter 1
         {
-            /* ### ACHTUNG: Neuer Text in Resource? Der Wert, dessen Arkustangens berechnet werden soll. : Der Tangenswert */
             Text [ en-US ] = "The value for which the arctangent is to be returned." ;
         };
     };
@@ -3126,7 +2997,6 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
     {
         String 1 // Description
         {
-            /* ### ACHTUNG: Neuer Text in Resource? Berechnet den Areakotanges (inverser hyperbolischer Kotangens) einer Zahl. : Area Cotangens Funktion */
             Text [ en-US ] = "Returns the inverse hyperbolic cotangent of a number." ;
         };
         ExtraData =
@@ -3141,8 +3011,6 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
         };
         String 3 // Description of Parameter 1
         {
-            /* ### ACHTUNG: Neuer Text in Resource? Ein Wert kleiner als -1 oder größer als 1, dessen Areakotanges berechnet werden soll. : Der hyperbolische Cotangenswert */
-            /* ### ACHTUNG: Neuer Text in Resource? Ein Wert kleiner als -1 oder größer als 1, dessen Areakotanges berechnet werden soll. : Ein Wert kleiner als -1 oder gr÷˜er als 1, dessen Areakotanges berechnet werden soll. */
             Text [ en-US ] = "A value smaller than -1 or greater than 1 for which the inverse hyperbolic cotangent is to be returned." ;
         };
     };
@@ -3151,7 +3019,6 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
     {
         String 1 // Description
         {
-            /* ### ACHTUNG: Neuer Text in Resource? Berechnet den Areatangens (inverser hyperbolischer Tangens) einer Zahl. : Area Tangens Hyperbolicus Funktion */
             Text [ en-US ] = "Returns the inverse hyperbolic tangent of a number." ;
         };
         ExtraData =
@@ -3166,7 +3033,6 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
         };
         String 3 // Description of Parameter 1
         {
-            /* ### ACHTUNG: Neuer Text in Resource? Ein Wert zwischen -1 und 1, dessen Areatanges berechnet werden soll. : Der hyperbolische Tangenswert */
             Text [ en-US ] = "A value between -1 and 1 for which the inverse hyperbolic tangent is to be returned." ;
         };
     };
@@ -3175,7 +3041,6 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
     {
         String 1 // Description
         {
-            /* ### ACHTUNG: Neuer Text in Resource? Berechnet den Kosinus einer Zahl. : Cosinusfunktion */
             Text [ en-US ] = "Returns the cosine of a number." ;
         };
         ExtraData =
@@ -3190,7 +3055,6 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
         };
         String 3 // Description of Parameter 1
         {
-            /* ### ACHTUNG: Neuer Text in Resource? Der Winkel im Bogenmaß (Radiant), dessen Kosinus berechnet werden soll. : Der Winkel im Bogenma˜ (Radiant), dessen Kosinus berechnet werden soll. */
             Text [ en-US ] = "The angle in the radians for which the cosine is to be returned." ;
         };
     };
@@ -3199,7 +3063,6 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
     {
         String 1 // Description
         {
-            /* ### ACHTUNG: Neuer Text in Resource? Berechnet den Sinus einer Zahl. : Sinusfunktion */
             Text [ en-US ] = "Returns the sine of a number." ;
         };
         ExtraData =
@@ -3214,7 +3077,6 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
         };
         String 3 // Description of Parameter 1
         {
-            /* ### ACHTUNG: Neuer Text in Resource? Der Winkel im Bogenmaß (Radiant), dessen Sinus berechnet werden soll. : Der Winkel im Bogenma˜ (Radiant), dessen Sinus berechnet werden soll. */
             Text [ en-US ] = "The angle in radians for which the sine is to be calculated." ;
         };
     };
@@ -3223,7 +3085,6 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
     {
         String 1 // Description
         {
-            /* ### ACHTUNG: Neuer Text in Resource? Berechnet den Kotangens einer Zahl. : Cotangensfunktion */
             Text [ en-US ] = "Returns the cotangent of a number." ;
         };
         ExtraData =
@@ -3238,7 +3099,6 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
         };
         String 3 // Description of Parameter 1
         {
-            /* ### ACHTUNG: Neuer Text in Resource? Der Winkel im Bogenmaß (Radiant), dessen Kotangens berechnet werden soll. : Der Winkel im Bogenma˜ (Radiant), dessen Kotangens berechnet werden soll. */
             Text [ en-US ] = "The angle in radians whose cotangent value is to be returned." ;
         };
     };
@@ -3247,7 +3107,6 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
     {
         String 1 // Description
         {
-            /* ### ACHTUNG: Neuer Text in Resource? Berechnet den Tangens einer Zahl. : Tangensfunktion */
             Text [ en-US ] = "Returns the tangent of a number." ;
         };
         ExtraData =
@@ -3262,7 +3121,6 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
         };
         String 3 // Description of Parameter 1
         {
-            /* ### ACHTUNG: Neuer Text in Resource? Der Winkel im Bogenmaß (Radiant), dessen Tangens berechnet werden soll. : Der Winkel im Bogenma˜ (Radiant), dessen Tangens berechnet werden soll. */
             Text [ en-US ] = "The angle in radians for which the tangent is to be calculated." ;
         };
     };
@@ -3271,7 +3129,6 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
     {
         String 1 // Description
         {
-            /* ### ACHTUNG: Neuer Text in Resource? Berechnet den Hyperbelkosinus (hyperbolischer Kosinus) einer Zahl. : Cosinus Hyperbolicus Funktion */
             Text [ en-US ] = "Returns the hyperbolic cosine of a number." ;
         };
         ExtraData =
@@ -3286,7 +3143,6 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
         };
         String 3 // Description of Parameter 1
         {
-            /* ### ACHTUNG: Neuer Text in Resource? Der Wert, dessen Hyperbelkosinus berechnet werden soll. : ??? */
             Text [ en-US ] = "The value for which the hyperbolic cosine is to be returned." ;
         };
     };
@@ -3295,7 +3151,6 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
     {
         String 1 // Description
         {
-            /* ### ACHTUNG: Neuer Text in Resource? Berechnet den Hyperbelsinus (hyperbolischer Sinus) einer Zahl. : Sinus Hyperbolicus Funktion */
             Text [ en-US ] = "Returns the hyperbolic sine of a number." ;
         };
         ExtraData =
@@ -3310,7 +3165,6 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
         };
         String 3 // Description of Parameter 1
         {
-            /* ### ACHTUNG: Neuer Text in Resource? Der Wert, dessen Hyperbelsinus berechnet werden soll. : ??? */
             Text [ en-US ] = "The value for which the hyperbolic sine is to be calculated." ;
         };
     };
@@ -3319,7 +3173,6 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
     {
         String 1 // Description
         {
-            /* ### ACHTUNG: Neuer Text in Resource? Berechnet den Hyperbelkotangens (hyperbolischer Kotangens) einer Zahl. : Cotangens Hyperbolicus Funktion */
             Text [ en-US ] = "Returns the hyperbolic cotangent of a number." ;
         };
         ExtraData =
@@ -3334,7 +3187,6 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
         };
         String 3 // Description of Parameter 1
         {
-            /* ### ACHTUNG: Neuer Text in Resource? Ein Wert ungleich 0, dessen Hyperbelkotangens berechnet werden soll. : ??? */
             Text [ en-US ] = "A value not equal to 0 for which the hyperbolic cotangent is to be returned." ;
         };
     };
@@ -3343,7 +3195,6 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
     {
         String 1 // Description
         {
-            /* ### ACHTUNG: Neuer Text in Resource? Berechnet den Hyperbeltangens (hyperbolischer Tangens) einer Zahl. : Tangens Hyperbolicus Funktion */
             Text [ en-US ] = "Returns the hyperbolic tangent of a number." ;
         };
         ExtraData =
@@ -3358,7 +3209,6 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
         };
         String 3 // Description of Parameter 1
         {
-            /* ### ACHTUNG: Neuer Text in Resource? Der Wert, dessen Hyperbeltangens berechnet werden soll. : ??? */
             Text [ en-US ] = "The value for which the hyperbolic tangent is to be calculated." ;
         };
     };
@@ -3367,7 +3217,6 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
     {
         String 1 // Description
         {
-            /* ### ACHTUNG: Neuer Text in Resource? Berechnet den Arkustangens zu den angegebenen Koordinaten. : Tangens Funktion in Koordinatendarstellung */
             Text [ en-US ] = "Returns the arctangent for the specified coordinates." ;
         };
         ExtraData =
@@ -3382,7 +3231,6 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
         };
         String 3 // Description of Parameter 1
         {
-            /* ### ACHTUNG: Neuer Text in Resource? Wert für die X-Koordinate. : Wert f³r die X-Koordinate. */
             Text [ en-US ] = "The value for the x coordinate." ;
         };
         String 4 // Name of Parameter 2
@@ -3391,7 +3239,6 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
         };
         String 5 // Description of Parameter 2
         {
-            /* ### ACHTUNG: Neuer Text in Resource? Wert für die Y-Koordinate. : Wert f³r die Y-Koordinate. */
             Text [ en-US ] = "The value for the y coordinate." ;
         };
     };
@@ -3400,7 +3247,6 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
     {
         String 1 // Description
         {
-            /* ### ACHTUNG: Neuer Text in Resource? Wandelt Bogenmaß (Radiant) in Grad um. : Wandelt Bogenma˜ (Radiant) in Grad um. */
             Text [ en-US ] = "Converts a radian to degrees" ;
         };
         ExtraData =
@@ -3415,7 +3261,6 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
         };
         String 3 // Description of Parameter 1
         {
-            /* ### ACHTUNG: Neuer Text in Resource? Der Winkel im Bogenmaß (Radiant). : Der Winkel im Bogenma˜ (Radiant). */
             Text [ en-US ] = "The angle in a radian" ;
         };
     };
@@ -3424,7 +3269,6 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
     {
         String 1 // Description
         {
-            /* ### ACHTUNG: Neuer Text in Resource? Wandelt Grad in Bogenmaß (Radiant) um. : Wandelt Grad in Bogenma˜ (Radiant) um. */
             Text [ en-US ] = "Converts degrees to radians" ;
         };
         ExtraData =
@@ -3447,7 +3291,6 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
     {
         String 1 // Description
         {
-            /* ### ACHTUNG: Neuer Text in Resource? Berechnet die Exponentialfunktion zur Basis e. : Exponentialfunktion. */
             Text [ en-US ] = "Calculates the exponent for basis e." ;
         };
         ExtraData =
@@ -3470,7 +3313,6 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
     {
         String 1 // Description
         {
-            /* ### ACHTUNG: Neuer Text in Resource? Berechnet den Logarithmus zu einer beliebigen Basis. : Logarithmusfunktion. Berechnet den Logarithmus zu einer beliebigen Basis. */
             Text [ en-US ] = "Calculates the logarithm to any specified base." ;
         };
         ExtraData =
@@ -3485,7 +3327,6 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
         };
         String 3 // Description of Parameter 1
         {
-            /* ### ACHTUNG: Neuer Text in Resource? Ein Wert größer als 0, dessen Logarithmus berechnet wird. : Ein Wert gr÷˜er als 0, dessen Logarithmus berechnet wird. */
             Text [ en-US ] = "A value greater than 0 for which the logarithm is to be calculated." ;
         };
         String 4 // Name of Parameter 2
@@ -3494,7 +3335,6 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
         };
         String 5 // Description of Parameter 2
         {
-            /* ### ACHTUNG: Neuer Text in Resource? Die Basis für die Logarithmusberechnung. : Die Basis f³r die Logarithmusberechnung. */
             Text [ en-US ] = "The base of the logarithm." ;
         };
     };
@@ -3503,7 +3343,6 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
     {
         String 1 // Description
         {
-            /* ### ACHTUNG: Neuer Text in Resource? Berechnet den natürlichen Logarithmus einer Zahl. : Berechnet den nat³rlichen Logarithmus einer Zahl. */
             Text [ en-US ] = "Calculates the natural logarithm of a number." ;
         };
         ExtraData =
@@ -3518,7 +3357,6 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
         };
         String 3 // Description of Parameter 1
         {
-            /* ### ACHTUNG: Neuer Text in Resource? Ein Wert größer als 0, dessen natürlicher Logarithmus berechnet wird. : Ein Wert gr÷˜er als 0, dessen nat³rlicher Logarithmus berechnet wird. */
             Text [ en-US ] = "A value greater than 0 for which the natural logarithm is to be calculated." ;
         };
     };
@@ -3527,7 +3365,6 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
     {
         String 1 // Description
         {
-            /* ### ACHTUNG: Neuer Text in Resource? Berechnet den Logarithmus zu der Basis 10. : Zehnerlogarithmus. Berechnet den Logarithmus zu der Basis 10. */
             Text [ en-US ] = "Calculates the base-10 logarithm of a number." ;
         };
         ExtraData =
@@ -3542,16 +3379,14 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
         };
         String 3 // Description of Parameter 1
         {
-            /* ### ACHTUNG: Neuer Text in Resource? Ein Wert größer als 0, dessen Logarithmus berechnet wird. : Ein Wert gr÷˜er als 0, dessen Logarithmus berechnet wird. */
             Text [ en-US ] = "A value greater than 0 for which the logarithm is to be calculated." ;
         };
     };
-     // -=*# Resource for function FAKULTÄT #*=-
+     // -=*# Resource for function FAKULTÃ„T #*=-
     Resource SC_OPCODE_FACT
     {
         String 1 // Description
         {
-            /* ### ACHTUNG: Neuer Text in Resource? Berechnet die Fakultät einer Zahl. : Berechnet die Fakultõt einer Zahl. */
             Text [ en-US ] = "Calculates the factorial of a number." ;
         };
         ExtraData =
@@ -3566,7 +3401,6 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
         };
         String 3 // Description of Parameter 1
         {
-            /* ### ACHTUNG: Neuer Text in Resource? Die Zahl, deren Fakultät berechnet wird. : Die Zahl, deren Fakultõt berechnet wird. */
             Text [ en-US ] = "The number for which the factorial is to be calculated." ;
         };
     };
@@ -3605,7 +3439,6 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
     {
         String 1 // Description
         {
-            /* ### ACHTUNG: Neuer Text in Resource? Liefert das Vorzeichen einer Zahl. : Die Signum Funktion. Berechnet das Vorzeichen einer Zahl. */
             Text [ en-US ] = "Returns the algebraic sign of a number." ;
         };
         ExtraData =
@@ -3642,7 +3475,6 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
         };
         String 3 // Description of Parameter 1
         {
-            /* ### ACHTUNG: Neuer Text in Resource? Funktionsindex. Ist ein Index auf die möglichen Funktion Summe, Max, ... : Funktionsindex. Ist ein Index auf die m÷glichen Funktion Summe, Max, ... */
             Text [ en-US ] = "Function index. Is an index of the possible functions Total, Max, ..." ;
         };
         String 4 // Name of Parameter 2
@@ -3651,7 +3483,6 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
         };
         String 5 // Description of Parameter 2
         {
-            /* ### ACHTUNG: Neuer Text in Resource? Der Bereich, dessen Zellen berücksichtigt werden. : Der Bereich, dessen Zellen ber³cksichtigt werden. */
             Text [ en-US ] = "The cells of the range which are to be taken into account." ;
         };
     };
@@ -3660,7 +3491,6 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
     {
         String 1 // Description
         {
-            /* ### ACHTUNG: Neuer Text in Resource? Rundet eine Zahl auf die nächst kleinere ganze Zahl ab. : Rundet eine Zahl auf die nõchst kleinere ganze Zahl ab. */
             Text [ en-US ] = "Rounds a number down to the nearest integer." ;
         };
         ExtraData =
@@ -3678,7 +3508,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
             Text [ en-US ] = "The number to be rounded down." ;
         };
     };
-     // -=*# Resource for function KÜRZEN #*=-
+     // -=*# Resource for function KÃœRZEN #*=-
     Resource SC_OPCODE_TRUNC
     {
         String 1 // Description
@@ -3847,7 +3677,6 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
     {
         String 1 // Description
         {
-            /* ### ACHTUNG: Neuer Text in Resource? Rundet eine Zahl auf das nächste Vielfache der Schrittweite auf. : Rundet eine Zahl auf das nõchste Vielfache der Schrittweite auf. */
             Text [ en-US ] = "Rounds a number up to the nearest multiple of significance." ;
         };
         ExtraData =
@@ -3886,7 +3715,6 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
     {
         String 1 // Description
         {
-            /* ### ACHTUNG: Neuer Text in Resource? Rundet eine Zahl auf das nächste Vielfache der Schrittweite ab. : Rundet eine Zahl auf das nõchste Vielfache der Schrittweite ab. */
             Text [ en-US ] = "Rounds number down to the nearest multiple of significance." ;
         };
         ExtraData =
@@ -3925,7 +3753,6 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
     {
         String 1 // Description
         {
-            /* ### ACHTUNG: Neuer Text in Resource? Größter gemeinsamer Teiler. : Gr÷˜ter gemeinsamer Teiler. */
             Text [ en-US ] = "Greatest Common Divisor" ;
         };
         ExtraData =
@@ -3940,7 +3767,6 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
         };
         String 3 // Description of Parameter 1
         {
-            /* ### ACHTUNG: Neuer Text in Resource? Ganzzahl 1;Ganzzahl 2,... sind ganze Zahlen, deren größter gemeinsamer Teiler berechnet wird. : Ganzzahl 1;Ganzzahl 2,... sind ganze Zahlen, deren gr÷˜ter gemeinsamer Teiler berechnet wird. */
             Text [ en-US ] = "Integer 1; integer 2,... are integers for which the greatest common divisor is to be calculated." ;
         };
     };
@@ -4007,7 +3833,6 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
         };
         String 3 // Description of Parameter 1
         {
-            /* ### ACHTUNG: Neuer Text in Resource? Die erste Matrix für das Matrixprodukt. : Die erste Matrix f³r das Matrixprodukt. */
             Text [ en-US ] = "The first array for the array product." ;
         };
         String 4 // Name of Parameter 2
@@ -4068,7 +3893,6 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
     {
         String 1 // Description
         {
-            /* ### ACHTUNG: Neuer Text in Resource? Bestimmt die quadratische Einheitsmatrix einer bestimmten Größe. : Bestimmt die quadratische Einheitsmatrix einer bestimmten Gr÷˜e. */
             Text [ en-US ] = "Returns the unitary square array of a certain size." ;
         };
         ExtraData =
@@ -4083,7 +3907,6 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
         };
         String 3 // Description of Parameter 1
         {
-            /* ### ACHTUNG: Neuer Text in Resource? Die Größe der Einheitsmatrix. : Die Gr÷˜e der Einheitsmatrix. */
             Text [ en-US ] = "The size of the unitary array." ;
         };
     };
@@ -4203,13 +4026,11 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
 
 Resource RID_SC_FUNCTION_DESCRIPTIONS2
 {
-     // -=*# Resource for function DBANZAHL2 #*=-
-     // -=*# Resource for function HÄUFIGKEIT #*=-
+     // -=*# Resource for function HÃ„UFIGKEIT #*=-
     Resource SC_OPCODE_FREQUENCY
     {
         String 1 // Description
         {
-            /* ### ACHTUNG: Neuer Text in Resource? Erstellt eine Häufigkeitsverteilung als Spaltenmatrix. : Erstellt eine Hõufigkeitsverteilung als Spaltenmatrix. */
             Text [ en-US ] = "Returns a frequency distribution as a vertical array." ;
         };
         ExtraData =
@@ -4240,7 +4061,6 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
     {
         String 1 // Description
         {
-            /* ### ACHTUNG: Neuer Text in Resource? Berechnet Kenngrößen der linearen Regression als Matrix. : Berechnet Kenngr÷˜en der linearen Regression als Matrix. */
             Text [ en-US ] = "Calculates parameters of the linear regression as an array." ;
         };
         ExtraData =
@@ -4275,12 +4095,10 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
         };
         String 8 // Name of Parameter 4
         {
-            /* ### ACHTUNG: Neuer Text in Resource? Kenngrößen : Kenngr÷˜en */
             Text [ en-US ] = "stats" ;
         };
         String 9 // Description of Parameter 4
         {
-            /* ### ACHTUNG: Neuer Text in Resource? Ist Kenngrößen=0, so werden nur die Regressionskoeffizienten berechnet, sonst noch weitere Werte. : Ist Kenngr÷˜en=0, so werden nur die Regressionskoeffizienten berechnet, sonst noch weitere Werte. */
             Text [ en-US ] = "If parameter = 0 then only the regression coefficient will be calculated, otherwise other values as well." ;
         };
     };
@@ -4289,7 +4107,6 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
     {
         String 1 // Description
         {
-            /* ### ACHTUNG: Neuer Text in Resource? Berechnet Kenngrößen der exponentiellen Regression als Matrix. : Berechnet Kenngr÷˜en der exponentiellen Regression als Matrix. */
             Text [ en-US ] = "Calculates the parameters of the exponential regression curve as an array." ;
         };
         ExtraData =
@@ -4324,12 +4141,10 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
         };
         String 8 // Name of Parameter 4
         {
-            /* ### ACHTUNG: Neuer Text in Resource? Kenngrößen : Kenngr÷˜en */
             Text [ en-US ] = "stats" ;
         };
         String 9 // Description of Parameter 4
         {
-            /* ### ACHTUNG: Neuer Text in Resource? Ist Kenngrößen=0, so werden nur die Regressionskoeffizienten berechnet, sonst noch weitere Werte. : Ist Kenngr÷˜en=0, so werden nur die Regressionskoeffizienten berechnet, sonst noch weitere Werte. */
             Text [ en-US ] = "If parameter = 0 then only the regression coefficient will be calculated, otherwise other values as well." ;
         };
     };
@@ -4430,7 +4245,6 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
     {
         String 1 // Description
         {
-            /* ### ACHTUNG: Neuer Text in Resource? Zählt, wie viele Zahlen eine Liste von Argumenten enthält. : Zõhlt, wie viele Zahlen eine Liste von Argumenten enthõlt. */
             Text [ en-US ] = "Counts how many numbers are in the list of arguments." ;
         };
         ExtraData =
@@ -4445,7 +4259,6 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
         };
         String 3 // Description of Parameter 1
         {
-            /* ### ACHTUNG: Neuer Text in Resource? Wert 1; Wert 2;... sind 1 bis 30 Argumente mit unterschiedlichen Datentypen, wobei nur Zahlen in die Zählung eingehen. : Wert 1; Wert 2;... sind 1 bis 30 Argumente mit unterschiedlichen Datentypen, wobei nur Zahlen in die Zõhlung eingehen. */
             Text [ en-US ] = "Value 1, value 2, ... are 1 to 30 arguments containing different data types but where only numbers are counted." ;
         };
     };
@@ -4454,7 +4267,6 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
     {
         String 1 // Description
         {
-            /* ### ACHTUNG: Neuer Text in Resource? Zählt, wie viele Werte eine Liste von Argumenten enthält. : Zõhlt, wie viele Werte eine Liste von Argumenten enthõlt. */
             Text [ en-US ] = "Counts how many values are in the list of arguments." ;
         };
         ExtraData =
@@ -4469,7 +4281,6 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
         };
         String 3 // Description of Parameter 1
         {
-            /* ### ACHTUNG: Neuer Text in Resource? Wert 1; Wert 2;... sind 1 bis 30 Argumente, die den zu zählenden Werten entsprechen. : Wert 1; Wert 2;... sind 1 bis 30 Argumente, die den zu zõhlenden Werten entsprechen. */
             Text [ en-US ] = "Value 1, value 2, ... are 1 to 30 arguments representing the values to be counted." ;
         };
     };
@@ -4478,7 +4289,6 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
     {
         String 1 // Description
         {
-            /* ### ACHTUNG: Neuer Text in Resource? Liefert die größte Zahl einer Argumentliste. : Liefert die gr÷˜te Zahl einer Argumentliste. */
             Text [ en-US ] = "Returns the maximum value in a list of arguments." ;
         };
         ExtraData =
@@ -4493,7 +4303,6 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
         };
         String 3 // Description of Parameter 1
         {
-            /* ### ACHTUNG: Neuer Text in Resource? Zahl 1; Zahl 2;... sind 1 bis 30 numerische Argumente, deren größte Zahl bestimmt werden soll. : Zahl 1; Zahl 2;... sind 1 bis 30 numerische Argumente, deren gr÷˜te Zahl bestimmt werden soll. */
             Text [ en-US ] = "Number 1, number 2, ... are 1 to 30 numerical arguments for which the largest number is to be determined." ;
         };
     };
@@ -4626,8 +4435,6 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
         };
         String 3 // Description of Parameter 1
         {
-            /* ### ACHTUNG: Neuer Text in Resource? Zahl 1; Zahl 2;... sind 1 bis 30 numerische Argumente, die einer Grundgesamtheit entsprechen. : Zahl 1; Zahl 2;... sind 1 bis 30 numerische Argumente, die eine, aus einer Grundgesamtheit gezogene, Stichprobe darstellen. */
-            /* ### ACHTUNG: Neuer Text in Resource? Zahl 1; Zahl 2;... sind 1 bis 30 numerische Argumente, die einer Grundgesamtheit entsprechen. : Zahl 1; Zahl 2;... sind 1 bis 30 numerische Argumente, die eine, aus einer Grundgesamtheit gezogene, Stichprobe darstellen. */
             Text [ en-US ] = "Number 1, number 2, ... are 1 to 30 numerical arguments which represent a population." ;
         };
     };
@@ -4716,8 +4523,6 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
         };
         String 3 // Description of Parameter 1
         {
-            /* ### ACHTUNG: Neuer Text in Resource? Zahl 1; Zahl 2;... sind 1 bis 30 numerische Argumente, die einer Grundgesamtheit entsprechen. : Zahl 1; Zahl 2;... sind 1 bis 30 numerische Argumente, die eine, aus einer Grundgesamtheit gezogene, Stichprobe darstellen. */
-            /* ### ACHTUNG: Neuer Text in Resource? Zahl 1; Zahl 2;... sind 1 bis 30 numerische Argumente, die einer Grundgesamtheit entsprechen. : Zahl 1; Zahl 2;... sind 1 bis 30 numerische Argumente, die eine, aus einer Grundgesamtheit gezogene, Stichprobe darstellen. */
             Text [ en-US ] = "Number 1, number 2, ... are 1 to 30 numerical arguments which portray a sample of a population." ;
         };
     };
@@ -4924,7 +4729,6 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
     {
         String 1 // Description
         {
-            /* ### ACHTUNG: Neuer Text in Resource? Berechnet den häufigsten Wert in einer Stichprobe. : Berechnet den hõufigsten Wert in einer Stichprobe. */
             Text [ en-US ] = "Returns the most common value in a sample." ;
         };
         ExtraData =
@@ -5024,12 +4828,11 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
             Text [ en-US ] = "The type of the quartile (0 = MIN, 1 = 25%, 2 = 50 %, 3 = 75 %, 4 =MAX)." ;
         };
     };
-     // -=*# Resource for function KGRÖSSTE #*=-
+     // -=*# Resource for function KGRÃ–SSTE #*=-
     Resource SC_OPCODE_LARGE
     {
         String 1 // Description
         {
-            /* ### ACHTUNG: Neuer Text in Resource? Berechnet den k-größten Wert einer Stichprobe. : Berechnet den k-gr÷˜ten Wert einer Stichprobe. */
             Text [ en-US ] = "Returns the k-th largest value of a sample." ;
         };
         ExtraData =
@@ -5090,8 +4893,6 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
     {
         String 1 // Description
         {
-            /* ### ACHTUNG: Neuer Text in Resource? Berechnet den prozentualen Rang eines Wertes in einer Stichprobe. : Berechnet den prozentualen Rang eines Wert in einer Stichprobe. */
-            /* ### ACHTUNG: Neuer Text in Resource? Berechnet den prozentualen Rang eines Wertes in einer Stichprobe. : Berechnet den prozentualen Rang eines Wert in einer Stichprobe. */
             Text [ en-US ] = "Returns the percentage rank of a value in a sample." ;
         };
         ExtraData =
@@ -5122,7 +4923,6 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
     {
         String 1 // Description
         {
-            /* ### ACHTUNG: Neuer Text in Resource? Berechnet den Rang eines Wertes in einer Stichprobe. : Berechnet den Rang eines Wert in einer Stichprobe. */
             Text [ en-US ] = "Returns the ranking of a value in a sample." ;
         };
         ExtraData =
@@ -5183,7 +4983,6 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
         };
         String 5 // Description of Parameter 2
         {
-            /* ### ACHTUNG: Neuer Text in Resource? Der Prozentsatz der Randdaten, die nicht berücksichtigt werden. : Der Prozentsatz der Randdaten, die nicht ber³cksichtigt werden. */
             Text [ en-US ] = "The percentage of marginal data that is not to be taken into account." ;
         };
     };
@@ -5214,7 +5013,6 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
         };
         String 5 // Description of Parameter 2
         {
-            /* ### ACHTUNG: Neuer Text in Resource? Die Matrix der dazugehörigen Wahrscheinlichkeiten. : Die Matrix der dazugeh÷rigen Wahrscheinlichkeiten. */
             Text [ en-US ] = "The array of the associated probabilities." ;
         };
         String 6 // Name of Parameter 3
@@ -5239,7 +5037,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
     {
         String 1 // Description
         {
-            Text [ en-US ] = "Returns the probabilityof a trial result using binomial distribution." ;
+            Text [ en-US ] = "Returns the probability of a trial result using binomial distribution." ;
         };
         ExtraData =
         {
@@ -5365,7 +5163,6 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
         };
         String 3 // Description of Parameter 1
         {
-            /* ### ACHTUNG: Neuer Text in Resource? Der Wert, der rücktransformiert wird. : Der Wert, der r³cktransformiert wird. */
             Text [ en-US ] = "The value that is to be transformed back." ;
         };
     };
@@ -5434,7 +5231,6 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
         };
         String 3 // Description of Parameter 1
         {
-            /* ### ACHTUNG: Neuer Text in Resource? Die Anzahl der Mißerfolge in der Versuchsreihe. : Die Anzahl der Mi˜erfolge in der Versuchsreihe. */
             Text [ en-US ] = "The number of failures in the trial range." ;
         };
         String 4 // Name of Parameter 2
@@ -5489,7 +5285,6 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
         };
         String 7 // Description of Parameter 3
         {
-            /* ### ACHTUNG: Neuer Text in Resource? Die Grenzwahrscheinlichkeit, die erreicht oder überschritten wird. : Die Grenzwahrscheinlichkeit, die erreicht oder ³berschritten wird. */
             Text [ en-US ] = "The border probability that is attained or exceeded." ;
         };
     };
@@ -5876,7 +5671,6 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
         };
         String 3 // Description of Parameter 1
         {
-            /* ### ACHTUNG: Neuer Text in Resource? Der Wert, zu dem der natürliche Logarithmus der Gamma-Funktion berechnet werden soll. : Der Wert, zu dem der nat³rliche Logarithmus der Gamma-Funktion berechnet werden soll. */
             Text [ en-US ] = "The value for which the natural logarithm of the gamma function is to be calculated." ;
         };
     };
@@ -5923,7 +5717,6 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
         };
         String 9 // Description of Parameter 4
         {
-            /* ### ACHTUNG: Neuer Text in Resource? Der Anfangswert für das Werteintervall der Verteilung. : Der Anfangswert f³r das Werteintervall der Verteilung. */
             Text [ en-US ] = "The starting value for the value interval of the distribution." ;
         };
         String 10 // Name of Parameter 5
@@ -5932,7 +5725,6 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
         };
         String 11 // Description of Parameter 5
         {
-            /* ### ACHTUNG: Neuer Text in Resource? Der Endwert für das Werteintervall der Verteilung. : Der Endwert f³r das Werteintervall der Verteilung. */
             Text [ en-US ] = "The final value for the value interval of the distribution." ;
         };
     };
@@ -5979,7 +5771,6 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
         };
         String 9 // Description of Parameter 4
         {
-            /* ### ACHTUNG: Neuer Text in Resource? Der Anfangswert für das Werteintervall der Verteilung. : Der Anfangswert f³r das Werteintervall der Verteilung. */
             Text [ en-US ] = "The starting value for the value interval of the distribution." ;
         };
         String 10 // Name of Parameter 5
@@ -5988,7 +5779,6 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
         };
         String 11 // Description of Parameter 5
         {
-            /* ### ACHTUNG: Neuer Text in Resource? Der Endwert für das Werteintervall der Verteilung. : Der Endwert f³r das Werteintervall der Verteilung. */
             Text [ en-US ] = "The final value for the value interval of the distribution." ;
         };
     };
@@ -6065,7 +5855,6 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
         };
         String 5 // Description of Parameter 2
         {
-            /* ### ACHTUNG: Neuer Text in Resource? Die Größe der Stichprobe. : Die Gr÷˜e der Stichprobe. */
             Text [ en-US ] = "The size of the sample." ;
         };
         String 6 // Name of Parameter 3
@@ -6082,7 +5871,6 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
         };
         String 9 // Description of Parameter 4
         {
-            /* ### ACHTUNG: Neuer Text in Resource? Die Größe der Grundgesamtheit. : Die Gr÷˜e der Grundgesamtheit. */
             Text [ en-US ] = "The population size." ;
         };
     };
@@ -6091,7 +5879,6 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
     {
         String 1 // Description
         {
-            /* ### ACHTUNG: Neuer Text in Resource? Werte der (Student'schen) t-Verteilung : Werte der (Student''schen) t-Verteilung */
             Text [ en-US ] = "Returns the t-distribution." ;
         };
         ExtraData =
@@ -6130,7 +5917,6 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
     {
         String 1 // Description
         {
-            /* ### ACHTUNG: Neuer Text in Resource? Werte der inversen (Student'schen) t-Verteilung : Werte der inversen (Student''schen) t-Verteilung */
             Text [ en-US ] = "Values of the inverse t-distribution." ;
         };
         ExtraData =
@@ -6183,7 +5969,6 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
         };
         String 5 // Description of Parameter 2
         {
-            /* ### ACHTUNG: Neuer Text in Resource? Die Freiheitsgrade im Zähler der F-Verteilung. : Die Freiheitsgrade im Zõhler der F-Verteilung. */
             Text [ en-US ] = "The degrees of freedom in the numerator of the F distribution." ;
         };
         String 6 // Name of Parameter 3
@@ -6222,7 +6007,6 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
         };
         String 5 // Description of Parameter 2
         {
-            /* ### ACHTUNG: Neuer Text in Resource? Die Freiheitsgrade im Zähler der F-Verteilung. : Die Freiheitsgrade im Zõhler der F-Verteilung. */
             Text [ en-US ] = "The degrees of freedom in the numerator of the F distribution." ;
         };
         String 6 // Name of Parameter 3
@@ -6427,7 +6211,6 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
         };
         String 7 // Description of Parameter 3
         {
-            /* ### ACHTUNG: Neuer Text in Resource? Die Größe der Grundgesamtheit. : Die Gr÷˜e der Grundgesamtheit. */
             Text [ en-US ] = "The size of the population." ;
         };
     };
@@ -6436,7 +6219,6 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
     {
         String 1 // Description
         {
-            /* ### ACHTUNG: Neuer Text in Resource? (Gauss-Test) Berechnet die zweiseitige Prüfstatistik zur Normalverteilung. : (Gauss-Test) Berechnet die zweiseitige Pr³fstatistik zur Normalverteilung. */
             Text [ en-US ] = "Returns the two-tailed P value of a z test." ;
         };
         ExtraData =
@@ -6475,7 +6257,6 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
     {
         String 1 // Description
         {
-            /* ### ACHTUNG: Neuer Text in Resource? Berechnet den Chi-Quadrat-Unabhängigkeitstest. : Berechnet den Chi-Quadrat-Unabhõngigkeitstest. */
             Text [ en-US ] = "Returns the chi square independence test." ;
         };
         ExtraData =
@@ -6787,7 +6568,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
             Text [ en-US ] = "The second record array." ;
         };
     };
-     // -=*# Resource for function SCHÄTZER #*=-
+     // -=*# Resource for function SCHÃ„TZER #*=-
     Resource SC_OPCODE_FORECAST
     {
         String 1 // Description
@@ -6876,7 +6657,6 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
     {
         String 1 // Description
         {
-            /* ### ACHTUNG: Neuer Text in Resource? Bestimmt die Anzahl der Einzelbereiche, die zu einem (Mehrfach-)Bereich gehören. : Bestimmt die Anzahl der Einzelbereiche, die zu einem (Mehrfach-)Bereich geh÷ren. */
             Text [ en-US ] = "Returns the number of individual ranges that belong to a (multiple) range." ;
         };
         ExtraData =
@@ -6899,7 +6679,6 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
     {
         String 1 // Description
         {
-            /* ### ACHTUNG: Neuer Text in Resource? Wählt einen Wert aus bis zu 30 Argumenten. : Wõhlt einen Wert aus bis zu 30 Argumenten. */
             Text [ en-US ] = "Selects a value from a list of up to 30 value arguments." ;
         };
         ExtraData =
@@ -6914,7 +6693,6 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
         };
         String 3 // Description of Parameter 1
         {
-            /* ### ACHTUNG: Neuer Text in Resource? Der Index des Wertes (1..30), der ausgewählt wird. : Der Index des Wertes (1..30), der ausgewõhlt wird. */
             Text [ en-US ] = "The index of the value (1..30) selected." ;
         };
         String 4 // Name of Parameter 2
@@ -6923,7 +6701,6 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
         };
         String 5 // Description of Parameter 2
         {
-            /* ### ACHTUNG: Neuer Text in Resource? Wert 1; Wert 2;... Die Liste der Argumente, aus der ein Wert ausgewählt wird. : Wert 1; Wert 2;... Die Liste der Argumente, aus der ein Wert ausgewõhlt wird. */
             Text [ en-US ] = "Value 1, value 2,... The list of arguments from which a value is chosen." ;
         };
     };
@@ -7064,7 +6841,6 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
     {
         String 1 // Description
         {
-            /* ### ACHTUNG: Neuer Text in Resource? Waagerechte Suche und Verweis auf darüber- oder darunterstehende Zellen. : Waagerechte Suche und Verweis auf dar³ber- oder darunterstehende Zellen. */
             Text [ en-US ] = "Horizontal search and reference to the cells located below." ;
         };
         ExtraData =
@@ -7087,7 +6863,6 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
         };
         String 5 // Description of Parameter 2
         {
-            /* ### ACHTUNG: Neuer Text in Resource? Die Matrix oder der Bereich für den Verweis. : Die Matrix oder der Bereich f³r den Verweis. */
             Text [ en-US ] = "The array or the range for the reference." ;
         };
         String 6 // Name of Parameter 3
@@ -7104,7 +6879,6 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
         };
         String 9 // Description of Parameter 4
         {
-            /* ### ACHTUNG: Neuer Text in Resource? Ist der Wert WAHR oder nicht angegeben, muß die Suchzeile der Matrix aufsteigend sortiert sein. : Ist der Wert WAHR oder nicht angegeben, mu˜ die Suchzeile der Matrix aufsteigend sortiert sein. */
             Text [ en-US ] = "If the value is TRUE or not given, the search row of the array must be sorted in ascending order." ;
         };
     };
@@ -7135,7 +6909,6 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
         };
         String 5 // Description of Parameter 2
         {
-            /* ### ACHTUNG: Neuer Text in Resource? Die Matrix oder der Bereich für den Verweis. : Die Matrix oder der Bereich f³r den Verweis. */
             Text [ en-US ] = "The array or range for referencing." ;
         };
         String 6 // Name of Parameter 3
@@ -7152,7 +6925,6 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
         };
         String 9 // Description of Parameter 4
         {
-            /* ### ACHTUNG: Neuer Text in Resource? Ist der Wert WAHR oder nicht angegeben, muß die Suchspalte der Matrix aufsteigend sortiert sein. : Ist der Wert WAHR oder nicht angegeben, mu˜ die Suchspalte der Matrix aufsteigend sortiert sein. */
             Text [ en-US ] = "if the value is TRUE or not given, the search column of the array must be sorted in ascending order." ;
         };
     };
@@ -7305,7 +7077,6 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
     {
         String 1 // Description
         {
-            /* ### ACHTUNG: Neuer Text in Resource? Bestimmt einen Bezug, der gegenüber dem Ausgangspunkt verschoben ist. : Bestimmt einen Bezug, der gegen³ber dem Ausgangspunkt verschoben ist. */
             Text [ en-US ] = "Returns a reference which has been moved in relation to the starting point." ;
         };
         ExtraData =
@@ -7340,7 +7111,6 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
         };
         String 8 // Name of Parameter 4
         {
-            /* ### ACHTUNG: Neuer Text in Resource? Höhe : H÷he */
             Text [ en-US ] = "height" ;
         };
         String 9 // Description of Parameter 4
@@ -7405,7 +7175,6 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
         };
         String 5 // Description of Parameter 2
         {
-            /* ### ACHTUNG: Neuer Text in Resource? Die Zeit (in Sekunden), die die Vorlage gültig bleibt. : Die Zeit (in Sekunden), die die Vorlage g³ltig bleibt. */
             Text [ en-US ] = "The time (in seconds) that the Style is to remain valid." ;
         };
         String 6 // Name of Parameter 3
@@ -7422,7 +7191,6 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
     {
         String 1 // Description
         {
-            /* ### ACHTUNG: Neuer Text in Resource? Ergebnis einer DDE-Verknüpfung. : Ergebnis einer DDE-Verkn³pfung. */
             Text [ en-US ] = "Result of a DDE link." ;
         };
         ExtraData =
@@ -7554,6 +7322,50 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
             Text [ en-US ] = "The number to convert.";
         };
     };
+     // -=*# Resource for function JIS #*=-
+    Resource SC_OPCODE_JIS
+    {
+        String 1 // Description
+        {
+            Text [ en-US ] = "Converts half-width ASCII and katakana characters to full-width." ;
+        };
+        ExtraData =
+        {
+            ID_FUNCTION_GRP_TEXT;
+            U2S( HID_FUNC_JIS );
+            1;  0;
+        };
+        String 2 // Name of Parameter 1
+        {
+            Text [ en-US ] = "text" ;
+        };
+        String 3 // Description of Parameter 1
+        {
+            Text [ en-US ] = "The text to convert.";
+        };
+    };
+     // -=*# Resource for function ASC #*=-
+    Resource SC_OPCODE_ASC
+    {
+        String 1 // Description
+        {
+            Text [ en-US ] = "Converts full-width ASCII and katakana characters to half-width." ;
+        };
+        ExtraData =
+        {
+            ID_FUNCTION_GRP_TEXT;
+            U2S( HID_FUNC_ASC );
+            1;  0;
+        };
+        String 2 // Name of Parameter 1
+        {
+            Text [ en-US ] = "text" ;
+        };
+        String 3 // Description of Parameter 1
+        {
+            Text [ en-US ] = "The text to convert.";
+        };
+    };
      // -=*# Resource for function CODE #*=-
     Resource SC_OPCODE_CODE
     {
@@ -7573,7 +7385,6 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
         };
         String 3 // Description of Parameter 1
         {
-            /* ### ACHTUNG: Neuer Text in Resource? Ist der Text, für den der Code des ersten Zeichens ermittelt werden soll. : Ist der Text, f³r den der Code des ersten Zeichens ermittelt werden soll. */
             Text [ en-US ] = "This is the text for which the code of the first character is to be found." ;
         };
     };
@@ -7582,7 +7393,6 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
     {
         String 1 // Description
         {
-            /* ### ACHTUNG: Neuer Text in Resource? Wandelt einen Zahlenwert in einen Text im Währungsformat um. : Wandelt einen Zahlenwert in einen Text im Wõhrungsformat um. */
             Text [ en-US ] = "Converts a number to text in currency format." ;
         };
         ExtraData =
@@ -7597,7 +7407,6 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
         };
         String 3 // Description of Parameter 1
         {
-            /* ### ACHTUNG: Neuer Text in Resource? Wert ist eine Zahl, ein Bezug auf eine Zelle, die eine Zahl enthält, oder eine Formel, die eine Zahl ergibt. : Wert ist eine Zahl, ein Bezug auf eine Zelle, die eine Zahl enthõlt, oder eine Formel, die eine Zahl ergibt. */
             Text [ en-US ] = "Value is a number, a reference to a cell containing a number or a formula that results in a number." ;
         };
         String 4 // Name of Parameter 2
@@ -7628,16 +7437,14 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
         };
         String 3 // Description of Parameter 1
         {
-            /* ### ACHTUNG: Neuer Text in Resource? Der Codewert für das Zeichen : Der Codewert f³r das Zeichen */
             Text [ en-US ] = "The code value for the character." ;
         };
     };
-     // -=*# Resource for function SÄUBERN #*=-
+     // -=*# Resource for function SÃ„UBERN #*=-
     Resource SC_OPCODE_CLEAN
     {
         String 1 // Description
         {
-            /* ### ACHTUNG: Neuer Text in Resource? Löscht nichtdruckbare Zeichen aus dem Text. : L÷scht nichtdruckbare Zeichen aus dem Text. */
             Text [ en-US ] = "Removes all nonprintable characters from text." ;
         };
         ExtraData =
@@ -7674,7 +7481,6 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
         };
         String 3 // Description of Parameter 1
         {
-            /* ### ACHTUNG: Neuer Text in Resource? Text für die Textverkettung. : Text f³r die Textverkettung. */
             Text [ en-US ] = "Text for the concatentation." ;
         };
     };
@@ -7697,7 +7503,6 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
         };
         String 3 // Description of Parameter 1
         {
-            /* ### ACHTUNG: Neuer Text in Resource? Der erste Text für den Textvergleich. : Der erste Text f³r den Textvergleich. */
             Text [ en-US ] = "The first text to be used for comparing texts." ;
         };
         String 4 // Name of Parameter 2
@@ -7706,7 +7511,6 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
         };
         String 5 // Description of Parameter 2
         {
-            /* ### ACHTUNG: Neuer Text in Resource? Der zweite Text für den Textvergleich. : Der zweite Text f³r den Textvergleich. */
             Text [ en-US ] = "The second text for comparing texts." ;
         };
     };
@@ -7715,7 +7519,6 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
     {
         String 1 // Description
         {
-            /* ### ACHTUNG: Neuer Text in Resource? Sucht ein Teilwort in einem Text unter Berücksichtigung von Groß- und Kleinschreibung. : Sucht ein Teilwort in einem Text unter Ber³cksichtigung von Gro˜- und Kleinschreibung. */
             Text [ en-US ] = "Looks for a string of text within another (case sensitive)" ;
         };
         ExtraData =
@@ -7754,7 +7557,6 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
     {
         String 1 // Description
         {
-            /* ### ACHTUNG: Neuer Text in Resource? Sucht ein Teilwort in einem Text ohne Berücksichtigung von Groß- und Kleinschreibung. : Sucht ein Teilwort in einem Text ohne Ber³cksichtigung von Gro˜- und Kleinschreibung. */
             Text [ en-US ] = "Looks for one text value within another (not case-sensitive)." ;
         };
         ExtraData =
@@ -7788,12 +7590,11 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
             Text [ en-US ] = "The position in the text where the search is started." ;
         };
     };
-     // -=*# Resource for function GLÄTTEN #*=-
+     // -=*# Resource for function GLÃ„TTEN #*=-
     Resource SC_OPCODE_TRIM
     {
         String 1 // Description
         {
-            /* ### ACHTUNG: Neuer Text in Resource? Löscht überflüssige Leerzeichen zwischen Worten. : L÷scht ³berfl³ssige Leerzeichen zwischen Worten. */
             Text [ en-US ] = "Removes extra spaces from text." ;
         };
         ExtraData =
@@ -7808,7 +7609,6 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
         };
         String 3 // Description of Parameter 1
         {
-            /* ### ACHTUNG: Neuer Text in Resource? Der Text, in dem überflüssige Leerzeichen zwischen Worten gelöscht werden. : Der Text, in dem ³berfl³ssige Leerzeichen zwischen Worten gel÷scht werden. */
             Text [ en-US ] = "The text in which extra spaces between words are to be deleted." ;
         };
     };
@@ -7817,7 +7617,6 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
     {
         String 1 // Description
         {
-            /* ### ACHTUNG: Neuer Text in Resource? Wandelt alle Wortanfänge in Großbuchstaben um. : Wandelt alle Wortanfõnge in Gro˜buchstaben um. */
             Text [ en-US ] = "Capitalizes the first letter in all words." ;
         };
         ExtraData =
@@ -7832,7 +7631,6 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
         };
         String 3 // Description of Parameter 1
         {
-            /* ### ACHTUNG: Neuer Text in Resource? Der Text, in dem Wortanfänge durch Großbuchstaben ersetzt werden. : Der Text, in dem Wortanfõnge durch Gro˜buchstaben ersetzt werden. */
             Text [ en-US ] = "The text in which the beginning of words are to be replaced by capital letters." ;
         };
     };
@@ -7841,7 +7639,6 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
     {
         String 1 // Description
         {
-            /* ### ACHTUNG: Neuer Text in Resource? Wandelt alle Buchstaben eines Textes in Großbuchstaben um. : Wandelt alle Buchstaben eines Textes in Gro˜buchstaben. */
             Text [ en-US ] = "Converts text to uppercase." ;
         };
         ExtraData =
@@ -7856,7 +7653,6 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
         };
         String 3 // Description of Parameter 1
         {
-            /* ### ACHTUNG: Neuer Text in Resource? Der Text, in dem Kleinbuchstaben durch Großbuchstaben ersetzt werden. : Der Text, in dem Kleinbuchstaben durch Gro˜buchstaben ersetzt werden. */
             Text [ en-US ] = "The text in which lower case letters are to be converted to capitals." ;
         };
     };
@@ -7879,7 +7675,6 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
         };
         String 3 // Description of Parameter 1
         {
-            /* ### ACHTUNG: Neuer Text in Resource? Der Text, in dem Großbuchstaben durch Kleinbuchstaben ersetzt werden. : Der Text, in dem Gro˜buchstaben durch Kleinbuchstaben ersetzt werden. */
             Text [ en-US ] = "The text in which capitals are converted to lower case letters." ;
         };
     };
@@ -7910,7 +7705,6 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
     {
         String 1 // Description
         {
-            /* ### ACHTUNG: Neuer Text in Resource? Wandelt eine Zahl gemäß einer Formatangabe in einen Text. : Wandelt eine Zahl gemõ˜ einer Formatangabe in einen Text. */
             Text [ en-US ] = "Converts a number to text according to a given format." ;
         };
         ExtraData =
@@ -7989,7 +7783,6 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
         };
         String 6 // Name of Parameter 3
         {
-            /* ### ACHTUNG: Neuer Text in Resource? Länge : Lõnge */
             Text [ en-US ] = "length" ;
         };
         String 7 // Description of Parameter 3
@@ -8043,12 +7836,11 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
             Text [ en-US ] = "No thousands separator. True value, if existing and TRUE (unequal to 0), no thousands separators are set." ;
         };
     };
-     // -=*# Resource for function LÄNGE #*=-
+     // -=*# Resource for function LÃ„NGE #*=-
     Resource SC_OPCODE_LEN
     {
         String 1 // Description
         {
-            /* ### ACHTUNG: Neuer Text in Resource? Berechnet die Länge eines Textes. : Berechnet die Lõnge eines Textes. */
             Text [ en-US ] = "Calculates length of a text string." ;
         };
         ExtraData =
@@ -8063,7 +7855,6 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
         };
         String 3 // Description of Parameter 1
         {
-            /* ### ACHTUNG: Neuer Text in Resource? Der Text, dessen Länge bestimmt wird. : Der Text, dessen Lõnge bestimmt wird. */
             Text [ en-US ] = "The text in which the length is to be determined." ;
         };
     };
@@ -8094,7 +7885,6 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
         };
         String 5 // Description of Parameter 2
         {
-            /* ### ACHTUNG: Neuer Text in Resource? Die Anzahl der Zeichen für das Anfangsteilwort. : Die Anzahl der Zeichen f³r das Anfangsteilwort. */
             Text [ en-US ] = "The number of characters for the start text." ;
         };
     };
@@ -8125,7 +7915,6 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
         };
         String 5 // Description of Parameter 2
         {
-            /* ### ACHTUNG: Neuer Text in Resource? Die Anzahl der Zeichen für das Endteilwort. : Die Anzahl der Zeichen f³r das Endteilwort. */
             Text [ en-US ] = "The number of characters for the end text." ;
         };
     };
@@ -8164,7 +7953,6 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
         };
         String 7 // Description of Parameter 3
         {
-            /* ### ACHTUNG: Neuer Text in Resource? Die Anzahl der Zeichen für das Teilwort. : Die Anzahl der Zeichen f³r das Teilwort. */
             Text [ en-US ] = "The number of characters for the text." ;
         };
     };
@@ -8312,12 +8100,12 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
             Text [ en-US ] = "The base number for conversion must be in the range 2 - 36." ;
         };
     };
-     // -=*# Resource for function UMRECHNEN #*=-
+     // -=*# Resource for function CONVERT #*=-
     Resource SC_OPCODE_CONVERT
     {
         String 1 // Description
         {
-            Text [ en-US ] = "Converts a value according to a conversion table in the configuration (calc.xml).";
+            Text [ en-US ] = "Converts a value according to a conversion table in the configuration (calc.xcu).";
         };
         ExtraData =
         {
