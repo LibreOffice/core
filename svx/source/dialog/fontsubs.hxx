@@ -4,9 +4,9 @@
  *
  *  $RCSfile: fontsubs.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: hr $ $Date: 2007-06-27 17:06:00 $
+ *  last change: $Author: rt $ $Date: 2007-07-03 14:26:32 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -114,12 +114,6 @@ class SVX_DLLPUBLIC SvxFontSubstTabPage : public SfxTabPage
     String          sHeader3;
     String          sHeader4;
 
-    Bitmap          aChkunBmp;
-    Bitmap          aChkchBmp;
-    Bitmap          aChkchhiBmp;
-    Bitmap          aChkunhiBmp;
-    Bitmap          aChktriBmp;
-    Bitmap          aChktrihiBmp;
     Color           aTextColor;
     ByteString      sFontGroup;
 
