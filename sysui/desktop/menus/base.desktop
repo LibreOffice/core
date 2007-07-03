@@ -9,4 +9,5 @@ Categories=Application;Office;X-Red-Hat-Base;X-SuSE-Core-Office;X-MandrivaLinux-
 Exec=openoffice -base %U
 MimeType=application/vnd.oasis.opendocument.database;application/vnd.sun.xml.base
 Name=%PRODUCTNAME Base
+GenericName=Database Development
 Comment=Manage databases, create queries and reports to track and manage your information by using Base.
