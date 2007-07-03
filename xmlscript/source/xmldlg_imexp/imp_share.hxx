@@ -4,9 +4,9 @@
  *
  *  $RCSfile: imp_share.hxx,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: hr $ $Date: 2006-06-20 05:11:40 $
+ *  last change: $Author: rt $ $Date: 2007-07-03 12:57:04 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -456,6 +456,9 @@ public:
     bool importLineEndFormatProperty(
         ::rtl::OUString const & rPropName, ::rtl::OUString const & rAttrName,
         css::uno::Reference<css::xml::input::XAttributes> const & xAttributes );
+    bool importSelectionTypeProperty(
+        ::rtl::OUString const & rPropName, ::rtl::OUString const & rAttrName,
+        css::uno::Reference<css::xml::input::XAttributes> const & xAttributes );
 };
 
 //==============================================================================
@@ -774,6 +777,28 @@ public:
         throw (css::xml::sax::SAXException, css::uno::RuntimeException);
 
     inline FileControlElement(
+        ::rtl::OUString const & rLocalName,
+        css::uno::Reference< css::xml::input::XAttributes > const & xAttributes,
+        ElementBase * pParent, DialogImport * pImport )
+        SAL_THROW( () )
+        : ControlElement( rLocalName, xAttributes, pParent, pImport )
+        {}
+};
+
+//==============================================================================
+class TreeControlElement
+    : public ControlElement
+{
+public:
+    virtual css::uno::Reference< css::xml::input::XElement >
+    SAL_CALL startChildElement(
+        sal_Int32 nUid, ::rtl::OUString const & rLocalName,
+        css::uno::Reference<css::xml::input::XAttributes> const & xAttributes )
+        throw (css::xml::sax::SAXException, css::uno::RuntimeException);
+    virtual void SAL_CALL endElement()
+        throw (css::xml::sax::SAXException, css::uno::RuntimeException);
+
+    inline TreeControlElement(
         ::rtl::OUString const & rLocalName,
         css::uno::Reference< css::xml::input::XAttributes > const & xAttributes,
         ElementBase * pParent, DialogImport * pImport )
