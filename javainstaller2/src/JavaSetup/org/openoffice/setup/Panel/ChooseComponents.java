@@ -1,4 +1,40 @@
+/*************************************************************************
+ *
+ *  OpenOffice.org - a multi-platform office productivity suite
+ *
+ *  $RCSfile: ChooseComponents.java,v $
+ *
+ *  $Revision: 1.2 $
+ *
+ *  last change: $Author: rt $ $Date: 2007-07-03 11:55:25 $
+ *
+ *  The Contents of this file are made available subject to
+ *  the terms of GNU Lesser General Public License Version 2.1.
+ *
+ *
+ *    GNU Lesser General Public License Version 2.1
+ *    =============================================
+ *    Copyright 2005 by Sun Microsystems, Inc.
+ *    901 San Antonio Road, Palo Alto, CA 94303, USA
+ *
+ *    This library is free software; you can redistribute it and/or
+ *    modify it under the terms of the GNU Lesser General Public
+ *    License version 2.1, as published by the Free Software Foundation.
+ *
+ *    This library is distributed in the hope that it will be useful,
+ *    but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ *    Lesser General Public License for more details.
+ *
+ *    You should have received a copy of the GNU Lesser General Public
+ *    License along with this library; if not, write to the Free Software
+ *    Foundation, Inc., 59 Temple Place, Suite 330, Boston,
+ *    MA  02111-1307  USA
+ *
+ ************************************************************************/
+
 package org.openoffice.setup.Panel;
+
 import org.openoffice.setup.PanelHelper.PanelLabel;
 import org.openoffice.setup.PanelHelper.PanelTitle;
 import org.openoffice.setup.PanelHelper.TreeNodeRenderer;
@@ -87,7 +123,11 @@ public class ChooseComponents extends JPanel implements MouseListener, KeyListen
             nodeInfo.toggleState(node);
 
             DefaultTreeModel model = (DefaultTreeModel)componentTree.getModel();
-            model.nodeChanged(node);
+            // model.nodeChanged(node);
+
+            // The following line was included because of task i78481.
+            // In Java 1.6 nodeChanged does not work correctly.
+            model.nodeStructureChanged(node);
 
             descriptionLabel.setText(nodeInfo.getDescription());
             sizeLabel.setText(sizeString + nodeInfo.getSize());
@@ -147,4 +187,5 @@ public class ChooseComponents extends JPanel implements MouseListener, KeyListen
             sizeLabel.setText(sizeString + nodeInfo.getSize());
         }
     }
+
 }
