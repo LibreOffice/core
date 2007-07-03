@@ -4,9 +4,9 @@
  *
  *  $RCSfile: autocdlg.hxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: hr $ $Date: 2007-06-27 16:47:29 $
+ *  last change: $Author: rt $ $Date: 2007-07-03 14:24:55 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -202,12 +202,6 @@ class OfaSwAutoFmtOptionsPage : public SfxTabPage
     String          sMargin;
     String          sBulletChar;
     String          sByInputBulletChar;
-    Bitmap          aChkunBmp;
-    Bitmap          aChkchBmp;
-    Bitmap          aChkchhiBmp;
-    Bitmap          aChkunhiBmp;
-    Bitmap          aChktriBmp;
-    Bitmap          aChktrihiBmp;
 
     Font            aBulletFont;
     Font            aByInputBulletFont;
