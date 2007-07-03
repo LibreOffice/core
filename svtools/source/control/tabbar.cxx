@@ -4,9 +4,9 @@
  *
  *  $RCSfile: tabbar.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: hr $ $Date: 2007-06-27 14:51:52 $
+ *  last change: $Author: rt $ $Date: 2007-07-03 15:42:20 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1060,6 +1060,10 @@ void TabBar::Paint( const Rectangle& )
     Font aLightFont = aFont;
     aLightFont.SetWeight( WEIGHT_LIGHT );
 
+    // #i36013# exclude push buttons from painting area
+    Rectangle aClipRect( Point( mnOffX, 0 ), Point( mnLastOffX, GetOutputHeightPixel() - 1 ) );
+    SetClipRegion( Region( aClipRect ) );
+
     // Bei Border oben und unten einen Strich extra malen
     if ( (mnWinStyle & WB_BORDER) || (mnWinStyle & WB_TOPBORDER) )
     {
@@ -1237,6 +1241,8 @@ void TabBar::Paint( const Rectangle& )
 
     // Font wieder herstellen
     SetFont( aFont );
+    // remove clip region
+    SetClipRegion();
 }
 
 // -----------------------------------------------------------------------
