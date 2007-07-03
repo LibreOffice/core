@@ -4,9 +4,9 @@
 #
 #   $RCSfile: environment.pm,v $
 #
-#   $Revision: 1.10 $
+#   $Revision: 1.11 $
 #
-#   last change: $Author: gm $ $Date: 2007-05-10 10:58:22 $
+#   last change: $Author: rt $ $Date: 2007-07-03 11:45:40 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -110,6 +110,8 @@ sub set_global_environment_variables
     if ( $ENV{'PREVIOUS_IDT_DIR'} ) { $installer::globals::previous_idt_dir = $ENV{'PREVIOUS_IDT_DIR'}; }
     if ( $ENV{'LOCALINSTALLDIR'} ) { $installer::globals::localinstalldir = $ENV{'LOCALINSTALLDIR'}; }
     if ( $ENV{'MAX_LANG_LENGTH'} ) { $installer::globals::max_lang_length = $ENV{'MAX_LANG_LENGTH'}; }
+
+    if ( $ENV{'SOLAR_JAVA'} ) { $installer::globals::solarjavaset = 1; }
 }
 
 1;
