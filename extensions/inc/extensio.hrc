@@ -4,9 +4,9 @@
  *
  *  $RCSfile: extensio.hrc,v $
  *
- *  $Revision: 1.29 $
+ *  $Revision: 1.30 $
  *
- *  last change: $Author: kz $ $Date: 2007-06-20 10:41:25 $
+ *  last change: $Author: rt $ $Date: 2007-07-03 13:05:52 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -390,6 +390,13 @@
 #define UID_PROP_REMOVE_DATA_TYPE               (HID_FORMS_START +  249)
 #define HID_PROP_LIST_BINDING                   (HID_FORMS_START +  250)
 #define HID_PROP_BINDING_NAME                   (HID_FORMS_START +  251)
+#define HID_PROP_SELECTION_TYPE                 (HID_FORMS_START +  253)
+#define HID_PROP_ROOT_DISPLAYED                 (HID_FORMS_START +  254)
+#define HID_PROP_SHOWS_HANDLES                  (HID_FORMS_START +  255)
+#define HID_PROP_SHOWS_ROOT_HANDLES             (HID_FORMS_START +  256)
+#define HID_PROP_EDITABLE                       (HID_FORMS_START +  257)
+#define HID_PROP_INVOKES_STOP_NOT_EDITING       (HID_FORMS_START +  258)
+#define HID_PROP_ROW_HEIGHT                     (HID_FORMS_START +  259)
 #define HID_PROP_DECORATION                     (HID_FORMS_START +  252)
 
 #define HID_EVT_ACTIONPERFORMED                 (HID_FORMS_START + 300)
