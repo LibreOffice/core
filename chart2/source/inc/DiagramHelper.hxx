@@ -4,9 +4,9 @@
  *
  *  $RCSfile: DiagramHelper.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: vg $ $Date: 2007-05-22 18:15:39 $
+ *  last change: $Author: rt $ $Date: 2007-07-03 13:41:35 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -59,10 +59,6 @@
 #include <com/sun/star/chart2/XChartDocument.hpp>
 #endif
 
-
-#ifndef _COM_SUN_STAR_DRAWING_CAMERAGEOMETRY_HPP_
-#include <com/sun/star/drawing/CameraGeometry.hpp>
-#endif
 #ifndef _COM_SUN_STAR_LANG_XMULTISERVICEFACTORY_HPP_
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #endif
@@ -340,33 +336,6 @@ public:
                     ::com::sun::star::chart2::XDataSeries >& xDataSeries,
                const ::com::sun::star::uno::Reference<
                     ::com::sun::star::chart2::XChartType >& xChartType );
-
-    /** Returns the default camera geometry that is set in the Diagram CTOR.
-        This is not the property default!
-
-        @todo deprecate the hard set camera geometry and use the property
-              default
-     */
-    static ::com::sun::star::drawing::CameraGeometry getDefaultCameraGeometry( bool bPie=false );
-
-    static void getRotationAngleFromDiagram(
-        const ::com::sun::star::uno::Reference<
-            ::com::sun::star::beans::XPropertySet >& xSceneProperties
-            , double& rfXAngleRad, double& rfYAngleRad, double& rfZAngleRad );
-    static void setRotationAngleToDiagram(
-        const ::com::sun::star::uno::Reference<
-            ::com::sun::star::beans::XPropertySet >& xSceneProperties
-            , double fXAngleRad, double fYAngleRad, double fZAngleRad );
-
-    static double getCameraDistance(
-        const ::com::sun::star::uno::Reference<
-            ::com::sun::star::beans::XPropertySet >& xSceneProperties );
-    static void setCameraDistance(
-        const ::com::sun::star::uno::Reference<
-            ::com::sun::star::beans::XPropertySet >& xSceneProperties
-            , double fCameraDistance );
-    static void ensureCameraDistanceRange( double& rfCameraDistance );
-    static void getCameraDistanceRange( double& rfMinimumDistance, double& rfMaximumDistance );
 
     static bool isSupportingFloorAndWall( const ::com::sun::star::uno::Reference<
                 ::com::sun::star::chart2::XDiagram > & xDiagram );
