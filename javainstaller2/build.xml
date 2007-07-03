@@ -83,23 +83,6 @@
     </jar>
   </target>
 
-  <!--
-  <target name="test-javainstaller" depends="build-javainstaller">
-    <java classname="com.sun.soserv.staroffice.CoreTest" fork="true">
-      <classpath>
-        <pathelement location="${build.dir}/${classes.dir}/client"/>
-        <pathelement location="/soserv-core.jar"/>
-        <pathelement location="${basedir}/lib/juh.jar"/>
-      </classpath>
-      <sysproperty key="verbose" value="true"/>
-      <arg value="file:///tausch/lo/test.odt"/>
-      <arg value="file:///tausch/lo/"/>
-      <arg value="/export/home/lo/m145"/>
-      <arg value=":12"/>
-    </java>
-  </target>
-  -->
-
   <!-- CLEAN UP OUTPUT TREES -->
   <target name="clean" unless="jarFile.uptodate">
    <!-- <delete dir="${build.dir}"/> -->
