@@ -5,9 +5,9 @@
  
     $RCSfile: dialog.dtd,v $
  
-    $Revision: 1.25 $
+    $Revision: 1.26 $
  
-    last change: $Author: rt $ $Date: 2005-09-09 16:07:19 $
+    last change: $Author: rt $ $Date: 2007-07-03 12:56:35 $
  
     The Contents of this file are made available subject to
     the terms of GNU Lesser General Public License Version 2.1.
@@ -266,6 +266,17 @@
                           dlg:value CDATA #IMPLIED
                           dlg:hide-inactive-selection %boolean; #IMPLIED
                           dlg:readonly %boolean; #IMPLIED
+                          >
+
+<!ELEMENT dlg:treecontrol ((%event;)*)>
+<!ATTLIST dlg:treecontrol %default-attributes;
+						  dlg:selectiontype CDATA #IMPLIED
+                          dlg:rootdisplayed %boolean; #IMPLIED
+                          dlg:showshandles %boolean; #IMPLIED
+                          dlg:showsroothandles %boolean; #IMPLIED
+                          dlg:rowheight %boolean; #IMPLIED
+	                      dlg:editable %numeric; #IMPLIED
+		                  dlg:invokesstopnodeediting %boolean; #IMPLIED
                           >
 
 <!ELEMENT dlg:currencyfield ((%event;)*)>
