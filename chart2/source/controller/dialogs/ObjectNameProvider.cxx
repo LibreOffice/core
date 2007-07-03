@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ObjectNameProvider.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: vg $ $Date: 2007-05-22 17:28:29 $
+ *  last change: $Author: rt $ $Date: 2007-07-03 13:37:23 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -49,6 +49,7 @@
 #include "ExplicitCategoriesProvider.hxx"
 #include "CommonConverters.hxx"
 #include "chartview/NumberFormatterWrapper.hxx"
+#include "RegressionCurveHelper.hxx"
 
 #ifndef INCLUDED_RTL_MATH_HXX
 #include <rtl/math.hxx>
@@ -60,9 +61,10 @@
 #include <tools/string.hxx>
 #endif
 
-#ifndef _COM_SUN_STAR_CHART2_XTITLE_HPP_
+// #include <svtools/syslocale.hxx>
+
 #include <com/sun/star/chart2/XTitle.hpp>
-#endif
+#include <com/sun/star/chart2/XRegressionCurveContainer.hpp>
 
 //.............................................................................
 namespace chart
@@ -553,6 +555,63 @@ rtl::OUString ObjectNameProvider::getHelpText( const rtl::OUString& rObjectCID, 
         //or different names for series of diferent charttypes
     }
     */
+    else if( OBJECTTYPE_DATA_CURVE == eObjectType )
+    {
+        if( bVerbose )
+        {
+            aRet = String( SchResId( STR_OBJECT_CURVE_WITH_PARAMETERS ));
+            Reference< chart2::XDataSeries > xSeries( ObjectIdentifier::getDataSeriesForCID( rObjectCID , xChartModel ));
+            Reference< chart2::XRegressionCurveContainer > xCurveCnt( xSeries, uno::UNO_QUERY );
+            if( xCurveCnt.is())
+            {
+                Reference< chart2::XRegressionCurve > xCurve(
+                    RegressionCurveHelper::getFirstCurveNotMeanValueLine( xCurveCnt ));
+                if( xCurve.is())
+                {
+                    try
+                    {
+                        Reference< chart2::XRegressionCurveCalculator > xCalculator( xCurve->getCalculator(), uno::UNO_QUERY_THROW );
+                        RegressionCurveHelper::initializeCurveCalculator( xCalculator, xSeries, xChartModel );
+
+                        // replace formula
+                        sal_Int32 nIndex = -1;
+                        OUString aWildcard( C2U("%FORMULA") );
+                        nIndex = aRet.indexOf( aWildcard );
+                        if( nIndex != -1 )
+                            aRet = aRet.replaceAt( nIndex, aWildcard.getLength(), xCalculator->getRepresentation());
+
+                        // replace r^2
+                        aWildcard = C2U("%RSQUARED");
+                        nIndex = aRet.indexOf( aWildcard );
+                        if( nIndex != -1 )
+                        {
+                            sal_Unicode aDecimalSep( '.' );
+                            //@todo: enable this code when a localized decimal
+                            //separator is also available for the formula
+//                             SvtSysLocale aSysLocale;
+//                             OUString aSep( aSysLocale.GetLocaleData().getNumDecimalSep());
+//                             if( aSep.getLength() == 1 )
+//                                 aDecimalSep = aSep.toChar();
+                            double fR( xCalculator->getCorrelationCoefficient());
+                            aRet = aRet.replaceAt(
+                                nIndex, aWildcard.getLength(),
+                                ::rtl::math::doubleToUString(
+                                    fR*fR, rtl_math_StringFormat_G, 4, aDecimalSep, true ));
+                        }
+                    }
+                    catch( const uno::Exception & ex )
+                    {
+                        ASSERT_EXCEPTION( ex );
+                    }
+                }
+            }
+        }
+        else
+        {
+            // non-verbose
+            aRet = ObjectNameProvider::getName( eObjectType, false );
+        }
+    }
     else
     {
         aRet = ObjectNameProvider::getName( eObjectType, false );
@@ -600,7 +659,9 @@ rtl::OUString ObjectNameProvider::getSelectedObjectText( const rtl::OUString & r
     }
     else
     {
-        OUString aHelpText( getHelpText( rObjectCID, xChartModel, false ));
+        // use the verbose text including the formula for trend lines
+        bool bVerbose( OBJECTTYPE_DATA_CURVE == eObjectType );
+        OUString aHelpText( getHelpText( rObjectCID, xChartModel, bVerbose ));
         if( aHelpText.getLength())
         {
             aRet = String( SchResId( STR_STATUS_OBJECT_MARKED ));
