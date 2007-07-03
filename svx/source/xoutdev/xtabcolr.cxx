@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xtabcolr.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: hr $ $Date: 2007-06-27 19:35:29 $
+ *  last change: $Author: rt $ $Date: 2007-07-03 13:35:21 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -433,7 +433,37 @@ BOOL XColorTable::Create()
     aStr.SetChar(nLen, sal_Unicode('4'));
     Insert( 91, new XColorEntry( Color( 0xcc, 0xcc, 0xff ), aStr ) );
 
-    return( Count() == 92 );
+    // Chart default colors
+    aStr = SVX_RESSTR( RID_SVXSTR_COLOR_CHART );
+    aStr.AppendAscii(" 1");
+    nLen = aStr.Len() - 1;
+    Insert( 92, new XColorEntry( Color( 0x00, 0x45, 0x86 ), aStr ) );
+    aStr.SetChar(nLen, sal_Unicode('2'));
+    Insert( 93, new XColorEntry( Color( 0xff, 0x42, 0x0e ), aStr ) );
+    aStr.SetChar(nLen, sal_Unicode('3'));
+    Insert( 94, new XColorEntry( Color( 0xff, 0xd3, 0x20 ), aStr ) );
+    aStr.SetChar(nLen, sal_Unicode('4'));
+    Insert( 95, new XColorEntry( Color( 0x57, 0x9d, 0x1c ), aStr ) );
+    aStr.SetChar(nLen, sal_Unicode('5'));
+    Insert( 96, new XColorEntry( Color( 0x7e, 0x00, 0x21 ), aStr ) );
+    aStr.SetChar(nLen, sal_Unicode('6'));
+    Insert( 97, new XColorEntry( Color( 0x83, 0xca, 0xff ), aStr ) );
+    aStr.SetChar(nLen, sal_Unicode('7'));
+    Insert( 98, new XColorEntry( Color( 0x31, 0x40, 0x04 ), aStr ) );
+    aStr.SetChar(nLen, sal_Unicode('8'));
+    Insert( 99, new XColorEntry( Color( 0xae, 0xcf, 0x00 ), aStr ) );
+    aStr.SetChar(nLen, sal_Unicode('9'));
+    Insert( 100, new XColorEntry( Color( 0x4b, 0x1f, 0x6f ), aStr ) );
+    aStr.SetChar(nLen, sal_Unicode('1'));
+    aStr.AppendAscii("0");
+    nLen = aStr.Len() - 1;
+    Insert( 101, new XColorEntry( Color( 0xff, 0x95, 0x0e ), aStr ) );
+    aStr.SetChar(nLen, sal_Unicode('1'));
+    Insert( 102, new XColorEntry( Color( 0xc5, 0x00, 0x0b ), aStr ) );
+    aStr.SetChar(nLen, sal_Unicode('2'));
+    Insert( 103, new XColorEntry( Color( 0x00, 0x84, 0xd1 ), aStr ) );
+
+    return( Count() == 104 );
 }
 
 /************************************************************************/
