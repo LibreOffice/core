@@ -4,9 +4,9 @@
  *
  *  $RCSfile: BarChartTypeTemplate.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: vg $ $Date: 2007-05-22 18:45:05 $
+ *  last change: $Author: rt $ $Date: 2007-07-03 13:43:29 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -326,13 +326,6 @@ void SAL_CALL BarChartTypeTemplate::applyStyle(
     {
         try
         {
-            drawing::LineStyle eStyle = drawing::LineStyle_NONE;
-
-            Reference< beans::XPropertySet > xProp( xSeries, uno::UNO_QUERY_THROW );
-            xProp->setPropertyValue( C2U("BorderStyle"),
-                                     uno::makeAny( eStyle ));
-
-            //-------------------------
             //apply Geometry3D
             uno::Any aAGeometry3D;
             this->getFastPropertyValue( aAGeometry3D, PROP_BAR_TEMPLATE_GEOMETRY3D );
