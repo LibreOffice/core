@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xlpage.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: vg $ $Date: 2007-05-22 19:59:39 $
+ *  last change: $Author: rt $ $Date: 2007-07-03 15:52:55 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -164,7 +164,7 @@ struct XclPageData : ScfNoCopy
     void                SetDefaults();
 
     /** Returns the real paper size (twips) from the paper size index and paper orientation. */
-    Size                GetScPaperSize( SfxPrinter* pPrinter ) const;
+    Size                GetScPaperSize() const;
     /** Sets the Excel paper size index and paper orientation from Calc paper size (twips). */
     void                SetScPaperSize( const Size& rSize, bool bPortrait );
 };
