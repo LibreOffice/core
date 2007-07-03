@@ -4,9 +4,9 @@
  *
  *  $RCSfile: idetemp.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-07 20:04:27 $
+ *  last change: $Author: rt $ $Date: 2007-07-03 13:02:31 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -63,7 +63,8 @@ enum SvxChooseControlEnum
     SVX_SNAP_CURRENCYFIELD,
     SVX_SNAP_FORMATTEDFIELD,
     SVX_SNAP_PATTERNFIELD,
-    SVX_SNAP_FILECONTROL
+    SVX_SNAP_FILECONTROL,
+    SVX_SNAP_TREECONTROL
 };
 
 #define SvxChooseControlItem SfxAllEnumItem
