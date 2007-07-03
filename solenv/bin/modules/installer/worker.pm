@@ -4,9 +4,9 @@
 #
 #   $RCSfile: worker.pm,v $
 #
-#   $Revision: 1.49 $
+#   $Revision: 1.50 $
 #
-#   last change: $Author: kz $ $Date: 2007-05-21 10:41:04 $
+#   last change: $Author: rt $ $Date: 2007-07-03 11:46:26 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -2121,6 +2121,14 @@ sub put_scpactions_into_installset
         my $destdir = $installdir;
         $destdir =~ s/\Q$installer::globals::separator\E\s*$//;
         if ( $subdir ) { $destdir = $destdir . $installer::globals::separator . $subdir; }
+
+        my $sourcefile = $onescpaction->{'sourcepath'};
+        my $destfile = $destdir . $installer::globals::separator . $onescpaction->{'DestinationName'};
+
+        my $styles = "";
+        if ( $onescpaction->{'Styles'} ) { $styles = $onescpaction->{'Styles'}; }
+        if (( $styles =~ /\bFILE_CAN_MISS\b/ ) && ( $sourcefile eq "" )) { next; }
+
         if (( $subdir =~ /\// ) || ( $subdir =~ /\\/ ))
         {
             installer::systemactions::create_directory_structure($destdir);
@@ -2129,9 +2137,6 @@ sub put_scpactions_into_installset
         {
             installer::systemactions::create_directory($destdir);
         }
-
-        my $sourcefile = $onescpaction->{'sourcepath'};
-        my $destfile = $destdir . $installer::globals::separator . $onescpaction->{'DestinationName'};
 
         installer::systemactions::copy_one_file($sourcefile, $destfile);
 
