@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.1 $
+#   $Revision: 1.2 $
 #
-#   last change: $Author: is $ $Date: 2006-12-20 14:40:01 $
+#   last change: $Author: rt $ $Date: 2007-07-03 11:47:25 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -37,4 +37,7 @@ TARGET=javainstaller2
 PRJ=.
 
 .INCLUDE : ant.mk
+
+.IF "$(SOLAR_JAVA)"!=""
 ALLTAR: ANTBUILD
+.ENDIF
