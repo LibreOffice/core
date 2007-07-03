@@ -4,9 +4,9 @@
  *
  *  $RCSfile: salnativewidgets-gtk.cxx,v $
  *
- *  $Revision: 1.38 $
+ *  $Revision: 1.39 $
  *
- *  last change: $Author: ihi $ $Date: 2007-06-04 14:58:25 $
+ *  last change: $Author: rt $ $Date: 2007-07-03 14:06:42 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -410,10 +410,15 @@ void GtkData::initNWF( void )
     pSVData->maNWFData.mbOpenMenuOnF10 = true;
 
     if( SalGetDesktopEnvironment().equalsAscii( "KDE" ) )
-        // KDE 3.3 invented a bug in the qt<->gtk theme engine
-        // that makes direct rendering impossible: they totally
-        // ignore the clip rectangle passed to the paint methods
-        GtkSalGraphics::bNeedPixmapPaint = GtkSalGraphics::bGlobalNeedPixmapPaint = true;
+    {
+        if( g_type_from_name( "QtEngineStyle" ) )
+        {
+            // KDE 3.3 invented a bug in the qt<->gtk theme engine
+            // that makes direct rendering impossible: they totally
+            // ignore the clip rectangle passed to the paint methods
+            GtkSalGraphics::bNeedPixmapPaint = GtkSalGraphics::bGlobalNeedPixmapPaint = true;
+        }
+    }
     static const char* pEnv = getenv( "SAL_GTK_USE_PIXMAPPAINT" );
     if( pEnv && *pEnv )
         GtkSalGraphics::bNeedPixmapPaint = GtkSalGraphics::bGlobalNeedPixmapPaint = true;
@@ -704,9 +709,16 @@ BOOL GtkSalGraphics::drawNativeControl( ControlType nType,
                             SalControlHandle& rControlHandle,
                             const OUString& rCaption )
 {
+    if( (nType==CTRL_CHECKBOX) && (nPart==PART_ENTIRE_CONTROL) &&
+        aValue.getTristateVal() == BUTTONVALUE_MIXED )
+    {
+        return drawNativeMixedStateCheck( nType, nPart, rControlRegion, nState, aValue, rControlHandle, rCaption );
+    }
+
     BOOL            returnVal = FALSE;
     // get a GC with current clipping region set
     SelectFont();
+
 
     // theme changed ?
     if( GtkSalGraphics::bThemeChanged )
@@ -834,11 +846,60 @@ BOOL GtkSalGraphics::drawNativeControl( ControlType nType,
     }
     if( pixmap )
     {
-        returnVal = NWRenderPixmapToScreen( pixmap, aPixmapRect );
+        returnVal = NWRenderPixmapToScreen( pixmap, aPixmapRect ) && returnVal;
         g_object_unref( pixmap );
     }
 
     return( returnVal );
+}
+
+BOOL GtkSalGraphics::drawNativeMixedStateCheck( ControlType nType,
+                                                ControlPart nPart,
+                                                const Region& rControlRegion,
+                                                ControlState nState,
+                                                const ImplControlValue& aValue,
+                                                SalControlHandle& rControlHandle,
+                                                const OUString& rCaption )
+{
+    // need to emulate something for mixed state
+
+    // do this via pixmap since some themes don't care for regions
+    bool bOldNeedPixmapPaint = bNeedPixmapPaint;
+    bNeedPixmapPaint = true;
+
+    Rectangle aCtrlRect = rControlRegion.GetBoundRect();
+    BOOL      returnVal = FALSE;
+    SelectFont();
+
+    // draw upper half in off state
+    const_cast<ImplControlValue&>(aValue).setTristateVal( BUTTONVALUE_OFF );
+    XLIB_Region aRegion = XCreateRegion();
+    XRectangle aXRect = { aCtrlRect.Left(), aCtrlRect.Top(), aCtrlRect.GetWidth(), aCtrlRect.GetHeight() };
+    const unsigned short nH = aXRect.height/2;
+    aXRect.height -= nH;
+    XUnionRectWithRegion( &aXRect, aRegion, aRegion );
+    SetClipRegion( pFontGC_, aRegion );
+    XDestroyRegion( aRegion );
+
+    returnVal = drawNativeControl( nType, nPart, rControlRegion, nState, aValue, rControlHandle, rCaption );
+
+    if( returnVal )
+    {
+        // draw lower half in on state
+        const_cast<ImplControlValue&>(aValue).setTristateVal( BUTTONVALUE_ON );
+        aXRect.y += nH;
+        aRegion = XCreateRegion();
+        XUnionRectWithRegion( &aXRect, aRegion, aRegion );
+        SetClipRegion( pFontGC_, aRegion );
+        XDestroyRegion( aRegion );
+        returnVal = drawNativeControl( nType, nPart, rControlRegion, nState, aValue, rControlHandle, rCaption );
+    }
+
+    // clean up
+    bNeedPixmapPaint = bOldNeedPixmapPaint;
+    const_cast<ImplControlValue&>(aValue).setTristateVal( BUTTONVALUE_MIXED );
+    SetClipRegion( pFontGC_ );
+    return returnVal;
 }
 
 
