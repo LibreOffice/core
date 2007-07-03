@@ -4,9 +4,9 @@
  *
  *  $RCSfile: analysishelper.cxx,v $
  *
- *  $Revision: 1.54 $
+ *  $Revision: 1.55 $
  *
- *  last change: $Author: rt $ $Date: 2007-04-26 08:10:20 $
+ *  last change: $Author: rt $ $Date: 2007-07-03 15:39:28 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -780,7 +780,7 @@ double ConvertToDec( const STRING& aStr, sal_uInt16 nBase, sal_uInt16 nCharLim )
 
     }
 
-    if( nStrLen == nCharLim && !bFirstDig && nFirstDig == nBase - 1 )
+    if( nStrLen == nCharLim && !bFirstDig && (nFirstDig >= nBase / 2) )
     {   // handling negativ values
         fVal = ( pow( double( nBase ), double( nCharLim ) ) - fVal );   // complement
         fVal *= -1.0;
