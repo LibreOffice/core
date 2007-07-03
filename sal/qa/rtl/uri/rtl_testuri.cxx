@@ -4,9 +4,9 @@
  *
  *  $RCSfile: rtl_testuri.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 09:01:42 $
+ *  last change: $Author: rt $ $Date: 2007-07-03 14:20:09 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -506,6 +506,41 @@ void Test::test_Uri() {
             "failure 28",
             (rtl::Uri::decode(
                 aText1, rtl_UriDecodeStrict, RTL_TEXTENCODING_GB_18030)
+             == aText2));
+    }
+
+    // Check rtl_UriEncodeStrictKeepEscapes mode:
+
+    {
+        aText1 = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("%%ea%c3%aa"));
+        aText2 = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("%25%EA%C3%AA"));
+        CPPUNIT_ASSERT_MESSAGE(
+            "failure 29",
+            (rtl::Uri::encode(
+                aText1, rtl_UriCharClassUric, rtl_UriEncodeStrictKeepEscapes,
+                RTL_TEXTENCODING_UTF8)
+             == aText2));
+    }
+    {
+        sal_Unicode const aText1U[] = { 0x00EA, 0 };
+        aText1 = rtl::OUString(aText1U);
+        aText2 = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("%C3%AA"));
+        CPPUNIT_ASSERT_MESSAGE(
+            "failure 30",
+            (rtl::Uri::encode(
+                aText1, rtl_UriCharClassUric, rtl_UriEncodeStrictKeepEscapes,
+                RTL_TEXTENCODING_UTF8)
+             == aText2));
+    }
+    {
+        sal_Unicode const aText1U[] = { ' ', '!', 0x0401, 0x0700, 0x045F, 0 };
+        aText1 = rtl::OUString(aText1U);
+        aText2 = rtl::OUString();
+        CPPUNIT_ASSERT_MESSAGE(
+            "failure 23",
+            (rtl::Uri::encode(
+                aText1, rtl_UriCharClassUric, rtl_UriEncodeStrictKeepEscapes,
+                RTL_TEXTENCODING_ISO_8859_5)
              == aText2));
     }
 }
