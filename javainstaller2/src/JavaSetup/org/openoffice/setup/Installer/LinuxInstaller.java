@@ -1,5 +1,41 @@
+/*************************************************************************
+ *
+ *  OpenOffice.org - a multi-platform office productivity suite
+ *
+ *  $RCSfile: LinuxInstaller.java,v $
+ *
+ *  $Revision: 1.3 $
+ *
+ *  last change: $Author: rt $ $Date: 2007-07-03 11:54:15 $
+ *
+ *  The Contents of this file are made available subject to
+ *  the terms of GNU Lesser General Public License Version 2.1.
+ *
+ *
+ *    GNU Lesser General Public License Version 2.1
+ *    =============================================
+ *    Copyright 2005 by Sun Microsystems, Inc.
+ *    901 San Antonio Road, Palo Alto, CA 94303, USA
+ *
+ *    This library is free software; you can redistribute it and/or
+ *    modify it under the terms of the GNU Lesser General Public
+ *    License version 2.1, as published by the Free Software Foundation.
+ *
+ *    This library is distributed in the hope that it will be useful,
+ *    but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ *    Lesser General Public License for more details.
+ *
+ *    You should have received a copy of the GNU Lesser General Public
+ *    License along with this library; if not, write to the Free Software
+ *    Foundation, Inc., 59 Temple Place, Suite 330, Boston,
+ *    MA  02111-1307  USA
+ *
+ ************************************************************************/
+
 package org.openoffice.setup.Installer;
 
+import java.io.File;
 import org.openoffice.setup.InstallData;
 import org.openoffice.setup.InstallerHelper.LinuxHelper;
 import org.openoffice.setup.ResourceManager;
@@ -9,7 +45,6 @@ import org.openoffice.setup.SetupData.SetupDataProvider;
 import org.openoffice.setup.Util.ExecuteProcess;
 import org.openoffice.setup.Util.Informer;
 import org.openoffice.setup.Util.LogManager;
-import org.openoffice.setup.Util.SystemManager;
 import java.util.HashMap;
 import java.util.Vector;
 
@@ -116,6 +151,12 @@ public class LinuxInstaller extends Installer {
         // setting installDir
         String installDir = data.getInstallDir();
         String packagePath = data.getPackagePath();
+
+        if (( packageData.getPkgSubdir() != null ) && ( ! packageData.getPkgSubdir().equals("") )) {
+            File completePackageFile = new File(packagePath, packageData.getPkgSubdir());
+            packagePath = completePackageFile.getPath();
+        }
+
         String packageName = packageData.getPackageName();
 
         if (( packageName.equals("")) || ( packageName == null )) {
@@ -125,10 +166,10 @@ public class LinuxInstaller extends Installer {
             log = "<b>Package Name: " + packageName + "</b>";
             LogManager.addCommandsLogfileComment(log);
 
-            packageName = packagePath + packageName;
-            boolean packageFound = SystemManager.find_file(packageName);
+            File completePackage = new File(packagePath, packageName);
+            packageName = completePackage.getPath();
 
-            if ( packageFound ) {
+            if ( completePackage.exists() ) {
                 String fixedInstallDir = helper.fixInstallationDirectory(installDir);
                 String relocations = helper.getRelocationString(packageData, packageName);
                 if ( relocations != null ) {
@@ -437,43 +478,43 @@ public class LinuxInstaller extends Installer {
                 String[] rpmCommandArray;
 
                 if (useLocalDatabase) {
-                    rpmCommand = "rpm" + " " + databaseString + " " + databasePath + " -q --queryformat %{VERSION} " + packageName;
+                    rpmCommand = "rpm" + " " + databaseString + " " + databasePath + " -q --queryformat %{VERSION}\\n " + packageName;
                     rpmCommandArray = new String[7];
                     rpmCommandArray[0] = "rpm";
                     rpmCommandArray[1] = databaseString;
                     rpmCommandArray[2] = databasePath;
                     rpmCommandArray[3] = "-q";
                     rpmCommandArray[4] = "--queryformat";
-                    rpmCommandArray[5] = "%{VERSION}";
+                    rpmCommandArray[5] = "%{VERSION}\\n";
                     rpmCommandArray[6] = packageName;
                 } else {
-                    rpmCommand = "rpm" + " -q --queryformat %{VERSION} " + packageName;
+                    rpmCommand = "rpm" + " -q --queryformat %{VERSION}\\n " + packageName;
                     rpmCommandArray = new String[5];
                     rpmCommandArray[0] = "rpm";
                     rpmCommandArray[1] = "-q";
                     rpmCommandArray[2] = "--queryformat";
-                    rpmCommandArray[3] = "%{VERSION}";
+                    rpmCommandArray[3] = "%{VERSION}\\n";
                     rpmCommandArray[4] = packageName;
                 }
 
                 Vector versionVector = new Vector();
                 Vector returnErrorVector = new Vector();
                 int returnValue = ExecuteProcess.executeProcessReturnVector(rpmCommandArray, versionVector, returnErrorVector);
-                String version = (String) versionVector.get(0);
+                String version = (String) versionVector.lastElement();
                 log = rpmCommand + "<br><b>Returns: " + version + "</b><br>";
                 LogManager.addCommandsLogfileComment(log);
 
                 if (useLocalDatabase) {
-                    rpmCommand = "rpm" + " " + databaseString + " " + databasePath + " -q --queryformat %{RELEASE} " + packageName;
-                    rpmCommandArray[5] = "%{RELEASE}";
+                    rpmCommand = "rpm" + " " + databaseString + " " + databasePath + " -q --queryformat %{RELEASE}\\n " + packageName;
+                    rpmCommandArray[5] = "%{RELEASE}\\n";
                 } else {
-                    rpmCommand = "rpm" + " -q --queryformat %{RELEASE} " + packageName;
-                    rpmCommandArray[3] = "%{RELEASE}";
+                    rpmCommand = "rpm" + " -q --queryformat %{RELEASE}\\n " + packageName;
+                    rpmCommandArray[3] = "%{RELEASE}\\n";
                 }
 
                 Vector releaseVector = new Vector();
                 returnValue = ExecuteProcess.executeProcessReturnVector(rpmCommandArray, releaseVector, returnErrorVector);
-                String release = (String) releaseVector.get(0);
+                String release = (String) releaseVector.lastElement();
 
                 log = rpmCommand + "<br><b>Returns: " + release + "</b><br>";
                 LogManager.addCommandsLogfileComment(log);
