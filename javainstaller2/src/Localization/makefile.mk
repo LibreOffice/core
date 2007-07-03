@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.1 $
+#   $Revision: 1.2 $
 #
-#   last change: $Author: is $ $Date: 2006-12-20 14:44:06 $
+#   last change: $Author: rt $ $Date: 2007-07-03 12:03:40 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -38,6 +38,8 @@ PRJ=..$/..
 PRJNAME=javainstaller2
 TARGET=java_ulffiles
 
+WITH_LANG!:=ALL
+
 # --- Settings -----------------------------------------------------
 
 .INCLUDE :  settings.mk
@@ -53,8 +55,6 @@ JLFFILES = $(foreach,i,$(ULFFILES) $(COMMONMISC)$/$(TARGET)$/$(i:b).jlf)
 
 .INCLUDE :	target.mk
 
-.IF "$(GUI)"=="UNX"
-
+.IF "$(SOLAR_JAVA)"!=""
 ALLTAR : $(JLFFILES)
-
 .ENDIF
