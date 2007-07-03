@@ -4,9 +4,9 @@
  *
  *  $RCSfile: cfg.cxx,v $
  *
- *  $Revision: 1.40 $
+ *  $Revision: 1.41 $
  *
- *  last change: $Author: hr $ $Date: 2007-06-27 16:50:41 $
+ *  last change: $Author: rt $ $Date: 2007-07-03 14:04:08 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -5457,12 +5457,15 @@ SvxIconSelectorDialog::SvxIconSelectorDialog( Window *pWindow,
             // added to the list
         }
 
+        uno::Reference< graphic::XGraphic > xGraph;
         if ( graphics.getLength() > 0 )
+            xGraph = graphics[ 0 ];
+        if( xGraph.is() )
         {
-            Image img = Image( graphics[ 0 ] );
+            Image img = Image( xGraph );
             aTbSymbol.InsertItem( nId, img, pConstIter->first );
 
-            graphics[ 0 ]->acquire();
+            xGraph->acquire();
 
             aTbSymbol.SetItemData(
                 nId, static_cast< void * > ( graphics[ 0 ].get() ) );
