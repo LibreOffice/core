@@ -4,9 +4,9 @@
  *
  *  $RCSfile: pvlaydlg.cxx,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: rt $ $Date: 2007-04-26 09:51:04 $
+ *  last change: $Author: rt $ $Date: 2007-07-03 15:54:10 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -79,12 +79,29 @@ long PivotGlobal::nSelSpace  = 0;
 
 //============================================================================
 
+namespace {
+
 void lcl_FillToPivotField( PivotField& rPivotField, const ScDPFuncData& rFuncData )
 {
     rPivotField.nCol = rFuncData.mnCol;
     rPivotField.nFuncMask = rFuncData.mnFuncMask;
     rPivotField.maFieldRef = rFuncData.maFieldRef;
 }
+
+PointerStyle lclGetPointerForField( ScDPFieldType eType )
+{
+    switch( eType )
+    {
+        case TYPE_PAGE:     return POINTER_PIVOT_FIELD;
+        case TYPE_COL:      return POINTER_PIVOT_COL;
+        case TYPE_ROW:      return POINTER_PIVOT_ROW;
+        case TYPE_DATA:     return POINTER_PIVOT_FIELD;
+        case TYPE_SELECT:   return POINTER_PIVOT_FIELD;
+    }
+    return POINTER_ARROW;
+}
+
+} // namespace
 
 //============================================================================
 
@@ -888,17 +905,17 @@ PointerStyle ScDPLayoutDlg::NotifyMouseMove( const Point& rAt )
         Point aPos = ScreenToOutputPixel( rAt );
 
         if ( aRectPage.IsInside( aPos ) )
-            ePtr = POINTER_PIVOT_FIELD;
+            ePtr = lclGetPointerForField( TYPE_PAGE );
         else if ( aRectCol.IsInside( aPos ) )
-            ePtr = POINTER_PIVOT_COL;
+            ePtr = lclGetPointerForField( TYPE_COL );
         else if ( aRectRow.IsInside( aPos ) )
-            ePtr = POINTER_PIVOT_ROW;
+            ePtr = lclGetPointerForField( TYPE_ROW );
         else if ( aRectData.IsInside( aPos ) )
-            ePtr = POINTER_PIVOT_FIELD;
+            ePtr = lclGetPointerForField( TYPE_DATA );
         else if ( eDnDFromType != TYPE_SELECT )
             ePtr = POINTER_PIVOT_DELETE;
         else if ( aRectSelect.IsInside( aPos ) )
-            ePtr = POINTER_PIVOT_FIELD;
+            ePtr = lclGetPointerForField( TYPE_SELECT );
         else
             ePtr = POINTER_NOTALLOWED;
     }
@@ -911,20 +928,10 @@ PointerStyle ScDPLayoutDlg::NotifyMouseMove( const Point& rAt )
 
 PointerStyle ScDPLayoutDlg::NotifyMouseButtonDown( ScDPFieldType eType, size_t nFieldIndex )
 {
-    PointerStyle ePtr = POINTER_ARROW;
-
     bIsDrag       = TRUE;
     eDnDFromType  = eType;
     nDnDFromIndex = nFieldIndex;
-
-    if ( eType == TYPE_PAGE )
-        ePtr = POINTER_PIVOT_FIELD;
-    else if ( eType == TYPE_COL )
-        ePtr = POINTER_PIVOT_COL;
-    else if ( eType == TYPE_ROW )
-        ePtr = POINTER_PIVOT_ROW;
-
-    return ePtr;
+    return lclGetPointerForField( eType );
 }
 
 
