@@ -4,9 +4,9 @@
  *
  *  $RCSfile: document.cxx,v $
  *
- *  $Revision: 1.77 $
+ *  $Revision: 1.78 $
  *
- *  last change: $Author: vg $ $Date: 2007-05-22 19:42:31 $
+ *  last change: $Author: rt $ $Date: 2007-07-03 15:47:56 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -104,6 +104,7 @@
 #include <set>
 #endif
 #include "autonamecache.hxx"
+#include "bcaslot.hxx"
 
 struct ScDefaultAttr
 {
@@ -2333,8 +2334,11 @@ void ScDocument::SetDirty()
 {
     BOOL bOldAutoCalc = GetAutoCalc();
     bAutoCalc = FALSE;      // keine Mehrfachberechnung
-    for (SCTAB i=0; i<=MAXTAB; i++)
-        if (pTab[i]) pTab[i]->SetDirty();
+    {   // scope for bulk broadcast
+        ScBulkBroadcast aBulkBroadcast( pBASM);
+        for (SCTAB i=0; i<=MAXTAB; i++)
+            if (pTab[i]) pTab[i]->SetDirty();
+    }
 
     //  Charts werden zwar auch ohne AutoCalc im Tracking auf Dirty gesetzt,
     //  wenn alle Formeln dirty sind, werden die Charts aber nicht mehr erwischt
@@ -2350,9 +2354,12 @@ void ScDocument::SetDirty( const ScRange& rRange )
 {
     BOOL bOldAutoCalc = GetAutoCalc();
     bAutoCalc = FALSE;      // keine Mehrfachberechnung
-    SCTAB nTab2 = rRange.aEnd.Tab();
-    for (SCTAB i=rRange.aStart.Tab(); i<=nTab2; i++)
-        if (pTab[i]) pTab[i]->SetDirty( rRange );
+    {   // scope for bulk broadcast
+        ScBulkBroadcast aBulkBroadcast( pBASM);
+        SCTAB nTab2 = rRange.aEnd.Tab();
+        for (SCTAB i=rRange.aStart.Tab(); i<=nTab2; i++)
+            if (pTab[i]) pTab[i]->SetDirty( rRange );
+    }
     SetAutoCalc( bOldAutoCalc );
 }
 
