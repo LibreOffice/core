@@ -1,0 +1,12 @@
+[writer]
+en-US = "Word Processor"
+
+[impress]
+en-US = "Presentation"
+
+[calc]
+en-US = "Spreadsheet"
+
+[base]
+en-US = "Database Development"
+
