@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ChartTypeDialogController.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: vg $ $Date: 2007-05-22 17:26:53 $
+ *  last change: $Author: rt $ $Date: 2007-07-03 13:36:54 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -373,7 +373,7 @@ bool ChartTypeDialogController::commitToModel( const ChartTypeParameter& rParame
             aTemplateWithService.first->resetStyles( xDiagram );
         xTemplate->changeDiagram( xDiagram );
         if( rParameter.b3DLook )
-            Pseudo3DHelper::setScheme( xModel, rParameter.eThreeDLookScheme );
+            ThreeDHelper::setScheme( xDiagram, rParameter.eThreeDLookScheme );
 
         //SortByXValues
         {
@@ -940,7 +940,7 @@ void AreaChartDialogController::fillSubTypeList( ValueSet& rSubTypeList, bool bI
         rSubTypeList.InsertItem( 3, SELECT_BITMAP( BMP_AREAS_2D_3 ) );
     }
 
-    rSubTypeList.SetItemText( 1, String( SchResId( STR_NORMAL )) );
+    rSubTypeList.SetItemText( 1, String( SchResId( rParameter.b3DLook ? STR_DEEP : STR_NORMAL )) );
     rSubTypeList.SetItemText( 2, String( SchResId( STR_STACKED )) );
     rSubTypeList.SetItemText( 3, String( SchResId( STR_PERCENT )) );
 }
