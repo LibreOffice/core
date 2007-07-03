@@ -1,5 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <accel:acceleratorlist xmlns:accel="http://openoffice.org/2001/accel" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <accel:item accel:code="KEY_SUBTRACT" accel:mod1="true" xlink:href=".uno:DeleteCell"/>
+    <accel:item accel:code="KEY_ADD" accel:mod1="true" xlink:href=".uno:InsertCell"/>
+    <accel:item accel:code="KEY_ADD" accel:shift="true" accel:mod1="true" xlink:href=".uno:InsertCell"/>
     <accel:item accel:code="KEY_F11" accel:shift="true" xlink:href=".uno:SaveAsTemplate"/>
     <accel:item accel:code="KEY_F11" xlink:href=".uno:DesignerDialog"/>
     <accel:item accel:code="KEY_F11" accel:mod1="true" xlink:href=".uno:StyleCatalog"/>
@@ -22,7 +25,7 @@
     <accel:item accel:code="KEY_I" accel:mod1="true" xlink:href=".uno:Italic"/>
     <accel:item accel:code="KEY_B" accel:mod1="true" xlink:href=".uno:Bold"/>
     <accel:item accel:code="KEY_U" accel:mod1="true" xlink:href=".uno:Underline"/>
-    <accel:item accel:code="KEY_1" accel:mod1="true" xlink:href=".uno:SpacePara1"/>
+    <accel:item accel:code="KEY_1" accel:mod1="true" xlink:href=".uno:FormatCellDialog"/>
     <accel:item accel:code="KEY_5" accel:mod1="true" xlink:href=".uno:SpacePara15"/>
     <accel:item accel:code="KEY_2" accel:mod1="true" xlink:href=".uno:SpacePara2"/>
     <accel:item accel:code="KEY_F7" xlink:href=".uno:SpellDialog"/>
