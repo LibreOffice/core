@@ -4,9 +4,9 @@
  *
  *  $RCSfile: LocaleNode.cxx,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: rt $ $Date: 2007-01-25 09:35:57 $
+ *  last change: $Author: rt $ $Date: 2007-07-03 14:05:01 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -142,6 +142,8 @@ LocaleNode* LocaleNode::createNode (const OUString& name, const Reference< XAttr
     if (name.equalsAscii("LC_CTYPE"))
         return new LCCTYPENode (name,attr);
     if (name.equalsAscii("LC_FORMAT"))
+        return new LCFormatNode (name,attr);
+    if (name.equalsAscii("LC_FORMAT_1"))
         return new LCFormatNode (name,attr);
     if (name.equalsAscii("LC_CALENDAR"))
         return new LCCalendarNode (name,attr);
@@ -404,12 +406,45 @@ void LCCTYPENode::generateCode (const OFileWriter &of) const
     OUString aListSep =
         writeParameterCheckLen( of, "ListSeparator", "listSeparator", 1, 1);
 
+    OUString aLDS;
+
+    sepNode = findNode("LongDateDayOfWeekSeparator");
+    aLDS = sepNode->getValue();
+    of.writeParameter("LongDateDayOfWeekSeparator", aLDS);
+    if (aLDS.getLength() == 1 && aLDS.getStr()[0] == ',')
+        fprintf( stderr, "Warning: %s\n",
+                "LongDateDayOfWeekSeparator is only a comma not followed by a space. Usually this is not the case and may lead to concatenated display names like \"Wednesday,May 9, 2007\".");
+
+    sepNode = findNode("LongDateDaySeparator");
+    aLDS = sepNode->getValue();
+    of.writeParameter("LongDateDaySeparator", aLDS);
+    if (aLDS.getLength() == 1 && (aLDS.getStr()[0] == ',' || aLDS.getStr()[0] == '.'))
+        fprintf( stderr, "Warning: %s\n",
+                "LongDateDaySeparator is only a comma or dot not followed by a space. Usually this is not the case and may lead to concatenated display names like \"Wednesday, May 9,2007\".");
+
+    sepNode = findNode("LongDateMonthSeparator");
+    aLDS = sepNode->getValue();
+    of.writeParameter("LongDateMonthSeparator", aLDS);
+    if (aLDS.getLength() == 0)
+        fprintf( stderr, "Warning: %s\n",
+                "LongDateMonthSeparator is empty. Usually this is not the case and may lead to concatenated display names like \"Wednesday, May9, 2007\".");
+
+    sepNode = findNode("LongDateYearSeparator");
+    aLDS = sepNode->getValue();
+    of.writeParameter("LongDateYearSeparator", aLDS);
+    if (aLDS.getLength() == 0)
+        fprintf( stderr, "Warning: %s\n",
+                "LongDateYearSeparator is empty. Usually this is not the case and may lead to concatenated display names like \"Wednesday, 2007May 9\".");
+
+
     int nSavErr = nError;
     int nWarn = 0;
     if (aDateSep == aTimeSep)
         incError( "DateSeparator equals TimeSeparator.");
     if (aDecSep == aThoSep)
         incError( "DecimalSeparator equals ThousandSeparator.");
+    if (aThoSep.equalsAscii( " "))
+        incError( "ThousandSeparator is an ' ' ordinary space, this should be a non-breaking space U+00A0 instead.");
     if (aListSep == aDecSep)
         fprintf( stderr, "Warning: %s\n",
                 "ListSeparator equals DecimalSeparator.");
@@ -421,30 +456,49 @@ void LCCTYPENode::generateCode (const OFileWriter &of) const
                 "Time100SecSeparator equals TimeSeparator, this is probably an error.");
     if (aDecSep != aTime100Sep)
         ++nWarn, fprintf( stderr, "Warning: %s\n",
-                "DecimalSeparator is different from Time100SecSeparator, this may be correct or not.");
-    if (aThoSep.equalsAscii( " "))
-        ++nWarn, fprintf( stderr, "Warning: %s\n",
-                "ThousandSeparator is an ' ' ordinary space, this should be a non-breaking space U+00A0 instead.");
+                "Time100SecSeparator is different from DecimalSeparator, this may be correct or not. Intended?");
     if (nSavErr != nError || nWarn)
         fprintf( stderr, "Warning: %s\n",
-                "Don't forget to adapt FormatCode elements when changing separators.");
+                "Don't forget to adapt corresponding FormatCode elements when changing separators.");
 
-    writeParameterCheckLen( of, "QuotationStart", "quotationStart", 1, 1);
-    writeParameterCheckLen( of, "QuotationEnd", "quotationEnd", 1, 1);
-    writeParameterCheckLen( of, "DoubleQuotationStart", "doubleQuotationStart", 1, 1);
-    writeParameterCheckLen( of, "DoubleQuotationEnd", "doubleQuotationEnd", 1, 1);
+    OUString aQuoteStart =
+        writeParameterCheckLen( of, "QuotationStart", "quotationStart", 1, 1);
+    OUString aQuoteEnd =
+        writeParameterCheckLen( of, "QuotationEnd", "quotationEnd", 1, 1);
+    OUString aDoubleQuoteStart =
+        writeParameterCheckLen( of, "DoubleQuotationStart", "doubleQuotationStart", 1, 1);
+    OUString aDoubleQuoteEnd =
+        writeParameterCheckLen( of, "DoubleQuotationEnd", "doubleQuotationEnd", 1, 1);
+
+    if (aQuoteStart.toChar() <= 127 && aQuoteEnd.toChar() > 127)
+        fprintf( stderr, "Warning: %s\n",
+                "QuotationStart is an ASCII character but QuotationEnd is not.");
+    if (aQuoteEnd.toChar() <= 127 && aQuoteStart.toChar() > 127)
+        fprintf( stderr, "Warning: %s\n",
+                "QuotationEnd is an ASCII character but QuotationStart is not.");
+    if (aDoubleQuoteStart.toChar() <= 127 && aDoubleQuoteEnd.toChar() > 127)
+        fprintf( stderr, "Warning: %s\n",
+                "DoubleQuotationStart is an ASCII character but DoubleQuotationEnd is not.");
+    if (aDoubleQuoteEnd.toChar() <= 127 && aDoubleQuoteStart.toChar() > 127)
+        fprintf( stderr, "Warning: %s\n",
+                "DoubleQuotationEnd is an ASCII character but DoubleQuotationStart is not.");
+    if (aQuoteStart.toChar() <= 127 && aQuoteEnd.toChar() <= 127)
+        fprintf( stderr, "Warning: %s\n",
+                "QuotationStart and QuotationEnd are both ASCII characters. Not necessarily an error, but unusual.");
+    if (aDoubleQuoteStart.toChar() <= 127 && aDoubleQuoteEnd.toChar() <= 127)
+        fprintf( stderr, "Warning: %s\n",
+                "DoubleQuotationStart and DoubleQuotationEnd are both ASCII characters. Not necessarily an error, but unusual.");
+    if (aQuoteStart == aQuoteEnd)
+        fprintf( stderr, "Warning: %s\n",
+                "QuotationStart equals QuotationEnd. Not necessarily an error, but unusual.");
+    if (aDoubleQuoteStart == aDoubleQuoteEnd)
+        fprintf( stderr, "Warning: %s\n",
+                "DoubleQuotationStart equals DoubleQuotationEnd. Not necessarily an error, but unusual.");
+
     writeParameterCheckLen( of, "TimeAM", "timeAM", 1, -1);
     writeParameterCheckLen( of, "TimePM", "timePM", 1, -1);
     sepNode = findNode("MeasurementSystem");
     of.writeParameter("measurementSystem", sepNode->getValue());
-    sepNode = findNode("LongDateDayOfWeekSeparator");
-    of.writeParameter("LongDateDayOfWeekSeparator", sepNode->getValue());
-    sepNode = findNode("LongDateDaySeparator");
-    of.writeParameter("LongDateDaySeparator", sepNode->getValue());
-    sepNode = findNode("LongDateMonthSeparator");
-    of.writeParameter("LongDateMonthSeparator", sepNode->getValue());
-    sepNode = findNode("LongDateYearSeparator");
-    of.writeParameter("LongDateYearSeparator", sepNode->getValue());
 
     of.writeAsciiString("\nstatic const sal_Unicode* LCType[] = {\n");
     of.writeAsciiString("\tLC_CTYPE_Unoid,\n");
@@ -469,22 +523,35 @@ void LCCTYPENode::generateCode (const OFileWriter &of) const
     of.writeFunction("getLocaleItem_", "0", "LCType");
 }
 
+
+sal_Int16 LCFormatNode::mnSection = 0;
+sal_Int16 LCFormatNode::mnFormats = 0;
+
 void LCFormatNode::generateCode (const OFileWriter &of) const
 {
-    of.writeParameter("replaceFrom", getAttr() -> getValueByName("replaceFrom"));
-    of.writeParameter("replaceTo", getAttr() -> getValueByName("replaceTo"));
+    if (mnSection >= 2)
+        incError("more than 2 LC_FORMAT sections");
+    of.writeParameter("replaceFrom", getAttr() -> getValueByName("replaceFrom"), mnSection);
+    of.writeParameter("replaceTo", getAttr() -> getValueByName("replaceTo"), mnSection);
     ::rtl::OUString useLocale =   getAttr() -> getValueByName("ref");
     if (useLocale.getLength() > 0) {
-        of.writeRefFunction("getAllFormats_", useLocale, "replaceTo");
+        switch (mnSection)
+        {
+            case 0:
+                of.writeRefFunction("getAllFormats0_", useLocale, "replaceTo0");
+                break;
+            case 1:
+                of.writeRefFunction("getAllFormats1_", useLocale, "replaceTo1");
+                break;
+        }
         return;
     }
-    sal_Int16 formatCount = 0;
-    sal_Int16 i;
+    sal_Int16 formatCount = mnFormats;
     NameSet aMsgId;
     ValueSet aFormatIndex;
     bool bCtypeIsRef = false;
 
-    for ( i = 0; i< getNumberOfChildren() ; i++,formatCount++) {
+    for (sal_Int16 i = 0; i< getNumberOfChildren() ; i++,formatCount++) {
         LocaleNode * currNode = getChildAt (i);
         ::rtl::OUString str;
         //      currNode -> print();
@@ -541,6 +608,24 @@ void LCFormatNode::generateCode (const OFileWriter &of) const
                                 }
                             }
                         }
+                    }
+                    break;
+                // Currency formats should be something like [C]###0;-[C]###0
+                // and not parenthesized [C]###0;([C]###0) if not en_US.
+                case cssi::NumberFormatIndex::CURRENCY_1000INT :
+                case cssi::NumberFormatIndex::CURRENCY_1000INT_RED :
+                case cssi::NumberFormatIndex::CURRENCY_1000DEC2 :
+                case cssi::NumberFormatIndex::CURRENCY_1000DEC2_RED :
+                case cssi::NumberFormatIndex::CURRENCY_1000DEC2_CCC :
+                case cssi::NumberFormatIndex::CURRENCY_1000DEC2_DASHED :
+                    if (strcmp( of.getLocale(), "en_US") != 0)
+                    {
+                        OUString aCode( n->getValue());
+                        OUString aPar1( RTL_CONSTASCII_USTRINGPARAM( "0)" ));
+                        OUString aPar2( RTL_CONSTASCII_USTRINGPARAM( "-)" ));
+                        OUString aPar3( RTL_CONSTASCII_USTRINGPARAM( " )" ));
+                        if (aCode.indexOf( aPar1 ) > 0 || aCode.indexOf( aPar2 ) > 0 || aCode.indexOf( aPar3 ) > 0)
+                            fprintf( stderr, "Warning: FormatCode formatindex=\"%d\" for currency uses parentheses for negative amounts, which probably is not correct for locales not based on en_US.\n", formatindex);
                     }
                     break;
             }
@@ -613,7 +698,7 @@ void LCFormatNode::generateCode (const OFileWriter &of) const
                 }
                 if (nSavErr != nError)
                     fprintf( stderr,
-                            "Warning: formatindex=\"%d\",\"%d\",\"%d\" are the only FormatCode elements checked, there may be others that have errors.\n",
+                            "Warning: formatindex=\"%d\",\"%d\",\"%d\" are the only FormatCode elements checked for separator usage, there may be others that have errors.\n",
                             int(cssi::NumberFormatIndex::NUMBER_1000DEC2),
                             int(cssi::NumberFormatIndex::TIME_MMSS00),
                             int(cssi::NumberFormatIndex::TIME_HH_MMSS00));
@@ -630,51 +715,58 @@ void LCFormatNode::generateCode (const OFileWriter &of) const
 
     }
 
-    // 0..47 MUST be present, 48,49 MUST NOT be present
-    ValueSet::const_iterator aIter( aFormatIndex.begin());
-    for (sal_Int16 nNext = cssi::NumberFormatIndex::NUMBER_START;
-            nNext < cssi::NumberFormatIndex::INDEX_TABLE_ENTRIES; ++nNext)
+    // Check presence of all required format codes only in first section
+    // LC_FORMAT, not in optional LC_FORMAT_1
+    if (mnSection == 0)
     {
-        sal_Int16 nHere = ::std::min( ((aIter != aFormatIndex.end() ? *aIter :
-                cssi::NumberFormatIndex::INDEX_TABLE_ENTRIES)),
-                cssi::NumberFormatIndex::INDEX_TABLE_ENTRIES);
-        if (aIter != aFormatIndex.end()) ++aIter;
-        for ( ; nNext < nHere; ++nNext)
+        // 0..47 MUST be present, 48,49 MUST NOT be present
+        ValueSet::const_iterator aIter( aFormatIndex.begin());
+        for (sal_Int16 nNext = cssi::NumberFormatIndex::NUMBER_START;
+                nNext < cssi::NumberFormatIndex::INDEX_TABLE_ENTRIES; ++nNext)
         {
-            switch (nNext)
+            sal_Int16 nHere = ::std::min( ((aIter != aFormatIndex.end() ? *aIter :
+                    cssi::NumberFormatIndex::INDEX_TABLE_ENTRIES)),
+                    cssi::NumberFormatIndex::INDEX_TABLE_ENTRIES);
+            if (aIter != aFormatIndex.end()) ++aIter;
+            for ( ; nNext < nHere; ++nNext)
             {
-                case cssi::NumberFormatIndex::FRACTION_1 :
-                case cssi::NumberFormatIndex::FRACTION_2 :
+                switch (nNext)
+                {
+                    case cssi::NumberFormatIndex::FRACTION_1 :
+                    case cssi::NumberFormatIndex::FRACTION_2 :
+                    case cssi::NumberFormatIndex::BOOLEAN :
+                    case cssi::NumberFormatIndex::TEXT :
+                        // generated internally
+                        break;
+                    default:
+                        incErrorInt( "FormatElement formatindex=\"%d\" not present.", nNext);
+                }
+            }
+            switch (nHere)
+            {
                 case cssi::NumberFormatIndex::BOOLEAN :
+                    incErrorInt( "FormatElement formatindex=\"%d\" reserved for internal ``BOOLEAN''.", nNext);
+                    break;
                 case cssi::NumberFormatIndex::TEXT :
-                    // generated internally
+                    incErrorInt( "FormatElement formatindex=\"%d\" reserved for internal ``@'' (TEXT).", nNext);
                     break;
                 default:
-                    incErrorInt( "FormatElement formatindex=\"%d\" not present.", nNext);
+                    ;   // nothing
             }
-        }
-        switch (nHere)
-        {
-            case cssi::NumberFormatIndex::BOOLEAN :
-                incErrorInt( "FormatElement formatindex=\"%d\" reserved for internal ``BOOLEAN''.", nNext);
-                break;
-            case cssi::NumberFormatIndex::TEXT :
-                incErrorInt( "FormatElement formatindex=\"%d\" reserved for internal ``@'' (TEXT).", nNext);
-                break;
-            default:
-                ;   // nothing
         }
     }
 
     of.writeAsciiString("\nstatic const sal_Int16 ");
-    of.writeAsciiString("FormatElements");
-    of.writeAsciiString("Count = ");
-    of.writeInt(formatCount);
+    of.writeAsciiString("FormatElementsCount");
+    of.writeInt(mnSection);
+    of.writeAsciiString(" = ");
+    of.writeInt( formatCount - mnFormats);
     of.writeAsciiString(";\n");
     of.writeAsciiString("static const sal_Unicode* ");
-    of.writeAsciiString("FormatElements");
-    of.writeAsciiString("Array[] = {\n");
-    for(i = 0; i < formatCount; i++) {
+    of.writeAsciiString("FormatElementsArray");
+    of.writeInt(mnSection);
+    of.writeAsciiString("[] = {\n");
+    for(sal_Int16 i = mnFormats; i < formatCount; i++) {
 
         of.writeAsciiString("\t");
         of.writeAsciiString("FormatCode");
@@ -713,7 +805,18 @@ void LCFormatNode::generateCode (const OFileWriter &of) const
     }
     of.writeAsciiString("};\n\n");
 
-    of.writeFunction("getAllFormats_", "FormatElementsCount", "FormatElementsArray", "replaceFrom", "replaceTo");
+    switch (mnSection)
+    {
+        case 0:
+            of.writeFunction("getAllFormats0_", "FormatElementsCount0", "FormatElementsArray0", "replaceFrom0", "replaceTo0");
+            break;
+        case 1:
+            of.writeFunction("getAllFormats1_", "FormatElementsCount1", "FormatElementsArray1", "replaceFrom1", "replaceTo1");
+            break;
+    }
+
+    mnFormats = mnFormats + formatCount;
+    ++mnSection;
 }
 
 void LCCollationNode::generateCode (const OFileWriter &of) const
