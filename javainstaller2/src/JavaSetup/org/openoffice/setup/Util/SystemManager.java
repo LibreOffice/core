@@ -1,3 +1,38 @@
+/*************************************************************************
+ *
+ *  OpenOffice.org - a multi-platform office productivity suite
+ *
+ *  $RCSfile: SystemManager.java,v $
+ *
+ *  $Revision: 1.4 $
+ *
+ *  last change: $Author: rt $ $Date: 2007-07-03 12:03:13 $
+ *
+ *  The Contents of this file are made available subject to
+ *  the terms of GNU Lesser General Public License Version 2.1.
+ *
+ *
+ *    GNU Lesser General Public License Version 2.1
+ *    =============================================
+ *    Copyright 2005 by Sun Microsystems, Inc.
+ *    901 San Antonio Road, Palo Alto, CA 94303, USA
+ *
+ *    This library is free software; you can redistribute it and/or
+ *    modify it under the terms of the GNU Lesser General Public
+ *    License version 2.1, as published by the Free Software Foundation.
+ *
+ *    This library is distributed in the hope that it will be useful,
+ *    but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ *    Lesser General Public License for more details.
+ *
+ *    You should have received a copy of the GNU Lesser General Public
+ *    License along with this library; if not, write to the Free Software
+ *    Foundation, Inc., 59 Temple Place, Suite 330, Boston,
+ *    MA  02111-1307  USA
+ *
+ ************************************************************************/
+
 package org.openoffice.setup.Util;
 
 import java.io.BufferedInputStream;
@@ -332,7 +367,7 @@ public class SystemManager {
         // put file into buffer
         bis = new BufferedInputStream(fis);
         bos = new BufferedOutputStream(fos);
-        try { // Datei lesen, schreiben und schlieﬂen
+        try { // read file, write and close
             b = new byte[bis.available()];
             bis.read(b);
             bos.write(b);
@@ -348,7 +383,7 @@ public class SystemManager {
 
     static public boolean deleteFile(File file) {
         boolean success = false;
-        if ( file != null ) {
+        if ( file.exists() && file != null ) {
             success = file.delete();
         }
         return success;
@@ -367,7 +402,7 @@ public class SystemManager {
     }
 
     static public void removeDirectory(File dir) {
-        if ( dir.isDirectory() ) {
+        if ( dir.exists() && dir.isDirectory() ) {
             File[] file = dir.listFiles();
             if (file != null) {
                 for (int i = 0; i < file.length; i++) {
@@ -398,6 +433,15 @@ public class SystemManager {
         commandArray[1] = unixRights;
         commandArray[2] = fileName;
         int value = ExecuteProcess.executeProcessReturnValue(commandArray);
+    }
+
+    static public void setUnixPrivilegesDirectory(File directoryName, String ext, String unixRights) {
+        File[] file = directoryName.listFiles(new FileExtensionFilter(ext));
+        if (file != null) {
+            for (int i = 0; i < file.length; i++) {
+                setUnixPrivileges(file[i].getPath(), unixRights);
+            }
+        }
     }
 
     static public int calculateDiscSpace(String directory) {
