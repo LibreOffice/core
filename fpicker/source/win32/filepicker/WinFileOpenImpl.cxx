@@ -4,9 +4,9 @@
  *
  *  $RCSfile: WinFileOpenImpl.cxx,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: vg $ $Date: 2007-03-26 13:19:00 $
+ *  last change: $Author: rt $ $Date: 2007-07-03 13:57:26 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -90,10 +90,6 @@
 
 #ifndef _RTL_USTRBUF_HXX_
 #include <rtl/ustrbuf.hxx>
-#endif
-
-#ifndef _RESOURCEPROVIDER_HXX_
-#include "..\misc\resourceprovider.hxx"
 #endif
 
 #ifndef _RTL_STRING_HXX_
@@ -623,14 +619,12 @@ LRESULT CALLBACK CWinFileOpenImpl::SubClassFunc(
 
 void SAL_CALL CWinFileOpenImpl::InitControlLabel(HWND hWnd)
 {
-    CResourceProvider aResProvider;
-
     //-----------------------------------------
     // set the labels for all extendet controls
     //-----------------------------------------
 
     sal_Int16 aCtrlId = sal::static_int_cast< sal_Int16 >(GetDlgCtrlID(hWnd));
-    rtl::OUString aLabel = aResProvider.getResString(aCtrlId);
+    rtl::OUString aLabel = m_ResProvider.getResString(aCtrlId);
     if (aLabel.getLength())
         setLabel(aCtrlId, aLabel);
 }
