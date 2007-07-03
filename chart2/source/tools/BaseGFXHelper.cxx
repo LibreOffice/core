@@ -4,9 +4,9 @@
  *
  *  $RCSfile: BaseGFXHelper.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: vg $ $Date: 2007-05-22 18:55:17 $
+ *  last change: $Author: rt $ $Date: 2007-07-03 13:43:56 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -193,16 +193,6 @@ HomogenMatrix B3DHomMatrixToHomogenMatrix( const B3DHomMatrix & rB3DMatrix )
     aResult.Line4.Column4 = rB3DMatrix.get( 3, 3 );
 
     return aResult;
-}
-
-double ShiftAngleToIntervalMinusPiToPi( double fAngleRad )
-{
-    //valid range:  ]-Pi,Pi]
-    while( fAngleRad<=-F_PI )
-        fAngleRad+=(2*F_PI);
-    while( fAngleRad>F_PI )
-        fAngleRad-=(2*F_PI);
-    return fAngleRad;
 }
 
 B3DTuple GetRotationFromMatrix( const B3DHomMatrix & rB3DMatrix )
