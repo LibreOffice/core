@@ -1,3 +1,38 @@
+/*************************************************************************
+ *
+ *  OpenOffice.org - a multi-platform office productivity suite
+ *
+ *  $RCSfile: LinuxHelper.java,v $
+ *
+ *  $Revision: 1.2 $
+ *
+ *  last change: $Author: rt $ $Date: 2007-07-03 11:54:40 $
+ *
+ *  The Contents of this file are made available subject to
+ *  the terms of GNU Lesser General Public License Version 2.1.
+ *
+ *
+ *    GNU Lesser General Public License Version 2.1
+ *    =============================================
+ *    Copyright 2005 by Sun Microsystems, Inc.
+ *    901 San Antonio Road, Palo Alto, CA 94303, USA
+ *
+ *    This library is free software; you can redistribute it and/or
+ *    modify it under the terms of the GNU Lesser General Public
+ *    License version 2.1, as published by the Free Software Foundation.
+ *
+ *    This library is distributed in the hope that it will be useful,
+ *    but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ *    Lesser General Public License for more details.
+ *
+ *    You should have received a copy of the GNU Lesser General Public
+ *    License along with this library; if not, write to the Free Software
+ *    Foundation, Inc., 59 Temple Place, Suite 330, Boston,
+ *    MA  02111-1307  USA
+ *
+ ************************************************************************/
+
 package org.openoffice.setup.InstallerHelper;
 
 import org.openoffice.setup.InstallData;
@@ -26,11 +61,18 @@ import java.util.Vector;public class LinuxHelper {
         }
     }
 
-    private String getPackageNameFromRpm(String rpmFileName, InstallData installData) {
+    private String getPackageNameFromRpm(PackageDescription packageData, InstallData installData) {
         String fullPackageName = null;
         String packagePath = installData.getPackagePath();
 
+        if (( packageData.getPkgSubdir() != null ) && ( ! packageData.getPkgSubdir().equals("") )) {
+            File completePackageFile = new File(packagePath, packageData.getPkgSubdir());
+            packagePath = completePackageFile.getPath();
+        }
+
+        String rpmFileName = packageData.getPackageName();
         File rpmFile = new File(packagePath, rpmFileName);
+
         if ( rpmFile.exists() ) {
             String rpmCommand = "rpm -qp " + rpmFile.getPath();
             String[] rpmCommandArray = new String[3];
@@ -55,9 +97,17 @@ import java.util.Vector;public class LinuxHelper {
         return fullPackageName;
     }
 
-    private boolean checkPackageExistence(String rpmFileName, InstallData installData) {
+    private boolean checkPackageExistence(PackageDescription packageData, InstallData installData) {
         boolean fileExists = false;
+
         String packagePath = installData.getPackagePath();
+
+        if (( packageData.getPkgSubdir() != null ) && ( ! packageData.getPkgSubdir().equals("") )) {
+            File completePackageFile = new File(packagePath, packageData.getPkgSubdir());
+            packagePath = completePackageFile.getPath();
+        }
+
+        String rpmFileName = packageData.getPackageName();
 
         File rpmFile = new File(packagePath, rpmFileName);
         if ( rpmFile.exists() ) {
@@ -68,8 +118,6 @@ import java.util.Vector;public class LinuxHelper {
     }
 
     private HashMap analyzeVersionString(String versionString) {
-
-        // System.err.println("Version String: " + versionString);
 
         boolean errorOccured = false;
 
@@ -102,8 +150,21 @@ import java.util.Vector;public class LinuxHelper {
             }
         }
 
-        // the standard analyzing mechanism
+        // Problem: Some rpms have "2.3" instead of "2.3.0"
+        String compareString = versionString;
+        pos = compareString.lastIndexOf(".");  // returns "-1", if not found
+        if ( pos > -1 ) {
+            String substring = compareString.substring(0, pos);
+            pos = substring.lastIndexOf(".");  // returns "-1", if not found
+            if ( pos == -1 ) {
+                versionString = versionString + ".0";
+                // System.err.println("Warning: Changing from " + compareString + " to " + versionString);
+            }
+        } else {
+            versionString = versionString + ".0.0";
+        }
 
+        // the standard analyzing mechanism
         pos = versionString.lastIndexOf(".");  // returns "-1", if not found
 
         if ( pos > -1 )
@@ -140,6 +201,12 @@ import java.util.Vector;public class LinuxHelper {
             }
         }
 
+        // if ( microString == null ) { microString = ""; }
+        // if ( majorString == null ) { majorString = ""; }
+        // if ( releaseString == null ) { releaseString = ""; }
+        // if ( minorString == null ) { minorString = ""; }
+        // System.err.println("Major " + majorString + " Minor: " + minorString + " Micro: " + microString + " Release: " + releaseString);
+
         if ( errorOccured ) {
             micro = null;
             minor = null;
@@ -171,7 +238,9 @@ import java.util.Vector;public class LinuxHelper {
             hashRpm.put("release", releaseObj);
          }
         catch (NumberFormatException ex) {
-            System.err.println("Error: Could not convert " + releaseString + " to integer");
+            // JRE often contain a string like "FCS"
+            // System.err.println("Error: Could not convert " + releaseString + " to integer");
+            hashRpm.put("release", null);
         }
 
         return hashRpm;
@@ -180,18 +249,24 @@ import java.util.Vector;public class LinuxHelper {
     private boolean compareTwoRpms(HashMap hash1, HashMap hash2) {
         boolean hash1IsOlder = false;
 
-        if ( (! hash1.containsValue(null) ) && (! hash2.containsValue(null) )) {
+        if (( hash1.get("major") != null ) && ( hash2.get("major") != null )) {
             if ( ((Integer)hash1.get("major")).intValue() < ((Integer)hash2.get("major")).intValue() ) {
                 hash1IsOlder = true;
             } else {
-                if ( ((Integer)hash1.get("minor")).intValue() < ((Integer)hash2.get("minor")).intValue() ) {
-                    hash1IsOlder = true;
-                } else {
-                    if ( ((Integer)hash1.get("micro")).intValue() < ((Integer)hash2.get("micro")).intValue() ) {
+                if (( hash1.get("minor") != null ) && ( hash2.get("minor") != null )) {
+                    if ( ((Integer)hash1.get("minor")).intValue() < ((Integer)hash2.get("minor")).intValue() ) {
                         hash1IsOlder = true;
                     } else {
-                        if ( ((Integer)hash1.get("release")).intValue() < ((Integer)hash2.get("release")).intValue() ) {
-                            hash1IsOlder = true;
+                        if (( hash1.get("micro") != null ) && ( hash2.get("micro") != null )) {
+                            if ( ((Integer)hash1.get("micro")).intValue() < ((Integer)hash2.get("micro")).intValue() ) {
+                                hash1IsOlder = true;
+                            } else {
+                                if (( hash1.get("release") != null ) && ( hash2.get("release") != null )) {
+                                    if ( ((Integer)hash1.get("release")).intValue() < ((Integer)hash2.get("release")).intValue() ) {
+                                        hash1IsOlder = true;
+                                    }
+                                }
+                            }
                         }
                     }
                 }
@@ -214,30 +289,41 @@ import java.util.Vector;public class LinuxHelper {
         }
 
         // System.err.println("Package: " + packageData.getPackageName());
-
-        // System.err.println("Installed RPM: " + "major: " + installedRpm.get("major").toString() +
-        //                                       " minor: " + installedRpm.get("minor").toString() +
-        //                                       " micro: " + installedRpm.get("micro").toString() +
-        //                                       " release: " + installedRpm.get("release").toString());
+        // String outputString = "Installed RPM: ";
+        // if ( installedRpm.get("major") != null ) { outputString = outputString + " major: " + installedRpm.get("major").toString(); }
+        // else { outputString = outputString + " major is null"; }
+        // if ( installedRpm.get("minor") != null ) { outputString = outputString + " minor: " + installedRpm.get("minor").toString(); }
+        // else { outputString = outputString + " minor is null"; }
+        // if ( installedRpm.get("micro") != null ) { outputString = outputString + " micro: " + installedRpm.get("micro").toString(); }
+        // else { outputString = outputString + " micro is null"; }
+        // if ( installedRpm.get("release") != null ) { outputString = outputString + " release: " + installedRpm.get("release").toString(); }
+        // else { outputString = outputString + " release is null"; }
+        // System.err.println(outputString);
 
         HashMap notInstalledRpm = analyzeVersionString(packageData.getPkgVersion());
         if ( notInstalledRpm.get("release") == null ) {
             notInstalledRpm = analyzeReleaseString(notInstalledRpm, packageData.getPkgRelease());
         }
 
-        //  System.err.println("Not installed RPM: " + "major: " + notInstalledRpm.get("major").toString() +
-        //                                            " minor: " + notInstalledRpm.get("minor").toString() +
-        //                                            " micro: " + notInstalledRpm.get("micro").toString() +
-        //                                            " release: " + notInstalledRpm.get("release").toString());
+        // outputString = "Not installed RPM: ";
+        // if ( notInstalledRpm.get("major") != null ) { outputString = outputString + " major: " + notInstalledRpm.get("major").toString(); }
+        // else { outputString = outputString + " major is null"; }
+        // if ( notInstalledRpm.get("minor") != null ) { outputString = outputString + " minor: " + notInstalledRpm.get("minor").toString(); }
+        // else { outputString = outputString + " minor is null"; }
+        // if ( notInstalledRpm.get("micro") != null ) { outputString = outputString + " micro: " + notInstalledRpm.get("micro").toString(); }
+        // else { outputString = outputString + " micro is null"; }
+        // if ( notInstalledRpm.get("release") != null ) { outputString = outputString + " release: " + notInstalledRpm.get("release").toString(); }
+        // else { outputString = outputString + " release is null"; }
+        // System.err.println(outputString);
 
         boolean firstIsOlder = false;
 
         if ( checkIfInstalledIsOlder ) {
             firstIsOlder = compareTwoRpms(installedRpm, notInstalledRpm);
-            //  System.err.println("Result: Installed RPM is older: " + firstIsOlder);
+            // System.err.println("Result: Installed RPM is older: " + firstIsOlder);
         } else {
             firstIsOlder = compareTwoRpms(notInstalledRpm, installedRpm);
-            //  System.err.println("Result: Not installed RPM is older: " + firstIsOlder);
+            // System.err.println("Result: Not installed RPM is older: " + firstIsOlder);
         }
 
         return firstIsOlder;
@@ -247,14 +333,13 @@ import java.util.Vector;public class LinuxHelper {
 
         if ((packageData.getPackageName() != null) && ( ! packageData.getPackageName().equals(""))) {
 
-            boolean rpmExists = checkPackageExistence(packageData.getPackageName(), installData);
+            boolean rpmExists = checkPackageExistence(packageData, installData);
 
             if ( rpmExists ) {
-
                 // Full package name not defined in xpd file
                 if (( packageData.getFullPackageName() == null ) || ( packageData.getFullPackageName().equals(""))) {
                     // Now it is possible to query the rpm database for the packageName, if it is not defined in xpd file!
-                    String fullPackageName = getPackageNameFromRpm(packageData.getPackageName(), installData);
+                    String fullPackageName = getPackageNameFromRpm(packageData, installData);
                     if ( fullPackageName != null ) {
                         packageData.setFullPackageName(fullPackageName);
                     } else {
