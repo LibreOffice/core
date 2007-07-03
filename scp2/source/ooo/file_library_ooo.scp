@@ -4,9 +4,9 @@
  *
  *  $RCSfile: file_library_ooo.scp,v $
  *
- *  $Revision: 1.247 $
+ *  $Revision: 1.248 $
  *
- *  last change: $Author: hr $ $Date: 2007-06-28 16:34:39 $
+ *  last change: $Author: rt $ $Date: 2007-07-03 12:50:37 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1813,17 +1813,6 @@ File gid_File_Lib_Sal
     Dir = gid_Dir_Program;
     Styles = (PACKED, PATCH);
 End
-
-#ifdef MACOSX
-
-File gid_File_Lib_Salextra
-    TXT_FILE_BODY;
-    Name = STRING(CONCAT2(libsalsystools,UNXSUFFIX));
-    Dir = gid_Dir_Program;
-    Styles = (PACKED,PATCH);
-End
-
-#endif
 
 File gid_File_Lib_Salhelper
     TXT_FILE_BODY;
