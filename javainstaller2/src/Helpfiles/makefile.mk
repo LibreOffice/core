@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.1 $
+#   $Revision: 1.2 $
 #
-#   last change: $Author: is $ $Date: 2006-12-20 14:43:18 $
+#   last change: $Author: rt $ $Date: 2007-07-03 11:48:19 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -50,7 +50,9 @@ INPUT=java_ulffiles
 
 .INCLUDE :	target.mk
 
+.IF "$(SOLAR_JAVA)"!=""
 ALLTAR: $(BIN)$/Prologue.html
 
 $(BIN)$/Prologue.html : create_helpfiles.pl helpfilenames.txt $(COMMONMISC)$/$(INPUT)$/setupstrings.ulf
     $(PERL) create_helpfiles.pl $/ $(COMMONMISC)$/$(INPUT) $(BIN)
+.ENDIF
