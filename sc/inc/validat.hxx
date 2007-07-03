@@ -4,9 +4,9 @@
  *
  *  $RCSfile: validat.hxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: vg $ $Date: 2007-02-27 11:58:47 $
+ *  last change: $Author: rt $ $Date: 2007-07-03 15:46:58 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -143,7 +143,7 @@ public:
         @descr  Fills the list only, if this is a list validation and IsShowList() is enabled.
         @param rStrings  (out-param) The string list to fill with list validation entires.
         @return  true = rStrings has been filled with at least one entry. */
-    bool            FillSelectionList( TypedStrCollection& rStrings, const ScAddress rPos ) const;
+    bool            FillSelectionList( TypedStrCollection& rStrings, const ScAddress& rPos ) const;
 
                     //  mit String: bei Eingabe, mit Zelle: fuer Detektiv / RC_FORCED
     BOOL            IsDataValid( const String& rTest, const ScPatternAttr& rPattern,
@@ -169,12 +169,17 @@ public:
     BOOL operator < ( const ScValidationData& r ) const { return nKey <  r.nKey; }
 
 private:
-    /** Tries to get a cell range from a list validation formula.
-        @descr  The formula may contain a cell reference, a defined name or a database range.
-        @param rRange  (out-param) The resulting cell range.
-        @param rBaseAddr  Base address for relative references.
-        @return  true = Cell range found, rRange is valid. */
-    bool            GetRangeFromFormula( ScRange& rRange, const ScAddress& rBaseAddr, ScTokenArray& rTokArr, int nRecCount = 0 ) const;
+    /** Tries to fill the passed collection with list validation entries.
+        @descr  Fills the list only if it is non-NULL,
+        @param pStrings  (out-param) Optionally NULL, string list to fill with list validation entires.
+        @param pCell     can be NULL if it is not necessary to which element in the list is selected.
+        @param rPos      the base address for relative references.
+        @param rTokArr   Formula token array.
+        @param rMatch    (out-param) the index of the first item that matched, -1 if nothing matched.
+        @return  true = Cell range found, rRange is valid, or an error entry stuffed into the list if pCell==NULL. */
+    bool            GetSelectionFromFormula( TypedStrCollection* pStrings,
+                                             ScBaseCell* pCell, const ScAddress& rPos,
+                                             const ScTokenArray& rTokArr, int& rMatch ) const;
 
     /** Tests, if pCell is equal to what the passed token array represents. */
     bool            IsEqualToTokenArray( ScBaseCell* pCell, const ScAddress& rPos, const ScTokenArray& rTokArr ) const;
