@@ -4,9 +4,9 @@
  *
  *  $RCSfile: opcode.hxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: hr $ $Date: 2007-06-27 13:42:28 $
+ *  last change: $Author: rt $ $Date: 2007-07-03 15:46:22 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -45,16 +45,16 @@
 
 enum OpCodeEnum
 {
-    // Spezielle Kommandos
+    // Special commands
         ocPush              = SC_OPCODE_PUSH,
         ocJump              = SC_OPCODE_JUMP,
         ocStop              = SC_OPCODE_STOP,
         ocExternal          = SC_OPCODE_EXTERNAL,
         ocName              = SC_OPCODE_NAME,
-    // Sprung Kommandos
+    // Jump commands
         ocIf                = SC_OPCODE_IF,
         ocChose             = SC_OPCODE_CHOSE,
-    // Klammern und Seps
+    // Parentheses and separators
         ocOpen              = SC_OPCODE_OPEN,
         ocClose             = SC_OPCODE_CLOSE,
         ocSep               = SC_OPCODE_SEP,
@@ -62,13 +62,12 @@ enum OpCodeEnum
         ocArrayClose        = SC_OPCODE_ARRAY_CLOSE,
         ocArrayRowSep       = SC_OPCODE_ARRAY_ROW_SEP,
         ocArrayColSep       = SC_OPCODE_ARRAY_COL_SEP,
-
-    // Spezial-Opcodes
+    // Special OpCodes
         ocMissing           = SC_OPCODE_MISSING,
         ocBad               = SC_OPCODE_BAD,
         ocSpaces            = SC_OPCODE_SPACES,
         ocMatRef            = SC_OPCODE_MAT_REF,
-    // weitere Zugriffs-Operanden
+    // Access commands
         ocDBArea            = SC_OPCODE_DB_AREA,
         ocMacro             = SC_OPCODE_MACRO,
         ocColRowName        = SC_OPCODE_COL_ROW_NAME,
@@ -77,7 +76,7 @@ enum OpCodeEnum
         ocPercentSign       = SC_OPCODE_PERCENT_SIGN,
     // EndOfDiverse
         ocEndDiv            = SC_OPCODE_END_DIV,
-    // Binaere Operatoren
+    // Binary operators
         ocAdd               = SC_OPCODE_ADD,
         ocSub               = SC_OPCODE_SUB,
         ocMul               = SC_OPCODE_MUL,
@@ -96,12 +95,12 @@ enum OpCodeEnum
         ocUnion             = SC_OPCODE_UNION,
         ocRange             = SC_OPCODE_RANGE,
         ocEndBinOp          = SC_OPCODE_END_BIN_OP,
-    // Unaere Operatoren
+    // Unary operators
         ocNot               = SC_OPCODE_NOT,
         ocNeg               = SC_OPCODE_NEG,
         ocNegSub            = SC_OPCODE_NEG_SUB,
         ocEndUnOp           = SC_OPCODE_END_UN_OP,
-    // Funktionen mit keinem Parameter
+    // Functions with no parameters
         ocPi                = SC_OPCODE_PI,
         ocRandom            = SC_OPCODE_RANDOM,
         ocTrue              = SC_OPCODE_TRUE,
@@ -111,7 +110,7 @@ enum OpCodeEnum
         ocNoValue           = SC_OPCODE_NO_VALUE,
         ocCurrent           = SC_OPCODE_CURRENT,
         ocEndNoPar          = SC_OPCODE_END_NO_PAR,
-    // Funktionen mit einem Parameter
+    // Functions with one parameter
         ocDeg               = SC_OPCODE_DEG,
         ocRad               = SC_OPCODE_RAD,
         ocSin               = SC_OPCODE_SIN,
@@ -160,7 +159,7 @@ enum OpCodeEnum
         ocIsEven            = SC_OPCODE_IS_EVEN,
         ocIsOdd             = SC_OPCODE_IS_ODD,
         ocN                 = SC_OPCODE_N,
-    // String-Funktionen
+    // String functions
         ocGetDateValue      = SC_OPCODE_GET_DATE_VALUE,
         ocGetTimeValue      = SC_OPCODE_GET_TIME_VALUE,
         ocCode              = SC_OPCODE_CODE,
@@ -187,8 +186,10 @@ enum OpCodeEnum
         ocArabic            = SC_OPCODE_ARABIC,
         ocInfo              = SC_OPCODE_INFO,
         ocBahtText          = SC_OPCODE_BAHTTEXT,
+        ocJis               = SC_OPCODE_JIS,
+        ocAsc               = SC_OPCODE_ASC,
         ocEnd1Par           = SC_OPCODE_END_1_PAR,
-    // Funktionen mit mehreren Parametern
+    // Functions with more than one parameters
         ocArcTan2           = SC_OPCODE_ARC_TAN_2,
         ocCeil              = SC_OPCODE_CEIL,
         ocFloor             = SC_OPCODE_FLOOR,
@@ -256,9 +257,8 @@ enum OpCodeEnum
         ocKumKapZ           = SC_OPCODE_KUM_KAP_Z,
         ocEffektiv          = SC_OPCODE_EFFEKTIV,
         ocNominal           = SC_OPCODE_NOMINAL,
-    // Spezialfunktion fuer Teilergebnisse
         ocSubTotal          = SC_OPCODE_SUB_TOTAL,
-    // Datenbankfunktionen
+    // Database functions
         ocDBSum             = SC_OPCODE_DB_SUM,
         ocDBCount           = SC_OPCODE_DB_COUNT,
         ocDBCount2          = SC_OPCODE_DB_COUNT_2,
@@ -271,7 +271,7 @@ enum OpCodeEnum
         ocDBStdDevP         = SC_OPCODE_DB_STD_DEV_P,
         ocDBVar             = SC_OPCODE_DB_VAR,
         ocDBVarP            = SC_OPCODE_DB_VAR_P,
-    // Verwaltungsfunktionen
+    // Management functions
         ocIndirect          = SC_OPCODE_INDIRECT,
         ocIndirectXL        = SC_OPCODE_INDIRECT_XL,
         ocAddress           = SC_OPCODE_ADDRESS,
@@ -287,7 +287,7 @@ enum OpCodeEnum
         ocOffset            = SC_OPCODE_OFFSET,
         ocIndex             = SC_OPCODE_INDEX,
         ocAreas             = SC_OPCODE_AREAS,
-    // String-Funktionen
+    // String functions
         ocCurrency          = SC_OPCODE_CURRENCY,
         ocReplace           = SC_OPCODE_REPLACE,
         ocFixed             = SC_OPCODE_FIXED,
@@ -301,7 +301,7 @@ enum OpCodeEnum
         ocSubstitute        = SC_OPCODE_SUBSTITUTE,
         ocRept              = SC_OPCODE_REPT,
         ocConcat            = SC_OPCODE_CONCAT,
-    // Matrix-Funktionen
+    // Matrix functions
         ocMatValue          = SC_OPCODE_MAT_VALUE,
         ocMatDet            = SC_OPCODE_MAT_DET,
         ocMatInv            = SC_OPCODE_MAT_INV,
@@ -310,7 +310,7 @@ enum OpCodeEnum
         ocMatrixUnit        = SC_OPCODE_MATRIX_UNIT,
     // BackSolver
         ocBackSolver        = SC_OPCODE_BACK_SOLVER,
-    // Statistik-Funktionen
+    // Statistical functions
         ocHypGeomDist       = SC_OPCODE_HYP_GEOM_DIST,
         ocLogNormDist       = SC_OPCODE_LOG_NORM_DIST,
         ocTDist             = SC_OPCODE_T_DIST,
@@ -364,7 +364,7 @@ enum OpCodeEnum
         ocTableOp           = SC_OPCODE_TABLE_OP,
         ocBetaDist          = SC_OPCODE_BETA_DIST,
         ocBetaInv           = SC_OPCODE_BETA_INV,
-    // sonstige
+    // miscellaneous
         ocWeek              = SC_OPCODE_WEEK,
         ocGetDayOfWeek      = SC_OPCODE_GET_DAY_OF_WEEK,
         ocNoName            = SC_OPCODE_NO_NAME,
@@ -387,7 +387,7 @@ enum OpCodeEnum
         ocHyperLink         = SC_OPCODE_HYPERLINK,
         ocGetPivotData      = SC_OPCODE_GET_PIVOT_DATA,
         ocEnd2Par           = SC_OPCODE_END_2_PAR,
-    // internes Allerlei
+    // internal stuff
         ocInternalBegin     = SC_OPCODE_INTERNAL_BEGIN,
         ocGame              = SC_OPCODE_GAME,
         ocSpew              = SC_OPCODE_SPEW,
@@ -395,9 +395,9 @@ enum OpCodeEnum
         ocTeam              = SC_OPCODE_TEAM,
         ocAnswer            = SC_OPCODE_ANSWER,
         ocInternalEnd       = SC_OPCODE_INTERNAL_END,
-    // ab hier sind Extradaten drin
+    // from here on ExtraData
         ocDataToken1        = SC_OPCODE_DATA_TOKEN_1,
-    // kein OpCode
+    // no OpCode
         ocNone              = SC_OPCODE_NONE
 };
 
