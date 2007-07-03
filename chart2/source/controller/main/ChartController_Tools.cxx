@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ChartController_Tools.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: vg $ $Date: 2007-05-22 18:04:18 $
+ *  last change: $Author: rt $ $Date: 2007-07-03 13:40:28 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -40,7 +40,7 @@
 #include "ChartWindow.hxx"
 #include "ChartModelHelper.hxx"
 #include "TitleHelper.hxx"
-#include "DiagramHelper.hxx"
+#include "ThreeDHelper.hxx"
 #include "DataSeriesHelper.hxx"
 #include "UndoGuard.hxx"
 #include "ControllerLockGuard.hxx"
@@ -263,7 +263,7 @@ void ChartController::executeDispatch_NewArrangement()
             xState->setPropertyToDefault( C2U("D3DSceneDistance"));
             xState->setPropertyToDefault( C2U("D3DSceneFocalLength"));
             Reference< beans::XPropertySet > xDiaProp( xDiagram, uno::UNO_QUERY_THROW );
-            drawing::CameraGeometry aCameraGeo( DiagramHelper::getDefaultCameraGeometry());
+            drawing::CameraGeometry aCameraGeo( ThreeDHelper::getDefaultCameraGeometry());
             xDiaProp->setPropertyValue( C2U("D3DCameraGeometry"), uno::makeAny( aCameraGeo ));
             //todo: different defaults for pie and donut; todo ask template
 
