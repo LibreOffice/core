@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.19 $
+#   $Revision: 1.20 $
 #
-#   last change: $Author: hr $ $Date: 2007-06-27 13:58:07 $
+#   last change: $Author: rt $ $Date: 2007-07-03 12:58:02 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -58,6 +58,7 @@ ULFDIR:=.
 ULFFILES= \
     documents.ulf \
     launcher_comment.ulf \
+    launcher_genericname.ulf \
     launcher_name.ulf
 
 LAUNCHERLIST = writer calc draw impress math base printeradmin qstart extension
@@ -139,7 +140,7 @@ ALLTAR : $(LAUNCHERFLAGFILE) $(SPECFILES) $(COMMONMISC)$/{$(PRODUCTLIST)}$/build
 # Copy/patch the .desktop files to the output tree and 
 # merge-in the translations. 
 #
-$(LAUNCHERFLAGFILE) : ../productversion.mk brand.pl translate.pl $(ULFDIR)$/launcher_name.ulf $(ULFDIR)$/launcher_comment.ulf
+$(LAUNCHERFLAGFILE) : ../productversion.mk brand.pl translate.pl $(ULFDIR)$/launcher_name.ulf $(ULFDIR)$/launcher_comment.ulf $(ULFDIR)/launcher_genericname.ulf
 $(LAUNCHERFLAGFILE) : $(LAUNCHERDEPN) 
     @$(MKDIRHIER) $(@:db).$(INPATH)
     @echo Creating desktop entries for $(@:f) ..
@@ -147,6 +148,8 @@ $(LAUNCHERFLAGFILE) : $(LAUNCHERDEPN)
     @$(PERL) brand.pl -p '$${{PRODUCTNAME}} $${{PRODUCTVERSION}}' -u $(UNIXWRAPPERNAME) --iconprefix '$${{WITHOUTDOTUNIXPRODUCTNAME}}${ICONVERSION}-' $< $(@:db).$(INPATH)
     @$(PERL) translate.pl -p '$${{PRODUCTNAME}} $${{PRODUCTVERSION}}' -d $(@:db).$(INPATH) --ext "desktop" --key "Name" $(ULFDIR)$/launcher_name.ulf
     @$(PERL) translate.pl -p '$${{PRODUCTNAME}} $${{PRODUCTVERSION}}' -d $(@:db).$(INPATH) --ext "desktop" --key "Comment" $(ULFDIR)$/launcher_comment.ulf
+    @$(PERL) translate.pl -p '$${{PRODUCTNAME}} $${{PRODUCTVERSION}}' -d $(@:db).$(INPATH) --ext "desktop" --key "GenericName" $(ULFDIR)$/launcher_comment.ulf
+
 .IF "$(WITH_LIBSN)"=="YES"
     @noop x$(foreach,i,$(LAUNCHERLIST) $(shell echo "StartupNotify=true" >> $(@:db).$(INPATH)/$i.desktop))x
 .ENDIF
