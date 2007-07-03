@@ -4,9 +4,9 @@
  *
  *  $RCSfile: salogl.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: rt $ $Date: 2006-12-04 16:39:59 $
+ *  last change: $Author: rt $ $Date: 2007-07-03 14:08:16 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -200,7 +200,7 @@ bool X11SalOpenGL::IsValid()
             mnOGLState = OGL_STATE_INVALID;
 #if OSL_DEBUG_LEVEL > 1
         if( mnOGLState == OGL_STATE_VALID )
-            fprintf( stderr, "Using GLX on visual id %x.\n", mpVisualInfo->visualid );
+            fprintf( stderr, "Using GLX on visual id %lx.\n", mpVisualInfo->visualid );
         else
             fprintf( stderr, "Not using GLX.\n" );
 #endif
