@@ -4,9 +4,9 @@
  *
  *  $RCSfile: nlsupport.c,v $
  *
- *  $Revision: 1.34 $
+ *  $Revision: 1.35 $
  *
- *  last change: $Author: kz $ $Date: 2007-06-19 16:16:54 $
+ *  last change: $Author: rt $ $Date: 2007-07-03 12:48:57 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -845,18 +845,15 @@ rtl_TextEncoding osl_getTextEncodingFromLocale( rtl_Locale * pLocale )
 #ifdef MACOSX
 #include "system.h"
 
-#include <premac.h>
-#include <CoreFoundation/CoreFoundation.h>
-#include <postmac.h>
-#include <sal/config.h>
-
-/* OS X locale discovery function from dylib */
+/* OS X locale discovery function */
 int (*pGetOSXLocale)( char *, sal_uInt32 );
 
 oslModule SAL_CALL osl_psz_loadModule(const sal_Char *pszModuleName, sal_Int32 nRtldMode);
 /*****************************************************************************
  return the current process locale
  *****************************************************************************/
+
+int macosx_getLocale(char *locale, sal_uInt32 bufferLen);
 
 void _imp_getProcessLocale( rtl_Locale ** ppLocale )
 {
@@ -868,46 +865,12 @@ void _imp_getProcessLocale( rtl_Locale ** ppLocale )
     /* Only fetch the locale once and cache it */
     if ( NULL == locale )
     {
-        unsigned int    isDarwin;
-        unsigned int    majorVersion;
-        unsigned int    minorVersion;
-        unsigned int    minorMinorVersion;
 
-        /* If running on OS X, attempt to fetch the locale using CoreServices calls. */
-        macxp_getSystemVersion( &isDarwin, &majorVersion, &minorVersion, &minorMinorVersion );
-        if( !isDarwin )
-        {
-            /* Load the locale discovery library if we are running on OS X */
-
-            const sal_Char   *aLocaleLibName            = "libsalsystools" SAL_DLLEXTENSION;
-            const sal_Char   *aGetOSXLocaleFunctionName = "macosx_getLocale";
-            oslModule         pLocaleLib;
-            oslGenericFunction pFunc;
-            int               err;
-
-            pLocaleLib = osl_psz_loadModule( aLocaleLibName, SAL_LOADMODULE_DEFAULT );
-            if( pLocaleLib )
-            {
-                /* Grab a pointer to the locale function and call it */
-                pFunc = osl_getAsciiFunctionSymbol( pLocaleLib, aGetOSXLocaleFunctionName );
-                if( pFunc )
-                {
-                    pGetOSXLocale = ( int(*)(char *, sal_uInt32) )( pFunc );
-                    locale = (char *)malloc( 20 );
-                    if ( locale )
-                        err = (*pGetOSXLocale)( locale, 20 );
-                    else
-                        fprintf( stderr, "nlsupport.c:  locale allocation returned NULL!\n" );
-                }
-                else
-                    fprintf( stderr, "Could not load the OS X locale discovery function! (%s)\n", aGetOSXLocaleFunctionName );
-            }
-            else
-                fprintf( stderr, "Could not load the OS X locale discovery library! (%s)\n", aLocaleLibName );
-
-            /* Let go of the module, we don't need it anymore */
-            osl_unloadModule( pLocaleLib );
-         }
+        locale = (char *)malloc( 20 );
+        if ( locale )
+            macosx_getLocale( locale, 20 );
+        else
+            fprintf( stderr, "nlsupport.c:  locale allocation returned NULL!\n" );
     }
 
     /* handle the case where OS specific method of finding locale fails */
