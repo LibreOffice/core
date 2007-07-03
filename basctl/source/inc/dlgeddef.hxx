@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dlgeddef.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: kz $ $Date: 2007-06-20 10:40:07 $
+ *  last change: $Author: rt $ $Date: 2007-07-03 13:04:43 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -70,7 +70,7 @@ const UINT32 DlgInventor = UINT32('D')*0x00000001+
 #define OBJ_DLG_FORMATTEDFIELD  ((UINT16)21)
 #define OBJ_DLG_PATTERNFIELD    ((UINT16)22)
 #define OBJ_DLG_FILECONTROL     ((UINT16)23)
-
+#define OBJ_DLG_TREECONTROL     ((UINT16)24)
 
 // control properties
 #define DLGED_PROP_BACKGROUNDCOLOR      ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "BackgroundColor" ) )
