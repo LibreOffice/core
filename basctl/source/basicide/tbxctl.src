@@ -4,9 +4,9 @@
  *
  *  $RCSfile: tbxctl.src,v $
  *
- *  $Revision: 1.49 $
+ *  $Revision: 1.50 $
  *
- *  last change: $Author: ihi $ $Date: 2007-04-19 13:47:36 $
+ *  last change: $Author: rt $ $Date: 2007-07-03 13:03:02 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -138,6 +138,13 @@ ToolBox RID_TOOLBOX
             Identifier = SID_INSERT_FILECONTROL ;
             RadioCheck = TRUE ;
             Text [ en-US ] = "File Selection";
+        };
+        ToolBoxItem
+        {
+            HelpId = SID_INSERT_TREECONTROL ;
+            Identifier = SID_INSERT_TREECONTROL ;
+            RadioCheck = TRUE ;
+            Text [ en-US ] = "Tree Control";
         };
         ToolBoxItem { Type = TOOLBOXITEM_SEPARATOR ; };
         ToolBoxItem
