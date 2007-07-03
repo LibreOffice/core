@@ -4,9 +4,9 @@
 #
 #   $RCSfile: cc5_solaris_sparc.map,v $
 #
-#   $Revision: 1.10 $
+#   $Revision: 1.11 $
 #
-#   last change: $Author: obo $ $Date: 2007-03-12 10:43:25 $
+#   last change: $Author: rt $ $Date: 2007-07-03 12:42:32 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -81,9 +81,9 @@ UDK_3.3 {
         __1cJjvmaccessRUnoVirtualMachineOgetClassLoader6kM_pv_; # jvmaccess::UnoVirtualMachine::getClassLoader() const
 } UDK_3.2;
 
-UDK_3.4 {
+UDK_3.4 { # OOo 2.3
     global:
         # jvmaccess/classpath.hxx:
-        __1cJjvmaccessJClassPathLdoLoadClass6FrknDcomDsunEstarDunoJReference4n0FRXComponentContext___pnHJNIEnv__rknDrtlIOUString_9F_pv_; # jvmaccess::ClassPath::doLoadClass(com::sun::star::uno::Reference< com::sun::star::uno::XComponentContext > const &, JNIEnv *, rtl::OUString const &, rtl::OUString const &)
-        __1cJjvmaccessJClassPathRdoTranslateToUrls6FrknDcomDsunEstarDunoJReference4n0FRXComponentContext___pnHJNIEnv__rknDrtlIOUString__pv_; # jvmaccess::ClassPath::doTranslateToUrls(com::sun::star::uno::Reference< com::sun::star::uno::XComponentContext > const &, JNIEnv *, rtl::OUString const &)
+        __1cJjvmaccessJClassPathLdoLoadClass6FrknDcomDsunEstarDunoJReference4n0FRXComponentContext___pvrknDrtlIOUString_9E_9A_; # jvmaccess::ClassPath::doLoadClass(com::sun::star::uno::Reference< com::sun::star::uno::XComponentContext > const &, void *, rtl::OUString const &, rtl::OUString const &)
+        __1cJjvmaccessJClassPathRdoTranslateToUrls6FrknDcomDsunEstarDunoJReference4n0FRXComponentContext___pvrknDrtlIOUString__9A_; # jvmaccess::ClassPath::doTranslateToUrls(com::sun::star::uno::Reference< com::sun::star::uno::XComponentContext > const &, void *, rtl::OUString const &)
 } UDK_3.3;
