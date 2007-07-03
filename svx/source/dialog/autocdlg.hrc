@@ -4,9 +4,9 @@
  *
  *  $RCSfile: autocdlg.hrc,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: hr $ $Date: 2007-06-27 16:47:14 $
+ *  last change: $Author: rt $ $Date: 2007-07-03 14:24:41 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -111,13 +111,6 @@
 #define STR_TABLE                       77
 #define STR_REPLACE_TEMPLATES           78
 #define FL_PRCNT                        79
-
-#define CHKBUT_UNCHECKED                80
-#define CHKBUT_CHECKED                  81
-#define CHKBUT_HICHECKED                82
-#define CHKBUT_HIUNCHECKED              83
-#define CHKBUT_TRISTATE                 84
-#define CHKBUT_HITRISTATE               85
 
 #define STR_HEADER                      90
 #define FT_HEADER_EXPLANATION           91
