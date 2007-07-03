@@ -4,9 +4,9 @@
  *
  *  $RCSfile: classpath.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: obo $ $Date: 2007-03-12 10:42:21 $
+ *  last change: $Author: rt $ $Date: 2007-07-03 12:42:01 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -143,18 +143,19 @@ private:
     ~ClassPath(); // not defined
     void operator =(ClassPath &); // not defined
 
-    // Functions that replace jobjectArray and jclass with void *, so that their
-    // mangled C++ names do not depend on the JDK version used at compile time:
+    // Functions that replace JNIEnv, jobjectArray, and jclass with void *, so
+    // that their mangled C++ names do not depend on the JDK version used at
+    // compile time:
 
     static void * doTranslateToUrls(
         ::com::sun::star::uno::Reference<
         ::com::sun::star::uno::XComponentContext > const & context,
-        ::JNIEnv * environment, ::rtl::OUString const & classPath);
+        void * environment, ::rtl::OUString const & classPath);
 
     static void * doLoadClass(
         ::com::sun::star::uno::Reference<
         ::com::sun::star::uno::XComponentContext > const & context,
-        ::JNIEnv * environment, ::rtl::OUString const & classPath,
+        void * environment, ::rtl::OUString const & classPath,
         ::rtl::OUString const & name);
 };
 

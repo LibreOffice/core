@@ -4,9 +4,9 @@
  *
  *  $RCSfile: classpath.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: obo $ $Date: 2007-03-12 10:42:47 $
+ *  last change: $Author: rt $ $Date: 2007-07-03 12:42:17 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -65,17 +65,17 @@ namespace css = ::com::sun::star;
 
 void * ::jvmaccess::ClassPath::doTranslateToUrls(
     css::uno::Reference< css::uno::XComponentContext > const & context,
-    ::JNIEnv * environment, ::rtl::OUString const & classPath)
+    void * environment, ::rtl::OUString const & classPath)
 {
     OSL_ASSERT(context.is() && environment != 0);
 #if defined SOLAR_JAVA
-    jclass classUrl(environment->FindClass("java/net/URL"));
+    ::JNIEnv * const env = static_cast< ::JNIEnv * >(environment);
+    jclass classUrl(env->FindClass("java/net/URL"));
     if (classUrl == 0) {
         return 0;
     }
     jmethodID ctorUrl(
-        environment->GetMethodID(
-            classUrl, "<init>", "(Ljava/lang/String;)V"));
+        env->GetMethodID(classUrl, "<init>", "(Ljava/lang/String;)V"));
     if (ctorUrl == 0) {
         return 0;
     }
@@ -120,20 +120,20 @@ void * ::jvmaccess::ClassPath::doTranslateToUrls(
                 }
             }
             jvalue arg;
-            arg.l = environment->NewString(
+            arg.l = env->NewString(
                 static_cast< jchar const * >(url.getStr()),
                 static_cast< jsize >(url.getLength()));
             if (arg.l == 0) {
                 return 0;
             }
-            jobject o(environment->NewObjectA(classUrl, ctorUrl, &arg));
+            jobject o(env->NewObjectA(classUrl, ctorUrl, &arg));
             if (o == 0) {
                 return 0;
             }
             urls.push_back(o);
         }
     }
-    jobjectArray result = environment->NewObjectArray(
+    jobjectArray result = env->NewObjectArray(
         static_cast< jsize >(urls.size()), classUrl, 0);
         // static_cast is ok, as each element of urls occupied at least one
         // character of the ::rtl::OUString classPath
@@ -143,7 +143,7 @@ void * ::jvmaccess::ClassPath::doTranslateToUrls(
     jsize idx = 0;
     for (std::vector< jobject >::iterator i(urls.begin()); i != urls.end(); ++i)
     {
-        environment->SetObjectArrayElement(result, idx++, *i);
+        env->SetObjectArrayElement(result, idx++, *i);
     }
     return result;
 #else
@@ -153,42 +153,43 @@ void * ::jvmaccess::ClassPath::doTranslateToUrls(
 
 void * ::jvmaccess::ClassPath::doLoadClass(
     css::uno::Reference< css::uno::XComponentContext > const & context,
-    ::JNIEnv * environment, ::rtl::OUString const & classPath,
+    void * environment, ::rtl::OUString const & classPath,
     ::rtl::OUString const & name)
 {
     OSL_ASSERT(context.is() && environment != 0);
 #if defined SOLAR_JAVA
-    jclass classLoader(environment->FindClass("java/net/URLClassLoader"));
+    ::JNIEnv * const env = static_cast< ::JNIEnv * >(environment);
+    jclass classLoader(env->FindClass("java/net/URLClassLoader"));
     if (classLoader == 0) {
         return 0;
     }
     jmethodID ctorLoader(
-        environment->GetMethodID(classLoader, "<init>", "([Ljava/net/URL;)V"));
+        env->GetMethodID(classLoader, "<init>", "([Ljava/net/URL;)V"));
     if (ctorLoader == 0) {
         return 0;
     }
     jvalue arg;
-    arg.l = translateToUrls(context, environment, classPath);
+    arg.l = translateToUrls(context, env, classPath);
     if (arg.l == 0) {
         return 0;
     }
-    jobject cl = environment->NewObjectA(classLoader, ctorLoader, &arg);
+    jobject cl = env->NewObjectA(classLoader, ctorLoader, &arg);
     if (cl == 0) {
         return 0;
     }
     jmethodID methLoadClass(
-        environment->GetMethodID(
+        env->GetMethodID(
             classLoader, "loadClass", "(Ljava/lang/String;)Ljava/lang/Class;"));
     if (methLoadClass == 0) {
         return 0;
     }
-    arg.l = environment->NewString(
+    arg.l = env->NewString(
         static_cast< jchar const * >(name.getStr()),
         static_cast< jsize >(name.getLength()));
     if (arg.l == 0) {
         return 0;
     }
-    return environment->CallObjectMethodA(cl, methLoadClass, &arg);
+    return env->CallObjectMethodA(cl, methLoadClass, &arg);
 #else
     return 0;
 #endif
