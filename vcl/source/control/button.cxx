@@ -4,9 +4,9 @@
  *
  *  $RCSfile: button.cxx,v $
  *
- *  $Revision: 1.50 $
+ *  $Revision: 1.51 $
  *
- *  last change: $Author: hr $ $Date: 2007-06-27 20:04:30 $
+ *  last change: $Author: rt $ $Date: 2007-07-03 14:05:08 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1988,6 +1988,10 @@ Size PushButton::CalcMinimumSize( long nMaxWidth ) const
         aSize = GetTextRect( Rectangle( Point(), Size( nMaxWidth ? nMaxWidth : 0x7fffffff, 0x7fffffff ) ),
                              PushButton::GetText(), ImplGetTextStyle( nDrawFlags ) ).GetSize();
     }
+
+    // cf. ImplDrawPushButton ...
+    aSize.Width() += 8;
+    aSize.Height() += 8;
 
     return CalcWindowSize( aSize );
 }
