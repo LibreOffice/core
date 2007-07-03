@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xeformula.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: obo $ $Date: 2007-06-14 08:08:10 $
+ *  last change: $Author: rt $ $Date: 2007-07-03 15:50:20 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -215,13 +215,10 @@ public:
     inline sal_uInt8    GetParamCount() const { return mnParamCount; }
     inline void         IncParamCount() { ++mnParamCount; }
 
-    inline ScfUInt16Vec& GetParamPosVec() { return maParamPosVec; }
     inline ScfUInt16Vec& GetAttrPosVec() { return maAttrPosVec; }
-    inline void         AppendParamPos( sal_uInt16 nPos ) { maParamPosVec.push_back( nPos ); }
     inline void         AppendAttrPos( sal_uInt16 nPos ) { maAttrPosVec.push_back( nPos ); }
 
 private:
-    ScfUInt16Vec        maParamPosVec;      /// Token array positions of function parameters.
     ScfUInt16Vec        maAttrPosVec;       /// Token array positions of tAttr tokens.
     const XclExpTokenData& mrTokData;       /// Data about processed function name token.
     const XclFunctionInfo& mrFuncInfo;      /// Constant data about processed function.
@@ -330,12 +327,12 @@ private:
     void                ProcessFunction( const XclExpTokenData& rTokData, sal_uInt8 nExpClass );
     void                PrepareFunction( XclExpFuncData& rFuncData );
     void                FinishFunction( XclExpFuncData& rFuncData, sal_uInt8 nCloseSpaces );
-    void                FinishIfFunction( XclExpFuncData& rFuncData, sal_uInt16 nFuncTokPos );
-    void                FinishChooseFunction( XclExpFuncData& rFuncData, sal_uInt16 nFuncTokPos );
+    void                FinishIfFunction( XclExpFuncData& rFuncData );
+    void                FinishChooseFunction( XclExpFuncData& rFuncData );
 
     XclExpTokenData     ProcessParam( XclExpTokenData aTokData, XclExpFuncData& rFuncData );
     void                PrepareParam( XclExpFuncData& rFuncData );
-    void                FinishParam( XclExpFuncData& rFuncData, sal_uInt16 nParamPos );
+    void                FinishParam( XclExpFuncData& rFuncData );
     void                AppendDefaultParam( XclExpFuncData& rFuncData );
     void                AppendTrailingParam( XclExpFuncData& rFuncData );
 
@@ -399,9 +396,9 @@ private:
     void                AppendJumpToken( XclExpFuncData& rFuncData, sal_uInt8 nAttrType );
 
     void                Insert( sal_uInt16 nInsertPos, sal_uInt16 nInsertSize );
-
     void                Overwrite( sal_uInt16 nWriteToPos, sal_uInt16 nOffset );
-    void                WriteDistance( sal_uInt16 nWriteToPos, sal_uInt16 nStartPos );
+
+    void                UpdateAttrGoto( sal_uInt16 nAttrPos );
 
     bool                IsSpaceToken( sal_uInt16 nPos ) const;
     void                RemoveTrailingParen();
@@ -505,7 +502,7 @@ XclTokenArrayRef XclExpFmlaCompImpl::CreateFormula( XclFormulaType eType,
         }
     }
 
-    // finalizing, e.g. add tAttr-volatile token, and storing any inline arrays
+    // finalizing, e.g. add tAttrVolatile token, and storing any inline arrays
     ScfUInt8Vec aExtensionTokens;
     FinalizeFormula( aExtensionTokens );
 
@@ -745,10 +742,10 @@ void XclExpFmlaCompImpl::FinalizeFormula( ScfUInt8Vec & rExtensionTokens )
 {
     if( mbOk )
     {
-        // Volatile? Add a tAttr-volatile token at the beginning of the token array.
+        // Volatile? Add a tAttrVolatile token at the beginning of the token array.
         if( mbVolatile )
         {
-            // tAttr-space token can be extended with volatile flag
+            // tAttrSpace token can be extended with volatile flag
             if( !IsSpaceToken( 0 ) )
             {
                 Insert( 0, 4 );
@@ -1353,8 +1350,6 @@ void XclExpFmlaCompImpl::FinishFunction( XclExpFuncData& rFuncData, sal_uInt8 nC
 {
     // append missing parameters required in Excel, may modify param count
     AppendTrailingParam( rFuncData );
-    // store position behind last parameter
-    rFuncData.AppendParamPos( GetSize() );
 
     // check if parameter count fits into the limits of the function
     sal_uInt8 nParamCount = rFuncData.GetParamCount();
@@ -1363,12 +1358,21 @@ void XclExpFmlaCompImpl::FinishFunction( XclExpFuncData& rFuncData, sal_uInt8 nC
     if( (nMinCount <= nParamCount) && (nParamCount <= nMaxCount) )
     {
         sal_uInt16 nXclFuncIdx = rFuncData.GetXclFuncIdx();
-        // first put the tAttr-space tokens, they must not be included in tAttr-goto handling
+        // first put the tAttrSpace tokens, they must not be included in tAttrGoto handling
         AppendSpaceToken( EXC_TOK_ATTR_SPACE_SP_CLOSE, nCloseSpaces );
         AppendSpaceToken( EXC_TOK_ATTR_SPACE_SP, rFuncData.GetSpaces() );
-        // cache the start position of the function token (without spaces)
-        sal_uInt16 nFuncTokPos = GetSize();
-        // put the tFunc or tFuncVar token (or another special token, e.g. tAttr-sum)
+
+        // add tAttrGoto tokens for IF or CHOOSE functions
+        switch( rFuncData.GetOpCode() )
+        {
+            case ocIf:
+            case ocChose:
+                AppendJumpToken( rFuncData, EXC_TOK_ATTR_GOTO );
+            break;
+            default:;
+        }
+
+        // put the tFunc or tFuncVar token (or another special token, e.g. tAttrSum)
         sal_uInt8 nRetClass = rFuncData.GetReturnClass();
         sal_uInt8 nExpRetClass = rFuncData.GetExpReturnClass();
         if( (nXclFuncIdx == EXC_FUNCID_SUM) && (nParamCount == 1) )
@@ -1395,14 +1399,14 @@ void XclExpFmlaCompImpl::FinishFunction( XclExpFuncData& rFuncData, sal_uInt8 nC
         // update volatile flag - is set if at least one used function is volatile
         mbVolatile |= rFuncData.IsVolatile();
 
-        // update jump tokens for specific functions
+        // update jump tokens for specific functions, add additional tokens
         switch( rFuncData.GetOpCode() )
         {
             case ocIf:
-                FinishIfFunction( rFuncData, nFuncTokPos );
+                FinishIfFunction( rFuncData );
             break;
             case ocChose:
-                FinishChooseFunction( rFuncData, nFuncTokPos );
+                FinishChooseFunction( rFuncData );
             break;
 
             case ocCot:                     // simulate COT(x) by (1/TAN(x))
@@ -1422,58 +1426,46 @@ void XclExpFmlaCompImpl::FinishFunction( XclExpFuncData& rFuncData, sal_uInt8 nC
         mbOk = false;
 }
 
-void XclExpFmlaCompImpl::FinishIfFunction( XclExpFuncData& rFuncData, sal_uInt16 nFuncTokPos )
+void XclExpFmlaCompImpl::FinishIfFunction( XclExpFuncData& rFuncData )
 {
-    ScfUInt16Vec& rParamPos = rFuncData.GetParamPosVec();
-    ScfUInt16Vec& rAttrPos = rFuncData.GetAttrPosVec();
-    if( rFuncData.GetParamCount() == 3 )
-    {
-        // update tAttr-if token following the condition parameter, points to false parameter
-        Overwrite( rAttrPos[ 0 ] + 2, rParamPos[ 2 ] - rParamPos[ 1 ] );
-        // update the tAttr-goto tokens following true and false parameters
-        // (tAttr-goto tokens contain a value one-less to real distance)
-        WriteDistance( rAttrPos[ 1 ] + 2, rParamPos[ 2 ] + 1 );
-        WriteDistance( rAttrPos[ 2 ] + 2, rParamPos[ 3 ] + 1 );
-    }
-    else
-    {
-        // update tAttr-if token following the condition parameter, points to
-        // real tFuncVar token, not to possible leading tAttr-space tokens
-        Overwrite( rAttrPos[ 0 ] + 2, nFuncTokPos - rParamPos[ 1 ] );
-        // update the tAttr-goto token following true parameter
-        // (tAttr-goto tokens contain a value one-less to real distance)
-        WriteDistance( rAttrPos[ 1 ] + 2, rParamPos[ 2 ] + 1 );
-    }
+    sal_uInt16 nParamCount = rFuncData.GetParamCount();
+    DBG_ASSERT( (nParamCount == 2) || (nParamCount == 3), "XclExpFmlaCompImpl::FinishIfFunction - wrong parameter count" );
+    const ScfUInt16Vec& rAttrPos = rFuncData.GetAttrPosVec();
+    DBG_ASSERT( nParamCount == rAttrPos.size(), "XclExpFmlaCompImpl::FinishIfFunction - wrong number of tAttr tokens" );
+    // update tAttrIf token following the condition parameter
+    Overwrite( rAttrPos[ 0 ] + 2, static_cast< sal_uInt16 >( rAttrPos[ 1 ] - rAttrPos[ 0 ] ) );
+    // update the tAttrGoto tokens following true and false parameters
+    UpdateAttrGoto( rAttrPos[ 1 ] );
+    if( nParamCount == 3 )
+        UpdateAttrGoto( rAttrPos[ 2 ] );
 }
 
-void XclExpFmlaCompImpl::FinishChooseFunction( XclExpFuncData& rFuncData, sal_uInt16 nFuncTokPos )
+void XclExpFmlaCompImpl::FinishChooseFunction( XclExpFuncData& rFuncData )
 {
-    ScfUInt16Vec& rParamPos = rFuncData.GetParamPosVec();
-    ScfUInt16Vec& rAttrPos = rFuncData.GetAttrPosVec();
     sal_uInt16 nParamCount = rFuncData.GetParamCount();
-    sal_uInt16 nIdx;
-    // tAttr-choose token contains number of parameters minus 1
-    Overwrite( rAttrPos[ 0 ] + 2, nParamCount - 1 );
-    // insert the jump table into the tAttr-choose token
+    ScfUInt16Vec& rAttrPos = rFuncData.GetAttrPosVec();
+    DBG_ASSERT( nParamCount == rAttrPos.size(), "XclExpFmlaCompImpl::FinishChooseFunction - wrong number of tAttr tokens" );
+    // number of choices is parameter count minus 1
+    sal_uInt16 nChoices = nParamCount - 1;
+    // tAttrChoose token contains number of choices
+    Overwrite( rAttrPos[ 0 ] + 2, nChoices );
+    // cache position of the jump table (follows number of choices in tAttrChoose token)
     sal_uInt16 nJumpArrPos = rAttrPos[ 0 ] + 4;
-    sal_uInt16 nJumpArrSize = 2 * nParamCount;
+    // size of jump table: number of choices, plus 1 for error position
+    sal_uInt16 nJumpArrSize = 2 * (nChoices + 1);
+    // insert the jump table into the tAttrChoose token
     Insert( nJumpArrPos, nJumpArrSize );
-    // update positions of parameters and tAttr tokens after jump table insertion
-    for( nIdx = 1; nIdx <= nParamCount; ++nIdx )
-        rParamPos[ nIdx ] = rParamPos[ nIdx ] + nJumpArrSize;
+    // update positions of tAttrGoto tokens after jump table insertion
+    sal_uInt16 nIdx;
     for( nIdx = 1; nIdx < nParamCount; ++nIdx )
         rAttrPos[ nIdx ] = rAttrPos[ nIdx ] + nJumpArrSize;
-    nFuncTokPos = nFuncTokPos + nJumpArrSize;
-    // update the tAttr-goto tokens
+    // update the tAttrGoto tokens (they contain a value one-less to real distance)
     for( nIdx = 1; nIdx < nParamCount; ++nIdx )
-        // (tAttr-goto tokens contain a value one-less to real distance)
-        WriteDistance( rAttrPos[ nIdx ] + 2, rParamPos[ nIdx + 1 ] + 1 );
-    // jump table needs real position of tFuncVar token, old value of
-    // rParamPos[nParamCount] may include leading tAttr-space tokens
-    rParamPos[ nParamCount ] = nFuncTokPos;
-    // update the jump table
-    for( nIdx = 0; nIdx < nParamCount; ++nIdx )
-        Overwrite( nJumpArrPos + 2 * nIdx, rParamPos[ nIdx + 1 ] - nJumpArrPos );
+        UpdateAttrGoto( rAttrPos[ nIdx ] );
+    // update the distances in the jump table
+    Overwrite( nJumpArrPos, nJumpArrSize );
+    for( nIdx = 1; nIdx < nParamCount; ++nIdx )
+        Overwrite( nJumpArrPos + 2 * nIdx, static_cast< sal_uInt16 >( rAttrPos[ nIdx ] + 4 - nJumpArrPos ) );
 }
 
 XclExpTokenData XclExpFmlaCompImpl::ProcessParam( XclExpTokenData aTokData, XclExpFuncData& rFuncData )
@@ -1490,12 +1482,11 @@ XclExpTokenData XclExpFmlaCompImpl::ProcessParam( XclExpTokenData aTokData, XclE
         while( rFuncData.GetExpParamClass() == EXC_FUNC_PAR_EXCELONLY )
             AppendDefaultParam( rFuncData );
 
-        // cache start position of the next parameter
-        sal_uInt16 nParamPos = GetSize();
         // propagate expected ARR class to subsequent subexpressions
         sal_uInt8 nExpClass = rFuncData.GetExpParamClass();
         bool bOldIsArrExp = mbIsArrExp;
         UpdateArrExpFlag( nExpClass, rFuncData.GetReturnClass() );
+
         // process the parameter, stop at next ocClose or ocSep
         PrepareParam( rFuncData );
         /*  #i37355# insert tMissArg token for missing parameters --
@@ -1510,73 +1501,75 @@ XclExpTokenData XclExpFmlaCompImpl::ProcessParam( XclExpTokenData aTokData, XclE
         // restore old expected ARR class mode
         SetArrExpFlag( bOldIsArrExp );
         // finalize the parameter and add special tokens, e.g. for IF or CHOOSE parameters
-        if( mbOk ) FinishParam( rFuncData, nParamPos );
+        if( mbOk ) FinishParam( rFuncData );
     }
     return aTokData;
 }
 
 void XclExpFmlaCompImpl::PrepareParam( XclExpFuncData& rFuncData )
 {
+    // index of this parameter is equal to number of already finished parameters
+    sal_uInt8 nParamIdx = rFuncData.GetParamCount();
+
     switch( rFuncData.GetOpCode() )
     {
+        case ocIf:
+            switch( nParamIdx )
+            {
+                // add a tAttrIf token before true-parameter (second parameter)
+                case 1:     AppendJumpToken( rFuncData, EXC_TOK_ATTR_IF );      break;
+                // add a tAttrGoto token before false-parameter (third parameter)
+                case 2:     AppendJumpToken( rFuncData, EXC_TOK_ATTR_GOTO );    break;
+            }
+        break;
+
+        case ocChose:
+            switch( nParamIdx )
+            {
+                // do nothing for first parameter
+                case 0:                                                         break;
+                // add a tAttrChoose token before first value parameter (second parameter)
+                case 1:     AppendJumpToken( rFuncData, EXC_TOK_ATTR_CHOOSE );  break;
+                // add a tAttrGoto token before other value parameters
+                default:    AppendJumpToken( rFuncData, EXC_TOK_ATTR_GOTO );
+            }
+        break;
+
         case ocArcCotHyp:               // simulate ACOTH(x) by ATANH(1/(x))
-            if( rFuncData.GetParamCount() == 0 )
+            if( nParamIdx == 0 )
                 AppendIntToken( 1 );
         break;
         default:;
     }
 }
 
-void XclExpFmlaCompImpl::FinishParam( XclExpFuncData& rFuncData, sal_uInt16 nParamPos )
+void XclExpFmlaCompImpl::FinishParam( XclExpFuncData& rFuncData )
 {
+    // index of this parameter is equal to number of already finished parameters
+    sal_uInt8 nParamIdx = rFuncData.GetParamCount();
+
     // increase parameter count
     rFuncData.IncParamCount();
     // move to next expected parameter class
     rFuncData.IncExpParamClassIdx();
 
-    // add special jump tokens
-    sal_uInt8 nParamCount = rFuncData.GetParamCount();
     switch( rFuncData.GetOpCode() )
     {
-        case ocIf:
-            rFuncData.AppendParamPos( nParamPos );
-            switch( nParamCount )
-            {
-                // add a tAttr-if token after condition parameter
-                case 1:     AppendJumpToken( rFuncData, EXC_TOK_ATTR_IF );      break;
-                // add an tAttr-goto token after true and false parameter
-                case 2:
-                case 3:     AppendJumpToken( rFuncData, EXC_TOK_ATTR_GOTO );    break;
-            }
-        break;
-
-        case ocChose:
-            rFuncData.AppendParamPos( nParamPos );
-            switch( nParamCount )
-            {
-                // add a tAttr-choose token after value-select parameter
-                case 1:     AppendJumpToken( rFuncData, EXC_TOK_ATTR_CHOOSE );  break;
-                // add a tAttr-goto token after each value parameter
-                default:    AppendJumpToken( rFuncData, EXC_TOK_ATTR_GOTO );
-            }
-        break;
-
         case ocArcCotHyp:               // simulate ACOTH(x) by ATANH(1/(x))
-            if( nParamCount == 1 )
+            if( nParamIdx == 0 )
             {
                 AppendParenToken();
                 AppendOpTokenId( EXC_TOKID_DIV, EXC_TOKCLASS_NONE );
             }
         break;
-
         default:;
     }
 }
 
 void XclExpFmlaCompImpl::AppendDefaultParam( XclExpFuncData& rFuncData )
 {
-    // cache start position of the parameter
-    sal_uInt16 nParamPos = GetSize();
+    // prepare parameters of some special functions
+    PrepareParam( rFuncData );
 
     switch( rFuncData.GetOpCode() )
     {
@@ -1591,62 +1584,62 @@ void XclExpFmlaCompImpl::AppendDefaultParam( XclExpFuncData& rFuncData )
         break;
         default:
         {
+            DBG_ASSERT( rFuncData.IsMacroFunc(), "XclExpFmlaCompImpl::AppendDefaultParam - unknown opcode" );
             if( rFuncData.IsMacroFunc() )
-            {
                 AppendMacroCallToken( rFuncData.GetExtFuncData(), EXC_TOKCLASS_REF );
-            }
             else
-            {
-                DBG_ERRORFILE( "XclExpFmlaCompImpl::AppendDefaultParam - unknown opcode" );
                 AppendMissingToken();   // to keep parameter count valid
-            }
         }
     }
 
     // update parameter count, add special parameter tokens
-    FinishParam( rFuncData, nParamPos );
+    FinishParam( rFuncData );
 }
 
 void XclExpFmlaCompImpl::AppendTrailingParam( XclExpFuncData& rFuncData )
 {
     sal_uInt8 nParamCount = rFuncData.GetParamCount();
-    // cache start position of the parameter
-    sal_uInt16 nParamPos = GetSize();
-
     switch( rFuncData.GetOpCode() )
     {
         case ocIf:
             if( nParamCount == 1 )
             {
                 // #112262# Excel needs at least two parameters in IF function
+                PrepareParam( rFuncData );
                 AppendBoolToken( true );
-                FinishParam( rFuncData, nParamPos );
+                FinishParam( rFuncData );
             }
         break;
+
         case ocRound:
         case ocRoundUp:
         case ocRoundDown:
             if( nParamCount == 1 )
             {
                 // ROUND, ROUNDUP, ROUNDDOWN functions are fixed to 2 parameters in Excel
+                PrepareParam( rFuncData );
                 AppendIntToken( 0 );
-                FinishParam( rFuncData, nParamPos );
+                FinishParam( rFuncData );
             }
         break;
+
         case ocIndex:
             if( nParamCount == 1 )
             {
                 // INDEX function needs at least 2 parameters in Excel
+                PrepareParam( rFuncData );
                 AppendMissingToken();
-                FinishParam( rFuncData, nParamPos );
+                FinishParam( rFuncData );
             }
         break;
+
         case ocExternal:
         case ocMacro:
             // external or macro call without parameters needs the external name reference
             if( nParamCount == 0 )
                 AppendDefaultParam( rFuncData );
         break;
+
         default:;
     }
 }
@@ -2255,9 +2248,14 @@ void XclExpFmlaCompImpl::Overwrite( sal_uInt16 nWriteToPos, sal_uInt16 nOffset )
     ShortToSVBT16( nOffset, &maTokVec[ nWriteToPos ] );
 }
 
-void XclExpFmlaCompImpl::WriteDistance( sal_uInt16 nWriteToPos, sal_uInt16 nStartPos )
+void XclExpFmlaCompImpl::UpdateAttrGoto( sal_uInt16 nAttrPos )
 {
-    Overwrite( nWriteToPos, GetSize() - nStartPos );
+    /*  tAttrGoto contains distance from end of tAttr token to position behind
+        the function token (for IF or CHOOSE function), which is currently at
+        the end of the token array. Additionally this distance is decreased by
+        one, for whatever reason. So we have to subtract 4 and 1 from the
+        distance between the tAttr token start and the end of the token array. */
+    Overwrite( nAttrPos + 2, static_cast< sal_uInt16 >( GetSize() - nAttrPos - 5 ) );
 }
 
 bool XclExpFmlaCompImpl::IsSpaceToken( sal_uInt16 nPos ) const
@@ -2273,7 +2271,7 @@ void XclExpFmlaCompImpl::RemoveTrailingParen()
     // remove trailing tParen token
     if( !maTokVec.empty() && (maTokVec.back() == EXC_TOKID_PAREN) )
         maTokVec.pop_back();
-    // remove remaining tAttr-space tokens
+    // remove remaining tAttrSpace tokens
     while( (maTokVec.size() >= 4) && IsSpaceToken( GetSize() - 4 ) )
         maTokVec.erase( maTokVec.end() - 4, maTokVec.end() );
 }
