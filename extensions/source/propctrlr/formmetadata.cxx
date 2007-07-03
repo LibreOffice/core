@@ -4,9 +4,9 @@
  *
  *  $RCSfile: formmetadata.cxx,v $
  *
- *  $Revision: 1.44 $
+ *  $Revision: 1.45 $
  *
- *  last change: $Author: kz $ $Date: 2007-06-20 10:41:38 $
+ *  last change: $Author: rt $ $Date: 2007-07-03 13:06:11 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -368,6 +368,14 @@ namespace pcr
         DEF_INFO_3( TAG,               TAG,                TAG,               FORM_VISIBLE, DIALOG_VISIBLE, COMPOSEABLE ),
         DEF_INFO_3( HELPTEXT,          HELPTEXT,           HELPTEXT,          FORM_VISIBLE, DIALOG_VISIBLE, COMPOSEABLE ),
         DEF_INFO_3( HELPURL,           HELPURL,            HELPURL,           FORM_VISIBLE, DIALOG_VISIBLE, COMPOSEABLE ),
+        DEF_INFO_3( SELECTION_TYPE,    SELECTION_TYPE,     SELECTION_TYPE,                  DIALOG_VISIBLE, ENUM, COMPOSEABLE ),
+        DEF_INFO_2( ROOT_DISPLAYED,    ROOT_DISPLAYED,     ROOT_DISPLAYED,                  DIALOG_VISIBLE, COMPOSEABLE ),
+        DEF_INFO_2( SHOWS_HANDLES,     SHOWS_HANDLES,      SHOWS_HANDLES,                   DIALOG_VISIBLE, COMPOSEABLE ),
+        DEF_INFO_2( SHOWS_ROOT_HANDLES, SHOWS_ROOT_HANDLES, SHOWS_ROOT_HANDLES,             DIALOG_VISIBLE, COMPOSEABLE ),
+        DEF_INFO_2( EDITABLE,          EDITABLE,           EDITABLE,                        DIALOG_VISIBLE, COMPOSEABLE ),
+        DEF_INFO_2( INVOKES_STOP_NOT_EDITING, INVOKES_STOP_NOT_EDITING, INVOKES_STOP_NOT_EDITING, DIALOG_VISIBLE, COMPOSEABLE ),
+        DEF_INFO_2( ROW_HEIGHT,        ROW_HEIGHT,         ROW_HEIGHT,                      DIALOG_VISIBLE, COMPOSEABLE ),
+        DEF_INFO_3( HELPURL,           HELPURL,            HELPURL,           FORM_VISIBLE, DIALOG_VISIBLE, COMPOSEABLE ),
         DEF_INFO_2( DECORATION,        DECORATION,         DECORATION,        DIALOG_VISIBLE, COMPOSEABLE )
         };
 
@@ -506,6 +514,9 @@ namespace pcr
                 break;
             case PROPERTY_ID_XSD_WHITESPACES:
                 nStringItemsResId = RID_RSC_ENUM_WHITESPACE_HANDLING;
+                break;
+            case PROPERTY_ID_SELECTION_TYPE:
+                nStringItemsResId = RID_RSC_ENUM_SELECTION_TYPE;
                 break;
             default:
                 OSL_ENSURE( sal_False, "OPropertyInfoService::getPropertyEnumRepresentations: unknown enum property!" );
