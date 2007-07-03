@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ContentProperties.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: kz $ $Date: 2007-06-19 16:11:47 $
+ *  last change: $Author: rt $ $Date: 2007-07-03 12:11:20 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -127,12 +127,24 @@ ContentProperties::ContentProperties( const DAVResource& rResource )
                 "ContentProperties ctor - Empty resource URI!" );
 
     // Title
-      NeonUri aURI( rResource.uri );
-    m_aEscapedTitle = aURI.GetPathBaseName();
+    try
+    {
+        NeonUri aURI( rResource.uri );
+        m_aEscapedTitle = aURI.GetPathBaseName();
 
-    (*m_xProps)[ rtl::OUString::createFromAscii( "Title" ) ]
-                = PropertyValue(
-                    uno::makeAny( aURI.GetPathBaseNameUnescaped() ), true );
+        (*m_xProps)[ rtl::OUString::createFromAscii( "Title" ) ]
+            = PropertyValue(
+                uno::makeAny( aURI.GetPathBaseNameUnescaped() ), true );
+    }
+    catch ( DAVException const & )
+    {
+        (*m_xProps)[ rtl::OUString::createFromAscii( "Title" ) ]
+            = PropertyValue(
+                uno::makeAny(
+                    rtl::OUString(
+                        RTL_CONSTASCII_USTRINGPARAM( "*** unknown ***" ) ) ),
+                true );
+    }
 
     std::vector< DAVPropertyValue >::const_iterator it
         = rResource.properties.begin();
