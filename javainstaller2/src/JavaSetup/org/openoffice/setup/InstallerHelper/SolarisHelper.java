@@ -1,7 +1,41 @@
+/*************************************************************************
+ *
+ *  OpenOffice.org - a multi-platform office productivity suite
+ *
+ *  $RCSfile: SolarisHelper.java,v $
+ *
+ *  $Revision: 1.2 $
+ *
+ *  last change: $Author: rt $ $Date: 2007-07-03 11:54:52 $
+ *
+ *  The Contents of this file are made available subject to
+ *  the terms of GNU Lesser General Public License Version 2.1.
+ *
+ *
+ *    GNU Lesser General Public License Version 2.1
+ *    =============================================
+ *    Copyright 2005 by Sun Microsystems, Inc.
+ *    901 San Antonio Road, Palo Alto, CA 94303, USA
+ *
+ *    This library is free software; you can redistribute it and/or
+ *    modify it under the terms of the GNU Lesser General Public
+ *    License version 2.1, as published by the Free Software Foundation.
+ *
+ *    This library is distributed in the hope that it will be useful,
+ *    but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ *    Lesser General Public License for more details.
+ *
+ *    You should have received a copy of the GNU Lesser General Public
+ *    License along with this library; if not, write to the Free Software
+ *    Foundation, Inc., 59 Temple Place, Suite 330, Boston,
+ *    MA  02111-1307  USA
+ *
+ ************************************************************************/
+
 package org.openoffice.setup.InstallerHelper;
 
 import org.openoffice.setup.InstallData;
-import org.openoffice.setup.InstallerHelper.SolarisHelper;
 import org.openoffice.setup.ResourceManager;
 import org.openoffice.setup.SetupData.PackageDescription;
 import org.openoffice.setup.Util.Controller;
@@ -206,6 +240,17 @@ public class SolarisHelper {
         }
 
         return comparison;
+    }
+
+    public void saveModulesLogFile(InstallData data) {
+        if ( data.logModuleStates() ) {
+            Vector logContent = LogManager.getModulesLogFile();
+            File baseDir = new File(data.getInstallRoot(), data.getInstallDir());
+            File uninstallDir = new File(baseDir, data.getUninstallDirName());
+            File modulesLogFile = new File(uninstallDir, "moduleSettingsLog.txt");
+            // System.err.println("Saving file: " + modulesLogFile.getPath());
+            SystemManager.saveCharFileVector(modulesLogFile.getPath(), logContent);
+        }
     }
 
     public void removeSolarisLockFile() {
