@@ -4,9 +4,9 @@
  *
  *  $RCSfile: formres.src,v $
  *
- *  $Revision: 1.77 $
+ *  $Revision: 1.78 $
  *
- *  last change: $Author: kz $ $Date: 2007-06-20 10:42:29 $
+ *  last change: $Author: rt $ $Date: 2007-07-03 13:06:54 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -778,6 +778,28 @@ Resource RID_RSC_ENUM_SUBMIT_TARGET
     String 3 { Text = "_self"; };
     String 4 { Text = "_top"; };
 };
+
+Resource RID_RSC_ENUM_SELECTION_TYPE
+{
+    String 1
+    {
+        Text [ en-US ] = "None" ;
+    };
+    String 2
+    {
+        Text [ en-US ] = "Single" ;
+    };
+    String 3
+    {
+        Text [ en-US ] = "Multi" ;
+    };
+    String 4
+    {
+        Text [ en-US ] = "Range" ;
+    };
+
+};
+
 String RID_STR_EVT_APPROVEPARAMETER
 {
     Text [ en-US ] = "Fill parameters" ;
@@ -1391,7 +1413,43 @@ String RID_STR_BINDING_UI_NAME
     Text [ en-US ] = "Binding" ;
 };
 
+String RID_STR_SELECTION_TYPE
+{
+    Text [ en-US ] = "Selection type" ;
+};
+
+String RID_STR_ROOT_DISPLAYED
+{
+    Text [ en-US ] = "Root displayed" ;
+};
+
+String RID_STR_SHOWS_HANDLES
+{
+    Text [ en-US ] = "Show handles" ;
+};
+
+String RID_STR_SHOWS_ROOT_HANDLES
+{
+    Text [ en-US ] = "Show root handles" ;
+};
+
+String RID_STR_EDITABLE
+{
+    Text [ en-US ] = "Editable" ;
+};
+
+String RID_STR_INVOKES_STOP_NOT_EDITING
+{
+    Text [ en-US ] = "Invokes stop node editing" ;
+};
+
+String RID_STR_ROW_HEIGHT
+{
+    Text [ en-US ] = "Row height" ;
+};
+
 String RID_STR_DECORATION
 {
     Text [ en-US ] = "With title bar" ;
 };
+
