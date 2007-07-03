@@ -4,9 +4,9 @@
  *
  *  $RCSfile: propbrw.cxx,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: kz $ $Date: 2007-05-10 10:44:54 $
+ *  last change: $Author: rt $ $Date: 2007-07-03 13:04:24 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -528,6 +528,10 @@ void PropBrw::implSetNewObject( const Reference< XPropertySet >& _rxObject )
         else if ( xServiceInfo->supportsService( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.awt.UnoControlFileControlModel" ) ) ) )
         {
             nResId = RID_STR_CLASS_FILECONTROL;
+        }
+        else if ( xServiceInfo->supportsService( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.awt.tree.TreeControlModel" ) ) ) )
+        {
+            nResId = RID_STR_CLASS_TREECONTROL;
         }
         else
         {
