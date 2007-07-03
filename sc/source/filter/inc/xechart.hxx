@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xechart.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: vg $ $Date: 2007-05-22 19:55:17 $
+ *  last change: $Author: rt $ $Date: 2007-07-03 13:25:30 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -741,13 +741,10 @@ private:
 class XclExpChChart3d : public XclExpRecord
 {
 public:
-    typedef ::com::sun::star::uno::Reference< ::com::sun::star::chart2::XChartType > XChartTypeRef;
-
-public:
     explicit            XclExpChChart3d();
 
     /** Converts 3d settings for the passed chart type. */
-    void                Convert( XChartTypeRef xChartType, const XclChTypeInfo& rTypeInfo );
+    void                Convert( const ScfPropertySet& rPropSet, const XclChTypeInfo& rTypeInfo );
     /** Sets flag that the data points are clustered on the X axis. */
     inline void         SetClustered() { ::set_flag( maData.mnFlags, EXC_CHCHART3D_CLUSTER ); }
 
@@ -832,6 +829,7 @@ typedef ScfRef< XclExpChDropBar > XclExpChDropBarRef;
 class XclExpChTypeGroup : public XclExpChGroupBase, protected XclExpChRoot
 {
 public:
+    typedef ::com::sun::star::uno::Reference< ::com::sun::star::chart2::XDiagram >                      XDiagramRef;
     typedef ::com::sun::star::uno::Reference< ::com::sun::star::chart2::XChartType >                    XChartTypeRef;
     typedef ::com::sun::star::uno::Reference< ::com::sun::star::chart2::XDataSeries >                   XDataSeriesRef;
     typedef ::com::sun::star::uno::Reference< ::com::sun::star::chart2::data::XLabeledDataSequence >    XLabeledDataSeqRef;
@@ -840,8 +838,8 @@ public:
     explicit            XclExpChTypeGroup( const XclExpChRoot& rRoot, sal_uInt16 nGroupIdx );
 
     /** Converts the passed chart type to Excel type settings. */
-    void                ConvertType( XChartTypeRef xChartType, sal_Int32 nApiAxesSetIdx,
-                            bool b3dChart, bool bSwappedAxesSet, bool bHasXLabels );
+    void                ConvertType( XDiagramRef xDiagram, XChartTypeRef xChartType,
+                            sal_Int32 nApiAxesSetIdx, bool b3dChart, bool bSwappedAxesSet, bool bHasXLabels );
     /** Converts and inserts all series from the passed chart type. */
     void                ConvertSeries( XChartTypeRef xChartType,
                             sal_Int32 nGroupAxesSetIdx, bool bPercent, bool bConnectorLines );

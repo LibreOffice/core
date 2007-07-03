@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xechart.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: vg $ $Date: 2007-05-22 19:46:27 $
+ *  last change: $Author: rt $ $Date: 2007-07-03 13:25:00 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1757,11 +1757,12 @@ XclExpChChart3d::XclExpChChart3d() :
 {
 }
 
-void XclExpChChart3d::Convert( Reference< XChartType > /*xChartType*/, const XclChTypeInfo& rTypeInfo )
+void XclExpChChart3d::Convert( const ScfPropertySet& rPropSet, const XclChTypeInfo& rTypeInfo )
 {
     if( rTypeInfo.mb3dWalls )
     {
         maData.mnRotation = 20;
+        ::set_flag( maData.mnFlags, EXC_CHCHART3D_REAL3D, !rPropSet.GetBoolProperty( EXC_CHPROP_RIGHTANGLEDAXES ) );
         ::set_flag( maData.mnFlags, EXC_CHCHART3D_AUTOHEIGHT );
         ::set_flag( maData.mnFlags, EXC_CHCHART3D_BIT4 );
     }
@@ -1851,7 +1852,8 @@ XclExpChTypeGroup::XclExpChTypeGroup( const XclExpChRoot& rRoot, sal_uInt16 nGro
     maData.mnGroupIdx = nGroupIdx;
 }
 
-void XclExpChTypeGroup::ConvertType( Reference< XChartType > xChartType,
+void XclExpChTypeGroup::ConvertType(
+        Reference< XDiagram > xDiagram, Reference< XChartType > xChartType,
         sal_Int32 nApiAxesSetIdx, bool b3dChart, bool bSwappedAxesSet, bool bHasXLabels )
 {
     // chart type settings
@@ -1870,7 +1872,8 @@ void XclExpChTypeGroup::ConvertType( Reference< XChartType > xChartType,
     if( maTypeInfo.mb3dChart )  // only true, if Excel chart supports 3d mode
     {
         mxChart3d.reset( new XclExpChChart3d );
-        mxChart3d->Convert( xChartType, maTypeInfo );
+        ScfPropertySet aDiaProp( xDiagram );
+        mxChart3d->Convert( aDiaProp, maTypeInfo );
     }
 }
 
@@ -2406,7 +2409,7 @@ sal_uInt16 XclExpChAxesSet::Convert( Reference< XDiagram > xDiagram, sal_uInt16 
                 for( const Reference< XChartType >* pIt = pBeg; pIt != pEnd; ++pIt )
                 {
                     XclExpChTypeGroupRef xTypeGroup( new XclExpChTypeGroup( GetChRoot(), nGroupIdx ) );
-                    xTypeGroup->ConvertType( *pIt, nApiAxesSetIdx, b3dChart, bSwappedAxesSet, bHasXLabels );
+                    xTypeGroup->ConvertType( xDiagram, *pIt, nApiAxesSetIdx, b3dChart, bSwappedAxesSet, bHasXLabels );
                     /*  If new chart type group cannot be inserted into a combination
                         chart with existing type groups, insert all series into last
                         contained chart type group instead of creating a new group. */
