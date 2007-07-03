@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ExternalUriReferenceTranslator.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 17:38:09 $
+ *  last change: $Author: rt $ $Date: 2007-07-03 14:18:52 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -192,12 +192,16 @@ rtl::OUString Translator::translateToExternal(
             ++j;
         }
         if (j != i) {
+            // Use rtl_UriDecodeToIuri -> rtl_UriEncodeStrictKeepEscapes instead
+            // of rtl_UriDecodeStrict -> rtl_UriEncodeStrict, so that spurious
+            // non--UTF-8 octets like "%FE" are copied verbatim:
             rtl::OUString seg(
                 rtl::Uri::encode(
                     rtl::Uri::decode(
                         internalUriReference.copy(i, j - i),
-                        rtl_UriDecodeStrict, RTL_TEXTENCODING_UTF8),
-                    rtl_UriCharClassPchar, rtl_UriEncodeStrict, encoding));
+                        rtl_UriDecodeToIuri, RTL_TEXTENCODING_UTF8),
+                    rtl_UriCharClassPchar, rtl_UriEncodeStrictKeepEscapes,
+                    encoding));
             if (seg.getLength() == 0) {
                 return rtl::OUString();
             }
