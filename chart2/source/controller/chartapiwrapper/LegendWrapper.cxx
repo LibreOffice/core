@@ -4,9 +4,9 @@
  *
  *  $RCSfile: LegendWrapper.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: vg $ $Date: 2007-05-22 17:18:34 $
+ *  last change: $Author: rt $ $Date: 2007-07-03 13:36:32 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -148,7 +148,7 @@ void WrappedLegendAlignmentProperty::setPropertyValue( const Any& rOuterValue, c
         sal_Bool bNewShowLegend = sal_True;
         sal_Bool bOldShowLegend = sal_True;
         {
-            ::com::sun::star::chart::ChartLegendPosition eOuterPos;
+            ::com::sun::star::chart::ChartLegendPosition eOuterPos(::com::sun::star::chart::ChartLegendPosition_NONE);
             if( (rOuterValue >>= eOuterPos)  && eOuterPos == ::com::sun::star::chart::ChartLegendPosition_NONE )
                 bNewShowLegend = sal_False;
             xInnerPropertySet->getPropertyValue( C2U( "Show" ) ) >>= bOldShowLegend;
@@ -165,14 +165,14 @@ void WrappedLegendAlignmentProperty::setPropertyValue( const Any& rOuterValue, c
         xInnerPropertySet->setPropertyValue( m_aInnerName, aInnerValue );
 
         //correct LegendExpansion
-        chart2::LegendPosition eNewInnerPos;
+        chart2::LegendPosition eNewInnerPos(chart2::LegendPosition_LINE_END);
         if( aInnerValue >>= eNewInnerPos )
         {
             chart2::LegendExpansion eNewExpansion = chart2::LegendExpansion_WIDE;
             if( eNewInnerPos == chart2::LegendPosition_LINE_END || eNewInnerPos == chart2::LegendPosition_LINE_START )
                 eNewExpansion = chart2::LegendExpansion_HIGH;
 
-            chart2::LegendExpansion eOldExpansion;
+            chart2::LegendExpansion eOldExpansion( chart2::LegendExpansion_WIDE );
             xInnerPropertySet->getPropertyValue( C2U( "Expansion" ) ) >>= eOldExpansion;
 
             if(eOldExpansion != eNewExpansion)
