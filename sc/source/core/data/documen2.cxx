@@ -4,9 +4,9 @@
  *
  *  $RCSfile: documen2.cxx,v $
  *
- *  $Revision: 1.64 $
+ *  $Revision: 1.65 $
  *
- *  last change: $Author: vg $ $Date: 2007-05-22 19:41:42 $
+ *  last change: $Author: rt $ $Date: 2007-07-03 15:47:26 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1729,9 +1729,12 @@ ULONG ScDocument::TransferTab( ScDocument* pSrcDoc, SCTAB nSrcPos,
                 pFormatExchangeList = pExchangeList;
         }
         nDestPos = Min(nDestPos, (SCTAB)(GetTableCount() - 1));
-        pSrcDoc->pTab[nSrcPos]->CopyToTable(0, 0, MAXCOL, MAXROW,
-            ( bResultsOnly ? IDF_ALL & ~IDF_FORMULA : IDF_ALL),
-            FALSE, pTab[nDestPos] );
+        {   // scope for bulk broadcast
+            ScBulkBroadcast aBulkBroadcast( pBASM);
+            pSrcDoc->pTab[nSrcPos]->CopyToTable(0, 0, MAXCOL, MAXROW,
+                    ( bResultsOnly ? IDF_ALL & ~IDF_FORMULA : IDF_ALL),
+                    FALSE, pTab[nDestPos] );
+        }
         pFormatExchangeList = NULL;
         pTab[nDestPos]->SetTabNo(nDestPos);
 
@@ -1835,7 +1838,8 @@ ULONG ScDocument::TransferTab( ScDocument* pSrcDoc, SCTAB nSrcPos,
         SetNoListening( FALSE );
         if ( !bResultsOnly )
             pTab[nDestPos]->StartAllListeners();
-        SetDirty();     // ist das wirklich dokumentweit noetig?!?
+        SetDirty( ScRange( 0, 0, nDestPos, MAXCOL, MAXROW, nDestPos));
+
         if ( bResultsOnly )
             pSrcDoc->SetAutoCalc( bOldAutoCalcSrc );
         SetAutoCalc( bOldAutoCalc );
