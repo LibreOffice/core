@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xlformula.cxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: hr $ $Date: 2007-06-27 13:45:55 $
+ *  last change: $Author: rt $ $Date: 2007-07-03 15:51:42 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -240,12 +240,12 @@ static const XclFunctionInfo saFuncTable_3[] =
     { ocInfo,               244,    1,  1,  V, { V }, EXC_FUNCFLAG_VOLATILE, 0 }
 };
 
-/** Functions new in BIFF4. Unsupported functions: ASC, DBCS. */
+/** Functions new in BIFF4. */
 static const XclFunctionInfo saFuncTable_4[] =
 {
     { ocFixed,              14,     1,  3,  V, { V }, 0, 0 },     // BIFF2-3: 1-2, BIFF4: 1-3
-    { ocNoName,             214,    1,  1,  V, { V }, EXC_FUNCFLAG_IMPORTONLY, 0 },    // ASC
-    { ocNoName,             215,    1,  1,  V, { V }, EXC_FUNCFLAG_IMPORTONLY, 0 },    // DBCS
+    { ocAsc,                214,    1,  1,  V, { V }, 0, 0 },
+    { ocJis,                215,    1,  1,  V, { V }, 0, 0 },
     { ocRank,               216,    2,  3,  V, { V, R, V }, 0, 0 },
     { ocGDA2,               247,    4,  5,  V, { V }, 0, 0 },
     { ocFrequency,          252,    2,  2,  A, { R }, 0, 0 },
@@ -644,7 +644,7 @@ bool XclTokenArrayHelper::GetStringList( String& rStringList, const ScTokenArray
     return bRet;
 }
 
-void XclTokenArrayHelper::ConvertStringToList( ScTokenArray& rScTokArr, sal_Unicode cStringSep )
+void XclTokenArrayHelper::ConvertStringToList( ScTokenArray& rScTokArr, sal_Unicode cStringSep, bool bTrimLeadingSpaces )
 {
     String aString;
     if( GetString( aString, rScTokArr ) )
@@ -655,6 +655,8 @@ void XclTokenArrayHelper::ConvertStringToList( ScTokenArray& rScTokArr, sal_Unic
         for( xub_StrLen nToken = 0; nToken < nTokenCnt; ++nToken )
         {
             String aToken( aString.GetToken( 0, cStringSep, nStringIx ) );
+            if( bTrimLeadingSpaces )
+                aToken.EraseLeadingChars( ' ' );
             if( nToken > 0 )
                 rScTokArr.AddOpCode( ocSep );
             rScTokArr.AddString( aToken );
