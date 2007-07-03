@@ -4,9 +4,9 @@
  *
  *  $RCSfile: resourceprovider.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: rt $ $Date: 2007-04-26 08:26:48 $
+ *  last change: $Author: rt $ $Date: 2007-07-03 13:58:02 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -60,8 +60,8 @@
 #include <vcl/svapp.hxx>
 #endif
 
-#ifndef _TOOLS_RESMGR_HXX
-#include <tools/resmgr.hxx>
+#ifndef _TOOLS_SIMPLERESMGR_HXX
+#include <tools/simplerm.hxx>
 #endif
 
 #ifndef _COM_SUN_STAR_UI_DIALOGS_COMMONFILEPICKERELEMENTIDS_HPP_
@@ -153,7 +153,10 @@ public:
 
     CResourceProvider_Impl( )
     {
-        m_ResMgr = CREATEVERSIONRESMGR( RES_NAME );
+        const ::vos::OGuard aGuard( Application::GetSolarMutex() );
+
+        com::sun::star::lang::Locale aLoc( Application::GetSettings().GetUILocale() );
+        m_ResMgr = new SimpleResMgr( CREATEVERSIONRESMGR_NAME( RES_NAME ), aLoc );
     }
 
     //-------------------------------------
@@ -171,10 +174,7 @@ public:
 
     OUString getResString( sal_Int16 aId )
     {
-        String   aResString;
         OUString aResOUString;
-
-        const ::vos::OGuard aGuard( Application::GetSolarMutex() );
 
         try
         {
@@ -184,10 +184,7 @@ public:
             sal_Int16 aResId = CtrlIdToResId( aId );
 
             if ( aResId > -1 )
-            {
-                aResString = String( ResId( aResId, *m_ResMgr ) );
-                aResOUString = OUString( aResString );
-            }
+                aResOUString = m_ResMgr->ReadString( aResId );
         }
         catch(...)
         {
@@ -197,7 +194,7 @@ public:
     }
 
 public:
-    ResMgr* m_ResMgr;
+    SimpleResMgr* m_ResMgr;
 };
 
 //------------------------------------------------------------
