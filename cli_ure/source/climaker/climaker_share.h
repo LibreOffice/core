@@ -4,9 +4,9 @@
  *
  *  $RCSfile: climaker_share.h,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: rt $ $Date: 2006-03-09 10:52:23 $
+ *  last change: $Author: hr $ $Date: 2007-07-03 09:36:15 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -180,11 +180,27 @@ __gc class TypeEmitter : public ::System::IDisposable
     __gc class struct_entry
     {
     public:
+         css::reflection::XCompoundTypeDescription * m_xType;
+        ::System::Reflection::Emit::TypeBuilder * m_type_builder;
+        ::System::Type * m_base_type;
+
         ::System::String * m_member_names __gc [];
         ::System::Type * m_param_types __gc [];
         ::System::Reflection::ConstructorInfo * m_default_ctor;
         ::System::Reflection::ConstructorInfo * m_ctor;
     };
+    ::System::Collections::Hashtable * m_incomplete_structs;
+    ::System::Type * complete_struct_type( struct_entry * entry );
+
+    /*  returns the type for the name. If it is a struct then it may
+        complete the struct if not already done. This also refers to its
+        base types.
+
+        @param sName
+            the full name of the type.
+        @return the type object for sName. Not necessarily a struct.
+    */
+    ::System::Type * get_complete_struct( ::System::String * sName);
 
     __gc class service_entry
     {
@@ -220,6 +236,10 @@ __gc class TypeEmitter : public ::System::IDisposable
     ::System::Type * get_type(
         css::uno::Reference<
         css::reflection::XEnumTypeDescription > const & xType );
+    /* returns the type for a struct or exception. In case of a polymorphic struct it may
+        return a ::uno::PolymorphicType (cli_basetypes.dll) only if the struct is already
+        complete.
+    */
     ::System::Type * get_type(
         css::uno::Reference<
         css::reflection::XCompoundTypeDescription > const & xType );

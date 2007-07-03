@@ -4,9 +4,9 @@
  *
  *  $RCSfile: climaker_emit.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: vg $ $Date: 2006-09-25 13:04:37 $
+ *  last change: $Author: hr $ $Date: 2007-07-03 09:36:22 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -345,13 +345,15 @@ Assembly * TypeEmitter::type_resolve(
     ::System::String * cts_name, bool throw_exc )
 {
     ::System::Type * ret_type = m_module_builder->GetType( cts_name, false );
-    if (ret_type == 0)
-    {
-        iface_entry * entry = dynamic_cast< iface_entry * >(
-            m_incomplete_ifaces->get_Item( cts_name ) );
-        if (0 != entry)
-            ret_type = entry->m_type_builder;
-    }
+    //We get the type from the ModuleBuilder even if the type is not complete
+    //but have been defined.
+    //if (ret_type == 0)
+    //{
+    //    iface_entry * entry = dynamic_cast< iface_entry * >(
+    //        m_incomplete_ifaces->get_Item( cts_name ) );
+    //    if (0 != entry)
+    //        ret_type = entry->m_type_builder;
+    //}
         //try the cli_basetypes assembly
     if (ret_type == 0)
     {
@@ -690,357 +692,39 @@ Assembly * TypeEmitter::type_resolve(
                                   TypeAttributes::AnsiClass),
                 base_type );
 
-        //Polymorphic struct, define uno.TypeParametersAttribute
-        //A polymorphic struct cannot have a basetype.
-        //When we create the template of the struct then we have no exact types
-        //and the name does not contain a parameter list
-        Sequence< OUString > seq_type_parameters;
-        Reference< reflection::XStructTypeDescription> xStructTypeDesc(
-            xType, UNO_QUERY);
-        if (xStructTypeDesc.is())
-        {
-            seq_type_parameters = xStructTypeDesc->getTypeParameters();
-            int numTypes = 0;
-            if ((numTypes =seq_type_parameters.getLength()) > 0)
-            {
-                ::System::Object * aArg[] = new ::System::Object*[numTypes];
-                for (int i = 0; i < numTypes; i++)
-                    aArg[i] = ustring_to_String(seq_type_parameters.getConstArray()[i]);
-                ::System::Object * args[] = {aArg};
 
-                ::System::Type * arTypesCtor[] =
-                    {::System::Type::GetType(S"System.String[]")};
-                Emit::CustomAttributeBuilder * attrBuilder =
-                    new Emit::CustomAttributeBuilder(
-                        __typeof(::uno::TypeParametersAttribute)->GetConstructor(arTypesCtor),
-                        args);
-                type_builder->SetCustomAttribute(attrBuilder);
-            }
-        }
-
-        // optional: lookup base type whether generated entry of this session
-        struct_entry * base_type_entry = 0;
-        if (0 != base_type)
-        {
-            base_type_entry =
-                dynamic_cast< struct_entry * >(
-                    m_generated_structs->get_Item(
-                        base_type->get_FullName() ) );
-        }
-
-        // members
-        Sequence< Reference< reflection::XTypeDescription > > seq_members(
-            xType->getMemberTypes() );
-        Sequence< OUString > seq_member_names( xType->getMemberNames() );
-        sal_Int32 members_length = seq_members.getLength();
-        OSL_ASSERT( seq_member_names.getLength() == members_length );
-        //check if we have a XTypeDescription for every member. If not then the user may
-        //have forgotten to specify additional rdbs with the --extra option.
-        Reference< reflection::XTypeDescription > const * pseq_members =
-                seq_members.getConstArray();
-        OUString const * pseq_member_names =
-            seq_member_names.getConstArray();
-        for (int i = 0; i < members_length; i++)
-        {
-            OUString sType = xType->getName();
-            OUString sMemberName = pseq_member_names[i];
-            if ( ! pseq_members[i].is())
-                throw RuntimeException(OUSTR("Missing type description . Check if you need to " \
-                "specify additional RDBs with the --extra option. Type missing for: ") +  sType +
-                OUSTR("::") + sMemberName,0);
-        }
-
-        sal_Int32 all_members_length = 0;
-        sal_Int32 member_pos;
-        sal_Int32 type_param_pos = 0;
-
-        // collect base types; wrong order
-        ::System::Collections::ArrayList * base_types_list =
-              new ::System::Collections::ArrayList( 3 /* initial capacity */ );
-        for ( ::System::Type * base_type_pos = base_type;
-              ! base_type_pos->Equals( __typeof (::System::Object) );
-              base_type_pos = base_type_pos->get_BaseType() )
-        {
-            base_types_list->Add( base_type_pos );
-            if (base_type_pos->Equals( __typeof (::System::Exception) ))
-            {
-                // special Message member
-                all_members_length += 1;
-                break; // don't include System.Exception base classes
-            }
-            else
-            {
-                all_members_length +=
-                    base_type_pos->GetFields(
-                        (BindingFlags) (BindingFlags::Instance |
-                                        BindingFlags::Public |
-                                        BindingFlags::DeclaredOnly) )
-                      ->get_Length();
-            }
-        }
-
-        // create all_members arrays; right order
-        ::System::String * all_member_names[] =
-              new ::System::String * [all_members_length + members_length ];
-        ::System::Type * all_param_types[] =
-              new ::System::Type * [all_members_length + members_length ];
-        member_pos = 0;
-        for ( sal_Int32 pos = base_types_list->get_Count(); pos--; )
-        {
-            ::System::Type * base_type = __try_cast< ::System::Type * >(
-                base_types_list->get_Item( pos ) );
-            if (base_type->Equals( __typeof (::System::Exception) ))
-            {
-                all_member_names[ member_pos ] = S"Message";
-                all_param_types[ member_pos ] = __typeof (::System::String);
-                ++member_pos;
-            }
-            else
-            {
-                ::System::String * base_type_name = base_type->get_FullName();
-                struct_entry * entry =
-                    dynamic_cast< struct_entry * >(
-                        m_generated_structs->get_Item( base_type_name ) );
-                if (0 == entry)
-                {
-                    // complete type
-                    FieldInfo * fields [] =
-                        base_type->GetFields(
-                            (BindingFlags) (BindingFlags::Instance |
-                                            BindingFlags::Public |
-                                            BindingFlags::DeclaredOnly) );
-                    sal_Int32 len = fields->get_Length();
-                    for ( sal_Int32 pos = 0; pos < len; ++pos )
-                    {
-                        FieldInfo * field = fields[ pos ];
-                        all_member_names[ member_pos ] = field->get_Name();
-                        all_param_types[ member_pos ] = field->get_FieldType();
-                        ++member_pos;
-                    }
-                }
-                else // generated during this session:
-                     // members may be incomplete ifaces
-                {
-                    sal_Int32 len = entry->m_member_names->get_Length();
-                    for ( sal_Int32 pos = 0; pos < len; ++pos )
-                    {
-                        all_member_names[ member_pos ] =
-                            entry->m_member_names[ pos ];
-                        all_param_types[ member_pos ] =
-                            entry->m_param_types[ pos ];
-                        ++member_pos;
-                    }
-                }
-            }
-        }
-        OSL_ASSERT( all_members_length == member_pos );
-
-        // build up entry
+         // insert to be completed
         struct_entry * entry = new struct_entry();
-        entry->m_member_names = new ::System::String * [ members_length ];
-        entry->m_param_types = new ::System::Type * [ members_length ];
+        xType->acquire();
+        entry->m_xType = xType.get();
+        entry->m_type_builder = type_builder;
+        entry->m_base_type = base_type;
+        m_incomplete_structs->Add( cts_name, entry );
 
-        // add members
-        Emit::FieldBuilder * members[] = new Emit::FieldBuilder * [ members_length ];
-        //Reference< reflection::XTypeDescription > const * pseq_members =
-        //    seq_members.getConstArray();
-        //OUString const * pseq_member_names =
-        //    seq_member_names.getConstArray();
-
-        int curParamIndex = 0; //count the fields which have parameterized types
-        for ( member_pos = 0; member_pos < members_length; ++member_pos )
-        {
-            ::System::String * field_name =
-                  ustring_to_String( pseq_member_names[ member_pos ] );
-            ::System::Type * field_type;
-            //Special handling of struct parameter types
-            bool bParameterizedType = false;
-            if (pseq_members[ member_pos ]->getTypeClass() == TypeClass_UNKNOWN)
-            {
-                bParameterizedType = true;
-                if (type_param_pos < seq_type_parameters.getLength())
-                {
-                    field_type = __typeof(::System::Object);
-                    type_param_pos++;
-                }
-                else
-                {
-                    throw RuntimeException(
-                        OUSTR("unexpected member type in ") + xType->getName(),
-                        Reference< XInterface >() );
-                }
-            }
-            else
-            {
-                field_type =
-                  get_type( pseq_members[ member_pos ] );
-            }
-            members[ member_pos ] =
-                type_builder->DefineField(
-                    field_name, field_type, FieldAttributes::Public );
-
-            //parameterized type (polymorphic struct) ?
-            if (bParameterizedType && xStructTypeDesc.is())
-            {
-                //get the name
-                OSL_ASSERT(seq_type_parameters.getLength() > curParamIndex);
-                ::System::String* sTypeName = ustring_to_String(
-                    seq_type_parameters.getConstArray()[curParamIndex++]);
-                ::System::Object * args[] = {sTypeName};
-                //set ParameterizedTypeAttribute
-                ::System::Type * arCtorTypes[] = {__typeof(::System::String)};
-
-                Emit::CustomAttributeBuilder * attrBuilder =
-                    new Emit::CustomAttributeBuilder(
-                        __typeof(::uno::ParameterizedTypeAttribute)
-                        ->GetConstructor(arCtorTypes),
-                        args);
-
-                members[member_pos]->SetCustomAttribute(attrBuilder);
-            }
-            // add to all_members
-            all_member_names[ all_members_length + member_pos ] = field_name;
-            all_param_types[ all_members_length + member_pos ] = field_type;
-            // add to entry
-            entry->m_member_names[ member_pos ] = field_name;
-            entry->m_param_types[ member_pos ] = field_type;
-        }
-        all_members_length += members_length;
-
-        // default .ctor
-        Emit::ConstructorBuilder * ctor_builder =
-            type_builder->DefineConstructor(
-                c_ctor_method_attr, CallingConventions::Standard,
-                new ::System::Type * [ 0 ] );
-        Emit::ILGenerator * code = ctor_builder->GetILGenerator();
-        code->Emit( Emit::OpCodes::Ldarg_0 );
-        code->Emit(
-            Emit::OpCodes::Call,
-            0 == base_type_entry
-            ? base_type->GetConstructor( new ::System::Type * [ 0 ] )
-            : base_type_entry->m_default_ctor );
-        // default initialize members
-        for ( member_pos = 0; member_pos < members_length; ++member_pos )
-        {
-            FieldInfo * field = members[ member_pos ];
-            ::System::Type * field_type = field->get_FieldType();
-            // default initialize:
-            // string, type, enum, sequence, struct, exception, any
-            if (field_type->Equals( __typeof (::System::String) ))
-            {
-                code->Emit( Emit::OpCodes::Ldarg_0 );
-                code->Emit( Emit::OpCodes::Ldstr, S"" );
-                code->Emit( Emit::OpCodes::Stfld, field );
-            }
-            else if (field_type->Equals( __typeof (::System::Type) ))
-            {
-                code->Emit( Emit::OpCodes::Ldarg_0 );
-                code->Emit(
-                    Emit::OpCodes::Ldtoken, __typeof (::System::Void) );
-                code->Emit(
-                    Emit::OpCodes::Call, m_method_info_Type_GetTypeFromHandle );
-                code->Emit( Emit::OpCodes::Stfld, field );
-            }
-            else if (field_type->get_IsArray())
-            {
-                code->Emit( Emit::OpCodes::Ldarg_0 );
-                code->Emit( Emit::OpCodes::Ldc_I4_0 );
-                code->Emit(
-                    Emit::OpCodes::Newarr, field_type->GetElementType() );
-                code->Emit( Emit::OpCodes::Stfld, field );
-            }
-            else if (field_type->get_IsValueType())
-            {
-                if (field_type->get_FullName()->Equals( S"uno.Any" ))
-                {
-                    code->Emit( Emit::OpCodes::Ldarg_0 );
-                    code->Emit( Emit::OpCodes::Ldsfld, __typeof(::uno::Any)->GetField(S"VOID"));
-                    code->Emit( Emit::OpCodes::Stfld, field );
-                }
-            }
-            else if (field_type->get_IsClass())
-            {
-                /* may be XInterface */
-                if (! field_type->Equals( __typeof (::System::Object) ))
-                {
-                    // struct, exception
-                    code->Emit( Emit::OpCodes::Ldarg_0 );
-                    code->Emit(
-                        Emit::OpCodes::Newobj,
-                        field_type->GetConstructor(
-                            new ::System::Type * [ 0 ] ) );
-                    code->Emit( Emit::OpCodes::Stfld, field );
-                }
-            }
-        }
-        code->Emit( Emit::OpCodes::Ret );
-        entry->m_default_ctor = ctor_builder;
-
-        // parameterized .ctor including all base members
-        ctor_builder = type_builder->DefineConstructor(
-            c_ctor_method_attr, CallingConventions::Standard, all_param_types );
-        for ( member_pos = 0; member_pos < all_members_length; ++member_pos )
-        {
-            ctor_builder->DefineParameter(
-                member_pos +1 /* starts with 1 */, ParameterAttributes::In,
-                all_member_names[ member_pos ] );
-        }
-        code = ctor_builder->GetILGenerator();
-        // call base .ctor
-        code->Emit( Emit::OpCodes::Ldarg_0 ); // push this
-        sal_Int32 base_members_length = all_members_length - members_length;
-        ::System::Type * param_types [] =
-              new ::System::Type * [ base_members_length ];
-        for ( member_pos = 0; member_pos < base_members_length; ++member_pos )
-        {
-            emit_ldarg( code, member_pos +1 );
-            param_types[ member_pos ] = all_param_types[ member_pos ];
-        }
-        code->Emit(
-            Emit::OpCodes::Call,
-            0 == base_type_entry
-            ? base_type->GetConstructor( param_types )
-            : base_type_entry->m_ctor );
-        // initialize members
-        for ( member_pos = 0; member_pos < members_length; ++member_pos )
-        {
-            code->Emit( Emit::OpCodes::Ldarg_0 ); // push this
-            emit_ldarg( code, member_pos + base_members_length +1 );
-            code->Emit( Emit::OpCodes::Stfld, members[ member_pos ] );
-        }
-        code->Emit( Emit::OpCodes::Ret );
-        entry->m_ctor = ctor_builder;
-
-        if (g_verbose)
-        {
-            ::System::Console::WriteLine(
-                "> emitting {0} type {1}",
-                TypeClass_STRUCT == xType->getTypeClass()
-                ? S"struct"
-                : S"exception",
-                cts_name );
-        }
-        // new entry
-        m_generated_structs->Add( cts_name, entry );
-        ret_type = type_builder->CreateType();
+        // type is incomplete
+        ret_type = type_builder;
     }
 
     //In case of an instantiated polymorphic struct we want to return a
-    //uno.PolymorphicType (inherits Type) rather then Type.
-    Reference< reflection::XStructTypeDescription> xStructTypeDesc(
-        xType, UNO_QUERY);
-    if (xStructTypeDesc.is())
+    //uno.PolymorphicType (inherits Type) rather then Type. This is neaded for constructing
+    //the service code. We can only do that if the struct is completed.
+    if (m_generated_structs->get_Item(cts_name))
     {
-        Sequence< Reference< reflection::XTypeDescription > > seqTypeArgs = xStructTypeDesc->getTypeArguments();
-        sal_Int32 numTypes = seqTypeArgs.getLength();
-        if (numTypes > 0)
+        Reference< reflection::XStructTypeDescription> xStructTypeDesc(
+            xType, UNO_QUERY);
+
+        if (xStructTypeDesc.is())
         {
-            //it is an instantiated polymorphic struct
-            ::System::String * sCliName = mapUnoTypeName(ustring_to_String(xType->getName()));
-            ret_type = ::uno::PolymorphicType::GetType(ret_type, sCliName);
+            Sequence< Reference< reflection::XTypeDescription > > seqTypeArgs = xStructTypeDesc->getTypeArguments();
+            sal_Int32 numTypes = seqTypeArgs.getLength();
+            if (numTypes > 0)
+            {
+                //it is an instantiated polymorphic struct
+                ::System::String * sCliName = mapUnoTypeName(ustring_to_String(xType->getName()));
+                ret_type = ::uno::PolymorphicType::GetType(ret_type, sCliName);
+            }
         }
     }
-
     return ret_type;
 }
 
@@ -1228,12 +912,12 @@ Assembly * TypeEmitter::type_resolve(
              MethodAttributes::Abstract |
              MethodAttributes::Virtual |
              MethodAttributes::NewSlot |
-             MethodAttributes::HideBySig |
-#if defined(_MSC_VER) && (_MSC_VER < 1400)
-             MethodAttributes::Instance);
-#else
-         Instance);
-#endif
+             MethodAttributes::HideBySig);
+//#if defined(_MSC_VER) && (_MSC_VER < 1400)
+//             MethodAttributes::Instance);
+//#else
+//       Instance);
+//#endif
 
         if (TypeClass_INTERFACE_METHOD == xMember->getTypeClass())
         {
@@ -1430,6 +1114,371 @@ Assembly * TypeEmitter::type_resolve(
     return type_builder->CreateType();
 }
 
+::System::Type * TypeEmitter::complete_struct_type( struct_entry * entry )
+{
+     OSL_ASSERT(entry);
+    ::System::String * cts_name = entry->m_type_builder->get_FullName();
+
+    //Polymorphic struct, define uno.TypeParametersAttribute
+    //A polymorphic struct cannot have a basetype.
+    //When we create the template of the struct then we have no exact types
+    //and the name does not contain a parameter list
+    Sequence< OUString > seq_type_parameters;
+    Reference< reflection::XStructTypeDescription> xStructTypeDesc(
+        entry->m_xType, UNO_QUERY);
+    if (xStructTypeDesc.is())
+    {
+        seq_type_parameters = xStructTypeDesc->getTypeParameters();
+        int numTypes = 0;
+        if ((numTypes = seq_type_parameters.getLength()) > 0)
+        {
+            ::System::Object * aArg[] = new ::System::Object*[numTypes];
+            for (int i = 0; i < numTypes; i++)
+                aArg[i] = ustring_to_String(seq_type_parameters.getConstArray()[i]);
+            ::System::Object * args[] = {aArg};
+
+            ::System::Type * arTypesCtor[] =
+            {::System::Type::GetType(S"System.String[]")};
+            Emit::CustomAttributeBuilder * attrBuilder =
+                new Emit::CustomAttributeBuilder(
+                __typeof(::uno::TypeParametersAttribute)->GetConstructor(arTypesCtor),
+                args);
+            entry->m_type_builder->SetCustomAttribute(attrBuilder);
+        }
+    }
+
+    // optional: lookup base type whether generated entry of this session
+    struct_entry * base_type_entry = 0;
+    if (0 != entry->m_base_type)
+    {
+        //ToDo maybe get from incomplete structs
+        base_type_entry =
+            dynamic_cast< struct_entry * >(
+                m_generated_structs->get_Item(
+                    entry->m_base_type->get_FullName() ) );
+    }
+
+        // members
+    Sequence< Reference< reflection::XTypeDescription > > seq_members(
+        entry->m_xType->getMemberTypes() );
+    Sequence< OUString > seq_member_names( entry->m_xType->getMemberNames() );
+    sal_Int32 members_length = seq_members.getLength();
+    OSL_ASSERT( seq_member_names.getLength() == members_length );
+    //check if we have a XTypeDescription for every member. If not then the user may
+    //have forgotten to specify additional rdbs with the --extra option.
+    Reference< reflection::XTypeDescription > const * pseq_members =
+            seq_members.getConstArray();
+    OUString const * pseq_member_names =
+        seq_member_names.getConstArray();
+    for (int i = 0; i < members_length; i++)
+    {
+        const OUString sType(entry->m_xType->getName());
+        const OUString sMemberName(pseq_member_names[i]);
+        if ( ! pseq_members[i].is())
+            throw RuntimeException(OUSTR("Missing type description . Check if you need to " \
+            "specify additional RDBs with the --extra option. Type missing for: ") +  sType +
+            OUSTR("::") + sMemberName,0);
+    }
+
+    sal_Int32 all_members_length = 0;
+    sal_Int32 member_pos;
+    sal_Int32 type_param_pos = 0;
+
+    // collect base types; wrong order
+    ::System::Collections::ArrayList * base_types_list =
+            new ::System::Collections::ArrayList( 3 /* initial capacity */ );
+    for (::System::Type * base_type_pos = entry->m_base_type;
+        ! base_type_pos->Equals( __typeof (::System::Object) );
+        base_type_pos = base_type_pos->get_BaseType() )
+    {
+        base_types_list->Add( base_type_pos );
+        if (base_type_pos->Equals( __typeof (::System::Exception) ))
+        {
+            // special Message member
+            all_members_length += 1;
+            break; // don't include System.Exception base classes
+        }
+        else
+        {
+            //ensure the base type is complete. Otherwise GetFields won't work
+            get_complete_struct(base_type_pos->get_FullName());
+            all_members_length +=
+                base_type_pos->GetFields(
+                (BindingFlags) (BindingFlags::Instance |
+                BindingFlags::Public |
+                BindingFlags::DeclaredOnly) )
+                ->get_Length();
+        }
+    }
+
+    // create all_members arrays; right order
+    ::System::String * all_member_names[] =
+        new ::System::String * [all_members_length + members_length ];
+    ::System::Type * all_param_types[] =
+        new ::System::Type * [all_members_length + members_length ];
+    member_pos = 0;
+    for ( sal_Int32 pos = base_types_list->get_Count(); pos--; )
+    {
+        ::System::Type * base_type = __try_cast< ::System::Type * >(
+            base_types_list->get_Item( pos ) );
+        if (base_type->Equals( __typeof (::System::Exception) ))
+        {
+            all_member_names[ member_pos ] = S"Message";
+            all_param_types[ member_pos ] = __typeof (::System::String);
+            ++member_pos;
+        }
+        else
+        {
+            ::System::String * base_type_name = base_type->get_FullName();
+
+            //ToDo m_generated_structs?
+            struct_entry * entry =
+                dynamic_cast< struct_entry * >(
+                m_generated_structs->get_Item( base_type_name ) );
+            if (0 == entry)
+            {
+                // complete type
+                FieldInfo * fields [] =
+                    base_type->GetFields(
+                    (BindingFlags) (BindingFlags::Instance |
+                    BindingFlags::Public |
+                    BindingFlags::DeclaredOnly) );
+                sal_Int32 len = fields->get_Length();
+                for ( sal_Int32 pos = 0; pos < len; ++pos )
+                {
+                    FieldInfo * field = fields[ pos ];
+                    all_member_names[ member_pos ] = field->get_Name();
+                    all_param_types[ member_pos ] = field->get_FieldType();
+                    ++member_pos;
+                }
+            }
+            else // generated during this session:
+                // members may be incomplete ifaces
+            {
+                sal_Int32 len = entry->m_member_names->get_Length();
+                for ( sal_Int32 pos = 0; pos < len; ++pos )
+                {
+                    all_member_names[ member_pos ] =
+                        entry->m_member_names[ pos ];
+                    all_param_types[ member_pos ] =
+                        entry->m_param_types[ pos ];
+                    ++member_pos;
+                }
+            }
+        }
+    }
+    OSL_ASSERT( all_members_length == member_pos );
+
+    // build up entry
+//    struct_entry * entry = new struct_entry();
+    entry->m_member_names = new ::System::String * [ members_length ];
+    entry->m_param_types = new ::System::Type * [ members_length ];
+
+    // add members
+    Emit::FieldBuilder * members[] = new Emit::FieldBuilder * [ members_length ];
+    //Reference< reflection::XTypeDescription > const * pseq_members =
+    //    seq_members.getConstArray();
+    //OUString const * pseq_member_names =
+    //    seq_member_names.getConstArray();
+
+    int curParamIndex = 0; //count the fields which have parameterized types
+    for ( member_pos = 0; member_pos < members_length; ++member_pos )
+    {
+        ::System::String * field_name =
+            ustring_to_String( pseq_member_names[ member_pos ] );
+        ::System::Type * field_type;
+        //Special handling of struct parameter types
+        bool bParameterizedType = false;
+        if (pseq_members[ member_pos ]->getTypeClass() == TypeClass_UNKNOWN)
+        {
+            bParameterizedType = true;
+            if (type_param_pos < seq_type_parameters.getLength())
+            {
+                field_type = __typeof(::System::Object);
+                type_param_pos++;
+            }
+            else
+            {
+                throw RuntimeException(
+                    OUSTR("unexpected member type in ") + entry->m_xType->getName(),
+                    Reference< XInterface >() );
+            }
+        }
+        else
+        {
+            field_type =
+                get_type( pseq_members[ member_pos ] );
+        }
+        members[ member_pos ] =
+            entry->m_type_builder->DefineField(
+            field_name, field_type, FieldAttributes::Public );
+
+        //parameterized type (polymorphic struct) ?
+        if (bParameterizedType && xStructTypeDesc.is())
+        {
+            //get the name
+            OSL_ASSERT(seq_type_parameters.getLength() > curParamIndex);
+            ::System::String* sTypeName = ustring_to_String(
+                seq_type_parameters.getConstArray()[curParamIndex++]);
+            ::System::Object * args[] = {sTypeName};
+            //set ParameterizedTypeAttribute
+            ::System::Type * arCtorTypes[] = {__typeof(::System::String)};
+
+            Emit::CustomAttributeBuilder * attrBuilder =
+                new Emit::CustomAttributeBuilder(
+                __typeof(::uno::ParameterizedTypeAttribute)
+                ->GetConstructor(arCtorTypes),
+                args);
+
+            members[member_pos]->SetCustomAttribute(attrBuilder);
+        }
+        // add to all_members
+        all_member_names[ all_members_length + member_pos ] = field_name;
+        all_param_types[ all_members_length + member_pos ] = field_type;
+        // add to entry
+        entry->m_member_names[ member_pos ] = field_name;
+        entry->m_param_types[ member_pos ] = field_type;
+    }
+    all_members_length += members_length;
+
+    // default .ctor
+    Emit::ConstructorBuilder * ctor_builder =
+        entry->m_type_builder->DefineConstructor(
+        c_ctor_method_attr, CallingConventions::Standard,
+        new ::System::Type * [ 0 ] );
+    Emit::ILGenerator * code = ctor_builder->GetILGenerator();
+    code->Emit( Emit::OpCodes::Ldarg_0 );
+    code->Emit(
+        Emit::OpCodes::Call,
+        0 == base_type_entry
+        ? entry->m_base_type->GetConstructor( new ::System::Type * [ 0 ] )
+        : base_type_entry->m_default_ctor );
+    // default initialize members
+    for ( member_pos = 0; member_pos < members_length; ++member_pos )
+    {
+        FieldInfo * field = members[ member_pos ];
+        ::System::Type * field_type = field->get_FieldType();
+        //            ::System::Type * new_field_type = m_module_builder->GetType(field_type->FullName, false);
+        // default initialize:
+        // string, type, enum, sequence, struct, exception, any
+        if (field_type->Equals( __typeof (::System::String) ))
+        {
+            code->Emit( Emit::OpCodes::Ldarg_0 );
+            code->Emit( Emit::OpCodes::Ldstr, S"" );
+            code->Emit( Emit::OpCodes::Stfld, field );
+        }
+        else if (field_type->Equals( __typeof (::System::Type) ))
+        {
+            code->Emit( Emit::OpCodes::Ldarg_0 );
+            code->Emit(
+                Emit::OpCodes::Ldtoken, __typeof (::System::Void) );
+            code->Emit(
+                Emit::OpCodes::Call, m_method_info_Type_GetTypeFromHandle );
+            code->Emit( Emit::OpCodes::Stfld, field );
+        }
+        else if (field_type->get_IsArray())
+        {
+            //Find the value type. In case of sequence<sequence< ... > > find the actual value type
+            ::System::Type * value = field_type;
+            while ((value = value->GetElementType())->get_IsArray());
+            //If the value type is a struct then make sure it is fully created.
+            get_complete_struct(value->get_FullName());
+
+            code->Emit( Emit::OpCodes::Ldarg_0 );
+            code->Emit( Emit::OpCodes::Ldc_I4_0 );
+            code->Emit(
+                Emit::OpCodes::Newarr, field_type->GetElementType() );
+            code->Emit( Emit::OpCodes::Stfld, field );
+        }
+        else if (field_type->get_IsValueType())
+        {
+            if (field_type->get_FullName()->Equals( S"uno.Any" ))
+            {
+                code->Emit( Emit::OpCodes::Ldarg_0 );
+                code->Emit( Emit::OpCodes::Ldsfld, __typeof(::uno::Any)->GetField(S"VOID"));
+                code->Emit( Emit::OpCodes::Stfld, field );
+            }
+        }
+        else if (field_type->get_IsClass())
+        {
+            /* may be XInterface */
+            if (! field_type->Equals( __typeof (::System::Object) ))
+            {
+                // struct, exception
+                //make sure the struct is already complete.
+                get_complete_struct(field_type->get_FullName());
+                code->Emit( Emit::OpCodes::Ldarg_0 );
+                code->Emit(
+                    Emit::OpCodes::Newobj,
+                    //GetConstructor requies that the member types of the object which is to be constructed are already known.
+                    field_type->GetConstructor(
+                    new ::System::Type * [ 0 ] ) );
+                code->Emit( Emit::OpCodes::Stfld, field );
+            }
+        }
+    }
+    code->Emit( Emit::OpCodes::Ret );
+    entry->m_default_ctor = ctor_builder;
+
+    // parameterized .ctor including all base members
+    ctor_builder = entry->m_type_builder->DefineConstructor(
+        c_ctor_method_attr, CallingConventions::Standard, all_param_types );
+    for ( member_pos = 0; member_pos < all_members_length; ++member_pos )
+    {
+        ctor_builder->DefineParameter(
+            member_pos +1 /* starts with 1 */, ParameterAttributes::In,
+            all_member_names[ member_pos ] );
+    }
+    code = ctor_builder->GetILGenerator();
+    // call base .ctor
+    code->Emit( Emit::OpCodes::Ldarg_0 ); // push this
+    sal_Int32 base_members_length = all_members_length - members_length;
+    ::System::Type * param_types [] =
+        new ::System::Type * [ base_members_length ];
+    for ( member_pos = 0; member_pos < base_members_length; ++member_pos )
+    {
+        emit_ldarg( code, member_pos +1 );
+        param_types[ member_pos ] = all_param_types[ member_pos ];
+    }
+    code->Emit(
+        Emit::OpCodes::Call,
+        0 == base_type_entry
+        ? entry->m_base_type->GetConstructor( param_types )
+        : base_type_entry->m_ctor );
+    // initialize members
+    for ( member_pos = 0; member_pos < members_length; ++member_pos )
+    {
+        code->Emit( Emit::OpCodes::Ldarg_0 ); // push this
+        emit_ldarg( code, member_pos + base_members_length +1 );
+        code->Emit( Emit::OpCodes::Stfld, members[ member_pos ] );
+    }
+    code->Emit( Emit::OpCodes::Ret );
+    entry->m_ctor = ctor_builder;
+
+    if (g_verbose)
+    {
+        ::System::Console::WriteLine(
+            "> emitting {0} type {1}",
+            TypeClass_STRUCT == entry->m_xType->getTypeClass()
+            ? S"struct"
+            : S"exception",
+            cts_name);
+    }
+    // new entry
+    m_generated_structs->Add(cts_name, entry );
+    ::System::Type * ret_type = entry->m_type_builder->CreateType();
+
+    // remove from incomplete types map
+    m_incomplete_structs->Remove( cts_name );
+    entry->m_xType->release();
+
+    if (g_verbose)
+    {
+        ::System::Console::WriteLine(
+            "> emitting struct type {0}", cts_name);
+    }
+    return ret_type;
+}
 
 //Examples of generated code
 //      public static XWeak constructor1(XComponentContext ctx)
@@ -2145,6 +2194,17 @@ Emit::CustomAttributeBuilder* TypeEmitter::get_exception_attribute(
 }
 
 //______________________________________________________________________________
+::System::Type * TypeEmitter::get_complete_struct( ::System::String * sName)
+{
+    struct_entry * pStruct = __try_cast< struct_entry *>(
+        m_incomplete_structs->get_Item(sName));
+    if (pStruct)
+    {
+        complete_struct_type(pStruct);
+    }
+    //get_type will asked the module builder for the type or otherwise all known assemblies.
+    return get_type(sName, true);
+}
 void TypeEmitter::Dispose()
 {
     while (true)
@@ -2156,6 +2216,17 @@ void TypeEmitter::Dispose()
         complete_iface_type(
             __try_cast< iface_entry * >( enumerator->get_Value() ) );
     }
+
+    while (true)
+    {
+        ::System::Collections::IDictionaryEnumerator * enumerator =
+              m_incomplete_structs->GetEnumerator();
+        if (! enumerator->MoveNext())
+            break;
+        complete_struct_type(
+            __try_cast< struct_entry * >( enumerator->get_Value() ) );
+    }
+
 
     while (true)
     {
@@ -2187,6 +2258,7 @@ TypeEmitter::TypeEmitter(
       m_type_Exception( 0 ),
       m_type_RuntimeException( 0 ),
       m_incomplete_ifaces( new ::System::Collections::Hashtable() ),
+      m_incomplete_structs( new ::System::Collections::Hashtable() ),
       m_incomplete_services(new ::System::Collections::Hashtable() ),
       m_incomplete_singletons(new ::System::Collections::Hashtable() ),
       m_generated_structs( new ::System::Collections::Hashtable() )
