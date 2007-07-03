@@ -4,9 +4,9 @@
  *
  *  $RCSfile: popup.src,v $
  *
- *  $Revision: 1.56 $
+ *  $Revision: 1.57 $
  *
- *  last change: $Author: ihi $ $Date: 2007-04-19 16:45:44 $
+ *  last change: $Author: rt $ $Date: 2007-07-03 15:55:21 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -52,7 +52,7 @@ Menu RID_POPUP_CELLS
         {
             Identifier = SID_CELL_FORMAT_RESET ;
             HelpId = SID_CELL_FORMAT_RESET ;
-            Text [ en-US ] = "~Default" ;
+            Text [ en-US ] = "~Default Formatting" ;
         };
          //------------------------------
         MenuItem { Separator = TRUE ; };
