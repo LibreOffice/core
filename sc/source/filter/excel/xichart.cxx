@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xichart.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: obo $ $Date: 2007-06-13 09:10:22 $
+ *  last change: $Author: rt $ $Date: 2007-07-03 13:25:14 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1958,8 +1958,11 @@ void XclImpChChart3d::ReadChChart3d( XclImpStream& rStrm )
             >> maData.mnFlags;
 }
 
-void XclImpChChart3d::Convert( ScfPropertySet& rPropSet ) const
+void XclImpChChart3d::Convert( ScfPropertySet& rPropSet, const XclChTypeInfo& rTypeInfo ) const
 {
+    // do not set right-angled axes for pie charts
+    bool bRightAngled = rTypeInfo.mb3dWalls && !::get_flag( maData.mnFlags, EXC_CHCHART3D_REAL3D );
+    rPropSet.SetBoolProperty( EXC_CHPROP_RIGHTANGLEDAXES, bRightAngled );
     rPropSet.SetBoolProperty( EXC_CHPROP_D3DSCENELIGHTON1, false );
     rPropSet.SetBoolProperty( EXC_CHPROP_D3DSCENELIGHTON2, true );
     rPropSet.SetColorProperty( EXC_CHPROP_D3DSCENELIGHTCOLOR2, Color( RGB_COLORDATA( 204, 204, 204 ) ) );
@@ -2168,7 +2171,7 @@ const String& XclImpChTypeGroup::GetSingleSeriesTitle() const
 void XclImpChTypeGroup::ConvertChart3d( ScfPropertySet& rPropSet ) const
 {
     if( mxChart3d.is() )
-        mxChart3d->Convert( rPropSet );
+        mxChart3d->Convert( rPropSet, maTypeInfo );
 }
 
 Reference< XCoordinateSystem > XclImpChTypeGroup::CreateCoordSystem() const
