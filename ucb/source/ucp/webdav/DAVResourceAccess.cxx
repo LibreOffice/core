@@ -4,9 +4,9 @@
  *
  *  $RCSfile: DAVResourceAccess.cxx,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: kz $ $Date: 2007-05-10 13:06:49 $
+ *  last change: $Author: rt $ $Date: 2007-07-03 12:11:33 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -987,6 +987,7 @@ void DAVResourceAccess::getUserRequestHeaders(
 //=========================================================================
 sal_Bool DAVResourceAccess::detectRedirectCycle(
                                 const rtl::OUString& rRedirectURL )
+    throw ( DAVException )
 {
     osl::Guard< osl::Mutex > aGuard( m_aMutex );
 
