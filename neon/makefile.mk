@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.9 $
+#   $Revision: 1.10 $
 #
-#   last change: $Author: hr $ $Date: 2006-04-20 13:31:10 $
+#   last change: $Author: rt $ $Date: 2007-07-03 12:09:44 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -54,18 +54,16 @@ TARGET=so_neon
     @echo "neon disabled...."
 .ENDIF
 
-NEON_NAME=neon-0.24.7
+NEON_NAME=neon-0.26.3
 
 TARFILE_NAME=$(NEON_NAME)
 PATCH_FILE_NAME=neon.patch
-
 ADDITIONAL_FILES=src$/makefile.mk src$/config.h
 
 BUILD_DIR=src
 BUILD_ACTION=dmake $(MFLAGS) $(CALLMACROS)
 
 OUT2INC= \
-    $(BUILD_DIR)$/config.h \
     $(BUILD_DIR)$/ne_207.h \
     $(BUILD_DIR)$/ne_alloc.h \
     $(BUILD_DIR)$/ne_auth.h \
@@ -81,7 +79,8 @@ OUT2INC= \
     $(BUILD_DIR)$/ne_string.h \
     $(BUILD_DIR)$/ne_uri.h \
     $(BUILD_DIR)$/ne_utils.h \
-    $(BUILD_DIR)$/ne_xml.h
+    $(BUILD_DIR)$/ne_xml.h \
+    $(BUILD_DIR)$/ne_xmlreq.h
 
 # --- Targets ------------------------------------------------------
 
