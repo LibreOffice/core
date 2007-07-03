@@ -4,9 +4,9 @@
  *
  *  $RCSfile: Axis.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: vg $ $Date: 2007-05-22 18:30:56 $
+ *  last change: $Author: rt $ $Date: 2007-07-03 13:42:15 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -342,6 +342,9 @@ Axis::Axis( Reference< uno::XComponentContext > const & /* xContext */ ) :
         m_aSubGridProperties(),
         m_xTitle()
 {
+    setFastPropertyValue_NoBroadcast(
+        ::chart::LineProperties::PROP_LINE_COLOR, uno::makeAny( static_cast< sal_Int32 >( 0xb3b3b3 ) ) );  // gray30
+
     if( m_xGrid.is())
         ModifyListenerHelper::addListener( m_xGrid, m_xModifyEventForwarder );
     if( m_aScaleData.Categories.is())
