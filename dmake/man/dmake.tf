@@ -19,7 +19,7 @@
 .IP "\\$1" \\n[dmake-indent]u
 .it 1 PD
 ..
-.TH DMAKE 1  "2007-04-24" "Dmake Version 4.8"
+.TH DMAKE 1  "2007-06-25" "Dmake Version 4.9"
 .SH NAME
 \fBdmake\fR \- maintain program groups, or interdependent files
 .SH SYNOPSIS
@@ -940,6 +940,23 @@ If a token ends in a string composed from the value of the macro DIRBRKSTR
 \fB:d\fP modifier then the expansion returns the directory name less the
 final directory separator string.  Thus successive pairs of :d modifiers
 each remove a level of directory in the token string.
+.PP
+The infered names of targets \fB:i\fP modifier returnes the actual filename
+associated to the target, see BINDING TARGETS. If the value is not a target or
+prerequisite the value is returned unchanged. For the following example:
+.RS
+test = aprog bprog
+.RE
+If aprog and bprog are targets or prerequisits and they are bound
+to /tmp/aprog and bprog (see .SOURCE special target) the macro expansion
+has the following effect:
+.RS
+.sp
+.Is "$(test:s/out/in/:f)   "
+.Ii "$(test:i)"
+\(-> /tmp/aprog bprog
+.RE
+.fi
 .PP
 The map escape codes modifier changes the following escape codes \ea => <bel>,
 \&\eb => <backspace>, \ef => <formfeed>, \en => <nl>, \er => <cr>,
@@ -1864,6 +1881,12 @@ line or in the makefile is equivalent to supplying a corresponding value to
 the -P flag on the command line. If the global .SEQUENTIAL attribute is set
 (or the -S command line switch is used) the value of MAXPROCESS is fixed
 to "1" and cannot be changed.
+.IP \fBOOODMAKEMODE\fP 1.6i
+This macro enables a special compatibility mode needed by the OpenOffice.org
+build system. If set, the switch disables the removal of leading './' path
+elements during target filename normalization (See BINDING TARGETS). If './'
+appear in the pathname, but not at the beginning of it, they are still
+removed by the normalization.
 .IP \fBPREP\fP 1.6i
 This macro defines the number of iterations to be expanded
 automatically when processing % rule definitions of the form:
@@ -2388,7 +2411,11 @@ none of their prerequisite files have been modified as a result of the fix.
 .PP
 When \fBdmake\fP constructs target (and prerequisite) pathnames they are
 normalized  to the shortest (or most natural, see below for the cygwin case)
-representation.  Substrings like './' or of the form 'baz/..' are removed.
+representation.  Substrings like './' or of the form 'baz/..' are removed
+and multiple slashes are collapsed to one unless they are at the beginning
+of the pathname. Leading slashes are normalized according to POSIX rules,
+i.e. more than two leading slashes are reduced to one slash and a
+leading '//' is kept as it might have a special meaning. 
 For example "./foo", "bar/../foo" and foo are recognized as the same file.
 This may result in somewhat unexpected values of the macro expansion
 of runtime macros like \fB$@\fP, but is infact the corect result.
