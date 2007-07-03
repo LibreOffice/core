@@ -4,9 +4,9 @@
  *
  *  $RCSfile: notemark.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: vg $ $Date: 2007-02-27 13:53:28 $
+ *  last change: $Author: rt $ $Date: 2007-07-03 15:56:14 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -101,7 +101,7 @@ IMPL_LINK( ScNoteMarker, TimeHdl, Timer*, EMPTYARG )
         rPool.SetDefaultMetric(SFX_MAPUNIT_100TH_MM);
         rPool.FreezeIdRanges();
 
-        Printer* pPrinter = pDoc->GetPrinter();
+        OutputDevice* pPrinter = pDoc->GetRefDevice();
         if (pPrinter)
         {
             //  Am Outliner des Draw-Model ist auch der Drucker als RefDevice gesetzt,
