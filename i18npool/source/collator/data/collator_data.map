@@ -18,6 +18,8 @@ global:
     get_dz_charset;
     get_ku_alphanumeric;
     get_hu_charset;
+    get_vi_charset;
+    get_ln_charset;
 
 local:
     *;
