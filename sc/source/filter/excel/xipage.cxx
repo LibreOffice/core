@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xipage.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: kz $ $Date: 2007-05-10 16:49:03 $
+ *  last change: $Author: rt $ $Date: 2007-07-03 15:51:05 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -338,7 +338,7 @@ void XclImpPageSettings::Finalize()
         SvxPageItem aPageItem( GETITEM( rItemSet, SvxPageItem, ATTR_PAGE ) );
         aPageItem.SetLandscape( !maData.mbPortrait );
         rItemSet.Put( aPageItem );
-        ScfTools::PutItem( rItemSet, SvxSizeItem( ATTR_PAGE_SIZE, maData.GetScPaperSize( GetPrinter() ) ), true );
+        ScfTools::PutItem( rItemSet, SvxSizeItem( ATTR_PAGE_SIZE, maData.GetScPaperSize() ), true );
     }
 
     if( maData.mbFitToPages )
