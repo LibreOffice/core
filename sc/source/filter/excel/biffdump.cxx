@@ -4,9 +4,9 @@
  *
  *  $RCSfile: biffdump.cxx,v $
  *
- *  $Revision: 1.88 $
+ *  $Revision: 1.89 $
  *
- *  last change: $Author: vg $ $Date: 2007-05-22 19:44:04 $
+ *  last change: $Author: rt $ $Date: 2007-07-03 15:50:04 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -138,6 +138,11 @@ inline void lclAppendDec( ByteString& rStr, sal_uInt32 nData )
 inline void lclAppendDec( ByteString& rStr, sal_Int32 nData )
 {
     rStr.Append( ByteString::CreateFromInt32( nData ) );
+}
+
+inline void lclAppendDec( ByteString& rStr, float fData )
+{
+    rStr.Append( ByteString( ::rtl::math::doubleToString( fData, rtl_math_StringFormat_G, 15, '.', true ) ) );
 }
 
 inline void lclAppendDec( ByteString& rStr, double fData )
@@ -828,29 +833,6 @@ static void AddRangeRef( ByteString& t, UINT16 nRow1, UINT16 nC1, UINT16 nRow2, 
 
 
 
-static void AddString( ByteString& t, XclImpStream& r, const UINT16 nLen )
-{
-    if( nLen )
-    {
-        UINT16  n = nLen;
-        UINT8   c;
-        while( n )
-        {
-            r >> c;
-            if( c < ' ' )
-            {
-                t += '<';
-                __AddHex( t, c );
-                t += '>';
-            }
-            else
-                t += ( sal_Char ) c;
-            n--;
-        }
-    }
-}
-
-
 static BOOL AddUNICODEString( ByteString& rStr, XclImpStream& rStrm, const BOOL b16BitLen = TRUE, UINT16 nLen = 0, ByteString* pRawName = 0 )
 {
     BOOL bRet = TRUE;
@@ -862,7 +844,7 @@ static BOOL AddUNICODEString( ByteString& rStr, XclImpStream& rStrm, const BOOL 
     UINT32  nExtLen;
     UINT16  nCrun;
     bool    b16Bit, bFarEast, bRichString;
-    ULONG   nSeek = rStrm.ReadUniStringExtHeader( b16Bit, bRichString, bFarEast, nCrun, nExtLen, nGrbit );
+    rStrm.ReadUniStringExtHeader( b16Bit, bRichString, bFarEast, nCrun, nExtLen, nGrbit );
 
     rStr += "(l=";
     __AddDec( rStr, nLen );
@@ -5740,14 +5722,14 @@ void Biff8RecDumper::EscherDump( const ULONG nMaxLen, bool bDumpOffset )
             nL -= 24; n -= 24;
         }
 
-        if( ( nPre & 0x000F ) == 0x000F && n >= 0 )
+        if( ( nPre & 0x000F ) == 0x000F )
         {   // Container
             if ( nL <= (UINT32) n )
                 Print( "            completed within" );
             else
                 Print( "            continued elsewhere" );
         }
-        else if( n >= 0 )
+        else
             // -> 0x0000 ... 0x0FFF
         {
             nDumpSize = ( ( UINT32 ) nL > ( UINT32 ) n )? ( UINT16 ) n : ( UINT16 ) nL;
@@ -5758,8 +5740,6 @@ void Biff8RecDumper::EscherDump( const ULONG nMaxLen, bool bDumpOffset )
                 n -= nDumpSize;
             }
         }
-        else
-            Print( " >> OVERRUN <<" );
 
         aT.Erase();
     }
@@ -5828,145 +5808,140 @@ void Biff8RecDumper::ObjDump( const ULONG nMaxLen )
         (t += "]  ") += p;
         Print( t );
 
-        if( n >= 0 )
-        {
-            nDumpSize = ( ( UINT32 ) nL > ( UINT32 ) n )? ( UINT16 ) n : ( UINT16 ) nL;
+        nDumpSize = ( ( UINT32 ) nL > ( UINT32 ) n )? ( UINT16 ) n : ( UINT16 ) nL;
 
-            if( nDumpSize )
+        if( nDumpSize )
+        {
+            ULONG nPos1 = (bDetails ? rIn.GetRecPos() : 0);
+            ContDump( nDumpSize );
+            n -= nDumpSize;
+            if ( bDetails )
             {
-                ULONG nPos1 = (bDetails ? rIn.GetRecPos() : 0);
-                ContDump( nDumpSize );
-                n -= nDumpSize;
-                if ( bDetails )
+                ULONG nPos2 = rIn.GetRecPos();
+                rIn.Seek( nPos1 );
+                t.Erase();
+                switch ( nR )
                 {
-                    ULONG nPos2 = rIn.GetRecPos();
-                    rIn.Seek( nPos1 );
-                    t.Erase();
-                    switch ( nR )
+                    case 0x0008 :       // ftPioGrbit
                     {
-                        case 0x0008 :       // ftPioGrbit
+                        rIn >> nObjFlags;
+                        UINT16 __nFlags = nObjFlags;
+                        if ( __nFlags )
                         {
-                            rIn >> nObjFlags;
-                            UINT16 __nFlags = nObjFlags;
-                            if ( __nFlags )
-                            {
-                                ADDTEXT( "   " );
-                                STARTFLAG();
-                                ADDFLAG( 0x0001, "man-size" );
-                                ADDFLAG( 0x0002, "linked" );
-                                ADDFLAG( 0x0008, "symbol" );
-                                ADDFLAG( 0x0010, "control" );
-                                ADDFLAG( 0x0020, "ctls-stream" );
-                                ADDFLAG( 0x0200, "autoload" );
-                                ADDRESERVED( 0xFDC4 );
-                            }
+                            ADDTEXT( "   " );
+                            STARTFLAG();
+                            ADDFLAG( 0x0001, "man-size" );
+                            ADDFLAG( 0x0002, "linked" );
+                            ADDFLAG( 0x0008, "symbol" );
+                            ADDFLAG( 0x0010, "control" );
+                            ADDFLAG( 0x0020, "ctls-stream" );
+                            ADDFLAG( 0x0200, "autoload" );
+                            ADDRESERVED( 0xFDC4 );
                         }
-                        break;
-                        case 0x0009 :       // ftPictFmla
+                    }
+                    break;
+                    case 0x0009 :       // ftPictFmla
+                    {
+                        ADDTEXT( "    Document type " );
+                        UINT16 nFmlaLen;
+                        rIn >> nFmlaLen;
+                        if( nObjFlags & 0x0002 )
                         {
-                            ADDTEXT( "    Document type " );
-                            UINT16 nFmlaLen;
+                            ADDTEXT( "linked\n    OLE stream: LNK??? (from EXTERNNAME)   " );
                             rIn >> nFmlaLen;
-                            if( nObjFlags & 0x0002 )
+                            ADDTEXT( "    unknown=" ); ADDHEX( 4 );
+                            PRINT();
+                            t.Erase();
+                            FormulaDump( nFmlaLen, FT_CellFormula );
+                        }
+                        else
+                        {
+                            ADDTEXT( "embedded " );
+                            const UINT16 nStringOffset = 14;    // MAY be right
+                            rIn.Seek( nPos1 + nStringOffset );
+                            INT32 nBytesLeft = nL - nStringOffset;
+                            UINT16 nStrLen = rIn.ReaduInt16();
+                            ULONG nPos3 = rIn.GetRecPos();
+                            if( nStrLen )
+                                AddUNICODEString( t, rIn, TRUE, nStrLen );
+                            nBytesLeft -= (rIn.GetRecPos() - nPos3);
+                            ADDTEXT( '\n' );
+                            if ( nBytesLeft < 4 )
+                                ADDTEXT( "    >> ByteString OVERRUN <<\n" );
+
+                            rIn.Seek( nPos1 + sizeof(nFmlaLen) + nFmlaLen );
+                            if( nObjFlags & 0x0020 )
                             {
-                                ADDTEXT( "linked\n    OLE stream: LNK??? (from EXTERNNAME)   " );
-                                rIn >> nFmlaLen;
-                                ADDTEXT( "    unknown=" ); ADDHEX( 4 );
-                                PRINT();
-                                t.Erase();
-                                FormulaDump( nFmlaLen, FT_CellFormula );
+                                sal_uInt32 nStrmStart, nStrmLen;
+                                rIn >> nStrmStart >> nStrmLen;
+                                ADDTEXT( "    'Ctls' stream   start=" );
+                                __AddHex( t, nStrmStart );
+                                ADDTEXT( "   size=" );
+                                __AddHex( t, nStrmLen );
+                                maCtlsPosMap[ nStrmStart ] = nStrmLen;
                             }
                             else
                             {
-                                ADDTEXT( "embedded " );
-                                const UINT16 nStringOffset = 14;    // MAY be right
-                                rIn.Seek( nPos1 + nStringOffset );
-                                INT32 nBytesLeft = nL - nStringOffset;
-                                UINT16 nStrLen = rIn.ReaduInt16();
-                                ULONG nPos3 = rIn.GetRecPos();
-                                if( nStrLen )
-                                    AddUNICODEString( t, rIn, TRUE, nStrLen );
-                                nBytesLeft -= (rIn.GetRecPos() - nPos3);
-                                ADDTEXT( '\n' );
-                                if ( nBytesLeft < 4 )
-                                    ADDTEXT( "    >> ByteString OVERRUN <<\n" );
-
-                                rIn.Seek( nPos1 + sizeof(nFmlaLen) + nFmlaLen );
-                                if( nObjFlags & 0x0020 )
-                                {
-                                    sal_uInt32 nStrmStart, nStrmLen;
-                                    rIn >> nStrmStart >> nStrmLen;
-                                    ADDTEXT( "    'Ctls' stream   start=" );
-                                    __AddHex( t, nStrmStart );
-                                    ADDTEXT( "   size=" );
-                                    __AddHex( t, nStrmLen );
-                                    maCtlsPosMap[ nStrmStart ] = nStrmLen;
-                                }
-                                else
-                                {
-                                    ADDTEXT( "    OLE storage name: MBD" );
-                                    __AddPureHex( t, rIn.ReaduInt32() );
-                                }
+                                ADDTEXT( "    OLE storage name: MBD" );
+                                __AddPureHex( t, rIn.ReaduInt32() );
                             }
                         }
-                        break;
-                        case 0x0015 :       // ftCmo
-                        {
-                            UINT16 nType, nId;
-                            rIn >> nType >> nId;
-                            ADDTEXT( "    Object ID " );
-                            __AddHex( t, nId );
-                            switch ( nType )
-                            {
-                                case 0x0000 :   p = "Group";        break;
-                                case 0x0001 :   p = "Line";         break;
-                                case 0x0002 :   p = "Rectangle";    break;
-                                case 0x0003 :   p = "Oval";         break;
-                                case 0x0004 :   p = "Arc";          break;
-                                case 0x0005 :   p = "Chart";        break;
-                                case 0x0006 :   p = "Text";         break;
-                                case 0x0007 :   p = "Button";       break;
-                                case 0x0008 :   p = "Picture";      break;
-                                case 0x0009 :   p = "Polygon";      break;
-                                case 0x000a :   p = "(Reserved)";   break;
-                                case 0x000b :   p = "Check box";    break;
-                                case 0x000c :   p = "Option button";break;
-                                case 0x000d :   p = "Edit box";     break;
-                                case 0x000e :   p = "Label";        break;
-                                case 0x000f :   p = "Dialog box";   break;
-                                case 0x0010 :   p = "Spinner";      break;
-                                case 0x0011 :   p = "Scroll bar";   break;
-                                case 0x0012 :   p = "List box";     break;
-                                case 0x0013 :   p = "Group box";    break;
-                                case 0x0014 :   p = "Combo box";    break;
-                                case 0x0015 :   p = "(Reserved)";   break;
-                                case 0x0016 :   p = "(Reserved)";   break;
-                                case 0x0017 :   p = "(Reserved)";   break;
-                                case 0x0018 :   p = "(Reserved)";   break;
-                                case 0x0019 :   p = "Comment";      break;
-                                case 0x001a :   p = "(Reserved)";   break;
-                                case 0x001b :   p = "(Reserved)";   break;
-                                case 0x001c :   p = "(Reserved)";   break;
-                                case 0x001d :   p = "(Reserved)";   break;
-                                case 0x001e :   p = "Microsoft Office drawing"; break;
-                                default:
-                                    p = "UNKNOWN";
-                            }
-                            ADDTEXT( ", type " );
-                            __AddHex( t, nType );
-                            ADDTEXT( ' ' );
-                            ADDTEXT( p );
-                        }
-                        break;
                     }
-                    if ( t.Len() )
-                        PRINT();
-                    rIn.Seek( nPos2 );
+                    break;
+                    case 0x0015 :       // ftCmo
+                    {
+                        UINT16 nType, nId;
+                        rIn >> nType >> nId;
+                        ADDTEXT( "    Object ID " );
+                        __AddHex( t, nId );
+                        switch ( nType )
+                        {
+                            case 0x0000 :   p = "Group";        break;
+                            case 0x0001 :   p = "Line";         break;
+                            case 0x0002 :   p = "Rectangle";    break;
+                            case 0x0003 :   p = "Oval";         break;
+                            case 0x0004 :   p = "Arc";          break;
+                            case 0x0005 :   p = "Chart";        break;
+                            case 0x0006 :   p = "Text";         break;
+                            case 0x0007 :   p = "Button";       break;
+                            case 0x0008 :   p = "Picture";      break;
+                            case 0x0009 :   p = "Polygon";      break;
+                            case 0x000a :   p = "(Reserved)";   break;
+                            case 0x000b :   p = "Check box";    break;
+                            case 0x000c :   p = "Option button";break;
+                            case 0x000d :   p = "Edit box";     break;
+                            case 0x000e :   p = "Label";        break;
+                            case 0x000f :   p = "Dialog box";   break;
+                            case 0x0010 :   p = "Spinner";      break;
+                            case 0x0011 :   p = "Scroll bar";   break;
+                            case 0x0012 :   p = "List box";     break;
+                            case 0x0013 :   p = "Group box";    break;
+                            case 0x0014 :   p = "Combo box";    break;
+                            case 0x0015 :   p = "(Reserved)";   break;
+                            case 0x0016 :   p = "(Reserved)";   break;
+                            case 0x0017 :   p = "(Reserved)";   break;
+                            case 0x0018 :   p = "(Reserved)";   break;
+                            case 0x0019 :   p = "Comment";      break;
+                            case 0x001a :   p = "(Reserved)";   break;
+                            case 0x001b :   p = "(Reserved)";   break;
+                            case 0x001c :   p = "(Reserved)";   break;
+                            case 0x001d :   p = "(Reserved)";   break;
+                            case 0x001e :   p = "Microsoft Office drawing"; break;
+                            default:
+                                p = "UNKNOWN";
+                        }
+                        ADDTEXT( ", type " );
+                        __AddHex( t, nType );
+                        ADDTEXT( ' ' );
+                        ADDTEXT( p );
+                    }
+                    break;
                 }
+                if ( t.Len() )
+                    PRINT();
+                rIn.Seek( nPos2 );
             }
         }
-        else
-            Print( " >> OVERRUN <<" );
 
         t.Erase();
     }
@@ -6625,8 +6600,6 @@ void Biff8RecDumper::FormulaDump( const UINT16 nL, const FORMULA_TYPE eFT )
 
     sal_uInt32              nStartPos = pIn->GetRecPos();
     const sal_uInt32        nAfterPos = nStartPos + nL;
-    const sal_Char*         pPre = "    ";
-    const sal_Char*         pInfix = "  ";
 
     BYTE                    nOp;
     ByteString              t, aOperand;
@@ -7317,6 +7290,7 @@ const sal_uInt16 EXC_CTRL_FONTDATA      = 0xFFF0;   // internal use only
 const sal_uInt16 EXC_CTRL_USERFORM      = 0xFFF1;   // internal use only
 const sal_uInt16 EXC_CTRL_ADDDATA       = 0xFFF2;   // internal use only
 const sal_uInt16 EXC_CTRL_FRAMECHILD    = 0xFFF3;   // internal use only
+const sal_uInt16 EXC_CTRL_PROGRESSBAR   = 0xFFF4;   // internal use only
 const sal_uInt16 EXC_CTRL_UNKNOWN       = 0xFFFF;   // internal use only
 
 const sal_uInt16 EXC_CTRL_RECORD_ID     = 0x0000;
@@ -7353,7 +7327,8 @@ static const XclDumpControlInfo spControlInfos[] =
     { EXC_CTRL_FONTDATA,        "FontData",     EXC_CTRL_CLIENT_ID    },
     { EXC_CTRL_USERFORM,        "UserForm",     EXC_CTRL_CONTAINER_ID },
     { EXC_CTRL_ADDDATA,         "AddData",      EXC_CTRL_RECORD_ID    },
-    { EXC_CTRL_FRAMECHILD,      "FrameChild",   EXC_CTRL_RECORD_ID    }
+    { EXC_CTRL_FRAMECHILD,      "FrameChild",   EXC_CTRL_RECORD_ID    },
+    { EXC_CTRL_PROGRESSBAR,     "ProgressBar",  EXC_CTRL_RECORD_ID    }
 };
 
 typedef ::std::map< sal_uInt16, const XclDumpControlInfo* > XclDumpControlInfoMap;
@@ -7435,7 +7410,8 @@ static const XclDumpControlGuid spControlGuids[] =
     { EXC_CTRL_COMBOBOX,        0x8BD21D30, 0xEC42, 0x11CE, 0x9E, 0x0D, 0x00, 0xAA, 0x00, 0x60, 0x02, 0xF3 },
     { EXC_CTRL_SPINBUTTON,      0x79176FB0, 0xB7F2, 0x11CE, 0x97, 0xEF, 0x00, 0xAA, 0x00, 0x6D, 0x27, 0x76 },
     { EXC_CTRL_SCROLLBAR,       0xDFD181E0, 0x5E2F, 0x11CE, 0xA4, 0x49, 0x00, 0xAA, 0x00, 0x4A, 0x80, 0x3D },
-    { EXC_CTRL_IMAGE,           0x4C599241, 0x6926, 0x101B, 0x99, 0x92, 0x00, 0x00, 0x0B, 0x65, 0xC6, 0xF9 }
+    { EXC_CTRL_IMAGE,           0x4C599241, 0x6926, 0x101B, 0x99, 0x92, 0x00, 0x00, 0x0B, 0x65, 0xC6, 0xF9 },
+    { EXC_CTRL_PROGRESSBAR,     0x35053A22, 0x8589, 0x11D1, 0xB1, 0x6A, 0x00, 0xC0, 0xF0, 0x28, 0x36, 0x28 }
 };
 
 typedef ::std::map< XclGuid, sal_uInt16 >   XclDumpControlGuidMap;
@@ -7500,6 +7476,7 @@ static const XclGuid saStdPicGuid(  0x0BE35204, 0x8F91, 0x11CE, 0x9D, 0xE3, 0x00
 #define EXC_CTRLDUMP_PLAIN_DEC2( text ) IMPL_EXC_CTRLDUMP_PLAIN_VALUE( sal_Int16,  lclAppendDec, text )
 #define EXC_CTRLDUMP_PLAIN_HEX1( text ) IMPL_EXC_CTRLDUMP_PLAIN_VALUE( sal_uInt8,  lclAppendHex, text )
 #define EXC_CTRLDUMP_PLAIN_DEC1( text ) IMPL_EXC_CTRLDUMP_PLAIN_VALUE( sal_Int8,   lclAppendDec, text )
+#define EXC_CTRLDUMP_PLAIN_DECF( text ) IMPL_EXC_CTRLDUMP_PLAIN_VALUE( float,      lclAppendDec, text )
 // read a value from stream (with stream alignment)
 #define EXC_CTRLDUMP_HEX4( text ) IMPL_EXC_CTRLDUMP_VALUE( sal_uInt32, lclAppendHex, text )
 #define EXC_CTRLDUMP_DEC4( text ) IMPL_EXC_CTRLDUMP_VALUE( sal_Int32,  lclAppendDec, text )
@@ -7663,6 +7640,40 @@ void Biff8RecDumper::DumpControlContents( SvStream& rInStrm, sal_uInt16 nCtrlTyp
 {
     SvStream& rOutStrm = *pDumpStream;
 
+    if( nCtrlType == EXC_CTRL_PROGRESSBAR )
+    {
+        lclDumpControlType( rOutStrm, nCtrlType );
+        rOutStrm << '\n';
+
+        ByteString t;                       // "t" needed for macros
+        sal_uInt32 nFlags = 0;              // "nFlags" needed for macros
+
+        EXC_CTRLDUMP_PLAIN_HEX4( "unknown" );
+        EXC_CTRLDUMP_PLAIN_HEX4( "unknown" );
+        EXC_CTRLDUMP_PLAIN_DEC4( "width" );
+        EXC_CTRLDUMP_PLAIN_DEC4( "height" );
+        EXC_CTRLDUMP_PLAIN_HEX4( "unknown" );
+        EXC_CTRLDUMP_PLAIN_HEX4( "unknown" );
+        EXC_CTRLDUMP_PLAIN_HEX4( "unknown" );
+        EXC_CTRLDUMP_PLAIN_DECF( "min" );
+        EXC_CTRLDUMP_PLAIN_DECF( "max" );
+        EXC_CTRLDUMP_PLAIN_STARTFLAG( "flags1" );
+        EXC_CTRLDUMP_ADDFLAG( 0x00000001, "vertical" );
+        EXC_CTRLDUMP_ADDFLAG( 0x00010000, "smooth-scroll" );
+        EXC_CTRLDUMP_ENDFLAG( 0xFFFEFFFE );
+        EXC_CTRLDUMP_PLAIN_HEX4( "unknown" );
+        EXC_CTRLDUMP_PLAIN_HEX4( "unknown" );
+        EXC_CTRLDUMP_PLAIN_HEX4( "unknown" );
+        EXC_CTRLDUMP_PLAIN_STARTFLAG( "flags2" );
+        EXC_CTRLDUMP_ADDFLAG( 0x0001, "border-single" );
+        EXC_CTRLDUMP_ADDFLAG( 0x0002, "enabled" );
+        EXC_CTRLDUMP_ADDFLAG( 0x0004, "3d-style" );
+        EXC_CTRLDUMP_ADDFLAGVALUE( 3, 8, "mouse-icon" );
+        EXC_CTRLDUMP_ADDFLAG( 0x2000, "ole-drop-manual" );
+        EXC_CTRLDUMP_ENDFLAG( 0xFFFFD800 );
+        return;
+    }
+
     sal_uInt16 nSize = lclDumpControlHeader( rInStrm, rOutStrm, nCtrlType );
     if( nSize > 0 )
     {
@@ -7677,7 +7688,9 @@ void Biff8RecDumper::DumpControlContents( SvStream& rInStrm, sal_uInt16 nCtrlTyp
         sal_uInt32 nGroupNameLen = 0;
         sal_uInt32 nTagLen = 0;
         sal_uInt32 nTipLen = 0;
+        sal_uInt32 nCtrlIdLen = 0;
         sal_uInt32 nCtrlSrcLen = 0;
+        sal_uInt32 nRowSrcLen = 0;
         sal_uInt16 nPic = 0;
         sal_uInt16 nIcon = 0;
         sal_uInt16 nFont = 0;
@@ -8012,7 +8025,6 @@ void Biff8RecDumper::DumpControlContents( SvStream& rInStrm, sal_uInt16 nCtrlTyp
                 sal_uInt32 nCtrlFlags = nFlags;
 
                 sal_uInt32 nTabCount = 0;
-                sal_uInt32 nInfoArrLen = 0;
                 sal_uInt32 nIdArrLen = 0;
                 sal_uInt32 nUnknownArrLen = 0;
                 sal_uInt32 nShortArrLen = 0;
@@ -8197,8 +8209,10 @@ void Biff8RecDumper::DumpControlContents( SvStream& rInStrm, sal_uInt16 nCtrlTyp
                 EXC_CTRLDUMP_ADDFLAG( 0x0080, "type" );
                 EXC_CTRLDUMP_ADDFLAG( 0x0100, "pos" );
                 EXC_CTRLDUMP_ADDFLAG( 0x0800, "tiptext" );
+                EXC_CTRLDUMP_ADDFLAG( 0x1000, "ctrl-id" );
                 EXC_CTRLDUMP_ADDFLAG( 0x2000, "ctrl-source" );
-                EXC_CTRLDUMP_ENDFLAG( 0xFFFFD600 );
+                EXC_CTRLDUMP_ADDFLAG( 0x4000, "row-source" );
+                EXC_CTRLDUMP_ENDFLAG( 0xFFFF8600 );
                 sal_uInt32 nCtrlFlags = nFlags;
 
                 sal_uInt32 nStorageId = 0;
@@ -8220,13 +8234,17 @@ void Biff8RecDumper::DumpControlContents( SvStream& rInStrm, sal_uInt16 nCtrlTyp
                 if( nCtrlFlags & 0x0040 ) EXC_CTRLDUMP_DEC2( "tabpos" );
                 if( nCtrlFlags & 0x0080 ) EXC_CTRLDUMP_CTRLTYPE( nChildType, "type" );
                 if( nCtrlFlags & 0x0800 ) EXC_CTRLDUMP_DECVARMASK( nTipLen, 0x7FFFFFFF, "infotip-len" );
+                if( nCtrlFlags & 0x1000 ) EXC_CTRLDUMP_DECVARMASK( nCtrlIdLen, 0x7FFFFFFF, "ctrl-id-len" );
                 if( nCtrlFlags & 0x2000 ) EXC_CTRLDUMP_DECVARMASK( nCtrlSrcLen, 0x7FFFFFFF, "ctrl-source-len" );
+                if( nCtrlFlags & 0x4000 ) EXC_CTRLDUMP_DECVARMASK( nRowSrcLen, 0x7FFFFFFF, "row-source-len" );
 
                 if( nCtrlFlags & 0x0001 ) EXC_CTRLDUMP_STRING( nNameLen, "name" );
                 if( nCtrlFlags & 0x0002 ) EXC_CTRLDUMP_STRING( nTagLen, "tag" );
                 if( nCtrlFlags & 0x0100 ) EXC_CTRLDUMP_COORD4( "pos" );
                 if( nCtrlFlags & 0x0800 ) EXC_CTRLDUMP_STRING( nTipLen, "infotip" );
+                if( nCtrlFlags & 0x1000 ) EXC_CTRLDUMP_STRING( nCtrlIdLen, "ctrl-id" );
                 if( nCtrlFlags & 0x2000 ) EXC_CTRLDUMP_STRING( nCtrlSrcLen, "ctrl-source" );
+                if( nCtrlFlags & 0x4000 ) EXC_CTRLDUMP_STRING( nRowSrcLen, "row-source" );
                 EXC_CTRLDUMP_REMAINING( nStartPos + nSize );
 
                 if( (nCtrlFlags & 0x0080) && (nChildType != EXC_CTRL_UNKNOWN) )
@@ -8363,7 +8381,6 @@ void Biff8RecDumper::DumpControlFrameStream( SotStorageRef xInStrg, sal_uInt16 n
     if( aStrmHeader.GetStreamLen() > 0 )
     {
         ByteString t;               // "t" needed for macros
-        sal_uInt32 nFlags = 0;      // "nFlags" needed for macros
 
         rOutStrm << "header-record\n";
         DumpControlContents( rInStrm, nCtrlType );
@@ -8668,7 +8685,7 @@ void Biff8RecDumper::Init( void )
         ByteString  aInExClude;
         ByteString  aHexBody;
         UINT32      nLine = 1;
-        BOOL        bCommand;
+        BOOL        bCommand = FALSE;
 
         *pIn >> c >> cNext;
 
@@ -9153,7 +9170,7 @@ _common:
 
                     *pOutName = aDefault;
                 }
-                CreateOutStream( nL );
+                CreateOutStream();
             }
             else if( pDumpStream )
             {
@@ -9285,7 +9302,7 @@ UINT32 Biff8RecDumper::GetVal( const ByteString& r )
 {
     const sal_Char* p = r.GetBuffer();
     sal_Char        c = *p;
-    UINT32          n;
+    UINT32          n = 0;
     const UINT32    nLimitDec = 0xFFFFFFFF / 10;
     const UINT32    nLimitHex = 0xFFFFFFFF / 16;
     BOOL            bError = FALSE;
@@ -9378,7 +9395,7 @@ BOOL Biff8RecDumper::FillIdRangeList( const UINT32 nL, IdRangeList& rRL, const B
     const sal_Char      cCont = '.';
     const sal_Char      cAll = '*';
     ByteString          t;
-    UINT16              n1, n2;
+    UINT16              n1 = 0, n2 = 0;
     UINT32              n;
     BOOL                b = TRUE;
     BOOL                bExp2 = FALSE;
@@ -9545,10 +9562,8 @@ BOOL Biff8RecDumper::FillIdRangeList( const UINT32 nL, IdRangeList& rRL, const B
 }
 
 
-BOOL Biff8RecDumper::CreateOutStream( const UINT32 n )
+BOOL Biff8RecDumper::CreateOutStream()
 {
-    const BOOL bWithErr = ( n != 0xFFFFFFFF );
-
     if( pDumpStream )
     {
         pDumpStream->Close();
