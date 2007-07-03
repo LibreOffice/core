@@ -4,9 +4,9 @@
  *
  *  $RCSfile: file_ooo.scp,v $
  *
- *  $Revision: 1.201 $
+ *  $Revision: 1.202 $
  *
- *  last change: $Author: rt $ $Date: 2007-07-03 14:13:03 $
+ *  last change: $Author: rt $ $Date: 2007-07-03 16:01:02 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -2541,6 +2541,11 @@ File gid_File_Share_Config_Sofficecfg_uiconfig_Zip
                   "modules/dbtable/menubar/menubar.xml",
                   "modules/sbibliography/menubar/menubar.xml",
                   "modules/scalc/menubar/menubar.xml",
+                  "modules/scalc/accelerator/de/default.xml",
+                  "modules/scalc/accelerator/en-GB/default.xml",
+                  "modules/scalc/accelerator/en-US/default.xml",
+                  "modules/scalc/accelerator/es/default.xml",
+                  "modules/scalc/accelerator/fr/default.xml",
                   "modules/starmath/menubar/menubar.xml",
                   "modules/StartModule/menubar/menubar.xml",
                   "modules/BasicIDE/menubar/menubar.xml",
