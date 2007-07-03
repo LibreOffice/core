@@ -4,9 +4,9 @@
  *
  *  $RCSfile: XMLTextPContext.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: vg $ $Date: 2007-02-27 12:48:33 $
+ *  last change: $Author: rt $ $Date: 2007-07-03 15:53:26 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -128,7 +128,8 @@ ScXMLTextPContext::ScXMLTextPContext( ScXMLImport& rImport,
     pTextPContext(NULL),
     pCellContext(pTempCellContext),
     sLName(rLName),
-    sOUText(),
+    sSimpleContent(),
+    pContentBuffer(NULL),
     nPrefix(nPrfx),
     bIsOwn(sal_True)
 {
@@ -139,13 +140,19 @@ ScXMLTextPContext::~ScXMLTextPContext()
 {
     if (pTextPContext)
         delete pTextPContext;
+    if (pContentBuffer)
+        delete pContentBuffer;
 }
 
 void ScXMLTextPContext::AddSpaces(sal_Int32 nSpaceCount)
 {
+    // use pContentBuffer
+    if ( !pContentBuffer )
+        pContentBuffer = new rtl::OUStringBuffer( sSimpleContent );
+
     sal_Char* pChars = new sal_Char[nSpaceCount];
     memset(pChars, ' ', nSpaceCount);
-    sOUText.appendAscii(pChars, nSpaceCount);
+    pContentBuffer->appendAscii(pChars, nSpaceCount);
 }
 
 SvXMLImportContext *ScXMLTextPContext::CreateChildContext( USHORT nTempPrefix,
@@ -162,7 +169,12 @@ SvXMLImportContext *ScXMLTextPContext::CreateChildContext( USHORT nTempPrefix,
     {
         if (!pTextPContext)
         {
-            rtl::OUString sSetString( sOUText.makeStringAndClear() );
+            rtl::OUString sSetString;
+            if ( pContentBuffer )
+                sSetString = pContentBuffer->makeStringAndClear();
+            else
+                sSetString = sSimpleContent;
+
             sal_Unicode cNonSpace(0);
 
             sal_Int32 nLength = sSetString.getLength();
@@ -204,7 +216,19 @@ SvXMLImportContext *ScXMLTextPContext::CreateChildContext( USHORT nTempPrefix,
 void ScXMLTextPContext::Characters( const ::rtl::OUString& rChars )
 {
     if (!pTextPContext)
-        sOUText.append(rChars);
+    {
+        // For the first call to an empty context, copy (ref-counted) the OUString.
+        // The OUStringBuffer is used only if there is more complex content.
+
+        if ( !pContentBuffer && sSimpleContent.getLength() == 0 )
+            sSimpleContent = rChars;
+        else
+        {
+            if ( !pContentBuffer )
+                pContentBuffer = new rtl::OUStringBuffer( sSimpleContent );
+            pContentBuffer->append(rChars);
+        }
+    }
     else
         pTextPContext->Characters(rChars);
 }
@@ -212,8 +236,12 @@ void ScXMLTextPContext::Characters( const ::rtl::OUString& rChars )
 void ScXMLTextPContext::EndElement()
 {
     if (!pTextPContext)
-        pCellContext->SetString(sOUText.makeStringAndClear());
-//      GetScImport().GetTextImport()->GetCursor()->setString(sOUText.makeStringAndClear());
+    {
+        if ( pContentBuffer )
+            pCellContext->SetString(pContentBuffer->makeStringAndClear());
+        else
+            pCellContext->SetString(sSimpleContent);
+    }
     else
     {
         pTextPContext->EndElement();
