@@ -4,9 +4,9 @@
  *
  *  $RCSfile: LocaleNode.hxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: hr $ $Date: 2006-04-20 13:29:12 $
+ *  last change: $Author: rt $ $Date: 2007-07-03 14:05:18 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -91,6 +91,8 @@ virtual ~OFileWriter();
     virtual void  writeParameter(const sal_Char* pTagStr, const sal_Char* pAsciiStr, const ::rtl::OUString& aChars, sal_Int16 count0, sal_Int16 count1) const;
     virtual void  flush(void) const ;
     virtual void  closeOutput(void) const;
+    /// Return the locale string, something like en_US or de_DE
+    const char * getLocale() const { return theLocale; }
 private:
     char m_pcFile[1024];
     char theLocale[50];
@@ -179,6 +181,8 @@ public:
 };
 
 class LCFormatNode : public LocaleNode {
+    static sal_Int16 mnSection;
+    static sal_Int16 mnFormats;
 public:
     inline LCFormatNode (const OUString& name,
                 const Reference< XAttributeList > & attr) : LocaleNode (name, attr) { ; };
