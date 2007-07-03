@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xlchart.hxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: vg $ $Date: 2007-05-22 19:58:43 $
+ *  last change: $Author: rt $ $Date: 2007-07-03 13:25:59 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -111,6 +111,7 @@ namespace com { namespace sun { namespace star {
 #define EXC_CHPROP_OVERLAPSEQ               CREATE_OUSTRING( "OverlapSequence" )
 #define EXC_CHPROP_PERCENTDIAGONAL          CREATE_OUSTRING( "PercentDiagonal" )
 #define EXC_CHPROP_POSITIVEERROR            CREATE_OUSTRING( "PositiveError" )
+#define EXC_CHPROP_RIGHTANGLEDAXES          CREATE_OUSTRING( "RightAngledAxes" )
 #define EXC_CHPROP_ROLE                     CREATE_OUSTRING( "Role" )
 #define EXC_CHPROP_SHOW                     CREATE_OUSTRING( "Show" )
 #define EXC_CHPROP_SHOWFIRST                CREATE_OUSTRING( "ShowFirst" )
