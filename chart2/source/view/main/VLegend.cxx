@@ -4,9 +4,9 @@
  *
  *  $RCSfile: VLegend.cxx,v $
  *
- *  $Revision: 1.38 $
+ *  $Revision: 1.39 $
  *
- *  last change: $Author: vg $ $Date: 2007-05-22 19:26:21 $
+ *  last change: $Author: rt $ $Date: 2007-07-03 13:45:52 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -71,7 +71,7 @@
 #include <rtl/ustrbuf.hxx>
 #endif
 
-#include <deque>
+#include <vector>
 #include <algorithm>
 
 using namespace ::com::sun::star;
@@ -92,7 +92,7 @@ namespace
 
 typedef ::std::pair< ::chart::tNameSequence, ::chart::tAnySequence > tPropertyValues;
 
-typedef ::std::deque< ViewLegendEntry > tViewLegendEntryContainer;
+typedef ::std::vector< ViewLegendEntry > tViewLegendEntryContainer;
 
 double lcl_CalcViewFontSize(
     const Reference< beans::XPropertySet > & xProp,
@@ -228,15 +228,15 @@ awt::Size lcl_createTextShapes(
             xGroup->add( xEntry );
 
             // set label text
-            const Reference< XFormattedString > * pSeq = ((*aIt).aLabel).getConstArray();
-            for( sal_Int32 i = 0; i < ((*aIt).aLabel).getLength(); ++i )
+            Sequence< Reference< XFormattedString > > aLabelSeq = (*aIt).aLabel;
+            for( sal_Int32 i = 0; i < aLabelSeq.getLength(); ++i )
             {
                 // todo: support more than one text range
                 if( i == 1 )
                     break;
 
                 Reference< text::XTextRange > xRange( xEntry, uno::UNO_QUERY );
-                OUString aLabelString( pSeq[i]->getString());
+                OUString aLabelString( aLabelSeq[i]->getString());
                 // workaround for Issue #i67540#
                 if( !aLabelString.getLength())
                     aLabelString = C2U(" ");
@@ -544,14 +544,11 @@ awt::Point lcl_calculatePositionAndRemainingSpace(
 }
 
 template< class T >
-void lcl_appendSeqToDeque( const Sequence< T > & rSource, ::std::deque< T > & rDest, bool bReverse )
+void lcl_appendSeqToVector( const Sequence< T > & rSource, ::std::vector< T > & rDest )
 {
     const sal_Int32 nCount = rSource.getLength();
     for( sal_Int32 i = 0; i < nCount; ++i )
-        if( bReverse )
-            rDest.push_front( rSource[ i ] );
-        else
-            rDest.push_back( rSource[ i ] );
+        rDest.push_back( rSource[ i ] );
 }
 
 } // anonymous namespace
@@ -672,9 +669,9 @@ void VLegend::createShapes(
                     LegendEntryProvider* pLegendEntryProvider( *aIter );
                     if( pLegendEntryProvider )
                     {
-                        lcl_appendSeqToDeque< ViewLegendEntry >(
+                        lcl_appendSeqToVector< ViewLegendEntry >(
                             pLegendEntryProvider->createLegendEntries( eExpansion, xLegendProp, xLegendContainer, m_xShapeFactory, m_xContext )
-                            , aViewEntries, false );
+                            , aViewEntries );
                     }
                 }
             }
