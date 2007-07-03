@@ -4,9 +4,9 @@
  *
  *  $RCSfile: validat.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: obo $ $Date: 2007-03-05 14:40:43 $
+ *  last change: $Author: rt $ $Date: 2007-07-03 15:48:10 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -699,147 +699,177 @@ void lclInsertStringToCollection( TypedStrCollection& rStrColl, TypedStrData* pD
 
 // ----------------------------------------------------------------------------
 
-bool ScValidationData::GetRangeFromFormula( ScRange& rRange, const ScAddress& rBaseAddr, ScTokenArray& rTokArr, int nRecCount ) const
-{
-    if( nRecCount >= 42 )
-        return false;
-
-    bool bIsRange = false;          // range found from recursive call
-    bool bRangeFound = false;       // range found in current run
-
-    const ScToken* pToken = rTokArr.FirstNoSpaces();
-    /*  The test !rTokArr.NextNoSpaces() would result in returning an error, if any
-        other token follows. But specification says, just ignore the rest of the formula. */
-    if( pToken /*&& !rTokArr.NextNoSpaces()*/ )
-    {
-        switch( pToken->GetType() )
-        {
-            case svSingleRef:
-            case svDoubleRef:
-            {
-                // Single or double reference. Convert to absolute cell range in the document.
-                ComplRefData aRef;
-                if( pToken->GetType() == svSingleRef )
-                    aRef.Ref1 = aRef.Ref2 = pToken->GetSingleRef();
-                else
-                    aRef = pToken->GetDoubleRef();
-                aRef.CalcAbsIfRel( rBaseAddr );
-
-                if( aRef.Valid() && !aRef.IsDeleted() )
-                {
-                    rRange.aStart.Set( aRef.Ref1.nCol, aRef.Ref1.nRow, aRef.Ref1.nTab );
-                    rRange.aEnd.Set( aRef.Ref2.nCol, aRef.Ref2.nRow, aRef.Ref2.nTab );
-                    bRangeFound = true;
-                }
-            }
-            break;
-
-            case svIndex:
-            {
-                switch( pToken->GetOpCode() )
-                {
-                    case ocName:
-                    {
-                        // Defined name. Calls this function recursively with name definition.
-                        if( ScRangeData* pRangeData = GetDocument()->GetRangeName()->FindIndex( pToken->GetIndex() ) )
-                            if( ScTokenArray* pNameTokArr = pRangeData->GetCode() )
-                                bIsRange = GetRangeFromFormula( rRange, rBaseAddr, *pNameTokArr, nRecCount + 1 );
-                    }
-                    break;
-
-                    case ocDBArea:
-                    {
-                        // Database range. Gets cell range and evaluates the cells.
-                        if( ScDBCollection* pDBColl = GetDocument()->GetDBCollection() )
-                        {
-                            if( const ScDBData* pDBData = pDBColl->FindIndex( pToken->GetIndex() ) )
-                            {
-                                pDBData->GetArea( rRange );
-                                bRangeFound = true;
-                            }
-                        }
-                    }
-                    break;
-
-                    default:
-                    {
-                        // added to avoid warnings
-                    }
-                }
-            }
-            break;
-
-            default:
-            {
-                // added to avoid warnings
-            }
-        }
-    }
-
-    if( bRangeFound )
-    {
-        rRange.Justify();
-        // range is restricted to one table
-        rRange.aEnd.SetTab( rRange.aStart.Tab() );
-        // if the range has multiple rows, it is restricted to one column
-        if( rRange.aStart.Row() < rRange.aEnd.Row() )
-            rRange.aEnd.SetCol( rRange.aStart.Col() );
-        bIsRange = true;
-    }
-
-    return bIsRange;
-}
-
-// ----------------------------------------------------------------------------
-
 bool ScValidationData::HasSelectionList() const
 {
     return (eDataMode == SC_VALID_LIST) && (mnListType != ValidListType::INVISIBLE);
 }
 
-bool ScValidationData::FillSelectionList( TypedStrCollection& rStrColl, const ScAddress rPos ) const
+bool ScValidationData::GetSelectionFromFormula( TypedStrCollection* pStrings,
+                                                ScBaseCell* pCell,
+                                                const ScAddress& rPos,
+                                                const ScTokenArray& rTokArr,
+                                                int& rMatch ) const
+{
+    bool bOk = true;
+
+    // pDoc is private in condition, use an accessor and a long winded name.
+    ScDocument* pDocument = GetDocument();
+    if( NULL == pDocument )
+        return false;
+
+    ScFormulaCell aValidationSrc( pDocument, rPos, &rTokArr, MM_FORMULA);
+
+    // Make sure the formula gets interpreted and a result is delivered,
+    // regardless of the AutoCalc setting.
+    aValidationSrc.Interpret();
+
+    ScMatrixRef xMatRef;
+    const ScMatrix *pValues = aValidationSrc.GetMatrix();
+    if (!pValues)
+    {
+        // The somewhat nasty case of either an error occured, or the
+        // dereferenced value of a single cell reference or an immediate result
+        // is stored as a single value.
+
+        // Use an interim matrix to create the TypedStrData below.
+        xMatRef = new ScMatrix(1,1);
+
+        USHORT nErrCode = aValidationSrc.GetErrCode();
+        if (nErrCode)
+        {
+            /* TODO : to use later in an alert box?
+             * String rStrResult = "...";
+             * rStrResult += ScGlobal::GetLongErrorString(nErrCode);
+             */
+
+            xMatRef->PutError( nErrCode, 0);
+            bOk = false;
+        }
+        else if (aValidationSrc.HasValueData())
+            xMatRef->PutDouble( aValidationSrc.GetValue(), 0);
+        else
+        {
+            String aStr;
+            aValidationSrc.GetString( aStr);
+            xMatRef->PutString( aStr, 0);
+        }
+
+        pValues = xMatRef;
+    }
+
+    // which index matched.  We will want it eventually to pre-select that item.
+    rMatch = -1;
+
+    SvNumberFormatter* pFormatter = GetDocument()->GetFormatTable();
+
+    bool    bSortList = (mnListType == ValidListType::SORTEDASCENDING);
+    SCSIZE  nCol, nRow, nCols, nRows, n = 0;
+    pValues->GetDimensions( nCols, nRows );
+
+    /* XL artificially limits things to a single col or row in the UI but does
+     * not list the constraint in MOOXml. If a defined name or INDIRECT
+     * resulting in 1D is entered in the UI and the definition later modified
+     * to 2D, it is evaluated fine and also stored and loaded.  Lets get ahead
+     * of the curve and support 2d. In XL, values are listed row-wise, do the
+     * same. */
+    for( nRow = 0; nRow < nRows ; nRow++ )
+    {
+        for( nCol = 0; nCol < nCols ; nCol++ )
+        {
+            ScTokenArray         aCondTokArr;
+            TypedStrData*        pEntry = NULL;
+            ScMatValType         nMatValType;
+            String               aValStr;
+            const ScMatrixValue* pMatVal = pValues->Get( nCol, nRow, nMatValType);
+
+            // strings and empties
+            if( NULL == pMatVal || ScMatrix::IsStringType( nMatValType ) )
+            {
+                if( NULL != pMatVal )
+                    aValStr = pMatVal->GetString();
+
+                if( NULL != pStrings )
+                    pEntry = new TypedStrData( aValStr, 0.0, SC_STRTYPE_STANDARD);
+
+                if( pCell && rMatch < 0 )
+                    aCondTokArr.AddString( aValStr );
+            }
+            else
+            {
+                USHORT nErr = pMatVal->GetError();
+
+                if( 0 != nErr )
+                {
+                    aValStr = ScGlobal::GetErrorString( nErr );
+                }
+                else
+                {
+                    // FIXME FIXME FIXME
+                    // Feature regression.  Date formats are lost passing through the matrix
+                    pFormatter->GetInputLineString( pMatVal->fVal, 0, aValStr );
+                }
+
+                if( pCell && rMatch < 0 )
+                {
+                    // I am not sure errors will work here, but a user can no
+                    // manually enter an error yet so the point is somewhat moot.
+                    aCondTokArr.AddDouble( pMatVal->fVal );
+                }
+                if( NULL != pStrings )
+                    pEntry = new TypedStrData( aValStr, pMatVal->fVal, SC_STRTYPE_VALUE);
+            }
+
+            if( rMatch < 0 && NULL != pCell && IsEqualToTokenArray( pCell, rPos, aCondTokArr ) )
+            {
+                rMatch = n;
+                // short circuit on the first match if not filling the list
+                if( NULL == pStrings )
+                    return true;
+            }
+
+            if( NULL != pEntry )
+            {
+                lclInsertStringToCollection( *pStrings, pEntry, bSortList );
+                n++;
+            }
+        }
+    }
+
+    // In case of no match needed and an error occurred, return that error
+    // entry as valid instead of silently failing.
+    return bOk || NULL == pCell;
+}
+
+bool ScValidationData::FillSelectionList( TypedStrCollection& rStrColl, const ScAddress& rPos ) const
 {
     bool bOk = false;
 
     if( HasSelectionList() )
     {
         ::std::auto_ptr< ScTokenArray > pTokArr( CreateTokenArry( 0 ) );
+
+        // *** try if formula is a string list ***
+
         bool bSortList = (mnListType == ValidListType::SORTEDASCENDING);
-
-        ScRange aSource;
-        if( GetRangeFromFormula( aSource, rPos, *pTokArr ) )
+        UINT32 nFormat = lclGetCellFormat( *GetDocument(), rPos );
+        ScStringTokenIterator aIt( *pTokArr );
+        for( const String* pString = aIt.First(); pString && aIt.Ok(); pString = aIt.Next() )
         {
-            // *** formula results in a cell range ***
-
-            SCTAB nTab = aSource.aStart.Tab();
-            for( SCCOL nCol = aSource.aStart.Col(), nEndCol = aSource.aEnd.Col(); nCol <= nEndCol; ++nCol )
-            {
-                for( SCROW nRow = aSource.aStart.Row(), nEndRow = aSource.aEnd.Row(); nRow <= nEndRow; ++nRow )
-                {
-                    TypedStrData* pData = new TypedStrData( GetDocument(), nCol, nRow, nTab, TRUE );
-                    lclInsertStringToCollection( rStrColl, pData, bSortList );
-                }
-            }
-
-            bOk = true;
+            double fValue;
+            bool bIsValue = GetDocument()->GetFormatTable()->IsNumberFormat( *pString, nFormat, fValue );
+            TypedStrData* pData = new TypedStrData( *pString, fValue, bIsValue ? SC_STRTYPE_VALUE : SC_STRTYPE_STANDARD );
+            lclInsertStringToCollection( rStrColl, pData, bSortList );
         }
-        else
+        bOk = aIt.Ok();
+
+        // *** if not a string list, try if formula results in a cell range or
+        // anything else we recognize as valid ***
+
+        if (!bOk)
         {
-            // *** try if formula is a string list ***
-
-            UINT32 nFormat = lclGetCellFormat( *GetDocument(), rPos );
-            ScStringTokenIterator aIt( *pTokArr );
-            for( const String* pString = aIt.First(); pString && aIt.Ok(); pString = aIt.Next() )
-            {
-                double fValue;
-                bool bIsValue = GetDocument()->GetFormatTable()->IsNumberFormat( *pString, nFormat, fValue );
-                TypedStrData* pData = new TypedStrData( *pString, fValue, bIsValue ? SC_STRTYPE_VALUE : SC_STRTYPE_STANDARD );
-                lclInsertStringToCollection( rStrColl, pData, bSortList );
-            }
-
-            bOk = aIt.Ok();
+            int nMatch;
+            bOk = GetSelectionFromFormula( &rStrColl, NULL, rPos, *pTokArr, nMatch );
         }
-
     }
 
     return bOk;
@@ -862,60 +892,48 @@ bool ScValidationData::IsListValid( ScBaseCell* pCell, const ScAddress& rPos ) c
         Currently a formula may contain:
         1)  A list of strings (at least one string).
         2)  A single cell or range reference.
-        3)  A single defined name (must contain a cell/range reference, another name, or DB range).
+        3)  A single defined name (must contain a cell/range reference, another
+            name, or DB range, or a formula resulting in a cell/range reference
+            or matrix/array).
         4)  A single database range.
-        If the range consists of one row or one column, all cells of a cell range are used.
-        Otherwise only the first column of a range will be evaluated. */
+        5)  A formula resulting in a cell/range reference or matrix/array.
+    */
 
     ::std::auto_ptr< ScTokenArray > pTokArr( CreateTokenArry( 0 ) );
 
-    ScRange aSource;
-    if( GetRangeFromFormula( aSource, rPos, *pTokArr ) )
+    // *** try if formula is a string list ***
+
+    UINT32 nFormat = lclGetCellFormat( *GetDocument(), rPos );
+    ScStringTokenIterator aIt( *pTokArr );
+    for( const String* pString = aIt.First(); pString && aIt.Ok(); pString = aIt.Next() )
     {
-        // *** formula results in a cell range ***
-
-        SingleRefData aStartRef, aEndRef;
-        aStartRef.InitAddress( aSource.aStart );
-        aEndRef.InitAddress( aSource.aEnd );
-
-        for( SingleRefData aRef = aStartRef; !bIsValid && (aRef.nCol <= aEndRef.nCol); ++aRef.nCol )
+        /*  Do not break the loop, if a valid string has been found.
+            This is to find invalid tokens following in the formula. */
+        if( !bIsValid )
         {
-            for( aRef.nRow = aStartRef.nRow; !bIsValid && (aRef.nRow <= aEndRef.nRow); ++aRef.nRow )
-            {
-                // create a formula containing a single reference to the current cell
-                ScTokenArray aCondTokArr;
-                aCondTokArr.AddSingleReference( aRef );
+            // create a formula containing a single string or number
+            ScTokenArray aCondTokArr;
+            double fValue;
+            if( GetDocument()->GetFormatTable()->IsNumberFormat( *pString, nFormat, fValue ) )
+                aCondTokArr.AddDouble( fValue );
+            else
+                aCondTokArr.AddString( *pString );
 
-                bIsValid = IsEqualToTokenArray( pCell, rPos, aCondTokArr );
-            }
+            bIsValid = IsEqualToTokenArray( pCell, rPos, aCondTokArr );
         }
     }
-    else
+
+    if( !aIt.Ok() )
+        bIsValid = false;
+
+    // *** if not a string list, try if formula results in a cell range or
+    // anything else we recognize as valid ***
+
+    if (!bIsValid)
     {
-        // *** try if formula is a string list ***
-
-        UINT32 nFormat = lclGetCellFormat( *GetDocument(), rPos );
-        ScStringTokenIterator aIt( *pTokArr );
-        for( const String* pString = aIt.First(); pString && aIt.Ok(); pString = aIt.Next() )
-        {
-            /*  Do not break the loop, if a valid string has been found.
-                This is to find invalid tokens following in the formula. */
-            if( !bIsValid )
-            {
-                // create a formula containing a single string or number
-                ScTokenArray aCondTokArr;
-                double fValue;
-                if( GetDocument()->GetFormatTable()->IsNumberFormat( *pString, nFormat, fValue ) )
-                    aCondTokArr.AddDouble( fValue );
-                else
-                    aCondTokArr.AddString( *pString );
-
-                bIsValid = IsEqualToTokenArray( pCell, rPos, aCondTokArr );
-            }
-        }
-
-        if( !aIt.Ok() )
-            bIsValid = false;
+        int nMatch;
+        bIsValid = GetSelectionFromFormula( NULL, pCell, rPos, *pTokArr, nMatch );
+        bIsValid = bIsValid && nMatch >= 0;
     }
 
     return bIsValid;
