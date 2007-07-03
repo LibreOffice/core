@@ -4,9 +4,9 @@
 #
 #   $RCSfile: make_installer.pl,v $
 #
-#   $Revision: 1.87 $
+#   $Revision: 1.88 $
 #
-#   last change: $Author: kz $ $Date: 2007-05-10 13:56:19 $
+#   last change: $Author: rt $ $Date: 2007-07-03 11:45:11 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -311,6 +311,12 @@ if ( $installer::globals::iswindowsbuild ) { installer::control::read_encodingli
 #####################################################################
 
 if ( $allvariableshashref->{'ADD_INCLUDE_FILES'} ) { installer::worker::add_variables_from_inc_to_hashref($allvariableshashref, $includepatharrayref); }
+
+################################################
+# Disable xpd installer, if SOLAR_JAVA not set
+################################################
+
+installer::control::check_java_for_xpd($allvariableshashref);
 
 #####################################
 # Analyzing the setup script
@@ -1517,9 +1523,13 @@ for ( my $n = 0; $n <= $#installer::globals::languageproducts; $n++ )
                 # creating the xpd file for the package
                 if ( $installer::globals::isxpdplatform )
                 {
-                    if (( $allvariableshashref->{'XPDINSTALLER'} ) && ( $installer::globals::call_epm != 0 ))
+                    if (( ! $installer::globals::languagepack ) && ( ! $installer::globals::patch ))
                     {
-                        installer::xpdinstaller::create_xpd_file($onepackage, $packages, $languagestringref, $allvariableshashref, $modulesinproductarrayref, $installdir, $installer::globals::subdir, $linkpackage);
+                        if (( $allvariableshashref->{'XPDINSTALLER'} ) && ( $installer::globals::call_epm != 0 ))
+                        {
+                            installer::xpdinstaller::create_xpd_file($onepackage, $packages, $languagestringref, $allvariableshashref, $modulesinproductarrayref, $installdir, $installer::globals::subdir, $linkpackage);
+                            $installer::globals::xpd_files_prepared = 1;
+                        }
                     }
                 }
 
@@ -1557,7 +1567,7 @@ for ( my $n = 0; $n <= $#installer::globals::languageproducts; $n++ )
             if (( $installer::globals::patch ) && ( $installer::globals::islinuxrpmbuild )) { installer::epmfile::finalize_linux_patch($installer::globals::subdir, $allvariableshashref, $includepatharrayref); }
 
             # Copying the xpd installer into the installation set
-            if (( $allvariableshashref->{'XPDINSTALLER'} ) && ( $installer::globals::isxpdplatform ))
+            if (( $allvariableshashref->{'XPDINSTALLER'} ) && ( $installer::globals::isxpdplatform ) && ( $installer::globals::xpd_files_prepared ))
             {
                 installer::xpdinstaller::create_xpd_installer($installdir, $allvariableshashref);
                 $installer::globals::addjavainstaller = 0;  # only one java installer possible
