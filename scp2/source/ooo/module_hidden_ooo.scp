@@ -4,9 +4,9 @@
  *
  *  $RCSfile: module_hidden_ooo.scp,v $
  *
- *  $Revision: 1.66 $
+ *  $Revision: 1.67 $
  *
- *  last change: $Author: hr $ $Date: 2007-06-27 15:51:58 $
+ *  last change: $Author: rt $ $Date: 2007-07-03 12:07:33 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -39,6 +39,7 @@ Module gid_Module_Root_Files_2
 	ParentID = gid_Module_Root;
 	Name = "gid_Module_Root_Files_2";
 	Description = "gid_Module_Root_Files_2";
+	Sortkey = "200";
 	Default = YES;
 	Styles = (HIDDEN_ROOT,ISUPDATEPACKAGE);
 	Files = (gid_File_Bin_Cde_Open_Url,
@@ -112,6 +113,7 @@ Module gid_Module_Root_Files_3
 	ParentID = gid_Module_Root;
 	Name = "gid_Module_Root_Files_3";
 	Description = "gid_Module_Root_Files_3";
+	Sortkey = "300";
 	Default = YES;
 	Styles = (HIDDEN_ROOT);
 	Files = (gid_File_Dat_Root3,
@@ -164,6 +166,7 @@ Module gid_Module_Root_Files_4
 	ParentID = gid_Module_Root;
 	Name = "gid_Module_Root_Files_4";
 	Description = "gid_Module_Root_Files_4";
+	Sortkey = "400";
 	Default = YES;
 	Styles = (HIDDEN_ROOT);
 	Files = (gid_File_Dat_Root4,
@@ -282,6 +285,7 @@ Module gid_Module_Root_Files_5
 	ParentID = gid_Module_Root;
 	Name = "gid_Module_Root_Files_5";
 	Description = "gid_Module_Root_Files_5";
+	Sortkey = "500";
 	Default = YES;
 	Styles = (HIDDEN_ROOT);
 	Files = (gid_File_Dat_Root5,
@@ -515,6 +519,7 @@ Module gid_Module_Root_Files_6
 	ParentID = gid_Module_Root;
 	Name = "gid_Module_Root_Files_6";
 	Description = "gid_Module_Root_Files_6";
+	Sortkey = "600";
 	Default = YES;
 	Styles = (HIDDEN_ROOT);
 	Files = (gid_File_Basic_User,
@@ -929,6 +934,7 @@ Module gid_Module_Root_Files_7
 	ParentID = gid_Module_Root;
 	Name = "gid_Module_Root_Files_7";
 	Description = "gid_Module_Root_Files_7";
+	Sortkey = "700";
 	Default = YES;
 	Styles = (HIDDEN_ROOT);
 	Files = (gid_File_Help_Common_Zip,
@@ -941,6 +947,7 @@ Module gid_Module_Root_Files_8
 	ParentID = gid_Module_Root;
 	Name = "gid_Module_Root_Files_8";
 	Description = "gid_Module_Root_Files_8";
+	Sortkey = "800";
 	Default = YES;
 	Styles = (HIDDEN_ROOT);
 	Files = (
@@ -1011,6 +1018,7 @@ Module gid_Module_Root_Files_9
 	ParentID = gid_Module_Root;
 	Name = "gid_Module_Root_Files_9";
 	Description = "gid_Module_Root_Files_9";
+	Sortkey = "900";
 	Default = YES;
 	Styles = (HIDDEN_ROOT);
 	Files = (gid_File_Mozilla_Runtime);
@@ -1023,6 +1031,7 @@ Module gid_Module_Root_Files_10
 	ParentID = gid_Module_Root;
 	Name = "gid_Module_Root_Files_10";
 	Description = "gid_Module_Root_Files_10";
+	Sortkey = "1000";
 	Default = YES;
 	Styles = (HIDDEN_ROOT);
 	Files = (gid_File_Lib_Freetype);
