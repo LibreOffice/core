@@ -4,9 +4,9 @@
  *
  *  $RCSfile: VDiagram.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: vg $ $Date: 2007-05-22 19:21:22 $
+ *  last change: $Author: rt $ $Date: 2007-07-03 13:45:38 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -140,6 +140,7 @@ private: //members
     double m_fXAnglePi;
     double m_fYAnglePi;
     double m_fZAnglePi;
+    sal_Bool m_bRightAngledAxes;
 
     ::com::sun::star::awt::Point    m_aAvailablePosIncludingAxes;
     ::com::sun::star::awt::Size     m_aAvailableSizeIncludingAxes;
