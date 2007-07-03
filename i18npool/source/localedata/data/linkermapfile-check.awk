@@ -15,7 +15,9 @@ BEGIN {
     nPublics = 0
     sPublic[nPublics++] = "getAllCalendars_"
     sPublic[nPublics++] = "getAllCurrencies_"
-    sPublic[nPublics++] = "getAllFormats_"
+    sPublic[nPublics++] = "getAllFormats0_"
+    bOptional[nPublics] = 1     # getAllFormats1 most times not present
+    sPublic[nPublics++] = "getAllFormats1_"
     sPublic[nPublics++] = "getBreakIteratorRules_"
     sPublic[nPublics++] = "getCollationOptions_"
     sPublic[nPublics++] = "getCollatorImplementation_"
@@ -53,6 +55,11 @@ file != FILENAME {
             {
                 if ( sSymbol[j,symbol] )
                     bFound = 1
+            }
+            if ( !bFound && bOptional[i] )
+            {
+                print symbol " not present but optional"
+                bFound = 1
             }
             if ( !bFound )
             {
