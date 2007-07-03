@@ -4,9 +4,9 @@
  *
  *  $RCSfile: addincol.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: vg $ $Date: 2007-02-27 12:11:14 $
+ *  last change: $Author: rt $ $Date: 2007-07-03 15:49:16 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -491,7 +491,7 @@ void ScUnoAddInCollection::ReadConfiguration()
                     aFuncProperties[CFG_FUNCPROP_DESCRIPTION] >>= aDescription;
 
                     rtl::OUString aCategoryName;
-                    aFuncProperties[CFG_FUNCPROP_DESCRIPTION] >>= aCategoryName;
+                    aFuncProperties[CFG_FUNCPROP_CATEGORY] >>= aCategoryName;
                     nCategory = lcl_GetCategory( aCategoryName );
                 }
 
