@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xmltoken.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: vg $ $Date: 2007-05-22 16:04:31 $
+ *  last change: $Author: rt $ $Date: 2007-07-03 13:22:15 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -2873,6 +2873,7 @@ namespace xmloff { namespace token {
         // <--
 
         XML_SORT_BY_X_VALUES,
+        XML_RIGHT_ANGLED_AXES,
 
         XML_TOKEN_END
     };
