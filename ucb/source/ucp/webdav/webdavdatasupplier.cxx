@@ -4,9 +4,9 @@
  *
  *  $RCSfile: webdavdatasupplier.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: ihi $ $Date: 2007-06-05 18:21:34 $
+ *  last change: $Author: rt $ $Date: 2007-07-03 12:14:48 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -429,83 +429,103 @@ sal_Bool DataSupplier::getData()
 
         if ( !m_pImpl->m_bThrowException )
         {
-            NeonUri aURI( m_pImpl->m_xContent->getResourceAccess().getURL() );
-            rtl::OUString aPath = aURI.GetPath();
-            if ( aPath.getStr()[ aPath.getLength() - 1 ] == sal_Unicode( '/' ) )
-                aPath = aPath.copy( 0, aPath.getLength() - 1 );
-
-            aPath = NeonUri::unescape( aPath );
-            bool bFoundParent = false;
-
-            for ( sal_uInt32 n = 0; n < resources.size(); ++n )
+            try
             {
-                const DAVResource & rRes = resources[ n ];
+                NeonUri aURI(
+                    m_pImpl->m_xContent->getResourceAccess().getURL() );
+                rtl::OUString aPath = aURI.GetPath();
 
-                // Filter parent, which is contained somewhere(!) in the vector.
-                if ( !bFoundParent )
+                if ( aPath.getStr()[ aPath.getLength() - 1 ]
+                     == sal_Unicode( '/' ) )
+                    aPath = aPath.copy( 0, aPath.getLength() - 1 );
+
+                aPath = NeonUri::unescape( aPath );
+                bool bFoundParent = false;
+
+                for ( sal_uInt32 n = 0; n < resources.size(); ++n )
                 {
-                    NeonUri aCurrURI( rRes.uri );
-                    rtl::OUString aCurrPath = aCurrURI.GetPath();
-                    if ( aCurrPath.getStr()[
-                            aCurrPath.getLength() - 1 ] == sal_Unicode( '/' ) )
-                        aCurrPath
-                            = aCurrPath.copy( 0, aCurrPath.getLength() - 1 );
+                    const DAVResource & rRes = resources[ n ];
 
-                    aCurrPath = NeonUri::unescape( aCurrPath );
-                    if ( aPath == aCurrPath )
+                    // Filter parent, which is contained somewhere(!) in
+                    // the vector.
+                    if ( !bFoundParent )
                     {
-                        bFoundParent = true;
-                        continue;
+                        try
+                        {
+                            NeonUri aCurrURI( rRes.uri );
+                            rtl::OUString aCurrPath = aCurrURI.GetPath();
+                            if ( aCurrPath.getStr()[
+                                     aCurrPath.getLength() - 1 ]
+                                 == sal_Unicode( '/' ) )
+                                aCurrPath
+                                    = aCurrPath.copy(
+                                        0,
+                                        aCurrPath.getLength() - 1 );
+
+                            aCurrPath = NeonUri::unescape( aCurrPath );
+                            if ( aPath == aCurrPath )
+                            {
+                                bFoundParent = true;
+                                continue;
+                            }
+                        }
+                        catch ( DAVException const & )
+                        {
+                            // do nothing, ignore error. continue.
+                        }
                     }
-                }
 
-                ContentProperties* pContentProperties
-                    = new ContentProperties( rRes );
+                    ContentProperties* pContentProperties
+                        = new ContentProperties( rRes );
 
-                // Check resource against open mode.
-                switch ( m_pImpl->m_nOpenMode )
-                {
+                    // Check resource against open mode.
+                    switch ( m_pImpl->m_nOpenMode )
+                    {
                     case ucb::OpenMode::FOLDERS:
-                    {
-                        sal_Bool bFolder = sal_False;
+                        {
+                            sal_Bool bFolder = sal_False;
 
-                        const uno::Any & rValue
-                            = pContentProperties->getValue(
-                                rtl::OUString(
-                                    RTL_CONSTASCII_USTRINGPARAM(
-                                        "IsFolder" ) ) );
-                        rValue >>= bFolder;
+                            const uno::Any & rValue
+                                = pContentProperties->getValue(
+                                    rtl::OUString(
+                                        RTL_CONSTASCII_USTRINGPARAM(
+                                            "IsFolder" ) ) );
+                            rValue >>= bFolder;
 
-                        if ( !bFolder )
-                            continue;
+                            if ( !bFolder )
+                                continue;
 
-                        break;
-                    }
+                            break;
+                        }
 
                     case ucb::OpenMode::DOCUMENTS:
-                    {
-                        sal_Bool bDocument = sal_False;
+                        {
+                            sal_Bool bDocument = sal_False;
 
-                        const uno::Any & rValue
-                            = pContentProperties->getValue(
-                                rtl::OUString(
-                                    RTL_CONSTASCII_USTRINGPARAM(
-                                        "IsDocument" ) ) );
-                        rValue >>= bDocument;
+                            const uno::Any & rValue
+                                = pContentProperties->getValue(
+                                    rtl::OUString(
+                                        RTL_CONSTASCII_USTRINGPARAM(
+                                            "IsDocument" ) ) );
+                            rValue >>= bDocument;
 
-                        if ( !bDocument )
-                            continue;
+                            if ( !bDocument )
+                                continue;
 
-                        break;
-                    }
+                            break;
+                        }
 
                     case ucb::OpenMode::ALL:
                     default:
                         break;
-                }
+                    }
 
-                m_pImpl->m_aResults.push_back(
-                                    new ResultListEntry( pContentProperties ) );
+                    m_pImpl->m_aResults.push_back(
+                        new ResultListEntry( pContentProperties ) );
+                }
+            }
+            catch ( DAVException const & )
+            {
             }
         }
 
