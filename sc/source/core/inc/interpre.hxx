@@ -4,9 +4,9 @@
  *
  *  $RCSfile: interpre.hxx,v $
  *
- *  $Revision: 1.28 $
+ *  $Revision: 1.29 $
  *
- *  last change: $Author: hr $ $Date: 2007-06-27 13:43:58 $
+ *  last change: $Author: rt $ $Date: 2007-07-03 15:48:37 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -374,6 +374,8 @@ void ScT();
 void ScValue();
 void ScClean();
 void ScChar();
+void ScJis();
+void ScAsc();
 void ScMin( BOOL bTextAsZero = FALSE );
 void ScMax( BOOL bTextAsZero = FALSE );
 double IterateParameters( ScIterFunc, BOOL bTextAsZero = FALSE );
