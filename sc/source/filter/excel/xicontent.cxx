@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xicontent.cxx,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: obo $ $Date: 2007-06-13 09:10:38 $
+ *  last change: $Author: rt $ $Date: 2007-07-03 15:50:33 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -802,7 +802,7 @@ void XclImpValidation::ReadDV( XclImpStream& rStrm )
 
                 // process string list of a list validity (convert to list of string tokens)
                 if( xTokArr1.get() && (eValMode == SC_VALID_LIST) && ::get_flag( nFlags, EXC_DV_STRINGLIST ) )
-                    XclTokenArrayHelper::ConvertStringToList( *xTokArr1, '\n' );
+                    XclTokenArrayHelper::ConvertStringToList( *xTokArr1, '\n', true );
 
                 ScValidationData aValidData( eValMode, eCondMode, xTokArr1.get(), xTokArr2.get(), &rDoc, rScRange.aStart );
 
