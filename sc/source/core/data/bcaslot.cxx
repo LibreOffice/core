@@ -4,9 +4,9 @@
  *
  *  $RCSfile: bcaslot.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: kz $ $Date: 2006-07-21 10:47:59 $
+ *  last change: $Author: rt $ $Date: 2007-07-03 15:47:12 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -223,8 +223,11 @@ BOOL ScBroadcastAreaSlot::AreaBroadcast( const ScHint& rHint) const
         const ScRange& rAreaRange = (*aIter)->GetRange();
         if (rAreaRange.In( rAddress))
         {
-            (*aIter)->GetBroadcaster().Broadcast( rHint);
-            bIsBroadcasted = TRUE;
+            if (!pBASM->IsInBulkBroadcast() || pBASM->InsertBulkArea( *aIter))
+            {
+                (*aIter)->GetBroadcaster().Broadcast( rHint);
+                bIsBroadcasted = TRUE;
+            }
         }
         else if (rAddress < rAreaRange.aStart)
             break;  // for loop, only ranges greater than rAddress follow
@@ -246,8 +249,11 @@ BOOL ScBroadcastAreaSlot::AreaBroadcastInRange( const ScRange& rRange,
         const ScRange& rAreaRange = (*aIter)->GetRange();
         if (rAreaRange.Intersects( rRange ))
         {
-            (*aIter)->GetBroadcaster().Broadcast( rHint);
-            bIsBroadcasted = TRUE;
+            if (!pBASM->IsInBulkBroadcast() || pBASM->InsertBulkArea( *aIter))
+            {
+                (*aIter)->GetBroadcaster().Broadcast( rHint);
+                bIsBroadcasted = TRUE;
+            }
         }
         else if (rRange.aEnd < rAreaRange.aStart)
             break;  // for loop, only ranges greater than end address follow
@@ -358,7 +364,8 @@ ScBroadcastAreaSlotMachine::ScBroadcastAreaSlotMachine(
     pBCAlways( NULL ),
     pDoc( pDocument ),
     pUpdateChain( NULL ),
-    pEOUpdateChain( NULL )
+    pEOUpdateChain( NULL ),
+    nInBulkBroadcast( 0 )
 {
     ppSlots = new ScBroadcastAreaSlot* [ BCA_SLOTS ];
     memset( ppSlots, 0 , sizeof( ScBroadcastAreaSlot* ) * BCA_SLOTS );
@@ -673,3 +680,24 @@ void ScBroadcastAreaSlotMachine::UpdateBroadcastAreas(
     pEOUpdateChain = NULL;
 }
 
+
+void ScBroadcastAreaSlotMachine::EnterBulkBroadcast()
+{
+    ++nInBulkBroadcast;
+}
+
+
+void ScBroadcastAreaSlotMachine::LeaveBulkBroadcast()
+{
+    if (nInBulkBroadcast > 0)
+    {
+        if (--nInBulkBroadcast == 0)
+            ScBroadcastAreasBulk().swap( aBulkBroadcastAreas);
+    }
+}
+
+
+bool ScBroadcastAreaSlotMachine::InsertBulkArea( const ScBroadcastArea* pArea )
+{
+    return aBulkBroadcastAreas.insert( pArea ).second;
+}
