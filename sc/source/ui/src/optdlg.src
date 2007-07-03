@@ -4,9 +4,9 @@
  *
  *  $RCSfile: optdlg.src,v $
  *
- *  $Revision: 1.64 $
+ *  $Revision: 1.65 $
  *
- *  last change: $Author: ihi $ $Date: 2007-04-19 16:45:29 $
+ *  last change: $Author: rt $ $Date: 2007-07-03 15:55:06 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -141,6 +141,7 @@ TabPage RID_SCPAGE_CALC
         Size = MAP_APPFONT ( 25 , 12 ) ;
         Maximum = 20 ;
         Spin = TRUE ;
+        Repeat = TRUE ;
     };
     CheckBox BTN_CASE
     {
