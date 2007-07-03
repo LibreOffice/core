@@ -4,9 +4,9 @@
  *
  *  $RCSfile: linkarea.src,v $
  *
- *  $Revision: 1.30 $
+ *  $Revision: 1.31 $
  *
- *  last change: $Author: ihi $ $Date: 2007-04-19 16:32:47 $
+ *  last change: $Author: rt $ $Date: 2007-07-03 15:54:37 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -112,6 +112,7 @@ ModalDialog RID_SCDLG_LINKAREA
         Size = MAP_APPFONT ( 32 , 12 ) ;
         TabStop = TRUE ;
         Spin = TRUE ;
+        Repeat = TRUE ;
         Minimum = 1 ;
         Maximum = 99999 ;
         Value = 60 ;
@@ -124,41 +125,4 @@ ModalDialog RID_SCDLG_LINKAREA
     };
     Text [ en-US ] = "External Data";
 };
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
