@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.1 $
+#   $Revision: 1.2 $
 #
-#   last change: $Author: is $ $Date: 2006-12-20 14:45:03 $
+#   last change: $Author: rt $ $Date: 2007-07-03 12:04:16 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -50,7 +50,9 @@ INPUT=java_ulffiles
 
 .INCLUDE :	target.mk
 
+.IF "$(SOLAR_JAVA)"!=""
 ALLTAR: $(MISC)$/setupstrings.properties
 
 $(MISC)$/setupstrings.properties : create_property.pl $(COMMONMISC)$/$(INPUT)$/setupstrings.jlf setupstrings_template.properties setupfiles_template.properties
     $(PERL) create_property.pl $/ $(COMMONMISC)$/$(INPUT) $(MISC)
+.ENDIF
