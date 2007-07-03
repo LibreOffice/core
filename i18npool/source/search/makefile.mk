@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.6 $
+#   $Revision: 1.7 $
 #
-#   last change: $Author: vg $ $Date: 2007-03-26 14:29:34 $
+#   last change: $Author: rt $ $Date: 2007-07-03 14:12:36 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -57,7 +57,7 @@ SLOFILES=	\
 SHL1TARGET= $(TARGET)
 SHL1OBJS=	$(SLOFILES)
 
-.IF "$(GUI)"=="UNX" || "$(GUI)"=="MAC" || "$(COM)"=="GCC"
+.IF "$(GUI)"=="UNX" || "$(COM)"=="GCC"
 I18NREGEXPLIB=-li18nregexp$(COMID)
 .ELSE
 I18NREGEXPLIB=ii18nregexp.lib
