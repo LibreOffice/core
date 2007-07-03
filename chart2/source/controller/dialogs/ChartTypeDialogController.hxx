@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ChartTypeDialogController.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: vg $ $Date: 2007-05-22 17:27:03 $
+ *  last change: $Author: rt $ $Date: 2007-07-03 13:37:08 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -37,7 +37,7 @@
 #define _CHART2_CHARTTYPE_DIALOG_CONTROLLER_HXX
 
 #include "ChangingResource.hxx"
-#include "Pseudo3DHelper.hxx"
+#include "ThreeDHelper.hxx"
 
 #ifndef INCLUDED_COMPHELPER_INLINE_CONTAINER_HXX
 #include <comphelper/InlineContainer.hxx>
