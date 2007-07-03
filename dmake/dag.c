@@ -1,6 +1,6 @@
 /* $RCSfile: dag.c,v $
--- $Revision: 1.9 $
--- last change: $Author: obo $ $Date: 2007-06-12 06:04:33 $
+-- $Revision: 1.10 $
+-- last change: $Author: rt $ $Date: 2007-07-03 11:29:33 $
 --
 -- SYNOPSIS
 --      Routines to construct the internal dag.
@@ -709,6 +709,8 @@ char *path;
 {
    static char *cpath = NIL(char);
 
+   DB_ENTER( "_normalize_path" );
+
    if ( !cpath && ( (cpath = MALLOC( PATH_MAX, char)) == NIL(char) ) )
       No_ram();
 
@@ -718,7 +720,7 @@ char *path;
     * indistinguishable from a literal $ characters at this point we skip
     * the normalization if a $ is found.  */
    if( strchr(path, '$') ) {
-      return path;
+      DB_RETURN( path );
    }
 
 #if __CYGWIN__
@@ -728,6 +730,8 @@ char *path;
       if (err)
      Fatal( "error converting \"%s\" - %s\n",
         path, strerror (errno));
+      if( path[2] != '/' && path[2] != '\\' )
+     Warning("Malformed DOS path %s converted to %s", path, cpath);
    }
    else
 #endif
@@ -738,5 +742,5 @@ char *path;
 
    DB_PRINT( "path", ("normalized: %s", cpath ));
 
-   return cpath;
+   DB_RETURN( cpath );
 }
