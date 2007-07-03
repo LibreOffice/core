@@ -4,9 +4,9 @@
 #
 #   $RCSfile: control.pm,v $
 #
-#   $Revision: 1.32 $
+#   $Revision: 1.33 $
 #
-#   last change: $Author: ihi $ $Date: 2007-03-26 12:44:38 $
+#   last change: $Author: rt $ $Date: 2007-07-03 11:45:26 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -713,6 +713,17 @@ sub check_oxtfiles
             }
         }
     }
+}
+
+#############################################################
+# Check if Java is available to create xpd installer
+#############################################################
+
+sub check_java_for_xpd
+{
+    my ( $allvariables ) = @_;
+
+    if ( ! $installer::globals::solarjavaset ) { $allvariables->{'XPDINSTALLER'} = 0; }
 }
 
 1;
