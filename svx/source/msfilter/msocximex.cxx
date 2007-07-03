@@ -4,9 +4,9 @@
  *
  *  $RCSfile: msocximex.cxx,v $
  *
- *  $Revision: 1.33 $
+ *  $Revision: 1.34 $
  *
- *  last change: $Author: hr $ $Date: 2007-06-27 18:35:29 $
+ *  last change: $Author: rt $ $Date: 2007-07-03 16:00:20 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -595,33 +595,32 @@ void SvxOcxString::WriteCharArray( SvStorageStream& rStrm ) const
     }
 }
 
-//} // namespace
+const sal_uInt16 USERFORM = (sal_uInt16)0xFF;
+const sal_uInt16 STDCONTAINER = (sal_uInt16)0xFE;
 
-static const ::sal_uInt16 USERFORM = (sal_uInt16)0xFF;
-static const ::sal_uInt16 STDCONTAINER = (sal_uInt16)0xFE;
+const sal_uInt16 PAGE = (sal_uInt16)0x07;
 
-static const ::sal_uInt16 PAGE = (sal_uInt16)0x07;
+const sal_uInt16 IMAGE = (sal_uInt16)0x0C;
+const sal_uInt16 FRAME = (sal_uInt16)0x0E;
 
-static const ::sal_uInt16 IMAGE = (sal_uInt16)0x0C;
-static const ::sal_uInt16 FRAME = (sal_uInt16)0x0E;
+const sal_uInt16 SPINBUTTON = (sal_uInt16)0x10;
+const sal_uInt16 CMDBUTTON = (sal_uInt16)0x11;
+const sal_uInt16 TABSTRIP = (sal_uInt16)0x12;
 
-static const ::sal_uInt16 SPINBUTTON = (sal_uInt16)0x10;
-static const ::sal_uInt16 CMDBUTTON = (sal_uInt16)0x11;
-static const ::sal_uInt16 TABSTRIP = (sal_uInt16)0x12;
+const sal_uInt16 LABEL = (sal_uInt16)0x15;
 
-static const ::sal_uInt16 LABEL = (sal_uInt16)0x15;
+const sal_uInt16 TEXTBOX = (sal_uInt16)0x17;
+const sal_uInt16 LISTBOX = (sal_uInt16)0x18;
+const sal_uInt16 COMBOBOX = (sal_uInt16)0x19;
+const sal_uInt16 CHECKBOX = (sal_uInt16)0x1A;
 
-static const ::sal_uInt16 TEXTBOX = (sal_uInt16)0x17;
-static const ::sal_uInt16 LISTBOX = (sal_uInt16)0x18;
-static const ::sal_uInt16 COMBOBOX = (sal_uInt16)0x19;
-static const ::sal_uInt16 CHECKBOX = (sal_uInt16)0x1A;
+const sal_uInt16 OPTIONBUTTON = (sal_uInt16)0x1B;
+const sal_uInt16 TOGGLEBUTTON = (sal_uInt16)0x1C;
 
-static const ::sal_uInt16 OPTIONBUTTON = (sal_uInt16)0x1B;
-static const ::sal_uInt16 TOGGLEBUTTON = (sal_uInt16)0x1C;
+const sal_uInt16 SCROLLBAR = (sal_uInt16)0x2F;
 
-static const ::sal_uInt16 SCROLLBAR = (sal_uInt16)0x2F;
-
-static const ::sal_uInt16 MULTIPAGE = (sal_uInt16)0x39;
+const sal_uInt16 MULTIPAGE = (sal_uInt16)0x39;
+const sal_uInt16 PROGRESSBAR = (sal_uInt16)0x8000;
 
 typedef std::vector< ContainerRecord > ContainerRecordList;
 
@@ -700,12 +699,25 @@ class ContainerRecReader
                 ReadAlign( pS, pS->Tell() - nStartPos, 4 );
                 *pS >> nTipLen;
             }
+
+            sal_uInt32 nCntrlIdLen = 0;
+            if( nContentFlags & 0x00001000 )
+                *pS >> nCntrlIdLen;
+
             // length of control source name
             sal_uInt32 nCtrlSrcLen = 0;
             if( nContentFlags & 0x00002000 )
             {
                 ReadAlign( pS, pS->Tell() - nStartPos, 4 );
                 *pS >> nCtrlSrcLen;
+            }
+
+            // length of row source name
+            sal_uInt32 nRowSrcLen = 0;
+            if( nContentFlags & 0x00004000 )
+            {
+                ReadAlign( pS, pS->Tell() - nStartPos, 4 );
+                *pS >> nRowSrcLen;
             }
 
             // control name
@@ -739,12 +751,26 @@ class ContainerRecReader
                 ReadAlign( pS, pS->Tell() - nStartPos, 4 );
                 pS->SeekRel( nTipBufSize );
             }
+            // control id
+            sal_uInt32 nCntrlIdSize = lclGetBufferSize( nCntrlIdLen );
+            if( nCntrlIdSize > 0 )
+            {
+                ReadAlign( pS, pS->Tell() - nStartPos, 4 );
+                pS->SeekRel( nCntrlIdSize );
+            }
             // control source name
             sal_uInt32 nCtrlSrcBufSize = lclGetBufferSize( nCtrlSrcLen );
             if( nCtrlSrcBufSize > 0 )
             {
                 ReadAlign( pS, pS->Tell() - nStartPos, 4 );
                 pS->SeekRel( nCtrlSrcBufSize );
+            }
+            // row source name
+            sal_uInt32 nRowSrcBufSize = lclGetBufferSize( nRowSrcLen );
+            if( nRowSrcBufSize > 0 )
+            {
+                ReadAlign( pS, pS->Tell() - nStartPos, 4 );
+                pS->SeekRel( nRowSrcBufSize );
             }
 
             // seek to end of data
@@ -851,10 +877,10 @@ class ContainerRecordReaderFac
     ContainerRecordReaderFac();
 };
 
-
 } // namespace
 
 // ============================================================================
+
 void RBGroup::add(OCX_Control* pRB)
 {
     // The tab index for the group is calculated as
@@ -1203,7 +1229,19 @@ sal_Bool OCX_Control::Import(uno::Reference<container::XNameContainer> &rDialog
     if (!xModel.is())
         return sal_False;
 
-    rDialog->insertByName(sName, uno::makeAny(xModel));
+    /*  #147900# sometimes insertion of a control fails due to existing name,
+        do not break entire form import then... */
+    try
+    {
+        rDialog->insertByName(sName, uno::makeAny(xModel));
+    }
+    catch( uno::Exception& )
+    {
+        DBG_ERRORFILE(
+            ByteString( "OCX_Control::Import - cannot insert control \"" ).
+            Append( ByteString( sName, RTL_TEXTENCODING_UTF8 ) ).
+            Append( '"' ).GetBuffer() );
+    }
 
     uno::Reference<beans::XPropertySet> xPropSet(xCreate, uno::UNO_QUERY);
     if (!xPropSet.is())
@@ -3555,6 +3593,9 @@ bool OCX_ContainerControl::createFromContainerRecord( const ContainerRecord& rec
             case SCROLLBAR: //ScrollBar
                 pControl = new OCX_ScrollBar;
                 break;
+            case PROGRESSBAR: //ProgressBar Active X control
+                pControl = new OCX_ProgressBar;
+                break;
             default:
                 OSL_TRACE( "**** Unknown control 0x%x", record.nTypeIdent );
                 DBG_ERROR( "Unknown control");
@@ -4449,7 +4490,9 @@ OCX_map aOCXTab[] =
     {&OCX_ScrollBar::Create,"DFD181E0-5E2F-11CE-a449-00aa004a803d",
         form::FormComponentType::SCROLLBAR,"ScrollBar"},
     {&OCX_GroupBox::Create,"",
-        form::FormComponentType::GROUPBOX,""}
+        form::FormComponentType::GROUPBOX,""},
+    {&OCX_ProgressBar::Create,"",
+        form::FormComponentType::CONTROL,""}
 };
 
 const int NO_OCX = sizeof( aOCXTab ) / sizeof( *aOCXTab );
@@ -5897,6 +5940,65 @@ sal_Bool OCX_ScrollBar::WriteContents(
     return WriteData( *rObj );
 }
 
+OCX_ProgressBar::OCX_ProgressBar() :
+    OCX_Control( OUString( RTL_CONSTASCII_USTRINGPARAM( "ProgressBar" ) ) ),
+    nMin( 0 ),
+    nMax( 0 ),
+    bFixedSingle(true),
+    bEnabled( true ),
+    b3d( true )
+{
+    msDialogType = C2U("com.sun.star.awt.UnoControlProgressBarModel");
+    bSetInDialog = true;
+}
+
+sal_Bool OCX_ProgressBar::Read( SvStorageStream *pS )
+{
+    pS->SeekRel( 8 );
+    *pS >> nWidth >> nHeight;
+    pS->SeekRel( 12 );
+
+    float fMin, fMax;
+    *pS >> fMin >> fMax;
+    nMin = static_cast< sal_Int32 >( fMin );
+    nMax = static_cast< sal_Int32 >( fMax );
+    bool bVisible = true;
+    sal_uInt8 pUnknownFlags[4];
+    pS->Read(pUnknownFlags,4);
+
+    // complete guess, but we don't handle visible anyway
+    if ( ( pUnknownFlags[2] & 0x8 ) &&  (  pUnknownFlags[2] & 0x2 ) )
+        bVisible = false;
+
+    sal_uInt32 nFlags;
+    *pS >> nFlags;
+
+    // seems these work out
+    bFixedSingle = (nFlags & 0x01) != 0;
+    bEnabled = (nFlags & 0x02) != 0;
+    b3d = (nFlags & 0x04) != 0;
+
+    return true;
+}
+
+OCX_Control* OCX_ProgressBar::Create()
+{
+    return new OCX_ProgressBar;
+}
+
+sal_Bool OCX_ProgressBar::Import(uno::Reference< beans::XPropertySet > &rPropSet)
+{
+    uno::Any aTmp(&sName,getCppuType((OUString *)0));
+    rPropSet->setPropertyValue( WW8_ASCII2STR("Name"), aTmp );
+    aTmp <<= nMax;
+    rPropSet->setPropertyValue( WW8_ASCII2STR("ProgressValueMax"), aTmp );
+    aTmp <<= nMin;
+    rPropSet->setPropertyValue( WW8_ASCII2STR("ProgressValueMin"), aTmp );
+
+    if ( !bEnabled )
+        rPropSet->setPropertyValue( WW8_ASCII2STR("Enabled"), uno::makeAny( sal_False ) );
+    return sal_True;
+}
 // ============================================================================
 
 /* vi:set tabstop=4 shiftwidth=4 expandtab: */
