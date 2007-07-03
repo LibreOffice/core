@@ -4,9 +4,9 @@
  *
  *  $RCSfile: outdev6.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: hr $ $Date: 2007-06-27 20:20:06 $
+ *  last change: $Author: rt $ $Date: 2007-07-03 14:06:02 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -291,23 +291,26 @@ void OutputDevice::DrawTransparent( const PolyPolygon& rPolyPoly,
                 {
                     // setup Graphics only here (other cases delegate
                     // to basic OutDev methods)
-                    if ( mbInitClipRegion )
-                        ImplInitClipRegion();
-                    if ( mbInitLineColor )
-                        ImplInitLineColor();
-                    if ( mbInitFillColor )
-                        ImplInitFillColor();
+                    if( mpGraphics || ImplGetGraphics() )
+                    {
+                        if ( mbInitClipRegion )
+                            ImplInitClipRegion();
+                        if ( mbInitLineColor )
+                            ImplInitLineColor();
+                        if ( mbInitFillColor )
+                            ImplInitFillColor();
 
-                    Rectangle aLogicPolyRect( rPolyPoly.GetBoundRect() );
-                    Rectangle aPixelRect( ImplLogicToDevicePixel( aLogicPolyRect ) );
+                        Rectangle aLogicPolyRect( rPolyPoly.GetBoundRect() );
+                        Rectangle aPixelRect( ImplLogicToDevicePixel( aLogicPolyRect ) );
 
-                    if( !mbOutputClipped )
-                        bDrawn = mpGraphics->DrawAlphaRect( aPixelRect.Left(), aPixelRect.Top(),
-                                                            aPixelRect.GetWidth(), aPixelRect.GetHeight(),
-                                                            sal::static_int_cast<sal_uInt8>(nTransparencePercent),
-                                                            this );
-                    else
-                        bDrawn = true;
+                        if( !mbOutputClipped )
+                            bDrawn = mpGraphics->DrawAlphaRect( aPixelRect.Left(), aPixelRect.Top(),
+                                                                aPixelRect.GetWidth(), aPixelRect.GetHeight(),
+                                                                sal::static_int_cast<sal_uInt8>(nTransparencePercent),
+                                                                this );
+                        else
+                            bDrawn = true;
+                    }
                 }
 
                 if( !bDrawn )
