@@ -4,9 +4,9 @@
  *
  *  $RCSfile: iahndl.cxx,v $
  *
- *  $Revision: 1.60 $
+ *  $Revision: 1.61 $
  *
- *  last change: $Author: kz $ $Date: 2007-06-19 16:10:14 $
+ *  last change: $Author: rt $ $Date: 2007-07-03 13:59:57 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -2503,12 +2503,9 @@ UUIInteractionHelper::handleErrorRequest(
 
         vos::OGuard aGuard(Application::GetSolarMutex());
         std::auto_ptr< ResMgr > xManager;
-        if (aManager[eSource])
-        {
-            xManager.reset(ResMgr::CreateResMgr(aManager[eSource]));
-            if (!xManager.get())
-                return;
-        }
+        xManager.reset(ResMgr::CreateResMgr(aManager[eSource]));
+        if (!xManager.get())
+            return;
         ResId aResId(aId[eSource], *xManager.get());
         if (!ErrorResource(aResId).  getString(nErrorCode, &aMessage))
             return;
