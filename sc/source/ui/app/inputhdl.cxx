@@ -4,9 +4,9 @@
  *
  *  $RCSfile: inputhdl.cxx,v $
  *
- *  $Revision: 1.70 $
+ *  $Revision: 1.71 $
  *
- *  last change: $Author: hr $ $Date: 2007-06-27 12:45:09 $
+ *  last change: $Author: rt $ $Date: 2007-07-03 15:53:54 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1996,6 +1996,19 @@ BOOL lcl_IsNumber(const String& rString)
     return TRUE;
 }
 
+void lcl_SelectionToEnd( EditView* pView )
+{
+    if ( pView )
+    {
+        EditEngine* pEngine = pView->GetEditEngine();
+        USHORT nParCnt = pEngine->GetParagraphCount();
+        if ( nParCnt == 0 )
+            nParCnt = 1;
+        ESelection aSel( nParCnt-1, pEngine->GetTextLen(nParCnt-1) );   // empty selection, cursor at the end
+        pView->SetSelection( aSel );
+    }
+}
+
 void ScInputHandler::EnterHandler( BYTE nBlockMode )
 {
     //  #62806# Bei Makro-Aufrufen fuer Gueltigkeit kann Tod und Teufel passieren,
@@ -2019,6 +2032,15 @@ void ScInputHandler::EnterHandler( BYTE nBlockMode )
     EditView* pActiveView = pTopView ? pTopView : pTableView;
     if (bModified && pActiveView && aString.Len() && !lcl_IsNumber(aString))
     {
+        if ( pColumnData && nAutoPos != SCPOS_INVALID )
+        {
+            // #i47125# If AutoInput appended something, do the final AutoCorrect
+            // with the cursor at the end of the input.
+
+            lcl_SelectionToEnd(pTopView);
+            lcl_SelectionToEnd(pTableView);
+        }
+
         if (pTopView)
             pTopView->CompleteAutoCorrect();    // #59759# CompleteAutoCorrect fuer beide Views
         if (pTableView)
