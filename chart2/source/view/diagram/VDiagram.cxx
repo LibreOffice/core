@@ -4,9 +4,9 @@
  *
  *  $RCSfile: VDiagram.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: obo $ $Date: 2007-06-11 15:03:18 $
+ *  last change: $Author: rt $ $Date: 2007-07-03 13:45:24 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -45,6 +45,8 @@
 #include "DiagramHelper.hxx"
 #include "BaseGFXHelper.hxx"
 #include "CommonConverters.hxx"
+#include "ChartTypeHelper.hxx"
+#include "ThreeDHelper.hxx"
 
 #ifndef _SVX_UNOPRNMS_HXX
 #include <svx/unoprnms.hxx>
@@ -115,11 +117,23 @@ VDiagram::VDiagram(
     , m_fXAnglePi(0)
     , m_fYAnglePi(0)
     , m_fZAnglePi(0)
+    , m_bRightAngledAxes(sal_False)
 {
     if( m_nDimensionCount == 3)
     {
         uno::Reference< beans::XPropertySet > xSourceProp( m_xDiagram, uno::UNO_QUERY );
-        DiagramHelper::getRotationAngleFromDiagram( xSourceProp, m_fXAnglePi, m_fYAnglePi, m_fZAnglePi );
+        ThreeDHelper::getRotationAngleFromDiagram( xSourceProp, m_fXAnglePi, m_fYAnglePi, m_fZAnglePi );
+        if( ChartTypeHelper::isSupportingRightAngledAxes(
+                DiagramHelper::getChartTypeByIndex( m_xDiagram, 0 ) ) )
+        {
+            if(xSourceProp.is())
+                xSourceProp->getPropertyValue(C2U( "RightAngledAxes" )) >>= m_bRightAngledAxes;
+            if( m_bRightAngledAxes )
+            {
+                ThreeDHelper::adaptRadAnglesForRightAngledAxes( m_fXAnglePi, m_fYAnglePi );
+                m_fZAnglePi=0.0;
+            }
+        }
     }
 }
 
@@ -331,6 +345,22 @@ void lcl_setLightSources(
                              xSource->getPropertyValue( C2U( UNO_NAME_3D_SCENE_LIGHTCOLOR_8 )));
 }
 
+namespace
+{
+
+void lcl_ensureScaleValue( double& rfScale )
+{
+    DBG_ASSERT(rfScale>0, "calculation error for automatic 3D height in chart");
+    if( rfScale<0 )
+        rfScale = 1.0;
+    else if( rfScale<0.2 )
+        rfScale = 0.2;
+    else if( rfScale>5.0 )
+        rfScale = 5.0;
+}
+
+}
+
 void VDiagram::adjustAspectRatio3d( const awt::Size& rAvailableSize )
 {
     DBG_ASSERT(m_xAspectRatio3D.is(), "created shape offers no XPropertySet");
@@ -363,82 +393,104 @@ void VDiagram::adjustAspectRatio3d( const awt::Size& rAvailableSize )
                 double cz = fabs(cos(m_fZAnglePi));
                 double sz = fabs(sin(m_fZAnglePi));
 
-                if( fScaleX>0 && fScaleZ>0 )
+                if(m_bRightAngledAxes)
                 {
-                    //calculate fScaleY:
                     //base equations:
-                    //fH*zoomfactor == cz*fScaleY + sz*fScaleX;
-                    //fW*zoomfactor == cz*fScaleX + sz*fScaleY;
-                    //==>  fScaleY*(fH*sz-fW*cz) == fScaleX*(fW*sz-fH*cz);
-                    double fDivide = fH*sz-fW*cz;
-                    if( !::basegfx::fTools::equalZero(fDivide) )
-                    {
-                        fScaleY = fScaleX*(fW*sz-fH*cz) / fDivide;
-                        DBG_ASSERT(fScaleY>0, "calculation error for automatic 3D height in chart");
-                        if( fScaleY<0 )
-                            fScaleY = 1.0;
-                        if( fScaleY<0.2 )
-                            fScaleY = 0.2;
-                        if( fScaleY>5.0 )
-                            fScaleY = 5.0;
-                    }
-                    else
-                        fScaleY = 1.0;//looking from top or bottom hieght is irrelevant
+                    //fH*zoomfactor == sx*fScaleZ + fScaleY;
+                    //fW*zoomfactor == sy*fScaleZ + fScaleX;
 
-                    /*
-                    //fW*zoomfactor == fScaleX*cy*cz + fScaleY*sz*cy + fScaleZ*sy*cx;
-                    //fH*zoomfactor == fScaleY*cx*cz + fScaleX*sz*cy + fScaleZ*sx*cz;
-                    //==> fScaleY*(sz*cy*fH -cx*cz*fW) =  fScaleX*(sz*cy*fW - cy*cz*fH) + fScaleZ*(sx*cz*fW - sy*cx*fH);
-                    double fDivide = sz*cy*fH -cx*cz*fW;
-                    if( !::basegfx::fTools::equalZero(fDivide) )
+                    if( fScaleX>0 && fScaleZ>0 )
                     {
-                        fScaleY = ( fScaleX*(sz*cy*fW - cy*cz*fH)
-                            + fScaleZ*(sx*cz*fW - sy*cx*fH) ) / fDivide;
-                        DBG_ASSERT(fScaleY>0, "calculation error for automatic 3D height in chart");
-                        if( fScaleY<0 )
-                            fScaleY = 1.0;
-                        if( fScaleY<0.2 )
-                            fScaleY = 0.2;
-                        if( fScaleY>5.0 )
-                            fScaleY = 5.0;
+                        //calculate fScaleY:
+                        if( !::basegfx::fTools::equalZero(fW) )
+                        {
+                            fScaleY = (fH/fW)*(sy*fScaleZ+fScaleX)-(sx*fScaleZ);
+                            lcl_ensureScaleValue( fScaleY );
+                        }
+                        else
+                            fScaleY = 1.0;//looking from top or bottom the height is irrelevant
+                    }
+                    else if( fScaleY>0 && fScaleZ>0 )
+                    {
+                        //calculate fScaleX:
+                        if( !::basegfx::fTools::equalZero(fH) )
+                        {
+                            fScaleX = (fW/fH)*(sx*fScaleZ+fScaleY)-(sy*fScaleZ);
+                            lcl_ensureScaleValue(fScaleX);
+                        }
+                        else
+                            fScaleX = 1.0;//looking from top or bottom hieght is irrelevant
                     }
                     else
-                        fScaleY = 1.0;//looking from top or bottom hieght is irrelevant
-                    */
-                }
-                else if( fScaleY>0 && fScaleZ>0 )
-                {
-                    //calculate fScaleY:
-                    //base equations:
-                    //fH*zoomfactor == cz*fScaleY + sz*fScaleX;
-                    //fW*zoomfactor == cz*fScaleX + sz*fScaleY;
-                    //==>  fScaleY*(fH*sz-fW*cz) == fScaleX*(fW*sz-fH*cz);
-                    double fDivide = fW*sz-fH*cz;
-                    if( !::basegfx::fTools::equalZero(fDivide) )
                     {
-                        fScaleX = fScaleY*(fH*sz-fW*cz) / fDivide;
-                        DBG_ASSERT(fScaleX>0, "calculation error for automatic 3D height in chart");
+                        //todo
+                        DBG_ASSERT(false, "not implemented yet");
+
                         if( fScaleX<0 )
                             fScaleX = 1.0;
-                        if( fScaleX<0.2 )
-                            fScaleX = 0.2;
-                        if( fScaleX>5.0 )
-                            fScaleX = 5.0;
+                        if( fScaleY<0 )
+                            fScaleY = 1.0;
+                        if( fScaleZ<0 )
+                            fScaleZ = 1.0;
                     }
-                    else
-                        fScaleX = 1.0;//looking from top or bottom hieght is irrelevant
                 }
                 else
                 {
-                    //todo
-                    DBG_ASSERT(false, "not implemented yet");
+                    //base equations:
+                    //fH*zoomfactor == cz*fScaleY + sz*fScaleX;
+                    //fW*zoomfactor == cz*fScaleX + sz*fScaleY;
+                    //==>  fScaleY*(fH*sz-fW*cz) == fScaleX*(fW*sz-fH*cz);
+                    if( fScaleX>0 && fScaleZ>0 )
+                    {
+                        //calculate fScaleY:
+                        double fDivide = fH*sz-fW*cz;
+                        if( !::basegfx::fTools::equalZero(fDivide) )
+                        {
+                            fScaleY = fScaleX*(fW*sz-fH*cz) / fDivide;
+                            lcl_ensureScaleValue(fScaleY);
+                        }
+                        else
+                            fScaleY = 1.0;//looking from top or bottom the height is irrelevant
 
-                    if( fScaleX<0 )
-                        fScaleX = 1.0;
-                    if( fScaleY<0 )
-                        fScaleY = 1.0;
-                    if( fScaleZ<0 )
-                        fScaleZ = 1.0;
+                        /*
+                        //fW*zoomfactor == fScaleX*cy*cz + fScaleY*sz*cy + fScaleZ*sy*cx;
+                        //fH*zoomfactor == fScaleY*cx*cz + fScaleX*sz*cy + fScaleZ*sx*cz;
+                        //==> fScaleY*(sz*cy*fH -cx*cz*fW) =  fScaleX*(sz*cy*fW - cy*cz*fH) + fScaleZ*(sx*cz*fW - sy*cx*fH);
+                        double fDivide = sz*cy*fH -cx*cz*fW;
+                        if( !::basegfx::fTools::equalZero(fDivide) )
+                        {
+                            fScaleY = ( fScaleX*(sz*cy*fW - cy*cz*fH)
+                                + fScaleZ*(sx*cz*fW - sy*cx*fH) ) / fDivide;
+                            lcl_ensureScaleValue(fScaleY);
+                        }
+                        else
+                            fScaleY = 1.0;//looking from top or bottom hieght is irrelevant
+                        */
+                    }
+                    else if( fScaleY>0 && fScaleZ>0 )
+                    {
+                        //calculate fScaleX:
+                        double fDivide = fW*sz-fH*cz;
+                        if( !::basegfx::fTools::equalZero(fDivide) )
+                        {
+                            fScaleX = fScaleY*(fH*sz-fW*cz) / fDivide;
+                            lcl_ensureScaleValue(fScaleX);
+                        }
+                        else
+                            fScaleX = 1.0;//looking from top or bottom hieght is irrelevant
+                    }
+                    else
+                    {
+                        //todo
+                        DBG_ASSERT(false, "not implemented yet");
+
+                        if( fScaleX<0 )
+                            fScaleX = 1.0;
+                        if( fScaleY<0 )
+                            fScaleY = 1.0;
+                        if( fScaleZ<0 )
+                            fScaleZ = 1.0;
+                    }
                 }
             }
 
@@ -513,7 +565,7 @@ void VDiagram::createShapes_3d()
             //ignore distance and focal length from file format and model comcpletely
             //use vrp only to indicate the distance of the camera and thus influence the perspecitve
             xDestProp->setPropertyValue( C2U( UNO_NAME_3D_SCENE_DISTANCE ), uno::makeAny(
-                                        static_cast<sal_Int32>(DiagramHelper::getCameraDistance( xSourceProp ))));
+                                        static_cast<sal_Int32>(ThreeDHelper::getCameraDistance( xSourceProp ))));
             xDestProp->setPropertyValue( C2U( UNO_NAME_3D_SCENE_PERSPECTIVE ),
                                         xSourceProp->getPropertyValue( C2U( UNO_NAME_3D_SCENE_PERSPECTIVE )));
         }
@@ -537,7 +589,11 @@ void VDiagram::createShapes_3d()
 
             ::basegfx::B3DHomMatrix aEffectiveTranformation;
             aEffectiveTranformation.translate(-FIXED_SIZE_FOR_3D_CHART_VOLUME/2.0, -FIXED_SIZE_FOR_3D_CHART_VOLUME/2.0, -FIXED_SIZE_FOR_3D_CHART_VOLUME/2.0);
-            aEffectiveTranformation.rotate(m_fXAnglePi,m_fYAnglePi,m_fZAnglePi);
+
+            if(!m_bRightAngledAxes)
+                aEffectiveTranformation.rotate(m_fXAnglePi,m_fYAnglePi,m_fZAnglePi);
+            else
+                aEffectiveTranformation.shearXY(m_fYAnglePi,-m_fXAnglePi);
 
             xDestProp->setPropertyValue( C2U( UNO_NAME_3D_TRANSFORM_MATRIX ),
                     uno::makeAny( BaseGFXHelper::B3DHomMatrixToHomogenMatrix( aEffectiveTranformation ) ) );
