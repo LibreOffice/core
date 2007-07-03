@@ -4,9 +4,9 @@
  *
  *  $RCSfile: isolang.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: ihi $ $Date: 2006-12-19 18:04:41 $
+ *  last change: $Author: rt $ $Date: 2007-07-03 14:04:00 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -153,7 +153,6 @@ static MsLangId::IsoLangEntry const aImplIsoLangEntries[] =
     { LANGUAGE_ENGLISH_BELIZE,              "en", "BZ" },
     { LANGUAGE_ENGLISH_TRINIDAD,            "en", "TT" },
     { LANGUAGE_ENGLISH_ZIMBABWE,            "en", "ZW" },
-    { LANGUAGE_ENGLISH_PHILIPPINES,         "en", "PH" },
     { LANGUAGE_ENGLISH_INDONESIA,           "en", "ID" },
     { LANGUAGE_ESTONIAN,                    "et", "EE" },
     { LANGUAGE_FAEROESE,                    "fo", "FO" },
@@ -314,6 +313,7 @@ static MsLangId::IsoLangEntry const aImplIsoLangEntries[] =
     { LANGUAGE_EDO,                        "bin", "NG" },
     { LANGUAGE_FULFULDE_NIGERIA,            "ff", "NG" },
     { LANGUAGE_HAUSA_NIGERIA,               "ha", "NG" },
+    { LANGUAGE_USER_HAUSA_GHANA,            "ha", "GH" },
     { LANGUAGE_IGBO_NIGERIA,                "ig", "NG" },
     { LANGUAGE_KANURI_NIGERIA,              "kr", "NG" },
     { LANGUAGE_YORUBA,                      "yo", "NG" },
@@ -347,6 +347,8 @@ static MsLangId::IsoLangEntry const aImplIsoLangEntries[] =
     { LANGUAGE_DARI_AFGHANISTAN,           "gbz", "AF" },   // ISO/DIS 639-3 (!)
     { LANGUAGE_WOLOF_SENEGAL,               "wo", "SN" },
     { LANGUAGE_FILIPINO,                   "fil", "PH" },
+    { LANGUAGE_USER_TAGALOG,                "tl", "PH" },
+    { LANGUAGE_ENGLISH_PHILIPPINES,         "en", "PH" },
 //  { LANGUAGE_IBIBIO_NIGERIA,             "nic", "NG" },   // ISO "nic" is only a collective language code
     { LANGUAGE_YI,                          "ii", "CN" },
 //  { LANGUAGE_TAMAZIGHT_LATIN,            "ber", ""   },   // ISO "ber" only collective!
@@ -391,6 +393,11 @@ static MsLangId::IsoLangEntry const aImplIsoLangEntries[] =
     { LANGUAGE_USER_GASCON,                "gsc", "FR" },
     { LANGUAGE_USER_GERMAN_BELGIUM,         "de", "BE" },
     { LANGUAGE_USER_CHUVASH,                "cv", "RU" },
+    { LANGUAGE_USER_EWE_GHANA,              "ee", "GH" },
+    { LANGUAGE_USER_ENGLISH_GHANA,          "en", "GH" },
+    { LANGUAGE_USER_SANGO,                  "sg", "CF" },
+    { LANGUAGE_USER_GANDA,                  "lg", "UG" },
+    { LANGUAGE_USER_LINGALA_DRCONGO,        "ln", "CD" },
     { LANGUAGE_NONE,                       "zxx", ""   },   // added to ISO 639-2 on 2006-01-11: Used to declare the absence of linguistic information
     { LANGUAGE_DONTKNOW,                    "",   ""   }    // marks end of table
 };
