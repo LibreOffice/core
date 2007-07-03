@@ -4,9 +4,9 @@
  *
  *  $RCSfile: optfltr.hxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: hr $ $Date: 2007-06-27 17:26:39 $
+ *  last change: $Author: rt $ $Date: 2007-07-03 14:27:49 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -99,8 +99,6 @@ class OfaMSFilterTabPage2 : public SfxTabPage
 
     MSFltrSimpleTable aCheckLB;
     FixedText aHeader1FT, aHeader2FT;
-    Bitmap aChkunBmp, aChkchBmp, aChkchhiBmp,
-           aChkunhiBmp, aChktriBmp, aChktrihiBmp;
     String sHeader1, sHeader2;
     String sChgToFromMath,
            sChgToFromWriter,
