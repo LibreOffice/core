@@ -4,9 +4,9 @@
  *
  *  $RCSfile: scfuncs.hrc,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: hr $ $Date: 2007-06-27 13:42:50 $
+ *  last change: $Author: rt $ $Date: 2007-07-03 15:46:36 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -329,4 +329,5 @@
 #define HID_FUNC_ROEMISCH           (HID_SC_FUNC_DUMMY+(ID_FUNCTION_GRP_TEXT*ID_FUNCTION_OFFSET)+26)
 #define HID_FUNC_ARABISCH           (HID_SC_FUNC_DUMMY+(ID_FUNCTION_GRP_TEXT*ID_FUNCTION_OFFSET)+27)
 #define HID_FUNC_BAHTTEXT           (HID_SC_FUNC_DUMMY+(ID_FUNCTION_GRP_TEXT*ID_FUNCTION_OFFSET)+28)
-
+#define HID_FUNC_JIS                (HID_SC_FUNC_DUMMY+(ID_FUNCTION_GRP_TEXT*ID_FUNCTION_OFFSET)+29)
+#define HID_FUNC_ASC                (HID_SC_FUNC_DUMMY+(ID_FUNCTION_GRP_TEXT*ID_FUNCTION_OFFSET)+30)
