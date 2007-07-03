@@ -4,9 +4,9 @@
  *
  *  $RCSfile: baside3.cxx,v $
  *
- *  $Revision: 1.38 $
+ *  $Revision: 1.39 $
  *
- *  last change: $Author: hr $ $Date: 2007-06-29 16:33:32 $
+ *  last change: $Author: rt $ $Date: 2007-07-03 13:02:16 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -424,6 +424,7 @@ void __EXPORT DialogWindow::GetState( SfxItemSet& rSet )
                             case OBJ_DLG_FORMATTEDFIELD:    nObj = SVX_SNAP_FORMATTEDFIELD; break;
                             case OBJ_DLG_PATTERNFIELD:      nObj = SVX_SNAP_PATTERNFIELD; break;
                             case OBJ_DLG_FILECONTROL:       nObj = SVX_SNAP_FILECONTROL; break;
+                            case OBJ_DLG_TREECONTROL:       nObj = SVX_SNAP_TREECONTROL; break;
                             default:                        nObj = 0;
                         }
 #ifdef DBG_UTIL
@@ -628,6 +629,13 @@ void __EXPORT DialogWindow::ExecuteCommand( SfxRequest& rReq )
                     GetEditor()->SetInsertObj( OBJ_DLG_FILECONTROL );
                 }
                 break;
+                case SVX_SNAP_TREECONTROL:
+                {
+                    GetEditor()->SetMode( DLGED_INSERT );
+                    GetEditor()->SetInsertObj( OBJ_DLG_TREECONTROL );
+                }
+                break;
+
                 case SVX_SNAP_SELECT:
                 {
                     GetEditor()->SetMode( DLGED_SELECT );
