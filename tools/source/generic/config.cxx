@@ -4,9 +4,9 @@
  *
  *  $RCSfile: config.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: hr $ $Date: 2007-06-27 22:13:15 $
+ *  last change: $Author: rt $ $Date: 2007-07-03 13:58:34 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -98,6 +98,7 @@ struct ImplConfigData
     USHORT          mnRefCount;
     BOOL            mbModified;
     BOOL            mbRead;
+    BOOL            mbIsUTF8BOM;
 };
 
 // =======================================================================
@@ -142,7 +143,7 @@ static ULONG ImplSysGetConfigTimeStamp( const XubString& rFileName )
 // -----------------------------------------------------------------------
 
 static BYTE* ImplSysReadConfig( const XubString& rFileName,
-                                sal_uInt64& rRead, BOOL& rbRead, ULONG& rTimeStamp )
+                                sal_uInt64& rRead, BOOL& rbRead, BOOL& rbIsUTF8BOM, ULONG& rTimeStamp )
 {
     BYTE*           pBuf = NULL;
     ::osl::File aFile( rFileName );
@@ -159,6 +160,15 @@ static BYTE* ImplSysReadConfig( const XubString& rFileName,
             pBuf = new BYTE[static_cast< std::size_t >(nPos)];
             if( aFile.read( pBuf, nPos, nRead ) == ::osl::FileBase::E_None && nRead == nPos )
             {
+                //skip the byte-order-mark 0xEF 0xBB 0xBF, if it was UTF8 files
+                unsigned char BOM[3] = {0xEF, 0xBB, 0xBF};
+                if (nRead > 2 && memcmp(pBuf, BOM, 3) == 0)
+                {
+                    nRead -= 3;
+                    rtl_moveMemory(pBuf, pBuf + 3, sal::static_int_cast<sal_Size>(nRead * sizeof(BYTE)) );
+                    rbIsUTF8BOM = TRUE;
+                }
+
                 rTimeStamp = ImplSysGetConfigTimeStamp( rFileName );
                 rbRead = TRUE;
                 rRead = nRead;
@@ -178,9 +188,10 @@ static BYTE* ImplSysReadConfig( const XubString& rFileName,
 // -----------------------------------------------------------------------
 
 static BOOL ImplSysWriteConfig( const XubString& rFileName,
-                                const BYTE* pBuf, ULONG nBufLen, ULONG& rTimeStamp )
+                                const BYTE* pBuf, ULONG nBufLen, BOOL rbIsUTF8BOM, ULONG& rTimeStamp )
 {
     BOOL bSuccess = FALSE;
+    BOOL bUTF8BOMSuccess = FALSE;
 
     ::osl::File aFile( rFileName );
     ::osl::FileBase::RC eError = aFile.open( osl_File_OpenFlag_Write | osl_File_OpenFlag_Create );
@@ -191,14 +202,29 @@ static BOOL ImplSysWriteConfig( const XubString& rFileName,
         // truncate
         aFile.setSize( 0 );
         sal_uInt64 nWritten;
+
+        //write the the byte-order-mark 0xEF 0xBB 0xBF first , if it was UTF8 files
+        if ( rbIsUTF8BOM )
+        {
+            unsigned char BOM[3] = {0xEF, 0xBB, 0xBF};
+            sal_uInt64 nUTF8BOMWritten;
+            if( aFile.write( BOM, 3, nUTF8BOMWritten ) == ::osl::FileBase::E_None && 3 == nUTF8BOMWritten )
+            {
+                bUTF8BOMSuccess = TRUE;
+            }
+        }
+
         if( aFile.write( pBuf, nBufLen, nWritten ) == ::osl::FileBase::E_None && nWritten == nBufLen )
         {
             bSuccess = TRUE;
+        }
+        if ( rbIsUTF8BOM ? bSuccess && bUTF8BOMSuccess : bSuccess )
+        {
             rTimeStamp = ImplSysGetConfigTimeStamp( rFileName );
         }
     }
 
-    return bSuccess;
+    return rbIsUTF8BOM ? bSuccess && bUTF8BOMSuccess : bSuccess;
 }
 
 // -----------------------------------------------------------------------
@@ -602,7 +628,8 @@ static void ImplReadConfig( ImplConfigData* pData )
     ULONG           nTimeStamp = 0;
     sal_uInt64 nRead = 0;
     BOOL            bRead = FALSE;
-    BYTE*           pBuf = ImplSysReadConfig( pData->maFileName, nRead, bRead, nTimeStamp );
+    BOOL                bIsUTF8BOM =FALSE;
+    BYTE*           pBuf = ImplSysReadConfig( pData->maFileName, nRead, bRead, bIsUTF8BOM, nTimeStamp );
 
     // Aus dem Buffer die Config-Verwaltungsliste aufbauen
     if ( pBuf )
@@ -614,6 +641,8 @@ static void ImplReadConfig( ImplConfigData* pData )
     pData->mbModified  = FALSE;
     if ( bRead )
         pData->mbRead = TRUE;
+    if ( bIsUTF8BOM )
+        pData->mbIsUTF8BOM = TRUE;
 }
 
 // -----------------------------------------------------------------------
@@ -635,7 +664,7 @@ static void ImplWriteConfig( ImplConfigData* pData )
     BYTE*   pBuf = ImplGetConfigBuffer( pData, nBufLen );
     if ( pBuf )
     {
-        if ( ImplSysWriteConfig( pData->maFileName, pBuf, nBufLen, pData->mnTimeStamp ) )
+        if ( ImplSysWriteConfig( pData->maFileName, pBuf, nBufLen, pData->mbIsUTF8BOM, pData->mnTimeStamp ) )
             pData->mbModified = FALSE;
         delete[] pBuf;
     }
@@ -685,6 +714,7 @@ static ImplConfigData* ImplGetConfigData( const XubString& rFileName )
     pData->meLineEnd        = LINEEND_CRLF;
     pData->mnRefCount       = 0;
     pData->mbRead           = FALSE;
+    pData->mbIsUTF8BOM      = FALSE;
     ImplReadConfig( pData );
 
     return pData;
@@ -973,6 +1003,8 @@ ByteString Config::ReadKey( const ByteString& rKey ) const
 
 UniString Config::ReadKey( const ByteString& rKey, rtl_TextEncoding eEncoding ) const
 {
+    if ( mpData->mbIsUTF8BOM )
+        eEncoding = RTL_TEXTENCODING_UTF8;
     return UniString( ReadKey( rKey ), eEncoding );
 }
 
@@ -1084,6 +1116,8 @@ void Config::WriteKey( const ByteString& rKey, const ByteString& rStr )
 
 void Config::WriteKey( const ByteString& rKey, const UniString& rValue, rtl_TextEncoding eEncoding )
 {
+    if ( mpData->mbIsUTF8BOM  )
+        eEncoding = RTL_TEXTENCODING_UTF8;
     WriteKey( rKey, ByteString( rValue, eEncoding ) );
 }
 
