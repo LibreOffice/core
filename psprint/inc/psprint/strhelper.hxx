@@ -4,9 +4,9 @@
  *
  *  $RCSfile: strhelper.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 16:35:58 $
+ *  last change: $Author: rt $ $Date: 2007-07-03 13:58:58 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -38,6 +38,8 @@
 #ifndef _STRING_HXX
 #include <tools/string.hxx>
 #endif
+#include <rtl/math.hxx>
+#include <cstring>
 
 namespace psp {
 
@@ -58,17 +60,30 @@ ByteString WhitespaceToSpace( const ByteString&, BOOL bProtect = TRUE );
 // doublequote, singlequote and singleleftquote protect their respective
 // contents
 
-double StringToDouble( const String& rStr );
-double StringToDouble( const ByteString& rStr );
+
 // parses the first double in the string; decimal is '.' only
+inline double StringToDouble( const String& rStr )
+{
+    rtl_math_ConversionStatus eStatus;
+    return rtl::math::stringToDouble( rStr, sal_Unicode('.'), sal_Unicode(0), &eStatus, NULL);
+}
+
+inline double StringToDouble( const ByteString& rStr )
+{
+    rtl_math_ConversionStatus eStatus;
+    return rtl::math::stringToDouble( rtl::OStringToOUString( rStr, osl_getThreadTextEncoding() ), sal_Unicode('.'), sal_Unicode(0), &eStatus, NULL);
+}
 
 // fills a character buffer with the string representation of a double
 // the buffer has to be long enough (e.g. 128 bytes)
 // returns the string len
-int getValueOfDouble( char* pBuffer, double f, int nPrecision = 0 );
-// corresponding convenience functions
-ByteString DoubleToByteString( double f, int nPrecision = 0 );
-String DoubleToString( double f, int nPrecision = 0 );
+inline int getValueOfDouble( char* pBuffer, double f, int nPrecision = 0)
+{
+    rtl::OString aStr( rtl::math::doubleToString( f, rtl_math_StringFormat_G, nPrecision, '.', true ) );
+    int nLen = aStr.getLength();
+    strncpy( pBuffer, aStr.getStr(), nLen+1 ); // copy string including terminating zero
+    return nLen;
+}
 
 } // namespace
 
