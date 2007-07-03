@@ -4,9 +4,9 @@
  *
  *  $RCSfile: svx.sdi,v $
  *
- *  $Revision: 1.71 $
+ *  $Revision: 1.72 $
  *
- *  last change: $Author: hr $ $Date: 2007-06-27 13:38:42 $
+ *  last change: $Author: rt $ $Date: 2007-07-03 13:01:30 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -3445,6 +3445,34 @@ SfxBoolItem InsertFileControl SID_INSERT_FILECONTROL
     ToolBoxConfig = TRUE,
     GroupId = GID_CONTROLS;
 ]
+
+//--------------------------------------------------------------------------
+SfxBoolItem InsertTreeControl SID_INSERT_TREECONTROL
+
+[
+    /* flags: */
+    AutoUpdate = TRUE,
+    Cachable = Cachable,
+    FastCall = FALSE,
+    HasCoreId = FALSE,
+    HasDialog = FALSE,
+    ReadOnlyDoc = FALSE,
+    Toggle = FALSE,
+    Container = FALSE,
+    RecordAbsolute = FALSE,
+    RecordPerSet;
+    Synchron;
+
+    Readonly = FALSE,
+
+    /* config: */
+    AccelConfig = TRUE,
+    MenuConfig = TRUE,
+    StatusBarConfig = FALSE,
+    ToolBoxConfig = TRUE,
+    GroupId = GID_CONTROLS;
+]
+
 
 //--------------------------------------------------------------------------
 XFillBitmapItem FillBitmap SID_ATTR_FILL_BITMAP
