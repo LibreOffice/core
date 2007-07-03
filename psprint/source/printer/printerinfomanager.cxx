@@ -4,9 +4,9 @@
  *
  *  $RCSfile: printerinfomanager.cxx,v $
  *
- *  $Revision: 1.44 $
+ *  $Revision: 1.45 $
  *
- *  last change: $Author: obo $ $Date: 2007-06-11 14:20:51 $
+ *  last change: $Author: rt $ $Date: 2007-07-03 13:59:32 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -145,18 +145,24 @@ void PrinterInfoManager::initSystemDefaultPaper()
     bool bSuccess = false;
 
     // try libpaper
-    FILE* pPipe = popen( "paperconf", "r" );
+    #ifdef SOLARIS
+    // #i78617# workaround missing paperconf command; on e.g. Linux
+    // the 2>/dev/null works on the started shell also
+    FILE* pPipe = popen( "sh -c paperconf 2>/dev/null", "r" );
+    #else
+    FILE* pPipe = popen( "paperconf 2>/dev/null", "r" );
+    #endif
     if( pPipe )
     {
         char pBuffer[ 1024 ];
-    *pBuffer = 0;
+        *pBuffer = 0;
         fgets( pBuffer, sizeof(pBuffer)-1, pPipe );
-    pclose( pPipe );
+        pclose( pPipe );
 
-    ByteString aPaper( pBuffer );
-    aPaper = WhitespaceToSpace( aPaper );
-    if( aPaper.Len() )
-    {
+        ByteString aPaper( pBuffer );
+        aPaper = WhitespaceToSpace( aPaper );
+        if( aPaper.Len() )
+        {
             m_aSystemDefaultPaper = OUString( OStringToOUString( aPaper, osl_getThreadTextEncoding() ) );
             bSuccess = true;
             #if OSL_DEBUG_LEVEL > 1
