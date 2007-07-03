@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dialogs.hrc,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: hr $ $Date: 2007-06-27 13:37:29 $
+ *  last change: $Author: rt $ $Date: 2007-07-03 13:34:35 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -894,6 +894,8 @@
 #define RID_SVXSTR_SALMON_DEF               (RID_SVX_START + 618)
 #define RID_SVXSTR_SEABLUE_DEF              (RID_SVX_START + 619)
 #define RID_SVXSTR_COLOR_SUN_DEF            (RID_SVX_START + 620)
+#define RID_SVXSTR_COLOR_CHART              (RID_SVX_START + 621)
+#define RID_SVXSTR_COLOR_CHART_DEF          (RID_SVX_START + 622)
 
 // Default-Gradient-Names
 #define RID_SVXSTR_GRDT0_DEF                (RID_SVX_START + 631)
