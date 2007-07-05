@@ -4,9 +4,9 @@
  *
  *  $RCSfile: outdev6.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: rt $ $Date: 2007-07-03 14:06:02 $
+ *  last change: $Author: rt $ $Date: 2007-07-05 08:39:57 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -79,6 +79,9 @@
 #ifndef _COM_SUN_STAR_UNO_SEQUENCE_HXX_
 #include <com/sun/star/uno/Sequence.hxx>
 #endif
+
+#include <window.h>
+#include <svdata.hxx>
 
 // ========================================================================
 
@@ -941,7 +944,24 @@ void OutputDevice::Erase()
     if ( !IsDeviceOutputNecessary() || ImplIsRecordLayout() )
         return;
 
-    if ( mbBackground )
+    BOOL bNativeOK = FALSE;
+    if( meOutDevType == OUTDEV_WINDOW )
+    {
+        Window* pWindow = static_cast<Window*>(this);
+        ControlPart aCtrlPart = pWindow->ImplGetWindowImpl()->mnNativeBackground;
+        if( aCtrlPart != 0 && ! pWindow->IsControlBackground() )
+        {
+            ImplControlValue    aControlValue;
+            Region              aCtrlRegion( Rectangle( Point(), GetOutputSizePixel() ) );
+            ControlState        nState = 0;
+
+            if( pWindow->IsEnabled() )              nState |= CTRL_STATE_ENABLED;
+            bNativeOK = pWindow->DrawNativeControl( CTRL_WINDOW_BACKGROUND, aCtrlPart, aCtrlRegion,
+                                                    nState, aControlValue, rtl::OUString() );
+        }
+    }
+
+    if ( mbBackground && ! bNativeOK )
     {
         RasterOp eRasterOp = GetRasterOp();
         if ( eRasterOp != ROP_OVERPAINT )
