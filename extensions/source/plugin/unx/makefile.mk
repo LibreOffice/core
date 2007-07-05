@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.13 $
+#   $Revision: 1.14 $
 #
-#   last change: $Author: rt $ $Date: 2006-12-01 14:19:00 $
+#   last change: $Author: rt $ $Date: 2007-07-05 08:52:09 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -39,6 +39,12 @@ TARGET=plunx
 TARGETTYPE=CUI
 
 .INCLUDE :  ..$/util$/makefile.pmk
+
+.IF "$(GUIBASE)"=="aqua"
+dummy:
+    @echo "Nothing to build for GUIBASE aqua."
+    
+.ELSE
 
 # --- Files --------------------------------------------------------
 
@@ -90,6 +96,8 @@ APP1STDLIBS+= -lXt -lXext -lX11 -ldl
 APP1DEF=	$(MISC)$/$(TARGET).def
 
 .ENDIF # $(WITH_MOZILLA) != "NO"
+
+.ENDIF # $(GUIBASE)==aqua
 
 # --- Targets ------------------------------------------------------
 
