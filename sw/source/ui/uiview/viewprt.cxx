@@ -4,9 +4,9 @@
  *
  *  $RCSfile: viewprt.cxx,v $
  *
- *  $Revision: 1.33 $
+ *  $Revision: 1.34 $
  *
- *  last change: $Author: rt $ $Date: 2007-04-03 13:49:40 $
+ *  last change: $Author: rt $ $Date: 2007-07-05 07:42:05 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -540,12 +540,7 @@ void __EXPORT SwView::ExecutePrint(SfxRequest& rReq)
                     SW_MOD()->GetModuleConfig()->IsAskForMailMerge() && pSh->IsAnyDatabaseFieldInDoc())
             {
                 QueryBox aBox( &GetEditWin(), SW_RES( MSG_PRINT_AS_MERGE ));
-                aBox.SetCheckBoxText( SW_RESSTR( STR_DONT_ASK_AGAIN ));
                 short nRet = aBox.Execute();
-                if(RET_CANCEL != nRet && aBox.GetCheckBoxState())
-                {
-                    SW_MOD()->GetModuleConfig()->SetAskForMailMerge(sal_False);
-                }
                 if(RET_YES == nRet)
                 {
                     SfxBoolItem aBool(FN_QRY_MERGE, TRUE);
