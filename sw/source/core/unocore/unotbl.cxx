@@ -4,9 +4,9 @@
  *
  *  $RCSfile: unotbl.cxx,v $
  *
- *  $Revision: 1.104 $
+ *  $Revision: 1.105 $
  *
- *  last change: $Author: hr $ $Date: 2007-06-26 10:43:32 $
+ *  last change: $Author: rt $ $Date: 2007-07-05 13:13:19 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -442,7 +442,7 @@ uno::Any lcl_GetSpecialProperty(SwFrmFmt* pFmt, const SfxItemPropertyMap* pMap )
 // Sample for naming scheme of cell in a single row (in groups a 26):
 // A1..Z1, a1..z1, AA1..AZ1, Aa1..Az1, BA1..BZ1, Ba1..Bz1, ...
 void lcl_GetCellPosition( const String &rCellName,
-        sal_Int16 &rColumn, sal_Int16 &rRow)
+        sal_Int32 &rColumn, sal_Int32 &rRow)
 {
     rColumn = rRow = -1;    // default return values indicating failure
     xub_StrLen nLen = rCellName.Len();
@@ -459,7 +459,7 @@ void lcl_GetCellPosition( const String &rCellName,
             String aRowTxt( pBuf, rCellName.GetBuffer() + nLen - pBuf);
             if (aColTxt.Len() && aRowTxt.Len())
             {
-                sal_Int16 nColIdx = 0;
+                sal_Int32 nColIdx = 0;
                 for (xub_StrLen i = 0;  i < aColTxt.Len();  ++i)
                 {
                     sal_Unicode cChar = aColTxt.GetBuffer()[i];
@@ -475,7 +475,7 @@ void lcl_GetCellPosition( const String &rCellName,
                 }
 
                 rColumn = nColIdx;
-                rRow    = static_cast< sal_Int16 >( aRowTxt.ToInt32() ) - 1;    // - 1 because indices ought to be 0 based
+                rRow    = aRowTxt.ToInt32() - 1;  // - 1 because indices ought to be 0 based
             }
         }
     }
@@ -493,7 +493,7 @@ void lcl_GetCellPosition( const String &rCellName,
 //      for cell names of non-complex tables
 int lcl_CompareCellsByRowFirst( const String &rCellName1, const String &rCellName2 )
 {
-    sal_Int16 nCol1, nRow1, nCol2, nRow2;
+    sal_Int32 nCol1 = -1, nRow1 = -1, nCol2 = -1, nRow2 = -1;
     lcl_GetCellPosition( rCellName1, nCol1, nRow1 );
     lcl_GetCellPosition( rCellName2, nCol2, nRow2 );
 
@@ -516,7 +516,7 @@ int lcl_CompareCellsByRowFirst( const String &rCellName1, const String &rCellNam
 //      for cell names of non-complex tables
 int lcl_CompareCellsByColFirst( const String &rCellName1, const String &rCellName2 )
 {
-    sal_Int16 nCol1, nRow1, nCol2, nRow2;
+    sal_Int32 nCol1 = -1, nRow1 = -1, nCol2 = -1, nRow2 = -1;
     lcl_GetCellPosition( rCellName1, nCol1, nRow1 );
     lcl_GetCellPosition( rCellName2, nCol2, nRow2 );
 
@@ -564,25 +564,25 @@ int lcl_CompareCellRanges(
 
 // returns the cell name for the cell at the specified position
 // (note that the indices nColumn and nRow are 0 based here)
-String lcl_GetCellName(sal_Int16 nColumn, sal_Int16 nRow)
+String lcl_GetCellName( sal_Int32 nColumn, sal_Int32 nRow )
 {
-        String sCellName;
-        if (nColumn < 0 || nRow < 0)
-            return sCellName;
-        sal_uInt16 nDiv = nColumn;
-        sal_uInt16 nMod = 0;
-        sal_Bool bFirst = sal_True;
-        while( 0 != (nDiv -= nMod) || bFirst )
-        {
-            nMod = nDiv % 52;
-            sal_uInt16 nMod2 = nDiv % 26;
-            char cCol = nMod < 26 ? 'A' : 'a';
-            cCol += nMod2;
-            sCellName.Insert(cCol, 0);
-            bFirst = sal_False;
-        }
-        sCellName += String::CreateFromInt32(++nRow);
+    String sCellName;
+    if (nColumn < 0 || nRow < 0)
         return sCellName;
+    sal_uInt32 nDiv = nColumn;
+    sal_uInt32 nMod = 0;
+    sal_Bool bFirst = sal_True;
+    while( 0 != (nDiv -= nMod) || bFirst )
+    {
+        nMod = nDiv % 52;
+        sal_uInt32 nMod2 = nDiv % 26;
+        char cCol = nMod < 26 ? 'A' : 'a';
+        cCol += nMod2;
+        sCellName.Insert(cCol, 0);
+        bFirst = sal_False;
+    }
+    sCellName += String::CreateFromInt32(++nRow);
+    return sCellName;
 }
 
 
@@ -598,7 +598,7 @@ void lcl_NormalizeRange(
     String &rCell1,     // will hold the upper-left cell of the range upon return
     String &rCell2 )    // will hold the lower-right cell of the range upon return
 {
-    sal_Int16 nCol1, nRow1, nCol2, nRow2;
+    sal_Int32 nCol1 = -1, nRow1 = -1, nCol2 = -1, nRow2 = -1;
     lcl_GetCellPosition( rCell1, nCol1, nRow1 );
     lcl_GetCellPosition( rCell2, nCol2, nRow2 );
     if (nCol2 < nCol1 || nRow2 < nRow1)
@@ -613,62 +613,18 @@ void SwRangeDescriptor::Normalize()
 {
     if (nTop > nBottom)
     {
-        sal_uInt16 nTmp = nTop;
+        sal_Int32 nTmp = nTop;
         nTop = nBottom;
         nBottom = nTmp;
     }
     if (nLeft > nRight)
     {
-        sal_uInt16 nTmp = nLeft;
+        sal_Int32 nTmp = nLeft;
         nLeft = nRight;
         nRight = nTmp;
     }
 }
 
-/* -----------------06.10.99 14:46-------------------
-
- --------------------------------------------------*/
-void lcl_GetRowCol(const String& rCellName, sal_uInt16& rRow, sal_uInt16& rCol)
-{
-    //make parts out of the cell name
-    // examples: B5, Aa34,  Cf97 ...
-    xub_StrLen nLen = rCellName.Len();
-    xub_StrLen nFirstPart = 1;
-    while(nFirstPart < nLen && !lcl_IsNumeric(String(rCellName.GetChar(nFirstPart))))
-    {
-        nFirstPart ++;
-    }
-    String sRow(rCellName.Copy(nFirstPart,nLen - nFirstPart));
-    String sCol(rCellName.Copy(0, nFirstPart));
-    rRow = (sal_uInt16)sRow.ToInt32();
-    rRow -= 1;
-
-    rCol = 0;
-    nLen = sCol.Len();
-    if(!nLen)
-    {
-        rRow = -1;
-        rCol = -1;
-    }
-    else
-    {
-        sal_uInt16 nBase = 1;
-        do
-        {
-            sal_Unicode cChar = sCol.GetChar(nLen-1);
-
-            if( cChar <= 'Z' )
-                rCol += nBase * ((cChar - 'A') + (nBase > 1 ? 1 : 0));
-            else
-                rCol += nBase * ((cChar - 'a') + (nBase > 1 ? 1 : 0));
-
-            sCol.Erase(nLen -1, 1);
-            nLen = sCol.Len();
-            nBase *= 50;
-        }
-        while(nLen);
-    }
-}
 
 /* -----------------25.06.98 08:32-------------------
  *
@@ -2849,10 +2805,10 @@ uno::Reference< table::XCellRange >  SwXTextTable::getCellRangeByPosition(sal_In
         if(!pTable->IsTblComplex())
         {
             SwRangeDescriptor aDesc;
-            aDesc.nTop    = (sal_uInt16)nTop;
-            aDesc.nBottom = (sal_uInt16)nBottom;
-            aDesc.nLeft   = (sal_uInt16)nLeft;
-            aDesc.nRight  = (sal_uInt16)nRight;
+            aDesc.nTop    = nTop;
+            aDesc.nBottom = nBottom;
+            aDesc.nLeft   = nLeft;
+            aDesc.nRight  = nRight;
             String sTLName = lcl_GetCellName(aDesc.nLeft, aDesc.nTop);
             String sBRName = lcl_GetCellName(aDesc.nRight, aDesc.nBottom);
 
@@ -2886,9 +2842,9 @@ uno::Reference< table::XCellRange >  SwXTextTable::getCellRangeByName(const OUSt
             if(!sTLName.Len() || !sBRName.Len())
                 throw uno::RuntimeException();
             SwRangeDescriptor aDesc;
-            aDesc.nTop = aDesc.nLeft =  aDesc.nBottom = aDesc.nRight = -1;
-            lcl_GetRowCol(sTLName, aDesc.nTop, aDesc.nLeft);
-            lcl_GetRowCol(sBRName, aDesc.nBottom, aDesc.nRight);
+            aDesc.nTop = aDesc.nLeft = aDesc.nBottom = aDesc.nRight = -1;
+            lcl_GetCellPosition(sTLName, aDesc.nLeft, aDesc.nTop );
+            lcl_GetCellPosition(sBRName, aDesc.nRight, aDesc.nBottom );
 
 
             // we should normalize the range now (e.g. A5:C1 will become A1:C5)
@@ -4114,9 +4070,9 @@ uno::Reference< table::XCellRange >  SwXCellRange::getCellRangeByName(const OUSt
     if(!sTLName.Len() || !sBRName.Len())
         throw uno::RuntimeException();
     SwRangeDescriptor aDesc;
-    aDesc.nTop = aDesc.nLeft =  aDesc.nBottom = aDesc.nRight = -1;
-    lcl_GetRowCol(sTLName, aDesc.nTop, aDesc.nLeft);
-    lcl_GetRowCol(sBRName, aDesc.nBottom, aDesc.nRight);
+    aDesc.nTop = aDesc.nLeft = aDesc.nBottom = aDesc.nRight = -1;
+    lcl_GetCellPosition(sTLName, aDesc.nLeft, aDesc.nTop );
+    lcl_GetCellPosition(sBRName, aDesc.nRight, aDesc.nBottom );
     aDesc.Normalize();
     return getCellRangeByPosition(aDesc.nLeft - aRgDesc.nLeft, aDesc.nTop - aRgDesc.nTop,
                 aDesc.nRight - aRgDesc.nLeft, aDesc.nBottom - aRgDesc.nTop);
