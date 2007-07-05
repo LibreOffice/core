@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.14 $
+#   $Revision: 1.15 $
 #
-#   last change: $Author: vg $ $Date: 2007-03-26 13:10:14 $
+#   last change: $Author: rt $ $Date: 2007-07-05 08:52:58 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -52,7 +52,13 @@ LIB1FILES  = \
     $(SHL1LINKLIB)
 
 .IF "$(GUI)" == "UNX"
+.IF "$(GUIBASE)"=="aqua"
+.IF "$(WITH_MOZILLA)"=="YES"
+SHL1LINKLIB = $(SLB)$/plaqua.lib
+.ENDIF
+.ELSE
 SHL1LINKLIB = $(SLB)$/plunx.lib
+.ENDIF # $(GUIBASE)==aqua
 .IF "$(OS)" == "SOLARIS"
 SHL1OWNLIBS = -lsocket
 .ENDIF # SOLARIS
@@ -94,7 +100,7 @@ SHL1STDLIBS+= \
     $(CPPULIB)			\
     $(SALLIB)
 
-.IF "$(OS)"=="MACOSX"
+.IF "$(OS)"=="MACOSX" && "$(GUIBASE)"=="unx"
 SHL1STDLIBS+= -lX11
 .ENDIF
 
