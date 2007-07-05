@@ -4,9 +4,9 @@
  *
  *  $RCSfile: splash.cxx,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: obo $ $Date: 2007-06-11 14:03:36 $
+ *  last change: $Author: rt $ $Date: 2007-07-05 09:25:34 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -119,6 +119,7 @@ void SAL_CALL SplashScreen::start(const OUString&, sal_Int32 nRange)
             ShowFullScreenMode( TRUE );
         Show();
         Paint(Rectangle());
+        Flush();
     }
 }
 
@@ -155,6 +156,7 @@ void SAL_CALL SplashScreen::setText(const OUString&)
         if ( _eBitmapMode == BM_FULLSCREEN )
             ShowFullScreenMode( TRUE );
         Show();
+        Flush();
     }
 }
 
@@ -261,6 +263,7 @@ void SplashScreen::updateStatus()
     //_bPaintBitmap=sal_False;
     Paint(Rectangle());
     //_bPaintBitmap=sal_True;
+    Flush();
 }
 
 // internal private methods
