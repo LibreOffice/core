@@ -4,9 +4,9 @@
  *
  *  $RCSfile: compositeiterator.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: hr $ $Date: 2007-06-27 12:40:09 $
+ *  last change: $Author: rt $ $Date: 2007-07-05 08:53:41 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -61,10 +61,10 @@ namespace detail
             mpVal2( &val2 )
         {}
 
-        void operator++() { ++*mpVal1; ++*mpVal2; }
-        void operator++(int) { ++*mpVal1; ++*mpVal2; }
-        void operator--() { --*mpVal1; --*mpVal2; }
-        void operator--(int) { --*mpVal1; --*mpVal2; }
+        void operator++() { ++(*mpVal1); ++(*mpVal2); }
+        void operator++(int) { (*mpVal1)++; (*mpVal2)++; }
+        void operator--() { --(*mpVal1); --(*mpVal2); }
+        void operator--(int) { (*mpVal1)--; (*mpVal2)--; }
         void operator+=(int d) {*mpVal1+=d; *mpVal2+=d; }
         void operator-=(int d) {*mpVal1-=d; *mpVal2-=d; }
 
