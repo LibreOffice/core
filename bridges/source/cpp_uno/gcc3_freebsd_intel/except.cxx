@@ -4,9 +4,9 @@
  *
  *  $RCSfile: except.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 15:45:54 $
+ *  last change: $Author: rt $ $Date: 2007-07-05 09:00:28 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -40,6 +40,7 @@
 #include <dlfcn.h>
 #include <cxxabi.h>
 #include <hash_map>
+#include <sys/param.h>
 
 #include <rtl/strbuf.hxx>
 #include <rtl/ustrbuf.hxx>
@@ -125,7 +126,11 @@ public:
 };
 //__________________________________________________________________________________________________
 RTTI::RTTI() SAL_THROW( () )
+#if __FreeBSD_version < 602103
     : m_hApp( dlopen( 0, RTLD_NOW | RTLD_GLOBAL ) )
+#else
+    : m_hApp( dlopen( 0, RTLD_LAZY ) )
+#endif
 {
 }
 //__________________________________________________________________________________________________
@@ -142,8 +147,8 @@ type_info * RTTI::getRTTI( typelib_CompoundTypeDescription *pTypeDescr ) SAL_THR
     OUString const & unoName = *(OUString const *)&pTypeDescr->aBase.pTypeName;
 
     MutexGuard guard( m_mutex );
-    t_rtti_map::const_iterator iFind( m_rttis.find( unoName ) );
-    if (iFind == m_rttis.end())
+    t_rtti_map::const_iterator iRttiFind( m_rttis.find( unoName ) );
+    if (iRttiFind == m_rttis.end())
     {
         // RTTI symbol
         OStringBuffer buf( 64 );
@@ -160,8 +165,11 @@ type_info * RTTI::getRTTI( typelib_CompoundTypeDescription *pTypeDescr ) SAL_THR
         buf.append( 'E' );
 
         OString symName( buf.makeStringAndClear() );
-//#iZ 22253
+#if __FreeBSD_version < 602103 /* #i22253# */
         rtti = (type_info *)dlsym( RTLD_DEFAULT, symName.getStr() );
+#else
+        rtti = (type_info *)dlsym( m_hApp, symName.getStr() );
+#endif
 
         if (rtti)
         {
@@ -208,7 +216,7 @@ type_info * RTTI::getRTTI( typelib_CompoundTypeDescription *pTypeDescr ) SAL_THR
     }
     else
     {
-        rtti = iFind->second;
+        rtti = iRttiFind->second;
     }
 
     return rtti;
