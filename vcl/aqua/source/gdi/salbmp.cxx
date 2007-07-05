@@ -4,9 +4,9 @@
  *
  *  $RCSfile: salbmp.cxx,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: hr $ $Date: 2007-06-27 19:52:36 $
+ *  last change: $Author: rt $ $Date: 2007-07-05 10:11:31 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -36,456 +36,880 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_vcl.hxx"
 
-#ifndef _SV_SALBMP_HXX
-    #include <vcl/salbmp.hxx>
+#ifndef _TOOLS_COLOR_HXX
+#include <tools/color.hxx>
 #endif
 
-// =======================================================================
+#ifndef _SV_SALBMP_H
+#include "vcl/salbmp.h"
+#endif
+
+#ifndef _SV_BITMAP_HXX
+#include <vcl/bitmap.hxx> // for BitmapSystemData
+#endif
+
+#ifndef _SV_SALBTYPE_HXX
+#include "vcl/salbtype.hxx"
+#endif
+
+#include <basebmp/scanlineformats.hxx>
+#include <basebmp/color.hxx>
+#include <basegfx/vector/b2ivector.hxx>
+
+#include "salinst.h"
 
 // =======================================================================
 
-SalBitmap::SalBitmap() :
-        mpVirDev( 0 ),
-        mnBitCount( 0 )
+static bool isValidBitCount( sal_uInt16 nBitCount )
+{
+    return (nBitCount == 1) || (nBitCount == 4) || (nBitCount == 8) || (nBitCount == 16) || (nBitCount == 24) || (nBitCount == 32);
+}
+
+// =======================================================================
+
+AquaSalBitmap::AquaSalBitmap()
+: mxGraphicContext( 0 )
+, mnBits(0)
+, mnWidth(0)
+, mnHeight(0)
+, mnBytesPerRow(0)
 {
 }
 
 // ------------------------------------------------------------------
 
-SalBitmap::~SalBitmap()
+AquaSalBitmap::~AquaSalBitmap()
 {
     Destroy();
 }
 
 // ------------------------------------------------------------------
 
-BOOL SalBitmap::Create( const Size&           rSize,
-                        USHORT                nBitCount,
-                        const BitmapPalette&  rBitmapPalette
-                      )
+bool AquaSalBitmap::Create( CGContextRef xContext, int nX, int nY, int nWidth, int nHeight, bool bMirrorVert )
 {
-    ImplSVData  *pSVData           = ImplGetSVData();
-    BOOL         bSalBitmapCreated = FALSE;
+    return Create(  CGBitmapContextGetWidth( xContext ), CGBitmapContextGetHeight( xContext ),
+                    CGBitmapContextGetBitsPerPixel( xContext ), CGBitmapContextGetBytesPerRow( xContext ),
+                    static_cast< sal_uInt8* >( CGBitmapContextGetData( xContext ) ),
+                    nX, nY, nWidth, nHeight, bMirrorVert );
+}
 
-    if ( pSVData != NULL )
+/** creates an AquaSalBitmap from a rectangle inside a memory bitmap (only 16 und 32 bit supported!)
+    NOTE: This code flips the data upside down so sources must come from AQUA directly
+*/
+bool AquaSalBitmap::Create( sal_uInt32 nWidth, sal_uInt32 nHeight, sal_uInt16 nBits, sal_uInt32 nBytesPerRow, sal_uInt8* pBuffer, sal_uInt32 nX, sal_uInt32 nY, sal_uInt32 nDX, sal_uInt32 nDY, bool bMirrorVert )
+{
+    if( (nBits != 16) && (nBits != 32) || !nWidth || !nHeight )
+        return false;
+
+    mnBits = nBits;
+    mnWidth = nDX;
+    mnHeight = nDY;
+
+    if( AllocateUserData() )
     {
-        const long nHeight = rSize.Height();
-        const long nWidth  = rSize.Width();
+        sal_uInt8* pDest = maUserBuffer.get();
 
-        Destroy();
+        sal_uInt8* pSource = pBuffer;
+        if( nX )
+            pSource += nX << (( nBits == 32 ) ? 2 : 1);
 
-        if ( ( nHeight > 0 ) && ( nWidth > 0 ) )
+        if( bMirrorVert )
         {
-            // Create a SalVirtualDevice
+            nY = nHeight - nY - nDY;
+            pSource += nBytesPerRow * nY;
 
-            mpVirDev
-                = pSVData->mpDefInst->CreateVirtualDevice( NULL,
-                                                           nWidth,
-                                                           nHeight,
-                                                           nBitCount
-                                                         );
-
-            if ( mpVirDev != NULL )
+            sal_uInt32 y = nDY;
+            while( y-- )
             {
-                // Get the SalGraphics which contains the
-                // GWorld we will draw to
+                memcpy( pDest, pSource, mnBytesPerRow );
+                pDest += mnBytesPerRow;
+                pSource += nBytesPerRow;
+            }
+        }
+        else
+        {
+            pSource += nBytesPerRow * nY;
+            pDest += mnBytesPerRow * (nDY-1);
 
-                SalGraphics *pGraphics = GetGraphics();
-
-                if ( pGraphics != NULL )
-                {
-                    const CGrafPtr  pCGraf = pGraphics->maGraphicsData.mpCGrafPort;
-
-                    if ( pCGraf != NULL )
-                    {
-                        mhPixMap = GetCGrafPortPixMap( rSize,
-                                                       nBitCount,
-                                                       rBitmapPalette,
-                                                       pCGraf
-                                                     );
-
-                        if ( ( mhPixMap != NULL ) && ( *mhPixMap != NULL ) )
-                        {
-                            mnBitCount = GetPixDepth( mhPixMap);
-                            mnSize     = rSize;
-
-                            bSalBitmapCreated = TRUE;
-                        } // if
-
-                        // Release the SalGraphics so that others can get a
-                        // handle to it in future GetGraphics() calls
-                    } // if
-
-                    ReleaseGraphics( pGraphics );
-                } // if
-            } // if
-        } // if
-    } // if
-
-    return bSalBitmapCreated;
-} // SalBitmap::Create
+            sal_uInt32 y = nDY;
+            while( y-- )
+            {
+                memcpy( pDest, pSource, mnBytesPerRow );
+                pDest -= mnBytesPerRow;
+                pSource += nBytesPerRow;
+            }
+        }
+        return true;
+    }
+    return false;
+}
 
 // ------------------------------------------------------------------
 
-BOOL SalBitmap::Create( const SalBitmap& rSalBmp )
+bool AquaSalBitmap::Create( CGImageRef& xImage )
+{
+    mnBits = CGImageGetBitsPerPixel( xImage );
+    if( (mnBits == 16) || (mnBits == 32) )
+    {
+        mnWidth = CGImageGetWidth( xImage );
+        mnHeight = CGImageGetHeight( xImage );
+
+        if( AllocateUserData() )
+        {
+            CreateContext();
+            if( mxGraphicContext )
+            {
+                CGContextDrawImage(mxGraphicContext, CGRectMake( 0, 0, mnWidth, mnHeight ), xImage);
+                return true;
+            }
+        }
+    }
+    return false;
+}
+
+// ------------------------------------------------------------------
+
+bool AquaSalBitmap::Create( const Size& rSize, USHORT nBits, const BitmapPalette& rBitmapPalette )
+{
+    if( !isValidBitCount( nBits ) )
+        return false;
+    maPalette = rBitmapPalette;
+    mnBits = nBits;
+    mnWidth = rSize.Width();
+    mnHeight = rSize.Height();
+    return AllocateUserData();
+}
+
+// ------------------------------------------------------------------
+
+bool AquaSalBitmap::Create( const SalBitmap& rSalBmp )
 {
     return Create( rSalBmp, rSalBmp.GetBitCount() );
-} // SalBitmap::Create
+}
 
 // ------------------------------------------------------------------
 
-BOOL SalBitmap::Create( const SalBitmap& rSalBmp,
-                        SalGraphics*     pGraphics
-                      )
+bool AquaSalBitmap::Create( const SalBitmap& rSalBmp, SalGraphics* pGraphics )
 {
-    USHORT nSalBmpBitCount   = 0;
-    BOOL   bSalBitmapCreated = FALSE;
-
-    if ( pGraphics != NULL )
-    {
-        const CGrafPtr  pCGraf = pGraphics->maGraphicsData.mpCGrafPort;
-
-        if ( pCGraf != NULL )
-        {
-            mhPixMap = GetCGrafPortPixMap( rSalBmp.GetSize(),
-                                           rSalBmp.GetBitCount(),
-                                           BitmapPalette(),
-                                           pCGraf
-                                         );
-
-            if ( ( mhPixMap != NULL ) && ( *mhPixMap != NULL ) )
-            {
-                nSalBmpBitCount = GetPixDepth( mhPixMap );
-            } // if
-        } // if
-    } // if
-
-    if ( nSalBmpBitCount == 0 )
-    {
-        nSalBmpBitCount = rSalBmp.GetBitCount();
-    } // if
-
-    bSalBitmapCreated = Create( rSalBmp, nSalBmpBitCount );
-
-    return  bSalBitmapCreated;
-} // SalBitmap::Create
+    return Create( rSalBmp, pGraphics ? pGraphics->GetBitCount() : rSalBmp.GetBitCount() );
+}
 
 // ------------------------------------------------------------------
 
-BOOL SalBitmap::Create( const SalBitmap& rSalBmp, USHORT nNewBitCount )
+bool AquaSalBitmap::Create( const SalBitmap& rSalBmp, USHORT nNewBitCount )
 {
-    BOOL bSalBitmapCreated = FALSE;
+    const AquaSalBitmap& rSourceBitmap = static_cast<const AquaSalBitmap&>(rSalBmp);
 
-    if ( Create( rSalBmp.mnSize, nNewBitCount, BitmapPalette() ) )
+    if( isValidBitCount( nNewBitCount ) &&  rSourceBitmap.maUserBuffer.get() )
     {
-        // Copy pixels from rSalBmp.mpVirDev to mpVirDev
+        mnBits = nNewBitCount;
+        mnWidth = rSourceBitmap.mnWidth;
+        mnHeight = rSourceBitmap.mnHeight;
+        maPalette = rSourceBitmap.maPalette;
 
-        SalGraphics *pDstGraphics = GetGraphics();
-
-        if ( pDstGraphics != NULL )
+        if( AllocateUserData() )
         {
-            SalGraphics *pSrcGraphics = rSalBmp.GetGraphics();
-
-            if (    ( pSrcGraphics                             != NULL )
-                 && ( pSrcGraphics->maGraphicsData.mpCGrafPort != NULL )
-               )
-            {
-                SalTwoRect  aTwoRect;
-
-                // Get size of graphics to copy from
-
-                GetTwoRectFromSalBmp( rSalBmp, &aTwoRect );
-
-                // Copy bits from source graphics
-
-                pDstGraphics->CopyBits( &aTwoRect, pSrcGraphics );
-
-                rSalBmp.ReleaseGraphics( pSrcGraphics );
-
-                bSalBitmapCreated = TRUE;
-            } // if
-
-            ReleaseGraphics( pDstGraphics );
-        } // if
-    } // if
-
-    return bSalBitmapCreated;
-} // SalBitmap::Create
+            ConvertBitmapData( mnWidth, mnHeight, mnBits, mnBytesPerRow, maPalette, maUserBuffer.get(), rSourceBitmap.mnBits, rSourceBitmap.mnBytesPerRow, rSourceBitmap.maPalette, rSourceBitmap.maUserBuffer.get() );
+            return true;
+        }
+    }
+    return false;
+}
 
 // ------------------------------------------------------------------
 
-void SalBitmap::Destroy()
+void AquaSalBitmap::Destroy()
 {
-    ImplSVData *pSVData = ImplGetSVData();
-
-    if ( pSVData != NULL )
-    {
-        if ( mpVirDev != NULL )
-        {
-            pSVData->mpDefInst->DestroyVirtualDevice( mpVirDev );
-        } // if
-
-        mhPixMap   = NULL;
-        mnSize     = Size();
-        mnBitCount = 0;
-    } // if
-} // SalBitmap::Destroy
+    DestroyContext();
+    maUserBuffer.reset();
+}
 
 // ------------------------------------------------------------------
 
-BitmapBuffer* SalBitmap::AcquireBuffer( BOOL bReadOnly )
+void AquaSalBitmap::DestroyContext()
 {
-    BitmapBuffer *pBuffer = NULL;
-
-    if ( mpVirDev != NULL )
+    if( mxGraphicContext )
     {
-        pBuffer = new BitmapBuffer();
-
-        if (    (   pBuffer != NULL )
-             && (  mhPixMap != NULL )
-             && ( *mhPixMap != NULL )
-           )
-        {
-            GWorldFlags  nPixMapFlags = noErr;
-
-            nPixMapFlags = GetPixelsState( mhPixMap );
-
-            if ( nPixMapFlags == noErr )
-            {
-                if ( LockPixels( mhPixMap ) )
-                {
-                    SetBitmapBufferColorFormat( mhPixMap, pBuffer );
-
-                    if ( BMP_SCANLINE_FORMAT( pBuffer->mnFormat ) )
-                    {
-                        pBuffer->mnWidth        = mpVirDev->maVirDevData.mnWidth;
-                        pBuffer->mnHeight       = mpVirDev->maVirDevData.mnHeight;
-                        pBuffer->mnScanlineSize = GetPixRowBytes( mhPixMap );
-                        pBuffer->mpBits         = (BYTE *)GetPixBaseAddr( mhPixMap );
-                        pBuffer->mnBitCount     = GetPixDepth( mhPixMap);
-
-                        // If the pixel depth is <= 8, we need to map QD's
-                        // internal color table to the platform independent
-                        // BitmapPalette color table
-
-                        if ( pBuffer->mnBitCount <= kEightBitColor )
-                        {
-                            CTabHandle hCTab = (**mhPixMap).pmTable;
-
-                            if ( ( hCTab != NULL ) && ( *hCTab != NULL ) )
-                            {
-                                SInt8 nCTabFlags  = noErr;
-
-                                nCTabFlags = HGetState( (Handle)hCTab );
-
-                                if ( nCTabFlags == noErr )
-                                {
-                                    USHORT          nCTabSize      = 0;
-                                    USHORT          nCTabIndex     = 0;
-                                    BitmapPalette  &rBitmapPalette = pBuffer->maPalette;
-
-                                    HLock( (Handle)hCTab );
-
-                                        // Map each color in the QuickDraw color
-                                        // table to a BitmapColor
-
-                                        nCTabSize = (**hCTab).ctSize + 1;
-
-                                        rBitmapPalette.SetEntryCount( nCTabSize );
-
-                                        for ( nCTabIndex = 0;
-                                              nCTabIndex < nCTabSize;
-                                              nCTabIndex++
-                                            )
-                                        {
-                                            BitmapColor     &rBitmapColor = rBitmapPalette[nCTabIndex];
-                                            const RGBColor   aRGBColor    = (**hCTab).ctTable[nCTabIndex].rgb;
-
-                                            RGBColor2BitmapColor( &aRGBColor, rBitmapColor );
-                                        } // for
-
-                                    HSetState( (Handle)hCTab, nCTabFlags );
-                                } // if
-                            } // if
-                        } // if
-                    } // if
-                    else
-                    {
-                        delete pBuffer;
-
-                        pBuffer = NULL;
-                    } // else
-
-                    SetPixelsState( mhPixMap, nPixMapFlags );
-                } // if
-            } // if
-        } // if
-    } // if
-
-    return pBuffer;
-} // SalBitmap::AcquireBuffer
+        CFRelease( mxGraphicContext );
+        mxGraphicContext = 0;
+        maContextBuffer.reset();
+    }
+}
 
 // ------------------------------------------------------------------
 
-void SalBitmap::ReleaseBuffer( BitmapBuffer* pBuffer, BOOL bReadOnly )
+bool AquaSalBitmap::CreateContext()
 {
-    if ( mpVirDev != NULL )
+    DestroyContext();
+
+    size_t bitsPerComponent = (mnBits == 16) ? 5 : 8;
+    sal_uInt32 nContextBytesPerRow = mnBytesPerRow;
+    if( (mnBits == 16) || (mnBits ==32) )
     {
-        // Get the SalGraphics which contains the GWorld
-        // we used as the buffer
-
-        SalGraphics *pGraphics = GetGraphics();
-
-        if (    ( pGraphics                             != NULL )
-             && ( pGraphics->maGraphicsData.mpCGrafPort != NULL )
-           )
-        {
-            // Release the SalGraphics so that others can get a
-            // handle to it in future calls to GetGraphics()
-
-            ReleaseGraphics( pGraphics );
-
-            pGraphics = NULL;
-        } // if
-    } // if
-
-    if ( pBuffer != NULL )
-    {
-        if ( !bReadOnly )
-        {
-            if ( ( mhPixMap != NULL ) && (*mhPixMap != NULL ) )
-            {
-                GWorldFlags  nPixMapFlags = noErr;
-
-                nPixMapFlags = GetPixelsState( mhPixMap );
-
-                if ( nPixMapFlags == noErr )
-                {
-                    if ( LockPixels( mhPixMap ) )
-                    {
-                        if ( !!pBuffer->maPalette )
-                        {
-                            CTabHandle hCTab = (**mhPixMap).pmTable;
-
-                            if ( ( hCTab != NULL ) && ( *hCTab != NULL ) )
-                            {
-                                SInt8 nCTabFlags = noErr;
-
-                                nCTabFlags = HGetState( (Handle)hCTab );
-
-                                if ( nCTabFlags == noErr )
-                                {
-                                    const BitmapPalette  &rBitmapPalette = pBuffer->maPalette;
-                                    short                 nCTabSize      = 0;
-                                    short                 nCTabMinSize   = 0;
-                                    short                 nCTabIndex;
-
-                                    HLock( (Handle)hCTab );
-
-                                        nCTabSize    = (**hCTab).ctSize + 1;
-                                        nCTabMinSize = GetMinColorCount( nCTabSize, rBitmapPalette );
-
-                                        for( nCTabIndex = 0;
-                                             nCTabIndex < nCTabMinSize;
-                                             nCTabIndex++
-                                           )
-                                        {
-                                            const BitmapColor &rBitmapPaletteColor = rBitmapPalette[nCTabIndex];
-
-                                            (**hCTab).ctTable[nCTabIndex].value = nCTabIndex;
-
-                                            (**hCTab).ctTable[nCTabIndex].rgb
-                                                = BitmapColor2RGBColor( rBitmapPaletteColor );
-                                        } // for
-
-                                        CTabChanged( hCTab );
-
-                                    HSetState( (Handle)hCTab, nCTabFlags );
-                                } // if
-                            } // if
-                        } // if
-                        else
-                        {
-                            GDPtr pGDevice = NULL;
-
-                            pGDevice = *GetGDevice();
-
-                            if ( pGDevice != NULL )
-                            {
-                                PixMapPtr  pPixMap = *pGDevice->gdPMap;
-
-                                if ( pPixMap != NULL )
-                                {
-                                    CTabPtr  pCTable = *pPixMap->pmTable;
-
-                                    if ( pCTable != NULL )
-                                    {
-                                        ITabPtr  pITable = *pGDevice->gdITable;
-
-                                        if ( pITable != NULL )
-                                        {
-                                            // Is the inverse color table up-to-date?
-
-                                            if ( pITable->iTabSeed != pCTable->ctSeed )
-                                            {
-                                                // Update our inverse color table
-
-                                                MakeITable( pPixMap->pmTable,
-                                                            pGDevice->gdITable,
-                                                            pGDevice->gdResPref
-                                                          );
-
-                                                pGDevice = *GetGDevice();
-                                                pCTable  = *pPixMap->pmTable;
-                                            } // if
-                                        } // if
-
-                                        (**mhPixMap).pmTable = pPixMap->pmTable;
-                                    } // if
-                                    else
-                                    {
-                                        (**mhPixMap).pmTable = NULL;
-                                    } // else
-                                } // if
-                            } // if
-                        } // else
-
-                        SetPixelsState( mhPixMap, nPixMapFlags );
-                    } // if
-                }  //if
-            } // if
-        } // if
-
-        delete pBuffer;
-
-        pBuffer = NULL;
-    } // if
-} // SalBitmap::ReleaseBuffer
-
-// ------------------------------------------------------------------
-
-SalGraphics* SalBitmap::GetGraphics()
-{
-    if ( mpVirDev != NULL )
-    {
-        return mpVirDev->GetGraphics();
-    } // if
+        // simple, no conversion needed
+        maContextBuffer = maUserBuffer;
+    }
     else
     {
-        return NULL;
-    } // else
-} // SalBitmap::GetGraphics
+        // convert user data to 32 bit
+        nContextBytesPerRow = mnWidth << 2;
+        maContextBuffer.reset( new sal_uInt8[ mnHeight * nContextBytesPerRow ] );
+
+        ConvertBitmapData( mnWidth, mnHeight,
+                           32, nContextBytesPerRow, maPalette, maContextBuffer.get(),
+                           mnBits, mnBytesPerRow, maPalette, maUserBuffer.get() );
+    }
+
+    CGColorSpaceRef xColorSpace( CGColorSpaceCreateWithName(kCGColorSpaceGenericRGB) );
+    mxGraphicContext = CGBitmapContextCreate( maContextBuffer.get(), mnWidth, mnHeight, bitsPerComponent, nContextBytesPerRow, xColorSpace, kCGImageAlphaNoneSkipFirst );
+    CFRelease( xColorSpace );
+
+    if( mxGraphicContext )
+    {
+        CGContextTranslateCTM (mxGraphicContext, 0, mnHeight);
+        CGContextScaleCTM (mxGraphicContext, 1.0, -1.0);
+    }
+    else
+    {
+        maContextBuffer.reset();
+    }
+
+    return mxGraphicContext != NULL;
+}
 
 // ------------------------------------------------------------------
 
-void SalBitmap::ReleaseGraphics( SalGraphics* pGraphics )
+bool AquaSalBitmap::AllocateUserData()
 {
-    if ( mpVirDev != NULL )
+    Destroy();
+
+    if( mnWidth && mnHeight )
     {
-        mpVirDev->ReleaseGraphics( pGraphics );
-    } // if
-} // SalBitmap::ReleaseGraphics
+        mnBytesPerRow =  0;
+
+        switch( mnBits )
+        {
+        case 1:     mnBytesPerRow = (mnWidth + 7) >> 3; break;
+        case 4:     mnBytesPerRow = (mnWidth + 1) >> 1; break;
+        case 8:     mnBytesPerRow = mnWidth; break;
+        case 16:    mnBytesPerRow = mnWidth << 1; break;
+        case 24:    mnBytesPerRow = (mnWidth << 1) + mnWidth; break;
+        case 32:    mnBytesPerRow = mnWidth << 2; break;
+        default:
+            DBG_ERROR("vcl::AquaSalBitmap::AllocateUserData(), illegal bitcount!");
+        }
+    }
+
+    if( mnBytesPerRow )
+        maUserBuffer.reset( new sal_uInt8[mnBytesPerRow * mnHeight] );
+
+    return maUserBuffer.get() != 0;
+}
+
+// ------------------------------------------------------------------
+
+class ImplPixelFormat
+{
+protected:
+    sal_uInt8* pData;
+public:
+    static ImplPixelFormat* GetFormat( sal_uInt16 nBits, const BitmapPalette& rPalette );
+
+    virtual void StartLine( sal_uInt8* pLine ) { pData = pLine; }
+    virtual void SkipPixel( sal_uInt32 nPixel ) = 0;
+    virtual ColorData ReadPixel() = 0;
+    virtual void WritePixel( ColorData nColor ) = 0;
+};
+
+class ImplPixelFormat32 : public ImplPixelFormat
+{
+public:
+    virtual void SkipPixel( sal_uInt32 nPixel )
+    {
+        pData += nPixel << 2;
+    }
+    virtual ColorData ReadPixel()
+    {
+        pData++;
+        return RGB_COLORDATA( *pData++, *pData++, *pData++ );
+    }
+    virtual void WritePixel( ColorData nColor )
+    {
+        *pData++ = 0;
+        *pData++ = COLORDATA_RED( nColor );
+        *pData++ = COLORDATA_GREEN( nColor );
+        *pData++ = COLORDATA_BLUE( nColor );
+    }
+};
+
+class ImplPixelFormat24 : public ImplPixelFormat
+{
+public:
+    virtual void SkipPixel( sal_uInt32 nPixel )
+    {
+        pData += (nPixel << 1) + nPixel;
+    }
+    virtual ColorData ReadPixel()
+    {
+        const ColorData c = RGB_COLORDATA( pData[2], pData[1], pData[0] );
+        pData += 3;
+        return c;
+    }
+    virtual void WritePixel( ColorData nColor )
+    {
+        *pData++ = COLORDATA_BLUE( nColor );
+        *pData++ = COLORDATA_GREEN( nColor );
+        *pData++ = COLORDATA_RED( nColor );
+    }
+};
+
+class ImplPixelFormat16 : public ImplPixelFormat
+{
+protected:
+    sal_uInt16* pData16;
+public:
+
+    virtual void StartLine( sal_uInt8* pLine )
+    {
+        pData16 = (sal_uInt16*)pLine;
+    }
+    virtual void SkipPixel( sal_uInt32 nPixel )
+    {
+        pData += nPixel;
+    }
+    virtual ColorData ReadPixel()
+    {
+        const ColorData c = RGB_COLORDATA( (*pData & 0x7c00) >> 7, (*pData & 0x03e0) >> 2 , (*pData & 0x001f) << 3 );
+        pData++;
+        return c;
+    }
+    virtual void WritePixel( ColorData nColor )
+    {
+        *pData++ =  ((COLORDATA_RED( nColor ) & 0xf8 ) << 7 ) ||
+                    ((COLORDATA_GREEN( nColor ) & 0xf8 ) << 2 ) ||
+                    ((COLORDATA_BLUE( nColor ) & 0xf8 ) >> 3 );
+    }
+};
+
+class ImplPixelFormat8 : public ImplPixelFormat
+{
+private:
+    const BitmapPalette& mrPalette;
+
+public:
+    ImplPixelFormat8( const BitmapPalette& rPalette )
+    : mrPalette( rPalette )
+    {
+    }
+    virtual void SkipPixel( sal_uInt32 nPixel )
+    {
+        pData += nPixel;
+    }
+    virtual ColorData ReadPixel()
+    {
+        return mrPalette[ *pData++ ].operator Color().GetColor();
+    }
+    virtual void WritePixel( ColorData nColor )
+    {
+        const BitmapColor aColor( COLORDATA_RED( nColor ), COLORDATA_GREEN( nColor ), COLORDATA_BLUE( nColor ) );
+        *pData++ = static_cast< sal_uInt8 >( mrPalette.GetBestIndex( aColor ) );
+    }
+};
+
+class ImplPixelFormat4 : public ImplPixelFormat
+{
+private:
+    const BitmapPalette& mrPalette;
+    sal_uInt32 mnX;
+    sal_uInt32 mnShift;
+
+public:
+    ImplPixelFormat4( const BitmapPalette& rPalette )
+    : mrPalette( rPalette )
+    {
+    }
+    virtual void SkipPixel( sal_uInt32 nPixel )
+    {
+        mnX += nPixel;
+        if( (nPixel & 1) )
+            mnShift ^= 4;
+    }
+    virtual void StartLine( sal_uInt8* pLine )
+    {
+        pData = pLine;
+        mnX = 0;
+        mnShift = 4;
+    }
+    virtual ColorData ReadPixel()
+    {
+        const BitmapColor& rColor = mrPalette[( pData[mnX >> 1] >> mnShift) & 0x0f];
+        mnX++;
+        mnShift ^= 4;
+        return rColor.operator Color().GetColor();
+    }
+    virtual void WritePixel( ColorData nColor )
+    {
+        const BitmapColor aColor( COLORDATA_RED( nColor ), COLORDATA_GREEN( nColor ), COLORDATA_BLUE( nColor ) );
+        pData[mnX>>1] &= (0xf0 >> mnShift);
+        pData[mnX>>1] |= (static_cast< sal_uInt8 >( mrPalette.GetBestIndex( aColor ) ) & 0x0f);
+        mnX++;
+        mnShift ^= 4;
+    }
+};
+
+class ImplPixelFormat1 : public ImplPixelFormat
+{
+private:
+    const BitmapPalette& mrPalette;
+    sal_uInt32 mnX;
+
+public:
+    ImplPixelFormat1( const BitmapPalette& rPalette )
+    : mrPalette( rPalette )
+    {
+    }
+    virtual void SkipPixel( sal_uInt32 nPixel )
+    {
+        mnX += nPixel;
+    }
+    virtual void StartLine( sal_uInt8* pLine )
+    {
+        pData = pLine;
+        mnX = 0;
+    }
+    virtual ColorData ReadPixel()
+    {
+        const BitmapColor& rColor = mrPalette[ (pData[mnX >> 3 ] >> ( 7 - ( mnX & 7 ) )) & 1];
+        mnX++;
+        return rColor.operator Color().GetColor();
+    }
+    virtual void WritePixel( ColorData nColor )
+    {
+        const BitmapColor aColor( COLORDATA_RED( nColor ), COLORDATA_GREEN( nColor ), COLORDATA_BLUE( nColor ) );
+        if( mrPalette.GetBestIndex( aColor ) & 1 )
+            pData[ mnX >> 3 ] |= 1 << ( 7 - ( mnX & 7 ) );
+        else
+            pData[ mnX >> 3 ] &= ~( 1 << ( 7 - ( mnX & 7 ) ) );
+        mnX++;
+    }
+};
+
+ImplPixelFormat* ImplPixelFormat::GetFormat( sal_uInt16 nBits, const BitmapPalette& rPalette )
+{
+    switch( nBits )
+    {
+    case 1: return new ImplPixelFormat1( rPalette );
+    case 4: return new ImplPixelFormat4( rPalette );
+    case 8: return new ImplPixelFormat8( rPalette );
+    case 16: return new ImplPixelFormat16;
+    case 24: return new ImplPixelFormat24;
+    case 32: return new ImplPixelFormat32;
+    }
+
+    return 0;
+}
+
+basebmp::BitmapDeviceSharedPtr AquaSalBitmap::getBitmapDevice() const
+{
+    sal_Int32 nFormat = basebmp::Format::NONE;
+    basebmp::PaletteMemorySharedVector aPalette;
+    switch( mnBits )
+    {
+    case 1:  nFormat = basebmp::Format::ONE_BIT_MSB_PAL;            break;
+    case 4:  nFormat = basebmp::Format::FOUR_BIT_MSB_PAL;           break;
+    case 8:  nFormat = basebmp::Format::EIGHT_BIT_PAL;              break;
+    case 16: nFormat = basebmp::Format::SIXTEEN_BIT_MSB_TC_MASK;    break;
+    case 24: nFormat = basebmp::Format::TWENTYFOUR_BIT_TC_MASK;     break;
+    case 32: nFormat = basebmp::Format::THIRTYTWO_BIT_TC_MASK_ARGB; break;
+    default:
+        DBG_ERROR( "unsupported bitmap format" );
+        break;
+    }
+
+    if( mnBits < 16 )
+    {
+        USHORT nColors = maPalette.GetEntryCount();
+        std::vector<basebmp::Color>* pVector = new std::vector<basebmp::Color>( nColors );
+        for( USHORT nCol = 0; nCol < nColors; nCol++ )
+        {
+            const BitmapColor& rCol( maPalette[nCol] );
+            (*pVector)[nCol] = basebmp::Color( rCol.GetRed(), rCol.GetGreen(), rCol.GetBlue() );
+        }
+        aPalette.reset( pVector );
+    }
+
+    return basebmp::createBitmapDevice( basegfx::B2IVector( mnWidth, mnHeight ),
+                                        false,
+                                        nFormat,
+                                        maUserBuffer,
+                                        aPalette );
+}
+
+void AquaSalBitmap::ConvertBitmapData( sal_uInt32 nWidth, sal_uInt32 nHeight,
+                                       sal_uInt16 nDestBits, sal_uInt32 nDestBytesPerRow, const BitmapPalette& rDestPalette, sal_uInt8* pDestData,
+                                       sal_uInt16 nSrcBits, sal_uInt32 nSrcBytesPerRow, const BitmapPalette& rSrcPalette, sal_uInt8* pSrcData )
+
+{
+    if( (nDestBytesPerRow == nSrcBytesPerRow) && (nDestBits == nSrcBits) && ((nSrcBits != 8) || (rDestPalette.operator==( rSrcPalette ))) )
+    {
+        // simple case, same format, so just copy
+        memcpy( pDestData, pSrcData, nHeight * nDestBytesPerRow );
+    }
+    else
+    {
+        // TODO: this implementation is for clarety, not for speed
+
+        ImplPixelFormat* pD = ImplPixelFormat::GetFormat( nDestBits, rDestPalette );
+        ImplPixelFormat* pS = ImplPixelFormat::GetFormat( nSrcBits, rSrcPalette );
+
+        if( pD && pS )
+        {
+            sal_uInt32 nY = nHeight;
+            while( nY-- )
+            {
+                pD->StartLine( pDestData );
+                pS->StartLine( pSrcData );
+
+                sal_uInt32 nX = nWidth;
+                while( nX-- )
+                    pD->WritePixel( pS->ReadPixel() );
+
+                pSrcData += nSrcBytesPerRow;
+                pDestData += nDestBytesPerRow;
+            }
+        }
+        delete pS;
+        delete pD;
+    }
+}
+
+// ------------------------------------------------------------------
+
+Size AquaSalBitmap::GetSize() const
+{
+    return Size( mnWidth, mnHeight );
+}
+
+// ------------------------------------------------------------------
+
+USHORT AquaSalBitmap::GetBitCount() const
+{
+    return mnBits;
+}
+
+// ------------------------------------------------------------------
+
+BitmapBuffer* AquaSalBitmap::AcquireBuffer( bool bReadOnly )
+{
+    BitmapBuffer* pBuffer = new BitmapBuffer;
+    pBuffer->mnWidth = mnWidth;
+    pBuffer->mnHeight = mnHeight;
+    pBuffer->maPalette = maPalette;
+    pBuffer->mnScanlineSize = mnBytesPerRow;
+    pBuffer->mpBits = maUserBuffer.get();
+    pBuffer->mnBitCount = mnBits;
+    switch( mnBits )
+    {
+    case 1:     pBuffer->mnFormat = BMP_FORMAT_1BIT_MSB_PAL; break;
+    case 4:     pBuffer->mnFormat = BMP_FORMAT_4BIT_MSN_PAL; break;
+    case 8:     pBuffer->mnFormat = BMP_FORMAT_8BIT_PAL; break;
+    case 16:    pBuffer->mnFormat = BMP_FORMAT_16BIT_TC_MSB_MASK;
+                pBuffer->maColorMask  = ColorMask( k16BitRedColorMask, k16BitGreenColorMask, k16BitBlueColorMask );
+                break;
+    case 24:    pBuffer->mnFormat = BMP_FORMAT_24BIT_TC_BGR; break;
+    case 32:    pBuffer->mnFormat = BMP_FORMAT_32BIT_TC_ARGB;
+                pBuffer->maColorMask  = ColorMask( k32BitRedColorMask, k32BitGreenColorMask, k32BitBlueColorMask );
+                break;
+    }
+
+    return pBuffer;
+}
+
+// ------------------------------------------------------------------
+
+void AquaSalBitmap::ReleaseBuffer( BitmapBuffer* pBuffer, bool bReadOnly )
+{
+//  AquaLog("AquaSalBitmap::ReleaseBuffer(%lx)\n", this);
+
+    // invalidate graphic context if we have different data
+    if( !bReadOnly )
+    {
+        maPalette = pBuffer->maPalette;
+        if( mxGraphicContext )
+        DestroyContext();
+    }
+
+    delete pBuffer;
+}
+
+// ------------------------------------------------------------------
+
+CGImageRef AquaSalBitmap::CreateCroppedImage( int nX, int nY, int nWidth, int nHeight )
+{
+    CGImageRef xImage = 0;
+
+    if( !mxGraphicContext )
+        CreateContext();
+
+    if( mxGraphicContext )
+        xImage = CreateCroppedImage( mxGraphicContext, nX, nY, nWidth, nHeight );
+
+    return xImage;
+}
+
+// ------------------------------------------------------------------
+
+/*static*/ CGImageRef AquaSalBitmap::CreateCroppedImage( CGContextRef xContext, int nX, int nY, int nWidth, int nHeight )
+{
+    CGImageRef xImage = 0;
+    if( xContext )
+    {
+        xImage = CGBitmapContextCreateImage( xContext );
+        if( nX || nY || (CGImageGetWidth(xImage) != static_cast<unsigned int> (nWidth)) || (CGImageGetHeight(xImage) != static_cast<unsigned int>(nHeight)) )
+        {
+            CGImageRef myTempImage = CGImageCreateWithImageInRect( xImage, CGRectMake( nX, nY, nWidth, nHeight ) );
+            CGImageRelease( xImage );
+            xImage = myTempImage;
+        }
+    }
+    return xImage;
+}
+
+// ------------------------------------------------------------------
+
+/** TODO: Optimize me, merge the bitmap and alpha mask ourself
+*/
+CGImageRef AquaSalBitmap::CreateWithMask( const AquaSalBitmap& rMask, sal_uInt32 nX, sal_uInt32 nY, sal_uInt32 nDX, sal_uInt32 nDY )
+{
+    AquaSalBitmap rMaskNew;
+    if(!rMaskNew.Create( rMask ))
+    {
+        AquaLog( "AquaSalBitmap::CreateWithMask: error can't copy rMask!");
+        return NULL;
+    }
+
+    //AquaLog("source: (%d,%d,%u) mask: (%d,%d,%u)\n", mnWidth, mnHeight, mnBits, rMask.mnWidth, rMask.mnHeight, rMask.mnBits );
+
+    CGImageRef xMaskedImage = 0;
+
+    CGImageRef xImage( CreateCroppedImage( nX, nY, nDX, nDY ) );
+    if( xImage )
+    {
+        CGImageRef xMask = rMaskNew.CreateCroppedImage( nX, nY, nDX, nDY );
+        if( xMask )
+        {
+
+            rMaskNew.Destroy();//destroy old context with a size which could be different from
+            //the xMaskedImage, xImage, xMask size (the three have the same size=(nDX, nDY))
+            // and are part of the original image
+            rMaskNew.Create(xMask);//and create one which will fit to image
+
+            //This code should be replaced by rMaskNew.invert() before the line containing
+            //rMaskNew.CreateCroppedImage when the AquaSalGraphic::invert function will be
+            //implemented (salgdi.cxx)
+            rMaskNew.CreateContext();
+            CGContextTranslateCTM (rMaskNew.mxGraphicContext, 0, mnHeight);
+            CGContextScaleCTM (rMaskNew.mxGraphicContext, 1.0, -1.0);
+            CGContextSetGrayFillColor(rMaskNew.mxGraphicContext, 1.0, 1.0);
+            CGRect xImageRect=CGRectMake( 0, 0, nDX, nDY);//the rect has no offset
+            CGContextFillRect(rMaskNew.mxGraphicContext, xImageRect);
+            CGContextSetBlendMode(rMaskNew.mxGraphicContext,  kCGBlendModeDifference);
+            CGContextDrawImage(rMaskNew.mxGraphicContext, xImageRect, xMask);
+            CFRelease( xMask );
+            xMask=CGBitmapContextCreateImage(rMaskNew.mxGraphicContext);
+
+            //we create the new image which has width and height equal to nDX and nDY
+            AquaSalBitmap xMaskedBmp;
+            xMaskedBmp.Create(xImage);
+
+            CGContextSaveGState(mxGraphicContext);
+
+            //we create the transparent image
+            CGContextBeginTransparencyLayer(xMaskedBmp.mxGraphicContext, NULL);
+            CGContextClipToMask(xMaskedBmp.mxGraphicContext, xImageRect, xMask);
+            CGContextClearRect (xMaskedBmp.mxGraphicContext, xImageRect);
+            CGContextDrawImage(xMaskedBmp.mxGraphicContext, xImageRect, xImage );
+            xMaskedImage=CGBitmapContextCreateImage(xMaskedBmp.mxGraphicContext);
+            CGContextEndTransparencyLayer(xMaskedBmp.mxGraphicContext);
+
+            //we revert it as its top was on the bottom and vice versa
+            CGContextBeginTransparencyLayer(xMaskedBmp.mxGraphicContext, NULL);
+            CGContextClearRect (xMaskedBmp.mxGraphicContext, xImageRect);
+            CGContextDrawImage(xMaskedBmp.mxGraphicContext, xImageRect, xMaskedImage );
+            CFRelease( xMaskedImage );
+
+            xMaskedImage=CGBitmapContextCreateImage(xMaskedBmp.mxGraphicContext);
+            CGContextEndTransparencyLayer(xMaskedBmp.mxGraphicContext);
+
+            CGContextRestoreGState(mxGraphicContext);
+
+            CFRelease( xMask );
+        }
+        CFRelease( xImage );
+    }
+    return xMaskedImage;
+}
+
+// ------------------------------------------------------------------
+
+static void CFMallocDeleter(void* /*info*/, const void* data, size_t /*size*/)
+{
+    free( const_cast<void*>(data) );
+}
+
+// ------------------------------------------------------------------
+
+/** creates an image from the given rectangle, replacing all black pixels with nMaskColor and make all other full transparent */
+CGImageRef AquaSalBitmap::CreateColorMask( int nX, int nY, int nWidth, int nHeight, SalColor nMaskColor ) const
+{
+    CGImageRef xMask = 0;
+    if( maUserBuffer.get() && (static_cast<unsigned int>(nX + nWidth) <= mnWidth) && (static_cast<unsigned int>(nY + nHeight) <= mnHeight)  )
+    {
+        const sal_uInt32 nDestBytesPerRow = nWidth << 2;
+        sal_uInt32* pMaskBuffer = static_cast<sal_uInt32*>( malloc( nHeight * nDestBytesPerRow ) );
+        sal_uInt32* pDest = pMaskBuffer;
+
+        ImplPixelFormat* pSourcePixels = ImplPixelFormat::GetFormat( mnBits, maPalette );
+
+        if( pMaskBuffer && pSourcePixels )
+        {
+            sal_uInt32 nColor;
+            reinterpret_cast<sal_uInt8*>(&nColor)[0] = 0xff;
+            reinterpret_cast<sal_uInt8*>(&nColor)[1] = SALCOLOR_RED( nMaskColor );
+            reinterpret_cast<sal_uInt8*>(&nColor)[2] = SALCOLOR_GREEN( nMaskColor );
+            reinterpret_cast<sal_uInt8*>(&nColor)[3] = SALCOLOR_BLUE( nMaskColor );
+
+            sal_uInt8* pSource = maUserBuffer.get();
+            if( nY )
+                pSource += nY * mnBytesPerRow;
+
+            sal_uInt32 y = nHeight;
+            while( y-- )
+            {
+                pSourcePixels->StartLine( pSource );
+                pSourcePixels->SkipPixel(nX);
+                sal_uInt32 x = nWidth;
+                while( x-- )
+                {
+                    *pDest++ = ( pSourcePixels->ReadPixel() == 0 ) ? nColor : 0;
+                }
+                pSource += mnBytesPerRow;
+            }
+
+            CGColorSpaceRef xColorSpace( CGColorSpaceCreateWithName(kCGColorSpaceGenericRGB) );
+            CGDataProviderRef xDataProvider( CGDataProviderCreateWithData(NULL, pMaskBuffer, nHeight * nDestBytesPerRow, &CFMallocDeleter) );
+            xMask = CGImageCreate(nWidth, nHeight, 8, 32, nDestBytesPerRow, xColorSpace, kCGImageAlphaPremultipliedFirst, xDataProvider, NULL, true, kCGRenderingIntentDefault);
+            CFRelease(xDataProvider);
+            CFRelease(xColorSpace);
+        }
+        else
+        {
+            free(pMaskBuffer);
+        }
+
+        delete pSourcePixels;
+    }
+    return xMask;
+}
+
+// ------------------------------------------------------------------
+
+CGImageRef AquaSalBitmap::CreateMask( int nX, int nY, int nWidth, int nHeight ) const
+{
+    CGImageRef xMask = 0;
+    if( (maUserBuffer.get()) && (static_cast<unsigned int>(nX + nWidth) <= mnWidth) && (static_cast<unsigned int>(nY + nHeight) <= mnHeight)  )
+    {
+        if( mnBits == 1 )
+        {
+            CGDataProviderRef xDataProvider( CGDataProviderCreateWithData(NULL, maUserBuffer.get(), nHeight * mnBytesPerRow, NULL) );
+            xMask = CGImageMaskCreate(nWidth, nHeight, 1, 1, mnBytesPerRow, xDataProvider, NULL, true );
+            CFRelease(xDataProvider);
+        }
+        else
+        {
+            basebmp::RawMemorySharedArray aMaskBuffer( new sal_uInt8[ nWidth * nHeight ] );
+            sal_uInt8* pDest = aMaskBuffer.get();
+            if( pDest )
+            {
+                sal_uInt8* pSource = maUserBuffer.get();
+                if( nY )
+                    pSource += nY * mnBytesPerRow;
+
+                if( mnBits == 8 )
+                {
+                    if( nX )
+                        pSource += nX;
+
+                    // simple convert alpha
+                    sal_uInt32 y = nHeight;
+                    while( y-- )
+                    {
+                        sal_uInt32 x = nWidth;
+                        while( x-- )
+                            *pDest++ = 0xff - *pSource++;
+                        pSource += mnBytesPerRow;
+                    }
+                }
+                else
+                {
+                    ImplPixelFormat* pSourcePixels = ImplPixelFormat::GetFormat( mnBits, maPalette );
+                    if( pSourcePixels )
+                    {
+                        sal_uInt32 y = nHeight;
+                        while( y-- )
+                        {
+                            pSourcePixels->StartLine(pSource);
+                            pSourcePixels->SkipPixel(nX);
+                            sal_uInt32 x = nWidth;
+                            while( x-- )
+                                *pDest++ = (pSourcePixels->ReadPixel() == 0) ? 0x00 : 0xff;
+
+                            pSource += mnBytesPerRow;
+                        }
+                        delete pSourcePixels;
+                    }
+                }
+
+                CGDataProviderRef xDataProvider( CGDataProviderCreateWithData(NULL, aMaskBuffer.get(), nHeight * nWidth, NULL) );
+                xMask = CGImageMaskCreate(nWidth, nHeight, 8, 8, nWidth, xDataProvider, NULL, true );
+                CFRelease(xDataProvider);
+            }
+        }
+    }
+    return xMask;
+}
 
 // =======================================================================
 
-// =======================================================================
+/** AquaSalBitmap::GetSystemData Get platform native image data from existing image
+ *
+ *  @param rData struct BitmapSystemData, defined in vcl/inc/bitmap.hxx
+ *  @return true if successful
+**/
+bool AquaSalBitmap::GetSystemData( BitmapSystemData& rData )
+{
+    bool bRet = false;
+
+    if( !mxGraphicContext )
+        CreateContext();
+
+    if ( mxGraphicContext )
+    {
+        bRet = true;
+        rData.rImageContext = (void *) mxGraphicContext;
+        rData.mnWidth = (int) CGBitmapContextGetWidth(mxGraphicContext);
+        rData.mnHeight = (int) CGBitmapContextGetHeight(mxGraphicContext);
+
+
+        if (rData.mnWidth != (int) mnWidth || rData.mnHeight != (int) mnHeight) {
+            AquaLog( "VCL::AquaSalBitmap::%s(BitmapSystemData) ERROR size mismatch:, Image:%ldx%ld != Context:%dx%d\n",__func__, mnWidth, mnHeight, rData.mnWidth, rData.mnHeight);
+        } else {
+            AquaLog( "VCL::AquaSalBitmap::%s(BitmapSystemData) mxGraphicContext = OK, w:%d h:%d\n",__func__, rData.mnWidth, rData.mnHeight);
+        }
+
+    } else {
+        AquaLog( "VCL::AquaSalBitmap::%s(BitmapSystemData) w:%ld h:%ld - FAIL mxGraphicContext == NULL\n",__func__, mnWidth, mnHeight);
+    }
+
+    return bRet;
+}
