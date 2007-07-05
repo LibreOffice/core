@@ -4,9 +4,9 @@
  *
  *  $RCSfile: system.c,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: vg $ $Date: 2007-01-18 14:18:40 $
+ *  last change: $Author: rt $ $Date: 2007-07-05 09:05:56 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -339,7 +339,7 @@ struct passwd *getpwnam_r(const char* name, struct passwd* s, char* buffer, int 
 }
 #endif /* defined SCO */
 
-#if !defined(FREEBSD) || (__FreeBSD_version < 700015)
+#if !defined(FREEBSD) || (__FreeBSD_version < 601103)
 
 extern int h_errno;
 
@@ -430,7 +430,7 @@ struct hostent *gethostbyname_r(const char *name, struct hostent *result,
 
       return res;
 }
-#endif /* !defined(FREEBSD) || (__FreeBSD_version < 700015) */
+#endif /* !defined(FREEBSD) || (__FreeBSD_version < 601103) */
 
 #if defined(MACOSX)
 /*
