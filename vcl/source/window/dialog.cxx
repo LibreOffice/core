@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dialog.cxx,v $
  *
- *  $Revision: 1.38 $
+ *  $Revision: 1.39 $
  *
- *  last change: $Author: hr $ $Date: 2007-06-27 20:29:22 $
+ *  last change: $Author: rt $ $Date: 2007-07-05 08:41:12 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -402,11 +402,19 @@ void Dialog::ImplInit( Window* pParent, WinBits nStyle )
 
 void Dialog::ImplInitSettings()
 {
-    // Wir haben graue Dialoge
+    // user override
     if ( IsControlBackground() )
         SetBackground( GetControlBackground() );
+    // NWF background
+    else if( IsNativeControlSupported( CTRL_WINDOW_BACKGROUND, PART_BACKGROUND_DIALOG ) )
+    {
+        mpWindowImpl->mnNativeBackground = PART_BACKGROUND_DIALOG;
+        EnableChildTransparentMode( TRUE );
+    }
+    // fallback to settings color
     else
         SetBackground( GetSettings().GetStyleSettings().GetDialogColor() );
+
 }
 
 // -----------------------------------------------------------------------
