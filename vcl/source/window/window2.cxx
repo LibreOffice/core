@@ -4,9 +4,9 @@
  *
  *  $RCSfile: window2.cxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: hr $ $Date: 2007-06-27 20:36:03 $
+ *  last change: $Author: rt $ $Date: 2007-07-05 08:43:42 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -405,26 +405,47 @@ void Window::ShowFocus( const Rectangle& rRect )
 {
     DBG_CHKTHIS( Window, ImplDbgCheckWindow );
 
+    if( mpWindowImpl->mbInShowFocus )
+        return;
+    mpWindowImpl->mbInShowFocus = TRUE;
+
     ImplWinData* pWinData = ImplGetWinData();
 
-    if ( !mpWindowImpl->mbInPaint )
+    // native themeing suggest not to use focus rects
+    if( ! ( mpWindowImpl->mbUseNativeFocus &&
+            IsNativeWidgetEnabled() ) )
     {
-        if ( mpWindowImpl->mbFocusVisible )
+        if ( !mpWindowImpl->mbInPaint )
         {
-            if ( *(pWinData->mpFocusRect) == rRect )
-                return;
+            if ( mpWindowImpl->mbFocusVisible )
+            {
+                if ( *(pWinData->mpFocusRect) == rRect )
+                {
+                    mpWindowImpl->mbInShowFocus = FALSE;
+                    return;
+                }
 
-            ImplInvertFocus( *(pWinData->mpFocusRect) );
+                ImplInvertFocus( *(pWinData->mpFocusRect) );
+            }
+
+            ImplInvertFocus( rRect );
         }
-
-        ImplInvertFocus( rRect );
+        if ( !pWinData->mpFocusRect )
+            pWinData->mpFocusRect = new Rectangle( rRect );
+        else
+            *(pWinData->mpFocusRect) = rRect;
+        mpWindowImpl->mbFocusVisible = TRUE;
     }
-
-    if ( !pWinData->mpFocusRect )
-        pWinData->mpFocusRect = new Rectangle( rRect );
     else
-        *(pWinData->mpFocusRect) = rRect;
-    mpWindowImpl->mbFocusVisible = TRUE;
+    {
+        if( ! mpWindowImpl->mbNativeFocusVisible )
+        {
+            mpWindowImpl->mbNativeFocusVisible = TRUE;
+            if ( !mpWindowImpl->mbInPaint )
+                Invalidate();
+        }
+    }
+    mpWindowImpl->mbInShowFocus = FALSE;
 }
 
 // -----------------------------------------------------------------------
@@ -433,12 +454,34 @@ void Window::HideFocus()
 {
     DBG_CHKTHIS( Window, ImplDbgCheckWindow );
 
-    if ( !mpWindowImpl->mbFocusVisible )
+    if( mpWindowImpl->mbInHideFocus )
         return;
+    mpWindowImpl->mbInHideFocus = TRUE;
 
-    if ( !mpWindowImpl->mbInPaint )
-        ImplInvertFocus( *(ImplGetWinData()->mpFocusRect) );
-    mpWindowImpl->mbFocusVisible = FALSE;
+    // native themeing can suggest not to use focus rects
+    if( ! ( mpWindowImpl->mbUseNativeFocus &&
+            IsNativeWidgetEnabled() ) )
+    {
+        if ( !mpWindowImpl->mbFocusVisible )
+        {
+            mpWindowImpl->mbInHideFocus = FALSE;
+            return;
+        }
+
+        if ( !mpWindowImpl->mbInPaint )
+            ImplInvertFocus( *(ImplGetWinData()->mpFocusRect) );
+        mpWindowImpl->mbFocusVisible = FALSE;
+    }
+    else
+    {
+        if( mpWindowImpl->mbNativeFocusVisible )
+        {
+            mpWindowImpl->mbNativeFocusVisible = FALSE;
+            if ( !mpWindowImpl->mbInPaint )
+                Invalidate();
+        }
+    }
+    mpWindowImpl->mbInHideFocus = FALSE;
 }
 
 // -----------------------------------------------------------------------
