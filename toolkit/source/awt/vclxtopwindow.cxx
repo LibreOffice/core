@@ -4,9 +4,9 @@
  *
  *  $RCSfile: vclxtopwindow.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 12:15:39 $
+ *  last change: $Author: rt $ $Date: 2007-07-05 08:04:41 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -179,15 +179,7 @@ VCLXTopWindow::~VCLXTopWindow()
         const SystemEnvData* pSysData = ((SystemWindow *)pWindow)->GetSystemData();
         if( pSysData )
         {
-#ifdef UNX
-            if( SystemType == ::com::sun::star::lang::SystemDependent::SYSTEM_XWINDOW )
-            {
-                ::com::sun::star::awt::SystemDependentXWindow aSD;
-                aSD.DisplayPointer = sal::static_int_cast< sal_Int64 >(reinterpret_cast< sal_IntPtr >(pSysData->pDisplay));
-                aSD.WindowHandle = pSysData->aWindow;
-                aRet <<= aSD;
-            }
-#elif (defined WNT)
+#if (defined WNT)
             if( SystemType == ::com::sun::star::lang::SystemDependent::SYSTEM_WIN32 )
             {
                  aRet <<= (sal_Int32)pSysData->hWnd;
@@ -196,6 +188,19 @@ VCLXTopWindow::~VCLXTopWindow()
             if( SystemType == ::com::sun::star::lang::SystemDependent::SYSTEM_OS2 )
             {
                  aRet <<= (sal_Int32)pSysData->hWnd;
+            }
+#elif (defined QUARTZ)
+            if( SystemType == ::com::sun::star::lang::SystemDependent::SYSTEM_MAC )
+            {
+                 aRet <<= (sal_IntPtr)pSysData->rWindow;
+            }
+#elif (defined UNX)
+            if( SystemType == ::com::sun::star::lang::SystemDependent::SYSTEM_XWINDOW )
+            {
+                ::com::sun::star::awt::SystemDependentXWindow aSD;
+                aSD.DisplayPointer = sal::static_int_cast< sal_Int64 >(reinterpret_cast< sal_IntPtr >(pSysData->pDisplay));
+                aSD.WindowHandle = pSysData->aWindow;
+                aRet <<= aSD;
             }
 #endif
         }
