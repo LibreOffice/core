@@ -4,9 +4,9 @@
  *
  *  $RCSfile: javachild.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: hr $ $Date: 2007-06-27 20:31:31 $
+ *  last change: $Author: rt $ $Date: 2007-07-05 08:41:45 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -134,6 +134,8 @@ sal_Int32 JavaChildWindow::getParentWindowHandleForJava()
 
 #if defined WNT
     nRet = reinterpret_cast< sal_Int32 >( GetSystemData()->hWnd );
+#elif defined QUARTZ
+    nRet = reinterpret_cast< sal_IntPtr >( GetSystemData()->rWindow );
 #elif defined UNX
 #ifdef SOLAR_JAVA
     uno::Reference< lang::XMultiServiceFactory > xFactory( vcl::unohelper::GetMultiServiceFactory() );
@@ -213,7 +215,7 @@ sal_Int32 JavaChildWindow::getParentWindowHandleForJava()
         }
     }
 #endif // SOLAR_JAVA
-#else // WNT || UNX
+#else // WNT || QUARTZ || UNX
     // TBD
 #endif
 
