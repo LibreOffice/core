@@ -4,9 +4,9 @@
  *
  *  $RCSfile: vclxsystemdependentwindow.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 12:15:11 $
+ *  last change: $Author: rt $ $Date: 2007-07-05 08:03:28 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -41,7 +41,7 @@
 #include <com/sun/star/lang/SystemDependent.hpp>
 #endif
 
-#if defined UNX && ! defined _COM_SUN_STAR_AWT_SYSTEMDEPENDENTXWINDOW_HPP_
+#if defined UNX && ! defined QUARTZ && ! defined _COM_SUN_STAR_AWT_SYSTEMDEPENDENTXWINDOW_HPP_
 #include <com/sun/star/awt/SystemDependentXWindow.hpp>
 #endif
 
@@ -95,15 +95,7 @@ IMPL_XTYPEPROVIDER_END
         const SystemEnvData* pSysData = ((SystemChildWindow *)pWindow)->GetSystemData();
         if( pSysData )
         {
-#ifdef UNX
-            if( SystemType == ::com::sun::star::lang::SystemDependent::SYSTEM_XWINDOW )
-            {
-                ::com::sun::star::awt::SystemDependentXWindow aSD;
-                aSD.DisplayPointer = sal::static_int_cast< sal_Int64 >(reinterpret_cast< sal_IntPtr >(pSysData->pDisplay));
-                aSD.WindowHandle = pSysData->aWindow;
-                aRet <<= aSD;
-            }
-#elif (defined WNT)
+#if (defined WNT)
             if( SystemType == ::com::sun::star::lang::SystemDependent::SYSTEM_WIN32 )
             {
                  aRet <<= (sal_Int32)pSysData->hWnd;
@@ -112,6 +104,19 @@ IMPL_XTYPEPROVIDER_END
             if( SystemType == ::com::sun::star::lang::SystemDependent::SYSTEM_OS2 )
             {
                  aRet <<= (sal_Int32)pSysData->hWnd;
+            }
+#elif (defined QUARTZ)
+            if( SystemType == ::com::sun::star::lang::SystemDependent::SYSTEM_MAC )
+            {
+                 aRet <<= (sal_IntPtr)pSysData->rWindow;
+            }
+#elif (defined UNX)
+            if( SystemType == ::com::sun::star::lang::SystemDependent::SYSTEM_XWINDOW )
+            {
+                ::com::sun::star::awt::SystemDependentXWindow aSD;
+                aSD.DisplayPointer = sal::static_int_cast< sal_Int64 >(reinterpret_cast< sal_IntPtr >(pSysData->pDisplay));
+                aSD.WindowHandle = pSysData->aWindow;
+                aRet <<= aSD;
             }
 #endif
         }
