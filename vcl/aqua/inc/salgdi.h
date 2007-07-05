@@ -4,9 +4,9 @@
  *
  *  $RCSfile: salgdi.h,v $
  *
- *  $Revision: 1.29 $
+ *  $Revision: 1.30 $
  *
- *  last change: $Author: hr $ $Date: 2007-06-27 19:49:01 $
+ *  last change: $Author: rt $ $Date: 2007-07-05 10:01:37 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -41,78 +41,309 @@
 #include <postmac.h>
 
 #ifndef _SV_SV_H
-    #include <vcl/sv.h>
+#include <vcl/sv.h>
 #endif
 
-#ifndef _SV_VCLWINDOW_H
-    #include <VCLWindow.h>
+#ifndef _SV_OUTFONT_HXX
+#include <outfont.hxx>
 #endif
 
-// -------------------
-// - Structures -
-// -------------------
+#ifndef _SV_SALGDI_HXX
+#include <salgdi.hxx>
+#endif
 
-struct SalGraphicsData
+#ifndef _AQUAVCLTYPES_H
+#include <aquavcltypes.h>
+#endif
+
+#include <vector>
+
+#include <basebmp/bitmapdevice.hxx>
+
+#include <salsys.h>
+class AquaSalBitmap;
+class ImplDevFontAttributes;
+
+// mac specific physically available font face
+class ImplMacFontData : public ImplFontData
 {
-    // NSView and NSWindow
+public:
+    ImplMacFontData( const ImplDevFontAttributes&, ATSUFontID );
 
-    VCLVIEW         mhDC;                   // VCLVIEW
+    virtual ~ImplMacFontData();
 
-    // QuickDraw graph port, offscreen graphic world, and graphic device handle
+    virtual ImplFontData*   Clone() const;
+    virtual ImplFontEntry*  CreateFontInstance( ImplFontSelectData& ) const;
+    virtual sal_IntPtr      GetFontId() const;
 
-    CGrafPtr        mpCGrafPort;            // QD color graphics port
-    GWorldPtr       mpGWorld;               // QD offscreen GWorld
-    GDHandle        mhGDevice;              // QD GDevice
+    ImplFontCharMap*        GetImplFontCharMap() const;
+    bool                    HasChar(sal_uInt32 cChar) const;
 
-    // Graph port pixels, state and flags
-
-    BOOL            mbGWorldPixelsLocked;   // GWorld pixels locked?
-    BOOL            mbGWorldPixelsCopy;     // GWorld pixels was a copy of the original?
-    BOOL            mbGWorldPixelsNew;      // GWorld pixels is brand new?
-    GWorldFlags     mnGWorldFlags;          // GWorld pixels status flags
-    PixMapHandle    mhGWorldPixMap;         // GWorld pixels
-
-    // Clip region
-
-    BOOL            mbClipRgnChanged;       // Did the clip region change?
-    RgnHandle       mhClipRgn;              // Clip Region Handle
-
-    // Font attributes
-
-    short           mnFontID;               // Mac FontFamilyId
-    short           mnFontSize;             // Mac Font Size
-    RGBColor        maFontColor;            // Text Color
-    Style           mnFontStyle;            // Mac Font Style
-
-    // Pen attributes and status
-
-    BOOL            mbPenTransparent;       // Is pen transparent?
-    SInt32          mnPenMode;              // Pen Mode
-    RGBColor        maPenColor;             // Pen Color
-
-    // Port's pen attributes
-
-    SInt32          mnPortPenMode;          // Port's pen mode
-    MacOSPoint      maPortPenSize;          // Port's pen size;
-    MacOSPoint      maPortPenLocation;      // Port's pen location
-    PixPatHandle    mhPortPenPattern;       // Port's pen pattern
-
-    // Brush attributes and status
-
-    BOOL            mbBrushTransparent;     // Is brush transparent?
-    RGBColor        maBrushColor;           // Brush Color
-
-    // Miscellaneous status flags
-
-    BOOL            mbPrinter;              // Is a printer available?
-    BOOL            mbVirDev;               // Is a virtual device available?
-    BOOL            mbWindow;               // Is a window availble?
-    BOOL            mbScreen;               // Is this screen compatiable?
-    OSStatus        mnOSStatus;             // The current MacOS error
+private:
+    const ATSUFontID            mnFontId;
+    mutable ImplFontCharMap*    mpCharMap;
 };
 
-typedef struct SalGraphicsData   SalGraphicsData;
-typedef SalGraphicsData         *SalGraphicsDataPtr;
-typedef SalGraphicsDataPtr      *SalGraphicsDataHandle;
+
+// -------------------
+// - AquaSalGraphics -
+// -------------------
+
+class AquaSalGraphics : public SalGraphics
+{
+    friend class ATSLayout;
+protected:
+    /// VCLVIEW
+    CarbonViewRef                           mrView;
+    /// graphics context for Quartz 2D
+    CGContextRef                            mrContext;
+    /// Window if this is a Window graphics
+    CarbonWindowRef                         mrWindow;
+    /// resolution of this graphics (72 on window and virdev, device dependent on printer)
+    long                                    mnDPIX;
+    long                                    mnDPIY;
+    /// memory for graphics bitmap context (window or virdev)
+    boost::shared_array< sal_uInt8 >        maContextMemory;
+    /// basebmp::BitmapDevice used for XOR rendering
+    basebmp::BitmapDeviceSharedPtr          maXORDevice;
+    basebmp::BitmapDeviceSharedPtr          maXORClipMask;
+
+    /// path representing current clip region
+    CGMutablePathRef                        mrClippingPath;
+    std::vector< CGRect >                   maClippingRects;
+
+    // Drawing colors
+
+    /// the RGB color space
+    CGColorSpaceRef                         mrRGBColorSpace;
+    /// pen color RGBA
+    float                                   mpLineColor[4];
+    /// brush color RGBA
+    float                                   mpFillColor[4];
+    /// is XOR mode enabled ?
+    bool                                    mbXORMode;
+
+    // Device Font settings
+    const ImplMacFontData* mpMacFontData;
+    /// style object which carries all font attributes
+    ATSUStyle                               maATSUStyle;
+    /// text rotation as ATSU angle
+    Fixed                                   mnATSUIRotation;
+    /// allows text measurements for huge font sizes
+    float                                   mfFontScale;
+    /// allows text to be rendered without antialiasing
+    bool                                    mbNonAntialiasedText;
+
+    // Graphics types
+
+    /// is this a printer graphics
+    bool                                    mbPrinter;
+    /// is this a virtual device graphics
+    bool                                    mbVirDev;
+    /// is this a window graphics
+    bool                                    mbWindow;
+    /// is this graphics screen compatible
+    bool                                    mbScreen;
+private:
+    /** returns the display id this window is mostly visible on */
+    CGDirectDisplayID   GetWindowDisplayID() const;
+public:
+    AquaSalGraphics();
+    virtual ~AquaSalGraphics();
+
+    bool                IsPenTransparent() const        { return (mpLineColor[3] == 0.0); }
+    bool                IsBrushTransparent() const      { return (mpFillColor[3] == 0.0); }
+
+    void                SetWindowGraphics( CarbonViewRef rView, CarbonWindowRef rWindow, bool bScreenCompatible );
+    void                SetPrinterGraphics( CGContextRef xContext, long nDPIX, long nDPIY );
+    void                SetVirDevGraphics( CGContextRef xContext, bool bSCreenCompatible );
+
+    bool                IsWindowGraphics()      const   { return mbWindow; }
+    bool                IsPrinterGraphics()     const   { return mbPrinter; }
+    bool                IsVirDevGraphics()      const   { return mbVirDev; }
+    bool                IsScreenCompatible()    const   { return mbScreen; }
+
+    void                ImplDrawPixel( long nX, long nY, float pColor[] ); // helper to draw single pixels
+
+    void                Flush();
+    bool                CheckContext();
+    void                UpdateWindow();
+    void                RefreshRect(float lX, float lY, float lWidth, float lHeight);
+
+    void                SetState();
+
+    virtual BOOL        unionClipRegion( long nX, long nY, long nWidth, long nHeight );
+    // draw --> LineColor and FillColor and RasterOp and ClipRegion
+    virtual void        drawPixel( long nX, long nY );
+    virtual void        drawPixel( long nX, long nY, SalColor nSalColor );
+    virtual void        drawLine( long nX1, long nY1, long nX2, long nY2 );
+    virtual void        drawRect( long nX, long nY, long nWidth, long nHeight );
+    virtual void        drawPolyLine( ULONG nPoints, const SalPoint* pPtAry );
+    virtual void        drawPolygon( ULONG nPoints, const SalPoint* pPtAry );
+    virtual void        drawPolyPolygon( ULONG nPoly, const ULONG* pPoints, PCONSTSALPOINT* pPtAry );
+    virtual sal_Bool    drawPolyLineBezier( ULONG nPoints, const SalPoint* pPtAry, const BYTE* pFlgAry );
+    virtual sal_Bool    drawPolygonBezier( ULONG nPoints, const SalPoint* pPtAry, const BYTE* pFlgAry );
+    virtual sal_Bool    drawPolyPolygonBezier( ULONG nPoly, const ULONG* pPoints, const SalPoint* const* pPtAry, const BYTE* const* pFlgAry );
+
+    // CopyArea --> No RasterOp, but ClipRegion
+    virtual void        copyArea( long nDestX, long nDestY, long nSrcX, long nSrcY, long nSrcWidth,
+                                  long nSrcHeight, USHORT nFlags );
+
+    // CopyBits and DrawBitmap --> RasterOp and ClipRegion
+    // CopyBits() --> pSrcGraphics == NULL, then CopyBits on same Graphics
+    virtual void        copyBits( const SalTwoRect* pPosAry, SalGraphics* pSrcGraphics );
+    virtual void        drawBitmap( const SalTwoRect* pPosAry, const SalBitmap& rSalBitmap );
+    virtual void        drawBitmap( const SalTwoRect* pPosAry,
+                                    const SalBitmap& rSalBitmap,
+                                    SalColor nTransparentColor );
+    virtual void        drawBitmap( const SalTwoRect* pPosAry,
+                                    const SalBitmap& rSalBitmap,
+                                    const SalBitmap& rTransparentBitmap );
+    virtual void        drawMask( const SalTwoRect* pPosAry,
+                                  const SalBitmap& rSalBitmap,
+                                  SalColor nMaskColor );
+
+    virtual SalBitmap*  getBitmap( long nX, long nY, long nWidth, long nHeight );
+    virtual SalColor    getPixel( long nX, long nY );
+
+    // invert --> ClipRegion (only Windows or VirDevs)
+    virtual void        invert( long nX, long nY, long nWidth, long nHeight, SalInvert nFlags);
+    virtual void        invert( ULONG nPoints, const SalPoint* pPtAry, SalInvert nFlags );
+
+    virtual BOOL        drawEPS( long nX, long nY, long nWidth, long nHeight, void* pPtr, ULONG nSize );
+
+    virtual bool            drawAlphaBitmap( const SalTwoRect&,
+                                             const SalBitmap& rSourceBitmap,
+                                             const SalBitmap& rAlphaBitmap );
+
+    virtual bool            drawAlphaRect( long nX, long nY, long nWidth,
+                                           long nHeight, sal_uInt8 nTransparency );
+
+    CGPoint*                makeCGptArray(ULONG nPoints, const SalPoint*  pPtAry);
+    // native widget rendering methods that require mirroring
+    virtual BOOL        hitTestNativeControl( ControlType nType, ControlPart nPart, const Region& rControlRegion,
+                                              const Point& aPos, SalControlHandle& rControlHandle, BOOL& rIsInside );
+    virtual BOOL        drawNativeControl( ControlType nType, ControlPart nPart, const Region& rControlRegion,
+                                           ControlState nState, const ImplControlValue& aValue, SalControlHandle& rControlHandle,
+                                           const rtl::OUString& aCaption );
+    virtual BOOL        drawNativeControlText( ControlType nType, ControlPart nPart, const Region& rControlRegion,
+                                               ControlState nState, const ImplControlValue& aValue,
+                                               SalControlHandle& rControlHandle, const rtl::OUString& aCaption );
+    virtual BOOL        getNativeControlRegion( ControlType nType, ControlPart nPart, const Region& rControlRegion, ControlState nState,
+                                                const ImplControlValue& aValue, SalControlHandle& rControlHandle, const rtl::OUString& aCaption,
+                                                Region &rNativeBoundingRegion, Region &rNativeContentRegion );
+
+public:
+    // public SalGraphics methods, the interface to teh independent vcl part
+
+    // get device resolution
+    virtual void            GetResolution( long& rDPIX, long& rDPIY );
+    // get resolution for fonts (an implementations specific adjustment,
+    // ideally would be the same as the Resolution)
+    virtual void            GetScreenFontResolution( long& rDPIX, long& rDPIY );
+    // get the depth of the device
+    virtual USHORT          GetBitCount();
+    // get the width of the device
+    virtual long            GetGraphicsWidth() const;
+
+    // set the clip region to empty
+    virtual void            ResetClipRegion();
+    // begin setting the clip region, add rectangles to the
+    // region with the UnionClipRegion call
+    virtual void            BeginSetClipRegion( ULONG nCount );
+    // all rectangles were added and the clip region should be set now
+    virtual void            EndSetClipRegion();
+
+    // set the line color to transparent (= don't draw lines)
+    virtual void            SetLineColor();
+    // set the line color to a specific color
+    virtual void            SetLineColor( SalColor nSalColor );
+    // set the fill color to transparent (= don't fill)
+    virtual void            SetFillColor();
+    // set the fill color to a specific color, shapes will be
+    // filled accordingly
+    virtual void            SetFillColor( SalColor nSalColor );
+    // enable/disable XOR drawing
+    virtual void            SetXORMode( BOOL bSet );
+    // set line color for raster operations
+    virtual void            SetROPLineColor( SalROPColor nROPColor );
+    // set fill color for raster operations
+    virtual void            SetROPFillColor( SalROPColor nROPColor );
+    // set the text color to a specific color
+    virtual void            SetTextColor( SalColor nSalColor );
+    // set the font
+    virtual USHORT         SetFont( ImplFontSelectData*, int nFallbackLevel );
+    // get the current font's etrics
+    virtual void            GetFontMetric( ImplFontMetricData* );
+    // get kernign pairs of the current font
+    // return only PairCount if (pKernPairs == NULL)
+    virtual ULONG           GetKernPairs( ULONG nPairs, ImplKernPairData* pKernPairs );
+    // get the repertoire of the current font
+    virtual ImplFontCharMap* GetImplFontCharMap() const;
+    // graphics must fill supplied font list
+    virtual void            GetDevFontList( ImplDevFontList* );
+    // graphics should call ImplAddDevFontSubstitute on supplied
+    // OutputDevice for all its device specific preferred font substitutions
+    virtual void            GetDevFontSubstList( OutputDevice* );
+    virtual bool            AddTempDevFont( ImplDevFontList*, const String& rFileURL, const String& rFontName );
+    // CreateFontSubset: a method to get a subset of glyhps of a font
+    // inside a new valid font file
+    // returns TRUE if creation of subset was successfull
+    // parameters: rToFile: contains a osl file URL to write the subset to
+    //             pFont: describes from which font to create a subset
+    //             pGlyphIDs: the glyph ids to be extracted
+    //             pEncoding: the character code corresponding to each glyph
+    //             pWidths: the advance widths of the correspoding glyphs (in PS font units)
+    //             nGlyphs: the number of glyphs
+    //             rInfo: additional outgoing information
+    // implementation note: encoding 0 with glyph id 0 should be added implicitly
+    // as "undefined character"
+    virtual BOOL            CreateFontSubset( const rtl::OUString& rToFile,
+                                              ImplFontData* pFont,
+                                              long* pGlyphIDs,
+                                              sal_uInt8* pEncoding,
+                                              sal_Int32* pWidths,
+                                              int nGlyphs,
+                                              FontSubsetInfo& rInfo // out parameter
+                                              );
+
+    // GetFontEncodingVector: a method to get the encoding map Unicode
+    // to font encoded character; this is only used for type1 fonts and
+    // may return NULL in case of unknown encoding vector
+    // if ppNonEncoded is set and non encoded characters (that is type1
+    // glyphs with only a name) exist it is set to the corresponding
+    // map for non encoded glyphs; the encoding vector contains -1
+    // as encoding for these cases
+    virtual const std::map< sal_Unicode, sal_Int32 >* GetFontEncodingVector( ImplFontData* pFont, const std::map< sal_Unicode, rtl::OString >** ppNonEncoded );
+
+    // GetEmbedFontData: gets the font data for a font marked
+    // embeddable by GetDevFontList or NULL in case of error
+    // parameters: pFont: describes the font in question
+    //             pWidths: the widths of all glyphs from char code 0 to 255
+    //                      pWidths MUST support at least 256 members;
+    //             rInfo: additional outgoing information
+    //             pDataLen: out parameter, contains the byte length of the returned buffer
+    virtual const void* GetEmbedFontData( ImplFontData* pFont,
+                                          const sal_Unicode* pUnicodes,
+                                          sal_Int32* pWidths,
+                                          FontSubsetInfo& rInfo,
+                                          long* pDataLen );
+    // frees the font data again
+    virtual void            FreeEmbedFontData( const void* pData, long nDataLen );
+
+    virtual void            GetGlyphWidths( ImplFontData* pFont,
+                                            bool bVertical,
+                                            std::vector< sal_Int32 >& rWidths,
+                                            std::map< sal_Unicode, sal_uInt32 >& rUnicodeEnc );
+
+    virtual BOOL                    GetGlyphBoundRect( long nIndex, Rectangle& );
+    virtual BOOL                    GetGlyphOutline( long nIndex, basegfx::B2DPolyPolygon& );
+
+    virtual SalLayout*              GetTextLayout( ImplLayoutArgs&, int nFallbackLevel );
+    virtual void                     DrawServerFontLayout( const ServerFontLayout& );
+
+    // Query the platform layer for control support
+    virtual BOOL IsNativeControlSupported( ControlType nType, ControlPart nPart );
+};
 
 #endif // _SV_SALGDI_H
