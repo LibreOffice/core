@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.10 $
+#   $Revision: 1.11 $
 #
-#   last change: $Author: obo $ $Date: 2007-01-25 15:41:57 $
+#   last change: $Author: rt $ $Date: 2007-07-05 09:13:35 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -52,6 +52,8 @@ USE_BOUNDCHK=
 
 # ------------------------------------------------------------------
 
+CFLAGS+=-fconstant-cfstrings
+
 .IF "$(OS)"!="MACOSX"
 
 dummy:
@@ -66,7 +68,11 @@ dummy:
 
 SLOFILES= \
         $(SLO)$/aqua_service.obj	\
-        $(SLO)$/aqua_clipboard.obj
+        $(SLO)$/aqua_clipboard.obj \
+        $(SLO)$/DataFlavorMapping.obj \
+        $(SLO)$/OSXTransferable.obj \
+        $(SLO)$/HtmlFmtFlt.obj \
+        $(SLO)$/PictToBmpFlt.obj
 
 SHL1TARGET=$(TARGET)$(UPD)$(DLLPOSTFIX)
 
@@ -74,7 +80,8 @@ SHL1STDLIBS= \
         $(SALLIB)	\
         $(CPPULIB) 	\
         $(CPPUHELPERLIB) \
-        -framework Cocoa
+        -framework Carbon \
+        -framework QuickTime
 
 SHL1DEPN=
 SHL1IMPLIB=	i$(SHL1TARGET)
@@ -89,13 +96,11 @@ APP1STDLIBS= \
         $(CPPULIB) 	\
         $(CPPUHELPERLIB) \
         -framework Cocoa
-                
+
 # --- Targets ------------------------------------------------------
 
 ALL : ALLTAR
-# hjs - do *not* call deliver out of makefiles
-#	deliver.pl
-    regcomp -register -r $(BIN)$/$(COMP1TYPELIST).rdb -c $(SHL1TARGET)
+    +cd $(LB) && regcomp -register -r ../bin/$(COMP1TYPELIST).rdb -c $(SHL1TARGET)
 
 .INCLUDE :	target.mk
 
