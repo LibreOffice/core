@@ -4,9 +4,9 @@
  *
  *  $RCSfile: aqua_clipboard.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: hr $ $Date: 2006-06-20 05:58:48 $
+ *  last change: $Author: rt $ $Date: 2007-07-05 09:12:04 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -45,7 +45,7 @@
 #endif
 
 #ifndef _CPPUHELPER_COMPBASE3_HXX_
-#include <cppuhelper/compbase3.hxx>
+#include <cppuhelper/compbase4.hxx>
 #endif
 
 #ifndef _COM_SUN_STAR_DATATRANSFER_XTRANSFERABLE_HPP_
@@ -68,9 +68,26 @@
 #include <com/sun/star/datatransfer/clipboard/XClipboardNotifier.hpp>
 #endif
 
+#ifndef _COM_SUN_STAR_DATATRANSFER_XMIMECONTENTTYPEFACTORY_HPP_
+#include <com/sun/star/datatransfer/XMimeContentTypeFactory.hpp>
+#endif
+
+#ifndef _COM_SUN_STAR_DATATRANSFER_CLIPBOARD_XFLUSHABLECLIPBOARD_HPP_
+#include <com/sun/star/datatransfer/clipboard/XFlushableClipboard.hpp>
+#endif
+
 #ifndef _COM_SUN_STAR_LANG_XSERVICEINFO_HPP_
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #endif
+
+#include "DataFlavorMapping.hxx"
+
+#include <premac.h>
+    #include <Carbon/Carbon.h>
+    #include <ApplicationServices/ApplicationServices.h>
+#include <postmac.h>
+
+#include <list>
 
 // the service names
 #define AQUA_CLIPBOARD_SERVICE_NAME "com.sun.star.datatransfer.clipboard.SystemClipboard"
@@ -84,25 +101,60 @@
 namespace aqua {
 
 class AquaClipboard :
-    public cppu::WeakComponentImplHelper3< ::com::sun::star::datatransfer::clipboard::XClipboardEx, ::com::sun::star::datatransfer::clipboard::XClipboardNotifier, ::com::sun::star::lang::XServiceInfo >
+    public cppu::WeakComponentImplHelper4< ::com::sun::star::datatransfer::clipboard::XClipboardEx,
+                                           ::com::sun::star::datatransfer::clipboard::XClipboardNotifier,
+                                           ::com::sun::star::datatransfer::clipboard::XFlushableClipboard,
+                                           ::com::sun::star::lang::XServiceInfo >
 {
 public:
-    AquaClipboard();
+    AquaClipboard(const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > ServiceManager);
+
+   ~AquaClipboard();
+
+    //------------------------------------------------
+    // XClipboard
+    //------------------------------------------------
 
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::datatransfer::XTransferable > SAL_CALL getContents()
         throw( ::com::sun::star::uno::RuntimeException );
-    virtual void SAL_CALL setContents( const ::com::sun::star::uno::Reference< ::com::sun::star::datatransfer::XTransferable >& xTransferable, const ::com::sun::star::uno::Reference< ::com::sun::star::datatransfer::clipboard::XClipboardOwner >& xClipboardOwner )
+
+    virtual void SAL_CALL setContents( const ::com::sun::star::uno::Reference< ::com::sun::star::datatransfer::XTransferable >& xTransferable,
+                                       const ::com::sun::star::uno::Reference< ::com::sun::star::datatransfer::clipboard::XClipboardOwner >& xClipboardOwner )
         throw( ::com::sun::star::uno::RuntimeException );
+
     virtual ::rtl::OUString SAL_CALL getName()
         throw( ::com::sun::star::uno::RuntimeException );
+
+    //------------------------------------------------
+    // XClipboardEx
+    //------------------------------------------------
+
     virtual sal_Int8 SAL_CALL getRenderingCapabilities()
         throw( ::com::sun::star::uno::RuntimeException );
+
+    //------------------------------------------------
+    // XClipboardNotifier
+    //------------------------------------------------
+
     virtual void SAL_CALL addClipboardListener( const ::com::sun::star::uno::Reference< ::com::sun::star::datatransfer::clipboard::XClipboardListener >& listener )
         throw( ::com::sun::star::uno::RuntimeException );
+
     virtual void SAL_CALL removeClipboardListener( const ::com::sun::star::uno::Reference< ::com::sun::star::datatransfer::clipboard::XClipboardListener >& listener )
         throw( ::com::sun::star::uno::RuntimeException );
+
+    //------------------------------------------------
+    // XFlushableClipboard
+    //------------------------------------------------
+
+    virtual void SAL_CALL flushClipboard( ) throw( com::sun::star::uno::RuntimeException );
+
+    //------------------------------------------------
+    // XServiceInfo
+    //------------------------------------------------
+
     virtual ::rtl::OUString SAL_CALL getImplementationName()
         throw(::com::sun::star::uno::RuntimeException);
+
     virtual sal_Bool SAL_CALL supportsService( const ::rtl::OUString& ServiceName )
         throw(::com::sun::star::uno::RuntimeException);
 
@@ -110,8 +162,36 @@ public:
         throw(::com::sun::star::uno::RuntimeException);
 
 private:
-    ::osl::Mutex m_aMutex;
-    ::com::sun::star::uno::Reference< ::com::sun::star::datatransfer::XTransferable > m_aTransferable;
+  /* Notify all registered XClipboardListener that the clipboard content
+     has changed.
+  */
+  void fireClipboardChangedEvent();
+
+  /* Notify the current clipboard owner that he is no longer the clipboard owner.
+   */
+  void fireLostClipboardOwnershipEvent();
+
+  /* Event handler for application activated events. We need to determine the state of the clipboard
+     in this event handler.
+  */
+  static OSStatus handleAppActivatedEvent(EventHandlerCallRef inHandlerCallRef, EventRef inEvent, void* inUserData);
+
+  /* A clipboard promise keeper handler.
+   */
+  static OSStatus clipboardPromiseKeeperCallback(PasteboardRef inPasteboard,
+                                                 PasteboardItemID itemID,
+                                                 CFStringRef inFlavaor,
+                                                 void* inContext);
+private:
+  const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > mrServiceMgr;
+  ::com::sun::star::uno::Reference< ::com::sun::star::datatransfer::XMimeContentTypeFactory> mrXMimeCntFactory;
+  ::std::list< ::com::sun::star::uno::Reference< ::com::sun::star::datatransfer::clipboard::XClipboardListener > > mClipboardListeners;
+  ::com::sun::star::uno::Reference< ::com::sun::star::datatransfer::XTransferable > mXClipboardContent;
+  com::sun::star::uno::Reference<com::sun::star::datatransfer::clipboard::XClipboardOwner> mXClipboardOwner;
+  DataFlavorMapperPtr_t mpDataFlavorMapper;
+  ::osl::Mutex m_aMutex;
+  PasteboardRef mrClipboard;
+  EventHandlerRef mrAppActivatedHdl;
 };
 
 } // namespace aqua
