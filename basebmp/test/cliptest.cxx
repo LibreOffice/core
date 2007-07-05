@@ -4,9 +4,9 @@
  *
  *  $RCSfile: cliptest.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: thb $ $Date: 2006-07-13 12:03:26 $
+ *  last change: $Author: rt $ $Date: 2007-07-05 08:56:07 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -114,6 +114,11 @@ private:
         CPPUNIT_ASSERT_MESSAGE("number of rendered line pixel is not 4",
                                countPixel( rDevice,
                                            rDevice->getPixel(aPt3) ) == 4);
+
+        rDevice->drawLine( aPt1, aPt2, aCol, DrawMode_XOR, mpClipMask );
+        CPPUNIT_ASSERT_MESSAGE("number of xor-rendered line pixel is not 0",
+                               countPixel( rDevice,
+                                           rDevice->getPixel(aPt3) ) == 121);
     }
 
     void implTestFillClip(const BitmapDeviceSharedPtr& rDevice)
@@ -129,6 +134,21 @@ private:
                                   mpClipMask );
         const basegfx::B2IPoint aPt(0,10);
         CPPUNIT_ASSERT_MESSAGE("number of clipped pixel is not 30",
+                               countPixel( rDevice, rDevice->getPixel(aPt) ) == 121-30);
+
+        rDevice->fillPolyPolygon( basegfx::B2DPolyPolygon(
+                                      basegfx::tools::createPolygonFromRect(aAllOver)),
+                                  aCol,
+                                  DrawMode_PAINT );
+        CPPUNIT_ASSERT_MESSAGE("number of filled pixel is not 121",
+                               countPixel( rDevice, rDevice->getPixel(aPt) ) == 121);
+
+        rDevice->fillPolyPolygon( basegfx::B2DPolyPolygon(
+                                      basegfx::tools::createPolygonFromRect(aAllOver)),
+                                  aCol,
+                                  DrawMode_XOR,
+                                  mpClipMask );
+        CPPUNIT_ASSERT_MESSAGE("number of xor-cleared pixel is not 91",
                                countPixel( rDevice, rDevice->getPixel(aPt) ) == 121-30);
     }
 
