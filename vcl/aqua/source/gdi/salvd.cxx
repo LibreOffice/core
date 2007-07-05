@@ -4,9 +4,9 @@
  *
  *  $RCSfile: salvd.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: hr $ $Date: 2007-06-27 19:53:32 $
+ *  last change: $Author: rt $ $Date: 2007-07-05 10:22:43 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -37,230 +37,171 @@
 #include "precompiled_vcl.hxx"
 
 #ifndef _SV_SALVD_HXX
-    #include <vcl/salvd.hxx>
+#include <vcl/salvd.hxx>
+#endif
+#ifndef _SV_SALVD_H
+#include <salvd.h>
+#endif
+#ifndef _SV_SALINST_H
+#include <salinst.h>
 #endif
 
-// =======================================================================
+// -----------------------------------------------------------------------
 
-// =======================================================================
-
-static BOOL InitVirtualDeviceGWorld ( SalVirDevDataPtr rSalVirDevData )
+SalVirtualDevice* AquaSalInstance::CreateVirtualDevice( SalGraphics* pGraphics,
+    long nDX, long nDY, USHORT nBitCount, const SystemGraphicsData *pData )
 {
-    BOOL  bVirtualDeviceGWorldInited = FALSE;
+    return new AquaSalVirtualDevice( static_cast< AquaSalGraphics* >( pGraphics ), nDX, nDY, nBitCount, pData );
+}
 
-    if (    ( rSalVirDevData             != NULL )
-         && ( rSalVirDevData->mpGraphics != NULL )
-       )
+// -----------------------------------------------------------------------
+
+void AquaSalInstance::DestroyVirtualDevice( SalVirtualDevice* pDevice )
+{
+    delete pDevice;
+}
+
+// =======================================================================
+
+AquaSalVirtualDevice::AquaSalVirtualDevice( AquaSalGraphics* pGraphic, long nDX, long nDY, USHORT nBitCount, const SystemGraphicsData *pData )
+: mbGraphicsUsed( false ),
+  mxContext( 0 )
+{
+    if( pGraphic && pData && pData->rCGContext)
     {
-        Rect         aBoundsRect;
-        short        nRectLeft   = 0;
-        short        nRectTop    = 0;
-        short        nRectRight  = rSalVirDevData->mnWidth;
-        short        nRectBottom = rSalVirDevData->mnHeight;
-        short        nPixelDepth = rSalVirDevData->mnBitCount;
-        GWorldPtr    pGWorld     = NULL;
-        CTabHandle   hCTable     = NULL;
-        GDHandle     hGDevice    = NULL;
-        GWorldFlags  nFlags      = 0; // [ed] 12/1/01 Allow offscreen gworlds
-        OSStatus     nOSStatus   = noErr;
+        // Create virtual device based on existing SystemGraphicsData
+        // We ignore nDx and nDY, as the desired size comes from the SystemGraphicsData
+        mxContext = pData->rCGContext;
+        mbForeignContext = true;        // the mxContext is from pData
+        mpGraphics = pGraphic;
+        mpGraphics->SetVirDevGraphics( mxContext, true );
 
-        // Set the dimensions of the GWorldPtr
+        AquaLog( "vcl::AquaSalVirtualDevice::%s(): Created virtual device based on existing SystemGraphicsData w:%ld h:%ld b:\n", __func__,CGBitmapContextGetWidth(mxContext),CGBitmapContextGetHeight(mxContext));
+    }
+    else
+    {
+        // create empty new virtual device
 
-        MacSetRect( &aBoundsRect, nRectLeft, nRectTop, nRectRight, nRectBottom );
+        //AquaLog( "vcl::AquaSalVirtualDevice::%s(): Creating empty virtual device\n", __func__);
+        mbForeignContext = false;           // the mxContext is created within VCL
+        mpGraphics = new AquaSalGraphics(); // never fails
 
-        // Create the offscreen graphics context
+        if( nDX && nDY )
+            SetSize( nDX, nDY );
 
-        nOSStatus = NewGWorld( &pGWorld,
-                                nPixelDepth,
-                               &aBoundsRect,
-                                hCTable,
-                                hGDevice,
-                                nFlags
-                             );
+        // NOTE: if SetSize does not succeed, we just ignore the nDX and nDY
+    }
+}
 
-        // If NewGWorld failed, try again with different flags
+// -----------------------------------------------------------------------
 
-        if ( nOSStatus != noErr )
+AquaSalVirtualDevice::~AquaSalVirtualDevice()
+{
+    if( mpGraphics )
+    {
+        mpGraphics->SetVirDevGraphics( 0, true );
+        delete mpGraphics;
+        mpGraphics = 0;
+    }
+    Destroy();
+}
+
+// -----------------------------------------------------------------------
+
+void AquaSalVirtualDevice::Destroy()
+{
+    if( mbForeignContext ) {
+        // Do not delete mxContext that we have received from outside VCL
+        return;
+    }
+
+    if( mxContext )
+    {
+        if( mpGraphics )
+            mpGraphics->SetVirDevGraphics( 0, true );
+        void* pBuffer = CGBitmapContextGetData(mxContext);
+        CFRelease( mxContext );
+        mxContext = 0;
+        if( pBuffer )
+            free( pBuffer );
+    }
+}
+// -----------------------------------------------------------------------
+
+SalGraphics* AquaSalVirtualDevice::GetGraphics()
+{
+    if( mbGraphicsUsed || !mpGraphics )
+        return 0;
+
+    mbGraphicsUsed = true;
+    return mpGraphics;
+}
+
+// -----------------------------------------------------------------------
+
+void AquaSalVirtualDevice::ReleaseGraphics( SalGraphics *pGraphics )
+{
+    mbGraphicsUsed = false;
+}
+
+// -----------------------------------------------------------------------
+
+BOOL AquaSalVirtualDevice::SetSize( long nDX, long nDY )
+{
+    if( mbForeignContext )
+    {
+        // Do not delete/resize mxContext that we have received from outside VCL
+        return true;
+    }
+
+    if( mxContext &&
+        ( nDX == static_cast<long> (CGBitmapContextGetWidth( mxContext ) ) ) &&
+        ( nDY == static_cast<long> (CGBitmapContextGetHeight( mxContext ) ) ) )
+    {
+        // Yay, we do not have to do anything :)
+        return true;
+    }
+
+    Destroy();
+
+    void* pData = malloc( nDX * 4 * nDY );
+    if (pData)
+    {
+        CGColorSpaceRef xColorSpace( CGColorSpaceCreateWithName(kCGColorSpaceGenericRGB) );
+        mxContext = CGBitmapContextCreate( pData, nDX, nDY, 8, nDX * 4, xColorSpace, kCGImageAlphaNoneSkipFirst );
+        CFRelease( xColorSpace );
+
+        if( mxContext )
         {
-            nFlags = noErr;
-
-            nOSStatus = NewGWorld( &pGWorld,
-                                    nPixelDepth,
-                                   &aBoundsRect,
-                                    hCTable,
-                                    hGDevice,
-                                    nFlags
-                                 );
-        } // if
-
-        if (    ( nOSStatus == noErr )
-             && ( pGWorld   != NULL  )
-           )
+            if( mpGraphics )
+                mpGraphics->SetVirDevGraphics( mxContext, true );
+        }
+        else
         {
-            // Lock the virtual GWorld's port bits
+            free (pData);
+            DBG_ERROR( "vcl::AquaSalVirtualDevice::SetSize(), could not create Bitmap Context" );
+        }
+    }
+    else
+    {
+        DBG_ERROR( "vcl::AquaSalVirtualDevice::SetSize(), could not allocate bitmap data" );
+    }
 
-            rSalVirDevData->mpGraphics->maGraphicsData.mnOSStatus
-                = LockPortBits( pGWorld );
-
-            if ( rSalVirDevData->mpGraphics->maGraphicsData.mnOSStatus == noErr )
-            {
-                // Initialize the virtual graph port
-
-                rSalVirDevData->mpGraphics->maGraphicsData.mpCGrafPort
-                    = pGWorld;
-
-                rSalVirDevData->mpGraphics->maGraphicsData.mpGWorld
-                    = pGWorld;
-
-                // Initialize virtual port's GWorld attributes
-
-                rSalVirDevData->mpGraphics->maGraphicsData.mhGWorldPixMap
-                    = GetGWorldPixMap( pGWorld );
-
-                // Unlock virtual GWorld's port bits
-
-                UnlockPortBits( pGWorld );
-            } // if
-
-            // Initialize virtual port's GWorld attributes
-
-            rSalVirDevData->mpGraphics->maGraphicsData.mbGWorldPixelsLocked = FALSE;
-            rSalVirDevData->mpGraphics->maGraphicsData.mbGWorldPixelsCopy   = FALSE;
-            rSalVirDevData->mpGraphics->maGraphicsData.mbGWorldPixelsNew    = FALSE;
-            rSalVirDevData->mpGraphics->maGraphicsData.mnGWorldFlags        = noErr;
-
-            // Initialize the virtual port's brush attributes
-
-            rSalVirDevData->mpGraphics->maGraphicsData.mbBrushTransparent = FALSE;
-            rSalVirDevData->mpGraphics->maGraphicsData.maBrushColor       = GetBlackColor( );
-
-            // Initialize the virtual port's font attributes
-
-            rSalVirDevData->mpGraphics->maGraphicsData.maFontColor = GetBlackColor( );
-            rSalVirDevData->mpGraphics->maGraphicsData.mnFontID    = kFontIDGeneva;
-            rSalVirDevData->mpGraphics->maGraphicsData.mnFontSize  = 10;
-            rSalVirDevData->mpGraphics->maGraphicsData.mnFontStyle = normal;
-
-            // Initialize virtual port's clip regions
-
-            rSalVirDevData->mpGraphics->maGraphicsData.mhClipRgn        = NULL;
-            rSalVirDevData->mpGraphics->maGraphicsData.mbClipRgnChanged = FALSE;
-
-            // Initilaize virtual port's status flags
-
-            rSalVirDevData->mpGraphics->maGraphicsData.mbPrinter = FALSE;
-            rSalVirDevData->mpGraphics->maGraphicsData.mbVirDev  = TRUE;
-            rSalVirDevData->mpGraphics->maGraphicsData.mbWindow  = FALSE;
-            rSalVirDevData->mpGraphics->maGraphicsData.mbScreen  = TRUE;
-
-            bVirtualDeviceGWorldInited = TRUE;
-        } // if
-    } // if
-
-    return bVirtualDeviceGWorldInited;
-} //InitVirtualDeviceGWorld
-
-// =======================================================================
-
-// =======================================================================
-
-SalVirtualDevice::SalVirtualDevice()
-{
-    maVirDevData.mpGraphics = NULL;
-    maVirDevData.mnBitCount = 0;
-    maVirDevData.mnWidth    = 0;
-    maVirDevData.mnHeight   = 0;
-    maVirDevData.mbGraphics = FALSE;
-} // Constructor
+    return mxContext != 0;
+}
 
 // -----------------------------------------------------------------------
 
-SalVirtualDevice::~SalVirtualDevice()
+void AquaSalVirtualDevice::GetSize( long& rWidth, long& rHeight )
 {
-    if ( maVirDevData.mpGraphics != NULL )
+    if( mxContext )
     {
-        // Delete exisiting clip regions, offscreen graphic world,
-        // and its associated colour graph port
-
-        delete maVirDevData.mpGraphics;
-    } // if
-} // Destructor
-
-// -----------------------------------------------------------------------
-
-SalGraphics* SalVirtualDevice::GetGraphics()
-{
-    if ( maVirDevData.mbGraphics )
+        rWidth = CGBitmapContextGetWidth( mxContext );
+        rHeight = CGBitmapContextGetHeight( mxContext );
+    }
+    else
     {
-        return NULL;
-    } // if
-
-    if ( !maVirDevData.mpGraphics )
-    {
-        maVirDevData.mpGraphics = new SalGraphics;
-
-        maVirDevData.mbGraphics = InitVirtualDeviceGWorld( &maVirDevData );
-
-        if ( !maVirDevData.mbGraphics )
-        {
-            delete maVirDevData.mpGraphics;
-            maVirDevData.mpGraphics = NULL;
-        } // if
-    } // if
-
-    return maVirDevData.mpGraphics;
-} // SalVirtualDevice::GetGraphics
-
-// -----------------------------------------------------------------------
-
-void SalVirtualDevice::ReleaseGraphics( SalGraphics *pGraphics )
-{
-    maVirDevData.mbGraphics = FALSE;
-} // SalVirtualDevice::ReleaseGraphics
-
-// -----------------------------------------------------------------------
-
-BOOL SalVirtualDevice::SetSize( long nDX, long nDY )
-{
-    BOOL bSizeSet = FALSE;
-
-    // If we have already created a graphics context, dispose of it,
-    // by deleting exisiting clip regions, offscreen graphic worlds,
-    // and its associated colour graph port
-
-    if (    (    ( maVirDevData.mpGraphics->maGraphicsData.mbGWorldPixelsCopy == TRUE )
-              || ( maVirDevData.mpGraphics->maGraphicsData.mbGWorldPixelsNew  == TRUE )
-            )
-         && ( maVirDevData.mpGraphics->maGraphicsData.mhGWorldPixMap != NULL )
-           )
-    {
-        DisposePixMap( maVirDevData.mpGraphics->maGraphicsData.mhGWorldPixMap );
-    } // if
-
-    if ( maVirDevData.mpGraphics->maGraphicsData.mhClipRgn != NULL )
-    {
-        DisposeRgn( maVirDevData.mpGraphics->maGraphicsData.mhClipRgn );
-    } // if
-
-    if ( maVirDevData.mpGraphics->maGraphicsData.mpCGrafPort != NULL )
-    {
-        DisposeGWorld( maVirDevData.mpGraphics->maGraphicsData.mpCGrafPort );
-
-        maVirDevData.mpGraphics->maGraphicsData.mpGWorld    = NULL;
-        maVirDevData.mpGraphics->maGraphicsData.mpCGrafPort = NULL;
-    } // if
-
-    // Create the offscreen graphics context
-
-    maVirDevData.mnWidth  = nDX;
-    maVirDevData.mnHeight = nDY;
-
-    bSizeSet = InitVirtualDeviceGWorld( &maVirDevData );
-
-    return bSizeSet;
-} // SalVirtualDevice::SetSize
-
-// =======================================================================
-
-// =======================================================================
-
+        rWidth = 0;
+        rHeight = 0;
+    }
+}
