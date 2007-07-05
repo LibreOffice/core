@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.6 $
+#   $Revision: 1.7 $
 #
-#   last change: $Author: obo $ $Date: 2007-01-25 13:27:22 $
+#   last change: $Author: rt $ $Date: 2007-07-05 09:00:46 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -52,6 +52,10 @@ ENABLE_EXCEPTIONS=TRUE
 CFLAGS += -DLEAK_STATIC_DATA
 .ENDIF
 
+# In case someone enabled the non-standard -fomit-frame-pointer which does not
+# work with the .cxx sources in this directory:
+CFLAGSCXX += -fno-omit-frame-pointer
+
 CFLAGSNOOPT=-O0
 
 SLOFILES= \
@@ -80,5 +84,8 @@ SHL1STDLIBS= \
 .INCLUDE :  target.mk
 
 $(SLO)$/%.obj: %.s
+#cmc: Ideally --noexecstack would be in operations, but with #i51385# pyuno
+#remote bridgeing breaks
+#    $(CC) -Wa,--noexecstack -c -o $(SLO)$/$(@:b).o $<
     $(CC) -c -o $(SLO)$/$(@:b).o $<
     touch $@
