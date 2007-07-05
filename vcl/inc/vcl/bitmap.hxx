@@ -4,9 +4,9 @@
  *
  *  $RCSfile: bitmap.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: vg $ $Date: 2007-04-11 17:47:49 $
+ *  last change: $Author: rt $ $Date: 2007-07-05 08:33:42 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -260,6 +260,8 @@ struct BitmapSystemData
     #if defined WNT
     void* pDIB; // device independent byte buffer
     void* pDDB; // if not NULL then this is actually an HBITMAP
+    #elif defined( QUARTZ )
+    void* rImageContext;
     #else
     void* aPixmap;
     #endif
