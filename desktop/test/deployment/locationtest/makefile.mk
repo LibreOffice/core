@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.3 $
+#   $Revision: 1.4 $
 #
-#   last change: $Author: rt $ $Date: 2007-06-14 10:26:58 $
+#   last change: $Author: rt $ $Date: 2007-07-05 09:26:28 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -82,10 +82,10 @@ $(MISC)$/$(ZIP1TARGET).createdir :
     +$(MKDIRHIER) $(MISC)$/$(TARGET)$/META-INF >& $(NULLDEV) && $(TOUCH) $@
 
 $(MISC)$/$(TARGET)_resort : manifest.xml $(JARTARGETN) $(MISC)$/$(ZIP1TARGET).createdir $(BIN)$/LocationTest.rdb description.xml
-    $(GNUCOPY) -u manifest.xml $(MISC)$/$(TARGET)$/META-INF$/manifest.xml
-    $(GNUCOPY) -u $(JARTARGETN) $(MISC)$/$(TARGET)$/$(JARTARGET)
-    $(GNUCOPY) -u $(BIN)$/LocationTest.rdb $(MISC)$/$(TARGET)$/LocationTest.rdb
-    $(GNUCOPY) -u description.xml $(MISC)$/$(TARGET)$/description.xml	
+    $(COPY)  manifest.xml $(MISC)$/$(TARGET)$/META-INF$/manifest.xml
+    $(COPY)  $(JARTARGETN) $(MISC)$/$(TARGET)$/$(JARTARGET)
+    $(COPY)  $(BIN)$/LocationTest.rdb $(MISC)$/$(TARGET)$/LocationTest.rdb
+    $(COPY)  description.xml $(MISC)$/$(TARGET)$/description.xml	
     $(TOUCH) $@
 
 $(ZIP1TARGETN) : $(MISC)$/$(TARGET)_resort $(MISC)$/$(ZIP1TARGET).createdir
