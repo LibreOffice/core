@@ -4,9 +4,9 @@
  *
  *  $RCSfile: menu.cxx,v $
  *
- *  $Revision: 1.152 $
+ *  $Revision: 1.153 $
  *
- *  last change: $Author: hr $ $Date: 2007-06-27 20:32:12 $
+ *  last change: $Author: rt $ $Date: 2007-07-05 08:42:17 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -4842,6 +4842,7 @@ void MenuFloatingWindow::Paint( const Rectangle& )
 
     if( IsNativeControlSupported( CTRL_MENU_POPUP, PART_ENTIRE_CONTROL ) )
     {
+        SetClipRegion();
         long nX = pMenu->pLogo ? pMenu->pLogo->aBitmap.GetSizePixel().Width() : 0;
         Size aPxSize( GetOutputSizePixel() );
         aPxSize.Width() -= nX;
@@ -4850,6 +4851,7 @@ void MenuFloatingWindow::Paint( const Rectangle& )
                            CTRL_STATE_ENABLED,
                            ImplControlValue(),
                            OUString() );
+        ImplInitClipRegion();
     }
     if ( IsScrollMenu() )
     {
