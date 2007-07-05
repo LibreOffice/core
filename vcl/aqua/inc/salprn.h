@@ -4,9 +4,9 @@
  *
  *  $RCSfile: salprn.h,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: hr $ $Date: 2007-06-27 19:50:09 $
+ *  last change: $Author: rt $ $Date: 2007-07-05 08:15:47 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -40,63 +40,106 @@
 #include <vcl/sv.h>
 #endif
 
+#ifndef _AQUAVCLTYPES_H
+#include <aquavcltypes.h>
+#endif
 
-class SalGraphics;
-class SalInfoPrinter;
+#include <salprn.hxx>
 
-// -------------------
-// - SalDriverData -
-// -------------------
+// ---------------------
+// - AquaSalInfoPrinter -
+// ---------------------
 
-struct SalDriverData
+class AquaSalGraphics;
+
+class AquaSalInfoPrinter : public SalInfoPrinter
 {
-    ULONG                   mnSysSignature;
-    USHORT                  mnVersion;
-    USHORT                  mnDriverOffset;
-    BYTE                    maDriverData[1];
+    PMPrintSession          mrSession;
+    PMPrintSettings         mrSettings;
+    PMPrinter               mrPrinter;
+    PMPageFormat            mrPageFormat;
+    /// Printer graphics
+    AquaSalGraphics*        mpGraphics;
+    /// is Graphics used
+    bool                    mbGraphics;
+    /// job active ?
+    bool                    mbJob;
+
+    public:
+    AquaSalInfoPrinter( const SalPrinterQueueInfo& pInfo );
+    virtual ~AquaSalInfoPrinter();
+
+    void                        SetupPrinterGraphics( CGContextRef i_xContext ) const;
+
+    virtual SalGraphics*        GetGraphics();
+    virtual void                ReleaseGraphics( SalGraphics* i_pGraphics );
+    virtual BOOL                Setup( SalFrame* i_pFrame, ImplJobSetup* i_pSetupData );
+    virtual BOOL                SetPrinterData( ImplJobSetup* pSetupData );
+    virtual BOOL                SetData( ULONG i_nFlags, ImplJobSetup* i_pSetupData );
+    virtual void                GetPageInfo( const ImplJobSetup* i_pSetupData,
+                                             long& o_rOutWidth, long& o_rOutHeight,
+                                             long& o_rPageOffX, long& o_rPageOffY,
+                                             long& o_rPageWidth, long& o_rPageHeight );
+    virtual ULONG               GetCapabilities( const ImplJobSetup* i_pSetupData, USHORT i_nType );
+    virtual ULONG               GetPaperBinCount( const ImplJobSetup* i_pSetupData );
+    virtual String              GetPaperBinName( const ImplJobSetup* i_pSetupData, ULONG i_nPaperBin );
+    virtual void                InitPaperFormats( const ImplJobSetup* i_pSetupData );
+    virtual int                 GetLandscapeAngle( const ImplJobSetup* i_pSetupData );
+    virtual DuplexMode          GetDuplexMode( const ImplJobSetup* i_pSetupData );
+
+
+    // the artificial separation between InfoPrinter and Printer
+    // is not really useful for us
+    // so let's make AquaSalPrinter just a forwarder to AquaSalInfoPrinter
+    // and concentrate the real work in one class
+    BOOL                        StartJob( const XubString* i_pFileName,
+                                          const XubString& i_rJobName,
+                                          const XubString& i_rAppName,
+                                          ULONG i_nCopies, BOOL i_bCollate,
+                                          ImplJobSetup* i_pSetupData );
+    BOOL                        EndJob();
+    BOOL                        AbortJob();
+    SalGraphics*                StartPage( ImplJobSetup* i_pSetupData, BOOL i_bNewJobData );
+    BOOL                        EndPage();
+    ULONG                       GetErrorCode() const;
+    private:
+    AquaSalInfoPrinter( const AquaSalInfoPrinter& );
+    AquaSalInfoPrinter& operator=(const AquaSalInfoPrinter&);
 };
 
-// -------------------
-// - SalSysQueueData -
-// -------------------
+// -----------------
+// - AquaSalPrinter -
+// -----------------
 
-struct SalSysQueueData
+class AquaSalPrinter : public SalPrinter
 {
-    XubString               maDriverName;           // printer driver name
-    XubString               maDeviceName;           // printer device name
-    XubString               maPortName;             // printer port name
-    ByteString              maDriverNameA;          // printer driver name
-    ByteString              maDeviceNameA;          // printer device name
-    ByteString              maPortNameA;            // printer port name
-    BOOL                    mbAnsi;                 // TRUE - use A functions
+    AquaSalInfoPrinter*         mpInfoPrinter;          // pointer to the compatible InfoPrinter
+    public:
+    AquaSalPrinter( AquaSalInfoPrinter* i_pInfoPrinter );
+    virtual ~AquaSalPrinter();
+
+    virtual BOOL                    StartJob( const XubString* i_pFileName,
+                                              const XubString& i_rJobName,
+                                              const XubString& i_rAppName,
+                                              ULONG i_nCopies, BOOL i_bCollate,
+                                              ImplJobSetup* i_pSetupData );
+    virtual BOOL                    EndJob();
+    virtual BOOL                    AbortJob();
+    virtual SalGraphics*            StartPage( ImplJobSetup* i_pSetupData, BOOL i_bNewJobData );
+    virtual BOOL                    EndPage();
+    virtual ULONG                   GetErrorCode();
+
+    private:
+    AquaSalPrinter( const AquaSalPrinter& );
+    AquaSalPrinter& operator=(const AquaSalPrinter&);
 };
 
-// ----------------------
-// - SalInfoPrinterData -
-// ----------------------
+const double fPtTo100thMM = 35.27777778;
 
-struct SalInfoPrinterData
-{
-    SalGraphics*            mpGraphics;             // current Printer graphics
-    XubString               maDriverName;           // printer driver name
-    XubString               maDeviceName;           // printer device name
-    XubString               maPortName;             // printer port name
-    ByteString              maDriverNameA;          // printer driver name
-    ByteString              maDeviceNameA;          // printer device name
-    ByteString              maPortNameA;            // printer port name
-    VCLVIEW                 mhDC;                   // printer hdc
-    BOOL                    mbGraphics;             // is Graphics used
-    BOOL                    mbAnsi;
-};
+inline int PtTo10Mu( double nPoints ) { return (int)(((nPoints)*fPtTo100thMM)+0.5); }
 
-// ------------------
-// - SalPrinterData -
-// ------------------
+inline double TenMuToPt( double nUnits ) { return (((nUnits)/fPtTo100thMM)+0.5); }
 
-struct SalPrinterData
-{
-    SalGraphics*            mpGraphics;             // current Printer graphics
-    SalInfoPrinter*         mpInfoPrinter;          // pointer to the compatible InfoPrinter
-};
+
 
 #endif // _SV_SALPRN_H
