@@ -14,9 +14,9 @@
 #
 #   $RCSfile: linkoo,v $
 #
-#   $Revision: 1.14 $
+#   $Revision: 1.15 $
 #
-#   last change: $Author: kz $ $Date: 2007-05-10 13:21:51 $
+#   last change: $Author: rt $ $Date: 2007-07-05 09:01:53 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -58,18 +58,21 @@ export MALLOC_CHECK_=2
 export OOO_DISABLE_RECOVERY=1
 ';
 
+$program_dir = 'program';
+$program_dir = 'MacOS' if ($ENV{OS} eq 'MACOSX');
+
 my @exceptions = ( 'cppuhelper', 'configmgr2', 'sunjavaplugin' );
 
 %replaceable = (
-    'program' => '\.so$',
-    'program/resource' => '\.res$',
-    'program/classes' => '\.jar$',
+	$program_dir => '\.so',
+    $program_dir . '/resource' => '\.res$',
+    $program_dir . '/classes' => '\.jar$',
     'share/config' => '\.zip$',
 #    'share/uno_packages' => '\.zip$'
 );
 
 # strangely enough, OSX has those small differences...
-$replaceable{'program'} = '\.dylib$' if ($ENV{OS} eq 'MACOSX');
+$replaceable{$program_dir} = '\.dylib$' if ($ENV{OS} eq 'MACOSX');
 
 @search_dirs = ( 'lib', 'bin', 'class' );
 
@@ -278,8 +281,8 @@ sub evilness($)
 sub link_iso_res()
 {
     print "Special iso.res case: ";
-    my $ooo_res="$OOO_INSTALL/program/resource/ooo".$LIBVER.$LANG.".res";
-    my $star_res="$OOO_INSTALL/program/resource/iso".$LIBVER.$LANG.".res";
+    my $ooo_res="$OOO_INSTALL/" . $program_dir . "/resource/ooo".$LIBVER.$LANG.".res";
+    my $star_res="$OOO_INSTALL/" . $program_dir . "/resource/iso".$LIBVER.$LANG.".res";
     if (-l $ooo_res && -l $star_res) {
 	if ($dry_run) {
 	    print "link $ooo_res to $star_res";
@@ -297,7 +300,7 @@ sub link_types_rdb()
 {
     print "Types.rdb case:";
     my $src  = "$OOO_BUILD/offapi/$TARGET/ucr";
-    my $dest = "$OOO_INSTALL/program";
+    my $dest = "$OOO_INSTALL/" . $program_dir;
     do_link ($src, $dest, 'types.db', 'types.rdb');
     print "\n";
 }
@@ -306,7 +309,7 @@ sub link_types_rdb()
 sub link_soffice_bin_files()
 {
     my $dest;
-    my $src = "$OOO_INSTALL/program";
+    my $src = "$OOO_INSTALL/" . $program_dir;
 
     print "soffice files";
     $dest = "$OOO_BUILD/desktop/$TARGET/bin";
@@ -353,13 +356,13 @@ if ($usage || !defined $OOO_INSTALL || !defined $OOO_BUILD) {
     exit (1);
 }
 
-substr ($OOO_INSTALL, 0, 1) eq '/' || die "linkoo requires absolute paths";
-substr ($OOO_BUILD, 0, 1)   eq '/' || die "linkoo requires absolute paths";
+substr ($OOO_INSTALL, 0, 1) eq '/' || die "linkoo requires absolute paths ($OOO_INSTALL does not qualify)";
+substr ($OOO_BUILD, 0, 1)   eq '/' || die "linkoo requires absolute paths ($OOO_BUILD does not qualify)";
 
 -d $OOO_INSTALL || die "No such directory $OOO_INSTALL";
 -w $OOO_INSTALL || die "You need write access to $OOO_INSTALL";
 -d $OOO_BUILD || die "No such directory $OOO_BUILD";
--d "$OOO_INSTALL/program/resource" || die "$OOO_INSTALL doesn't look like an OO install";
+-d "$OOO_INSTALL/" . $program_dir . "/resource" || die "$OOO_INSTALL doesn't look like an OO install";
 
 ($TARGET, $LIBVER, $LANG) = sniff_target ($OOO_BUILD);
 
@@ -372,9 +375,9 @@ link_iso_res();
 link_types_rdb();
 link_soffice_bin_files();
 
-if (!-f "$OOO_INSTALL/program/ooenv") {
-    print "Creating '$OOO_INSTALL/program/ooenv'\n";
-    open ($ooenv, ">$OOO_INSTALL/program/ooenv") || die "Can't open $OOO_INSTALL/program/ooenv: $!";
+if (!-f "$OOO_INSTALL/" . $program_dir . "/ooenv") {
+    print "Creating '$OOO_INSTALL/", $program_dir, "/ooenv'\n";
+    open ($ooenv, ">$OOO_INSTALL/" . $program_dir . "/ooenv") || die "Can't open $OOO_INSTALL/" . $program_dir . "/ooenv: $!";
     print $ooenv $env_script;
     close ($ooenv);
 }
