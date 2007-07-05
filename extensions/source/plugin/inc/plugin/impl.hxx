@@ -4,9 +4,9 @@
  *
  *  $RCSfile: impl.hxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: ihi $ $Date: 2007-06-05 14:43:34 $
+ *  last change: $Author: rt $ $Date: 2007-07-05 08:51:16 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -140,8 +140,12 @@
 #include <plugin/os2/sysplug.hxx>
 #endif
 
-#ifdef UNX
+#if defined(UNX)
+#if defined(QUARTZ)
+#include <plugin/aqua/sysplug.hxx>
+#else
 #include <plugin/unx/sysplug.hxx>
+#endif
 #endif
 
 #include <vcl/sysdata.hxx>
