@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.19 $
+#   $Revision: 1.20 $
 #
-#   last change: $Author: vg $ $Date: 2007-03-26 13:45:45 $
+#   last change: $Author: rt $ $Date: 2007-07-05 08:57:12 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -79,7 +79,7 @@ SHL1STDLIBS+=$(LIBSTLPORT)
 .IF "$(GUI)"=="WNT"
 SHL1STDLIBS+= 	-lsupc++
 .ELSE
-.IF "$(OS)"=="FREEBSD" || "$(OS)"=="NETBSD"
+.IF "$(OS)"=="NETBSD"
 SHL1STDLIBS+= 	-lsupc++
 .ELIF "$(OS)"=="MACOSX"
 .IF "$(CCNUMVER)"<="000399999999"
