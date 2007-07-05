@@ -266,6 +266,23 @@
 *** misc/mozilla/configure	Tue Oct 12 00:13:29 2004
 --- misc/build/mozilla/configure	Thu Mar 29 14:27:08 2007
 ***************
+*** 5228,5234 ****
+      ;;
+  
+  *-freebsd*)
+!     if test `test -x /usr/bin/objformat && /usr/bin/objformat || echo aout` != "elf"; then
+  	DLL_SUFFIX=".so.1.0"
+  	DSO_LDOPTS="-shared"
+      fi
+--- 5228,5234 ----
+      ;;
+  
+  *-freebsd*)
+!     if test `test -x /usr/bin/objformat && /usr/bin/objformat || echo elf` != "elf"; then
+  	DLL_SUFFIX=".so.1.0"
+  	DSO_LDOPTS="-shared"
+      fi
+***************
 *** 5895,5901 ****
          MKCSHLIB='$(CC) $(CFLAGS) $(DSO_PIC_FLAGS) -G -Wl,-z -Wl,muldefs -o $@'
          MKSHLIB_FORCE_ALL='-Qoption ld -z,allextract'
@@ -282,6 +299,17 @@
          AR_LIST="$AR t"
          AR_EXTRACT="$AR x"
          AR_DELETE="$AR d"
+***************
+*** 7504,7509 ****
+--- 7504,7511 ----
+  case $target in
+  *-hpux11.*)
+  	;;
++ *-freebsd*)
++ 	;;
+  *)
+  	echo $ac_n "checking for gethostbyname_r in -lc_r""... $ac_c" 1>&6
+  echo "configure:7510: checking for gethostbyname_r in -lc_r" >&5
 ***************
 *** 16606,16613 ****
 --- 16606,16617 ----
@@ -300,6 +328,23 @@
 *** misc/mozilla/configure.in	Tue Oct 12 00:13:29 2004
 --- misc/build/mozilla/configure.in	Thu Mar 29 14:27:08 2007
 ***************
+*** 1006,1012 ****
+      ;;
+  
+  *-freebsd*)
+!     if test `test -x /usr/bin/objformat && /usr/bin/objformat || echo aout` != "elf"; then
+  	DLL_SUFFIX=".so.1.0"
+  	DSO_LDOPTS="-shared"
+      fi
+--- 1006,1012 ----
+      ;;
+  
+  *-freebsd*)
+!     if test `test -x /usr/bin/objformat && /usr/bin/objformat || echo elf` != "elf"; then
+  	DLL_SUFFIX=".so.1.0"
+  	DSO_LDOPTS="-shared"
+      fi
+***************
 *** 1536,1542 ****
          MKCSHLIB='$(CC) $(CFLAGS) $(DSO_PIC_FLAGS) -G -Wl,-z -Wl,muldefs -o $@'
          MKSHLIB_FORCE_ALL='-Qoption ld -z,allextract'
@@ -316,6 +361,17 @@
          AR_LIST="$AR t"
          AR_EXTRACT="$AR x"
          AR_DELETE="$AR d"
+***************
+*** 1981,1986 ****
+--- 1981,1988 ----
+  case $target in
+  *-hpux11.*)
+  	;;
++ *-freebsd*)
++ 	;;
+  *)
+  	AC_CHECK_LIB(c_r, gethostbyname_r)
+  	;;
 ***************
 *** 5692,5699 ****
 --- 5692,5703 ----
@@ -427,6 +483,25 @@
   ASM_SUFFIX	= @ASM_SUFFIX@
   PROG_SUFFIX	= @PROG_SUFFIX@
   MOD_NAME	= @NSPR_MODNAME@
+*** misc/mozilla/directory/c-sdk/config/FreeBSD.mk	Tue Mar 26 16:51:46 2002
+--- misc/build/mozilla/directory/c-sdk/config/FreeBSD.mk	Wed Apr  4 20:56:05 2007
+***************
+*** 66,72 ****
+  
+  ARCH			= freebsd
+  
+! MOZ_OBJFORMAT          := $(shell test -x /usr/bin/objformat && /usr/bin/objformat || echo aout)
+  
+  ifeq ($(MOZ_OBJFORMAT),elf)
+  DLL_SUFFIX		= so
+--- 66,72 ----
+  
+  ARCH			= freebsd
+  
+! MOZ_OBJFORMAT          := $(shell test -x /usr/bin/objformat && /usr/bin/objformat || echo elf)
+  
+  ifeq ($(MOZ_OBJFORMAT),elf)
+  DLL_SUFFIX		= so
 *** misc/mozilla/directory/c-sdk/config/cygwin-wrapper	Wed Apr  2 19:22:39 2003
 --- misc/build/mozilla/directory/c-sdk/config/cygwin-wrapper	Thu Mar 29 14:27:08 2007
 ***************
@@ -501,6 +576,23 @@
   ASM_SUFFIX=s
   MKSHLIB='$(LD) $(DSO_LDOPTS) -o $@'
   PR_MD_ASFILES=
+***************
+*** 3465,3471 ****
+  EOF
+  
+      CFLAGS="$CFLAGS $(DSO_CFLAGS) -ansi -Wall"
+!     MOZ_OBJFORMAT=`test -x /usr/bin/objformat && /usr/bin/objformat || echo aout`
+      if test "$MOZ_OBJFORMAT" = "elf"; then
+          DLL_SUFFIX=so
+      else
+--- 3465,3471 ----
+  EOF
+  
+      CFLAGS="$CFLAGS $(DSO_CFLAGS) -ansi -Wall"
+!     MOZ_OBJFORMAT=`test -x /usr/bin/objformat && /usr/bin/objformat || echo elf`
+      if test "$MOZ_OBJFORMAT" = "elf"; then
+          DLL_SUFFIX=so
+      else
 ***************
 *** 3832,3837 ****
 --- 3833,3839 ----
@@ -581,6 +673,23 @@
   ASM_SUFFIX=s
   MKSHLIB='$(LD) $(DSO_LDOPTS) -o $@'
   PR_MD_ASFILES=
+***************
+*** 896,902 ****
+      AC_DEFINE(FREEBSD)
+      AC_DEFINE(HAVE_BSD_FLOCK)
+      CFLAGS="$CFLAGS $(DSO_CFLAGS) -ansi -Wall"
+!     MOZ_OBJFORMAT=`test -x /usr/bin/objformat && /usr/bin/objformat || echo aout`
+      if test "$MOZ_OBJFORMAT" = "elf"; then
+          DLL_SUFFIX=so
+      else
+--- 896,902 ----
+      AC_DEFINE(FREEBSD)
+      AC_DEFINE(HAVE_BSD_FLOCK)
+      CFLAGS="$CFLAGS $(DSO_CFLAGS) -ansi -Wall"
+!     MOZ_OBJFORMAT=`test -x /usr/bin/objformat && /usr/bin/objformat || echo elf`
+      if test "$MOZ_OBJFORMAT" = "elf"; then
+          DLL_SUFFIX=so
+      else
 ***************
 *** 1144,1149 ****
 --- 1145,1151 ----
@@ -7540,6 +7649,44 @@
   
       switch (name) {
       case MAX_CONNECTIONS:
+*** misc/mozilla/nsprpub/configure	Tue Sep 14 17:14:38 2004
+--- misc/build/mozilla/nsprpub/configure	Wed Apr  4 20:56:33 2007
+***************
+*** 3407,3413 ****
+  EOF
+  
+      CFLAGS="$CFLAGS $(DSO_CFLAGS) -ansi -Wall"
+!     MOZ_OBJFORMAT=`test -x /usr/bin/objformat && /usr/bin/objformat || echo aout`
+      if test "$MOZ_OBJFORMAT" = "elf"; then
+          DLL_SUFFIX=so
+      else
+--- 3407,3413 ----
+  EOF
+  
+      CFLAGS="$CFLAGS $(DSO_CFLAGS) -ansi -Wall"
+!     MOZ_OBJFORMAT=`test -x /usr/bin/objformat && /usr/bin/objformat || echo elf`
+      if test "$MOZ_OBJFORMAT" = "elf"; then
+          DLL_SUFFIX=so
+      else
+*** misc/mozilla/nsprpub/configure.in	Tue Sep 14 17:14:38 2004
+--- misc/build/mozilla/nsprpub/configure.in	Wed Apr  4 20:56:40 2007
+***************
+*** 922,928 ****
+      AC_DEFINE(HAVE_BSD_FLOCK)
+      AC_DEFINE(HAVE_SOCKLEN_T)
+      CFLAGS="$CFLAGS $(DSO_CFLAGS) -ansi -Wall"
+!     MOZ_OBJFORMAT=`test -x /usr/bin/objformat && /usr/bin/objformat || echo aout`
+      if test "$MOZ_OBJFORMAT" = "elf"; then
+          DLL_SUFFIX=so
+      else
+--- 922,928 ----
+      AC_DEFINE(HAVE_BSD_FLOCK)
+      AC_DEFINE(HAVE_SOCKLEN_T)
+      CFLAGS="$CFLAGS $(DSO_CFLAGS) -ansi -Wall"
+!     MOZ_OBJFORMAT=`test -x /usr/bin/objformat && /usr/bin/objformat || echo elf`
+      if test "$MOZ_OBJFORMAT" = "elf"; then
+          DLL_SUFFIX=so
+      else
 *** misc/mozilla/nsprpub/build/cygwin-wrapper	Wed Apr  2 19:22:38 2003
 --- misc/build/mozilla/nsprpub/build/cygwin-wrapper	Thu Mar 29 14:27:08 2007
 ***************
@@ -7821,7 +7968,7 @@
   #endif
   
 ! #if (defined(LINUX) && defined(__GLIBC__) && __GLIBC__ >= 2) || \
-! 	(defined(__FreeBSD__) && __FreeBSD_version > 700016)
+! 	(defined(__FreeBSD__) && __FreeBSD_version > 601103)
   #define _PR_HAVE_GETPROTO_R
   #define _PR_HAVE_5_ARG_GETPROTO_R
   #endif
@@ -8068,6 +8215,25 @@
 + ifdef NS_USE_GCC
 + NSPR31_LIB_PREFIX = lib
 + endif
+*** misc/mozilla/security/coreconf/FreeBSD.mk	Wed Mar 26 20:17:25 2003
+--- misc/build/mozilla/security/coreconf/FreeBSD.mk	Wed Apr  4 20:56:48 2007
+***************
+*** 63,69 ****
+  
+  ARCH			= freebsd
+  
+! MOZ_OBJFORMAT		:= $(shell test -x /usr/bin/objformat && /usr/bin/objformat || echo aout)
+  
+  ifeq ($(MOZ_OBJFORMAT),elf)
+  DLL_SUFFIX		= so
+--- 63,69 ----
+  
+  ARCH			= freebsd
+  
+! MOZ_OBJFORMAT		:= $(shell test -x /usr/bin/objformat && /usr/bin/objformat || echo elf)
+  
+  ifeq ($(MOZ_OBJFORMAT),elf)
+  DLL_SUFFIX		= so
 *** misc/mozilla/security/coreconf/command.mk	Fri Feb 15 17:53:12 2002
 --- misc/build/mozilla/security/coreconf/command.mk	Thu Mar 29 14:27:09 2007
 ***************
