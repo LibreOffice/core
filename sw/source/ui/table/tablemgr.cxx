@@ -4,9 +4,9 @@
  *
  *  $RCSfile: tablemgr.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: vg $ $Date: 2007-05-22 16:39:51 $
+ *  last change: $Author: rt $ $Date: 2007-07-05 13:14:11 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -60,6 +60,8 @@
 #include "table.hrc"
 #include "swabstdlg.hxx" //CHINA001
 #include "docsh.hxx"
+#include "unotbl.hxx"
+#include "unochart.hxx"
 
 #include "swcli.hxx"
 
@@ -260,7 +262,8 @@ void SwTableFUNC::UpdateChart()
     if ( xObj.is() )
     {
 
-        SwFlyFrmFmt* pTmp = pSh->InsertOleObject( aEmbObjRef );
+        SwFlyFrmFmt* pTmp = 0;
+        pSh->InsertOleObject( aEmbObjRef, &pTmp );
         if (ppFlyFrmFmt)
             *ppFlyFrmFmt = pTmp;
 
@@ -298,20 +301,44 @@ void SwTableFUNC::UpdateChart()
         uno::Reference< util::XNumberFormatsSupplier > xNumberFormatsSupplier( pSh->GetView().GetDocShell()->GetModel(), uno::UNO_QUERY );
         xDataReceiver->attachNumberFormatsSupplier( xNumberFormatsSupplier );
 
+        // default values for ranges that do not consist of a single row or column
+        bool bHasCategories = true;
+        bool bFirstCellAsLabel = true;
+        chart::ChartDataRowSource eDataRowSource = chart::ChartDataRowSource_COLUMNS;
+
+        SwRangeDescriptor aDesc;
+        FillRangeDescriptor( aDesc, rCellRange );
+        bool bSingleRowCol = aDesc.nTop == aDesc.nBottom || aDesc.nLeft == aDesc.nRight;
+        if (bSingleRowCol)
+        {
+            aDesc.Normalize();
+            sal_Int32 nRowLen = aDesc.nRight  - aDesc.nLeft + 1;
+            sal_Int32 nColLen = aDesc.nBottom - aDesc.nTop + 1;
+
+            bHasCategories = false;
+            if (nRowLen == 1 && nColLen == 1)
+                bFirstCellAsLabel   = false;
+            else if (nRowLen > 1)
+                eDataRowSource = chart::ChartDataRowSource_ROWS;
+            else if (nColLen > 1)
+                eDataRowSource = chart::ChartDataRowSource_COLUMNS;
+            else
+                DBG_ERROR( "unexpected state" );
+        }
+
         uno::Sequence< beans::PropertyValue > aArgs( 4 );
         aArgs[0] = beans::PropertyValue(
             ::rtl::OUString::createFromAscii("CellRangeRepresentation"), -1,
             uno::makeAny( rCellRange ), beans::PropertyState_DIRECT_VALUE );
-        // TODO: preset the following three arguments according to the selected range
         aArgs[1] = beans::PropertyValue(
             ::rtl::OUString::createFromAscii("HasCategories"), -1,
-            uno::makeAny( true ), beans::PropertyState_DIRECT_VALUE );
+            uno::makeAny( bHasCategories ), beans::PropertyState_DIRECT_VALUE );
         aArgs[2] = beans::PropertyValue(
             ::rtl::OUString::createFromAscii("FirstCellAsLabel"), -1,
-            uno::makeAny( true ), beans::PropertyState_DIRECT_VALUE );
+            uno::makeAny( bFirstCellAsLabel ), beans::PropertyState_DIRECT_VALUE );
         aArgs[3] = beans::PropertyValue(
             ::rtl::OUString::createFromAscii("DataRowSource"), -1,
-            uno::makeAny( chart::ChartDataRowSource_COLUMNS ), beans::PropertyState_DIRECT_VALUE );
+            uno::makeAny( eDataRowSource ), beans::PropertyState_DIRECT_VALUE );
         xDataReceiver->setArguments( aArgs );
     }
 
