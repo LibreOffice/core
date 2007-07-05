@@ -4,9 +4,9 @@
  *
  *  $RCSfile: salsys.h,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: hr $ $Date: 2007-06-27 19:50:54 $
+ *  last change: $Author: rt $ $Date: 2007-07-05 08:17:00 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -40,13 +40,42 @@
 #include <vcl/sv.h>
 #endif
 
+#include <salsys.hxx>
+
+#include <list>
 
 // -----------------
 // - SalSystemData -
 // -----------------
 
-struct SalSystemData
+//struct SalSystemData
+//{
+//};
+
+class VCL_DLLPUBLIC AquaSalSystem : public SalSystem
 {
+public:
+    AquaSalSystem() {}
+    virtual ~AquaSalSystem();
+
+    // get info about the display
+    virtual unsigned int GetDisplayScreenCount();
+    virtual bool IsMultiDisplay();
+    virtual unsigned int GetDefaultDisplayNumber();
+    virtual Rectangle GetDisplayScreenPosSizePixel( unsigned int nScreen );
+    virtual Rectangle GetDisplayWorkAreaPosSizePixel( unsigned int nScreen );
+
+    virtual rtl::OUString GetScreenName( unsigned int nScreen );
+    // overload pure virtual methods
+    virtual int ShowNativeDialog( const String& rTitle,
+                                  const String& rMessage,
+                                  const std::list< String >& rButtons,
+                                  int nDefButton );
+    virtual int ShowNativeMessageBox( const String& rTitle,
+                                      const String& rMessage,
+                                      int nButtonCombination,
+                                      int nDefaultButton);
 };
+
 
 #endif // _SV_SALSYS_H
