@@ -4,9 +4,9 @@
  *
  *  $RCSfile: svmainhook.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 11:50:19 $
+ *  last change: $Author: rt $ $Date: 2007-07-05 08:37:51 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -48,6 +48,41 @@ BOOL ImplSVMainHook( BOOL * )
 }
 
 #else
+#ifdef QUARTZ  // only Mac OS X / X11 needs this trick, the Aqua version has its own native event loop
+#include <premac.h>
+//#include <ApplicationServices/ApplicationServices.h>
+#include <Carbon/Carbon.h>
+#include <postmac.h>
+#include <stdio.h>
+
+extern BOOL ImplSVMain();
+
+static BOOL* gpbInit = 0;
+
+static  pascal  void    MainRunLoopForThreadedApps( EventLoopTimerRef inTimer, void *inUserData )
+{
+    BOOL bRet = ImplSVMain();
+    if( gpbInit )
+        *gpbInit = bRet;
+
+    QuitApplicationEventLoop();
+}
+
+BOOL ImplSVMainHook( BOOL * pbInit )
+{
+    gpbInit = pbInit;
+
+    EventLoopTimerRef aMainRunLoopTimerRef;
+    (void) InstallEventLoopTimer( GetCurrentEventLoop(), 0, 0, NewEventLoopTimerUPP( MainRunLoopForThreadedApps ), NULL, &aMainRunLoopTimerRef );
+
+    //  We really only call RunApplicationEventLoop() to install the default CarbonEvent handlers.  Once the timer installed above
+    //  fires, we remain in the MainRunLoopForThreadedApps() routine which is designed to yield to other cooperative threads.
+    RunApplicationEventLoop();
+
+    return TRUE;   // indicate that ImplSVMainHook is implemented
+}
+
+#else  // MACOSX (X11) needs the CFRunLoop()
 #include <osl/thread.h>
 #include <premac.h>
 #include <CoreFoundation/CoreFoundation.h>
@@ -122,3 +157,4 @@ BOOL ImplSVMainHook( BOOL *pbInit )
 }
 
 #endif // MACOSX
+#endif
