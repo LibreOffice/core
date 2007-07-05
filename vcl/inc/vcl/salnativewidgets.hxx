@@ -4,9 +4,9 @@
  *
  *  $RCSfile: salnativewidgets.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: vg $ $Date: 2007-04-11 18:07:38 $
+ *  last change: $Author: rt $ $Date: 2007-07-05 08:35:00 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -138,6 +138,9 @@ typedef sal_uInt32      ControlType;
 // tool tips
 #define CTRL_TOOLTIP            140
 
+// to draw the implemented theme
+#define CTRL_WINDOW_BACKGROUND  150
+
 /* Control Parts:
  *
  *   Uniquely identify a part of a control,
@@ -193,6 +196,9 @@ typedef sal_uInt32      ControlPart;
 
 // For scrollbars that have 3 buttons (most KDE themes)
 #define HAS_THREE_BUTTONS       5000
+
+#define PART_BACKGROUND_WINDOW  6000
+#define PART_BACKGROUND_DIALOG  6001
 
 /* Control State:
  *
