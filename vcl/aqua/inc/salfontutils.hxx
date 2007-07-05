@@ -4,9 +4,9 @@
  *
  *  $RCSfile: salfontutils.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: hr $ $Date: 2007-06-27 19:48:35 $
+ *  last change: $Author: rt $ $Date: 2007-07-05 08:11:51 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -33,24 +33,14 @@
  *
  ************************************************************************/
 
-// =======================================================================
-
-// =======================================================================
 
 #ifndef _SV_SALFONTUTILS_HXX
 #define _SV_SALFONTUTILS_HXX
-
-#ifndef _SV_SALDATA_HXX
-    #include <saldata.hxx>
-#endif
 
 #ifndef _SV_OUTFONT_HXX
     #include <vcl/outfont.hxx>
 #endif
 
-// =======================================================================
-
-// =======================================================================
 
 static const char *kFontWeightThin1 = "Thin";
 static const char *kFontWeightThin2 = "thin";
@@ -82,21 +72,6 @@ static const char *kFontWeightRoman2 = "roman";
 static const char *kFontWeightRegular1 = "Regular";
 static const char *kFontWeightRegular2 = "regular";
 
-// =======================================================================
-
-// =======================================================================
-
-DECLARE_LIST( FontList, ImplFontData* );
-
-// =======================================================================
-
-// =======================================================================
-
-FontList *GetMacFontList();
-
-// =======================================================================
-
-// =======================================================================
 
 #endif  // _SV_SALFONTUTILS_HXX
 
