@@ -4,9 +4,9 @@
 #
 #   $RCSfile: rules.mk,v $
 #
-#   $Revision: 1.88 $
+#   $Revision: 1.89 $
 #
-#   last change: $Author: vg $ $Date: 2007-05-25 10:51:40 $
+#   last change: $Author: rt $ $Date: 2007-07-05 09:04:04 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -361,6 +361,72 @@ $(SLO)$/%.obj : %.m
 not_existing$/s_%.dpcc : %.c;@noop $(assign all_local_slo+:=$<)
 not_existing$/o_%.dpcc : %.c;@noop $(assign all_local_obj+:=$<)
 
+# Objective-C++ files
+$(OBJ)$/%.obj : %.mm
+    @echo ------------------------------
+    @echo Making: $@
+.IF "$(OS)"=="MACOSX"
+.IF "$(TEST)"!=""
+    $(objc) $(CFLAGS) $(CFLAGSCC) $(OBJCXXFLAGS) $(CFLAGSOBJ) $(CDEFS) $(CDEFSOBJ) -E $(CFLAGSAPPEND) $(CFLAGSOUTOBJ) $(OBJ)$/$*.o $*.mm
+.ELSE
+    @$(RM) $@ $(@:s/.obj/.o/)
+    $(objc) $(CFLAGS) $(CFLAGSCC) $(OBJCXXFLAGS) $(CFLAGSOBJ) $(CDEFS) $(CDEFSOBJ) $(CFLAGSAPPEND) $(CFLAGSOUTOBJ) $(OBJ)$/$*.o $*.mm
+    +if ( -e $(@:s/.obj/.o/)) $(TOUCH) $@
+.ENDIF
+.ELSE		"$(OS)"=="MACOSX"
+    @echo "No recipe for compiling Objective-C++ files is available for this platform"
+.ENDIF		"$(OS)"=="MACOSX"
+
+# Objective-C++ files
+$(OBJ)$/%.obj : $(MISC)$/%.mm
+    @echo ------------------------------
+    @echo Making: $@
+.IF "$(OS)"=="MACOSX"
+    @$(RM) $@ $(@:s/.obj/.o/)
+    $(objc) $(CFLAGS) $(CFLAGSCC) $(OBJCXXFLAGS) $(CFLAGSOBJ) $(CDEFS) $(CDEFSOBJ) $(CFLAGSAPPEND) $(CFLAGSOUTOBJ) $(OBJ)$/$*.o $(MISC)$/$*.mm
+    +if ( -e $(@:s/.obj/.o/)) $(TOUCH) $@
+.ELSE		"$(OS)"=="MACOSX"
+    @echo "No recipe for compiling Objective-C++ files is available for this platform"
+.ENDIF		"$(OS)"=="MACOSX"
+
+# Objective-C++ files
+$(SLO)$/%.obj : $(MISC)$/%.mm
+    @echo ------------------------------
+    @echo Making: $@
+.IF "$(OS)"=="MACOSX"
+    @$(RM) $@ $(@:s/.obj/.o/)
+    $(objc) $(CFLAGS) $(CFLAGSCC) $(OBJCXXFLAGS) $(CFLAGSSLO) $(CDEFS) $(CDEFSSLO) $(CFLAGSAPPEND) $(CFLAGSOUTOBJ) $(SLO)$/$*.o $(MISC)$/$*.mm
+    +if ( -e $(@:s/.obj/.o/)) $(TOUCH) $@
+.ELSE		"$(OS)"=="MACOSX"
+    @echo "No recipe for compiling Objective-C++ files is available for this platform"
+.ENDIF		"$(OS)"=="MACOSX"
+
+# Objective-C++ files
+$(SLO)$/%.obj : %.mm
+    @echo ------------------------------
+    @echo Making: $@
+.IF "$(OS)"=="MACOSX"
+    @$(RM) $@ $(@:s/.obj/.o/)
+    $(objc) $(CFLAGS) $(CFLAGSCC) $(OBJCXXFLAGS) $(CFLAGSSLO) $(CDEFS) $(CDEFSSLO) $(CDEFSMT) $(CFLAGSAPPEND) $(CFLAGSOUTOBJ) $(SLO)$/$*.o $*.mm
+    +if ( -e $(@:s/.obj/.o/)) $(TOUCH) $@
+.ELSE		"$(OS)"=="MACOSX"
+    @echo "No recipe for compiling Objective-C++ files is available for this platform"
+.ENDIF		"$(OS)"=="MACOSX"
+
+# dependencies c / c++
+.IF "$(verbose)"==""
+noout=>& $(NULLDEV)
+.ENDIF
+
+$(MISC)$/s_%.dpcc : %.c
+    @+-$(RM) $@ >& $(NULLDEV)
+    @$(MAKEDEPEND) -f - -p$(SLO) $(MKDEPFLAGS) $(CDEFS) $(CDEFSSLO) $(CDEFSMT) $< > $@
+.IF "$(LAZY_DEPS)"==""	
+    @echo $@ : $(SLO)$/$(<:b).obj >> $@
+.ELSE			# "$(LAZY_DEPS)"==""	
+    @echo LAZY_DEPS=were_used_to_generate >> $@
+.ENDIF			# "$(LAZY_DEPS)"==""	
+
 $(MISC)$/%.dpslo :
 # faster but unusable with current source (e.g. external include guards)
 #	$(MAKEDEPEND) @$(mktmp -f - -p$(SLO) $(MKDEPFLAGS) $(CDEFS) $(CDEFSSLO) $(CDEFSMT) $(all_local_slo) $(all_misc_slo)) > $@
@@ -435,6 +501,60 @@ $(MISC)$/o_%.dpcc : $(MISC)$/%.m
     @$(MAKEDEPEND) -f - -p$(OBJ) $(MKDEPFLAGS) $(CDEFS) $(CDEFSOBJ) $(CDEFSMT) $< | sed s\#$(MISC)$/\#\# > $@
 .ELSE			# "$(GUI)"=="UNX"	
     @$(MAKEDEPEND) -f - -p$(OBJ) $(MKDEPFLAGS) $(CDEFS) $(CDEFSOBJ) $(CDEFSMT) $< | $(SED) s/$(MISC:s/\/\\/)\\// > $@
+.ENDIF			# "$(GUI)"=="UNX"	
+.IF "$(LAZY_DEPS)"==""	
+    @echo $@ : $(OBJ)$/$(<:b).obj >> $@
+.ELSE			# "$(LAZY_DEPS)"==""	
+    @echo LAZY_DEPS=were_used_to_generate >> $@
+.ENDIF			# "$(LAZY_DEPS)"==""	
+
+# dependencies objective-c++
+
+$(MISC)$/s_%.dpcc : %.mm
+    @echo ------------------------------ $(noout)
+    @echo Making: $@ $(noout)
+    @+-$(RM) $@ >& $(NULLDEV)
+    @$(MAKEDEPEND) -f - -p$(SLO)$/ $(MKDEPFLAGS) $(CDEFS) $(CDEFSSLO) $(CDEFSMT) $< > $@
+.IF "$(LAZY_DEPS)"==""	
+    @+echo $@ : $(SLO)$/$(<:b).obj >> $@
+.ELSE			# "$(LAZY_DEPS)"==""	
+    @+echo LAZY_DEPS=were_used_to_generate >> $@
+.ENDIF			# "$(LAZY_DEPS)"==""	
+   
+$(MISC)$/o_%.dpcc : %.mm
+    @echo ------------------------------ $(noout)
+    @echo Making: $@ $(noout)
+    @+-$(RM) $@ >& $(NULLDEV)
+    @$(MAKEDEPEND) -f - -p$(OBJ)$/ $(MKDEPFLAGS) $(CDEFS) $(CDEFSOBJ) $(CDEFSMT) $< > $@
+.IF "$(LAZY_DEPS)"==""	
+    @+echo $@ : $(OBJ)$/$(<:b).obj >> $@
+.ELSE			# "$(LAZY_DEPS)"==""	
+    @+echo LAZY_DEPS=were_used_to_generate >> $@
+.ENDIF			# "$(LAZY_DEPS)"==""	
+   
+$(MISC)$/s_%.dpcc : $(MISC)$/%.mm
+    @echo ------------------------------ $(noout)
+    @echo Making: $@ $(noout)
+    @+-$(RM) $@ >& $(NULLDEV)
+.IF "$(GUI)"=="UNX"	
+    @$(MAKEDEPEND) -f - -p$(SLO)$/ $(MKDEPFLAGS) $(CDEFS) $(CDEFSSLO) $(CDEFSMT) $< | sed s\#$(MISC)$/\#\# > $@
+.ELSE			# "$(GUI)"=="UNX"	
+    @$(MAKEDEPEND) -f - -p$(SLO)$/ $(MKDEPFLAGS) $(CDEFS) $(CDEFSSLO) $(CDEFSMT) $< | $(SED) s/$(MISC:s/\/\\/)\\// > $@
+.ENDIF			# "$(GUI)"=="UNX"	
+.IF "$(LAZY_DEPS)"==""	
+    @+echo $@ : $(SLO)$/$(<:b).obj >> $@
+.ELSE			# "$(LAZY_DEPS)"==""	
+    @+echo LAZY_DEPS=were_used_to_generate >> $@
+.ENDIF			# "$(LAZY_DEPS)"==""	
+   
+$(MISC)$/o_%.dpcc : $(MISC)$/%.mm
+    @echo ------------------------------ $(noout)
+    @echo Making: $@ $(noout)
+    @+-$(RM) $@ >& $(NULLDEV)
+.IF "$(GUI)"=="UNX"	
+    @$(MAKEDEPEND) -f - -p$(OBJ)$/ $(MKDEPFLAGS) $(CDEFS) $(CDEFSOBJ) $(CDEFSMT) $< | sed s\#$(MISC)$/\#\# > $@
+.ELSE			# "$(GUI)"=="UNX"	
+    @$(MAKEDEPEND) -f - -p$(OBJ)$/ $(MKDEPFLAGS) $(CDEFS) $(CDEFSOBJ) $(CDEFSMT) $< | $(SED) s/$(MISC:s/\/\\/)\\// > $@
 .ENDIF			# "$(GUI)"=="UNX"	
 .IF "$(LAZY_DEPS)"==""	
     @echo $@ : $(OBJ)$/$(<:b).obj >> $@
