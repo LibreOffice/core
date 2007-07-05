@@ -4,9 +4,9 @@
  *
  *  $RCSfile: settings.cxx,v $
  *
- *  $Revision: 1.70 $
+ *  $Revision: 1.71 $
  *
- *  last change: $Author: hr $ $Date: 2007-06-27 20:01:56 $
+ *  last change: $Author: rt $ $Date: 2007-07-05 08:37:31 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -78,13 +78,6 @@
 #include <unotools/confignode.hxx>
 #endif
 
-#ifdef UNX
-#include <prex.h>
-#include <postx.h>
-#include <dtint.hxx>
-#include <stdio.h>
-#endif
-
 #ifdef WNT
 #include <tools/prewin.h>
 #include <windows.h>
@@ -92,8 +85,6 @@
 #endif
 
 using namespace rtl;
-
-
 
 // =======================================================================
 
