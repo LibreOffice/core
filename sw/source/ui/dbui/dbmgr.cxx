@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dbmgr.cxx,v $
  *
- *  $Revision: 1.119 $
+ *  $Revision: 1.120 $
  *
- *  last change: $Author: ihi $ $Date: 2007-06-06 11:06:43 $
+ *  last change: $Author: rt $ $Date: 2007-07-05 07:38:34 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -695,6 +695,7 @@ BOOL SwNewDBMgr::MergeNew(const SwMergeDescriptor& rMergeDesc )
 
         case DBMGR_MERGE_MAILING:
         case DBMGR_MERGE_MAILFILES:
+        case DBMGR_MERGE_SINGLE_FILE:
             // save files and send them as e-Mail if required
             bRet = MergeMailFiles(&rMergeDesc.rSh,
                     rMergeDesc);
@@ -1405,6 +1406,7 @@ BOOL SwNewDBMgr::MergeMailFiles(SwWrtShell* pSourceShell,
     BOOL bSynchronizedDoc = pSourceShell->IsLabelDoc() && pSourceShell->GetSectionFmtCount() > 1;
     BOOL bLoop = TRUE;
     BOOL bEMail = rMergeDescriptor.nMergeType == DBMGR_MERGE_MAILING;
+    const bool bAsSingleFile = rMergeDescriptor.nMergeType == DBMGR_MERGE_SINGLE_FILE;
 
     ::rtl::Reference< MailDispatcher >          xMailDispatcher;
     ::rtl::OUString sBodyMimeType;
@@ -1483,7 +1485,7 @@ BOOL SwNewDBMgr::MergeMailFiles(SwWrtShell* pSourceShell,
             String sStartingPageDesc;
             USHORT nStartingPageNo = 0;
             bool bPageStylesWithHeaderFooter = false;
-            if(rMergeDescriptor.bCreateSingleFile)
+            if(bAsSingleFile || rMergeDescriptor.bCreateSingleFile)
             {
                 // create a target docshell to put the merged document into
                 xTargetDocShell = new SwDocShell( SFX_CREATE_MODE_STANDARD );
@@ -1564,7 +1566,7 @@ BOOL SwNewDBMgr::MergeMailFiles(SwWrtShell* pSourceShell,
                     }
 
                     // create a new temporary file name - only done once in case of bCreateSingleFile
-                    if( 1 == nDocNo || !rMergeDescriptor.bCreateSingleFile )
+                    if( 1 == nDocNo || (!rMergeDescriptor.bCreateSingleFile && !bAsSingleFile) )
                     {
                         INetURLObject aEntry(sPath);
                         String sLeading(aEntry.GetBase());
@@ -1574,6 +1576,8 @@ BOOL SwNewDBMgr::MergeMailFiles(SwWrtShell* pSourceShell,
                         sExt.EraseLeadingChars('*');
                         aTempFile = std::auto_ptr< utl::TempFile >(
                                 new utl::TempFile(sLeading,&sExt,&sPath ));
+                        if( bAsSingleFile )
+                            aTempFile->EnableKillingFile();
                     }
 
                     if( !aTempFile->IsValid() )
@@ -1627,7 +1631,7 @@ BOOL SwNewDBMgr::MergeMailFiles(SwWrtShell* pSourceShell,
                                 pEvtSrc->LaunchMailMergeEvent( aEvt );
                             }
 
-                            if(rMergeDescriptor.bCreateSingleFile)
+                            if(rMergeDescriptor.bCreateSingleFile || bAsSingleFile )
                             {
                                 DBG_ASSERT( pTargetShell, "no target shell available!" )
                                 // copy created file into the target document
@@ -1800,10 +1804,10 @@ BOOL SwNewDBMgr::MergeMailFiles(SwWrtShell* pSourceShell,
             } while( !bCancel &&
                 (bSynchronizedDoc && (nStartRow != nEndRow)? ExistsNextRecord() : ToNextMergeRecord()));
             // save the single output document
-            if(rMergeDescriptor.bCreateSingleFile)
+            if(rMergeDescriptor.bCreateSingleFile || bAsSingleFile)
             {
                 DBG_ASSERT( aTempFile.get(), "Temporary file not available" )
-                INetURLObject aTempFileURL(aTempFile->GetURL());
+                INetURLObject aTempFileURL(bAsSingleFile ? sSubject : aTempFile->GetURL());
                 SfxMedium* pDstMed = new SfxMedium(
                     aTempFileURL.GetMainURL( INetURLObject::NO_DECODE ),
                     STREAM_STD_READWRITE, TRUE );
@@ -2954,6 +2958,7 @@ void SwNewDBMgr::ExecuteFormLetter( SwWrtShell& rSh,
 
         SFX_APP()->NotifyEvent(SfxEventHint(SW_EVENT_MAIL_MERGE, rSh.GetView().GetViewFrame()->GetObjectShell()));
         SwMergeDescriptor aMergeDesc( pImpl->pMergeDialog->GetMergeType(), rSh, aDescriptor );
+        aMergeDesc.sSaveToFilter = pImpl->pMergeDialog->GetSaveFilter();
         MergeNew(aMergeDesc);
         SFX_APP()->NotifyEvent(SfxEventHint(SW_EVENT_MAIL_MERGE_END, rSh.GetView().GetViewFrame()->GetObjectShell()));
 
