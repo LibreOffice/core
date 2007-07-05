@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.10 $
+#   $Revision: 1.11 $
 #
-#   last change: $Author: vg $ $Date: 2007-02-06 14:18:01 $
+#   last change: $Author: rt $ $Date: 2007-07-05 08:31:09 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -57,9 +57,8 @@ dummy:
 
 SLOFILES=	\
         $(SLO)/salframe.obj		\
-        $(SLO)/salobj.obj		\
-        $(SLO)/VCLView.obj		\
-        $(SLO)/VCLWindow.obj
+        $(SLO)/salmenu.obj		\
+        $(SLO)/salobj.obj
 
 .ENDIF		# "$(GUIBASE)"!="aqua"
 
