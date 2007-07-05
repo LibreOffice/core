@@ -4,9 +4,9 @@
  *
  *  $RCSfile: bitmapdevice.cxx,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: hr $ $Date: 2007-06-27 12:42:01 $
+ *  last change: $Author: rt $ $Date: 2007-07-05 08:55:38 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -217,11 +217,8 @@ namespace
             Masks::clipmask_polarity>::type                                raw_maskedaccessor_type;
         typedef typename accessor_selector::template wrap_accessor<
             raw_maskedaccessor_type >::type                                masked_accessor_type;
-        typedef typename raw_xor_accessor_traits::template masked_accessor<
-            mask_rawaccessor_type,
-            dest_iterator_type,
-            mask_iterator_type,
-            Masks::clipmask_polarity>::type                                raw_maskedxor_accessor_type;
+        typedef typename AccessorTraits<
+            raw_maskedaccessor_type>::xor_accessor                         raw_maskedxor_accessor_type;
         typedef typename accessor_selector::template wrap_accessor<
             raw_maskedxor_accessor_type >::type                            masked_xoraccessor_type;
 
@@ -1817,6 +1814,7 @@ BitmapDeviceSharedPtr createBitmapDeviceImpl( const basegfx::B2IVector&        r
         16, // SIXTEEN_BIT_MSB_TC_MASK
         24, // TWENTYFOUR_BIT_TC_MASK
         32, // THIRTYTWO_BIT_TC_MASK
+        32, // THIRTYTWO_BIT_TC_MASK_ARGB
     };
 
     sal_Int32  nScanlineStride(0);
@@ -1949,6 +1947,11 @@ BitmapDeviceSharedPtr createBitmapDeviceImpl( const basegfx::B2IVector&        r
 
         case Format::THIRTYTWO_BIT_TC_MASK:
             return createRenderer<PixelFormatTraits_RGB32_888,StdMasks>(
+                aBounds, nScanlineFormat, nScanlineStride,
+                pFirstScanline, pMem, pPal );
+
+        case Format::THIRTYTWO_BIT_TC_MASK_ARGB:
+            return createRenderer<PixelFormatTraits_BGR32_888,StdMasks>(
                 aBounds, nScanlineFormat, nScanlineStride,
                 pFirstScanline, pMem, pPal );
     }
