@@ -4,9 +4,9 @@
  *
  *  $RCSfile: salinst.h,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: hr $ $Date: 2007-06-27 19:49:15 $
+ *  last change: $Author: rt $ $Date: 2007-07-05 08:13:10 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -46,9 +46,12 @@
 #include <vos/thread.hxx>
 #endif
 
-#ifndef _SV_VCLWINDOW_H
-#include <VCLWindow.h>
-#endif
+#include <salsys.h>
+#include <salobj.h>
+#include <salvd.h>
+#include <salsound.h>
+#include <saltimer.h>
+#include <salbmp.h>
 
 #ifdef __cplusplus
 
@@ -64,7 +67,7 @@ class SalYieldMutex;
 // - SalYieldMutex -
 // -----------------
 
-class SalYieldMutex : public NAMESPACE_VOS(OMutex)
+class SalYieldMutex : public vos::OMutex
 {
     ULONG                                       mnCount;
     NAMESPACE_VOS(OThread)::TThreadIdentifier   mnThreadId;
@@ -78,16 +81,98 @@ public:
     NAMESPACE_VOS(OThread)::TThreadIdentifier   GetThreadId() const { return mnThreadId; }
 };
 
+#define YIELD_GUARD vos::OGuard aGuard( GetSalData()->mpFirstInstance->GetYieldMutex() )
+
 // -------------------
 // - SalInstanceData -
 // -------------------
 
-struct SalInstanceData
+//struct SalInstanceData
+//{
+//public:
+//};
+
+// ------------------
+// - AquaSalInstance -
+// ------------------
+
+class AquaSalInstance : public SalInstance
 {
 public:
     void*               mpFilterInst;
     void*               mpFilterCallback;
     SalYieldMutex*      mpSalYieldMutex;        // Sal-Yield-Mutex
+    rtl::OUString       maDefaultPrinter;
+public:
+    AquaSalInstance();
+    virtual ~AquaSalInstance();
+
+    virtual SalSystem*      CreateSystem();
+    virtual void            DestroySystem(SalSystem*);
+    virtual SalFrame*       CreateChildFrame( SystemParentData* pParent, ULONG nStyle );
+    virtual SalFrame*       CreateFrame( SalFrame* pParent, ULONG nStyle );
+    virtual void            DestroyFrame( SalFrame* pFrame );
+    virtual SalObject*      CreateObject( SalFrame* pParent, SystemWindowData* pWindowData );
+    virtual void            DestroyObject( SalObject* pObject );
+    virtual SalVirtualDevice*   CreateVirtualDevice( SalGraphics* pGraphics,
+                                                     long nDX, long nDY,
+                                                     USHORT nBitCount, const SystemGraphicsData *pData );
+    virtual void            DestroyVirtualDevice( SalVirtualDevice* pDevice );
+
+    virtual SalInfoPrinter* CreateInfoPrinter( SalPrinterQueueInfo* pQueueInfo,
+                                               ImplJobSetup* pSetupData );
+    virtual void            DestroyInfoPrinter( SalInfoPrinter* pPrinter );
+    virtual SalPrinter*     CreatePrinter( SalInfoPrinter* pInfoPrinter );
+    virtual void            DestroyPrinter( SalPrinter* pPrinter );
+    virtual void            GetPrinterQueueInfo( ImplPrnQueueList* pList );
+    virtual void            GetPrinterQueueState( SalPrinterQueueInfo* pInfo );
+    virtual void            DeletePrinterQueueInfo( SalPrinterQueueInfo* pInfo );
+    virtual String             GetDefaultPrinter();
+    virtual SalSound*           CreateSalSound();
+    virtual SalTimer*           CreateSalTimer();
+    virtual SalOpenGL*          CreateSalOpenGL( SalGraphics* pGraphics );
+    virtual SalI18NImeStatus*   CreateI18NImeStatus();
+    virtual SalSystem*          CreateSalSystem();
+    virtual SalBitmap*          CreateSalBitmap();
+    virtual vos::IMutex*        GetYieldMutex();
+    virtual ULONG               ReleaseYieldMutex();
+    virtual void                AcquireYieldMutex( ULONG nCount );
+    virtual void                Yield( bool bWait, bool bHandleAllCurrentEvents );
+    virtual bool                AnyInput( USHORT nType );
+    virtual SalMenu*            CreateMenu( BOOL bMenuBar );
+    virtual void                DestroyMenu( SalMenu* );
+    virtual SalMenuItem*        CreateMenuItem( const SalItemParams* pItemData );
+    virtual void                DestroyMenuItem( SalMenuItem* );
+    virtual SalSession*         CreateSalSession();
+    virtual void*               GetConnectionIdentifier( ConnectionIdentifierType& rReturnedType, int& rReturnedBytes );
+    virtual void            SetEventCallback( void* pInstance, bool(*pCallback)(void*,void*,int) );
+    virtual void            SetErrorEventCallback( void* pInstance, bool(*pCallback)(void*,void*,int) );
+
+    static void TimerEventHandler(EventLoopTimerRef inTimer, void* pData);
+
+ public:
+    /* During window resizing the standard event handler does
+       not dispatch VCL timer messages which (for some strange
+       reasons) trigger VCL painting. So when live resizing of
+       windows is enabled the window content will not be painted
+       at all especially when the user doesn't move the mouse
+       anymore but still holds the left mouse button pressed on
+       the resize area.
+       So to get timer messages delivered nevertheless we setup
+       a message loop timer. Events fired by this timer will also
+       be delivered during window resizing.
+    */
+    void StartForceDispatchingPaintEvents();
+    void StopForceDispatchingPaintEvents();
+    EventLoopTimerRef mEventLoopTimerRef;
+    bool mbForceDispatchPaintEvents;
+
+    friend class AquaSalFrame;
 };
+
+
+// helper class
+rtl::OUString GetOUString( CFStringRef );
+CFStringRef CreateCFString( const rtl::OUString& );
 
 #endif // _SV_SALINST_H
