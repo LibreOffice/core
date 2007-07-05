@@ -4,9 +4,9 @@
  *
  *  $RCSfile: metafunctions.hxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: thb $ $Date: 2006-07-13 12:03:25 $
+ *  last change: $Author: rt $ $Date: 2007-07-05 08:54:06 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -183,7 +183,7 @@ struct ifBothScalarIntegral
 //--------------------------------------------------------------
 
 /// Count number of trailing zeros
-template< int val > struct numberOfTrailingZeros
+template< unsigned int val > struct numberOfTrailingZeros
 {
     enum { next = val >> 1 };
     enum { value = vigra::IfBool< (val & 1) == 0,
@@ -199,7 +199,7 @@ template<> struct numberOfTrailingZeros<0>
 //--------------------------------------------------------------
 
 /// Count number of one bits
-template< int val > struct bitcount
+template< unsigned int val > struct bitcount
 {
     enum { next = val >> 1 };
     enum { value = bitcount<next>::value + (val & 1) };
