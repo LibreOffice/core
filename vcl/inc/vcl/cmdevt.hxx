@@ -4,9 +4,9 @@
  *
  *  $RCSfile: cmdevt.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: vg $ $Date: 2007-04-11 17:49:05 $
+ *  last change: $Author: rt $ $Date: 2007-07-05 08:34:29 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -319,6 +319,24 @@ inline CommandModKeyData::CommandModKeyData( USHORT nCode )
     mnCode = nCode;
 }
 
+// --------------------
+// - CommanDialogData -
+// --------------------
+
+#define SHOWDIALOG_ID_PREFERENCES       1
+#define SHOWDIALOG_ID_ABOUT             2
+
+class VCL_DLLPUBLIC CommandDialogData
+{
+    int             m_nDialogId;
+    public:
+    CommandDialogData( int nDialogId = SHOWDIALOG_ID_PREFERENCES )
+    : m_nDialogId( nDialogId )
+    {}
+
+    int GetDialogId() const { return m_nDialogId; }
+};
+
 // ----------------
 // - CommandEvent -
 // ----------------
@@ -338,6 +356,7 @@ inline CommandModKeyData::CommandModKeyData( USHORT nCode )
 #define COMMAND_MODKEYCHANGE            ((USHORT)13)
 #define COMMAND_HANGUL_HANJA_CONVERSION ((USHORT)14)
 #define COMMAND_INPUTLANGUAGECHANGE     ((USHORT)15)
+#define COMMAND_SHOWDIALOG              ((USHORT)16)
 
 #define COMMAND_USER                    ((USHORT)4096)
 
@@ -365,6 +384,7 @@ public:
     const CommandScrollData*            GetAutoScrollData() const;
     const CommandVoiceData*             GetVoiceData() const;
     const CommandModKeyData*            GetModKeyData() const;
+    const CommandDialogData*            GetDialogData() const;
 };
 
 inline CommandEvent::CommandEvent()
@@ -427,6 +447,14 @@ inline const CommandModKeyData* CommandEvent::GetModKeyData() const
 {
     if( mnCommand == COMMAND_MODKEYCHANGE )
         return (const CommandModKeyData*)mpData;
+    else
+        return NULL;
+}
+
+inline const CommandDialogData* CommandEvent::GetDialogData() const
+{
+    if( mnCommand == COMMAND_SHOWDIALOG )
+        return (const CommandDialogData*)mpData;
     else
         return NULL;
 }
