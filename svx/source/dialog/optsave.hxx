@@ -4,9 +4,9 @@
  *
  *  $RCSfile: optsave.hxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: rt $ $Date: 2006-07-26 09:09:45 $
+ *  last change: $Author: rt $ $Date: 2007-07-05 07:47:05 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -76,6 +76,7 @@ class SvxSaveTabPage : public SfxTabPage
 private:
     FixedLine           aLoadFL;
     CheckBox            aLoadUserSettingsCB;
+    CheckBox            aLoadDocPrinterCB;
     FixedLine           aSaveBox;
     CheckBox            aDocInfoBtn;
     ReadOnlyImage       aBackupFI;
