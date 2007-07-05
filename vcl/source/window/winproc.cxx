@@ -2288,6 +2288,23 @@ static void ImplHandleSalExtTextInputPos( Window* pWindow, SalExtTextInputPosEve
 
 // -----------------------------------------------------------------------
 
+static long ImplHandleShowDialog( Window* pWindow, int nDialogId )
+{
+    if( ! pWindow )
+        return FALSE;
+
+    if( pWindow->GetType() == WINDOW_BORDERWINDOW )
+    {
+        Window* pWrkWin = pWindow->GetWindow( WINDOW_CLIENT );
+        if( pWrkWin )
+            pWindow = pWrkWin;
+    }
+    CommandDialogData aCmdData( nDialogId );
+    return ImplCallCommand( pWindow, COMMAND_SHOWDIALOG, &aCmdData );
+}
+
+// -----------------------------------------------------------------------
+
 long ImplWindowFrameProc( void* pInst, SalFrame* /*pFrame*/,
                           USHORT nEvent, const void* pEvent )
 {
@@ -2514,6 +2531,12 @@ long ImplWindowFrameProc( void* pInst, SalFrame* /*pFrame*/,
             break;
         case SALEVENT_INPUTCONTEXTCHANGE:
             nRet = ImplHandleInputContextChange( pWindow, ((SalInputContextChangeEvent*)pEvent)->meLanguage );
+            break;
+        case SALEVENT_SHOWDIALOG:
+            {
+                int nDialogID = reinterpret_cast<int>(pEvent);
+                nRet = ImplHandleShowDialog( pWindow, nDialogID );
+            }
             break;
 
 #ifdef DBG_UTIL
