@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.93 $
+#   $Revision: 1.94 $
 #
-#   last change: $Author: rt $ $Date: 2007-07-03 14:08:50 $
+#   last change: $Author: rt $ $Date: 2007-07-05 08:44:46 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -151,8 +151,7 @@ LIB1FILES=  $(SLB)$/app.lib     \
             $(SLB)$/helper.lib	\
             $(SLB)$/components.lib
 
-
-.IF "$(GUI)" == "UNX"
+.IF "$(GUI)" == "UNX" && "$(GUIBASE)"!="aqua"
 LIB1FILES+=$(SLB)$/salplug.lib
 SHL1STDLIBS+=\
             -lpsp$(VERSION)$(DLLPOSTFIX)
@@ -181,6 +180,10 @@ SHL1STDLIBS+=\
             $(ICULELIB)			\
             $(JVMACCESSLIB)
 SHL1USE_EXPORTS=ordinal
+
+.IF "$(GUIBASE)"=="aqua"
+SHL1STDLIBS+=$(BASEBMPLIB)
+.ENDIF
 
 .IF "$(USE_BUILTIN_RASTERIZER)"!=""
     LIB1FILES +=    $(SLB)$/glyphs.lib
@@ -237,8 +240,10 @@ LINKFLAGSSHL += /ENTRY:LibMain@12
 
 # --- UNX ----------------------------------------------------------------
 
+SHL1STDLIBS += $(PSPLIB)
+
 # UNX sal plugins
-.IF "$(GUI)" == "UNX"
+.IF "$(GUI)" == "UNX" && "$(GUIBASE)" != "aqua"
 
 # basic pure X11 plugin
 LIB2TARGET=$(SLB)$/ipure_x
@@ -289,11 +294,11 @@ SHL2STDLIBS+=`pkg-config --libs xrender`
 
 
 .IF "$(ENABLE_PASF)" != ""
+SHL2STDLIBS += -lsndfile -lportaudio
 .IF "$(OS)"=="MACOSX"
 SHL2STDLIBS += -framework CoreAudio -framework AudioToolbox
-.ENDIF
-SHL2STDLIBS += -lsndfile -lportaudio
-.ENDIF # ENABLE_PASF
+.ENDIF # "$(OS)"=="MACOSX"
+.ENDIF # "$(ENABLE_PASF)"!=""
 
 .IF "$(ENABLE_NAS)" != ""
 SHL2STDLIBS += -laudio
