@@ -4,9 +4,9 @@
  *
  *  $RCSfile: salobj.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: hr $ $Date: 2007-06-27 19:53:59 $
+ *  last change: $Author: rt $ $Date: 2007-07-05 10:25:18 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -41,8 +41,8 @@
 #ifndef _SV_SALDATA_HXX
 #include <saldata.hxx>
 #endif
-#ifndef _SV_SALOBJ_HXX
-#include <vcl/salobj.hxx>
+#ifndef _SV_SALOBJ_H
+#include <salobj.h>
 #endif
 
 // =======================================================================
@@ -54,118 +54,118 @@ static long ImplSalObjectCallbackDummy( void*, SalObject*, USHORT, const void* )
 
 // =======================================================================
 
-SalObject::SalObject()
+AquaSalObject::AquaSalObject()
 {
     SalData* pSalData = GetSalData();
 
-    maObjectData.mpFrame            = NULL;
-    maObjectData.mpInst             = NULL;
-    maObjectData.mpProc             = ImplSalObjectCallbackDummy;
+    mpFrame         = NULL;
+    mpInst          = NULL;
+    mpProc          = ImplSalObjectCallbackDummy;
 
     // Insert object in objectlist
-    maObjectData.mpNextObject = pSalData->mpFirstObject;
+    mpNextObject = (AquaSalObject*)pSalData->mpFirstObject;
     pSalData->mpFirstObject = this;
 }
 
 // -----------------------------------------------------------------------
 
-SalObject::~SalObject()
+AquaSalObject::~AquaSalObject()
 {
     SalData* pSalData = GetSalData();
 
     // remove frame from framelist
     if ( this == pSalData->mpFirstObject )
-        pSalData->mpFirstObject = maObjectData.mpNextObject;
+        pSalData->mpFirstObject = mpNextObject;
     else
     {
-        SalObject* pTempObject = pSalData->mpFirstObject;
-        while ( pTempObject->maObjectData.mpNextObject != this )
-            pTempObject = pTempObject->maObjectData.mpNextObject;
-        pTempObject->maObjectData.mpNextObject = maObjectData.mpNextObject;
+        AquaSalObject* pTempObject = (AquaSalObject*)pSalData->mpFirstObject;
+        while ( pTempObject->mpNextObject != this )
+            pTempObject = pTempObject->mpNextObject;
+        pTempObject->mpNextObject = mpNextObject;
     }
 }
 
 // -----------------------------------------------------------------------
 
-void SalObject::ResetClipRegion()
+void AquaSalObject::ResetClipRegion()
 {
 }
 
 // -----------------------------------------------------------------------
 
-USHORT SalObject::GetClipRegionType()
+USHORT AquaSalObject::GetClipRegionType()
 {
     return SAL_OBJECT_CLIP_INCLUDERECTS;
 }
 
 // -----------------------------------------------------------------------
 
-void SalObject::BeginSetClipRegion( ULONG nRectCount )
+void AquaSalObject::BeginSetClipRegion( ULONG nRectCount )
 {
 }
 
 // -----------------------------------------------------------------------
 
-void SalObject::UnionClipRegion( long nX, long nY, long nWidth, long nHeight )
+void AquaSalObject::UnionClipRegion( long nX, long nY, long nWidth, long nHeight )
 {
 }
 
 // -----------------------------------------------------------------------
 
-void SalObject::EndSetClipRegion()
+void AquaSalObject::EndSetClipRegion()
 {
 }
 
 // -----------------------------------------------------------------------
 
-void SalObject::SetPosSize( long nX, long nY, long nWidth, long nHeight )
+void AquaSalObject::SetPosSize( long nX, long nY, long nWidth, long nHeight )
 {
 }
 
 // -----------------------------------------------------------------------
 
-void SalObject::Show( BOOL bVisible )
+void AquaSalObject::Show( BOOL bVisible )
 {
 }
 
 // -----------------------------------------------------------------------
 
-void SalObject::Enable( BOOL bEnable )
+void AquaSalObject::Enable( BOOL bEnable )
 {
 }
 
 // -----------------------------------------------------------------------
 
-void SalObject::GrabFocus()
+void AquaSalObject::GrabFocus()
 {
 }
 
 // -----------------------------------------------------------------------
 
-void SalObject::SetBackground()
+void AquaSalObject::SetBackground()
 {
 }
 
 // -----------------------------------------------------------------------
 
-void SalObject::SetBackground( SalColor nSalColor )
+void AquaSalObject::SetBackground( SalColor nSalColor )
 {
 }
 
 // -----------------------------------------------------------------------
 
-const SystemEnvData* SalObject::GetSystemData() const
+const SystemEnvData* AquaSalObject::GetSystemData() const
 {
     return NULL;
 }
 
 // -----------------------------------------------------------------------
 
-void SalObject::SetCallback( void* pInst, SALOBJECTPROC pProc )
+void AquaSalObject::SetCallback( void* pInst, SALOBJECTPROC pProc )
 {
-    maObjectData.mpInst = pInst;
+    mpInst = pInst;
     if ( pProc )
-        maObjectData.mpProc = pProc;
+        mpProc = pProc;
     else
-        maObjectData.mpProc = ImplSalObjectCallbackDummy;
+        mpProc = ImplSalObjectCallbackDummy;
 }
