@@ -4,9 +4,9 @@
  *
  *  $RCSfile: unochart.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: ihi $ $Date: 2007-06-05 17:31:55 $
+ *  last change: $Author: rt $ $Date: 2007-07-05 13:41:06 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -120,14 +120,17 @@
 #define SN_DATA_SEQUENCE            "com.sun.star.chart2.data.DataSequence"
 #define SN_LABELED_DATA_SEQUENCE    "com.sun.star.chart2.data.LabeledDataSequence"
 
+#define DIRECTION_DONT_KNOW     -1
+#define DIRECTION_HAS_ERROR     -2
+#define DIRECTION_COLS           0
+#define DIRECTION_ROWS           1
 
 using namespace ::com::sun::star;
 using namespace ::rtl;
 
 // from unotbl.cxx
-extern void lcl_GetRowCol(const String& rCellName, sal_uInt16& rRow, sal_uInt16& rCol);
-extern void lcl_GetCellPosition( const String &rCellName, sal_Int16 &rColumn, sal_Int16 &rRow);
-extern String lcl_GetCellName(sal_Int16 nColumn, sal_Int16 nRow);
+extern void lcl_GetCellPosition( const String &rCellName, sal_Int32 &rColumn, sal_Int32 &rRow);
+extern String lcl_GetCellName( sal_Int32 nColumn, sal_Int32 nRow );
 extern int lcl_CompareCellsByColFirst( const String &rCellName1, const String &rCellName2 );
 extern int lcl_CompareCellsByRowFirst( const String &rCellName1, const String &rCellName2 );
 extern int lcl_CompareCellRanges(
@@ -251,23 +254,28 @@ static void LaunchModifiedEvent(
 
 //////////////////////////////////////////////////////////////////////
 
-static sal_Bool FillRangeDescriptor(
+// rCellRangeName needs to be of one of the following formats:
+// - e.g. "A2:E5" or
+// - e.g. "Table1.A2:E5"
+sal_Bool FillRangeDescriptor(
         SwRangeDescriptor &rDesc,
         const String &rCellRangeName )
 {
-    String aTLName( rCellRangeName.GetToken(0, ':') );  // name of top left cell
-    String aBRName( rCellRangeName.GetToken(1, ':') );  // name of bottom right cell
+    xub_StrLen nToken = STRING_NOTFOUND == rCellRangeName.Search('.') ? 0 : 1;
+    String aCellRangeNoTableName( rCellRangeName.GetToken( nToken, '.' ) );
+    String aTLName( aCellRangeNoTableName.GetToken(0, ':') );  // name of top left cell
+    String aBRName( aCellRangeNoTableName.GetToken(1, ':') );  // name of bottom right cell
     if(!aTLName.Len() || !aBRName.Len())
         return sal_False;
 
-    rDesc.nTop = rDesc.nLeft =  rDesc.nBottom = rDesc.nRight = static_cast< sal_uInt16 >( -1 );
-    lcl_GetRowCol( aTLName, rDesc.nTop,    rDesc.nLeft );
-    lcl_GetRowCol( aBRName, rDesc.nBottom, rDesc.nRight );
+    rDesc.nTop = rDesc.nLeft = rDesc.nBottom = rDesc.nRight = -1;
+    lcl_GetCellPosition( aTLName, rDesc.nLeft,  rDesc.nTop );
+    lcl_GetCellPosition( aBRName, rDesc.nRight, rDesc.nBottom );
     rDesc.Normalize();
-    DBG_ASSERT( rDesc.nTop    != static_cast< sal_uInt16 >( -1 ) &&
-                rDesc.nLeft   != static_cast< sal_uInt16 >( -1 ) &&
-                rDesc.nBottom != static_cast< sal_uInt16 >( -1 ) &&
-                rDesc.nRight  != static_cast< sal_uInt16 >( -1 ),
+    DBG_ASSERT( rDesc.nTop    != -1 &&
+                rDesc.nLeft   != -1 &&
+                rDesc.nBottom != -1 &&
+                rDesc.nRight  != -1,
             "failed to get range descriptor" );
     DBG_ASSERT( rDesc.nTop <= rDesc.nBottom  &&  rDesc.nLeft <= rDesc.nRight,
             "invalid range descriptor");
@@ -301,7 +309,6 @@ static String GetCellRangeName( SwFrmFmt &rTblFmt, SwUnoCrsr &rTblCrsr )
     {
         pStart = pUnoTblCrsr->GetMark()->nNode.GetNode().FindTableBoxStartNode();
         pStartBox = pTable->GetTblBox( pStart->GetIndex());
-
     }
     DBG_ASSERT( pStartBox, "start box not found" );
     DBG_ASSERT( pEndBox, "end box not found" );
@@ -669,19 +676,6 @@ uno::Reference< chart2::data::XDataSource > SAL_CALL SwChartDataProvider::create
         }
     }
 
-#if OSL_DEBUG_LEVEL > 1
-    {
-        static bool bTest = sal_False;
-        if (bTest)
-        {
-            OUString aTmp( OUString::createFromAscii("BarChart_sw5") );
-            aTmp += aRangeRepresentation;
-            aRangeRepresentation = aTmp;
-            //createDataSequenceByRangeRepresentation( aRangeRepresentation );
-        }
-    }
-#endif
-
     uno::Sequence< OUString > aSubRanges;
     // get sub-ranges and check that they all are from the very same table
     sal_Bool bOk = GetSubranges( aRangeRepresentation, aSubRanges, sal_True );
@@ -765,10 +759,10 @@ uno::Reference< chart2::data::XDataSource > SAL_CALL SwChartDataProvider::create
         {
             // get a character map in the size of the table to mark
             // all the ranges to use in
-            sal_Int16 nRows = pTable->GetTabLines().Count();
-            sal_Int16 nCols = pTable->GetTabLines().GetObject(0)->GetTabBoxes().Count();
+            sal_Int32 nRows = pTable->GetTabLines().Count();
+            sal_Int32 nCols = pTable->GetTabLines().GetObject(0)->GetTabBoxes().Count();
             std::vector< std::vector< sal_Char > > aMap( nRows );
-            for (sal_Int16 i = 0;  i < nRows;  ++i)
+            for (sal_Int32 i = 0;  i < nRows;  ++i)
                 aMap[i].resize( nCols );
 
             // iterate over subranges and mark used cells in above map
@@ -783,27 +777,21 @@ uno::Reference< chart2::data::XDataSource > SAL_CALL SwChartDataProvider::create
                                     pSubRanges[i], aTblName, aStartCell, aEndCell );
                 DBG_ASSERT( bOk, "failed to get table and start/end cells" );
 
-                sal_Int16 nStartRow, nStartCol, nEndRow, nEndCol;
-                {
-                    sal_uInt16 nTmpStartRow, nTmpStartCol, nTmpEndRow, nTmpEndCol;
-                    lcl_GetRowCol( aStartCell, nTmpStartRow, nTmpStartCol );
-                    lcl_GetRowCol( aEndCell,   nTmpEndRow,   nTmpEndCol );
-                    nStartRow = static_cast< sal_Int16 >( nTmpStartRow );
-                    nEndRow = static_cast< sal_Int16 >( nTmpEndRow );
-                    nStartCol = static_cast< sal_Int16 >( nTmpStartCol );
-                    nEndCol = static_cast< sal_Int16 >( nTmpEndCol );
-                }
+                sal_Int32 nStartRow, nStartCol, nEndRow, nEndCol;
+                lcl_GetCellPosition( aStartCell, nStartCol, nStartRow );
+                lcl_GetCellPosition( aEndCell,   nEndCol,   nEndRow );
                 DBG_ASSERT( nStartRow <= nEndRow && nStartCol <= nEndCol,
                         "cell range not normalized");
+
                 // test if the ranges span more than the available cells
                 if( nStartRow < 0 || nEndRow >= nRows ||
                     nStartCol < 0 || nEndCol >= nCols )
                 {
                     throw lang::IllegalArgumentException();
                 }
-                for (sal_Int16 k1 = nStartRow;  k1 <= nEndRow;  ++k1)
+                for (sal_Int32 k1 = nStartRow;  k1 <= nEndRow;  ++k1)
                 {
-                    for (sal_Int16 k2 = nStartCol;  k2 <= nEndCol;  ++k2)
+                    for (sal_Int32 k2 = nStartCol;  k2 <= nEndCol;  ++k2)
                         aMap[k1][k2] = 'x';
                 }
             }
@@ -811,13 +799,13 @@ uno::Reference< chart2::data::XDataSource > SAL_CALL SwChartDataProvider::create
             //
             // find label and data sequences to use
             //
-            sal_Int16 oi;  // outer index (slower changing index)
-            sal_Int16 ii;  // inner index (faster changing index)
-            sal_Int16 oiEnd = bDtaSrcIsColumns ? nCols : nRows;
-            sal_Int16 iiEnd = bDtaSrcIsColumns ? nRows : nCols;
-            std::vector< sal_Int16 > aLabelIdx( oiEnd );
-            std::vector< sal_Int16 > aDataStartIdx( oiEnd );
-            std::vector< sal_Int16 > aDataLen( oiEnd );
+            sal_Int32 oi;  // outer index (slower changing index)
+            sal_Int32 ii;  // inner index (faster changing index)
+            sal_Int32 oiEnd = bDtaSrcIsColumns ? nCols : nRows;
+            sal_Int32 iiEnd = bDtaSrcIsColumns ? nRows : nCols;
+            std::vector< sal_Int32 > aLabelIdx( oiEnd );
+            std::vector< sal_Int32 > aDataStartIdx( oiEnd );
+            std::vector< sal_Int32 > aDataLen( oiEnd );
             for (oi = 0;  oi < oiEnd;  ++oi)
             {
                 aLabelIdx[oi]       = -1;
@@ -847,7 +835,7 @@ uno::Reference< chart2::data::XDataSource > SAL_CALL SwChartDataProvider::create
                         aDataStartIdx[oi] = ii;
 
                         // get length of data sequence
-                        sal_Int16 nL = 0;
+                        sal_Int32 nL = 0;
                         sal_Char c;
                         while (ii< iiEnd && 'x' == (c = bDtaSrcIsColumns ? aMap[ii][oi] : aMap[oi][ii]))
                         {
@@ -876,8 +864,8 @@ uno::Reference< chart2::data::XDataSource > SAL_CALL SwChartDataProvider::create
             sal_Int32 nNumLDS = 0;
             if (oiEnd > 0)
             {
-                sal_Int16 nFirstSeqLen = 0;
-                sal_Int16 nFirstSeqLabelIdx = -1;
+                sal_Int32 nFirstSeqLen = 0;
+                sal_Int32 nFirstSeqLabelIdx = -1;
                 for (oi = 0;  oi < oiEnd;  ++oi)
                 {
                     sal_Bool bFirstFound = sal_False;
@@ -1061,8 +1049,8 @@ uno::Sequence< beans::PropertyValue > SAL_CALL SwChartDataProvider::detectArgume
     SwFrmFmt *pTableFmt = 0;
     SwTable  *pTable    = 0;
     String    aTableName;
-    sal_Int16 nTableRows = 0;
-    sal_Int16 nTableCols = 0;
+    sal_Int32 nTableRows = 0;
+    sal_Int32 nTableCols = 0;
 
     // data used to build 'CellRangeRepresentation' from later on
     std::vector< std::vector< sal_Char > > aMap;
@@ -1135,7 +1123,7 @@ uno::Sequence< beans::PropertyValue > SAL_CALL SwChartDataProvider::detectArgume
         // try to get 'DataRowSource' value (ROWS or COLUMNS) from inspecting
         // first and last cell used in both sequences
         //
-        sal_Int16 nFirstCol, nFirstRow, nLastCol, nLastRow;
+        sal_Int32 nFirstCol, nFirstRow, nLastCol, nLastRow;
         String aCell( aLabelStartCell.Len() ? aLabelStartCell : aValuesStartCell );
         DBG_ASSERT( aCell.Len() , "start cell missing?" );
         lcl_GetCellPosition( aCell, nFirstCol, nFirstRow);
@@ -1187,12 +1175,12 @@ uno::Sequence< beans::PropertyValue > SAL_CALL SwChartDataProvider::detectArgume
             nTableRows = pTable->GetTabLines().Count();
             nTableCols = pTable->GetTabLines().GetObject(0)->GetTabBoxes().Count();
             aMap.resize( nTableRows );
-            for (sal_Int16 i = 0;  i < nTableRows;  ++i)
+            for (sal_Int32 i = 0;  i < nTableRows;  ++i)
                 aMap[i].resize( nTableCols );
             //
             if (aLabelStartCell.Len() && aLabelEndCell.Len())
             {
-                sal_Int16 nStartCol, nStartRow, nEndCol, nEndRow;
+                sal_Int32 nStartCol, nStartRow, nEndCol, nEndRow;
                 lcl_GetCellPosition( aLabelStartCell, nStartCol, nStartRow );
                 lcl_GetCellPosition( aLabelEndCell,   nEndCol,   nEndRow );
                 if (nStartRow < 0 || nEndRow >= nTableRows ||
@@ -1200,9 +1188,9 @@ uno::Sequence< beans::PropertyValue > SAL_CALL SwChartDataProvider::detectArgume
                 {
                     return aResult; // failed -> return empty property sequence
                 }
-                for (sal_Int16 i = nStartRow;  i <= nEndRow;  ++i)
+                for (sal_Int32 i = nStartRow;  i <= nEndRow;  ++i)
                 {
-                    for (sal_Int16 k = nStartCol;  k <= nEndCol;  ++k)
+                    for (sal_Int32 k = nStartCol;  k <= nEndCol;  ++k)
                     {
                         sal_Char &rChar = aMap[i][k];
                         if (rChar == '\0')   // check for overlapping values and/or labels
@@ -1214,7 +1202,7 @@ uno::Sequence< beans::PropertyValue > SAL_CALL SwChartDataProvider::detectArgume
             }
             if (aValuesStartCell.Len() && aValuesEndCell.Len())
             {
-                sal_Int16 nStartCol, nStartRow, nEndCol, nEndRow;
+                sal_Int32 nStartCol, nStartRow, nEndCol, nEndRow;
                 lcl_GetCellPosition( aValuesStartCell, nStartCol, nStartRow );
                 lcl_GetCellPosition( aValuesEndCell,   nEndCol,   nEndRow );
                 if (nStartRow < 0 || nEndRow >= nTableRows ||
@@ -1222,9 +1210,9 @@ uno::Sequence< beans::PropertyValue > SAL_CALL SwChartDataProvider::detectArgume
                 {
                     return aResult; // failed -> return empty property sequence
                 }
-                for (sal_Int16 i = nStartRow;  i <= nEndRow;  ++i)
+                for (sal_Int32 i = nStartRow;  i <= nEndRow;  ++i)
                 {
-                    for (sal_Int16 k = nStartCol;  k <= nEndCol;  ++k)
+                    for (sal_Int32 k = nStartCol;  k <= nEndCol;  ++k)
                     {
                         sal_Char &rChar = aMap[i][k];
                         if (rChar == '\0')   // check for overlapping values and/or labels
@@ -1240,7 +1228,7 @@ uno::Sequence< beans::PropertyValue > SAL_CALL SwChartDataProvider::detectArgume
         // do some extra sanity checking that the length of the sequences
         // matches their range representation
         {
-            sal_Int16 nStartRow, nStartCol, nEndRow, nEndCol;
+            sal_Int32 nStartRow, nStartCol, nEndRow, nEndCol;
             if (xCurLabel.is())
             {
                 lcl_GetCellPosition( aLabelStartCell, nStartCol, nStartRow);
@@ -1267,17 +1255,17 @@ uno::Sequence< beans::PropertyValue > SAL_CALL SwChartDataProvider::detectArgume
     String aCellRangeBase( aTableName );
     aCellRangeBase += '.';
     String aCurRange;
-    for (sal_Int16 i = 0;  i < nTableRows;  ++i)
+    for (sal_Int32 i = 0;  i < nTableRows;  ++i)
     {
-        for (sal_Int16 k = 0;  k < nTableCols;  ++k)
+        for (sal_Int32 k = 0;  k < nTableCols;  ++k)
         {
             if (aMap[i][k] != '\0')  // top-left cell of a sub-range found
             {
                 // find rectangular sub-range to use
-                sal_Int16 ri = i;   // row index
-                sal_Int16 ci = k;   // column index
-                sal_Int16 nRowSubLen = 0;
-                sal_Int16 nColSubLen = 0;
+                sal_Int32 ri = i;   // row index
+                sal_Int32 ci = k;   // column index
+                sal_Int32 nRowSubLen = 0;
+                sal_Int32 nColSubLen = 0;
                 while (ri < nTableRows && aMap[ri++][k] != '\0')
                     ++nRowSubLen;
                 // be aware of shifted sequences!
@@ -1299,8 +1287,8 @@ uno::Sequence< beans::PropertyValue > SAL_CALL SwChartDataProvider::detectArgume
                 aCellRanges += aCurRange;
 
                 // clear already found sub-range from map
-                for (sal_Int16 ri = 0;  ri < nRowSubLen;  ++ri)
-                    for (sal_Int16 ci = 0;  ci < nColSubLen;  ++ci)
+                for (sal_Int32 ri = 0;  ri < nRowSubLen;  ++ri)
+                    for (sal_Int32 ci = 0;  ci < nColSubLen;  ++ci)
                         aMap[i + ri][k + ci] = '\0';
             }
         }
@@ -1604,6 +1592,118 @@ void SwChartDataProvider::DisposeAllDataSequences( const SwTable *pTable )
 }
 
 
+////////////////////////////////////////
+// SwChartDataProvider::AddRowCols tries to notify charts of added columns
+// or rows and extends the value sequence respectively (if possible).
+// If those can be added to the end of existing value data-sequences those
+// sequences get mofdified accordingly and will send a modification
+// notification (calling 'setModified').
+//
+// Since this function is a work-around for non existent Writer core functionality
+// (no arbitrary multi-selection in tables that can be used to define a
+// data-sequence) this function will be somewhat unreliable.
+// For example we will only try to adapt value sequences. For this we assume
+// that a sequence of length 1 is a label sequence and those with length >= 2
+// we presume to be value sequences. Also new cells can only be added in the
+// direction the value sequence is already pointing (rows / cols) and at the
+// start or end of the values data-sequence.
+// Nothing needs to be done if the new cells are in between the table cursors
+// point and mark since data-sequence are considered to consist of all cells
+// between those.
+// New rows/cols need to be added already to the table before calling
+// this function.
+//
+void SwChartDataProvider::AddRowCols(
+        const SwTable &rTable,
+        const SwSelBoxes& rBoxes,
+        USHORT nLines, BOOL bBehind )
+{
+    if (rTable.IsTblComplex())
+        return;
+
+    const USHORT nBoxes     = rBoxes.Count();
+    if (nBoxes < 1 || nLines < 1)
+        return;
+
+    SwTableBox* pFirstBox   = *( rBoxes.GetData() + 0 );
+    SwTableBox* pLastBox    = *( rBoxes.GetData() + nBoxes - 1 );
+
+    bool bChanged = false; // no data-sequence changed yet...
+
+    sal_Int32 nFirstCol = -1, nFirstRow = -1, nLastCol = -1, nLastRow = -1;
+    if (pFirstBox && pLastBox)
+    {
+        lcl_GetCellPosition( pFirstBox->GetName(), nFirstCol, nFirstRow  );
+        lcl_GetCellPosition( pLastBox->GetName(),  nLastCol,  nLastRow );
+
+        bool bAddCols = false;  // default; also to be used if nBoxes == 1 :-/
+        if (nFirstCol == nLastCol && nFirstRow != nLastRow)
+            bAddCols = true;
+        if (nFirstCol == nLastCol || nFirstRow == nLastRow)
+        {
+            //get range of indices in col/rows for new cells
+            sal_Int32 nFirstNewCol = nFirstCol;
+            sal_Int32 nLastNewCol  = nLastCol;
+            sal_Int32 nFirstNewRow = bBehind ?  nFirstRow + 1 : nFirstRow - nLines;
+            sal_Int32 nLastNewRow  = nFirstNewRow - 1 + nLines;
+            if (bAddCols)
+            {
+                DBG_ASSERT( nFirstCol == nLastCol, "column indices seem broken" );
+                nFirstNewCol = bBehind ?  nFirstCol + 1 : nFirstCol - nLines;
+                nLastNewCol  = nFirstNewCol - 1 + nLines;
+                nFirstNewRow = nFirstRow;
+                nLastNewRow  = nLastRow;
+            }
+
+            // iterate over all data-sequences for the table
+            const Set_DataSequenceRef_t &rSet = aDataSequences[ &rTable ];
+            Set_DataSequenceRef_t::iterator aIt( rSet.begin() );
+            while (aIt != rSet.end())
+            {
+                Reference< chart2::data::XTextualDataSequence > xRef( Reference< chart2::data::XDataSequence >(*aIt), UNO_QUERY );
+                if (xRef.is())
+                {
+                    const sal_Int32 nLen = xRef->getTextualData().getLength();
+                    if (nLen > 1) // value data-sequence ?
+                    {
+                        SwChartDataSequence *pDataSeq = 0;
+                        uno::Reference< XUnoTunnel > xTunnel( xRef, uno::UNO_QUERY );
+                        if(xTunnel.is())
+                        {
+                            pDataSeq = reinterpret_cast< SwChartDataSequence * >(
+                                    sal::static_int_cast< sal_IntPtr >( xTunnel->getSomething( SwChartDataSequence::getUnoTunnelId() )));
+
+                            if (pDataSeq)
+                            {
+                                SwRangeDescriptor aDesc;
+                                pDataSeq->FillRangeDesc( aDesc );
+
+                                chart::ChartDataRowSource eDRSource = chart::ChartDataRowSource_COLUMNS;
+                                if (aDesc.nTop == aDesc.nBottom && aDesc.nLeft != aDesc.nRight)
+                                    eDRSource = chart::ChartDataRowSource_ROWS;
+
+                                if (!bAddCols && eDRSource == chart::ChartDataRowSource_COLUMNS)
+                                {
+                                    // add rows: extend affected columns by newly added row cells
+                                    pDataSeq->ExtendTo( true, nFirstNewRow, nLines );
+                                }
+                                else if (bAddCols && eDRSource == chart::ChartDataRowSource_ROWS)
+                                {
+                                    // add cols: extend affected rows by newly added column cells
+                                    pDataSeq->ExtendTo( false, nFirstNewCol, nLines );
+                                }
+                            }
+                        }
+                    }
+                }
+                ++aIt;
+            }
+
+        }
+    }
+}
+
+
 // XRangeXMLConversion ---------------------------------------------------
 
 rtl::OUString SAL_CALL SwChartDataProvider::convertRangeToXML( const rtl::OUString& rRangeRepresentation )
@@ -1613,47 +1713,67 @@ rtl::OUString SAL_CALL SwChartDataProvider::convertRangeToXML( const rtl::OUStri
     if (bDisposed)
         throw lang::DisposedException();
 
-    SwFrmFmt    *pTblFmt    = 0;    // pointer to table format
-    //SwUnoCrsr   *pUnoCrsr   = 0;    // pointer to new created cursor spanning the cell range
-    GetFormatAndCreateCursorFromRangeRep( pDoc, rRangeRepresentation,
-                                          &pTblFmt, /*&pUnoCrsr*/ NULL );
-    if (!pTblFmt)
-        throw lang::IllegalArgumentException();
+    String aRes;
+    String aRangeRepresentation( rRangeRepresentation );
+
+    // multiple ranges are delimeted by a ';' like in
+    // "Table1.A1:A4;Table1.C2:C5" the same table must be used in all ranges!
+    xub_StrLen nNumRanges = aRangeRepresentation.GetTokenCount( ';' );
+    SwTable* pFirstFoundTable = 0;  // to check that only one table will be used
+    for (USHORT i = 0;  i < nNumRanges;  ++i)
+    {
+        String aRange( aRangeRepresentation.GetToken(i, ';') );
+        SwFrmFmt    *pTblFmt    = 0;    // pointer to table format
+        //SwUnoCrsr   *pUnoCrsr   = 0;    // pointer to new created cursor spanning the cell range
+        GetFormatAndCreateCursorFromRangeRep( pDoc, aRange,
+                                              &pTblFmt, /*&pUnoCrsr*/ NULL );
+        if (!pTblFmt)
+            throw lang::IllegalArgumentException();
 //    if (!pUnoCrsr)
 //        throw uno::RuntimeException();
-    SwTable* pTable = SwTable::FindTable( pTblFmt );
-    if  (pTable->IsTblComplex())
-        throw uno::RuntimeException();
+        SwTable* pTable = SwTable::FindTable( pTblFmt );
+        if  (pTable->IsTblComplex())
+            throw uno::RuntimeException();
 
-    String aTblName;
-    String aStartCell;
-    String aEndCell;
-    if (!GetTableAndCellsFromRangeRep( rRangeRepresentation, aTblName, aStartCell, aEndCell ))
-        throw lang::IllegalArgumentException();
+        // check that there is only one table used in all ranges
+        if (!pFirstFoundTable)
+            pFirstFoundTable = pTable;
+        if (pTable != pFirstFoundTable)
+            throw lang::IllegalArgumentException();
 
-    sal_Int16 nCol, nRow;
-    lcl_GetCellPosition( aStartCell, nCol, nRow );
-    if (nCol < 0 || nRow < 0)
-        throw uno::RuntimeException();
+        String aTblName;
+        String aStartCell;
+        String aEndCell;
+        if (!GetTableAndCellsFromRangeRep( aRange, aTblName, aStartCell, aEndCell ))
+            throw lang::IllegalArgumentException();
 
-    //!! following objects/functions are implemented in XMLRangeHelper.?xx
-    //!! which is a copy of the respective file from chart2 !!
-    XMLRangeHelper::CellRange aCellRange;
-    aCellRange.aTableName = aTblName;
-    aCellRange.aUpperLeft.nColumn   = nCol;
-    aCellRange.aUpperLeft.nRow      = nRow;
-    aCellRange.aUpperLeft.bIsEmpty  = false;
-    if (aStartCell != aEndCell && aEndCell.Len() != 0)
-    {
-        lcl_GetCellPosition( aEndCell, nCol, nRow );
+        sal_Int32 nCol, nRow;
+        lcl_GetCellPosition( aStartCell, nCol, nRow );
         if (nCol < 0 || nRow < 0)
             throw uno::RuntimeException();
 
-        aCellRange.aLowerRight.nColumn   = nCol;
-        aCellRange.aLowerRight.nRow      = nRow;
-        aCellRange.aLowerRight.bIsEmpty  = false;
+        //!! following objects/functions are implemented in XMLRangeHelper.?xx
+        //!! which is a copy of the respective file from chart2 !!
+        XMLRangeHelper::CellRange aCellRange;
+        aCellRange.aTableName = aTblName;
+        aCellRange.aUpperLeft.nColumn   = nCol;
+        aCellRange.aUpperLeft.nRow      = nRow;
+        aCellRange.aUpperLeft.bIsEmpty  = false;
+        if (aStartCell != aEndCell && aEndCell.Len() != 0)
+        {
+            lcl_GetCellPosition( aEndCell, nCol, nRow );
+            if (nCol < 0 || nRow < 0)
+                throw uno::RuntimeException();
+
+            aCellRange.aLowerRight.nColumn   = nCol;
+            aCellRange.aLowerRight.nRow      = nRow;
+            aCellRange.aLowerRight.bIsEmpty  = false;
+        }
+        String aTmp( XMLRangeHelper::getXMLStringFromCellRange( aCellRange ) );
+        if (aRes.Len()) // in case of multiple ranges add delimeter
+            aRes.AppendAscii( " " );
+        aRes += aTmp;
     }
-    String aRes( XMLRangeHelper::getXMLStringFromCellRange( aCellRange ) );
 
     return aRes;
 }
@@ -1665,20 +1785,42 @@ rtl::OUString SAL_CALL SwChartDataProvider::convertRangeFromXML( const rtl::OUSt
     if (bDisposed)
         throw lang::DisposedException();
 
-    //!! following objects and function are implemented in XMLRangeHelper.?xx
-    //!! which is a copy of the respective file from chart2 !!
-    XMLRangeHelper::CellRange aCellRange( XMLRangeHelper::getCellRangeFromXMLString( rXMLRange ));
+    String aRes;
+    String aXMLRange( rXMLRange );
 
-    OUString aRes( aCellRange.aTableName );
-    aRes += OUString::valueOf((sal_Unicode) '.');
-    aRes += lcl_GetCellName( static_cast< sal_Int16 >( aCellRange.aUpperLeft.nColumn ),
-                             static_cast< sal_Int16 >( aCellRange.aUpperLeft.nRow ) );
-    // does cell range consist of more than a single cell?
-    if (!aCellRange.aLowerRight.bIsEmpty)
+    // multiple ranges are delimeted by a ' ' like in
+    // "Table1.$A$1:.$A$4 Table1.$C$2:.$C$5" the same table must be used in all ranges!
+    xub_StrLen nNumRanges = aXMLRange.GetTokenCount( ' ' );
+    rtl::OUString aFirstFoundTable; // to check that only one table will be used
+    for (USHORT i = 0;  i < nNumRanges;  ++i)
     {
-        aRes += OUString::valueOf((sal_Unicode) ':');
-        aRes += lcl_GetCellName( static_cast< sal_Int16 >( aCellRange.aLowerRight.nColumn ),
-                                 static_cast< sal_Int16 >( aCellRange.aLowerRight.nRow ));
+        String aRange( aXMLRange.GetToken(i, ' ') );
+
+        //!! following objects and function are implemented in XMLRangeHelper.?xx
+        //!! which is a copy of the respective file from chart2 !!
+        XMLRangeHelper::CellRange aCellRange( XMLRangeHelper::getCellRangeFromXMLString( aRange ));
+
+        // check that there is only one table used in all ranges
+        if (aFirstFoundTable.getLength() == 0)
+            aFirstFoundTable = aCellRange.aTableName;
+        if (aCellRange.aTableName != aFirstFoundTable)
+            throw IllegalArgumentException();
+
+        OUString aTmp( aCellRange.aTableName );
+        aTmp += OUString::valueOf((sal_Unicode) '.');
+        aTmp += lcl_GetCellName( aCellRange.aUpperLeft.nColumn,
+                                 aCellRange.aUpperLeft.nRow );
+        // does cell range consist of more than a single cell?
+        if (!aCellRange.aLowerRight.bIsEmpty)
+        {
+            aTmp += OUString::valueOf((sal_Unicode) ':');
+            aTmp += lcl_GetCellName( aCellRange.aLowerRight.nColumn,
+                                     aCellRange.aLowerRight.nRow );
+        }
+
+        if (aRes.Len()) // in case of multiple ranges add delimeter
+            aRes.AppendAscii( ";" );
+        aRes += String(aTmp);
     }
 
     return aRes;
@@ -1942,8 +2084,8 @@ uno::Sequence< OUString > SAL_CALL SwChartDataSequence::generateLabel(
         if (bOk)
         {
             aDesc.Normalize();
-            sal_Int16 nColSpan = aDesc.nRight - aDesc.nLeft + 1;
-            sal_Int16 nRowSpan = aDesc.nBottom - aDesc.nTop + 1;
+            sal_Int32 nColSpan = aDesc.nRight - aDesc.nLeft + 1;
+            sal_Int32 nRowSpan = aDesc.nBottom - aDesc.nTop + 1;
             DBG_ASSERT( nColSpan == 1 || nRowSpan == 1,
                     "unexpected range of selected cells" );
 
@@ -1977,12 +2119,12 @@ uno::Sequence< OUString > SAL_CALL SwChartDataSequence::generateLabel(
                 if (!bReturnEmptyTxt)
                 {
                     aTxt = bUseCol ? aColLabelText : aRowLabelText;
-                    sal_Int16 nCol = aDesc.nLeft;
-                    sal_Int16 nRow = aDesc.nTop;
+                    sal_Int32 nCol = aDesc.nLeft;
+                    sal_Int32 nRow = aDesc.nTop;
                     if (bUseCol)
-                        nCol = nCol + static_cast<sal_Int16>(i);
+                        nCol = nCol + i;
                     else
-                        nRow = nRow + static_cast<sal_Int16>(i);
+                        nRow = nRow + i;
                     String aCellName( lcl_GetCellName( nCol, nRow ) );
 
                     xub_StrLen nLen = aCellName.Len();
@@ -2366,9 +2508,8 @@ sal_Bool SwChartDataSequence::DeleteBox( const SwTableBox &rBox )
     }
     else if (pPointStartNode == rBox.GetSttNd()  ||  pMarkStartNode == rBox.GetSttNd())
     {
-        //void lcl_GetRowCol(const String& rCellName, sal_uInt16& rRow, sal_uInt16& rCol);
-        sal_Int16 nPointRow, nPointCol;
-        sal_Int16 nMarkRow, nMarkCol;
+        sal_Int32 nPointRow, nPointCol;
+        sal_Int32 nMarkRow, nMarkCol;
         const SwTable* pTable = SwTable::FindTable( GetFrmFmt() );
         String aPointCellName( pTable->GetTblBox( pPointStartNode->GetIndex() )->GetName() );
         String aMarkCellName( pTable->GetTblBox( pMarkStartNode->GetIndex() )->GetName() );
@@ -2407,8 +2548,8 @@ sal_Bool SwChartDataSequence::DeleteBox( const SwTableBox &rBox )
             DBG_ERROR( "neither vertical nor horizontal movement" );
 
         // get new box (position) to use...
-        sal_Int16 nRow = (pPointStartNode == rBox.GetSttNd()) ? nPointRow : nMarkRow;
-        sal_Int16 nCol = (pPointStartNode == rBox.GetSttNd()) ? nPointCol : nMarkCol;
+        sal_Int32 nRow = (pPointStartNode == rBox.GetSttNd()) ? nPointRow : nMarkRow;
+        sal_Int32 nCol = (pPointStartNode == rBox.GetSttNd()) ? nPointCol : nMarkCol;
         if (bMoveVertical)
             nRow += bMoveUp ? -1 : +1;
         if (bMoveHorizontal)
@@ -2451,6 +2592,149 @@ sal_Bool SwChartDataSequence::DeleteBox( const SwTableBox &rBox )
     return bNowEmpty;
 }
 
+
+chart::ChartDataRowSource SwChartDataSequence::GetDataRowSource() const
+{
+    // default value if sequence is not long enough to properly get this value
+    chart::ChartDataRowSource eDataRowSource = chart::ChartDataRowSource_COLUMNS;
+
+    SwFrmFmt* pTblFmt = GetFrmFmt();
+    if(pTblFmt)
+    {
+        SwTable* pTable = SwTable::FindTable( pTblFmt );
+        if(!pTable->IsTblComplex())
+        {
+            SwRangeDescriptor aDesc;
+            if (FillRangeDescriptor( aDesc, GetCellRangeName( *pTblFmt, *pTblCrsr ) ))
+            {
+                if (aDesc.nTop == aDesc.nBottom && aDesc.nLeft != aDesc.nRight)
+                    eDataRowSource = chart::ChartDataRowSource_ROWS;
+            }
+        }
+    }
+    return eDataRowSource;
+}
+
+
+void SwChartDataSequence::FillRangeDesc( SwRangeDescriptor &rRangeDesc ) const
+{
+    SwFrmFmt* pTblFmt = GetFrmFmt();
+    if(pTblFmt)
+    {
+        SwTable* pTable = SwTable::FindTable( pTblFmt );
+        if(!pTable->IsTblComplex())
+        {
+            FillRangeDescriptor( rRangeDesc, GetCellRangeName( *pTblFmt, *pTblCrsr ) );
+        }
+    }
+}
+
+/**
+SwChartDataSequence::ExtendTo
+
+extends the data-sequence by new cells added at the end of the direction
+the data-sequence points to.
+If the cells are already within the range of the sequence nothing needs
+to be done.
+If the cells are beyond the end of the sequence (are not adjacent to the
+current last cell) nothing can be done. Only if the cells are adjacent to
+the last cell they can be added.
+
+@returns     true if the data-sequence was changed.
+@param       bExtendCols
+             specifies if columns or rows are to be extended
+@param       nFirstNew
+             index of first new row/col to be included in data-sequence
+@param       nLastNew
+             index of last new row/col to be included in data-sequence
+*/
+bool SwChartDataSequence::ExtendTo( bool bExtendCol,
+        sal_Int32 nFirstNew, sal_Int32 nCount )
+{
+    bool bChanged = false;
+
+    SwUnoTableCrsr* pUnoTblCrsr = *pTblCrsr;
+    //pUnoTblCrsr->MakeBoxSels();
+
+    const SwStartNode *pStartNd  = 0;
+    const SwTableBox  *pStartBox = 0;
+    const SwTableBox  *pEndBox   = 0;
+
+    const SwTable* pTable = SwTable::FindTable( GetFrmFmt() );
+    DBG_ASSERT( !pTable->IsTblComplex(), "table too complex" );
+    if (nCount < 1 || nFirstNew < 0 || pTable->IsTblComplex())
+        return false;
+
+    //
+    // get range descriptor (cell range) for current data-sequence
+    //
+    pStartNd = pUnoTblCrsr->GetPoint()->nNode.GetNode().FindTableBoxStartNode();
+    pEndBox = pTable->GetTblBox( pStartNd->GetIndex() );
+    const String aEndBox( pEndBox->GetName() );
+    //
+    pStartNd = pUnoTblCrsr->GetMark()->nNode.GetNode().FindTableBoxStartNode();
+    pStartBox = pTable->GetTblBox( pStartNd->GetIndex() );
+    const String aStartBox( pStartBox->GetName() );
+    //
+    String aCellRange( aStartBox );     // note that cell range here takes the newly added rows/cols already into account
+    aCellRange.AppendAscii( ":" );
+    aCellRange += aEndBox;
+    SwRangeDescriptor aDesc;
+    FillRangeDescriptor( aDesc, aCellRange );
+
+    String aNewStartCell;
+    String aNewEndCell;
+    if (bExtendCol && aDesc.nBottom + 1 == nFirstNew)
+    {
+        // new column cells adjacent to the bottom of the
+        // current data-sequence to be added...
+        DBG_ASSERT( aDesc.nLeft == aDesc.nRight, "data-sequence is not a column" );
+        aNewStartCell = lcl_GetCellName(aDesc.nLeft,  aDesc.nTop);
+        aNewEndCell   = lcl_GetCellName(aDesc.nRight, aDesc.nBottom + nCount);
+        bChanged = true;
+    }
+    else if (bExtendCol && aDesc.nTop - nCount == nFirstNew)
+    {
+        // new column cells adjacent to the top of the
+        // current data-sequence to be added...
+        DBG_ASSERT( aDesc.nLeft == aDesc.nRight, "data-sequence is not a column" );
+        aNewStartCell = lcl_GetCellName(aDesc.nLeft,  aDesc.nTop - nCount);
+        aNewEndCell   = lcl_GetCellName(aDesc.nRight, aDesc.nBottom);
+        bChanged = true;
+    }
+    else if (!bExtendCol && aDesc.nRight + 1 == nFirstNew)
+    {
+        // new row cells adjacent to the right of the
+        // current data-sequence to be added...
+        DBG_ASSERT( aDesc.nTop == aDesc.nBottom, "data-sequence is not a row" );
+        aNewStartCell = lcl_GetCellName(aDesc.nLeft, aDesc.nTop);
+        aNewEndCell   = lcl_GetCellName(aDesc.nRight + nCount, aDesc.nBottom);
+        bChanged = true;
+    }
+    else if (!bExtendCol && aDesc.nLeft - nCount == nFirstNew)
+    {
+        // new row cells adjacent to the left of the
+        // current data-sequence to be added...
+        DBG_ASSERT( aDesc.nTop == aDesc.nBottom, "data-sequence is not a row" );
+        aNewStartCell = lcl_GetCellName(aDesc.nLeft - nCount, aDesc.nTop);
+        aNewEndCell   = lcl_GetCellName(aDesc.nRight, aDesc.nBottom);
+        bChanged = true;
+    }
+
+    if (bChanged)
+    {
+        // move table cursor to new start and end of data-sequence
+        const SwTableBox *pNewStartBox = pTable->GetTblBox( aNewStartCell );
+        const SwTableBox *pNewEndBox   = pTable->GetTblBox( aNewEndCell );
+        pUnoTblCrsr->SetMark();
+        pUnoTblCrsr->GetPoint()->nNode = *pNewEndBox->GetSttNd();
+        pUnoTblCrsr->GetMark()->nNode  = *pNewStartBox->GetSttNd();
+        pUnoTblCrsr->Move( fnMoveForward, fnGoNode );
+        pUnoTblCrsr->MakeBoxSels();
+    }
+
+    return bChanged;
+}
 
 //////////////////////////////////////////////////////////////////////
 
