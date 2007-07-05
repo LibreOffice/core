@@ -5,9 +5,9 @@
  *
  *  $RCSfile: Common.xcs,v $
  *
- *  $Revision: 1.135 $
+ *  $Revision: 1.136 $
  *
- *  last change: $Author: hr $ $Date: 2007-06-27 13:08:45 $
+ *  last change: $Author: rt $ $Date: 2007-07-05 07:29:42 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -2061,6 +2061,14 @@ Dymamic border coloring means that when the mouse is hovered over a control, and
 						<desc>If the option is set, every time a user triggers a plain Save operation, SaveAs operation with possible additional user notifications will be started.</desc>
 					</info>
 					<value>false</value>
+				</prop>
+				<prop oor:name="LoadPrinter" oor:type="xs:boolean">
+					<!-- UIHints: Tools - Options - Load/Save - General - Load - Load printer settings with the document -->
+					<info>
+						<author>PB</author>
+						<desc>Specifies if the printer settings will be loaded with the document.</desc>
+					</info>
+					<value>true</value>
 				</prop>
 			</group>
 			<group oor:name="Graphic">
