@@ -4,9 +4,9 @@
  *
  *  $RCSfile: wrtsh1.cxx,v $
  *
- *  $Revision: 1.61 $
+ *  $Revision: 1.62 $
  *
- *  last change: $Author: vg $ $Date: 2007-05-22 16:40:51 $
+ *  last change: $Author: rt $ $Date: 2007-07-05 13:14:40 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -637,7 +637,7 @@ void SwWrtShell::InsertObject( const svt::EmbeddedObjectRef& xRef, SvGlobalName 
                  Vom ClipBoard oder Insert
 ------------------------------------------------------------------------*/
 
-SwFlyFrmFmt* SwWrtShell::InsertOleObject( const svt::EmbeddedObjectRef&  xRef )
+BOOL SwWrtShell::InsertOleObject( const svt::EmbeddedObjectRef& xRef, SwFlyFrmFmt **pFlyFrmFmt )
 {
     SwFlyFrmFmt *pFmt = 0;
     {
@@ -716,6 +716,9 @@ SwFlyFrmFmt* SwWrtShell::InsertOleObject( const svt::EmbeddedObjectRef&  xRef )
         aFrmMgr.SetSize( aSz );
         pFmt = SwFEShell::InsertObject( xRef, &aFrmMgr.GetAttrSet() );
 
+        if (pFlyFrmFmt)
+            *pFlyFrmFmt = pFmt;
+
         EndAllAction();
         GetView().AutoCaption(OLE_CAP, &aCLSID);
 
@@ -728,10 +731,11 @@ SwFlyFrmFmt* SwWrtShell::InsertOleObject( const svt::EmbeddedObjectRef&  xRef )
         else
             aRewriter.AddRule(UNDO_ARG1, SW_RES(STR_OLE));
 
-
         EndUndo(UNDO_INSERT, &aRewriter);
+
+        return bActivate;
     }
-    return pFmt;
+    return FALSE;
 }
 
 /*------------------------------------------------------------------------
