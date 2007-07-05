@@ -4,9 +4,9 @@
  *
  *  $RCSfile: mailmrge.hrc,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 07:32:12 $
+ *  last change: $Author: rt $ $Date: 2007-07-05 07:40:42 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -68,16 +68,20 @@
 #define FT_PATH         24
 #define ED_PATH         25
 #define PB_PATH         26
-#define FT_FILENAME     27
-#define RB_COLUMN       28
-#define RB_FILENAME     29
 #define LB_COLUMN       30
-#define ED_FILENAME     31
 #define FT_ATTACH       32
 #define ED_ATTACH       33
 #define PB_ATTACH       34
 #define WIN_BEAMER      35
 #define FL_SEPARATOR    36
+#define FL_BOTTOM_SEPARATOR             37
+#define FL_SAVE_MERGED_DOCUMENT         38
+#define RB_SAVE_SINGLE_DOC              39
+#define RB_SAVE_INDIVIDUAL              40
+#define RB_GENERATE_FROM_DATABASE       41
+#define FT_COLUMN                       42
+#define FT_FILTER                       43
+#define LB_FILTER                       44
 
 #define FL_CREATEFROM   1
 #define RB_THISDOC      2
