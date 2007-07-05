@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xplugin.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: ihi $ $Date: 2007-06-05 14:43:22 $
+ *  last change: $Author: rt $ $Date: 2007-07-05 08:50:51 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -527,7 +527,7 @@ void XPlugin_Impl::loadPlugin()
         }
     }
     const SystemEnvData* pEnvData = getSysChildSysData();
-#ifdef UNX
+#if defined( UNX ) && !(defined(QUARTZ))
     XSync( (Display*)pEnvData->pDisplay, False );
 #endif
     if( ! getPluginComm() )
@@ -539,12 +539,21 @@ void XPlugin_Impl::loadPlugin()
             PluginComm* pComm = NULL;
             int sv[2];
             if( !socketpair( AF_UNIX, SOCK_STREAM, 0, sv ) )
+#ifdef QUARTZ
+                pComm = new MacPluginComm( m_aDescription.Mimetype,
+                                           m_aDescription.PluginName,
+                                           (WindowRef)pEnvData->rWindow,
+                                           sv[0],
+                                           sv[1]
+                                           );
+#else
                 pComm = new UnxPluginComm( m_aDescription.Mimetype,
                                            m_aDescription.PluginName,
                                            (XLIB_Window)pEnvData->aWindow,
                                            sv[0],
                                            sv[1]
                                            );
+#endif //QUARTZ
 #elif (defined WNT || defined OS2)
             PluginComm* pComm = new PluginComm_Impl( m_aDescription.Mimetype,
                                                      m_aDescription.PluginName,
@@ -566,12 +575,17 @@ void XPlugin_Impl::loadPlugin()
                  (char**)(m_nArgs ? m_pArgv : NULL),
                  NULL );
 
-#ifdef UNX
+#if defined( UNX ) && !defined(QUARTZ)
     XSync( (Display*)pEnvData->pDisplay, False );
 #endif
 #ifdef UNX
+#if !defined(QUARTZ)
     m_aNPWindow.window      = (void*)pEnvData->aWindow;
     m_aNPWindow.ws_info     = NULL;
+#else
+    m_aNPWindow.window      = (void*)pEnvData->rWindow;
+    m_aNPWindow.type        = NPWindowTypeWindow;
+#endif //QUARTZ
 #else
     m_aNPWindow.window = (void*)pEnvData->hWnd;
 #endif
