@@ -4,9 +4,9 @@
  *
  *  $RCSfile: sjapplet_impl.cxx,v $
  *
- *  $Revision: 1.28 $
+ *  $Revision: 1.29 $
  *
- *  last change: $Author: obo $ $Date: 2007-03-12 10:46:39 $
+ *  last change: $Author: rt $ $Date: 2007-07-05 08:06:56 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -58,7 +58,7 @@
 #include "com/sun/star/uno/XComponentContext.hpp"
 #include "jvmaccess/classpath.hxx"
 
-#ifdef UNX
+#if defined(UNX) && !defined(QUARTZ)
 #define Time xlib_time
 #define Window xlib_window
 #define Font xlib_font
@@ -116,7 +116,7 @@ static void throwException() throw(com::sun::star::uno::RuntimeException)
 #endif
 
 #ifdef SOLAR_JAVA
-#ifdef UNX
+#if defined (UNX) && !defined(QUARTZ)
 struct EmbeddedWindow {
     jobject _joWindow;
 
@@ -189,7 +189,7 @@ EmbeddedWindow::EmbeddedWindow(JNIEnv * pEnv, SystemEnvData const * pEnvData)
 #endif
 }
 
-#else
+#else // UNX && !QUARTZ
 
 struct EmbeddedWindow {
 jobject _joWindow;
@@ -211,6 +211,22 @@ pEnv->CallVoidMethod(joFrame, jmFrame_rinit, (jint)pEnvData->hWnd);     testJava
 _joWindow = pEnv->NewGlobalRef(joFrame);
 }
 
+#elif defined QUARTZ
+EmbeddedWindow::EmbeddedWindow(JNIEnv * pEnv, SystemEnvData const * pEnvData) throw(com::sun::star::uno::RuntimeException)
+{
+  /* The WNT code (above) that this code derives from, may be using quite old
+     ways of interacting with native windows. More modern approaches seems to
+     point towards JAWT_* and com.apple.eawt */
+
+jclass jcFrame = pEnv->FindClass("apple/awt/CEmbeddedFrame");     testJavaException(pEnv);
+jmethodID jmFrame_rinit = pEnv->GetMethodID(jcFrame, "<init>", "(I)V"); testJavaException(pEnv);
+
+jobject joFrame = pEnv->AllocObject(jcFrame);                           testJavaException(pEnv);
+pEnv->CallVoidMethod(joFrame, jmFrame_rinit, (jint)pEnvData->rWindow);     testJavaException(pEnv);
+
+_joWindow = pEnv->NewGlobalRef(joFrame);
+}
+
 #else
 
 EmbeddedWindow::EmbeddedWindow(JNIEnv * pEnv, SystemEnvData const * pEnvData) throw(com::sun::star::uno::RuntimeException)
@@ -225,7 +241,7 @@ _joWindow = pEnv->NewGlobalRef(joFrame);
 
 #endif
 
-#endif
+#endif // UNX && !QUARTZ
 
 void EmbeddedWindow::dispose(JNIEnv * pEnv)
 {
