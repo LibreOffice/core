@@ -4,9 +4,9 @@
  *
  *  $RCSfile: salpixmaputils.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: hr $ $Date: 2007-06-27 19:49:56 $
+ *  last change: $Author: rt $ $Date: 2007-07-05 08:15:24 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -62,19 +62,7 @@
 
 // ------------------------------------------------------------------
 
-
-PixMapHandle GetNewPixMap ( const Size           &rPixMapSize,
-                            const USHORT          nPixMapBits,
-                            const BitmapPalette  &rBitmapPalette
-                          );
-
-PixMapHandle CopyPixMap ( PixMapHandle  hPixMap );
-
-PixMapHandle GetCGrafPortPixMap ( const Size           &rPixMapSize,
-                                  const USHORT          nPixMapBits,
-                                  const BitmapPalette  &rBitmapPalette,
-                                  const CGrafPtr        pCGraf
-                                );
+// Empty. Do we need this?
 
 // ------------------------------------------------------------------
 
