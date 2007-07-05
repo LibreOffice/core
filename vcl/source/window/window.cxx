@@ -4,9 +4,9 @@
  *
  *  $RCSfile: window.cxx,v $
  *
- *  $Revision: 1.259 $
+ *  $Revision: 1.260 $
  *
- *  last change: $Author: hr $ $Date: 2007-06-27 20:35:50 $
+ *  last change: $Author: rt $ $Date: 2007-07-05 10:29:27 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -186,6 +186,7 @@
 #include <com/sun/star/accessibility/AccessibleRole.hpp>
 #endif
 
+#include <vcl/dialog.hxx>
 #include <vcl/unowrap.hxx>
 #include <dndlcon.hxx>
 #include <dndevdis.hxx>
@@ -724,6 +725,10 @@ void Window::ImplInitWindowData( WindowType nType )
     mpWindowImpl->mbMouseTransparent  = FALSE;        // TRUE: Window is transparent for Mouse
     mpWindowImpl->mbDlgCtrlStart      = FALSE;        // TRUE: Ab hier eigenes Dialog-Control
     mpWindowImpl->mbFocusVisible      = FALSE;        // TRUE: Focus Visible
+    mpWindowImpl->mbUseNativeFocus    = FALSE;
+    mpWindowImpl->mbNativeFocusVisible= FALSE;        // TRUE: native Focus Visible
+    mpWindowImpl->mbInShowFocus       = FALSE;        // prevent recursion
+    mpWindowImpl->mbInHideFocus       = FALSE;        // prevent recursion
     mpWindowImpl->mbTrackVisible      = FALSE;        // TRUE: Tracking Visible
     mpWindowImpl->mbControlForeground = FALSE;        // TRUE: Foreground-Property set
     mpWindowImpl->mbControlBackground = FALSE;        // TRUE: Background-Property set
@@ -739,6 +744,7 @@ void Window::ImplInitWindowData( WindowType nType )
     mpWindowImpl->mbSuppressAccessibilityEvents = FALSE; // TRUE: do not send any accessibility events
     mpWindowImpl->mbDrawSelectionBackground = FALSE;    // TRUE: draws transparent window background to indicate (toolbox) selection
     mpWindowImpl->mbIsInTaskPaneList = FALSE;           // TRUE: window was added to the taskpanelist in the topmost system window
+    mpWindowImpl->mnNativeBackground  = 0;              // initialize later, depends on type
 
     mbEnableRTL         = TRUE;         // TRUE: this outdev will be mirrored if RTL window layout (UI mirroring) is globally active
 }
@@ -2473,6 +2479,9 @@ void Window::ImplCallPaint( const Region* pRegion, USHORT nPaintFlags )
 
     if ( pChildRegion )
         delete pChildRegion;
+
+    if( mpWindowImpl->mbFrame && mpWindowImpl->mnNativeBackground )
+        Flush();
 }
 
 // -----------------------------------------------------------------------
@@ -3823,7 +3832,13 @@ void Window::ImplGenerateMouseMove()
 IMPL_LINK( Window, ImplGenerateMouseMoveHdl, void*, EMPTYARG )
 {
     mpWindowImpl->mpFrameData->mnMouseMoveId = 0;
-    ImplCallMouseMove( mpWindowImpl->mpFrameData->mnMouseCode );
+    Window* pCaptureWin = ImplGetSVData()->maWinData.mpCaptureWin;
+    if( ! pCaptureWin ||
+        (pCaptureWin->mpWindowImpl && pCaptureWin->mpWindowImpl->mpFrame == mpWindowImpl->mpFrame)
+    )
+    {
+        ImplCallMouseMove( mpWindowImpl->mpFrameData->mnMouseCode );
+    }
     return 0;
 }
 
@@ -8348,6 +8363,13 @@ Reference< XDragSource > Window::GetDragSource()
                         aDropTargetSN = OUString::createFromAscii( "com.sun.star.datatransfer.dnd.OleDropTarget" );
                         aDragSourceAL[ 1 ] = makeAny( (sal_uInt32) pEnvData->hWnd );
                         aDropTargetAL[ 0 ] = makeAny( (sal_uInt32) pEnvData->hWnd );
+#elif defined QUARTZ
+            /* FIXME: Mac OS X specific dnd interface does not exist! *
+             * Using Windows based dnd as a temporary solution        */
+                        aDragSourceSN = OUString::createFromAscii( "com.sun.star.datatransfer.dnd.OleDragSource" );
+                        aDropTargetSN = OUString::createFromAscii( "com.sun.star.datatransfer.dnd.OleDropTarget" );
+                        aDragSourceAL[ 1 ] = makeAny( (sal_uInt32) pEnvData->rWindow );
+                        aDropTargetAL[ 0 ] = makeAny( (sal_uInt32) pEnvData->rWindow );
 #elif defined UNX
                         aDropTargetAL.realloc( 3 );
                         aDragSourceAL.realloc( 3 );
@@ -8427,7 +8449,7 @@ Reference< XClipboard > Window::GetClipboard()
                 {
                     mpWindowImpl->mpFrameData->mxClipboard = Reference< XClipboard >( xFactory->createInstance( OUString::createFromAscii( "com.sun.star.datatransfer.clipboard.SystemClipboard" ) ), UNO_QUERY );
 
-#ifdef UNX          // unix clipboard needs to be initialized
+#if defined(UNX) && !defined(QUARTZ)          // unix clipboard needs to be initialized
                     if( mpWindowImpl->mpFrameData->mxClipboard.is() )
                     {
                         Reference< XInitialization > xInit = Reference< XInitialization >( mpWindowImpl->mpFrameData->mxClipboard, UNO_QUERY );
@@ -8476,7 +8498,7 @@ Reference< XClipboard > Window::GetPrimarySelection()
 
                 if( xFactory.is() )
                 {
-#   ifdef UNX
+#if defined(UNX) && !defined(QUARTZ)
                     Sequence< Any > aArgumentList( 3 );
                       aArgumentList[ 0 ] = makeAny( Application::GetDisplayConnection() );
                     aArgumentList[ 1 ] = makeAny( OUString::createFromAscii( "PRIMARY" ) );
@@ -8488,7 +8510,7 @@ Reference< XClipboard > Window::GetPrimarySelection()
                     static Reference< XClipboard >  s_xSelection;
 
                     if ( !s_xSelection.is() )
-                        s_xSelection = Reference< XClipboard >( xFactory->createInstance( OUString::createFromAscii( "com.sun.star.datatransfer.clipboard.GenericClipboard" ) ), UNO_QUERY );
+                         s_xSelection = Reference< XClipboard >( xFactory->createInstance( OUString::createFromAscii( "com.sun.star.datatransfer.clipboard.GenericClipboard" ) ), UNO_QUERY );
 
                     mpWindowImpl->mpFrameData->mxSelection = s_xSelection;
 #   endif
@@ -9420,6 +9442,10 @@ Reference< rendering::XCanvas > Window::ImplGetCanvas( const Size& rFullscreenSi
     // take HWND for Windows
     if( pSysData )
         aArg[ 1 ] = makeAny( reinterpret_cast<sal_Int32>(pSysData->hWnd) );
+#elif defined( QUARTZ )
+    // take WindowRef for Mac OS X / Quartz
+    if( pSysData )
+        aArg[ 1 ] = makeAny( reinterpret_cast<sal_IntPtr>(pSysData->rWindow) );
 #elif defined( UNX )
     // take XLIB window for X11, and fake a motif widget ID from
     // that.
