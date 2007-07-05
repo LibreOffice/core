@@ -4,9 +4,9 @@
 *
 *  $RCSfile: salbmp.h,v $
 *
-*  $Revision: 1.2 $
+*  $Revision: 1.3 $
 *
-*  last change: $Author: rt $ $Date: 2007-07-05 08:10:43 $
+*  last change: $Author: rt $ $Date: 2007-07-05 15:58:54 $
 *
 *  The Contents of this file are made available subject to
 *  the terms of GNU Lesser General Public License Version 2.1.
@@ -41,11 +41,11 @@
 #endif
 
 #ifndef _SV_SV_H
-#include <sv.h>
+#include <vcl/sv.h>
 #endif
 
 #ifndef _SV_SALBTYPE_HXX
-#include <salbtype.hxx>
+#include <vcl/salbtype.hxx>
 #endif
 
 #ifndef _SV_SALDATA_HXX
@@ -53,7 +53,7 @@
 #endif
 
 #ifndef _SV_SALINST_HXX
-#include <salinst.hxx>
+#include <vcl/salinst.hxx>
 #endif
 
 #ifndef _SV_SALCONST_H
@@ -61,7 +61,7 @@
 #endif
 
 #ifndef _SV_SALVD_HXX
-#include <salvd.hxx>
+#include <vcl/salvd.hxx>
 #endif
 
 #ifndef _SV_SALCOLORUTILS_HXX
@@ -73,7 +73,7 @@
 #endif
 
 #ifndef _SV_SALBMP_HXX
-#include <salbmp.hxx>
+#include <vcl/salbmp.hxx>
 #endif
 
 #ifndef _SV_SALGDI_H

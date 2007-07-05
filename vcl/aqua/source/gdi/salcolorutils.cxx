@@ -4,9 +4,9 @@
  *
  *  $RCSfile: salcolorutils.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: rt $ $Date: 2007-07-05 08:25:56 $
+ *  last change: $Author: rt $ $Date: 2007-07-05 15:59:28 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -39,7 +39,7 @@
 #ifndef _SV_SALCOLORUTILS_HXX
     #include <salcolorutils.hxx>
 #endif
-#include <salbtype.hxx>
+#include <vcl/salbtype.hxx>
 
 // =======================================================================
 

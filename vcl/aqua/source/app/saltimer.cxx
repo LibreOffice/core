@@ -4,9 +4,9 @@
  *
  *  $RCSfile: saltimer.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: rt $ $Date: 2007-07-05 10:06:19 $
+ *  last change: $Author: rt $ $Date: 2007-07-05 16:00:00 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -37,7 +37,7 @@
 #include "precompiled_vcl.hxx"
 
 #ifndef _SV_SALTIMER_H
-#include <vcl/saltimer.h>
+#include <saltimer.h>
 #endif
 #ifndef _SV_SALDATA_HXX
 #include <saldata.hxx>

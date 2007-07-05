@@ -4,9 +4,9 @@
  *
  *  $RCSfile: outdev6.cxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: rt $ $Date: 2007-07-05 08:39:57 $
+ *  last change: $Author: rt $ $Date: 2007-07-05 16:02:57 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -81,7 +81,7 @@
 #endif
 
 #include <window.h>
-#include <svdata.hxx>
+#include <vcl/svdata.hxx>
 
 // ========================================================================
 

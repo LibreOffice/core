@@ -4,9 +4,9 @@
 *
 *  $RCSfile: saltimer.h,v $
 *
-*  $Revision: 1.3 $
+*  $Revision: 1.4 $
 *
-*  last change: $Author: rt $ $Date: 2007-07-05 08:17:20 $
+*  last change: $Author: rt $ $Date: 2007-07-05 15:56:34 $
 *
 *  The Contents of this file are made available subject to
 *  the terms of GNU Lesser General Public License Version 2.1.
@@ -42,7 +42,7 @@
 #include <postmac.h>
 
 #ifndef _SV_SALTIMER_HXX
-#include <saltimer.hxx>
+#include <vcl/saltimer.hxx>
 #endif
 
 class AquaSalTimer : public SalTimer

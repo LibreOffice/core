@@ -4,9 +4,9 @@
  *
  *  $RCSfile: salframe.h,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: rt $ $Date: 2007-07-05 08:12:19 $
+ *  last change: $Author: rt $ $Date: 2007-07-05 16:00:33 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -36,7 +36,7 @@
 #ifndef _SV_SALFRAME_H
 #define _SV_SALFRAME_H
 
-#include <salframe.hxx>
+#include <vcl/salframe.hxx>
 
 #include <salmenu.h>
 

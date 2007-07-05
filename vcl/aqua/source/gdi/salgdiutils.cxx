@@ -4,9 +4,9 @@
  *
  *  $RCSfile: salgdiutils.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: rt $ $Date: 2007-07-05 08:27:30 $
+ *  last change: $Author: rt $ $Date: 2007-07-05 16:01:22 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -49,7 +49,7 @@
 #include <basegfx/polygon/b2dpolygontools.hxx>
 #include <boost/bind.hpp>
 
-#include <svapp.hxx>
+#include <vcl/svapp.hxx>
 
 #include "saldata.hxx"
 

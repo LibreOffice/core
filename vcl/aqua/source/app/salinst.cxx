@@ -4,9 +4,9 @@
  *
  *  $RCSfile: salinst.cxx,v $
  *
- *  $Revision: 1.36 $
+ *  $Revision: 1.37 $
  *
- *  last change: $Author: rt $ $Date: 2007-07-05 10:02:46 $
+ *  last change: $Author: rt $ $Date: 2007-07-05 15:59:02 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -45,10 +45,10 @@
 #include <vcl/salinst.hxx>
 #endif
 #ifndef _SV_SALINST_H
-#include <vcl/salinst.h>
+#include <salinst.h>
 #endif
 #ifndef _SV_SALFRAME_H
-#include <vcl/salframe.h>
+#include <salframe.h>
 #endif
 #ifndef _SV_SALOBJ_HXX
 #include <vcl/salobj.hxx>
@@ -76,11 +76,11 @@
 #include <tools/fsys.hxx>
 #endif
 #ifndef _SV_SALIMESTATUS_HXX
-#include <salimestatus.hxx>
+#include <vcl/salimestatus.hxx>
 #endif
 
 #include <salprn.h>
-#include <print.h>
+#include <vcl/print.h>
 
 #include <salogl.h>
 #include <saltimer.h>

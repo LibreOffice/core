@@ -4,9 +4,9 @@
  *
  *  $RCSfile: salprn.h,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: rt $ $Date: 2007-07-05 08:15:47 $
+ *  last change: $Author: rt $ $Date: 2007-07-05 15:57:56 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -44,7 +44,7 @@
 #include <aquavcltypes.h>
 #endif
 
-#include <salprn.hxx>
+#include <vcl/salprn.hxx>
 
 // ---------------------
 // - AquaSalInfoPrinter -

@@ -4,9 +4,9 @@
  *
  *  $RCSfile: salgdi.cxx,v $
  *
- *  $Revision: 1.62 $
+ *  $Revision: 1.63 $
  *
- *  last change: $Author: rt $ $Date: 2007-07-05 10:16:20 $
+ *  last change: $Author: rt $ $Date: 2007-07-05 15:56:55 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -49,7 +49,7 @@
 #include <salcolorutils.hxx>
 #endif
 #ifndef _SV_IMPFONT_HXX
-#include <impfont.hxx>
+#include <vcl/impfont.hxx>
 #endif
 #ifndef __SUBFONT_H
 #include <psprint/list.h>
@@ -65,11 +65,11 @@
 #include <osl/process.h>
 #endif
 
-#include <sallayout.hxx>
+#include <vcl/sallayout.hxx>
 
 #include <salatsuifontutils.hxx>
 
-#include <svapp.hxx>
+#include <vcl/svapp.hxx>
 
 #include <basegfx/range/b2drectangle.hxx>
 #include <basegfx/range/b2irange.hxx>

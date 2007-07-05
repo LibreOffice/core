@@ -4,9 +4,9 @@
 *
 *  $RCSfile: salogl.h,v $
 *
-*  $Revision: 1.2 $
+*  $Revision: 1.3 $
 *
-*  last change: $Author: rt $ $Date: 2007-07-05 08:14:25 $
+*  last change: $Author: rt $ $Date: 2007-07-05 15:58:44 $
 *
 *  The Contents of this file are made available subject to
 *  the terms of GNU Lesser General Public License Version 2.1.
@@ -50,7 +50,7 @@
 //#endif
 
 #ifndef _SV_SALOGL_HXX
-#include <salogl.hxx>
+#include <vcl/salogl.hxx>
 #endif
 
 #ifndef _OSL_MODULE_H
