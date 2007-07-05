@@ -158,6 +158,23 @@
   	# is EXPORTS), use it as is; otherwise, prepend...
   	archive_expsym_cmds='if test "x`$SED 1q $export_symbols`" = xEXPORTS; then
 ***************
+*** 7778,7784 ****
+    ;;
+  
+  freebsd*)
+!   objformat=`test -x /usr/bin/objformat && /usr/bin/objformat || echo aout`
+    version_type=freebsd-$objformat
+    case $version_type in
+      freebsd-elf*)
+--- 7779,7785 ----
+    ;;
+  
+  freebsd*)
+!   objformat=`test -x /usr/bin/objformat && /usr/bin/objformat || echo elf`
+    version_type=freebsd-$objformat
+    case $version_type in
+      freebsd-elf*)
+***************
 *** 9046,9052 ****
         ;;
       esac
@@ -215,6 +232,23 @@
         # built for inclusion in a dll (and should export symbols for example).
         lt_prog_compiler_pic_CXX='-DDLL_EXPORT'
 ***************
+*** 11497,11503 ****
+    ;;
+  
+  freebsd*)
+!   objformat=`test -x /usr/bin/objformat && /usr/bin/objformat || echo aout`
+    version_type=freebsd-$objformat
+    case $version_type in
+      freebsd-elf*)
+--- 11498,11504 ----
+    ;;
+  
+  freebsd*)
+!   objformat=`test -x /usr/bin/objformat && /usr/bin/objformat || echo elf`
+    version_type=freebsd-$objformat
+    case $version_type in
+      freebsd-elf*)
+***************
 *** 13259,13269 ****
         lt_prog_compiler_pic_F77='-m68020 -resident32 -malways-restore-a4'
         ;;
@@ -256,6 +290,23 @@
   	# If the export-symbols file already is a .def file (1st line
   	# is EXPORTS), use it as is; otherwise, prepend...
   	archive_expsym_cmds_F77='if test "x`$SED 1q $export_symbols`" = xEXPORTS; then
+***************
+*** 14667,14673 ****
+    ;;
+  
+  freebsd*)
+!   objformat=`test -x /usr/bin/objformat && /usr/bin/objformat || echo aout`
+    version_type=freebsd-$objformat
+    case $version_type in
+      freebsd-elf*)
+--- 14668,14674 ----
+    ;;
+  
+  freebsd*)
+!   objformat=`test -x /usr/bin/objformat && /usr/bin/objformat || echo elf`
+    version_type=freebsd-$objformat
+    case $version_type in
+      freebsd-elf*)
 ***************
 *** 15607,15617 ****
         lt_prog_compiler_pic_GCJ='-m68020 -resident32 -malways-restore-a4'
@@ -315,6 +366,23 @@
   	# If the export-symbols file already is a .def file (1st line
   	# is EXPORTS), use it as is; otherwise, prepend...
   	archive_expsym_cmds_GCJ='if test "x`$SED 1q $export_symbols`" = xEXPORTS; then
+***************
+*** 17035,17041 ****
+    ;;
+  
+  freebsd*)
+!   objformat=`test -x /usr/bin/objformat && /usr/bin/objformat || echo aout`
+    version_type=freebsd-$objformat
+    case $version_type in
+      freebsd-elf*)
+--- 17036,17042 ----
+    ;;
+  
+  freebsd*)
+!   objformat=`test -x /usr/bin/objformat && /usr/bin/objformat || echo elf`
+    version_type=freebsd-$objformat
+    case $version_type in
+      freebsd-elf*)
 ***************
 *** 24598,24604 ****
   fi
