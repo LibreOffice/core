@@ -4,9 +4,9 @@
  *
  *  $RCSfile: about.cxx,v $
  *
- *  $Revision: 1.33 $
+ *  $Revision: 1.34 $
  *
- *  last change: $Author: hr $ $Date: 2007-06-27 23:08:48 $
+ *  last change: $Author: rt $ $Date: 2007-07-05 09:08:21 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -203,7 +203,12 @@ AboutDialog::AboutDialog( Window* pParent, const ResId& rId, const String& rVerS
     const StyleSettings& rSettings = GetSettings().GetStyleSettings();
     Color aWhiteCol( rSettings.GetWindowColor() );
     Wallpaper aWall( aWhiteCol );
+    #if 0
+    // pl: FIXME #i78884#
     SetBackground( aWall );
+    #else
+    SetControlBackground( aWhiteCol );
+    #endif
     Font aNewFont( aCopyrightText.GetFont() );
     aNewFont.SetTransparent( TRUE );
 
