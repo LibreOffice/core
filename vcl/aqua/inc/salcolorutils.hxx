@@ -4,9 +4,9 @@
  *
  *  $RCSfile: salcolorutils.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: hr $ $Date: 2007-06-27 19:47:54 $
+ *  last change: $Author: rt $ $Date: 2007-07-05 08:11:19 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -62,71 +62,9 @@
 
 // ------------------------------------------------------------------
 
-SalColor RGBColor2SALColor ( const RGBColor *pRGBColor );
+SalColor GetSalColor( const float* pQuartzColor );
 
-SalColor RGB8BitColor2SALColor ( const RGBColor *pRGBColor );
-
-SalColor RGB16BitColor2SALColor ( const RGBColor *pRGBColor );
-
-SalColor RGB32BitColor2SALColor ( const RGBColor *pRGBColor );
-
-// ------------------------------------------------------------------
-
-RGBColor SALColor2RGBColor ( const SalColor nSalColor );
-
-RGBColor SALColor2RGB32bitColor ( const SalColor nSalColor );
-
-RGBColor SALColor2RGB18bitColor ( const SalColor nSalColor );
-
-RGBColor SALColor2RGB8bitColor ( const SalColor nSalColor );
-
-// ------------------------------------------------------------------
-
-SalColor GetROPSalColor ( SalROPColor nROPColor );
-
-// ------------------------------------------------------------------
-
-RGBColor BitmapColor2RGBColor ( const BitmapColor &rBitmapColor );
-
-void RGBColor2BitmapColor ( const RGBColor  *rRGBColor,
-                            BitmapColor     &rBitmapColor
-                          );
-
-// ------------------------------------------------------------------
-
-short GetMinColorCount ( const short           nPixMapColorDepth,
-                         const BitmapPalette  &rBitmapPalette
-                       );
-
-// ------------------------------------------------------------------
-
-void SetBlackForeColor ( );
-
-void SetWhiteBackColor ( );
-
-RGBColor GetBlackColor ( );
-
-RGBColor GetWhiteColor ( );
-
-// ------------------------------------------------------------------
-
-CTabHandle CopyGDeviceCTab ( );
-
-CTabHandle GetCTabFromStdCLUT ( const short nBitDepth );
-
-CTabHandle CopyCTabIndexed ( CTabHandle hCTab );
-
-CTabHandle CopyCTabRGBDirect ( CTabHandle hCTab );
-
-// ------------------------------------------------------------------
-
-CTabHandle CopyPixMapCTab ( PixMapHandle hPixMap );
-
-// ------------------------------------------------------------------
-
-void SetBitmapBufferColorFormat ( const PixMapHandle   mhPixMap,
-                                  BitmapBuffer        *rBuffer
-                                );
+void SetSalColor( const SalColor& rColor, float* pQuartzColor );
 
 // ------------------------------------------------------------------
 
