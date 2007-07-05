@@ -4,9 +4,9 @@
  *
  *  $RCSfile: spritehelper.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: kz $ $Date: 2007-05-09 13:21:14 $
+ *  last change: $Author: rt $ $Date: 2007-07-05 08:02:26 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -271,7 +271,7 @@ namespace vclcanvas
                         // the final sprite output position.
                         aClipPoly.transform( aTransform );
 
-#ifndef WNT
+#if ! defined WNT && ! defined QUARTZ
                         // non-Windows only - bAtLeastOnePolygon is
                         // only used in non-WNT code below
 
@@ -305,7 +305,7 @@ namespace vclcanvas
                             rTargetSurface.DrawPolyPolygon(PolyPolygon(aClipPoly)); // #i76339#
                         }
 
-#ifndef WNT
+#if ! defined WNT && ! defined QUARTZ
                         // as a matter of fact, this fast path only
                         // performs well for X11 - under Windows, the
                         // clip via SetTriangleClipRegion is faster.
