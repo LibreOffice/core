@@ -4,9 +4,9 @@
  *
  *  $RCSfile: optsave.hrc,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 18:14:15 $
+ *  last change: $Author: rt $ $Date: 2007-07-05 07:45:08 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -36,18 +36,20 @@
 #define _SVX_OPTSAVE_HRC
 
 // defines ------------------------------------------------------------------
-#define LB_LOAD                 1
-#define CB_LOAD_SETTINGS        2
-#define GB_SAVE                 10
-#define BTN_DOCINFO             11
-#define BTN_BACKUP              12
-#define BTN_AUTOSAVE            13
-#define ED_AUTOSAVE             14
-#define FT_MINUTE               15
-#define BTN_AUTOSAVEPROMPT      16
-#define BTN_NOPRETTYPRINTING    17
-#define FI_BACKUP               18
-#define BTN_WARNALIENFORMAT     19
+
+#define LB_LOAD                 10
+#define CB_LOAD_SETTINGS        11
+#define CB_LOAD_DOCPRINTER      12
+#define GB_SAVE                 13
+#define BTN_DOCINFO             14
+#define BTN_BACKUP              15
+#define BTN_AUTOSAVE            16
+#define ED_AUTOSAVE             17
+#define FT_MINUTE               18
+#define BTN_AUTOSAVEPROMPT      19
+#define BTN_NOPRETTYPRINTING    20
+#define FI_BACKUP               21
+#define BTN_WARNALIENFORMAT     22
 
 #define GB_RELATIVE         40
 #define BTN_RELATIVE_FSYS   41
