@@ -4,9 +4,9 @@
  *
  *  $RCSfile: salmathutils.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 11:44:50 $
+ *  last change: $Author: rt $ $Date: 2007-07-05 08:27:45 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -39,6 +39,8 @@
 #ifndef _SV_SALMATHUTILS_HXX
     #include <salmathutils.hxx>
 #endif
+
+#include <stdlib.h>
 
 // =======================================================================
 
