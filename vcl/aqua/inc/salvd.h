@@ -4,9 +4,9 @@
  *
  *  $RCSfile: salvd.h,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: hr $ $Date: 2007-06-27 19:51:10 $
+ *  last change: $Author: rt $ $Date: 2007-07-05 08:17:34 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -56,6 +56,9 @@
     #include <salcolorutils.hxx>
 #endif
 
+#include <salvd.hxx>
+#include <salgdi.h>
+
 #if PRAGMA_ONCE
     #pragma once
 #endif
@@ -70,11 +73,6 @@
 
 struct SalVirDevData
 {
-    SalGraphics  *mpGraphics;    // current VirDev graphics
-    USHORT        mnBitCount;    // GWorld pixel depth
-    long          mnWidth;       // GWorld width
-    long          mnHeight;      // GWorld height
-    BOOL          mbGraphics;    // is Graphics used?
 };
 
 typedef struct SalVirDevData   SalVirDevData;
@@ -82,6 +80,32 @@ typedef SalVirDevData         *SalVirDevDataPtr;
 typedef SalVirDevDataPtr      *SalVirDevDataHandle;
 
 // =======================================================================
+
+class AquaSalGraphics;
+
+// -----------------
+// - SalVirDevData -
+// -----------------
+
+class AquaSalVirtualDevice : public SalVirtualDevice
+{
+private:
+    bool mbGraphicsUsed;             // is Graphics used
+    bool mbForeignContext;           // is mxContext from outside VCL
+    CGContextRef mxContext;          // native graphics context
+    AquaSalGraphics* mpGraphics;     // current VirDev graphics
+
+    void Destroy();
+
+public:
+    AquaSalVirtualDevice( AquaSalGraphics* pGraphic, long nDX, long nDY, USHORT nBitCount, const SystemGraphicsData *pData );
+    virtual ~AquaSalVirtualDevice();
+
+    virtual SalGraphics*            GetGraphics();
+    virtual void                    ReleaseGraphics( SalGraphics* pGraphics );
+    virtual BOOL                    SetSize( long nNewDX, long nNewDY );
+    virtual void                       GetSize( long& rWidth, long& rHeight );
+};
 
 // =======================================================================
 
