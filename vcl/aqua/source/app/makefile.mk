@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.13 $
+#   $Revision: 1.14 $
 #
-#   last change: $Author: vg $ $Date: 2007-02-06 14:17:37 $
+#   last change: $Author: rt $ $Date: 2007-07-05 08:18:05 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -38,6 +38,7 @@ PRJ=..$/..$/..
 PRJNAME=vcl
 TARGET=salapp
 .INCLUDE :  $(PRJ)$/util$/makefile.pmk
+ENABLE_EXCEPTIONS=TRUE
 
 # --- Settings -----------------------------------------------------
 
@@ -53,19 +54,15 @@ dummy:
 
 .ELSE		# "$(GUIBASE)"!="aqua"
 
-OBJFILES=	$(OBJ)$/salmain.obj			\
-            $(OBJ)$/VCLApplication.obj	\
-            $(OBJ)$/VCLAutoreleasePool.obj
+#CFLAGS+=-x objective-c++
+
+OBJFILES=	$(OBJ)$/salmain.obj
 
 SLOFILES=   $(SLO)$/salinst.obj			\
-            $(SLO)$/saldata.obj			\
             $(SLO)$/saltimer.obj		\
             $(SLO)$/salsound.obj		\
             $(SLO)$/salsys.obj			\
-            $(SLO)$/salmain.obj			\
-            $(SLO)$/VCLApplication.obj	\
-            $(SLO)$/VCLAutoreleasePool.obj	\
-            $(SLO)$/VCLEvent.obj
+            $(SLO)$/salmain.obj
 
 EXCEPTIONSFILES=$(SLO)$/salmain.obj	\
             $(OBJ)$/salmain.obj
