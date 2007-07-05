@@ -4,9 +4,9 @@
  *
  *  $RCSfile: salsys.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: hr $ $Date: 2007-06-27 19:52:04 $
+ *  last change: $Author: rt $ $Date: 2007-07-05 08:23:10 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -39,33 +39,97 @@
 #ifndef _SV_SALSYS_HXX
 #include <vcl/salsys.hxx>
 #endif
+#ifndef _SV_SALSYS_H
+#include <salsys.h>
+#endif
+#include <premac.h>
+#include <ApplicationServices/ApplicationServices.h>
+#include <postmac.h>
 
+#include "saldata.hxx"
 
 // =======================================================================
 
-SalSystem::SalSystem()
+//AquaSalSystem::AquaSalSystem()
+//{
+//}
+
+// -----------------------------------------------------------------------
+
+AquaSalSystem::~AquaSalSystem()
 {
 }
 
 // -----------------------------------------------------------------------
 
-SalSystem::~SalSystem()
-{
-}
+//bool AquaSalSystem::StartProcess( SalFrame* pFrame,
+//                            const XubString& rFileName,
+//                            const XubString& rParam,
+//                            const XubString& rWorkDir )
+//{
+//  return FALSE;
+//}
 
 // -----------------------------------------------------------------------
 
-BOOL SalSystem::StartProcess( SalFrame* pFrame,
-                              const XubString& rFileName,
-                              const XubString& rParam,
-                              const XubString& rWorkDir )
+//BOOL AquaSalSystem::AddRecentDoc( SalFrame*, const XubString& rFileName )
+//{
+//  return FALSE;
+//}
+
+unsigned int AquaSalSystem::GetDisplayScreenCount()
 {
-    return FALSE;
+/*
+    CGDirectDisplayID displays[64]; // 64 displays are enough for everyone
+    CGDisplayCount displayCount;
+    if( noErr == CGGetActiveDisplayList( 64, displays, &displayCount ) )
+        return displayCount;
+*/
+    return 1;
 }
 
-// -----------------------------------------------------------------------
-
-BOOL SalSystem::AddRecentDoc( SalFrame*, const XubString& rFileName )
+bool AquaSalSystem::IsMultiDisplay()
 {
-    return FALSE;
+    /* FIXME: add support for multiple displays. */
+    return false;
+}
+
+unsigned int AquaSalSystem::GetDefaultDisplayNumber()
+{
+    return 0;
+}
+
+Rectangle AquaSalSystem::GetDisplayScreenPosSizePixel( unsigned int nScreen )
+{
+    CGRect aRect( CGDisplayBounds ( CGMainDisplayID() ) );
+    Rectangle aRet( aRect.origin.x, aRect.origin.y, aRect.origin.x + aRect.size.width, aRect.origin.y + aRect.size.height );
+    AquaLog("AquaSalSystem::GetDisplayScreenPosSizePixel(%d) (%ld,%ld,%ld,%ld)\n", nScreen, aRet.nLeft, aRet.nTop, aRet.nRight, aRet.nBottom );
+    return aRet;
+}
+
+Rectangle AquaSalSystem::GetDisplayWorkAreaPosSizePixel( unsigned int nScreen )
+{
+    return Rectangle();
+}
+
+rtl::OUString AquaSalSystem::GetScreenName( unsigned int nScreen )
+{
+    // FIXME
+    return rtl::OUString();
+}
+
+int AquaSalSystem::ShowNativeDialog( const String& rTitle,
+                                    const String& rMessage,
+                                    const std::list< String >& rButtons,
+                                    int nDefButton )
+{
+    return 0;
+}
+
+int AquaSalSystem::ShowNativeMessageBox( const String& rTitle,
+                                        const String& rMessage,
+                                        int nButtonCombination,
+                                        int nDefaultButton)
+{
+    return 0;
 }
