@@ -4,9 +4,9 @@
  *
  *  $RCSfile: salogl.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: hr $ $Date: 2007-06-27 19:53:04 $
+ *  last change: $Author: rt $ $Date: 2007-07-05 08:28:49 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -39,57 +39,85 @@
 #ifndef _SV_SALGDI_HXX
 #include <vcl/salgdi.hxx>
 #endif
+#ifndef _SV_SALGDI_H
+#include <salgdi.h>
+#endif
 #ifndef _SV_SALOGL_HXX
 #include <vcl/salogl.hxx>
+#endif
+#ifndef _SV_SALOGL_H
+#include <salogl.h>
 #endif
 
 
 // ========================================================================
 
 // Initialize static data members
-VCLVIEW             SalOpenGL::mhOGLLastDC = 0;
-ULONG               SalOpenGL::mnOGLState = OGL_STATE_UNLOADED;
+CarbonViewRef           AquaSalOpenGL::mhOGLLastDC = 0;
+ULONG               AquaSalOpenGL::mnOGLState = OGL_STATE_UNLOADED;
 
 // ========================================================================
 
-SalOpenGL::SalOpenGL( SalGraphics* pGraphics )
+AquaSalOpenGL::AquaSalOpenGL( SalGraphics* pGraphics )
 {
 }
 
 // ------------------------------------------------------------------------
 
-SalOpenGL::~SalOpenGL()
+AquaSalOpenGL::~AquaSalOpenGL()
 {
 }
 
 // ------------------------------------------------------------------------
 
-BOOL SalOpenGL::Create()
+BOOL AquaSalOpenGL::Create()
 {
     return FALSE;
 }
 
 // ------------------------------------------------------------------------
 
-void SalOpenGL::Release()
+void AquaSalOpenGL::Release()
 {
 }
 
 // ------------------------------------------------------------------------
 
-void *SalOpenGL::GetOGLFnc( const char* pFncName )
+oglFunction AquaSalOpenGL::GetOGLFnc( const char* pFncName )
 {
     return NULL;
 }
 
 // ------------------------------------------------------------------------
 
-void SalOpenGL::OGLEntry( SalGraphics* pGraphics )
+void AquaSalOpenGL::OGLEntry( SalGraphics* pGraphics )
 {
 }
 
 // ------------------------------------------------------------------------
 
-void SalOpenGL::OGLExit( SalGraphics* pGraphics )
+void AquaSalOpenGL::OGLExit( SalGraphics* pGraphics )
 {
+}
+
+
+
+
+
+
+
+
+void AquaSalOpenGL::StartScene( SalGraphics* pGraphics )
+{
+
+}
+
+bool AquaSalOpenGL::IsValid()
+{
+    return FALSE;
+}
+
+void AquaSalOpenGL::StopScene()
+{
+
 }
