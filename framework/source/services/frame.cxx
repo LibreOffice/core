@@ -4,9 +4,9 @@
  *
  *  $RCSfile: frame.cxx,v $
  *
- *  $Revision: 1.101 $
+ *  $Revision: 1.102 $
  *
- *  last change: $Author: ihi $ $Date: 2007-04-16 16:43:56 $
+ *  last change: $Author: rt $ $Date: 2007-07-05 08:58:43 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -54,6 +54,10 @@
 
 #ifndef __FRAMEWORK_DISPATCH_CLOSEDISPATCHER_HXX_
 #include <dispatch/closedispatcher.hxx>
+#endif
+
+#ifndef __FRAMEWORK_DISPATCH_WINDOWCOMMANDDISPATCH_HXX_
+#include <dispatch/windowcommanddispatch.hxx>
 #endif
 
 #ifndef __FRAMEWORK_LOADENV_LOADENV_HXX_
@@ -738,6 +742,9 @@ void SAL_CALL Frame::initialize( const css::uno::Reference< css::awt::XWindow >&
     implts_startWindowListening();
 
     impl_enablePropertySet();
+
+    // create WindowCommandDispatch; it is supposed to release itself at frame destruction
+    (void)new WindowCommandDispatch(m_xSMGR, this);
 }
 
 /*-****************************************************************************************************//**
