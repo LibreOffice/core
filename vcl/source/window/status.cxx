@@ -4,9 +4,9 @@
  *
  *  $RCSfile: status.cxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: hr $ $Date: 2007-06-27 20:33:57 $
+ *  last change: $Author: rt $ $Date: 2007-07-05 08:42:49 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -67,7 +67,7 @@
 #ifndef _SV_VIRDEV_HXX
 #include <vcl/virdev.hxx>
 #endif
-
+#include <window.h>
 
 // =======================================================================
 
@@ -278,6 +278,14 @@ void StatusBar::ImplInitSettings( BOOL bFont,
             aColor = rStyleSettings.GetWindowColor();
         SetBackground( aColor );
         mpImplData->mpVirDev->SetBackground( GetBackground() );
+
+        // NWF background
+        if( ! IsControlBackground() &&
+              IsNativeControlSupported( CTRL_WINDOW_BACKGROUND, PART_BACKGROUND_WINDOW ) )
+        {
+            ImplGetWindowImpl()->mnNativeBackground = PART_BACKGROUND_WINDOW;
+            EnableChildTransparentMode( TRUE );
+        }
     }
 }
 
