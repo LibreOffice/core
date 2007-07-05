@@ -4,9 +4,9 @@
  *
  *  $RCSfile: svdata.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2007-04-26 10:35:09 $
+ *  last change: $Author: rt $ $Date: 2007-07-05 08:35:44 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -313,6 +313,7 @@ struct ImplSVNWFData
     Color                   maMenuBarHighlightTextColor;  // override higlight text color
                                                           // in menubar if not transparent
     bool                    mbOpenMenuOnF10;              // on gnome the first menu opens on F10
+    bool                    mbNoFocusRects;               // on Aqua focus rects are not used
 };
 
 
