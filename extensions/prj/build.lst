@@ -9,10 +9,11 @@ ex	extensions\source\activex\msidl		nmake	-	w	ex_axmsidl ex_inc NULL
 ex	extensions\source\activex\main		nmake	-	w	ex_axmain ex_axmsidl.w ex_inc NULL
 ex	extensions\source\ole				nmake	-	w	ex_ole ex_xmlextr ex_inc NULL
 ex	extensions\source\resource			nmake	-	all	ex_resrc ex_inc NULL
+ex	extensions\source\plugin\aqua			nmake	-	u	ex_plaqua ex_plbase NULL
 ex	extensions\source\plugin\base			nmake	-	all	ex_plbase ex_inc NULL
 ex	extensions\source\plugin\win			nmake	-	w	ex_plwin ex_plbase ex_inc NULL
 ex	extensions\source\plugin\unx			nmake	-	u	ex_plunx ex_inc NULL
-ex	extensions\source\plugin\util			nmake	-	all	ex_plutil ex_plbase ex_plunx.u ex_plwin.w ex_inc NULL
+ex	extensions\source\plugin\util			nmake	-	all	ex_plutil ex_plbase ex_plunx.u ex_plwin.w ex_plaqua.u ex_inc NULL
 ex	extensions\source\scanner			nmake	-	all	ex_scan ex_resrc ex_inc NULL
 ex	extensions\source\svg				nmake	-	all	ex_svg ex_scan ex_inc NULL
 ex	extensions\source\bibliography			nmake	-	all	ex_bib ex_inc NULL
