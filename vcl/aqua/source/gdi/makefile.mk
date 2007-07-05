@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.11 $
+#   $Revision: 1.12 $
 #
-#   last change: $Author: vg $ $Date: 2007-02-06 14:17:49 $
+#   last change: $Author: rt $ $Date: 2007-07-05 08:24:00 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -37,6 +37,8 @@ PRJ=..$/..$/..
 
 PRJNAME=vcl
 TARGET=salgdi
+ENABLE_EXCEPTIONS=TRUE
+
 .INCLUDE :  $(PRJ)$/util$/makefile.pmk
 
 # --- Settings -----------------------------------------------------
@@ -54,14 +56,13 @@ dummy:
 .ELSE		# "$(GUIBASE)"!="aqua"
 
 SLOFILES=   $(SLO)$/salmathutils.obj      \
-            $(SLO)$/salrectangleutils.obj \
             $(SLO)$/salcolorutils.obj     \
             $(SLO)$/salpixmaputils.obj    \
             $(SLO)$/salgdiutils.obj       \
+            $(SLO)$/salnativewidgets.obj  \
             $(SLO)$/salatsuifontutils.obj \
-            $(SLO)$/salfontutils.obj      \
+            $(SLO)$/salatslayout.obj      \
             $(SLO)$/salgdi.obj            \
-            $(SLO)$/VCLGraphics.obj       \
             $(SLO)$/salvd.obj             \
             $(SLO)$/salprn.obj            \
             $(SLO)$/salbmp.obj            \
