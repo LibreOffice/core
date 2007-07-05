@@ -4,9 +4,9 @@
  *
  *  $RCSfile: saveopt.cxx,v $
  *
- *  $Revision: 1.28 $
+ *  $Revision: 1.29 $
  *
- *  last change: $Author: hr $ $Date: 2007-06-27 21:16:34 $
+ *  last change: $Author: rt $ $Date: 2007-07-05 07:28:30 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -102,7 +102,8 @@ class SvtSaveOptions_Impl : public utl::ConfigItem
                                         bSaveRelFSys,
                                         bSaveUnpacked,
                                         bDoPrettyPrinting,
-                                        bWarnAlienFormat;
+                                        bWarnAlienFormat,
+                                        bLoadDocPrinter;
 
     sal_Bool                            bROAutoSaveTime,
                                         bROSaveGraphics,
@@ -118,7 +119,8 @@ class SvtSaveOptions_Impl : public utl::ConfigItem
                                         bROSaveRelFSys,
                                         bROSaveUnpacked,
                                         bROWarnAlienFormat,
-                                        bRODoPrettyPrinting;
+                                        bRODoPrettyPrinting,
+                                        bROLoadDocPrinter;
 public:
                             SvtSaveOptions_Impl();
                             ~SvtSaveOptions_Impl();
@@ -132,15 +134,17 @@ public:
     BOOL                    IsAutoSave() const                  { return bAutoSave; }
     BOOL                    IsAutoSavePrompt() const            { return bAutoSavePrompt; }
     BOOL                    IsDocInfoSave() const               { return bDocInfSave; }
-    SvtSaveOptions::SaveGraphicsMode        GetSaveGraphicsMode() const         { return eSaveGraphics; }
-    BOOL                    IsSaveWorkingSet() const            { return bSaveWorkingSet;         }
+    SvtSaveOptions::SaveGraphicsMode
+                            GetSaveGraphicsMode() const         { return eSaveGraphics; }
+    BOOL                    IsSaveWorkingSet() const            { return bSaveWorkingSet; }
     BOOL                    IsSaveDocWins() const               { return bSaveDocWins; }
     BOOL                    IsSaveDocView() const               { return bSaveDocView; }
     BOOL                    IsSaveRelINet() const               { return bSaveRelINet; }
     BOOL                    IsSaveRelFSys() const               { return bSaveRelFSys; }
     BOOL                    IsSaveUnpacked() const              { return bSaveUnpacked; }
     sal_Bool                IsPrettyPrintingEnabled( ) const    { return bDoPrettyPrinting; }
-    sal_Bool                IsWarnAlienFormat( ) const    { return bWarnAlienFormat; }
+    sal_Bool                IsWarnAlienFormat() const           { return bWarnAlienFormat; }
+    sal_Bool                IsLoadDocPrinter() const            { return bLoadDocPrinter; }
 
     void                    SetAutoSaveTime( sal_Int32 n );
     void                    SetUseUserData( BOOL b );
@@ -157,6 +161,7 @@ public:
     void                    SetSaveUnpacked( BOOL b );
     void                    EnablePrettyPrinting( sal_Bool _bDoPP );
     void                    SetWarnAlienFormat( sal_Bool _bDoPP );
+    void                    SetLoadDocPrinter( sal_Bool bNew );
 
     sal_Bool                IsReadOnly( SvtSaveOptions::EOption eOption ) const;
 };
@@ -288,6 +293,7 @@ void SvtSaveOptions_Impl::EnablePrettyPrinting( sal_Bool _bDoPP )
         SetModified();
     }
 }
+
 void SvtSaveOptions_Impl::SetWarnAlienFormat( sal_Bool _bDoPP )
 {
     if (!bROWarnAlienFormat && bWarnAlienFormat!=_bDoPP)
@@ -297,6 +303,14 @@ void SvtSaveOptions_Impl::SetWarnAlienFormat( sal_Bool _bDoPP )
     }
 }
 
+void SvtSaveOptions_Impl::SetLoadDocPrinter( sal_Bool bNew )
+{
+    if ( !bROLoadDocPrinter && bLoadDocPrinter != bNew )
+    {
+        bLoadDocPrinter = bNew;
+        SetModified();
+    }
+}
 
 sal_Bool SvtSaveOptions_Impl::IsReadOnly( SvtSaveOptions::EOption eOption ) const
 {
@@ -348,6 +362,9 @@ sal_Bool SvtSaveOptions_Impl::IsReadOnly( SvtSaveOptions::EOption eOption ) cons
         case SvtSaveOptions::E_WARNALIENFORMAT :
             bReadOnly = bROWarnAlienFormat;
             break;
+        case SvtSaveOptions::E_LOADDOCPRINTER :
+            bReadOnly = bROLoadDocPrinter;
+            break;
     }
     return bReadOnly;
 }
@@ -364,9 +381,10 @@ sal_Bool SvtSaveOptions_Impl::IsReadOnly( SvtSaveOptions::EOption eOption ) cons
 #define UNPACKED         9
 #define PRETTYPRINTING  10
 #define WARNALIENFORMAT 11
-#define FILESYSTEM      12
-#define INTERNET        13
-#define SAVEWORKINGSET  14
+#define LOADDOCPRINTER  12
+#define FILESYSTEM      13
+#define INTERNET        14
+#define SAVEWORKINGSET  15
 
 Sequence< OUString > GetPropertyNames()
 {
@@ -384,6 +402,7 @@ Sequence< OUString > GetPropertyNames()
         "Document/Unpacked",
         "Document/PrettyPrinting",
         "Document/WarnAlienFormat",
+        "Document/LoadPrinter",
         "URL/FileSystem",
         "URL/Internet",
         "WorkingSet",
@@ -417,6 +436,7 @@ SvtSaveOptions_Impl::SvtSaveOptions_Impl()
     , bSaveUnpacked( sal_False )
     , bDoPrettyPrinting( sal_False )
     , bWarnAlienFormat( sal_True )
+    , bLoadDocPrinter( sal_True )
     , bROAutoSaveTime( CFG_READONLY_DEFAULT )
     , bROSaveGraphics( CFG_READONLY_DEFAULT )
     , bROUseUserData( CFG_READONLY_DEFAULT )
@@ -432,6 +452,7 @@ SvtSaveOptions_Impl::SvtSaveOptions_Impl()
     , bROSaveUnpacked( CFG_READONLY_DEFAULT )
     , bROWarnAlienFormat( CFG_READONLY_DEFAULT )
     , bRODoPrettyPrinting( CFG_READONLY_DEFAULT )
+    , bROLoadDocPrinter( CFG_READONLY_DEFAULT )
 {
     Sequence< OUString > aNames = GetPropertyNames();
     Sequence< Any > aValues = GetProperties( aNames );
@@ -527,6 +548,11 @@ SvtSaveOptions_Impl::SvtSaveOptions_Impl()
                                 case WARNALIENFORMAT:
                                     bWarnAlienFormat = bTemp;
                                     bROWarnAlienFormat = pROStates[nProp];
+                                    break;
+
+                                case LOADDOCPRINTER:
+                                    bLoadDocPrinter = bTemp;
+                                    bROLoadDocPrinter = pROStates[nProp];
                                     break;
 
                                 default :
@@ -703,6 +729,16 @@ void SvtSaveOptions_Impl::Commit()
                     ++nRealCount;
                 }
                 break;
+
+            case LOADDOCPRINTER:
+                if (!bROLoadDocPrinter)
+                {
+                    pValues[nRealCount] <<= bLoadDocPrinter;
+                    pNames[nRealCount] = pOrgNames[i];
+                    ++nRealCount;
+                }
+                break;
+
             default:
                 DBG_ERRORFILE( "invalid index to save a path" );
         }
@@ -994,7 +1030,18 @@ sal_Bool SvtSaveOptions::IsWarnAlienFormat() const
     return pImp->pSaveOpt->IsWarnAlienFormat();
 }
 
+void SvtSaveOptions::SetLoadDocumentPrinter( sal_Bool _bEnable )
+{
+    pImp->pSaveOpt->SetLoadDocPrinter( _bEnable );
+}
+
+sal_Bool SvtSaveOptions::IsLoadDocumentPrinter() const
+{
+    return pImp->pSaveOpt->IsLoadDocPrinter();
+}
+
 sal_Bool SvtSaveOptions::IsReadOnly( SvtSaveOptions::EOption eOption ) const
 {
     return pImp->pSaveOpt->IsReadOnly(eOption);
 }
+
