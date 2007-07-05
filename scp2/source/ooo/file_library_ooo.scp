@@ -4,9 +4,9 @@
  *
  *  $RCSfile: file_library_ooo.scp,v $
  *
- *  $Revision: 1.248 $
+ *  $Revision: 1.249 $
  *
- *  last change: $Author: rt $ $Date: 2007-07-03 12:50:37 $
+ *  last change: $Author: rt $ $Date: 2007-07-05 09:19:09 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1664,7 +1664,7 @@ File gid_File_Lib_Proxyfac
   #endif
 End
 
-#ifdef UNX
+#if defined(UNX) && !defined(QUARTZ)
 File gid_File_Lib_Psp
     Name = LIBNAME(psp);
     TXT_FILE_BODY;
@@ -1673,7 +1673,7 @@ File gid_File_Lib_Psp
 End
 #endif
 
-#ifdef UNX
+#if defined(UNX) && ! defined(QUARTZ)
 File gid_File_Lib_Vclplug_Gen
     Name = LIBNAME(vclplug_gen);
     TXT_FILE_BODY;
@@ -1682,7 +1682,7 @@ File gid_File_Lib_Vclplug_Gen
 End
 #endif
 
-#ifdef UNX
+#if defined(UNX) && ! defined(QUARTZ)
 #ifdef ENABLE_GTK
 File gid_File_Lib_Vclplug_Gtk
     Name = LIBNAME(vclplug_gtk);
@@ -1702,8 +1702,16 @@ End
 #endif
 #endif
 #endif
+#if defined(QUARTZ)
+File gid_File_Lib_Basebmp
+    Name = LIBNAME(basebmp);
+    TXT_FILE_BODY;
+    Styles = (PACKED,PATCH);
+    Dir = gid_Dir_Program;
+End
+#endif
 
-#ifdef UNX
+#if defined(UNX) && ! defined(QUARTZ)
 #ifdef ENABLE_HEADLESS
 File gid_File_Lib_Vclplug_Hidden
     Name = LIBNAME(vclplug_svp);
@@ -2137,7 +2145,11 @@ File gid_File_Lib_Sysdtrans
     RegistryID = gid_Starregistry_Services_Rdb;
     Dir = gid_Dir_Program;
   #ifdef UNX
-    Name = STRING(CONCAT4(libdtransX11,SUPD,DLLPOSTFIX,UNXSUFFIX));
+    #ifdef QUARTZ
+      Name = STRING(CONCAT4(libdtransaqua,SUPD,DLLPOSTFIX,UNXSUFFIX));
+    #else
+      Name = STRING(CONCAT4(libdtransX11,SUPD,DLLPOSTFIX,UNXSUFFIX));
+    #endif
   #else
     Name = "sysdtrans.dll";
   #endif
