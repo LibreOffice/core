@@ -4,9 +4,9 @@
  *
  *  $RCSfile: DocumentSettingsContext.cxx,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: hr $ $Date: 2007-06-27 14:54:00 $
+ *  last change: $Author: rt $ $Date: 2007-07-05 07:31:27 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -79,12 +79,9 @@
 #ifndef _COM_SUN_STAR_FORMULA_SYMBOLDESCRIPTOR_HPP_
 #include <com/sun/star/formula/SymbolDescriptor.hpp>
 #endif
-
-// #110680#
-//#ifndef _COMPHELPER_PROCESSFACTORY_HXX_
-//#include <comphelper/processfactory.hxx>
-//#endif
-
+#ifndef _COMPHELPER_PROCESSFACTORY_HXX_
+#include <comphelper/processfactory.hxx>
+#endif
 #ifndef _COM_SUN_STAR_UTIL_DATETIME_HPP_
 #include <com/sun/star/util/DateTime.hpp>
 #endif
@@ -93,6 +90,9 @@
 #endif
 #ifndef _COM_SUN_STAR_DOCUMENT_PRINTERINDEPENDENTLAYOUT_HPP_
 #include <com/sun/star/document/PrinterIndependentLayout.hpp>
+#endif
+#ifndef _COMPHELPER_CONFIGURATIONHELPER_HXX_
+#include <comphelper/configurationhelper.hxx>
 #endif
 #ifndef _RTL_USTRBUF_HXX_
 #include <rtl/ustrbuf.hxx>
@@ -104,6 +104,7 @@
 using namespace com::sun::star;
 using namespace ::xmloff::token;
 
+#define C2U(cChar) ::rtl::OUString::createFromAscii(cChar)
 
 //------------------------------------------------------------------
 
@@ -460,9 +461,43 @@ void XMLDocumentSettingsContext::EndElement()
                 i--;
         }
     }
+
+    sal_Bool bLoadDocPrinter( sal_True );
+    ::comphelper::ConfigurationHelper::readDirectKey(
+        ::comphelper::getProcessServiceFactory(),
+        C2U("org.openoffice.Office.Common/"), C2U("Save/Document"), C2U("LoadPrinter"),
+        ::comphelper::ConfigurationHelper::E_READONLY ) >>= bLoadDocPrinter;
     uno::Sequence<beans::PropertyValue> aSeqConfigProps;
-    if (aConfigProps >>= aSeqConfigProps)
-        GetImport().SetConfigurationSettings(aSeqConfigProps);
+    if ( aConfigProps >>= aSeqConfigProps )
+    {
+        if ( !bLoadDocPrinter )
+        {
+            sal_Int32 i = aSeqConfigProps.getLength() - 1;
+            int nFound = 0;
+
+            while ( ( i >= 0 ) && nFound < 2 )
+            {
+                rtl::OUString sProp( aSeqConfigProps[i].Name );
+
+                if ( sProp.compareToAscii("PrinterName") == 0 )
+                {
+                    rtl::OUString sEmpty;
+                    aSeqConfigProps[i].Value = uno::makeAny( sEmpty );
+                    nFound++;
+                }
+                else if ( sProp.compareToAscii("PrinterSetup") == 0 )
+                {
+                    uno::Sequence< sal_Int8 > aEmpty;
+                    aSeqConfigProps[i].Value = uno::makeAny( aEmpty );
+                    nFound++;
+                }
+
+                i--;
+            }
+        }
+
+        GetImport().SetConfigurationSettings( aSeqConfigProps );
+    }
 }
 
 //=============================================================================
