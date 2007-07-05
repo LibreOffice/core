@@ -4,9 +4,9 @@
  *
  *  $RCSfile: socket.c,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: rt $ $Date: 2007-01-31 13:04:19 $
+ *  last change: $Author: rt $ $Date: 2007-07-05 09:05:40 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -813,7 +813,7 @@ static struct hostent* _osl_gethostbyname_r (
     const char *name, struct hostent *result,
     char *buffer, int buflen, int *h_errnop)
 {
-#if defined(LINUX) || (defined(FREEBSD) && (__FreeBSD_version >= 700015))
+#if defined(LINUX) || (defined(FREEBSD) && (__FreeBSD_version >= 601103))
     struct hostent *__result; /* will be the same as result */
     int __error;
     __error = gethostbyname_r (name, result, buffer, buflen,
