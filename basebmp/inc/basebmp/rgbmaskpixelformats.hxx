@@ -4,9 +4,9 @@
  *
  *  $RCSfile: rgbmaskpixelformats.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: obo $ $Date: 2006-10-12 13:46:55 $
+ *  last change: $Author: rt $ $Date: 2007-07-05 08:54:38 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -76,12 +76,12 @@ namespace basebmp
     When true, the final pixel values will be byte-swapped before
     passed on.
  */
-template< typename PixelType,
-          typename ColorType,
-          int      RedMask,
-          int      GreenMask,
-          int      BlueMask,
-          bool     SwapBytes > struct RGBMaskFunctorBase
+template< typename     PixelType,
+          typename     ColorType,
+          unsigned int RedMask,
+          unsigned int GreenMask,
+          unsigned int BlueMask,
+          bool         SwapBytes > struct RGBMaskFunctorBase
 {
     typedef PixelType                                       pixel_type;
     typedef ColorType                                       color_type;
@@ -100,12 +100,12 @@ template< typename PixelType,
     };
 };
 
-template< typename PixelType,
-          typename ColorType,
-          int      RedMask,
-          int      GreenMask,
-          int      BlueMask,
-          bool     SwapBytes > struct RGBMaskGetter :
+template< typename     PixelType,
+          typename     ColorType,
+          unsigned int RedMask,
+          unsigned int GreenMask,
+          unsigned int BlueMask,
+          bool         SwapBytes > struct RGBMaskGetter :
         public RGBMaskFunctorBase<PixelType,
                                   ColorType,
                                   RedMask,
@@ -162,12 +162,12 @@ template< typename PixelType,
     }
 };
 
-template< typename PixelType,
-          typename ColorType,
-          int      RedMask,
-          int      GreenMask,
-          int      BlueMask,
-          bool     SwapBytes > struct RGBMaskSetter :
+template< typename     PixelType,
+          typename     ColorType,
+          unsigned int RedMask,
+          unsigned int GreenMask,
+          unsigned int BlueMask,
+          bool         SwapBytes > struct RGBMaskSetter :
         public RGBMaskFunctorBase<PixelType,
                                   ColorType,
                                   RedMask,
@@ -209,11 +209,11 @@ template< typename PixelType,
 
 //-----------------------------------------------------------------------------
 
-template< typename PixelType,
-          int      RedMask,
-          int      GreenMask,
-          int      BlueMask,
-          bool     SwapBytes > struct PixelFormatTraitsTemplate_RGBMask
+template< typename     PixelType,
+          unsigned int RedMask,
+          unsigned int GreenMask,
+          unsigned int BlueMask,
+          bool         SwapBytes > struct PixelFormatTraitsTemplate_RGBMask
 {
     typedef PixelType                           pixel_type;
 
@@ -278,10 +278,19 @@ typedef PixelFormatTraitsTemplate_RGBMask<
     0xFF0000,
     0x00FF00,
     0x0000FF,
-    false >            PixelFormatTraits_RGB32_888;
+    BASEBMP_TRUECOLORMASK_LSB_SWAP >            PixelFormatTraits_RGB32_888;
 BASEBMP_SPECIALIZE_ACCESSORTRAITS(PixelFormatTraits_RGB32_888::getter_type,
                                   PixelFormatTraits_RGB32_888::setter_type);
 
+// 32bpp endian-sensitive BGR
+typedef PixelFormatTraitsTemplate_RGBMask<
+    sal_uInt32,
+    0xFF0000,
+    0x00FF00,
+    0x0000FF,
+    BASEBMP_TRUECOLORMASK_MSB_SWAP >            PixelFormatTraits_BGR32_888;
+BASEBMP_SPECIALIZE_ACCESSORTRAITS(PixelFormatTraits_BGR32_888::getter_type,
+                                  PixelFormatTraits_BGR32_888::setter_type);
 
 } // namespace basebmp
 
