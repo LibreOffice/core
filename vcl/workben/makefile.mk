@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.18 $
+#   $Revision: 1.19 $
 #
-#   last change: $Author: obo $ $Date: 2007-03-09 09:22:11 $
+#   last change: $Author: rt $ $Date: 2007-07-05 08:45:17 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -47,10 +47,15 @@ ENABLE_EXCEPTIONS=TRUE
 .INCLUDE :	settings.mk
 
 # --- Files --------------------------------------------------------
+
 OBJFILES= \
     $(OBJ)$/svdem.obj \
+    $(OBJ)$/vcldemo.obj \
     $(OBJ)$/outdevgrind.obj
 
+# --- Targets ------------------------------------------------------
+
+# svdem
 
 APP1NOSAL=		TRUE
 APP1TARGET= 	$(TARGET)
@@ -67,7 +72,7 @@ APP1STDLIBS=	$(CPPULIB)			\
                 $(SOTLIB)			\
                 $(VCLLIB)
 
-# --- Targets ------------------------------------------------------
+# outdevgrind
 
 APP2TARGET= outdevgrind
 APP2OBJS=	\
@@ -87,6 +92,24 @@ APP2STDLIBS=$(TOOLSLIB) 		\
             $(UCBHELPERLIB)		\
             $(SALLIB)			\
             $(VCLLIB)
+
+# vcldemo
+
+APP3NOSAL=TRUE
+APP3TARGET=vcldemo
+APP3OBJS= \
+    $(OBJ)$/svdem.obj
+
+APP3STDLIBS=	$(CPPULIB)			\
+                $(UNOTOOLSLIB)	\
+                $(CPPUHELPERLIB)	\
+                $(COMPHELPERLIB)	\
+                $(TOOLSLIB) 		\
+                $(SALLIB)			\
+                $(VOSLIB)			\
+                $(SOTLIB)			\
+                $(VCLLIB)
+
 
 # --- Targets ------------------------------------------------------
 
