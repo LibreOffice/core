@@ -4,9 +4,9 @@
  *
  *  $RCSfile: vclxtoolkit.cxx,v $
  *
- *  $Revision: 1.54 $
+ *  $Revision: 1.55 $
  *
- *  last change: $Author: kz $ $Date: 2007-06-20 10:25:08 $
+ *  last change: $Author: rt $ $Date: 2007-07-05 08:03:46 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -254,12 +254,14 @@ namespace css = ::com::sun::star;
 #define VCLWINDOW_FRAMEWINDOW               0x1000
 #define VCLWINDOW_SYSTEMCHILDWINDOW         0x1001
 
-#ifdef UNX
-#define SYSTEM_DEPENDENT_TYPE ::com::sun::star::lang::SystemDependent::SYSTEM_XWINDOW
-#elif (defined WNT)
+#if (defined WNT)
 #define SYSTEM_DEPENDENT_TYPE ::com::sun::star::lang::SystemDependent::SYSTEM_WIN32
 #elif (defined OS2)
 #define SYSTEM_DEPENDENT_TYPE ::com::sun::star::lang::SystemDependent::SYSTEM_OS2
+#elif (defined QUARTZ)
+#define SYSTEM_DEPENDENT_TYPE ::com::sun::star::lang::SystemDependent::SYSTEM_MAC
+#elif (defined UNX)
+#define SYSTEM_DEPENDENT_TYPE ::com::sun::star::lang::SystemDependent::SYSTEM_XWINDOW
 #endif
 
 WinBits ImplGetWinBits( sal_uInt32 nComponentAttribs, sal_uInt16 nCompType )
@@ -995,18 +997,7 @@ Window* VCLXToolkit::ImplCreateWindow( VCLXWindow** ppNewComp,
 
                                 ::com::sun::star::uno::Any anyHandle = xSystemDepParent->getWindowHandle(processIdSeq, SYSTEM_DEPENDENT_TYPE);
 
-#if defined UNX
-                                sal_Int32 x11_id = 0;
-
-                                            if (anyHandle >>= x11_id)
-                                            {
-                                                            printf("x11_id = %ld\n", x11_id);
-                                                            SystemParentData aParentData;
-                                                            aParentData.nSize   = sizeof( aParentData );
-                                                            aParentData.aWindow = x11_id;
-                                                            pNewWindow = new WorkWindow( &aParentData );
-                                            }
-#elif defined WNT
+#if defined WNT
 
                                 sal_Int32 hWnd;
 
@@ -1016,6 +1007,29 @@ Window* VCLXToolkit::ImplCreateWindow( VCLXWindow** ppNewComp,
                                                             SystemParentData aParentData;
                                                             aParentData.nSize   = sizeof( aParentData );
                                                             aParentData.hWnd    = (HWND)hWnd;
+                                                            pNewWindow = new WorkWindow( &aParentData );
+                                            }
+#elif defined QUARTZ
+
+                                sal_IntPtr rWindow = 0;
+
+                                            if (anyHandle >>= rWindow)
+                                            {
+                                                            printf("rWindow = %ld\n", rWindow);
+                                                            SystemParentData aParentData;
+                                                            aParentData.nSize   = sizeof( aParentData );
+                                                            aParentData.rWindow = (WindowRef)rWindow;
+                                                            pNewWindow = new WorkWindow( &aParentData );
+                                            }
+#elif defined UNX
+                                sal_Int32 x11_id = 0;
+
+                                            if (anyHandle >>= x11_id)
+                                            {
+                                                            printf("x11_id = %ld\n", x11_id);
+                                                            SystemParentData aParentData;
+                                                            aParentData.nSize   = sizeof( aParentData );
+                                                            aParentData.aWindow = x11_id;
                                                             pNewWindow = new WorkWindow( &aParentData );
                                             }
 #endif
@@ -1188,14 +1202,14 @@ css::uno::Reference< css::awt::XWindowPeer > VCLXToolkit::ImplCreateWindow(
     Window* pChildWindow = NULL;
     if ( nSystemType == SYSTEM_DEPENDENT_TYPE )
     {
-#if defined UNX
-            sal_Int32 x11_id = 0;
-            if ( Parent >>= x11_id )
+#if defined WNT
+            sal_Int32 hWnd;
+            if ( Parent >>= hWnd)
             {
-                printf("x11_id = %ld\n", x11_id);
+                printf("hWnd = %ld\n", hWnd);
                 SystemParentData aParentData;
                 aParentData.nSize = sizeof( aParentData );
-                aParentData.aWindow = x11_id;
+                aParentData.hWnd = (HWND)hWnd;
                 osl::Guard< vos::IMutex > aGuard( Application::GetSolarMutex() );
                 try
                 {
@@ -1211,14 +1225,37 @@ css::uno::Reference< css::awt::XWindowPeer > VCLXToolkit::ImplCreateWindow(
                     pChildWindow = NULL;
                 }
             }
-#elif defined WNT
-            sal_Int32 hWnd;
-            if ( Parent >>= hWnd)
+#elif defined QUARTZ
+            sal_IntPtr rWindow = 0;
+            if ( Parent >>= rWindow)
             {
-                printf("hWnd = %ld\n", hWnd);
+                printf("rWindow = %ld\n", rWindow);
                 SystemParentData aParentData;
                 aParentData.nSize = sizeof( aParentData );
-                aParentData.hWnd = (HWND)hWnd;
+                aParentData.rWindow = (WindowRef)rWindow;
+                osl::Guard< vos::IMutex > aGuard( Application::GetSolarMutex() );
+                try
+                {
+                    pChildWindow = new WorkWindow( &aParentData );
+                }
+                catch ( ::com::sun::star::uno::RuntimeException & rEx )
+                {
+                    // system child window could not be created
+                    OSL_TRACE(
+                        "VCLXToolkit::createSystemChild: caught %s\n",
+                        ::rtl::OUStringToOString(
+                            rEx.Message, RTL_TEXTENCODING_UTF8).getStr());
+                    pChildWindow = NULL;
+                }
+            }
+#elif defined UNX
+            sal_Int32 x11_id = 0;
+            if ( Parent >>= x11_id )
+            {
+                printf("x11_id = %ld\n", x11_id);
+                SystemParentData aParentData;
+                aParentData.nSize = sizeof( aParentData );
+                aParentData.aWindow = x11_id;
                 osl::Guard< vos::IMutex > aGuard( Application::GetSolarMutex() );
                 try
                 {
