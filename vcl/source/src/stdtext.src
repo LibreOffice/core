@@ -4,9 +4,9 @@
  *
  *  $RCSfile: stdtext.src,v $
  *
- *  $Revision: 1.47 $
+ *  $Revision: 1.48 $
  *
- *  last change: $Author: ihi $ $Date: 2007-04-19 15:56:46 $
+ *  last change: $Author: rt $ $Date: 2007-07-05 08:40:14 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -109,32 +109,7 @@ String SV_ACCESSERROR_TURNAROUND_MSG
     Text [ en-US ] = "The Java Access Bridge could not be started.";
 };
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+String SV_STDTEXT_ABOUT
+{
+    Text [ en-US ] = "About %PRODUCTNAME";
+};
