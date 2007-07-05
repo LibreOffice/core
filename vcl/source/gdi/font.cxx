@@ -4,9 +4,9 @@
  *
  *  $RCSfile: font.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: hr $ $Date: 2007-06-27 20:12:15 $
+ *  last change: $Author: rt $ $Date: 2007-07-05 08:39:18 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -866,6 +866,9 @@ namespace
     bool identifyTrueTypeFont( const void* i_pBuffer, sal_uInt32 i_nSize, Font& o_rResult )
     {
         bool bResult = false;
+// FIXME: This is HACK. We do not build psprint's part on aqua...
+// How to solve this?
+#ifndef QUARTZ
         TrueTypeFont* pTTF = NULL;
         if( OpenTTFontBuffer( const_cast<void*>(i_pBuffer), i_nSize, 0, &pTTF ) == SF_OK )
         {
@@ -939,6 +942,7 @@ namespace
             // success
             bResult = true;
         }
+#endif
         return bResult;
     }
 
