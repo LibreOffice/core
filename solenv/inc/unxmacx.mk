@@ -4,9 +4,9 @@
 #
 #   $RCSfile: unxmacx.mk,v $
 #
-#   $Revision: 1.17 $
+#   $Revision: 1.18 $
 #
-#   last change: $Author: kz $ $Date: 2007-06-18 16:34:34 $
+#   last change: $Author: rt $ $Date: 2007-07-05 09:04:21 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -97,7 +97,9 @@ CFLAGS=-fsigned-char -fmessage-length=0 -malign-natural -c
 CFLAGSCC=-pipe -fsigned-char -malign-natural $(ARCH_FLAGS)
 
 # Normal Objective C compilation flags
-OBJCFLAGS=-no-precomp
+#OBJCFLAGS=-no-precomp
+OBJCFLAGS=-fobjc-exceptions
+OBJCXXFLAGS=-x objective-c++ -fobjc-exceptions
 
 # Comp Flags for files that need exceptions enabled (C and C++)
 CFLAGSEXCEPTIONS=-fexceptions -fno-enforce-eh-specs
@@ -231,9 +233,15 @@ STDSLOGUI=
 STDOBJCUI=
 STDSLOCUI=
 
+.IF "$(GUIBASE)" == "aqua"
+    STDLIBCUIMT=CPPRUNTIME -lm
+    STDSHLGUIMT=-lpthread CPPRUNTIME -lm -framework CoreFoundation -framework Carbon
+    PSPLIB=-lpsp
+.ELSE
+    STDLIBCUIMT=-lX11 CPPRUNTIME -lm
+    STDSHLGUIMT=-lX11 -lXext -lpthread CPPRUNTIME -lm -framework CoreFoundation
+.ENDIF
 STDLIBGUIMT=-lpthread CPPRUNTIME -lm
-STDLIBCUIMT=-lX11 CPPRUNTIME -lm
-STDSHLGUIMT=-lX11 -lXext -lpthread CPPRUNTIME -lm -framework CoreFoundation
 STDSHLCUIMT=-lpthread CPPRUNTIME -lm
 
 LIBMGR=ar
