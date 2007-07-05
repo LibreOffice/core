@@ -4,9 +4,9 @@
 #
 #   $RCSfile: unxfbsd.mk,v $
 #
-#   $Revision: 1.3 $
+#   $Revision: 1.4 $
 #
-#   last change: $Author: obo $ $Date: 2007-03-09 09:07:55 $
+#   last change: $Author: rt $ $Date: 2007-07-05 08:56:05 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -71,10 +71,6 @@ JAVA_RUNTIME=-ljava_g
 .ENDIF
 .ENDIF
 
-# architecture dependent flags for the C and C++ compiler that can be changed by
-# exporting the variable ARCH_FLAGS="..." in the shell, which is used to start build
-ARCH_FLAGS*=-mtune=pentiumpro
-
 # name of C++ Compiler
 CXX*=g++
 # name of C Compiler
@@ -121,12 +117,6 @@ CFLAGSPROF=
 # Compiler flags for debugging
 CFLAGSDEBUG=-g
 CFLAGSDBGUTIL=
-# Compiler flags for enabling optimizations
-.IF "$(PRODUCT)"!=""
-CFLAGSOPT=-Os -fno-strict-aliasing		# optimizing for products
-.ELSE 	# "$(PRODUCT)"!=""
-CFLAGSOPT=   							# no optimizing for non products
-.ENDIF	# "$(PRODUCT)"!=""
 # Compiler flags for disabling optimizations
 CFLAGSNOOPT=-O0
 # Compiler flags for describing the output path
@@ -228,4 +218,3 @@ RCSETVERSION=
 # platform specific identifier for shared libs
 DLLPRE=lib
 DLLPOST=.so
-
