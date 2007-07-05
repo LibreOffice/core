@@ -1,3 +1,73 @@
+*** misc/libwpd-0.8.8/configure	Tue Jan  9 05:35:10 2007
+--- misc/build/libwpd-0.8.8/configure	Wed Apr  4 20:10:49 2007
+***************
+*** 8089,8095 ****
+    ;;
+  
+  freebsd*)
+!   objformat=`test -x /usr/bin/objformat && /usr/bin/objformat || echo aout`
+    version_type=freebsd-$objformat
+    case $version_type in
+      freebsd-elf*)
+--- 8089,8095 ----
+    ;;
+  
+  freebsd*)
+!   objformat=`test -x /usr/bin/objformat && /usr/bin/objformat || echo elf`
+    version_type=freebsd-$objformat
+    case $version_type in
+      freebsd-elf*)
+***************
+*** 11808,11814 ****
+    ;;
+  
+  freebsd*)
+!   objformat=`test -x /usr/bin/objformat && /usr/bin/objformat || echo aout`
+    version_type=freebsd-$objformat
+    case $version_type in
+      freebsd-elf*)
+--- 11808,11814 ----
+    ;;
+  
+  freebsd*)
+!   objformat=`test -x /usr/bin/objformat && /usr/bin/objformat || echo elf`
+    version_type=freebsd-$objformat
+    case $version_type in
+      freebsd-elf*)
+***************
+*** 14978,14984 ****
+    ;;
+  
+  freebsd*)
+!   objformat=`test -x /usr/bin/objformat && /usr/bin/objformat || echo aout`
+    version_type=freebsd-$objformat
+    case $version_type in
+      freebsd-elf*)
+--- 14978,14984 ----
+    ;;
+  
+  freebsd*)
+!   objformat=`test -x /usr/bin/objformat && /usr/bin/objformat || echo elf`
+    version_type=freebsd-$objformat
+    case $version_type in
+      freebsd-elf*)
+***************
+*** 17346,17352 ****
+    ;;
+  
+  freebsd*)
+!   objformat=`test -x /usr/bin/objformat && /usr/bin/objformat || echo aout`
+    version_type=freebsd-$objformat
+    case $version_type in
+      freebsd-elf*)
+--- 17346,17352 ----
+    ;;
+  
+  freebsd*)
+!   objformat=`test -x /usr/bin/objformat && /usr/bin/objformat || echo elf`
+    version_type=freebsd-$objformat
+    case $version_type in
+      freebsd-elf*)
 *** misc/libwpd-0.8.8/src/lib/WP1Heuristics.cpp	Wed Jan  3 14:07:55 2007
 --- misc/build/libwpd-0.8.8/src/lib/WP1Heuristics.cpp	Tue Apr 17 16:20:47 2007
 ***************
