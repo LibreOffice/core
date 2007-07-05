@@ -4,9 +4,9 @@
  *
  *  $RCSfile: view.cxx,v $
  *
- *  $Revision: 1.48 $
+ *  $Revision: 1.49 $
  *
- *  last change: $Author: vg $ $Date: 2007-05-25 12:16:41 $
+ *  last change: $Author: rt $ $Date: 2007-07-05 13:08:30 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -304,7 +304,10 @@ void SmGraphicWindow::MouseButtonDown(const MouseEvent& rMEvt)
 
 void SmGraphicWindow::GetFocus()
 {
-    ScrollableWindow::GetFocus();
+    SmEditWindow *pEditWin = pViewShell ? pViewShell->GetEditWindow() : 0;
+    if (pEditWin)
+        pEditWin->GrabFocus();
+/*
     if (xAccessible.is())
     {
         uno::Any aOldValue, aNewValue;
@@ -313,6 +316,7 @@ void SmGraphicWindow::GetFocus()
         pAccessible->LaunchEvent( AccessibleEventId::STATE_CHANGED,
                 aOldValue, aNewValue );
     }
+*/
 }
 
 void SmGraphicWindow::LoseFocus()
