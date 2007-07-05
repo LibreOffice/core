@@ -4,9 +4,9 @@
  *
  *  $RCSfile: tblrwcl.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: vg $ $Date: 2007-05-22 16:25:55 $
+ *  last change: $Author: rt $ $Date: 2007-07-05 13:12:10 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -597,45 +597,52 @@ BOOL SwTable::InsertCol( SwDoc* pDoc, const SwSelBoxes& rBoxes,
     if( !pTblNd )
         return FALSE;
 
+    BOOL bRes = TRUE;
     if( IsNewModel() )
-        return NewInsertCol( pDoc, rBoxes, nCnt, bBehind );
-
-    // suche alle Boxen / Lines
-    _FndBox aFndBox( 0, 0 );
+        bRes = NewInsertCol( pDoc, rBoxes, nCnt, bBehind );
+    else
     {
-        _FndPara aPara( rBoxes, &aFndBox );
-        GetTabLines().ForEach( &_FndLineCopyCol, &aPara );
+        // suche alle Boxen / Lines
+        _FndBox aFndBox( 0, 0 );
+        {
+            _FndPara aPara( rBoxes, &aFndBox );
+            GetTabLines().ForEach( &_FndLineCopyCol, &aPara );
+        }
+        if( !aFndBox.GetLines().Count() )
+            return FALSE;
+
+        SetHTMLTableLayout( 0 );    // MIB 9.7.97: HTML-Layout loeschen
+
+        //Lines fuer das Layout-Update herausuchen.
+        aFndBox.SetTableLines( *this );
+        aFndBox.DelFrms( *this );
+
+        // TL_CHART2: nothing to be done since chart2 currently does not want to
+        // get notified about new rows/cols.
+
+        _CpyTabFrms aTabFrmArr;
+        _CpyPara aCpyPara( pTblNd, nCnt, aTabFrmArr );
+
+        for( USHORT n = 0; n < aFndBox.GetLines().Count(); ++n )
+            lcl_InsCol( aFndBox.GetLines()[ n ], aCpyPara, nCnt, bBehind );
+
+        // dann raeume die Struktur dieser Line noch mal auf, generell alle
+        GCLines();
+
+        //Layout updaten
+        aFndBox.MakeFrms( *this );
+
+        CHECKBOXWIDTH
+        CHECKTABLELAYOUT
+        bRes = TRUE;
     }
-    if( !aFndBox.GetLines().Count() )
-        return FALSE;
 
-    SetHTMLTableLayout( 0 );    // MIB 9.7.97: HTML-Layout loeschen
-
-    //Lines fuer das Layout-Update herausuchen.
-    aFndBox.SetTableLines( *this );
-    aFndBox.DelFrms( *this );
-
-    // TL_CHART2: nothing to be done since chart2 currently does not want to
-    // get notified about new rows/cols.
-
-    _CpyTabFrms aTabFrmArr;
-    _CpyPara aCpyPara( pTblNd, nCnt, aTabFrmArr );
-
-    for( USHORT n = 0; n < aFndBox.GetLines().Count(); ++n )
-        lcl_InsCol( aFndBox.GetLines()[ n ], aCpyPara, nCnt, bBehind );
-
-    // dann raeume die Struktur dieser Line noch mal auf, generell alle
-    GCLines();
-
-    //Layout updaten
-    aFndBox.MakeFrms( *this );
-
-    // TL_CHART2: need to inform chart of probably changed cell names
+    SwChartDataProvider *pPCD = pDoc->GetChartDataProvider();
+    if (pPCD && nCnt)
+        pPCD->AddRowCols( *this, rBoxes, nCnt, bBehind );
     pDoc->UpdateCharts( GetFrmFmt()->GetName() );
 
-    CHECKBOXWIDTH
-    CHECKTABLELAYOUT
-    return TRUE;
+    return bRes;
 }
 
 BOOL SwTable::_InsertRow( SwDoc* pDoc, const SwSelBoxes& rBoxes,
@@ -724,11 +731,14 @@ BOOL SwTable::_InsertRow( SwDoc* pDoc, const SwSelBoxes& rBoxes,
         else
             aFndBox.MakeNewFrms( *this, nCnt, bBehind );
     }
-    // TL_CHART2: need to inform chart of probably changed cell names
-    pDoc->UpdateCharts( GetFrmFmt()->GetName() );
 
     CHECKBOXWIDTH
     CHECKTABLELAYOUT
+
+    SwChartDataProvider *pPCD = pDoc->GetChartDataProvider();
+    if (pPCD && nCnt)
+        pPCD->AddRowCols( *this, rBoxes, nCnt, bBehind );
+    pDoc->UpdateCharts( GetFrmFmt()->GetName() );
 
     return TRUE;
 }
