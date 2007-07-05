@@ -4,9 +4,9 @@
  *
  *  $RCSfile: postmac.h,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 09:36:31 $
+ *  last change: $Author: rt $ $Date: 2007-07-05 09:03:06 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -50,10 +50,11 @@
 #undef LSize
 #undef ModalDialog
 #undef SetCursor
-#undef ShowWindow
+//#undef ShowWindow
 #undef StringPtr
 #undef DirInfo
 #undef BOOL
 #undef ULONG
 #undef Line
 #undef TimeValue
+#undef Pattern

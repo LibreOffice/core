@@ -4,9 +4,9 @@
  *
  *  $RCSfile: premac.h,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 09:37:32 $
+ *  last change: $Author: rt $ $Date: 2007-07-05 09:03:26 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -50,10 +50,11 @@
 #define LSize MacOSLSize
 #define ModalDialog MacOSModalDialog
 #define SetCursor MacOSSetCursor
-#define ShowWindow MacOSShowWindow
+//#define ShowWindow MacOSShowWindow
 #define StringPtr MacOSStringPtr
 #define DirInfo MacOSDirInfo
 #define BOOL MacOSBOOL
 #define ULONG MacOSULONG
 #define Line MacOSLine
 #define TimeValue MacOSTimeValue
+#define Pattern MacOSPattern
