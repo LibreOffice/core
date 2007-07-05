@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dbmgr.hxx,v $
  *
- *  $Revision: 1.34 $
+ *  $Revision: 1.35 $
  *
- *  last change: $Author: rt $ $Date: 2007-04-25 08:52:14 $
+ *  last change: $Author: rt $ $Date: 2007-07-05 07:37:06 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -124,7 +124,8 @@ enum DBMgrOptions
     DBMGR_MERGE_MAILMERGE,  // Serienbriefe drucken
     DBMGR_MERGE_MAILING,    // Serienbriefe als email versenden
     DBMGR_MERGE_MAILFILES,  // Serienbriefe als Datei(en) speichern
-    DBMGR_MERGE_DOCUMENTS   // Print merged documents
+    DBMGR_MERGE_DOCUMENTS,   // Print merged documents
+    DBMGR_MERGE_SINGLE_FILE  // save merge as single file
 };
 
 // -----------------------------------------------------------------------
