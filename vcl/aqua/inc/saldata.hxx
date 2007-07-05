@@ -1,12 +1,13 @@
+
 /*************************************************************************
  *
  *  OpenOffice.org - a multi-platform office productivity suite
  *
  *  $RCSfile: saldata.hxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: hr $ $Date: 2007-06-27 19:48:19 $
+ *  last change: $Author: rt $ $Date: 2007-07-05 10:00:34 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -36,78 +37,105 @@
 #ifndef _SV_SALDATA_HXX
 #define _SV_SALDATA_HXX
 
+#include <premac.h>
+#include <Carbon/Carbon.h>
+#include <postmac.h>
+
+
 #ifndef _SV_SV_H
     #include <vcl/sv.h>
 #endif
 
-#ifdef __cplusplus
-
-    #ifndef _SV_SVDATA_HXX
-        #include <vcl/svdata.hxx>
-    #endif
-
-#endif // __cplusplus
+#ifndef _SV_SVDATA_HXX
+#include <vcl/svdata.hxx>
+#endif
 
 #ifndef _SV_SALWTYPE_HXX
-    #include <vcl/salwtype.hxx>
+#include <vcl/salwtype.hxx>
 #endif
 
-#ifndef _SV_VCLWINDOW_H
-    #include <VCLWindow.h>
-#endif
+#include <list>
+#include <hash_set>
 
-#ifdef __cplusplus
+#include <cstdio>
+#include <cstdarg>
 
-    class SalInstance;
-    class SalObject;
-    class SalFrame;
-    class SalVirtualDevice;
-    class SalPrinter;
 
-    class FontList;
+class SalInstance;
+class SalObject;
+class SalFrame;
+class SalVirtualDevice;
+class SalPrinter;
+class SystemFontList;
 
-#else // __cplusplus
+// ------------------
+// - Some constants -
+// ------------------
 
-    #define SalInstance void
-    #define SalVirtualDevice void
-    #define SalPrinter void
-    #define FontList void
-
-#endif // __cplusplus
+#define SAL_CLIPRECT_COUNT 16
 
 // -----------
 // - SalData -
 // -----------
 
-struct SalData
+class AquaSalFrame;
+struct FrameHash : public std::hash<sal_IntPtr>
 {
-    SALTIMERPROC       mpTimerProc;     // timer callback proc
-    SalInstance       *mpFirstInstance; // pointer of first instance
-    SalFrame          *mpFirstFrame;    // pointer of first frame
-    SalObject         *mpFirstObject;   // pointer of first object window
-    SalVirtualDevice  *mpFirstVD;       // first VirDev
-    SalPrinter        *mpFirstPrinter;  // first printing printer
-    FontList          *mpFontList;          // Mac OS font list
+    size_t operator()(const AquaSalFrame* frame) const
+    { return std::hash<sal_IntPtr>::operator()( reinterpret_cast<const sal_IntPtr>(frame) ); }
 };
 
-#ifdef __cplusplus
+struct SalData
+{
 
-    inline void SetSalData( SalData* pData ) { ImplGetSVData()->mpSalData = (void*)pData; }
+    SALTIMERPROC                                  mpTimerProc;      // timer callback proc
+    SalInstance                                  *mpFirstInstance;  // pointer of first instance
+    std::list<AquaSalFrame*>                      maFrames;         // pointer of first frame
+    std::hash_set<const AquaSalFrame*,FrameHash>  maFrameCheck;     // for fast check of frame existance
+    SalObject                                    *mpFirstObject;    // pointer of first object window
+    SalVirtualDevice                             *mpFirstVD;        // first VirDev
+    SalPrinter                                   *mpFirstPrinter;   // first printing printer
+    SystemFontList                               *mpFontList;
 
-    inline SalData *GetSalData() { return (SalData*)ImplGetSVData()->mpSalData; }
-    inline SalData *GetAppSalData() { return (SalData*)ImplGetAppSVData()->mpSalData; }
 
-#else // __cplusplus
+    /*
+     * SalTimer related members
+     */
+    BOOL              mbInTimerProc;     // timer event is currently being dispatched
+    BOOL              mbTimerInstalled;  // timer is in the event loop
+    ULONG             mnTimerMS;         // Current Time (in MS) of the Timer
+    ULONG             mnTimerOrgMS;      // Current Original Time (in MS)
 
-    // C wrapper functions around SetSalData, GetSalData, and GetAppSalData
+    EventLoopTimerRef mrTimerRef;
+    EventLoopTimerUPP mrTimerUPP;
+    static FILE                                  *s_pLog;
 
-    void SalSetSalData( struct SalData* pData );
+    SalData() :
+        mpTimerProc( NULL ),
+        mpFirstInstance( NULL ),
+        mpFirstObject( NULL ),
+        mpFirstVD( NULL ),
+        mpFirstPrinter( NULL ),
+        mpFontList( NULL ),
+        mbInTimerProc( FALSE ),
+        mbTimerInstalled( FALSE ),
+        mnTimerMS( 0 ),
+        mnTimerOrgMS( 0 ),
+        mrTimerRef( 0 ),
+        mrTimerUPP( 0 )
+    {}
+};
 
-    struct SalData *SalGetSalData();
-    struct SalData *SalGetAppSalData();
+void AquaLog( const char* pFormat, ... );
 
-    BOOL SalGetAppQuit();
+inline void SetSalData( SalData* pData ) { ImplGetSVData()->mpSalData = (void*)pData; }
+inline SalData *GetSalData() { return (SalData*)ImplGetSVData()->mpSalData; }
+inline SalData *GetAppSalData() { return (SalData*)ImplGetAppSVData()->mpSalData; }
 
-#endif // __cplusplus
+// --- Prototypes ---
+
+BOOL ImplSalYieldMutexTryToAcquire();
+void ImplSalYieldMutexAcquire();
+void ImplSalYieldMutexRelease();
 
 #endif  // _SV_SALDATA_HXX
