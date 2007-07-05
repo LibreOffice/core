@@ -1,3 +1,42 @@
+diff -uprN misc/vigra1.4.0/configure misc/build/vigra1.4.0/configure
+--- misc/vigra1.4.0/configure	Tue Dec 20 23:53:28 2005
++++ misc/build/vigra1.4.0/configure	Wed Apr  4 20:35:48 2007
+@@ -7259,7 +7259,7 @@ kfreebsd*-gnu)
+   ;;
+ 
+ freebsd*)
+-  objformat=`test -x /usr/bin/objformat && /usr/bin/objformat || echo aout`
++  objformat=`test -x /usr/bin/objformat && /usr/bin/objformat || echo elf`
+   version_type=freebsd-$objformat
+   case $version_type in
+     freebsd-elf*)
+@@ -10961,7 +10961,7 @@ kfreebsd*-gnu)
+   ;;
+ 
+ freebsd*)
+-  objformat=`test -x /usr/bin/objformat && /usr/bin/objformat || echo aout`
++  objformat=`test -x /usr/bin/objformat && /usr/bin/objformat || echo elf`
+   version_type=freebsd-$objformat
+   case $version_type in
+     freebsd-elf*)
+@@ -14110,7 +14110,7 @@ kfreebsd*-gnu)
+   ;;
+ 
+ freebsd*)
+-  objformat=`test -x /usr/bin/objformat && /usr/bin/objformat || echo aout`
++  objformat=`test -x /usr/bin/objformat && /usr/bin/objformat || echo elf`
+   version_type=freebsd-$objformat
+   case $version_type in
+     freebsd-elf*)
+@@ -16461,7 +16461,7 @@ kfreebsd*-gnu)
+   ;;
+ 
+ freebsd*)
+-  objformat=`test -x /usr/bin/objformat && /usr/bin/objformat || echo aout`
++  objformat=`test -x /usr/bin/objformat && /usr/bin/objformat || echo elf`
+   version_type=freebsd-$objformat
+   case $version_type in
+     freebsd-elf*)
 diff -uprN misc/vigra1.4.0/include/vigra/array_vector.hxx misc/build/vigra1.4.0/include/vigra/array_vector.hxx
 --- misc/vigra1.4.0/include/vigra/array_vector.hxx	2005-12-21 05:53:30.000000000 +0100
 +++ misc/build/vigra1.4.0/include/vigra/array_vector.hxx	2006-08-31 12:08:15.172679000 +0200
