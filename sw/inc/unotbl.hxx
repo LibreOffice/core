@@ -4,9 +4,9 @@
  *
  *  $RCSfile: unotbl.hxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: vg $ $Date: 2007-05-22 16:22:18 $
+ *  last change: $Author: rt $ $Date: 2007-07-05 13:11:38 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -302,10 +302,10 @@ public:
 --------------------------------------------------*/
 struct SwRangeDescriptor
 {
-    sal_uInt16 nTop;
-    sal_uInt16 nLeft;
-    sal_uInt16 nBottom;
-    sal_uInt16 nRight;
+    sal_Int32 nTop;
+    sal_Int32 nLeft;
+    sal_Int32 nBottom;
+    sal_Int32 nRight;
 
     void Normalize();
 };
