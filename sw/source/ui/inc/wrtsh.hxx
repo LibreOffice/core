@@ -4,9 +4,9 @@
  *
  *  $RCSfile: wrtsh.hxx,v $
  *
- *  $Revision: 1.37 $
+ *  $Revision: 1.38 $
  *
- *  last change: $Author: vg $ $Date: 2007-05-22 16:39:04 $
+ *  last change: $Author: rt $ $Date: 2007-07-05 13:13:40 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -324,7 +324,7 @@ typedef FASTBOOL (SwWrtShell:: *FNSimpleMove)();
                           USHORT nSlotId = 0,       // SlotId fuer Dialog
                           SfxRequest* pReq = 0 );
 
-    SwFlyFrmFmt*    InsertOleObject( const svt::EmbeddedObjectRef& xObj );
+    BOOL    InsertOleObject( const svt::EmbeddedObjectRef& xObj, SwFlyFrmFmt **pFlyFrmFmt = 0 );
     void    LaunchOLEObj( long nVerb = 0 );             // Server starten
     BOOL    IsOLEObj() const { return GetCntType() == CNT_OLE;}
     virtual void CalcAndSetScale( svt::EmbeddedObjectRef& xObj,
