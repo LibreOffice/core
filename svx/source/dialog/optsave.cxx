@@ -4,9 +4,9 @@
  *
  *  $RCSfile: optsave.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: hr $ $Date: 2007-06-27 17:30:55 $
+ *  last change: $Author: rt $ $Date: 2007-07-05 07:46:03 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -256,6 +256,7 @@ SfxSaveTabPage::SfxSaveTabPage( Window* pParent, const SfxItemSet& rCoreSet ) :
     SfxTabPage( pParent, SVX_RES( RID_SFXPAGE_SAVE ), rCoreSet ),
     aLoadFL             ( this, SVX_RES( LB_LOAD ) ),
     aLoadUserSettingsCB ( this, SVX_RES( CB_LOAD_SETTINGS ) ),
+    aLoadDocPrinterCB   ( this, SVX_RES( CB_LOAD_DOCPRINTER ) ),
     aSaveBox            ( this, SVX_RES( GB_SAVE ) ),
     aDocInfoBtn         ( this, SVX_RES( BTN_DOCINFO ) ),
     aBackupFI           ( this, SVX_RES( FI_BACKUP ) ),
@@ -438,6 +439,9 @@ BOOL SfxSaveTabPage::FillItemSet( SfxItemSet& rSet )
         aSaveOpt.SetLoadUserSettings(aLoadUserSettingsCB.IsChecked());
     }
 
+    if ( aLoadDocPrinterCB.IsChecked() != aLoadDocPrinterCB.GetSavedValue() )
+        aSaveOpt.SetLoadDocumentPrinter( aLoadDocPrinterCB.IsChecked() );
+
     if ( aDocInfoBtn.IsChecked() != aDocInfoBtn.GetSavedValue() )
     {
         rSet.Put( SfxBoolItem( GetWhich( SID_ATTR_DOCINFO ),
@@ -538,6 +542,8 @@ void SfxSaveTabPage::Reset( const SfxItemSet& )
     SvtSaveOptions aSaveOpt;
     aLoadUserSettingsCB.Check(aSaveOpt.IsLoadUserSettings());
     aLoadUserSettingsCB.SaveValue();
+    aLoadDocPrinterCB.Check( aSaveOpt.IsLoadDocumentPrinter() );
+    aLoadDocPrinterCB.SaveValue();
 
     if ( !pImpl->bInitialized )
     {
