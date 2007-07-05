@@ -4,9 +4,9 @@
  *
  *  $RCSfile: unochart.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: vg $ $Date: 2007-05-22 16:21:05 $
+ *  last change: $Author: rt $ $Date: 2007-07-05 13:11:07 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -87,6 +87,7 @@
 #include <com/sun/star/util/XModifyListener.hpp>
 #endif
 
+#include <com/sun/star/chart/ChartDataRowSource.hpp>
 
 #ifndef _CPPUHELPER_INTERFACECONTAINER_H_
 #include <cppuhelper/interfacecontainer.h>  //OMultiTypeInterfaceContainerHelper
@@ -121,6 +122,11 @@ class SwTable;
 class SwTableBox;
 class SwUnoCrsr;
 struct SwRangeDescriptor;
+class SwSelBoxes;
+
+//////////////////////////////////////////////////////////////////////
+
+sal_Bool FillRangeDescriptor( SwRangeDescriptor &rDesc, const String &rCellRangeName );
 
 //////////////////////////////////////////////////////////////////////
 
@@ -241,6 +247,9 @@ public:
     void        InvalidateTable( const SwTable *pTable );
     sal_Bool    DeleteBox( const SwTable *pTable, const SwTableBox &rBox );
     void        DisposeAllDataSequences( const SwTable *pTable );
+
+    // functionality needed to get notified about new added rows/cols
+    void        AddRowCols( const SwTable &rTable, const SwSelBoxes& rBoxes, USHORT nLines, BOOL bBehind );
 };
 
 //////////////////////////////////////////////////////////////////////
@@ -383,6 +392,10 @@ public:
 
     SwFrmFmt*   GetFrmFmt() const { return (SwFrmFmt*)GetRegisteredIn(); }
     sal_Bool    DeleteBox( const SwTableBox &rBox );
+
+    ::com::sun::star::chart::ChartDataRowSource GetDataRowSource() const;
+    void        FillRangeDesc( SwRangeDescriptor &rRangeDesc ) const;
+    bool        ExtendTo( bool bExtendCol, sal_Int32 nFirstNew, sal_Int32 nCount );
 };
 
 //////////////////////////////////////////////////////////////////////
