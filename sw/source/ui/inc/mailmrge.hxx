@@ -4,9 +4,9 @@
  *
  *  $RCSfile: mailmrge.hxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 09:49:17 $
+ *  last change: $Author: rt $ $Date: 2007-07-05 07:41:35 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -86,7 +86,7 @@ class SwMailMergeDlg : public SvxStandardDialog
 {
     friend class SwXSelChgLstnr_Impl;
 
-    Window*          pBeamerWin;
+    Window*         pBeamerWin;
 
     RadioButton     aAllRB;
     RadioButton     aMarkedRB;
@@ -104,16 +104,20 @@ class SwMailMergeDlg : public SvxStandardDialog
 
     CheckBox        aSingleJobsCB;
 
+    FixedLine       aSaveMergedDocumentFL;
+    RadioButton     aSaveSingleDocRB;
+    RadioButton     aSaveIndividualRB;
+
+    CheckBox        aGenerateFromDataBaseCB;
+
+    FixedText       aColumnFT;
+    ListBox         aColumnLB;
     FixedText       aPathFT;
     Edit            aPathED;
     PushButton      aPathPB;
-    FixedText       aFilenameFT;
-    RadioButton     aColumnRB;
-    RadioButton     aFilenameRB;
-    ListBox         aColumnLB;
-    Edit            aFilenameED;
+    FixedText       aFilterFT;
+    ListBox         aFilterLB;
 
-    FixedText       aAddressFT;
     ListBox         aAddressFldLB;
     FixedText       aSubjectFT;
     Edit            aSubjectED;
@@ -125,6 +129,8 @@ class SwMailMergeDlg : public SvxStandardDialog
     CheckBox        aFormatRtfCB;
     CheckBox        aFormatSwCB;
     FixedLine       aDestFL;
+
+    FixedLine       aBottomSeparatorFL;
 
     OKButton        aOkBTN;
     CancelButton    aCancelBTN;
@@ -141,16 +147,21 @@ class SwMailMergeDlg : public SvxStandardDialog
     ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any >       m_aSelection;
     ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame > xFrame;
 
+    Size            m_aDialogSize;
+    ::rtl::OUString m_sSaveFilter;
+
 
     DECL_LINK( ButtonHdl, Button* pBtn );
     DECL_LINK( InsertPathHdl, PushButton * );
     DECL_LINK( AttachFileHdl, PushButton * );
-    DECL_LINK( RadioButtonHdl, RadioButton* pBtn );
-    DECL_LINK( FilenameHdl, RadioButton* pBtn );
+    DECL_LINK( OutputTypeHdl, RadioButton* pBtn );
+    DECL_LINK( FilenameHdl, CheckBox* pBtn );
     DECL_LINK( ModifyHdl, NumericField* pLB );
+    DECL_LINK( SaveTypeHdl, RadioButton* pBtn );
 
     virtual void    Apply();
-    void            ExecQryShell(BOOL bVisible);
+    virtual void    Resize();
+    bool            ExecQryShell();
 
 public:
      SwMailMergeDlg(Window* pParent, SwWrtShell& rSh,
@@ -162,6 +173,7 @@ public:
     ~SwMailMergeDlg();
 
     inline USHORT   GetMergeType() { return nMergeType; }
+    const ::rtl::OUString& GetSaveFilter() const {return m_sSaveFilter;}
     inline const ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any > GetSelection() const { return m_aSelection; }
     ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XResultSet> GetResultSet() const;
 
