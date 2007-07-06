@@ -4,9 +4,9 @@
  *
  *  $RCSfile: propertysethelper.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 17:19:04 $
+ *  last change: $Author: rt $ $Date: 2007-07-06 10:22:39 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -206,6 +206,7 @@ Sequence< Any > SAL_CALL PropertySetHelper::getPropertyValues( const Sequence< :
     if( nCount )
     {
         PropertyMapEntry** pEntries = new PropertyMapEntry*[nCount+1];
+        pEntries[nCount] = NULL;
         const OUString* pNames = aPropertyNames.getConstArray();
 
         sal_Bool bUnknown = sal_False;
@@ -217,7 +218,10 @@ Sequence< Any > SAL_CALL PropertySetHelper::getPropertyValues( const Sequence< :
         }
 
         if( !bUnknown )
+        {
+            aValues.realloc(nCount);
             _getPropertyValues( (const PropertyMapEntry**)pEntries, aValues.getArray() );
+        }
 
         delete[] pEntries;
 
