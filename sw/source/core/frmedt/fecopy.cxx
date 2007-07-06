@@ -4,9 +4,9 @@
  *
  *  $RCSfile: fecopy.cxx,v $
  *
- *  $Revision: 1.45 $
+ *  $Revision: 1.46 $
  *
- *  last change: $Author: vg $ $Date: 2007-02-28 15:43:06 $
+ *  last change: $Author: rt $ $Date: 2007-07-06 09:51:58 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1385,7 +1385,8 @@ void lcl_ConvertSdrOle2ObjsToSdrGrafObjs( SdrModel* _pModel )
                 pGraphicObj->SetLayer( pOle2Obj->GetLayer() );
 
                 // replace ole2 shape with the new graphic object and delete the ol2 shape
-                delete pObjList->ReplaceObject( pGraphicObj, pOle2Obj->GetOrdNum() );
+                SdrObject* pRemovedObject = pObjList->ReplaceObject( pGraphicObj, pOle2Obj->GetOrdNum() );
+                SdrObject::Free( pRemovedObject );
             }
         }
     }
