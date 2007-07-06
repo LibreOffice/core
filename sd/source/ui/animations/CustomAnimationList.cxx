@@ -4,9 +4,9 @@
  *
  *  $RCSfile: CustomAnimationList.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: kz $ $Date: 2006-12-12 16:51:23 $
+ *  last change: $Author: rt $ $Date: 2007-07-06 13:11:11 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -872,26 +872,23 @@ void CustomAnimationList::onSelectionChanged( Any aSelection )
 
         if( aSelection.hasValue() )
         {
-            Reference< XShape > xShape;
-            Reference< XIndexAccess > xShapes;
-            aSelection >>= xShapes;
+            Reference< XIndexAccess > xShapes( aSelection, UNO_QUERY );
             if( xShapes.is() )
             {
                 sal_Int32 nCount = xShapes->getCount();
                 sal_Int32 nIndex;
                 for( nIndex = 0; nIndex < nCount; nIndex++ )
                 {
-                    xShapes->getByIndex( nIndex ) >>= xShape;
-                    selectShape( this, xShape );
+                    Reference< XShape > xShape( xShapes->getByIndex( nIndex ), UNO_QUERY );
+                    if( xShape.is() )
+                        selectShape( this, xShape );
                 }
             }
             else
             {
-                aSelection >>= xShape;
+                Reference< XShape > xShape( aSelection, UNO_QUERY );
                 if( xShape.is() )
-                {
                     selectShape( this, xShape );
-                }
             }
         }
 
