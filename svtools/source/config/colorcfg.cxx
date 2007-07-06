@@ -4,9 +4,9 @@
  *
  *  $RCSfile: colorcfg.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: hr $ $Date: 2007-06-27 21:10:39 $
+ *  last change: $Author: rt $ $Date: 2007-07-06 10:04:05 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -594,7 +594,7 @@ Color ColorConfig::GetDefaultColor(ColorConfigEntry eEntry)
         COL_LIGHTRED,// BASICSTRING    ,
         COL_BLUE, // BASICOPERATOR  ,
         COL_BLUE, // BASICKEYWORD   ,
-        COL_RED //BASICERROR
+        COL_RED, //BASICERROR
     };
     Color aRet;
     switch(eEntry)
