@@ -4,9 +4,9 @@
  *
  *  $RCSfile: pptin.cxx,v $
  *
- *  $Revision: 1.86 $
+ *  $Revision: 1.87 $
  *
- *  last change: $Author: hr $ $Date: 2007-06-27 15:38:15 $
+ *  last change: $Author: rt $ $Date: 2007-07-06 09:48:00 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -2660,7 +2660,10 @@ SdrObject* ImplSdPPTImport::ApplyTextObj( PPTTextObj* pTextObj, SdrTextObj* pObj
         }
     }
     if ( pRet != pText )
-        delete (SdrObject*)pText;
+    {
+        SdrObject* pFree( pText );
+        SdrObject::Free( pFree );
+    }
     return pRet;
 }
 
@@ -2783,7 +2786,7 @@ SdrObject* ImplSdPPTImport::ProcessObj( SvStream& rSt, DffObjData& rObjData, voi
                                             }
                                             //--
 
-                                            delete pObj, pObj = pMediaObj;  // SJ: hoping that pObj is not inserted in any list
+                                            SdrObject::Free( pObj ), pObj = pMediaObj;  // SJ: hoping that pObj is not inserted in any list
                                             pMediaObj->setURL( aMediaURL );
                                         }
                                     }
