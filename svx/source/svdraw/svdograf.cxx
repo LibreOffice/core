@@ -4,9 +4,9 @@
  *
  *  $RCSfile: svdograf.cxx,v $
  *
- *  $Revision: 1.80 $
+ *  $Revision: 1.81 $
  *
- *  last change: $Author: hr $ $Date: 2007-06-27 19:06:08 $
+ *  last change: $Author: rt $ $Date: 2007-07-06 07:41:30 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1215,7 +1215,7 @@ SdrObject* SdrGrafObj::DoConvertToPolyObj(BOOL bBezier) const
                 {
                     SdrObject* pHalfDone = pRetval;
                     pRetval = pHalfDone->DoConvertToPolyObj(bBezier);
-                    delete pHalfDone; // resulting object is newly created
+                    SdrObject::Free( pHalfDone ); // resulting object is newly created
 
                     if( pRetval )
                     {
