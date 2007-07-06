@@ -4,9 +4,9 @@
  *
  *  $RCSfile: transobj.cxx,v $
  *
- *  $Revision: 1.31 $
+ *  $Revision: 1.32 $
  *
- *  last change: $Author: vg $ $Date: 2007-05-22 20:05:40 $
+ *  last change: $Author: rt $ $Date: 2007-07-06 12:27:37 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -838,6 +838,32 @@ void ScTransferObj::StripRefs( ScDocument* pDoc,
         }
         pCell = aIter.GetNext();
     }
+}
+
+const com::sun::star::uno::Sequence< sal_Int8 >& ScTransferObj::getUnoTunnelId()
+{
+    static com::sun::star::uno::Sequence< sal_Int8 > aSeq;
+    if( !aSeq.getLength() )
+    {
+        static osl::Mutex           aCreateMutex;
+        osl::Guard< osl::Mutex >    aGuard( aCreateMutex );
+        aSeq.realloc( 16 );
+        rtl_createUuid( reinterpret_cast< sal_uInt8* >( aSeq.getArray() ), 0, sal_True );
+    }
+    return aSeq;
+}
+
+sal_Int64 SAL_CALL ScTransferObj::getSomething( const com::sun::star::uno::Sequence< sal_Int8 >& rId ) throw( com::sun::star::uno::RuntimeException )
+{
+    sal_Int64 nRet;
+    if( ( rId.getLength() == 16 ) &&
+        ( 0 == rtl_compareMemory( getUnoTunnelId().getConstArray(), rId.getConstArray(), 16 ) ) )
+    {
+        nRet = reinterpret_cast< sal_Int64 >( this );
+    }
+    else
+        nRet = TransferableHelper::getSomething(rId);
+    return nRet;
 }
 
 
