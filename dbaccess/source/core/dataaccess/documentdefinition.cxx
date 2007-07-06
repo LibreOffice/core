@@ -4,9 +4,9 @@
  *
  *  $RCSfile: documentdefinition.cxx,v $
  *
- *  $Revision: 1.42 $
+ *  $Revision: 1.43 $
  *
- *  last change: $Author: kz $ $Date: 2007-05-10 10:12:45 $
+ *  last change: $Author: rt $ $Date: 2007-07-06 07:54:16 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -93,6 +93,8 @@
 #ifndef _COM_SUN_STAR_UCB_INSERTCOMMANDARGUMENT_HPP_
 #include <com/sun/star/ucb/InsertCommandArgument.hpp>
 #endif
+#include <com/sun/star/report/XReportDefinition.hpp>
+#include <com/sun/star/report/XReportEngine.hpp>
 #ifndef _COM_SUN_STAR_UCB_OPENMODE_HPP_
 #include <com/sun/star/ucb/OpenMode.hpp>
 #endif
@@ -234,7 +236,14 @@
 #ifndef _COMPHELPER_SEQUENCEASHASHMAP_HXX_
 #include <comphelper/sequenceashashmap.hxx>
 #endif
+#ifndef _COMPHELPER_MIMECONFIGHELPER_HXX_
+#include <comphelper/mimeconfighelper.hxx>
+#endif
+#ifndef _COMPHELPER_STORAGEHELPER_HXX
+#include <comphelper/storagehelper.hxx>
+#endif
 
+using namespace ::com::sun::star;
 using namespace ::com::sun::star::view;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::util;
@@ -433,8 +442,11 @@ namespace dbaccess
         m_xParentContainer = _xParent;
     }
 
-::rtl::OUString lcl_GetDocumentServiceFromMediaType( const Reference< XStorage >& xStorage
-                                                    ,const ::rtl::OUString& sEntName )
+::rtl::OUString ODocumentDefinition::GetDocumentServiceFromMediaType( const Reference< XStorage >& xStorage
+                                                    ,const ::rtl::OUString& sEntName
+                                                    ,const Reference< XMultiServiceFactory >& _xORB
+                                                    ,Sequence< sal_Int8 >& _rClassId
+                                                    )
 {
     ::rtl::OUString sResult;
     try
@@ -455,21 +467,36 @@ namespace dbaccess
             catch ( Exception& )
             {
             }
+            ::comphelper::MimeConfigurationHelper aConfigHelper(_xORB);
+            sResult = aConfigHelper.GetDocServiceNameFromMediaType(aMediaType);
+            _rClassId = aConfigHelper.GetSequenceClassIDRepresentation(aConfigHelper.GetExplicitlyRegisteredObjClassID(aMediaType));
+            if ( !_rClassId.getLength() && sResult.getLength() )
+            {
+                Reference< XNameAccess > xObjConfig = aConfigHelper.GetObjConfiguration();
+                if ( xObjConfig.is() )
+                {
+                    try
+                    {
+                        Sequence< ::rtl::OUString > aClassIDs = xObjConfig->getElementNames();
+                        for ( sal_Int32 nInd = 0; nInd < aClassIDs.getLength(); nInd++ )
+                        {
+                            Reference< XNameAccess > xObjectProps;
+                            ::rtl::OUString aEntryDocName;
 
-            if ( aMediaType.equalsAscii( "application/vnd.sun.xml.writer" ) )
-                sResult = ::rtl::OUString::createFromAscii( "com.sun.star.comp.Writer.TextDocument" );
-            else if ( aMediaType.equalsAscii( "application/vnd.sun.xml.writer.global" ) )
-                sResult = ::rtl::OUString::createFromAscii( "com.sun.star.comp.Writer.GlobalDocument" );
-            else if ( aMediaType.equalsAscii( "application/vnd.sun.xml.writer.web" ) )
-                sResult = ::rtl::OUString::createFromAscii( "com.sun.star.comp.Writer.WebDocument" );
-            else if ( aMediaType.equalsAscii( "application/vnd.sun.xml.calc" ) )
-                sResult = ::rtl::OUString::createFromAscii( "com.sun.star.comp.Calc.SpreadsheetDocument" );
-            else if ( aMediaType.equalsAscii( "application/vnd.sun.xml.impress" ) )
-                sResult = ::rtl::OUString::createFromAscii( "com.sun.star.comp.Draw.PresentationDocument" );
-            else if ( aMediaType.equalsAscii( "application/vnd.sun.xml.draw" ) )
-                sResult = ::rtl::OUString::createFromAscii( "com.sun.star.comp.Draw.DrawingDocument" );
-            else if ( aMediaType.equalsAscii( "application/vnd.sun.xml.math" ) )
-                sResult = ::rtl::OUString::createFromAscii( "com.sun.star.comp.Math.FormulaDocument" );
+                            if (    ( xObjConfig->getByName( aClassIDs[nInd] ) >>= xObjectProps ) && xObjectProps.is()
+                                 && ( xObjectProps->getByName(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ObjectDocumentServiceName"))
+                                              ) >>= aEntryDocName )
+                                 && aEntryDocName.equals( sResult ) )
+                            {
+                                _rClassId = aConfigHelper.GetSequenceClassIDRepresentation(aClassIDs[nInd]);
+                                break;
+                            }
+                        }
+                    }
+                    catch( Exception& )
+                    {}
+                }
+            }
 
             try
             {
@@ -486,30 +513,6 @@ namespace dbaccess
     return sResult;
 }
 // -----------------------------------------------------------------------------
-Sequence< sal_Int8 > lcl_GetSequenceClassID( sal_uInt32 n1, sal_uInt16 n2, sal_uInt16 n3,
-                                                    sal_uInt8 b8, sal_uInt8 b9, sal_uInt8 b10, sal_uInt8 b11,
-                                                    sal_uInt8 b12, sal_uInt8 b13, sal_uInt8 b14, sal_uInt8 b15 )
-{
-    Sequence< sal_Int8 > aResult( 16 );
-    aResult[0] = static_cast<sal_Int8>(n1 >> 24);
-    aResult[1] = static_cast<sal_Int8>(( n1 << 8 ) >> 24);
-    aResult[2] = static_cast<sal_Int8>(( n1 << 16 ) >> 24);
-    aResult[3] = static_cast<sal_Int8>(( n1 << 24 ) >> 24);
-    aResult[4] = (sal_Int8)(n2 >> 8);
-    aResult[5] = (sal_Int8)(( n2 << 8 ) >> 8);
-    aResult[6] = (sal_Int8)(n3 >> 8);
-    aResult[7] = (sal_Int8)(( n3 << 8 ) >> 8);
-    aResult[8] = b8;
-    aResult[9] = b9;
-    aResult[10] = b10;
-    aResult[11] = b11;
-    aResult[12] = b12;
-    aResult[13] = b13;
-    aResult[14] = b14;
-    aResult[15] = b15;
-
-    return aResult;
-}
 //==========================================================================
 //= ODocumentDefinition
 //==========================================================================
@@ -923,19 +926,31 @@ Any SAL_CALL ODocumentDefinition::execute( const Command& aCommand, sal_Int32 Co
                 if ( m_xEmbeddedObject.is() )
                 {
                     xModel.set(getComponent(),UNO_QUERY);
+                    Reference< report::XReportDefinition> xReportDefinition(xModel,UNO_QUERY);
 
-                    if ( !bOpenForMail )
+                    if ( !bOpenForMail && !(!bOpenInDesign && xReportDefinition.is()) )
                     {
                         Reference< XModule> xModule(xModel,UNO_QUERY);
                         if ( xModule.is() )
                         {
                             if ( m_bForm )
                                 xModule->setIdentifier(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.sdb.FormDesign")));
-                            else
+                            else if ( !xReportDefinition.is() )
                                 xModule->setIdentifier(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.sdb.TextReportDesign")));
                         }
                         m_xEmbeddedObject->changeState(EmbedStates::ACTIVE);
                         impl_onActivateEmbeddedObject( bOpenInDesign );
+                    }
+                    else if ( !bOpenInDesign && xReportDefinition.is() )
+                    {
+                        // we are in ReadOnly mode
+                        // we would like to open the Writer or Calc with the report direct, without design it.
+                        Reference< report::XReportEngine> xReportEngine( m_xORB->createInstance( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.comp.report.OReportEngineJFree"))) ,UNO_QUERY);
+
+                        xReportEngine->setReportDefinition(xReportDefinition);
+                        xReportEngine->setActiveConnection(m_xLastKnownConnection);
+                        aRet <<= xReportEngine->createDocumentAlive(NULL);
+                        return aRet;
                     }
 
                     fillReportData(!bOpenInDesign);
@@ -1240,7 +1255,7 @@ void ODocumentDefinition::fillLoadArgs(Sequence<PropertyValue>& _rArgs,Sequence<
         _rArgs[nLen++].Value <<= aDocumentContext;
     }
 
-    _rArgs.realloc(nLen+3);
+    _rArgs.realloc(nLen+2);
     _rArgs[nLen].Name = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ReadOnly"));
     _rArgs[nLen++].Value <<= _bReadOnly;
 
@@ -1271,12 +1286,6 @@ void ODocumentDefinition::fillLoadArgs(Sequence<PropertyValue>& _rArgs,Sequence<
     _rEmbeddedObjectDescriptor[nLen++].Value <<= xInterceptor;
 }
 // -----------------------------------------------------------------------------
-Sequence< sal_Int8 > ODocumentDefinition::getDefaultDocumentTypeClassId()
-{
-    return lcl_GetSequenceClassID( SO3_SW_CLASSID );
-}
-
-// -----------------------------------------------------------------------------
 void ODocumentDefinition::loadEmbeddedObject(const Sequence< sal_Int8 >& _aClassID,const Reference<XConnection>& _xConnection,sal_Bool _bReadOnly)
 {
     if ( !m_xEmbeddedObject.is() )
@@ -1298,9 +1307,20 @@ void ODocumentDefinition::loadEmbeddedObject(const Sequence< sal_Int8 >& _aClass
                 }
                 else
                 {
-                    aClassID = getDefaultDocumentTypeClassId();
-                    sDocumentService = lcl_GetDocumentServiceFromMediaType(xStorage,m_pImpl->m_aProps.sPersistentName);
+                    sDocumentService = GetDocumentServiceFromMediaType(xStorage,m_pImpl->m_aProps.sPersistentName,m_xORB,aClassID);
+                    if ( !aClassID.getLength() )
+                    {
+                        if ( m_bForm )
+                            aClassID = MimeConfigurationHelper::GetSequenceClassID(SO3_SW_CLASSID);
+                        else
+                        {
+                            ::comphelper::MimeConfigurationHelper aConfigHelper(m_xORB);
+                            aClassID = aConfigHelper.GetSequenceClassIDFromObjectName((::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Report"))));
+                        }
+                    }
                 }
+
+                OSL_ENSURE( aClassID.getLength(),"No Class ID" );
 
                 Sequence<PropertyValue> aArgs,aEmbeddedObjectDescriptor;
                 fillLoadArgs(aArgs,aEmbeddedObjectDescriptor,_xConnection,_bReadOnly);
