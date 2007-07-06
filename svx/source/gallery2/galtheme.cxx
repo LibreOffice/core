@@ -4,9 +4,9 @@
  *
  *  $RCSfile: galtheme.cxx,v $
  *
- *  $Revision: 1.47 $
+ *  $Revision: 1.48 $
  *
- *  last change: $Author: hr $ $Date: 2007-06-27 18:20:50 $
+ *  last change: $Author: rt $ $Date: 2007-07-06 07:37:49 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -968,7 +968,7 @@ BOOL GalleryTheme::InsertGraphic( const Graphic& rGraphic, ULONG nInsertPos )
 
 // -----------------------------------------------------------------------------
 
-BOOL GalleryTheme::GetModel( ULONG nPos, FmFormModel& rModel, BOOL )
+BOOL GalleryTheme::GetModel( ULONG nPos, SdrModel& rModel, BOOL )
 {
     const GalleryObject*    pObject = ImplGetGalleryObject( nPos );
     BOOL                    bRet = FALSE;
