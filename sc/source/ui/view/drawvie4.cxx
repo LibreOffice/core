@@ -4,9 +4,9 @@
  *
  *  $RCSfile: drawvie4.cxx,v $
  *
- *  $Revision: 1.28 $
+ *  $Revision: 1.29 $
  *
- *  last change: $Author: vg $ $Date: 2007-05-22 20:13:10 $
+ *  last change: $Author: rt $ $Date: 2007-07-06 12:29:45 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -240,6 +240,41 @@ void ScDrawView::DoCopy()
 
     pTransferObj->CopyToClipboard( pViewData->GetActiveWin() );     // system clipboard
     SC_MOD()->SetClipObject( NULL, pTransferObj );                  // internal clipboard
+}
+
+uno::Reference<datatransfer::XTransferable> ScDrawView::CopyToTransferable()
+{
+    BOOL bAnyOle, bOneOle;
+    const SdrMarkList& rMarkList = GetMarkedObjectList();
+    lcl_CheckOle( rMarkList, bAnyOle, bOneOle );
+
+    // update ScGlobal::pDrawClipDocShellRef
+    ScDrawLayer::SetGlobalDrawPersist( ScTransferObj::SetDrawClipDoc( bAnyOle ) );
+    SdrModel* pModel = GetAllMarkedModel();
+    ScDrawLayer::SetGlobalDrawPersist(NULL);
+
+    //  Charts now always copy their data in addition to the source reference, so
+    //  there's no need to call SchDLL::Update for the charts in the clipboard doc.
+    //  Update with the data (including NumberFormatter) from the live document would
+    //  also store the NumberFormatter in the clipboard chart (#88749#)
+    // lcl_RefreshChartData( pModel, pViewData->GetDocument() );
+
+    ScDocShell* pDocSh = pViewData->GetDocShell();
+
+    TransferableObjectDescriptor aObjDesc;
+    pDocSh->FillTransferableObjectDescriptor( aObjDesc );
+    aObjDesc.maDisplayName = pDocSh->GetMedium()->GetURLObject().GetURLNoPass();
+    // maSize is set in ScDrawTransferObj ctor
+
+    ScDrawTransferObj* pTransferObj = new ScDrawTransferObj( pModel, pDocSh, aObjDesc );
+    uno::Reference<datatransfer::XTransferable> xTransferable( pTransferObj );
+
+    if ( ScGlobal::pDrawClipDocShellRef )
+    {
+        pTransferObj->SetDrawPersist( &(*ScGlobal::pDrawClipDocShellRef) );    // keep persist for ole objects alive
+    }
+
+    return xTransferable;
 }
 
 //  Korrektur fuer 100% berechnen, unabhaengig von momentanen Einstellungen
