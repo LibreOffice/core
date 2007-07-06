@@ -4,9 +4,9 @@
  *
  *  $RCSfile: tablink.cxx,v $
  *
- *  $Revision: 1.28 $
+ *  $Revision: 1.29 $
  *
- *  last change: $Author: hr $ $Date: 2007-06-27 12:45:54 $
+ *  last change: $Author: rt $ $Date: 2007-07-06 12:42:13 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -355,7 +355,7 @@ BOOL ScTableLink::Refresh(const String& rNewFile, const String& rNewFilter,
                     if ( nRanges )                          // found any?
                     {
                         ScTokenArray aTokenArr;
-                        aTokenArr.AddOpCode( ocNoValue );
+                        aTokenArr.AddOpCode( ocNotAvail );
                         aTokenArr.AddOpCode( ocOpen );
                         aTokenArr.AddOpCode( ocClose );
                         aTokenArr.AddOpCode( ocStop );
