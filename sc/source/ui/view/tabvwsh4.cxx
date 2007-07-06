@@ -4,9 +4,9 @@
  *
  *  $RCSfile: tabvwsh4.cxx,v $
  *
- *  $Revision: 1.66 $
+ *  $Revision: 1.67 $
  *
- *  last change: $Author: vg $ $Date: 2007-05-22 20:14:44 $
+ *  last change: $Author: rt $ $Date: 2007-07-06 12:48:02 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1268,8 +1268,14 @@ ErrCode ScTabViewShell::DoPrint( SfxPrinter *pPrinter,
             bPrintSelected = TRUE;
     }
 
-    //  SfxViewShell::DoPrint calls Print (after StartJob etc.)
-    ErrCode nRet = SfxViewShell::DoPrint( pPrinter, pPrintDialog, bSilent, bIsAPI );
+    ErrCode nRet = ERRCODE_IO_ABORT;
+
+    ScDocShell* pDocShell = GetViewData()->GetDocShell();
+    if ( pDocShell->CheckPrint( pPrintDialog, &GetViewData()->GetMarkData(), bPrintSelected, bIsAPI ) )
+    {
+        // SfxViewShell::DoPrint calls Print (after StartJob etc.)
+        nRet = SfxViewShell::DoPrint( pPrinter, pPrintDialog, bSilent, bIsAPI );
+    }
 
     bPrintSelected = FALSE;
 
