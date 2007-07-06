@@ -4,9 +4,9 @@
  *
  *  $RCSfile: svdmodel.cxx,v $
  *
- *  $Revision: 1.74 $
+ *  $Revision: 1.75 $
  *
- *  last change: $Author: hr $ $Date: 2007-06-27 19:03:54 $
+ *  last change: $Author: rt $ $Date: 2007-07-06 07:40:36 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -187,6 +187,7 @@ struct SdrModelImpl
 {
     SfxUndoManager* mpUndoManager;
     SdrUndoFactory* mpUndoFactory;
+    bool mbAllowShapePropertyChangeListener;
 };
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -199,6 +200,7 @@ void SdrModel::ImpCtor(SfxItemPool* pPool, SfxObjectShell* pPers,
     mpImpl = new SdrModelImpl;
     mpImpl->mpUndoManager=0;
     mpImpl->mpUndoFactory=0;
+    mpImpl->mbAllowShapePropertyChangeListener=false;
     mbInDestruction=false;
     aObjUnit=SdrEngineDefaults::GetMapFraction();
     eObjUnit=SdrEngineDefaults::GetMapUnit();
@@ -2085,6 +2087,21 @@ void SdrModel::SetSdrUndoFactory( SdrUndoFactory* pUndoFactory )
     {
         delete mpImpl->mpUndoFactory;
         mpImpl->mpUndoFactory = pUndoFactory;
+    }
+}
+
+/** cl: added this for OJ to complete his reporting engine, does not work
+    correctly so only enable it for his model */
+bool SdrModel::IsAllowShapePropertyChangeListener() const
+{
+    return mpImpl && mpImpl->mbAllowShapePropertyChangeListener;
+}
+
+void SdrModel::SetAllowShapePropertyChangeListener( bool bAllow )
+{
+    if( mpImpl )
+    {
+        mpImpl->mbAllowShapePropertyChangeListener = bAllow;
     }
 }
 
