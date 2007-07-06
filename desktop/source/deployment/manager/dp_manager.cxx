@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dp_manager.cxx,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: ihi $ $Date: 2007-06-05 15:05:09 $
+ *  last change: $Author: rt $ $Date: 2007-07-06 12:36:15 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1114,6 +1114,13 @@ void PackageManagerImpl::reinstallDeployedPackages(
                   "packages of context ") + m_context,
             static_cast<OWeakObject *>(this), exc );
     }
+}
+
+
+::sal_Bool SAL_CALL PackageManagerImpl::isReadOnly(  )
+        throw (::com::sun::star::uno::RuntimeException)
+{
+    return m_readOnly;
 }
 
 //##############################################################################
