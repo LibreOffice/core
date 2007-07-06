@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xmltoken.cxx,v $
  *
- *  $Revision: 1.107 $
+ *  $Revision: 1.108 $
  *
- *  last change: $Author: rt $ $Date: 2007-07-03 13:22:45 $
+ *  last change: $Author: rt $ $Date: 2007-07-06 09:43:54 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -2862,14 +2862,89 @@ namespace xmloff { namespace token {
         // XML_HORIZONTAL_ON_LEFT_PAGES and XML_HORIZONTAL_ON_RIGHT_PAGES
         // are replaced by XML_HORIZONTAL_ON_EVEN and XML_HORIZONTAL_ON_ODD.
         TOKEN( "horizontal-on-even",        XML_HORIZONTAL_ON_EVEN ),
-        TOKEN( "horizontal-on-odd",         XML_HORIZONTAL_ON_ODD ),
         // <--
+        // --> OJ 2005-09-01
+        TOKEN( "urn:oasis:names:tc:opendocument:xmlns:report:1.0",        XML_N_RPT_OASIS ),
+        TOKEN( "http://openoffice.org/2005/report",       XML_N_RPT ),
+        TOKEN( "group",       XML_GROUP ),
+        TOKEN( "groups",       XML_GROUPS        ),
+        TOKEN( "report-header",       XML_REPORT_HEADER ),
+        TOKEN( "page-header",       XML_PAGE_HEADER  ),
+        TOKEN( "detail",       XML_DETAIL        ),
+        TOKEN( "page-footer",       XML_PAGE_FOOTER  ),
+        TOKEN( "report-footer",       XML_REPORT_FOOTER ),
+        TOKEN( "start-new-column",       XML_START_NEW_COLUMN            ),
+        TOKEN( "reset-page-number",       XML_RESET_PAGE_NUMBER          ),
+        TOKEN( "print-header-on-each-page",       XML_PRINT_HEADER_ON_EACH_PAGE  ),
+        TOKEN( "group-expression",       XML_GROUP_EXPRESSION            ),
+        TOKEN( "group-header",       XML_GROUP_HEADER                ),
+        TOKEN( "group-footer",       XML_GROUP_FOOTER                ),
+        TOKEN( "header-on-new-page",       XML_HEADER_ON_NEW_PAGE),
+        TOKEN( "footer-on-new-page",       XML_FOOTER_ON_NEW_PAGE),
+        TOKEN( "page-print-option",       XML_PAGE_PRINT_OPTION ),
+        TOKEN( "pre-evaluated",         XML_PRE_EVALUATED),
+        TOKEN( "command-type",       XML_COMMAND_TYPE ),
+        TOKEN( "master-fields",       XML_MASTER_FIELDS ),
+        TOKEN( "detail-fields",       XML_DETAIL_FIELDS ),
+        TOKEN( "conditional-print-expression",       XML_CONDITIONAL_PRINT_EXPRESSION ),
+        TOKEN( "report-component",       XML_REPORT_COMPONENT ),
+        TOKEN( "print-repeated-values",       XML_PRINT_REPEATED_VALUES ),
+        TOKEN( "repeat-section",       XML_REPEAT_SECTION ),
+        TOKEN( "force-new-column",       XML_FORCE_NEW_COLUMN ),
+        TOKEN( "group-on",       XML_GROUP_ON),
+        TOKEN( "force-new-page",       XML_FORCE_NEW_PAGE),
+        TOKEN( "group-interval",       XML_GROUP_INTERVAL),
+        TOKEN( "print-only-when-group-change",   XML_PRINT_ONLY_WHEN_GROUP_CHANGE),
+        TOKEN( "report-element",   XML_REPORT_ELEMENT),
+        TOKEN( "list-source",   XML_LIST_SOURCE),
+        TOKEN( "list-source-type",   XML_LIST_SOURCE_TYPE),
+        TOKEN( "image-data",   XML_IMAGE_DATA),
+        TOKEN( "selected",   XML_SELECTED),
+        TOKEN( "current-state",   XML_CURRENT_STATE),
+        TOKEN( "is-tristate",   XML_IS_TRISTATE),
+        TOKEN( "all-pages",   XML_ALL_PAGES),
+        TOKEN( "not-with-report-header",                XML_NOT_WITH_REPORT_HEADER              ),
+        TOKEN( "not-with-report-footer",                XML_NOT_WITH_REPORT_FOOTER              ),
+        TOKEN( "not-with-report-header-nor-footer",     XML_NOT_WITH_REPORT_HEADER_NOR_FOOTER   ),
+        TOKEN( "before-section",        XML_BEFORE_SECTION      ),
+        TOKEN( "after-section",         XML_AFTER_SECTION       ),
+        TOKEN( "before-after-section",  XML_BEFORE_AFTER_SECTION),
+        TOKEN( "prefix-characters",     XML_PREFIX_CHARACTERS       ),
+        TOKEN( "quartal",               XML_QUARTAL             ),
+        TOKEN( "week",                  XML_WEEK                ),
+        TOKEN( "whole-group",           XML_WHOLE_GROUP         ),
+        TOKEN( "with-first-detail",     XML_WITH_FIRST_DETAIL   ),
+        TOKEN( "top-down",              XML_TOP_DOWN   ),
+        TOKEN( "bottom-up",             XML_BOTTOM_UP   ),
+        TOKEN( "hour",                  XML_HOUR   ),
+        TOKEN( "minute",                XML_MINUTE   ),
+        TOKEN( "rpt",                   XML_NP_RPT ),
+        TOKEN( "format-condition",      XML_FORMAT_CONDITION ),
+        TOKEN( "expression1",           XML_EXPRESSION1     ),
+        TOKEN( "expression2",           XML_EXPRESSION2     ),
+        TOKEN( "equal",                 XML_EQUAL           ),
+        TOKEN( "not_equal",             XML_NOT_EQUAL       ),
+        TOKEN( "less",                  XML_LESS            ),
+        TOKEN( "greater",               XML_GREATER         ),
+        TOKEN( "less_equal",            XML_LESS_EQUAL      ),
+        TOKEN( "greater_equal",         XML_GREATER_EQUAL   ),
+        TOKEN( "between",               XML_BETWEEN         ),
+        TOKEN( "not_between",           XML_NOT_BETWEEN     ),
+        // <--
+        TOKEN( "horizontal-on-odd",         XML_HORIZONTAL_ON_ODD ),
         // --> OD 2005-10-10 #i45874#
         TOKEN( "restart-numbering",               XML_RESTART_NUMBERING),
         // <--
         // -> FLR #i52127#
         TOKEN( "numbered-paragraph", XML_NUMBERED_PARAGRAPH),
         // <--
+        TOKEN( "master-detail-fields",  XML_MASTER_DETAIL_FIELDS),
+        TOKEN( "master-detail-field",   XML_MASTER_DETAIL_FIELD),
+        TOKEN( "sub-document",          XML_SUB_DOCUMENT),
+        TOKEN( "fixed-content",         XML_FIXED_CONTENT),
+        TOKEN( "initial-formula",       XML_INITIAL_FORMULA),
+        TOKEN( "deep-traversing",       XML_DEEP_TRAVERSING),
+        TOKEN( "preserve-IRI",       XML_PRESERVE_IRI),
         TOKEN( "sort-by-x-values",      XML_SORT_BY_X_VALUES ),
         TOKEN( "right-angled-axes",      XML_RIGHT_ANGLED_AXES ),
 
