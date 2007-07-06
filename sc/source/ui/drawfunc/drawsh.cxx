@@ -4,9 +4,9 @@
  *
  *  $RCSfile: drawsh.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: rt $ $Date: 2007-04-26 09:52:04 $
+ *  last change: $Author: rt $ $Date: 2007-07-06 12:42:27 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -36,252 +36,10 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_sc.hxx"
 
-
 #include <svx/svxdlg.hxx> //CHINA001
 #include <svx/dialogs.hrc> //CHINA001
-//------------------------------------------------------------------
 
-// TOOLS
-#define _BIGINT_HXX
-#define _SFXMULTISEL_HXX
-#define _STACK_HXX
-#define _QUEUE_HXX
-#define _DYNARR_HXX
-#define _TREELIST_HXX
-#define _CACHESTR_HXX
-#define _NEW_HXX
-//#define _SHL_HXX
-//#define _LINK_HXX
-//#define _ERRCODE_HXX
-//#define _GEN_HXX
-//#define _FRACT_HXX
-//#define _STRING_HXX
-//#define _MTF_HXX
-//#define _CONTNR_HXX
-//#define _LIST_HXX
-//#define _TABLE_HXX
-#define _DYNARY_HXX
-//#define _UNQIDX_HXX
-#define _SVMEMPOOL_HXX
-//#define _UNQID_HXX
-//#define _DEBUG_HXX
-//#define _DATE_HXX
-//#define _TIME_HXX
-//#define _DATETIME_HXX
-//#define _INTN_HXX
-//#define _WLDCRD_HXX
-//#define _FSYS_HXX
-//#define _STREAM_HXX
-#define _CACHESTR_HXX
-#define _SV_MULTISEL_HXX
-
-//SV
-//#define _CLIP_HXX ***
-#define _CONFIG_HXX
-#define _CURSOR_HXX
-#define _FONTDLG_HXX
-#define _PRVWIN_HXX
-//#define _COLOR_HXX
-//#define _PAL_HXX
-//#define _BITMAP_HXX
-//#define _GDIOBJ_HXX
-//#define _POINTR_HXX
-//#define _ICON_HXX
-//#define _IMAGE_HXX
-//#define _KEYCOD_HXX
-//#define _EVENT_HXX
-#define _HELP_HXX
-//#define _APP_HXX
-//#define _MDIAPP_HXX
-//#define _TIMER_HXX
-//#define _METRIC_HXX
-//#define _REGION_HXX
-//#define _OUTDEV_HXX
-//#define _SYSTEM_HXX
-//#define _VIRDEV_HXX
-//#define _JOBSET_HXX
-//#define _PRINT_HXX
-//#define _WINDOW_HXX
-//#define _SYSWIN_HXX
-//#define _WRKWIN_HXX
-#define _MDIWIN_HXX
-//#define _FLOATWIN_HXX
-//#define _DOCKWIN_HXX
-//#define _CTRL_HXX
-//#define _SCRBAR_HXX
-//#define _BUTTON_HXX
-//#define _IMAGEBTN_HXX
-//#define _FIXED_HXX
-//#define _GROUP_HXX
-//#define _EDIT_HXX
-//#define _COMBOBOX_HXX
-//#define _LSTBOX_HXX
-//#define _SELENG_HXX ***
-//#define _SPLIT_HXX
-#define _SPIN_HXX
-//#define _FIELD_HXX
-//#define _MOREBTN_HXX ***
-//#define _TOOLBOX_HXX
-//#define _STATUS_HXX ***
-//#define _DIALOG_HXX
-//#define _MSGBOX_HXX
-//#define _SYSDLG_HXX
-//#define _FILDLG_HXX ***
-//#define _PRNDLG_HXX
-#define _COLDLG_HXX
-//#define _TABDLG_HXX
-//#define _MENU_HXX ***
-//#define _GDIMTF_HXX
-//#define _POLY_HXX
-//#define _ACCEL_HXX
-//#define _GRAPH_HXX
-#define _SOUND_HXX
-
-#if defined  WIN
-#define _MENUBTN_HXX
-#endif
-
-//svtools
-#define _SCRWIN_HXX
-#define _RULER_HXX
-//#define _TABBAR_HXX
-//#define _VALUESET_HXX
-#define _STDMENU_HXX
-//#define _STDCTRL_HXX
-//#define _CTRLBOX_HXX
-#define _CTRLTOOL_HXX
-#define _EXTATTR_HXX
-#define _FRM3D_HXX
-#define _EXTATTR_HXX
-
-//SVTOOLS
-//#define _SVTREELIST_HXX
-#define _FILTER_HXX
-//#define _SVLBOXITM_HXX
-//#define _SVTREEBOX_HXX
-#define _SVICNVW_HXX
-#define _SVTABBX_HXX
-
-//sfxcore.hxx
-//#define _SFXINIMGR_HXX
-//#define _SFXCFGITEM_HXX
-//#define _SFX_PRINTER_HXX
-#define _SFXGENLINK_HXX
-#define _SFXHINTPOST_HXX
-#define _SFXDOCINF_HXX
-#define _SFXLINKHDL_HXX
-//#define _SFX_PROGRESS_HXX
-
-//sfxsh.hxx
-//#define _SFX_SHELL_HXX
-//#define _SFXAPP_HXX
-//#define _SFXDISPATCH_HXX
-//#define _SFXMSG_HXX
-//#define _SFXOBJFACE_HXX
-//#define _SFXREQUEST_HXX
-#define _SFXMACRO_HXX
-
-// SFX
-//#define _SFXAPPWIN_HXX
-#define _SFX_SAVEOPT_HXX
-//#define _SFX_CHILDWIN_HXX
-//#define _SFXCTRLITEM_HXX
-#define _SFXPRNMON_HXX
-#define _INTRO_HXX
-#define _SFXMSGDESCR_HXX
-#define _SFXMSGPOOL_HXX
-#define _SFXFILEDLG_HXX
-#define _PASSWD_HXX
-//#define _SFXTBXCTRL_HXX ***
-#define _SFXSTBITEM_HXX
-#define _SFXMNUITEM_HXX
-#define _SFXIMGMGR_HXX
-#define _SFXTBXMGR_HXX
-#define _SFXSTBMGR_HXX
-#define _SFX_MINFITEM_HXX
-#define _SFXEVENT_HXX
-
-//sfxdoc.hxx
-//#define _SFX_OBJSH_HXX
-//#define _SFX_CLIENTSH_HXX
-//#define _SFXDOCINF_HXX
-//#define _SFX_OBJFAC_HXX
-#define _SFX_DOCFILT_HXX
-//#define _SFXDOCFILE_HXX
-//define _VIEWFAC_HXX
-//#define _SFXVIEWFRM_HXX
-//#define _SFXVIEWSH_HXX
-//#define _MDIFRM_HXX
-#define _SFX_IPFRM_HXX
-//#define _SFX_INTERNO_HXX
-
-//sfxdlg.hxx
-//#define _SFXTABDLG_HXX
-//#define _BASEDLGS_HXX
-#define _SFX_DINFDLG_HXX
-#define _SFXDINFEDT_HXX
-#define _SFX_MGETEMPL_HXX
-#define _SFX_TPLPITEM_HXX
-//#define _SFX_STYLEDLG_HXX
-#define _NEWSTYLE_HXX
-//#define _SFXDOCTEMPL_HXX
-//#define _SFXDOCTDLG_HXX
-//#define _SFX_TEMPLDLG_HXX
-//#define _SFXNEW_HXX
-#define _SFXDOCMAN_HXX
-//#define _SFXDOCKWIN_HXX ***
-
-//sfxitems.hxx
-#define _SFX_WHMAP_HXX
-#define _ARGS_HXX
-//#define _SFXPOOLITEM_HXX
-//#define _SFXINTITEM_HXX
-//#define _SFXENUMITEM_HXX
-#define _SFXFLAGITEM_HXX
-//#define _SFXSTRITEM_HXX
-#define _SFXPTITEM_HXX
-#define _SFXRECTITEM_HXX
-//#define _SFXITEMPOOL_HXX
-//#define _SFXITEMSET_HXX
-#define _SFXITEMITER_HXX
-//#define _SFX_WHITER_HXX ***
-#define _SFXPOOLCACH_HXX
-//#define _AEITEM_HXX
-#define _SFXRNGITEM_HXX
-//#define _SFXSLSTITM_HXX
-//#define _SFXSTYLE_HXX
-
-//xout.hxx
-//#define _XENUM_HXX
-//#define _XPOLY_HXX
-//#define _XATTR_HXX
-//#define _XOUTX_HXX
-//#define _XPOOL_HXX
-//#define _XTABLE_HXX
-
-//svdraw.hxx
-#define _SDR_NOITEMS
-#define _SDR_NOTOUCH
-#define _SDR_NOTRANSFORM
-//#define _SDR_NOOBJECTS
-//#define _SDR_NOVIEWS
-
-//#define SI_NOITEMS
-//#define SI_NODRW
-#define _SI_NOSBXCONTROLS
-//#define _VCATTR_HXX
-#define _VCONT_HXX
-//#define _VCSBX_HXX
-#define _SI_NOOTHERFORMS
-#define _VCTRLS_HXX
-//#define _VCDRWOBJ_HXX
-#define _SI_NOCONTROL
-#define _SETBRW_HXX
-#define _VCBRW_HXX
-#define _SI_NOSBXCONTROLS
-//#define _SIDLL_HXX
-
-//------------------------------------------------------------------
+#include "scitems.hxx"
 
 #include <svx/eeitem.hxx>
 #include <svx/fontwork.hxx>
@@ -292,7 +50,9 @@
 //CHINA001 #include <svx/transfrm.hxx>
 #include <sfx2/app.hxx>
 #include <sfx2/objface.hxx>
+#include <sfx2/objsh.hxx>
 #include <sfx2/request.hxx>
+#include <sfx2/dispatch.hxx>
 #include <svtools/whiter.hxx>
 #include <vcl/msgbox.hxx>
 
@@ -311,9 +71,17 @@
 //add header of cui CHINA001
 #include <svx/svxdlg.hxx>
 #include <svx/dialogs.hrc>
+#include <svx/drawitem.hxx>
+#include <svx/xtable.hxx>
 
 #define ScDrawShell
 #include "scslots.hxx"
+
+#include "userdat.hxx"
+#include <sfx2/objsh.hxx>
+#include <sfx2/macropg.hxx>
+#include <svtools/macitem.hxx>
+#include <com/sun/star/util/XModifiable.hpp>
 
 //------------------------------------------------------------------
 
@@ -342,6 +110,15 @@ void ScDrawShell::StateDisableItems( SfxItemSet &rSet )
     }
 }
 
+void lcl_setModified( SfxObjectShell*  pShell )
+{
+    if ( pShell )
+    {
+        com::sun::star::uno::Reference< com::sun::star::util::XModifiable > xModif( pShell->GetModel(), com::sun::star::uno::UNO_QUERY );
+        if ( xModif.is() )
+            xModif->setModified( sal_True );
+    }
+}
 
 void ScDrawShell::ExecDrawAttr( SfxRequest& rReq )
 {
@@ -351,8 +128,21 @@ void ScDrawShell::ExecDrawAttr( SfxRequest& rReq )
     ScDrawView*         pView       = pViewData->GetScDrawView();
     SdrModel*           pDoc        = pViewData->GetDocument()->GetDrawLayer();
 
+    const SdrMarkList& rMarkList = pView->GetMarkedObjectList();
+    ULONG nMarkCount = rMarkList.GetMarkCount();
+    SdrObject* pSingleSelectedObj = NULL;
+    if ( nMarkCount > 0 )
+        pSingleSelectedObj = rMarkList.GetMark( 0 )->GetMarkedSdrObj();
+
     switch ( nSlot )
     {
+        case SID_ASSIGNMACRO:
+            {
+                if ( pSingleSelectedObj )
+                    ExecuteMacroAssign( pSingleSelectedObj, pWin );
+            }
+            break;
+
         case SID_TEXT_STANDARD: // Harte Textattributierung loeschen
             {
                 SfxItemSet aEmptyAttr(GetPool(), EE_ITEMS_START, EE_ITEMS_END);
@@ -428,6 +218,36 @@ void ScDrawShell::ExecDrawAttr( SfxRequest& rReq )
             ExecuteTextAttrDlg( rReq );
             break;
 
+#ifdef ISSUE66550_HLINK_FOR_SHAPES
+        case SID_DRAW_HLINK_EDIT:
+            if ( pSingleSelectedObj )
+                pViewData->GetDispatcher().Execute( SID_HYPERLINK_DIALOG );
+            break;
+
+        case SID_DRAW_HLINK_DELETE:
+            if ( pSingleSelectedObj )
+                SetHlinkForObject( pSingleSelectedObj, rtl::OUString() );
+            break;
+
+        case SID_OPEN_HYPERLINK:
+            if ( nMarkCount == 1 )
+            {
+                SdrObject* pObj = rMarkList.GetMark( 0 )->GetMarkedSdrObj();
+                if ( pObj->IsGroupObject() )
+                {
+                    SdrPageView* pPV = 0;
+                    SdrObject* pHit = 0;
+                    if ( pView->PickObj( pWin->PixelToLogic( pViewData->GetMousePosPixel() ), pHit, pPV, SDRSEARCH_DEEP ) )
+                        pObj = pHit;
+                }
+
+                ScMacroInfo* pInfo = ScDrawLayer::GetMacroInfo( pObj );
+                if ( pInfo && (pInfo->GetHlink().getLength() > 0) )
+                    ScGlobal::OpenURL( pInfo->GetHlink(), String::EmptyString() );
+            }
+            break;
+#endif
+
         case SID_ATTR_TRANSFORM:
             {
                 if ( pView->AreObjectsMarked() )
@@ -436,7 +256,7 @@ void ScDrawShell::ExecDrawAttr( SfxRequest& rReq )
 
                     if( !pArgs )
                     {
-                        const SdrMarkList& rMarkList = pView->GetMarkedObjectList();
+                        // const SdrMarkList& rMarkList = pView->GetMarkedObjectList();
                         if( rMarkList.GetMark(0) != 0 )
                         {
                             SdrObject* pObj = rMarkList.GetMark(0)->GetMarkedSdrObj();
@@ -502,6 +322,56 @@ void ScDrawShell::ExecDrawAttr( SfxRequest& rReq )
         default:
             break;
     }
+}
+
+void ScDrawShell::ExecuteMacroAssign( SdrObject* pObj, Window* pWin )
+{
+    SvxMacroItem aItem ( SFX_APP()->GetPool().GetWhich( SID_ATTR_MACROITEM ) );
+    ScMacroInfo* pInfo = ScDrawLayer::GetMacroInfo( pObj, TRUE );
+    if ( pInfo->GetMacro().getLength() > 0 )
+    {
+        SvxMacroTableDtor aTab;
+        String sMacro(  pInfo->GetMacro() );
+        aTab.Insert( SFX_EVENT_MOUSECLICK_OBJECT, new SvxMacro( sMacro, String() ) );
+        aItem.SetMacroTable( aTab );
+    }
+    // create empty itemset for macro-dlg
+    SfxItemSet* pItemSet = new SfxItemSet(SFX_APP()->GetPool(), SID_ATTR_MACROITEM, SID_ATTR_MACROITEM );
+    pItemSet->Put ( aItem, SID_ATTR_MACROITEM );
+
+    SfxMacroAssignDlg aDlg( pWin, *pItemSet );
+    SfxMacroTabPage *pMacroPage = (SfxMacroTabPage*) aDlg.GetTabPage();
+    pMacroPage->AddEvent( ScResId(RID_SCSTR_ONCLICK),
+        SFX_EVENT_MOUSECLICK_OBJECT);
+
+    if ( RET_OK == aDlg.Execute() )
+    {
+        const SfxItemSet* pOutSet = aDlg.GetOutputItemSet();
+        const SfxPoolItem* pItem;
+        if( SFX_ITEM_SET == pOutSet->GetItemState( SID_ATTR_MACROITEM, FALSE, &pItem ))
+        {
+            rtl::OUString sMacro;
+            SvxMacro* pMacro = ((SvxMacroItem*)pItem)->GetMacroTable().Get( SFX_EVENT_MOUSECLICK_OBJECT );
+            if ( pMacro )
+            {
+                if ( pObj->IsGroupObject() )
+                {
+                    SdrObjList* pOL = pObj->GetSubList();
+                    ULONG nObj = pOL->GetObjCount();
+                    for ( ULONG index=0; index<nObj; ++index )
+                    {
+                        pInfo = ScDrawLayer::GetMacroInfo( pOL->GetObj(index), TRUE );
+                        pInfo->SetMacro( pMacro->GetMacName() );
+                    }
+                }
+                else
+                    pInfo->SetMacro( pMacro->GetMacName() );
+                lcl_setModified( GetObjectShell() );
+            }
+        }
+    }
+
+    delete pItemSet;
 }
 
 void ScDrawShell::ExecuteLineDlg( SfxRequest& rReq, USHORT nTabPage )
@@ -575,6 +445,12 @@ void ScDrawShell::ExecuteAreaDlg( SfxRequest& rReq, USHORT nTabPage )
                                                             pView);
     DBG_ASSERT(pDlg, "Dialogdiet fail!");//CHINA001
 
+    // #i74099# by default, the dialog deletes the current color table if a different one is loaded
+    // (see SwDrawShell::ExecDrawDlg)
+    const SvxColorTableItem* pColorItem =
+        static_cast<const SvxColorTableItem*>( pViewData->GetSfxDocShell()->GetItem(SID_COLOR_TABLE) );
+    if (pColorItem->GetColorTable() == XColorTable::GetStdColorTable())
+        pDlg->DontDeleteColorTable();
 
     if ( nTabPage != 0xffff )
         pDlg->SetCurPageId( nTabPage );
@@ -622,4 +498,15 @@ void ScDrawShell::ExecuteTextAttrDlg( SfxRequest& rReq, USHORT /* nTabPage */ )
     delete( pDlg );
 }
 
+#ifdef ISSUE66550_HLINK_FOR_SHAPES
+void ScDrawShell::SetHlinkForObject( SdrObject* pObj, const rtl::OUString& rHlnk )
+{
+    if ( pObj )
+    {
+        ScMacroInfo* pInfo = ScDrawLayer::GetMacroInfo( pObj, TRUE );
+        pInfo->SetHlink( rHlnk );
+        lcl_setModified( GetObjectShell() );
+    }
+}
+#endif
 
