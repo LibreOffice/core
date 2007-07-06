@@ -4,9 +4,9 @@
  *
  *  $RCSfile: CustomAnimationCreateDialog.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: kz $ $Date: 2006-12-12 16:50:36 $
+ *  last change: $Author: rt $ $Date: 2007-07-06 13:10:37 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -76,6 +76,9 @@
 #include <svtools/valueset.hxx>
 #endif
 
+#include <svx/svdetc.hxx>
+#include <svx/svdstr.hrc>
+
 #ifndef SD_RESID_HXX
 #include "sdresid.hxx"
 #endif
@@ -121,6 +124,11 @@ using namespace ::com::sun::star::presentation;
 
 namespace sd {
 
+
+const int ENTRANCE = 0;
+const int EMPHASIS = 1;
+const int EXIT = 2;
+const int MOTIONPATH = 3;
 
 extern void fillDurationComboBox( ComboBox* pBox );
 
@@ -201,9 +209,10 @@ void CategoryListBox::UserDraw( const UserDrawEvent& rUDEvt )
 class CustomAnimationCreateTabPage : public TabPage
 {
 public:
-    CustomAnimationCreateTabPage( Window* pParent, CustomAnimationCreateDialog* pDialogParent, const ResId& rResId, const PresetCategoryList& rCategoryList, bool bHasText );
+    CustomAnimationCreateTabPage( Window* pParent, CustomAnimationCreateDialog* pDialogParent, int nTabId, const PresetCategoryList& rCategoryList, bool bHasText );
     ~CustomAnimationCreateTabPage();
 
+    PathKind getCreatePathKind() const;
     CustomAnimationPresetPtr getSelectedPreset() const;
     double getDuration() const;
     void setDuration( double fDuration );
@@ -226,6 +235,10 @@ private:
     CheckBox*   mpCBXPReview;
 
     CustomAnimationCreateDialog*        mpParent;
+
+    USHORT mnCurvePathPos;
+    USHORT mnPolygonPathPos;
+    USHORT mnFreeformPathPos;
 };
 
 struct ImplStlEffectCategorySortHelper
@@ -257,8 +270,12 @@ bool ImplStlEffectCategorySortHelper::operator()( const CustomAnimationPresetPtr
     return mxCollator.is() ? mxCollator->compareString(p1->getLabel(), p2->getLabel()) == -1 : false;
 }
 
-CustomAnimationCreateTabPage::CustomAnimationCreateTabPage( Window* pParent, CustomAnimationCreateDialog* pDialogParent, const ResId& rResId, const PresetCategoryList& rCategoryList, bool bHasText )
-: TabPage( pParent, rResId ), mpParent( pDialogParent )
+CustomAnimationCreateTabPage::CustomAnimationCreateTabPage( Window* pParent, CustomAnimationCreateDialog* pDialogParent, int nTabId, const PresetCategoryList& rCategoryList, bool bHasText )
+: TabPage( pParent, SdResId( RID_TP_CUSTOMANIMATION_ENTRANCE ) )
+, mpParent( pDialogParent )
+, mnCurvePathPos( LISTBOX_ENTRY_NOTFOUND )
+, mnPolygonPathPos( LISTBOX_ENTRY_NOTFOUND )
+, mnFreeformPathPos( LISTBOX_ENTRY_NOTFOUND )
 {
     mpLBEffects = new CategoryListBox( this, SdResId( LB_EFFECTS ) );
     mpFTSpeed = new FixedText( this, SdResId( FT_SPEED ) );
@@ -269,6 +286,8 @@ CustomAnimationCreateTabPage::CustomAnimationCreateTabPage( Window* pParent, Cus
 
     USHORT nFirstEffect = LISTBOX_ENTRY_NOTFOUND;
 
+    bool bInsertMotionPath = nTabId == MOTIONPATH;
+
     PresetCategoryList::const_iterator aCategoryIter( rCategoryList.begin() );
     const PresetCategoryList::const_iterator aCategoryEnd( rCategoryList.end() );
     while( aCategoryIter != aCategoryEnd )
@@ -277,6 +296,14 @@ CustomAnimationCreateTabPage::CustomAnimationCreateTabPage( Window* pParent, Cus
         if( pCategory.get() )
         {
             mpLBEffects->InsertCategory( pCategory->maLabel );
+
+            if( bInsertMotionPath )
+            {
+                mnCurvePathPos = nFirstEffect = mpLBEffects->InsertEntry( sdr::GetResourceString(STR_ObjNameSingulCOMBLINE) );
+                mnPolygonPathPos = mpLBEffects->InsertEntry( sdr::GetResourceString(STR_ObjNameSingulPOLY) );
+                mnFreeformPathPos = mpLBEffects->InsertEntry( sdr::GetResourceString(STR_ObjNameSingulFREELINE) );
+                bInsertMotionPath = false;
+            }
 
             std::vector< CustomAnimationPresetPtr > aSortedVector(pCategory->maEffects.size());
             std::copy( pCategory->maEffects.begin(), pCategory->maEffects.end(), aSortedVector.begin() );
@@ -387,10 +414,40 @@ CustomAnimationPresetPtr CustomAnimationCreateTabPage::getSelectedPreset() const
     CustomAnimationPresetPtr pPreset;
 
     if( mpLBEffects->GetSelectEntryCount() == 1 )
-        pPreset = *static_cast< CustomAnimationPresetPtr* >( mpLBEffects->GetEntryData( mpLBEffects->GetSelectEntryPos() ) );
+    {
+        void* pEntryData = mpLBEffects->GetEntryData( mpLBEffects->GetSelectEntryPos() );
+        if( pEntryData )
+            pPreset = *static_cast< CustomAnimationPresetPtr* >( pEntryData );
+    }
 
     return pPreset;
 }
+
+PathKind CustomAnimationCreateTabPage::getCreatePathKind() const
+{
+    PathKind eKind = NONE;
+
+    if( mpLBEffects->GetSelectEntryCount() == 1 )
+    {
+        const USHORT nPos = mpLBEffects->GetSelectEntryPos();
+        if( nPos == mnCurvePathPos )
+        {
+            eKind = CURVE;
+        }
+        else if( nPos == mnPolygonPathPos )
+        {
+            eKind = POLYGON;
+        }
+        else if( nPos == mnFreeformPathPos )
+        {
+            eKind = FREEFORM;
+        }
+    }
+
+    return eKind;
+}
+
+
 
 double CustomAnimationCreateTabPage::getDuration() const
 {
@@ -455,11 +512,6 @@ void CustomAnimationCreateTabPage::setIsPreview( bool bIsPreview )
 
 // --------------------------------------------------------------------
 
-const int ENTRANCE = 0;
-const int EMPHASIS = 1;
-const int EXIT = 2;
-const int MOTIONPATH = 3;
-
 CustomAnimationCreateDialog::CustomAnimationCreateDialog( Window* pParent, CustomAnimationPane* pPane, const std::vector< ::com::sun::star::uno::Any >& rTargets, bool bHasText  )
 :   TabDialog( pParent, SdResId( DLG_CUSTOMANIMATION_CREATE ) ),
     mpPane( pPane ),
@@ -477,16 +529,16 @@ CustomAnimationCreateDialog::CustomAnimationCreateDialog( Window* pParent, Custo
     mbIsPreview = pOptions->IsPreviewNewEffects();
 
     const CustomAnimationPresets& rPresets = CustomAnimationPresets::getCustomAnimationPresets();
-    mpTabPages[ENTRANCE] = new CustomAnimationCreateTabPage( mpTabControl, this, SdResId( RID_TP_CUSTOMANIMATION_ENTRANCE ), rPresets.getEntrancePresets(), bHasText );
+    mpTabPages[ENTRANCE] = new CustomAnimationCreateTabPage( mpTabControl, this, ENTRANCE, rPresets.getEntrancePresets(), bHasText );
     mpTabPages[ENTRANCE]->SetHelpId( HID_SD_CUSTOMANIMATIONDIALOG_ENTRANCE );
     mpTabControl->SetTabPage( RID_TP_CUSTOMANIMATION_ENTRANCE, mpTabPages[ENTRANCE] );
-    mpTabPages[EMPHASIS] = new CustomAnimationCreateTabPage( mpTabControl, this, SdResId( RID_TP_CUSTOMANIMATION_ENTRANCE ), rPresets.getEmphasisPresets(), bHasText );
+    mpTabPages[EMPHASIS] = new CustomAnimationCreateTabPage( mpTabControl, this, EMPHASIS, rPresets.getEmphasisPresets(), bHasText );
     mpTabPages[EMPHASIS]->SetHelpId( HID_SD_CUSTOMANIMATIONDIALOG_EMPHASIS );
     mpTabControl->SetTabPage( RID_TP_CUSTOMANIMATION_EMPHASIS, mpTabPages[EMPHASIS] );
-    mpTabPages[EXIT] = new CustomAnimationCreateTabPage( mpTabControl, this, SdResId( RID_TP_CUSTOMANIMATION_ENTRANCE ), rPresets.getExitPresets(), bHasText );
+    mpTabPages[EXIT] = new CustomAnimationCreateTabPage( mpTabControl, this, EXIT, rPresets.getExitPresets(), bHasText );
     mpTabPages[EXIT]->SetHelpId( HID_SD_CUSTOMANIMATIONDIALOG_EXIT );
     mpTabControl->SetTabPage( RID_TP_CUSTOMANIMATION_EXIT, mpTabPages[EXIT] );
-    mpTabPages[MOTIONPATH] = new CustomAnimationCreateTabPage( mpTabControl, this, SdResId( RID_TP_CUSTOMANIMATION_ENTRANCE ), rPresets.getMotionPathsPresets(), bHasText );
+    mpTabPages[MOTIONPATH] = new CustomAnimationCreateTabPage( mpTabControl, this, MOTIONPATH, rPresets.getMotionPathsPresets(), bHasText );
     mpTabPages[MOTIONPATH]->SetHelpId( HID_SD_CUSTOMANIMATIONDIALOG_MOTIONPATH );
     mpTabControl->SetTabPage( RID_TP_CUSTOMANIMATION_MOTIONPATH, mpTabPages[MOTIONPATH] );
 
@@ -528,6 +580,11 @@ CustomAnimationCreateTabPage* CustomAnimationCreateDialog::getCurrentPage() cons
     default:
                                             return mpTabPages[MOTIONPATH];
     }
+}
+
+PathKind CustomAnimationCreateDialog::getCreatePathKind() const
+{
+    return getCurrentPage()->getCreatePathKind();
 }
 
 CustomAnimationPresetPtr CustomAnimationCreateDialog::getSelectedPreset() const
