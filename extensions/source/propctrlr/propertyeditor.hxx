@@ -4,9 +4,9 @@
  *
  *  $RCSfile: propertyeditor.hxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: kz $ $Date: 2006-12-13 12:02:56 $
+ *  last change: $Author: rt $ $Date: 2007-07-06 08:53:10 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -49,7 +49,10 @@
 #ifndef _SV_TABCTRL_HXX
 #include <vcl/tabctrl.hxx>
 #endif
-
+#ifndef _COMPHELPER_STLTYPES_HXX_
+#include <comphelper/stl_types.hxx>
+#endif
+#include <boost/mem_fn.hpp>
 #include <map>
 
 //............................................................................
@@ -61,6 +64,7 @@ namespace pcr
     class IPropertyControlObserver;
     class OBrowserPage;
     struct OLineDescriptor;
+    class OBrowserListBox;
 
     //========================================================================
     //= OPropertyEditor
@@ -148,6 +152,8 @@ namespace pcr
 
         OBrowserPage* getPage( const ::rtl::OUString& _rPropertyName );
         const OBrowserPage* getPage( const ::rtl::OUString& _rPropertyName ) const;
+
+        void Update(const ::std::mem_fun_t<void,OBrowserListBox>& _aUpdateFunction);
 
         typedef void (OPropertyEditor::*PageOperation)( OBrowserPage&, const void* );
         void    forEachPage( PageOperation _pOperation, const void* _pArgument = NULL );
