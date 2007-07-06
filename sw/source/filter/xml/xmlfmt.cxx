@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xmlfmt.cxx,v $
  *
- *  $Revision: 1.35 $
+ *  $Revision: 1.36 $
  *
- *  last change: $Author: ihi $ $Date: 2007-06-05 17:39:40 $
+ *  last change: $Author: rt $ $Date: 2007-07-06 09:54:35 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -136,6 +136,7 @@
 #ifndef _SWSTYLENAMEMAPPER_HXX
 #include <SwStyleNameMapper.hxx>
 #endif
+#include <xmloff/attrlist.hxx>
 
 
 using namespace ::com::sun::star;
@@ -520,6 +521,8 @@ class SwXMLItemSetStyleContext_Impl : public SvXMLStyleContext
 {
     OUString                sMasterPageName;
     SfxItemSet              *pItemSet;
+    SwXMLTextStyleContext_Impl *pTextStyle;
+    SvXMLStylesContext      &rStyles;
 
     OUString                sDataStyleName;
 
@@ -550,9 +553,11 @@ public:
             SwXMLImport& rImport, sal_uInt16 nPrfx,
             const OUString& rLName,
             const uno::Reference< xml::sax::XAttributeList > & xAttrList,
+            SvXMLStylesContext& rStylesC,
             sal_uInt16 nFamily);
     virtual ~SwXMLItemSetStyleContext_Impl();
 
+       virtual void CreateAndInsert( sal_Bool bOverwrite );
     virtual SvXMLImportContext *CreateChildContext(
             sal_uInt16 nPrefix,
             const OUString& rLocalName,
@@ -655,9 +660,12 @@ TYPEINIT1( SwXMLItemSetStyleContext_Impl, SvXMLStyleContext );
 SwXMLItemSetStyleContext_Impl::SwXMLItemSetStyleContext_Impl( SwXMLImport& rImport,
         sal_uInt16 nPrfx, const OUString& rLName,
         const uno::Reference< xml::sax::XAttributeList > & xAttrList,
+        SvXMLStylesContext& rStylesC,
         sal_uInt16 nFamily ) :
     SvXMLStyleContext( rImport, nPrfx, rLName, xAttrList, nFamily ),
     pItemSet( 0 ),
+    pTextStyle( 0 ),
+    rStyles( rStylesC ),
     bHasMasterPageName( sal_False ),
     bPageDescConnected( sal_False ),
     sDataStyleName(),
@@ -668,6 +676,12 @@ SwXMLItemSetStyleContext_Impl::SwXMLItemSetStyleContext_Impl( SwXMLImport& rImpo
 SwXMLItemSetStyleContext_Impl::~SwXMLItemSetStyleContext_Impl()
 {
     delete pItemSet;
+}
+
+void SwXMLItemSetStyleContext_Impl::CreateAndInsert( sal_Bool bOverwrite )
+{
+    if( pTextStyle )
+        pTextStyle->CreateAndInsert( bOverwrite );
 }
 
 SvXMLImportContext *SwXMLItemSetStyleContext_Impl::CreateChildContext(
@@ -685,6 +699,22 @@ SvXMLImportContext *SwXMLItemSetStyleContext_Impl::CreateChildContext(
             IsXMLToken( rLocalName, XML_TABLE_CELL_PROPERTIES ) )
         {
             pContext = CreateItemSetContext( nPrefix, rLocalName, xAttrList );
+        }
+        else if( IsXMLToken( rLocalName, XML_TEXT_PROPERTIES ) ||
+                 IsXMLToken( rLocalName, XML_PARAGRAPH_PROPERTIES ))
+        {
+            if( !pTextStyle )
+            {
+                SvXMLAttributeList *pTmp = new SvXMLAttributeList;
+                OUString aStr = GetImport().GetNamespaceMap().GetQNameByKey( nPrefix, GetXMLToken(XML_NAME) );
+                pTmp->AddAttribute( aStr, GetName() );
+                uno::Reference <xml::sax::XAttributeList> xTmpAttrList = pTmp;
+                pTextStyle = new SwXMLTextStyleContext_Impl( GetSwImport(), nPrefix,
+                                 rLocalName, xTmpAttrList, XML_STYLE_FAMILY_TEXT_PARAGRAPH, rStyles );
+                pTextStyle->StartElement( xTmpAttrList );
+                rStyles.AddStyle( *pTextStyle );
+            }
+            pContext = pTextStyle->CreateChildContext( nPrefix, rLocalName, xAttrList );
         }
     }
 
@@ -867,7 +897,7 @@ SvXMLStyleContext *SwXMLStylesContext_Impl::CreateStyleStyleChildContext(
     case XML_STYLE_FAMILY_TABLE_ROW:
     case XML_STYLE_FAMILY_TABLE_CELL:
         pStyle = new SwXMLItemSetStyleContext_Impl( GetSwImport(), nPrefix,
-                            rLocalName, xAttrList, nFamily  );
+                            rLocalName, xAttrList, *this, nFamily  );
         break;
     case XML_STYLE_FAMILY_SD_GRAPHICS_ID:
         // As long as there are no element items, we can use the text
