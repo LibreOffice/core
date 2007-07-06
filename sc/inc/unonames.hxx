@@ -4,9 +4,9 @@
  *
  *  $RCSfile: unonames.hxx,v $
  *
- *  $Revision: 1.73 $
+ *  $Revision: 1.74 $
  *
- *  last change: $Author: vg $ $Date: 2007-05-22 19:39:55 $
+ *  last change: $Author: rt $ $Date: 2007-07-06 12:31:28 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -151,7 +151,7 @@
 //  SheetCellRange
 #define SC_UNONAME_POS              "Position"
 #define SC_UNONAME_SIZE             "Size"
-#define SC_UNONAME_ABSNAME          "AbsolutName"
+#define SC_UNONAME_ABSNAME          "AbsoluteName"
 
 //  column/row/sheet
 #define SC_UNONAME_CELLHGT          "Height"
