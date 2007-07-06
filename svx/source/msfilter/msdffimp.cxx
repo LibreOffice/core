@@ -4,9 +4,9 @@
  *
  *  $RCSfile: msdffimp.cxx,v $
  *
- *  $Revision: 1.150 $
+ *  $Revision: 1.151 $
  *
- *  last change: $Author: hr $ $Date: 2007-06-27 18:35:00 $
+ *  last change: $Author: rt $ $Date: 2007-07-06 07:38:49 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -4300,7 +4300,7 @@ SdrObject* SvxMSDffManager::ImportFontWork( SvStream& rStCt, SfxItemSet& rSet, R
             else
             {
                 pRet->NbcSetSnapRect( rBoundRect );
-                delete pNewObj;
+                SdrObject::Free( pNewObj );
             }
             if( bTextRotate )
             {
@@ -5380,7 +5380,7 @@ SdrObject* SvxMSDffManager::ImportShape( const DffRecordHeader& rHd, SvStream& r
                         {
                             nSpFlags &= ~( SP_FFLIPV | SP_FFLIPH );
                             nObjectRotation = 0;
-                            delete pRet;
+                            SdrObject::Free( pRet );
                             pRet = p3d;
                         }
                     }
@@ -5650,7 +5650,7 @@ SdrObject* SvxMSDffManager::ProcessObj(SvStream& rSt,
 
             if (bTextFrame)
             {
-                delete pObj;
+                SdrObject::Free( pObj );
                 pObj = pOrgObj = 0;
             }
 
