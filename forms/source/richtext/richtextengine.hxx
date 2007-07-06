@@ -4,9 +4,9 @@
  *
  *  $RCSfile: richtextengine.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 23:07:31 $
+ *  last change: $Author: rt $ $Date: 2007-07-06 09:56:32 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -78,6 +78,8 @@ namespace frm
         // for multiplexing the StatusChanged events of the edit engine
         void registerEngineStatusListener( IEngineStatusListener* _pListener );
         void revokeEngineStatusListener( IEngineStatusListener* _pListener );
+
+        inline SfxItemPool* getPool() { return m_pEnginePool; }
 
     protected:
         /** constructs a new RichTextEngine. The instances takes the ownership of the given SfxItemPool
