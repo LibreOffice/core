@@ -4,9 +4,9 @@
  *
  *  $RCSfile: updatecheckconfig.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: vg $ $Date: 2006-11-01 10:13:12 $
+ *  last change: $Author: rt $ $Date: 2007-07-06 14:37:15 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -33,12 +33,16 @@
  *
  ************************************************************************/
 
-#ifndef _CPPUHELPER_IMPLBASE4_HXX_
-#include <cppuhelper/implbase4.hxx>
+#ifndef _CPPUHELPER_IMPLBASE3_HXX_
+#include <cppuhelper/implbase3.hxx>
 #endif
 
-#ifndef _COM_SUN_STAR_CONTAINER_XNAMEREPLACE_HPP_
-#include <com/sun/star/container/XNameReplace.hpp>
+#ifndef _COM_SUN_STAR_BEANS_NAMEDVALUE_HPP_
+#include <com/sun/star/beans/NamedValue.hpp>
+#endif
+
+#ifndef _COM_SUN_STAR_CONTAINER_XNAMECONTAINER_HPP_
+#include <com/sun/star/container/XNameContainer.hpp>
 #endif
 
 #ifndef _COM_SUN_STAR_LANG_XSERVICEINFO_HPP_
@@ -53,27 +57,129 @@
 #include <com/sun/star/util/XChangesBatch.hpp>
 #endif
 
-#ifndef _COM_SUN_STAR_UTIL_XCHANGESNOTIFIER_HPP_
-#include <com/sun/star/util/XChangesNotifier.hpp>
+#ifndef _RTL_REF_HXX_
+#include <rtl/ref.hxx>
 #endif
 
-#include <list>
+#include "updatecheckconfiglistener.hxx"
+#include "updateinfo.hxx"
 
-class UpdateCheckConfig : public ::cppu::WeakImplHelper4<
-    ::com::sun::star::container::XNameReplace,
-    ::com::sun::star::util::XChangesBatch,
-    ::com::sun::star::util::XChangesNotifier,
-    ::com::sun::star::lang::XServiceInfo >
+/* Interface to acess configuration data read-only */
+struct IByNameAccess
 {
-    ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameReplace > m_xUpdateAccess;
-    std::list < ::com::sun::star::uno::Reference< ::com::sun::star::util::XChangesListener > > m_aListenerList;
+    virtual ::com::sun::star::uno::Any getValue(const sal_Char * pName) = 0;
+};
+
+/* This helper class provides by name access to a sequence of named values */
+class NamedValueByNameAccess : public IByNameAccess
+{
+    const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::NamedValue >& m_rValues;
 
 public:
-    UpdateCheckConfig(const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& xContext);
+    NamedValueByNameAccess(
+        const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::NamedValue >& rValues) :
+        m_rValues(rValues) {} ;
+
+    virtual ~NamedValueByNameAccess();
+
+    virtual ::com::sun::star::uno::Any getValue(const sal_Char * pName);
+};
+
+
+/* This class encapsulates the configuration item actually used for storing the state
+ * the update check is actually in.
+ */
+class UpdateCheckROModel
+{
+public:
+    UpdateCheckROModel(IByNameAccess& aNameAccess) : m_aNameAccess(aNameAccess) {};
+
+    bool isAutoCheckEnabled() const;
+    bool isAutoDownloadEnabled() const;
+    bool isDownloadPaused() const;
+    bool hasLocalFile() const;
+
+    rtl::OUString getUpdateEntryVersion() const;
+    void getUpdateEntry(UpdateInfo& rInfo) const;
+
+private:
+
+    rtl::OUString getStringValue(const sal_Char *) const;
+
+    IByNameAccess& m_aNameAccess;
+};
+
+
+
+/* This class implements the non published UNO service com.sun.star.setup.UpdateCheckConfig,
+ * which primary use is to be able to track changes done in the Toos -> Options page of this
+ * component, as this is not supported by the OOo configuration for extendable groups.
+ */
+
+class UpdateCheckConfig : public ::cppu::WeakImplHelper3<
+    ::com::sun::star::container::XNameReplace,
+    ::com::sun::star::util::XChangesBatch,
+    ::com::sun::star::lang::XServiceInfo >
+{
+    UpdateCheckConfig(const ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameContainer >& xContainer,
+                      const ::rtl::Reference< UpdateCheckConfigListener >& rListener );
+
     virtual ~UpdateCheckConfig();
+
+public:
 
     static ::com::sun::star::uno::Sequence< rtl::OUString > getServiceNames();
     static rtl::OUString getImplName();
+
+    static ::rtl::Reference< UpdateCheckConfig > get(
+        const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& xContext,
+        const ::rtl::Reference< UpdateCheckConfigListener >& rListener = ::rtl::Reference< UpdateCheckConfigListener >());
+
+    // Should really implement ROModel ..
+    bool isAutoCheckEnabled() const;
+    bool isAutoDownloadEnabled() const;
+    rtl::OUString getUpdateEntryVersion() const;
+
+    /* Updates the timestamp of last check, but does not commit the change
+     * as either clearUpdateFound() or setUpdateFound() are expected to get
+     * called next.
+     */
+    void updateLastChecked();
+
+    /* Returns the date of the last successful check in seconds since 1970 */
+    sal_Int64 getLastChecked() const;
+
+    /* Returns configured check interval in seconds */
+    sal_Int64 getCheckInterval() const;
+
+    /* Reset values of previously remembered update
+     */
+    void clearUpdateFound();
+
+    /* Stores the specified data of an available update
+     */
+    void storeUpdateFound(const UpdateInfo& rInfo, const rtl::OUString& aCurrentBuild);
+
+    // Returns the local file name of a started download
+    rtl::OUString getLocalFileName() const;
+
+    // Returns the local file name of a started download
+    rtl::OUString getDownloadDestination() const;
+
+    // stores the local file name of a just started download
+    void storeLocalFileName(const rtl::OUString& rFileName);
+
+    // Removes the local file name of a download
+    void clearLocalFileName();
+
+    // Stores the bool value for manually paused downloads
+    void storeDownloadPaused(bool paused);
+
+    // Returns the directory that acts as the user's desktop
+    static rtl::OUString getDesktopDirectory();
+
+    // Returns a directory accessible for all users
+    static rtl::OUString getAllUsersDirectory();
 
     // XElementAccess
     virtual ::com::sun::star::uno::Type SAL_CALL getElementType(  )
@@ -107,12 +213,6 @@ public:
     virtual ::com::sun::star::uno::Sequence< ::com::sun::star::util::ElementChange > SAL_CALL getPendingChanges(  )
         throw (::com::sun::star::uno::RuntimeException);
 
-    // XChangesNotifier
-    virtual void SAL_CALL addChangesListener( const ::com::sun::star::uno::Reference< ::com::sun::star::util::XChangesListener >& aListener )
-        throw (::com::sun::star::uno::RuntimeException);
-    virtual void SAL_CALL removeChangesListener( const ::com::sun::star::uno::Reference< ::com::sun::star::util::XChangesListener >& aListener )
-        throw (::com::sun::star::uno::RuntimeException);
-
     // XServiceInfo
     virtual rtl::OUString SAL_CALL getImplementationName()
         throw (::com::sun::star::uno::RuntimeException);
@@ -120,5 +220,38 @@ public:
         throw (::com::sun::star::uno::RuntimeException);
     virtual ::com::sun::star::uno::Sequence< rtl::OUString > SAL_CALL getSupportedServiceNames()
         throw (::com::sun::star::uno::RuntimeException);
+
+private:
+
+    const ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameContainer > m_xContainer;
+    const ::rtl::Reference< UpdateCheckConfigListener > m_rListener;
 };
 
+//------------------------------------------------------------------------------
+
+
+template <typename T>
+T getValue( const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::NamedValue >& rNamedValues, const sal_Char * pszName )
+    throw (::com::sun::star::uno::RuntimeException)
+{
+    for( sal_Int32 n=0; n < rNamedValues.getLength(); n++ )
+    {
+        // Unfortunatly gcc-3.3 does not like Any.get<T>();
+        if( rNamedValues[n].Name.equalsAscii( pszName ) )
+        {
+            T value;
+            if( ! (rNamedValues[n].Value >>= value) )
+                throw ::com::sun::star::uno::RuntimeException(
+                    ::rtl::OUString(
+                        cppu_Any_extraction_failure_msg(
+                            &rNamedValues[n].Value,
+                            ::cppu::getTypeFavourUnsigned(&value).getTypeLibType() ),
+                            SAL_NO_ACQUIRE ),
+                    ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >() );
+
+            return value;
+        }
+    }
+
+    return T();
+}
