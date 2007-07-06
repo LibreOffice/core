@@ -4,9 +4,9 @@
  *
  *  $RCSfile: WCPage.cxx,v $
  *
- *  $Revision: 1.29 $
+ *  $Revision: 1.30 $
  *
- *  last change: $Author: rt $ $Date: 2007-04-26 08:02:09 $
+ *  last change: $Author: rt $ $Date: 2007-07-06 08:34:33 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -45,9 +45,6 @@
 #ifndef _TOOLS_DEBUG_HXX
 #include <tools/debug.hxx>
 #endif
-#ifndef _DBAUI_MODULE_DBU_HXX_
-#include "moduledbu.hxx"
-#endif
 #ifndef _DBA_DBACCESS_HELPID_HRC_
 #include "dbaccess_helpid.hrc"
 #endif
@@ -83,6 +80,9 @@
 #endif
 #ifndef DBAUI_TOOLS_HXX
 #include "UITools.hxx"
+#endif
+#ifndef _DBAUI_MODULE_DBU_HXX_
+#include "moduledbu.hxx"
 #endif
 #ifndef _CPPUHELPER_EXC_HLP_HXX_
 #include <cppuhelper/exc_hlp.hxx>
