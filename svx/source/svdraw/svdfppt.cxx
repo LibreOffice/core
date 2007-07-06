@@ -4,9 +4,9 @@
  *
  *  $RCSfile: svdfppt.cxx,v $
  *
- *  $Revision: 1.152 $
+ *  $Revision: 1.153 $
  *
- *  last change: $Author: hr $ $Date: 2007-06-27 19:01:30 $
+ *  last change: $Author: rt $ $Date: 2007-07-06 07:40:11 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1018,7 +1018,7 @@ SdrObject* SdrEscherImport::ProcessObj( SvStream& rSt, DffObjData& rObjData, voi
                 nPageNum--;
 
             // replacing the object which we will return with a SdrPageObj
-            delete pRet;
+            SdrObject::Free( pRet );
             pRet = new SdrPageObj( rObjData.rBoundRect, pSdrModel->GetPage( nPageNum - 1 ) );
         }
         else
@@ -1071,7 +1071,7 @@ SdrObject* SdrEscherImport::ProcessObj( SvStream& rSt, DffObjData& rObjData, voi
                     if ( bDeleteSource  && ( pRet->ISA( SdrGrafObj ) == FALSE )     // we are not allowed to get
                             && ( pRet->ISA( SdrObjGroup ) == FALSE )                // grouped placeholder objects
                                 && ( pRet->ISA( SdrOle2Obj ) == FALSE ) )
-                        delete pRet, pRet = NULL;
+                        SdrObject::Free( pRet );
                 }
                 sal_uInt32 nTextFlags = aTextObj.GetTextFlags();
                 sal_Int32 nTextLeft = GetPropertyValue( DFF_Prop_dxTextLeft, 25 * 3600 );   // 0.25 cm (emu)
@@ -1280,7 +1280,7 @@ SdrObject* SdrEscherImport::ProcessObj( SvStream& rSt, DffObjData& rObjData, voi
                 {
                     if ( pRet && pRet->ISA( SdrObjCustomShape ) )
                     {
-                        delete pRet;
+                        SdrObject::Free( pRet );
                         pRet = NULL;
                     }
                     pTObj = new SdrRectObj( eTextKind != OBJ_RECT ? eTextKind : OBJ_TEXT );
@@ -3097,7 +3097,7 @@ void SdrPowerPointImport::ImportPage( SdrPage* pRet, const PptSlidePersistEntry*
                         if ( rSlidePersist.pBObj )
                         {
                             if ( rSlidePersist.bBObjIsTemporary )
-                                delete rSlidePersist.pBObj;
+                                SdrObject::Free( rSlidePersist.pBObj );
                             else
                                 pRet->SetBackgroundObj( rSlidePersist.pBObj );
                         }
