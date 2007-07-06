@@ -4,9 +4,9 @@
  *
  *  $RCSfile: excform8.cxx,v $
  *
- *  $Revision: 1.43 $
+ *  $Revision: 1.44 $
  *
- *  last change: $Author: obo $ $Date: 2007-06-13 09:09:01 $
+ *  last change: $Author: rt $ $Date: 2007-07-06 12:36:47 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -343,7 +343,7 @@ ConvErr ExcelToSc8::Convert( const ScTokenArray*& rpTokArray, XclImpStream& aIn,
                     case EXC_ERR_REF:
                     case EXC_ERR_NAME:
                     case EXC_ERR_NUM:   eOc = ocStop;       break;
-                    case EXC_ERR_NA:    eOc = ocNoValue;    break;
+                    case EXC_ERR_NA:    eOc = ocNotAvail;   break;
                     default:            eOc = ocNoName;
                 }
                 aPool << eOc;
