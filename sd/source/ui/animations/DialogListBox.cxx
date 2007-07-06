@@ -4,9 +4,9 @@
  *
  *  $RCSfile: DialogListBox.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: kz $ $Date: 2006-12-12 16:52:11 $
+ *  last change: $Author: rt $ $Date: 2007-07-06 13:11:50 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -315,6 +315,10 @@ void DialogListBox::StateChanged( StateChangedType nType )
     else if ( nType == STATE_CHANGE_CONTROLBACKGROUND )
     {
         mpChild->SetControlBackground( GetControlBackground() );
+    }
+    else if( nType == STATE_CHANGE_VISIBLE )
+    {
+        mpChild->Show( IsVisible() );
     }
 
     Control::StateChanged( nType );
