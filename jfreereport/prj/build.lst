@@ -1,0 +1,11 @@
+jf	jfreereport	:	solenv NULL
+jf	jfreereport								usr1	-	all	jf_mkout 				NULL
+jf  reportdesign\java\flute					nmake   -   all jf_flute 				NULL
+jf  reportdesign\java\libxml				nmake   -   all jf_libxml				NULL
+jf  reportdesign\java\libloader				nmake   -   all jf_libloader			NULL
+jf  reportdesign\java\libfonts				nmake   -   all jf_libfonts				NULL
+jf  reportdesign\java\libformula			nmake   -   all jf_libformula			NULL
+jf  reportdesign\java\librepository			nmake   -   all jf_librepository		NULL
+jf  reportdesign\java\jcommon-serializer	nmake   -   all jf_jcommon-serializer	NULL
+jf  reportdesign\java\jfreereport			nmake   -   all jf_jfreereport			NULL
+jf  reportdesign\java\liblayout				nmake   -   all jf_liblayout			NULL
