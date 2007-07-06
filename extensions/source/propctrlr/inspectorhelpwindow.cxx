@@ -4,9 +4,9 @@
  *
  *  $RCSfile: inspectorhelpwindow.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: vg $ $Date: 2006-12-15 02:13:45 $
+ *  last change: $Author: rt $ $Date: 2007-07-06 08:50:12 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -67,10 +67,15 @@ namespace pcr
         ,m_nMinLines( 3 )
         ,m_nMaxLines( 8 )
     {
+        SetBackground();
+        SetPaintTransparent(TRUE);
         m_aSeparator.SetText( String( PcrRes( RID_STR_HELP_SECTION_LABEL ) ) );
+        m_aSeparator.SetBackground();
         m_aSeparator.Show();
 
-        m_aHelpText.SetControlBackground( m_aSeparator.GetBackground().GetColor() );
+        m_aHelpText.SetControlBackground( /*m_aSeparator.GetBackground().GetColor() */);
+        m_aHelpText.SetBackground();
+        m_aHelpText.SetPaintTransparent(TRUE);
         m_aHelpText.Show();
     }
 
