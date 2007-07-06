@@ -4,9 +4,9 @@
  *
  *  $RCSfile: filedlghelper.cxx,v $
  *
- *  $Revision: 1.131 $
+ *  $Revision: 1.132 $
  *
- *  last change: $Author: hr $ $Date: 2007-06-27 23:11:43 $
+ *  last change: $Author: rt $ $Date: 2007-07-06 10:16:51 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -2079,13 +2079,19 @@ void FileDialogHelper_Impl::loadConfig()
             {
                 // respect the last "insert as link" state
                 sal_Bool bLink = (sal_Bool) aUserData.GetToken( 0, ' ' ).ToInt32();
-                aValue <<= bLink;
-                xDlg->setValue( ExtendedFilePickerElementIds::CHECKBOX_LINK, 0, aValue );
+                if ( !xDlg->getValue( ExtendedFilePickerElementIds::CHECKBOX_LINK, 0 ).hasValue() )
+                {
+                    aValue <<= bLink;
+                    xDlg->setValue( ExtendedFilePickerElementIds::CHECKBOX_LINK, 0, aValue );
+                }
 
                 // respect the last "show preview" state
                 sal_Bool bShowPreview = (sal_Bool) aUserData.GetToken( 1, ' ' ).ToInt32();
-                aValue <<= bShowPreview;
-                xDlg->setValue( ExtendedFilePickerElementIds::CHECKBOX_PREVIEW, 0, aValue );
+                if  ( !xDlg->getValue( ExtendedFilePickerElementIds::CHECKBOX_PREVIEW, 0 ).hasValue() )
+                {
+                    aValue <<= bShowPreview;
+                    xDlg->setValue( ExtendedFilePickerElementIds::CHECKBOX_PREVIEW, 0, aValue );
+                }
 
                 if ( !maPath.getLength() )
                     displayFolder( getInitPath( aUserData, 2 ) );
