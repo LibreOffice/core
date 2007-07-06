@@ -4,9 +4,9 @@
  *
  *  $RCSfile: frame.cxx,v $
  *
- *  $Revision: 1.102 $
+ *  $Revision: 1.103 $
  *
- *  last change: $Author: rt $ $Date: 2007-07-05 08:58:43 $
+ *  last change: $Author: rt $ $Date: 2007-07-06 12:22:50 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -652,6 +652,35 @@ void SAL_CALL Frame::setActiveFrame( const css::uno::Reference< css::frame::XFra
 }
 
 /*-****************************************************************************************************//**
+   initialize new created layout manager
+**/
+void lcl_enableLayoutManager(const css::uno::Reference< css::frame::XLayoutManager >& xLayoutManager,
+                             const css::uno::Reference< css::frame::XFrame >&         xFrame        )
+{
+    // Provide container window to our layout manager implementation
+    xLayoutManager->attachFrame(xFrame);
+
+    css::uno::Reference< css::frame::XFrameActionListener > xListen(xLayoutManager, css::uno::UNO_QUERY_THROW);
+    xFrame->addFrameActionListener(xListen);
+
+    DockingAreaDefaultAcceptor* pAcceptor = new DockingAreaDefaultAcceptor(xFrame);
+    css::uno::Reference< css::ui::XDockingAreaAcceptor > xDockingAreaAcceptor( static_cast< ::cppu::OWeakObject* >(pAcceptor), css::uno::UNO_QUERY_THROW);
+    xLayoutManager->setDockingAreaAcceptor(xDockingAreaAcceptor);
+}
+
+/*-****************************************************************************************************//**
+   deinitialize layout manager
+**/
+void lcl_disableLayoutManager(const css::uno::Reference< css::frame::XLayoutManager >& xLayoutManager,
+                              const css::uno::Reference< css::frame::XFrame >&         xFrame        )
+{
+    css::uno::Reference< css::frame::XFrameActionListener > xListen(xLayoutManager, css::uno::UNO_QUERY_THROW);
+    xFrame->removeFrameActionListener(xListen);
+    xLayoutManager->setDockingAreaAcceptor(css::uno::Reference< css::ui::XDockingAreaAcceptor >());
+    xLayoutManager->attachFrame(css::uno::Reference< css::frame::XFrame >());
+}
+
+/*-****************************************************************************************************//**
     @short      initialize frame instance
     @descr      A frame needs a window. This method set a new one ... but should called one times only!
                 We use this window to listen for window events and forward it to our set component.
@@ -708,14 +737,7 @@ void SAL_CALL Frame::initialize( const css::uno::Reference< css::awt::XWindow >&
     /* UNSAFE AREA --------------------------------------------------------------------------------------------- */
 
     if (xLayoutManager.is())
-    {
-        // Provide container window to our layout manager implementation
-        xLayoutManager->attachFrame(this);
-        addFrameActionListener(css::uno::Reference< css::frame::XFrameActionListener >(xLayoutManager, css::uno::UNO_QUERY));
-        DockingAreaDefaultAcceptor* pAcceptor = new DockingAreaDefaultAcceptor(this);
-        css::uno::Reference< css::ui::XDockingAreaAcceptor > xDockingAreaAcceptor( static_cast< ::cppu::OWeakObject* >(pAcceptor), css::uno::UNO_QUERY );
-        xLayoutManager->setDockingAreaAcceptor(xDockingAreaAcceptor);
-    }
+        lcl_enableLayoutManager(xLayoutManager, this);
 
     // create progress helper
     css::uno::Reference< css::frame::XFrame >                 xThis            (static_cast< css::frame::XFrame* >(this)                        , css::uno::UNO_QUERY_THROW);
@@ -2713,7 +2735,20 @@ void SAL_CALL Frame::impl_setPropertyValue(const ::rtl::OUString& /*sProperty*/,
                 break;
 
         case FRAME_PROPHANDLE_LAYOUTMANAGER :
-                aValue >>= m_xLayoutManager;
+                {
+                    css::uno::Reference< css::frame::XLayoutManager > xOldLayoutManager = m_xLayoutManager;
+                    css::uno::Reference< css::frame::XLayoutManager > xNewLayoutManager;
+                    aValue >>= xNewLayoutManager;
+
+                    if (xOldLayoutManager != xNewLayoutManager)
+                    {
+                        m_xLayoutManager = xNewLayoutManager;
+                        if (xOldLayoutManager.is())
+                            lcl_disableLayoutManager(xOldLayoutManager, this);
+                        if (xNewLayoutManager.is())
+                            lcl_enableLayoutManager(xNewLayoutManager, this);
+                    }
+                }
                 break;
 
         case FRAME_PROPHANDLE_INDICATORINTERCEPTION :
