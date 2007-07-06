@@ -4,9 +4,9 @@
  *
  *  $RCSfile: global.hxx,v $
  *
- *  $Revision: 1.48 $
+ *  $Revision: 1.49 $
  *
- *  last change: $Author: rt $ $Date: 2007-04-25 15:57:24 $
+ *  last change: $Author: rt $ $Date: 2007-07-06 12:30:02 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -189,20 +189,12 @@ const SCSIZE PIVOT_MAXPAGEFIELD = 10;
 #define MAX_COL_WIDTH       56693   // 1m in TWIPS
 #define MAX_COL_HEIGHT      56693
 
-#ifdef MAC
-#define STD_ROWHEIGHT_DIFF  3
-#else
 #define STD_ROWHEIGHT_DIFF  23
-#endif
 #define STD_FONT_HEIGHT     200     // entspricht 10 Punkt
 
 //!     statt STD_ROW_HEIGHT ScGlobal::nStdRowHeight benutzen !
 
-#ifdef MAC                              // Mac braucht mehr Platz
-#define STD_ROW_HEIGHT      (14.8 * TWIPS_PER_POINT)            //
-#else
 #define STD_ROW_HEIGHT      (12.8 * TWIPS_PER_POINT)            // 256 Twips, 0.45 cm
-#endif
 
                                     // Standardgroesse als Ole-Server (Zellen)
 #define OLE_STD_CELLS_X     4
