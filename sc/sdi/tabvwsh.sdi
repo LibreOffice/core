@@ -4,9 +4,9 @@
  *
  *  $RCSfile: tabvwsh.sdi,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: vg $ $Date: 2007-05-22 19:41:30 $
+ *  last change: $Author: rt $ $Date: 2007-07-06 12:32:23 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -188,6 +188,7 @@ interface TableEditView : View
     FID_SCALESTATUS     [ ExecMethod = Execute; StateMethod = GetState; ]
     FID_TOGGLESYNTAX    [ ExecMethod = Execute; StateMethod = GetState; ]
     FID_TOGGLEHEADERS   [ ExecMethod = Execute; StateMethod = GetState; ]
+    FID_TOGGLEFORMULA   [ ExecMethod = Execute; StateMethod = GetState; ]
     FID_NORMALVIEWMODE  [ ExecMethod = Execute; StateMethod = GetState; ]
     FID_PAGEBREAKMODE   [ ExecMethod = Execute; StateMethod = GetState; ]
     SID_REPAINT         [ ExecMethod = Execute; StateMethod = GetState; ]
