@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xmlExport.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: kz $ $Date: 2007-05-09 13:24:20 $
+ *  last change: $Author: rt $ $Date: 2007-07-06 07:56:15 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -918,6 +918,16 @@ void ODBExport::exportAutoStyle(XPropertySet* _xProp)
     {
         if ( !aPropertyStates.empty() )
             m_aAutoStyleNames.insert( TPropertyStyleMap::value_type(_xProp,GetAutoStylePool()->Add( XML_STYLE_FAMILY_TABLE_TABLE, aPropertyStates )));
+        try
+        {
+            awt::FontDescriptor aFont;
+            _xProp->getPropertyValue(PROPERTY_FONT) >>= aFont;
+            GetFontAutoStylePool()->Add(aFont.Name,aFont.StyleName,aFont.Family,aFont.Pitch,aFont.CharSet );
+        }
+        catch(Exception&)
+        {
+            // not interested in
+        }
         Reference< XNameAccess > xCollection = xSup->getColumns();
         try
         {
