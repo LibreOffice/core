@@ -4,9 +4,9 @@
  *
  *  $RCSfile: fmvwimp.hxx,v $
  *
- *  $Revision: 1.31 $
+ *  $Revision: 1.32 $
  *
- *  last change: $Author: hr $ $Date: 2007-06-27 18:23:36 $
+ *  last change: $Author: rt $ $Date: 2007-07-06 07:38:04 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -99,6 +99,8 @@ class FmFormView;
 class FmFormShell;
 class Window;
 class OutputDevice;
+class SdrUnoObj;
+class SdrView;
 
 FORWARD_DECLARE_INTERFACE(awt,XControl)
 FORWARD_DECLARE_INTERFACE(awt,XWindow)
@@ -159,6 +161,7 @@ protected:
 };
 
 typedef vector<FmXPageViewWinRec*> FmWinRecList;
+class SdrModel;
 //==================================================================
 // FmXFormView
 //==================================================================
@@ -259,16 +262,23 @@ private:
     /// does some initializations to the newly created control model, returns the ClassId
     sal_Int16   implInitializeNewControlModel( const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& _rxModel, const SdrObject* _pObject ) const;
 
-    void createControlLabelPair(
+    static void createControlLabelPair(
+        SdrView* _pView,
         OutputDevice* _pOutDev,
+        sal_Int32 _nXOffsetMM,
         sal_Int32 _nYOffsetMM,
         const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& _rxField,
         const ::com::sun::star::uno::Reference< ::com::sun::star::util::XNumberFormats >& _rxNumberFormats,
         sal_uInt16 _nObjID,
         const ::rtl::OUString& _rFieldPostfix,
-        FmFormObj*& _rpLabel,
-        FmFormObj*& _rpControl
-    ) const;
+        UINT32 _nInventor,
+        UINT16 _nIndent,
+        SdrPage* _pLabelPage,
+        SdrPage* _pPage,
+        SdrModel* _pModel,
+        SdrUnoObj*& _rpLabel,
+        SdrUnoObj*& _rpControl
+    );
 
     void ObjectRemovedInAliveMode(const SdrObject* pObject);
 
