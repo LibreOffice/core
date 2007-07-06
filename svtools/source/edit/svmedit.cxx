@@ -4,9 +4,9 @@
  *
  *  $RCSfile: svmedit.cxx,v $
  *
- *  $Revision: 1.41 $
+ *  $Revision: 1.42 $
  *
- *  last change: $Author: hr $ $Date: 2007-06-29 12:21:13 $
+ *  last change: $Author: rt $ $Date: 2007-07-06 10:05:06 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1066,24 +1066,38 @@ void MultiLineEdit::ImplInitSettings( BOOL /*bFont*/, BOOL /*bForeground*/, BOOL
     Font aFont = rStyleSettings.GetFieldFont();
     if ( IsControlFont() )
         aFont.Merge( GetControlFont() );
-    aFont.SetTransparent( FALSE );
+    aFont.SetTransparent( IsPaintTransparent() );
     SetZoomedPointFont( aFont );
     Font TheFont = GetFont();
     TheFont.SetColor( aTextColor );
-    TheFont.SetFillColor( IsControlBackground() ? GetControlBackground() : rStyleSettings.GetFieldColor() );
+    if( IsPaintTransparent() )
+        TheFont.SetFillColor( Color( COL_TRANSPARENT ) );
+    else
+        TheFont.SetFillColor( IsControlBackground() ? GetControlBackground() : rStyleSettings.GetFieldColor() );
     pImpSvMEdit->GetTextWindow()->SetFont( TheFont );
     pImpSvMEdit->GetTextWindow()->GetTextEngine()->SetFont( TheFont );
     pImpSvMEdit->GetTextWindow()->SetTextColor( aTextColor );
 
     if ( bBackground )
     {
-        if( IsControlBackground() )
-            pImpSvMEdit->GetTextWindow()->SetBackground( GetControlBackground() );
+        if( IsPaintTransparent() )
+        {
+            pImpSvMEdit->GetTextWindow()->SetPaintTransparent( TRUE );
+            pImpSvMEdit->GetTextWindow()->SetBackground();
+            pImpSvMEdit->GetTextWindow()->SetControlBackground();
+            SetBackground();
+            SetControlBackground();
+        }
         else
-            pImpSvMEdit->GetTextWindow()->SetBackground( rStyleSettings.GetFieldColor() );
-        // Auch am MultiLineEdit einstellen, weil die TextComponent
-        // ggf. die Scrollbars hidet.
-        SetBackground( pImpSvMEdit->GetTextWindow()->GetBackground() );
+        {
+            if( IsControlBackground() )
+                pImpSvMEdit->GetTextWindow()->SetBackground( GetControlBackground() );
+            else
+                pImpSvMEdit->GetTextWindow()->SetBackground( rStyleSettings.GetFieldColor() );
+            // Auch am MultiLineEdit einstellen, weil die TextComponent
+            // ggf. die Scrollbars hidet.
+            SetBackground( pImpSvMEdit->GetTextWindow()->GetBackground() );
+        }
     }
 }
 
@@ -1336,6 +1350,17 @@ void MultiLineEdit::StateChanged( StateChangedType nType )
     {
         pImpSvMEdit->InitFromStyle( GetStyle() );
         SetStyle( ImplInitStyle( GetStyle() ) );
+    }
+    else if ( nType == STATE_CHANGE_INITSHOW )
+    {
+        if( IsPaintTransparent() )
+        {
+            pImpSvMEdit->GetTextWindow()->SetPaintTransparent( TRUE );
+            pImpSvMEdit->GetTextWindow()->SetBackground();
+            pImpSvMEdit->GetTextWindow()->SetControlBackground();
+            SetBackground();
+            SetControlBackground();
+        }
     }
 
     Control::StateChanged( nType );
