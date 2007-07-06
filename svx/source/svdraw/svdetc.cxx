@@ -4,9 +4,9 @@
  *
  *  $RCSfile: svdetc.cxx,v $
  *
- *  $Revision: 1.30 $
+ *  $Revision: 1.31 $
  *
- *  last change: $Author: hr $ $Date: 2007-06-27 19:00:45 $
+ *  last change: $Author: rt $ $Date: 2007-07-06 13:21:00 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -711,6 +711,16 @@ ResMgr* ImpGetResMgr()
 String ImpGetResStr(sal_uInt16 nResID)
 {
     return String(ResId(nResID, *ImpGetResMgr()));
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////
+
+namespace sdr
+{
+String GetResourceString(sal_uInt16 nResID)
+{
+    return ImpGetResStr( nResID );
+}
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
