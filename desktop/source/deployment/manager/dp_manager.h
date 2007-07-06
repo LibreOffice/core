@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dp_manager.h,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: ihi $ $Date: 2007-06-05 15:05:22 $
+ *  last change: $Author: rt $ $Date: 2007-07-06 12:36:28 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -242,6 +242,9 @@ public:
                css::ucb::CommandAbortedException,
                css::lang::IllegalArgumentException,
                css::uno::RuntimeException);
+
+    virtual ::sal_Bool SAL_CALL isReadOnly(  )
+        throw (::com::sun::star::uno::RuntimeException);
 };
 
 //______________________________________________________________________________
