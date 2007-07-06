@@ -4,9 +4,9 @@
  *
  *  $RCSfile: documentcontainer.cxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: kz $ $Date: 2007-05-09 13:23:52 $
+ *  last change: $Author: rt $ $Date: 2007-07-06 07:53:39 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -75,7 +75,12 @@
 #ifndef _DBA_COREDATAACCESS_DATASOURCE_HXX_
 #include "datasource.hxx"
 #endif
-
+#ifndef _COMPHELPER_MIMECONFIGHELPER_HXX_
+#include <comphelper/mimeconfighelper.hxx>
+#endif
+#ifndef _SO_CLSIDS_HXX
+#include <so3/clsids.hxx>
+#endif
 
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::lang;
@@ -256,9 +261,7 @@ Reference< XInterface > SAL_CALL ODocumentContainer::createInstanceWithArguments
             }
 
             if ( ( aClassID.getLength() == 0 ) && ( 0 == sURL.getLength() ) )
-                // default the class id, if none is given
-                // #i57097# / 2005-11-01 / frank.schoenheit@sun.com
-                aClassID = ODocumentDefinition::getDefaultDocumentTypeClassId();
+                ODocumentDefinition::GetDocumentServiceFromMediaType(getStorage(),sPersistentName,m_xORB,aClassID);
         }
 
         ODefinitionContainer_Impl::const_iterator aFind = rDefinitions.find( sName );
@@ -554,9 +557,10 @@ Reference< XComponent > SAL_CALL ODocumentContainer::loadComponentFromURL( const
     {
         throw IllegalArgumentException();
     }
-    catch(WrappedTargetException)
+    catch(WrappedTargetException e)
     {
-        throw IllegalArgumentException();
+        // throw IllegalArgumentException();
+        throw;
     }
     return xComp;
 }
