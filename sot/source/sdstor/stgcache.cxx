@@ -4,9 +4,9 @@
  *
  *  $RCSfile: stgcache.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 16:09:21 $
+ *  last change: $Author: rt $ $Date: 2007-07-06 12:49:50 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -436,9 +436,13 @@ BOOL StgCache::Read( INT32 nPage, void* pBuf, INT32 nPg )
 {
     if( Good() )
     {
-        if ( nPage >= nPages )
+        /*  #i73846# real life: a storage may refer to a page one-behind the
+            last valid page (see document attached to the issue). In that case
+            (if nPage==nPages), just do nothing here and let the caller work on
+            the empty zero-filled buffer. */
+        if ( nPage > nPages )
             SetError( SVSTREAM_READ_ERROR );
-        else
+        else if ( nPage < nPages )
         {
             ULONG nPos = Page2Pos( nPage );
             INT32 nPg2 = ( ( nPage + nPg ) > nPages ) ? nPages - nPage : nPg;
