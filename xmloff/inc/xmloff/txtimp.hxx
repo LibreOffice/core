@@ -4,9 +4,9 @@
  *
  *  $RCSfile: txtimp.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2007-07-06 09:41:36 $
+ *  last change: $Author: rt $ $Date: 2007-07-06 12:08:57 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -139,6 +139,7 @@ enum XMLTextPElemTokens
     XML_TOK_TEXT_SPAN,
     XML_TOK_TEXT_TAB_STOP,
     XML_TOK_TEXT_LINE_BREAK,
+    XML_TOK_TEXT_SOFT_PAGE_BREAK,
     XML_TOK_TEXT_S,
     XML_TOK_TEXT_FRAME,
     XML_TOK_TEXT_HYPERLINK,
