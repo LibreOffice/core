@@ -4,9 +4,9 @@
  *
  *  $RCSfile: genericcontroller.cxx,v $
  *
- *  $Revision: 1.77 $
+ *  $Revision: 1.78 $
  *
- *  last change: $Author: obo $ $Date: 2007-06-12 05:33:49 $
+ *  last change: $Author: rt $ $Date: 2007-07-06 08:04:34 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -167,9 +167,10 @@ OGenericUnoController::OGenericUnoController(const Reference< XMultiServiceFacto
 #ifdef DBG_UTIL
     ,m_bDescribingSupportedFeatures( false )
 #endif
+    ,m_aSelectionListeners(m_aMutex)
     ,m_aAsyncInvalidateAll(LINK(this, OGenericUnoController, OnAsyncInvalidateAll))
     ,m_aAsyncCloseTask(LINK(this, OGenericUnoController, OnAsyncCloseTask))
-    ,m_xMultiServiceFacatory(_rM)
+    ,m_xServiceFactory(_rM)
     ,m_pView(NULL)
     ,m_bPreview(sal_False)
     ,m_bReadOnly(sal_False)
@@ -205,20 +206,14 @@ sal_Bool OGenericUnoController::Construct(Window* /*pParent*/)
         getView()->Show();
     }
 
-#ifdef DBG_UTIL
-    m_bDescribingSupportedFeatures = true;
-#endif
     m_aSupportedFeatures.clear();
-    describeSupportedFeatures();
-#ifdef DBG_UTIL
-    m_bDescribingSupportedFeatures = false;
-#endif
+    fillSupportedFeatures();
 
     // create the database context
-    DBG_ASSERT(m_xMultiServiceFacatory.is(), "OGenericUnoController::Construct need a service factory!");
+    DBG_ASSERT(getORB().is(), "OGenericUnoController::Construct need a service factory!");
     try
     {
-        m_xDatabaseContext = Reference< XNameAccess >(m_xMultiServiceFacatory->createInstance(SERVICE_SDB_DATABASECONTEXT), UNO_QUERY);
+        m_xDatabaseContext = Reference< XNameAccess >(getORB()->createInstance(SERVICE_SDB_DATABASECONTEXT), UNO_QUERY);
     }
     catch(Exception&)
     {
@@ -470,6 +465,8 @@ namespace
             _out_rStates.push_back( makeAny( *_rFeatureState.sTitle ) );
         if ( !!_rFeatureState.bChecked )
             _out_rStates.push_back( makeAny( (sal_Bool)*_rFeatureState.bChecked ) );
+        if ( _rFeatureState.aValue.hasValue() )
+            _out_rStates.push_back( _rFeatureState.aValue );
         if ( _out_rStates.empty() )
             _out_rStates.push_back( Any() );
     }
@@ -673,6 +670,8 @@ Reference< XDispatch >  OGenericUnoController::queryDispatch(const URL& aURL, co
 {
     Reference< XDispatch > xReturn;
 
+    if ( m_aSupportedFeatures.empty() )
+        fillSupportedFeatures();
     // URL's we can handle ourself?
     if  (   aURL.Complete.equals( getConfirmDeletionURL() )
         ||  ( m_aSupportedFeatures.find( aURL.Complete ) != m_aSupportedFeatures.end() )
@@ -796,6 +795,8 @@ void OGenericUnoController::removeStatusListener(const Reference< XStatusListene
             ++iterSearch;
     }
 
+    if ( m_aSupportedFeatures.empty() )
+        fillSupportedFeatures();
     SupportedFeatures::const_iterator aIter = m_aSupportedFeatures.find(_rURL.Complete);
     if (aIter != m_aSupportedFeatures.end())
     {   // clear the cache for that feature
@@ -826,6 +827,7 @@ void OGenericUnoController::disposing()
             aIter->xListener->disposing(aDisposeEvent);
         }
         m_arrStatusListener.clear();
+        m_aSelectionListeners.disposeAndClear( aDisposeEvent );
     }
 
     m_xDatabaseContext = NULL;
@@ -841,7 +843,7 @@ void OGenericUnoController::disposing()
     m_xMasterDispatcher = NULL;
     m_xSlaveDispatcher = NULL;
     m_xCurrentFrame = NULL;
-    m_xMultiServiceFacatory = NULL;
+    m_xServiceFactory = NULL;
 }
 
 // -----------------------------------------------------------------------
@@ -981,7 +983,7 @@ Reference< XConnection > OGenericUnoController::connect(
     WaitObject aWaitCursor(getView());
 
     const ::rtl::OUString sNoContext;
-    ODatasourceConnector aConnector(m_xMultiServiceFacatory, getView(), sNoContext, sNoContext);
+    ODatasourceConnector aConnector(getORB(), getView(), sNoContext, sNoContext);
     Reference<XConnection> xConnection = aConnector.connect(_xDataSource);
 
     // be notified when connection is in disposing
@@ -997,7 +999,7 @@ Reference< XConnection > OGenericUnoController::connect(
 {
     WaitObject aWaitCursor(getView());
 
-    ODatasourceConnector aConnector(m_xMultiServiceFacatory, getView(), _rContextInformation, _rContextDetails);
+    ODatasourceConnector aConnector(getORB(), getView(), _rContextInformation, _rContextDetails);
     Reference<XConnection> xConnection = aConnector.connect(_rDataSourceName);
 
     // be notified when connection is in disposing
@@ -1103,8 +1105,15 @@ sal_Bool SAL_CALL OGenericUnoController::attachModel(const Reference< XModel > &
     return sal_False;
 }
 // -----------------------------------------------------------------------------
+void OGenericUnoController::executeUnChecked(sal_uInt16 _nCommandId, const Sequence< PropertyValue >& aArgs)
+{
+    Execute(_nCommandId, aArgs);
+}
+// -----------------------------------------------------------------------------
 void OGenericUnoController::executeUnChecked(const ::com::sun::star::util::URL& _rCommand, const Sequence< PropertyValue >& aArgs)
 {
+    if ( m_aSupportedFeatures.empty() )
+        fillSupportedFeatures();
     SupportedFeatures::const_iterator aIter = m_aSupportedFeatures.find( _rCommand.Complete );
     if (aIter != m_aSupportedFeatures.end())
         Execute( aIter->second.nFeatureId, aArgs );
@@ -1112,6 +1121,8 @@ void OGenericUnoController::executeUnChecked(const ::com::sun::star::util::URL& 
 // -----------------------------------------------------------------------------
 void OGenericUnoController::executeChecked(const ::com::sun::star::util::URL& _rCommand, const Sequence< PropertyValue >& aArgs)
 {
+    if ( m_aSupportedFeatures.empty() )
+        fillSupportedFeatures();
     SupportedFeatures::const_iterator aIter = m_aSupportedFeatures.find( _rCommand.Complete );
     if ( aIter != m_aSupportedFeatures.end() )
     {
@@ -1165,6 +1176,7 @@ namespace
                 // check which service we know ....
                 static const sal_Char* pTransTable[] = {
                     "com.sun.star.sdb.OfficeDatabaseDocument","sdatabase",
+                    "com.sun.star.report.ReportDefinition","sdatabase",
                     "com.sun.star.text.TextDocument",   "swriter",
                     "com.sun.star.sheet.SpreadsheetDocument", "scalc",
                     "com.sun.star.presentation.PresentationDocument", "simpress",
@@ -1301,11 +1313,18 @@ sal_Bool OGenericUnoController::isCommandEnabled(sal_uInt16 _nCommandId) const
 {
     return GetState( _nCommandId ).bEnabled;
 }
+// -----------------------------------------------------------------------------
+sal_Bool OGenericUnoController::isCommandChecked(sal_uInt16 _nCommandId) const
+{
+    FeatureState aState = GetState( _nCommandId );
 
+    return aState.bChecked && (sal_Bool)*aState.bChecked;
+}
 // -----------------------------------------------------------------------------
 sal_Bool OGenericUnoController::isCommandEnabled( const ::rtl::OUString& _rCompleteCommandURL ) const
 {
     OSL_ENSURE( _rCompleteCommandURL.getLength(), "OGenericUnoController::isCommandEnabled: Empty command url!" );
+
     sal_Bool bIsEnabled = sal_False;
     SupportedFeatures::const_iterator aIter = m_aSupportedFeatures.find( _rCompleteCommandURL );
     if ( aIter != m_aSupportedFeatures.end() )
@@ -1361,3 +1380,37 @@ Sequence< DispatchInformation > SAL_CALL OGenericUnoController::getConfigurableD
 
     return aInformation;
 }
+// -----------------------------------------------------------------------------
+void OGenericUnoController::fillSupportedFeatures()
+{
+#ifdef DBG_UTIL
+    m_bDescribingSupportedFeatures = true;
+#endif
+    describeSupportedFeatures();
+// -----------------------------------------------------------------------------
+#ifdef DBG_UTIL
+    m_bDescribingSupportedFeatures = false;
+#endif
+}
+// -----------------------------------------------------------------------------
+::sal_Bool SAL_CALL OGenericUnoController::select( const Any& /*xSelection*/ ) throw (IllegalArgumentException, RuntimeException)
+{
+    return sal_False;
+}
+// -----------------------------------------------------------------------------
+Any SAL_CALL OGenericUnoController::getSelection(  ) throw (RuntimeException)
+{
+    return Any();
+}
+// -----------------------------------------------------------------------------
+void SAL_CALL OGenericUnoController::addSelectionChangeListener( const Reference< ::com::sun::star::view::XSelectionChangeListener >& xListener ) throw (RuntimeException)
+{
+    m_aSelectionListeners.addInterface(xListener);
+}
+// -----------------------------------------------------------------------------
+void SAL_CALL OGenericUnoController::removeSelectionChangeListener( const Reference< ::com::sun::star::view::XSelectionChangeListener >& xListener ) throw (RuntimeException)
+{
+    m_aSelectionListeners.removeInterface(xListener);
+}
+// -----------------------------------------------------------------------------
+
