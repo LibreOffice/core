@@ -4,9 +4,9 @@
  *
  *  $RCSfile: sbagrid.cxx,v $
  *
- *  $Revision: 1.80 $
+ *  $Revision: 1.81 $
  *
- *  last change: $Author: kz $ $Date: 2007-05-10 15:05:59 $
+ *  last change: $Author: rt $ $Date: 2007-07-06 08:05:23 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -202,9 +202,6 @@
 #endif
 #ifndef _DBU_BRW_HRC_
 #include "dbu_brw.hrc"
-#endif
-#ifndef _DBAUI_MODULE_DBU_HXX_
-#include "moduledbu.hxx"
 #endif
 #ifndef DBACCESS_UI_BROWSER_ID_HXX
 #include "browserids.hxx"
