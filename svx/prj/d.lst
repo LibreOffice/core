@@ -438,6 +438,7 @@ mkdir: %_DEST%\inc%_EXT%\svx
 ..\inc\editund2.hxx %_DEST%\inc%_EXT%\svx\editund2.hxx
 ..\inc\svx\editview.hxx %_DEST%\inc%_EXT%\svx\editview.hxx
 ..\inc\svx\eeitem.hxx %_DEST%\inc%_EXT%\svx\eeitem.hxx
+..\inc\svx\eeitemid.hxx %_DEST%\inc%_EXT%\svx\eeitemid.hxx
 ..\inc\eerdll.hxx %_DEST%\inc%_EXT%\svx\editdll.hxx
 ..\inc\svx\svxacorr.hxx %_DEST%\inc%_EXT%\svx\svxacorr.hxx
 ..\inc\svx\swafopt.hxx %_DEST%\inc%_EXT%\svx\swafopt.hxx
@@ -560,6 +561,7 @@ mkdir: %_DEST%\inc%_EXT%\svx
 ..\inc\framelink.hxx %_DEST%\inc%_EXT%\svx\framelink.hxx
 ..\inc\xmlexchg.hxx %_DEST%\inc%_EXT%\svx\xmlexchg.hxx
 ..\inc\tbxcolor.hxx %_DEST%\inc%_EXT%\svx\tbxcolor.hxx
+..\inc\svx\tbxcolorupdate.hxx %_DEST%\inc%_EXT%\svx\tbxcolorupdate.hxx
 ..\inc\svx\svxdllapi.h %_DEST%\inc%_EXT%\svx\svxdllapi.h
 ..\inc\svdstr.hrc %_DEST%\inc%_EXT%\svx\svdstr.hrc
 ..\inc\svx\SmartTagMgr.hxx %_DEST%\inc%_EXT%\svx\SmartTagMgr.hxx
