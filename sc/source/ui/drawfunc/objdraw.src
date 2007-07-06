@@ -4,9 +4,9 @@
  *
  *  $RCSfile: objdraw.src,v $
  *
- *  $Revision: 1.70 $
+ *  $Revision: 1.71 $
  *
- *  last change: $Author: vg $ $Date: 2007-05-22 20:06:38 $
+ *  last change: $Author: rt $ $Date: 2007-07-06 12:43:31 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -190,6 +190,24 @@
         ITEM_FORMAT_PARA_DLG\
     };
 
+#ifdef ISSUE66550_HLINK_FOR_SHAPES
+#define MN_EDITLNK \
+    MenuItem\
+    {\
+        Identifier = SID_DRAW_HLINK_EDIT ; \
+        HelpID = SID_DRAW_HLINK_EDIT ; \
+        Text [ en-US ] = "~Hyperlink..." ; \
+    };
+
+#define MN_DELLNK \
+    MenuItem\
+    {\
+        Identifier = SID_DRAW_HLINK_DELETE ; \
+        HelpID = SID_DRAW_HLINK_DELETE ; \
+        Text [ en-US ] = "~Remove Hyperlink" ; \
+    };
+#endif
+
 #define MN_DRWTXTATTR \
     MenuItem\
     {\
@@ -199,6 +217,15 @@
         /* ### ACHTUNG: Neuer Text in Resource? Textattribute für die selektierten Textobjekte festlegen : Textattribute f³r die selektierten Textobjekte festlegen */\
         Text [ x-comment ] = " ";\
     };
+
+#define MN_ASSIGNMACRO \
+     MenuItem\
+     {\
+         Identifier = SID_ASSIGNMACRO ; \
+         HelpID = SID_ASSIGNMACRO ; \
+         Text [ en-US ] = "Assig~n Macro..." ; \
+         Text [ x-comment ] = " ";\
+     };
 
 #define MN_ORIGINALSIZE \
     MenuItem\
@@ -1254,6 +1281,7 @@ Menu RID_POPUP_DRAW
         MN_ARRANGESUB
         MN_ALIGNSUB
         MN_ANCHORSUB
+        MN_ASSIGNMACRO
          //------------------------------
         MenuItem { Separator = TRUE ; };
          //------------------------------
@@ -1271,6 +1299,14 @@ Menu RID_POPUP_DRAW
         MenuItem { Separator = TRUE ; };
          //------------------------------
         ITEM_GROUP_MENU
+#ifdef ISSUE66550_HLINK_FOR_SHAPES
+         //------------------------------
+        MenuItem { Separator = TRUE ; };
+         //------------------------------
+        MN_EDITLNK
+        MN_DELLNK
+        MenuItem { ITEM_OPEN_HYPERLINK };
+#endif
     };
 };
 
@@ -1335,11 +1371,20 @@ Menu RID_POPUP_GRAPHIC
         MN_ARRANGESUB
         MN_ALIGNSUB
         MN_ANCHORSUB
+        MN_ASSIGNMACRO
          //------------------------------
         MenuItem { Separator = TRUE ; };
          //------------------------------
         ITEM_GROUP_MENU
-       };
+#ifdef ISSUE66550_HLINK_FOR_SHAPES
+         //------------------------------
+        MenuItem { Separator = TRUE ; };
+         //------------------------------
+        MN_EDITLNK
+        MN_DELLNK
+        MenuItem { ITEM_OPEN_HYPERLINK };
+#endif
+    };
 };
 
  //
@@ -1501,37 +1546,4 @@ Menu RID_POPUP_DRAWTEXT
         };
     };
 };
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
