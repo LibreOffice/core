@@ -4,9 +4,9 @@
  *
  *  $RCSfile: tplneend.cxx,v $
  *
- *  $Revision: 1.28 $
+ *  $Revision: 1.29 $
  *
- *  last change: $Author: hr $ $Date: 2007-06-27 17:49:52 $
+ *  last change: $Author: rt $ $Date: 2007-07-06 07:34:52 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -210,7 +210,7 @@ void SvxLineEndDefTabPage::Construct()
             pNewObj = pPolyObj->ConvertToPolyObj( TRUE, FALSE );
 
         bCreateArrowPossible = pNewObj && pNewObj->ISA( SdrPathObj );
-        delete pNewObj;
+        SdrObject::Free( pNewObj );
     }
 
     if( !bCreateArrowPossible )
@@ -508,8 +508,7 @@ IMPL_LINK( SvxLineEndDefTabPage, ClickAddHdl_Impl, void *, EMPTYARG )
         aNewPolyPolygon.transform(aMatrix);
 
         // Loeschen des angelegten PolyObjektes
-        if( pConvPolyObj )
-            delete pConvPolyObj;
+        SdrObject::Free( pConvPolyObj );
 
         XLineEndEntry* pEntry;
 
