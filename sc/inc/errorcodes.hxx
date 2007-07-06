@@ -4,9 +4,9 @@
  *
  *  $RCSfile: errorcodes.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: obo $ $Date: 2007-06-13 09:05:00 $
+ *  last change: $Author: rt $ $Date: 2007-07-06 12:29:48 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -48,7 +48,7 @@ namespace ScErrorCodes
 
 const USHORT errIllegalChar          = 501;
 const USHORT errIllegalArgument      = 502;
-const USHORT errIllegalFPOperation   = 503;
+const USHORT errIllegalFPOperation   = 503; // #NUM!
 const USHORT errIllegalParameter     = 504;
 const USHORT errIllegalJump          = 505;
 const USHORT errSeparator            = 506;
@@ -64,13 +64,13 @@ const USHORT errUnknownState         = 515;
 const USHORT errUnknownVariable      = 516;
 const USHORT errUnknownOpCode        = 517;
 const USHORT errUnknownStackVariable = 518;
-const USHORT errNoValue              = 519;
+const USHORT errNoValue              = 519; // #VALUE!
 const USHORT errUnknownToken         = 520;
-const USHORT errNoCode               = 521;
+const USHORT errNoCode               = 521; // #NULL!
 const USHORT errCircularReference    = 522;
 const USHORT errNoConvergence        = 523;
-const USHORT errNoRef                = 524;
-const USHORT errNoName               = 525;
+const USHORT errNoRef                = 524; // #REF!
+const USHORT errNoName               = 525; // #NAME?
 const USHORT errDoubleRef            = 526;
 const USHORT errInterpOverflow       = 527;
 // Not displayed, temporary for TrackFormulas,
@@ -82,11 +82,13 @@ const USHORT errCellNoValue          = 529;
 const USHORT errNoAddin              = 530;
 // Interpreter: needed Macro not found
 const USHORT errNoMacro              = 531;
+// Interpreter: Division by zero
+const USHORT errDivisionByZero       = 532; // #DIV/0!
 // Compiler: a non-simple (str,err,val) value was put in an array
 const USHORT errNestedArray          = 533;
 
 // Interpreter: NA() not available condition, not a real error
-const USHORT NOVALUE                 = 0x7fff;
+const USHORT NOTAVAILABLE            = 0x7fff;
 
 
 /** Unconditionally construct a double value of NAN where the lower bits
