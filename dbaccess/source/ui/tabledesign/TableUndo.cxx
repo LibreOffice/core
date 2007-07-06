@@ -4,9 +4,9 @@
  *
  *  $RCSfile: TableUndo.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: ihi $ $Date: 2006-10-18 13:33:08 $
+ *  last change: $Author: rt $ $Date: 2007-07-06 08:44:17 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -37,9 +37,6 @@
 #include "precompiled_dbaccess.hxx"
 #ifndef DBAUI_TABLEUNDO_HXX
 #include "TableUndo.hxx"
-#endif
-#ifndef _DBAUI_MODULE_DBU_HXX_
-#include "moduledbu.hxx"
 #endif
 #ifndef _DBU_TBL_HRC_
 #include "dbu_tbl.hrc"
