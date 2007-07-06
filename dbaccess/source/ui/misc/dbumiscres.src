@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dbumiscres.src,v $
  *
- *  $Revision: 1.74 $
+ *  $Revision: 1.75 $
  *
- *  last change: $Author: ihi $ $Date: 2007-04-19 15:05:31 $
+ *  last change: $Author: rt $ $Date: 2007-07-06 08:36:39 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -220,9 +220,9 @@ Resource RSC_DATASOURCE_TYPE_UINAMES
 
 Resource RSC_CHARSETS
 {
-String 1
-{
-    Text [ en-US ] = "System";
+    String 1
+    {
+        Text [ en-US ] = "System";
     };
 };
 
@@ -233,33 +233,33 @@ String STR_ERROR_DURING_CREATION
 
 String STR_UNEXPECTED_ERROR
 {
-Text [ en-US ] = "An unexpected error occurred. The operation could not be performed.";
+    Text [ en-US ] = "An unexpected error occurred. The operation could not be performed.";
 };
 
 String STR_COULDNOTOPEN_LINKEDDOC
 {
-Text [ en-US ] = "The document\n\n$file$\n\ncould not be opened.";
+    Text [ en-US ] = "The document \"$file$\" could not be opened.";
 };
 
 String STR_MISSING_TABLES_XDROP
 {
-Text [ en-US ] = "The table cannot be deleted because the database connection does not support this.";
+    Text [ en-US ] = "The table cannot be deleted because the database connection does not support this.";
 };
 
 String STR_BUTTON_TEXT_ALL
 {
-Text [ en-US ] = "~All";
+    Text [ en-US ] = "~All";
 
 };
 
 String STR_UNDO_COLON
 {
-Text [ en-US ] = "Undo:";
+    Text [ en-US ] = "Undo:";
 };
 
 String STR_REDO_COLON
 {
-Text [ en-US ] = "Redo:";
+    Text [ en-US ] = "Redo:";
 };
 
 String STR_UNKNOWN_TYPE_FOUND
