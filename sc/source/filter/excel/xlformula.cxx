@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xlformula.cxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: rt $ $Date: 2007-07-03 15:51:42 $
+ *  last change: $Author: rt $ $Date: 2007-07-06 12:37:33 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -78,7 +78,7 @@ static const XclFunctionInfo saFuncTable_2[] =
 {
     { ocCount,              0,      0,  30, V, { R }, 0, 0 },
     { ocIf,                 1,      2,  3,  R, { V, R }, 0, 0 },
-    { ocIsNV,               2,      1,  1,  V, { V }, 0, 0 },
+    { ocIsNA,               2,      1,  1,  V, { V }, 0, 0 },
     { ocIsError,            3,      1,  1,  V, { V }, 0, 0 },
     { ocSum,                4,      0,  30, V, { R }, 0, 0 },
     { ocAverage,            5,      1,  30, V, { R }, 0, 0 },
@@ -86,7 +86,7 @@ static const XclFunctionInfo saFuncTable_2[] =
     { ocMax,                7,      1,  30, V, { R }, 0, 0 },
     { ocRow,                8,      0,  1,  V, { R }, 0, 0 },
     { ocColumn,             9,      0,  1,  V, { R }, 0, 0 },
-    { ocNoValue,            10,     0,  0,  V, {}, 0, 0 },
+    { ocNotAvail,           10,     0,  0,  V, {}, 0, 0 },
     { ocNBW,                11,     2,  30, V, { V, R }, 0, 0 },
     { ocStDev,              12,     1,  30, V, { R }, 0, 0 },
     { ocCurrency,           13,     1,  2,  V, { V }, 0, 0 },
