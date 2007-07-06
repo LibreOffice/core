@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ConnectionPageSetup.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: kz $ $Date: 2007-05-10 10:22:01 $
+ *  last change: $Author: rt $ $Date: 2007-07-06 08:10:32 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -44,9 +44,6 @@
 #endif
 #ifndef _DBAUI_DBADMINSETUP_HRC_
 #include "dbadminsetup.hrc"
-#endif
-#ifndef _DBAUI_MODULE_DBU_HXX_
-#include "moduledbu.hxx"
 #endif
 #ifndef _DBU_DLG_HRC_
 #include "dbu_dlg.hrc"
