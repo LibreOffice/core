@@ -4,9 +4,9 @@
  *
  *  $RCSfile: profileitem_ooo.scp,v $
  *
- *  $Revision: 1.46 $
+ *  $Revision: 1.47 $
  *
- *  last change: $Author: rt $ $Date: 2007-07-05 09:21:23 $
+ *  last change: $Author: rt $ $Date: 2007-07-06 12:32:36 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -619,7 +619,6 @@ End
 
 #endif 
 
-
 ProfileItem gid_Profileitem_Soffice_ProgressBarColor
     ProfileID = gid_Profile_Soffice_Ini;
     ModuleID = gid_Module_Root;
@@ -646,6 +645,22 @@ ProfileItem gid_Profileitem_Soffice_ProgressPosition
     Key = "ProgressPosition";
     Value = "-1,-1";
 End
+
+#ifdef WNT
+
+ProfileItem gid_Profileitem_Soffice_Hideeula
+    ProfileID = gid_Profile_Soffice_Ini;
+    ModuleID = gid_Module_Root;
+    Section = "Bootstrap";
+    Order = 7;
+    Key = "HideEula";
+    Value = "[HIDEEULA]";
+    Inifiletablekey = "HideEula";
+    Inifiletableaction = "1";
+    Styles = (INIFILETABLE);
+End
+
+#endif
 
 ProfileItem gid_Profileitem_Uno_Uno_Shared_Packages
     ProfileID = gid_Profile_Uno_Ini;
