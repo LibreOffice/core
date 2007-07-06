@@ -4,9 +4,9 @@
  *
  *  $RCSfile: propertyeditor.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: kz $ $Date: 2006-12-13 12:02:43 $
+ *  last change: $Author: rt $ $Date: 2007-07-06 08:52:44 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -307,7 +307,7 @@ namespace pcr
     }
 
     //------------------------------------------------------------------
-    void OPropertyEditor::EnableUpdate()
+    void OPropertyEditor::Update(const ::std::mem_fun_t<void,OBrowserListBox>& _aUpdateFunction)
     {
         // forward this to all our pages
         sal_uInt16 nCount = m_aTabControl.GetPageCount();
@@ -316,22 +316,18 @@ namespace pcr
             sal_uInt16 nID = m_aTabControl.GetPageId(i);
             OBrowserPage* pPage = static_cast<OBrowserPage*>(m_aTabControl.GetTabPage(nID));
             if (pPage)
-                pPage->getListBox().EnableUpdate();
+                _aUpdateFunction(&pPage->getListBox());
         }
     }
-
+    //------------------------------------------------------------------
+    void OPropertyEditor::EnableUpdate()
+    {
+        Update(::std::mem_fun(&OBrowserListBox::EnableUpdate));
+    }
     //------------------------------------------------------------------
     void OPropertyEditor::DisableUpdate()
     {
-        // forward this to all our pages
-        sal_uInt16 nCount = m_aTabControl.GetPageCount();
-        for (sal_uInt16 i=0;i<nCount;++i)
-        {
-            sal_uInt16 nID = m_aTabControl.GetPageId(i);
-            OBrowserPage* pPage = static_cast<OBrowserPage*>(m_aTabControl.GetTabPage(nID));
-            if (pPage)
-                pPage->getListBox().DisableUpdate();
-        }
+        Update(::std::mem_fun(&OBrowserListBox::DisableUpdate));
     }
 
     //------------------------------------------------------------------
