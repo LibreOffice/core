@@ -4,9 +4,9 @@
  *
  *  $RCSfile: brwctrlr.cxx,v $
  *
- *  $Revision: 1.98 $
+ *  $Revision: 1.99 $
  *
- *  last change: $Author: kz $ $Date: 2007-05-10 10:18:11 $
+ *  last change: $Author: rt $ $Date: 2007-07-06 08:02:38 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -598,13 +598,13 @@ void SbaXDataBrowserController::initFormatter()
 {
     // ---------------------------------------------------------------
     // create a formatter working with the connections format supplier
-    Reference< ::com::sun::star::util::XNumberFormatsSupplier >  xSupplier(::dbtools::getNumberFormats(::dbtools::getConnection(m_xRowSet), sal_True,m_xMultiServiceFacatory));
+    Reference< ::com::sun::star::util::XNumberFormatsSupplier >  xSupplier(::dbtools::getNumberFormats(::dbtools::getConnection(m_xRowSet), sal_True,getORB()));
 
     if(xSupplier.is())
     {
         // create a new formatter
         m_xFormatter = Reference< ::com::sun::star::util::XNumberFormatter > (
-            m_xMultiServiceFacatory->createInstance(::rtl::OUString::createFromAscii("com.sun.star.util.NumberFormatter")), UNO_QUERY);
+            getORB()->createInstance(::rtl::OUString::createFromAscii("com.sun.star.util.NumberFormatter")), UNO_QUERY);
         if (m_xFormatter.is())
             m_xFormatter->attachNumberFormatsSupplier(xSupplier);
     }
@@ -669,7 +669,7 @@ sal_Bool SbaXDataBrowserController::Construct(Window* pParent)
 
     // ---------------
     // create the view
-    m_pView = new UnoDataBrowserView(pParent,this,m_xMultiServiceFacatory);
+    m_pView = new UnoDataBrowserView(pParent,this,getORB());
     if (!getBrowserView())
         return sal_False;
 
@@ -766,13 +766,13 @@ void SbaXDataBrowserController::RemoveColumnListener(const Reference< XPropertyS
 //------------------------------------------------------------------------------
 Reference< XRowSet >  SbaXDataBrowserController::CreateForm()
 {
-    return Reference< XRowSet > (m_xMultiServiceFacatory->createInstance(::rtl::OUString::createFromAscii("com.sun.star.form.component.Form")), UNO_QUERY);
+    return Reference< XRowSet > (getORB()->createInstance(::rtl::OUString::createFromAscii("com.sun.star.form.component.Form")), UNO_QUERY);
 }
 
 //------------------------------------------------------------------------------
 Reference< ::com::sun::star::form::XFormComponent >  SbaXDataBrowserController::CreateGridModel()
 {
-    return Reference< ::com::sun::star::form::XFormComponent > (m_xMultiServiceFacatory->createInstance(::rtl::OUString::createFromAscii("com.sun.star.form.component.GridControl")), UNO_QUERY);
+    return Reference< ::com::sun::star::form::XFormComponent > (getORB()->createInstance(::rtl::OUString::createFromAscii("com.sun.star.form.component.GridControl")), UNO_QUERY);
 }
 
 // -------------------------------------------------------------------------
@@ -1709,7 +1709,7 @@ void SbaXDataBrowserController::ExecuteFilterSortCrit(sal_Bool bFilter)
         Reference< XConnection> xCon(xFormSet->getPropertyValue(PROPERTY_ACTIVECONNECTION),UNO_QUERY);
         if(bFilter)
         {
-            DlgFilterCrit aDlg( getBrowserView(), m_xMultiServiceFacatory, xCon, m_xParser, xSup->getColumns() );
+            DlgFilterCrit aDlg( getBrowserView(), getORB(), xCon, m_xParser, xSup->getColumns() );
             String aFilter;
             if(!aDlg.Execute())
             {
@@ -1788,7 +1788,7 @@ void SbaXDataBrowserController::ExecuteSearch()
     xModelSet->setPropertyValue(::rtl::OUString::createFromAscii("AlwaysShowCursor"), ::comphelper::makeBoolAny(sal_Bool(sal_True)));
     xModelSet->setPropertyValue(::rtl::OUString::createFromAscii("CursorColor"), makeAny(sal_Int32(COL_LIGHTRED)));
 
-    Reference< ::com::sun::star::util::XNumberFormatsSupplier >  xNFS(::dbtools::getNumberFormats(::dbtools::getConnection(m_xRowSet), sal_True,m_xMultiServiceFacatory));
+    Reference< ::com::sun::star::util::XNumberFormatsSupplier >  xNFS(::dbtools::getNumberFormats(::dbtools::getConnection(m_xRowSet), sal_True,getORB()));
 
     SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
     AbstractFmSearchDialog* pDialog = NULL;
