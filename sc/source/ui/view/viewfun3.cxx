@@ -4,9 +4,9 @@
  *
  *  $RCSfile: viewfun3.cxx,v $
  *
- *  $Revision: 1.35 $
+ *  $Revision: 1.36 $
  *
- *  last change: $Author: vg $ $Date: 2007-02-27 14:01:07 $
+ *  last change: $Author: rt $ $Date: 2007-07-06 12:30:02 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -212,6 +212,8 @@
 #include "warnbox.hxx"
 #include "drwlayer.hxx"
 #include "editable.hxx"
+#include "transobj.hxx"
+#include "drwtrans.hxx"
 
 using namespace com::sun::star;
 
@@ -389,6 +391,41 @@ BOOL ScViewFunc::CopyToClip( ScDocument* pClipDoc, BOOL bCut, BOOL bApi, BOOL bI
     return bDone;
 }
 
+ScTransferObj* ScViewFunc::CopyToTransferable()
+{
+    ScRange aRange;
+    if ( GetViewData()->GetSimpleArea( aRange ) )
+    {
+        ScDocument* pDoc = GetViewData()->GetDocument();
+        ScMarkData& rMark = GetViewData()->GetMarkData();
+        if ( !pDoc->HasSelectedBlockMatrixFragment(
+                        aRange.aStart.Col(), aRange.aStart.Row(),
+                        aRange.aEnd.Col(),   aRange.aEnd.Row(),
+                        rMark ) )
+        {
+            ScDocument *pClipDoc = new ScDocument( SCDOCMODE_CLIP );    // create one (deleted by ScTransferObj)
+
+            BOOL bAnyOle = pDoc->HasOLEObjectsInArea( aRange, &rMark );
+            ScDrawLayer::SetGlobalDrawPersist( ScTransferObj::SetDrawClipDoc( bAnyOle ) );
+
+            pDoc->CopyToClip( aRange.aStart.Col(), aRange.aStart.Row(),
+                              aRange.aEnd.Col(),   aRange.aEnd.Row(),
+                              FALSE, pClipDoc, FALSE, &rMark, FALSE, TRUE );
+
+            ScDrawLayer::SetGlobalDrawPersist(NULL);
+            pClipDoc->ExtendMerge( aRange, TRUE );
+
+            ScDocShell* pDocSh = GetViewData()->GetDocShell();
+            TransferableObjectDescriptor aObjDesc;
+            pDocSh->FillTransferableObjectDescriptor( aObjDesc );
+            aObjDesc.maDisplayName = pDocSh->GetMedium()->GetURLObject().GetURLNoPass();
+            ScTransferObj* pTransferObj = new ScTransferObj( pClipDoc, aObjDesc );
+            return pTransferObj;
+        }
+    }
+
+    return NULL;
+}
 
 //----------------------------------------------------------------------------
 //      P A S T E
@@ -501,6 +538,113 @@ void ScViewFunc::PasteFromSystem()
 
     //  keine Fehlermeldung, weil SID_PASTE in der idl das FastCall-Flag hat,
     //  also auch gerufen wird, wenn nichts im Clipboard steht (#42531#)
+}
+
+void ScViewFunc::PasteFromTransferable( const uno::Reference<datatransfer::XTransferable>& rxTransferable )
+{
+    ScTransferObj *pOwnClip=0;
+    ScDrawTransferObj *pDrawClip=0;
+    uno::Reference<lang::XUnoTunnel> xTunnel( rxTransferable, uno::UNO_QUERY );
+    if ( xTunnel.is() )
+    {
+        sal_Int64 nHandle = xTunnel->getSomething( ScTransferObj::getUnoTunnelId() );
+        if ( nHandle )
+            pOwnClip = (ScTransferObj*) (sal_IntPtr) nHandle;
+        else
+        {
+            nHandle = xTunnel->getSomething( ScDrawTransferObj::getUnoTunnelId() );
+            if ( nHandle )
+                pDrawClip = (ScDrawTransferObj*) (sal_IntPtr) nHandle;
+        }
+    }
+
+    if (pOwnClip)
+    {
+        PasteFromClip( IDF_ALL, pOwnClip->GetDocument(),
+                        PASTE_NOFUNC, FALSE, FALSE, FALSE, INS_NONE, IDF_NONE,
+                        TRUE );     // allow warning dialog
+    }
+    else if (pDrawClip)
+    {
+        ScViewData* pViewData = GetViewData();
+        SCCOL nPosX = pViewData->GetCurX();
+        SCROW nPosY = pViewData->GetCurY();
+        Window* pWin = GetActiveWin();
+        Point aPos = pWin->PixelToLogic( pViewData->GetScrPos( nPosX, nPosY, pViewData->GetActivePart() ) );
+        PasteDraw( aPos, pDrawClip->GetModel(), FALSE, pDrawClip->GetSourceDocID() == pViewData->GetDocument()->GetDocumentID() );
+    }
+    else
+    {
+            TransferableDataHelper aDataHelper( rxTransferable );
+        {
+            ULONG nBiff8 = SotExchange::RegisterFormatName(
+                    String::CreateFromAscii(RTL_CONSTASCII_STRINGPARAM("Biff8")));
+            ULONG nBiff5 = SotExchange::RegisterFormatName(
+                    String::CreateFromAscii(RTL_CONSTASCII_STRINGPARAM("Biff5")));
+            ULONG nFormatId = 0;
+                //  als erstes SvDraw-Model, dann Grafik
+                //  (Grafik darf nur bei einzelner Grafik drinstehen)
+
+            if (aDataHelper.HasFormat( SOT_FORMATSTR_ID_DRAWING ))
+                nFormatId = SOT_FORMATSTR_ID_DRAWING;
+            else if (aDataHelper.HasFormat( SOT_FORMATSTR_ID_SVXB ))
+                nFormatId = SOT_FORMATSTR_ID_SVXB;
+            else if (aDataHelper.HasFormat( SOT_FORMATSTR_ID_EMBED_SOURCE ))
+            {
+                //  If it's a Writer object, insert RTF instead of OLE
+                BOOL bDoRtf = FALSE;
+                SotStorageStreamRef xStm;
+                TransferableObjectDescriptor aObjDesc;
+                if( aDataHelper.GetTransferableObjectDescriptor( SOT_FORMATSTR_ID_OBJECTDESCRIPTOR, aObjDesc ) &&
+                    aDataHelper.GetSotStorageStream( SOT_FORMATSTR_ID_EMBED_SOURCE, xStm ) )
+                {
+                    SotStorageRef xStore( new SotStorage( *xStm ) );
+                    bDoRtf = ( ( aObjDesc.maClassName == SvGlobalName( SO3_SW_CLASSID ) ||
+                                 aObjDesc.maClassName == SvGlobalName( SO3_SWWEB_CLASSID ) )
+                               && aDataHelper.HasFormat( SOT_FORMAT_RTF ) );
+                }
+                if ( bDoRtf )
+                    nFormatId = FORMAT_RTF;
+                else
+                    nFormatId = SOT_FORMATSTR_ID_EMBED_SOURCE;
+            }
+            else if (aDataHelper.HasFormat( SOT_FORMATSTR_ID_LINK_SOURCE ))
+                nFormatId = SOT_FORMATSTR_ID_LINK_SOURCE;
+            // the following format can not affect scenario from #89579#
+            else if (aDataHelper.HasFormat( SOT_FORMATSTR_ID_EMBEDDED_OBJ_OLE ))
+                nFormatId = SOT_FORMATSTR_ID_EMBEDDED_OBJ_OLE;
+            // FORMAT_PRIVATE no longer here (can't work if pOwnClip is NULL)
+            else if (aDataHelper.HasFormat(nBiff8))      // before xxx_OLE formats
+                nFormatId = nBiff8;
+            else if (aDataHelper.HasFormat(nBiff5))
+                nFormatId = nBiff5;
+            else if (aDataHelper.HasFormat(FORMAT_RTF))
+                nFormatId = FORMAT_RTF;
+            else if (aDataHelper.HasFormat(SOT_FORMATSTR_ID_HTML))
+                nFormatId = SOT_FORMATSTR_ID_HTML;
+            else if (aDataHelper.HasFormat(SOT_FORMATSTR_ID_HTML_SIMPLE))
+                nFormatId = SOT_FORMATSTR_ID_HTML_SIMPLE;
+            else if (aDataHelper.HasFormat(SOT_FORMATSTR_ID_SYLK))
+                nFormatId = SOT_FORMATSTR_ID_SYLK;
+            else if (aDataHelper.HasFormat(FORMAT_STRING))
+                nFormatId = FORMAT_STRING;
+            else if (aDataHelper.HasFormat(FORMAT_GDIMETAFILE))
+                nFormatId = FORMAT_GDIMETAFILE;
+            else if (aDataHelper.HasFormat(FORMAT_BITMAP))
+                nFormatId = FORMAT_BITMAP;
+            // #89579# xxx_OLE formats come last, like in SotExchange tables
+            else if (aDataHelper.HasFormat( SOT_FORMATSTR_ID_EMBED_SOURCE_OLE ))
+                nFormatId = SOT_FORMATSTR_ID_EMBED_SOURCE_OLE;
+            else if (aDataHelper.HasFormat( SOT_FORMATSTR_ID_LINK_SOURCE_OLE ))
+                nFormatId = SOT_FORMATSTR_ID_LINK_SOURCE_OLE;
+            else
+                return;
+
+            PasteDataFormat( nFormatId, aDataHelper.GetTransferable(),
+                GetViewData()->GetCurX(), GetViewData()->GetCurY(),
+                NULL, FALSE, FALSE );
+        }
+    }
 }
 
 BOOL ScViewFunc::PasteFromSystem( ULONG nFormatId, BOOL bApi )
