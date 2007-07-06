@@ -5,9 +5,9 @@
  *
  *  $RCSfile: GenericCommands.xcu,v $
  *
- *  $Revision: 1.59 $
+ *  $Revision: 1.60 $
  *
- *  last change: $Author: rt $ $Date: 2007-07-03 12:51:16 $
+ *  last change: $Author: rt $ $Date: 2007-07-06 12:26:47 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -2663,7 +2663,7 @@
             </node>
             <node oor:name=".uno:ObjectMenue" oor:op="replace">
                 <prop oor:name="Label" oor:type="xs:string">
-                    <value xml:lang="en-US">~Object</value>
+                    <value xml:lang="en-US">Ob~ject</value>
                 </prop>
             </node>
             <node oor:name=".uno:Groupbox" oor:op="replace">
