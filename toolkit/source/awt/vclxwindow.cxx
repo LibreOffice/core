@@ -4,9 +4,9 @@
  *
  *  $RCSfile: vclxwindow.cxx,v $
  *
- *  $Revision: 1.75 $
+ *  $Revision: 1.76 $
  *
- *  last change: $Author: hr $ $Date: 2007-06-27 15:15:34 $
+ *  last change: $Author: rt $ $Date: 2007-07-06 14:26:58 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1862,6 +1862,7 @@ void VCLXWindow::setProperty( const ::rtl::OUString& PropertyName, const ::com::
                         // no break here!
                     case WINDOW_FIXEDTEXT:
                     case WINDOW_EDIT:
+                    case WINDOW_MULTILINEEDIT:
                     case WINDOW_CHECKBOX:
                     case WINDOW_RADIOBUTTON:
                     case WINDOW_LISTBOX:
@@ -1947,6 +1948,13 @@ void VCLXWindow::setProperty( const ::rtl::OUString& PropertyName, const ::com::
                 sal_Bool bMouseTransparent = false;
                 Value >>= bMouseTransparent;
                 pWindow->SetMouseTransparent( bMouseTransparent );
+            }
+            break;
+            case BASEPROPERTY_PAINTTRANSPARENT:
+            {
+                sal_Bool bPaintTransparent = false;
+                Value >>= bPaintTransparent;
+                pWindow->SetPaintTransparent( bPaintTransparent );
             }
             break;
 
@@ -2104,6 +2112,7 @@ void VCLXWindow::setProperty( const ::rtl::OUString& PropertyName, const ::com::
                 {
                     case WINDOW_FIXEDTEXT:
                     case WINDOW_EDIT:
+                    case WINDOW_MULTILINEEDIT:
                     case WINDOW_CHECKBOX:
                     case WINDOW_RADIOBUTTON:
                     case WINDOW_LISTBOX:
@@ -2149,6 +2158,12 @@ void VCLXWindow::setProperty( const ::rtl::OUString& PropertyName, const ::com::
             {
                 sal_Bool bMouseTransparent = GetWindow()->IsMouseTransparent();
                 aProp <<= bMouseTransparent;
+            }
+            break;
+            case BASEPROPERTY_PAINTTRANSPARENT:
+            {
+                sal_Bool bPaintTransparent = GetWindow()->IsPaintTransparent();
+                aProp <<= bPaintTransparent;
             }
             break;
 
