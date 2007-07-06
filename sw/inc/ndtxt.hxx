@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ndtxt.hxx,v $
  *
- *  $Revision: 1.48 $
+ *  $Revision: 1.49 $
  *
- *  last change: $Author: hr $ $Date: 2007-06-27 13:13:59 $
+ *  last change: $Author: rt $ $Date: 2007-07-06 12:24:32 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -55,6 +55,7 @@
 #endif
 
 #include <vector>
+#include <set>
 
 namespace utl {
     class TransliterationWrapper;
@@ -86,12 +87,14 @@ namespace com { namespace sun { namespace star { namespace uno {
     template < class > class Sequence;
 }}}}
 
+typedef std::set< xub_StrLen > SwSoftPageBreakList;
 
 // --------------------
 // SwTxtNode
 // --------------------
 class SW_DLLPUBLIC SwTxtNode: public SwCntntNode
 {
+
     // fuer das Erzeugen des ersten TextNode
     friend class SwDoc;         // CTOR und AppendTxtNode()
     friend class SwNodes;
@@ -560,6 +563,7 @@ public:
     // END OF BULLET/NUMBERING/OUTLINE STUFF:
     //
 
+    void fillSoftPageBreakList( SwSoftPageBreakList& rBreak ) const;
 
     USHORT GetLang( const xub_StrLen nBegin, const xub_StrLen nLen = 0,
                     USHORT nScript = 0 ) const;
