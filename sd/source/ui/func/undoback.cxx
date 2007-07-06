@@ -4,9 +4,9 @@
  *
  *  $RCSfile: undoback.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: kz $ $Date: 2006-12-12 17:28:22 $
+ *  last change: $Author: rt $ $Date: 2007-07-06 09:49:21 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -62,7 +62,7 @@ SdBackgroundObjUndoAction::SdBackgroundObjUndoAction( SdDrawDocument& rDoc, SdPa
 
 SdBackgroundObjUndoAction::~SdBackgroundObjUndoAction()
 {
-    delete mpBackgroundObj;
+    SdrObject::Free( mpBackgroundObj );
 }
 
 // -----------------------------------------------------------------------------
