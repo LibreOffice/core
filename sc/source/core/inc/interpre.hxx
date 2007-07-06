@@ -4,9 +4,9 @@
  *
  *  $RCSfile: interpre.hxx,v $
  *
- *  $Revision: 1.29 $
+ *  $Revision: 1.30 $
  *
- *  last change: $Author: rt $ $Date: 2007-07-03 15:48:37 $
+ *  last change: $Author: rt $ $Date: 2007-07-06 12:34:04 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -147,6 +147,10 @@ public:
     /// of the string content.
     static BOOL MayBeRegExp( const String& rStr, const ScDocument* pDoc );
 
+    /// Fail safe division, returning an errDivisionByZero coded into a double
+    /// if denominator is 0.0
+    static inline double div( double fNumerator, double fDenominator );
+
 private:
     static ScTokenStack*    pGlobalStack;
     static ScErrorStack*    pGlobalErrorStack;
@@ -194,7 +198,7 @@ void SetParameterExpected();
 void SetIllegalParameter();
 void SetIllegalArgument();
 void SetNoValue();
-void SetNV();
+void SetNA();
 //-------------------------------------------------------------------------
 // Funktionen fuer den Zugriff auf das Document
 //-------------------------------------------------------------------------
@@ -215,6 +219,7 @@ inline BOOL HasCellValueData( const ScBaseCell* pCell )
     { return pCell ? pCell->HasValueData() : FALSE; }
 inline BOOL HasCellStringData( const ScBaseCell* pCell )
     { return pCell ? pCell->HasStringData() : FALSE; }
+
 BOOL CreateDoubleArr(SCCOL nCol1, SCROW nRow1, SCTAB nTab1,
                      SCCOL nCol2, SCROW nRow2, SCTAB nTab2, BYTE* pCellArr);
 BOOL CreateStringArr(SCCOL nCol1, SCROW nRow1, SCTAB nTab1,
@@ -261,7 +266,7 @@ void PushSingleRef(SCCOL nCol, SCROW nRow, SCTAB nTab);
 void PushDoubleRef(SCCOL nCol1, SCROW nRow1, SCTAB nTab1,
                                  SCCOL nCol2, SCROW nRow2, SCTAB nTab2);
 void PushMatrix(ScMatrix* pMat);
-void PushError();
+void PushError( USHORT nError = errIllegalArgument );
 StackVar GetStackType();
 // peek StackType of Parameter, Parameter 1 == TOS, 2 == TOS-1, ...
 StackVar GetStackType( BYTE nParam );
@@ -776,4 +781,13 @@ inline void ScInterpreter::TreatDoubleError( double& rVal )
         rVal = 0.0;
     }
 }
+
+
+// static
+inline double ScInterpreter::div( double fNumerator, double fDenominator )
+{
+    return (fDenominator != 0.0) ? (fNumerator / fDenominator) :
+        CreateDoubleError( errDivisionByZero);
+}
+
 #endif
