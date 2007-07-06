@@ -4,9 +4,9 @@
  *
  *  $RCSfile: fmview.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: kz $ $Date: 2007-05-10 10:04:55 $
+ *  last change: $Author: rt $ $Date: 2007-07-06 07:29:42 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -63,6 +63,7 @@ namespace svx {
     struct OXFormsDescriptor;
 }
 
+class SdrUnoObj;
 namespace com { namespace sun { namespace star { namespace form {
     class XForm;
     class XFormController;
@@ -109,6 +110,24 @@ public:
     virtual void MarkListHasChanged();
     virtual void AddWindowToPaintView(OutputDevice* pNewWin);
     virtual void DeleteWindowFromPaintView(OutputDevice* pOldWin);
+
+    static void createControlLabelPair(
+        SdrView* _pView,
+        OutputDevice* _pOutDev,
+        sal_Int32 _nXOffsetMM,
+        sal_Int32 _nYOffsetMM,
+        const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& _rxField,
+        const ::com::sun::star::uno::Reference< ::com::sun::star::util::XNumberFormats >& _rxNumberFormats,
+        sal_uInt16 _nObjID,
+        const ::rtl::OUString& _rFieldPostfix,
+        UINT32 _nInventor,
+        UINT16 _nIndent,
+        SdrPage* _pLabelPage,
+        SdrPage* _pPage,
+        SdrModel* _pModel,
+        SdrUnoObj*& _rpLabel,
+        SdrUnoObj*& _rpControl
+    );
 
     virtual SdrPageView* ShowSdrPage(SdrPage* pPage);
     virtual void HideSdrPage();
