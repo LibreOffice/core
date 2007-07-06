@@ -4,9 +4,9 @@
  *
  *  $RCSfile: svdstr.hrc,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 18:55:31 $
+ *  last change: $Author: rt $ $Date: 2007-07-06 13:16:47 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -759,7 +759,7 @@
 #define SIP_SA_FINE_MARKERS                 (SIP_Begin + 259)
 
 // #100499#
-#define BMP_OLEOBJ                          (SIP_Begin + 260)
+#define BMP_SVXOLEOBJ                       (SIP_Begin + 260)
 
 // #101928#
 #define SIP_SA_ACCESSIBILITY_MARKERS        (SIP_Begin + 261)
