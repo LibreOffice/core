@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dialogcontrol.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: hr $ $Date: 2007-06-27 12:21:36 $
+ *  last change: $Author: rt $ $Date: 2007-07-06 14:27:12 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -264,6 +264,7 @@ UnoControlDialogModel::UnoControlDialogModel()
     ImplRegisterProperty( BASEPROPERTY_HELPURL );
     ImplRegisterProperty( BASEPROPERTY_TITLE );
     ImplRegisterProperty( BASEPROPERTY_SIZEABLE );
+    ImplRegisterProperty( BASEPROPERTY_DESKTOP_AS_PARENT );
     ImplRegisterProperty( BASEPROPERTY_DECORATION );
 
     Any aBool;
