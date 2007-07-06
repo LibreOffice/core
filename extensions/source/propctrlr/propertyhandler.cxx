@@ -4,9 +4,9 @@
  *
  *  $RCSfile: propertyhandler.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: kz $ $Date: 2006-12-13 16:58:47 $
+ *  last change: $Author: rt $ $Date: 2007-07-06 08:53:26 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -211,7 +211,7 @@ namespace pcr
         }
         else
             aPropertyValue = PropertyHandlerHelper::convertToPropertyValue(
-                m_xTypeConverter, aProperty, _rControlValue );
+                m_aContext.getContext(),m_xTypeConverter, aProperty, _rControlValue );
         return aPropertyValue;
     }
 
@@ -232,7 +232,7 @@ namespace pcr
         }
 
         return PropertyHandlerHelper::convertToControlValue(
-            m_xTypeConverter, _rPropertyValue, _rControlValueType );
+            m_aContext.getContext(),m_xTypeConverter, _rPropertyValue, _rControlValueType );
     }
 
     //--------------------------------------------------------------------
