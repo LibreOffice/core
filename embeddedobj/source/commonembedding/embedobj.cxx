@@ -4,9 +4,9 @@
  *
  *  $RCSfile: embedobj.cxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: vg $ $Date: 2007-05-22 19:35:00 $
+ *  last change: $Author: rt $ $Date: 2007-07-06 10:06:37 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -98,7 +98,6 @@
 #include <targetstatecontrol.hxx>
 
 #include "commonembobj.hxx"
-#include "convert.hxx"
 #include "intercept.hxx"
 
 
