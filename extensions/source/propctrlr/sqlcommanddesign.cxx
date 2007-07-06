@@ -4,9 +4,9 @@
  *
  *  $RCSfile: sqlcommanddesign.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: kz $ $Date: 2007-05-10 10:49:49 $
+ *  last change: $Author: rt $ $Date: 2007-07-06 08:53:46 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -89,6 +89,9 @@
 #ifndef _COM_SUN_STAR_FRAME_XDISPATCHPROVIDER_HPP_
 #include <com/sun/star/frame/XDispatchProvider.hpp>
 #endif
+#ifndef _COM_SUN_STAR_BEANS_XPROPERTYSETINFO_HPP_
+#include <com/sun/star/beans/XPropertySetInfo.hpp>
+#endif
 #ifndef _COM_SUN_STAR_SDB_COMMANDTYPE_HPP_
 #include <com/sun/star/sdb/CommandType.hpp>
 #endif
@@ -119,6 +122,7 @@ namespace pcr
     using ::com::sun::star::lang::XComponent;
     using ::com::sun::star::frame::XComponentLoader;
     using ::com::sun::star::beans::XPropertySet;
+    using ::com::sun::star::beans::XPropertySetInfo;
     using ::com::sun::star::frame::XController;
     using ::com::sun::star::lang::EventObject;
     using ::com::sun::star::lang::NullPointerException;
@@ -263,6 +267,7 @@ namespace pcr
         OSL_PRECOND( !isActive(),
             "SQLCommandDesigner::impl_doOpenDesignerFrame_nothrow: already active!" );
         OSL_PRECOND( m_xConnection.is() && m_xRowSet.is(), "SQLCommandDesigner::impl_doOpenDesignerFrame_nothrow: this will crash!" );
+        osl_incrementInterlockedCount(&m_refCount);
 
         try
         {
@@ -302,11 +307,15 @@ namespace pcr
             if ( xController.is() )
                 xFrameProps = xFrameProps.query( xController->getFrame() );
 
-            if ( xFrameProps.is() && xFrameProps->getPropertySetInfo().is() && xFrameProps->getPropertySetInfo()->hasPropertyByName( PROPERTY_TITLE ) )
+            if ( xFrameProps.is() )
             {
-                ::svt::OLocalResourceAccess aEnumStrings( PcrRes( RID_RSC_ENUM_COMMAND_TYPE ), RSC_RESOURCE );
-                ::rtl::OUString sDisplayName = String( PcrRes( CommandType::COMMAND + 1 ) );
-                xFrameProps->setPropertyValue( PROPERTY_TITLE, makeAny( sDisplayName ) );
+                Reference< XPropertySetInfo > xInfo = xFrameProps->getPropertySetInfo();
+                if ( xInfo.is() && xInfo->hasPropertyByName( PROPERTY_TITLE ) )
+                {
+                    ::svt::OLocalResourceAccess aEnumStrings( PcrRes( RID_RSC_ENUM_COMMAND_TYPE ), RSC_RESOURCE );
+                    ::rtl::OUString sDisplayName = String( PcrRes( CommandType::COMMAND + 1 ) );
+                    xFrameProps->setPropertyValue( PROPERTY_TITLE, makeAny( sDisplayName ) );
+                }
             }
         }
         catch( const Exception& )
@@ -314,6 +323,7 @@ namespace pcr
             DBG_UNHANDLED_EXCEPTION();
             m_xDesigner.clear();
         }
+        osl_decrementInterlockedCount(&m_refCount);
     }
 
     //------------------------------------------------------------------------
