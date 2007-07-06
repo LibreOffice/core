@@ -4,9 +4,9 @@
  *
  *  $RCSfile: unocontrols.cxx,v $
  *
- *  $Revision: 1.80 $
+ *  $Revision: 1.81 $
  *
- *  last change: $Author: kz $ $Date: 2007-02-14 15:35:00 $
+ *  last change: $Author: rt $ $Date: 2007-07-06 14:27:55 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -187,6 +187,8 @@ static void lcl_knitImageComponents( const uno::Reference< awt::XControlModel >&
 UnoControlEditModel::UnoControlEditModel()
 {
     ImplRegisterProperty( BASEPROPERTY_ALIGN );
+    ImplRegisterProperty( BASEPROPERTY_AUTOHSCROLL );
+    ImplRegisterProperty( BASEPROPERTY_AUTOVSCROLL );
     ImplRegisterProperty( BASEPROPERTY_BACKGROUNDCOLOR );
     ImplRegisterProperty( BASEPROPERTY_BORDER );
     ImplRegisterProperty( BASEPROPERTY_BORDERCOLOR );
@@ -201,6 +203,7 @@ UnoControlEditModel::UnoControlEditModel()
     ImplRegisterProperty( BASEPROPERTY_LINE_END_FORMAT );
     ImplRegisterProperty( BASEPROPERTY_MAXTEXTLEN );
     ImplRegisterProperty( BASEPROPERTY_MULTILINE );
+    ImplRegisterProperty( BASEPROPERTY_PAINTTRANSPARENT );
     ImplRegisterProperty( BASEPROPERTY_PRINTABLE );
     ImplRegisterProperty( BASEPROPERTY_READONLY );
     ImplRegisterProperty( BASEPROPERTY_TABSTOP );
