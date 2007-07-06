@@ -4,9 +4,9 @@
  *
  *  $RCSfile: sc.hrc,v $
  *
- *  $Revision: 1.53 $
+ *  $Revision: 1.54 $
  *
- *  last change: $Author: vg $ $Date: 2007-05-22 19:39:31 $
+ *  last change: $Author: rt $ $Date: 2007-07-06 12:30:48 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -580,6 +580,17 @@
 // #i68101# ID for changing Title & Descriptopn of an Object
 #define SID_TITLE_DESCRIPTION_OBJECT    (SC_VIEW_START + 94)
 
+// #i59082# assign macro to shape
+#define SID_ASSIGNMACRO                 (SC_VIEW_START + 95)
+
+#ifdef ISSUE66550_HLINK_FOR_SHAPES
+// #i66550# hyperlinks in shapes
+#define SID_DRAW_HLINK_EDIT             (SC_VIEW_START + 96)
+#define SID_DRAW_HLINK_DELETE           (SC_VIEW_START + 97)
+#endif
+
+// NOTE: last valid ID is (SC_VIEW_START + 99)
+
 // Nachrichten -------------------------------------------------------------
 
 #define FID_INPUTLINE_STATUS    (SC_MESSAGE_START)
@@ -686,6 +697,7 @@
 #define FID_PAGEBREAKMODE       (VIEW_MENU_START + 7)
 #define FID_FUNCTION_BOX        (VIEW_MENU_START + 8)
 #define FID_NORMALVIEWMODE      (VIEW_MENU_START + 9)
+#define FID_TOGGLEFORMULA       (VIEW_MENU_START + 10)
 // Compare/Merge jetzt aus Sfx
 //#define FID_CHG_COMPARE       (VIEW_MENU_START + 16)// DANGER DIRTY ID
 //#define FID_CHG_MERGE         (VIEW_MENU_START + 17)// DANGER DIRTY ID
@@ -1274,6 +1286,7 @@
 #define STR_REPLCELLSWARN           (STR_START + 91)
 
 #define SCSTR_DPFUNCLISTBOX         (STR_START + 92)
+#define STR_PRINT_NOTHING           (STR_START + 93)
 
 // Items
 
@@ -1394,7 +1407,9 @@
 // Media shell
 #define SCSTR_MEDIASHELL        (STR_START + 401)
 
-#define STR_END                 (STR_START + 402)
+#define RID_SCSTR_ONCLICK       (STR_START + 402)
+
+#define STR_END                 RID_SCSTR_ONCLICK
 
 #define BMP_START               (STR_END)
 
