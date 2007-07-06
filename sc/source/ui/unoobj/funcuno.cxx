@@ -4,9 +4,9 @@
  *
  *  $RCSfile: funcuno.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: obo $ $Date: 2007-03-05 14:46:42 $
+ *  last change: $Author: rt $ $Date: 2007-07-06 12:45:57 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -685,7 +685,7 @@ uno::Any SAL_CALL ScFunctionAccess::callFunction( const rtl::OUString& aName,
                 aRet <<= rtl::OUString( aStrVal );
             }
         }
-        else if ( nErrCode == NOVALUE )
+        else if ( nErrCode == NOTAVAILABLE )
         {
             // #N/A: leave result empty, no exception
         }
