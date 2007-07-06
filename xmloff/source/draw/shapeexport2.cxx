@@ -4,9 +4,9 @@
  *
  *  $RCSfile: shapeexport2.cxx,v $
  *
- *  $Revision: 1.60 $
+ *  $Revision: 1.61 $
  *
- *  last change: $Author: hr $ $Date: 2007-06-27 15:06:20 $
+ *  last change: $Author: rt $ $Date: 2007-07-06 12:28:29 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -358,125 +358,151 @@ void XMLShapeExport::ImpExportText( const uno::Reference< drawing::XShape >& xSh
 #include <com/sun/star/presentation/AnimationSpeed.hpp>
 #endif
 
-#define FOUND_CLICKACTION   0x0001
-#define FOUND_BOOKMARK      0x0002
-#define FOUND_EFFECT        0x0004
-#define FOUND_PLAYFULL      0x0008
-#define FOUND_VERB          0x0010
-#define FOUND_SOUNDURL      0x0020
-#define FOUND_SPEED         0x0040
-#define FOUND_EVENTTYPE     0x0080
-#define FOUND_MACRO         0x0100
-#define FOUND_LIBRARY       0x0200
+namespace {
+
+const sal_Int32 FOUND_CLICKACTION       = 0x00000001;
+const sal_Int32 FOUND_BOOKMARK          = 0x00000002;
+const sal_Int32 FOUND_EFFECT            = 0x00000004;
+const sal_Int32 FOUND_PLAYFULL          = 0x00000008;
+const sal_Int32 FOUND_VERB              = 0x00000010;
+const sal_Int32 FOUND_SOUNDURL          = 0x00000020;
+const sal_Int32 FOUND_SPEED             = 0x00000040;
+const sal_Int32 FOUND_CLICKEVENTTYPE    = 0x00000080;
+const sal_Int32 FOUND_MACRO             = 0x00000100;
+const sal_Int32 FOUND_LIBRARY           = 0x00000200;
+const sal_Int32 FOUND_ACTIONEVENTTYPE   = 0x00000400;
+#ifdef ISSUE66550_HLINK_FOR_SHAPES
+const sal_Int32 FOUND_URL               = 0x00000800;
+#endif
+
+} // namespace
 
 void XMLShapeExport::ImpExportEvents( const uno::Reference< drawing::XShape >& xShape )
 {
-    do
+    uno::Reference< document::XEventsSupplier > xEventsSupplier( xShape, uno::UNO_QUERY );
+    if( !xEventsSupplier.is() )
+        return;
+
+    uno::Reference< container::XNameAccess > xEvents( xEventsSupplier->getEvents(), uno::UNO_QUERY );
+    DBG_ASSERT( xEvents.is(), "XEventsSupplier::getEvents() returned NULL" );
+    if( !xEvents.is() )
+        return;
+
+    sal_Int32 nFound = 0;
+
+    // extract properties from "OnClick" event --------------------------------
+
+    OUString aClickEventType;
+    presentation::ClickAction eClickAction = presentation::ClickAction_NONE;
+    presentation::AnimationEffect eEffect = presentation::AnimationEffect_NONE;
+    presentation::AnimationSpeed eSpeed = presentation::AnimationSpeed_SLOW;
+    OUString aStrSoundURL;
+    sal_Bool bPlayFull = false;
+    sal_Int32 nVerb = 0;
+    OUString aStrMacro;
+    OUString aStrLibrary;
+    OUString aStrBookmark;
+
+    uno::Sequence< beans::PropertyValue > aClickProperties;
+    if( xEvents->hasByName( msOnClick ) && (xEvents->getByName( msOnClick ) >>= aClickProperties) )
     {
-        uno::Reference< document::XEventsSupplier > xEventsSupplier( xShape, uno::UNO_QUERY );
-        if( !xEventsSupplier.is() )
-            break;
-
-        uno::Reference< container::XNameReplace > xEvents( xEventsSupplier->getEvents() );
-        DBG_ASSERT( xEvents.is(), "XEventsSupplier::getEvents() returned NULL" );
-        if( !xEvents.is() )
-            break;
-
-        uno::Sequence< beans::PropertyValue > aProperties;
-        if( !xEvents->hasByName( msOnClick ) )
-            break;
-
-        if( !(xEvents->getByName( msOnClick ) >>= aProperties) )
-            break;
-
-        sal_Int32 nFound = 0;
-        const beans::PropertyValue* pProperties = aProperties.getConstArray();
-
-        OUString aStrEventType;
-        presentation::ClickAction eClickAction = presentation::ClickAction_NONE;
-        presentation::AnimationEffect eEffect =
-            presentation::AnimationEffect_NONE;
-        presentation::AnimationSpeed eSpeed = presentation::AnimationSpeed_SLOW;
-        OUString aStrSoundURL;
-        sal_Bool bPlayFull = false;
-        sal_Int32 nVerb = 0;
-        OUString aStrMacro;
-        OUString aStrLibrary;
-        OUString aStrBookmark;
-
-        const sal_Int32 nCount = aProperties.getLength();
-        sal_Int32 nIndex;
-        for( nIndex = 0; nIndex < nCount; nIndex++, pProperties++ )
+        const beans::PropertyValue* pProperty = aClickProperties.getConstArray();
+        const beans::PropertyValue* pPropertyEnd = pProperty + aClickProperties.getLength();
+        for( ; pProperty != pPropertyEnd; ++pProperty )
         {
-            if( ( ( nFound & FOUND_EVENTTYPE ) == 0 ) && pProperties->Name == msEventType )
+            if( ( ( nFound & FOUND_CLICKEVENTTYPE ) == 0 ) && pProperty->Name == msEventType )
             {
-                if( pProperties->Value >>= aStrEventType )
-                    nFound |= FOUND_EVENTTYPE;
+                if( pProperty->Value >>= aClickEventType )
+                    nFound |= FOUND_CLICKEVENTTYPE;
             }
-            else if( ( ( nFound & FOUND_CLICKACTION ) == 0 ) && pProperties->Name == msClickAction )
+            else if( ( ( nFound & FOUND_CLICKACTION ) == 0 ) && pProperty->Name == msClickAction )
             {
-                if( pProperties->Value >>= eClickAction )
+                if( pProperty->Value >>= eClickAction )
                     nFound |= FOUND_CLICKACTION;
             }
-            else if( ( ( nFound & FOUND_MACRO ) == 0 ) && ( pProperties->Name == msMacroName || pProperties->Name == msScript ) )
+            else if( ( ( nFound & FOUND_MACRO ) == 0 ) && ( pProperty->Name == msMacroName || pProperty->Name == msScript ) )
             {
-                if( pProperties->Value >>= aStrMacro )
+                if( pProperty->Value >>= aStrMacro )
                     nFound |= FOUND_MACRO;
             }
-            else if( ( ( nFound & FOUND_LIBRARY ) == 0 ) && pProperties->Name == msLibrary )
+            else if( ( ( nFound & FOUND_LIBRARY ) == 0 ) && pProperty->Name == msLibrary )
             {
-                if( pProperties->Value >>= aStrLibrary )
+                if( pProperty->Value >>= aStrLibrary )
                     nFound |= FOUND_LIBRARY;
             }
-            else if( ( ( nFound & FOUND_EFFECT ) == 0 ) && pProperties->Name == msEffect )
+            else if( ( ( nFound & FOUND_EFFECT ) == 0 ) && pProperty->Name == msEffect )
             {
-                if( pProperties->Value >>= eEffect )
+                if( pProperty->Value >>= eEffect )
                     nFound |= FOUND_EFFECT;
             }
-            else if( ( ( nFound & FOUND_BOOKMARK ) == 0 ) && pProperties->Name == msBookmark )
+            else if( ( ( nFound & FOUND_BOOKMARK ) == 0 ) && pProperty->Name == msBookmark )
             {
-                if( pProperties->Value >>= aStrBookmark )
+                if( pProperty->Value >>= aStrBookmark )
                     nFound |= FOUND_BOOKMARK;
             }
-            else if( ( ( nFound & FOUND_SPEED ) == 0 ) && pProperties->Name == msSpeed )
+            else if( ( ( nFound & FOUND_SPEED ) == 0 ) && pProperty->Name == msSpeed )
             {
-                if( pProperties->Value >>= eSpeed )
+                if( pProperty->Value >>= eSpeed )
                     nFound |= FOUND_SPEED;
             }
-            else if( ( ( nFound & FOUND_SOUNDURL ) == 0 ) && pProperties->Name == msSoundURL )
+            else if( ( ( nFound & FOUND_SOUNDURL ) == 0 ) && pProperty->Name == msSoundURL )
             {
-                if( pProperties->Value >>= aStrSoundURL )
+                if( pProperty->Value >>= aStrSoundURL )
                     nFound |= FOUND_SOUNDURL;
             }
-            else if( ( ( nFound & FOUND_PLAYFULL ) == 0 ) && pProperties->Name == msPlayFull )
+            else if( ( ( nFound & FOUND_PLAYFULL ) == 0 ) && pProperty->Name == msPlayFull )
             {
-                if( pProperties->Value >>= bPlayFull )
+                if( pProperty->Value >>= bPlayFull )
                     nFound |= FOUND_PLAYFULL;
             }
-            else if( ( ( nFound & FOUND_VERB ) == 0 ) && pProperties->Name == msVerb )
+            else if( ( ( nFound & FOUND_VERB ) == 0 ) && pProperty->Name == msVerb )
             {
-                if( pProperties->Value >>= nVerb )
+                if( pProperty->Value >>= nVerb )
                     nFound |= FOUND_VERB;
             }
         }
+    }
 
-        if( ( nFound & FOUND_EVENTTYPE ) == 0 )
-            break;
+#ifdef ISSUE66550_HLINK_FOR_SHAPES
+    // extract properties from "OnAction" event -------------------------------
 
-        if( aStrEventType == msPresentation )
+    OUString aActionEventType;
+    OUString aHyperURL;
+
+    uno::Sequence< beans::PropertyValue > aActionProperties;
+    if( xEvents->hasByName( msOnAction ) && (xEvents->getByName( msOnAction ) >>= aActionProperties) )
+    {
+        const beans::PropertyValue* pProperty = aActionProperties.getConstArray();
+        const beans::PropertyValue* pPropertyEnd = pProperty + aActionProperties.getLength();
+        for( ; pProperty != pPropertyEnd; ++pProperty )
         {
-            if( ( nFound & FOUND_CLICKACTION ) == 0 )
-                break;
-
-            if( eClickAction == presentation::ClickAction_NONE )
-                break;
-
-            SvXMLElementExport aEventsElemt(mrExport, XML_NAMESPACE_OFFICE, XML_EVENT_LISTENERS, sal_True, sal_True);
-
-            enum XMLTokenEnum eStrAction;
-
-            switch( eClickAction )
+            if( ( ( nFound & FOUND_ACTIONEVENTTYPE ) == 0 ) && pProperty->Name == msEventType )
             {
+                if( pProperty->Value >>= aActionEventType )
+                    nFound |= FOUND_ACTIONEVENTTYPE;
+            }
+            else if( ( ( nFound & FOUND_URL ) == 0 ) && ( pProperty->Name == msURL  ) )
+            {
+                if( pProperty->Value >>= aHyperURL )
+                    nFound |= FOUND_URL;
+            }
+        }
+    }
+#endif
+
+    // create the XML elements
+
+    if( aClickEventType == msPresentation )
+    {
+        if( ((nFound & FOUND_CLICKACTION) == 0) || (eClickAction == presentation::ClickAction_NONE) )
+            return;
+
+        SvXMLElementExport aEventsElemt(mrExport, XML_NAMESPACE_OFFICE, XML_EVENT_LISTENERS, sal_True, sal_True);
+
+        enum XMLTokenEnum eStrAction;
+
+        switch( eClickAction )
+        {
             case presentation::ClickAction_PREVPAGE:        eStrAction = XML_PREVIOUS_PAGE; break;
             case presentation::ClickAction_NEXTPAGE:        eStrAction = XML_NEXT_PAGE; break;
             case presentation::ClickAction_FIRSTPAGE:       eStrAction = XML_FIRST_PAGE; break;
@@ -493,138 +519,143 @@ void XMLShapeExport::ImpExportEvents( const uno::Reference< drawing::XShape >& x
             default:
                 DBG_ERROR( "unknown presentation::ClickAction found!" );
                 eStrAction = XML_UNKNOWN;
+        }
+
+        OUString aEventQName(
+            mrExport.GetNamespaceMap().GetQNameByKey(
+                    XML_NAMESPACE_DOM, OUString( RTL_CONSTASCII_USTRINGPARAM( "click" ) ) ) );
+        mrExport.AddAttribute( XML_NAMESPACE_SCRIPT, XML_EVENT_NAME, aEventQName );
+        mrExport.AddAttribute( XML_NAMESPACE_PRESENTATION, XML_ACTION, eStrAction );
+
+        if( eClickAction == presentation::ClickAction_VANISH )
+        {
+            if( nFound & FOUND_EFFECT )
+            {
+                XMLEffect eKind;
+                XMLEffectDirection eDirection;
+                sal_Int16 nStartScale;
+                sal_Bool bIn;
+
+                SdXMLImplSetEffect( eEffect, eKind, eDirection, nStartScale, bIn );
+
+                if( eKind != EK_none )
+                {
+                    SvXMLUnitConverter::convertEnum( msBuffer, eKind, aXML_AnimationEffect_EnumMap );
+                    mrExport.AddAttribute( XML_NAMESPACE_PRESENTATION, XML_EFFECT, msBuffer.makeStringAndClear() );
+                }
+
+                if( eDirection != ED_none )
+                {
+                    SvXMLUnitConverter::convertEnum( msBuffer, eDirection, aXML_AnimationDirection_EnumMap );
+                    mrExport.AddAttribute( XML_NAMESPACE_PRESENTATION, XML_DIRECTION, msBuffer.makeStringAndClear() );
+                }
+
+                if( nStartScale != -1 )
+                {
+                    SvXMLUnitConverter::convertPercent( msBuffer, nStartScale );
+                    mrExport.AddAttribute( XML_NAMESPACE_PRESENTATION, XML_START_SCALE, msBuffer.makeStringAndClear() );
+                }
             }
 
+            if( nFound & FOUND_SPEED && eEffect != presentation::AnimationEffect_NONE )
+            {
+                 if( eSpeed != presentation::AnimationSpeed_MEDIUM )
+                    {
+                    SvXMLUnitConverter::convertEnum( msBuffer, eSpeed, aXML_AnimationSpeed_EnumMap );
+                    mrExport.AddAttribute( XML_NAMESPACE_PRESENTATION, XML_SPEED, msBuffer.makeStringAndClear() );
+                }
+            }
+        }
+
+        if( eClickAction == presentation::ClickAction_PROGRAM ||
+            eClickAction == presentation::ClickAction_BOOKMARK ||
+            eClickAction == presentation::ClickAction_DOCUMENT )
+        {
+            if( eClickAction == presentation::ClickAction_BOOKMARK )
+                msBuffer.append( sal_Unicode('#') );
+
+            msBuffer.append( aStrBookmark );
+            mrExport.AddAttribute(XML_NAMESPACE_XLINK, XML_HREF, GetExport().GetRelativeReference(msBuffer.makeStringAndClear()) );
+            mrExport.AddAttribute( XML_NAMESPACE_XLINK, XML_TYPE, XML_SIMPLE );
+            mrExport.AddAttribute( XML_NAMESPACE_XLINK, XML_SHOW, XML_EMBED );
+            mrExport.AddAttribute( XML_NAMESPACE_XLINK, XML_ACTUATE, XML_ONREQUEST );
+        }
+
+        if( ( nFound & FOUND_VERB ) && eClickAction == presentation::ClickAction_VERB )
+        {
+            msBuffer.append( nVerb );
+            mrExport.AddAttribute(XML_NAMESPACE_PRESENTATION, XML_VERB, msBuffer.makeStringAndClear());
+        }
+
+        SvXMLElementExport aEventElemt(mrExport, XML_NAMESPACE_PRESENTATION, XML_EVENT_LISTENER, sal_True, sal_True);
+
+        if( eClickAction == presentation::ClickAction_VANISH || eClickAction == presentation::ClickAction_SOUND )
+        {
+            if( ( nFound & FOUND_SOUNDURL ) && aStrSoundURL.getLength() != 0 )
+            {
+                mrExport.AddAttribute(XML_NAMESPACE_XLINK, XML_HREF, GetExport().GetRelativeReference(aStrSoundURL) );
+                mrExport.AddAttribute( XML_NAMESPACE_XLINK, XML_TYPE, XML_SIMPLE );
+                mrExport.AddAttribute( XML_NAMESPACE_XLINK, XML_SHOW, XML_NEW );
+                mrExport.AddAttribute( XML_NAMESPACE_XLINK, XML_ACTUATE, XML_ONREQUEST );
+                if( nFound & FOUND_PLAYFULL && bPlayFull )
+                    mrExport.AddAttribute( XML_NAMESPACE_PRESENTATION, XML_PLAY_FULL, XML_TRUE );
+
+                SvXMLElementExport aElem( mrExport, XML_NAMESPACE_PRESENTATION, XML_SOUND, sal_True, sal_True );
+            }
+       }
+    }
+    else if( aClickEventType == msStarBasic )
+    {
+        if( nFound & FOUND_MACRO )
+        {
+            SvXMLElementExport aEventsElemt(mrExport, XML_NAMESPACE_OFFICE, XML_EVENT_LISTENERS, sal_True, sal_True);
+
+            mrExport.AddAttribute( XML_NAMESPACE_SCRIPT, XML_LANGUAGE,
+                        mrExport.GetNamespaceMap().GetQNameByKey(
+                            XML_NAMESPACE_OOO,
+                            OUString( RTL_CONSTASCII_USTRINGPARAM(
+                                            "starbasic" ) ) ) );
             OUString aEventQName(
                 mrExport.GetNamespaceMap().GetQNameByKey(
                         XML_NAMESPACE_DOM, OUString( RTL_CONSTASCII_USTRINGPARAM( "click" ) ) ) );
             mrExport.AddAttribute( XML_NAMESPACE_SCRIPT, XML_EVENT_NAME, aEventQName );
-            mrExport.AddAttribute( XML_NAMESPACE_PRESENTATION, XML_ACTION, eStrAction );
 
-            if( eClickAction == presentation::ClickAction_VANISH )
+            if( nFound & FOUND_LIBRARY )
             {
-                if( nFound & FOUND_EFFECT )
-                {
-                    XMLEffect eKind;
-                    XMLEffectDirection eDirection;
-                    sal_Int16 nStartScale;
-                    sal_Bool bIn;
-
-                    SdXMLImplSetEffect( eEffect, eKind, eDirection, nStartScale, bIn );
-
-                    if( eKind != EK_none )
-                    {
-                        SvXMLUnitConverter::convertEnum( msBuffer, eKind, aXML_AnimationEffect_EnumMap );
-                        mrExport.AddAttribute( XML_NAMESPACE_PRESENTATION, XML_EFFECT, msBuffer.makeStringAndClear() );
-                    }
-
-                    if( eDirection != ED_none )
-                    {
-                        SvXMLUnitConverter::convertEnum( msBuffer, eDirection, aXML_AnimationDirection_EnumMap );
-                        mrExport.AddAttribute( XML_NAMESPACE_PRESENTATION, XML_DIRECTION, msBuffer.makeStringAndClear() );
-                    }
-
-                    if( nStartScale != -1 )
-                    {
-                        SvXMLUnitConverter::convertPercent( msBuffer, nStartScale );
-                        mrExport.AddAttribute( XML_NAMESPACE_PRESENTATION, XML_START_SCALE, msBuffer.makeStringAndClear() );
-                    }
-                }
-
-                if( nFound & FOUND_SPEED && eEffect != presentation::AnimationEffect_NONE )
-                {
-                    if( eSpeed != presentation::AnimationSpeed_MEDIUM )
-                    {
-                        SvXMLUnitConverter::convertEnum( msBuffer, eSpeed, aXML_AnimationSpeed_EnumMap );
-                        mrExport.AddAttribute( XML_NAMESPACE_PRESENTATION, XML_SPEED, msBuffer.makeStringAndClear() );
-                    }
-                }
+                OUString sLocation( GetXMLToken(
+                    (aStrLibrary.equalsIgnoreAsciiCaseAscii("StarOffice") ||
+                     aStrLibrary.equalsIgnoreAsciiCaseAscii("application") ) ? XML_APPLICATION
+                                                                       : XML_DOCUMENT ) );
+                OUStringBuffer sTmp( sLocation.getLength() + aStrMacro.getLength() + 1 );
+                sTmp = sLocation;
+                sTmp.append( sal_Unicode( ':' ) );
+                sTmp.append( aStrMacro );
+                mrExport.AddAttribute(XML_NAMESPACE_SCRIPT, XML_MACRO_NAME,
+                                     sTmp.makeStringAndClear());
+            }
+            else
+            {
+                mrExport.AddAttribute( XML_NAMESPACE_SCRIPT, XML_MACRO_NAME, aStrMacro );
             }
 
-            if( eClickAction == presentation::ClickAction_PROGRAM ||
-                eClickAction == presentation::ClickAction_BOOKMARK ||
-                eClickAction == presentation::ClickAction_DOCUMENT )
-            {
-                if( eClickAction == presentation::ClickAction_BOOKMARK )
-                    msBuffer.append( sal_Unicode('#') );
-
-                msBuffer.append( aStrBookmark );
-                mrExport.AddAttribute(XML_NAMESPACE_XLINK, XML_HREF, GetExport().GetRelativeReference(msBuffer.makeStringAndClear()) );
-                mrExport.AddAttribute( XML_NAMESPACE_XLINK, XML_TYPE, XML_SIMPLE );
-                mrExport.AddAttribute( XML_NAMESPACE_XLINK, XML_SHOW, XML_EMBED );
-                mrExport.AddAttribute( XML_NAMESPACE_XLINK, XML_ACTUATE, XML_ONREQUEST );
-            }
-
-            if( ( nFound & FOUND_VERB ) && eClickAction == presentation::ClickAction_VERB )
-            {
-                msBuffer.append( nVerb );
-                mrExport.AddAttribute(XML_NAMESPACE_PRESENTATION, XML_VERB, msBuffer.makeStringAndClear());
-            }
-
-            SvXMLElementExport aEventElemt(mrExport, XML_NAMESPACE_PRESENTATION, XML_EVENT_LISTENER, sal_True, sal_True);
-
-            if( eClickAction == presentation::ClickAction_VANISH || eClickAction == presentation::ClickAction_SOUND )
-            {
-                if( ( nFound & FOUND_SOUNDURL ) && aStrSoundURL.getLength() != 0 )
-                {
-                    mrExport.AddAttribute(XML_NAMESPACE_XLINK, XML_HREF, GetExport().GetRelativeReference(aStrSoundURL) );
-                    mrExport.AddAttribute( XML_NAMESPACE_XLINK, XML_TYPE, XML_SIMPLE );
-                    mrExport.AddAttribute( XML_NAMESPACE_XLINK, XML_SHOW, XML_NEW );
-                    mrExport.AddAttribute( XML_NAMESPACE_XLINK, XML_ACTUATE, XML_ONREQUEST );
-                    if( nFound & FOUND_PLAYFULL && bPlayFull )
-                        mrExport.AddAttribute( XML_NAMESPACE_PRESENTATION, XML_PLAY_FULL, XML_TRUE );
-
-                    SvXMLElementExport aElem( mrExport, XML_NAMESPACE_PRESENTATION, XML_SOUND, sal_True, sal_True );
-                }
-            }
-            break;
+            SvXMLElementExport aEventElemt(mrExport, XML_NAMESPACE_SCRIPT, XML_EVENT_LISTENER, sal_True, sal_True);
         }
-        else if( aStrEventType == msStarBasic )
+    }
+#ifdef ISSUE66550_HLINK_FOR_SHAPES
+    else if( aClickEventType == msScript || aActionEventType == msAction )
+    {
+        if( nFound & ( FOUND_MACRO | FOUND_URL ) )
+#else
+    else if( aClickEventType == msScript )
+    {
+        if( nFound & FOUND_MACRO )
+#endif
         {
-            if( nFound & FOUND_MACRO )
+            SvXMLElementExport aEventsElemt(mrExport, XML_NAMESPACE_OFFICE, XML_EVENT_LISTENERS, sal_True, sal_True);
+            if ( nFound & FOUND_MACRO )
             {
-                SvXMLElementExport aEventsElemt(mrExport, XML_NAMESPACE_OFFICE, XML_EVENT_LISTENERS, sal_True, sal_True);
-
-                mrExport.AddAttribute( XML_NAMESPACE_SCRIPT, XML_LANGUAGE,
-                            mrExport.GetNamespaceMap().GetQNameByKey(
-                                 XML_NAMESPACE_OOO,
-                                 OUString( RTL_CONSTASCII_USTRINGPARAM(
-                                                "starbasic" ) ) ) );
-                OUString aEventQName(
-                    mrExport.GetNamespaceMap().GetQNameByKey(
-                            XML_NAMESPACE_DOM, OUString( RTL_CONSTASCII_USTRINGPARAM( "click" ) ) ) );
-                mrExport.AddAttribute( XML_NAMESPACE_SCRIPT, XML_EVENT_NAME, aEventQName );
-
-                if( nFound & FOUND_LIBRARY )
-                {
-                    OUString sLocation( GetXMLToken(
-                        (aStrLibrary.equalsIgnoreAsciiCaseAscii("StarOffice") ||
-                          aStrLibrary.equalsIgnoreAsciiCaseAscii("application") ) ? XML_APPLICATION
-                                                                              : XML_DOCUMENT ) );
-                    OUStringBuffer sTmp( sLocation.getLength() + aStrMacro.getLength() + 1 );
-                    sTmp = sLocation;
-                    sTmp.append( sal_Unicode( ':' ) );
-                    sTmp.append( aStrMacro );
-                    mrExport.AddAttribute(XML_NAMESPACE_SCRIPT, XML_MACRO_NAME,
-                                         sTmp.makeStringAndClear());
-                }
-                else
-                {
-                    mrExport.AddAttribute( XML_NAMESPACE_SCRIPT, XML_MACRO_NAME, aStrMacro );
-                }
-
-
-                SvXMLElementExport aEventElemt(mrExport, XML_NAMESPACE_SCRIPT, XML_EVENT_LISTENER, sal_True, sal_True);
-            }
-        }
-        else if( aStrEventType == msScript )
-        {
-            if( nFound & FOUND_MACRO )
-            {
-                SvXMLElementExport aEventsElemt(mrExport, XML_NAMESPACE_OFFICE, XML_EVENT_LISTENERS, sal_True, sal_True);
-
                 mrExport.AddAttribute( XML_NAMESPACE_SCRIPT, XML_LANGUAGE, mrExport.GetNamespaceMap().GetQNameByKey(
-                             XML_NAMESPACE_OOO, GetXMLToken(XML_SCRIPT) ) );
+                         XML_NAMESPACE_OOO, GetXMLToken(XML_SCRIPT) ) );
                 OUString aEventQName(
                     mrExport.GetNamespaceMap().GetQNameByKey(
                             XML_NAMESPACE_DOM, OUString( RTL_CONSTASCII_USTRINGPARAM( "click" ) ) ) );
@@ -633,9 +664,20 @@ void XMLShapeExport::ImpExportEvents( const uno::Reference< drawing::XShape >& x
 
                 SvXMLElementExport aEventElemt(mrExport, XML_NAMESPACE_SCRIPT, XML_EVENT_LISTENER, sal_True, sal_True);
             }
+#ifdef ISSUE66550_HLINK_FOR_SHAPES
+            if ( nFound & FOUND_URL )
+            {
+                OUString aEventQName(
+                    mrExport.GetNamespaceMap().GetQNameByKey(
+                            XML_NAMESPACE_DOM, OUString( RTL_CONSTASCII_USTRINGPARAM( "action" ) ) ) );
+                mrExport.AddAttribute( XML_NAMESPACE_SCRIPT, XML_EVENT_NAME, aEventQName );
+                mrExport.AddAttribute( XML_NAMESPACE_XLINK, XML_HREF, aHyperURL );
+
+                SvXMLElementExport aEventElemt(mrExport, XML_NAMESPACE_PRESENTATION, XML_EVENT_LISTENER, sal_True, sal_True);
+            }
+#endif
         }
     }
-    while(0);
 }
 
 //////////////////////////////////////////////////////////////////////////////
