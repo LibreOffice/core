@@ -4,9 +4,9 @@
  *
  *  $RCSfile: svdobj.cxx,v $
  *
- *  $Revision: 1.90 $
+ *  $Revision: 1.91 $
  *
- *  last change: $Author: hr $ $Date: 2007-06-27 19:05:11 $
+ *  last change: $Author: rt $ $Date: 2007-07-06 07:41:10 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -46,6 +46,7 @@
 #include <vcl/cvtsvm.hxx>
 #include <tools/line.hxx>
 #include <tools/bigint.hxx>
+#include <tools/diagnose_ex.h>
 #include <vector>
 #include <svx/svdobj.hxx>
 #include <svx/xpoly.hxx>
@@ -481,7 +482,8 @@ SdrObject::SdrObject()
     pUserCall(NULL),
     pPlusData(NULL),
     nOrdNum(0),
-    mnLayerID(0)
+    mnLayerID(0),
+    mpSvxShape(0)
 {
     DBG_CTOR(SdrObject,NULL);
     bVirtObj         =FALSE;
@@ -528,9 +530,21 @@ SdrObject::~SdrObject()
     // when they get called from ObjectInDestruction().
     maObjectUsers.clear();
 
-    uno::Reference< lang::XComponent > xShape( mxUnoShape, uno::UNO_QUERY );
-    if( xShape.is() )
-        xShape->dispose();
+    try
+    {
+        uno::Reference< uno::XInterface > xShape;
+        SvxShape* pSvxShape = getSvxShape( xShape );
+        if ( pSvxShape )
+        {
+            pSvxShape->InvalidateSdrObject();
+            uno::Reference< lang::XComponent > xShapeComp( xShape, uno::UNO_QUERY_THROW );
+            xShapeComp->dispose();
+        }
+    }
+    catch( const uno::Exception& )
+    {
+        DBG_UNHANDLED_EXCEPTION();
+    }
 
     DBG_DTOR(SdrObject,NULL);
     SendUserCall(SDRUSERCALL_DELETE, GetLastBoundRect());
@@ -549,6 +563,22 @@ SdrObject::~SdrObject()
         delete mpViewContact;
         mpViewContact = 0L;
     }
+}
+
+void SdrObject::Free( SdrObject*& _rpObject )
+{
+    SdrObject* pObject = _rpObject; _rpObject = NULL;
+    if ( pObject == NULL )
+        // nothing to do
+        return;
+
+    uno::Reference< uno::XInterface > xShape;
+    SvxShape* pShape = pObject->getSvxShape( xShape );
+    if ( pShape && pShape->HasSdrObjectOwnership() )
+        // only the shape is allowed to delete me, and will reset the ownership before doing so
+        return;
+
+    delete pObject;
 }
 
 SdrObjPlusData* SdrObject::NewPlusData() const
@@ -580,13 +610,10 @@ void SdrObject::SetModel(SdrModel* pNewModel)
     // update listeners at possible api wrapper object
     if( pModel != pNewModel )
     {
-        uno::Reference< uno::XInterface > xShape( mxUnoShape );
-        if( xShape.is() )
-        {
-            SvxShape* pShape = SvxShape::getImplementation( xShape );
-            if( pShape )
-                pShape->ChangeModel( pNewModel );
-        }
+        uno::Reference< uno::XInterface > xShapeGuard;
+        SvxShape* pShape = getSvxShape( xShapeGuard );
+        if( pShape )
+            pShape->ChangeModel( pNewModel );
     }
 
     pModel = pNewModel;
@@ -3245,6 +3272,17 @@ void SdrObject::SendUserCall(SdrUserCallType eUserCall, const Rectangle& rBoundR
         else
             pGroup = NULL;
     }
+
+    if( eUserCall == SDRUSERCALL_CHGATTR )
+    {
+        if( pModel && pModel->IsAllowShapePropertyChangeListener() )
+        {
+            ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > xShapeGuard;
+            SvxShape* pShape = const_cast< SdrObject* >(this)->getSvxShape( xShapeGuard );
+            if( pShape )
+                pShape->onUserCall( eUserCall, rBoundRect );
+        }
+    }
 }
 
 // ItemPool fuer dieses Objekt wechseln
@@ -3309,6 +3347,34 @@ sal_Bool SdrObject::IsTransparent( BOOL /*bCheckForAlphaChannel*/) const
     return bRet;
 }
 
+void SdrObject::setUnoShape(
+    const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >& _rxUnoShape,
+    SdrObject::GrantXShapeAccess /*aGrant*/
+)
+{
+    mxUnoShape = _rxUnoShape;
+    mpSvxShape = 0;
+}
+
+/** only for internal use! */
+SvxShape* SdrObject::getSvxShape( ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >& xShapeGuard )
+{
+    xShapeGuard = xShapeGuard.query( mxUnoShape );
+    if( xShapeGuard.is() )
+    {
+        if( !mpSvxShape )
+        {
+            mpSvxShape = SvxShape::getImplementation( xShapeGuard );
+        }
+    }
+    else if( mpSvxShape )
+    {
+        mpSvxShape = NULL;
+    }
+
+    return mpSvxShape;
+}
+
 ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > SdrObject::getUnoShape()
 {
     // try weak reference first
@@ -3317,6 +3383,7 @@ sal_Bool SdrObject::IsTransparent( BOOL /*bCheckForAlphaChannel*/) const
     {
         if ( pPage )
         {
+            mpSvxShape = 0;
             uno::Reference< uno::XInterface > xPage( pPage->getUnoPage() );
             if( xPage.is() )
             {
@@ -3324,16 +3391,14 @@ sal_Bool SdrObject::IsTransparent( BOOL /*bCheckForAlphaChannel*/) const
                 if( pDrawPage )
                 {
                     // create one
-                    xShape = pDrawPage->_CreateShape( this );
-                    mxUnoShape = xShape;
+                    mxUnoShape = xShape = pDrawPage->_CreateShape( this );
                 }
             }
         }
         else
         {
-            uno::Reference< drawing::XShape > xS( SvxDrawPage::CreateShapeByTypeAndInventor( GetObjIdentifier(), GetObjInventor(), this, NULL ) );
-            xShape = xS;
-            mxUnoShape = xShape;
+            mpSvxShape = SvxDrawPage::CreateShapeByTypeAndInventor( GetObjIdentifier(), GetObjInventor(), this, NULL );
+            mxUnoShape = xShape = static_cast< ::cppu::OWeakObject* >( mpSvxShape );
         }
     }
 
