@@ -4,9 +4,9 @@
  *
  *  $RCSfile: attrlist.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: hr $ $Date: 2007-06-27 14:56:01 $
+ *  last change: $Author: rt $ $Date: 2007-07-06 09:43:11 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -253,14 +253,9 @@ void SvXMLAttributeList::SetValueByIndex( sal_Int16 i,
 
 void SvXMLAttributeList::RemoveAttributeByIndex( sal_Int16 i )
 {
-    ::std::vector<struct SvXMLTagAttribute_Impl>::iterator ii =
-        m_pImpl->vecAttribute.begin();
-
-    for( ; i && ii != m_pImpl->vecAttribute.end() ; --i )
-        ++ii;
-
-    if( ii !=  m_pImpl->vecAttribute.end() )
-        m_pImpl->vecAttribute.erase( ii );
+    if( static_cast< SvXMLAttributeList_Impl::size_type >( i )
+            < m_pImpl->vecAttribute.size() )
+        m_pImpl->vecAttribute.erase( m_pImpl->vecAttribute.begin() + i );
 }
 
 void SvXMLAttributeList::RenameAttributeByIndex( sal_Int16 i,
