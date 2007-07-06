@@ -5,9 +5,9 @@
  *
  *  $RCSfile: CalcWindowState.xcu,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: obo $ $Date: 2007-06-12 05:30:04 $
+ *  last change: $Author: rt $ $Date: 2007-07-06 12:26:34 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -276,17 +276,6 @@
                 </prop>
                 <prop oor:name="UIName" oor:type="xs:string">
                     <value xml:lang="en-US">Insert Cell</value>
-                </prop>
-            </node>
-            <node oor:name="private:resource/toolbar/insertobjectbar" oor:op="replace">
-                <prop oor:name="Docked" oor:type="xs:boolean">
-                    <value>false</value>
-                </prop>
-                <prop oor:name="Visible" oor:type="xs:boolean">
-                    <value>false</value>
-                </prop>
-                <prop oor:name="UIName" oor:type="xs:string">
-                    <value xml:lang="en-US">Insert Object</value>
                 </prop>
             </node>
             <node oor:name="private:resource/toolbar/standardbar" oor:op="replace">
