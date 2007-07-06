@@ -4,9 +4,9 @@
  *
  *  $RCSfile: updateprotocol.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2007-01-29 16:00:14 $
+ *  last change: $Author: rt $ $Date: 2007-07-06 14:38:58 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -42,6 +42,10 @@
 
 #include "updateprotocol.hxx"
 
+#ifndef _COM_SUN_STAR_DEPLOYMENT_UPDATEINFORMATINENTRY_HPP_
+#include <com/sun/star/deployment/UpdateInformationEntry.hpp>
+#endif
+
 #include <rtl/ref.hxx>
 #include <rtl/uri.hxx>
 #include <rtl/strbuf.hxx>
@@ -52,6 +56,7 @@
 #include <cppuhelper/implbase1.hxx>
 
 namespace css = com::sun::star ;
+namespace container = css::container ;
 namespace deployment = css::deployment ;
 namespace lang = css::lang ;
 namespace uno = css::uno ;
@@ -99,10 +104,10 @@ getBootstrapData(
 // Returns 'true' if successfully connected to the update server
 bool
 checkForUpdates(
+    UpdateInfo& o_rUpdateInfo,
     uno::Reference< uno::XComponentContext > const & rxContext,
     uno::Reference< task::XInteractionHandler > const & rxInteractionHandler,
-    rtl::OUString& rUpdateURL, rtl::OUString& rVersionFound,
-    uno::Reference< deployment::XUpdateInformationProvider >& rUpdateInfoProvider)
+    const uno::Reference< deployment::XUpdateInformationProvider >& rUpdateInfoProvider)
 {
     OSL_TRACE("checking for updates ..\n");
 
@@ -125,9 +130,6 @@ checkForUpdates(
 
     OSL_ASSERT( rxContext->getServiceManager().is() );
 
-    // the update information provider
-    rUpdateInfoProvider =  deployment::UpdateInformationProvider::create( rxContext );
-
     // XPath implementation
     uno::Reference< xml::xpath::XXPathAPI > xXPath(
         rxContext->getServiceManager()->createInstanceWithContext( UNISTRING( "com.sun.star.xml.xpath.XPathAPI" ), rxContext ),
@@ -140,8 +142,8 @@ checkForUpdates(
 
     try
     {
-        uno::Sequence< uno::Reference< xml::dom::XElement > > aUpdateInfoList =
-            rUpdateInfoProvider->getUpdateInformation( aRepositoryList, aInstallSetID );
+        uno::Reference< container::XEnumeration > aUpdateInfoEnumeration =
+            rUpdateInfoProvider->getUpdateInformationEnumeration( aRepositoryList, aInstallSetID );
 
         rtl::OUStringBuffer aBuffer;
         aBuffer.appendAscii("/child::inst:description[inst:os=\'");
@@ -154,30 +156,80 @@ checkForUpdates(
 
         rtl::OUString aXPathExpression = aBuffer.makeStringAndClear();
 
-        sal_Int32 nmax = aUpdateInfoList.getLength();
-        for( sal_Int32 n = 0; n < nmax; ++n )
+        while( aUpdateInfoEnumeration->hasMoreElements() )
         {
-            uno::Reference< xml::dom::XNode > xNode( aUpdateInfoList[n].get() );
-            uno::Reference< xml::dom::XNodeList > xNodeList =
-                xXPath->selectNodeList(xNode, aXPathExpression + UNISTRING("/inst:update/attribute::src"));
+            deployment::UpdateInformationEntry aEntry;
 
-            sal_Int32 imax = xNodeList->getLength();
-            for( sal_Int32 i = 0; i < imax; ++i )
+            if( aUpdateInfoEnumeration->nextElement() >>= aEntry )
             {
-                uno::Reference< xml::dom::XNode > xNode2( xNodeList->item(i) );
+                uno::Reference< xml::dom::XNode > xNode( aEntry.UpdateDocument.get() );
+                uno::Reference< xml::dom::XNodeList > xNodeList =
+                    xXPath->selectNodeList(xNode, aXPathExpression + UNISTRING("/inst:update/attribute::src"));
 
-                if( xNode2.is() && rUpdateURL.getLength() == 0 )
-                    rUpdateURL = xNode2->getNodeValue();
+/*
+                o_rUpdateInfo.Sources.push_back( DownloadSource(true,
+                    UNISTRING("http://openoffice.bouncer.osuosl.org/?product=OpenOffice.org&os=solarissparcwjre&lang=en-US&version=2.2.1") ) );
+*/
+
+                sal_Int32 i, imax = xNodeList->getLength();
+                for( i = 0; i < imax; ++i )
+                {
+                    uno::Reference< xml::dom::XNode > xNode2( xNodeList->item(i) );
+
+                    if( xNode2.is() )
+                    {
+                        uno::Reference< xml::dom::XElement > xParent(xNode2->getParentNode(), uno::UNO_QUERY_THROW);
+                        rtl::OUString aType = xParent->getAttribute(UNISTRING("type"));
+                        bool bIsDirect = ( sal_False == aType.equalsIgnoreAsciiCaseAscii("text/html") );
+
+                        o_rUpdateInfo.Sources.push_back( DownloadSource(bIsDirect, xNode2->getNodeValue()) );
+                    }
+                }
+
+                uno::Reference< xml::dom::XNode > xNode2 =
+                    xXPath->selectSingleNode(xNode, aXPathExpression + UNISTRING("/inst:version/text()"));
+
+                if( xNode2.is() )
+                    o_rUpdateInfo.Version = xNode2->getNodeValue();
+
+                xNode2 = xXPath->selectSingleNode(xNode, aXPathExpression + UNISTRING("/inst:buildid/text()"));
+
+                if( xNode2.is() )
+                    o_rUpdateInfo.BuildId = xNode2->getNodeValue();
+
+                o_rUpdateInfo.Description = aEntry.Description;
+
+                // Release Notes
+                xNodeList = xXPath->selectNodeList(xNode, aXPathExpression + UNISTRING("/inst:relnote"));
+                imax = xNodeList->getLength();
+                for( i = 0; i < imax; ++i )
+                {
+                    uno::Reference< xml::dom::XElement > xRelNote(xNodeList->item(i), uno::UNO_QUERY);
+                    if( xRelNote.is() )
+                    {
+                        sal_Int32 pos = xRelNote->getAttribute(UNISTRING("pos")).toInt32();
+
+                        ReleaseNote aRelNote((sal_uInt8) pos, xRelNote->getAttribute(UNISTRING("src")));
+
+                        if( xRelNote->hasAttribute(UNISTRING("src2")) )
+                        {
+                            pos = xRelNote->getAttribute(UNISTRING("pos2")).toInt32();
+                            aRelNote.Pos2 = (sal_Int8) pos;
+                            aRelNote.URL2 = xRelNote->getAttribute(UNISTRING("src2"));
+                        }
+
+                        o_rUpdateInfo.ReleaseNotes.push_back(aRelNote);
+                    }
+                }
+/*
+                o_rUpdateInfo.ReleaseNotes.push_back(
+                    ReleaseNote(1, UNISTRING("http://qa.openoffice.org/tests/online_update_test.html"))
+                );
+*/
+
+                if( o_rUpdateInfo.Sources.size() > 0 )
+                    return true;
             }
-
-            uno::Reference< xml::dom::XNode > xNode2 =
-                xXPath->selectSingleNode(xNode, aXPathExpression + UNISTRING("/inst:buildid/text()"));
-
-            if( xNode2.is() )
-                rVersionFound = xNode2->getNodeValue();
-
-            if( rUpdateURL.getLength() > 0 )
-                return true;
         }
     }
     catch( ... )
