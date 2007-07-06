@@ -4,9 +4,9 @@
  *
  *  $RCSfile: transobj.hxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: rt $ $Date: 2007-04-25 15:59:52 $
+ *  last change: $Author: rt $ $Date: 2007-07-06 12:29:00 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -125,6 +125,8 @@ public:
     static SC_DLLPUBLIC ScTransferObj* GetOwnClipboard( Window* pUIWin );
 
     static SfxObjectShell*  SetDrawClipDoc( BOOL bAnyOle );     // update ScGlobal::pDrawClipDocShellRef
+    virtual sal_Int64 SAL_CALL getSomething( const com::sun::star::uno::Sequence< sal_Int8 >& rId ) throw( com::sun::star::uno::RuntimeException );
+    static const com::sun::star::uno::Sequence< sal_Int8 >& getUnoTunnelId();
 };
 
 #endif
