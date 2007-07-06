@@ -4,9 +4,9 @@
  *
  *  $RCSfile: docsh.hxx,v $
  *
- *  $Revision: 1.42 $
+ *  $Revision: 1.43 $
  *
- *  last change: $Author: vg $ $Date: 2007-05-22 20:07:44 $
+ *  last change: $Author: rt $ $Date: 2007-07-06 12:43:58 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -313,6 +313,8 @@ public:
     void            DoRecalc( BOOL bApi );
     void            DoHardRecalc( BOOL bApi );
 
+    bool            CheckPrint( PrintDialog* pPrintDialog, ScMarkData* pMarkData,
+                                bool bForceSelected, bool bIsAPI );
     void            PreparePrint( PrintDialog* pPrintDialog, ScMarkData* pMarkData );
     void            Print( SfxProgress& rProgress, PrintDialog* pPrintDialog,
                             ScMarkData* pMarkData, Window* pDialogParent,
