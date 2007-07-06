@@ -4,9 +4,9 @@
  *
  *  $RCSfile: hidother.src,v $
  *
- *  $Revision: 1.41 $
+ *  $Revision: 1.42 $
  *
- *  last change: $Author: hr $ $Date: 2007-06-27 19:36:56 $
+ *  last change: $Author: rt $ $Date: 2007-07-06 07:46:23 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -405,6 +405,28 @@ hidspecial HID_COLORPAGE_BASICSTRING_CB                { HelpID =  HID_COLORPAGE
 hidspecial HID_COLORPAGE_BASICOPERATOR_CB              { HelpID =  HID_COLORPAGE_BASICOPERATOR_CB               ; };
 hidspecial HID_COLORPAGE_BASICKEYWORD_CB               { HelpID =  HID_COLORPAGE_BASICKEYWORD_CB                ; };
 hidspecial HID_COLORPAGE_BASICERROR_CB                 { HelpID =  HID_COLORPAGE_BASICERROR_CB                  ; };
+
+hidspecial HID_COLORPAGE_DBREPORTHEADER_CB          { HelpID =  HID_COLORPAGE_DBREPORTHEADER_CB                  ; };
+hidspecial HID_COLORPAGE_DBREPORTFOOTER_CB          { HelpID =  HID_COLORPAGE_DBREPORTFOOTER_CB                  ; };
+hidspecial HID_COLORPAGE_DBPAGEHEADER_CB            { HelpID =  HID_COLORPAGE_DBPAGEHEADER_CB                  ; };
+hidspecial HID_COLORPAGE_DBPAGEFOOTER_CB            { HelpID =  HID_COLORPAGE_DBPAGEFOOTER_CB                  ; };
+hidspecial HID_COLORPAGE_DBGROUPHEADER_CB           { HelpID =  HID_COLORPAGE_DBGROUPHEADER_CB                  ; };
+hidspecial HID_COLORPAGE_DBGROUPFOOTER_CB           { HelpID =  HID_COLORPAGE_DBGROUPFOOTER_CB                  ; };
+hidspecial HID_COLORPAGE_DBCOLUMNHEADER_CB          { HelpID =  HID_COLORPAGE_DBCOLUMNHEADER_CB                  ; };
+hidspecial HID_COLORPAGE_DBCOLUMNFOOTER_CB          { HelpID =  HID_COLORPAGE_DBCOLUMNFOOTER_CB                  ; };
+hidspecial HID_COLORPAGE_DBDETAIL_CB                { HelpID =  HID_COLORPAGE_DBDETAIL_CB                  ; };
+
+hidspecial HID_COLORPAGE_DBREPORTHEADER_LB          { HelpID =  HID_COLORPAGE_DBREPORTHEADER_LB                  ; };
+hidspecial HID_COLORPAGE_DBREPORTFOOTER_LB          { HelpID =  HID_COLORPAGE_DBREPORTFOOTER_LB                  ; };
+hidspecial HID_COLORPAGE_DBPAGEHEADER_LB            { HelpID =  HID_COLORPAGE_DBPAGEHEADER_LB                  ; };
+hidspecial HID_COLORPAGE_DBPAGEFOOTER_LB            { HelpID =  HID_COLORPAGE_DBPAGEFOOTER_LB                  ; };
+hidspecial HID_COLORPAGE_DBGROUPHEADER_LB           { HelpID =  HID_COLORPAGE_DBGROUPHEADER_LB                  ; };
+hidspecial HID_COLORPAGE_DBGROUPFOOTER_LB           { HelpID =  HID_COLORPAGE_DBGROUPFOOTER_LB                  ; };
+hidspecial HID_COLORPAGE_DBCOLUMNHEADER_LB          { HelpID =  HID_COLORPAGE_DBCOLUMNHEADER_LB                  ; };
+hidspecial HID_COLORPAGE_DBCOLUMNFOOTER_LB          { HelpID =  HID_COLORPAGE_DBCOLUMNFOOTER_LB                  ; };
+hidspecial HID_COLORPAGE_DBDETAIL_LB                { HelpID =  HID_COLORPAGE_DBDETAIL_LB                  ; };
+
+
 hidspecial HID_GALLERY_EDIT_MSNAME                     { HelpID =  HID_GALLERY_EDIT_MSNAME ; };
 hidspecial HID_OFAPAGE_AUTOCORR_CLB                 { HelpId = HID_OFAPAGE_AUTOCORR_CLB; };
 hidspecial HID_OFAPAGE_AUTOFORMAT_CLB               { HelpId = HID_OFAPAGE_AUTOFORMAT_CLB; };
