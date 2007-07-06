@@ -4,9 +4,9 @@
  *
  *  $RCSfile: drawsh5.cxx,v $
  *
- *  $Revision: 1.34 $
+ *  $Revision: 1.35 $
  *
- *  last change: $Author: rt $ $Date: 2007-07-06 12:27:50 $
+ *  last change: $Author: rt $ $Date: 2007-07-06 12:42:53 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -103,6 +103,14 @@ void ScDrawShell::GetHLinkState( SfxItemSet& rSet )             //  Hyperlink
     if ( nMarkCount == 1 )              // URL-Button markiert ?
     {
         SdrObject* pObj = rMarkList.GetMark(0)->GetMarkedSdrObj();
+#ifdef ISSUE66550_HLINK_FOR_SHAPES
+        ScMacroInfo* pInfo = ScDrawLayer::GetMacroInfo( pObj );
+        if ( pInfo && (pInfo->GetHlink().getLength() > 0) )
+        {
+            aHLinkItem.SetURL( pInfo->GetHlink() );
+            aHLinkItem.SetInsertMode(HLINK_FIELD);
+        }
+#endif
         SdrUnoObj* pUnoCtrl = PTR_CAST(SdrUnoObj, pObj);
         if (pUnoCtrl && FmFormInventor == pUnoCtrl->GetObjInventor())
         {
@@ -182,13 +190,14 @@ void ScDrawShell::ExecuteHLink( SfxRequest& rReq )
                     SvxLinkInsertMode eMode = pHyper->GetInsertMode();
 
                     BOOL bDone = FALSE;
-                    if ( eMode == HLINK_DEFAULT || eMode == HLINK_BUTTON )
+                    if ( eMode == HLINK_FIELD || eMode == HLINK_BUTTON )
                     {
                         ScDrawView* pView = pViewData->GetScDrawView();
                         const SdrMarkList& rMarkList = pView->GetMarkedObjectList();
                         if ( rMarkList.GetMarkCount() == 1 )
                         {
-                            SdrUnoObj* pUnoCtrl = PTR_CAST(SdrUnoObj, rMarkList.GetMark(0)->GetMarkedSdrObj());
+                            SdrObject* pObj = rMarkList.GetMark(0)->GetMarkedSdrObj();
+                            SdrUnoObj* pUnoCtrl = PTR_CAST(SdrUnoObj, pObj );
                             if (pUnoCtrl && FmFormInventor == pUnoCtrl->GetObjInventor())
                             {
                                 uno::Reference<awt::XControlModel> xControlModel =
@@ -244,6 +253,13 @@ void ScDrawShell::ExecuteHLink( SfxRequest& rReq )
                                     bDone = TRUE;
                                 }
                             }
+#ifdef ISSUE66550_HLINK_FOR_SHAPES
+                            else
+                            {
+                                SetHlinkForObject( pObj, rURL );
+                                bDone = TRUE;
+                            }
+#endif
                         }
                     }
 
