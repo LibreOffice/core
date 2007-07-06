@@ -4,9 +4,9 @@
  *
  *  $RCSfile: acceleratorexecute.hxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: ihi $ $Date: 2007-04-16 16:49:32 $
+ *  last change: $Author: rt $ $Date: 2007-07-06 10:00:58 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -251,6 +251,12 @@ class SVT_DLLPUBLIC AcceleratorExecute : private TMutexInit
         virtual sal_Bool execute(const KeyCode&            aKey);
         virtual sal_Bool execute(const css::awt::KeyEvent& aKey);
 
+        /** search the command for the given key event.
+        *
+        * @param aKey The key event
+        * @return The command or an empty string if the key event could not be found.
+        */
+        ::rtl::OUString  findCommand(const ::com::sun::star::awt::KeyEvent& aKey);
         //---------------------------------------
         /** TODO document me */
         static css::awt::KeyEvent st_VCLKey2AWTKey(const KeyCode&            aKey);
