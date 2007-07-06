@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xmltoken.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2007-07-03 13:22:15 $
+ *  last change: $Author: rt $ $Date: 2007-07-06 10:09:51 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -2863,6 +2863,74 @@ namespace xmloff { namespace token {
         // XML_HORIZONTAL_ON_LEFT_PAGES and XML_HORIZONTAL_ON_RIGHT_PAGES
         // are replaced by XML_HORIZONTAL_ON_EVEN and XML_HORIZONTAL_ON_ODD.
         XML_HORIZONTAL_ON_EVEN,
+        // --> OJ 2005-09-01
+        XML_N_RPT_OASIS,
+        XML_N_RPT,
+        XML_GROUP,
+        XML_GROUPS      ,
+        XML_REPORT_HEADER,
+        XML_PAGE_HEADER ,
+        XML_DETAIL      ,
+        XML_PAGE_FOOTER ,
+        XML_REPORT_FOOTER,
+        XML_START_NEW_COLUMN            ,
+        XML_RESET_PAGE_NUMBER           ,
+        XML_PRINT_HEADER_ON_EACH_PAGE   ,
+        XML_GROUP_EXPRESSION            ,
+        XML_GROUP_HEADER                ,
+        XML_GROUP_FOOTER                ,
+        XML_HEADER_ON_NEW_PAGE,
+        XML_FOOTER_ON_NEW_PAGE,
+        XML_PAGE_PRINT_OPTION,
+        XML_PRE_EVALUATED,
+        XML_COMMAND_TYPE,
+        XML_MASTER_FIELDS,
+        XML_DETAIL_FIELDS,
+        XML_CONDITIONAL_PRINT_EXPRESSION,
+        XML_REPORT_COMPONENT,
+        XML_PRINT_REPEATED_VALUES,
+        XML_REPEAT_SECTION,
+        XML_FORCE_NEW_COLUMN,
+        XML_GROUP_ON,
+        XML_FORCE_NEW_PAGE,
+        XML_GROUP_INTERVAL,
+        XML_PRINT_ONLY_WHEN_GROUP_CHANGE,
+        XML_REPORT_ELEMENT,
+        XML_LIST_SOURCE,
+        XML_LIST_SOURCE_TYPE,
+        XML_IMAGE_DATA,
+        XML_SELECTED,
+        XML_CURRENT_STATE,
+        XML_IS_TRISTATE,
+        XML_ALL_PAGES,
+        XML_NOT_WITH_REPORT_HEADER,
+        XML_NOT_WITH_REPORT_FOOTER,
+        XML_NOT_WITH_REPORT_HEADER_NOR_FOOTER,
+        XML_BEFORE_SECTION,
+        XML_AFTER_SECTION,
+        XML_BEFORE_AFTER_SECTION,
+        XML_PREFIX_CHARACTERS,
+        XML_QUARTAL,
+        XML_WEEK,
+        XML_WHOLE_GROUP,
+        XML_WITH_FIRST_DETAIL,
+        XML_TOP_DOWN,
+        XML_BOTTOM_UP,
+        XML_HOUR,
+        XML_MINUTE,
+        XML_NP_RPT,
+        XML_FORMAT_CONDITION,
+        XML_EXPRESSION1,
+        XML_EXPRESSION2,
+        XML_EQUAL,
+        XML_NOT_EQUAL,
+        XML_LESS,
+        XML_GREATER,
+        XML_LESS_EQUAL,
+        XML_GREATER_EQUAL,
+        XML_BETWEEN,
+        XML_NOT_BETWEEN,
+        // <--
         XML_HORIZONTAL_ON_ODD,
         // <--
         // --> OD 2005-10-10 #i45874#
@@ -2871,10 +2939,15 @@ namespace xmloff { namespace token {
         // --> FLR #i52127#
         XML_NUMBERED_PARAGRAPH,
         // <--
-
+        XML_MASTER_DETAIL_FIELDS,
+        XML_MASTER_DETAIL_FIELD,
+        XML_SUB_DOCUMENT,
+        XML_FIXED_CONTENT,
+        XML_INITIAL_FORMULA,
+        XML_DEEP_TRAVERSING,
+        XML_PRESERVE_IRI,
         XML_SORT_BY_X_VALUES,
         XML_RIGHT_ANGLED_AXES,
-
         XML_TOKEN_END
     };
 
@@ -2899,4 +2972,3 @@ namespace xmloff { namespace token {
 } }
 
 #endif
-
