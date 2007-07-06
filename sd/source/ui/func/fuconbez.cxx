@@ -4,9 +4,9 @@
  *
  *  $RCSfile: fuconbez.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: hr $ $Date: 2007-06-27 15:41:41 $
+ *  last change: $Author: rt $ $Date: 2007-07-06 13:12:38 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -35,6 +35,8 @@
 
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_sd.hxx"
+
+#include <com/sun/star/presentation/EffectNodeType.hpp>
 
 #include "fuconbez.hxx"
 
@@ -97,6 +99,10 @@
 #include <basegfx/polygon/b2dpolygontools.hxx>
 #endif
 
+#include "CustomAnimationEffect.hxx"
+
+using namespace ::com::sun::star::uno;
+
 namespace sd {
 
 TYPEINIT1( FuConstructBezierPolygon, FuConstruct );
@@ -131,6 +137,14 @@ FunctionReference FuConstructBezierPolygon::Create( ViewShell* pViewSh, ::sd::Wi
 void FuConstructBezierPolygon::DoExecute( SfxRequest& rReq )
 {
     FuConstruct::DoExecute( rReq );
+
+    const SfxItemSet* pArgs = rReq.GetArgs();
+    if( pArgs )
+    {
+        const SfxPoolItem*  pPoolItem = NULL;
+        if( SFX_ITEM_SET == pArgs->GetItemState( SID_ADD_MOTION_PATH, TRUE, &pPoolItem ) )
+            maTargets = ( ( const SfxUnoAnyItem* ) pPoolItem )->GetValue();
+    }
 }
 
 /*************************************************************************
@@ -231,7 +245,7 @@ BOOL FuConstructBezierPolygon::MouseButtonUp(const MouseEvent& rMEvt )
     {
         bReturn = TRUE;
 
-        if (nCount != mpView->GetSdrPageView()->GetObjList()->GetObjCount())
+        if (nCount == (mpView->GetSdrPageView()->GetObjList()->GetObjCount() - 1))
         {
             bCreated = TRUE;
         }
@@ -243,8 +257,45 @@ BOOL FuConstructBezierPolygon::MouseButtonUp(const MouseEvent& rMEvt )
 
     bReturn = FuConstruct::MouseButtonUp(rMEvt) || bReturn;
 
-    if (!bPermanent && bCreated)
+    bool bDeleted = false;
+    if( bCreated && maTargets.hasValue() )
+    {
+        SdrPathObj* pPathObj = dynamic_cast< SdrPathObj* >( mpView->GetSdrPageView()->GetObjList()->GetObj( nCount ) );
+        SdPage* pPage = dynamic_cast< SdPage* >( pPathObj ? pPathObj->GetPage() : 0 );
+        if( pPage )
+        {
+            boost::shared_ptr< sd::MainSequence > pMainSequence( pPage->getMainSequence() );
+            if( pMainSequence.get() )
+            {
+                Sequence< Any > aTargets;
+                maTargets >>= aTargets;
+
+                sal_Int32 nTCount = aTargets.getLength();
+                if( nTCount > 1 )
+                {
+                    const Any* pTarget = aTargets.getConstArray();
+                    double fDuration = 0.0;
+                    *pTarget++ >>= fDuration;
+                    bool bFirst = true;
+                    while( --nTCount )
+                    {
+                        CustomAnimationEffectPtr pCreated( pMainSequence->append( *pPathObj, *pTarget++, fDuration ) );
+                        if( bFirst )
+                            bFirst = false;
+                        else
+                            pCreated->setNodeType( ::com::sun::star::presentation::EffectNodeType::WITH_PREVIOUS );
+                    }
+                }
+            }
+        }
+        mpView->DeleteMarked();
+        bDeleted = true;
+    }
+
+    if ((!bPermanent && bCreated) || bDeleted)
+    {
         mpViewShell->GetViewFrame()->GetDispatcher()->Execute(SID_OBJECT_SELECT, SFX_CALLMODE_ASYNCHRON);
+    }
 
     return(bReturn);
 }
