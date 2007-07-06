@@ -4,9 +4,9 @@
  *
  *  $RCSfile: svdview.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: vg $ $Date: 2007-04-11 16:28:57 $
+ *  last change: $Author: rt $ $Date: 2007-07-06 13:18:53 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -269,7 +269,7 @@ public:
     SdrHitKind PickAnything(const MouseEvent& rMEvt, USHORT nMouseDownOrMoveOrUp, SdrViewEvent& rVEvt) const;
     SdrHitKind PickAnything(const Point& rLogicPos, SdrViewEvent& rVEvt) const;
     BOOL DoMouseEvent(const SdrViewEvent& rVEvt);
-    SdrViewContext GetContext() const;
+    virtual SdrViewContext GetContext() const;
 
     // Die Methoden beruecksichtigen den jeweiligen Kontex:
     // - Einfaches Zeichnen
