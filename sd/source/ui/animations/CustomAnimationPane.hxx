@@ -4,9 +4,9 @@
  *
  *  $RCSfile: CustomAnimationPane.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: kz $ $Date: 2006-12-12 16:51:54 $
+ *  last change: $Author: rt $ $Date: 2007-07-06 13:11:36 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -54,6 +54,12 @@
 #ifndef _SD_CUSTOMANIMATIONLIST_HXX
 #include "CustomAnimationList.hxx"
 #endif
+#include "CustomAnimationCreateDialog.hxx"
+
+#include "motionpathtag.hxx"
+#include "misc/scopelock.hxx"
+
+#include <vector>
 
 class PushButton;
 class FixedLine;
@@ -77,10 +83,13 @@ class PropertyControl;
 class STLPropertySet;
 class ViewShellBase;
 
+typedef std::vector< rtl::Reference< MotionPathTag > > MotionPathTagVector;
+
 // --------------------------------------------------------------------
 
 class CustomAnimationPane : public Control, public ICustomAnimationListController
 {
+    friend class MotionPathTag;
 public:
     CustomAnimationPane( ::Window* pParent, ViewShellBase& rBase, const Size& rMinSize );
     virtual ~CustomAnimationPane();
@@ -97,9 +106,11 @@ public:
 
     // methods
     void preview( const ::com::sun::star::uno::Reference< ::com::sun::star::animations::XAnimationNode >& xAnimationNode );
+    void remove( CustomAnimationEffectPtr& pEffect );
 
     // Control
-   virtual void Resize();
+    virtual void Resize();
+    virtual void StateChanged( StateChangedType nStateChange );
 
     // ICustomAnimationListController
     virtual void onSelect();
@@ -108,15 +119,21 @@ public:
 
     void addUndo();
 
+    void updatePathFromMotionPathTag( const rtl::Reference< MotionPathTag >& xTag );
+
 private:
     void addListener();
     void removeListener();
     void updateLayout();
     void updateControls();
+    void updateMotionPathTags();
+    void markShapesFromSelectedEffects();
 
     void showOptions( USHORT nPage = 0 );
     void moveSelection( bool bUp );
     void onPreview( bool bForcePreview );
+
+    void createPath( PathKind eKind, std::vector< ::com::sun::star::uno::Any >& rTargets, double fDuration );
 
     STLPropertySet* createSelectionSet();
     void changeSelection( STLPropertySet* pResultSet, STLPropertySet* pOldSet );
@@ -182,6 +199,10 @@ private:
         returns a reference to the list.
     */
     const CustomAnimationPresets& getPresets (void);
+
+    MotionPathTagVector maMotionPathTags;
+
+    ScopeLock maSelectionLock;
 };
 
 }
