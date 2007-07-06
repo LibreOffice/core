@@ -4,9 +4,9 @@
  *
  *  $RCSfile: AppDetailPageHelper.cxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: kz $ $Date: 2007-05-10 10:16:52 $
+ *  last change: $Author: rt $ $Date: 2007-07-06 07:58:46 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -37,6 +37,9 @@
 #include "precompiled_dbaccess.hxx"
 #ifndef DBAUI_APPDETAILPAGEHELPER_HXX
 #include "AppDetailPageHelper.hxx"
+#endif
+#ifndef _DBAUI_MODULE_DBU_HXX_
+#include "moduledbu.hxx"
 #endif
 #ifndef _TOOLS_DEBUG_HXX
 #include <tools/debug.hxx>
@@ -1210,11 +1213,12 @@ void OAppDetailPageHelper::DataChanged( const DataChangedEvent& rDCEvt )
 {
     Window::DataChanged( rDCEvt );
 
-    if (  (  ( rDCEvt.GetType() == DATACHANGED_SETTINGS )
-          || ( rDCEvt.GetType() == DATACHANGED_DISPLAY )
-          )
-       && ( rDCEvt.GetFlags() & SETTINGS_STYLE )
-       )
+       if ( (rDCEvt.GetType() == DATACHANGED_FONTS) ||
+        (rDCEvt.GetType() == DATACHANGED_DISPLAY) ||
+        (rDCEvt.GetType() == DATACHANGED_FONTSUBSTITUTION) ||
+        ((rDCEvt.GetType() == DATACHANGED_SETTINGS) &&
+        (rDCEvt.GetFlags() & SETTINGS_STYLE)) )
+
     {
         ImplInitSettings();
         if ( m_pLists[ E_TABLE ] )
