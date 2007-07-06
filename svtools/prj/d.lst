@@ -320,6 +320,7 @@ mkdir: %_DEST%\inc%_EXT%\svtools
 ..\inc\dialogclosedlistener.hxx %_DEST%\inc%_EXT%\svtools\dialogclosedlistener.hxx
 ..\inc\svtools\options.hxx %_DEST%\inc%_EXT%\svtools\options.hxx
 ..\inc\contextmenuhelper.hxx %_DEST%\inc%_EXT%\svtools\contextmenuhelper.hxx
+..\inc\extcolorcfg.hxx %_DEST%\inc%_EXT%\svtools\extcolorcfg.hxx
 
 dos: sh -c "if test %OS% = MACOSX; then macosx-create-bundle %_DEST%\bin%_EXT%\bmp=%__PRJROOT%\%__SRC%\bin%_EXT%; fi"
 
