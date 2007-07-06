@@ -4,9 +4,9 @@
  *
  *  $RCSfile: seterror.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: gm $ $Date: 2007-05-10 11:05:29 $
+ *  last change: $Author: rt $ $Date: 2007-07-06 12:18:01 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -51,6 +51,8 @@
 #define MSI_ERROR_OLD_PATCH_FOUND           9015
 
 #define MSI_ERROR_OFFICE_IS_RUNNING         9020
+
+#define MSI_ERROR_DIRECTORY_NOT_EMPTY       9030
 
 //----------------------------------------------------------
 
