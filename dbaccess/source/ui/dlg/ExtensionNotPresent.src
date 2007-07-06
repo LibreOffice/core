@@ -1,0 +1,97 @@
+/*************************************************************************
+ *
+ *  OpenOffice.org - a multi-platform office productivity suite
+ *
+ *  $RCSfile: ExtensionNotPresent.src,v $
+ *
+ *  $Revision: 1.2 $
+ *
+ *  last change: $Author: rt $ $Date: 2007-07-06 08:11:45 $
+ *
+ *  The Contents of this file are made available subject to
+ *  the terms of GNU Lesser General Public License Version 2.1.
+ *
+ *
+ *    GNU Lesser General Public License Version 2.1
+ *    =============================================
+ *    Copyright 2005 by Sun Microsystems, Inc.
+ *    901 San Antonio Road, Palo Alto, CA 94303, USA
+ *
+ *    This library is free software; you can redistribute it and/or
+ *    modify it under the terms of the GNU Lesser General Public
+ *    License version 2.1, as published by the Free Software Foundation.
+ *
+ *    This library is distributed in the hope that it will be useful,
+ *    but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ *    Lesser General Public License for more details.
+ *
+ *    You should have received a copy of the GNU Lesser General Public
+ *    License along with this library; if not, write to the Free Software
+ *    Foundation, Inc., 59 Temple Place, Suite 330, Boston,
+ *    MA  02111-1307  USA
+ *
+ ************************************************************************/
+#include "ExtensionNotPresent.hrc"
+#include "dbaccess_helpid.hrc"
+#include "dbu_resource.hrc"
+#include <svx/globlmn.hrc>
+#include <svx/svxids.hrc>
+
+
+String RID_STR_EXTENSION_NOT_PRESENT
+{
+    Text [ de ] = "Zum Öffnen eines Reports benötigen Sie die Extension %RPT_EXTENSION_NAME.\n\nKlicken Sie auf 'Herunterladen...', um die Extension herunterzuladen und zu installieren." ;
+    Text [ en-US ] = "To open a report you require the extension %RPT_EXTENSION_NAME.\n\nClick 'Download...' to download and install the extension.";
+};
+// To open a report you require the extension Sun Report Designer weiss der Geier Hauptsache extra langer Name
+String RID_STR_EXTENSION_NAME
+{
+    Text = "Sun(TM) Report Builder";
+};
+
+ModalDialog RID_EXTENSION_NOT_PRESENT_DLG
+{
+    OutputSize = TRUE ;
+    SVLook = TRUE ;
+    Size = MAP_APPFONT ( DLG_WIDTH , DLG_HEIGHT ) ;
+    Text [ de ] = "%PRODUCTNAME %PRODUCTVERSION" ;
+    Text [ en-US ] = "%PRODUCTNAME %PRODUCTVERSION" ;
+    HelpId = HID_EXTENSION_NOT_PRESENT_DLG;
+    Moveable = TRUE ;
+    Closeable = TRUE ;
+
+    // most of the calulated values here are overridden by the ExtensionNotPresent ctor itself.
+    FixedImage FI_WARNING
+    {
+        Pos = MAP_APPFONT (CELL_PADDING / 2, CELL_PADDING) ;
+        Size = (32, 32);
+        Fixed=BMP_EXCEPTION_WARNING;
+    };
+
+
+    FixedText FT_TEXT
+    {
+        Pos                 = MAP_APPFONT ( 32 , CELL_PADDING ) ;
+        Size                = MAP_APPFONT ( DLG_WIDTH - LEFT_PADDING - RIGHT_PADDING , 3 * (FIXEDTEXT_HEIGHT + 2) ) ;
+        // Border = TRUE ;
+        // Text will set outside from RID_STR_EXTENSION_NOT_PRESENT
+    };
+
+    PushButton PB_DOWNLOAD
+    {
+        Pos = MAP_APPFONT ( DLG_WIDTH / 2 - (CELL_PADDING/2) - BUTTON_WIDTH, ACTION_LINE_START ) ;
+        Size = MAP_APPFONT ( BUTTON_WIDTH , BUTTON_HEIGHT ) ;
+        DefButton = TRUE ;
+        TabStop = TRUE ;
+        Text [ de ] = "~Herunterladen..." ;
+        Text [ en-US ] = "~Download..." ;
+    };
+
+    CancelButton PB_CANCEL
+    {
+        Pos = MAP_APPFONT ( DLG_WIDTH / 2 + (CELL_PADDING/2), ACTION_LINE_START) ;
+        Size = MAP_APPFONT ( BUTTON_WIDTH , BUTTON_HEIGHT ) ;
+        TabStop = TRUE ;
+    };
+};
