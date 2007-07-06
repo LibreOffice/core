@@ -4,9 +4,9 @@
  *
  *  $RCSfile: updatecheck.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: rt $ $Date: 2007-04-04 07:48:31 $
+ *  last change: $Author: rt $ $Date: 2007-07-06 14:36:35 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -36,22 +36,20 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_extensions.hxx"
 
-#include <cppuhelper/implbase3.hxx>
-#include <cppuhelper/implementationentry.hxx>
+#include "updatecheck.hxx"
+
+#include <cppuhelper/implbase1.hxx>
+
+#ifndef _COM_SUN_STAR_BEANS_XFASTPROPERTYSET_HPP_
+#include <com/sun/star/beans/XFastPropertySet.hpp>
+#endif
 
 #ifndef _COM_SUN_STAR_LANG_XCOMPONENT_HPP_
 #include <com/sun/star/lang/XComponent.hpp>
 #endif
 
-// #ifndef _COM_SUN_STAR_BEANS_XPROPERTYSTATE_HPP_
-// #include <com/sun/star/beans/XPropertyState.hpp>
-// #endif
-
-#ifndef _COM_SUN_STAR_BEANS_PROPERTYVALUE_HPP_
-#include <com/sun/star/beans/PropertyValue.hpp>
-#endif
-#ifndef _COM_SUN_STAR_BEANS_XPROPERTYSET_HPP_
-#include <com/sun/star/beans/XPropertySet.hpp>
+#ifndef _COM_SUN_STAR_FRAME_XDESKTOP_HPP_
+#include <com/sun/star/frame/XDesktop.hpp>
 #endif
 
 #ifndef _COM_SUN_STAR_FRAME_XFRAME_HPP_
@@ -78,21 +76,14 @@
 #include <com/sun/star/task/XJob.hpp>
 #endif
 
-#ifndef _COM_SUN_STAR_UTIL_XCHANGESLISTENER_HPP_
-#include <com/sun/star/util/XChangesListener.hpp>
-#endif
+// #include <comphelper/processfactory.hxx>
 
-#include <comphelper/processfactory.hxx>
-
-#ifndef _RTL_USTRBUF_HXX_
 #include <rtl/ustrbuf.hxx>
-#endif // _RTL_USTRBUF_HXX_
 
 #include <rtl/bootstrap.hxx>
-#include <osl/thread.h>
-#include <osl/conditn.h>
 #include <osl/process.h>
-#include <osl/module.h>
+#include <osl/module.hxx>
+#include <osl/file.hxx>
 
 #include "updateprotocol.hxx"
 #include "updatecheckconfig.hxx"
@@ -108,8 +99,6 @@ namespace task = com::sun::star::task ;
 namespace util = com::sun::star::util ;
 namespace uno = com::sun::star::uno ;
 
-extern "C" void SAL_CALL myThreadFunc(void*);
-
 #define UNISTRING(s) rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(s))
 
 #define PROPERTY_TITLE          UNISTRING("BubbleHeading")
@@ -123,41 +112,24 @@ extern "C" void SAL_CALL myThreadFunc(void*);
 
 //------------------------------------------------------------------------------
 
-template <typename T>
-T getValue( const uno::Sequence< beans::NamedValue >& rNamedValues, const sal_Char * pszName )
-    throw (uno::RuntimeException)
+// Returns the URL of the release note for the given position
+rtl::OUString getReleaseNote(const UpdateInfo& rInfo, sal_uInt8 pos, bool autoDownloadEnabled)
 {
-    for( sal_Int32 n=0; n < rNamedValues.getLength(); n++ )
+    std::vector< ReleaseNote >::const_iterator iter = rInfo.ReleaseNotes.begin();
+    while( iter != rInfo.ReleaseNotes.end() )
     {
-    // Unfortunatly gcc-3.3 does not like Any.get<T>();
-        if( rNamedValues[n].Name.equalsAscii( pszName ) )
+        if( pos == iter->Pos )
         {
-            T value;
-            if( ! (rNamedValues[n].Value >>= value) )
-                throw uno::RuntimeException(
-                    ::rtl::OUString(
-                        cppu_Any_extraction_failure_msg(
-                            &rNamedValues[n].Value,
-                            ::cppu::getTypeFavourUnsigned(&value).getTypeLibType() ),
-                            SAL_NO_ACQUIRE ),
-                    uno::Reference<uno::XInterface>() );
-
-            return value;
+            if( (pos > 2) || !autoDownloadEnabled || ! (iter->URL2.getLength() > 0) )
+                return iter->URL;
         }
+        else if( (pos == iter->Pos2) && ((1 == iter->Pos) || (2 == iter->Pos)) && autoDownloadEnabled )
+            return iter->URL2;
+
+        iter++;
     }
 
-    return T();
-}
-
-//------------------------------------------------------------------------------
-
-template <typename T>
-void setValue( uno::Sequence< beans::NamedValue >& rNamedValues, const sal_Char * pszName, T const & value )
-    throw (uno::RuntimeException)
-{
-    for( sal_Int32 n=0; n < rNamedValues.getLength(); n++ )
-        if( rNamedValues[n].Name.equalsAscii( pszName ) )
-            rNamedValues[n].Value = uno::makeAny( value );
+    return rtl::OUString();
 }
 
 //------------------------------------------------------------------------------
@@ -165,64 +137,82 @@ void setValue( uno::Sequence< beans::NamedValue >& rNamedValues, const sal_Char 
 namespace
 {
 
-class UpdateCheckJob : public ::cppu::WeakImplHelper3< task::XJob, lang::XServiceInfo, util::XChangesListener >
+static rtl::OUString getBuildId()
 {
-    uno::Reference<uno::XComponentContext> m_xContext;
+    rtl::OUString aPath, aRet;
+    if( osl_getExecutableFile(&aPath.pData) == osl_Process_E_None )
+    {
+        sal_uInt32 lastIndex = aPath.lastIndexOf('/');
+        if ( lastIndex > 0 )
+        {
+            aPath = aPath.copy( 0, lastIndex+1 );
+            aPath  += UNISTRING( SAL_CONFIGFILE( "version" ) );
+        }
 
-    uno::Reference<lang::XMultiServiceFactory> getConfigProvider() const;
+        rtl::Bootstrap aVersionFile(aPath);
+        aVersionFile.getFrom(UNISTRING("buildid"), aRet, rtl::OUString());
+    }
+    return aRet;
+}
 
-    uno::Reference< uno::XInterface > getConfigAccess(
-        rtl::OUString const & rNodePath,
-        rtl::OUString const & rService,
-        uno::Reference< lang::XMultiServiceFactory > const & rConfigProvider ) const;
+//------------------------------------------------------------------------------
 
-    uno::Reference< container::XNameAccess > getOwnConfigAccess() const;
-
-    inline uno::Reference< container::XNameAccess > getNameAccess(
-        rtl::OUString const & rNodePath,
-        uno::Reference< lang::XMultiServiceFactory > const & rConfigProvider ) const;
-
-    inline uno::Reference< container::XNameReplace > getUpdateAccess(
-        rtl::OUString const & rNodePath,
-        uno::Reference< lang::XMultiServiceFactory > const & rConfigProvider ) const;
-
-    inline uno::Reference< container::XNameAccess > getNameAccess(rtl::OUString const & rNodePath) const
-        { return getNameAccess(rNodePath, getConfigProvider()); };
-    inline uno::Reference< container::XNameReplace > getUpdateAccess(rtl::OUString const & rNodePath) const
-        { return getUpdateAccess(rNodePath, getConfigProvider()); };
-
+inline bool isObsoleteUpdateInfo(const rtl::OUString& rBuildId)
+{
+    return sal_True != rBuildId.equals(getBuildId()) && rBuildId.getLength() > 0;
+}
 
 
-    void getUIService( sal_Bool bShowBubble );
-    uno::Reference<task::XInteractionHandler> getInteractionHandler() const;
-    uno::Reference<c3s::XSystemShellExecute> getShellExecuter() const;
+static uno::Reference< beans::XPropertySet > createMenuBarUI(
+    const uno::Reference< uno::XComponentContext >& xContext,
+    const uno::Reference< task::XJob >& xJob)
+{
+    if( !xContext.is() )
+        throw uno::RuntimeException(
+            UNISTRING( "UpdateCheckJob: empty component context" ), uno::Reference< uno::XInterface > () );
 
-    static uno::Reference< uno::XInterface > g_aInstance;
+    uno::Reference< lang::XMultiComponentFactory > xServiceManager(xContext->getServiceManager());
+    if( !xServiceManager.is() )
+        throw uno::RuntimeException(
+            UNISTRING( "UpdateCheckJob: unable to obtain service manager from component context" ), uno::Reference< uno::XInterface > () );
 
-    // Not using the C++ wrappers because we need those in the global instance only
-    oslThread m_hThread;
-    oslModule m_hModule;
-    oslCondition m_hCondition;
+    uno::Reference< beans::XPropertySet > xMenuBarUI =
+        uno::Reference< beans::XPropertySet > (
+            xServiceManager->createInstanceWithContext( UNISTRING( "com.sun.star.setup.UpdateCheckUI" ), xContext ),
+            uno::UNO_QUERY_THROW);
 
-    void makeGlobal(const uno::Sequence<beans::NamedValue>& rNamedValues)
-        throw (uno::RuntimeException);
-    void createAndStartThread( rtl::OUString &rBuildID )
-        throw (uno::RuntimeException);
+    xMenuBarUI->setPropertyValue( PROPERTY_CLICK_HDL, uno::makeAny( xJob ) );
 
-    rtl::OUString m_aBuildId;
-    rtl::OUString getBuildId();
+    return xMenuBarUI;
+}
 
-    uno::Reference< uno::XInterface > m_xUIService;
-    uno::Reference<deployment::XUpdateInformationProvider> m_xProvider;
+//------------------------------------------------------------------------------
 
-    sal_Bool (* m_pHasInternetConnection) ();
+
+
+typedef sal_Bool (* OnlineCheckFunc) ();
+
+class UpdateCheckThread : public WorkerThread
+{
+
+public:
+    UpdateCheckThread( osl::Condition& rCondition,
+        const uno::Reference<uno::XComponentContext>& xContext );
+
+    virtual void SAL_CALL join();
+    virtual void SAL_CALL terminate();
+    virtual void SAL_CALL cancel();
 
 protected:
-    void runAsThread();
-    friend void SAL_CALL ::myThreadFunc(void *);
+    virtual ~UpdateCheckThread();
 
-    inline rtl::OUString getProductName() const;
-    inline rtl::OUString getLocale() const;
+    virtual void SAL_CALL run();
+    virtual void SAL_CALL onTerminated();
+
+    /* Wrapper around checkForUpdates */
+    bool runCheck();
+
+private:
 
     /* Used to avoid dialup login windows (on platforms we know how to double this) */
     inline bool hasInternetConnection() const
@@ -232,499 +222,93 @@ protected:
         return true;
     }
 
+    /* Creates a new instance of UpdateInformationProvider and returns this instance */
+    inline uno::Reference<deployment::XUpdateInformationProvider> createProvider()
+    {
+        osl::MutexGuard aGuard(m_aMutex);
+        m_xProvider = deployment::UpdateInformationProvider::create(m_xContext);
+        return m_xProvider;
+    };
+
+    /* Returns the remembered instance of UpdateInformationProvider if any */
+    inline uno::Reference<deployment::XUpdateInformationProvider> getProvider()
+        { osl::MutexGuard aGuard(m_aMutex); return m_xProvider; };
+
+    /* Releases the remembered instance of UpdateInformationProvider if any */
+    inline void clearProvider()
+        { osl::MutexGuard aGuard(m_aMutex); m_xProvider.clear(); };
+
+    osl::Mutex      m_aMutex;
+    osl::Module     m_aModule;
+
+protected:
+    osl::Condition& m_aCondition;
+
+private:
+
+//    const
+    OnlineCheckFunc m_pHasInternetConnection;
+
+    const uno::Reference<uno::XComponentContext> m_xContext;
+    uno::Reference<deployment::XUpdateInformationProvider> m_xProvider;
+};
+
+
+class ManualUpdateCheckThread : public UpdateCheckThread
+{
 public:
-    UpdateCheckJob(const uno::Reference<uno::XComponentContext>&);
-    virtual ~UpdateCheckJob();
+    ManualUpdateCheckThread( osl::Condition& rCondition, const uno::Reference<uno::XComponentContext>& xContext ) :
+        UpdateCheckThread(rCondition, xContext) {};
 
-    static uno::Sequence< rtl::OUString > getServiceNames();
-    static rtl::OUString getImplName();
+    virtual void SAL_CALL run();
+};
 
-    // Allows runtime exceptions to be thrown by const methods
-    inline SAL_CALL operator uno::Reference< uno::XInterface > () const
-        { return const_cast< cppu::OWeakObject * > (static_cast< cppu::OWeakObject const * > (this)); };
+
+class MenuBarButtonJob : public ::cppu::WeakImplHelper1< task::XJob >
+{
+public:
+    MenuBarButtonJob(const rtl::Reference< UpdateCheck >& rUpdateCheck);
 
     // XJob
     virtual uno::Any SAL_CALL execute(const uno::Sequence<beans::NamedValue>&)
         throw (lang::IllegalArgumentException, uno::Exception);
 
-    // XChangesListener
-    virtual void SAL_CALL changesOccurred( const util::ChangesEvent& Event )
-        throw ( uno::RuntimeException );
-
-    // XServiceInfo
-    virtual rtl::OUString SAL_CALL getImplementationName()
-        throw (uno::RuntimeException);
-    virtual sal_Bool SAL_CALL supportsService(rtl::OUString const & serviceName)
-        throw (uno::RuntimeException);
-    virtual uno::Sequence< rtl::OUString > SAL_CALL getSupportedServiceNames()
-        throw (uno::RuntimeException);
-
-    virtual void SAL_CALL disposing(const lang::EventObject&)
-        throw (uno::RuntimeException);
+private:
+    rtl::Reference< UpdateCheck > m_aUpdateCheck;
 };
 
-uno::Reference< uno::XInterface > UpdateCheckJob::g_aInstance;
-
-//------------------------------------------------------------------------------
-
-UpdateCheckJob::UpdateCheckJob(const uno::Reference<uno::XComponentContext>& xContext) :
-    m_xContext(xContext),
-    m_pHasInternetConnection(NULL)
+class DownloadThread :  public WorkerThread
 {
-    m_hThread = 0;
-    m_hModule = 0;
-    m_hCondition = 0;
-}
+public:
+    DownloadThread(
+        osl::Condition& rCondition,
+        const uno::Reference<uno::XComponentContext>& xContext,
+        const rtl::Reference< DownloadInteractionHandler >& rHandler,
+        const rtl::OUString& rURL );
 
-//------------------------------------------------------------------------------
+    virtual void SAL_CALL run();
+    virtual void SAL_CALL cancel();
+    virtual void SAL_CALL suspend();
+    virtual void SAL_CALL onTerminated();
 
-UpdateCheckJob::~UpdateCheckJob()
-{
-    if( m_hThread )
-    {
-        osl_terminateThread(m_hThread);
+protected:
+    ~DownloadThread();
 
-        // Cancel potentially hanging http request - not yet implemented ..
-        if( m_xProvider.is() )
-            m_xProvider->cancel();
-        // .. so do not join until #i73893# is fixed
-        else
-        {
-            osl_setCondition(m_hCondition);
-            osl_joinWithThread(m_hThread);
-        }
-        osl_destroyThread(m_hThread);
-    }
-
-    if( m_hCondition )
-        osl_destroyCondition(m_hCondition);
-
-    if( m_hModule )
-        osl_unloadModule(m_hModule);
-}
-
-//------------------------------------------------------------------------------
-
-uno::Sequence< rtl::OUString >
-UpdateCheckJob::getServiceNames()
-{
-    uno::Sequence< rtl::OUString > aServiceList(1);
-    aServiceList[0] = UNISTRING( "com.sun.star.setup.UpdateCheck");
-    return aServiceList;
+private:
+    osl::Condition& m_aCondition;
+    const uno::Reference<uno::XComponentContext> m_xContext;
+    const rtl::OUString m_aURL;
+    Download m_aDownload;
 };
 
 //------------------------------------------------------------------------------
 
-rtl::OUString
-UpdateCheckJob::getImplName()
+UpdateCheckThread::UpdateCheckThread( osl::Condition& rCondition,
+                                      const uno::Reference<uno::XComponentContext>& xContext ) :
+    m_aCondition(rCondition),
+    m_pHasInternetConnection(NULL),
+    m_xContext(xContext)
 {
-    return UNISTRING( "vnd.sun.UpdateCheck");
-}
-
-//------------------------------------------------------------------------------
-
-uno::Reference< lang::XMultiServiceFactory >
-UpdateCheckJob::getConfigProvider() const
-{
-    uno::Reference<uno::XComponentContext> xContext(m_xContext);
-
-    if( !xContext.is() )
-        throw uno::RuntimeException(
-            UNISTRING( "UpdateCheckJob: empty component context" ), *this );
-
-    uno::Reference< lang::XMultiComponentFactory > xServiceManager(xContext->getServiceManager());
-
-    if( !xServiceManager.is() )
-        throw uno::RuntimeException(
-            UNISTRING( "UpdateCheckJob: unable to obtain service manager from component context" ), *this );
-
-    uno::Reference< lang::XMultiServiceFactory > xConfigurationProvider(
-        xServiceManager->createInstanceWithContext( UNISTRING( "com.sun.star.configuration.ConfigurationProvider" ), xContext ),
-        uno::UNO_QUERY_THROW);
-
-    return xConfigurationProvider;
-}
-
-//------------------------------------------------------------------------------
-
-uno::Reference< uno::XInterface >
-UpdateCheckJob::getConfigAccess(
-    const rtl::OUString& rNodePath,
-    const rtl::OUString& rService,
-    uno::Reference< lang::XMultiServiceFactory > const & rxConfigProvider) const
-{
-    beans::PropertyValue aProperty;
-    aProperty.Name  = UNISTRING( "nodepath" );
-    aProperty.Value = uno::makeAny( rNodePath );
-
-    uno::Sequence< uno::Any > aArgumentList( 1 );
-    aArgumentList[0] = uno::makeAny( aProperty );
-
-    return rxConfigProvider->createInstanceWithArguments( rService, aArgumentList );
-}
-
-//------------------------------------------------------------------------------
-uno::Reference< container::XNameAccess >
-UpdateCheckJob::getOwnConfigAccess() const
-{
-    uno::Reference<uno::XComponentContext> xContext(m_xContext);
-
-    if( !xContext.is() )
-        throw uno::RuntimeException(
-            UNISTRING( "UpdateCheckJob: empty component context" ), *this );
-
-    uno::Reference< lang::XMultiComponentFactory > xServiceManager(xContext->getServiceManager());
-
-    if( !xServiceManager.is() )
-        throw uno::RuntimeException(
-            UNISTRING( "UpdateCheckJob: unable to obtain service manager from component context" ), *this );
-
-    uno::Reference< container::XNameAccess > xNameAccess(
-        xServiceManager->createInstanceWithContext( UNISTRING( "com.sun.star.setup.UpdateCheckConfig" ), xContext ),
-        uno::UNO_QUERY_THROW);
-
-    return xNameAccess;
-}
-
-//------------------------------------------------------------------------------
-
-inline uno::Reference< container::XNameAccess >
-UpdateCheckJob::getNameAccess(
-    rtl::OUString const & rNodePath,
-    uno::Reference< lang::XMultiServiceFactory > const & rxConfigProvider) const
-{
-    return uno::Reference< container::XNameAccess > (
-        getConfigAccess( rNodePath,
-            UNISTRING("com.sun.star.configuration.ConfigurationAccess"),
-            rxConfigProvider ),
-        uno::UNO_QUERY_THROW );
-}
-
-//------------------------------------------------------------------------------
-
-inline uno::Reference< container::XNameReplace >
-UpdateCheckJob::getUpdateAccess(
-    rtl::OUString const & rNodePath,
-    uno::Reference< lang::XMultiServiceFactory > const & rxConfigProvider) const
-{
-    return uno::Reference< container::XNameReplace > (
-        getConfigAccess( rNodePath,
-            UNISTRING("com.sun.star.configuration.ConfigurationUpdateAccess"),
-            rxConfigProvider ),
-        uno::UNO_QUERY_THROW );
-}
-
-//------------------------------------------------------------------------------
-
-void UpdateCheckJob::getUIService( sal_Bool bShowBubble )
-{
-    if ( ! m_xUIService.is() )
-    {
-        uno::Reference< uno::XComponentContext > xContext(m_xContext);
-        if( !xContext.is() )
-            throw uno::RuntimeException( UNISTRING( "UpdateCheckJob: empty component context" ), *this );
-
-        uno::Reference< lang::XMultiComponentFactory > xServiceManager(xContext->getServiceManager());
-
-        if( !xServiceManager.is() )
-            throw uno::RuntimeException(
-                UNISTRING( "UpdateCheckJob: unable to obtain service manager from component context" ), *this );
-
-        m_xUIService = xServiceManager->createInstanceWithContext(
-            UNISTRING( "com.sun.star.setup.UpdateCheckUI" ), xContext );
-
-        uno::Reference< beans::XPropertySet > xSetProperties( m_xUIService, uno::UNO_QUERY_THROW );
-        xSetProperties->setPropertyValue( PROPERTY_TITLE,
-                                          xSetProperties->getPropertyValue( PROPERTY_DEFAULT_TITLE ) );
-        xSetProperties->setPropertyValue( PROPERTY_TEXT,
-                                          xSetProperties->getPropertyValue( PROPERTY_DEFAULT_TEXT ) );
-        xSetProperties->setPropertyValue( PROPERTY_CLICK_HDL,
-                                          uno::makeAny( uno::Reference< task::XJob >(const_cast <UpdateCheckJob *> (this) ) ) );
-        xSetProperties->setPropertyValue( PROPERTY_SHOW_BUBBLE, uno::makeAny( bShowBubble ) );
-    }
-    else
-    {
-        uno::Reference< beans::XPropertySet > xSetProperties( m_xUIService, uno::UNO_QUERY_THROW );
-        xSetProperties->setPropertyValue( PROPERTY_SHOW_BUBBLE, uno::makeAny( bShowBubble ) );
-    }
-}
-
-//------------------------------------------------------------------------------
-
-uno::Reference<task::XInteractionHandler>
-UpdateCheckJob::getInteractionHandler() const
-{
-    uno::Reference<uno::XComponentContext> xContext(m_xContext);
-
-    if( !xContext.is() )
-        throw uno::RuntimeException(
-            UNISTRING( "UpdateCheckJob: empty component context" ), *this );
-
-    uno::Reference< lang::XMultiComponentFactory > xServiceManager(xContext->getServiceManager());
-
-    if( !xServiceManager.is() )
-        throw uno::RuntimeException(
-            UNISTRING( "UpdateCheckJob: unable to obtain service manager from component context" ), *this );
-
-    return uno::Reference<task::XInteractionHandler> (
-        xServiceManager->createInstanceWithContext(
-            UNISTRING( "com.sun.star.task.InteractionHandler" ),
-            xContext),
-        uno::UNO_QUERY_THROW);
-}
-
-//------------------------------------------------------------------------------
-
-uno::Reference<c3s::XSystemShellExecute>
-UpdateCheckJob::getShellExecuter() const
-{
-    uno::Reference<uno::XComponentContext> xContext(m_xContext);
-
-    if( !xContext.is() )
-        throw uno::RuntimeException(
-            UNISTRING( "UpdateCheckJob: empty component context" ), *this );
-
-    uno::Reference< lang::XMultiComponentFactory > xServiceManager(xContext->getServiceManager());
-
-    if( !xServiceManager.is() )
-        throw uno::RuntimeException(
-            UNISTRING( "UpdateCheckJob: unable to obtain service manager from component context" ), *this );
-
-    return uno::Reference<c3s::XSystemShellExecute> (
-        xServiceManager->createInstanceWithContext(
-            UNISTRING( "com.sun.star.system.SystemShellExecute" ),
-            xContext),
-        uno::UNO_QUERY_THROW);
-}
-
-//------------------------------------------------------------------------------
-
-rtl::OUString
-UpdateCheckJob::getBuildId()
-{
-    if( m_aBuildId.getLength() == 0 )
-    {
-        rtl::OUString aPath;
-        if( osl_getExecutableFile(&aPath.pData) == osl_Process_E_None )
-        {
-            sal_uInt32 lastIndex = aPath.lastIndexOf('/');
-            if ( lastIndex > 0 )
-            {
-                aPath = aPath.copy( 0, lastIndex+1 );
-                aPath  += UNISTRING( SAL_CONFIGFILE( "version" ) );
-            }
-
-            rtl::Bootstrap aVersionFile(aPath);
-            aVersionFile.getFrom(UNISTRING("buildid"), m_aBuildId, rtl::OUString());
-        }
-    }
-
-    return m_aBuildId;
-}
-
-//------------------------------------------------------------------------------
-
-rtl::OUString
-UpdateCheckJob::getProductName() const
-{
-    rtl::OUString aProductName;
-
-    uno::Reference< container::XNameAccess > xNameAccess( getNameAccess(UNISTRING("org.openoffice.Setup/Product")) );
-    xNameAccess->getByName(UNISTRING("ooName")) >>= aProductName;
-
-    return aProductName;
-}
-
-//------------------------------------------------------------------------------
-
-rtl::OUString
-UpdateCheckJob::getLocale() const
-{
-    rtl::OUString aProductName;
-
-    uno::Reference< container::XNameAccess > xNameAccess( getNameAccess(UNISTRING("org.openoffice.Setup/L10N")) );
-    xNameAccess->getByName(UNISTRING("ooLocale")) >>= aProductName;
-
-    return aProductName;
-}
-
-//------------------------------------------------------------------------------
-
-void
-UpdateCheckJob::runAsThread()
-{
-    TimeValue tv = { 10, 0 };
-
-    // Initial wait to avoid doing further time consuming tasks during start-up
-    osl_waitCondition(m_hCondition, &tv);
-
-    // Might have been terminated meanwhile
-    if( sal_False == osl_scheduleThread(m_hThread) )
-        return;
-
-    try {
-        uno::Reference< container::XNameReplace > xCFGUpdate =
-            getUpdateAccess( UNISTRING("org.openoffice.Office.Jobs/Jobs/UpdateCheck/Arguments") );
-
-        while( sal_True == osl_scheduleThread(m_hThread) )
-        {
-            sal_Int64 last;
-            sal_Int64 offset;
-            sal_Bool bEnabled;
-
-            xCFGUpdate->getByName( UNISTRING("LastCheck") ) >>= last;
-            xCFGUpdate->getByName( UNISTRING("CheckInterval") ) >>= offset;
-            xCFGUpdate->getByName( UNISTRING("AutoCheckEnabled") ) >>= bEnabled;
-
-            if( bEnabled != sal_True )
-            {
-                osl_terminateThread(m_hThread);
-                continue;
-            }
-
-            // last == 0 means check immediately
-            if( last > 0 )
-            {
-                TimeValue systime;
-                osl_getSystemTime(&systime);
-
-                // Go back to sleep until time has elapsed
-                sal_Int64 next = last + offset;
-                if( last + offset > systime.Seconds )
-                {
-                    // This can not be > 32 Bit for now ..
-                    tv.Seconds = static_cast< sal_Int32 > (next - systime.Seconds);
-                    osl_waitCondition(m_hCondition, &tv);
-                    continue;
-                }
-            }
-
-            rtl::OUString aDownloadURL;
-            rtl::OUString aVersionFound;
-
-            if( hasInternetConnection() &&
-                checkForUpdates(m_xContext, uno::Reference< task::XInteractionHandler >(), aDownloadURL, aVersionFound, m_xProvider) )
-            {
-                /*
-                 * found updates for previous version are removed at startup, so
-                 * we just compare the version info returned from the server
-                 */
-
-                if( aDownloadURL.getLength() > 0 )
-                {
-                    rtl::OUString aPreviousVersionFound;
-                    xCFGUpdate->getByName( UNISTRING("UpdateVersionFound") ) >>= aPreviousVersionFound;
-
-                    if( ! aPreviousVersionFound.equals(aVersionFound) )
-                        getUIService( sal_True );
-
-                    xCFGUpdate->replaceByName(UNISTRING("UpdateVersionFound"), uno::makeAny(aVersionFound));
-                    xCFGUpdate->replaceByName(UNISTRING("DownloadURL"), uno::makeAny(aDownloadURL));
-                    xCFGUpdate->replaceByName(UNISTRING("UpdateFoundFor"), uno::makeAny(getBuildId()));
-                }
-
-                TimeValue systime;
-                osl_getSystemTime(&systime);
-                sal_Int64 lastCheck = systime.Seconds;
-
-                xCFGUpdate->replaceByName(UNISTRING("LastCheck"), uno::makeAny(lastCheck));
-
-                uno::Reference< util::XChangesBatch > xChangesBatch(xCFGUpdate, uno::UNO_QUERY_THROW);
-                xChangesBatch->commitChanges();
-            }
-            else
-            {
-                // Increase next by 1, 5, 15, 60, .. minutes
-                static const sal_Int16 nRetryInterval[] = { 60, 300, 900, 3600 };
-                static sal_uInt8 n = 0;
-
-                if( n < sizeof(nRetryInterval) / sizeof(sal_Int16) )
-                    ++n;
-
-                tv.Seconds = nRetryInterval[n-1];
-                osl_waitCondition(m_hCondition, &tv);
-            }
-
-            m_xProvider.clear();
-        }
-    }
-
-    catch(const uno::Exception& e) {
-        // Silently catch all errors
-        OSL_TRACE( "Caught exception: %s\n thread terminated.\n",
-            rtl::OUStringToOString(e.Message, RTL_TEXTENCODING_UTF8).getStr() );
-    }
-
-    m_hThread = 0;
-}
-
-//------------------------------------------------------------------------------
-
-void
-UpdateCheckJob::makeGlobal(const uno::Sequence<beans::NamedValue>& rNamedValues)
-    throw (uno::RuntimeException)
-{
-    rtl::OUString aBuildId = getValue< rtl::OUString > (rNamedValues, "UpdateFoundFor");
-
-    // Clean up service data after update
-    if( aBuildId.getLength() > 0 && ! aBuildId.equals(getBuildId()) )
-    {
-        uno::Reference< container::XNameReplace > xCFGUpdate =
-            getUpdateAccess(UNISTRING("org.openoffice.Office.Jobs/Jobs/UpdateCheck/Arguments"));
-
-        uno::Any aEmptyAny = uno::makeAny( rtl::OUString() );
-
-        xCFGUpdate->replaceByName(UNISTRING("UpdateVersionFound"), aEmptyAny);
-        xCFGUpdate->replaceByName(UNISTRING("DownloadURL"), aEmptyAny);
-        xCFGUpdate->replaceByName(UNISTRING("UpdateFoundFor"), aEmptyAny);
-
-        uno::Reference< util::XChangesBatch > xChangesBatch(xCFGUpdate, uno::UNO_QUERY_THROW);
-        xChangesBatch->commitChanges();
-
-        aBuildId = rtl::OUString();
-    }
-
-    sal_Bool isEnabled = getValue< sal_Bool > (rNamedValues, "AutoCheckEnabled");
-    if( isEnabled == sal_True )
-    {
-        createAndStartThread( aBuildId );
-    }
-}
-
-//------------------------------------------------------------------------------
-
-void
-UpdateCheckJob::createAndStartThread( rtl::OUString &rBuildId )
-    throw (uno::RuntimeException)
-{
-    // If we found an update earlier, turn on menu bar icon
-    if( ( rBuildId.getLength() > 0 ) && ! m_xUIService.is() )
-    {
-        getUIService( sal_False );
-        OSL_TRACE( "UI Service initialization %s\n", m_xUIService.is() ? "succeeded" : "failed" );
-    }
-
-    // Initialize thread resources ..
-    if ( m_hCondition == 0 )
-        m_hCondition = osl_createCondition();
-    if( m_hCondition == 0 )
-        throw uno::RuntimeException(
-            UNISTRING( "UpdateCheckJob: unable to create condition object" ), *this);
-
-    if ( m_hThread == 0 )
-        m_hThread = osl_createSuspendedThread( myThreadFunc, this );
-    if( m_hThread == 0 )
-        throw uno::RuntimeException(
-            UNISTRING( "UpdateCheckJob: unable to create thread object" ), *this);
-
-    // .. , hook up as terminate listener and remember this instace before ..
-    if ( ! g_aInstance.is() )
-    {
-        uno::Reference< lang::XComponent > xComponent(m_xContext, uno::UNO_QUERY_THROW);
-
-        xComponent->addEventListener(this);
-        g_aInstance = static_cast< cppu::OWeakObject *> (this);
-    }
 
 #ifdef WNT
     rtl::OUString aPath;
@@ -737,312 +321,1063 @@ UpdateCheckJob::createAndStartThread( rtl::OUString &rBuildId )
             aPath  += UNISTRING( "onlinecheck" );
         }
 
-        if ( ! m_hModule )
+        if ( m_aModule.load(aPath) )
         {
-            m_hModule = osl_loadModule(aPath.pData, SAL_LOADMODULE_DEFAULT);
-
-            if( m_hModule )
-                m_pHasInternetConnection = reinterpret_cast < sal_Bool (*) () > (
-                    osl_getFunctionSymbol(m_hModule,
-                        UNISTRING("hasInternetConnection").pData));
+            m_pHasInternetConnection =
+                reinterpret_cast < OnlineCheckFunc > (
+                    m_aModule.getFunctionSymbol( UNISTRING("hasInternetConnection")));
         }
     }
 #endif
 
+    createSuspended();
+
     // actually run the thread
-    osl_resumeThread(m_hThread);
+    resume();
 }
 
 //------------------------------------------------------------------------------
 
-uno::Any
-UpdateCheckJob::execute(const uno::Sequence<beans::NamedValue>& namedValues)
+UpdateCheckThread::~UpdateCheckThread()
+{
+}
+
+//------------------------------------------------------------------------------
+
+
+void SAL_CALL
+UpdateCheckThread::terminate()
+{
+    // Cancel potentially hanging http request ..
+    cancel();
+    // .. before terminating
+    osl::Thread::terminate();
+}
+
+//------------------------------------------------------------------------------
+
+void SAL_CALL
+UpdateCheckThread::join()
+{
+    uno::Reference< deployment::XUpdateInformationProvider > xProvider(getProvider());
+
+    // do not join during an update check until #i73893# is fixed
+    if( ! xProvider.is() )
+    {
+        osl::Thread::join();
+    }
+}
+
+//------------------------------------------------------------------------------
+
+void SAL_CALL
+UpdateCheckThread::cancel()
+{
+    uno::Reference< deployment::XUpdateInformationProvider > xProvider(getProvider());
+
+    if( xProvider.is() )
+        xProvider->cancel();
+}
+
+//------------------------------------------------------------------------------
+
+bool
+UpdateCheckThread::runCheck()
+{
+    bool ret = false;
+
+    UpdateInfo aInfo;
+    rtl::Reference< UpdateCheck > aController(UpdateCheck::get());
+
+    if( checkForUpdates(aInfo, m_xContext, aController->getInteractionHandler(), createProvider()) )
+    {
+        aController->setUpdateInfo(aInfo);
+        ret = true;
+    }
+
+    // joining with this thread is safe again
+    clearProvider();
+    return ret;
+}
+
+//------------------------------------------------------------------------------
+
+void SAL_CALL
+UpdateCheckThread::onTerminated()
+{
+    delete this;
+}
+
+//------------------------------------------------------------------------------
+
+void SAL_CALL
+UpdateCheckThread::run()
+{
+    osl::Condition::Result aResult = osl::Condition::result_timeout;
+    TimeValue tv = { 10, 0 };
+
+    // Initial wait to avoid doing further time consuming tasks during start-up
+    aResult = m_aCondition.wait(&tv);
+
+    try {
+
+        while( sal_True == schedule() )
+        {
+            /* Use cases:
+             *  a) manual check requested from auto check thread - "last check" should not be checked (one time)
+             *     a1) manual check was requested in the middle of a running auto check,
+             *         condition is set
+             *     a2) manual check was requested while waiting for a retry,
+             *         condition is set
+             *     a3) manual check was requested while waiting for time to next
+             *         scheduled check elapsing, condition is set
+             *     a4) manual check was requested during initial wait, condition is set
+             *  b) check interval got changed, condition may be set - same sub-cases as a),
+             *     but "last check" should be honored
+             *  c) normal auto check mode, condition not set - "last check" should be honored
+             */
+
+            // Accessing const members without synchronization
+            rtl::Reference< UpdateCheck > aController(UpdateCheck::get());
+            rtl::Reference< UpdateCheckConfig > rModel = UpdateCheckConfig::get(m_xContext, *aController);
+
+            // FIXME: remember last & offset ?
+            sal_Int64 last   = rModel->getLastChecked();
+            sal_Int64 offset = rModel->getCheckInterval();
+
+            rModel.clear();
+
+            // last == 0 means check immediately
+            bool checkNow = ! (last > 0);
+
+            // Reset the condition to avoid busy loops
+            if( osl::Condition::result_ok == aResult )
+            {
+                m_aCondition.reset();
+                aResult = osl::Condition::result_timeout;
+                checkNow = aController->isDialogShowing();
+            }
+
+            if( ! checkNow )
+            {
+                TimeValue systime;
+                osl_getSystemTime(&systime);
+
+                // Go back to sleep until time has elapsed
+                sal_Int64 next = last + offset;
+                if( last + offset > systime.Seconds )
+                {
+                    // This can not be > 32 Bit for now ..
+                    tv.Seconds = static_cast< sal_Int32 > (next - systime.Seconds);
+                    aResult = m_aCondition.wait(&tv);
+                    continue;
+                }
+            }
+
+            static sal_uInt8 n = 0;
+
+            if( ! hasInternetConnection() || ! runCheck() )
+            {
+                // Increase next by 1, 5, 15, 60, .. minutes
+                static const sal_Int16 nRetryInterval[] = { 60, 300, 900, 3600 };
+
+                if( n < sizeof(nRetryInterval) / sizeof(sal_Int16) )
+                    ++n;
+
+                tv.Seconds = nRetryInterval[n-1];
+                aResult = m_aCondition.wait(&tv);
+            }
+            else // reset retry counter
+                n = 0;
+        }
+    }
+
+    catch(const uno::Exception& e) {
+        // Silently catch all errors
+        OSL_TRACE( "Caught exception: %s\n thread terminated.\n",
+            rtl::OUStringToOString(e.Message, RTL_TEXTENCODING_UTF8).getStr() );
+    }
+}
+
+//------------------------------------------------------------------------------
+
+void SAL_CALL
+ManualUpdateCheckThread::run()
+{
+    try {
+        runCheck();
+        m_aCondition.reset();
+    }
+    catch(const uno::Exception& e) {
+        // Silently catch all errors
+        OSL_TRACE( "Caught exception: %s\n thread terminated.\n",
+            rtl::OUStringToOString(e.Message, RTL_TEXTENCODING_UTF8).getStr() );
+    }
+}
+
+//------------------------------------------------------------------------------
+
+MenuBarButtonJob::MenuBarButtonJob(const rtl::Reference< UpdateCheck >& rUpdateCheck) :
+    m_aUpdateCheck(rUpdateCheck)
+{
+};
+
+//------------------------------------------------------------------------------
+
+uno::Any SAL_CALL
+MenuBarButtonJob::execute(const uno::Sequence<beans::NamedValue>& )
     throw (lang::IllegalArgumentException, uno::Exception)
 {
-    uno::Sequence<beans::NamedValue> aConfig =
-        getValue< uno::Sequence<beans::NamedValue> > (namedValues, "JobConfig");
-
-    /* Determine the way we got invoked here -
-     * see Developers Guide Chapter "4.7.2 Jobs" to understand the magic
-     */
-
-    uno::Sequence<beans::NamedValue> aEnvironment =
-        getValue< uno::Sequence<beans::NamedValue> > (namedValues, "Environment");
-
-    rtl::OUString aEventName = getValue< rtl::OUString > (aEnvironment, "EventName");
-
-    if( aEventName.equalsAscii("onFirstVisibleTask") )
-    {
-        makeGlobal(aConfig);
-
-        uno::Reference < util::XChangesNotifier > xChangesNotifier;
-        xChangesNotifier = uno::Reference < util::XChangesNotifier >( getOwnConfigAccess(), uno::UNO_QUERY_THROW );
-
-        if ( xChangesNotifier.is() )
-            xChangesNotifier->addChangesListener( uno::Reference< util::XChangesListener >(const_cast <UpdateCheckJob *> (this) ) );
-    }
-    else if( aConfig.getLength() > 0 )
-    {
-        uno::Reference < container::XNameReplace > xCFGUpdate;
-        xCFGUpdate = uno::Reference < container::XNameReplace >( getOwnConfigAccess(), uno::UNO_QUERY_THROW );
-
-        rtl::OUString aDownloadURL;
-        rtl::OUString aVersionFound;
-        uno::Sequence< beans::NamedValue > aResult(1);
-        aResult[0].Name = UNISTRING("SendDispatchResult");
-
-        if( checkForUpdates(m_xContext, getInteractionHandler(), aDownloadURL, aVersionFound, m_xProvider) )
-        {
-            if( aDownloadURL.getLength() > 0 )
-            {
-                xCFGUpdate->replaceByName(UNISTRING("UpdateVersionFound"), uno::makeAny(aVersionFound));
-                xCFGUpdate->replaceByName(UNISTRING("DownloadURL"), uno::makeAny(aDownloadURL));
-                xCFGUpdate->replaceByName(UNISTRING("UpdateFoundFor"), uno::makeAny(getBuildId()));
-            }
-            else
-            {
-                uno::Any aEmptyAny = uno::makeAny( rtl::OUString() );
-                xCFGUpdate->replaceByName(UNISTRING("UpdateFoundFor"), aEmptyAny);
-            }
-
-            TimeValue systime;
-            osl_getSystemTime(&systime);
-            sal_Int64 lastCheck = systime.Seconds;
-
-            xCFGUpdate->replaceByName(UNISTRING("LastCheck"), uno::makeAny(lastCheck));
-
-            uno::Reference< util::XChangesBatch > xChangesBatch(xCFGUpdate, uno::UNO_QUERY_THROW);
-            xChangesBatch->commitChanges();
-
-            // setValue< sal_Int64 > (aConfig, "NextCheck", nOffset + systime.Seconds);
-
-            frame::DispatchResultEvent aResultEvent(*this, frame::DispatchResultState::SUCCESS, uno::makeAny(aDownloadURL));
-
-            aResult[0].Value = uno::makeAny(aResultEvent);
-        }
-        else
-        {
-            aResult[0].Value = uno::makeAny(sal_False);
-        }
-
-        m_xProvider.clear();
-
-        return uno::makeAny(aResult);
-    }
-    else
-    {
-        uno::Reference< container::XNameAccess > xCFGAccess =
-            getNameAccess( UNISTRING("org.openoffice.Office.Jobs/Jobs/UpdateCheck/Arguments") );
-
-        rtl::OUString aDownloadURL;
-        xCFGAccess->getByName( UNISTRING("DownloadURL") ) >>= aDownloadURL;
-
-        uno::Reference< c3s::XSystemShellExecute > xShellExecute( getShellExecuter() );
-        xShellExecute->execute( aDownloadURL, ::rtl::OUString(), c3s::SystemShellExecuteFlags::DEFAULTS );
-    }
-
+    m_aUpdateCheck->showDialog();
     return uno::Any();
 }
 
 //------------------------------------------------------------------------------
-// XChangesListener
+
+DownloadThread::DownloadThread(osl::Condition& rCondition,
+                               const uno::Reference<uno::XComponentContext>& xContext,
+                               const rtl::Reference< DownloadInteractionHandler >& rHandler,
+                               const rtl::OUString& rURL) :
+    m_aCondition(rCondition),
+    m_xContext(xContext),
+    m_aURL(rURL),
+    m_aDownload(xContext, rHandler)
+{
+    createSuspended();
+}
+
+//------------------------------------------------------------------------------
+
+DownloadThread::~DownloadThread()
+{
+}
+
+//------------------------------------------------------------------------------
 
 void SAL_CALL
-UpdateCheckJob::changesOccurred( const util::ChangesEvent& rEvent )
-        throw ( uno::RuntimeException )
+DownloadThread::run()
 {
-    sal_Int32 nCount = rEvent.Changes.getLength();
-    rtl::OUString aString;
-
-    for ( sal_Int32 i=0; i<nCount; i++ )
+    while( schedule() )
     {
-        uno::Any aAccessor = rEvent.Changes[i].Accessor;
-        aAccessor >>= aString;
-        if ( aString.indexOf( UNISTRING( "AutoCheckEnabled" ) ) != -1 )
+        rtl::Reference< UpdateCheckConfig > rModel = UpdateCheckConfig::get(m_xContext);
+
+        bool bResumeDownload = true;
+        rtl::OUString aLocalFile = rModel->getLocalFileName();
+
+        // pass destination directory as file name for new downloads
+        if( ! ( aLocalFile.getLength() > 0 ) )
         {
-            sal_Bool bAutoCheck;
-            rEvent.Changes[i].Element >>= bAutoCheck;
-
-            if ( m_xUIService.is() )
-            {
-                uno::Reference< beans::XPropertySet > xSetProperties(m_xUIService, uno::UNO_QUERY_THROW);
-                xSetProperties->setPropertyValue( PROPERTY_SHOW_MENUICON, uno::makeAny( bAutoCheck ) );
-            }
-            if ( bAutoCheck )
-            {
-                uno::Reference< container::XNameReplace > xCFGUpdate =
-                    getUpdateAccess( UNISTRING("org.openoffice.Office.Jobs/Jobs/UpdateCheck/Arguments") );
-                xCFGUpdate->getByName( UNISTRING("UpdateFoundFor") ) >>= aString;
-
-                createAndStartThread( aString );
-            }
-            else if ( m_hThread )
-            {
-                osl_terminateThread(m_hThread);
-                osl_setCondition(m_hCondition);
-                osl_joinWithThread(m_hThread);
-                osl_destroyThread(m_hThread);
-                osl_resetCondition(m_hCondition);
-                m_hThread = 0;
-            }
+            bResumeDownload = false;
+            aLocalFile = rModel->getDownloadDestination();
         }
-        else if ( aString.indexOf( UNISTRING( "CheckInterval" ) ) != -1 )
+
+        // release config class for now
+        rModel.clear();
+
+        if( ! m_aDownload.start(m_aURL, aLocalFile, bResumeDownload) )
         {
-            if ( m_hThread )
+            static sal_uInt8 n = 0;
+
+            // retry every 15s unless the dialog is not visible
+            TimeValue tv;
+            tv.Seconds = 15;
+
+            if( ! UpdateCheck::get()->isDialogShowing() )
             {
-                osl_setCondition(m_hCondition);
-                osl_resetCondition(m_hCondition);
+                // Increase next by 1, 5, 15, 60, .. minutes
+                static const sal_Int16 nRetryInterval[] = { 60, 300, 900, 3600 };
+
+                if( n < sizeof(nRetryInterval) / sizeof(sal_Int16) )
+                    ++n;
+
+                tv.Seconds = nRetryInterval[n-1];
             }
-        }
-        else if ( aString.indexOf( UNISTRING( "UpdateFoundFor" ) ) != -1 )
-        {
-            rEvent.Changes[i].Element >>= aString;
-
-            sal_Bool bAutoCheck = sal_False;
-            uno::Reference< container::XNameReplace > xCFGUpdate =
-                getUpdateAccess( UNISTRING("org.openoffice.Office.Jobs/Jobs/UpdateCheck/Arguments") );
-            xCFGUpdate->getByName( UNISTRING("AutoCheckEnabled") ) >>= bAutoCheck;
-
-            if ( m_xUIService.is() )
-            {
-                uno::Reference< beans::XPropertySet > xSetProperties(m_xUIService, uno::UNO_QUERY_THROW);
-
-                if ( ( aString.getLength() == 0 ) && xSetProperties.is() )
-                    xSetProperties->setPropertyValue( PROPERTY_SHOW_MENUICON, uno::makeAny( sal_False ) );
-                else if ( ( aString.getLength() != 0 )&& xSetProperties.is() && bAutoCheck )
-                    xSetProperties->setPropertyValue( PROPERTY_SHOW_MENUICON, uno::makeAny( sal_True ) );
-            }
-            else if ( ( aString.getLength() != 0 ) && bAutoCheck )
-                createAndStartThread( aString );
+            m_aCondition.wait(&tv);
         }
     }
 }
 
 //------------------------------------------------------------------------------
 
-rtl::OUString SAL_CALL
-UpdateCheckJob::getImplementationName() throw (uno::RuntimeException)
+void SAL_CALL DownloadThread::cancel()
 {
-    return getImplName();
+    m_aDownload.stop();
+    resume();
+
+    rtl::Reference< UpdateCheck > aController(UpdateCheck::get());
+    aController->cancelDownload();
 }
 
 //------------------------------------------------------------------------------
 
-uno::Sequence< rtl::OUString > SAL_CALL
-UpdateCheckJob::getSupportedServiceNames() throw (uno::RuntimeException)
+void SAL_CALL DownloadThread::suspend()
 {
-    return getServiceNames();
+    osl::Thread::suspend();
+    m_aDownload.stop();
 }
 
 //------------------------------------------------------------------------------
 
-sal_Bool SAL_CALL
-UpdateCheckJob::supportsService( rtl::OUString const & serviceName ) throw (uno::RuntimeException)
+void SAL_CALL DownloadThread::onTerminated()
 {
-    uno::Sequence< rtl::OUString > aServiceNameList = getServiceNames();
-
-    for( sal_Int32 n=0; n < aServiceNameList.getLength(); n++ )
-        if( aServiceNameList[n].equals(serviceName) )
-            return sal_True;
-
-    return sal_False;
+    delete this;
 }
 
 //------------------------------------------------------------------------------
-
-void SAL_CALL
-UpdateCheckJob::disposing(const lang::EventObject&) throw (uno::RuntimeException)
-{
-    g_aInstance.clear();
-
-    uno::Reference < util::XChangesNotifier > xChangesNotifier;
-    xChangesNotifier = uno::Reference < util::XChangesNotifier >( getOwnConfigAccess(), uno::UNO_QUERY );
-
-    if ( xChangesNotifier.is() )
-        xChangesNotifier->removeChangesListener( uno::Reference< util::XChangesListener >(const_cast <UpdateCheckJob *> (this) ) );
-}
 
 } // anonymous namespace
 
-//------------------------------------------------------------------------------
-
-extern "C" void SAL_CALL myThreadFunc( void* p )
-{
-    reinterpret_cast< UpdateCheckJob * > (p)->runAsThread();
-}
 
 //------------------------------------------------------------------------------
 
-static uno::Reference<uno::XInterface> SAL_CALL
-createJobInstance(const uno::Reference<uno::XComponentContext>& xContext)
+
+void
+UpdateCheck::initialize(const uno::Sequence< beans::NamedValue >& rValues,
+                        const uno::Reference<uno::XComponentContext>& xContext)
 {
-    return * new UpdateCheckJob(xContext);
-}
+    osl::MutexGuard aGuard(m_aMutex);
 
-//------------------------------------------------------------------------------
-
-static uno::Reference<uno::XInterface> SAL_CALL
-createConfigInstance(const uno::Reference<uno::XComponentContext>& xContext)
-{
-    static uno::Reference<uno::XInterface> xConfig;
-
-    if ( !xConfig.is() )
-        xConfig = * new UpdateCheckConfig( xContext );
-    return xConfig;
-}
-
-//------------------------------------------------------------------------------
-
-static const cppu::ImplementationEntry kImplementations_entries[] =
-{
+    if( NOT_INITIALIZED == m_eState )
     {
-        createJobInstance,
-        UpdateCheckJob::getImplName,
-        UpdateCheckJob::getServiceNames,
-        cppu::createSingleComponentFactory,
-        NULL,
-        0
-    },
+        NamedValueByNameAccess aNameAccess(rValues);
+        UpdateCheckROModel aModel( aNameAccess );
+        m_xContext = xContext;
+
+        rtl::OUString aUpdateEntryVersion = aModel.getUpdateEntryVersion();
+
+        aModel.getUpdateEntry(m_aUpdateInfo);
+
+        bool obsoleteUpdateInfo = isObsoleteUpdateInfo(aUpdateEntryVersion);
+
+        if( aModel.hasLocalFile() )
+        {
+            bool downloadPaused = aModel.isDownloadPaused();
+
+            enableDownload(true, downloadPaused);
+            setUIState(downloadPaused ? UPDATESTATE_DOWNLOAD_PAUSED : UPDATESTATE_DOWNLOADING);
+        }
+        else
+        {
+            // We do this intentionally only if no download is in progress ..
+            if( obsoleteUpdateInfo )
+            {
+                // Bring-up release note for position 5 ..
+                const rtl::OUString aURL(getReleaseNote(m_aUpdateInfo, 5));
+                if( aURL.getLength() > 0 )
+                    showReleaseNote(aURL);
+
+                // Data is outdated, probably due to installed update
+                rtl::Reference< UpdateCheckConfig > aConfig = UpdateCheckConfig::get( xContext, *this );
+                aConfig->clearUpdateFound();
+
+                m_aUpdateInfo = UpdateInfo();
+            }
+            else
+            {
+                enableAutoCheck(aModel.isAutoCheckEnabled());
+                setUIState(m_aUpdateInfo);
+            }
+        }
+    }
+}
+
+//------------------------------------------------------------------------------
+
+void
+UpdateCheck::dispose()
+{
+    shutdownThread(true);
+
+    osl::MutexGuard aGuard(m_aMutex);
+
+    m_eState = NOT_INITIALIZED;
+    m_xContext.clear();
+    m_xMenuBarUI.clear();
+    m_aUpdateHandler.clear();
+}
+
+//------------------------------------------------------------------------------
+void
+UpdateCheck::cancel()
+{
+    osl::ClearableMutexGuard aGuard(m_aMutex);
+
+    WorkerThread *pThread = m_pThread;
+    aGuard.clear();
+
+    if( NULL != pThread )
+        pThread->cancel();
+
+    osl::MutexGuard aGuard2(m_aMutex);
+    setUIState(m_aUpdateInfo);
+}
+
+//------------------------------------------------------------------------------
+
+void
+UpdateCheck::download()
+{
+    osl::ClearableMutexGuard aGuard(m_aMutex);
+    UpdateInfo aInfo(m_aUpdateInfo);
+    State eState = m_eState;
+    aGuard.clear();
+
+    if( aInfo.Sources[0].IsDirect )
     {
-        createConfigInstance,
-        UpdateCheckConfig::getImplName,
-        UpdateCheckConfig::getServiceNames,
-        cppu::createSingleComponentFactory,
-        NULL,
-        0
-    },
-    { NULL, NULL, NULL, NULL, NULL, 0 }
-} ;
+        // Ignore second click of a double click
+        if( DOWNLOADING != eState )
+        {
+            shutdownThread(true);
 
-//------------------------------------------------------------------------------
-
-extern "C" void SAL_CALL
-component_getImplementationEnvironment( const sal_Char **aEnvTypeName, uno_Environment **)
-{
-    *aEnvTypeName = CPPU_CURRENT_LANGUAGE_BINDING_NAME ;
+            osl::MutexGuard aGuard2(m_aMutex);
+            enableDownload(true);
+            setUIState(UPDATESTATE_DOWNLOADING);
+        }
+    }
+    else
+    {
+        showReleaseNote(aInfo.Sources[0].URL); // Display in browser
+    }
 }
 
 //------------------------------------------------------------------------------
 
-extern "C" sal_Bool SAL_CALL
-component_writeInfo(void *pServiceManager, void *pRegistryKey)
+void
+UpdateCheck::install()
 {
-    return cppu::component_writeInfoHelper(
-        pServiceManager,
-        pRegistryKey,
-        kImplementations_entries
-    );
+    osl::MutexGuard aGuard(m_aMutex);
+
+    const uno::Reference< c3s::XSystemShellExecute > xShellExecute(
+        createService( UNISTRING( "com.sun.star.system.SystemShellExecute" ), m_xContext ),
+        uno::UNO_QUERY );
+
+    try {
+
+        // Construct install command ??
+
+
+        // Store release note for position 3 and 4
+        rtl::OUString aURL(getReleaseNote(m_aUpdateInfo, 3));
+        if( aURL.getLength() > 0 )
+            storeReleaseNote(1, aURL);
+
+        aURL = getReleaseNote(m_aUpdateInfo, 4);
+        if( aURL.getLength() > 0 )
+            storeReleaseNote(2, aURL);
+
+        if( xShellExecute.is() )
+        {
+            rtl::OUString aInstallImage(m_aImageName);
+            osl::FileBase::getSystemPathFromFileURL(aInstallImage, aInstallImage);
+            xShellExecute->execute(aInstallImage, rtl::OUString(), c3s::SystemShellExecuteFlags::DEFAULTS);
+
+            // Tell QuickStarter not to veto ..
+            uno::Reference< beans::XFastPropertySet > xQuickStarter(
+                createService(UNISTRING("com.sun.star.office.Quickstart"), m_xContext),
+                uno::UNO_QUERY
+            );
+
+            if (xQuickStarter.is())
+                xQuickStarter->setFastPropertyValue(0, uno::makeAny(false));
+
+            // Shutdown the office
+            uno::Reference< frame::XDesktop > xDesktop(
+                createService(UNISTRING("com.sun.star.frame.Desktop"), m_xContext),
+                uno::UNO_QUERY);
+
+            if( xDesktop.is() )
+                xDesktop->terminate();
+        }
+    } catch(c3s::SystemShellExecuteException&) {
+        m_aUpdateHandler->setErrorMessage( m_aUpdateHandler->getDefaultInstErrMsg() );
+    }
 }
 
 //------------------------------------------------------------------------------
 
-extern "C" void *
-component_getFactory(const sal_Char *pszImplementationName, void *pServiceManager, void *pRegistryKey)
+void
+UpdateCheck::pause()
 {
-    return cppu::component_getFactoryHelper(
-        pszImplementationName,
-        pServiceManager,
-        pRegistryKey,
-        kImplementations_entries) ;
+    osl::MutexGuard aGuard(m_aMutex);
+
+    if( NULL != m_pThread )
+        m_pThread->suspend();
+
+    rtl::Reference< UpdateCheckConfig > rModel = UpdateCheckConfig::get(m_xContext);
+    rModel->storeDownloadPaused(true);
+
+    setUIState(UPDATESTATE_DOWNLOAD_PAUSED);
 }
 
+//------------------------------------------------------------------------------
+
+void
+UpdateCheck::resume()
+{
+    osl::MutexGuard aGuard(m_aMutex);
+
+    if( NULL != m_pThread )
+        m_pThread->resume();
+
+    rtl::Reference< UpdateCheckConfig > rModel = UpdateCheckConfig::get(m_xContext);
+    rModel->storeDownloadPaused(false);
+
+    setUIState(UPDATESTATE_DOWNLOADING);
+}
+
+//------------------------------------------------------------------------------
+
+void
+UpdateCheck::shutdownThread(bool join)
+{
+    osl::ClearableMutexGuard aGuard(m_aMutex);
+
+    // copy thread object pointer to stack
+    osl::Thread *pThread = m_pThread;
+    m_pThread = NULL;
+    aGuard.clear();
+
+    if( NULL != pThread )
+    {
+        pThread->terminate();
+        if( join )
+        {
+            m_aCondition.set();
+            pThread->join();
+            m_aCondition.reset();
+        }
+    }
+}
+
+//------------------------------------------------------------------------------
+
+void
+UpdateCheck::enableAutoCheck(bool enable)
+{
+    if( enable )
+        m_pThread = new UpdateCheckThread(m_aCondition, m_xContext);
+
+    m_eState = enable ? CHECK_SCHEDULED : DISABLED;
+}
+
+//------------------------------------------------------------------------------
+
+void
+UpdateCheck::enableDownload(bool enable, bool paused)
+{
+    OSL_ASSERT(NULL == m_pThread);
+
+    State eState = DISABLED;
+    if( enable )
+    {
+        m_pThread = new DownloadThread(m_aCondition, m_xContext, this, m_aUpdateInfo.Sources[0].URL );
+        if( !paused )
+        {
+            eState = DOWNLOADING;
+            m_pThread->resume();
+        }
+        else
+            eState = DOWNLOAD_PAUSED;
+
+        m_eState = eState;
+    }
+    else {
+        enableAutoCheck(UpdateCheckConfig::get(m_xContext)->isAutoCheckEnabled());
+    }
+
+}
+
+//------------------------------------------------------------------------------
+
+bool
+UpdateCheck::downloadTargetExists(const rtl::OUString& rFileName)
+{
+    osl::MutexGuard aGuard(m_aMutex);
+
+    rtl::Reference< UpdateHandler > aUpdateHandler(getUpdateHandler());
+
+    bool cont = false;
+
+    if( aUpdateHandler->isVisible() )
+    {
+        cont = aUpdateHandler->showOverwriteWarning();
+        if( cont )
+        {
+            if( osl_File_E_None != osl_removeFile(rFileName.pData) )
+            {
+                // FIXME: error message
+                cont = false;
+            }
+        }
+    }
+    else // this is a automatic download trigger
+    {
+        shutdownThread(false);
+        enableDownload(false);
+    }
+
+    return cont;
+}
+
+//------------------------------------------------------------------------------
+
+void
+UpdateCheck::downloadStalled(const rtl::OUString& rErrorMessage)
+{
+    osl::MutexGuard aGuard(m_aMutex);
+    getUpdateHandler()->setErrorMessage(rErrorMessage);
+    setUIState(UPDATESTATE_ERROR_DOWNLOADING);
+}
+
+//------------------------------------------------------------------------------
+
+void
+UpdateCheck::downloadProgressAt(sal_Int8 nPercent)
+{
+    osl::MutexGuard aGuard(m_aMutex);
+    getUpdateHandler()->setProgress(nPercent);
+}
+
+//------------------------------------------------------------------------------
+
+void
+UpdateCheck::downloadStarted(const rtl::OUString& rLocalFileName)
+{
+    osl::MutexGuard aGuard(m_aMutex);
+
+    rtl::Reference< UpdateCheckConfig > aModel(UpdateCheckConfig::get(m_xContext));
+    aModel->storeLocalFileName(rLocalFileName);
+
+    // Bring-up release note for position 1 ..
+    const rtl::OUString aURL(getReleaseNote(m_aUpdateInfo, 1, aModel->isAutoDownloadEnabled()));
+    if( aURL.getLength() > 0 )
+        showReleaseNote(aURL);
+}
+
+//------------------------------------------------------------------------------
+
+void
+UpdateCheck::downloadFinished(const rtl::OUString& rLocalFileName)
+{
+    osl::MutexGuard aGuard(m_aMutex);
+
+    // no more retries
+    m_pThread->terminate();
+
+    rtl::Reference< UpdateCheckConfig > rModel = UpdateCheckConfig::get(m_xContext);
+    rModel->clearLocalFileName();
+
+    m_aImageName = rLocalFileName;
+    setUIState(UPDATESTATE_DOWNLOAD_AVAIL);
+
+    // Bring-up release note for position 2 ..
+    const rtl::OUString aURL(getReleaseNote(m_aUpdateInfo, 2, rModel->isAutoDownloadEnabled()));
+    if( aURL.getLength() > 0 )
+        showReleaseNote(aURL);
+}
+
+//------------------------------------------------------------------------------
+
+void
+UpdateCheck::cancelDownload()
+{
+    shutdownThread(true);
+
+    osl::MutexGuard aGuard(m_aMutex);
+    enableDownload(false);
+
+    rtl::Reference< UpdateCheckConfig > rModel = UpdateCheckConfig::get(m_xContext);
+
+    rtl::OUString aLocalFile(rModel->getLocalFileName());
+    rModel->clearLocalFileName();
+    rModel->storeDownloadPaused(false);
+
+    if( isObsoleteUpdateInfo(rModel->getUpdateEntryVersion()) )
+    {
+        rModel->clearUpdateFound(); // This wasn't done during init yet ..
+        m_aUpdateInfo = UpdateInfo();
+    }
+
+    /*oslFileError rc =*/ osl_removeFile(aLocalFile.pData);
+    // FIXME: error handling ..
+
+}
+
+//------------------------------------------------------------------------------
+
+void
+UpdateCheck::showDialog(bool forceCheck)
+{
+    osl::MutexGuard aGuard(m_aMutex);
+
+    bool update_found = m_aUpdateInfo.BuildId.getLength() > 0;
+    bool bSetUIState = ! m_aUpdateHandler.is();
+
+    UpdateState eDialogState = UPDATESTATES_COUNT;
+
+    switch( m_eState )
+    {
+    case DISABLED:
+    case CHECK_SCHEDULED:
+        if( forceCheck || ! update_found ) // Run check when forced or if we did not find an update yet
+        {
+            eDialogState = UPDATESTATE_CHECKING;
+            bSetUIState = true;
+        }
+        else if(m_aUpdateInfo.Sources[0].IsDirect)
+            eDialogState = UPDATESTATE_UPDATE_AVAIL;
+        else
+            eDialogState = UPDATESTATE_UPDATE_NO_DOWNLOAD;
+        break;
+
+    case DOWNLOADING:
+        eDialogState = UPDATESTATE_DOWNLOADING;
+        break;
+
+    case DOWNLOAD_PAUSED:
+        eDialogState = UPDATESTATE_DOWNLOAD_PAUSED;
+        break;
+
+    default:
+        OSL_ASSERT( false );
+    }
+
+    if( bSetUIState )
+        setUIState(eDialogState, true); // suppress bubble as Dialog will be visible soon
+
+    getUpdateHandler()->setVisible(true);
+
+    // Run check in separate thread ..
+    if( UPDATESTATE_CHECKING == eDialogState )
+    {
+        if( DISABLED == m_eState )
+        {
+            // destructs itself when done, not cancellable for now ..
+            new ManualUpdateCheckThread(m_aCondition, m_xContext);
+        }
+
+        m_aCondition.set();
+    }
+}
+
+//------------------------------------------------------------------------------
+
+void
+UpdateCheck::setUpdateInfo(const UpdateInfo& aInfo)
+{
+    osl::MutexGuard aGuard(m_aMutex);
+
+    bool bSuppressBubble = (sal_True == aInfo.BuildId.equals(m_aUpdateInfo.BuildId));
+    m_aUpdateInfo = aInfo;
+
+    OSL_ASSERT(DISABLED == m_eState || CHECK_SCHEDULED == m_eState);
+
+    // Ignore leading non direct download if we get direct ones
+    std::vector< DownloadSource >::iterator iter = m_aUpdateInfo.Sources.begin();
+    while( iter != m_aUpdateInfo.Sources.end() )
+    {
+        if( iter->IsDirect )
+            break;
+
+        iter++;
+    }
+
+    if( iter->IsDirect && (iter != m_aUpdateInfo.Sources.begin()) )
+    {
+        iter--;
+        m_aUpdateInfo.Sources.erase(m_aUpdateInfo.Sources.begin(), iter);
+    }
+
+    rtl::Reference< UpdateCheckConfig > rModel = UpdateCheckConfig::get(m_xContext, *this);
+    OSL_ASSERT( rModel.is() );
+
+    // Decide whether to use alternate release note pos ..
+    bool autoDownloadEnabled = rModel->isAutoDownloadEnabled();
+
+    std::vector< ReleaseNote >::iterator iter2 = m_aUpdateInfo.ReleaseNotes.begin();
+    while( iter2 != m_aUpdateInfo.ReleaseNotes.end() )
+    {
+        if( ((1 == iter2->Pos) || (2 == iter2->Pos)) && autoDownloadEnabled && (iter2->URL2.getLength() > 0))
+        {
+            iter2->URL = iter2->URL2;
+            iter2->URL2 = rtl::OUString();
+            iter2->Pos = iter2->Pos2;
+            iter2->Pos2 = 0;
+        }
+
+        iter2++;
+    }
+
+    // do not move below store/clear ..
+    rModel->updateLastChecked();
+
+    UpdateState eUIState;
+    if( m_aUpdateInfo.Sources.size() > 0 )
+    {
+        rModel->storeUpdateFound(aInfo, getBuildId());
+
+        if( m_aUpdateInfo.Sources[0].IsDirect )
+        {
+            eUIState = UPDATESTATE_UPDATE_AVAIL;
+
+            if( rModel->isAutoDownloadEnabled() )
+            {
+                shutdownThread(false);
+                eUIState = UPDATESTATE_DOWNLOADING;
+                enableDownload(true);
+            }
+        }
+        else
+            eUIState = UPDATESTATE_UPDATE_NO_DOWNLOAD;
+    }
+    else
+    {
+        eUIState = UPDATESTATE_NO_UPDATE_AVAIL;
+        rModel->clearUpdateFound();
+    }
+
+    setUIState(eUIState, bSuppressBubble);
+}
+
+//------------------------------------------------------------------------------
+
+void UpdateCheck::setUIState(UpdateState eState, bool suppressBubble)
+{
+    if( ! m_xMenuBarUI.is() &&
+        (DISABLED != m_eState) &&
+        (UPDATESTATE_NO_UPDATE_AVAIL != eState)
+    )
+    {
+        m_xMenuBarUI = createMenuBarUI(m_xContext, new MenuBarButtonJob(this));
+    }
+
+    rtl::Reference<UpdateHandler> aUpdateHandler(getUpdateHandler());
+
+    OSL_ASSERT( aUpdateHandler.is() );
+
+    if( m_xMenuBarUI.is() )
+    {
+        sal_Bool bShowMenuIcon = sal_False;
+
+        if( UPDATESTATE_NO_UPDATE_AVAIL != eState )
+        {
+            bShowMenuIcon = sal_True;
+
+            m_xMenuBarUI->setPropertyValue( PROPERTY_TITLE, uno::makeAny(aUpdateHandler->getBubbleTitle(eState)) );
+            m_xMenuBarUI->setPropertyValue( PROPERTY_TEXT, uno::makeAny(aUpdateHandler->getBubbleText(eState)) );
+
+            if( ! suppressBubble && ( ! aUpdateHandler->isVisible() || aUpdateHandler->isMinimized() ) )
+                m_xMenuBarUI->setPropertyValue( PROPERTY_SHOW_BUBBLE, uno::makeAny( sal_True ) );
+        }
+
+        m_xMenuBarUI->setPropertyValue( PROPERTY_SHOW_MENUICON, uno::makeAny(bShowMenuIcon) );
+    }
+
+    if( UPDATESTATE_UPDATE_AVAIL == eState )
+    {
+        aUpdateHandler->setNextVersion(m_aUpdateInfo.Version);
+
+        rtl::OUString aDesktopDirectory =
+            UpdateCheckConfig::get(m_xContext, this)->getDownloadDestination();
+
+        osl_getSystemPathFromFileURL(aDesktopDirectory.pData, &aDesktopDirectory.pData);
+
+        aUpdateHandler->setDownloadPath(aDesktopDirectory);
+    }
+    else if( UPDATESTATE_DOWNLOAD_AVAIL == eState )
+    {
+        aUpdateHandler->setDownloadFile(m_aImageName);
+    }
+
+    if( (UPDATESTATE_UPDATE_AVAIL == eState) || (UPDATESTATE_UPDATE_NO_DOWNLOAD == eState) )
+    {
+        aUpdateHandler->setDescription(m_aUpdateInfo.Description);
+    }
+
+    aUpdateHandler->setState(eState);
+}
+
+//------------------------------------------------------------------------------
+
+void
+UpdateCheck::setUIState(const UpdateInfo& rInfo, bool suppressBubble)
+{
+    UpdateState eUIState = UPDATESTATE_NO_UPDATE_AVAIL;
+
+    if( rInfo.BuildId.getLength() > 0 )
+    {
+        if( rInfo.Sources[0].IsDirect )
+            eUIState = UPDATESTATE_UPDATE_AVAIL;
+        else
+            eUIState = UPDATESTATE_UPDATE_NO_DOWNLOAD;
+    }
+
+    setUIState(eUIState, suppressBubble);
+}
+
+//------------------------------------------------------------------------------
+
+void
+UpdateCheck::showReleaseNote(const rtl::OUString& rURL) const
+{
+    const uno::Reference< c3s::XSystemShellExecute > xShellExecute(
+        createService( UNISTRING( "com.sun.star.system.SystemShellExecute" ), m_xContext ),
+        uno::UNO_QUERY );
+
+    try {
+
+        if( xShellExecute.is() )
+            xShellExecute->execute(rURL, rtl::OUString(), c3s::SystemShellExecuteFlags::DEFAULTS);
+    } catch(c3s::SystemShellExecuteException&) {
+    }
+}
+
+//------------------------------------------------------------------------------
+
+bool
+UpdateCheck::storeReleaseNote(sal_Int8 nNum, const rtl::OUString &rURL)
+{
+    osl::FileBase::RC rc;
+    rtl::OUString aTargetDir( UpdateCheckConfig::getAllUsersDirectory() + UNISTRING( "/sun" ) );
+
+    rc = osl::Directory::createPath( aTargetDir );
+
+    rtl::OUString aFileName = UNISTRING("releasenote") +
+                              rtl::OUString::valueOf( (sal_Int32) nNum ) +
+                              UNISTRING(".url");
+
+    rtl::OUString aFilePath;
+    rc = osl::FileBase::getAbsoluteFileURL( aTargetDir, aFileName, aFilePath );
+    if ( rc != osl::FileBase::E_None ) return false;
+
+    rc = osl::File::remove( aFilePath );
+
+    osl::File aFile( aFilePath );
+    rc = aFile.open( OpenFlag_Write | OpenFlag_Create );
+
+    if ( rc != osl::FileBase::E_None ) return false;
+
+    rtl::OString aLineBuf("[InternetShortcut]\r\n");
+    sal_uInt64 nWritten = 0;
+
+    rtl::OUString aURL( rURL );
+#ifdef WNT
+    rc = aFile.write( aLineBuf.getStr(), aLineBuf.getLength(), nWritten );
+    if ( rc != osl::FileBase::E_None ) return false;
+    aURL = UNISTRING("URL=") + rURL;
+#endif
+    aLineBuf = rtl::OUStringToOString( aURL, RTL_TEXTENCODING_UTF8 );
+    rc = aFile.write( aLineBuf.getStr(), aLineBuf.getLength(), nWritten );
+    if ( rc != osl::FileBase::E_None ) return false;
+
+    aFile.close();
+    return true;
+}
+
+//------------------------------------------------------------------------------
+
+rtl::Reference<UpdateHandler>
+UpdateCheck::getUpdateHandler()
+{
+    if( ! m_aUpdateHandler.is() )
+        m_aUpdateHandler = new UpdateHandler(m_xContext, this);
+
+    return m_aUpdateHandler;
+}
+
+//------------------------------------------------------------------------------
+
+uno::Reference< task::XInteractionHandler >
+UpdateCheck::getInteractionHandler() const
+{
+    osl::MutexGuard aGuard(m_aMutex);
+
+    uno::Reference< task::XInteractionHandler > xHandler;
+
+    if( m_aUpdateHandler.is() && m_aUpdateHandler->isVisible() )
+        xHandler = m_aUpdateHandler.get();
+
+    return xHandler;
+}
+
+//------------------------------------------------------------------------------
+
+uno::Reference< uno::XInterface >
+UpdateCheck::createService(const rtl::OUString& rServiceName,
+                           const uno::Reference<uno::XComponentContext>& xContext)
+{
+    if( !xContext.is() )
+        throw uno::RuntimeException(
+            UNISTRING( "UpdateCheckConfig: empty component context" ),
+            uno::Reference< uno::XInterface >() );
+
+    const uno::Reference< lang::XMultiComponentFactory > xServiceManager(xContext->getServiceManager());
+
+    if( !xServiceManager.is() )
+        throw uno::RuntimeException(
+            UNISTRING( "UpdateCheckConfig: unable to obtain service manager from component context" ),
+            uno::Reference< uno::XInterface >() );
+
+    return xServiceManager->createInstanceWithContext(rServiceName, xContext);
+}
+
+//------------------------------------------------------------------------------
+
+uno::Reference< uno::XInterface >
+UpdateCheck::createService(const rtl::OUString& rServiceName) const
+{
+    osl::MutexGuard aGuard(m_aMutex);
+    const uno::Reference<uno::XComponentContext>& xContext(m_xContext);
+    return createService(rServiceName, xContext);
+}
+
+//------------------------------------------------------------------------------
+
+bool
+UpdateCheck::isDialogShowing() const
+{
+    osl::MutexGuard aGuard(m_aMutex);
+    return sal_True == m_aUpdateHandler.is() && m_aUpdateHandler->isVisible();
+};
+
+//------------------------------------------------------------------------------
+
+void
+UpdateCheck::autoCheckStatusChanged(bool enabled)
+{
+    osl::MutexGuard aGuard(m_aMutex);
+
+    if( (CHECK_SCHEDULED == m_eState) && !enabled )
+        shutdownThread(false);
+
+    if( (DISABLED == m_eState) || (CHECK_SCHEDULED == m_eState) )
+    {
+        enableAutoCheck(enabled);
+        setUIState(m_aUpdateInfo);
+    }
+};
+
+//------------------------------------------------------------------------------
+
+void
+UpdateCheck::autoCheckIntervalChanged()
+{
+    // just wake-up
+    m_aCondition.set();
+};
+
+//------------------------------------------------------------------------------
+
+oslInterlockedCount SAL_CALL
+UpdateCheck::acquire() SAL_THROW(())
+{
+    return ReferenceObject::acquire();
+}
+
+//------------------------------------------------------------------------------
+
+oslInterlockedCount SAL_CALL
+UpdateCheck::release() SAL_THROW(())
+{
+    return ReferenceObject::release();
+}
