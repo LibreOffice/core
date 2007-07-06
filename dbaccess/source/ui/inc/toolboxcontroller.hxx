@@ -4,9 +4,9 @@
  *
  *  $RCSfile: toolboxcontroller.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: hr $ $Date: 2006-04-19 13:22:13 $
+ *  last change: $Author: rt $ $Date: 2007-07-06 08:32:06 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -50,6 +50,9 @@
 #ifndef _DBASHARED_APITOOLS_HXX_
 #include "apitools.hxx"
 #endif
+#ifndef _DBAUI_MODULE_DBU_HXX_
+#include "moduledbu.hxx"
+#endif
 #include <memory>
 
 class PopupMenu;
@@ -61,6 +64,7 @@ namespace dbaui
                               ,public TToolboxController_BASE
     {
         DECLARE_STL_USTRINGACCESS_MAP(sal_Bool,TCommandState);
+        OModuleClient   m_aModuleClient;
         TCommandState   m_aStates;
         sal_uInt16      m_nToolBoxId;
 
