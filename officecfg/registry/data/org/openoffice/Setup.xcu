@@ -5,9 +5,9 @@
  *
  *  $RCSfile: Setup.xcu,v $
  *
- *  $Revision: 1.31 $
+ *  $Revision: 1.32 $
  *
- *  last change: $Author: vg $ $Date: 2007-05-22 13:03:40 $
+ *  last change: $Author: rt $ $Date: 2007-07-06 06:49:42 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -506,6 +506,26 @@
                 </prop>
                 <prop oor:name="ooSetupFactoryUIName">
                     <value >Query Design</value>
+                </prop>
+            </node>
+            <node oor:name="com.sun.star.report.ReportDefinition" oor:op="replace" install:module="report">
+                <prop oor:name="ooSetupFactoryCommandConfigRef">
+                    <value >ReportCommands</value>
+                </prop>
+                <prop oor:name="ooSetupFactoryShortName">
+                    <value >dbreport</value>
+                </prop>
+                <prop oor:name="ooSetupFactoryWindowStateConfigRef">
+                    <value >DbReportWindowState</value>
+                </prop>
+                <prop oor:name="ooSetupFactoryIcon">
+                    <value >14</value>
+                </prop>
+                <prop oor:name="ooSetupFactoryCmdCategoryConfigRef">
+                    <value >GenericCategories</value>
+                </prop>
+                <prop oor:name="ooSetupFactoryUIName">
+                    <value >Report Design</value>
                 </prop>
             </node>
             <node oor:name="com.sun.star.sdb.TableDesign" oor:op="replace" install:module="base">
