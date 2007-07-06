@@ -4,9 +4,9 @@
  *
  *  $RCSfile: XMLPageExport.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: vg $ $Date: 2007-04-11 13:24:02 $
+ *  last change: $Author: rt $ $Date: 2007-07-06 09:41:18 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -66,7 +66,7 @@
 
 namespace com { namespace sun { namespace star {
     namespace style { class XStyle; }
-    namespace container { class XIndexReplace; }
+    namespace container { class XIndexReplace; class XNameAccess;}
     namespace beans { class XPropertySet; }
 } } }
 
@@ -93,7 +93,7 @@ class XMLOFF_DLLPUBLIC XMLPageExport : public UniRefBase
     const ::rtl::OUString sFollowStyle;
 
     ::com::sun::star::uno::Reference<
-        ::com::sun::star::container::XIndexAccess > xPageStyles;
+        ::com::sun::star::container::XNameAccess > xPageStyles;
 
     ::std::vector< XMLPageExportNameEntry > aNameVector;
     SAL_DLLPRIVATE sal_Bool findPageMasterName( const ::rtl::OUString& rStyleName, ::rtl::OUString& rPMName ) const;
