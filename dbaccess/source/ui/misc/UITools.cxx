@@ -4,9 +4,9 @@
  *
  *  $RCSfile: UITools.cxx,v $
  *
- *  $Revision: 1.71 $
+ *  $Revision: 1.72 $
  *
- *  last change: $Author: ihi $ $Date: 2007-06-05 14:42:00 $
+ *  last change: $Author: rt $ $Date: 2007-07-06 08:34:20 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -249,9 +249,6 @@
 #endif
 #ifndef _DBU_MISC_HRC_
 #include "dbu_misc.hrc"
-#endif
-#ifndef _DBAUI_MODULE_DBU_HXX_
-#include "moduledbu.hxx"
 #endif
 #ifndef _DBAUI_SQLMESSAGE_HXX_
 #include "sqlmessage.hxx"
@@ -1525,16 +1522,20 @@ namespace
 // -----------------------------------------------------------------------------
 void setEvalDateFormatForFormatter(Reference< ::com::sun::star::util::XNumberFormatter >& _rxFormatter)
 {
-    Reference< ::com::sun::star::util::XNumberFormatsSupplier >  xSupplier = _rxFormatter->getNumberFormatsSupplier();
-
-    Reference< XUnoTunnel > xTunnel(xSupplier,UNO_QUERY);
-    SvNumberFormatsSupplierObj* pSupplierImpl = reinterpret_cast<SvNumberFormatsSupplierObj*>(xTunnel->getSomething(SvNumberFormatsSupplierObj::getUnoTunnelId()));
-    OSL_ENSURE(pSupplierImpl,"No Supplier!");
-
-    if ( pSupplierImpl )
+    OSL_ENSURE( _rxFormatter.is(),"setEvalDateFormatForFormatter: Formatter is NULL!");
+    if ( _rxFormatter.is() )
     {
-        SvNumberFormatter* pFormatter = pSupplierImpl->GetNumberFormatter();
-        pFormatter->SetEvalDateFormat(NF_EVALDATEFORMAT_FORMAT);
+        Reference< ::com::sun::star::util::XNumberFormatsSupplier >  xSupplier = _rxFormatter->getNumberFormatsSupplier();
+
+        Reference< XUnoTunnel > xTunnel(xSupplier,UNO_QUERY);
+        SvNumberFormatsSupplierObj* pSupplierImpl = reinterpret_cast<SvNumberFormatsSupplierObj*>(xTunnel->getSomething(SvNumberFormatsSupplierObj::getUnoTunnelId()));
+        OSL_ENSURE(pSupplierImpl,"No Supplier!");
+
+        if ( pSupplierImpl )
+        {
+            SvNumberFormatter* pFormatter = pSupplierImpl->GetNumberFormatter();
+            pFormatter->SetEvalDateFormat(NF_EVALDATEFORMAT_FORMAT);
+        }
     }
 }
 // -----------------------------------------------------------------------------
