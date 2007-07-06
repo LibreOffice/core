@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.10 $
+#   $Revision: 1.11 $
 #
-#   last change: $Author: kz $ $Date: 2007-06-20 10:47:09 $
+#   last change: $Author: rt $ $Date: 2007-07-06 13:58:25 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -40,6 +40,8 @@ TARGET = deploymentgui
 ENABLE_EXCEPTIONS = TRUE
 #USE_DEFFILE = TRUE
 NO_BSYMBOLIC = TRUE
+USE_PCH :=
+ENABLE_PCH :=
 
 .INCLUDE : settings.mk
 .INCLUDE : $(PRJ)$/source$/deployment$/inc$/dp_misc.mk
@@ -57,7 +59,7 @@ SLOFILES = \
         $(SLO)$/dp_gui_updatedialog.obj \
         $(SLO)$/dp_gui_updateinstalldialog.obj \
         $(SLO)$/dp_gui_autoscrolledit.obj \
-        $(SLO)$/dp_gui_modifiablecontext.obj
+        $(SLO)$/dp_gui_system.obj
 
 SHL1TARGET = $(TARGET)$(UPD)$(DLLPOSTFIX).uno
 SHL1VERSIONMAP = ..$/deployment.map
