@@ -4,9 +4,9 @@
  *
  *  $RCSfile: svdmark.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: vg $ $Date: 2007-04-11 16:21:43 $
+ *  last change: $Author: rt $ $Date: 2007-07-06 13:18:03 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -56,6 +56,8 @@
 #include <svx/sdrobjectuser.hxx>
 #endif
 
+#include <set>
+
 class Rectangle;
 class SdrPage;
 class SdrObjList;
@@ -63,7 +65,7 @@ class SdrObject;
 class SdrPageView;
 
 // Ein Container fuer USHORTs (im Prinzip ein dynamisches Array)
-class SdrUShortCont
+class SVX_DLLPUBLIC SdrUShortCont
 {
     Container                                           maArray;
     sal_Bool                                            mbSorted;
@@ -81,6 +83,9 @@ public:
     :   maArray(rCont.maArray),
         mbSorted(rCont.mbSorted)
     {}
+
+    /** helper to migrate to stl containers */
+    std::set< sal_uInt16 > getContainer();
 
     SdrUShortCont& operator=(const SdrUShortCont& rCont)
     {
