@@ -4,9 +4,9 @@
  *
  *  $RCSfile: viewsh.cxx,v $
  *
- *  $Revision: 1.73 $
+ *  $Revision: 1.74 $
  *
- *  last change: $Author: hr $ $Date: 2007-06-27 23:36:36 $
+ *  last change: $Author: rt $ $Date: 2007-07-06 12:31:49 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1730,7 +1730,11 @@ void Change( Menu* pMenu, SfxViewShell* pView )
         USHORT nId = pMenu->GetItemId(nPos);
         String aCmd = pMenu->GetItemCommand(nId);
         PopupMenu* pPopup = pMenu->GetPopupMenu(nId);
-        if ( nId < 5000 )
+        if ( pPopup )
+        {
+            Change( pPopup, pView );
+        }
+        else if ( nId < 5000 )
         {
             if ( aCmd.CompareToAscii(".uno:", 5) == 0 )
             {
@@ -1749,10 +1753,6 @@ void Change( Menu* pMenu, SfxViewShell* pView )
                     }
                 }
             }
-        }
-        if ( pPopup )
-        {
-            Change( pPopup, pView );
         }
     }
 }
