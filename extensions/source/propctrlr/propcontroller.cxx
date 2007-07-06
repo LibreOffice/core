@@ -4,9 +4,9 @@
  *
  *  $RCSfile: propcontroller.cxx,v $
  *
- *  $Revision: 1.37 $
+ *  $Revision: 1.38 $
  *
- *  last change: $Author: kz $ $Date: 2007-05-10 10:49:24 $
+ *  last change: $Author: rt $ $Date: 2007-07-06 08:52:26 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -286,12 +286,13 @@ namespace pcr
     //--------------------------------------------------------------------
     void OPropertyBrowserController::impl_startOrStopModelListening_nothrow( bool _bDoListen ) const
     {
-        if ( !m_xModel.is() )
-            return;
-
         try
         {
-            Reference< XPropertySet > xModelProperties( m_xModel, UNO_QUERY_THROW );
+            Reference< XPropertySet > xModelProperties( m_xModel, UNO_QUERY );
+            if ( !xModelProperties.is() )
+                // okay, so the model doesn't want to change its properties
+                // dynamically - fine with us
+                return;
 
             void (SAL_CALL XPropertySet::*pListenerOperation)( const ::rtl::OUString&, const Reference< XPropertyChangeListener >& )
                 = _bDoListen ? &XPropertySet::addPropertyChangeListener : &XPropertySet::removePropertyChangeListener;
@@ -319,7 +320,7 @@ namespace pcr
             impl_initializeView_nothrow();
 
         // inspect again, if we already have inspectees
-        if ( m_aInspectedObjects.size() )
+        if ( !m_aInspectedObjects.empty() )
             impl_rebindToInspectee_nothrow( m_aInspectedObjects );
     }
 
@@ -1484,6 +1485,9 @@ namespace pcr
         catch(PropertyVetoException& eVetoException)
         {
             InfoBox(m_pView, eVetoException.Message).Execute();
+            PropertyHandlerRef handler = impl_getHandlerForProperty_throw( rName );
+            Any aNormalizedValue = handler->getPropertyValue( rName );
+            getPropertyBox().SetPropertyValue( rName, aNormalizedValue );
         }
         catch(Exception&)
         {
@@ -1527,6 +1531,7 @@ namespace pcr
                 xHandler = xHandler.query( xServiceFac->createInstance() );
             else if ( _rFactoryDescriptor >>= xComponentFac )
                 xHandler = xHandler.query( xComponentFac->createInstanceWithContext( _rContext.getUNOContext() ) );
+            OSL_ENSURE(xHandler.is(),"lcl_createHandler: Can not create handler");
             return xHandler;
         }
     }
