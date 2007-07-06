@@ -4,9 +4,9 @@
  *
  *  $RCSfile: acceleratorexecute.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: vg $ $Date: 2007-05-22 19:34:17 $
+ *  last change: $Author: rt $ $Date: 2007-07-06 10:06:05 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -302,7 +302,11 @@ KeyCode AcceleratorExecute::st_AWTKey2VCLKey(const css::awt::KeyEvent& aAWTKey)
 
     return KeyCode(nKey, bShift, bMod1, bMod2);
 }
-
+//-----------------------------------------------
+::rtl::OUString AcceleratorExecute::findCommand(const css::awt::KeyEvent& aKey)
+{
+    return impl_ts_findCommand(aKey);
+}
 //-----------------------------------------------
 ::rtl::OUString AcceleratorExecute::impl_ts_findCommand(const css::awt::KeyEvent& aKey)
 {
