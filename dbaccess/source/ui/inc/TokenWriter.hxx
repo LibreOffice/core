@@ -4,9 +4,9 @@
  *
  *  $RCSfile: TokenWriter.hxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: obo $ $Date: 2006-10-12 13:38:31 $
+ *  last change: $Author: rt $ $Date: 2007-07-06 08:25:44 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -37,6 +37,9 @@
 
 #ifndef DBAUI_DATABASEEXPORT_HXX
 #include "DExport.hxx"
+#endif
+#ifndef _DBAUI_MODULE_DBU_HXX_
+#include "moduledbu.hxx"
 #endif
 #ifndef _STREAM_HXX //autogen
 #include <tools/stream.hxx>
@@ -73,9 +76,6 @@
 #endif
 #ifndef _SVX_DATACCESSDESCRIPTOR_HXX_
 #include <svx/dataaccessdescriptor.hxx>
-#endif
-#ifndef _DBAUI_MODULE_DBU_HXX_
-#include "moduledbu.hxx"
 #endif
 #ifndef _DBAUI_COMMON_TYPES_HXX_
 #include "commontypes.hxx"
@@ -238,9 +238,9 @@ namespace dbaui
     // normal RowSet Im- und Export
     // =========================================================================
 
-    class ORowSetImportExport : public ODatabaseImportExport,
-                                public OModuleClient
+    class ORowSetImportExport : public ODatabaseImportExport
     {
+        OModuleClient       m_aModuleClient;
         ::std::vector<sal_Int32>    m_aColumnMapping;
         ::std::vector<sal_Int32>    m_aColumnTypes;
         ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XResultSetUpdate >    m_xTargetResultSetUpdate;   //
@@ -265,9 +265,7 @@ namespace dbaui
         ORowSetImportExport(const SharedConnection& _rxConnection,
                             const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& _rM)
                         : ODatabaseImportExport(_rxConnection,NULL,_rM)
-        {
-        }
-
+        {}
 
         virtual BOOL Write();
         virtual BOOL Read();
