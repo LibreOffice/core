@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xfactory.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: obo $ $Date: 2006-10-12 11:21:20 $
+ *  last change: $Author: rt $ $Date: 2007-07-06 10:07:25 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -65,7 +65,6 @@
 #include "commonembobj.hxx"
 #include "specialobject.hxx"
 #include "oleembobj.hxx"
-// #include "convert.hxx"
 
 
 using namespace ::com::sun::star;
