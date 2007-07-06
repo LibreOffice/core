@@ -4,9 +4,9 @@
  *
  *  $RCSfile: unoport.cxx,v $
  *
- *  $Revision: 1.38 $
+ *  $Revision: 1.39 $
  *
- *  last change: $Author: ihi $ $Date: 2007-06-05 17:34:55 $
+ *  last change: $Author: rt $ $Date: 2007-07-06 12:17:24 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -349,6 +349,7 @@ void SwXTextPortion::GetPropertyValue(
                 case PORTION_REDLINE_END:   pRet = "Redline";break;
                 case PORTION_RUBY_START:
                 case PORTION_RUBY_END:      pRet = "Ruby";break;
+                case PORTION_SOFT_PAGEBREAK:pRet = "SoftPageBreak";break;
                 default:
                     pRet = 0;
                 }
