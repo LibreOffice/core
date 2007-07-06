@@ -4,9 +4,9 @@
  *
  *  $RCSfile: brwctrlr.hxx,v $
  *
- *  $Revision: 1.37 $
+ *  $Revision: 1.38 $
  *
- *  last change: $Author: kz $ $Date: 2007-05-10 10:30:41 $
+ *  last change: $Author: rt $ $Date: 2007-07-06 08:26:49 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -102,7 +102,9 @@
 #ifndef _CLIPLISTENER_HXX
 #include <svtools/cliplistener.hxx>
 #endif
-
+#ifndef _DBAUI_MODULE_DBU_HXX_
+#include "moduledbu.hxx"
+#endif
 class ResMgr;
 struct FmFoundRecordInformation;
 struct FmSearchContext;
@@ -133,6 +135,7 @@ namespace dbaui
         // for implementing the XFormController
         class FormControllerImpl;
         friend class FormControllerImpl;
+        OModuleClient                                                            m_aModuleClient;
 
         ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XRowSet >             m_xRowSet;      // our rowset
         ::com::sun::star::uno::Reference< ::com::sun::star::sdbcx::XColumnsSupplier >   m_xColumnsSupplier; // queried from the rowset member
