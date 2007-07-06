@@ -4,9 +4,9 @@
  *
  *  $RCSfile: registerextensions.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: ihi $ $Date: 2007-06-05 11:26:59 $
+ *  last change: $Author: rt $ $Date: 2007-07-06 12:17:47 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -46,6 +46,7 @@
 
 #include <malloc.h>
 #include <assert.h>
+#include <string.h>
 
 #ifdef UNICODE
 #define _UNICODE
@@ -106,6 +107,94 @@ static BOOL ExecuteCommand( LPCTSTR lpCommand, BOOL bSync )
     }
 
     return fSuccess;
+}
+
+static BOOL RemoveCompleteDirectory( std::_tstring sPath )
+{
+    bool bDirectoryRemoved = true;
+
+    std::_tstring mystr;
+    std::_tstring sPattern = sPath + TEXT("\\") + TEXT("*.*");
+    WIN32_FIND_DATA aFindData;
+
+    // Finding all content in sPath
+
+    HANDLE hFindContent = FindFirstFile( sPattern.c_str(), &aFindData );
+
+    if ( hFindContent != INVALID_HANDLE_VALUE )
+    {
+        bool fNextFile = false;
+
+        do
+        {
+            std::_tstring sFileName = aFindData.cFileName;
+            std::_tstring sCurrentDir = TEXT(".");
+            std::_tstring sParentDir = TEXT("..");
+
+            // mystr = "Current short file: " + sFileName;
+            // MessageBox(NULL, mystr.c_str(), "Current Content", MB_OK);
+
+            if (( strcmp(sFileName.c_str(),sCurrentDir.c_str()) != 0 ) &&
+                ( strcmp(sFileName.c_str(),sParentDir.c_str()) != 0 ))
+            {
+                std::_tstring sCompleteFileName = sPath + TEXT("\\") + sFileName;
+
+                if ( aFindData.dwFileAttributes == FILE_ATTRIBUTE_DIRECTORY )
+                {
+                    bool fSuccess = RemoveCompleteDirectory(sCompleteFileName);
+                    if ( fSuccess )
+                    {
+                        mystr = "Successfully removed content of dir " + sCompleteFileName;
+                        // MessageBox(NULL, mystr.c_str(), "Removed Directory", MB_OK);
+                    }
+                    else
+                    {
+                        mystr = "An error occured during removing content of " + sCompleteFileName;
+                        // MessageBox(NULL, mystr.c_str(), "Error removing directory", MB_OK);
+                    }
+                }
+                else
+                {
+                    bool fSuccess = DeleteFile( sCompleteFileName.c_str() );
+                    if ( fSuccess )
+                    {
+                        mystr = "Successfully removed file " + sCompleteFileName;
+                        // MessageBox(NULL, mystr.c_str(), "Removed File", MB_OK);
+                    }
+                    else
+                    {
+                        mystr = "An error occured during removal of file " + sCompleteFileName;
+                        // MessageBox(NULL, mystr.c_str(), "Error removing file", MB_OK);
+                    }
+                }
+            }
+
+            fNextFile = FindNextFile( hFindContent, &aFindData );
+
+        } while ( fNextFile );
+
+        FindClose( hFindContent );
+
+        // empty directory can be removed now
+        // RemoveDirectory is only successful, if the last handle to the directory is closed
+        // -> first removing content -> closing handle -> remove empty directory
+
+        bool fRemoveDirSuccess = RemoveDirectory(sPath.c_str());
+
+        if ( fRemoveDirSuccess )
+        {
+            mystr = "Successfully removed dir " + sPath;
+            // MessageBox(NULL, mystr.c_str(), "Removed Directory", MB_OK);
+        }
+        else
+        {
+            mystr = "An error occured during removal of empty directory " + sPath;
+            // MessageBox(NULL, mystr.c_str(), "Error removing directory", MB_OK);
+            bDirectoryRemoved = false;
+        }
+    }
+
+    return bDirectoryRemoved;
 }
 
 extern "C" UINT __stdcall RegisterExtensions(MSIHANDLE handle)
@@ -269,6 +358,62 @@ extern "C" UINT __stdcall DeregisterExtensions(MSIHANDLE handle)
     //     mystr = "Not found: " + sUnoPkgFile;
     //     MessageBox(NULL, mystr.c_str(), "Command", MB_OK);
     // }
+
+    return ERROR_SUCCESS;
+}
+
+extern "C" UINT __stdcall RemoveExtensions(MSIHANDLE handle)
+{
+    std::_tstring mystr;
+
+    // Finding the product with the help of the propery FINDPRODUCT,
+    // that contains a Windows Registry key, that points to the install location.
+
+    TCHAR szValue[8192];
+    DWORD nValueSize = sizeof(szValue);
+    HKEY  hKey;
+    std::_tstring sInstDir;
+
+    std::_tstring sProductKey = GetMsiProperty( handle, TEXT("FINDPRODUCT") );
+    // MessageBox( NULL, sProductKey.c_str(), "Titel", MB_OK );
+
+    if ( ERROR_SUCCESS == RegOpenKey( HKEY_CURRENT_USER,  sProductKey.c_str(), &hKey ) )
+    {
+        if ( ERROR_SUCCESS == RegQueryValueEx( hKey, TEXT("INSTALLLOCATION"), NULL, NULL, (LPBYTE)szValue, &nValueSize ) )
+        {
+            sInstDir = szValue;
+        }
+        RegCloseKey( hKey );
+    }
+    else if ( ERROR_SUCCESS == RegOpenKey( HKEY_LOCAL_MACHINE,  sProductKey.c_str(), &hKey ) )
+    {
+        if ( ERROR_SUCCESS == RegQueryValueEx( hKey, TEXT("INSTALLLOCATION"), NULL, NULL, (LPBYTE)szValue, &nValueSize ) )
+        {
+            sInstDir = szValue;
+        }
+        RegCloseKey( hKey );
+    }
+    else
+    {
+        return ERROR_SUCCESS;
+    }
+
+    // Removing complete directory "share\uno_packages\cache"
+
+    std::_tstring sCacheDir = sInstDir + TEXT("share\\uno_packages\\cache");
+
+    bool fSuccess = RemoveCompleteDirectory( sCacheDir );
+
+    if ( fSuccess )
+    {
+        mystr = "Executed successfully!";
+        // MessageBox(NULL, mystr.c_str(), "Main methode", MB_OK);
+    }
+    else
+    {
+        mystr = "An error occured during execution!";
+        // MessageBox(NULL, mystr.c_str(), "Main methode", MB_OK);
+    }
 
     return ERROR_SUCCESS;
 }
