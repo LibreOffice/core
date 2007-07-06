@@ -4,9 +4,9 @@
  *
  *  $RCSfile: standardcontrol.hxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: kz $ $Date: 2007-05-10 10:50:27 $
+ *  last change: $Author: rt $ $Date: 2007-07-06 08:54:41 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -317,6 +317,7 @@ namespace pcr
         virtual void SAL_CALL clearList(  ) throw (::com::sun::star::uno::RuntimeException);
         virtual void SAL_CALL prependListEntry( const ::rtl::OUString& NewEntry ) throw (::com::sun::star::uno::RuntimeException);
         virtual void SAL_CALL appendListEntry( const ::rtl::OUString& NewEntry ) throw (::com::sun::star::uno::RuntimeException);
+        virtual ::com::sun::star::uno::Sequence< ::rtl::OUString > SAL_CALL getListEntries(  ) throw (::com::sun::star::uno::RuntimeException);
 
     protected:
         virtual void modified();
@@ -342,6 +343,7 @@ namespace pcr
         virtual void SAL_CALL clearList(  ) throw (::com::sun::star::uno::RuntimeException);
         virtual void SAL_CALL prependListEntry( const ::rtl::OUString& NewEntry ) throw (::com::sun::star::uno::RuntimeException);
         virtual void SAL_CALL appendListEntry( const ::rtl::OUString& NewEntry ) throw (::com::sun::star::uno::RuntimeException);
+        virtual ::com::sun::star::uno::Sequence< ::rtl::OUString > SAL_CALL getListEntries(  ) throw (::com::sun::star::uno::RuntimeException);
 
     protected:
         virtual void modified();
@@ -365,6 +367,7 @@ namespace pcr
         virtual void SAL_CALL clearList(  ) throw (::com::sun::star::uno::RuntimeException);
         virtual void SAL_CALL prependListEntry( const ::rtl::OUString& NewEntry ) throw (::com::sun::star::uno::RuntimeException);
         virtual void SAL_CALL appendListEntry( const ::rtl::OUString& NewEntry ) throw (::com::sun::star::uno::RuntimeException);
+        virtual ::com::sun::star::uno::Sequence< ::rtl::OUString > SAL_CALL getListEntries(  ) throw (::com::sun::star::uno::RuntimeException);
 
     };
 
