@@ -4,9 +4,9 @@
  *
  *  $RCSfile: TEditControl.cxx,v $
  *
- *  $Revision: 1.56 $
+ *  $Revision: 1.57 $
  *
- *  last change: $Author: ihi $ $Date: 2006-10-18 13:32:38 $
+ *  last change: $Author: rt $ $Date: 2007-07-06 08:42:50 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1246,7 +1246,8 @@ Any OTableEditorCtrl::GetCellData( long nRow, sal_uInt16 nColId )
             break;
 
         case FIELD_TYPE:
-            sValue = pFieldDescr->getTypeInfo()->aUIName;
+            if ( pFieldDescr->getTypeInfo() )
+                sValue = pFieldDescr->getTypeInfo()->aUIName;
             break;
 
         case FIELD_DESCR:
