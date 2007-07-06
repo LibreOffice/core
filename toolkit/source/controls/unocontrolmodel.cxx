@@ -4,9 +4,9 @@
  *
  *  $RCSfile: unocontrolmodel.cxx,v $
  *
- *  $Revision: 1.55 $
+ *  $Revision: 1.56 $
  *
- *  last change: $Author: hr $ $Date: 2007-06-27 12:21:50 $
+ *  last change: $Author: rt $ $Date: 2007-07-06 14:27:38 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -379,6 +379,8 @@ void UnoControlModel::ImplPropertyChanged( sal_uInt16 )
             case BASEPROPERTY_DEFAULTCONTROL:       aDefault <<= ((UnoControlModel*)this)->getServiceName();    break;
 
 
+            case BASEPROPERTY_AUTOHSCROLL:
+            case BASEPROPERTY_AUTOVSCROLL:
             case BASEPROPERTY_MOVEABLE:
             case BASEPROPERTY_CLOSEABLE:
             case BASEPROPERTY_SIZEABLE:
@@ -394,6 +396,8 @@ void UnoControlModel::ImplPropertyChanged( sal_uInt16 )
             case BASEPROPERTY_NUMSHOWTHOUSANDSEP:
             case BASEPROPERTY_STRICTFORMAT:
             case BASEPROPERTY_REPEAT:
+            case BASEPROPERTY_PAINTTRANSPARENT:
+            case BASEPROPERTY_DESKTOP_AS_PARENT:
             case BASEPROPERTY_HARDLINEBREAKS:       aDefault <<= (sal_Bool) sal_False; break;
 
             case BASEPROPERTY_WHEELWITHOUTFOCUS:
