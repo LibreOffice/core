@@ -4,9 +4,9 @@
  *
  *  $RCSfile: LayoutManagerEvents.idl,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: vg $ $Date: 2007-05-22 15:10:13 $
+ *  last change: $Author: rt $ $Date: 2007-07-06 12:08:58 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -112,6 +112,28 @@ constants LayoutManagerEvents
         </p>
      */
     const short MERGEDMENUBAR = 5;
+
+    //-------------------------------------------------------------------------
+    /** specifies that a certain user interface element has been made
+        visible
+
+        <p>
+        This event sends the resource url of the newly visible user
+        interface element.
+        </p>
+     */
+    const short UIELEMENT_VISIBLE = 6;
+
+    //-------------------------------------------------------------------------
+    /** specifies that a certain user interface element has been made
+        invisible
+
+        <p>
+        This event sends the resource url of the invisible user
+        interface element.
+        </p>
+     */
+    const short UIELEMENT_INVISIBLE = 7;
 };
 
 }; }; }; };
