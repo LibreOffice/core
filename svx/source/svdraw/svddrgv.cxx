@@ -4,9 +4,9 @@
  *
  *  $RCSfile: svddrgv.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: hr $ $Date: 2007-06-27 18:59:28 $
+ *  last change: $Author: rt $ $Date: 2007-07-06 13:20:46 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -66,6 +66,9 @@
 #ifndef _BGFX_POLYGON_B2DPOLYGONTOOLS_HXX
 #include <basegfx/polygon/b2dpolygontools.hxx>
 #endif
+#include "polypolygoneditor.hxx"
+
+using namespace sdr;
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 
@@ -312,7 +315,7 @@ void SdrDragView::SetDragPolys(bool bReset)
                                     {
                                         sal_uInt32 nPolyNum, nPointNum;
 
-                                        if(SdrPathObj::ImpFindPolyPnt(aPathXPP, nObjPt, nPolyNum, nPointNum))
+                                        if(PolyPolygonEditor::GetRelativePolyPoint(aPathXPP, nObjPt, nPolyNum, nPointNum))
                                         {
                                             aPolygon.append(aPathXPP.getB2DPolygon(nPolyNum).getB2DPoint(nPointNum));
                                         }
@@ -442,6 +445,7 @@ BOOL SdrDragView::TakeDragLimit(SdrDragMode /*eMode*/, Rectangle& /*rRect*/) con
 BOOL SdrDragView::BegDragObj(const Point& rPnt, OutputDevice* pOut, SdrHdl* pHdl, short nMinMov, SdrDragMethod* pForcedMeth)
 {
     BrkAction();
+
     bool bRet=false;
     {
         SetDragWithCopy(FALSE);
