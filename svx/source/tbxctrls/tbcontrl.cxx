@@ -4,9 +4,9 @@
  *
  *  $RCSfile: tbcontrl.cxx,v $
  *
- *  $Revision: 1.78 $
+ *  $Revision: 1.79 $
  *
- *  last change: $Author: hr $ $Date: 2007-06-27 19:18:43 $
+ *  last change: $Author: rt $ $Date: 2007-07-06 07:44:06 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -70,6 +70,9 @@
 #endif
 #ifndef _SFXSTRITEM_HXX //autogen
 #include <svtools/stritem.hxx>
+#endif
+#ifndef INCLUDED_SVTOOLS_PATHOPTIONS_HXX
+#include <svtools/pathoptions.hxx>
 #endif
 #ifndef _SFX_TPLPITEM_HXX
 #include <sfx2/tplpitem.hxx>
@@ -167,10 +170,12 @@
 #include "dlgutil.hxx"
 #include <svx/dialmgr.hxx>
 #include "colorwindow.hxx"
+#include <memory>
+
+#include <svx/tbxcolorupdate.hxx>
 
 // ------------------------------------------------------------------------
 
-#define IMAGE_COL_TRANSPARENT       COL_LIGHTMAGENTA
 #define MAX_MRU_FONTNAME_ENTRIES    5
 #define LOGICAL_EDIT_HEIGHT         12
 
@@ -217,7 +222,7 @@ class SvxStyleBox_Impl : public ComboBox
     using Window::IsVisible;
 public:
     SvxStyleBox_Impl( Window* pParent, USHORT nSlot, const OUString& rCommand, SfxStyleFamily eFamily, const Reference< XDispatchProvider >& rDispatchProvider,
-                        const String& rClearFormatKey, const String& rMoreKey, BOOL bInSpecialMode );
+                        const Reference< XFrame >& _xFrame,const String& rClearFormatKey, const String& rMoreKey, BOOL bInSpecialMode );
     ~SvxStyleBox_Impl();
 
     void            SetFamily( SfxStyleFamily eNewFamily );
@@ -246,6 +251,7 @@ private:
     Link                            aVisibilityListener;
     BOOL                            bVisible;
     Reference< XDispatchProvider >  m_xDispatchProvider;
+    Reference< XFrame >             m_xFrame;
     OUString                        m_aCommand;
     String                          aClearFormatKey;
     String                          aMoreKey;
@@ -264,12 +270,14 @@ class SvxFontNameBox_Impl : public FontNameBox
     using Window::Update;
 private:
     const FontList*                pFontList;
+    ::std::auto_ptr<FontList>      m_aOwnFontList;
     Font                           aCurFont;
     Size                           aLogicalSize;
     String                         aCurText;
     USHORT                         nFtCount;
     BOOL                           bRelease;
     Reference< XDispatchProvider > m_xDispatchProvider;
+    Reference< XFrame >            m_xFrame;
 
     void            ReleaseFocus_Impl();
     void            EnableControls_Impl();
@@ -279,7 +287,9 @@ protected:
     virtual void    DataChanged( const DataChangedEvent& rDCEvt );
 
 public:
-    SvxFontNameBox_Impl( Window* pParent, const Reference< XDispatchProvider >& rDispatchProvider, WinBits nStyle = WB_SORT );
+    SvxFontNameBox_Impl( Window* pParent, const Reference< XDispatchProvider >& rDispatchProvider,const Reference< XFrame >& _xFrame
+        , WinBits nStyle = WB_SORT
+        );
 
     void            FillList();
     void            Update( const SvxFontItem* pFontItem );
@@ -290,7 +300,8 @@ public:
                           nFtCount = pList->GetFontNameCount(); }
     virtual long    PreNotify( NotifyEvent& rNEvt );
     virtual long    Notify( NotifyEvent& rNEvt );
-    virtual ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible > CreateAccessible();
+    virtual Reference< ::com::sun::star::accessibility::XAccessible > CreateAccessible();
+    inline void     SetOwnFontList(::std::auto_ptr<FontList> _aOwnFontList) { m_aOwnFontList = _aOwnFontList; }
 };
 
 //========================================================================
@@ -308,6 +319,7 @@ private:
     Size                            aLogicalSize;
     BOOL                            bRelease;
     Reference< XDispatchProvider >  m_xDispatchProvider;
+    Reference< XFrame >             m_xFrame;
 
 //  SfxBindings&                    rBindings;
 
@@ -320,6 +332,7 @@ protected:
 public:
                         SvxFontSizeBox_Impl( Window* pParent,
                                              const Reference< XDispatchProvider >& rDispatchProvider,
+                                             const Reference< XFrame >& _xFrame,
                                              SvxFontHeightToolBoxControl& rCtrl );
 
     void                statusChanged_Impl( long nHeight, SfxItemState eState );
@@ -449,6 +462,7 @@ SvxStyleBox_Impl::SvxStyleBox_Impl(
     const rtl::OUString&                    rCommand,
     SfxStyleFamily                          eFamily,
     const Reference< XDispatchProvider >&   rDispatchProvider,
+    const Reference< XFrame >&              _xFrame,
     const String&                           rClearFormatKey,
     const String&                           rMoreKey,
     BOOL                                    bInSpec) :
@@ -460,6 +474,7 @@ SvxStyleBox_Impl::SvxStyleBox_Impl(
     bRelease    ( TRUE ),
     bVisible(FALSE),
     m_xDispatchProvider( rDispatchProvider ),
+    m_xFrame(_xFrame),
     m_aCommand  ( rCommand ),
     aClearFormatKey ( rClearFormatKey ),
     aMoreKey        ( rMoreKey ),
@@ -482,15 +497,8 @@ void SvxStyleBox_Impl::ReleaseFocus()
         bRelease = TRUE;
         return;
     }
-    SfxViewShell* pCurSh = SfxViewShell::Current();
-
-    if ( pCurSh )
-    {
-        Window* pShellWnd = pCurSh->GetWindow();
-
-        if ( pShellWnd )
-            pShellWnd->GrabFocus();
-    }
+    if ( m_xFrame.is() && m_xFrame->getContainerWindow().is() )
+        m_xFrame->getContainerWindow()->setFocus();
 }
 
 // -----------------------------------------------------------------------
@@ -674,6 +682,13 @@ BOOL GetDocFontList_Impl( const FontList** ppFontList, SvxFontNameBox_Impl* pBox
     if ( pDocSh )
         pFontListItem =
             (SvxFontListItem*)pDocSh->GetItem( SID_ATTR_CHAR_FONTLIST );
+    else
+    {
+        ::std::auto_ptr<FontList> aFontList(new FontList( pBox ));
+        *ppFontList = aFontList.get();
+        pBox->SetOwnFontList(aFontList);
+        bChanged = TRUE;
+    }
 
     if ( pFontListItem )
     {
@@ -732,19 +747,19 @@ BOOL GetDocFontList_Impl( const FontList** ppFontList, SvxFontNameBox_Impl* pBox
 // class SvxFontNameBox_Impl --------------------------------------------------
 //========================================================================
 
-SvxFontNameBox_Impl::SvxFontNameBox_Impl( Window* pParent, const Reference< XDispatchProvider >& rDispatchProvider, WinBits nStyle ) :
+SvxFontNameBox_Impl::SvxFontNameBox_Impl( Window* pParent, const Reference< XDispatchProvider >& rDispatchProvider,const Reference< XFrame >& _xFrame, WinBits nStyle ) :
 
     FontNameBox        ( pParent, nStyle | WinBits( WB_DROPDOWN | WB_AUTOHSCROLL ) ),
     pFontList          ( NULL ),
     aLogicalSize       ( 75,160 ),
     nFtCount           ( 0 ),
     bRelease           ( TRUE ),
-    m_xDispatchProvider( rDispatchProvider )
+    m_xDispatchProvider( rDispatchProvider ),
+    m_xFrame (_xFrame)
 {
     SetSizePixel(LogicToPixel( aLogicalSize, MAP_APPFONT ));
     EnableControls_Impl();
 }
-
 // -----------------------------------------------------------------------
 
 void SvxFontNameBox_Impl::FillList()
@@ -851,15 +866,8 @@ void SvxFontNameBox_Impl::ReleaseFocus_Impl()
         bRelease = TRUE;
         return;
     }
-    SfxViewShell* pCurSh = SfxViewShell::Current();
-
-    if ( pCurSh )
-    {
-        Window* pShellWnd = pCurSh->GetWindow();
-
-        if ( pShellWnd )
-            pShellWnd->GrabFocus();
-    }
+    if ( m_xFrame.is() && m_xFrame->getContainerWindow().is() )
+        m_xFrame->getContainerWindow()->setFocus();
 }
 
 // -----------------------------------------------------------------------
@@ -931,6 +939,7 @@ void SvxFontNameBox_Impl::Select()
 SvxFontSizeBox_Impl::SvxFontSizeBox_Impl(
     Window*                               pParent,
     const Reference< XDispatchProvider >& rDispatchProvider,
+    const Reference< XFrame >&            _xFrame,
     SvxFontHeightToolBoxControl&          rCtrl ) :
 
     FontSizeBox( pParent, WinBits( WB_DROPDOWN ) ),
@@ -938,8 +947,8 @@ SvxFontSizeBox_Impl::SvxFontSizeBox_Impl(
     pCtrl               ( &rCtrl ),
     aLogicalSize        ( 30,100 ),
     bRelease            ( TRUE ),
-    m_xDispatchProvider ( rDispatchProvider )
-
+    m_xDispatchProvider ( rDispatchProvider ),
+    m_xFrame(_xFrame)
 {
     SetSizePixel(LogicToPixel( aLogicalSize, MAP_APPFONT ));
     SetValue( 0 );
@@ -955,16 +964,8 @@ void SvxFontSizeBox_Impl::ReleaseFocus_Impl()
         bRelease = TRUE;
         return;
     }
-
-    SfxViewShell* pCurSh = SfxViewShell::Current();
-
-    if ( pCurSh )
-    {
-        Window* pShellWnd = pCurSh->GetWindow();
-
-        if ( pShellWnd )
-            pShellWnd->GrabFocus();
-    }
+    if ( m_xFrame.is() && m_xFrame->getContainerWindow().is() )
+        m_xFrame->getContainerWindow()->setFocus();
 }
 
 // -----------------------------------------------------------------------
@@ -1025,6 +1026,12 @@ void SvxFontSizeBox_Impl::Update( const SvxFontItem* pFontItem )
     // Sizes-Liste auff"ullen
     sal_Int64 nOldVal = GetValue(); // alten Wert merken
     const FontList* _pFontList = pFontListItem ? pFontListItem->GetFontList() : NULL;
+    ::std::auto_ptr<FontList> aHold;
+    if ( !_pFontList )
+    {
+        aHold.reset(new FontList( this ));
+        _pFontList = aHold.get();
+    }
     if ( _pFontList && pFontItem )
     {
         FontInfo _aFontInfo( _pFontList->Get( pFontItem->GetFamilyName(), pFontItem->GetStyleName() ) );
@@ -1120,11 +1127,18 @@ SvxColorWindow_Impl::SvxColorWindow_Impl( const OUString&            rCommand,
     SfxObjectShell* pDocSh = SfxObjectShell::Current();
     const SfxPoolItem* pItem = NULL;
     XColorTable* pColorTable = NULL;
+    BOOL bKillTable = FALSE;
     const Size aSize12( 13, 13 );
 
     if ( pDocSh )
         if ( 0 != ( pItem = pDocSh->GetItem( SID_COLOR_TABLE ) ) )
             pColorTable = ( (SvxColorTableItem*)pItem )->GetColorTable();
+
+    if ( !pColorTable )
+    {
+        pColorTable = new XColorTable( SvtPathOptions().GetPalettePath() );
+        bKillTable = TRUE;
+    }
 
     if ( SID_ATTR_CHAR_COLOR_BACKGROUND == theSlotId || SID_BACKGROUND_COLOR == theSlotId )
     {
@@ -1191,6 +1205,8 @@ SvxColorWindow_Impl::SvxColorWindow_Impl( const OUString&            rCommand,
 //  StartListening( rBindings );
 
     AddStatusListener( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( ".uno:ColorTableState" )));
+    if ( bKillTable )
+        delete pColorTable;
 }
 
 SvxColorWindow_Impl::~SvxColorWindow_Impl()
@@ -1963,166 +1979,6 @@ void SvxLineWindow_Impl::CreateBitmaps( void )
 // Hilfsklassen
 
 //========================================================================
-// class SvxTbxButtonColorUpdater_Impl ----------------------------------------
-//========================================================================
-
-SvxTbxButtonColorUpdater_Impl::SvxTbxButtonColorUpdater_Impl(
-    USHORT nId,
-    USHORT nTbxBtnId,
-    ToolBox* ptrTbx,
-    USHORT nMode ) :
-    mnDrawMode        ( nMode ),
-    mnBtnId           ( nTbxBtnId ),
-    mnSlotId           ( nId ),
-    mpTbx             ( ptrTbx ),
-    maCurColor        ( COL_TRANSPARENT )
-{
-    if (mnSlotId == SID_BACKGROUND_COLOR)
-        mnDrawMode = TBX_UPDATER_MODE_CHAR_COLOR_NEW;
-    DBG_ASSERT( ptrTbx, "ToolBox not found :-(" );
-    mbWasHiContrastMode = ptrTbx ? ( ptrTbx->GetBackground().GetColor().IsDark() ) : FALSE;
-    Update(mnSlotId == SID_ATTR_CHAR_COLOR2 ? COL_BLACK : COL_GRAY);
-}
-
-// -----------------------------------------------------------------------
-
-SvxTbxButtonColorUpdater_Impl::~SvxTbxButtonColorUpdater_Impl()
-{
-}
-
-// -----------------------------------------------------------------------
-
-void SvxTbxButtonColorUpdater_Impl::Update( const Color& rColor )
-{
-    Image       aImage( mpTbx->GetItemImage( mnBtnId ) );
-    const bool  bSizeChanged = ( maBmpSize != aImage.GetSizePixel() );
-    const bool  bDisplayModeChanged = ( mbWasHiContrastMode != mpTbx->GetBackground().GetColor().IsDark() );
-    Color       aColor( rColor );
-
-    // !!! #109290# Workaround for SetFillColor with COL_AUTO
-    if( aColor.GetColor() == COL_AUTO )
-        aColor = Color( COL_TRANSPARENT );
-
-    if( ( maCurColor != aColor ) || bSizeChanged || bDisplayModeChanged )
-    {
-        BitmapEx            aBmpEx( aImage.GetBitmapEx() );
-        Bitmap              aBmp( aBmpEx.GetBitmap() );
-        BitmapWriteAccess*  pBmpAcc = aBmp.AcquireWriteAccess();
-
-        maBmpSize = aBmp.GetSizePixel();
-
-        if( pBmpAcc )
-        {
-            Bitmap              aMsk;
-            BitmapWriteAccess*  pMskAcc;
-            const Point         aNullPnt;
-
-            if( aBmpEx.IsAlpha() )
-                pMskAcc = ( aMsk = aBmpEx.GetAlpha().GetBitmap() ).AcquireWriteAccess();
-            else if( aBmpEx.IsTransparent() )
-                pMskAcc = ( aMsk = aBmpEx.GetMask() ).AcquireWriteAccess();
-            else
-                pMskAcc = NULL;
-
-            mbWasHiContrastMode = mpTbx->GetBackground().GetColor().IsDark();
-
-            if( mnDrawMode == TBX_UPDATER_MODE_CHAR_COLOR_NEW && ( COL_TRANSPARENT != aColor.GetColor() ) )
-                pBmpAcc->SetLineColor( aColor );
-            else if( mpTbx->GetBackground().GetColor().IsDark() )
-                pBmpAcc->SetLineColor( Color( COL_WHITE ) );
-            else
-                pBmpAcc->SetLineColor( Color( COL_BLACK ) );
-
-            pBmpAcc->SetFillColor( maCurColor = aColor );
-
-            if( TBX_UPDATER_MODE_CHAR_COLOR_NEW == mnDrawMode || TBX_UPDATER_MODE_NONE == mnDrawMode )
-            {
-                if( TBX_UPDATER_MODE_CHAR_COLOR_NEW == mnDrawMode )
-                {
-                    if( maBmpSize.Width() <= 16 )
-                        maUpdRect = Rectangle( Point( 0,12 ), Size( maBmpSize.Width(), 4 ) );
-                    else
-                        maUpdRect = Rectangle( Point( 1, maBmpSize.Height() - 7 ), Size( maBmpSize.Width() - 2 ,6 ) );
-                }
-                else
-                {
-                    if( maBmpSize.Width() <= 16 )
-                        maUpdRect = Rectangle( Point( 7, 7 ), Size( 8, 8 ) );
-                    else
-                        maUpdRect = Rectangle( Point( maBmpSize.Width() - 12, maBmpSize.Height() - 12 ), Size( 11, 11 ) );
-                }
-
-                pBmpAcc->DrawRect( maUpdRect );
-
-                if( pMskAcc )
-                {
-                    if( COL_TRANSPARENT == aColor.GetColor() )
-                    {
-                        pMskAcc->SetLineColor( COL_BLACK );
-                        pMskAcc->SetFillColor( COL_WHITE );
-                    }
-                    else
-                        pMskAcc->SetFillColor( COL_BLACK );
-
-                    pMskAcc->DrawRect( maUpdRect );
-                }
-            }
-            else
-            {
-                DBG_ERROR( "SvxTbxButtonColorUpdater_Impl::Update: TBX_UPDATER_MODE_CHAR_COLOR / TBX_UPDATER_MODE_CHAR_BACKGROUND" );
-                // !!! DrawChar( aVirDev, aColor );
-            }
-
-            aBmp.ReleaseAccess( pBmpAcc );
-
-            if( pMskAcc )
-                aMsk.ReleaseAccess( pMskAcc );
-
-            if( aBmpEx.IsAlpha() )
-                aBmpEx = BitmapEx( aBmp, AlphaMask( aMsk ) );
-            else if( aBmpEx.IsTransparent() )
-                aBmpEx = BitmapEx( aBmp, aMsk );
-            else
-                aBmpEx = aBmp;
-
-            mpTbx->SetItemImage( mnBtnId, Image( aBmpEx ) );
-        }
-    }
-}
-
-// -----------------------------------------------------------------------
-
-void SvxTbxButtonColorUpdater_Impl::DrawChar( VirtualDevice& rVirDev, const Color& rCol )
-{
-    Font aOldFont = rVirDev.GetFont();
-    Font aFont = aOldFont;
-    Size aSz = aFont.GetSize();
-    aSz.Height() = maBmpSize.Height();
-    aFont.SetSize( aSz );
-    aFont.SetWeight( WEIGHT_BOLD );
-
-    if ( mnDrawMode == TBX_UPDATER_MODE_CHAR_COLOR )
-    {
-        aFont.SetColor( rCol );
-        aFont.SetFillColor( Color( IMAGE_COL_TRANSPARENT ) );
-    }
-    else
-    {
-        rVirDev.SetLineColor();
-        rVirDev.SetFillColor( rCol );
-        Rectangle aRect( Point(0,0), maBmpSize );
-        rVirDev.DrawRect( aRect );
-        aFont.SetFillColor( rCol );
-    }
-    rVirDev.SetFont( aFont );
-    Size aTxtSize(rVirDev.GetTextWidth( 'A' ), rVirDev.GetTextHeight());
-    Point aPos( ( maBmpSize.Width() - aTxtSize.Width() ) / 2,
-                ( maBmpSize.Height() - aTxtSize.Height() ) / 2 );
-
-    rVirDev.DrawText( aPos, 'A' );
-    rVirDev.SetFont( aOldFont );
-}
-//========================================================================
 // class SfxStyleControllerItem_Impl ------------------------------------------
 //========================================================================
 
@@ -2353,7 +2209,7 @@ throw ( Exception, RuntimeException)
 }
 
 // -----------------------------------------------------------------------
-void SAL_CALL SvxStyleToolBoxControl::update() throw (::com::sun::star::uno::RuntimeException)
+void SAL_CALL SvxStyleToolBoxControl::update() throw (RuntimeException)
 {
     // Do nothing, we will start binding our listener when we are visible.
     // See link SvxStyleToolBoxControl::VisibilityNotification.
@@ -2668,6 +2524,7 @@ Window* SvxStyleToolBoxControl::CreateItemWindow( Window *pParent )
                                                    OUString( RTL_CONSTASCII_USTRINGPARAM( ".uno:StyleApply" )),
                                                    SFX_STYLE_FAMILY_PARA,
                                                    Reference< XDispatchProvider >( m_xFrame->getController(), UNO_QUERY ),
+                                                   m_xFrame,
                                                    pImpl->aClearForm,
                                                    pImpl->aMore,
                                                    pImpl->bSpecModeWriter || pImpl->bSpecModeCalc );
@@ -2736,7 +2593,7 @@ Window* SvxFontNameToolBoxControl::CreateItemWindow( Window *pParent )
 {
     SvxFontNameBox_Impl* pBox = new SvxFontNameBox_Impl( pParent,
                                                          Reference< XDispatchProvider >( m_xFrame->getController(), UNO_QUERY ),
-                                                         0 );
+                                                         m_xFrame,0);
     return pBox;
 }
 
@@ -2764,7 +2621,7 @@ SvxFontHeightToolBoxControl::~SvxFontHeightToolBoxControl()
 }
 
 void SAL_CALL SvxFontHeightToolBoxControl::statusChanged( const FeatureStateEvent& rEvent )
-throw ( ::com::sun::star::uno::RuntimeException )
+throw ( RuntimeException )
 {
     if ( rEvent.FeatureURL.Path.equalsAscii( "FontHeight" ))
     {
@@ -2773,23 +2630,23 @@ throw ( ::com::sun::star::uno::RuntimeException )
         if ( rEvent.IsEnabled )
         {
             eState = SFX_ITEM_AVAILABLE;
-            ::com::sun::star::uno::Type pType = rEvent.State.getValueType();
+            Type pType =    rEvent.State.getValueType();
 
             if ( pType == ::getVoidCppuType() )
             {
                 pItem = new SfxVoidItem( SID_ATTR_CHAR_FONTHEIGHT );
                 eState = SFX_ITEM_UNKNOWN;
             }
-            else if ( pType == ::getCppuType((const ::com::sun::star::frame::status::ItemStatus*)0) )
+            else if ( pType == ::getCppuType((const status::ItemStatus*)0) )
             {
-                ::com::sun::star::frame::status::ItemStatus aItemStatus;
+                status::ItemStatus aItemStatus;
                 rEvent.State >>= aItemStatus;
                 eState = aItemStatus.State;
                 pItem = new SfxVoidItem( SID_ATTR_CHAR_FONTHEIGHT );
             }
             else
             {
-                ::com::sun::star::frame::status::FontHeight aFontHeight;
+                status::FontHeight aFontHeight;
                 if ( rEvent.State >>= aFontHeight )
                 {
                     pBox->statusChanged_Impl( long( 10. * aFontHeight.Height ), eState );
@@ -2801,7 +2658,8 @@ throw ( ::com::sun::star::uno::RuntimeException )
         StateChanged( SID_ATTR_CHAR_FONTHEIGHT, eState, pItem );
         delete pItem;
     }
-    else SfxToolBoxControl::statusChanged( rEvent );
+    else
+        SfxToolBoxControl::statusChanged( rEvent );
 }
 
 // -----------------------------------------------------------------------
@@ -2814,7 +2672,7 @@ void SvxFontHeightToolBoxControl::StateChanged(
     // FontHeight?
     if ( SID_ATTR_CHAR_FONTHEIGHT == nSID )
     {
-        if ( eState != SFX_ITEM_AVAILABLE )
+        if ( eState != SFX_ITEM_AVAILABLE && pBox )
             pBox->statusChanged_Impl( 0, eState );
         SfxToolBoxControl::StateChanged( nSID, eState, pState );
     }
@@ -2824,7 +2682,8 @@ void SvxFontHeightToolBoxControl::StateChanged(
         delete pFontItem;
         pFontItem = (eState == SFX_ITEM_AVAILABLE) ? (SvxFontItem*)pState->Clone() : NULL;
 
-        pBox->Update( pFontItem );
+        if ( pBox )
+            pBox->Update( pFontItem );
     }
 }
 
@@ -2836,6 +2695,7 @@ Window* SvxFontHeightToolBoxControl::CreateItemWindow( Window *pParent )
 {
     pBox = new SvxFontSizeBox_Impl( pParent,
                                     Reference< XDispatchProvider >( m_xFrame->getController(), UNO_QUERY ),
+                                    m_xFrame,
                                     *this );
     return pBox;
 }
@@ -2850,7 +2710,7 @@ SvxFontColorToolBoxControl::SvxFontColorToolBoxControl(
     ToolBox&        rTbx )
 
     :   SfxToolBoxControl( nSlotId, nId, rTbx ),
-    pBtnUpdater( new SvxTbxButtonColorUpdater_Impl(
+    pBtnUpdater( new ::svx::ToolboxButtonColorUpdater(
                     nSlotId, nId, &GetToolBox(), TBX_UPDATER_MODE_CHAR_COLOR_NEW ))
 {
     rTbx.SetItemBits( nId, TIB_DROPDOWN | rTbx.GetItemBits( nId ) );
@@ -2923,7 +2783,7 @@ SvxColorToolBoxControl::SvxColorToolBoxControl( USHORT nSlotId, USHORT nId, Tool
     else
         rTbx.SetItemBits( nId, TIB_DROPDOWN | rTbx.GetItemBits( nId ) );
     rTbx.Invalidate();
-    pBtnUpdater = new SvxTbxButtonColorUpdater_Impl( nSlotId, nId, &GetToolBox() );
+    pBtnUpdater = new ::svx::ToolboxButtonColorUpdater( nSlotId, nId, &GetToolBox() );
 }
 
 // -----------------------------------------------------------------------
@@ -3001,7 +2861,7 @@ SvxFontColorExtToolBoxControl::SvxFontColorExtToolBoxControl(
 
     USHORT nMode =  SID_ATTR_CHAR_COLOR2 == nSlotId
         ? TBX_UPDATER_MODE_CHAR_COLOR_NEW : TBX_UPDATER_MODE_CHAR_COLOR_NEW;
-    pBtnUpdater = new SvxTbxButtonColorUpdater_Impl( nSlotId, nId, &GetToolBox(), nMode );
+    pBtnUpdater = new ::svx::ToolboxButtonColorUpdater( nSlotId, nId, &GetToolBox(), nMode );
 }
 
 // -----------------------------------------------------------------------
@@ -3212,7 +3072,7 @@ SvxFrameLineColorToolBoxControl::SvxFrameLineColorToolBoxControl(
     ToolBox&    rTbx ) :
 
     SfxToolBoxControl( nSlotId, nId, rTbx ),
-    pBtnUpdater(new SvxTbxButtonColorUpdater_Impl( nSlotId, nId, &GetToolBox() ))
+    pBtnUpdater(new ::svx::ToolboxButtonColorUpdater( nSlotId, nId, &GetToolBox() ))
 {
     rTbx.SetItemBits( nId, TIB_DROPDOWNONLY | rTbx.GetItemBits( nId ) );
 }
@@ -3394,7 +3254,7 @@ BOOL lcl_FontChangedHint( const SfxHint &rHint )
     }
 }
 // -----------------------------------------------------------------------------
-::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible > SvxFontNameBox_Impl::CreateAccessible()
+Reference< ::com::sun::star::accessibility::XAccessible > SvxFontNameBox_Impl::CreateAccessible()
 {
     FillList();
     return FontNameBox::CreateAccessible();
