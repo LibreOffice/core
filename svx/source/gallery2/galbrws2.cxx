@@ -4,9 +4,9 @@
  *
  *  $RCSfile: galbrws2.cxx,v $
  *
- *  $Revision: 1.55 $
+ *  $Revision: 1.56 $
  *
- *  last change: $Author: hr $ $Date: 2007-06-27 18:19:43 $
+ *  last change: $Author: rt $ $Date: 2007-07-06 07:54:29 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -58,6 +58,7 @@
 #include "galdlg.hxx"
 #include "galbrws2.hxx"
 #include <vcl/svapp.hxx>
+#include <svx/fmmodel.hxx>
 #include <svx/svxdlg.hxx> //CHINA001
 //CHINA001 #include <svx/dialogs.hrc> //CHINA001
 
