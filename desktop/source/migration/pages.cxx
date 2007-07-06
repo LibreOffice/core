@@ -4,9 +4,9 @@
  *
  *  $RCSfile: pages.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: obo $ $Date: 2006-10-16 07:59:44 $
+ *  last change: $Author: rt $ $Date: 2007-07-06 12:36:52 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version .1.
@@ -129,9 +129,17 @@ WelcomePage::WelcomePage( svt::OWizardMachine* parent, const ResId& resid)
             aText.SearchAndReplaceAll( UniString::CreateFromAscii("%OLD_VERSION"), Migration::getOldVersionName());
             m_ftBody.SetText( aText );
         }
-        if (bIsEvalVersion && (! bNoEvalText)) {
+        else
+        if (bIsEvalVersion && (! bNoEvalText))
+        {
             String aText(WizardResId(STR_WELCOME_EVAL));
             aText.SearchAndReplaceAll( UniString::CreateFromAscii("%EVALDAYS"), UniString::CreateFromAscii("90"));
+            m_ftBody.SetText( aText );
+        }
+        else
+        if ( ! FirstStartWizard::needsLicenseAcceptence())
+        {
+            String aText(WizardResId(STR_WELCOME_WITHOUT_LICENSE));
             m_ftBody.SetText( aText );
         }
         break;
