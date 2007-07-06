@@ -4,9 +4,9 @@
  *
  *  $RCSfile: fumorph.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: kz $ $Date: 2006-12-12 17:20:07 $
+ *  last change: $Author: rt $ $Date: 2007-07-06 09:49:02 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -233,11 +233,11 @@ void FuMorph::DoExecute( SfxRequest& )
             }
         }
         delete pDlg;
-        delete pCloneObj1;
-        delete pCloneObj2;
+        SdrObject::Free( pCloneObj1 );
+        SdrObject::Free( pCloneObj2 );
 
-        delete pPolyObj1;
-        delete pPolyObj2;
+        SdrObject::Free( pPolyObj1 );
+        SdrObject::Free( pPolyObj2 );
     }
 }
 
