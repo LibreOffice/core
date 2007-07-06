@@ -4,9 +4,9 @@
  *
  *  $RCSfile: printopt.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: vg $ $Date: 2007-02-27 12:17:50 $
+ *  last change: $Author: rt $ $Date: 2007-07-06 12:36:22 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -71,8 +71,8 @@ ScPrintOptions::~ScPrintOptions()
 
 void ScPrintOptions::SetDefaults()
 {
-    bSkipEmpty = FALSE;
-    bAllSheets = TRUE;
+    bSkipEmpty = TRUE;
+    bAllSheets = FALSE;
 }
 
 const ScPrintOptions& ScPrintOptions::operator=( const ScPrintOptions& rCpy )
