@@ -4,9 +4,9 @@
  *
  *  $RCSfile: CustomAnimationEffect.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: vg $ $Date: 2007-01-09 11:20:51 $
+ *  last change: $Author: rt $ $Date: 2007-07-06 13:10:13 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -109,6 +109,7 @@
 #ifndef _COM_SUN_STAR_UTIL_XCHANGESNOTIFIER_HPP_
 #include <com/sun/star/util/XChangesNotifier.hpp>
 #endif
+#include <com/sun/star/animations/XAnimateMotion.hpp>
 
 #ifndef _COMPHELPER_PROCESSFACTORY_HXX_
 #include <comphelper/processfactory.hxx>
@@ -133,9 +134,18 @@
 #include <com/sun/star/presentation/TextAnimationType.hpp>
 #endif
 
+#include <basegfx/polygon/b2dpolypolygon.hxx>
+#include <basegfx/polygon/b2dpolypolygontools.hxx>
+#include <basegfx/matrix/b2dhommatrix.hxx>
+#include <basegfx/range/b2drange.hxx>
+
 #include <algorithm>
 
 #include <cppuhelper/implbase1.hxx>
+
+#include <svx/svdopath.hxx>
+#include <svx/svdpage.hxx>
+#include <svx/unoapi.hxx>
 
 #ifndef _SD_CUSTOMANIMATIONEFFECT_HXX
 #include "CustomAnimationEffect.hxx"
@@ -182,6 +192,33 @@ using ::com::sun::star::util::XChangesListener;
 
 namespace sd
 {
+class MainSequenceChangeGuard
+{
+public:
+    MainSequenceChangeGuard( EffectSequenceHelper* pSequence )
+    {
+        mpMainSequence = dynamic_cast< MainSequence* >( pSequence );
+        if( mpMainSequence == 0 )
+        {
+            InteractiveSequence* pI = dynamic_cast< InteractiveSequence* >( pSequence );
+            if( pI )
+                mpMainSequence = pI->mpMainSequence;
+        }
+        DBG_ASSERT( mpMainSequence, "sd::MainSequenceChangeGuard::MainSequenceChangeGuard(), no main sequence to guard!" );
+
+        if( mpMainSequence )
+            mpMainSequence->mbIgnoreChanges++;
+    }
+
+    ~MainSequenceChangeGuard()
+    {
+        if( mpMainSequence )
+            mpMainSequence->mbIgnoreChanges++;
+    }
+
+private:
+    MainSequence* mpMainSequence;
+};
 
 CustomAnimationEffect::CustomAnimationEffect( const ::com::sun::star::uno::Reference< ::com::sun::star::animations::XAnimationNode >& xNode )
 :   mnNodeType(-1),
@@ -474,6 +511,47 @@ sal_Int32 CustomAnimationEffect::get_node_type( const Reference< XAnimationNode 
 }
 
 // --------------------------------------------------------------------
+
+void CustomAnimationEffect::setPresetClass( sal_Int16 nPresetClass )
+{
+    if( mnPresetClass != nPresetClass )
+    {
+        mnPresetClass = nPresetClass;
+        if( mxNode.is() )
+        {
+            // first try to find a "preset-class" entry in the user data
+            // and change it
+            Sequence< NamedValue > aUserData( mxNode->getUserData() );
+            sal_Int32 nLength = aUserData.getLength();
+            bool bFound = false;
+            if( nLength )
+            {
+                NamedValue* p = aUserData.getArray();
+                while( nLength-- )
+                {
+                    if( p->Name.equalsAscii( "preset-class" ) )
+                    {
+                        p->Value <<= mnPresetClass;
+                        bFound = true;
+                        break;
+                    }
+                    p++;
+                }
+            }
+
+            // no "node-type" entry inside user data, so add it
+            if( !bFound )
+            {
+                nLength = aUserData.getLength();
+                aUserData.realloc( nLength + 1);
+                aUserData[nLength].Name = OUString( RTL_CONSTASCII_USTRINGPARAM( "preset-class" ) );
+                aUserData[nLength].Value <<= mnPresetClass;
+            }
+
+            mxNode->setUserData( aUserData );
+        }
+    }
+}
 
 void CustomAnimationEffect::setNodeType( sal_Int16 nNodeType )
 {
@@ -1135,6 +1213,62 @@ void CustomAnimationEffect::setIterateInterval( double fIterateInterval )
 
 // --------------------------------------------------------------------
 
+::rtl::OUString CustomAnimationEffect::getPath() const
+{
+    ::rtl::OUString aPath;
+
+    if( mxNode.is() ) try
+    {
+        Reference< XEnumerationAccess > xEnumerationAccess( mxNode, UNO_QUERY_THROW );
+        Reference< XEnumeration > xEnumeration( xEnumerationAccess->createEnumeration(), UNO_QUERY_THROW );
+        while( xEnumeration->hasMoreElements() )
+        {
+            Reference< XAnimateMotion > xMotion( xEnumeration->nextElement(), UNO_QUERY );
+            if( xMotion.is() )
+            {
+                xMotion->getPath() >>= aPath;
+                break;
+            }
+        }
+    }
+    catch( Exception& e )
+    {
+        (void)e;
+        DBG_ERROR("sd::CustomAnimationEffect::getPath(), exception cought!" );
+    }
+
+    return aPath;
+}
+
+// --------------------------------------------------------------------
+
+void CustomAnimationEffect::setPath( const ::rtl::OUString& rPath )
+{
+    if( mxNode.is() ) try
+    {
+        Reference< XEnumerationAccess > xEnumerationAccess( mxNode, UNO_QUERY_THROW );
+        Reference< XEnumeration > xEnumeration( xEnumerationAccess->createEnumeration(), UNO_QUERY_THROW );
+        while( xEnumeration->hasMoreElements() )
+        {
+            Reference< XAnimateMotion > xMotion( xEnumeration->nextElement(), UNO_QUERY );
+            if( xMotion.is() )
+            {
+
+                MainSequenceChangeGuard aGuard( mpEffectSequence );
+                xMotion->setPath( Any( rPath ) );
+                break;
+            }
+        }
+    }
+    catch( Exception& e )
+    {
+        (void)e;
+        DBG_ERROR("sd::CustomAnimationEffect::setPath(), exception cought!" );
+    }
+}
+
+// --------------------------------------------------------------------
+
 Any CustomAnimationEffect::getProperty( sal_Int32 nNodeType, const OUString& rAttributeName, EValue eValue )
 {
     Any aProperty;
@@ -1632,6 +1766,75 @@ bool CustomAnimationEffect::getStopAudio() const
     return mnCommand == EffectCommands::STOPAUDIO;
 }
 
+// --------------------------------------------------------------------
+
+SdrPathObj* CustomAnimationEffect::createSdrPathObjFromPath()
+{
+    SdrPathObj * pPathObj = new SdrPathObj( OBJ_PATHLINE );
+    updateSdrPathObjFromPath( *pPathObj );
+    return pPathObj;
+}
+
+// --------------------------------------------------------------------
+
+void CustomAnimationEffect::updateSdrPathObjFromPath( SdrPathObj& rPathObj )
+{
+    ::basegfx::B2DPolyPolygon xPolyPoly;
+    if( ::basegfx::tools::importFromSvgD( xPolyPoly, getPath() ) )
+    {
+        SdrObject* pObj = GetSdrObjectFromXShape( getTargetShape() );
+        if( pObj )
+        {
+            ::basegfx::B2DHomMatrix aTransform;
+
+            SdrPage* pPage = pObj->GetPage();
+            if( pPage )
+            {
+                const Size aPageSize( pPage->GetSize() );
+                aTransform.scale( (double)aPageSize.Width(), (double)aPageSize.Height() );
+                xPolyPoly.transform( aTransform );
+                aTransform.identity();
+            }
+
+            const Rectangle aBoundRect( pObj->GetCurrentBoundRect() );
+            const Point aCenter( aBoundRect.Center() );
+            aTransform.translate( aCenter.X(), aCenter.Y() );
+            xPolyPoly.transform( aTransform );
+        }
+    }
+
+    rPathObj.SetPathPoly( xPolyPoly );
+}
+
+// --------------------------------------------------------------------
+
+void CustomAnimationEffect::updatePathFromSdrPathObj( const SdrPathObj& rPathObj )
+{
+    ::basegfx::B2DPolyPolygon xPolyPoly( rPathObj.GetPathPoly() );
+
+    SdrObject* pObj = GetSdrObjectFromXShape( getTargetShape() );
+    if( pObj )
+    {
+        const Rectangle aBoundRect( pObj->GetCurrentBoundRect() );
+        const Point aCenter( aBoundRect.Center() );
+
+        ::basegfx::B2DHomMatrix aTransform;
+        aTransform.translate( -aCenter.X(), -aCenter.Y() );
+        xPolyPoly.transform( aTransform );
+
+        SdrPage* pPage = pObj->GetPage();
+        if( pPage )
+        {
+            aTransform.identity();
+            const Size aPageSize( pPage->GetSize() );
+            aTransform.scale( 1.0 / (double)aPageSize.Width(), 1.0 / (double)aPageSize.Height() );
+            xPolyPoly.transform( aTransform );
+        }
+    }
+
+    setPath( ::basegfx::tools::exportToSvgD( xPolyPoly ) );
+}
+
 // ====================================================================
 
 EffectSequenceHelper::EffectSequenceHelper()
@@ -1764,6 +1967,57 @@ CustomAnimationEffectPtr EffectSequenceHelper::append( const CustomAnimationPres
     }
 
     DBG_ASSERT( pEffect.get(), "sd::EffectSequenceHelper::append(), failed!" );
+    return pEffect;
+}
+
+// --------------------------------------------------------------------
+
+CustomAnimationEffectPtr EffectSequenceHelper::append( const SdrPathObj& rPathObj, const Any& rTarget, double fDuration /* = -1.0 */ )
+{
+    CustomAnimationEffectPtr pEffect;
+
+    if( fDuration <= 0.0 )
+        fDuration = 2.0;
+
+    try
+    {
+        Reference< XTimeContainer > xEffectContainer( createParallelTimeContainer() );
+        const OUString aServiceName( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.animations.AnimateMotion" ) );
+        Reference< XAnimationNode > xAnimateMotion( ::comphelper::getProcessServiceFactory()->createInstance(aServiceName), UNO_QUERY_THROW );
+
+        xAnimateMotion->setDuration( Any( fDuration ) );
+        xAnimateMotion->setFill( AnimationFill::HOLD );
+        xEffectContainer->appendChild( xAnimateMotion );
+
+        sal_Int16 nSubItem = ShapeAnimationSubType::AS_WHOLE;
+
+        if( rTarget.getValueType() == ::getCppuType((const ParagraphTarget*)0) )
+            nSubItem = ShapeAnimationSubType::ONLY_TEXT;
+
+        Reference< XAnimationNode > xEffectNode( xEffectContainer, UNO_QUERY_THROW );
+        pEffect.reset( new CustomAnimationEffect( xEffectNode ) );
+        pEffect->setEffectSequence( this );
+        pEffect->setTarget( rTarget );
+        pEffect->setTargetSubItem( nSubItem );
+        pEffect->setNodeType( ::com::sun::star::presentation::EffectNodeType::ON_CLICK );
+        pEffect->setPresetClass( ::com::sun::star::presentation::EffectPresetClass::MOTIONPATH );
+        pEffect->setAcceleration( 0.5 );
+        pEffect->setDecelerate( 0.5 );
+        pEffect->setFill( AnimationFill::HOLD );
+        pEffect->setBegin( 0.0 );
+        pEffect->updatePathFromSdrPathObj( rPathObj );
+        if( fDuration != -1.0 )
+            pEffect->setDuration( fDuration );
+
+        maEffects.push_back(pEffect);
+
+        rebuild();
+    }
+    catch( Exception& )
+    {
+        DBG_ERROR( "sd::EffectSequenceHelper::append(), exception cought!" );
+    }
+
     return pEffect;
 }
 
@@ -2122,6 +2376,56 @@ void stl_process_after_effect_node_func(AfterEffectNode& rNode)
 EffectSequence::iterator EffectSequenceHelper::find( const CustomAnimationEffectPtr& pEffect )
 {
     return std::find( maEffects.begin(), maEffects.end(), pEffect );
+}
+
+// --------------------------------------------------------------------
+
+CustomAnimationEffectPtr EffectSequenceHelper::findEffect( const ::com::sun::star::uno::Reference< ::com::sun::star::animations::XAnimationNode >& xNode ) const
+{
+    CustomAnimationEffectPtr pEffect;
+
+    EffectSequence::const_iterator aIter( maEffects.begin() );
+    for( ; aIter != maEffects.end(); aIter++ )
+    {
+        if( (*aIter)->getNode() == xNode )
+        {
+            pEffect = (*aIter);
+            break;
+        }
+    }
+
+    return pEffect;
+}
+
+// --------------------------------------------------------------------
+
+sal_Int32 EffectSequenceHelper::getOffsetFromEffect( const CustomAnimationEffectPtr& xEffect ) const
+{
+    sal_Int32 nOffset = 0;
+
+    EffectSequence::const_iterator aIter( maEffects.begin() );
+    for( ; aIter != maEffects.end(); aIter++, nOffset++ )
+    {
+        if( (*aIter) == xEffect )
+            return nOffset;
+    }
+
+    return -1;
+}
+
+// --------------------------------------------------------------------
+
+CustomAnimationEffectPtr EffectSequenceHelper::getEffectFromOffset( sal_Int32 nOffset ) const
+{
+    EffectSequence::const_iterator aIter( maEffects.begin() );
+    while( nOffset-- && aIter != maEffects.end() )
+        aIter++;
+
+    CustomAnimationEffectPtr pEffect;
+    if( aIter != maEffects.end() )
+        pEffect = (*aIter);
+
+    return pEffect;
 }
 
 // --------------------------------------------------------------------
@@ -3062,6 +3366,7 @@ MainSequence::MainSequence( const ::com::sun::star::uno::Reference< ::com::sun::
 , mbRebuilding( false )
 , mnRebuildLockGuard( 0 )
 , mbPendingRebuildRequest( false )
+, mbIgnoreChanges( 0 )
 {
     init();
 }
@@ -3228,6 +3533,71 @@ InteractiveSequencePtr MainSequence::createInteractiveSequence( const ::com::sun
     pIS->addListener( this );
     maInteractiveSequenceList.push_back( pIS );
     return pIS;
+}
+
+// --------------------------------------------------------------------
+
+CustomAnimationEffectPtr MainSequence::findEffect( const ::com::sun::star::uno::Reference< ::com::sun::star::animations::XAnimationNode >& xNode ) const
+{
+    CustomAnimationEffectPtr pEffect = EffectSequenceHelper::findEffect( xNode );
+
+    if( pEffect.get() == 0 )
+    {
+        InteractiveSequenceList::const_iterator aIter;
+        for( aIter = maInteractiveSequenceList.begin(); (aIter != maInteractiveSequenceList.end()) && (pEffect.get() == 0); aIter++ )
+        {
+            pEffect = (*aIter)->findEffect( xNode );
+        }
+    }
+    return pEffect;
+}
+
+// --------------------------------------------------------------------
+
+sal_Int32 MainSequence::getOffsetFromEffect( const CustomAnimationEffectPtr& pEffect ) const
+{
+    sal_Int32 nOffset = EffectSequenceHelper::getOffsetFromEffect( pEffect );
+
+    if( nOffset != -1 )
+        return nOffset;
+
+    nOffset = EffectSequenceHelper::getCount();
+
+    InteractiveSequenceList::const_iterator aIter;
+    for( aIter = maInteractiveSequenceList.begin(); aIter != maInteractiveSequenceList.end(); aIter++ )
+    {
+        sal_Int32 nTemp = (*aIter)->getOffsetFromEffect( pEffect );
+        if( nTemp != -1 )
+            return nOffset + nTemp;
+
+        nOffset += (*aIter)->getCount();
+    }
+
+    return -1;
+}
+
+// --------------------------------------------------------------------
+
+CustomAnimationEffectPtr MainSequence::getEffectFromOffset( sal_Int32 nOffset ) const
+{
+    if( nOffset >= 0 )
+    {
+        if( nOffset < getCount() )
+            return EffectSequenceHelper::getEffectFromOffset( nOffset );
+
+        nOffset -= getCount();
+
+        InteractiveSequenceList::const_iterator aIter( maInteractiveSequenceList.begin() );
+
+        while( (aIter != maInteractiveSequenceList.end()) && (nOffset > (*aIter)->getCount()) )
+            nOffset -= (*aIter++)->getCount();
+
+        if( (aIter != maInteractiveSequenceList.end()) && (nOffset >= 0) )
+            return (*aIter)->getEffectFromOffset( nOffset );
+    }
+
+    CustomAnimationEffectPtr pEffect;
+    return pEffect;
 }
 
 // --------------------------------------------------------------------
@@ -3475,7 +3845,7 @@ IMPL_LINK( MainSequence, onTimerHdl, Timer *, EMPTYARG )
 /** starts a timer that recreates the internal structure from the API core after 1 second */
 void MainSequence::startRecreateTimer()
 {
-    if( !mbRebuilding )
+    if( !mbRebuilding && (mbIgnoreChanges == 0) )
     {
         mbTimerMode = false;
         maTimer.Start();
