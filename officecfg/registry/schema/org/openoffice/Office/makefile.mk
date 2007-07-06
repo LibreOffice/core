@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.16 $
+#   $Revision: 1.17 $
 #
-#   last change: $Author: hr $ $Date: 2007-06-27 14:44:12 $
+#   last change: $Author: rt $ $Date: 2007-07-06 06:52:05 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -77,9 +77,11 @@ XCSFILES= \
     WebWizard.xcs \
     Recovery.xcs \
     FormWizard.xcs \
+    ExtendedColorScheme.xcs \
     TypeDetection.xcs \
     TabBrowse.xcs \
-    Paths.xcs
+    Paths.xcs	\
+    ReportDesign.xcs
 
 .INCLUDE :  target.mk
 
