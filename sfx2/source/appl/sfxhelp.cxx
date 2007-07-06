@@ -4,9 +4,9 @@
  *
  *  $RCSfile: sfxhelp.cxx,v $
  *
- *  $Revision: 1.75 $
+ *  $Revision: 1.76 $
  *
- *  last change: $Author: hr $ $Date: 2007-06-27 23:00:47 $
+ *  last change: $Author: rt $ $Date: 2007-07-06 10:16:30 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -609,6 +609,8 @@ String SfxHelp::GetHelpModuleName_Impl()
         else if ( aFactoryShortName.equalsAscii( "dbtable" ) )
             aFactoryShortName = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "sdatabase" ) );
         else if ( aFactoryShortName.equalsAscii( "dbapp" ) )
+            aFactoryShortName = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "sdatabase" ) );
+        else if ( aFactoryShortName.equalsAscii( "dbreport" ) )
             aFactoryShortName = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "sdatabase" ) );
         else if ( aFactoryShortName.equalsAscii( "sbibliography" ) )
             aFactoryShortName = sDefaultModule;
