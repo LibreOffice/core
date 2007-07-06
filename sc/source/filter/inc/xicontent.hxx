@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xicontent.hxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: vg $ $Date: 2007-05-22 19:57:19 $
+ *  last change: $Author: rt $ $Date: 2007-07-06 12:38:28 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -104,6 +104,9 @@ public:
     /** Reads a HLINK record and inserts it into the document.
         @descr  Import stream must be located at start of a HLINK record. */
     static void         ReadHlink( XclImpStream& rStrm );
+
+    /** Reads the (undocumented) embedded hyperlink data and returns the URL. */
+    static String       ReadEmbeddedData( XclImpStream& rStrm );
 
     /** Inserts the URL into a range of cells. Does not modify value or formula cells. */
     static void         InsertUrl( const XclImpRoot& rRoot, const XclRange& rXclRange, const String& rUrl );
