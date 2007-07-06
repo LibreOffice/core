@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dlgsize.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: rt $ $Date: 2007-04-26 07:59:50 $
+ *  last change: $Author: rt $ $Date: 2007-07-06 08:16:24 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -41,11 +41,11 @@
 #ifndef _DBAUI_DLGSIZE_HXX
 #include "dlgsize.hxx"
 #endif
-#ifndef _DBAUI_MODULE_DBU_HXX_
-#include "moduledbu.hxx"
-#endif
 #ifndef _DBU_DLG_HRC_
 #include "dbu_dlg.hrc"
+#endif
+#ifndef _DBAUI_MODULE_DBU_HXX_
+#include "moduledbu.hxx"
 #endif
 
 //.........................................................................
