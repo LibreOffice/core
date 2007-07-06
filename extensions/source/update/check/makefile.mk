@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.9 $
+#   $Revision: 1.10 $
 #
-#   last change: $Author: kz $ $Date: 2007-05-10 13:11:36 $
+#   last change: $Author: rt $ $Date: 2007-07-06 14:36:21 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -60,11 +60,21 @@ DLLPRE =
 
 # --- Files ---
 
+SRS2NAME=$(TARGET)
+SRC2FILES=\
+    updatehdl.src
+
+RESLIB2NAME=upd
+RESLIB2SRSFILES= $(SRS)$/updchk.srs
+RESLIB2DEPN= updatehdl.src updatehdl.hrc
 
 SLOFILES=\
+    $(SLO)$/download.obj \
     $(SLO)$/updatecheck.obj \
+    $(SLO)$/updatecheckjob.obj \
     $(SLO)$/updatecheckconfig.obj \
-    $(SLO)$/updateprotocol.obj
+    $(SLO)$/updateprotocol.obj \
+    $(SLO)$/updatehdl.obj
         
 SHL1NOCHECK=TRUE
 SHL1TARGET=$(TARGET).uno   
@@ -75,7 +85,9 @@ SHL1IMPLIB=i$(SHL1TARGET)
 SHL1STDLIBS=    \
         $(CPPUHELPERLIB) \
         $(CPPULIB) \
-        $(SALLIB)
+        $(CURLLIB) \
+        $(SALLIB) \
+        $(SHELL32LIB)
         
 SHL1VERSIONMAP=..$/exports.map
 SHL1DEF=$(MISC)$/$(SHL1TARGET).def
@@ -124,6 +136,6 @@ $(SPOOLDIR)$/$(PACKAGEDIR)$/Addons$/Addons-onlineupdate.xcu : $(XCU_SOURCEDIR)$/
 
 $(SPOOLDIR)$/$(PACKAGEDIR)$/Jobs$/Jobs-onlineupdate.xcu : $(XCU_SOURCEDIR)$/Jobs.xcu
     @-$(MKDIRHIER) $(@:d)
-    @$(PERL) transform.pl < $< > $@
-#	@$(COPY) $< $@
+    @$(COPY) $< $@
+#	@$(PERL) transform.pl < $< > $@
 
