@@ -4,9 +4,9 @@
  *
  *  $RCSfile: sequence.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 17:14:16 $
+ *  last change: $Author: rt $ $Date: 2007-07-06 10:21:01 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -99,6 +99,13 @@ staruno::Sequence<sal_Int16> findValue(const staruno::Sequence< ::rtl::OUString 
 
         return aRetSeq;
     }
+}
+// -----------------------------------------------------------------------------
+sal_Bool existsValue(const ::rtl::OUString& Value,const staruno::Sequence< ::rtl::OUString >& _aList)
+{
+    const ::rtl::OUString * pIter   = _aList.getConstArray();
+    const ::rtl::OUString * pEnd    = pIter + _aList.getLength();
+    return ::std::find(pIter,pEnd,Value) != pEnd;
 }
 
 //.........................................................................
