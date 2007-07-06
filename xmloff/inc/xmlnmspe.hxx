@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xmlnmspe.hxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: hr $ $Date: 2007-06-27 15:31:33 $
+ *  last change: $Author: rt $ $Date: 2007-07-06 10:08:59 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -84,8 +84,9 @@ XML_NAMESPACE( XSI,             29U )
 XML_NAMESPACE( SMIL,            30U )
 XML_NAMESPACE( ANIMATION,       31U )
 XML_NAMESPACE( XML,             32U )       // TODO: This 'implicit' namespace is not yet used
+XML_NAMESPACE( REPORT,          33U )
 
-#define _XML_OLD_NAMESPACE_BASE 33U
+#define _XML_OLD_NAMESPACE_BASE 34U
 
 // namespaces used in the technical preview (SO 5.2)
 XML_OLD_NAMESPACE( FO,      0U )
