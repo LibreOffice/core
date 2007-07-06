@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xmlexprt.cxx,v $
  *
- *  $Revision: 1.206 $
+ *  $Revision: 1.207 $
  *
- *  last change: $Author: rt $ $Date: 2007-07-06 10:14:07 $
+ *  last change: $Author: rt $ $Date: 2007-07-06 12:40:24 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -3631,6 +3631,12 @@ void ScXMLExport::CollectUserDefinedNamespaces(const SfxItemPool* pPool, sal_uIn
             }
         }
     }
+
+    // #i66550# needed for 'presentation:event-listener' element for URLs in shapes
+    _GetNamespaceMap().Add(
+        GetXMLToken( XML_NP_PRESENTATION ),
+        GetXMLToken( XML_N_PRESENTATION ),
+        XML_NAMESPACE_PRESENTATION );
 }
 
 void ScXMLExport::IncrementProgressBar(sal_Bool bEditCell, sal_Int32 nInc)
