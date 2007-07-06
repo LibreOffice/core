@@ -4,9 +4,9 @@
  *
  *  $RCSfile: view3d.cxx,v $
  *
- *  $Revision: 1.29 $
+ *  $Revision: 1.30 $
  *
- *  last change: $Author: hr $ $Date: 2007-06-27 18:06:11 $
+ *  last change: $Author: rt $ $Date: 2007-07-06 07:35:50 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1026,12 +1026,12 @@ void E3dView::ImpCreate3DObject(E3dScene* pScene, SdrObject* pObj, BOOL bExtrude
 
                 // delete zwi object
                 if(pNewObj2 != pObj && pNewObj2 != pNewObj1 && pNewObj2)
-                    delete pNewObj2;
+                    SdrObject::Free( pNewObj2 );
             }
 
             // delete zwi object
             if(pNewObj1 != pObj && pNewObj1)
-                delete pNewObj1;
+                SdrObject::Free( pNewObj1 );
         }
     }
 }
