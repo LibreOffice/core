@@ -4,9 +4,9 @@
  *
  *  $RCSfile: tabview3.cxx,v $
  *
- *  $Revision: 1.55 $
+ *  $Revision: 1.56 $
  *
- *  last change: $Author: hr $ $Date: 2007-06-26 11:53:03 $
+ *  last change: $Author: rt $ $Date: 2007-07-06 12:47:36 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -2433,12 +2433,7 @@ void ScTabView::InvertBlockMark(SCCOL nStartX, SCROW nStartY,
         return;
     }
 
-#ifdef MAC
-    BOOL bSingle = TRUE;
-#else
     BOOL bSingle = rMark.IsMultiMarked();
-#endif
-
     BOOL bMerge = pDoc->HasAttrib( nStartX, nStartY, nTab, nEndX, nEndY, nTab,
                                     HASATTR_MERGED | HASATTR_OVERLAPPED );
 
