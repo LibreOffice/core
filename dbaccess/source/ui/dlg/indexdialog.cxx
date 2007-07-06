@@ -4,9 +4,9 @@
  *
  *  $RCSfile: indexdialog.cxx,v $
  *
- *  $Revision: 1.28 $
+ *  $Revision: 1.29 $
  *
- *  last change: $Author: rt $ $Date: 2007-04-26 08:00:38 $
+ *  last change: $Author: rt $ $Date: 2007-07-06 08:17:29 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -41,9 +41,6 @@
 #endif
 #ifndef _DBU_DLG_HRC_
 #include "dbu_dlg.hrc"
-#endif
-#ifndef _DBAUI_MODULE_DBU_HXX_
-#include "moduledbu.hxx"
 #endif
 #ifndef _DBA_DBACCESS_HELPID_HRC_
 #include "dbaccess_helpid.hrc"
@@ -922,7 +919,7 @@ DBG_NAME(DbaIndexDialog)
         }
     }
     //------------------------------------------------------------------
-    sal_Int16 DbaIndexDialog::getImageListId(sal_Int16 _eBitmapSet,sal_Bool _bHiContast) const
+    ImageList DbaIndexDialog::getImageList(sal_Int16 _eBitmapSet,sal_Bool _bHiContast) const
     {
         sal_Int16 nN = IMG_INDEX_DLG_SC;
         sal_Int16 nH = IMG_INDEX_DLG_SCH;
@@ -930,9 +927,8 @@ DBG_NAME(DbaIndexDialog)
         {
             nN = IMG_INDEX_DLG_LC;
             nH = IMG_INDEX_DLG_LCH;
-        }
-
-        return _bHiContast ? nH : nN;
+        } // if ( _eBitmapSet == SFX_SYMBOLS_LARGE )
+        return ImageList(ModuleRes( _bHiContast ? nH : nN ));
     }
     //------------------------------------------------------------------
     void DbaIndexDialog::resizeControls(const Size& _rDiff)
