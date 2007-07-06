@@ -4,9 +4,9 @@
  *
  *  $RCSfile: galexpl.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: obo $ $Date: 2007-01-23 08:59:28 $
+ *  last change: $Author: rt $ $Date: 2007-07-06 07:37:18 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -373,7 +373,7 @@ ULONG GalleryExplorer::GetSdrObjCount( ULONG nThemeId  )
 // ------------------------------------------------------------------------
 
 BOOL GalleryExplorer::GetSdrObj( const String& rThemeName, ULONG nSdrModelPos,
-                                 FmFormModel* pModel, Bitmap* pThumb )
+                                 SdrModel* pModel, Bitmap* pThumb )
 {
     Gallery*    pGal = ImplGetGallery();
     BOOL        bRet = FALSE;
@@ -410,7 +410,7 @@ BOOL GalleryExplorer::GetSdrObj( const String& rThemeName, ULONG nSdrModelPos,
 // ------------------------------------------------------------------------
 
 BOOL GalleryExplorer::GetSdrObj( ULONG nThemeId, ULONG nSdrModelPos,
-                                 FmFormModel* pModel, Bitmap* pThumb )
+                                 SdrModel* pModel, Bitmap* pThumb )
 {
     Gallery* pGal = ImplGetGallery();
     return( pGal ? GetSdrObj( pGal->GetThemeName( nThemeId ), nSdrModelPos, pModel, pThumb ) : FALSE );
