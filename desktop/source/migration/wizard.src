@@ -4,9 +4,9 @@
  *
  *  $RCSfile: wizard.src,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: ihi $ $Date: 2007-04-19 15:48:54 $
+ *  last change: $Author: rt $ $Date: 2007-07-06 12:37:45 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -105,6 +105,12 @@ String STR_WELCOME_OEM_EXT
 String STR_WELCOME_EVAL
 {
     Text [ en-US ] = "This wizard will guide you through the license agreement and the registration of %PRODUCTNAME.\n\nThis version lets you evaluate the full functionality. However, since it is an evaluation version, you will be able to start it within %EVALDAYS days after installation. To find out more about the %PRODUCTNAME product, visit www.sun.com/%PRODUCTNAME\n\nClick 'Next' to continue.";
+};
+
+String STR_WELCOME_WITHOUT_LICENSE
+{
+    Text [ de ]    = "Dieser Assistent wird Sie durch die Registrierung von %PRODUCTNAME führen.\n\nKlicken Sie auf 'Weiter', um fortzufahren.";
+    Text [ en-US ] = "This wizard will guide you through the registration of %PRODUCTNAME.\n\nClick 'Next' to continue.";
 };
 
 String STR_FINISH
