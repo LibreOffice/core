@@ -4,9 +4,9 @@
  *
  *  $RCSfile: formcomponenthandler.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: kz $ $Date: 2007-05-10 15:07:57 $
+ *  last change: $Author: rt $ $Date: 2007-07-06 08:48:27 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -265,30 +265,32 @@ namespace pcr
 //........................................................................
 
     using namespace ::com::sun::star;
-    using namespace ::com::sun::star::uno;
-    using namespace ::com::sun::star::lang;
-    using namespace ::com::sun::star::beans;
-    using namespace ::com::sun::star::frame;
-    using namespace ::com::sun::star::script;
-    using namespace ::com::sun::star::form;
-    using namespace ::com::sun::star::util;
-    using namespace ::com::sun::star::awt;
-    using namespace ::com::sun::star::sdb;
-    using namespace ::com::sun::star::sdbc;
-    using namespace ::com::sun::star::sdbcx;
-    using namespace ::com::sun::star::form;
-    using namespace ::com::sun::star::container;
-    using namespace ::com::sun::star::ui::dialogs;
-    using namespace ::com::sun::star::inspection;
+    using namespace uno;
+    using namespace lang;
+    using namespace beans;
+    using namespace frame;
+    using namespace script;
+    using namespace form;
+    using namespace util;
+    using namespace awt;
+    using namespace sdb;
+    using namespace sdbc;
+    using namespace sdbcx;
+    using namespace form;
+    using namespace container;
+    using namespace ui::dialogs;
+    using namespace inspection;
     using namespace ::dbtools;
 
     //====================================================================
     //= FormComponentPropertyHandler
     //====================================================================
     DBG_NAME( FormComponentPropertyHandler )
+#define PROPERTY_ID_ROWSET 1
     //--------------------------------------------------------------------
     FormComponentPropertyHandler::FormComponentPropertyHandler( const Reference< XComponentContext >& _rxContext )
         :FormComponentPropertyHandler_Base( _rxContext )
+        ,::comphelper::OPropertyContainer(FormComponentPropertyHandler_Base::rBHelper)
         ,m_sDefaultValueString( String( PcrRes( RID_STR_STANDARD ) ) )
         ,m_eComponentClass( eUnknown )
         ,m_bComponentIsSubForm( false )
@@ -297,6 +299,7 @@ namespace pcr
         ,m_nClassId( 0 )
     {
         DBG_CTOR( FormComponentPropertyHandler, NULL );
+        registerProperty(PROPERTY_ROWSET,PROPERTY_ID_ROWSET,0,&m_xRowSet,::getCppuType(&m_xRowSet));
     }
 
     //--------------------------------------------------------------------
@@ -304,7 +307,8 @@ namespace pcr
     {
         DBG_DTOR( FormComponentPropertyHandler, NULL );
     }
-
+    //--------------------------------------------------------------------
+    IMPLEMENT_FORWARD_XINTERFACE2(FormComponentPropertyHandler,FormComponentPropertyHandler_Base,::comphelper::OPropertyContainer)
     //--------------------------------------------------------------------
     ::rtl::OUString SAL_CALL FormComponentPropertyHandler::getImplementationName_static(  ) throw (RuntimeException)
     {
@@ -451,6 +455,8 @@ namespace pcr
     //--------------------------------------------------------------------
     Any SAL_CALL FormComponentPropertyHandler::getPropertyValue( const ::rtl::OUString& _rPropertyName ) throw (UnknownPropertyException, RuntimeException)
     {
+        if( _rPropertyName == PROPERTY_ROWSET )
+            return ::comphelper::OPropertyContainer::getPropertyValue( _rPropertyName);
         ::osl::MutexGuard aGuard( m_aMutex );
         return impl_getPropertyValue_throw( _rPropertyName );
     }
@@ -458,8 +464,13 @@ namespace pcr
     //--------------------------------------------------------------------
     void SAL_CALL FormComponentPropertyHandler::setPropertyValue( const ::rtl::OUString& _rPropertyName, const Any& _rValue ) throw (UnknownPropertyException, RuntimeException)
     {
+        if( _rPropertyName == PROPERTY_ROWSET )
+        {
+            ::comphelper::OPropertyContainer::setPropertyValue( _rPropertyName, _rValue );
+            return;
+        }
         ::osl::MutexGuard aGuard( m_aMutex );
-        PropertyId nPropId( impl_getPropertyId_throw( _rPropertyName ) );
+        PropertyId nPropId( impl_getPropertyId_throw( _rPropertyName ) ); // check if property is known by the handler
 
         if ( PROPERTY_ID_FONT_NAME == nPropId )
         {
@@ -866,7 +877,7 @@ namespace pcr
         if ( !m_xComponentPropertyInfo.is() && m_xComponent.is() )
             throw NullPointerException();
 
-        m_xPropertyState = Reference< XPropertyState >( m_xComponent, UNO_QUERY_THROW );
+        m_xPropertyState.set( m_xComponent, UNO_QUERY );
         m_eComponentClass = eUnknown;
         m_bComponentIsSubForm = m_bHaveListSource = m_bHaveCommand = false;
         m_nClassId = 0;
@@ -1143,7 +1154,7 @@ namespace pcr
             {
                 Reference< XUnoTunnel > xTunnel(xSupplier,UNO_QUERY);
                 DBG_ASSERT(xTunnel.is(), "FormComponentPropertyHandler::describePropertyLine : xTunnel is invalid!");
-                SvNumberFormatsSupplierObj* pSupplier = (SvNumberFormatsSupplierObj*)xTunnel->getSomething(SvNumberFormatsSupplierObj::getUnoTunnelId());
+                SvNumberFormatsSupplierObj* pSupplier = reinterpret_cast<SvNumberFormatsSupplierObj*>(xTunnel->getSomething(SvNumberFormatsSupplierObj::getUnoTunnelId()));
 
                 if (pSupplier != NULL)
                 {
@@ -1240,11 +1251,9 @@ namespace pcr
                 sal_Int16 nDisplayUnit = -1;
                 if ( m_eComponentClass == eFormControl )
                 {
-                    if  ( nPropId == PROPERTY_ID_HEIGHT )
-                        nDigits = 1;
-
                     if  (  ( nPropId == PROPERTY_ID_WIDTH )
                         || ( nPropId == PROPERTY_ID_ROWHEIGHT )
+                        || ( nPropId == PROPERTY_ID_HEIGHT )
                         )
                     {
                         nValueUnit = MeasureUnit::MM_10TH;
@@ -1767,31 +1776,34 @@ namespace pcr
 
             Reference< XUnoTunnel > xTunnel( xSupplier, UNO_QUERY );
             DBG_ASSERT(xTunnel.is(), "FormComponentPropertyHandler::actuatingPropertyChanged: xTunnel is invalid!");
-            SvNumberFormatsSupplierObj* pSupplier = (SvNumberFormatsSupplierObj*)xTunnel->getSomething(SvNumberFormatsSupplierObj::getUnoTunnelId());
-                // the same again
-
-            aNewDesc.pSupplier = pSupplier;
-            if ( !( _rNewValue >>= aNewDesc.nKey ) )
-                aNewDesc.nKey = 0;
-
-            // give each control which has to know this an own copy of the description
-            ::rtl::OUString aFormattedPropertyControls[] = {
-                PROPERTY_EFFECTIVE_MIN, PROPERTY_EFFECTIVE_MAX, PROPERTY_EFFECTIVE_DEFAULT, PROPERTY_EFFECTIVE_VALUE
-            };
-            for ( sal_Int16 i=0; i<sizeof(aFormattedPropertyControls)/sizeof(aFormattedPropertyControls[0]); ++i )
+            if ( xTunnel.is() )
             {
-                Reference< XPropertyControl > xControl;
-                try
+                SvNumberFormatsSupplierObj* pSupplier = reinterpret_cast<SvNumberFormatsSupplierObj*>(xTunnel->getSomething(SvNumberFormatsSupplierObj::getUnoTunnelId()));
+                    // the same again
+
+                aNewDesc.pSupplier = pSupplier;
+                if ( !( _rNewValue >>= aNewDesc.nKey ) )
+                    aNewDesc.nKey = 0;
+
+                // give each control which has to know this an own copy of the description
+                ::rtl::OUString aFormattedPropertyControls[] = {
+                    PROPERTY_EFFECTIVE_MIN, PROPERTY_EFFECTIVE_MAX, PROPERTY_EFFECTIVE_DEFAULT, PROPERTY_EFFECTIVE_VALUE
+                };
+                for ( sal_uInt16 i=0; i<sizeof(aFormattedPropertyControls)/sizeof(aFormattedPropertyControls[0]); ++i )
                 {
-                    xControl = _rxInspectorUI->getPropertyControl( aFormattedPropertyControls[i] );
-                }
-                catch( const UnknownPropertyException& e ) { (void)e; }
-                if ( xControl.is() )
-                {
-                    OFormattedNumericControl* pControl = dynamic_cast< OFormattedNumericControl* >( xControl.get() );
-                    DBG_ASSERT( pControl, "FormComponentPropertyHandler::actuatingPropertyChanged: invalid control!" );
-                    if ( pControl )
-                        pControl->SetFormatDescription( aNewDesc );
+                    Reference< XPropertyControl > xControl;
+                    try
+                    {
+                        xControl = _rxInspectorUI->getPropertyControl( aFormattedPropertyControls[i] );
+                    }
+                    catch( const UnknownPropertyException& e ) { (void)e; }
+                    if ( xControl.is() )
+                    {
+                        OFormattedNumericControl* pControl = dynamic_cast< OFormattedNumericControl* >( xControl.get() );
+                        DBG_ASSERT( pControl, "FormComponentPropertyHandler::actuatingPropertyChanged: invalid control!" );
+                        if ( pControl )
+                            pControl->SetFormatDescription( aNewDesc );
+                    }
                 }
             }
         }
@@ -1938,7 +1950,7 @@ namespace pcr
                 _rxInspectorUI->enablePropertyUIElements(
                     impl_getPropertyNameFromId_nothrow( _nPropId ),
                     PropertyLineElement::PrimaryButton,
-                        impl_hasValidDataSourceSignature_nothrow( Reference< XForm >( m_xComponent, UNO_QUERY ), bAllowEmptyDS )
+                        impl_hasValidDataSourceSignature_nothrow( m_xComponent, bAllowEmptyDS )
                     &&  bDoEscapeProcessing
                 );
             }
@@ -1949,18 +1961,20 @@ namespace pcr
             {
                 sal_Int32       nCommandType( CommandType::COMMAND );
                 sal_Bool        bEscapeProcessing( sal_False );
-                ::rtl::OUString sDataSource;
                 OSL_VERIFY( impl_getPropertyValue_throw( PROPERTY_COMMANDTYPE ) >>= nCommandType );
                 OSL_VERIFY( impl_getPropertyValue_throw( PROPERTY_ESCAPE_PROCESSING ) >>= bEscapeProcessing );
-                OSL_VERIFY( impl_getPropertyValue_throw( PROPERTY_DATASOURCE ) >>= sDataSource );
 
-                Reference< XConnection > xOuterConnection;
-                ::dbtools::isEmbeddedInDatabase( m_xComponent, xOuterConnection );
+                impl_ensureRowsetConnection_nothrow();
+                Reference< XConnection > xConnection = m_xRowSetConnection;
+                bool bAllowEmptyDS = false;
+                if ( !xConnection.is() )
+                    bAllowEmptyDS = ::dbtools::isEmbeddedInDatabase( m_xComponent, xConnection );
+
                 bool doEnable = ( nCommandType == CommandType::COMMAND )
                             &&  ( bEscapeProcessing )
                             &&  (  m_xRowSetConnection.is()
-                                || xOuterConnection.is()
-                                || impl_isValidDataSourceName_nothrow( sDataSource )
+                                || xConnection.is()
+                                || impl_hasValidDataSourceSignature_nothrow( m_xComponent, bAllowEmptyDS)
                                 );
 
                 _rxInspectorUI->enablePropertyUIElements(
@@ -1979,14 +1993,14 @@ namespace pcr
 
                 // both our current form, and it's parent form, need to have a valid
                 // data source signature
-                bool doEnableMasterDetailFields =
-                        impl_hasValidDataSourceSignature_nothrow( Reference< XForm >( m_xComponent,    UNO_QUERY ), bAllowEmptyDS )
-                    &&  impl_hasValidDataSourceSignature_nothrow( Reference< XForm >( m_xObjectParent, UNO_QUERY ), bAllowEmptyDS );
+                bool bDoEnableMasterDetailFields =
+                        impl_hasValidDataSourceSignature_nothrow( m_xComponent, bAllowEmptyDS )
+                    &&  impl_hasValidDataSourceSignature_nothrow( Reference< XPropertySet >( m_xObjectParent, UNO_QUERY ), bAllowEmptyDS );
 
                 // in opposite to the other properties, here in real *two* properties are
                 // affected
-                _rxInspectorUI->enablePropertyUIElements( PROPERTY_DETAILFIELDS, PropertyLineElement::PrimaryButton, doEnableMasterDetailFields );
-                _rxInspectorUI->enablePropertyUIElements( PROPERTY_MASTERFIELDS, PropertyLineElement::PrimaryButton, doEnableMasterDetailFields );
+                _rxInspectorUI->enablePropertyUIElements( PROPERTY_DETAILFIELDS, PropertyLineElement::PrimaryButton, bDoEnableMasterDetailFields );
+                _rxInspectorUI->enablePropertyUIElements( PROPERTY_MASTERFIELDS, PropertyLineElement::PrimaryButton, bDoEnableMasterDetailFields );
             }
             break;
 
@@ -2033,6 +2047,8 @@ namespace pcr
                 &&  impl_componentHasProperty_throw( PROPERTY_HEIGHT )
                 &&  impl_componentHasProperty_throw( PROPERTY_POSITIONX )
                 &&  impl_componentHasProperty_throw( PROPERTY_POSITIONY )
+                &&  impl_componentHasProperty_throw( PROPERTY_STEP )
+                &&  impl_componentHasProperty_throw( PROPERTY_TABINDEX )
                 )
             {
                 m_eComponentClass = eDialogControl;
@@ -2084,7 +2100,7 @@ namespace pcr
         else if ( eDialogControl == m_eComponentClass )
         {
             Reference< XControlModel > xControlModel( m_xComponent, UNO_QUERY );
-            Reference< XServiceInfo > xServiceInfo( xControlModel, UNO_QUERY );
+            Reference< XServiceInfo > xServiceInfo( m_xComponent, UNO_QUERY );
             if ( xServiceInfo.is() )
             {
                 // it's a control model, and can tell about it's supported services
@@ -2333,28 +2349,34 @@ namespace pcr
             eUnit = MEASURE_METRIC == eSystem ? FUNIT_CM : FUNIT_INCH;
         }
 
-        return MeasurementUnitConversion::convertToMeasurementUnit( eUnit, 1 );
+        return VCLUnoHelper::ConvertToMeasurementUnit( eUnit, 1 );
     }
 
     //------------------------------------------------------------------------
     Reference< XRowSet > FormComponentPropertyHandler::impl_getRowSet_throw( ) const
     {
-        Reference< XRowSet > xRowSet( m_xComponent, UNO_QUERY );
+        Reference< XRowSet > xRowSet = m_xRowSet;
         if ( !xRowSet.is() )
         {
-            xRowSet = Reference< XRowSet >( m_xObjectParent, UNO_QUERY );
+            xRowSet.set( m_xComponent, UNO_QUERY );
             if ( !xRowSet.is() )
             {
-                // are we inspecting a grid column?
-                if (Reference< XGridColumnFactory >( m_xObjectParent, UNO_QUERY) .is())
-                {   // yes
-                    Reference< XChild > xParentAsChild( m_xObjectParent, UNO_QUERY );
-                    if ( xParentAsChild.is() )
-                        xRowSet = Reference< XRowSet >( xParentAsChild->getParent(), UNO_QUERY );
+                xRowSet = Reference< XRowSet >( m_xObjectParent, UNO_QUERY );
+                if ( !xRowSet.is() )
+                {
+                    // are we inspecting a grid column?
+                    if (Reference< XGridColumnFactory >( m_xObjectParent, UNO_QUERY) .is())
+                    {   // yes
+                        Reference< XChild > xParentAsChild( m_xObjectParent, UNO_QUERY );
+                        if ( xParentAsChild.is() )
+                            xRowSet = Reference< XRowSet >( xParentAsChild->getParent(), UNO_QUERY );
+                    }
                 }
+                if ( !xRowSet.is() )
+                    xRowSet = m_xRowSet;
             }
+            DBG_ASSERT( xRowSet.is(), "FormComponentPropertyHandler::impl_getRowSet_throw: could not obtain the rowset for the introspectee!" );
         }
-        DBG_ASSERT( xRowSet.is(), "FormComponentPropertyHandler::impl_getRowSet_throw: could not obtain the rowset for the introspectee!" );
         return xRowSet;
     }
 
@@ -2426,6 +2448,11 @@ namespace pcr
     //------------------------------------------------------------------------
     bool FormComponentPropertyHandler::impl_ensureRowsetConnection_nothrow() const
     {
+        if ( !m_xRowSetConnection.is() )
+        {
+            uno::Reference<sdbc::XConnection> xConnection(m_aContext.getContextValueByAsciiName( "ActiveConnection" ),uno::UNO_QUERY);
+            m_xRowSetConnection.reset(xConnection,::dbtools::SharedConnection::NoTakeOwnership);
+        }
         if ( m_xRowSetConnection.is() )
             return true;
 
@@ -2997,28 +3024,31 @@ namespace pcr
     }
 
     //------------------------------------------------------------------------
-    bool FormComponentPropertyHandler::impl_hasValidDataSourceSignature_nothrow( const Reference< XForm >& _rxForm, bool _bAllowEmptyDataSourceName ) SAL_THROW(())
+    bool FormComponentPropertyHandler::impl_hasValidDataSourceSignature_nothrow( const Reference< XPropertySet >& _xFormProperties, bool _bAllowEmptyDataSourceName ) SAL_THROW(())
     {
         bool bHas = false;
-        try
+        if ( _xFormProperties.is() )
         {
-            Reference< XPropertySet > xFormProperties( _rxForm, UNO_QUERY_THROW );
-
-            ::rtl::OUString sPropertyValue;
-            // first, we need the name of an existent data source
-            xFormProperties->getPropertyValue( PROPERTY_DATASOURCE ) >>= sPropertyValue;
-            bHas = ( sPropertyValue.getLength() != 0 ) || _bAllowEmptyDataSourceName;
-
-            // then, the command should not be empty
-            if ( bHas )
+            try
             {
-                xFormProperties->getPropertyValue( PROPERTY_COMMAND ) >>= sPropertyValue;
-                bHas = ( sPropertyValue.getLength() != 0 );
+                ::rtl::OUString sPropertyValue;
+                // first, we need the name of an existent data source
+                if ( _xFormProperties->getPropertySetInfo()->hasPropertyByName(PROPERTY_DATASOURCE) )
+                    _xFormProperties->getPropertyValue( PROPERTY_DATASOURCE ) >>= sPropertyValue;
+                bHas = ( sPropertyValue.getLength() != 0 ) || _bAllowEmptyDataSourceName;
+
+                // then, the command should not be empty
+                if ( bHas )
+                {
+                    if ( _xFormProperties->getPropertySetInfo()->hasPropertyByName(PROPERTY_COMMAND) )
+                        _xFormProperties->getPropertyValue( PROPERTY_COMMAND ) >>= sPropertyValue;
+                    bHas = ( sPropertyValue.getLength() != 0 );
+                }
             }
-        }
-        catch( const Exception& )
-        {
-            OSL_ENSURE( false, "FormComponentPropertyHandler::impl_hasValidDataSourceSignature_nothrow: caught an exception!" );
+            catch( const Exception& )
+            {
+                OSL_ENSURE( false, "FormComponentPropertyHandler::impl_hasValidDataSourceSignature_nothrow: caught an exception!" );
+            }
         }
         return bHas;
     }
@@ -3058,10 +3088,28 @@ namespace pcr
             sMessage += ::rtl::OString( e.Message.getStr(), e.Message.getLength(), osl_getThreadTextEncoding() );
             OSL_ENSURE( false, sMessage );
         #else
-            e; // make compiler happy
+            (void)e; // make compiler happy
         #endif
         }
         return sURL;
+    }
+    // -------------------------------------------------------------------------
+    ::cppu::IPropertyArrayHelper* FormComponentPropertyHandler::createArrayHelper( ) const
+    {
+        uno::Sequence< beans::Property > aProps;
+        describeProperties(aProps);
+        return new ::cppu::OPropertyArrayHelper(aProps);
+
+    }
+    // -------------------------------------------------------------------------
+    ::cppu::IPropertyArrayHelper & FormComponentPropertyHandler::getInfoHelper()
+    {
+        return *const_cast<FormComponentPropertyHandler*>(this)->getArrayHelper();
+    }
+    // -----------------------------------------------------------------------------
+    uno::Reference< beans::XPropertySetInfo > SAL_CALL FormComponentPropertyHandler::getPropertySetInfo(  ) throw(uno::RuntimeException)
+    {
+        return ::cppu::OPropertySetHelper::createPropertySetInfo(getInfoHelper());
     }
 
 //........................................................................
