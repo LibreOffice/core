@@ -4,9 +4,9 @@
  *
  *  $RCSfile: handlerhelper.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: kz $ $Date: 2006-12-13 16:57:36 $
+ *  last change: $Author: rt $ $Date: 2007-07-06 08:49:40 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -42,9 +42,6 @@
 #ifndef EXTENSIONS_PROPRESID_HRC
 #include "propresid.hrc"
 #endif
-#ifndef EXTENSIONS_SOURCE_PROPCTRLR_STRINGREPRESENTATION_HXX
-#include "stringrepresentation.hxx"
-#endif
 #ifndef _COMPHELPER_EXTRACT_HXX_
 #include <comphelper/extract.hxx>
 #endif
@@ -62,6 +59,9 @@
 #endif
 
 /** === begin UNO includes === **/
+#ifndef _COM_SUN_STAR_INSPECTION_STRINGREPRESENTATION_HPP_
+#include "com/sun/star/inspection/StringRepresentation.hpp"
+#endif
 #ifndef _COM_SUN_STAR_BEANS_PROPERTYATTRIBUTE_HPP_
 #include <com/sun/star/beans/PropertyAttribute.hpp>
 #endif
@@ -247,7 +247,7 @@ namespace pcr
     }
 
     //--------------------------------------------------------------------
-    Any PropertyHandlerHelper::convertToPropertyValue( const Reference< XTypeConverter >& _rxTypeConverter,
+    Any PropertyHandlerHelper::convertToPropertyValue( const Reference< XComponentContext >& _rxContext,const Reference< XTypeConverter >& _rxTypeConverter,
         const Property& _rProperty, const Any& _rControlValue )
     {
         Any aPropertyValue( _rControlValue );
@@ -264,8 +264,8 @@ namespace pcr
             ::rtl::OUString sControlValue;
             _rControlValue >>= sControlValue;
 
-            StringRepresentation aConversionHelper( _rxTypeConverter );
-            aPropertyValue = aConversionHelper.convertStringRepresentationToPropertyValue( sControlValue, _rProperty.Type );
+            Reference< XStringRepresentation > xConversionHelper = StringRepresentation::create( _rxContext,_rxTypeConverter );
+            aPropertyValue = xConversionHelper->convertToPropertyValue( sControlValue, _rProperty.Type );
         }
         else
         {
@@ -284,7 +284,7 @@ namespace pcr
     }
 
     //--------------------------------------------------------------------
-    Any PropertyHandlerHelper::convertToControlValue( const Reference< XTypeConverter >& _rxTypeConverter,
+    Any PropertyHandlerHelper::convertToControlValue( const Reference< XComponentContext >& _rxContext,const Reference< XTypeConverter >& _rxTypeConverter,
         const Any& _rPropertyValue, const Type& _rControlValueType )
     {
         Any aControlValue( _rPropertyValue );
@@ -294,8 +294,8 @@ namespace pcr
 
         if ( _rControlValueType.getTypeClass() == TypeClass_STRING )
         {
-            StringRepresentation aConversionHelper( _rxTypeConverter );
-            aControlValue <<= aConversionHelper.convertPropertyValueToStringRepresentation( _rPropertyValue );
+            Reference< XStringRepresentation > xConversionHelper = StringRepresentation::create( _rxContext,_rxTypeConverter );
+            aControlValue <<= xConversionHelper->convertToControlValue( _rPropertyValue );
         }
         else
         {
