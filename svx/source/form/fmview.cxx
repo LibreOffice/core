@@ -4,9 +4,9 @@
  *
  *  $RCSfile: fmview.cxx,v $
  *
- *  $Revision: 1.49 $
+ *  $Revision: 1.50 $
  *
- *  last change: $Author: hr $ $Date: 2007-06-27 18:16:32 $
+ *  last change: $Author: rt $ $Date: 2007-07-06 07:36:30 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -793,6 +793,19 @@ FmFormObj* FmFormView::getMarkedGrid() const
     return pObj;
 }
 
+// -----------------------------------------------------------------------------
+void FmFormView::createControlLabelPair(SdrView* _pView,OutputDevice* _pOutDev, sal_Int32 _nXOffsetMM, sal_Int32 _nYOffsetMM,
+    const Reference< XPropertySet >& _rxField, const Reference< XNumberFormats >& _rxNumberFormats,
+    sal_uInt16 _nObjID, const ::rtl::OUString& _rFieldPostfix,UINT32 _nInventor,UINT16 _nIndent,
+    SdrPage* _pLabelPage,SdrPage* _pPage,SdrModel* _pModel,
+    SdrUnoObj*& _rpLabel, SdrUnoObj*& _rpControl)
+{
+    FmXFormView::createControlLabelPair(_pView,_pOutDev,_nXOffsetMM, _nYOffsetMM,
+    _rxField, _rxNumberFormats,
+    _nObjID, _rFieldPostfix,_nInventor,_nIndent,
+    _pLabelPage,_pPage,_pModel,
+    _rpLabel, _rpControl);
+}
 // -----------------------------------------------------------------------------
 Reference< XFormController > FmFormView::GetFormController( const Reference< XForm >& _rxForm, const OutputDevice& _rDevice ) const
 {
