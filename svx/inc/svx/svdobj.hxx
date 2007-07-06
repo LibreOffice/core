@@ -4,9 +4,9 @@
  *
  *  $RCSfile: svdobj.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: vg $ $Date: 2007-04-11 16:22:55 $
+ *  last change: $Author: rt $ $Date: 2007-07-06 07:30:43 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -666,10 +666,19 @@ protected:
     virtual void SaveGeoData(SdrObjGeoData& rGeo) const;
     virtual void RestGeoData(const SdrObjGeoData& rGeo);
 
+protected:
+    virtual ~SdrObject();
+
 public:
     TYPEINFO();
     SdrObject();
-    virtual ~SdrObject();
+
+    /** fres the SdrObject pointed to by the argument
+
+        In case the object has an SvxShape, which has the ownership of the object, it
+        is actually *not* deleted.
+    */
+    static  void    Free( SdrObject*& _rpObject );
 
     // This method is only for access from Property objects
     void SetBoundRectDirty();
@@ -1189,7 +1198,7 @@ public:
 
     ////////////////////////////////////////////////////////////////////////////////////////////////////
     // access to the UNO representation of the shape
-    ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > getUnoShape();
+    virtual ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > getUnoShape();
     ::com::sun::star::uno::WeakReference< ::com::sun::star::uno::XInterface > getWeakUnoShape() { return mxUnoShape; }
 
     // helper struct for granting access exclusive to SvxShape
@@ -1204,10 +1213,7 @@ public:
     void setUnoShape(
         const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >& _rxUnoShape,
         GrantXShapeAccess /*aGrant*/
-    )
-    {
-        mxUnoShape = _rxUnoShape;
-    }
+    );
 
     ////////////////////////////////////////////////////////////////////////////////////////////////////
     //
@@ -1252,6 +1258,16 @@ protected:
     // #b4899532#
     // Force LineStyle with hard attributes to hair line in COL_LIGHTGRAY
     void ImpPrepareLocalItemSetForDraftLine(SfxItemSet& rItemSet) const;
+    /** only for internal use!
+        The returned SvxShape pointer may be null and if not it is only valid as long as you
+        hold the xShapeGuard reference.
+    */
+    SvxShape* getSvxShape( ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >& xShapeGuard );
+
+private:
+    /** do not use directly, always use getSvxShape() if you have to! */
+    SvxShape* mpSvxShape;
+
 };
 
 //************************************************************
