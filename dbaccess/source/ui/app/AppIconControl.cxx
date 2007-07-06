@@ -4,9 +4,9 @@
  *
  *  $RCSfile: AppIconControl.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 06:55:02 $
+ *  last change: $Author: rt $ $Date: 2007-07-06 07:59:38 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -44,14 +44,14 @@
 #ifndef _DBA_DBACCESS_HELPID_HRC_
 #include "dbaccess_helpid.hrc"
 #endif
+#ifndef _DBAUI_MODULE_DBU_HXX_
+#include "moduledbu.hxx"
+#endif
 #ifndef _DBU_APP_HRC_
 #include "dbu_app.hrc"
 #endif
 #ifndef _IMAGE_HXX //autogen
 #include <vcl/image.hxx>
-#endif
-#ifndef _DBAUI_MODULE_DBU_HXX_
-#include "moduledbu.hxx"
 #endif
 #ifndef _DBACCESS_UI_CALLBACKS_HXX_
 #include "callbacks.hxx"
