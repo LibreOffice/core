@@ -4,9 +4,9 @@
  *
  *  $RCSfile: tabview.cxx,v $
  *
- *  $Revision: 1.31 $
+ *  $Revision: 1.32 $
  *
- *  last change: $Author: vg $ $Date: 2007-05-22 20:13:45 $
+ *  last change: $Author: rt $ $Date: 2007-07-06 12:47:23 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1434,12 +1434,6 @@ void ScTabView::ScrollX( long nDeltaX, ScHSplitPos eWhich, BOOL bUpdBars )
     {
         SCCOL nTrackX = std::max( nOldX, static_cast<SCCOL>(nNewX) );
 
-            //  Auf dem Mac wird in Window::Scroll vor dem Scrollen Update gerufen,
-            //  so dass mit den neuen Variablen an die alte Position ausgegeben wuerde.
-            //  Deshalb ein Update vorneweg (vor SetPosX), auf welches Fenster ist beim Mac egal.
-#ifdef MAC
-        pGridWin[SC_SPLIT_BOTTOMLEFT]->Update();
-#endif
             //  Mit VCL wirkt Update() im Moment immer auf alle Fenster, beim Update
             //  nach dem Scrollen des GridWindow's wuerde darum der Col-/RowBar evtl.
             //  mit schon geaenderter Pos. gepainted werden -
@@ -1534,10 +1528,6 @@ void ScTabView::ScrollY( long nDeltaY, ScVSplitPos eWhich, BOOL bUpdBars )
         //  PosY darf dann auch noch nicht umgesetzt sein, neuen Wert uebergeben
         SCROW nUNew = static_cast<SCROW>(nNewY);
         UpdateHeaderWidth( &eWhich, &nUNew );               // Zeilenkoepfe anpassen
-
-#ifdef MAC
-        pGridWin[SC_SPLIT_BOTTOMLEFT]->Update();
-#endif
 
         if (pRowBar[eWhich])
             pRowBar[eWhich]->Update();
