@@ -4,9 +4,9 @@
  *
  *  $RCSfile: roadmapwizard.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: hr $ $Date: 2007-06-27 21:29:23 $
+ *  last change: $Author: rt $ $Date: 2007-07-06 12:24:40 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -61,7 +61,7 @@ namespace svt
 
     namespace
     {
-        typedef ::std::vector< WizardTypes::WizardState >       Path;
+//        typedef ::std::vector< WizardTypes::WizardState >       Path;
         typedef ::std::map< RoadmapWizardTypes::PathId, Path >  Paths;
         typedef ::std::set< WizardTypes::WizardState >          StateSet;
     }
@@ -251,6 +251,20 @@ namespace svt
     }
 
     //--------------------------------------------------------------------
+    void RoadmapWizard::declarePath( PathId _nPathId, const Path& _lWizardStates)
+    {
+        DBG_CHKTHIS( RoadmapWizard, CheckInvariants );
+
+        m_pImpl->aPaths.insert( Paths::value_type( _nPathId, _lWizardStates ) );
+
+        if ( m_pImpl->aPaths.size() == 1 )
+            // the very first path -> activate it
+            activatePath( _nPathId, false );
+        else
+            implUpdateRoadmap( );
+    }
+
+    //--------------------------------------------------------------------
     void RoadmapWizard::declarePath( PathId _nPathId, WizardState _nFirstState, ... )
     {
         DBG_CHKTHIS( RoadmapWizard, CheckInvariants );
@@ -318,8 +332,10 @@ namespace svt
         // assert that the current and the new path are equal, up to nCurrentStatePathIndex
         Paths::const_iterator aActivePathPos = m_pImpl->aPaths.find( m_pImpl->nActivePath );
         if ( aActivePathPos != m_pImpl->aPaths.end() )
+        {
             DBG_ASSERT( m_pImpl->getFirstDifferentIndex( aActivePathPos->second, aNewPathPos->second ) > nCurrentStatePathIndex,
-                "RoadmapWizard::activate: you cannot activate a path which conflicts with the current one *before* the current state!" );
+                "RoadmapWizard::activate: you cannot activate a path which conflicts with the current one *before* the current state!" )
+        }
 #endif
 
         m_pImpl->nActivePath = _nPathId;
