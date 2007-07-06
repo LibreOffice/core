@@ -4,9 +4,9 @@
  *
  *  $RCSfile: shapeexport.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: vg $ $Date: 2007-04-11 13:28:50 $
+ *  last change: $Author: rt $ $Date: 2007-07-06 12:27:43 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -70,6 +70,7 @@
 #ifndef _COM_SUN_STAR_AWT_POINT_HPP_
 #include <com/sun/star/awt/Point.hpp>
 #endif
+#include <com/sun/star/beans/PropertyValue.hpp>
 
 #include <map>
 
@@ -230,6 +231,11 @@ private:
     const rtl::OUString                         msStartShape;
     const rtl::OUString                         msEndShape;
     const rtl::OUString                         msOnClick;
+#ifdef ISSUE66550_HLINK_FOR_SHAPES
+    const rtl::OUString                         msOnAction;
+    const rtl::OUString                         msAction;
+    const rtl::OUString                         msURL;
+#endif
     const rtl::OUString                         msEventType;
     const rtl::OUString                         msPresentation;
     const rtl::OUString                         msMacroName;
