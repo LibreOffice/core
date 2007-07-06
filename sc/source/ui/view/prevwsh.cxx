@@ -4,9 +4,9 @@
  *
  *  $RCSfile: prevwsh.cxx,v $
  *
- *  $Revision: 1.35 $
+ *  $Revision: 1.36 $
  *
- *  last change: $Author: kz $ $Date: 2007-05-10 17:02:08 $
+ *  last change: $Author: rt $ $Date: 2007-07-06 12:46:57 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -58,6 +58,7 @@
 #include <vcl/msgbox.hxx>
 #include <tools/urlobj.hxx>
 #include <sfx2/docfile.hxx>
+#include <sfx2/printer.hxx>
 
 #include "prevwsh.hxx"
 #include "preview.hxx"
@@ -74,6 +75,7 @@
 #include "ViewSettingsSequenceDefines.hxx"
 #endif
 #include "tpprint.hxx"
+#include "printopt.hxx"
 
 #ifndef _XMLOFF_XMLUCONV_HXX
 #include <xmloff/xmluconv.hxx>
@@ -472,26 +474,72 @@ SfxTabPage* ScPreviewShell::CreatePrintOptionsPage( Window *pParent, const SfxIt
 void __EXPORT ScPreviewShell::PreparePrint( PrintDialog* pPrintDialog )
 {
     SfxViewShell::PreparePrint( pPrintDialog );
-    pDocShell->PreparePrint( pPrintDialog, NULL );
+
+    ScMarkData aMarkData;
+    aMarkData.SelectTable( static_cast< SCTAB >( pPreview->GetPageNo() ), TRUE );
+    pDocShell->PreparePrint( pPrintDialog, &aMarkData );
+}
+
+ErrCode ScPreviewShell::DoPrint( SfxPrinter *pPrinter,
+                                 PrintDialog *pPrintDialog, BOOL bSilent, BOOL bIsAPI )
+{
+    ErrCode nRet = ERRCODE_IO_ABORT;
+
+    ScMarkData aMarkData;
+    aMarkData.SelectTable( static_cast< SCTAB >( pPreview->GetPageNo() ), TRUE );
+
+    if ( pDocShell->CheckPrint( pPrintDialog, &aMarkData, false, bIsAPI ) )
+    {
+        // SfxViewShell::DoPrint calls Print (after StartJob etc.)
+        nRet = SfxViewShell::DoPrint( pPrinter, pPrintDialog, bSilent, bIsAPI );
+    }
+
+    return nRet;
 }
 
 USHORT __EXPORT ScPreviewShell::Print( SfxProgress& rProgress, BOOL bIsAPI, PrintDialog* pPrintDialog )
 {
     pDocShell->GetDocument()->SetPrintOptions();    // Optionen aus OFA am Printer setzen
 
-    // get the list of affected sheets (using the "only selected sheets" option) before SfxViewShell::Print
+    // get the list of affected sheets (using the "only selected sheets" option)
+    // before SfxViewShell::Print
+    ScPrintOptions aOptions;
+    const SfxItemSet& rOptionSet = pDocShell->GetPrinter()->GetOptions();
+    const SfxPoolItem* pItem;
+    if ( rOptionSet.GetItemState( SID_SCPRINTOPTIONS, FALSE, &pItem ) == SFX_ITEM_SET )
+    {
+        aOptions = ((const ScTpPrintItem*)pItem)->GetPrintOptions();
+    }
+    else
+    {
+        // use configuration
+        aOptions = SC_MOD()->GetPrintOptions();
+    }
+    bool bAllTabs = aOptions.GetAllSheets();
+
+    ScMarkData aMarkData;
+    aMarkData.SelectTable( static_cast< SCTAB >( pPreview->GetPageNo() ), TRUE );
+
+    uno::Sequence< sal_Int32 > aSheets;
     SCTAB nTabCount = pDocShell->GetDocument()->GetTableCount();
-    uno::Sequence<sal_Int32> aSheets(nTabCount);
-    for ( SCTAB nTab=0; nTab<nTabCount; nTab++ )
-        aSheets[nTab] = nTab;
+    sal_Int32 nPrinted = 0;
+    for ( SCTAB nTab = 0; nTab < nTabCount; ++nTab )
+    {
+        if ( bAllTabs || aMarkData.GetTableSelect( nTab ) )
+        {
+            aSheets.realloc( nPrinted + 1 );
+            aSheets[nPrinted] = nTab;
+            ++nPrinted;
+        }
+    }
 
     uno::Sequence < beans::PropertyValue > aProps(1);
-    aProps[0].Name=::rtl::OUString::createFromAscii("PrintSheets");
+    aProps[0].Name = ::rtl::OUString::createFromAscii( "PrintSheets" );
     aProps[0].Value <<= aSheets;
     SetAdditionalPrintOptions( aProps );
 
     SfxViewShell::Print( rProgress, bIsAPI, pPrintDialog );
-    pDocShell->Print( rProgress, pPrintDialog, NULL, pPreview, FALSE, bIsAPI );
+    pDocShell->Print( rProgress, pPrintDialog, &aMarkData, pPreview, FALSE, bIsAPI );
 
     return 0;
 }
