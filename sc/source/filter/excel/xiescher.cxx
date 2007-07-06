@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xiescher.cxx,v $
  *
- *  $Revision: 1.53 $
+ *  $Revision: 1.54 $
  *
- *  last change: $Author: rt $ $Date: 2007-07-06 10:13:36 $
+ *  last change: $Author: rt $ $Date: 2007-07-06 12:37:20 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -168,6 +168,9 @@
 #ifndef SC_DRWLAYER_HXX
 #include "drwlayer.hxx"
 #endif
+#ifndef SC_USERDAT_HXX
+#include "userdat.hxx"
+#endif
 #ifndef SC_CHARTARR_HXX
 #include "chartarr.hxx"
 #endif
@@ -213,6 +216,9 @@
 #endif
 #ifndef SC_XICHART_HXX
 #include "xichart.hxx"
+#endif
+#ifndef SC_XICONTENT_HXX
+#include "xicontent.hxx"
 #endif
 
 using ::rtl::OUString;
@@ -472,8 +478,14 @@ XclImpDrawObjRef XclImpDrawObjBase::ReadObjCmo( XclImpStream& rStrm )
     return xDrawObj;
 }
 
-void XclImpDrawObjBase::ReadSubRecord( XclImpStream& /*rStrm*/, sal_uInt16 /*nSubRecId*/, sal_uInt16 /*nSubRecSize*/ )
+void XclImpDrawObjBase::ReadSubRecord( XclImpStream& rStrm, sal_uInt16 nSubRecId, sal_uInt16 /*nSubRecSize*/ )
 {
+    switch( nSubRecId )
+    {
+        case EXC_ID_OBJ_FTMACRO:
+            ReadMacro( rStrm );
+        break;
+    }
 }
 
 void XclImpDrawObjBase::ReadClientAnchor( SvStream& rEscherStrm, const DffRecordHeader& rHeader )
@@ -547,6 +559,38 @@ void XclImpDrawObjBase::ProcessSdrObject( SdrObject& rSdrObj ) const
 {
     // call virtual function for object type specific processing
     DoProcessSdrObj( rSdrObj );
+}
+
+void XclImpDrawObjBase::ReadMacro( XclImpStream& rStrm )
+{
+    maMacroName.Erase();
+    if( rStrm.GetRecLeft() > 6 )
+    {
+        // macro is stored in a tNameXR token containing a link to a defined name
+        sal_uInt16 nFmlaSize;
+        rStrm >> nFmlaSize;
+        rStrm.Ignore( 4 );
+        DBG_ASSERT( nFmlaSize == 7, "XclImpDrawObjBase::ReadMacro - unexpected formula size" );
+        if( nFmlaSize == 7 )
+        {
+            sal_uInt8 nTokenId;
+            sal_uInt16 nExtSheet, nExtName;
+            rStrm >> nTokenId >> nExtSheet >> nExtName;
+            DBG_ASSERT( nTokenId == XclTokenArrayHelper::GetTokenId( EXC_TOKID_NAMEX, EXC_TOKCLASS_REF ),
+                "XclImpDrawObjBase::ReadMacro - tNameXR token expected" );
+            if( nTokenId == XclTokenArrayHelper::GetTokenId( EXC_TOKID_NAMEX, EXC_TOKCLASS_REF ) )
+            {
+                maMacroName = GetLinkManager().GetMacroName( nExtSheet, nExtName );
+                // #i38718# missing module name - try to find the macro in the imported modules
+                if( maMacroName.Len() && (maMacroName.Search( '.' ) == STRING_NOTFOUND) )
+                    if( SfxObjectShell* pDocShell = GetDocShell() )
+                        if( StarBASIC* pBasic = pDocShell->GetBasic() )
+                            if( SbMethod* pMethod = dynamic_cast< SbMethod* >( pBasic->Find( maMacroName, SbxCLASS_METHOD ) ) )
+                                if( SbModule* pModule = pMethod->GetModule() )
+                                    maMacroName.Insert( '.', 0 ).Insert( pModule->GetName(), 0 );
+            }
+        }
+    }
 }
 
 sal_Size XclImpDrawObjBase::DoGetProgressSize() const
@@ -822,9 +866,6 @@ void XclImpTbxControlObj::ReadSubRecord( XclImpStream& rStrm, sal_uInt16 nSubRec
         case EXC_ID_OBJ_FTGBODATA:
             ReadGboData( rStrm );
         break;
-        case EXC_ID_OBJ_FTMACRO:
-            ReadMacro( rStrm );
-        break;
         default:
             XclImpDrawObjBase::ReadSubRecord( rStrm, nSubRecId, nSubRecSize );
     }
@@ -837,7 +878,7 @@ OUString XclImpTbxControlObj::GetServiceName() const
 
 bool XclImpTbxControlObj::FillMacroDescriptor( ScriptEventDescriptor& rEvent ) const
 {
-    if( maMacroName.Len() )
+    if( GetMacroName().Len() > 0 )
     {
         // type of action is dependent on control type
         rEvent.ListenerType = XclControlObjHelper::GetTbxListenerType( GetObjType() );
@@ -846,7 +887,7 @@ bool XclImpTbxControlObj::FillMacroDescriptor( ScriptEventDescriptor& rEvent ) c
         {
             // set the macro name
             rEvent.ScriptType = XclControlObjHelper::GetTbxScriptType();
-            rEvent.ScriptCode = XclControlObjHelper::GetScMacroName( maMacroName );
+            rEvent.ScriptCode = XclControlObjHelper::GetScMacroName( GetMacroName() );
             return true;
         }
     }
@@ -1068,7 +1109,6 @@ void XclImpTbxControlObj::ReadLbsData( XclImpStream& rStrm )
                 SetInvalid();
         break;
     }
-
 }
 
 void XclImpTbxControlObj::ReadSbs( XclImpStream& rStrm )
@@ -1089,38 +1129,6 @@ void XclImpTbxControlObj::ReadGboData( XclImpStream& rStrm )
     rStrm.Ignore( 4 );
     rStrm >> nStyle;
     mbFlatBorder = ::get_flag( nStyle, EXC_OBJ_GBO_FLAT );
-}
-
-void XclImpTbxControlObj::ReadMacro( XclImpStream& rStrm )
-{
-    maMacroName.Erase();
-    if( rStrm.GetRecLeft() > 6 )
-    {
-        // macro is stored in a tNameXR token containing a link to a defined name
-        sal_uInt16 nFmlaSize;
-        rStrm >> nFmlaSize;
-        rStrm.Ignore( 4 );
-        DBG_ASSERT( nFmlaSize == 7, "XclImpTbxControlObj::ReadMacro - unexpected formula size" );
-        if( nFmlaSize == 7 )
-        {
-            sal_uInt8 nTokenId;
-            sal_uInt16 nExtSheet, nExtName;
-            rStrm >> nTokenId >> nExtSheet >> nExtName;
-            DBG_ASSERT( nTokenId == XclTokenArrayHelper::GetTokenId( EXC_TOKID_NAMEX, EXC_TOKCLASS_REF ),
-                "XclImpTbxControlObj::ReadMacro - tNameXR token expected" );
-            if( nTokenId == XclTokenArrayHelper::GetTokenId( EXC_TOKID_NAMEX, EXC_TOKCLASS_REF ) )
-            {
-                maMacroName = GetLinkManager().GetMacroName( nExtSheet, nExtName );
-                // #i38718# missing module name - try to find the macro in the imported modules
-                if( maMacroName.Len() && (maMacroName.Search( '.' ) == STRING_NOTFOUND) )
-                    if( SfxObjectShell* pDocShell = GetDocShell() )
-                        if( StarBASIC* pBasic = pDocShell->GetBasic() )
-                            if( SbMethod* pMethod = dynamic_cast< SbMethod* >( pBasic->Find( maMacroName, SbxCLASS_METHOD ) ) )
-                                if( SbModule* pModule = pMethod->GetModule() )
-                                    maMacroName.Insert( '.', 0 ).Insert( pModule->GetName(), 0 );
-            }
-        }
-    }
 }
 
 // ----------------------------------------------------------------------------
@@ -1681,6 +1689,26 @@ SdrObject* XclImpDffManager::ProcessObj( SvStream& rEscherStrm,
         // transfer ownership to xSdrObj
         xSdrObj = xNewSdrObj;
     }
+    else if( xSdrObj.get() && (dynamic_cast< XclImpDrawingObj* >( xDrawObj.get() ) || dynamic_cast< XclImpOleObj* >( xDrawObj.get() )) )
+    {
+        // macro name and hyperlink for drawing objects and pictures (not for controls and charts)
+        const String& rMacro = xDrawObj->GetMacroName();
+#ifdef ISSUE66550_HLINK_FOR_SHAPES
+        OUString aHlink = ReadHlinkProperty( rEscherStrm );
+        if( (rMacro.Len() > 0) || (aHlink.getLength() > 0) )
+#else
+        if( rMacro.Len() > 0 )
+#endif
+        {
+            if( ScMacroInfo* pInfo = ScDrawLayer::GetMacroInfo( xSdrObj.get(), TRUE ) )
+            {
+                pInfo->SetMacro( XclControlObjHelper::GetScMacroName( rMacro ) );
+#ifdef ISSUE66550_HLINK_FOR_SHAPES
+                pInfo->SetHlink( aHlink );
+#endif
+            }
+        }
+    }
 
     // process the SdrObject
     if( xSdrObj.get() )
@@ -1743,6 +1771,37 @@ FASTBOOL XclImpDffManager::GetColorFromPalette( USHORT nIndex, Color& rColor ) c
 }
 
 // private --------------------------------------------------------------------
+
+OUString XclImpDffManager::ReadHlinkProperty( SvStream& rEscherStrm ) const
+{
+    /*  Reads hyperlink data from a complex Escher property. Contents of this
+        property are equal to the HLINK record, import of this record is
+        implemented in class XclImpHyperlink. This function has to create an
+        instance of the XclImpStream class to be able to reuse the
+        functionality of XclImpHyperlink. */
+    OUString aString;
+    sal_uInt32 nBufferSize = GetPropertyValue( DFF_Prop_pihlShape );
+    if( (0 < nBufferSize) && (nBufferSize <= 0xFFFF) && SeekToContent( DFF_Prop_pihlShape, rEscherStrm ) )
+    {
+        // create a faked BIFF record that can be read by XclImpStream class
+        SvMemoryStream aMemStream;
+        aMemStream << sal_uInt16( 0 ) << static_cast< sal_uInt16 >( nBufferSize );
+
+        // copy from Escher stream to memory stream
+        ::std::vector< sal_uInt8 > aBuffer( nBufferSize );
+        sal_uInt8* pnData = &aBuffer.front();
+        if( rEscherStrm.Read( pnData, nBufferSize ) == nBufferSize )
+        {
+            aMemStream.Write( pnData, nBufferSize );
+
+            // create BIFF import stream to be able to use XclImpHyperlink class
+            XclImpStream aXclStrm( aMemStream, GetRoot() );
+            if( aXclStrm.StartNextRecord() )
+                aString = XclImpHyperlink::ReadEmbeddedData( aXclStrm );
+        }
+    }
+    return aString;
+}
 
 void XclImpDffManager::ProcessDggContainer( SvStream& rEscherStrm, const DffRecordHeader& rDggHeader )
 {
