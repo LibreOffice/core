@@ -4,9 +4,9 @@
  *
  *  $RCSfile: htmlexp2.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: vg $ $Date: 2007-02-27 12:30:58 $
+ *  last change: $Author: rt $ $Date: 2007-07-06 12:38:00 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -39,10 +39,6 @@
 
 
 //------------------------------------------------------------------------
-
-#ifdef MAC
-#define _SYSDEP_HXX
-#endif
 
 #include <svx/svditer.hxx>
 #include <svx/svdograf.hxx>
