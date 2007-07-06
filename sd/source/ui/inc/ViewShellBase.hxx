@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ViewShellBase.hxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: hr $ $Date: 2007-06-27 15:43:56 $
+ *  last change: $Author: rt $ $Date: 2007-07-06 13:13:26 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -52,6 +52,8 @@
 #include <memory>
 #include <boost/shared_ptr.hpp>
 
+#include <set>
+
 class SdDrawDocument;
 class SfxRequest;
 
@@ -69,6 +71,7 @@ class ToolBarManager;
 class UpdateLockManager;
 class ViewShell;
 class ViewShellManager;
+class CustomHandleManager;
 
 /** SfxViewShell descendant that the stacked Draw/Impress shells are
     based on.
@@ -271,6 +274,8 @@ public:
     */
     ::Window* GetViewWindow (void);
 
+    CustomHandleManager& getCustomHandleManager() const;
+
 protected:
     osl::Mutex maMutex;
 
@@ -297,6 +302,8 @@ private:
 
     ::boost::shared_ptr<UpdateLockManager> mpUpdateLockManager;
 
+    ::std::auto_ptr<CustomHandleManager> mpCustomHandleManager;
+
     /** Determine from the properties of the document shell the initial type
         of the view shell in the center pane.  We use this method to avoid
         starting with the wrong type.  When ReadUserDataSequence() is called
@@ -304,6 +311,28 @@ private:
         not the case because something went wrong.
     */
     ::rtl::OUString GetInitialViewShellType (void);
+};
+
+class ICustomhandleSupplier
+{
+public:
+    virtual void addCustomHandler( SdrView& rSourceView, ViewShell::ShellType eShellType, SdrHdlList& rHandlerList ) = 0;
+};
+
+class CustomHandleManager : public ICustomhandleSupplier
+{
+public:
+    CustomHandleManager( ViewShellBase& rViewShellBase  );
+    virtual ~CustomHandleManager();
+
+    void registerSupplier( ICustomhandleSupplier* pSupplier );
+    void unRegisterSupplier( ICustomhandleSupplier* pSupplier );
+
+    virtual void addCustomHandler( SdrView& rSourceView, ViewShell::ShellType eShellType, SdrHdlList& rHandlerList );
+
+private:
+    ViewShellBase& mrViewShellBase;
+    std::set< ICustomhandleSupplier* > maSupplier;
 };
 
 } // end of namespace sd
