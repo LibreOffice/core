@@ -4,9 +4,9 @@
  *
  *  $RCSfile: opcode.hxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: rt $ $Date: 2007-07-03 15:46:22 $
+ *  last change: $Author: rt $ $Date: 2007-07-06 12:30:35 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -107,7 +107,7 @@ enum OpCodeEnum
         ocFalse             = SC_OPCODE_FALSE,
         ocGetActDate        = SC_OPCODE_GET_ACT_DATE,
         ocGetActTime        = SC_OPCODE_GET_ACT_TIME,
-        ocNoValue           = SC_OPCODE_NO_VALUE,
+        ocNotAvail          = SC_OPCODE_NO_VALUE,
         ocCurrent           = SC_OPCODE_CURRENT,
         ocEndNoPar          = SC_OPCODE_END_NO_PAR,
     // Functions with one parameter
@@ -153,7 +153,7 @@ enum OpCodeEnum
         ocIsRef             = SC_OPCODE_IS_REF,
         ocIsValue           = SC_OPCODE_IS_VALUE,
         ocIsFormula         = SC_OPCODE_IS_FORMULA,
-        ocIsNV              = SC_OPCODE_IS_NV,
+        ocIsNA              = SC_OPCODE_IS_NV,
         ocIsErr             = SC_OPCODE_IS_ERR,
         ocIsError           = SC_OPCODE_IS_ERROR,
         ocIsEven            = SC_OPCODE_IS_EVEN,
