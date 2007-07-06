@@ -4,9 +4,9 @@
  *
  *  $RCSfile: txtprmap.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2007-04-18 08:00:14 $
+ *  last change: $Author: rt $ $Date: 2007-07-06 09:41:49 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -199,7 +199,7 @@
 #define TEXT_PROP_MAP_TABLE_DEFAULTS 9
 #define TEXT_PROP_MAP_TABLE_ROW_DEFAULTS 10
 
-class XMLTextPropertySetMapper : public XMLPropertySetMapper
+class XMLOFF_DLLPUBLIC XMLTextPropertySetMapper : public XMLPropertySetMapper
 {
 public:
     XMLTextPropertySetMapper( sal_uInt16 nType );
