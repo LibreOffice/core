@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dp_gui.h,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: kz $ $Date: 2007-06-20 14:15:08 $
+ *  last change: $Author: rt $ $Date: 2007-07-06 13:53:41 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -174,8 +174,22 @@ struct DialogImpl :
 
         ::com::sun::star::uno::Reference< ::com::sun::star::deployment::XPackageManager> getPackageManager(
             SvLBoxEntry * entry ) const;
-        ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Reference< ::com::sun::star::deployment::XPackage> >
-        getSelectedPackages( bool onlyFirstLevel = false ) const;
+
+        /** returns a vector of pairs of packages and the respective package managers.
+
+            Only returns valid packages. That is the top-level nodes StarOffice Extensions and
+            my Extensions have no associated XPackage.
+         */
+        ::std::vector<
+            ::std::pair<
+                ::com::sun::star::uno::Reference< ::com::sun::star::deployment::XPackage>,
+                ::com::sun::star::uno::Reference< ::com::sun::star::deployment::XPackageManager> > >
+        getSelectedPackages(bool onlyFirstLevel) const;
+        typedef ::std::vector<
+            ::std::pair<
+                ::com::sun::star::uno::Reference< ::com::sun::star::deployment::XPackage>,
+                ::com::sun::star::uno::Reference< ::com::sun::star::deployment::XPackageManager> > >::const_iterator
+                CI_PAIR_PACKAGE;
     };
 
     class SyncPushButton : public PushButton
@@ -241,7 +255,16 @@ struct DialogImpl :
 
     bool supportsOptions( ::rtl::OUString const & sExtensionId);
 
-    ::rtl::Reference<ModifiableContext> m_modifiableContext;
+    /** checks if an some action is done with a shared extension.
+
+        If so, the user will be warned by  message box, reading that all other office instances
+        need to be closed. If the user selects the cancel button then this function returns false.
+        Otherwise it returns true.
+     */
+    bool continueActionOnSharedExtension(
+        ::com::sun::star::uno::Reference<
+            ::com::sun::star::deployment::XPackageManager> const & xPMgr) const;
+
     const ::com::sun::star::uno::Sequence< ::rtl::OUString > m_arExtensions;
     oslThread m_installThread;
     bool m_bAutoInstallFinished;
