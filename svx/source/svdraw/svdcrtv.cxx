@@ -4,9 +4,9 @@
  *
  *  $RCSfile: svdcrtv.cxx,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: hr $ $Date: 2007-06-27 18:58:35 $
+ *  last change: $Author: rt $ $Date: 2007-07-06 07:39:12 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -293,7 +293,7 @@ SdrCreateView::~SdrCreateView()
 {
     ImpClearConnectMarker();
     delete mpCreateViewExtraData;
-    delete pAktCreate;
+    SdrObject::Free( pAktCreate );
 }
 
 void SdrCreateView::ImpDelCreateAttr()
@@ -449,7 +449,7 @@ void SdrCreateView::SetCurrentObj(UINT16 nIdent, UINT32 nInvent)
             else
                 aAktCreatePointer = pObj->GetCreatePointer();
 
-            delete pObj;
+            SdrObject::Free( pObj );
         }
         else
         {
@@ -589,7 +589,7 @@ BOOL SdrCreateView::ImpBegCreateObj(UINT32 nInvent, UINT16 nIdent, const Point& 
                     ShowCreateObj(/*pOut,TRUE*/);
                     bRet=TRUE;
                 } else {
-                    delete pAktCreate;
+                    SdrObject::Free( pAktCreate );
                     pAktCreate=NULL;
                     pCreatePV=NULL;
                 }
@@ -730,7 +730,7 @@ BOOL SdrCreateView::EndCreateObj(SdrCreateCmd eCmd)
                     if(bDidInsert)
                     {
                         // delete object, it's content is cloned and inserted
-                        delete pObjMerk;
+                        SdrObject::Free( pObjMerk );
                         pObjMerk = 0L;
                         bRet = FALSE;
                         bSceneIntoScene = TRUE;
@@ -799,7 +799,7 @@ void SdrCreateView::BrkCreateObj()
     {
         HideCreateObj();
         pAktCreate->BrkCreate(aDragStat);
-        delete pAktCreate;
+        SdrObject::Free( pAktCreate );
         pAktCreate=NULL;
         pCreatePV=NULL;
     }
