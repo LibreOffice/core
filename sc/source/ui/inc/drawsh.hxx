@@ -4,9 +4,9 @@
  *
  *  $RCSfile: drawsh.hxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: rt $ $Date: 2007-07-06 12:28:04 $
+ *  last change: $Author: rt $ $Date: 2007-07-06 12:44:12 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -62,6 +62,10 @@ class ScDrawShell : public SfxShell
 
     DECL_LINK( NameObjectHdl, AbstractSvxNameDialog* );
 
+#ifdef ISSUE66550_HLINK_FOR_SHAPES
+    void SetHlinkForObject( SdrObject* pObj, const rtl::OUString& rHlnk );
+#endif
+
 protected:
     ScViewData* GetViewData()   { return pViewData; }
 
@@ -91,6 +95,7 @@ public:
     void    ExecFormatPaintbrush(SfxRequest& rReq);
     void    StateFormatPaintbrush(SfxItemSet& rSet);
 
+    void    ExecuteMacroAssign( SdrObject* pObj, Window* pWin );
     void    ExecuteLineDlg( SfxRequest& rReq, USHORT nTabPage = 0xffff );
     void    ExecuteAreaDlg( SfxRequest& rReq, USHORT nTabPage = 0xffff );
     void    ExecuteTextAttrDlg( SfxRequest& rReq, USHORT nTabPage = 0xffff );
