@@ -4,9 +4,9 @@
  *
  *  $RCSfile: tabvwsha.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: rt $ $Date: 2007-04-26 09:58:13 $
+ *  last change: $Author: rt $ $Date: 2007-07-06 12:48:17 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -295,6 +295,14 @@ void __EXPORT ScTabViewShell::GetState( SfxItemSet& rSet )
 
             case FID_TOGGLEHEADERS:
                 rSet.Put(SfxBoolItem(nWhich, GetViewData()->IsHeaderMode()));
+                break;
+
+            case FID_TOGGLEFORMULA:
+                {
+                    const ScViewOptions& rOpts = pViewData->GetOptions();
+                    BOOL bFormulaMode = rOpts.GetOption( VOPT_FORMULAS );
+                    rSet.Put(SfxBoolItem(nWhich, bFormulaMode ));
+                }
                 break;
 
             case FID_NORMALVIEWMODE:
