@@ -4,9 +4,9 @@
  *
  *  $RCSfile: resmgr.cxx,v $
  *
- *  $Revision: 1.46 $
+ *  $Revision: 1.47 $
  *
- *  last change: $Author: hr $ $Date: 2007-06-27 22:17:20 $
+ *  last change: $Author: rt $ $Date: 2007-07-06 10:12:31 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -419,7 +419,28 @@ InternalResMgr* ResMgrContainer::getResMgr( const OUString& rPrefix,
     }
     // give up
     if( it == m_aResFiles.end() )
+    {
+        OUStringBuffer sKey = rPrefix;
+        sKey.append( rLocale.Language );
+        if( rLocale.Country.getLength() )
+        {
+            sKey.append( sal_Unicode('-') );
+            sKey.append( rLocale.Country );
+        }
+        if( rLocale.Variant.getLength() )
+        {
+            sKey.append( sal_Unicode('-') );
+            sKey.append( rLocale.Variant );
+        } // if( aLocale.Variant.getLength() )
+        ::rtl::OUString sURL = sKey.makeStringAndClear();
+        sURL += ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(".res"));
+        if ( m_aResFiles.find(sURL) == m_aResFiles.end() )
+        {
+            m_aResFiles[ sURL ].aFileURL = sURL;
+            return getResMgr(rPrefix,rLocale,bForceNewInstance);
+        } // if ( m_aResFiles.find(sURL) == m_aResFiles.end() )
         return NULL;
+    }
 
     rLocale = aLocale;
     // at this point it->second.pResMgr must be filled either by creating a new one
