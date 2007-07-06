@@ -4,9 +4,9 @@
  *
  *  $RCSfile: drwtrans.cxx,v $
  *
- *  $Revision: 1.36 $
+ *  $Revision: 1.37 $
  *
- *  last change: $Author: vg $ $Date: 2007-02-27 12:57:36 $
+ *  last change: $Author: rt $ $Date: 2007-07-06 12:27:23 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -796,6 +796,32 @@ void ScDrawTransferObj::InitDocShell()
         aViewData.SetCurY( 0 );
         pDocSh->UpdateOle(&aViewData, TRUE);
     }
+}
+
+const com::sun::star::uno::Sequence< sal_Int8 >& ScDrawTransferObj::getUnoTunnelId()
+{
+    static com::sun::star::uno::Sequence< sal_Int8 > aSeq;
+    if( !aSeq.getLength() )
+    {
+        static osl::Mutex           aCreateMutex;
+        osl::Guard< osl::Mutex >    aGuard( aCreateMutex );
+        aSeq.realloc( 16 );
+        rtl_createUuid( reinterpret_cast< sal_uInt8* >( aSeq.getArray() ), 0, sal_True );
+    }
+    return aSeq;
+}
+
+sal_Int64 SAL_CALL ScDrawTransferObj::getSomething( const com::sun::star::uno::Sequence< sal_Int8 >& rId ) throw( com::sun::star::uno::RuntimeException )
+{
+    sal_Int64 nRet;
+    if( ( rId.getLength() == 16 ) &&
+        ( 0 == rtl_compareMemory( getUnoTunnelId().getConstArray(), rId.getConstArray(), 16 ) ) )
+    {
+        nRet = reinterpret_cast< sal_Int64 >( this );
+    }
+    else
+        nRet = TransferableHelper::getSomething(rId);
+    return nRet;
 }
 
 
