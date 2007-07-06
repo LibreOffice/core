@@ -4,9 +4,9 @@
  *
  *  $RCSfile: eventimp.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: hr $ $Date: 2007-06-27 15:02:22 $
+ *  last change: $Author: rt $ $Date: 2007-07-06 12:27:59 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -147,6 +147,9 @@ public:
 
     sal_Bool mbValid;
     sal_Bool mbScript;
+#ifdef ISSUE66550_HLINK_FOR_SHAPES
+    sal_Bool mbActionEvent;
+#endif
     ClickAction meClickAction;
     XMLEffect meEffect;
     XMLEffectDirection meDirection;
@@ -158,6 +161,9 @@ public:
     OUString msMacroName;
     OUString msBookmark;
     OUString msLanguage;
+#ifdef ISSUE66550_HLINK_FOR_SHAPES
+    OUString msHyperURL;
+#endif
 };
 
 ///////////////////////////////////////////////////////////////////////
@@ -216,11 +222,18 @@ TYPEINIT1( SdXMLEventContext, SvXMLImportContext );
 
 SdXMLEventContext::SdXMLEventContext( SvXMLImport& rImp,  sal_uInt16 nPrfx, const OUString& rLocalName,  const Reference< XAttributeList >& xAttrList, const Reference< XShape >& rxShape )
 :   SvXMLImportContext(rImp, nPrfx, rLocalName),
+#ifdef ISSUE66550_HLINK_FOR_SHAPES
+    mxShape( rxShape ), mbScript( sal_False ), mbActionEvent( sal_False ), meClickAction( ClickAction_NONE ),
+#else
     mxShape( rxShape ), mbScript( sal_False ), meClickAction( ClickAction_NONE ),
+#endif
     meEffect( EK_none ), meDirection( ED_none ), mnStartScale( 100 ),
     meSpeed( AnimationSpeed_MEDIUM ), mnVerb(0), mbPlayFull( sal_False )
 {
-    const OUString msXMLEventName( RTL_CONSTASCII_USTRINGPARAM( "click" ) );
+    static const OUString sXMLClickName( RTL_CONSTASCII_USTRINGPARAM( "click" ) );
+#ifdef ISSUE66550_HLINK_FOR_SHAPES
+    static const OUString sXMLActionName( RTL_CONSTASCII_USTRINGPARAM( "action" ) );
+#endif
 
     if( nPrfx == XML_NAMESPACE_PRESENTATION && IsXMLToken( rLocalName, XML_EVENT_LISTENER ) )
     {
@@ -291,7 +304,12 @@ SdXMLEventContext::SdXMLEventContext( SvXMLImport& rImp,  sal_uInt16 nPrfx, cons
                 sEventName = sValue;
                 sal_uInt16 nScriptPrefix =
                     GetImport().GetNamespaceMap().GetKeyByAttrName( sValue, &sEventName );
-                mbValid = XML_NAMESPACE_DOM == nScriptPrefix && sEventName == msXMLEventName;
+#ifdef ISSUE66550_HLINK_FOR_SHAPES
+                mbValid = XML_NAMESPACE_DOM == nScriptPrefix && ( sEventName == sXMLClickName || sEventName == sXMLActionName );
+                mbActionEvent = mbValid && (sEventName == sXMLActionName);
+#else
+                mbValid = XML_NAMESPACE_DOM == nScriptPrefix && sEventName == sXMLClickName;
+#endif
             }
             else if( IsXMLToken( aAttrLocalName, XML_LANGUAGE ) )
             {
@@ -320,6 +338,12 @@ SdXMLEventContext::SdXMLEventContext( SvXMLImport& rImp,  sal_uInt16 nPrfx, cons
                 {
                     msMacroName = sValue;
                 }
+#ifdef ISSUE66550_HLINK_FOR_SHAPES
+                else if ( mbActionEvent )
+                {
+                    msHyperURL = sValue;
+                }
+#endif
                 else
                 {
                     const rtl::OUString &rTmp =
@@ -348,8 +372,6 @@ SvXMLImportContext * SdXMLEventContext::CreateChildContext( USHORT nPrefix, cons
 
 void SdXMLEventContext::EndElement()
 {
-    const OUString msAPIEventName( RTL_CONSTASCII_USTRINGPARAM( "OnClick" ) );
-
     if( !mbValid )
         return;
 
@@ -364,195 +386,216 @@ void SdXMLEventContext::EndElement()
         if( !xEvents.is() )
             break;
 
-        if( !xEvents->hasByName( msAPIEventName ) )
-            break;
+        OUString sAPIEventName;
+        uno::Sequence< beans::PropertyValue > aProperties;
 
-        if( mbScript )
-            meClickAction = ClickAction_MACRO;
-
-        sal_Int32 nPropertyCount = 2;
-        switch( meClickAction )
+#ifdef ISSUE66550_HLINK_FOR_SHAPES
+        if( mbActionEvent )
         {
-        case ClickAction_NONE:
-        case ClickAction_PREVPAGE:
-        case ClickAction_NEXTPAGE:
-        case ClickAction_FIRSTPAGE:
-        case ClickAction_LASTPAGE:
-        case ClickAction_INVISIBLE:
-        case ClickAction_STOPPRESENTATION:
-            break;
-        case ClickAction_PROGRAM:
-        case ClickAction_VERB:
-        case ClickAction_BOOKMARK:
-        case ClickAction_DOCUMENT:
-            nPropertyCount += 1;
-            break;
-        case ClickAction_MACRO:
-            if ( msLanguage.equalsIgnoreAsciiCaseAscii("starbasic") )
-                nPropertyCount += 1;
-            break;
+            sAPIEventName = OUString( RTL_CONSTASCII_USTRINGPARAM( "OnAction" ) );
+            aProperties.realloc( 2 );
+            beans::PropertyValue* pProperty = aProperties.getArray();
 
-        case ClickAction_SOUND:
-            nPropertyCount += 2;
-            break;
-
-        case ClickAction_VANISH:
-            nPropertyCount += 4;
-            break;
-        default:
-            break;
+            pProperty->Name = OUString( RTL_CONSTASCII_USTRINGPARAM( "EventType" ) );
+            pProperty->Handle = -1;
+            pProperty->Value <<= OUString( RTL_CONSTASCII_USTRINGPARAM( "Action" ) );
+            pProperty->State = beans::PropertyState_DIRECT_VALUE;
+            ++pProperty;
+            pProperty->Name = OUString( RTL_CONSTASCII_USTRINGPARAM( "URL" ) );
+            pProperty->Handle = -1;
+            pProperty->Value <<= msHyperURL;
+            pProperty->State = beans::PropertyState_DIRECT_VALUE;
         }
-
-        uno::Sequence< beans::PropertyValue > aProperties( nPropertyCount );
-        beans::PropertyValue* pProperties = aProperties.getArray();
-
-        if( ClickAction_MACRO == meClickAction )
+        else
+#endif
         {
-            if ( msLanguage.equalsIgnoreAsciiCaseAscii("starbasic") )
+            sAPIEventName = OUString( RTL_CONSTASCII_USTRINGPARAM( "OnClick" ) );
+
+            if( mbScript )
+                meClickAction = ClickAction_MACRO;
+
+            sal_Int32 nPropertyCount = 2;
+            switch( meClickAction )
             {
-                OUString sLibrary;
-                const OUString& rApp = GetXMLToken( XML_APPLICATION );
-                const OUString& rDoc = GetXMLToken( XML_DOCUMENT );
-                if( msMacroName.getLength() > rApp.getLength()+1 &&
-                    msMacroName.copy(0,rApp.getLength()).equalsIgnoreAsciiCase( rApp ) &&
-                    ':' == msMacroName[rApp.getLength()] )
+                case ClickAction_NONE:
+                case ClickAction_PREVPAGE:
+                case ClickAction_NEXTPAGE:
+                case ClickAction_FIRSTPAGE:
+                case ClickAction_LASTPAGE:
+                case ClickAction_INVISIBLE:
+                case ClickAction_STOPPRESENTATION:
+                    break;
+                case ClickAction_PROGRAM:
+                case ClickAction_VERB:
+                case ClickAction_BOOKMARK:
+                case ClickAction_DOCUMENT:
+                    nPropertyCount += 1;
+                    break;
+                case ClickAction_MACRO:
+                    if ( msLanguage.equalsIgnoreAsciiCaseAscii("starbasic") )
+                        nPropertyCount += 1;
+                    break;
+
+                case ClickAction_SOUND:
+                    nPropertyCount += 2;
+                    break;
+
+                case ClickAction_VANISH:
+                    nPropertyCount += 4;
+                    break;
+                default:
+                    break;
+            }
+
+            aProperties.realloc( nPropertyCount );
+            beans::PropertyValue* pProperties = aProperties.getArray();
+
+            if( ClickAction_MACRO == meClickAction )
+            {
+                if ( msLanguage.equalsIgnoreAsciiCaseAscii("starbasic") )
                 {
-                    sLibrary = OUString(RTL_CONSTASCII_USTRINGPARAM("StarOffice"));
-                    msMacroName = msMacroName.copy( rApp.getLength()+1 );
+                    OUString sLibrary;
+                    const OUString& rApp = GetXMLToken( XML_APPLICATION );
+                    const OUString& rDoc = GetXMLToken( XML_DOCUMENT );
+                    if( msMacroName.getLength() > rApp.getLength()+1 &&
+                        msMacroName.copy(0,rApp.getLength()).equalsIgnoreAsciiCase( rApp ) &&
+                        ':' == msMacroName[rApp.getLength()] )
+                    {
+                        sLibrary = OUString(RTL_CONSTASCII_USTRINGPARAM("StarOffice"));
+                        msMacroName = msMacroName.copy( rApp.getLength()+1 );
+                    }
+                    else if( msMacroName.getLength() > rDoc.getLength()+1 &&
+                        msMacroName.copy(0,rDoc.getLength()).equalsIgnoreAsciiCase( rDoc ) &&
+                        ':' == msMacroName[rDoc.getLength()] )
+                    {
+                        sLibrary = rDoc;
+                        msMacroName = msMacroName.copy( rDoc.getLength()+1 );
+                    }
+
+                    pProperties->Name = OUString( RTL_CONSTASCII_USTRINGPARAM( "EventType" ) );
+                    pProperties->Handle = -1;
+                    pProperties->Value <<= OUString( RTL_CONSTASCII_USTRINGPARAM("StarBasic") );
+                    pProperties->State = beans::PropertyState_DIRECT_VALUE;
+                    pProperties++;
+
+                    pProperties->Name = OUString( RTL_CONSTASCII_USTRINGPARAM( "MacroName" ) );
+                    pProperties->Handle = -1;
+                    pProperties->Value <<= msMacroName;
+                    pProperties->State = beans::PropertyState_DIRECT_VALUE;
+                    pProperties++;
+
+                    pProperties->Name = OUString( RTL_CONSTASCII_USTRINGPARAM( "Library" ) );
+                    pProperties->Handle = -1;
+                    pProperties->Value <<= sLibrary;
+                    pProperties->State = beans::PropertyState_DIRECT_VALUE;
                 }
-                else if( msMacroName.getLength() > rDoc.getLength()+1 &&
-                    msMacroName.copy(0,rDoc.getLength()).equalsIgnoreAsciiCase( rDoc ) &&
-                    ':' == msMacroName[rDoc.getLength()] )
+                else
                 {
-                    sLibrary = rDoc;
-                    msMacroName = msMacroName.copy( rDoc.getLength()+1 );
+                    pProperties->Name =
+                        OUString( RTL_CONSTASCII_USTRINGPARAM( "EventType" ) );
+                    pProperties->Handle = -1;
+                    pProperties->Value <<= OUString(
+                        RTL_CONSTASCII_USTRINGPARAM("Script") );
+                    pProperties->State = beans::PropertyState_DIRECT_VALUE;
+                    pProperties++;
+
+                    pProperties->Name = OUString(
+                        RTL_CONSTASCII_USTRINGPARAM( "Script" ) );
+                    pProperties->Handle = -1;
+                    pProperties->Value <<= msMacroName;
+                    pProperties->State = beans::PropertyState_DIRECT_VALUE;
                 }
-
-                pProperties->Name = OUString( RTL_CONSTASCII_USTRINGPARAM( "EventType" ) );
-                pProperties->Handle = -1;
-                pProperties->Value <<= OUString( RTL_CONSTASCII_USTRINGPARAM("StarBasic") );
-                pProperties->State = beans::PropertyState_DIRECT_VALUE;
-                pProperties++;
-
-                pProperties->Name = OUString( RTL_CONSTASCII_USTRINGPARAM( "MacroName" ) );
-                pProperties->Handle = -1;
-                pProperties->Value <<= msMacroName;
-                pProperties->State = beans::PropertyState_DIRECT_VALUE;
-                pProperties++;
-
-                pProperties->Name = OUString( RTL_CONSTASCII_USTRINGPARAM( "Library" ) );
-                pProperties->Handle = -1;
-                pProperties->Value <<= sLibrary;
-                pProperties->State = beans::PropertyState_DIRECT_VALUE;
             }
             else
             {
-                pProperties->Name =
-                    OUString( RTL_CONSTASCII_USTRINGPARAM( "EventType" ) );
+                pProperties->Name = OUString( RTL_CONSTASCII_USTRINGPARAM( "EventType" ) );
                 pProperties->Handle = -1;
-                pProperties->Value <<= OUString(
-                    RTL_CONSTASCII_USTRINGPARAM("Script") );
+                pProperties->Value <<= OUString( RTL_CONSTASCII_USTRINGPARAM("Presentation") );
                 pProperties->State = beans::PropertyState_DIRECT_VALUE;
                 pProperties++;
 
-                pProperties->Name = OUString(
-                    RTL_CONSTASCII_USTRINGPARAM( "Script" ) );
+                // ClickAction_BOOKMARK and ClickAction_DOCUMENT share the same xml event
+                // so check here if its realy a bookmark or maybe a document
+                if( meClickAction == ClickAction_BOOKMARK )
+                {
+                    if( msBookmark.compareToAscii( "#", 1 ) != 0 )
+                        meClickAction = ClickAction_DOCUMENT;
+                }
+
+                pProperties->Name = OUString( RTL_CONSTASCII_USTRINGPARAM("ClickAction") );
                 pProperties->Handle = -1;
-                pProperties->Value <<= msMacroName;
-                pProperties->State = beans::PropertyState_DIRECT_VALUE;
-            }
-        }
-        else
-        {
-            pProperties->Name = OUString( RTL_CONSTASCII_USTRINGPARAM( "EventType" ) );
-            pProperties->Handle = -1;
-            pProperties->Value <<= OUString( RTL_CONSTASCII_USTRINGPARAM("Presentation") );
-            pProperties->State = beans::PropertyState_DIRECT_VALUE;
-            pProperties++;
-
-            // ClickAction_BOOKMARK and ClickAction_DOCUMENT share the same xml event
-            // so check here if its realy a bookmark or maybe a document
-            if( meClickAction == ClickAction_BOOKMARK )
-            {
-                if( msBookmark.compareToAscii( "#", 1 ) != 0 )
-                    meClickAction = ClickAction_DOCUMENT;
-            }
-
-            pProperties->Name = OUString( RTL_CONSTASCII_USTRINGPARAM("ClickAction") );
-            pProperties->Handle = -1;
-            pProperties->Value <<= meClickAction;
-            pProperties->State = beans::PropertyState_DIRECT_VALUE;
-            pProperties++;
-
-            switch( meClickAction )
-            {
-            case ClickAction_NONE:
-            case ClickAction_PREVPAGE:
-            case ClickAction_NEXTPAGE:
-            case ClickAction_FIRSTPAGE:
-            case ClickAction_LASTPAGE:
-            case ClickAction_INVISIBLE:
-            case ClickAction_STOPPRESENTATION:
-                break;
-
-            case ClickAction_BOOKMARK:
-                msBookmark = msBookmark.copy(1);
-
-                // Note: no break here!!!
-
-            case ClickAction_DOCUMENT:
-            case ClickAction_PROGRAM:
-                pProperties->Name = OUString( RTL_CONSTASCII_USTRINGPARAM("Bookmark") );
-                pProperties->Handle = -1;
-                pProperties->Value <<= msBookmark;
-                pProperties->State = beans::PropertyState_DIRECT_VALUE;
-                break;
-
-            case ClickAction_VANISH:
-                pProperties->Name = OUString( RTL_CONSTASCII_USTRINGPARAM("Effect") );
-                pProperties->Handle = -1;
-                pProperties->Value <<= ImplSdXMLgetEffect( meEffect, meDirection, mnStartScale, sal_True );
+                pProperties->Value <<= meClickAction;
                 pProperties->State = beans::PropertyState_DIRECT_VALUE;
                 pProperties++;
 
-                pProperties->Name = OUString( RTL_CONSTASCII_USTRINGPARAM("Speed") );
-                pProperties->Handle = -1;
-                pProperties->Value <<= meSpeed;
-                pProperties->State = beans::PropertyState_DIRECT_VALUE;
-                pProperties++;
+                switch( meClickAction )
+                {
+                case ClickAction_NONE:
+                case ClickAction_PREVPAGE:
+                case ClickAction_NEXTPAGE:
+                case ClickAction_FIRSTPAGE:
+                case ClickAction_LASTPAGE:
+                case ClickAction_INVISIBLE:
+                case ClickAction_STOPPRESENTATION:
+                    break;
 
-                // NOTE: no break here!!!
+                case ClickAction_BOOKMARK:
+                    msBookmark = msBookmark.copy(1);
 
-            case ClickAction_SOUND:
-                pProperties->Name = OUString( RTL_CONSTASCII_USTRINGPARAM("SoundURL") );
-                pProperties->Handle = -1;
-                pProperties->Value <<= msSoundURL;
-                pProperties->State = beans::PropertyState_DIRECT_VALUE;
-                pProperties++;
+                    // Note: no break here!!!
 
-                pProperties->Name = OUString( RTL_CONSTASCII_USTRINGPARAM("PlayFull") );
-                pProperties->Handle = -1;
-                pProperties->Value = ::cppu::bool2any(mbPlayFull);
-                pProperties->State = beans::PropertyState_DIRECT_VALUE;
-                break;
+                case ClickAction_DOCUMENT:
+                case ClickAction_PROGRAM:
+                    pProperties->Name = OUString( RTL_CONSTASCII_USTRINGPARAM("Bookmark") );
+                    pProperties->Handle = -1;
+                    pProperties->Value <<= msBookmark;
+                    pProperties->State = beans::PropertyState_DIRECT_VALUE;
+                    break;
 
-            case ClickAction_VERB:
-                pProperties->Name = OUString( RTL_CONSTASCII_USTRINGPARAM("Verb") );
-                pProperties->Handle = -1;
-                pProperties->Value <<= mnVerb;
-                pProperties->State = beans::PropertyState_DIRECT_VALUE;
-                break;
-            case ClickAction_MACRO:
-                DBG_ERROR("xmloff::SdXMLEventContext::EndElement(), ClickAction_MACRO must be handled in different if case");
-                break;
-            default:
-                break;
+                case ClickAction_VANISH:
+                    pProperties->Name = OUString( RTL_CONSTASCII_USTRINGPARAM("Effect") );
+                    pProperties->Handle = -1;
+                    pProperties->Value <<= ImplSdXMLgetEffect( meEffect, meDirection, mnStartScale, sal_True );
+                    pProperties->State = beans::PropertyState_DIRECT_VALUE;
+                    pProperties++;
+
+                    pProperties->Name = OUString( RTL_CONSTASCII_USTRINGPARAM("Speed") );
+                    pProperties->Handle = -1;
+                    pProperties->Value <<= meSpeed;
+                    pProperties->State = beans::PropertyState_DIRECT_VALUE;
+                    pProperties++;
+
+                    // NOTE: no break here!!!
+
+                case ClickAction_SOUND:
+                    pProperties->Name = OUString( RTL_CONSTASCII_USTRINGPARAM("SoundURL") );
+                    pProperties->Handle = -1;
+                    pProperties->Value <<= msSoundURL;
+                    pProperties->State = beans::PropertyState_DIRECT_VALUE;
+                    pProperties++;
+
+                    pProperties->Name = OUString( RTL_CONSTASCII_USTRINGPARAM("PlayFull") );
+                    pProperties->Handle = -1;
+                    pProperties->Value = ::cppu::bool2any(mbPlayFull);
+                    pProperties->State = beans::PropertyState_DIRECT_VALUE;
+                    break;
+
+                case ClickAction_VERB:
+                    pProperties->Name = OUString( RTL_CONSTASCII_USTRINGPARAM("Verb") );
+                    pProperties->Handle = -1;
+                    pProperties->Value <<= mnVerb;
+                    pProperties->State = beans::PropertyState_DIRECT_VALUE;
+                    break;
+                case ClickAction_MACRO:
+                    DBG_ERROR("xmloff::SdXMLEventContext::EndElement(), ClickAction_MACRO must be handled in different if case");
+                    break;
+                default:
+                    break;
+                }
             }
         }
 
-        uno::Any aAny;
-        aAny <<= aProperties;
-        xEvents->replaceByName( msAPIEventName, aAny );
+        xEvents->replaceByName( sAPIEventName, uno::Any( aProperties ) );
 
     } while(0);
 }
