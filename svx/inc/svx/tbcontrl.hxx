@@ -4,9 +4,9 @@
  *
  *  $RCSfile: tbcontrl.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: kz $ $Date: 2007-05-10 14:32:35 $
+ *  last change: $Author: rt $ $Date: 2007-07-06 07:31:16 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -188,6 +188,10 @@ class SfxStyleControllerItem_Impl;
 class SfxStyleSheetBasePool;
 class SfxTemplateItem;
 
+namespace svx
+{
+    class ToolboxButtonColorUpdater;
+}
 //########################################################################
 
 //========================================================================
@@ -303,11 +307,9 @@ public:
 
 
 
-class SvxTbxButtonColorUpdater_Impl;
-
 class SVX_DLLPUBLIC SvxFontColorToolBoxControl : public SfxToolBoxControl
 {
-    SvxTbxButtonColorUpdater_Impl*   pBtnUpdater;
+    ::svx::ToolboxButtonColorUpdater*   pBtnUpdater;
 
 public:
     SFX_DECL_TOOLBOX_CONTROL();
@@ -334,7 +336,7 @@ class SVX_DLLPUBLIC SvxFontColorExtToolBoxControl : public SfxToolBoxControl
     using SfxToolBoxControl::Select;
 
     //  SfxStatusForwarder          aForward;
-    SvxTbxButtonColorUpdater_Impl*   pBtnUpdater;
+    ::svx::ToolboxButtonColorUpdater*   pBtnUpdater;
 
 public:
     SFX_DECL_TOOLBOX_CONTROL();
@@ -358,7 +360,7 @@ public:
 
 class SVX_DLLPUBLIC SvxColorToolBoxControl : public SfxToolBoxControl
 {
-    SvxTbxButtonColorUpdater_Impl*   pBtnUpdater;
+    ::svx::ToolboxButtonColorUpdater*   pBtnUpdater;
 public:
     SFX_DECL_TOOLBOX_CONTROL();
     SvxColorToolBoxControl( USHORT nSlotId, USHORT nId, ToolBox& rTbx );
@@ -418,7 +420,7 @@ public:
 
 class SVX_DLLPUBLIC SvxFrameLineColorToolBoxControl : public SfxToolBoxControl
 {
-    SvxTbxButtonColorUpdater_Impl*   pBtnUpdater;
+    ::svx::ToolboxButtonColorUpdater*   pBtnUpdater;
 public:
     SFX_DECL_TOOLBOX_CONTROL();
     SvxFrameLineColorToolBoxControl( USHORT nSlotId,
