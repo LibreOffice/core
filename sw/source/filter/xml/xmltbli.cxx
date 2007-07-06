@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xmltbli.cxx,v $
  *
- *  $Revision: 1.56 $
+ *  $Revision: 1.57 $
  *
- *  last change: $Author: kz $ $Date: 2007-05-10 16:12:35 $
+ *  last change: $Author: rt $ $Date: 2007-07-06 09:54:57 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -446,6 +446,7 @@ class SwXMLTableCellContext_Impl : public SvXMLImportContext
 {
     OUString aStyleName;
     OUString sFormula;
+    OUString sSaveParaDefault;
 
     SvXMLImportContextRef   xMyTable;
 
@@ -501,6 +502,7 @@ SwXMLTableCellContext_Impl::SwXMLTableCellContext_Impl(
     bHasValue( sal_False ),
     bProtect( sal_False )
 {
+    sSaveParaDefault = GetImport().GetTextImport()->sCellParaStyleDefault;
     sal_Int16 nAttrCount = xAttrList.is() ? xAttrList->getLength() : 0;
     for( sal_Int16 i=0; i < nAttrCount; i++ )
     {
@@ -517,6 +519,7 @@ SwXMLTableCellContext_Impl::SwXMLTableCellContext_Impl(
         {
         case XML_TOK_TABLE_STYLE_NAME:
             aStyleName = rValue;
+            GetImport().GetTextImport()->sCellParaStyleDefault = rValue;
             break;
         case XML_TOK_TABLE_NUM_COLS_SPANNED:
             nColSpan = (sal_uInt32)rValue.toInt32();
@@ -741,6 +744,7 @@ void SwXMLTableCellContext_Impl::EndElement()
             }
         }
     }
+    GetImport().GetTextImport()->sCellParaStyleDefault = sSaveParaDefault;
 }
 
 // ---------------------------------------------------------------------
@@ -2161,7 +2165,7 @@ SwTableBox *SwXMLTableContext::MakeTableBox(
         }
 
         // update cell content depend on the default language
-        pBox->ChgByLanguageSystem();
+        pBox->ActualiseValueBox();
     }
 
     // table cell protection
@@ -2442,7 +2446,7 @@ void SwXMLTableContext::_MakeTable( SwTableBox *pBox )
             // value as the smallest column that has an relative width
             // already.
             if( 0L == nMinRelColWidth )
-                nMinRelColWidth = MINLAY;
+                nMinRelColWidth = nMinAbsColWidth;
 
             for( i=0UL; nAbsCols > 0UL && i < nCols; i++ )
             {
