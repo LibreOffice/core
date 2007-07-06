@@ -4,9 +4,9 @@
  *
  *  $RCSfile: uiservices.cxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: obo $ $Date: 2006-10-12 13:42:39 $
+ *  last change: $Author: rt $ $Date: 2007-07-06 08:38:21 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -44,6 +44,9 @@
 #endif
 #ifndef _DBU_REGHELPER_HXX_
 #include "dbu_reghelper.hxx"
+#endif
+#ifndef INCLUDED_DBACCESSDLLAPI_H
+#include "dbaccessdllapi.h"
 #endif
 
 /********************************************************************************************/
@@ -117,7 +120,7 @@ extern "C" void SAL_CALL createRegistryInfo_DBU()
 
 //---------------------------------------------------------------------------------------
 
-extern "C" void SAL_CALL component_getImplementationEnvironment(
+extern "C" DBACCESS_DLLPUBLIC void SAL_CALL component_getImplementationEnvironment(
                 const sal_Char  **ppEnvTypeName,
                 uno_Environment **
             )
@@ -127,7 +130,7 @@ extern "C" void SAL_CALL component_getImplementationEnvironment(
 }
 
 //---------------------------------------------------------------------------------------
-extern "C" sal_Bool SAL_CALL component_writeInfo(
+extern "C" DBACCESS_DLLPUBLIC sal_Bool SAL_CALL component_writeInfo(
                 void* pServiceManager,
                 void* pRegistryKey
             )
@@ -149,7 +152,7 @@ extern "C" sal_Bool SAL_CALL component_writeInfo(
 }
 
 //---------------------------------------------------------------------------------------
-extern "C" void* SAL_CALL component_getFactory(
+extern "C" DBACCESS_DLLPUBLIC void* SAL_CALL component_getFactory(
                     const sal_Char* pImplementationName,
                     void* pServiceManager,
                     void* /*pRegistryKey*/)
