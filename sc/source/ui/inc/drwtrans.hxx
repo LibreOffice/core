@@ -4,9 +4,9 @@
  *
  *  $RCSfile: drwtrans.hxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: obo $ $Date: 2006-10-13 11:36:05 $
+ *  last change: $Author: rt $ $Date: 2007-07-06 12:28:33 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -125,6 +125,8 @@ public:
     sal_uInt32          GetSourceDocID() const      { return nSourceDocID; }
 
     static ScDrawTransferObj* GetOwnClipboard( Window* pUIWin );
+    virtual sal_Int64 SAL_CALL getSomething( const com::sun::star::uno::Sequence< sal_Int8 >& rId ) throw( com::sun::star::uno::RuntimeException );
+    static const com::sun::star::uno::Sequence< sal_Int8 >& getUnoTunnelId();
 };
 
 #endif
