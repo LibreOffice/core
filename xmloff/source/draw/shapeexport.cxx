@@ -4,9 +4,9 @@
  *
  *  $RCSfile: shapeexport.cxx,v $
  *
- *  $Revision: 1.77 $
+ *  $Revision: 1.78 $
  *
- *  last change: $Author: hr $ $Date: 2007-06-27 15:06:04 $
+ *  last change: $Author: rt $ $Date: 2007-07-06 12:28:14 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -161,6 +161,11 @@ XMLShapeExport::XMLShapeExport(SvXMLExport& rExp,
     msStartShape( RTL_CONSTASCII_USTRINGPARAM("StartShape") ),
     msEndShape( RTL_CONSTASCII_USTRINGPARAM("EndShape") ),
     msOnClick( RTL_CONSTASCII_USTRINGPARAM("OnClick") ),
+#ifdef ISSUE66550_HLINK_FOR_SHAPES
+    msOnAction( RTL_CONSTASCII_USTRINGPARAM("OnAction") ),
+    msAction( RTL_CONSTASCII_USTRINGPARAM("Action") ),
+    msURL( RTL_CONSTASCII_USTRINGPARAM("URL") ),
+#endif
     msEventType( RTL_CONSTASCII_USTRINGPARAM("EventType") ),
     msPresentation( RTL_CONSTASCII_USTRINGPARAM("Presentation") ),
     msMacroName( RTL_CONSTASCII_USTRINGPARAM("MacroName") ),
