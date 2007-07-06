@@ -1,0 +1,100 @@
+/*************************************************************************
+ *
+ *  OpenOffice.org - a multi-platform office productivity suite
+ *
+ *  $RCSfile: XShape.idl,v $
+ *
+ *  $Revision: 1.2 $
+ *
+ *  last change: $Author: rt $ $Date: 2007-07-06 07:23:02 $
+ *
+ *  The Contents of this file are made available subject to
+ *  the terms of GNU Lesser General Public License Version 2.1.
+ *
+ *
+ *    GNU Lesser General Public License Version 2.1
+ *    =============================================
+ *    Copyright 2005 by Sun Microsystems, Inc.
+ *    901 San Antonio Road, Palo Alto, CA 94303, USA
+ *
+ *    This library is free software; you can redistribute it and/or
+ *    modify it under the terms of the GNU Lesser General Public
+ *    License version 2.1, as published by the Free Software Foundation.
+ *
+ *    This library is distributed in the hope that it will be useful,
+ *    but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ *    Lesser General Public License for more details.
+ *
+ *    You should have received a copy of the GNU Lesser General Public
+ *    License along with this library; if not, write to the Free Software
+ *    Foundation, Inc., 59 Temple Place, Suite 330, Boston,
+ *    MA  02111-1307  USA
+ *
+ ************************************************************************/
+#ifndef __com_sun_star_report_XShape_idl__
+#define __com_sun_star_report_XShape_idl__
+
+#ifndef __com_sun_star_report_XReportControlModel_idl__
+#include <com/sun/star/report/XReportControlModel.idl>
+#endif
+#ifndef __com_sun_star_beans_PropertyValue_idl__
+#include <com/sun/star/beans/PropertyValue.idl>
+#endif
+#ifndef __com_sun_star_drawing_XShape_idl__
+#include <com/sun/star/drawing/XShape.idl>
+#endif
+#ifndef __com_sun_star_drawing_HomogenMatrix3_idl__
+#include <com/sun/star/drawing/HomogenMatrix3.idl>
+#endif
+//=============================================================================
+
+ module com {  module sun {  module star {  module report {
+
+//=============================================================================
+interface XShape
+{
+    interface XReportControlModel;
+
+    /** is used to query or change the ZOrder of this <type>Shape</type>. */
+    [attribute,bound] long ZOrder;
+
+    /** this property lets you get and set the transformation matrix
+        for this shape.
+
+        The transformation is a 3x3 homogen matrix and can contain
+        translation, rotation, shearing and scaling.
+     */
+    [attribute,bound] com::sun::star::drawing::HomogenMatrix3 Transformation;
+
+    //-------------------------------------------------------------------------
+    /** This property contains the CustomShapeEngine service name that has to
+        be used for rendering.
+    */
+    [attribute] string CustomShapeEngine;
+
+    //-------------------------------------------------------------------------
+    /** This property can be used to store data that the CustomShapeEngine may
+        use for rendering
+    */
+    [attribute] string CustomShapeData;
+
+    /** This property describes the geometry of the CustomShape. The CustomShapeEngine
+        that is used should be able to get on with the content of this property.
+
+        If the CustomShapeEngine property is "com.sun.star.drawing.EnhancedCustomShapeEngine",
+        then this property is containing properties as they are specified in the service
+        com.sun.star.drawing.EnhancedCustomShapeGeometry
+    */
+    [attribute,bound] sequence<::com::sun::star::beans::PropertyValue> CustomShapeGeometry;
+};
+
+service Shape : XShape;
+//=============================================================================
+
+}; }; }; };
+
+/*=============================================================================
+
+=============================================================================*/
+#endif
