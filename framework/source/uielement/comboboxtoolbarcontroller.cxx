@@ -4,9 +4,9 @@
  *
  *  $RCSfile: comboboxtoolbarcontroller.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: vg $ $Date: 2006-11-21 17:21:28 $
+ *  last change: $Author: rt $ $Date: 2007-07-06 12:23:29 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -75,6 +75,9 @@
 #endif
 #ifndef _COM_SUN_STAR_FRAME_XCONTROLNOTIFICATIONLISTENER_HPP_
 #include <com/sun/star/frame/XControlNotificationListener.hpp>
+#endif
+#ifndef _COM_SUN_STAR_UTIL_COLOR_HPP_
+#include <com/sun/star/util/Color.hpp>
 #endif
 
 //_________________________________________________________________________________________________________________
@@ -219,7 +222,6 @@ ComboboxToolbarController::ComboboxToolbarController(
 
     m_pComboBox->SetSizePixel( ::Size( nWidth, aPixelSize.Height() ));
     m_pToolbar->SetItemWindow( m_nID, m_pComboBox );
-    m_pComboBox->SetDropDownLineCount( 5 );
 }
 
 // ------------------------------------------------------------------
@@ -465,6 +467,38 @@ void ComboboxToolbarController::executeControlCommand( const ::com::sun::star::f
                 sal_Int32 nValue( 5 );
                 rControlCommand.Arguments[i].Value >>= nValue;
                 m_pComboBox->SetDropDownLineCount( sal_uInt16( nValue ));
+                break;
+            }
+        }
+    }
+    else if ( rControlCommand.Command.equalsAsciiL( "SetBackgroundColor", 18 ))
+    {
+        for ( sal_Int32 i = 0; i < rControlCommand.Arguments.getLength(); i++ )
+        {
+            if ( rControlCommand.Arguments[i].Name.equalsAsciiL( "Color", 5 ))
+            {
+                com::sun::star::util::Color aColor(0);
+                if ( rControlCommand.Arguments[i].Value >>= aColor )
+                {
+                    ::Color aBackColor( static_cast< UINT32 >( aColor ));
+                    m_pComboBox->SetControlBackground( aBackColor );
+                }
+                break;
+            }
+        }
+    }
+    else if ( rControlCommand.Command.equalsAsciiL( "SetTextColor", 12 ))
+    {
+        for ( sal_Int32 i = 0; i < rControlCommand.Arguments.getLength(); i++ )
+        {
+            if ( rControlCommand.Arguments[i].Name.equalsAsciiL( "Color", 5 ))
+            {
+                com::sun::star::util::Color aColor(0);
+                if ( rControlCommand.Arguments[i].Value >>= aColor )
+                {
+                    ::Color aForeColor( static_cast< UINT32 >( aColor ));
+                    m_pComboBox->SetControlForeground( aForeColor );
+                }
                 break;
             }
         }
