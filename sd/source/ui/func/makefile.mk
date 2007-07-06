@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.20 $
+#   $Revision: 1.21 $
 #
-#   last change: $Author: kz $ $Date: 2007-05-10 15:32:24 $
+#   last change: $Author: rt $ $Date: 2007-07-06 13:12:51 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -115,7 +115,8 @@ SLOFILES = \
         $(SLO)$/fuvect.obj		\
         $(SLO)$/bulmaper.obj    \
         $(SLO)$/undoback.obj    \
-        $(SLO)$/fuconcs.obj
+        $(SLO)$/fuconcs.obj		\
+        $(SLO)$/smarttag.obj
 
 .IF "$(GUI)" == "WNT"
 
@@ -159,8 +160,9 @@ LIB1OBJFILES= \
         $(SLO)$/fubullet.obj 	\
         $(SLO)$/futempl.obj		\
         $(SLO)$/fuoutl.obj		\
-        $(SLO)$/fuoltext.obj 
-
+        $(SLO)$/fuoltext.obj	\
+        $(SLO)$/smarttag.obj
+            
 LIB3TARGET=	$(SLB)$/$(TARGET)_2.lib
 LIB3OBJFILES= \
         $(SLO)$/fuinsert.obj 	\
