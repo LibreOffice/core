@@ -4,9 +4,9 @@
  *
  *  $RCSfile: directsql.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: kz $ $Date: 2007-05-10 10:32:15 $
+ *  last change: $Author: rt $ $Date: 2007-07-06 08:28:58 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -62,6 +62,9 @@
 #ifndef _UNOTOOLS_EVENTLISTENERADAPTER_HXX_
 #include <unotools/eventlisteneradapter.hxx>
 #endif
+#ifndef _DBAUI_MODULE_DBU_HXX_
+#include "moduledbu.hxx"
+#endif
 #ifndef _OSL_MUTEX_HXX_
 #include <osl/mutex.hxx>
 #endif
@@ -79,6 +82,7 @@ namespace dbaui
             ,public ::utl::OEventListenerAdapter
     {
     protected:
+        OModuleClient m_aModuleClient;
         ::osl::Mutex    m_aMutex;
 
         FixedLine       m_aFrame;
