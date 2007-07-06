@@ -1,0 +1,84 @@
+/*************************************************************************
+ *
+ *  OpenOffice.org - a multi-platform office productivity suite
+ *
+ *  $RCSfile: XStringRepresentation.idl,v $
+ *
+ *  $Revision: 1.2 $
+ *
+ *  last change: $Author: rt $ $Date: 2007-07-06 07:17:34 $
+ *
+ *  The Contents of this file are made available subject to
+ *  the terms of GNU Lesser General Public License Version 2.1.
+ *
+ *
+ *    GNU Lesser General Public License Version 2.1
+ *    =============================================
+ *    Copyright 2005 by Sun Microsystems, Inc.
+ *    901 San Antonio Road, Palo Alto, CA 94303, USA
+ *
+ *    This library is free software; you can redistribute it and/or
+ *    modify it under the terms of the GNU Lesser General Public
+ *    License version 2.1, as published by the Free Software Foundation.
+ *
+ *    This library is distributed in the hope that it will be useful,
+ *    but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ *    Lesser General Public License for more details.
+ *
+ *    You should have received a copy of the GNU Lesser General Public
+ *    License along with this library; if not, write to the Free Software
+ *    Foundation, Inc., 59 Temple Place, Suite 330, Boston,
+ *    MA  02111-1307  USA
+ *
+ ************************************************************************/
+
+#ifndef __com_sun_star_inspection_XStringRepresentation_idl__
+#define __com_sun_star_inspection_XStringRepresentation_idl__
+
+#ifndef __com_sun_star_script_XTypeConverter_idl__
+#include <com/sun/star/script/XTypeConverter.idl>
+#endif
+
+//=============================================================================
+module com {  module sun {  module star {  module inspection {
+
+//-----------------------------------------------------------------------------
+/** handles string representations of property values.
+    @see
+*/
+interface XStringRepresentation
+{
+    /** converts a  into a string.
+        @param PropertyValue
+            The to-be-converted property value.
+        @return
+            The converted string representation of the property value.
+        @see <member>XPropertyHandler::convertToControlValue</member>
+    */
+    string  convertToControlValue([in]any PropertyValue) raises( com::sun::star::uno::Exception );
+
+    /** converts a string into an any with the type defined by the target tpye.
+        @param ControlValue
+            The to-be-converted control value.
+        @param ControlValueType
+            The target type of the conversion.
+        @see <member>XPropertyHandler::convertToPropertyValue</member>
+    */
+    any     convertToPropertyValue(
+                            [in]string ControlValue,
+                            [in]type ControlValueType
+                        ) raises( com::sun::star::uno::Exception );
+};
+
+service StringRepresentation : XStringRepresentation
+{
+    create([in]com::sun::star::script::XTypeConverter TypeConverter)raises( com::sun::star::lang::IllegalArgumentException );
+    createConstant([in]com::sun::star::script::XTypeConverter TypeConverter,[in] string Constant,[in] sequence<string> Values)raises( com::sun::star::lang::IllegalArgumentException );
+};
+//=============================================================================
+
+}; }; }; };
+
+#endif
+
