@@ -4,9 +4,9 @@
  *
  *  $RCSfile: olecomponent.cxx,v $
  *
- *  $Revision: 1.40 $
+ *  $Revision: 1.41 $
  *
- *  last change: $Author: vg $ $Date: 2007-03-26 13:43:41 $
+ *  last change: $Author: rt $ $Date: 2007-07-06 10:10:28 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -67,6 +67,9 @@
 #include <platform.h>
 
 #include <cppuhelper/interfacecontainer.h>
+#ifndef _COMPHELPER_MIMECONFIGHELPER_HXX_
+#include <comphelper/mimeconfighelper.hxx>
+#endif
 #include <comphelper/storagehelper.hxx>
 #include <osl/file.hxx>
 #include <rtl/ref.hxx>
@@ -76,10 +79,9 @@
 #include <advisesink.hxx>
 #include <oleembobj.hxx>
 #include <mtnotification.hxx>
-#include <convert.hxx>
 
 using namespace ::com::sun::star;
-
+using namespace ::comphelper;
 #define     MAX_ENUM_ELE     20
 #define     FORMATS_NUM      3
 
@@ -1199,7 +1201,7 @@ uno::Sequence< sal_Int8 > OleComponent::GetCLSID()
     if ( FAILED( hr ) )
         throw io::IOException(); // TODO:
 
-    return  GetSequenceClassID( aCLSID.Data1, aCLSID.Data2, aCLSID.Data3,
+    return  MimeConfigurationHelper::GetSequenceClassID( aCLSID.Data1, aCLSID.Data2, aCLSID.Data3,
                                 aCLSID.Data4[0], aCLSID.Data4[1],
                                 aCLSID.Data4[2], aCLSID.Data4[3],
                                 aCLSID.Data4[4], aCLSID.Data4[5],
@@ -1629,7 +1631,7 @@ sal_Int64 SAL_CALL OleComponent::getSomething( const ::com::sun::star::uno::Sequ
     try
     {
         uno::Sequence < sal_Int8 > aCLSID = GetCLSID();
-        if ( ClassIDsEqual( aIdentifier, aCLSID ) )
+        if ( MimeConfigurationHelper::ClassIDsEqual( aIdentifier, aCLSID ) )
             return (sal_Int64) (IUnknown*) m_pNativeImpl->m_pObj;
 
         // compatibility hack for old versions: CLSID was used in wrong order (SvGlobalName order)
