@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dbtools.cxx,v $
  *
- *  $Revision: 1.67 $
+ *  $Revision: 1.68 $
  *
- *  last change: $Author: vg $ $Date: 2006-11-21 16:59:34 $
+ *  last change: $Author: rt $ $Date: 2007-07-06 06:47:28 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -44,6 +44,9 @@
 #endif
 #ifndef _DBHELPER_DBCONVERSION_HXX_
 #include <connectivity/dbconversion.hxx>
+#endif
+#ifndef CONNECTIVITY_STATEMENTCOMPOSER_HXX
+#include <connectivity/statementcomposer.hxx>
 #endif
 #ifndef CONNECTIVITY_DIAGNOSE_EX_H
 #include "diagnose_ex.h"
@@ -95,6 +98,9 @@
 #ifndef _COM_SUN_STAR_SDB_XSINGLESELECTQUERYCOMPOSER_HPP_
 #include <com/sun/star/sdb/XSingleSelectQueryComposer.hpp>
 #endif
+#ifndef _COM_SUN_STAR_SDB_XOFFICEDATABASEDOCUMENT_HPP_
+#include <com/sun/star/sdb/XOfficeDatabaseDocument.hpp>
+#endif
 #ifndef _COM_SUN_STAR_SDB_COMMANDTYPE_HPP_
 #include <com/sun/star/sdb/CommandType.hpp>
 #endif
@@ -112,6 +118,9 @@
 #endif
 #ifndef _OSL_DIAGNOSE_H_
 #include <osl/diagnose.h>
+#endif
+#ifndef TOOLS_DIAGNOSE_EX_H
+#include <tools/diagnose_ex.h>
 #endif
 #ifndef _COM_SUN_STAR_UTIL_XNUMBERFORMATSSUPPLIER_HPP_
 #include <com/sun/star/util/XNumberFormatsSupplier.hpp>
@@ -1317,7 +1326,12 @@ sal_Bool canDelete(const Reference< XPropertySet>& _rxCursorSet)
 // -----------------------------------------------------------------------------
 Reference< XDataSource> findDataSource(const Reference< XInterface >& _xParent)
 {
-    Reference< XDataSource> xDataSource(_xParent, UNO_QUERY);
+    Reference< XOfficeDatabaseDocument> xDatabaseDocument(_xParent, UNO_QUERY);
+    Reference< XDataSource> xDataSource;
+    if ( xDatabaseDocument.is() )
+        xDataSource = xDatabaseDocument->getDataSource();
+    if ( !xDataSource.is() )
+        xDataSource.set(_xParent, UNO_QUERY);
     if (!xDataSource.is())
     {
         Reference< XChild> xChild(_xParent, UNO_QUERY);
@@ -1326,6 +1340,7 @@ Reference< XDataSource> findDataSource(const Reference< XInterface >& _xParent)
     }
     return xDataSource;
 }
+
 //------------------------------------------------------------------------------
 ::rtl::OUString getComposedRowSetStatement( const Reference< XPropertySet >& _rxRowSet, const Reference< XMultiServiceFactory>& _rxFactory,
                                    sal_Bool _bUseRowSetFilter, sal_Bool _bUseRowSetOrder, Reference< XSingleSelectQueryComposer >* _pxComposer )
@@ -1340,136 +1355,34 @@ Reference< XDataSource> findDataSource(const Reference< XInterface >& _xParent)
             // build the statement the row set is based on (can't use the ActiveCommand property of the set
             // as this reflects the status after the last execute, not the currently set properties)
 
-            const ::rtl::OUString sPropCommandType  = ::rtl::OUString::createFromAscii( "CommandType" );
-            const ::rtl::OUString sPropFilter       = ::rtl::OUString::createFromAscii( "Filter"      );
-            const ::rtl::OUString sPropOrder        = ::rtl::OUString::createFromAscii( "Order"       );
-            const ::rtl::OUString sPropApplyFilter  = ::rtl::OUString::createFromAscii( "ApplyFilter" );
-
-            const ::rtl::OUString sPropCommand      = OMetaConnection::getPropMap().getNameByIndex( PROPERTY_ID_COMMAND          );
-            const ::rtl::OUString sPropEspaceProc   = OMetaConnection::getPropMap().getNameByIndex( PROPERTY_ID_ESCAPEPROCESSING );
-
             sal_Int32 nCommandType = CommandType::COMMAND;
             ::rtl::OUString sCommand;
             sal_Bool bEscapeProcessing = sal_False;
 
-            _rxRowSet->getPropertyValue( sPropCommandType ) >>= nCommandType     ;
-            _rxRowSet->getPropertyValue( sPropCommand     ) >>= sCommand         ;
-            _rxRowSet->getPropertyValue( sPropEspaceProc  ) >>= bEscapeProcessing;
+            OSL_VERIFY( _rxRowSet->getPropertyValue( ::rtl::OUString::createFromAscii( "CommandType" )      ) >>= nCommandType      );
+            OSL_VERIFY( _rxRowSet->getPropertyValue( ::rtl::OUString::createFromAscii( "Command" )          ) >>= sCommand          );
+            OSL_VERIFY( _rxRowSet->getPropertyValue( ::rtl::OUString::createFromAscii( "EscapeProcessing" ) ) >>= bEscapeProcessing );
 
-            switch ( nCommandType )
+            StatementComposer aComposer( xConn, sCommand, nCommandType, bEscapeProcessing );
+            // append sort
+            if ( _bUseRowSetOrder )
+                aComposer.setOrder( getString( _rxRowSet->getPropertyValue( ::rtl::OUString::createFromAscii( "Order" ) ) ) );
+
+            // append filter
+            if ( _bUseRowSetFilter )
             {
-                case CommandType::COMMAND:
-                    if ( bEscapeProcessing )
-                        sStatement = sCommand;
-                    // (in case of no escape processing  we assume a not parseable statement)
-                    break;
-
-                case CommandType::TABLE:
-                {
-                    if ( !sCommand.getLength() )
-                        break;
-
-                    sStatement = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("SELECT * FROM "));
-
-                    ::rtl::OUString sCatalog, sSchema, sTable;
-                    qualifiedNameComponents( xConn->getMetaData(), sCommand, sCatalog, sSchema, sTable, eInDataManipulation );
-
-                    sStatement += composeTableNameForSelect( xConn, sCatalog, sSchema, sTable );
-                }
-                break;
-
-                case CommandType::QUERY:
-                {
-                    // ask the connection for the query
-                    Reference< XQueriesSupplier > xSupplyQueries( xConn, UNO_QUERY );
-                    Reference< XNameAccess >      xQueries;
-                    if ( xSupplyQueries.is() )
-                        xQueries = xQueries.query( xSupplyQueries->getQueries() );
-                    OSL_ENSURE( xQueries.is(), "getComposedRowSetStatement: a connection which cannot supply queries?" );
-                    if ( !xQueries.is() )
-                        break;
-
-                    if ( !xQueries->hasByName( sCommand ) )
-                        break;
-
-                    Reference< XPropertySet > xQuery;
-                    xQueries->getByName( sCommand ) >>= xQuery;
-                    OSL_ENSURE( xQuery.is(), "getComposedRowSetStatement: invalid query!" );
-                    if ( !xQuery.is() )
-                        break;
-
-                    //  a native query ?
-                    sal_Bool bQueryEscapeProcessing = sal_False;
-                    xQuery->getPropertyValue( sPropEspaceProc ) >>= bQueryEscapeProcessing;
-                    if ( !bQueryEscapeProcessing )
-                        break;
-
-                    // the command used by the query
-                    xQuery->getPropertyValue( sPropCommand ) >>= sStatement;
-                    if ( !sStatement.getLength() )
-                        break;
-
-                    // use a composer to build a statement from the query filter/order props
-                    Reference< XMultiServiceFactory > xFactory( xConn, UNO_QUERY );
-                    Reference< XSingleSelectQueryComposer > xComposer;
-                    if ( xFactory.is() )
-                        xComposer.set( xFactory->createInstance( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.sdb.SingleSelectQueryComposer" ) ) ), UNO_QUERY );
-                    if ( !xComposer.is() )
-                        break;
-
-                    // the "basic" statement
-                    xComposer->setQuery( sStatement );
-
-                    // the sort order
-                    if ( hasProperty( sPropOrder, xQuery ) )
-                        xComposer->setOrder( getString( xQuery->getPropertyValue( sPropOrder ) ) );
-
-                    // the filter
-                    sal_Bool bApplyFilter = sal_True;
-                    if ( hasProperty( sPropApplyFilter, xQuery ) )
-                        bApplyFilter = getBOOL( xQuery->getPropertyValue( sPropApplyFilter ) );
-
-                    if ( bApplyFilter )
-                        xComposer->setFilter( getString( xQuery->getPropertyValue( sPropFilter ) ) );
-
-                    // the composed statement
-                    sStatement = xComposer->getQuery();
-                }
-                break;
-
-                default:
-                    OSL_ENSURE(sal_False, "getComposedRowSetStatement: no table, no query, no statement - what else ?!");
-                    break;
+                sal_Bool bApplyFilter = sal_True;
+                _rxRowSet->getPropertyValue( ::rtl::OUString::createFromAscii( "ApplyFilter" ) ) >>= bApplyFilter;
+                if ( bApplyFilter )
+                    aComposer.setFilter( getString( _rxRowSet->getPropertyValue( ::rtl::OUString::createFromAscii( "Filter" ) ) ) );
             }
 
-            if ( sStatement.getLength() && ( _bUseRowSetFilter || _bUseRowSetOrder ) )
+            sStatement = aComposer.getQuery();
+
+            if ( _pxComposer )
             {
-                // create an composer
-                Reference< XMultiServiceFactory > xFactory( xConn, UNO_QUERY );
-                Reference< XSingleSelectQueryComposer > xComposer;
-                if ( xFactory.is() )
-                    xComposer.set( xFactory->createInstance( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.sdb.SingleSelectQueryComposer" ) ) ), UNO_QUERY );
-                if ( xComposer.is() )
-                {
-                    xComposer->setElementaryQuery( sStatement );
-
-                    // append sort
-                    if ( _bUseRowSetOrder )
-                        xComposer->setOrder( getString( _rxRowSet->getPropertyValue( sPropOrder ) ) );
-
-                    // append filter
-                    if ( _bUseRowSetFilter )
-                    {
-                        sal_Bool bApplyFilter = sal_True;
-                        _rxRowSet->getPropertyValue( sPropApplyFilter ) >>= bApplyFilter;
-                        if ( bApplyFilter )
-                            xComposer->setFilter( getString( _rxRowSet->getPropertyValue( sPropFilter ) ) );
-                    }
-
-                    sStatement = xComposer->getQuery();
-                    if ( _pxComposer )
-                        *_pxComposer = xComposer;
-                }
+                *_pxComposer = aComposer.getComposer();
+                aComposer.setDisposeComposer( false );
             }
         }
     }
@@ -1479,7 +1392,7 @@ Reference< XDataSource> findDataSource(const Reference< XInterface >& _xParent)
     }
     catch( const Exception& )
     {
-        OSL_ENSURE( sal_False, "getComposedRowSetStatement: caught an (non-SQL) exception!" );
+        DBG_UNHANDLED_EXCEPTION();
     }
 
     return sStatement;
