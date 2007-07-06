@@ -1,0 +1,370 @@
+/*************************************************************************
+ *
+ *  OpenOffice.org - a multi-platform office productivity suite
+ *
+ *  $RCSfile: download.cxx,v $
+ *
+ *  $Revision: 1.2 $
+ *
+ *  last change: $Author: rt $ $Date: 2007-07-06 14:35:55 $
+ *
+ *  The Contents of this file are made available subject to
+ *  the terms of GNU Lesser General Public License Version 2.1.
+ *
+ *
+ *    GNU Lesser General Public License Version 2.1
+ *    =============================================
+ *    Copyright 2005 by Sun Microsystems, Inc.
+ *    901 San Antonio Road, Palo Alto, CA 94303, USA
+ *
+ *    This library is free software; you can redistribute it and/or
+ *    modify it under the terms of the GNU Lesser General Public
+ *    License version 2.1, as published by the Free Software Foundation.
+ *
+ *    This library is distributed in the hope that it will be useful,
+ *    but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ *    Lesser General Public License for more details.
+ *
+ *    You should have received a copy of the GNU Lesser General Public
+ *    License along with this library; if not, write to the Free Software
+ *    Foundation, Inc., 59 Temple Place, Suite 330, Boston,
+ *    MA  02111-1307  USA
+ *
+ ************************************************************************/
+
+// MARKER(update_precomp.py): autogen include statement, do not remove
+#include "precompiled_extensions.hxx"
+
+#if defined WNT
+#pragma warning(push, 1) /* disable warnings within system headers */
+#include <curl/curl.h>
+#pragma warning(pop)
+#else
+#include <curl/curl.h>
+#endif
+
+#ifndef _COM_SUN_STAR_BEANS_PROPERTYVALUE_HPP_
+#include <com/sun/star/beans/PropertyValue.hpp>
+#endif
+
+#ifndef _COM_SUN_STAR_CONTAINER_XNAMEACCESS_HPP_
+#include <com/sun/star/container/XNameAccess.hpp>
+#endif
+
+#ifndef _COM_SUN_STAR_LANG_XMULTISERVICEFACTORY_HPP_
+#include <com/sun/star/lang/XMultiServiceFactory.hpp>
+#endif
+
+#include "download.hxx"
+
+namespace beans = com::sun::star::beans ;
+namespace container = com::sun::star::container ;
+namespace lang = com::sun::star::lang ;
+namespace uno = com::sun::star::uno ;
+
+#define UNISTRING(s) rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(s))
+
+
+struct OutData
+{
+    rtl::Reference< DownloadInteractionHandler >Handler;
+    rtl::OUString   FilePath;
+    oslFileHandle   FileHandle;
+    sal_uInt64      Offset;
+    osl::Condition& StopCondition;
+    CURL *curl;
+
+    OutData(osl::Condition& rCondition) : FileHandle(NULL), Offset(0), StopCondition(rCondition), curl(NULL) {};
+};
+
+
+//------------------------------------------------------------------------------
+
+static inline rtl::OString
+getStringValue(const uno::Reference< container::XNameAccess >& xNameAccess, const rtl::OUString& aName)
+{
+    rtl::OString aRet;
+
+    OSL_ASSERT(xNameAccess->hasByName(aName));
+    uno::Any aValue = xNameAccess->getByName(aName);
+
+    return rtl::OUStringToOString(aValue.get<rtl::OUString>(), RTL_TEXTENCODING_UTF8);
+}
+
+//------------------------------------------------------------------------------
+
+static inline sal_Int32
+getInt32Value(const uno::Reference< container::XNameAccess >& xNameAccess, const rtl::OUString& aName)
+{
+    OSL_ASSERT(xNameAccess->hasByName(aName));
+    uno::Any aValue = xNameAccess->getByName(aName);
+
+    return aValue.get<sal_Int32>();
+}
+
+//------------------------------------------------------------------------------
+
+static size_t
+write_function( void *ptr, size_t size, size_t nmemb, void *stream )
+{
+    OutData *out = reinterpret_cast < OutData * > (stream);
+
+    if( NULL == out->FileHandle )
+    {
+        char * effective_url;
+        curl_easy_getinfo(out->curl, CURLINFO_EFFECTIVE_URL, &effective_url);
+
+        rtl::OString aURL(effective_url);
+
+        // ensure no trailing '/'
+        sal_Int32 nLen = aURL.getLength();
+        while( (nLen > 0) && ('/' == aURL[nLen-1]) )
+            aURL = aURL.copy(0, --nLen);
+
+        // extract file name last '/'
+        sal_Int32 nIndex = aURL.lastIndexOf('/');
+        if( nIndex > 0 )
+        {
+            out->FilePath += rtl::OStringToOUString(aURL.copy(nIndex), RTL_TEXTENCODING_UTF8);
+
+            oslFileError rc;
+
+            // Give the user an overwrite warning if the target file exists
+            const sal_Int32 openFlags = osl_File_OpenFlag_Write | osl_File_OpenFlag_Create;
+            do
+            {
+                rc = osl_openFile(out->FilePath.pData, &out->FileHandle, openFlags);
+
+                if( osl_File_E_EXIST == rc && ! out->Handler->downloadTargetExists(out->FilePath) )
+                    break;
+
+            } while( osl_File_E_EXIST == rc );
+
+            if( osl_File_E_None == rc )
+                out->Handler->downloadStarted(out->FilePath);
+        }
+    }
+
+    sal_uInt64 nBytesWritten = 0;
+
+    if( NULL != out->FileHandle )
+        osl_writeFile(out->FileHandle, ptr, size * nmemb, &nBytesWritten);
+
+    return (size_t) nBytesWritten;
+}
+
+//------------------------------------------------------------------------------
+
+static int
+progress_callback( void *clientp, double dltotal, double dlnow, double ultotal, double ulnow )
+{
+    (void) ultotal;
+    (void) ulnow;
+
+    OutData *out = reinterpret_cast < OutData * > (clientp);
+
+    OSL_ASSERT( out );
+
+    if( ! out->StopCondition.check() )
+    {
+        double fProcent = (dlnow + out->Offset) * 100 / (dltotal + out->Offset);
+        if( fProcent < 0 )
+            fProcent = 0;
+
+        // Do not report progress for redirection replies
+        long nCode;
+        curl_easy_getinfo(out->curl, CURLINFO_RESPONSE_CODE, &nCode);
+        if( (nCode != 302) && (nCode != 303) )
+            out->Handler->downloadProgressAt((sal_Int8)fProcent);
+
+        return 0;
+    }
+
+    // If stop condition is set, return non 0 value to abort
+    return -1;
+}
+
+//------------------------------------------------------------------------------
+
+void
+Download::getProxyForURL(const rtl::OUString& rURL, rtl::OString& rHost, sal_Int32& rPort) const
+{
+    if( !m_xContext.is() )
+        throw uno::RuntimeException(
+            UNISTRING( "Download: empty component context" ),
+            uno::Reference< uno::XInterface >() );
+
+    uno::Reference< lang::XMultiComponentFactory > xServiceManager(m_xContext->getServiceManager());
+
+    if( !xServiceManager.is() )
+        throw uno::RuntimeException(
+            UNISTRING( "Download: unable to obtain service manager from component context" ),
+            uno::Reference< uno::XInterface >() );
+
+    uno::Reference< lang::XMultiServiceFactory > xConfigProvider(
+        xServiceManager->createInstanceWithContext( UNISTRING( "com.sun.star.configuration.ConfigurationProvider" ), m_xContext ),
+        uno::UNO_QUERY_THROW);
+
+    beans::PropertyValue aProperty;
+    aProperty.Name  = UNISTRING( "nodepath" );
+    aProperty.Value = uno::makeAny( UNISTRING("org.openoffice.Inet/Settings") );
+
+    uno::Sequence< uno::Any > aArgumentList( 1 );
+    aArgumentList[0] = uno::makeAny( aProperty );
+
+    uno::Reference< container::XNameAccess > xNameAccess(
+        xConfigProvider->createInstanceWithArguments(
+            UNISTRING("com.sun.star.configuration.ConfigurationAccess"), aArgumentList ),
+        uno::UNO_QUERY_THROW );
+
+    OSL_ASSERT(xNameAccess->hasByName(UNISTRING("ooInetProxyType")));
+    uno::Any aValue = xNameAccess->getByName(UNISTRING("ooInetProxyType"));
+
+    sal_Int32 nProxyType = aValue.get< sal_Int32 >();
+    if( 0 != nProxyType ) // type 0 means "direct connection to the internet
+    {
+        if( rURL.matchAsciiL(RTL_CONSTASCII_STRINGPARAM("http:")) )
+        {
+            rHost = getStringValue(xNameAccess, UNISTRING("ooInetHTTPProxyName"));
+            rPort = getInt32Value(xNameAccess, UNISTRING("ooInetHTTPProxyPort"));
+        }
+        else if( rURL.matchAsciiL(RTL_CONSTASCII_STRINGPARAM("ftp:")) )
+        {
+            rHost = getStringValue(xNameAccess, UNISTRING("ooInetFTPProxyName"));
+            rPort = getInt32Value(xNameAccess, UNISTRING("ooInetFTPProxyPort"));
+        }
+    }
+}
+
+//------------------------------------------------------------------------------
+
+bool curl_run(const rtl::OUString& rURL, OutData& out, const rtl::OString& aProxyHost, sal_Int32 nProxyPort)
+{
+    /* Need to investigate further whether it is necessary to call
+     * curl_global_init or not - leave it for now (as the ftp UCB content
+     * provider does as well).
+     */
+
+    CURL * pCURL = curl_easy_init();
+    bool ret = false;
+
+    if( NULL != pCURL )
+    {
+        out.curl = pCURL;
+
+        rtl::OString aURL(rtl::OUStringToOString(rURL, RTL_TEXTENCODING_UTF8));
+        curl_easy_setopt(pCURL, CURLOPT_URL, aURL.getStr());
+
+        // enable redirection
+        curl_easy_setopt(pCURL, CURLOPT_FOLLOWLOCATION, 1);
+
+        // write function
+        curl_easy_setopt(pCURL, CURLOPT_WRITEDATA, &out);
+        curl_easy_setopt(pCURL, CURLOPT_WRITEFUNCTION, &write_function);
+
+        // progress handler - Condition::check unfortunatly is not defined const
+        curl_easy_setopt(pCURL, CURLOPT_NOPROGRESS, 0);
+        curl_easy_setopt(pCURL, CURLOPT_PROGRESSFUNCTION, &progress_callback);
+        curl_easy_setopt(pCURL, CURLOPT_PROGRESSDATA, &out);
+
+        // proxy
+        curl_easy_setopt(pCURL, CURLOPT_PROXY, aProxyHost.getStr());
+        curl_easy_setopt(pCURL, CURLOPT_PROXYTYPE, CURLPROXY_HTTP);
+        if( -1 != nProxyPort )
+            curl_easy_setopt(pCURL, CURLOPT_PROXYPORT, nProxyPort);
+
+        // ToDo: SSL support
+
+        if( out.Offset > 0 )
+        {
+            // curl_off_t offset = nOffset; libcurl seems to be compiled with large
+            // file support (and we not) ..
+            sal_Int64 offset = (sal_Int64) out.Offset;
+            curl_easy_setopt(pCURL, CURLOPT_RESUME_FROM_LARGE, offset);
+        }
+
+        CURLcode cc = curl_easy_perform(pCURL);
+
+        if( CURLE_OK == cc )
+        {
+            out.Handler->downloadFinished(out.FilePath);
+            ret = true;
+        }
+
+        // Avoid target file being removed
+        else if( CURLE_ABORTED_BY_CALLBACK == cc )
+            ret = true;
+
+        // Only report errors when not stopped
+        else
+        {
+            rtl::OString aMessage(RTL_CONSTASCII_STRINGPARAM("Unknown error"));
+
+            const char * error_message = curl_easy_strerror(cc);
+            if( NULL != error_message )
+                aMessage = error_message;
+
+            out.Handler->downloadStalled( rtl::OStringToOUString(aMessage, RTL_TEXTENCODING_UTF8) );
+        }
+
+        curl_easy_cleanup(pCURL);
+    }
+
+    return ret;
+}
+
+//------------------------------------------------------------------------------
+
+bool
+Download::start(const rtl::OUString& rURL, const rtl::OUString& rLocalFile, bool resume)
+{
+    OSL_ASSERT( m_aHandler.is() );
+
+    OutData out(m_aCondition);
+
+    out.FilePath = rLocalFile;
+    out.Handler = m_aHandler;
+
+    if( resume )
+    {
+        oslFileError rc = osl_openFile(rLocalFile.pData, &out.FileHandle, osl_File_OpenFlag_Write);
+
+        if( osl_File_E_None == rc )
+        {
+            // Set file pointer to the end of the file on resume
+            if( osl_File_E_None == osl_setFilePos(out.FileHandle, osl_Pos_End, 0) )
+            {
+                osl_getFilePos(out.FileHandle, &out.Offset);
+            }
+        }
+        else if( osl_File_E_NOENT == rc ) // file has been deleted meanwhile ..
+            resume = false;
+    }
+
+    rtl::OString aProxyHost;
+    sal_Int32    nProxyPort = -1;
+    getProxyForURL(rURL, aProxyHost, nProxyPort);
+
+    bool ret = curl_run(rURL, out, aProxyHost, nProxyPort);
+
+    if( NULL != out.FileHandle )
+    {
+        osl_syncFile(out.FileHandle);
+        osl_closeFile(out.FileHandle);
+
+        if( ! ret )
+            osl_removeFile(out.FilePath.pData);
+    }
+
+    m_aCondition.reset();
+    return ret;
+}
+
+//------------------------------------------------------------------------------
+
+void
+Download::stop()
+{
+    m_aCondition.set();
+}
