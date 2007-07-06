@@ -4,9 +4,9 @@
  *
  *  $RCSfile: pcrcomponentcontext.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: vg $ $Date: 2006-03-14 11:28:10 $
+ *  last change: $Author: rt $ $Date: 2007-07-06 08:51:40 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -177,6 +177,10 @@ namespace pcr
         {
             return getContextValueByName( ::rtl::OUString::createFromAscii( _pAsciiName ) );
         }
+
+        /** retrieve context to create interfaces by the ctors
+        */
+        ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext > getContext() const { return        m_xContext;}
 
     };
 
