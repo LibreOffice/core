@@ -4,9 +4,9 @@
  *
  *  $RCSfile: persistence.cxx,v $
  *
- *  $Revision: 1.30 $
+ *  $Revision: 1.31 $
  *
- *  last change: $Author: vg $ $Date: 2007-05-22 19:35:24 $
+ *  last change: $Author: rt $ $Date: 2007-07-06 10:06:51 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -118,10 +118,11 @@
 #include <comphelper/fileformat.h>
 #include <comphelper/storagehelper.hxx>
 
-#include <rtl/logfile.hxx>
+#ifndef _COMPHELPER_MIMECONFIGHELPER_HXX_
+#include <comphelper/mimeconfighelper.hxx>
+#endif
 
-#include <confighelper.hxx>
-#include <convert.hxx>
+#include <rtl/logfile.hxx>
 
 #define USE_STORAGEBASED_DOCUMENT
 
@@ -475,13 +476,14 @@ uno::Reference< util::XCloseable > OCommonEmbeddedObject::LoadDocumentFromStorag
             ( xDocument, uno::UNO_QUERY )
 #endif
             ;
-    if ( !xDoc.is() && !xLoadable.is() )
+    if ( !xDoc.is() && !xLoadable.is() ) ///BUG: This should be || instead of && ?
         throw uno::RuntimeException();
 
+    ::comphelper::MimeConfigurationHelper aHelper( m_xFactory );
     ::rtl::OUString aFilterName;
     // TODO/LATER: the filter will be provided from outside, factory will set it in object props
     try {
-        aFilterName = GetDefaultFilterFromServName( GetDocumentServiceName(),
+        aFilterName = aHelper.GetDefaultFilterFromServiceName( GetDocumentServiceName(),
                                                     ::comphelper::OStorageHelper::GetXStorageFormat( xStorage ) );
     } catch( uno::Exception& )
     {}
@@ -592,10 +594,11 @@ uno::Reference< io::XInputStream > OCommonEmbeddedObject::StoreDocumentToTempStr
     if( !xStorable.is() )
         throw uno::RuntimeException(); // TODO:
 
+    ::comphelper::MimeConfigurationHelper aHelper( m_xFactory );
     ::rtl::OUString aFilterName;
     try {
         // TODO/LATER: the filter must be provided from outside in future
-        aFilterName = GetDefaultFilterFromServName( GetDocumentServiceName(),
+        aFilterName = aHelper.GetDefaultFilterFromServiceName( GetDocumentServiceName(),
                                                     nStorageFormat );
     }
     catch( uno::Exception& )
@@ -747,12 +750,13 @@ void OCommonEmbeddedObject::StoreDocToStorage_Impl( const uno::Reference< embed:
             xDoc = uno::Reference< document::XStorageBasedDocument >( m_pDocHolder->GetComponent(), uno::UNO_QUERY );
     }
 
+    ::comphelper::MimeConfigurationHelper aHelper( m_xFactory );
     if ( xDoc.is() )
     {
         ::rtl::OUString aFilterName;
         try {
             // TODO/LATER: the filter must be provided from outside in future
-            aFilterName = GetDefaultFilterFromServName( GetDocumentServiceName(),
+            aFilterName = aHelper.GetDefaultFilterFromServiceName( GetDocumentServiceName(),
                                                         nStorageFormat );
         }
         catch( uno::Exception& )
@@ -870,6 +874,7 @@ uno::Reference< util::XCloseable > OCommonEmbeddedObject::CreateTempDocFromLink_
     }
 
 
+    ::comphelper::MimeConfigurationHelper aHelper( m_xFactory );
     if ( m_pDocHolder->GetComponent().is() )
     {
         aTempMediaDescr.realloc( 4 );
@@ -898,7 +903,7 @@ uno::Reference< util::XCloseable > OCommonEmbeddedObject::CreateTempDocFromLink_
         aTempMediaDescr[1].Value <<= xTempStream;
         aTempMediaDescr[2].Name = ::rtl::OUString::createFromAscii( "FilterName" );
         // TODO/LATER: the filter must be provided from outside in future
-        aTempMediaDescr[2].Value <<= GetDefaultFilterFromServName(
+        aTempMediaDescr[2].Value <<= aHelper.GetDefaultFilterFromServiceName(
                                                     GetDocumentServiceName(),
                                                     nStorageFormat );
         aTempMediaDescr[3].Name = ::rtl::OUString::createFromAscii( "AsTemplate" );
@@ -1667,7 +1672,7 @@ void SAL_CALL OCommonEmbeddedObject::reload(
             }
         }
 
-        ConfigurationHelper aHelper( m_xFactory );
+        ::comphelper::MimeConfigurationHelper aHelper( m_xFactory );
         if ( !m_aLinkFilterName.getLength() )
         {
             if ( aNewLinkFilter.getLength() )
