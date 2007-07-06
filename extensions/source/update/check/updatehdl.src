@@ -1,0 +1,289 @@
+/*************************************************************************
+ *
+ *  OpenOffice.org - a multi-platform office productivity suite
+ *
+ *  $RCSfile: updatehdl.src,v $
+ *
+ *  $Revision: 1.2 $
+ *
+ *  last change: $Author: rt $ $Date: 2007-07-06 14:38:34 $
+ *
+ *  The Contents of this file are made available subject to
+ *  the terms of GNU Lesser General Public License Version 2.1.
+ *
+ *
+ *    GNU Lesser General Public License Version 2.1
+ *    =============================================
+ *    Copyright 2005 by Sun Microsystems, Inc.
+ *    901 San Antonio Road, Palo Alto, CA 94303, USA
+ *
+ *    This library is free software; you can redistribute it and/or
+ *    modify it under the terms of the GNU Lesser General Public
+ *    License version 2.1, as published by the Free Software Foundation.
+ *
+ *    This library is distributed in the hope that it will be useful,
+ *    but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ *    Lesser General Public License for more details.
+ *
+ *    You should have received a copy of the GNU Lesser General Public
+ *    License along with this library; if not, write to the Free Software
+ *    Foundation, Inc., 59 Temple Place, Suite 330, Boston,
+ *    MA  02111-1307  USA
+ *
+ ************************************************************************/
+
+#include "updatehdl.hrc"
+
+String RID_UPDATE_STR_CHECKING
+{
+    Text [ de ] = "Suche läuft..." ;
+    Text [ en-US ] = "Checking...";
+};
+
+String RID_UPDATE_STR_CHECKING_ERR
+{
+    Text [ de ] = "Die Suche nach einem Update ist fehlgeschlagen." ;
+    Text [ en-US ] = "Checking for an update failed.";
+};
+
+String RID_UPDATE_STR_NO_UPD_FOUND
+{
+    Text [ de ] = "%PRODUCTNAME %PRODUCTVERSION ist auf dem neuesten Stand." ;
+    Text [ en-US ] = "%PRODUCTNAME %PRODUCTVERSION is up to date.";
+};
+
+String RID_UPDATE_STR_UPD_FOUND
+{
+    Text [ de ] = "%PRODUCTNAME %NEXTVERSION ist verfügbar.\n\nDie installierte Version ist %PRODUCTNAME %PRODUCTVERSION.\n\nHinweis: Bevor Sie ein Update herunterladen, vergewissern Sie sich bitte, dass Sie die benötigten Rechte zur Installation haben.\nEin Passwort, normalerweise das eines Administrators oder das Root Passwort, könnte erforderlich sein." ;
+    Text [ en-US ] = "%PRODUCTNAME %NEXTVERSION is available.\n\nThe installed version is %PRODUCTNAME %PRODUCTVERSION.\n\nNote: Before downloading  an update, please ensure that you have sufficient access rights to install it.\nA password, usually the administrator's or root password, may be required.";
+};
+
+String RID_UPDATE_STR_DLG_TITLE
+{
+    Text [ de ] = "Suche nach Updates" ;
+    Text [ en-US ] = "Check for Updates";
+};
+
+String RID_UPDATE_STR_DOWNLOAD_PAUSE
+{
+    Text [ de ] = "Das Herunterladen von %PRODUCTNAME %NEXTVERSION wurde angehalten bei...";
+    Text [ en-US ] = "Downloading %PRODUCTNAME %NEXTVERSION paused at...";
+};
+
+String RID_UPDATE_STR_DOWNLOAD_ERR
+{
+    Text [ de ] = "Das Herunterladen von %PRODUCTNAME %NEXTVERSION wurde unterbrochen bei";
+    Text [ en-US ] = "Downloading %PRODUCTNAME %NEXTVERSION stalled at";
+};
+
+String RID_UPDATE_STR_DOWNLOAD_WARN
+{
+    Text [ de ] = "Das Update wird im Verzeichnis [%DOWNLOAD_PATH] gespeichert. Sie können den Speicherort unter Tools - Options - %PRODUCTNAME ändern." ;
+    Text [ en-US ] = "The download location is: %DOWNLOAD_PATH.\n\nUnder Tools – Options... - %PRODUCTNAME – Online Update you can change the download location.";
+};
+
+String RID_UPDATE_STR_DOWNLOAD_DESCR
+{
+    Text [ de ] = "%FILE_NAME ist nach %DOWNLOAD_PATH heruntergeladen worden." ;
+    Text [ en-US ] = "%FILE_NAME has been downloaded to %DOWNLOAD_PATH.";
+};
+
+String RID_UPDATE_STR_DOWNLOAD_UNAVAIL
+{
+    Text [ de ] = "Das automatische Herunterladen des Updates ist momentan nicht verfügbar.\n\nKlicken Sie auf 'Herunterladen', um %PRODUCTNAME %NEXTVERSION manuell von der Webseite herunterzuladen." ;
+    Text [ en-US ] = "The automatic download of the update is currently not available.\n\nClick 'Download...' to download %PRODUCTNAME %NEXTVERSION manually from the web site.";
+};
+
+String RID_UPDATE_STR_DOWNLOADING
+{
+    Text [ de ] = "Herunterladen von %PRODUCTNAME %NEXTVERSION..." ;
+    Text [ en-US ] = "Downloading %PRODUCTNAME %NEXTVERSION...";
+};
+
+String RID_UPDATE_STR_READY_INSTALL
+{
+    Text [ de ] = "Das Herunterladen von %PRODUCTNAME %NEXTVERSION ist abgeschlossen. Bereit zur Installation." ;
+    Text [ en-US ] = "Download of %PRODUCTNAME %NEXTVERSION completed. Ready for installation.";
+};
+
+String RID_UPDATE_STR_CANCEL_TITLE
+{
+    Text [ de ] = "%PRODUCTNAME %PRODUCTVERSION" ;
+    Text [ en-US ] = "%PRODUCTNAME %PRODUCTVERSION";
+};
+
+String RID_UPDATE_STR_CANCEL_DOWNLOAD
+{
+    Text [ de ] = "Möchten Sie das Herunterladen wirklich abbrechen?" ;
+    Text [ en-US ] = "Do you really want to cancel the download?";
+};
+
+String RID_UPDATE_STR_BEGIN_INSTALL
+{
+    Text [ de ] = "Zur Installation des Updates wird %PRODUCTNAME %PRODUCTVERSION beendet. Möchten Sie das Update jetzt installieren?" ;
+    Text [ en-US ] = "To install the update, %PRODUCTNAME %PRODUCTVERSION needs to be closed. Do you want to install the update now?";
+};
+
+String RID_UPDATE_STR_INSTALL_NOW
+{
+    Text [ de ] = "~Jetzt installieren" ;
+    Text [ en-US ] = "Install ~now";
+};
+
+String RID_UPDATE_STR_INSTALL_LATER
+{
+    Text [ de ] = "~Später installieren" ;
+    Text [ en-US ] = "Install ~later";
+};
+
+String RID_UPDATE_STR_INSTALL_ERROR
+{
+    Text [ de ] = "Das Installationsprogramm konnte nicht gestartet werden! Bitte starten Sie das Programm %FILE_NAME im Verzeichnis %DOWNLOAD_PATH." ;
+    Text [ en-US ] = "Could not run the installer application, please run %FILE_NAME in %DOWNLOAD_PATH manually.";
+};
+
+String RID_UPDATE_STR_OVERWRITE_WARNING
+{
+    Text [ de ] = "Eine Datei mit diesem Namen existiert bereits! Wollen Sie sie überschreiben?" ;
+    Text [ en-US ] = "A file with that name already exists! Do you want to overwrite the existing file?";
+};
+
+String RID_UPDATE_STR_PERCENT
+{
+    Text [ de ] = "%PERCENT%" ;
+    Text [ en-US ] = "%PERCENT%";
+};
+
+String RID_UPDATE_FT_STATUS
+{
+    Text [ de ] = "Status" ;
+    Text [ en-US ] = "Status";
+};
+
+String RID_UPDATE_FT_DESCRIPTION
+{
+    Text [ de ] = "Beschreibung" ;
+    Text [ en-US ] = "Description";
+};
+
+String RID_UPDATE_BTN_CLOSE
+{
+    Text [ de ] = "Schließen" ;
+    Text [ en-US ] = "Close";
+};
+
+String RID_UPDATE_BTN_DOWNLOAD
+{
+    Text [ de ] = "Herunter~laden" ;
+    Text [ en-US ] = "~Download";
+};
+
+String RID_UPDATE_BTN_INSTALL
+{
+    Text [ de ] = "~Installieren" ;
+    Text [ en-US ] = "~Install";
+};
+
+String RID_UPDATE_BTN_PAUSE
+{
+    Text [ de ] = "~Anhalten" ;
+    Text [ en-US ] = "~Pause";
+};
+
+String RID_UPDATE_BTN_RESUME
+{
+    Text [ de ] = "~Fortfahren" ;
+    Text [ en-US ] = "~Resume";
+};
+
+String RID_UPDATE_BTN_CANCEL
+{
+    Text [ de ] = "Abbrechen" ;
+    Text [ en-US ] = "Cancel";
+};
+
+String RID_UPDATE_BUBBLE_T_UPDATE_AVAIL
+{
+    Text [ de ] = "%PRODUCTNAME Update verfügbar" ;
+    Text [ en-US ] = "%PRODUCTNAME update available";
+};
+
+String RID_UPDATE_BUBBLE_UPDATE_AVAIL
+{
+    Text [ de ] = "Klicken Sie hier, um das Update herunterzuladen." ;
+    Text [ en-US ] = "Click here to start the download.";
+};
+
+String RID_UPDATE_BUBBLE_T_UPDATE_NO_DOWN
+{
+    Text [ de ] = "%PRODUCTNAME Update verfügbar" ;
+    Text [ en-US ] = "%PRODUCTNAME update available";
+};
+
+String RID_UPDATE_BUBBLE_UPDATE_NO_DOWN
+{
+    Text [ de ] = "Klicken Sie hier, um mehr Information zu erhalten." ;
+    Text [ en-US ] = "Click here for more information.";
+};
+
+String RID_UPDATE_BUBBLE_T_AUTO_START
+{
+    Text [ de ] = "%PRODUCTNAME Update verfügbar" ;
+    Text [ en-US ] = "%PRODUCTNAME update available";
+};
+
+String RID_UPDATE_BUBBLE_AUTO_START
+{
+    Text [ de ] = "Das Herunterladen des Updates beginnt." ;
+    Text [ en-US ] = "Download of update begins.";
+};
+
+String RID_UPDATE_BUBBLE_T_DOWNLOADING
+{
+    Text [ de ] = "Update wird heruntergeladen" ;
+    Text [ en-US ] = "Download of update in progress";
+};
+
+String RID_UPDATE_BUBBLE_DOWNLOADING
+{
+    Text [ de ] = "" ;
+    Text [ en-US ] = "";
+};
+
+String RID_UPDATE_BUBBLE_T_DOWNLOAD_PAUSED
+{
+    Text [ de ] = "Das Herunterladen des Updates wurde angehalten" ;
+    Text [ en-US ] = "Download of update paused";
+};
+
+String RID_UPDATE_BUBBLE_DOWNLOAD_PAUSED
+{
+    Text [ de ] = "Klicken Sie hier, um es fortzusetzen." ;
+    Text [ en-US ] = "Click here to resume.";
+};
+
+String RID_UPDATE_BUBBLE_T_ERROR_DOWNLOADING
+{
+    Text [ de ] = "Das Herunterladen des Updates ist unterbrochen worden" ;
+    Text [ en-US ] = "Download of update stalled";
+};
+
+String RID_UPDATE_BUBBLE_ERROR_DOWNLOADING
+{
+    Text [ de ] = "Klicken Sie hier, um mehr Information zu erhalten." ;
+    Text [ en-US ] = "Click here for more information.";
+};
+
+String RID_UPDATE_BUBBLE_T_DOWNLOAD_AVAIL
+{
+    Text [ de ] = "Das Herunterladen des Updates ist beendet" ;
+    Text [ en-US ] = "Download of update completed";
+};
+
+String RID_UPDATE_BUBBLE_DOWNLOAD_AVAIL
+{
+    Text [ de ] = "Klicken Sie hier, um die Installation zu starten. " ;
+    Text [ en-US ] = "Click here to start the installation.";
+};
+
