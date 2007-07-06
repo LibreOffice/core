@@ -4,9 +4,9 @@
  *
  *  $RCSfile: op.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: kz $ $Date: 2007-05-10 16:50:47 $
+ *  last change: $Author: rt $ $Date: 2007-07-06 12:39:08 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -46,7 +46,7 @@
 #include <string.h>
 #include <math.h>
 #include <ctype.h>
-#if defined( MAC ) || defined( ICC )
+#if defined( ICC )
 #include <stdlib.h>
 #endif
 
