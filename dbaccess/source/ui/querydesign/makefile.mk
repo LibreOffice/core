@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.15 $
+#   $Revision: 1.16 $
 #
-#   last change: $Author: kz $ $Date: 2007-05-10 10:40:14 $
+#   last change: $Author: rt $ $Date: 2007-07-06 08:40:27 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -41,6 +41,7 @@ TARGET=querydesign
 # --- Settings -----------------------------------------------------
 
 .INCLUDE :  settings.mk
+.INCLUDE : $(PRJ)$/util$/makefile.pmk
 
 # --- Files --------------------------------------------------------
 
