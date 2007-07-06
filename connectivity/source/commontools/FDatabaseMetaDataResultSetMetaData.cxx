@@ -4,9 +4,9 @@
  *
  *  $RCSfile: FDatabaseMetaDataResultSetMetaData.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 01:58:24 $
+ *  last change: $Author: rt $ $Date: 2007-07-06 06:47:14 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -224,22 +224,7 @@ sal_Bool SAL_CALL ODatabaseMetaDataResultSetMetaData::isWritable( sal_Int32 colu
 // -------------------------------------------------------------------------
 void ODatabaseMetaDataResultSetMetaData::setColumnPrivilegesMap()
 {
-    m_mColumns[1] = OColumn(::rtl::OUString(),::rtl::OUString::createFromAscii("TABLE_CAT"),
-                ColumnValue::NULLABLE,
-        3,3,0,
-                DataType::VARCHAR);
-    m_mColumns[2] = OColumn(::rtl::OUString(),::rtl::OUString::createFromAscii("TABLE_SCHEM"),
-                ColumnValue::NULLABLE,
-        3,3,0,
-                DataType::VARCHAR);
-    m_mColumns[3] = OColumn(::rtl::OUString(),::rtl::OUString::createFromAscii("TABLE_NAME"),
-                ColumnValue::NO_NULLS,
-        3,3,0,
-                DataType::VARCHAR);
-    m_mColumns[4] = OColumn(::rtl::OUString(),::rtl::OUString::createFromAscii("COLUMN_NAME"),
-                ColumnValue::NO_NULLS,
-        3,3,0,
-                DataType::VARCHAR);
+    setColumnMap();
     m_mColumns[5] = OColumn(::rtl::OUString(),::rtl::OUString::createFromAscii("GRANTOR"),
                 ColumnValue::NULLABLE,
         3,3,0,
@@ -257,8 +242,8 @@ void ODatabaseMetaDataResultSetMetaData::setColumnPrivilegesMap()
         3,3,0,
                 DataType::VARCHAR);
 }
-// -------------------------------------------------------------------------
-void ODatabaseMetaDataResultSetMetaData::setColumnsMap()
+// -----------------------------------------------------------------------------
+void ODatabaseMetaDataResultSetMetaData::setTableNameMap()
 {
     m_mColumns[1] = OColumn(::rtl::OUString(),::rtl::OUString::createFromAscii("TABLE_CAT"),
                 ColumnValue::NULLABLE,
@@ -272,10 +257,21 @@ void ODatabaseMetaDataResultSetMetaData::setColumnsMap()
                 ColumnValue::NO_NULLS,
         3,3,0,
                 DataType::VARCHAR);
+}
+// -----------------------------------------------------------------------------
+void ODatabaseMetaDataResultSetMetaData::setColumnMap()
+{
+    setTableNameMap();
     m_mColumns[4] = OColumn(::rtl::OUString(),::rtl::OUString::createFromAscii("COLUMN_NAME"),
                 ColumnValue::NO_NULLS,
         3,3,0,
                 DataType::VARCHAR);
+}
+// -------------------------------------------------------------------------
+void ODatabaseMetaDataResultSetMetaData::setColumnsMap()
+{
+    setColumnMap();
+
     m_mColumns[5] = OColumn(::rtl::OUString(),::rtl::OUString::createFromAscii("DATA_TYPE"),
                 ColumnValue::NO_NULLS,
         0,0,0,
@@ -336,18 +332,7 @@ void ODatabaseMetaDataResultSetMetaData::setColumnsMap()
 // -------------------------------------------------------------------------
 void ODatabaseMetaDataResultSetMetaData::setTablesMap()
 {
-    m_mColumns[1] = OColumn(::rtl::OUString(),::rtl::OUString::createFromAscii("TABLE_CAT"),
-                ColumnValue::NULLABLE,
-        0,0,0,
-                DataType::VARCHAR);
-    m_mColumns[2] = OColumn(::rtl::OUString(),::rtl::OUString::createFromAscii("TABLE_SCHEM"),
-                ColumnValue::NULLABLE,
-        0,0,0,
-                DataType::VARCHAR);
-    m_mColumns[3] = OColumn(::rtl::OUString(),::rtl::OUString::createFromAscii("TABLE_NAME"),
-                ColumnValue::NO_NULLS,
-        0,0,0,
-                DataType::VARCHAR);
+    setTableNameMap();
     m_mColumns[4] = OColumn(::rtl::OUString(),::rtl::OUString::createFromAscii("TABLE_TYPE"),
                 ColumnValue::NO_NULLS,
         0,0,0,
@@ -358,7 +343,7 @@ void ODatabaseMetaDataResultSetMetaData::setTablesMap()
                 DataType::VARCHAR);
 }
 // -------------------------------------------------------------------------
-void ODatabaseMetaDataResultSetMetaData::setProcedureColumnsMap()
+void ODatabaseMetaDataResultSetMetaData::setProcedureNameMap()
 {
    m_mColumns[1] = OColumn(::rtl::OUString(),::rtl::OUString::createFromAscii("PROCEDURE_CAT"),
                 ColumnValue::NULLABLE,
@@ -372,6 +357,11 @@ void ODatabaseMetaDataResultSetMetaData::setProcedureColumnsMap()
                 ColumnValue::NO_NULLS,
         0,0,0,
                 DataType::VARCHAR);
+}
+// -------------------------------------------------------------------------
+void ODatabaseMetaDataResultSetMetaData::setProcedureColumnsMap()
+{
+    setProcedureNameMap();
     m_mColumns[4] = OColumn(::rtl::OUString(),::rtl::OUString::createFromAscii("COLUMN_NAME"),
                 ColumnValue::NO_NULLS,
         0,0,0,
@@ -417,22 +407,7 @@ void ODatabaseMetaDataResultSetMetaData::setProcedureColumnsMap()
 // -------------------------------------------------------------------------
 void ODatabaseMetaDataResultSetMetaData::setPrimaryKeysMap()
 {
-    m_mColumns[1] = OColumn(::rtl::OUString(),::rtl::OUString::createFromAscii("TABLE_CAT"),
-                ColumnValue::NULLABLE,
-        0,0,0,
-                DataType::VARCHAR);
-    m_mColumns[2] = OColumn(::rtl::OUString(),::rtl::OUString::createFromAscii("TABLE_SCHEM"),
-                ColumnValue::NULLABLE,
-        0,0,0,
-                DataType::VARCHAR);
-    m_mColumns[3] = OColumn(::rtl::OUString(),::rtl::OUString::createFromAscii("TABLE_NAME"),
-                ColumnValue::NO_NULLS,
-        0,0,0,
-                DataType::VARCHAR);
-    m_mColumns[4] = OColumn(::rtl::OUString(),::rtl::OUString::createFromAscii("COLUMN_NAME"),
-                ColumnValue::NO_NULLS,
-        0,0,0,
-                DataType::VARCHAR);
+    setColumnMap();
     m_mColumns[5] = OColumn(::rtl::OUString(),::rtl::OUString::createFromAscii("KEY_SEQ"),
                 ColumnValue::NO_NULLS,
         1,1,0,
@@ -445,18 +420,7 @@ void ODatabaseMetaDataResultSetMetaData::setPrimaryKeysMap()
 // -------------------------------------------------------------------------
 void ODatabaseMetaDataResultSetMetaData::setIndexInfoMap()
 {
-    m_mColumns[1] = OColumn(::rtl::OUString(),::rtl::OUString::createFromAscii("TABLE_CAT"),
-                ColumnValue::NULLABLE,
-        0,0,0,
-                DataType::VARCHAR);
-    m_mColumns[2] = OColumn(::rtl::OUString(),::rtl::OUString::createFromAscii("TABLE_SCHEM"),
-                ColumnValue::NULLABLE,
-        0,0,0,
-                DataType::VARCHAR);
-    m_mColumns[3] = OColumn(::rtl::OUString(),::rtl::OUString::createFromAscii("TABLE_NAME"),
-                ColumnValue::NO_NULLS,
-        0,0,0,
-                DataType::VARCHAR);
+    setTableNameMap();
     m_mColumns[4] = OColumn(::rtl::OUString(),::rtl::OUString::createFromAscii("NON_UNIQUE"),
                 ColumnValue::NO_NULLS,
         1,1,0,
@@ -501,18 +465,7 @@ void ODatabaseMetaDataResultSetMetaData::setIndexInfoMap()
 // -------------------------------------------------------------------------
 void ODatabaseMetaDataResultSetMetaData::setTablePrivilegesMap()
 {
-    m_mColumns[1] = OColumn(::rtl::OUString(),::rtl::OUString::createFromAscii("TABLE_CAT"),
-                ColumnValue::NULLABLE,
-        0,0,0,
-                DataType::VARCHAR);
-    m_mColumns[2] = OColumn(::rtl::OUString(),::rtl::OUString::createFromAscii("TABLE_SCHEM"),
-                ColumnValue::NULLABLE,
-        0,0,0,
-                DataType::VARCHAR);
-    m_mColumns[3] = OColumn(::rtl::OUString(),::rtl::OUString::createFromAscii("TABLE_NAME"),
-                ColumnValue::NO_NULLS,
-        0,0,0,
-                DataType::VARCHAR);
+    setTableNameMap();
     m_mColumns[4] = OColumn(::rtl::OUString(),::rtl::OUString::createFromAscii("GRANTOR"),
                 ColumnValue::NULLABLE,
         0,0,0,
@@ -670,18 +623,7 @@ void ODatabaseMetaDataResultSetMetaData::setTypeInfoMap()
 // -------------------------------------------------------------------------
 void ODatabaseMetaDataResultSetMetaData::setProceduresMap()
 {
-    m_mColumns[1] = OColumn(::rtl::OUString(),::rtl::OUString::createFromAscii("PROCEDURE_CAT"),
-                ColumnValue::NULLABLE,
-        0,0,0,
-                DataType::VARCHAR);
-    m_mColumns[2] = OColumn(::rtl::OUString(),::rtl::OUString::createFromAscii("PROCEDURE_SCHEM"),
-                ColumnValue::NULLABLE,
-        0,0,0,
-                DataType::VARCHAR);
-    m_mColumns[3] = OColumn(::rtl::OUString(),::rtl::OUString::createFromAscii("PROCEDURE_NAME"),
-                ColumnValue::NO_NULLS,
-        0,0,0,
-                DataType::VARCHAR);
+    setProcedureNameMap();
     m_mColumns[4] = OColumn(::rtl::OUString(),::rtl::OUString::createFromAscii("RESERVED1"),
                 ColumnValue::NULLABLE,
         0,0,0,
