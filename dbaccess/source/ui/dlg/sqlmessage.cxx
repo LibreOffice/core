@@ -4,9 +4,9 @@
  *
  *  $RCSfile: sqlmessage.cxx,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: kz $ $Date: 2007-05-10 10:26:15 $
+ *  last change: $Author: rt $ $Date: 2007-07-06 08:19:33 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -38,9 +38,6 @@
 
 #ifndef _DBAUI_SQLMESSAGE_HXX_
 #include "sqlmessage.hxx"
-#endif
-#ifndef _DBAUI_MODULE_DBU_HXX_
-#include "moduledbu.hxx"
 #endif
 #ifndef _DBU_DLG_HRC_
 #include "dbu_dlg.hrc"
@@ -80,6 +77,9 @@
 #endif
 #ifndef DBAUI_TOOLS_HXX
 #include "UITools.hxx"
+#endif
+#ifndef _DBAUI_MODULE_DBU_HXX_
+#include "moduledbu.hxx"
 #endif
 
 #define BUTTONID_MORE   BUTTONID_RETRY + 1
@@ -512,8 +512,17 @@ void OSQLMessageBox::impl_positionControls()
     sPrimary = rFirstInfo.sMessage;
     if ( pSecondInfo )
     {
+        // we show two elements in the main dialog if and only if one of
+        // - the first element in the chain is an SQLContext, and the second
+        //   element denotes its sub entry
+        // - the first and the second element are both independent (i.e. the second
+        //   is no sub entry), and none of them is a context.
         bool bFirstElementIsContext = ( rFirstInfo.eType == SQLExceptionInfo::SQL_CONTEXT );
-        if ( !bFirstElementIsContext || ( pSecondInfo->bSubEntry ) )
+        bool bSecondElementIsContext = ( pSecondInfo->eType == SQLExceptionInfo::SQL_CONTEXT );
+
+        if ( bFirstElementIsContext && pSecondInfo->bSubEntry )
+            sSecondary = pSecondInfo->sMessage;
+        if ( !bFirstElementIsContext && !bSecondElementIsContext )
             sSecondary = pSecondInfo->sMessage;
     }
 
