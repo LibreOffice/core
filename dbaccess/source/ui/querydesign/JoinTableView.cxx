@@ -4,9 +4,9 @@
  *
  *  $RCSfile: JoinTableView.cxx,v $
  *
- *  $Revision: 1.56 $
+ *  $Revision: 1.57 $
  *
- *  last change: $Author: hr $ $Date: 2007-06-27 12:25:30 $
+ *  last change: $Author: rt $ $Date: 2007-07-06 08:38:41 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -49,9 +49,6 @@
 #endif
 #ifndef _DBU_QRY_HRC_
 #include "dbu_qry.hrc"
-#endif
-#ifndef _DBAUI_MODULE_DBU_HXX_
-#include "moduledbu.hxx"
 #endif
 #ifndef DBAUI_TABLEWINDOW_HXX
 #include "TableWindow.hxx"
