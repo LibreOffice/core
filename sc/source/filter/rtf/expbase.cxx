@@ -4,9 +4,9 @@
  *
  *  $RCSfile: expbase.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: kz $ $Date: 2006-07-21 12:32:53 $
+ *  last change: $Author: rt $ $Date: 2007-07-06 12:39:36 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -46,9 +46,7 @@
 
 //------------------------------------------------------------------
 
-#if defined(MAC)
-const sal_Char __FAR_DATA ScExportBase::sNewLine = '\015';
-#elif defined(UNX)
+#if defined(UNX)
 const sal_Char __FAR_DATA ScExportBase::sNewLine = '\012';
 #else
 const sal_Char __FAR_DATA ScExportBase::sNewLine[] = "\015\012";
