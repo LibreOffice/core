@@ -4,9 +4,9 @@
  *
  *  $RCSfile: tablespage.cxx,v $
  *
- *  $Revision: 1.29 $
+ *  $Revision: 1.30 $
  *
- *  last change: $Author: kz $ $Date: 2007-05-10 10:26:28 $
+ *  last change: $Author: rt $ $Date: 2007-07-06 08:19:51 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -38,9 +38,6 @@
 
 #ifndef _DBAUI_TABLESPAGE_HXX_
 #include "tablespage.hxx"
-#endif
-#ifndef _DBAUI_MODULE_DBU_HXX_
-#include "moduledbu.hxx"
 #endif
 #ifndef _DBU_DLG_HRC_
 #include "dbu_dlg.hrc"
@@ -143,6 +140,7 @@ namespace dbaui
     using namespace ::com::sun::star::frame;
     using namespace ::com::sun::star::util;
     using namespace ::dbtools;
+    using namespace ::comphelper;
 
     //========================================================================
     //= OTableSubscriptionPage
