@@ -4,9 +4,9 @@
  *
  *  $RCSfile: svdmark.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: hr $ $Date: 2007-06-27 19:03:40 $
+ *  last change: $Author: rt $ $Date: 2007-07-06 13:21:32 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -140,6 +140,17 @@ void SdrUShortCont::CheckSort(sal_uInt32 nPos)
         if(nNextVal <= nAktVal)
             mbSorted = sal_False;
     }
+}
+
+std::set< sal_uInt16 > SdrUShortCont::getContainer()
+{
+    std::set< sal_uInt16 > aSet;
+
+    sal_uInt32 nAnz = maArray.Count();
+    while(nAnz)
+        aSet.insert( GetObject(--nAnz) );
+
+    return aSet;
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
