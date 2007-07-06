@@ -4,9 +4,9 @@
  *
  *  $RCSfile: drwlayer.hxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: ihi $ $Date: 2006-11-14 15:46:19 $
+ *  last change: $Author: rt $ $Date: 2007-07-06 12:29:36 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -42,9 +42,6 @@
 #ifndef _FM_FMMODEL_HXX
 #include <svx/fmmodel.hxx>
 #endif
-//REMOVE    #ifndef _SVSTOR_HXX
-//REMOVE    #include <so3/svstor.hxx>
-//REMOVE    #endif
 #ifndef SC_SCGLOB_HXX
 #include "global.hxx"
 #endif
@@ -54,6 +51,7 @@ class SfxViewShell;
 class SfxObjectShell;
 class ScDrawObjData;
 class ScIMapInfo;
+class ScMacroInfo;
 class IMapObject;
 class ScMarkData;
 class SdrOle2Obj;
@@ -195,8 +193,11 @@ public:
 
     // Image-Map
     static ScIMapInfo* GetIMapInfo( SdrObject* pObj );
+
     static IMapObject* GetHitIMapObject( SdrObject* pObject,
                             const Point& rWinPoint, const Window& rCmpWnd );
+
+    static ScMacroInfo* GetMacroInfo( SdrObject* pObj, BOOL bCreate = FALSE );
 
 private:
     static SfxObjectShell* pGlobalDrawPersist;          // fuer AllocModel
