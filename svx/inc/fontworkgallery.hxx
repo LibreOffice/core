@@ -4,9 +4,9 @@
  *
  *  $RCSfile: fontworkgallery.hxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: obo $ $Date: 2006-10-12 11:42:19 $
+ *  last change: $Author: rt $ $Date: 2007-07-06 07:27:57 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -69,13 +69,11 @@ class SdrModel;
 class SfxBindings;
 class ToolbarMenu;
 class SfxStatusForwarder;
-class SvxTbxButtonColorUpdater_Impl;
 
 //------------------------------------------------------------------------
 
 namespace svx
 {
-
 
 class FontWorkAlignmentWindow : public SfxPopupWindow
 {
