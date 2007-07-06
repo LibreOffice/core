@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ww8graf2.cxx,v $
  *
- *  $Revision: 1.71 $
+ *  $Revision: 1.72 $
  *
- *  last change: $Author: ihi $ $Date: 2006-12-19 17:39:23 $
+ *  last change: $Author: rt $ $Date: 2007-07-06 09:53:12 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -798,7 +798,7 @@ SwFrmFmt* SwWW8ImplReader::ImportGraf(SdrTextObj* pTextObj,
                             // zerstoeren
                             if (pObject->GetPage())
                                 pDrawPg->RemoveObject(pObject->GetOrdNum());
-                            delete pObject;
+                            SdrObject::Free( pObject );
                         }
                     }
                     else
