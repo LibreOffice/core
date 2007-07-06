@@ -4,9 +4,9 @@
  *
  *  $RCSfile: svdpoev.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: kz $ $Date: 2007-05-09 13:29:55 $
+ *  last change: $Author: rt $ $Date: 2007-07-06 13:18:29 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -44,24 +44,7 @@
 #include <svx/svdedtv.hxx>
 #endif
 
-//************************************************************
-//   Defines
-//************************************************************
-
-enum SdrPathSmoothKind  {SDRPATHSMOOTH_DONTCARE,   // nur fuer Statusabfrage
-                         SDRPATHSMOOTH_ANGULAR,    // Eckig
-                         SDRPATHSMOOTH_ASYMMETRIC, // unsymmetrisch, normales Smooth
-                         SDRPATHSMOOTH_SYMMETRIC}; // symmetrisch
-
-enum SdrPathSegmentKind {SDRPATHSEGMENT_DONTCARE,  // nur fuer Statusabfrage
-                         SDRPATHSEGMENT_LINE,      // gerader Streckenabschnitt
-                         SDRPATHSEGMENT_CURVE,     // Kurvenabschnitt (Bezier)
-                         SDRPATHSEGMENT_TOGGLE};   // nur fuer Set: Toggle
-
-enum SdrObjClosedKind   {SDROBJCLOSED_DONTCARE,    // nur fuer Statusabfrage
-                         SDROBJCLOSED_OPEN,        // Objekte geoeffnet (Linie, Polyline, ...)
-                         SDROBJCLOSED_CLOSED,      // Objekte geschlossen (Polygon, ...)
-                         SDROBJCLOSED_TOGGLE};     // nur fuer Set: Toggle (not implemented yet)
+#include "svx/ipolypolygoneditorcontroller.hxx"
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -77,7 +60,7 @@ enum SdrObjClosedKind   {SDROBJCLOSED_DONTCARE,    // nur fuer Statusabfrage
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 
-class SVX_DLLPUBLIC SdrPolyEditView: public SdrEditView
+class SVX_DLLPUBLIC SdrPolyEditView: public SdrEditView, public IPolyPolygonEditorController
 {
     friend class                SdrEditView;
 
@@ -105,18 +88,18 @@ protected:
     virtual ~SdrPolyEditView();
 
 public:
-    BOOL IsSetMarkedPointsSmoothPossible() const { ForcePossibilities(); return bSetMarkedPointsSmoothPossible; }
-    SdrPathSmoothKind GetMarkedPointsSmooth() const { ForcePossibilities(); return eMarkedPointsSmooth; }
+    BOOL IsSetMarkedPointsSmoothPossible() const;
+    SdrPathSmoothKind GetMarkedPointsSmooth() const;
     void SetMarkedPointsSmooth(SdrPathSmoothKind eKind);
 
     // Ein PolySegment kann eine Strecke oder eine Bezierkurve sein.
-    BOOL IsSetMarkedSegmentsKindPossible() const { ForcePossibilities(); return bSetMarkedSegmentsKindPossible; }
-    SdrPathSegmentKind GetMarkedSegmentsKind() const { ForcePossibilities(); return eMarkedSegmentsKind; }
+    BOOL IsSetMarkedSegmentsKindPossible() const;
+    SdrPathSegmentKind GetMarkedSegmentsKind() const;
     void SetMarkedSegmentsKind(SdrPathSegmentKind eKind);
 
     // Moeglicherweise ist das Obj hinterher geloescht:
     void DeleteMarkedPoints();
-    BOOL IsDeleteMarkedPointsPossible() const { return HasMarkedPoints(); }
+    BOOL IsDeleteMarkedPointsPossible() const;
 
     void MoveMarkedPoints(const Size& rSiz, bool bCopy=false);
     void ResizeMarkedPoints(const Point& rRef, const Fraction& xFact, const Fraction& yFact, bool bCopy=false);
@@ -132,6 +115,8 @@ public:
     void CloseMarkedObjects(BOOL bToggle=FALSE, BOOL bOpen=FALSE); // , long nOpenDistance=0);
     bool IsOpenCloseMarkedObjectsPossible() const;
     SdrObjClosedKind GetMarkedObjectsClosedState() const;
+
+    void CheckPolyPossibilitiesHelper( SdrMark* pM, bool& b1stSmooth, bool& b1stSegm, bool& bCurve, bool& bSmoothFuz, bool& bSegmFuz, basegfx::B2VectorContinuity& eSmooth );
 };
 
 #endif //_SVDPOEV_HXX
