@@ -4,9 +4,9 @@
  *
  *  $RCSfile: printfun.cxx,v $
  *
- *  $Revision: 1.51 $
+ *  $Revision: 1.52 $
  *
- *  last change: $Author: hr $ $Date: 2007-06-26 11:52:35 $
+ *  last change: $Author: rt $ $Date: 2007-07-06 12:47:10 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -71,13 +71,7 @@
 #include <tools/urlobj.hxx>
 #endif
 
-#ifdef MAC
-#define RGBColor MAC_RGBColor
 #include <svx/xoutbmp.hxx>
-#undef RGBColor
-#else
-#include <svx/xoutbmp.hxx>
-#endif
 
 #include "editutil.hxx"
 #include "docsh.hxx"
