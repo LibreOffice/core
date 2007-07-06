@@ -4,9 +4,9 @@
  *
  *  $RCSfile: txtimp.cxx,v $
  *
- *  $Revision: 1.128 $
+ *  $Revision: 1.129 $
  *
- *  last change: $Author: hr $ $Date: 2007-06-27 16:15:30 $
+ *  last change: $Author: rt $ $Date: 2007-07-06 12:10:01 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -258,6 +258,7 @@ static __FAR_DATA SvXMLTokenMapEntry aTextPElemTokenMap[] =
     { XML_NAMESPACE_TEXT, XML_SPAN, XML_TOK_TEXT_SPAN },
     { XML_NAMESPACE_TEXT, XML_TAB, XML_TOK_TEXT_TAB_STOP },
     { XML_NAMESPACE_TEXT, XML_LINE_BREAK, XML_TOK_TEXT_LINE_BREAK },
+    { XML_NAMESPACE_TEXT, XML_SOFT_PAGE_BREAK, XML_TOK_TEXT_SOFT_PAGE_BREAK },
     { XML_NAMESPACE_TEXT, XML_S, XML_TOK_TEXT_S },
     { XML_NAMESPACE_TEXT, XML_A, XML_TOK_TEXT_HYPERLINK },
     { XML_NAMESPACE_TEXT, XML_RUBY, XML_TOK_TEXT_RUBY },
