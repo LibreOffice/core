@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xicontent.cxx,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: rt $ $Date: 2007-07-03 15:50:33 $
+ *  last change: $Author: rt $ $Date: 2007-07-06 12:37:07 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -292,20 +292,27 @@ void lclInsertUrl( const XclImpRoot& rRoot, const String& rUrl, SCCOL nScCol, SC
 
 void XclImpHyperlink::ReadHlink( XclImpStream& rStrm )
 {
-    const XclImpRoot& rRoot = rStrm.GetRoot();
-    DBG_ASSERT_BIFF( rRoot.GetBiff() == EXC_BIFF8 );
+    XclRange aXclRange( ScAddress::UNINITIALIZED );
+    rStrm >> aXclRange;
+    String aString = ReadEmbeddedData( rStrm );
+    if ( aString.Len() > 0 )
+        rStrm.GetRoot().GetXFRangeBuffer().SetHyperlink( aXclRange, aString );
+}
 
+String XclImpHyperlink::ReadEmbeddedData( XclImpStream& rStrm )
+{
+    const XclImpRoot& rRoot = rStrm.GetRoot();
     SfxObjectShell* pDocShell = rRoot.GetDocShell();
 
-    XclRange aXclRange( ScAddress::UNINITIALIZED );
+    DBG_ASSERT_BIFF( rRoot.GetBiff() == EXC_BIFF8 );
+
     sal_uInt32 nFlags;
     XclGuid aGuid;
-
-    rStrm >> aXclRange >> aGuid;
+    rStrm >> aGuid;
     rStrm.Ignore( 4 );
     rStrm >> nFlags;
 
-    DBG_ASSERT( aGuid == XclTools::maGuidStdLink, "XclImpHyperlink::ReadHlink - unknown header GUID" );
+    DBG_ASSERT( aGuid == XclTools::maGuidStdLink, "XclImpHyperlink::ReadEmbeddedData - unknown header GUID" );
 
     sal_uInt16 nLevel = 0;                  // counter for level to climb down in path
     ::std::auto_ptr< String > xLongName;    // link / file name
@@ -367,7 +374,7 @@ void XclImpHyperlink::ReadHlink( XclImpStream& rStrm )
                 lclGetAbsPath( *xLongName, 0, pDocShell );
         }
         else
-            DBG_ERRORFILE( "XclImpHyperlink::ReadHlink - unknown content GUID" );
+            DBG_ERRORFILE( "XclImpHyperlink::ReadEmbeddedData - unknown content GUID" );
     }
 
     // text mark
@@ -379,7 +386,7 @@ void XclImpHyperlink::ReadHlink( XclImpStream& rStrm )
 
     rStrm.SetNulSubstChar();    // back to default
 
-    DBG_ASSERT( rStrm.GetRecLeft() == 0, "XclImpHyperlink::ReadHlink - record size mismatch" );
+    DBG_ASSERT( rStrm.GetRecLeft() == 0, "XclImpHyperlink::ReadEmbeddedData - record size mismatch" );
 
     if( !xLongName.get() && xShortName.get() )
         xLongName = xShortName;
@@ -390,13 +397,14 @@ void XclImpHyperlink::ReadHlink( XclImpStream& rStrm )
     {
         if( xTextMark.get() )
         {
-            if( !xLongName->Len() )
+            if( xLongName->Len() == 0 )
                 xTextMark->SearchAndReplaceAll( '!', '.' );
             xLongName->Append( '#' );
             xLongName->Append( *xTextMark );
         }
-        rRoot.GetXFRangeBuffer().SetHyperlink( aXclRange, *xLongName );
+        return *xLongName;
     }
+    return String::EmptyString();
 }
 
 void XclImpHyperlink::InsertUrl( const XclImpRoot& rRoot, const XclRange& rXclRange, const String& rUrl )
