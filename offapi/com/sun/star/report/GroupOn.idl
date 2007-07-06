@@ -1,0 +1,100 @@
+/*************************************************************************
+ *
+ *  OpenOffice.org - a multi-platform office productivity suite
+ *
+ *  $RCSfile: GroupOn.idl,v $
+ *
+ *  $Revision: 1.2 $
+ *
+ *  last change: $Author: rt $ $Date: 2007-07-06 07:18:36 $
+ *
+ *  The Contents of this file are made available subject to
+ *  the terms of GNU Lesser General Public License Version 2.1.
+ *
+ *
+ *    GNU Lesser General Public License Version 2.1
+ *    =============================================
+ *    Copyright 2005 by Sun Microsystems, Inc.
+ *    901 San Antonio Road, Palo Alto, CA 94303, USA
+ *
+ *    This library is free software; you can redistribute it and/or
+ *    modify it under the terms of the GNU Lesser General Public
+ *    License version 2.1, as published by the Free Software Foundation.
+ *
+ *    This library is distributed in the hope that it will be useful,
+ *    but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ *    Lesser General Public License for more details.
+ *
+ *    You should have received a copy of the GNU Lesser General Public
+ *    License along with this library; if not, write to the Free Software
+ *    Foundation, Inc., 59 Temple Place, Suite 330, Boston,
+ *    MA  02111-1307  USA
+ *
+ ************************************************************************/
+#ifndef __com_sun_star_report_GroupOn_idl__
+#define __com_sun_star_report_GroupOn_idl__
+
+
+//=============================================================================
+
+ module com {  module sun {  module star {  module report {
+
+//=============================================================================
+
+/** Specifies how to group data.
+    @see XGroup
+ */
+constants GroupOn
+{
+    //-------------------------------------------------------------------------
+
+    /** The same value in the column value or expression.
+     */
+    const short DEFAULT = 0;
+
+    /** The same first nth of characters in the column value or expression.
+     */
+    const short PREFIX_CHARACTERS = 1;
+
+    /** Dates in the same calendar year.
+    */
+    const short YEAR= 2;
+
+    /** Dates in the same calendar quarter.
+    */
+    const short QUARTAL = 3;
+
+    /** Dates in the same month.
+    */
+    const short MONTH = 4;
+
+    /** Dates in the same week.
+    */
+    const short WEEK = 5;
+
+    /** Dates on the same date.
+    */
+    const short DAY = 6;
+
+    /** Times in the same hour.
+    */
+    const short HOUR = 7;
+
+    /** Times in the same minute.
+    */
+    const short MINUTE = 8;
+
+    /** Values within an interval you specify.
+    */
+    const short INTERVAL = 9;
+};
+
+//=============================================================================
+
+}; }; }; };
+
+/*=============================================================================
+
+=============================================================================*/
+#endif
