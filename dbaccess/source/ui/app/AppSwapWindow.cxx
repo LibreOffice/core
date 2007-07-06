@@ -4,9 +4,9 @@
  *
  *  $RCSfile: AppSwapWindow.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: obo $ $Date: 2007-06-12 05:33:01 $
+ *  last change: $Author: rt $ $Date: 2007-07-06 07:59:58 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -52,9 +52,6 @@
 #endif
 #ifndef DBAUI_IAPPELEMENTNOTIFICATION_HXX
 #include "IAppElementNotification.hxx"
-#endif
-#ifndef _DBAUI_MODULE_DBU_HXX_
-#include "moduledbu.hxx"
 #endif
 #ifndef _SV_SVAPP_HXX
 #include <vcl/svapp.hxx>
@@ -142,9 +139,11 @@ void OApplicationSwapWindow::ImplInitSettings( sal_Bool bFont, sal_Bool bForegro
 void OApplicationSwapWindow::DataChanged( const DataChangedEvent& rDCEvt )
 {
     Window::DataChanged( rDCEvt );
-
-    if ( (rDCEvt.GetType() == DATACHANGED_SETTINGS) &&
-         (rDCEvt.GetFlags() & SETTINGS_STYLE) )
+    if ( (rDCEvt.GetType() == DATACHANGED_FONTS) ||
+        (rDCEvt.GetType() == DATACHANGED_DISPLAY) ||
+        (rDCEvt.GetType() == DATACHANGED_FONTSUBSTITUTION) ||
+        ((rDCEvt.GetType() == DATACHANGED_SETTINGS) &&
+        (rDCEvt.GetFlags() & SETTINGS_STYLE)) )
     {
         ImplInitSettings( sal_True, sal_True, sal_True );
         Invalidate();
