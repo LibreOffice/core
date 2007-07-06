@@ -4,9 +4,9 @@
  *
  *  $RCSfile: unoportenum.cxx,v $
  *
- *  $Revision: 1.35 $
+ *  $Revision: 1.36 $
  *
- *  last change: $Author: rt $ $Date: 2007-01-30 15:23:35 $
+ *  last change: $Author: rt $ $Date: 2007-07-06 12:17:39 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -367,6 +367,30 @@ void lcl_ExportBookmark(
         rBkmArr.erase( aIter++ );
     }
 }
+
+void lcl_ExportSoftPageBreak(
+    SwSoftPageBreakList& rBreakArr, ULONG nIndex,
+    SwUnoCrsr* pUnoCrsr, Reference<XText> & rParent, XTextRangeArr& rPortionArr)
+{
+    for ( SwSoftPageBreakList::iterator aIter = rBreakArr.begin(), aEnd = rBreakArr.end();
+          aIter != aEnd; )
+    {
+        if ( nIndex > *aIter )
+        {
+            rBreakArr.erase( aIter++ );
+            continue;
+        }
+        if ( nIndex < *aIter )
+            break;
+
+        rPortionArr.Insert(
+            new Reference< XTextRange >(new SwXTextPortion(pUnoCrsr, rParent, PORTION_SOFT_PAGEBREAK)),
+            rPortionArr.Count());
+        rBreakArr.erase( aIter++ );
+    }
+}
+
+
 /* -----------------------------18.12.00 14:51--------------------------------
 
  ---------------------------------------------------------------------------*/
@@ -419,6 +443,7 @@ Reference<XTextRange> lcl_ExportHints(SwpHints* pHints,
                                 const xub_StrLen& nFirstFrameIndex,
                                 SwXBookmarkPortion_ImplList& aBkmArr,
                                 SwXRedlinePortion_ImplList& aRedArr,
+                                SwSoftPageBreakList& aBreakArr,
                                 sal_Int32 nEndPos )
 {
     Reference<XTextRange> xRef;
@@ -622,6 +647,11 @@ Reference<XTextRange> lcl_ExportHints(SwpHints* pHints,
         {
             nMovePos = (sal_uInt16)(*aRedArr.begin())->getRealIndex();
         }
+        // break up portions for soft page breaks
+        if (aBreakArr.size() && *aBreakArr.begin() < nMovePos)
+        {
+            nMovePos = *aBreakArr.begin();
+        }
         // break up if the destination is behind a frame
         if(nFirstFrameIndex != STRING_MAXLEN && nMovePos > nFirstFrameIndex)
             nMovePos = nFirstFrameIndex;
@@ -709,6 +739,15 @@ void lcl_FillRedlineArray(SwDoc& rDoc,SwUnoCrsr& rUnoCrsr, SwXRedlinePortion_Imp
        }
     }
 }
+
+//-----------------------------------------------------------------------------
+void lcl_FillSoftPageBreakArray( SwUnoCrsr& rUnoCrsr, SwSoftPageBreakList& rBreakArr )
+{
+    const SwTxtNode *pTxtNode = rUnoCrsr.GetPoint()->nNode.GetNode().GetTxtNode();
+    if( pTxtNode )
+        pTxtNode->fillSoftPageBreakList( rBreakArr );
+}
+
 /* -----------------------------19.12.00 12:25--------------------------------
 
  ---------------------------------------------------------------------------*/
@@ -747,7 +786,9 @@ void lcl_ExportRedline(
  ---------------------------------------------------------------------------*/
 void lcl_ExportBkmAndRedline(
     SwXBookmarkPortion_ImplList& rBkmArr,
-    SwXRedlinePortion_ImplList& rRedlineArr, ULONG nIndex,
+    SwXRedlinePortion_ImplList& rRedlineArr,
+    SwSoftPageBreakList& rBreakArr,
+    ULONG nIndex,
     SwUnoCrsr* pUnoCrsr, Reference<XText> & rParent, XTextRangeArr& rPortionArr)
 {
     if (rBkmArr.size())
@@ -755,9 +796,14 @@ void lcl_ExportBkmAndRedline(
 
     if (rRedlineArr.size())
         lcl_ExportRedline(rRedlineArr, nIndex, pUnoCrsr, rParent, rPortionArr);
+
+    if (rBreakArr.size())
+        lcl_ExportSoftPageBreak(rBreakArr, nIndex, pUnoCrsr, rParent, rPortionArr);
 }
 //-----------------------------------------------------------------------------
-sal_Int32 lcl_GetNextIndex(SwXBookmarkPortion_ImplList& rBkmArr, SwXRedlinePortion_ImplList& rRedlineArr)
+sal_Int32 lcl_GetNextIndex(SwXBookmarkPortion_ImplList& rBkmArr,
+    SwXRedlinePortion_ImplList& rRedlineArr,
+    SwSoftPageBreakList& rBreakArr )
 {
     sal_Int32 nRet = -1;
     if(rBkmArr.size())
@@ -771,6 +817,11 @@ sal_Int32 lcl_GetNextIndex(SwXBookmarkPortion_ImplList& rBkmArr, SwXRedlinePorti
         sal_Int32 nTmp = pPtr->getRealIndex();
         if(nRet < 0 || nTmp < nRet)
             nRet = nTmp;
+    }
+    if(rBreakArr.size())
+    {
+        if(nRet < 0 || *rBreakArr.begin() < static_cast<sal_uInt32>(nRet))
+            nRet = *rBreakArr.begin();
     }
     return nRet;
 };
@@ -792,10 +843,12 @@ void SwXTextPortionEnumeration::CreatePortions()
     {
         SwXBookmarkPortion_ImplList aBkmArr;
         SwXRedlinePortion_ImplList aRedArr;
+        SwSoftPageBreakList aBreakArr;
 
         SwDoc* pDoc = pUnoCrsr->GetDoc();
         lcl_FillRedlineArray(*pDoc, *pUnoCrsr, aRedArr);
         lcl_FillBookmarkArray(*pDoc, *pUnoCrsr, aBkmArr );
+        lcl_FillSoftPageBreakArray( *pUnoCrsr, aBreakArr );
 #if OSL_DEBUG_LEVEL > 1
         for (SwXBookmarkPortion_ImplList::const_iterator aIter = aBkmArr.begin(), aEnd = aBkmArr.end();
              aIter != aEnd;
@@ -833,7 +886,7 @@ void SwXTextPortionEnumeration::CreatePortions()
                     uno::Reference< XTextRange >  xRef;
                     if(!pCNd->Len())
                     {
-                        lcl_ExportBkmAndRedline(aBkmArr, aRedArr, 0, pUnoCrsr, xParent, aPortionArr);
+                        lcl_ExportBkmAndRedline(aBkmArr, aRedArr, aBreakArr, 0, pUnoCrsr, xParent, aPortionArr);
                         // the paragraph is empty
                         xRef = new SwXTextPortion(pUnoCrsr, xParent, ePortionType);
                         // are there any frames?
@@ -893,7 +946,7 @@ void SwXTextPortionEnumeration::CreatePortions()
                     }
                     if(!xRef.is())
                     {
-                        lcl_ExportBkmAndRedline(aBkmArr, aRedArr, nCurrentIndex, pUnoCrsr, xParent, aPortionArr);
+                        lcl_ExportBkmAndRedline(aBkmArr, aRedArr, aBreakArr, nCurrentIndex, pUnoCrsr, xParent, aPortionArr);
                         if(pHints)
                         {
                             xRef = lcl_ExportHints(pHints,
@@ -905,6 +958,7 @@ void SwXTextPortionEnumeration::CreatePortions()
                                 nFirstFrameIndex,
                                 aBkmArr,
                                 aRedArr,
+                                aBreakArr,
                                 nEndPos);
 
                         }
@@ -914,7 +968,7 @@ void SwXTextPortionEnumeration::CreatePortions()
                         }
                         else
                         {
-                            sal_Int32 nNextIndex = lcl_GetNextIndex(aBkmArr, aRedArr);
+                            sal_Int32 nNextIndex = lcl_GetNextIndex(aBkmArr, aRedArr, aBreakArr);
                             DBG_ASSERT( nNextIndex <= pCNd->Len(), "illegal next index" );
                             if( nNextIndex > pCNd->Len() )
                             {
@@ -961,7 +1015,7 @@ void SwXTextPortionEnumeration::CreatePortions()
             if( pCNd && pUnoCrsr->GetPoint()->nContent >= (xub_StrLen)nLocalEnd)
             {
                 bAtEnd = sal_True;
-                lcl_ExportBkmAndRedline(aBkmArr, aRedArr, nLocalEnd,
+                lcl_ExportBkmAndRedline(aBkmArr, aRedArr, aBreakArr, nLocalEnd,
                                             pUnoCrsr, xParent, aPortionArr);
                 if(ND_TEXTNODE == pNode->GetNodeType())
                 {
@@ -979,6 +1033,7 @@ void SwXTextPortionEnumeration::CreatePortions()
                             STRING_MAXLEN,
                             aBkmArr,
                             aRedArr,
+                            aBreakArr,
                             nEndPos);
                         if(xRef.is())
                             aPortionArr.Insert(new Reference<XTextRange>(xRef), aPortionArr.Count());
