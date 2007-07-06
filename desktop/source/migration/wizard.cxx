@@ -4,9 +4,9 @@
  *
  *  $RCSfile: wizard.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: rt $ $Date: 2007-04-26 08:25:00 $
+ *  last change: $Author: rt $ $Date: 2007-07-06 12:37:06 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -46,6 +46,7 @@
 #include <rtl/ustrbuf.hxx>
 #include <rtl/string.hxx>
 #include <rtl/strbuf.hxx>
+#include <rtl/bootstrap.hxx>
 
 #include <comphelper/processfactory.hxx>
 #include <tools/date.hxx>
@@ -116,15 +117,14 @@ FirstStartWizard::FirstStartWizard(Window* pParent)
     ,m_aDefaultPath(0)
     ,m_aMigrationPath(0)
     ,m_bDone(sal_False)
-    ,m_bAccepted(sal_False)
+    ,m_bLicenseNeedsAcceptence(FirstStartWizard::needsLicenseAcceptence())
+    ,m_bLicenseWasAccepted(sal_False)
     ,m_bAutomaticUpdChk(sal_True)
 {
     // ---
     // FreeResource();
-
-
-    enableState(STATE_USER, sal_False);
-    enableState(STATE_REGISTRATION, sal_False);
+//  enableState(STATE_USER, sal_False);
+//  enableState(STATE_REGISTRATION, sal_False);
 
     ShowButtonFixedLine(sal_True);
     Size aTPSize(TP_WIDTH, TP_HEIGHT);
@@ -146,66 +146,7 @@ FirstStartWizard::FirstStartWizard(Window* pParent)
     // save cancel click handler
     m_lnkCancel = m_pCancel->GetClickHdl();
 
-    // prepare initial state and
-    // check whether migration should be offered
-    // and disable the migration tabpage if no
-    // migration is needed
-    if(Migration::checkMigration())
-    {
-        if ( showOnlineUpdatePage() )
-        {
-            declarePath(m_aDefaultPath,
-                STATE_WELCOME,
-                STATE_LICENSE,
-                STATE_MIGRATION,
-                STATE_USER,
-                STATE_UPDATE_CHECK,
-                STATE_REGISTRATION,
-                WZS_INVALID_STATE
-                );
-            enableState(STATE_UPDATE_CHECK, sal_False);
-        }
-        else
-        {
-            declarePath(m_aDefaultPath,
-                STATE_WELCOME,
-                STATE_LICENSE,
-                STATE_MIGRATION,
-                STATE_USER,
-                STATE_REGISTRATION,
-                WZS_INVALID_STATE
-                );
-        }
-        enableState(STATE_MIGRATION, sal_False);
-    }
-    else
-    {
-        if ( showOnlineUpdatePage() )
-        {
-            declarePath(m_aDefaultPath,
-                STATE_WELCOME,
-                STATE_LICENSE,
-                STATE_USER,
-                STATE_UPDATE_CHECK,
-                STATE_REGISTRATION,
-                WZS_INVALID_STATE
-                );
-            enableState(STATE_UPDATE_CHECK, sal_False);
-        }
-        else
-        {
-            declarePath(m_aDefaultPath,
-                STATE_WELCOME,
-                STATE_LICENSE,
-                STATE_USER,
-                STATE_REGISTRATION,
-                WZS_INVALID_STATE
-                );
-        }
-    }
-    enableState(STATE_USER, sal_False);
-    enableState(STATE_REGISTRATION, sal_False);
-
+    m_aDefaultPath = defineWizardPagesDependingFromContext();
     activatePath(m_aDefaultPath, sal_True);
 
     enterState(STATE_WELCOME);
@@ -216,7 +157,56 @@ FirstStartWizard::FirstStartWizard(Window* pParent)
     // disable "finish button"
     enableButtons(WZB_FINISH, sal_False);
     defaultButton(WZB_NEXT);
+}
 
+::svt::RoadmapWizardTypes::PathId FirstStartWizard::defineWizardPagesDependingFromContext()
+{
+    ::svt::RoadmapWizardTypes::PathId aDefaultPath = 0;
+
+    sal_Bool bPage_Welcome      = sal_True;
+    sal_Bool bPage_License      = sal_True;
+    sal_Bool bPage_Migration    = sal_True;
+    sal_Bool bPage_User         = sal_True;
+    sal_Bool bPage_UpdateCheck  = sal_True;
+    sal_Bool bPage_Registration = sal_True;
+
+    bPage_License     = m_bLicenseNeedsAcceptence;
+    bPage_Migration   = Migration::checkMigration();
+    bPage_UpdateCheck = showOnlineUpdatePage();
+
+    Path aPath;
+    if (bPage_Welcome)
+        aPath.push_back(STATE_WELCOME);
+    if (bPage_License)
+        aPath.push_back(STATE_LICENSE);
+    if (bPage_Migration)
+        aPath.push_back(STATE_MIGRATION);
+    if (bPage_User)
+        aPath.push_back(STATE_USER);
+    if (bPage_UpdateCheck)
+        aPath.push_back(STATE_UPDATE_CHECK);
+    if (bPage_Registration)
+        aPath.push_back(STATE_REGISTRATION);
+
+    declarePath(aDefaultPath, aPath);
+
+    // a) If license must be accepted by the user, all direct links
+    //    to wizard tab pages must be disabled. Because such pages
+    //    should be accessible only in case license was accepted !
+    // b) But if no license should be shown at all ...
+    //    such direct links can be enabled by default.
+    sal_Bool bAllowDirectLink = ( ! bPage_License);
+
+    if (bPage_User)
+        enableState(STATE_USER, bAllowDirectLink);
+    if (bPage_UpdateCheck)
+        enableState(STATE_UPDATE_CHECK, bAllowDirectLink);
+    if (bPage_Migration)
+        enableState(STATE_MIGRATION, bAllowDirectLink);
+    if (bPage_Registration)
+        enableState(STATE_REGISTRATION, bAllowDirectLink);
+
+    return aDefaultPath;
 }
 
 // catch F1 and disable help
@@ -344,23 +334,25 @@ String FirstStartWizard::getStateDisplayName(WizardState _nState)
 
 sal_Bool FirstStartWizard::prepareLeaveCurrentState( CommitPageReason _eReason )
 {
-    if (_eReason == eTravelForward && getCurrentState() == STATE_LICENSE && !m_bAccepted)
+    // the license acceptance is handled here, because it needs to change the state
+    // of the roadmap wizard which the page implementation does not know.
+    if (
+        (_eReason              == eTravelForward) &&
+        (getCurrentState()     == STATE_LICENSE ) &&
+        (m_bLicenseWasAccepted == sal_False     )
+       )
     {
-        // the license acceptance is handled here, because it needs to change the state
-        // of the roadmap wizard which the page implementation does not know.
         if (Migration::checkMigration())
             enableState(FirstStartWizard::STATE_MIGRATION, sal_True);
-
-        enableState(FirstStartWizard::STATE_USER, sal_True);
-
         if ( showOnlineUpdatePage() )
             enableState(FirstStartWizard::STATE_UPDATE_CHECK, sal_True);
-
+        enableState(FirstStartWizard::STATE_USER, sal_True);
         enableState(FirstStartWizard::STATE_REGISTRATION, sal_True);
 
-        m_bAccepted = sal_True;
         storeAcceptDate();
+        m_bLicenseWasAccepted = sal_True;
     }
+
     return svt::RoadmapWizard::prepareLeaveCurrentState(_eReason);
 }
 
@@ -498,7 +490,7 @@ void FirstStartWizard::storeAcceptDate()
 
         // since the license is accepted the local user registry can be cleaned if required
         cleanOldOfficeRegKeys();
-    } catch (RuntimeException)
+    } catch (const Exception&)
     {
     }
 
@@ -518,14 +510,14 @@ void FirstStartWizard::cleanOldOfficeRegKeys()
     OUString aSharedLocationPath;
     OUString aInstallMode;
 
-    Bootstrap::PathStatus aBaseLocateResult =
-        Bootstrap::locateBaseInstallation( aBaseLocationPath );
-    Bootstrap::PathStatus aSharedLocateResult =
-        Bootstrap::locateSharedData( aSharedLocationPath );
-    aInstallMode = Bootstrap::getAllUsersValue( ::rtl::OUString() );
+    ::utl::Bootstrap::PathStatus aBaseLocateResult =
+        ::utl::Bootstrap::locateBaseInstallation( aBaseLocationPath );
+    ::utl::Bootstrap::PathStatus aSharedLocateResult =
+        ::utl::Bootstrap::locateSharedData( aSharedLocationPath );
+    aInstallMode = ::utl::Bootstrap::getAllUsersValue( ::rtl::OUString() );
 
     // TODO: replace the checking for install mode
-    if ( aBaseLocateResult == Bootstrap::PATH_EXISTS && aSharedLocateResult == Bootstrap::PATH_EXISTS
+    if ( aBaseLocateResult == ::utl::Bootstrap::PATH_EXISTS && aSharedLocateResult == ::utl::Bootstrap::PATH_EXISTS
       && aInstallMode.equals( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "1" ) ) ) )
     {
         ::rtl::OUString aDeregCompletePath =
@@ -567,7 +559,7 @@ void FirstStartWizard::disableWizard()
             theConfigProvider->createInstanceWithArguments(sAccessSrvc, theArgs), UNO_QUERY_THROW);
         pset->setPropertyValue(OUString::createFromAscii("FirstStartWizardCompleted"), makeAny(sal_True));
         Reference< XChangesBatch >(pset, UNO_QUERY_THROW)->commitChanges();
-    } catch (RuntimeException)
+    } catch (const Exception&)
     {
     }
 
@@ -589,7 +581,15 @@ void FirstStartWizard::enableQuickstart()
 
 }
 
-sal_Bool FirstStartWizard::isFirstStart()
+sal_Bool FirstStartWizard::isWizardNeeded()
+{
+    return  (
+                  FirstStartWizard::impl_isFirstStart()      ||
+                ! FirstStartWizard::impl_isLicenseAccepted()
+            );
+}
+
+sal_Bool FirstStartWizard::impl_isFirstStart()
 {
     try {
         Reference < XMultiServiceFactory > xFactory = ::comphelper::getProcessServiceFactory();
@@ -608,14 +608,32 @@ sal_Bool FirstStartWizard::isFirstStart()
             return sal_False;  // wizard was already completed
         else
             return sal_True;
-    } catch (RuntimeException)
+    } catch (const Exception&)
     {
         return sal_True;
     }
 }
 
-sal_Bool FirstStartWizard::isLicenseAccepted()
+sal_Bool FirstStartWizard::needsLicenseAcceptence()
 {
+    static const ::rtl::OUString BOOTPARAM_SHOWLICENSE = ::rtl::OUString::createFromAscii("HideEula");
+    ::rtl::OUString sValue;
+    sal_Bool        bParamExists = ::rtl::Bootstrap::get(BOOTPARAM_SHOWLICENSE, sValue);
+    sal_Bool        bShowLicense = sal_True;
+    if (bParamExists)
+        bShowLicense = ! sValue.toBoolean();
+    return bShowLicense;
+}
+
+sal_Bool FirstStartWizard::impl_isLicenseAccepted()
+{
+    // If no license will be shown ... it must not be accepted.
+    // So it was accepted "hardly" by the outside installer.
+    // But if the configuration entry "HideEula" will be removed afterwards ..
+    // we have to show the licese page again and user has to accept it here .-)
+    if ( ! FirstStartWizard::needsLicenseAcceptence())
+        return sal_True;
+
     try
     {
         Reference < XMultiServiceFactory > xFactory = ::comphelper::getProcessServiceFactory();
@@ -656,7 +674,7 @@ sal_Bool FirstStartWizard::isLicenseAccepted()
                 return sal_True;
         }
         return sal_False;
-    } catch (RuntimeException)
+    } catch (const Exception&)
     {
         return sal_False;
     }
@@ -681,7 +699,7 @@ sal_Bool FirstStartWizard::showOnlineUpdatePage()
             else
                 return sal_False;
         }
-    } catch (RuntimeException)
+    } catch (const Exception&)
     {
     }
     return sal_False;
@@ -704,9 +722,9 @@ OUString FirstStartWizard::getLicensePath()
         return aLicensePath;
 
     OUString aBaseInstallPath;
-    Bootstrap::PathStatus aBaseLocateResult =
-        Bootstrap::locateBaseInstallation(aBaseInstallPath);
-    if (aBaseLocateResult != Bootstrap::PATH_EXISTS)
+    ::utl::Bootstrap::PathStatus aBaseLocateResult =
+        ::utl::Bootstrap::locateBaseInstallation(aBaseInstallPath);
+    if (aBaseLocateResult != ::utl::Bootstrap::PATH_EXISTS)
     {
         // yuck! no license :/
     }
