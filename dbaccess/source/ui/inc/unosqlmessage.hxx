@@ -4,9 +4,9 @@
  *
  *  $RCSfile: unosqlmessage.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 16:06:27 $
+ *  last change: $Author: rt $ $Date: 2007-07-06 08:32:44 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -42,7 +42,6 @@
 #ifndef _DBAUI_MODULE_DBU_HXX_
 #include "moduledbu.hxx"
 #endif
-
 //.........................................................................
 namespace dbaui
 {
@@ -52,8 +51,8 @@ typedef ::svt::OGenericUnoDialog OSQLMessageDialogBase;
 class OSQLMessageDialog
         :public OSQLMessageDialogBase
         ,public ::comphelper::OPropertyArrayUsageHelper< OSQLMessageDialog >
-        ,public OModuleClient
 {
+    OModuleClient m_aModuleClient;
 protected:
     // <properties>
     ::com::sun::star::uno::Any  m_aException;
