@@ -4,9 +4,9 @@
  *
  *  $RCSfile: pcrcommon.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: vg $ $Date: 2006-03-14 11:27:40 $
+ *  last change: $Author: rt $ $Date: 2007-07-06 08:51:14 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -54,8 +54,8 @@
 #ifndef _STRING_HXX
 #include <tools/string.hxx>
 #endif
-#ifndef _VCL_FLDUNIT_HXX
-#include <vcl/fldunit.hxx>
+#ifndef _TOOLKIT_HELPER_VCLUNOHELPER_HXX_
+#include <toolkit/helper/vclunohelper.hxx>
 #endif
 #ifndef COMPHELPER_INC_COMPHELPER_LISTENERNOTIFICATION_HXX
 #include <comphelper/listenernotification.hxx>
@@ -99,19 +99,6 @@ namespace pcr
     public:
         static sal_uInt32 getHelpId( const ::rtl::OUString& _rHelpURL );
         static ::rtl::OUString getHelpURL( sal_uInt32 _nHelpId );
-    };
-
-    //========================================================================
-    //= MeasurementUnitConversion
-    //========================================================================
-    /** small helper to convert between <type>MeasurementUnit</type> and
-        <type>FieldUnit</type>
-    */
-    class MeasurementUnitConversion
-    {
-    public:
-        static sal_Int16 convertToMeasurementUnit( FieldUnit _nFieldUnit, sal_Int16 _rFieldToUNOValueFactor );
-        static FieldUnit convertToFieldUnit( sal_Int16 _nMeasurementUnit, sal_Int16& _rFieldToUNOValueFactor );
     };
 
     //====================================================================
