@@ -4,9 +4,9 @@
  *
  *  $RCSfile: unoport.hxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: hr $ $Date: 2006-08-14 15:37:21 $
+ *  last change: $Author: rt $ $Date: 2007-07-06 12:16:27 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -106,7 +106,8 @@ enum SwTextPortionType
     PORTION_REDLINE_START,
     PORTION_REDLINE_END,
     PORTION_RUBY_START,
-    PORTION_RUBY_END
+    PORTION_RUBY_END,
+    PORTION_SOFT_PAGEBREAK
 };
 
 class SwXRubyPortion;
