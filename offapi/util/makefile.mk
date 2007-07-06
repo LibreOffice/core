@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.106 $
+#   $Revision: 1.107 $
 #
-#   last change: $Author: hr $ $Date: 2007-06-27 14:49:57 $
+#   last change: $Author: rt $ $Date: 2007-07-06 07:25:19 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -142,7 +142,9 @@ UNOIDLDBFILES= \
     $(UCR)$/xsec-crypto.db \
     $(UCR)$/xsec-csax.db \
     $(UCR)$/xsec-sax.db \
-    $(UCR)$/xsec-wrapper.db
+    $(UCR)$/xsec-wrapper.db \
+    $(UCR)$/cssreport.db \
+    $(UCR)$/cssrptins.db
 
 REFERENCE_RDB=$(PRJ)$/type_reference$/types.rdb
 
