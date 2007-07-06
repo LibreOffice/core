@@ -4,9 +4,9 @@
  *
  *  $RCSfile: windowscustomaction_ooo.scp,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: gm $ $Date: 2007-05-10 11:07:11 $
+ *  last change: $Author: rt $ $Date: 2007-07-06 12:32:49 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -218,7 +218,19 @@ WindowsCustomAction gid_Customaction_Register_Extensions
 	Target = "RegisterExtensions";
 	Inbinarytable = 1;
 	Assignment1 = ("InstallExecuteSequence", "Not REMOVE=\"ALL\"", "end");
+	Assignment2 = ("AdminExecuteSequence", "Not REMOVE=\"ALL\"", "end");
 End
+
+/*
+WindowsCustomAction gid_Customaction_Remove_Extensions
+	Name = "RemoveExtensions";
+	Typ = "65";
+	Source = "shlxtmsi.dll";
+	Target = "RemoveExtensions";
+	Inbinarytable = 1;
+	Assignment1 = ("InstallExecuteSequence", "REMOVE=\"ALL\"", "Shellextensionsdll4");
+End
+*/
 
 WindowsCustomAction gid_Customaction_Deregister_Extensions
 	Name = "DeregisterExtensions";
@@ -226,7 +238,19 @@ WindowsCustomAction gid_Customaction_Deregister_Extensions
 	Source = "shlxtmsi.dll";
 	Target = "DeregisterExtensions";
 	Inbinarytable = 1;
+	// Assignment1 = ("InstallExecuteSequence", "Not REMOVE=\"\"", "gid_Customaction_Remove_Extensions");
 	Assignment1 = ("InstallExecuteSequence", "Not REMOVE=\"\"", "Shellextensionsdll4");
+End
+
+WindowsCustomAction gid_Customaction_Check_Install_Directory
+	Name = "CheckInstallDirectory";
+	Typ = "65";
+	Source = "shlxtmsi.dll";
+	Target = "CheckInstallDirectory";
+	Inbinarytable = 1;
+	Assignment1 = ("InstallExecuteSequence", "Not Installed", "ExitInstallDirNotEmpty");
+	Assignment2 = ("ControlEvent", "SetupType", "Next", "DoAction", "CheckInstallDirectory", "_IsSetupTypeMin = \"Typical\" And Not Installed", "2");
+	Assignment3 = ("ControlEvent", "CustomSetup", "Next", "DoAction", "CheckInstallDirectory", "Not Installed", "2");
 End
 
 WindowsCustomAction gid_Customaction_RegCleanOld
@@ -265,6 +289,24 @@ WindowsCustomAction gid_Customaction_Patch_InstallExchangeFiles
 	Inbinarytable = 1;
 	Assignment1 = ("InstallExecuteSequence", "Not Installed", "behind_InstallFinalize");
 	Assignment2 = ("AdminExecuteSequence", "", "behind_InstallFinalize");
+End
+
+WindowsCustomAction gid_Customaction_Patch_Register_Extensions
+	Name = "RegisterExtensions";
+	Typ = "65";
+	Source = "patchmsi.dll";
+	Target = "RegisterExtensions";
+	Inbinarytable = 1;
+	Assignment1 = ("InstallExecuteSequence", "", "end");
+End
+
+WindowsCustomAction gid_Customaction_Patch_Deregister_Extensions
+	Name = "DeregisterExtensions";
+	Typ = "65";
+	Source = "patchmsi.dll";
+	Target = "DeregisterExtensions";
+	Inbinarytable = 1;
+	Assignment1 = ("InstallExecuteSequence", "Installed", "InstallInitialize");
 End
 
 WindowsCustomAction gid_Customaction_Patch_SetNewFeatureState
@@ -310,22 +352,22 @@ WindowsCustomAction gid_Customaction_Patch_Shutdownquickstarter
 	Target = "ShutDownQuickstarter";
 	Inbinarytable = 1;
 	Assignment1 = ("ControlEvent", "DestinationFolder", "Next", "DoAction", "ShutDownQuickstarter", "1", "0");
-	Assignment2 = ("InstallExecuteSequence", "Installed", "IsolateComponents");
+	Assignment2 = ("InstallExecuteSequence", "", "IsolateComponents");
 End
 
 WindowsCustomAction gid_Customaction_Patch_Isofficerunning
 	Name = "IsOfficeRunning";
-	Typ = "65";
+	Typ = "321";
 	Source = "patchmsi.dll";
 	Target = "IsOfficeRunning";
 	Inbinarytable = 1;
 	Assignment1 = ("ControlEvent", "ReadyToInstall", "InstallNow", "DoAction", "IsOfficeRunning", "1", "1");
-	Assignment2 = ("InstallExecuteSequence", "Installed", "RunningOffice");
+	Assignment2 = ("InstallExecuteSequence", "", "RunningOffice");
 End
 
 WindowsCustomAction gid_Customaction_Patch_SetUserInstallMode
 	Name = "SetUserInstallMode";
-	Typ = "65";
+	Typ = "321";
 	Source = "patchmsi.dll";
 	Target = "GetUserInstallMode";
 	Inbinarytable = 1;
@@ -341,6 +383,7 @@ WindowsCustomAction gid_Customaction_Patch_SetUserInstallMode
 	Assignment10 = ("ControlCondition", "DestinationFolder", "LabelInvalidDir2", "Show", "INVALIDDIRECTORY");
 	Assignment11 = ("ControlCondition", "DestinationFolder", "LabelPatchOlder2", "Show", "PATCHISOLDER");
 	Assignment12 = ("ControlCondition", "DestinationFolder", "LabelWrongProduct2", "Show", "ISWRONGPRODUCT");
+	Assignment13 = ("InstallExecuteSequence", "Not Installed", "PatchIsOlder");
 End
 
 WindowsCustomAction gid_Customaction_Langpack_SetUserInstallMode
@@ -380,5 +423,3 @@ WindowsCustomAction gid_Customaction_CheckVersions
 	Assignment1 = ("InstallExecuteSequence", "NOT Installed", "NewProductFound");
 	Assignment2 = ("InstallUISequence", "NOT Installed", "NewProductFound");
 End
-
-
