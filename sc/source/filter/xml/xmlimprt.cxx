@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xmlimprt.cxx,v $
  *
- *  $Revision: 1.126 $
+ *  $Revision: 1.127 $
  *
- *  last change: $Author: vg $ $Date: 2007-05-22 20:04:19 $
+ *  last change: $Author: rt $ $Date: 2007-07-06 12:40:45 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1564,6 +1564,12 @@ ScXMLImport::ScXMLImport(
     xColumnStylesPropertySetMapper = new XMLPropertySetMapper((XMLPropertyMapEntry*)aXMLScColumnStylesProperties, xScPropHdlFactory);
     xRowStylesPropertySetMapper = new XMLPropertySetMapper((XMLPropertyMapEntry*)aXMLScRowStylesImportProperties, xScPropHdlFactory);
     xTableStylesPropertySetMapper = new XMLPropertySetMapper((XMLPropertyMapEntry*)aXMLScTableStylesImportProperties, xScPropHdlFactory);
+
+    // #i66550# needed for 'presentation:event-listener' element for URLs in shapes
+    GetNamespaceMap().Add(
+        GetXMLToken( XML_NP_PRESENTATION ),
+        GetXMLToken( XML_N_PRESENTATION ),
+        XML_NAMESPACE_PRESENTATION );
 }
 
 ScXMLImport::~ScXMLImport() throw()
