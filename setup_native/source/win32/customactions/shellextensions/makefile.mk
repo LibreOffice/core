@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.11 $
+#   $Revision: 1.12 $
 #
-#   last change: $Author: ihi $ $Date: 2007-06-05 10:49:43 $
+#   last change: $Author: rt $ $Date: 2007-07-06 12:17:34 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -64,6 +64,7 @@ SLOFILES = \
     $(SLO)$/iconcache.obj \
     $(SLO)$/postuninstall.obj \
     $(SLO)$/migrateinstallpath.obj \
+    $(SLO)$/checkdirectory.obj \
     $(SLO)$/registerextensions.obj
 
 
@@ -77,6 +78,9 @@ STDSHL+=	\
     $(KERNEL32LIB)\
     -lmsvcrt
 .ENDIF
+
+SHL1OBJS = $(SLOFILES) \
+    $(SLO)$/seterror.obj
 
 SHL1LIBS = $(SLB)$/$(TARGET).lib 
 
