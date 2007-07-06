@@ -4,9 +4,9 @@
  *
  *  $RCSfile: interpr4.cxx,v $
  *
- *  $Revision: 1.50 $
+ *  $Revision: 1.51 $
  *
- *  last change: $Author: rt $ $Date: 2007-07-03 15:49:45 $
+ *  last change: $Author: rt $ $Date: 2007-07-06 12:35:56 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1271,12 +1271,11 @@ void ScInterpreter::PushMatrix(ScMatrix* pMat)
 }
 
 
-void ScInterpreter::PushError()
+void ScInterpreter::PushError( USHORT nError )
 {
-    SetError( errIllegalArgument );     // only sets error if not already set
+    SetError( nError );     // only sets error if not already set
     PushInt(0);
 }
-
 
 void ScInterpreter::SetParameterExpected()
 {
@@ -1299,9 +1298,9 @@ void ScInterpreter::SetIllegalArgument()
 }
 
 
-void ScInterpreter::SetNV()
+void ScInterpreter::SetNA()
 {
-    SetError(NOVALUE);
+    SetError(NOTAVAILABLE);
     PushInt(0);
 }
 
@@ -1920,7 +1919,7 @@ void ScInterpreter::ScExternal()
                             }
                         }
                         else
-                            SetNV();
+                            SetNA();
                     }
                     else
                         SetNoValue();
@@ -3283,7 +3282,7 @@ StackVar ScInterpreter::Interpret()
                 case ocFalse            : ScFalse();                    break;
                 case ocGetActDate       : ScGetActDate();               break;
                 case ocGetActTime       : ScGetActTime();               break;
-                case ocNoValue          : nGlobalError = NOVALUE;
+                case ocNotAvail         : nGlobalError = NOTAVAILABLE;
                                             PushInt(0);                 break;
                 case ocDeg              : ScDeg();                      break;
                 case ocRad              : ScRad();                      break;
@@ -3337,7 +3336,7 @@ StackVar ScInterpreter::Interpret()
                 case ocIsValue          : ScIsValue();                  break;
                 case ocIsFormula        : ScIsFormula();                break;
                 case ocFormula          : ScFormula();                  break;
-                case ocIsNV             : ScIsNV();                     break;
+                case ocIsNA             : ScIsNV();                     break;
                 case ocIsErr            : ScIsErr();                    break;
                 case ocIsError          : ScIsError();                  break;
                 case ocIsEven           : ScIsEven();                   break;
@@ -3617,7 +3616,7 @@ StackVar ScInterpreter::Interpret()
     case ocIsError : \
     case ocIsFormula : \
     case ocIsLogical : \
-    case ocIsNV : \
+    case ocIsNA : \
     case ocIsNonString : \
     case ocIsRef : \
     case ocIsString : \
