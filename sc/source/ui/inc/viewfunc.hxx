@@ -4,9 +4,9 @@
  *
  *  $RCSfile: viewfunc.hxx,v $
  *
- *  $Revision: 1.31 $
+ *  $Revision: 1.32 $
  *
- *  last change: $Author: kz $ $Date: 2007-06-20 13:33:07 $
+ *  last change: $Author: rt $ $Date: 2007-07-06 12:29:16 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -80,6 +80,7 @@ class Graphic;
 class Exchange;
 class ScRangeList;
 class SvxHyperlinkItem;
+class ScTransferObj;
 
 namespace com { namespace sun { namespace star { namespace datatransfer { class XTransferable; } } } }
 
@@ -122,6 +123,7 @@ public:
     SC_DLLPUBLIC void           CutToClip( ScDocument* pClipDoc = NULL, BOOL bIncludeObjects = FALSE );
     SC_DLLPUBLIC BOOL           CopyToClip( ScDocument* pClipDoc = NULL, BOOL bCut = FALSE, BOOL bApi = FALSE,
                                 BOOL bIncludeObjects = FALSE, BOOL bStopEdit = TRUE );
+    ScTransferObj*              CopyToTransferable();
     SC_DLLPUBLIC BOOL           PasteFromClip( USHORT nFlags, ScDocument* pClipDoc,
                                     USHORT nFunction = PASTE_NOFUNC, BOOL bSkipEmpty = FALSE,
                                     BOOL bTranspose = FALSE, BOOL bAsLink = FALSE,
@@ -133,6 +135,8 @@ public:
 
     SC_DLLPUBLIC void           PasteFromSystem();
     SC_DLLPUBLIC BOOL           PasteFromSystem( ULONG nFormatId, BOOL bApi = FALSE );
+    void                        PasteFromTransferable( const ::com::sun::star::uno::Reference<
+                                                       ::com::sun::star::datatransfer::XTransferable >& rxTransferable );
 
     void            PasteDraw();
     void            PasteDraw( const Point& rLogicPos, SdrModel* pModel,
