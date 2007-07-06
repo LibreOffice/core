@@ -4,9 +4,9 @@
  *
  *  $RCSfile: extrusioncontrols.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: hr $ $Date: 2007-06-27 19:15:27 $
+ *  last change: $Author: rt $ $Date: 2007-07-06 07:58:05 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -72,11 +72,6 @@
 #include <svx/dialogs.hrc>
 #include "helpid.hrc"
 
-//#include "drawitem.hxx"
-//#include "xattr.hxx"
-//#include <svx/xtable.hxx>
-//#include "linectrl.hxx"
-//#include <svx/itemwin.hxx>
 #include <svx/svdtrans.hxx>
 #include <svx/dialmgr.hxx>
 #include "extrusioncontrols.hxx"
@@ -84,6 +79,8 @@
 #include <svx/sdasitm.hxx>
 #include "toolbarmenu.hxx"
 #include "colorwindow.hxx"
+
+#include <svx/tbxcolorupdate.hxx>
 
 ////////////
 
@@ -1471,7 +1468,7 @@ ExtrusionColorControl::ExtrusionColorControl(
 : SfxToolBoxControl ( nSlotId, nId, rTbx )
 {
     rTbx.SetItemBits( nId, TIB_DROPDOWNONLY | rTbx.GetItemBits( nId ) );
-    mpBtnUpdater = new SvxTbxButtonColorUpdater_Impl( nSlotId, nId, &GetToolBox(), TBX_UPDATER_MODE_CHAR_COLOR_NEW );
+    mpBtnUpdater = new ToolboxButtonColorUpdater( nSlotId, nId, &GetToolBox(), TBX_UPDATER_MODE_CHAR_COLOR_NEW );
 }
 
 // -----------------------------------------------------------------------
