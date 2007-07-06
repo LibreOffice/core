@@ -4,9 +4,9 @@
  *
  *  $RCSfile: expbase.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 19:17:49 $
+ *  last change: $Author: rt $ $Date: 2007-07-06 12:38:15 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -55,7 +55,7 @@ class ScFieldEditEngine;
 class ScExportBase
 {
 public:
-#if defined UNX || defined MAC
+#if defined UNX
     static const sal_Char __FAR_DATA sNewLine;
 #else
     static const sal_Char __FAR_DATA sNewLine[];
