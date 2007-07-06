@@ -4,9 +4,9 @@
  *
  *  $RCSfile: unodatbr.cxx,v $
  *
- *  $Revision: 1.188 $
+ *  $Revision: 1.189 $
  *
- *  last change: $Author: hr $ $Date: 2007-06-27 14:50:55 $
+ *  last change: $Author: rt $ $Date: 2007-07-06 08:05:39 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -244,9 +244,6 @@
 #endif
 #ifndef _DBU_BRW_HRC_
 #include "dbu_brw.hrc"
-#endif
-#ifndef _DBAUI_MODULE_DBU_HXX_
-#include "moduledbu.hxx"
 #endif
 #ifndef DBACCESS_SBA_GRID_HRC
 #include "sbagrid.hrc"
@@ -557,7 +554,7 @@ sal_Bool SbaTableQueryBrowser::Construct(Window* pParent)
         m_pSplitter->SetPosSizePixel( ::Point(0,0), ::Size(nFrameWidth,0) );
         m_pSplitter->SetBackground( Wallpaper( Application::GetSettings().GetStyleSettings().GetDialogColor() ) );
 
-        m_pTreeView = new DBTreeView(getBrowserView(),m_xMultiServiceFacatory, WB_TABSTOP | WB_BORDER);
+        m_pTreeView = new DBTreeView(getBrowserView(),getORB(), WB_TABSTOP | WB_BORDER);
         m_pTreeView->SetPreExpandHandler(LINK(this, SbaTableQueryBrowser, OnExpandEntry));
 
         m_pTreeView->setCopyHandler(LINK(this, SbaTableQueryBrowser, OnCopyEntry));
@@ -3556,7 +3553,7 @@ sal_Bool SbaTableQueryBrowser::requestContextMenu( const CommandEvent& _rEvent )
     // rebuild conn not implemented yet
     aContextMenu.EnableItem(ID_TREE_REBUILD_CONN, sal_False);
 
-    if (!m_xMultiServiceFacatory.is())
+    if (!getORB().is())
         // no ORB -> no administration dialog
         aContextMenu.EnableItem(ID_TREE_EDIT_DATABASE, sal_False);
 
