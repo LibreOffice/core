@@ -4,9 +4,9 @@
  *
  *  $RCSfile: AppController.cxx,v $
  *
- *  $Revision: 1.41 $
+ *  $Revision: 1.42 $
  *
- *  last change: $Author: kz $ $Date: 2007-05-09 13:24:34 $
+ *  last change: $Author: rt $ $Date: 2007-07-06 07:57:53 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -64,6 +64,9 @@
 #ifndef _COM_SUN_STAR_SDB_XBOOKMARKSSUPPLIER_HPP_
 #include <com/sun/star/sdb/XBookmarksSupplier.hpp>
 #endif
+#ifndef _COM_SUN_STAR_CONTAINER_XCONTENTENUMERATIONACCESS_HPP_
+#include <com/sun/star/container/XContentEnumerationAccess.hpp>
+#endif
 #ifndef _COM_SUN_STAR_SDBCX_XAPPEND_HPP_
 #include <com/sun/star/sdbcx/XAppend.hpp>
 #endif
@@ -82,7 +85,9 @@
 #ifndef _COM_SUN_STAR_SDB_COMMANDTYPE_HPP_
 #include <com/sun/star/sdb/CommandType.hpp>
 #endif
+#ifndef _COM_SUN_STAR_SDB_SQLCONTEXT_HPP_
 #include <com/sun/star/sdb/SQLContext.hpp>
+#endif
 #ifndef _COM_SUN_STAR_SDB_XQUERYDEFINITIONSSUPPLIER_HPP_
 #include <com/sun/star/sdb/XQueryDefinitionsSupplier.hpp>
 #endif
@@ -251,6 +256,8 @@
 
 #include <algorithm>
 #include <functional>
+
+#include "ExtensionNotPresent.hxx"
 
 #define APP_SIZE_WIDTH  350
 #define APP_SIZE_HEIGHT 250
@@ -658,6 +665,21 @@ FeatureState OApplicationController::GetState(sal_uInt16 _nId) const
             case SID_APP_NEW_FORM:
             case ID_DOCUMENT_CREATE_REPWIZ:
                 aReturn.bEnabled = !isDataSourceReadOnly() && SvtModuleOptions().IsModuleInstalled(SvtModuleOptions::E_SWRITER);
+                break;
+            case SID_APP_NEW_REPORT:
+                aReturn.bEnabled = !isDataSourceReadOnly()
+                                    && SvtModuleOptions().IsModuleInstalled(SvtModuleOptions::E_SWRITER);
+                if ( aReturn.bEnabled )
+                {
+                    Reference< XContentEnumerationAccess > xEnumAccess(m_xServiceFactory, UNO_QUERY);
+                    aReturn.bEnabled = xEnumAccess.is();
+                    if ( aReturn.bEnabled )
+                    {
+                        static ::rtl::OUString s_sReportDesign(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.report.pentaho.SOReportJobFactory"));
+                        Reference< XEnumeration > xEnumDrivers = xEnumAccess->createContentEnumeration(s_sReportDesign);
+                        aReturn.bEnabled = xEnumDrivers.is() && xEnumDrivers->hasMoreElements();
+                    }
+                }
                 break;
             case SID_DB_APP_VIEW_TABLES:
                 aReturn.bEnabled = sal_True;
@@ -1114,6 +1136,7 @@ void OApplicationController::Execute(sal_uInt16 _nId, const Sequence< PropertyVa
             case SID_FORM_CREATE_REPWIZ_PRE_SEL:
             case ID_DOCUMENT_CREATE_REPWIZ:
             case SID_APP_NEW_FORM:
+            case SID_APP_NEW_REPORT:
             case ID_NEW_QUERY_SQL:
             case ID_NEW_QUERY_DESIGN:
             case ID_NEW_TABLE_DESIGN:
@@ -1134,6 +1157,8 @@ void OApplicationController::Execute(sal_uInt16 _nId, const Sequence< PropertyVa
                         case ID_DOCUMENT_CREATE_REPWIZ:
                         case SID_REPORT_CREATE_REPWIZ_PRE_SEL:
                             bAutoPilot = sal_True;
+                            // run through
+                        case SID_APP_NEW_REPORT:
                             eType = E_REPORT;
                             break;
                         case ID_APP_NEW_QUERY_AUTO_PILOT:
@@ -1323,6 +1348,7 @@ void OApplicationController::describeSupportedFeatures()
                                                              SID_FORM_CREATE_REPWIZ_PRE_SEL,
                                                                                         CommandGroup::APPLICATION );
 
+    implDescribeSupportedFeature( ".uno:DBNewReport",        SID_APP_NEW_REPORT,        CommandGroup::INSERT );
     implDescribeSupportedFeature( ".uno:DBNewReportAutoPilot",
                                                              ID_DOCUMENT_CREATE_REPWIZ, CommandGroup::INSERT );
     implDescribeSupportedFeature( ".uno:DBNewReportAutoPilotWithPreSelection",
@@ -1656,15 +1682,45 @@ Reference< XComponent > OApplicationController::openElement(const ::rtl::OUStrin
     }
     switch ( _eType )
     {
-        case E_REPORT: // TODO: seperate handling of forms and reports
+        case E_REPORT:
+            {
+                Reference< XContentEnumerationAccess > xEnumAccess(m_xServiceFactory, UNO_QUERY);
+                static ::rtl::OUString s_sReportDesign(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.report.pentaho.SOReportJobFactory"));
+                Reference< XEnumeration > xEnumDrivers = xEnumAccess->createContentEnumeration(s_sReportDesign);
+                if ( !xEnumDrivers.is() || !xEnumDrivers->hasMoreElements() )
+                {
+                    OExtensionNotPresentDialog aDlg(getView(), getORB());
+                    aDlg.Execute();
+                    // // is there no report designer available?
+                    // static const ::rtl::OUString sStatus = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("S1000"));
+                    // String sMsg = String( ModuleRes( RID_STR_ERROR_NO_REPORT_INSTALLED ) );
+                    // // sMsg.SearchAndReplace('#',e.Message);
+                    // SQLExceptionInfo aInfo;
+                    //
+                    // SQLException aSQLException;
+                    // aSQLException.Message = sMsg;
+                    // // aSQLException.Context = e.Context;
+                    // aInfo = SQLExceptionInfo(aSQLException);
+                    //
+                    // showError(aInfo);
+
+                    break;
+                }
+            }// run through
         case E_FORM:
             {
                 ::std::auto_ptr<OLinkedDocumentsAccess> aHelper = getDocumentsAccess(_eType);
                 Reference< XComponent > xDefinition;
                 xRet.set(aHelper->open(_sName, xDefinition,_eOpenMode),UNO_QUERY);
-                addDocumentListener(xRet,xDefinition);
+                if (_eOpenMode == OLinkedDocumentsAccess::OPEN_DESIGN ||
+                _eType == E_FORM )
+                {
+                //  // LLA: close only if in EDIT mode
+                    addDocumentListener(xRet,xDefinition);
+                }
             }
             break;
+
         case E_QUERY:
         case E_TABLE:
             {
@@ -1680,13 +1736,17 @@ Reference< XComponent > OApplicationController::openElement(const ::rtl::OUStrin
                         {
                             pDesigner.reset( new TableDesigner( getORB(), this, m_xCurrentFrame ) );
                         }
-                        else
+                        else if ( _eType == E_QUERY )
                         {
                             sal_Bool bQuerySQLMode =
                                 (   ( _nInstigatorCommand == SID_DB_APP_EDIT_SQL_VIEW )
                                 &&  ( _eType == E_QUERY )
                                 );
                             pDesigner.reset( new QueryDesigner( getORB(), this, m_xCurrentFrame, sal_False, bQuerySQLMode ) );
+                        }
+                        else if ( _eType == E_REPORT )
+                        {
+                            pDesigner.reset(new OReportDesigner(getORB(),this, m_xCurrentFrame ));
                         }
                         aDataSource <<= m_xDataSource;
                     }
@@ -1785,10 +1845,6 @@ void OApplicationController::newElement( ElementType _eType, sal_Bool _bSQLView 
 
     switch ( _eType )
     {
-        case E_REPORT:
-            OSL_ENSURE( sal_False, "OApplicationController::newElement: can't create a blank report!" );
-            break;
-
         case E_FORM:
             {
                 ::std::auto_ptr<OLinkedDocumentsAccess> aHelper = getDocumentsAccess(_eType);
@@ -1797,8 +1853,17 @@ void OApplicationController::newElement( ElementType _eType, sal_Bool _bSQLView 
                 addDocumentListener(xComponent,xDefinition);
             }
             break;
+        case E_REPORT:
+            {
+                ::std::auto_ptr<OLinkedDocumentsAccess> aHelper = getDocumentsAccess(_eType);
+                Reference< XComponent > xComponent,xDefinition;
+                xComponent = aHelper->newForm(ID_REPORT_NEW_TEXT,xDefinition);
+                addDocumentListener(xComponent,xDefinition);
+            }
+            break;
         case E_QUERY:
         case E_TABLE:
+
             {
                 ::std::auto_ptr< DatabaseObjectView > pDesigner;
                 SharedConnection xConnection( ensureConnection() );
@@ -1808,10 +1873,13 @@ void OApplicationController::newElement( ElementType _eType, sal_Bool _bSQLView 
                     {
                         pDesigner.reset( new TableDesigner( getORB(), this, m_xCurrentFrame ) );
                     }
-                    else
+                    else if ( _eType == E_QUERY )
                     {
                         pDesigner.reset( new QueryDesigner( getORB(), this, m_xCurrentFrame, sal_False, _bSQLView ) );
                     }
+                    else
+                        pDesigner.reset(new OReportDesigner(getORB(),this, m_xCurrentFrame ));
+
                     Reference< XDataSource > xDataSource( m_xDataSource, UNO_QUERY );
                     Reference< XComponent > xComponent( pDesigner->createNew( xDataSource ), UNO_QUERY );
                     addDocumentListener(xComponent,NULL);
