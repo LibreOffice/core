@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ToolBoxHelper.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 07:13:47 $
+ *  last change: $Author: rt $ $Date: 2007-07-06 08:34:01 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -53,9 +53,6 @@
 #ifndef _SVTOOLS_IMGDEF_HXX
 #include <svtools/imgdef.hxx>
 #endif
-#ifndef _DBAUI_MODULE_DBU_HXX_
-#include "moduledbu.hxx"
-#endif
 #include <vcl/event.hxx>
 
 namespace dbaui
@@ -93,7 +90,7 @@ namespace dbaui
                 m_bIsHiContrast = m_pToolBox->GetBackground().GetColor().IsDark();
 
 
-                m_pToolBox->SetImageList( ModuleRes( getImageListId(m_nSymbolsSize,m_bIsHiContrast) ) );
+                m_pToolBox->SetImageList( getImageList(m_nSymbolsSize,m_bIsHiContrast) );
                 Size aTbOldSize = m_pToolBox->GetSizePixel();
                 adjustToolBoxSize(m_pToolBox);
                 Size aTbNewSize = m_pToolBox->GetSizePixel();
