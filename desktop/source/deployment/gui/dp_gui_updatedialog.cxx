@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dp_gui_updatedialog.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: rt $ $Date: 2007-04-26 08:23:53 $
+ *  last change: $Author: rt $ $Date: 2007-07-06 12:35:27 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -112,6 +112,7 @@
 #include "dp_gui_updatedata.hxx"
 #include "dp_gui_updatedialog.hxx"
 #include "dp_gui_shared.hxx"
+#include "dp_gui_system.hxx"
 
 class KeyEvent;
 class MouseEvent;
@@ -136,7 +137,6 @@ rtl::OUString confineToParagraph(rtl::OUString const & text) {
     // each is acceptable:
     return text.replace(LF, ' ').replace(CR, ' ');
 }
-
 }
 
 struct UpdateDialog::DisabledUpdate {
@@ -219,7 +219,6 @@ class UpdateDialog::Thread: public dp_gui::Thread {
 public:
     Thread(
         css::uno::Reference< css::uno::XComponentContext > const & context,
-        rtl::Reference< dp_gui::ModifiableContext > const & modifiableContext,
         UpdateDialog & dialog,
         rtl::Reference< dp_gui::SelectedPackageIterator > const &
             selectedPackages,
@@ -268,7 +267,7 @@ private:
         css::uno::Reference< css::deployment::XPackage > const & package,
         css::uno::Reference< css::deployment::XPackageManager > const &
             packageManager,
-        Map * map) const;
+        Map * map);
 
     bool update(
         css::uno::Reference< css::deployment::XPackage > const & package,
@@ -277,7 +276,6 @@ private:
         css::uno::Reference< css::xml::dom::XNode > const & updateInfo) const;
 
     css::uno::Reference< css::uno::XComponentContext > const & m_context;
-    rtl::Reference< dp_gui::ModifiableContext > const & m_modifiableContext;
     UpdateDialog & m_dialog;
     rtl::Reference< dp_gui::SelectedPackageIterator > m_selectedPackages;
     css::uno::Sequence< css::uno::Reference<
@@ -288,23 +286,23 @@ private:
     // guarded by Application::GetSolarMutex():
     css::uno::Reference< css::task::XAbortChannel > m_abort;
     bool m_stop;
+    bool m_infoSharedDone;
 };
 
 UpdateDialog::Thread::Thread(
     css::uno::Reference< css::uno::XComponentContext > const & context,
-    rtl::Reference< dp_gui::ModifiableContext > const & modifiableContext,
     UpdateDialog & dialog,
     rtl::Reference< dp_gui::SelectedPackageIterator > const & selectedPackages,
     css::uno::Sequence< css::uno::Reference<
         css::deployment::XPackageManager > > const & packageManagers):
     m_context(context),
-    m_modifiableContext(modifiableContext),
     m_dialog(dialog),
     m_selectedPackages(selectedPackages),
     m_packageManagers(packageManagers),
     m_updateInformation(
         css::deployment::UpdateInformationProvider::create(context)),
-    m_stop(false)
+    m_stop(false),
+    m_infoSharedDone(false)
 {}
 
 void UpdateDialog::Thread::stop() {
@@ -487,7 +485,7 @@ void UpdateDialog::Thread::handle(
     css::uno::Reference< css::deployment::XPackage > const & package,
     css::uno::Reference< css::deployment::XPackageManager > const &
         packageManager,
-    Map * map) const
+    Map * map)
 {
     rtl::OUString id(dp_misc::getIdentifier(package));
     css::uno::Sequence< rtl::OUString > urls(
@@ -499,6 +497,20 @@ void UpdateDialog::Thread::handle(
     } else {
         css::uno::Sequence< css::uno::Reference< css::xml::dom::XElement > >
             infos(getUpdateInformation(package, urls, id));
+        //If there is an update for a shared extension and this user has writer
+        //access tho office/shared then we need to warn the user.
+        if ( ! m_infoSharedDone && infos.getLength() > 0
+             && packageManager->getContext().equals(OUSTR("shared"))
+             && ! packageManager->isReadOnly())
+        {
+            vos::OGuard guard(Application::GetSolarMutex());
+            InfoBox box(&m_dialog, ResId(RID_INFOBOX_UPDATE_SHARED_EXTENSION,
+                                        *DeploymentGuiResMgr::get()));
+            String msgText = box.GetMessText();
+            msgText.SearchAndReplaceAllAscii( "%PRODUCTNAME", BrandName::get() );
+            box.Execute();
+            m_infoSharedDone = true;
+        }
         rtl::OUString latestVersion(package->getVersion());
         sal_Int32 latestIndex = -1;
         for (sal_Int32 i = 0; i < infos.getLength(); ++i) {
@@ -548,8 +560,7 @@ bool UpdateDialog::Thread::update(
     for (sal_Int32 i = 0; i < ds.getLength(); ++i) {
         du.unsatisfiedDependencies[i] = dp_misc::Dependencies::name(ds[i]);
     }
-    du.permission = m_modifiableContext->isModifiable(
-        packageManager->getContext());
+    du.permission = ! packageManager->isReadOnly();
     du.updateWebsiteUrl = infoset.getUpdateWebsiteUrl();
     if (du.unsatisfiedDependencies.getLength() == 0 && du.permission &&
         !du.updateWebsiteUrl)
@@ -575,7 +586,6 @@ bool UpdateDialog::Thread::update(
 UpdateDialog::UpdateDialog(
     css::uno::Reference< css::uno::XComponentContext > const & context,
     Window * parent,
-    rtl::Reference< dp_gui::ModifiableContext > const & modifiableContext,
     rtl::Reference< dp_gui::SelectedPackageIterator > const & selectedPackages,
     css::uno::Sequence< css::uno::Reference<
         css::deployment::XPackageManager > > const & packageManagers,
@@ -604,11 +614,12 @@ UpdateDialog::UpdateDialog(
     m_noInstall(String(DpGuiResId(RID_DLG_UPDATE_NOINSTALL))),
     m_noDependency(String(DpGuiResId(RID_DLG_UPDATE_NODEPENDENCY))),
     m_noPermission(String(DpGuiResId(RID_DLG_UPDATE_NOPERMISSION))),
+    m_noPermissionVista(String(DpGuiResId(RID_DLG_UPDATE_NOPERMISSION_VISTA))),
     m_noUpdate(String(DpGuiResId(RID_DLG_UPDATE_NOUPDATE))),
     m_updateData(*updateData),
     m_thread(
         new UpdateDialog::Thread(
-            context, modifiableContext, *this, selectedPackages,
+            context, *this, selectedPackages,
             packageManagers))
 {
     OSL_ASSERT(updateData != NULL);
@@ -652,6 +663,10 @@ UpdateDialog::UpdateDialog(
     if ( ! dp_misc::office_is_running())
         m_help.Disable();
     FreeResource();
+
+    String sTemp(m_noPermissionVista);
+    sTemp.SearchAndReplaceAllAscii( "%PRODUCTNAME", BrandName::get() );
+    m_noPermissionVista = sTemp;
 }
 
 UpdateDialog::~UpdateDialog() {
@@ -840,7 +855,10 @@ IMPL_LINK(UpdateDialog, selectionHandler, void *, EMPTYARG) {
                         b.append(m_noInstall);
                     }
                     b.append(LF);
-                    b.append(m_noPermission);
+                    if (isVista())
+                        b.append(m_noPermissionVista);
+                    else
+                        b.append(m_noPermission);
                 }
                 if (data.updateWebsiteUrl) {
                     if (b.getLength() == 0) {
