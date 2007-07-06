@@ -4,9 +4,9 @@
  *
  *  $RCSfile: gridwin5.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: hr $ $Date: 2007-06-26 13:44:20 $
+ *  last change: $Author: rt $ $Date: 2007-07-06 12:46:43 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -35,8 +35,6 @@
 
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_sc.hxx"
-
-
 
 // INCLUDE ---------------------------------------------------------------
 
@@ -69,9 +67,6 @@
 #include <com/sun/star/accessibility/XAccessible.hpp>
 #endif
 
-
-// INCLUDE ---------------------------------------------------------------
-
 #include "gridwin.hxx"
 #include "viewdata.hxx"
 #include "drawview.hxx"
@@ -83,7 +78,7 @@
 #include "chgviset.hxx"
 #include "dbfunc.hxx"
 #include "tabvwsh.hxx"
-
+#include "userdat.hxx"
 
 // -----------------------------------------------------------------------
 
@@ -275,7 +270,7 @@ BOOL ScGridWindow::ShowNoteMarker( SCsCOL nPosX, SCsROW nPosY, BOOL bKeyboard )
 
 // -----------------------------------------------------------------------
 
-void __EXPORT ScGridWindow::RequestHelp(const HelpEvent& rHEvt)
+void ScGridWindow::RequestHelp(const HelpEvent& rHEvt)
 {
     BOOL bDone = FALSE;
     BOOL bHelpEnabled = ( rHEvt.GetMode() & ( HELPMODE_BALLOON | HELPMODE_QUICK ) ) != 0;
@@ -343,11 +338,37 @@ void __EXPORT ScGridWindow::RequestHelp(const HelpEvent& rHEvt)
                         aPixRect = LogicToPixel(aVEvt.pObj->GetLogicRect());
                     }
                 }
-                // URL in Textobjekt
-                if ( !aHelpText.Len() && aVEvt.eEvent == SDREVENT_EXECUTEURL )
+                // URL in shape text or at shape itself (URL in text overrides object URL)
+                if ( aHelpText.Len() == 0 )
                 {
-                    aHelpText = aVEvt.pURLField->GetURL();
-                    aPixRect = LogicToPixel(aVEvt.pObj->GetLogicRect());
+                    if( aVEvt.eEvent == SDREVENT_EXECUTEURL )
+                    {
+                        aHelpText = aVEvt.pURLField->GetURL();
+                        aPixRect = LogicToPixel(aVEvt.pObj->GetLogicRect());
+                    }
+                    else
+                    {
+                        SdrObject* pObj = 0;
+                        SdrPageView* pPV = 0;
+                        Point aMDPos = PixelToLogic( aPosPixel );
+                        if ( pDrView->PickObj(aMDPos, pObj, pPV, SDRSEARCH_ALSOONMASTER) )
+                        {
+                            if ( pObj->IsGroupObject() )
+                            {
+                                    SdrObject* pHit = 0;
+                                    if ( pDrView->PickObj(aMDPos, pHit, pPV, SDRSEARCH_DEEP ) )
+                                        pObj = pHit;
+                            }
+#ifdef ISSUE66550_HLINK_FOR_SHAPES
+                            ScMacroInfo* pInfo = ScDrawLayer::GetMacroInfo( pObj );
+                            if ( pInfo && (pInfo->GetHlink().getLength() > 0) )
+                            {
+                                aPixRect = LogicToPixel(aVEvt.pObj->GetLogicRect());
+                                aHelpText = pInfo->GetHlink();
+                            }
+#endif
+                        }
+                    }
                 }
             }
         }
