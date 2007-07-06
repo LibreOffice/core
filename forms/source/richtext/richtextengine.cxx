@@ -4,9 +4,9 @@
  *
  *  $RCSfile: richtextengine.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 00:00:21 $
+ *  last change: $Author: rt $ $Date: 2007-07-06 09:56:09 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -79,6 +79,10 @@
 #ifndef _SVTOOLS_LINGUCFG_HXX_
 #include <svtools/lingucfg.hxx>
 #endif
+#ifndef _UNDO_HXX
+#include <svtools/undo.hxx>
+#endif
+
 
 #include <algorithm>
 #include <functional>
@@ -137,17 +141,20 @@ namespace frm
         return pClone;
     }
 
+    DBG_NAME(RichTextEngine)
     //--------------------------------------------------------------------
     RichTextEngine::RichTextEngine( SfxItemPool* _pPool )
         :EditEngine( _pPool )
         ,m_pEnginePool( _pPool )
     {
+        DBG_CTOR(RichTextEngine,NULL);
     }
 
     //--------------------------------------------------------------------
     RichTextEngine::~RichTextEngine( )
     {
-        delete m_pEnginePool;
+        //delete m_pEnginePool; // must be done after the RichTextEngine was deleted
+        DBG_DTOR(RichTextEngine,NULL);
     }
 
     //--------------------------------------------------------------------
