@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dbustrings.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: ihi $ $Date: 2007-04-16 16:25:48 $
+ *  last change: $Author: rt $ $Date: 2007-07-06 07:57:28 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -51,6 +51,7 @@ namespace dbaui
     IMPLEMENT_CONSTASCII_USTRING(URL_COMPONENT_DATASOURCEBROWSER, ".component:DB/DataSourceBrowser");
     IMPLEMENT_CONSTASCII_USTRING(URL_COMPONENT_RELATIONDESIGN, ".component:DB/RelationDesign");
     IMPLEMENT_CONSTASCII_USTRING(URL_COMPONENT_APPLICATION, ".component:DB/Application");
+    IMPLEMENT_CONSTASCII_USTRING(URL_COMPONENT_REPORTDESIGN, ".component:DB/ReportDesign");
 
     //============================================================
     //= service names
