@@ -4,9 +4,9 @@
  *
  *  $RCSfile: statusbarontroller.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 07:02:43 $
+ *  last change: $Author: rt $ $Date: 2007-07-06 08:08:03 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -38,9 +38,6 @@
 #include "statusbarontroller.hxx"
 #ifndef _DBU_REGHELPER_HXX_
 #include "dbu_reghelper.hxx"
-#endif
-#ifndef _DBAUI_MODULE_DBU_HXX_
-#include "moduledbu.hxx"
 #endif
 
 extern "C" void SAL_CALL createRegistryInfo_OStatusbarController()
