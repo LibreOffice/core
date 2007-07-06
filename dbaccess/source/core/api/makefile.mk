@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.13 $
+#   $Revision: 1.14 $
 #
-#   last change: $Author: rt $ $Date: 2005-09-08 10:06:47 $
+#   last change: $Author: rt $ $Date: 2007-07-06 07:52:46 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -46,6 +46,7 @@ ENABLE_EXCEPTIONS=TRUE
 
 # --- Files -------------------------------------
 SLOFILES=	\
+        $(SLO)$/querydescriptor.obj				\
         $(SLO)$/FilteredContainer.obj			\
         $(SLO)$/TableDeco.obj					\
         $(SLO)$/RowSetCacheIterator.obj			\
@@ -76,7 +77,6 @@ SLOFILES=	\
         $(SLO)$/table.obj						\
         $(SLO)$/viewcontainer.obj				\
         $(SLO)$/tablecontainer.obj				\
-        $(SLO)$/querydescriptor.obj				\
         $(SLO)$/SingleSelectQueryComposer.obj	\
         $(SLO)$/HelperCollections.obj			\
         $(SLO)$/datasettings.obj
