@@ -4,9 +4,9 @@
  *
  *  $RCSfile: viewuno.hxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: kz $ $Date: 2007-05-10 10:52:20 $
+ *  last change: $Author: rt $ $Date: 2007-07-06 12:27:09 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -92,6 +92,9 @@
 #endif
 #ifndef _COM_SUN_STAR_LANG_XUNOTUNNEL_HPP_
 #include <com/sun/star/lang/XUnoTunnel.hpp>
+#endif
+#ifndef _COM_SUN_STAR_DATATRANSFER_XTRANSFERABLESUPPLIER_HPP_
+#include <com/sun/star/datatransfer/XTransferableSupplier.hpp>
 #endif
 
 class ScTabViewShell;
@@ -229,7 +232,8 @@ class ScTabViewObj : public ScViewPaneBase,
                      public com::sun::star::sheet::XViewSplitable,
                      public com::sun::star::sheet::XViewFreezable,
                      public com::sun::star::sheet::XRangeSelection,
-                     public com::sun::star::lang::XUnoTunnel
+                     public com::sun::star::lang::XUnoTunnel,
+                     public com::sun::star::datatransfer::XTransferableSupplier
 {
 private:
     SfxItemPropertySet                      aPropSet;
@@ -427,6 +431,10 @@ public:
                                 throw(::com::sun::star::uno::RuntimeException);
     virtual ::com::sun::star::uno::Sequence< sal_Int8 > SAL_CALL getImplementationId()
                                 throw(::com::sun::star::uno::RuntimeException);
+
+    //XTransferableSupplier
+    virtual ::com::sun::star::uno::Reference< ::com::sun::star::datatransfer::XTransferable > SAL_CALL getTransferable(  ) throw (::com::sun::star::uno::RuntimeException);
+    virtual void SAL_CALL insertTransferable( const ::com::sun::star::uno::Reference< ::com::sun::star::datatransfer::XTransferable >& xTrans ) throw (::com::sun::star::datatransfer::UnsupportedFlavorException, ::com::sun::star::uno::RuntimeException);
 };
 
 
