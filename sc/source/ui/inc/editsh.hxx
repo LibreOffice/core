@@ -4,9 +4,9 @@
  *
  *  $RCSfile: editsh.hxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: vg $ $Date: 2007-02-27 13:22:37 $
+ *  last change: $Author: rt $ $Date: 2007-07-06 12:28:47 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -47,6 +47,7 @@
 #endif
 
 #include "shellids.hxx"
+#include <svx/editview.hxx>
 
 class EditView;
 class ScViewData;
@@ -77,6 +78,7 @@ public:
                     ~ScEditShell();
 
     void    SetEditView(EditView* pView);
+    EditView* GetEditView() {return pEditView;}
 
     void    Execute(SfxRequest& rReq);
     void    ExecuteTrans(SfxRequest& rReq);

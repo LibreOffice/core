@@ -4,9 +4,9 @@
  *
  *  $RCSfile: drawsh.hxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: vg $ $Date: 2007-02-27 13:21:34 $
+ *  last change: $Author: rt $ $Date: 2007-07-06 12:28:04 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -54,7 +54,7 @@
 
 class AbstractSvxNameDialog; //CHINA001 class SvxNameDialog;
 class ScViewData;
-
+class ScDrawView;
 
 class ScDrawShell : public SfxShell
 {
@@ -94,6 +94,8 @@ public:
     void    ExecuteLineDlg( SfxRequest& rReq, USHORT nTabPage = 0xffff );
     void    ExecuteAreaDlg( SfxRequest& rReq, USHORT nTabPage = 0xffff );
     void    ExecuteTextAttrDlg( SfxRequest& rReq, USHORT nTabPage = 0xffff );
+
+    ScDrawView* GetDrawView();
 
     BOOL    AreAllObjectsOnLayer(USHORT nLayerNo,const SdrMarkList& rMark);
 };
