@@ -4,9 +4,9 @@
  *
  *  $RCSfile: RowSet.hxx,v $
  *
- *  $Revision: 1.47 $
+ *  $Revision: 1.48 $
  *
- *  last change: $Author: ihi $ $Date: 2006-10-18 13:25:49 $
+ *  last change: $Author: rt $ $Date: 2007-07-06 07:52:06 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -36,6 +36,10 @@
 #ifndef DBACCESS_CORE_API_ROWSET_HXX
 #define DBACCESS_CORE_API_ROWSET_HXX
 
+#include "apitools.hxx"
+#include "RowSetBase.hxx"
+
+/** === begin UNO includes === **/
 #ifndef _COM_SUN_STAR_SDBC_XPREPAREDSTATEMENT_HPP_
 #include <com/sun/star/sdbc/XPreparedStatement.hpp>
 #endif
@@ -78,36 +82,34 @@
 #ifndef _COM_SUN_STAR_SDB_ROWSETVETOEXCEPTION_HPP_
 #include <com/sun/star/sdb/RowSetVetoException.hpp>
 #endif
-#ifndef _CPPUHELPER_COMPBASE9_HXX_
-#include <cppuhelper/compbase9.hxx>
-#endif
-#ifndef _CONNECTIVITY_FILE_VALUE_HXX_
-#include "connectivity/FValue.hxx"
-#endif
-#ifndef _DBASHARED_APITOOLS_HXX_
-#include "apitools.hxx"
-#endif
 #ifndef _COM_SUN_STAR_SDB_XSINGLESELECTQUERYANALYZER_HPP_
 #include <com/sun/star/sdb/XSingleSelectQueryAnalyzer.hpp>
 #endif
 #ifndef _COM_SUN_STAR_SDB_XSINGLESELECTQUERYCOMPOSER_HPP_
 #include <com/sun/star/sdb/XSingleSelectQueryComposer.hpp>
 #endif
+#ifndef _COM_SUN_STAR_SDB_XPARAMETERSSUPPLIER_HPP_
+#include <com/sun/star/sdb/XParametersSupplier.hpp>
+#endif
+/** === end UNO includes === **/
 
-#include "RowSetBase.hxx"
+#include <cppuhelper/compbase10.hxx>
+#include <connectivity/paramwrapper.hxx>
+#include <connectivity/FValue.hxx>
 
 namespace dbaccess
 {
-    typedef ::cppu::WeakAggComponentImplHelper9 <   ::com::sun::star::sdb::XResultSetAccess
-                                                ,   ::com::sun::star::sdb::XRowSetApproveBroadcaster
-                                                ,   ::com::sun::star::sdbcx::XDeleteRows
-                                                ,   ::com::sun::star::sdbc::XParameters
-                                                ,   ::com::sun::star::lang::XEventListener
-                                                ,   ::com::sun::star::sdbc::XResultSetUpdate
-                                                ,   ::com::sun::star::sdbc::XRowUpdate
-                                                ,   ::com::sun::star::util::XCancellable
-                                                ,   ::com::sun::star::sdb::XCompletedExecution
-                                                >   ORowSet_BASE1;
+    typedef ::cppu::WeakAggComponentImplHelper10    <   ::com::sun::star::sdb::XResultSetAccess
+                                                    ,   ::com::sun::star::sdb::XRowSetApproveBroadcaster
+                                                    ,   ::com::sun::star::sdbcx::XDeleteRows
+                                                    ,   ::com::sun::star::sdbc::XParameters
+                                                    ,   ::com::sun::star::lang::XEventListener
+                                                    ,   ::com::sun::star::sdbc::XResultSetUpdate
+                                                    ,   ::com::sun::star::sdbc::XRowUpdate
+                                                    ,   ::com::sun::star::util::XCancellable
+                                                    ,   ::com::sun::star::sdb::XCompletedExecution
+                                                    ,   ::com::sun::star::sdb::XParametersSupplier
+                                                    >   ORowSet_BASE1;
 
     class OTableContainer;
     class ORowSet : public comphelper::OBaseMutex
@@ -128,7 +130,13 @@ namespace dbaccess
         ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess >    m_xColumns; // the columns from a table or query
 
         connectivity::OWeakRefArray                 m_aClones;
-        ORowSetValueVector                          m_aParameterRow; // hold all parameters
+        /** our parameters as XPropertySet instances and ORowSetValue instances
+        */
+        ::dbtools::param::ParametersContainerRef    m_pParameters;
+        /** our parameters values, used when we do not yet have a parameters container
+            (since we have not been executed, yet)
+        */
+        ORowSetValueVector                          m_aPrematureParamValues;
 
         ::cppu::OInterfaceContainerHelper           m_aRowsetListeners;
         ::cppu::OInterfaceContainerHelper           m_aApproveListeners;
@@ -162,7 +170,7 @@ namespace dbaccess
         sal_Bool                    m_bLastKnownRowCountFinal;
         sal_Bool                    m_bUseEscapeProcessing ;
         sal_Bool                    m_bApplyFilter ;
-        sal_Bool                    m_bCreateStatement ;    // determines we to create a new prepared statement
+        sal_Bool                    m_bCommandFacetsDirty;  // any of the facets which define the active command is dirty
         sal_Bool                    m_bModified ;
         sal_Bool                    m_bRebuildConnOnExecute ;
         sal_Bool                    m_bIsBookmarable ;
@@ -171,25 +179,6 @@ namespace dbaccess
         sal_Bool                    m_bOwnConnection;
 
     private:
-        /** retrieves the composed SQL query to be used for preparing an SQL statement at the connection
-
-            The query is built from our active command plus our current filter/order criterions.
-
-            @param _bForExecution
-                <TRUE/> if this is for executing the statement (then XSingleSelectQueryAnalyzer::getQueryWithSubstitution will be
-                used), or <FALSE/> if it's for presentation to the user, e.g. in an error message (then
-                XSingleSelectQueryAnalyzer::getQuery will be used).
-
-            @precond
-                m_xActiveConnection points to a valid SDB-level connection
-
-            @throws com::sun::star::sdb::SQLException
-                if an database-related error occured
-            @throws com::sun::star::uno::RuntimeException
-                if any of the components involved throws a com::sun::star::uno::RuntimeException
-        */
-        ::rtl::OUString impl_getComposedQuery_throw( bool _bForExecution );
-
         /** builds m_aActiveCommand from our settings
 
             @return
@@ -198,6 +187,34 @@ namespace dbaccess
                 of a query we're based on.
         */
         sal_Bool        impl_buildActiveCommand_throw();
+
+        /** initializes our query composer, and everything which has to do with it
+
+            If we don't use escape processing, then we don't have a composer, and everything
+            related to it. Nonetheless, _out_rCommandToExecute and the return value are properly
+            initialized.
+
+            @param _out_rCommandToExecute
+                The command which is to be executed, according to the current settings -
+                it is built from our active command plus our current filter/order criterions.
+
+            @return
+                whether we should use escape processing before executing the actual command. This is determined
+                from our own EscapeProcessing property, and possibly overruled by the respective property
+                of a query we're based on.
+                Effectively, this value determines whether or not we actually have an composer (m_xComposer)
+                and dependent information (such as the parameters container).
+
+            @precond
+                m_xActiveConnection points to a valid SDB-level connection
+
+            @throws com::sun::star::sdb::SQLException
+                if an database-related error occured
+
+            @throws com::sun::star::uno::RuntimeException
+                if any of the components involved throws a com::sun::star::uno::RuntimeException
+        */
+        sal_Bool        impl_initComposer_throw( ::rtl::OUString& _out_rCommandToExecute );
 
         /** returns the table container of our active connection
 
@@ -224,8 +241,8 @@ namespace dbaccess
                         impl_prepareAndExecute_throw();
 
         ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection >  calcConnection(const ::com::sun::star::uno::Reference< ::com::sun::star::task::XInteractionHandler >& _rxHandler) throw( ::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException );
-        // free clones and ParseTree
-        void freeResources();
+        // free clones and ParseTree. Plus, if _bComplete is <TRUE/>, *all* other associated resources
+        void freeResources( bool _bComplete );
 
         // fire a change for one column
         // _nPos starts at zero
@@ -241,7 +258,8 @@ namespace dbaccess
         const connectivity::ORowSetValue& getInsertValue(sal_Int32 columnIndex);
         void setParameter(sal_Int32 parameterIndex, const connectivity::ORowSetValue& x);
         // resizes the parameter vector if nescessary
-        void checkAndResizeParameters(sal_Int32 parameterIndex);
+        ::connectivity::ORowSetValue& getParameterStorage( sal_Int32 parameterIndex );
+
         void updateValue(sal_Int32 columnIndex,const connectivity::ORowSetValue& x);
         void checkUpdateConditions(sal_Int32 columnIndex);
 
@@ -314,6 +332,9 @@ namespace dbaccess
 
     // XCompletedExecution
         virtual void SAL_CALL executeWithCompletion( const ::com::sun::star::uno::Reference< ::com::sun::star::task::XInteractionHandler >& handler ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
+
+    // XParametersSupplier
+        virtual ::com::sun::star::uno::Reference< ::com::sun::star::container::XIndexAccess > SAL_CALL getParameters(  ) throw (::com::sun::star::uno::RuntimeException);
 
     // ::com::sun::star::sdbc::XRow
         virtual sal_Bool SAL_CALL wasNull(  ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
@@ -444,6 +465,14 @@ namespace dbaccess
             const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& _rxTemplateColumn,
             const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& _rxRowSetColumn
         );
+
+        /** initializes our parameters container (m_pParameters) according to the parameter columns as
+            obtained from our composer
+        */
+        void    impl_initParametersContainer_nothrow();
+        /** disposes our parameters container
+        */
+        void    impl_disposeParametersContainer_nothrow();
 
     protected:
         using ORowSetBase::getFastPropertyValue;
