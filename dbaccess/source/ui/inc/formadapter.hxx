@@ -4,9 +4,9 @@
  *
  *  $RCSfile: formadapter.hxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: kz $ $Date: 2007-05-10 10:32:38 $
+ *  last change: $Author: rt $ $Date: 2007-07-06 08:29:54 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -148,6 +148,9 @@
 #ifndef _CPPUHELPER_IMPLBASE10_HXX_
 #include <cppuhelper/implbase10.hxx>
 #endif
+#ifndef _DBAUI_MODULE_DBU_HXX_
+#include "moduledbu.hxx"
+#endif
 
 namespace dbaui
 {
@@ -211,8 +214,9 @@ namespace dbaui
         ,public SbaXFormAdapter_BASE3
     {
     private:
+        OModuleClient                m_aModuleClient;
         ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XRowSet >                             m_xMainForm;
-        ::osl::Mutex                                m_aMutex;
+        ::osl::Mutex                        m_aMutex;
 
         SbaXLoadMultiplexer                 m_aLoadListeners;
         SbaXRowSetMultiplexer               m_aRowSetListeners;
