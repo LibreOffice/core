@@ -4,9 +4,9 @@
  *
  *  $RCSfile: initui.src,v $
  *
- *  $Revision: 1.40 $
+ *  $Revision: 1.41 $
  *
- *  last change: $Author: hr $ $Date: 2007-06-27 13:28:53 $
+ *  last change: $Author: rt $ $Date: 2007-07-06 11:55:29 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -146,7 +146,7 @@ Resource RID_SW_SHELLRES
     };
     String STR_HYPERLINK_CLICK
     {
-        Text [ en-US ] = "CTRL + click to open hyperlink";
+        Text [ en-US ] = "Ctrl-click to open hyperlink";
     };
 
 
