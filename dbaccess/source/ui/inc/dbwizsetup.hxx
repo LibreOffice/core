@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dbwizsetup.hxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: kz $ $Date: 2007-05-10 10:32:02 $
+ *  last change: $Author: rt $ $Date: 2007-07-06 08:28:45 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -51,9 +51,6 @@
 #ifndef _URLOBJ_HXX
 #include <tools/urlobj.hxx>
 #endif
-#ifndef _DBAUI_MODULE_DBU_HXX_
-#include "moduledbu.hxx"
-#endif
 #include <memory>
 #ifndef SVTOOLS_INC_ROADMAPWIZARD_HXX
 #include <svtools/roadmapwizard.hxx>
@@ -61,7 +58,9 @@
 #ifndef _CONNECTIVITY_DBTOOLS_HXX_
 #include <connectivity/dbtools.hxx>
 #endif
-
+#ifndef _DBAUI_MODULE_DBU_HXX_
+#include "moduledbu.hxx"
+#endif
 
 FORWARD_DECLARE_INTERFACE(beans,XPropertySet)
 FORWARD_DECLARE_INTERFACE(sdbc,XConnection)
@@ -88,6 +87,7 @@ class ODbTypeWizDialogSetup : public svt::RoadmapWizard , public IItemSetHelper,
 {
 
 private:
+    OModuleClient m_aModuleClient;
     ::std::auto_ptr<ODbDataSourceAdministrationHelper>  m_pImpl;
     SfxItemSet*             m_pOutSet;
     DATASOURCE_TYPE         m_eType;
