@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dbu_dlg.hrc,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: kz $ $Date: 2006-12-13 16:52:15 $
+ *  last change: $Author: rt $ $Date: 2007-07-06 08:27:58 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -128,9 +128,13 @@
 #define STR_EXCEPTION_INFO                  RID_STR_DLG_START + 64
 #define STR_EXCEPTION_DETAILS               RID_STR_DLG_START + 65
 
+
+
 // please adjust checking before insert new strings
 
-#if STR_EXCEPTION_DETAILS > RID_STR_DLG_END
+#define LAST_STR_HERE                       RID_STR_DLG_START + 65
+
+#if LAST_STR_HERE > RID_STR_DLG_END
 #error Resource-Id Overflow in #file, #line
 #endif
 
