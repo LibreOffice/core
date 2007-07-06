@@ -4,9 +4,9 @@
  *
  *  $RCSfile: XMLPageExport.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: hr $ $Date: 2007-06-27 15:33:37 $
+ *  last change: $Author: rt $ $Date: 2007-07-06 09:44:13 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -124,7 +124,7 @@ void XMLPageExport::collectPageMasterAutoStyle(
     if( xPageMasterPropSetMapper.is() )
     {
         ::std::vector<XMLPropertyState> xPropStates = xPageMasterExportPropMapper->Filter( rPropSet );
-        if(xPropStates.size())
+        if( !xPropStates.empty())
         {
             OUString sParent;
             rPageMasterName = rExport.GetAutoStylePool()->Find( XML_STYLE_FAMILY_PAGE_MASTER, sParent, xPropStates );
@@ -148,13 +148,11 @@ sal_Bool XMLPageExport::exportStyle(
     Reference< XPropertySet > xPropSet( rStyle, UNO_QUERY );
     Reference< XPropertySetInfo > xPropSetInfo = xPropSet->getPropertySetInfo();
 
-    Any aAny;
-
     // Don't export styles that aren't existing really. This may be the
     // case for StarOffice Writer's pool styles.
     if( xPropSetInfo->hasPropertyByName( sIsPhysical ) )
     {
-        aAny = xPropSet->getPropertyValue( sIsPhysical );
+        Any aAny = xPropSet->getPropertyValue( sIsPhysical );
         if( !*(sal_Bool *)aAny.getValue() )
             return sal_False;
     }
@@ -183,13 +181,17 @@ sal_Bool XMLPageExport::exportStyle(
         if( findPageMasterName( sName, sPMName ) )
             GetExport().AddAttribute( XML_NAMESPACE_STYLE, XML_PAGE_LAYOUT_NAME, GetExport().EncodeStyleName( sPMName ) );
 
-        aAny = xPropSet->getPropertyValue( sFollowStyle );
-        OUString sNextName;
-        aAny >>= sNextName;
-        if( sName != sNextName && sNextName.getLength() )
+        Reference<XPropertySetInfo> xInfo = xPropSet->getPropertySetInfo();
+        if ( xInfo.is() && xInfo->hasPropertyByName(sFollowStyle) )
         {
-            GetExport().AddAttribute( XML_NAMESPACE_STYLE, XML_NEXT_STYLE_NAME,
-                  GetExport().EncodeStyleName( sNextName ) );
+            OUString sNextName;
+            xPropSet->getPropertyValue( sFollowStyle ) >>= sNextName;
+
+            if( sName != sNextName && sNextName.getLength() )
+            {
+                GetExport().AddAttribute( XML_NAMESPACE_STYLE, XML_NEXT_STYLE_NAME,
+                    GetExport().EncodeStyleName( sNextName ) );
+            }
         }
 //      OUString sPageMaster = GetExport().GetAutoStylePool()->Find(
 //                                          XML_STYLE_FAMILY_PAGE_MASTER,
@@ -239,11 +241,7 @@ XMLPageExport::XMLPageExport( SvXMLExport& rExp ) :
 
             if( xFamilies->hasByName( aPageStyleName ) )
             {
-                Reference < XNameContainer > xStyleCont;
-                xFamilies->getByName( aPageStyleName ) >>= xStyleCont;
-
-                xPageStyles = Reference< XIndexAccess >( xStyleCont,
-                                                          UNO_QUERY );
+                xPageStyles.set(xFamilies->getByName( aPageStyleName ),uno::UNO_QUERY);
 
                 DBG_ASSERT( xPageStyles.is(),
                             "Page Styles not found for export!" );
@@ -260,13 +258,12 @@ void XMLPageExport::exportStyles( sal_Bool bUsed, sal_Bool bAutoStyles )
 {
     if( xPageStyles.is() )
     {
-        const sal_Int32 nStyles = xPageStyles->getCount();
-
-        for( sal_Int32 i=0; i < nStyles; i++ )
+        uno::Sequence< ::rtl::OUString> aSeq = xPageStyles->getElementNames();
+        const ::rtl::OUString* pIter = aSeq.getConstArray();
+        const ::rtl::OUString* pEnd   = pIter + aSeq.getLength();
+        for(;pIter != pEnd;++pIter)
         {
-            Reference< XStyle > xStyle;
-            xPageStyles->getByIndex( i ) >>= xStyle;
-
+            Reference< XStyle > xStyle(xPageStyles->getByName( *pIter ),uno::UNO_QUERY);
             if( !bUsed || xStyle->isInUse() )
                 exportStyle( xStyle, bAutoStyles );
         }
