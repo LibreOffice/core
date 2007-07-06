@@ -4,9 +4,9 @@
  *
  *  $RCSfile: swnewtable.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: hr $ $Date: 2007-06-26 10:42:49 $
+ *  last change: $Author: rt $ $Date: 2007-07-06 12:17:07 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1343,7 +1343,7 @@ USHORT lcl_CalculateSplitLineHeights( SwSplitLines &rCurr, SwSplitLines &rNew,
     SwTwips* pLines = new SwTwips[ nLast + 1 - nFirst ];
     for( USHORT i = nFirst; i <= nLast; ++i )
     {
-        bool bLayoutAvailable;
+        bool bLayoutAvailable = false;
         nHeight += rTable.GetTabLines()[ i ]->GetTableLineHeight( bLayoutAvailable );
         rCurr.insert( rCurr.end(), nHeight );
         pLines[ i - nFirst ] = nHeight;
