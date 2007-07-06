@@ -4,9 +4,9 @@
  *
  *  $RCSfile: FDatabaseMetaDataResultSetMetaData.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 06:37:17 $
+ *  last change: $Author: rt $ $Date: 2007-07-06 06:48:34 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -105,7 +105,9 @@ namespace connectivity
 
         // methods to set the right column mapping
         void setColumnPrivilegesMap();
+        void setColumnMap();
         void setColumnsMap();
+        void setTableNameMap();
         void setTablesMap();
         void setProcedureColumnsMap();
         void setPrimaryKeysMap();
@@ -113,6 +115,7 @@ namespace connectivity
         void setTablePrivilegesMap();
         void setCrossReferenceMap();
         void setTypeInfoMap();
+        void setProcedureNameMap();
         void setProceduresMap();
         void setTableTypes();
         void setBestRowIdentifierMap() { setVersionColumnsMap();}
