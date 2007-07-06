@@ -4,9 +4,9 @@
  *
  *  $RCSfile: tbxitem.cxx,v $
  *
- *  $Revision: 1.66 $
+ *  $Revision: 1.67 $
  *
- *  last change: $Author: hr $ $Date: 2007-06-27 23:33:00 $
+ *  last change: $Author: rt $ $Date: 2007-07-06 10:17:09 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -616,6 +616,8 @@ throw ( ::com::sun::star::uno::RuntimeException )
     const SfxSlot* pSlot = rPool.GetUnoSlot( rEvent.FeatureURL.Path );
     if ( pSlot )
         nSlotId = pSlot->GetSlotId();
+    else if ( m_aCommandURL == rEvent.FeatureURL.Path )
+        nSlotId = GetSlotId();
 
     if ( nSlotId > 0 )
     {
