@@ -4,9 +4,9 @@
  *
  *  $RCSfile: txtparai.cxx,v $
  *
- *  $Revision: 1.59 $
+ *  $Revision: 1.60 $
  *
- *  last change: $Author: hr $ $Date: 2007-06-27 16:16:29 $
+ *  last change: $Author: rt $ $Date: 2007-07-06 09:45:43 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -121,6 +121,7 @@
 #ifndef _XMLTEXTFRAMECONTEXT_HXX
 #include "XMLTextFrameContext.hxx"
 #endif
+#include "XMLCharContext.hxx"
 #ifndef _XMLTEXTFRAMEHYPERLINKCONTEXT_HXX
 #include "XMLTextFrameHyperlinkContext.hxx"
 #endif
@@ -153,32 +154,10 @@ using namespace ::xmloff::token;
 using ::com::sun::star::container::XEnumerationAccess;
 using ::com::sun::star::container::XEnumeration;
 
-class XMLImpCharContext_Impl : public SvXMLImportContext
-{
-public:
 
-    TYPEINFO();
+TYPEINIT1( XMLCharContext, SvXMLImportContext );
 
-    XMLImpCharContext_Impl(
-            SvXMLImport& rImport,
-            sal_uInt16 nPrfx,
-            const OUString& rLName,
-            const Reference< xml::sax::XAttributeList > & xAttrList,
-            sal_Unicode c,
-            sal_Bool bCount );
-    XMLImpCharContext_Impl(
-            SvXMLImport& rImport,
-            sal_uInt16 nPrfx,
-            const OUString& rLName,
-            const Reference< xml::sax::XAttributeList > & xAttrList,
-            sal_Int16 nControl );
-
-    virtual ~XMLImpCharContext_Impl();
-};
-
-TYPEINIT1( XMLImpCharContext_Impl, SvXMLImportContext );
-
-XMLImpCharContext_Impl::XMLImpCharContext_Impl(
+XMLCharContext::XMLCharContext(
         SvXMLImport& rImport,
         sal_uInt16 nPrfx,
         const OUString& rLName,
@@ -186,20 +165,20 @@ XMLImpCharContext_Impl::XMLImpCharContext_Impl(
         sal_Unicode c,
         sal_Bool bCount ) :
     SvXMLImportContext( rImport, nPrfx, rLName )
+    ,m_nControl(0)
+    ,m_nCount(1)
+    ,m_c(c)
 {
-    sal_uInt16 nCount = 1;
-
     if( bCount )
     {
+        const SvXMLNamespaceMap& rMap = GetImport().GetNamespaceMap();
         sal_Int16 nAttrCount = xAttrList.is() ? xAttrList->getLength() : 0;
         for( sal_Int16 i=0; i < nAttrCount; i++ )
         {
             const OUString& rAttrName = xAttrList->getNameByIndex( i );
 
             OUString aLocalName;
-            sal_uInt16 nPrefix =
-                GetImport().GetNamespaceMap().GetKeyByAttrName( rAttrName,
-                                                                &aLocalName );
+            sal_uInt16 nPrefix =rMap.GetKeyByAttrName( rAttrName,&aLocalName );
             if( XML_NAMESPACE_TEXT == nPrefix &&
                 IsXMLToken( aLocalName, XML_C ) )
             {
@@ -207,42 +186,60 @@ XMLImpCharContext_Impl::XMLImpCharContext_Impl(
                 if( nTmp > 0L )
                 {
                     if( nTmp > USHRT_MAX )
-                        nCount = USHRT_MAX;
+                        m_nCount = USHRT_MAX;
                     else
-                        nCount = (sal_uInt16)nTmp;
+                        m_nCount = (sal_uInt16)nTmp;
                 }
             }
         }
     }
-
-    if( 1U == nCount )
-    {
-        OUString sBuff( &c, 1 );
-        GetImport().GetTextImport()->InsertString( sBuff );
-    }
-    else
-    {
-        OUStringBuffer sBuff( nCount );
-        while( nCount-- )
-            sBuff.append( &c, 1 );
-
-        GetImport().GetTextImport()->InsertString( sBuff.makeStringAndClear() );
-    }
 }
 
-XMLImpCharContext_Impl::XMLImpCharContext_Impl(
+XMLCharContext::XMLCharContext(
         SvXMLImport& rImp,
         sal_uInt16 nPrfx,
         const OUString& rLName,
         const Reference< xml::sax::XAttributeList > &,
         sal_Int16 nControl ) :
     SvXMLImportContext( rImp, nPrfx, rLName )
+    ,m_nControl(nControl)
+    ,m_nCount(0)
 {
-    GetImport().GetTextImport()->InsertControlCharacter( nControl );
 }
 
-XMLImpCharContext_Impl::~XMLImpCharContext_Impl()
+XMLCharContext::~XMLCharContext()
 {
+}
+// -----------------------------------------------------------------------------
+void XMLCharContext::EndElement()
+{
+    if ( !m_nCount )
+        InsertControlCharacter( m_nControl );
+    else
+    {
+        if( 1U == m_nCount )
+        {
+            OUString sBuff( &m_c, 1 );
+            InsertString(sBuff);
+        }
+        else
+        {
+            OUStringBuffer sBuff( m_nCount );
+            while( m_nCount-- )
+                sBuff.append( &m_c, 1 );
+
+            InsertString(sBuff.makeStringAndClear() );
+        }
+    }
+}
+// -----------------------------------------------------------------------------
+void XMLCharContext::InsertControlCharacter(sal_Int16   _nControl)
+{
+    GetImport().GetTextImport()->InsertControlCharacter( _nControl );
+}
+void XMLCharContext::InsertString(const ::rtl::OUString& _sString)
+{
+    GetImport().GetTextImport()->InsertString( _sString );
 }
 
 // ---------------------------------------------------------------------
@@ -1335,21 +1332,21 @@ SvXMLImportContext *XMLImpSpanContext_Impl::CreateChildContext(
         break;
 
     case XML_TOK_TEXT_TAB_STOP:
-        pContext = new XMLImpCharContext_Impl( rImport, nPrefix,
+        pContext = new XMLCharContext( rImport, nPrefix,
                                                rLocalName, xAttrList,
                                                0x0009, sal_False );
         rIgnoreLeadingSpace = sal_False;
         break;
 
     case XML_TOK_TEXT_LINE_BREAK:
-        pContext = new XMLImpCharContext_Impl( rImport, nPrefix,
+        pContext = new XMLCharContext( rImport, nPrefix,
                                                rLocalName, xAttrList,
                                                ControlCharacter::LINE_BREAK );
         rIgnoreLeadingSpace = sal_False;
         break;
 
     case XML_TOK_TEXT_S:
-        pContext = new XMLImpCharContext_Impl( rImport, nPrefix,
+        pContext = new XMLCharContext( rImport, nPrefix,
                                                rLocalName, xAttrList,
                                                0x0020, sal_True );
         break;
@@ -1697,6 +1694,9 @@ XMLParaContext::~XMLParaContext()
     // #103445# for headings without style name, find the proper style
     if( bHeading && (sStyleName.getLength() == 0) )
         xTxtImport->FindOutlineStyleName( sStyleName, nOutlineLevel );
+
+    if( sStyleName.getLength() == 0 )
+        sStyleName = xTxtImport->sCellParaStyleDefault;
 
     // set style and hard attributes at the previous paragraph
     sStyleName = xTxtImport->SetStyleAndAttrs( GetImport(), xAttrCursor, sStyleName, sal_True, bHeading ? nOutlineLevel : -1 );
