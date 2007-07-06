@@ -4,9 +4,9 @@
  *
  *  $RCSfile: fmvwimp.cxx,v $
  *
- *  $Revision: 1.62 $
+ *  $Revision: 1.63 $
  *
- *  last change: $Author: hr $ $Date: 2007-06-27 18:16:56 $
+ *  last change: $Author: rt $ $Date: 2007-07-06 07:36:55 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1521,9 +1521,9 @@ SdrObject* FmXFormView::implCreateFieldControl( const ::svx::ODataAccessDescript
         if (!nOBJID)
             return NULL;
 
-        FmFormObj* pLabel;
-        FmFormObj* pControl;
-        createControlLabelPair(_pOutDev, 0, xField, xNumberFormats, nOBJID, sLabelPostfix, pLabel, pControl);
+        SdrUnoObj* pLabel;
+        SdrUnoObj* pControl;
+        createControlLabelPair(m_pView,_pOutDev, 0,0, xField, xNumberFormats, nOBJID, sLabelPostfix, FmFormInventor,OBJ_FM_FIXEDTEXT,NULL,NULL,NULL,pLabel, pControl);
         if (!pLabel || !pControl)
         {
             delete pLabel;
@@ -1559,8 +1559,9 @@ SdrObject* FmXFormView::implCreateFieldControl( const ::svx::ODataAccessDescript
         {   // wir haben bis jetzt nur ein Datums-Feld eingefuegt, brauchen aber noch ein extra Feld fuer
             // die Zeit-Komponente
             pLabel = pControl = NULL;
-            createControlLabelPair(_pOutDev, 1000, xField, xNumberFormats, OBJ_FM_TIMEFIELD,
-                UniString(SVX_RES(RID_STR_DATETIME_LABELPOSTFIX)).GetToken(1, ';'),
+            createControlLabelPair(m_pView,_pOutDev, 0,1000, xField, xNumberFormats, OBJ_FM_TIMEFIELD,
+                UniString(SVX_RES(RID_STR_DATETIME_LABELPOSTFIX)).GetToken(1, ';'),FmFormInventor,OBJ_FM_FIXEDTEXT,
+                NULL,NULL,NULL,
                 pLabel, pControl);
 
             if (pLabel && pControl)
@@ -1651,9 +1652,9 @@ SdrObject* FmXFormView::implCreateXFormsControl( const ::svx::OXFormsDescriptor 
         if ( !xSubmission.is() )
         {
 
-            FmFormObj* pLabel;
-            FmFormObj* pControl;
-            createControlLabelPair(_pOutDev, 0, xField, xNumberFormats, nOBJID, sLabelPostfix, pLabel, pControl);
+            SdrUnoObj* pLabel;
+            SdrUnoObj* pControl;
+            createControlLabelPair(m_pView,_pOutDev, 0,0, xField, xNumberFormats, nOBJID, sLabelPostfix, FmFormInventor,OBJ_FM_FIXEDTEXT,NULL,NULL,NULL,pLabel, pControl);
             if (!pLabel || !pControl) {
                 delete pLabel;
                 delete pControl;
@@ -1731,10 +1732,11 @@ SdrObject* FmXFormView::implCreateXFormsControl( const ::svx::OXFormsDescriptor 
 }
 
 //------------------------------------------------------------------------
-void FmXFormView::createControlLabelPair(OutputDevice* _pOutDev, sal_Int32 _nYOffsetMM,
+void FmXFormView::createControlLabelPair(SdrView* /*_pView*/,OutputDevice* _pOutDev, sal_Int32 _nXOffsetMM, sal_Int32 _nYOffsetMM,
     const Reference< XPropertySet >& _rxField, const Reference< XNumberFormats >& _rxNumberFormats,
-    sal_uInt16 _nObjID, const ::rtl::OUString& _rFieldPostfix,
-    FmFormObj*& _rpLabel, FmFormObj*& _rpControl) const
+    sal_uInt16 _nObjID, const ::rtl::OUString& _rFieldPostfix,UINT32 _nInventor,UINT16 _nIndent
+    ,SdrPage* _pLabelPage,SdrPage* _pPage,SdrModel* _pModel,
+    SdrUnoObj*& _rpLabel, SdrUnoObj*& _rpControl)
 {
     sal_Int32 nDataType = 0;
     sal_Int32 nFormatKey = 0;
@@ -1758,7 +1760,7 @@ void FmXFormView::createControlLabelPair(OutputDevice* _pOutDev, sal_Int32 _nYOf
     }
 
     // das Label
-    _rpLabel = (FmFormObj*)SdrObjFactory::MakeNewObject( FmFormInventor, OBJ_FM_FIXEDTEXT, NULL, NULL );
+    _rpLabel = static_cast<SdrUnoObj*>(SdrObjFactory::MakeNewObject( _nInventor, _nIndent, _pLabelPage,_pModel ));
     Reference< XPropertySet > xLabelSet(_rpLabel->GetUnoControlModel(), UNO_QUERY);
     xLabelSet->setPropertyValue(FM_PROP_LABEL, makeAny(sFieldName + _rFieldPostfix));
 
@@ -1784,19 +1786,19 @@ void FmXFormView::createControlLabelPair(OutputDevice* _pOutDev, sal_Int32 _nYOf
     aRealSize.Width() = long(Fraction(aRealSize.Width(), 1) * eTargetMode.GetScaleX());
     aRealSize.Height() = long(Fraction(aRealSize.Height(), 1) * eTargetMode.GetScaleY());
     _rpLabel->SetLogicRect(
-        ::Rectangle(    _pOutDev->LogicToLogic(Point(0, _nYOffsetMM), eSourceMode, eTargetMode),
+        ::Rectangle(    _pOutDev->LogicToLogic(Point(_nXOffsetMM, _nYOffsetMM), eSourceMode, eTargetMode),
                     _pOutDev->LogicToLogic(aRealSize, eSourceMode, eTargetMode)
         ));
 
     // jetzt das Control
-    _rpControl = static_cast<FmFormObj*>(SdrObjFactory::MakeNewObject( FmFormInventor, _nObjID, NULL, NULL ));
-    Reference< XPropertySet > xControlSet = Reference< XPropertySet > ( _rpControl->GetUnoControlModel(), UNO_QUERY );
+    _rpControl = static_cast<SdrUnoObj*>(SdrObjFactory::MakeNewObject( _nInventor, _nObjID, _pPage,_pModel ));
+    Reference< XPropertySet > xControlSet( _rpControl->GetUnoControlModel(), UNO_QUERY );
 
     // positionieren
     ::Size szControlSize;
     if (DataType::BIT == nDataType || nDataType == DataType::BOOLEAN )
         szControlSize = aDefSize;
-    else if (OBJ_FM_IMAGECONTROL == _nObjID || DataType::LONGVARCHAR == nDataType)
+    else if (OBJ_FM_IMAGECONTROL == _nObjID || DataType::LONGVARCHAR == nDataType || DataType::LONGVARBINARY == nDataType )
         szControlSize = aDefImageSize;
     else
         szControlSize = aDefSize;
@@ -1805,21 +1807,22 @@ void FmXFormView::createControlLabelPair(OutputDevice* _pOutDev, sal_Int32 _nYOf
     szControlSize.Width() = long(Fraction(szControlSize.Width(), 1) * eTargetMode.GetScaleX());
     szControlSize.Height() = long(Fraction(szControlSize.Height(), 1) * eTargetMode.GetScaleY());
     _rpControl->SetLogicRect(
-        ::Rectangle(    _pOutDev->LogicToLogic(Point(aRealSize.Width(), _nYOffsetMM), eSourceMode, eTargetMode),
+        ::Rectangle(    _pOutDev->LogicToLogic(Point(aRealSize.Width() + _nXOffsetMM, _nYOffsetMM), eSourceMode, eTargetMode),
                     _pOutDev->LogicToLogic(szControlSize, eSourceMode, eTargetMode)
         ));
 
     // ein paar initiale Einstellungen am ControlModel
     if (xControlSet.is())
     {
+        Reference< XPropertySetInfo > xControlPropInfo = xControlSet->getPropertySetInfo();
         // ein paar numersiche Eigenschaften durchschleifen
-        if (::comphelper::hasProperty(FM_PROP_DECIMAL_ACCURACY, xControlSet))
+        if (xControlPropInfo->hasPropertyByName(FM_PROP_DECIMAL_ACCURACY))
         {
             // Number braucht eine Scale
             Any aScaleVal(::comphelper::getNumberFormatDecimals(_rxNumberFormats, nFormatKey));
             xControlSet->setPropertyValue(FM_PROP_DECIMAL_ACCURACY, aScaleVal);
         }
-        if (::comphelper::hasProperty(FM_PROP_VALUEMIN, xControlSet) && ::comphelper::hasProperty(FM_PROP_VALUEMAX, xControlSet))
+        if (xControlPropInfo->hasPropertyByName(FM_PROP_VALUEMIN) && xControlPropInfo->hasPropertyByName(FM_PROP_VALUEMAX))
         {
             // die minimale/maximale Zahl in diesem Feld
             sal_Int32 nMinValue = -1000000000, nMaxValue = 1000000000;
@@ -1831,7 +1834,6 @@ void FmXFormView::createControlLabelPair(OutputDevice* _pOutDev, sal_Int32 _nYOf
                     // um die doubles/singles kuemmere ich mich nicht, da es ein wenig sinnlos ist
             }
 
-            Reference< XPropertySetInfo > xControlPropInfo = xControlSet->getPropertySetInfo();
             Any aVal;
 
             Property aMinProp = xControlPropInfo->getPropertyByName(FM_PROP_VALUEMIN);
@@ -1853,7 +1855,7 @@ void FmXFormView::createControlLabelPair(OutputDevice* _pOutDev, sal_Int32 _nYOf
             xControlSet->setPropertyValue(FM_PROP_VALUEMAX,aVal);
         }
 
-        if (::comphelper::hasProperty(FM_PROP_STRICTFORMAT, xControlSet))
+        if (xControlPropInfo->hasPropertyByName(FM_PROP_STRICTFORMAT))
         {   // Formatueberpruefung fue numeric fields standardmaessig sal_True
             sal_Bool bB(sal_True);
             Any aVal(&bB,getBooleanCppuType());
@@ -1866,7 +1868,7 @@ void FmXFormView::createControlLabelPair(OutputDevice* _pOutDev, sal_Int32 _nYOf
             xControlSet->setPropertyValue(FM_PROP_NAME, aFieldName);
         }
 
-        if (nDataType == DataType::LONGVARCHAR)
+        if (nDataType == DataType::LONGVARCHAR && xControlPropInfo->hasPropertyByName(FM_PROP_MULTILINE) )
         {
             sal_Bool bB(sal_True);
             xControlSet->setPropertyValue(FM_PROP_MULTILINE,Any(&bB,getBooleanCppuType()));
@@ -1879,20 +1881,20 @@ void FmXFormView::createControlLabelPair(OutputDevice* _pOutDev, sal_Int32 _nYOf
                 _rxField->getPropertyValue( FM_PROP_ISNULLABLE ) >>= nNullable;
             xControlSet->setPropertyValue( FM_PROP_TRISTATE, makeAny( sal_Bool( ColumnValue::NULLABLE == nNullable ) ) );
         }
-    }
 
-    // announce the label to the control
-    if (::comphelper::hasProperty(FM_PROP_CONTROLLABEL, xControlSet))
-    {
-        // (try-catch as the control may refuse a model without the right service name - which we don't know
-        // usually a fixed text we use as label should be accepted, but to be sure ....)
-        try
+        // announce the label to the control
+        if (xControlPropInfo->hasPropertyByName(FM_PROP_CONTROLLABEL))
         {
-            xControlSet->setPropertyValue(FM_PROP_CONTROLLABEL, makeAny(xLabelSet));
-        }
-        catch(Exception&)
-        {
-            DBG_ERROR("FmXFormView::createControlLabelPair : could not marry the control and the label !");
+            // (try-catch as the control may refuse a model without the right service name - which we don't know
+            // usually a fixed text we use as label should be accepted, but to be sure ....)
+            try
+            {
+                xControlSet->setPropertyValue(FM_PROP_CONTROLLABEL, makeAny(xLabelSet));
+            }
+            catch(Exception&)
+            {
+                DBG_ERROR("FmXFormView::createControlLabelPair : could not marry the control and the label !");
+            }
         }
     }
 }
