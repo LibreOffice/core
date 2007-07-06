@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dcontact.cxx,v $
  *
- *  $Revision: 1.56 $
+ *  $Revision: 1.57 $
  *
- *  last change: $Author: hr $ $Date: 2007-06-26 11:56:42 $
+ *  last change: $Author: rt $ $Date: 2007-07-06 09:51:39 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -875,7 +875,8 @@ SwDrawContact::~SwDrawContact()
 
     if ( !mbMasterObjCleared )
     {
-        delete maAnchoredDrawObj.GetDrawObj();
+        SdrObject* pObject = const_cast< SdrObject* >( maAnchoredDrawObj.GetDrawObj() );
+        SdrObject::Free( pObject );
     }
 }
 
