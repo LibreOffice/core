@@ -4,9 +4,9 @@
  *
  *  $RCSfile: defaultforminspection.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: kz $ $Date: 2007-05-10 10:47:16 $
+ *  last change: $Author: rt $ $Date: 2007-07-06 08:48:00 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -241,7 +241,7 @@ namespace pcr
                 // page, and by definition, if two properties have the same OrderIndex, then
                 // they will be ordered as they appear in the handler's getSupportedProperties.
                 return 1000;
-            throw UnknownPropertyException();
+            return 0;
         }
         return m_pInfoService->getPropertyPos( nPropertyId );
     }
