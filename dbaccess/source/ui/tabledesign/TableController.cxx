@@ -4,9 +4,9 @@
  *
  *  $RCSfile: TableController.cxx,v $
  *
- *  $Revision: 1.111 $
+ *  $Revision: 1.112 $
  *
- *  last change: $Author: kz $ $Date: 2007-05-10 10:41:47 $
+ *  last change: $Author: rt $ $Date: 2007-07-06 08:43:02 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -635,26 +635,11 @@ void OTableController::impl_initialize()
         if (!isConnected()) // so what should otherwise
         {
             if(!bFirstTry)
-            {
-                String aMessage(ModuleRes(RID_STR_CONNECTION_LOST));
-                ODataView* pWindow = getView();
-                InfoBox(pWindow, aMessage).Execute();
-            }
+                connectionLostMessage();
             throw Exception();
         }
 
         assignTable();
-        if(!m_xFormatter.is())
-        {
-            Reference< XNumberFormatsSupplier> xSupplier = ::dbtools::getNumberFormats(getConnection());
-            if(xSupplier.is())
-            {
-                m_xFormatter = Reference< ::com::sun::star::util::XNumberFormatter >(getORB()
-                    ->createInstance(::rtl::OUString::createFromAscii("com.sun.star.util.NumberFormatter")), UNO_QUERY);
-                m_xFormatter->attachNumberFormatsSupplier(xSupplier);
-            }
-            OSL_ENSURE(m_xFormatter.is(),"No NumberFormatter!");
-        }
     }
     catch(const SQLException&)
     {
@@ -686,7 +671,7 @@ void OTableController::impl_initialize()
 // -----------------------------------------------------------------------------
 sal_Bool OTableController::Construct(Window* pParent)
 {
-    m_pView = new OTableDesignView(pParent,m_xMultiServiceFacatory,this);
+    m_pView = new OTableDesignView(pParent,getORB(),this);
     OTableController_BASE::Construct(pParent);
 //  m_pView->Construct();
 //  m_pView->Show();
