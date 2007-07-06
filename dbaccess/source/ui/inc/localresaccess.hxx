@@ -4,9 +4,9 @@
  *
  *  $RCSfile: localresaccess.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2006-05-04 08:43:55 $
+ *  last change: $Author: rt $ $Date: 2007-07-06 08:30:53 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -36,11 +36,11 @@
 #ifndef _DBAUI_LOCALRESACCESS_HXX_
 #define _DBAUI_LOCALRESACCESS_HXX_
 
-#ifndef _DBAUI_MODULE_DBU_HXX_
-#include "moduledbu.hxx"
-#endif
 #ifndef _SVTOOLS_LOCALRESACCESS_HXX_
 #include <svtools/localresaccess.hxx>
+#endif
+#ifndef _DBAUI_MODULE_DBU_HXX_
+#include "moduledbu.hxx"
 #endif
 
 //.........................................................................
@@ -56,6 +56,7 @@ namespace dbaui
 typedef ::svt::OLocalResourceAccess LRA_Base;
 class LocalResourceAccess : protected LRA_Base
 {
+    OModuleClient m_aModuleClient;
 public:
     inline LocalResourceAccess( sal_uInt16 _nId, RESOURCE_TYPE _rType )
         :LRA_Base( ModuleRes( _nId ), _rType )
