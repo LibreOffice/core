@@ -4,9 +4,9 @@
  *
  *  $RCSfile: viewshel.cxx,v $
  *
- *  $Revision: 1.66 $
+ *  $Revision: 1.67 $
  *
- *  last change: $Author: hr $ $Date: 2007-06-27 15:48:03 $
+ *  last change: $Author: rt $ $Date: 2007-07-06 13:15:12 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -522,9 +522,14 @@ BOOL ViewShell::KeyInput(const KeyEvent& rKEvt, ::sd::Window* pWin)
         {
             bReturn = mpSlideShow->keyInput(rKEvt);
         }
-        else if(HasCurrentFunction())
+        else
         {
-            bReturn = GetCurrentFunction()->KeyInput(rKEvt);
+            bool bConsumed = false;
+            if( GetView() )
+                bConsumed = GetView()->getSmartTags().KeyInput(rKEvt);
+
+            if( !bConsumed &&  HasCurrentFunction())
+                bReturn = GetCurrentFunction()->KeyInput(rKEvt);
         }
     }
 
@@ -584,9 +589,14 @@ void ViewShell::MouseButtonDown(const MouseEvent& rMEvt, ::sd::Window* pWin)
     {
         mpSlideShow->mouseButtonDown(rMEvt);
     }
-    else if (HasCurrentFunction())
+    else
     {
-        GetCurrentFunction()->MouseButtonDown(rMEvt);
+        bool bConsumed = false;
+        if( GetView() )
+            bConsumed = GetView()->getSmartTags().MouseButtonDown( rMEvt );
+
+        if( !bConsumed && HasCurrentFunction() )
+            GetCurrentFunction()->MouseButtonDown(rMEvt);
     }
 }
 
@@ -618,17 +628,13 @@ void ViewShell::MouseMove(const MouseEvent& rMEvt, ::sd::Window* pWin)
     if (GetView() != NULL)
         GetView()->SetMouseEvent(rMEvt);
 
-    Point aPosition = pWin->OutputToAbsoluteScreenPixel(rMEvt.GetPosPixel());
-    //    if (saMousePosition != aPosition)
-    {
     if(mpSlideShow)
     {
         mpSlideShow->mouseMove(rMEvt);
     }
     else if(HasCurrentFunction())
     {
-        GetCurrentFunction()->MouseMove(rMEvt);
-    }
+            GetCurrentFunction()->MouseMove(rMEvt);
     }
 }
 
@@ -653,9 +659,9 @@ void ViewShell::MouseButtonUp(const MouseEvent& rMEvt, ::sd::Window* pWin)
     {
         mpSlideShow->mouseButtonUp(rMEvt);
     }
-    else if(HasCurrentFunction())
+    else if( HasCurrentFunction())
     {
-        GetCurrentFunction()->MouseButtonUp(rMEvt);
+            GetCurrentFunction()->MouseButtonUp(rMEvt);
     }
 
     if ( ! mpImpl->mpUpdateLockForMouse.expired())
