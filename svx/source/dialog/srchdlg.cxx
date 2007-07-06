@@ -4,9 +4,9 @@
  *
  *  $RCSfile: srchdlg.cxx,v $
  *
- *  $Revision: 1.43 $
+ *  $Revision: 1.44 $
  *
- *  last change: $Author: hr $ $Date: 2007-06-27 17:39:58 $
+ *  last change: $Author: rt $ $Date: 2007-07-06 12:15:06 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -98,6 +98,7 @@
 #endif
 
 #include <sfx2/app.hxx>
+#include <toolkit/unohlp.hxx>
 
 #define _SVX_SRCHDLG_CXX
 #include "srchdlg.hxx"
@@ -609,7 +610,7 @@ void SvxSearchDialog::Construct_Impl()
         }
         catch(uno::Exception&){}
 
-        if(aSearchComponent1PB.GetText().Len())
+        if(aSearchComponent1PB.GetText().Len() && bSearchComponent1 )
         {
             aSearchComponentFL.Show();
             aSearchComponent1PB.Show();
@@ -623,10 +624,10 @@ void SvxSearchDialog::Construct_Impl()
             aSearchComponentFL.Show();
             aSearchComponent2PB.Show();
         }
-        if( aSearchComponentFL.IsVisible())
+        if( aSearchComponentFL.IsVisible() && aSearchComponent1PB.IsVisible() )
         {
 
-            //dialog must me resized
+            //dialog must be resized
             Size aDlgSize(GetSizePixel());
             sal_Int32 nOffset = aSearchCmdLine.GetPosPixel().Y() - aSearchAllBtn.GetPosPixel().Y()
                 - aButtonsFL.GetPosPixel().Y() + aSearchComponent2PB.GetPosPixel().Y();
@@ -1542,14 +1543,22 @@ IMPL_LINK( SvxSearchDialog, CommandHdl_Impl, Button *, pBtn )
     }
     else if(pBtn == &aSearchComponent1PB || pBtn == &aSearchComponent2PB )
     {
-        uno::Sequence < beans::PropertyValue > aArgs(1);
+        uno::Sequence < beans::PropertyValue > aArgs(2);
         beans::PropertyValue* pArgs = aArgs.getArray();
         pArgs[0].Name = ::rtl::OUString::createFromAscii("SearchString");
         pArgs[0].Value <<= ::rtl::OUString(aSearchLB.GetText());
+        pArgs[1].Name = ::rtl::OUString::createFromAscii("ParentWindow");
+        pArgs[1].Value <<= VCLUnoHelper::GetInterface( this );
         if(pBtn == &aSearchComponent1PB)
-            pImpl->xCommand1Dispatch->dispatch(pImpl->aCommand1URL, aArgs);
+        {
+            if ( pImpl->xCommand1Dispatch.is() )
+                pImpl->xCommand1Dispatch->dispatch(pImpl->aCommand1URL, aArgs);
+        }
         else
-            pImpl->xCommand2Dispatch->dispatch(pImpl->aCommand2URL, aArgs);
+        {
+            if ( pImpl->xCommand2Dispatch.is() )
+                pImpl->xCommand2Dispatch->dispatch(pImpl->aCommand2URL, aArgs);
+        }
     }
 
     return 0;
