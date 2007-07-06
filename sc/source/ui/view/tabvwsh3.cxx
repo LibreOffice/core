@@ -4,9 +4,9 @@
  *
  *  $RCSfile: tabvwsh3.cxx,v $
  *
- *  $Revision: 1.33 $
+ *  $Revision: 1.34 $
  *
- *  last change: $Author: vg $ $Date: 2007-05-22 20:14:31 $
+ *  last change: $Author: rt $ $Date: 2007-07-06 12:47:49 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -586,6 +586,28 @@ void ScTabViewShell::Execute( SfxRequest& rReq )
                 rReq.Done();
             }
             break;
+
+        case FID_TOGGLEFORMULA:
+            {
+                ScViewData* pViewData = GetViewData();
+                const ScViewOptions& rOpts = pViewData->GetOptions();
+                BOOL bFormulaMode = !rOpts.GetOption( VOPT_FORMULAS );
+                const SfxPoolItem *pItem;
+                if( pReqArgs && pReqArgs->GetItemState(nSlot, TRUE, &pItem) == SFX_ITEM_SET )
+                    bFormulaMode = ((const SfxBoolItem *)pItem)->GetValue();
+
+                ScViewOptions rSetOpts = ScViewOptions( rOpts );
+                rSetOpts.SetOption( VOPT_FORMULAS, bFormulaMode );
+                pViewData->SetOptions( rSetOpts );
+
+                pViewData->GetDocShell()->PostPaintGridAll();
+
+                rBindings.Invalidate( FID_TOGGLEFORMULA );
+                rReq.AppendItem( SfxBoolItem( nSlot, bFormulaMode ) );
+                rReq.Done();
+            }
+            break;
+
         case FID_TOGGLEINPUTLINE:
             {
                 USHORT          nId  = ScInputWindowWrapper::GetChildWindowId();
