@@ -4,9 +4,9 @@
  *
  *  $RCSfile: svddrgmt.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: hr $ $Date: 2007-06-27 18:59:14 $
+ *  last change: $Author: rt $ $Date: 2007-07-06 13:20:33 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -631,14 +631,20 @@ FASTBOOL SdrDragObjOwn::End(FASTBOOL /*bCopy*/)
     SdrUndoAction* pUndo2=NULL;
     bool bRet=FALSE;
     SdrObject* pObj=GetDragObj();
-    if (pObj!=NULL) {
-        if (!rView.IsInsObjPoint()) {
-            if (DragStat().IsEndDragChangesAttributes()) {
+    if (pObj!=NULL)
+    {
+        if(!rView.IsInsObjPoint() && pObj->IsInserted() )
+        {
+            if (DragStat().IsEndDragChangesAttributes())
+            {
                 pUndo=rView.GetModel()->GetSdrUndoFactory().CreateUndoAttrObject(*pObj);
-                if (DragStat().IsEndDragChangesGeoAndAttributes()) {
+                if (DragStat().IsEndDragChangesGeoAndAttributes())
+                {
                     pUndo2 = rView.GetModel()->GetSdrUndoFactory().CreateUndoGeoObject(*pObj);
                 }
-            } else {
+            }
+            else
+            {
                 pUndo= rView.GetModel()->GetSdrUndoFactory().CreateUndoGeoObject(*pObj);
             }
         }
@@ -664,7 +670,9 @@ FASTBOOL SdrDragObjOwn::End(FASTBOOL /*bCopy*/)
                     rView.EndUndo();
                 }
             }
-        } else {
+        }
+        else
+        {
             delete pUndo;
         }
     }
