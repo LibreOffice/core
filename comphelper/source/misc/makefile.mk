@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.38 $
+#   $Revision: 1.39 $
 #
-#   last change: $Author: hr $ $Date: 2007-06-27 14:55:04 $
+#   last change: $Author: rt $ $Date: 2007-07-06 10:25:03 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -75,11 +75,13 @@ SLOFILES=	\
             $(SLO)$/mediadescriptor.obj \
             $(SLO)$/locale.obj \
             $(SLO)$/configurationhelper.obj \
+            $(SLO)$/mimeconfighelper.obj \
             $(SLO)$/servicedecl.obj \
             $(SLO)$/scopeguard.obj \
             $(SLO)$/componentmodule.obj \
             $(SLO)$/componentcontext.obj \
             $(SLO)$/officeresourcebundle.obj \
+            $(SLO)$/SelectionMultiplex.obj \
             $(SLO)$/namedvaluecollection.obj \
             $(SLO)$/logging.obj
 
