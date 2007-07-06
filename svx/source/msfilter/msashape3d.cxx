@@ -4,9 +4,9 @@
  *
  *  $RCSfile: msashape3d.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: hr $ $Date: 2007-06-27 18:34:27 $
+ *  last change: $Author: rt $ $Date: 2007-07-06 07:38:30 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -357,7 +357,7 @@ SdrObject* SvxMSDffCustomShape3D::Create3DObject( const SdrObject* pObj, const D
             pScene->Insert3DObj( p3DObj );
             bSceneHasObjects = sal_True;
         }
-        delete pNewObj;
+        SdrObject::Free( pNewObj );
         pNext = NULL;
         if ( pIter && pIter->IsMore() )
             pNext = pIter->Next();
