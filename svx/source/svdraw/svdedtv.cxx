@@ -4,9 +4,9 @@
  *
  *  $RCSfile: svdedtv.cxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: hr $ $Date: 2007-06-27 18:59:42 $
+ *  last change: $Author: rt $ $Date: 2007-07-06 07:39:35 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -815,7 +815,7 @@ BOOL SdrEditView::InsertObjectAtView(SdrObject* pObj, SdrPageView& rPV, ULONG nO
         SdrLayerID nLayer=rPV.GetPage()->GetLayerAdmin().GetLayerID(aAktLayer,TRUE);
         if (nLayer==SDRLAYER_NOTFOUND) nLayer=0;
         if (rPV.GetLockedLayers().IsSet(nLayer) || !rPV.GetVisibleLayers().IsSet(nLayer)) {
-            delete pObj; // Layer gesperrt oder nicht sichtbar
+            SdrObject::Free( pObj ); // Layer gesperrt oder nicht sichtbar
             return FALSE;
         }
         pObj->NbcSetLayer(nLayer);
