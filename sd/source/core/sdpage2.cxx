@@ -4,9 +4,9 @@
  *
  *  $RCSfile: sdpage2.cxx,v $
  *
- *  $Revision: 1.33 $
+ *  $Revision: 1.34 $
  *
- *  last change: $Author: hr $ $Date: 2007-06-27 15:37:47 $
+ *  last change: $Author: rt $ $Date: 2007-07-06 09:47:46 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -570,7 +570,10 @@ void SdPage::RemoveEmptyPresentationObjects()
     for( pShape = aShapeIter.Next(); pShape; pShape = aShapeIter.Next() )
     {
         if( pShape && pShape->IsEmptyPresObj() )
-            delete RemoveObject( pShape->GetOrdNum() );
+        {
+            RemoveObject( pShape->GetOrdNum() );
+            SdrObject::Free( pShape );
+        }
 
     }
 }
