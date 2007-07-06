@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dbaccess_slotid.hrc,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: kz $ $Date: 2006-12-13 16:44:03 $
+ *  last change: $Author: rt $ $Date: 2007-07-06 07:49:37 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -113,8 +113,9 @@
 #define SID_DB_APP_SENDREPORTTOWRITER   ( SID_DBACCESS_START +  62 )
 #define SID_DB_FORM_NEW_PILOT           ( SID_DBACCESS_START +  63 )
 #define SID_DB_NEW_VIEW_SQL             ( SID_DBACCESS_START +  64 )
+#define SID_APP_NEW_REPORT              ( SID_DBACCESS_START +  65 )
 
-#define SID_DB_APP_EDIT_SQL_VIEW        ( SID_DBACCESS_START +  65 )
+#define SID_DB_APP_EDIT_SQL_VIEW        ( SID_DBACCESS_START +  66 )
 
 
 #endif // _DBACCESS_SLOTID_HRC_
