@@ -4,9 +4,9 @@
  *
  *  $RCSfile: querydlg.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: rt $ $Date: 2007-04-26 08:03:08 $
+ *  last change: $Author: rt $ $Date: 2007-07-06 08:41:10 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -49,9 +49,6 @@
 #endif
 #ifndef DBAUI_QTABLECONNECTIONDATA_HXX
 #include "QTableConnectionData.hxx"
-#endif
-#ifndef _DBAUI_MODULE_DBU_HXX_
-#include "moduledbu.hxx"
 #endif
 #ifndef DBAUI_QUERYCONTROLLER_HXX
 #include "querycontroller.hxx"
