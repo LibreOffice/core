@@ -4,9 +4,9 @@
  *
  *  $RCSfile: View.hxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: kz $ $Date: 2006-12-12 17:39:30 $
+ *  last change: $Author: rt $ $Date: 2007-07-06 13:13:13 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -60,6 +60,8 @@
 #ifndef SD_FU_POOR_HXX
 #include "fupoor.hxx"
 #endif
+
+#include "smarttag.hxx"
 
 class SdDrawDocument;
 class SdrOle2Obj;
@@ -198,6 +200,33 @@ public:
     /** returns true if we have an undo manager and there is an open list undo action */
     bool isRecordingUndo() const;
 
+    virtual void AddCustomHdl();
+
+    SmartTagSet& getSmartTags() { return maSmartTags; }
+    void selectSmartTag( const SmartTagReference& xTag );
+    void updateHandles();
+
+    virtual SdrViewContext GetContext() const;
+    virtual BOOL HasMarkablePoints() const;
+    virtual ULONG GetMarkablePointCount() const;
+    virtual BOOL HasMarkedPoints() const;
+    virtual ULONG GetMarkedPointCount() const;
+    virtual BOOL IsPointMarkable(const SdrHdl& rHdl) const;
+    virtual BOOL MarkPoint(SdrHdl& rHdl, BOOL bUnmark=FALSE);
+    virtual void CheckPossibilities();
+    virtual BOOL MarkPoints(const ::Rectangle* pRect, BOOL bUnmark);
+    using SdrMarkView::MarkPoints;
+
+    void SetPossibilitiesDirty() { bPossibilitiesDirty = true; }
+    void SetMoveAllowed( bool bSet ) { bMoveAllowed = bSet; }
+    void SetMoveProtected( bool bSet ) { bMoveProtect = bSet; }
+    void SetResizeFreeAllowed( bool bSet ) { bResizeFreeAllowed = bSet; }
+    void SetResizePropAllowed( bool bSet ) { bResizePropAllowed = bSet; }
+    void SetResizeProtected( bool bSet ) { bResizeProtect = bSet; }
+
+    void SetMarkedPointsSmoothPossible( bool bSet ) { bSetMarkedPointsSmoothPossible = bSet; }
+    void SetMarkedSegmentsKindPossible( bool bSet ) { bSetMarkedSegmentsKindPossible = bSet; }
+
 protected:
     DECL_LINK( OnParagraphInsertedHdl, ::Outliner * );
     DECL_LINK( OnParagraphRemovingHdl, ::Outliner * );
@@ -223,6 +252,9 @@ protected:
                             DECL_LINK( ExecuteNavigatorDrop, SdNavigatorDropEvent* pSdNavigatorDropEvent );
 
     void ImplClearDrawDropMarker();
+
+    SmartTagSet             maSmartTags;
+
 private:
     ::std::auto_ptr<ViewClipboard> mpClipboard;
 };
