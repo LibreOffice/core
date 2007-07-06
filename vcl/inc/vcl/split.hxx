@@ -4,9 +4,9 @@
  *
  *  $RCSfile: split.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: vg $ $Date: 2007-04-11 18:11:48 $
+ *  last change: $Author: rt $ $Date: 2007-07-06 09:58:09 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -69,6 +69,7 @@ private:
     long                mnKeyboardStepSize;
     Link                maStartSplitHdl;
     Link                maSplitHdl;
+    Link                maEndSplitHdl;
 
     SAL_DLLPRIVATE void      ImplInitSplitterData();
     SAL_DLLPRIVATE void      ImplDrawSplitter();
@@ -93,6 +94,7 @@ public:
                         ~Splitter();
 
     virtual void        StartSplit();
+    virtual void        EndSplit();
     virtual void        Split();
     virtual void        Splitting( Point& rSplitPos );
 
@@ -131,6 +133,8 @@ public:
     void                SetStartSplitHdl( const Link& rLink ) { maStartSplitHdl = rLink; }
     const Link&         GetStartSplitHdl() const { return maStartSplitHdl; }
     void                SetSplitHdl( const Link& rLink ) { maSplitHdl = rLink; }
+    void                SetEndSplitHdl( const Link& rLink ) { maEndSplitHdl = rLink; }
+    const Link&         GetEndSplitHdl() const { return maEndSplitHdl; }
     const Link&         GetSplitHdl() const { return maSplitHdl; }
 };
 
