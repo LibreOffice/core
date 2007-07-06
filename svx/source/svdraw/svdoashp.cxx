@@ -4,9 +4,9 @@
  *
  *  $RCSfile: svdoashp.cxx,v $
  *
- *  $Revision: 1.41 $
+ *  $Revision: 1.42 $
  *
- *  last change: $Author: hr $ $Date: 2007-06-27 19:04:40 $
+ *  last change: $Author: rt $ $Date: 2007-07-06 07:40:55 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -3612,7 +3612,7 @@ SdrObject* SdrObjCustomShape::DoConvertToPolyObj(BOOL bBezier) const
         DBG_ASSERT(pCandidate, "SdrObjCustomShape::DoConvertToPolyObj: Could not clone SdrObject (!)");
         pCandidate->SetModel(GetModel());
         pRetval = pCandidate->DoConvertToPolyObj(bBezier);
-        delete pCandidate;
+        SdrObject::Free( pCandidate );
 
         if(pRetval)
         {
@@ -3950,7 +3950,7 @@ bool SdrObjCustomShape::doConstructOrthogonal(const ::rtl::OUString& rName)
 void SdrObjCustomShape::InvalidateRenderGeometry()
 {
     mXRenderedCustomShape = 0L;
-    delete mpLastShadowGeometry;
+    SdrObject::Free( mpLastShadowGeometry );
     mpLastShadowGeometry = 0L;
 }
 
