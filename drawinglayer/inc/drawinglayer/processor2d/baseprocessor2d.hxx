@@ -4,9 +4,9 @@
  *
  *  $RCSfile: baseprocessor2d.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: aw $ $Date: 2007-01-25 12:56:41 $
+ *  last change: $Author: aw $ $Date: 2007-07-06 13:38:51 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -77,7 +77,7 @@ namespace drawinglayer
         class CollectingProcessor2D : public BaseProcessor2D
         {
         private:
-            primitive2d::Primitive2DSequence                maPrimitiveSequence;
+            primitive2d::Primitive2DSequence                maPrimitive2DSequence;
 
         public:
             CollectingProcessor2D(const geometry::ViewInformation2D& rViewInformation);
@@ -88,17 +88,17 @@ namespace drawinglayer
             // helpers for adding to local sequence
             void appendPrimitive2DSequence(const primitive2d::Primitive2DSequence& rSource)
             {
-                primitive2d::appendPrimitive2DSequenceToPrimitive2DSequence(maPrimitiveSequence, rSource);
+                primitive2d::appendPrimitive2DSequenceToPrimitive2DSequence(maPrimitive2DSequence, rSource);
             }
 
             void appendPrimitive2DReference(const primitive2d::Primitive2DReference& rSource)
             {
-                primitive2d::appendPrimitive2DReferenceToPrimitive2DSequence(maPrimitiveSequence, rSource);
+                primitive2d::appendPrimitive2DReferenceToPrimitive2DSequence(maPrimitive2DSequence, rSource);
             }
 
             // data access and reset
-            const primitive2d::Primitive2DSequence& getPrimitive2DSequence() const { return maPrimitiveSequence; }
-            void reset() { maPrimitiveSequence = primitive2d::Primitive2DSequence(); }
+            const primitive2d::Primitive2DSequence& getPrimitive2DSequence() const { return maPrimitive2DSequence; }
+            void reset() { maPrimitive2DSequence = primitive2d::Primitive2DSequence(); }
         };
     } // end of namespace processor2d
 } // end of namespace drawinglayer

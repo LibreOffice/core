@@ -4,9 +4,9 @@
  *
  *  $RCSfile: baseprocessor2d.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: aw $ $Date: 2006-10-19 10:35:37 $
+ *  last change: $Author: aw $ $Date: 2007-07-06 13:38:52 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -66,14 +66,14 @@ namespace drawinglayer
     {
         CollectingProcessor2D::CollectingProcessor2D(const geometry::ViewInformation2D& rViewInformation)
         :   BaseProcessor2D(rViewInformation),
-            maPrimitiveSequence()
+            maPrimitive2DSequence()
         {
         }
 
         void CollectingProcessor2D::process(const primitive2d::Primitive2DSequence& rSource)
         {
             // accept everything
-            primitive2d::appendPrimitive2DSequenceToPrimitive2DSequence(maPrimitiveSequence, rSource);
+            primitive2d::appendPrimitive2DSequenceToPrimitive2DSequence(maPrimitive2DSequence, rSource);
         }
     } // end of namespace processor2d
 } // end of namespace drawinglayer

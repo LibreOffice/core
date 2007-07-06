@@ -4,9 +4,9 @@
  *
  *  $RCSfile: baseprocessor3d.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: aw $ $Date: 2006-10-19 10:33:20 $
+ *  last change: $Author: aw $ $Date: 2007-07-06 13:38:51 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -73,7 +73,7 @@ namespace drawinglayer
         class CollectingProcessor3D : public BaseProcessor3D
         {
         private:
-            primitive3d::Primitive3DSequence                        maPrimitiveSequence;
+            primitive3d::Primitive3DSequence                        maPrimitive3DSequence;
 
         public:
             CollectingProcessor3D(double fTime);
@@ -84,16 +84,17 @@ namespace drawinglayer
             // helpers for adding to local sequence
             void appendPrimitive3DSequence(const primitive3d::Primitive3DSequence& rSource)
             {
-                primitive3d::appendPrimitive3DSequenceToPrimitive3DSequence(maPrimitiveSequence, rSource);
+                primitive3d::appendPrimitive3DSequenceToPrimitive3DSequence(maPrimitive3DSequence, rSource);
             }
 
             void appendPrimitive3DReference(const primitive3d::Primitive3DReference& rSource)
             {
-                primitive3d::appendPrimitive3DReferenceToPrimitive3DSequence(maPrimitiveSequence, rSource);
+                primitive3d::appendPrimitive3DReferenceToPrimitive3DSequence(maPrimitive3DSequence, rSource);
             }
 
-            // data access
-            const primitive3d::Primitive3DSequence& getPrimitive3DSequence() const { return maPrimitiveSequence; }
+            // data access and reset
+            const primitive3d::Primitive3DSequence& getPrimitive3DSequence() const { return maPrimitive3DSequence; }
+            void reset() { maPrimitive3DSequence = primitive3d::Primitive3DSequence(); }
         };
     } // end of namespace processor3d
 } // end of namespace drawinglayer

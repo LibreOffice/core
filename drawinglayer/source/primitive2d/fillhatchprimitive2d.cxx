@@ -4,9 +4,9 @@
  *
  *  $RCSfile: fillhatchprimitive2d.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: aw $ $Date: 2007-03-06 12:34:29 $
+ *  last change: $Author: aw $ $Date: 2007-07-06 13:38:51 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -90,12 +90,16 @@ namespace drawinglayer
                     // rotated 45 degrees
                     texture::GeoTexSvxHatch aHatch(getObjectRange(), maFillHatch.getDistance(), fAngle + F_PI4);
                     aHatch.appendTransformations(aMatrices);
+
+                    // fall-through by purpose
                 }
                 case attribute::HATCHSTYLE_DOUBLE:
                 {
                     // rotated 90 degrees
                     texture::GeoTexSvxHatch aHatch(getObjectRange(), maFillHatch.getDistance(), fAngle + F_PI2);
                     aHatch.appendTransformations(aMatrices);
+
+                    // fall-through by purpose
                 }
                 case attribute::HATCHSTYLE_SINGLE:
                 {

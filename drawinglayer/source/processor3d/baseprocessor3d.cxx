@@ -4,9 +4,9 @@
  *
  *  $RCSfile: baseprocessor3d.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: aw $ $Date: 2006-10-19 10:39:22 $
+ *  last change: $Author: aw $ $Date: 2007-07-06 13:38:52 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -66,14 +66,14 @@ namespace drawinglayer
     {
         CollectingProcessor3D::CollectingProcessor3D(double fTime)
         :   BaseProcessor3D(fTime),
-            maPrimitiveSequence()
+            maPrimitive3DSequence()
         {
         }
 
         void CollectingProcessor3D::process(const primitive3d::Primitive3DSequence& rSource)
         {
             // accept everything
-            primitive3d::appendPrimitive3DSequenceToPrimitive3DSequence(maPrimitiveSequence, rSource);
+            primitive3d::appendPrimitive3DSequenceToPrimitive3DSequence(maPrimitive3DSequence, rSource);
         }
     } // end of namespace processor3d
 } // end of namespace drawinglayer
