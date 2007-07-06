@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ww8par.cxx,v $
  *
- *  $Revision: 1.177 $
+ *  $Revision: 1.178 $
  *
- *  last change: $Author: kz $ $Date: 2007-05-10 16:10:53 $
+ *  last change: $Author: rt $ $Date: 2007-07-06 09:53:35 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -503,7 +503,7 @@ SdrObject* SwMSDffManager::ProcessObj(SvStream& rSt,
 
             if (bIsSimpleDrawingTextBox)
             {
-                delete pObj;
+                SdrObject::Free( pObj );
                 pObj = pOrgObj = 0;
             }
 
