@@ -4,9 +4,9 @@
  *
  *  $RCSfile: standardcontrol.cxx,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: kz $ $Date: 2007-05-10 15:08:10 $
+ *  last change: $Author: rt $ $Date: 2007-07-06 08:54:12 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -618,7 +618,7 @@ namespace pcr
     //--------------------------------------------------------------------
     ::sal_Int16 SAL_CALL ONumericControl::getDisplayUnit() throw (RuntimeException)
     {
-        return MeasurementUnitConversion::convertToMeasurementUnit( getTypedControlWindow()->GetUnit(), 1 );
+        return VCLUnoHelper::ConvertToMeasurementUnit( getTypedControlWindow()->GetUnit(), 1 );
     }
 
     //--------------------------------------------------------------------
@@ -636,7 +636,7 @@ namespace pcr
             throw IllegalArgumentException();
 
         sal_Int16 nDummyFactor = 1;
-        FieldUnit eFieldUnit = MeasurementUnitConversion::convertToFieldUnit( _displayunit, nDummyFactor );
+        FieldUnit eFieldUnit = VCLUnoHelper::ConvertToFieldUnit( _displayunit, nDummyFactor );
         if ( nDummyFactor != 1 )
             // everything which survived the checks above should result in a factor of 1, i.e.,
             // it should have a direct counterpart as FieldUnit
@@ -647,7 +647,7 @@ namespace pcr
     //--------------------------------------------------------------------
     ::sal_Int16 SAL_CALL ONumericControl::getValueUnit() throw (RuntimeException)
     {
-        return MeasurementUnitConversion::convertToMeasurementUnit( m_eValueUnit, m_nFieldToUNOValueFactor );
+        return VCLUnoHelper::ConvertToMeasurementUnit( m_eValueUnit, m_nFieldToUNOValueFactor );
     }
 
     //--------------------------------------------------------------------
@@ -655,7 +655,7 @@ namespace pcr
     {
         if ( ( _valueunit < MeasureUnit::MM_100TH ) || ( _valueunit > MeasureUnit::PERCENT ) )
             throw IllegalArgumentException();
-        m_eValueUnit = MeasurementUnitConversion::convertToFieldUnit( _valueunit, m_nFieldToUNOValueFactor );
+        m_eValueUnit = VCLUnoHelper::ConvertToFieldUnit( _valueunit, m_nFieldToUNOValueFactor );
     }
 
     //--------------------------------------------------------------------
@@ -734,33 +734,29 @@ namespace pcr
         :OColorControl_Base( PropertyControlType::ColorListBox, pParent, nWinStyle )
     {
         // initialize the color listbox
+        XColorTable* pColorTable = NULL;
         SfxObjectShell* pDocSh = SfxObjectShell::Current();
-        DBG_ASSERT( pDocSh, "OColorControl::OColorControl: no doc shell!");
-
-        if (pDocSh)
+        const SfxPoolItem* pItem = NULL;
+        if ( pDocSh && ( pItem = pDocSh->GetItem( SID_COLOR_TABLE ) ) )
         {
-            XColorTable* pColorTbl;
-            const SfxPoolItem* pColorItem = pDocSh->GetItem( SID_COLOR_TABLE );
-            if (pColorItem)
-            {
-                DBG_ASSERT(pColorItem->ISA(SvxColorTableItem), "OColorControl::OColorControl: invalid color item!");
-                SvxColorTableItem aItem( *static_cast< const SvxColorTableItem*>( pColorItem ) );
-                pColorTbl = aItem.GetColorTable();
-            }
-            else    // BasicDocShell has no color item
-            {
-                pColorTbl = XColorTable::GetStdColorTable();
-            }
+            DBG_ASSERT(pItem->ISA(SvxColorTableItem), "OColorControl::OColorControl: invalid color item!");
+            pColorTable = ( (SvxColorTableItem*)pItem )->GetColorTable();
+        }
 
-            DBG_ASSERT(pColorTbl, "OColorControl::OColorControl: no color table!");
+        if ( !pColorTable )
+        {
+            pColorTable = XColorTable::GetStdColorTable();
+        }
 
-            if (pColorTbl)
+
+        DBG_ASSERT(pColorTable, "OColorControl::OColorControl: no color table!");
+
+        if (pColorTable)
+        {
+            for (sal_uInt16 i = 0; i < pColorTable->Count(); ++i)
             {
-                for (sal_uInt16 i = 0; i < pColorTbl->Count(); ++i)
-                {
-                    XColorEntry* pEntry = pColorTbl->GetColor( i );
-                    getTypedControlWindow()->InsertEntry( pEntry->GetColor(), pEntry->GetName() );
-                }
+                XColorEntry* pEntry = pColorTable->GetColor( i );
+                getTypedControlWindow()->InsertEntry( pEntry->GetColor(), pEntry->GetName() );
             }
         }
 
@@ -848,6 +844,13 @@ namespace pcr
         getTypedControlWindow()->InsertEntry( NewEntry );
         m_aNonColorEntries.insert( NewEntry );
     }
+    //------------------------------------------------------------------
+    Sequence< ::rtl::OUString > SAL_CALL OColorControl::getListEntries(  ) throw (RuntimeException)
+    {
+        if ( !m_aNonColorEntries.empty() )
+            return Sequence< ::rtl::OUString >(&(*m_aNonColorEntries.begin()),m_aNonColorEntries.size());
+        return Sequence< ::rtl::OUString >();
+    }
 
     //------------------------------------------------------------------
     void OColorControl::modified()
@@ -929,6 +932,17 @@ namespace pcr
     {
         getTypedControlWindow()->InsertEntry( NewEntry );
     }
+    //------------------------------------------------------------------
+    Sequence< ::rtl::OUString > SAL_CALL OListboxControl::getListEntries(  ) throw (RuntimeException)
+    {
+        const USHORT nCount = getTypedControlWindow()->GetEntryCount();
+        Sequence< ::rtl::OUString > aRet(nCount);
+        ::rtl::OUString* pIter = aRet.getArray();
+        for (USHORT i = 0; i < nCount ; ++i,++pIter)
+            *pIter = getTypedControlWindow()->GetEntry(i);
+
+        return aRet;
+    }
 
     //------------------------------------------------------------------
     void OListboxControl::modified()
@@ -986,6 +1000,17 @@ namespace pcr
     void SAL_CALL OComboboxControl::appendListEntry( const ::rtl::OUString& NewEntry ) throw (RuntimeException)
     {
         getTypedControlWindow()->InsertEntry( NewEntry );
+    }
+    //------------------------------------------------------------------
+    Sequence< ::rtl::OUString > SAL_CALL OComboboxControl::getListEntries(  ) throw (RuntimeException)
+    {
+        const USHORT nCount = getTypedControlWindow()->GetEntryCount();
+        Sequence< ::rtl::OUString > aRet(nCount);
+        ::rtl::OUString* pIter = aRet.getArray();
+        for (USHORT i = 0; i < nCount ; ++i,++pIter)
+            *pIter = getTypedControlWindow()->GetEntry(i);
+
+        return aRet;
     }
 
     //==================================================================
