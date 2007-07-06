@@ -4,9 +4,9 @@
  *
  *  $RCSfile: updatecheckui.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: rt $ $Date: 2007-04-26 08:09:50 $
+ *  last change: $Author: rt $ $Date: 2007-07-06 14:39:50 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -883,6 +883,10 @@ void BubbleWindow::Show( BOOL bVisible, USHORT nFlags )
         FloatingWindow::Show( bVisible );
         return;
     }
+
+    // don't show bubbles without a text
+    if ( ( maBubbleTitle.Len() == 0 ) && ( maBubbleText.Len() == 0 ) )
+        return;
 
     Size aWindowSize = GetSizePixel();
 
