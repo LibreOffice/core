@@ -4,9 +4,9 @@
  *
  *  $RCSfile: querycontroller.cxx,v $
  *
- *  $Revision: 1.109 $
+ *  $Revision: 1.110 $
  *
- *  last change: $Author: rt $ $Date: 2007-04-26 08:02:57 $
+ *  last change: $Author: rt $ $Date: 2007-07-06 08:40:51 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -461,6 +461,8 @@ void OQueryController::deleteIterator()
 // -----------------------------------------------------------------------------
 void OQueryController::disposing()
 {
+    OQueryController_PBase::disposing();
+
     deleteIterator();
 
     delete m_pParseContext;
@@ -816,11 +818,7 @@ void OQueryController::impl_initialize()
         m_bDesign = sal_False;
         if(m_bCreateView)
         {
-            {
-                String aMessage(ModuleRes(RID_STR_CONNECTION_LOST));
-                ODataView* pWindow = getView();
-                InfoBox(pWindow, aMessage).Execute();
-            }
+            connectionLostMessage();
             throw SQLException();
         }
     }
@@ -854,18 +852,6 @@ void OQueryController::impl_initialize()
 
     try
     {
-        if(!m_xFormatter.is() && haveDataSource())
-        {
-            Reference< XNumberFormatsSupplier> xSupplier;
-            ::cppu::extractInterface(xSupplier, getDataSource()->getPropertyValue(PROPERTY_NUMBERFORMATSSUPPLIER));
-            if(xSupplier.is())
-            {
-                m_xFormatter = Reference< ::com::sun::star::util::XNumberFormatter >(getORB()
-                    ->createInstance(::rtl::OUString::createFromAscii("com.sun.star.util.NumberFormatter")), UNO_QUERY);
-                m_xFormatter->attachNumberFormatsSupplier(xSupplier);
-            }
-            OSL_ENSURE(m_xFormatter.is(),"No NumberFormatter!");
-        }
         getContainer()->initialize();
         resetImpl();
         switchDesignModeImpl(this,getContainer(),m_bDesign);
@@ -955,7 +941,7 @@ sal_Bool OQueryController::Construct(Window* pParent)
 {
     // TODO: we have to check if we should create the text- or the design- view
 
-    m_pView = new OQueryContainerWindow(pParent,this,m_xMultiServiceFacatory);
+    m_pView = new OQueryContainerWindow(pParent,this,getORB());
 
     return OJoinController::Construct(pParent);
 }
@@ -1683,6 +1669,7 @@ bool OQueryController::allowQueries() const
     return !bCreatingView;
 }
 
+// -----------------------------------------------------------------------------
 // -----------------------------------------------------------------------------
 } // namespace dbaui
 // -----------------------------------------------------------------------------
