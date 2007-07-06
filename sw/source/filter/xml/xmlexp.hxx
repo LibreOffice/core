@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xmlexp.hxx,v $
  *
- *  $Revision: 1.33 $
+ *  $Revision: 1.34 $
  *
- *  last change: $Author: vg $ $Date: 2007-02-28 15:55:00 $
+ *  last change: $Author: rt $ $Date: 2007-07-06 12:18:05 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -124,6 +124,7 @@ class SwXMLExport : public SvXMLExport
     virtual void _ExportStyles( sal_Bool bUsed );
     virtual void _ExportAutoStyles();
     virtual void _ExportMasterStyles();
+    virtual void SetBodyAttributes();
     virtual void _ExportContent();
     virtual void GetViewSettings(com::sun::star::uno::Sequence<com::sun::star::beans::PropertyValue>& aProps);
     virtual void GetConfigurationSettings(com::sun::star::uno::Sequence<com::sun::star::beans::PropertyValue>& aProps);
