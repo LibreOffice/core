@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xmlexp.cxx,v $
  *
- *  $Revision: 1.84 $
+ *  $Revision: 1.85 $
  *
- *  last change: $Author: vg $ $Date: 2006-09-25 09:32:10 $
+ *  last change: $Author: rt $ $Date: 2007-07-06 12:17:52 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -624,6 +624,36 @@ void SwXMLExport::GetConfigurationSettings( Sequence < PropertyValue >& rProps)
             SvXMLUnitConverter::convertPropertySet( rProps, xProps );
     }
 }
+
+void SwXMLExport::SetBodyAttributes()
+{
+    Reference < XTextDocument > xTextDoc( GetModel(), UNO_QUERY );
+    Reference < XText > xText = xTextDoc->getText();
+    // export use of soft page breaks
+    {
+        Reference<XUnoTunnel> xTextTunnel( xText, UNO_QUERY);
+        ASSERT( xTextTunnel.is(), "missing XUnoTunnel for Cursor" );
+        if( xTextTunnel.is() )
+        {
+            SwXText *pText = (SwXText *)xTextTunnel->getSomething(
+                                        SwXText::getUnoTunnelId() );
+            ASSERT( pText, "SwXText missing" );
+            if( pText )
+            {
+                SwDoc *pDoc = pText->GetDoc();
+                if( pDoc && pDoc->GetPageCount() > 1 )
+                {
+                    sal_Bool bValue = sal_True;
+                    rtl::OUStringBuffer sBuffer;
+                    GetMM100UnitConverter().convertBool(sBuffer, bValue);
+                    AddAttribute(XML_NAMESPACE_TEXT, XML_USE_SOFT_PAGE_BREAKS,
+                        sBuffer.makeStringAndClear());
+                }
+            }
+        }
+    }
+}
+
 
 void SwXMLExport::_ExportContent()
 {
