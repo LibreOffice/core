@@ -4,9 +4,9 @@
  *
  *  $RCSfile: drawview.hxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: kz $ $Date: 2006-12-12 16:07:50 $
+ *  last change: $Author: rt $ $Date: 2007-07-06 12:28:17 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -41,6 +41,8 @@
 #endif
 
 #include "global.hxx"
+
+namespace com { namespace sun { namespace star { namespace datatransfer { class XTransferable; } } } }
 
 class ScDocument;
 class ScViewData;
@@ -129,6 +131,7 @@ public:
     void                    StoreCaptionAttribs();
     void                    StoreCaptionDimensions();
     void                    CaptionTextDirection(USHORT nSlot);
+    ::com::sun::star::uno::Reference< ::com::sun::star::datatransfer::XTransferable > CopyToTransferable();
 };
 
 
