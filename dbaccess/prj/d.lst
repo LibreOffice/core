@@ -32,6 +32,8 @@ mkdir: %_DEST%\xml%_EXT%\uiconfig\modules\dbrelation\toolbar
 mkdir: %_DEST%\xml%_EXT%\uiconfig\modules\dbtable\menubar
 mkdir: %_DEST%\xml%_EXT%\uiconfig\modules\dbtable\toolbar
 
+mkdir: %_DEST%\inc%_EXT%\dbaccess
+
 ..\%COMMON_OUTDIR%\misc\*.hid %COMMON_DEST%\bin%_EXT%\hid\*.hid
 ..\%__SRC%\bin\*.dll %_DEST%\bin%_EXT%\*.dll
 ..\%__SRC%\lib\lib*.so %_DEST%\lib%_EXT%
@@ -40,6 +42,7 @@ mkdir: %_DEST%\xml%_EXT%\uiconfig\modules\dbtable\toolbar
 ..\%__SRC%\bin\*.bin %_DEST%\bin%_EXT%\*.bin
 ..\%__SRC%\bin\*.res %_DEST%\bin%_EXT%\*.res
 ..\%__SRC%\bin\*.exe %_DEST%\bin%_EXT%\*.exe
+..\%__SRC%\lib\idbu* %_DEST%\lib%_EXT%\idbu*
 *.xml %_DEST%\xml%_EXT%\*.xml
 
 touch: ..\%__SRC%\misc\dbaccess.hid %_DEST%\bin%_EXT%\dba.hid
@@ -67,3 +70,6 @@ touch: ..\%__SRC%\misc\dbaccess.hid %_DEST%\bin%_EXT%\dba.hid
 ..\uiconfig\dbquery\accelerator\en-US\*.xml %_DEST%\xml%_EXT%\uiconfig\modules\dbquery\accelerator\en-US\*.xml
 ..\uiconfig\dbrelation\toolbar\*.xml %_DEST%\xml%_EXT%\uiconfig\modules\dbrelation\toolbar\*.xml
 ..\uiconfig\dbtable\toolbar\*.xml %_DEST%\xml%_EXT%\uiconfig\modules\dbtable\toolbar\*.xml
+..\inc\*.hxx %_DEST%\inc%_EXT%\dbaccess\*.hxx
+..\inc\*.h %_DEST%\inc%_EXT%\dbaccess\*.h
+
