@@ -102,6 +102,8 @@ mkdir: %COMMON_DEST%\idl%_EXT%\com\sun\star\xml\crypto\sax
 mkdir: %COMMON_DEST%\idl%_EXT%\com\sun\star\xml\csax
 mkdir: %COMMON_DEST%\idl%_EXT%\com\sun\star\xml\wrapper
 #i20156 - end
+mkdir: %COMMON_DEST%\idl%_EXT%\com\sun\star\report
+mkdir: %COMMON_DEST%\idl%_EXT%\com\sun\star\report\inspection
 
 ..\%__SRC%\ucr\offapi.db %_DEST%\bin%_EXT%\offapi.rdb
 ..\%__SRC%\ucrdoc\offapi_doc.db %_DEST%\bin%_EXT%\offapi_doc.rdb
@@ -209,3 +211,5 @@ mkdir: %COMMON_DEST%\idl%_EXT%\com\sun\star\xml\wrapper
 ..\com\sun\star\xml\csax\*.idl %COMMON_DEST%\idl%_EXT%\com\sun\star\xml\csax
 ..\com\sun\star\xml\wrapper\*.idl %COMMON_DEST%\idl%_EXT%\com\sun\star\xml\wrapper
 #i20156 - end
+..\com\sun\star\report\*.idl %COMMON_DEST%\idl%_EXT%\com\sun\star\report
+..\com\sun\star\report\inspection\*.idl %COMMON_DEST%\idl%_EXT%\com\sun\star\report\inspection
