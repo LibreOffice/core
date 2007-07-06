@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dp_gui_treelb.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: kz $ $Date: 2007-06-20 14:03:55 $
+ *  last change: $Author: rt $ $Date: 2007-07-06 12:35:10 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -439,6 +439,7 @@ SvLBoxEntry * DialogImpl::TreeListBoxImpl::addNode(
     Reference<XCommandEnvironment> const & xCmdEnv,
     bool sortIn )
 {
+    OSL_ASSERT(xPackageManager.is());
     NodeImpl * node = new NodeImpl(
         m_context, this, factoryURL, xPackageManager, xPackage );
     Reference<util::XModifyListener> xListener( node );
