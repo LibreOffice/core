@@ -4,9 +4,9 @@
  *
  *  $RCSfile: undoanim.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: hr $ $Date: 2007-06-27 15:38:01 $
+ *  last change: $Author: rt $ $Date: 2007-07-06 13:10:25 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -135,6 +135,84 @@ void UndoAnimation::Redo()
 }
 
 String UndoAnimation::GetComment() const
+{
+    return String(SdResId(STR_UNDO_ANIMATION));
+}
+
+struct UndoAnimationPathImpl
+{
+    SdPage*         mpPage;
+    sal_Int32       mnEffectOffset;
+    ::rtl::OUString msUndoPath;
+    ::rtl::OUString msRedoPath;
+
+    UndoAnimationPathImpl( SdPage* pThePage, const com::sun::star::uno::Reference< ::com::sun::star::animations::XAnimationNode >& xNode )
+        : mpPage( pThePage )
+        , mnEffectOffset( -1 )
+    {
+        if( mpPage && xNode.is() )
+        {
+            boost::shared_ptr< sd::MainSequence > pMainSequence( mpPage->getMainSequence() );
+            if( pMainSequence.get() )
+            {
+                CustomAnimationEffectPtr pEffect( pMainSequence->findEffect( xNode ) );
+                if( pEffect.get() )
+                {
+                    mnEffectOffset = pMainSequence->getOffsetFromEffect( pEffect );
+                    msUndoPath = pEffect->getPath();
+                }
+            }
+        }
+    }
+
+    CustomAnimationEffectPtr getEffect() const
+    {
+        CustomAnimationEffectPtr pEffect;
+        if( mpPage && (mnEffectOffset >= 0) )
+        {
+            boost::shared_ptr< sd::MainSequence > pMainSequence( mpPage->getMainSequence() );
+            if( pMainSequence.get() )
+                pEffect = pMainSequence->getEffectFromOffset( mnEffectOffset );
+        }
+        return pEffect;
+    }
+
+    private:
+        UndoAnimationPathImpl( const UndoAnimationPathImpl& ); //not implemented
+        const UndoAnimationPathImpl& operator=( const UndoAnimationPathImpl& ); // not implemented
+
+};
+
+UndoAnimationPath::UndoAnimationPath( SdDrawDocument* pDoc, SdPage* pThePage, const com::sun::star::uno::Reference< ::com::sun::star::animations::XAnimationNode >& xNode )
+: SdrUndoAction( *pDoc )
+, mpImpl( new UndoAnimationPathImpl( pThePage, xNode ) )
+{
+}
+
+UndoAnimationPath::~UndoAnimationPath()
+{
+}
+
+void UndoAnimationPath::Undo()
+{
+    CustomAnimationEffectPtr pEffect = mpImpl->getEffect();
+    if( pEffect.get() )
+    {
+        mpImpl->msRedoPath = pEffect->getPath();
+        pEffect->setPath( mpImpl->msUndoPath );
+    }
+}
+
+void UndoAnimationPath::Redo()
+{
+    CustomAnimationEffectPtr pEffect = mpImpl->getEffect();
+    if( pEffect.get() )
+    {
+        pEffect->setPath( mpImpl->msRedoPath );
+    }
+}
+
+String UndoAnimationPath::GetComment() const
 {
     return String(SdResId(STR_UNDO_ANIMATION));
 }
