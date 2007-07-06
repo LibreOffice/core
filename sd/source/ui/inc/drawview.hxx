@@ -4,9 +4,9 @@
  *
  *  $RCSfile: drawview.hxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: kz $ $Date: 2006-12-12 17:43:15 $
+ *  last change: $Author: rt $ $Date: 2007-07-06 13:13:40 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -90,7 +90,6 @@ public:
     virtual SdrObject* GetMaxToBtmObj(SdrObject* pObj) const;
 
     virtual void DeleteMarked(); // from SdrView
-
 protected:
     virtual void ModelHasChanged();
 
