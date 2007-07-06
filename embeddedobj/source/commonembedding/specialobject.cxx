@@ -4,9 +4,9 @@
  *
  *  $RCSfile: specialobject.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: obo $ $Date: 2006-10-13 11:31:55 $
+ *  last change: $Author: rt $ $Date: 2007-07-06 10:07:11 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -91,7 +91,6 @@
 #include <cppuhelper/typeprovider.hxx>
 
 #include "specialobject.hxx"
-#include "convert.hxx"
 #include "intercept.hxx"
 
 using namespace ::com::sun::star;
