@@ -4,9 +4,9 @@
  *
  *  $RCSfile: galtheme.hxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: obo $ $Date: 2006-10-12 11:44:28 $
+ *  last change: $Author: rt $ $Date: 2007-07-06 07:28:47 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -204,7 +204,7 @@ public:
     BOOL                        GetGraphic( ULONG nPos, Graphic& rGraphic, BOOL bProgress = FALSE );
     BOOL                        InsertGraphic( const Graphic& rGraphic, ULONG nInsertPos = LIST_APPEND );
 
-    BOOL                        GetModel( ULONG nPos, FmFormModel& rModel, BOOL bProgress = FALSE );
+    BOOL                        GetModel( ULONG nPos, SdrModel& rModel, BOOL bProgress = FALSE );
     BOOL                        InsertModel( const FmFormModel& rModel, ULONG nInsertPos = LIST_APPEND );
 
     BOOL                        GetModelStream( ULONG nPos, SotStorageStreamRef& rModelStreamRef, BOOL bProgress = FALSE );
