@@ -4,9 +4,9 @@
  *
  *  $RCSfile: table6.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: kz $ $Date: 2007-05-10 16:46:05 $
+ *  last change: $Author: rt $ $Date: 2007-07-06 12:33:33 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -72,7 +72,7 @@ void ScTable::ScReplaceTabsStr( String& rStr, const String& rSrch, const String&
         if( nPos && '\\' == rStr.GetChar(nPos-1) )
         {
             // noch nicht am Ende ??
-            rStr.Erase( nPos );     // den \\ noch loeschen
+            rStr.Erase( nPos-1,1 );     // den \\ noch loeschen
             if( nPos < rStr.Len() )
                 continue;
             break;
