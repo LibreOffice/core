@@ -4,9 +4,9 @@
  *
  *  $RCSfile: scalc.sdi,v $
  *
- *  $Revision: 1.34 $
+ *  $Revision: 1.35 $
  *
- *  last change: $Author: vg $ $Date: 2007-05-22 19:41:19 $
+ *  last change: $Author: rt $ $Date: 2007-07-06 12:32:08 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -6326,6 +6326,58 @@ SfxVoidItem StandardFonts SID_STANDARD_FONTS
 ]
 
 //--------------------------------------------------------------------------
+// ISSUE66550_HLINK_FOR_SHAPES
+//SfxVoidItem EditShapeHyperlink SID_DRAW_HLINK_EDIT
+//()
+//[
+//   /* flags: */
+//   AutoUpdate = FALSE,
+//   Cachable = Cachable,
+//   FastCall = TRUE,
+//   HasCoreId = FALSE,
+//   HasDialog = TRUE,
+//   ReadOnlyDoc = TRUE,
+//   Toggle = FALSE,
+//   Container = FALSE,
+//   RecordAbsolute = FALSE,
+//   RecordPerSet;
+//   Synchron;
+//
+//   /* config: */
+//   AccelConfig = TRUE,
+//   MenuConfig = FALSE,
+//   StatusBarConfig = FALSE,
+//   ToolBoxConfig = FALSE,
+//   GroupId = GID_DRAWING;
+//]
+
+//--------------------------------------------------------------------------
+// ISSUE66550_HLINK_FOR_SHAPES
+//SfxVoidItem DeleteShapeHyperlink SID_DRAW_HLINK_DELETE
+//()
+//[
+//   /* flags: */
+//   AutoUpdate = TRUE,
+//   Cachable = Cachable,
+//   FastCall = TRUE,
+//   HasCoreId = FALSE,
+//   HasDialog = FALSE,
+//   ReadOnlyDoc = TRUE,
+//   Toggle = FALSE,
+//   Container = FALSE,
+//   RecordAbsolute = FALSE,
+//   RecordPerSet;
+//   Synchron;
+//
+//   /* config: */
+//   AccelConfig = TRUE,
+//   MenuConfig = FALSE,
+//   StatusBarConfig = FALSE,
+//   ToolBoxConfig = FALSE,
+//   GroupId = GID_DRAWING;
+//]
+
+//--------------------------------------------------------------------------
 SfxVoidItem StandardTextAttributes SID_TEXT_STANDARD
 ()
 [
@@ -6822,6 +6874,32 @@ SfxVoidItem TextAttributes SID_DRAWTEXT_ATTR_DLG
     GroupId = GID_DRAWING;
 ]
 
+
+//--------------------------------------------------------------------------
+SfxVoidItem AssignMacro SID_ASSIGNMACRO
+()
+[
+    /* flags: */
+    AutoUpdate = FALSE,
+    Cachable = Cachable,
+    FastCall = TRUE,
+    HasCoreId = FALSE,
+    HasDialog = TRUE,
+    ReadOnlyDoc = TRUE,
+    Toggle = FALSE,
+    Container = FALSE,
+    RecordAbsolute = FALSE,
+    RecordPerSet;
+    Synchron;
+
+    /* config: */
+    AccelConfig = TRUE,
+    MenuConfig = FALSE,
+    StatusBarConfig = FALSE,
+    ToolBoxConfig = FALSE,
+    GroupId = GID_DRAWING;
+]
+
 //--------------------------------------------------------------------------
 SfxVoidItem TextInSpalten SID_TEXT_TO_COLUMNS
 ()
@@ -7290,6 +7368,34 @@ SfxBoolItem ViewRowColumnHeaders FID_TOGGLEHEADERS
     StatusBarConfig = FALSE,
     ToolBoxConfig = FALSE,
     GroupId = GID_VIEW;
+]
+
+//--------------------------------------------------------------------------
+SfxBoolItem ToggleFormula   FID_TOGGLEFORMULA
+
+[
+    /* flags */
+    AutoUpdate = FALSE,
+    Cachable = Cachable,
+    FastCall = FALSE,
+    HasCoreId = FALSE,
+    HasDialog = FALSE,
+    ReadOnlyDoc = TRUE,
+    Toggle = FALSE,
+    Container = FALSE,
+    RecordAbsolute = FALSE,
+    RecordPerSet;
+    Synchron;
+
+    Readonly = FALSE,
+
+    /* config */
+    AccelConfig = TRUE,
+    MenuConfig = FALSE,
+    StatusBarConfig = FALSE,
+    ToolBoxConfig = FALSE,
+    GroupId = GID_VIEW
+
 ]
 
 //--------------------------------------------------------------------------
