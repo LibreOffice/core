@@ -4,9 +4,9 @@
  *
  *  $RCSfile: fudraw.cxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: vg $ $Date: 2007-02-27 13:12:16 $
+ *  last change: $Author: rt $ $Date: 2007-07-06 12:43:05 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -35,9 +35,6 @@
 
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_sc.hxx"
-
-
-
 
 //------------------------------------------------------------------------
 
@@ -865,6 +862,18 @@ void FuDraw::ForcePointer(const MouseEvent* pMEvt)
         SdrObject* pObj;
         SdrPageView* pPV;
 
+        ScMacroInfo* pInfo = 0;
+        if ( pView->PickObj(aPnt, pObj, pPV, SDRSEARCH_ALSOONMASTER) )
+        {
+            if ( pObj->IsGroupObject() )
+            {
+                SdrObject* pHit = 0;
+                if ( pView->PickObj(aMDPos, pHit, pPV, SDRSEARCH_DEEP ) )
+                    pObj = pHit;
+            }
+            pInfo = ScDrawLayer::GetMacroInfo( pObj );
+        }
+
         if ( pView->IsTextEdit() )
         {
             pViewShell->SetActivePointer(Pointer(POINTER_TEXT));        // kann nicht sein ?
@@ -890,6 +899,12 @@ void FuDraw::ForcePointer(const MouseEvent* pMEvt)
             SdrObjMacroHitRec aHitRec;  //! muss da noch irgendwas gesetzt werden ????
             pViewShell->SetActivePointer( pObj->GetMacroPointer(aHitRec) );
         }
+#ifdef ISSUE66550_HLINK_FOR_SHAPES
+        else if ( !bAlt && pInfo && ((pInfo->GetMacro().getLength() > 0) || (pInfo->GetHlink().getLength() > 0)) )
+#else
+        else if ( !bAlt && pInfo && (pInfo->GetMacro().getLength() > 0) )
+#endif
+            pWindow->SetPointer( Pointer( POINTER_REFHAND ) );
         else if ( IsDetectiveHit( aPnt ) )
             pViewShell->SetActivePointer( Pointer( POINTER_DETECTIVE ) );
         else
