@@ -4,9 +4,9 @@
  *
  *  $RCSfile: AppDetailView.cxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: obo $ $Date: 2007-06-12 05:32:38 $
+ *  last change: $Author: rt $ $Date: 2007-07-06 07:59:01 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -83,14 +83,14 @@
 #ifndef _SV_MNEMONIC_HXX
 #include <vcl/mnemonic.hxx>
 #endif
+#ifndef _SV_MNEMONIC_HXX
+#include <vcl/mnemonic.hxx>
+#endif
 #ifndef DBACCESS_UI_BROWSER_ID_HXX
 #include "browserids.hxx"
 #endif
 #ifndef DBAUI_APPDETAILPAGEHELPER_HXX
 #include "AppDetailPageHelper.hxx"
-#endif
-#ifndef _DBAUI_MODULE_DBU_HXX_
-#include "moduledbu.hxx"
 #endif
 #ifndef _SV_SVAPP_HXX //autogen
 #include <vcl/svapp.hxx>
@@ -101,9 +101,13 @@
 #ifndef DBAUI_ICONTROLLER_HXX
 #include "IController.hxx"
 #endif
+#ifndef _DBAUI_MODULE_DBU_HXX_
+#include "moduledbu.hxx"
+#endif
 #ifndef _SVTOOLS_LOCALRESACCESS_HXX_
 #include <svtools/localresaccess.hxx>
 #endif
+#include <algorithm>
 
 
 using namespace ::dbaui;
@@ -153,6 +157,7 @@ void OCreationList::Paint( const Rectangle& _rRect )
     if ( m_pMouseDownEntry )
         Control::SetFont( m_aOriginalFont );
 }
+
 // -----------------------------------------------------------------------------
 void OCreationList::PreparePaint( SvLBoxEntry* _pEntry )
 {
@@ -558,6 +563,7 @@ void OTasksWindow::fillTaskEntryList( const TaskEntryList& _rList )
     m_aDescription.Show();
     m_aFL.Show();
     m_aCreation.updateHelpText();
+    Enable(!_rList.empty());
 }
 // -----------------------------------------------------------------------------
 void OTasksWindow::Clear()
@@ -650,8 +656,11 @@ void OApplicationDetailView::DataChanged( const DataChangedEvent& rDCEvt )
     DBG_CHKTHIS(OApplicationDetailView,NULL);
     OSplitterView::DataChanged( rDCEvt );
 
-    if ( (rDCEvt.GetType() == DATACHANGED_SETTINGS) &&
-         (rDCEvt.GetFlags() & SETTINGS_STYLE) )
+    if ( (rDCEvt.GetType() == DATACHANGED_FONTS) ||
+        (rDCEvt.GetType() == DATACHANGED_DISPLAY) ||
+        (rDCEvt.GetType() == DATACHANGED_FONTSUBSTITUTION) ||
+        ((rDCEvt.GetType() == DATACHANGED_SETTINGS) &&
+        (rDCEvt.GetFlags() & SETTINGS_STYLE)) )
     {
         ImplInitSettings( sal_True, sal_True, sal_True );
         Invalidate();
@@ -757,6 +766,7 @@ void OApplicationDetailView::impl_fillTaskPaneData( ElementType _eType, TaskPane
         break;
 
     case E_REPORT:
+        rList.push_back( TaskEntry( ".uno:DBNewReport", RID_STR_REPORT_HELP_TEXT, RID_STR_NEW_REPORT, true ) );
         rList.push_back( TaskEntry( ".uno:DBNewReportAutoPilot", RID_STR_REPORTS_HELP_TEXT_WIZARD, RID_STR_NEW_REPORT_AUTO ) );
         _rData.nTitleId = RID_STR_REPORTS_CONTAINER;
         break;
