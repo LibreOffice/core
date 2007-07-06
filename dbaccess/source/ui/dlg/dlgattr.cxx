@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dlgattr.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: kz $ $Date: 2007-05-10 15:06:12 $
+ *  last change: $Author: rt $ $Date: 2007-07-06 08:15:47 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -67,10 +67,6 @@
 #ifndef _SVX_DIALOGS_HRC
 #include <svx/dialogs.hrc>
 #endif
-
-#ifndef _DBAUI_MODULE_DBU_HXX_
-#include "moduledbu.hxx"
-#endif
 #ifndef _DBU_DLG_HRC_
 #include "dbu_dlg.hrc"
 #endif
@@ -86,7 +82,9 @@
 #ifndef _SFXINTITEM_HXX //CHINA001
 #include <svtools/intitem.hxx> //CHINA001
 #endif //CHINA001
-
+#ifndef _DBAUI_MODULE_DBU_HXX_
+#include "moduledbu.hxx"
+#endif
 using namespace dbaui;
 
 DBG_NAME(SbaSbAttrDlg)
