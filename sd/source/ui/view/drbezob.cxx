@@ -4,9 +4,9 @@
  *
  *  $RCSfile: drbezob.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: kz $ $Date: 2006-12-12 19:10:41 $
+ *  last change: $Author: rt $ $Date: 2007-07-06 13:14:31 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -185,21 +185,27 @@ void BezierObjectBar::GetAttrState(SfxItemSet& rSet)
         }
     }
 
-    if (!mpView->IsRipUpAtMarkedPointsPossible())
+    IPolyPolygonEditorController* pIPPEC = 0;
+    if( mpView->GetMarkedObjectList().GetMarkCount() )
+        pIPPEC = mpView;
+    else
+        pIPPEC = dynamic_cast< IPolyPolygonEditorController* >( mpView->getSmartTags().getSelected().get() );
+
+    if ( !pIPPEC || !pIPPEC->IsRipUpAtMarkedPointsPossible())
     {
         rSet.DisableItem(SID_BEZIER_CUTLINE);
     }
-    if (!mpView->IsDeleteMarkedPointsPossible())
+    if (!pIPPEC || !pIPPEC->IsDeleteMarkedPointsPossible())
     {
         rSet.DisableItem(SID_BEZIER_DELETE);
     }
-    if (!mpView->IsSetMarkedSegmentsKindPossible())
+    if (!pIPPEC || !pIPPEC->IsSetMarkedSegmentsKindPossible())
     {
         rSet.DisableItem(SID_BEZIER_CONVERT);
     }
     else
     {
-        SdrPathSegmentKind eSegm = mpView->GetMarkedSegmentsKind();
+        SdrPathSegmentKind eSegm = pIPPEC->GetMarkedSegmentsKind();
         switch (eSegm)
         {
             case SDRPATHSEGMENT_DONTCARE: rSet.InvalidateItem(SID_BEZIER_CONVERT); break;
@@ -208,7 +214,7 @@ void BezierObjectBar::GetAttrState(SfxItemSet& rSet)
             default: break;
         }
     }
-    if (!mpView->IsSetMarkedPointsSmoothPossible())
+    if (!pIPPEC || !pIPPEC->IsSetMarkedPointsSmoothPossible())
     {
         rSet.DisableItem(SID_BEZIER_EDGE);
         rSet.DisableItem(SID_BEZIER_SMOOTH);
@@ -216,7 +222,7 @@ void BezierObjectBar::GetAttrState(SfxItemSet& rSet)
     }
     else
     {
-        SdrPathSmoothKind eSmooth = mpView->GetMarkedPointsSmooth();
+        SdrPathSmoothKind eSmooth = pIPPEC->GetMarkedPointsSmooth();
         switch (eSmooth)
         {
             case SDRPATHSMOOTH_DONTCARE  : break;
@@ -225,13 +231,13 @@ void BezierObjectBar::GetAttrState(SfxItemSet& rSet)
             case SDRPATHSMOOTH_SYMMETRIC : rSet.Put(SfxBoolItem(SID_BEZIER_SYMMTR,TRUE)); break;
         }
     }
-    if (!mpView->IsOpenCloseMarkedObjectsPossible())
+    if (!pIPPEC || !pIPPEC->IsOpenCloseMarkedObjectsPossible())
     {
         rSet.DisableItem(SID_BEZIER_CLOSE);
     }
     else
     {
-        SdrObjClosedKind eClose = mpView->GetMarkedObjectsClosedState();
+        SdrObjClosedKind eClose = pIPPEC->GetMarkedObjectsClosedState();
         switch (eClose)
         {
             case SDROBJCLOSED_DONTCARE: rSet.InvalidateItem(SID_BEZIER_CLOSE); break;
@@ -241,7 +247,10 @@ void BezierObjectBar::GetAttrState(SfxItemSet& rSet)
         }
     }
 
-    rSet.Put(SfxBoolItem(SID_BEZIER_ELIMINATE_POINTS, mpView->IsEliminatePolyPoints()));
+    if(pIPPEC == mpView)
+        rSet.Put(SfxBoolItem(SID_BEZIER_ELIMINATE_POINTS, mpView->IsEliminatePolyPoints()));
+    else
+        rSet.DisableItem( SID_BEZIER_ELIMINATE_POINTS ); // only works for views
 }
 
 
@@ -267,21 +276,27 @@ void BezierObjectBar::Execute(SfxRequest& rReq)
         {
             const SdrMarkList& rMarkList = mpView->GetMarkedObjectList();
 
-            if (rMarkList.GetMark(0) && !mpView->IsAction())
+            IPolyPolygonEditorController* pIPPEC = 0;
+            if( rMarkList.GetMarkCount() )
+                pIPPEC = mpView;
+            else
+                pIPPEC = dynamic_cast< IPolyPolygonEditorController* >( mpView->getSmartTags().getSelected().get() );
+
+            if( pIPPEC && !mpView->IsAction())
             {
                 switch (nSId)
                 {
                     case SID_BEZIER_DELETE:
-                        mpView->DeleteMarkedPoints();
+                        pIPPEC->DeleteMarkedPoints();
                         break;
 
                     case SID_BEZIER_CUTLINE:
-                        mpView->RipUpAtMarkedPoints();
+                        pIPPEC->RipUpAtMarkedPoints();
                         break;
 
                     case SID_BEZIER_CONVERT:
                     {
-                        mpView->SetMarkedSegmentsKind(SDRPATHSEGMENT_TOGGLE);
+                        pIPPEC->SetMarkedSegmentsKind(SDRPATHSEGMENT_TOGGLE);
                         break;
                     }
 
@@ -299,7 +314,7 @@ void BezierObjectBar::Execute(SfxRequest& rReq)
                             case SID_BEZIER_SYMMTR: eKind = SDRPATHSMOOTH_SYMMETRIC; break;
                         }
 
-                        mpView->SetMarkedPointsSmooth(eKind);
+                        pIPPEC->SetMarkedPointsSmooth(eKind);
                         break;
                     }
 
@@ -316,7 +331,7 @@ void BezierObjectBar::Execute(SfxRequest& rReq)
                 }
             }
 
-            if ( !mpView->AreObjectsMarked() )
+            if( (pIPPEC == mpView) && !mpView->AreObjectsMarked() )
                 mpViewSh->GetViewFrame()->GetDispatcher()->Execute(SID_OBJECT_SELECT, SFX_CALLMODE_ASYNCHRON);
 
             rReq.Ignore();
