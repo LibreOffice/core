@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xmltble.cxx,v $
  *
- *  $Revision: 1.41 $
+ *  $Revision: 1.42 $
  *
- *  last change: $Author: rt $ $Date: 2007-04-18 07:53:12 $
+ *  last change: $Author: rt $ $Date: 2007-07-06 12:18:21 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1013,6 +1013,11 @@ void SwXMLExport::ExportTableLine( const SwTableLine& rLine,
                                    const SwXMLTableLines_Impl& rLines,
                                    SwXMLTableInfo_Impl& rTblInfo )
 {
+    if( rLine.hasSoftPageBreak() )
+    {
+        SvXMLElementExport aElem( *this, XML_NAMESPACE_TEXT,
+                                  XML_SOFT_PAGE_BREAK, sal_True, sal_True );
+    }
     const SwFrmFmt *pFrmFmt = rLine.GetFrmFmt();
     if( pFrmFmt )
     {
