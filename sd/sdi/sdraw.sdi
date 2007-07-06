@@ -6831,3 +6831,4 @@ SfxBoolItem DisplayMasterObjects SID_DISPLAY_MASTER_OBJECTS
     ToolBoxConfig = FALSE,
     GroupId = GID_VIEW;
 ]
+
