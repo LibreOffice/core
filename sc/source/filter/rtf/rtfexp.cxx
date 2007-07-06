@@ -4,9 +4,9 @@
  *
  *  $RCSfile: rtfexp.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: kz $ $Date: 2007-05-10 16:51:27 $
+ *  last change: $Author: rt $ $Date: 2007-07-06 12:39:50 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -108,11 +108,7 @@ ScRTFExport::~ScRTFExport()
 ULONG ScRTFExport::Write()
 {
     rStrm << '{' << sRTF_RTF;
-#ifdef MAC
-    rStrm << sRTF_MAC << sNewLine;
-#else
     rStrm << sRTF_ANSI << sNewLine;
-#endif
 
 #if 0
 // das ist noch nicht ausgegoren
