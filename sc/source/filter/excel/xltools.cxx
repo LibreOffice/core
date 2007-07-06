@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xltools.cxx,v $
  *
- *  $Revision: 1.29 $
+ *  $Revision: 1.30 $
  *
- *  last change: $Author: vg $ $Date: 2007-05-22 19:52:21 $
+ *  last change: $Author: rt $ $Date: 2007-07-06 12:37:46 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -211,6 +211,7 @@ sal_uInt8 XclTools::GetXclErrorCode( USHORT nScError )
     {
         case errIllegalArgument:        return EXC_ERR_VALUE;
         case errIllegalFPOperation:     return EXC_ERR_NUM;     // maybe DIV/0 or NUM...
+        case errDivisionByZero:         return EXC_ERR_DIV0;
         case errIllegalParameter:       return EXC_ERR_VALUE;
         case errPairExpected:           return EXC_ERR_VALUE;
         case errOperatorExpected:       return EXC_ERR_VALUE;
@@ -223,7 +224,7 @@ sal_uInt8 XclTools::GetXclErrorCode( USHORT nScError )
         case errNoName:                 return EXC_ERR_NAME;
         case errNoAddin:                return EXC_ERR_NAME;
         case errNoMacro:                return EXC_ERR_NAME;
-        case NOVALUE:                   return EXC_ERR_NA;
+        case NOTAVAILABLE:              return EXC_ERR_NA;
     }
     return EXC_ERR_NA;
 }
@@ -234,15 +235,15 @@ USHORT XclTools::GetScErrorCode( sal_uInt8 nXclError )
     switch( nXclError )
     {
         case EXC_ERR_NULL:  return errNoCode;
-        case EXC_ERR_DIV0:  return errIllegalFPOperation;
+        case EXC_ERR_DIV0:  return errDivisionByZero;
         case EXC_ERR_VALUE: return errNoValue;
         case EXC_ERR_REF:   return errNoRef;
         case EXC_ERR_NAME:  return errNoName;
         case EXC_ERR_NUM:   return errIllegalFPOperation;
-        case EXC_ERR_NA:    return NOVALUE;
+        case EXC_ERR_NA:    return NOTAVAILABLE;
         default:            DBG_ERRORFILE( "XclTools::GetScErrorCode - unknown error code" );
     }
-    return NOVALUE;
+    return NOTAVAILABLE;
 }
 
 
