@@ -42,6 +42,19 @@ done
 BOOTSTRAPRC="${PRODUCTINSTALLLOCATION}/program/bootstraprc"
 USERINST=`grep UserInstallation ${BOOTSTRAPRC}`
 
+# Check, if searchtoolbar extension rpm is available
+SEARCHTOOLBARRPM=`ls $BASEDIR/RPMS/*.rpm | grep searchtoolbar`
+
+if [ "x$SEARCHTOOLBARRPM" != "x" ]; then
+  # Check, that $RPMLIST does not contain search toolbar rpm (then it is already installed)
+  SEARCHTOOLBARINSTALLED=`grep searchtoolbar ${RPMLIST}`
+
+  if [ "x$SEARCHTOOLBARINSTALLED" == "x" ]; then
+    # Install the online update rpm
+    RPMLIST="$RPMLIST $SEARCHTOOLBARRPM"
+  fi
+fi
+
 echo
 rpm --upgrade -v --hash --prefix $PRODUCTINSTALLLOCATION --notriggers $RPMLIST
 echo
