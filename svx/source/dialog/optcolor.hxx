@@ -4,9 +4,9 @@
  *
  *  $RCSfile: optcolor.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: obo $ $Date: 2006-10-12 12:20:54 $
+ *  last change: $Author: rt $ $Date: 2007-07-06 07:34:05 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -53,7 +53,7 @@
 /* -----------------------------25.03.2002 10:40------------------------------
 
  ---------------------------------------------------------------------------*/
-namespace svtools {class EditableColorConfig;}
+namespace svtools {class EditableColorConfig;class EditableExtendedColorConfig;}
 class ColorConfigCtrl_Impl;
 class AbstractSvxNameDialog; //CHINA001 class SvxNameDialog;
 class SvxColorOptionsTabPage : public SfxTabPage
@@ -71,6 +71,7 @@ class SvxColorOptionsTabPage : public SfxTabPage
     BOOL                    bFillItemSetCalled;
 
     svtools::EditableColorConfig* pColorConfig;
+    svtools::EditableExtendedColorConfig* pExtColorConfig;
     ColorConfigCtrl_Impl*   pColorConfigCT;
 
     DECL_LINK(SchemeChangedHdl_Impl, ListBox*);
