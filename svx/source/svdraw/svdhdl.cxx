@@ -4,9 +4,9 @@
  *
  *  $RCSfile: svdhdl.cxx,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: hr $ $Date: 2007-06-27 19:02:15 $
+ *  last change: $Author: rt $ $Date: 2007-07-06 13:21:19 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1696,9 +1696,11 @@ int ImpSdrHdlListSorter::Compare(const void* pElem1, const void* pElem2) const
         if (eKind1==HDL_REF1 || eKind1==HDL_REF2 || eKind1==HDL_MIRX) n1=5;
         else if (eKind1==HDL_GLUE) n1=2;
         else if (eKind1==HDL_USER) n1=3;
+        else if (eKind1==HDL_SMARTTAG) n1=0;
         if (eKind2==HDL_REF1 || eKind2==HDL_REF2 || eKind2==HDL_MIRX) n2=5;
         else if (eKind2==HDL_GLUE) n2=2;
         else if (eKind2==HDL_USER) n2=3;
+        else if (eKind2==HDL_SMARTTAG) n2=0;
     }
     if (((SdrHdl*)pElem1)->IsPlusHdl()) n1=4;
     if (((SdrHdl*)pElem2)->IsPlusHdl()) n2=4;
