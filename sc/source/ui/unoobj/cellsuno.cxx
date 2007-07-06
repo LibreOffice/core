@@ -4,9 +4,9 @@
  *
  *  $RCSfile: cellsuno.cxx,v $
  *
- *  $Revision: 1.104 $
+ *  $Revision: 1.105 $
  *
- *  last change: $Author: hr $ $Date: 2007-06-27 12:46:29 $
+ *  last change: $Author: rt $ $Date: 2007-07-06 12:45:43 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1148,7 +1148,7 @@ BOOL lcl_PutDataArray( ScDocShell& rDocShell, const ScRange& rRange,
                 if ( eElemClass == uno::TypeClass_VOID )
                 {
                     // void = "no value"
-                    pDoc->SetError( nDocCol, nDocRow, nTab, NOVALUE );
+                    pDoc->SetError( nDocCol, nDocRow, nTab, NOTAVAILABLE );
                 }
                 else if ( eElemClass == uno::TypeClass_BYTE ||
                             eElemClass == uno::TypeClass_SHORT ||
@@ -3086,8 +3086,8 @@ void SAL_CALL ScCellRangesBase::setData( const uno::Sequence< uno::Sequence<doub
                     for (long nCol=0; nCol<nColCount; nCol++)
                     {
                         const ScAddress* pPos = pPosMap->GetPosition(
-                                static_cast<SCSIZE>(nCol),
-                                static_cast<SCSIZE>(nRow) );
+                                static_cast<SCCOL>(nCol),
+                                static_cast<SCROW>(nRow) );
                         if (pPos)
                         {
                             double fVal = pArray[nCol];
@@ -3223,7 +3223,7 @@ void SAL_CALL ScCellRangesBase::setColumnDescriptions(
                     for (long nCol=0; nCol<nColCount; nCol++)
                     {
                         const ScAddress* pPos = pPosMap->GetColHeaderPosition(
-                                static_cast<SCSIZE>(nCol) );
+                                static_cast<SCCOL>(nCol) );
                         if (pPos)
                         {
                             String aStr(pArray[nCol]);
