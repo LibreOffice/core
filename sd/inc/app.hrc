@@ -4,9 +4,9 @@
  *
  *  $RCSfile: app.hrc,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: kz $ $Date: 2007-05-10 13:57:45 $
+ *  last change: $Author: rt $ $Date: 2007-07-06 13:09:31 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -465,5 +465,7 @@
 
 // Add companion for the SID_HIDE_SLIDE (that is defined in svx)
 #define SID_SHOW_SLIDE                      (SID_SD_START+440)
+
+#define SID_ADD_MOTION_PATH             (SID_SD_START+441)
 
 #endif
