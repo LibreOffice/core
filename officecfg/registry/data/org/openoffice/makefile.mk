@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.11 $
+#   $Revision: 1.12 $
 #
-#   last change: $Author: ihi $ $Date: 2007-04-16 15:33:21 $
+#   last change: $Author: rt $ $Date: 2007-07-06 06:49:56 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -57,7 +57,8 @@ MODULEFILES= \
     Setup-draw.xcu   \
     Setup-impress.xcu   \
     Setup-base.xcu   \
-    Setup-math.xcu
+    Setup-math.xcu \
+    Setup-report.xcu
 
 LOCALIZEDFILES=Setup.xcu
 
