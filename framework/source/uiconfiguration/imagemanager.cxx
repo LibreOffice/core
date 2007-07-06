@@ -4,9 +4,9 @@
  *
  *  $RCSfile: imagemanager.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: ihi $ $Date: 2007-06-06 14:01:48 $
+ *  last change: $Author: rt $ $Date: 2007-07-06 12:23:04 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -316,12 +316,12 @@ sal_Bool ImageManager::implts_loadUserImages(
                 if ( xBitmapStream.is() )
                 {
                     SvStream* pSvStream( 0 );
-            BitmapEx aUserBitmap;
-            {
-                pSvStream = utl::UcbStreamHelper::CreateStream( xBitmapStream );
-                vcl::PNGReader aPngReader( *pSvStream );
-                aUserBitmap = aPngReader.Read();
-            }
+                    BitmapEx aUserBitmap;
+                    {
+                        pSvStream = utl::UcbStreamHelper::CreateStream( xBitmapStream );
+                        vcl::PNGReader aPngReader( *pSvStream );
+                        aUserBitmap = aPngReader.Read();
+                    }
                     delete pSvStream;
 
                     // Delete old image list and create a new one from the read bitmap
@@ -400,8 +400,10 @@ sal_Bool ImageManager::implts_storeUserImages(
                 if ( xBitmapStream.is() )
                 {
                     SvStream* pSvStream = utl::UcbStreamHelper::CreateStream( xBitmapStream );
-                    vcl::PNGWriter aPngWriter( pImageList->GetAsHorizontalStrip() );
-                    aPngWriter.Write( *pSvStream );
+                    {
+                        vcl::PNGWriter aPngWriter( pImageList->GetAsHorizontalStrip() );
+                        aPngWriter.Write( *pSvStream );
+                    }
                     delete pSvStream;
 
                     // Commit user bitmaps storage
