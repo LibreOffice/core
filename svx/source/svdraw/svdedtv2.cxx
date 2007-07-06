@@ -4,9 +4,9 @@
  *
  *  $RCSfile: svdedtv2.cxx,v $
  *
- *  $Revision: 1.30 $
+ *  $Revision: 1.31 $
  *
- *  last change: $Author: hr $ $Date: 2007-06-27 19:00:15 $
+ *  last change: $Author: rt $ $Date: 2007-07-06 07:39:50 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -616,7 +616,7 @@ basegfx::B2DPolyPolygon SdrEditView::ImpGetPolyPolygon1(const SdrObject* pObj, s
                 }
             }
 
-            delete pConvObj;
+            SdrObject::Free( pConvObj );
         }
     }
 
