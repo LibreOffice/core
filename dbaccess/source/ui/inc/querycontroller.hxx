@@ -4,9 +4,9 @@
  *
  *  $RCSfile: querycontroller.hxx,v $
  *
- *  $Revision: 1.35 $
+ *  $Revision: 1.36 $
  *
- *  last change: $Author: rt $ $Date: 2007-01-17 14:57:50 $
+ *  last change: $Author: rt $ $Date: 2007-07-06 08:31:39 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -44,9 +44,6 @@
 #ifndef _COM_SUN_STAR_SDB_XSQLQUERYCOMPOSER_HPP_
 #include <com/sun/star/sdb/XSQLQueryComposer.hpp>
 #endif
-#ifndef _COM_SUN_STAR_UTIL_XNUMBERFORMATTER_HPP_
-#include <com/sun/star/util/XNumberFormatter.hpp>
-#endif
 #ifndef DBAUI_QUERYVIEW_HXX
 #include "queryview.hxx"
 #endif
@@ -64,6 +61,12 @@
 #endif
 #ifndef _CONNECTIVITY_SQLPARSE_HXX
 #include <connectivity/sqlparse.hxx>
+#endif
+#ifndef _COMPHELPER_UNO3_HXX_
+#include <comphelper/uno3.hxx>
+#endif
+#ifndef _COMPHELPER_UNO3_HXX_
+#include <comphelper/uno3.hxx>
 #endif
 #ifndef _CONNECTIVITY_SQLNODE_HXX
 #include <connectivity/sqlnode.hxx>
@@ -114,7 +117,6 @@ namespace dbaui
         ::std::vector<sal_uInt32>               m_vColumnWidth;
 
         ::com::sun::star::uno::Reference< ::com::sun::star::sdb::XSQLQueryComposer >    m_xComposer;
-        ::com::sun::star::uno::Reference< ::com::sun::star::util::XNumberFormatter >    m_xFormatter;   // a number formatter working with the connection's NumberFormatsSupplier
 
         ::rtl::OUString m_sStatement;           // contains the sql statement
         ::rtl::OUString m_sUpdateCatalogName;   // catalog for update data
@@ -163,7 +165,7 @@ namespace dbaui
     public:
         OQueryController(const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& _rM);
 
-        ~OQueryController();
+        virtual ~OQueryController();
         OTableFields&   getTableFieldDesc()         { return m_vTableFieldDesc; }
         OTableFields&   getUnUsedFields()           { return m_vUnUsedFieldsDesc; }
 
@@ -193,17 +195,18 @@ namespace dbaui
 
         virtual sal_Bool Construct(Window* pParent);
 
-        ::com::sun::star::uno::Reference< ::com::sun::star::util::XNumberFormatter >    getNumberFormatter()const   { return m_xFormatter; }
+        DECLARE_XINTERFACE( )
+        DECLARE_XTYPEPROVIDER( )
+        // XPropertySet
+        virtual com::sun::star::uno::Reference<com::sun::star::beans::XPropertySetInfo>  SAL_CALL getPropertySetInfo() throw(com::sun::star::uno::RuntimeException);
+        virtual ::cppu::IPropertyArrayHelper& SAL_CALL getInfoHelper();
+
         // XEventListener
         virtual void SAL_CALL disposing( const ::com::sun::star::lang::EventObject& Source ) throw(::com::sun::star::uno::RuntimeException);
 
         // ::com::sun::star::lang::XComponent
         virtual void        SAL_CALL disposing();
 
-        DECLARE_XINTERFACE()
-        DECLARE_XTYPEPROVIDER()
-
-        // XServiceInfo
         virtual ::rtl::OUString SAL_CALL getImplementationName() throw(::com::sun::star::uno::RuntimeException);
         virtual ::com::sun::star::uno::Sequence< ::rtl::OUString> SAL_CALL getSupportedServiceNames() throw(::com::sun::star::uno::RuntimeException);
         // need by registration
@@ -212,12 +215,10 @@ namespace dbaui
         static ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >
                 SAL_CALL Create(const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >&);
 
-        // XPropertySet
-        virtual com::sun::star::uno::Reference<com::sun::star::beans::XPropertySetInfo>  SAL_CALL getPropertySetInfo() throw(com::sun::star::uno::RuntimeException);
-        virtual ::cppu::IPropertyArrayHelper& SAL_CALL getInfoHelper();
-
     protected:
         virtual void    onLoadedMenu(const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XLayoutManager >& _xLayoutManager);
+        // OPropertyArrayUsageHelper
+        virtual ::cppu::IPropertyArrayHelper* createArrayHelper( ) const;
 
         virtual OTableWindowData* createTableWindowData();
         virtual OJoinDesignView*  getJoinView();
@@ -234,9 +235,6 @@ namespace dbaui
         // OJoinController overridables
         virtual bool allowViews() const;
         virtual bool allowQueries() const;
-
-        // OPropertyArrayUsageHelper
-        virtual ::cppu::IPropertyArrayHelper* createArrayHelper( ) const;
 
     private:
         DECL_LINK( OnExecuteAddTable, void* );
