@@ -4,9 +4,9 @@
  *
  *  $RCSfile: unowrapper.cxx,v $
  *
- *  $Revision: 1.31 $
+ *  $Revision: 1.32 $
  *
- *  last change: $Author: hr $ $Date: 2007-06-27 15:16:54 $
+ *  last change: $Author: rt $ $Date: 2007-07-06 14:28:36 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -89,6 +89,7 @@ using namespace ::com::sun::star;
         case WINDOW_NUMERICFIELD:
         case WINDOW_CURRENCYFIELD:  return new VCLXNumericField;
         case WINDOW_DATEFIELD:      return new VCLXDateField;
+        case WINDOW_MULTILINEEDIT:
         case WINDOW_EDIT:           return new VCLXEdit;
         case WINDOW_METRICFIELD:    return new VCLXSpinField;
         case WINDOW_MESSBOX:
