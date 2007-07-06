@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dp_dependencies.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: hr $ $Date: 2007-06-27 13:27:18 $
+ *  last change: $Author: rt $ $Date: 2007-07-06 09:54:48 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -95,7 +95,13 @@ check(::dp_misc::DescriptionInfoset const & infoset) {
         if (e->getNamespaceURI().equalsAsciiL(
                 RTL_CONSTASCII_STRINGPARAM(xmlNamespace))
             && e->getTagName().equalsAsciiL(
-                RTL_CONSTASCII_STRINGPARAM(minimalVersion)))
+                RTL_CONSTASCII_STRINGPARAM(minimalVersion))
+            && (::dp_misc::compareVersions(
+                      e->getAttribute(
+                          ::rtl::OUString(
+                              RTL_CONSTASCII_USTRINGPARAM("value"))),
+                      ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("2.3")))
+                  != ::dp_misc::GREATER)))
         {
             sat = satisfiesMinimalVersion(
                 e->getAttribute(
