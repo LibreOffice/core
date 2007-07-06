@@ -98,4 +98,5 @@
     <accel:item accel:code="KEY_F5" accel:shift="true" accel:mod1="true" xlink:href=".uno:FocusCellAddress"/>
     <accel:item accel:code="KEY_SPACE" accel:mod1="true" accel:shift="true" xlink:href=".uno:ResetAttributes"/>
     <accel:item accel:code="KEY_J" accel:shift="true" accel:mod1="true" xlink:href=".uno:FullScreen"/>
+    <accel:item accel:code="KEY_QUOTELEFT" accel:mod1="true" xlink:href=".uno:ToggleFormula"/>
 </accel:acceleratorlist>
