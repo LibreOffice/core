@@ -4,9 +4,9 @@
  *
  *  $RCSfile: shapeuno.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: obo $ $Date: 2007-03-05 14:47:32 $
+ *  last change: $Author: rt $ $Date: 2007-07-06 12:46:13 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -36,18 +36,16 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_sc.hxx"
 
-
-
 #include <tools/debug.hxx>
 #include <comphelper/uno3.hxx>
+#include <comphelper/stl_types.hxx>
 #include <svtools/unoevent.hxx>
 #include <svtools/unoimap.hxx>
 #include <svx/svdobj.hxx>
 #include <svx/unoshape.hxx>
 #include <svx/unofield.hxx>
-#ifndef _TOOLKIT_HELPER_CONVERT_HXX_
 #include <toolkit/helper/convert.hxx>
-#endif
+#include <cppuhelper/implbase2.hxx>
 
 #include <com/sun/star/drawing/XShape.hpp>
 #include <com/sun/star/beans/PropertyAttribute.hpp>
@@ -62,10 +60,6 @@
 #include "userdat.hxx"
 #include "unonames.hxx"
 #include "unoguard.hxx"
-
-#ifndef _COMPHELPER_STLTYPES_HXX_
-#include <comphelper/stl_types.hxx>
-#endif
 
 using namespace ::com::sun::star;
 
@@ -142,6 +136,7 @@ uno::Any SAL_CALL ScShapeObj::queryInterface( const uno::Type& rType )
     SC_QUERYINTERFACE( beans::XPropertyState )
     SC_QUERYINTERFACE( text::XTextContent )
     SC_QUERYINTERFACE( lang::XComponent )
+    SC_QUERYINTERFACE( document::XEventsSupplier )
     if ( bIsTextShape )
     {
         //  #105585# for text shapes, XText (and parent interfaces) must
@@ -1334,5 +1329,155 @@ SdrObject* ScShapeObj::GetSdrObject() const throw()
     }
 
     return NULL;
+}
+
+#define SC_EVENTACC_ONCLICK     ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "OnClick" ) )
+#ifdef ISSUE66550_HLINK_FOR_SHAPES
+#define SC_EVENTACC_ONACTION    ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "OnAction" ) )
+#define SC_EVENTACC_URL         ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "URL" ) )
+#define SC_EVENTACC_ACTION      ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Action" ) )
+#endif
+#define SC_EVENTACC_SCRIPT      ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Script" ) )
+#define SC_EVENTACC_EVENTTYPE   ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "EventType" ) )
+
+typedef ::cppu::WeakImplHelper1< container::XNameReplace > ShapeUnoEventAcess_BASE;
+class ShapeUnoEventAccessImpl : public ShapeUnoEventAcess_BASE
+{
+private:
+    ScShapeObj* mpShape;
+
+    ScMacroInfo* getInfo( BOOL bCreate = FALSE )
+    {
+        if( mpShape )
+            if( SdrObject* pObj = mpShape->GetSdrObject() )
+                return ScDrawLayer::GetMacroInfo( pObj, bCreate );
+        return 0;
+    }
+
+public:
+    ShapeUnoEventAccessImpl( ScShapeObj* pShape ): mpShape( pShape )
+    {
+    }
+
+    // XNameReplace
+    virtual void SAL_CALL replaceByName( const rtl::OUString& aName, const uno::Any& aElement ) throw(lang::IllegalArgumentException, container::NoSuchElementException, lang::WrappedTargetException, uno::RuntimeException)
+    {
+        if ( !hasByName( aName ) )
+            throw container::NoSuchElementException();
+        uno::Sequence< beans::PropertyValue > aProperties;
+        aElement >>= aProperties;
+        const beans::PropertyValue* pProperties = aProperties.getConstArray();
+        const sal_Int32 nCount = aProperties.getLength();
+        sal_Int32 nIndex;
+        bool isEventType = false;
+        for( nIndex = 0; nIndex < nCount; nIndex++, pProperties++ )
+        {
+            if ( pProperties->Name.equals( SC_EVENTACC_EVENTTYPE ) )
+            {
+                isEventType = true;
+                continue;
+            }
+#ifdef ISSUE66550_HLINK_FOR_SHAPES
+            if ( isEventType && ((pProperties->Name == SC_EVENTACC_SCRIPT) || (pProperties->Name == SC_EVENTACC_URL)) )
+#else
+            if ( isEventType && (pProperties->Name == SC_EVENTACC_SCRIPT) )
+#endif
+            {
+                rtl::OUString sValue;
+                if ( pProperties->Value >>= sValue )
+                {
+                    ScMacroInfo* pInfo = getInfo( TRUE );
+                    DBG_ASSERT( pInfo, "shape macro info could not be created!" );
+                    if ( !pInfo )
+                        break;
+                    if ( pProperties->Name == SC_EVENTACC_SCRIPT )
+                        pInfo->SetMacro( sValue );
+#ifdef ISSUE66550_HLINK_FOR_SHAPES
+                    else
+                        pInfo->SetHlink( sValue );
+#endif
+                }
+            }
+        }
+    }
+
+    // XNameAccess
+    virtual uno::Any SAL_CALL getByName( const rtl::OUString& aName ) throw(container::NoSuchElementException, lang::WrappedTargetException, uno::RuntimeException)
+    {
+        uno::Sequence< beans::PropertyValue > aProperties;
+        ScMacroInfo* pInfo = getInfo();
+
+        if ( aName == SC_EVENTACC_ONCLICK )
+        {
+            if ( pInfo && (pInfo->GetMacro().getLength() > 0) )
+            {
+                aProperties.realloc( 2 );
+                aProperties[ 0 ].Name = SC_EVENTACC_EVENTTYPE;
+                aProperties[ 0 ].Value <<= SC_EVENTACC_SCRIPT;
+                aProperties[ 1 ].Name = SC_EVENTACC_SCRIPT;
+                aProperties[ 1 ].Value <<= pInfo->GetMacro();
+            }
+        }
+#ifdef ISSUE66550_HLINK_FOR_SHAPES
+        else if( aName == SC_EVENTACC_ONACTION )
+        {
+            if ( pInfo && (pInfo->GetHlink().getLength() > 0) )
+            {
+                aProperties.realloc( 2 );
+                aProperties[ 0 ].Name = SC_EVENTACC_EVENTTYPE;
+                aProperties[ 0 ].Value <<= SC_EVENTACC_ACTION;
+                aProperties[ 1 ].Name = SC_EVENTACC_URL;
+                aProperties[ 1 ].Value <<= pInfo->GetHlink();
+            }
+        }
+#endif
+        else
+        {
+            throw container::NoSuchElementException();
+        }
+
+        return uno::Any( aProperties );
+    }
+
+    virtual uno::Sequence< rtl::OUString > SAL_CALL getElementNames() throw(uno::RuntimeException)
+    {
+#ifdef ISSUE66550_HLINK_FOR_SHAPES
+        uno::Sequence< rtl::OUString > aSeq( 2 );
+#else
+        uno::Sequence< rtl::OUString > aSeq( 1 );
+#endif
+        aSeq[ 0 ] = SC_EVENTACC_ONCLICK;
+#ifdef ISSUE66550_HLINK_FOR_SHAPES
+        aSeq[ 1 ] = SC_EVENTACC_ONACTION;
+#endif
+        return aSeq;
+    }
+
+    virtual sal_Bool SAL_CALL hasByName( const rtl::OUString& aName ) throw(uno::RuntimeException)
+    {
+#ifdef ISSUE66550_HLINK_FOR_SHAPES
+        return (aName == SC_EVENTACC_ONCLICK) || (aName == SC_EVENTACC_ONACTION);
+#else
+        return aName == SC_EVENTACC_ONCLICK;
+#endif
+    }
+
+    // XElementAccess
+    virtual uno::Type SAL_CALL getElementType() throw(uno::RuntimeException)
+    {
+        return *SEQTYPE(::getCppuType((const uno::Sequence< beans::PropertyValue >*)0));
+    }
+
+    virtual sal_Bool SAL_CALL hasElements() throw(uno::RuntimeException)
+    {
+        // elements are always present (but contained property sequences may be empty)
+        return sal_True;
+    }
+};
+
+::uno::Reference< container::XNameReplace > SAL_CALL
+ScShapeObj::getEvents(  ) throw(uno::RuntimeException)
+{
+    return new ShapeUnoEventAccessImpl( this );
 }
 
