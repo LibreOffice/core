@@ -4,9 +4,9 @@
  *
  *  $RCSfile: firststart.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: obo $ $Date: 2006-10-12 14:17:58 $
+ *  last change: $Author: rt $ $Date: 2007-07-06 12:37:58 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -142,9 +142,8 @@ throw ( RuntimeException )
 
     sal_Bool bOverride      = lArgs.getUnpackedValueOrDefault(ARG_OVERRIDE, (sal_Bool)sal_False);
     sal_Bool bWidthUI       = lArgs.getUnpackedValueOrDefault(ARG_WIDTHUI , (sal_Bool)sal_True );
-    sal_Bool bSomethingTodo = (  bOverride                               ||
-                                 FirstStartWizard::isFirstStart()        ||
-                               ! FirstStartWizard::isLicenseAccepted()   );
+    sal_Bool bSomethingTodo = (  bOverride                          ||
+                                 FirstStartWizard::isWizardNeeded() );
 
     if(bSomethingTodo)
     {
