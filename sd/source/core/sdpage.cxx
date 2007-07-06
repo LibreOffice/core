@@ -4,9 +4,9 @@
  *
  *  $RCSfile: sdpage.cxx,v $
  *
- *  $Revision: 1.60 $
+ *  $Revision: 1.61 $
  *
- *  last change: $Author: hr $ $Date: 2007-06-27 15:37:33 $
+ *  last change: $Author: rt $ $Date: 2007-07-06 09:47:24 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1610,7 +1610,7 @@ void SdPage::SetAutoLayout(AutoLayout eLayout, BOOL bInit, BOOL bCreate )
                     RemoveObject( pObj->GetOrdNum() );
 
                     if( !bUndo )
-                        delete pObj;
+                        SdrObject::Free( pObj );
                 }
                 else
                 {
@@ -2228,7 +2228,7 @@ SdrObject* convertPresentationObjectImpl( SdPage& rPage, SdrObject* pSourceObj, 
             rPage.RemoveObject( pSourceObj->GetOrdNum() );
 
             if( !bUndo )
-                delete pSourceObj;
+                SdrObject::Free( pSourceObj );
         }
     }
     else if((eObjKind == PRESOBJ_TEXT) && (pSourceObj->GetObjIdentifier() != OBJ_TEXT) )
@@ -2274,7 +2274,7 @@ SdrObject* convertPresentationObjectImpl( SdPage& rPage, SdrObject* pSourceObj, 
             rPage.RemoveObject( pSourceObj->GetOrdNum() );
 
             if( !bUndo )
-                delete pSourceObj;
+                SdrObject::Free( pSourceObj );
         }
     }
 
