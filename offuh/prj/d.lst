@@ -58,6 +58,8 @@ mkdir: %_DEST%\inc%_EXT%\offuh\com\sun\star\presentation
 mkdir: %_DEST%\inc%_EXT%\offuh\com\sun\star\animations
 mkdir: %_DEST%\inc%_EXT%\offuh\com\sun\star\reflection
 mkdir: %_DEST%\inc%_EXT%\offuh\com\sun\star\registry
+mkdir: %_DEST%\inc%_EXT%\offuh\com\sun\star\report
+mkdir: %_DEST%\inc%_EXT%\offuh\com\sun\star\report\inspection
 mkdir: %_DEST%\inc%_EXT%\offuh\com\sun\star\resource
 mkdir: %_DEST%\inc%_EXT%\offuh\com\sun\star\sdb
 mkdir: %_DEST%\inc%_EXT%\offuh\com\sun\star\sdb\tools
@@ -236,6 +238,10 @@ mkdir: %_DEST%\inc%_EXT%\offuh\com\sun\star\xml\wrapper
 ..\%__SRC%\inc\offuh\com\sun\star\reflection\*.hpp %_DEST%\inc%_EXT%\offuh\com\sun\star\reflection\*.hpp
 ..\%__SRC%\inc\offuh\com\sun\star\registry\*.hpp %_DEST%\inc%_EXT%\offuh\com\sun\star\registry\*.hpp
 ..\%__SRC%\inc\offuh\com\sun\star\registry\*.hdl %_DEST%\inc%_EXT%\offuh\com\sun\star\registry\*.hdl
+..\%__SRC%\inc\offuh\com\sun\star\report\*.hpp %_DEST%\inc%_EXT%\offuh\com\sun\star\report\*.hpp
+..\%__SRC%\inc\offuh\com\sun\star\report\*.hdl %_DEST%\inc%_EXT%\offuh\com\sun\star\report\*.hdl
+..\%__SRC%\inc\offuh\com\sun\star\report\inspection\*.hpp %_DEST%\inc%_EXT%\offuh\com\sun\star\report\inspection\*.hpp
+..\%__SRC%\inc\offuh\com\sun\star\report\inspection\*.hdl %_DEST%\inc%_EXT%\offuh\com\sun\star\report\inspection\*.hdl
 ..\%__SRC%\inc\offuh\com\sun\star\resource\*.hpp %_DEST%\inc%_EXT%\offuh\com\sun\star\resource\*.hpp
 ..\%__SRC%\inc\offuh\com\sun\star\resource\*.hdl %_DEST%\inc%_EXT%\offuh\com\sun\star\resource\*.hdl
 ..\%__SRC%\inc\offuh\com\sun\star\sdb\*.hdl %_DEST%\inc%_EXT%\offuh\com\sun\star\sdb\*.hdl
