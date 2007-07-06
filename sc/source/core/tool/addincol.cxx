@@ -4,9 +4,9 @@
  *
  *  $RCSfile: addincol.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: rt $ $Date: 2007-07-03 15:49:16 $
+ *  last change: $Author: rt $ $Date: 2007-07-06 12:34:33 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1625,7 +1625,7 @@ void ScUnoAddInCall::SetResult( const uno::Any& rNewRes )
     switch (eClass)
     {
         case uno::TypeClass_VOID:
-            nErrCode = NOVALUE;         // #nv
+            nErrCode = NOTAVAILABLE;         // #NA
             break;
 
         case uno::TypeClass_ENUM:
