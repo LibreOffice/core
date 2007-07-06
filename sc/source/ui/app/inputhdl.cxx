@@ -4,9 +4,9 @@
  *
  *  $RCSfile: inputhdl.cxx,v $
  *
- *  $Revision: 1.71 $
+ *  $Revision: 1.72 $
  *
- *  last change: $Author: rt $ $Date: 2007-07-03 15:53:54 $
+ *  last change: $Author: rt $ $Date: 2007-07-06 12:41:28 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -2607,13 +2607,10 @@ BOOL ScInputHandler::KeyInput( const KeyEvent& rKEvt, BOOL bStartEdit /* = FALSE
     USHORT nCode  = aCode.GetCode();
     sal_Unicode nChar = rKEvt.GetCharCode();
 
-    //  Alt-Return wird gebraucht, alle anderen Alt's und Ctrl-Tab nicht:
-#ifndef MAC
+    //  Alt-Return is accepted, everything else with ALT, or CTRL-TAB are not:
     if (( bAlt && !bControl && nCode != KEY_RETURN ) ||
             ( bControl && aCode.GetCode() == KEY_TAB ))
         return FALSE;
-#endif
-    //  auf'm Mac nicht, sonst werden druckbare Zeichen unterdrueckt
 
     BOOL bInputLine = ( eMode==SC_INPUT_TOP );
 
