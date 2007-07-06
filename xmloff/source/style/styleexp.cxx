@@ -4,9 +4,9 @@
  *
  *  $RCSfile: styleexp.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: hr $ $Date: 2007-06-27 15:44:35 $
+ *  last change: $Author: rt $ $Date: 2007-07-06 09:44:50 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -422,22 +422,22 @@ void XMLStyleExport::exportStyleFamily(
     if( !xStyleCont.is() )
         return;
 
-    Reference< XIndexAccess > xStyles( xStyleCont, UNO_QUERY );
-    const sal_Int32 nStyles = xStyles->getCount();
-
-    // If next styles are supported and used styles should be exported only,
+    Reference< XNameAccess > xStyles( xStyleCont, UNO_QUERY );
+       // If next styles are supported and used styles should be exported only,
     // the next style may be unused but has to be exported, too. In this case
     // the names of all exported styles are remembered.
     SvStringsSortDtor *pExportedStyles = 0;
     sal_Bool bFirstStyle = sal_True;
-    sal_Int32 i;
 
-    for( i = 0; i < nStyles; i++ )
+    const uno::Sequence< ::rtl::OUString> aSeq = xStyles->getElementNames();
+    const ::rtl::OUString* pIter = aSeq.getConstArray();
+    const ::rtl::OUString* pEnd   = pIter + aSeq.getLength();
+    for(;pIter != pEnd;++pIter)
     {
         Reference< XStyle > xStyle;
         try
         {
-            xStyles->getByIndex( i ) >>= xStyle;
+            xStyles->getByName( *pIter ) >>= xStyle;
         }
         catch( lang::IndexOutOfBoundsException )
         {
@@ -488,10 +488,11 @@ void XMLStyleExport::exportStyleFamily(
     {
         // if next styles are supported, export all next styles that are
         // unused and that for, haven't been exported in the first loop.
-        for( i=0; i < nStyles; i++ )
+        pIter = aSeq.getConstArray();
+        for(;pIter != pEnd;++pIter)
         {
             Reference< XStyle > xStyle;
-            xStyles->getByIndex( i ) >>= xStyle;
+            xStyles->getByName( *pIter ) >>= xStyle;
 
             DBG_ASSERT( xStyle.is(), "Style not found for export!" );
             if( xStyle.is() )
