@@ -4,9 +4,9 @@
  *
  *  $RCSfile: userdat.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: ihi $ $Date: 2006-11-14 15:46:30 $
+ *  last change: $Author: rt $ $Date: 2007-07-06 12:31:41 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -60,6 +60,7 @@
 // Object-Ids fuer UserData
 #define SC_UD_OBJDATA       1
 #define SC_UD_IMAPDATA      2
+#define SC_UD_MACRODATA     3
 
 //-------------------------------------------------------------------------
 
@@ -103,6 +104,32 @@ public:
     const ImageMap& GetImageMap() const             { return aImageMap; }
 };
 
+//-------------------------------------------------------------------------
+
+class ScMacroInfo : public SdrObjUserData
+{
+public:
+                    ScMacroInfo();
+    virtual         ~ScMacroInfo();
+
+    virtual SdrObjUserData* Clone( SdrObject* pObj ) const;
+
+    void            SetMacro( const rtl::OUString& rMacro ) { maMacro = rMacro; }
+    const rtl::OUString& GetMacro() const { return maMacro; }
+
+#ifdef ISSUE66550_HLINK_FOR_SHAPES
+    void            SetHlink( const rtl::OUString& rHlink ) { maHlink = rHlink; }
+    const rtl::OUString& GetHlink() const { return maHlink; }
+#endif
+
+private:
+    rtl::OUString   maMacro;
+#ifdef ISSUE66550_HLINK_FOR_SHAPES
+    rtl::OUString   maHlink;
+#endif
+};
+
+//-------------------------------------------------------------------------
 
 #endif
 
