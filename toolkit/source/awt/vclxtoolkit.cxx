@@ -4,9 +4,9 @@
  *
  *  $RCSfile: vclxtoolkit.cxx,v $
  *
- *  $Revision: 1.55 $
+ *  $Revision: 1.56 $
  *
- *  last change: $Author: rt $ $Date: 2007-07-05 08:03:46 $
+ *  last change: $Author: rt $ $Date: 2007-07-06 14:26:42 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -337,6 +337,14 @@ WinBits ImplGetWinBits( sal_uInt32 nComponentAttribs, sal_uInt16 nCompType )
         if( nComponentAttribs & ::com::sun::star::awt::VclWindowPeerAttribute::DEF_NO )
             nWinBits |= WB_DEF_NO;
     }
+    if ( nCompType == WINDOW_MULTILINEEDIT )
+    {
+        if( nComponentAttribs & ::com::sun::star::awt::VclWindowPeerAttribute::AUTOHSCROLL )
+            nWinBits |= WB_AUTOHSCROLL;
+        if( nComponentAttribs & ::com::sun::star::awt::VclWindowPeerAttribute::AUTOVSCROLL )
+            nWinBits |= WB_AUTOVSCROLL;
+    }
+
 
     if( nComponentAttribs & ::com::sun::star::awt::WindowAttribute::NODECORATION )
     {
@@ -395,6 +403,7 @@ static ComponentInfo __FAR_DATA aComponentInfos [] =
     { "modaldialog",        WINDOW_MODALDIALOG },
     { "modelessdialog",     WINDOW_MODELESSDIALOG },
     { "morebutton",         WINDOW_MOREBUTTON },
+    { "multilineedit",      WINDOW_MULTILINEEDIT },
     { "multilistbox",       WINDOW_MULTILISTBOX },
     { "numericbox",         WINDOW_NUMERICBOX },
     { "numericfield",       WINDOW_NUMERICFIELD },
@@ -782,6 +791,7 @@ Window* VCLXToolkit::ImplCreateWindow( VCLXWindow** ppNewComp,
             case WINDOW_DOCKINGAREA:
                 pNewWindow = new DockingAreaWindow( pParent );
             break;
+            case WINDOW_MULTILINEEDIT:
             case WINDOW_EDIT:
                 pNewWindow = new Edit( pParent, nWinBits );
                 *ppNewComp = new VCLXEdit;
@@ -859,6 +869,8 @@ Window* VCLXToolkit::ImplCreateWindow( VCLXWindow** ppNewComp,
             case WINDOW_MODELESSDIALOG:
             {
                 // Modal/Modeless nur durch Show/Execute
+                if ( (pParent == NULL ) && ( rDescriptor.ParentIndex == -1 ) )
+                    pParent = DIALOG_NO_PARENT;
                 pNewWindow = new Dialog( pParent, nWinBits );
                 *ppNewComp = new VCLXDialog;
             }
@@ -998,40 +1010,39 @@ Window* VCLXToolkit::ImplCreateWindow( VCLXWindow** ppNewComp,
                                 ::com::sun::star::uno::Any anyHandle = xSystemDepParent->getWindowHandle(processIdSeq, SYSTEM_DEPENDENT_TYPE);
 
 #if defined WNT
-
                                 sal_Int32 hWnd;
 
-                                            if (anyHandle >>= hWnd)
-                                            {
-                                                            printf("hWnd = %ld\n", hWnd);
-                                                            SystemParentData aParentData;
-                                                            aParentData.nSize   = sizeof( aParentData );
-                                                            aParentData.hWnd    = (HWND)hWnd;
-                                                            pNewWindow = new WorkWindow( &aParentData );
-                                            }
+                                if (anyHandle >>= hWnd)
+                                {
+                                    printf("hWnd = %ld\n", hWnd);
+                                    SystemParentData aParentData;
+                                    aParentData.nSize   = sizeof( aParentData );
+                                    aParentData.hWnd    = (HWND)hWnd;
+                                    pNewWindow = new WorkWindow( &aParentData );
+                                }
 #elif defined QUARTZ
 
                                 sal_IntPtr rWindow = 0;
 
-                                            if (anyHandle >>= rWindow)
-                                            {
-                                                            printf("rWindow = %ld\n", rWindow);
-                                                            SystemParentData aParentData;
-                                                            aParentData.nSize   = sizeof( aParentData );
-                                                            aParentData.rWindow = (WindowRef)rWindow;
-                                                            pNewWindow = new WorkWindow( &aParentData );
-                                            }
+                                if (anyHandle >>= rWindow)
+                                {
+                                    printf("rWindow = %ld\n", rWindow);
+                                    SystemParentData aParentData;
+                                    aParentData.nSize   = sizeof( aParentData );
+                                    aParentData.rWindow = (WindowRef)rWindow;
+                                    pNewWindow = new WorkWindow( &aParentData );
+                                }
 #elif defined UNX
                                 sal_Int32 x11_id = 0;
 
-                                            if (anyHandle >>= x11_id)
-                                            {
-                                                            printf("x11_id = %ld\n", x11_id);
-                                                            SystemParentData aParentData;
-                                                            aParentData.nSize   = sizeof( aParentData );
-                                                            aParentData.aWindow = x11_id;
-                                                            pNewWindow = new WorkWindow( &aParentData );
-                                            }
+                                if (anyHandle >>= x11_id)
+                                {
+                                    printf("x11_id = %ld\n", x11_id);
+                                    SystemParentData aParentData;
+                                    aParentData.nSize   = sizeof( aParentData );
+                                    aParentData.aWindow = x11_id;
+                                    pNewWindow = new WorkWindow( &aParentData );
+                                }
 #endif
                             }
                         }
