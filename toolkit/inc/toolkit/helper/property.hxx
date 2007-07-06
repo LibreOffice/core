@@ -4,9 +4,9 @@
  *
  *  $RCSfile: property.hxx,v $
  *
- *  $Revision: 1.29 $
+ *  $Revision: 1.30 $
  *
- *  last change: $Author: hr $ $Date: 2007-06-27 12:20:46 $
+ *  last change: $Author: rt $ $Date: 2007-07-06 14:26:28 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -176,6 +176,12 @@ namespace rtl {
 #define BASEPROPERTY_GRAPHIC               117  // css.graphic.XGraphic
 #define BASEPROPERTY_STEP_TIME             118  // sal_Int32
 #define BASEPROPERTY_DECORATION            119  // sal_Bool
+#define BASEPROPERTY_PAINTTRANSPARENT      120  // sal_Bool
+#define BASEPROPERTY_AUTOHSCROLL           121  // sal_Bool
+#define BASEPROPERTY_AUTOVSCROLL           122  // sal_Bool
+#define BASEPROPERTY_DESKTOP_AS_PARENT     123  // sal_Bool
+
+//#define BASEPROPERTY_RESOURCERESOLVER      124  // css.resource.XStringResourceResolver
 
 #define BASEPROPERTY_TREE_START                     120
 #define BASEPROPERTY_TREE_SELECTIONTYPE             120
