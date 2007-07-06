@@ -4,9 +4,9 @@
  *
  *  $RCSfile: RowSet.cxx,v $
  *
- *  $Revision: 1.152 $
+ *  $Revision: 1.153 $
  *
- *  last change: $Author: vg $ $Date: 2007-01-15 14:29:58 $
+ *  last change: $Author: rt $ $Date: 2007-07-06 07:51:46 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -273,6 +273,7 @@ ORowSet::ORowSet(const Reference< ::com::sun::star::lang::XMultiServiceFactory >
     : ORowSet_BASE1(m_aMutex)
     , ORowSetBase(ORowSet_BASE1::rBHelper,&m_aMutex)
     ,m_xServiceManager(_xFac)
+    ,m_pParameters( NULL )
     ,m_aRowsetListeners(*m_pMutex)
     ,m_aApproveListeners(*m_pMutex)
     ,m_pTables(NULL)
@@ -286,7 +287,7 @@ ORowSet::ORowSet(const Reference< ::com::sun::star::lang::XMultiServiceFactory >
     ,m_nPrivileges(0)
     ,m_bUseEscapeProcessing(sal_True)
     ,m_bApplyFilter(sal_False)
-    ,m_bCreateStatement(sal_True)
+    ,m_bCommandFacetsDirty( sal_True )
     ,m_bModified(sal_False)
     ,m_bRebuildConnOnExecute(sal_False)
     ,m_bIsBookmarable(sal_True)
@@ -302,6 +303,8 @@ ORowSet::ORowSet(const Reference< ::com::sun::star::lang::XMultiServiceFactory >
     sal_Int32 nRBT  = PropertyAttribute::READONLY   | PropertyAttribute::BOUND      | PropertyAttribute::TRANSIENT;
     sal_Int32 nRT   = PropertyAttribute::READONLY   | PropertyAttribute::TRANSIENT;
     sal_Int32 nBT   = PropertyAttribute::BOUND      | PropertyAttribute::TRANSIENT;
+
+    m_aPrematureParamValues.resize( 0 );
 
     // sdb.RowSet Properties
     registerMayBeVoidProperty(PROPERTY_ACTIVECONNECTION,PROPERTY_ID_ACTIVECONNECTION,   PropertyAttribute::MAYBEVOID|PropertyAttribute::TRANSIENT|PropertyAttribute::BOUND, &m_aActiveConnection,   ::getCppuType(reinterpret_cast< Reference< XConnection >* >(NULL)));
@@ -319,7 +322,6 @@ ORowSet::ORowSet(const Reference< ::com::sun::star::lang::XMultiServiceFactory >
     registerProperty(PROPERTY_ISMODIFIED,           PROPERTY_ID_ISMODIFIED,             nBT,                            &m_bModified,           ::getBooleanCppuType());
     registerProperty(PROPERTY_ISNEW,                PROPERTY_ID_ISNEW,                  nRBT,                           &m_bNew,                ::getBooleanCppuType());
 
-
     // sdbcx.ResultSet Properties
     registerProperty(PROPERTY_ISBOOKMARKABLE,       PROPERTY_ID_ISBOOKMARKABLE,         nRT,                            &m_bIsBookmarable,      ::getBooleanCppuType());
     registerProperty(PROPERTY_CANUPDATEINSERTEDROWS,PROPERTY_ID_CANUPDATEINSERTEDROWS,  nRT,                            &m_bCanUpdateInsertedRows,      ::getBooleanCppuType());
@@ -333,7 +335,7 @@ ORowSet::ORowSet(const Reference< ::com::sun::star::lang::XMultiServiceFactory >
     registerProperty(PROPERTY_URL,                  PROPERTY_ID_URL,                    0,                              &m_aURL,                ::getCppuType(reinterpret_cast< ::rtl::OUString*>(NULL)));
     registerProperty(PROPERTY_TRANSACTIONISOLATION, PROPERTY_ID_TRANSACTIONISOLATION,   PropertyAttribute::TRANSIENT,   &m_nTransactionIsolation,::getCppuType(reinterpret_cast< sal_Int32*>(NULL)));
     registerMayBeVoidProperty(PROPERTY_TYPEMAP,     PROPERTY_ID_TYPEMAP,                PropertyAttribute::MAYBEVOID|PropertyAttribute::TRANSIENT,  &m_aTypeMap,            ::getCppuType(reinterpret_cast< Reference< XNameAccess >* >(NULL)));
-    registerProperty(PROPERTY_USE_ESCAPE_PROCESSING,PROPERTY_ID_USE_ESCAPE_PROCESSING,  0,                              &m_bUseEscapeProcessing,::getBooleanCppuType()  );
+    registerProperty(PROPERTY_USE_ESCAPE_PROCESSING,PROPERTY_ID_USE_ESCAPE_PROCESSING,  PropertyAttribute::BOUND,       &m_bUseEscapeProcessing,::getBooleanCppuType()  );
     registerProperty(PROPERTY_QUERYTIMEOUT,         PROPERTY_ID_QUERYTIMEOUT,           PropertyAttribute::TRANSIENT,   &m_nQueryTimeOut,       ::getCppuType(reinterpret_cast< sal_Int32*>(NULL)));
     registerProperty(PROPERTY_MAXFIELDSIZE,         PROPERTY_ID_MAXFIELDSIZE,           PropertyAttribute::TRANSIENT,   &m_nMaxFieldSize,       ::getCppuType(reinterpret_cast< sal_Int32*>(NULL)));
     registerProperty(PROPERTY_MAXROWS,              PROPERTY_ID_MAXROWS,                0,                              &m_nMaxRows,            ::getCppuType(reinterpret_cast< sal_Int32*>(NULL)) );
@@ -343,8 +345,6 @@ ORowSet::ORowSet(const Reference< ::com::sun::star::lang::XMultiServiceFactory >
     registerProperty(PROPERTY_UPDATE_CATALOGNAME,   PROPERTY_ID_UPDATE_CATALOGNAME,     PropertyAttribute::BOUND,       &m_aUpdateCatalogName,  ::getCppuType(reinterpret_cast< ::rtl::OUString*>(NULL)));
     registerProperty(PROPERTY_UPDATE_SCHEMANAME,    PROPERTY_ID_UPDATE_SCHEMANAME,      PropertyAttribute::BOUND,       &m_aUpdateSchemaName,   ::getCppuType(reinterpret_cast< ::rtl::OUString*>(NULL)));
     registerProperty(PROPERTY_UPDATE_TABLENAME,     PROPERTY_ID_UPDATE_TABLENAME,       PropertyAttribute::BOUND,       &m_aUpdateTableName,    ::getCppuType(reinterpret_cast< ::rtl::OUString*>(NULL)));
-
-    m_aParameterRow.clear(); // because it was constructed with one element as default
 }
 
 ORowSet::~ORowSet()
@@ -414,6 +414,24 @@ void SAL_CALL ORowSet::setFastPropertyValue_NoBroadcast(sal_Int32 nHandle,const 
             OPropertyStateContainer::setFastPropertyValue_NoBroadcast(nHandle,rValue);
     }
 
+    if  (   ( nHandle == PROPERTY_ID_ACTIVECONNECTION )
+        ||  ( nHandle == PROPERTY_ID_DATASOURCENAME )
+        ||  ( nHandle == PROPERTY_ID_COMMAND )
+        ||  ( nHandle == PROPERTY_ID_COMMANDTYPE )
+        ||  ( nHandle == PROPERTY_ID_IGNORERESULT )
+        ||  ( nHandle == PROPERTY_ID_FILTER )
+        ||  ( nHandle == PROPERTY_ID_HAVING_CLAUSE )
+        ||  ( nHandle == PROPERTY_ID_GROUP_BY )
+        ||  ( nHandle == PROPERTY_ID_APPLYFILTER )
+        ||  ( nHandle == PROPERTY_ID_ORDER )
+        ||  ( nHandle == PROPERTY_ID_URL )
+        ||  ( nHandle == PROPERTY_ID_USER )
+        )
+    {
+        m_bCommandFacetsDirty = sal_True;
+    }
+
+
     switch(nHandle)
     {
         case PROPERTY_ID_ACTIVECONNECTION:
@@ -424,19 +442,9 @@ void SAL_CALL ORowSet::setFastPropertyValue_NoBroadcast(sal_Int32 nHandle,const 
             }
 
             m_bOwnConnection        = sal_False;
-            m_bCreateStatement      = sal_True;
             m_bRebuildConnOnExecute = sal_False;
             break;
 
-        case PROPERTY_ID_APPLYFILTER:
-            m_bCreateStatement = sal_True;
-            break;
-        case PROPERTY_ID_COMMAND:
-            m_bCreateStatement = sal_True;
-            break;
-        case PROPERTY_ID_COMMANDTYPE:
-            m_bCreateStatement = sal_True;
-            break;
         case PROPERTY_ID_DATASOURCENAME:
             if(!m_xStatement.is())
             {
@@ -447,8 +455,6 @@ void SAL_CALL ORowSet::setFastPropertyValue_NoBroadcast(sal_Int32 nHandle,const 
             }
             else
                 m_bRebuildConnOnExecute = sal_True;
-            m_bCreateStatement = sal_True;
-            //  m_bOwnConnection   = sal_True;
             break;
         case PROPERTY_ID_FETCHSIZE:
             if(m_pCache)
@@ -456,14 +462,6 @@ void SAL_CALL ORowSet::setFastPropertyValue_NoBroadcast(sal_Int32 nHandle,const 
                 m_pCache->setMaxRowSize(m_nFetchSize);
                 fireRowcount();
             }
-            break;
-        case PROPERTY_ID_HAVING_CLAUSE:
-        case PROPERTY_ID_GROUP_BY:
-        case PROPERTY_ID_FILTER:
-            m_bCreateStatement = sal_True;
-            break;
-        case PROPERTY_ID_ORDER:
-            m_bCreateStatement = sal_True;
             break;
         case PROPERTY_ID_URL:
             // is the connection-to-be-built determined by the url (which is the case if m_aDataSourceName is empty) ?
@@ -481,17 +479,13 @@ void SAL_CALL ORowSet::setFastPropertyValue_NoBroadcast(sal_Int32 nHandle,const 
                     setFastPropertyValue(PROPERTY_ID_ACTIVECONNECTION, aNewConn);
                 }
             }
-            m_bCreateStatement = sal_True;
             m_bOwnConnection = sal_True;
-            break;
-        case PROPERTY_ID_USER:
-            m_bCreateStatement = sal_True;
             break;
         case PROPERTY_ID_TYPEMAP:
             ::cppu::extractInterface(m_xTypeMap,m_aTypeMap);
             break;
         default:
-            ;
+            break;
     };
 }
 // -------------------------------------------------------------------------
@@ -635,7 +629,7 @@ Reference< XInterface > ORowSet::Create(const Reference< XMultiServiceFactory >&
 }
 // -------------------------------------------------------------------------
 // OComponentHelper
-void SAL_CALL ORowSet::disposing(void)
+void SAL_CALL ORowSet::disposing()
 {
     OPropertyStateContainer::disposing();
 
@@ -645,9 +639,7 @@ void SAL_CALL ORowSet::disposing(void)
     m_aRowsetListeners.disposeAndClear( aDisposeEvent );
     m_aApproveListeners.disposeAndClear( aDisposeEvent );
 
-    // just because we want to clear all see freeResources()
-    m_bCreateStatement = sal_True;
-    freeResources();
+    freeResources( true );
     m_xServiceManager   = NULL;
     // remove myself as dispose listener
     Reference< XComponent >  xComponent(m_xActiveConnection, UNO_QUERY);
@@ -667,7 +659,7 @@ void SAL_CALL ORowSet::disposing(void)
     ORowSetBase::disposing();
 }
 // -------------------------------------------------------------------------
-void ORowSet::freeResources()
+void ORowSet::freeResources( bool _bComplete )
 {
     MutexGuard aGuard(m_aMutex);
 
@@ -679,7 +671,8 @@ void ORowSet::freeResources()
             xComp->dispose();
     }
     m_aClones.clear();
-    if (m_bCreateStatement)
+
+    if ( _bComplete )
     {
         // the columns must be disposed before the querycomposer is disposed because
         // their owner can be the composer
@@ -688,13 +681,10 @@ void ORowSet::freeResources()
         if ( m_pColumns )
             m_pColumns->disposing();
         // dispose the composer to avoid that everbody knows that the querycomposer is eol
-        try
-        {
-            ::comphelper::disposeComponent(m_xComposer);
-        }
+        try { ::comphelper::disposeComponent( m_xComposer ); }
         catch(Exception&)
         {
-            OSL_ENSURE(0,"Composer could not be disposed!");
+            DBG_UNHANDLED_EXCEPTION();
             m_xComposer = NULL;
         }
 
@@ -714,6 +704,10 @@ void ORowSet::freeResources()
         m_nLastKnownRowCount      = 0;
         if ( m_aOldRow.isValid() )
             m_aOldRow->clearRow();
+
+        impl_disposeParametersContainer_nothrow();
+
+        m_bCommandFacetsDirty = sal_True;
     }
 }
 
@@ -789,8 +783,7 @@ void SAL_CALL ORowSet::close(  ) throw(SQLException, RuntimeException)
         ::connectivity::checkDisposed(ORowSet_BASE1::rBHelper.bDisposed);
     }
     // additionals things to set
-    m_bCreateStatement = sal_True;
-    freeResources();
+    freeResources( true );
 }
 // -------------------------------------------------------------------------
 // comphelper::OPropertyArrayUsageHelper
@@ -1524,10 +1517,11 @@ void SAL_CALL ORowSet::executeWithCompletion( const Reference< XInteractionHandl
 
     try
     {
-        freeResources();
+        freeResources( m_bCommandFacetsDirty );
 
         // calc the connection to be used
-        if (m_xActiveConnection.is() && m_bRebuildConnOnExecute) {
+        if (m_xActiveConnection.is() && m_bRebuildConnOnExecute)
+        {
             // there was a setProperty(ActiveConnection), but a setProperty(DataSource) _after_ that, too
             Reference< XConnection > xXConnection;
             setActiveConnection( xXConnection );
@@ -1557,6 +1551,34 @@ void SAL_CALL ORowSet::executeWithCompletion( const Reference< XInteractionHandl
     //  do the real execute
     execute_NoApprove_NoNewConn(aGuard);
 }
+
+// -------------------------------------------------------------------------
+Reference< XIndexAccess > SAL_CALL ORowSet::getParameters(  ) throw (RuntimeException)
+{
+    ::osl::MutexGuard aGuard( *m_pMutex );
+    ::connectivity::checkDisposed(ORowSet_BASE1::rBHelper.bDisposed);
+
+    if ( m_bCommandFacetsDirty )
+        // need to rebuild the parameters, since some property which contributes to the
+        // complete command, and thus the parameters, changed
+        impl_disposeParametersContainer_nothrow();
+
+    if ( !m_pParameters.get() && m_aCommand.getLength() )
+    {
+        try
+        {
+            ::rtl::OUString sNotInterestedIn;
+            impl_initComposer_throw( sNotInterestedIn );
+        }
+        catch( const Exception& )
+        {
+            // silence it
+        }
+    }
+
+    return m_pParameters.get();
+}
+
 // -------------------------------------------------------------------------
 void ORowSet::approveExecution() throw (RowSetVetoException, RuntimeException)
 {
@@ -1580,7 +1602,7 @@ void SAL_CALL ORowSet::execute(  ) throw(SQLException, RuntimeException)
     approveExecution();
 
     ResettableMutexGuard aGuard( m_aMutex );
-    freeResources();
+    freeResources( m_bCommandFacetsDirty );
 
     // calc the connection to be used
     if (m_xActiveConnection.is() && m_bRebuildConnOnExecute) {
@@ -1649,10 +1671,8 @@ void ORowSet::setStatementResultSetType( const Reference< XPropertySet >& _rxSta
 // -----------------------------------------------------------------------------
 Reference< XResultSet > ORowSet::impl_prepareAndExecute_throw()
 {
-    sal_Bool bUseEscapeProcessing = impl_buildActiveCommand_throw( );
-    ::rtl::OUString sCommandToExecute( m_aActiveCommand );
-    if ( bUseEscapeProcessing )
-        sCommandToExecute = impl_getComposedQuery_throw( true );
+    ::rtl::OUString sCommandToExecute;
+    sal_Bool bUseEscapeProcessing = impl_initComposer_throw( sCommandToExecute );
 
     Reference< XResultSet> xResultSet;
     try
@@ -1675,19 +1695,18 @@ Reference< XResultSet > ORowSet::impl_prepareAndExecute_throw()
             xStatementProps->setPropertyValue( PROPERTY_USEBOOKMARKS, makeAny( sal_True ) );
             setStatementResultSetType( xStatementProps, m_nResultSetType, m_nResultSetConcurrency );
         }
-        catch(Exception&)
+        catch ( const Exception& )
         {
             // this exception doesn't matter here because when we catch an exception
             // then the driver doesn't support this feature
         }
 
         Reference< XParameters > xParam( m_xStatement, UNO_QUERY_THROW );
-        sal_Int32 index = 1;
-        for (   ORowVector< ORowSetValue >::const_iterator aParam = m_aParameterRow.begin();
-                aParam != m_aParameterRow.end();
-                ++aParam, ++index )
+        size_t nParamCount( m_pParameters.is() ? m_pParameters->size() : m_aPrematureParamValues.size() );
+        for ( size_t i=1; i<=nParamCount; ++i )
         {
-            ::dbtools::setObjectWithInfo( xParam, index, aParam->makeAny(), aParam->getTypeKind() );
+            ORowSetValue& rParamValue( getParameterStorage( (sal_Int32)i ) );
+            ::dbtools::setObjectWithInfo( xParam, i, rParamValue.makeAny(), rParamValue.getTypeKind() );
         }
 
         xResultSet = m_xStatement->executeQuery();
@@ -1700,7 +1719,7 @@ Reference< XResultSet > ORowSet::impl_prepareAndExecute_throw()
         // append information about what we were actually going to execute
         try
         {
-            String sQuery = bUseEscapeProcessing ? impl_getComposedQuery_throw( false ) : m_aActiveCommand;
+            String sQuery = bUseEscapeProcessing && m_xComposer.is() ? m_xComposer->getQuery() : m_aActiveCommand;
             String sInfo( DBA_RES_PARAM( RID_STR_COMMAND_LEADING_TO_ERROR, "$command$", sQuery ) );
             aError.append( SQLExceptionInfo::SQL_CONTEXT, sInfo );
         }
@@ -1809,7 +1828,7 @@ void ORowSet::execute_NoApprove_NoNewConn(ResettableMutexGuard& _rClearForNotifi
     m_xOldConnection = NULL;
 
     // do we need a new statement
-    if (m_bCreateStatement)
+    if ( m_bCommandFacetsDirty )
     {
         m_xStatement    = NULL;
         m_xComposer     = NULL;
@@ -1832,9 +1851,6 @@ void ORowSet::execute_NoApprove_NoNewConn(ResettableMutexGuard& _rClearForNotifi
             m_aCurrentRow   = m_pCache->createIterator(this);
             m_aOldRow = m_pCache->registerOldRow();
         }
-
-        // now we can clear the parameter row
-        m_aParameterRow.clear();
 
         // get the locale
         //  ConfigManager*  pConfigMgr = ConfigManager::GetConfigManager();
@@ -2244,6 +2260,56 @@ void ORowSet::impl_resetTables_nothrow()
 }
 
 //------------------------------------------------------------------------------
+sal_Bool ORowSet::impl_initComposer_throw( ::rtl::OUString& _out_rCommandToExecute )
+{
+    sal_Bool bUseEscapeProcessing = impl_buildActiveCommand_throw( );
+    _out_rCommandToExecute = m_aActiveCommand;
+    if ( !bUseEscapeProcessing )
+        return bUseEscapeProcessing;
+
+    Reference< XMultiServiceFactory > xFactory( m_xActiveConnection, UNO_QUERY );
+    if ( xFactory.is() )
+    {
+        try
+        {
+            ::comphelper::disposeComponent( m_xComposer );
+            m_xComposer.set( xFactory->createInstance( SERVICE_NAME_SINGLESELECTQUERYCOMPOSER ), UNO_QUERY_THROW );
+        }
+        catch (const Exception& ) { m_xComposer = NULL; }
+    }
+    if ( !m_xComposer.is() )
+        m_xComposer = new OSingleSelectQueryComposer( impl_getTables_throw(), m_xActiveConnection, m_xServiceManager );
+
+    m_xComposer->setElementaryQuery( m_aActiveCommand );
+
+    m_xComposer->setFilter( m_bApplyFilter ? m_aFilter : ::rtl::OUString() );
+    m_xComposer->setHavingClause( m_bApplyFilter ? m_aHavingClause : ::rtl::OUString() );
+
+    if ( m_bIgnoreResult )
+    {   // append a "0=1" filter
+        // don't simply overwrite an existent filter, this would lead to problems if this existent
+        // filter contains paramters (since a keyset may add parameters itself)
+        // 2003-12-12 - #23418# - fs@openoffice.org
+        m_xComposer->setElementaryQuery( m_xComposer->getQuery( ) );
+        m_xComposer->setFilter( ::rtl::OUString::createFromAscii( "0 = 1" ) );
+    }
+
+    m_xComposer->setOrder( m_aOrder );
+    m_xComposer->setGroup( m_aGroupBy );
+
+    if ( !m_xColumns.is() )
+    {
+        Reference< XColumnsSupplier > xCols( m_xComposer, UNO_QUERY_THROW );
+        m_xColumns = xCols->getColumns();
+    }
+
+    impl_initParametersContainer_nothrow();
+
+    _out_rCommandToExecute = m_xComposer->getQueryWithSubstitution();
+    return bUseEscapeProcessing;
+}
+
+//------------------------------------------------------------------------------
 sal_Bool ORowSet::impl_buildActiveCommand_throw()
 {
     // create the sql command
@@ -2352,87 +2418,78 @@ sal_Bool ORowSet::impl_buildActiveCommand_throw()
 
     return bDoEscapeProcessing;
 }
+
 //------------------------------------------------------------------------------
-::rtl::OUString ORowSet::impl_getComposedQuery_throw( bool _bForExecution )
+void ORowSet::impl_initParametersContainer_nothrow()
 {
-    Reference< XMultiServiceFactory > xFactory( m_xActiveConnection, UNO_QUERY );
-    if ( xFactory.is() )
+    OSL_PRECOND( !m_pParameters.is(), "ORowSet::impl_initParametersContainer_nothrow: already initialized the parameters!" );
+
+    m_pParameters = new param::ParameterWrapperContainer( m_xComposer.get() );
+    // copy the premature parameters into the final ones
+    size_t nParamCount( ::std::min( m_pParameters->size(), m_aPrematureParamValues.size() ) );
+    for ( size_t i=0; i<nParamCount; ++i )
     {
-        try
-        {
-            ::comphelper::disposeComponent( m_xComposer );
-            m_xComposer.set( xFactory->createInstance( SERVICE_NAME_SINGLESELECTQUERYCOMPOSER ), UNO_QUERY_THROW );
-        }
-        catch (const Exception& ) { m_xComposer = NULL; }
+        (*m_pParameters)[i] = m_aPrematureParamValues[i];
     }
-    if ( !m_xComposer.is() )
-        m_xComposer = new OSingleSelectQueryComposer( impl_getTables_throw(), m_xActiveConnection, m_xServiceManager );
-
-    m_xComposer->setElementaryQuery( m_aActiveCommand );
-
-    if ( m_bApplyFilter )
-    {
-        if ( m_aFilter.getLength() )
-            m_xComposer->setFilter(m_aFilter);
-        if ( m_aHavingClause.getLength() )
-            m_xComposer->setHavingClause(m_aHavingClause);
-    }
-
-    if ( m_bIgnoreResult )
-    {   // append a "0=1" filter
-        // don't simply overwrite an existent filter, this would lead to problems if this existent
-        // filter contains paramters (since a keyset may add parameters itself)
-        // 2003-12-12 - #23418# - fs@openoffice.org
-        m_xComposer->setElementaryQuery( m_xComposer->getQuery( ) );
-        m_xComposer->setFilter( ::rtl::OUString::createFromAscii( "0 = 1" ) );
-    }
-
-    if ( m_aOrder.getLength() )
-        m_xComposer->setOrder( m_aOrder );
-    if ( m_aGroupBy.getLength() )
-        m_xComposer->setGroup( m_aGroupBy );
-
-    if ( !m_xColumns.is() )
-    {
-        Reference<XColumnsSupplier> xCols( m_xComposer, UNO_QUERY_THROW );
-        m_xColumns = xCols->getColumns();
-    }
-
-    return _bForExecution ? m_xComposer->getQueryWithSubstitution() : m_xComposer->getQuery();
 }
-// -----------------------------------------------------------------------------
-void ORowSet::checkAndResizeParameters(sal_Int32 parameterIndex)
+
+//------------------------------------------------------------------------------
+void ORowSet::impl_disposeParametersContainer_nothrow()
 {
-    ::connectivity::checkDisposed(ORowSet_BASE1::rBHelper.bDisposed);
-    if (parameterIndex < 1)
-        throwInvalidIndexException(*this);
-    else if ((sal_Int32)m_aParameterRow.size() < parameterIndex)
-        m_aParameterRow.resize(parameterIndex);
+    if ( !m_pParameters.is() )
+        return;
+
+    // copy the actual values to our "premature" ones, to preserve them for later use
+    size_t nParamCount( m_pParameters->size() );
+    m_aPrematureParamValues.resize( nParamCount );
+    for ( size_t i=0; i<nParamCount; ++i )
+    {
+        m_aPrematureParamValues[i] = (*m_pParameters)[i];
+    }
+
+    m_pParameters->dispose();
+    m_pParameters = NULL;
+}
+
+// -----------------------------------------------------------------------------
+ORowSetValue& ORowSet::getParameterStorage(sal_Int32 parameterIndex)
+{
+    ::connectivity::checkDisposed( ORowSet_BASE1::rBHelper.bDisposed );
+    if ( parameterIndex < 1 )
+        throwInvalidIndexException( *this );
+
+    if ( m_pParameters.is() )
+    {
+        if ( (size_t)parameterIndex > m_pParameters->size() )
+            throwInvalidIndexException( *this );
+        return (*m_pParameters)[ parameterIndex - 1 ];
+    }
+
+    if ( m_aPrematureParamValues.size() < (size_t)parameterIndex )
+        m_aPrematureParamValues.resize( parameterIndex );
+    return m_aPrematureParamValues[ parameterIndex - 1 ];
 }
 // -------------------------------------------------------------------------
 // XParameters
 void SAL_CALL ORowSet::setNull( sal_Int32 parameterIndex, sal_Int32 /*sqlType*/ ) throw(SQLException, RuntimeException)
 {
     ::osl::MutexGuard aGuard( m_aColumnsMutex );
-    checkAndResizeParameters(parameterIndex);
 
-    m_aParameterRow[parameterIndex-1].setNull();
+    getParameterStorage( parameterIndex ).setNull();
 }
 // -------------------------------------------------------------------------
-void SAL_CALL ORowSet::setObjectNull( sal_Int32 parameterIndex, sal_Int32 /*sqlType*/, const ::rtl::OUString& /*typeName*/ ) throw(SQLException, RuntimeException)
+void SAL_CALL ORowSet::setObjectNull( sal_Int32 parameterIndex, sal_Int32 sqlType, const ::rtl::OUString& /*typeName*/ ) throw(SQLException, RuntimeException)
 {
-    ::osl::MutexGuard aGuard( m_aColumnsMutex );
-    checkAndResizeParameters(parameterIndex);
-    m_aParameterRow[parameterIndex-1].setNull();
+    setNull( parameterIndex, sqlType );
 }
 // -----------------------------------------------------------------------------
 void ORowSet::setParameter(sal_Int32 parameterIndex, const ORowSetValue& x)
 {
     ::osl::MutexGuard aGuard( m_aColumnsMutex );
-    checkAndResizeParameters(parameterIndex);
 
-    m_aParameterRow[parameterIndex-1] = x;
+    getParameterStorage( parameterIndex ) = x;
 }
+
 // -------------------------------------------------------------------------
 void SAL_CALL ORowSet::setBoolean( sal_Int32 parameterIndex, sal_Bool x ) throw(SQLException, RuntimeException)
 {
@@ -2497,12 +2554,13 @@ void SAL_CALL ORowSet::setTimestamp( sal_Int32 parameterIndex, const ::com::sun:
 void SAL_CALL ORowSet::setBinaryStream( sal_Int32 parameterIndex, const Reference< ::com::sun::star::io::XInputStream >& x, sal_Int32 length ) throw(SQLException, RuntimeException)
 {
     ::osl::MutexGuard aGuard( m_aColumnsMutex );
-    checkAndResizeParameters(parameterIndex);
+    ORowSetValue& rParamValue( getParameterStorage( parameterIndex ) );
+
     try
     {
         Sequence <sal_Int8> aData;
         x->readBytes(aData, length);
-        m_aParameterRow[parameterIndex-1] = aData;
+        rParamValue = aData;
         x->closeInput();
     }
     catch( Exception& )
@@ -2514,7 +2572,7 @@ void SAL_CALL ORowSet::setBinaryStream( sal_Int32 parameterIndex, const Referenc
 void SAL_CALL ORowSet::setCharacterStream( sal_Int32 parameterIndex, const Reference< ::com::sun::star::io::XInputStream >& x, sal_Int32 length ) throw(SQLException, RuntimeException)
 {
     ::osl::MutexGuard aGuard( m_aColumnsMutex );
-    checkAndResizeParameters(parameterIndex);
+    ORowSetValue& rParamValue( getParameterStorage( parameterIndex ) );
     try
     {
         Sequence <sal_Int8> aData;
@@ -2523,8 +2581,8 @@ void SAL_CALL ORowSet::setCharacterStream( sal_Int32 parameterIndex, const Refer
         sal_Int32 nSize = x->readBytes(aData, length * sizeof(sal_Unicode));
         if (nSize / sizeof(sal_Unicode))
             aDataStr = rtl::OUString((sal_Unicode*)aData.getConstArray(), nSize / sizeof(sal_Unicode));
-        m_aParameterRow[parameterIndex-1] = aDataStr;
-        m_aParameterRow[parameterIndex-1].setTypeKind(DataType::LONGVARCHAR);
+        rParamValue = aDataStr;
+        rParamValue.setTypeKind( DataType::LONGVARCHAR );
         x->closeInput();
     }
     catch( Exception& )
@@ -2535,9 +2593,7 @@ void SAL_CALL ORowSet::setCharacterStream( sal_Int32 parameterIndex, const Refer
 // -------------------------------------------------------------------------
 void SAL_CALL ORowSet::setObject( sal_Int32 parameterIndex, const Any& x ) throw(SQLException, RuntimeException)
 {
-    ::osl::MutexGuard aGuard( m_aColumnsMutex );
-    checkAndResizeParameters(parameterIndex);
-    if (!::dbtools::implSetObject(this, parameterIndex, x))
+    if ( !::dbtools::implSetObject( this, parameterIndex, x ) )
     {   // there is no other setXXX call which can handle the value in x
         throw SQLException();
     }
@@ -2546,9 +2602,9 @@ void SAL_CALL ORowSet::setObject( sal_Int32 parameterIndex, const Any& x ) throw
 void SAL_CALL ORowSet::setObjectWithInfo( sal_Int32 parameterIndex, const Any& x, sal_Int32 targetSqlType, sal_Int32 /*scale*/ ) throw(SQLException, RuntimeException)
 {
     ::osl::MutexGuard aGuard( m_aColumnsMutex );
-    checkAndResizeParameters(parameterIndex);
-    setObject(parameterIndex, x);
-    m_aParameterRow[parameterIndex-1].setTypeKind(targetSqlType);
+    ORowSetValue& rParamValue( getParameterStorage( parameterIndex ) );
+    setObject( parameterIndex, x );
+    rParamValue.setTypeKind( targetSqlType );
 }
 // -------------------------------------------------------------------------
 void SAL_CALL ORowSet::setRef( sal_Int32 /*parameterIndex*/, const Reference< XRef >& /*x*/ ) throw(SQLException, RuntimeException)
@@ -2576,9 +2632,10 @@ void SAL_CALL ORowSet::clearParameters(  ) throw(SQLException, RuntimeException)
     ::connectivity::checkDisposed(ORowSet_BASE1::rBHelper.bDisposed);
 
     ::osl::MutexGuard aGuard( m_aColumnsMutex );
-    // this is the real clear
-    m_aParameterRow = connectivity::ORowVector< ORowSetValue >();
-    m_aParameterRow.clear();
+
+    size_t nParamCount( m_pParameters.is() ? m_pParameters->size() : m_aPrematureParamValues.size() );
+    for ( size_t i=1; i<=nParamCount; ++i )
+        getParameterStorage( (sal_Int32)i ).setNull();
 }
 // -------------------------------------------------------------------------
 void ORowSet::firePropertyChange(sal_Int32 _nPos,const ::connectivity::ORowSetValue& _rOldValue)
@@ -2871,16 +2928,13 @@ sal_Int64 SAL_CALL ORowSetClone::getSomething( const Sequence< sal_Int8 >& rId )
 // -----------------------------------------------------------------------------
 void SAL_CALL ORowSetClone::setFastPropertyValue_NoBroadcast(sal_Int32 nHandle,const Any& rValue) throw (Exception)
 {
-    switch(nHandle)
+    if ( nHandle == PROPERTY_ID_FETCHSIZE )
     {
-    case PROPERTY_ID_FETCHSIZE:
-        if(m_pParent)
-            m_pParent->setFastPropertyValue_NoBroadcast(nHandle,rValue);
-        // run through
-    default:
-        OPropertyStateContainer::setFastPropertyValue_NoBroadcast(nHandle,rValue);
+        if ( m_pParent )
+            m_pParent->setFastPropertyValue_NoBroadcast( nHandle, rValue );
     }
 
+    OPropertyStateContainer::setFastPropertyValue_NoBroadcast(nHandle,rValue);
 }
 
 // -----------------------------------------------------------------------------
