@@ -4,9 +4,9 @@
  *
  *  $RCSfile: JoinController.hxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: obo $ $Date: 2006-07-10 15:28:07 $
+ *  last change: $Author: rt $ $Date: 2007-07-06 08:23:57 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -41,6 +41,9 @@
 #ifndef _COM_SUN_STAR_BEANS_XPROPERTYSET_HPP_
 #include <com/sun/star/beans/XPropertySet.hpp>
 #endif
+#ifndef _DBAUI_MODULE_DBU_HXX_
+#include "moduledbu.hxx"
+#endif
 #ifndef DBAUI_JOINTABLEVIEW_HXX
 #include "JoinTableView.hxx"
 #endif
@@ -62,6 +65,7 @@ namespace dbaui
     typedef OSingleDocumentController OJoinController_BASE;
     class OJoinController : public OJoinController_BASE
     {
+        OModuleClient                    m_aModuleClient;
     protected:
         ::std::vector<OTableConnectionData*>    m_vTableConnectionData;
         ::std::vector<OTableWindowData*>        m_vTableData;
