@@ -4,9 +4,9 @@
  *
  *  $RCSfile: module_hidden_ooo.scp,v $
  *
- *  $Revision: 1.67 $
+ *  $Revision: 1.68 $
  *
- *  last change: $Author: rt $ $Date: 2007-07-03 12:07:33 $
+ *  last change: $Author: rt $ $Date: 2007-07-06 09:28:37 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -757,6 +757,8 @@ Module gid_Module_Root_Files_6
 	gid_File_Oo_Office_Ui_Genericcategories_Xcs,
 	gid_File_Oo_Office_Ui_Genericcategories_Xcu,
 	gid_File_Oo_Office_Common_Xcs,
+	gid_File_Oo_Office_Extendedcolorscheme_Xcs,
+	gid_File_Oo_Office_Extendedcolorscheme_Xcu,
     gid_File_Oo_Office_OptionsDialog_Xcs,
 	gid_File_Oo_Office_Recovery_Xcs,
 	gid_File_Oo_Office_Common_Xcu,
