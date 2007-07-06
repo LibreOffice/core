@@ -4,9 +4,9 @@
  *
  *  $RCSfile: file_ooo.scp,v $
  *
- *  $Revision: 1.204 $
+ *  $Revision: 1.205 $
  *
- *  last change: $Author: rt $ $Date: 2007-07-06 09:28:15 $
+ *  last change: $Author: rt $ $Date: 2007-07-06 12:50:15 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1541,7 +1541,7 @@ End
 */
 File gid_File_Oo_Office_Calc_Xcs
     TXT_FILE_BODY;
-    Styles = (PACKED);
+    Styles = (PACKED,PATCH);
     Dir = gid_Dir_Share_Registry_Schema_Org_Openoffice_Office;
     Name = "/registry/schema/org/openoffice/Office/Calc.xcs";
 End
@@ -2555,6 +2555,7 @@ File gid_File_Share_Config_Sofficecfg_uiconfig_Zip
                   "modules/dbtable/menubar/menubar.xml",
                   "modules/sbibliography/menubar/menubar.xml",
                   "modules/scalc/menubar/menubar.xml",
+                  "modules/scalc/toolbar/insertbar.xml",
                   "modules/scalc/accelerator/de/default.xml",
                   "modules/scalc/accelerator/en-GB/default.xml",
                   "modules/scalc/accelerator/en-US/default.xml",
