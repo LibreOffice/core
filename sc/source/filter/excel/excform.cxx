@@ -4,9 +4,9 @@
  *
  *  $RCSfile: excform.cxx,v $
  *
- *  $Revision: 1.47 $
+ *  $Revision: 1.48 $
  *
- *  last change: $Author: obo $ $Date: 2007-06-13 09:08:48 $
+ *  last change: $Author: rt $ $Date: 2007-07-06 12:36:34 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -448,7 +448,7 @@ ConvErr ExcelToSc::Convert( const ScTokenArray*& pErgebnis, XclImpStream& aIn, s
                     case EXC_ERR_REF:
                     case EXC_ERR_NAME:
                     case EXC_ERR_NUM:   eOc = ocStop;       break;
-                    case EXC_ERR_NA:    eOc = ocNoValue;    break;
+                    case EXC_ERR_NA:    eOc = ocNotAvail;   break;
                     default:            eOc = ocNoName;
                 }
                 aPool << eOc;
@@ -1746,12 +1746,12 @@ const ScTokenArray* ExcelToSc::GetBoolErr( XclBoolError eType )
     switch( eType )
     {
         case xlErrNull:     eOc = ocStop;       nError = errNoCode;             break;
-        case xlErrDiv0:     eOc = ocStop;       nError = errIllegalFPOperation; break;
+        case xlErrDiv0:     eOc = ocStop;       nError = errDivisionByZero;     break;
         case xlErrValue:    eOc = ocStop;       nError = errNoValue;            break;
         case xlErrRef:      eOc = ocStop;       nError = errNoRef;              break;
         case xlErrName:     eOc = ocStop;       nError = errNoName;             break;
         case xlErrNum:      eOc = ocStop;       nError = errIllegalFPOperation; break;
-        case xlErrNA:       eOc = ocNoValue;    nError = NOVALUE;               break;
+        case xlErrNA:       eOc = ocNotAvail;   nError = NOTAVAILABLE;          break;
         case xlErrTrue:     eOc = ocTrue;       nError = 0;                     break;
         case xlErrFalse:    eOc = ocFalse;      nError = 0;                     break;
         case xlErrUnknown:  eOc = ocStop;       nError = errUnknownState;       break;
