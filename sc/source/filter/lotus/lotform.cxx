@@ -4,9 +4,9 @@
  *
  *  $RCSfile: lotform.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: vg $ $Date: 2007-02-27 12:38:39 $
+ *  last change: $Author: rt $ $Date: 2007-07-06 12:38:55 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -972,7 +972,7 @@ DefTokenId LotusToSc::IndexToToken( BYTE nIndex )
         ocNoName,           //   28
         ocNoName,           //   29
         ocNoName,           //   30
-        ocNoValue,          //   31 Not applicable
+        ocNotAvail,         //   31 Not available
         ocNoName,           //   32 Error
         ocAbs,              //   33 Betrag ABS()
         ocInt,              //   34 Ganzzahl INT()
@@ -990,7 +990,7 @@ DefTokenId LotusToSc::IndexToToken( BYTE nIndex )
         ocExp,              //   46 Exponentialfunktion
         ocMod,              //   47 Modulo
         ocChose,            //   48 Auswahl
-        ocIsNV,             //   49 Is not applicable?
+        ocIsNA,             //   49 Is not available?
         ocIsError,          //   50 Is Error?
         ocFalse,            //   51 FALSE
         ocTrue,             //   52 TRUE
@@ -1503,7 +1503,7 @@ DefTokenId LotusToSc::IndexToTokenWK123( BYTE nIndex )
         ocNot,              //   28 Not (logisch)
         ocPush,             //   29 unaeres Plus
         ocAmpersand,        //   30 Concatenation
-        ocNoValue,          //   31 Not applicable
+        ocNotAvail,         //   31 Not available
         ocNoName,           //   32 Error
         ocAbs,              //   33 Betrag ABS()
         ocInt,              //   34 Ganzzahl INT()
@@ -1521,7 +1521,7 @@ DefTokenId LotusToSc::IndexToTokenWK123( BYTE nIndex )
         ocExp,              //   46 Exponentialfunktion
         ocMod,              //   47 Modulo
         ocChose,            //   48 Auswahl
-        ocIsNV,             //   49 Is not applicable?
+        ocIsNA,             //   49 Is not available?
         ocIsError,          //   50 Is Error?
         ocFalse,            //   51 FALSE
         ocTrue,             //   52 TRUE
