@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xmlstyle.cxx,v $
  *
- *  $Revision: 1.42 $
+ *  $Revision: 1.43 $
  *
- *  last change: $Author: hr $ $Date: 2007-06-27 15:49:16 $
+ *  last change: $Author: rt $ $Date: 2007-07-06 09:45:08 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -880,21 +880,23 @@ Reference < XNameContainer > SvXMLStylesContext::GetStylesContainer(
     {
         Reference< XStyleFamiliesSupplier > xFamiliesSupp(
                                         GetImport().GetModel(), UNO_QUERY );
-        Reference< XNameAccess > xFamilies = xFamiliesSupp->getStyleFamilies();
-        if (xFamilies->hasByName(sName))
+        if ( xFamiliesSupp.is() )
         {
-            Any aAny = xFamilies->getByName( sName );
-
-            xStyles = *(Reference<XNameContainer>*)aAny.getValue();
-            switch( nFamily )
+            Reference< XNameAccess > xFamilies = xFamiliesSupp->getStyleFamilies();
+            if (xFamilies->hasByName(sName))
             {
-            case XML_STYLE_FAMILY_TEXT_PARAGRAPH:
-                ((SvXMLStylesContext *)this)->mxParaStyles = xStyles;
-                break;
+                xStyles.set(xFamilies->getByName( sName ),uno::UNO_QUERY);
 
-            case XML_STYLE_FAMILY_TEXT_TEXT:
-                ((SvXMLStylesContext *)this)->mxTextStyles = xStyles;
-                break;
+                switch( nFamily )
+                {
+                case XML_STYLE_FAMILY_TEXT_PARAGRAPH:
+                    ((SvXMLStylesContext *)this)->mxParaStyles = xStyles;
+                    break;
+
+                case XML_STYLE_FAMILY_TEXT_TEXT:
+                    ((SvXMLStylesContext *)this)->mxTextStyles = xStyles;
+                    break;
+                }
             }
         }
     }
@@ -983,7 +985,8 @@ void SvXMLStylesContext::CopyAutoStylesToDoc()
     {
         SvXMLStyleContext *pStyle = GetStyle( i );
         if( !pStyle || ( pStyle->GetFamily() != XML_STYLE_FAMILY_TEXT_TEXT &&
-            pStyle->GetFamily() != XML_STYLE_FAMILY_TEXT_PARAGRAPH ) )
+            pStyle->GetFamily() != XML_STYLE_FAMILY_TEXT_PARAGRAPH  &&
+            pStyle->GetFamily() != XML_STYLE_FAMILY_TABLE_CELL ) )
             continue;
         pStyle->CreateAndInsert( sal_False );
     }
