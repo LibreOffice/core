@@ -4,9 +4,9 @@
  *
  *  $RCSfile: undoanim.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: kz $ $Date: 2006-12-12 16:27:06 $
+ *  last change: $Author: rt $ $Date: 2007-07-06 13:09:44 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -36,6 +36,9 @@
 #ifndef _SD_UNDO_ANIM_HXX
 #define _SD_UNDO_ANIM_HXX
 
+#include <com/sun/star/uno/Any.hxx>
+#include <com/sun/star/animations/XAnimationNode.hpp>
+
 #ifndef _SVDUNDO_HXX
 #include <svx/svdundo.hxx>
 #endif
@@ -62,6 +65,22 @@ public:
 
 private:
     UndoAnimationImpl*  mpImpl;
+};
+
+struct UndoAnimationPathImpl;
+class UndoAnimationPath : public SdrUndoAction
+{
+public:
+    UndoAnimationPath( SdDrawDocument* pDoc, SdPage* pThePage, const com::sun::star::uno::Reference< ::com::sun::star::animations::XAnimationNode >& xNode );
+    virtual ~UndoAnimationPath();
+
+    virtual void Undo();
+    virtual void Redo();
+
+    virtual String GetComment() const;
+
+private:
+    UndoAnimationPathImpl* mpImpl;
 };
 
 struct UndoTransitionImpl;
