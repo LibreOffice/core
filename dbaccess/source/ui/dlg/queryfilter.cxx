@@ -4,9 +4,9 @@
  *
  *  $RCSfile: queryfilter.cxx,v $
  *
- *  $Revision: 1.33 $
+ *  $Revision: 1.34 $
  *
- *  last change: $Author: rt $ $Date: 2007-04-26 08:01:01 $
+ *  last change: $Author: rt $ $Date: 2007-07-06 08:19:08 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -38,6 +38,9 @@
 
 #ifndef DBAUI_QUERYFILTER_HXX
 #include "queryfilter.hxx"
+#endif
+#ifndef _DBAUI_MODULE_DBU_HXX_
+#include "moduledbu.hxx"
 #endif
 #ifndef _COM_SUN_STAR_SDBC_DATATYPE_HPP_
 #include <com/sun/star/sdbc/DataType.hpp>
