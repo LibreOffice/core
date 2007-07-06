@@ -4,9 +4,9 @@
  *
  *  $RCSfile: pcrservices.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: kz $ $Date: 2006-12-13 12:01:51 $
+ *  last change: $Author: rt $ $Date: 2007-07-06 08:52:00 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -65,6 +65,7 @@ extern "C" void SAL_CALL createRegistryInfo_EventHandler();
 extern "C" void SAL_CALL createRegistryInfo_GenericPropertyHandler();
 extern "C" void SAL_CALL createRegistryInfo_ObjectInspectorModel();
 extern "C" void SAL_CALL createRegistryInfo_SubmissionPropertyHandler();
+extern "C" void SAL_CALL createRegistryInfo_StringRepresentation();
 
 //---------------------------------------------------------------------------------------
 
@@ -89,6 +90,7 @@ extern "C" void SAL_CALL pcr_initializeModule()
         createRegistryInfo_GenericPropertyHandler();
         createRegistryInfo_ObjectInspectorModel();
         createRegistryInfo_SubmissionPropertyHandler();
+        createRegistryInfo_StringRepresentation();
         s_bInit = sal_True;
     }
 }
