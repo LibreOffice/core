@@ -4,9 +4,9 @@
  *
  *  $RCSfile: definitioncontainer.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: obo $ $Date: 2006-07-10 15:14:03 $
+ *  last change: $Author: rt $ $Date: 2007-07-06 07:55:03 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -90,7 +90,9 @@
 #ifndef _RTL_REF_HXX_
 #include <rtl/ref.hxx>
 #endif
-
+#ifndef _DBASHARED_APITOOLS_HXX_
+#include "apitools.hxx"
+#endif
 //........................................................................
 namespace dbaccess
 {
