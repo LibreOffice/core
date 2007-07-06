@@ -4,9 +4,9 @@
  *
  *  $RCSfile: textview.cxx,v $
  *
- *  $Revision: 1.54 $
+ *  $Revision: 1.55 $
  *
- *  last change: $Author: hr $ $Date: 2007-06-27 21:32:13 $
+ *  last change: $Author: rt $ $Date: 2007-07-06 10:05:46 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -379,7 +379,8 @@ void TextView::ImpPaint( OutputDevice* pOut, const Point& rStartPos, Rectangle c
         aColor.SetTransparency( 0 );
         if ( aColor != aFont.GetFillColor() )
         {
-            aFont.SetTransparent( FALSE );
+            if( aFont.IsTransparent() )
+                aColor = Color( COL_TRANSPARENT );
             aFont.SetFillColor( aColor );
             mpImpl->mpTextEngine->maFont = aFont;
         }
@@ -569,15 +570,20 @@ void TextView::ImpShowHideSelection( BOOL bShow, const TextSelection* pRange )
         }
         else
         {
-            Rectangle aOutArea( Point( 0, 0 ), mpImpl->mpWindow->GetOutputSizePixel() );
-            Point aStartPos( ImpGetOutputStartPos( mpImpl->maStartDocPos ) );
-            TextSelection aRange( *pRangeOrSelection );
-            aRange.Justify();
-            BOOL bVisCursor = mpImpl->mpCursor->IsVisible();
-            mpImpl->mpCursor->Hide();
-            ImpPaint( mpImpl->mpWindow, aStartPos, &aOutArea, &aRange, bShow ? &mpImpl->maSelection : NULL );
-            if ( bVisCursor )
-                mpImpl->mpCursor->Show();
+            if( mpImpl->mpWindow->IsPaintTransparent() )
+                mpImpl->mpWindow->Invalidate();
+            else
+            {
+                Rectangle aOutArea( Point( 0, 0 ), mpImpl->mpWindow->GetOutputSizePixel() );
+                Point aStartPos( ImpGetOutputStartPos( mpImpl->maStartDocPos ) );
+                TextSelection aRange( *pRangeOrSelection );
+                aRange.Justify();
+                BOOL bVisCursor = mpImpl->mpCursor->IsVisible();
+                mpImpl->mpCursor->Hide();
+                ImpPaint( mpImpl->mpWindow, aStartPos, &aOutArea, &aRange, bShow ? &mpImpl->maSelection : NULL );
+                if ( bVisCursor )
+                    mpImpl->mpCursor->Show();
+            }
         }
     }
 }
