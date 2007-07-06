@@ -4,9 +4,9 @@
  *
  *  $RCSfile: composerdialogs.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 16:50:51 $
+ *  last change: $Author: rt $ $Date: 2007-07-06 08:44:52 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -79,8 +79,8 @@ namespace dbaui
     class ComposerDialog
             :public ComposerDialog_BASE
             ,public ComposerDialog_PBASE
-            ,public OModuleClient
     {
+        OModuleClient m_aModuleClient;
     protected:
         // <properties>
         ::com::sun::star::uno::Reference< ::com::sun::star::sdb::XSingleSelectQueryComposer >
