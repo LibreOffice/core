@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.29 $
+#   $Revision: 1.30 $
 #
-#   last change: $Author: obo $ $Date: 2006-07-10 14:20:56 $
+#   last change: $Author: rt $ $Date: 2007-07-06 06:47:42 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -72,7 +72,9 @@ EXCEPTIONSFILES=\
         $(SLO)$/TSortIndex.obj                          \
         $(SLO)$/dbcharset.obj                           \
         $(SLO)$/propertyids.obj                         \
-        $(SLO)$/FValue.obj
+        $(SLO)$/FValue.obj                              \
+        $(SLO)$/paramwrapper.obj                        \
+        $(SLO)$/statementcomposer.obj
 
 SLOFILES=\
         $(EXCEPTIONSFILES)								\
