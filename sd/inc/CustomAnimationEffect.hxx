@@ -4,9 +4,9 @@
  *
  *  $RCSfile: CustomAnimationEffect.hxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: kz $ $Date: 2006-12-12 16:21:18 $
+ *  last change: $Author: rt $ $Date: 2007-07-06 13:09:19 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -71,6 +71,7 @@
 #include <list>
 #include <map>
 
+class SdrPathObj;
 
 namespace sd {
 
@@ -109,7 +110,9 @@ public:
     const rtl::OUString&    getPresetId() const { return maPresetId; }
     const rtl::OUString&    getPresetSubType() const { return maPresetSubType; }
     const rtl::OUString&    getProperty() const { return maProperty; }
+
     sal_Int16               getPresetClass() const { return mnPresetClass; }
+    void                    setPresetClass( sal_Int16 nPresetClass );
 
     sal_Int16       getNodeType() const { return mnNodeType; }
     void            setNodeType( sal_Int16 nNodeType );
@@ -185,6 +188,9 @@ public:
     sal_Int16       getTargetSubItem() const { return mnTargetSubItem; }
     void            setTargetSubItem( sal_Int16 nSubItem );
 
+    ::rtl::OUString getPath() const;
+    void setPath( const ::rtl::OUString& rPath );
+
     bool checkForText();
     bool calculateIterateDuration();
 
@@ -204,6 +210,10 @@ public:
     // static helpers
     static sal_Int32 get_node_type( const ::com::sun::star::uno::Reference< ::com::sun::star::animations::XAnimationNode >& xNode );
     static sal_Int32 getNumberOfSubitems( const ::com::sun::star::uno::Any& aTarget, sal_Int16 nIterateType );
+
+    SdrPathObj* createSdrPathObjFromPath();
+    void updateSdrPathObjFromPath( SdrPathObj& rPathObj );
+    void updatePathFromSdrPathObj( const SdrPathObj& rPathObj );
 
 protected:
     void setEffectSequence( EffectSequenceHelper* pSequence ) { mpEffectSequence = pSequence; }
@@ -307,6 +317,7 @@ public:
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::animations::XAnimationNode > getRootNode();
 
     CustomAnimationEffectPtr append( const CustomAnimationPresetPtr& pDescriptor, const ::com::sun::star::uno::Any& rTarget, double fDuration = -1.0 );
+    CustomAnimationEffectPtr append( const SdrPathObj& rPathObj, const ::com::sun::star::uno::Any& rTarget, double fDuration = -1.0 );
     void append( const CustomAnimationEffectPtr& pEffect );
     void insert( EffectSequence::iterator& rPos, const CustomAnimationEffectPtr& pEffect );
     void replace( const CustomAnimationEffectPtr& pEffect, const CustomAnimationPresetPtr& pDescriptor, double fDuration = -1.0 );
@@ -317,6 +328,10 @@ public:
     void createEffectsequence( const ::com::sun::star::uno::Reference< ::com::sun::star::animations::XAnimationNode >& xNode );
     void processAfterEffect( const ::com::sun::star::uno::Reference< ::com::sun::star::animations::XAnimationNode >& xNode );
     void createEffects( const ::com::sun::star::uno::Reference< ::com::sun::star::animations::XAnimationNode >& xNode );
+
+    sal_Int32 getCount() const { return sal::static_int_cast< sal_Int32 >( maEffects.size() ); }
+
+    virtual CustomAnimationEffectPtr findEffect( const ::com::sun::star::uno::Reference< ::com::sun::star::animations::XAnimationNode >& xNode ) const;
 
     virtual bool disposeShape( const com::sun::star::uno::Reference< com::sun::star::drawing::XShape >& xShape );
     virtual void insertTextRange( const com::sun::star::uno::Any& aTarget );
@@ -354,6 +369,9 @@ public:
     ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShape > getTriggerShape() const { return mxEventSource; }
     void setTriggerShape( const ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShape >& xTrigger ) { mxEventSource = xTrigger; }
 
+    virtual sal_Int32 getOffsetFromEffect( const CustomAnimationEffectPtr& xEffect ) const;
+    virtual CustomAnimationEffectPtr getEffectFromOffset( sal_Int32 nOffset ) const;
+
 protected:
     virtual void implRebuild();
     virtual void reset();
@@ -380,6 +398,7 @@ class MainSequence;
 class InteractiveSequence : public EffectSequenceHelper
 {
 friend class MainSequence;
+friend class MainSequenceChangeGuard;
 
 public:
     InteractiveSequence( const ::com::sun::star::uno::Reference< ::com::sun::star::animations::XTimeContainer >& xSequenceRoot, MainSequence* pMainSequence );
@@ -400,6 +419,7 @@ class MainSequence : public EffectSequenceHelper, public ISequenceListener
 {
     friend class UndoAnimation;
     friend class MainSequenceRebuildGuard;
+    friend class MainSequenceChangeGuard;
 
 public:
     MainSequence();
@@ -411,6 +431,8 @@ public:
 
     /** this method rebuilds the animation nodes */
     virtual void rebuild();
+
+    virtual CustomAnimationEffectPtr findEffect( const ::com::sun::star::uno::Reference< ::com::sun::star::animations::XAnimationNode >& xNode ) const;
 
     virtual bool disposeShape( const com::sun::star::uno::Reference< com::sun::star::drawing::XShape >& xShape );
     virtual void insertTextRange( const com::sun::star::uno::Any& aTarget );
@@ -429,6 +451,9 @@ public:
 
     /** starts a timer that rebuilds the API core from the internal structure after 1 second */
     void startRebuildTimer();
+
+    virtual sal_Int32 getOffsetFromEffect( const CustomAnimationEffectPtr& xEffect ) const;
+    virtual CustomAnimationEffectPtr getEffectFromOffset( sal_Int32 nOffset ) const;
 
 protected:
     /** permits rebuilds until unlockRebuilds() is called. All rebuild calls during a locked sequence are
@@ -457,6 +482,7 @@ protected:
 
     long mnRebuildLockGuard;
     bool mbPendingRebuildRequest;
+    sal_Int32 mbIgnoreChanges;
 };
 
 typedef boost::shared_ptr< MainSequence > MainSequencePtr;
