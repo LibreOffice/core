@@ -4,9 +4,9 @@
  *
  *  $RCSfile: svdotext.cxx,v $
  *
- *  $Revision: 1.82 $
+ *  $Revision: 1.83 $
  *
- *  last change: $Author: hr $ $Date: 2007-06-27 19:08:23 $
+ *  last change: $Author: rt $ $Date: 2007-07-06 07:41:46 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -849,7 +849,7 @@ void SdrTextObj::ImpSetContourPolygon( SdrOutliner& rOutliner, Rectangle& rAncho
             SdrObject* pCopy = Clone();
             pCopy->SetMergedItem(SdrShadowItem(FALSE));
             *pContourPolyPolygon = pCopy->TakeContour();
-            delete pCopy;
+            SdrObject::Free( pCopy );
         }
         else
         {
