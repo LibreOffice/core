@@ -4,9 +4,9 @@
  *
  *  $RCSfile: UnoControlDialogModel.idl,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-07 21:22:46 $
+ *  last change: $Author: rt $ $Date: 2007-07-06 14:30:54 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -161,6 +161,14 @@ published service UnoControlDialogModel
     /** specifies the text that is displayed in the caption bar of the dialog.
      */
     [property] string Title;
+
+    //-------------------------------------------------------------------------
+
+    /** If set to true the dialog will have the desktop as parent.
+
+        @since OOo 2.3.0
+     */
+    [optional, property] boolean DesktopAsParent;
 
 };
 
