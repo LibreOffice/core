@@ -106,5 +106,7 @@ mkdir: %_DEST%\inc%_EXT%\xmloff
 ..\inc\xmloff\ControlBorderHandler.hxx %_DEST%\inc%_EXT%\xmloff\ControlBorderHandler.hxx
 ..\inc\xmloff\XMLConstantsPropertyHandler.hxx %_DEST%\inc%_EXT%\xmloff\XMLConstantsPropertyHandler.hxx
 ..\inc\xmloff\XMLStringVector.hxx %_DEST%\inc%_EXT%\xmloff\XMLStringVector.hxx
+..\inc\txtimppr.hxx %_DEST%\inc%_EXT%\xmloff\txtimppr.hxx
+..\inc\xmloff\XMLCharContext.hxx %_DEST%\inc%_EXT%\xmloff\XMLCharContext.hxx
 ..\xml\components.xml %_DEST%\xml%_EXT%\components.xml
 
