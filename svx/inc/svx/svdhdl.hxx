@@ -4,9 +4,9 @@
  *
  *  $RCSfile: svdhdl.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: vg $ $Date: 2007-04-11 16:21:10 $
+ *  last change: $Author: rt $ $Date: 2007-07-06 13:17:50 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -114,7 +114,9 @@ enum SdrHdlKind
     HDL_ANCHOR_TR,  // #101688# Anchor handle with (0,0) at top right for SW
 
     // for SJ and the CustomShapeHandles:
-    HDL_CUSTOMSHAPE1
+    HDL_CUSTOMSHAPE1,
+
+    HDL_SMARTTAG
 };
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
