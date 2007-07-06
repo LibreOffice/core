@@ -4,9 +4,9 @@
  *
  *  $RCSfile: swtable.hxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: vg $ $Date: 2007-05-25 13:00:00 $
+ *  last change: $Author: rt $ $Date: 2007-07-06 09:51:24 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -439,9 +439,8 @@ public:
     // Leere Boxen haben den ReturnWert USHRT_MAX !!
     USHORT IsFormulaOrValueBox() const;
 
-    // fuers Laden - tauscht bei Value Zellen den Inhalt aus, falls sie
-    // fuer die Sprache System formatiert sind.
-    void ChgByLanguageSystem();
+    // Loading of a document requires an actualisation of cells with values
+    void ActualiseValueBox();
 
     DECL_FIXEDMEMPOOL_NEWDEL(SwTableBox)
 
