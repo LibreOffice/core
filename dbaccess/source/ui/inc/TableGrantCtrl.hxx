@@ -4,9 +4,9 @@
  *
  *  $RCSfile: TableGrantCtrl.hxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: hr $ $Date: 2006-06-20 03:14:12 $
+ *  last change: $Author: rt $ $Date: 2007-07-06 08:25:15 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -50,6 +50,9 @@
 #ifndef _COMPHELPER_STLTYPES_HXX_
 #include <comphelper/stl_types.hxx>
 #endif
+#ifndef _DBAUI_MODULE_DBU_HXX_
+#include "moduledbu.hxx"
+#endif
 
 class Edit;
 namespace dbaui
@@ -64,6 +67,8 @@ class OTableGrantControl : public ::svt::EditBrowseBox
     } TPrivileges;
 
     DECLARE_STL_USTRINGACCESS_MAP(TPrivileges,TTablePrivilegeMap);
+
+    OModuleClient        m_aModuleClient;
 
     ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess >    m_xUsers;
     ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess >    m_xTables;
