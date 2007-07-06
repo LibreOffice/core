@@ -4,9 +4,9 @@
  *
  *  $RCSfile: EnhancedCustomShapeEngine.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: hr $ $Date: 2007-06-27 16:43:42 $
+ *  last change: $Author: rt $ $Date: 2007-07-06 07:32:24 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -289,7 +289,7 @@ void SetTemporary( ::com::sun::star::uno::Reference< ::com::sun::star::drawing::
     {
         SvxShape* pShape = SvxShape::getImplementation( xShape );
         if ( pShape )
-            pShape->SetTemporaryShape( sal_True );
+            pShape->TakeSdrObjectOwnership();
 /*
         ::com::sun::star::uno::Reference<
             ::com::sun::star::drawing::XShapes > xShapes( xShape, ::com::sun::star::uno::UNO_QUERY );
@@ -338,14 +338,17 @@ REF( com::sun::star::drawing::XShape ) SAL_CALL EnhancedCustomShapeEngine::rende
             {
                 SdrObject* pRenderedFontWork = EnhancedCustomShapeFontWork::CreateFontWork( pRenderedShape, pSdrObjCustomShape );
                 if ( pRenderedFontWork )
-                    delete pRenderedShape, pRenderedShape = pRenderedFontWork;
+                {
+                    SdrObject::Free( pRenderedShape );
+                    pRenderedShape = pRenderedFontWork;
+                }
             }
             SdrObject* pRenderedShape3d = EnhancedCustomShape3d::Create3DObject( pRenderedShape, pSdrObjCustomShape );
             if ( pRenderedShape3d )
             {
                 bFlipV = bFlipH = sal_False;
                 nRotateAngle = 0;
-                delete pRenderedShape;
+                SdrObject::Free( pRenderedShape );
                 pRenderedShape = pRenderedShape3d;
             }
             Rectangle aRect( pSdrObjCustomShape->GetSnapRect() );
@@ -467,9 +470,9 @@ com::sun::star::drawing::PolyPolygonBezierCoords SAL_CALL EnhancedCustomShapeEng
                         aPolyPolygon.append(aPP);
                     }
                 }
-                delete pNewObj;
+                SdrObject::Free( pNewObj );
             }
-            delete pObj;
+            SdrObject::Free( pObj );
             SvxConvertB2DPolyPolygonToPolyPolygonBezier( aPolyPolygon, aPolyPolygonBezierCoords );
         }
     }
