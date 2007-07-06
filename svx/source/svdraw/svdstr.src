@@ -4,9 +4,9 @@
  *
  *  $RCSfile: svdstr.src,v $
  *
- *  $Revision: 1.89 $
+ *  $Revision: 1.90 $
  *
- *  last change: $Author: ihi $ $Date: 2007-04-19 14:41:04 $
+ *  last change: $Author: rt $ $Date: 2007-07-06 13:22:43 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -3050,7 +3050,7 @@ Bitmap SIP_SA_FINE_MARKERS
 };
 
 // #100499#
-Bitmap BMP_OLEOBJ
+Bitmap BMP_SVXOLEOBJ
 {
     File = "oleobj.bmp" ;
 };
