@@ -4,9 +4,9 @@
  *
  *  $RCSfile: docvw.src,v $
  *
- *  $Revision: 1.47 $
+ *  $Revision: 1.48 $
  *
- *  last change: $Author: hr $ $Date: 2007-06-27 13:24:08 $
+ *  last change: $Author: rt $ $Date: 2007-07-06 11:55:16 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -305,5 +305,5 @@ String STR_TABLE_SELECT_COL
 
 String STR_SMARTTAG_CLICK
 {
-    Text [ en-US ] = "CTRL + click to open Smart Tag menu" ;
+    Text [ en-US ] = "Ctrl-click to open Smart Tag menu" ;
 };
