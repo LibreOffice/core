@@ -4,9 +4,9 @@
  *
  *  $RCSfile: file_ooo.scp,v $
  *
- *  $Revision: 1.203 $
+ *  $Revision: 1.204 $
  *
- *  last change: $Author: rt $ $Date: 2007-07-05 09:19:22 $
+ *  last change: $Author: rt $ $Date: 2007-07-06 09:28:15 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1649,6 +1649,20 @@ File gid_File_Oo_Office_Common_Xcs
     Styles = (PACKED,PATCH);
     Dir = gid_Dir_Share_Registry_Schema_Org_Openoffice_Office;
     Name = "/registry/schema/org/openoffice/Office/Common.xcs";
+End
+
+File gid_File_Oo_Office_Extendedcolorscheme_Xcs
+    TXT_FILE_BODY;
+    Styles = (PACKED,PATCH);
+    Dir = gid_Dir_Share_Registry_Schema_Org_Openoffice_Office;
+    Name = "/registry/schema/org/openoffice/Office/ExtendedColorScheme.xcs";
+End
+
+File gid_File_Oo_Office_Extendedcolorscheme_Xcu
+    TXT_FILE_BODY;
+    Styles = (PACKED,PATCH);
+    Dir = gid_Dir_Share_Registry_Data_Org_Openoffice_Office;
+    Name = "/registry/data/org/openoffice/Office/ExtendedColorScheme.xcu";
 End
 
 File gid_File_Oo_Office_Paths_Xcs
