@@ -4,9 +4,9 @@
  *
  *  $RCSfile: globstr.hrc,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: obo $ $Date: 2007-06-13 09:05:13 $
+ *  last change: $Author: rt $ $Date: 2007-07-06 12:30:16 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -549,6 +549,11 @@
 #define STR_HF_CUSTOM_FOOTER        410
 
 #define STR_ERR_DATAPILOT_INPUT     411
+
+#define STR_DIV_ZERO                412
+#define STR_LONG_ERR_DIV_ZERO       413
+#define STR_NUM_ERROR               414
+#define STR_NULL_ERROR              415
 
 #define STR_RECALC_MANUAL           416
 #define STR_RECALC_AUTO             417
