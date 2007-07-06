@@ -4,9 +4,9 @@
  *
  *  $RCSfile: olepersist.cxx,v $
  *
- *  $Revision: 1.35 $
+ *  $Revision: 1.36 $
  *
- *  last change: $Author: obo $ $Date: 2007-01-23 07:33:51 $
+ *  last change: $Author: rt $ $Date: 2007-07-06 10:10:50 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -98,20 +98,17 @@
 #include <rtl/logfile.hxx>
 
 #include <comphelper/storagehelper.hxx>
+#include <comphelper/mimeconfighelper.hxx>
 #include <comphelper/classids.hxx>
 
 
 #include <olecomponent.hxx>
 #include <closepreventer.hxx>
-#include <convert.hxx>
 
 using namespace ::com::sun::star;
+using namespace ::comphelper;
 
-//------------------------------------------------------
-// TODO: probably later those common functions should be moved
-//       to a separate helper library.
-
-//-----------------------------------------------
+//-------------------------------------------------------------------------
 sal_Bool KillFile_Impl( const ::rtl::OUString& aURL, const uno::Reference< lang::XMultiServiceFactory >& xFactory )
 {
     if ( !xFactory.is() )
@@ -832,7 +829,7 @@ uno::Reference< io::XStream > OleEmbeddedObject::TryToRetrieveCachedVisualRepres
                     {
                         uno::Reference< embed::XClassifiedObject > xClassified( xNameContainer, uno::UNO_QUERY_THROW );
                         uno::Sequence< sal_Int8 > aClassID;
-                        if ( ClassIDsEqual( xClassified->getClassID(), GetSequenceClassID( SO3_OUT_CLASSID ) ) )
+                        if ( MimeConfigurationHelper::ClassIDsEqual( xClassified->getClassID(), MimeConfigurationHelper::GetSequenceClassID( SO3_OUT_CLASSID ) ) )
                         {
                             // this is an OLE object wrongly stored in 5.0 format
                             // this object must be repaired since SO7 has done it
@@ -1029,8 +1026,8 @@ void OleEmbeddedObject::OnViewChanged_Impl()
     if ( m_aVerbExecutionController.CanDoNotification()
       && m_pOleComponent && m_nUpdateMode == embed::EmbedUpdateModes::ALWAYS_UPDATE )
     {
-        OSL_ENSURE( ClassIDsEqual( m_aClassID, GetSequenceClassID( 0x852ee1c9, 0x9058, 0x44ba, 0x8c,0x6c,0x0c,0x5f,0xc6,0x6b,0xdb,0x8d ) )
-                    || ClassIDsEqual( m_aClassID, GetSequenceClassID( 0xcf1b4491, 0xbea3, 0x4c9f, 0xa7,0x0f,0x22,0x1b,0x1e,0xca,0xef,0x3e ) ),
+        OSL_ENSURE( MimeConfigurationHelper::ClassIDsEqual( m_aClassID, MimeConfigurationHelper::GetSequenceClassID( 0x852ee1c9, 0x9058, 0x44ba, 0x8c,0x6c,0x0c,0x5f,0xc6,0x6b,0xdb,0x8d ) )
+                    || MimeConfigurationHelper::ClassIDsEqual( m_aClassID, MimeConfigurationHelper::GetSequenceClassID( 0xcf1b4491, 0xbea3, 0x4c9f, 0xa7,0x0f,0x22,0x1b,0x1e,0xca,0xef,0x3e ) ),
                     "Expected to be triggered for STAMPIT only! Please contact developers!\n" );
 
         // The view is changed while the object is in running state, save the new object
