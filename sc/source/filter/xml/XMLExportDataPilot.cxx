@@ -4,9 +4,9 @@
  *
  *  $RCSfile: XMLExportDataPilot.cxx,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: vg $ $Date: 2007-05-22 20:02:36 $
+ *  last change: $Author: rt $ $Date: 2007-07-06 12:40:04 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -814,7 +814,7 @@ void ScXMLExportDataPilot::WriteDataPilots(const uno::Reference <sheet::XSpreads
                                 {
                                     ScAddress aButtonAddr(nCol, nButtonRow, aOutRange.aStart.Tab());
                                     ScRangeStringConverter::GetStringFromAddress(
-                                        sOUButtonList, aButtonAddr, pDoc, sal_True );
+                                        sOUButtonList, aButtonAddr, pDoc, ' ', sal_True );
                                 }
                             }
                             pAttr = aAttrItr.GetNext(nCol, nRow1, nRow2);
