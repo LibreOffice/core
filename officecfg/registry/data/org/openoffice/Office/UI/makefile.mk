@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.14 $
+#   $Revision: 1.15 $
 #
-#   last change: $Author: ihi $ $Date: 2007-04-16 15:34:45 $
+#   last change: $Author: rt $ $Date: 2007-07-06 06:51:30 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -74,7 +74,9 @@ LOCALIZEDFILES= \
     WriterGlobalWindowState.xcu \
     WriterWebWindowState.xcu \
     WriterCommands.xcu\
-    GenericCategories.xcu
+    GenericCategories.xcu\
+    ReportCommands.xcu \
+    DbReportWindowState.xcu
 
 XCUFILES= \
     $(LOCALIZEDFILES) \
