@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.9 $
+#   $Revision: 1.10 $
 #
-#   last change: $Author: rt $ $Date: 2005-09-08 02:45:22 $
+#   last change: $Author: rt $ $Date: 2007-07-06 10:19:46 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -51,8 +51,9 @@ SLOFILES=\
             $(SLO)$/namecontainer.obj \
             $(SLO)$/enumhelper.obj	\
             $(SLO)$/container.obj \
+            $(SLO)$/containermultiplexer.obj \
             $(SLO)$/IndexedPropertyValuesContainer.obj	\
-                        $(SLO)$/embeddedobjectcontainer.obj      \
+            $(SLO)$/embeddedobjectcontainer.obj      \
             $(SLO)$/NamedPropertyValuesContainer.obj
 
 # --- Targets ----------------------------------
