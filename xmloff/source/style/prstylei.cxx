@@ -4,9 +4,9 @@
  *
  *  $RCSfile: prstylei.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: hr $ $Date: 2007-06-27 15:43:12 $
+ *  last change: $Author: rt $ $Date: 2007-07-06 09:44:28 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -248,6 +248,8 @@ void XMLPropStyleContext::CreateAndInsert( sal_Bool bOverwrite )
                     OUString sParent( GetParentName() );
                     if( sParent.getLength() )
                         sParent = GetImport().GetStyleDisplayName( GetFamily(), sParent );
+                    else
+                        sParent =  rtl::OUString::createFromAscii("Standard");
                     pProps->Value <<= sParent;
                     ++pProps;
                     pProps->Name = rtl::OUString::createFromAscii("ParaConditionalStyleName");
