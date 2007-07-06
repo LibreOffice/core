@@ -4,9 +4,9 @@
  *
  *  $RCSfile: fusel.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: vg $ $Date: 2007-05-22 20:06:26 $
+ *  last change: $Author: rt $ $Date: 2007-07-06 12:43:18 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -36,13 +36,11 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_sc.hxx"
 
-
-
 // INCLUDE ---------------------------------------------------------------
 
+#include <com/sun/star/embed/EmbedStates.hpp>
+
 #include <svx/eeitem.hxx>
-
-
 #include <svx/flditem.hxx>
 #include <svx/svdoole2.hxx>
 #include <svx/svdotext.hxx>
@@ -54,12 +52,7 @@
 #include <svx/svdpagv.hxx>
 #include <svx/outlobj.hxx>
 #include <svx/svdocapt.hxx>
-
-
-#ifndef _COM_SUN_STAR_EMBED_EMBEDSTATES_HPP_
-#include <com/sun/star/embed/EmbedStates.hpp>
-#endif
-
+#include <sfx2/app.hxx>
 
 #include "fusel.hxx"
 #include "sc.hrc"
@@ -69,6 +62,7 @@
 #include "drawpage.hxx"
 #include "globstr.hrc"
 #include "drwlayer.hxx"
+#include "userdat.hxx"
 #include "scmod.hxx"
 
 // -----------------------------------------------------------------------
@@ -125,10 +119,10 @@ BOOL __EXPORT FuSelection::MouseButtonDown(const MouseEvent& rMEvt)
 {
     // #95491# remember button state for creation of own MouseEvents
     SetMouseButtonCode(rMEvt.GetButtons());
-
+    const bool bSelectionOnly = rMEvt.IsRight();
     if ( pView->IsAction() )
     {
-        if ( rMEvt.IsRight() )
+        if ( bSelectionOnly )
             pView->BckAction();
         return TRUE;
     }
@@ -189,6 +183,61 @@ BOOL __EXPORT FuSelection::MouseButtonDown(const MouseEvent& rMEvt)
             }
             else
             {
+                String sURL, sTarget;
+                if ( !bAlt && pView->PickObj(aMDPos, pObj, pPV, SDRSEARCH_ALSOONMASTER))
+                {
+                   // Support for imported Excel docs
+                   // Excel is of course not consistent and allows
+                   // a hyperlink to be assigned for an object group
+                   // and even though the hyperlink is exported in the Escher layer
+                   // its never used, when dealing with a group object the link
+                   // associated with the clicked object is used only
+
+                   // additionally you can also select a macro in Excel for a grouped
+                   // objects and this results in the macro being set for the elements
+                   // in the group and no macro is exported for the group
+
+                   // if a macro and hlink are defined favour the hlink
+
+                   // If a group object has no hyperlink use the hyperlink of the
+                   // object clicked
+
+                   if ( pObj->IsGroupObject() )
+                   {
+                       SdrObject* pHit = NULL;
+                       if ( pView->PickObj(aMDPos, pHit, pPV, SDRSEARCH_DEEP ) )
+                           pObj = pHit;
+                   }
+
+                   ScMacroInfo* pInfo = ScDrawLayer::GetMacroInfo( pObj, TRUE );
+#ifdef ISSUE66550_HLINK_FOR_SHAPES
+                   // For interoperability favour links over macros if both are defined
+                   if ( pInfo->GetHlink().getLength() > 0 )
+                   {
+                       OSL_TRACE("** Got URL");
+                       sURL = pInfo->GetHlink();
+                   }
+                   else if ( pInfo->GetMacro().getLength() > 0 )
+#else
+                   if ( pInfo->GetMacro().getLength() > 0 )
+#endif
+                   {
+                       SfxObjectShell* pObjSh = SfxObjectShell::Current();
+                       if ( pObjSh && SfxApplication::IsXScriptURL( pInfo->GetMacro() ) )
+                       {
+                           uno::Any aRet;
+                           uno::Sequence< sal_Int16 > aOutArgsIndex;
+                           uno::Sequence< uno::Any > aOutArgs;
+                           uno::Sequence< uno::Any >* pInArgs =
+                               new uno::Sequence< uno::Any >(0);
+                           pObjSh->CallXScript( pInfo->GetMacro(),
+                               *pInArgs, aRet, aOutArgsIndex, aOutArgs);
+                           pViewShell->FakeButtonUp( pViewShell->GetViewData()->GetActivePart() );
+                           return TRUE;        // kein CaptureMouse etc.
+                       }
+                   }
+                }
+
                 //  URL / ImageMap
 
                 SdrViewEvent aVEvt;
@@ -202,20 +251,23 @@ BOOL __EXPORT FuSelection::MouseButtonDown(const MouseEvent& rMEvt)
                                 ScDrawLayer::GetHitIMapObject( aVEvt.pObj, aMDPos, *pWindow );
                         if ( pIMapObj && pIMapObj->GetURL().Len() )
                         {
-                            ScGlobal::OpenURL( pIMapObj->GetURL(), pIMapObj->GetTarget() );
-
-                            pViewShell->FakeButtonUp( pViewShell->GetViewData()->GetActivePart() );
-                            return TRUE;        // kein CaptureMouse etc.
+                            sURL = pIMapObj->GetURL();
+                            sTarget = pIMapObj->GetTarget();
                         }
                     }
                     if ( aVEvt.eEvent == SDREVENT_EXECUTEURL && aVEvt.pURLField )   // URL
                     {
-                        ScGlobal::OpenURL( aVEvt.pURLField->GetURL(),
-                                            aVEvt.pURLField->GetTargetFrame() );
-
-                        pViewShell->FakeButtonUp( pViewShell->GetViewData()->GetActivePart() );
-                        return TRUE;        // kein CaptureMouse etc.
+                        sURL = aVEvt.pURLField->GetURL();
+                        sTarget = aVEvt.pURLField->GetTargetFrame();
                     }
+                }
+
+                // open hyperlink, if found at object or in object's text
+                if ( sURL.Len() > 0 )
+                {
+                    ScGlobal::OpenURL( sURL, sTarget );
+                    pViewShell->FakeButtonUp( pViewShell->GetViewData()->GetActivePart() );
+                    return TRUE;        // kein CaptureMouse etc.
                 }
 
                 //  Is another object being edited in this view?
