@@ -4,9 +4,9 @@
  *
  *  $RCSfile: formstrings.hxx,v $
  *
- *  $Revision: 1.35 $
+ *  $Revision: 1.36 $
  *
- *  last change: $Author: rt $ $Date: 2007-07-03 13:07:27 $
+ *  last change: $Author: rt $ $Date: 2007-07-06 08:49:03 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -276,6 +276,7 @@ namespace pcr
     PCR_CONSTASCII_STRING( PROPERTY_AUTOLINEBREAK,          "AutomaticLineBreak");
     PCR_CONSTASCII_STRING( PROPERTY_TEXTTYPE,               "TextType");
     PCR_CONSTASCII_STRING( PROPERTY_RICHTEXT,               "RichText");
+    PCR_CONSTASCII_STRING( PROPERTY_ROWSET,                 "RowSet");
 
     // services
     PCR_CONSTASCII_STRING( SERVICE_COMPONENT_GROUPBOX,      "com.sun.star.form.component.GroupBox" );
