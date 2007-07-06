@@ -4,9 +4,9 @@
  *
  *  $RCSfile: svdoole2.cxx,v $
  *
- *  $Revision: 1.79 $
+ *  $Revision: 1.80 $
  *
- *  last change: $Author: hr $ $Date: 2007-06-27 19:07:18 $
+ *  last change: $Author: rt $ $Date: 2007-07-06 13:21:59 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1320,7 +1320,7 @@ sal_Bool SdrOle2Obj::DoPaintObject(XOutputDevice& rOut, const SdrPaintInfoRec& r
             pOutDev->SetLineColor(Color(COL_LIGHTGRAY));
             pOutDev->DrawRect(aOutRect);
 
-            Bitmap aBitmap(ResId(BMP_OLEOBJ, *ImpGetResMgr()));
+            Bitmap aBitmap(ResId(BMP_SVXOLEOBJ, *ImpGetResMgr()));
             Rectangle aSnapRect(GetSnapRect());
             Size aBitmapSize(pOutDev->PixelToLogic(aBitmap.GetSizePixel()));
 
