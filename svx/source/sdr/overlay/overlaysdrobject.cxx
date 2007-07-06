@@ -4,9 +4,9 @@
  *
  *  $RCSfile: overlaysdrobject.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: hr $ $Date: 2007-06-27 18:49:05 $
+ *  last change: $Author: rt $ $Date: 2007-07-06 13:19:40 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -85,6 +85,17 @@ namespace sdr
 
         OverlaySdrObject::~OverlaySdrObject()
         {
+        }
+
+        sal_Bool OverlaySdrObject::isHit(const basegfx::B2DPoint& rPos, double fTol) const
+        {
+            if(isHittable())
+            {
+                Point aPnt( (long)rPos.getX(), (long)rPos.getY() );
+                return mrSdrObject.CheckHit(aPnt, (USHORT)fTol, 0) != 0 ? sal_True : sal_False;
+            }
+
+            return sal_False;
         }
     } // end of namespace overlay
 } // end of namespace sdr
