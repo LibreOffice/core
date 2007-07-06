@@ -50,6 +50,8 @@ mkdir: %_DEST%\inc%_EXT%\svx
 ..\inc\svx\svddef.hxx %_DEST%\inc%_EXT%\svx\svddef.hxx
 ..\inc\svx\svdfppt.hxx %_DEST%\inc%_EXT%\svx\svdfppt.hxx
 ..\inc\linkmgr.hxx %_DEST%\inc%_EXT%\svx\linkmgr.hxx
+..\inc\svx\ipolypolygoneditorcontroller.hxx %_DEST%\inc%_EXT%\svx\ipolypolygoneditorcontroller.hxx
+..\inc\svx\polypolygoneditor.hxx %_DEST%\inc%_EXT%\svx\polypolygoneditor.hxx
 ..\inc\svx\svdsob.hxx %_DEST%\inc%_EXT%\svx\svdsob.hxx
 ..\inc\svx\svdlayer.hxx %_DEST%\inc%_EXT%\svx\svdlayer.hxx
 ..\inc\svx\adjitem.hxx %_DEST%\inc%_EXT%\svx\adjitem.hxx
@@ -616,6 +618,7 @@ mkdir: %_DEST%\inc%_EXT%\svx\sdr\overlay
 ..\inc\svx\sdr\overlay\overlayobjectlist.hxx %_DEST%\inc%_EXT%\svx\sdr\overlay\overlayobjectlist.hxx
 ..\inc\svx\sdr\overlay\overlaytriangle.hxx %_DEST%\inc%_EXT%\svx\sdr\overlay\overlaytriangle.hxx
 ..\inc\svx\sdr\overlay\overlaypolypolygon.hxx %_DEST%\inc%_EXT%\svx\sdr\overlay\overlaypolypolygon.hxx
+..\inc\svx\sdr\overlay\overlaysdrobject.hxx %_DEST%\inc%_EXT%\svx\sdr\overlay\overlaysdrobject.hxx
 
 mkdir: %_DEST%\inc%_EXT%\svx\sdr\animation
 ..\inc\svx\sdr\animation\ainfographic.hxx %_DEST%\inc%_EXT%\svx\sdr\animation\ainfographic.hxx
