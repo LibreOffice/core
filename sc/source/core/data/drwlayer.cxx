@@ -4,9 +4,9 @@
  *
  *  $RCSfile: drwlayer.cxx,v $
  *
- *  $Revision: 1.50 $
+ *  $Revision: 1.51 $
  *
- *  last change: $Author: kz $ $Date: 2007-06-20 13:32:03 $
+ *  last change: $Author: rt $ $Date: 2007-07-06 12:33:05 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1993,6 +1993,25 @@ IMapObject* ScDrawLayer::GetHitIMapObject( SdrObject* pObj,
     }
 
     return pIMapObj;
+}
+
+ScMacroInfo* ScDrawLayer::GetMacroInfo( SdrObject* pObj, BOOL bCreate )             // static
+{
+    USHORT nCount = pObj->GetUserDataCount();
+    for( USHORT i = 0; i < nCount; i++ )
+    {
+        SdrObjUserData* pData = pObj->GetUserData( i );
+        if( pData && pData->GetInventor() == SC_DRAWLAYER
+                    && pData->GetId() == SC_UD_MACRODATA )
+            return (ScMacroInfo*) pData;
+    }
+    if ( bCreate )
+    {
+        ScMacroInfo* pData = new ScMacroInfo;
+        pObj->InsertUserData( pData, 0 );
+        return pData;
+    }
+    return 0;
 }
 
 void ScDrawLayer::SetGlobalDrawPersist(SfxObjectShell* pPersist)            // static
