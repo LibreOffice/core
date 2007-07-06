@@ -4,9 +4,9 @@
  *
  *  $RCSfile: iahndl.cxx,v $
  *
- *  $Revision: 1.61 $
+ *  $Revision: 1.62 $
  *
- *  last change: $Author: rt $ $Date: 2007-07-03 13:59:57 $
+ *  last change: $Author: rt $ $Date: 2007-07-06 14:29:22 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -86,9 +86,12 @@
 #include "com/sun/star/ucb/InteractiveWrongMediumException.hpp"
 #include "com/sun/star/ucb/IOErrorCode.hpp"
 #include "com/sun/star/ucb/NameClashException.hpp"
+#include "com/sun/star/ucb/NameClashResolveRequest.hpp"
 #include "com/sun/star/ucb/UnsupportedNameClashException.hpp"
 #include "com/sun/star/ucb/XInteractionCookieHandling.hpp"
+#include "com/sun/star/ucb/XInteractionReplaceExistingData.hpp"
 #include "com/sun/star/ucb/XInteractionSupplyAuthentication.hpp"
+#include "com/sun/star/ucb/XInteractionSupplyName.hpp"
 #include <com/sun/star/ui/dialogs/XExecutableDialog.hpp>
 #include "com/sun/star/uno/RuntimeException.hpp"
 #include "com/sun/star/xforms/InvalidDataOnSubmitException.hpp"
@@ -163,7 +166,11 @@ getContinuations(
     star::uno::Reference< star::task::XInteractionAbort > * pAbort,
     star::uno::Reference< star::ucb::XInteractionSupplyAuthentication > *
         pSupplyAuthentication,
-    star::uno::Reference< star::task::XInteractionPassword > * pPassword)
+    star::uno::Reference< star::task::XInteractionPassword > * pPassword,
+    star::uno::Reference< star::ucb::XInteractionSupplyName > *
+        pSupplyName,
+    star::uno::Reference< star::ucb::XInteractionReplaceExistingData > *
+    pReplaceExistingData)
     SAL_THROW((star::uno::RuntimeException))
 {
     for (sal_Int32 i = 0; i < rContinuations.getLength(); ++i)
@@ -210,9 +217,26 @@ getContinuations(
         if (pPassword && !pPassword->is())
         {
             *pPassword
-        = star::uno::Reference< star::task::XInteractionPassword >(
-            rContinuations[i], star::uno::UNO_QUERY);
+                = star::uno::Reference< star::task::XInteractionPassword >(
+                    rContinuations[i], star::uno::UNO_QUERY);
             if (pPassword->is())
+                continue;
+        }
+        if (pSupplyName && !pSupplyName->is())
+        {
+            *pSupplyName
+                = star::uno::Reference< star::ucb::XInteractionSupplyName >(
+                    rContinuations[i], star::uno::UNO_QUERY);
+            if (pSupplyName->is())
+                continue;
+        }
+        if (pReplaceExistingData && !pReplaceExistingData->is())
+        {
+            *pReplaceExistingData
+                = star::uno::Reference<
+                      star::ucb::XInteractionReplaceExistingData >(
+                    rContinuations[i], star::uno::UNO_QUERY);
+            if (pReplaceExistingData->is())
                 continue;
         }
     }
@@ -510,7 +534,7 @@ void UUIInteractionHelper::handleMessageboxRequests(
             star::task::XInteractionDisapprove > xDisapprove;
         getContinuations(
             rRequest->getContinuations(),
-            &xApprove, &xDisapprove, 0, 0, 0, 0);
+            &xApprove, &xDisapprove, 0, 0, 0, 0, 0, 0);
 
         if( xApprove.is() && xDisapprove.is() )
         {
@@ -1000,6 +1024,15 @@ void UUIInteractionHelper::handleDialogRequests(
                                     rRequest->getContinuations());
         return;
     }
+
+// @@@ Todo #i29340#: activate!
+//    star::ucb::NameClashResolveRequest aNameClashResolveRequest;
+//    if (aAnyRequest >>= aNameClashResolveRequest)
+//    {
+//        handleNameClashResolveRequest(aNameClashResolveRequest,
+//                                      rRequest->getContinuations());
+//        return;
+//    }
 
     star::task::MasterPasswordRequest aMasterPasswordRequest;
     if (aAnyRequest >>= aMasterPasswordRequest)
@@ -1597,7 +1630,8 @@ UUIInteractionHelper::handleAuthenticationRequest(
     star::uno::Reference< star::ucb::XInteractionSupplyAuthentication >
         xSupplyAuthentication;
     getContinuations(
-        rContinuations, 0, 0, &xRetry, &xAbort, &xSupplyAuthentication, 0);
+        rContinuations,
+        0, 0, &xRetry, &xAbort, &xSupplyAuthentication, 0, 0, 0 );
     bool bRemember;
     bool bRememberPersistent;
     if (xSupplyAuthentication.is())
@@ -1798,6 +1832,106 @@ UUIInteractionHelper::handleAuthenticationRequest(
     }
 }
 
+namespace {
+
+enum NameClashResolveDialogResult { ABORT, RENAME, OVERWRITE };
+
+NameClashResolveDialogResult
+executeNameClashResolveDialog(
+    rtl::OUString const & /*rTargetFolderURL*/,
+    rtl::OUString const & /*rClashingName*/,
+    rtl::OUString & /*rProposedNewName*/)
+{
+    // @@@ Todo DV: execute overwrite-rename dialog, deliver result
+    OSL_ENSURE( false,
+                "executeNameClashResolveDialog not yet implemented!" );
+    return ABORT;
+}
+
+NameClashResolveDialogResult
+executeSimpleNameClashResolveDialog(
+    rtl::OUString const & /*rTargetFolderURL*/,
+    rtl::OUString const & /*rClashingName*/,
+    rtl::OUString & /*rProposedNewName*/)
+{
+    // @@@ Todo DV: execute rename-only dialog, deliver result
+    OSL_ENSURE( false,
+                "executeSimpleNameClashResolveDialog not yet implemented!" );
+    return ABORT;
+}
+
+} // namespace
+
+void
+UUIInteractionHelper::handleNameClashResolveRequest(
+    star::ucb::NameClashResolveRequest const & rRequest,
+    star::uno::Sequence< star::uno::Reference<
+    star::task::XInteractionContinuation > > const & rContinuations)
+  SAL_THROW((star::uno::RuntimeException))
+{
+    OSL_ENSURE(
+        rRequest.TargetFolderURL.getLength() > 0,
+        "NameClashResolveRequest must not contain empty TargetFolderURL" );
+
+    OSL_ENSURE(
+        rRequest.ClashingName.getLength() > 0,
+        "NameClashResolveRequest must not contain empty ClashingName" );
+
+    star::uno::Reference< star::task::XInteractionAbort >
+        xAbort;
+    star::uno::Reference< star::ucb::XInteractionSupplyName >
+        xSupplyName;
+    star::uno::Reference< star::ucb::XInteractionReplaceExistingData >
+        xReplaceExistingData;
+    getContinuations(
+        rContinuations,
+        0, 0, 0, &xAbort, 0, 0, &xSupplyName, &xReplaceExistingData);
+
+    OSL_ENSURE( xAbort.is(),
+        "NameClashResolveRequest must contain Abort continuation" );
+
+    OSL_ENSURE( xSupplyName.is(),
+        "NameClashResolveRequest must contain SupplyName continuation" );
+
+    NameClashResolveDialogResult eResult = ABORT;
+    rtl::OUString aProposedNewName( rRequest.ProposedNewName );
+    if ( xReplaceExistingData.is() )
+        eResult = executeNameClashResolveDialog(
+          rRequest.TargetFolderURL,
+          rRequest.ClashingName,
+          aProposedNewName);
+    else
+        eResult = executeSimpleNameClashResolveDialog(
+          rRequest.TargetFolderURL,
+          rRequest.ClashingName,
+          aProposedNewName);
+
+    switch ( eResult )
+    {
+    case ABORT:
+        xAbort->select();
+        break;
+
+    case RENAME:
+        xSupplyName->setName( aProposedNewName );
+        xSupplyName->select();
+        break;
+
+    case OVERWRITE:
+        OSL_ENSURE(
+            xReplaceExistingData.is(),
+            "Invalid NameClashResolveDialogResult: OVERWRITE - "
+            "No ReplaceExistingData continuation available!" );
+        xReplaceExistingData->select();
+        break;
+
+    default:
+        OSL_ENSURE( false, "Unknown NameClashResolveDialogResult value. "
+                           "Interaction Request not handled!" );
+        break;
+    }
+}
+
 void
 UUIInteractionHelper::handleMasterPasswordRequest(
     star::task::PasswordRequestMode nMode,
@@ -1811,7 +1945,8 @@ UUIInteractionHelper::handleMasterPasswordRequest(
     star::uno::Reference< star::ucb::XInteractionSupplyAuthentication >
         xSupplyAuthentication;
     getContinuations(
-        rContinuations, 0, 0, &xRetry, &xAbort, &xSupplyAuthentication, 0);
+        rContinuations,
+        0, 0, &xRetry, &xAbort, &xSupplyAuthentication, 0, 0, 0);
     LoginErrorInfo aInfo;
 
     // in case of master password a hash code is returned
@@ -1854,7 +1989,7 @@ UUIInteractionHelper::handlePasswordRequest(
     star::uno::Reference< star::task::XInteractionPassword >
         xPassword;
     getContinuations(
-        rContinuations, 0, 0, &xRetry, &xAbort, 0, &xPassword);
+        rContinuations, 0, 0, &xRetry, &xAbort, 0, &xPassword, 0, 0);
     LoginErrorInfo aInfo;
 
     executePasswordDialog(aInfo, nMode, aDocumentName);
@@ -2534,7 +2669,8 @@ UUIInteractionHelper::handleErrorRequest(
         star::uno::Reference< star::task::XInteractionRetry > xRetry;
         star::uno::Reference< star::task::XInteractionAbort > xAbort;
         getContinuations(
-            rContinuations, &xApprove, &xDisapprove, &xRetry, &xAbort, 0, 0);
+            rContinuations,
+            &xApprove, &xDisapprove, &xRetry, &xAbort, 0, 0, 0, 0);
 
         // The following mapping uses the bit mask
         //     Approve = 8,
@@ -2652,7 +2788,7 @@ UUIInteractionHelper::handleBrokenPackageRequest(
     star::uno::Reference< star::task::XInteractionDisapprove > xDisapprove;
     star::uno::Reference< star::task::XInteractionAbort > xAbort;
     getContinuations(
-        rContinuations, &xApprove, &xDisapprove, 0, &xAbort, 0, 0);
+        rContinuations, &xApprove, &xDisapprove, 0, &xAbort, 0, 0, 0, 0);
 
     ErrCode nErrorCode;
     if( xApprove.is() && xDisapprove.is() )
