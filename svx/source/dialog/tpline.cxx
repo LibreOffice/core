@@ -4,9 +4,9 @@
  *
  *  $RCSfile: tpline.cxx,v $
  *
- *  $Revision: 1.40 $
+ *  $Revision: 1.41 $
  *
- *  last change: $Author: hr $ $Date: 2007-06-27 17:49:22 $
+ *  last change: $Author: rt $ $Date: 2007-07-06 07:34:31 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1056,8 +1056,7 @@ void SvxLineTabPage::Reset( const SfxItemSet& rAttrs )
 
                     pView->UnmarkAll();
                     pObj=pPage->RemoveObject(0);
-                    if(pObj)
-                        delete pObj;
+                    SdrObject::Free( pObj );
                 }
             }
         }
@@ -1730,8 +1729,7 @@ IMPL_LINK( SvxLineTabPage, MenuCreateHdl_Impl, MenuButton *, pButton )
             GDIMetaFile aMeta(pView->GetAllMarkedMetaFile());
             pView->UnmarkAll();
             pObj=pPage->RemoveObject(0);
-            if(pObj)
-                delete pObj;
+            SdrObject::Free(pObj);
 
             SvxBrushItem* pBrushItem = new SvxBrushItem(Graphic(aMeta), GPOS_AREA, SID_ATTR_BRUSH);
             pBrushItem->SetDoneLink(STATIC_LINK(this, SvxLineTabPage, GraphicArrivedHdl_Impl));
