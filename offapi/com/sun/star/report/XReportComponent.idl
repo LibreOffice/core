@@ -1,0 +1,163 @@
+/*************************************************************************
+ *
+ *  OpenOffice.org - a multi-platform office productivity suite
+ *
+ *  $RCSfile: XReportComponent.idl,v $
+ *
+ *  $Revision: 1.2 $
+ *
+ *  last change: $Author: rt $ $Date: 2007-07-06 07:21:40 $
+ *
+ *  The Contents of this file are made available subject to
+ *  the terms of GNU Lesser General Public License Version 2.1.
+ *
+ *
+ *    GNU Lesser General Public License Version 2.1
+ *    =============================================
+ *    Copyright 2005 by Sun Microsystems, Inc.
+ *    901 San Antonio Road, Palo Alto, CA 94303, USA
+ *
+ *    This library is free software; you can redistribute it and/or
+ *    modify it under the terms of the GNU Lesser General Public
+ *    License version 2.1, as published by the Free Software Foundation.
+ *
+ *    This library is distributed in the hope that it will be useful,
+ *    but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ *    Lesser General Public License for more details.
+ *
+ *    You should have received a copy of the GNU Lesser General Public
+ *    License along with this library; if not, write to the Free Software
+ *    Foundation, Inc., 59 Temple Place, Suite 330, Boston,
+ *    MA  02111-1307  USA
+ *
+ ************************************************************************/
+#ifndef __com_sun_star_report_XReportComponent_idl__
+#define __com_sun_star_report_XReportComponent_idl__
+
+#ifndef __com_sun_star_container_XChild_idl__
+#include <com/sun/star/container/XChild.idl>
+#endif
+
+#ifndef __com_sun_star_lang_XComponent_idl__
+#include <com/sun/star/lang/XComponent.idl>
+#endif
+
+#ifndef __com_sun_star_container_XNamed_idl__
+#include <com/sun/star/container/XNamed.idl>
+#endif
+
+#ifndef __com_sun_star_beans_XPropertySet_idl__
+#include <com/sun/star/beans/XPropertySet.idl>
+#endif
+#ifndef __com_sun_star_util_XCloneable_idl__
+#include <com/sun/star/util/XCloneable.idl>
+#endif
+#ifndef __com_sun_star_awt_XControlModel_idl__
+#include <com/sun/star/awt/XControlModel.idl>
+#endif
+#ifndef __com_sun_star_drawing_XShape_idl__
+#include <com/sun/star/drawing/XShape.idl>
+#endif
+
+//=============================================================================
+
+ module com {  module sun {  module star {  module report {
+ interface XSection;
+//=============================================================================
+/** describes a component which may be part of a report.
+
+    @see XReportDefinition
+ */
+interface XReportComponent
+{
+    interface com::sun::star::util::XCloneable;
+    /** identifies the component as a candidate for being part of a report.
+        <p>This interface also provides the access to the component's parent.</p>
+     */
+    interface com::sun::star::container::XChild;
+
+    /** allows life-time control of report components.
+     */
+    interface com::sun::star::lang::XComponent;
+
+    interface com::sun::star::drawing::XShape;
+
+    /** gives access to the properties.
+    */
+    interface com::sun::star::beans::XPropertySet;
+
+    /** the name of the component.
+     */
+    [attribute,bound] string Name
+    {
+        set raises ( com::sun::star::beans::PropertyVetoException );
+    };
+
+    /** specifies the height of the control.
+     */
+    [attribute,bound] long Height;
+
+    /** specifies the horizontal position of the control.
+     */
+    [attribute,bound] long PositionX;
+
+    /** specifies the vertical position of the control.
+     */
+    [attribute,bound] long PositionY;
+
+    /** specifies the width of the control.
+     */
+    [attribute,bound] long Width;
+
+    /** specifies the border style of the control.
+
+        <pre>
+        0: No border
+        2: simple border
+        </pre>
+     */
+    [attribute,bound] short ControlBorder
+    {
+        set raises ( com::sun::star::lang::IllegalArgumentException,com::sun::star::beans::UnknownPropertyException );
+        get raises ( com::sun::star::beans::UnknownPropertyException );
+    };
+
+    //-------------------------------------------------------------------------
+
+    /** specifies the color of the border, if present
+
+        <p>Not every border style (see <member>Border</member>) may support coloring.
+        For instance, usually a border with 3D effect will ignore the BorderColor setting.</p>
+     */
+    [attribute,bound] long ControlBorderColor
+    {
+        set raises ( com::sun::star::lang::IllegalArgumentException,com::sun::star::beans::UnknownPropertyException );
+        get raises ( com::sun::star::beans::UnknownPropertyException );
+    };
+
+    /** Specifies that recurring values are printed.
+        If set to <TRUE/> then the value will be printed every time. If set to <FALSE/> then the value will only be printed once.
+        The default value is <TRUE/>.
+    */
+    [attribute,bound] boolean PrintRepeatedValues
+    {
+        set raises ( com::sun::star::beans::UnknownPropertyException );
+        get raises ( com::sun::star::beans::UnknownPropertyException );
+    };
+
+    /** Specifies the section where the control belongs to.
+        This is a shortcut to get control hierachy up.
+        This value is <NULL/> when the control was not inserted in any section.
+    */
+    [attribute,readonly] com::sun::star::report::XSection Section;
+};
+
+//=============================================================================
+
+}; }; }; };
+
+/*=============================================================================
+
+=============================================================================*/
+#endif
