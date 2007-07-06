@@ -4,9 +4,9 @@
  *
  *  $RCSfile: browserids.hxx,v $
  *
- *  $Revision: 1.37 $
+ *  $Revision: 1.38 $
  *
- *  last change: $Author: hr $ $Date: 2006-08-15 10:52:52 $
+ *  last change: $Author: rt $ $Date: 2007-07-06 08:26:37 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -87,7 +87,7 @@
 // free
 // free
 // free
-// free
+#define ID_REPORT_NEW_TEXT                  14
 #define ID_FORM_NEW_TEXT                    15
 #define ID_FORM_NEW_CALC                    16
 #define ID_FORM_NEW_IMPRESS                 17
