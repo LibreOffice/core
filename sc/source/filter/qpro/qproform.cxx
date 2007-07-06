@@ -4,9 +4,9 @@
  *
  *  $RCSfile: qproform.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: vg $ $Date: 2007-02-27 12:40:40 $
+ *  last change: $Author: rt $ $Date: 2007-07-06 12:39:23 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -439,7 +439,7 @@ static const struct
     { ocNoName, FT_NOP }, // Extended operands
     { ocNoName, FT_NOP }, // Reserved
     { ocNoName, FT_NOP }, // Reserved
-    { ocNoValue, FT_FuncFix0 }, // NA
+    { ocNotAvail, FT_FuncFix0 }, // NA
     { ocNoName, FT_FuncFix0 }, // Error         // 0x20
     { ocAbs, FT_FuncFix1 },
     { ocInt, FT_FuncFix1 },
@@ -457,7 +457,7 @@ static const struct
     { ocExp, FT_FuncFix1 },
     { ocMod, FT_FuncFix2 },
     { ocChose, FT_FuncVar },                    // 0x30
-    { ocIsNV, FT_FuncFix1 },
+    { ocIsNA, FT_FuncFix1 },
     { ocIsError, FT_FuncFix1 },
     { ocFalse, FT_FuncFix0 },
     { ocTrue, FT_FuncFix0 },
