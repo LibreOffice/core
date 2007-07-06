@@ -4,9 +4,9 @@
  *
  *  $RCSfile: gridwin4.cxx,v $
  *
- *  $Revision: 1.35 $
+ *  $Revision: 1.36 $
  *
- *  last change: $Author: hr $ $Date: 2007-06-26 12:18:57 $
+ *  last change: $Author: rt $ $Date: 2007-07-06 12:46:27 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -51,10 +51,6 @@
 #include <svx/scripttypeitem.hxx>
 #include <sfx2/bindings.hxx>
 #include <sfx2/printer.hxx>
-
-#ifdef MAC
-#include <svx/brshitem.hxx>
-#endif
 
 #include <svx/svdview.hxx>
 #include "tabvwsh.hxx"
@@ -1878,19 +1874,10 @@ void ScGridWindow::GetSelectionRects( ::std::vector< Rectangle >& rPixelRects )
 
 // -------------------------------------------------------------------------
 
-void ScGridWindow::DrawDragRect( SCCOL nX1, SCROW nY1, SCCOL nX2, SCROW nY2,
-                                    BOOL bMarkDrop )
+void ScGridWindow::DrawDragRect( SCCOL nX1, SCROW nY1, SCCOL nX2, SCROW nY2 )
 {
     if ( nX2 < pViewData->GetPosX(eHWhich) || nY2 < pViewData->GetPosY(eVWhich) )
         return;
-
-    //  Nur auf dem Mac wird bei Drag&Drop nur die Einfuegeposition markiert
-#ifndef MAC
-    bMarkDrop = FALSE;
-#endif
-
-    if (bMarkDrop)
-        nY2 = nY1;      // nur 1 Zeile
 
     Update();           // wegen XOR
 
@@ -1917,21 +1904,13 @@ void ScGridWindow::DrawDragRect( SCCOL nX1, SCROW nY1, SCCOL nX2, SCROW nY2,
     BOOL bLayoutRTL = pDoc->IsLayoutRTL( nTab );
     long nLayoutSign = bLayoutRTL ? -1 : 1;
 
-    if (bMarkDrop)
-    {
-        aScrPos.X() -= nLayoutSign;         // only mark the position
-        nSizeXPix   += 2;
-    }
+    if (ValidCol(nX2) && nX2>=nX1)
+        for (i=nX1; i<=nX2; i++)
+            nSizeXPix += ScViewData::ToPixel( pDoc->GetColWidth( static_cast<SCCOL>(i), nTab ), nPPTX );
     else
     {
-        if (ValidCol(nX2) && nX2>=nX1)
-            for (i=nX1; i<=nX2; i++)
-                nSizeXPix += ScViewData::ToPixel( pDoc->GetColWidth( static_cast<SCCOL>(i), nTab ), nPPTX );
-        else
-        {
-            aScrPos.X() -= nLayoutSign;
-            nSizeXPix   += 2;
-        }
+        aScrPos.X() -= nLayoutSign;
+        nSizeXPix   += 2;
     }
 
     if (ValidRow(nY2) && nY2>=nY1)
