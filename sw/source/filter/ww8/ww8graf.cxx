@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ww8graf.cxx,v $
  *
- *  $Revision: 1.147 $
+ *  $Revision: 1.148 $
  *
- *  last change: $Author: kz $ $Date: 2007-05-10 16:10:41 $
+ *  last change: $Author: rt $ $Date: 2007-07-06 09:52:56 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -2989,7 +2989,7 @@ SwFrmFmt* SwWW8ImplReader::MungeTextIntoDrawBox(SdrObject* pTrueObject,
                     // Objekt in der Z-Order-Liste ersetzen
                     pMSDffManager->ExchangeInShapeOrder(pSdrTextObj, 0,0, pNewObj);
                     // Objekt jetzt noch loeschen
-                    delete pRecord->pObj;
+                    SdrObject::Free( pRecord->pObj );
                     // und das neue Objekt merken.
                     pRecord->pObj = pNewObj;
                 }
@@ -3071,7 +3071,7 @@ SwFlyFrmFmt* SwWW8ImplReader::ConvertDrawTextToFly(SdrObject* &rpObject,
         pMSDffManager->RemoveFromShapeOrder( rpObject );
 
         // und das Objekt loeschen
-        DELETEZ( rpObject );
+        SdrObject::Free( rpObject );
         /*
             Achtung: ab jetzt nur noch pOrgShapeObject
             abfragen!
@@ -3236,7 +3236,7 @@ SwFlyFrmFmt* SwWW8ImplReader::ImportReplaceableDrawables( SdrObject* &rpObject,
         pDrawPg->RemoveObject( rpObject->GetOrdNum() );
 
     // und das Objekt loeschen
-    DELETEZ( rpObject );
+    SdrObject::Free( rpObject );
     /*
         Achtung: ab jetzt nur noch pOrgShapeObject abfragen!
     */
