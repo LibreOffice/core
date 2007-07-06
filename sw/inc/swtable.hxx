@@ -4,9 +4,9 @@
  *
  *  $RCSfile: swtable.hxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: rt $ $Date: 2007-07-06 09:51:24 $
+ *  last change: $Author: rt $ $Date: 2007-07-06 12:16:12 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -358,8 +358,9 @@ public:
     SwTableBox* FindPreviousBox( const SwTable&, const SwTableBox* =0,
                             BOOL bOvrTblLns=TRUE ) const;
 
-    // bLayoutAvailable indicates if there's a table frame with a height
     SwTwips GetTableLineHeight( bool& bLayoutAvailable ) const;
+
+    bool hasSoftPageBreak() const;
 };
 
 class SwTableBox: public SwClient       //Client vom FrmFmt
