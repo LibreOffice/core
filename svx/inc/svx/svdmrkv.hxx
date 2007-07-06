@@ -4,9 +4,9 @@
  *
  *  $RCSfile: svdmrkv.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: vg $ $Date: 2007-04-11 16:22:18 $
+ *  last change: $Author: rt $ $Date: 2007-07-06 13:18:17 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -206,7 +206,7 @@ protected:
 
     // Macht aus einer Winkelangabe in 1/100deg einen String inkl. Grad-Zeichen
     BOOL ImpMarkPoint(SdrHdl* pHdl, SdrMark* pMark, BOOL bUnmark);
-    BOOL MarkPoints(const Rectangle* pRect, BOOL bUnmark);
+    virtual BOOL MarkPoints(const Rectangle* pRect, BOOL bUnmark);
     BOOL MarkGluePoints(const Rectangle* pRect, BOOL bUnmark);
 
     void SetMoveOutside(BOOL bOn);
@@ -377,14 +377,17 @@ public:
     BOOL IsSolidMarkHdl() const { return aHdl.IsFineHdl(); }
     void SetSolidMarkHdl(BOOL bOn);
 
-    BOOL HasMarkablePoints() const;
-    ULONG GetMarkablePointCount() const;
-    BOOL HasMarkedPoints() const;
-    ULONG GetMarkedPointCount() const;
+    virtual BOOL HasMarkablePoints() const;
+    virtual ULONG GetMarkablePointCount() const;
+    virtual BOOL HasMarkedPoints() const;
+    virtual ULONG GetMarkedPointCount() const;
 
     // Nicht alle Punkte lassen sich markieren:
-    BOOL IsPointMarkable(const SdrHdl& rHdl) const;
-    BOOL MarkPoint(SdrHdl& rHdl, BOOL bUnmark=FALSE);
+    virtual BOOL IsPointMarkable(const SdrHdl& rHdl) const;
+    virtual BOOL MarkPoint(SdrHdl& rHdl, BOOL bUnmark=FALSE);
+
+    /** should only be used from outside svx for special ui elements */
+    BOOL MarkPointHelper(SdrHdl* pHdl, SdrMark* pMark, BOOL bUnmark);
 
     // alle Punkte innerhalb dieses Rechtecks markieren (Viewkoordinaten)
     BOOL MarkPoints(const Rectangle& rRect, BOOL bUnmark=FALSE) { return MarkPoints(&rRect,bUnmark); }
