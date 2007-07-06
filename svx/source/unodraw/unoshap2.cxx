@@ -4,9 +4,9 @@
  *
  *  $RCSfile: unoshap2.cxx,v $
  *
- *  $Revision: 1.63 $
+ *  $Revision: 1.64 $
  *
- *  last change: $Author: hr $ $Date: 2007-06-27 19:26:23 $
+ *  last change: $Author: rt $ $Date: 2007-07-06 07:45:14 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -353,8 +353,8 @@ void SAL_CALL SvxShapeGroup::remove( const uno::Reference< drawing::XShape >& xS
             }
         }
 
-        delete rList.NbcRemoveObject( nObjNum );
-        pShape->InvalidateSdrObject();
+        SdrObject* pObject = rList.NbcRemoveObject( nObjNum );
+        SdrObject::Free( pObject );
     }
     else
     {
@@ -597,17 +597,19 @@ uno::Sequence< OUString > SAL_CALL SvxShapeConnector::getSupportedServiceNames()
 /***********************************************************************
 * class SvxShapeControl                                                *
 ***********************************************************************/
-
+DBG_NAME(SvxShapeControl)
 
 SvxShapeControl::SvxShapeControl( SdrObject* pObj )  throw() :
     SvxShapeText( pObj, aSvxMapProvider.GetMap(SVXMAP_CONTROL) )
 {
+    DBG_CTOR(SvxShapeControl,NULL);
     setShapeKind( OBJ_UNO );
 }
 
 //----------------------------------------------------------------------
 SvxShapeControl::~SvxShapeControl() throw()
 {
+    DBG_DTOR(SvxShapeControl,NULL);
 }
 
 //----------------------------------------------------------------------
