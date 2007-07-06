@@ -1,0 +1,393 @@
+/*************************************************************************
+ *
+ *  OpenOffice.org - a multi-platform office productivity suite
+ *
+ *  $RCSfile: XReportDefinition.idl,v $
+ *
+ *  $Revision: 1.2 $
+ *
+ *  last change: $Author: rt $ $Date: 2007-07-06 07:22:19 $
+ *
+ *  The Contents of this file are made available subject to
+ *  the terms of GNU Lesser General Public License Version 2.1.
+ *
+ *
+ *    GNU Lesser General Public License Version 2.1
+ *    =============================================
+ *    Copyright 2005 by Sun Microsystems, Inc.
+ *    901 San Antonio Road, Palo Alto, CA 94303, USA
+ *
+ *    This library is free software; you can redistribute it and/or
+ *    modify it under the terms of the GNU Lesser General Public
+ *    License version 2.1, as published by the Free Software Foundation.
+ *
+ *    This library is distributed in the hope that it will be useful,
+ *    but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ *    Lesser General Public License for more details.
+ *
+ *    You should have received a copy of the GNU Lesser General Public
+ *    License along with this library; if not, write to the Free Software
+ *    Foundation, Inc., 59 Temple Place, Suite 330, Boston,
+ *    MA  02111-1307  USA
+ *
+ ************************************************************************/
+#ifndef __com_sun_star_report_XReportDefinition_idl__
+#define __com_sun_star_report_XReportDefinition_idl__
+
+#ifndef __com_sun_star_report_XReportComponent_idl__
+#include <com/sun/star/report/XReportComponent.idl>
+#endif
+#ifndef __com_sun_star_report_XFunctionsSupplier_idl__
+#include <com/sun/star/report/XFunctionsSupplier.idl>
+#endif
+#ifndef __com_sun_star_view_PaperOrientation_idl__
+#include <com/sun/star/view/PaperOrientation.idl>
+#endif
+#ifndef __com_sun_star_container_NoSuchElementException_idl__
+#include <com/sun/star/container/NoSuchElementException.idl>
+#endif
+#ifndef __com_sun_star_style_GraphicLocation_idl__
+#include <com/sun/star/style/GraphicLocation.idl>
+#endif
+#ifndef __com_sun_star_view_PaperFormat_idl__
+#include <com/sun/star/view/PaperFormat.idl>
+#endif
+#ifndef __com_sun_star_util_XClosable_idl__
+#include <com/sun/star/util/XCloseable.idl>
+#endif
+#ifndef __com_sun_star_ui_XUIConfigurationManagerSupplier_idl__
+#include <com/sun/star/ui/XUIConfigurationManagerSupplier.idl>
+#endif
+#ifndef __com_sun_star_document_XDocumentSubStorageSupplier_idl__
+#include <com/sun/star/document/XDocumentSubStorageSupplier.idl>
+#endif
+#ifndef __com_sun_star_frame_XModel_idl__
+#include <com/sun/star/frame/XModel.idl>
+#endif
+#ifndef __com_sun_star_document_XViewDataSupplier_idl__
+#include <com/sun/star/document/XViewDataSupplier.idl>
+#endif
+#ifndef __com_sun_star_frame_XLoadable_idl__
+#include <com/sun/star/frame/XLoadable.idl>
+#endif
+#ifndef __com_sun_star_embed_XVisualObject_idl__
+#include <com/sun/star/embed/XVisualObject.idl>
+#endif
+#ifndef __com_sun_star_embed_XStorageBasedDocument_idl__
+#include <com/sun/star/document/XStorageBasedDocument.idl>
+#endif
+#ifndef __com_sun_star_awt_Size_idl__
+#include <com/sun/star/awt/Size.idl>
+#endif
+#ifndef __com_sun_star_util_XModifiable_idl__
+#include <com/sun/star/util/XModifiable.idl>
+#endif
+#ifndef __com_sun_star_document_XEventBroadcaster_idl__
+#include <com/sun/star/document/XEventBroadcaster.idl>
+#endif
+#ifndef __com_sun_star_lang_DisposedException_idl__
+#include <com/sun/star/lang/DisposedException.idl>
+#endif
+#ifndef __com_sun_star_style_XStyleFamiliesSupplier_idl__
+#include <com/sun/star/style/XStyleFamiliesSupplier.idl>
+#endif
+
+module com {  module sun {  module star {  module sdbc {
+published interface XConnection;
+};};};};
+//=============================================================================
+
+ module com {  module sun {  module star {  module report {
+
+     interface XSection;
+     interface XGroups;
+//=============================================================================
+
+/** identifies a <type>XReportComponent</type> as being a (sub-) report.
+
+    <p>This interface does not really provide an own functionality, it is only for easier
+    runtime identification of report components.</p>
+
+    <p>A report fulfills several tasks, like storing the structure of its
+    report components and it provides the
+    event environment for its contained elements.</p>
+
+    @see XReportComponent
+ */
+interface XReportDefinition
+{
+    /** allows the access to the model embedded in the database storage.
+    */
+    interface com::sun::star::frame::XModel;
+
+    /** offers a simple way to initialize a component.
+    */
+    interface com::sun::star::frame::XLoadable;
+
+    /** represents common visualisation functionality for the embedded report.
+    */
+    interface com::sun::star::embed::XVisualObject;
+
+    /** allows to initialize the document with a storage.
+    */
+    interface com::sun::star::document::XStorageBasedDocument;
+
+    /** gives access to some properties describing all open views to a document.
+    */
+    interface com::sun::star::document::XViewDataSupplier;
+
+    /** allows to close the document.
+    */
+    interface com::sun::star::util::XCloseable;
+
+    /** allows to retrieve the user interface configuration manager related to an object.
+    */
+    interface com::sun::star::ui::XUIConfigurationManagerSupplier;
+
+    interface com::sun::star::document::XDocumentSubStorageSupplier;
+
+    /** provides access to the collection of style families.
+
+        <p>A spreadsheet document contains 2 families of styles:
+        "PageStyles" and "CellStyles".</p>
+     */
+    interface com::sun::star::style::XStyleFamiliesSupplier;
+
+    //-------------------------------------------------------------------------
+    /** a storable document should provide information about his modify state
+
+        <p>
+        With this interface it's possible too, to reset the modify state.
+        That can be neccessary to prevent code against problem during closing
+        of the document without saving any changes.
+        </p>
+     */
+    interface com::sun::star::util::XModifiable;
+
+    /** allows the creation of sub reports.
+    */
+    interface XReportComponent;
+
+    /** gives access to functions defined in the report definition.
+    */
+    interface XFunctionsSupplier;
+
+    /** makes it possible to register listeners which are called whenever
+        a document event occurs.
+        This is a workaround due to the fact that this interface can not be directly inherited from <type scope="com::sun::star::document">XEventBroadcaster</type>
+        because the methods addEventListener and removeEventListener are already defined in <type scope="com::sun::star::lang">XComponent</type>.
+        A queryInterface call is still supported to the <type scope="com::sun::star::document">XEventBroadcaster</type> interface.
+     */
+    com::sun::star::document::XEventBroadcaster getEventBroadcaster()
+        raises( ::com::sun::star::lang::DisposedException,
+                ::com::sun::star::uno::Exception );
+
+    /** returns a sequence of the currently supported output formats.
+    */
+    sequence<string> getAvailableMimeTypes()
+        raises( ::com::sun::star::lang::DisposedException,
+                ::com::sun::star::uno::Exception );
+
+    //-------------------------------------------------------------------------
+
+    /** Represents the output format (media (mime) type) of the resulting document when executing this report.
+    */
+    [attribute,bound] string MimeType
+    {
+        set raises (com::sun::star::lang::IllegalArgumentException);
+    };
+
+    /** Represents the title of the report in print preview.
+    */
+    [attribute,bound] string Caption;
+
+    /** Specifies whether groups in a multi column report are kept together.
+        @see com.sun.star.report.GroupKeepTogether
+    */
+    [attribute,bound] short GroupKeepTogether
+    {
+        set raises (com::sun::star::lang::IllegalArgumentException);
+    };
+
+    /** Represents the location of the page header.
+        @see ReportPrintOption
+    */
+    [attribute,bound] short PageHeaderOption;
+
+    /** Represents the location of the page footer.
+        @see ReportPrintOption
+    */
+    [attribute,bound] short PageFooterOption;
+
+    /** is used for subreports and contains the names of columns of the parent report.
+    <p> These columns are typically the foreign key fields of the parent report.
+    The values of theses columns are used to identify the data for the subreport.
+    Each time the parent report changes it's current row, the subreport requeries
+    it's data based on the values of the master fields.</p>
+    <p>If the report is no sub report (e.g. it's parent is not a report itself), this
+    property is not evaluated.</p>
+
+    */
+    [attribute,bound] sequence<string> MasterFields;
+
+    /**is used for subreports and contains the names of the columns of the subreport
+    which are related to the master fields of the parent report.
+    <p>Entries in this sequence can either denote column names in the sub report,
+    or paramater names.<br/>
+    For instance, you could base the report on the SQL statement
+    <code>SELECT * FROM invoices WHERE cust_ref = :cid</code>, and add <code>cid</code>
+    to the DetailFields property. In this case, the parameter will be filled from
+    the corresponding master field.<br/>
+    Alternatively, you could simply base your report on the table <code>invoices</code>,
+    and add the column name <code>cust_ref</code> to the DetailFields. In this case,
+    and implicit filter clause <code>WHERE cust_ref = :&lt;new_param_name&gt;</code> will
+    be created, and the artificial parameter will be filled from the corresponding
+    master field.<br/>
+    If a string in this property denotes both a column name and a parameter name, it
+    is undefined which way it is interpreted, but implementations of the service are required
+    to either decide for the paramter or the column, and proceed as usual.
+    </p>
+    <p>The columns specified herein typically represent a part of the primary key
+    fields or their aliases of the detail report.</p>
+    <p>If the report is no sub report (e.g. it's parent is not a report itself), this
+    property is not evaluated.</p>
+    *
+    */
+    [attribute,bound] sequence<string> DetailFields;
+
+    /** is the command which should be executed, the type of command depends
+    on the CommandType.
+    <p>In case of a <member>CommandType</member> of <member>CommandType::COMMAND</member>,
+    means in case the <member>Command</member> specifies an SQL statement, the inherited
+    <member scope="com::sun::star::sdbc">RowSet::EscapeProcessing</member>
+    becomes relevant:<br/>
+    It then can be to used to specify whether the SQL statement should be analyzed on the
+    client side before sending it to the database server.<br/>
+    The default value for <member scope="com::sun::star::sdbc">RowSet::EscapeProcessing</member>
+    is <TRUE/>. By switching it to <FALSE/>, you can pass backend-specific SQL statements,
+    which are not standard SQL, to your database.</p>
+
+
+    @see com::sun::star::sdb::CommandType
+    */
+    [attribute,bound] string Command;
+
+    /** specifies the type of the command to be executed to retrieve a result set.
+
+        <p><member>Command</member> needs to be interpreted depending on the value of this property.</p>
+
+        <p>This property is only meaningfull together with the <member>Command</member>
+        property, thus either <em>both</em> or <em>none</em> of them are present.</p>
+
+        @see com::sun::star::sdb::CommandType
+     */
+    [attribute,bound] long CommandType;
+
+    /** specifies an addtional filter to optinally use.
+
+        <p>The Filter string has to form a SQL WHERE-clause, <em>without</em> the WHERE-string itself.</p>
+
+        <p>If a <member>DataSourceName</member>, <member>Command</member> and <member>CommandType</member>
+        are specified, a <type>RowSet</type> can be created with this information. If the results provided by the
+        row set are to be additionally filtered, the Filter property can be used.</p>
+
+        <p>Note that the Filter property does not make sense if a <member>ResultSet</member> has been specified
+        in the DataAccessDescriptor.</p>
+
+        @see com::sun::star::sdb::RowSet
+        @see ResultSet
+    */
+    [attribute,bound] string Filter;
+
+    /** specifies if the <member>Command</member> should be analyzed on the client side before sending it
+        to the database server.
+
+        <p>The default value of this property is <TRUE/>. By switching it to <FALSE/>, you can pass
+        backend-specific SQL statements, which are not standard SQL, to your database.</p>
+
+        <p>This property is usually present together with the <member>Command</member> and
+        <member>CommandType</member> properties, and is evaluated if and only if <member>CommandType</member>
+        equals <member>CommandType::COMMAND</member>.</p>
+    */
+    [attribute,bound] boolean EscapeProcessing;
+
+    /** Defines that the report header is on.
+        Default is <FALSE/>.
+    */
+    [attribute,bound] boolean ReportHeaderOn;
+
+    /** Defines that the report footer is on.
+        Default is <FALSE/>.
+    */
+    [attribute,bound] boolean ReportFooterOn;
+
+    /** Defines that the page header is on.
+        Default is <TRUE/>.
+    */
+    [attribute,bound] boolean PageHeaderOn;
+
+    /** Defines that the page footer is on.
+        Default is <TRUE/>.
+    */
+    [attribute,bound] boolean PageFooterOn;
+
+    /** Represents the groups of the report.
+    */
+    [attribute,readonly] com::sun::star::report::XGroups Groups;
+
+    /** returns the report header if the <member>ReportHeaderOn</member>is <TRUE/>.
+        @throws <type scope="com::sun::star::container">NoSuchElementException</type>
+            If the report has the report header disabled.
+        @see XSection
+    */
+    [attribute,readonly] com::sun::star::report::XSection ReportHeader
+    {
+        get raises (com::sun::star::container::NoSuchElementException);
+    };
+
+    /** returns the page header if the <member>PageHeaderOn</member>is <TRUE/>.
+        @throws <type scope="com::sun::star::container">NoSuchElementException</type>
+            If the report has the page header disabled.
+        @see XSection
+    */
+    [attribute,readonly] com::sun::star::report::XSection PageHeader
+    {
+        get raises (com::sun::star::container::NoSuchElementException);
+    };
+
+    /** returns the detail section.
+        @see XSection
+    */
+    [attribute,readonly] com::sun::star::report::XSection Detail;
+
+    /** returns the page footer if the <member>PageFooterOn</member>is <TRUE/>.
+        @throws <type scope="com::sun::star::container">NoSuchElementException</type>
+            If the report has the page footer disabled.
+        @see XSection
+    */
+    [attribute,readonly] com::sun::star::report::XSection PageFooter
+    {
+        get raises (com::sun::star::container::NoSuchElementException);
+    };
+
+    /** returns the report footer if the <member>ReportFooterOn</member>is <TRUE/>.
+        @throws <type scope="com::sun::star::container">NullPointerException</type>
+            If the report has the report footer disabled.
+        @see XSection
+    */
+    [attribute,readonly] com::sun::star::report::XSection ReportFooter
+    {
+        get raises (com::sun::star::container::NoSuchElementException);
+    };
+};
+
+service ReportDefinition : XReportDefinition;
+//=============================================================================
+
+}; }; }; };
+
+/*=============================================================================
+
+=============================================================================*/
+#endif

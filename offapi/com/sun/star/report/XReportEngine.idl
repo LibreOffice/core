@@ -1,0 +1,170 @@
+/*************************************************************************
+ *
+ *  OpenOffice.org - a multi-platform office productivity suite
+ *
+ *  $RCSfile: XReportEngine.idl,v $
+ *
+ *  $Revision: 1.2 $
+ *
+ *  last change: $Author: rt $ $Date: 2007-07-06 07:22:35 $
+ *
+ *  The Contents of this file are made available subject to
+ *  the terms of GNU Lesser General Public License Version 2.1.
+ *
+ *
+ *    GNU Lesser General Public License Version 2.1
+ *    =============================================
+ *    Copyright 2005 by Sun Microsystems, Inc.
+ *    901 San Antonio Road, Palo Alto, CA 94303, USA
+ *
+ *    This library is free software; you can redistribute it and/or
+ *    modify it under the terms of the GNU Lesser General Public
+ *    License version 2.1, as published by the Free Software Foundation.
+ *
+ *    This library is distributed in the hope that it will be useful,
+ *    but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ *    Lesser General Public License for more details.
+ *
+ *    You should have received a copy of the GNU Lesser General Public
+ *    License along with this library; if not, write to the Free Software
+ *    Foundation, Inc., 59 Temple Place, Suite 330, Boston,
+ *    MA  02111-1307  USA
+ *
+ ************************************************************************/
+#ifndef __com_sun_star_report_XReportEngine_idl__
+#define __com_sun_star_report_XReportEngine_idl__
+
+#ifndef __com_sun_star_report_XReportDefinition_idl__
+#include <com/sun/star/report/XReportDefinition.idl>
+#endif
+#ifndef __com_sun_star_beans_XPropertySet_idl__
+#include <com/sun/star/beans/XPropertySet.idl>
+#endif
+#ifndef __com_sun_star_lang_XComponent_idl__
+#include <com/sun/star/lang/XComponent.idl>
+#endif
+#ifndef __com_sun_star_util_URL_idl__
+#include <com/sun/star/util/URL.idl>
+#endif
+#ifndef __com_sun_star_frame_XModel_idl__
+#include <com/sun/star/frame/XModel.idl>
+#endif
+#ifndef __com_sun_star_task_XStatusIndicator_idl__
+#include <com/sun/star/task/XStatusIndicator.idl>
+#endif
+#ifndef __com_sun_star_frame_XFrame_idl__
+#include <com/sun/star/frame/XFrame.idl>
+#endif
+#ifndef __com_sun_star_sdbc_XConnection_idl__
+#include <com/sun/star/sdbc/XConnection.idl>
+#endif
+#ifndef __com_sun_star_lang_IllegalArgumentException_idl__
+#include <com/sun/star/lang/IllegalArgumentException.idl>
+#endif
+#ifndef __com_sun_star_lang_DisposedException_idl__
+#include <com/sun/star/lang/DisposedException.idl>
+#endif
+#ifndef __com_sun_star_uno_Exception_idl__
+#include <com/sun/star/uno/Exception.idl>
+#endif
+
+//=============================================================================
+/** identifies a <type>XReportEngine</type> which allows the creation of OpenDocument files.
+
+    <p>The following events are supported by the report engine.
+        OnPageStarted       Is fired when a new page started.
+        OnReportStarted     Is fired when a new report started.
+        OnGroupStarted      Is fired when a new group started.
+        OnGroupEnded        Is fired when the group ended.
+        OnReportEnded       Is fired when the report ended.
+        OnPageEnded         Is fired when the page ended.
+
+    @see com.sun.star.document.OfficeDocument
+*/
+module com {  module sun {  module star {  module report {
+
+interface XReportEngine
+{
+    /** allows life-time control of report engine.
+     */
+    interface com::sun::star::lang::XComponent;
+
+    /** gives access to the properties.
+    */
+    interface com::sun::star::beans::XPropertySet;
+
+    /** creates a report document.
+        @throws <type scope="com::sun::star::lang">DisposedException</type>
+            If the report engine is already disposed.
+        @throws <type scope="com::sun::star::lang">IllegalArgumentException</type>
+            If the report definition was not set or is <NULL/>.
+    */
+    com::sun::star::frame::XModel createDocumentModel()
+        raises( ::com::sun::star::lang::DisposedException,
+                com::sun::star::lang::IllegalArgumentException,
+                ::com::sun::star::uno::Exception );
+
+    /** creates a report document.
+        @param  _frame
+            The frame must have a controller set. This controller will be set at the model.
+        @throws <type scope="com::sun::star::lang">DisposedException</type>
+            If the report engine is already disposed.
+        @throws <type scope="com::sun::star::lang">IllegalArgumentException</type>
+            If the report definition was not set or is <NULL/>.
+
+        OJ: Has to be discussed if this method is usefull.
+    */
+    com::sun::star::frame::XModel createDocumentAlive([in] com::sun::star::frame::XFrame frame)
+        raises( ::com::sun::star::lang::DisposedException,
+                com::sun::star::lang::IllegalArgumentException,
+                ::com::sun::star::uno::Exception );
+
+    /** creates a report document.
+        @return
+            The URL where the new document is located.
+        @throws <type scope="com::sun::star::lang">DisposedException</type>
+            If the report engine is already disposed.
+        @throws <type scope="com::sun::star::lang">IllegalArgumentException</type>
+            If the report definition was not set or is <NULL/>.
+    */
+    com::sun::star::util::URL createDocument()
+        raises( ::com::sun::star::lang::DisposedException,
+                com::sun::star::lang::IllegalArgumentException,
+                ::com::sun::star::uno::Exception );
+
+    /** allows to interrupt the creation process of the report document.
+        @throws <type scope="com::sun::star::lang">DisposedException</type>
+            If the report engine is already disposed.
+    */
+    void interrupt()
+        raises( ::com::sun::star::lang::DisposedException,
+                ::com::sun::star::uno::Exception );
+
+    /** specifies the report definition object which is used to create the resulting report.
+    */
+    [attribute] XReportDefinition ReportDefinition
+    {
+        set raises (com::sun::star::lang::IllegalArgumentException);
+    };
+
+    /** specifies the active connection which is used to create the resulting report.
+    */
+    [attribute] com::sun::star::sdbc::XConnection ActiveConnection
+    {
+        set raises (com::sun::star::lang::IllegalArgumentException);
+    };
+
+    /** specifies the status indicator which shows the progress of the report generation process.
+    */
+    [attribute] com::sun::star::task::XStatusIndicator StatusIndicator;
+};
+
+//=============================================================================
+
+}; }; }; };
+
+/*=============================================================================
+
+=============================================================================*/
+#endif
