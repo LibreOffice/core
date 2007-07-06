@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ViewShellBase.cxx,v $
  *
- *  $Revision: 1.37 $
+ *  $Revision: 1.38 $
  *
- *  last change: $Author: hr $ $Date: 2007-06-27 15:46:50 $
+ *  last change: $Author: rt $ $Date: 2007-07-06 13:14:18 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1232,6 +1232,13 @@ void ViewShellBase::SetViewTabBar (const ::rtl::Reference<ViewTabBar>& rViewTabB
     return mpImpl->mpViewWindow.get();
 }
 
+CustomHandleManager& ViewShellBase::getCustomHandleManager() const
+{
+    if( !mpCustomHandleManager.get() )
+        const_cast< ViewShellBase* >(this)->mpCustomHandleManager.reset( new ::sd::CustomHandleManager(*const_cast< ViewShellBase* >(this)) );
+
+    return *mpCustomHandleManager.get();
+}
 
 
 
@@ -1730,5 +1737,35 @@ void FocusForwardingWindow::KeyInput (const KeyEvent& rKEvt)
 }
 
 } // end of anonymouse namespace
+
+// ====================================================================
+
+CustomHandleManager::CustomHandleManager( ViewShellBase& rViewShellBase  )
+: mrViewShellBase( rViewShellBase )
+{
+}
+
+CustomHandleManager::~CustomHandleManager()
+{
+    DBG_ASSERT( maSupplier.empty(), "sd::CustomHandleManager::~CustomHandleManager(), still suppliers attached!" );
+}
+
+void CustomHandleManager::registerSupplier( ICustomhandleSupplier* pSupplier )
+{
+    maSupplier.insert( pSupplier );
+}
+
+void CustomHandleManager::unRegisterSupplier( ICustomhandleSupplier* pSupplier )
+{
+    maSupplier.erase( pSupplier );
+}
+
+void CustomHandleManager::addCustomHandler( SdrView& rSourceView, ViewShell::ShellType eShellType, SdrHdlList& rHandlerList )
+{
+    for( std::set< ICustomhandleSupplier* >::iterator aIter( maSupplier.begin() ); aIter != maSupplier.end(); aIter++ )
+    {
+        (*aIter)->addCustomHandler( rSourceView, eShellType, rHandlerList );
+    }
+}
 
 } // end of namespace sd
