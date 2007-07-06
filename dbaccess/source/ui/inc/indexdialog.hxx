@@ -4,9 +4,9 @@
  *
  *  $RCSfile: indexdialog.hxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: hr $ $Date: 2006-06-20 03:17:28 $
+ *  last change: $Author: rt $ $Date: 2007-07-06 08:30:26 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -169,7 +169,7 @@ namespace dbaui
             @param  _bHiContast
                 <TRUE/> when in high contrast mode.
         */
-        virtual sal_Int16 getImageListId(sal_Int16 _eBitmapSet,sal_Bool _bHiContast) const;
+        virtual ImageList getImageList(sal_Int16 _eBitmapSet,sal_Bool _bHiContast) const;
 
         /** will be called when the controls need to be resized.
         */
