@@ -4,9 +4,9 @@
  *
  *  $RCSfile: swtable.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: vg $ $Date: 2007-05-25 13:01:16 $
+ *  last change: $Author: rt $ $Date: 2007-07-06 09:52:34 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -2683,19 +2683,15 @@ USHORT SwTableBox::IsFormulaOrValueBox() const
     return nWhich;
 }
 
-// JP 12.09.97 - Bug 41223:
-// falls an der International Einstellung gedreht wurde, so muss beim Laden
-// eine entsprechende Aktualisierung erfolgen.
-void SwTableBox::ChgByLanguageSystem()
+void SwTableBox::ActualiseValueBox()
 {
     const SfxPoolItem *pFmtItem, *pValItem;
     SwFrmFmt* pFmt = GetFrmFmt();
-    ULONG nFmtId;
     if( SFX_ITEM_SET == pFmt->GetItemState( RES_BOXATR_FORMAT, TRUE, &pFmtItem )
-        && ( nFmtId = ((SwTblBoxNumFormat*)pFmtItem)->GetValue()) < SV_COUNTRY_LANGUAGE_OFFSET
         && SFX_ITEM_SET == pFmt->GetItemState( RES_BOXATR_VALUE, TRUE, &pValItem ))
     {
-        ULONG nNdPos;
+        const ULONG nFmtId = ((SwTblBoxNumFormat*)pFmtItem)->GetValue();
+        ULONG nNdPos = ULONG_MAX;
         SvNumberFormatter* pNumFmtr = pFmt->GetDoc()->GetNumberFormatter();
 
         if( !pNumFmtr->IsTextFormat( nFmtId ) &&
