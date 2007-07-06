@@ -4,9 +4,9 @@
  *
  *  $RCSfile: svdtrans.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: vg $ $Date: 2007-04-11 16:28:09 $
+ *  last change: $Author: rt $ $Date: 2007-07-06 13:18:40 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -259,8 +259,8 @@ public:
 Polygon Rect2Poly(const Rectangle& rRect, const GeoStat& rGeo);
 void Poly2Rect(const Polygon& rPol, Rectangle& rRect, GeoStat& rGeo);
 
-void OrthoDistance8(const Point& rPt0, Point& rPt, FASTBOOL bBigOrtho);
-void OrthoDistance4(const Point& rPt0, Point& rPt, FASTBOOL bBigOrtho);
+SVX_DLLPUBLIC void OrthoDistance8(const Point& rPt0, Point& rPt, FASTBOOL bBigOrtho);
+SVX_DLLPUBLIC void OrthoDistance4(const Point& rPt0, Point& rPt, FASTBOOL bBigOrtho);
 
 // Multiplikation und anschliessende Division.
 // Rechnung und Zwischenergebnis sind BigInt.
