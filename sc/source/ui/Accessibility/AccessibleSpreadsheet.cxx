@@ -4,9 +4,9 @@
  *
  *  $RCSfile: AccessibleSpreadsheet.cxx,v $
  *
- *  $Revision: 1.48 $
+ *  $Revision: 1.49 $
  *
- *  last change: $Author: vg $ $Date: 2007-02-27 12:56:35 $
+ *  last change: $Author: rt $ $Date: 2007-07-06 12:41:00 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -107,29 +107,17 @@ ScAccessibleSpreadsheet::ScAccessibleSpreadsheet(
     :
     ScAccessibleTableBase (pAccDoc, GetDocument(pViewShell),
         ScRange(ScAddress(0, 0, nTab),ScAddress(MAXCOL, MAXROW, nTab))),
-    mpViewShell(pViewShell),
-    mpMarkedRanges(NULL),
-    mpSortedMarkedCells(NULL),
-    mpAccDoc(pAccDoc),
-    mpAccCell(NULL),
-    meSplitPos(eSplitPos),
-    mbHasSelection(sal_False),
-    mbDelIns(sal_False),
-    mbIsFocusSend(sal_False)
+    mbIsSpreadsheet( sal_True )
 {
-    maVisCells = GetVisCells(GetVisArea(pViewShell, eSplitPos));
-    if (pViewShell)
-    {
-        pViewShell->AddAccessibilityObject(*this);
+    ConstructScAccessibleSpreadsheet( pAccDoc, pViewShell, nTab, eSplitPos );
+}
 
-        maActiveCell = pViewShell->GetViewData()->GetCurPos();
-        mbHasSelection = pViewShell->GetViewData()->GetMarkData().GetTableSelect(maActiveCell.Tab()) &&
-                    (pViewShell->GetViewData()->GetMarkData().IsMarked() ||
-                    pViewShell->GetViewData()->GetMarkData().IsMultiMarked());
-        mpAccCell = GetAccessibleCellAt(maActiveCell.Row(), maActiveCell.Col());
-        mpAccCell->acquire();
-        mpAccCell->Init();
-    }
+ScAccessibleSpreadsheet::ScAccessibleSpreadsheet(
+        ScAccessibleSpreadsheet& rParent, const ScRange& rRange ) :
+    ScAccessibleTableBase( rParent.mpAccDoc, rParent.mpDoc, rRange),
+    mbIsSpreadsheet( sal_False )
+{
+    ConstructScAccessibleSpreadsheet( rParent.mpAccDoc, rParent.mpViewShell, rParent.mnTab, rParent.meSplitPos );
 }
 
 ScAccessibleSpreadsheet::~ScAccessibleSpreadsheet()
@@ -140,6 +128,38 @@ ScAccessibleSpreadsheet::~ScAccessibleSpreadsheet()
         delete mpSortedMarkedCells;
     if (mpViewShell)
         mpViewShell->RemoveAccessibilityObject(*this);
+}
+
+void ScAccessibleSpreadsheet::ConstructScAccessibleSpreadsheet(
+    ScAccessibleDocument* pAccDoc,
+    ScTabViewShell* pViewShell,
+    SCTAB nTab,
+    ScSplitPos eSplitPos)
+{
+    mpViewShell = pViewShell;
+    mpMarkedRanges = 0;
+    mpSortedMarkedCells = 0;
+    mpAccDoc = pAccDoc;
+    mpAccCell = 0;
+    meSplitPos = eSplitPos;
+    mnTab = nTab;
+    mbHasSelection = sal_False;
+    mbDelIns = sal_False;
+    mbIsFocusSend = sal_False;
+    maVisCells = GetVisCells(GetVisArea(mpViewShell, meSplitPos));
+    if (mpViewShell)
+    {
+        mpViewShell->AddAccessibilityObject(*this);
+
+        const ScViewData& rViewData = *mpViewShell->GetViewData();
+        const ScMarkData& rMarkData = rViewData.GetMarkData();
+        maActiveCell = rViewData.GetCurPos();
+        mbHasSelection = rMarkData.GetTableSelect(maActiveCell.Tab()) &&
+                    (rMarkData.IsMarked() || rMarkData.IsMultiMarked());
+        mpAccCell = GetAccessibleCellAt(maActiveCell.Row(), maActiveCell.Col());
+        mpAccCell->acquire();
+        mpAccCell->Init();
+    }
 }
 
 void SAL_CALL ScAccessibleSpreadsheet::disposing()
@@ -384,6 +404,44 @@ void ScAccessibleSpreadsheet::Notify( SfxBroadcaster& rBC, const SfxHint& rHint 
 }
 
     //=====  XAccessibleTable  ================================================
+
+uno::Reference< XAccessibleTable > SAL_CALL ScAccessibleSpreadsheet::getAccessibleRowHeaders(  )
+                    throw (uno::RuntimeException)
+{
+    ScUnoGuard aGuard;
+    IsObjectValid();
+    uno::Reference< XAccessibleTable > xAccessibleTable;
+    if( mpDoc && mbIsSpreadsheet )
+    {
+        if( const ScRange* pRowRange = mpDoc->GetRepeatRowRange( mnTab ) )
+        {
+            SCROW nStart = pRowRange->aStart.Row();
+            SCROW nEnd = pRowRange->aEnd.Row();
+            if( (0 <= nStart) && (nStart <= nEnd) && (nEnd <= MAXROW) )
+                xAccessibleTable.set( new ScAccessibleSpreadsheet( *this, ScRange( 0, nStart, mnTab, MAXCOL, nEnd, mnTab ) ) );
+        }
+    }
+    return xAccessibleTable;
+}
+
+uno::Reference< XAccessibleTable > SAL_CALL ScAccessibleSpreadsheet::getAccessibleColumnHeaders(  )
+                    throw (uno::RuntimeException)
+{
+    ScUnoGuard aGuard;
+    IsObjectValid();
+    uno::Reference< XAccessibleTable > xAccessibleTable;
+    if( mpDoc && mbIsSpreadsheet )
+    {
+        if( const ScRange* pColRange = mpDoc->GetRepeatColRange( mnTab ) )
+        {
+            SCCOL nStart = pColRange->aStart.Col();
+            SCCOL nEnd = pColRange->aEnd.Col();
+            if( (0 <= nStart) && (nStart <= nEnd) && (nEnd <= MAXCOL) )
+                xAccessibleTable.set( new ScAccessibleSpreadsheet( *this, ScRange( nStart, 0, mnTab, nEnd, MAXROW, mnTab ) ) );
+        }
+    }
+    return xAccessibleTable;
+}
 
 uno::Sequence< sal_Int32 > SAL_CALL ScAccessibleSpreadsheet::getSelectedAccessibleRows(  )
                     throw (uno::RuntimeException)
