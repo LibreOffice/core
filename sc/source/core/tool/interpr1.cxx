@@ -4,9 +4,9 @@
  *
  *  $RCSfile: interpr1.cxx,v $
  *
- *  $Revision: 1.47 $
+ *  $Revision: 1.48 $
  *
- *  last change: $Author: rt $ $Date: 2007-07-03 15:49:30 $
+ *  last change: $Author: rt $ $Date: 2007-07-06 12:35:07 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1967,13 +1967,13 @@ void ScInterpreter::ScFormula()
                     ((ScFormulaCell*)pCell)->GetFormula( aFormula );
                 break;
                 default:
-                    SetError( NOVALUE );
+                    SetError( NOTAVAILABLE );
             }
         }
         break;
         default:
             Pop();
-            SetError( NOVALUE );
+            SetError( NOTAVAILABLE );
     }
     PushString( aFormula );
 }
@@ -1991,13 +1991,13 @@ void ScInterpreter::ScIsNV()
         {
             ScAddress aAdr;
             PopDoubleRefOrSingleRef( aAdr );
-            if ( nGlobalError == NOVALUE )
+            if ( nGlobalError == NOTAVAILABLE )
                 nRes = 1;
             else
             {
                 ScBaseCell* pCell = GetCell( aAdr );
                 USHORT nErr = GetCellErrCode( pCell );
-                nRes = (nErr == NOVALUE);
+                nRes = (nErr == NOTAVAILABLE);
             }
         }
         break;
@@ -2007,20 +2007,20 @@ void ScInterpreter::ScIsNV()
             if ( !pMat )
                 ;   // nothing
             else if ( !pJumpMatrix )
-                nRes = (pMat->GetErrorIfNotString( 0 ) == NOVALUE);
+                nRes = (pMat->GetErrorIfNotString( 0 ) == NOTAVAILABLE);
             else
             {
                 SCSIZE nCols, nRows, nC, nR;
                 pMat->GetDimensions( nCols, nRows);
                 pJumpMatrix->GetPos( nC, nR);
                 if ( nC < nCols && nR < nRows )
-                    nRes = (pMat->GetErrorIfNotString( nC, nR) == NOVALUE);
+                    nRes = (pMat->GetErrorIfNotString( nC, nR) == NOTAVAILABLE);
             }
         }
         break;
         default:
             PopError();
-            if ( nGlobalError == NOVALUE )
+            if ( nGlobalError == NOTAVAILABLE )
                 nRes = 1;
     }
     nGlobalError = 0;
@@ -2039,13 +2039,13 @@ void ScInterpreter::ScIsErr()
         {
             ScAddress aAdr;
             PopDoubleRefOrSingleRef( aAdr );
-            if ( nGlobalError && nGlobalError != NOVALUE )
+            if ( nGlobalError && nGlobalError != NOTAVAILABLE )
                 nRes = 1;
             else
             {
                 ScBaseCell* pCell = GetCell( aAdr );
                 USHORT nErr = GetCellErrCode( pCell );
-                nRes = (nErr && nErr != NOVALUE);
+                nRes = (nErr && nErr != NOTAVAILABLE);
             }
         }
         break;
@@ -2053,11 +2053,11 @@ void ScInterpreter::ScIsErr()
         {
             ScMatrixRef pMat = PopMatrix();
             if ( nGlobalError || !pMat )
-                nRes = ((nGlobalError && nGlobalError != NOVALUE) || !pMat);
+                nRes = ((nGlobalError && nGlobalError != NOTAVAILABLE) || !pMat);
             else if ( !pJumpMatrix )
             {
                 USHORT nErr = pMat->GetErrorIfNotString( 0 );
-                nRes = (nErr && nErr != NOVALUE);
+                nRes = (nErr && nErr != NOTAVAILABLE);
             }
             else
             {
@@ -2067,14 +2067,14 @@ void ScInterpreter::ScIsErr()
                 if ( nC < nCols && nR < nRows )
                 {
                     USHORT nErr = pMat->GetErrorIfNotString( nC, nR);
-                    nRes = (nErr && nErr != NOVALUE);
+                    nRes = (nErr && nErr != NOTAVAILABLE);
                 }
             }
         }
         break;
         default:
             PopError();
-            if ( nGlobalError && nGlobalError != NOVALUE )
+            if ( nGlobalError && nGlobalError != NOTAVAILABLE )
                 nRes = 1;
     }
     nGlobalError = 0;
@@ -2232,9 +2232,9 @@ void ScInterpreter::ScN()
     USHORT nErr = nGlobalError;
     nGlobalError = 0;
     double fVal = GetDouble();
-    if ( nGlobalError == NOVALUE || nGlobalError == errIllegalArgument )
-        nGlobalError = 0;       // N(#NV) und N("text") sind ok
-    if ( !nGlobalError && nErr != NOVALUE )
+    if ( nGlobalError == NOTAVAILABLE || nGlobalError == errIllegalArgument )
+        nGlobalError = 0;       // N(#NA) and N("text") are ok
+    if ( !nGlobalError && nErr != NOTAVAILABLE )
         nGlobalError = nErr;
     PushDouble( fVal );
 }
@@ -3248,7 +3248,7 @@ double ScInterpreter::IterateParameters( ScIterFunc eFunc, BOOL bTextAsZero )
     switch( eFunc )
     {
         case ifSUM:     fRes = ::rtl::math::approxAdd( fRes, fMem ); break;
-        case ifAVERAGE: fRes = ::rtl::math::approxAdd( fRes, fMem ) / nCount; break;
+        case ifAVERAGE: fRes = div(::rtl::math::approxAdd( fRes, fMem ), nCount); break;
         case ifCOUNT2:
         case ifCOUNT:   fRes  = nCount; break;
         case ifPRODUCT: if ( !nCount ) fRes = 0.0; break;
@@ -3419,7 +3419,11 @@ void ScInterpreter::ScVar( BOOL bTextAsZero )
     double nVal;
     double nValCount;
     GetStVarParams( nVal, nValCount, bTextAsZero );
-    PushDouble(nVal / (nValCount - 1.0));
+
+    if (nValCount <= 1.0)
+        PushError( errDivisionByZero );
+    else
+        PushDouble( nVal / (nValCount - 1.0));
 }
 
 
@@ -3428,7 +3432,8 @@ void ScInterpreter::ScVarP( BOOL bTextAsZero )
     double nVal;
     double nValCount;
     GetStVarParams( nVal, nValCount, bTextAsZero );
-    PushDouble(nVal / nValCount);
+
+    PushDouble( div( nVal, nValCount));
 }
 
 
@@ -3437,7 +3442,10 @@ void ScInterpreter::ScStDev( BOOL bTextAsZero )
     double nVal;
     double nValCount;
     GetStVarParams( nVal, nValCount, bTextAsZero );
-    PushDouble(sqrt(nVal / (nValCount - 1.0)));
+    if (nValCount <= 1.0)
+        PushError( errDivisionByZero );
+    else
+        PushDouble( sqrt( nVal / (nValCount - 1.0)));
 }
 
 
@@ -3446,7 +3454,27 @@ void ScInterpreter::ScStDevP( BOOL bTextAsZero )
     double nVal;
     double nValCount;
     GetStVarParams( nVal, nValCount, bTextAsZero );
-    PushDouble(sqrt(nVal / nValCount));
+    if (nValCount == 0.0)
+        PushError( errDivisionByZero );
+    else
+        PushDouble( sqrt( nVal / nValCount));
+
+    /* this was: PushDouble( sqrt( div( nVal, nValCount)));
+     *
+     * Besides that the special NAN gets lost in the call through sqrt(),
+     * unxlngi6.pro then looped back and forth somewhere between div() and
+     * ::rtl::math::setNan(). Tests showed that
+     *
+     *      sqrt( div( 1, 0));
+     *
+     * produced a loop, but
+     *
+     *      double f1 = div( 1, 0);
+     *      sqrt( f1 );
+     *
+     * was fine. There seems to be some compiler optimization problem. It does
+     * not occur when compiled with debug=t.
+     */
 }
 
 
@@ -3893,7 +3921,7 @@ void ScInterpreter::ScMatch()
                         nR = aCellIter.GetRow();
                     else
                     {
-                        SetNV();
+                        SetNA();
                         return;
                     }
                 }
@@ -3901,7 +3929,7 @@ void ScInterpreter::ScMatch()
                 {                                       // <= or >=
                     if ( !aCellIter.FindEqualOrSortedLastInRange( nC, nR ) )
                     {
-                        SetNV();
+                        SetNA();
                         return;
                     }
                 }
@@ -3921,7 +3949,7 @@ void ScInterpreter::ScMatch()
                         nC = aCellIter.GetCol();
                     else
                     {
-                        SetNV();
+                        SetNA();
                         return;
                     }
                 }
@@ -3929,7 +3957,7 @@ void ScInterpreter::ScMatch()
                 {                                       // <= or >=
                     if ( !aCellIter.FindEqualOrSortedLastInRange( nC, nR ) )
                     {
-                        SetNV();
+                        SetNA();
                         return;
                     }
                 }
@@ -4583,7 +4611,7 @@ void ScInterpreter::ScLookup()
                 }
                 if (i == nMatCount+2 && !bFound)
                 {
-                    SetNV();
+                    SetNA();
                     return;
                 }
                 else if (!bFound)
@@ -4610,7 +4638,7 @@ void ScInterpreter::ScLookup()
                 }
                 if (i == nMatCount+2 && !bFound)
                 {
-                    SetNV();
+                    SetNA();
                     return;
                 }
                 else if (!bFound)
@@ -4630,7 +4658,7 @@ void ScInterpreter::ScLookup()
                     static_cast<SCSIZE>(nC - nCol1);
             else
             {
-                SetNV();
+                SetNA();
                 return;
             }
         }
@@ -4904,7 +4932,7 @@ void ScInterpreter::ScHLookup()
                                     static_cast<SCSIZE>(nZIndex)));
                 }
                 else
-                    SetNV();
+                    SetNA();
             }
             else
             {
@@ -4940,7 +4968,7 @@ void ScInterpreter::ScHLookup()
                     }
                 }
                 else
-                    SetNV();
+                    SetNA();
             }
         }
         else
@@ -5161,7 +5189,7 @@ void ScInterpreter::ScVLookup()
                                     static_cast<SCSIZE>(nSpIndex), nDelta));
                 }
                 else
-                    SetNV();
+                    SetNA();
             }
             else
             {
@@ -5195,7 +5223,7 @@ void ScInterpreter::ScVLookup()
                     }
                 }
                 else
-                    SetNV();
+                    SetNA();
             }
         }
         else
@@ -6592,7 +6620,7 @@ void ScInterpreter::ScErrorType()
     else
     {
         nGlobalError = nOldError;
-        SetNV();
+        SetNA();
     }
 }
 
