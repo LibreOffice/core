@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.14 $
+#   $Revision: 1.15 $
 #
-#   last change: $Author: rt $ $Date: 2007-04-25 09:08:04 $
+#   last change: $Author: rt $ $Date: 2007-07-06 12:16:41 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -83,6 +83,7 @@ SLOFILES =  \
         $(SLO)$/pagedesc.obj \
         $(SLO)$/paintfrm.obj \
         $(SLO)$/sectfrm.obj \
+        $(SLO)$/softpagebreak.obj \
                 $(SLO)$/sortedobjs.obj \
                 $(SLO)$/sortedobjsimpl.obj \
         $(SLO)$/ssfrm.obj \
