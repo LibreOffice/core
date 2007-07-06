@@ -4,9 +4,9 @@
  *
  *  $RCSfile: updatefeed.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: kz $ $Date: 2007-06-19 16:20:54 $
+ *  last change: $Author: rt $ $Date: 2007-07-06 14:39:27 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -37,7 +37,7 @@
 #include "precompiled_extensions.hxx"
 
 #include <cppuhelper/implbase1.hxx>
-#include <cppuhelper/implbase4.hxx>
+#include <cppuhelper/implbase5.hxx>
 #include <cppuhelper/implementationentry.hxx>
 
 #ifndef  _COM_SUN_STAR_BEANS_PROPERTY_HPP_
@@ -52,6 +52,10 @@
 
 #ifndef _COM_SUN_STAR_CONTAINER_XNAMEACCESS_HPP_
 #include <com/sun/star/container/XNameAccess.hpp>
+#endif
+
+#ifndef _COM_SUN_STAR_DEPLOYMENT_UPDATEINFORMATIONENTRY_HPP_
+#include <com/sun/star/deployment/UpdateInformationEntry.hpp>
 #endif
 
 #ifndef _COM_SUN_STAR_DEPLOYMENT_UPDATEINFORMATIONPROVIDER_HPP_
@@ -72,6 +76,16 @@
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #endif
 
+#ifndef  _COM_SUN_STAR_TASK_XPASSWORDCONTAINER_HPP_
+#include <com/sun/star/task/XPasswordContainer.hpp>
+#endif
+#ifndef  _COM_SUN_STAR_TASK_NOMASTEREXCEPTION_HPP_
+#include "com/sun/star/task/NoMasterException.hpp"
+#endif
+
+#ifndef  _COM_SUN_STAR_UCB_AUTHENTICATIONREQUEST_HPP_
+#include "com/sun/star/ucb/AuthenticationRequest.hpp"
+#endif
 #ifndef _COM_SUN_STAR_UCB_XCOMMMANDENVIRONMENT_HPP_
 #include <com/sun/star/ucb/XCommandEnvironment.hpp>
 #endif
@@ -86,6 +100,9 @@
 #endif
 #ifndef _COM_SUN_STAR_UCB_XCONTENTPROVIDER_HPP_
 #include <com/sun/star/ucb/XContentProvider.hpp>
+#endif
+#ifndef  _COM_SUN_STAR_UCB_XINTERACTIONSUPPLYAUTHENTICATION_HPP_
+#include "com/sun/star/ucb/XInteractionSupplyAuthentication.hpp"
 #endif
 #ifndef _COM_SUN_STAR_UCB_OPENCOMMANDARGUMENT2_HPP_
 #include <com/sun/star/ucb/OpenCommandArgument2.hpp>
@@ -337,52 +354,24 @@ void InflateInputStream::readIntoMemory()
     }
 }
 
-
 //------------------------------------------------------------------------------
 
 class UpdateInformationProvider :
-    public ::cppu::WeakImplHelper4< deployment::XUpdateInformationProvider,
+    public ::cppu::WeakImplHelper5< deployment::XUpdateInformationProvider,
                                     ucb::XCommandEnvironment,
                                     ucb::XWebDAVCommandEnvironment,
-                                    lang::XServiceInfo >
+                                    lang::XServiceInfo,
+                                    task::XInteractionHandler >
 {
-    uno::Reference< uno::XComponentContext> m_xContext;
-    uno::Reference< ucb::XCommandProcessor > m_xCommandProcessor;
-    uno::Reference< task::XInteractionHandler > m_xInteractionHandler;
-
-    uno::Sequence< beans::NamedValue > m_aRequestHeaderList;
-
-    osl::Mutex m_aMutex;
-    osl::Condition m_bCancelled;
-
-    sal_Int32 m_nCommandId;
-
-    uno::Reference< io::XInputStream > load(
-        uno::Reference< ucb::XContentIdentifierFactory > const & rxIdFactory,
-        uno::Reference< ucb::XContentProvider > const & rxProvider,
-        rtl::OUString const & rURL);
-
-    uno::Reference< xml::dom::XElement > getDocumentRoot(
-        uno::Reference< ucb::XContentIdentifierFactory > const & rxIdFactory,
-        uno::Reference< ucb::XContentProvider > const & rxProvider,
-        uno::Reference< xml::dom::XDocumentBuilder > const & rxBuilder,
-        uno::Reference< xml::dom::XNode > const & rxNode);
-
-    void storeCommandInfo( sal_Int32 nCommandId,
-        uno::Reference< ucb::XCommandProcessor > const & rxCommandProcessor);
-
-    rtl::OUString m_aUpdateURL;
-
-protected:
-
-    static uno::Any getUILanguage(uno::Reference<uno::XComponentContext> const & xContext);
-
 public:
-    UpdateInformationProvider(const uno::Reference<uno::XComponentContext>&);
-    virtual ~UpdateInformationProvider();
+    static uno::Reference< uno::XInterface > createInstance(const uno::Reference<uno::XComponentContext>& xContext);
 
     static uno::Sequence< rtl::OUString > getServiceNames();
     static rtl::OUString getImplName();
+
+    uno::Reference< xml::dom::XElement > getDocumentRoot(const uno::Reference< xml::dom::XNode >& rxNode);
+    uno::Reference< xml::dom::XNode > getChildNode(const uno::Reference< xml::dom::XNode >& rxNode, const rtl::OUString& rName);
+
 
     // XUpdateInformationService
     virtual uno::Sequence< uno::Reference< xml::dom::XElement > > SAL_CALL
@@ -401,9 +390,15 @@ public:
         uno::Reference< task::XInteractionHandler > const & handler )
         throw (uno::RuntimeException);
 
+    virtual uno::Reference< container::XEnumeration > SAL_CALL
+    getUpdateInformationEnumeration(
+        uno::Sequence< rtl::OUString > const & repositories,
+        rtl::OUString const & extensionId
+    ) throw (uno::Exception, uno::RuntimeException);
+
     // XCommandEnvironment
     virtual uno::Reference< task::XInteractionHandler > SAL_CALL getInteractionHandler()
-        throw ( uno::RuntimeException ) { osl::MutexGuard aGuard(m_aMutex); return m_xInteractionHandler; };
+        throw ( uno::RuntimeException );
 
     virtual uno::Reference< ucb::XProgressHandler > SAL_CALL getProgressHandler()
         throw ( uno::RuntimeException ) { return  uno::Reference< ucb::XProgressHandler >(); };
@@ -420,12 +415,148 @@ public:
         throw (uno::RuntimeException);
     virtual uno::Sequence< rtl::OUString > SAL_CALL getSupportedServiceNames()
         throw (uno::RuntimeException);
+
+    // XInteractionHandler
+    virtual void SAL_CALL handle( const uno::Reference< task::XInteractionRequest >& rRequest )
+        throw( uno::RuntimeException );
+
+protected:
+
+    virtual ~UpdateInformationProvider();
+    static uno::Any getUILanguage(uno::Reference<uno::XComponentContext> const & xContext);
+
+private:
+    uno::Reference< io::XInputStream > load(const rtl::OUString& rURL);
+
+    void storeCommandInfo( sal_Int32 nCommandId,
+        uno::Reference< ucb::XCommandProcessor > const & rxCommandProcessor);
+
+    bool initPasswordContainer( uno::Reference< task::XPasswordContainer > * pContainer );
+
+    UpdateInformationProvider(const uno::Reference<uno::XComponentContext>& xContext,
+                              const uno::Reference< ucb::XContentIdentifierFactory >& xContentIdFactory,
+                              const uno::Reference< ucb::XContentProvider >& xContentProvider,
+                              const uno::Reference< xml::dom::XDocumentBuilder >& xDocumentBuilder,
+                              const uno::Reference< xml::xpath::XXPathAPI >& xXPathAPI);
+
+    const uno::Reference< uno::XComponentContext> m_xContext;
+
+    const uno::Reference< ucb::XContentIdentifierFactory > m_xContentIdFactory;
+    const uno::Reference< ucb::XContentProvider > m_xContentProvider;
+    const uno::Reference< xml::dom::XDocumentBuilder > m_xDocumentBuilder;
+    const uno::Reference< xml::xpath::XXPathAPI > m_xXPathAPI;
+
+    uno::Sequence< beans::NamedValue > m_aRequestHeaderList;
+
+    uno::Reference< ucb::XCommandProcessor > m_xCommandProcessor;
+    uno::Reference< task::XInteractionHandler > m_xInteractionHandler;
+
+    osl::Mutex m_aMutex;
+    osl::Condition m_bCancelled;
+
+    sal_Int32 m_nCommandId;
+
+    rtl::OUString m_aUpdateURL;
 };
 
 //------------------------------------------------------------------------------
 
-UpdateInformationProvider::UpdateInformationProvider(uno::Reference<uno::XComponentContext> const & xContext) :
-    m_xContext(xContext), m_aRequestHeaderList(2)
+class UpdateInformationEnumeration : public ::cppu::WeakImplHelper1< container::XEnumeration >
+{
+public:
+    UpdateInformationEnumeration(const uno::Reference< xml::dom::XNodeList >& xNodeList,
+                                 const uno::Reference< UpdateInformationProvider > xUpdateInformationProvider) :
+        m_nCount(0), m_nNodes(0), m_xNodeList(xNodeList),
+        m_xUpdateInformationProvider(xUpdateInformationProvider)
+    {
+        if( xNodeList.is() )
+            m_nNodes = xNodeList->getLength();
+    };
+
+    ~UpdateInformationEnumeration() {};
+
+    // XEnumeration
+    sal_Bool SAL_CALL hasMoreElements() throw (uno::RuntimeException) { return m_nCount < m_nNodes; };
+    uno::Any SAL_CALL nextElement() throw (container::NoSuchElementException, lang::WrappedTargetException, uno::RuntimeException)
+    {
+        try
+        {
+            deployment::UpdateInformationEntry aEntry;
+
+            uno::Reference< xml::dom::XNode > xAtomEntryNode( m_xNodeList->item(m_nCount++) );
+
+            uno::Reference< xml::dom::XNode > xSummaryNode(
+                m_xUpdateInformationProvider->getChildNode( xAtomEntryNode, UNISTRING( "summary/text()" ) )
+            );
+
+            if( xSummaryNode.is() )
+                aEntry.Description = xSummaryNode->getNodeValue();
+
+            uno::Reference< xml::dom::XNode > xContentNode(
+                m_xUpdateInformationProvider->getChildNode( xAtomEntryNode, UNISTRING( "content" ) ) );
+
+            if( xContentNode.is() )
+                aEntry.UpdateDocument = m_xUpdateInformationProvider->getDocumentRoot(xContentNode);
+
+            return uno::makeAny(aEntry);
+        }
+
+        // action has been aborted
+        catch( ucb::CommandAbortedException const & e)
+            { throw lang::WrappedTargetException( UNISTRING( "Command aborted" ), *this, uno::makeAny(e) ); }
+
+        // let runtime exception pass
+        catch( uno::RuntimeException const & ) { throw; }
+
+        // document not accessible
+        catch( uno::Exception const & e)
+            { throw lang::WrappedTargetException( UNISTRING( "Document not accessible" ), *this, uno::makeAny(e) ); }
+    }
+
+private:
+    sal_Int32 m_nCount;
+    sal_Int32 m_nNodes;
+    const uno::Reference< xml::dom::XNodeList > m_xNodeList;
+    const uno::Reference< UpdateInformationProvider > m_xUpdateInformationProvider;
+};
+
+//------------------------------------------------------------------------------
+
+class SingleUpdateInformationEnumeration : public ::cppu::WeakImplHelper1< container::XEnumeration >
+{
+public:
+    SingleUpdateInformationEnumeration(const uno::Reference< xml::dom::XElement >& xElement)
+        : m_nCount(0) { m_aEntry.UpdateDocument = xElement; };
+    ~SingleUpdateInformationEnumeration() {};
+
+    // XEnumeration
+    sal_Bool SAL_CALL hasMoreElements() throw (uno::RuntimeException) { return 0 == m_nCount; };
+    uno::Any SAL_CALL nextElement() throw (container::NoSuchElementException, lang::WrappedTargetException, uno::RuntimeException)
+    {
+        if( m_nCount > 0 )
+            throw container::NoSuchElementException(rtl::OUString::valueOf(m_nCount), *this);
+
+        ++m_nCount;
+        return uno::makeAny(m_aEntry);
+    };
+
+private:
+    sal_uInt8 m_nCount;
+    deployment::UpdateInformationEntry m_aEntry;
+};
+
+
+//------------------------------------------------------------------------------
+
+UpdateInformationProvider::UpdateInformationProvider(
+    const uno::Reference<uno::XComponentContext>& xContext,
+    const uno::Reference< ucb::XContentIdentifierFactory >& xContentIdFactory,
+    const uno::Reference< ucb::XContentProvider >& xContentProvider,
+    const uno::Reference< xml::dom::XDocumentBuilder >& xDocumentBuilder,
+    const uno::Reference< xml::xpath::XXPathAPI >& xXPathAPI
+) : m_xContext(xContext), m_xContentIdFactory(xContentIdFactory),
+    m_xContentProvider(xContentProvider), m_xDocumentBuilder(xDocumentBuilder),
+    m_xXPathAPI(xXPathAPI), m_aRequestHeaderList(2)
 {
     rtl::OUString aPath;
     if( osl_getExecutableFile(&aPath.pData) == osl_Process_E_None )
@@ -455,6 +586,35 @@ UpdateInformationProvider::UpdateInformationProvider(uno::Reference<uno::XCompon
             m_aRequestHeaderList[2].Value = uno::makeAny(aUserAgent);
         }
     }
+}
+
+//------------------------------------------------------------------------------
+uno::Reference< uno::XInterface >
+UpdateInformationProvider::createInstance(const uno::Reference<uno::XComponentContext>& xContext)
+{
+    uno::Reference< lang::XMultiComponentFactory > xServiceManager(xContext->getServiceManager());
+    if( !xServiceManager.is() )
+        throw uno::RuntimeException(
+            UNISTRING( "unable to obtain service manager from component context" ),
+            uno::Reference< uno::XInterface > ());
+
+    uno::Reference< ucb::XContentIdentifierFactory > xContentIdFactory(
+        xServiceManager->createInstanceWithContext( UNISTRING( "com.sun.star.ucb.UniversalContentBroker" ), xContext ),
+        uno::UNO_QUERY_THROW);
+
+    uno::Reference< ucb::XContentProvider > xContentProvider(xContentIdFactory, uno::UNO_QUERY_THROW);
+
+    uno::Reference< xml::dom::XDocumentBuilder > xDocumentBuilder(
+        xServiceManager->createInstanceWithContext( UNISTRING( "com.sun.star.xml.dom.DocumentBuilder" ), xContext ),
+        uno::UNO_QUERY_THROW);
+
+    uno::Reference< xml::xpath::XXPathAPI > xXPath(
+        xServiceManager->createInstanceWithContext( UNISTRING( "com.sun.star.xml.xpath.XPathAPI" ), xContext ),
+        uno::UNO_QUERY_THROW);
+
+    xXPath->registerNS( UNISTRING("atom"), UNISTRING("http://www.w3.org/2005/Atom") );
+
+    return *new UpdateInformationProvider(xContext, xContentIdFactory, xContentProvider, xDocumentBuilder, xXPath);
 }
 
 //------------------------------------------------------------------------------
@@ -511,19 +671,43 @@ UpdateInformationProvider::storeCommandInfo(
 
 //------------------------------------------------------------------------------
 
-uno::Reference< io::XInputStream >
-UpdateInformationProvider::load(
-    uno::Reference< ucb::XContentIdentifierFactory > const & rxIdFactory,
-    uno::Reference< ucb::XContentProvider > const & rxProvider,
-    rtl::OUString const & rURL)
+bool UpdateInformationProvider::initPasswordContainer( uno::Reference< task::XPasswordContainer > * pContainer )
 {
-    uno::Reference< ucb::XContentIdentifier > xId = rxIdFactory->createContentIdentifier(rURL);
+    OSL_ENSURE( pContainer, "specification violation" );
+
+    if ( !pContainer->is() )
+    {
+        uno::Reference<uno::XComponentContext> xContext(m_xContext);
+
+        if( !xContext.is() )
+            throw uno::RuntimeException( UNISTRING( "UpdateInformationProvider: empty component context" ), *this );
+
+        uno::Reference< lang::XMultiComponentFactory > xServiceManager(xContext->getServiceManager());
+
+        if( !xServiceManager.is() )
+            throw uno::RuntimeException( UNISTRING( "UpdateInformationProvider: unable to obtain service manager from component context" ), *this );
+
+        *pContainer = uno::Reference< task::XPasswordContainer >(
+            xServiceManager->createInstanceWithContext( UNISTRING( "com.sun.star.task.PasswordContainer" ), xContext ),
+            uno::UNO_QUERY);
+    }
+
+    OSL_ENSURE(pContainer->is(), "unexpected situation");
+    return pContainer->is();
+}
+
+//------------------------------------------------------------------------------
+
+uno::Reference< io::XInputStream >
+UpdateInformationProvider::load(const rtl::OUString& rURL)
+{
+    uno::Reference< ucb::XContentIdentifier > xId = m_xContentIdFactory->createContentIdentifier(rURL);
 
     if( !xId.is() )
         throw uno::RuntimeException(
             UNISTRING( "unable to obtain universal content id" ), *this);
 
-    uno::Reference< ucb::XCommandProcessor > xCommandProcessor(rxProvider->queryContent(xId), uno::UNO_QUERY_THROW);
+    uno::Reference< ucb::XCommandProcessor > xCommandProcessor(m_xContentProvider->queryContent(xId), uno::UNO_QUERY_THROW);
     rtl::Reference< ActiveDataSink > aSink(new ActiveDataSink());
 
     ucb::OpenCommandArgument2 aOpenArgument;
@@ -543,7 +727,7 @@ UpdateInformationProvider::load(
         uno::Any aResult = xCommandProcessor->execute(aCommand, nCommandId,
             static_cast < XCommandEnvironment *> (this));
     }
-    catch( const uno::Exception & e )
+    catch( const uno::Exception & /* e */ )
     {
         storeCommandInfo(0, uno::Reference< ucb::XCommandProcessor > ());
 
@@ -594,21 +778,18 @@ UpdateInformationProvider::load(
 
 //------------------------------------------------------------------------------
 
+// TODO: docu content node
+
 uno::Reference< xml::dom::XElement >
-UpdateInformationProvider::getDocumentRoot(
-    uno::Reference< ucb::XContentIdentifierFactory > const & rxIdFactory,
-    uno::Reference< ucb::XContentProvider > const & rxProvider,
-    uno::Reference< xml::dom::XDocumentBuilder > const & rxBuilder,
-    uno::Reference< xml::dom::XNode > const & rxNode
-)
+UpdateInformationProvider::getDocumentRoot(const uno::Reference< xml::dom::XNode >& rxNode)
 {
     uno::Reference< xml::dom::XElement > xElement(rxNode, uno::UNO_QUERY_THROW);
 
     // load the document referenced in 'src' attribute ..
     if( xElement->hasAttribute( UNISTRING("src") ) )
     {
-        uno::Reference< xml::dom::XDocument > xUpdateXML = rxBuilder->parse(
-            load(rxIdFactory, rxProvider, xElement->getAttribute( UNISTRING("src") )));
+        uno::Reference< xml::dom::XDocument > xUpdateXML =
+            m_xDocumentBuilder->parse(load(xElement->getAttribute( UNISTRING("src") )));
 
         OSL_ASSERT( xUpdateXML.is() );
 
@@ -630,7 +811,7 @@ UpdateInformationProvider::getDocumentRoot(
                 /* Copy the content to a dedicated document since XXPathAPI->selectNodeList
                  * seems to evaluate expression always relative to the root node.
                  */
-                uno::Reference< xml::dom::XDocument > xUpdateXML = rxBuilder->newDocument();
+                uno::Reference< xml::dom::XDocument > xUpdateXML = m_xDocumentBuilder->newDocument();
                 xUpdateXML->appendChild( xUpdateXML->importNode(xChildElement.get(), sal_True ) );
                 return xUpdateXML->getDocumentElement();
             }
@@ -642,8 +823,17 @@ UpdateInformationProvider::getDocumentRoot(
 
 //------------------------------------------------------------------------------
 
-uno::Sequence< uno::Reference< xml::dom::XElement > > SAL_CALL
-UpdateInformationProvider::getUpdateInformation(
+uno::Reference< xml::dom::XNode >
+UpdateInformationProvider::getChildNode(const uno::Reference< xml::dom::XNode >& rxNode,
+                                        const rtl::OUString& rName)
+{
+    return m_xXPathAPI->selectSingleNode(rxNode, UNISTRING( "./atom:" ) + rName);
+}
+
+//------------------------------------------------------------------------------
+
+uno::Reference< container::XEnumeration > SAL_CALL
+UpdateInformationProvider::getUpdateInformationEnumeration(
     uno::Sequence< rtl::OUString > const & repositories,
     rtl::OUString const & extensionId
 ) throw (uno::Exception, uno::RuntimeException)
@@ -653,19 +843,8 @@ UpdateInformationProvider::getUpdateInformation(
     {
         uno::Sequence< rtl::OUString > aDefaultRepository(1);
         aDefaultRepository[0] = m_aUpdateURL;
-        return getUpdateInformation(aDefaultRepository, extensionId);
+        return getUpdateInformationEnumeration(aDefaultRepository, extensionId);
     }
-
-    uno::Reference< lang::XMultiComponentFactory > xServiceManager(m_xContext->getServiceManager());
-    if( !xServiceManager.is() )
-        throw uno::RuntimeException(
-            UNISTRING( "unable to obtain service manager from component context" ), *this);
-
-    uno::Reference< ucb::XContentIdentifierFactory > xIdFactory(
-        xServiceManager->createInstanceWithContext( UNISTRING( "com.sun.star.ucb.UniversalContentBroker" ), m_xContext ),
-        uno::UNO_QUERY_THROW);
-
-    uno::Reference< ucb::XContentProvider > xProvider(xIdFactory, uno::UNO_QUERY_THROW);
 
     // reset cancelled flag
     m_bCancelled.reset();
@@ -674,11 +853,7 @@ UpdateInformationProvider::getUpdateInformation(
     {
         try
         {
-            uno::Reference< xml::dom::XDocumentBuilder > xBuilder(
-                xServiceManager->createInstanceWithContext( UNISTRING( "com.sun.star.xml.dom.DocumentBuilder" ), m_xContext ),
-                uno::UNO_QUERY_THROW);
-
-            uno::Reference< xml::dom::XDocument > xDocument = xBuilder->parse(load(xIdFactory, xProvider, repositories[n]));
+            uno::Reference< xml::dom::XDocument > xDocument = m_xDocumentBuilder->parse(load(repositories[n]));
             uno::Reference< xml::dom::XElement > xElement;
 
             if( xDocument.is() )
@@ -688,55 +863,21 @@ UpdateInformationProvider::getUpdateInformation(
             {
                 if( xElement->getNodeName().equalsAsciiL("feed", 4) )
                 {
-                    uno::Reference< xml::xpath::XXPathAPI > xXPath(
-                        xServiceManager->createInstanceWithContext( UNISTRING( "com.sun.star.xml.xpath.XPathAPI" ), m_xContext ),
-                        uno::UNO_QUERY_THROW);
-
-                    xXPath->registerNS( UNISTRING("atom"), UNISTRING("http://www.w3.org/2005/Atom") );
-
                     rtl::OUString aXPathExpression;
 
                     if( extensionId.getLength() > 0 )
-                        aXPathExpression = UNISTRING("//atom:entry/atom:category[@term=\'") + extensionId + UNISTRING("\']/../atom:content");
+                        aXPathExpression = UNISTRING("//atom:entry/atom:category[@term=\'") + extensionId + UNISTRING("\']/..");
                     else
-                        aXPathExpression = UNISTRING("//atom:entry/atom:content");
+                        aXPathExpression = UNISTRING("//atom:entry");
 
                     uno::Reference< xml::dom::XNodeList > xNodeList =
-                        xXPath->selectNodeList(xDocument.get(), aXPathExpression);
+                        m_xXPathAPI->selectNodeList(xDocument.get(), aXPathExpression);
 
-                    sal_Int32 nElements = 0;
-                    sal_Int32 nNodes = xNodeList->getLength();
-                    uno::Sequence< uno::Reference< xml::dom::XElement > > aRet(nNodes);
-
-                    for(sal_Int32 i=0; i < nNodes; i++)
-                    {
-                        try
-                        {
-                            uno::Reference< xml::dom::XElement > xRootElement =
-                                getDocumentRoot(xIdFactory, xProvider, xBuilder, xNodeList->item(i));
-
-                            if( xRootElement.is() )
-                                aRet[nElements++] = xRootElement;
-                        }
-
-                        // return what we have got so far
-                        catch( ucb::CommandAbortedException const & ) { break; }
-
-                        // let runtime exception pass
-                        catch( uno::RuntimeException const & ) { throw; }
-
-                        // ignore files that can't be loaded
-                        catch( uno::Exception const & ) { }
-                    }
-
-                    aRet.realloc(nElements);
-                    return aRet;
+                    return new UpdateInformationEnumeration(xNodeList, this);
                 }
                 else
                 {
-                    uno::Sequence< uno::Reference< xml::dom::XElement > > aRet(1);
-                    aRet[0] = xElement;
-                    return aRet;
+                    return new SingleUpdateInformationEnumeration(xElement);
                 }
             }
 
@@ -754,7 +895,52 @@ UpdateInformationProvider::getUpdateInformation(
         }
     }
 
-    return uno::Sequence< uno::Reference< xml::dom::XElement > > ();
+    return uno::Reference< container::XEnumeration >();
+}
+
+//------------------------------------------------------------------------------
+
+uno::Sequence< uno::Reference< xml::dom::XElement > > SAL_CALL
+UpdateInformationProvider::getUpdateInformation(
+    uno::Sequence< rtl::OUString > const & repositories,
+    rtl::OUString const & extensionId
+) throw (uno::Exception, uno::RuntimeException)
+{
+    uno::Reference< container::XEnumeration > xEnumeration(
+        getUpdateInformationEnumeration(repositories, extensionId)
+    );
+
+    uno::Sequence< uno::Reference< xml::dom::XElement > > aRet;
+
+    if( xEnumeration.is() )
+    {
+        while( xEnumeration->hasMoreElements() )
+        {
+            try
+            {
+                deployment::UpdateInformationEntry aEntry;
+                if( (xEnumeration->nextElement() >>= aEntry ) && aEntry.UpdateDocument.is() )
+                {
+                    sal_Int32 n = aRet.getLength();
+                    aRet.realloc(n + 1);
+                    aRet[n] = aEntry.UpdateDocument;
+                }
+            }
+
+            catch( const lang::WrappedTargetException& e )
+            {
+                // command aborted, return what we have got so far
+                if( e.TargetException.isExtractableTo( ::cppu::UnoType< ::com::sun::star::ucb::CommandAbortedException >::get() ) )
+                {
+                    break;
+                }
+
+                // ignore files that can't be loaded
+            }
+        }
+    }
+
+    return aRet;
 }
 
 //------------------------------------------------------------------------------
@@ -788,6 +974,19 @@ UpdateInformationProvider::setInteractionHandler(
     m_xInteractionHandler = handler;
 }
 
+//------------------------------------------------------------------------------
+
+uno::Reference< task::XInteractionHandler > SAL_CALL
+UpdateInformationProvider::getInteractionHandler()
+    throw ( uno::RuntimeException )
+{
+    osl::MutexGuard aGuard( m_aMutex );
+
+    if ( m_xInteractionHandler.is() )
+        return m_xInteractionHandler;
+    else
+        return this;
+}
 //------------------------------------------------------------------------------
 
 uno::Sequence< rtl::OUString >
@@ -836,6 +1035,97 @@ UpdateInformationProvider::supportsService( rtl::OUString const & serviceName ) 
     return sal_False;
 }
 
+//------------------------------------------------------------------------------
+
+void SAL_CALL UpdateInformationProvider::handle( uno::Reference< task::XInteractionRequest > const & rRequest)
+    throw (uno::RuntimeException)
+{
+    uno::Any aAnyRequest( rRequest->getRequest() );
+    ucb::AuthenticationRequest aAuthenticationRequest;
+
+    if ( aAnyRequest >>= aAuthenticationRequest )
+    {
+        uno::Sequence< uno::Reference< task::XInteractionContinuation > > xContinuations = rRequest->getContinuations();
+        uno::Reference< task::XInteractionHandler > xIH;
+        uno::Reference< ucb::XInteractionSupplyAuthentication > xSupplyAuthentication;
+        uno::Reference< task::XPasswordContainer > xContainer;
+
+        for ( sal_Int32 i = 0; i < xContinuations.getLength(); ++i )
+        {
+            xSupplyAuthentication = uno::Reference< ucb::XInteractionSupplyAuthentication >(
+                                                            xContinuations[i], uno::UNO_QUERY );
+            if ( xSupplyAuthentication.is() )
+                break;
+        }
+
+        // xContainer works with userName passwdSequences pairs:
+        if ( xSupplyAuthentication.is() &&
+             aAuthenticationRequest.HasUserName &&
+             aAuthenticationRequest.HasPassword &&
+             initPasswordContainer( &xContainer ) )
+        {
+            xIH = getInteractionHandler();
+            try
+            {
+                if ( aAuthenticationRequest.UserName.getLength() == 0 )
+                {
+                    task::UrlRecord aRec( xContainer->find( aAuthenticationRequest.ServerName, xIH ) );
+                    if ( aRec.UserList.getLength() != 0 )
+                    {
+                        if ( xSupplyAuthentication->canSetUserName() )
+                            xSupplyAuthentication->setUserName( aRec.UserList[0].UserName.getStr() );
+                        if ( xSupplyAuthentication->canSetPassword() )
+                        {
+                            OSL_ENSURE( aRec.UserList[0].Passwords.getLength() != 0, "empty password list" );
+                            xSupplyAuthentication->setPassword( aRec.UserList[0].Passwords[0].getStr() );
+                        }
+                        if ( aRec.UserList[0].Passwords.getLength() > 1 )
+                            if ( aAuthenticationRequest.HasRealm )
+                            {
+                                if ( xSupplyAuthentication->canSetRealm() )
+                                    xSupplyAuthentication->setRealm( aRec.UserList[0].Passwords[1].getStr() );
+                            }
+                            else if ( xSupplyAuthentication->canSetAccount() )
+                                xSupplyAuthentication->setAccount( aRec.UserList[0].Passwords[1].getStr() );
+                        xSupplyAuthentication->select();
+                        return;
+                    }
+                }
+                else
+                {
+                    task::UrlRecord aRec(xContainer->findForName( aAuthenticationRequest.ServerName,
+                                                                  aAuthenticationRequest.UserName,
+                                                                  xIH));
+                    if ( aRec.UserList.getLength() != 0 )
+                    {
+                        OSL_ENSURE( aRec.UserList[0].Passwords.getLength() != 0, "empty password list" );
+                        if ( !aAuthenticationRequest.HasPassword ||
+                             ( aAuthenticationRequest.Password != aRec.UserList[0].Passwords[0] ) )
+                        {
+                            if ( xSupplyAuthentication->canSetUserName() )
+                                xSupplyAuthentication->setUserName( aRec.UserList[0].UserName.getStr() );
+                            if ( xSupplyAuthentication->canSetPassword() )
+                                xSupplyAuthentication->setPassword(aRec.UserList[0].Passwords[0].getStr());
+                            if ( aRec.UserList[0].Passwords.getLength() > 1 )
+                                if ( aAuthenticationRequest.HasRealm )
+                                {
+                                    if ( xSupplyAuthentication->canSetRealm() )
+                                        xSupplyAuthentication->setRealm(aRec.UserList[0].Passwords[1].getStr());
+                                }
+                                else if ( xSupplyAuthentication->canSetAccount() )
+                                    xSupplyAuthentication->setAccount(aRec.UserList[0].Passwords[1].getStr());
+                            xSupplyAuthentication->select();
+                            return;
+                        }
+                    }
+                }
+            }
+            catch (task::NoMasterException const &)
+            {} // user did not enter master password
+        }
+    }
+}
+
 } // anonymous namespace
 
 //------------------------------------------------------------------------------
@@ -843,7 +1133,7 @@ UpdateInformationProvider::supportsService( rtl::OUString const & serviceName ) 
 static uno::Reference<uno::XInterface> SAL_CALL
 createInstance(uno::Reference<uno::XComponentContext> const & xContext)
 {
-    return * new UpdateInformationProvider(xContext);
+    return UpdateInformationProvider::createInstance(xContext);
 }
 
 //------------------------------------------------------------------------------
