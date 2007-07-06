@@ -4,9 +4,9 @@
  *
  *  $RCSfile: viewuno.cxx,v $
  *
- *  $Revision: 1.31 $
+ *  $Revision: 1.32 $
  *
- *  last change: $Author: vg $ $Date: 2007-05-22 20:12:13 $
+ *  last change: $Author: rt $ $Date: 2007-07-06 12:29:30 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -58,6 +58,10 @@
 #include <toolkit/helper/convert.hxx>
 #endif
 
+#include "drawsh.hxx"
+#include "drtxtob.hxx"
+#include "transobj.hxx"
+#include "editsh.hxx"
 #include "viewuno.hxx"
 #include "cellsuno.hxx"
 #include "miscuno.hxx"
@@ -523,6 +527,7 @@ uno::Any SAL_CALL ScTabViewObj::queryInterface( const uno::Type& rType )
     SC_QUERYINTERFACE( sheet::XViewFreezable )
     SC_QUERYINTERFACE( sheet::XRangeSelection )
     SC_QUERYINTERFACE( lang::XUnoTunnel )
+    SC_QUERYINTERFACE( datatransfer::XTransferableSupplier )
 
     uno::Any aRet(ScViewPaneBase::queryInterface( rType ));
     if (!aRet.hasValue())
@@ -584,7 +589,7 @@ uno::Sequence<uno::Type> SAL_CALL ScTabViewObj::getTypes() throw(uno::RuntimeExc
 
         long nParentLen = nViewPaneLen + nControllerLen;
 
-        aTypes.realloc( nParentLen + 11 );
+        aTypes.realloc( nParentLen + 12 );
         uno::Type* pPtr = aTypes.getArray();
         pPtr[nParentLen + 0] = getCppuType((const uno::Reference<sheet::XSpreadsheetView>*)0);
         pPtr[nParentLen + 1] = getCppuType((const uno::Reference<container::XEnumerationAccess>*)0);
@@ -597,6 +602,7 @@ uno::Sequence<uno::Type> SAL_CALL ScTabViewObj::getTypes() throw(uno::RuntimeExc
         pPtr[nParentLen + 8] = getCppuType((const uno::Reference<lang::XUnoTunnel>*)0);
         pPtr[nParentLen + 9] = getCppuType((const uno::Reference<sheet::XEnhancedMouseClickBroadcaster>*)0);
         pPtr[nParentLen + 10] = getCppuType((const uno::Reference<sheet::XActivationBroadcaster>*)0);
+        pPtr[nParentLen + 11] = getCppuType((const uno::Reference<datatransfer::XTransferableSupplier>*)0);
 
         long i;
         for (i=0; i<nViewPaneLen; i++)
@@ -2119,6 +2125,56 @@ ScTabViewObj* ScTabViewObj::getImplementation( const uno::Reference<uno::XInterf
     return pRet;
 }
 
+::com::sun::star::uno::Reference< ::com::sun::star::datatransfer::XTransferable > SAL_CALL ScTabViewObj::getTransferable(  ) throw (::com::sun::star::uno::RuntimeException)
+{
+    ScUnoGuard aGuard;
+    ScEditShell* pShell = PTR_CAST( ScEditShell, GetViewShell()->GetViewFrame()->GetDispatcher()->GetShell(0) );
+    if (pShell)
+        return pShell->GetEditView()->GetTransferable();
+
+    ScDrawTextObjectBar* pTextShell = PTR_CAST( ScDrawTextObjectBar, GetViewShell()->GetViewFrame()->GetDispatcher()->GetShell(0) );
+    if (pTextShell)
+    {
+        ScViewData* pViewData = GetViewShell()->GetViewData();
+        ScDrawView* pView = pViewData->GetScDrawView();
+        OutlinerView* pOutView = pView->GetTextEditOutlinerView();
+        if (pOutView)
+            return pOutView->GetEditView().GetTransferable();
+    }
+
+    ScDrawShell* pDrawShell = PTR_CAST( ScDrawShell, GetViewShell()->GetViewFrame()->GetDispatcher()->GetShell(0) );
+    if (pDrawShell)
+        return pDrawShell->GetDrawView()->CopyToTransferable();
+
+    ScTransferObj* pObj = GetViewShell()->CopyToTransferable();
+    uno::Reference<datatransfer::XTransferable> xTransferable( pObj );
+    return xTransferable;
+}
+
+void SAL_CALL ScTabViewObj::insertTransferable( const ::com::sun::star::uno::Reference< ::com::sun::star::datatransfer::XTransferable >& xTrans ) throw (::com::sun::star::datatransfer::UnsupportedFlavorException, ::com::sun::star::uno::RuntimeException)
+{
+    ScUnoGuard aGuard;
+    ScEditShell* pShell = PTR_CAST( ScEditShell, GetViewShell()->GetViewFrame()->GetDispatcher()->GetShell(0) );
+    if (pShell)
+        pShell->GetEditView()->InsertText( xTrans, ::rtl::OUString(), FALSE );
+    else
+    {
+        ScDrawTextObjectBar* pTextShell = PTR_CAST( ScDrawTextObjectBar, GetViewShell()->GetViewFrame()->GetDispatcher()->GetShell(0) );
+        if (pTextShell)
+        {
+            ScViewData* pViewData = GetViewShell()->GetViewData();
+            ScDrawView* pView = pViewData->GetScDrawView();
+            OutlinerView* pOutView = pView->GetTextEditOutlinerView();
+            if ( pOutView )
+            {
+                pOutView->GetEditView().InsertText( xTrans, ::rtl::OUString(), FALSE );
+                return;
+            }
+        }
+
+        GetViewShell()->PasteFromTransferable( xTrans );
+    }
+}
 
 //------------------------------------------------------------------------
 
