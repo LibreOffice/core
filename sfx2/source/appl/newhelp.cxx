@@ -4,9 +4,9 @@
  *
  *  $RCSfile: newhelp.cxx,v $
  *
- *  $Revision: 1.125 $
+ *  $Revision: 1.126 $
  *
- *  last change: $Author: hr $ $Date: 2007-06-27 23:00:16 $
+ *  last change: $Author: rt $ $Date: 2007-07-06 12:31:23 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -104,6 +104,9 @@
 #ifndef _COM_SUN_STAR_CONTAINER_XINDEXACCESS_HPP_
 #include <com/sun/star/container/XIndexAccess.hpp>
 #endif
+#ifndef _COM_SUN_STAR_FRAME_XLAYOUTMANAGER_HPP_
+#include <com/sun/star/frame/XLayoutManager.hpp>
+#endif
 #ifndef _COM_SUN_STAR_FRAME_DISPATCHRESULTSTATE_HPP_
 #include <com/sun/star/frame/DispatchResultState.hpp>
 #endif
@@ -176,6 +179,9 @@
 #ifndef _COM_SUN_STAR_VIEW_XVIEWSETTINGSSUPPLIER_HPP_
 #include <com/sun/star/view/XViewSettingsSupplier.hpp>
 #endif
+#ifndef _COM_SUN_STAR_UI_XDOCKINGAREAACCEPTOR_HPP_
+#include <com/sun/star/ui/XDockingAreaAcceptor.hpp>
+#endif
 
 #ifndef INCLUDED_SVTOOLS_HELPOPT_HXX
 #include <svtools/helpopt.hxx>
@@ -244,6 +250,7 @@ using namespace ::com::sun::star::text;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::util;
 using namespace ::com::sun::star::view;
+using namespace ::com::sun::star::ui;
 
 using namespace ::comphelper;
 
@@ -2170,6 +2177,16 @@ long TextWin_Impl::Notify( NotifyEvent& rNEvt )
         return DockingWindow::Notify( rNEvt );
 }
 
+// -----------------------------------------------------------------------
+// remove docking area acceptor from layoutmanager, so it will not layout anything further .-)
+void lcl_disableLayoutOfFrame(const Reference< XFrame >& xFrame)
+{
+    static const ::rtl::OUString PROP_LAYOUT_MANAGER(DEFINE_CONST_UNICODE("LayoutManager"));
+
+    Reference< XPropertySet > xPropSet(xFrame, UNO_QUERY_THROW);
+    xPropSet->setPropertyValue(PROP_LAYOUT_MANAGER, makeAny(Reference< XLayoutManager >()));
+}
+
 // class SfxHelpTextWindow_Impl ------------------------------------------
 
 SfxHelpTextWindow_Impl::SfxHelpTextWindow_Impl( SfxHelpWindow_Impl* pParent ) :
@@ -2199,6 +2216,7 @@ SfxHelpTextWindow_Impl::SfxHelpTextWindow_Impl( SfxHelpWindow_Impl* pParent ) :
         DEFINE_CONST_UNICODE("com.sun.star.frame.Frame") ), UNO_QUERY );
     xFrame->initialize( VCLUnoHelper::GetInterface ( pTextWin ) );
     xFrame->setName( DEFINE_CONST_UNICODE("OFFICE_HELP") );
+    lcl_disableLayoutOfFrame(xFrame);
 
     aToolBox.SetHelpId( HID_HELP_TOOLBOX );
 
