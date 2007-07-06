@@ -4,9 +4,9 @@
  *
  *  $RCSfile: FieldControls.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: hr $ $Date: 2006-06-20 03:11:22 $
+ *  last change: $Author: rt $ $Date: 2007-07-06 08:22:29 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -41,14 +41,14 @@
 #ifndef _SV_LSTBOX_HXX
 #include <vcl/lstbox.hxx>
 #endif
-#ifndef _DBAUI_MODULE_DBU_HXX_
-#include "moduledbu.hxx"
-#endif
 #ifndef _SV_SVAPP_HXX
 #include <vcl/svapp.hxx>
 #endif
 #ifndef DBAUI_SQLNAMEEDIT_HXX
 #include "SqlNameEdit.hxx"
+#endif
+#ifndef _DBAUI_MODULE_DBU_HXX_
+#include "moduledbu.hxx"
 #endif
 
 
@@ -68,8 +68,9 @@ namespace dbaui
     //==================================================================
     class OPropColumnEditCtrl : public OSQLNameEdit
     {
-        short   m_nPos;
-        String  m_strHelpText;
+        OModuleClient m_aModuleClient;
+        short                m_nPos;
+        String               m_strHelpText;
     public:
         inline OPropColumnEditCtrl(Window* pParent, ::rtl::OUString& _rAllowedChars, USHORT nHelpId, short nPosition = -1, WinBits nWinStyle = 0);
 
@@ -97,8 +98,9 @@ namespace dbaui
     //==================================================================
     class OPropEditCtrl :   public Edit
     {
-        short   m_nPos;
-        String  m_strHelpText;
+        OModuleClient m_aModuleClient;
+        short                m_nPos;
+        String               m_strHelpText;
 
     public:
         inline OPropEditCtrl(Window* pParent, USHORT nHelpId, short nPosition = -1, WinBits nWinStyle = 0);
