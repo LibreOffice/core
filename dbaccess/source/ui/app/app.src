@@ -4,9 +4,9 @@
  *
  *  $RCSfile: app.src,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: ihi $ $Date: 2007-04-19 14:53:28 $
+ *  last change: $Author: rt $ $Date: 2007-07-06 08:01:34 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -68,6 +68,13 @@ String RID_STR_NEW_REPORT_AUTO
 {
     Text [ en-US ] = "Use Wizard to Create Report..." ;
 };
+
+String RID_STR_NEW_REPORT
+{
+    Text [ de ] ="Bericht in Entwurfsansicht erstellen..." ;
+    Text [ en-US ] = "Create Report in Design View..." ;
+};
+
 String RID_STR_NEW_QUERY
 {
     Text [ en-US ] = "Create Query in Design View..." ;
@@ -116,6 +123,14 @@ Menu RID_MENU_APP_NEW
             HelpId = SID_APP_NEW_FORM;
             Command = ".uno:DBNewForm";
             Text [ en-US ] = "Form..." ;
+        };
+        MenuItem
+        {
+            Identifier = SID_APP_NEW_REPORT;
+            HelpId = SID_APP_NEW_REPORT;
+            Command = ".uno:DBNewReport";
+            Text [ de ] ="Bericht..." ;
+            Text [ en-US ] = "Report..." ;
         };
         MenuItem
         {
@@ -304,6 +319,11 @@ String RID_STR_FORMS_HELP_TEXT
 {
     Text [ en-US ] = "Create a form by specifying the record source, controls, and control properties." ;
 };
+String RID_STR_REPORT_HELP_TEXT
+{
+    Text [ de ] ="Erstellen Sie einen Bericht, indem Sie die Datensatzquelle, Steuerelemente und Steuerelementeigenschaften angeben." ;
+    Text [ en-US ] = "Create a report by specifying the record source, controls, and control properties." ;
+};
 String RID_STR_FORMS_HELP_TEXT_WIZARD
 {
     Text [ en-US ] = "The wizard will guide you through the steps necessary to create a form." ;
@@ -429,3 +449,8 @@ String STR_FOLDER_LABEL
     Text [ en-US ] = "F~older name" ;
 };
 
+String RID_STR_ERROR_NO_REPORT_INSTALLED
+{
+    Text [ de ] ="Es wurde keine Report Designer Erweiterung gefunden, bitte installieren." ;
+    Text [ en-US ] = "There is no report designer extension found, please install." ;
+};
