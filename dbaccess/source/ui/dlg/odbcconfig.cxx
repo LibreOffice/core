@@ -4,9 +4,9 @@
  *
  *  $RCSfile: odbcconfig.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: obo $ $Date: 2006-10-12 13:37:54 $
+ *  last change: $Author: rt $ $Date: 2007-07-06 08:18:35 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -352,4 +352,3 @@ void OOdbcManagement::manageDataSources(void* _pParentSysWindowHandle)
 //.........................................................................
 }   // namespace dbaui
 //.........................................................................
-
