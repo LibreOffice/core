@@ -4,9 +4,9 @@
  *
  *  $RCSfile: unoshap3.cxx,v $
  *
- *  $Revision: 1.28 $
+ *  $Revision: 1.29 $
  *
- *  last change: $Author: hr $ $Date: 2007-06-27 19:26:36 $
+ *  last change: $Author: rt $ $Date: 2007-07-06 07:45:33 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -202,8 +202,7 @@ void SAL_CALL Svx3DSceneObject::add( const Reference< drawing::XShape >& xShape 
     }
     else
     {
-        delete pSdrShape;
-        pShape->InvalidateSdrObject();
+        SdrObject::Free( pSdrShape );
         throw uno::RuntimeException();
     }
 
@@ -242,8 +241,8 @@ void SAL_CALL Svx3DSceneObject::remove( const Reference< drawing::XShape >& xSha
 
         if( nObjNum < nObjCount )
         {
-            delete rList.NbcRemoveObject( nObjNum );
-            pShape->InvalidateSdrObject();
+            SdrObject* pObject = rList.NbcRemoveObject( nObjNum );
+            SdrObject::Free( pObject );
         }
         else
         {
