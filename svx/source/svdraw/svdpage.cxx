@@ -4,9 +4,9 @@
  *
  *  $RCSfile: svdpage.cxx,v $
  *
- *  $Revision: 1.59 $
+ *  $Revision: 1.60 $
  *
- *  last change: $Author: hr $ $Date: 2007-06-27 19:10:58 $
+ *  last change: $Author: rt $ $Date: 2007-07-06 07:42:36 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -277,7 +277,7 @@ void SdrObjList::Clear()
         }
 
         // delete the object itself
-        delete pObj;
+        SdrObject::Free( pObj );
     }
 
     if(pModel && bObjectsRemoved)
@@ -451,11 +451,10 @@ SdrObject* SdrObjList::RemoveObject(ULONG nObjNum)
     ULONG nAnz=GetObjCount();
     SdrObject* pObj=(SdrObject*)maList.Remove(nObjNum);
 
-    // #110094#
-    pObj->ActionRemoved();
-
     DBG_ASSERT(pObj!=NULL,"Object zum Removen nicht gefunden");
     if (pObj!=NULL) {
+        // #110094#
+        pObj->ActionRemoved();
         DBG_ASSERT(pObj->IsInserted(),"ZObjekt hat keinen Inserted-Status");
         if (pModel!=NULL) {
             // Hier muss ein anderer Broadcast her!
@@ -975,7 +974,7 @@ SdrPage::~SdrPage()
     // when they get called from PageInDestruction().
     maPageUsers.clear();
 
-    delete pBackgroundObj;
+    SdrObject::Free( pBackgroundObj );
     delete pLayerAdmin;
 
     TRG_ClearMasterPage();
@@ -997,11 +996,7 @@ void SdrPage::operator=(const SdrPage& rSrcPage)
         mpViewContact = 0L;
     }
 
-    if(pBackgroundObj)
-    {
-        delete pBackgroundObj;
-        pBackgroundObj = 0L;
-    }
+    SdrObject::Free( pBackgroundObj );
 
     // Joe also sets some parameters for the class this one
     // is derived from. SdrObjList does the same bad handling of
@@ -1366,7 +1361,7 @@ void SdrPage::SetBackgroundObj( SdrObject* pObj )
         pObj->SetMergedItem(XLineStyleItem(XLINE_NONE));
     }
 
-    delete pBackgroundObj;
+    SdrObject::Free( pBackgroundObj );
     pBackgroundObj = pObj;
 }
 
