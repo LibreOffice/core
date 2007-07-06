@@ -4,9 +4,9 @@
  *
  *  $RCSfile: unopage.cxx,v $
  *
- *  $Revision: 1.41 $
+ *  $Revision: 1.42 $
  *
- *  last change: $Author: hr $ $Date: 2007-06-27 19:25:42 $
+ *  last change: $Author: rt $ $Date: 2007-07-06 07:44:59 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -390,8 +390,8 @@ void SAL_CALL SvxDrawPage::remove( const Reference< drawing::XShape >& xShape )
             {
                 if(mpPage->GetObj(nNum) == pObj)
                 {
-                    delete mpPage->RemoveObject(nNum);
-                    pShape->InvalidateSdrObject();
+                    OSL_VERIFY( mpPage->RemoveObject( nNum ) == pObj );
+                    SdrObject::Free( pObj );
                     break;
                 }
             }
