@@ -4,9 +4,9 @@
  *
  *  $RCSfile: iahndl.hxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: obo $ $Date: 2007-01-23 08:09:05 $
+ *  last change: $Author: rt $ $Date: 2007-07-06 14:29:36 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -95,6 +95,7 @@ namespace com { namespace sun { namespace star {
     namespace ucb {
         class AuthenticationRequest;
         class HandleCookiesRequest;
+        class NameClashResolveRequest;
     }
     namespace uno {
         class RuntimeException;
@@ -216,6 +217,14 @@ private:
         com::sun::star::uno::Reference<
             com::sun::star::task::XInteractionContinuation > > const &
     rContinuations)
+        SAL_THROW((com::sun::star::uno::RuntimeException));
+
+    void
+    handleNameClashResolveRequest(
+        com::sun::star::ucb::NameClashResolveRequest const & rRequest,
+        com::sun::star::uno::Sequence< com::sun::star::uno::Reference<
+            com::sun::star::task::XInteractionContinuation > > const &
+        rContinuations)
         SAL_THROW((com::sun::star::uno::RuntimeException));
 
     void
