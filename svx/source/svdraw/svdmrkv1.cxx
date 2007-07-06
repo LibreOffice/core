@@ -4,9 +4,9 @@
  *
  *  $RCSfile: svdmrkv1.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: hr $ $Date: 2007-06-27 19:04:27 $
+ *  last change: $Author: rt $ $Date: 2007-07-06 13:21:44 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -130,65 +130,81 @@ ULONG SdrMarkView::GetMarkedPointCount() const
 
 BOOL SdrMarkView::IsPointMarkable(const SdrHdl& rHdl) const
 {
-    return !ImpIsFrameHandles() && &rHdl!=NULL && !rHdl.IsPlusHdl() && rHdl.GetKind()!=HDL_GLUE && rHdl.GetObj()!=NULL && rHdl.GetObj()->IsPolyObj();
+    return !ImpIsFrameHandles() && &rHdl!=NULL && !rHdl.IsPlusHdl() && rHdl.GetKind()!=HDL_GLUE && rHdl.GetKind()!=HDL_SMARTTAG && rHdl.GetObj()!=NULL && rHdl.GetObj()->IsPolyObj();
+}
+
+BOOL SdrMarkView::MarkPointHelper(SdrHdl* pHdl, SdrMark* pMark, BOOL bUnmark)
+{
+    return ImpMarkPoint( pHdl, pMark, bUnmark );
 }
 
 BOOL SdrMarkView::ImpMarkPoint(SdrHdl* pHdl, SdrMark* pMark, BOOL bUnmark)
 {
-    if (pHdl==NULL || pHdl->IsPlusHdl() || pHdl->GetKind()==HDL_GLUE) return FALSE;
-    if (pHdl->IsSelected() != bUnmark) return FALSE;
+    if (pHdl==NULL || pHdl->IsPlusHdl() || pHdl->GetKind()==HDL_GLUE)
+        return FALSE;
+
+    if (pHdl->IsSelected() != bUnmark)
+        return FALSE;
+
     SdrObject* pObj=pHdl->GetObj();
-    if (pObj==NULL || !pObj->IsPolyObj()) return FALSE;
-    if (pMark==NULL) {
+    if (pObj==NULL || !pObj->IsPolyObj())
+        return FALSE;
+
+    if (pMark==NULL)
+    {
         ULONG nMarkNum=TryToFindMarkedObject(pObj);
-        if (nMarkNum==CONTAINER_ENTRY_NOTFOUND) return FALSE;
+        if (nMarkNum==CONTAINER_ENTRY_NOTFOUND)
+            return FALSE;
         pMark=GetSdrMarkByIndex(nMarkNum);
     }
-    sal_uInt32 nHdlNum(pHdl->GetObjHdlNum());
+    const sal_uInt32 nHdlNum(pHdl->GetObjHdlNum());
     SdrUShortCont* pPts=pMark->ForceMarkedPoints();
-    if (!bUnmark) {
+    if (!bUnmark)
+    {
         pPts->Insert((sal_uInt16)nHdlNum);
-    } else {
-        ULONG nBla=pPts->GetPos((sal_uInt16)nHdlNum);
-        if (nBla!=CONTAINER_ENTRY_NOTFOUND) {
-            pPts->Remove(nBla);
-        } else return FALSE; // Fehlerfall!
     }
-    //HMHBOOL bVis=IsMarkHdlShown();
+    else
+    {
+        ULONG nBla=pPts->GetPos((sal_uInt16)nHdlNum);
+        if (nBla!=CONTAINER_ENTRY_NOTFOUND)
+        {
+            pPts->Remove(nBla);
+        }
+        else
+        {
+            return FALSE; // Fehlerfall!
+        }
+    }
+
     pHdl->SetSelected(!bUnmark);
-    if (!bPlusHdlAlways) {
-        //HMHBOOL bSolid=IsSolidMarkHdl();
+    if (!bPlusHdlAlways)
+    {
         if (!bUnmark)
         {
             sal_uInt32 nAnz(pObj->GetPlusHdlCount(*pHdl));
-            //HMHif (nAnz!=0L && bSolid && bVis) HideMarkHdl();
-            for (sal_uInt32 i=0; i<nAnz; i++) {
+            for (sal_uInt32 i=0; i<nAnz; i++)
+            {
                 SdrHdl* pPlusHdl=pObj->GetPlusHdl(*pHdl,i);
-                if (pPlusHdl!=NULL) {
+                if (pPlusHdl!=NULL)
+                {
                     pPlusHdl->SetObj(pObj);
                     pPlusHdl->SetPageView(pMark->GetPageView());
                     pPlusHdl->SetPlusHdl(TRUE);
                     aHdl.AddHdl(pPlusHdl);
                 }
             }
-            //HMHif (nAnz!=0 && bSolid && bVis) ShowMarkHdl();
-        } else {
-            ULONG nAnz=aHdl.GetHdlCount();
-            for (ULONG i=nAnz; i>0;) {
+        }
+        else
+        {
+            for (ULONG i = aHdl.GetHdlCount(); i>0;)
+            {
                 i--;
                 SdrHdl* pPlusHdl=aHdl.GetHdl(i);
-                //HMHBOOL bFlag=FALSE;
-                if (pPlusHdl->IsPlusHdl() && pPlusHdl->GetSourceHdlNum()==nHdlNum) {
-                    //HMHif (bVis) {
-                    //HMH   if (bSolid) {
-                    //HMH       bFlag=TRUE;
-                    //HMH       HideMarkHdl(); // SolidMarkHdl und Bezier ist noch nicht fertig!
-                    //HMH   }
-                    //HMH}
+                if (pPlusHdl->IsPlusHdl() && pPlusHdl->GetSourceHdlNum()==nHdlNum)
+                {
                     aHdl.RemoveHdl(i);
                     delete pPlusHdl;
                 }
-                //HMHif (bFlag) ShowMarkHdl();
             }
         }
     }
@@ -198,6 +214,7 @@ BOOL SdrMarkView::ImpMarkPoint(SdrHdl* pHdl, SdrMark* pMark, BOOL bUnmark)
 
     return TRUE;
 }
+
 
 BOOL SdrMarkView::MarkPoint(SdrHdl& rHdl, BOOL bUnmark)
 {
