@@ -4,9 +4,9 @@
  *
  *  $RCSfile: overlaysdrobject.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: ihi $ $Date: 2006-11-14 13:08:52 $
+ *  last change: $Author: rt $ $Date: 2007-07-06 13:19:05 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -50,7 +50,7 @@ namespace sdr
 {
     namespace overlay
     {
-        class OverlaySdrObject : public OverlayObjectWithBasePosition
+        class SVX_DLLPUBLIC OverlaySdrObject : public OverlayObjectWithBasePosition
         {
         protected:
             // the SdrObject to show
@@ -61,6 +61,9 @@ namespace sdr
 
             // Create the BaseRange. This method needs to calculate maBaseRange.
             virtual void createBaseRange(OutputDevice& rOutputDevice);
+
+            // Hittest with logical coordinates. Default tests against maBaseRange.
+            virtual sal_Bool isHit(const basegfx::B2DPoint& rPos, double fTol = 0.0) const;
 
         public:
             OverlaySdrObject(
