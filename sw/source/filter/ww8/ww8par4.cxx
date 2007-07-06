@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ww8par4.cxx,v $
  *
- *  $Revision: 1.59 $
+ *  $Revision: 1.60 $
  *
- *  last change: $Author: ihi $ $Date: 2006-11-14 15:15:05 $
+ *  last change: $Author: rt $ $Date: 2007-07-06 09:53:54 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -386,7 +386,7 @@ SwFrmFmt* SwWW8ImplReader::ImportOle(const Graphic* pGrf,
         if (pRet->ISA(SdrOle2Obj))
         {
             pFmt = InsertOle(*((SdrOle2Obj*)pRet), *pFlySet, *pGrfSet);
-            delete pRet;        // das brauchen wir nicht mehr
+            SdrObject::Free( pRet );        // das brauchen wir nicht mehr
         }
         else
             pFmt = rDoc.Insert(*pPaM, *pRet, pFlySet, NULL);
