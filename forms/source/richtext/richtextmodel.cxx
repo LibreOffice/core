@@ -4,9 +4,9 @@
  *
  *  $RCSfile: richtextmodel.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: obo $ $Date: 2007-03-09 13:36:05 $
+ *  last change: $Author: rt $ $Date: 2007-07-06 09:56:54 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -165,7 +165,7 @@ namespace frm
         m_nMaxTextLength       = _pOriginal->m_nMaxTextLength;
         m_bMultiLine           = _pOriginal->m_bMultiLine;
 
-        m_pEngine              = _pOriginal->m_pEngine->Clone();
+        m_pEngine.reset(_pOriginal->m_pEngine->Clone());
         m_sLastKnownEngineText = m_pEngine->GetText();
 
         implInit();
@@ -174,8 +174,8 @@ namespace frm
     //------------------------------------------------------------------
     void ORichTextModel::implInit()
     {
-        OSL_ENSURE( m_pEngine, "ORichTextModel::implInit: where's the engine?" );
-        if ( m_pEngine )
+        OSL_ENSURE( m_pEngine.get(), "ORichTextModel::implInit: where's the engine?" );
+        if ( m_pEngine.get() )
         {
             m_pEngine->SetModifyHdl( LINK( this, ORichTextModel, OnEngineContentModified ) );
 
@@ -246,6 +246,12 @@ namespace frm
             acquire();
             dispose();
         }
+        if ( m_pEngine.get() )
+        {
+            ::std::auto_ptr<SfxItemPool> pPool(m_pEngine->getPool());
+            m_pEngine.reset();
+        }
+
 
         DBG_DTOR( ORichTextModel, NULL );
     }
@@ -483,7 +489,7 @@ namespace frm
     //--------------------------------------------------------------------
     void ORichTextModel::impl_smlock_setEngineText( const ::rtl::OUString& _rText )
     {
-        if ( m_pEngine )
+        if ( m_pEngine.get() )
         {
             ::vos::OGuard aSolarGuard( Application::GetSolarMutex() );
             m_bSettingEngineText = true;
@@ -573,7 +579,7 @@ namespace frm
         if  (   ( _rId.getLength() == aEditEngineAccessId.getLength() )
             &&  ( 0 == rtl_compareMemory( aEditEngineAccessId.getConstArray(),  _rId.getConstArray(), _rId.getLength() ) )
             )
-            return reinterpret_cast< sal_Int64 >( m_pEngine );
+            return reinterpret_cast< sal_Int64 >( m_pEngine.get() );
 
         Reference< XUnoTunnel > xAggTunnel;
         if ( query_aggregation( m_xAggregate, xAggTunnel ) )
@@ -598,7 +604,7 @@ namespace frm
     void ORichTextModel::potentialTextChange( )
     {
         ::rtl::OUString sCurrentEngineText;
-        if ( m_pEngine )
+        if ( m_pEngine.get() )
             sCurrentEngineText = m_pEngine->GetText();
 
         if ( sCurrentEngineText != m_sLastKnownEngineText )
