@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.5 $
+#   $Revision: 1.6 $
 #
-#   last change: $Author: kz $ $Date: 2006-12-13 11:47:28 $
+#   last change: $Author: rt $ $Date: 2007-07-06 07:17:47 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -64,7 +64,8 @@ IDLFILES=\
     XPropertyControlFactory.idl \
     XPropertyControlObserver.idl \
     XPropertyHandler.idl \
-    XStringListControl.idl
+    XStringListControl.idl \
+    XStringRepresentation.idl
 
 # ------------------------------------------------------------------
 .INCLUDE :  target.mk
