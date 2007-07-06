@@ -4,9 +4,9 @@
  *
  *  $RCSfile: obj3d.cxx,v $
  *
- *  $Revision: 1.44 $
+ *  $Revision: 1.45 $
  *
- *  last change: $Author: hr $ $Date: 2007-06-27 18:03:58 $
+ *  last change: $Author: rt $ $Date: 2007-07-06 07:35:30 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1496,7 +1496,7 @@ void E3dObject::operator=(const SdrObject& rObj)
                     {
                         aOwnSubList.NbcRemoveObject(pObj->GetOrdNum());
                         i--;
-                        delete pObj;
+                        SdrObject::Free( pObj );
                     }
                 }
             }
