@@ -4,9 +4,9 @@
  *
  *  $RCSfile: wizard.hxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: kz $ $Date: 2006-10-06 10:40:09 $
+ *  last change: $Author: rt $ $Date: 2007-07-06 12:37:32 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -76,12 +76,13 @@ public:
 private:
     sal_Bool m_bOverride;
     WizardState _currentState;
-    PathId m_aDefaultPath;
-    PathId m_aMigrationPath;
+    ::svt::RoadmapWizardTypes::PathId m_aDefaultPath;
+    ::svt::RoadmapWizardTypes::PathId m_aMigrationPath;
     String m_sNext;
     String m_sCancel;
     sal_Bool m_bDone;
-    sal_Bool m_bAccepted;
+    sal_Bool m_bLicenseNeedsAcceptence;
+    sal_Bool m_bLicenseWasAccepted;
     sal_Bool m_bAutomaticUpdChk;
     Link m_lnkCancel;
 
@@ -93,10 +94,15 @@ private:
 
     void cleanOldOfficeRegKeys();
     sal_Bool showOnlineUpdatePage();
+    ::svt::RoadmapWizardTypes::PathId defineWizardPagesDependingFromContext();
 
 public:
-    static sal_Bool isFirstStart();
-    static sal_Bool isLicenseAccepted();
+    static sal_Bool isWizardNeeded();
+    static sal_Bool needsLicenseAcceptence();
+
+private:
+    static sal_Bool impl_isFirstStart();
+    static sal_Bool impl_isLicenseAccepted();
 
 protected:
     // from svt::WizardMachine
