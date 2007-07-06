@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dbu_resource.hrc,v $
  *
- *  $Revision: 1.96 $
+ *  $Revision: 1.97 $
  *
- *  last change: $Author: kz $ $Date: 2006-12-13 16:52:40 $
+ *  last change: $Author: rt $ $Date: 2007-07-06 08:28:17 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -124,6 +124,7 @@
 #define DLG_COLLECTION_VIEW             RID_DIALOG_START + 27
 #define DLG_DATABASE_TYPE_CHANGE        RID_DIALOG_START + 28
 #define DLG_DATABASE_WIZARD             RID_DIALOG_START + 29
+#define RID_EXTENSION_NOT_PRESENT_DLG           RID_DIALOG_START + 30
 
 //========================================================================
 // tab pages
@@ -384,6 +385,10 @@
 #define STR_TABLEDESIGN_NO_PRIM_KEY_HEAD    RID_STR_GEN_START + 37
 #define STR_TABLEDESIGN_NO_PRIM_KEY         RID_STR_GEN_START + 38
 
+#define RID_STR_ERROR_NO_REPORT_INSTALLED       RID_STR_GEN_START + 39
+
+#define RID_STR_EXTENSION_NOT_PRESENT       RID_STR_GEN_START + 40
+#define RID_STR_EXTENSION_NAME              RID_STR_GEN_START + 41
 
 //========================================================================
 // untyped resources
