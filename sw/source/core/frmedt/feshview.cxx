@@ -4,9 +4,9 @@
  *
  *  $RCSfile: feshview.cxx,v $
  *
- *  $Revision: 1.54 $
+ *  $Revision: 1.55 $
  *
- *  last change: $Author: kz $ $Date: 2007-05-10 15:59:05 $
+ *  last change: $Author: rt $ $Date: 2007-07-06 09:52:22 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1830,7 +1830,8 @@ BOOL SwFEShell::ImpEndCreate()
             pTmpSdrModel->InsertPage( pPg );
         }
         pPg->RecalcObjOrdNums();
-        delete pPg->RemoveObject( rSdrObj.GetOrdNumDirect() );
+        SdrObject* pRemovedObject = pPg->RemoveObject( rSdrObj.GetOrdNumDirect() );
+        SdrObject::Free( pRemovedObject );
         GetDoc()->SetNoDrawUndoObj( FALSE );
 
         SwFlyFrm* pFlyFrm;
