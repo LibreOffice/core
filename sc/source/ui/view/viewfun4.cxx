@@ -4,9 +4,9 @@
  *
  *  $RCSfile: viewfun4.cxx,v $
  *
- *  $Revision: 1.36 $
+ *  $Revision: 1.37 $
  *
- *  last change: $Author: hr $ $Date: 2007-06-27 12:46:44 $
+ *  last change: $Author: rt $ $Date: 2007-07-06 12:48:29 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -565,8 +565,16 @@ BOOL ScViewFunc::PasteFile( const Point& rPos, const String& rFile, BOOL bLink )
     if (!pGraphicFilter->ImportGraphic(aGraphic, aURL,
             GRFILTER_FORMAT_DONTKNOW, &nFilterFormat ))
     {
-        String aFltName = pGraphicFilter->GetImportFormatName(nFilterFormat);
-        return PasteGraphic( rPos, aGraphic, aStrURL, aFltName );
+        if ( bLink )
+        {
+            String aFltName = pGraphicFilter->GetImportFormatName(nFilterFormat);
+            return PasteGraphic( rPos, aGraphic, aStrURL, aFltName );
+        }
+        else
+        {
+            // #i76709# if bLink isn't set, pass empty URL/filter, so a non-linked image is inserted
+            return PasteGraphic( rPos, aGraphic, EMPTY_STRING, EMPTY_STRING );
+        }
     }
 
     if (bLink)                      // bei bLink alles, was nicht Grafik ist, als URL
