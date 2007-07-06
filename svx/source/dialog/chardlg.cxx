@@ -4,9 +4,9 @@
  *
  *  $RCSfile: chardlg.cxx,v $
  *
- *  $Revision: 1.96 $
+ *  $Revision: 1.97 $
  *
- *  last change: $Author: rt $ $Date: 2007-07-03 14:01:08 $
+ *  last change: $Author: rt $ $Date: 2007-07-06 07:32:55 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -775,7 +775,7 @@ void SvxCharNamePage::Initialize()
 
     // fill the color box
     SfxObjectShell* pDocSh = SfxObjectShell::Current();
-    DBG_ASSERT( pDocSh, "DocShell not found!" );
+    //DBG_ASSERT( pDocSh, "DocShell not found!" );
     XColorTable* pColorTable = NULL;
     FASTBOOL bKillTable = FALSE;
     const SfxPoolItem* pItem = NULL;
