@@ -4,9 +4,9 @@
  *
  *  $RCSfile: swxml.cxx,v $
  *
- *  $Revision: 1.77 $
+ *  $Revision: 1.78 $
  *
- *  last change: $Author: ihi $ $Date: 2007-06-05 17:39:07 $
+ *  last change: $Author: rt $ $Date: 2007-07-06 09:54:09 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -586,7 +586,8 @@ void lcl_ConvertSdrOle2ObjsToSdrGrafObjs( SwDoc& _rDoc )
                 pGraphicObj->SetLayer( pOle2Obj->GetLayer() );
 
                 // replace ole2 shape with the new graphic object and delete the ol2 shape
-                delete pObjList->ReplaceObject( pGraphicObj, pOle2Obj->GetOrdNum() );
+                SdrObject* pReplaced = pObjList->ReplaceObject( pGraphicObj, pOle2Obj->GetOrdNum() );
+                SdrObject::Free( pReplaced );
             }
         }
     }
