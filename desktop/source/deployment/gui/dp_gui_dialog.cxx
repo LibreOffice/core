@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dp_gui_dialog.cxx,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: kz $ $Date: 2007-06-20 14:16:10 $
+ *  last change: $Author: rt $ $Date: 2007-07-06 13:56:29 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -122,7 +122,6 @@ DialogImpl::DialogImpl(
     Window * pParent, Sequence<OUString> const & arExtensions,
     Reference<XComponentContext> const & xContext )
     : ModelessDialog( pParent, getResId(RID_DLG_PACKAGE_MANAGER) ),
-      m_modifiableContext( new ModifiableContext ),
       m_arExtensions(arExtensions),
       m_installThread(0),
       m_bAutoInstallFinished(false),
@@ -660,9 +659,10 @@ void DialogImpl::updateButtonStates(
           entry != 0; entry = m_treelb->NextSelected(entry) )
     {
         allowModification = allowModification &&
-            m_modifiableContext->isModifiable( m_treelb->getContext( entry ) );
+            ! m_treelb->getPackageManager(entry)->isReadOnly();
 
-        xPackage = m_treelb->getPackage(entry);
+        Reference<deployment::XPackage> xPackage(
+            m_treelb->getPackage(entry) );
 
         if (xPackage.is())
         {
@@ -807,21 +807,28 @@ bool DialogImpl::supportsOptions( ::rtl::OUString const & sExtensionId)
 }
 
 //______________________________________________________________________________
-Sequence< Reference<deployment::XPackage> >
-DialogImpl::TreeListBoxImpl::getSelectedPackages( bool onlyFirstLevel ) const
+
+::std::vector<
+    ::std::pair<
+        Reference< deployment::XPackage>,
+        Reference< deployment::XPackageManager> > >
+        DialogImpl::TreeListBoxImpl::getSelectedPackages(bool onlyFirstLevel) const
 {
-    ::std::vector< Reference<deployment::XPackage> > ret;
+    ::std::vector< ::std::pair< Reference<deployment::XPackage>,
+        Reference<deployment::XPackageManager> > > ret;
 
     for ( SvLBoxEntry * entry = FirstSelected();
           entry != 0; entry = NextSelected(entry) )
     {
-        if (onlyFirstLevel && !isFirstLevelChild( entry ))
+        if (onlyFirstLevel && ! isFirstLevelChild( entry ))
             continue;
         Reference<deployment::XPackage> xPackage( getPackage(entry) );
+        Reference<deployment::XPackageManager> xPackageManager(getPackageManager(entry));
+        OSL_ASSERT(xPackageManager.is());
         if (xPackage.is())
-            ret.push_back( xPackage );
+            ret.push_back( ::std::make_pair(xPackage, xPackageManager));
     }
-    return comphelper::containerToSequence(ret);
+    return ret;
 }
 
 namespace {
@@ -906,16 +913,14 @@ Sequence<OUString> DialogImpl::solarthread_raiseAddPicker(
 //______________________________________________________________________________
 void DialogImpl::clickAdd( USHORT )
 {
-    OSL_ASSERT( m_treelb->getSelectedPackages().getLength() == 0 );
-    OUString context( m_treelb->getContext(
-                          m_treelb->getCurrentSingleSelectedEntry() ) );
-    OSL_ASSERT( context.getLength() > 0 );
-    if (context.getLength() == 0)
-        return;
+    //The top level nodes of the tree contain the respective XPackageManager
+    OSL_ASSERT( m_treelb->getSelectedPackages(false).size() == 0 );
+    const Reference<deployment::XPackageManager> xPackageManager(
+        m_treelb->getPackageManager(m_treelb->getCurrentSingleSelectedEntry() ) );
+    OSL_ASSERT(xPackageManager.is() );
 
-    Reference<deployment::XPackageManager> xPackageManager(
-        m_xPkgMgrFac->getPackageManager( context ) );
-    OSL_ASSERT( xPackageManager.is() );
+    if (! continueActionOnSharedExtension(xPackageManager))
+        return;
 
     const Sequence<OUString> files(
         vcl::solarthread::syncExecute(
@@ -964,42 +969,39 @@ void DialogImpl::clickAdd( USHORT )
 //______________________________________________________________________________
 void DialogImpl::clickRemove( USHORT )
 {
-    OSL_ASSERT( m_treelb->getSelectedPackages(true).getLength() > 0 );
+    const ::std::vector< ::std::pair< Reference<deployment::XPackage>,
+        Reference<deployment::XPackageManager> > > selection(
+            m_treelb->getSelectedPackages(true) );
+    OSL_ASSERT( selection.size() > 0 );
 
-    typedef ::std::pair<
-        Reference<deployment::XPackageManager>,
-        Reference<deployment::XPackage> > t_item;
-    ::std::vector<t_item> to_be_removed;
-
-    for ( SvLBoxEntry * entry = m_treelb->FirstSelected();
-          entry != 0; entry = m_treelb->NextSelected(entry) )
+    //Check if we want to remove a shared extension and notify user if necessary
+    for (TreeListBoxImpl::CI_PAIR_PACKAGE i = selection.begin();
+         i != selection.end(); i++)
     {
-        if (m_treelb->isFirstLevelChild( entry ))
+        if (! continueActionOnSharedExtension(i->second))
         {
-            OUString context(m_treelb->getContext(entry));
-            OSL_ASSERT( context.getLength() > 0 );
-            if (context.getLength() == 0)
-                continue;
-            to_be_removed.push_back(
-                t_item( m_xPkgMgrFac->getPackageManager(context),
-                        m_treelb->getPackage(entry) ) );
+            return;
+        }
+        else
+        {
+            //We only show the the messagebox once
+            if (i->second->getContext().equals(OUSTR("shared")))
+                break;
         }
     }
-
     ::rtl::Reference<ProgressCommandEnv> currentCmdEnv(
         new ProgressCommandEnv( m_xComponentContext, this, m_strRemovingPackages) );
-    currentCmdEnv->showProgress( to_be_removed.size() );
-    for ( ::std::size_t pos = 0;
-          !currentCmdEnv->isAborted() && pos < to_be_removed.size(); ++pos )
+    currentCmdEnv->showProgress( selection.size() );
+    for ( TreeListBoxImpl::CI_PAIR_PACKAGE pos = selection.begin();
+          !currentCmdEnv->isAborted() && pos != selection.end(); ++pos )
     {
-        t_item const & item = to_be_removed[ pos ];
         Reference<task::XAbortChannel> xAbortChannel(
-            item.first->createAbortChannel() );
-        OUString id( dp_misc::getIdentifier( item.second ) );
+            pos->second->createAbortChannel() );
+        OUString id( dp_misc::getIdentifier( pos->first ) );
         currentCmdEnv->progressSection( id, xAbortChannel );
         try {
-            item.first->removePackage(
-                id, item.second->getName(), xAbortChannel,
+            pos->second->removePackage(
+                id, pos->first->getName(), xAbortChannel,
                 currentCmdEnv.get() );
         }
         catch (CommandAbortedException &) {
@@ -1011,19 +1013,36 @@ void DialogImpl::clickRemove( USHORT )
 //______________________________________________________________________________
 void DialogImpl::clickEnableDisable( USHORT id )
 {
-    Sequence< Reference<deployment::XPackage> > selection(
-        m_treelb->getSelectedPackages(true) );
-    OSL_ASSERT( selection.getLength() > 0 );
+    const ::std::vector< ::std::pair< Reference<deployment::XPackage>,
+        Reference<deployment::XPackageManager> > > selection(
+            m_treelb->getSelectedPackages(true) );
+    OSL_ASSERT( selection.size() > 0 );
+
+    //Check if we want to remove a shared extension and notify user if necessary
+    for (TreeListBoxImpl::CI_PAIR_PACKAGE i = selection.begin();
+         i != selection.end(); i++)
+    {
+        if (! continueActionOnSharedExtension(i->second))
+        {
+            return;
+        }
+        else
+        {
+            //We only show the the messagebox once
+            if (i->second->getContext().equals(OUSTR("shared")))
+                break;
+        }
+    }
 
     ::rtl::Reference<ProgressCommandEnv> currentCmdEnv(
         new ProgressCommandEnv( m_xComponentContext, this, id == RID_BTN_ENABLE
                                 ? m_strEnablingPackages
                                 : m_strDisablingPackages ) );
-    currentCmdEnv->showProgress( selection.getLength() );
-    for ( sal_Int32 pos = 0;
-          !currentCmdEnv->isAborted() && pos < selection.getLength(); ++pos )
+    currentCmdEnv->showProgress( selection.size() );
+    for ( TreeListBoxImpl::CI_PAIR_PACKAGE pos = selection.begin();
+          !currentCmdEnv->isAborted() && pos != selection.end(); ++pos )
     {
-        Reference<deployment::XPackage> const & xPackage = selection[ pos ];
+        Reference<deployment::XPackage> const & xPackage = pos->first;
         Reference<task::XAbortChannel> xAbortChannel(
             xPackage->createAbortChannel() );
         currentCmdEnv->progressSection( xPackage->getDisplayName(),
@@ -1174,11 +1193,22 @@ bool DialogImpl::solarthread_raiseExportPickers(
 //______________________________________________________________________________
 void DialogImpl::clickExport( USHORT )
 {
-    Sequence< Reference<deployment::XPackage> > selection(
-        m_treelb->getSelectedPackages() );
-    OSL_ASSERT( selection.getLength() > 0 );
-    if (selection.getLength() == 0)
-        return;
+    const ::std::vector< ::std::pair< Reference<deployment::XPackage>,
+        Reference<deployment::XPackageManager> > > selection(
+            m_treelb->getSelectedPackages(false) );
+
+    OSL_ASSERT( selection.size() > 0 );
+
+    //create the Sequence<Reference<XPackage> > out of selection for use in
+    //syncExecute
+    Sequence<Reference<deployment::XPackage> > seqPackages(
+        selection.size());
+    sal_Int32 j = 0;
+    for (TreeListBoxImpl::CI_PAIR_PACKAGE i = selection.begin();
+         i != selection.end(); i++, j++)
+    {
+        seqPackages[j] = i->first;
+    }
 
     OUString destFolder;
     OUString newTitle;
@@ -1186,7 +1216,7 @@ void DialogImpl::clickExport( USHORT )
     using namespace vcl::solarthread;
     if (! syncExecute( boost::bind(
                            &DialogImpl::solarthread_raiseExportPickers, this,
-                           selection,
+                           seqPackages,
                            inout_by_ref(destFolder),
                            inout_by_ref(newTitle),
                            inout_by_ref(nameClashAction) ) ))
@@ -1194,11 +1224,11 @@ void DialogImpl::clickExport( USHORT )
 
     ::rtl::Reference<ProgressCommandEnv> currentCmdEnv(
         new ProgressCommandEnv( m_xComponentContext, this, m_strExportingPackages ) );
-    currentCmdEnv->showProgress( selection.getLength() );
-    for ( sal_Int32 pos = 0;
-          !currentCmdEnv->isAborted() && pos < selection.getLength(); ++pos )
+    currentCmdEnv->showProgress( selection.size() );
+    for ( TreeListBoxImpl::CI_PAIR_PACKAGE pos = selection.begin();
+          !currentCmdEnv->isAborted() && pos != selection.end(); ++pos )
     {
-        Reference<deployment::XPackage> const & xPackage = selection[ pos ];
+        Reference<deployment::XPackage> const & xPackage = pos->first;
         currentCmdEnv->progressSection( xPackage->getDisplayName() );
         OSL_ASSERT( destFolder.getLength() > 0 );
         xPackage->exportTo( destFolder, newTitle, nameClashAction,
@@ -1245,7 +1275,7 @@ void DialogImpl::checkUpdates(bool selected)
 {
     std::vector<UpdateData> data;
     if (UpdateDialog(
-            m_xComponentContext, this, m_modifiableContext,
+            m_xComponentContext, this,
             (selected
              ? new SelectedPackageIterator(*m_treelb.get())
              : rtl::Reference<SelectedPackageIterator>()),
@@ -1259,7 +1289,28 @@ void DialogImpl::checkUpdates(bool selected)
     }
 }
 
-//##############################################################################
+
+bool DialogImpl::continueActionOnSharedExtension(
+    Reference<css::deployment::XPackageManager> const & xPMgr) const
+{
+    //If the package manager is readonly then the user cannot modify anything anyway.
+    //Then the messagebox need not be displayed. Also the add, remove, disable buttons
+    //should not be enabled.
+    if (xPMgr->getContext().equals(OUSTR("shared"))
+        && ! xPMgr->isReadOnly())
+    {
+        vos::OGuard guard(Application::GetSolarMutex());
+        InfoBox box(const_cast<DialogImpl*>(this),
+                    ResId(RID_INFOBOX_MODIFY_SHARED_EXTENSION, *DeploymentGuiResMgr::get()));
+        String msgText = box.GetMessText();
+        msgText.SearchAndReplaceAllAscii( "%PRODUCTNAME", BrandName::get() );
+        if (RET_OK == box.Execute())
+            return true;
+        else
+            return false;
+    }
+    return true;
+}
 
 //______________________________________________________________________________
 void DialogImpl::SyncPushButton::Click()
