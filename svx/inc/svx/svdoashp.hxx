@@ -4,9 +4,9 @@
  *
  *  $RCSfile: svdoashp.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: vg $ $Date: 2007-04-11 16:22:32 $
+ *  last change: $Author: rt $ $Date: 2007-07-06 07:30:22 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -111,7 +111,7 @@ class SVX_DLLPUBLIC SdrObjCustomShape : public SdrTextObj
 
 private:
     // BaseProperties section
-    SVX_DLLPRIVATE virtual sdr::properties::BaseProperties* CreateObjectSpecificProperties();
+    virtual sdr::properties::BaseProperties* CreateObjectSpecificProperties();
 
     virtual sdr::contact::ViewContact* CreateObjectSpecificViewContact();
 
