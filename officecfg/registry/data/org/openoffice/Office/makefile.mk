@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.17 $
+#   $Revision: 1.18 $
 #
-#   last change: $Author: hr $ $Date: 2007-06-27 14:43:20 $
+#   last change: $Author: rt $ $Date: 2007-07-06 06:50:32 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -65,7 +65,8 @@ XCUFILES= \
     WebWizard.xcu \
     FormWizard.xcu \
     Writer.xcu \
-    Paths.xcu
+    Paths.xcu \
+    ExtendedColorScheme.xcu
 
 MODULEFILES= \
     Common-writer.xcu   \
@@ -92,7 +93,9 @@ MODULEFILES= \
     Embedding-draw.xcu   \
     Embedding-impress.xcu   \
     Embedding-math.xcu   \
-    Embedding-writer.xcu
+    Embedding-base.xcu   \
+    Embedding-writer.xcu \
+    Embedding-report.xcu
 
 
 LOCALIZEDFILES= \
@@ -104,7 +107,8 @@ LOCALIZEDFILES= \
     UI.xcu \
     WebWizard.xcu \
     FormWizard.xcu \
-    Writer.xcu
+    Writer.xcu \
+    ExtendedColorScheme.xcu
 
 .INCLUDE :  target.mk
 
