@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dbinteraction.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 16:51:28 $
+ *  last change: $Author: rt $ $Date: 2007-07-06 08:45:13 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -40,7 +40,9 @@
 #include <cppuhelper/implbase2.hxx>
 #endif
 
-
+#ifndef _DBAUI_MODULE_DBU_HXX_
+#include "moduledbu.hxx"
+#endif
 #ifndef _COM_SUN_STAR_LANG_XSERVICEINFO_HPP_
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #endif
@@ -61,10 +63,6 @@
 #endif
 #ifndef _DBASHARED_APITOOLS_HXX_
 #include "apitools.hxx"
-#endif
-
-#ifndef _DBAUI_MODULE_DBU_HXX_
-#include "moduledbu.hxx"
 #endif
 
 namespace dbtools
@@ -96,8 +94,8 @@ namespace dbaui
     */
     class OInteractionHandler
                 :public OInteractionHandler_Base
-                ,public OModuleClient       // want to use resources
     {
+        OModuleClient m_aModuleClient;
         ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >
                 m_xORB;
     public:
