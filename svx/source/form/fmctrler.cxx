@@ -4,9 +4,9 @@
  *
  *  $RCSfile: fmctrler.cxx,v $
  *
- *  $Revision: 1.64 $
+ *  $Revision: 1.65 $
  *
- *  last change: $Author: hr $ $Date: 2007-06-27 18:11:37 $
+ *  last change: $Author: rt $ $Date: 2007-07-06 07:36:06 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1566,10 +1566,10 @@ void FmXFormController::setModel(const Reference< XTabControllerModel > & Model)
             Reference< XPropertySet > xModelProps( m_xModelAsIndex, UNO_QUERY );
             Reference< XPropertySetInfo > xPropInfo( xModelProps->getPropertySetInfo() );
             if (  xPropInfo.is()
-               && xModelProps->getPropertySetInfo()->hasPropertyByName( FM_PROP_DYNAMIC_CONTROL_BORDER )
-               && xModelProps->getPropertySetInfo()->hasPropertyByName( FM_PROP_CONTROL_BORDER_COLOR_FOCUS )
-               && xModelProps->getPropertySetInfo()->hasPropertyByName( FM_PROP_CONTROL_BORDER_COLOR_MOUSE )
-               && xModelProps->getPropertySetInfo()->hasPropertyByName( FM_PROP_CONTROL_BORDER_COLOR_INVALID )
+               && xPropInfo->hasPropertyByName( FM_PROP_DYNAMIC_CONTROL_BORDER )
+               && xPropInfo->hasPropertyByName( FM_PROP_CONTROL_BORDER_COLOR_FOCUS )
+               && xPropInfo->hasPropertyByName( FM_PROP_CONTROL_BORDER_COLOR_MOUSE )
+               && xPropInfo->hasPropertyByName( FM_PROP_CONTROL_BORDER_COLOR_INVALID )
                )
             {
                 bool bEnableDynamicControlBorder = lcl_shouldUseDynamicControlBorder(
@@ -2374,7 +2374,8 @@ void FmXFormController::startFormListening( const Reference< XPropertySet >& _rx
             }
         }
 
-        if ( _rxForm->getPropertySetInfo().is() && _rxForm->getPropertySetInfo()->hasPropertyByName( FM_PROP_DYNAMIC_CONTROL_BORDER ) )
+        Reference< XPropertySetInfo > xInfo = _rxForm->getPropertySetInfo();
+        if ( xInfo.is() && xInfo->hasPropertyByName( FM_PROP_DYNAMIC_CONTROL_BORDER ) )
             _rxForm->addPropertyChangeListener( FM_PROP_DYNAMIC_CONTROL_BORDER, this );
     }
     catch( const Exception& )
@@ -2405,7 +2406,8 @@ void FmXFormController::stopFormListening( const Reference< XPropertySet >& _rxF
             }
         }
 
-        if ( _rxForm->getPropertySetInfo().is() && _rxForm->getPropertySetInfo()->hasPropertyByName( FM_PROP_DYNAMIC_CONTROL_BORDER ) )
+        Reference< XPropertySetInfo > xInfo = _rxForm->getPropertySetInfo();
+        if ( xInfo.is() && xInfo->hasPropertyByName( FM_PROP_DYNAMIC_CONTROL_BORDER ) )
             _rxForm->removePropertyChangeListener( FM_PROP_DYNAMIC_CONTROL_BORDER, this );
     }
     catch( const Exception& )
