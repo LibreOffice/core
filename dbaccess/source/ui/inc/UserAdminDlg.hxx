@@ -4,9 +4,9 @@
  *
  *  $RCSfile: UserAdminDlg.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: kz $ $Date: 2007-05-10 10:29:52 $
+ *  last change: $Author: rt $ $Date: 2007-07-06 08:26:19 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -70,6 +70,7 @@ namespace dbaui
     */
     class OUserAdminDlg : public SfxTabDialog, public IItemSetHelper, public IDatabaseSettingsDialog,public dbaui::OModuleClient
     {
+        OModuleClient m_aModuleClient;
         ::std::auto_ptr<ODbDataSourceAdministrationHelper>  m_pImpl;
         SfxItemSet* m_pItemSet;
         ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection>          m_xConnection;
