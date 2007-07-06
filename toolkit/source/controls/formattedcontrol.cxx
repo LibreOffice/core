@@ -4,9 +4,9 @@
  *
  *  $RCSfile: formattedcontrol.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: kz $ $Date: 2007-02-14 15:34:15 $
+ *  last change: $Author: rt $ $Date: 2007-07-06 06:53:38 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -82,15 +82,22 @@ namespace toolkit
         }
 
         // ...............................................................
+        bool& lcl_getTriedCreation()
+        {
+            static bool s_bTriedCreation = false;
+            return s_bTriedCreation;
+        }
+
+        // ...............................................................
         const Reference< XNumberFormatsSupplier >& lcl_getDefaultFormats_throw()
         {
             ::osl::MutexGuard aGuard( getDefaultFormatsMutex() );
-            static bool s_bTriedCreation = false;
 
+            bool& rbTriedCreation = lcl_getTriedCreation();
             Reference< XNumberFormatsSupplier >& rDefaultFormats( lcl_getDefaultFormatsAccess_nothrow() );
-            if ( !rDefaultFormats.is() && !s_bTriedCreation )
+            if ( !rDefaultFormats.is() && !rbTriedCreation )
             {
-                s_bTriedCreation = true;
+                rbTriedCreation = true;
                 rDefaultFormats = Reference< XNumberFormatsSupplier >(
                     ::comphelper::createProcessComponent(
                         ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.util.NumberFormatsSupplier" ) ) ),
@@ -121,6 +128,7 @@ namespace toolkit
                 Reference< XNumberFormatsSupplier >& rDefaultFormats( lcl_getDefaultFormatsAccess_nothrow() );
                 Reference< XNumberFormatsSupplier > xReleasePotentialLastReference( rDefaultFormats );
                 rDefaultFormats.clear();
+                lcl_getTriedCreation() = false;
 
                 aGuard.clear();
                 xReleasePotentialLastReference.clear();
@@ -339,7 +347,7 @@ namespace toolkit
                 Any& rConvertedValue, Any& rOldValue, sal_Int32 nPropId,
                 const Any& rValue ) throw (IllegalArgumentException)
     {
-        if ( BASEPROPERTY_EFFECTIVE_DEFAULT == nPropId )
+        if ( BASEPROPERTY_EFFECTIVE_DEFAULT == nPropId && rValue.hasValue() )
         {
             double dVal = 0;
             sal_Int32  nVal = 0;
