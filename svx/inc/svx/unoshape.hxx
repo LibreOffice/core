@@ -4,9 +4,9 @@
  *
  *  $RCSfile: unoshape.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: vg $ $Date: 2007-05-22 15:15:50 $
+ *  last change: $Author: rt $ $Date: 2007-07-06 07:31:41 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -131,7 +131,6 @@
 class SfxItemSet;
 class SdrModel;
 class SvxDrawPage;
-class SvxShapeList;
 class SvGlobalName;
 
 class SvxShapeMutex
@@ -225,7 +224,14 @@ class SVX_DLLPUBLIC SvxShape : public SvxShape_UnoImplHelper,
     // Internals
     void ObtainSettingsFromPropertySet(SvxItemPropertySet& rPropSet) throw ();
     virtual void Create( SdrObject* pNewOpj, SvxDrawPage* pNewPage = NULL ) throw ();
-    void SetTemporaryShape( sal_Bool bTemporary );
+    /** takes the ownership of the SdrObject.
+
+        When the shape is disposed, and it has the ownership of its associated SdrObject, then
+        it will delete this object.
+    */
+    void TakeSdrObjectOwnership();
+    bool HasSdrObjectOwnership() const;
+
     void ChangeModel( SdrModel* pNewModel );
 
     void InvalidateSdrObject() { mpObj.reset( NULL ); };
@@ -271,6 +277,11 @@ class SVX_DLLPUBLIC SvxShape : public SvxShape_UnoImplHelper,
     // SfxListener
     virtual void Notify( SfxBroadcaster& rBC, const SfxHint& rHint ) throw ();
 
+
+    /** called from SdrObject::SendUserCall
+        Currently only called for SDRUSERCALL_CHILD_CHGATTR
+    */
+    virtual void onUserCall(SdrUserCallType eUserCall, const Rectangle& rBoundRect);
     // XAggregation
     virtual ::com::sun::star::uno::Any SAL_CALL queryAggregation( const ::com::sun::star::uno::Type& aType ) throw (::com::sun::star::uno::RuntimeException);
 
