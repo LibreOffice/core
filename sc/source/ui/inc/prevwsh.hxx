@@ -4,9 +4,9 @@
  *
  *  $RCSfile: prevwsh.hxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: vg $ $Date: 2007-02-27 13:25:41 $
+ *  last change: $Author: rt $ $Date: 2007-07-06 12:44:41 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -140,6 +140,7 @@ public:
     virtual PrintDialog*    CreatePrintDialog( Window* pParent );
     virtual SfxTabPage*     CreatePrintOptionsPage( Window *pParent, const SfxItemSet &rOptions );
     virtual void            PreparePrint( PrintDialog* pPrintDialog = NULL );
+    virtual ErrCode         DoPrint( SfxPrinter *pPrinter, PrintDialog *pPrintDialog, BOOL bSilent, BOOL bIsAPI );
     virtual USHORT          Print( SfxProgress& rProgress, BOOL bIsAPI, PrintDialog* pPrintDialog = NULL );
 
     void    AddAccessibilityObject( SfxListener& rObject );
