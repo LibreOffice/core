@@ -1,0 +1,116 @@
+/*************************************************************************
+ *
+ *  OpenOffice.org - a multi-platform office productivity suite
+ *
+ *  $RCSfile: XFixedLine.idl,v $
+ *
+ *  $Revision: 1.2 $
+ *
+ *  last change: $Author: rt $ $Date: 2007-07-06 07:19:38 $
+ *
+ *  The Contents of this file are made available subject to
+ *  the terms of GNU Lesser General Public License Version 2.1.
+ *
+ *
+ *    GNU Lesser General Public License Version 2.1
+ *    =============================================
+ *    Copyright 2005 by Sun Microsystems, Inc.
+ *    901 San Antonio Road, Palo Alto, CA 94303, USA
+ *
+ *    This library is free software; you can redistribute it and/or
+ *    modify it under the terms of the GNU Lesser General Public
+ *    License version 2.1, as published by the Free Software Foundation.
+ *
+ *    This library is distributed in the hope that it will be useful,
+ *    but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ *    Lesser General Public License for more details.
+ *
+ *    You should have received a copy of the GNU Lesser General Public
+ *    License along with this library; if not, write to the Free Software
+ *    Foundation, Inc., 59 Temple Place, Suite 330, Boston,
+ *    MA  02111-1307  USA
+ *
+ ************************************************************************/
+#ifndef __com_sun_star_report_XFixedLine_idl__
+#define __com_sun_star_report_XFixedLine_idl__
+
+#ifndef __com_sun_star_report_XReportControlModel_idl__
+#include <com/sun/star/report/XReportControlModel.idl>
+#endif
+#ifndef __com_sun_star_drawing_CircleKind_idl__
+#include <com/sun/star/drawing/CircleKind.idl>
+#endif
+#ifndef __com_sun_star_drawing_LineStyle_idl__
+#include <com/sun/star/drawing/LineStyle.idl>
+#endif
+
+#ifndef __com_sun_star_util_Color_idl__
+#include <com/sun/star/util/Color.idl>
+#endif
+
+#ifndef __com_sun_star_drawing_LineDash_idl__
+#include <com/sun/star/drawing/LineDash.idl>
+#endif
+//=============================================================================
+
+ module com {  module sun {  module star {  module report {
+
+//=============================================================================
+interface XFixedLine
+{
+    interface XReportControlModel;
+
+    /** specifies the orientation of the control.
+
+        <pre>
+        0: horizontal
+        1: vertical </default>
+        </pre>
+     */
+    [attribute,bound] long Orientation
+    {
+        set raises ( com::sun::star::beans::UnknownPropertyException );
+        get raises ( com::sun::star::beans::UnknownPropertyException );
+    };
+
+    /** This property contains the type of the line.
+     */
+    [attribute,bound] com::sun::star::drawing::LineStyle LineStyle;
+
+    //-------------------------------------------------------------------------
+
+    /** This property contains the dash of the line.
+     */
+    [attribute,bound] com::sun::star::drawing::LineDash LineDash;
+
+    //-------------------------------------------------------------------------
+
+    /** This property contains the line color.
+     */
+    [attribute,bound] com::sun::star::util::Color LineColor;
+
+    //-------------------------------------------------------------------------
+
+    /** This property contains the extent of transparency.
+     */
+    [attribute,bound] short LineTransparence;
+
+    //-------------------------------------------------------------------------
+
+    /** This property contains the width of the line in 1/100th mm.
+     */
+    [attribute,bound] long LineWidth;
+
+    //-------------------------------------------------------------------------
+};
+
+service FixedLine : XFixedLine;
+//=============================================================================
+
+}; }; }; };
+
+/*=============================================================================
+
+=============================================================================*/
+#endif
