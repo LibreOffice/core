@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ownview.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 00:45:36 $
+ *  last change: $Author: rt $ $Date: 2007-07-06 10:11:27 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -101,13 +101,18 @@
 #include <cppuhelper/implbase1.hxx>
 #endif
 
+#ifndef _COMPHELPER_STORAGEHELPER_HXX
 #include <comphelper/storagehelper.hxx>
+#endif
+#ifndef _COMPHELPER_MIMECONFIGHELPER_HXX_
+#include <comphelper/mimeconfighelper.hxx>
+#endif
+
 #include "ownview.hxx"
-#include <convert.hxx>
 
 
 using namespace ::com::sun::star;
-
+using namespace ::comphelper;
 
 ::rtl::OUString GetNewTempFileURL_Impl( const uno::Reference< lang::XMultiServiceFactory >& xFactory ) throw( io::IOException );
 ::rtl::OUString GetNewFilledTempFile_Impl( const uno::Reference< io::XInputStream >& xInStream, const uno::Reference< lang::XMultiServiceFactory >& xFactory ) throw( io::IOException );
@@ -508,7 +513,7 @@ void OwnView_Impl::CreateNative()
             {
                 sal_Bool bOk = sal_False;
 
-                if ( ClassIDsEqual( aPackageClassID, aStorClassID ) )
+                if ( MimeConfigurationHelper::ClassIDsEqual( aPackageClassID, aStorClassID ) )
                 {
                     // the storage represents Object Package
 
