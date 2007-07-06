@@ -4,9 +4,9 @@
  *
  *  $RCSfile: QTableWindow.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 07:21:44 $
+ *  last change: $Author: rt $ $Date: 2007-07-06 08:39:02 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -65,9 +65,6 @@
 #endif
 #ifndef _DBU_QRY_HRC_
 #include "dbu_qry.hrc"
-#endif
-#ifndef _DBAUI_MODULE_DBU_HXX_
-#include "moduledbu.hxx"
 #endif
 #ifndef DBAUI_QUERY_HRC
 #include "Query.hrc"
