@@ -30,6 +30,11 @@ Function .onInit
     /EXTRACTONLY=ON : NSIS only extracts the PRODUCTNAMEPLACEHOLDER PRODUCTVERSIONPLACEHOLDER installation set $\n \
     /INSTALLLOCATION=<path> : PRODUCTNAMEPLACEHOLDER PRODUCTVERSIONPLACEHOLDER installation directory $\n \
     /POSTREMOVE=ON : Removes the unpacked installation set after PRODUCTNAMEPLACEHOLDER PRODUCTVERSIONPLACEHOLDER installation $\n \
+    /INSTALLJAVA=ON : Installs JRE located in sub directory java, if exists $\n \
+    /GUILEVEL=<guilevel> : Setting Windows Installer GUI level: qr, qb, qn, qf, ... $\n \
+    /PARAM1=$\"key=value$\" : Flexible parameter 1. Example: /PARAM1=$\"INSTALLLEVEL=70$\" $\n \
+    /PARAM2=$\"key=value$\" : Flexible parameter 2. $\n \
+    /PARAM3=$\"key=value$\" : Flexible parameter 3. $\n \
     /HELP=ON : Shows this help $\n"
     Quit
     GoTo onInitDone
@@ -241,6 +246,8 @@ SectionEnd
 
 Section -Post
 
+  StrCpy $R9 "false"
+  
   Call GetParameters
   Pop $1
 
@@ -264,6 +271,68 @@ Section -Post
     StrCpy $3 'INSTALLLOCATION="$2"'
   installnotset:
 
+  Push $1
+  Push "/INSTALLJAVA="
+  Call GetOptions
+  Pop $2
+  ;MessageBox MB_OK "INSTALLJAVA: $2"
+
+  StrCmp $2 "ON" setinstalljava setdontinstalljava 
+  setinstalljava:
+    StrCpy $R9 "true"
+  setdontinstalljava:
+
+  Push $1
+  Push "/GUILEVEL="
+  Call GetOptions
+  Pop $2
+
+  StrCmp $2 "" dontsetguilevel setguilevel 
+  setguilevel:
+    StrCpy $7 "/"
+    StrCpy $7 $7$2
+    GoTo afterguilevel
+  dontsetguilevel:
+    StrCpy $7 "/qr"
+  afterguilevel:
+
+  ;MessageBox MB_OK "GUILEVEL: $7"
+
+  Push $1
+  Push "/PARAM1="
+  Call GetOptions
+  Pop $2
+  ;MessageBox MB_OK "PARAM1: $2"
+
+  StrCmp $2 "" param1notset param1set
+  param1set:
+    StrCpy $4 "$2"
+  param1notset:
+
+
+  Push $1
+  Push "/PARAM2="
+  Call GetOptions
+  Pop $2
+  ;MessageBox MB_OK "PARAM2: $2"
+
+  StrCmp $2 "" param2notset param2set
+  param2set:
+    StrCpy $5 "$2"
+  param2notset:
+
+
+  Push $1
+  Push "/PARAM3="
+  Call GetOptions
+  Pop $2
+  ;MessageBox MB_OK "PARAM3: $2"
+
+  StrCmp $2 "" param3notset param3set
+  param3set:
+    StrCpy $6 "$2"
+  param3notset:
+
   IfSilent onPostSilent onPostNoSilent
 
   onPostSilent:
@@ -275,12 +344,20 @@ Section -Post
 
     StrCmp $2 "ON" postremovesilent nopostremovesilent
     nopostremovesilent:
-      ExecWait "$INSTDIR\setup.exe -lang $LANGUAGE $3 /qr -ignore_running" $0
+      StrCmp $R9 "true" installjava1 dontinstalljava1 
+      installjava1:
+        ExecWait '$INSTDIR\java\jre-6-windows-i586.exe /s /v"/qn REBOOT=Suppress"'
+      dontinstalljava1:
+      ExecWait "$INSTDIR\setup.exe -lang $LANGUAGE $3 $4 $5 $6 $7 -ignore_running" $0
       SetErrorLevel $0
       Quit
       GoTo onPostDone
     postremovesilent:
-      ExecWait "$INSTDIR\setup.exe -lang $LANGUAGE $3 /qr -ignore_running" $0
+      StrCmp $R9 "true" installjava2 dontinstalljava2 
+      installjava2:
+        ExecWait '$INSTDIR\java\jre-6-windows-i586.exe /s /v"/qn REBOOT=Suppress"'
+      dontinstalljava2:
+      ExecWait "$INSTDIR\setup.exe -lang $LANGUAGE $3 $4 $5 $6 $7 -ignore_running" $0
       RMDir /r $INSTDIR
       RMDir $INSTDIR
       SetErrorLevel $0
@@ -296,11 +373,15 @@ Section -Post
 
     StrCmp $2 "ON" postremove nopostremove
     nopostremove:
-      Exec "$INSTDIR\setup.exe -lang $LANGUAGE $3"
+      Exec "$INSTDIR\setup.exe -lang $LANGUAGE $3 $4 $5 $6"
       Quit
       GoTo onPostDone
     postremove:
-      ExecWait "$INSTDIR\setup.exe -lang $LANGUAGE $3" $0
+      StrCmp $R9 "true" installjava3 dontinstalljava3 
+      installjava3:
+        ExecWait '$INSTDIR\java\jre-6-windows-i586.exe /s /v"/qr REBOOT=Suppress"'
+      dontinstalljava3:
+      ExecWait "$INSTDIR\setup.exe -lang $LANGUAGE $3 $4 $5 $6" $0
       RMDir /r $INSTDIR
       RMDir $INSTDIR
       SetErrorLevel $0
