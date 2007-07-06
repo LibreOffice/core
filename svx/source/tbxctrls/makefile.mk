@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.11 $
+#   $Revision: 1.12 $
 #
-#   last change: $Author: rt $ $Date: 2005-09-09 00:51:33 $
+#   last change: $Author: rt $ $Date: 2007-07-06 07:43:44 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -66,11 +66,11 @@ SLOFILES=	\
         $(SLO)$/linectrl.obj	\
         $(SLO)$/tbcontrl.obj	\
         $(SLO)$/tbxalign.obj	\
-        $(SLO)$/tbxdraw.obj		\
         $(SLO)$/tbxdrctl.obj    \
         $(SLO)$/verttexttbxctrl.obj \
         $(SLO)$/toolbarmenu.obj \
-        $(SLO)$/tbxcolor.obj
+        $(SLO)$/tbxcolor.obj \
+        $(SLO)$/tbxcolorupdate.obj
 
 SRS1NAME=$(TARGET)
 SRC1FILES = \
