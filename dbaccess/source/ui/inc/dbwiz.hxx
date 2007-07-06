@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dbwiz.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: kz $ $Date: 2007-05-10 10:31:50 $
+ *  last change: $Author: rt $ $Date: 2007-07-06 08:28:29 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -77,6 +77,7 @@ class ODbDataSourceAdministrationHelper;
 class ODbTypeWizDialog : public svt::OWizardMachine , public IItemSetHelper, public IDatabaseSettingsDialog,public dbaui::OModuleClient
 {
 private:
+    OModuleClient m_aModuleClient;
     ::std::auto_ptr<ODbDataSourceAdministrationHelper>  m_pImpl;
     SfxItemSet*             m_pOutSet;
     DATASOURCE_TYPE         m_eType;
