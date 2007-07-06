@@ -4,9 +4,9 @@
  *
  *  $RCSfile: gallery.hxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 17:49:07 $
+ *  last change: $Author: rt $ $Date: 2007-07-06 07:28:12 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -114,6 +114,7 @@ class List;
 class Gallery;
 class VCDrawModel;
 class FmFormModel;
+class SdrModel;
 class Graphic;
 class FmFormModel;
 class Bitmap;
@@ -171,9 +172,9 @@ public:
     static ULONG                GetSdrObjCount( ULONG nThemeId );
 
     static BOOL                 GetSdrObj( const String& rThemeName, ULONG nSdrModelPos,
-                                           FmFormModel* pModel = NULL, Bitmap* pThumb = NULL );
+                                           SdrModel* pModel = NULL, Bitmap* pThumb = NULL );
     static BOOL                 GetSdrObj( ULONG nThemeId, ULONG nSdrModelPos,
-                                           FmFormModel* pModel = NULL, Bitmap* pThumb = NULL );
+                                           SdrModel* pModel = NULL, Bitmap* pThumb = NULL );
 
     static BOOL                 InsertSdrObj( const String& rThemeName, FmFormModel& rModel );
     static BOOL                 InsertSdrObj( ULONG nThemeId, FmFormModel& rModel );
