@@ -5,7 +5,7 @@
         <node oor:name="OfficeHelp">
             <node oor:name="UpdateCheckJob" oor:op="replace">
                 <prop oor:name="URL" oor:type="xs:string">
-                    <value>.uno:OnlineUpdate</value>
+                    <value>vnd.sun.star.job:alias=UpdateCheck</value>
                 </prop>
                 <prop oor:name="ImageIdentifier" oor:type="xs:string">
                     <value/>
