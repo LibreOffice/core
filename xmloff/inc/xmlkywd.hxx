@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xmlkywd.hxx,v $
  *
- *  $Revision: 1.172 $
+ *  $Revision: 1.173 $
  *
- *  last change: $Author: vg $ $Date: 2007-05-22 16:03:40 $
+ *  last change: $Author: rt $ $Date: 2007-07-06 12:08:43 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1507,6 +1507,7 @@ XML_CONSTASCII_ACTION( sXML_size, "size" );
 XML_CONSTASCII_ACTION( sXML_size_protect, "size-protect" );
 XML_CONSTASCII_ACTION( sXML_slide, "slide" );
 XML_CONSTASCII_ACTION( sXML_slow, "slow" );
+XML_CONSTASCII_ACTION( sXML_soft_page_break, "soft-page-break" );
 XML_CONSTASCII_ACTION( sXML_solid, "solid" );
 XML_CONSTASCII_ACTION( sXML_solid_type, "solid-type" );
 XML_CONSTASCII_ACTION( sXML_sort, "sort");
@@ -1756,6 +1757,7 @@ XML_CONSTASCII_ACTION( sXML_use_objects, "use-objects" );
 XML_CONSTASCII_ACTION( sXML_use_optimal_column_width, "use-optimal-column-width");
 XML_CONSTASCII_ACTION( sXML_use_optimal_row_height, "use-optimal-row-height");
 XML_CONSTASCII_ACTION( sXML_use_other_objects, "use-other-objects" );
+XML_CONSTASCII_ACTION( sXML_use_soft_page_breaks, "use-soft-page-breaks" );
 XML_CONSTASCII_ACTION( sXML_use_spreadsheet_objects, "use-spreadsheet-objects" );
 XML_CONSTASCII_ACTION( sXML_use_styles, "use-styles" );
 XML_CONSTASCII_ACTION( sXML_use_tables, "use-tables" );
