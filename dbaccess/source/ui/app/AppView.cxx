@@ -4,9 +4,9 @@
  *
  *  $RCSfile: AppView.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: obo $ $Date: 2007-06-12 05:33:24 $
+ *  last change: $Author: rt $ $Date: 2007-07-06 08:01:04 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -216,8 +216,11 @@ void OAppBorderWindow::DataChanged( const DataChangedEvent& rDCEvt )
 {
     Window::DataChanged( rDCEvt );
 
-    if ( (rDCEvt.GetType() == DATACHANGED_SETTINGS) &&
-         (rDCEvt.GetFlags() & SETTINGS_STYLE) )
+    if ( (rDCEvt.GetType() == DATACHANGED_FONTS) ||
+        (rDCEvt.GetType() == DATACHANGED_DISPLAY) ||
+        (rDCEvt.GetType() == DATACHANGED_FONTSUBSTITUTION) ||
+        ((rDCEvt.GetType() == DATACHANGED_SETTINGS) &&
+        (rDCEvt.GetFlags() & SETTINGS_STYLE)) )
     {
         ImplInitSettings();
         Invalidate();
@@ -338,8 +341,11 @@ void OApplicationView::DataChanged( const DataChangedEvent& rDCEvt )
 {
     ODataView::DataChanged( rDCEvt );
 
-    if ( (rDCEvt.GetType() == DATACHANGED_SETTINGS) &&
-         (rDCEvt.GetFlags() & SETTINGS_STYLE) )
+    if ( (rDCEvt.GetType() == DATACHANGED_FONTS) ||
+        (rDCEvt.GetType() == DATACHANGED_DISPLAY) ||
+        (rDCEvt.GetType() == DATACHANGED_FONTSUBSTITUTION) ||
+        ((rDCEvt.GetType() == DATACHANGED_SETTINGS) &&
+        (rDCEvt.GetFlags() & SETTINGS_STYLE)) )
     {
         ImplInitSettings();
         Invalidate();
