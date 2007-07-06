@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dp_gui_updatedialog.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: ihi $ $Date: 2006-12-20 14:24:49 $
+ *  last change: $Author: rt $ $Date: 2007-07-06 12:35:42 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -93,7 +93,6 @@ namespace com { namespace sun { namespace star {
     namespace uno { class XComponentContext; }
 } } }
 namespace dp_gui {
-    class ModifiableContext;
     class SelectedPackageIterator;
     struct UpdateData;
 }
@@ -127,7 +126,6 @@ public:
         com::sun::star::uno::Reference< com::sun::star::uno::XComponentContext >
             const & context,
         Window * parent,
-        rtl::Reference< dp_gui::ModifiableContext > const & modifiableContext,
         rtl::Reference< dp_gui::SelectedPackageIterator > const &
             selectedPackages,
         com::sun::star::uno::Sequence< com::sun::star::uno::Reference<
@@ -233,6 +231,7 @@ private:
     rtl::OUString m_noInstall;
     rtl::OUString m_noDependency;
     rtl::OUString m_noPermission;
+    rtl::OUString m_noPermissionVista;
     rtl::OUString m_noUpdate;
     std::vector< dp_gui::UpdateData > m_enabledUpdates;
     std::vector< UpdateDialog::DisabledUpdate > m_disabledUpdates;
