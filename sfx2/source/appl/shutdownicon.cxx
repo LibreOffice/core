@@ -4,9 +4,9 @@
  *
  *  $RCSfile: shutdownicon.cxx,v $
  *
- *  $Revision: 1.58 $
+ *  $Revision: 1.59 $
  *
- *  last change: $Author: hr $ $Date: 2007-06-27 23:01:13 $
+ *  last change: $Author: rt $ $Date: 2007-07-06 12:31:36 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -848,19 +848,22 @@ void ShutdownIcon::SetAutostart( bool bActivate )
         OString aShortcutUnx = OUStringToOString( aShortcut,
                                                   osl_getThreadTextEncoding() );
         symlink( aDesktopFileUnx, aShortcutUnx );
-#endif // UNX
+
         ShutdownIcon *pIcon = ShutdownIcon::createInstance();
         if( pIcon )
             pIcon->initSystray();
+#endif // UNX
     }
     else
     {
         OUString aShortcutUrl;
         ::osl::File::getFileURLFromSystemPath( aShortcut, aShortcutUrl );
         ::osl::File::remove( aShortcutUrl );
+#ifdef UNX
         ShutdownIcon *pIcon = getInstance();
         if( pIcon )
             pIcon->deInitSystray();
+#endif
     }
 #else
     (void)bActivate; // unused variable
