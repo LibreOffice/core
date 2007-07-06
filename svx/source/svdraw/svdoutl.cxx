@@ -4,9 +4,9 @@
  *
  *  $RCSfile: svdoutl.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: hr $ $Date: 2007-06-27 19:10:15 $
+ *  last change: $Author: rt $ $Date: 2007-07-06 07:42:08 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -58,6 +58,7 @@
 #include <svtools/itempool.hxx>
 #endif
 
+DBG_NAME(SdrOutliner)
 /*************************************************************************
 |*
 |* Ctor
@@ -67,6 +68,7 @@ SdrOutliner::SdrOutliner( SfxItemPool* pItemPool, USHORT nMode )
 :   Outliner( pItemPool, nMode ),
     mpPaintInfoRec( NULL )
 {
+    DBG_CTOR(SdrOutliner,NULL);
 }
 
 
@@ -77,6 +79,7 @@ SdrOutliner::SdrOutliner( SfxItemPool* pItemPool, USHORT nMode )
 \************************************************************************/
 SdrOutliner::~SdrOutliner()
 {
+    DBG_DTOR(SdrOutliner,NULL);
 }
 
 
