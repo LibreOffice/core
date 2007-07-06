@@ -4,9 +4,9 @@
  *
  *  $RCSfile: formcomponenthandler.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2006-07-26 07:56:33 $
+ *  last change: $Author: rt $ $Date: 2007-07-06 08:48:42 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -45,7 +45,15 @@
 #ifndef _EXTENSIONS_PROPCTRLR_PCRCOMMON_HXX_
 #include "pcrcommon.hxx"
 #endif
-
+#ifndef _COMPHELPER_UNO3_HXX_
+#include <comphelper/uno3.hxx>
+#endif
+#ifndef _COMPHELPER_PROPERTY_ARRAY_HELPER_HXX_
+#include <comphelper/proparrhlp.hxx>
+#endif
+#ifndef _COMPHELPER_PROPERTYCONTAINER_HXX_
+#include <comphelper/propertycontainer.hxx>
+#endif
 /** === begin UNO includes === **/
 #ifndef _COM_SUN_STAR_FRAME_XMODEL_HPP_
 #include <com/sun/star/frame/XModel.hpp>
@@ -96,9 +104,12 @@ namespace pcr
     //====================================================================
     class FormComponentPropertyHandler;
     typedef HandlerComponentBase< FormComponentPropertyHandler > FormComponentPropertyHandler_Base;
+    typedef ::comphelper::OPropertyArrayUsageHelper<FormComponentPropertyHandler> FormComponentPropertyHandler_PROP;
     /** default ->XPropertyHandler for all form components.
     */
-    class FormComponentPropertyHandler : public FormComponentPropertyHandler_Base
+    class FormComponentPropertyHandler :    public FormComponentPropertyHandler_Base,
+                                            public ::comphelper::OPropertyContainer,
+                                            public FormComponentPropertyHandler_PROP
     {
     private:
         /// access to property states
@@ -108,6 +119,7 @@ namespace pcr
 
         /// the database connection. Owned by us if and only if we created it ourself.
         mutable ::dbtools::SharedConnection                                                     m_xRowSetConnection;
+        ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XRowSet >                     m_xRowSet;
         /** helper component encapsulating the handling for the QueryDesign component for
             interactively designing an SQL command
         */
@@ -134,6 +146,11 @@ namespace pcr
             const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& _rxContext
         );
 
+        DECLARE_XINTERFACE( )
+
+        // XPropertySet
+        virtual ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySetInfo > SAL_CALL getPropertySetInfo(  ) throw(::com::sun::star::uno::RuntimeException);
+
         static ::rtl::OUString SAL_CALL getImplementationName_static(  ) throw (::com::sun::star::uno::RuntimeException);
         static ::com::sun::star::uno::Sequence< ::rtl::OUString > SAL_CALL getSupportedServiceNames_static(  ) throw (::com::sun::star::uno::RuntimeException);
 
@@ -141,6 +158,8 @@ namespace pcr
         ~FormComponentPropertyHandler();
 
     protected:
+        virtual ::cppu::IPropertyArrayHelper* createArrayHelper( ) const;
+        virtual ::cppu::IPropertyArrayHelper& SAL_CALL getInfoHelper();
         // XPropertyHandler overridables
         virtual ::com::sun::star::uno::Any                          SAL_CALL getPropertyValue( const ::rtl::OUString& _rPropertyName ) throw (::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::uno::RuntimeException);
         virtual void                                                SAL_CALL setPropertyValue( const ::rtl::OUString& _rPropertyName, const ::com::sun::star::uno::Any& _rValue ) throw (::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::uno::RuntimeException);
@@ -433,14 +452,14 @@ namespace pcr
             Command property is not empty. No check is made whether the value of the Command property
             denotes an existent object, since this would be way too expensive.
 
-            @param _rxForm
+            @param _xFormProperties
                 the form to check. Must not be <NULL/>.
             @param _bAllowEmptyDataSourceName
                 determine whether an empty data source name is allowed (<TRUE/>), and should not
                 lead to rejection
         */
         static bool impl_hasValidDataSourceSignature_nothrow(
-                const ::com::sun::star::uno::Reference< ::com::sun::star::form::XForm >& _rxForm,
+                const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& _xFormProperties,
                 bool _bAllowEmptyDataSourceName );
 
         /// determines whether the given name denotes an existent data source
