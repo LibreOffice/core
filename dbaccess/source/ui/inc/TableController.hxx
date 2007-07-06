@@ -4,9 +4,9 @@
  *
  *  $RCSfile: TableController.hxx,v $
  *
- *  $Revision: 1.37 $
+ *  $Revision: 1.38 $
  *
- *  last change: $Author: obo $ $Date: 2006-07-10 15:29:24 $
+ *  last change: $Author: rt $ $Date: 2007-07-06 08:24:41 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -38,14 +38,14 @@
 #ifndef DBAUI_SINGLEDOCCONTROLLER_HXX
 #include "singledoccontroller.hxx"
 #endif
+#ifndef _DBAUI_MODULE_DBU_HXX_
+#include "moduledbu.hxx"
+#endif
 #ifndef _COM_SUN_STAR_SDBC_XCONNECTION_HPP_
 #include <com/sun/star/sdbc/XConnection.hpp>
 #endif
 #ifndef _COM_SUN_STAR_BEANS_XPROPERTYSET_HPP_
 #include <com/sun/star/beans/XPropertySet.hpp>
-#endif
-#ifndef _COM_SUN_STAR_UTIL_XNUMBERFORMATTER_HPP_
-#include <com/sun/star/util/XNumberFormatter.hpp>
 #endif
 #ifndef _COM_SUN_STAR_IO_XOBJECTOUTPUTSTREAM_HPP_
 #include <com/sun/star/io/XObjectOutputStream.hpp>
@@ -75,12 +75,12 @@ namespace dbaui
     class OTableController : public OTableController_BASE
     {
     private:
+        OModuleClient        m_aModuleClient;
         ::std::vector< ::boost::shared_ptr<OTableRow> > m_vRowList;
         OTypeInfoMap                m_aTypeInfo;
         ::std::vector<OTypeInfoMap::iterator> m_aTypeInfoIndex;
 
         ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >       m_xTable;
-        ::com::sun::star::uno::Reference< ::com::sun::star::util::XNumberFormatter >    m_xFormatter;   // a number formatter working with the connection's NumberFormatsSupplier
 
         ::rtl::OUString m_sCatalogName;         // catalog for update data
         ::rtl::OUString m_sSchemaName;          // schema for update data
@@ -127,8 +127,6 @@ namespace dbaui
         OTableController(const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& _rM);
 
         ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >       getTable() { return m_xTable;}
-        ::com::sun::star::uno::Reference< ::com::sun::star::util::XNumberFormatter >    getNumberFormatter() const  { return m_xFormatter; }
-
 
         sal_Bool isAddAllowed()     const;
         sal_Bool isDropAllowed()    const;
