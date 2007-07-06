@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.36 $
+#   $Revision: 1.37 $
 #
-#   last change: $Author: ihi $ $Date: 2007-06-05 10:47:50 $
+#   last change: $Author: rt $ $Date: 2007-07-06 08:18:17 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -41,6 +41,7 @@ TARGET=uidlg
 # --- Settings ----------------------------------
 
 .INCLUDE : settings.mk
+.INCLUDE : $(PRJ)$/util$/makefile.pmk
 
 .IF "$(SYSTEM_ODBC_HEADERS)" == "YES"
 CFLAGS+=-DSYSTEM_ODBC_HEADERS
@@ -83,7 +84,9 @@ SRC1FILES =	\
         AdvancedPageDlg.src \
         AdabasStatDlg.src	\
         UserAdminDlg.src	\
-        sqlmessage.src
+        sqlmessage.src      \
+        ExtensionNotPresent.src
+
 
 # ... object files ............................
 EXCEPTIONSFILES=						\
@@ -121,7 +124,8 @@ EXCEPTIONSFILES=						\
         $(SLO)$/dsselect.obj			\
         $(SLO)$/dbfindex.obj            \
         $(SLO)$/DriverSettings.obj      \
-        $(SLO)$/odbcconfig.obj
+        $(SLO)$/odbcconfig.obj          \
+        $(SLO)$/ExtensionNotPresent.obj
 
 SLOFILES=								\
         $(EXCEPTIONSFILES)				\
