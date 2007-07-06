@@ -4,9 +4,9 @@
  *
  *  $RCSfile: layoutmanager.cxx,v $
  *
- *  $Revision: 1.63 $
+ *  $Revision: 1.64 $
  *
- *  last change: $Author: vg $ $Date: 2007-05-22 15:26:45 $
+ *  last change: $Author: rt $ $Date: 2007-07-06 12:22:36 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -208,7 +208,7 @@
 //  using namespace
 
 using namespace rtl;
-//using namespace com::sun::star::awt;
+using namespace ::com::sun::star;
 using namespace com::sun::star::uno;
 using namespace com::sun::star::beans;
 using namespace com::sun::star::util;
@@ -4086,7 +4086,8 @@ throw (RuntimeException)
     /* SAFE AREA ----------------------------------------------------------------------------------------------- */
     WriteGuard aWriteLock( m_aLock );
 
-    sal_Bool                                      bFound = sal_False;
+    sal_Bool                                      bFound( sal_False );
+    sal_Bool                                      bNotify( sal_False );
     OUString                                      aElementType;
     OUString                                      aElementName;
     Reference< ::com::sun::star::ui::XUIElement > xUIElement;
@@ -4159,7 +4160,10 @@ throw (RuntimeException)
                 implts_sortUIElements();
 
                 if ( bVisible )
+                {
                     doLayout();
+                    bNotify = sal_True;
+                }
             }
         }
         else if ( aElementType.equalsIgnoreAsciiCaseAscii( "menubar" ))
@@ -4208,7 +4212,10 @@ throw (RuntimeException)
                                 {
                                     pSysWindow->SetMenuBar( pMenuBar );
                                     if ( m_bMenuVisible )
+                                    {
                                         pMenuBar->SetDisplayable( sal_True );
+                                        bNotify = sal_True;
+                                    }
                                     else
                                         pMenuBar->SetDisplayable( sal_False );
                                     implts_updateMenuBarClose();
@@ -4223,16 +4230,24 @@ throw (RuntimeException)
         else if ( aElementType.equalsIgnoreAsciiCaseAscii( "statusbar" ) && ( implts_isFrameOrWindowTop(xFrame) || implts_isEmbeddedLayoutManager() ))
         {
             implts_createStatusBar( aName );
+            bNotify = sal_True;
         }
         else if ( aElementType.equalsIgnoreAsciiCaseAscii( "progressbar" ) &&
                   aElementName.equalsIgnoreAsciiCaseAscii( "progressbar" ) &&
                   implts_isFrameOrWindowTop(xFrame) )
         {
             implts_createProgressBar();
+            bNotify = sal_True;
         }
     }
 
     /* SAFE AREA ----------------------------------------------------------------------------------------------- */
+    if ( bNotify )
+    {
+        // UI element is invisible - provide information to listeners
+        uno::Any a = uno::makeAny( aName );
+        implts_notifyListeners( css::frame::LayoutManagerEvents::UIELEMENT_VISIBLE, a );
+    }
 }
 
 void SAL_CALL LayoutManager::destroyElement( const ::rtl::OUString& aName )
@@ -4246,6 +4261,7 @@ throw (RuntimeException)
     sal_Bool    bMustLayouted( sal_False );
     sal_Bool    bMustBeDestroyed( sal_False );
     sal_Bool    bMustBeSorted( sal_False );
+    sal_Bool    bNotify( sal_False );
     OUString    aElementType;
     OUString    aElementName;
 
@@ -4259,6 +4275,7 @@ throw (RuntimeException)
             {
                 impl_clearUpMenuBar();
                 m_xMenuBar.clear();
+                bNotify = sal_True;
             }
         }
         else if (( aElementType.equalsIgnoreAsciiCaseAscii( "statusbar" ) &&
@@ -4268,6 +4285,7 @@ throw (RuntimeException)
             aWriteLock.unlock();
             implts_destroyStatusBar();
             bMustLayouted = sal_True;
+            bNotify = sal_True;
         }
         else if ( aElementType.equalsIgnoreAsciiCaseAscii( "progressbar" ) &&
                   aElementName.equalsIgnoreAsciiCaseAscii( "progressbar" ) )
@@ -4275,6 +4293,7 @@ throw (RuntimeException)
             aWriteLock.unlock();
             implts_createProgressBar();
             bMustLayouted = sal_True;
+            bNotify = sal_True;
         }
         else
         {
@@ -4320,6 +4339,7 @@ throw (RuntimeException)
                         {
                             pIter->m_bVisible = sal_False;
                             xWindow->setVisible( sal_False );
+                            bNotify = sal_True;
                         }
 
                         if ( !xDockWindow->isFloating() )
@@ -4342,6 +4362,7 @@ throw (RuntimeException)
     {
         if ( xComponent.is() )
             xComponent->dispose();
+        bNotify = sal_True;
     }
 
     if ( bMustBeSorted )
@@ -4349,6 +4370,13 @@ throw (RuntimeException)
         implts_sortUIElements();
         if ( bMustLayouted )
             doLayout();
+    }
+
+    if ( bNotify )
+    {
+        // UI element is invisible - provide information to listeners
+        uno::Any a = uno::makeAny( aName );
+        implts_notifyListeners( css::frame::LayoutManagerEvents::UIELEMENT_INVISIBLE, a );
     }
 }
 
@@ -4360,6 +4388,8 @@ throw (::com::sun::star::uno::RuntimeException)
     OUString                  aElementType;
     OUString                  aElementName;
     UIElementVector::iterator pIter;
+    sal_Bool                  bResult( sal_False );
+    sal_Bool                  bNotify( sal_False );
 
     WriteGuard aWriteLock( m_aLock );
     if ( impl_parseResourceURL( ResourceURL, aElementType, aElementName ))
@@ -4390,6 +4420,8 @@ throw (::com::sun::star::uno::RuntimeException)
                     {
                         pWindow->Show( TRUE, SHOW_NOFOCUSCHANGE | SHOW_NOACTIVATE );
                         doLayout();
+                        bResult = sal_True;
+                        bNotify = sal_True;
                     }
                 }
             }
@@ -4400,6 +4432,8 @@ throw (::com::sun::star::uno::RuntimeException)
             aWriteLock.unlock();
             implts_showProgressBar();
             doLayout();
+            bResult = sal_True;
+            bNotify = sal_True;
         }
         else
         {
@@ -4438,10 +4472,12 @@ throw (::com::sun::star::uno::RuntimeException)
 
                                     if ( xDockWindow.is() && !xDockWindow->isFloating() )
                                         doLayout();
-                                    return sal_True;
+                                    bResult = sal_True;
+                                    bNotify = sal_True;
                                 }
 
-                                return sal_False;
+                                bResult = sal_False;
+                                break;
                             }
                         }
 
@@ -4451,32 +4487,44 @@ throw (::com::sun::star::uno::RuntimeException)
                 }
 
                 // Create toolbar on demand when it's visible
-                Reference< ::com::sun::star::ui::XUIElement > xUIElement;
-                if ( !bFound )
+                if ( !bResult )
                 {
-                    UIElement aNewToolbar( aElementName, aElementType, xUIElement );
-                    aNewToolbar.m_aName = ResourceURL;
-                    implts_readWindowStateData( ResourceURL, aNewToolbar );
-                    m_aUIElements.push_back( aNewToolbar );
-                    aWriteLock.unlock();
+                    Reference< ::com::sun::star::ui::XUIElement > xUIElement;
+                    if ( !bFound )
+                    {
+                        UIElement aNewToolbar( aElementName, aElementType, xUIElement );
+                        aNewToolbar.m_aName = ResourceURL;
+                        implts_readWindowStateData( ResourceURL, aNewToolbar );
+                        m_aUIElements.push_back( aNewToolbar );
+                        aWriteLock.unlock();
 
-                    implts_sortUIElements();
-                    if ( aNewToolbar.m_bVisible )
+                        implts_sortUIElements();
+                        if ( aNewToolbar.m_bVisible )
+                            createElement( ResourceURL );
+                        bResult = sal_True;
+                        bNotify = sal_True;
+                    }
+                    else if ( pIter->m_bVisible )
+                    {
+                        aWriteLock.unlock();
+
                         createElement( ResourceURL );
+                        bResult = sal_True;
+                        bNotify = sal_True;
+                    }
                 }
-                else if ( pIter->m_bVisible )
-                {
-                    aWriteLock.unlock();
-
-                    createElement( ResourceURL );
-                }
-
-                return sal_True;
             }
         }
     }
 
-    return sal_False;
+    if ( bNotify )
+    {
+        // UI element is visible - provide information to listeners
+        uno::Any a = uno::makeAny( ResourceURL );
+        implts_notifyListeners( css::frame::LayoutManagerEvents::UIELEMENT_VISIBLE, a );
+    }
+
+    return bResult;
 }
 
 Reference< XUIElement > SAL_CALL LayoutManager::getElement( const ::rtl::OUString& aName )
@@ -4535,6 +4583,8 @@ throw (RuntimeException)
 {
     RTL_LOGFILE_CONTEXT( aLog, "framework (cd100003) ::LayoutManager::showElement" );
 
+    sal_Bool    bResult( sal_False );
+    sal_Bool    bNotify( sal_False );
     OUString    aElementType;
     OUString    aElementName;
 
@@ -4550,7 +4600,8 @@ throw (RuntimeException)
             m_bMenuVisible = sal_True;
             aWriteLock.unlock();
 
-            return implts_resetMenuBar();
+            bResult = implts_resetMenuBar();
+            bNotify = bResult;
         }
         else if (( aElementType.equalsIgnoreAsciiCaseAscii( "statusbar" ) &&
                    aElementName.equalsIgnoreAsciiCaseAscii( "statusbar" )) ||
@@ -4564,14 +4615,15 @@ throw (RuntimeException)
                 {
                     implts_writeWindowStateData( m_aStatusBarAlias, m_aStatusBarElement );
                     doLayout();
-                    return sal_True;
+                    bResult = sal_True;
+                    bNotify = sal_True;
                 }
             }
         }
         else if ( aElementType.equalsIgnoreAsciiCaseAscii( "progressbar" ) &&
                   aElementName.equalsIgnoreAsciiCaseAscii( "progressbar" ))
         {
-            return implts_showProgressBar();
+            bNotify = bResult = implts_showProgressBar();
         }
         else
         {
@@ -4600,20 +4652,30 @@ throw (RuntimeException)
                         vos::OGuard aGuard( Application::GetSolarMutex() );
                         Window* pWindow = VCLUnoHelper::GetWindow( xWindow );
                         if( pWindow )
+                        {
                             pWindow->Show( TRUE, SHOW_NOFOCUSCHANGE | SHOW_NOACTIVATE );
+                            bNotify = sal_True;
+                        }
                         implts_writeNewStateData( aName, xWindow );
 
                         if ( xDockWindow.is() && !xDockWindow->isFloating() )
                             doLayout();
 
-                        return sal_True;
+                        bResult = sal_True;
                     }
                 }
             }
         }
     }
 
-    return sal_False;
+    if ( bNotify )
+    {
+        // UI element is visible - provide information to listeners
+        uno::Any a = uno::makeAny( aName );
+        implts_notifyListeners( css::frame::LayoutManagerEvents::UIELEMENT_VISIBLE, a );
+    }
+
+    return bResult;
 }
 
 sal_Bool SAL_CALL LayoutManager::hideElement( const ::rtl::OUString& aName )
@@ -4621,6 +4683,9 @@ throw (RuntimeException)
 {
     RTL_LOGFILE_CONTEXT( aLog, "framework (cd100003) ::LayoutManager::hideElement" );
 
+
+    sal_Bool            bResult( sal_False );
+    sal_Bool            bNotify( sal_False );
     OUString            aElementType;
     OUString            aElementName;
 
@@ -4648,7 +4713,8 @@ throw (RuntimeException)
                     if ( pMenuBar )
                     {
                         pMenuBar->SetDisplayable( sal_False );
-                        return sal_True;
+                        bResult = sal_True;
+                        bNotify = sal_True;
                     }
                 }
             }
@@ -4665,14 +4731,15 @@ throw (RuntimeException)
                 {
                     implts_writeWindowStateData( m_aStatusBarAlias, m_aStatusBarElement );
                     doLayout();
-                    return sal_True;
+                    bNotify = sal_True;
+                    bResult = sal_True;
                 }
             }
         }
         else if ( aElementType.equalsIgnoreAsciiCaseAscii( "progressbar" ) &&
                   aElementName.equalsIgnoreAsciiCaseAscii( "progressbar" ))
         {
-            return implts_hideProgressBar();
+            bResult = bNotify = implts_hideProgressBar();
         }
         else
         {
@@ -4697,11 +4764,19 @@ throw (RuntimeException)
                         if ( xDockWindow.is() && !xDockWindow->isFloating() )
                             doLayout();
 
-                        return sal_True;
+                        bResult = sal_True;
+                        bNotify = sal_True;
                     }
                 }
             }
         }
+    }
+
+    if ( bNotify )
+    {
+        // UI element is visible - provide information to listeners
+        uno::Any a = uno::makeAny( aName );
+        implts_notifyListeners( css::frame::LayoutManagerEvents::UIELEMENT_INVISIBLE, a );
     }
 
     return sal_False;
