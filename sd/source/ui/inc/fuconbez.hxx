@@ -4,9 +4,9 @@
  *
  *  $RCSfile: fuconbez.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2005-12-14 17:08:38 $
+ *  last change: $Author: rt $ $Date: 2007-07-06 13:13:53 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -35,6 +35,8 @@
 
 #ifndef SD_FU_CONSTRUCT_BEZIER_HXX
 #define SD_FU_CONSTRUCT_BEZIER_HXX
+
+#include <com/sun/star/uno/Any.hxx>
 
 #ifndef SD_FU_CONSTRUCT_HXX
 #include "fuconstr.hxx"
@@ -84,6 +86,8 @@ protected:
         SfxRequest& rReq);
 
     USHORT      nEditMode;
+
+    ::com::sun::star::uno::Any maTargets;   // used for creating a path for custom animations
 };
 
 } // end of namespace sd
