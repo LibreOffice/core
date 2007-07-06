@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dlgctrl.cxx,v $
  *
- *  $Revision: 1.32 $
+ *  $Revision: 1.33 $
  *
- *  last change: $Author: hr $ $Date: 2007-06-27 17:01:18 $
+ *  last change: $Author: rt $ $Date: 2007-07-06 07:33:32 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1992,9 +1992,9 @@ SvxXLinePreview::SvxXLinePreview( Window* pParent, const ResId& rResId, XOutputD
 
 SvxXLinePreview::~SvxXLinePreview()
 {
-    delete mpLineObjA;
-    delete mpLineObjB;
-    delete mpLineObjC;
+    SdrObject::Free( mpLineObjA );
+    SdrObject::Free( mpLineObjB );
+    SdrObject::Free( mpLineObjC );
     delete mpModel;
 }
 
