@@ -4,9 +4,9 @@
  *
  *  $RCSfile: richtextmodel.hxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: obo $ $Date: 2007-03-09 13:36:42 $
+ *  last change: $Author: rt $ $Date: 2007-07-06 09:57:09 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -71,6 +71,7 @@
 #ifndef _LINK_HXX
 #include <tools/link.hxx>
 #endif
+#include <memory>
 
 class EditEngine;
 //........................................................................
@@ -125,7 +126,8 @@ namespace frm
         sal_Bool                    m_bMultiLine;
         // </properties_for_awt_edit_compatibility>
 
-        RichTextEngine*             m_pEngine;
+        ::std::auto_ptr<RichTextEngine>
+                                    m_pEngine;
         bool                        m_bSettingEngineText;
 
         ::cppu::OInterfaceContainerHelper
