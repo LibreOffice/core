@@ -4,9 +4,9 @@
  *
  *  $RCSfile: interpr5.cxx,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: obo $ $Date: 2007-06-13 09:08:07 $
+ *  last change: $Author: rt $ $Date: 2007-07-06 12:36:09 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1389,8 +1389,9 @@ ScMatrixRef ScInterpreter::MatDiv(ScMatrix* pMat1, ScMatrix* pMat2)
             for (j = 0; j < nMinR; j++)
             {
                 if (pMat1->IsValueOrEmpty(i,j) && pMat2->IsValueOrEmpty(i,j))
-                    pResMat->PutDouble(pMat1->GetDouble(i,j) /
-                                       pMat2->GetDouble(i,j), i, j);
+                    pResMat->PutDouble(
+                            div( pMat1->GetDouble(i,j), pMat2->GetDouble(i,j)),
+                            i, j);
                 else
                     pResMat->PutString(ScGlobal::GetRscString(
                                                     STR_NO_VALUE), i, j);
@@ -1956,14 +1957,14 @@ void ScInterpreter::ScDiv()
             if (bFlag)
             {   for ( SCSIZE i = 0; i < nCount; i++ )
                     if (pMat->IsValue(i))
-                        pResMat->PutDouble(fVal / pMat->GetDouble(i), i);
+                        pResMat->PutDouble( div( fVal, pMat->GetDouble(i)), i);
                     else
                         pResMat->PutString(ScGlobal::GetRscString(STR_NO_VALUE), i);
             }
             else
             {   for ( SCSIZE i = 0; i < nCount; i++ )
                     if (pMat->IsValue(i))
-                        pResMat->PutDouble(pMat->GetDouble(i) / fVal, i);
+                        pResMat->PutDouble( div( pMat->GetDouble(i), fVal), i);
                     else
                         pResMat->PutString(ScGlobal::GetRscString(STR_NO_VALUE), i);
             }
@@ -1973,7 +1974,9 @@ void ScInterpreter::ScDiv()
             PushError();
     }
     else
-        PushDouble(fVal1 / fVal2);
+    {
+        PushDouble( div( fVal1, fVal2) );
+    }
     if ( nFmtCurrencyType == NUMBERFORMAT_CURRENCY && nFmtCurrencyType2 != NUMBERFORMAT_CURRENCY )
     {   // auch DM/DM ist nicht DM bzw. DEM/EUR nicht DEM
         nFuncFmtType = nFmtCurrencyType;
@@ -3944,7 +3947,7 @@ void ScInterpreter::ScMatRef()
                 }
             }
             else
-                SetNV();
+                SetNA();
         }
         else
         {
