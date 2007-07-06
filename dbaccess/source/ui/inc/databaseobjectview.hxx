@@ -4,9 +4,9 @@
  *
  *  $RCSfile: databaseobjectview.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: ihi $ $Date: 2007-04-16 16:27:23 $
+ *  last change: $Author: rt $ $Date: 2007-07-06 08:27:00 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -285,7 +285,17 @@ namespace dbaui
             const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >& _rxParentFrame
         );
     };
-
+    //======================================================================
+    //= OReportDesigner
+    //======================================================================
+    class OReportDesigner : public DatabaseObjectView
+    {
+    public:
+        OReportDesigner(const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& _rxORB
+           ,const ::com::sun::star::uno::Reference< ::com::sun::star::sdb::application::XDatabaseDocumentUI >& _rxApplication
+,const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >& _rxParentFrame
+);
+    };
 // .........................................................................
 }   // namespace dbaui
 // .........................................................................
