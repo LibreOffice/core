@@ -4,9 +4,9 @@
  *
  *  $RCSfile: sequence.hxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: rt $ $Date: 2006-03-06 10:13:10 $
+ *  last change: $Author: rt $ $Date: 2007-07-06 10:19:13 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -67,6 +67,15 @@ namespace comphelper
         if _bOnlyFirst is sal_True, only the first occurence will be returned.
     */
     COMPHELPER_DLLPUBLIC staruno::Sequence<sal_Int16> findValue(const staruno::Sequence< ::rtl::OUString >& _rList, const ::rtl::OUString& _rValue, sal_Bool _bOnlyFirst = sal_False);
+
+    /** Checks if the name exists
+     *
+     * \param Value   The value to search for.
+     * \param _aList  The list in which to search for the value.
+     * \return <TRUE/> if the value can be found, otherwise <FALSE/>.
+     */
+    COMPHELPER_DLLPUBLIC sal_Bool existsValue(const ::rtl::OUString& Value,const ::com::sun::star::uno::Sequence< ::rtl::OUString >& _aList);
+
 
     //-------------------------------------------------------------------------
     namespace internal
