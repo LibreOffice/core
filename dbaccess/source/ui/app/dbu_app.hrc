@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dbu_app.hrc,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 14:24:04 $
+ *  last change: $Author: rt $ $Date: 2007-07-06 08:01:53 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -71,11 +71,12 @@
 #define RID_STR_TABLES_HELP_TEXT_DESIGN     RID_STR_APP_START + 27
 #define RID_STR_TABLES_HELP_TEXT_WIZARD     RID_STR_APP_START + 28
 #define RID_STR_FORMS_HELP_TEXT_WIZARD      RID_STR_APP_START + 29
+#define RID_STR_REPORT_HELP_TEXT            RID_STR_APP_START + 30
 
 
 // please adjust checking before insert new strings
 
-#if RID_STR_FORMS_HELP_TEXT_WIZARD > RID_STR_APP_END
+#if RID_STR_REPORT_HELP_TEXT > RID_STR_APP_END
 #error Resource-Id Ueberlauf in #file, #line
 #endif
 
