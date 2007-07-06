@@ -4,9 +4,9 @@
  *
  *  $RCSfile: handlerhelper.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: kz $ $Date: 2006-12-13 16:57:59 $
+ *  last change: $Author: rt $ $Date: 2007-07-06 08:49:57 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -92,6 +92,7 @@ namespace pcr
         /** helper for implementing XPropertyHandler::convertToPropertyValue
         */
         static ::com::sun::star::uno::Any convertToPropertyValue(
+                const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& _rxContext,
                 const ::com::sun::star::uno::Reference< ::com::sun::star::script::XTypeConverter >& _rxTypeConverter,
                 const ::com::sun::star::beans::Property& _rProperty,
                 const ::com::sun::star::uno::Any& _rControlValue
@@ -99,6 +100,7 @@ namespace pcr
 
         /// helper for implementing XPropertyHandler::convertToControlValue
         static ::com::sun::star::uno::Any convertToControlValue(
+                const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& _rxContext,
                 const ::com::sun::star::uno::Reference< ::com::sun::star::script::XTypeConverter >& _rxTypeConverter,
                 const ::com::sun::star::uno::Any& _rPropertyValue,
                 const ::com::sun::star::uno::Type& _rControlValueType
