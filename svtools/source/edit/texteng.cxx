@@ -4,9 +4,9 @@
  *
  *  $RCSfile: texteng.cxx,v $
  *
- *  $Revision: 1.48 $
+ *  $Revision: 1.49 $
  *
- *  last change: $Author: hr $ $Date: 2007-06-27 21:31:32 $
+ *  last change: $Author: rt $ $Date: 2007-07-06 10:05:21 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1649,7 +1649,7 @@ void TextEngine::UpdateViews( TextView* pCurView )
             aClipRec.SetPos( aNewPos );
 
             if ( pView == pCurView )
-                pView->ImpPaint( aClipRec, TRUE );
+                pView->ImpPaint( aClipRec, !pView->GetWindow()->IsPaintTransparent() );
             else
                 pView->GetWindow()->Invalidate( aClipRec );
         }
@@ -2098,6 +2098,10 @@ void TextEngine::ImpPaint( OutputDevice* pOutDev, const Point& rStartPos, Rectan
     if ( !IsFormatted() )
         FormatDoc();
 
+    bool bTransparent = false;
+    Window* pOutWin = dynamic_cast<Window*>(pOutDev);
+    bTransparent = (pOutWin && pOutWin->IsPaintTransparent());
+
     long nY = rStartPos.Y();
 
     TextPaM const* pSelStart = 0;
@@ -2169,7 +2173,9 @@ void TextEngine::ImpPaint( OutputDevice* pOutDev, const Point& rStartPos, Rectan
                                     {
                                         Font aFont;
                                         SeekCursor( nPara, nIndex+1, aFont, pOutDev );
-                                        if ( pSelection )
+                                        if( bTransparent )
+                                            aFont.SetTransparent( TRUE );
+                                        else if ( pSelection )
                                             aFont.SetTransparent( FALSE );
                                         pOutDev->SetFont( aFont );
 
