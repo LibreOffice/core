@@ -4,9 +4,9 @@
  *
  *  $RCSfile: EnhancedCustomShape3d.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: hr $ $Date: 2007-06-27 16:43:14 $
+ *  last change: $Author: rt $ $Date: 2007-07-06 07:32:10 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -475,7 +475,7 @@ SdrObject* EnhancedCustomShape3d::Create3DObject( const SdrObject* pShape2d, con
                 SdrPathObj* pPath = PTR_CAST( SdrPathObj, pNewObj );
                 if ( pPath )
                     aPolyPoly = pPath->GetPathPoly();
-                delete pNewObj;
+                SdrObject::Free( pNewObj );
             }
 
             if( aPolyPoly.count() )
