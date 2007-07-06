@@ -4,9 +4,9 @@
  *
  *  $RCSfile: editbrowsebox.cxx,v $
  *
- *  $Revision: 1.30 $
+ *  $Revision: 1.31 $
  *
- *  last change: $Author: hr $ $Date: 2007-06-28 10:35:51 $
+ *  last change: $Author: rt $ $Date: 2007-07-06 10:03:11 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -389,6 +389,9 @@ namespace svt
                 break;
             case FILTER:
                 aImage = m_aStatusImages.GetImage(IMG_EBB_FILTER);
+                break;
+            case HEADERFOOTER:
+                aImage = m_aStatusImages.GetImage(IMG_EBB_HEADERFOOTER);
                 break;
             case CLEAN:
                 break;
