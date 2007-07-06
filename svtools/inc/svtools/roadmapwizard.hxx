@@ -4,9 +4,9 @@
  *
  *  $RCSfile: roadmapwizard.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: vg $ $Date: 2007-05-22 19:32:11 $
+ *  last change: $Author: rt $ $Date: 2007-07-06 12:24:28 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -48,6 +48,11 @@
 namespace svt
 {
 //........................................................................
+
+    namespace
+    {
+        typedef ::std::vector< WizardTypes::WizardState > Path;
+    }
 
     struct RoadmapWizardImpl;
 
@@ -126,6 +131,7 @@ namespace svt
                 with a WZS_INVALID_STATE.
         */
         void    declarePath( PathId _nPathId, WizardState _nFirstState, ... );
+        void    declarePath( PathId _nPathId, const Path& _lWizardStates);
 
         /** activates a path which has previously been declared with <member>declarePath</member>
 
