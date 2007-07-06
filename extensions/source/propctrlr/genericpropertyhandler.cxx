@@ -4,9 +4,9 @@
  *
  *  $RCSfile: genericpropertyhandler.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: kz $ $Date: 2006-12-13 16:57:21 $
+ *  last change: $Author: rt $ $Date: 2007-07-06 08:49:25 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -494,7 +494,7 @@ namespace pcr
             impl_getEnumConverter( pos->second.Type )->getValueFromDescription( sControlValue, aPropertyValue );
         }
         else
-            aPropertyValue = PropertyHandlerHelper::convertToPropertyValue( m_xTypeConverter, pos->second, _rControlValue );
+            aPropertyValue = PropertyHandlerHelper::convertToPropertyValue( m_aContext.getContext(),m_xTypeConverter, pos->second, _rControlValue );
 
         return aPropertyValue;
     }
@@ -519,7 +519,7 @@ namespace pcr
             aControlValue <<= impl_getEnumConverter( pos->second.Type )->getDescriptionForValue( _rPropertyValue );
         }
         else
-            aControlValue = PropertyHandlerHelper::convertToControlValue( m_xTypeConverter, _rPropertyValue, _rControlValueType );
+            aControlValue = PropertyHandlerHelper::convertToControlValue( m_aContext.getContext(),m_xTypeConverter, _rPropertyValue, _rControlValueType );
         return aControlValue;
     }
 
