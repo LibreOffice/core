@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dbustrings.hrc,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: ihi $ $Date: 2007-04-16 16:25:01 $
+ *  last change: $Author: rt $ $Date: 2007-07-06 07:57:04 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -54,6 +54,7 @@ namespace dbaui
     DECLARE_CONSTASCII_USTRING(URL_COMPONENT_DATASOURCEBROWSER);
     DECLARE_CONSTASCII_USTRING(URL_COMPONENT_RELATIONDESIGN);
     DECLARE_CONSTASCII_USTRING(URL_COMPONENT_APPLICATION);
+    DECLARE_CONSTASCII_USTRING(URL_COMPONENT_REPORTDESIGN);
 
     //============================================================
     //= service names
