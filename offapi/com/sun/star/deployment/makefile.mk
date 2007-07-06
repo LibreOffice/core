@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.14 $
+#   $Revision: 1.15 $
 #
-#   last change: $Author: obo $ $Date: 2007-06-12 06:17:56 $
+#   last change: $Author: rt $ $Date: 2007-07-06 14:32:11 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -55,6 +55,7 @@ IDLFILES = \
         LicenseException.idl                    \
         VersionException.idl                    \
         InstallException.idl                    \
+        UpdateInformationEntry.idl				\
         XUpdateInformationProvider.idl          \
         UpdateInformationProvider.idl           \
         XPackageInformationProvider.idl         \
