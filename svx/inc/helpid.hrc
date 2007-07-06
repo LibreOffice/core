@@ -4,9 +4,9 @@
  *
  *  $RCSfile: helpid.hrc,v $
  *
- *  $Revision: 1.73 $
+ *  $Revision: 1.74 $
  *
- *  last change: $Author: hr $ $Date: 2007-06-27 13:36:20 $
+ *  last change: $Author: rt $ $Date: 2007-07-06 07:29:01 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -788,6 +788,25 @@
 #define HID_SVX_OPTIONS_ONLINEUPDATE                (HID_SVX_EXT0_START + 186)
 #define HID_OPTIONS_CHART_DEFCOLORS                 (HID_SVX_EXT0_START + 187)
 #define HID_OPTIONS_MULTIPATH_LIST                  (HID_SVX_EXT0_START + 188)
+
+#define HID_COLORPAGE_DBREPORTHEADER_CB             (HID_SVX_EXT0_START + 185)
+#define HID_COLORPAGE_DBREPORTFOOTER_CB             (HID_SVX_EXT0_START + 186)
+#define HID_COLORPAGE_DBPAGEHEADER_CB               (HID_SVX_EXT0_START + 187)
+#define HID_COLORPAGE_DBPAGEFOOTER_CB               (HID_SVX_EXT0_START + 188)
+#define HID_COLORPAGE_DBGROUPHEADER_CB              (HID_SVX_EXT0_START + 189)
+#define HID_COLORPAGE_DBGROUPFOOTER_CB              (HID_SVX_EXT0_START + 190)
+#define HID_COLORPAGE_DBCOLUMNHEADER_CB             (HID_SVX_EXT0_START + 191)
+#define HID_COLORPAGE_DBCOLUMNFOOTER_CB             (HID_SVX_EXT0_START + 192)
+#define HID_COLORPAGE_DBDETAIL_CB                   (HID_SVX_EXT0_START + 193)
+#define HID_COLORPAGE_DBREPORTHEADER_LB             (HID_SVX_EXT0_START + 194)
+#define HID_COLORPAGE_DBREPORTFOOTER_LB             (HID_SVX_EXT0_START + 195)
+#define HID_COLORPAGE_DBPAGEHEADER_LB               (HID_SVX_EXT0_START + 196)
+#define HID_COLORPAGE_DBPAGEFOOTER_LB               (HID_SVX_EXT0_START + 197)
+#define HID_COLORPAGE_DBGROUPHEADER_LB              (HID_SVX_EXT0_START + 198)
+#define HID_COLORPAGE_DBGROUPFOOTER_LB              (HID_SVX_EXT0_START + 199)
+#define HID_COLORPAGE_DBCOLUMNHEADER_LB             (HID_SVX_EXT0_START + 200)
+#define HID_COLORPAGE_DBCOLUMNFOOTER_LB             (HID_SVX_EXT0_START + 201)
+#define HID_COLORPAGE_DBDETAIL_LB                   (HID_SVX_EXT0_START + 202)
 
 // please adjust ACT_SVX_HID_END2 below if you add entries here!
 
