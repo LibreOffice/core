@@ -4,9 +4,9 @@
  *
  *  $RCSfile: unocontrol.cxx,v $
  *
- *  $Revision: 1.47 $
+ *  $Revision: 1.48 $
  *
- *  last change: $Author: kz $ $Date: 2007-02-14 15:34:26 $
+ *  last change: $Author: rt $ $Date: 2007-07-06 14:27:25 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -623,9 +623,12 @@ void UnoControl::ImplModelPropertiesChanged( const Sequence< PropertyChangeEvent
                                 || ( nPType == BASEPROPERTY_DROPDOWN )
                                 || ( nPType == BASEPROPERTY_HSCROLL )
                                 || ( nPType == BASEPROPERTY_VSCROLL )
+                                || ( nPType == BASEPROPERTY_AUTOHSCROLL )
+                                || ( nPType == BASEPROPERTY_AUTOVSCROLL )
                                 || ( nPType == BASEPROPERTY_ORIENTATION )
                                 || ( nPType == BASEPROPERTY_SPIN )
-                                || ( nPType == BASEPROPERTY_ALIGN );
+                                || ( nPType == BASEPROPERTY_ALIGN )
+                                || ( nPType == BASEPROPERTY_PAINTTRANSPARENT );
                 else
                     bNeedNewPeer = requiresNewPeer( pEvents->PropertyName );
 
@@ -1240,6 +1243,18 @@ void UnoControl::createPeer( const Reference< XToolkit >& rxToolkit, const Refer
             }
         }
 
+        // DESKTOP_AS_PARENT
+        if ( aDescr.Type == WindowClass_TOP )
+        {
+            aPropName = GetPropertyName( BASEPROPERTY_DESKTOP_AS_PARENT );
+            if ( xInfo->hasPropertyByName( aPropName ) )
+            {
+                aVal = xPSet->getPropertyValue( aPropName );
+                sal_Bool b = sal_Bool();
+                if ( ( aVal >>= b ) && b)
+                    aDescr.ParentIndex = -1;
+            }
+        }
         // Moveable
         aPropName = GetPropertyName( BASEPROPERTY_MOVEABLE );
         if ( xInfo->hasPropertyByName( aPropName ) )
@@ -1298,6 +1313,26 @@ void UnoControl::createPeer( const Reference< XToolkit >& rxToolkit, const Refer
             sal_Bool b = sal_Bool();
             if ( ( aVal >>= b ) && b)
                 aDescr.WindowAttributes |= VclWindowPeerAttribute::VSCROLL;
+        }
+
+        // AutoHScroll
+        aPropName = GetPropertyName( BASEPROPERTY_AUTOHSCROLL );
+        if ( xInfo->hasPropertyByName( aPropName ) )
+        {
+            aVal = xPSet->getPropertyValue( aPropName );
+            sal_Bool b = sal_Bool();
+            if ( ( aVal >>= b ) && b)
+                aDescr.WindowAttributes |= VclWindowPeerAttribute::AUTOHSCROLL;
+        }
+
+        // AutoVScroll
+        aPropName = GetPropertyName( BASEPROPERTY_AUTOVSCROLL );
+        if ( xInfo->hasPropertyByName( aPropName ) )
+        {
+            aVal = xPSet->getPropertyValue( aPropName );
+            sal_Bool b = sal_Bool();
+            if ( ( aVal >>= b ) && b)
+                aDescr.WindowAttributes |= VclWindowPeerAttribute::AUTOVSCROLL;
         }
 
         // Align
