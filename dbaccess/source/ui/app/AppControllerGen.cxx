@@ -4,9 +4,9 @@
  *
  *  $RCSfile: AppControllerGen.cxx,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: obo $ $Date: 2007-06-12 05:32:26 $
+ *  last change: $Author: rt $ $Date: 2007-07-06 07:58:32 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -139,6 +139,8 @@
 #include "defaultobjectnamecheck.hxx"
 #endif
 
+#include <com/sun/star/lang/XEventListener.hpp>
+
 //........................................................................
 namespace dbaui
 {
@@ -157,6 +159,35 @@ using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::container;
 using namespace ::com::sun::star::ucb;
 //........................................................................
+// -----------------------------------------------------------------------------
+
+class CloseChecker : public ::cppu::WeakImplHelper1< com::sun::star::lang::XEventListener >
+{
+    sal_Bool m_bClosed;
+public:
+    CloseChecker()
+            :m_bClosed(sal_False)
+        {
+            // DBG_CTOR(CloseChecker,NULL);
+
+        }
+    virtual ~CloseChecker()
+        {
+            // DBG_DTOR(CloseChecker,NULL);
+        }
+
+    sal_Bool isClosed()
+    {
+        return m_bClosed;
+    }
+    // interface ::com::sun::star::lang::XEventListener
+    virtual void SAL_CALL disposing(const ::com::sun::star::lang::EventObject& Source) throw( ::com::sun::star::uno::RuntimeException )
+        {
+            (void)Source;
+            m_bClosed = sal_True;
+        }
+
+};
 // -----------------------------------------------------------------------------
 void OApplicationController::convertToView(const ::rtl::OUString& _sName)
 {
@@ -267,7 +298,7 @@ void OApplicationController::openDialog(const ::rtl::OUString& _sServiceName)
         // create the dialog
         Reference< XExecutableDialog > xAdminDialog;
         xAdminDialog = Reference< XExecutableDialog >(
-            m_xMultiServiceFacatory->createInstanceWithArguments(_sServiceName,aArgs), UNO_QUERY);
+            getORB()->createInstanceWithArguments(_sServiceName,aArgs), UNO_QUERY);
 
         // execute it
         if (xAdminDialog.is())
@@ -485,6 +516,7 @@ sal_Bool OApplicationController::suspendDocument(const TDocuments::key_type& _xC
 
     return bSuspended;
 }
+
 // -----------------------------------------------------------------------------
 sal_Bool OApplicationController::suspendDocuments(sal_Bool bSuspend)
 {
@@ -543,16 +575,50 @@ sal_Bool OApplicationController::suspendDocuments(sal_Bool bSuspend)
 
                 if ( xController.is() && xController != *this )
                 {
-                    Reference< com::sun::star::util::XCloseable> xCloseable(xController->getFrame(),UNO_QUERY);
-                    if ( xCloseable.is() )
-                        xCloseable->close(sal_True);
+                    // Reference< com::sun::star::util::XCloseable> xCloseable(xController->getFrame(),UNO_QUERY);
+                    // if ( xCloseable.is() )
+                    //  xCloseable->close(sal_True);
+                    ::com::sun::star::util::URL aUrl;// getURLForId(DISPATCH_CLOSEWIN);
+                    aUrl.Complete = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(".uno:CloseDoc"));
+                    if (m_xUrlTransformer.is())
+                        m_xUrlTransformer->parseStrict(aUrl);
+                    try
+                    {
+                        Reference<XDispatchProvider> xFrame(xController->getFrame(),UNO_QUERY);
+
+                        rtl::Reference< CloseChecker > xCloseChecker = new CloseChecker();
+                        Reference<XComponent> xComponent(xFrame, UNO_QUERY);
+                        if (xComponent.is())
+                        {
+                            xComponent->addEventListener( xCloseChecker.get() );
+                        }
+                        xFrame->queryDispatch(aUrl, rtl::OUString::createFromAscii("_self"), 0)->dispatch( aUrl, Sequence< PropertyValue >() );
+
+                        if (! xCloseChecker->isClosed())
+                        {
+                            bSubSuspended = sal_False;
+                        }
+                        if (xComponent.is())
+                        {
+                            xComponent->removeEventListener( xCloseChecker.get() );
+                        }
+                    }
+                    catch(Exception &e)
+                    {
+                       (void)e;
+                       // bCheck = sal_False;
+                    }
                 }
             }
         }
         catch(Exception)
         {
         }
-        m_aDocuments.clear();
+        if (bSubSuspended == sal_True)
+        {
+            // remove the document only at save or discard, but not at cancel state.
+            m_aDocuments.clear();
+        }
     }
     else // resuspend the documents again
     {
