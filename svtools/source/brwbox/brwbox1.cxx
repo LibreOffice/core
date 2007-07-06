@@ -4,9 +4,9 @@
  *
  *  $RCSfile: brwbox1.cxx,v $
  *
- *  $Revision: 1.43 $
+ *  $Revision: 1.44 $
  *
- *  last change: $Author: hr $ $Date: 2007-06-28 10:31:51 $
+ *  last change: $Author: rt $ $Date: 2007-07-06 10:02:43 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -169,6 +169,7 @@ void BrowseBox::ConstructImpl( BrowserMode nMode )
     m_aCursorColor = COL_TRANSPARENT;
     m_nCurrentMode = 0;
     nControlAreaWidth = USHRT_MAX;
+    uRow.nSel = BROWSER_ENDOFSELECTION;
 
     aHScroll.SetLineSize(1);
     aHScroll.SetScrollHdl( LINK( this, BrowseBox, ScrollHdl ) );
