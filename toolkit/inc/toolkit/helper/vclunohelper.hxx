@@ -4,9 +4,9 @@
  *
  *  $RCSfile: vclunohelper.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 13:00:25 $
+ *  last change: $Author: rt $ $Date: 2007-07-06 06:53:25 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -73,6 +73,7 @@ namespace com { namespace sun { namespace star { namespace awt {
 #include <vcl/region.hxx>
 #include <vcl/metric.hxx>
 #include <vcl/mapunit.hxx>
+#include <vcl/fldunit.hxx>
 #include <tools/poly.hxx>
 
 class Window;
@@ -129,6 +130,15 @@ public:
     // MapUnits
     static MapUnit                                  UnoEmbed2VCLMapUnit( sal_Int32 nUnoEmbedMapUnit );
     static sal_Int32                                VCL2UnoEmbedMapUnit( MapUnit nVCLMapUnit );
+
+    //========================================================================
+    //= MeasurementUnitConversion
+    //========================================================================
+    /** small helper to convert between <type>MeasurementUnit</type> and
+        <type>FieldUnit</type>
+    */
+    static sal_Int16                                ConvertToMeasurementUnit( FieldUnit _nFieldUnit, sal_Int16 _rFieldToUNOValueFactor );
+    static FieldUnit                                ConvertToFieldUnit( sal_Int16 _nMeasurementUnit, sal_Int16& _rFieldToUNOValueFactor );
 
 };
 
