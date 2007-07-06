@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ComponentDefinition.hxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: ihi $ $Date: 2006-08-04 13:56:31 $
+ *  last change: $Author: rt $ $Date: 2007-07-06 07:53:00 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -65,6 +65,9 @@
 #endif
 #ifndef DBA_CONTENTHELPER_HXX
 #include "ContentHelper.hxx"
+#endif
+#ifndef _DBASHARED_APITOOLS_HXX_
+#include "apitools.hxx"
 #endif
 #ifndef _DBA_COREAPI_COLUMN_HXX_
 #include <column.hxx>
