@@ -4,9 +4,9 @@
  *
  *  $RCSfile: indexfieldscontrol.hxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: hr $ $Date: 2006-06-20 03:17:52 $
+ *  last change: $Author: rt $ $Date: 2007-07-06 08:30:39 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -36,6 +36,9 @@
 #ifndef _DBAUI_INDEXFIELDSCONTROL_HXX_
 #define _DBAUI_INDEXFIELDSCONTROL_HXX_
 
+#ifndef _DBAUI_MODULE_DBU_HXX_
+#include "moduledbu.hxx"
+#endif
 #ifndef _SVTOOLS_EDITBROWSEBOX_HXX_
 #include <svtools/editbrowsebox.hxx>
 #endif
@@ -56,6 +59,7 @@ namespace dbaui
     //==================================================================
     class IndexFieldsControl : public ::svt::EditBrowseBox
     {
+        OModuleClient        m_aModuleClient;
     protected:
         IndexFields                 m_aSavedValue;
 
