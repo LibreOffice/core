@@ -4,9 +4,9 @@
  *
  *  $RCSfile: extensio.hrc,v $
  *
- *  $Revision: 1.30 $
+ *  $Revision: 1.31 $
  *
- *  last change: $Author: rt $ $Date: 2007-07-03 13:05:52 $
+ *  last change: $Author: rt $ $Date: 2007-07-06 14:35:06 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -139,7 +139,17 @@
 #define HID_DLG_MAPPING                         (HID_EXTENSIONS_START + 74)
 #define HID_DLG_DBCHANGE                        (HID_EXTENSIONS_START + 75)
 #define HID_SELECTION_TLB                       (HID_EXTENSIONS_START + 76)
+#define HID_CHECK_FOR_UPD_DLG                   (HID_EXTENSIONS_START + 77)
 
+// please adjust HID_LAST_EXTENSIONS_ID if you add new ids here!
+
+#define HID_LAST_EXTENSIONS_ID  HID_CHECK_FOR_UPD_DLG
+
+#if HID_LAST_EXTENSIONS_ID > HID_EXTENSIONS_END
+    #error id overflow
+#endif
+
+//-----------------------------------------------------------------------
     // FREE
     // FREE
 #define HID_PROP_GROUPBOX                       (HID_FORMS_START +   2)
