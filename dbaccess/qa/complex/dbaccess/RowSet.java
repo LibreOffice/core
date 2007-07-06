@@ -4,9 +4,9 @@
  *
  *  $RCSfile: RowSet.java,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: obo $ $Date: 2006-07-10 14:59:27 $
+ *  last change: $Author: rt $ $Date: 2007-07-06 07:51:31 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -34,6 +34,7 @@
  ************************************************************************/
 package complex.dbaccess;
 
+import com.sun.star.container.XIndexAccess;
 import com.sun.star.uno.UnoRuntime;
 import com.sun.star.beans.*;
 import com.sun.star.lang.*;
@@ -42,6 +43,7 @@ import com.sun.star.sdbc.*;
 import com.sun.star.sdb.*;
 import com.sun.star.lang.XMultiServiceFactory;
 import com.sun.star.util.XRefreshable;
+import connectivity.tools.DataSource;
 import connectivity.tools.HsqlDatabase;
 
 import complexlib.ComplexTestCase;
@@ -54,12 +56,14 @@ public class RowSet extends ComplexTestCase {
     static final int MAX_FETCH_ROWS = 10;
 
     HsqlDatabase        m_database;
+    DataSource          m_dataSource;
     XRowSet             m_rowSet;
     XResultSet          m_resultSet;
     XResultSetUpdate    m_resultSetUpdate;
     XRow                m_row;
     XRowLocate          m_rowLocate;
     XPropertySet        m_rowSetProperties;
+    XParametersSupplier m_paramsSupplier;
 
     // --------------------------------------------------------------------------------------------------------
     class ResultSetMovementStress implements Runnable
@@ -102,7 +106,8 @@ public class RowSet extends ComplexTestCase {
             "testRowSetEvents",
             "testDeleteBehavior",
             "testCloneMovesPlusDeletions",
-            "testCloneMovesPlusInsertions"
+            "testCloneMovesPlusInsertions",
+            "testParameters"
         };
     }
 
@@ -112,13 +117,15 @@ public class RowSet extends ComplexTestCase {
     }
 
     // --------------------------------------------------------------------------------------------------------
-    private void createTestCase()
+    private void createTestCase( boolean _defaultRowSet )
     {
         if ( m_database == null )
         {
             try
             {
-                m_database = new HsqlDatabase( getFactory() );
+                CRMDatabase database = new CRMDatabase( getFactory() );
+                m_database = database.getDatabase();
+                m_dataSource = m_database.getDataSource();
             }
             catch(Exception e)
             {
@@ -135,19 +142,8 @@ public class RowSet extends ComplexTestCase {
             assure( "could not connect to the database/table structure, error message:\n" + e.getMessage(), false );
         }
 
-        try
-        {
-            m_rowSet = createRowSet( true );
-            m_resultSet = (XResultSet)UnoRuntime.queryInterface( XResultSet.class, m_rowSet );
-            m_resultSetUpdate = (XResultSetUpdate)UnoRuntime.queryInterface( XResultSetUpdate.class, m_rowSet );
-            m_row = (XRow)UnoRuntime.queryInterface( XRow.class, m_rowSet );
-            m_rowLocate = (XRowLocate)UnoRuntime.queryInterface( XRowLocate.class, m_resultSet );
-            m_rowSetProperties = (XPropertySet)UnoRuntime.queryInterface( XPropertySet.class, m_rowSet );
-        }
-        catch ( java.lang.Exception e )
-        {
-            assure( "caught an exception while creating the RowSet. Type:\n" + e.getClass().toString() + "\nMessage:\n" + e.getMessage(), false );
-        }
+        if ( _defaultRowSet )
+            createRowSet( "TEST1", CommandType.TABLE, true, true );
     }
 
 
@@ -159,29 +155,63 @@ public class RowSet extends ComplexTestCase {
 
     // --------------------------------------------------------------------------------------------------------
     /** creates a com.sun.star.sdb.RowSet to use during the test
+     *  @param command
+     *      the command to use for the RowSet
+     *  @param commandType
+     *      the command type to use for the RowSet
+     *  @param execute
+     *      determines whether the RowSet should be executed
+     */
+    private void createRowSet( String command, int commandType, boolean execute )
+    {
+        createRowSet( command, commandType, execute, false );
+    }
+
+    // --------------------------------------------------------------------------------------------------------
+    /** creates a com.sun.star.sdb.RowSet to use during the test
+     *  @param command
+     *      the command to use for the RowSet
+     *  @param commandType
+     *      the command type to use for the RowSet
      *  @param limitFetchSize
      *      determines whether the fetch size of the RowSet should be limited to MAX_FETCH_ROWS
+     *  @param execute
+     *      determines whether the RowSet should be executed
      */
-    private XRowSet createRowSet( boolean limitFetchSize ) throws java.lang.Exception
+    private void createRowSet( String command, int commandType, boolean execute, boolean limitFetchSize )
     {
-        XRowSet rowSet = (XRowSet)UnoRuntime.queryInterface(XRowSet.class,
-            getFactory().createInstance("com.sun.star.sdb.RowSet"));
-        XPropertySet rowSetProperties = (XPropertySet)UnoRuntime.queryInterface(XPropertySet.class, rowSet );
-        rowSetProperties.setPropertyValue("Command","TEST1");
-        rowSetProperties.setPropertyValue("CommandType",new Integer(CommandType.TABLE));
-        rowSetProperties.setPropertyValue("ActiveConnection",m_database.defaultConnection());
-        if ( limitFetchSize )
-            rowSetProperties.setPropertyValue("FetchSize",new Integer(MAX_FETCH_ROWS));
+        try
+        {
+            m_rowSet = (XRowSet)UnoRuntime.queryInterface(XRowSet.class,
+                getFactory().createInstance("com.sun.star.sdb.RowSet"));
+            XPropertySet rowSetProperties = (XPropertySet)UnoRuntime.queryInterface( XPropertySet.class, m_rowSet );
+            rowSetProperties.setPropertyValue( "Command", command );
+            rowSetProperties.setPropertyValue( "CommandType", new Integer( commandType ) );
+            rowSetProperties.setPropertyValue( "ActiveConnection",m_database.defaultConnection() );
+            if ( limitFetchSize )
+                rowSetProperties.setPropertyValue( "FetchSize", new Integer( MAX_FETCH_ROWS ) );
 
-        rowSet.execute();
-        return rowSet;
+            m_resultSet = (XResultSet)UnoRuntime.queryInterface( XResultSet.class, m_rowSet );
+            m_resultSetUpdate = (XResultSetUpdate)UnoRuntime.queryInterface( XResultSetUpdate.class, m_rowSet );
+            m_row = (XRow)UnoRuntime.queryInterface( XRow.class, m_rowSet );
+            m_rowLocate = (XRowLocate)UnoRuntime.queryInterface( XRowLocate.class, m_resultSet );
+            m_rowSetProperties = (XPropertySet)UnoRuntime.queryInterface( XPropertySet.class, m_rowSet );
+            m_paramsSupplier = (XParametersSupplier)UnoRuntime.queryInterface( XParametersSupplier.class, m_rowSet );
+
+            if ( execute )
+                m_rowSet.execute();
+        }
+        catch ( java.lang.Exception e )
+        {
+            assure( "caught an exception while creating the RowSet. Type:\n" + e.getClass().toString() + "\nMessage:\n" + e.getMessage(), false );
+        }
     }
 
     // --------------------------------------------------------------------------------------------------------
     public void testRowSet()  throws java.lang.Exception {
 
         log.println("testing testRowSet");
-        createTestCase();
+        createTestCase( true );
 
         // sequential postioning
         m_resultSet.beforeFirst();
@@ -348,7 +378,7 @@ public class RowSet extends ComplexTestCase {
     // --------------------------------------------------------------------------------------------------------
     public void testRowSetEvents() throws java.lang.Exception {
         log.println("testing RowSet Events");
-        createTestCase();
+        createTestCase( true );
 
         // first we create our RowSet object
         RowSetEventListener pRow = new RowSetEventListener(this);
@@ -560,7 +590,7 @@ public class RowSet extends ComplexTestCase {
     // --------------------------------------------------------------------------------------------------------
     public void testDeleteBehavior() throws Exception
     {
-        createTestCase();
+        createTestCase( true );
 
         // ensure that all records are known
         m_resultSet.last();
@@ -666,7 +696,7 @@ public class RowSet extends ComplexTestCase {
      */
     public void testCloneMovesPlusDeletions() throws SQLException, UnknownPropertyException, WrappedTargetException
     {
-        createTestCase();
+        createTestCase( true );
         // ensure that all records are known
         m_resultSet.last();
 
@@ -735,7 +765,7 @@ public class RowSet extends ComplexTestCase {
      */
     public void testCloneMovesPlusInsertions() throws SQLException, UnknownPropertyException, WrappedTargetException, PropertyVetoException, com.sun.star.lang.IllegalArgumentException
     {
-        createTestCase();
+        createTestCase( true );
         // ensure that all records are known
         m_rowSetProperties.setPropertyValue( "FetchSize", new Integer( 10 ) );
 
@@ -771,4 +801,139 @@ public class RowSet extends ComplexTestCase {
         testPosition( clone, cloneRow, 1, "mixed clone/rowset move/insertion: clone check" );
         testPosition( m_resultSet, m_row, 100, "mixed clone/rowset move/insertion: rowset check" );
     }
+
+    // --------------------------------------------------------------------------------------------------------
+    private void testTableParameters()
+    {
+        // for a row set simply based on a table, there should be not parameters at all
+        createRowSet( "products", CommandType.TABLE, false );
+        try
+        {
+            verifyParameters( new String[] {}, "testTableParameters" );
+        }
+        catch( AssureException e ) { throw e; }
+        catch( Exception e )
+        {
+            assure( "testing the parameters of a table failed" + e.getMessage(), false );
+        }
+    }
+
+    // --------------------------------------------------------------------------------------------------------
+    private void verifyParameters( String[] _paramNames, String _context ) throws com.sun.star.uno.Exception
+    {
+        XIndexAccess params = m_paramsSupplier.getParameters();
+        int expected = _paramNames.length;
+        int found = params != null ? params.getCount() : 0;
+
+        assure( "wrong number of parameters (expected: " + expected + ", found: " + found + ") in " + _context,
+            found == expected );
+
+        if ( found == 0 )
+            return;
+
+        for ( int i=0; i<expected; ++i )
+        {
+            XPropertySet param = (XPropertySet)UnoRuntime.queryInterface( XPropertySet.class,
+                params.getByIndex(i) );
+
+            String expectedName = _paramNames[i];
+            String foundName = (String)param.getPropertyValue( "Name" );
+            assure( "wrong parameter name (expected: " + expectedName + ", found: " + foundName + ") in" + _context,
+                expectedName.equals( foundName ) );
+        }
+    }
+
+    // --------------------------------------------------------------------------------------------------------
+    private void testParametrizedQuery()
+    {
+        try
+        {
+            // for a row set based on a parametrized query, those parameters should be properly
+            // recognized
+            m_dataSource.createQuery( "products like", "SELECT * FROM \"products\" WHERE \"Name\" LIKE :product_name" );
+            createRowSet( "products like", CommandType.QUERY, false );
+            verifyParameters( new String[] { "product_name" }, "testParametrizedQuery" );
+        }
+        catch( AssureException e ) { throw e; }
+        catch( Exception e )
+        {
+            assure( "testing the parameters of a parametrized query failed" + e.getMessage(), false );
+        }
+    }
+
+    // --------------------------------------------------------------------------------------------------------
+    private void testParametersInteraction()
+    {
+        try
+        {
+            createRowSet( "products like", CommandType.QUERY, false );
+
+            // let's fill in a parameter value via XParameters, and see whether it is respected by the parameters container
+            XParameters rowsetParams = (XParameters)UnoRuntime.queryInterface( XParameters.class,
+                m_rowSet );
+            rowsetParams.setString( 1, "Apples" );
+
+            XIndexAccess params = m_paramsSupplier.getParameters();
+            XPropertySet firstParam = (XPropertySet)UnoRuntime.queryInterface( XPropertySet.class, params.getByIndex(0) );
+            Object firstParamValue = firstParam.getPropertyValue( "Value" );
+
+            assure( "XParameters and the parameters container do not properly interact",
+                firstParamValue.equals( "Apples" ) );
+
+            // let's see whether this also survices an execute of the row set
+            rowsetParams.setString( 1, "Oranges" );
+            m_rowSet.execute();
+            {
+                // TODO: the following would not be necessary if the parameters container would *survive*
+                // the execution of the row set. It currently doesn't (though the values it represents do).
+                // It would be nice, but not strictly necessary, if it would.
+                params = m_paramsSupplier.getParameters();
+                firstParam = (XPropertySet)UnoRuntime.queryInterface( XPropertySet.class, params.getByIndex(0) );
+            }
+            firstParamValue = firstParam.getPropertyValue( "Value" );
+            assure( "XParameters and the parameters container do not properly interact, after the row set has been executed",
+                firstParamValue.equals( "Oranges" ) );
+        }
+        catch( AssureException e ) { throw e; }
+        catch( Exception e )
+        {
+            assure( "could not text the relationship between XParameters and XParametersSupplier" + e.getMessage(), false );
+        }
+    }
+
+    // --------------------------------------------------------------------------------------------------------
+    private void testParametersInFilter()
+    {
+        try
+        {
+            createRowSet( "SELECT * FROM \"customers\"", CommandType.COMMAND, false );
+            m_rowSetProperties.setPropertyValue( "Filter", "\"City\" = :city" );
+
+            m_rowSetProperties.setPropertyValue( "ApplyFilter", new Boolean( true ) );
+            verifyParameters( new String[] { "city" }, "testParametersInFilter" );
+
+            m_rowSetProperties.setPropertyValue( "ApplyFilter", new Boolean( false ) );
+            verifyParameters( new String[] {}, "testParametersInFilter" );
+        }
+        catch( AssureException e ) { throw e; }
+        catch( Exception e )
+        {
+            assure( "testing the parameters within a WHERE clause failed" + e.getMessage(), false );
+        }
+    }
+
+    // --------------------------------------------------------------------------------------------------------
+    /** checks the XParametersSupplier functionality of a RowSet
+     */
+    public void testParameters()
+    {
+        createTestCase( false );
+            // use an own RowSet instance, not the one which is also used for the other cases
+
+        testTableParameters();
+        testParametrizedQuery();
+        testParametersInFilter();
+
+        testParametersInteraction();
+   }
 }
