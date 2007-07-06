@@ -4,9 +4,9 @@
  *
  *  $RCSfile: extrusioncontrols.hxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: obo $ $Date: 2006-10-12 11:41:01 $
+ *  last change: $Author: rt $ $Date: 2007-07-06 07:27:43 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -68,12 +68,12 @@
 class SfxBindings;
 class ToolbarMenu;
 class SfxStatusForwarder;
-class SvxTbxButtonColorUpdater_Impl;
 
 //========================================================================
 
 namespace svx
 {
+class ToolboxButtonColorUpdater;
 
 class ExtrusionDirectionWindow : public SfxPopupWindow
 {
@@ -379,7 +379,7 @@ public:
 class SVX_DLLPUBLIC ExtrusionColorControl : public SfxToolBoxControl
 {
 private:
-    SvxTbxButtonColorUpdater_Impl*  mpBtnUpdater;
+    ToolboxButtonColorUpdater*  mpBtnUpdater;
 
 public:
     SFX_DECL_TOOLBOX_CONTROL();
