@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ConnectionHelper.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: ihi $ $Date: 2007-06-05 14:41:23 $
+ *  last change: $Author: rt $ $Date: 2007-07-06 08:09:53 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -38,9 +38,6 @@
 
 #ifndef DBAUI_CONNECTIONHELPER_HXX
 #include "ConnectionHelper.hxx"
-#endif
-#ifndef _DBAUI_MODULE_DBU_HXX_
-#include "moduledbu.hxx"
 #endif
 #ifndef _DBAUI_AUTOCONTROLS_HRC_
 #include "AutoControls.hrc"
