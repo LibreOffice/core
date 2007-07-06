@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dbfindex.cxx,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: ihi $ $Date: 2007-06-05 14:41:48 $
+ *  last change: $Author: rt $ $Date: 2007-07-06 08:14:04 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -46,7 +46,6 @@
 #ifndef _SFXAPP_HXX //autogen
 #include <sfx2/app.hxx>
 #endif
-
 #ifndef _DBAUI_MODULE_DBU_HXX_
 #include "moduledbu.hxx"
 #endif
