@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xcreator.hxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 18:40:35 $
+ *  last change: $Author: rt $ $Date: 2007-07-06 10:10:15 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -58,7 +58,9 @@
 #include <cppuhelper/implbase5.hxx>
 #endif
 
-#include "confighelper.hxx"
+#ifndef _COMPHELPER_MIMECONFIGHELPER_HXX_
+#include <comphelper/mimeconfighelper.hxx>
+#endif
 
 class UNOEmbeddedObjectCreator : public ::cppu::WeakImplHelper5<
                                                 ::com::sun::star::embed::XEmbedObjectCreator,
@@ -69,7 +71,7 @@ class UNOEmbeddedObjectCreator : public ::cppu::WeakImplHelper5<
 {
     ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > m_xFactory;
 
-    ConfigurationHelper m_aConfigHelper;
+    ::comphelper::MimeConfigurationHelper m_aConfigHelper;
 public:
     UNOEmbeddedObjectCreator(
             const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& xFactory )
