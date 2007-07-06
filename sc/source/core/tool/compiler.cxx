@@ -4,9 +4,9 @@
  *
  *  $RCSfile: compiler.cxx,v $
  *
- *  $Revision: 1.69 $
+ *  $Revision: 1.70 $
  *
- *  last change: $Author: obo $ $Date: 2007-06-13 09:07:22 $
+ *  last change: $Author: rt $ $Date: 2007-07-06 12:34:52 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -135,7 +135,7 @@ short lcl_GetRetFormat( OpCode eOpCode )
         case ocIsRef:
         case ocIsValue:
         case ocIsFormula:
-        case ocIsNV:
+        case ocIsNA:
         case ocIsErr:
         case ocIsError:
         case ocIsEven:
