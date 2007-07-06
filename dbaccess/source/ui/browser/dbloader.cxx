@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dbloader.cxx,v $
  *
- *  $Revision: 1.28 $
+ *  $Revision: 1.29 $
  *
- *  last change: $Author: ihi $ $Date: 2007-04-16 16:27:08 $
+ *  last change: $Author: rt $ $Date: 2007-07-06 08:03:30 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -80,6 +80,9 @@
 #endif
 #ifndef _CPPUHELPER_IMPLBASE2_HXX_
 #include <cppuhelper/implbase2.hxx>
+#endif
+#ifndef _COMPHELPER_SEQUENCEASHASHMAP_HXX_
+#include <comphelper/sequenceashashmap.hxx>
 #endif
 #ifndef _DBU_REGHELPER_HXX_
 #include "dbu_reghelper.hxx"
@@ -248,6 +251,28 @@ void SAL_CALL DBContentLoader::load(const Reference< XFrame > & rFrame, const ::
         xController.set(m_xServiceFactory->createInstance(::rtl::OUString::createFromAscii("org.openoffice.comp.dbu.OTableDesign")),UNO_QUERY);
     else if ( (bAttachModel = (aParser.GetMainURL(INetURLObject::DECODE_TO_IURI) == URL_COMPONENT_RELATIONDESIGN)) )// construct the control
         xController.set(m_xServiceFactory->createInstance(::rtl::OUString::createFromAscii("org.openoffice.comp.dbu.ORelationDesign")),UNO_QUERY);
+    else if ( aParser.GetMainURL(INetURLObject::DECODE_TO_IURI) == URL_COMPONENT_REPORTDESIGN )// construct the control
+    {
+        ::comphelper::SequenceAsHashMap lDescriptor(rArgs);
+        sal_Bool bPreview = lDescriptor.getUnpackedValueOrDefault(INFO_PREVIEW, sal_False );
+        if ( bPreview )
+        {
+            if (rListener.is())
+                rListener->loadCancelled(this);
+            return;
+        }
+        Reference< XModel > xModel   = lDescriptor.getUnpackedValueOrDefault(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Model")), Reference< XModel >());
+        if ( xModel.is() )
+        {
+            xController.set(m_xServiceFactory->createInstance(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.sdb.ReportDesign"))),UNO_QUERY);
+            if ( xController.is() )
+            {
+                xController->attachModel(xModel);
+                xModel->connectController( xController );
+                xModel->setCurrentController(xController);
+            }
+        }
+    }
     else
         OSL_ENSURE(0,"wrong dispatch url!");
 
