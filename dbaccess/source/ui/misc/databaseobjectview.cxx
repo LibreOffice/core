@@ -4,9 +4,9 @@
  *
  *  $RCSfile: databaseobjectview.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: ihi $ $Date: 2007-04-16 16:28:24 $
+ *  last change: $Author: rt $ $Date: 2007-07-06 08:36:01 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -384,8 +384,8 @@ namespace dbaui
             _rDispatchArguments[nPos  ].Name = PROPERTY_UPDATE_TABLENAME;
             _rDispatchArguments[nPos++].Value <<= sTable;
         }
-
     }
+
     //======================================================================
     //= RelationDesigner
     //======================================================================
@@ -394,6 +394,15 @@ namespace dbaui
         :DatabaseObjectView( _rxORB, _rxApplication, _rxParentFrame, static_cast< ::rtl::OUString >( URL_COMPONENT_RELATIONDESIGN ) )
     {
     }
+    //======================================================================
+    //= OReportDesigner
+    //======================================================================
+    //----------------------------------------------------------------------
+    OReportDesigner::OReportDesigner( const Reference< XMultiServiceFactory >& _rxORB, const Reference< XDatabaseDocumentUI >& _rxApplication , const Reference< XFrame >& _rxParentFrame)
+        :DatabaseObjectView( _rxORB, _rxApplication,  _rxParentFrame,static_cast< ::rtl::OUString >( URL_COMPONENT_REPORTDESIGN ) )
+    {
+    }
+
 
 // .........................................................................
 }   // namespace dbaui
