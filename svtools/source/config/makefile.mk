@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.58 $
+#   $Revision: 1.59 $
 #
-#   last change: $Author: ihi $ $Date: 2006-11-14 15:39:50 $
+#   last change: $Author: rt $ $Date: 2007-07-06 10:04:36 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -101,12 +101,13 @@ LIB2OBJFILES=  \
     $(SLO)$/apearcfg.obj				\
     $(SLO)$/helpopt.obj                 \
     $(SLO)$/printoptions.obj			\
-        $(SLO)$/languageoptions.obj     \
-        $(SLO)$/ctloptions.obj          \
-        $(SLO)$/cjkoptions.obj          \
-        $(SLO)$/colorcfg.obj            \
-        $(SLO)$/undoopt.obj                 \
-        $(SLO)$/useroptions.obj      \
+    $(SLO)$/languageoptions.obj     \
+    $(SLO)$/ctloptions.obj          \
+    $(SLO)$/cjkoptions.obj          \
+    $(SLO)$/colorcfg.obj            \
+    $(SLO)$/extcolorcfg.obj            \
+    $(SLO)$/undoopt.obj                 \
+    $(SLO)$/useroptions.obj      \
     $(SLO)$/syslocaleoptions.obj \
     $(SLO)$/itemholder2.obj
 
