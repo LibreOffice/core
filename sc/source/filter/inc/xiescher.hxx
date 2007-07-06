@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xiescher.hxx,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: vg $ $Date: 2007-05-22 19:57:31 $
+ *  last change: $Author: rt $ $Date: 2007-07-06 12:38:40 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -125,6 +125,8 @@ public:
     inline const XclObjId& GetObjId() const { return maObjId; }
     /** Returns the Excel object type from OBJ record. */
     inline sal_uInt16   GetObjType() const { return mnObjType; }
+    /** Returns associated macro name, if set, otherwise zero length string. */
+    const String        GetMacroName() const { return maMacroName; }
 
     /** Returns the shape identifier used in the Escher stream. */
     inline sal_uInt32   GetShapeId() const { return mnShapeId; }
@@ -153,6 +155,9 @@ public:
     void                ProcessSdrObject( SdrObject& rSdrObj ) const;
 
 protected:
+    /** Reads the contents of the ftMacro sub structure in an OBJ record. */
+    void                ReadMacro( XclImpStream& rStrm );
+
     /** Derived classes may return a progress bar size different from 1. */
     virtual sal_Size    DoGetProgressSize() const;
     /** Derived classes may perform additional processing for the passed SdrObject. */
@@ -168,6 +173,7 @@ private:
     sal_uInt32          mnShapeId;      /// Shape ID from Escher stream.
     sal_uInt32          mnShapeFlags;   /// Shape flags from Escher stream.
     sal_uInt32          mnShapeBlipId;  /// The BLIP identifier (meta file).
+    String              maMacroName;    /// Name of an attached macro.
     bool                mbValid;        /// true = Object is valid, do processing and insertion.
     bool                mbAreaObj;      /// true = Width and height must be greater than 0.
     bool                mbInsSdr;       /// true = Insert the SdrObject into draw page.
@@ -289,12 +295,9 @@ private:
     void                ReadSbs( XclImpStream& rStrm );
     /** Reads the contents of the ftGboData sub structure in an OBJ record. */
     void                ReadGboData( XclImpStream& rStrm );
-    /** Reads the contents of the ftMacro sub structure in an OBJ record. */
-    void                ReadMacro( XclImpStream& rStrm );
 
 private:
     ScfInt16Vec         maMultiSel;     /// Indexes of all selected entries in a multi selection.
-    String              maMacroName;    /// Name of an attached macro.
     sal_uInt16          mnState;        /// Checked/unchecked state.
     sal_Int16           mnSelEntry;     /// Index of selected entry (1-based).
     sal_Int16           mnSelType;      /// Selection type.
@@ -479,6 +482,9 @@ protected:
     virtual FASTBOOL    GetColorFromPalette( USHORT nIndex, Color& rColor ) const;
 
 private:
+    /** Reads contents of a hyperlink property and returns the extracted URL. */
+    ::rtl::OUString     ReadHlinkProperty( SvStream& rEscherStrm ) const;
+
     /** Processes a drawing group container (global drawing data). */
     void                ProcessDggContainer( SvStream& rEscherStrm, const DffRecordHeader& rDggHeader );
     /** Processes a drawing container (all drawing data of a sheet). */
