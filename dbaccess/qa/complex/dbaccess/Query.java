@@ -4,9 +4,9 @@
  *
  *  $RCSfile: Query.java,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: obo $ $Date: 2006-07-10 14:58:58 $
+ *  last change: $Author: rt $ $Date: 2007-07-06 07:51:16 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -67,80 +67,16 @@ public class Query extends complexlib.ComplexTestCase {
     }
 
     // --------------------------------------------------------------------------------------------------------
-    private void createTables() throws SQLException
-    {
-        m_database.dropTable( "test", true );
-        HsqlTableDescriptor table = new HsqlTableDescriptor( "test",
-            new HsqlColumnDescriptor[] {
-                new HsqlColumnDescriptor( "ID", "INTEGER", HsqlColumnDescriptor.PRIMARY ),
-                new HsqlColumnDescriptor( "left", "VARCHAR(50)" ),
-                new HsqlColumnDescriptor( "right", "VARCHAR(50)" ) } );
-        m_database.createTable(table);
-    }
-
-    // --------------------------------------------------------------------------------------------------------
-    private void validateUnparseable()
-    {
-        // The "unparseable" query should be indeed be unparseable by OOo (though a valid HSQL query)
-        XSingleSelectQueryComposer composer = null;
-        QueryDefinition unparseableQuery = null;
-        try
-        {
-            XMultiServiceFactory factory = (XMultiServiceFactory)UnoRuntime.queryInterface(
-                    XMultiServiceFactory.class, m_database.defaultConnection() );
-            composer = (XSingleSelectQueryComposer)UnoRuntime.queryInterface(
-                    XSingleSelectQueryComposer.class, factory.createInstance( "com.sun.star.sdb.SingleSelectQueryComposer" ) );
-            unparseableQuery = m_dataSource.getQueryDefinition( "unparseable" );
-        }
-        catch( Exception e )
-        {
-            assure( "caught an unexpected exception: " + e.getMessage(), false );
-        }
-
-        boolean caughtExpected = false;
-        try
-        {
-            composer.setQuery( unparseableQuery.getCommand() );
-        }
-        catch (WrappedTargetException e) { }
-        catch( SQLException e )
-        {
-            caughtExpected = true;
-        }
-
-        assure( "Somebody improved the parser! This is bad :), since we need an unparsable query here!", caughtExpected );
-    }
-
-    // --------------------------------------------------------------------------------------------------------
-    private void createQueries() throws SQLException
-    {
-        try
-        {
-            m_dataSource.createQuery( "parseable", "SELECT * FROM \"test\"" );
-            m_dataSource.createQuery( "parseable native", "SELECT * FROM INFORMATION_SCHEMA.SYSTEM_VIEWS", false );
-            m_dataSource.createQuery( "unparseable", "SELECT \"left\" || ' - ' || \"right\" AS \"concat\" FROM \"test\"", false );
-        }
-        catch ( Exception e )
-        {
-            assure( "caught an unexpected exception:" + e.getMessage(), false );
-        }
-
-        validateUnparseable();
-    }
-
-    // --------------------------------------------------------------------------------------------------------
     private void createTestCase()
     {
         try
         {
             if ( m_database == null )
             {
-                m_database = new HsqlDatabase( getFactory() );
+                CRMDatabase database = new CRMDatabase( getFactory() );
+                m_database = database.getDatabase();
                 m_dataSource = m_database.getDataSource();
             }
-
-            createTables();
-            createQueries();
         }
         catch( Exception e )
         {
@@ -169,7 +105,7 @@ public class Query extends complexlib.ComplexTestCase {
 
             String[] queryNames = new String[] { "parseable", "parseable native", "unparseable" };
             String[][] expectedColumnNames = new String[][] {
-                new String[] { "ID", "left", "right" },
+                new String[] { "ID", "Name", "Address", "City", "Postal" },
                 new String[] { "TABLE_CATALOG", "TABLE_SCHEMA", "TABLE_NAME", "VIEW_DEFINITION", "CHECK_OPTION", "IS_UPDATABLE", "VALID" },
                 new String[] { "concat" }
             };

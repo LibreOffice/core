@@ -4,9 +4,9 @@
  *
  *  $RCSfile: CRMDatabase.java,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: obo $ $Date: 2006-07-10 14:58:33 $
+ *  last change: $Author: rt $ $Date: 2007-07-06 07:50:58 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -37,6 +37,7 @@ package complex.dbaccess;
 import com.sun.star.container.ElementExistException;
 import com.sun.star.lang.WrappedTargetException;
 import com.sun.star.lang.XMultiServiceFactory;
+import com.sun.star.sdb.XSingleSelectQueryComposer;
 import com.sun.star.sdbc.SQLException;
 import com.sun.star.sdbc.XConnection;
 import com.sun.star.sdbcx.XTablesSupplier;
@@ -46,6 +47,9 @@ import connectivity.tools.DataSource;
 import connectivity.tools.HsqlColumnDescriptor;
 import connectivity.tools.HsqlDatabase;
 import connectivity.tools.HsqlTableDescriptor;
+import connectivity.tools.QueryDefinition;
+
+import complexlib.ComplexTestCase.AssureException;
 
 /** implements a small Customer Relationship Management database
  *
@@ -143,6 +147,41 @@ public class CRMDatabase
         refreshTables.refresh();
     }
 
+    // --------------------------------------------------------------------------------------------------------
+    private void validateUnparseable()
+    {
+        // The "unparseable" query should be indeed be unparseable by OOo (though a valid HSQL query)
+        XSingleSelectQueryComposer composer = null;
+        QueryDefinition unparseableQuery = null;
+        try
+        {
+            XMultiServiceFactory factory = (XMultiServiceFactory)UnoRuntime.queryInterface(
+                    XMultiServiceFactory.class, m_database.defaultConnection() );
+            composer = (XSingleSelectQueryComposer)UnoRuntime.queryInterface(
+                    XSingleSelectQueryComposer.class, factory.createInstance( "com.sun.star.sdb.SingleSelectQueryComposer" ) );
+            unparseableQuery = m_dataSource.getQueryDefinition( "unparseable" );
+        }
+        catch( Exception e )
+        {
+            throw new RuntimeException( "caught an unexpected exception: " + e.getMessage() );
+        }
+
+        boolean caughtExpected = false;
+        try
+        {
+            composer.setQuery( unparseableQuery.getCommand() );
+        }
+        catch (WrappedTargetException e) { }
+        catch( SQLException e )
+        {
+            caughtExpected = true;
+        }
+
+        if ( !caughtExpected )
+            throw new RuntimeException( "Somebody improved the parser! This is bad :), since we need an unparsable query here!" );
+    }
+
+    // --------------------------------------------------------------------------------------------------------
     private void createQueries() throws ElementExistException, WrappedTargetException, com.sun.star.lang.IllegalArgumentException
     {
         m_database.getDataSource().createQuery(
@@ -166,7 +205,13 @@ public class CRMDatabase
             "unshipped orders",
             "SELECT * " +
             "FROM \"all orders\"" +
-            "WHERE ( \"ShipDate\" IS NULL"
+            "WHERE ( \"ShipDate\" IS NULL )"
         );
+
+        m_database.getDataSource().createQuery( "parseable", "SELECT * FROM \"customers\"" );
+        m_database.getDataSource().createQuery( "parseable native", "SELECT * FROM INFORMATION_SCHEMA.SYSTEM_VIEWS", false );
+        m_database.getDataSource().createQuery( "unparseable", "SELECT \"Postal\" || ' - ' || \"City\" AS \"concat\" FROM \"customers\"", false );
+
+        validateUnparseable();
     }
 }
