@@ -915,7 +915,7 @@
                     <value xml:lang="en-US">Format ~Cells...</value>
                 </prop>
                 <prop oor:name="ContextLabel" oor:type="xs:string">
-                    <value xml:lang="en-US">~Cells...</value>
+                    <value xml:lang="en-US">Ce~lls...</value>
                 </prop>
             </node>
             <node oor:name=".uno:RowHeight" oor:op="replace">
@@ -1453,7 +1453,7 @@
             </node>
             <node oor:name=".uno:DelBreakMenu" oor:op="replace">
                 <prop oor:name="Label" oor:type="xs:string">
-                    <value xml:lang="en-US">Delete Manual Break</value>
+                    <value xml:lang="en-US">Delete Manual ~Break</value>
                 </prop>
             </node>
             <node oor:name=".uno:FillCellsMenu" oor:op="replace">
