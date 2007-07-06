@@ -4,9 +4,9 @@
  *
  *  $RCSfile: gridwin.hxx,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: hr $ $Date: 2007-06-26 11:50:31 $
+ *  last change: $Author: rt $ $Date: 2007-07-06 12:44:27 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -44,12 +44,7 @@
 #include <svtools/transfer.hxx>
 #endif
 
-// nur auf dem MAC Auto-Filter per Popup
-#ifdef MAC
-#define AUTOFILTER_POPUP
-#else
 #undef AUTOFILTER_POPUP
-#endif
 
 #ifndef SC_VIEWUTIL_HXX
 #include "viewutil.hxx"
@@ -410,8 +405,7 @@ public:
     void            InvertSimple( SCCOL nX1, SCROW nY1, SCCOL nX2, SCROW nY2,
                                     BOOL bTestMerge = FALSE, BOOL bRepeat = FALSE );
 
-    void            DrawDragRect( SCCOL nX1, SCROW nY1, SCCOL nX2, SCROW nY2,
-                                    BOOL bMarkDrop = TRUE );
+    void            DrawDragRect( SCCOL nX1, SCROW nY1, SCCOL nX2, SCROW nY2 );
 
     void            DrawRefMark( SCCOL nRefStartX, SCROW nRefStartY,
                                     SCCOL nRefEndX, SCROW nRefEndY,
