@@ -4,9 +4,9 @@
  *
  *  $RCSfile: windowscustomaction_ooo.scp,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: rt $ $Date: 2007-07-06 12:32:49 $
+ *  last change: $Author: rt $ $Date: 2007-07-06 14:34:30 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -423,3 +423,22 @@ WindowsCustomAction gid_Customaction_CheckVersions
 	Assignment1 = ("InstallExecuteSequence", "NOT Installed", "NewProductFound");
 	Assignment2 = ("InstallUISequence", "NOT Installed", "NewProductFound");
 End
+
+WindowsCustomAction gid_Customaction_ShowReleaseNotes1
+	Name = "ShowReleaseNotesBefore";
+	Typ = "65";
+	Source = "relnotes.dll";
+	Target = "ShowReleaseNotesBefore";
+	Inbinarytable = 1;
+	Assignment1 = ("InstallExecuteSequence", "(Not Installed or ISPATCH) and Not REMOVE=\"ALL\"", "behind_InstallValidate");
+End
+
+WindowsCustomAction gid_Customaction_ShowReleaseNotes2
+	Name = "ShowReleaseNotesAfter";
+	Typ = "65";
+	Source = "relnotes.dll";
+	Target = "ShowReleaseNotesAfter";
+	Inbinarytable = 1;
+	Assignment1 = ("InstallExecuteSequence", "(Not Installed or ISPATCH) and Not REMOVE=\"ALL\"", "end");
+End
+
