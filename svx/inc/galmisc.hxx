@@ -4,9 +4,9 @@
  *
  *  $RCSfile: galmisc.hxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: hr $ $Date: 2007-06-27 16:32:49 $
+ *  last change: $Author: rt $ $Date: 2007-07-06 07:28:26 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -91,7 +91,7 @@ class Gallery;
 
 SVX_DLLPUBLIC ResMgr*           GetGalleryResMgr();
 USHORT          GalleryGraphicImport( const INetURLObject& rURL, Graphic& rGraphic, String& rFilterName, BOOL bShowProgress = FALSE );
-BOOL            GallerySvDrawImport( SvStream& rIStm, FmFormModel& rModel );
+BOOL            GallerySvDrawImport( SvStream& rIStm, SdrModel& rModel );
 BOOL            CreateIMapGraphic( const FmFormModel& rModel, Graphic& rGraphic, ImageMap& rImageMap );
 SVX_DLLPUBLIC String            GetReducedString( const INetURLObject& rURL, ULONG nMaxLen );
 String          GetSvDrawStreamNameFromURL( const INetURLObject& rSvDrawObjURL );
