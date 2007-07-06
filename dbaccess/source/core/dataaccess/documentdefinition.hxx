@@ -4,9 +4,9 @@
  *
  *  $RCSfile: documentdefinition.hxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: kz $ $Date: 2007-05-10 10:12:58 $
+ *  last change: $Author: rt $ $Date: 2007-07-06 07:54:31 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -216,6 +216,12 @@ public:
         @raises ::com::sun::star::uno::RuntimeException
     */
     void impl_removeFrameFromDesktop_throw( const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >& _rxFrame );
+
+    static ::rtl::OUString GetDocumentServiceFromMediaType( const ::com::sun::star::uno::Reference< ::com::sun::star::embed::XStorage >& xStorage
+                                                    ,const ::rtl::OUString& sEntName
+                                                    ,const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& _xORB
+                                                    ,::com::sun::star::uno::Sequence< sal_Int8 >& _rClassId
+                                                    );
 
 protected:
     // OPropertyArrayUsageHelper
