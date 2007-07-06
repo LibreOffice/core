@@ -8,3 +8,6 @@ ExecutePostUninstallScript
 MigrateInstallPath
 RegisterExtensions
 DeregisterExtensions
+RemoveExtensions
+CheckInstallDirectory
+
