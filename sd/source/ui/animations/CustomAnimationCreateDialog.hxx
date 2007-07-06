@@ -4,9 +4,9 @@
  *
  *  $RCSfile: CustomAnimationCreateDialog.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 03:33:09 $
+ *  last change: $Author: rt $ $Date: 2007-07-06 13:10:50 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -44,6 +44,8 @@
 #include <vcl/tabdlg.hxx>
 #endif
 
+enum PathKind { NONE, CURVE, POLYGON, FREEFORM };
+
 class TabControl;
 class OKButton;
 class CancelButton;
@@ -63,6 +65,7 @@ public:
     CustomAnimationCreateDialog( ::Window* pParent, CustomAnimationPane* pPane, const std::vector< ::com::sun::star::uno::Any >& rTargets, bool bHasText );
     ~CustomAnimationCreateDialog();
 
+    PathKind getCreatePathKind() const;
     CustomAnimationPresetPtr getSelectedPreset() const;
     double getSelectedDuration() const;
 
