@@ -4,9 +4,9 @@
  *
  *  $RCSfile: txtparae.cxx,v $
  *
- *  $Revision: 1.137 $
+ *  $Revision: 1.138 $
  *
- *  last change: $Author: hr $ $Date: 2007-06-27 16:16:14 $
+ *  last change: $Author: rt $ $Date: 2007-07-06 12:10:23 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -971,6 +971,7 @@ XMLTextParagraphExport::XMLTextParagraphExport(
     sServerMap(RTL_CONSTASCII_USTRINGPARAM("ServerMap")),
     sShapeService(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.drawing.Shape")),
     sSizeType(RTL_CONSTASCII_USTRINGPARAM("SizeType")),
+    sSoftPageBreak( RTL_CONSTASCII_USTRINGPARAM( "SoftPageBreak" ) ),
     sStartAt(RTL_CONSTASCII_USTRINGPARAM("StartAt")),
     sSuffix(RTL_CONSTASCII_USTRINGPARAM("Suffix")),
     sTableService(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.text.TextTable")),
@@ -2185,6 +2186,10 @@ void XMLTextParagraphExport::exportTextRangeEnumeration(
             {
                 exportRuby(xPropSet, bAutoStyles);
             }
+            else if (sType.equals(sSoftPageBreak))
+            {
+                exportSoftPageBreak(xPropSet,   bAutoStyles);
+            }
             else
                 DBG_ERROR("unknown text portion type");
         }
@@ -2241,6 +2246,15 @@ void XMLTextParagraphExport::exportTextField(
         }
 
     }
+}
+
+void XMLTextParagraphExport::exportSoftPageBreak(
+    const Reference<XPropertySet> & ,
+    sal_Bool )
+{
+    SvXMLElementExport aElem( GetExport(), XML_NAMESPACE_TEXT,
+                              XML_SOFT_PAGE_BREAK, sal_False,
+                              sal_False );
 }
 
 void XMLTextParagraphExport::exportTextMark(
