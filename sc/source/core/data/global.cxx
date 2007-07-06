@@ -4,9 +4,9 @@
  *
  *  $RCSfile: global.cxx,v $
  *
- *  $Revision: 1.51 $
+ *  $Revision: 1.52 $
  *
- *  last change: $Author: obo $ $Date: 2007-06-13 09:06:37 $
+ *  last change: $Author: rt $ $Date: 2007-07-06 12:33:19 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -389,13 +389,16 @@ String ScGlobal::GetErrorString(USHORT nErrNumber)
     String sResStr;
     switch (nErrNumber)
     {
-        case NOVALUE     : nErrNumber = STR_NV_STR; break;
-        case errNoRef    : nErrNumber = STR_NO_REF_TABLE; break;
-        case errNoName   : nErrNumber = STR_NO_NAME_REF; break;
-        case errNoAddin  : nErrNumber = STR_NO_ADDIN; break;
-        case errNoMacro  : nErrNumber = STR_NO_MACRO; break;
-        case errDoubleRef:
-        case errNoValue  : nErrNumber = STR_NO_VALUE; break;
+        case NOTAVAILABLE          : nErrNumber = STR_NV_STR; break;
+        case errNoRef              : nErrNumber = STR_NO_REF_TABLE; break;
+        case errNoName             : nErrNumber = STR_NO_NAME_REF; break;
+        case errNoAddin            : nErrNumber = STR_NO_ADDIN; break;
+        case errNoMacro            : nErrNumber = STR_NO_MACRO; break;
+        case errDoubleRef          :
+        case errNoValue            : nErrNumber = STR_NO_VALUE; break;
+        case errNoCode             : nErrNumber = STR_NULL_ERROR; break;
+        case errDivisionByZero     : nErrNumber = STR_DIV_ZERO; break;
+        case errIllegalFPOperation : nErrNumber = STR_NUM_ERROR; break;
 
         default          : sResStr = GetRscString(STR_ERROR_STR);
                            sResStr += String::CreateFromInt32( nErrNumber );
@@ -482,13 +485,16 @@ String ScGlobal::GetLongErrorString(USHORT nErrNumber)
         case errNoMacro:
             nErrNumber = STR_LONG_ERR_NO_MACRO;
         break;
+        case errDivisionByZero:
+            nErrNumber = STR_LONG_ERR_DIV_ZERO;
+        break;
         case errNestedArray:
             nErrNumber = STR_ERR_LONG_NESTED_ARRAY;
         break;
         case errNoValue:
             nErrNumber = STR_LONG_ERR_NO_VALUE;
         break;
-        case NOVALUE:
+        case NOTAVAILABLE:
             nErrNumber = STR_LONG_ERR_NV;
         break;
         default:
