@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ContentHelper.hxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: obo $ $Date: 2006-07-10 15:11:57 $
+ *  last change: $Author: rt $ $Date: 2007-07-06 07:54:51 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -35,9 +35,6 @@
 #ifndef DBA_CONTENTHELPER_HXX
 #define DBA_CONTENTHELPER_HXX
 
-#ifndef _DBASHARED_APITOOLS_HXX_
-#include "apitools.hxx"
-#endif
 #ifndef _COM_SUN_STAR_UCB_XCONTENT_HPP_
 #include <com/sun/star/ucb/XContent.hpp>
 #endif
@@ -98,7 +95,6 @@
 #ifndef BOOST_SHARED_PTR_HPP_INCLUDED
 #include <boost/shared_ptr.hpp>
 #endif
-
 
 namespace dbaccess
 {
@@ -187,10 +183,12 @@ namespace dbaccess
                     );
 
         // com::sun::star::lang::XTypeProvider
-        DECLARE_IMPLEMENTATION_ID( );
+        virtual ::com::sun::star::uno::Sequence<sal_Int8> SAL_CALL getImplementationId(  ) throw(::com::sun::star::uno::RuntimeException);
+        static ::com::sun::star::uno::Sequence< sal_Int8 >  getUnoTunnelImplementationId();
         // ::com::sun::star::lang::XServiceInfo
-        DECLARE_SERVICE_INFO();
-
+        virtual sal_Bool SAL_CALL supportsService( const ::rtl::OUString& ServiceName ) throw(::com::sun::star::uno::RuntimeException);
+        virtual ::com::sun::star::uno::Sequence< ::rtl::OUString > SAL_CALL getSupportedServiceNames(  ) throw(::com::sun::star::uno::RuntimeException);
+        virtual ::rtl::OUString SAL_CALL getImplementationName(  ) throw (::com::sun::star::uno::RuntimeException);
 
         // XContent
         virtual ::com::sun::star::uno::Reference< ::com::sun::star::ucb::XContentIdentifier > SAL_CALL getIdentifier(  ) throw (::com::sun::star::uno::RuntimeException) ;
