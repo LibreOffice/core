@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dlgctl3d.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: hr $ $Date: 2007-06-27 17:01:03 $
+ *  last change: $Author: rt $ $Date: 2007-07-06 07:33:15 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -339,7 +339,8 @@ void Svx3DPreviewControl::Set3DObject( const E3dObject* pObj )
     }
     else if( pObj->ISA( E3dPolyScene ) )
     {
-        delete pFmPage->RemoveObject( pScene->GetOrdNum() );
+        SdrObject* pObject = pFmPage->RemoveObject( pScene->GetOrdNum() );
+        SdrObject::Free( pObject );
         p3DObj = NULL;
         pScene = (E3dPolyScene*)pObj->Clone();
         pFmPage->InsertObject( pScene );
