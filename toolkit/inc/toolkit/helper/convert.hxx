@@ -4,9 +4,9 @@
  *
  *  $RCSfile: convert.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 12:54:04 $
+ *  last change: $Author: rt $ $Date: 2007-07-06 06:53:12 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -79,6 +79,5 @@ inline ::Rectangle VCLRectangle( const ::com::sun::star::awt::Rectangle& rAWTRec
 {
     return ::Rectangle( ::Point( rAWTRect.X, rAWTRect.Y ), ::Size( rAWTRect.Width, rAWTRect.Height ) );
 }
-
 
 #endif  // _TOOLKIT_HELPER_CONVERT_HXX_
