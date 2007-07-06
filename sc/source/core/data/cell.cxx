@@ -4,9 +4,9 @@
  *
  *  $RCSfile: cell.cxx,v $
  *
- *  $Revision: 1.38 $
+ *  $Revision: 1.39 $
  *
- *  last change: $Author: obo $ $Date: 2007-06-13 09:06:09 $
+ *  last change: $Author: rt $ $Date: 2007-07-06 12:32:38 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -37,13 +37,6 @@
 #include "precompiled_sc.hxx"
 
 // INCLUDE ---------------------------------------------------------------
-
-#ifdef MAC
-    // StackSpace
-#include <mac_start.h>
-#include <Memory.h>
-#include <mac_end.h>
-#endif
 
 #include <svtools/zforlist.hxx>
 
