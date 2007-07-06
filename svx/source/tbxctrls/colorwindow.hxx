@@ -55,37 +55,4 @@ public:
     virtual SfxPopupWindow* Clone() const;
 };
 
-//========================================================================
-// class SvxTbxButtonColorUpdater_Impl ----------------------------------------
-//========================================================================
-#define TBX_UPDATER_MODE_NONE               0x00
-#define TBX_UPDATER_MODE_CHAR_COLOR         0x01
-#define TBX_UPDATER_MODE_CHAR_BACKGROUND    0x02
-#define TBX_UPDATER_MODE_CHAR_COLOR_NEW     0x03
-
-class SvxTbxButtonColorUpdater_Impl
-{
-public:
-                SvxTbxButtonColorUpdater_Impl( USHORT   nSlotId,
-                                               USHORT   nTbxBtnId,
-                                               ToolBox* ptrTbx,
-                                               USHORT   nMode = 0 );
-                ~SvxTbxButtonColorUpdater_Impl();
-
-    void        Update( const Color& rColor );
-
-protected:
-    void        DrawChar(VirtualDevice&, const Color&);
-
-private:
-    USHORT      mnDrawMode;
-    USHORT      mnBtnId;
-    USHORT      mnSlotId;
-    ToolBox*    mpTbx;
-    Color       maCurColor;
-    Rectangle   maUpdRect;
-    Size        maBmpSize;
-    BOOL        mbWasHiContrastMode;
-};
-
 #endif
