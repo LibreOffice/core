@@ -4,9 +4,9 @@
  *
  *  $RCSfile: unoDirectSql.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 16:52:50 $
+ *  last change: $Author: rt $ $Date: 2007-07-06 08:45:52 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -39,9 +39,6 @@
 #ifndef _SVT_GENERICUNODIALOG_HXX_
 #include <svtools/genericunodialog.hxx>
 #endif
-#ifndef _DBAUI_MODULE_DBU_HXX_
-#include "moduledbu.hxx"
-#endif
 #ifndef _DBASHARED_APITOOLS_HXX_
 #include "apitools.hxx"
 #endif
@@ -53,6 +50,9 @@
 #endif
 #ifndef _COM_SUN_STAR_SDBC_XROWSET_HPP_
 #include <com/sun/star/sdbc/XRowSet.hpp>
+#endif
+#ifndef _DBAUI_MODULE_DBU_HXX_
+#include "moduledbu.hxx"
 #endif
 #ifndef _COM_SUN_STAR_SDBC_XCONNECTION_HPP_
 #include <com/sun/star/sdbc/XConnection.hpp>
@@ -73,8 +73,8 @@ namespace dbaui
     class ODirectSQLDialog
             :public ODirectSQLDialog_BASE
             ,public ODirectSQLDialog_PBASE
-            ,public OModuleClient
     {
+        OModuleClient m_aModuleClient;
         ::rtl::OUString m_sInitialSelection;
         ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection > m_xActiveConnection;
     protected:
