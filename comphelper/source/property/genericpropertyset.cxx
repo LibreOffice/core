@@ -4,9 +4,9 @@
  *
  *  $RCSfile: genericpropertyset.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 17:17:55 $
+ *  last change: $Author: rt $ $Date: 2007-07-06 10:21:39 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -46,7 +46,9 @@
 #ifndef _CPPUHELPER_WEAKAGG_HXX_
 #include <cppuhelper/weakagg.hxx>
 #endif
-
+#ifndef _CPPUHELPER_INTERFACECONTAINER_HXX_
+#include <cppuhelper/interfacecontainer.hxx>
+#endif
 #ifndef _COMPHELPER_PROPERTYSETHELPER_HXX_
 #include <comphelper/propertysethelper.hxx>
 #endif
@@ -74,6 +76,9 @@
 #ifndef _RTL_UUID_H_
 #include <rtl/uuid.h>
 #endif
+#include <boost/mem_fn.hpp>
+#include <boost/bind.hpp>
+#include <boost/utility.hpp>
 
 ///////////////////////////////////////////////////////////////////////
 
@@ -103,6 +108,7 @@ namespace comphelper
     {
     private:
         GenericAnyMapImpl   maAnyMap;
+        ::cppu::OMultiTypeInterfaceContainerHelperVar< ::rtl::OUString,UStringHash,UStringEqual> m_aListener;
 
     protected:
         virtual void _setPropertyValues( const PropertyMapEntry** ppEntries, const  Any* pValues ) throw( UnknownPropertyException,  PropertyVetoException,  IllegalArgumentException,  WrappedTargetException );
@@ -127,6 +133,9 @@ namespace comphelper
         virtual sal_Bool SAL_CALL supportsService( const rtl::OUString& ServiceName ) throw(  RuntimeException );
         virtual  Sequence< rtl::OUString > SAL_CALL getSupportedServiceNames() throw(  RuntimeException );
 
+        // XPropertySet
+        virtual void SAL_CALL addPropertyChangeListener( const ::rtl::OUString& aPropertyName, const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertyChangeListener >& xListener ) throw(::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException);
+        virtual void SAL_CALL removePropertyChangeListener( const ::rtl::OUString& aPropertyName, const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertyChangeListener >& aListener ) throw(::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException);
     };
 
 }
@@ -135,22 +144,81 @@ namespace comphelper
 
 GenericPropertySet::GenericPropertySet( PropertySetInfo* pInfo ) throw()
 : PropertySetHelper( pInfo )
+,m_aListener(maMutex)
 {
 }
 
 GenericPropertySet::~GenericPropertySet() throw()
 {
 }
+void SAL_CALL GenericPropertySet::addPropertyChangeListener( const ::rtl::OUString& aPropertyName, const Reference< XPropertyChangeListener >& xListener ) throw(UnknownPropertyException, WrappedTargetException, RuntimeException)
+{
+    Reference < XPropertySetInfo > xInfo = getPropertySetInfo(  );
+    if ( xInfo.is() )
+    {
+        if ( !aPropertyName.getLength() )
+        {
+            Sequence< Property> aSeq = xInfo->getProperties();
+            const Property* pIter = aSeq.getConstArray();
+            const Property* pEnd  = pIter + aSeq.getLength();
+            for( ; pIter != pEnd ; ++pIter)
+            {
+                m_aListener.addInterface(pIter->Name,xListener);
+            }
+        }
+        else if ( xInfo->hasPropertyByName(aPropertyName) )
+            m_aListener.addInterface(aPropertyName,xListener);
+        else
+            throw UnknownPropertyException();
+    }
+}
+
+void SAL_CALL GenericPropertySet::removePropertyChangeListener( const ::rtl::OUString& aPropertyName, const Reference< XPropertyChangeListener >& xListener ) throw(UnknownPropertyException, WrappedTargetException, RuntimeException)
+{
+    ResettableMutexGuard aGuard( maMutex );
+    Reference < XPropertySetInfo > xInfo = getPropertySetInfo(  );
+    aGuard.clear();
+    if ( xInfo.is() )
+    {
+        if ( !aPropertyName.getLength() )
+        {
+            Sequence< Property> aSeq = xInfo->getProperties();
+            const Property* pIter = aSeq.getConstArray();
+            const Property* pEnd  = pIter + aSeq.getLength();
+            for( ; pIter != pEnd ; ++pIter)
+            {
+                m_aListener.removeInterface(pIter->Name,xListener);
+            }
+        }
+        else if ( xInfo->hasPropertyByName(aPropertyName) )
+            m_aListener.removeInterface(aPropertyName,xListener);
+        else
+            throw UnknownPropertyException();
+    }
+}
 
 void GenericPropertySet::_setPropertyValues( const PropertyMapEntry** ppEntries, const Any* pValues )
     throw(UnknownPropertyException, PropertyVetoException, IllegalArgumentException, WrappedTargetException )
 {
-    MutexGuard aGuard( maMutex );
+    ResettableMutexGuard aGuard( maMutex );
 
     while( *ppEntries )
     {
         const OUString aPropertyName( (*ppEntries)->mpName, (*ppEntries)->mnNameLen, RTL_TEXTENCODING_ASCII_US );
+        OInterfaceContainerHelper * pHelper = m_aListener.getContainer(aPropertyName);
+
         maAnyMap[ aPropertyName ] = *pValues;
+
+        if ( pHelper )
+        {
+            PropertyChangeEvent aEvt;
+            aEvt.PropertyName = aPropertyName;
+            aEvt.NewValue = *pValues;
+            aGuard.clear();
+            pHelper->forEach<XPropertyChangeListener>(
+                    ::boost::bind(&XPropertyChangeListener::propertyChange,_1,boost::cref(aEvt)));
+            aGuard.reset();
+        }
 
         ppEntries++;
         pValues++;
