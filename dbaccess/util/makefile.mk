@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.30 $
+#   $Revision: 1.31 $
 #
-#   last change: $Author: ihi $ $Date: 2007-06-05 14:42:12 $
+#   last change: $Author: rt $ $Date: 2007-07-06 08:46:44 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -128,10 +128,16 @@ SHL2STDLIBS= \
         $(VOSLIB)				\
         $(SALLIB)
 
+SHL2DEPN=
+SHL2IMPLIB=i$(TARGET2)
 SHL2LIBS=$(LIB2TARGET)
 SHL2DEF=$(MISC)$/$(SHL2TARGET).def
 DEF2NAME=$(SHL2TARGET)
-SHL2VERSIONMAP=$(TARGET2).map
+DEFLIB2NAME=$(TARGET2)
+DEF2DEPN=	$(MISC)$/$(SHL2TARGET).flt \
+            $(SLB)$/$(TARGET2).lib
+# SHL2VERSIONMAP=$(TARGET2).map
+SHL2USE_EXPORTS=ordinal
 
 ALL: \
     $(LIB2TARGET)	\
@@ -198,3 +204,13 @@ RESLIB3SRSFILES=$(RES3FILELIST)
 # --- Targets ----------------------------------
 
 .INCLUDE : target.mk
+.IF "$(depend)"==""
+
+$(MISC)$/$(SHL2TARGET).flt: makefile.mk
+    @echo ------------------------------
+    @echo CLEAR_THE_FILE	> $@
+    @echo _TI				>>$@
+    @echo _real				>>$@
+.ENDIF
+
+
