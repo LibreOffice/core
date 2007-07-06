@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xfactory.hxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 18:36:24 $
+ *  last change: $Author: rt $ $Date: 2007-07-06 10:07:46 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -59,8 +59,9 @@
 #ifndef _CPPUHELPER_IMPLBASE5_HXX_
 #include <cppuhelper/implbase5.hxx>
 #endif
-
-#include <confighelper.hxx>
+#ifndef _COMPHELPER_MIMECONFIGHELPER_HXX_
+#include <comphelper/mimeconfighelper.hxx>
+#endif
 
 class OOoEmbeddedObjectFactory : public ::cppu::WeakImplHelper5<
                                                 ::com::sun::star::embed::XEmbedObjectCreator,
@@ -71,7 +72,7 @@ class OOoEmbeddedObjectFactory : public ::cppu::WeakImplHelper5<
 {
     ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > m_xFactory;
 
-    ConfigurationHelper m_aConfigHelper;
+    ::comphelper::MimeConfigurationHelper m_aConfigHelper;
 
 public:
     OOoEmbeddedObjectFactory(
@@ -118,7 +119,7 @@ class OOoSpecialEmbeddedObjectFactory : public ::cppu::WeakImplHelper2<
 {
     ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > m_xFactory;
 
-    ConfigurationHelper m_aConfigHelper;
+    ::comphelper::MimeConfigurationHelper m_aConfigHelper;
 
 public:
     OOoSpecialEmbeddedObjectFactory(
