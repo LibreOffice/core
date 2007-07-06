@@ -4,9 +4,9 @@
  *
  *  $RCSfile: interpr3.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: vg $ $Date: 2007-02-27 12:16:29 $
+ *  last change: $Author: rt $ $Date: 2007-07-06 12:35:41 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1073,8 +1073,10 @@ void ScInterpreter::ScNormDist()
         double sigma = GetDouble();                 // Stdabw
         double mue = GetDouble();                   // Mittelwert
         double x = GetDouble();                     // x
-        if (sigma <= 0.0)
-            SetIllegalArgument();
+        if (sigma < 0.0)
+            PushError( errIllegalArgument);
+        else if (sigma == 0.0)
+            PushError( errDivisionByZero);
         else if (kum == 0.0)                        // Dichte
             PushDouble(phi((x-mue)/sigma)/sigma);
         else                                        // Verteilung
@@ -1089,7 +1091,11 @@ void ScInterpreter::ScLogNormDist()
         double sigma = GetDouble();                 // Stdabw
         double mue = GetDouble();                   // Mittelwert
         double x = GetDouble();                     // x
-        if (sigma <= 0.0 || x <= 0.0)
+        if (sigma < 0.0)
+            PushError( errIllegalArgument);
+        else if (sigma == 0.0)
+            PushError( errDivisionByZero);
+        else if (x <= 0.0)
             SetIllegalArgument();
         else
             PushDouble(0.5 + gauss((log(x)-mue)/sigma));
@@ -1840,7 +1846,7 @@ void ScInterpreter::ScZTest()
         default : SetError(errIllegalParameter); break;
     }
     if (rValCount <= 1.0)
-        SetNoValue();
+        PushError( errDivisionByZero);
     else
     {
         mue = fSum/rValCount;
@@ -2282,6 +2288,12 @@ void ScInterpreter::ScKurt()
         return;
     }
 
+    if (fCount == 0.0)
+    {
+        PushError( errDivisionByZero);
+        return;
+    }
+
     double fMean = fSum / fCount;
 
     for (i = 0; i < values.size(); i++)
@@ -2291,9 +2303,9 @@ void ScInterpreter::ScKurt()
     double dx = 0.0;
     double xpower4 = 0.0;
 
-    if (fStdDev == 0)
+    if (fStdDev == 0.0)
     {
-        SetError(errIllegalArgument);
+        PushError( errDivisionByZero);
         return;
     }
 
@@ -2552,8 +2564,10 @@ void ScInterpreter::ScStandard()
         double sigma = GetDouble();
         double mue   = GetDouble();
         double x     = GetDouble();
-        if (sigma <= 0.0)
-            SetIllegalArgument();
+        if (sigma < 0.0)
+            PushError( errIllegalArgument);
+        else if (sigma == 0.0)
+            PushError( errDivisionByZero);
         else
             PushDouble((x-mue)/sigma);
     }
@@ -3554,7 +3568,7 @@ void ScInterpreter::ScProbability()
         pMatW->GetDimensions(nC2, nR2);
         if (nC1 != nC2 || nR1 != nR2 || nC1 == 0 || nR1 == 0 ||
             nC2 == 0 || nR2 == 0)
-            SetNV();
+            SetNA();
         else
         {
             double fSum = 0.0;
