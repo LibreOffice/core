@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xmlexprt.cxx,v $
  *
- *  $Revision: 1.205 $
+ *  $Revision: 1.206 $
  *
- *  last change: $Author: vg $ $Date: 2007-05-22 20:03:57 $
+ *  last change: $Author: rt $ $Date: 2007-07-06 10:14:07 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -2899,7 +2899,7 @@ void ScXMLExport::RemoveTempAnnotaionShape(const sal_Int32 nTable)
                 if (pObject->GetLayer() == SC_LAYER_HIDDEN)
                 {
                     pPage->RemoveObject(pObject->GetOrdNum());
-                    delete pObject;
+                    SdrObject::Free( pObject );
                 }
             }
         }
