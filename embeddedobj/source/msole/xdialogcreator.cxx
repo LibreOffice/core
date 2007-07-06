@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xdialogcreator.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: obo $ $Date: 2006-10-13 11:31:52 $
+ *  last change: $Author: rt $ $Date: 2007-07-06 10:11:44 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -65,10 +65,16 @@
 #include <comphelper/classids.hxx>
 
 #include "platform.h"
-#include <confighelper.hxx>
+#ifndef _COMPHELPER_MIMECONFIGHELPER_HXX_
+#include <comphelper/mimeconfighelper.hxx>
+#endif
+
+#include "xdialogcreator.hxx"
+#include "oleembobj.hxx"
+// LLA: tip from FS
+// #include <confighelper.hxx>
 #include <xdialogcreator.hxx>
 #include <oleembobj.hxx>
-#include <convert.hxx>
 
 
 #ifdef WNT
@@ -98,39 +104,39 @@ typedef UINT STDAPICALLTYPE OleUIInsertObjectA_Type(LPOLEUIINSERTOBJECTA);
 
 
 using namespace ::com::sun::star;
-
+using namespace ::comphelper;
 //-------------------------------------------------------------------------
 uno::Sequence< sal_Int8 > GetRelatedInternalID_Impl( const uno::Sequence< sal_Int8 >& aClassID )
 {
     // Writer
-    if ( ClassIDsEqual( aClassID, GetSequenceClassID( SO3_SW_OLE_EMBED_CLASSID_60 ) )
-      || ClassIDsEqual( aClassID, GetSequenceClassID( SO3_SW_OLE_EMBED_CLASSID_8 ) ) )
-        return GetSequenceClassID( SO3_SW_CLASSID_60 );
+    if ( MimeConfigurationHelper::ClassIDsEqual( aClassID, MimeConfigurationHelper::GetSequenceClassID( SO3_SW_OLE_EMBED_CLASSID_60 ) )
+      || MimeConfigurationHelper::ClassIDsEqual( aClassID, MimeConfigurationHelper::GetSequenceClassID( SO3_SW_OLE_EMBED_CLASSID_8 ) ) )
+        return MimeConfigurationHelper::GetSequenceClassID( SO3_SW_CLASSID_60 );
 
     // Calc
-    if ( ClassIDsEqual( aClassID, GetSequenceClassID( SO3_SC_OLE_EMBED_CLASSID_60 ) )
-      || ClassIDsEqual( aClassID, GetSequenceClassID( SO3_SC_OLE_EMBED_CLASSID_8 ) ) )
-        return GetSequenceClassID( SO3_SC_CLASSID_60 );
+    if ( MimeConfigurationHelper::ClassIDsEqual( aClassID, MimeConfigurationHelper::GetSequenceClassID( SO3_SC_OLE_EMBED_CLASSID_60 ) )
+      || MimeConfigurationHelper::ClassIDsEqual( aClassID, MimeConfigurationHelper::GetSequenceClassID( SO3_SC_OLE_EMBED_CLASSID_8 ) ) )
+        return MimeConfigurationHelper::GetSequenceClassID( SO3_SC_CLASSID_60 );
 
     // Impress
-    if ( ClassIDsEqual( aClassID, GetSequenceClassID( SO3_SIMPRESS_OLE_EMBED_CLASSID_60 ) )
-      || ClassIDsEqual( aClassID, GetSequenceClassID( SO3_SIMPRESS_OLE_EMBED_CLASSID_8 ) ) )
-        return GetSequenceClassID( SO3_SIMPRESS_CLASSID_60 );
+    if ( MimeConfigurationHelper::ClassIDsEqual( aClassID, MimeConfigurationHelper::GetSequenceClassID( SO3_SIMPRESS_OLE_EMBED_CLASSID_60 ) )
+      || MimeConfigurationHelper::ClassIDsEqual( aClassID, MimeConfigurationHelper::GetSequenceClassID( SO3_SIMPRESS_OLE_EMBED_CLASSID_8 ) ) )
+        return MimeConfigurationHelper::GetSequenceClassID( SO3_SIMPRESS_CLASSID_60 );
 
     // Draw
-    if ( ClassIDsEqual( aClassID, GetSequenceClassID( SO3_SDRAW_OLE_EMBED_CLASSID_60 ) )
-      || ClassIDsEqual( aClassID, GetSequenceClassID( SO3_SDRAW_OLE_EMBED_CLASSID_8 ) ) )
-        return GetSequenceClassID( SO3_SDRAW_CLASSID_60 );
+    if ( MimeConfigurationHelper::ClassIDsEqual( aClassID, MimeConfigurationHelper::GetSequenceClassID( SO3_SDRAW_OLE_EMBED_CLASSID_60 ) )
+      || MimeConfigurationHelper::ClassIDsEqual( aClassID, MimeConfigurationHelper::GetSequenceClassID( SO3_SDRAW_OLE_EMBED_CLASSID_8 ) ) )
+        return MimeConfigurationHelper::GetSequenceClassID( SO3_SDRAW_CLASSID_60 );
 
     // Chart
-    if ( ClassIDsEqual( aClassID, GetSequenceClassID( SO3_SCH_OLE_EMBED_CLASSID_60 ) )
-      || ClassIDsEqual( aClassID, GetSequenceClassID( SO3_SCH_OLE_EMBED_CLASSID_8 ) ) )
-        return GetSequenceClassID( SO3_SCH_CLASSID_60 );
+    if ( MimeConfigurationHelper::ClassIDsEqual( aClassID, MimeConfigurationHelper::GetSequenceClassID( SO3_SCH_OLE_EMBED_CLASSID_60 ) )
+      || MimeConfigurationHelper::ClassIDsEqual( aClassID, MimeConfigurationHelper::GetSequenceClassID( SO3_SCH_OLE_EMBED_CLASSID_8 ) ) )
+        return MimeConfigurationHelper::GetSequenceClassID( SO3_SCH_CLASSID_60 );
 
     // Math
-    if ( ClassIDsEqual( aClassID, GetSequenceClassID( SO3_SM_OLE_EMBED_CLASSID_60 ) )
-      || ClassIDsEqual( aClassID, GetSequenceClassID( SO3_SM_OLE_EMBED_CLASSID_8 ) ) )
-        return GetSequenceClassID( SO3_SM_CLASSID_60 );
+    if ( MimeConfigurationHelper::ClassIDsEqual( aClassID, MimeConfigurationHelper::GetSequenceClassID( SO3_SM_OLE_EMBED_CLASSID_60 ) )
+      || MimeConfigurationHelper::ClassIDsEqual( aClassID, MimeConfigurationHelper::GetSequenceClassID( SO3_SM_OLE_EMBED_CLASSID_8 ) ) )
+        return MimeConfigurationHelper::GetSequenceClassID( SO3_SM_CLASSID_60 );
 
     return aClassID;
 }
@@ -222,7 +228,7 @@ embed::InsertedObjectInfo SAL_CALL MSOLEDialogObjectCreator::createInstanceByDia
             if ( !xEmbCreator.is() )
                 throw uno::RuntimeException();
 
-            uno::Sequence< sal_Int8 > aClassID = GetSequenceClassID( io.clsid.Data1,
+            uno::Sequence< sal_Int8 > aClassID = MimeConfigurationHelper::GetSequenceClassID( io.clsid.Data1,
                                                                      io.clsid.Data2,
                                                                      io.clsid.Data3,
                                                                      io.clsid.Data4[0],
@@ -255,7 +261,7 @@ embed::InsertedObjectInfo SAL_CALL MSOLEDialogObjectCreator::createInstanceByDia
 
             // TODO: use config helper for type detection
             uno::Reference< embed::XEmbedObjectCreator > xEmbCreator;
-            ConfigurationHelper aHelper( m_xFactory );
+            ::comphelper::MimeConfigurationHelper aHelper( m_xFactory );
 
             if ( aHelper.AddFilterNameCheckOwnFile( aMediaDescr ) )
                 xEmbCreator = uno::Reference< embed::XEmbedObjectCreator >(
