@@ -4,9 +4,9 @@
  *
  *  $RCSfile: DbAdminImpl.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: kz $ $Date: 2007-05-10 10:22:47 $
+ *  last change: $Author: rt $ $Date: 2007-07-06 08:11:06 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -63,9 +63,6 @@
 #ifndef _SVTOOLS_LOGINDLG_HXX_
 #include <svtools/logindlg.hxx>
 #endif
-#ifndef _DBAUI_MODULE_DBU_HXX_
-#include "moduledbu.hxx"
-#endif
 #ifndef _DBHELPER_DBEXCEPTION_HXX_
 #include <connectivity/dbexception.hxx>
 #endif
@@ -117,6 +114,9 @@
 #endif
 #ifndef _DBAUI_STRINGLISTITEM_HXX_
 #include "stringlistitem.hxx"
+#endif
+#ifndef _DBAUI_MODULE_DBU_HXX_
+#include "moduledbu.hxx"
 #endif
 #ifndef DBAUI_TOOLS_HXX
 #include "UITools.hxx"
