@@ -4,9 +4,9 @@
  *
  *  $RCSfile: file_onlineupdate.scp,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: ihi $ $Date: 2006-08-04 10:08:29 $
+ *  last change: $Author: rt $ $Date: 2007-07-06 14:33:31 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -36,6 +36,8 @@
 #include "macros.inc"
 
 SPECIAL_UNO_COMPONENT_LIB_FILE_PATCH( gid_File_Lib_Updchk , updchk.uno )
+
+STD_RES_FILE_PATCH( gid_File_Res_Upd, upd )
 
 File gid_File_Registry_Spool_Oo_Office_Addons_Onlineupdate_Xcu
     TXT_FILE_BODY;
