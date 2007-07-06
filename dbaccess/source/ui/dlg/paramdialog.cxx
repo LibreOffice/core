@@ -4,9 +4,9 @@
  *
  *  $RCSfile: paramdialog.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: rt $ $Date: 2007-04-26 08:00:50 $
+ *  last change: $Author: rt $ $Date: 2007-07-06 08:18:49 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -44,6 +44,9 @@
 #endif
 #ifndef _DBU_DLG_HRC_
 #include "dbu_dlg.hrc"
+#endif
+#ifndef _DBAUI_COMMON_TYPES_HXX_
+#include "commontypes.hxx"
 #endif
 #ifndef _DBAUI_MODULE_DBU_HXX_
 #include "moduledbu.hxx"
@@ -451,4 +454,3 @@ DBG_NAME(OParameterDialog)
 //.........................................................................
 }   // namespace dbaui
 //.........................................................................
-
