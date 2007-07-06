@@ -4,9 +4,9 @@
  *
  *  $RCSfile: drawsh2.cxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: ihi $ $Date: 2006-12-19 17:33:56 $
+ *  last change: $Author: rt $ $Date: 2007-07-06 12:42:40 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -35,8 +35,6 @@
 
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_sc.hxx"
-
-
 
 //------------------------------------------------------------------
 #ifndef _COM_SUN_STAR_EMBED_EMBEDMISC_HPP_
@@ -67,7 +65,8 @@
 #include "viewdata.hxx"
 #include "sc.hrc"
 #include "tabvwsh.hxx"
-
+#include "drwlayer.hxx"
+#include "userdat.hxx"
 
 #ifndef _SVDOOLE2_HXX
 #include <svx/svdoole2.hxx>
@@ -208,9 +207,26 @@ void ScDrawShell::GetDrawFuncState( SfxItemSet& rSet )      // Funktionen disabl
     }
 
     BOOL bCanRename = FALSE;
-    if ( nMarkCount == 1 )
+    if ( nMarkCount > 1 )
+    {
+#ifdef ISSUE66550_HLINK_FOR_SHAPES
+        // no hypelink options for a selected group
+        rSet.DisableItem( SID_DRAW_HLINK_EDIT );
+        rSet.DisableItem( SID_DRAW_HLINK_DELETE );
+        rSet.DisableItem( SID_OPEN_HYPERLINK );
+#endif
+    }
+    else if ( nMarkCount == 1 )
     {
         SdrObject* pObj = rMarkList.GetMark( 0 )->GetMarkedSdrObj();
+#ifdef ISSUE66550_HLINK_FOR_SHAPES
+        ScMacroInfo* pInfo = ScDrawLayer::GetMacroInfo( pObj );
+        if ( !pInfo || (pInfo->GetHlink().getLength() == 0) )
+        {
+            rSet.DisableItem( SID_DRAW_HLINK_DELETE );
+            rSet.DisableItem( SID_OPEN_HYPERLINK );
+        }
+#endif
         SdrLayerID nLayerID = pObj->GetLayer();
         if ( nLayerID != SC_LAYER_INTERN )
             bCanRename = TRUE;                          // #i51351# anything except internal objects can be renamed
