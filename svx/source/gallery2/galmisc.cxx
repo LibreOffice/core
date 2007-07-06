@@ -4,9 +4,9 @@
  *
  *  $RCSfile: galmisc.cxx,v $
  *
- *  $Revision: 1.43 $
+ *  $Revision: 1.44 $
  *
- *  last change: $Author: hr $ $Date: 2007-06-27 18:20:18 $
+ *  last change: $Author: rt $ $Date: 2007-07-06 07:37:33 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -167,7 +167,7 @@ USHORT GalleryGraphicImport( const INetURLObject& rURL, Graphic& rGraphic,
 // - GallerySvDrawImport -
 // -----------------------
 
-BOOL GallerySvDrawImport( SvStream& rIStm, FmFormModel& rModel )
+BOOL GallerySvDrawImport( SvStream& rIStm, SdrModel& rModel )
 {
     UINT32  nVersion;
     BOOL    bRet = FALSE;
