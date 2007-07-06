@@ -4,9 +4,9 @@
  *
  *  $RCSfile: property.cxx,v $
  *
- *  $Revision: 1.36 $
+ *  $Revision: 1.37 $
  *
- *  last change: $Author: hr $ $Date: 2007-06-27 12:23:09 $
+ *  last change: $Author: rt $ $Date: 2007-07-06 14:28:22 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -168,8 +168,10 @@ ImplPropertyInfo* ImplGetPropertyInfos( sal_uInt16& rElementCount )
             DECL_PROP_2     ( "AccessibleName",         ACCESSIBLENAME,     ::rtl::OUString,    BOUND, MAYBEDEFAULT ),
             DECL_PROP_3     ( "Align",                  ALIGN,              sal_Int16,          BOUND, MAYBEDEFAULT, MAYBEVOID ),
             DECL_PROP_2     ( "Autocomplete",           AUTOCOMPLETE,       bool,               BOUND, MAYBEDEFAULT ),
+            DECL_PROP_2     ( "AutoHScroll",            AUTOHSCROLL,        bool,               BOUND, MAYBEDEFAULT ),
             DECL_PROP_1     ( "AutoMnemonics",          AUTOMNEMONICS,      bool,               BOUND ),
             DECL_PROP_2     ( "AutoToggle",             AUTOTOGGLE,         bool,               BOUND, MAYBEDEFAULT ),
+            DECL_PROP_2     ( "AutoVScroll",            AUTOVSCROLL,        bool,               BOUND, MAYBEDEFAULT ),
             DECL_PROP_3     ( "BackgroundColor",        BACKGROUNDCOLOR,    sal_Int32,          BOUND, MAYBEDEFAULT, MAYBEVOID ),
             DECL_DEP_PROP_2 ( "BlockIncrement",         BLOCKINCREMENT,     sal_Int32,          BOUND, MAYBEDEFAULT ),
             DECL_PROP_3     ( "Border",                 BORDER,             sal_Int16,          BOUND, MAYBEDEFAULT, MAYBEVOID ),
@@ -184,6 +186,7 @@ ImplPropertyInfo* ImplGetPropertyInfos( sal_uInt16& rElementCount )
             DECL_PROP_2     ( "DecimalAccuracy",        DECIMALACCURACY,    sal_Int16,          BOUND, MAYBEDEFAULT ),
             DECL_PROP_2     ( "DefaultButton",          DEFAULTBUTTON,      bool,               BOUND, MAYBEDEFAULT ),
             DECL_PROP_2     ( "DefaultControl",         DEFAULTCONTROL,     ::rtl::OUString,    BOUND, MAYBEDEFAULT ),
+            DECL_PROP_2     ( "DesktopAsParent",        DESKTOP_AS_PARENT,  bool,               BOUND, MAYBEDEFAULT ),
             DECL_PROP_2     ( "DisplayBackgroundColor", DISPLAYBACKGROUNDCOLOR, sal_Int32, BOUND, MAYBEVOID ),
             DECL_PROP_2     ( "Dropdown",               DROPDOWN,           bool,               BOUND, MAYBEDEFAULT ),
             DECL_PROP_2     ( "EchoChar",               ECHOCHAR,           sal_Int16,          BOUND, MAYBEDEFAULT ),
@@ -245,6 +248,7 @@ ImplPropertyInfo* ImplGetPropertyInfos( sal_uInt16& rElementCount )
             DECL_PROP_2     ( "MultiSelection",         MULTISELECTION,     bool,               BOUND, MAYBEDEFAULT ),
             DECL_PROP_2     ( "NativeWidgetLook",       NATIVE_WIDGET_LOOK, bool,               BOUND, MAYBEDEFAULT ),
             DECL_PROP_2     ( "Orientation",            ORIENTATION,        sal_Int32,          BOUND, MAYBEDEFAULT ),
+            DECL_PROP_2     ( "PaintTransparent",       PAINTTRANSPARENT,   bool,               BOUND, MAYBEDEFAULT ),
             DECL_PROP_2     ( "PluginParent",           PLUGINPARENT,       sal_Int64,          BOUND, MAYBEDEFAULT ),
             DECL_PROP_2     ( "PrependCurrencySymbol",  CURSYM_POSITION,    bool,               BOUND, MAYBEDEFAULT ),
             DECL_PROP_2     ( "Printable",              PRINTABLE,          bool,               BOUND, MAYBEDEFAULT ),
