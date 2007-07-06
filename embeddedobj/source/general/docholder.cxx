@@ -4,9 +4,9 @@
  *
  *  $RCSfile: docholder.cxx,v $
  *
- *  $Revision: 1.30 $
+ *  $Revision: 1.31 $
  *
- *  last change: $Author: vg $ $Date: 2007-05-22 19:35:56 $
+ *  last change: $Author: rt $ $Date: 2007-07-06 10:08:49 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -65,6 +65,12 @@
 #endif
 #ifndef _COM_SUN_STAR_CONTAINER_XNAMEACESS_HPP_
 #include <com/sun/star/container/XNameAccess.hpp>
+#endif
+#ifndef _COM_SUN_STAR_LANG_XSERVICEINFO_HPP_
+#include <com/sun/star/lang/XServiceInfo.hpp>
+#endif
+#ifndef _COM_SUN_STAR_LANG_XSERVICEINFO_HPP_
+#include <com/sun/star/lang/XServiceInfo.hpp>
 #endif
 #ifndef _COM_SUN_STAR_BEANS_XPROPERTYSET_HPP_
 #include <com/sun/star/beans/XPropertySet.hpp>
@@ -1085,31 +1091,23 @@ sal_Bool DocumentHolder::LoadDocToFrame( sal_Bool bInPlace )
                 aArgs[2].Name = ::rtl::OUString::createFromAscii( "PluginMode" );
                 aArgs[2].Value <<= sal_Int16(1);
             }
-
-            bool bIsChart = false;
-            uno::Reference< lang::XServiceInfo > xInfo( xDoc, uno::UNO_QUERY );
-            if( xInfo.is())
+            ::rtl::OUString sUrl;
+            uno::Reference< lang::XServiceInfo> xServiceInfo(xDoc,uno::UNO_QUERY);
+            if (    xServiceInfo.is()
+                &&  xServiceInfo->supportsService(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.report.ReportDefinition"))) )
             {
-                bIsChart = xInfo->supportsService(
-                    ::rtl::OUString::createFromAscii("com.sun.star.chart2.ChartDocument"));
+                sUrl = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(".component:DB/ReportDesign"));
             }
-
-            if( bIsChart )
-            {
-                xComponentLoader->loadComponentFromURL(
-                    ::rtl::OUString::createFromAscii( "private:factory/schart" ),
-                    ::rtl::OUString::createFromAscii( "_self" ),
-                    0,
-                    aArgs );
-            }
+            else if( xServiceInfo.is()
+                &&   xServiceInfo->supportsService( ::rtl::OUString::createFromAscii("com.sun.star.chart2.ChartDocument")) )
+                sUrl = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("private:factory/schart"));
             else
-            {
-                xComponentLoader->loadComponentFromURL( rtl::OUString::createFromAscii( "private:object" ),
+                sUrl = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("private:object"));
+
+            xComponentLoader->loadComponentFromURL( sUrl,
                                                         rtl::OUString::createFromAscii( "_self" ),
                                                         0,
                                                         aArgs );
-            }
-
 
 //             ::rtl::OUString aDocumentName;
 //             uno::Reference < frame::XModel > xDocument( m_xComponent, uno::UNO_QUERY );
