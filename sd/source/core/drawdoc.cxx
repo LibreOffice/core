@@ -4,9 +4,9 @@
  *
  *  $RCSfile: drawdoc.cxx,v $
  *
- *  $Revision: 1.82 $
+ *  $Revision: 1.83 $
  *
- *  last change: $Author: kz $ $Date: 2007-05-10 15:22:09 $
+ *  last change: $Author: rt $ $Date: 2007-07-06 09:47:02 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -745,7 +745,7 @@ void SdDrawDocument::NewOrLoadCompleted(DocCreationMode eMode)
                 {
                     pPage->RemoveObject( pPresObj->GetOrdNum() );
                     pPage->RemovePresObj(pPresObj);
-                    delete pPresObj;
+                    SdrObject::Free( pPresObj );
                 }
             }
         }
