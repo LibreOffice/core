@@ -4,9 +4,9 @@
  *
  *  $RCSfile: linkeddocuments.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: kz $ $Date: 2007-05-10 10:36:27 $
+ *  last change: $Author: rt $ $Date: 2007-07-06 08:37:12 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -42,12 +42,12 @@
 #ifndef _OSL_DIAGNOSE_H_
 #include <osl/diagnose.h>
 #endif
+#include <tools/diagnose_ex.h>
+
 #ifndef DBACCESS_SHARED_DBUSTRINGS_HRC
 #include "dbustrings.hrc"
 #endif
-#ifndef _SO_CLSIDS_HXX
-#include <so3/clsids.hxx>
-#endif
+#include <comphelper/classids.hxx>
 #ifndef _COM_SUN_STAR_LANG_XSINGLESERVICEFACTORY_HPP_
 #include <com/sun/star/lang/XSingleServiceFactory.hpp>
 #endif
@@ -90,9 +90,6 @@
 #ifndef _UCBHELPER_CONTENT_HXX
 #include <ucbhelper/content.hxx>
 #endif
-#ifndef _DBAUI_MODULE_DBU_HXX_
-#include "moduledbu.hxx"
-#endif
 #ifndef _DBU_MISC_HRC_
 #include "dbu_misc.hrc"
 #endif
@@ -107,6 +104,9 @@
 #endif
 #ifndef _SVTOOLS_TEMPLDLG_HXX
 #include <svtools/templdlg.hxx>
+#endif
+#ifndef _DBAUI_MODULE_DBU_HXX_
+#include "moduledbu.hxx"
 #endif
 // -----------------
 // for calling basic
@@ -138,6 +138,12 @@
 #ifndef _SV_WAITOBJ_HXX
 #include <vcl/waitobj.hxx>
 #endif
+#ifndef _COMPHELPER_MIMECONFIGHELPER_HXX_
+#include <comphelper/mimeconfighelper.hxx>
+#endif
+
+#include <connectivity/dbtools.hxx>
+#include <toolkit/helper/vclunohelper.hxx>
 
 //......................................................................
 namespace dbaui
@@ -248,8 +254,10 @@ namespace dbaui
             }
             xRet = xComponentLoader->loadComponentFromURL(_rLinkName,::rtl::OUString(),0,aArguments);
         }
-        catch(Exception& )
+        catch(Exception& e)
         {
+            (void)e;
+            throw;
         }
 
         return xRet;
@@ -338,6 +346,7 @@ namespace dbaui
         {
             case ID_FORM_NEW_TEXT:
                 aClassId = lcl_GetSequenceClassID(SO3_SW_CLASSID);
+                OSL_ENSURE(aClassId == comphelper::MimeConfigurationHelper::GetSequenceClassID(SO3_SW_CLASSID),"Not equal");
                 break;
 
             case ID_FORM_NEW_CALC:
@@ -346,6 +355,12 @@ namespace dbaui
 
             case ID_FORM_NEW_IMPRESS:
                 aClassId = lcl_GetSequenceClassID(SO3_SIMPRESS_CLASSID);
+                break;
+            case ID_REPORT_NEW_TEXT:
+                {
+                    ::comphelper::MimeConfigurationHelper aConfigHelper(m_xORB);
+                    aClassId = aConfigHelper.GetSequenceClassIDFromObjectName((::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Report"))));
+                }
                 break;
 
             case SID_DB_FORM_NEW_PILOT:
@@ -388,9 +403,10 @@ namespace dbaui
                 }
             }
         }
-        catch(const Exception&)
+        catch(const Exception& )
         {
-            OSL_ENSURE(sal_False, "OLinkedDocumentsAccess::newForm: caught an exception while loading the object!");
+            DBG_UNHANDLED_EXCEPTION();
+            // OSL_ENSURE(sal_False, "OLinkedDocumentsAccess::newForm: caught an exception while loading the object!");
         }
 
         return xNewDocument;
@@ -399,16 +415,49 @@ namespace dbaui
     //------------------------------------------------------------------
     Reference< XComponent > OLinkedDocumentsAccess::open(const ::rtl::OUString& _rLinkName,Reference< XComponent >& _xDefinition, EOpenMode _eOpenMode)
     {
-        Reference< XComponent > xRet = implOpen(_rLinkName,_xDefinition, _eOpenMode);
-        if ( !xRet.is() )
+        dbtools::SQLExceptionInfo aInfo;
+        Reference< XComponent > xRet;
+        try
         {
+            xRet = implOpen(_rLinkName,_xDefinition, _eOpenMode);
+            if ( !xRet.is() )
+            {
+                String sMessage = String(ModuleRes(STR_COULDNOTOPEN_LINKEDDOC));
+                sMessage.SearchAndReplaceAscii("$file$",_rLinkName);
+
+                com::sun::star::sdbc::SQLException aSQLException;
+                aSQLException.Message = sMessage;
+                // aSQLException.Context = e.Context;
+                aInfo = dbtools::SQLExceptionInfo(aSQLException);
+            }
+            return xRet;
+        }
+        catch(Exception& e)
+        {
+            com::sun::star::sdbc::SQLException aSQLException;
+            aSQLException.Message = e.Message;
+            aSQLException.Context = e.Context;
+            aInfo = dbtools::SQLExceptionInfo(aSQLException);
+
+            // more like a hack, insert an empty message
+            aInfo.prepend(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(" \n")));
+
             String sMessage = String(ModuleRes(STR_COULDNOTOPEN_LINKEDDOC));
             sMessage.SearchAndReplaceAscii("$file$",_rLinkName);
-            ErrorBox aError(m_pDialogParent, WB_OK, sMessage);
-            aError.Execute();
+            aInfo.prepend(sMessage);
+
+            // sMessage.SearchAndReplaceAscii("$file$",_rLinkName);
+            // ErrorBox aError(m_pDialogParent, WB_OK, sMessage);
+            // aError.Execute();
+        }
+        if (aInfo.isValid())
+        {
+            showError(aInfo, VCLUnoHelper::GetInterface(m_pDialogParent), m_xORB );
         }
         return xRet;
     }
+
+
 //......................................................................
 }   // namespace dbaui
 //......................................................................
