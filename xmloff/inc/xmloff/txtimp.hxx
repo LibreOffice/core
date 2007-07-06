@@ -4,9 +4,9 @@
  *
  *  $RCSfile: txtimp.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: vg $ $Date: 2007-04-11 13:29:38 $
+ *  last change: $Author: rt $ $Date: 2007-07-06 09:41:36 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -523,6 +523,7 @@ public:
     const ::rtl::OUString sServiceCombinedCharacters;
     const ::rtl::OUString sNumberingStyleName;
 
+    ::rtl::OUString sCellParaStyleDefault;
     XMLTextImportHelper(
             const ::com::sun::star::uno::Reference <
                 ::com::sun::star::frame::XModel>& rModel,
