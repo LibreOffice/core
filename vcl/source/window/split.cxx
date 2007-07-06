@@ -4,9 +4,9 @@
  *
  *  $RCSfile: split.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: hr $ $Date: 2007-06-27 20:33:30 $
+ *  last change: $Author: rt $ $Date: 2007-07-06 09:58:41 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -294,6 +294,7 @@ void Splitter::MouseButtonDown( const MouseEvent& rMEvt )
                 SetSplitPosPixel( aPos.Y() );
             mnLastSplitPos = nTemp;
             Split();
+            EndSplit();
         }
     }
     else
@@ -322,6 +323,7 @@ void Splitter::Tracking( const TrackingEvent& rTEvt )
                 mnLastSplitPos = 0;
                 Split();
             }
+            EndSplit();
         }
         else if ( mbDragFull )
         {
@@ -405,6 +407,7 @@ void Splitter::ImplKbdTracking( KeyCode aKeyCode )
         {
             SetSplitPosPixel( mnStartSplitPos );
             Split();
+            EndSplit();
         }
         mnStartSplitPos = 0;
     }
@@ -503,6 +506,14 @@ void Splitter::StartSplit()
 void Splitter::Split()
 {
     maSplitHdl.Call( this );
+}
+
+// -----------------------------------------------------------------------
+
+void Splitter::EndSplit()
+{
+    if ( maEndSplitHdl.IsSet() )
+        maEndSplitHdl.Call( this );
 }
 
 // -----------------------------------------------------------------------
@@ -621,6 +632,7 @@ void Splitter::ImplRestoreSplitter()
         SetSplitPosPixel( aPos.Y() );
     mnLastSplitPos = nTemp;
     Split();
+    EndSplit();
 }
 
 
@@ -719,6 +731,7 @@ void Splitter::KeyInput( const KeyEvent& rKEvt )
                     SetSplitPosPixel( aPos.Y() );
                 mnLastSplitPos = nTemp;
                 Split();
+                EndSplit();
 
                 // Shift-Del deletes both splitters
                 if( aKeyCode.IsShift() && pSibling )
