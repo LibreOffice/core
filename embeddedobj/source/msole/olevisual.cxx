@@ -4,9 +4,9 @@
  *
  *  $RCSfile: olevisual.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: mav $ $Date: 2006-10-16 06:20:56 $
+ *  last change: $Author: rt $ $Date: 2007-07-06 10:11:03 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -67,12 +67,13 @@
 
 #include <oleembobj.hxx>
 #include <olecomponent.hxx>
-#include <convert.hxx>
-
+#ifndef _COMPHELPER_MIMECONFIGHELPER_HXX_
+#include <comphelper/mimeconfighelper.hxx>
+#endif
 #include <comphelper/seqstream.hxx>
 
 using namespace ::com::sun::star;
-
+using namespace ::comphelper;
 
 embed::VisualRepresentation OleEmbeddedObject::GetVisualRepresentationInNativeFormat_Impl(
                     const uno::Reference< io::XStream > xCachedVisRepr )
@@ -143,7 +144,7 @@ void SAL_CALL OleEmbeddedObject::setVisualAreaSize( sal_Int64 nAspect, const awt
     // If cached size is not set, that means that this is the size initialization, so there is no need to set the real size
     sal_Bool bAllowToSetExtent =
       ( ( getStatus( nAspect ) & embed::EmbedMisc::MS_EMBED_RECOMPOSEONRESIZE )
-      && !ClassIDsEqual( m_aClassID, GetSequenceClassID( 0x00020906L, 0x0000, 0x0000,
+      && !MimeConfigurationHelper::ClassIDsEqual( m_aClassID, MimeConfigurationHelper::GetSequenceClassID( 0x00020906L, 0x0000, 0x0000,
                                                            0xc0,0x00,0x00,0x00,0x00,0x00,0x00,0x46 ) )
       && m_bHasCachedSize );
 
