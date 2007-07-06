@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xiescher.cxx,v $
  *
- *  $Revision: 1.52 $
+ *  $Revision: 1.53 $
  *
- *  last change: $Author: rt $ $Date: 2007-07-03 15:50:50 $
+ *  last change: $Author: rt $ $Date: 2007-07-06 10:13:36 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -237,7 +237,42 @@ using ::com::sun::star::script::ScriptEventDescriptor;
 using ::com::sun::star::table::CellAddress;
 using ::com::sun::star::table::CellRangeAddress;
 
-typedef ::std::auto_ptr< SdrObject > SdrObjectPtr;
+/** helper class which mimics the auto_ptr< SdrObject > semantics, but calls SdrObject::Free instead
+    of deleting the SdrObject directly
+*/
+class SdrObjectPtr
+{
+private:
+    SdrObject*  mpObject;
+
+public:
+    SdrObjectPtr() : mpObject( NULL ) { }
+    SdrObjectPtr( SdrObject* _pObject ) : mpObject( _pObject ) { }
+    ~SdrObjectPtr() { free(); }
+
+    const SdrObject* operator->() const { return mpObject; }
+          SdrObject* operator->()       { return mpObject; }
+
+    void reset( SdrObject* _pObject = NULL ) { free(); mpObject = _pObject; }
+
+    SdrObject* get() const { return mpObject; }
+    SdrObject& operator*() { return *mpObject; }
+
+    SdrObject* release() { SdrObject* pRet = get(); mpObject = NULL; return pRet; }
+
+    SdrObjectPtr& operator=( SdrObjectPtr& _rLHS )
+    {
+        SdrObject* pNew = _rLHS.release();
+        reset( pNew );
+        return *this;
+    }
+
+private:
+    SdrObjectPtr( const SdrObjectPtr& );            // not implemented
+
+private:
+    void free() { SdrObject::Free( mpObject ); }
+};
 
 // Text box data ==============================================================
 
