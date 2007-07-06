@@ -4,9 +4,9 @@
  *
  *  $RCSfile: svdopath.cxx,v $
  *
- *  $Revision: 1.42 $
+ *  $Revision: 1.43 $
  *
- *  last change: $Author: hr $ $Date: 2007-06-27 19:07:53 $
+ *  last change: $Author: rt $ $Date: 2007-07-06 13:22:13 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -64,6 +64,8 @@
 #include <svx/xflclit.hxx>
 #include <svx/svdogrp.hxx>
 
+#include "polypolygoneditor.hxx"
+
 #ifndef _SVX_XLNTRIT_HXX
 #include <svx/xlntrit.hxx>
 #endif
@@ -111,6 +113,8 @@ inline double ImplMMToTwips(double fVal) { return (fVal * (72.0 / 127.0)); }
 #ifndef _BGFX_POLYGON_B2DPOLYGONTOOLS_HXX
 #include <basegfx/polygon/b2dpolygontools.hxx>
 #endif
+
+using namespace sdr;
 
 inline USHORT GetPrevPnt(USHORT nPnt, USHORT nPntMax, FASTBOOL bClosed)
 {
@@ -914,7 +918,7 @@ FASTBOOL ImpPathForDragAndCreate::EndDrag(SdrDragStat& rDrag)
             basegfx::B2DPolyPolygon aTempPolyPolygon(aPathPolygon.getB2DPolyPolygon());
             sal_uInt32 nPoly,nPnt;
 
-            if(SdrPathObj::ImpFindPolyPnt(aTempPolyPolygon, rDrag.GetHdl()->GetSourceHdlNum(), nPoly, nPnt))
+            if(PolyPolygonEditor::GetRelativePolyPoint(aTempPolyPolygon, rDrag.GetHdl()->GetSourceHdlNum(), nPoly, nPnt))
             {
                 basegfx::B2DPolygon aCandidate(aTempPolyPolygon.getB2DPolygon(nPoly));
                 aCandidate.remove(nPnt);
@@ -1695,32 +1699,6 @@ SdrPathObj::SdrPathObj(SdrObjKind eNewKind, const basegfx::B2DPolyPolygon& rPath
 SdrPathObj::~SdrPathObj()
 {
     impDeleteDAC();
-}
-
-sal_Bool SdrPathObj::ImpFindPolyPnt(const basegfx::B2DPolyPolygon& rPoly, sal_uInt32 nAbsPnt, sal_uInt32& rPolyNum, sal_uInt32& rPointNum)
-{
-    const sal_uInt32 nPolyCount(rPoly.count());
-    sal_uInt32 nPolyNum(0L);
-
-    while(nPolyNum < nPolyCount)
-    {
-        const sal_uInt32 nPointCount(rPoly.getB2DPolygon(nPolyNum).count());
-
-        if(nAbsPnt < nPointCount)
-        {
-            rPolyNum = nPolyNum;
-            rPointNum = nAbsPnt;
-
-            return true;
-        }
-        else
-        {
-            nPolyNum++;
-            nAbsPnt -= nPointCount;
-        }
-    }
-
-    return false;
 }
 
 sal_Bool ImpIsLine(const basegfx::B2DPolyPolygon& rPolyPolygon)
@@ -2622,7 +2600,7 @@ sal_uInt32 SdrPathObj::GetSnapPointCount() const
 Point SdrPathObj::GetSnapPoint(sal_uInt32 nSnapPnt) const
 {
     sal_uInt32 nPoly,nPnt;
-    if(!ImpFindPolyPnt(GetPathPoly(), nSnapPnt, nPoly, nPnt))
+    if(!PolyPolygonEditor::GetRelativePolyPoint(GetPathPoly(), nSnapPnt, nPoly, nPnt))
     {
         DBG_ASSERT(FALSE,"SdrPathObj::GetSnapPoint: Punkt nSnapPnt nicht vorhanden!");
     }
@@ -2654,7 +2632,7 @@ Point SdrPathObj::GetPoint(sal_uInt32 nHdlNum) const
     Point aRetval;
     sal_uInt32 nPoly,nPnt;
 
-    if(ImpFindPolyPnt(GetPathPoly(), nHdlNum, nPoly, nPnt))
+    if(PolyPolygonEditor::GetRelativePolyPoint(GetPathPoly(), nHdlNum, nPoly, nPnt))
     {
         const basegfx::B2DPolygon aPoly(GetPathPoly().getB2DPolygon(nPoly));
         const basegfx::B2DPoint aPoint(aPoly.getB2DPoint(nPnt));
@@ -2668,7 +2646,7 @@ void SdrPathObj::NbcSetPoint(const Point& rPnt, sal_uInt32 nHdlNum)
 {
     sal_uInt32 nPoly,nPnt;
 
-    if(ImpFindPolyPnt(GetPathPoly(), nHdlNum, nPoly, nPnt))
+    if(PolyPolygonEditor::GetRelativePolyPoint(GetPathPoly(), nHdlNum, nPoly, nPnt))
     {
         basegfx::B2DPolygon aNewPolygon(GetPathPoly().getB2DPolygon(nPoly));
         aNewPolygon.setB2DPoint(nPnt, basegfx::B2DPoint(rPnt.X(), rPnt.Y()));
@@ -2837,7 +2815,7 @@ SdrObject* SdrPathObj::RipPoint(sal_uInt32 nHdlNum, sal_uInt32& rNewPt0Index)
     const basegfx::B2DPolyPolygon aLocalPolyPolygon(GetPathPoly());
     sal_uInt32 nPoly, nPnt;
 
-    if(ImpFindPolyPnt(aLocalPolyPolygon, nHdlNum, nPoly, nPnt))
+    if(PolyPolygonEditor::GetRelativePolyPoint(aLocalPolyPolygon, nHdlNum, nPoly, nPnt))
     {
         if(0L == nPoly)
         {
