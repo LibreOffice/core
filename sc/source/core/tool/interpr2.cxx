@@ -4,9 +4,9 @@
  *
  *  $RCSfile: interpr2.cxx,v $
  *
- *  $Revision: 1.32 $
+ *  $Revision: 1.33 $
  *
- *  last change: $Author: hr $ $Date: 2007-06-27 13:44:28 $
+ *  last change: $Author: rt $ $Date: 2007-07-06 12:35:26 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1641,20 +1641,20 @@ void ScInterpreter::ScBackSolver()
                 pDok->SetDirty( aVRange );
                 pFormula->Interpret();
                 if ( !bDoneIteration )
-                    SetError(NOVALUE);
+                    SetError(NOTAVAILABLE);
                 PushDouble(nX);
             }
             else
             {
                 if ( !bDoneIteration )
-                    SetError(NOVALUE);
+                    SetError(NOTAVAILABLE);
                 PushInt(0);         // falsche Zelltypen
             }
         }
         else
         {
             if ( !bDoneIteration )
-                SetError(NOVALUE);
+                SetError(NOTAVAILABLE);
             PushInt(0);             // nGlobalError
         }
     }
@@ -1941,7 +1941,7 @@ void ScInterpreter::ScDde()
                 PushError();
         }
         else
-            SetNV();
+            SetNA();
 
         pDok->DisableIdle( bOldDis );
     }
@@ -2151,7 +2151,7 @@ void ScInterpreter::ScConvert()
             else if ( ScGlobal::GetUnitConverter()->GetValue( fConv, aToUnit, aFromUnit ) )
                 PushDouble( fVal / fConv );
             else
-                SetNV();
+                SetNA();
         }
     }
 }
