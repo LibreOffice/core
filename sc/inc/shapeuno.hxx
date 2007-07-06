@@ -4,9 +4,9 @@
  *
  *  $RCSfile: shapeuno.hxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: obo $ $Date: 2006-03-27 09:26:00 $
+ *  last change: $Author: rt $ $Date: 2007-07-06 12:31:01 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -56,6 +56,8 @@
 #include <com/sun/star/lang/XTypeProvider.hpp>
 #endif
 
+#include <com/sun/star/document/XEventsSupplier.hpp>
+
 #ifndef _CPPUHELPER_WEAK_HXX_
 #include <cppuhelper/weak.hxx>
 #endif
@@ -71,6 +73,7 @@ namespace com { namespace sun { namespace star {
 
 class SdrObject;
 struct SvEventDescription;
+class ShapeUnoEventAccessImpl;
 
 //------------------------------------------------------------------------
 
@@ -82,7 +85,8 @@ class ScShapeObj : public ::cppu::OWeakObject,
                     public ::com::sun::star::beans::XPropertyState,
                     public ::com::sun::star::text::XTextContent,
                     public ::com::sun::star::text::XText,
-                    public ::com::sun::star::lang::XTypeProvider
+                    public ::com::sun::star::lang::XTypeProvider,
+                    public ::com::sun::star::document::XEventsSupplier
 {
 private:
     ::com::sun::star::uno::Reference< ::com::sun::star::uno::XAggregation > mxShapeAgg;
@@ -97,6 +101,8 @@ private:
 
     void                    GetShapePropertySet();
     void                    GetShapePropertyState();
+
+friend class ShapeUnoEventAccessImpl;
 
 public:
     static const SvEventDescription* GetSupportedMacroItems();
@@ -235,6 +241,10 @@ public:
     virtual ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Type > SAL_CALL getTypes()
                                 throw(::com::sun::star::uno::RuntimeException);
     virtual ::com::sun::star::uno::Sequence< sal_Int8 > SAL_CALL getImplementationId()
+                                throw(::com::sun::star::uno::RuntimeException);
+
+                            // XEventsSupplier
+    virtual ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameReplace > SAL_CALL getEvents()
                                 throw(::com::sun::star::uno::RuntimeException);
 };
 
