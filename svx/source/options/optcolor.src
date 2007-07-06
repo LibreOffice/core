@@ -4,9 +4,9 @@
  *
  *  $RCSfile: optcolor.src,v $
  *
- *  $Revision: 1.42 $
+ *  $Revision: 1.43 $
  *
- *  last change: $Author: hr $ $Date: 2007-06-27 18:37:38 $
+ *  last change: $Author: rt $ $Date: 2007-07-06 08:00:25 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -116,24 +116,14 @@ TabPage RID_SVXPAGE_COLORCONFIG
         };
         Window WN_SCROLL
         {
-#define _FT_WIDTH                       120
-#define _LINE_HEIGHT                    15
-#define _CB_WIDTH                       130
-#define _FT_XPOS                        14
-#define _CB_XPOS                        6
-#define _LB_XPOS                        139
-#define _LB_WIDTH                       50
-#define _WN_WIDTH                       30
-#define _WN_HEIGHT                      12
-#define _WN_XPOS                        195
 
 // misc defines to shorten defining of standard elements
 // standard sizes
 #define FT_SEP_SIZE                     Size = MAP_APPFONT ( _FT_WIDTH , 8 )
-#define FT_SIZE                         Size = MAP_APPFONT ( _FT_WIDTH , 10 )
-#define LB_SIZE                         Size = MAP_APPFONT ( _LB_WIDTH , 50 )
+#define FT_SIZE                         Size = MAP_APPFONT ( _FT_WIDTH , _FT_HEIGHT )
+#define LB_SIZE                         Size = MAP_APPFONT ( _LB_WIDTH , _LB_HEIGHT )
 #define WN_SIZE                         Size = MAP_APPFONT ( _WN_WIDTH , _WN_HEIGHT )
-#define CB_SIZE                         Size = MAP_APPFONT ( _CB_WIDTH , 10 )
+#define CB_SIZE                         Size = MAP_APPFONT ( _CB_WIDTH , _FT_HEIGHT )
 
 // combination of position and size
 #define POS_SIZE( POSX, LINENUM, CONTRL_SIZE )  Pos = MAP_APPFONT ( POSX , LINENUM * _LINE_HEIGHT ) ; CONTRL_SIZE
@@ -455,6 +445,11 @@ TabPage RID_SVXPAGE_COLORCONFIG
             };
             LB_WN( BASICERROR, 43 )
 
+            String ST_EXTENSION
+            {
+                Text [ de ] = "Farbeinstellungen der Erweiterungen" ;
+                Text [ en-US ] = "Colorsettings of the Extensions";
+            };
         };
     };
 };
