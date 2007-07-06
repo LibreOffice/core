@@ -4,9 +4,9 @@
  *
  *  $RCSfile: svddrgm1.hxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: hr $ $Date: 2007-06-27 18:59:01 $
+ *  last change: $Author: rt $ $Date: 2007-07-06 13:20:19 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -80,84 +80,6 @@ public:
     virtual Pointer GetPointer() const;
     virtual void Show();
     virtual void Hide();
-};
-
-//************************************************************
-//   SdrDragObjOwn
-//************************************************************
-
-class SdrDragObjOwn : public SdrDragMethod
-{
-public:
-    TYPEINFO();
-    SdrDragObjOwn(SdrDragView& rNewView): SdrDragMethod(rNewView) {}
-
-    virtual void TakeComment(String& rStr) const;
-
-    virtual FASTBOOL Beg();
-    virtual void Mov(const Point& rPnt);
-    virtual FASTBOOL End(FASTBOOL bCopy);
-    virtual Pointer GetPointer() const;
-
-    // for migration from XOR to overlay
-    virtual void CreateOverlayGeometry(::sdr::overlay::OverlayManager& rOverlayManager, ::sdr::overlay::OverlayObjectList& rOverlayList);
-
-    //SJ: added following method, otherwise the object won't be
-    //able to notice that dragging has been cancelled.
-    virtual void Brk();
-};
-
-//************************************************************
-//   SdrDragMove
-//************************************************************
-
-class SdrDragMove : public SdrDragMethod
-{
-    long                        nBestXSnap;
-    long                        nBestYSnap;
-    FASTBOOL                    bXSnapped;
-    FASTBOOL                    bYSnapped;
-
-private:
-    void ImpCheckSnap(const Point& rPt);
-
-public:
-    TYPEINFO();
-    SdrDragMove(SdrDragView& rNewView): SdrDragMethod(rNewView) {}
-
-    virtual void TakeComment(String& rStr) const;
-
-    virtual FASTBOOL Beg();
-    virtual void MovAllPoints();
-    virtual void MovPoint(Point& rPnt);
-//  virtual void MovPoint(Point& rPnt, const Point& rPvOfs);
-    virtual void Mov(const Point& rPnt);
-    virtual FASTBOOL End(FASTBOOL bCopy);
-    virtual FASTBOOL IsMoveOnly() const;
-    virtual Pointer GetPointer() const;
-};
-
-//************************************************************
-//   SdrDragResize
-//************************************************************
-
-class SdrDragResize : public SdrDragMethod
-{
-protected:
-    Fraction                    aXFact;
-    Fraction                    aYFact;
-
-public:
-    TYPEINFO();
-    SdrDragResize(SdrDragView& rNewView): SdrDragMethod(rNewView), aXFact(1,1), aYFact(1,1) {}
-
-    virtual void TakeComment(String& rStr) const;
-
-    virtual FASTBOOL Beg();
-    virtual void MovPoint(Point& rPnt);
-    virtual void Mov(const Point& rPnt);
-    virtual FASTBOOL End(FASTBOOL bCopy);
-    virtual Pointer GetPointer() const;
 };
 
 //************************************************************
