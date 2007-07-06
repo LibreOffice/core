@@ -4,9 +4,9 @@
  *
  *  $RCSfile: drviewse.cxx,v $
  *
- *  $Revision: 1.67 $
+ *  $Revision: 1.68 $
  *
- *  last change: $Author: hr $ $Date: 2007-06-27 15:47:33 $
+ *  last change: $Author: rt $ $Date: 2007-07-06 13:14:44 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -987,19 +987,18 @@ void DrawViewShell::FuSupport(SfxRequest& rReq)
                 ::sd::Window* pWindow = GetActiveWindow();
                 InfoBox(pWindow, String(SdResId(STR_ACTION_NOTPOSSIBLE) ) ).Execute();
             }
-            else if( HasCurrentFunction() )
+            else
             {
                 KeyCode aKCode(KEY_DELETE);
                 KeyEvent aKEvt( 0, aKCode);
 
-                if( !GetCurrentFunction()->KeyInput(aKEvt) && mpDrawView )
-                {
+                bool bConsumed = mpDrawView && mpDrawView->getSmartTags().KeyInput( aKEvt );
+
+                if( !bConsumed && HasCurrentFunction() )
+                    bConsumed = GetCurrentFunction()->KeyInput(aKEvt);
+
+                if( !bConsumed && mpDrawView )
                     mpDrawView->DeleteMarked();
-                }
-            }
-            else
-            {
-                mpDrawView->DeleteMarked();
             }
             rReq.Ignore ();
         }
