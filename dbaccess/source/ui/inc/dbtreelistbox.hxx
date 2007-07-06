@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dbtreelistbox.hxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: obo $ $Date: 2007-01-25 12:00:37 $
+ *  last change: $Author: rt $ $Date: 2007-07-06 08:27:45 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -38,9 +38,6 @@
 #ifndef _SVTREEBOX_HXX
 #include <svtools/svtreebx.hxx>
 #endif
-#ifndef _DBAUI_MODULE_DBU_HXX_
-#include "moduledbu.hxx"
-#endif
 #ifndef _SV_TIMER_HXX
 #include <vcl/timer.hxx>
 #endif
@@ -50,6 +47,10 @@
 #ifndef DBAUI_SCROLLHELPER_HXX
 #include "ScrollHelper.hxx"
 #endif
+#ifndef _DBAUI_MODULE_DBU_HXX_
+#include "moduledbu.hxx"
+#endif
+
 
 namespace dbaui
 {
@@ -71,8 +72,8 @@ namespace dbaui
     class IControlActionListener;
     class IController;
     class DBTreeListBox     :public SvTreeListBox
-                            ,public dbaui::OModuleClient
     {
+        OModuleClient        m_aModuleClient;
         OScrollHelper               m_aScrollHelper;
         Timer                       m_aTimer; // is needed for table updates
         Point                       m_aMousePos;
