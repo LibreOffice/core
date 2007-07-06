@@ -4,9 +4,9 @@
  *
  *  $RCSfile: sdview.cxx,v $
  *
- *  $Revision: 1.58 $
+ *  $Revision: 1.59 $
  *
- *  last change: $Author: hr $ $Date: 2007-06-26 11:47:26 $
+ *  last change: $Author: rt $ $Date: 2007-07-06 13:14:57 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -193,6 +193,7 @@ View::View(SdDrawDocument* pDrawDoc, OutputDevice* pOutDev,
     mnLockRedrawSmph(0),
     mpLockedRedraws(NULL),
     mbIsDropAllowed(TRUE),
+    maSmartTags(*this),
     mpClipboard (new ViewClipboard (*this))
 {
     // #i73602# Use default from the configuration
@@ -237,6 +238,8 @@ void View::ImplClearDrawDropMarker()
 
 View::~View()
 {
+    maSmartTags.Dispose();
+
     // release content of selection clipboard, if we own the content
     UpdateSelectionClipboard( TRUE );
 
@@ -522,6 +525,9 @@ void View::CompleteRedraw(OutputDevice* pOutDev, const Region& rReg, USHORT nPai
 void View::MarkListHasChanged()
 {
     FmFormView::MarkListHasChanged();
+
+    if( GetMarkedObjectCount() > 0 )
+        maSmartTags.deselect();
 }
 
 
@@ -1161,6 +1167,85 @@ bool View::isRecordingUndo() const
 {
     sd::UndoManager* pUndoManager = mpDoc ? mpDoc->GetUndoManager() : 0;
     return pUndoManager && pUndoManager->isInListAction();
+}
+
+void View::AddCustomHdl()
+{
+    maSmartTags.addCustomHandles( aHdl );
+}
+
+void View::updateHandles()
+{
+    AdjustMarkHdl();
+}
+
+SdrViewContext View::GetContext() const
+{
+    SdrViewContext eContext = SDRCONTEXT_STANDARD;
+    if( maSmartTags.getContext( eContext ) )
+        return eContext;
+    else
+        return FmFormView::GetContext();
+}
+
+BOOL View::HasMarkablePoints() const
+{
+    if( maSmartTags.HasMarkablePoints() )
+        return true;
+    else
+        return FmFormView::HasMarkablePoints();
+}
+
+ULONG View::GetMarkablePointCount() const
+{
+    ULONG nCount = FmFormView::GetMarkablePointCount();
+    nCount += maSmartTags.GetMarkablePointCount();
+    return nCount;
+}
+
+BOOL View::HasMarkedPoints() const
+{
+    if( maSmartTags.HasMarkedPoints() )
+        return true;
+    else
+        return FmFormView::HasMarkedPoints();
+}
+
+ULONG View::GetMarkedPointCount() const
+{
+    ULONG nCount = FmFormView::GetMarkedPointCount();
+    nCount += maSmartTags.GetMarkedPointCount();
+    return nCount;
+}
+
+BOOL View::IsPointMarkable(const SdrHdl& rHdl) const
+{
+    if( maSmartTags.IsPointMarkable( rHdl ) )
+        return true;
+    else
+        return FmFormView::IsPointMarkable( rHdl );
+}
+
+BOOL View::MarkPoint(SdrHdl& rHdl, BOOL bUnmark )
+{
+    if( maSmartTags.MarkPoint( rHdl, bUnmark ) )
+        return true;
+    else
+        return FmFormView::MarkPoint( rHdl, bUnmark );
+}
+
+BOOL View::MarkPoints(const Rectangle* pRect, BOOL bUnmark)
+{
+    if( maSmartTags.MarkPoints( pRect, bUnmark ) )
+        return true;
+    else
+        return FmFormView::MarkPoints( pRect, bUnmark );
+}
+
+void View::CheckPossibilities()
+{
+    FmFormView::CheckPossibilities();
+    maSmartTags.CheckPossibilities();
 }
 
 } // end of namespace sd
