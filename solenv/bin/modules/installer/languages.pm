@@ -4,9 +4,9 @@
 #
 #   $RCSfile: languages.pm,v $
 #
-#   $Revision: 1.9 $
+#   $Revision: 1.10 $
 #
-#   last change: $Author: hr $ $Date: 2007-01-02 15:23:23 $
+#   last change: $Author: rt $ $Date: 2007-07-06 12:25:24 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -157,11 +157,13 @@ sub get_all_languages_for_one_product
     installer::remover::remove_leading_and_ending_whitespaces(\$last);
     push(@languagearray, "$last");
 
-    # For some languages (that are not supported by Windows, english needs to be added to the installation set
-    # Languages saved in "@installer::globals::noMSLocaleLangs"
-
     if ( $installer::globals::iswindowsbuild )
     {
+        my $furthercheck = 1;
+
+        # For some languages (that are not supported by Windows, english needs to be added to the installation set
+        # Languages saved in "@installer::globals::noMSLocaleLangs"
+
         if ( all_elements_of_array1_in_array2(\@languagearray, \@installer::globals::noMSLocaleLangs) )
         {
             my $officestartlanguage = $languagearray[0];
@@ -171,6 +173,21 @@ sub get_all_languages_for_one_product
             $installer::globals::set_office_start_language  = 1;
             # setting the variable PRODUCTLANGUAGE, needed for Linguistic-ForceDefaultLanguage.xcu
             $allvariables->{'PRODUCTLANGUAGE'} = $officestartlanguage;
+            $furthercheck = 0;
+        }
+
+        # In bilingual installation sets, in which english is the first language,
+        # the Office start language shall be the second language.
+
+        if ( $furthercheck )
+        {
+            if (( $#languagearray == 1 ) && ( $languagearray[0] eq "en-US" ))
+            {
+                my $officestartlanguage = $languagearray[1];
+                $installer::globals::set_office_start_language  = 1;
+                # setting the variable PRODUCTLANGUAGE, needed for Linguistic-ForceDefaultLanguage.xcu
+                $allvariables->{'PRODUCTLANGUAGE'} = $officestartlanguage;
+            }
         }
     }
 
