@@ -4,9 +4,9 @@
  *
  *  $RCSfile: documentconstants.hxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 02:29:43 $
+ *  last change: $Author: rt $ $Date: 2007-07-06 10:18:34 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -79,6 +79,7 @@
 #define MIMETYPE_OASIS_OPENDOCUMENT_CHART_ASCII         "application/vnd.oasis.opendocument.chart"
 #define MIMETYPE_OASIS_OPENDOCUMENT_FORMULA_ASCII       "application/vnd.oasis.opendocument.formula"
 #define MIMETYPE_OASIS_OPENDOCUMENT_DATABASE_ASCII      "application/vnd.sun.xml.base"
+#define MIMETYPE_OASIS_OPENDOCUMENT_REPORT_ASCII        "application/vnd.sun.xml.report"
 
 #define MIMETYPE_OASIS_OPENDOCUMENT_TEXT                ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( MIMETYPE_OASIS_OPENDOCUMENT_TEXT_ASCII ) )
 #define MIMETYPE_OASIS_OPENDOCUMENT_TEXT_WEB            ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( MIMETYPE_OASIS_OPENDOCUMENT_TEXT_WEB_ASCII ) )
@@ -89,6 +90,7 @@
 #define MIMETYPE_OASIS_OPENDOCUMENT_CHART               ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( MIMETYPE_OASIS_OPENDOCUMENT_CHART_ASCII ) )
 #define MIMETYPE_OASIS_OPENDOCUMENT_FORMULA             ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( MIMETYPE_OASIS_OPENDOCUMENT_FORMULA_ASCII ) )
 #define MIMETYPE_OASIS_OPENDOCUMENT_DATABASE            ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( MIMETYPE_OASIS_OPENDOCUMENT_DATABASE_ASCII ) )
+#define MIMETYPE_OASIS_OPENDOCUMENT_REPORT              ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( MIMETYPE_OASIS_OPENDOCUMENT_REPORT_ASCII ) )
 
 // template formats of SO8
 #define MIMETYPE_OASIS_OPENDOCUMENT_TEXT_TEMPLATE_ASCII          "application/vnd.oasis.opendocument.text-template"
