@@ -4,9 +4,9 @@
  *
  *  $RCSfile: XPackageManager.idl,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: vg $ $Date: 2007-01-18 14:51:40 $
+ *  last change: $Author: rt $ $Date: 2007-07-06 12:08:42 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -204,6 +204,22 @@ interface XPackageManager
                 com::sun::star::ucb::CommandFailedException,
                 com::sun::star::ucb::CommandAbortedException,
                 com::sun::star::lang::IllegalArgumentException);
+
+    /** indicates that this implementation cannot be used for tasks
+        which require write access to the location where the extensions
+        are installed.
+        <p>
+        Normally one would call a method and handle the exception
+        if writing failed. However, a GUI interface may need to know beforehand
+        if writing is allowed. For example, the Extension Manager dialog
+        needs to enable / disable the Add button depending if the user has
+        write permission. Only the XPackageManager implementation knows the
+        location of the installed extensions. Therefore it is not possible
+        to check &quot;externally&quot; for write permission.
+        </p>
+    */
+    boolean isReadOnly();
+
 };
 
 }; }; }; };
