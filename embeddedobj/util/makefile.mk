@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.9 $
+#   $Revision: 1.10 $
 #
-#   last change: $Author: hr $ $Date: 2007-06-26 16:05:41 $
+#   last change: $Author: rt $ $Date: 2007-07-06 10:11:58 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -58,9 +58,7 @@ LIB1OBJFILES= \
         $(SLO)$/xcreator.obj\
         $(SLO)$/xfactory.obj\
         $(SLO)$/register.obj\
-        $(SLO)$/convert.obj\
         $(SLO)$/docholder.obj\
-        $(SLO)$/confighelper.obj\
         $(SLO)$/intercept.obj
 
 LIB1TARGET=$(SLB)$/$(TARGET).lib
