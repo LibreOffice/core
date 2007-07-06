@@ -4,9 +4,9 @@
  *
  *  $RCSfile: svdmodel.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: vg $ $Date: 2007-04-11 16:21:54 $
+ *  last change: $Author: rt $ $Date: 2007-07-06 07:29:56 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -279,6 +279,32 @@ protected:
     UINT32          nMaxUndoCount;
     FASTBOOL        bSaveNative;
     BOOL            bStarDrawPreviewMode;
+
+
+//////////////////////////////////////////////////////////////////////////////
+// sdr::Comment interface
+private:
+    // the next unique comment ID, used for counting added comments. Initialized
+    // to 0. UI shows one more due to the fact that 0 is a no-no for users.
+    sal_uInt32                                          mnUniqueCommentID;
+
+public:
+    // create a new, unique comment ID
+    sal_uInt32 GetNextUniqueCommentID();
+
+    // get the author name
+    ::rtl::OUString GetDocumentAuthorName() const;
+
+    // for export
+    sal_uInt32 GetUniqueCommentID() const { return mnUniqueCommentID; }
+
+    // for import
+    void SetUniqueCommentID(sal_uInt32 nNewID) { if(nNewID != mnUniqueCommentID) { mnUniqueCommentID = nNewID; } }
+    /** cl: added this for OJ to complete his reporting engine, does not work
+        correctly so only enable it for his model */
+    bool IsAllowShapePropertyChangeListener() const;
+    void SetAllowShapePropertyChangeListener( bool bAllow );
+
     UINT16          nStarDrawPreviewMasterPageNum;
     // Reserven fuer kompatible Erweiterungen
 //-/    SfxItemPool*    pUndoItemPool;
@@ -731,29 +757,10 @@ public:
     /** copies the items from the source set to the destination set. Both sets must have
         same ranges but can have different pools. If pNewModel is optional. If it is null,
         this model is used. */
+
     void MigrateItemSet( const SfxItemSet* pSourceSet, SfxItemSet* pDestSet, SdrModel* pNewModel );
 
     bool IsInDestruction() const;
-
-//////////////////////////////////////////////////////////////////////////////
-// sdr::Comment interface
-private:
-    // the next unique comment ID, used for counting added comments. Initialized
-    // to 0. UI shows one more due to the fact that 0 is a no-no for users.
-    sal_uInt32                                          mnUniqueCommentID;
-
-public:
-    // create a new, unique comment ID
-    sal_uInt32 GetNextUniqueCommentID();
-
-    // get the author name
-    ::rtl::OUString GetDocumentAuthorName() const;
-
-    // for export
-    sal_uInt32 GetUniqueCommentID() const { return mnUniqueCommentID; }
-
-    // for import
-    void SetUniqueCommentID(sal_uInt32 nNewID) { if(nNewID != mnUniqueCommentID) { mnUniqueCommentID = nNewID; } }
 };
 
 typedef tools::WeakReference< SdrModel > SdrModelWeakRef;
