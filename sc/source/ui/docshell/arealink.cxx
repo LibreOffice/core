@@ -4,9 +4,9 @@
  *
  *  $RCSfile: arealink.cxx,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: rt $ $Date: 2007-04-26 09:51:40 $
+ *  last change: $Author: rt $ $Date: 2007-07-06 12:41:42 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -72,9 +72,9 @@
 struct AreaLink_Impl
 {
     ScDocShell* m_pDocSh;
-    Link        m_aEndEditLink;
+    AbstractScLinkedAreaDlg* m_pDialog;
 
-    AreaLink_Impl() : m_pDocSh( NULL ) {}
+    AreaLink_Impl() : m_pDocSh( NULL ), m_pDialog( NULL ) {}
 };
 
 TYPEINIT1(ScAreaLink,::sfx2::SvBaseLink);
@@ -121,6 +121,7 @@ void __EXPORT ScAreaLink::Edit(Window* pParent, const Link& /* rEndEditHdl */ )
     AbstractScLinkedAreaDlg* pDlg = pFact->CreateScLinkedAreaDlg( pParent, RID_SCDLG_LINKAREA);
     DBG_ASSERT(pDlg, "Dialog create fail!");//CHINA001
     pDlg->InitFromOldLink( aFileName, aFilterName, aOptions, aSourceArea, GetRefreshDelay() );
+    pImpl->m_pDialog = pDlg;
     pDlg->StartExecuteModal( LINK( this, ScAreaLink, AreaEndEditHdl ) );
 }
 
@@ -507,21 +508,23 @@ IMPL_LINK( ScAreaLink, RefreshHdl, ScAreaLink*, EMPTYARG )
     return nRes;
 }
 
-IMPL_LINK( ScAreaLink, AreaEndEditHdl, AbstractScLinkedAreaDlg*, _pDlg )
+IMPL_LINK( ScAreaLink, AreaEndEditHdl, void*, EMPTYARG )
 {
-    if ( _pDlg->GetResult() == RET_OK )
+    //  #i76514# can't use link argument to access the dialog,
+    //  because it's the ScLinkedAreaDlg, not AbstractScLinkedAreaDlg
+
+    if ( pImpl->m_pDialog && pImpl->m_pDialog->GetResult() == RET_OK )
     {
-        aOptions = _pDlg->GetOptions();
-        Refresh( _pDlg->GetURL(), _pDlg->GetFilter(), _pDlg->GetSource(), _pDlg->GetRefresh() );
+        aOptions = pImpl->m_pDialog->GetOptions();
+        Refresh( pImpl->m_pDialog->GetURL(), pImpl->m_pDialog->GetFilter(),
+                 pImpl->m_pDialog->GetSource(), pImpl->m_pDialog->GetRefresh() );
 
         //  copy source data from members (set in Refresh) into link name for dialog
         String aNewLinkName;
         sfx2::MakeLnkName( aNewLinkName, NULL, aFileName, aSourceArea, &aFilterName );
         SetName( aNewLinkName );
     }
-
-    if ( pImpl->m_aEndEditLink.IsSet() )
-        pImpl->m_aEndEditLink.Call( this );
+    pImpl->m_pDialog = NULL;    // dialog is deleted with parent
 
     return 0;
 }
