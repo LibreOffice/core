@@ -4,9 +4,9 @@
  *
  *  $RCSfile: txtparae.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: vg $ $Date: 2007-04-11 13:29:49 $
+ *  last change: $Author: rt $ $Date: 2007-07-06 12:09:12 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -211,6 +211,7 @@ protected:
     const ::rtl::OUString sServerMap;
     const ::rtl::OUString sShapeService;
     const ::rtl::OUString sSizeType;
+    const ::rtl::OUString sSoftPageBreak;
     const ::rtl::OUString sStartAt;
     const ::rtl::OUString sSuffix;
     const ::rtl::OUString sTableService;
@@ -448,6 +449,11 @@ protected:
         sal_Bool bAutoStyles);
 
     void exportIndexMark(
+        const ::com::sun::star::uno::Reference<
+            ::com::sun::star::beans::XPropertySet> & rPropSet,
+        sal_Bool bAutoStyles);
+
+    void exportSoftPageBreak(
         const ::com::sun::star::uno::Reference<
             ::com::sun::star::beans::XPropertySet> & rPropSet,
         sal_Bool bAutoStyles);
