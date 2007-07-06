@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.22 $
+#   $Revision: 1.23 $
 #
-#   last change: $Author: vg $ $Date: 2007-05-22 15:20:06 $
+#   last change: $Author: rt $ $Date: 2007-07-06 13:19:54 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -37,6 +37,7 @@ PRJ=..$/..
 
 PRJNAME=svx
 TARGET=svdraw
+ENABLE_EXCEPTIONS=TRUE
 
 # --- Settings -----------------------------------------------------
 
@@ -45,7 +46,7 @@ TARGET=svdraw
 
 # --- Files --------------------------------------------------------
 
-EXCEPTIONSFILES= \
+SLOFILES=\
          $(SLO)$/svdxcgv.obj		 \
          $(SLO)$/svdpage.obj         \
          $(SLO)$/svdoimp.obj         \
@@ -65,10 +66,7 @@ EXCEPTIONSFILES= \
          $(SLO)$/svdpntv.obj         \
          $(SLO)$/svdsnpv.obj         \
          $(SLO)$/svdview.obj         \
-         $(SLO)$/svdoashp.obj
-
-SLOFILES=\
-         $(EXCEPTIONSFILES)          \
+         $(SLO)$/svdoashp.obj		 \
          $(SLO)$/svdoattr.obj        \
          $(SLO)$/svdotext.obj        \
          $(SLO)$/svdotxat.obj        \
@@ -118,6 +116,7 @@ SLOFILES=\
          $(SLO)$/clonelist.obj		 \
          $(SLO)$/ActionDescriptionProvider.obj \
          $(SLO)$/svdedtv.obj         \
+         $(SLO)$/polypolygoneditor.obj \
          $(SLO)$/svdomedia.obj
 
 SRS1NAME=svdstr
