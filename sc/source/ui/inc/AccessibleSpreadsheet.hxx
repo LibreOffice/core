@@ -4,9 +4,9 @@
  *
  *  $RCSfile: AccessibleSpreadsheet.hxx,v $
  *
- *  $Revision: 1.28 $
+ *  $Revision: 1.29 $
  *
- *  last change: $Author: vg $ $Date: 2007-02-27 13:18:54 $
+ *  last change: $Author: rt $ $Date: 2007-07-06 12:43:45 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -79,7 +79,17 @@ public:
         SCTAB   nTab,
         ScSplitPos eSplitPos);
 protected:
+    ScAccessibleSpreadsheet(
+        ScAccessibleSpreadsheet& rParent,
+        const ScRange& rRange );
+
     virtual ~ScAccessibleSpreadsheet();
+
+    void ConstructScAccessibleSpreadsheet(
+        ScAccessibleDocument* pAccDoc,
+        ScTabViewShell* pViewShell,
+        SCTAB nTab,
+        ScSplitPos eSplitPos);
 
     using ScAccessibleTableBase::IsDefunc;
 
@@ -104,6 +114,16 @@ public:
     virtual void Notify( SfxBroadcaster& rBC, const SfxHint& rHint );
 
     ///=====  XAccessibleTable  ================================================
+
+    /// Returns the row headers as an AccessibleTable.
+    virtual ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessibleTable > SAL_CALL
+                getAccessibleRowHeaders(  )
+                    throw (::com::sun::star::uno::RuntimeException);
+
+    /// Returns the column headers as an AccessibleTable.
+    virtual ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessibleTable > SAL_CALL
+                getAccessibleColumnHeaders(  )
+                    throw (::com::sun::star::uno::RuntimeException);
 
     /// Returns the selected rows in a table.
     virtual ::com::sun::star::uno::Sequence< sal_Int32 > SAL_CALL
@@ -251,6 +271,8 @@ private:
     Rectangle       maVisCells;
     ScSplitPos      meSplitPos;
     ScAddress       maActiveCell;
+    SCTAB           mnTab;
+    sal_Bool        mbIsSpreadsheet;
     sal_Bool        mbHasSelection;
     sal_Bool        mbDelIns;
     sal_Bool        mbIsFocusSend;
