@@ -4,9 +4,9 @@
  *
  *  $RCSfile: txtparai.cxx,v $
  *
- *  $Revision: 1.60 $
+ *  $Revision: 1.61 $
  *
- *  last change: $Author: rt $ $Date: 2007-07-06 09:45:43 $
+ *  last change: $Author: rt $ $Date: 2007-07-09 07:54:03 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -121,7 +121,7 @@
 #ifndef _XMLTEXTFRAMECONTEXT_HXX
 #include "XMLTextFrameContext.hxx"
 #endif
-#include "XMLCharContext.hxx"
+#include <xmloff/XMLCharContext.hxx>
 #ifndef _XMLTEXTFRAMEHYPERLINKCONTEXT_HXX
 #include "XMLTextFrameHyperlinkContext.hxx"
 #endif
