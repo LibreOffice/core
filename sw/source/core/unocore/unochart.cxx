@@ -4,9 +4,9 @@
  *
  *  $RCSfile: unochart.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2007-07-05 13:41:06 $
+ *  last change: $Author: rt $ $Date: 2007-07-09 12:29:49 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1660,14 +1660,14 @@ void SwChartDataProvider::AddRowCols(
             Set_DataSequenceRef_t::iterator aIt( rSet.begin() );
             while (aIt != rSet.end())
             {
-                Reference< chart2::data::XTextualDataSequence > xRef( Reference< chart2::data::XDataSequence >(*aIt), UNO_QUERY );
+                uno::Reference< chart2::data::XTextualDataSequence > xRef( uno::Reference< chart2::data::XDataSequence >(*aIt), uno::UNO_QUERY );
                 if (xRef.is())
                 {
                     const sal_Int32 nLen = xRef->getTextualData().getLength();
                     if (nLen > 1) // value data-sequence ?
                     {
                         SwChartDataSequence *pDataSeq = 0;
-                        uno::Reference< XUnoTunnel > xTunnel( xRef, uno::UNO_QUERY );
+                        uno::Reference< lang::XUnoTunnel > xTunnel( xRef, uno::UNO_QUERY );
                         if(xTunnel.is())
                         {
                             pDataSeq = reinterpret_cast< SwChartDataSequence * >(
@@ -1804,7 +1804,7 @@ rtl::OUString SAL_CALL SwChartDataProvider::convertRangeFromXML( const rtl::OUSt
         if (aFirstFoundTable.getLength() == 0)
             aFirstFoundTable = aCellRange.aTableName;
         if (aCellRange.aTableName != aFirstFoundTable)
-            throw IllegalArgumentException();
+            throw lang::IllegalArgumentException();
 
         OUString aTmp( aCellRange.aTableName );
         aTmp += OUString::valueOf((sal_Unicode) '.');
