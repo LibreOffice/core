@@ -6,9 +6,9 @@
  *
  *  $RCSfile: RptDef.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2007-07-09 11:56:02 $
+ *  last change: $Author: rt $ $Date: 2007-07-09 15:47:00 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -102,7 +102,7 @@ REPORTDESIGN_DLLPUBLIC ::com::sun::star::uno::Reference< ::com::sun::star::style
 // -----------------------------------------------------------------------------
 template < typename T> T getStyleProperty(const ::com::sun::star::uno::Reference< ::com::sun::star::report::XReportDefinition>& _xReport,const ::rtl::OUString& _sPropertyName)
 {
-    T nReturn;
+    T nReturn = T();
     ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet> xProp(getUsedStyle(_xReport),::com::sun::star::uno::UNO_QUERY_THROW);
     xProp->getPropertyValue(_sPropertyName) >>= nReturn;
     return nReturn;
