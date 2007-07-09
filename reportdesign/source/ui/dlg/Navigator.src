@@ -1,0 +1,203 @@
+/*************************************************************************
+ *
+ *  OpenOffice.org - a multi-platform office productivity suite
+ *
+ *  $RCSfile: Navigator.src,v $
+ *
+ *  $Revision: 1.2 $
+ *
+ *  last change: $Author: rt $ $Date: 2007-07-09 11:56:29 $
+ *
+ *  The Contents of this file are made available subject to
+ *  the terms of GNU Lesser General Public License Version 2.1.
+ *
+ *
+ *    GNU Lesser General Public License Version 2.1
+ *    =============================================
+ *    Copyright 2005 by Sun Microsystems, Inc.
+ *    901 San Antonio Road, Palo Alto, CA 94303, USA
+ *
+ *    This library is free software; you can redistribute it and/or
+ *    modify it under the terms of the GNU Lesser General Public
+ *    License version 2.1, as published by the Free Software Foundation.
+ *
+ *    This library is distributed in the hope that it will be useful,
+ *    but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ *    Lesser General Public License for more details.
+ *
+ *    You should have received a copy of the GNU Lesser General Public
+ *    License along with this library; if not, write to the Free Software
+ *    Foundation, Inc., 59 Temple Place, Suite 330, Boston,
+ *    MA  02111-1307  USA
+ *
+ ************************************************************************/
+#include "RptResId.hrc"
+#include "helpids.hrc"
+#include "rptui_slotid.hrc"
+#ifndef _GLOBLMN_HRC
+#include <svx/globlmn.hrc>
+#endif
+#ifndef _SBASLTID_HRC
+#include <svx/svxids.hrc>
+#endif
+#include <svtools/solar.hrc>
+
+#define RID_SVXIMG_COLLAPSEDNODE                    (RID_FORMS_START + 2)
+#define RID_SVXIMG_EXPANDEDNODE                     (RID_FORMS_START + 3)
+#define RID_SVXIMG_FORMS                            (RID_FORMS_START +13)
+
+FloatingWindow RID_NAVIGATOR
+{
+    OutputSize = TRUE ;
+    SVLook = TRUE ;
+    Size = MAP_APPFONT ( 200 , 250 ) ;
+    Text [ de ] = "Berichtsnavigator" ;
+    Text [ en-US ] = "Report navigator" ;
+    HelpId = HID_NAVIGATOR_DLG;
+    Moveable = TRUE ;
+    Closeable = TRUE ;
+    Sizeable = TRUE;
+
+    Control 1
+    {
+        Pos = MAP_APPFONT( 0, 0 );
+        Size = MAP_APPFONT( 200, 250 );
+        Border = TRUE;
+        TabStop = TRUE;
+    };
+};
+#define NAVIGATOR_IMAGEIDS \
+    IdList = \
+    { \
+        SID_SELECT_REPORT;\
+        SID_FM_FIXEDTEXT ; \
+        SID_INSERT_HFIXEDLINE ; \
+        SID_INSERT_VFIXEDLINE;\
+        SID_FM_IMAGECONTROL ; \
+        SID_FM_EDIT ; \
+        SID_RPT_NEW_FUNCTION;\
+        SID_REPORTHEADERFOOTER;\
+        SID_PAGEHEADERFOOTER;\
+        SID_GROUPHEADER;\
+        SID_GROUPFOOTER;\
+        RID_SVXIMG_COLLAPSEDNODE ; \
+        RID_SVXIMG_EXPANDEDNODE ; \
+        SID_SORTINGANDGROUPING;\
+        SID_DRAWTBX_CS_BASIC;\
+        SID_GROUP;\
+        SID_ICON_DETAIL;\
+    }; \
+    IdCount = 17
+
+ImageList RID_SVXIMGLIST_RPTEXPL
+{
+    Prefix = "sx";
+    MaskColor = Color { Red = 0xff00 ; Green = 0x0000 ; Blue = 0xff00 ; };
+    NAVIGATOR_IMAGEIDS;
+};
+
+ImageList RID_SVXIMGLIST_RPTEXPL_HC
+{
+    Prefix = "sxh";
+    MaskColor = Color { Red = 0xff00 ; Green = 0x0000 ; Blue = 0xff00 ; };
+    NAVIGATOR_IMAGEIDS;
+};
+
+String RID_STR_FUNCTIONS
+{
+    Text [ de ] = "Funktionen" ;
+    Text [ en-US ] = "Functions" ;
+};
+String RID_STR_GROUPS
+{
+    Text [ de ] = "Gruppen" ;
+    Text [ en-US ] = "Groups" ;
+};
+Menu RID_MENU_NAVIGATOR
+{
+    ItemList =
+    {
+        MenuItem
+        {
+            Identifier = SID_SORTINGANDGROUPING;
+            HelpId = SID_SORTINGANDGROUPING ;
+            Command = ".uno:DbSortingAndGrouping";
+            Text [ de ] = "Sortierung und Gruppierung..." ;
+            Text [ en-US ] = "Sorting and Grouping...";
+        };
+        MenuItem
+        {
+            Separator = TRUE;
+        };
+        MenuItem
+        {
+            Identifier = SID_PAGEHEADERFOOTER;
+            HelpId = SID_PAGEHEADERFOOTER ;
+            Command = ".uno:PageHeaderFooter";
+            Checkable = TRUE;
+            Text [ de ] = "Seitenkopf, -fuß..." ;
+            Text [ en-US ] = "Page Header/Footer...";
+        };
+        MenuItem
+        {
+            Identifier = SID_REPORTHEADERFOOTER;
+            HelpId = SID_REPORTHEADERFOOTER ;
+            Command = ".uno:ReportHeaderFooter";
+            Checkable = TRUE;
+            Text [ de ] = "Berichtskopf, -fuß..." ;
+            Text [ en-US ] = "Report Header/Footer...";
+        };
+        MenuItem
+        {
+            Separator = TRUE;
+        };
+        MenuItem
+        {
+            Identifier = SID_RPT_NEW_FUNCTION;
+            HelpId = SID_RPT_NEW_FUNCTION;
+            Command = ".uno:NewFunction";
+            Text [ de ] = "Neue Funktion" ;
+            Text [ en-US ] = "New Function";
+        };
+        MenuItem
+        {
+            Separator = TRUE;
+        };
+        MenuItem
+        {
+            Identifier = SID_SHOW_PROPERTYBROWSER;
+            HelpId = SID_SHOW_PROPERTYBROWSER ;
+            Command = ".uno:FormProperties";
+            Text [ de ] = "Eigenschaften..." ;
+            Text [ en-US ] = "Properties...";
+        };
+        MenuItem
+        {
+            Separator = TRUE;
+        };
+        MenuItem
+        {
+            ITEM_EDIT_DELETE
+        };
+/*
+        MenuItem
+        {
+            Separator = TRUE;
+        };
+        MenuItem
+        {
+            ITEM_EDIT_CUT
+        };
+        MenuItem
+        {
+            ITEM_EDIT_COPY
+        };
+        MenuItem
+        {
+            ITEM_EDIT_PASTE
+        };
+*/
+    };
+};
+

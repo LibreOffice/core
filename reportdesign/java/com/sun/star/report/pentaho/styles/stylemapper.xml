@@ -1,0 +1,116 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+          OpenOffice.org - a multi-platform office productivity suite
+
+        $RCSfile: stylemapper.xml,v $
+
+        $Revision: 1.2 $
+
+        last change: $Author: rt $ $Date: 2007-07-09 11:56:12 $
+
+        The Contents of this file are made available subject to
+        the terms of GNU Lesser General Public License Version 2.1.
+
+
+        GNU Lesser General Public License Version 2.1
+        =============================================
+        Copyright 2007 by Sun Microsystems, Inc.
+        901 San Antonio Road, Palo Alto, CA 94303, USA
+        Copyright 2007 by Pentaho Corporation
+
+        This library is free software; you can redistribute it and/or
+        modify it under the terms of the GNU Lesser General Public
+        License version 2.1, as published by the Free Software Foundation.
+
+        This library is distributed in the hope that it will be useful,
+        but WITHOUT ANY WARRANTY; without even the implied warranty of
+        MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+        Lesser General Public License for more details.
+
+        You should have received a copy of the GNU Lesser General Public
+        License along with this library; if not, write to the Free Software
+        Foundation, Inc., 59 Temple Place, Suite 330, Boston,
+        MA  02111-1307  USA
+  -->
+<style-mapper-definition
+    xmlns="http://jfreereport.sourceforge.net/namespaces/engine/openoffice/stylemapper">
+  <mapping element-namespace="urn:oasis:names:tc:opendocument:xmlns:text:1.0"
+           element-name="p"
+           attribute-namespace="urn:oasis:names:tc:opendocument:xmlns:text:1.0"
+           attribute-name="style-name"
+           style-family="paragraph"
+           type="styleNameRef"/>
+  <mapping element-namespace="urn:oasis:names:tc:opendocument:xmlns:text:1.0"
+           element-name="p"
+           attribute-namespace="urn:oasis:names:tc:opendocument:xmlns:text:1.0"
+           attribute-name="class-names"
+           style-family="paragraph"
+           type="styleNameRefs"/>
+  <mapping element-namespace="urn:oasis:names:tc:opendocument:xmlns:text:1.0"
+           element-name="list"
+           attribute-namespace="urn:oasis:names:tc:opendocument:xmlns:text:1.0"
+           attribute-name="style-name"
+           style-family="paragraph"
+           type="styleNameRef"/>
+  <mapping element-namespace="urn:oasis:names:tc:opendocument:xmlns:text:1.0"
+           element-name="section"
+           attribute-namespace="urn:oasis:names:tc:opendocument:xmlns:text:1.0"
+           attribute-name="style-name"
+           style-family="section"
+           type="styleNameRef"/>
+  <mapping element-namespace="urn:oasis:names:tc:opendocument:xmlns:text:1.0"
+           element-name="span"
+           attribute-namespace="urn:oasis:names:tc:opendocument:xmlns:text:1.0"
+           attribute-name="style-name"
+           style-family="text"
+           type="styleNameRef"/>
+  <mapping element-namespace="urn:oasis:names:tc:opendocument:xmlns:text:1.0"
+           element-name="span"
+           attribute-namespace="urn:oasis:names:tc:opendocument:xmlns:text:1.0"
+           attribute-name="class-names"
+           style-family="text"
+           type="styleNameRefs"/>
+  <mapping element-namespace="urn:oasis:names:tc:opendocument:xmlns:text:1.0"
+           element-name="ruby"
+           attribute-namespace="urn:oasis:names:tc:opendocument:xmlns:text:1.0"
+           attribute-name="style-name"
+           style-family="ruby"
+           type="styleNameRef"/>
+  <mapping element-namespace="urn:oasis:names:tc:opendocument:xmlns:text:1.0"
+           element-name="ruby-text"
+           attribute-namespace="urn:oasis:names:tc:opendocument:xmlns:text:1.0"
+           attribute-name="style-name"
+           style-family="paragraph"
+           type="styleNameRef"/>
+  <mapping element-namespace="urn:oasis:names:tc:opendocument:xmlns:table:1.0"
+           element-name="table"
+           attribute-namespace="urn:oasis:names:tc:opendocument:xmlns:table:1.0"
+           attribute-name="style-name"
+           style-family="table"
+           type="styleNameRef"/>
+  <mapping element-namespace="urn:oasis:names:tc:opendocument:xmlns:table:1.0"
+           element-name="table-column"
+           attribute-namespace="urn:oasis:names:tc:opendocument:xmlns:table:1.0"
+           attribute-name="style-name"
+           style-family="table-column"
+           type="styleNameRef"/>
+  <mapping element-namespace="urn:oasis:names:tc:opendocument:xmlns:table:1.0"
+           element-name="table-row"
+           attribute-namespace="urn:oasis:names:tc:opendocument:xmlns:table:1.0"
+           attribute-name="style-name"
+           style-family="table-row"
+           type="styleNameRef"/>
+  <mapping element-namespace="urn:oasis:names:tc:opendocument:xmlns:table:1.0"
+           element-name="table-cell"
+           attribute-namespace="urn:oasis:names:tc:opendocument:xmlns:table:1.0"
+           attribute-name="style-name"
+           style-family="table-cell"
+           type="styleNameRef"/>
+  <mapping element-namespace="urn:oasis:names:tc:opendocument:xmlns:drawing:1.0"
+           element-name="custom-shape"
+           attribute-namespace="urn:oasis:names:tc:opendocument:xmlns:drawing:1.0"
+           attribute-name="style-name"
+           style-family="graphic"
+           type="styleNameRef"/>
+</style-mapper-definition>

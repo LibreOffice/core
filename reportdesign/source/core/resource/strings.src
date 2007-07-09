@@ -1,0 +1,119 @@
+/*************************************************************************
+ *
+ *  OpenOffice.org - a multi-platform office productivity suite
+ *
+ *  $RCSfile: strings.src,v $
+ *
+ *  $Revision: 1.2 $
+ *
+ *  last change: $Author: rt $ $Date: 2007-07-09 11:56:16 $
+ *
+ *  The Contents of this file are made available subject to
+ *  the terms of GNU Lesser General Public License Version 2.1.
+ *
+ *
+ *    GNU Lesser General Public License Version 2.1
+ *    =============================================
+ *    Copyright 2005 by Sun Microsystems, Inc.
+ *    901 San Antonio Road, Palo Alto, CA 94303, USA
+ *
+ *    This library is free software; you can redistribute it and/or
+ *    modify it under the terms of the GNU Lesser General Public
+ *    License version 2.1, as published by the Free Software Foundation.
+ *
+ *    This library is distributed in the hope that it will be useful,
+ *    but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ *    Lesser General Public License for more details.
+ *
+ *    You should have received a copy of the GNU Lesser General Public
+ *    License along with this library; if not, write to the Free Software
+ *    Foundation, Inc., 59 Temple Place, Suite 330, Boston,
+ *    MA  02111-1307  USA
+ *
+ ************************************************************************/
+
+#include "core_resource.hrc"
+
+String RID_STR_DETAIL
+{
+    Text [ de ] = "Detail";
+    Text [ en-US ] = "Detail";
+};
+String RID_STR_PAGE_HEADER
+{
+    Text [ de ] = "Seitenkopf";
+    Text [ en-US ] = "Page Header";
+};
+String RID_STR_PAGE_FOOTER
+{
+    Text [ de ] = "Seitenfuß";
+    Text [ en-US ] = "Page Footer";
+};
+String RID_STR_GROUP_HEADER
+{
+    Text [ de ] = "Gruppenkopf";
+    Text [ en-US ] = "Group Header";
+};
+String RID_STR_GROUP_FOOTER
+{
+    Text [ de ] = "Gruppenfuß";
+    Text [ en-US ] = "Group Footer";
+};
+String RID_STR_REPORT_HEADER
+{
+    Text [ de ] = "Berichtskopf";
+    Text [ en-US ] = "Report Header";
+};
+String RID_STR_REPORT_FOOTER
+{
+    Text [ de ] = "Berichtsfuß";
+    Text [ en-US ] = "Report Footer";
+};
+
+String RID_STR_PROPERTY_CHANGE_NOT_ALLOWED
+{
+    Text [ de ] = "Der Name '#1' ist bereits vergeben und kann nicht erneut vergeben werden.";
+    Text [ en-US ] = "The name '#1' already exists and can not be asssigned again.";
+};
+
+String RID_STR_ERROR_WRONG_ARGUMENT
+{
+    Text [ de ] = "Sie haben versucht ein ungültiges Argument zu setzen. Gültige Argumente entnehmen Sie bitte '#1'.";
+    Text [ en-US ] = "You tried to set an illegal argument. Please have a look at '#1' for valid arguments.";
+};
+String RID_STR_ARGUMENT_IS_NULL
+{
+    Text [ de ] = "Das Element ist ungültig.";
+    Text [ en-US ] = "The element is invalid.";
+};
+String RID_STR_FIXEDTEXT
+{
+    Text [ de ] = "LabelField";
+    Text [ en-US ] = "LabelField";
+};
+String RID_STR_FORMATTEDFIELD
+{
+    Text [ de ] = "FormattedField";
+    Text [ en-US ] = "FormattedField";
+};
+String RID_STR_IMAGECONTROL
+{
+    Text [ de ] = "ImageControl";
+    Text [ en-US ] = "ImageControl";
+};
+String RID_STR_REPORT
+{
+    Text [ de ] = "Report";
+    Text [ en-US ] = "Report";
+};
+String RID_STR_SHAPE
+{
+    Text [ de ] = "Shape";
+    Text [ en-US ] = "Shape";
+};
+String RID_STR_FIXEDLINE
+{
+    Text [ de ] = "FixedLine";
+    Text [ en-US ] = "FixedLine";
+};

@@ -1,0 +1,71 @@
+/*************************************************************************
+ *
+ *  OpenOffice.org - a multi-platform office productivity suite
+ *
+ *  $RCSfile: uistrings.hrc,v $
+ *
+ *  $Revision: 1.2 $
+ *
+ *  last change: $Author: rt $ $Date: 2007-07-09 11:56:28 $
+ *
+ *  The Contents of this file are made available subject to
+ *  the terms of GNU Lesser General Public License Version 2.1.
+ *
+ *
+ *    GNU Lesser General Public License Version 2.1
+ *    =============================================
+ *    Copyright 2005 by Sun Microsystems, Inc.
+ *    901 San Antonio Road, Palo Alto, CA 94303, USA
+ *
+ *    This library is free software; you can redistribute it and/or
+ *    modify it under the terms of the GNU Lesser General Public
+ *    License version 2.1, as published by the Free Software Foundation.
+ *
+ *    This library is distributed in the hope that it will be useful,
+ *    but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ *    Lesser General Public License for more details.
+ *
+ *    You should have received a copy of the GNU Lesser General Public
+ *    License along with this library; if not, write to the Free Software
+ *    Foundation, Inc., 59 Temple Place, Suite 330, Boston,
+ *    MA  02111-1307  USA
+ *
+ ************************************************************************/
+#ifndef REPORTDESIGN_SHARED_UISTRINGS_HRC
+#define REPORTDESIGN_SHARED_UISTRINGS_HRC
+
+#ifndef _RTL_USTRING_HXX_
+#include <rtl/ustring.hxx>
+#endif
+
+namespace rptui
+{
+#define STRINGCONSTANTS_INCLUDED_INDIRECT
+#include "stringconstants.hrc"
+#undef STRINGCONSTANTS_INCLUDED_INDIRECT
+
+DECLARE_CONSTASCII_USTRING(PROPERTY_REPORTNAME          );
+DECLARE_CONSTASCII_USTRING(CFG_REPORTDESIGNER           );
+DECLARE_CONSTASCII_USTRING(DBREPORTHEADER               );
+DECLARE_CONSTASCII_USTRING(DBREPORTFOOTER               );
+DECLARE_CONSTASCII_USTRING(DBPAGEHEADER                 );
+DECLARE_CONSTASCII_USTRING(DBPAGEFOOTER                 );
+DECLARE_CONSTASCII_USTRING(DBGROUPHEADER                );
+DECLARE_CONSTASCII_USTRING(DBGROUPFOOTER                );
+DECLARE_CONSTASCII_USTRING(DBCOLUMNHEADER               );
+DECLARE_CONSTASCII_USTRING(DBCOLUMNFOOTER               );
+DECLARE_CONSTASCII_USTRING(DBDETAIL                     );
+DECLARE_CONSTASCII_USTRING(REPORTCONTROLFORMAT          );
+DECLARE_CONSTASCII_USTRING(CURRENT_WINDOW               );
+DECLARE_CONSTASCII_USTRING(PROPERTY_FONTCOLOR           );
+DECLARE_CONSTASCII_USTRING(PROPERTY_EMPTY_IS_NULL       );
+DECLARE_CONSTASCII_USTRING(PROPERTY_FILTERPROPOSAL      );
+DECLARE_CONSTASCII_USTRING(PROPERTY_POSITION            );
+DECLARE_CONSTASCII_USTRING(PROPERTY_FORMATKEYDATE       );
+DECLARE_CONSTASCII_USTRING(PROPERTY_FORMATKEYTIME       );
+
+}
+
+#endif // REPORTDESIGN_SHARED_UISTRINGS_HRC
+

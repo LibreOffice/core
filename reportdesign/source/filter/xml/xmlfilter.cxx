@@ -1,0 +1,1068 @@
+/*************************************************************************
+ *
+ *  OpenOffice.org - a multi-platform office productivity suite
+ *
+ *  $RCSfile: xmlfilter.cxx,v $
+ *
+ *  $Revision: 1.2 $
+ *
+ *  last change: $Author: rt $ $Date: 2007-07-09 11:56:18 $
+ *
+ *  The Contents of this file are made available subject to
+ *  the terms of GNU Lesser General Public License Version 2.1.
+ *
+ *
+ *    GNU Lesser General Public License Version 2.1
+ *    =============================================
+ *    Copyright 2005 by Sun Microsystems, Inc.
+ *    901 San Antonio Road, Palo Alto, CA 94303, USA
+ *
+ *    This library is free software; you can redistribute it and/or
+ *    modify it under the terms of the GNU Lesser General Public
+ *    License version 2.1, as published by the Free Software Foundation.
+ *
+ *    This library is distributed in the hope that it will be useful,
+ *    but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ *    Lesser General Public License for more details.
+ *
+ *    You should have received a copy of the GNU Lesser General Public
+ *    License along with this library; if not, write to the Free Software
+ *    Foundation, Inc., 59 Temple Place, Suite 330, Boston,
+ *    MA  02111-1307  USA
+ *
+ ************************************************************************/
+#include "precompiled_reportdesign.hxx"
+
+#ifndef _COM_SUN_STAR_PACKAGES_ZIP_ZIPIOEXCEPTION_HPP_
+#include <com/sun/star/packages/zip/ZipIOException.hpp>
+#endif
+#ifndef _COM_SUN_STAR_EMBED_ELEMENTMODES_HPP_
+#include <com/sun/star/embed/ElementModes.hpp>
+#endif
+#ifndef _COM_SUN_STAR_SDB_XOFFICEDATABASEDOCUMENT_HPP_
+#include <com/sun/star/sdb/XOfficeDatabaseDocument.hpp>
+#endif
+#ifndef RPT_XMLFILTER_HXX
+#include "xmlfilter.hxx"
+#endif
+#ifndef RPT_XMLGROUP_HXX
+#include "xmlGroup.hxx"
+#endif
+#ifndef RPT_XMLREPORT_HXX
+#include "xmlReport.hxx"
+#endif
+#ifndef RPT_XMLHELPER_HXX
+#include "xmlHelper.hxx"
+#endif
+#ifndef _SV_SVAPP_HXX
+#include <vcl/svapp.hxx>
+#endif
+#ifndef _SV_WINDOW_HXX
+#include <vcl/window.hxx>
+#endif
+#ifndef _CONNECTIVITY_DBTOOLS_HXX_
+#include <connectivity/dbtools.hxx>
+#endif
+#ifndef _XMLOFF_XMLNMSPE_HXX
+#include <xmloff/xmlnmspe.hxx>
+#endif
+#ifndef _XMLOFF_XMLTOKEN_HXX
+#include <xmloff/xmltoken.hxx>
+#endif
+#ifndef _XMLOFF_TEXTIMP_HXX_
+#include <xmloff/txtimp.hxx>
+#endif
+#ifndef _XMLOFF_NMSPMAP_HXX
+#include <xmloff/nmspmap.hxx>
+#endif
+#ifndef _XMLOFF_XMLFONTSTYLESCONTEXT_HXX_
+#include <xmloff/XMLFontStylesContext.hxx>
+#endif
+#ifndef _RTL_LOGFILE_HXX_
+#include <rtl/logfile.hxx>
+#endif
+#ifndef _COM_SUN_STAR_XML_SAX_INPUTSOURCE_HPP_
+#include <com/sun/star/xml/sax/InputSource.hpp>
+#endif
+#ifndef _COM_SUN_STAR_XML_SAX_XPARSER_HPP_
+#include <com/sun/star/xml/sax/XParser.hpp>
+#endif
+#ifndef _XMLOFF_PROGRESSBARHELPER_HXX
+#include <xmloff/ProgressBarHelper.hxx>
+#endif
+#ifndef _SFXDOCFILE_HXX //autogen wg. SfxMedium
+#include <sfx2/docfile.hxx>
+#endif
+#ifndef _COM_SUN_STAR_IO_XINPUTSTREAM_HPP_
+#include <com/sun/star/io/XInputStream.hpp>
+#endif
+#ifndef _COM_SUN_STAR_UNO_XNAMINGSERVICE_HPP_
+#include <com/sun/star/uno/XNamingService.hpp>
+#endif
+#ifndef _URLOBJ_HXX //autogen wg. INetURLObject
+#include <tools/urlobj.hxx>
+#endif
+#ifndef _XMLOFF_DOCUMENTSETTINGSCONTEXT_HXX
+#include <xmloff/DocumentSettingsContext.hxx>
+#endif
+#ifndef _XMLOFF_XMLUCONV_HXX
+#include <xmloff/xmluconv.hxx>
+#endif
+#ifndef _COM_SUN_STAR_UTIL_XMODIFIABLE_HPP_
+#include <com/sun/star/util/XModifiable.hpp>
+#endif
+#ifndef _SV_SVAPP_HXX //autogen
+#include <vcl/svapp.hxx>
+#endif
+#ifndef _VOS_MUTEX_HXX_
+#include <vos/mutex.hxx>
+#endif
+#ifndef _SFXECODE_HXX
+#include <svtools/sfxecode.hxx>
+#endif
+#ifndef RPT_XMLENUMS_HXX
+#include "xmlEnums.hxx"
+#endif
+#ifndef RPT_XMLSTYLEIMPORT_HXX
+#include "xmlStyleImport.hxx"
+#endif
+#ifndef REPORTDESIGN_SHARED_XMLSTRINGS_HRC
+#include "xmlstrings.hrc"
+#endif
+#ifndef RPT_XMLPROPHANDLER_HXX
+#include "xmlPropertyHandler.hxx"
+#endif
+#include <xmloff/txtprmap.hxx>
+#ifndef REPORTDESIGN_API_REPORTDEFINITION_HXX
+#include "ReportDefinition.hxx"
+#endif
+
+
+
+//--------------------------------------------------------------------------
+namespace rptxml
+{
+using namespace ::com::sun::star::uno;
+using ::com::sun::star::uno::Reference;
+using namespace ::com::sun::star;
+using namespace ::com::sun::star::container;
+using namespace ::com::sun::star::lang;
+using namespace ::com::sun::star::beans;
+using namespace ::com::sun::star::document;
+using namespace ::com::sun::star::text;
+using namespace ::com::sun::star::io;
+using namespace ::com::sun::star::report;
+using namespace ::com::sun::star::xml::sax;
+using namespace xmloff;
+    sal_Char __READONLY_DATA sXML_np__rpt[] = "_report";
+    sal_Char __READONLY_DATA sXML_np___rpt[] = "__report";
+
+    using namespace ::com::sun::star::util;
+
+class RptMLMasterStylesContext_Impl : public XMLTextMasterStylesContext
+{
+    ORptFilter& m_rImport;
+    RptMLMasterStylesContext_Impl(const RptMLMasterStylesContext_Impl&);
+    void operator =(const RptMLMasterStylesContext_Impl&);
+public:
+
+    TYPEINFO();
+
+    RptMLMasterStylesContext_Impl(
+            ORptFilter& rImport, sal_uInt16 nPrfx,
+            const ::rtl::OUString& rLName ,
+            const uno::Reference< xml::sax::XAttributeList > & xAttrList );
+    virtual ~RptMLMasterStylesContext_Impl();
+    virtual void EndElement();
+};
+
+TYPEINIT1( RptMLMasterStylesContext_Impl, XMLTextMasterStylesContext );
+
+RptMLMasterStylesContext_Impl::RptMLMasterStylesContext_Impl(
+        ORptFilter& rImport, sal_uInt16 nPrfx,
+        const ::rtl::OUString& rLName ,
+        const uno::Reference< xml::sax::XAttributeList > & xAttrList ) :
+    XMLTextMasterStylesContext( rImport, nPrfx, rLName, xAttrList )
+    ,m_rImport(rImport)
+{
+}
+
+RptMLMasterStylesContext_Impl::~RptMLMasterStylesContext_Impl()
+{
+}
+
+void RptMLMasterStylesContext_Impl::EndElement()
+{
+    FinishStyles( sal_True );
+    m_rImport.FinishStyles();
+}
+    /// read a component (file + filter version)
+sal_Int32 ReadThroughComponent(
+    const uno::Reference<XInputStream>& xInputStream,
+    const uno::Reference<XComponent>& xModelComponent,
+    const sal_Char* /*pStreamName*/,
+    const uno::Reference<XMultiServiceFactory> & rFactory,
+    const uno::Reference< XDocumentHandler >& _xFilter,
+    sal_Bool /*bEncrypted*/ )
+{
+    DBG_ASSERT(xInputStream.is(), "input stream missing");
+    DBG_ASSERT(xModelComponent.is(), "document missing");
+    DBG_ASSERT(rFactory.is(), "factory missing");
+
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLog, "rptxml", "oj", "ReadThroughComponent" );
+
+    // prepare ParserInputSrouce
+    InputSource aParserInput;
+    aParserInput.aInputStream = xInputStream;
+
+    // get parser
+    uno::Reference< XParser > xParser(
+        rFactory->createInstance(
+            ::rtl::OUString::createFromAscii("com.sun.star.xml.sax.Parser") ),
+        UNO_QUERY );
+    DBG_ASSERT( xParser.is(), "Can't create parser" );
+    if( !xParser.is() )
+        return 1;
+    RTL_LOGFILE_CONTEXT_TRACE( aLog, "parser created" );
+
+    // get filter
+    DBG_ASSERT( _xFilter.is(), "Can't instantiate filter component." );
+    if( !_xFilter.is() )
+        return 1;
+
+    // connect parser and filter
+    xParser->setDocumentHandler( _xFilter );
+
+    // connect model and filter
+    uno::Reference < XImporter > xImporter( _xFilter, UNO_QUERY );
+    xImporter->setTargetDocument( xModelComponent );
+
+
+#ifdef TIMELOG
+    // if we do profiling, we want to know the stream
+    RTL_LOGFILE_TRACE_AUTHOR1( "rptxml", "oj",
+                               "ReadThroughComponent : parsing \"%s\"", pStreamName );
+#endif
+
+    // finally, parser the stream
+    try
+    {
+        xParser->parseStream( aParserInput );
+    }
+    catch( SAXParseException&
+
+#if OSL_DEBUG_LEVEL > 1
+r
+#endif
+)
+    {
+#if OSL_DEBUG_LEVEL > 1
+        ByteString aError( "SAX parse exception catched while importing:\n" );
+        aError += ByteString( String( r.Message), RTL_TEXTENCODING_ASCII_US );
+        aError += ByteString::CreateFromInt32( r.LineNumber );
+        aError += ',';
+        aError += ByteString::CreateFromInt32( r.ColumnNumber );
+
+        DBG_ERROR( aError.GetBuffer() );
+#endif
+        return 1;
+    }
+    catch( SAXException& )
+    {
+        return 1;
+    }
+    catch( packages::zip::ZipIOException& )
+    {
+        return ERRCODE_IO_BROKENPACKAGE;
+    }
+    catch( IOException& )
+    {
+        return 1;
+    }
+    catch( Exception& )
+    {
+        return 1;
+    }
+
+    // success!
+    return 0;
+}
+
+/// read a component (storage version)
+sal_Int32 ReadThroughComponent(
+    uno::Reference< embed::XStorage > xStorage,
+    const uno::Reference<XComponent>& xModelComponent,
+    const sal_Char* pStreamName,
+    const sal_Char* pCompatibilityStreamName,
+    const uno::Reference<XMultiServiceFactory> & rFactory,
+    const ::rtl::OUString& _sFilterName)
+{
+    DBG_ASSERT( xStorage.is(), "Need storage!");
+    DBG_ASSERT(NULL != pStreamName, "Please, please, give me a name!");
+
+    if ( xStorage.is() )
+    {
+        uno::Reference< io::XStream > xDocStream;
+        sal_Bool bEncrypted = sal_False;
+
+        try
+        {
+            // open stream (and set parser input)
+            ::rtl::OUString sStreamName = ::rtl::OUString::createFromAscii(pStreamName);
+            if ( !xStorage->hasByName( sStreamName ) || !xStorage->isStreamElement( sStreamName ) )
+            {
+                // stream name not found! Then try the compatibility name.
+                // if no stream can be opened, return immediatly with OK signal
+
+                // do we even have an alternative name?
+                if ( NULL == pCompatibilityStreamName )
+                    return 0;
+
+                // if so, does the stream exist?
+                sStreamName = ::rtl::OUString::createFromAscii(pCompatibilityStreamName);
+                if ( !xStorage->hasByName( sStreamName ) || !xStorage->isStreamElement( sStreamName ) )
+                    return 0;
+            }
+
+            // get input stream
+            xDocStream = xStorage->openStreamElement( sStreamName, embed::ElementModes::READ );
+
+            uno::Reference< beans::XPropertySet > xProps( xDocStream, uno::UNO_QUERY_THROW );
+            uno::Any aAny = xProps->getPropertyValue( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("Encrypted") ) );
+            aAny >>= bEncrypted;
+        }
+        catch( packages::WrongPasswordException& )
+        {
+            return ERRCODE_SFX_WRONGPASSWORD;
+        }
+        catch ( uno::Exception& )
+        {
+            return 1; // TODO/LATER: error handling
+        }
+
+
+        uno::Reference< XDocumentHandler > xFilter(rFactory->createInstance(_sFilterName),uno::UNO_QUERY);
+        uno::Reference< XInputStream > xInputStream = xDocStream->getInputStream();
+        // read from the stream
+        return ReadThroughComponent( xInputStream
+                                    ,xModelComponent
+                                    ,pStreamName
+                                    ,rFactory
+                                    ,xFilter
+                                    ,bEncrypted );
+    }
+
+    // TODO/LATER: better error handling
+    return 1;
+}
+
+//---------------------------------------------------------------------
+uno::Reference< uno::XInterface > ORptImportHelper::create(uno::Reference< uno::XComponentContext > const & xContext)
+{
+    return static_cast< XServiceInfo* >(new ORptFilter(Reference< XMultiServiceFactory >(xContext->getServiceManager(),UNO_QUERY),IMPORT_SETTINGS ));
+}
+//---------------------------------------------------------------------
+::rtl::OUString ORptImportHelper::getImplementationName_Static(  ) throw (RuntimeException)
+{
+    return ::rtl::OUString(SERVICE_SETTINGSIMPORTER);
+}
+//---------------------------------------------------------------------
+Sequence< ::rtl::OUString > ORptImportHelper::getSupportedServiceNames_Static(  ) throw(RuntimeException)
+{
+    Sequence< ::rtl::OUString > aSupported(1);
+    aSupported[0] = SERVICE_IMPORTFILTER;
+    return aSupported;
+}
+//---------------------------------------------------------------------
+Reference< XInterface > ORptContentImportHelper::create(const Reference< XComponentContext > & xContext)
+{
+    return static_cast< XServiceInfo* >(new ORptFilter(Reference< XMultiServiceFactory >(xContext->getServiceManager(),UNO_QUERY),IMPORT_AUTOSTYLES |   IMPORT_CONTENT | IMPORT_SCRIPTS |
+        IMPORT_FONTDECLS ));
+}
+//---------------------------------------------------------------------
+::rtl::OUString ORptContentImportHelper::getImplementationName_Static(  ) throw (RuntimeException)
+{
+    return ::rtl::OUString(SERVICE_CONTENTIMPORTER);
+}
+//---------------------------------------------------------------------
+Sequence< ::rtl::OUString > ORptContentImportHelper::getSupportedServiceNames_Static(  ) throw(RuntimeException)
+{
+    Sequence< ::rtl::OUString > aSupported(1);
+    aSupported[0] = SERVICE_IMPORTFILTER;
+    return aSupported;
+}
+
+//---------------------------------------------------------------------
+Reference< XInterface > ORptStylesImportHelper::create(Reference< XComponentContext > const & xContext)
+{
+    return static_cast< XServiceInfo* >(new ORptFilter(Reference< XMultiServiceFactory >(xContext->getServiceManager(),UNO_QUERY),
+        IMPORT_STYLES | IMPORT_MASTERSTYLES | IMPORT_AUTOSTYLES |
+        IMPORT_FONTDECLS ));
+}
+//---------------------------------------------------------------------
+::rtl::OUString ORptStylesImportHelper::getImplementationName_Static(  ) throw (RuntimeException)
+{
+    return ::rtl::OUString(SERVICE_STYLESIMPORTER);
+}
+//---------------------------------------------------------------------
+Sequence< ::rtl::OUString > ORptStylesImportHelper::getSupportedServiceNames_Static(  ) throw(RuntimeException)
+{
+    Sequence< ::rtl::OUString > aSupported(1);
+    aSupported[0] = SERVICE_IMPORTFILTER;
+    return aSupported;
+}
+
+// -------------
+// - ORptFilter -
+// -------------
+
+ORptFilter::ORptFilter( const uno::Reference< XMultiServiceFactory >& _rxMSF,sal_uInt16 nImportFlags )
+    :SvXMLImport(_rxMSF,nImportFlags)
+{
+    GetMM100UnitConverter().setCoreMeasureUnit(MAP_100TH_MM);
+    GetMM100UnitConverter().setXMLMeasureUnit(MAP_CM);
+    GetNamespaceMap().Add( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM ( sXML_np__rpt) ),
+                        GetXMLToken(XML_N_RPT),
+                        XML_NAMESPACE_REPORT );
+
+    GetNamespaceMap().Add( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM ( sXML_np___rpt) ),
+                        GetXMLToken(XML_N_RPT_OASIS),
+                        XML_NAMESPACE_REPORT );
+
+    m_xPropHdlFactory = new OXMLRptPropHdlFactory;
+    m_xCellStylesPropertySetMapper = OXMLHelper::GetCellStylePropertyMap();
+    m_xColumnStylesPropertySetMapper = new XMLPropertySetMapper(OXMLHelper::GetColumnStyleProps(), m_xPropHdlFactory);
+    m_xRowStylesPropertySetMapper = new XMLPropertySetMapper(OXMLHelper::GetRowStyleProps(), m_xPropHdlFactory);
+    m_xTableStylesPropertySetMapper = new XMLTextPropertySetMapper( TEXT_PROP_MAP_TABLE_DEFAULTS );
+}
+
+// -----------------------------------------------------------------------------
+
+ORptFilter::~ORptFilter() throw()
+{
+}
+//------------------------------------------------------------------------------
+uno::Reference< XInterface > ORptFilter::create(uno::Reference< XComponentContext > const & xContext)
+{
+    return *(new ORptFilter(uno::Reference< XMultiServiceFactory >(xContext->getServiceManager(),UNO_QUERY)));
+}
+
+// -----------------------------------------------------------------------------
+::rtl::OUString ORptFilter::getImplementationName_Static(  ) throw(uno::RuntimeException)
+{
+    return ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.comp.report.OReportFilter"));
+}
+
+//--------------------------------------------------------------------------
+::rtl::OUString SAL_CALL ORptFilter::getImplementationName(  ) throw(uno::RuntimeException)
+{
+    return getImplementationName_Static();
+}
+//--------------------------------------------------------------------------
+uno::Sequence< ::rtl::OUString > ORptFilter::getSupportedServiceNames_Static(  ) throw(uno::RuntimeException)
+{
+    uno::Sequence< ::rtl::OUString > aServices(1);
+    aServices.getArray()[0] = SERVICE_IMPORTFILTER;
+
+    return aServices;
+}
+
+//--------------------------------------------------------------------------
+uno::Sequence< ::rtl::OUString > SAL_CALL ORptFilter::getSupportedServiceNames(  ) throw(uno::RuntimeException)
+{
+    return getSupportedServiceNames_Static();
+}
+//------------------------------------------------------------------------------
+sal_Bool SAL_CALL ORptFilter::supportsService(const ::rtl::OUString& ServiceName) throw( uno::RuntimeException )
+{
+    return ::comphelper::existsValue(ServiceName,getSupportedServiceNames_Static());
+}
+// -----------------------------------------------------------------------------
+sal_Bool SAL_CALL ORptFilter::filter( const Sequence< PropertyValue >& rDescriptor )
+    throw (RuntimeException)
+{
+    Window*     pFocusWindow = Application::GetFocusWindow();
+    sal_Bool    bRet = sal_False;
+
+    if( pFocusWindow )
+        pFocusWindow->EnterWait();
+
+    if ( GetModel().is() )
+        bRet = implImport( rDescriptor );
+
+    if ( pFocusWindow )
+        pFocusWindow->LeaveWait();
+
+    return bRet;
+}
+// -----------------------------------------------------------------------------
+sal_Bool ORptFilter::implImport( const Sequence< PropertyValue >& rDescriptor )
+    throw (RuntimeException)
+{
+    ::rtl::OUString                     sFileName;
+    uno::Reference< embed::XStorage >   xStorage;
+    uno::Reference< util::XNumberFormatsSupplier > xNumberFormatsSupplier;
+
+    const PropertyValue* pIter = rDescriptor.getConstArray();
+    const PropertyValue* pEnd   = pIter + rDescriptor.getLength();
+    for(;pIter != pEnd;++pIter)
+    {
+        if( pIter->Name.equalsAscii( "FileName" ) )
+            pIter->Value >>= sFileName;
+        else if( pIter->Name.equalsAscii( "Storage" ) )
+            pIter->Value >>= xStorage;
+        else if( pIter->Name.equalsAscii( "ComponentData" ) )
+        {
+            Sequence< PropertyValue > aComponent;
+            pIter->Value >>= aComponent;
+            const PropertyValue* pComponentIter = aComponent.getConstArray();
+            const PropertyValue* pComponentEnd  = pComponentIter + aComponent.getLength();
+            for(;pComponentIter != pComponentEnd;++pComponentIter)
+            {
+                if( pComponentIter->Name.equalsAscii( "ActiveConnection" ) )
+                {
+                    uno::Reference<sdbc::XConnection> xCon(pComponentIter->Value,uno::UNO_QUERY);
+                    xNumberFormatsSupplier = ::dbtools::getNumberFormats(xCon);
+                    break;
+                }
+            }
+        }
+    }
+
+    if ( sFileName.getLength() != 0 )
+    {
+        uno::Reference<XComponent> xCom(GetModel(),UNO_QUERY);
+
+        SfxMediumRef pMedium = new SfxMedium(
+                sFileName, ( STREAM_READ | STREAM_NOCREATE ), FALSE, 0 );
+
+        if( pMedium )
+        {
+            try
+            {
+                xStorage = pMedium->GetStorage();
+                //  nError = pMedium->GetError();
+            }
+            catch(const Exception&)
+            {
+            }
+        } // if( pMedium )
+    } // if ( bRet = (sFileName.getLength() != 0) )
+    sal_Bool bRet = xStorage.is();
+    if ( bRet )
+    {
+        m_xReportDefinition.set(GetModel(),UNO_QUERY_THROW);
+        OSL_ENSURE(m_xReportDefinition.is(),"ReportDefinition is NULL!");
+        if ( !m_xReportDefinition.is() )
+            return sal_False;
+
+        m_pReportModel = reportdesign::OReportDefinition::getSdrModel(m_xReportDefinition);
+        if ( !m_pReportModel )
+            return sal_False;
+
+        if ( !xNumberFormatsSupplier.is() )
+            xNumberFormatsSupplier = OXMLHelper::GetNumberFormatsSupplier(m_xReportDefinition);
+        SetNumberFormatsSupplier(xNumberFormatsSupplier);
+
+
+        uno::Reference<XComponent> xModel(GetModel(),UNO_QUERY);
+        sal_Int32 nRet = ReadThroughComponent( xStorage
+                                    ,xModel
+                                    ,"settings.xml"
+                                    ,"Settings.xml"
+                                    ,getServiceFactory()
+                                    ,SERVICE_SETTINGSIMPORTER
+                                    );
+        if ( nRet == 0 )
+            nRet = ReadThroughComponent(
+                xStorage, xModel, "styles.xml", "Styles.xml", getServiceFactory(),
+                SERVICE_STYLESIMPORTER );
+
+        if ( nRet == 0 )
+            nRet = ReadThroughComponent( xStorage
+                                    ,xModel
+                                    ,"content.xml"
+                                    ,"Content.xml"
+                                    ,getServiceFactory()
+                                    ,SERVICE_CONTENTIMPORTER
+                                    );
+
+        bRet = nRet == 0;
+
+        if ( bRet )
+        {
+            uno::Reference< XModifiable > xModi(GetModel(),UNO_QUERY);
+            if ( xModi.is() )
+                xModi->setModified(sal_False);
+        }
+        else
+        {
+            switch( nRet )
+            {
+                case ERRCODE_IO_BROKENPACKAGE:
+                    if( xStorage.is() )
+                    {
+                        // TODO/LATER: no way to transport the error outside from the filter!
+                        break;
+                    }
+                    // fall through intented
+                default:
+                    {
+                        // TODO/LATER: this is completely wrong! Filter code should never call ErrorHandler directly! But for now this is the only way!
+                        ErrorHandler::HandleError( nRet );
+                        if( nRet & ERRCODE_WARNING_MASK )
+                            bRet = sal_True;
+                    }
+            }
+        }
+    }
+
+    return bRet;
+}
+// -----------------------------------------------------------------------------
+SvXMLImportContext* ORptFilter::CreateContext( sal_uInt16 nPrefix,
+                                      const ::rtl::OUString& rLocalName,
+                                      const uno::Reference< xml::sax::XAttributeList >& xAttrList )
+{
+    SvXMLImportContext *pContext = 0;
+
+    const SvXMLTokenMap& rTokenMap = GetDocElemTokenMap();
+    switch( rTokenMap.Get( nPrefix, rLocalName ) )
+    {
+        case XML_TOK_DOC_SETTINGS:
+            GetProgressBarHelper()->Increment( PROGRESS_BAR_STEP );
+            pContext = new XMLDocumentSettingsContext( *this, nPrefix, rLocalName,xAttrList );
+            break;
+        case XML_TOK_DOC_REPORT:
+            GetProgressBarHelper()->Increment( PROGRESS_BAR_STEP );
+            {
+                const SvXMLStylesContext* pAutoStyles = GetAutoStyles();
+                if ( pAutoStyles )
+                {
+                    XMLPropStyleContext* pAutoStyle = PTR_CAST(XMLPropStyleContext,pAutoStyles->FindStyleChildContext(XML_STYLE_FAMILY_PAGE_MASTER,::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("pm1"))));
+                    if ( pAutoStyle )
+                    {
+                        pAutoStyle->FillPropertySet(getReportDefinition().get());
+                    }
+                }
+                pContext = new OXMLReport( *this, nPrefix, rLocalName,xAttrList,getReportDefinition(),NULL );
+            }
+            break;
+        case XML_TOK_DOC_STYLES:
+            GetProgressBarHelper()->Increment( PROGRESS_BAR_STEP );
+            pContext = CreateStylesContext( rLocalName, xAttrList, sal_False);
+            break;
+        case XML_TOK_DOC_AUTOSTYLES:
+            GetProgressBarHelper()->Increment( PROGRESS_BAR_STEP );
+            pContext = CreateStylesContext( rLocalName, xAttrList, sal_True);
+            break;
+        case XML_TOK_DOC_FONTDECLS:
+            GetProgressBarHelper()->Increment( PROGRESS_BAR_STEP );
+            pContext = CreateFontDeclsContext( rLocalName,xAttrList );
+            break;
+        case XML_TOK_DOC_MASTERSTYLES:
+            {
+                SvXMLStylesContext* pStyleContext = new RptMLMasterStylesContext_Impl(*this, nPrefix, rLocalName,xAttrList);//CreateMasterStylesContext( rLocalName,xAttrList );
+                pContext = pStyleContext;
+                SetMasterStyles( pStyleContext );
+            }
+            break;
+        default:
+            break;
+    }
+
+    if ( !pContext )
+        pContext = SvXMLImport::CreateContext( nPrefix, rLocalName, xAttrList );
+
+    return pContext;
+}
+// -----------------------------------------------------------------------------
+const SvXMLTokenMap& ORptFilter::GetDocElemTokenMap() const
+{
+    if ( !m_pDocElemTokenMap.get() )
+    {
+        static __FAR_DATA SvXMLTokenMapEntry aElemTokenMap[]=
+        {
+            { XML_NAMESPACE_OFFICE, XML_SETTINGS,           XML_TOK_DOC_SETTINGS    },
+            //{ XML_NAMESPACE_OOO,    XML_SETTINGS,         XML_TOK_DOC_SETTINGS    },
+            { XML_NAMESPACE_OFFICE, XML_STYLES,             XML_TOK_DOC_STYLES      },
+            //{ XML_NAMESPACE_OOO,    XML_STYLES,               XML_TOK_DOC_STYLES      },
+            { XML_NAMESPACE_OFFICE, XML_AUTOMATIC_STYLES,   XML_TOK_DOC_AUTOSTYLES  },
+            //{ XML_NAMESPACE_OOO,    XML_AUTOMATIC_STYLES, XML_TOK_DOC_AUTOSTYLES  },
+            { XML_NAMESPACE_OFFICE, XML_REPORT,             XML_TOK_DOC_REPORT      },
+            { XML_NAMESPACE_OOO,    XML_REPORT,             XML_TOK_DOC_REPORT      },
+            { XML_NAMESPACE_OFFICE, XML_FONT_FACE_DECLS,    XML_TOK_DOC_FONTDECLS   },
+            { XML_NAMESPACE_OFFICE, XML_MASTER_STYLES,      XML_TOK_DOC_MASTERSTYLES    },
+            //{ XML_NAMESPACE_OOO,    XML_FONT_FACE_DECLS,  XML_TOK_DOC_FONTDECLS   },
+            XML_TOKEN_MAP_END
+        };
+        m_pDocElemTokenMap.reset(new SvXMLTokenMap( aElemTokenMap ));
+    }
+    return *m_pDocElemTokenMap;
+}
+// -----------------------------------------------------------------------------
+const SvXMLTokenMap& ORptFilter::GetReportElemTokenMap() const
+{
+    if ( !m_pReportElemTokenMap.get() )
+    {
+        static __FAR_DATA SvXMLTokenMapEntry aElemTokenMap[]=
+        {
+            { XML_NAMESPACE_REPORT, XML_REPORT_HEADER,              XML_TOK_REPORT_HEADER           },
+            { XML_NAMESPACE_REPORT, XML_PAGE_HEADER ,               XML_TOK_PAGE_HEADER             },
+            { XML_NAMESPACE_REPORT, XML_GROUP,                      XML_TOK_GROUP                   },
+            { XML_NAMESPACE_REPORT, XML_DETAIL      ,               XML_TOK_DETAIL                  },
+            { XML_NAMESPACE_REPORT, XML_PAGE_FOOTER ,               XML_TOK_PAGE_FOOTER             },
+            { XML_NAMESPACE_REPORT, XML_REPORT_FOOTER,              XML_TOK_REPORT_FOOTER           },
+            { XML_NAMESPACE_REPORT, XML_HEADER_ON_NEW_PAGE,         XML_TOK_HEADER_ON_NEW_PAGE      },
+            { XML_NAMESPACE_REPORT, XML_FOOTER_ON_NEW_PAGE,         XML_TOK_FOOTER_ON_NEW_PAGE      },
+            { XML_NAMESPACE_REPORT, XML_COMMAND_TYPE,               XML_TOK_COMMAND_TYPE            },
+            { XML_NAMESPACE_REPORT, XML_COMMAND,                    XML_TOK_COMMAND                 },
+            { XML_NAMESPACE_REPORT, XML_FILTER,                     XML_TOK_FILTER                  },
+            { XML_NAMESPACE_REPORT, XML_CAPTION,                    XML_TOK_CAPTION                 },
+            { XML_NAMESPACE_REPORT, XML_ESCAPE_PROCESSING,          XML_TOK_ESCAPE_PROCESSING       },
+            { XML_NAMESPACE_REPORT, XML_FUNCTION,                   XML_TOK_REPORT_FUNCTION         },
+            { XML_NAMESPACE_OFFICE, XML_MIMETYPE,                   XML_TOK_REPORT_MIMETYPE         },
+            XML_TOKEN_MAP_END
+        };
+        m_pReportElemTokenMap.reset(new SvXMLTokenMap( aElemTokenMap ));
+    }
+    return *m_pReportElemTokenMap;
+}
+// -----------------------------------------------------------------------------
+const SvXMLTokenMap& ORptFilter::GetSubDocumentElemTokenMap() const
+{
+    if ( !m_pSubDocumentElemTokenMap.get() )
+    {
+        static __FAR_DATA SvXMLTokenMapEntry aElemTokenMap[]=
+        {
+            { XML_NAMESPACE_REPORT, XML_MASTER_DETAIL_FIELDS,   XML_TOK_MASTER_DETAIL_FIELDS},
+            { XML_NAMESPACE_REPORT, XML_MASTER_DETAIL_FIELD,    XML_TOK_MASTER_DETAIL_FIELD},
+            { XML_NAMESPACE_REPORT, XML_MASTER,                 XML_TOK_MASTER},
+            { XML_NAMESPACE_REPORT, XML_DETAIL,                 XML_TOK_SUB_DETAIL},
+            XML_TOKEN_MAP_END
+        };
+        m_pSubDocumentElemTokenMap.reset(new SvXMLTokenMap( aElemTokenMap ));
+    }
+    return *m_pSubDocumentElemTokenMap;
+}
+// -----------------------------------------------------------------------------
+const SvXMLTokenMap& ORptFilter::GetFunctionElemTokenMap() const
+{
+    if ( !m_pFunctionElemTokenMap.get() )
+    {
+        static __FAR_DATA SvXMLTokenMapEntry aElemTokenMap[]=
+        {
+            { XML_NAMESPACE_REPORT, XML_NAME,           XML_TOK_FUNCTION_NAME   },
+            { XML_NAMESPACE_REPORT, XML_FORMULA,        XML_TOK_FUNCTION_FORMULA},
+            { XML_NAMESPACE_REPORT, XML_PRE_EVALUATED,  XML_TOK_PRE_EVALUATED   },
+            { XML_NAMESPACE_REPORT, XML_INITIAL_FORMULA,XML_TOK_INITIAL_FORMULA   },
+            { XML_NAMESPACE_REPORT, XML_DEEP_TRAVERSING,XML_TOK_DEEP_TRAVERSING   },
+            XML_TOKEN_MAP_END
+        };
+        m_pFunctionElemTokenMap.reset(new SvXMLTokenMap( aElemTokenMap ));
+    }
+    return *m_pFunctionElemTokenMap;
+}
+// -----------------------------------------------------------------------------
+const SvXMLTokenMap& ORptFilter::GetFormatElemTokenMap() const
+{
+    if ( !m_pFormatElemTokenMap.get() )
+    {
+        static __FAR_DATA SvXMLTokenMapEntry aElemTokenMap[]=
+        {
+            { XML_NAMESPACE_REPORT, XML_ENABLED                     ,   XML_TOK_ENABLED                     },
+            { XML_NAMESPACE_REPORT, XML_FORMULA                     ,   XML_TOK_FORMULA                     },
+            { XML_NAMESPACE_REPORT, XML_STYLE_NAME                  ,   XML_TOK_FORMAT_STYLE_NAME           },
+            XML_TOKEN_MAP_END
+        };
+        m_pFormatElemTokenMap.reset(new SvXMLTokenMap( aElemTokenMap ));
+    }
+    return *m_pFormatElemTokenMap;
+}
+// -----------------------------------------------------------------------------
+const SvXMLTokenMap& ORptFilter::GetGroupElemTokenMap() const
+{
+    if ( !m_pGroupElemTokenMap.get() )
+    {
+        static __FAR_DATA SvXMLTokenMapEntry aElemTokenMap[]=
+        {
+            { XML_NAMESPACE_REPORT, XML_START_NEW_COLUMN            ,   XML_TOK_START_NEW_COLUMN            },
+            { XML_NAMESPACE_REPORT, XML_RESET_PAGE_NUMBER           ,   XML_TOK_RESET_PAGE_NUMBER           },
+            { XML_NAMESPACE_REPORT, XML_PRINT_HEADER_ON_EACH_PAGE   ,   XML_TOK_PRINT_HEADER_ON_EACH_PAGE   },
+            { XML_NAMESPACE_REPORT, XML_RESET_PAGE_NUMBER           ,   XML_TOK_RESET_PAGE_NUMBER           },
+            { XML_NAMESPACE_REPORT, XML_GROUP_EXPRESSION            ,   XML_TOK_GROUP_EXPRESSION            },
+            { XML_NAMESPACE_REPORT, XML_GROUP_HEADER                ,   XML_TOK_GROUP_HEADER                },
+            { XML_NAMESPACE_REPORT, XML_GROUP                       ,   XML_TOK_GROUP_GROUP                 },
+            { XML_NAMESPACE_REPORT, XML_DETAIL                      ,   XML_TOK_GROUP_DETAIL                },
+            { XML_NAMESPACE_REPORT, XML_GROUP_FOOTER                ,   XML_TOK_GROUP_FOOTER                },
+            { XML_NAMESPACE_REPORT, XML_SORT_ASCENDING              ,   XML_TOK_SORT_ASCENDING              },
+            { XML_NAMESPACE_REPORT, XML_KEEP_TOGETHER               ,   XML_TOK_GROUP_KEEP_TOGETHER         },
+            { XML_NAMESPACE_REPORT, XML_FUNCTION                    ,   XML_TOK_GROUP_FUNCTION              },
+            //{ XML_NAMESPACE_REPORT,   XML_            ,   XML_TOK_            },
+            XML_TOKEN_MAP_END
+        };
+        m_pGroupElemTokenMap.reset(new SvXMLTokenMap( aElemTokenMap ));
+    }
+    return *m_pGroupElemTokenMap;
+}
+// -----------------------------------------------------------------------------
+const SvXMLTokenMap& ORptFilter::GetReportElementElemTokenMap() const
+{
+    if ( !m_pElemTokenMap.get() )
+    {
+        static __FAR_DATA SvXMLTokenMapEntry aElemTokenMap[]=
+        {
+            { XML_NAMESPACE_REPORT, XML_PRINT_REPEATED_VALUES       ,XML_TOK_PRINT_REPEATED_VALUES              },
+            { XML_NAMESPACE_REPORT, XML_PRINT_ONLY_WHEN_GROUP_CHANGE,XML_TOK_PRINT_ONLY_WHEN_GROUP_CHANGE       },
+            { XML_NAMESPACE_REPORT, XML_CONDITIONAL_PRINT_EXPRESSION,XML_TOK_REP_CONDITIONAL_PRINT_EXPRESSION   },
+            { XML_NAMESPACE_REPORT, XML_REPORT_COMPONENT            ,XML_TOK_COMPONENT                          },
+            { XML_NAMESPACE_REPORT, XML_FORMAT_CONDITION            ,XML_TOK_FORMATCONDITION                    },
+            XML_TOKEN_MAP_END
+        };
+        m_pElemTokenMap.reset(new SvXMLTokenMap( aElemTokenMap ));
+    }
+    return *m_pElemTokenMap;
+}
+// -----------------------------------------------------------------------------
+const SvXMLTokenMap& ORptFilter::GetControlElemTokenMap() const
+{
+    if ( !m_pControlElemTokenMap.get() )
+    {
+        static __FAR_DATA SvXMLTokenMapEntry aElemTokenMap[]=
+        {
+            { XML_NAMESPACE_FORM,   XML_LABEL               ,XML_TOK_LABEL              },
+            { XML_NAMESPACE_FORM,   XML_PROPERTIES          ,XML_TOK_PROPERTIES         },
+            { XML_NAMESPACE_FORM,   XML_SIZE                ,XML_TOK_SIZE               },
+            { XML_NAMESPACE_FORM,   XML_IMAGE_DATA          ,XML_TOK_IMAGE_DATA         },
+            { XML_NAMESPACE_REPORT, XML_SCALE               ,XML_TOK_SCALE              },
+            { XML_NAMESPACE_FORM,   XML_IMAGE_POSITION      ,XML_TOK_IMAGE_POSITION     },
+            { XML_NAMESPACE_FORM,   XML_IMAGE_ALIGN         ,XML_TOK_IMAGE_ALIGN        },
+            { XML_NAMESPACE_REPORT, XML_REPORT_ELEMENT      ,XML_TOK_REPORT_ELEMENT     },
+            { XML_NAMESPACE_REPORT, XML_FORMULA             ,XML_TOK_DATA_FORMULA       },
+            { XML_NAMESPACE_REPORT, XML_PRESERVE_IRI        ,XML_TOK_PRESERVE_IRI       },
+            { XML_NAMESPACE_REPORT, XML_SELECT_PAGE        ,XML_TOK_SELECT_PAGE       },
+            XML_TOKEN_MAP_END
+        };
+        m_pControlElemTokenMap.reset(new SvXMLTokenMap( aElemTokenMap ));
+    }
+    return *m_pControlElemTokenMap;
+}
+// -----------------------------------------------------------------------------
+const SvXMLTokenMap& ORptFilter::GetControlPropertyElemTokenMap() const
+{
+    if ( !m_pControlElemTokenMap.get() )
+    {
+        static __FAR_DATA SvXMLTokenMapEntry aElemTokenMap[]=
+        {
+            { XML_NAMESPACE_FORM,   XML_PROPERTY_NAME   ,XML_TOK_PROPERTY_NAME          },
+            { XML_NAMESPACE_OOO,    XML_VALUE_TYPE      ,XML_TOK_VALUE_TYPE             },
+            { XML_NAMESPACE_FORM,   XML_LIST_PROPERTY   ,XML_TOK_LIST_PROPERTY          },
+            { XML_NAMESPACE_OOO,    XML_VALUE           ,XML_TOK_VALUE                  },
+            { XML_NAMESPACE_OOO,    XML_CURRENCY        ,XML_TOK_CURRENCY               },
+            { XML_NAMESPACE_OOO,    XML_DATE_VALUE      ,XML_TOK_DATE_VALUE             },
+            { XML_NAMESPACE_OOO,    XML_TIME_VALUE      ,XML_TOK_TIME_VALUE             },
+            { XML_NAMESPACE_OOO,    XML_STRING_VALUE    ,XML_TOK_STRING_VALUE           },
+            { XML_NAMESPACE_OOO,    XML_BOOLEAN_VALUE   ,XML_TOK_BOOLEAN_VALUE          },
+            XML_TOKEN_MAP_END
+        };
+        m_pControlElemTokenMap.reset(new SvXMLTokenMap( aElemTokenMap ));
+    }
+    return *m_pControlElemTokenMap;
+}
+// -----------------------------------------------------------------------------
+const SvXMLTokenMap& ORptFilter::GetComponentElemTokenMap() const
+{
+    if ( !m_pComponentElemTokenMap.get() )
+    {
+        static __FAR_DATA SvXMLTokenMapEntry aElemTokenMap[]=
+        {
+            { XML_NAMESPACE_DRAW,   XML_NAME                        ,   XML_TOK_NAME                        },
+            { XML_NAMESPACE_DRAW,   XML_TEXT_STYLE_NAME             ,   XML_TOK_TEXT_STYLE_NAME             },
+            { XML_NAMESPACE_REPORT, XML_TRANSFORM                   ,   XML_TOK_TRANSFORM                   },
+            XML_TOKEN_MAP_END
+        };
+        m_pComponentElemTokenMap.reset(new SvXMLTokenMap( aElemTokenMap ));
+    }
+    return *m_pComponentElemTokenMap;
+}
+// -----------------------------------------------------------------------------
+const SvXMLTokenMap& ORptFilter::GetColumnTokenMap() const
+{
+    if ( !m_pColumnTokenMap.get() )
+    {
+        static __FAR_DATA SvXMLTokenMapEntry aElemTokenMap[]=
+        {
+            { XML_NAMESPACE_TABLE,  XML_NAME                        ,   XML_TOK_NAME                        },
+            { XML_NAMESPACE_TABLE,  XML_STYLE_NAME                  ,   XML_TOK_COLUMN_STYLE_NAME           },
+            { XML_NAMESPACE_TABLE,  XML_TABLE_COLUMN                ,   XML_TOK_COLUMN                      },
+            { XML_NAMESPACE_TABLE,  XML_TABLE_ROW                   ,   XML_TOK_ROW                         },
+            { XML_NAMESPACE_TABLE,  XML_TABLE_CELL                  ,   XML_TOK_CELL                        },
+            { XML_NAMESPACE_TABLE,  XML_TABLE_COLUMNS               ,   XML_TOK_TABLE_COLUMNS               },
+            { XML_NAMESPACE_TABLE,  XML_TABLE_ROWS                  ,   XML_TOK_TABLE_ROWS                  },
+            { XML_NAMESPACE_TABLE,  XML_COVERED_TABLE_CELL          ,   XML_TOK_COV_CELL                    },
+            { XML_NAMESPACE_TABLE,  XML_NUMBER_COLUMNS_SPANNED      ,   XML_TOK_NUMBER_COLUMNS_SPANNED      },
+            { XML_NAMESPACE_TABLE,  XML_NUMBER_ROWS_SPANNED         ,   XML_TOK_NUMBER_ROWS_SPANNED         },
+            XML_TOKEN_MAP_END
+        };
+        m_pColumnTokenMap.reset(new SvXMLTokenMap( aElemTokenMap ));
+    }
+    return *m_pColumnTokenMap;
+}
+// -----------------------------------------------------------------------------
+const SvXMLTokenMap& ORptFilter::GetSectionElemTokenMap() const
+{
+    if ( !m_pSectionElemTokenMap.get() )
+    {
+        static __FAR_DATA SvXMLTokenMapEntry aElemTokenMap[]=
+        {
+            { XML_NAMESPACE_TABLE,  XML_TABLE                       ,   XML_TOK_TABLE                       },
+            { XML_NAMESPACE_TABLE,  XML_NAME                        ,   XML_TOK_SECTION_NAME                },
+            { XML_NAMESPACE_REPORT, XML_CONDITIONAL_PRINT_EXPRESSION,   XML_TOK_CONDITIONAL_PRINT_EXPRESSION},
+            { XML_NAMESPACE_REPORT, XML_VISIBLE                     ,   XML_TOK_VISIBLE                     },
+            { XML_NAMESPACE_REPORT, XML_FORCE_NEW_PAGE              ,   XML_TOK_FORCE_NEW_PAGE              },
+            { XML_NAMESPACE_REPORT, XML_FORCE_NEW_COLUMN            ,   XML_TOK_FORCE_NEW_COLUMN            },
+            { XML_NAMESPACE_REPORT, XML_KEEP_TOGETHER               ,   XML_TOK_KEEP_TOGETHER               },
+            { XML_NAMESPACE_REPORT, XML_REPEAT_SECTION              ,   XML_TOK_REPEAT_SECTION              },
+            { XML_NAMESPACE_TABLE,  XML_STYLE_NAME                  ,   XML_TOK_SECT_STYLE_NAME             },
+            { XML_NAMESPACE_REPORT, XML_PAGE_PRINT_OPTION           ,   XML_TOK_PAGE_PRINT_OPTION           },
+
+            XML_TOKEN_MAP_END
+        };
+        m_pSectionElemTokenMap.reset(new SvXMLTokenMap( aElemTokenMap ));
+    }
+    return *m_pSectionElemTokenMap;
+}
+// -----------------------------------------------------------------------------
+const SvXMLTokenMap& ORptFilter::GetCellElemTokenMap() const
+{
+    if ( !m_pCellElemTokenMap.get() )
+    {
+        static __FAR_DATA SvXMLTokenMapEntry aElemTokenMap[]=
+        {
+            { XML_NAMESPACE_TEXT,   XML_P                           ,   XML_TOK_P                           },
+            { XML_NAMESPACE_REPORT, XML_FIXED_CONTENT               ,   XML_TOK_FIXED_CONTENT               },
+            { XML_NAMESPACE_REPORT, XML_FORMATTED_TEXT              ,   XML_TOK_FORMATTED_TEXT              },
+            { XML_NAMESPACE_REPORT, XML_IMAGE                       ,   XML_TOK_IMAGE                       },
+            { XML_NAMESPACE_REPORT, XML_SUB_DOCUMENT                ,   XML_TOK_SUB_DOCUMENT                },
+            { XML_NAMESPACE_DRAW,   XML_CUSTOM_SHAPE                ,   XML_TOK_CUSTOM_SHAPE                },
+            { XML_NAMESPACE_TEXT,   XML_PAGE_NUMBER                 ,   XML_TOK_PAGE_NUMBER                 },
+            { XML_NAMESPACE_TEXT,   XML_PAGE_COUNT                  ,   XML_TOK_PAGE_COUNT                  },
+            { XML_NAMESPACE_TEXT,   XML_TAB                         ,   XML_TOK_TEXT_TAB_STOP               },
+            { XML_NAMESPACE_TEXT,   XML_LINE_BREAK                  ,   XML_TOK_TEXT_LINE_BREAK             },
+            { XML_NAMESPACE_TEXT,   XML_S                           ,   XML_TOK_TEXT_S                      },
+            XML_TOKEN_MAP_END
+        };
+        m_pCellElemTokenMap.reset(new SvXMLTokenMap( aElemTokenMap ));
+    }
+    return *m_pCellElemTokenMap;
+}
+// -----------------------------------------------------------------------------
+SvXMLImportContext* ORptFilter::CreateStylesContext(const ::rtl::OUString& rLocalName,
+                                     const uno::Reference< XAttributeList>& xAttrList, sal_Bool bIsAutoStyle )
+{
+    SvXMLImportContext* pContext = bIsAutoStyle ? GetAutoStyles() : GetStyles();
+    if ( !pContext )
+    {
+        pContext = new OReportStylesContext(*this, XML_NAMESPACE_OFFICE, rLocalName, xAttrList, bIsAutoStyle);
+        if (bIsAutoStyle)
+            //xAutoStyles = pContext;
+            SetAutoStyles((SvXMLStylesContext*)pContext);
+        else
+            //xStyles = pContext;
+            SetStyles((SvXMLStylesContext*)pContext);
+    }
+    return pContext;
+}
+// -----------------------------------------------------------------------------
+SvXMLImport&         ORptFilter::getGlobalContext()
+{
+    return *this;
+}
+// -----------------------------------------------------------------------------
+void ORptFilter::enterEventContext()
+{
+}
+// -----------------------------------------------------------------------------
+void ORptFilter::leaveEventContext()
+{
+}
+// -----------------------------------------------------------------------------
+SvXMLImportContext *ORptFilter::CreateFontDeclsContext(
+        const ::rtl::OUString& rLocalName,
+        const uno::Reference< xml::sax::XAttributeList > & xAttrList )
+{
+    XMLFontStylesContext *pFSContext =
+            new XMLFontStylesContext( *this, XML_NAMESPACE_OFFICE,
+                                      rLocalName, xAttrList,
+                                      gsl_getSystemTextEncoding() );
+    SetFontDecls( pFSContext );
+    return pFSContext;
+}
+// -----------------------------------------------------------------------------
+XMLShapeImportHelper* ORptFilter::CreateShapeImport()
+{
+    return new XMLShapeImportHelper( *this,GetModel() );
+}
+// -----------------------------------------------------------------------------
+void ORptFilter::FinishStyles()
+{
+    if( GetStyles() )
+        GetStyles()->FinishStyles( sal_True );
+}
+// -----------------------------------------------------------------------------
+::rtl::OUString ORptFilter::convertFormula(const ::rtl::OUString& _sFormula)
+{
+    //sal_Int32 nLen = _sFormula.getLength();
+    //if ( nLen )
+    //{
+    //    const static ::rtl::OUString s_sField(RTL_CONSTASCII_USTRINGPARAM("field:["));
+    //    sal_Int32 nPos = _sFormula.indexOf(s_sField);
+    //    if ( nPos == -1 )
+    //        nPos = 4; // "rpt:"
+    //    else
+    //    {
+    //        nPos = s_sField.getLength();
+    //        --nLen; // eat "]"
+    //    }
+    //    return _sFormula.copy(nPos,nLen-nPos);
+    //}
+    return _sFormula;
+}
+// -----------------------------------------------------------------------------
+void SAL_CALL ORptFilter::startDocument( void )
+    throw( xml::sax::SAXException, uno::RuntimeException )
+{
+    m_xReportDefinition.set(GetModel(),UNO_QUERY_THROW);
+    OSL_ENSURE(m_xReportDefinition.is(),"ReportDefinition is NULL!");
+    if ( m_xReportDefinition.is() )
+    {
+        m_pReportModel = reportdesign::OReportDefinition::getSdrModel(m_xReportDefinition);
+        OSL_ENSURE(m_pReportModel,"Report model is NULL!");
+
+        uno::Reference< util::XNumberFormatsSupplier > xNumberFormatsSupplier = OXMLHelper::GetNumberFormatsSupplier(m_xReportDefinition);
+        SetNumberFormatsSupplier(xNumberFormatsSupplier);
+    }
+}
+// -----------------------------------------------------------------------------
+void ORptFilter::endDocument( void )
+    throw( xml::sax::SAXException, uno::RuntimeException )
+{
+    DBG_ASSERT( GetModel().is(), "model missing; maybe startDocument wasn't called?" );
+    if( !GetModel().is() )
+        return;
+
+    // this method will modify the document directly -> lock SolarMutex
+    vos::OGuard aGuard(Application::GetSolarMutex());
+    // Clear the shape import to sort the shapes  (and not in the
+    // destructor that might be called after the import has finished
+    // for Java filters.
+    if( HasShapeImport() )
+        ClearShapeImport();
+
+    // delegate to parent: takes care of error handling
+    SvXMLImport::endDocument();
+}
+// -----------------------------------------------------------------------------
+}// rptxml
+// -----------------------------------------------------------------------------

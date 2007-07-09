@@ -1,0 +1,68 @@
+/*************************************************************************
+ *
+ *  OpenOffice.org - a multi-platform office productivity suite
+ *
+ *  $RCSfile: DateTime.hrc,v $
+ *
+ *  $Revision: 1.2 $
+ *
+ *  last change: $Author: rt $ $Date: 2007-07-09 11:56:29 $
+ *
+ *  The Contents of this file are made available subject to
+ *  the terms of GNU Lesser General Public License Version 2.1.
+ *
+ *
+ *    GNU Lesser General Public License Version 2.1
+ *    =============================================
+ *    Copyright 2005 by Sun Microsystems, Inc.
+ *    901 San Antonio Road, Palo Alto, CA 94303, USA
+ *
+ *    This library is free software; you can redistribute it and/or
+ *    modify it under the terms of the GNU Lesser General Public
+ *    License version 2.1, as published by the Free Software Foundation.
+ *
+ *    This library is distributed in the hope that it will be useful,
+ *    but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ *    Lesser General Public License for more details.
+ *
+ *    You should have received a copy of the GNU Lesser General Public
+ *    License along with this library; if not, write to the Free Software
+ *    Foundation, Inc., 59 Temple Place, Suite 330, Boston,
+ *    MA  02111-1307  USA
+ *
+ ************************************************************************/
+#ifndef RPTUI_DATETIME_HRC
+#define RPTUI_DATETIME_HRC
+
+#define CB_DATE                     (1)
+#define RB_DATE_F1                  (2)
+#define RB_DATE_F2                  (3)
+#define RB_DATE_F3                  (4)
+#define CB_TIME                     (5)
+#define RB_TIME_F1                  (6)
+#define RB_TIME_F2                  (7)
+#define RB_TIME_F3                  (8)
+#define FL_SAMPLE                   (9)
+#define PB_OK                       (10)
+#define PB_CANCEL                   (11)
+#define PB_HELP                     (12)
+#define FT_DATESAMPLE               (13)
+#define FL_SEPARATOR1               (14)
+#define FT_TIMESAMPLE               (15)
+#define FL_DATE                     (16)
+#define FL_TIME                     (17)
+
+#define CHECKBOX_HEIGHT      8
+#define FIXEDTEXT_HEIGHT     8
+#define RELATED_CONTROLS     4
+#define UNRELATED_CONTROLS   7
+#define EDIT_HEIGHT         12
+#define BUTTON_HEIGHT       14
+#define BUTTON_WIDTH        50
+#define BROWSER_HEIGHT      75
+#define PAGE_WIDTH          (RELATED_CONTROLS + 3*UNRELATED_CONTROLS + 3*BUTTON_WIDTH)
+#define PAGE_HEIGHT         (10*RELATED_CONTROLS + 3*UNRELATED_CONTROLS + 10*FIXEDTEXT_HEIGHT +1 + BUTTON_HEIGHT)
+#define LISTBOX_WIDTH       PAGE_WIDTH - 3*UNRELATED_CONTROLS - FIXEDTEXT_WIDTH
+
+#endif // RPTUI_DATETIME_HRC

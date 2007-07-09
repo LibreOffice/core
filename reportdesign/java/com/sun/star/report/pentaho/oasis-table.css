@@ -1,0 +1,37 @@
+@namespace url("urn:oasis:names:tc:opendocument:xmlns:table:1.0");
+
+table {
+  display: table;
+}
+
+table-columns {
+  display: table-column-group;
+}
+
+table-column {
+  display: table-column;
+}
+
+table-row {
+  display: table-row;
+}
+
+table-cell {
+  display: table-cell;
+}
+
+table-cell[number-cols-spanned],
+table-cell[number-cols-spanned],
+table-columns[number-cols-spanned],
+table-column[number-cols-spanned] {
+  -x-liblayout-colspan: attr(number-cols-spanned);
+}
+
+table-cell[number-rows-spanned],
+table-cell[number-rows-spanned] {
+  -x-liblayout-rowspan: attr(number-rows-spanned);
+}
+
+
+
+

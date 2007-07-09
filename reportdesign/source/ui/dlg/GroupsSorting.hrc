@@ -1,0 +1,78 @@
+/*************************************************************************
+ *
+ *  OpenOffice.org - a multi-platform office productivity suite
+ *
+ *  $RCSfile: GroupsSorting.hrc,v $
+ *
+ *  $Revision: 1.2 $
+ *
+ *  last change: $Author: rt $ $Date: 2007-07-09 11:56:29 $
+ *
+ *  The Contents of this file are made available subject to
+ *  the terms of GNU Lesser General Public License Version 2.1.
+ *
+ *
+ *    GNU Lesser General Public License Version 2.1
+ *    =============================================
+ *    Copyright 2005 by Sun Microsystems, Inc.
+ *    901 San Antonio Road, Palo Alto, CA 94303, USA
+ *
+ *    This library is free software; you can redistribute it and/or
+ *    modify it under the terms of the GNU Lesser General Public
+ *    License version 2.1, as published by the Free Software Foundation.
+ *
+ *    This library is distributed in the hope that it will be useful,
+ *    but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ *    Lesser General Public License for more details.
+ *
+ *    You should have received a copy of the GNU Lesser General Public
+ *    License along with this library; if not, write to the Free Software
+ *    Foundation, Inc., 59 Temple Place, Suite 330, Boston,
+ *    MA  02111-1307  USA
+ *
+ ************************************************************************/
+#ifndef RPTUI_GROUPSSORTING_HRC
+#define RPTUI_GROUPSSORTING_HRC
+
+#define FT_HEADER           (1)
+#define LST_HEADERLST       (2)
+#define FT_FOOTER           (3)
+#define LST_FOOTERLST       (4)
+#define FT_GROUPON          (5)
+#define LST_GROUPONLST      (6)
+#define FT_GROUPINTERVAL    (7)
+#define ED_GROUPINTERVALLST (8)
+#define FT_KEEPTOGETHER     (9)
+#define LST_KEEPTOGETHERLST (10)
+#define PB_OK               (11)
+#define PB_CANCEL           (12)
+#define PB_HELP             (13)
+#define WND_CONTROL         (14)
+#define HELP_FIELD          (15)
+#define FT_ORDER            (16)
+#define LST_ORDER           (17)
+#define FL_SEPARATOR1       (18)
+#define FT_MOVELABEL        (19)
+#define PB_UP               (20)
+#define PB_DOWN             (21)
+#define FL_SEPARATOR2       (22)
+#define FL_SEPARATOR3       (23)
+#define IMG_UP_H            (24)
+#define IMG_DOWN_H          (25)
+
+
+#define CHECKBOX_HEIGHT      8
+#define FIXEDTEXT_HEIGHT     8
+#define FIXEDTEXT_WIDTH     60
+#define RELATED_CONTROLS     4
+#define UNRELATED_CONTROLS   7
+#define EDIT_HEIGHT         12
+#define BUTTON_HEIGHT       14
+#define BUTTON_WIDTH        50
+#define BROWSER_HEIGHT      75
+#define PAGE_WIDTH          120
+#define PAGE_HEIGHT         ( 13*UNRELATED_CONTROLS + BROWSER_HEIGHT + BUTTON_HEIGHT + 11*FIXEDTEXT_HEIGHT )
+#define LISTBOX_WIDTH       PAGE_WIDTH - 4*UNRELATED_CONTROLS - FIXEDTEXT_WIDTH
+
+#endif // RPTUI_GROUPSSORTING_HRC

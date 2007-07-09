@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE toolbar:toolbar PUBLIC "-//OpenOffice.org//DTD OfficeDocument 1.0//EN" "toolbar.dtd">
+<toolbar:toolbar xmlns:toolbar="http://openoffice.org/2001/toolbar" xmlns:xlink="http://www.w3.org/1999/xlink" toolbar:id="toolbar">
+ <toolbar:toolbaritem xlink:href=".uno:SelectObject" toolbar:helpid="helpid:10128"  toolbar:style="radio auto" />
+ <toolbar:toolbarseparator/>
+ <toolbar:toolbaritem xlink:href=".uno:ControlProperties" toolbar:helpid="helpid:10613" />
+ <toolbar:toolbarseparator/>
+ <toolbar:toolbaritem xlink:href=".uno:Label" toolbar:helpid="helpid:10597"  toolbar:style="radio auto" />
+ <toolbar:toolbaritem xlink:href=".uno:Edit" toolbar:helpid="helpid:10599"  toolbar:style="radio auto" />
+ <toolbar:toolbaritem xlink:href=".uno:ImageControl" toolbar:style="radio auto" />
+ <toolbar:toolbarseparator/>
+ <toolbar:toolbaritem xlink:href=".uno:HFixedLine" toolbar:helpid="helpid:10928"  toolbar:style="radio" />
+ <toolbar:toolbaritem xlink:href=".uno:VFixedLine" toolbar:helpid="helpid:10929"  toolbar:style="radio" />
+ <toolbar:toolbarseparator/>
+ <toolbar:toolbaritem xlink:href=".uno:BasicShapes" toolbar:helpid="11002" toolbar:style="dropdown"/>
+ <toolbar:toolbaritem xlink:href=".uno:SymbolShapes" toolbar:helpid="11003" toolbar:style="dropdown"/>
+ <toolbar:toolbaritem xlink:href=".uno:ArrowShapes" toolbar:helpid="11004" toolbar:style="dropdown"/>
+ <toolbar:toolbaritem xlink:href=".uno:FlowChartShapes" toolbar:helpid="11005" toolbar:style="dropdown"/>
+ <toolbar:toolbaritem xlink:href=".uno:CalloutShapes" toolbar:helpid="11006" toolbar:style="dropdown"/>
+ <toolbar:toolbaritem xlink:href=".uno:StarShapes" toolbar:helpid="11007" toolbar:style="dropdown"/>
+ <toolbar:toolbarseparator/>
+ <toolbar:toolbaritem xlink:href=".uno:GridVisible" toolbar:helpid="helpid:27322" toolbar:style="radio auto" toolbar:visible="false"/>
+ <toolbar:toolbaritem xlink:href=".uno:GridUse" toolbar:helpid="helpid:27154" toolbar:visible="false"/>
+ <toolbar:toolbaritem xlink:href=".uno:HelplinesMove" toolbar:helpid="helpid:27153" toolbar:visible="false"/>
+</toolbar:toolbar>
