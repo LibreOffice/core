@@ -1,17 +1,17 @@
-ba  reportdesign    :   boost jfreereport comphelper dbaccess NULL
-ba  reportdesign                                                        usr1    -   all ba_mkout NULL
-ba  reportdesign\inc                                                    nmake   -   all ba_inc NULL
-ba  reportdesign\java							                        nmake   -   all ba_java NULL
-ba  reportdesign\java\com\sun\star\report		                        nmake   -   all ba_jreport ba_java NULL
-ba  reportdesign\java\com\sun\star\report\util	                        nmake   -   all ba_jreport_util ba_jreport NULL
-ba  reportdesign\java\com\sun\star\report\pentaho                       nmake   -   all ba_jreport_pe ba_jreport_util NULL
-ba  reportdesign\source\core\api                                        nmake   -   all ba_api ba_inc NULL
-ba  reportdesign\source\core\resource                                   nmake   -   all ba_res ba_inc NULL
-ba  reportdesign\source\core\sdr                                        nmake   -   all ba_sdr ba_inc NULL
-ba  reportdesign\source\shared                                          nmake   -   all ba_shared ba_inc NULL
-ba  reportdesign\source\ui\misc                                         nmake   -   all ba_uimisc ba_inc NULL
-ba  reportdesign\source\ui\dlg                                          nmake   -   all ba_uidlg ba_inc NULL
-ba  reportdesign\source\ui\report                                       nmake   -   all ba_uireport ba_inc NULL
-ba  reportdesign\source\ui\inspection                                   nmake   -   all ba_uiinspection ba_inc NULL
-ba  reportdesign\source\filter\xml                                      nmake   -   all ba_filter_xml ba_inc NULL
-ba  reportdesign\util                                                   nmake   -   all ba_util ba_inc ba_jreport_pe ba_api ba_res ba_shared ba_uimisc ba_uidlg ba_uireport ba_uiinspection ba_sdr ba_filter_xml NULL
+rd  reportdesign    :   boost jfreereport comphelper dbaccess NULL
+rd  reportdesign                                                        usr1    -   all rd_mkout NULL
+rd  reportdesign\inc                                                    nmake   -   all rd_inc NULL
+rd  reportdesign\java							                        nmake   -   all rd_java NULL
+rd  reportdesign\java\com\sun\star\report		                        nmake   -   all rd_jreport rd_java NULL
+rd  reportdesign\java\com\sun\star\report\util	                        nmake   -   all rd_jreport_util rd_jreport NULL
+rd  reportdesign\java\com\sun\star\report\pentaho                       nmake   -   all rd_jreport_pe rd_jreport_util NULL
+rd  reportdesign\source\core\api                                        nmake   -   all rd_api rd_inc NULL
+rd  reportdesign\source\core\resource                                   nmake   -   all rd_res rd_inc NULL
+rd  reportdesign\source\core\sdr                                        nmake   -   all rd_sdr rd_inc NULL
+rd  reportdesign\source\shared                                          nmake   -   all rd_shared rd_inc NULL
+rd  reportdesign\source\ui\misc                                         nmake   -   all rd_uimisc rd_inc NULL
+rd  reportdesign\source\ui\dlg                                          nmake   -   all rd_uidlg rd_inc NULL
+rd  reportdesign\source\ui\report                                       nmake   -   all rd_uireport rd_inc NULL
+rd  reportdesign\source\ui\inspection                                   nmake   -   all rd_uiinspection rd_inc NULL
+rd  reportdesign\source\filter\xml                                      nmake   -   all rd_filter_xml rd_inc NULL
+rd  reportdesign\util                                                   nmake   -   all rd_util rd_inc rd_jreport_pe rd_api rd_res rd_shared rd_uimisc rd_uidlg rd_uireport rd_uiinspection rd_sdr rd_filter_xml NULL
