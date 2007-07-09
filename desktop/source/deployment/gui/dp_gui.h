@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dp_gui.h,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: rt $ $Date: 2007-07-06 13:53:41 $
+ *  last change: $Author: rt $ $Date: 2007-07-09 09:39:33 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -36,7 +36,6 @@
 #if ! defined INCLUDED_DP_GUI_H
 #define INCLUDED_DP_GUI_H
 
-#include "dp_gui_modifiablecontext.hxx"
 #include "dp_gui_cmdenv.h"
 #include "dp_misc.h"
 #include "dp_gui_updatability.hxx"
