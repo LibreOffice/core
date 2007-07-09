@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dp_gui_dialog.cxx,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: rt $ $Date: 2007-07-06 13:56:29 $
+ *  last change: $Author: rt $ $Date: 2007-07-09 09:54:47 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -661,8 +661,7 @@ void DialogImpl::updateButtonStates(
         allowModification = allowModification &&
             ! m_treelb->getPackageManager(entry)->isReadOnly();
 
-        Reference<deployment::XPackage> xPackage(
-            m_treelb->getPackage(entry) );
+        xPackage = m_treelb->getPackage(entry);
 
         if (xPackage.is())
         {
