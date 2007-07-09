@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dp_dependencies.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2007-07-06 09:54:48 $
+ *  last change: $Author: rt $ $Date: 2007-07-09 10:47:47 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -101,7 +101,7 @@ check(::dp_misc::DescriptionInfoset const & infoset) {
                           ::rtl::OUString(
                               RTL_CONSTASCII_USTRINGPARAM("value"))),
                       ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("2.3")))
-                  != ::dp_misc::GREATER)))
+                  != ::dp_misc::GREATER))
         {
             sat = satisfiesMinimalVersion(
                 e->getAttribute(
