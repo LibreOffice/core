@@ -4,9 +4,9 @@
  *
  *  $RCSfile: extcolorcfg.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2007-07-06 10:04:15 $
+ *  last change: $Author: rt $ $Date: 2007-07-09 07:14:03 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -68,10 +68,10 @@
 #include <com/sun/star/uno/Sequence.h>
 #endif
 #ifndef _SFXPOOLITEM_HXX
-#include <poolitem.hxx> //Any2Bool
+#include <svtools/poolitem.hxx> //Any2Bool
 #endif
 #ifndef _SFXSMPLHINT_HXX
-#include <smplhint.hxx>
+#include <svtools/smplhint.hxx>
 #endif
 #ifndef _VOS_MUTEX_HXX_
 #include <vos/mutex.hxx>
