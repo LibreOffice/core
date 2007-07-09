@@ -4,9 +4,9 @@
  *
  *  $RCSfile: vclprocessor2d.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: hdu $ $Date: 2007-04-17 10:02:27 $
+ *  last change: $Author: aw $ $Date: 2007-07-09 13:19:09 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -142,8 +142,11 @@ namespace drawinglayer
         //////////////////////////////////////////////////////////////////////////////
         // rendering support
 
-        // directdraw of text simple portion
-        void VclProcessor2D::RenderTextSimplePortionPrimitive2D(const primitive2d::TextSimplePortionPrimitive2D& rTextCandidate)
+        // directdraw of text simple portion or decorated portion primitive. When decorated, all the extra
+        // information is translated to VCL parameters and set at the font.
+        // Acceptance is restricted to no shearing and positive scaling in X and Y (no font mirroring
+        // for VCL)
+        void VclProcessor2D::RenderTextSimpleOrDecoratedPortionPrimitive2D(const primitive2d::TextSimplePortionPrimitive2D& rTextCandidate)
         {
             // decompose matrix to have position and size of text
             basegfx::B2DHomMatrix aLocalTransform(maCurrentTransformation * rTextCandidate.getTextTransform());
@@ -165,11 +168,12 @@ namespace drawinglayer
                 if(basegfx::fTools::more(aScale.getX(), 0.0) && basegfx::fTools::more(aScale.getY(), 0.0))
                 {
                     // prepare everything that is not sheared and mirrored
-                    bPrimitiveAccepted = true;
                     Font aFont(primitive2d::getVclFontFromFontAttributes(rTextCandidate.getFontAttributes(), aScale, fRotate));
+
                     // handle additional font attributes
                     const primitive2d::TextDecoratedPortionPrimitive2D* pTCPP =
                         dynamic_cast<const primitive2d::TextDecoratedPortionPrimitive2D*>( &rTextCandidate );
+
                     if( pTCPP != NULL )
                     {
                         // set Underline attribute
@@ -272,30 +276,31 @@ namespace drawinglayer
                     }
 
                     mpOutputDevice->SetFont(aFont);
-                }
 
-                // create transformed integer DXArray in view coordinate system
-                ::std::vector< sal_Int32 > aTransformedDXArray;
+                    // create transformed integer DXArray in view coordinate system
+                    ::std::vector< sal_Int32 > aTransformedDXArray;
 
-                if(rTextCandidate.getDXArray().size())
-                {
-                    aTransformedDXArray.reserve(rTextCandidate.getDXArray().size());
-                    const basegfx::B2DVector aPixelVector(aLocalTransform * basegfx::B2DVector(1.0, 0.0));
-                    const double fPixelVectorLength(aPixelVector.getLength());
-
-                    for(::std::vector< double >::const_iterator aStart(rTextCandidate.getDXArray().begin()); aStart != rTextCandidate.getDXArray().end(); aStart++)
+                    if(rTextCandidate.getDXArray().size())
                     {
-                        aTransformedDXArray.push_back(basegfx::fround((*aStart) * fPixelVectorLength));
-                    }
-                }
+                        aTransformedDXArray.reserve(rTextCandidate.getDXArray().size());
+                        const basegfx::B2DVector aPixelVector(aLocalTransform * basegfx::B2DVector(1.0, 0.0));
+                        const double fPixelVectorLength(aPixelVector.getLength());
 
-                // set parameters and paint
-                const basegfx::BColor aRGBFontColor(maBColorModifierStack.getModifiedColor(rTextCandidate.getFontColor()));
-                mpOutputDevice->SetTextColor(Color(aRGBFontColor));
-                const basegfx::B2DPoint aPoint(aLocalTransform * basegfx::B2DPoint(0.0, 0.0));
-                const Point aStartPoint(basegfx::fround(aPoint.getX()), basegfx::fround(aPoint.getY()));
-                mpOutputDevice->DrawTextArray(aStartPoint, rTextCandidate.getText(),
-                    aTransformedDXArray.size() ? &(aTransformedDXArray[0]) : NULL);
+                        for(::std::vector< double >::const_iterator aStart(rTextCandidate.getDXArray().begin()); aStart != rTextCandidate.getDXArray().end(); aStart++)
+                        {
+                            aTransformedDXArray.push_back(basegfx::fround((*aStart) * fPixelVectorLength));
+                        }
+                    }
+
+                    // set parameters and paint
+                    const basegfx::BColor aRGBFontColor(maBColorModifierStack.getModifiedColor(rTextCandidate.getFontColor()));
+                    mpOutputDevice->SetTextColor(Color(aRGBFontColor));
+                    const basegfx::B2DPoint aPoint(aLocalTransform * basegfx::B2DPoint(0.0, 0.0));
+                    const Point aStartPoint(basegfx::fround(aPoint.getX()), basegfx::fround(aPoint.getY()));
+                    mpOutputDevice->DrawTextArray(aStartPoint, rTextCandidate.getText(),
+                        aTransformedDXArray.size() ? &(aTransformedDXArray[0]) : NULL);
+                    bPrimitiveAccepted = true;
+                }
             }
 
             if(!bPrimitiveAccepted)
@@ -314,21 +319,7 @@ namespace drawinglayer
 
             basegfx::B2DPolygon aLocalPolygon(rPolygonCandidate.getB2DPolygon());
             aLocalPolygon.transform(maCurrentTransformation);
-
-            if(maCurrentClipPolyPolygon.count())
-            {
-                const basegfx::B2DPolyPolygon aClippedPolyPolygon(basegfx::tools::clipPolygonOnPolyPolygon(aLocalPolygon, maCurrentClipPolyPolygon, true, false));
-
-                for(sal_uInt32 a(0L); a < aClippedPolyPolygon.count(); a++)
-                {
-                    const basegfx::B2DPolygon aClippedPolygon(aClippedPolyPolygon.getB2DPolygon(a));
-                    mpOutputDevice->DrawPolyLine(aClippedPolygon,0.0);
-                }
-            }
-            else
-            {
-                mpOutputDevice->DrawPolyLine(aLocalPolygon,0.0);
-            }
+            mpOutputDevice->DrawPolyLine(aLocalPolygon,0.0);
         }
 
         // direct draw of transformed BitmapEx primitive
@@ -568,12 +559,6 @@ namespace drawinglayer
 
             basegfx::B2DPolyPolygon aLocalPolyPolygon(rPolygonCandidate.getB2DPolyPolygon());
             aLocalPolyPolygon.transform(maCurrentTransformation);
-
-            if(maCurrentClipPolyPolygon.count())
-            {
-                aLocalPolyPolygon = basegfx::tools::clipPolyPolygonOnPolyPolygon(aLocalPolyPolygon, maCurrentClipPolyPolygon, false, false);
-            }
-
             mpOutputDevice->DrawPolyPolygon(aLocalPolyPolygon);
         }
 
@@ -629,62 +614,29 @@ namespace drawinglayer
                 if(aMask.count())
                 {
                     aMask.transform(maCurrentTransformation);
+                    const basegfx::B2DRange aRange(basegfx::tools::getRange(aMask));
+                    impBufferDevice aBufferDevice(*mpOutputDevice, aRange);
 
-                    if(isOutputToRecordingMetaFile() || isOutputToPrinter())
+                    if(aBufferDevice.isVisible())
                     {
-                        // vector output; use ClipPolyPolygon
-                        if(maCurrentClipPolyPolygon.count())
-                        {
-                            // rescue current
-                            const basegfx::B2DPolyPolygon aOldClipPolyPolygon(maCurrentClipPolyPolygon);
+                        // remember last OutDev and set to content
+                        OutputDevice* pLastOutputDevice = mpOutputDevice;
+                        mpOutputDevice = &aBufferDevice.getContent();
 
-                            // create and set new
-                            maCurrentClipPolyPolygon = basegfx::tools::clipPolyPolygonOnPolyPolygon(aMask, maCurrentClipPolyPolygon, false, false);
+                        // paint to it
+                        process(rMaskCandidate.getChildren());
 
-                            // process with new ClipPolyPoygon
-                            process(rMaskCandidate.getChildren());
+                        // back to old OutDev
+                        mpOutputDevice = pLastOutputDevice;
 
-                            // restore old
-                            maCurrentClipPolyPolygon = aOldClipPolyPolygon;
-                        }
-                        else
-                        {
-                            // set new
-                            maCurrentClipPolyPolygon = aMask;
+                        // draw mask
+                        VirtualDevice& rMask = aBufferDevice.getMask();
+                        rMask.SetLineColor();
+                        rMask.SetFillColor(COL_BLACK);
+                        rMask.DrawPolyPolygon(aMask);
 
-                            // process with new ClipPolyPoygon
-                            process(rMaskCandidate.getChildren());
-
-                            // restore old
-                            maCurrentClipPolyPolygon.clear();
-                        }
-                    }
-                    else
-                    {
-                        const basegfx::B2DRange aRange(basegfx::tools::getRange(aMask));
-                        impBufferDevice aBufferDevice(*mpOutputDevice, aRange);
-
-                        if(aBufferDevice.isVisible())
-                        {
-                            // remember last OutDev and set to content
-                            OutputDevice* pLastOutputDevice = mpOutputDevice;
-                            mpOutputDevice = &aBufferDevice.getContent();
-
-                            // paint to it
-                            process(rMaskCandidate.getChildren());
-
-                            // back to old OutDev
-                            mpOutputDevice = pLastOutputDevice;
-
-                            // draw mask
-                            VirtualDevice& rMask = aBufferDevice.getMask();
-                            rMask.SetLineColor();
-                            rMask.SetFillColor(COL_BLACK);
-                            rMask.DrawPolyPolygon(aMask);
-
-                            // dump buffer to outdev
-                            aBufferDevice.paint();
-                        }
+                        // dump buffer to outdev
+                        aBufferDevice.paint();
                     }
                 }
             }
@@ -827,7 +779,7 @@ namespace drawinglayer
         }
 
         //////////////////////////////////////////////////////////////////////////////
-        // internal processing support
+        // process support
 
         void VclProcessor2D::process(const primitive2d::Primitive2DSequence& rSource)
         {
@@ -847,114 +799,8 @@ namespace drawinglayer
 
                         if(pBasePrimitive)
                         {
-                            // it is a BasePrimitive2D implementation, use getPrimitiveID() call for switch
-                            switch(pBasePrimitive->getPrimitiveID())
-                            {
-                                case PRIMITIVE2D_ID_TEXTSIMPLEPORTIONPRIMITIVE2D :
-                                case PRIMITIVE2D_ID_TEXTDECORATEDPORTIONPRIMITIVE2D :
-                                {
-                                    // directdraw of text simple portion
-                                    RenderTextSimplePortionPrimitive2D(static_cast< const primitive2d::TextSimplePortionPrimitive2D& >(*pBasePrimitive));
-                                    break;
-                                }
-                                case PRIMITIVE2D_ID_POLYGONHAIRLINEPRIMITIVE2D :
-                                {
-                                    // direct draw of hairline
-                                    RenderPolygonHairlinePrimitive2D(static_cast< const primitive2d::PolygonHairlinePrimitive2D& >(*pBasePrimitive));
-                                    break;
-                                }
-                                case PRIMITIVE2D_ID_BITMAPPRIMITIVE2D :
-                                {
-                                    // direct draw of transformed BitmapEx primitive
-                                    RenderBitmapPrimitive2D(static_cast< const primitive2d::BitmapPrimitive2D& >(*pBasePrimitive));
-                                    break;
-                                }
-                                case PRIMITIVE2D_ID_FILLBITMAPPRIMITIVE2D :
-                                {
-                                    const primitive2d::FillBitmapPrimitive2D& rFillBitmapCandidate(static_cast< const primitive2d::FillBitmapPrimitive2D& >(*pBasePrimitive));
-
-                                    if(isOutputToRecordingMetaFile() || isOutputToPrinter())
-                                    {
-                                        // vector device or printer
-                                        // do not use VDev but use decompose which creates BitmapPrimitive2D's
-                                        process(pBasePrimitive->get2DDecomposition(getViewInformation2D()));
-                                    }
-                                    else
-                                    {
-                                        // pixel device
-                                        // direct draw of fillBitmapPrimitive
-                                        RenderFillBitmapPrimitive2D(rFillBitmapCandidate);
-                                    }
-                                    break;
-                                }
-                                case PRIMITIVE2D_ID_POLYPOLYGONGRADIENTPRIMITIVE2D :
-                                {
-                                    const primitive2d::PolyPolygonGradientPrimitive2D& rPolygonCandidate(static_cast< const primitive2d::PolyPolygonGradientPrimitive2D& >(*pBasePrimitive));
-
-                                    if(isOutputToRecordingMetaFile() || isOutputToPrinter())
-                                    {
-                                        // vector device or printer
-                                        // do not use VDev but use decompose which creates a mask primitive which then
-                                        // is used for clipping
-                                        process(pBasePrimitive->get2DDecomposition(getViewInformation2D()));
-                                    }
-                                    else
-                                    {
-                                        // pixel device
-                                        // direct draw of gradient
-                                        RenderPolyPolygonGradientPrimitive2D(rPolygonCandidate);
-                                    }
-                                    break;
-                                }
-                                case PRIMITIVE2D_ID_POLYPOLYGONCOLORPRIMITIVE2D :
-                                {
-                                    // direct draw of PolyPolygon with color
-                                    RenderPolyPolygonColorPrimitive2D(static_cast< const primitive2d::PolyPolygonColorPrimitive2D& >(*pBasePrimitive));
-                                    break;
-                                }
-                                case PRIMITIVE2D_ID_METAFILEPRIMITIVE2D :
-                                {
-                                    // direct draw of MetaFile
-                                    RenderMetafilePrimitive2D(static_cast< const primitive2d::MetafilePrimitive2D& >(*pBasePrimitive));
-                                    break;
-                                }
-                                case PRIMITIVE2D_ID_MASKPRIMITIVE2D :
-                                {
-                                    // mask group.
-                                    RenderMaskPrimitive2D(static_cast< const primitive2d::MaskPrimitive2D& >(*pBasePrimitive));
-                                    break;
-                                }
-                                case PRIMITIVE2D_ID_MODIFIEDCOLORPRIMITIVE2D :
-                                {
-                                    // modified color group. Force output to unified color.
-                                    RenderModifiedColorPrimitive2D(static_cast< const primitive2d::ModifiedColorPrimitive2D& >(*pBasePrimitive));
-                                    break;
-                                }
-                                case PRIMITIVE2D_ID_ALPHAPRIMITIVE2D :
-                                {
-                                    // sub-transparence group. Draw to VDev first.
-                                    RenderAlphaPrimitive2D(static_cast< const primitive2d::AlphaPrimitive2D& >(*pBasePrimitive));
-                                    break;
-                                }
-                                case PRIMITIVE2D_ID_TRANSFORMPRIMITIVE2D :
-                                {
-                                    // transform group.
-                                    RenderTransformPrimitive2D(static_cast< const primitive2d::TransformPrimitive2D& >(*pBasePrimitive));
-                                    break;
-                                }
-                                case PRIMITIVE2D_ID_MARKERARRAYPRIMITIVE2D :
-                                {
-                                    // marker array
-                                    RenderMarkerArrayPrimitive2D(static_cast< const primitive2d::MarkerArrayPrimitive2D& >(*pBasePrimitive));
-                                    break;
-                                }
-                                default :
-                                {
-                                    // process recursively
-                                    process(pBasePrimitive->get2DDecomposition(getViewInformation2D()));
-                                    break;
-                                }
-                            }
+                            // it is a BasePrimitive2D implementation, use local processor
+                            processBasePrinitive2D(*pBasePrimitive);
                         }
                         else
                         {
@@ -978,44 +824,228 @@ namespace drawinglayer
         :   BaseProcessor2D(rViewInformation),
             mpOutputDevice(&rOutDev),
             maBColorModifierStack(),
-            maCurrentTransformation(),
-            maCurrentClipPolyPolygon(),
-            mbOutputToRecordingMetaFile(false),
-            mbOutputToPrinter(false)
+            maCurrentTransformation()
         {
-            // check if output is recorded to metafile
-            const GDIMetaFile* pMetaFile = mpOutputDevice->GetConnectMetaFile();
-            mbOutputToRecordingMetaFile = (pMetaFile && pMetaFile->IsRecord() && !pMetaFile->IsPause());
-
-            if(isOutputToRecordingMetaFile())
-            {
-                // draw to logic coordinates, do not initialize maCurrentTransformation to viewTransformation,
-                // do not change MapMode of destination
-
-                // look for printer output, too
-                mbOutputToPrinter = (OUTDEV_PRINTER == mpOutputDevice->GetOutDevType());
-            }
-            else
-            {
-                // prepare maCurrentTransformation matrix with viewTransformation to go directly to pixels
-                maCurrentTransformation = rViewInformation.getViewTransformation();
-
-                // prepare output to pixels
-                mpOutputDevice->Push(PUSH_MAPMODE);
-                mpOutputDevice->SetMapMode();
-            }
         }
 
         VclProcessor2D::~VclProcessor2D()
         {
-            if(isOutputToRecordingMetaFile())
+        }
+    } // end of namespace processor2d
+} // end of namespace drawinglayer
+
+//////////////////////////////////////////////////////////////////////////////
+
+namespace drawinglayer
+{
+    namespace processor2d
+    {
+        VclMetafileProcessor2D::VclMetafileProcessor2D(const geometry::ViewInformation2D& rViewInformation, OutputDevice& rOutDev)
+        :   VclProcessor2D(rViewInformation, rOutDev)
+        {
+            // draw to logic coordinates, do not initialize maCurrentTransformation to viewTransformation,
+            // do not change MapMode of destination
+        }
+
+        VclMetafileProcessor2D::~VclMetafileProcessor2D()
+        {
+            // MapMode was not changed, no restore necessary
+        }
+
+        void VclMetafileProcessor2D::processBasePrinitive2D(const primitive2d::BasePrimitive2D& rCandidate)
+        {
+            switch(rCandidate.getPrimitiveID())
             {
-                // MapMode was not changed, no restore necessary
+                case PRIMITIVE2D_ID_TEXTSIMPLEPORTIONPRIMITIVE2D :
+                case PRIMITIVE2D_ID_TEXTDECORATEDPORTIONPRIMITIVE2D :
+                {
+                    // directdraw of text simple portion
+                    RenderTextSimpleOrDecoratedPortionPrimitive2D(static_cast< const primitive2d::TextSimplePortionPrimitive2D& >(rCandidate));
+                    break;
+                }
+                case PRIMITIVE2D_ID_POLYGONHAIRLINEPRIMITIVE2D :
+                {
+                    // direct draw of hairline
+                    RenderPolygonHairlinePrimitive2D(static_cast< const primitive2d::PolygonHairlinePrimitive2D& >(rCandidate));
+                    break;
+                }
+                case PRIMITIVE2D_ID_BITMAPPRIMITIVE2D :
+                {
+                    // direct draw of transformed BitmapEx primitive
+                    RenderBitmapPrimitive2D(static_cast< const primitive2d::BitmapPrimitive2D& >(rCandidate));
+                    break;
+                }
+                case PRIMITIVE2D_ID_FILLBITMAPPRIMITIVE2D :
+                {
+                    // direct draw of fillBitmapPrimitive
+                    RenderFillBitmapPrimitive2D(static_cast< const primitive2d::FillBitmapPrimitive2D& >(rCandidate));
+                    break;
+                }
+                case PRIMITIVE2D_ID_POLYPOLYGONGRADIENTPRIMITIVE2D :
+                {
+                    // direct draw of gradient
+                    RenderPolyPolygonGradientPrimitive2D(static_cast< const primitive2d::PolyPolygonGradientPrimitive2D& >(rCandidate));
+                    break;
+                }
+                case PRIMITIVE2D_ID_POLYPOLYGONCOLORPRIMITIVE2D :
+                {
+                    // direct draw of PolyPolygon with color
+                    RenderPolyPolygonColorPrimitive2D(static_cast< const primitive2d::PolyPolygonColorPrimitive2D& >(rCandidate));
+                    break;
+                }
+                case PRIMITIVE2D_ID_METAFILEPRIMITIVE2D :
+                {
+                    // direct draw of MetaFile
+                    RenderMetafilePrimitive2D(static_cast< const primitive2d::MetafilePrimitive2D& >(rCandidate));
+                    break;
+                }
+                case PRIMITIVE2D_ID_MASKPRIMITIVE2D :
+                {
+                    // mask group.
+                    RenderMaskPrimitive2D(static_cast< const primitive2d::MaskPrimitive2D& >(rCandidate));
+                    break;
+                }
+                case PRIMITIVE2D_ID_MODIFIEDCOLORPRIMITIVE2D :
+                {
+                    // modified color group. Force output to unified color.
+                    RenderModifiedColorPrimitive2D(static_cast< const primitive2d::ModifiedColorPrimitive2D& >(rCandidate));
+                    break;
+                }
+                case PRIMITIVE2D_ID_ALPHAPRIMITIVE2D :
+                {
+                    // sub-transparence group. Draw to VDev first.
+                    RenderAlphaPrimitive2D(static_cast< const primitive2d::AlphaPrimitive2D& >(rCandidate));
+                    break;
+                }
+                case PRIMITIVE2D_ID_TRANSFORMPRIMITIVE2D :
+                {
+                    // transform group.
+                    RenderTransformPrimitive2D(static_cast< const primitive2d::TransformPrimitive2D& >(rCandidate));
+                    break;
+                }
+                case PRIMITIVE2D_ID_MARKERARRAYPRIMITIVE2D :
+                {
+                    // marker array
+                    RenderMarkerArrayPrimitive2D(static_cast< const primitive2d::MarkerArrayPrimitive2D& >(rCandidate));
+                    break;
+                }
+                default :
+                {
+                    // process recursively
+                    process(rCandidate.get2DDecomposition(getViewInformation2D()));
+                    break;
+                }
             }
-            else
+        }
+    } // end of namespace processor2d
+} // end of namespace drawinglayer
+
+//////////////////////////////////////////////////////////////////////////////
+
+namespace drawinglayer
+{
+    namespace processor2d
+    {
+        VclPixelProcessor2D::VclPixelProcessor2D(const geometry::ViewInformation2D& rViewInformation, OutputDevice& rOutDev)
+        :   VclProcessor2D(rViewInformation, rOutDev)
+        {
+            // prepare maCurrentTransformation matrix with viewTransformation to target directly to pixels
+            maCurrentTransformation = rViewInformation.getViewTransformation();
+
+            // prepare output to pixels
+            mpOutputDevice->Push(PUSH_MAPMODE);
+            mpOutputDevice->SetMapMode();
+        }
+
+        VclPixelProcessor2D::~VclPixelProcessor2D()
+        {
+            // restore MapMode
+            mpOutputDevice->Pop();
+        }
+
+        void VclPixelProcessor2D::processBasePrinitive2D(const primitive2d::BasePrimitive2D& rCandidate)
+        {
+            switch(rCandidate.getPrimitiveID())
             {
-                // restore MapMode
-                mpOutputDevice->Pop();
+                case PRIMITIVE2D_ID_TEXTSIMPLEPORTIONPRIMITIVE2D :
+                case PRIMITIVE2D_ID_TEXTDECORATEDPORTIONPRIMITIVE2D :
+                {
+                    // directdraw of text simple portion
+                    RenderTextSimpleOrDecoratedPortionPrimitive2D(static_cast< const primitive2d::TextSimplePortionPrimitive2D& >(rCandidate));
+                    break;
+                }
+                case PRIMITIVE2D_ID_POLYGONHAIRLINEPRIMITIVE2D :
+                {
+                    // direct draw of hairline
+                    RenderPolygonHairlinePrimitive2D(static_cast< const primitive2d::PolygonHairlinePrimitive2D& >(rCandidate));
+                    break;
+                }
+                case PRIMITIVE2D_ID_BITMAPPRIMITIVE2D :
+                {
+                    // direct draw of transformed BitmapEx primitive
+                    RenderBitmapPrimitive2D(static_cast< const primitive2d::BitmapPrimitive2D& >(rCandidate));
+                    break;
+                }
+                case PRIMITIVE2D_ID_FILLBITMAPPRIMITIVE2D :
+                {
+                    // direct draw of fillBitmapPrimitive
+                    RenderFillBitmapPrimitive2D(static_cast< const primitive2d::FillBitmapPrimitive2D& >(rCandidate));
+                    break;
+                }
+                case PRIMITIVE2D_ID_POLYPOLYGONGRADIENTPRIMITIVE2D :
+                {
+                    // direct draw of gradient
+                    RenderPolyPolygonGradientPrimitive2D(static_cast< const primitive2d::PolyPolygonGradientPrimitive2D& >(rCandidate));
+                    break;
+                }
+                case PRIMITIVE2D_ID_POLYPOLYGONCOLORPRIMITIVE2D :
+                {
+                    // direct draw of PolyPolygon with color
+                    RenderPolyPolygonColorPrimitive2D(static_cast< const primitive2d::PolyPolygonColorPrimitive2D& >(rCandidate));
+                    break;
+                }
+                case PRIMITIVE2D_ID_METAFILEPRIMITIVE2D :
+                {
+                    // direct draw of MetaFile
+                    RenderMetafilePrimitive2D(static_cast< const primitive2d::MetafilePrimitive2D& >(rCandidate));
+                    break;
+                }
+                case PRIMITIVE2D_ID_MASKPRIMITIVE2D :
+                {
+                    // mask group.
+                    RenderMaskPrimitive2D(static_cast< const primitive2d::MaskPrimitive2D& >(rCandidate));
+                    break;
+                }
+                case PRIMITIVE2D_ID_MODIFIEDCOLORPRIMITIVE2D :
+                {
+                    // modified color group. Force output to unified color.
+                    RenderModifiedColorPrimitive2D(static_cast< const primitive2d::ModifiedColorPrimitive2D& >(rCandidate));
+                    break;
+                }
+                case PRIMITIVE2D_ID_ALPHAPRIMITIVE2D :
+                {
+                    // sub-transparence group. Draw to VDev first.
+                    RenderAlphaPrimitive2D(static_cast< const primitive2d::AlphaPrimitive2D& >(rCandidate));
+                    break;
+                }
+                case PRIMITIVE2D_ID_TRANSFORMPRIMITIVE2D :
+                {
+                    // transform group.
+                    RenderTransformPrimitive2D(static_cast< const primitive2d::TransformPrimitive2D& >(rCandidate));
+                    break;
+                }
+                case PRIMITIVE2D_ID_MARKERARRAYPRIMITIVE2D :
+                {
+                    // marker array
+                    RenderMarkerArrayPrimitive2D(static_cast< const primitive2d::MarkerArrayPrimitive2D& >(rCandidate));
+                    break;
+                }
+                default :
+                {
+                    // process recursively
+                    process(rCandidate.get2DDecomposition(getViewInformation2D()));
+                    break;
+                }
             }
         }
     } // end of namespace processor2d
