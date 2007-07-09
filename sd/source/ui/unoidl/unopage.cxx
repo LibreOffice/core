@@ -4,9 +4,9 @@
  *
  *  $RCSfile: unopage.cxx,v $
  *
- *  $Revision: 1.87 $
+ *  $Revision: 1.88 $
  *
- *  last change: $Author: hr $ $Date: 2007-06-27 15:45:50 $
+ *  last change: $Author: rt $ $Date: 2007-07-09 13:06:35 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -699,7 +699,7 @@ void SAL_CALL SdGenericDrawPage::setPropertyValue( const OUString& aPropertyName
             }
             else
             {
-                sal_Bool bStopSound;
+                sal_Bool bStopSound = sal_False;
                 if( aValue >>= bStopSound )
                 {
                     GetPage()->SetStopSound( bStopSound ? true : false );
@@ -712,7 +712,7 @@ void SAL_CALL SdGenericDrawPage::setPropertyValue( const OUString& aPropertyName
         }
         case WID_LOOP_SOUND:
         {
-            sal_Bool bLoop;
+            sal_Bool bLoop = sal_False;
             if( ! (aValue >>= bLoop) )
                 throw lang::IllegalArgumentException();
 
