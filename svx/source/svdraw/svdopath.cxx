@@ -4,9 +4,9 @@
  *
  *  $RCSfile: svdopath.cxx,v $
  *
- *  $Revision: 1.43 $
+ *  $Revision: 1.44 $
  *
- *  last change: $Author: rt $ $Date: 2007-07-06 13:22:13 $
+ *  last change: $Author: rt $ $Date: 2007-07-09 08:11:04 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -64,7 +64,7 @@
 #include <svx/xflclit.hxx>
 #include <svx/svdogrp.hxx>
 
-#include "polypolygoneditor.hxx"
+#include <svx/polypolygoneditor.hxx>
 
 #ifndef _SVX_XLNTRIT_HXX
 #include <svx/xlntrit.hxx>
