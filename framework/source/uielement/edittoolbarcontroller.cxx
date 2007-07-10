@@ -4,9 +4,9 @@
  *
  *  $RCSfile: edittoolbarcontroller.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 14:19:19 $
+ *  last change: $Author: ihi $ $Date: 2007-07-10 15:10:53 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -184,7 +184,7 @@ long EditControl::PreNotify( NotifyEvent& rNEvt )
 EditToolbarController::EditToolbarController(
     const Reference< XMultiServiceFactory >& rServiceManager,
     const Reference< XFrame >&               rFrame,
-    ToolBar*                                 pToolbar,
+    ToolBox*                                 pToolbar,
     USHORT                                   nID,
     sal_Int32                                nWidth,
     const OUString&                          aCommand ) :
