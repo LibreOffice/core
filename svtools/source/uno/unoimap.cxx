@@ -4,9 +4,9 @@
  *
  *  $RCSfile: unoimap.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: hr $ $Date: 2007-06-27 22:03:24 $
+ *  last change: $Author: ihi $ $Date: 2007-07-10 15:20:01 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -292,6 +292,7 @@ SvUnoImageMapObject::SvUnoImageMapObject( const IMapObject& rMapObject, const Sv
         }
         break;
     case IMAP_OBJ_POLYGON:
+    default:
         {
             const Polygon aPoly( ((IMapPolygonObject*)&rMapObject)->GetPolygon(sal_False) );
 
@@ -465,6 +466,7 @@ Sequence< OUString > SAL_CALL SvUnoImageMapObject::getSupportedServiceNames()
     switch( mnType )
     {
     case IMAP_OBJ_POLYGON:
+    default:
         aSNS.getArray()[1] = OUString( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.image.ImageMapPolygonObject" ));
         break;
     case IMAP_OBJ_RECTANGLE:
@@ -482,11 +484,11 @@ OUString SAL_CALL SvUnoImageMapObject::getImplementationName() throw(RuntimeExce
     switch( mnType )
     {
     case IMAP_OBJ_POLYGON:
+    default:
         return OUString( RTL_CONSTASCII_USTRINGPARAM("org.openoffice.comp.svt.ImageMapPolygonObject") );
     case IMAP_OBJ_CIRCLE:
         return OUString( RTL_CONSTASCII_USTRINGPARAM("org.openoffice.comp.svt.ImageMapCircleObject") );
     case IMAP_OBJ_RECTANGLE:
-    default:
         return OUString( RTL_CONSTASCII_USTRINGPARAM("org.openoffice.comp.svt.ImageMapRectangleObject") );
     }
 }
@@ -530,6 +532,9 @@ void SvUnoImageMapObject::_setPropertyValues( const PropertyMapEntry** ppEntries
             break;
         case HANDLE_POLYGON:
             bOk = *pValues >>= maPolygon;
+            break;
+        default:
+            DBG_ERROR( "SvUnoImageMapObject::_setPropertyValues: unexpected property handle" );
             break;
         }
 
@@ -577,6 +582,9 @@ void SvUnoImageMapObject::_getPropertyValues( const PropertyMapEntry** ppEntries
             break;
         case HANDLE_POLYGON:
             *pValues <<= maPolygon;
+            break;
+        default:
+            DBG_ERROR( "SvUnoImageMapObject::_getPropertyValues: unexpected property handle" );
             break;
         }
 
