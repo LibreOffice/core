@@ -4,9 +4,9 @@
  *
  *  $RCSfile: generictoolbarcontroller.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 00:43:30 $
+ *  last change: $Author: ihi $ $Date: 2007-07-10 15:07:12 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -58,7 +58,7 @@ class GenericToolbarController : public svt::ToolboxController
     public:
         GenericToolbarController( const com::sun::star::uno::Reference< com::sun::star::lang::XMultiServiceFactory >& rServiceManager,
                                   const com::sun::star::uno::Reference< com::sun::star::frame::XFrame >& rFrame,
-                                  ToolBar* pToolBar,
+                                  ToolBox* pToolBar,
                                   USHORT   nID,
                                   const rtl::OUString& aCommand );
         virtual ~GenericToolbarController();
@@ -75,7 +75,7 @@ class GenericToolbarController : public svt::ToolboxController
          DECL_STATIC_LINK( GenericToolbarController, ExecuteHdl_Impl, ExecuteInfo* );
 
     private:
-        ToolBar*        m_pToolbar;
+        ToolBox*        m_pToolbar;
         sal_uInt16      m_nID;
         sal_Bool        m_bEnumCommand : 1,
                         m_bMadeInvisible : 1;
