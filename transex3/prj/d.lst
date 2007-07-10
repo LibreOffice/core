@@ -20,8 +20,10 @@ mkdir: %_DEST%\class%_EXT%
 ..\%__SRC%\bin\txtconv.exe %_DEST%\bin%_EXT%\txtconv.exe
 ..\%__SRC%\bin\txtconv %_DEST%\bin%_EXT%\txtconv
 
-..\%__SRC%\class\converter.jar %_DEST%\class%_EXT%\converter.jar
+..\%__SRC%\class\converter\converter.jar %_DEST%\class%_EXT%\converter.jar
 ..\%__SRC%\doc\converter_javadoc.zip %_DEST%\class%_EXT%\converter_javadoc.zip
+
+..\%__SRC%\class\receditor\receditor.jar %_DEST%\class%_EXT%\receditor.jar
 
 ..\scripts\localize.pl %_DEST%\bin%_EXT%\localize.pl
 ..\scripts\localize %_DEST%\bin%_EXT%\localize
