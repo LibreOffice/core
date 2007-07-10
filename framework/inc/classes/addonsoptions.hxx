@@ -4,9 +4,9 @@
  *
  *  $RCSfile: addonsoptions.hxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: hr $ $Date: 2006-05-08 15:16:23 $
+ *  last change: $Author: ihi $ $Date: 2007-07-10 15:05:29 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -75,14 +75,30 @@
     @descr          The method GetAddonsMenu() returns a list of property values.
                     Use follow defines to seperate values by names.
 *//*-*************************************************************************************************************/
-#define ADDONSMENUITEM_PROPERTYNAME_URL                 ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("URL"               ))
-#define ADDONSMENUITEM_PROPERTYNAME_TITLE               ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Title"             ))
-#define ADDONSMENUITEM_PROPERTYNAME_TARGET              ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Target"            ))
-#define ADDONSMENUITEM_PROPERTYNAME_IMAGEIDENTIFIER     ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ImageIdentifier"   ))
-#define ADDONSMENUITEM_PROPERTYNAME_CONTEXT             ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Context"           ))
-#define ADDONSMENUITEM_PROPERTYNAME_SUBMENU             ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Submenu"           ))
-#define ADDONSMENUITEM_PROPERTYNAME_CONTROLTYPE         ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ControlType"       ))
-#define ADDONSMENUITEM_PROPERTYNAME_WIDTH               ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Width"             ))
+#define ADDONSMENUITEM_STRING_URL                       "URL"
+#define ADDONSMENUITEM_STRING_TITLE                     "Title"
+#define ADDONSMENUITEM_STRING_TARGET                    "Target"
+#define ADDONSMENUITEM_STRING_IMAGEIDENTIFIER           "ImageIdentifier"
+#define ADDONSMENUITEM_STRING_CONTEXT                   "Context"
+#define ADDONSMENUITEM_STRING_SUBMENU                   "Submenu"
+#define ADDONSMENUITEM_STRING_CONTROLTYPE               "ControlType"
+#define ADDONSMENUITEM_STRING_WIDTH                     "Width"
+
+#define ADDONSMENUITEM_URL_LEN                          3
+#define ADDONSMENUITEM_TITLE_LEN                        5
+#define ADDONSMENUITEM_TARGET_LEN                       6
+#define ADDONSMENUITEM_SUBMENU_LEN                      7
+#define ADDONSMENUITEM_CONTEXT_LEN                      7
+#define ADDONSMENUITEM_IMAGEIDENTIFIER_LEN              15
+
+#define ADDONSMENUITEM_PROPERTYNAME_URL                 ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(ADDONSMENUITEM_STRING_URL             ))
+#define ADDONSMENUITEM_PROPERTYNAME_TITLE               ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(ADDONSMENUITEM_STRING_TITLE           ))
+#define ADDONSMENUITEM_PROPERTYNAME_TARGET              ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(ADDONSMENUITEM_STRING_TARGET          ))
+#define ADDONSMENUITEM_PROPERTYNAME_IMAGEIDENTIFIER     ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(ADDONSMENUITEM_STRING_IMAGEIDENTIFIER ))
+#define ADDONSMENUITEM_PROPERTYNAME_CONTEXT             ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(ADDONSMENUITEM_STRING_CONTEXT         ))
+#define ADDONSMENUITEM_PROPERTYNAME_SUBMENU             ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(ADDONSMENUITEM_STRING_SUBMENU         ))
+#define ADDONSMENUITEM_PROPERTYNAME_CONTROLTYPE         ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(ADDONSMENUITEM_STRING_CONTROLTYPE     ))
+#define ADDONSMENUITEM_PROPERTYNAME_WIDTH               ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(ADDONSMENUITEM_STRING_WIDTH           ))
 
 #define ADDONSPOPUPMENU_URL_PREFIX_STR                  "private:menu/Addon"
 
@@ -90,6 +106,32 @@
 
 namespace framework
 {
+
+typedef ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue > > MergeMenuDefinition;
+
+struct MergeMenuInstruction
+{
+    ::rtl::OUString     aMergePoint;
+    ::rtl::OUString     aMergeCommand;
+    ::rtl::OUString     aMergeCommandParameter;
+    ::rtl::OUString     aMergeFallback;
+    ::rtl::OUString     aMergeContext;
+    ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue > > aMergeMenu;
+};
+typedef ::std::vector< MergeMenuInstruction > MergeMenuInstructionContainer;
+
+struct MergeToolbarInstruction
+{
+    ::rtl::OUString     aMergeToolbar;
+    ::rtl::OUString     aMergePoint;
+    ::rtl::OUString     aMergeCommand;
+    ::rtl::OUString     aMergeCommandParameter;
+    ::rtl::OUString     aMergeFallback;
+    ::rtl::OUString     aMergeContext;
+    ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue > > aMergeToolbarItems;
+};
+
+typedef ::std::vector< MergeToolbarInstruction > MergeToolbarInstructionContainer;
 
 //_________________________________________________________________________________________________________________
 //  forward declarations
@@ -248,6 +290,31 @@ class AddonsOptions
         *//*-*****************************************************************************************************/
 
         const ::rtl::OUString GetAddonsToolbarResourceName( sal_uInt32 nIndex ) const;
+
+        /*-****************************************************************************************************//**
+            @short      Retrieves all available merge instructions for the Office menu bar
+            @descr      -
+
+            @seealso    -
+
+            @return     The filled MergeMenuDefinitionContaier
+
+            @onerror    We return sal_False
+        *//*-*****************************************************************************************************/
+
+        const MergeMenuInstructionContainer& GetMergeMenuInstructions() const;
+
+        /*-****************************************************************************************************//**
+            @short      Retrieves all available merge instructions for a single toolbar
+            @descr      -
+
+            @seealso    -
+
+            @return     The filled
+
+            @onerror    We return sal_False
+        *//*-*****************************************************************************************************/
+        bool GetMergeToolbarInstructions( const ::rtl::OUString& rToolbarName, MergeToolbarInstructionContainer& rToolbar ) const;
 
         /*-****************************************************************************************************//**
             @short      Gets the Add-On help menu part of all addon components registered
