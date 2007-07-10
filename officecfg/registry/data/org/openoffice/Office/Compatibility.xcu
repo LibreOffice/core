@@ -1,13 +1,13 @@
-<?xml version="1.0" encoding="UTF-8"?>
+﻿<?xml version="1.0" encoding="UTF-8"?>
 <!--***********************************************************************
  *
  *  OpenOffice.org - a multi-platform office productivity suite
  *
  *  $RCSfile: Compatibility.xcu,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 14:47:47 $
+ *  last change: $Author: ihi $ $Date: 2007-07-10 14:51:20 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -45,70 +45,10 @@
             <prop oor:name="Module">
                 <value>swriter</value>
             </prop>
-            <prop oor:name="UsePrinterMetrics">
-                <value>false</value>
-            </prop>
-            <prop oor:name="AddSpacing">
-                <value>true</value>
-            </prop>
-            <prop oor:name="AddSpacingAtPages">
-                <value>true</value>
-            </prop>
-            <prop oor:name="UseOurTabStopFormat">
-                <value>false</value>
-            </prop>
-            <prop oor:name="NoExternalLeading">
-                <value>false</value>
-            </prop>
-            <prop oor:name="UseLineSpacing">
-                <value>false</value>
-            </prop>
-            <prop oor:name="AddTableSpacing">
-                <value>true</value>
-            </prop>
-            <prop oor:name="UseObjectPositioning">
-                <value>false</value>
-            </prop>
-            <prop oor:name="UseOurTextWrapping">
-                <value>false</value>
-            </prop>
-            <prop oor:name="ConsiderWrappingStyle">
-                <value>false</value>
-            </prop>
         </node>
         <node oor:name="_user" oor:op="replace">
             <prop oor:name="Module">
                 <value>swriter</value>
-            </prop>
-            <prop oor:name="UsePrinterMetrics">
-                <value>false</value>
-            </prop>
-            <prop oor:name="AddSpacing">
-                <value>true</value>
-            </prop>
-            <prop oor:name="AddSpacingAtPages">
-                <value>true</value>
-            </prop>
-            <prop oor:name="UseOurTabStopFormat">
-                <value>false</value>
-            </prop>
-            <prop oor:name="NoExternalLeading">
-                <value>false</value>
-            </prop>
-            <prop oor:name="UseLineSpacing">
-                <value>false</value>
-            </prop>
-            <prop oor:name="AddTableSpacing">
-                <value>true</value>
-            </prop>
-            <prop oor:name="UseObjectPositioning">
-                <value>false</value>
-            </prop>
-            <prop oor:name="UseOurTextWrapping">
-                <value>false</value>
-            </prop>
-            <prop oor:name="ConsiderWrappingStyle">
-                <value>false</value>
             </prop>
         </node>
     </node>
