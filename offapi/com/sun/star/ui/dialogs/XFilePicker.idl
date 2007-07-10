@@ -4,9 +4,9 @@
  *
  *  $RCSfile: XFilePicker.idl,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 08:38:38 $
+ *  last change: $Author: ihi $ $Date: 2007-07-10 16:16:06 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -62,7 +62,7 @@ published interface XFilePicker: com::sun::star::ui::dialogs::XExecutableDialog
     /** Enable/disable multiselection mode
 
         <p>If the multiselection mode is enabled, multiple files
-        may be selected bz the user else only one file selection at a time is possible</p>
+        may be selected by the user else only one file selection at a time is possible</p>
 
         @param bMode
         <p>A value of <TRUE/> enables the multiselection mode.</p>
