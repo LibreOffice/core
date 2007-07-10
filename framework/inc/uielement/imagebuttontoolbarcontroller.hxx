@@ -4,9 +4,9 @@
  *
  *  $RCSfile: imagebuttontoolbarcontroller.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: hr $ $Date: 2006-05-08 15:17:08 $
+ *  last change: $Author: ihi $ $Date: 2007-07-10 15:07:31 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -58,7 +58,7 @@ class ImageButtonToolbarController : public ComplexToolbarController
     public:
         ImageButtonToolbarController( const com::sun::star::uno::Reference< com::sun::star::lang::XMultiServiceFactory >& rServiceManager,
                                       const com::sun::star::uno::Reference< com::sun::star::frame::XFrame >& rFrame,
-                                      ToolBar*             pToolBar,
+                                      ToolBox*             pToolBar,
                                       USHORT               nID,
                                       const rtl::OUString& aCommand );
         virtual ~ImageButtonToolbarController();
