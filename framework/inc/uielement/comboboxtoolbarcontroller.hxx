@@ -4,9 +4,9 @@
  *
  *  $RCSfile: comboboxtoolbarcontroller.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: ihi $ $Date: 2006-08-01 09:35:31 $
+ *  last change: $Author: ihi $ $Date: 2007-07-10 15:06:11 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -73,7 +73,7 @@ class ComboboxToolbarController : public IComboBoxListener,
     public:
         ComboboxToolbarController( const com::sun::star::uno::Reference< com::sun::star::lang::XMultiServiceFactory >& rServiceManager,
                                    const com::sun::star::uno::Reference< com::sun::star::frame::XFrame >& rFrame,
-                                   ToolBar*     pToolBar,
+                                   ToolBox*     pToolBar,
                                    USHORT       nID,
                                    sal_Int32    nWidth,
                                    const rtl::OUString& aCommand );

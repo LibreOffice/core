@@ -4,9 +4,9 @@
  *
  *  $RCSfile: complextoolbarcontroller.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: ihi $ $Date: 2006-08-01 09:36:35 $
+ *  last change: $Author: ihi $ $Date: 2007-07-10 15:06:31 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -78,7 +78,7 @@ class ComplexToolbarController : public svt::ToolboxController
     public:
         ComplexToolbarController( const com::sun::star::uno::Reference< com::sun::star::lang::XMultiServiceFactory >& rServiceManager,
                                   const com::sun::star::uno::Reference< com::sun::star::frame::XFrame >& rFrame,
-                                  ToolBar*     pToolBar,
+                                  ToolBox*     pToolBar,
                                   USHORT       nID,
                                   const rtl::OUString& aCommand );
         virtual ~ComplexToolbarController();
@@ -108,7 +108,7 @@ class ComplexToolbarController : public svt::ToolboxController
         void notifyFocusLost();
         void notifyTextChanged( const ::rtl::OUString& aText );
 
-        ToolBar*                                                                    m_pToolbar;
+        ToolBox*                                                                    m_pToolbar;
         sal_uInt16                                                                  m_nID;
         sal_Bool                                                                    m_bMadeInvisible;
         mutable ::com::sun::star::util::URL                                         m_aURL;
