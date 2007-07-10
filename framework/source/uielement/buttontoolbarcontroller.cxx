@@ -4,9 +4,9 @@
  *
  *  $RCSfile: buttontoolbarcontroller.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 14:17:43 $
+ *  last change: $Author: ihi $ $Date: 2007-07-10 15:09:53 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -105,7 +105,7 @@ namespace framework
 
 ButtonToolbarController::ButtonToolbarController(
     const uno::Reference< lang::XMultiServiceFactory >& rServiceManager,
-    ToolBar*                                            pToolBar,
+    ToolBox*                                            pToolBar,
     const rtl::OUString&                                aCommand ) :
     cppu::OWeakObject(),
     m_bInitialized( sal_False ),
