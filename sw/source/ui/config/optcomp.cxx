@@ -4,9 +4,9 @@
  *
  *  $RCSfile: optcomp.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: rt $ $Date: 2007-04-26 08:51:36 $
+ *  last change: $Author: ihi $ $Date: 2007-07-10 14:59:36 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -99,6 +99,7 @@ struct CompatibilityItem
     bool        m_bUseObjPos;
     bool        m_bUseOurTextWrapping;
     bool        m_bConsiderWrappingStyle;
+    bool        m_bExpandWordSpace;
     bool        m_bIsDefault;
     bool        m_bIsUser;
 
@@ -106,7 +107,8 @@ struct CompatibilityItem
                        bool _bUsePrtMetrics, bool _bAddSpacing, bool _bAddSpacingAtPages,
                        bool _bUseOurTabStops, bool _bNoExtLeading, bool _bUseLineSpacing,
                        bool _bAddTableSpacing, bool _bUseObjPos, bool _bUseOurTextWrapping,
-                       bool _bConsiderWrappingStyle, bool _bIsDefault, bool _bIsUser ) :
+                       bool _bConsiderWrappingStyle, bool _bExpandWordSpace,
+                       bool _bIsDefault, bool _bIsUser ) :
 
         m_sName                 ( _rName ),
         m_sModule               ( _rModule ),
@@ -120,6 +122,7 @@ struct CompatibilityItem
         m_bUseObjPos            ( _bUseObjPos ),
         m_bUseOurTextWrapping   ( _bUseOurTextWrapping ),
         m_bConsiderWrappingStyle( _bConsiderWrappingStyle ),
+        m_bExpandWordSpace      ( _bExpandWordSpace ),
         m_bIsDefault            ( _bIsDefault ),
         m_bIsUser               ( _bIsUser ) {}
 };
@@ -248,7 +251,8 @@ ULONG convertBools2Ulong_Impl
     bool _bAddTableSpacing,
     bool _bUseObjPos,
     bool _bUseOurTextWrapping,
-    bool _bConsiderWrappingStyle
+    bool _bConsiderWrappingStyle,
+    bool _bExpandWordSpace
 )
 {
     ULONG nRet = 0;
@@ -282,6 +286,9 @@ ULONG convertBools2Ulong_Impl
         nRet |= nSetBit;
     nSetBit = nSetBit << 1;
     if ( _bConsiderWrappingStyle )
+        nRet |= nSetBit;
+    nSetBit = nSetBit << 1;
+    if ( _bExpandWordSpace )
         nRet |= nSetBit;
 
     return nRet;
@@ -331,6 +338,7 @@ void SwCompatibilityOptPage::InitControls( const SfxItemSet& rSet )
     bool bUseObjPos;
     bool bUseOurTextWrapping;
     bool bConsiderWrappingStyle;
+    bool bExpandWordSpace;
     int i, j, nCount = aList.getLength();
     for ( i = 0; i < nCount; ++i )
     {
@@ -363,13 +371,15 @@ void SwCompatibilityOptPage::InitControls( const SfxItemSet& rSet )
                 aValue.Value >>= bUseOurTextWrapping;
             else if ( aValue.Name == COMPATIBILITY_PROPERTYNAME_CONSIDERWRAPPINGSTYLE )
                 aValue.Value >>= bConsiderWrappingStyle;
+            else if ( aValue.Name == COMPATIBILITY_PROPERTYNAME_EXPANDWORDSPACE )
+                aValue.Value >>= bExpandWordSpace;
         }
 
         CompatibilityItem aItem(
             sName, sModule, bUsePrtMetrics, bAddSpacing,
             bAddSpacingAtPages, bUseOurTabStops, bNoExtLeading,
             bUseLineSpacing, bAddTableSpacing, bUseObjPos,
-            bUseOurTextWrapping, bConsiderWrappingStyle,
+            bUseOurTextWrapping, bConsiderWrappingStyle, bExpandWordSpace,
             ( sName.equals( DEFAULT_ENTRY ) != sal_False ),
             ( sName.equals( USER_ENTRY ) != sal_False ) );
         m_pImpl->m_aList.push_back( aItem );
@@ -394,7 +404,8 @@ void SwCompatibilityOptPage::InitControls( const SfxItemSet& rSet )
         ULONG nOptions = convertBools2Ulong_Impl(
             bUsePrtMetrics, bAddSpacing, bAddSpacingAtPages,
             bUseOurTabStops, bNoExtLeading, bUseLineSpacing,
-            bAddTableSpacing, bUseObjPos, bUseOurTextWrapping, bConsiderWrappingStyle );
+            bAddTableSpacing, bUseObjPos, bUseOurTextWrapping,
+            bConsiderWrappingStyle, bExpandWordSpace );
         m_aFormattingLB.SetEntryData( nPos, (void*)(long)nOptions );
     }
 
@@ -466,6 +477,7 @@ IMPL_LINK( SwCompatibilityOptPage, UseAsDefaultHdl, PushButton*, EMPTYARG )
                         case COPT_USE_OBJECTPOSITIONING: pItem->m_bUseObjPos = bChecked; break;
                         case COPT_USE_OUR_TEXTWRAPPING: pItem->m_bUseOurTextWrapping = bChecked; break;
                         case COPT_CONSIDER_WRAPPINGSTYLE: pItem->m_bConsiderWrappingStyle = bChecked; break;
+                        case COPT_EXPAND_WORDSPACE:  pItem->m_bExpandWordSpace = bChecked; break;
                         default:
                         {
                             DBG_ERRORFILE( "SwCompatibilityOptPage::UseAsDefaultHdl(): wrong option" );
@@ -514,7 +526,8 @@ ULONG SwCompatibilityOptPage::GetDocumentOptions() const
                 rIDocumentSettingAccess.get(IDocumentSettingAccess::ADD_PARA_SPACING_TO_TABLE_CELLS) != sal_False,
                 rIDocumentSettingAccess.get(IDocumentSettingAccess::USE_FORMER_OBJECT_POS) != sal_False,
                 rIDocumentSettingAccess.get(IDocumentSettingAccess::USE_FORMER_TEXT_WRAPPING) != sal_False,
-                rIDocumentSettingAccess.get(IDocumentSettingAccess::CONSIDER_WRAP_ON_OBJECT_POSITION) != sal_False );
+                rIDocumentSettingAccess.get(IDocumentSettingAccess::CONSIDER_WRAP_ON_OBJECT_POSITION) != sal_False,
+                rIDocumentSettingAccess.get(IDocumentSettingAccess::DO_NOT_JUSTIFY_LINES_WITH_MANUAL_BREAK) != sal_True );
     }
     return nRet;
 }
@@ -531,7 +544,8 @@ void SwCompatibilityOptPage::WriteOptions()
             pItem->m_bAddSpacingAtPages, pItem->m_bUseOurTabStops,
             pItem->m_bNoExtLeading, pItem->m_bUseLineSpacing,
             pItem->m_bAddTableSpacing, pItem->m_bUseObjPos,
-            pItem->m_bUseOurTextWrapping, pItem->m_bConsiderWrappingStyle );
+            pItem->m_bUseOurTextWrapping, pItem->m_bConsiderWrappingStyle,
+            pItem->m_bExpandWordSpace );
 }
 
 // -----------------------------------------------------------------------
@@ -606,6 +620,11 @@ BOOL SwCompatibilityOptPage::FillItemSet( SfxItemSet& rSet )
                 else if ( COPT_CONSIDER_WRAPPINGSTYLE == nOption )
                 {
                     m_pWrtShell->SetConsiderWrapOnObjPos( bChecked );
+                    bModified = TRUE;
+                }
+                else if ( COPT_EXPAND_WORDSPACE == nOption )
+                {
+                    m_pWrtShell->SetDoNotJustifyLinesWithManualBreak( !bChecked );
                     bModified = TRUE;
                 }
             }
