@@ -4,9 +4,9 @@
  *
  *  $RCSfile: imagebuttontoolbarcontroller.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2007-01-29 14:51:39 $
+ *  last change: $Author: ihi $ $Date: 2007-07-10 15:11:45 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -163,7 +163,7 @@ static void SubstituteVariables( ::rtl::OUString& aURL )
 ImageButtonToolbarController::ImageButtonToolbarController(
     const Reference< XMultiServiceFactory >& rServiceManager,
     const Reference< XFrame >&               rFrame,
-    ToolBar*                                 pToolbar,
+    ToolBox*                                 pToolbar,
     USHORT                                   nID,
     const OUString&                          aCommand ) :
     ComplexToolbarController( rServiceManager, rFrame, pToolbar, nID, aCommand )
