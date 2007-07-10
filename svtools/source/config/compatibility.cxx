@@ -4,9 +4,9 @@
  *
  *  $RCSfile: compatibility.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: hr $ $Date: 2007-06-27 21:10:53 $
+ *  last change: $Author: ihi $ $Date: 2007-07-10 15:15:59 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -101,21 +101,23 @@ using namespace ::com::sun::star::beans;
 #define PROPERTYNAME_USEOBJPOS          COMPATIBILITY_PROPERTYNAME_USEOBJECTPOSITIONING
 #define PROPERTYNAME_USEOURTEXTWRAP     COMPATIBILITY_PROPERTYNAME_USEOURTEXTWRAPPING
 #define PROPERTYNAME_CONSIDERWRAPSTYLE  COMPATIBILITY_PROPERTYNAME_CONSIDERWRAPPINGSTYLE
+#define PROPERTYNAME_EXPANDWORDSPACE    COMPATIBILITY_PROPERTYNAME_EXPANDWORDSPACE
 
-#define PROPERTYCOUNT               12
+#define PROPERTYCOUNT                   13
 
-#define OFFSET_NAME                 0
-#define OFFSET_MODULE               1
-#define OFFSET_USEPRTMETRICS        2
-#define OFFSET_ADDSPACING           3
-#define OFFSET_ADDSPACINGATPAGES    4
-#define OFFSET_USEOURTABSTOPS       5
-#define OFFSET_NOEXTLEADING         6
-#define OFFSET_USELINESPACING       7
-#define OFFSET_ADDTABLESPACING      8
-#define OFFSET_USEOBJPOS            9
-#define OFFSET_USEOURTEXTWRAPPING   10
-#define OFFSET_CONSIDERWRAPPINGSTYLE 11
+#define OFFSET_NAME                     0
+#define OFFSET_MODULE                   1
+#define OFFSET_USEPRTMETRICS            2
+#define OFFSET_ADDSPACING               3
+#define OFFSET_ADDSPACINGATPAGES        4
+#define OFFSET_USEOURTABSTOPS           5
+#define OFFSET_NOEXTLEADING             6
+#define OFFSET_USELINESPACING           7
+#define OFFSET_ADDTABLESPACING          8
+#define OFFSET_USEOBJPOS                9
+#define OFFSET_USEOURTEXTWRAPPING       10
+#define OFFSET_CONSIDERWRAPPINGSTYLE    11
+#define OFFSET_EXPANDWORDSPACE          12
 
 //_________________________________________________________________________________________________________________
 //  private declarations!
@@ -132,7 +134,8 @@ struct SvtCompatibilityEntry
             bAddSpacingAtPages( false ), bUseOurTabStops( false ),
             bNoExtLeading( false ), bUseLineSpacing( false ),
             bAddTableSpacing( false ), bUseObjPos( false ),
-            bUseOurTextWrapping( false ), bConsiderWrappingStyle( false ) {}
+            bUseOurTextWrapping( false ), bConsiderWrappingStyle( false ),
+            bExpandWordSpace( true ) {}
         SvtCompatibilityEntry(
             const OUString& _rName, const OUString& _rNewModule ) :
                 sName( _rName ), sModule( _rNewModule ),
@@ -140,7 +143,8 @@ struct SvtCompatibilityEntry
                 bAddSpacingAtPages( false ), bUseOurTabStops( false ),
                 bNoExtLeading( false ), bUseLineSpacing( false ),
                 bAddTableSpacing( false ), bUseObjPos( false ),
-                bUseOurTextWrapping( false ), bConsiderWrappingStyle( false ) {}
+                bUseOurTextWrapping( false ), bConsiderWrappingStyle( false ),
+                bExpandWordSpace( true ) {}
 
         inline void     SetUsePrtMetrics( bool _bSet ) { bUsePrtMetrics = _bSet; }
         inline void     SetAddSpacing( bool _bSet ) { bAddSpacing = _bSet; }
@@ -152,6 +156,7 @@ struct SvtCompatibilityEntry
         inline void     SetUseObjPos( bool _bSet ) { bUseObjPos = _bSet; }
         inline void     SetUseOurTextWrapping( bool _bSet ) { bUseOurTextWrapping = _bSet; }
         inline void     SetConsiderWrappingStyle( bool _bSet ) { bConsiderWrappingStyle = _bSet; }
+        inline void     SetExpandWordSpace( bool _bSet ) { bExpandWordSpace = _bSet; }
 
     public:
         OUString    sName;
@@ -166,6 +171,7 @@ struct SvtCompatibilityEntry
         bool        bUseObjPos;
         bool        bUseOurTextWrapping;
         bool        bConsiderWrappingStyle;
+        bool        bExpandWordSpace;
 };
 
 /*-****************************************************************************************************************
@@ -210,6 +216,7 @@ class SvtCompatibility
             lProperties[ OFFSET_USEOBJPOS ].Name = PROPERTYNAME_USEOBJPOS;
             lProperties[ OFFSET_USEOURTEXTWRAPPING ].Name = PROPERTYNAME_USEOURTEXTWRAP;
             lProperties[ OFFSET_CONSIDERWRAPPINGSTYLE ].Name = PROPERTYNAME_CONSIDERWRAPSTYLE;
+            lProperties[ OFFSET_EXPANDWORDSPACE ].Name = PROPERTYNAME_EXPANDWORDSPACE;
 
             for ( vector< SvtCompatibilityEntry >::const_iterator pItem = pList->begin();
                   pItem != pList->end(); ++pItem )
@@ -226,6 +233,7 @@ class SvtCompatibility
                 lProperties[ OFFSET_USEOBJPOS ].Value <<= pItem->bUseObjPos;
                 lProperties[ OFFSET_USEOURTEXTWRAPPING ].Value <<= pItem->bUseOurTextWrapping;
                 lProperties[ OFFSET_CONSIDERWRAPPINGSTYLE ].Value <<= pItem->bConsiderWrappingStyle;
+                lProperties[ OFFSET_EXPANDWORDSPACE ].Value <<= pItem->bExpandWordSpace;
                 lResult[ nStep ] = lProperties;
                 ++nStep;
             }
@@ -327,18 +335,20 @@ class SvtCompatibilityOptions_Impl : public ConfigItem
                                                             bool _bAddTableSpacing,
                                                             bool _bUseObjPos,
                                                             bool _bUseOurTextWrapping,
-                                                            bool _bConsiderWrappingStyle );
+                                                            bool _bConsiderWrappingStyle,
+                                                            bool _bExpandWordSpace );
 
-        inline bool                             IsUsePrtDevice() const { return m_aDefOptions.bUsePrtMetrics; }
-        inline bool                             IsAddSpacing() const { return m_aDefOptions.bAddSpacing; }
-        inline bool                             IsAddSpacingAtPages() const { return m_aDefOptions.bAddSpacingAtPages; }
-        inline bool                             IsUseOurTabStops() const { return m_aDefOptions.bUseOurTabStops; }
-        inline bool                             IsNoExtLeading() const { return m_aDefOptions.bNoExtLeading; }
-        inline bool                             IsUseLineSpacing() const { return m_aDefOptions.bUseLineSpacing; }
-        inline bool                             IsAddTableSpacing() const { return m_aDefOptions.bAddTableSpacing; }
-        inline bool                             IsUseObjPos() const { return m_aDefOptions.bUseObjPos; }
-        inline bool                             IsUseOurTextWrapping() const { return m_aDefOptions.bUseOurTextWrapping; }
-        inline bool                             IsConsiderWrappingStyle() const { return m_aDefOptions.bConsiderWrappingStyle; }
+        inline bool IsUsePrtDevice() const { return m_aDefOptions.bUsePrtMetrics; }
+        inline bool IsAddSpacing() const { return m_aDefOptions.bAddSpacing; }
+        inline bool IsAddSpacingAtPages() const { return m_aDefOptions.bAddSpacingAtPages; }
+        inline bool IsUseOurTabStops() const { return m_aDefOptions.bUseOurTabStops; }
+        inline bool IsNoExtLeading() const { return m_aDefOptions.bNoExtLeading; }
+        inline bool IsUseLineSpacing() const { return m_aDefOptions.bUseLineSpacing; }
+        inline bool IsAddTableSpacing() const { return m_aDefOptions.bAddTableSpacing; }
+        inline bool IsUseObjPos() const { return m_aDefOptions.bUseObjPos; }
+        inline bool IsUseOurTextWrapping() const { return m_aDefOptions.bUseOurTextWrapping; }
+        inline bool IsConsiderWrappingStyle() const { return m_aDefOptions.bConsiderWrappingStyle; }
+        inline bool IsExpandWordSpace() const { return m_aDefOptions.bExpandWordSpace; }
 
     //-------------------------------------------------------------------------------------------------------------
     //  private methods
@@ -433,6 +443,7 @@ SvtCompatibilityOptions_Impl::SvtCompatibilityOptions_Impl()
         lValues[ nPosition++ ] >>= aItem.bUseObjPos;
         lValues[ nPosition++ ] >>= aItem.bUseOurTextWrapping;
         lValues[ nPosition++ ] >>= aItem.bConsiderWrappingStyle;
+        lValues[ nPosition++ ] >>= aItem.bExpandWordSpace;
         m_aOptions.AppendEntry( aItem );
 
         if ( !bDefaultFound && aItem.sName.equals( COMPATIBILITY_DEFAULT_NAME ) != sal_False )
@@ -493,6 +504,7 @@ void SvtCompatibilityOptions_Impl::Commit()
         lPropertyValues[ OFFSET_USEOBJPOS - 1               ].Name = sNode + PROPERTYNAME_USEOBJPOS;
         lPropertyValues[ OFFSET_USEOURTEXTWRAPPING - 1      ].Name = sNode + PROPERTYNAME_USEOURTEXTWRAP;
         lPropertyValues[ OFFSET_CONSIDERWRAPPINGSTYLE - 1   ].Name = sNode + PROPERTYNAME_CONSIDERWRAPSTYLE;
+        lPropertyValues[ OFFSET_EXPANDWORDSPACE - 1         ].Name = sNode + PROPERTYNAME_EXPANDWORDSPACE;
 
         lPropertyValues[ OFFSET_MODULE - 1                  ].Value <<= aItem.sModule;
         lPropertyValues[ OFFSET_USEPRTMETRICS - 1           ].Value <<= aItem.bUsePrtMetrics;
@@ -505,6 +517,7 @@ void SvtCompatibilityOptions_Impl::Commit()
         lPropertyValues[ OFFSET_USEOBJPOS - 1               ].Value <<= aItem.bUseObjPos;
         lPropertyValues[ OFFSET_USEOURTEXTWRAPPING - 1      ].Value <<= aItem.bUseOurTextWrapping;
         lPropertyValues[ OFFSET_CONSIDERWRAPPINGSTYLE - 1   ].Value <<= aItem.bConsiderWrappingStyle;
+        lPropertyValues[ OFFSET_EXPANDWORDSPACE - 1         ].Value <<= aItem.bExpandWordSpace;
 
         SetSetProperties( SETNODE_ALLFILEFORMATS, lPropertyValues );
     }
@@ -544,7 +557,8 @@ void SvtCompatibilityOptions_Impl::AppendItem(  const ::rtl::OUString& _sName,
                                                 bool _bAddTableSpacing,
                                                 bool _bUseObjPos,
                                                 bool _bUseOurTextWrapping,
-                                                bool _bConsiderWrappingStyle )
+                                                bool _bConsiderWrappingStyle,
+                                                bool _bExpandWordSpace )
 {
     SvtCompatibilityEntry aItem( _sName, _sModule );
     aItem.SetUsePrtMetrics( _bUsePrtMetrics );
@@ -557,7 +571,13 @@ void SvtCompatibilityOptions_Impl::AppendItem(  const ::rtl::OUString& _sName,
     aItem.SetUseObjPos( _bUseObjPos );
     aItem.SetUseOurTextWrapping( _bUseOurTextWrapping );
     aItem.SetConsiderWrappingStyle( _bConsiderWrappingStyle );
+    aItem.SetExpandWordSpace( _bExpandWordSpace );
     m_aOptions.AppendEntry( aItem );
+
+    // default item reset?
+    if ( _sName.equals( COMPATIBILITY_DEFAULT_NAME ) != sal_False )
+        m_aDefOptions = aItem;
+
     SetModified();
 }
 
@@ -624,6 +644,9 @@ void SvtCompatibilityOptions_Impl::impl_ExpandPropertyNames(
         ++nDestStep;
         lDestination[nDestStep] = sFixPath;
         lDestination[nDestStep] += PROPERTYNAME_CONSIDERWRAPSTYLE;
+        ++nDestStep;
+        lDestination[nDestStep] = sFixPath;
+        lDestination[nDestStep] += PROPERTYNAME_EXPANDWORDSPACE;
         ++nDestStep;
     }
 }
@@ -694,13 +717,15 @@ void SvtCompatibilityOptions::AppendItem( const ::rtl::OUString& sName,
                                           bool bAddTableSpacing,
                                           bool bUseObjPos,
                                           bool bUseOurTextWrapping,
-                                          bool bConsiderWrappingStyle )
+                                          bool bConsiderWrappingStyle,
+                                          bool bExpandWordSpace )
 {
     MutexGuard aGuard( GetOwnStaticMutex() );
     m_pDataContainer->AppendItem(
         sName, sModule, bUsePrtMetrics, bAddSpacing,
         bAddSpacingAtPages, bUseOurTabStops, bNoExtLeading,
-        bUseLineSpacing, bAddTableSpacing, bUseObjPos, bUseOurTextWrapping, bConsiderWrappingStyle );
+        bUseLineSpacing, bAddTableSpacing, bUseObjPos,
+        bUseOurTextWrapping, bConsiderWrappingStyle, bExpandWordSpace );
 }
 
 bool SvtCompatibilityOptions::IsUsePrtDevice() const
@@ -761,6 +786,12 @@ bool SvtCompatibilityOptions::IsConsiderWrappingStyle() const
 {
     MutexGuard aGuard( GetOwnStaticMutex() );
     return m_pDataContainer->IsConsiderWrappingStyle();
+}
+
+bool SvtCompatibilityOptions::IsExpandWordSpace() const
+{
+    MutexGuard aGuard( GetOwnStaticMutex() );
+    return m_pDataContainer->IsExpandWordSpace();
 }
 
 Sequence< Sequence< PropertyValue > > SvtCompatibilityOptions::GetList() const
