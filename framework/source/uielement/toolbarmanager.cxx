@@ -4,9 +4,9 @@
  *
  *  $RCSfile: toolbarmanager.cxx,v $
  *
- *  $Revision: 1.33 $
+ *  $Revision: 1.34 $
  *
- *  last change: $Author: obo $ $Date: 2007-01-23 07:11:26 $
+ *  last change: $Author: ihi $ $Date: 2007-07-10 15:13:31 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -75,6 +75,8 @@
 #ifndef __FRAMEWORK_CLASES_RESOURCE_HRC_
 #include <classes/resource.hrc>
 #endif
+#include <classes/addonsoptions.hxx>
+#include <uielement/toolbarmerger.hxx>
 
 //_________________________________________________________________________________________________________________
 //  interface includes
@@ -211,7 +213,7 @@ static const sal_Int32 ITEM_DESCRIPTOR_STYLE_LEN       = 5;
 
 static const char   HELPID_PREFIX[]                 = "helpid:";
 static const char   HELPID_PREFIX_TESTTOOL[]        = ".HelpId:";
-static sal_Int32    HELPID_PREFIX_LENGTH            = 7;
+//static sal_Int32    HELPID_PREFIX_LENGTH            = 7;
 static const USHORT STARTID_CUSTOMIZE_POPUPMENU     = 1000;
 
 
@@ -395,6 +397,15 @@ void ToolBarManager::Destroy()
             ((SystemWindow *)pWindow)->GetTaskPaneList()->RemoveWindow( m_pToolBar );
         m_bAddedToTaskPaneList = sal_False;
     }
+
+    // Delete the additional add-ons data
+    for ( sal_uInt16 i = 0; i < m_pToolBar->GetItemCount(); i++ )
+    {
+        sal_uInt16 nItemId = m_pToolBar->GetItemId( i );
+        if ( nItemId > 0 )
+            delete static_cast< AddonsParams* >( m_pToolBar->GetItemData( nItemId ));
+    }
+
     delete m_pToolBar;
     m_pToolBar = 0;
 }
@@ -529,17 +540,20 @@ void ToolBarManager::UpdateControllers()
     if ( !m_bUpdateControllers )
     {
         m_bUpdateControllers = sal_True;
-        for ( sal_uInt32 n = 0; n < m_aControllerVector.size(); n++ )
+        ToolBarControllerMap::iterator pIter = m_aControllerMap.begin();
+
+        while ( pIter != m_aControllerMap.end() )
         {
             try
             {
-                Reference< XUpdatable > xUpdatable( m_aControllerVector[n], UNO_QUERY );
+                Reference< XUpdatable > xUpdatable( pIter->second, UNO_QUERY );
                 if ( xUpdatable.is() )
                     xUpdatable->update();
             }
             catch ( Exception& )
             {
             }
+            ++pIter;
         }
     }
     m_bUpdateControllers = sal_False;
@@ -879,20 +893,22 @@ void ToolBarManager::RemoveControllers()
         return;
 
     m_aSubToolBarControllerMap.clear();
-    for ( sal_uInt32 n = 0; n < m_aControllerVector.size(); n++ )
+
+    ToolBarControllerMap::iterator pIter = m_aControllerMap.begin();
+    while ( pIter != m_aControllerMap.end() )
     {
         try
         {
-            Reference< XComponent > xComponent( m_aControllerVector[n], UNO_QUERY );
+            Reference< XComponent > xComponent( pIter->second, UNO_QUERY );
             if ( xComponent.is() )
                 xComponent->dispose();
         }
         catch ( Exception& )
         {
         }
-
-        m_aControllerVector[n].clear();
+        ++pIter;
     }
+    m_aControllerMap.clear();
 }
 
 OUString ToolBarManager::RetrieveLabelFromCommand( const OUString& aCmdURL )
@@ -956,7 +972,7 @@ OUString ToolBarManager::RetrieveLabelFromCommand( const OUString& aCmdURL )
     return aLabel;
 }
 
-void ToolBarManager::CreateControllers( const ControllerParamsVector& rControllerParamsVector )
+void ToolBarManager::CreateControllers()
 {
     RTL_LOGFILE_CONTEXT( aLog, "framework (cd100003) ::ToolBarManager::CreateControllers" );
 
@@ -980,6 +996,7 @@ void ToolBarManager::CreateControllers( const ControllerParamsVector& rControlle
         if ( nId == 0 )
             continue;
 
+        sal_Int16                    nWidth( sal_Int16( m_pToolBar->GetHelpId( nId )));
         rtl::OUString                aLoadURL( RTL_CONSTASCII_USTRINGPARAM( ".uno:OpenUrl" ));
         rtl::OUString                aCommandURL( m_pToolBar->GetItemCommand( nId ));
         sal_Bool                     bInit( sal_True );
@@ -988,13 +1005,14 @@ void ToolBarManager::CreateControllers( const ControllerParamsVector& rControlle
 
         svt::ToolboxController* pController( 0 );
 
+        m_pToolBar->SetHelpId( nId, 0 ); // reset value again
         if ( bHasDisabledEntries )
         {
             aURL.Complete = aCommandURL;
             xTrans->parseStrict( aURL );
             if ( aCmdOptions.Lookup( SvtCommandOptions::CMDOPTION_DISABLED, aURL.Path ))
             {
-                m_aControllerVector.push_back( xController );
+                m_aControllerMap[ nId ] = xController;
                 m_pToolBar->HideItem( nId );
                 continue;
             }
@@ -1021,7 +1039,6 @@ void ToolBarManager::CreateControllers( const ControllerParamsVector& rControlle
                 aPropValue.Value    = makeAny( xToolbarWindow );
                 aPropertyVector.push_back( makeAny( aPropValue ));
 
-                sal_Int16 nWidth( rControllerParamsVector[nId-1].nWidth );
                 if ( nWidth > 0 )
                 {
                     aPropValue.Name     = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Width" ));
@@ -1044,13 +1061,38 @@ void ToolBarManager::CreateControllers( const ControllerParamsVector& rControlle
         {
             pController = CreateToolBoxController( m_xFrame, m_pToolBar, nId, aCommandURL );
             if ( !pController )
-                pController = new GenericToolbarController( m_xServiceManager, m_xFrame, m_pToolBar, nId, aCommandURL );
+            {
+                if ( m_pToolBar->GetItemData( nId ) != 0 )
+                {
+                    // retrieve additional parameters
+                    ::rtl::OUString aControlType = static_cast< AddonsParams* >( m_pToolBar->GetItemData( nId ))->aControlType;
 
-            if ( pController )
+                    Reference< XStatusListener > xStatusListener(
+                        ToolBarMerger::CreateController( m_xServiceManager,
+                                                         m_xFrame,
+                                                         m_pToolBar,
+                                                         aCommandURL,
+                                                         nId,
+                                                         nWidth,
+                                                         aControlType ), UNO_QUERY );
+
+                    xController = xStatusListener;
+                }
+                else
+                {
+                    xController = Reference< XStatusListener >(
+                        new GenericToolbarController( m_xServiceManager, m_xFrame, m_pToolBar, nId, aCommandURL ));
+                }
+            }
+            else if ( pController )
+            {
                 xController = Reference< XStatusListener >( static_cast< ::cppu::OWeakObject *>( pController ), UNO_QUERY );
+            }
         }
 
-        m_aControllerVector.push_back( xController );
+        // Associate ID and controller to be able to retrieve
+        // the controller from the ID later.
+        m_aControllerMap[ nId ] = xController;
 
         // Fill sub-toolbars into our hash-map
         Reference< XSubToolbarController > xSubToolBar( xController, UNO_QUERY );
@@ -1094,7 +1136,6 @@ void ToolBarManager::CreateControllers( const ControllerParamsVector& rControlle
                 aPropValue.Name = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "ParentWindow" ));
                 aPropValue.Value = makeAny( xToolbarWindow );
                 aPropertyVector.push_back( makeAny( aPropValue ));
-                sal_Int16 nWidth( rControllerParamsVector[nId-1].nWidth );
                 if ( nWidth > 0 )
                 {
                     aPropValue.Name     = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Width" ));
@@ -1234,12 +1275,10 @@ void ToolBarManager::FillToolbar( const Reference< XIndexAccess >& rItemContaine
 
     // reset and fill command map
     m_pToolBar->Clear();
-    m_aControllerVector.clear();
+    m_aControllerMap.clear();
     m_aCommandMap.clear();
 
-    CommandInfo             aCmdInfo;
-    ControllerParams        aCtrlParams;
-    ControllerParamsVector  aCtrlParamsVector;
+    CommandInfo aCmdInfo;
     for ( sal_Int32 n = 0; n < rItemContainer->getCount(); n++ )
     {
         Sequence< PropertyValue >   aProp;
@@ -1259,7 +1298,7 @@ void ToolBarManager::FillToolbar( const Reference< XIndexAccess >& rItemContaine
                 {
                     if ( aProp[i].Name.equalsAsciiL( ITEM_DESCRIPTOR_COMMANDURL, ITEM_DESCRIPTOR_COMMANDURL_LEN ))
                         aProp[i].Value >>= aCommandURL;
-                    else if ( aProp[i].Name.equalsAsciiL( ITEM_DESCRIPTOR_HELPURL, ITEM_DESCRIPTOR_HELPURL_LEN ))
+                    else if (  aProp[i].Name.equalsAsciiL( ITEM_DESCRIPTOR_HELPURL, ITEM_DESCRIPTOR_HELPURL_LEN ))
                         aProp[i].Value >>= aHelpURL;
                     else if ( aProp[i].Name.equalsAsciiL( ITEM_DESCRIPTOR_LABEL, ITEM_DESCRIPTOR_LABEL_LEN ))
                         aProp[i].Value >>= aLabel;
@@ -1302,24 +1341,8 @@ void ToolBarManager::FillToolbar( const Reference< XIndexAccess >& rItemContaine
                         pIter->second.aIds.push_back( nId );
                     }
 
-                    // Add additional information for the controller to our
-                    // params vector. It is given to the CreateControllers method
-                    // which will provide them to the controller instances.
-                    aCtrlParams.nWidth = nWidth;
-                    aCtrlParamsVector.push_back( aCtrlParams );
-
-                    sal_uInt16 nHelpId = 0;
-                    if ( aHelpURL.indexOf( aHelpIdPrefix ) == 0 )
-                    {
-                        OUString aId( aHelpURL.copy( HELPID_PREFIX_LENGTH ));
-                        nHelpId = (sal_uInt16)(aId.toInt32());
-                    }
-                    else
-                        // assume numerical value
-                        nHelpId = (sal_uInt16)(aHelpURL.toInt32());
-
-                    if ( nHelpId > 0 )
-                        m_pToolBar->SetHelpId( nId, nHelpId );
+                    // Add additional information for the controller to the obsolete help id
+                    m_pToolBar->SetHelpId( ULONG( nWidth ));
 
                     if ( !bIsVisible )
                         m_pToolBar->HideItem( nId );
@@ -1346,13 +1369,68 @@ void ToolBarManager::FillToolbar( const Reference< XIndexAccess >& rItemContaine
         }
     }
 
+    // Support add-on toolbar merging here. Working directly on the toolbar object is much
+    // simpler and faster.
+    const sal_uInt16 TOOLBAR_ITEM_STARTID = 1000;
+
+    MergeToolbarInstructionContainer aMergeInstructionContainer;
+
+    // Retrieve the toolbar name from the resource name
+    ::rtl::OUString aToolbarName( m_aResourceName );
+    sal_Int32 nIndex = aToolbarName.lastIndexOf( '/' );
+    if (( nIndex > 0 ) && ( nIndex < aToolbarName.getLength() ))
+        aToolbarName = aToolbarName.copy( nIndex+1 );
+
+    AddonsOptions().GetMergeToolbarInstructions( aToolbarName, aMergeInstructionContainer );
+
+    if ( aMergeInstructionContainer.size() > 0 )
+    {
+        sal_uInt16 nItemId( TOOLBAR_ITEM_STARTID );
+        for ( sal_uInt32 i = 0; i < aMergeInstructionContainer.size(); i++ )
+        {
+            MergeToolbarInstruction& rInstruction = aMergeInstructionContainer[i];
+            if ( ToolBarMerger::IsCorrectContext( rInstruction.aMergeContext, m_aModuleIdentifier ))
+            {
+                ReferenceToolbarPathInfo aRefPoint = ToolBarMerger::FindReferencePoint( m_pToolBar, rInstruction.aMergePoint );
+
+                // convert the sequence< sequence< propertyvalue > > structure to
+                // something we can better handle. A vector with item data
+                AddonToolbarItemContainer aItems;
+                ToolBarMerger::ConvertSeqSeqToVector( rInstruction.aMergeToolbarItems, aItems );
+
+                if ( aRefPoint.bResult )
+                {
+                    ToolBarMerger::ProcessMergeOperation( m_xFrame,
+                                                          m_pToolBar,
+                                                          aRefPoint.nPos,
+                                                          nItemId,
+                                                          m_aModuleIdentifier,
+                                                          rInstruction.aMergeCommand,
+                                                          rInstruction.aMergeCommandParameter,
+                                                          aItems );
+                }
+                else
+                {
+                    ToolBarMerger::ProcessMergeFallback( m_xFrame,
+                                                         m_pToolBar,
+                                                         aRefPoint.nPos,
+                                                         nItemId,
+                                                         m_aModuleIdentifier,
+                                                         rInstruction.aMergeCommand,
+                                                         rInstruction.aMergeFallback,
+                                                         aItems );
+                }
+            }
+        }
+    }
+
     // Request images for all toolbar items. Must be done before CreateControllers as
     // some controllers need access to the image.
     RequestImages();
 
     // Create controllers after we set the images. There are controllers which needs
     // an image at the toolbar at creation time!
-    CreateControllers( aCtrlParamsVector );
+    CreateControllers();
 
     // Notify controllers that they are now correctly initialized and can start listening
     // toolbars that will open in popup mode will be updated immediately to avoid flickering
@@ -1482,9 +1560,10 @@ IMPL_LINK( ToolBarManager, Click, ToolBox*, EMPTYARG )
         return 1;
 
     USHORT nId( m_pToolBar->GetCurItemId() );
-    if (( nId > 0 ) && ( nId <= m_aControllerVector.size() ))
+    ToolBarControllerMap::const_iterator pIter = m_aControllerMap.find( nId );
+    if ( pIter != m_aControllerMap.end() )
     {
-        Reference< XToolbarController > xController( m_aControllerVector[(nId-1)], UNO_QUERY );
+        Reference< XToolbarController > xController( pIter->second, UNO_QUERY );
 
         if ( xController.is() )
             xController->click();
@@ -1501,9 +1580,10 @@ IMPL_LINK( ToolBarManager, DropdownClick, ToolBox*, EMPTYARG )
         return 1;
 
     USHORT nId( m_pToolBar->GetCurItemId() );
-    if (( nId > 0 ) && ( nId <= m_aControllerVector.size() ))
+    ToolBarControllerMap::const_iterator pIter = m_aControllerMap.find( nId );
+    if ( pIter != m_aControllerMap.end() )
     {
-        Reference< XToolbarController > xController( m_aControllerVector[(nId-1)], UNO_QUERY );
+        Reference< XToolbarController > xController( pIter->second, UNO_QUERY );
 
         if ( xController.is() )
             xController->createPopupWindow();
@@ -1520,9 +1600,10 @@ IMPL_LINK( ToolBarManager, DoubleClick, ToolBox*, EMPTYARG )
         return 1;
 
     USHORT nId( m_pToolBar->GetCurItemId() );
-    if (( nId > 0 ) && ( nId <= m_aControllerVector.size() ))
+    ToolBarControllerMap::const_iterator pIter = m_aControllerMap.find( nId );
+    if ( pIter != m_aControllerMap.end() )
     {
-        Reference< XToolbarController > xController( m_aControllerVector[(nId-1)], UNO_QUERY );
+        Reference< XToolbarController > xController( pIter->second, UNO_QUERY );
 
         if ( xController.is() )
             xController->doubleClick();
@@ -1920,10 +2001,15 @@ IMPL_LINK( ToolBarManager, Select, ToolBox*, EMPTYARG )
 
     sal_Int16   nKeyModifier( (sal_Int16)m_pToolBar->GetModifier() );
     USHORT      nId( m_pToolBar->GetCurItemId() );
-    Reference< XToolbarController > xController( m_aControllerVector[(nId-1)], UNO_QUERY );
 
-    if ( xController.is() )
-        xController->execute( nKeyModifier );
+    ToolBarControllerMap::const_iterator pIter = m_aControllerMap.find( nId );
+    if ( pIter != m_aControllerMap.end() )
+    {
+        Reference< XToolbarController > xController( pIter->second, UNO_QUERY );
+
+        if ( xController.is() )
+            xController->execute( nKeyModifier );
+    }
 
     return 1;
 }
