@@ -4,9 +4,9 @@
 #
 #   $RCSfile: settings.mk,v $
 #
-#   $Revision: 1.217 $
+#   $Revision: 1.218 $
 #
-#   last change: $Author: hr $ $Date: 2007-06-27 17:49:47 $
+#   last change: $Author: rt $ $Date: 2007-07-10 09:21:45 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -1217,12 +1217,6 @@ CDEFS+= -DTF_CNTEX
 .IF "$(TF_CAPELLA)"!=""
 CDEFS+= -DTF_CAPELLA
 .ENDIF
-
-#.IF "$(UPDATER)"=="YES"
-.IF "$(PRJNAME)"=="chaos" || "$(PRJNAME)"=="svtools"
-CDEFS+=-DUPD=\"$(UPD)\" -DMINOR=\"$(LAST_MINOR)\" -DBUILD_ID=\"$(BUILD)\"
-.ENDIF
-#.ENDIF
 
 #to be removed soon!!!
 .IF "$(TF_NEWEX)"!=""
