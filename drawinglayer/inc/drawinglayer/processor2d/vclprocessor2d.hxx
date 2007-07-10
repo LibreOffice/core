@@ -4,9 +4,9 @@
  *
  *  $RCSfile: vclprocessor2d.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: aw $ $Date: 2007-07-09 13:19:09 $
+ *  last change: $Author: aw $ $Date: 2007-07-10 11:28:08 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -110,7 +110,7 @@ namespace drawinglayer
 
             // as tooling, the process() implementation takes over API handling and calls this
             // virtual render method when the primitive implementation is BasePrimitive2D-based.
-            virtual void processBasePrinitive2D(const primitive2d::BasePrimitive2D& rCandidate) = 0;
+            virtual void processBasePrimitive2D(const primitive2d::BasePrimitive2D& rCandidate) = 0;
 
         public:
             // constructor/destructor
@@ -120,7 +120,7 @@ namespace drawinglayer
             virtual ~VclProcessor2D();
 
             // the central processing method
-            // This VCL base implementation takes over the API handling and calls processBasePrinitive2D
+            // This VCL base implementation takes over the API handling and calls processBasePrimitive2D
             // directly when it's a BasePrinitive2D implementation. This is used as tooling from derived
             // implementations
             virtual void process(const primitive2d::Primitive2DSequence& rSource);
@@ -139,7 +139,7 @@ namespace drawinglayer
         protected:
             // the local processor for BasePrinitive2D-Implementation based primitives,
             // called from the common process()-implementation
-            virtual void processBasePrinitive2D(const primitive2d::BasePrimitive2D& rCandidate);
+            virtual void processBasePrimitive2D(const primitive2d::BasePrimitive2D& rCandidate);
 
         public:
             // constructor/destructor
@@ -162,7 +162,7 @@ namespace drawinglayer
         protected:
             // the local processor for BasePrinitive2D-Implementation based primitives,
             // called from the common process()-implementation
-            virtual void processBasePrinitive2D(const primitive2d::BasePrimitive2D& rCandidate);
+            virtual void processBasePrimitive2D(const primitive2d::BasePrimitive2D& rCandidate);
 
         public:
             // constructor/destructor
@@ -171,6 +171,8 @@ namespace drawinglayer
                 OutputDevice& rOutDev);
             virtual ~VclPixelProcessor2D();
 
+            // overloaded here to reset the MapMode at the target OutDev
+            virtual void process(const primitive2d::Primitive2DSequence& rSource);
         };
     } // end of namespace processor2d
 } // end of namespace drawinglayer

@@ -4,9 +4,9 @@
  *
  *  $RCSfile: vclprocessor2d.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: aw $ $Date: 2007-07-09 13:19:09 $
+ *  last change: $Author: aw $ $Date: 2007-07-10 11:28:08 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -800,7 +800,7 @@ namespace drawinglayer
                         if(pBasePrimitive)
                         {
                             // it is a BasePrimitive2D implementation, use local processor
-                            processBasePrinitive2D(*pBasePrimitive);
+                            processBasePrimitive2D(*pBasePrimitive);
                         }
                         else
                         {
@@ -852,7 +852,7 @@ namespace drawinglayer
             // MapMode was not changed, no restore necessary
         }
 
-        void VclMetafileProcessor2D::processBasePrinitive2D(const primitive2d::BasePrimitive2D& rCandidate)
+        void VclMetafileProcessor2D::processBasePrimitive2D(const primitive2d::BasePrimitive2D& rCandidate)
         {
             switch(rCandidate.getPrimitiveID())
             {
@@ -951,19 +951,13 @@ namespace drawinglayer
         {
             // prepare maCurrentTransformation matrix with viewTransformation to target directly to pixels
             maCurrentTransformation = rViewInformation.getViewTransformation();
-
-            // prepare output to pixels
-            mpOutputDevice->Push(PUSH_MAPMODE);
-            mpOutputDevice->SetMapMode();
         }
 
         VclPixelProcessor2D::~VclPixelProcessor2D()
         {
-            // restore MapMode
-            mpOutputDevice->Pop();
         }
 
-        void VclPixelProcessor2D::processBasePrinitive2D(const primitive2d::BasePrimitive2D& rCandidate)
+        void VclPixelProcessor2D::processBasePrimitive2D(const primitive2d::BasePrimitive2D& rCandidate)
         {
             switch(rCandidate.getPrimitiveID())
             {
@@ -1047,6 +1041,19 @@ namespace drawinglayer
                     break;
                 }
             }
+        }
+
+        void VclPixelProcessor2D::process(const primitive2d::Primitive2DSequence& rSource)
+        {
+            // prepare output directly to pixels
+            mpOutputDevice->Push(PUSH_MAPMODE);
+            mpOutputDevice->SetMapMode();
+
+            // call parent
+            VclProcessor2D::process(rSource);
+
+            // restore MapMode
+            mpOutputDevice->Pop();
         }
     } // end of namespace processor2d
 } // end of namespace drawinglayer
