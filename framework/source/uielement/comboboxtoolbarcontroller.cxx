@@ -4,9 +4,9 @@
  *
  *  $RCSfile: comboboxtoolbarcontroller.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: rt $ $Date: 2007-07-06 12:23:29 $
+ *  last change: $Author: ihi $ $Date: 2007-07-10 15:10:07 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -205,7 +205,7 @@ long ComboBoxControl::PreNotify( NotifyEvent& rNEvt )
 ComboboxToolbarController::ComboboxToolbarController(
     const Reference< XMultiServiceFactory >& rServiceManager,
     const Reference< XFrame >&               rFrame,
-    ToolBar*                                 pToolbar,
+    ToolBox*                                 pToolbar,
     USHORT                                   nID,
     sal_Int32                                nWidth,
     const OUString&                          aCommand ) :
