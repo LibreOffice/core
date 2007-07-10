@@ -4,9 +4,9 @@
  *
  *  $RCSfile: edittoolbarcontroller.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: ihi $ $Date: 2006-08-01 09:36:54 $
+ *  last change: $Author: ihi $ $Date: 2007-07-10 15:06:57 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -71,7 +71,7 @@ class EditToolbarController : public IEditListener,
     public:
         EditToolbarController( const com::sun::star::uno::Reference< com::sun::star::lang::XMultiServiceFactory >& rServiceManager,
                                const com::sun::star::uno::Reference< com::sun::star::frame::XFrame >& rFrame,
-                               ToolBar*     pToolBar,
+                               ToolBox*     pToolBar,
                                USHORT       nID,
                                sal_Int32    nWidth,
                                const rtl::OUString& aCommand );
