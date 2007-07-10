@@ -4,9 +4,9 @@
  *
  *  $RCSfile: headermenucontroller.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: kz $ $Date: 2006-12-13 15:08:06 $
+ *  last change: $Author: ihi $ $Date: 2007-07-10 15:11:32 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -246,7 +246,7 @@ void HeaderMenuController::fillPopupMenu( const Reference< ::com::sun::star::fra
                     pVCLPopupMenu->InsertItem( ALL_MENUITEM_ID, String( FwkResId( STR_MENU_HEADFOOTALL )), 0, 0 );
 
                     rtl::OUStringBuffer aStrBuf( aCmd );
-                    aStrBuf.appendAscii( "&On:bool=" );
+                    aStrBuf.appendAscii( "?On:bool=" );
 
                     // Command depends on check state of first menu item entry
                     if ( !bFirstChecked )
