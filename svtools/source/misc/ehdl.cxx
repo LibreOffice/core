@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ehdl.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: hr $ $Date: 2007-06-27 21:48:39 $
+ *  last change: $Author: ihi $ $Date: 2007-07-10 15:18:38 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -183,9 +183,10 @@ static USHORT aWndFunc(
 
 //-------------------------------------------------------------------------
 
-SfxErrorHandler::SfxErrorHandler(USHORT nIdP, ULONG lStartP, ULONG lEndP,
-                                 ResMgr *pMgrP)
-    : lStart(lStartP), lEnd(lEndP), nId(nIdP), pMgr(pMgrP), pFreeMgr( NULL )
+SfxErrorHandler::SfxErrorHandler(USHORT nIdP, ULONG lStartP, ULONG lEndP, ResMgr *pMgrP) :
+
+    lStart(lStartP), lEnd(lEndP), nId(nIdP), pMgr(pMgrP), pFreeMgr( NULL )
+
 {
     RegisterDisplay(&aWndFunc);
     if( ! pMgr )
@@ -366,6 +367,7 @@ BOOL SfxErrorHandler::GetMessageString(
 {
     BOOL bRet = FALSE;
     ResId *pResId= new ResId(nId, *pMgr);
+
     ErrorResource_Impl aEr(*pResId, (USHORT)lErrId);
     if(aEr)
     {
@@ -504,5 +506,3 @@ BOOL SfxErrorContext::GetString(ULONG nErrId, String &rStr)
     }
     return bRet;
 }
-
-
