@@ -4,8 +4,8 @@
  *
  *  $RCSfile: menubarmanager.hxx,v $
  *
- *  $Revision: 1.19 $
- *  last change: $Author: ihi $ $Date: 2007-04-16 16:33:43 $
+ *  $Revision: 1.20 $
+ *  last change: $Author: ihi $ $Date: 2007-07-10 15:07:44 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -109,6 +109,9 @@
 #ifndef _COM_SUN_STAR_UTIL_XURLTRANSFORMER_HPP_
 #include <com/sun/star/util/XURLTransformer.hpp>
 #endif
+#ifndef _COM_SUN_STAR_LANG_XMULTISERVICEFACTORY_HPP_
+#include <com/sun/star/lang/XMultiServiceFactory.hpp>
+#endif
 
 //_________________________________________________________________________________________________________________
 //  other includes
@@ -135,11 +138,7 @@
 #ifndef _CPPUHELPER_INTERFACECONTAINER_HXX_
 #include <cppuhelper/interfacecontainer.hxx>
 #endif
-
-// #110897#
-#ifndef _COM_SUN_STAR_LANG_XMULTISERVICEFACTORY_HPP_
-#include <com/sun/star/lang/XMultiServiceFactory.hpp>
-#endif
+#include <classes/addonsoptions.hxx>
 
 namespace framework
 {
@@ -295,6 +294,7 @@ class MenuBarManager : public com::sun::star::frame::XStatusListener            
         static void      impl_RetrieveShortcutsFromConfiguration( const ::com::sun::star::uno::Reference< ::com::sun::star::ui::XAcceleratorConfiguration >& rAccelCfg,
                                                                   const ::com::sun::star::uno::Sequence< rtl::OUString >& rCommands,
                                                                   std::vector< MenuItemHandler* >& aMenuShortCuts );
+        static void      MergeAddonMenus( Menu* pMenuBar, const MergeMenuInstructionContainer&, const ::rtl::OUString& aModuleIdentifier );
 
         MenuItemHandler* GetMenuItemHandler( USHORT nItemId );
         sal_Bool         CreatePopupMenuController( MenuItemHandler* pMenuItemHandler );
@@ -324,11 +324,10 @@ class MenuBarManager : public com::sun::star::frame::XStatusListener            
         ::com::sun::star::uno::Reference< ::com::sun::star::ui::XAcceleratorConfiguration >    m_xDocAcceleratorManager;
         ::com::sun::star::uno::Reference< ::com::sun::star::ui::XAcceleratorConfiguration >    m_xModuleAcceleratorManager;
         ::com::sun::star::uno::Reference< ::com::sun::star::ui::XAcceleratorConfiguration >    m_xGlobalAcceleratorManager;
-        // #110897#
-        ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >               mxServiceFactory;
-        ::com::sun::star::uno::Reference< ::com::sun::star::container::XIndexAccess >                  m_xDeferedItemContainer;
-        sal_Int16                                                                                      m_nSymbolsStyle;
-        Timer                                                                                          m_aAsyncSettingsTimer;
+        ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >       mxServiceFactory;
+        ::com::sun::star::uno::Reference< ::com::sun::star::container::XIndexAccess >          m_xDeferedItemContainer;
+        sal_Int16                                                                              m_nSymbolsStyle;
+        Timer                                                                                  m_aAsyncSettingsTimer;
 };
 
 } // namespace
