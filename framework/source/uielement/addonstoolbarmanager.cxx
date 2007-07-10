@@ -4,9 +4,9 @@
  *
  *  $RCSfile: addonstoolbarmanager.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: obo $ $Date: 2007-01-23 07:11:04 $
+ *  last change: $Author: ihi $ $Date: 2007-07-10 15:09:39 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -39,6 +39,7 @@
 #ifndef __FRAMEWORK_UIELEMENT_ADDONSTOOLBARMANAGER_HXX_
 #include <uielement/addonstoolbarmanager.hxx>
 #endif
+#include <uielement/toolbarmerger.hxx>
 
 //_________________________________________________________________________________________________________________
 //  my own includes
@@ -93,6 +94,7 @@
 #ifndef __FRAMEWORK_UIELEMENT_DROPDOWNBOXTOOLBARCONTROLLER_HXX_
 #include <uielement/dropdownboxtoolbarcontroller.hxx>
 #endif
+#include <uielement/toolbarmerger.hxx>
 
 //_________________________________________________________________________________________________________________
 //  interface includes
@@ -309,7 +311,7 @@ void AddonsToolBarManager::FillToolbar( const Sequence< Sequence< PropertyValue 
     RemoveControllers();
 
     m_pToolBar->Clear();
-    m_aControllerVector.clear();
+    m_aControllerMap.clear();
 
     Reference< XModel > xModel;
     if ( m_xFrame.is() )
@@ -339,30 +341,11 @@ void AddonsToolBarManager::FillToolbar( const Sequence< Sequence< PropertyValue 
         rtl::OUString   aContext;
         rtl::OUString   aTarget;
         rtl::OUString   aControlType;
-        sal_Int32       nWidth( 0 );
+        sal_uInt16      nWidth( 0 );
 
         const Sequence< PropertyValue >& rSeq = rAddonToolbar[n];
 
-        sal_uInt32 nIndex = 0;
-        while ( nIndex < (sal_uInt32)rSeq.getLength() )
-        {
-            aValueName = rSeq[nIndex].Name;
-            if ( aValueName.equalsAsciiL( "URL", 3 ))
-                rSeq[nIndex].Value >>= aURL;
-            else if ( aValueName.equalsAsciiL( "Title", 5 ))
-                rSeq[nIndex].Value >>= aTitle;
-            else if ( aValueName.equalsAsciiL( "ImageIdentifier", 15 ))
-                rSeq[nIndex].Value >>= aImageId;
-            else if ( aValueName.equalsAsciiL( "Context", 7 ))
-                rSeq[nIndex].Value >>= aContext;
-            else if ( aValueName.equalsAsciiL( "Target", 6 ))
-                rSeq[nIndex].Value >>= aTarget;
-            else if ( aValueName.equalsAsciiL( "ControlType", 11 ))
-                rSeq[nIndex].Value >>= aControlType;
-            else if ( aValueName.equalsAsciiL( "Width", 5 ))
-                rSeq[nIndex].Value >>= nWidth;
-            nIndex++;
-        }
+        ToolBarMerger::ConvertSequenceToValues( rSeq, aURL, aTitle, aImageId, aTarget, aContext, aControlType, nWidth );
 
         if ( IsCorrectContext( xModel, aContext ))
         {
@@ -443,31 +426,13 @@ void AddonsToolBarManager::FillToolbar( const Sequence< Sequence< PropertyValue 
                 {
                     ::cppu::OWeakObject* pController = 0;
 
-                    if ( aControlType.equalsAsciiL( "Button", 6 ))
-                        pController = new ButtonToolbarController( m_xServiceManager, m_pToolBar, aURL );
-                    else if ( aControlType.equalsAsciiL( "Combobox", 8 ))
-                        pController = new ComboboxToolbarController( m_xServiceManager, m_xFrame, m_pToolBar, nId, nWidth, aURL );
-                    else if ( aControlType.equalsAsciiL( "Editfield", 9 ))
-                        pController = new EditToolbarController( m_xServiceManager, m_xFrame, m_pToolBar, nId, nWidth, aURL );
-                    else if ( aControlType.equalsAsciiL( "Spinfield", 9 ))
-                        pController = new SpinfieldToolbarController( m_xServiceManager, m_xFrame, m_pToolBar, nId, nWidth, aURL );
-                    else if ( aControlType.equalsAsciiL( "ImageButton", 11 ))
-                        pController = new ImageButtonToolbarController( m_xServiceManager, m_xFrame, m_pToolBar, nId, aURL );
-                    else if ( aControlType.equalsAsciiL( "Dropdownbox", 11 ))
-                        pController = new DropdownToolbarController( m_xServiceManager, m_xFrame, m_pToolBar, nId, nWidth, aURL );
-                    else if ( aControlType.equalsAsciiL( "DropdownButton", 14 ))
-                        pController = new ToggleButtonToolbarController( m_xServiceManager, m_xFrame, m_pToolBar, nId,
-                                                                         ToggleButtonToolbarController::STYLE_DROPDOWNBUTTON, aURL );
-                    else if ( aControlType.equalsAsciiL( "ToggleDropdownButton", 20 ))
-                        pController = new ToggleButtonToolbarController( m_xServiceManager, m_xFrame, m_pToolBar, nId,
-                                                                         ToggleButtonToolbarController::STYLE_TOGGLE_DROPDOWNBUTTON, aURL );
-                    else
-                        pController = new GenericToolbarController( m_xServiceManager, m_xFrame, m_pToolBar, nId, aURL );
-
+                    pController = ToolBarMerger::CreateController( m_xServiceManager, m_xFrame, m_pToolBar, aURL, nId, nWidth, aControlType );
                     xController = Reference< XStatusListener >( pController, UNO_QUERY );
                 }
 
-                m_aControllerVector.push_back( xController );
+                // insert controller to the map
+                m_aControllerMap[nId] = xController;
+
                 Reference< XInitialization > xInit( xController, UNO_QUERY );
                 if ( xInit.is() && bMustBeInit )
                 {
@@ -537,9 +502,10 @@ IMPL_LINK( AddonsToolBarManager, Click, ToolBox*, EMPTYARG )
         return 1;
 
     USHORT nId( m_pToolBar->GetCurItemId() );
-    if (( nId > 0 ) && ( nId < m_aControllerVector.size() ))
+    ToolBarControllerMap::const_iterator pIter = m_aControllerMap.find( nId );
+    if ( pIter != m_aControllerMap.end() )
     {
-        Reference< XToolbarController > xController( m_aControllerVector[(nId-1)], UNO_QUERY );
+        Reference< XToolbarController > xController( pIter->second, UNO_QUERY );
 
         if ( xController.is() )
             xController->click();
@@ -554,9 +520,10 @@ IMPL_LINK( AddonsToolBarManager, DoubleClick, ToolBox*, EMPTYARG )
         return 1;
 
     USHORT nId( m_pToolBar->GetCurItemId() );
-    if (( nId > 0 ) && ( nId < m_aControllerVector.size() ))
+    ToolBarControllerMap::const_iterator pIter = m_aControllerMap.find( nId );
+    if ( pIter != m_aControllerMap.end() )
     {
-        Reference< XToolbarController > xController( m_aControllerVector[(nId-1)], UNO_QUERY );
+        Reference< XToolbarController > xController( pIter->second, UNO_QUERY );
 
         if ( xController.is() )
             xController->doubleClick();
@@ -582,10 +549,14 @@ IMPL_LINK( AddonsToolBarManager, Select, ToolBox*, EMPTYARG )
 
     sal_Int16   nKeyModifier( (sal_Int16)m_pToolBar->GetModifier() );
     USHORT      nId( m_pToolBar->GetCurItemId() );
-    Reference< XToolbarController > xController( m_aControllerVector[(nId-1)], UNO_QUERY );
+    ToolBarControllerMap::const_iterator pIter = m_aControllerMap.find( nId );
+    if ( pIter != m_aControllerMap.end() )
+    {
+        Reference< XToolbarController > xController( pIter->second, UNO_QUERY );
 
-    if ( xController.is() )
-        xController->execute( nKeyModifier );
+        if ( xController.is() )
+            xController->execute( nKeyModifier );
+    }
 
     return 1;
 }
