@@ -4,9 +4,9 @@
  *
  *  $RCSfile: page.cxx,v $
  *
- *  $Revision: 1.37 $
+ *  $Revision: 1.38 $
  *
- *  last change: $Author: hr $ $Date: 2007-06-27 17:31:38 $
+ *  last change: $Author: ihi $ $Date: 2007-07-10 15:02:54 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -345,6 +345,8 @@ SvxPageDescPage::SvxPageDescPage( Window* pParent, const SfxItemSet& rAttr ) :
 {
     bBorderModified = FALSE;
     FreeResource();
+    aBspWin.EnableRTL( FALSE );
+
     // diese Page braucht ExchangeSupport
     SetExchangeSupport();
 
