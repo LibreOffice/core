@@ -2,9 +2,9 @@
  *
  *  $RCSfile: textwindowpeer.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: hr $ $Date: 2007-06-29 12:21:20 $
+ *  last change: $Author: rt $ $Date: 2007-07-10 09:20:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -58,6 +58,9 @@
  *
  *
  ************************************************************************/
+
+// MARKER(update_precomp.py): autogen include statement, do not remove
+#include "precompiled_svtools.hxx"
 
 #include <svtools/textwindowpeer.hxx>
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svtaccessiblefactory.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: hr $ $Date: 2007-06-27 14:55:51 $
+ *  last change: $Author: rt $ $Date: 2007-07-10 09:20:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -58,6 +58,9 @@
  *
  *
  ************************************************************************/
+
+// MARKER(update_precomp.py): autogen include statement, do not remove
+#include "precompiled_svtools.hxx"
 
 #ifndef SVTOOLS_ACCESSIBLE_FACTORY_ACCESS_HXX
 #include "svtaccessiblefactory.hxx"

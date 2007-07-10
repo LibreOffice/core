@@ -4,9 +4,9 @@
  *
  *  $RCSfile: insdlg.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: hr $ $Date: 2007-06-27 21:27:53 $
+ *  last change: $Author: rt $ $Date: 2007-07-10 09:19:39 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -78,9 +78,9 @@
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::uno;
-using namespace ::rtl;
 using namespace ::com::sun::star::container;
 using namespace ::com::sun::star::ui::dialogs;
+using ::rtl::OUString;
 
 #define _SVSTDARR_STRINGSDTOR
 #include <svtools/svstdarr.hxx>

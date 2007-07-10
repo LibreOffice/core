@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.13 $
+#   $Revision: 1.14 $
 #
-#   last change: $Author: hr $ $Date: 2007-06-27 14:52:07 $
+#   last change: $Author: rt $ $Date: 2007-07-10 09:20:03 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -62,9 +62,7 @@ EXCEPTIONSFILES=	\
             $(SLO)$/textview.obj	\
             $(SLO)$/textdoc.obj     \
             $(SLO)$/texteng.obj     \
-            $(OBJ)$/textview.obj    \
-            $(SLO)$/textwindowpeer.obj  \
-            $(OBJ)$/textwindowpeer.obj
+            $(SLO)$/textwindowpeer.obj
 
 # --- Targets ------------------------------------------------------
 
