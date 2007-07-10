@@ -4,9 +4,9 @@
  *
  *  $RCSfile: zforlist.cxx,v $
  *
- *  $Revision: 1.67 $
+ *  $Revision: 1.68 $
  *
- *  last change: $Author: hr $ $Date: 2007-06-27 21:56:48 $
+ *  last change: $Author: ihi $ $Date: 2007-07-10 15:19:20 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -4104,6 +4104,9 @@ USHORT NfCurrencyEntry::GetEffectivePositiveFormat( USHORT
             break;
             case 3:                                         // 1 $
             break;
+            default:
+                DBG_ERROR("NfCurrencyEntry::GetEffectivePositiveFormat: unknown option");
+            break;
         }
         return nIntlFormat;
 #endif
@@ -4141,6 +4144,9 @@ USHORT lcl_MergeNegativeParenthesisFormat( USHORT nIntlFormat, USHORT nCurrForma
         case 10:                                        // 1 $-
         case 12 :                                       // $ 1-
             nSign = 2;
+        break;
+        default:
+            DBG_ERROR("lcl_MergeNegativeParenthesisFormat: unknown option");
         break;
     }
 
@@ -4252,6 +4258,9 @@ USHORT NfCurrencyEntry::GetEffectiveNegativeFormat( USHORT nIntlFormat,
 //              nIntlFormat = 15;                           // (1 $)
                 nIntlFormat = 8;                            // -1 $
             break;
+            default:
+                DBG_ERROR("NfCurrencyEntry::GetEffectiveNegativeFormat: unknown option");
+            break;
         }
 #endif
     }
@@ -4310,6 +4319,9 @@ USHORT NfCurrencyEntry::GetEffectiveNegativeFormat( USHORT nIntlFormat,
             case 15 :                                       // (1 $)
                 nIntlFormat = lcl_MergeNegativeParenthesisFormat(
                     nIntlFormat, nCurrFormat );
+            break;
+            default:
+                DBG_ERROR("NfCurrencyEntry::GetEffectiveNegativeFormat: unknown option");
             break;
         }
     }
