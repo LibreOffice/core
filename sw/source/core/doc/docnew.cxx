@@ -4,9 +4,9 @@
  *
  *  $RCSfile: docnew.cxx,v $
  *
- *  $Revision: 1.74 $
+ *  $Revision: 1.75 $
  *
- *  last change: $Author: kz $ $Date: 2007-06-20 10:11:15 $
+ *  last change: $Author: ihi $ $Date: 2007-07-10 14:59:09 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -398,7 +398,7 @@ SwDoc::SwDoc() :
     mbOldNumbering                          = false;        // hidden
     mbUseHiResolutionVirtualDevice          = true;         // hidden
     mbIgnoreFirstLineIndentInNumbering      = false;        // hidden
-    mbDoNotJustifyLinesWithManualBreak      = false;        // hidden
+    mbDoNotJustifyLinesWithManualBreak      = !aOptions.IsExpandWordSpace();
     mbDoNotResetParaAttrsForNumFont         = false;        // hidden
     mbOutlineLevelYieldsOutlineRule         = false;        // hidden
     mbTableRowKeep                          = false;        // hidden
