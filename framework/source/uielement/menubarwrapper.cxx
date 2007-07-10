@@ -4,9 +4,9 @@
  *
  *  $RCSfile: menubarwrapper.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: ihi $ $Date: 2007-04-16 16:46:37 $
+ *  last change: $Author: ihi $ $Date: 2007-07-10 15:12:46 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -43,22 +43,19 @@
 #ifndef __FRAMEWORK_UIELEMENT_MENUBARWRAPPER_HXX_
 #include <uielement/menubarwrapper.hxx>
 #endif
-
 #ifndef __FRAMEWORK_THREADHELP_RESETABLEGUARD_HXX_
 #include <threadhelp/resetableguard.hxx>
 #endif
-
 #ifndef __FRAMEWORK_HELPER_ACTIONTRIGGERHELPER_HXX_
 #include <helper/actiontriggerhelper.hxx>
 #endif
-
 #ifndef __FRAMEWORK_UIELEMENT_CONSTITEMCONTAINER_HXX_
 #include <uielement/constitemcontainer.hxx>
 #endif
-
 #ifndef __FRAMEWORK_UIELEMENT_ROOTITEMCONTAINER_HXX_
 #include <uielement/rootitemcontainer.hxx>
 #endif
+#include <services.h>
 
 //_________________________________________________________________________________________________________________
 //  interface includes
@@ -67,30 +64,25 @@
 #ifndef _COM_SUN_STAR_LANG_XSERVICEINFO_HPP_
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #endif
-
 #ifndef _COM_SUN_STAR_BEANS_XPROPERTYSET_HPP_
 #include <com/sun/star/beans/XPropertySet.hpp>
 #endif
-
 #ifndef _COM_SUN_STAR_AWT_XSYSTEMDEPENDENTMENUPEER_HPP_
 #include <com/sun/star/awt/XSystemDependentMenuPeer.hpp>
 #endif
-
 #ifndef _COM_SUN_STAR_AWT_XMENUBAR_HPP_
 #include <com/sun/star/awt/XMenuBar.hpp>
 #endif
-
 #ifndef _COM_SUN_STAR_CONTAINER_XINDEXCONTAINER_HPP_
 #include <com/sun/star/container/XIndexContainer.hpp>
 #endif
-
 #ifndef _COM_SUN_STAR_CONTAINER_XNAMEACCESS_HPP_
 #include <com/sun/star/container/XNameAccess.hpp>
 #endif
-
 #ifndef _COM_SUN_STAR_UI_UIELEMENTTYPE_HPP_
 #include <com/sun/star/ui/UIElementType.hpp>
 #endif
+#include <com/sun/star/frame/XModuleManager.hpp>
 
 //_________________________________________________________________________________________________________________
 //  other includes
@@ -212,6 +204,19 @@ void SAL_CALL MenuBarWrapper::initialize( const Sequence< Any >& aArguments ) th
             {
                 vos::OGuard aSolarMutexGuard( Application::GetSolarMutex() );
                 pVCLMenuBar = new MenuBar();
+            }
+
+            Reference< XModuleManager > xModuleManager;
+            xModuleManager = Reference< XModuleManager >(
+                getServiceFactory()->createInstance(
+                    SERVICENAME_MODULEMANAGER ), UNO_QUERY_THROW );
+
+            try
+            {
+                aModuleIdentifier = xModuleManager->identify( xFrame );
+            }
+            catch( Exception& )
+            {
             }
 
             try
