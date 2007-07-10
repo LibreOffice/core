@@ -4,9 +4,9 @@
  *
  *  $RCSfile: viewsh.hxx,v $
  *
- *  $Revision: 1.56 $
+ *  $Revision: 1.57 $
  *
- *  last change: $Author: hr $ $Date: 2007-06-26 11:55:41 $
+ *  last change: $Author: ihi $ $Date: 2007-07-10 14:58:56 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -424,6 +424,10 @@ public:
 
     // --> FME #108724#
     void SetUseFormerTextWrapping( bool _bUseFormerTextWrapping );
+
+    // -> PB 2007-06-11 #i45491#
+    void SetDoNotJustifyLinesWithManualBreak( bool _bDoNotJustifyLinesWithManualBreak );
+    // <--
 
     //
     // DOCUMENT COMPATIBILITY FLAGS END
