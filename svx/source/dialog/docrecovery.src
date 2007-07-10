@@ -4,9 +4,9 @@
  *
  *  $RCSfile: docrecovery.src,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: hr $ $Date: 2007-06-27 17:03:42 $
+ *  last change: $Author: ihi $ $Date: 2007-07-10 15:02:21 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -77,7 +77,7 @@ TabPage RID_SVXPAGE_DOCRECOVERY_SAVE
         Pos = MAP_APPFONT( SAVE_COL0 , SAVE_ROW2 );
         Size = MAP_APPFONT( SAVE_CONTROLWIDTH, (SAVE_ROW3-SAVE_ROW2-RSC_SP_CTRL_DESC_Y) );
         WordBreak = TRUE;
-        Text[ en-US ] = "Due to an unexpected error, %PRODUCTNAME crashed. All the files you were working on will be saved now. The next time %PRODUCTNAME is launched, your files will be recovered automatically.";
+        Text[ en-US ] = "Due to an unexpected error, %PRODUCTNAME crashed. All the files you were working on will now be saved. The next time %PRODUCTNAME is launched, your files will be recovered automatically.";
     };
     FixedText FT_SAVE_FILELIST
     {
@@ -261,11 +261,11 @@ TabPage RID_SVXPAGE_DOCRECOVERY_RECOVER
     };
     String STR_RECOVERY_INPROGRESS
     {
-        Text[ en-US ] = "%PRODUCTNAME %PRODUCTVERSION starts now to recover your documents. Depending on the size of the documents this process can take some time." ;
+        Text[ en-US ] = "%PRODUCTNAME %PRODUCTVERSION will start to recover your documents. Depending on the size of the documents this process can take some time." ;
     };
     String STR_RECOVERY_REPORT
     {
-        Text[ en-US ] = "A report of the crash was created helping us to identify the cause why %PRODUCTNAME crashed. Click 'Next' to get to the Error Report Tool or press 'Cancel' to skip this step." ;
+        Text[ en-US ] = "A report of the crash was created to help us identify the reason why %PRODUCTNAME crashed. Click 'Next' to get to the Error Report Tool or press 'Cancel' to skip this step." ;
     };
     String STR_RECOVERYONLY_FINISH_DESCR
     {
