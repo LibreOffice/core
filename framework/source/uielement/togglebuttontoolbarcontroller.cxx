@@ -4,9 +4,9 @@
  *
  *  $RCSfile: togglebuttontoolbarcontroller.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: rt $ $Date: 2007-01-29 14:51:52 $
+ *  last change: $Author: ihi $ $Date: 2007-07-10 15:13:16 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -114,7 +114,7 @@ namespace framework
 ToggleButtonToolbarController::ToggleButtonToolbarController(
     const Reference< XMultiServiceFactory >& rServiceManager,
     const Reference< XFrame >&               rFrame,
-    ToolBar*                                 pToolbar,
+    ToolBox*                                 pToolbar,
     USHORT                                   nID,
     Style                                    eStyle,
     const OUString&                          aCommand ) :
