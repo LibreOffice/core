@@ -4,9 +4,9 @@
  *
  *  $RCSfile: addonstoolbarmanager.hxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: obo $ $Date: 2007-01-23 07:10:00 $
+ *  last change: $Author: ihi $ $Date: 2007-07-10 15:05:41 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -143,13 +143,6 @@ class AddonsToolBarManager : public ToolBarManager
         DECL_LINK( DataChanged, DataChangedEvent* );
 
         virtual bool MenuItemAllowed( sal_uInt16 ) const;
-
-    private:
-        struct AddonsParams
-        {
-            rtl::OUString aImageId;
-            rtl::OUString aTarget;
-        };
 };
 
 }
