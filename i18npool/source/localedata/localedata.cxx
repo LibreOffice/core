@@ -4,9 +4,9 @@
  *
  *  $RCSfile: localedata.cxx,v $
  *
- *  $Revision: 1.48 $
+ *  $Revision: 1.49 $
  *
- *  last change: $Author: rt $ $Date: 2007-07-03 14:05:34 $
+ *  last change: $Author: rt $ $Date: 2007-07-10 09:24:03 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -516,8 +516,14 @@ LocaleData::getAllFormats( const Locale& rLocale ) throw(RuntimeException)
         }
     } section[SECTIONS];
 
+#if 0
+// #i79398# wntmsci10 MSVC doesn't get this right with optimization.
     const sal_Int32 formatCount = section[0].getFunc( *this, rLocale, "getAllFormats0")
                                 + section[1].getFunc( *this, rLocale, "getAllFormats1");
+#else
+    sal_Int32 formatCount  = section[0].getFunc( *this, rLocale, "getAllFormats0");
+              formatCount += section[1].getFunc( *this, rLocale, "getAllFormats1");
+#endif
     Sequence< FormatElement > seq(formatCount);
     sal_Int32 f = 0;
     for (int s = 0; s < SECTIONS; ++s)
