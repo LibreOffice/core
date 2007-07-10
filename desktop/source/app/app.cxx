@@ -4,9 +4,9 @@
  *
  *  $RCSfile: app.cxx,v $
  *
- *  $Revision: 1.205 $
+ *  $Revision: 1.206 $
  *
- *  last change: $Author: hr $ $Date: 2007-06-27 12:28:08 $
+ *  last change: $Author: ihi $ $Date: 2007-07-10 15:24:16 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1000,7 +1000,7 @@ void Desktop::HandleBootstrapErrors( BootstrapError aBootstrapError )
         OUString aErrorMsg;
         aErrorMsg = GetMsgString(
             //@@@ FIXME: should use an own resource string => #i36213#
-            STR_BOOTSTRAP_ERR_INTERNAL,
+            STR_BOOTSTRAP_ERR_LANGUAGE_MISSING,
             OUString( RTL_CONSTASCII_USTRINGPARAM(
                 "Language could not be determined." )) );
         aDiagnosticMessage.append( aErrorMsg );
