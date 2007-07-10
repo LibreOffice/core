@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.112 $
+#   $Revision: 1.113 $
 #
-#   last change: $Author: rt $ $Date: 2007-07-05 08:59:13 $
+#   last change: $Author: ihi $ $Date: 2007-07-10 15:38:59 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -329,7 +329,9 @@ SHL4OBJS=       \
                 $(SLO)$/dropdownboxtoolbarcontroller.obj  \
                 $(SLO)$/uriabbreviation.obj               \
                 $(SLO)$/popupmenudispatcher.obj           \
-                $(SLO)$/windowcommanddispatch.obj
+                $(SLO)$/windowcommanddispatch.obj			\
+                $(SLO)$/menubarmerger.obj				  \
+                $(SLO)$/toolbarmerger.obj
 
 SHL4STDLIBS=	\
                 $(FWILIB)                           \
