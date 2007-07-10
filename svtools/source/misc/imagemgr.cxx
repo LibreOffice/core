@@ -4,9 +4,9 @@
  *
  *  $RCSfile: imagemgr.cxx,v $
  *
- *  $Revision: 1.47 $
+ *  $Revision: 1.48 $
  *
- *  last change: $Author: hr $ $Date: 2007-06-27 21:50:27 $
+ *  last change: $Author: ihi $ $Date: 2007-07-10 15:18:52 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
