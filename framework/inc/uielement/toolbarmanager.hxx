@@ -4,9 +4,9 @@
  *
  *  $RCSfile: toolbarmanager.hxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: obo $ $Date: 2007-01-23 07:10:11 $
+ *  last change: $Author: ihi $ $Date: 2007-07-10 15:08:40 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -219,7 +219,7 @@ class ToolBarManager : public ::com::sun::star::frame::XFrameActionListener     
 
         void RemoveControllers();
         rtl::OUString RetrieveLabelFromCommand( const rtl::OUString& aCmdURL );
-        void CreateControllers( const ControllerParamsVector& );
+        void CreateControllers();
         void UpdateControllers();
         void AddFrameActionListener();
         void AddImageOrientationListener();
@@ -244,39 +244,39 @@ class ToolBarManager : public ::com::sun::star::frame::XFrameActionListener     
                                     bRotated  : 1;
         };
 
-        typedef std::vector< ::com::sun::star::uno::Reference< com::sun::star::frame::XStatusListener > >           ToolBarControllerVector;
+        typedef ::std::hash_map< sal_uInt16, ::com::sun::star::uno::Reference< com::sun::star::frame::XStatusListener > > ToolBarControllerMap;
         typedef ::std::vector< ::com::sun::star::uno::Reference< ::com::sun::star::frame::XSubToolbarController > > SubToolBarControllerVector;
         typedef BaseHash< CommandInfo >                                                                             CommandToInfoMap;
         typedef BaseHash< SubToolBarControllerVector >                                                              SubToolBarToSubToolBarControllerMap;
 
-        sal_Bool                                                                                        m_bDisposed : 1,
-                                                                                                        m_bIsHiContrast : 1,
-                                                                                                        m_bSmallSymbols : 1,
-                                                                                                        m_bModuleIdentified : 1,
-                                                                                                        m_bAddedToTaskPaneList : 1,
-                                                                                                        m_bVerticalTextEnabled : 1,
-                                                                                                        m_bFrameActionRegistered : 1,
-                                                                                                        m_bUpdateControllers : 1;
-        sal_Bool                                                                                        m_bImageOrientationRegistered : 1,
-                                                                                                        m_bImageMirrored : 1,
-                                                                                                        m_bCanBeCustomized : 1;
-        long                                                                                            m_lImageRotation;
-        ToolBar*                                                                                        m_pToolBar;
-        rtl::OUString                                                                                   m_aModuleIdentifier;
-        rtl::OUString                                                                                   m_aResourceName;
-        com::sun::star::uno::Reference< com::sun::star::frame::XFrame >                                 m_xFrame;
-        com::sun::star::uno::Reference< com::sun::star::container::XNameAccess >                        m_xUICommandLabels;
-        ToolBarControllerVector                                                                         m_aControllerVector;
-        ::cppu::OMultiTypeInterfaceContainerHelper                                                      m_aListenerContainer;   /// container for ALL Listener
-        ::com::sun::star::uno::Reference< com::sun::star::lang::XMultiServiceFactory >                  m_xServiceManager;
-        ::com::sun::star::uno::Reference< ::com::sun::star::frame::XUIControllerRegistration >  m_xToolbarControllerRegistration;
-        ::com::sun::star::uno::Reference< ::com::sun::star::ui::XImageManager >                 m_xModuleImageManager;
-        ::com::sun::star::uno::Reference< ::com::sun::star::ui::XImageManager >                 m_xDocImageManager;
-        ::com::sun::star::uno::Reference< ::com::sun::star::lang::XComponent >                          m_xImageOrientationListener;
-        CommandToInfoMap                                                                                m_aCommandMap;
-        SubToolBarToSubToolBarControllerMap                                                             m_aSubToolBarControllerMap;
-        Timer                                                                                           m_aAsyncUpdateControllersTimer;
-        sal_Int16                                                                                       m_nSymbolsStyle;
+        sal_Bool                                                                               m_bDisposed : 1,
+                                                                                               m_bIsHiContrast : 1,
+                                                                                               m_bSmallSymbols : 1,
+                                                                                               m_bModuleIdentified : 1,
+                                                                                               m_bAddedToTaskPaneList : 1,
+                                                                                               m_bVerticalTextEnabled : 1,
+                                                                                               m_bFrameActionRegistered : 1,
+                                                                                               m_bUpdateControllers : 1;
+        sal_Bool                                                                               m_bImageOrientationRegistered : 1,
+                                                                                               m_bImageMirrored : 1,
+                                                                                               m_bCanBeCustomized : 1;
+        long                                                                                   m_lImageRotation;
+        ToolBar*                                                                               m_pToolBar;
+        rtl::OUString                                                                          m_aModuleIdentifier;
+        rtl::OUString                                                                          m_aResourceName;
+        com::sun::star::uno::Reference< com::sun::star::frame::XFrame >                        m_xFrame;
+        com::sun::star::uno::Reference< com::sun::star::container::XNameAccess >               m_xUICommandLabels;
+        ToolBarControllerMap                                                                   m_aControllerMap;
+        ::cppu::OMultiTypeInterfaceContainerHelper                                             m_aListenerContainer;   /// container for ALL Listener
+        ::com::sun::star::uno::Reference< com::sun::star::lang::XMultiServiceFactory >         m_xServiceManager;
+        ::com::sun::star::uno::Reference< ::com::sun::star::frame::XUIControllerRegistration > m_xToolbarControllerRegistration;
+        ::com::sun::star::uno::Reference< ::com::sun::star::ui::XImageManager >                m_xModuleImageManager;
+        ::com::sun::star::uno::Reference< ::com::sun::star::ui::XImageManager >                m_xDocImageManager;
+        ::com::sun::star::uno::Reference< ::com::sun::star::lang::XComponent >                 m_xImageOrientationListener;
+        CommandToInfoMap                                                                       m_aCommandMap;
+        SubToolBarToSubToolBarControllerMap                                                    m_aSubToolBarControllerMap;
+        Timer                                                                                  m_aAsyncUpdateControllersTimer;
+        sal_Int16                                                                              m_nSymbolsStyle;
 };
 
 }
