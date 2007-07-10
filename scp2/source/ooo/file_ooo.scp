@@ -4,9 +4,9 @@
  *
  *  $RCSfile: file_ooo.scp,v $
  *
- *  $Revision: 1.205 $
+ *  $Revision: 1.206 $
  *
- *  last change: $Author: rt $ $Date: 2007-07-06 12:50:15 $
+ *  last change: $Author: ihi $ $Date: 2007-07-10 15:23:15 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -343,14 +343,14 @@ End
 
 // use this for high detail file open dialog >= 5.1 windows
 // #ifdef WNT
-// 
+//
 // File gid_File_Soffice_Bin_Manifest
 //     TXT_FILE_BODY;
 // 	Styles = (PACKED, PATCH);
 // 	Dir = gid_Dir_Program;
 // 	Name = "soffice.bin.manifest";
 // End
-// 
+//
 // #endif
 
 #ifdef UNX
@@ -1730,7 +1730,7 @@ End
 
 File gid_File_Oo_Office_Compatibility_Xcu
     TXT_FILE_BODY;
-    Styles = (PACKED, SCPZIP_REPLACE);
+    Styles = (PACKED, SCPZIP_REPLACE, PATCH);
     Dir = gid_Dir_Share_Registry_Data_Org_Openoffice_Office;
     Name = "/registry/data/org/openoffice/Office/Compatibility.xcu";
 End
