@@ -4,9 +4,9 @@
  *
  *  $RCSfile: fileview.cxx,v $
  *
- *  $Revision: 1.70 $
+ *  $Revision: 1.71 $
  *
- *  last change: $Author: hr $ $Date: 2007-06-27 21:19:11 $
+ *  last change: $Author: ihi $ $Date: 2007-07-10 15:16:16 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1933,7 +1933,7 @@ FileViewResult SvtFileView_Impl::GetFolderContent_Impl( const FolderDescriptor& 
     sal_Int32 nMinTimeout = pAsyncDescriptor->nMinTimeout;
     OSL_ENSURE( nMinTimeout > 0, "SvtFileView_Impl::GetFolderContent_Impl: invalid minimum timeout!" );
     if ( nMinTimeout <= 0 )
-        nMinTimeout = 1000L;
+        nMinTimeout = sal_Int32( 1000L );
     pTimeout->Seconds = nMinTimeout / 1000L;
     pTimeout->Nanosec = ( nMinTimeout % 1000L ) * 1000000L;
 
