@@ -4,9 +4,9 @@
  *
  *  $RCSfile: acccfg.cxx,v $
  *
- *  $Revision: 1.38 $
+ *  $Revision: 1.39 $
  *
- *  last change: $Author: hr $ $Date: 2007-06-27 23:09:02 $
+ *  last change: $Author: ihi $ $Date: 2007-07-10 15:22:14 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -546,6 +546,19 @@ SfxAcceleratorConfigPage::SfxAcceleratorConfigPage( Window* pParent, const SfxIt
     aEntriesBox.Resize(); // OS: Hack for right selection
     aEntriesBox.SetSpaceBetweenEntries(0);
     aEntriesBox.SetDragDropMode(0);
+
+    // detect max keyname width
+    long nMaxWidth  = 0;
+    for ( USHORT i = 0; i < KEYCODE_ARRAY_SIZE; ++i )
+    {
+        long nTmp = GetTextWidth( KeyCode( KEYCODE_ARRAY[i] ).GetName() );
+        if ( nTmp > nMaxWidth )
+            nMaxWidth = nTmp;
+    }
+    // recalc second tab
+    long nNewTab = PixelToLogic( Size( nMaxWidth, 0 ), MAP_APPFONT ).Width();
+    nNewTab = nNewTab + 5; // additional space
+    aEntriesBox.SetTab( 1, nNewTab );
 
     // initialize GroupBox
     aGroupLBox.SetFunctionListBox(&aFunctionBox);
