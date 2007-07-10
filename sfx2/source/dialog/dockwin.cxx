@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dockwin.cxx,v $
  *
- *  $Revision: 1.44 $
+ *  $Revision: 1.45 $
  *
- *  last change: $Author: hr $ $Date: 2007-06-27 23:11:30 $
+ *  last change: $Author: ihi $ $Date: 2007-07-10 15:22:37 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -44,6 +44,7 @@
 #endif
 
 #include <vcl/svapp.hxx>
+#include <vcl/timer.hxx>
 
 #include <sfx2/dockwin.hxx>
 #include <sfx2/bindings.hxx>
@@ -72,6 +73,7 @@ friend class SfxDockingWindow;
     SfxSplitWindow*     pSplitWin;
     BOOL                bSplitable;
 //  BOOL                bAutoHide;
+    Timer               aMoveTimer;
 
     // Folgende members sind nur in der Zeit von StartDocking bis EndDocking
     // g"ultig:
@@ -541,7 +543,8 @@ SfxDockingWindow::SfxDockingWindow( SfxBindings *pBindinx, SfxChildWindow *pCW,
     Window* pParent, WinBits nWinBits) :
     DockingWindow (pParent, nWinBits),
     pBindings(pBindinx),
-    pMgr(pCW)
+    pMgr(pCW),
+    pImp(NULL)
 
 /*  [Beschreibung]
 
@@ -570,6 +573,8 @@ SfxDockingWindow::SfxDockingWindow( SfxBindings *pBindinx, SfxChildWindow *pCW,
     pImp->nPos  = pImp->nDockPos = 0;
     pImp->bNewLine = FALSE;
     pImp->SetLastAlignment(SFX_ALIGN_NOALIGNMENT);
+    pImp->aMoveTimer.SetTimeout(50);
+    pImp->aMoveTimer.SetTimeoutHdl(LINK(this,SfxDockingWindow,TimerHdl));
 
 //  DBG_ASSERT(pMgr,"DockingWindow erfordert ein SfxChildWindow!");
 }
@@ -580,7 +585,8 @@ SfxDockingWindow::SfxDockingWindow( SfxBindings *pBindinx, SfxChildWindow *pCW,
     Window* pParent, const ResId& rResId) :
     DockingWindow(pParent, rResId),
     pBindings(pBindinx),
-    pMgr(pCW)
+    pMgr(pCW),
+    pImp(NULL)
 
 /*  [Beschreibung]
 
@@ -607,6 +613,8 @@ SfxDockingWindow::SfxDockingWindow( SfxBindings *pBindinx, SfxChildWindow *pCW,
     pImp->nPos  = pImp->nDockPos = 0;
     pImp->bNewLine = FALSE;
     pImp->SetLastAlignment(SFX_ALIGN_NOALIGNMENT);
+    pImp->aMoveTimer.SetTimeout(50);
+    pImp->aMoveTimer.SetTimeoutHdl(LINK(this,SfxDockingWindow,TimerHdl));
 
 //  DBG_ASSERT(pMgr,"DockingWindow erfordert ein SfxChildWindow!");
 }
@@ -1593,6 +1601,13 @@ void SfxDockingWindow::StateChanged( StateChangedType nStateChange )
 
 void SfxDockingWindow::Move()
 {
+    if ( pImp )
+        pImp->aMoveTimer.Start();
+}
+
+IMPL_LINK( SfxDockingWindow, TimerHdl, Timer*, EMPTYARG)
+{
+    pImp->aMoveTimer.Stop();
     if ( IsReallyVisible() && IsFloatingMode() )
     {
         SfxChildIdentifier eIdent = SFX_CHILDWIN_DOCKINGWINDOW;
@@ -1601,5 +1616,6 @@ void SfxDockingWindow::Move()
         SfxWorkWindow *pWorkWin = pBindings->GetWorkWindow_Impl();
         pWorkWin->ConfigChild_Impl( eIdent, SFX_ALIGNDOCKINGWINDOW, pMgr->GetType() );
     }
+    return 0;
 }
 
