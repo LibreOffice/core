@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dlgexpor.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: hr $ $Date: 2007-06-27 21:34:44 $
+ *  last change: $Author: ihi $ $Date: 2007-07-10 15:17:52 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -200,7 +200,6 @@ IMPL_LINK( DlgExportPix, OK, void *, EMPTYARG )
 
     pConfigItem->WriteInt32( String( ResId( KEY_MODE, *pMgr ) ), nMode );
     pConfigItem->WriteInt32( String( ResId( KEY_RES, *pMgr ) ), nRes );
-
     pConfigItem->WriteSize( String( ResId( KEY_SIZE, *pMgr ) ), aSize );
     pConfigItem->WriteInt32( String( ResId( KEY_COLORS, *pMgr ) ), (sal_Int32)aLbColors.GetSelectEntryPos() );
     pConfigItem->WriteBool( String( ResId( KEY_RLE_CODING, *pMgr ) ), aCbxRLE.IsChecked() );
@@ -329,7 +328,6 @@ DlgExportVec::DlgExportVec( FltCallDialogParameter& rPara ) :
     SetText( aTitle );
 
     // reading config-parameter
-
     sal_Int32   nMode = pConfigItem->ReadInt32( String( ResId( KEY_MODE, *pMgr ) ), 0 );
 
     ::com::sun::star::awt::Size aDefault( 10000, 10000 );
