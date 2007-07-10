@@ -4,9 +4,9 @@
  *
  *  $RCSfile: vclxtoolkit.cxx,v $
  *
- *  $Revision: 1.56 $
+ *  $Revision: 1.57 $
  *
- *  last change: $Author: rt $ $Date: 2007-07-06 14:26:42 $
+ *  last change: $Author: ihi $ $Date: 2007-07-10 14:52:25 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1362,7 +1362,6 @@ css::uno::Reference< css::awt::XWindowPeer > VCLXToolkit::ImplCreateWindow(
             osl::Guard< vos::IMutex > aGuard(Application::GetSolarMutex());
             xMsgBox->setCaptionText( aTitle );
             xMsgBox->setMessageText( aMessage );
-            pWindow->Show();
         }
     }
 
