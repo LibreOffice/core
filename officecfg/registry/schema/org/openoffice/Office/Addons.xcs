@@ -5,9 +5,9 @@
  *
  *  $RCSfile: Addons.xcs,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: hr $ $Date: 2006-05-08 15:20:26 $
+ *  last change: $Author: ihi $ $Date: 2007-07-10 14:51:33 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -93,6 +93,81 @@
 					<desc>An optional set to allow sub menus. This property cannot be used for toolbar item definitions.</desc>
 				</info>
 			</set>
+		</group>
+		<group oor:name="MergeMenuInstruction">
+			<info>
+				<desc>Describes a merge menu instruction of an external component. The name must be unique and should be written using a package-scheme like org.openoffice.external.applicationexecuter to minimize name clashes. A menu instruction describes how the attached menu items should be merged into the Office menubar.</desc>
+			</info>
+			<prop oor:name="MergePoint" oor:type="xs:string">
+				<info>
+					<desc>A command path describe the reference point for the merge command.</desc>
+				</info>
+			</prop>
+			<prop oor:name="MergeCommand" oor:type="xs:string">
+				<info>
+					<desc>A command to be processed for this merge menu instruction.</desc>
+				</info>
+			</prop>
+			<prop oor:name="MergeCommandParameter" oor:type="xs:string">
+			    <info>
+			        <desc>Optional parameters for a merge command. Interpretation depends on the individual command.</desc>
+			    </info>
+			</prop>
+			<prop oor:name="MergeFallback" oor:type="xs:string">
+				<info>
+					<desc>A fallback command to be used if MergeCommand cannot be applied.</desc>
+				</info>
+			</prop>
+			<prop oor:name="MergeContext" oor:type="xs:string">
+				<info>
+					<desc>A property to define the context of this merge instruction. It can be empty or a colon separated list of the supported application modules.</desc>
+				</info>
+			</prop>
+			<set oor:name="MenuItems" oor:node-type="MenuItem">
+				<info>
+					<desc>Defines the menu item(s) to be merged into the menu bar.</desc>
+				</info>
+			</set>
+		</group>
+		<group oor:name="MergeToolBarInstruction">
+			<info>
+				<desc>Describes a merge menu instruction of an external component. The name must be unique and should be written using a package-scheme like org.openoffice.external.applicationexecuter to minimize name clashes. A menu instruction describes how the attached menu items should be merged into the Office menubar.</desc>
+			</info>
+			<prop oor:name="MergeToolBar" oor:type="xs:string">
+				<info>
+					<desc>Defines the toolbar resource URL.</desc>
+				</info>
+			</prop>
+			<prop oor:name="MergePoint" oor:type="xs:string">
+			    <info>
+			        <desc>Describes the command that should be used as a reference point for the merge command.</desc>
+			    </info>
+			</prop>
+			<prop oor:name="MergeCommand" oor:type="xs:string">
+				<info>
+					<desc>A command to be processed for this merge menu instruction.</desc>
+				</info>
+			</prop>
+			<prop oor:name="MergeCommandParameter" oor:type="xs:string">
+				<info>
+					<desc>Optional parameters for a merge command. Interpretation depends on the individual command.</desc>
+				</info>
+			</prop>
+			<prop oor:name="MergeFallback" oor:type="xs:string">
+				<info>
+					<desc>A fallback command to be used if MergeCommand cannot be applied.</desc>
+				</info>
+			</prop>
+			<prop oor:name="MergeContext" oor:type="xs:string">
+				<info>
+					<desc>A property to define the context of this merge instruction. It can be empty or a colon separated list of the supported application modules.</desc>
+				</info>
+			</prop>
+    		<set oor:name="ToolBarItems" oor:node-type="ToolBarItem">
+    			<info>
+    				<desc>Contains a list of toolbar items used by an Add-On.</desc>
+    			</info>
+    		</set>
 		</group>
 		<group oor:name="ToolBarItem">
 			<info>
@@ -199,6 +274,16 @@
 				<desc>Contains a list of toolbar items used by an Add-On.</desc>
 			</info>
 		</set>
+		<set oor:name="MergeMenuItems" oor:node-type="MergeMenuInstruction">
+			<info>
+				<desc>Contains a list of merge menu instructions defined by an Add-On which specify how to merge menu items into the Office menubar.</desc>
+			</info>
+		</set>
+		<set oor:name="MergeToolBarItems" oor:node-type="MergeToolBarInstruction">
+			<info>
+				<desc>Contains a list of merge toolbar instructions defined by an Add-On which specify how to merge toolbar items into an existing toolbar.</desc>
+			</info>
+		</set>
 	</templates>
 	<component>
 		<group oor:name="AddonUI">
@@ -220,10 +305,20 @@
 					<desc>Contains the structure of addon popup-menus inserted into the Office menubar. It provide functions of external components to the user.</desc>
 				</info>
 			</set>
+			<set oor:name="OfficeMenuBarMerging" oor:node-type="MergeMenuItems">
+				<info>
+					<desc>Contains a list of menu merging instructions of different add-ons.</desc>
+				</info>
+			</set>
 			<set oor:name="OfficeToolBar" oor:node-type="ToolBarItems">
 				<info>
-					<desc>Contains a list of sets of toolbar items inserted into the Office function bar.</desc>
+					<desc>Contains a list of sets of toolbar items that are part of add-on toolbars.</desc>
 				</info>
+			</set>
+			<set oor:name="OfficeToolbarMerging" oor:node-type="MergeToolBarItems">
+			    <info>
+			        <desc>Contains a list of toolbar merging instructions of different add-ons. </desc>
+			    </info>
 			</set>
 			<set oor:name="OfficeHelp" oor:node-type="MenuItem">
 				<info>
