@@ -4,9 +4,9 @@
  *
  *  $RCSfile: layoutmanager.cxx,v $
  *
- *  $Revision: 1.64 $
+ *  $Revision: 1.65 $
  *
- *  last change: $Author: rt $ $Date: 2007-07-06 12:22:36 $
+ *  last change: $Author: ihi $ $Date: 2007-07-10 15:09:24 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -361,7 +361,14 @@ static sal_Bool implts_isFrameOrWindowTop( const css::uno::Reference< css::frame
 
     css::uno::Reference< css::awt::XTopWindow > xWindowCheck(xFrame->getContainerWindow(), css::uno::UNO_QUERY); // dont use _THROW here ... its a check only
     if (xWindowCheck.is())
-        return sal_True;
+    {
+        // --> PB 2007-06-18 #i76867# top and system window is required.
+        ::vos::OGuard aSolarLock(&Application::GetSolarMutex());
+        css::uno::Reference< css::awt::XWindow > xWindow( xWindowCheck, UNO_QUERY );
+        Window* pWindow = VCLUnoHelper::GetWindow( xWindow );
+        return ( pWindow && pWindow->IsSystemWindow() );
+        // <--
+    }
 
     return sal_False;
 }
