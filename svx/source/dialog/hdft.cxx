@@ -4,9 +4,9 @@
  *
  *  $RCSfile: hdft.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: hr $ $Date: 2007-06-27 17:10:37 $
+ *  last change: $Author: ihi $ $Date: 2007-07-10 15:02:37 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -196,6 +196,7 @@ SvxHFPage::SvxHFPage( Window* pParent, USHORT nResId, const SfxItemSet& rAttr, U
 
 {
     InitHandler();
+    aBspWin.EnableRTL( FALSE );
 
     // diese Page braucht ExchangeSupport
     SetExchangeSupport();
