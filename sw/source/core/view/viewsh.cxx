@@ -4,9 +4,9 @@
  *
  *  $RCSfile: viewsh.cxx,v $
  *
- *  $Revision: 1.72 $
+ *  $Revision: 1.73 $
  *
- *  last change: $Author: hr $ $Date: 2007-06-26 11:58:09 $
+ *  last change: $Author: ihi $ $Date: 2007-07-10 14:59:22 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -988,6 +988,20 @@ void ViewShell::SetUseFormerTextWrapping( bool _bUseFormerTextWrapping )
     {
         SwWait aWait( *GetDoc()->GetDocShell(), TRUE );
         pIDSA->set(IDocumentSettingAccess::USE_FORMER_TEXT_WRAPPING, _bUseFormerTextWrapping );
+        const BYTE nInv = INV_PRTAREA | INV_SIZE | INV_TABLE | INV_SECTION;
+        lcl_InvalidateAllCntnt( *this, nInv );
+    }
+}
+// <--
+
+// -> PB 2007-06-11 #i45491#
+void ViewShell::SetDoNotJustifyLinesWithManualBreak( bool _bDoNotJustifyLinesWithManualBreak )
+{
+    IDocumentSettingAccess* pIDSA = getIDocumentSettingAccess();
+    if ( pIDSA->get(IDocumentSettingAccess::DO_NOT_JUSTIFY_LINES_WITH_MANUAL_BREAK) != _bDoNotJustifyLinesWithManualBreak )
+    {
+        SwWait aWait( *GetDoc()->GetDocShell(), TRUE );
+        pIDSA->set(IDocumentSettingAccess::DO_NOT_JUSTIFY_LINES_WITH_MANUAL_BREAK, _bDoNotJustifyLinesWithManualBreak );
         const BYTE nInv = INV_PRTAREA | INV_SIZE | INV_TABLE | INV_SECTION;
         lcl_InvalidateAllCntnt( *this, nInv );
     }
