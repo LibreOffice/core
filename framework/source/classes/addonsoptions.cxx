@@ -4,9 +4,9 @@
  *
  *  $RCSfile: addonsoptions.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: vg $ $Date: 2006-11-01 14:49:10 $
+ *  last change: $Author: ihi $ $Date: 2007-07-10 15:09:05 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -136,6 +136,22 @@ using namespace ::com::sun::star::lang  ;
 #define IMAGES_NODENAME                                 OUString(RTL_CONSTASCII_USTRINGPARAM("UserDefinedImages" ))
 #define PRIVATE_IMAGE_URL                               OUString(RTL_CONSTASCII_USTRINGPARAM("private:image/" ))
 
+#define PROPERTYNAME_MERGEMENU_MERGEPOINT               OUString(RTL_CONSTASCII_USTRINGPARAM("MergePoint" ))
+#define PROPERTYNAME_MERGEMENU_MERGECOMMAND             OUString(RTL_CONSTASCII_USTRINGPARAM("MergeCommand" ))
+#define PROPERTYNAME_MERGEMENU_MERGECOMMANDPARAMETER    OUString(RTL_CONSTASCII_USTRINGPARAM("MergeCommandParameter" ))
+#define PROPERTYNAME_MERGEMENU_MERGEFALLBACK            OUString(RTL_CONSTASCII_USTRINGPARAM("MergeFallback" ))
+#define PROPERTYNAME_MERGEMENU_MERGECONTEXT             OUString(RTL_CONSTASCII_USTRINGPARAM("MergeContext" ))
+#define PROPERTYNAME_MERGEMENU_MENUITEMS                OUString(RTL_CONSTASCII_USTRINGPARAM("MenuItems" ))
+#define MERGEMENU_MERGEPOINT_SEPARATOR                  '\\'
+
+#define PROPERTYNAME_MERGETOOLBAR_TOOLBAR               OUString(RTL_CONSTASCII_USTRINGPARAM("MergeToolBar" ))
+#define PROPERTYNAME_MERGETOOLBAR_MERGEPOINT            OUString(RTL_CONSTASCII_USTRINGPARAM("MergePoint" ))
+#define PROPERTYNAME_MERGETOOLBAR_MERGECOMMAND          OUString(RTL_CONSTASCII_USTRINGPARAM("MergeCommand" ))
+#define PROPERTYNAME_MERGETOOLBAR_MERGECOMMANDPARAMETER OUString(RTL_CONSTASCII_USTRINGPARAM("MergeCommandParameter" ))
+#define PROPERTYNAME_MERGETOOLBAR_MERGEFALLBACK         OUString(RTL_CONSTASCII_USTRINGPARAM("MergeFallback" ))
+#define PROPERTYNAME_MERGETOOLBAR_MERGECONTEXT          OUString(RTL_CONSTASCII_USTRINGPARAM("MergeContext" ))
+#define PROPERTYNAME_MERGETOOLBAR_TOOLBARITEMS          OUString(RTL_CONSTASCII_USTRINGPARAM("ToolBarItems" ))
+
 // The following order is mandatory. Please add properties at the end!
 #define INDEX_URL             0
 #define INDEX_TITLE           1
@@ -184,6 +200,23 @@ using namespace ::com::sun::star::lang  ;
 #define OFFSET_IMAGES_BIG_URL                           5
 #define OFFSET_IMAGES_SMALLHC_URL                       6
 #define OFFSET_IMAGES_BIGHC_URL                         7
+
+#define PROPERTYCOUNT_MERGE_MENUBAR                     6
+#define OFFSET_MERGEMENU_MERGEPOINT                     0
+#define OFFSET_MERGEMENU_MERGECOMMAND                   1
+#define OFFSET_MERGEMENU_MERGECOMMANDPARAMETER          2
+#define OFFSET_MERGEMENU_MERGEFALLBACK                  3
+#define OFFSET_MERGEMENU_MERGECONTEXT                   4
+#define OFFSET_MERGEMENU_MENUITEMS                      5
+
+#define PROPERTYCOUNT_MERGE_TOOLBAR                     7
+#define OFFSET_MERGETOOLBAR_TOOLBAR                     0
+#define OFFSET_MERGETOOLBAR_MERGEPOINT                  1
+#define OFFSET_MERGETOOLBAR_MERGECOMMAND                2
+#define OFFSET_MERGETOOLBAR_MERGECOMMANDPARAMETER       3
+#define OFFSET_MERGETOOLBAR_MERGEFALLBACK               4
+#define OFFSET_MERGETOOLBAR_MERGECONTEXT                5
+#define OFFSET_MERGETOOLBAR_TOOLBARITEMS                6
 
 #define EXPAND_PROTOCOL                                 "vnd.sun.star.expand:"
 
@@ -276,6 +309,8 @@ class AddonsOptions_Impl : public ConfigItem
         const ::rtl::OUString                           GetAddonsToolbarResourceName( sal_uInt32 nIndex ) const;
         const Sequence< Sequence< PropertyValue > >&    GetAddonsHelpMenu    () const ;
         Image                                           GetImageFromURL( const rtl::OUString& aURL, sal_Bool bBig, sal_Bool bHiContrast, sal_Bool bNoScale ) const;
+        const MergeMenuInstructionContainer&            GetMergeMenuInstructions() const;
+        bool                                            GetMergeToolbarInstructions( const ::rtl::OUString& rToolbarName, MergeToolbarInstructionContainer& rToolbarInstructions ) const;
 
         void                                            ReadConfigurationData();
 
@@ -308,6 +343,7 @@ class AddonsOptions_Impl : public ConfigItem
         typedef std::hash_map< OUString, ImageEntry, OUStringHashCode, ::std::equal_to< OUString > > ImageManager;
         typedef std::hash_map< OUString, sal_uInt32, OUStringHashCode, ::std::equal_to< OUString > > StringToIndexMap;
         typedef std::vector< Sequence< Sequence< PropertyValue > > > AddonToolBars;
+        typedef ::std::hash_map< ::rtl::OUString, MergeToolbarInstructionContainer, OUStringHashCode, ::std::equal_to< OUString > > ToolbarMergingInstructions;
 
         enum ImageSize
         {
@@ -334,7 +370,11 @@ class AddonsOptions_Impl : public ConfigItem
         sal_Bool             ReadToolBarItemSet( const rtl::OUString rToolBarItemSetNodeName, Sequence< Sequence< PropertyValue > >& aAddonOfficeToolBarSeq );
         sal_Bool             ReadOfficeHelpSet( Sequence< Sequence< PropertyValue > >& aAddonOfficeHelpMenuSeq );
         sal_Bool             ReadImages( ImageManager& aImageManager );
+        sal_Bool             ReadMenuMergeInstructions( MergeMenuInstructionContainer& rContainer );
+        sal_Bool             ReadToolbarMergeInstructions( ToolbarMergingInstructions& rToolbarMergeMap );
 
+        sal_Bool             ReadMergeMenuData( const OUString& aMergeAddonInstructionBase, Sequence< Sequence< PropertyValue > >& rMergeMenu );
+        sal_Bool             ReadMergeToolbarData( const OUString& aMergeAddonInstructionBase, Sequence< Sequence< PropertyValue > >& rMergeToolbarItems );
         sal_Bool             ReadMenuItem( const OUString& aMenuItemNodeName, Sequence< PropertyValue >& aMenuItem, sal_Bool bIgnoreSubMenu = sal_False );
         sal_Bool             ReadPopupMenu( const OUString& aPopupMenuNodeName, Sequence< PropertyValue >& aPopupMenu );
         sal_Bool             AppendPopupMenu( Sequence< PropertyValue >& aTargetPopupMenu, const Sequence< PropertyValue >& rSourcePopupMenu );
@@ -350,6 +390,7 @@ class AddonsOptions_Impl : public ConfigItem
         void                 InsertToolBarSeparator( Sequence< Sequence< PropertyValue > >& rAddonOfficeToolBarSeq );
         OUString             GeneratePrefixURL();
 
+        Sequence< OUString > GetPropertyNamesMergeMenuInstruction( const OUString& aPropertyRootName ) const;
         Sequence< OUString > GetPropertyNamesMenuItem( const OUString& aPropertyRootNode ) const;
         Sequence< OUString > GetPropertyNamesPopupMenu( const OUString& aPropertyRootNode ) const;
         Sequence< OUString > GetPropertyNamesToolBarItem( const OUString& aPropertyRootNode ) const;
@@ -363,22 +404,26 @@ class AddonsOptions_Impl : public ConfigItem
     private:
         ImageEntry* ReadOptionalImageData( const OUString& aMenuNodeName );
 
-        sal_Int32                                           m_nRootAddonPopupMenuId;
-        OUString                                            m_aPropNames[PROPERTYCOUNT_INDEX];
-        OUString                                            m_aPropImagesNames[PROPERTYCOUNT_IMAGES];
-        OUString                                            m_aEmpty;
-        OUString                                            m_aPathDelimiter;
-        OUString                                            m_aSeparator;
-        OUString                                            m_aRootAddonPopupMenuURLPrexfix;
-        OUString                                            m_aPrivateImageURL;
-        Sequence< Sequence< PropertyValue > >               m_aCachedMenuProperties;
-        Sequence< Sequence< PropertyValue > >               m_aCachedMenuBarPartProperties;
-       AddonToolBars                                       m_aCachedToolBarPartProperties;
-       std::vector< rtl::OUString >                        m_aCachedToolBarPartResourceNames;
-        Sequence< Sequence< PropertyValue > >               m_aCachedHelpMenuProperties;
-        Reference< com::sun::star::util::XMacroExpander >   m_xMacroExpander;
-        ImageManager                                        m_aImageManager;
-       Sequence< Sequence< PropertyValue > >               m_aEmptyAddonToolBar;
+        sal_Int32                                         m_nRootAddonPopupMenuId;
+        OUString                                          m_aPropNames[PROPERTYCOUNT_INDEX];
+        OUString                                          m_aPropImagesNames[PROPERTYCOUNT_IMAGES];
+        OUString                                          m_aPropMergeMenuNames[PROPERTYCOUNT_MERGE_MENUBAR];
+        OUString                                          m_aPropMergeToolbarNames[PROPERTYCOUNT_MERGE_TOOLBAR];
+        OUString                                          m_aEmpty;
+        OUString                                          m_aPathDelimiter;
+        OUString                                          m_aSeparator;
+        OUString                                          m_aRootAddonPopupMenuURLPrexfix;
+        OUString                                          m_aPrivateImageURL;
+        Sequence< Sequence< PropertyValue > >             m_aCachedMenuProperties;
+        Sequence< Sequence< PropertyValue > >             m_aCachedMenuBarPartProperties;
+        AddonToolBars                                     m_aCachedToolBarPartProperties;
+        std::vector< rtl::OUString >                      m_aCachedToolBarPartResourceNames;
+        Sequence< Sequence< PropertyValue > >             m_aCachedHelpMenuProperties;
+        Reference< com::sun::star::util::XMacroExpander > m_xMacroExpander;
+        ImageManager                                      m_aImageManager;
+        Sequence< Sequence< PropertyValue > >             m_aEmptyAddonToolBar;
+        MergeMenuInstructionContainer                     m_aCachedMergeMenuInsContainer;
+        ToolbarMergingInstructions                        m_aCachedToolbarMergingInstructions;
 };
 
 //_________________________________________________________________________________________________________________
@@ -416,6 +461,22 @@ AddonsOptions_Impl::AddonsOptions_Impl()
     m_aPropImagesNames[ OFFSET_IMAGES_BIG_URL       ] = PROPERTYNAME_IMAGEBIG_URL;
     m_aPropImagesNames[ OFFSET_IMAGES_SMALLHC_URL   ] = PROPERTYNAME_IMAGESMALLHC_URL;
     m_aPropImagesNames[ OFFSET_IMAGES_BIGHC_URL     ] = PROPERTYNAME_IMAGEBIGHC_URL;
+
+    // initialize array with fixed merge menu property names
+    m_aPropMergeMenuNames[ OFFSET_MERGEMENU_MERGEPOINT    ] = PROPERTYNAME_MERGEMENU_MERGEPOINT;
+    m_aPropMergeMenuNames[ OFFSET_MERGEMENU_MERGECOMMAND  ] = PROPERTYNAME_MERGEMENU_MERGECOMMAND;
+    m_aPropMergeMenuNames[ OFFSET_MERGEMENU_MERGECOMMANDPARAMETER ] = PROPERTYNAME_MERGEMENU_MERGECOMMANDPARAMETER;
+    m_aPropMergeMenuNames[ OFFSET_MERGEMENU_MERGEFALLBACK ] = PROPERTYNAME_MERGEMENU_MERGEFALLBACK;
+    m_aPropMergeMenuNames[ OFFSET_MERGEMENU_MERGECONTEXT  ] = PROPERTYNAME_MERGEMENU_MERGECONTEXT;
+    m_aPropMergeMenuNames[ OFFSET_MERGEMENU_MENUITEMS     ] = PROPERTYNAME_MERGEMENU_MENUITEMS;
+
+    m_aPropMergeToolbarNames[ OFFSET_MERGETOOLBAR_TOOLBAR               ] = PROPERTYNAME_MERGETOOLBAR_TOOLBAR;
+    m_aPropMergeToolbarNames[ OFFSET_MERGETOOLBAR_MERGEPOINT            ] = PROPERTYNAME_MERGETOOLBAR_MERGEPOINT;
+    m_aPropMergeToolbarNames[ OFFSET_MERGETOOLBAR_MERGECOMMAND          ] = PROPERTYNAME_MERGETOOLBAR_MERGECOMMAND;
+    m_aPropMergeToolbarNames[ OFFSET_MERGETOOLBAR_MERGECOMMANDPARAMETER ] = PROPERTYNAME_MERGETOOLBAR_MERGECOMMANDPARAMETER;
+    m_aPropMergeToolbarNames[ OFFSET_MERGETOOLBAR_MERGEFALLBACK         ] = PROPERTYNAME_MERGETOOLBAR_MERGEFALLBACK;
+    m_aPropMergeToolbarNames[ OFFSET_MERGETOOLBAR_MERGECONTEXT          ] = PROPERTYNAME_MERGETOOLBAR_MERGECONTEXT;
+    m_aPropMergeToolbarNames[ OFFSET_MERGETOOLBAR_TOOLBARITEMS          ] = PROPERTYNAME_MERGETOOLBAR_TOOLBARITEMS;
 
     Reference< XComponentContext > xContext;
     Reference< com::sun::star::beans::XPropertySet > xProps( ::comphelper::getProcessServiceFactory(), UNO_QUERY );
@@ -463,6 +524,12 @@ void AddonsOptions_Impl::ReadConfigurationData()
     ReadOfficeToolBarSet( m_aCachedToolBarPartProperties, m_aCachedToolBarPartResourceNames );
     ReadOfficeHelpSet( m_aCachedHelpMenuProperties );
     ReadImages( m_aImageManager );
+
+    m_aCachedMergeMenuInsContainer.clear();
+    m_aCachedToolbarMergingInstructions.clear();
+
+    ReadMenuMergeInstructions( m_aCachedMergeMenuInsContainer );
+    ReadToolbarMergeInstructions( m_aCachedToolbarMergingInstructions );
 }
 
 //*****************************************************************************************************************
@@ -549,6 +616,31 @@ const ::rtl::OUString AddonsOptions_Impl::GetAddonsToolbarResourceName( sal_uInt
 const Sequence< Sequence< PropertyValue > >& AddonsOptions_Impl::GetAddonsHelpMenu  () const
 {
     return m_aCachedHelpMenuProperties;
+}
+
+//*****************************************************************************************************************
+//  public method
+//*****************************************************************************************************************
+const MergeMenuInstructionContainer& AddonsOptions_Impl::GetMergeMenuInstructions() const
+{
+    return m_aCachedMergeMenuInsContainer;
+}
+
+//*****************************************************************************************************************
+//  public method
+//*****************************************************************************************************************
+bool AddonsOptions_Impl::GetMergeToolbarInstructions(
+    const ::rtl::OUString& rToolbarName,
+    MergeToolbarInstructionContainer& rToolbarInstructions ) const
+{
+    ToolbarMergingInstructions::const_iterator pIter = m_aCachedToolbarMergingInstructions.find( rToolbarName );
+    if ( pIter != m_aCachedToolbarMergingInstructions.end() )
+    {
+        rToolbarInstructions = pIter->second;
+        return true;
+    }
+    else
+        return false;
 }
 
 //*****************************************************************************************************************
@@ -879,6 +971,183 @@ OUString AddonsOptions_Impl::GeneratePrefixURL()
 //*****************************************************************************************************************
 //  private method
 //*****************************************************************************************************************
+
+sal_Bool AddonsOptions_Impl::ReadMenuMergeInstructions( MergeMenuInstructionContainer& aContainer )
+{
+    const OUString aMenuMergeRootName( RTL_CONSTASCII_USTRINGPARAM( "AddonUI/OfficeMenuBarMerging/" ));
+
+    Sequence< OUString >    aAddonMergeNodesSeq = GetNodeNames( aMenuMergeRootName );
+    OUString                aAddonMergeNode( aMenuMergeRootName );
+
+    sal_uInt32              nCount = aAddonMergeNodesSeq.getLength();
+
+    // Init the property value sequence
+    Sequence< OUString >    aNodePropNames( 5 );
+    OUString                aURL;
+
+    for ( sal_uInt32 i = 0; i < nCount; i++ )
+    {
+        OUString aMergeAddonInstructions( aAddonMergeNode + aAddonMergeNodesSeq[i] );
+
+        Sequence< OUString > aAddonInstMergeNodesSeq = GetNodeNames( aMergeAddonInstructions );
+        sal_uInt32           nCountAddons = aAddonInstMergeNodesSeq.getLength();
+
+        for ( sal_uInt32 j = 0; j < nCountAddons; j++ )
+        {
+            OUStringBuffer aMergeAddonInstructionBase( aMergeAddonInstructions );
+            aMergeAddonInstructionBase.append( m_aPathDelimiter );
+            aMergeAddonInstructionBase.append( aAddonInstMergeNodesSeq[j] );
+            aMergeAddonInstructionBase.append( m_aPathDelimiter );
+
+            // Create sequence for data access
+            OUStringBuffer aBuffer( aMergeAddonInstructionBase );
+            aBuffer.append( m_aPropMergeMenuNames[ OFFSET_MERGEMENU_MERGEPOINT ] );
+            aNodePropNames[0] = aBuffer.makeStringAndClear();
+
+            aBuffer = aMergeAddonInstructionBase;
+            aBuffer.append( m_aPropMergeMenuNames[ OFFSET_MERGEMENU_MERGECOMMAND ] );
+            aNodePropNames[1] = aBuffer.makeStringAndClear();
+
+            aBuffer = aMergeAddonInstructionBase;
+            aBuffer.append( m_aPropMergeMenuNames[ OFFSET_MERGEMENU_MERGECOMMANDPARAMETER ] );
+            aNodePropNames[2] = aBuffer.makeStringAndClear();
+
+            aBuffer = aMergeAddonInstructionBase;
+            aBuffer.append( m_aPropMergeMenuNames[ OFFSET_MERGEMENU_MERGEFALLBACK ] );
+            aNodePropNames[3] = aBuffer.makeStringAndClear();
+
+            aBuffer = aMergeAddonInstructionBase;
+            aBuffer.append( m_aPropMergeMenuNames[ OFFSET_MERGEMENU_MERGECONTEXT ] );
+            aNodePropNames[4] = aBuffer.makeStringAndClear();
+
+            Sequence< Any > aNodePropValues = GetProperties( aNodePropNames );
+
+            MergeMenuInstruction aMergeMenuInstruction;
+            aNodePropValues[0] >>= aMergeMenuInstruction.aMergePoint;
+            aNodePropValues[1] >>= aMergeMenuInstruction.aMergeCommand;
+            aNodePropValues[2] >>= aMergeMenuInstruction.aMergeCommandParameter;
+            aNodePropValues[3] >>= aMergeMenuInstruction.aMergeFallback;
+            aNodePropValues[4] >>= aMergeMenuInstruction.aMergeContext;
+
+            OUString aMergeMenuBase = aMergeAddonInstructionBase.makeStringAndClear();
+            ReadMergeMenuData( aMergeMenuBase, aMergeMenuInstruction.aMergeMenu );
+
+            aContainer.push_back( aMergeMenuInstruction );
+        }
+    }
+
+    return sal_True;
+}
+
+//*****************************************************************************************************************
+//  private method
+//*****************************************************************************************************************
+sal_Bool AddonsOptions_Impl::ReadMergeMenuData( const OUString& aMergeAddonInstructionBase, Sequence< Sequence< PropertyValue > >& rMergeMenu )
+{
+    OUString aMergeMenuBaseNode( aMergeAddonInstructionBase+m_aPropMergeMenuNames[ OFFSET_MERGEMENU_MENUITEMS ] );
+
+    Sequence< OUString > aSubMenuNodeNames = GetNodeNames( aMergeMenuBaseNode );
+    aMergeMenuBaseNode += m_aPathDelimiter;
+
+    // extend the node names to have full path strings
+    for ( sal_uInt32 i = 0; i < (sal_uInt32)aSubMenuNodeNames.getLength(); i++ )
+        aSubMenuNodeNames[i] = OUString( aMergeMenuBaseNode + aSubMenuNodeNames[i] );
+
+    return ReadSubMenuEntries( aSubMenuNodeNames, rMergeMenu );
+}
+
+//*****************************************************************************************************************
+//  private method
+//*****************************************************************************************************************
+sal_Bool AddonsOptions_Impl::ReadToolbarMergeInstructions( ToolbarMergingInstructions& rCachedToolbarMergingInstructions )
+{
+    const OUString aToolbarMergeRootName( RTL_CONSTASCII_USTRINGPARAM( "AddonUI/OfficeToolbarMerging/" ));
+
+    Sequence< OUString >    aAddonMergeNodesSeq = GetNodeNames( aToolbarMergeRootName );
+    OUString                aAddonMergeNode( aToolbarMergeRootName );
+
+    sal_uInt32              nCount = aAddonMergeNodesSeq.getLength();
+
+    // Init the property value sequence
+    Sequence< OUString >    aNodePropNames( 6 );
+    OUString                aURL;
+
+    for ( sal_uInt32 i = 0; i < nCount; i++ )
+    {
+        OUString aMergeAddonInstructions( aAddonMergeNode + aAddonMergeNodesSeq[i] );
+
+        Sequence< OUString > aAddonInstMergeNodesSeq = GetNodeNames( aMergeAddonInstructions );
+        sal_uInt32           nCountAddons = aAddonInstMergeNodesSeq.getLength();
+
+        for ( sal_uInt32 j = 0; j < nCountAddons; j++ )
+        {
+            OUStringBuffer aMergeAddonInstructionBase( aMergeAddonInstructions );
+            aMergeAddonInstructionBase.append( m_aPathDelimiter );
+            aMergeAddonInstructionBase.append( aAddonInstMergeNodesSeq[j] );
+            aMergeAddonInstructionBase.append( m_aPathDelimiter );
+
+            // Create sequence for data access
+            OUStringBuffer aBuffer( aMergeAddonInstructionBase );
+            aBuffer.append( m_aPropMergeToolbarNames[ OFFSET_MERGETOOLBAR_TOOLBAR ] );
+            aNodePropNames[0] = aBuffer.makeStringAndClear();
+
+            aBuffer = aMergeAddonInstructionBase;
+            aBuffer.append( m_aPropMergeToolbarNames[ OFFSET_MERGETOOLBAR_MERGEPOINT ] );
+            aNodePropNames[1] = aBuffer.makeStringAndClear();
+
+            aBuffer = aMergeAddonInstructionBase;
+            aBuffer.append( m_aPropMergeToolbarNames[ OFFSET_MERGETOOLBAR_MERGECOMMAND ] );
+            aNodePropNames[2] = aBuffer.makeStringAndClear();
+
+            aBuffer = aMergeAddonInstructionBase;
+            aBuffer.append( m_aPropMergeToolbarNames[ OFFSET_MERGETOOLBAR_MERGECOMMANDPARAMETER ] );
+            aNodePropNames[3] = aBuffer.makeStringAndClear();
+
+            aBuffer = aMergeAddonInstructionBase;
+            aBuffer.append( m_aPropMergeToolbarNames[ OFFSET_MERGETOOLBAR_MERGEFALLBACK ] );
+            aNodePropNames[4] = aBuffer.makeStringAndClear();
+
+            aBuffer = aMergeAddonInstructionBase;
+            aBuffer.append( m_aPropMergeToolbarNames[ OFFSET_MERGETOOLBAR_MERGECONTEXT ] );
+            aNodePropNames[5] = aBuffer.makeStringAndClear();
+
+            Sequence< Any > aNodePropValues = GetProperties( aNodePropNames );
+
+            MergeToolbarInstruction aMergeToolbarInstruction;
+            aNodePropValues[0] >>= aMergeToolbarInstruction.aMergeToolbar;
+            aNodePropValues[1] >>= aMergeToolbarInstruction.aMergePoint;
+            aNodePropValues[2] >>= aMergeToolbarInstruction.aMergeCommand;
+            aNodePropValues[3] >>= aMergeToolbarInstruction.aMergeCommandParameter;
+            aNodePropValues[4] >>= aMergeToolbarInstruction.aMergeFallback;
+            aNodePropValues[5] >>= aMergeToolbarInstruction.aMergeContext;
+
+            ReadMergeToolbarData( aMergeAddonInstructionBase.makeStringAndClear(),
+                                  aMergeToolbarInstruction.aMergeToolbarItems );
+
+            MergeToolbarInstructionContainer& rVector = rCachedToolbarMergingInstructions[ aMergeToolbarInstruction.aMergeToolbar ];
+            rVector.push_back( aMergeToolbarInstruction );
+        }
+    }
+
+    return sal_True;
+}
+
+//*****************************************************************************************************************
+//  private method
+//*****************************************************************************************************************
+sal_Bool AddonsOptions_Impl::ReadMergeToolbarData( const OUString& aMergeAddonInstructionBase, Sequence< Sequence< PropertyValue > >& rMergeToolbarItems )
+{
+    OUStringBuffer aBuffer( aMergeAddonInstructionBase );
+    aBuffer.append( m_aPropMergeToolbarNames[ OFFSET_MERGETOOLBAR_TOOLBARITEMS ] );
+
+    OUString aMergeToolbarBaseNode = aBuffer.makeStringAndClear();
+
+    return ReadToolBarItemSet( aMergeToolbarBaseNode, rMergeToolbarItems );
+}
+
+//*****************************************************************************************************************
+//  private method
+//*****************************************************************************************************************
 sal_Bool AddonsOptions_Impl::ReadMenuItem( const OUString& aMenuNodeName, Sequence< PropertyValue >& aMenuItem, sal_Bool bIgnoreSubMenu )
 {
     sal_Bool            bResult = sal_False;
@@ -991,6 +1260,9 @@ sal_Bool AddonsOptions_Impl::ReadPopupMenu( const OUString& aPopupMenuNodeName, 
     return bResult;
 }
 
+//*****************************************************************************************************************
+//  private method
+//*****************************************************************************************************************
 sal_Bool AddonsOptions_Impl::AppendPopupMenu( Sequence< PropertyValue >& rTargetPopupMenu, const Sequence< PropertyValue >& rSourcePopupMenu )
 {
     Sequence< Sequence< PropertyValue > > aTargetSubMenuSeq;
@@ -1346,8 +1618,23 @@ sal_Bool AddonsOptions_Impl::CreateImageFromSequence( Image& rImage, sal_Bool bB
 }
 
 //*****************************************************************************************************************
-//  private method
+//  private methods
 //*****************************************************************************************************************
+Sequence< OUString > AddonsOptions_Impl::GetPropertyNamesMergeMenuInstruction( const OUString& aPropertyRootNode ) const
+{
+    Sequence< OUString > lResult( PROPERTYCOUNT_MERGE_MENUBAR );
+
+    // Create property names dependent from the root node name
+    lResult[ OFFSET_MERGEMENU_MERGEPOINT            ] = OUString( aPropertyRootNode + m_aPropMergeMenuNames[ OFFSET_MERGEMENU_MERGEPOINT    ] );
+    lResult[ OFFSET_MERGEMENU_MERGECOMMAND          ] = OUString( aPropertyRootNode + m_aPropMergeMenuNames[ OFFSET_MERGEMENU_MERGECOMMAND  ] );
+    lResult[ OFFSET_MERGEMENU_MERGECOMMANDPARAMETER ] = OUString( aPropertyRootNode + m_aPropMergeMenuNames[ OFFSET_MERGEMENU_MERGECOMMANDPARAMETER ] );
+    lResult[ OFFSET_MERGEMENU_MERGEFALLBACK         ] = OUString( aPropertyRootNode + m_aPropMergeMenuNames[ OFFSET_MERGEMENU_MERGEFALLBACK ] );
+    lResult[ OFFSET_MERGEMENU_MERGECONTEXT          ] = OUString( aPropertyRootNode + m_aPropMergeMenuNames[ OFFSET_MERGEMENU_MERGECONTEXT  ] );
+    lResult[ OFFSET_MERGEMENU_MENUITEMS             ] = OUString( aPropertyRootNode + m_aPropMergeMenuNames[ OFFSET_MERGEMENU_MENUITEMS     ] );
+
+    return lResult;
+}
+
 Sequence< OUString > AddonsOptions_Impl::GetPropertyNamesMenuItem( const OUString& aPropertyRootNode ) const
 {
     Sequence< OUString > lResult( PROPERTYCOUNT_MENUITEM );
@@ -1532,6 +1819,27 @@ const Sequence< Sequence< PropertyValue > >& AddonsOptions::GetAddonsHelpMenu() 
 {
     MutexGuard aGuard( GetOwnStaticMutex() );
     return m_pDataContainer->GetAddonsHelpMenu();
+}
+
+//*****************************************************************************************************************
+//  public method
+//*****************************************************************************************************************
+const MergeMenuInstructionContainer& AddonsOptions::GetMergeMenuInstructions() const
+{
+    MutexGuard aGuard( GetOwnStaticMutex() );
+    return m_pDataContainer->GetMergeMenuInstructions();
+}
+
+//*****************************************************************************************************************
+//  public method
+//*****************************************************************************************************************
+bool AddonsOptions::GetMergeToolbarInstructions(
+    const ::rtl::OUString& rToolbarName,
+    MergeToolbarInstructionContainer& rToolbarInstructions ) const
+{
+    MutexGuard aGuard( GetOwnStaticMutex() );
+    return m_pDataContainer->GetMergeToolbarInstructions(
+        rToolbarName, rToolbarInstructions );
 }
 
 //*****************************************************************************************************************
