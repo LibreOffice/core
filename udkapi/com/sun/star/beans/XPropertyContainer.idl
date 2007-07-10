@@ -4,9 +4,9 @@
  *
  *  $RCSfile: XPropertyContainer.idl,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 14:55:59 $
+ *  last change: $Author: ihi $ $Date: 2007-07-10 16:16:44 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -84,8 +84,11 @@ published interface XPropertyContainer: com::sun::star::uno::XInterface
         @param aName
             specifies the name of the new property.
 
-        @param xType
-            specifies the type of the new property.
+        @param Attributes
+            specifies the property attributes, see <type>PropertyAttribute</type>.
+
+        @param DefaultValue
+            specifies the type of the new property and a potential default value.
 
         @throws PropertyExistException
             if a property with the same name already exists.
@@ -93,7 +96,6 @@ published interface XPropertyContainer: com::sun::star::uno::XInterface
         @throws IllegalTypeException
             if the specified type is not allowed.
 
-        @see com::sun::star::beans::PropertyAttribute
      */
     void addProperty( [in] string Name,
                        [in] short Attributes,
