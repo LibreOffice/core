@@ -4,9 +4,9 @@
  *
  *  $RCSfile: guisaveas.cxx,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: hr $ $Date: 2007-06-27 23:22:01 $
+ *  last change: $Author: ihi $ $Date: 2007-07-10 15:22:51 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -150,6 +150,7 @@
 #define STATUS_SAVEAS               2
 #define STATUS_SAVEAS_STANDARDNAME  3
 
+const ::rtl::OUString aFilterNameString = ::rtl::OUString::createFromAscii( "FilterName" );
 const ::rtl::OUString aFilterOptionsString = ::rtl::OUString::createFromAscii( "FilterOptions" );
 const ::rtl::OUString aFilterDataString    = ::rtl::OUString::createFromAscii( "FilterData" );
 const ::rtl::OUString aFilterFlagsString   = ::rtl::OUString::createFromAscii( "FilterFlags" );
@@ -668,7 +669,7 @@ sal_Int8 ModelData_Impl::CheckStateForSave()
 
     // check that the old filter is acceptable
     ::rtl::OUString aOldFilterName = GetDocProps().getUnpackedValueOrDefault(
-                                                    ::rtl::OUString::createFromAscii( "FilterName" ),
+                                                    aFilterNameString,
                                                     ::rtl::OUString() );
     sal_Int8 nResult = CheckFilter( aOldFilterName );
 
@@ -885,7 +886,7 @@ sal_Bool ModelData_Impl::OutputFileDialog( sal_Int8 nStoreMode,
         uno::Sequence< beans::PropertyValue > aOldFilterProps;
         sal_Int32 nOldFiltFlags = 0;
         ::rtl::OUString aOldFilterName = GetDocProps().getUnpackedValueOrDefault(
-                                                    ::rtl::OUString::createFromAscii( "FilterName" ),
+                                                    aFilterNameString,
                                                     ::rtl::OUString() );
 
         if ( aOldFilterName.getLength() )
@@ -993,10 +994,10 @@ sal_Bool ModelData_Impl::OutputFileDialog( sal_Int8 nStoreMode,
     // old filter options should be cleared in case different filter is used
 
     ::rtl::OUString aFilterFromMediaDescr = GetMediaDescr().getUnpackedValueOrDefault(
-                                                    ::rtl::OUString::createFromAscii( "FilterName" ),
+                                                    aFilterNameString,
                                                     ::rtl::OUString() );
     ::rtl::OUString aOldFilterName = GetDocProps().getUnpackedValueOrDefault(
-                                                    ::rtl::OUString::createFromAscii( "FilterName" ),
+                                                    aFilterNameString,
                                                     ::rtl::OUString() );
     if ( aFilterName.equals( aFilterFromMediaDescr ) )
     {
@@ -1069,7 +1070,7 @@ sal_Bool ModelData_Impl::OutputFileDialog( sal_Int8 nStoreMode,
     // merge in results of the dialog execution
     GetMediaDescr()[::rtl::OUString::createFromAscii( "URL" )] <<=
                                                 ::rtl::OUString( aURL.GetMainURL( INetURLObject::NO_DECODE ));
-    GetMediaDescr()[::rtl::OUString::createFromAscii( "FilterName" )] <<= aFilterName;
+    GetMediaDescr()[aFilterNameString] <<= aFilterName;
 
     return bUseFilterOptions;
 }
@@ -1293,10 +1294,10 @@ sal_Bool SfxStoringHelper::GUIStoreModel( const uno::Reference< frame::XModel >&
                                                                     ::rtl::OUString() );
 
     ::rtl::OUString aFilterFromMediaDescr = aModelData.GetMediaDescr().getUnpackedValueOrDefault(
-                                                    ::rtl::OUString::createFromAscii( "FilterName" ),
+                                                    aFilterNameString,
                                                     ::rtl::OUString() );
     ::rtl::OUString aOldFilterName = aModelData.GetDocProps().getUnpackedValueOrDefault(
-                                                    ::rtl::OUString::createFromAscii( "FilterName" ),
+                                                    aFilterNameString,
                                                     ::rtl::OUString() );
 
     sal_Bool bUseFilterOptions = sal_False;
@@ -1305,6 +1306,7 @@ sal_Bool SfxStoringHelper::GUIStoreModel( const uno::Reference< frame::XModel >&
     if ( ( nStoreMode & EXPORT_REQUESTED ) && ( nStoreMode & PDFEXPORT_REQUESTED ) && !( nStoreMode & PDFDIRECTEXPORT_REQUESTED ) )
     {
         // this is PDF export, the filter options dialog should be shown before the export
+        aModelData.GetMediaDescr()[aFilterNameString] <<= aFilterName;
         if ( aModelData.GetMediaDescr().find( aFilterFlagsString ) == aModelData.GetMediaDescr().end()
           && aModelData.GetMediaDescr().find( aFilterOptionsString ) == aModelData.GetMediaDescr().end()
           && aModelData.GetMediaDescr().find( aFilterDataString ) == aModelData.GetMediaDescr().end() )
@@ -1326,7 +1328,7 @@ sal_Bool SfxStoringHelper::GUIStoreModel( const uno::Reference< frame::XModel >&
             {
                 // in case of saving check filter for possible alien warning
                 ::rtl::OUString aSelFilterName = aModelData.GetMediaDescr().getUnpackedValueOrDefault(
-                                                                                ::rtl::OUString::createFromAscii( "FilterName" ),
+                                                                                aFilterNameString,
                                                                                 ::rtl::OUString() );
                 sal_Int8 nStatusSave = aModelData.CheckFilter( aSelFilterName );
                 if ( nStatusSave == STATUS_SAVEAS_STANDARDNAME )
@@ -1374,12 +1376,12 @@ sal_Bool SfxStoringHelper::GUIStoreModel( const uno::Reference< frame::XModel >&
         DBG_ASSERT( aURL.GetProtocol() != INET_PROT_NOT_VALID, "Illegal URL!" );
 
         ::comphelper::SequenceAsHashMap::const_iterator aIter =
-                                aModelData.GetMediaDescr().find( ::rtl::OUString::createFromAscii( "FilterName" ) );
+                                aModelData.GetMediaDescr().find( aFilterNameString );
 
         if ( aIter != aModelData.GetMediaDescr().end() )
             aIter->second >>= aFilterName;
         else
-            aModelData.GetMediaDescr()[::rtl::OUString::createFromAscii( "FilterName" )] <<= aFilterName;
+            aModelData.GetMediaDescr()[aFilterNameString] <<= aFilterName;
 
         DBG_ASSERT( aFilterName.getLength(), "Illegal filter!" );
     }
