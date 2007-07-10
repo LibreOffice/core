@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ref.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: vg $ $Date: 2007-04-11 20:16:25 $
+ *  last change: $Author: ihi $ $Date: 2007-07-10 15:20:33 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -126,33 +126,6 @@ PRV_SV_IMPL_REF_COUNTERS( ClassName, Lock, OwnerLock( TRUE ),       \
                           OwnerLock( TRUE ), OwnerLock( FALSE ),    \
                           EMPTYARG, pObj )
 
-#define SV_DECL_COMPAT_REF( ClassName )         \
-class ClassName;                                \
-class ClassName##Ref                            \
-{                                               \
-protected:                                      \
-    SvRefBase* pRefbase;                        \
-    PRV_SV_DECL_REF( ClassName )                \
-public:                                         \
-    static void Destroy( void* );               \
-};
-
-#define SV_COMPAT_REF_INIT                                              \
-pObj ? ( pRefbase =                                                     \
- (SfxPointerServer::GetServer()->HasPointer( pObj ) ? NULL :            \
- ((*(SvRefBase **)SfxPointerServer::GetServer()->CreatePointer(pObj))=  \
-   new SvCompatRefBase( &Destroy, pObj ) ),                             \
-   (SvRefBase *)SfxPointerServer::GetServer()->GetPointer(pObj))) : 0;
-
-#define SV_IMPL_COMPAT_REF( ClassName )                                     \
-PRV_SV_IMPL_REF_COUNTERS( ClassName, Ref, AddRef(), AddNextRef(),           \
-                          ReleaseReference(), SV_COMPAT_REF_INIT, pRefbase )\
-inline void ClassName##Ref::Destroy( void* pObj)                            \
-{                                                                           \
-    SfxPointerServer::GetServer()->ReleasePointer( pObj );                  \
-    delete ( ClassName* ) pObj;                                             \
-}
-
 #define SV_DECL_IMPL_REF(ClassName)             \
     SV_DECL_REF(ClassName)                      \
     SV_IMPL_REF(ClassName)
@@ -161,9 +134,6 @@ inline void ClassName##Ref::Destroy( void* pObj)                            \
     SV_DECL_LOCK(ClassName)                     \
     SV_IMPL_LOCK(ClassName)
 
-#define SV_DECL_IMPL_COMPAT_REF( ClassName )    \
-    SV_DECL_COMPAT_REF(ClassName)               \
-    SV_IMPL_COMPAT_REF(ClassName)
 
 /************************** S v R e f L i s t ****************************/
 #define PRV_SV_DECL_REF_LIST(CN,EN,vis) \
@@ -410,17 +380,6 @@ public:
                         return n;
                     }
     UINT32          GetRefCount() const { return nRefCount; }
-};
-
-class SvCompatRefBase : public SvRefBase
-{
-    void (*pFunc)( void* );
-    void *pObj;
-protected:
-    virtual         ~SvCompatRefBase();
-public:
-    SvCompatRefBase( void (*pFuncP)( void*), void *pObjP ) :
-        pFunc( pFuncP ), pObj( pObjP ) {}
 };
 
 //#if 0 // _SOLAR__PRIVATE
