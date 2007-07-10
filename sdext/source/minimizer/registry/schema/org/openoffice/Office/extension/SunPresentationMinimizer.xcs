@@ -115,10 +115,10 @@
 				<value>~Help</value>
 			</prop>
 			<prop oor:name="STR_BACK" oor:type="xs:string" oor:localized="true">
-				<value>~Back</value>
+				<value>&lt; ~Back</value>
 			</prop>
 			<prop oor:name="STR_NEXT" oor:type="xs:string" oor:localized="true">
-				<value>~Next</value>
+				<value>~Next &gt;</value>
 			</prop>
 			<prop oor:name="STR_FINISH" oor:type="xs:string" oor:localized="true">
 				<value>~Finish</value>
@@ -130,7 +130,7 @@
 				<value>Introduction</value>
 			</prop>
 			<prop oor:name="STR_INTRODUCTION_T" oor:type="xs:string" oor:localized="true">
-				<value>The Presentation Minimizer is used to reduce the file size of the current presentation. Images will be compressed and data, that is no longer needed, will be removed.
+				<value>The Sun Presentation Minimizer is used to reduce the file size of the current presentation. Images will be compressed and data, that is no longer needed, will be removed.
 
 At the last step of the wizard you can choose to apply the changes to the current presentation or to create an optimized new version of the presentation.</value>
 			</prop>
@@ -240,7 +240,7 @@ At the last step of the wizard you can choose to apply the changes to the curren
 				<value>~Save settings as</value>
 			</prop>
 			<prop oor:name="STR_SAVE_AS" oor:type="xs:string" oor:localized="true">
-				<value>Duplicate presentation before applying changes</value>
+				<value>~Duplicate presentation before applying changes</value>
 			</prop>
 			<prop oor:name="STR_DELETE_SLIDES" oor:type="xs:string" oor:localized="true">
 				<value>Delete %SLIDES slides</value>
@@ -279,7 +279,7 @@ At the last step of the wizard you can choose to apply the changes to the curren
                 <value>Sun Presentation Minimizer</value>
            </prop>
             <prop oor:name="STR_ABOUT_PRN" oor:type="xs:string" oor:localized="true">
-                <value>Copyright © 2006 Sun Microsystems, Inc. All rights reserved.
+                <value>Copyright © 2007 Sun Microsystems, Inc. All rights reserved.
 
 U.S. Government Rights - Commercial software. Government users are subject to the Sun Microsystems, Inc. standard license agreement and applicable provisions of the FAR and its supplements.
 

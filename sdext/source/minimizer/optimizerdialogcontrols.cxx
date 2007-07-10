@@ -4,9 +4,9 @@
  *
  *  $RCSfile: optimizerdialogcontrols.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: sj $ $Date: 2007-05-24 10:08:36 $
+ *  last change: $Author: sj $ $Date: 2007-07-10 16:16:25 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -605,10 +605,10 @@ void OptimizerDialog::InitPage3()
     std::vector< rtl::OUString > aControlList;
     aControlList.push_back( InsertFixedText( *this, TKGet( TK_FixedText0Pg2 ), getString( STR_OLE_OPTIMIZATION ), PAGE_POS_X, PAGE_POS_Y, PAGE_WIDTH, 8, sal_False, sal_True, mnTabIndex++ ) );
     aControlList.push_back( InsertCheckBox(  *this, TKGet( TK_CheckBox0Pg2 ), mxItemListener, getString( STR_OLE_REPLACE ), PAGE_POS_X + 6, PAGE_POS_Y + 14, PAGE_WIDTH - 12, 8, mnTabIndex++ ) );
-    aControlList.push_back( InsertRadioButton( *this, TKGet( TK_RadioButton0Pg2 ), mxItemListener, getString( STR_ALL_OLE_OBJECTS ), PAGE_POS_X + 14, PAGE_POS_Y + 28, 100, 8, sal_False, mnTabIndex++ ) );
-    aControlList.push_back( InsertRadioButton( *this, TKGet( TK_RadioButton1Pg2 ), mxItemListener, getString( STR_ALIEN_OLE_OBJECTS_ONLY ), PAGE_POS_X + 14, PAGE_POS_Y + 40, 100, 8, sal_False, mnTabIndex++ ) );
+    aControlList.push_back( InsertRadioButton( *this, TKGet( TK_RadioButton0Pg2 ), mxItemListener, getString( STR_ALL_OLE_OBJECTS ), PAGE_POS_X + 14, PAGE_POS_Y + 28, ( PAGE_WIDTH - PAGE_POS_X ) - 22, 8, sal_False, mnTabIndex++ ) );
+    aControlList.push_back( InsertRadioButton( *this, TKGet( TK_RadioButton1Pg2 ), mxItemListener, getString( STR_ALIEN_OLE_OBJECTS_ONLY ), PAGE_POS_X + 14, PAGE_POS_Y + 40, ( PAGE_WIDTH - PAGE_POS_X ) - 22, 8, sal_False, mnTabIndex++ ) );
     if ( !nOLECount )
-        aControlList.push_back( InsertFixedText( *this, TKGet( TK_FixedText1Pg2 ), getString( STR_NO_OLE_OBJECTS ), PAGE_POS_X + 14, PAGE_POS_Y + 64, PAGE_WIDTH - 22, 8, sal_True, sal_False, mnTabIndex++ ) );
+        aControlList.push_back( InsertFixedText( *this, TKGet( TK_FixedText1Pg2 ), getString( STR_NO_OLE_OBJECTS ), PAGE_POS_X + 6, PAGE_POS_Y + 64, PAGE_WIDTH - 22, 8, sal_True, sal_False, mnTabIndex++ ) );
     maControlPages.push_back( aControlList );
     DeactivatePage( 3 );
     UpdateControlStatesPage3();

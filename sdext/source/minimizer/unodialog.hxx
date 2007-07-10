@@ -4,9 +4,9 @@
  *
  *  $RCSfile: unodialog.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: sj $ $Date: 2007-05-11 14:01:25 $
+ *  last change: $Author: sj $ $Date: 2007-07-10 16:16:25 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -152,6 +152,8 @@ public :
     void setVisible( const rtl::OUString& rName, sal_Bool bVisible );
 
     sal_Bool isHighContrast();
+
+    sal_Int32 getMapsFromPixels( sal_Int32 nPixels ) const;
 
     com::sun::star::uno::Reference< com::sun::star::awt::XButton > insertButton( const rtl::OUString& rName,
         com::sun::star::uno::Reference< com::sun::star::awt::XActionListener > xActionListener, const com::sun::star::uno::Sequence< rtl::OUString >& rPropertyNames,

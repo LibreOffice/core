@@ -4,9 +4,9 @@
  *
  *  $RCSfile: aboutdialog.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: sj $ $Date: 2007-05-11 13:49:08 $
+ *  last change: $Author: sj $ $Date: 2007-07-10 16:16:25 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -61,8 +61,11 @@ using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::script;
 using namespace ::com::sun::star::container;
 
+#define ABOUT_DIALOG_WIDTH  220
+#define ABOUT_DIALOG_HEIGHT 221
 
 // -----------------------------------------------------------------------------
+
 
 rtl::OUString InsertFixedText( AboutDialog& rAboutDialog, const rtl::OUString& rControlName, const OUString& rLabel,
                                 sal_Int32 nXPos, sal_Int32 nYPos, sal_Int32 nWidth, sal_Int32 nHeight, sal_Bool bMultiLine, sal_Int16 nTabIndex )
@@ -203,12 +206,12 @@ void AboutDialog::InitDialog()
 
     Any pValues[] = {
         Any( sal_True ),
-        Any( sal_Int32( 221 ) ),
+        Any( sal_Int32( ABOUT_DIALOG_HEIGHT ) ),
         Any( sal_True ),
         Any( sal_Int32( 113 ) ),
         Any( sal_Int32( 42 ) ),
-        Any( getString( STR_ABOUT ) ),
-        Any( sal_Int32( 178 ) ) };
+        Any( getString( STR_ABOUT_VERSION ) ),
+        Any( sal_Int32( ABOUT_DIALOG_WIDTH ) ) };
 
     sal_Int32 nCount = sizeof( pNames ) / sizeof( OUString );
 
@@ -220,10 +223,14 @@ void AboutDialog::InitDialog()
     rtl::OUString sURL( sBitmapPath += sBitmap );
 
     mxDialogModelMultiPropertySet->setPropertyValues( aNames, aValues );
-    InsertImage( *this, rtl::OUString( rtl::OUString::createFromAscii( "aboutimage" ) ), sURL, 0, 0, 178, 44 );
-    InsertFixedText( *this, rtl::OUString( rtl::OUString::createFromAscii( "fixedtext" ) ), getString( STR_ABOUT_PRN ), 9, 66, 160, 127, sal_True, 0 );
-    InsertSeparator( *this, rtl::OUString( rtl::OUString::createFromAscii( "separator" ) ), 0, 0, 196, 178, 8 );
-    InsertButton( *this, rtl::OUString( rtl::OUString::createFromAscii( "button" ) ), mxActionListener, 125, 204, 50, 14, 1, STR_OK );
+
+    int nWidth = (int) getMapsFromPixels( 387 );
+//    int nHeight = (int) getMapsFromPixels( 95 );
+
+    InsertImage( *this, rtl::OUString( rtl::OUString::createFromAscii( "aboutimage" ) ), sURL, 0, 0, ABOUT_DIALOG_WIDTH, 60 );
+    InsertFixedText( *this, rtl::OUString( rtl::OUString::createFromAscii( "fixedtext" ) ), getString( STR_ABOUT_PRN ), 9, 66, ABOUT_DIALOG_WIDTH - 18, 127, sal_True, 0 );
+    InsertSeparator( *this, rtl::OUString( rtl::OUString::createFromAscii( "separator" ) ), 0, 0, 196, ABOUT_DIALOG_WIDTH, 8 );
+    InsertButton( *this, rtl::OUString( rtl::OUString::createFromAscii( "button" ) ), mxActionListener, ( nWidth / 2 ) - 25, 204, 50, 14, 1, STR_OK );
 }
 
 // -----------------------------------------------------------------------------

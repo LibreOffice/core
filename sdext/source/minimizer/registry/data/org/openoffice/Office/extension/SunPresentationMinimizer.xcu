@@ -28,12 +28,12 @@
             <value xml:lang="de">~Hilfe</value>
         </prop>
         <prop oor:name="STR_BACK">
-            <value xml:lang="en-US">~Back</value>
-            <value xml:lang="de">~Zurück</value>
+            <value xml:lang="en-US">&lt; ~Back</value>
+            <value xml:lang="de">&lt; ~Zurück</value>
         </prop>
         <prop oor:name="STR_NEXT">
-            <value xml:lang="en-US">~Next</value>
-            <value xml:lang="de">~Weiter</value>
+            <value xml:lang="en-US">~Next &gt;</value>
+            <value xml:lang="de">~Weiter &gt;</value>
         </prop>
         <prop oor:name="STR_FINISH">
             <value xml:lang="en-US">~Finish</value>
@@ -48,7 +48,7 @@
             <value xml:lang="de">Einleitung</value>
         </prop>
         <prop oor:name="STR_INTRODUCTION_T">
-            <value xml:lang="en-US">The Presentation Minimizer is used to reduce the file size of the current presentation. Images will be compressed and data, that is no longer needed, will be removed.
+            <value xml:lang="en-US">The Sun Presentation Minimizer is used to reduce the file size of the current presentation. Images will be compressed and data, that is no longer needed, will be removed.
 
 At the last step of the wizard you can choose to apply the changes to the current presentation or to create an optimized new version of the presentation.</value>
             <value xml:lang="de">Mit dem Sun Presentation Minimizer können Sie die Dateigröße des aktuellen Dokumentes verkleinern. Dazu werden die Bilder komprimiert und nicht mehr benötigte Daten entfernt.
@@ -196,8 +196,8 @@ Im letzten Schritt können Sie entscheiden, ob die Änderungen am aktuellen Doku
             <value xml:lang="de">~Einstellungen speichern unter</value>
         </prop>
         <prop oor:name="STR_SAVE_AS">
-            <value xml:lang="en-US">Duplicate presentation before applying changes</value>
-            <value xml:lang="de">Dokument duplizieren bevor die Änderungen angewendet werden</value>
+            <value xml:lang="en-US">~Duplicate presentation before applying changes</value>
+            <value xml:lang="de">~Dokument duplizieren bevor die Änderungen angewendet werden</value>
         </prop>
         <prop oor:name="STR_DELETE_SLIDES">
             <value xml:lang="en-US">Delete %SLIDES slides</value>
@@ -248,14 +248,14 @@ Im letzten Schritt können Sie entscheiden, ob die Änderungen am aktuellen Doku
             <value xml:lang="de">&ProductName; &ProductVersion;</value>
         </prop>
         <prop oor:name="STR_ABOUT_PRN">
-            <value xml:lang="en-US">Copyright © 2006 Sun Microsystems, Inc. All rights reserved.
+            <value xml:lang="en-US">Copyright © 2007 Sun Microsystems, Inc. All rights reserved.
 
 U.S. Government Rights - Commercial software. Government users are subject to the Sun Microsystems, Inc. standard license agreement and applicable provisions of the FAR and its supplements.
 
 Use is subject to license terms.
 
 This distribution may include materials developed by third parties. Sun, Sun Microsystems, the Sun logo, Java and StarOffice are trademarks or registered trademarks of Sun Microsystems, Inc. in the U.S. and other countries.</value>
-            <value xml:lang="fr">Copyright © 2006 Sun Microsystems, Inc. Tous droits réservés.
+            <value xml:lang="fr">Copyright © 2007 Sun Microsystems, Inc. Tous droits réservés.
 
 L'utilisation est soumise aux termes du contrat de licence.
 

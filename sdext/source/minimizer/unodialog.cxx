@@ -4,9 +4,9 @@
  *
  *  $RCSfile: unodialog.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: sj $ $Date: 2007-05-11 14:01:14 $
+ *  last change: $Author: sj $ $Date: 2007-07-10 16:16:25 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -408,6 +408,29 @@ finally{
     }
 }}
 */
+}
+
+// -----------------------------------------------------------------------------
+
+sal_Int32 UnoDialog::getMapsFromPixels( sal_Int32 nPixels ) const
+{
+    double dMaps = 0;
+    try
+    {
+        sal_Int32 nMapWidth = 0;
+        const OUString sWidth( RTL_CONSTASCII_USTRINGPARAM( "Width" ) );
+        if ( mxDialogModelPropertySet->getPropertyValue( sWidth  ) >>= nMapWidth )
+        {
+            Reference< XWindow > xWindow( mxDialog, UNO_QUERY_THROW );
+            double pxWidth = xWindow->getPosSize().Width;
+            double mapRatio = ( pxWidth / nMapWidth );
+            dMaps = nPixels / mapRatio;
+        }
+    }
+    catch ( Exception& )
+    {
+    }
+    return static_cast< sal_Int32 >( dMaps );
 }
 
 // -----------------------------------------------------------------------------
