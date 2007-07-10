@@ -1,13 +1,13 @@
-<?xml version="1.0" encoding="UTF-8"?>
+﻿<?xml version="1.0" encoding="UTF-8"?>
 <!--***********************************************************************
  *
  *  OpenOffice.org - a multi-platform office productivity suite
  *
  *  $RCSfile: Compatibility.xcs,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: hr $ $Date: 2006-08-11 15:49:52 $
+ *  last change: $Author: ihi $ $Date: 2007-07-10 14:51:46 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -85,8 +85,13 @@
                 <info><desc>Use OpenOffice.org 1.1 text wrapping</desc></info>
                 <value>false</value>
             </prop>
-            <prop oor:name="ConsiderWrappingStyle" oor:type="xs:boolean"><info><desc>Consider wrapping style when positioning objects</desc></info>
+            <prop oor:name="ConsiderWrappingStyle" oor:type="xs:boolean">
+                <info><desc>Consider wrapping style when positioning objects</desc></info>
                 <value>false</value>
+            </prop>
+            <prop oor:name="ExpandWordSpace" oor:type="xs:boolean">
+                <info><desc>Expand word space on lines with manual line breaks in justified paragraphs</desc></info>
+                <value>true</value>
             </prop>
         </group>
     </templates>
