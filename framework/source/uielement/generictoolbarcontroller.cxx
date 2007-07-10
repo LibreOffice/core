@@ -4,9 +4,9 @@
  *
  *  $RCSfile: generictoolbarcontroller.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 14:20:18 $
+ *  last change: $Author: ihi $ $Date: 2007-07-10 15:11:20 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -153,7 +153,7 @@ struct ExecuteInfo
 
 GenericToolbarController::GenericToolbarController( const Reference< XMultiServiceFactory >& rServiceManager,
                                                     const Reference< XFrame >&               rFrame,
-                                                    ToolBar*                                 pToolbar,
+                                                    ToolBox*                                 pToolbar,
                                                     USHORT                                   nID,
                                                     const OUString&                          aCommand ) :
     svt::ToolboxController( rServiceManager, rFrame, aCommand )
