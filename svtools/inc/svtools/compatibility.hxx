@@ -4,9 +4,9 @@
  *
  *  $RCSfile: compatibility.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: vg $ $Date: 2007-04-11 19:14:43 $
+ *  last change: $Author: ihi $ $Date: 2007-07-10 15:15:43 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -78,27 +78,29 @@ enum CompatibilityOptions
     COPT_ADD_TABLESPACING,
     COPT_USE_OBJECTPOSITIONING,
     COPT_USE_OUR_TEXTWRAPPING,
-    COPT_CONSIDER_WRAPPINGSTYLE
+    COPT_CONSIDER_WRAPPINGSTYLE,
+    COPT_EXPAND_WORDSPACE
 };
 
 /*-************************************************************************************************************//**
     @descr          The method GetList() returns a list of property values.
                     Use follow defines to seperate values by names.
 *//*-*************************************************************************************************************/
-#define COMPATIBILITY_PROPERTYNAME_NAME                 OUString( RTL_CONSTASCII_USTRINGPARAM( "Name" ) )
-#define COMPATIBILITY_PROPERTYNAME_MODULE               OUString( RTL_CONSTASCII_USTRINGPARAM( "Module" ) )
-#define COMPATIBILITY_PROPERTYNAME_USEPRTMETRICS        OUString( RTL_CONSTASCII_USTRINGPARAM( "UsePrinterMetrics" ) )
-#define COMPATIBILITY_PROPERTYNAME_ADDSPACING           OUString( RTL_CONSTASCII_USTRINGPARAM( "AddSpacing" ) )
-#define COMPATIBILITY_PROPERTYNAME_ADDSPACINGATPAGES    OUString( RTL_CONSTASCII_USTRINGPARAM( "AddSpacingAtPages" ) )
-#define COMPATIBILITY_PROPERTYNAME_USEOURTABSTOPS       OUString( RTL_CONSTASCII_USTRINGPARAM( "UseOurTabStopFormat" ) )
-#define COMPATIBILITY_PROPERTYNAME_NOEXTLEADING         OUString( RTL_CONSTASCII_USTRINGPARAM( "NoExternalLeading" ) )
-#define COMPATIBILITY_PROPERTYNAME_USELINESPACING       OUString( RTL_CONSTASCII_USTRINGPARAM( "UseLineSpacing" ) )
-#define COMPATIBILITY_PROPERTYNAME_ADDTABLESPACING      OUString( RTL_CONSTASCII_USTRINGPARAM( "AddTableSpacing" ) )
-#define COMPATIBILITY_PROPERTYNAME_USEOBJECTPOSITIONING OUString( RTL_CONSTASCII_USTRINGPARAM( "UseObjectPositioning" ) )
-#define COMPATIBILITY_PROPERTYNAME_USEOURTEXTWRAPPING   OUString( RTL_CONSTASCII_USTRINGPARAM( "UseOurTextWrapping" ) )
-#define COMPATIBILITY_PROPERTYNAME_CONSIDERWRAPPINGSTYLE OUString( RTL_CONSTASCII_USTRINGPARAM( "ConsiderWrappingStyle" ) )
+#define COMPATIBILITY_PROPERTYNAME_NAME                     OUString( RTL_CONSTASCII_USTRINGPARAM( "Name" ) )
+#define COMPATIBILITY_PROPERTYNAME_MODULE                   OUString( RTL_CONSTASCII_USTRINGPARAM( "Module" ) )
+#define COMPATIBILITY_PROPERTYNAME_USEPRTMETRICS            OUString( RTL_CONSTASCII_USTRINGPARAM( "UsePrinterMetrics" ) )
+#define COMPATIBILITY_PROPERTYNAME_ADDSPACING               OUString( RTL_CONSTASCII_USTRINGPARAM( "AddSpacing" ) )
+#define COMPATIBILITY_PROPERTYNAME_ADDSPACINGATPAGES        OUString( RTL_CONSTASCII_USTRINGPARAM( "AddSpacingAtPages" ) )
+#define COMPATIBILITY_PROPERTYNAME_USEOURTABSTOPS           OUString( RTL_CONSTASCII_USTRINGPARAM( "UseOurTabStopFormat" ) )
+#define COMPATIBILITY_PROPERTYNAME_NOEXTLEADING             OUString( RTL_CONSTASCII_USTRINGPARAM( "NoExternalLeading" ) )
+#define COMPATIBILITY_PROPERTYNAME_USELINESPACING           OUString( RTL_CONSTASCII_USTRINGPARAM( "UseLineSpacing" ) )
+#define COMPATIBILITY_PROPERTYNAME_ADDTABLESPACING          OUString( RTL_CONSTASCII_USTRINGPARAM( "AddTableSpacing" ) )
+#define COMPATIBILITY_PROPERTYNAME_USEOBJECTPOSITIONING     OUString( RTL_CONSTASCII_USTRINGPARAM( "UseObjectPositioning" ) )
+#define COMPATIBILITY_PROPERTYNAME_USEOURTEXTWRAPPING       OUString( RTL_CONSTASCII_USTRINGPARAM( "UseOurTextWrapping" ) )
+#define COMPATIBILITY_PROPERTYNAME_CONSIDERWRAPPINGSTYLE    OUString( RTL_CONSTASCII_USTRINGPARAM( "ConsiderWrappingStyle" ) )
+#define COMPATIBILITY_PROPERTYNAME_EXPANDWORDSPACE          OUString( RTL_CONSTASCII_USTRINGPARAM( "ExpandWordSpace" ) )
 
-#define COMPATIBILITY_DEFAULT_NAME                      OUString( RTL_CONSTASCII_USTRINGPARAM( "_default" ) )
+#define COMPATIBILITY_DEFAULT_NAME                          OUString( RTL_CONSTASCII_USTRINGPARAM( "_default" ) )
 
 //_________________________________________________________________________________________________________________
 //  forward declarations
@@ -216,7 +218,8 @@ class SVL_DLLPUBLIC SvtCompatibilityOptions: public svt::detail::Options
                          bool bAddTableSpacing,
                          bool bUseObjectPositioning,
                          bool bUseOurTextWrapping,
-                         bool bConsiderWrappingStyle );
+                         bool bConsiderWrappingStyle,
+                         bool bExpandWordSpace );
 
         bool        IsUsePrtDevice() const;
         bool        IsAddSpacing() const;
@@ -228,6 +231,7 @@ class SVL_DLLPUBLIC SvtCompatibilityOptions: public svt::detail::Options
         bool        IsUseObjectPositioning() const;
         bool        IsUseOurTextWrapping() const;
         bool        IsConsiderWrappingStyle() const;
+        bool        IsExpandWordSpace() const;
 
     //-------------------------------------------------------------------------------------------------------------
     //  private methods
