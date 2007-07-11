@@ -4,9 +4,9 @@
  *
  *  $RCSfile: module_langpack.ulf,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: gm $ $Date: 2007-05-10 11:50:01 $
+ *  last change: $Author: ihi $ $Date: 2007-07-11 14:42:11 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -620,3 +620,9 @@ en-US = "Georgian"
 
 [STR_DESC_MODULE_LANGPACK_KA]
 en-US = "Installs Georgian support in %PRODUCTNAME %PRODUCTVERSION"
+
+[STR_NAME_MODULE_LANGPACK_EO]
+en-US = "Esperanto"
+
+[STR_DESC_MODULE_LANGPACK_EO]
+en-US = "Installs Esperanto support in %PRODUCTNAME %PRODUCTVERSION"
