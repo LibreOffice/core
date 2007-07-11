@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.20 $
+#   $Revision: 1.21 $
 #
-#   last change: $Author: kz $ $Date: 2007-05-10 15:21:47 $
+#   last change: $Author: ihi $ $Date: 2007-07-11 14:31:03 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -97,6 +97,7 @@ $(DEBFILES) : makefile.mk control postinst postrm prerm
     @chmod -R g-w $(MISC)$/$(@:b)
     @chmod a+rx $(MISC)$/$(@:b)$/DEBIAN $(MISC)/$(@:b)/DEBIAN/post* $(MISC)/$(@:b)/DEBIAN/pre*
     @chmod g-s $(MISC)/$(@:b)/DEBIAN
+    @mkdir -p $(PKGDIR)
     /bin/bash -c "LD_PRELOAD=$(SOLARBINDIR)/getuid.so dpkg-deb --build $(MISC)/$(@:b) $@" 
     $(RM) -r $(MISC)$/$(@:b)
 #	@chmod -R g+w $(MISC)/$(TARGET)/$(DEBFILE:f)
