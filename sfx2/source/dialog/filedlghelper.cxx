@@ -4,9 +4,9 @@
  *
  *  $RCSfile: filedlghelper.cxx,v $
  *
- *  $Revision: 1.132 $
+ *  $Revision: 1.133 $
  *
- *  last change: $Author: rt $ $Date: 2007-07-06 10:16:51 $
+ *  last change: $Author: ihi $ $Date: 2007-07-11 11:04:11 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1401,6 +1401,8 @@ sal_Int16 FileDialogHelper_Impl::implDoExecute()
 
     sal_Int16 nRet = ExecutableDialogResults::CANCEL;
 
+#if !(defined(MACOSX) && defined(QUARTZ))
+//On MacOSX the native file picker has to run in the primordial thread because of drawing issues
     if ( mbSystemPicker )
     {
         PickerThread_Impl* pThread = new PickerThread_Impl( mxFileDlg );
@@ -1412,6 +1414,7 @@ sal_Int16 FileDialogHelper_Impl::implDoExecute()
         delete pThread;
     }
     else
+#endif
     {
         try
         {
