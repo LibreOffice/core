@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.11 $
+#   $Revision: 1.12 $
 #
-#   last change: $Author: hr $ $Date: 2007-01-02 15:26:33 $
+#   last change: $Author: ihi $ $Date: 2007-07-11 15:05:11 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -51,6 +51,10 @@ UNIXTEXT= \
     $(BIN)$/register_extensions \
     $(BIN)$/deregister_extensions \
     $(BIN)$/downloadscript.sh
+
+.IF "$(OS)" == "SOLARIS"
+UNIXTEXT+= $(BIN)$/stclient_wrapper.sh
+.ENDIF
 
 # --- Targets ------------------------------------------------------
 
