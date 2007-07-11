@@ -4,9 +4,9 @@
  *
  *  $RCSfile: objmisc.cxx,v $
  *
- *  $Revision: 1.89 $
+ *  $Revision: 1.90 $
  *
- *  last change: $Author: hr $ $Date: 2007-06-27 23:23:32 $
+ *  last change: $Author: ihi $ $Date: 2007-07-11 13:12:35 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -216,11 +216,7 @@ sal_uInt16 __READONLY_DATA aTitleMap_Impl[3][2] =
 {
                                 //  local               remote
     /*  SFX_TITLE_CAPTION   */  {   SFX_TITLE_FILENAME, SFX_TITLE_TITLE },
-#ifdef MAC
-    /*  SFX_TITLE_PICKLIST  */  {   SFX_TITLE_FILENAME, SFX_TITLE_FULLNAME },
-#else
     /*  SFX_TITLE_PICKLIST  */  {   32,                 SFX_TITLE_FULLNAME },
-#endif
     /*  SFX_TITLE_HISTORY   */  {   32,                 SFX_TITLE_FULLNAME }
 };
 
