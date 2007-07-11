@@ -4,9 +4,9 @@
  *
  *  $RCSfile: templdlg.cxx,v $
  *
- *  $Revision: 1.56 $
+ *  $Revision: 1.57 $
  *
- *  last change: $Author: hr $ $Date: 2007-06-27 23:17:19 $
+ *  last change: $Author: ihi $ $Date: 2007-07-11 13:12:01 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -124,12 +124,7 @@ using namespace ::com::sun::star::uno;
 #define SFX_TEMPLDLG_HFRAME         3
 #define SFX_TEMPLDLG_VTOPFRAME      3
 
-#ifdef MAC
-#define SFX_TEMPLDLG_VBOTFRAME      8
-#else
 #define SFX_TEMPLDLG_VBOTFRAME      3
-#endif
-
 #define SFX_TEMPLDLG_MIDHSPACE      3
 #define SFX_TEMPLDLG_MIDVSPACE      3
 #define SFX_TEMPLDLG_FILTERHEIGHT   100
@@ -819,10 +814,6 @@ SfxCommonTemplateDialog_Impl::SfxCommonTemplateDialog_Impl( SfxBindings* pB, Sfx
     aFmtLb.SetWindowBits( WB_SORT | WB_HIDESELECTION );
     Font aFont = aFmtLb.GetFont();
     aFont.SetWeight( WEIGHT_NORMAL );
-#ifdef MAC
-    aFont.SetName( String::CreateFromAscii( "Geneva" ) );
-    aFont.SetSize( Size( 0, 10 ) );
-#endif
     aFmtLb.SetFont( aFont );
 }
 
