@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.49 $
+#   $Revision: 1.50 $
 #
-#   last change: $Author: vg $ $Date: 2007-03-26 15:03:27 $
+#   last change: $Author: ihi $ $Date: 2007-07-11 13:10:17 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -142,10 +142,6 @@ EXCEPTIONSFILES=\
     $(SLO)$/xpackcreator.obj    \
     $(SLO)$/updatedlg.obj
 
-.IF "$(GUI)" == "MAC"
-SLOFILES +=\
-        $(SLO)$/appmac.obj
-.ENDIF
 
 # --- Targets -------------------------------------------------------
 
