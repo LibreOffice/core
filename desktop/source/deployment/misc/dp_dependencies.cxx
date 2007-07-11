@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dp_dependencies.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: rt $ $Date: 2007-07-09 10:47:47 $
+ *  last change: $Author: ihi $ $Date: 2007-07-11 14:52:59 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -43,6 +43,7 @@
 #include "com/sun/star/xml/dom/XElement.hpp"
 #include "com/sun/star/xml/dom/XNode.hpp"
 #include "com/sun/star/xml/dom/XNodeList.hpp"
+#include "rtl/bootstrap.hxx"
 #include "rtl/string.h"
 #include "rtl/ustring.h"
 #include "rtl/ustring.hxx"
@@ -64,10 +65,12 @@ static char const xmlNamespace[] =
     "http://openoffice.org/extensions/description/2006";
 
 bool satisfiesMinimalVersion(::rtl::OUString const & version) {
-    return
-        ::dp_misc::compareVersions(
-            version, ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("2.2")))
-        != ::dp_misc::GREATER;
+    ::rtl::OUString v(
+        RTL_CONSTASCII_USTRINGPARAM(
+            "${$SYSBINDIR/" SAL_CONFIGFILE("version")
+            ":Version:OOOBaseVersion"));
+    ::rtl::Bootstrap::expandMacros(v);
+    return ::dp_misc::compareVersions(version, v) != ::dp_misc::GREATER;
 };
 
 }
@@ -95,13 +98,7 @@ check(::dp_misc::DescriptionInfoset const & infoset) {
         if (e->getNamespaceURI().equalsAsciiL(
                 RTL_CONSTASCII_STRINGPARAM(xmlNamespace))
             && e->getTagName().equalsAsciiL(
-                RTL_CONSTASCII_STRINGPARAM(minimalVersion))
-            && (::dp_misc::compareVersions(
-                      e->getAttribute(
-                          ::rtl::OUString(
-                              RTL_CONSTASCII_USTRINGPARAM("value"))),
-                      ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("2.3")))
-                  != ::dp_misc::GREATER))
+                RTL_CONSTASCII_STRINGPARAM(minimalVersion)))
         {
             sat = satisfiesMinimalVersion(
                 e->getAttribute(
