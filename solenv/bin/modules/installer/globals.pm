@@ -4,9 +4,9 @@
 #
 #   $RCSfile: globals.pm,v $
 #
-#   $Revision: 1.70 $
+#   $Revision: 1.71 $
 #
-#   last change: $Author: rt $ $Date: 2007-07-03 11:45:53 $
+#   last change: $Author: ihi $ $Date: 2007-07-11 14:40:26 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -119,6 +119,7 @@ BEGIN
     $controlledmakecabversion = "5";
     $saved_packages_path = "";
     $max_lang_length = 50;
+    $globalblock = "Globals";
 
     $is_special_epm = 0;
     $epm_in_path = 0;
