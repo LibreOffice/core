@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.113 $
+#   $Revision: 1.114 $
 #
-#   last change: $Author: ihi $ $Date: 2007-07-10 15:38:59 $
+#   last change: $Author: ihi $ $Date: 2007-07-11 15:03:03 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -63,6 +63,7 @@ LIB1OBJFILES=   \
                 $(SLO)$/itemcontainer.obj                       \
                 $(SLO)$/rootitemcontainer.obj                   \
                 $(SLO)$/constitemcontainer.obj                  \
+                $(SLO)$/jobconst.obj                            \
                 $(SLO)$/propertysethelper.obj
 
 
@@ -367,7 +368,8 @@ SHL5OBJS=       \
                 $(SLO)$/helponstartup.obj   \
                 $(SLO)$/tabwinfactory.obj   \
                 $(SLO)$/tabwindow.obj       \
-                $(SLO)$/systemexec.obj    \
+                $(SLO)$/systemexec.obj      \
+                $(SLO)$/shelljob.obj        \
                 $(SLO)$/register3rdcomponents.obj
 
 SHL5STDLIBS=	\
