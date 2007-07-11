@@ -4,9 +4,9 @@
  *
  *  $RCSfile: statcach.cxx,v $
  *
- *  $Revision: 1.34 $
+ *  $Revision: 1.35 $
  *
- *  last change: $Author: hr $ $Date: 2007-06-27 23:08:22 $
+ *  last change: $Author: ihi $ $Date: 2007-07-11 13:11:37 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -569,7 +569,7 @@ void SfxStateCache::DeleteFloatingWindows()
     SfxControllerItem *pNextCtrl=0;
     for ( SfxControllerItem *pCtrl=pController; pCtrl; pCtrl=pNextCtrl )
     {
-        DBG_TRACE((ByteString("pCtrl: ").Append(ByteString::CreateFromInt32((sal_uInt32)pCtrl))).GetBuffer());
+        DBG_TRACE((ByteString("pCtrl: ").Append(ByteString::CreateFromInt64((sal_uIntPtr)pCtrl))).GetBuffer());
         pNextCtrl = pCtrl->GetItemLink();
         pCtrl->DeleteFloatingWindow();
     }
