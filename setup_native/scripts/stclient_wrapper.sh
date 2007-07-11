@@ -1,0 +1,55 @@
+#!/bin/sh
+#
+# Copyright (c) 2007 by Sun Microsystems, Inc.
+# All rights reserved.
+#
+
+STCLIENT=/usr/bin/stclient
+
+TARGET_URN=
+PRODUCT_NAME=
+PRODUCT_VERSION=
+PRODUCT_SOURCE=
+PARENT_PRODUCT_NAME=
+
+while [ $# -gt 0 ]
+do
+  case "$1" in
+    -t)  TARGET_URN="$2"; shift;;
+    -p)  PRODUCT_NAME="$2"; shift;;
+    -e)  PRODUCT_VERSION="$2"; shift;;
+    -P)  PARENT_PRODUCT_NAME="$2"; shift;;
+    -S)  PRODUCT_SOURCE="$2"; shift;;
+    --)  shift; break;;
+    -*)
+        echo >&2 \
+        "usage: $0 -p <product name> -e <product version> -t <urn> -S <source> -P <parent product name>"
+        exit 1;;
+    *)  break;;
+    esac
+    shift
+done
+
+if [ -x "$STCLIENT" ]; then
+  INSERT="false"
+
+  TEST=`${STCLIENT} -f -t ${TARGET_URN}`
+
+  if [ "${TEST}" = "No records found" ]; then
+      INSERT="true"
+  fi
+
+  if [ "${INSERT}" = "true" ]; then
+    if [ `uname -s` = "SunOS" ]; then
+      uname=`uname -p`
+      zone="global"
+      if [ -x /usr/bin/zonename ]; then
+        zone=`/usr/bin/zonename`
+      fi
+
+      output=`${STCLIENT} -a -p "${PRODUCT_NAME}" -e "${PRODUCT_VERSION}" -t "${TARGET_URN}" -S "${PRODUCT_SOURCE}" -P "${PARENT_PRODUCT_NAME}" -m "Sun Microsystems, Inc." -A ${uname} -z global`
+    fi
+  fi
+fi
+
+exit 0
