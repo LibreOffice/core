@@ -4,9 +4,9 @@
  *
  *  $RCSfile: iodlg.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: ihi $ $Date: 2007-06-05 15:08:56 $
+ *  last change: $Author: ihi $ $Date: 2007-07-11 12:54:30 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -2750,15 +2750,13 @@ BOOL SvtFileDialog::IsolateFilterFromPath_Impl( String& rPath, String& rFilter )
             String aDelim(
 #ifdef WNT
                     '\\'
-#elif MAC
-                    ':'
 #else
                     '/'
 #endif
             );
 
             nPathTokenPos = aReversePath.Search( aDelim );
-#if !defined( UNX ) && !defined( MAC )
+#if !defined( UNX )
             if ( nPathTokenPos == STRING_NOTFOUND )
             {
                 nPathTokenPos = aReversePath.Search( ':' );
