@@ -4,9 +4,9 @@
 #
 #   $RCSfile: ziplist.pm,v $
 #
-#   $Revision: 1.17 $
+#   $Revision: 1.18 $
 #
-#   last change: $Author: ihi $ $Date: 2007-07-11 14:40:46 $
+#   last change: $Author: ihi $ $Date: 2007-07-11 15:03:46 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -749,9 +749,19 @@ sub replace_variables_in_ziplist_variables
     $milestonevariable =~ s/m//;
     $milestonevariable =~ s/s/\./;
 
+    my $localminor = $installer::globals::lastminor;
+    if ( $installer::globals::minor ) { $localminor = $installer::globals::minor; }
+
     for ( my $i = 0; $i <= $#{$blockref}; $i++ )
     {
         if ($installer::globals::lastminor) { ${$blockref}[$i] =~ s/\{milestone\}/$milestonevariable/; }
+        else { ${$blockref}[$i] =~ s/\{milestone\}//; }
+        if ( $localminor ) { ${$blockref}[$i] =~ s/\{minor\}/$localminor/; }
+        else { ${$blockref}[$i] =~ s/\{minor\}//; }
+        if ( $installer::globals::buildid ) { ${$blockref}[$i] =~ s/\{buildid\}/$installer::globals::buildid/; }
+        else { ${$blockref}[$i] =~ s/\{buildid\}//; }
+        if ( $installer::globals::build ) { ${$blockref}[$i] =~ s/\{buildsource\}/$installer::globals::build/; }
+        else { ${$blockref}[$i] =~ s/\{build\}//; }
     }
 }
 
