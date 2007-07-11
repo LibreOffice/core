@@ -4,9 +4,9 @@
  *
  *  $RCSfile: shellexec.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: obo $ $Date: 2007-01-23 12:27:49 $
+ *  last change: $Author: ihi $ $Date: 2007-07-11 15:04:25 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -164,7 +164,7 @@ ShellExec::ShellExec( const Reference< XComponentContext >& xContext ) :
 //
 //-------------------------------------------------
 
-void SAL_CALL ShellExec::execute( const OUString& aCommand, const OUString& aParameter, sal_Int32 /*nFlags*/ )
+void SAL_CALL ShellExec::execute( const OUString& aCommand, const OUString& aParameter, sal_Int32 nFlags )
     throw (IllegalArgumentException, SystemShellExecuteException, RuntimeException)
 {
     OStringBuffer aBuffer, aLaunchBuffer;
@@ -258,7 +258,10 @@ void SAL_CALL ShellExec::execute( const OUString& aCommand, const OUString& aPar
     } else {
         escapeForShell(aBuffer, OUStringToOString(aCommand, osl_getThreadTextEncoding()));
         aBuffer.append(" ");
-        escapeForShell(aBuffer, OUStringToOString(aParameter, osl_getThreadTextEncoding()));
+        if( nFlags != 42 )
+            escapeForShell(aBuffer, OUStringToOString(aParameter, osl_getThreadTextEncoding()));
+        else
+            aBuffer.append(OUStringToOString(aParameter, osl_getThreadTextEncoding()));
     }
 
     // Prefer DESKTOP_LAUNCH when available
