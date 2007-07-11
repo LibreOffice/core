@@ -4,9 +4,9 @@
  *
  *  $RCSfile: job.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 14:03:32 $
+ *  last change: $Author: ihi $ $Date: 2007-07-11 15:01:38 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -569,7 +569,7 @@ void Job::impl_reactForJobResult( /*IN*/ const css::uno::Any& aResult )
     // disable a job for further executions.
     // Note: this option is available inside the environment EXECUTOR only
     if (
-        (eEnvironment == JobData::E_EXECUTION              ) &&
+//        (eEnvironment == JobData::E_EXECUTION              ) &&
         (m_aJobCfg.hasConfig()                             ) &&
         (aAnalyzedResult.existPart(JobResult::E_DEACTIVATE))
        )
