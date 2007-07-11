@@ -4,9 +4,9 @@
  *
  *  $RCSfile: appmain.cxx,v $
  *
- *  $Revision: 1.32 $
+ *  $Revision: 1.33 $
  *
- *  last change: $Author: hr $ $Date: 2007-06-27 22:56:12 $
+ *  last change: $Author: ihi $ $Date: 2007-07-11 13:09:59 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -220,11 +220,6 @@ void SfxApplication::Main( )
 }
 
 //--------------------------------------------------------------------
-#if defined( MAC )
-    void InstallAppleScriptHdl();
-#endif
-
-//-------------------------------------------------------------------------
 void SfxApplication::InsertLateInitHdl(const Link& rLink)
 {
     if ( Application::IsInExecute() )
