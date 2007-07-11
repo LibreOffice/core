@@ -4,9 +4,9 @@
  *
  *  $RCSfile: file_ooo.scp,v $
  *
- *  $Revision: 1.206 $
+ *  $Revision: 1.207 $
  *
- *  last change: $Author: ihi $ $Date: 2007-07-10 15:23:15 $
+ *  last change: $Author: ihi $ $Date: 2007-07-11 11:06:17 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -3241,7 +3241,7 @@ File gid_Starregistry_Services_Rdb
     Styles = (PACKED, STARREGISTRY, PATCH);
 End
 
-#ifdef UNX
+#if defined(UNX) && !defined(QUARTZ)
 
 File gid_File_Registry_Spool_Oo_Office_Common_UseOOoFileDialogs_Xcu
     TXT_FILE_BODY;
