@@ -4,9 +4,9 @@
 #
 #   $RCSfile: make_installer.pl,v $
 #
-#   $Revision: 1.88 $
+#   $Revision: 1.89 $
 #
-#   last change: $Author: rt $ $Date: 2007-07-03 11:45:11 $
+#   last change: $Author: ihi $ $Date: 2007-07-11 14:40:12 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -201,6 +201,9 @@ installer::logger::print_message( "... analyzing $installer::globals::ziplistnam
 my $productblockref = installer::ziplist::getproductblock($ziplistref, $installer::globals::product);       # product block from zip.lst
 if ( $installer::globals::globallogging ) { installer::files::save_file($loggingdir . "productblock.log" ,$productblockref); }
 
+my $globalproductblockref = installer::ziplist::getproductblock($ziplistref, $installer::globals::globalblock);     # global product block from zip.lst
+if ( $installer::globals::globallogging ) { installer::files::save_file($loggingdir . "globalproductblock.log" ,$globalproductblockref); }
+
 my $settingsblockref = installer::ziplist::getproductblock($productblockref, "Settings");       # settings block from zip.lst
 if ( $installer::globals::globallogging ) { installer::files::save_file($loggingdir . "settingsblock1.log" ,$settingsblockref); }
 
@@ -212,6 +215,24 @@ if ( $installer::globals::globallogging ) { installer::files::save_file($logging
 
 my $allvariablesarrayref = installer::ziplist::get_variables_from_ziplist($settingsblockref);
 if ( $installer::globals::globallogging ) { installer::files::save_file($loggingdir . "allvariables1.log" ,$allvariablesarrayref); }
+
+if ( $#{$globalproductblockref} > -1 )
+{
+    my $globalsettingsblockref = installer::ziplist::getproductblock($globalproductblockref, "Settings");       # settings block from zip.lst
+    if ( $installer::globals::globallogging ) { installer::files::save_file($loggingdir . "globalsettingsblock1.log" ,$globalsettingsblockref); }
+
+    $globalsettingsblockref = installer::ziplist::analyze_settings_block($globalsettingsblockref);              # select data from settings block in zip.lst
+    if ( $installer::globals::globallogging ) { installer::files::save_file($loggingdir . "globalsettingsblock2.log" ,$globalsettingsblockref); }
+
+    my $allglobalsettingsarrayref = installer::ziplist::get_settings_from_ziplist($globalsettingsblockref);
+    if ( $installer::globals::globallogging ) { installer::files::save_file($loggingdir . "allglobalsettings1.log" ,$allglobalsettingsarrayref); }
+
+    my $allglobalvariablesarrayref = installer::ziplist::get_variables_from_ziplist($globalsettingsblockref);
+    if ( $installer::globals::globallogging ) { installer::files::save_file($loggingdir . "allglobalvariables1.log" ,$allglobalvariablesarrayref); }
+
+    if ( $#{$allglobalsettingsarrayref} > -1 ) { $allsettingsarrayref = installer::converter::combine_arrays_from_references($allsettingsarrayref, $allglobalsettingsarrayref); }
+    if ( $#{$allglobalvariablesarrayref} > -1 ) { $allvariablesarrayref = installer::converter::combine_arrays_from_references($allvariablesarrayref, $allglobalvariablesarrayref); }
+}
 
 $allsettingsarrayref = installer::ziplist::remove_multiples_from_ziplist($allsettingsarrayref); # the settings from the zip.lst
 if ( $installer::globals::globallogging ) { installer::files::save_file($loggingdir . "allsettings2.log" ,$allsettingsarrayref); }
