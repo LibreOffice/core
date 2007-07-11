@@ -1,3 +1,14 @@
+Globals
+{
+	Settings
+	{
+		variables
+		{
+		    OOOBASEVERSION 2.3
+		}
+	}
+}
+
 OpenOffice
 {
 	Settings
