@@ -4,9 +4,9 @@
  *
  *  $RCSfile: jobresult.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 14:04:24 $
+ *  last change: $Author: ihi $ $Date: 2007-07-11 15:02:07 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -39,25 +39,12 @@
 //________________________________
 //  my own includes
 
-#ifndef __FRAMEWORK_JOBS_JOBRESULT_HXX_
 #include <jobs/jobresult.hxx>
-#endif
-
-#ifndef __FRAMEWORK_THREADHELP_READGUARD_HXX_
+#include <jobs/jobconst.hxx>
 #include <threadhelp/readguard.hxx>
-#endif
-
-#ifndef __FRAMEWORK_THREADHELP_WRITEGUARD_HXX_
 #include <threadhelp/writeguard.hxx>
-#endif
-
-#ifndef __FRAMEWORK_GENERAL_H_
 #include <general.h>
-#endif
-
-#ifndef __FRAMEWORK_SERVICES_H_
 #include <services.h>
-#endif
 
 //________________________________
 //  interface includes
@@ -65,13 +52,9 @@
 //________________________________
 //  includes of other projects
 
-#ifndef _RTL_USTRBUF_HXX_
 #include <rtl/ustrbuf.hxx>
-#endif
-
-#ifndef _SV_SVAPP_HXX
 #include <vcl/svapp.hxx>
-#endif
+#include <comphelper/sequenceashashmap.hxx>
 
 //________________________________
 //  namespace
@@ -159,37 +142,33 @@ JobResult::JobResult( /*IN*/ const css::uno::Any& aResult )
     m_eParts = E_NOPART;
 
     // analyze the result and actualize our other members
-    css::uno::Sequence< css::beans::NamedValue > lProtocol;
-    if (!(aResult >>= lProtocol))
+    ::comphelper::SequenceAsHashMap aProtocol(aResult);
+    if (aProtocol.size() < 1)
         return;
 
-    sal_Int32 nCount = lProtocol.getLength();
-    for( sal_Int32 i=0; i<nCount; ++i )
+    ::comphelper::SequenceAsHashMap::const_iterator pIt = aProtocol.end();
+
+    pIt = aProtocol.find(JobConst::ANSWER_DEACTIVATE_JOB());
+    if (pIt != aProtocol.end())
     {
-        if (
-            (lProtocol[i].Name.equalsIgnoreAsciiCaseAsciiL("Deactivate",10)) &&
-            (lProtocol[i].Value >>= m_bDeactivate                          )
-           )
-        {
-            if ( m_bDeactivate )
-                m_eParts |= E_DEACTIVATE;
-        }
-        else
-        if (
-            (lProtocol[i].Name.equalsIgnoreAsciiCaseAsciiL("SaveArguments",13)) &&
-            (lProtocol[i].Value >>= m_lArguments                              )
-           )
-        {
+        pIt->second >>= m_bDeactivate;
+        if (m_bDeactivate)
+            m_eParts |= E_DEACTIVATE;
+    }
+
+    pIt = aProtocol.find(JobConst::ANSWER_SAVE_ARGUMENTS());
+    if (pIt != aProtocol.end())
+    {
+        pIt->second >>= m_lArguments;
+        if (m_lArguments.getLength() > 0)
             m_eParts |= E_ARGUMENTS;
-        }
-        else
-        if (
-            (lProtocol[i].Name.equalsIgnoreAsciiCaseAsciiL("SendDispatchResult",18)) &&
-            (lProtocol[i].Value >>= m_aDispatchResult                              )
-           )
-        {
+    }
+
+    pIt = aProtocol.find(JobConst::ANSWER_SEND_DISPATCHRESULT());
+    if (pIt != aProtocol.end())
+    {
+        if (pIt->second >>= m_aDispatchResult)
             m_eParts |= E_DISPATCHRESULT;
-        }
     }
 }
 

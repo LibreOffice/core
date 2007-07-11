@@ -4,9 +4,9 @@
  *
  *  $RCSfile: register3rdcomponents.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 14:06:25 $
+ *  last change: $Author: ihi $ $Date: 2007-07-11 15:02:49 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -80,14 +80,20 @@
 #include <dispatch/systemexec.hxx>
 #endif
 
+#ifndef __FRAMEWORK_JOBS_SHELLJOB_HXX_
+#include <jobs/shelljob.hxx>
+#endif
+
 COMPONENTGETIMPLEMENTATIONENVIRONMENT
 
 COMPONENTWRITEINFO  (   COMPONENTINFO( ::framework::HelpOnStartup   )
                         COMPONENTINFO( ::framework::TabWinFactory   )
                         COMPONENTINFO( ::framework::SystemExec      )
+                        COMPONENTINFO( ::framework::ShellJob        )
                     )
 
 COMPONENTGETFACTORY (   IFFACTORY( ::framework::HelpOnStartup       ) else
                         IFFACTORY( ::framework::TabWinFactory       ) else
-                        IFFACTORY( ::framework::SystemExec          )
+                        IFFACTORY( ::framework::SystemExec          ) else
+                        IFFACTORY( ::framework::ShellJob            )
                     )
