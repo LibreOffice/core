@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.15 $
+#   $Revision: 1.16 $
 #
-#   last change: $Author: kz $ $Date: 2007-05-10 15:02:22 $
+#   last change: $Author: ihi $ $Date: 2007-07-11 14:31:18 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -51,7 +51,7 @@ LIBSALCPPRT=$(0)
 
 .IF "$(ENABLE_GNOMEVFS)"!=""
 COMPILER_WARN_ALL=TRUE
-PKGCONFIG_MODULES=gnome-vfs-2.0 ORBit-2.0 ORBit-CosNaming-2.0 gconf-2.0 bonobo-activation-2.0 libbonobo-2.0
+PKGCONFIG_MODULES=gnome-vfs-2.0 ORBit-2.0 ORBit-CosNaming-2.0 gconf-2.0
 .INCLUDE: pkg_config.mk
 
 .IF "$(OS)" == "SOLARIS"
