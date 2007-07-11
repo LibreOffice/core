@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.47 $
+#   $Revision: 1.48 $
 #
-#   last change: $Author: vg $ $Date: 2007-04-11 21:32:57 $
+#   last change: $Author: ihi $ $Date: 2007-07-11 13:13:05 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -112,9 +112,7 @@ SHL1STDLIBS+=\
 .ENDIF # WNT
 
 
-.IF "$(GUI)"!="MAC"
 SHL1DEPN += $(shell $(FIND) $(SLO) -type f -name "*.OBJ" -print)
-.ENDIF
 
 SHL1LIBS=   $(LIB1TARGET)
 
