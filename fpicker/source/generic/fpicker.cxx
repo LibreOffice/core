@@ -4,9 +4,9 @@
  *
  *  $RCSfile: fpicker.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 17:49:17 $
+ *  last change: $Author: ihi $ $Date: 2007-07-11 11:01:20 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -80,6 +80,8 @@ static OUString FilePicker_getSystemPickerServiceName()
         return OUString (RTL_CONSTASCII_USTRINGPARAM ("com.sun.star.ui.dialogs.GtkFilePicker"));
     else if (aDesktopEnvironment.equalsIgnoreAsciiCaseAscii ("kde"))
         return OUString (RTL_CONSTASCII_USTRINGPARAM ("com.sun.star.ui.dialogs.KDEFilePicker"));
+    else if (aDesktopEnvironment.equalsIgnoreAsciiCaseAscii ("macosx"))
+        return OUString (RTL_CONSTASCII_USTRINGPARAM ("com.sun.star.ui.dialogs.AquaFilePicker"));
     else
         return OUString (RTL_CONSTASCII_USTRINGPARAM ("com.sun.star.ui.dialogs.SystemFilePicker"));
 }
@@ -146,6 +148,8 @@ static OUString FolderPicker_getSystemPickerServiceName()
         return OUString (RTL_CONSTASCII_USTRINGPARAM ("com.sun.star.ui.dialogs.GtkFolderPicker"));
     else if (aDesktopEnvironment.equalsIgnoreAsciiCaseAscii ("kde"))
         return OUString (RTL_CONSTASCII_USTRINGPARAM ("com.sun.star.ui.dialogs.KDEFolderPicker"));
+    else if (aDesktopEnvironment.equalsIgnoreAsciiCaseAscii ("macosx"))
+        return OUString (RTL_CONSTASCII_USTRINGPARAM ("com.sun.star.ui.dialogs.AquaFolderPicker"));
     else
         return OUString (RTL_CONSTASCII_USTRINGPARAM ("com.sun.star.ui.dialogs.SystemFolderPicker"));
 }
