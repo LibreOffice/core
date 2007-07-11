@@ -4,9 +4,9 @@
  *
  *  $RCSfile: appinit.cxx,v $
  *
- *  $Revision: 1.59 $
+ *  $Revision: 1.60 $
  *
- *  last change: $Author: hr $ $Date: 2007-06-27 22:55:56 $
+ *  last change: $Author: ihi $ $Date: 2007-07-11 13:09:43 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -136,11 +136,6 @@
 
 #ifdef UNX
 #define stricmp(a,b) strcmp(a,b)
-#endif
-
-#ifdef MAC
-int svstricmp( const char* pStr1, const char* pStr2);
-#define stricmp svstricmp
 #endif
 
 using namespace ::com::sun::star::uno;
