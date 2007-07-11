@@ -4,9 +4,9 @@
  *
  *  $RCSfile: shell.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: hr $ $Date: 2007-06-27 23:07:43 $
+ *  last change: $Author: ihi $ $Date: 2007-07-11 13:11:22 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -864,28 +864,6 @@ void SfxShell::ParentDeactivate
 */
 {
 }
-
-//--------------------------------------------------------------------
-#if 0
-// falls noch mal "pure virtual function called" auf dem MAC:
-//  Bitte MAC nicht mehr unterstuetzen
-// der MPW-Linker will die immer haben, obwohl pure virtual
-
-#ifdef MAC
-extern "C"
-{
-    void debugstr( char *pMsg );
-}
-#endif
-
-SfxItemPool& SfxShell::GetPool()
-{
-    debugstr( "pure virtual function called: SfxShell::GetPool()" );
-    SfxItemPool aPool(0,0);
-    return aPool;
-}
-
-#endif
 
 //--------------------------------------------------------------------
 
