@@ -4,9 +4,9 @@
  *
  *  $RCSfile: optgdlg.cxx,v $
  *
- *  $Revision: 1.43 $
+ *  $Revision: 1.44 $
  *
- *  last change: $Author: hr $ $Date: 2007-06-27 17:27:09 $
+ *  last change: $Author: ihi $ $Date: 2007-07-11 11:03:03 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -302,8 +302,8 @@ OfaMiscTabPage::OfaMiscTabPage(Window* pParent, const SfxItemSet& rSet ) :
     FreeResource();
 
     //system fileopen only available in Windows and with gtk vclplug based
-    //picker
-#if !defined( WNT ) && !defined( ENABLE_GTK )
+    //picker and on MacOSX (aqua version)
+#if !defined( WNT ) && !defined( ENABLE_GTK ) && !(defined(MACOSX) && defined(QUARTZ))
     aFileDlgFL.Hide();
     aFileDlgCB.Hide();
 #else
