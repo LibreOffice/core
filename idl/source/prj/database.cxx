@@ -4,9 +4,9 @@
  *
  *  $RCSfile: database.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 12:48:52 $
+ *  last change: $Author: ihi $ $Date: 2007-07-11 13:04:41 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -340,11 +340,7 @@ BOOL SvIdlDataBase::InsertId( const ByteString & rIdName, ULONG nVal )
 *************************************************************************/
 BOOL SvIdlDataBase::ReadIdFile( const String & rFileName )
 {
-#ifndef MAC
     DirEntry aFullName( rFileName );
-#else
-    DirEntry aFullName( rFileName, FSYS_STYLE_UNX );
-#endif
     aFullName.Find( GetPath() );
 
     String * pIdFile = aIdFileList.First();
