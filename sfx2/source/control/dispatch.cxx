@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dispatch.cxx,v $
  *
- *  $Revision: 1.52 $
+ *  $Revision: 1.53 $
  *
- *  last change: $Author: hr $ $Date: 2007-06-27 23:05:46 $
+ *  last change: $Author: ihi $ $Date: 2007-07-11 13:11:05 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -469,7 +469,7 @@ SfxDispatcher::~SfxDispatcher()
 {
 #ifdef DBG_UTIL
     ByteString sTemp( "Delete Dispatcher " );
-    sTemp += ByteString::CreateFromInt32( (sal_uInt32)this );
+    sTemp += ByteString::CreateFromInt64( (sal_uIntPtr)this );
     DBG_TRACE( sTemp.GetBuffer() );
     DBG_ASSERT( !pImp->bActive, "deleting active Dispatcher" );
 #endif
@@ -547,12 +547,12 @@ void SfxDispatcher::Pop
 
 #ifdef DBG_UTIL
     ByteString aMsg( "SfxDispatcher(" );
-    aMsg += ByteString::CreateFromInt32( (long) this );
+    aMsg += ByteString::CreateFromInt64( (sal_uIntPtr) this );
     aMsg += bPush ? ")::Push(" : ")::Pop(";
     if ( rShell.GetInterface() )
         aMsg += rShell.GetInterface()->GetClassName();
     else
-        aMsg += ByteString::CreateFromInt32( (long) &rShell );
+        aMsg += ByteString::CreateFromInt64( (sal_uIntPtr) &rShell );
     aMsg += bDelete ? ") with delete" : ")";
     DbgTrace( aMsg.GetBuffer() );
 #endif
@@ -814,7 +814,7 @@ void SfxDispatcher::DoActivate_Impl( sal_Bool bMDI, SfxViewFrame* /* pOld */ )
     {
         #ifdef DBG_UTIL
         ByteString sTemp("Activate Dispatcher ");
-        sTemp += ByteString::CreateFromInt32( (sal_uInt32) this );
+        sTemp += ByteString::CreateFromInt64( (sal_uIntPtr) this );
         DBG_TRACE(sTemp.GetBuffer());
         DBG_ASSERT( !pImp->bActive, "Activate-Fehler" );
         #endif
@@ -831,7 +831,7 @@ void SfxDispatcher::DoActivate_Impl( sal_Bool bMDI, SfxViewFrame* /* pOld */ )
     {
         #ifdef DBG_UTIL
         ByteString sTemp("Non-MDI-Activate Dispatcher");
-        sTemp += ByteString::CreateFromInt32( (sal_uInt32) this );
+        sTemp += ByteString::CreateFromInt64( (sal_uIntPtr) this );
         DBG_TRACE( sTemp.GetBuffer() );
         #endif
     }
@@ -904,7 +904,7 @@ void SfxDispatcher::DoDeactivate_Impl( sal_Bool bMDI, SfxViewFrame* pNew )
 
     if ( bMDI )
     {
-        DBG_TRACE(ByteString("Deactivate Dispatcher ").Append(ByteString::CreateFromInt32( (sal_uInt32) this )).GetBuffer());
+        DBG_TRACE(ByteString("Deactivate Dispatcher ").Append(ByteString::CreateFromInt64( (sal_uIntPtr) this )).GetBuffer());
         DBG_ASSERT( pImp->bActive, "Deactivate-Fehler" );
         pImp->bActive = sal_False;
 
@@ -925,7 +925,7 @@ void SfxDispatcher::DoDeactivate_Impl( sal_Bool bMDI, SfxViewFrame* pNew )
         }
     }
     else
-        DBG_TRACE( ByteString ("Non-MDI-DeActivate Dispatcher").Append(ByteString::CreateFromInt32( (sal_uInt32) this )).GetBuffer() );
+        DBG_TRACE( ByteString ("Non-MDI-DeActivate Dispatcher").Append(ByteString::CreateFromInt64( (sal_uIntPtr) this )).GetBuffer() );
 
     if ( IsAppDispatcher() && !pSfxApp->IsDowning() )
         return;
@@ -2020,7 +2020,7 @@ void SfxDispatcher::FlushImpl()
 
 #ifdef DBG_UTIL
     ByteString aMsg( "SfxDispatcher(" );
-    aMsg += ByteString::CreateFromInt32( (long) this );
+    aMsg += ByteString::CreateFromInt64( (sal_uIntPtr) this );
     aMsg += ")::Flush()";
 #endif
 
