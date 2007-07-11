@@ -1,0 +1,332 @@
+/*************************************************************************
+ *
+ *  OpenOffice.org - a multi-platform office productivity suite
+ *
+ *  $RCSfile: SalAquaFilePicker.hxx,v $
+ *
+ *  $Revision: 1.2 $
+ *
+ *  last change: $Author: ihi $ $Date: 2007-07-11 10:59:12 $
+ *
+ *  The Contents of this file are made available subject to
+ *  the terms of GNU Lesser General Public License Version 2.1.
+ *
+ *
+ *    GNU Lesser General Public License Version 2.1
+ *    =============================================
+ *    Copyright 2005 by Sun Microsystems, Inc.
+ *    901 San Antonio Road, Palo Alto, CA 94303, USA
+ *
+ *    This library is free software; you can redistribute it and/or
+ *    modify it under the terms of the GNU Lesser General Public
+ *    License version 2.1, as published by the Free Software Foundation.
+ *
+ *    This library is distributed in the hope that it will be useful,
+ *    but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ *    Lesser General Public License for more details.
+ *
+ *    You should have received a copy of the GNU Lesser General Public
+ *    License along with this library; if not, write to the Free Software
+ *    Foundation, Inc., 59 Temple Place, Suite 330, Boston,
+ *    MA  02111-1307  USA
+ *
+ ************************************************************************/
+
+#ifndef _SALAQUAFILEPICKER_HXX_
+#define _SALAQUAFILEPICKER_HXX_
+
+//_______________________________________________________________________________________________________________________
+//  includes of other projects
+//_______________________________________________________________________________________________________________________
+
+#ifndef _CPPUHELPER_COMPBASE9_HXX_
+#include <cppuhelper/compbase9.hxx>
+#endif
+
+#ifndef _COM_SUN_STAR_LANG_XINITIALIZATION_HPP_
+#include <com/sun/star/lang/XInitialization.hpp>
+#endif
+
+#ifndef _COM_SUN_STAR_UI_DIALOGS_XFILEPICKERNOTIFIER_HPP_
+#include <com/sun/star/ui/dialogs/XFilePickerNotifier.hpp>
+#endif
+
+#ifndef _COM_SUN_STAR_UI_DIALOGS_XFILTERMANAGER_HPP_
+#include <com/sun/star/ui/dialogs/XFilterManager.hpp>
+#endif
+
+#ifndef _COM_SUN_STAR_UI_DIALOGS_XFILTERGROUPMANAGER_HPP_
+#include <com/sun/star/ui/dialogs/XFilterGroupManager.hpp>
+#endif
+
+#ifndef _COM_SUN_STAR_UI_DIALOGS_XFILEPICKERCONTROLACCESS_HPP_
+#include <com/sun/star/ui/dialogs/XFilePickerControlAccess.hpp>
+#endif
+
+#ifndef _COM_SUN_STAR_UI_DIALOGS_XFILEPREVIEW_HPP_
+#include <com/sun/star/ui/dialogs/XFilePreview.hpp>
+#endif
+
+#ifndef _COM_SUN_STAR_BEANS_STRINGPAIR_HPP_
+#include <com/sun/star/beans/StringPair.hpp>
+#endif
+
+#ifndef _SALAQUAPICKER_HXX_
+#include "SalAquaPicker.hxx"
+#endif
+
+#include <memory>
+#include <list>
+
+#ifndef _RTL_USTRING_H_
+#include <rtl/ustring.hxx>
+#endif
+
+#ifndef _FILTERHELPER_HXX_
+#include "FilterHelper.hxx"
+#endif
+
+//----------------------------------------------------------
+// Implementation class for the XFilePicker Interface
+//----------------------------------------------------------
+
+//----------------------------------------------------------
+// forward declarations
+//----------------------------------------------------------
+
+using namespace rtl;
+
+//----------------------------------------------------------
+// class declaration
+//----------------------------------------------------------
+
+class SalAquaFilePicker :
+    public SalAquaPicker,
+    public cppu::WeakComponentImplHelper9<
+    ::com::sun::star::ui::dialogs::XFilterManager,
+    ::com::sun::star::ui::dialogs::XFilterGroupManager,
+    ::com::sun::star::ui::dialogs::XFilePickerControlAccess,
+    ::com::sun::star::ui::dialogs::XFilePickerNotifier,
+    ::com::sun::star::ui::dialogs::XFilePreview,
+    ::com::sun::star::lang::XInitialization,
+    ::com::sun::star::util::XCancellable,
+    ::com::sun::star::lang::XEventListener,
+    ::com::sun::star::lang::XServiceInfo >
+{
+public:
+
+    // constructor
+    SalAquaFilePicker( const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& xServiceMgr );
+
+    //------------------------------------------------------------------------------------
+    // XFilePickerNotifier
+    //------------------------------------------------------------------------------------
+
+    virtual void SAL_CALL addFilePickerListener( const ::com::sun::star::uno::Reference< ::com::sun::star::ui::dialogs::XFilePickerListener >& xListener )
+        throw( ::com::sun::star::uno::RuntimeException );
+    virtual void SAL_CALL removeFilePickerListener( const ::com::sun::star::uno::Reference< ::com::sun::star::ui::dialogs::XFilePickerListener >& xListener )
+        throw( ::com::sun::star::uno::RuntimeException );
+
+    //------------------------------------------------------------------------------------
+    // XExecutableDialog functions
+    //------------------------------------------------------------------------------------
+
+    virtual void SAL_CALL setTitle( const ::rtl::OUString& aTitle )
+        throw( ::com::sun::star::uno::RuntimeException );
+
+    virtual sal_Int16 SAL_CALL execute(  )
+        throw( ::com::sun::star::uno::RuntimeException );
+
+    //------------------------------------------------------------------------------------
+    // XFilePicker functions
+    //------------------------------------------------------------------------------------
+
+    virtual void SAL_CALL setMultiSelectionMode( sal_Bool bMode )
+        throw( ::com::sun::star::uno::RuntimeException );
+
+    virtual void SAL_CALL setDefaultName( const ::rtl::OUString& aName )
+        throw( ::com::sun::star::uno::RuntimeException );
+
+    virtual void SAL_CALL setDisplayDirectory( const ::rtl::OUString& aDirectory )
+        throw( com::sun::star::lang::IllegalArgumentException,
+               ::com::sun::star::uno::RuntimeException );
+
+    virtual ::rtl::OUString SAL_CALL getDisplayDirectory(  )
+        throw( ::com::sun::star::uno::RuntimeException );
+
+    virtual ::com::sun::star::uno::Sequence< ::rtl::OUString > SAL_CALL getFiles(  )
+        throw( ::com::sun::star::uno::RuntimeException );
+
+    //------------------------------------------------------------------------------------
+    // XFilterManager functions
+    //------------------------------------------------------------------------------------
+
+    virtual void SAL_CALL appendFilter( const ::rtl::OUString& aTitle, const ::rtl::OUString& aFilter )
+        throw( ::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::uno::RuntimeException );
+
+    virtual void SAL_CALL setCurrentFilter( const ::rtl::OUString& aTitle )
+        throw( ::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::uno::RuntimeException );
+
+    virtual ::rtl::OUString SAL_CALL getCurrentFilter(  )
+        throw( ::com::sun::star::uno::RuntimeException );
+
+    //------------------------------------------------------------------------------------
+    // XFilterGroupManager functions
+    //------------------------------------------------------------------------------------
+
+    virtual void SAL_CALL appendFilterGroup( const ::rtl::OUString& sGroupTitle, const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::StringPair >& aFilters )
+        throw (::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::uno::RuntimeException);
+
+    //------------------------------------------------------------------------------------
+    // XFilePickerControlAccess functions
+    //------------------------------------------------------------------------------------
+
+    virtual void SAL_CALL setValue( sal_Int16 nControlId, sal_Int16 nControlAction, const ::com::sun::star::uno::Any& aValue )
+        throw (::com::sun::star::uno::RuntimeException);
+
+    virtual ::com::sun::star::uno::Any SAL_CALL getValue( sal_Int16 aControlId, sal_Int16 aControlAction )
+        throw (::com::sun::star::uno::RuntimeException);
+
+    virtual void SAL_CALL enableControl( sal_Int16 nControlId, sal_Bool bEnable )
+        throw(::com::sun::star::uno::RuntimeException );
+
+    virtual void SAL_CALL setLabel( sal_Int16 nControlId, const ::rtl::OUString& aLabel )
+        throw (::com::sun::star::uno::RuntimeException);
+
+    virtual ::rtl::OUString SAL_CALL getLabel( sal_Int16 nControlId )
+        throw (::com::sun::star::uno::RuntimeException);
+
+    //------------------------------------------------
+    // XFilePreview
+    //------------------------------------------------
+
+    virtual ::com::sun::star::uno::Sequence< sal_Int16 > SAL_CALL getSupportedImageFormats(  )
+        throw (::com::sun::star::uno::RuntimeException);
+
+    virtual sal_Int32 SAL_CALL getTargetColorDepth(  )
+        throw (::com::sun::star::uno::RuntimeException);
+
+    virtual sal_Int32 SAL_CALL getAvailableWidth(  )
+        throw (::com::sun::star::uno::RuntimeException);
+
+    virtual sal_Int32 SAL_CALL getAvailableHeight(  )
+        throw (::com::sun::star::uno::RuntimeException);
+
+    virtual void SAL_CALL setImage( sal_Int16 aImageFormat, const ::com::sun::star::uno::Any& aImage )
+        throw (::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::uno::RuntimeException);
+
+    virtual sal_Bool SAL_CALL setShowState( sal_Bool bShowState )
+        throw (::com::sun::star::uno::RuntimeException);
+
+    virtual sal_Bool SAL_CALL getShowState(  )
+        throw (::com::sun::star::uno::RuntimeException);
+
+    //------------------------------------------------
+    // XInitialization
+    //------------------------------------------------
+
+    virtual void SAL_CALL initialize( const ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any >& aArguments )
+        throw(::com::sun::star::uno::Exception, ::com::sun::star::uno::RuntimeException);
+
+    //------------------------------------------------
+    // XCancellable
+    //------------------------------------------------
+
+    virtual void SAL_CALL cancel( )
+        throw( ::com::sun::star::uno::RuntimeException );
+
+    //------------------------------------------------
+    // XEventListener
+    //------------------------------------------------
+
+    using cppu::WeakComponentImplHelperBase::disposing;
+    virtual void SAL_CALL disposing( const ::com::sun::star::lang::EventObject& aEvent )
+        throw(::com::sun::star::uno::RuntimeException);
+
+    //------------------------------------------------
+    // XServiceInfo
+    //------------------------------------------------
+
+    virtual ::rtl::OUString SAL_CALL getImplementationName(  )
+        throw(::com::sun::star::uno::RuntimeException);
+
+    virtual sal_Bool SAL_CALL supportsService( const ::rtl::OUString& ServiceName )
+        throw(::com::sun::star::uno::RuntimeException);
+
+    virtual ::com::sun::star::uno::Sequence< ::rtl::OUString > SAL_CALL getSupportedServiceNames(  )
+        throw(::com::sun::star::uno::RuntimeException);
+
+    //------------------------------------------------------------------------------------
+    // FilePicker Event functions
+    //------------------------------------------------------------------------------------
+
+//    void SAL_CALL fileSelectionChanged( ::com::sun::star::ui::dialogs::FilePickerEvent aEvent );
+//    void SAL_CALL directoryChanged( ::com::sun::star::ui::dialogs::FilePickerEvent aEvent );
+//    rtl::OUString SAL_CALL helpRequested( ::com::sun::star::ui::dialogs::FilePickerEvent aEvent ) const;
+//    void SAL_CALL controlStateChanged( ::com::sun::star::ui::dialogs::FilePickerEvent aEvent );
+//    void SAL_CALL dialogSizeChanged( );
+
+private:
+    // prevent copy and assignment
+    SalAquaFilePicker( const SalAquaFilePicker& );
+    SalAquaFilePicker& operator=( const SalAquaFilePicker& );
+
+    virtual void ensureFilterHelper();
+
+    // to instanciate own services
+    ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > m_xServiceMgr;
+
+    ::com::sun::star::uno::Reference< ::com::sun::star::ui::dialogs::XFilePickerListener >
+    m_xListener;
+
+    FilterHelper *m_pFilterHelper;
+
+    rtl::OUString m_sSaveFileName;
+
+    bool bVersionWidthUnset;
+    sal_Bool mbPreviewState;
+
+    sal_Int32 m_PreviewImageWidth;
+    sal_Int32 m_PreviewImageHeight;
+
+    sal_Bool m_bFilterUICorrectlySet;
+
+    void UpdateFilterfromUI();
+
+    //        void updateCurrentFilterFromName(const gchar* filtername);
+    void unselect_type();
+    void InitialMapping();
+
+    //        static void expander_changed_cb( GtkExpander *expander, SalGtkFilePicker *pobjFP );
+    //      static void preview_toggled_cb (GtkObject *cb, SalGtkFilePicker *pobjFP);
+    //static void filter_changed_cb (GtkFileChooser *file_chooser, GParamSpec *pspec, SalGtkFilePicker *pobjFP);
+    //static void type_changed_cb( GtkTreeSelection *selection, SalGtkFilePicker *pobjFP );
+    //static void folder_changed_cb (GtkFileChooser *file_chooser, SalGtkFilePicker *pobjFP);
+    //static void selection_changed_cb (GtkFileChooser *file_chooser, SalGtkFilePicker *pobjFP);
+    //static void update_preview_cb (GtkFileChooser *file_chooser, SalGtkFilePicker *pobjFP);
+    //static void dialog_mapped_cb(GtkWidget *widget, SalGtkFilePicker *pobjFP);
+    void setDefaultName(const rtl::OUString& aName, bool appendExtension);
+    void updateFilterUI();
+    void updateSaveFileNameExtension(bool appendExtension = false);
+
+public:
+    ~SalAquaFilePicker();
+
+    void implHandleNavDialogCustomize(NavCBRecPtr callBackParms);
+    void implHandleNavDialogStart(NavCBRecPtr callBackParms);
+    void implHandleNavDialogEvent(NavCBRecPtr callBackParms);
+
+    sal_Bool implFilterHandler(AEDesc *theItem, void *info,
+                                               void *callBackUD,
+                                               NavFilterModes filterMode);
+
+    virtual void implHandlePopupMenuSelect(NavMenuItemSpec* menuItem);
+    void implHandleNavDialogSelectEntry(NavCBRecPtr callBackParms);
+    sal_Bool implPreviewHandler (NavCBRecPtr callBackParms);
+
+    void implInitialize();
+
+};
+
+#endif // _SALAQUAFILEPICKER_HXX_
