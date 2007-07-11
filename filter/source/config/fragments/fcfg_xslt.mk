@@ -1,24 +1,27 @@
 all_fragments+=xslt
 
 # -----------------------------------------------
-# count = 2
+# count = 3
 T4_XSLT = \
     writer_DocBook_File \
-    XHTML_File
+    XHTML_File \
+    MediaWiki_File
 
 # -----------------------------------------------
-# count = 5
+# count = 7
 F4_XSLT = \
     DocBook_File \
     XHTML_Calc_File \
     XHTML_Draw_File \
     XHTML_Impress_File \
-    XHTML_Writer_File
+    XHTML_Writer_File \
+    writer_MediaWiki_File \
+    writer_web_MediaWiki_File
 
 # -----------------------------------------------
 # count = 0
 F4_UI_XSLT =
-    
+
 # -----------------------------------------------
 # count = 0
 L4_XSLT =
@@ -42,8 +45,8 @@ ALL_4fcfg_xslt = \
     $(UI_FILTERS_4fcfg_xslt) \
     $(FRAMELOADERS_4fcfg_xslt) \
     $(CONTENTHANDLERS_4fcfg_xslt)
-    
-ALL_UI_FILTERS+=$(UI_FILTERS_4fcfg_xslt)    
-    
+
+ALL_UI_FILTERS+=$(UI_FILTERS_4fcfg_xslt)
+
 ALL_PACKAGES+=xslt
-    
+
