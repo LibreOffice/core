@@ -4,9 +4,9 @@
  *
  *  $RCSfile: frmhtmlw.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: hr $ $Date: 2007-06-27 23:03:23 $
+ *  last change: $Author: ihi $ $Date: 2007-07-11 13:10:49 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -83,9 +83,7 @@ static HTMLOutEvent __FAR_DATA aFrameSetEventTable[] =
 };
 */
 
-#if defined(MAC)
-const sal_Char SfxFrameHTMLWriter::sNewLine[] = "\015";
-#elif defined(UNX)
+#if defined(UNX)
 const sal_Char SfxFrameHTMLWriter::sNewLine[] = "\012";
 #else
 const sal_Char __FAR_DATA SfxFrameHTMLWriter::sNewLine[] = "\015\012";
