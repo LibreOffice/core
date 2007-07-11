@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.6 $
+#   $Revision: 1.7 $
 #
-#   last change: $Author: vg $ $Date: 2006-05-24 13:39:38 $
+#   last change: $Author: ihi $ $Date: 2007-07-11 15:02:23 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -50,7 +50,9 @@ SLOFILES=           $(SLO)$/jobexecutor.obj     \
                     $(SLO)$/jobdata.obj         \
                     $(SLO)$/jobresult.obj       \
                     $(SLO)$/joburl.obj          \
+                    $(SLO)$/jobconst.obj        \
                     $(SLO)$/helponstartup.obj   \
+                    $(SLO)$/shelljob.obj        \
                     $(SLO)$/configaccess.obj
 
 # --- Targets ------------------------------------------------------
