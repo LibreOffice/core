@@ -4,9 +4,9 @@
  *
  *  $RCSfile: module_java.scp,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: kz $ $Date: 2007-05-10 13:23:46 $
+ *  last change: $Author: ihi $ $Date: 2007-07-11 12:33:24 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -48,7 +48,7 @@ Module gid_Module_Optional_Java
     Styles = (JAVAMODULE,DONTUNINSTALL,NOTRELOCATABLE,DONTSHOWINUSERINSTALL);
   #endif
   #ifdef LINUX
-    PackageName = "jre-6-linux-i586.rpm";
+    PackageName = "jre-6u2-linux-i586.rpm";
   #else
     PackageName = "";
   #endif
@@ -61,9 +61,9 @@ Module gid_Module_Optional_Java_Runtime
 	Description = "gid_Module_Optional_Java_Runtime";
     Styles = (HIDDEN_ROOT,JAVAMODULE,DONTUNINSTALL,NOTRELOCATABLE);
   #if defined (SOLARIS) && defined (SPARC)
-    PackageName = "SUNWj6rt_1_6_0_sparc.tar.gz";
+    PackageName = "SUNWj6rt_1_6_0_02_sparc.tar.gz";
   #elif defined (SOLARIS) && defined (INTEL)
-    PackageName = "SUNWj6rt_1_6_0_x86.tar.gz";
+    PackageName = "SUNWj6rt_1_6_0_02_x86.tar.gz";
   #else
     PackageName = "";
   #endif
@@ -77,9 +77,9 @@ Module gid_Module_Optional_Java_Config
 	Description = "gid_Module_Optional_Java_Config";
     Styles = (HIDDEN_ROOT,JAVAMODULE,DONTUNINSTALL,NOTRELOCATABLE);
   #if defined (SOLARIS) && defined (SPARC)
-    PackageName = "SUNWj6cfg_1_6_0_sparc.tar.gz";
+    PackageName = "SUNWj6cfg_1_6_0_02_sparc.tar.gz";
   #elif defined (SOLARIS) && defined (INTEL)
-    PackageName = "SUNWj6cfg_1_6_0_x86.tar.gz";
+    PackageName = "SUNWj6cfg_1_6_0_02_x86.tar.gz";
   #else
     PackageName = "";
   #endif
@@ -93,9 +93,9 @@ Module gid_Module_Optional_Java_Manual
 	Description = "gid_Module_Optional_Java_Manual";
     Styles = (HIDDEN_ROOT,JAVAMODULE,DONTUNINSTALL,NOTRELOCATABLE);
   #if defined (SOLARIS) && defined (SPARC)
-    PackageName = "SUNWj6man_1_6_0_sparc.tar.gz";
+    PackageName = "SUNWj6man_1_6_0_02_sparc.tar.gz";
   #elif defined (SOLARIS) && defined (INTEL)
-    PackageName = "SUNWj6man_1_6_0_x86.tar.gz";
+    PackageName = "SUNWj6man_1_6_0_02_x86.tar.gz";
   #else
     PackageName = "";
   #endif
