@@ -14,6 +14,7 @@ mkdir: %_DEST%\bin%_EXT%\xslt\export\common
 mkdir: %_DEST%\bin%_EXT%\xslt\export\common\styles
 mkdir: %_DEST%\bin%_EXT%\xslt\export\common\table
 mkdir: %_DEST%\bin%_EXT%\xslt\export\spreadsheetml
+mkdir: %_DEST%\bin%_EXT%\xslt\export\wiki
 mkdir: %_DEST%\bin%_EXT%\xslt\export\wordml
 mkdir: %_DEST%\bin%_EXT%\xslt\export\xhtml
 mkdir: %_DEST%\bin%_EXT%\xslt\import
@@ -27,6 +28,8 @@ mkdir: %_DEST%\xml%_EXT%\registry\spool
 ..\source\xslt\export\common\styles\*.xsl %_DEST%\bin%_EXT%\xslt\export\common\styles\*.xsl
 ..\source\xslt\export\common\table\*.xsl %_DEST%\bin%_EXT%\xslt\export\common\table\*.xsl
 ..\source\xslt\export\spreadsheetml\*.xsl %_DEST%\bin%_EXT%\xslt\export\spreadsheetml\*.xsl
+..\source\xslt\export\wiki\*.xsl %_DEST%\bin%_EXT%\xslt\export\wiki\*.xsl
+..\source\xslt\export\wiki\*.ott %_DEST%\bin%_EXT%\xslt\export\wiki\*.ott
 ..\source\xslt\export\wordml\*.xsl %_DEST%\bin%_EXT%\xslt\export\wordml\*.xsl
 ..\source\xslt\export\xhtml\*.xsl %_DEST%\bin%_EXT%\xslt\export\xhtml\*.xsl
 ..\source\xslt\import\common\*.xsl %_DEST%\bin%_EXT%\xslt\import\common\*.xsl
