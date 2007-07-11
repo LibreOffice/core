@@ -4,9 +4,9 @@
  *
  *  $RCSfile: module_langpack.scp,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: gm $ $Date: 2007-05-10 11:06:49 $
+ *  last change: $Author: ihi $ $Date: 2007-07-11 14:41:57 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -4018,6 +4018,47 @@ Module gid_Module_Langpack_Fonts_ka
     Sortkey = "300";
     Name = "gid_Module_Langpack_Fonts_ka";
     Description = "gid_Module_Langpack_Fonts_ka";
+    Styles = (HIDDEN_ROOT);
+End
+#endif
+
+// Esperanto (eo)
+
+Module gid_Module_Root_eo
+    ParentID = gid_Module_Langpack_Base;
+    Sortkey = "9700";
+    MOD_NAME_DESC(MODULE_LANGPACK_EO);
+  #ifdef WNT
+    Styles = (LANGUAGEMODULE);
+  #endif
+End
+
+#ifndef WNT
+Module gid_Module_Langpack_Resource_eo
+    ParentID = gid_Module_Root_eo;
+    Sortkey = "100";
+    Name = "gid_Module_Langpack_Resource_eo";
+    Description = "gid_Module_Langpack_Resource_eo";
+    Styles = (HIDDEN_ROOT);
+End
+#endif
+
+#ifndef WNT
+Module gid_Module_Langpack_Help_eo
+    ParentID = gid_Module_Root_eo;
+    Sortkey = "200";
+    Name = "gid_Module_Langpack_Help_eo";
+    Description = "gid_Module_Langpack_Help_eo";
+    Styles = (HIDDEN_ROOT);
+End
+#endif
+
+#ifndef WNT
+Module gid_Module_Langpack_Fonts_eo
+    ParentID = gid_Module_Root_eo;
+    Sortkey = "300";
+    Name = "gid_Module_Langpack_Fonts_eo";
+    Description = "gid_Module_Langpack_Fonts_eo";
     Styles = (HIDDEN_ROOT);
 End
 #endif
