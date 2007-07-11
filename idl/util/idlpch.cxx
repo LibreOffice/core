@@ -4,9 +4,9 @@
  *
  *  $RCSfile: idlpch.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 12:49:57 $
+ *  last change: $Author: ihi $ $Date: 2007-07-11 13:05:13 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -35,11 +35,7 @@
 
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_idl.hxx"
-#ifdef MAC
-#include <string.h>
-#else
 #include <memory.h>
-#endif
 #include <stdlib.h>
 #include <stdio.h>
 #include <ctype.h>
