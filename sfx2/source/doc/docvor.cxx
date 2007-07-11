@@ -4,9 +4,9 @@
  *
  *  $RCSfile: docvor.cxx,v $
  *
- *  $Revision: 1.52 $
+ *  $Revision: 1.53 $
  *
- *  last change: $Author: hr $ $Date: 2007-06-27 23:21:22 $
+ *  last change: $Author: ihi $ $Date: 2007-07-11 13:12:19 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -2020,11 +2020,6 @@ long SfxOrganizeDlg_Impl::Dispatch_Impl( USHORT nId, Menu* _pMenu )
             pDlg->SetPrinter( pPrt );
             pDlg->Execute();
             delete pDlg;
-#ifdef MAC
-            // bei bestimmten Druckertreibern gibt es Probleme mit
-            // dem Repaint. Deshalb hier explizit Invalidate() rufen
-            pDialog->Invalidate();
-#endif
             break;
         }
 
