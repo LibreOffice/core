@@ -4,9 +4,9 @@
  *
  *  $RCSfile: embeddedobjectcontainer.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: hr $ $Date: 2007-06-26 16:10:39 $
+ *  last change: $Author: ihi $ $Date: 2007-07-11 14:09:53 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1133,7 +1133,6 @@ sal_Bool EmbeddedObjectContainer::RemoveEmbeddedObject( const uno::Reference < e
             uno::Reference < container::XChild > xChild( xObj, uno::UNO_QUERY );
             if ( xChild.is() )
                 xChild->setParent( uno::Reference < uno::XInterface >() );
-
             break;
         }
 
