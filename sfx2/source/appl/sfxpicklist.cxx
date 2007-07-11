@@ -4,9 +4,9 @@
  *
  *  $RCSfile: sfxpicklist.cxx,v $
  *
- *  $Revision: 1.30 $
+ *  $Revision: 1.31 $
  *
- *  last change: $Author: hr $ $Date: 2007-06-27 23:00:59 $
+ *  last change: $Author: ihi $ $Date: 2007-07-11 13:10:33 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -141,9 +141,6 @@ osl::Mutex* SfxPickList::GetOrCreateMutex()
 
 void SfxPickList::CreatePicklistMenuTitle( Menu* pMenu, USHORT nItemId, const String& aURLString, sal_uInt32 nNo )
 {
-#ifdef MAC
-    String aPickEntry;
-#else
     String aPickEntry;
 
     if ( nNo < 9 )
@@ -156,7 +153,6 @@ void SfxPickList::CreatePicklistMenuTitle( Menu* pMenu, USHORT nItemId, const St
     else
         aPickEntry += String::CreateFromInt32( nNo + 1 );
     aPickEntry += DEFINE_CONST_UNICODE(": ");
-#endif
 
     INetURLObject   aURL( aURLString );
     rtl::OUString   aTipHelpText;
