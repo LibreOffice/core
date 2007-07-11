@@ -4,9 +4,9 @@
  *
  *  $RCSfile: app.cxx,v $
  *
- *  $Revision: 1.206 $
+ *  $Revision: 1.207 $
  *
- *  last change: $Author: ihi $ $Date: 2007-07-10 15:24:16 $
+ *  last change: $Author: ihi $ $Date: 2007-07-11 13:15:28 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1913,6 +1913,20 @@ IMPL_STATIC_LINK_NOINSTANCE( Desktop, AsyncTerminate, void*, EMPTYARG )
     return 0L;
 }
 
+class ExitTimer : public Timer
+{
+  public:
+    ExitTimer()
+    {
+        SetTimeout(500);
+        Start();
+    }
+    virtual void Timeout()
+    {
+        exit(42);
+    }
+};
+
 IMPL_LINK( Desktop, OpenClients_Impl, void*, EMPTYARG )
 {
     RTL_LOGFILE_PRODUCT_CONTEXT( aLog, "PERFORMANCE - DesktopOpenClients_Impl()" );
@@ -1930,6 +1944,9 @@ IMPL_LINK( Desktop, OpenClients_Impl, void*, EMPTYARG )
 //    OfficeIPCThread::SetReady();
 
     EnableOleAutomation();
+
+    if (getenv ("OOO_EXIT_POST_STARTUP"))
+        new ExitTimer();
     return 0;
 }
 
@@ -2463,7 +2480,7 @@ void Desktop::OpenClients()
 
         impl_checkRecoveryState(bCrashed, bExistsRecoveryData, bExistsSessionData);
 
-        if (
+        if ( !getenv ("OOO_DISABLE_RECOVERY") &&
             ( ! bLoaded ) &&
             (
                 ( bExistsRecoveryData ) || // => crash with files    => recovery
