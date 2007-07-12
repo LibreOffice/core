@@ -318,6 +318,32 @@ find_rpm()
     done
 }
 
+check_architecture()
+{
+    # Check, if system and installation set fit together (x86 and sparc).
+    # If not, throw a warning.
+    # Architecture of the installation set is saved in file "installdata/xpd/setup.xpd"
+    # <architecture>sparc</architecture> or <architecture>i386</architecture>
+    # Architecture of system is determined with "uname -p"
+
+    setupxpdfile="installdata/xpd/setup.xpd"
+
+    if [ -f $setupxpdfile ]; then
+        platform=`uname -p` # valid values are "sparc" or "i386"
+        searchstring="<architecture>$platform</architecture>"
+        match=`cat $setupxpdfile | grep $searchstring`
+
+        if [ -z "$match" ]; then
+            # architecture does not fit, warning required
+            if [ "$platform" = "sparc" ]; then
+                echo "Warning: This is an attempt to install Solaris x86 packages on Solaris Sparc."
+            else
+                echo "Warning: This is an attempt to install Solaris Sparc packages on Solaris x86."
+            fi
+        fi
+    fi
+}
+
 find_solaris_jre()
 {
     # searching for java runtime in path
@@ -387,6 +413,7 @@ if [ "$java_runtime_set" != "yes" ]; then
     if [ "`uname -s`" = "Linux" ]; then
         install_linux_rpm
     elif [ "`uname -s`" = "SunOS" ]; then
+        check_architecture
         find_solaris_jre
         if [ "$java_runtime_found" = "yes" ]; then
             check_jre_version
