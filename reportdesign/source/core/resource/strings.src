@@ -4,9 +4,9 @@
  *
  *  $RCSfile: strings.src,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2007-07-09 11:56:16 $
+ *  last change: $Author: oj $ $Date: 2007-07-12 08:04:42 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -84,36 +84,29 @@ String RID_STR_ERROR_WRONG_ARGUMENT
 };
 String RID_STR_ARGUMENT_IS_NULL
 {
-    Text [ de ] = "Das Element ist ungültig.";
     Text [ en-US ] = "The element is invalid.";
 };
 String RID_STR_FIXEDTEXT
 {
-    Text [ de ] = "LabelField";
-    Text [ en-US ] = "LabelField";
+    Text [ en-US ] = "Label field" ;
 };
 String RID_STR_FORMATTEDFIELD
 {
-    Text [ de ] = "FormattedField";
-    Text [ en-US ] = "FormattedField";
+    Text [ en-US ] = "Formatted field";
 };
 String RID_STR_IMAGECONTROL
 {
-    Text [ de ] = "ImageControl";
-    Text [ en-US ] = "ImageControl";
+    Text [ en-US ] = "Image control" ;
 };
 String RID_STR_REPORT
 {
-    Text [ de ] = "Report";
     Text [ en-US ] = "Report";
 };
 String RID_STR_SHAPE
 {
-    Text [ de ] = "Shape";
     Text [ en-US ] = "Shape";
 };
 String RID_STR_FIXEDLINE
 {
-    Text [ de ] = "FixedLine";
-    Text [ en-US ] = "FixedLine";
+    Text [ en-US ] = "Fixed line";
 };
