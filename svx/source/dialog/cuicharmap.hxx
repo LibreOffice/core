@@ -4,9 +4,9 @@
  *
  *  $RCSfile: cuicharmap.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: ihi $ $Date: 2006-12-21 12:00:29 $
+ *  last change: $Author: ihi $ $Date: 2007-07-12 10:54:22 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -57,15 +57,9 @@ class SvxCharMapData;
 
 // define ----------------------------------------------------------------
 
-#ifdef MAC
-#define CHARMAP_MAXLEN  28
-#define COLUMN_COUNT    28
-#define ROW_COUNT        8
-#else
 #define CHARMAP_MAXLEN  32
 #define COLUMN_COUNT    16
 #define ROW_COUNT        8
-#endif
 
 namespace svx
 {
