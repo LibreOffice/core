@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.30 $
+#   $Revision: 1.31 $
 #
-#   last change: $Author: vg $ $Date: 2007-05-25 12:13:12 $
+#   last change: $Author: ihi $ $Date: 2007-07-12 10:37:10 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -118,7 +118,7 @@ LIB1OBJFILES = \
 
 # --- Targets -------------------------------------------------------
 
-.IF "$(GUI)"=="UNX" || "$(GUI)"=="MAC"
+.IF "$(GUI)"=="UNX" 
 CDEFS+=-DUSE_POLYGON
 .ENDIF
 
