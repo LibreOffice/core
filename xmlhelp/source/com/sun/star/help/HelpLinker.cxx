@@ -4,9 +4,9 @@
  *
  *  $RCSfile: HelpLinker.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: hjs $ $Date: 2007-06-29 17:09:25 $
+ *  last change: $Author: ihi $ $Date: 2007-07-12 13:24:50 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1531,17 +1531,9 @@ boost::shared_ptr<Entry> FullBtreeDict::insert(FullDictBlock &bl, boost::shared_
     return ent;
 }
 
-void FullBtreeDict::store(const std::string &bla, int id)
+void FullBtreeDict::store(const std::string &key, int id)
 {
-    HCDBG(std::cerr << "storing " << bla << " id " << id << std::endl);
-    /*
-    if (logging)
-        log.write(key + " " + id + "\n");
-    */
-    std::string key = bla;
-    int length = key.size();
-    while(key.size() >= 250)
-        key = bla.substr(--length);
+    HCDBG(std::cerr << "so storing " << key << " id " << id << std::endl);
 
     if (key.size() >= 250)
     {
@@ -2225,9 +2217,22 @@ void Index::init()
     }
 }
 
+namespace
+{
+    std::string cliptoken(const std::string &name)
+    {
+        std::string key = name;
+        int length = key.size();
+        while(key.size() >= 250)
+            key = name.substr(--length);
+       return key;
+    }
+}
+
 int Index::intern(const std::string &name)
 {
-    IndexHashtable::const_iterator aIter = _cache.find(name);
+    std::string key = cliptoken(name);
+    IndexHashtable::const_iterator aIter = _cache.find(key);
     if (aIter != _cache.end())
         return aIter->second;
     else
@@ -2235,15 +2240,9 @@ int Index::intern(const std::string &name)
         //Seeing as we always start off with an empty dictionary,
         //our entries will always be in the _cache, so don't ever
         //search the underlying dictionary
-#if 0
-        int id = _dict->fetch(name);
-        if (id == 0)
-            _dict->store(name, id = _freeID++);
-#else
         int id = _freeID++;
-        _dict->store(name, id);
-#endif
-        _cache.insert(IndexHashtable::value_type(name, id)).first->second = id;
+        _dict->store(key, id);
+        _cache.insert(IndexHashtable::value_type(key, id)).first->second = id;
         return id;
     }
 }
@@ -3329,8 +3328,8 @@ Tokenizer::~Tokenizer()
 {
 #if !defined(SOLARIS)
     delete bi;
-#endif
     ucnv_close(utf8);
+#endif
 }
 
 void Tokenizer::setText(const xmlChar *text)
