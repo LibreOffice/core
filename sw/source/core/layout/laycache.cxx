@@ -4,9 +4,9 @@
  *
  *  $RCSfile: laycache.cxx,v $
  *
- *  $Revision: 1.28 $
+ *  $Revision: 1.29 $
  *
- *  last change: $Author: kz $ $Date: 2007-05-10 16:00:22 $
+ *  last change: $Author: ihi $ $Date: 2007-07-12 10:42:58 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -659,8 +659,6 @@ ULONG SwLayHelper::CalcPageCount()
                                        ULONG(20 + nNdCount / 1000 * 3) );
 #ifdef PM2
                 const ULONG nMax = 49;
-#elif MAC
-                const ULONG nMax = 56;
 #elif UNIX
                 const ULONG nMax = 57;
 #else
