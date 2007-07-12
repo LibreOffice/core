@@ -4,9 +4,9 @@
  *
  *  $RCSfile: view2.cxx,v $
  *
- *  $Revision: 1.76 $
+ *  $Revision: 1.77 $
  *
- *  last change: $Author: hr $ $Date: 2007-06-27 13:27:21 $
+ *  last change: $Author: ihi $ $Date: 2007-07-12 10:51:17 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1117,9 +1117,10 @@ void __EXPORT SwView::Execute(SfxRequest &rReq)
         case FN_SCROLL_NEXT_PREV:
             if(pArgs && pArgs->GetItemState(FN_SCROLL_NEXT_PREV, FALSE, &pItem))
             {
-                // hier sollen nur die Handler der PageUp/DownButtons gerufen werden
-                BOOL bNext = ((const SfxBoolItem*)pItem)->GetValue();
-                MoveNavigation(bNext);
+                // call the handlers of PageUp/DownButtons, only
+                bool* pbNext = new bool ( ((const SfxBoolItem*)pItem)->GetValue() );
+                // #i75416# move the execution of the search to an asynchronously called static link
+                Application::PostUserEvent( STATIC_LINK(this, SwView, MoveNavigationHdl), pbNext );
             }
             break;
         case SID_JUMPTOMARK:
