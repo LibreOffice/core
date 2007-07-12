@@ -4,9 +4,9 @@
 #
 #   $RCSfile: simplepackage.pm,v $
 #
-#   $Revision: 1.5 $
+#   $Revision: 1.6 $
 #
-#   last change: $Author: gm $ $Date: 2007-05-10 10:59:13 $
+#   last change: $Author: ihi $ $Date: 2007-07-12 11:16:19 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -223,7 +223,7 @@ sub create_package
 
 sub create_simple_package
 {
-    my ( $filesref, $dirsref, $scpactionsref, $linksref, $loggingdir, $languagestringref, $shipinstalldir, $allsettingsarrayref, $allvariables, $includepatharrayref, $isfirstrun, $islastrun ) = @_;
+    my ( $filesref, $dirsref, $scpactionsref, $linksref, $unixlinksref, $loggingdir, $languagestringref, $shipinstalldir, $allsettingsarrayref, $allvariables, $includepatharrayref, $isfirstrun, $islastrun ) = @_;
 
     # Creating directories
 
@@ -346,6 +346,19 @@ sub create_simple_package
         system($localcall);
 
         $infoline = "Creating link: \"ln -sf $destinationfile $destination\"\n";
+        push(@installer::globals::logfileinfo, $infoline);
+    }
+
+    for ( my $i = 0; $i <= $#{$unixlinksref}; $i++ )
+    {
+        my $onelink = ${$unixlinksref}[$i];
+        my $target = $onelink->{'Target'};
+        my $destination = $subfolderdir . $installer::globals::separator . $onelink->{'destination'};
+
+        my $localcall = "ln -sf $target $destination \>\/dev\/null 2\>\&1";
+        system($localcall);
+
+        $infoline = "Creating Unix link: \"ln -sf $target $destination\"\n";
         push(@installer::globals::logfileinfo, $infoline);
     }
 
