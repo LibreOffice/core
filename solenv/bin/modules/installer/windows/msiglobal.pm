@@ -4,9 +4,9 @@
 #
 #   $RCSfile: msiglobal.pm,v $
 #
-#   $Revision: 1.39 $
+#   $Revision: 1.40 $
 #
-#   last change: $Author: kz $ $Date: 2007-05-21 10:40:48 $
+#   last change: $Author: ihi $ $Date: 2007-07-12 11:17:01 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -36,6 +36,7 @@
 package installer::windows::msiglobal;
 
 use Cwd;
+use Digest::MD5;
 use installer::converter;
 use installer::exiter;
 use installer::files;
@@ -725,9 +726,9 @@ sub create_transforms
 
     # Iterating over all files
 
-    for ( my $i = 0; $i <= $#{$languagesarray}; $i++ )
+    foreach ( @{$languagesarray} )
     {
-        my $onelanguage = ${$languagesarray}[$i];
+        my $onelanguage = $_;
 
         if ( $onelanguage eq $defaultlanguage ) { next; }
 
@@ -743,6 +744,64 @@ sub create_transforms
         my $infoline = "Systemcall: $systemcall\n";
         push( @installer::globals::logfileinfo, $infoline);
 
+        # Problem: msitran.exe in version 4.0 always returns "1", even if no failure occured.
+        # Therefore it has to be checked, if this is version 4.0. If yes, if the mst file
+        # exists and if it is larger than 0 bytes. If this is true, then no error occured.
+        # File Version of msitran.exe: 4.0.6000.16384 has checksum: "b66190a70145a57773ec769e16777b29"
+
+        if ($returnvalue)
+        {
+            $infoline = "WARNING: Returnvalue of $msitran is not 0. Checking version of $msitran!\n";
+            push( @installer::globals::logfileinfo, $infoline);
+
+            open(FILE, "<$msitran") or die "ERROR: Can't open $msitran for creating file hash";
+            binmode(FILE);
+            my $digest = Digest::MD5->new->addfile(*FILE)->hexdigest;
+            close(FILE);
+
+            my $problemchecksum = "b66190a70145a57773ec769e16777b29"; # File MsiTran.exe in version 4.0.6000.16384
+
+            $infoline = "Checksum of problematic MsiTran.exe (4.0.6000.16384): $problemchecksum\n";
+            push( @installer::globals::logfileinfo, $infoline);
+            $infoline = "Checksum of used MsiTran.exe: $digest\n";
+            push( @installer::globals::logfileinfo, $infoline);
+
+            if ( $digest eq $problemchecksum )
+            {
+                # Check existence of mst
+                if ( -f $transformfile )
+                {
+                    $infoline = "File $transformfile exists.\n";
+                    push( @installer::globals::logfileinfo, $infoline);
+                    my $filesize = (stat($transformfile))[7];
+                    $infoline = "Size of $transformfile: $filesize\n";
+                    push( @installer::globals::logfileinfo, $infoline);
+
+                    if ( $filesize > 0 )
+                    {
+                        $infoline = "Info: Returnvalue $returnvalue of $msitran is no problem :-) .\n";
+                        push( @installer::globals::logfileinfo, $infoline);
+                        $returnvalue = 0; # reset the error
+                    }
+                    else
+                    {
+                        $infoline = "Filesize indicates that an error occured.\n";
+                        push( @installer::globals::logfileinfo, $infoline);
+                    }
+                }
+                else
+                {
+                    $infoline = "File $transformfile does not exist -> An error occured.\n";
+                    push( @installer::globals::logfileinfo, $infoline);
+                }
+            }
+            else
+            {
+                $infoline = "This is not a problematic version of msitran.exe. Therefore the error is not caused by problematic msitran.exe.\n";
+                push( @installer::globals::logfileinfo, $infoline);
+            }
+        }
+
         if ($returnvalue)
         {
             $infoline = "ERROR: Could not execute $msitran!\n";
@@ -756,7 +815,15 @@ sub create_transforms
 
         # The reference database can be deleted
 
-        unlink($referencedbname);
+        my $result = unlink($referencedbname);
+        # $result contains the number of deleted files
+
+        if ( $result == 0 )
+        {
+            $infoline = "ERROR: Could not remove file $$referencedbname !\n";
+            push( @installer::globals::logfileinfo, $infoline);
+            installer::exiter::exit_program($infoline, "create_transforms");
+        }
     }
 }
 
