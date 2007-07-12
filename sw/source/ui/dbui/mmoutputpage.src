@@ -4,9 +4,9 @@
  *
  *  $RCSfile: mmoutputpage.src,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: ihi $ $Date: 2007-04-19 12:56:05 $
+ *  last change: $Author: ihi $ $Date: 2007-07-12 10:50:12 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -273,7 +273,7 @@ TabPage DLG_MM_OUTPUT_PAGE
     };
     String      ST_SAVEMERGED
     {
-        Text[ en-US ] = "Save merged document settings";
+        Text[ en-US ] = "Save merged document";
     };
     String      ST_PRINT
     {
