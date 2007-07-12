@@ -4,9 +4,9 @@
  *
  *  $RCSfile: autofmt.cxx,v $
  *
- *  $Revision: 1.35 $
+ *  $Revision: 1.36 $
  *
- *  last change: $Author: kz $ $Date: 2007-05-10 15:58:20 $
+ *  last change: $Author: ihi $ $Date: 2007-07-12 10:41:58 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -977,12 +977,7 @@ USHORT SwAutoFormat::GetDigitLevel( const SwTxtNode& rNd, xub_StrLen& rPos,
                 else
                     eTmpScan = LOWER_ROMAN, c += SVX_NUM_ROMAN_LOWER;
 
-#ifndef MAC
                 ( eScan &= ~(UPPER_ALPHA|LOWER_ALPHA)) |= eTmpScan;
-#else
-                eScan &= ~(UPPER_ALPHA|LOWER_ALPHA);
-                eScan |= eTmpScan;
-#endif
                 if( pNumTypes )
                     pNumTypes->SetChar( pNumTypes->Len() - 1, c );
             }
