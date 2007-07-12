@@ -4,9 +4,9 @@
  *
  *  $RCSfile: svxbox.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: hr $ $Date: 2007-06-27 17:42:06 $
+ *  last change: $Author: ihi $ $Date: 2007-07-12 10:55:51 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -601,10 +601,7 @@ void __EXPORT SvxComboBox::KeyInput( const KeyEvent& rKEvt )
 
     if(nStyle & SVX_CBS_FILENAME)
     {
-#ifdef MAC
-        if( cChar == sal_Unicode( ':' ) )
-            return;
-#elif defined UNX
+#if defined UNX
         if( cChar == sal_Unicode( '/' ) || cChar == sal_Unicode( ' ' ) )
             return;
 #else
