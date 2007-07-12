@@ -4,9 +4,9 @@
  *
  *  $RCSfile: portxt.cxx,v $
  *
- *  $Revision: 1.46 $
+ *  $Revision: 1.47 $
  *
- *  last change: $Author: obo $ $Date: 2007-01-23 08:32:26 $
+ *  last change: $Author: ihi $ $Date: 2007-07-12 10:43:24 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -290,11 +290,7 @@ void SwTxtPortion::BreakCut( SwTxtFormatInfo &rInf, const SwTxtGuess &rGuess )
             KSHORT nItalic = 0;
             if( ITALIC_NONE != rInf.GetFont()->GetItalic() && !rInf.NotEOL() )
             {
-#ifdef MAC
-                nItalic = Height() / 4;
-#else
                 nItalic = Height() / 12;
-#endif
             }
             Width( Width() + nItalic );
         }
