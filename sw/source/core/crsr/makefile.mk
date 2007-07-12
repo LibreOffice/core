@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.3 $
+#   $Revision: 1.4 $
 #
-#   last change: $Author: rt $ $Date: 2005-09-09 03:05:31 $
+#   last change: $Author: ihi $ $Date: 2007-07-12 10:41:31 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -73,10 +73,6 @@ CXXFILES = \
         unocrsr.cxx \
         viscrs.cxx
 
-.IF "$(GUI)"=="MAC"
-CXXFILES += \
-        crsrsh1.cxx
-.ENDIF
 .IF "$(mydebug)" != ""
 CXXFILES += \
         pamio.cxx
@@ -103,10 +99,6 @@ SLOFILES =	\
         $(SLO)$/unocrsr.obj \
         $(SLO)$/viscrs.obj
 
-.IF "$(GUI)"=="MAC"
-SLOFILES +=  \
-        $(SLO)$/crsrsh1.obj
-.ENDIF
 .IF "$(mydebug)" != ""
 SLOFILES +=  \
         $(SLO)$/pamio.obj
