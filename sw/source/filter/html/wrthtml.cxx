@@ -4,9 +4,9 @@
  *
  *  $RCSfile: wrthtml.cxx,v $
  *
- *  $Revision: 1.34 $
+ *  $Revision: 1.35 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 22:13:00 $
+ *  last change: $Author: ihi $ $Date: 2007-07-12 10:45:47 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -203,9 +203,7 @@
 
 #define MAX_INDENT_LEVEL 20
 
-#if defined(MAC)
-const sal_Char SwHTMLWriter::sNewLine = '\015';
-#elif defined(UNX)
+#if defined(UNX)
 const sal_Char SwHTMLWriter::sNewLine = '\012';
 #else
 const sal_Char __FAR_DATA SwHTMLWriter::sNewLine[] = "\015\012";
