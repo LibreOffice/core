@@ -5,9 +5,9 @@
  *
  *  $RCSfile: Common.xcs,v $
  *
- *  $Revision: 1.136 $
+ *  $Revision: 1.137 $
  *
- *  last change: $Author: rt $ $Date: 2007-07-05 07:29:42 $
+ *  last change: $Author: ihi $ $Date: 2007-07-12 13:43:56 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -2276,7 +2276,7 @@ Dymamic border coloring means that when the mouse is hovered over a control, and
 							</info>
 						</maxInclusive>
 					</constraints>
-					<value>1</value>
+					<value>2</value>
 				</prop>
 				<prop oor:name="DisableMacrosExecution" oor:type="xs:boolean">
 					<info>
