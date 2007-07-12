@@ -4,9 +4,9 @@
  *
  *  $RCSfile: wrtrtf.hxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: kz $ $Date: 2006-11-06 14:53:15 $
+ *  last change: $Author: ihi $ $Date: 2007-07-12 10:46:31 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -125,7 +125,7 @@ public:
     rtl_TextEncoding eDefaultEncoding;
     rtl_TextEncoding eCurrentEncoding;
 
-#if defined(MAC) || defined(UNX)
+#if defined(UNX)
     static const sal_Char sNewLine;                 // nur \012 oder \015
 #else
     static const sal_Char __FAR_DATA sNewLine[];    // \015\012
