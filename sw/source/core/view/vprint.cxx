@@ -4,9 +4,9 @@
  *
  *  $RCSfile: vprint.cxx,v $
  *
- *  $Revision: 1.40 $
+ *  $Revision: 1.41 $
  *
- *  last change: $Author: vg $ $Date: 2006-11-22 11:24:38 $
+ *  last change: $Author: ihi $ $Date: 2007-07-12 10:44:19 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -443,12 +443,6 @@ void lcl_FormatPostIt( IDocumentContentOperations* pIDCO, SwPaM& aPam, SwPostItF
 
     pIDCO->SplitNode( *aPam.GetPoint(), false );
     aStr = pField->GetPar2();
-#ifdef MAC
-    // Fuer den MAC alle CR durch LF ersetzen
-    for( USHORT n = 0; n < aStr.Len(); ++n )
-        if( aStr[n] == '\r' )
-            aStr[n] = '\n';
-#endif
 #if defined( WIN ) || defined( WNT ) || defined( PM2 )
     // Bei Windows und Co alle CR rausschmeissen
     aStr.EraseAllChars( '\r' );
