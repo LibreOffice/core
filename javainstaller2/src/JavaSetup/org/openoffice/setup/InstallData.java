@@ -4,9 +4,9 @@
  *
  *  $RCSfile: InstallData.java,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2007-07-03 11:48:43 $
+ *  last change: $Author: ihi $ $Date: 2007-07-12 11:18:04 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -79,6 +79,7 @@ public class InstallData
     static private String installRoot = null;     /* Root directory for Solaris user installation */
     static private String defaultDir = "/opt/OpenOffice.org";
     static private String packageFormat = null;
+    static private String architecture = null;
     static private String packagePath = null;
     static private String packageSubdir = "packages";
     static private String adminFileNameReloc = null;
@@ -318,6 +319,14 @@ public class InstallData
 
     public void setPackageFormat(String format) {
         packageFormat = format;
+    }
+
+    public String getArchitecture() {
+        return architecture;
+    }
+
+    public void setArchitecture(String arch) {
+        architecture = arch;
     }
 
     public String getLocalTempPath() {

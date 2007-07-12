@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ProductDescription.java,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2007-07-03 11:59:13 $
+ *  last change: $Author: ihi $ $Date: 2007-07-12 11:18:27 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -202,6 +202,15 @@ public class ProductDescription {
                 String value = section.getValue();
                 if ((value != null) && (! value.equals(""))) {
                     installData.setPackageSubdir(value);
+                }
+            }
+
+            /* check for the architecture of this installation set */
+           section = data.getElement("architecture");
+            if (section != null) {
+                String value = section.getValue();
+                if ((value != null) && (! value.equals(""))) {
+                    installData.setArchitecture(value);
                 }
             }
 
