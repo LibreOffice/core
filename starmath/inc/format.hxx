@@ -4,9 +4,9 @@
  *
  *  $RCSfile: format.hxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: vg $ $Date: 2007-05-25 12:09:23 $
+ *  last change: $Author: ihi $ $Date: 2007-07-12 10:36:56 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -54,11 +54,7 @@
 #define SM_FMT_VERSION_51   ((BYTE) 0x01)
 #define SM_FMT_VERSION_NOW  SM_FMT_VERSION_51
 
-#ifndef MAC
 #define FNTNAME_TIMES   "Times New Roman"
-#else
-#define FNTNAME_TIMES   "Times"
-#endif
 #define FNTNAME_HELV    "Helvetica"
 #define FNTNAME_COUR    "Courier"
 #define FNTNAME_MATH    FONTNAME_MATH
