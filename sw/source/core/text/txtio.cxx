@@ -4,9 +4,9 @@
  *
  *  $RCSfile: txtio.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 21:41:59 $
+ *  last change: $Author: ihi $ $Date: 2007-07-12 10:43:37 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -245,7 +245,6 @@ void lcl_OutFrame( SvFileStream& rStr, const SwFrm* pFrm, ByteString& rSp, sal_B
 
 void LayOutPut( const SwFrm* pFrm )
 {
-#ifndef MAC
     static char* pOutName = 0;
     const sal_Bool bFirstOpen = pOutName ? sal_False : sal_True;
     if( bFirstOpen )
@@ -280,7 +279,6 @@ void LayOutPut( const SwFrm* pFrm )
         XubString aSpace;
         lcl_OutFrame( aStream, pFrm, aSpace, sal_False );
     }
-#endif
 }
 
 #endif
