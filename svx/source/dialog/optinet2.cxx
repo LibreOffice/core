@@ -4,9 +4,9 @@
  *
  *  $RCSfile: optinet2.cxx,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: hr $ $Date: 2007-06-27 17:28:37 $
+ *  last change: $Author: ihi $ $Date: 2007-07-12 10:55:15 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -266,7 +266,7 @@ String lcl_MakeTabEntry(const SfxFilter* pFilter)
     sEntry += pFilter->GetWildcard().GetWildCard();
     sEntry += '\t';
     sEntry += pFilter->GetName();
-#if defined(OS2) || defined(MAC)
+#if defined(OS2)
     sEntry += '\t';
     sEntry += pFilter->GetTypeName();
 #endif
