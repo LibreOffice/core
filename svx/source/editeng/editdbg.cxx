@@ -4,9 +4,9 @@
  *
  *  $RCSfile: editdbg.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: hr $ $Date: 2007-06-27 17:54:23 $
+ *  last change: $Author: ihi $ $Date: 2007-07-12 10:56:17 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -327,9 +327,7 @@ void DbgOutItemSet( FILE* fp, const SfxItemSet& rSet, BOOL bSearchInParent, BOOL
 
 void EditDbg::ShowEditEngineData( EditEngine* pEE, BOOL bInfoBox )
 {
-#ifdef MAC
-    FILE* fp = fopen( "debug.log", "w" );
-#elif defined UNX
+#if defined UNX
     FILE* fp = fopen( "/tmp/debug.log", "w" );
 #else
     FILE* fp = fopen( "d:\\debug.log", "w" );
