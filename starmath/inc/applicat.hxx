@@ -4,9 +4,9 @@
  *
  *  $RCSfile: applicat.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-07 14:57:06 $
+ *  last change: $Author: ihi $ $Date: 2007-07-12 10:36:40 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -67,10 +67,6 @@ class SvxErrorHandler;
 
 #ifdef PM2
 #define RELEASE     "PM304"
-#endif
-
-#ifdef MAC
-#define RELEASE     "MAC304"
 #endif
 
 #ifdef WNT
