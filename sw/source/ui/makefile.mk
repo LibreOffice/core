@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.11 $
+#   $Revision: 1.12 $
 #
-#   last change: $Author: obo $ $Date: 2007-01-25 12:25:14 $
+#   last change: $Author: ihi $ $Date: 2007-07-12 10:49:26 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -45,11 +45,9 @@ TARGET=ui
 .INCLUDE :  $(PRJ)$/inc$/sw.mk
 
 .IF "$(GUI)" != "WNT"
-.IF "$(GUI)" != "MAC"
 .IF "$(COM)" != "BLC"
 .IF "$(COM)" != "WTC"
 LIBFLAGS=/NOI /NOE /PAGE:256
-.ENDIF
 .ENDIF
 .ENDIF
 .ENDIF
