@@ -4,9 +4,9 @@
  *
  *  $RCSfile: charmap.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: obo $ $Date: 2007-06-11 14:23:07 $
+ *  last change: $Author: ihi $ $Date: 2007-07-12 10:53:17 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -89,15 +89,9 @@ class SvxCharMapData;
 
 // define ----------------------------------------------------------------
 
-#ifdef MAC
-#define CHARMAP_MAXLEN  28
-#define COLUMN_COUNT    28
-#define ROW_COUNT        8
-#else
 #define CHARMAP_MAXLEN  32
 #define COLUMN_COUNT    16
 #define ROW_COUNT        8
-#endif
 
 namespace svx
 {
