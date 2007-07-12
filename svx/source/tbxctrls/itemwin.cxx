@@ -4,9 +4,9 @@
  *
  *  $RCSfile: itemwin.cxx,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: hr $ $Date: 2007-06-27 19:17:21 $
+ *  last change: $Author: ihi $ $Date: 2007-07-12 10:57:34 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -521,11 +521,7 @@ SvxMetricField::SvxMetricField(
 {
     Size aSize = Size(GetTextWidth( String::CreateFromAscii("99,99mm") ),GetTextHeight());
     aSize.Width() += 20;
-#ifndef MAC
     aSize.Height() += 6;
-#else
-    aSize.Height() += 5;
-#endif
     SetSizePixel( aSize );
     aLogicalSize = PixelToLogic(aSize, MAP_APPFONT);
     SetUnit( FUNIT_MM );
