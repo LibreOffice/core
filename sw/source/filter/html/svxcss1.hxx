@@ -4,9 +4,9 @@
  *
  *  $RCSfile: svxcss1.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: hr $ $Date: 2006-08-14 17:06:50 $
+ *  last change: $Author: ihi $ $Date: 2007-07-12 10:45:34 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -226,7 +226,7 @@ typedef SvxCSS1MapEntry *SvxCSS1MapEntryPtr;
 SV_DECL_PTRARR_SORT_DEL( SvxCSS1Map, SvxCSS1MapEntryPtr, 5, 5 )
 
 
-#if !defined( MAC ) && !defined( ICC ) && !defined( BLC )
+#if !defined( ICC ) && !defined( BLC )
 inline sal_Bool operator==( const SvxCSS1MapEntry& rE1, const SvxCSS1MapEntry& rE2 )
 {
     return  rE1.aKey==rE2.aKey;
