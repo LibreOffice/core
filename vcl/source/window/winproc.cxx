@@ -2534,7 +2534,7 @@ long ImplWindowFrameProc( void* pInst, SalFrame* /*pFrame*/,
             break;
         case SALEVENT_SHOWDIALOG:
             {
-                int nDialogID = reinterpret_cast<int>(pEvent);
+                int nDialogID = static_cast<int>(reinterpret_cast<sal_IntPtr>(pEvent));
                 nRet = ImplHandleShowDialog( pWindow, nDialogID );
             }
             break;
