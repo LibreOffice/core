@@ -4,9 +4,9 @@
  *
  *  $RCSfile: tstpitem.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: kz $ $Date: 2007-05-10 14:32:47 $
+ *  last change: $Author: ihi $ $Date: 2007-07-12 10:53:42 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -132,11 +132,7 @@ SV_DECL_VARARR_SORT_VISIBILITY( SvxTabStopArr, SvxTabStop, SVX_TAB_DEFCOUNT, 1, 
 Dieses Item beschreibt eine Liste von TabStops.
 */
 
-#ifndef MAC
 class SVX_DLLPUBLIC SvxTabStopItem : public SfxPoolItem, private SvxTabStopArr
-#else
-class SVX_DLLPUBLIC SvxTabStopItem : public SfxPoolItem, public SvxTabStopArr
-#endif
 {
 //friend class SvxTabStopObject_Impl;
 
