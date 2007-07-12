@@ -4,9 +4,9 @@
  *
  *  $RCSfile: resourceprovider.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: rt $ $Date: 2007-07-03 13:58:02 $
+ *  last change: $Author: ihi $ $Date: 2007-07-12 13:40:35 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -86,8 +86,6 @@ using namespace ::com::sun::star::ui::dialogs::CommonFilePickerElementIds;
 //
 //------------------------------------------------------------
 
-#define RES_NAME fps_office
-
 #define FOLDERPICKER_TITLE            500
 #define FOLDER_PICKER_DEF_DESCRIPTION 501
 
@@ -156,7 +154,7 @@ public:
         const ::vos::OGuard aGuard( Application::GetSolarMutex() );
 
         com::sun::star::lang::Locale aLoc( Application::GetSettings().GetUILocale() );
-        m_ResMgr = new SimpleResMgr( CREATEVERSIONRESMGR_NAME( RES_NAME ), aLoc );
+        m_ResMgr = new SimpleResMgr( CREATEVERSIONRESMGR_NAME( fps_office ), aLoc );
     }
 
     //-------------------------------------
