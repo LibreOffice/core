@@ -5,7 +5,7 @@ VERSION=$(UPD)
 
 .INCLUDE :  settings.mk
 
-.IF "$(GUI)"=="UNX" || "$(GUI)"=="MAC"
+.IF "$(GUI)"=="UNX"
 .IF "$(SYSTEM_LIBWPD)" == "YES"
 LIBWPD=$(LIBWPD_LIBS)
 .ELSE
