@@ -4,9 +4,9 @@
  *
  *  $RCSfile: chrtitem.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: kz $ $Date: 2007-05-10 14:49:39 $
+ *  last change: $Author: ihi $ $Date: 2007-07-12 10:57:09 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -55,10 +55,6 @@
 #endif
 #ifndef _COM_SUN_STAR_CHART_CHARTAXISARRANGEORDERTYPE_HPP_
 #include <com/sun/star/chart/ChartAxisArrangeOrderType.hpp>
-#endif
-
-#ifdef MAC
-#include <stdlib.h>
 #endif
 
 #include <stdio.h>
