@@ -4,9 +4,9 @@
  *
  *  $RCSfile: cuiimapwnd.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: hr $ $Date: 2007-06-27 16:58:29 $
+ *  last change: $Author: ihi $ $Date: 2007-07-12 10:54:36 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -98,11 +98,7 @@
 
 #include "cuiimapwnd.hxx" //CHINA001
 
-#ifdef MAC
-#define TRANSCOL Color( COL_LIGHTGRAY )
-#else
 #define TRANSCOL Color( COL_WHITE )
-#endif
 
 /*************************************************************************
 |*
