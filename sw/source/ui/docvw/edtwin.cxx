@@ -4,9 +4,9 @@
  *
  *  $RCSfile: edtwin.cxx,v $
  *
- *  $Revision: 1.142 $
+ *  $Revision: 1.143 $
  *
- *  last change: $Author: hr $ $Date: 2007-06-27 13:24:23 $
+ *  last change: $Author: ihi $ $Date: 2007-07-12 10:50:27 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -2652,10 +2652,6 @@ void SwEditWin::MouseButtonDown(const MouseEvent& _rMEvt)
         }
     }
 
-#ifdef MAC
-    if (rMEvt.IsMod1() && rMEvt.IsMod2())
-        return;
-#endif
 
     bIsInMove = FALSE;
     aStartPos = rMEvt.GetPosPixel();
