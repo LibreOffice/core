@@ -4,9 +4,9 @@
  *
  *  $RCSfile: tparea.cxx,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: hr $ $Date: 2007-06-27 17:48:05 $
+ *  last change: $Author: ihi $ $Date: 2007-07-12 10:56:04 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -53,7 +53,7 @@
 
 #define _SVX_TPAREA_CXX
 
-#if defined (MAC) || defined (UNX) || defined (WTC) || defined (ICC) || defined(WNT)
+#if defined (UNX) || defined (WTC) || defined (ICC) || defined(WNT)
 #include <stdlib.h>
 #endif
 
