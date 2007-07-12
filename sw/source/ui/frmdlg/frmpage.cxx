@@ -4,9 +4,9 @@
  *
  *  $RCSfile: frmpage.cxx,v $
  *
- *  $Revision: 1.61 $
+ *  $Revision: 1.62 $
  *
- *  last change: $Author: ihi $ $Date: 2007-06-05 17:42:17 $
+ *  last change: $Author: ihi $ $Date: 2007-07-12 10:50:42 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -934,6 +934,24 @@ void SwFrmPage::Reset( const SfxItemSet &rSet )
     //Prozenteingabe ermoeglichen.
     aWidthED. SetBaseValue( aWidthED.Normalize(aGrfSize.Width()), FUNIT_TWIP );
     aHeightED.SetBaseValue( aHeightED.Normalize(aGrfSize.Height()), FUNIT_TWIP );
+    //the available space is not yet known so the RefValue has to be calculated from size and relative size values
+    //this is needed only if relative values are already set
+
+    const SwFmtFrmSize& rFrmSize = (const SwFmtFrmSize&)rSet.Get(RES_FRM_SIZE);
+
+    if (rFrmSize.GetWidthPercent() != 0xff && rFrmSize.GetWidthPercent() != 0)
+    {
+        //calculate the rerference value from the with and relative width values
+        sal_Int32 nSpace = rFrmSize.GetWidth() * 100 / rFrmSize.GetWidthPercent();
+        aWidthED. SetRefValue( nSpace );
+    }
+
+    if (rFrmSize.GetHeightPercent() != 0xff && rFrmSize.GetHeightPercent() != 0)
+    {
+        //calculate the rerference value from the with and relative width values
+        sal_Int32 nSpace = rFrmSize.GetHeight() * 100 / rFrmSize.GetHeightPercent();
+        aHeightED.SetRefValue( nSpace );
+    }
 
     // Allgemeiner Initialisierungteil
     switch(rAnchor.GetAnchorId())
