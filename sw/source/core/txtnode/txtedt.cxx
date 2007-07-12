@@ -4,9 +4,9 @@
  *
  *  $RCSfile: txtedt.cxx,v $
  *
- *  $Revision: 1.79 $
+ *  $Revision: 1.80 $
  *
- *  last change: $Author: hr $ $Date: 2007-06-27 13:21:50 $
+ *  last change: $Author: ihi $ $Date: 2007-07-12 10:44:05 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1597,7 +1597,6 @@ void SwLinguStatistik::Flush()
     if ( !nWords )
         return ;
 
-#ifndef MAC
     static char *pLogName = 0;
     const BOOL bFirstOpen = pLogName ? FALSE : TRUE;
     if( bFirstOpen )
@@ -1656,7 +1655,6 @@ void SwLinguStatistik::Flush()
     nHyphens = nNoHyph = nHyphErr = nSpellTime = nTheTime =
     nHyphTime = 0;
     //pThes = NULL;
-#endif
 }
 
 #endif
