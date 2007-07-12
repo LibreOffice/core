@@ -4,9 +4,9 @@
  *
  *  $RCSfile: edglss.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: vg $ $Date: 2006-09-25 09:27:30 $
+ *  last change: $Author: ihi $ $Date: 2007-07-12 10:42:15 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -332,9 +332,7 @@ BOOL SwEditShell::GetSelectedText( String &rBuf, int nHndlParaBrk )
         else if( IsSelFullPara() &&
             GETSELTXT_PARABRK_TO_ONLYCR != nHndlParaBrk )
         {
-#if defined(MAC)
-                rBuf += '\015';
-#elif defined(UNX)
+#if defined(UNX)
                 rBuf += '\012';
 #else
                 rBuf += String::CreateFromAscii(
