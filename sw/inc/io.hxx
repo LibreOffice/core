@@ -4,9 +4,9 @@
  *
  *  $RCSfile: io.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 01:59:15 $
+ *  last change: $Author: ihi $ $Date: 2007-07-12 10:40:51 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -38,24 +38,16 @@
 #ifndef _IO_HXX
 #define _IO_HXX
 
-#ifndef MAC
 #ifdef UNX
 #include <unistd.h>
 #else
 #include <io.h>
 #endif
-#else
-#include <mac_start.h>      // wegen fcntl und sv
-#endif
 
 #include <fcntl.h>
 
-#ifndef MAC
 #include <sys/types.h>
 #include <sys/stat.h>
-#else
-#include <mac_end.h>
-#endif
 
 
 #ifndef _KEYCOD_HXX //autogen
