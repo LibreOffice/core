@@ -4,9 +4,9 @@
  *
  *  $RCSfile: optinet2.hxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: ihi $ $Date: 2007-04-19 09:17:03 $
+ *  last change: $Author: ihi $ $Date: 2007-07-12 10:55:27 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -84,7 +84,7 @@ class SvtInetOptions;
 #define CACHE_CONTROLS  20
 #define INET_SEARCH     19
 
-#if defined(OS2) || defined(MAC)
+#if defined(OS2)
 #define TYPE_CONTROLS  20
 #else
 #define TYPE_CONTROLS  18
