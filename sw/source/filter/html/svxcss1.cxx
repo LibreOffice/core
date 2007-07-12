@@ -4,9 +4,9 @@
  *
  *  $RCSfile: svxcss1.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: kz $ $Date: 2007-05-10 16:06:19 $
+ *  last change: $Author: ihi $ $Date: 2007-07-12 10:45:17 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -765,7 +765,7 @@ SvxCSS1MapEntry::SvxCSS1MapEntry( const String& rKey, const SfxItemSet& rItemSet
     aKey.ToUpperAscii();
 }
 
-#if defined( MAC ) || defined( ICC ) || defined( BLC )
+#if defined( ICC ) || defined( BLC )
 BOOL operator==( const SvxCSS1MapEntry& rE1, const SvxCSS1MapEntry& rE2 )
 {
     return  rE1.aKey==rE2.aKey;
