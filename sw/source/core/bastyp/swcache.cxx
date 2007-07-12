@@ -4,9 +4,9 @@
  *
  *  $RCSfile: swcache.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 20:43:01 $
+ *  last change: $Author: ihi $ $Date: 2007-07-12 10:41:17 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -155,7 +155,6 @@ SwCache::SwCache( const USHORT nInitSize, const USHORT nGrowSize
 SwCache::~SwCache()
 {
 #if OSL_DEBUG_LEVEL > 1
-#ifndef MAC
     {
         ByteString sOut( aName ); sOut += '\n';
         (( sOut += "Anzahl neuer Eintraege:             " )
@@ -188,7 +187,6 @@ SwCache::~SwCache()
         DBG_ERROR( sOut.GetBuffer() );
     }
     Check();
-#endif
 #endif
 }
 #endif
