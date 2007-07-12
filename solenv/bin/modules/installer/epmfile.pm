@@ -4,9 +4,9 @@
 #
 #   $RCSfile: epmfile.pm,v $
 #
-#   $Revision: 1.65 $
+#   $Revision: 1.66 $
 #
-#   last change: $Author: kz $ $Date: 2007-06-18 16:33:20 $
+#   last change: $Author: ihi $ $Date: 2007-07-12 11:15:36 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -198,6 +198,25 @@ sub put_links_into_epmfile
         my $destinationfile = $onelink->{'destinationfile'};
 
         my $line = "l 000 root $group $destination $destinationfile\n";
+
+        push(@{$epmfileref}, $line)
+    }
+}
+
+sub put_unixlinks_into_epmfile
+{
+    my ($unixlinksinproductarrayref, $epmfileref) = @_;
+    my $group = "bin";
+
+    if ( $installer::globals::islinuxbuild ) { $group = "root"; }
+
+    for ( my $i = 0; $i <= $#{$unixlinksinproductarrayref}; $i++ )
+    {
+        my $onelink = ${$unixlinksinproductarrayref}[$i];
+        my $destination = $onelink->{'destination'};
+        my $target = $onelink->{'Target'};
+
+        my $line = "l 000 root $group $destination $target\n";
 
         push(@{$epmfileref}, $line)
     }
