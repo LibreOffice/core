@@ -4,9 +4,9 @@
 #
 #   $RCSfile: module.pm,v $
 #
-#   $Revision: 1.5 $
+#   $Revision: 1.6 $
 #
-#   last change: $Author: rt $ $Date: 2005-09-08 09:26:47 $
+#   last change: $Author: ihi $ $Date: 2007-07-12 11:17:28 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -48,12 +48,13 @@ sub remove_from_modules
 {
     my ($script) = @_;
 
-    # if these 4 gids are not defined, they are automatically removed from the module
+    # if these 5 gids are not defined, they are automatically removed from the module
 
     my $allfilegids = par2script::work::get_all_gids_from_script($script, "File");
     my $allproceduregids = par2script::work::get_all_gids_from_script($script, "Procedure");
     my $allcustomgids = par2script::work::get_all_gids_from_script($script, "Custom");
     my $alldirectorygids = par2script::work::get_all_gids_from_script($script, "Directory");
+    my $allunixlinkgids = par2script::work::get_all_gids_from_script($script, "Unixlink");
 
     for ( my $i = 0; $i <= $#{$script}; $i++ )
     {
@@ -77,6 +78,7 @@ sub remove_from_modules
             elsif ( $key eq "Dirs" ) { $defineditemgids = $alldirectorygids; }
             elsif ( $key eq "Procedures" ) { $defineditemgids = $allproceduregids; }
             elsif ( $key eq "Customs" ) { $defineditemgids = $allcustomgids; }
+            elsif ( $key eq "Unixlinks" ) { $defineditemgids = $allunixlinkgids; }
             else { next; }  # for instance "Styles"
 
             my $allassigneditems = par2script::converter::convert_stringlist_into_array(\$allassigneditemsstring, ",");
@@ -260,6 +262,7 @@ sub add_to_root_module
     my $allproceduregids = par2script::work::get_all_gids_from_script($script, "Procedure");
     my $allcustomgids = par2script::work::get_all_gids_from_script($script, "Custom");
     my $alldirectorygids = par2script::work::get_all_gids_from_script($script, "Directory");
+    my $allunixlinkgids = par2script::work::get_all_gids_from_script($script, "Unixlink");
 
     for ( my $i = 0; $i <= $#{$script}; $i++ )
     {
@@ -280,6 +283,7 @@ sub add_to_root_module
             elsif ( $key eq "Dirs" ) { $defineditemgids = $alldirectorygids; }
             elsif ( $key eq "Procedures" ) { $defineditemgids = $allproceduregids; }
             elsif ( $key eq "Customs" ) { $defineditemgids = $allcustomgids; }
+            elsif ( $key eq "Unixlinks" ) { $defineditemgids = $allunixlinkgids; }
             else { next; }  # for instance "Styles"
 
             my $allassigneditems = par2script::converter::convert_stringlist_into_array(\$allassigneditemsstring, ",");
@@ -321,6 +325,7 @@ sub add_to_root_module
             elsif ( $key eq "Dirs" ) { $defineditemgids = $alldirectorygids; }
             elsif ( $key eq "Procedures" ) { $defineditemgids = $allproceduregids; }
             elsif ( $key eq "Customs" ) { $defineditemgids = $allcustomgids; }
+            elsif ( $key eq "Unixlinks" ) { $defineditemgids = $allunixlinkgids; }
             else { next; }  # for instance "Styles"
 
             my $allassigneditems = par2script::converter::convert_stringlist_into_array(\$allassigneditemsstring, "\,");
@@ -348,6 +353,7 @@ sub add_to_root_module
     create_rootmodule($rootmoduleref, $allfilegids, "Files");
     create_rootmodule($rootmoduleref, $allproceduregids, "Procedures");
     create_rootmodule($rootmoduleref, $allcustomgids, "Customs");
+    create_rootmodule($rootmoduleref, $allunixlinkgids, "Unixlinks");
 
     # and finally the new blocks can be inserted into the root module
 
