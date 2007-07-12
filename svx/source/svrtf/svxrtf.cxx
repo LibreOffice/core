@@ -4,9 +4,9 @@
  *
  *  $RCSfile: svxrtf.cxx,v $
  *
- *  $Revision: 1.29 $
+ *  $Revision: 1.30 $
  *
- *  last change: $Author: hr $ $Date: 2007-06-27 19:14:05 $
+ *  last change: $Author: ihi $ $Date: 2007-07-12 10:57:21 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -40,18 +40,6 @@
 
 
 #include <ctype.h>
-
-#ifdef MAC
-#include "mac_start.h"
-#ifndef __TYPES__
-  #include <Types.h>
-#endif
-#ifndef __FONTS__
-  #include <Fonts.h>
-#endif
-#include "mac_end.h"
-#endif
-
 
 #ifndef _DATETIME_HXX //autogen
 #include <tools/datetime.hxx>
@@ -873,28 +861,11 @@ const Font& SvxRTFParser::GetFont( USHORT nId )
     const Font* pFont = aFontTbl.Get( nId );
     if( !pFont )
     {
-#ifdef MAC
-        Str255 aMacString;
-        GetFontName( nId, aMacString );
-        if( 0 != aMacString[0] )        // FontName gefunden ?
-        {
-            String aFontNm( aMacString.GetBuffer() + 1,
-                            (xub_StrLen)aMacString.GetChar(0),
-                            RTL_TEXTENCODING_APPLE_ROMAN );
-
-
-            pDfltFont->SetName( aFontNm );
-            pDfltFont->SetFamily( FAMILY_DONTKNOW );
-        }
-        else
-#endif
-        {
-            const SvxFontItem& rDfltFont = (const SvxFontItem&)
-                            pAttrPool->GetDefaultItem(
-                        ((RTFPlainAttrMapIds*)aPlainMap.GetData())->nFont );
-            pDfltFont->SetName( rDfltFont.GetStyleName() );
-            pDfltFont->SetFamily( rDfltFont.GetFamily() );
-        }
+        const SvxFontItem& rDfltFont = (const SvxFontItem&)
+                        pAttrPool->GetDefaultItem(
+                    ((RTFPlainAttrMapIds*)aPlainMap.GetData())->nFont );
+        pDfltFont->SetName( rDfltFont.GetStyleName() );
+        pDfltFont->SetFamily( rDfltFont.GetFamily() );
         pFont = pDfltFont;
     }
     return *pFont;
