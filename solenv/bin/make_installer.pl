@@ -4,9 +4,9 @@
 #
 #   $RCSfile: make_installer.pl,v $
 #
-#   $Revision: 1.89 $
+#   $Revision: 1.90 $
 #
-#   last change: $Author: ihi $ $Date: 2007-07-11 14:40:12 $
+#   last change: $Author: ihi $ $Date: 2007-07-12 11:15:22 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -443,6 +443,11 @@ installer::logger::print_message( "... analyzing shortcuts ... \n" );
 my $linksinproductarrayref = installer::setupscript::get_all_items_from_script($setupscriptref, "Shortcut");
 if ( $installer::globals::globallogging ) { installer::files::save_array_of_hashes($loggingdir . "productlinks1.log", $linksinproductarrayref); }
 
+installer::logger::print_message( "... analyzing unix links ... \n" );
+
+my $unixlinksinproductarrayref = installer::setupscript::get_all_items_from_script($setupscriptref, "Unixlink");
+if ( $installer::globals::globallogging ) { installer::files::save_array_of_hashes($loggingdir . "unixlinks1.log", $unixlinksinproductarrayref); }
+
 installer::logger::print_message( "... analyzing profile ... \n" );
 
 my $profilesinproductarrayref = installer::setupscript::get_all_items_from_script($setupscriptref, "Profile");
@@ -503,6 +508,9 @@ if (!($installer::globals::is_copy_only_project))
 
     installer::scriptitems::assigning_modules_to_items($modulesinproductarrayref, $filesinproductarrayref, "Files");
     if ( $installer::globals::globallogging ) { installer::files::save_array_of_hashes($loggingdir . "productfiles3.log", $filesinproductarrayref); }
+
+    installer::scriptitems::assigning_modules_to_items($modulesinproductarrayref, $unixlinksinproductarrayref, "Unixlinks");
+    if ( $installer::globals::globallogging ) { installer::files::save_array_of_hashes($loggingdir . "unixlinks2.log", $unixlinksinproductarrayref); }
 }
 
 if ( $installer::globals::debug ) { installer::logger::debuginfo("\nEnd of part 1a: The language independent part\n"); }
@@ -920,6 +928,21 @@ for ( my $n = 0; $n <= $#installer::globals::languageproducts; $n++ )
     if ( $installer::globals::globallogging ) { installer::files::save_array_of_hashes($loggingdir . "productlinks8.log", $linksinproductlanguageresolvedarrayref); }
 
     #########################################################
+    # language dependent unix links part
+    #########################################################
+
+    installer::logger::print_message( "... analyzing unix links ...\n" );
+
+    my $unixlinksinproductlanguageresolvedarrayref = installer::scriptitems::resolving_all_languages_in_productlists($unixlinksinproductarrayref, $languagesarrayref);
+    if ( $installer::globals::globallogging ) { installer::files::save_array_of_hashes($loggingdir . "unixlinks3.log", $unixlinksinproductlanguageresolvedarrayref); }
+
+    installer::scriptitems::changing_name_of_language_dependent_keys($unixlinksinproductlanguageresolvedarrayref);
+    if ( $installer::globals::globallogging ) { installer::files::save_array_of_hashes($loggingdir . "unixlinks4.log", $unixlinksinproductlanguageresolvedarrayref); }
+
+    installer::scriptitems::get_Destination_Directory_For_Item_From_Directorylist($unixlinksinproductlanguageresolvedarrayref, $dirsinproductarrayref);
+    if ( $installer::globals::globallogging ) { installer::files::save_array_of_hashes($loggingdir . "unixlinks5.log", $unixlinksinproductlanguageresolvedarrayref); }
+
+    #########################################################
     # language dependent part for profiles and profileitems
     #########################################################
 
@@ -1032,6 +1055,8 @@ for ( my $n = 0; $n <= $#installer::globals::languageproducts; $n++ )
         if ( $installer::globals::globallogging ) { installer::files::save_array_of_hashes($loggingdir . "productscpactions6b.log", $scpactionsinproductlanguageresolvedarrayref); }
         $linksinproductlanguageresolvedarrayref = installer::languagepack::select_language_items($linksinproductlanguageresolvedarrayref, $languagesarrayref, "Shortcut");
         if ( $installer::globals::globallogging ) { installer::files::save_array_of_hashes($loggingdir . "productlinks8b.log", $linksinproductlanguageresolvedarrayref); }
+        $unixlinksinproductlanguageresolvedarrayref = installer::languagepack::select_language_items($unixlinksinproductlanguageresolvedarrayref, $languagesarrayref, "Unixlink");
+        if ( $installer::globals::globallogging ) { installer::files::save_array_of_hashes($loggingdir . "unixlinks5.log", $unixlinksinproductlanguageresolvedarrayref); }
         @{$folderitemsinproductlanguageresolvedarrayref} = (); # no folderitems in languagepacks
 
         # Collecting the directories again, to include only the language specific directories
@@ -1062,6 +1087,8 @@ for ( my $n = 0; $n <= $#installer::globals::languageproducts; $n++ )
         if ( $installer::globals::globallogging ) { installer::files::save_array_of_hashes($loggingdir . "productscpactions6patch.log", $scpactionsinproductlanguageresolvedarrayref); }
         $linksinproductlanguageresolvedarrayref = installer::worker::select_patch_items($linksinproductlanguageresolvedarrayref, "Shortcut");
         if ( $installer::globals::globallogging ) { installer::files::save_array_of_hashes($loggingdir . "productlinks8patch.log", $linksinproductlanguageresolvedarrayref); }
+        $unixlinksinproductlanguageresolvedarrayref = installer::worker::select_patch_items($unixlinksinproductlanguageresolvedarrayref, "Unixlink");
+        if ( $installer::globals::globallogging ) { installer::files::save_array_of_hashes($loggingdir . "unixlinks6patch.log", $unixlinksinproductlanguageresolvedarrayref); }
         $folderitemsinproductlanguageresolvedarrayref = installer::worker::select_patch_items($folderitemsinproductlanguageresolvedarrayref, "FolderItem");
         if ( $installer::globals::globallogging ) { installer::files::save_array_of_hashes($loggingdir . "productfolderitems1patch.log", $folderitemsinproductlanguageresolvedarrayref); }
         # @{$folderitemsinproductlanguageresolvedarrayref} = (); # no folderitems in languagepacks
@@ -1120,7 +1147,7 @@ for ( my $n = 0; $n <= $#installer::globals::languageproducts; $n++ )
 
     if ( $installer::globals::is_simple_packager_project )
     {
-        installer::simplepackage::create_simple_package($filesinproductlanguageresolvedarrayref, $directoriesforepmarrayref, $scpactionsinproductlanguageresolvedarrayref, $linksinproductlanguageresolvedarrayref, $loggingdir, $languagestringref, $shipinstalldir, $allsettingsarrayref, $allvariableshashref, $includepatharrayref, $isfirstrun, $islastrun);
+        installer::simplepackage::create_simple_package($filesinproductlanguageresolvedarrayref, $directoriesforepmarrayref, $scpactionsinproductlanguageresolvedarrayref, $linksinproductlanguageresolvedarrayref, $unixlinksinproductlanguageresolvedarrayref, $loggingdir, $languagestringref, $shipinstalldir, $allsettingsarrayref, $allvariableshashref, $includepatharrayref, $isfirstrun, $islastrun);
         next; # ! leaving the current loop, because no further packaging required.
     }
 
@@ -1272,6 +1299,8 @@ for ( my $n = 0; $n <= $#installer::globals::languageproducts; $n++ )
             if ( $installer::globals::globallogging ) { installer::files::save_array_of_hashes($loggingdir . "files1_" . $packagename . ".log", $filesinpackage); }
             my $linksinpackage = installer::converter::copy_collector($linksinproductlanguageresolvedarrayref);
             if ( $installer::globals::globallogging ) { installer::files::save_array_of_hashes($loggingdir . "links1_" . $packagename . ".log", $linksinpackage); }
+            my $unixlinksinpackage = installer::converter::copy_collector($unixlinksinproductlanguageresolvedarrayref);
+            if ( $installer::globals::globallogging ) { installer::files::save_array_of_hashes($loggingdir . "unixlinks1_" . $packagename . ".log", $unixlinksinpackage); }
             my $dirsinpackage = installer::converter::copy_collector($directoriesforepmarrayref);
             if ( $installer::globals::globallogging ) { installer::files::save_array_of_hashes($loggingdir . "dirs1_" . $packagename . ".log", $dirsinpackage); }
 
@@ -1285,6 +1314,8 @@ for ( my $n = 0; $n <= $#installer::globals::languageproducts; $n++ )
             if ( $installer::globals::globallogging ) { installer::files::save_array_of_hashes($loggingdir . "files2_" . $packagename . ".log", $filesinpackage); }
             installer::scriptitems::add_rootpath_to_links($linksinpackage, $packagerootpath);
             if ( $installer::globals::globallogging ) { installer::files::save_array_of_hashes($loggingdir . "links2_" . $packagename . ".log", $linksinpackage); }
+            installer::scriptitems::add_rootpath_to_files($unixlinksinpackage, $packagerootpath);
+            if ( $installer::globals::globallogging ) { installer::files::save_array_of_hashes($loggingdir . "unixlinks2_" . $packagename . ".log", $unixlinksinpackage); }
 
             #################################
             # collecting items for package
@@ -1292,9 +1323,11 @@ for ( my $n = 0; $n <= $#installer::globals::languageproducts; $n++ )
 
             $filesinpackage = installer::packagelist::find_files_for_package($filesinpackage, $onepackage);
             if ( $installer::globals::globallogging ) { installer::files::save_array_of_hashes($loggingdir . "files3_" . $packagename . ".log", $filesinpackage); }
+            $unixlinksinpackage = installer::packagelist::find_files_for_package($unixlinksinpackage, $onepackage);
+            if ( $installer::globals::globallogging ) { installer::files::save_array_of_hashes($loggingdir . "unixlinks3_" . $packagename . ".log", $unixlinksinpackage); }
             $linksinpackage = installer::packagelist::find_links_for_package($linksinpackage, $filesinpackage);
             if ( $installer::globals::globallogging ) { installer::files::save_array_of_hashes($loggingdir . "links3_" . $packagename . ".log", $linksinpackage); }
-            $dirsinpackage = installer::packagelist::find_dirs_for_package($dirsinpackage, $filesinpackage, $linksinpackage, $onepackagename);
+            $dirsinpackage = installer::packagelist::find_dirs_for_package($dirsinpackage, $filesinpackage, $linksinpackage, $unixlinksinpackage, $onepackagename);
             if ( $installer::globals::globallogging ) { installer::files::save_array_of_hashes($loggingdir . "dirs3_" . $packagename . ".log", $dirsinpackage); }
 
             ###############################################
@@ -1442,6 +1475,7 @@ for ( my $n = 0; $n <= $#installer::globals::languageproducts; $n++ )
                 installer::epmfile::put_directories_into_epmfile($dirsinpackage, \@epmfile );
                 installer::epmfile::put_files_into_epmfile($filesinpackage, \@epmfile );
                 installer::epmfile::put_links_into_epmfile($linksinpackage, \@epmfile );
+                installer::epmfile::put_unixlinks_into_epmfile($unixlinksinpackage, \@epmfile );
 
                 if ((!( $shellscriptsfilename eq "" )) && (!($installer::globals::iswindowsbuild))) { installer::epmfile::adding_shellscripts_to_epm_file(\@epmfile, $shellscriptsfilename, $packagerootpath, $allvariableshashref, $filesinpackage); }
 
