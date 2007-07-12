@@ -4,9 +4,9 @@
  *
  *  $RCSfile: editeng.cxx,v $
  *
- *  $Revision: 1.107 $
+ *  $Revision: 1.108 $
  *
- *  last change: $Author: hr $ $Date: 2007-06-27 17:55:21 $
+ *  last change: $Author: ihi $ $Date: 2007-07-12 10:56:30 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -2676,12 +2676,8 @@ sal_Bool EditEngine::DoesKeyChangeText( const KeyEvent& rKeyEvent )
 sal_Bool EditEngine::IsSimpleCharInput( const KeyEvent& rKeyEvent )
 {
     if( EditEngine::IsPrintable( rKeyEvent.GetCharCode() ) &&
-#ifndef MAC
         ( KEY_MOD2 != (rKeyEvent.GetKeyCode().GetModifier() & ~KEY_SHIFT ) ) &&
         ( KEY_MOD1 != (rKeyEvent.GetKeyCode().GetModifier() & ~KEY_SHIFT ) ) )
-#else
-        KEY_MOD1 != rKeyEvent.GetKeyCode().GetModifier() )
-#endif
     {
         return sal_True;
     }
