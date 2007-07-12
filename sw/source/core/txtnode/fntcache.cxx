@@ -4,9 +4,9 @@
  *
  *  $RCSfile: fntcache.cxx,v $
  *
- *  $Revision: 1.88 $
+ *  $Revision: 1.89 $
  *
- *  last change: $Author: hr $ $Date: 2007-06-27 13:20:37 $
+ *  last change: $Author: ihi $ $Date: 2007-07-12 10:43:50 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -486,22 +486,6 @@ static sal_Char __READONLY_DATA sStandardString[] = "Dies ist der Teststring";
     // Condition for output font / refdev font adjustment
     OutputDevice* pPrt = &rSh.GetRefDev();
 
-#ifdef MAC
-
-    if( !rSh.getIDocumentSettingAccess()->get(IDocumentSettingAccess::BROWSE_MODE) ||
-         rSh.GetViewOptions()->IsPrtFormat() )
-    {
-        CreatePrtFont( *pPrt );
-        pPrinter = pPrt;
-    }
-
-    bSymbol = CHARSET_SYMBOL == pPrtFont->GetCharSet();
-    nGuessedLeading = 0;
-    nExtLeading = 0;
-    pScrFont = pPrtFont;
-
-#else
-
     if( !rSh.GetWin() ||
         !rSh.getIDocumentSettingAccess()->get(IDocumentSettingAccess::BROWSE_MODE) ||
          rSh.GetViewOptions()->IsPrtFormat() )
@@ -714,8 +698,6 @@ static sal_Char __READONLY_DATA sStandardString[] = "Dies ist der Teststring";
         pScrFont = pPrtFont;
     }
 
-#endif
-
     // Zoomfaktor ueberpruefen, z.B. wg. PrtOle2 beim Speichern
     {
         // Sollte der Zoomfaktor des OutputDevices nicht mit dem der View-
@@ -811,11 +793,7 @@ void SwFntObj::GuessLeading( const ViewShell& rSh, const FontMetric& rMet )
     }
     else
 #endif
-#ifdef MAC
-        nGuessedLeading = (pPrtFont->GetSize().Height() * 15) / 100;
-#else
         nGuessedLeading = 0;
-#endif
 }
 
 /*************************************************************************
