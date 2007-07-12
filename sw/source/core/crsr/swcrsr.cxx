@@ -4,9 +4,9 @@
  *
  *  $RCSfile: swcrsr.cxx,v $
  *
- *  $Revision: 1.52 $
+ *  $Revision: 1.53 $
  *
- *  last change: $Author: vg $ $Date: 2007-05-22 16:23:47 $
+ *  last change: $Author: ihi $ $Date: 2007-07-12 10:41:44 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -543,7 +543,7 @@ FASTBOOL SwCursor::IsSelOvr( int eFlags )
     return FALSE;       // was bleibt noch ??
 }
 
-#if defined( UNX ) || defined( MAC )
+#if defined( UNX )
 #define IDX     (*pCellStt)
 #else
 #define IDX     aCellStt
@@ -603,7 +603,7 @@ FASTBOOL SwCursor::IsInProtectTable( FASTBOOL bMove, FASTBOOL bChgCrsr )
 
         // folgt nach dem EndNode der Zelle ein weiterer StartNode, dann
         // gibt es auch eine naechste Zelle
-#if defined( UNX ) || defined( MAC )
+#if defined( UNX )
         SwNodeIndex* pCellStt = new SwNodeIndex( *GetNode()->
                         FindTableBoxStartNode()->EndOfSectionNode(), 1 );
 #else
@@ -626,7 +626,7 @@ SetNextCrsr:
         if( !bProt )        // eine freie Zelle gefunden
         {
             GetPoint()->nNode = IDX;
-#if defined( UNX ) || defined( MAC )
+#if defined( UNX )
             delete pCellStt;
 #endif
             SwCntntNode* pCNd = GetCntntNode();
@@ -646,7 +646,7 @@ SetNextCrsr:
             // dann verbleibe auf der alten Position
             if( bChgCrsr )
                 RestoreSavePos();
-#if defined( UNX ) || defined( MAC )
+#if defined( UNX )
             delete pCellStt;
 #endif
             return TRUE;        // Crsr bleibt an der alten Position
@@ -662,7 +662,7 @@ SetNextCrsr:
     {
         // liegt vor dem StartNode der Zelle ein weiterer EndNode, dann
         // gibt es auch eine vorherige Zelle
-#if defined( UNX ) || defined( MAC )
+#if defined( UNX )
         SwNodeIndex* pCellStt = new SwNodeIndex(
                     *GetNode()->FindTableBoxStartNode(), -1 );
 #else
@@ -686,7 +686,7 @@ SetPrevCrsr:
         if( !bProt )        // eine freie Zelle gefunden
         {
             GetPoint()->nNode = IDX;
-#if defined( UNX ) || defined( MAC )
+#if defined( UNX )
             delete pCellStt;
 #endif
             SwCntntNode* pCNd = GetCntntNode();
@@ -705,7 +705,7 @@ SetPrevCrsr:
             // dann verbleibe auf der alten Position
             if( bChgCrsr )
                 RestoreSavePos();
-#if defined( UNX ) || defined( MAC )
+#if defined( UNX )
             delete pCellStt;
 #endif
             return TRUE;        // Crsr bleibt an der alten Position
