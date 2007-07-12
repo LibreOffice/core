@@ -4,9 +4,9 @@
 #
 #   $RCSfile: parameter.pm,v $
 #
-#   $Revision: 1.43 $
+#   $Revision: 1.44 $
 #
-#   last change: $Author: gm $ $Date: 2007-05-10 10:59:00 $
+#   last change: $Author: ihi $ $Date: 2007-07-12 11:16:03 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -36,6 +36,7 @@
 package installer::parameter;
 
 use Cwd;
+use installer::exiter;
 use installer::files;
 use installer::globals;
 use installer::logger;
@@ -418,10 +419,15 @@ sub setglobalvariables
         elsif ( $ENV{'TEMP'} )  { $installer::globals::temppath = $ENV{'TEMP'}; }
         $installer::globals::temppath =~ s/\Q$installer::globals::separator\E\s*$//;    # removing ending slashes and backslashes
         $installer::globals::temppath = $installer::globals::temppath . $installer::globals::separator . $installer::globals::globaltempdirname;
-        installer::systemactions::create_directory($installer::globals::temppath);
+        installer::systemactions::create_directory_with_privileges($installer::globals::temppath, "777");
+        my $dirsave = $installer::globals::temppath;
+
         $installer::globals::temppath = $installer::globals::temppath . $installer::globals::separator . "i";
         $installer::globals::temppath = installer::systemactions::create_pid_directory($installer::globals::temppath);
         push(@installer::globals::removedirs, $installer::globals::temppath);
+
+        if ( ! -d $installer::globals::temppath ) { installer::exiter::exit_program("ERROR: Failed to create directory $installer::globals::temppath ! Possible reason: Wrong privileges in directory $dirsave .", "setglobalvariables"); }
+
         $installer::globals::jdstemppath = $installer::globals::temppath;
         $installer::globals::jdstemppath =~ s/i_/j_/;
         push(@installer::globals::jdsremovedirs, $installer::globals::jdstemppath);
