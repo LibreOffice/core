@@ -4,9 +4,9 @@
  *
  *  $RCSfile: imapwnd.cxx,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: hr $ $Date: 2007-06-27 17:16:02 $
+ *  last change: $Author: ihi $ $Date: 2007-07-12 10:55:02 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -103,11 +103,7 @@
 #include <basegfx/polygon/b2dpolygon.hxx>
 #endif
 
-#ifdef MAC
-#define TRANSCOL Color( COL_LIGHTGRAY )
-#else
 #define TRANSCOL Color( COL_WHITE )
-#endif
 
 /*************************************************************************
 |*
