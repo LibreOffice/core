@@ -4,9 +4,9 @@
  *
  *  $RCSfile: swlbox.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 22:37:06 $
+ *  last change: $Author: ihi $ $Date: 2007-07-12 10:49:41 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -349,10 +349,7 @@ void SwComboBox::KeyInput( const KeyEvent& rKEvt )
 
     if(nStyle & CBS_FILENAME)
     {
-#ifdef MAC
-        if(nChar == ':')
-            return;
-#elif defined UNX
+#if defined UNX
         if(nChar == '/' || nChar == ' ' )
             return;
 #else
