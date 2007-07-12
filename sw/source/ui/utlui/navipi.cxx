@@ -4,9 +4,9 @@
  *
  *  $RCSfile: navipi.cxx,v $
  *
- *  $Revision: 1.43 $
+ *  $Revision: 1.44 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 23:33:54 $
+ *  last change: $Author: ihi $ $Date: 2007-07-12 10:51:44 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -371,7 +371,11 @@ IMPL_LINK( SwNavigationPI, ToolBoxSelectHdl, ToolBox *, pBox )
     {
         case FN_UP:
         case FN_DOWN:
-            pView->MoveNavigation(FN_DOWN == nId);
+        {
+            // #i75416# move the execution of the search to an asynchronously called static link
+            bool* pbNext = new bool( FN_DOWN == nId );
+            Application::PostUserEvent( STATIC_LINK(pView, SwView, MoveNavigationHdl), pbNext );
+        }
         break;
         case FN_SHOW_ROOT:
         {
