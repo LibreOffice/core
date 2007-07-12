@@ -4,9 +4,9 @@
  *
  *  $RCSfile: errhdl.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 21:09:25 $
+ *  last change: $Author: ihi $ $Date: 2007-07-12 10:42:29 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -116,11 +116,6 @@ void AssertFail( const sal_Char* pError, const sal_Char* pFileName, USHORT nLine
         Sound::Beep(SOUND_ERROR);
         Sound::Beep(SOUND_ERROR);
         Sound::Beep(SOUND_ERROR);
-        if( !bAssertFail )
-#if defined( MAC )
-        if( !bAssertFail )
-            *(short *)1 = 4711;         // odd address error erzeugen
-#endif
         if( !bAssertFail )
             *(short *)0 = 4711;         // UAE ausloesen
     }
