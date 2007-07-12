@@ -4,9 +4,9 @@
  *
  *  $RCSfile: htmlfly.cxx,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: kz $ $Date: 2007-05-10 16:04:47 $
+ *  last change: $Author: ihi $ $Date: 2007-07-12 10:45:01 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -998,7 +998,7 @@ Writer& OutHTML_Image( Writer& rWrt, const SwFrmFmt &rFrmFmt,
 
         ByteString aIndMap, aIndArea;
         const sal_Char *pLF = 0, *pIndArea = 0, *pIndMap = 0;
-#if defined(MAC) || defined(UNX)
+#if defined(UNX)
         sal_Char aLF[2] = "\x00";
 #endif
 
@@ -1007,7 +1007,7 @@ Writer& OutHTML_Image( Writer& rWrt, const SwFrmFmt &rFrmFmt,
             rHTMLWrt.OutNewLine( TRUE );
             rHTMLWrt.GetIndentString( aIndMap );
             rHTMLWrt.GetIndentString( aIndArea, 1 );
-#if defined(MAC) || defined(UNX)
+#if defined(UNX)
             aLF[0]  = SwHTMLWriter::sNewLine;
             pLF = aLF;
 #else
