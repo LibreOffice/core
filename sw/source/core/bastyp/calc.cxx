@@ -4,9 +4,9 @@
  *
  *  $RCSfile: calc.cxx,v $
  *
- *  $Revision: 1.39 $
+ *  $Revision: 1.40 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 20:41:42 $
+ *  last change: $Author: ihi $ $Date: 2007-07-12 10:41:04 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -38,7 +38,7 @@
 
 
 #include <cctype>
-#if defined(MAC) || defined(MACOSX)
+#if defined(MACOSX)
 #include <stdlib.h>
 #endif
 #include <cstdlib>
@@ -1318,11 +1318,7 @@ SwSbxValue SwCalc::Term()
 // removed here because of #77448# (=2*3^2 != 18)
             case CALC_POW:  {
                                 GetToken();
-#if defined(MAC) && !defined(__powerc)
-                                long double fraction, integer;
-#else
                                 double fraction, integer;
-#endif
                                 double right = Prim().GetDouble(),
                                        dleft = left.GetDouble();
 
@@ -1524,11 +1520,7 @@ SwSbxValue SwCalc::Prim()
         GetToken();
         double right = Prim().GetDouble();
 
-#if defined(MAC) && !defined(__powerc)
-        long double fraction, integer;
-#else
         double fraction, integer;
-#endif
         fraction = modf( right, &integer );
         if( ( dleft < 0.0 && 0.0 != fraction ) ||
             ( 0.0 == dleft && right < 0.0 ) )
