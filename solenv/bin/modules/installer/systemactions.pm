@@ -4,9 +4,9 @@
 #
 #   $RCSfile: systemactions.pm,v $
 #
-#   $Revision: 1.31 $
+#   $Revision: 1.32 $
 #
-#   last change: $Author: kz $ $Date: 2007-05-10 13:56:46 $
+#   last change: $Author: ihi $ $Date: 2007-07-12 11:16:33 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -90,6 +90,63 @@ sub create_directory
     {
         $infoline = "\nAlready existing directory, did not create: $directory\n";
         push(@installer::globals::logfileinfo, $infoline);
+    }
+}
+
+######################################################
+# Creating a new direcotory with defined privileges
+######################################################
+
+sub create_directory_with_privileges
+{
+    my ($directory, $privileges) = @_;
+
+    my $returnvalue = 1;
+    my $infoline = "";
+
+    if (!(-d $directory))
+    {
+        my $localprivileges = "0" . $privileges;
+        $returnvalue = mkdir($directory, $localprivileges);
+
+        if ($returnvalue)
+        {
+            $infoline = "\nCreated directory: $directory\n";
+            push(@installer::globals::logfileinfo, $infoline);
+
+            if ($installer::globals::isunix)
+            {
+                my $localcall = "chmod $privileges $directory \>\/dev\/null 2\>\&1";
+                system($localcall);
+            }
+        }
+        else
+        {
+            # New solution in parallel packing: It is possible, that the directory now exists, although it
+            # was not created in this process. There is only an important error, if the directory does not
+            # exist now.
+
+            if (!(-d $directory))
+            {
+                installer::exiter::exit_program("ERROR: Could not create directory: $directory", "create_directory");
+            }
+            else
+            {
+                $infoline = "\nAnother process created this directory in exactly this moment :-) : $directory\n";
+                push(@installer::globals::logfileinfo, $infoline);
+            }
+        }
+    }
+    else
+    {
+        $infoline = "\nAlready existing directory, did not create: $directory\n";
+        push(@installer::globals::logfileinfo, $infoline);
+
+        if ($installer::globals::isunix)
+        {
+            my $localcall = "chmod $privileges $directory \>\/dev\/null 2\>\&1";
+            system($localcall);
+        }
     }
 }
 
