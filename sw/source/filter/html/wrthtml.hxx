@@ -4,9 +4,9 @@
  *
  *  $RCSfile: wrthtml.hxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: hr $ $Date: 2006-08-14 17:07:44 $
+ *  last change: $Author: ihi $ $Date: 2007-07-12 10:46:00 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -237,7 +237,7 @@ protected:
     ULONG WriteStream();
 
 public:
-#if defined(MAC) || defined(UNX)
+#if defined(UNX)
     static const sal_Char sNewLine;     // nur \012 oder \015
 #else
     static const sal_Char __FAR_DATA sNewLine[];    // \015\012
