@@ -4,9 +4,9 @@
  *
  *  $RCSfile: fltini.cxx,v $
  *
- *  $Revision: 1.51 $
+ *  $Revision: 1.52 $
  *
- *  last change: $Author: rt $ $Date: 2007-04-25 09:12:11 $
+ *  last change: $Author: ihi $ $Date: 2007-07-12 10:44:47 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -46,6 +46,9 @@
 
 #ifndef INCLUDED_I18NPOOL_LANG_H
 #include <i18npool/lang.h>
+#endif
+#ifndef INCLUDED_I18NPOOL_MSLANGID_HXX
+#include <i18npool/mslangid.hxx>
 #endif
 #ifndef _SV_MSGBOX_HXX //autogen
 #include <vcl/msgbox.hxx>
@@ -908,248 +911,6 @@ String NameFromCharSet(rtl_TextEncoding nChrSet)
     return String::CreateFromAscii(pRet);
 }
 
-struct LangNameMap
-{
-    LanguageType nId;
-    const sal_Char* pLanguageNm;
-};
-
-const LangNameMap *GetLangNameMap()
-{
-    static const LangNameMap aMapArr[] =
-    {
-        {LANGUAGE_DONTKNOW,                 "DONTKNOW"              },
-        {LANGUAGE_NONE,                     "NONE"                  },
-        {LANGUAGE_SYSTEM,                   "SYSTEM"                },
-        {LANGUAGE_AFRIKAANS,                "AFRIKAANS"             },
-        {LANGUAGE_ALBANIAN,                 "ALBANIAN"              },
-        {LANGUAGE_ARABIC,                   "ARABIC"                },
-        {LANGUAGE_ARABIC_SAUDI_ARABIA,      "ARABIC (SAUDI ARABIA)" },
-        {LANGUAGE_ARABIC_IRAQ,              "ARABIC (IRAQ)"         },
-        {LANGUAGE_ARABIC_EGYPT,             "ARABIC (EGYPT)"        },
-        {LANGUAGE_ARABIC_LIBYA,             "ARABIC (LIBYA)"        },
-        {LANGUAGE_ARABIC_ALGERIA,           "ARABIC (ALGERIA)"      },
-        {LANGUAGE_ARABIC_MOROCCO,           "ARABIC (MOROCCO)"      },
-        {LANGUAGE_ARABIC_TUNISIA,           "ARABIC (TUNISIA)"      },
-        {LANGUAGE_ARABIC_OMAN,              "ARABIC (OMAN)"         },
-        {LANGUAGE_ARABIC_YEMEN,             "ARABIC (YEMEN)"        },
-        {LANGUAGE_ARABIC_SYRIA,             "ARABIC (SYRIA)"        },
-        {LANGUAGE_ARABIC_JORDAN,            "ARABIC (JORDAN)"       },
-        {LANGUAGE_ARABIC_LEBANON,           "ARABIC (LEBANON)"      },
-        {LANGUAGE_ARABIC_KUWAIT,            "ARABIC (KUWAIT)"       },
-        {LANGUAGE_ARABIC_UAE,               "ARABIC (UAE)"          },
-        {LANGUAGE_ARABIC_BAHRAIN,           "ARABIC (BAHRAIN)"      },
-        {LANGUAGE_ARABIC_QATAR,             "ARABIC (QATAR)"        },
-        {LANGUAGE_ARMENIAN,                 "ARMENIAN"              },
-        {LANGUAGE_ASSAMESE,                 "ASSAMESE"              },
-        {LANGUAGE_AZERI,                    "AZERI"                 },
-        {LANGUAGE_AZERI_LATIN,              "AZERI (LATIN)"         },
-        {LANGUAGE_AZERI_CYRILLIC,           "AZERI (CYRILLIC)"      },
-        {LANGUAGE_BASQUE,                   "BASQUE"                },
-        {LANGUAGE_BELARUSIAN,               "BELARUSIAN"            },
-        {LANGUAGE_BENGALI,                  "BENGALI"               },
-        {LANGUAGE_BULGARIAN,                "BULGARIAN"             },
-        {LANGUAGE_BURMESE,                  "BURMESE"               },
-        {LANGUAGE_CATALAN,                  "CATALAN"               },
-        {LANGUAGE_CHINESE,                  "CHINESE"               },
-        {LANGUAGE_CHINESE_TRADITIONAL,      "CHINESE (TRADITIONAL)" },
-        {LANGUAGE_CHINESE_SIMPLIFIED,       "CHINESE (SIMPLIFIED)"  },
-        {LANGUAGE_CHINESE_HONGKONG,         "CHINESE (HONGKONG)"    },
-        {LANGUAGE_CHINESE_SINGAPORE,        "CHINESE (SINGAPORE)"   },
-        {LANGUAGE_CHINESE_MACAU,            "CHINESE (MACAU)"       },
-        {LANGUAGE_CZECH,                    "CZECH"                 },
-        {LANGUAGE_DANISH,                   "DANISH"                },
-        {LANGUAGE_DUTCH,                    "DUTCH"                 },
-        {LANGUAGE_DUTCH_BELGIAN,            "DUTCH_BELGIAN"         },
-        {LANGUAGE_ENGLISH,                  "ENGLISH"               },
-        {LANGUAGE_ENGLISH_US,               "ENGLISH (US)"          },
-        {LANGUAGE_ENGLISH_UK,               "ENGLISH (UK)"          },
-        {LANGUAGE_ENGLISH_AUS,              "ENGLISH (AUS)"         },
-        {LANGUAGE_ENGLISH_CAN,              "ENGLISH (CAN)"         },
-        {LANGUAGE_ENGLISH_NZ,               "ENGLISH (NZ)"          },
-        {LANGUAGE_ENGLISH_EIRE,             "ENGLISH (EIRE)"        },
-        {LANGUAGE_ENGLISH_SAFRICA,          "ENGLISH (SAFRICA)"     },
-        {LANGUAGE_ENGLISH_JAMAICA,          "ENGLISH (JAMAICA)"     },
-        {LANGUAGE_ENGLISH_CARRIBEAN,        "ENGLISH (CARRIBEAN)"   },
-        {LANGUAGE_ENGLISH_BELIZE,           "ENGLISH (BELIZE)"      },
-        {LANGUAGE_ENGLISH_TRINIDAD,         "ENGLISH (TRINIDAD)"    },
-        {LANGUAGE_ENGLISH_ZIMBABWE,         "ENGLISH (ZIMBABWE)"    },
-        {LANGUAGE_ENGLISH_PHILIPPINES,      "ENGLISH (PHILIPPINES)" },
-        {LANGUAGE_USER_ESPERANTO,           "ESPERANTO"             },
-        {LANGUAGE_ESTONIAN,                 "ESTONIAN"              },
-        {LANGUAGE_FAEROESE,                 "FAEROESE"              },
-        {LANGUAGE_FARSI,                    "FARSI"                 },
-        {LANGUAGE_FINNISH,                  "FINNISH"               },
-        {LANGUAGE_FRENCH,                   "FRENCH"                },
-        {LANGUAGE_FRENCH_BELGIAN,           "FRENCH (BELGIAN)"      },
-        {LANGUAGE_FRENCH_CANADIAN,          "FRENCH (CANADIAN)"     },
-        {LANGUAGE_FRENCH_SWISS,             "FRENCH (SWISS)"        },
-        {LANGUAGE_FRENCH_LUXEMBOURG,        "FRENCH (LUXEMBOURG)"   },
-        {LANGUAGE_FRENCH_MONACO,            "FRENCH (MONACO)"       },
-        {LANGUAGE_FRENCH_WEST_INDIES,       "FRENCH (WEST INDIES)"  },
-        {LANGUAGE_FRENCH_REUNION,           "FRENCH (REUNION)"      },
-        {LANGUAGE_FRENCH_ZAIRE,             "FRENCH (ZAIRE)"        },
-        {LANGUAGE_FRENCH_SENEGAL,           "FRENCH (SENEGAL)"      },
-        {LANGUAGE_FRENCH_CAMEROON,          "FRENCH (CAMEROON)"     },
-        {LANGUAGE_FRENCH_COTE_D_IVOIRE,     "FRENCH (COTE D IVOIRE)"},
-        {LANGUAGE_FRENCH_MALI,              "FRENCH (MALI)"         },
-        {LANGUAGE_FRISIAN_NETHERLANDS,      "FRISIAN (NETHERLANDS)" },
-        {LANGUAGE_GAELIC_SCOTLAND,          "GAELIC (SCOTLAND)"     },
-        {LANGUAGE_GAELIC_IRELAND,           "GAELIC (IRELAND)"      },
-        {LANGUAGE_GALICIAN,                 "GALICIAN"              },
-        {LANGUAGE_GEORGIAN,                 "GEORGIAN"              },
-        {LANGUAGE_GERMAN,                   "GERMAN"                },
-        {LANGUAGE_GERMAN_SWISS,             "GERMAN (SWISS)"        },
-        {LANGUAGE_GERMAN_AUSTRIAN,          "GERMAN (AUSTRIAN)"     },
-        {LANGUAGE_GERMAN_LUXEMBOURG,        "GERMAN (LUXEMBOURG)"   },
-        {LANGUAGE_GERMAN_LIECHTENSTEIN,     "GERMAN (LIECHTENSTEIN)"},
-        {LANGUAGE_GREEK,                    "GREEK"                 },
-        {LANGUAGE_GUJARATI,                 "GUJARATI"              },
-        {LANGUAGE_HEBREW,                   "HEBREW"                },
-        {LANGUAGE_HINDI,                    "HINDI"                 },
-        {LANGUAGE_HUNGARIAN,                "HUNGARIAN"             },
-        {LANGUAGE_ICELANDIC,                "ICELANDIC"             },
-        {LANGUAGE_INDONESIAN,               "INDONESIAN"            },
-        {LANGUAGE_ITALIAN,                  "ITALIAN"               },
-        {LANGUAGE_ITALIAN_SWISS,            "ITALIAN (SWISS)"       },
-        {LANGUAGE_JAPANESE,                 "JAPANESE"              },
-        {LANGUAGE_KANNADA,                  "KANNADA"               },
-        {LANGUAGE_KASHMIRI,                 "KASHMIRI"              },
-        {LANGUAGE_KASHMIRI_INDIA,           "KASHMIRI (INDIA)"      },
-        {LANGUAGE_KAZAK,                    "KAZAK"                 },
-        {LANGUAGE_KHMER,                    "KHMER"                 },
-        {LANGUAGE_KIRGHIZ,                  "KIRGHIZ"               },
-        {LANGUAGE_KONKANI,                  "KONKANI"               },
-        {LANGUAGE_KOREAN,                   "KOREAN"                },
-        {LANGUAGE_KOREAN_JOHAB,             "KOREAN (JOHAB)"        },
-        {LANGUAGE_LAO,                      "LAO"                   },
-        {LANGUAGE_LATVIAN,                  "LATVIAN"               },
-        {LANGUAGE_LITHUANIAN,               "LITHUANIAN"            },
-        {LANGUAGE_LITHUANIAN_CLASSIC,       "LITHUANIAN (CLASSIC)"  },
-        {LANGUAGE_MACEDONIAN,               "MACEDONIAN"            },
-        {LANGUAGE_MALAY,                    "MALAY"                 },
-        {LANGUAGE_MALAY_MALAYSIA,           "MALAY (MALAYSIA)"      },
-        {LANGUAGE_MALAY_BRUNEI_DARUSSALAM,  "MALAY (BRUNEI DARUSSALAM)"},
-        {LANGUAGE_MALAYALAM,                "MALAYALAM"             },
-        {LANGUAGE_MALTESE,                  "MALTESE"               },
-        {LANGUAGE_MANIPURI,                 "MANIPURI"              },
-        {LANGUAGE_MARATHI,                  "MARATHI"               },
-        {LANGUAGE_MONGOLIAN,                "MONGOLIAN"             },
-        {LANGUAGE_NEPALI,                   "NEPALI"                },
-        {LANGUAGE_NEPALI_INDIA,             "NEPALI (INDIA)"        },
-        {LANGUAGE_NORWEGIAN,                "NORWEGIAN"             },
-        {LANGUAGE_NORWEGIAN_BOKMAL,         "NORWEGIAN (BOKMAL)"    },
-        {LANGUAGE_NORWEGIAN_NYNORSK,        "NORWEGIAN (NYNORSK)"   },
-        {LANGUAGE_ORIYA,                    "ORIYA"                 },
-        {LANGUAGE_POLISH,                   "POLISH"                },
-        {LANGUAGE_PORTUGUESE,               "PORTUGUESE"            },
-        {LANGUAGE_PORTUGUESE_BRAZILIAN,     "PORTUGUESE (BRAZILIAN)"},
-        {LANGUAGE_PUNJABI,                  "PUNJABI"               },
-        {LANGUAGE_RHAETO_ROMAN,             "RHAETO (ROMAN)"        },
-        {LANGUAGE_ROMANIAN,                 "ROMANIAN"              },
-        {LANGUAGE_ROMANIAN_MOLDOVA,         "ROMANIAN (MOLDOVA)"    },
-        {LANGUAGE_RUSSIAN,                  "RUSSIAN"               },
-        {LANGUAGE_RUSSIAN_MOLDOVA,          "RUSSIAN (MOLDOVA)"     },
-        {LANGUAGE_SAMI_LAPPISH,             "SAMI (LAPPISH)"        },
-        {LANGUAGE_SANSKRIT,                 "SANSKRIT"              },
-        {LANGUAGE_SERBIAN,                  "SERBIAN"               },
-        {LANGUAGE_CROATIAN,                 "CROATIAN"              },
-        {LANGUAGE_SERBIAN_LATIN,            "SERBIAN (LATIN)"       },
-        {LANGUAGE_SERBIAN_CYRILLIC,         "SERBIAN (CYRILLIC)"    },
-        {LANGUAGE_SESOTHO,                  "SESOTHO"               },
-        {LANGUAGE_SINDHI,                   "SINDHI"                },
-        {LANGUAGE_SLOVAK,                   "SLOVAK"                },
-        {LANGUAGE_SLOVENIAN,                "SLOVENIAN"             },
-        {LANGUAGE_SORBIAN,                  "SORBIAN"               },
-        {LANGUAGE_SPANISH,                  "SPANISH"               },
-        {LANGUAGE_SPANISH_MEXICAN,          "SPANISH (MEXICAN)"     },
-        {LANGUAGE_SPANISH_MODERN,           "SPANISH (MODERN)"      },
-        {LANGUAGE_SPANISH_GUATEMALA,        "SPANISH (GUATEMALA)"   },
-        {LANGUAGE_SPANISH_COSTARICA,        "SPANISH (COSTARICA)"   },
-        {LANGUAGE_SPANISH_PANAMA,           "SPANISH (PANAMA)"      },
-        {LANGUAGE_SPANISH_DOMINICAN_REPUBLIC,"SPANISH (DOMINICAN REPUBLIC)"},
-        {LANGUAGE_SPANISH_VENEZUELA,        "SPANISH (VENEZUELA)"   },
-        {LANGUAGE_SPANISH_COLOMBIA,         "SPANISH (COLOMBIA)"    },
-        {LANGUAGE_SPANISH_PERU,             "SPANISH (PERU)"        },
-        {LANGUAGE_SPANISH_ARGENTINA,        "SPANISH (ARGENTINA)"   },
-        {LANGUAGE_SPANISH_ECUADOR,          "SPANISH (ECUADOR)"     },
-        {LANGUAGE_SPANISH_CHILE,            "SPANISH (CHILE)"       },
-        {LANGUAGE_SPANISH_URUGUAY,          "SPANISH (URUGUAY)"     },
-        {LANGUAGE_SPANISH_PARAGUAY,         "SPANISH (PARAGUAY)"    },
-        {LANGUAGE_SPANISH_BOLIVIA,          "SPANISH (BOLIVIA)"     },
-        {LANGUAGE_SPANISH_EL_SALVADOR,      "SPANISH (EL SALVADOR)" },
-        {LANGUAGE_SPANISH_HONDURAS,         "SPANISH (HONDURAS)"    },
-        {LANGUAGE_SPANISH_NICARAGUA,        "SPANISH (NICARAGUA)"   },
-        {LANGUAGE_SPANISH_PUERTO_RICO,      "SPANISH (PUERTO RICO)" },
-        {LANGUAGE_SWAHILI,                  "SWAHILI"               },
-        {LANGUAGE_SWEDISH,                  "SWEDISH"               },
-        {LANGUAGE_SWEDISH_FINLAND,          "SWEDISH (FINLAND)"     },
-        {LANGUAGE_TAJIK,                    "TAJIK"                 },
-        {LANGUAGE_TAMIL,                    "TAMIL"                 },
-        {LANGUAGE_TATAR,                    "TATAR"                 },
-        {LANGUAGE_TELUGU,                   "TELUGU"                },
-        {LANGUAGE_THAI,                     "THAI"                  },
-        {LANGUAGE_TIBETAN,                  "TIBETAN"               },
-        {LANGUAGE_TSONGA,                   "TSONGA"                },
-        {LANGUAGE_TSWANA,                   "TSWANA"                },
-        {LANGUAGE_TURKISH,                  "TURKISH"               },
-        {LANGUAGE_TURKMEN,                  "TURKMEN"               },
-        {LANGUAGE_UKRAINIAN,                "UKRAINIAN"             },
-        {LANGUAGE_URDU,                     "URDU"                  },
-        {LANGUAGE_URDU_PAKISTAN,            "URDU (PAKISTAN)"       },
-        {LANGUAGE_URDU_INDIA,               "URDU (INDIA)"          },
-        {LANGUAGE_UZBEK,                    "UZBEK"                 },
-        {LANGUAGE_UZBEK_LATIN,              "UZBEK (LATIN)"         },
-        {LANGUAGE_UZBEK_CYRILLIC,           "UZBEK (CYRILLIC)"      },
-        {LANGUAGE_VENDA,                    "VENDA"                 },
-        {LANGUAGE_VIETNAMESE,               "VIETNAMESE"            },
-        {LANGUAGE_WELSH,                    "WELSH"                 },
-        {LANGUAGE_XHOSA,                    "XHOSA"                 },
-        {LANGUAGE_ZULU,                     "ZULU"                  },
-        {0,0}       //Last
-    };
-    return &aMapArr[0];
-}
-
-static LanguageType LanguageFromName(const String& rLngStr)
-{
-    const LangNameMap *pStart = GetLangNameMap();
-    LanguageType nRet = pStart->nId;
-
-    for (const LangNameMap *pMap = pStart; pMap->pLanguageNm; ++pMap)
-    {
-        if (rLngStr.EqualsIgnoreCaseAscii(pMap->pLanguageNm))
-        {
-            nRet = pMap->nId;
-            break;
-        }
-    }
-
-    ASSERT(nRet != pStart->nId, "TXT: That was an unknown language!");
-
-    return nRet;
-}
-
-static String NameFromLanguage(LanguageType nLang)
-{
-    const LangNameMap *pStart = GetLangNameMap();
-    const sal_Char *pRet = pStart->pLanguageNm;
-
-    for (const LangNameMap *pMap = pStart; pMap->pLanguageNm; ++pMap)
-    {
-        if (nLang == pMap->nId)
-        {
-            pRet = pMap->pLanguageNm;
-            break;
-        }
-    }
-
-    ASSERT(pRet != pStart->pLanguageNm, "TXT: That was an unknown language!");
-
-    return String::CreateFromAscii(pRet);
-}
-
-
 // for the automatic conversion (mail/news/...)
 // The user data contains the options for the ascii import/export filter.
 // The format is:
@@ -1185,7 +946,7 @@ void SwAsciiOptions::ReadUserData( const String& rStr )
                 sFont = sToken;
                 break;
             case 3:     // Language
-                nLanguage = LanguageFromName(sToken);
+                nLanguage = MsLangId::convertIsoStringToLanguage( sToken );
                 break;
             }
         }
@@ -1221,8 +982,8 @@ void SwAsciiOptions::WriteUserData( String& rStr )
     // 4. Language
     if (nLanguage)
     {
-        String sTmp = NameFromLanguage(nLanguage);
-        rStr += sTmp;
+        rtl::OUString sTmp = MsLangId::convertLanguageToIsoString( nLanguage );
+        rStr += (String)sTmp;
     }
     rStr += ',';
 }
