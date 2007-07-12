@@ -4,9 +4,9 @@
  *
  *  $RCSfile: autocdlg.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: rt $ $Date: 2007-07-03 14:24:25 $
+ *  last change: $Author: ihi $ $Date: 2007-07-12 10:53:56 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -2562,9 +2562,7 @@ void OfaAutoCompleteTabPage::CopyToClipboard() const
 
         ByteString sData;
         const sal_Char* pLineEnd =
-#if defined(MAC)
-                "\015";
-#elif defined(UNX)
+#if defined(UNX)
                 "\012";
 #else
                 "\015\012";
