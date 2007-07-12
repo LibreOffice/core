@@ -4,9 +4,9 @@
 #
 #   $RCSfile: globals.pm,v $
 #
-#   $Revision: 1.10 $
+#   $Revision: 1.11 $
 #
-#   last change: $Author: obo $ $Date: 2005-12-21 12:49:49 $
+#   last change: $Author: ihi $ $Date: 2007-07-12 11:17:41 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -49,7 +49,7 @@ BEGIN
     $langfilename = "";
 
     @allitems = ("Installation", "ScpAction", "HelpText", "Directory", "DataCarrier", "StarRegistry", "File",
-                 "Shortcut", "Custom", "Procedure", "Module", "Profile", "ProfileItem",
+                 "Shortcut", "Custom", "Unixlink", "Procedure", "Module", "Profile", "ProfileItem",
                  "Folder", "FolderItem", "RegistryItem", "StarRegistryItem", "WindowsCustomAction");
 
     $logging     = 0;
