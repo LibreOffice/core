@@ -4,9 +4,9 @@
  *
  *  $RCSfile: impedit4.cxx,v $
  *
- *  $Revision: 1.70 $
+ *  $Revision: 1.71 $
  *
- *  last change: $Author: hr $ $Date: 2007-06-27 17:59:45 $
+ *  last change: $Author: ihi $ $Date: 2007-07-12 10:56:43 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -202,7 +202,7 @@ EditPaM ImpEditEngine::ReadRTF( SvStream& rInput, EditSelection aSel )
 {
 #ifndef SVX_LIGHT
 
-#if defined (EDITDEBUG) && !defined(MAC) && !defined( UNX )
+#if defined (EDITDEBUG) && !defined( UNX )
     SvFileStream aRTFOut( String( RTL_CONSTASCII_USTRINGPARAM ( "d:\\rtf_in.rtf" ) ), STREAM_WRITE );
     aRTFOut << rInput;
     aRTFOut.Close();
@@ -403,13 +403,8 @@ sal_uInt32 ImpEditEngine::WriteRTF( SvStream& rOutput, EditSelection aSel )
 
     rOutput << sRTF_RTF;
 
-#ifndef MAC
     rOutput << sRTF_ANSI;
     rtl_TextEncoding eDestEnc = RTL_TEXTENCODING_MS_1252;
-#else
-    rOutput << sRTF_MAC;
-    rtl_TextEncoding eDestEnc = RTL_TEXTENCODING_APPLE_ROMAN;
-#endif
 
     // Fonttabelle erzeugen und rausschreiben...
     SvxFontTable aFontTable;
@@ -752,7 +747,7 @@ sal_uInt32 ImpEditEngine::WriteRTF( SvStream& rOutput, EditSelection aSel )
     rOutput << "}}";    // 1xKlammerung Absaetze, 1x Klammerung RTF-Dokument
     rOutput.Flush();
 
-#if defined (EDITDEBUG) && !defined(MAC) && !defined( UNX )
+#if defined (EDITDEBUG) && !defined( UNX )
     {
         SvFileStream aStream( String( RTL_CONSTASCII_USTRINGPARAM ( "d:\\rtf_out.rtf" ) ), STREAM_WRITE|STREAM_TRUNC );
         ULONG nP = rOutput.Tell();
