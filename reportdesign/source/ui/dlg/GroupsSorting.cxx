@@ -4,9 +4,9 @@
  *
  *  $RCSfile: GroupsSorting.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2007-07-09 11:56:29 $
+ *  last change: $Author: ihi $ $Date: 2007-07-12 13:51:08 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1143,7 +1143,7 @@ void OGroupsSortingDialog::SaveData( sal_Int32 _nRow)
         xGroup->setKeepTogether( m_aKeepTogetherLst.GetSelectEntryPos() );
     if ( m_aGroupOnLst.GetSavedValue() != m_aGroupOnLst.GetSelectEntryPos() )
     {
-        sal_Int16 nGroupOn = static_cast<sal_Int16>(reinterpret_cast<sal_Int32>(m_aGroupOnLst.GetEntryData(m_aGroupOnLst.GetSelectEntryPos())));
+        sal_Int16 nGroupOn = static_cast<sal_Int16>(reinterpret_cast<sal_IntPtr>(m_aGroupOnLst.GetEntryData(m_aGroupOnLst.GetSelectEntryPos())));
         xGroup->setGroupOn( nGroupOn );
     }
     if ( m_aGroupIntervalEd.GetSavedValue().ToInt32() != m_aGroupIntervalEd.GetValue() )
