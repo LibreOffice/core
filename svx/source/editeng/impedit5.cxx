@@ -4,9 +4,9 @@
  *
  *  $RCSfile: impedit5.cxx,v $
  *
- *  $Revision: 1.32 $
+ *  $Revision: 1.33 $
  *
- *  last change: $Author: hr $ $Date: 2007-06-27 18:00:01 $
+ *  last change: $Author: ihi $ $Date: 2007-07-12 10:56:56 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -444,25 +444,6 @@ SfxItemSet ImpEditEngine::GetAttribs( EditSelection aSel, BOOL bOnlyHardAttrib )
             }
         }
     }
-
-#ifdef EDITDEBUG
-/*
-#ifdef MAC
-        FILE* fp = fopen( "debug.log", "a" );
-#elif defined UNX
-        FILE* fp = fopen( "/tmp/debug.log", "a" );
-#else
-        FILE* fp = fopen( "d:\\debug.log", "a" );
-#endif
-        if ( fp )
-        {
-            fprintf( fp, "\n\n<= Attribute: Absatz %i\n", nNode );
-            DbgOutItemSet( fp, aCurSet, TRUE, FALSE );
-            fclose( fp );
-        }
-*/
-#endif
-
     return aCurSet;
 }
 
