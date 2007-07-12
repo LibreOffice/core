@@ -4,9 +4,9 @@
  *
  *  $RCSfile: guess.cxx,v $
  *
- *  $Revision: 1.46 $
+ *  $Revision: 1.47 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 21:34:42 $
+ *  last change: $Author: ihi $ $Date: 2007-07-12 10:43:11 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -158,11 +158,7 @@ sal_Bool SwTxtGuess::Guess( const SwTxtPortion& rPor, SwTxtFormatInfo &rInf,
              CH_BLANK == rInf.GetTxt().GetChar( rInf.GetIdx() ) )
             bAddItalic = sal_False;
 
-#ifdef MAC
-        nItalic = bAddItalic ? nPorHeight / 4 : 0;
-#else
         nItalic = bAddItalic ? nPorHeight / 12 : 0;
-#endif
 
         nLineWidth -= nItalic;
 
