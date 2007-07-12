@@ -4,9 +4,9 @@
  *
  *  $RCSfile: fldbas.cxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: rt $ $Date: 2007-04-25 09:04:14 $
+ *  last change: $Author: ihi $ $Date: 2007-07-12 10:42:45 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -38,9 +38,6 @@
 
 
 #include <math.h>
-#ifdef MAC
-#include <stdlib.h>
-#endif
 #include <float.h>
 
 #ifndef INCLUDED_RTL_MATH_HXX
