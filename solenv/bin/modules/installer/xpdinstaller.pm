@@ -4,9 +4,9 @@
 #
 #   $RCSfile: xpdinstaller.pm,v $
 #
-#   $Revision: 1.3 $
+#   $Revision: 1.4 $
 #
-#   last change: $Author: rt $ $Date: 2007-07-03 11:46:38 $
+#   last change: $Author: ihi $ $Date: 2007-07-12 11:16:47 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -755,6 +755,23 @@ sub set_packagetype_tag
 }
 
 ###################################################
+# Setting the architecture of installation set
+###################################################
+
+sub set_architecture_tag
+{
+    my ($indent) = @_;
+
+    my $architecture = "";
+    if ( $installer::globals::issolarissparcbuild ) { $architecture = "sparc"; }
+    if ( $installer::globals::issolarisx86build ) { $architecture = "i386"; }
+
+    my $tag = $indent . "<architecture>" . $architecture . "</architecture>" . "\n";
+
+    return $tag;
+}
+
+###################################################
 # Collecting content for product xpd file
 ###################################################
 
@@ -802,6 +819,9 @@ sub get_setup_file_content
     push(@xpdfile, $tag);
 
     $tag = set_packagetype_tag($singleindent);
+    push(@xpdfile, $tag);
+
+    $tag = set_architecture_tag($singleindent);
     push(@xpdfile, $tag);
 
     $tag = get_end_tag("product", $noindent);
