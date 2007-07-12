@@ -4,9 +4,9 @@
  *
  *  $RCSfile: wrtrtf.cxx,v $
  *
- *  $Revision: 1.36 $
+ *  $Revision: 1.37 $
  *
- *  last change: $Author: kz $ $Date: 2007-05-10 16:07:55 $
+ *  last change: $Author: ihi $ $Date: 2007-07-12 10:46:15 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -174,9 +174,7 @@
 #include <docsh.hxx>
 #endif
 
-#if defined(MAC)
-const sal_Char SwRTFWriter::sNewLine = '\015';
-#elif defined(UNX)
+#if defined(UNX)
 const sal_Char SwRTFWriter::sNewLine = '\012';
 #else
 const sal_Char __FAR_DATA SwRTFWriter::sNewLine[] = "\015\012";
@@ -439,12 +437,7 @@ void SwRTFWriter::MakeHeader()
 {
     // baue den Vorspann wie Header, ColorTbl, FontTbl
     Strm() << '{' << sRTF_RTF << '1'
-#ifdef MAC
-        << sRTF_MAC
-#else
-        << sRTF_ANSI
-#endif
-        ;
+        << sRTF_ANSI;
     if( bWriteAll )
     {
         Strm() << sRTF_DEFF;
