@@ -4,9 +4,9 @@
  *
  *  $RCSfile: wrtasc.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 22:04:23 $
+ *  last change: $Author: ihi $ $Date: 2007-07-12 10:44:33 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -110,10 +110,8 @@ SwASCWriter::SwASCWriter( const String& rFltNm )
                 break;
 
     case 'M':
-#if !defined(MAC)
                 aNewOpts.SetCharSet( RTL_TEXTENCODING_APPLE_ROMAN );
                 aNewOpts.SetParaFlags( LINEEND_CR );
-#endif
                 break;
 
     case 'X':
