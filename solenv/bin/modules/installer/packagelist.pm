@@ -4,9 +4,9 @@
 #
 #   $RCSfile: packagelist.pm,v $
 #
-#   $Revision: 1.9 $
+#   $Revision: 1.10 $
 #
-#   last change: $Author: obo $ $Date: 2007-01-25 15:23:52 $
+#   last change: $Author: ihi $ $Date: 2007-07-12 11:15:50 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -382,7 +382,7 @@ sub find_links_for_package
 
 sub find_dirs_for_package
 {
-    my ($dirlist, $filelist, $linklist, $packagename) = @_;
+    my ($dirlist, $filelist, $linklist, $unixlinklist, $packagename) = @_;
 
     my @newdirlist = ();
 
@@ -421,6 +421,23 @@ sub find_dirs_for_package
             for ( my $j = 0; $j <= $#{$linklist}; $j++ )
             {
                 my $onelink = ${$linklist}[$j];
+                my $destination = $onelink->{'destination'};
+
+                if ( $destination =~ /^\s*\Q$hostname\E/ )  # the directory path is part of the file path!
+                {
+                    $includedir = 1;
+                    last;
+                }
+            }
+        }
+
+        # also searching for unix links
+
+        if ( ! $includedir )    # also looking for links
+        {
+            for ( my $j = 0; $j <= $#{$unixlinklist}; $j++ )
+            {
+                my $onelink = ${$unixlinklist}[$j];
                 my $destination = $onelink->{'destination'};
 
                 if ( $destination =~ /^\s*\Q$hostname\E/ )  # the directory path is part of the file path!
