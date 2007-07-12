@@ -4,9 +4,9 @@
  *
  *  $RCSfile: hyphen.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: hr $ $Date: 2007-06-27 17:12:41 $
+ *  last change: $Author: ihi $ $Date: 2007-07-12 10:54:49 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -120,16 +120,6 @@ void SvxHyphenEdit::KeyInput( const KeyEvent& rKEvt )
         case KEY_RETURN:
             Edit::KeyInput(rKEvt);
             break;
-#ifdef MAC
-        case KEY_POINT:
-            // Command . abfangen
-            if ( nMod == KEY_MOD1 )
-            {
-                Edit::KeyInput( rKEvt );
-                break;
-            }
-            // kein break!
-#endif
         default:
             Control::KeyInput( rKEvt ); // An den Dialog weiterleiten
             break;
