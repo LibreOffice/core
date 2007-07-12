@@ -4,9 +4,9 @@
  *
  *  $RCSfile: svdobj.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2007-07-06 07:30:43 $
+ *  last change: $Author: ihi $ $Date: 2007-07-12 13:56:39 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -531,6 +531,7 @@ typedef ::std::vector< SdrObjectUser* > ObjectUserVector;
 //
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 
+class SvxShape;
 class SVX_DLLPUBLIC SdrObject: public SfxListener, public tools::WeakBase< SdrObject >
 {
 private:
