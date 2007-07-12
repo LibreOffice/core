@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dbmgr.cxx,v $
  *
- *  $Revision: 1.120 $
+ *  $Revision: 1.121 $
  *
- *  last change: $Author: rt $ $Date: 2007-07-05 07:38:34 $
+ *  last change: $Author: ihi $ $Date: 2007-07-12 10:49:57 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -936,7 +936,11 @@ BOOL SwNewDBMgr::GetColumnNames(ListBox* pListBox,
 {
     if (!bAppend)
         pListBox->Clear();
-    SwDSParam* pParam = FindDSConnection(rDBName, FALSE);
+    SwDBData aData;
+    aData.sDataSource = rDBName;
+    aData.sCommand = rTableName;
+    aData.nCommandType = -1;
+    SwDSParam* pParam = FindDSData(aData, FALSE);
     uno::Reference< XConnection> xConnection;
     if(pParam && pParam->xConnection.is())
         xConnection = pParam->xConnection;
@@ -1902,7 +1906,11 @@ ULONG SwNewDBMgr::GetColumnFmt( const String& rDBName,
         }
         if(!xConnection.is())
         {
-            SwDSParam* pParam = FindDSConnection(rDBName, FALSE);
+            SwDBData aData;
+            aData.sDataSource = rDBName;
+            aData.sCommand = rTableName;
+            aData.nCommandType = -1;
+            SwDSParam* pParam = FindDSData(aData, FALSE);
             if(pParam && pParam->xConnection.is())
             {
                 xConnection = pParam->xConnection;
@@ -2040,16 +2048,29 @@ sal_Int32 SwNewDBMgr::GetColumnType( const String& rDBName,
                           const String& rColNm )
 {
     sal_Int32 nRet = DataType::SQLNULL;
-    SwDSParam* pParam = FindDSConnection(rDBName, FALSE);
+    SwDBData aData;
+    aData.sDataSource = rDBName;
+    aData.sCommand = rTableName;
+    aData.nCommandType = -1;
+    SwDSParam* pParam = FindDSData(aData, FALSE);
     uno::Reference< XConnection> xConnection;
+    uno::Reference< XColumnsSupplier > xColsSupp;
+    bool bDispose = false;
     if(pParam && pParam->xConnection.is())
+    {
         xConnection = pParam->xConnection;
+        xColsSupp = uno::Reference< XColumnsSupplier >( pParam->xResultSet, UNO_QUERY );
+    }
     else
     {
         rtl::OUString sDBName(rDBName);
         xConnection = RegisterConnection( sDBName );
     }
-    uno::Reference< XColumnsSupplier> xColsSupp = SwNewDBMgr::GetColumnSupplier(xConnection, rTableName);
+    if( !xColsSupp.is() )
+    {
+        xColsSupp = SwNewDBMgr::GetColumnSupplier(xConnection, rTableName);
+        bDispose = true;
+    }
     if(xColsSupp.is())
     {
         uno::Reference<XNameAccess> xCols = xColsSupp->getColumns();
@@ -2061,7 +2082,8 @@ sal_Int32 SwNewDBMgr::GetColumnType( const String& rDBName,
             Any aType = xCol->getPropertyValue(C2S("Type"));
             aType >>= nRet;
         }
-        ::comphelper::disposeComponent( xColsSupp );
+        if(bDispose)
+            ::comphelper::disposeComponent( xColsSupp );
     }
     return nRet;
 }
@@ -2629,6 +2651,15 @@ void    SwNewDBMgr::CloseAll(BOOL bIncludingMerge)
  ---------------------------------------------------------------------------*/
 SwDSParam* SwNewDBMgr::FindDSData(const SwDBData& rData, BOOL bCreate)
 {
+    //prefer merge data if available
+    if(pImpl->pMergeData && rData.sDataSource == pImpl->pMergeData->sDataSource &&
+        rData.sCommand == pImpl->pMergeData->sCommand &&
+        (rData.nCommandType == -1 || rData.nCommandType == pImpl->pMergeData->nCommandType ||
+        (bCreate && pImpl->pMergeData->nCommandType == -1)))
+    {
+         return pImpl->pMergeData;
+    }
+
     SwDSParam* pFound = 0;
     for(USHORT nPos = aDataSourceParams.Count(); nPos; nPos--)
     {
@@ -2672,6 +2703,11 @@ SwDSParam* SwNewDBMgr::FindDSData(const SwDBData& rData, BOOL bCreate)
 
 SwDSParam*  SwNewDBMgr::FindDSConnection(const rtl::OUString& rDataSource, BOOL bCreate)
 {
+    //prefer merge data if available
+    if(pImpl->pMergeData && rDataSource == pImpl->pMergeData->sDataSource )
+    {
+         return pImpl->pMergeData;
+    }
     SwDSParam* pFound = 0;
     for(USHORT nPos = 0; nPos < aDataSourceParams.Count(); nPos++)
     {
@@ -2775,15 +2811,15 @@ String SwNewDBMgr::LoadAndRegisterDataSource()
         {
             bStore = false;
         }
-        else if(sExt.EqualsAscii("sxc")
-            || sExt.EqualsAscii("ods")
-                || sExt.EqualsAscii("xls"))
+        else if(sExt.EqualsIgnoreCaseAscii("sxc")
+            || sExt.EqualsIgnoreCaseAscii("ods")
+                || sExt.EqualsIgnoreCaseAscii("xls"))
         {
             rtl::OUString sDBURL(C2U("sdbc:calc:"));
             sDBURL += aTempURL.GetMainURL(INetURLObject::NO_DECODE);
             aURLAny <<= sDBURL;
         }
-        else if(sExt.EqualsAscii("dbf"))
+        else if(sExt.EqualsIgnoreCaseAscii("dbf"))
         {
             aTempURL.removeSegment();
             aTempURL.removeFinalSlash();
@@ -2796,7 +2832,7 @@ String SwNewDBMgr::LoadAndRegisterDataSource()
             aFilters[0] = aURL.getBase();
             aTableFilterAny <<= aFilters;
         }
-        else if(sExt.EqualsAscii("csv") || sExt.EqualsAscii("txt"))
+        else if(sExt.EqualsIgnoreCaseAscii("csv") || sExt.EqualsIgnoreCaseAscii("txt"))
         {
             aTempURL.removeSegment();
             aTempURL.removeFinalSlash();
@@ -3380,6 +3416,8 @@ sal_Int32 SwNewDBMgr::MergeDocuments( SwMailMergeConfigItem& rMMConfig,
                 //add the document info to the config item
                 SwDocMergeInfo aMergeInfo;
                 aMergeInfo.nStartPageInTarget = nPageCountBefore;
+                //#i72820# calculate layout to be able to find the correct page index
+                pTargetShell->CalcLayout();
                 aMergeInfo.nEndPageInTarget = pTargetShell->GetPageCnt();
                 aMergeInfo.nDBRow = nStartRow;
                 rMMConfig.AddMergedDocument( aMergeInfo );
