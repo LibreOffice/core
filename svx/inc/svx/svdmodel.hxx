@@ -4,9 +4,9 @@
  *
  *  $RCSfile: svdmodel.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2007-07-06 07:29:56 $
+ *  last change: $Author: ihi $ $Date: 2007-07-12 10:53:30 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -97,10 +97,6 @@ class OutputDevice;
 
 #if defined(DOS) || defined(OS2)
 #define DEGREE_CHAR ((sal_Unicode)248)   /* 0xF8 = IBM PC (Erw. ASCII) */
-#endif
-
-#if defined(MAC)
-#define DEGREE_CHAR ((sal_Unicode)161)   /* 0xA1 = na eben Mac */
 #endif
 
 #ifndef DEGREE_CHAR
