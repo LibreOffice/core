@@ -4,9 +4,9 @@
  *
  *  $RCSfile: viewmdi.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: kz $ $Date: 2007-05-10 16:26:20 $
+ *  last change: $Author: ihi $ $Date: 2007-07-12 10:51:31 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -42,6 +42,9 @@
 
 #include "hintids.hxx"
 
+#ifndef _SV_SVAPP_HXX
+#include <vcl/svapp.hxx>
+#endif
 #ifndef _SFXDISPATCH_HXX //autogen
 #include <sfx2/dispatch.hxx>
 #endif
@@ -324,19 +327,24 @@ void SwView::CreatePageButtons(BOOL bShow)
  */
 IMPL_LINK( SwView, BtnPage, Button *, pButton )
 {
-    MoveNavigation(pButton == pPageDownBtn);
+    // #i75416# move the execution of the search to an asynchronously called static link
+    bool* pbNext = new bool( (pButton == pPageDownBtn) );
+    Application::PostUserEvent( STATIC_LINK(this, SwView, MoveNavigationHdl), pbNext );
     return 0;
 }
 /*-----------------20.06.97 10:46-------------------
 
 --------------------------------------------------*/
-void SwView::MoveNavigation(BOOL bNext)
+IMPL_STATIC_LINK( SwView, MoveNavigationHdl, bool *, pbNext )
 {
-    SwWrtShell& rSh = GetWrtShell();
+    if ( !pbNext )
+        return 0;
+    bool bNext = *pbNext;
+    SwWrtShell& rSh = pThis->GetWrtShell();
     switch( nMoveType )
     {
         case NID_PGE:
-            bNext ? PhyPageDown() : PhyPageUp();
+            bNext ? pThis->PhyPageDown() : pThis->PhyPageUp();
         break;
         case NID_TBL :
             rSh.EnterStdMode();
@@ -381,7 +389,7 @@ void SwView::MoveNavigation(BOOL bNext)
         break;
         case NID_BKM :
             rSh.EnterStdMode();
-            GetViewFrame()->GetDispatcher()->Execute(bNext ?
+            pThis->GetViewFrame()->GetDispatcher()->Execute(bNext ?
                                         FN_NEXT_BOOKMARK :
                                             FN_PREV_BOOKMARK);
         break;
@@ -448,8 +456,8 @@ void SwView::MoveNavigation(BOOL bNext)
             if(rSh.HasSelection() && !bNext == rSh.IsCrsrPtAtEnd())
                 rSh.SwapPam();
             pSrchItem->SetBackward(!bNext);
-            SfxRequest aReq(FN_REPEAT_SEARCH, SFX_CALLMODE_SLOT, GetPool());
-            ExecSearch(aReq);
+            SfxRequest aReq(FN_REPEAT_SEARCH, SFX_CALLMODE_SLOT, pThis->GetPool());
+            pThis->ExecSearch(aReq);
             pSrchItem->SetBackward(bBackward);
         }
         break;
@@ -465,7 +473,9 @@ void SwView::MoveNavigation(BOOL bNext)
             rSh.GotoNxtPrvTblFormula( bNext, TRUE );
             break;
     }
-    pEditWin->GrabFocus();
+    pThis->pEditWin->GrabFocus();
+    delete pbNext;
+    return 0;
 }
 
 /*************************************************************************
