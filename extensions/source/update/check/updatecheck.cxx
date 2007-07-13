@@ -4,9 +4,9 @@
  *
  *  $RCSfile: updatecheck.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: ihi $ $Date: 2007-07-12 13:28:10 $
+ *  last change: $Author: ihi $ $Date: 2007-07-13 11:15:08 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1082,7 +1082,9 @@ UpdateCheck::setUpdateInfo(const UpdateInfo& aInfo)
         iter++;
     }
 
-    if( (iter != m_aUpdateInfo.Sources.begin()) && iter->IsDirect )
+    if( (iter != m_aUpdateInfo.Sources.begin()) &&
+        (iter != m_aUpdateInfo.Sources.end()) &&
+        iter->IsDirect )
     {
         iter--;
         m_aUpdateInfo.Sources.erase(m_aUpdateInfo.Sources.begin(), iter);
