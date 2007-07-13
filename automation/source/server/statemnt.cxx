@@ -4,9 +4,9 @@
  *
  *  $RCSfile: statemnt.cxx,v $
  *
- *  $Revision: 1.34 $
+ *  $Revision: 1.35 $
  *
- *  last change: $Author: hr $ $Date: 2007-06-27 21:00:43 $
+ *  last change: $Author: ihi $ $Date: 2007-07-13 11:35:16 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -744,7 +744,8 @@ BOOL StatementSlot::Execute()
                     if ( static_cast< SlotStatusListener* >(xListener.get())->bEnabled )
                     {
                         if ( bIsSlotInExecute )
-                            ReportError( GEN_RES_STR0( S_SLOT_IN_EXECUTE ) );
+// i79413                   ReportError( GEN_RES_STR0( S_SLOT_IN_EXECUTE ) );
+                            ReportError( CUniString( "Another Slot is being executed already." ) );
                         else
                         {
                             bIsSlotInExecute = TRUE;
@@ -5677,7 +5678,8 @@ BOOL StatementControl::Execute()
                                     if ( pItem )
                                         pRet->GenReturn ( RET_Value, aUId, pItem->GetText() );
                                     else
-                                        ReportError( aUId, GEN_RES_STR1( S_NO_LIST_BOX_STRING, MethodString( nMethodId ) ) );
+// i79413                               ReportError( aUId, GEN_RES_STR1( S_NO_LIST_BOX_STRING, MethodString( nMethodId ) ) );
+                                        ReportError( aUId, CUniString( "String does not exist in ($Arg1)" ).Append( ArgString( 1, MethodString( nMethodId ) ) ) );
                                 }
                             }
                             break;
@@ -5702,7 +5704,8 @@ BOOL StatementControl::Execute()
                                     if ( pItem )
                                         pRet->GenReturn ( RET_Value, aUId, pItem->GetText() );
                                     else
-                                        ReportError( aUId, GEN_RES_STR1( S_NO_LIST_BOX_STRING, MethodString( nMethodId ) ) );
+// i79413                               ReportError( aUId, GEN_RES_STR1( S_NO_LIST_BOX_STRING, MethodString( nMethodId ) ) );
+                                        ReportError( aUId, CUniString( "String does not exist in ($Arg1)" ).Append( ArgString( 1, MethodString( nMethodId ) ) ) );
                                 }
                             }
                             break;
