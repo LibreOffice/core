@@ -21,28 +21,8 @@ namespace cairo {
     public:
         cairo_surface_t* mpSurface;
 
-        Surface( const void* pSysData, void* pDisplay, long hDrawable, void* pRenderFormat, cairo_surface_t* pSurface )
-            : mpSysData( pSysData ),
-              mpDisplay( pDisplay ),
-              mhDrawable( hDrawable ),
-              mpRenderFormat( pRenderFormat ),
-              mpSurface( pSurface ),
-              mbFreePixmap( true ),
-              mnRefCount( 1 )
-        {
-        }
-
-        Surface( cairo_surface_t* pSurface )
-            : mpSurface( pSurface ),
-              mpDisplay( NULL ),
-              mhDrawable( 0 ),
-              mpSysData( NULL ),
-              mpRenderFormat( NULL ),
-              mbFreePixmap( false ),
-              mnRefCount( 1 )
-        {
-        }
-
+        Surface( const void* pSysData, void* pDisplay, long hDrawable, void* pRenderFormat, cairo_surface_t* pSurface );
+        Surface( cairo_surface_t* pSurface );
         Surface( const void* pSysData, int x, int y, int width, int height );
         Surface( const void* pSysData, void *pBmpData, int width, int height );
 
@@ -61,10 +41,7 @@ namespace cairo {
                 delete this;
         }
 
-        Cairo* getCairo()
-        {
-            return cairo_create( mpSurface );
-        }
+        Cairo* getCairo();
 
         Surface* getSimilar( Content aContent, int width, int height );
 
