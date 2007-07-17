@@ -4,9 +4,9 @@
  *
  *  $RCSfile: animationbasenode.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: kz $ $Date: 2006-12-13 15:28:39 $
+ *  last change: $Author: obo $ $Date: 2007-07-17 14:46:51 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -73,8 +73,8 @@ protected:
 
     /// Create parameter struct for ActivitiesFactory
     ActivitiesFactory::CommonParameters fillCommonParameters() const;
-
-    AttributableShapeSharedPtr getShape() const;
+    ::basegfx::B2DVector const&         getSlideSize() const { return maSlideSize; }
+    AttributableShapeSharedPtr          getShape() const;
 
 private:
     virtual bool hasPendingAnimation() const;
@@ -101,12 +101,14 @@ private:
     ::com::sun::star::uno::Reference<
         ::com::sun::star::animations::XAnimate>     mxAnimateNode;
     ShapeAttributeLayerHolder                       maAttributeLayerHolder;
+    ::basegfx::B2DVector                            maSlideSize;
     AnimationActivitySharedPtr                      mpActivity;
 
     /// When valid, this node has a plain target shape
     AttributableShapeSharedPtr                      mpShape;
     /// When valid, this is a subsetted target shape
     ShapeSubsetSharedPtr                            mpShapeSubset;
+    SubsettableShapeManagerSharedPtr                mpSubsetManager;
     bool                                            mbIsIndependentSubset;
 };
 
