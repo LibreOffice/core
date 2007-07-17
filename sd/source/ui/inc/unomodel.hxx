@@ -4,9 +4,9 @@
  *
  *  $RCSfile: unomodel.hxx,v $
  *
- *  $Revision: 1.30 $
+ *  $Revision: 1.31 $
  *
- *  last change: $Author: kz $ $Date: 2006-12-12 17:52:41 $
+ *  last change: $Author: obo $ $Date: 2007-07-17 13:01:42 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -275,10 +275,6 @@ public:
         See also comments of issue 27847.
     */
     virtual void SAL_CALL dispose() throw (::com::sun::star::uno::RuntimeException);
-
-    // XPrintable
-    virtual void SAL_CALL setPrinter( const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >& seqPrinter )
-        throw (::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::uno::RuntimeException);
 };
 
 /***********************************************************************
