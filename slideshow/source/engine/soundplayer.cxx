@@ -4,9 +4,9 @@
  *
  *  $RCSfile: soundplayer.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: hr $ $Date: 2007-06-27 15:50:15 $
+ *  last change: $Author: obo $ $Date: 2007-07-17 14:41:34 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -135,6 +135,10 @@ namespace slideshow
                 mxPlayer.set( xManager->createPlayer(
                                 aURL.GetMainURL( INetURLObject::DECODE_UNAMBIGUOUS ) ),
                                 uno::UNO_QUERY_THROW );
+            }
+            catch( uno::RuntimeException& )
+            {
+                throw;
             }
             catch( uno::Exception& )
             {
