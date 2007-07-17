@@ -4,9 +4,9 @@
  *
  *  $RCSfile: activitiesqueue.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: kz $ $Date: 2006-12-13 15:11:52 $
+ *  last change: $Author: obo $ $Date: 2007-07-17 14:33:38 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -40,16 +40,14 @@
 #include <canvas/debug.hxx>
 #include <canvas/verbosetrace.hxx>
 
-#include <comphelper/scopeguard.hxx>
 #include <comphelper/anytostring.hxx>
 #include <cppuhelper/exc_hlp.hxx>
 
-#include <slideshowexceptions.hxx>
-#include <activity.hxx>
-#include <activitiesqueue.hxx>
+#include "slideshowexceptions.hxx"
+#include "activity.hxx"
+#include "activitiesqueue.hxx"
 
 #include <boost/bind.hpp>
-#include <boost/mem_fn.hpp>
 #include <algorithm>
 
 
@@ -59,20 +57,20 @@ namespace slideshow
 {
     namespace internal
     {
-        ActivitiesQueue::ActivitiesQueue( const ::boost::shared_ptr< ::canvas::tools::ElapsedTime >&    pPresTimer,
-                                          EventMultiplexer&                                             rEventMultiplexer ) :
+        ActivitiesQueue::ActivitiesQueue(
+          const ::boost::shared_ptr< ::canvas::tools::ElapsedTime >& pPresTimer ) :
             mpTimer( pPresTimer ),
             maCurrentActivitiesWaiting(),
             maCurrentActivitiesReinsert(),
-            mrEventMultiplexer( rEventMultiplexer ),
-            mbCurrentRoundNeedsScreenUpdate( false )
+            maDequeuedActivities()
         {
         }
 
         ActivitiesQueue::~ActivitiesQueue()
         {
             // dispose all queue entries
-            try {
+            try
+            {
                 std::for_each( maCurrentActivitiesWaiting.begin(),
                                maCurrentActivitiesWaiting.end(),
                                boost::mem_fn( &Disposable::dispose ) );
@@ -80,7 +78,8 @@ namespace slideshow
                                maCurrentActivitiesReinsert.end(),
                                boost::mem_fn( &Disposable::dispose ) );
             }
-            catch (uno::Exception &) {
+            catch (uno::Exception &)
+            {
                 OSL_ENSURE( false, rtl::OUStringToOString(
                                 comphelper::anyToString(
                                     cppu::getCaughtException() ),
@@ -114,16 +113,10 @@ namespace slideshow
             double fLag = 0.0;
             for ( ; iPos != iEnd; ++iPos )
                 fLag = std::max<double>( fLag, (*iPos)->calcTimeLag() );
-            if (fLag > 0.0) {
+            if (fLag > 0.0)
+            {
                 mpTimer->adjustTimer( -fLag );
             }
-
-            // This list collects all activities which did not request
-            // a reinsertion. After the screen update has been
-            // performed, those are notified via dequeued(). This
-            // facilitates cleanup actions taking place _after_ the
-            // current frame has been displayed.
-            ActivityQueue aDequeuedActivities;
 
             // process list of activities
             while( !maCurrentActivitiesWaiting.empty() )
@@ -139,6 +132,10 @@ namespace slideshow
                     // fire up activity
                     bReinsert = pActivity->perform();
                 }
+                catch( uno::RuntimeException& )
+                {
+                    throw;
+                }
                 catch( uno::Exception& )
                 {
                     // catch anything here, we don't want
@@ -151,7 +148,10 @@ namespace slideshow
                     // since this will also capture segmentation
                     // violations and the like. In such a case, we
                     // still better let our clients now...
-                    OSL_TRACE( "::presentation::internal::ActivitiesQueue: Activity threw a uno::Exception, removing from ring" );
+                    OSL_ENSURE( false,
+                                rtl::OUStringToOString(
+                                    comphelper::anyToString( cppu::getCaughtException() ),
+                                    RTL_TEXTENCODING_UTF8 ).getStr() );
                 }
                 catch( SlideShowException& )
                 {
@@ -168,64 +168,32 @@ namespace slideshow
                     OSL_TRACE( "::presentation::internal::ActivitiesQueue: Activity threw a SlideShowException, removing from ring" );
                 }
 
-                // always query need for screen updates. Note that
-                // ending activities (i.e. those that return
-                // bReinsert=false) might also need one last screen
-                // update
-                if( pActivity->needsScreenUpdate() )
-                    mbCurrentRoundNeedsScreenUpdate = true;
-
                 if( bReinsert )
                     maCurrentActivitiesReinsert.push_back( pActivity );
                 else
-                    aDequeuedActivities.push_back( pActivity );
+                    maDequeuedActivities.push_back( pActivity );
 
                 VERBOSE_TRACE( "ActivitiesQueue: inner loop heartbeat" );
             }
 
-            // when true, the code below has determined that a screen
-            // update is necessary.
-            bool bPerformScreenUpdate( false );
-
-            // waiting activities exhausted? Then update screen, and
-            // reinsert
-            if( maCurrentActivitiesWaiting.empty() )
+            if( !maCurrentActivitiesReinsert.empty() )
             {
-                if( mbCurrentRoundNeedsScreenUpdate )
-                {
-                    bPerformScreenUpdate = true;
-                }
-
-                // always clear update flag. There's no need to update
-                // yesterday's display, even if the canvas sometimes
-                // become valid
-                mbCurrentRoundNeedsScreenUpdate = false;
-
-                if( !maCurrentActivitiesReinsert.empty() )
-                {
-                    // reinsert all processed, but not finished
-                    // activities back to waiting queue. With swap(),
-                    // we kill two birds with one stone: we reuse the
-                    // list nodes, and we clear the
-                    // maCurrentActivitiesReinsert list
-                    maCurrentActivitiesWaiting.swap( maCurrentActivitiesReinsert );
-                }
+                // reinsert all processed, but not finished
+                // activities back to waiting queue. With swap(),
+                // we kill two birds with one stone: we reuse the
+                // list nodes, and we clear the
+                // maCurrentActivitiesReinsert list
+                maCurrentActivitiesWaiting.swap( maCurrentActivitiesReinsert );
             }
+        }
 
-            // perform screen update (not only if one of the
-            // activities requested that, but also if the layer
-            // manager signals that it needs one. This frees us from
-            // introducing dummy activities, just to trigger screen
-            // updates. OTOH, this makes it necessary to always call
-            // BOTH event queue and activities queue, such that no
-            // pending update is unduly delayed)
-            mrEventMultiplexer.updateScreenContent( bPerformScreenUpdate );
-
-            // notify all dequeued activities, but only _after_ the
-            // screen update.
-            ::std::for_each( aDequeuedActivities.begin(),
-                             aDequeuedActivities.end(),
+        void ActivitiesQueue::processDequeued()
+        {
+            // notify all dequeued activities from last round
+            ::std::for_each( maDequeuedActivities.begin(),
+                             maDequeuedActivities.end(),
                              ::boost::mem_fn( &Activity::dequeued ) );
+            maDequeuedActivities.clear();
         }
 
         bool ActivitiesQueue::isEmpty() const
@@ -245,8 +213,6 @@ namespace slideshow
                            maCurrentActivitiesReinsert.end(),
                            boost::mem_fn( &Activity::dequeued ) );
             ActivityQueue().swap( maCurrentActivitiesReinsert );
-
-            mbCurrentRoundNeedsScreenUpdate = false;
         }
     }
 }
