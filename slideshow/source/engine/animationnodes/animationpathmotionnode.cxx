@@ -4,9 +4,9 @@
  *
  *  $RCSfile: animationpathmotionnode.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: kz $ $Date: 2006-12-13 15:30:18 $
+ *  last change: $Author: obo $ $Date: 2007-07-17 14:47:40 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -37,8 +37,9 @@
 #include "precompiled_slideshow.hxx"
 
 // must be first
-#include "canvas/debug.hxx"
-#include "canvas/verbosetrace.hxx"
+#include <canvas/debug.hxx>
+#include <canvas/verbosetrace.hxx>
+
 #include "animationpathmotionnode.hxx"
 #include "animationfactory.hxx"
 
@@ -63,7 +64,8 @@ AnimationActivitySharedPtr AnimationPathMotionNode::createActivity() const
         AnimationFactory::createPathMotionAnimation(
             aString,
             getShape(),
-            getContext().mpLayerManager ),
+            getContext().mpSubsettableShapeManager,
+            getSlideSize() ),
         true );
 }
 
