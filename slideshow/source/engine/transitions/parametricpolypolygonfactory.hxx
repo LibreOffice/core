@@ -4,9 +4,9 @@
  *
  *  $RCSfile: parametricpolypolygonfactory.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: kz $ $Date: 2006-12-13 15:43:42 $
+ *  last change: $Author: obo $ $Date: 2007-07-17 14:59:20 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -33,11 +33,11 @@
  *
  ************************************************************************/
 
-#ifndef _SLIDESHOW_PARAMETRICPOLYPOLYGONFACTORY_HXX
-#define _SLIDESHOW_PARAMETRICPOLYPOLYGONFACTORY_HXX
+#ifndef INCLUDED_SLIDESHOW_PARAMETRICPOLYPOLYGONFACTORY_HXX
+#define INCLUDED_SLIDESHOW_PARAMETRICPOLYPOLYGONFACTORY_HXX
 
-#include <parametricpolypolygon.hxx>
-#include <boost/utility.hpp>
+#include "parametricpolypolygon.hxx"
+#include <boost/noncopyable.hpp>
 
 namespace slideshow
 {
@@ -59,4 +59,4 @@ namespace slideshow
     }
 }
 
-#endif /* _SLIDESHOW_PARAMETRICPOLYPOLYGONFACTORY_HXX */
+#endif /* INCLUDED_SLIDESHOW_PARAMETRICPOLYPOLYGONFACTORY_HXX */
