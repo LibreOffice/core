@@ -4,9 +4,9 @@
  *
  *  $RCSfile: cairo_spritecanvas.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: kz $ $Date: 2006-12-13 14:43:15 $
+ *  last change: $Author: obo $ $Date: 2007-07-17 14:21:38 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -68,8 +68,8 @@ namespace cairocanvas
     SpriteCanvas::SpriteCanvas( const uno::Sequence< uno::Any >&                aArguments,
                                 const uno::Reference< uno::XComponentContext >& rxContext ) :
         mxComponentContext( rxContext ),
-        mpBackgroundCairo( NULL ),
-        mpBackgroundSurface( NULL )
+        mpBackgroundSurface( NULL ),
+        mpBackgroundCairo( NULL )
     {
         // #i64742# Only call initialize when not in probe mode
         if( aArguments.getLength() != 0 )
@@ -221,7 +221,7 @@ namespace cairocanvas
         return maDeviceHelper.getSizePixel();
     }
 
-    void SpriteCanvas::setSizePixel( const ::basegfx::B2ISize& rSize )
+    void SpriteCanvas::setSizePixel( const ::basegfx::B2ISize& /*rSize*/ )
     {
         if( mpBackgroundSurface )
         {
