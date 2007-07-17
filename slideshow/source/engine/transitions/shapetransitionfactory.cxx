@@ -4,9 +4,9 @@
  *
  *  $RCSfile: shapetransitionfactory.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: kz $ $Date: 2006-12-13 15:45:03 $
+ *  last change: $Author: obo $ $Date: 2007-07-17 14:59:35 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -74,7 +74,7 @@ class ClippingAnimation : public NumberAnimation
 public:
     ClippingAnimation(
         const ParametricPolyPolygonSharedPtr&   rPolygon,
-        const LayerManagerSharedPtr&            rLayerManager,
+        const ShapeManagerSharedPtr&            rShapeManager,
         const TransitionInfo&                   rTransitionInfo,
         bool                                    bDirectionForward,
         bool                                    bModeIn );
@@ -83,6 +83,8 @@ public:
 
     // Animation interface
     // -------------------
+    virtual void prefetch( const AnimatableShapeSharedPtr&     rShape,
+                           const ShapeAttributeLayerSharedPtr& rAttrLayer );
     virtual void start( const AnimatableShapeSharedPtr&     rShape,
                         const ShapeAttributeLayerSharedPtr& rAttrLayer );
     virtual void end();
@@ -97,20 +99,20 @@ private:
 
     AnimatableShapeSharedPtr           mpShape;
     ShapeAttributeLayerSharedPtr       mpAttrLayer;
-    LayerManagerSharedPtr              mpLayerManager;
+    ShapeManagerSharedPtr              mpShapeManager;
     ClippingFunctor                    maClippingFunctor;
     bool                               mbSpriteActive;
 };
 
 ClippingAnimation::ClippingAnimation(
     const ParametricPolyPolygonSharedPtr&   rPolygon,
-    const LayerManagerSharedPtr&            rLayerManager,
+    const ShapeManagerSharedPtr&            rShapeManager,
     const TransitionInfo&                   rTransitionInfo,
     bool                                    bDirectionForward,
     bool                                    bModeIn ) :
         mpShape(),
         mpAttrLayer(),
-        mpLayerManager( rLayerManager ),
+        mpShapeManager( rShapeManager ),
         maClippingFunctor( rPolygon,
                            rTransitionInfo,
                            bDirectionForward,
@@ -118,8 +120,8 @@ ClippingAnimation::ClippingAnimation(
         mbSpriteActive(false)
 {
     ENSURE_AND_THROW(
-        rLayerManager,
-        "ClippingAnimation::ClippingAnimation(): Invalid LayerManager" );
+        rShapeManager,
+        "ClippingAnimation::ClippingAnimation(): Invalid ShapeManager" );
 }
 
 ClippingAnimation::~ClippingAnimation()
@@ -128,12 +130,18 @@ ClippingAnimation::~ClippingAnimation()
     {
         end_();
     }
-    catch (uno::Exception &) {
+    catch (uno::Exception &)
+    {
         OSL_ENSURE( false, rtl::OUStringToOString(
                         comphelper::anyToString(
                             cppu::getCaughtException() ),
                         RTL_TEXTENCODING_UTF8 ).getStr() );
     }
+}
+
+void ClippingAnimation::prefetch( const AnimatableShapeSharedPtr&,
+                                  const ShapeAttributeLayerSharedPtr& )
+{
 }
 
 void ClippingAnimation::start( const AnimatableShapeSharedPtr&      rShape,
@@ -157,7 +165,7 @@ void ClippingAnimation::start( const AnimatableShapeSharedPtr&      rShape,
 
     if( !mbSpriteActive )
     {
-        mpLayerManager->enterAnimationMode( mpShape );
+        mpShapeManager->enterAnimationMode( mpShape );
         mbSpriteActive = true;
     }
 }
@@ -172,10 +180,10 @@ void ClippingAnimation::end_()
     if( mbSpriteActive )
     {
         mbSpriteActive = false;
-        mpLayerManager->leaveAnimationMode( mpShape );
+        mpShapeManager->leaveAnimationMode( mpShape );
 
-        if( mpShape->isUpdateNecessary() )
-            mpLayerManager->notifyShapeUpdate( mpShape );
+        if( mpShape->isContentChanged() )
+            mpShapeManager->notifyShapeUpdate( mpShape );
     }
 }
 
@@ -187,10 +195,10 @@ bool ClippingAnimation::operator()( double nValue )
 
     // set new clip
     mpAttrLayer->setClip( maClippingFunctor( nValue,
-                                             mpShape->getDOMBounds().getRange() ) );
+                                             mpShape->getDomBounds().getRange() ) );
 
-    if( mpShape->isUpdateNecessary() )
-        mpLayerManager->notifyShapeUpdate( mpShape );
+    if( mpShape->isContentChanged() )
+        mpShapeManager->notifyShapeUpdate( mpShape );
 
     return true;
 }
@@ -213,12 +221,14 @@ double ClippingAnimation::getUnderlyingValue() const
 AnimationActivitySharedPtr TransitionFactory::createShapeTransition(
     const ActivitiesFactory::CommonParameters&          rParms,
     const AnimatableShapeSharedPtr&                     rShape,
-    const LayerManagerSharedPtr&                        rLayerManager,
+    const ShapeManagerSharedPtr&                        rShapeManager,
+    const ::basegfx::B2DVector&                         rSlideSize,
     uno::Reference< animations::XTransitionFilter > const& xTransition )
 {
     return createShapeTransition( rParms,
                                   rShape,
-                                  rLayerManager,
+                                  rShapeManager,
+                                  rSlideSize,
                                   xTransition,
                                   xTransition->getTransition(),
                                   xTransition->getSubtype() );
@@ -227,7 +237,8 @@ AnimationActivitySharedPtr TransitionFactory::createShapeTransition(
 AnimationActivitySharedPtr TransitionFactory::createShapeTransition(
     const ActivitiesFactory::CommonParameters&              rParms,
     const AnimatableShapeSharedPtr&                         rShape,
-    const LayerManagerSharedPtr&                            rLayerManager,
+    const ShapeManagerSharedPtr&                            rShapeManager,
+    const ::basegfx::B2DVector&                             rSlideSize,
     ::com::sun::star::uno::Reference<
         ::com::sun::star::animations::XTransitionFilter > const& xTransition,
     sal_Int16                                               nType,
@@ -266,7 +277,7 @@ AnimationActivitySharedPtr TransitionFactory::createShapeTransition(
                     NumberAnimationSharedPtr(
                         new ClippingAnimation(
                             pPoly,
-                            rLayerManager,
+                            rShapeManager,
                             *pTransitionInfo,
                             xTransition->getDirection(),
                             xTransition->getMode() ) ),
@@ -294,7 +305,8 @@ AnimationActivitySharedPtr TransitionFactory::createShapeTransition(
                         // and recurse
                         pGeneratedActivity = createShapeTransition( rParms,
                                                                     rShape,
-                                                                    rLayerManager,
+                                                                    rShapeManager,
+                                                                    rSlideSize,
                                                                     xTransition,
                                                                     pRandomTransitionInfo->mnTransitionType,
                                                                     pRandomTransitionInfo->mnTransitionSubType );
@@ -348,7 +360,7 @@ AnimationActivitySharedPtr TransitionFactory::createShapeTransition(
                             NumberAnimationSharedPtr(
                                 new ClippingAnimation(
                                     pPoly,
-                                    rLayerManager,
+                                    rShapeManager,
                                     *getTransitionInfo( animations::TransitionType::BARWIPE,
                                                         nBarWipeSubType ),
                                     bDirectionForward,
@@ -370,7 +382,8 @@ AnimationActivitySharedPtr TransitionFactory::createShapeTransition(
                                 ::rtl::OUString(
                                     RTL_CONSTASCII_USTRINGPARAM("Opacity") ),
                                 rShape,
-                                rLayerManager ),
+                                rShapeManager,
+                                rSlideSize ),
                             xTransition->getMode() );
                     }
                     break;
