@@ -4,9 +4,9 @@
  *
  *  $RCSfile: DocumentInfoPreview.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 09:01:07 $
+ *  last change: $Author: obo $ $Date: 2007-07-17 13:27:29 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -42,8 +42,8 @@
 #ifndef _SV_WINDOW_HXX
 #include <vcl/window.hxx>
 #endif
-#ifndef _COM_SUN_STAR_BEANS_XPROPERTYSET_HPP_
-#include <com/sun/star/beans/XPropertySet.hpp>
+#ifndef _COM_SUN_STAR_DOCUMENT_XSTANDALONEDOCUMENTINFO_HPP_
+#include <com/sun/star/document/XStandaloneDocumentInfo.hpp>
 #endif
 #ifndef _COM_SUN_STAR_LANG_LOCALE_HPP_
 #include <com/sun/star/lang/Locale.hpp>
@@ -65,7 +65,7 @@ namespace svtools
 
         virtual void Resize();
         void    Clear();
-        void    fill(const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet>& _xDocInfo
+        void    fill(const ::com::sun::star::uno::Reference< ::com::sun::star::document::XStandaloneDocumentInfo>& _xDocInfo
                     ,const String& rURL);
         void    InsertEntry( const String& rTitle, const String& rValue );
         void SetAutoScroll(BOOL _bAutoScroll);
