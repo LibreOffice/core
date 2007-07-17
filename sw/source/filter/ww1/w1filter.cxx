@@ -4,9 +4,9 @@
  *
  *  $RCSfile: w1filter.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: kz $ $Date: 2007-05-10 16:08:55 $
+ *  last change: $Author: obo $ $Date: 2007-07-17 13:08:51 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1591,7 +1591,7 @@ void Ww1Assoc::Out(Ww1Shell& rOut)
     pInfo->SetKeywords( GetStr(KeyWords) );
     pInfo->SetCreated( GetStr(Author) );
     pInfo->SetChanged( GetStr(LastRevBy) );
-    rOut.GetDoc().SetInfo(*pInfo);
+    rOut.GetDoc().SetDocumentInfo(*pInfo);
     delete pInfo;
 }
 
