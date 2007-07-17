@@ -4,9 +4,9 @@
  *
  *  $RCSfile: activitybase.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: kz $ $Date: 2006-12-13 15:25:03 $
+ *  last change: $Author: obo $ $Date: 2007-07-17 14:44:41 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -69,7 +69,6 @@ protected:
     virtual bool isActive() const;
 
 private:
-    virtual bool needsScreenUpdate() const;
     virtual void dequeued();
 
     // From AnimationActivity interface
