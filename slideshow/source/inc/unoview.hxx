@@ -4,9 +4,9 @@
  *
  *  $RCSfile: unoview.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: kz $ $Date: 2006-12-13 16:05:47 $
+ *  last change: $Author: obo $ $Date: 2007-07-17 15:17:50 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -33,10 +33,11 @@
  *
  ************************************************************************/
 
-#ifndef _SLIDESHOW_UNOVIEW_HXX
-#define _SLIDESHOW_UNOVIEW_HXX
+#ifndef INCLUDED_SLIDESHOW_UNOVIEW_HXX
+#define INCLUDED_SLIDESHOW_UNOVIEW_HXX
 
 #include "view.hxx"
+#include <com/sun/star/uno/Reference.hxx>
 
 #include <vector>
 
@@ -79,4 +80,4 @@ namespace slideshow
     }
 }
 
-#endif /* _SLIDESHOW_UNOVIEW_HXX */
+#endif /* INCLUDED_SLIDESHOW_UNOVIEW_HXX */
