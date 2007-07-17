@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.25 $
+#   $Revision: 1.26 $
 #
-#   last change: $Author: obo $ $Date: 2007-01-23 07:10:43 $
+#   last change: $Author: obo $ $Date: 2007-07-17 13:26:12 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -50,7 +50,6 @@ SLOFILES=			\
                     $(SLO)$/frame.obj								\
                     $(SLO)$/urltransformer.obj						\
                     $(SLO)$/mediatypedetectionhelper.obj			\
-                    $(SLO)$/documentproperties.obj					\
                     $(SLO)$/substitutepathvars.obj					\
                     $(SLO)$/pathsettings.obj                        \
                     $(SLO)$/backingcomp.obj							\
