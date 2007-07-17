@@ -4,9 +4,9 @@
  *
  *  $RCSfile: activitiesfactory.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: kz $ $Date: 2006-12-13 15:24:22 $
+ *  last change: $Author: obo $ $Date: 2007-07-17 14:44:06 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -207,26 +207,31 @@ public:
         // are actually valid.
         // See http://www.w3.org/TR/smil20/animation.html#AnimationNS-FromToBy
         // for a definition
-        if( maFrom ) {
+        if( maFrom )
+        {
             // From-to or From-by animation. According to
             // SMIL spec, the To value takes precedence
             // over the By value, if both are specified
-            if( maTo ) {
+            if( maTo )
+            {
                 // From-To animation
                 maStartValue = *maFrom;
                 maEndValue = *maTo;
             }
-            else if( maBy ) {
+            else if( maBy )
+            {
                 // From-By animation
                 maStartValue = *maFrom;
                 maEndValue = maStartValue + *maBy;
             }
         }
-        else {
+        else
+        {
             // By or To animation. According to SMIL spec,
             // the To value takes precedence over the By
             // value, if both are specified
-            if( maTo ) {
+            if( maTo )
+            {
                 // To animation
 
                 // According to the SMIL spec
@@ -236,7 +241,8 @@ public:
                 mbDynamicStartValue = true;
                 maEndValue = *maTo;
             }
-            else if( maBy ) {
+            else if( maBy )
+            {
                 // By animation
                 maStartValue = aAnimationStartValue;
                 maEndValue = maStartValue + *maBy;
@@ -335,7 +341,7 @@ AnimationActivitySharedPtr createFromToByActivity(
     const Interpolator< typename AnimationType::ValueType >& rInterpolator,
     bool                                                     bCumulative,
     const ShapeSharedPtr&                                    rShape,
-    const LayerManagerSharedPtr&                             rLayerManager )
+    const ::basegfx::B2DVector&                              rSlideBounds )
 {
     typedef typename AnimationType::ValueType           ValueType;
     typedef boost::optional<ValueType>                  OptionalValueType;
@@ -346,21 +352,24 @@ AnimationActivitySharedPtr createFromToByActivity(
 
     ValueType aTmpValue;
 
-    if( rFromAny.hasValue() ) {
+    if( rFromAny.hasValue() )
+    {
         ENSURE_AND_THROW(
-            extractValue( aTmpValue, rFromAny, rShape, rLayerManager ),
+            extractValue( aTmpValue, rFromAny, rShape, rSlideBounds ),
             "createFromToByActivity(): Could not extract from value" );
         aFrom.reset(aTmpValue);
     }
-    if( rToAny.hasValue() ) {
+    if( rToAny.hasValue() )
+    {
         ENSURE_AND_THROW(
-            extractValue( aTmpValue, rToAny, rShape, rLayerManager ),
+            extractValue( aTmpValue, rToAny, rShape, rSlideBounds ),
             "createFromToByActivity(): Could not extract to value" );
         aTo.reset(aTmpValue);
     }
-    if( rByAny.hasValue() ) {
+    if( rByAny.hasValue() )
+    {
         ENSURE_AND_THROW(
-            extractValue( aTmpValue, rByAny, rShape, rLayerManager ),
+            extractValue( aTmpValue, rByAny, rShape, rSlideBounds ),
             "createFromToByActivity(): Could not extract by value" );
         aBy.reset(aTmpValue);
     }
@@ -565,7 +574,7 @@ AnimationActivitySharedPtr createValueListActivity(
     const Interpolator<typename AnimationType::ValueType>&    rInterpolator,
     bool                                                      bCumulative,
     const ShapeSharedPtr&                                     rShape,
-    const LayerManagerSharedPtr&                              rLayerManager )
+    const ::basegfx::B2DVector&                               rSlideBounds )
 {
     typedef typename AnimationType::ValueType   ValueType;
     typedef std::vector<ValueType>              ValueVectorType;
@@ -577,7 +586,7 @@ AnimationActivitySharedPtr createValueListActivity(
     {
         ValueType aValue;
         ENSURE_AND_THROW(
-            extractValue( aValue, rValues[i], rShape, rLayerManager ),
+            extractValue( aValue, rValues[i], rShape, rSlideBounds ),
             "createValueListActivity(): Could not extract values" );
         aValueVector.push_back( aValue );
     }
@@ -638,15 +647,17 @@ AnimationActivitySharedPtr createActivity(
     if( rFormulaString.getLength() )
     {
         // yep, parse and pass to ActivityParameters
-        try {
+        try
+        {
             aActivityParms.mpFormula =
                 SmilFunctionParser::parseSmilFunction(
                     rFormulaString,
                     calcRelativeShapeBounds(
-                        rParms.mpLayerManager->getPageBounds(),
-                        rParms.mpShape->getPosSize() ) );
+                        rParms.maSlideBounds,
+                        rParms.mpShape->getBounds() ) );
         }
-        catch( ParseError& ) {
+        catch( ParseError& )
+        {
             // parse error, thus no formula
             OSL_ENSURE( false,
                         "createActivity(): Error parsing formula string" );
@@ -655,7 +666,8 @@ AnimationActivitySharedPtr createActivity(
 
     // are key times given?
     const uno::Sequence< double >& aKeyTimes( xNode->getKeyTimes() );
-    if( aKeyTimes.hasElements() ) {
+    if( aKeyTimes.hasElements() )
+    {
         // yes, convert them from Sequence< double >
         aActivityParms.maDiscreteTimes.resize( aKeyTimes.getLength() );
         comphelper::sequenceToArray(
@@ -665,16 +677,18 @@ AnimationActivitySharedPtr createActivity(
 
     // values sequence given?
     const sal_Int32 nValueLen( xNode->getValues().getLength() );
-    if( nValueLen ) {
+    if( nValueLen )
+    {
         // Value list activity
         // ===================
 
         // fake keytimes, if necessary
-        if( !aKeyTimes.hasElements() ) {
+        if( !aKeyTimes.hasElements() )
+        {
             // create a dummy vector of key times,
             // with aValues.getLength equally spaced entries.
             for( sal_Int32 i=0; i<nValueLen; ++i )
-                aActivityParms.maDiscreteTimes.push_back( (double)i/nValueLen );
+                aActivityParms.maDiscreteTimes.push_back( double(i)/nValueLen );
         }
 
         // determine type of animation needed here:
@@ -683,51 +697,54 @@ AnimationActivitySharedPtr createActivity(
         // specializations
         const sal_Int16 nCalcMode( xNode->getCalcMode() );
 
-        switch( nCalcMode ) {
-        case animations::AnimationCalcMode::DISCRETE: {
-            // since DiscreteActivityBase suspends itself
-            // between the frames, create a WakeupEvent for it.
-            aActivityParms.mpWakeupEvent.reset(
-                new WakeupEvent(
-                    rParms.mrEventQueue.getTimer(),
-                    rParms.mrActivitiesQueue ) );
+        switch( nCalcMode )
+        {
+            case animations::AnimationCalcMode::DISCRETE:
+            {
+                // since DiscreteActivityBase suspends itself
+                // between the frames, create a WakeupEvent for it.
+                aActivityParms.mpWakeupEvent.reset(
+                    new WakeupEvent(
+                        rParms.mrEventQueue.getTimer(),
+                        rParms.mrActivitiesQueue ) );
 
-            AnimationActivitySharedPtr pActivity(
-                createValueListActivity< DiscreteActivityBase >(
+                AnimationActivitySharedPtr pActivity(
+                    createValueListActivity< DiscreteActivityBase >(
+                        xNode->getValues(),
+                        aActivityParms,
+                        rAnim,
+                        rInterpolator,
+                        xNode->getAccumulate(),
+                        rParms.mpShape,
+                        rParms.maSlideBounds ) );
+
+                // WakeupEvent and DiscreteActivityBase need circular
+                // references to the corresponding other object.
+                aActivityParms.mpWakeupEvent->setActivity( pActivity );
+
+                return pActivity;
+            }
+
+            default:
+                OSL_ENSURE( false, "createActivity(): unexpected case" );
+                // FALLTHROUGH intended
+            case animations::AnimationCalcMode::PACED:
+                // FALLTHROUGH intended
+            case animations::AnimationCalcMode::SPLINE:
+                // FALLTHROUGH intended
+            case animations::AnimationCalcMode::LINEAR:
+                return createValueListActivity< ContinuousKeyTimeActivityBase >(
                     xNode->getValues(),
                     aActivityParms,
                     rAnim,
                     rInterpolator,
                     xNode->getAccumulate(),
                     rParms.mpShape,
-                    rParms.mpLayerManager ) );
-
-            // WakeupEvent and DiscreteActivityBase need circular
-            // references to the corresponding other object.
-            aActivityParms.mpWakeupEvent->setActivity( pActivity );
-
-            return pActivity;
-        }
-
-        default:
-            OSL_ENSURE( false, "createActivity(): unexpected case" );
-            // FALLTHROUGH intended
-        case animations::AnimationCalcMode::PACED:
-            // FALLTHROUGH intended
-        case animations::AnimationCalcMode::SPLINE:
-            // FALLTHROUGH intended
-        case animations::AnimationCalcMode::LINEAR:
-            return createValueListActivity< ContinuousKeyTimeActivityBase >(
-                xNode->getValues(),
-                aActivityParms,
-                rAnim,
-                rInterpolator,
-                xNode->getAccumulate(),
-                rParms.mpShape,
-                rParms.mpLayerManager );
+                    rParms.maSlideBounds );
         }
     }
-    else {
+    else
+    {
         // FromToBy activity
         // =================
 
@@ -737,25 +754,54 @@ AnimationActivitySharedPtr createActivity(
         // specializations
         const sal_Int16 nCalcMode( xNode->getCalcMode() );
 
-        switch( nCalcMode ) {
-        case animations::AnimationCalcMode::DISCRETE: {
-            // fake keytimes, if necessary
-            if( !aKeyTimes.hasElements() ) {
-                // create a dummy vector of 2 key times
-                const ::std::size_t nLen( 2 );
-                for( ::std::size_t i=0; i<nLen; ++i )
-                    aActivityParms.maDiscreteTimes.push_back( (double)i/nLen );
+        switch( nCalcMode )
+        {
+            case animations::AnimationCalcMode::DISCRETE:
+            {
+                // fake keytimes, if necessary
+                if( !aKeyTimes.hasElements() )
+                {
+                    // create a dummy vector of 2 key times
+                    const ::std::size_t nLen( 2 );
+                    for( ::std::size_t i=0; i<nLen; ++i )
+                        aActivityParms.maDiscreteTimes.push_back( double(i)/nLen );
+                }
+
+                // since DiscreteActivityBase suspends itself
+                // between the frames, create a WakeupEvent for it.
+                aActivityParms.mpWakeupEvent.reset(
+                    new WakeupEvent(
+                        rParms.mrEventQueue.getTimer(),
+                        rParms.mrActivitiesQueue ) );
+
+                AnimationActivitySharedPtr pActivity(
+                    createFromToByActivity< DiscreteActivityBase >(
+                        xNode->getFrom(),
+                        xNode->getTo(),
+                        xNode->getBy(),
+                        aActivityParms,
+                        rAnim,
+                        rInterpolator,
+                        xNode->getAccumulate(),
+                        rParms.mpShape,
+                        rParms.maSlideBounds ) );
+
+                // WakeupEvent and DiscreteActivityBase need circular
+                // references to the corresponding other object.
+                aActivityParms.mpWakeupEvent->setActivity( pActivity );
+
+                return pActivity;
             }
 
-            // since DiscreteActivityBase suspends itself
-            // between the frames, create a WakeupEvent for it.
-            aActivityParms.mpWakeupEvent.reset(
-                new WakeupEvent(
-                    rParms.mrEventQueue.getTimer(),
-                    rParms.mrActivitiesQueue ) );
-
-            AnimationActivitySharedPtr pActivity(
-                createFromToByActivity< DiscreteActivityBase >(
+            default:
+                OSL_ENSURE( false, "createActivity(): unexpected case" );
+                // FALLTHROUGH intended
+            case animations::AnimationCalcMode::PACED:
+                // FALLTHROUGH intended
+            case animations::AnimationCalcMode::SPLINE:
+                // FALLTHROUGH intended
+            case animations::AnimationCalcMode::LINEAR:
+                return createFromToByActivity< ContinuousActivityBase >(
                     xNode->getFrom(),
                     xNode->getTo(),
                     xNode->getBy(),
@@ -764,33 +810,7 @@ AnimationActivitySharedPtr createActivity(
                     rInterpolator,
                     xNode->getAccumulate(),
                     rParms.mpShape,
-                    rParms.mpLayerManager ) );
-
-            // WakeupEvent and DiscreteActivityBase need circular
-            // references to the corresponding other object.
-            aActivityParms.mpWakeupEvent->setActivity( pActivity );
-
-            return pActivity;
-        }
-
-        default:
-            OSL_ENSURE( false, "createActivity(): unexpected case" );
-            // FALLTHROUGH intended
-        case animations::AnimationCalcMode::PACED:
-            // FALLTHROUGH intended
-        case animations::AnimationCalcMode::SPLINE:
-            // FALLTHROUGH intended
-        case animations::AnimationCalcMode::LINEAR:
-            return createFromToByActivity< ContinuousActivityBase >(
-                xNode->getFrom(),
-                xNode->getTo(),
-                xNode->getBy(),
-                aActivityParms,
-                rAnim,
-                rInterpolator,
-                xNode->getAccumulate(),
-                rParms.mpShape,
-                rParms.mpLayerManager );
+                    rParms.maSlideBounds );
         }
     }
 }
