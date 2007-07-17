@@ -4,9 +4,9 @@
  *
  *  $RCSfile: objserv.cxx,v $
  *
- *  $Revision: 1.98 $
+ *  $Revision: 1.99 $
  *
- *  last change: $Author: hr $ $Date: 2007-06-27 23:23:45 $
+ *  last change: $Author: obo $ $Date: 2007-07-17 13:44:02 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -228,20 +228,6 @@ svtools::AsynchronLink* pPendingCloser = 0;
 
 SFX_IMPL_INTERFACE(SfxObjectShell,SfxShell,SfxResId(0))
 {
-}
-
-long SfxObjectShellClose_Impl( void* /*pObj*/, void* pArg )
-{
-    SfxObjectShell *pObjSh = (SfxObjectShell*) pArg;
-    if ( pObjSh->Get_Impl()->bHiddenLockedByAPI )
-    {
-        pObjSh->Get_Impl()->bHiddenLockedByAPI = FALSE;
-        pObjSh->OwnerLock(FALSE);
-    }
-    else if ( !pObjSh->Get_Impl()->bClosing )
-        // GCC stuerzt ab, wenn schon im dtor, also vorher Flag abfragen
-        pObjSh->DoClose();
-    return 0;
 }
 
 //=========================================================================
@@ -493,19 +479,6 @@ void SfxObjectShell::ExecFile_Impl(SfxRequest &rReq)
     sal_Bool bIsPDFExport = sal_False;
     switch(nId)
     {
-        case SID_SAVE_VERSION_ON_CLOSE:
-        {
-            BOOL bSet = GetDocInfo().IsSaveVersionOnClose();
-            SFX_REQUEST_ARG( rReq, pItem, SfxBoolItem, nId, FALSE);
-            if ( pItem )
-                bSet = pItem->GetValue();
-            GetDocInfo().SetSaveVersionOnClose( bSet );
-            SetModified( TRUE );
-            if ( !pItem )
-                rReq.AppendItem( SfxBoolItem( nId, bSet ) );
-            rReq.Done();
-            return;
-        }
         case SID_VERSION:
         {
             SfxViewFrame* pFrame = GetFrame();
@@ -523,62 +496,97 @@ void SfxObjectShell::ExecFile_Impl(SfxRequest &rReq)
             if ( !IsOwnStorageFormat_Impl( *GetMedium() ) )
                 return;
 
-            SfxVersionDialog *pDlg = new SfxVersionDialog( pFrame, NULL );
+            SfxVersionDialog *pDlg = new SfxVersionDialog( pFrame, IsSaveVersionOnClose() );
             pDlg->Execute();
+            SetSaveVersionOnClose( pDlg->IsSaveVersionOnClose() );
             delete pDlg;
+            rReq.Done();
             return;
         }
-
-//REMOVE            case SID_LOAD_LIBRARY:
-//REMOVE            case SID_UNLOAD_LIBRARY:
-//REMOVE            case SID_REMOVE_LIBRARY:
-//REMOVE            case SID_ADD_LIBRARY:
-//REMOVE            {
-//REMOVE                // Diese Funktionen sind nur f"ur Aufrufe aus dem Basic gedacht
-//REMOVE                SfxApplication *pApp = SFX_APP();
-//REMOVE                if ( pApp->IsInBasicCall() )
-//REMOVE                    pApp->BasicLibExec_Impl( rReq, GetBasicManager() );
-//REMOVE                return;
-//REMOVE                break;
-//REMOVE            }
 
         // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
         case SID_DOCINFO:
         {
             SFX_REQUEST_ARG(rReq, pDocInfItem, SfxDocumentInfoItem, SID_DOCINFO, FALSE);
-
-            // keine Parameter vorhanden?
-            if ( !pDocInfItem )
+            if ( pDocInfItem )
             {
-                // Dialog ausf"uhren
-                SfxDocumentInfo *pOldInfo = new SfxDocumentInfo;
-                if ( pImp->pDocInfo )
-                    // r/o-flag korrigieren falls es zu frueh gesetzt wurde
-                    pImp->pDocInfo->SetReadOnly( IsReadOnly() );
-                *pOldInfo = GetDocInfo();
-                DocInfoDlg_Impl( GetDocInfo() );
-
-                // ge"andert?
-                if( !(*pOldInfo == GetDocInfo()) )
-                {
-                    // Dokument gilt als ver"andert
-                    FlushDocInfo();
-
-                    // ggf. Recorden
-                    if ( !rReq.IsRecording() )
-                        rReq.AppendItem( SfxDocumentInfoItem( GetTitle(), GetDocInfo() ) );
-                    rReq.Done();
-                }
-                else
-                    rReq.Ignore();
-
-                delete pOldInfo;
+                // parameter, e.g. from replayed macro
+                GetDocInfo() = (*pDocInfItem)();
+                SetUseUserData( pDocInfItem->IsUseUserData() );
             }
             else
             {
-                // DocInfo aus Parameter anwenden
-                GetDocInfo() = (*pDocInfItem)();
-                FlushDocInfo();
+                // no argument containing DocInfo; check optional arguments
+                BOOL bReadOnly = IsReadOnly();
+                SFX_REQUEST_ARG(rReq, pROItem, SfxBoolItem, SID_DOC_READONLY, FALSE);
+                if ( pROItem )
+                    // override readonly attribute of document
+                    // e.g. if a readonly document is saved elsewhere and user asks for editing DocInfo before
+                    bReadOnly = pROItem->GetValue();
+
+                // collect data for dialog
+                String aURL, aTitle;
+                if ( HasName() && !pImp->aNewName.Len() )
+                {
+                    aURL = GetMedium()->GetName();
+                    aTitle = GetTitle();
+                }
+                else
+                {
+                    if ( !pImp->aNewName.Len() )
+                    {
+                        aURL = DEFINE_CONST_UNICODE( "private:factory/" );
+                        aURL += String::CreateFromAscii( GetFactory().GetShortName() );
+                        // aTitle = String( SfxResId( STR_NONAME ) );
+                    }
+                    else
+                    {
+                        aURL = DEFINE_CONST_UNICODE( "[private:factory/" );
+                        aURL += String::CreateFromAscii( GetFactory().GetShortName() );
+                        aURL += DEFINE_CONST_UNICODE( "]" );
+                        INetURLObject aURLObj( pImp->aNewName );
+                        aURL += String(aURLObj.GetMainURL( INetURLObject::DECODE_TO_IURI ));
+                        // aTitle = aURLObj.GetBase();
+                    }
+
+                    aTitle = GetTitle();
+                }
+
+                SfxDocumentInfoItem aDocInfoItem( aURL, GetDocInfo(), IsUseUserData() );
+                if ( !GetSlotState( SID_DOCTEMPLATE ) )
+                    // templates not supported
+                    aDocInfoItem.SetTemplate(FALSE);
+
+                SfxItemSet aSet(GetPool(), SID_DOCINFO, SID_DOCINFO, SID_DOC_READONLY, SID_DOC_READONLY,
+                                SID_EXPLORER_PROPS_START, SID_EXPLORER_PROPS_START, SID_BASEURL, SID_BASEURL,
+                                0L );
+                aSet.Put( aDocInfoItem );
+                aSet.Put( SfxBoolItem( SID_DOC_READONLY, bReadOnly ) );
+                aSet.Put( SfxStringItem( SID_EXPLORER_PROPS_START, aTitle ) );
+                aSet.Put( SfxStringItem( SID_BASEURL, GetMedium()->GetBaseURL() ) );
+
+                // creating dialog is done via virtual method; application will add its own statistics page
+                SfxDocumentInfoDialog *pDlg = CreateDocumentInfoDialog(0, aSet);
+                if ( RET_OK == pDlg->Execute() )
+                {
+                    SFX_ITEMSET_ARG( pDlg->GetOutputItemSet(), pDocInfoItem, SfxDocumentInfoItem, SID_DOCINFO, FALSE);
+                    if ( pDocInfoItem )
+                    {
+                        // user has done some changes to DocumentInfo
+                        GetDocInfo() = (*(const SfxDocumentInfoItem *)pDocInfoItem)();
+                        SetUseUserData( ((const SfxDocumentInfoItem *)pDocInfoItem)->IsUseUserData() );
+
+                        // add data from dialog for possible recording purposes
+                        rReq.AppendItem( SfxDocumentInfoItem( GetTitle(), GetDocInfo(), IsUseUserData() ) );
+                    }
+
+                    rReq.Done();
+                }
+                else
+                    // nothing done; no recording
+                    rReq.Ignore();
+
+                delete pDlg;
             }
 
             return;
@@ -1014,12 +1022,6 @@ void SfxObjectShell::GetState_Impl(SfxItemSet &rSet)
     {
         switch ( nWhich )
         {
-            case SID_SAVE_VERSION_ON_CLOSE:
-            {
-                rSet.Put( SfxBoolItem( nWhich, GetDocInfo().IsSaveVersionOnClose() ) );
-                break;
-            }
-
             case SID_DOCTEMPLATE :
             {
                 if ( !GetFactory().GetTemplateFilter() )
@@ -1201,9 +1203,7 @@ void SfxObjectShell::ExecProps_Impl(SfxRequest &rReq)
         case SID_DOCINFO_AUTHOR :
         {
             String aStr = ( (SfxStringItem&)rReq.GetArgs()->Get(rReq.GetSlot())).GetValue();
-            SfxStamp aStamp( GetDocInfo().GetCreated() );
-            aStamp.SetName( aStr );
-            GetDocInfo().SetCreated( aStamp );
+            GetDocInfo().SetAuthor( aStr );
             break;
         }
 
@@ -1234,8 +1234,7 @@ void SfxObjectShell::StateProps_Impl(SfxItemSet &rSet)
         {
             case SID_DOCINFO_AUTHOR :
             {
-                String aStr = GetDocInfo().GetCreated().GetName();
-                rSet.Put( SfxStringItem( nSID, aStr ) );
+                rSet.Put( SfxStringItem( nSID, GetDocInfo().GetAuthor() ) );
                 break;
             }
 
