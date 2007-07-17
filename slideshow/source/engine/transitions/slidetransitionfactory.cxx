@@ -4,9 +4,9 @@
  *
  *  $RCSfile: slidetransitionfactory.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: vg $ $Date: 2006-12-15 00:51:10 $
+ *  last change: $Author: obo $ $Date: 2007-07-17 15:00:21 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -36,14 +36,12 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_slideshow.hxx"
 
-#include <boost/current_function.hpp>
-#include "slidechangebase.hxx"
+#include <canvas/debug.hxx>
 
 #include <basegfx/matrix/b2dhommatrix.hxx>
 #include <basegfx/polygon/b2dpolygontools.hxx>
 #include <basegfx/polygon/b2dpolypolygontools.hxx>
 
-#include <canvas/debug.hxx>
 #include <cppcanvas/basegfxfactory.hxx>
 
 #include <comphelper/optional.hxx>
@@ -52,12 +50,14 @@
 #include <com/sun/star/animations/TransitionType.hpp>
 #include <com/sun/star/animations/TransitionSubType.hpp>
 
+#include "slidechangebase.hxx"
 #include "transitionfactory.hxx"
 #include "transitiontools.hxx"
 #include "parametricpolypolygonfactory.hxx"
 #include "animationfactory.hxx"
 #include "clippingfunctor.hxx"
 #include "combtransition.hxx"
+#include "tools.hxx"
 
 
 /***************************************************
@@ -115,6 +115,7 @@ public:
         const ParametricPolyPolygonSharedPtr&   rPolygon,
         const TransitionInfo&                   rTransitionInfo,
         const UnoViewContainer&                 rViewContainer,
+        ScreenUpdater&                          rScreenUpdater,
         EventMultiplexer&                       rEventMultiplexer,
         bool                                    bDirectionForward,
         const SoundPlayerSharedPtr&             pSoundPlayer ) :
@@ -125,6 +126,7 @@ public:
             pEnteringSlide,
             pSoundPlayer,
             rViewContainer,
+            rScreenUpdater,
             rEventMultiplexer ),
         maClippingFunctor( rPolygon,
                            rTransitionInfo,
@@ -161,7 +163,7 @@ void ClippedSlideChange::performIn(
     // of the view transformation (e.g. rotation) from the transition.
     rSprite->setClipPixel(
         maClippingFunctor( t,
-                           getEnteringSizePixel(rViewEntry.mpView) ) );
+                           getEnteringSlideSizePixel(rViewEntry.mpView) ) );
 }
 
 void ClippedSlideChange::performOut(
@@ -181,16 +183,18 @@ public:
         entering slides, which applies a fade effect.
     */
     FadingSlideChange(
-        boost::optional<SlideSharedPtr> const &          leavingSlide,
-        const SlideSharedPtr&                            pEnteringSlide,
-        boost::optional<RGBColor> const&                 rFadeColor,
-        const SoundPlayerSharedPtr&                      pSoundPlayer,
-        const UnoViewContainer&                          rViewContainer,
-        EventMultiplexer&                                rEventMultiplexer )
+        boost::optional<SlideSharedPtr> const & leavingSlide,
+        const SlideSharedPtr&                   pEnteringSlide,
+        boost::optional<RGBColor> const&        rFadeColor,
+        const SoundPlayerSharedPtr&             pSoundPlayer,
+        const UnoViewContainer&                 rViewContainer,
+        ScreenUpdater&                          rScreenUpdater,
+        EventMultiplexer&                       rEventMultiplexer )
         : SlideChangeBase( leavingSlide,
                            pEnteringSlide,
                            pSoundPlayer,
                            rViewContainer,
+                           rScreenUpdater,
                            rEventMultiplexer ),
           maFadeColor( rFadeColor ),
           mbFirstTurn( true )
@@ -254,7 +258,7 @@ void FadingSlideChange::performOut(
             // clear page to given fade color. 'Leaving' slide is
             // painted atop of that, but slowly fading out.
             fillPage( rDestinationCanvas,
-                      getEnteringSizePixel( rViewEntry.mpView ),
+                      getEnteringSlideSizePixel( rViewEntry.mpView ),
                       *maFadeColor );
         }
 
@@ -297,12 +301,13 @@ public:
         const SlideSharedPtr&                  pEnteringSlide,
         const SoundPlayerSharedPtr&            pSoundPlayer,
         const UnoViewContainer&                rViewContainer,
+        ScreenUpdater&                         rScreenUpdater,
         EventMultiplexer&                      rEventMultiplexer,
         const ::basegfx::B2DVector&            rLeavingDirection,
         const ::basegfx::B2DVector&            rEnteringDirection )
         : SlideChangeBase(
             leavingSlide, pEnteringSlide, pSoundPlayer,
-            rViewContainer, rEventMultiplexer,
+            rViewContainer, rScreenUpdater, rEventMultiplexer,
             // Optimization: when leaving bitmap is given,
             // but it does not move, don't create sprites for it,
             // we simply paint it once at startup:
@@ -366,7 +371,7 @@ void MovingSlideChange::performIn(
     rSprite->movePixel(
         aPageOrigin +
         ((t - 1.0) *
-         ::basegfx::B2DSize( getEnteringSizePixel(rViewEntry.mpView) ) *
+         ::basegfx::B2DSize( getEnteringSlideSizePixel(rViewEntry.mpView) ) *
          maEnteringDirection) );
 }
 
@@ -403,7 +408,7 @@ void MovingSlideChange::performOut(
     // move sprite
     rSprite->movePixel(
         aPageOrigin + (t *
-                       ::basegfx::B2DSize( getEnteringSizePixel(rViewEntry.mpView) ) *
+                       ::basegfx::B2DSize( getEnteringSlideSizePixel(rViewEntry.mpView) ) *
                        maLeavingDirection) );
 }
 
@@ -412,6 +417,7 @@ NumberAnimationSharedPtr createPushWipeTransition(
     boost::optional<SlideSharedPtr> const &         leavingSlide_,
     const SlideSharedPtr&                           pEnteringSlide,
     const UnoViewContainer&                         rViewContainer,
+    ScreenUpdater&                                  rScreenUpdater,
     EventMultiplexer&                               rEventMultiplexer,
     sal_Int16                                       /*nTransitionType*/,
     sal_Int16                                       nTransitionSubType,
@@ -492,6 +498,7 @@ NumberAnimationSharedPtr createPushWipeTransition(
                                 pEnteringSlide,
                                 pSoundPlayer,
                                 rViewContainer,
+                                rScreenUpdater,
                                 rEventMultiplexer,
                                 aDirection,
                                 24 /* comb with 12 stripes */ ));
@@ -503,6 +510,7 @@ NumberAnimationSharedPtr createPushWipeTransition(
                                    pEnteringSlide,
                                    pSoundPlayer,
                                    rViewContainer,
+                                   rScreenUpdater,
                                    rEventMultiplexer,
                                    aDirection,
                                    aDirection ));
@@ -513,6 +521,7 @@ NumberAnimationSharedPtr createSlideWipeTransition(
     boost::optional<SlideSharedPtr> const &         leavingSlide,
     const SlideSharedPtr&                           pEnteringSlide,
     const UnoViewContainer&                         rViewContainer,
+    ScreenUpdater&                                  rScreenUpdater,
     EventMultiplexer&                               rEventMultiplexer,
     sal_Int16                                       /*nTransitionType*/,
     sal_Int16                                       nTransitionSubType,
@@ -577,6 +586,7 @@ NumberAnimationSharedPtr createSlideWipeTransition(
                 pEnteringSlide,
                 pSoundPlayer,
                 rViewContainer,
+                rScreenUpdater,
                 rEventMultiplexer,
                 basegfx::B2DVector(),
                 aInDirection ));
@@ -593,6 +603,7 @@ NumberAnimationSharedPtr createSlideWipeTransition(
                                    pEnteringSlide,
                                    pSoundPlayer,
                                    rViewContainer,
+                                   rScreenUpdater,
                                    rEventMultiplexer,
                                    aInDirection,
                                    basegfx::B2DVector() ));
@@ -606,6 +617,7 @@ NumberAnimationSharedPtr TransitionFactory::createSlideTransition(
     const SlideSharedPtr&       pLeavingSlide,
     const SlideSharedPtr&       pEnteringSlide,
     const UnoViewContainer&     rViewContainer,
+    ScreenUpdater&              rScreenUpdater,
     EventMultiplexer&           rEventMultiplexer,
     sal_Int16                   nTransitionType,
     sal_Int16                   nTransitionSubType,
@@ -658,6 +670,7 @@ NumberAnimationSharedPtr TransitionFactory::createSlideTransition(
                                             pPoly,
                                             *pTransitionInfo,
                                             rViewContainer,
+                                            rScreenUpdater,
                                             rEventMultiplexer,
                                             bTransitionDirection,
                                             pSoundPlayer ));
@@ -699,6 +712,7 @@ NumberAnimationSharedPtr TransitionFactory::createSlideTransition(
                             pLeavingSlide,
                             pEnteringSlide,
                             rViewContainer,
+                            rScreenUpdater,
                             rEventMultiplexer,
                             pRandomTransitionInfo->mnTransitionType,
                             pRandomTransitionInfo->mnTransitionSubType,
@@ -713,6 +727,7 @@ NumberAnimationSharedPtr TransitionFactory::createSlideTransition(
                             comphelper::make_optional(pLeavingSlide),
                             pEnteringSlide,
                             rViewContainer,
+                            rScreenUpdater,
                             rEventMultiplexer,
                             nTransitionType,
                             nTransitionSubType,
@@ -726,6 +741,7 @@ NumberAnimationSharedPtr TransitionFactory::createSlideTransition(
                             comphelper::make_optional(pLeavingSlide),
                             pEnteringSlide,
                             rViewContainer,
+                            rScreenUpdater,
                             rEventMultiplexer,
                             nTransitionType,
                             nTransitionSubType,
@@ -772,6 +788,7 @@ NumberAnimationSharedPtr TransitionFactory::createSlideTransition(
                                     rTransitionFadeColor),
                                 pSoundPlayer,
                                 rViewContainer,
+                                rScreenUpdater,
                                 rEventMultiplexer ));
                     }
                 }
