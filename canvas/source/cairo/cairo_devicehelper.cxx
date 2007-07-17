@@ -4,9 +4,9 @@
  *
  *  $RCSfile: cairo_devicehelper.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: kz $ $Date: 2006-12-13 14:40:11 $
+ *  last change: $Author: obo $ $Date: 2007-07-17 14:21:10 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -68,9 +68,11 @@ namespace cairocanvas
         mpSpriteCanvas( NULL ),
         maSize(),
         mbFullScreen( false ),
+        mpOutputWindow( NULL ),
+        mpSysData( NULL ),
+        mpWindowSurface( NULL ),
         mpBufferSurface( NULL ),
-        mpBufferCairo( NULL ),
-        mpWindowSurface( NULL )
+        mpBufferCairo( NULL )
     {
     }
 
@@ -150,7 +152,7 @@ namespace cairocanvas
     }
 
     uno::Reference< rendering::XLinePolyPolygon2D > DeviceHelper::createCompatibleLinePolyPolygon(
-        const uno::Reference< rendering::XGraphicDevice >&              rDevice,
+        const uno::Reference< rendering::XGraphicDevice >&              ,
         const uno::Sequence< uno::Sequence< geometry::RealPoint2D > >&  points )
     {
         // disposed?
@@ -163,7 +165,7 @@ namespace cairocanvas
     }
 
     uno::Reference< rendering::XBezierPolyPolygon2D > DeviceHelper::createCompatibleBezierPolyPolygon(
-        const uno::Reference< rendering::XGraphicDevice >&                      rDevice,
+        const uno::Reference< rendering::XGraphicDevice >&                      ,
         const uno::Sequence< uno::Sequence< geometry::RealBezierSegment2D > >&  points )
     {
         // disposed?
@@ -176,7 +178,7 @@ namespace cairocanvas
     }
 
     uno::Reference< rendering::XBitmap > DeviceHelper::createCompatibleBitmap(
-        const uno::Reference< rendering::XGraphicDevice >&  rDevice,
+        const uno::Reference< rendering::XGraphicDevice >&  ,
         const geometry::IntegerSize2D&                      size )
     {
         // disposed?
@@ -191,14 +193,14 @@ namespace cairocanvas
     }
 
     uno::Reference< rendering::XVolatileBitmap > DeviceHelper::createVolatileBitmap(
-        const uno::Reference< rendering::XGraphicDevice >&  rDevice,
-        const geometry::IntegerSize2D&                      size )
+        const uno::Reference< rendering::XGraphicDevice >&  ,
+        const geometry::IntegerSize2D&                      /*size*/ )
     {
         return uno::Reference< rendering::XVolatileBitmap >();
     }
 
     uno::Reference< rendering::XBitmap > DeviceHelper::createCompatibleAlphaBitmap(
-        const uno::Reference< rendering::XGraphicDevice >&  rDevice,
+        const uno::Reference< rendering::XGraphicDevice >&  ,
         const geometry::IntegerSize2D&                      size )
     {
         // disposed?
@@ -213,8 +215,8 @@ namespace cairocanvas
     }
 
     uno::Reference< rendering::XVolatileBitmap > DeviceHelper::createVolatileAlphaBitmap(
-        const uno::Reference< rendering::XGraphicDevice >&  rDevice,
-        const geometry::IntegerSize2D&                      size )
+        const uno::Reference< rendering::XGraphicDevice >&  ,
+        const geometry::IntegerSize2D&                      /*size*/ )
     {
         return uno::Reference< rendering::XVolatileBitmap >();
     }
@@ -225,13 +227,13 @@ namespace cairocanvas
         return false;
     }
 
-    sal_Bool DeviceHelper::enterFullScreenMode( sal_Bool bEnter )
+    sal_Bool DeviceHelper::enterFullScreenMode( sal_Bool /*bEnter*/ )
     {
         // TODO(F3): offer fullscreen mode the XCanvas way
         return false;
     }
 
-    ::sal_Int32 DeviceHelper::createBuffers( ::sal_Int32 nBuffers )
+    ::sal_Int32 DeviceHelper::createBuffers( ::sal_Int32 /*nBuffers*/ )
     {
         // TODO(F3): implement XBufferStrategy interface. For now, we
         // _always_ will have exactly one backbuffer
@@ -368,6 +370,12 @@ namespace cairocanvas
             return NULL;
     }
 
+
+  /** DeviceHelper::flush  Flush the platform native window
+   *
+   * Flushes the window by using the internally stored mpSysData.
+   *
+   **/
     void DeviceHelper::flush()
     {
         cairoHelperFlush( mpSysData );
