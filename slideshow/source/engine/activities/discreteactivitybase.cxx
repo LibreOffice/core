@@ -4,9 +4,9 @@
  *
  *  $RCSfile: discreteactivitybase.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: kz $ $Date: 2006-12-13 15:26:44 $
+ *  last change: $Author: obo $ $Date: 2007-07-17 14:45:22 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -141,7 +141,7 @@ namespace slideshow
             ++mnCurrPerformCalls;
 
             // calc currently reached repeat count
-            double nCurrRepeat( (double)mnCurrPerformCalls / nVectorSize );
+            double nCurrRepeat( double(mnCurrPerformCalls) / nVectorSize );
 
             // if auto-reverse is specified, halve the
             // effective repeat count, since we pass every
