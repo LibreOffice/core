@@ -4,9 +4,9 @@
  *
  *  $RCSfile: canvasbase.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: kz $ $Date: 2006-12-13 14:36:03 $
+ *  last change: $Author: obo $ $Date: 2007-07-17 14:17:58 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -153,6 +153,16 @@ namespace canvas
         }
 
         // XCanvas
+        virtual void SAL_CALL clear() throw (::com::sun::star::uno::RuntimeException)
+        {
+            MutexType aGuard( BaseType::m_aMutex );
+
+            mbSurfaceDirty = true;
+            maCanvasHelper.modifying();
+
+            maCanvasHelper.clear();
+        }
+
         virtual void SAL_CALL drawPoint( const ::com::sun::star::geometry::RealPoint2D&     aPoint,
                                          const ::com::sun::star::rendering::ViewState&      viewState,
                                          const ::com::sun::star::rendering::RenderState&    renderState ) throw (::com::sun::star::lang::IllegalArgumentException,
@@ -477,7 +487,6 @@ namespace canvas
 
             return maCanvasHelper.getDevice();
         }
-
 
     protected:
         ~CanvasBase() {} // we're a ref-counted UNO class. _We_ destroy ourselves.
