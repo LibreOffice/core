@@ -4,9 +4,9 @@
  *
  *  $RCSfile: expop2.cxx,v $
  *
- *  $Revision: 1.30 $
+ *  $Revision: 1.31 $
  *
- *  last change: $Author: vg $ $Date: 2007-02-27 12:22:53 $
+ *  last change: $Author: obo $ $Date: 2007-07-17 13:33:35 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -117,18 +117,11 @@ FltError ExportBiff5::Write()
 
     if( pDocShell && xRootStrg.Is() )
     {
-        GDIMetaFile *pMetaFile;
-
+        GDIMetaFile *pMetaFile=0;
         SfxDocumentInfo& rInfo = pDocShell->GetDocInfo();
-
         pMetaFile = pDocShell->GetPreviewMetaFile (sal_False);
-        if (pMetaFile)
-        {
-            rInfo.SetThumbnailMetaFile (*pMetaFile);
-            delete pMetaFile;
-        }
-
-        rInfo.SavePropertySet( xRootStrg );
+        rInfo.SavePropertySet( xRootStrg, pMetaFile );
+        delete pMetaFile;
     }
 
     //! TODO: separate warnings for columns and sheets
