@@ -4,9 +4,9 @@
  *
  *  $RCSfile: basidesh.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: hr $ $Date: 2007-06-26 16:53:07 $
+ *  last change: $Author: obo $ $Date: 2007-07-17 13:22:25 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -194,7 +194,7 @@ public:
 
     virtual USHORT          Print( SfxProgress &rProgress, BOOL bIsAPI, PrintDialog *pPrintDialog = 0 );
     virtual SfxPrinter*     GetPrinter( BOOL bCreate );
-    virtual USHORT          SetPrinter( SfxPrinter *pNewPrinter, USHORT nDiffFlags = SFX_PRINTER_ALL );
+    virtual USHORT          SetPrinter( SfxPrinter *pNewPrinter, USHORT nDiffFlags = SFX_PRINTER_ALL, bool bIsAPI=false );
     virtual String          GetSelectionText( BOOL bCompleteWords );
     virtual BOOL            HasSelection( BOOL bText ) const;
 
