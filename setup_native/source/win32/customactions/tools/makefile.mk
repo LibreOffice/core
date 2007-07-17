@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.2 $
+#   $Revision: 1.3 $
 #
-#   last change: $Author: gm $ $Date: 2007-05-10 11:04:51 $
+#   last change: $Author: obo $ $Date: 2007-07-17 07:26:09 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -61,11 +61,11 @@ SLOFILES =	$(SLO)$/seterror.obj \
 SHL1OBJS = $(SLOFILES)
 
 STDSHL+=	\
-    advapi32.lib\
-    msi.lib\
+    $(ADVAPI32LIB)\
+    $(MSILIB)\
     $(LIBSTLPORTST)								
 
-SHL1LIBS = $(SLB)$/$(TARGET).lib 
+#SHL1LIBS = $(SLB)$/$(TARGET).lib 
 
 SHL1TARGET = $(TARGET)
 SHL1IMPLIB = i$(TARGET)
