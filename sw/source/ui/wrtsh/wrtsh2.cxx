@@ -4,9 +4,9 @@
  *
  *  $RCSfile: wrtsh2.cxx,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: rt $ $Date: 2007-04-26 09:24:40 $
+ *  last change: $Author: obo $ $Date: 2007-07-17 13:13:34 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -480,14 +480,15 @@ void LoadURL( const String& rURL, ViewShell* pVSh, USHORT nFilter,
     else
         return;
 
+    SwDocShell* pDShell = pSh->GetView().GetDocShell();
+    DBG_ASSERT( pDShell, "No DocShell?!");
     String sTargetFrame;
     if( pTargetFrameName && pTargetFrameName->Len() )
         sTargetFrame = *pTargetFrameName;
-    else if( pSh )
-        sTargetFrame = pSh->GetDoc()->GetInfo()->GetDefaultTarget();
+    else if( pDShell )
+        sTargetFrame = pDShell->GetDocInfo().GetDefaultTarget();
 
     String sReferer;
-    SwDocShell* pDShell = pSh->GetView().GetDocShell();
     if( pDShell && pDShell->GetMedium() )
         sReferer = pDShell->GetMedium()->GetName();
     SfxViewFrame* pViewFrm = pSh->GetView().GetViewFrame();
