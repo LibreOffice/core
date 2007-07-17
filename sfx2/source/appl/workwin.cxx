@@ -4,9 +4,9 @@
  *
  *  $RCSfile: workwin.cxx,v $
  *
- *  $Revision: 1.70 $
+ *  $Revision: 1.71 $
  *
- *  last change: $Author: hr $ $Date: 2007-06-27 23:01:52 $
+ *  last change: $Author: obo $ $Date: 2007-07-17 13:41:04 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -38,6 +38,8 @@
 
 #ifndef GCC
 #endif
+
+#include <hash_map>
 
 #include <sfx2/docfile.hxx>
 #include <sfx2/objsh.hxx>
