@@ -4,9 +4,9 @@
  *
  *  $RCSfile: templwin.hxx,v $
  *
- *  $Revision: 1.35 $
+ *  $Revision: 1.36 $
  *
- *  last change: $Author: hr $ $Date: 2007-06-27 21:22:06 $
+ *  last change: $Author: obo $ $Date: 2007-07-17 13:29:02 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -73,7 +73,7 @@
 
 namespace com{ namespace sun { namespace star { namespace awt   { class XWindow; } } } }
 namespace com{ namespace sun { namespace star { namespace frame { class XFrame; } } } }
-namespace com{ namespace sun { namespace star { namespace io    { class XPersist; } } } }
+namespace com{ namespace sun { namespace star { namespace document    { class XStandaloneDocumentInfo; } } } }
 namespace svtools
 {
     class ODocumentInfoPreview;
@@ -222,7 +222,7 @@ class SvtFrameWindow_Impl : public Window
 private:
     ::com::sun::star::uno::Reference < ::com::sun::star::frame::XFrame >
                                 xFrame;
-    ::com::sun::star::uno::Reference < ::com::sun::star::io::XPersist >
+    ::com::sun::star::uno::Reference < ::com::sun::star::document::XStandaloneDocumentInfo >
                                 xDocInfo;
     ::com::sun::star::uno::Reference< ::com::sun::star::awt::XWindow >
                                 xWindow;
