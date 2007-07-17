@@ -4,9 +4,9 @@
  *
  *  $RCSfile: slideshowimpl.cxx,v $
  *
- *  $Revision: 1.44 $
+ *  $Revision: 1.45 $
  *
- *  last change: $Author: kz $ $Date: 2007-05-10 09:44:28 $
+ *  last change: $Author: obo $ $Date: 2007-07-17 14:30:22 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -914,6 +914,15 @@ bool SlideshowImpl::startShow( PresentationSettings* pPresSettings )
                 OUString( RTL_CONSTASCII_USTRINGPARAM("ImageAnimationsAllowed") ),
                 -1, Any( maPresSettings.mbAnimationAllowed != sal_False ),
                 beans::PropertyState_DIRECT_VALUE ) );
+
+        const sal_Bool bZOrderEnabled(
+            SD_MOD()->GetSdOptions( mpDoc->GetDocumentType() )->IsSlideshowRespectZOrder() );
+        aProperties.push_back(
+            beans::PropertyValue(
+                OUString( RTL_CONSTASCII_USTRINGPARAM("DisableAnimationZOrder") ),
+                -1, Any( bZOrderEnabled == sal_False ),
+                beans::PropertyState_DIRECT_VALUE ) );
+
 /*
         aProperties.push_back(
             beans::PropertyValue(
