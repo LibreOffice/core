@@ -4,9 +4,9 @@
  *
  *  $RCSfile: image.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: hr $ $Date: 2007-06-27 13:51:17 $
+ *  last change: $Author: obo $ $Date: 2007-07-17 14:24:17 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -215,6 +215,8 @@ namespace canvas { namespace
 
         o_rRenderColor = ARGB(0xFFFFFFFF,
                               renderState.DeviceColor);
+
+        // TODO(F3): handle compositing modes
 
         if( viewState.Clip.is() )
         {
@@ -801,7 +803,7 @@ namespace canvas { namespace
         unsigned size() const { return maSteps; }
         const T operator [] (unsigned v) const
         {
-            const double w = ((double)v)/maSteps;
+            const double w = double(v)/maSteps;
             return T( static_cast<value_type>(maColor1.r+(maColor2.r-maColor1.r)*w),
                       static_cast<value_type>(maColor1.g+(maColor2.g-maColor1.g)*w),
                       static_cast<value_type>(maColor1.b+(maColor2.b-maColor1.b)*w),
@@ -834,8 +836,8 @@ namespace canvas { namespace
         {
             const double aHalfSteps = maSteps/2.0;
             const double w = (v >= aHalfSteps) ?
-                1.0-(((double)v-aHalfSteps)/aHalfSteps) :
-                ((double)v*2.0)/maSteps;
+                1.0-((double(v)-aHalfSteps)/aHalfSteps) :
+                (double(v)*2.0)/maSteps;
             return T( static_cast<value_type>(maColor1.r+(maColor2.r-maColor1.r)*w),
                       static_cast<value_type>(maColor1.g+(maColor2.g-maColor1.g)*w),
                       static_cast<value_type>(maColor1.b+(maColor2.b-maColor1.b)*w),
