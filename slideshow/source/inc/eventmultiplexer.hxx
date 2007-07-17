@@ -4,9 +4,9 @@
  *
  *  $RCSfile: eventmultiplexer.hxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: kz $ $Date: 2006-12-13 15:56:27 $
+ *  last change: $Author: obo $ $Date: 2007-07-17 15:06:34 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -32,39 +32,35 @@
  *    MA  02111-1307  USA
  *
  ************************************************************************/
-#if ! defined(INCLUDED_SLIDESHOW_EVENTMULTIPLEXER_HXX)
+#ifndef INCLUDED_SLIDESHOW_EVENTMULTIPLEXER_HXX
 #define INCLUDED_SLIDESHOW_EVENTMULTIPLEXER_HXX
 
-#include <rtl/ref.hxx>
-#include <com/sun/star/awt/XMouseListener.hpp>
-#include <com/sun/star/awt/XMouseMotionListener.hpp>
-#include <cppuhelper/compbase2.hxx>
-#include <comphelper/broadcasthelper.hxx>
-
 #include "eventhandler.hxx"
-#include "unoviewcontainer.hxx"
+#include "hyperlinkhandler.hxx"
 #include "mouseeventhandler.hxx"
 #include "animationeventhandler.hxx"
 #include "pauseeventhandler.hxx"
+#include "shapelistenereventhandler.hxx"
+#include "shapecursoreventhandler.hxx"
+#include "userpainteventhandler.hxx"
 #include "vieweventhandler.hxx"
-#include "layermanager.hxx"
-#include "animationnode.hxx"
-#include "eventqueue.hxx"
-#include "unoview.hxx"
+#include "viewrepainthandler.hxx"
 
-#include <boost/weak_ptr.hpp>
-#include <boost/function.hpp>
+#include <boost/scoped_ptr.hpp>
 #include <boost/noncopyable.hpp>
+
 
 namespace slideshow {
 namespace internal {
 
-typedef cppu::WeakComponentImplHelper2<
-    ::com::sun::star::awt::XMouseListener,
-    ::com::sun::star::awt::XMouseMotionListener > Listener_UnoBase;
+class EventQueue;
+class UnoViewContainer;
+class AnimationNode;
+
+struct EventMultiplexerImpl;
 
 /** This class multiplexes user-activated and
-    slide-show-global events.
+    slide-show global events.
 
     This class listens at the XSlideShowView and fires events
     registered for certain user actions. Furthermore, global
@@ -75,9 +71,7 @@ typedef cppu::WeakComponentImplHelper2<
     after the user action occured, but only after the given
     timeout. Which is actually a feature.
 */
-class EventMultiplexer : private comphelper::OBaseMutex,
-                         public Listener_UnoBase,
-                         private ::boost::noncopyable
+class EventMultiplexer : private ::boost::noncopyable
 {
 public:
     /** Create an event multiplexer
@@ -93,9 +87,16 @@ public:
         this is not possible, both must be destructed in a
         phased mode: first clear both of any remaining events,
         then destruct them.
+
+        @param rViewContainer
+        Globally managed list of all registered views. Used to
+        determine event sources, and for registering view listeners
+        at.
     */
-    static ::rtl::Reference<EventMultiplexer> create( EventQueue&             rEventQueue,
-                                                      const UnoViewContainer& rViews );
+    EventMultiplexer( EventQueue&             rEventQueue,
+                      UnoViewContainer const& rViewContainer );
+    ~EventMultiplexer();
+
 
     // Management methods
     // =========================================================
@@ -103,69 +104,6 @@ public:
     /** Clear all registered handlers.
      */
     void clear();
-
-    // TODO(Q3): This is a wart. Remove from this class!
-    // Probably, there should exist a separate ViewContainer,
-    // which would expose such a method.
-    /**
-     */
-    void setMouseCursor( sal_Int16 );
-
-    // TODO(Q3): This is a wart. Remove from this class!
-    // Probably, there should exist a separate ViewContainer,
-    // which would expose such a method.
-    /** Set volatile mouse cursor.
-
-        A volatile mouse cursor only stays in effect, as long
-        as the mouse has not moved. As soon as the mouse
-        moves, the mouse cursor is set back to the value set
-        by setMouseCursor().
-    */
-    void setVolatileMouseCursor( sal_Int16 );
-
-    /** Set a LayerManager for update() calls.
-
-        A LayerManager set via this method will receive an
-        update() call whenever updateScreen() is called on the
-        EventMultiplexer. This is handy to avoid multiple
-        redraws. Note that every setLayerManager() call will
-        overwrite any previously set.
-    */
-    void setLayerManager( const LayerManagerSharedPtr& rMgr );
-
-    /** Update screen content
-
-        This method updates the screen content for the given view, by
-        first updating all layers (if setLayerManager() was called
-        with a valid layer manager previously), and then calling
-        updateScreen() on the view.
-
-        @param rView
-        The view to update
-
-        @param bForceUpdate
-        Force updateScreen() call, even if layer manager has
-        no updates pending. Set this parameter to true, if you
-        changed screen content or sprites and bypassed the
-        layer manager.
-    */
-    void updateScreenContent( const UnoViewSharedPtr& rView,
-                              bool                    bForceUpdate );
-
-    /** Update screen content
-
-        This method updates the screen content, by first
-        updating all layers (if setLayerManager() was called
-        with a valid layer manager previously), and then
-        calling updateScreen() on all registered views.
-
-        @param bForceUpdate
-        Force updateScreen() call, even if layer manager has
-        no updates pending. Set this parameter to true, if you
-        changed screen content or sprites and bypassed the
-        layer manager.
-    */
-    void updateScreenContent( bool bForceUpdate );
 
 
     // Automatic mode methods
@@ -214,6 +152,46 @@ public:
         Handler to call.
     */
     void addViewHandler( const ViewEventHandlerWeakPtr& rHandler );
+    void removeViewHandler( const ViewEventHandlerWeakPtr& rHandler );
+
+    /** Register an event handler that will be called when a view gets
+        clobbered.
+
+        Note that <em>all</em> registered handlers will be called when
+        the event. This is in contrast to the mouse events below.
+
+        @param rHandler
+        Handler to call when a view needs a repaint
+    */
+    void addViewRepaintHandler( const ViewRepaintHandlerSharedPtr& rHandler );
+    void removeViewRepaintHandler( const ViewRepaintHandlerSharedPtr& rHandler );
+
+    /** Register an event handler that will be called when
+        XShapeListeners are changed.
+
+        @param rHandler
+        Handler to call when a shape listener changes
+    */
+    void addShapeListenerHandler( const ShapeListenerEventHandlerSharedPtr& rHandler );
+    void removeShapeListenerHandler( const ShapeListenerEventHandlerSharedPtr& rHandler );
+
+    /** Register an event handler that will be called when
+        XShapeListeners are changed.
+
+        @param rHandler
+        Handler to call when a shape listener changes
+    */
+    void addShapeCursorHandler( const ShapeCursorEventHandlerSharedPtr& rHandler );
+    void removeShapeCursorHandler( const ShapeCursorEventHandlerSharedPtr& rHandler );
+
+    /** Register an event handler that will be called when
+        user paint parameters change.
+
+        @param rHandler
+        Handler to call when a shape listener changes
+    */
+    void addUserPaintHandler( const UserPaintEventHandlerSharedPtr& rHandler );
+    void removeUserPaintHandler( const UserPaintEventHandlerSharedPtr& rHandler );
 
     /** Register an event handler that will be called when the
         user requests the next effect.
@@ -390,26 +368,19 @@ public:
     void removeMouseMoveHandler( const MouseEventHandlerSharedPtr& rHandler );
 
 
-    // Hyperlink notifications
-    // =======================
-
-    typedef ::boost::function1<
-        bool /* whether event has been consumed */,
-        ::rtl::OUString /* actual hyperlink */ > HyperLinkHandlerFunc;
-
-    /// HandlerId: usually _this_ pointer of handler instance
-    typedef void const* HandlerId;
-
     /** Registers a hyperlink click handler.
-        @param func handler function
-        @param id identifier for registration
-    */
-    void addHyperlinkHandler( HyperLinkHandlerFunc const& func, HandlerId id );
 
-    /** Removes a hyperlink click handler.
-        @param id identifier for registration
+        For every hyperlink click, only one of the handlers registered
+        here is called. The handlers are considered with decreasing
+        priority, i.e. the handler with the currently highest priority
+        will be called.
+
+        @param rHandler
+        @param nPriority
     */
-    void removeHyperlinkHandler( HandlerId id );
+    void addHyperlinkHandler( const HyperlinkHandlerSharedPtr& rHandler,
+                              double                           nPriority );
+    void removeHyperlinkHandler( const HyperlinkHandlerSharedPtr& rHandler );
 
 
     // External event notifications
@@ -434,8 +405,22 @@ public:
 
         This method announces a changed view to all view
         listeners. View changes include size and transformation.
+
+        @param rView
+        View that has changed
     */
     bool notifyViewChanged( const UnoViewSharedPtr& rView );
+
+    /** View changed
+
+        This method announces a changed view to all view
+        listeners. View changes include size and transformation.
+
+        @param xView
+        View that has changed
+    */
+    bool notifyViewChanged( const ::com::sun::star::uno::Reference<
+                               ::com::sun::star::presentation::XSlideShowView>& xView );
 
     /** All Views changed
 
@@ -444,6 +429,78 @@ public:
         size and transformation.
     */
     bool notifyViewsChanged();
+
+    /** View clobbered
+
+        This method announces that the given view has been clobbered
+        by something external to the slideshow, and needs an update.
+
+        @param xView
+        View that has been clobbered
+    */
+    bool notifyViewClobbered( const ::com::sun::star::uno::Reference<
+                                 ::com::sun::star::presentation::XSlideShowView>& xView );
+
+    /** New shape event listener added
+
+        This method announces that the given listener was added for
+        the specified shape.
+
+        @return true, if at least one handler successfully processed
+        the notification.
+     */
+    bool notifyShapeListenerAdded( const ::com::sun::star::uno::Reference<
+                                      ::com::sun::star::presentation::XShapeEventListener>& xListener,
+                                   const ::com::sun::star::uno::Reference<
+                                      ::com::sun::star::drawing::XShape>&                   xShape );
+
+    /** A shape event listener was removed
+
+        This method announces that the given listener was removed for
+        the specified shape.
+
+        @return true, if at least one handler successfully processed
+        the notification.
+     */
+    bool notifyShapeListenerRemoved( const ::com::sun::star::uno::Reference<
+                                         ::com::sun::star::presentation::XShapeEventListener>& xListener,
+                                     const ::com::sun::star::uno::Reference<
+                                         ::com::sun::star::drawing::XShape>&                   xShape );
+
+    /** A new shape cursor was set
+
+        This method announces that the given cursor was set for the
+        specified shape.
+
+        @return true, if at least one handler successfully processed
+        the notification.
+     */
+    bool notifyShapeCursorChange( const ::com::sun::star::uno::Reference<
+                                     ::com::sun::star::drawing::XShape>&  xShape,
+                                  sal_Int16                               nPointerShape );
+
+    /** Notify a new user paint color
+
+        Sending this notification also implies that user paint is
+        enabled. User paint denotes the feature to draw colored lines
+        on top of the slide content.
+
+        @return true, if this event was processed by
+        anybody. If false is returned, no handler processed
+        this event (and probably, nothing will happen at all)
+    */
+    bool notifyUserPaintColor( RGBColor const& rUserColor );
+
+    /** Notify that user paint is disabled
+
+        User paint denotes the feature to draw colored lines on top of
+        the slide content.
+
+        @return true, if this event was processed by
+        anybody. If false is returned, no handler processed
+        this event (and probably, nothing will happen at all)
+    */
+    bool notifyUserPaintDisabled();
 
     /** Notify that the user requested the next effect.
 
@@ -494,7 +551,7 @@ public:
         anybody. If false is returned, no handler processed
         this event (and probably, nothing will happen at all)
     */
-    bool notifyAnimationStart( const AnimationNodeSharedPtr& rNode );
+    bool notifyAnimationStart( const boost::shared_ptr<AnimationNode>& rNode );
 
     /** Notify that the given node leaves its active duration.
 
@@ -510,7 +567,7 @@ public:
         anybody. If false is returned, no handler processed
         this event (and probably, nothing will happen at all)
     */
-    bool notifyAnimationEnd( const AnimationNodeSharedPtr& rNode );
+    bool notifyAnimationEnd( const boost::shared_ptr<AnimationNode>& rNode );
 
     /** Notify that the slide animations sequence leaves its
         active duration.
@@ -535,7 +592,7 @@ public:
         anybody. If false is returned, no handler processed
         this event (and probably, nothing will happen at all)
     */
-    bool notifyAudioStopped( const AnimationNodeSharedPtr& rNode );
+    bool notifyAudioStopped( const boost::shared_ptr<AnimationNode>& rNode );
 
     /** Notify that the show has entered or exited pause mode
 
@@ -560,7 +617,7 @@ public:
         anybody. If false is returned, no handler processed
         this event (and probably, nothing will happen at all)
     */
-    bool notifyCommandStopAudio( const AnimationNodeSharedPtr& rNode );
+    bool notifyCommandStopAudio( const boost::shared_ptr<AnimationNode>& rNode );
 
     /** Botifies that a hyperlink has been clicked.
 
@@ -571,183 +628,7 @@ public:
     bool notifyHyperlinkClicked( ::rtl::OUString const& hyperLink );
 
 private:
-    EventMultiplexer( EventQueue&,
-                      const UnoViewContainer& );
-    virtual ~EventMultiplexer();
-
-private:
-    // XMouseListener implementation
-    virtual void SAL_CALL disposing(
-        const ::com::sun::star::lang::EventObject& Source )
-        throw (::com::sun::star::uno::RuntimeException);
-    virtual void SAL_CALL mousePressed(
-        const ::com::sun::star::awt::MouseEvent& e )
-        throw (::com::sun::star::uno::RuntimeException);
-    virtual void SAL_CALL mouseReleased(
-        const ::com::sun::star::awt::MouseEvent& e )
-        throw (::com::sun::star::uno::RuntimeException);
-    virtual void SAL_CALL mouseEntered(
-        const ::com::sun::star::awt::MouseEvent& e )
-        throw (::com::sun::star::uno::RuntimeException);
-    virtual void SAL_CALL mouseExited(
-        const ::com::sun::star::awt::MouseEvent& e )
-        throw (::com::sun::star::uno::RuntimeException);
-
-    // XMouseMotionListener implementation
-    virtual void SAL_CALL mouseDragged(
-        const ::com::sun::star::awt::MouseEvent& e )
-        throw (::com::sun::star::uno::RuntimeException);
-    virtual void SAL_CALL mouseMoved(
-        const ::com::sun::star::awt::MouseEvent& e )
-        throw (::com::sun::star::uno::RuntimeException);
-
-    // WeakComponentImplHelperBase::disposing
-    virtual void SAL_CALL disposing();
-
-private:
-    // actual handler implementations (the UNO interface
-    // overrides above are only stubs)
-    void implMousePressed( const ::com::sun::star::awt::MouseEvent& e );
-    void implMouseReleased( const ::com::sun::star::awt::MouseEvent& e );
-    void implMouseDragged( const ::com::sun::star::awt::MouseEvent& e );
-    void implMouseMoved( const ::com::sun::star::awt::MouseEvent& e );
-
-    bool isMouseListenerRegistered() const;
-
-    template <typename HandlerT>
-    class PrioritizedHandlerEntry;
-
-    typedef std::vector<
-        PrioritizedHandlerEntry<EventHandler> > ImplNextEffectHandlers;
-    typedef std::vector<
-        PrioritizedHandlerEntry<MouseEventHandler> > ImplMouseHandlers;
-
-    typedef std::vector<EventHandlerSharedPtr>          ImplEventHandlers;
-    typedef std::vector<AnimationEventHandlerSharedPtr> ImplAnimationHandlers;
-    typedef std::vector<PauseEventHandlerSharedPtr>     ImplPauseHandlers;
-    typedef std::vector<ViewEventHandlerWeakPtr>        ImplViewHandlers;
-
-    template <typename ContainerT, typename HandlerT>
-    void addHandler( ContainerT & rContainer,
-                     boost::shared_ptr<HandlerT> const& pHandler );
-
-    template <typename ContainerT, typename HandlerT>
-    void addHandler( ContainerT & rContainer,
-                     HandlerT const& pHandler );
-
-    template <typename ContainerT, typename HandlerT>
-    void addPrioritizedHandler( ContainerT & rContainer,
-                                boost::shared_ptr<HandlerT> const& pHandler,
-                                double nPriority );
-
-    template< typename Container, typename Handler >
-    void removeHandler( Container&                              rContainer,
-                        const ::boost::shared_ptr< Handler >&   rHandler );
-
-    template< typename Container, typename Handler >
-    void removeHandler( Container&                              rContainer,
-                        const Handler&                          rHandler );
-
-    template <typename XSlideShowViewFunc>
-    void forEachView( XSlideShowViewFunc pViewMethod );
-
-    template< typename RegisterFunction >
-    void addMouseHandler( ImplMouseHandlers&                rHandlerContainer,
-                          const MouseEventHandlerSharedPtr& rHandler,
-                          double                            nPriority,
-                          RegisterFunction                  pRegisterListener );
-
-    /** @return true: one handler returned true (iterating from begin to end)
-                false: no handler at all returned true
-    */
-    template <typename ContainerT, typename FuncT>
-    bool notifySingleHandler( ContainerT const& rContainer, FuncT const& func,
-                              bool bOperateOnCopy = true );
-
-    /** @return true: at least one handler returned true
-                false: not a single handler returned true
-    */
-    template <typename T, typename FuncT>
-    bool notifyAllHandlers( std::vector< boost::shared_ptr<T> > const& rContainer, FuncT const& func );
-
-    /** @return true: at least one handler returned true
-                false: not a single handler returned true
-    */
-    template <typename FuncT> bool notifyAllViewHandlers( FuncT const& func );
-
-    bool notifyAllEventHandlers( ImplEventHandlers const& rContainer ) {
-        return notifyAllHandlers( rContainer,
-                                  boost::mem_fn(&EventHandler::handleEvent) );
-    }
-
-    bool notifyAllAnimationHandlers( ImplAnimationHandlers const& rContainer,
-                                     AnimationNodeSharedPtr const& rNode ) {
-        return notifyAllHandlers(
-            rContainer,
-            boost::bind( &AnimationEventHandler::handleAnimationEvent,
-                         _1, boost::cref(rNode) ) );
-    }
-
-    bool notifyMouseHandlers(
-        const ImplMouseHandlers& rQueue,
-        bool (MouseEventHandler::*pHandlerMethod)(
-            const ::com::sun::star::awt::MouseEvent& ),
-        const ::com::sun::star::awt::MouseEvent& e );
-
-    /// Called for automatic nextEffect
-    void tick();
-
-    /// Schedules a tick event
-    void scheduleTick();
-
-    /// Schedules tick events, if mbIsAutoMode is true
-    void handleTicks();
-
-    void implSetMouseCursor( sal_Int16 ) const;
-
-    EventQueue&                 mrEventQueue;
-    UnoViewVector               maViewContainer;
-
-    ImplNextEffectHandlers      maNextEffectHandlers;
-    ImplEventHandlers           maSlideStartHandlers;
-    ImplEventHandlers           maSlideEndHandlers;
-    ImplAnimationHandlers       maAnimationStartHandlers;
-    ImplAnimationHandlers       maAnimationEndHandlers;
-    ImplEventHandlers           maSlideAnimationsEndHandlers;
-    ImplAnimationHandlers       maAudioStoppedHandlers;
-    ImplAnimationHandlers       maCommandStopAudioHandlers;
-    ImplPauseHandlers           maPauseHandlers;
-    ImplViewHandlers            maViewHandlers;
-    ImplMouseHandlers           maMouseClickHandlers;
-    ImplMouseHandlers           maMouseDoubleClickHandlers;
-    ImplMouseHandlers           maMouseMoveHandlers;
-
-    struct AllViewNotifier;
-    friend struct AllViewNotifier;
-
-    typedef std::hash_map<HandlerId, HyperLinkHandlerFunc,
-                          hash<HandlerId> > ImplHyperLinkHandlers;
-    ImplHyperLinkHandlers maHyperlinkHandlers;
-    struct HyperLinkNotifier;
-    friend struct HyperLinkNotifier;
-
-    LayerManagerSharedPtr       mpLayerManager; // for screen updates
-
-    double                      mnTimeout;
-
-    /** Holds ptr to optional tick event weakly
-
-        When event queue is cleansed, the next
-        setAutomaticMode(true) call is then able to
-        regenerate the event.
-    */
-    ::boost::weak_ptr< Event >  mpTickEvent;
-
-    sal_Int16                   mnMouseCursor;
-    sal_Int16                   mnVolatileMouseCursor;
-    sal_Int16                   mnLastVolatileMouseCursor;
-
-    bool                        mbIsAutoMode;
+    boost::scoped_ptr<EventMultiplexerImpl> mpImpl;
 };
 
 } // namespace internal
