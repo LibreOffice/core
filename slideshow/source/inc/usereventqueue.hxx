@@ -4,9 +4,9 @@
  *
  *  $RCSfile: usereventqueue.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: kz $ $Date: 2006-12-13 16:06:28 $
+ *  last change: $Author: obo $ $Date: 2007-07-17 15:18:24 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -53,6 +53,7 @@ class PlainEventHandler;
 class AllAnimationEventHandler;
 class ShapeClickEventHandler;
 class ClickEventHandler;
+class CursorManager;
 class SkipEffectEventHandler;
 class RewindEffectEventHandler;
 class MouseEnterHandler;
@@ -95,7 +96,8 @@ public:
         then destruct them.
     */
     UserEventQueue( EventMultiplexer&   rMultiplexer,
-                    EventQueue&         rEventQueue );
+                    EventQueue&         rEventQueue,
+                    CursorManager&      rCursorManager );
     ~UserEventQueue();
 
     /** Query whether there are any events still pending.
@@ -293,6 +295,7 @@ private:
 
     EventMultiplexer&                               mrMultiplexer;
     EventQueue&                                     mrEventQueue;
+    CursorManager&                                  mrCursorManager;
 
     ::boost::shared_ptr<PlainEventHandler>          mpStartEventHandler;
     ::boost::shared_ptr<PlainEventHandler>          mpEndEventHandler;
