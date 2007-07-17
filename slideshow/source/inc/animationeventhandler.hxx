@@ -4,9 +4,9 @@
  *
  *  $RCSfile: animationeventhandler.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: kz $ $Date: 2006-12-13 15:51:48 $
+ *  last change: $Author: obo $ $Date: 2007-07-17 15:02:20 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -33,13 +33,11 @@
  *
  ************************************************************************/
 
-#ifndef _SLIDESHOW_ANIMATIONEVENTHANDLER_HXX
-#define _SLIDESHOW_ANIMATIONEVENTHANDLER_HXX
+#ifndef INCLUDED_SLIDESHOW_ANIMATIONEVENTHANDLER_HXX
+#define INCLUDED_SLIDESHOW_ANIMATIONEVENTHANDLER_HXX
 
 #include <boost/shared_ptr.hpp>
-
-#include <disposable.hxx>
-#include <animationnode.hxx>
+#include "animationnode.hxx"
 
 
 /* Definition of AnimationEventHandler interface */
@@ -55,9 +53,11 @@ namespace slideshow
             EventMultiplexer object, and are called from there to
             handle animation state change events.
          */
-        class AnimationEventHandler : public Disposable
+        class AnimationEventHandler
         {
         public:
+            virtual ~AnimationEventHandler() {}
+
             /** Handle the event.
 
                 @param rNode
@@ -76,4 +76,4 @@ namespace slideshow
     }
 }
 
-#endif /* _SLIDESHOW_ANIMATIONEVENTHANDLER_HXX */
+#endif /* INCLUDED_SLIDESHOW_ANIMATIONEVENTHANDLER_HXX */
