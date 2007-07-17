@@ -4,9 +4,9 @@
  *
  *  $RCSfile: viewfrm.cxx,v $
  *
- *  $Revision: 1.129 $
+ *  $Revision: 1.130 $
  *
- *  last change: $Author: hr $ $Date: 2007-06-27 23:35:58 $
+ *  last change: $Author: obo $ $Date: 2007-07-17 13:46:09 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -718,9 +718,20 @@ void SfxViewFrame::ExecReload_Impl( SfxRequest& rReq )
                 DELETEZ( xOldObj->Get_Impl()->pReloadTimer );
 
                 SfxItemSet* pNewSet = 0;
+                const SfxFilter *pFilter = pMedium->GetFilter();
+                if( pURLItem )
+                {
+                    pNewSet = new SfxAllItemSet( pApp->GetPool() );
+                    pNewSet->Put( *pURLItem );
 
-                // TODO/LATER: Reload with URL is currently *not* implemented
-                //if( !pURLItem )
+                    // Filter Detection
+                    SfxMedium aMedium( pURLItem->GetValue(), SFX_STREAM_READWRITE );
+                    SfxFilterMatcher().GuessFilter( aMedium, &pFilter );
+                    if ( pFilter )
+                        pNewSet->Put( SfxStringItem( SID_FILTER_NAME, pFilter->GetName() ) );
+                    pNewSet->Put( *aMedium.GetItemSet() );
+                }
+                else
                 {
                     pNewSet = new SfxAllItemSet( *pMedium->GetItemSet() );
                     pNewSet->ClearItem( SID_VIEW_ID );
@@ -785,7 +796,6 @@ void SfxViewFrame::ExecReload_Impl( SfxRequest& rReq )
                 if( !pURLItem || pURLItem->GetValue() == xOldObj->GetMedium()->GetName() )
                     xOldObj->Get_Impl()->bForbidCaching = sal_True;
 
-                const SfxFilter *pOldFilter = pMedium->GetFilter();
                 if( bHandsOff )
                 {
                     if ( pMedium->HasStorage_Impl() && pMedium->GetStorage() == xOldObj->GetStorage() )
@@ -798,7 +808,7 @@ void SfxViewFrame::ExecReload_Impl( SfxRequest& rReq )
                     pMedium->CloseAndRelease();
                 }
 
-                xNewObj = SfxObjectShell::CreateObject( pOldFilter->GetServiceName(), SFX_CREATE_MODE_STANDARD );
+                xNewObj = SfxObjectShell::CreateObject( pFilter->GetServiceName(), SFX_CREATE_MODE_STANDARD );
                 try
                 {
                     uno::Sequence < beans::PropertyValue > aProps;
@@ -838,8 +848,8 @@ void SfxViewFrame::ExecReload_Impl( SfxRequest& rReq )
                             if ( pSavedReferer )
                                 aSet.Put( *pSavedReferer );
                             aSet.Put( SfxBoolItem( SID_TEMPLATE, sal_True ) );
-                            if( pOldFilter )
-                                aSet.Put( SfxStringItem( SID_FILTER_NAME, pOldFilter->GetFilterName() ) );
+                            if( pFilter )
+                                aSet.Put( SfxStringItem( SID_FILTER_NAME, pFilter->GetFilterName() ) );
                             GetDispatcher()->Execute( SID_OPENDOC, SFX_CALLMODE_ASYNCHRON, aSet );
                         }
                     }
