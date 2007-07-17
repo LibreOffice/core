@@ -4,9 +4,9 @@
  *
  *  $RCSfile: pauseeventhandler.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: kz $ $Date: 2006-12-13 16:00:50 $
+ *  last change: $Author: obo $ $Date: 2007-07-17 15:12:11 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -33,8 +33,8 @@
  *
  ************************************************************************/
 
-#ifndef _SLIDESHOW_PAUSEEVENTHANDLER_HXX
-#define _SLIDESHOW_PAUSEEVENTHANDLER_HXX
+#ifndef INCLUDED_SLIDESHOW_PAUSEEVENTHANDLER_HXX
+#define INCLUDED_SLIDESHOW_PAUSEEVENTHANDLER_HXX
 
 #include <boost/shared_ptr.hpp>
 
@@ -73,4 +73,4 @@ namespace slideshow
     }
 }
 
-#endif /* _SLIDESHOW_PAUSEEVENTHANDLER_HXX */
+#endif /* INCLUDED_SLIDESHOW_PAUSEEVENTHANDLER_HXX */

@@ -4,9 +4,9 @@
  *
  *  $RCSfile: numberanimation.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: kz $ $Date: 2006-12-13 16:00:22 $
+ *  last change: $Author: obo $ $Date: 2007-07-17 15:11:41 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -33,8 +33,8 @@
  *
  ************************************************************************/
 
-#ifndef _SLIDESHOW_NUMBERANIMATION_HXX
-#define _SLIDESHOW_NUMBERANIMATION_HXX
+#ifndef INCLUDED_SLIDESHOW_NUMBERANIMATION_HXX
+#define INCLUDED_SLIDESHOW_NUMBERANIMATION_HXX
 
 #include <animation.hxx>
 
@@ -84,4 +84,4 @@ namespace slideshow
     }
 }
 
-#endif /* _SLIDESHOW_NUMBERANIMATION_HXX */
+#endif /* INCLUDED_SLIDESHOW_NUMBERANIMATION_HXX */

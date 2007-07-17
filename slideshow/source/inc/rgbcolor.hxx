@@ -4,9 +4,9 @@
  *
  *  $RCSfile: rgbcolor.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: kz $ $Date: 2006-12-13 16:01:03 $
+ *  last change: $Author: obo $ $Date: 2007-07-17 15:12:25 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -33,8 +33,8 @@
  *
  ************************************************************************/
 
-#ifndef _SLIDESHOW_RGBCOLOR_HXX
-#define _SLIDESHOW_RGBCOLOR_HXX
+#ifndef INCLUDED_SLIDESHOW_RGBCOLOR_HXX
+#define INCLUDED_SLIDESHOW_RGBCOLOR_HXX
 
 #include <cppcanvas/color.hxx>
 
@@ -127,4 +127,4 @@ namespace slideshow
     }
 }
 
-#endif /* _SLIDESHOW_RGBCOLOR_HXX */
+#endif /* INCLUDED_SLIDESHOW_RGBCOLOR_HXX */
