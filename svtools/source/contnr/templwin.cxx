@@ -4,9 +4,9 @@
  *
  *  $RCSfile: templwin.cxx,v $
  *
- *  $Revision: 1.78 $
+ *  $Revision: 1.79 $
  *
- *  last change: $Author: hr $ $Date: 2007-06-27 21:21:52 $
+ *  last change: $Author: obo $ $Date: 2007-07-17 13:28:47 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -140,8 +140,8 @@
 #ifndef _COM_SUN_STAR_AWT_XWINDOW_HPP_
 #include <com/sun/star/awt/XWindow.hpp>
 #endif
-#ifndef _COM_SUN_STAR_IO_XPERSIST_HPP_
-#include <com/sun/star/io/XPersist.hpp>
+#ifndef _COM_SUN_STAR_DOCUMENT_XSTANDALONEDOCUMENTINFO_HPP_
+#include <com/sun/star/document/XStandaloneDocumentInfo.hpp>
 #endif
 #ifndef _COM_SUN_STAR_BEANS_XPROPERTYSET_HPP_
 #include <com/sun/star/beans/XPropertySet.hpp>
@@ -198,7 +198,7 @@ using namespace ::com::sun::star;
 using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::container;
 using namespace ::com::sun::star::frame;
-using namespace ::com::sun::star::io;
+using namespace ::com::sun::star::document;
 using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::ucb;
 using namespace ::com::sun::star::uno;
@@ -296,9 +296,9 @@ void ODocumentInfoPreview::Clear()
     m_pEditWin->Clear();
 }
 // -----------------------------------------------------------------------------
-void ODocumentInfoPreview::fill(const Reference< XPropertySet>& _xDocInfo,const String& rURL)
+void ODocumentInfoPreview::fill(const Reference< XStandaloneDocumentInfo>& xDocInfo,const String& rURL)
 {
-    Reference< XPropertySet > aPropSet( _xDocInfo, UNO_QUERY );
+    Reference< XPropertySet > aPropSet( xDocInfo, UNO_QUERY );
     if ( aPropSet.is() )
     {
         m_pEditWin->SetAutoScroll( FALSE );
@@ -378,6 +378,15 @@ void ODocumentInfoPreview::fill(const Reference< XPropertySet>& _xDocInfo,const 
             }
 
             ++nIndex;
+        }
+
+        // info fields
+        sal_Int16 nCount = xDocInfo->getUserFieldCount();
+        for ( sal_Int16 i = 0; i < nCount; i++ )
+        {
+            String aValue( xDocInfo->getUserFieldValue(i) );
+            if ( aValue.Len() )
+                m_pEditWin->InsertEntry( String( xDocInfo->getUserFieldName(i) ), aValue );
         }
 
         m_pEditWin->SetSelection( Selection( 0, 0 ) );
@@ -928,8 +937,8 @@ SvtFrameWindow_Impl::SvtFrameWindow_Impl( Window* pParent ) :
     xFrame->initialize( xWindow );
 
     // create docinfo instance
-    xDocInfo = Reference < XPersist > ( ::comphelper::getProcessServiceFactory()->
-        createInstance( ASCII_STR("com.sun.star.document.DocumentProperties") ), UNO_QUERY );
+    xDocInfo = Reference < XStandaloneDocumentInfo > ( ::comphelper::getProcessServiceFactory()->
+        createInstance( ASCII_STR("com.sun.star.document.StandaloneDocumentInfo") ), UNO_QUERY );
 
     pEmptyWin = new Window( this, WB_BORDER | WB_3DLOOK );
 }
@@ -991,28 +1000,9 @@ void SvtFrameWindow_Impl::ShowDocInfo( const String& rURL )
 {
     try
     {
-        xDocInfo->read( rURL );
-        Reference< XPropertySet > aPropSet( xDocInfo, UNO_QUERY );
-        pEditWin->fill( aPropSet, rURL );
-
-        // info fields
-        Reference< XNameContainer > aNameCnt( xDocInfo, UNO_QUERY );
-        if ( aNameCnt.is() )
-        {
-            Sequence< ::rtl::OUString > aNameList = aNameCnt->getElementNames();
-            const ::rtl::OUString* pNames  = aNameList.getConstArray();
-            sal_uInt32 nCount = aNameList.getLength();
-
-            for ( sal_uInt32 i = 0; i < nCount; ++i )
-            {
-                ::rtl::OUString aName = pNames[i], aStrVal;
-                Any aValue = aNameCnt->getByName( aName );
-                if ( ( aValue >>= aStrVal ) && aStrVal.getLength() > 0 )
-                    pEditWin->InsertEntry( String( aName ), String( aStrVal ) );
-            }
-        }
+        xDocInfo->loadFromURL( rURL );
+        pEditWin->fill( xDocInfo, rURL );
     }
-    catch ( IOException& ) {}
     catch ( UnknownPropertyException& ) {}
     catch ( Exception& ) {}
 }
