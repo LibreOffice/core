@@ -4,9 +4,9 @@
  *
  *  $RCSfile: slide.hxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: kz $ $Date: 2006-12-13 16:02:36 $
+ *  last change: $Author: obo $ $Date: 2007-07-17 15:15:07 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -33,162 +33,102 @@
  *
  ************************************************************************/
 
-#ifndef _SLIDESHOW_SLIDE_HXX
-#define _SLIDESHOW_SLIDE_HXX
+#ifndef INCLUDED_SLIDESHOW_SLIDE_HXX
+#define INCLUDED_SLIDESHOW_SLIDE_HXX
 
-#include <com/sun/star/uno/XComponentContext.hpp>
-#include <com/sun/star/drawing/XDrawPage.hpp>
-
-#include <cppcanvas/spritecanvas.hxx>
-
-#include <basegfx/vector/b2isize.hxx>
-
-#include "unoview.hxx"
-#include "event.hxx"
-#include "layermanager.hxx"
-#include "userpaintoverlay.hxx"
-#include "slideanimations.hxx"
+#include "shapemanager.hxx"
+#include "subsettableshapemanager.hxx"
+#include "unoviewcontainer.hxx"
 #include "slidebitmap.hxx"
-#include "shapeeventbroadcaster.hxx"
+#include "shapemaps.hxx"
 
 #include <boost/shared_ptr.hpp>
-#include <boost/utility.hpp>
-#include <boost/optional.hpp>
 
-#include <vector>
-#include <utility>
+namespace com {  namespace sun { namespace star {
+    namespace drawing {
+        class XDrawPage;
+    }
+    namespace uno {
+        class XComponentContext;
+    }
+    namespace animations {
+        class XAnimationNode;
+} } } }
 
-/* Definition of Slide class */
+namespace basegfx
+{
+    class B2IVector;
+}
+
+/* Definition of Slide interface */
 
 namespace slideshow
 {
     namespace internal
     {
-        class EventQueue;
-        class ActivitiesQueue;
-        class UserEventQueue;
+        class RGBColor;
+        class ScreenUpdater;
 
-        typedef ::boost::shared_ptr< class Slide > SlideSharedPtr;
-
-        class Slide : private boost::noncopyable,
-                      public ViewEventHandler
+        class Slide
         {
         public:
-            /** Construct from XDrawPage
-
-                Prefetches shapes from draw page, thus might take some
-                time. The Slide object generally works in XDrawPage
-                model coordinates, that is, the page will have the
-                width and height as specified in the XDrawPage's
-                property set. The top, left corner of the page will be
-                rendered at (0,0) in the given canvas' view coordinate
-                system.
-             */
-            static SlideSharedPtr create( const ::com::sun::star::uno::Reference<
-                                                ::com::sun::star::drawing::XDrawPage >&         xDrawPage,
-                                          const ::com::sun::star::uno::Reference<
-                                                ::com::sun::star::animations::XAnimationNode >& xRootNode,
-                                          EventQueue&                                           rEventQueue,
-                                          ActivitiesQueue&                                      rActivitiesQueue,
-                                          EventMultiplexer&                                     rEventMultiplexer,
-                                          UserEventQueue&                                       rUserEventQueue,
-                                          const ::com::sun::star::uno::Reference<
-                                                ::com::sun::star::uno::XComponentContext >&     xContext,
-                                          const UnoViewContainer&                               rViewContainer );
-            ~Slide();
-
-            // ViewEventHandler
-            virtual void viewAdded( const UnoViewSharedPtr& rView );
-            virtual void viewRemoved( const UnoViewSharedPtr& rView );
-            virtual void viewChanged( const UnoViewSharedPtr& rView );
-
-            /** Add the given listener for the given shape.
-
-                This method implements the addShapeEventListener
-                method of the XSlideShow interface. The given listener
-                is called, whenever a user clicks on the shape. If the
-                shape is not contained in this slide, this method does
-                nothing.
-             */
-            void addShapeEventListener( const ::com::sun::star::uno::Reference<
-                                                ::com::sun::star::presentation::XShapeEventListener >&  xListener,
-                                        const ::com::sun::star::uno::Reference<
-                                                ::com::sun::star::drawing::XShape >&                    xShape );
-
-            /** Revoke the given listener for the given shape.
-
-                This method implements the removeShapeEventListener
-                method of the XSlideShow interface.
-             */
-            void removeShapeEventListener( const ::com::sun::star::uno::Reference<
-                                                       ::com::sun::star::presentation::XShapeEventListener >&   xListener,
-                                           const ::com::sun::star::uno::Reference<
-                                                       ::com::sun::star::drawing::XShape >&                     xShape );
-
-            /** Control intrinsic animation behaviour
-
-                @param bImageAnimationsAllowed
-                When true, GIF and drawing layer animations will be
-                shown. When false, those shapes have no intrinsic
-                animation.
-             */
-            void setImageAnimationsAllowed( bool bImageAnimationsAllowed );
-
-            /** Set the mouse cursor for a given shape.
-
-                This method implements the setShapeCursor method of
-                the XSlideShow interface. Whenever the mouse hovers
-                over the given shape, the specified mouse cursor will
-                be shown. To reset the mouse cursor to the default,
-                specify awt::SystemPointer::ARROW.
-             */
-            void setShapeCursor( const ::com::sun::star::uno::Reference<
-                                         ::com::sun::star::drawing::XShape >&   xShape,
-                                 sal_Int16                                      nPointerShape );
+            // Showing
+            // -------------------------------------------------------------------
 
             /** Prepares to show slide.
 
                 Call this method to reduce the timeout show(), and
                 getInitialSlideBitmap() need to complete. If
-                prefetchShow() is not called explicitely, the named
+                prefetch() is not called explicitely, the named
                 methods will call it implicitely.
              */
-            bool prefetchShow();
-
-            /** Paint the slide on given view, without any animation effects
-             */
-            bool paint( const UnoViewSharedPtr& rView );
+            virtual bool prefetch() = 0;
 
             /** Shows the slide on all registered views
+
+                After this call, the slide will render itself to the
+                views, and start its animations.
+
+                @param bSlideBackgoundPainted
+                When true, the initial slide content on the background
+                layer is already rendered (e.g. from a previous slide
+                transition). When false, Slide renders initial content of
+                slide.
              */
-            bool show();
+            virtual bool show( bool bSlideBackgoundPainted ) = 0;
 
-            /** Force-end the slide show.
+            /** Force-ends the slide
+
+                After this call, the slide has stopped all animations,
+                and ceased rendering/visualization on all views.
              */
-            void end();
+            virtual void hide() = 0;
 
-            /** Query whether this slide is currently showing.
 
-                @return true, if this slide is currently showing
-                (i.e. show() was called more often than end()).
+            // Queries
+            // -------------------------------------------------------------------
+
+            /** Query the size of this slide in user coordinates
+
+                This value is retrieved from the XDrawPage properties.
              */
-            bool isShowing() const;
+            virtual basegfx::B2IVector getSlideSize() const = 0;
 
-            /** Query whether the slide has animations at all
+            /// Gets the underlying API page
+            virtual ::com::sun::star::uno::Reference<
+                ::com::sun::star::drawing::XDrawPage > getXDrawPage() const = 0;
 
-                If the slide doesn't have animations, show() is
-                equivalent to paint(). If an event is registered with
-                registerSlideEndEvent(), this event will be
-                immediately activated at the end of the show() method.
+            /// Gets the animation node.
+            virtual ::com::sun::star::uno::Reference<
+                ::com::sun::star::animations::XAnimationNode > getXAnimationNode() const = 0;
 
-                @return true, if this slide has animations, false
-                otherwise
-             */
-            bool isAnimated();
+
+            // Slide bitmaps
+            // -------------------------------------------------------------------
 
             /** Request bitmap for current slide appearance.
 
-                The bitmap returned by this method is dependent on the
+                The bitmap returned by this method depends on the
                 current state of the slide and the contained
                 animations. A newly generated slide will return the
                 initial slide content here (e.g. with all 'appear'
@@ -206,180 +146,67 @@ namespace slideshow
                 that the view must have been added to this slide
                 before via viewAdded().
              */
-            // TODO(F2): Rework SlideBitmap to no longer be based on XBitmap,
-            // but on canvas-independent basegfx bitmaps
-            SlideBitmapSharedPtr getCurrentSlideBitmap( const UnoViewSharedPtr& rView );
-
-            /** Query the slide, whether next slide should appear
-                automatically.
-
-                @return true, if next slide should be displayed
-                automatically. When false is returned, the user is
-                required to click to have the next slide shown.
-             */
-            bool hasAutomaticNextSlide() const;
-
-            /** Query the slide for the timeout, until the next slide
-                is automatically shown.
-
-                This value is undefined, should
-                hasAutomaticNextSlide() return false.
-
-                @return a timeout in seconds, for which to delay the
-                display of the next slide.
-             */
-            double getAutomaticNextSlideTimeout() const;
-
-            /** Control the user paint mode.
-
-                The user paint mode lets the user paint on this slide
-                with the given color, when pressing down the
-                mousebutton.
-             */
-            void setUserPaintColor( boost::optional<RGBColor> const& rColor );
-
-            /// Query the XDrawPage's size
-            basegfx::B2ISize getSlideSize() const;
-
-            /// Get size of the slide in device coordinates for given view
-            ::basegfx::B2ISize getSlideSizePixel(
-                UnoViewSharedPtr const & pView ) const;
-
-            /// Gets the underlying API page
-            ::com::sun::star::uno::Reference<
-                ::com::sun::star::drawing::XDrawPage > const&
-            getXDrawPage() const { return mxDrawPage; }
-
-            /// Gets the animation node.
-            ::com::sun::star::uno::Reference<
-                ::com::sun::star::animations::XAnimationNode > const&
-            getXAnimationNode() const { return mxRootNode; }
-
-        private:
-            Slide( const ::com::sun::star::uno::Reference<
-                       ::com::sun::star::drawing::XDrawPage >&          xDrawPage,
-                   const ::com::sun::star::uno::Reference<
-                       ::com::sun::star::animations::XAnimationNode >&  xRootNode,
-                   EventQueue&                                          rEventQueue,
-                   ActivitiesQueue&                                     rActivitiesQueue,
-                   EventMultiplexer&                                    rEventMultiplexer,
-                   UserEventQueue&                                      rUserEventQueue,
-                   const ::com::sun::star::uno::Reference<
-                         ::com::sun::star::uno::XComponentContext >&    xContext,
-                   const UnoViewContainer&                              rViewContainer );
-
-            void enablePaintOverlay();
-            void disablePaintOverlay();
-
-            /// Set all Shapes to their initial attributes for slideshow
-            bool applyInitialShapeAttributes( const ::com::sun::star::uno::Reference<
-                                                  ::com::sun::star::animations::XAnimationNode >& xRootAnimationNode );
-
-            /// Renders current slide content to bitmap
-            SlideBitmapSharedPtr createCurrentSlideBitmap(
-                const UnoViewSharedPtr& rView,
-                ::basegfx::B2ISize const & rSlideSize );
-
-            /// Prefetch all shapes (not the animations)
-            bool prefetchShapes();
-
-            /// Prefetch show, but don't call applyInitialShapeAttributes()
-            bool implPrefetchShow();
-
-            /// Query the rectangle covered by the slide
-            ::basegfx::B2DRectangle getSlideRect() const;
-
-            /// Start GIF and other intrinsic shape animations
-            void endIntrinsicAnimations();
-
-            /// End GIF and other intrinsic shape animations
-            void startIntrinsicAnimations();
-
-
-            // Types
-            // =====
-
-            enum SlideAnimationState
-            {
-                CONSTRUCTING_STATE=0,
-                INITIAL_STATE=1,
-                SHOWING_STATE=2,
-                FINAL_STATE=3,
-                SlideAnimationState_NUM_ENTRIES=4
-            };
-
-            typedef std::vector< SlideBitmapSharedPtr > VectorOfSlideBitmaps;
-            /** Vector of slide bitmaps.
-
-                Since the bitmap content is sensitive to animation
-                effects, we have an inner vector containing a distinct
-                bitmap for each of the SlideAnimationStates.
-             */
-            typedef ::std::vector< std::pair< UnoViewSharedPtr,
-                                              VectorOfSlideBitmaps > > VectorOfVectorOfSlideBitmaps;
-
-
-            // Member variables
-            // ================
-
-            /// The page model object
-            const com::sun::star::uno::Reference<
-                com::sun::star::drawing::XDrawPage >            mxDrawPage;
-            const com::sun::star::uno::Reference<
-                com::sun::star::animations::XAnimationNode >    mxRootNode;
-
-            /// Contains common objects needed throughout the slideshow
-            SlideShowContext                                    maContext;
-
-            ::boost::shared_ptr<ShapeEventBroadcaster>          mpEventBroadcaster;
-
-            /// Handles the animation and event generation for us
-            SlideAnimations                                     maAnimations;
-
-            ::boost::optional<RGBColor>                         maUserPaintColor;
-            UserPaintOverlaySharedPtr                           mpPaintOverlay;
-
-            /// Bitmaps with slide content at various states
-            VectorOfVectorOfSlideBitmaps                        maSlideBitmaps;
-
-            /// Timeout for automatic next slide display
-            double                                              mnNextSlideTimeout;
-
-            SlideAnimationState                                 meAnimationState;
-
-            /// True, when intrinsic shape animations are allowed
-            bool                                                mbImageAnimationsAllowed;
-
-            /// True, if initial load of all page shapes succeeded
-            bool                                                mbShapesLoaded;
-
-            /// True, if initial load of all animation info succeeded
-            bool                                                mbShowLoaded;
-
-            /** True, if this slide is not static.
-
-                If this slide has animated content, this variable wiil
-                be true, and false otherwise.
-             */
-            bool                                                mbHaveAnimations;
-
-            /** True, if this slide has a main animation sequence.
-
-                If this slide has animation content, which in turn has
-                a main animation sequence (which must be fully run
-                before EventMultiplexer::notifySlideAnimationsEnd() is
-                called), this member is true.
-             */
-            bool                                                mbMainSequenceFound;
-
-            /** When true, next slide should display without further
-                user interaction.
-             */
-            bool                                                mbHasAutomaticNextSlide;
-
-            struct ShapesIterationFunc;  friend struct ShapesIterationFunc;
+            virtual SlideBitmapSharedPtr
+                getCurrentSlideBitmap( const UnoViewSharedPtr& rView ) const = 0;
         };
+
+        typedef ::boost::shared_ptr< Slide > SlideSharedPtr;
+
+        class EventQueue;
+        class CursorManager;
+        class EventMultiplexer;
+        class ActivitiesQueue;
+        class UserEventQueue;
+        class RGBColor;
+
+        /** Construct from XDrawPage
+
+            The Slide object generally works in XDrawPage model
+            coordinates, that is, the page will have the width and
+            height as specified in the XDrawPage's property
+            set. The top, left corner of the page will be rendered
+            at (0,0) in the given canvas' view coordinate system.
+
+            Does not render anything initially
+
+            @param xDrawPage
+            Page to display on this slide
+
+            @param xRootNode
+            Root of the SMIL animation tree. Used to animate the slide.
+
+            @param rEventQueue
+            EventQueue. Used to post events.
+
+            @param rActivitiesQueue
+            ActivitiesQueue. Used to run animations.
+
+            @param rEventMultiplexer
+            Event source
+
+            @param rUserEventQueue
+            UserEeventQueue
+        */
+        SlideSharedPtr createSlide( const ::com::sun::star::uno::Reference<
+                                       ::com::sun::star::drawing::XDrawPage >&         xDrawPage,
+                                    const ::com::sun::star::uno::Reference<
+                                       ::com::sun::star::animations::XAnimationNode >& xRootNode,
+                                    EventQueue&                                        rEventQueue,
+                                    EventMultiplexer&                                  rEventMultiplexer,
+                                    ScreenUpdater&                                     rScreenUpdater,
+                                    ActivitiesQueue&                                   rActivitiesQueue,
+                                    UserEventQueue&                                    rUserEventQueue,
+                                    CursorManager&                                     rCursorManager,
+                                    const UnoViewContainer&                            rViewContainer,
+                                    const ::com::sun::star::uno::Reference<
+                                       ::com::sun::star::uno::XComponentContext >&     xContext,
+                                    const ShapeEventListenerMap&                       rShapeListenerMap,
+                                    const ShapeCursorMap&                              rShapeCursorMap,
+                                    RGBColor const&                                    aUserPaintColor,
+                                    bool                                               bUserPaintEnabled,
+                                    bool                                               bIntrinsicAnimationsAllowed,
+                                    bool                                               bDisableAnimationZOrder );
     }
 }
 
-#endif /* _SLIDESHOW_SLIDE_HXX */
+#endif /* INCLUDED_SLIDESHOW_SLIDE_HXX */
