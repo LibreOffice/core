@@ -4,9 +4,9 @@
  *
  *  $RCSfile: IDocumentStatistics.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: obo $ $Date: 2006-10-11 08:44:39 $
+ *  last change: $Author: obo $ $Date: 2007-07-17 13:04:39 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -48,7 +48,7 @@
     /** Dokument info
         @return the current document information
     */
-    virtual SfxDocumentInfo* GetInfo() = 0;
+    virtual SfxDocumentInfo* GetDocumentInfo() = 0;
 
     /** Return a pointer to the document info.
         May also return NULL!
@@ -60,7 +60,7 @@
         der Info, um einen schnellen Zugriff zu ermoeglichen.
         (impl. in docsh2.cxx)
     */
-    virtual void SetInfo(const SfxDocumentInfo& rInfo) = 0;
+    virtual void SetDocumentInfo(const SfxDocumentInfo& rInfo) = 0;
 
     /** die DocInfo hat siche geaendert (Notify ueber die DocShell)
         stosse die entsp. Felder zum Updaten an.
