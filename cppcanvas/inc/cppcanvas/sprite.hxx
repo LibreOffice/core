@@ -4,9 +4,9 @@
  *
  *  $RCSfile: sprite.hxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: kz $ $Date: 2005-11-02 13:38:52 $
+ *  last change: $Author: obo $ $Date: 2007-07-17 15:23:37 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -102,6 +102,8 @@ namespace cppcanvas
             the view coordinate system of the parent canvas.
          */
         virtual void setClip( const ::basegfx::B2DPolyPolygon& rClipPoly ) = 0;
+
+        virtual void setClip() = 0;
 
         virtual void show() = 0;
         virtual void hide() = 0;
