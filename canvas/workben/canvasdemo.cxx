@@ -4,9 +4,9 @@
  *
  *  $RCSfile: canvasdemo.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 03:32:22 $
+ *  last change: $Author: obo $ $Date: 2007-07-17 14:27:02 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -108,7 +108,7 @@ class TestWindow : public Dialog
             Show();
         }
         virtual ~TestWindow() {}
-        virtual void MouseButtonUp( const MouseEvent& rMEvt )
+        virtual void MouseButtonUp( const MouseEvent& /*rMEvt*/ )
         {
             //TODO: do something cool
             EndDialog();
@@ -195,7 +195,7 @@ class DemoRenderer
             mxCanvas->drawText( aText, mxDefaultFont, maViewState, aRenderState, 0);
         }
 
-        void drawRect( Rectangle rRect, uno::Sequence< double > &aColor, int nWidth )
+        void drawRect( Rectangle rRect, uno::Sequence< double > &aColor, int /*nWidth*/ )
         {
             uno::Sequence< geometry::RealPoint2D > aPoints(4);
             uno::Reference< rendering::XLinePolyPolygon2D > xPoly;
@@ -428,8 +428,6 @@ class DemoRenderer
 
             translate( maBox.Width() * .5, maBox.Height() * .5 );
 
-            const double centerx = 100.0;
-            const double centery = 100.0;
             const double r= 30.0;
             const int num_curves = 3;
 
@@ -577,7 +575,7 @@ class DemoRenderer
 };
 
 
-void TestWindow::Paint( const Rectangle& rRect )
+void TestWindow::Paint( const Rectangle& /*rRect*/ )
 {
     try
     {
