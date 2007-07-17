@@ -4,9 +4,9 @@
  *
  *  $RCSfile: cairo_canvasfont.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: kz $ $Date: 2006-12-13 14:38:48 $
+ *  last change: $Author: obo $ $Date: 2007-07-17 14:20:19 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -73,7 +73,7 @@ namespace cairocanvas
     }
 
     CanvasFont::CanvasFont( const rendering::FontRequest&                   rFontRequest,
-                            const uno::Sequence< beans::PropertyValue >&    rExtraFontProperties,
+                            const uno::Sequence< beans::PropertyValue >&    /*rExtraFontProperties*/,
                             const geometry::Matrix2D&                       rFontMatrix,
                             const DeviceRef&                                rDevice ) :
         CanvasFont_Base( m_aMutex ),

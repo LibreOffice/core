@@ -4,9 +4,9 @@
  *
  *  $RCSfile: cairo_canvashelper_text.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: kz $ $Date: 2006-12-13 14:39:34 $
+ *  last change: $Author: obo $ $Date: 2007-07-17 14:20:59 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -62,7 +62,7 @@ namespace cairocanvas
         LINE_COLOR, FILL_COLOR, TEXT_COLOR, IGNORE_COLOR
     };
 
-    uno::Reference< rendering::XCanvasFont > CanvasHelper::createFont( const rendering::XCanvas*                    pCanvas,
+    uno::Reference< rendering::XCanvasFont > CanvasHelper::createFont( const rendering::XCanvas*                    ,
                                                                        const rendering::FontRequest&                fontRequest,
                                                                        const uno::Sequence< beans::PropertyValue >& extraFontProperties,
                                                                        const geometry::Matrix2D&                    fontMatrix )
@@ -70,9 +70,9 @@ namespace cairocanvas
         return uno::Reference< rendering::XCanvasFont >( new CanvasFont( fontRequest, extraFontProperties, fontMatrix, mpDevice ) );
     }
 
-    uno::Sequence< rendering::FontInfo > CanvasHelper::queryAvailableFonts( const rendering::XCanvas*                       pCanvas,
-                                                                            const rendering::FontInfo&                      aFilter,
-                                                                            const uno::Sequence< beans::PropertyValue >&    aFontProperties )
+    uno::Sequence< rendering::FontInfo > CanvasHelper::queryAvailableFonts( const rendering::XCanvas*                       ,
+                                                                            const rendering::FontInfo&                      /*aFilter*/,
+                                                                            const uno::Sequence< beans::PropertyValue >&    /*aFontProperties*/ )
     {
         // TODO
         return uno::Sequence< rendering::FontInfo >();
@@ -311,7 +311,7 @@ namespace cairocanvas
         return true;
     }
 
-    uno::Reference< rendering::XCachedPrimitive > CanvasHelper::drawText( const rendering::XCanvas*                         pCanvas,
+    uno::Reference< rendering::XCachedPrimitive > CanvasHelper::drawText( const rendering::XCanvas*                         ,
                                                                           const rendering::StringContext&                   text,
                                                                           const uno::Reference< rendering::XCanvasFont >&   xFont,
                                                                           const rendering::ViewState&                       viewState,
@@ -367,7 +367,7 @@ namespace cairocanvas
         return uno::Reference< rendering::XCachedPrimitive >(NULL);
     }
 
-    uno::Reference< rendering::XCachedPrimitive > CanvasHelper::drawTextLayout( const rendering::XCanvas*                       pCanvas,
+    uno::Reference< rendering::XCachedPrimitive > CanvasHelper::drawTextLayout( const rendering::XCanvas*                       ,
                                                                                 const uno::Reference< rendering::XTextLayout >& xLayoutedText,
                                                                                 const rendering::ViewState&                     viewState,
                                                                                 const rendering::RenderState&                   renderState )
