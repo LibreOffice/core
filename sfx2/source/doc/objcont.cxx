@@ -4,9 +4,9 @@
  *
  *  $RCSfile: objcont.cxx,v $
  *
- *  $Revision: 1.68 $
+ *  $Revision: 1.69 $
  *
- *  last change: $Author: hr $ $Date: 2007-06-27 23:22:52 $
+ *  last change: $Author: obo $ $Date: 2007-07-17 13:43:36 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -47,6 +47,12 @@
 #ifndef _COM_SUN_STAR_EMBED_ELEMENTMODES_HPP_
 #include <com/sun/star/embed/ElementModes.hpp>
 #endif
+#ifndef _COM_SUN_STAR_DOCUMENT_XSTANDALONEDOCUMENTINFO_HPP_
+#include <com/sun/star/document/XStandaloneDocumentInfo.hpp>
+#endif
+#ifndef _COM_SUN_STAR_BEANS_XFASTPROPERTYSET_HPP_
+#include <com/sun/star/beans/XFastPropertySet.hpp>
+#endif
 
 #ifndef _CACHESTR_HXX //autogen
 #include <tools/cachestr.hxx>
@@ -67,6 +73,7 @@
 #include <svtools/stritem.hxx>
 #include <svtools/intitem.hxx>
 #include <svtools/rectitem.hxx>
+#include <svtools/eitem.hxx>
 #include <svtools/urihelper.hxx>
 #include <comphelper/processfactory.hxx>
 #include <comphelper/storagehelper.hxx>
@@ -92,6 +99,7 @@
 
 #include <sfx2/app.hxx>
 #include "sfxresid.hxx"
+#include "appdata.hxx"
 #include <sfx2/dinfdlg.hxx>
 #include "fltfnc.hxx"
 #include <sfx2/docfac.hxx>
@@ -121,6 +129,9 @@ using namespace ::com::sun::star::uno;
 #define SFX_PREVIEW_STREAM "SfxPreview"
 
 //====================================================================
+
+extern ::com::sun::star::util::DateTime impl_DateTime_Object2Struct( const ::DateTime& aDateTimeObject );
+extern ::DateTime impl_DateTime_Struct2Object ( const ::com::sun::star::util::DateTime& aDateTimeStruct );
 
 GDIMetaFile* SfxObjectShell::GetPreviewMetaFile( sal_Bool bFullContent ) const
 {
@@ -432,44 +443,27 @@ SfxViewFrame* SfxObjectShell::LoadWindows_Impl( SfxTopFrame *pPreferedFrame )
 void SfxObjectShell::UpdateDocInfoForSave()
 {
     SfxDocumentInfo &rDocInfo = GetDocInfo();
-    rDocInfo.SetTemplateConfig( sal_False );
-
-    if ( IsModified() )
-    {
-        // Keine Unterschiede mehr zwischen Save, SaveAs
-        String aUserName = SvtUserOptions().GetFullName();
-        if ( !rDocInfo.IsUseUserData() )
-           {
-               SfxStamp aCreated = rDocInfo.GetCreated();
-               if ( aUserName == aCreated.GetName() )
-               {
-                   aCreated.SetName( String() );
-                  rDocInfo.SetCreated( aCreated );
-               }
-
-               SfxStamp aPrinted = rDocInfo.GetPrinted();
-               if ( aUserName == aPrinted.GetName() )
-               {
-                   aPrinted.SetName( String() );
-                  rDocInfo.SetPrinted( aPrinted );
-               }
-
-            aUserName.Erase();
-           }
-
-        rDocInfo.SetChanged( aUserName );
-        if ( !HasName() || pImp->bIsSaving )
-            UpdateTime_Impl( rDocInfo );
-    }
-
-    if ( !pImp->bIsSaving )
-        rDocInfo.SetPasswd( pImp->bPasswd );
 
     // clear user data if recommend (see 'Tools - Options - Open/StarOffice - Security')
     if ( SvtSecurityOptions().IsOptionSet( SvtSecurityOptions::E_DOCWARN_REMOVEPERSONALINFO ) )
-        rDocInfo.DeleteUserDataCompletely();
-
-    Broadcast( SfxDocumentInfoHint( &rDocInfo ) );
+        rDocInfo.DeleteUserData();
+    else if ( IsModified() )
+    {
+        String aUserName = SvtUserOptions().GetFullName();
+        if ( !IsUseUserData() )
+           {
+            // remove all data pointing to the current user
+            rDocInfo.DeleteUserData( &aUserName );
+           }
+        else
+        {
+            // update ModificationAuthor, revision and editing time
+            rDocInfo.SetChanged( aUserName );
+            if ( !HasName() || pImp->bIsSaving )
+                // QUESTION: not in case of "real" SaveAs as this is meant to create a new document
+                UpdateTime_Impl( rDocInfo );
+        }
+    }
 }
 
 //--------------------------------------------------------------------
@@ -540,60 +534,6 @@ SfxDocumentInfo& SfxObjectShell::UpdateTime_Impl(SfxDocumentInfo &rInfo)
 }
 
 //--------------------------------------------------------------------
-
-void SfxObjectShell::DocInfoDlg_Impl( SfxDocumentInfo &rDocInfo )
-{
-    // anzuzeigenden Dokumentnamen ermitteln
-    String aURL, aTitle;
-    if ( HasName() && !pImp->aNewName.Len() )
-    {
-        aURL = GetMedium()->GetName();
-        aTitle = GetTitle();
-    }
-    else
-    {
-        if ( !pImp->aNewName.Len() )
-        {
-            aURL = DEFINE_CONST_UNICODE( "private:factory/" );
-            aURL += String::CreateFromAscii( GetFactory().GetShortName() );
-            // aTitle = String( SfxResId( STR_NONAME ) );
-        }
-        else
-        {
-            aURL = DEFINE_CONST_UNICODE( "[private:factory/" );
-            aURL += String::CreateFromAscii( GetFactory().GetShortName() );
-            aURL += DEFINE_CONST_UNICODE( "]" );
-            INetURLObject aURLObj( pImp->aNewName );
-            aURL += String(aURLObj.GetMainURL( INetURLObject::DECODE_TO_IURI ));
-            // aTitle = aURLObj.GetBase();
-        }
-        aTitle = GetTitle();
-    }
-
-    // Itemset f"ur Dialog aufbereiten
-    SfxDocumentInfoItem aDocInfoItem( aURL, rDocInfo );
-    if ( !GetSlotState( SID_DOCTEMPLATE ) )
-        aDocInfoItem.SetTemplate(FALSE);
-    SfxItemSet aSet(GetPool(), SID_DOCINFO, SID_DOCINFO,
-                    SID_EXPLORER_PROPS_START, SID_EXPLORER_PROPS_START, SID_BASEURL, SID_BASEURL,
-                    0L );
-    aSet.Put( aDocInfoItem );
-    aSet.Put( SfxStringItem( SID_EXPLORER_PROPS_START, aTitle ) );
-    aSet.Put( SfxStringItem( SID_BASEURL, GetMedium()->GetBaseURL() ) );
-
-    // Dialog via Factory erzeugen und ausf"uhren
-    SfxDocumentInfoDialog *pDlg = CreateDocumentInfoDialog(0, aSet);
-    if ( RET_OK == pDlg->Execute() )
-    {
-        // neue DocInfo aus Dialog holen
-        const SfxPoolItem *pItem = 0;
-        if ( SFX_ITEM_SET == pDlg->GetOutputItemSet()->GetItemState( SID_DOCINFO, TRUE, &pItem ) )
-            rDocInfo = (*(const SfxDocumentInfoItem *)pItem)();
-    }
-    delete pDlg;
-}
-
-//------------------------------------------------------------------------
 
 SfxDocumentInfoDialog* SfxObjectShell::CreateDocumentInfoDialog
 (
@@ -1335,7 +1275,7 @@ void SfxObjectShell::UpdateFromTemplate_Impl(  )
         BOOL bLoad = FALSE;
 
         // should the document checked against changes in the template ?
-        if ( pInfo->IsQueryLoadTemplate() )
+        if ( IsQueryLoadTemplate() )
         {
             // load document info of template
             BOOL bOK = FALSE;
@@ -1354,7 +1294,7 @@ void SfxObjectShell::UpdateFromTemplate_Impl(  )
                     if ( aAny >>= aTmp )
                     {
                         // get modify date from document info
-                        aTemplDate = SfxDocumentInfoObject::impl_DateTime_Struct2Object( aTmp );
+                        aTemplDate = impl_DateTime_Struct2Object( aTmp );
                         bOK = TRUE;
                     }
                 }
@@ -1384,7 +1324,7 @@ void SfxObjectShell::UpdateFromTemplate_Impl(  )
                     if( !bLoad )
                     {
                         // user refuses, so don't ask again for this document
-                        pInfo->SetQueryLoadTemplate(FALSE);
+                        SetQueryLoadTemplate(FALSE);
                         SetModified( TRUE );
                     }
                 }
@@ -1520,5 +1460,75 @@ sal_Bool SfxObjectShell::IsHelpDocument() const
 {
     const SfxFilter* pFilter = GetMedium()->GetFilter();
     return ( pFilter && pFilter->GetFilterName().CompareToAscii("writer_web_HTML_help") == COMPARE_EQUAL );
+}
+
+void SfxObjectShell::ResetFromTemplate( const String& rTemplateName, const String& rFileName )
+{
+    SfxDocumentInfo& rInfo( GetDocInfo() );
+    rInfo.ClearTemplateInformation();
+    rInfo.DeleteUserData();
+
+    // TODO/REFACTOR:
+    // Title?
+
+    if( ::utl::LocalFileHelper::IsLocalFile( rFileName ) )
+    {
+        String aFoundName;
+        if( SFX_APP()->Get_Impl()->GetDocumentTemplates()->GetFull( String(), rTemplateName, aFoundName ) )
+        {
+            INetURLObject aObj( rFileName );
+            rInfo.SetTemplateFileName( aObj.GetMainURL(INetURLObject::DECODE_TO_IURI) );
+            rInfo.SetTemplateName( rTemplateName );
+            SetQueryLoadTemplate( sal_True );
+        }
+    }
+}
+
+sal_Bool SfxObjectShell::IsQueryLoadTemplate() const
+{
+    return pImp->bQueryLoadTemplate;
+}
+
+sal_Bool SfxObjectShell::IsUseUserData() const
+{
+    return pImp->bUseUserData;
+}
+
+void SfxObjectShell::SetQueryLoadTemplate( sal_Bool bNew )
+{
+    if ( pImp->bQueryLoadTemplate != bNew )
+        SetModified( TRUE );
+    pImp->bQueryLoadTemplate = bNew;
+}
+
+void SfxObjectShell::SetUseUserData( sal_Bool bNew )
+{
+    if ( pImp->bUseUserData != bNew )
+        SetModified( TRUE );
+    pImp->bUseUserData = bNew;
+}
+
+sal_Bool SfxObjectShell::IsLoadReadonly() const
+{
+    return pImp->bLoadReadonly;
+}
+
+sal_Bool SfxObjectShell::IsSaveVersionOnClose() const
+{
+    return pImp->bSaveVersionOnClose;
+}
+
+void SfxObjectShell::SetLoadReadonly( sal_Bool bNew )
+{
+    if ( pImp->bLoadReadonly != bNew )
+        SetModified( TRUE );
+    pImp->bLoadReadonly = bNew;
+}
+
+void SfxObjectShell::SetSaveVersionOnClose( sal_Bool bNew )
+{
+    if ( pImp->bSaveVersionOnClose != bNew )
+        SetModified( TRUE );
+    pImp->bSaveVersionOnClose = bNew;
 }
 
