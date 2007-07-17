@@ -4,9 +4,9 @@
  *
  *  $RCSfile: XCanvas.idl,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 02:58:03 $
+ *  last change: $Author: obo $ $Date: 2007-07-17 14:32:05 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -141,6 +141,14 @@ interface XTextLayout;
  */
 interface XCanvas : ::com::sun::star::uno::XInterface
 {
+    /** Clear the whole canvas area.<p>
+
+        This method clears the whole canvas area to the device default
+        color (e.g. white for a printer, transparent for an
+        <type>XCustomSprite</type>).
+     */
+    void                clear();
+
      /** Draw a point in device resolution on the device.
 
          @param aPoint
