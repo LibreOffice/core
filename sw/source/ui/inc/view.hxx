@@ -4,9 +4,9 @@
  *
  *  $RCSfile: view.hxx,v $
  *
- *  $Revision: 1.52 $
+ *  $Revision: 1.53 $
  *
- *  last change: $Author: ihi $ $Date: 2007-07-12 10:50:55 $
+ *  last change: $Author: obo $ $Date: 2007-07-17 13:11:32 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -440,7 +440,7 @@ public:
     virtual ErrCode         DoVerb( long nVerb );
 
     virtual USHORT          SetPrinter( SfxPrinter* pNew,
-                                        USHORT nDiff = SFX_PRINTER_ALL);
+                                        USHORT nDiff = SFX_PRINTER_ALL, bool bIsAPI=false);
     virtual ErrCode         DoPrint( SfxPrinter *pPrinter, PrintDialog *pPrintDialog,
                                      BOOL bSilent, BOOL bIsAPI );
     ShellModes              GetShellMode();
