@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.8 $
+#   $Revision: 1.9 $
 #
-#   last change: $Author: ihi $ $Date: 2007-06-05 10:48:27 $
+#   last change: $Author: obo $ $Date: 2007-07-17 07:25:34 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -75,7 +75,7 @@ STDSHL+=	\
     -lmsvcrt
 .ENDIF
 
-SHL1LIBS = $(SLB)$/$(TARGET).lib 
+#SHL1LIBS = $(SLB)$/$(TARGET).lib 
 
 SHL1TARGET = $(TARGET)
 SHL1IMPLIB = i$(TARGET)
