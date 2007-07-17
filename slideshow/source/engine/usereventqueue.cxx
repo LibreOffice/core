@@ -4,9 +4,9 @@
  *
  *  $RCSfile: usereventqueue.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: kz $ $Date: 2006-12-13 15:21:51 $
+ *  last change: $Author: obo $ $Date: 2007-07-17 14:42:04 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -38,7 +38,6 @@
 
 // must be first
 #include <canvas/debug.hxx>
-#include <osl/mutex.hxx>
 
 #include <comphelper/anytostring.hxx>
 #include <cppuhelper/exc_hlp.hxx>
@@ -51,6 +50,7 @@
 
 #include "delayevent.hxx"
 #include "usereventqueue.hxx"
+#include "cursormanager.hxx"
 #include "slideshowexceptions.hxx"
 
 #include <vector>
@@ -124,28 +124,26 @@ bool fireAllEvents( ContainerT & rQueue, EventQueue & rEventQueue )
 class EventContainer
 {
 public:
-    EventContainer() : maMutex(), maEvents() {}
+    EventContainer() :
+        maEvents()
+    {}
 
     void clearContainer()
     {
-        osl::MutexGuard const guard( maMutex );
         maEvents = ImpEventQueue();
     }
 
     void addEvent( const EventSharedPtr& rEvent )
     {
-        osl::MutexGuard const guard( maMutex );
         maEvents.push( rEvent );
     }
 
     bool isEmpty()
     {
-        osl::MutexGuard const guard( maMutex );
         return maEvents.empty();
     }
 
 protected:
-    osl::Mutex    maMutex;
     ImpEventQueue maEvents;
 };
 
@@ -165,7 +163,6 @@ public:
 
     virtual bool handleEvent()
     {
-        osl::MutexGuard const guard( maMutex );
         return fireAllEvents( maEvents, mrEventQueue );
     }
 
@@ -176,14 +173,13 @@ private:
 class AllAnimationEventHandler : public AnimationEventHandler
 {
 public:
-    AllAnimationEventHandler( EventQueue& rEventQueue )
-        : maMutex(),
-          mrEventQueue( rEventQueue ),
-          maAnimationEventMap() {}
+    AllAnimationEventHandler( EventQueue& rEventQueue ) :
+        mrEventQueue( rEventQueue ),
+        maAnimationEventMap()
+    {}
 
     virtual void dispose()
     {
-        osl::MutexGuard aGuard( maMutex );
         maAnimationEventMap.clear();
     }
 
@@ -192,8 +188,6 @@ public:
         ENSURE_AND_RETURN(
             rNode,
             "AllAnimationEventHandler::handleAnimationEvent(): Invalid node" );
-
-        osl::MutexGuard aGuard( maMutex );
 
         bool bRet( false );
 
@@ -219,8 +213,6 @@ public:
     void addEvent( const EventSharedPtr&                                rEvent,
                    const uno::Reference< animations::XAnimationNode >&  xNode )
     {
-        osl::MutexGuard aGuard( maMutex );
-
         ImpAnimationEventMap::iterator aIter;
         if( (aIter=maAnimationEventMap.find( xNode )) ==
             maAnimationEventMap.end() )
@@ -237,11 +229,9 @@ public:
 
     bool isEmpty()
     {
-        osl::MutexGuard aGuard( maMutex );
-
         // find at least one animation with a non-empty vector
-        ImpAnimationEventMap::iterator aCurr( maAnimationEventMap.begin() );
-        ImpAnimationEventMap::iterator aEnd( maAnimationEventMap.end() );
+        ImpAnimationEventMap::const_iterator aCurr( maAnimationEventMap.begin() );
+        const ImpAnimationEventMap::const_iterator aEnd( maAnimationEventMap.end() );
         while( aCurr != aEnd )
         {
             if( !aCurr->second.empty() )
@@ -254,8 +244,6 @@ public:
     }
 
 private:
-    /// Object mutex
-    osl::Mutex              maMutex;
     EventQueue&             mrEventQueue;
     ImpAnimationEventMap    maAnimationEventMap;
 };
@@ -265,14 +253,14 @@ class ClickEventHandler : public MouseEventHandler_,
                           public EventContainer
 {
 public:
-    ClickEventHandler( EventQueue& rEventQueue )
-        : EventContainer(),
-          mrEventQueue( rEventQueue ),
-          mbAdvanceOnClick( true ) {}
+    ClickEventHandler( EventQueue& rEventQueue ) :
+        EventContainer(),
+        mrEventQueue( rEventQueue ),
+        mbAdvanceOnClick( true )
+    {}
 
     void setAdvanceOnClick( bool bAdvanceOnClick )
     {
-        osl::MutexGuard aGuard( maMutex );
         mbAdvanceOnClick = bAdvanceOnClick;
     }
 
@@ -285,7 +273,6 @@ private:
     // triggered by API calls, e.g. space bar
     virtual bool handleEvent()
     {
-        osl::MutexGuard const guard( maMutex );
         return handleEvent_impl();
     }
 
@@ -294,8 +281,6 @@ private:
     {
         if(evt.Buttons != awt::MouseButton::LEFT)
             return false;
-
-        osl::MutexGuard const guard( maMutex );
 
         if( mbAdvanceOnClick ) {
             // fire next event
@@ -314,9 +299,8 @@ private:
     }
 
 private:
-    /// Object mutex
-    EventQueue&         mrEventQueue;
-    bool                mbAdvanceOnClick;
+    EventQueue& mrEventQueue;
+    bool        mbAdvanceOnClick;
 };
 
 class SkipEffectEventHandler : public ClickEventHandler
@@ -373,7 +357,6 @@ private:
         if(evt.Buttons != awt::MouseButton::RIGHT)
             return false;
 
-        osl::MutexGuard const guard( maMutex );
         return fireAllEvents( maEvents, mrEventQueue );
     }
 
@@ -390,15 +373,13 @@ private:
 class MouseHandlerBase : public MouseEventHandler_
 {
 public:
-    MouseHandlerBase( EventQueue& rEventQueue )
-        : maMutex(),
-          mrEventQueue( rEventQueue ),
-          maShapeEventMap() {}
+    MouseHandlerBase( EventQueue& rEventQueue ) :
+        mrEventQueue( rEventQueue ),
+        maShapeEventMap()
+    {}
 
     virtual void dispose()
     {
-        osl::MutexGuard aGuard( maMutex );
-
         // TODO(Q1): Check whether plain vector with swap idiom is
         // okay here
         maShapeEventMap = ImpShapeEventMap();
@@ -407,8 +388,6 @@ public:
     void addEvent( const EventSharedPtr& rEvent,
                    const ShapeSharedPtr& rShape )
     {
-        osl::MutexGuard aGuard( maMutex );
-
         ImpShapeEventMap::iterator aIter;
         if( (aIter=maShapeEventMap.find( rShape )) == maShapeEventMap.end() )
         {
@@ -424,8 +403,6 @@ public:
 
     bool isEmpty()
     {
-        osl::MutexGuard aGuard( maMutex );
-
         // find at least one shape with a non-empty queue
         ImpShapeEventMap::reverse_iterator aCurrShape( maShapeEventMap.begin());
         ImpShapeEventMap::reverse_iterator aEndShape( maShapeEventMap.end() );
@@ -449,14 +426,14 @@ protected:
 
         // find matching shape (scan reversely, to coarsely match
         // paint order)
-        ImpShapeEventMap::reverse_iterator aCurrShape(maShapeEventMap.rbegin());
-        ImpShapeEventMap::reverse_iterator aEndShape( maShapeEventMap.rend() );
+        ImpShapeEventMap::reverse_iterator       aCurrShape(maShapeEventMap.rbegin());
+        const ImpShapeEventMap::reverse_iterator aEndShape( maShapeEventMap.rend() );
         while( aCurrShape != aEndShape )
         {
             // TODO(F2): Get proper geometry polygon from the
             // shape, to avoid having areas outside the shape
             // react on the mouse
-            if( aCurrShape->first->getPosSize().isInside( aPosition ) &&
+            if( aCurrShape->first->getBounds().isInside( aPosition ) &&
                 aCurrShape->first->isVisible() )
             {
                 // shape hit, and shape is visible - report a
@@ -506,10 +483,6 @@ protected:
         return false; // did not handle the event
     }
 
-protected:
-    /// Object mutex
-    osl::Mutex          maMutex;
-
 private:
     EventQueue&         mrEventQueue;
     ImpShapeEventMap    maShapeEventMap;
@@ -518,37 +491,35 @@ private:
 class ShapeClickEventHandler : public MouseHandlerBase
 {
 public:
-    ShapeClickEventHandler( EventMultiplexer&   rMultiplexer,
-                            EventQueue&         rEventQueue )
-        : MouseHandlerBase( rEventQueue ),
-          mrMultiplexer( rMultiplexer ) {}
+    ShapeClickEventHandler( CursorManager& rCursorManager,
+                            EventQueue&    rEventQueue ) :
+        MouseHandlerBase( rEventQueue ),
+        mrCursorManager( rCursorManager )
+    {}
 
     virtual bool handleMouseReleased( const awt::MouseEvent& e )
     {
         if(e.Buttons != awt::MouseButton::LEFT)
             return false;
-        osl::MutexGuard aGuard( maMutex );
         return processEvent( e );
     }
 
     virtual bool handleMouseMoved( const awt::MouseEvent& e )
     {
-        osl::MutexGuard aGuard( maMutex );
-
         // TODO(P2): Maybe buffer last shape touched
 
         // if we have a shape click event, and the mouse
         // hovers over this shape, change cursor to hand
         ImpShapeEventMap::reverse_iterator aDummy;
         if( hitTest( e, aDummy ) )
-            mrMultiplexer.setVolatileMouseCursor( awt::SystemPointer::REFHAND );
+            mrCursorManager.requestCursor( awt::SystemPointer::REFHAND );
 
         return false; // we don't /eat/ this event. Lower prio
         // handler should see it, too.
     }
 
 private:
-    EventMultiplexer& mrMultiplexer;
+    CursorManager& mrCursorManager;
 };
 
 class MouseEnterHandler : public MouseHandlerBase
@@ -560,8 +531,6 @@ public:
 
     virtual bool handleMouseMoved( const awt::MouseEvent& e )
     {
-        osl::MutexGuard aGuard( maMutex );
-
         // TODO(P2): Maybe buffer last shape touched, and
         // check against that _first_
 
@@ -600,8 +569,6 @@ public:
 
     virtual bool handleMouseMoved( const awt::MouseEvent& e )
     {
-        osl::MutexGuard aGuard( maMutex );
-
         // TODO(P2): Maybe buffer last shape touched, and
         // check against that _first_
 
@@ -678,9 +645,11 @@ void UserEventQueue::registerEvent(
 // =====================================================
 
 UserEventQueue::UserEventQueue( EventMultiplexer&   rMultiplexer,
-                                EventQueue&         rEventQueue )
+                                EventQueue&         rEventQueue,
+                                CursorManager&      rCursorManager )
     : mrMultiplexer( rMultiplexer ),
       mrEventQueue( rEventQueue ),
+      mrCursorManager( rCursorManager ),
       mpStartEventHandler(),
       mpEndEventHandler(),
       mpAnimationStartEventHandler(),
@@ -867,8 +836,8 @@ void UserEventQueue::registerShapeClickEvent( const EventSharedPtr& rEvent,
     {
         // create handler
         mpShapeClickEventHandler.reset(
-            new ShapeClickEventHandler( mrMultiplexer,
-                                        mrEventQueue ) );
+            new ShapeClickEventHandler(mrCursorManager,
+                                       mrEventQueue) );
 
         // register handler on EventMultiplexer
         mrMultiplexer.addClickHandler( mpShapeClickEventHandler, 1.0 );
@@ -964,8 +933,8 @@ void UserEventQueue::registerShapeDoubleClickEvent(
     {
         // create handler
         mpShapeDoubleClickEventHandler.reset(
-            new ShapeClickEventHandler( mrMultiplexer,
-                                        mrEventQueue ) );
+            new ShapeClickEventHandler(mrCursorManager,
+                                       mrEventQueue) );
 
         // register handler on EventMultiplexer
         mrMultiplexer.addDoubleClickHandler( mpShapeDoubleClickEventHandler,
