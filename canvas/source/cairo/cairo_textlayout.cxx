@@ -4,9 +4,9 @@
  *
  *  $RCSfile: cairo_textlayout.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: vg $ $Date: 2006-11-01 14:46:49 $
+ *  last change: $Author: obo $ $Date: 2007-07-17 14:22:25 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -90,7 +90,7 @@ namespace cairocanvas
 
     TextLayout::TextLayout( const rendering::StringContext&     aText,
                             sal_Int8                            nDirection,
-                            sal_Int64                           nRandomSeed,
+                            sal_Int64                           /*nRandomSeed*/,
                             const CanvasFont::Reference&        rFont,
                             const DeviceRef&                    rRefDevice ) :
         TextLayout_Base( m_aMutex ),
@@ -196,7 +196,7 @@ namespace cairocanvas
         }
     }
 
-    double SAL_CALL TextLayout::justify( double nSize ) throw (lang::IllegalArgumentException, uno::RuntimeException)
+    double SAL_CALL TextLayout::justify( double /*nSize*/ ) throw (lang::IllegalArgumentException, uno::RuntimeException)
     {
         ::osl::MutexGuard aGuard( m_aMutex );
 
@@ -204,7 +204,8 @@ namespace cairocanvas
         return 0.0;
     }
 
-    double SAL_CALL TextLayout::combinedJustify( const uno::Sequence< uno::Reference< rendering::XTextLayout > >& aNextLayouts, double nSize ) throw (lang::IllegalArgumentException, uno::RuntimeException)
+    double SAL_CALL TextLayout::combinedJustify( const uno::Sequence< uno::Reference< rendering::XTextLayout > >& /*aNextLayouts*/,
+                                                 double /*nSize*/ ) throw (lang::IllegalArgumentException, uno::RuntimeException)
     {
         ::osl::MutexGuard aGuard( m_aMutex );
 
@@ -212,7 +213,7 @@ namespace cairocanvas
         return 0.0;
     }
 
-    rendering::TextHit SAL_CALL TextLayout::getTextHit( const geometry::RealPoint2D& aHitPoint ) throw (uno::RuntimeException)
+    rendering::TextHit SAL_CALL TextLayout::getTextHit( const geometry::RealPoint2D& /*aHitPoint*/ ) throw (uno::RuntimeException)
     {
         ::osl::MutexGuard aGuard( m_aMutex );
 
@@ -220,7 +221,8 @@ namespace cairocanvas
         return rendering::TextHit();
     }
 
-    rendering::Caret SAL_CALL TextLayout::getCaret( sal_Int32 nInsertionIndex, sal_Bool bExcludeLigatures ) throw (lang::IndexOutOfBoundsException, uno::RuntimeException)
+    rendering::Caret SAL_CALL TextLayout::getCaret( sal_Int32 /*nInsertionIndex*/,
+                                                    sal_Bool /*bExcludeLigatures*/ ) throw (lang::IndexOutOfBoundsException, uno::RuntimeException)
     {
         ::osl::MutexGuard aGuard( m_aMutex );
 
@@ -228,7 +230,9 @@ namespace cairocanvas
         return rendering::Caret();
     }
 
-    sal_Int32 SAL_CALL TextLayout::getNextInsertionIndex( sal_Int32 nStartIndex, sal_Int32 nCaretAdvancement, sal_Bool bExcludeLigatures ) throw (lang::IndexOutOfBoundsException, uno::RuntimeException)
+    sal_Int32 SAL_CALL TextLayout::getNextInsertionIndex( sal_Int32 /*nStartIndex*/,
+                                                          sal_Int32 /*nCaretAdvancement*/,
+                                                          sal_Bool /*bExcludeLigatures*/ ) throw (lang::IndexOutOfBoundsException, uno::RuntimeException)
     {
         ::osl::MutexGuard aGuard( m_aMutex );
 
@@ -236,7 +240,8 @@ namespace cairocanvas
         return 0;
     }
 
-    uno::Reference< rendering::XPolyPolygon2D > SAL_CALL TextLayout::queryVisualHighlighting( sal_Int32 nStartIndex, sal_Int32 nEndIndex ) throw (lang::IndexOutOfBoundsException, uno::RuntimeException)
+    uno::Reference< rendering::XPolyPolygon2D > SAL_CALL TextLayout::queryVisualHighlighting( sal_Int32 /*nStartIndex*/,
+                                                                                              sal_Int32 /*nEndIndex*/ ) throw (lang::IndexOutOfBoundsException, uno::RuntimeException)
     {
         ::osl::MutexGuard aGuard( m_aMutex );
 
@@ -244,7 +249,8 @@ namespace cairocanvas
         return uno::Reference< rendering::XPolyPolygon2D >();
     }
 
-    uno::Reference< rendering::XPolyPolygon2D > SAL_CALL TextLayout::queryLogicalHighlighting( sal_Int32 nStartIndex, sal_Int32 nEndIndex ) throw (lang::IndexOutOfBoundsException, uno::RuntimeException)
+    uno::Reference< rendering::XPolyPolygon2D > SAL_CALL TextLayout::queryLogicalHighlighting( sal_Int32 /*nStartIndex*/,
+                                                                                               sal_Int32 /*nEndIndex*/ ) throw (lang::IndexOutOfBoundsException, uno::RuntimeException)
     {
         ::osl::MutexGuard aGuard( m_aMutex );
 
