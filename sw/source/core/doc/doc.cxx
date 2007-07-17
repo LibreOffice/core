@@ -4,9 +4,9 @@
  *
  *  $RCSfile: doc.cxx,v $
  *
- *  $Revision: 1.57 $
+ *  $Revision: 1.58 $
  *
- *  last change: $Author: hr $ $Date: 2007-06-27 13:17:58 $
+ *  last change: $Author: obo $ $Date: 2007-07-17 13:05:50 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -46,15 +46,12 @@
 #include <tools/shl.hxx>
 #include <tools/globname.hxx>
 
-#ifndef _COM_SUN_STAR_I18N_WORDTYPE_HDL
 #include <com/sun/star/i18n/WordType.hdl>
-#endif
-#ifndef _COM_SUN_STAR_I18N_FORBIDDENCHARACTERS_HDL_
 #include <com/sun/star/i18n/ForbiddenCharacters.hdl>
-#endif
-#ifndef _COM_SUN_STAR_LANG_XMULTISERVICEFACTORY_HPP_
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
-#endif
+#include <com/sun/star/beans/NamedValue.hpp>
+#include <com/sun/star/beans/XPropertySet.hpp>
+
 #ifndef _COMPHELPER_PROCESSFACTORY_HXX_
 #include <comphelper/processfactory.hxx>
 #endif
@@ -1151,6 +1148,31 @@ void SwDoc::UpdateDocStat( SwDocStat& rStat )
         rStat.nPage     = GetRootFrm() ? GetRootFrm()->GetPageNum() : 0;
         rStat.bModified = FALSE;
         SetDocStat( rStat );
+
+        com::sun::star::uno::Sequence < com::sun::star::beans::NamedValue > aStat( rStat.nPage ? 7 : 6);
+        sal_Int32 n=0;
+        aStat[n].Name = ::rtl::OUString::createFromAscii("TableCount");
+        aStat[n++].Value <<= (sal_Int32)rStat.nTbl;
+        aStat[n].Name = ::rtl::OUString::createFromAscii("ImageCount");
+        aStat[n++].Value <<= (sal_Int32)rStat.nGrf;
+        aStat[n].Name = ::rtl::OUString::createFromAscii("ObjectCount");
+        aStat[n++].Value <<= (sal_Int32)rStat.nOLE;
+        if ( rStat.nPage )
+        {
+            aStat[n].Name = ::rtl::OUString::createFromAscii("PageCount");
+            aStat[n++].Value <<= (sal_Int32)rStat.nPage;
+        }
+        aStat[n].Name = ::rtl::OUString::createFromAscii("ParagraphCount");
+        aStat[n++].Value <<= (sal_Int32)rStat.nPara;
+        aStat[n].Name = ::rtl::OUString::createFromAscii("WordCount");
+        aStat[n++].Value <<= (sal_Int32)rStat.nWord;
+        aStat[n].Name = ::rtl::OUString::createFromAscii("CharacterCount");
+        aStat[n++].Value <<= (sal_Int32)rStat.nChar;
+
+        com::sun::star::uno::Reference < com::sun::star::beans::XPropertySet > xSet( pSwgInfo->GetInfo(), com::sun::star::uno::UNO_QUERY );
+        if ( xSet.is() )
+            xSet->setPropertyValue( ::rtl::OUString::createFromAscii("DocumentStatistic"), com::sun::star::uno::makeAny( aStat ) );
+
         // event. Stat. Felder Updaten
         SwFieldType *pType = GetSysFldType(RES_DOCSTATFLD);
         pType->UpdateFlds();
@@ -1162,8 +1184,7 @@ void SwDoc::UpdateDocStat( SwDocStat& rStat )
 
 void SwDoc::DocInfoChgd( const SfxDocumentInfo& rInfo )
 {
-    delete pSwgInfo;
-    pSwgInfo = new SfxDocumentInfo(rInfo);
+    DBG_ASSERT( pSwgInfo && rInfo.GetInfo() == pSwgInfo->GetInfo(), "DocInfo chaos!" );
 
     GetSysFldType( RES_DOCINFOFLD )->UpdateFlds();
     GetSysFldType( RES_TEMPLNAMEFLD )->UpdateFlds();
@@ -2031,25 +2052,12 @@ SwUnoCrsr* SwDoc::CreateUnoCrsr( const SwPosition& rPos, BOOL bTblCrsr )
 /* @@@MAINTAINABILITY-HORROR@@@
    Probably unwanted dependency on SwDocShell and SfxDocumentInfo
 */
-void SwDoc::SetInfo( const SfxDocumentInfo& rInfo )
+void SwDoc::SetDocumentInfo( const SfxDocumentInfo& rInfo )
 {
-    if( pDocShell )
-        pDocShell->SetDocumentInfo( rInfo );
-
-    // sollte nur beim "Konvertieren" von Dokumenten hier ankommen!
-    else
-    {
-        // dann setzen wir uns die DocInfo. Nach dem Konvertieren wird diese
-        // am Medium gesetzt. Erst dann ist die DocShell bekannt.
-        delete pSwgInfo;
+    if ( !pSwgInfo )
         pSwgInfo = new SfxDocumentInfo( rInfo );
-
-// wenn beim Einlesen, dann kein Modify verschicken, diese sollten dann
-// richtig eingelesen werden oder spaetestens beim Expandieren die richtigen
-// Werte finden.
-//      GetSysFldType( RES_DOCINFOFLD )->UpdateFlds();
-//      GetSysFldType( RES_TEMPLNAMEFLD )->UpdateFlds();
-    }
+    else
+        (*pSwgInfo) = rInfo;
 }
 
 void SwDoc::ChkCondColls()
