@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ww8par.cxx,v $
  *
- *  $Revision: 1.178 $
+ *  $Revision: 1.179 $
  *
- *  last change: $Author: rt $ $Date: 2007-07-06 09:53:35 $
+ *  last change: $Author: obo $ $Date: 2007-07-17 13:09:35 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1535,23 +1535,9 @@ void SwWW8ImplReader::ImportDop()
     {
         DateTime aLastPrinted(
             sw::ms::DTTM2DateTime(pWDop->dttmLastPrint));
-        SfxDocumentInfo aNeuDocInf(*rDoc.GetpInfo());
-        SfxStamp aPrinted(aNeuDocInf.GetPrinted());
-        if (aPrinted.GetTime() != aLastPrinted)
-        {
-            // check if WW8 date was set
-            if (aLastPrinted == DateTime(Date(0), Time(0)))
-            {
-                // create "invalid" value for SfxStamp
-                // (as seen in sfx2/DOSINF.HXX)
-                aPrinted.SetTime(DateTime(Date(1, 1, 1601), Time(0, 0, 0)));
-            }
-            else
-                aPrinted.SetTime( aLastPrinted );
-
-            aNeuDocInf.SetPrinted( aPrinted );
-            rDoc.SetInfo(aNeuDocInf);
-        }
+        DateTime aPrinted(rDoc.GetpInfo()->GetPrintDate());
+        if (aPrinted != aLastPrinted)
+           rDoc.GetDocumentInfo()->SetPrintDate( aPrinted );
     }
 
     //
@@ -3685,7 +3671,7 @@ void SwWW8ImplReader::ReadDocVars()
                 ::rtl::OUString name(aDocVarStrings[i]);
                 uno::Any aValue;
                 aValue <<= ::rtl::OUString(aDocValueStrings[i]);
-                pDoc->GetInfo()->SetCustomProperty( name, aValue );
+                pDoc->GetDocumentInfo()->SetCustomProperty( name, aValue );
             }
         }
     }
