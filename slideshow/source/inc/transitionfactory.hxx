@@ -4,9 +4,9 @@
  *
  *  $RCSfile: transitionfactory.hxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: kz $ $Date: 2006-12-13 16:05:20 $
+ *  last change: $Author: obo $ $Date: 2007-07-17 15:17:38 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -33,15 +33,15 @@
  *
  ************************************************************************/
 
-#ifndef _SLIDESHOW_TRANSITIONFACTORY_HXX
-#define _SLIDESHOW_TRANSITIONFACTORY_HXX
+#ifndef INCLUDED_SLIDESHOW_TRANSITIONFACTORY_HXX
+#define INCLUDED_SLIDESHOW_TRANSITIONFACTORY_HXX
 
 #include <com/sun/star/animations/XTransitionFilter.hpp>
 
 #include "animatableshape.hxx"
 #include "rgbcolor.hxx"
 #include "slide.hxx"
-#include "layermanager.hxx"
+#include "screenupdater.hxx"
 #include "animationactivity.hxx"
 #include "activitiesfactory.hxx"
 #include "numberanimation.hxx"
@@ -70,8 +70,8 @@ namespace slideshow
                 @param rShape
                 Shape to animate
 
-                @param rLayerManager
-                LayerManager, to manage shape animation
+                @param rShapeManager
+                ShapeManager, to manage shape animation
 
                 @param xTransition
                 The transition effect
@@ -82,7 +82,8 @@ namespace slideshow
             static AnimationActivitySharedPtr createShapeTransition(
                 const ActivitiesFactory::CommonParameters&              rParms,
                 const AnimatableShapeSharedPtr&                         rShape,
-                const LayerManagerSharedPtr&                            rLayerManager,
+                const ShapeManagerSharedPtr&                            rShapeManager,
+                const ::basegfx::B2DVector&                             rSlideSize,
                 ::com::sun::star::uno::Reference<
                     ::com::sun::star::animations::XTransitionFilter > const&  xTransition );
 
@@ -118,6 +119,7 @@ namespace slideshow
                 const SlideSharedPtr&       rLeavingSlide,
                 const SlideSharedPtr&       rEnteringSlide,
                 const UnoViewContainer&     rViewContainer,
+                ScreenUpdater&              rScreenUpdater,
                 EventMultiplexer&           rEventMultiplexer,
                 sal_Int16                   nTransitionType,
                 sal_Int16                   nTransitionSubType,
@@ -133,7 +135,8 @@ namespace slideshow
             static AnimationActivitySharedPtr createShapeTransition(
                 const ActivitiesFactory::CommonParameters&              rParms,
                 const AnimatableShapeSharedPtr&                         rShape,
-                const LayerManagerSharedPtr&                            rLayerManager,
+                const ShapeManagerSharedPtr&                            rShapeManager,
+                const ::basegfx::B2DVector&                             rSlideSize,
                 ::com::sun::star::uno::Reference<
                     ::com::sun::star::animations::XTransitionFilter > const& xTransition,
                 sal_Int16                                               nTransitionType,
@@ -146,4 +149,4 @@ namespace slideshow
     }
 }
 
-#endif /* _SLIDESHOW_TRANSITIONFACTORY_HXX */
+#endif /* INCLUDED_SLIDESHOW_TRANSITIONFACTORY_HXX */
