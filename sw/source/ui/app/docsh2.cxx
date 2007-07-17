@@ -4,9 +4,9 @@
  *
  *  $RCSfile: docsh2.cxx,v $
  *
- *  $Revision: 1.95 $
+ *  $Revision: 1.96 $
  *
- *  last change: $Author: hr $ $Date: 2007-06-27 13:22:57 $
+ *  last change: $Author: obo $ $Date: 2007-07-17 13:10:23 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -286,23 +286,6 @@ using ::rtl::OUString;
 using namespace ::sfx2;
 
 extern FASTBOOL FindPhyStyle( SwDoc& , const String& , SfxStyleFamily );
-
-/*--------------------------------------------------------------------
-    Beschreibung:   DocInfo setzen am SFX
- --------------------------------------------------------------------*/
-
-
-BOOL SwDocShell::SetDocumentInfo(const SfxDocumentInfo& rInfo)
-{
-    SfxDocumentInfo& rOldInfo = GetDocInfo();
-    BOOL bRet = !(rOldInfo == rInfo);
-    if( bRet )
-    {
-        rOldInfo = rInfo;
-        Broadcast( SfxDocumentInfoHint( &rOldInfo ) );
-    }
-    return bRet;
-}
 
 /*--------------------------------------------------------------------
     Beschreibung:   DocInfo kreieren (virtuell)
