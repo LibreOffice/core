@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.7 $
+#   $Revision: 1.8 $
 #
-#   last change: $Author: rt $ $Date: 2007-01-31 08:44:38 $
+#   last change: $Author: obo $ $Date: 2007-07-17 15:22:33 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -42,7 +42,6 @@ ENABLE_EXCEPTIONS=TRUE
 # --- Settings -----------------------------------------------------------
 
 .INCLUDE :	settings.mk
-DLLPRE =
 
 # --- Common ----------------------------------------------------------
 
@@ -50,11 +49,14 @@ DLLPRE =
 CDEFS+= -DVERBOSE
 .ENDIF
 
+SHL1DLLPRE=
 LIB1TARGET=$(SLB)$/$(TARGET).lib
 LIB1FILES=\
     $(SLB)$/transitions.lib	\
     $(SLB)$/activities.lib	\
     $(SLB)$/animationnodes.lib	\
+    $(SLB)$/shapes.lib \
+    $(SLB)$/slide.lib \
     $(SLB)$/engine.lib
 
 .IF "$(debug)"!="" || "$(DEBUG)"!=""
@@ -87,4 +89,28 @@ DEF1EXPORTFILE=exports.dxp
 
 # ==========================================================================
 
+TARGET2=slideshowtest
+LIB2TARGET=$(SLB)$/$(TARGET2).lib
+LIB2FILES=$(LIB1FILES)
+
+SHL2TARGET=$(TARGET2)$(UPD)$(DLLPOSTFIX)
+SHL2IMPLIB=i$(TARGET2)
+SHL2STDLIBS= $(SHL1STDLIBS)
+
+SHL2DEF=$(MISC)$/$(SHL2TARGET).def
+SHL2LIBS=$(SLB)$/$(TARGET2).lib
+
+DEF2NAME	=$(SHL2TARGET)
+DEF2LIBNAME = $(TARGET2)
+DEF2DEPN	=$(MISC)$/$(SHL2TARGET).flt
+
+DEF2DES		=SlideShowTest
+
+# ==========================================================================
+
 .INCLUDE :	target.mk
+
+$(MISC)$/$(SHL2TARGET).flt: makefile.mk \
+                            $(TARGET2).flt
+    +$(TYPE) $(TARGET2).flt > $@
+
