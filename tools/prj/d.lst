@@ -42,7 +42,6 @@ mkdir: %_DEST%\inc%_EXT%\bootstrp
 ..\inc\tools\contnr.hxx %_DEST%\inc%_EXT%\tools\contnr.hxx
 ..\inc\tools\date.hxx %_DEST%\inc%_EXT%\tools\date.hxx
 ..\inc\tools\datetime.hxx %_DEST%\inc%_EXT%\tools\datetime.hxx
-..\inc\tools\timestamp.hxx %_DEST%\inc%_EXT%\tools\timestamp.hxx
 ..\inc\tools\debug.hxx %_DEST%\inc%_EXT%\tools\debug.hxx
 ..\inc\tools\diagnose_ex.h %_DEST%\inc%_EXT%\tools\diagnose_ex.h
 ..\inc\tools\download.hxx %_DEST%\inc%_EXT%\tools\download.hxx
