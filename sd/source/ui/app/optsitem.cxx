@@ -4,9 +4,9 @@
  *
  *  $RCSfile: optsitem.cxx,v $
  *
- *  $Revision: 1.39 $
+ *  $Revision: 1.40 $
  *
- *  last change: $Author: kz $ $Date: 2006-12-12 16:53:31 $
+ *  last change: $Author: obo $ $Date: 2007-07-17 14:29:52 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -579,6 +579,7 @@ SdOptionsMisc::SdOptionsMisc( USHORT nConfigId, BOOL bUseConfig ) :
     bSummationOfParagraphs( FALSE ),
     // #90356#
     bShowUndoDeleteWarning( TRUE ),
+    bSlideshowRespectZOrder( TRUE ),
     bPreviewNewEffects( TRUE ),
     bPreviewChangedEffects( FALSE ),
     bPreviewTransitions( TRUE ),
@@ -644,6 +645,7 @@ BOOL SdOptionsMisc::operator==( const SdOptionsMisc& rOpt ) const
             IsSolidMarkHdl() == rOpt.IsSolidMarkHdl() &&
             // #90356#
             IsShowUndoDeleteWarning() == rOpt.IsShowUndoDeleteWarning() &&
+            IsSlideshowRespectZOrder() == rOpt.IsSlideshowRespectZOrder() &&
             GetPrinterIndependentLayout() == rOpt.GetPrinterIndependentLayout() &&
             // #97016#
             GetDefaultObjectSizeWidth() == rOpt.GetDefaultObjectSizeWidth() &&
@@ -687,6 +689,7 @@ void SdOptionsMisc::GetPropNameArray( const char**& ppNames, ULONG& rCount ) con
         "Compatibility/AddBetween",
         // #90356#
         "ShowUndoDeleteWarning",
+        "SlideshowRespectZOrder",
 
         "PreviewNewEffects",
         "PreviewChangedEffects",
@@ -697,7 +700,7 @@ void SdOptionsMisc::GetPropNameArray( const char**& ppNames, ULONG& rCount ) con
 
     // #90356# rCount = ( ( GetConfigId() == SDCFG_IMPRESS ) ? 15 : 12 );
     // #97016# rCount = ( ( GetConfigId() == SDCFG_IMPRESS ) ? 16 : 12 );
-    rCount = ( ( GetConfigId() == SDCFG_IMPRESS ) ? 23 : 15 );
+    rCount = ( ( GetConfigId() == SDCFG_IMPRESS ) ? 24 : 15 );
     ppNames = aPropNames;
 }
 
@@ -736,16 +739,19 @@ BOOL SdOptionsMisc::ReadData( const Any* pValues )
             SetShowUndoDeleteWarning( *(sal_Bool*) pValues[ 18 ].getValue() );
 
         if( pValues[19].hasValue() )
-            SetPreviewNewEffects(*(sal_Bool*) pValues[ 19 ].getValue());
+            SetSlideshowRespectZOrder(*(sal_Bool*) pValues[ 19 ].getValue());
 
         if( pValues[20].hasValue() )
-            SetPreviewChangedEffects(*(sal_Bool*) pValues[ 20 ].getValue());
+            SetPreviewNewEffects(*(sal_Bool*) pValues[ 20 ].getValue());
 
         if( pValues[21].hasValue() )
-            SetPreviewTransitions(*(sal_Bool*) pValues[ 21 ].getValue());
+            SetPreviewChangedEffects(*(sal_Bool*) pValues[ 21 ].getValue());
 
         if( pValues[22].hasValue() )
-            SetDisplay(*(sal_Int32*) pValues[ 22 ].getValue());
+            SetPreviewTransitions(*(sal_Bool*) pValues[ 22 ].getValue());
+
+        if( pValues[23].hasValue() )
+            SetDisplay(*(sal_Int32*) pValues[ 23 ].getValue());
     }
 
     return TRUE;
@@ -781,12 +787,13 @@ BOOL SdOptionsMisc::WriteData( Any* pValues ) const
         pValues[ 17 ] <<= IsSummationOfParagraphs();
         // #90356#
         pValues[ 18 ] <<= IsShowUndoDeleteWarning();
+        pValues[ 19 ] <<= IsSlideshowRespectZOrder();
 
-        pValues[ 19 ] <<= IsPreviewNewEffects();
-        pValues[ 20 ] <<= IsPreviewChangedEffects();
-        pValues[ 21 ] <<= IsPreviewTransitions();
+        pValues[ 20 ] <<= IsPreviewNewEffects();
+        pValues[ 21 ] <<= IsPreviewChangedEffects();
+        pValues[ 22 ] <<= IsPreviewTransitions();
 
-        pValues[ 22 ] <<= GetDisplay();
+        pValues[ 23 ] <<= GetDisplay();
     }
 
     return TRUE;
