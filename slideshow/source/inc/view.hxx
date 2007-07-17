@@ -4,9 +4,9 @@
  *
  *  $RCSfile: view.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: kz $ $Date: 2006-12-13 16:06:56 $
+ *  last change: $Author: obo $ $Date: 2007-07-17 15:18:59 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -33,24 +33,16 @@
  *
  ************************************************************************/
 
-#ifndef _SLIDESHOW_VIEW_HXX
-#define _SLIDESHOW_VIEW_HXX
+#ifndef INCLUDED_SLIDESHOW_VIEW_HXX
+#define INCLUDED_SLIDESHOW_VIEW_HXX
 
-#include <com/sun/star/uno/Reference.hxx>
-
-#include <cppcanvas/spritecanvas.hxx>
-
-#include <basegfx/matrix/b2dhommatrix.hxx>
-#include <basegfx/vector/b2dsize.hxx>
-#include <basegfx/polygon/b2dpolypolygon.hxx>
+#include "viewlayer.hxx"
 
 #include <boost/shared_ptr.hpp>
-
 #include <vector>
 
-#include <viewlayer.hxx>
 
-namespace basegfx { class B2DRange; }
+namespace basegfx { class B2DRange; class B2DVector; }
 
 
 /* Definition of View interface */
@@ -63,42 +55,26 @@ namespace slideshow
         {
         public:
             /** Create a new view layer for this view
-             */
-            virtual ViewLayerSharedPtr createViewLayer() const = 0;
 
-            /** Clear the view layer area
-             */
-            virtual void clear() const = 0;
+                @param rLayerBounds
+                Specifies the bound rect of the layer relative to the
+                user view coordinate system.
 
-            /** Query whether view content is still valid.
-
-                This method returns false, if the view content has
-                been destroyed until the last update. That might
-                happen e.g. during window resizes, or when volatile
-                bitmaps become reclaimed by the system. If this method
-                returns false, the slideshow must assume that the
-                whole view area needs a repaint. A call to clear()
-                sets the content to valid again.
+                This method sets the bounds of the view layer in
+                document coordinates (i.e. 'logical' coordinates). The
+                resulting transformation is then concatenated with the
+                underlying view transformation, returned by the
+                getTransformation() method.
              */
-            virtual bool isContentDestroyed() const = 0;
+            virtual ViewLayerSharedPtr createViewLayer( const basegfx::B2DRange& rLayerBounds ) const = 0;
 
             /** Update screen representation from backbuffer
              */
             virtual bool updateScreen() const = 0;
 
-            /** Get the overall view transformation.
-
-                This method should <em>not</em> simply return the
-                underlying canvas' transformation, but rather provide
-                a layer above that. This enables clients of the
-                slideshow to set their own user space transformation
-                at the canvas, whilst the slideshow adds their
-                transformation on top of that. Concretely, this method
-                returns the user transform (implicitely calculated
-                from the setViewSize() method), combined with the view
-                transformation.
-            */
-            virtual ::basegfx::B2DHomMatrix getTransformation() const = 0;
+            /** Paint screen content unconditionally from backbuffer
+             */
+            virtual bool paintScreen() const = 0;
 
             /** Set the size of the user view coordinate system.
 
@@ -108,16 +84,7 @@ namespace slideshow
                 underlying view transformation, returned by the
                 getTransformation() method.
             */
-            virtual void setViewSize( const ::basegfx::B2DSize& ) = 0;
-
-            /** Set clipping on this view.
-
-                @param rClip
-                Clip poly-polygon to set. The polygon is interpreted
-                in the user coordinate system, i.e. the view has the
-                size as given by setViewSize().
-             */
-            virtual void setClip( const ::basegfx::B2DPolyPolygon& rClip ) = 0;
+            virtual void setViewSize( const ::basegfx::B2DVector& ) = 0;
 
             /** Change the view's mouse cursor.
 
@@ -125,7 +92,7 @@ namespace slideshow
                 One of the ::com::sun::star::awt::SystemPointer
                 constant group members.
              */
-            virtual void setMouseCursor( sal_Int16 nPointerShape ) = 0;
+            virtual void setCursorShape( sal_Int16 nPointerShape ) = 0;
         };
 
         typedef ::boost::shared_ptr< View >     ViewSharedPtr;
@@ -133,4 +100,4 @@ namespace slideshow
     }
 }
 
-#endif /* _SLIDESHOW_VIEW_HXX */
+#endif /* INCLUDED_SLIDESHOW_VIEW_HXX */
