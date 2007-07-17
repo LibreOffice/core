@@ -4,9 +4,9 @@
  *
  *  $RCSfile: SwXDocumentSettings.cxx,v $
  *
- *  $Revision: 1.55 $
+ *  $Revision: 1.56 $
  *
- *  last change: $Author: kz $ $Date: 2007-06-20 10:11:52 $
+ *  last change: $Author: obo $ $Date: 2007-07-17 13:12:39 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -76,9 +76,6 @@
 #endif
 #ifndef _EDITSH_HXX
 #include <editsh.hxx>
-#endif
-#ifndef _SFXDOCINF_HXX
-#include <sfx2/docinf.hxx>
 #endif
 #ifndef _DRAWDOC_HXX
 #include <drawdoc.hxx>
@@ -486,9 +483,7 @@ void SwXDocumentSettings::_setSingleValue( const comphelper::PropertyInfo & rInf
         break;
         case HANDLE_APPLY_USER_DATA:
         {
-            SfxDocumentInfo& rInfo = mpDocSh->GetDocInfo();
-            sal_Bool bUseUserData = *(sal_Bool*)rValue.getValue();
-            rInfo.SetUseUserData(bUseUserData);
+            mpDocSh->SetUseUserData( *(sal_Bool*)rValue.getValue() );
         }
         break;
         case HANDLE_SAVE_GLOBAL_DOCUMENT_LINKS:
@@ -520,15 +515,12 @@ void SwXDocumentSettings::_setSingleValue( const comphelper::PropertyInfo & rInf
         break;
         case HANDLE_SAVE_VERSION_ON_CLOSE:
         {
-            SfxDocumentInfo& rInfo = mpDocSh->GetDocInfo();
-            sal_Bool bSaveVersion = *(sal_Bool*)rValue.getValue();
-            rInfo.SetSaveVersionOnClose ( bSaveVersion );
+            mpDocSh->SetSaveVersionOnClose( *(sal_Bool*)rValue.getValue() );
         }
         break;
         case HANDLE_UPDATE_FROM_TEMPLATE:
         {
-            sal_Bool bTmp = *(sal_Bool*)rValue.getValue();
-            mpDocSh->GetDocInfo().SetQueryLoadTemplate( bTmp );
+            mpDocSh->SetQueryLoadTemplate( *(sal_Bool*)rValue.getValue() );
         }
         break;
         case HANDLE_PRINTER_INDEPENDENT_LAYOUT:
@@ -664,9 +656,7 @@ void SwXDocumentSettings::_setSingleValue( const comphelper::PropertyInfo & rInf
         break;
         case HANDLE_LOAD_READONLY:
         {
-            sal_Bool bReadonly = *(sal_Bool*)rValue.getValue();
-            if ( bReadonly )
-                mpDocSh->GetDocInfo().SetLoadReadonly( bReadonly );
+            mpDocSh->SetLoadReadonly( *(sal_Bool*)rValue.getValue() );
         }
         break;
         case HANDLE_DO_NOT_CAPTURE_DRAW_OBJS_ON_PAGE:
@@ -804,9 +794,7 @@ void SwXDocumentSettings::_getSingleValue( const comphelper::PropertyInfo & rInf
         break;
         case HANDLE_APPLY_USER_DATA:
         {
-            SfxDocumentInfo &rInfo = mpDocSh->GetDocInfo();
-            sal_Bool bUseUserInfo = rInfo.IsUseUserData();
-            rValue.setValue(&bUseUserInfo, ::getBooleanCppuType());
+            rValue <<= mpDocSh->IsUseUserData();
         }
         break;
         case HANDLE_CHARACTER_COMPRESSION_TYPE:
@@ -840,15 +828,12 @@ void SwXDocumentSettings::_getSingleValue( const comphelper::PropertyInfo & rInf
         break;
         case HANDLE_SAVE_VERSION_ON_CLOSE:
         {
-            SfxDocumentInfo& rInfo = mpDocSh->GetDocInfo();
-            sal_Bool bSaveVersion = rInfo.IsSaveVersionOnClose();
-            rValue.setValue(&bSaveVersion, ::getBooleanCppuType());
+            rValue <<= mpDocSh->IsSaveVersionOnClose();
         }
         break;
         case HANDLE_UPDATE_FROM_TEMPLATE:
         {
-            sal_Bool bTmp = mpDocSh->GetDocInfo().IsQueryLoadTemplate();
-            rValue.setValue( &bTmp, ::getBooleanCppuType() );
+            rValue <<= mpDocSh->IsQueryLoadTemplate();
         }
         break;
         case HANDLE_PRINTER_INDEPENDENT_LAYOUT:
@@ -965,8 +950,7 @@ void SwXDocumentSettings::_getSingleValue( const comphelper::PropertyInfo & rInf
         break;
         case HANDLE_LOAD_READONLY:
         {
-            sal_Bool bReadonly = mpDocSh->GetDocInfo().IsLoadReadonly();
-            rValue.setValue( &bReadonly, ::getBooleanCppuType() );
+            rValue <<= mpDocSh->IsLoadReadonly();
         }
         break;
         case HANDLE_DO_NOT_CAPTURE_DRAW_OBJS_ON_PAGE:
