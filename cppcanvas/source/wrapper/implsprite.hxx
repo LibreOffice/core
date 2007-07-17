@@ -4,9 +4,9 @@
  *
  *  $RCSfile: implsprite.hxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: kz $ $Date: 2005-11-02 13:44:14 $
+ *  last change: $Author: obo $ $Date: 2007-07-17 15:27:26 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -82,6 +82,7 @@ namespace cppcanvas
             virtual void transform( const ::basegfx::B2DHomMatrix& rMatrix );
             virtual void setClipPixel( const ::basegfx::B2DPolyPolygon& rClipPoly );
             virtual void setClip( const ::basegfx::B2DPolyPolygon& rClipPoly );
+            virtual void setClip();
 
             virtual void show();
             virtual void hide();
@@ -103,7 +104,7 @@ namespace cppcanvas
             ::com::sun::star::uno::Reference< ::com::sun::star::rendering::XGraphicDevice >         mxGraphicDevice;
             const ::com::sun::star::uno::Reference< ::com::sun::star::rendering::XSprite >          mxSprite;
             const ::com::sun::star::uno::Reference< ::com::sun::star::rendering::XAnimatedSprite >  mxAnimatedSprite;
-            ImplSpriteCanvas::TransformationArbiterSharedPtr                                                mpTransformArbiter;
+            ImplSpriteCanvas::TransformationArbiterSharedPtr                                        mpTransformArbiter;
         };
     }
 }
