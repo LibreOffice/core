@@ -4,9 +4,9 @@
  *
  *  $RCSfile: precompiled_sfx2.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: kz $ $Date: 2007-05-10 17:06:53 $
+ *  last change: $Author: obo $ $Date: 2007-07-17 13:36:41 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -627,7 +627,6 @@
 #include "tools/string.hxx"
 #include "tools/table.hxx"
 #include "tools/tenccvt.hxx"
-#include "tools/timestamp.hxx"
 #include "tools/unqid.hxx"
 #include "tools/urlobj.hxx"
 #include "tools/wldcrd.hxx"
