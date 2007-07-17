@@ -4,9 +4,9 @@
  *
  *  $RCSfile: implrenderer.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: obo $ $Date: 2007-01-22 11:49:42 $
+ *  last change: $Author: obo $ $Date: 2007-07-17 15:24:30 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -46,6 +46,8 @@
 #include <rtl/logfile.hxx>
 
 #include <comphelper/sequence.hxx>
+#include <comphelper/anytostring.hxx>
+#include <cppuhelper/exc_hlp.hxx>
 
 #include <cppcanvas/canvas.hxx>
 
@@ -2952,33 +2954,46 @@ namespace cppcanvas
             ActionVector::const_iterator aRangeBegin;
             ActionVector::const_iterator aRangeEnd;
 
-            if( !getSubsetIndices( nStartIndex, nEndIndex,
-                                   aRangeBegin, aRangeEnd ) )
-                return true; // nothing to render (but _that_ was successful)
+            try
+            {
+                if( !getSubsetIndices( nStartIndex, nEndIndex,
+                                       aRangeBegin, aRangeEnd ) )
+                    return true; // nothing to render (but _that_ was successful)
 
-            // now, aRangeBegin references the action in which the
-            // subset rendering must start, and aRangeEnd references
-            // the action in which the subset rendering must end (it
-            // might also end right at the start of the referenced
-            // action, such that zero of that action needs to be
-            // rendered).
+                // now, aRangeBegin references the action in which the
+                // subset rendering must start, and aRangeEnd references
+                // the action in which the subset rendering must end (it
+                // might also end right at the start of the referenced
+                // action, such that zero of that action needs to be
+                // rendered).
 
 
-            // render subset of actions
-            // ========================
+                // render subset of actions
+                // ========================
 
-            ::basegfx::B2DHomMatrix aMatrix;
-            ::canvas::tools::getRenderStateTransform( aMatrix,
-                                                      getRenderState() );
+                ::basegfx::B2DHomMatrix aMatrix;
+                ::canvas::tools::getRenderStateTransform( aMatrix,
+                                                          getRenderState() );
 
-            ActionRenderer aRenderer( aMatrix );
+                ActionRenderer aRenderer( aMatrix );
 
-            return forSubsetRange( aRenderer,
-                                   aRangeBegin,
-                                   aRangeEnd,
-                                   nStartIndex,
-                                   nEndIndex,
-                                   maActions.end() );
+                return forSubsetRange( aRenderer,
+                                       aRangeBegin,
+                                       aRangeEnd,
+                                       nStartIndex,
+                                       nEndIndex,
+                                       maActions.end() );
+            }
+            catch( uno::Exception& )
+            {
+                OSL_ENSURE( false,
+                            rtl::OUStringToOString(
+                                comphelper::anyToString( cppu::getCaughtException() ),
+                                RTL_TEXTENCODING_UTF8 ).getStr() );
+
+                // convert error to return value
+                return false;
+            }
         }
 
         ::basegfx::B2DRange ImplRenderer::getSubsetArea( sal_Int32  nStartIndex,
@@ -3027,7 +3042,19 @@ namespace cppcanvas
             ::canvas::tools::getRenderStateTransform( aMatrix,
                                                       getRenderState() );
 
-            return ::std::for_each( maActions.begin(), maActions.end(), ActionRenderer( aMatrix ) ).result();
+            try
+            {
+                return ::std::for_each( maActions.begin(), maActions.end(), ActionRenderer( aMatrix ) ).result();
+            }
+            catch( uno::Exception& )
+            {
+                OSL_ENSURE( false,
+                            rtl::OUStringToOString(
+                                comphelper::anyToString( cppu::getCaughtException() ),
+                                RTL_TEXTENCODING_UTF8 ).getStr() );
+
+                return false;
+            }
         }
     }
 }
