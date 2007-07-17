@@ -4,9 +4,9 @@
  *
  *  $RCSfile: nodetools.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: kz $ $Date: 2006-12-13 15:33:35 $
+ *  last change: $Author: obo $ $Date: 2007-07-17 14:49:31 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -77,10 +77,13 @@ namespace slideshow
         }
 #endif
 
-        AttributableShapeSharedPtr lookupAttributableShape( const LayerManagerSharedPtr&                rLayerManager,
+        AttributableShapeSharedPtr lookupAttributableShape( const ShapeManagerSharedPtr&                rShapeManager,
                                                             const uno::Reference< drawing::XShape >&    xShape          )
         {
-            ShapeSharedPtr pShape( rLayerManager->lookupShape( xShape ) );
+            ENSURE_AND_THROW( rShapeManager,
+                              "lookupAttributableShape(): invalid ShapeManager" );
+
+            ShapeSharedPtr pShape( rShapeManager->lookupShape( xShape ) );
 
             ENSURE_AND_THROW( pShape,
                               "lookupAttributableShape(): no shape found for given XShape" );
