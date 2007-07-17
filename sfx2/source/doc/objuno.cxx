@@ -4,9 +4,9 @@
  *
  *  $RCSfile: objuno.cxx,v $
  *
- *  $Revision: 1.34 $
+ *  $Revision: 1.35 $
  *
- *  last change: $Author: hr $ $Date: 2007-06-27 23:24:14 $
+ *  last change: $Author: obo $ $Date: 2007-07-17 13:44:32 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -36,54 +36,39 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_sfx2.hxx"
 
-#ifndef _COM_SUN_STAR_LANG_DISPOSEDEXCEPTION_HPP_
 #include <com/sun/star/lang/DisposedException.hpp>
-#endif
-#ifndef _COM_SUN_STAR_FRAME_XFRAME_HPP_
-#include <com/sun/star/frame/XFrame.hpp>
-#endif
-#ifndef _COM_SUN_STAR_UTIL_DATETIME_HPP_
 #include <com/sun/star/util/DateTime.hpp>
-#endif
-#ifndef _COM_SUN_STAR_UTIL_DATE_HPP_
 #include <com/sun/star/util/Date.hpp>
-#endif
-#ifndef _COM_SUN_STAR_UTIL_TIME_HPP_
 #include <com/sun/star/util/Time.hpp>
-#endif
-#ifndef _COM_SUN_STAR_BEANS_PROPERTYATTRIBUTE_HPP_
 #include <com/sun/star/beans/PropertyAttribute.hpp>
-#endif
-#ifndef _CPPUHELPER_INTERFACECONTAINER_HXX_
-#include <cppuhelper/interfacecontainer.hxx>
-#endif
-#ifndef _COM_SUN_STAR_IO_IOEXCEPTION_HPP_
-#include <com/sun/star/io/IOException.hpp>
-#endif
-
-#ifndef _COM_SUN_STAR_EMBED_ELEMENTMODES_HPP_
+#include <com/sun/star/beans/NamedValue.hpp>
+#include <com/sun/star/beans/StringPair.hpp>
 #include <com/sun/star/embed/ElementModes.hpp>
-#endif
-
 #include <com/sun/star/xml/sax/XParser.hpp>
 #include <com/sun/star/document/XImporter.hpp>
 #include <com/sun/star/document/XExporter.hpp>
 #include <com/sun/star/io/XActiveDataSource.hpp>
 #include <com/sun/star/document/XFilter.hpp>
 #include <com/sun/star/embed/XTransactedObject.hpp>
+#include <com/sun/star/lang/Locale.hpp>
+#include <com/sun/star/util/XModifiable.hpp>
 
+#include <unotools/configmgr.hxx>
+#include <tools/inetdef.hxx>
+#include <unotools/bootstrap.hxx>
+#include <cppuhelper/interfacecontainer.hxx>
+#include <osl/mutex.hxx>
+#include <rtl/ustrbuf.hxx>
+#include <hash_map>                     // dynamic props
+#include <svtools/itemprop.hxx>         // dynamic props
+#include <vcl/svapp.hxx>
+#include <vos/mutex.hxx>
 
 #include <tools/errcode.hxx>
-#include <sot/storage.hxx>
 #include <svtools/cntwids.hrc>
-#include <svtools/itemset.hxx>
-#include <svtools/stritem.hxx>
-#include <svtools/intitem.hxx>
-#include <svtools/eitem.hxx>
-#include <svtools/adrparse.hxx>
-#include <unotools/streamwrap.hxx>
 #include <comphelper/sequenceasvector.hxx>
 #include <comphelper/storagehelper.hxx>
+#include <sot/storage.hxx>
 
 #include <sfx2/objuno.hxx>
 #include <sfx2/sfx.hrc>
@@ -102,14 +87,21 @@
 #include <sfx2/sfxuno.hxx>
 #include <objshimp.hxx>
 
-#include <osl/mutex.hxx>
-#include <vos/mutex.hxx>
-#include <rtl/ustrbuf.hxx>
-
-using namespace vos;
 using namespace ::com::sun::star;
-using namespace ::com::sun::star::uno;
-using namespace ::com::sun::star::frame;
+
+// TODO/REFACTOR: provide service for MS formats
+// TODO/REFACTOR: IsEncrypted is never set nor read
+// Generator is not saved ATM; which value?!
+// Generator handling must be implemented
+// Deprecate "Theme", rework IDL
+// AutoLoadEnabled is deprecated?!
+// Reasonable defaults for DateTime
+// MIMEType readonly?!
+// Announce changes about Theme, Language, Generator, removed entries etc.
+// IsEncrypted is necessary for binary formats!
+// Open: When to call PrepareDocInfoForSave? Currently only called for own formats and HTML/Writer
+// Open: How to load and save EditingTime to MS formats
+// PPT-Export should use SavePropertySet
 
 //=============================================================================
 
@@ -120,32 +112,22 @@ SfxItemPropertyMap aDocInfoPropertyMap_Impl[] =
 {
     { "Author"          , 6 , WID_FROM,           &::getCppuType((const ::rtl::OUString*)0), PROPERTY_UNBOUND, 0 },
     { "AutoloadEnabled" , 15, MID_DOCINFO_AUTOLOADENABLED, &::getBooleanCppuType(),   PROPERTY_UNBOUND, 0 },
-    { "AutoloadSecs"    , 12, MID_DOCINFO_AUTOLOADSECS, &::getCppuType((const sal_Int16*)0),     PROPERTY_UNBOUND, 0 },
+    { "AutoloadSecs"    , 12, MID_DOCINFO_AUTOLOADSECS, &::getCppuType((const sal_Int32*)0),     PROPERTY_UNBOUND, 0 },
     { "AutoloadURL"     , 11, MID_DOCINFO_AUTOLOADURL, &::getCppuType((const ::rtl::OUString*)0), PROPERTY_UNBOUND, 0 },
-    { "BlindCopiesTo"   , 13, WID_BCC,            &::getCppuType((const ::rtl::OUString*)0), PROPERTY_UNBOUND, 0 },
-    { "CharLocale"      , 10, MID_DOCINFO_CHARLOCALE, &::getCppuType((const lang::Locale*)0), PROPERTY_UNBOUND, 0 },
-    { "CopyTo"          , 6 , WID_CC,             &::getCppuType((const ::rtl::OUString*)0), PROPERTY_UNBOUND, 0 },
     { "CreationDate"    , 12, WID_DATE_CREATED,   &::getCppuType((const ::com::sun::star::util::DateTime*)0),PROPERTY_MAYBEVOID, 0 },
     { "DefaultTarget"   , 13, MID_DOCINFO_DEFAULTTARGET, &::getCppuType((const ::rtl::OUString*)0), PROPERTY_UNBOUND, 0 },
     { "Description"     , 11, MID_DOCINFO_DESCRIPTION, &::getCppuType((const ::rtl::OUString*)0), PROPERTY_UNBOUND, 0 },
-    { "DocumentStatistic"   , 17 , MID_DOCINFO_STATISTIC, &::getCppuType((const uno::Sequence< beans::NamedValue >*)0), PROPERTY_UNBOUND, 0 },
+    { "DocumentStatistic", 17 , MID_DOCINFO_STATISTIC, &::getCppuType((const uno::Sequence< beans::NamedValue >*)0), PROPERTY_UNBOUND, 0 },
     { "EditingCycles"   , 13, MID_DOCINFO_REVISION, &::getCppuType((const sal_Int16*)0),   PROPERTY_UNBOUND, 0 },
     { "EditingDuration" , 15, MID_DOCINFO_EDITTIME, &::getCppuType((const sal_Int32*)0),   PROPERTY_UNBOUND, 0 },
-    { "InReplyTo"       , 9 , WID_IN_REPLY_TO,    &::getCppuType((const ::rtl::OUString*)0), PROPERTY_UNBOUND, 0 },
-    { "IsEncrypted"     , 11, MID_DOCINFO_ENCRYPTED, &::getBooleanCppuType(),     PROPERTY_UNBOUND | ::com::sun::star::beans::PropertyAttribute::READONLY, 0 },
+    { "Generator"       , 9,  SID_APPLICATION, &::getCppuType((const ::rtl::OUString*)0), PROPERTY_UNBOUND, 0 },
     { "Keywords"        , 8 , WID_KEYWORDS,       &::getCppuType((const ::rtl::OUString*)0), PROPERTY_UNBOUND, 0 },
+    { "Language"        , 8,  MID_DOCINFO_CHARLOCALE, &::getCppuType((const lang::Locale*)0), PROPERTY_UNBOUND, 0 },
     { "MIMEType"        , 8 , WID_CONTENT_TYPE,   &::getCppuType((const ::rtl::OUString*)0), PROPERTY_UNBOUND | ::com::sun::star::beans::PropertyAttribute::READONLY, 0 },
     { "ModifiedBy"      , 10, MID_DOCINFO_MODIFICATIONAUTHOR, &::getCppuType((const ::rtl::OUString*)0), PROPERTY_UNBOUND, 0 },
     { "ModifyDate"      , 10, WID_DATE_MODIFIED,  &::getCppuType((const ::com::sun::star::util::DateTime*)0),PROPERTY_MAYBEVOID, 0 },
-    { "Newsgroups"      , 10, WID_NEWSGROUPS,     &::getCppuType((const ::rtl::OUString*)0), PROPERTY_UNBOUND, 0 },
-    { "Original"        , 8 , WID_MESSAGE_ID,     &::getCppuType((const ::rtl::OUString*)0), PROPERTY_UNBOUND, 0 },
     { "PrintDate"       , 9 , MID_DOCINFO_PRINTDATE, &::getCppuType((const ::com::sun::star::util::DateTime*)0),PROPERTY_MAYBEVOID, 0 },
     { "PrintedBy"       , 9 , MID_DOCINFO_PRINTEDBY, &::getCppuType((const ::rtl::OUString*)0), PROPERTY_UNBOUND, 0 },
-    { "Priority"        , 8 , WID_PRIORITY,       &::getCppuType((const sal_Int16*)0),   PROPERTY_UNBOUND, 0 },
-    { "Recipient"       , 9 , WID_TO,             &::getCppuType((const ::rtl::OUString*)0), PROPERTY_UNBOUND, 0 },
-    { "References"      , 10, WID_REFERENCES,     &::getCppuType((const ::rtl::OUString*)0), PROPERTY_UNBOUND, 0 },
-    { "ReplyTo"         , 7 , WID_REPLY_TO,       &::getCppuType((const ::rtl::OUString*)0), PROPERTY_UNBOUND, 0 },
-    { "SaveVersionOnClose", 18 , SID_VERSION, &::getBooleanCppuType(), PROPERTY_UNBOUND, 0 },
     { "Subject"         , 7 , MID_DOCINFO_SUBJECT, &::getCppuType((const ::rtl::OUString*)0), PROPERTY_UNBOUND, 0 },
     { "Template"        , 8 , MID_DOCINFO_TEMPLATE, &::getCppuType((const ::rtl::OUString*)0), PROPERTY_UNBOUND, 0 },
     { "TemplateFileName", 16, SID_TEMPLATE_NAME, &::getCppuType((const ::rtl::OUString*)0), PROPERTY_UNBOUND, 0 },
@@ -154,31 +136,178 @@ SfxItemPropertyMap aDocInfoPropertyMap_Impl[] =
     {0,0,0,0,0,0}
 };
 
-//-----------------------------------------------------------------------------
-SFX_IMPL_XINTERFACE_6( SfxDocumentInfoObject, OWeakObject, ::com::sun::star::document::XDocumentInfo, ::com::sun::star::lang::XComponent, ::com::sun::star::beans::XPropertySet, ::com::sun::star::beans::XFastPropertySet, ::com::sun::star::beans::XPropertyAccess, ::com::sun::star::beans::XPropertyContainer )
-SFX_IMPL_XTYPEPROVIDER_6( SfxDocumentInfoObject, ::com::sun::star::document::XDocumentInfo, ::com::sun::star::lang::XComponent, ::com::sun::star::beans::XPropertySet, ::com::sun::star::beans::XFastPropertySet, ::com::sun::star::beans::XPropertyAccess, ::com::sun::star::beans::XPropertyContainer )
-/*
-::com::sun::star::uno::Reference< ::com::sun::star::reflection::XIdlClass >  SfxDocumentInfoObject::getStaticIdlClass()
-{
-    // Global Method, must be guarded (multithreading)
-    MutexGuard aGuard( Mutex::getGlobalMutex() );
-    {
-        // use the standard class implementation of the usr library
-        static ::com::sun::star::uno::Reference< ::com::sun::star::reflection::XIdlClass >  xClass =
-        createStandardClass(
-            "com.sun.star.comp.sfx2.DocumentInfo",
-            OWeakObject::getStaticIdlClass(),
-            4,
-            ::getCppuType((const ::com::sun::star::lang::XComponent*)0),
-            ::getCppuType((const ::com::sun::star::document::XDocumentInfo*)0),
-            ::getCppuType((const ::com::sun::star::beans::XPropertyAccess*)0),
-            ::getCppuType((const ::com::sun::star::beans::XPropertySet*)0),
-            ::getCppuType((const ::com::sun::star::beans::XFastPropertySet*)0) );
+static USHORT aDaysInMonth[12] = { 31, 28, 31, 30, 31, 30,
+                                   31, 31, 30, 31, 30, 31 };
 
-        return xClass;
+inline USHORT DaysInMonth( USHORT nMonth, USHORT nYear )
+{
+    if ( nMonth != 2 )
+        return aDaysInMonth[nMonth-1];
+    else
+    {
+        if ( ((nYear % 4) == 0) && ((nYear % 100) != 0) ||
+             ((nYear % 400) == 0) )
+            return aDaysInMonth[nMonth-1] + 1;
+        else
+            return aDaysInMonth[nMonth-1];
     }
 }
-*/
+
+bool IsValidDateTime( const util::DateTime& rDT )
+{
+    if ( !rDT.Month || (rDT.Month > 12) )
+        return false;
+    if ( !rDT.Day || (rDT.Day > DaysInMonth( rDT.Month, rDT.Year )) )
+        return false;
+    else if ( rDT.Year <= 1582 )
+    {
+        if ( rDT.Year < 1582 )
+            return false;
+        else if ( rDT.Month < 10 )
+            return false;
+        else if ( (rDT.Month == 10) && (rDT.Day < 15) )
+            return false;
+    }
+
+    return true;
+}
+
+struct OUStringHashCode
+{
+    size_t operator()( const ::rtl::OUString& sString ) const
+    {
+        return sString.hashCode();
+    }
+};
+
+struct SfxExtendedItemPropertyMap : public SfxItemPropertyMap
+{
+    ::com::sun::star::uno::Any aValue;
+};
+
+typedef ::std::hash_map< ::rtl::OUString                    ,
+                         SfxExtendedItemPropertyMap         ,
+                         OUStringHashCode                   ,
+                         ::std::equal_to< ::rtl::OUString > > TDynamicProps;
+
+const sal_Char *sOpenOfficeOrgProject ="OpenOffice.org_project";
+
+// QUESTION: should we set it from the outside?
+rtl::OUString lcl_GetProductName()
+{
+    //  get the correct product name from the configuration
+
+    rtl::OUStringBuffer aName;
+
+    // First product: branded name + version
+    // version is <product_versions>_<product_extension>$<platform>
+    utl::ConfigManager* pMgr = utl::ConfigManager::GetConfigManager();
+    if (pMgr)
+    {
+        // plain product name
+        rtl::OUString aValue;
+        uno::Any aAny = pMgr->GetDirectConfigProperty(
+                                            utl::ConfigManager::PRODUCTNAME);
+        if ( (aAny >>= aValue) && aValue.getLength() )
+        {
+            aName.append( aValue.replace( ' ', '_' ) );
+            aName.append( (sal_Unicode)'/' );
+
+            aAny = pMgr->GetDirectConfigProperty(
+                                        utl::ConfigManager::PRODUCTVERSION);
+            if ( (aAny >>= aValue) && aValue.getLength() )
+            {
+                aName.append( aValue.replace( ' ', '_' ) );
+
+                aAny = pMgr->GetDirectConfigProperty(
+                                        utl::ConfigManager::PRODUCTEXTENSION);
+                if ( (aAny >>= aValue) && aValue.getLength() )
+                {
+                    aName.append( (sal_Unicode)'_' );
+                    aName.append( aValue.replace( ' ', '_' ) );
+                }
+            }
+
+            aName.append( (sal_Unicode)'$' );
+            aName.append( ::rtl::OUString::createFromAscii(
+                                    TOOLS_INETDEF_OS ).replace( ' ', '_' ) );
+
+            aName.append( (sal_Unicode)' ' );
+        }
+    }
+
+    // second product: OpenOffice.org_project/<build_information>
+    // build_information has '(' and '[' encoded as '$', ')' and ']' ignored
+    // and ':' replaced by '-'
+    {
+        aName.appendAscii( sOpenOfficeOrgProject );
+        aName.append( (sal_Unicode)'/' );
+        ::rtl::OUString aDefault;
+        ::rtl::OUString aBuildId( utl::Bootstrap::getBuildIdData( aDefault ) );
+        for( sal_Int32 i=0; i < aBuildId.getLength(); i++ )
+        {
+            sal_Unicode c = aBuildId[i];
+            switch( c )
+            {
+            case '(':
+            case '[':
+                aName.append( (sal_Unicode)'$' );
+                break;
+            case ')':
+            case ']':
+                break;
+            case ':':
+                aName.append( (sal_Unicode)'-' );
+                break;
+            default:
+                aName.append( c );
+                break;
+            }
+        }
+    }
+
+
+    return aName.makeStringAndClear();
+}
+
+void Copy( const uno::Reference < document::XStandaloneDocumentInfo >& rSource, const uno::Reference < document::XStandaloneDocumentInfo >& rTarget )
+{
+    try
+    {
+        uno::Reference< beans::XPropertySet > xSet( rSource, uno::UNO_QUERY );
+        uno::Reference< beans::XPropertySet > xTarget( rTarget, uno::UNO_QUERY );
+        uno::Reference< beans::XPropertySetInfo > xSetInfo = xSet->getPropertySetInfo();
+        uno::Reference< beans::XPropertyContainer > xContainer( rTarget, uno::UNO_QUERY );
+        uno::Sequence< beans::Property > lProps = xSetInfo->getProperties();
+        const beans::Property* pProps = lProps.getConstArray();
+        sal_Int32 c = lProps.getLength();
+        sal_Int32 i = 0;
+        for (i=0; i<c; ++i)
+        {
+            uno::Any aValue = xSet->getPropertyValue( pProps[i].Name );
+            if ( pProps[i].Attributes & ::com::sun::star::beans::PropertyAttribute::REMOVABLE )
+                // QUESTION: DefaultValue?!
+                xContainer->addProperty( pProps[i].Name, pProps[i].Attributes, aValue );
+            try
+            {
+                // it is possible that the propertysets from XML and binary files differ; we shouldn't break then
+                xTarget->setPropertyValue( pProps[i].Name, aValue );
+            }
+            catch ( uno::Exception& ) {}
+        }
+
+        sal_Int16 nCount = rSource->getUserFieldCount();
+        sal_Int16 nSupportedCount = rTarget->getUserFieldCount();
+        for ( sal_Int16 nInd = 0; nInd < nCount && nInd < nSupportedCount; nInd++ )
+        {
+            ::rtl::OUString aPropName = rSource->getUserFieldName( nInd );
+            rTarget->setUserFieldName( nInd, aPropName );
+            ::rtl::OUString aPropVal = rSource->getUserFieldValue( nInd );
+            rTarget->setUserFieldValue( nInd, aPropVal );
+        }
+    }
+    catch ( uno::Exception& ) {}
+}
 
 class MixedPropertySetInfo : public ::cppu::WeakImplHelper1< ::com::sun::star::beans::XPropertySetInfo >
 {
@@ -318,52 +447,113 @@ MixedPropertySetInfo::~MixedPropertySetInfo()
 //-----------------------------------------------------------------------------
 struct SfxDocumentInfoObject_Impl
 {
-    SfxObjectShell*                     _pObjSh;
     ::osl::Mutex                        _aMutex;
     ::cppu::OInterfaceContainerHelper   _aDisposeContainer;
+    ::cppu::OInterfaceContainerHelper   aModifyListenerContainer;
+    SfxItemPropertySet _aPropSet;
 
-    SfxDocumentInfoObject_Impl( SfxObjectShell* pObjSh )
-        : _pObjSh( pObjSh )
-        , _aDisposeContainer( _aMutex )
+    TDynamicProps lDynamicProps;
+    ::com::sun::star::uno::Sequence< ::com::sun::star::beans::NamedValue > aStatistic;
+    ::com::sun::star::uno::Sequence< ::com::sun::star::beans::StringPair > aUserKeys;
+    ::com::sun::star::lang::Locale aCharLocale;
+    com::sun::star::util::DateTime aCreated;    // WID_DATE_CREATED
+    com::sun::star::util::DateTime aModified;   // WID_DATE_MODIFIED
+    com::sun::star::util::DateTime aPrinted;    // MID_DOCINFO_PRINTDATE
+    com::sun::star::util::DateTime aTemplateDate; // MID_DOCINFO_TEMPLATEDATE
+    ::rtl::OUString     aMediaType;             // WID_CONTENT_TYPE
+    ::rtl::OUString     aAuthor;                // WID_FROM
+    ::rtl::OUString     aTitle;                 // WID_TITLE
+    ::rtl::OUString     aSubject;               // MID_DOCINFO_SUBJECT
+    ::rtl::OUString     aModifiedBy;            // MID_DOCINFO_MODIFICATIONAUTHOR
+    ::rtl::OUString     aPrintedBy;             // MID_DOCINFO_PRINTEDBY
+    ::rtl::OUString     aKeywords;              // WID_KEYWORDS
+    ::rtl::OUString     aDescription;           // MID_DOCINFO_DESCRIPTION
+    ::rtl::OUString     aTemplateName;          // MID_DOCINFO_TEMPLATE
+    ::rtl::OUString     aTemplateFileName;      // SID_TEMPLATE_NAME
+    ::rtl::OUString     aReloadURL;             // MID_DOCINFO_AUTOLOADURL
+    ::rtl::OUString     aDefaultTarget;         // MID_DOCINFO_DEFAULTTARGET
+    ::rtl::OUString     aGenerator;             // SID_APPLICATION
+    sal_Int32           nEditTime;              // MID_DOCINFO_EDITTIME
+    sal_Int32           nReloadSecs;            // MID_DOCINFO_AUTOLOADSECS
+    sal_Int16           nRevision;              // MID_DOCINFO_REVISION
+    sal_Bool            bReloadEnabled;         // MID_DOCINFO_AUTOLOADENABLED
+    sal_Bool            bModified;
+    sal_Bool            bDisposed;
+
+    SfxDocumentInfoObject_Impl()
+        : _aDisposeContainer( _aMutex )
+    , aModifyListenerContainer( _aMutex )
+    , _aPropSet( aDocInfoPropertyMap_Impl )
+        , nEditTime(0)
+        , nReloadSecs(0)
+        , nRevision(0)
+        , bReloadEnabled(sal_False)
+        , bModified(sal_False)
+        , bDisposed(sal_False)
     {
+        // the number of user fields is not changeable from the outside
+        // we can't set it too high because every name/value pair will be written to the file (even if empty)
+        // currently our dialog has only 4 user keys so 4 is still a reasonable number
+        aUserKeys.realloc(4);
+        const ::rtl::OUString aInf( DEFINE_CONST_UNICODE( "Info " ) );
+        for( sal_Int32 i = 0; i<4; ++i )
+        {
+            aUserKeys[i].First = aInf;
+            aUserKeys[i].First += String::CreateFromInt32(i+1);
+        }
     }
+
+    void Reset();
 };
 
-//-----------------------------------------------------------------------------
-
-SfxDocumentInfoObject::SfxDocumentInfoObject( sal_Bool bStandalone )
-    : _aPropSet( aDocInfoPropertyMap_Impl )
-    , _bStandalone( bStandalone )
-    , _pImp( new SfxDocumentInfoObject_Impl( NULL ) )
-    , _pInfo( NULL )
-    , _pFilter( NULL )
+void SfxDocumentInfoObject_Impl::Reset()
 {
+    aStatistic.realloc(0);
+    // QUESTION: do we have a reasonable default for Locales?
+    aCharLocale = com::sun::star::lang::Locale();
+
+    aCreated=com::sun::star::util::DateTime();
+    aModified=com::sun::star::util::DateTime();
+    aPrinted=com::sun::star::util::DateTime();
+    aTemplateDate=com::sun::star::util::DateTime();
+
+    aMediaType = ::rtl::OUString();
+    aAuthor = ::rtl::OUString();
+    aTitle = ::rtl::OUString();
+    aSubject = ::rtl::OUString();
+    aModifiedBy = ::rtl::OUString();
+    aPrintedBy = ::rtl::OUString();
+    aKeywords = ::rtl::OUString();
+    aDescription = ::rtl::OUString();
+    aTemplateName = ::rtl::OUString();
+    aTemplateFileName = ::rtl::OUString();
+    aReloadURL = ::rtl::OUString();
+    aDefaultTarget = ::rtl::OUString();
+    nEditTime=0;
+    nReloadSecs=0;
+    nRevision=0;
+    bModified=sal_False;
+    lDynamicProps.clear();
+    const ::rtl::OUString aInf( DEFINE_CONST_UNICODE( "Info " ) );
+    for( sal_Int32 i = 0; i<4; ++i )
+    {
+        aUserKeys[i].First = aInf;
+        aUserKeys[i].First += String::CreateFromInt32(i+1);
+        aUserKeys[i].Second = ::rtl::OUString();
+    }
 }
 
 //-----------------------------------------------------------------------------
 
-SfxDocumentInfoObject::SfxDocumentInfoObject( SfxObjectShell *pObjSh )
-    : _aPropSet( aDocInfoPropertyMap_Impl )
-    , _bStandalone( sal_False )
-    , _pImp( new SfxDocumentInfoObject_Impl( pObjSh ) )
-    , _pInfo( 0 )
-    , _pFilter( NULL )
+SfxDocumentInfoObject::SfxDocumentInfoObject()
+    : _pImp( new SfxDocumentInfoObject_Impl() )
 {
-    if ( pObjSh )
-    {
-        SfxDocumentInfo &rDocInfo = pObjSh->GetDocInfo();
-        _pInfo = &rDocInfo;
-        _pFilter = pObjSh->GetMedium()->GetFilter();
-        _wModel = pObjSh->GetModel();
-    }
 }
 
 //-----------------------------------------------------------------------------
 
 SfxDocumentInfoObject::~SfxDocumentInfoObject()
 {
-    if ( _bStandalone )
-        delete _pInfo;
     delete _pImp;
 }
 
@@ -373,12 +563,27 @@ void SAL_CALL SfxDocumentInfoObject::dispose() throw( ::com::sun::star::uno::Run
 {
     ::com::sun::star::lang::EventObject aEvent( (::cppu::OWeakObject *)this );
     _pImp->_aDisposeContainer.disposeAndClear( aEvent );
+    ::osl::MutexGuard aGuard( _pImp->_aMutex );
+    _pImp->bDisposed = sal_True;
+}
 
-/*
-    _xCurrent = ::com::sun::star::uno::Reference< ::com::sun::star::frame::XController > ();
-    for ( sal_uInt32 n = _aControllers.ge.getLength(); n; --n )
-        SequenceRemoveElementAt( _aControllers, n-1 );
-*/
+void SfxDocumentInfoObject::NotifyModified()
+{
+    if ( _pImp->bDisposed )
+        return;
+    lang::EventObject aEvent( (document::XDocumentInfo*)this );
+    ::cppu::OInterfaceIteratorHelper aIt( _pImp->aModifyListenerContainer );
+    while( aIt.hasMoreElements() )
+    {
+        try
+        {
+            ((util::XModifyListener*)aIt.next())->modified( aEvent );
+        }
+        catch( uno::RuntimeException& )
+        {
+            aIt.remove();
+        }
+    }
 }
 
 //-----------------------------------------------------------------------------
@@ -398,13 +603,9 @@ void SAL_CALL  SfxDocumentInfoObject::removeEventListener(const ::com::sun::star
 
 ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySetInfo >  SAL_CALL  SfxDocumentInfoObject::getPropertySetInfo()  throw( ::com::sun::star::uno::RuntimeException )
 {
-    ::vos::OGuard aGuard( Application::GetSolarMutex() );
+    ::osl::MutexGuard aGuard( _pImp->_aMutex );
 
-    // #i66675# basic makes introspection to early ..
-    if (! _pInfo)
-        return ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySetInfo >();
-
-    MixedPropertySetInfo* pInfo = new MixedPropertySetInfo(aDocInfoPropertyMap_Impl, &(_pInfo->GetDynamicProps_Impl()));
+    MixedPropertySetInfo* pInfo = new MixedPropertySetInfo( aDocInfoPropertyMap_Impl, &_pImp->lDynamicProps );
     ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySetInfo > xInfo(
         static_cast< ::com::sun::star::beans::XPropertySetInfo* >(pInfo),
         ::com::sun::star::uno::UNO_QUERY_THROW);
@@ -415,8 +616,6 @@ void SAL_CALL  SfxDocumentInfoObject::removeEventListener(const ::com::sun::star
 
 void SAL_CALL  SfxDocumentInfoObject::setPropertyValue(const ::rtl::OUString& aPropertyName, const ::com::sun::star::uno::Any& aValue) throw( ::com::sun::star::uno::RuntimeException )
 {
-    ::vos::OGuard aGuard( Application::GetSolarMutex() );
-
     const SfxItemPropertyMap* pMap = SfxItemPropertyMap::GetByName(
             aDocInfoPropertyMap_Impl,
             aPropertyName );
@@ -426,18 +625,19 @@ void SAL_CALL  SfxDocumentInfoObject::setPropertyValue(const ::rtl::OUString& aP
     else
     // dynamic prop!
     {
-        TDynamicProps& rDynamicProps = _pInfo->GetDynamicProps_Impl();
-        TDynamicProps::iterator pProp = rDynamicProps.find(aPropertyName);
-        if ( pProp != rDynamicProps.end() )
+        ::osl::ClearableMutexGuard aGuard( _pImp->_aMutex );
+        TDynamicProps::iterator pProp = _pImp->lDynamicProps.find(aPropertyName);
+        if ( pProp != _pImp->lDynamicProps.end() )
         {
             SfxExtendedItemPropertyMap& rExtMap = pProp->second;
             if (( rExtMap.nFlags & ::com::sun::star::beans::PropertyAttribute::READONLY ) != ::com::sun::star::beans::PropertyAttribute::READONLY )
             {
                 rExtMap.aValue = aValue;
-                // TODO check if value was realy changed!
+                // TODO/REFACTOR check if value was realy changed!
                 // no objsh if we are used from a StandaloneDocInfo!
-                if (_pImp->_pObjSh)
-                    _pImp->_pObjSh->FlushDocInfo();
+                _pImp->bModified = sal_True;
+                aGuard.clear();
+                NotifyModified();
             }
         }
     }
@@ -447,8 +647,6 @@ void SAL_CALL  SfxDocumentInfoObject::setPropertyValue(const ::rtl::OUString& aP
 
 ::com::sun::star::uno::Any  SAL_CALL  SfxDocumentInfoObject::getPropertyValue(const ::rtl::OUString& aPropertyName)  throw( ::com::sun::star::uno::RuntimeException )
 {
-    ::vos::OGuard aGuard( Application::GetSolarMutex() );
-
     const SfxItemPropertyMap* pMap = SfxItemPropertyMap::GetByName( aDocInfoPropertyMap_Impl,
         aPropertyName );
     // fix prop!
@@ -457,9 +655,9 @@ void SAL_CALL  SfxDocumentInfoObject::setPropertyValue(const ::rtl::OUString& aP
     else
     // dynamic prop!
     {
-        TDynamicProps& rDynamicProps = _pInfo->GetDynamicProps_Impl();
-        TDynamicProps::iterator pProp = rDynamicProps.find(aPropertyName);
-        if ( pProp != rDynamicProps.end() )
+        ::osl::MutexGuard aGuard( _pImp->_aMutex );
+        TDynamicProps::iterator pProp = _pImp->lDynamicProps.find(aPropertyName);
+        if ( pProp != _pImp->lDynamicProps.end() )
         {
             SfxExtendedItemPropertyMap& rExtMap = pProp->second;
             return rExtMap.aValue;
@@ -469,27 +667,55 @@ void SAL_CALL  SfxDocumentInfoObject::setPropertyValue(const ::rtl::OUString& aP
     return ::com::sun::star::uno::Any();
 }
 
+sal_Bool SAL_CALL SfxDocumentInfoObject::isModified() throw(::com::sun::star::uno::RuntimeException)
+{
+    ::osl::MutexGuard aGuard( _pImp->_aMutex );
+    return _pImp->bModified;
+}
+
+void SAL_CALL SfxDocumentInfoObject::setModified( sal_Bool bModified )
+        throw (::com::sun::star::beans::PropertyVetoException, ::com::sun::star::uno::RuntimeException)
+{
+    ::osl::ClearableMutexGuard aGuard( _pImp->_aMutex );
+    _pImp->bModified = bModified;
+    if ( bModified )
+    {
+        aGuard.clear();
+        NotifyModified();
+    }
+}
+
+void SAL_CALL SfxDocumentInfoObject::addModifyListener( const uno::Reference< util::XModifyListener >& xListener) throw( uno::RuntimeException )
+{
+    _pImp->aModifyListenerContainer.addInterface( xListener );
+}
+
+void SAL_CALL SfxDocumentInfoObject::removeModifyListener( const uno::Reference< util::XModifyListener >& xListener) throw( uno::RuntimeException )
+{
+    _pImp->aModifyListenerContainer.removeInterface( xListener );
+}
+
 //-----------------------------------------------------------------------------
 
-void SAL_CALL  SfxDocumentInfoObject::addPropertyChangeListener(const ::rtl::OUString&, const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertyChangeListener > & ) throw( ::com::sun::star::uno::RuntimeException )
+void SAL_CALL  SfxDocumentInfoObject::addPropertyChangeListener(const ::rtl::OUString&, const uno::Reference< beans::XPropertyChangeListener > & ) throw( uno::RuntimeException )
 {}
 
 //-----------------------------------------------------------------------------
 
-void SAL_CALL  SfxDocumentInfoObject::removePropertyChangeListener(const ::rtl::OUString&, const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertyChangeListener > & ) throw( ::com::sun::star::uno::RuntimeException )
+void SAL_CALL  SfxDocumentInfoObject::removePropertyChangeListener(const ::rtl::OUString&, const uno::Reference< ::beans::XPropertyChangeListener > & ) throw( uno::RuntimeException )
 {}
 
 //-----------------------------------------------------------------------------
 
-void SAL_CALL  SfxDocumentInfoObject::addVetoableChangeListener(const ::rtl::OUString&, const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XVetoableChangeListener > & ) throw( ::com::sun::star::uno::RuntimeException )
+void SAL_CALL  SfxDocumentInfoObject::addVetoableChangeListener(const ::rtl::OUString&, const uno::Reference< beans::XVetoableChangeListener > & ) throw( uno::RuntimeException )
 {}
 
 //-----------------------------------------------------------------------------
 
-void SAL_CALL  SfxDocumentInfoObject::removeVetoableChangeListener(const ::rtl::OUString&, const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XVetoableChangeListener > & ) throw( ::com::sun::star::uno::RuntimeException )
+void SAL_CALL  SfxDocumentInfoObject::removeVetoableChangeListener(const ::rtl::OUString&, const uno::Reference< beans::XVetoableChangeListener > & ) throw( uno::RuntimeException )
 {}
 
-::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue > SAL_CALL  SfxDocumentInfoObject::getPropertyValues( void ) throw( ::com::sun::star::uno::RuntimeException )
+uno::Sequence< beans::PropertyValue > SAL_CALL  SfxDocumentInfoObject::getPropertyValues( void ) throw( uno::RuntimeException )
 {
     ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySetInfo >  xInfo = getPropertySetInfo();
     ::com::sun::star::uno::Sequence< ::com::sun::star::beans::Property > aProps = xInfo->getProperties();
@@ -534,14 +760,13 @@ void SAL_CALL SfxDocumentInfoObject::addProperty(const ::rtl::OUString&         
           ::com::sun::star::lang::IllegalArgumentException,
           ::com::sun::star::uno::RuntimeException         )
 {
-    ::vos::OGuard aGuard( Application::GetSolarMutex() );
+    ::osl::ClearableMutexGuard aGuard( _pImp->_aMutex );
 
     // clash with "fix" properties ?
     sal_Bool bFixProp = (SfxItemPropertyMap::GetByName( aDocInfoPropertyMap_Impl, sName ) != 0);
 
     // clash with "dynamic" properties ?
-    TDynamicProps& rDynamicProps = _pInfo->GetDynamicProps_Impl();
-    sal_Bool bDynamicProp = (rDynamicProps.find(sName) != rDynamicProps.end());
+    sal_Bool bDynamicProp = (_pImp->lDynamicProps.find(sName) != _pImp->lDynamicProps.end());
 
     if ( bFixProp || bDynamicProp )
     {
@@ -608,21 +833,14 @@ void SAL_CALL SfxDocumentInfoObject::addProperty(const ::rtl::OUString&         
 
     if (aProp.nFlags == 0)
     {
-        if (_pImp->_pObjSh && _pImp->_pObjSh->IsReadOnly())
-        {
-            aProp.nFlags = ::com::sun::star::beans::PropertyAttribute::READONLY;
-        }
-        else
-        {
-            aProp.nFlags = ::com::sun::star::beans::PropertyAttribute::TRANSIENT |
-                           ::com::sun::star::beans::PropertyAttribute::REMOVABLE ;
-        }
+        aProp.nFlags = ::com::sun::star::beans::PropertyAttribute::TRANSIENT |
+                        ::com::sun::star::beans::PropertyAttribute::REMOVABLE ;
     }
 
-    rDynamicProps[sName] = aProp;
-    // no objsh if we are used from a StandaloneDocInfo!
-    if (_pImp->_pObjSh)
-        _pImp->_pObjSh->FlushDocInfo();
+    _pImp->lDynamicProps[sName] = aProp;
+    _pImp->bModified = sal_True;
+    aGuard.clear();
+    NotifyModified();
 }
 
 void SAL_CALL SfxDocumentInfoObject::removeProperty(const ::rtl::OUString& sName)
@@ -630,7 +848,7 @@ void SAL_CALL SfxDocumentInfoObject::removeProperty(const ::rtl::OUString& sName
           ::com::sun::star::beans::NotRemoveableException  ,
           ::com::sun::star::uno::RuntimeException          )
 {
-    ::vos::OGuard aGuard( Application::GetSolarMutex() );
+    ::osl::ClearableMutexGuard aGuard( _pImp->_aMutex );
 
     // clash with "fix" properties ?
     sal_Bool bFixProp = (SfxItemPropertyMap::GetByName( aDocInfoPropertyMap_Impl, sName ) != 0);
@@ -647,9 +865,8 @@ void SAL_CALL SfxDocumentInfoObject::removeProperty(const ::rtl::OUString& sName
     }
 
     // clash with "dynamic" properties ?
-    TDynamicProps& rDynamicProps = _pInfo->GetDynamicProps_Impl();
-    TDynamicProps::iterator pDynamicProp = rDynamicProps.find(sName);
-    sal_Bool                bDynamicProp = ( pDynamicProp != rDynamicProps.end() );
+    TDynamicProps::iterator pDynamicProp = _pImp->lDynamicProps.find(sName);
+    sal_Bool                bDynamicProp = ( pDynamicProp != _pImp->lDynamicProps.end() );
     if ( bDynamicProp )
     {
         SfxExtendedItemPropertyMap& rProp = pDynamicProp->second;
@@ -666,10 +883,10 @@ void SAL_CALL SfxDocumentInfoObject::removeProperty(const ::rtl::OUString& sName
         }
 
         // found and removeable -> do it
-        rDynamicProps.erase(pDynamicProp);
-        // no objsh if we are used from a StandaloneDocInfo!
-        if (_pImp->_pObjSh)
-            _pImp->_pObjSh->FlushDocInfo();
+        _pImp->lDynamicProps.erase(pDynamicProp);
+        _pImp->bModified = sal_True;
+        aGuard.clear();
+        NotifyModified();
         return;
     }
 
@@ -684,63 +901,36 @@ void SAL_CALL SfxDocumentInfoObject::removeProperty(const ::rtl::OUString& sName
             static_cast< ::cppu::OWeakObject* >(this));
 }
 
-::com::sun::star::util::DateTime SfxDocumentInfoObject::impl_DateTime_Object2Struct( const ::DateTime& aDateTimeObject )
+BOOL equalsDateTime( const util::DateTime& D1, const util::DateTime& D2 )
 {
-    //  Attention!
-    //      We can't use a DateTime-object as type of any property with new UNO!
-    //      We must use a DateTime-struct and convert the values.
-
-    ::com::sun::star::util::DateTime    aDateTimeStruct ;   // com/sun/star/util/DateTime   !!!
-
-    // ... and convert DateTime-object to struct ! (copy values)
-    aDateTimeStruct.HundredthSeconds    = aDateTimeObject.Get100Sec () ;
-    aDateTimeStruct.Seconds             = aDateTimeObject.GetSec    () ;
-    aDateTimeStruct.Minutes             = aDateTimeObject.GetMin    () ;
-    aDateTimeStruct.Hours               = aDateTimeObject.GetHour   () ;
-    aDateTimeStruct.Day                 = aDateTimeObject.GetDay    () ;
-    aDateTimeStruct.Month               = aDateTimeObject.GetMonth  () ;
-    aDateTimeStruct.Year                = aDateTimeObject.GetYear   () ;
-
-    // Return ricght type with right values.
-    return aDateTimeStruct ;
+    return D1.HundredthSeconds == D2.HundredthSeconds &&
+           D1.Seconds == D2.Seconds &&
+           D1.Minutes == D2.Minutes &&
+           D1.Hours == D2.Hours &&
+           D1.Day == D2.Day &&
+           D1.Month == D2.Month &&
+           D1.Year == D2.Year;
 }
-
-::DateTime SfxDocumentInfoObject::impl_DateTime_Struct2Object ( const ::com::sun::star::util::DateTime& aDateTimeStruct )
-{
-    //  Attention!
-    //      We can't use a DateTime-object as type of any property with new UNO!
-    //      We must use a DateTime-struct and convert the values.
-
-    // Get values from DateTime-struct and create a date and time instance ...
-    ::Date aDate ( aDateTimeStruct.Day  , aDateTimeStruct.Month     , aDateTimeStruct.Year                                      ) ;
-    ::Time aTime ( aDateTimeStruct.Hours, aDateTimeStruct.Minutes   , aDateTimeStruct.Seconds, aDateTimeStruct.HundredthSeconds ) ;
-
-    // ... to use it for creation of a DateTime-object ...
-    ::DateTime  aDateTimeObject ( aDate, aTime      ) ;
-
-    // Return converted values.
-    return aDateTimeObject ;
-}
-
 
 void SAL_CALL  SfxDocumentInfoObject::setFastPropertyValue(sal_Int32 nHandle, const ::com::sun::star::uno::Any& aValue) throw( ::com::sun::star::uno::RuntimeException )
 {
     // Attention: Only fix properties should be provided by this method.
     // Dynamic properties has no handle in real ... because it cant be used inside multithreaded environments :-)
 
-    ::vos::OGuard aGuard( Application::GetSolarMutex() );
-    sal_Bool bModified = sal_True;
+    ::osl::ClearableMutexGuard aGuard( _pImp->_aMutex );
+    sal_Bool bModified = sal_False;
 
-    if ( _pInfo && aValue.getValueType() == ::getCppuType((const ::rtl::OUString*)0) )
+    if ( aValue.getValueType() == ::getCppuType((const ::rtl::OUString*)0) )
     {
         ::rtl::OUString sTemp ;
         aValue >>= sTemp ;
-        String aStrVal( sTemp );
         switch ( nHandle )
         {
             case WID_FROM :
             {
-                const SfxStamp& rStamp = _pInfo->GetCreated();
+                // QUESTION: do we still need this?
+                /*
+                // String aStrVal( sTemp );
                 if ( aStrVal.Len() > TIMESTAMP_MAXLENGTH )
                 {
                     SvAddressParser aParser( aStrVal );
@@ -754,116 +944,115 @@ void SAL_CALL  SfxDocumentInfoObject::setFastPropertyValue(sal_Int32 nHandle, co
                         else if ( aEmail.Len() <= TIMESTAMP_MAXLENGTH )
                             aStrVal = aEmail;
                     }
-                }
-                _pInfo->SetCreated( SfxStamp( aStrVal, rStamp.GetTime() ) );
+                } */
+
+                if ( _pImp->aAuthor != sTemp )
+                    bModified = sal_True;
+                _pImp->aAuthor = sTemp;
                 break;
             }
             case MID_DOCINFO_PRINTEDBY:
-            {
-                const SfxStamp& rStamp = _pInfo->GetPrinted();
-                _pInfo->SetPrinted( SfxStamp( aStrVal, rStamp.GetTime() ) );
+                if ( _pImp->aPrintedBy != sTemp )
+                    bModified = sal_True;
+                _pImp->aPrintedBy = sTemp;
                 break;
-            }
             case MID_DOCINFO_MODIFICATIONAUTHOR:
-            {
-                const SfxStamp& rStamp = _pInfo->GetChanged();
-                _pInfo->SetChanged( SfxStamp( aStrVal, rStamp.GetTime() ) );
+                if ( _pImp->aModifiedBy != sTemp )
+                    bModified = sal_True;
+                _pImp->aModifiedBy = sTemp;
                 break;
-            }
             case WID_TITLE :
             {
-                _pInfo->SetTitle( aStrVal );
-                Reference < XModel > xModel( _wModel.get(), UNO_QUERY );
-                if ( xModel.is() )
-                {
-                    _pImp->_pObjSh->InvalidateName();
-                    _pImp->_pObjSh->Broadcast( SfxSimpleHint( SFX_HINT_TITLECHANGED ) );
-                }
+                if ( _pImp->aTitle != sTemp )
+                    bModified = sal_True;
+                _pImp->aTitle = sTemp;
                 break;
             }
             case MID_DOCINFO_SUBJECT :
-                _pInfo->SetTheme( aStrVal );
+                if ( _pImp->aSubject != sTemp )
+                    bModified = sal_True;
+                _pImp->aSubject = sTemp;
                 break;
             case WID_KEYWORDS :
-                _pInfo->SetKeywords( aStrVal );
-                break;
-            case WID_CC :
-                _pInfo->SetCopiesTo( aStrVal );
-                break;
-            case WID_MESSAGE_ID :
-                _pInfo->SetOriginal( aStrVal );
-                break;
-            case WID_REFERENCES :
-                _pInfo->SetReferences( aStrVal );
-                break;
-            case WID_TO :
-                _pInfo->SetRecipient( aStrVal );
-                break;
-            case WID_REPLY_TO :
-                _pInfo->SetReplyTo( aStrVal );
+                if ( _pImp->aKeywords != sTemp )
+                    bModified = sal_True;
+                _pImp->aKeywords = sTemp;
                 break;
             case MID_DOCINFO_TEMPLATE:
-                _pInfo->SetTemplateName( aStrVal );
+                if ( _pImp->aTemplateName != sTemp )
+                    bModified = sal_True;
+                _pImp->aTemplateName = sTemp;
                 break;
             case SID_TEMPLATE_NAME:
-                _pInfo->SetTemplateFileName( aStrVal );
-                break;
-            case WID_BCC :
-                _pInfo->SetBlindCopies( aStrVal );
-                break;
-            case WID_IN_REPLY_TO :
-                _pInfo->SetInReplyTo( aStrVal );
-                break;
-            case WID_NEWSGROUPS :
-                _pInfo->SetNewsgroups( aStrVal );
+                if ( _pImp->aTemplateFileName != sTemp )
+                    bModified = sal_True;
+                _pImp->aTemplateFileName = sTemp;
                 break;
             case MID_DOCINFO_DESCRIPTION:
-                _pInfo->SetComment( aStrVal );
+                if ( _pImp->aDescription != sTemp )
+                    bModified = sal_True;
+                _pImp->aDescription = sTemp;
                 break;
             case MID_DOCINFO_AUTOLOADURL:
-                _pInfo->SetReloadURL( aStrVal );
+                if ( _pImp->aReloadURL != sTemp )
+                    bModified = sal_True;
+                _pImp->aReloadURL = sTemp;
                 break;
             case MID_DOCINFO_DEFAULTTARGET:
-                _pInfo->SetDefaultTarget( aStrVal );
+                if ( _pImp->aDefaultTarget != sTemp )
+                    bModified = sal_True;
+                _pImp->aDefaultTarget = sTemp;
+                break;
+            case WID_CONTENT_TYPE :
+                if ( _pImp->aMediaType != sTemp )
+                    bModified = sal_True;
+                _pImp->aMediaType = sTemp;
                 break;
             default:
                 bModified = sal_False;
                 break;
         }
     }
-    else if ( _pInfo && aValue.getValueType() == ::getCppuType((const ::com::sun::star::util::DateTime*)0) )
+    else if ( aValue.getValueType() == ::getCppuType((const ::com::sun::star::util::DateTime*)0) )
     {
+        com::sun::star::util::DateTime aTemp;
+        aValue >>= aTemp ;
         switch ( nHandle )
         {
             case WID_DATE_CREATED :
             {
-                const SfxStamp& rStamp = _pInfo->GetCreated();
-                ::com::sun::star::util::DateTime aDateTime ;
-                aValue >>= aDateTime ;
-                _pInfo->SetCreated( SfxStamp( rStamp.GetName(), impl_DateTime_Struct2Object(aDateTime) ) );
+                if ( !equalsDateTime(_pImp->aCreated, aTemp ) )
+                {
+                    bModified = sal_True;
+                    _pImp->aCreated = aTemp;
+                }
                 break;
             }
             case WID_DATE_MODIFIED :
             {
-                const SfxStamp& rStamp = _pInfo->GetChanged();
-                ::com::sun::star::util::DateTime aDateTime ;
-                aValue >>= aDateTime ;
-                _pInfo->SetChanged( SfxStamp( rStamp.GetName(), impl_DateTime_Struct2Object(aDateTime) ) );
+                if ( !equalsDateTime(_pImp->aModified, aTemp ) )
+                {
+                    bModified = sal_True;
+                    _pImp->aModified = aTemp;
+                }
                 break;
             }
             case MID_DOCINFO_PRINTDATE :
             {
-                const SfxStamp& rStamp = _pInfo->GetPrinted();
-                ::com::sun::star::util::DateTime aDateTime ;
-                aValue >>= aDateTime ;
-                _pInfo->SetPrinted( SfxStamp( rStamp.GetName(), impl_DateTime_Struct2Object(aDateTime) ) );
+                if ( !equalsDateTime(_pImp->aPrinted, aTemp ) )
+                {
+                    bModified = sal_True;
+                    _pImp->aPrinted = aTemp;
+                }
                 break;
             }
             case MID_DOCINFO_TEMPLATEDATE :
             {
-                ::com::sun::star::util::DateTime aDateTime ;
-                aValue >>= aDateTime ;
-                _pInfo->SetTemplateDate( impl_DateTime_Struct2Object(aDateTime) );
+                if ( !equalsDateTime(_pImp->aTemplateDate, aTemp ) )
+                {
+                    bModified = sal_True;
+                    _pImp->aTemplateDate = aTemp;
+                }
                 break;
             }
             default:
@@ -871,48 +1060,96 @@ void SAL_CALL  SfxDocumentInfoObject::setFastPropertyValue(sal_Int32 nHandle, co
                 break;
         }
     }
-    else if ( _pInfo && aValue.getValueType() == ::getBooleanCppuType() )
+    else if ( aValue.getValueType() == ::getVoidCppuType() )
+    {
+        // DateTime properties may be void to describe an invalid DateTime value
+        switch ( nHandle )
+        {
+            case WID_DATE_CREATED :
+            {
+                if ( IsValidDateTime(_pImp->aCreated) )
+                {
+                    bModified = sal_True;
+                    _pImp->aCreated = util::DateTime();
+                }
+                break;
+            }
+            case WID_DATE_MODIFIED :
+            {
+                if ( IsValidDateTime(_pImp->aModified) )
+                {
+                    bModified = sal_True;
+                    _pImp->aModified = util::DateTime();
+                }
+                break;
+            }
+            case MID_DOCINFO_PRINTDATE :
+            {
+                if ( IsValidDateTime(_pImp->aPrinted) )
+                {
+                    bModified = sal_True;
+                    _pImp->aPrinted = util::DateTime();
+                }
+                break;
+            }
+            case MID_DOCINFO_TEMPLATEDATE :
+            {
+                if ( IsValidDateTime(_pImp->aTemplateDate) )
+                {
+                    bModified = sal_True;
+                    _pImp->aTemplateDate = util::DateTime();
+                }
+                break;
+            }
+            default:
+                bModified = sal_False;
+                break;
+        }
+    }
+    else if ( aValue.getValueType() == ::getBooleanCppuType() )
     {
         sal_Bool bBoolVal = false;
         aValue >>= bBoolVal ;
         switch ( nHandle )
         {
-            case SID_VERSION :
-                _pInfo->SetSaveVersionOnClose( bBoolVal );
-                break;
             case MID_DOCINFO_AUTOLOADENABLED:
-                _pInfo->EnableReload( bBoolVal );
+                if ( bBoolVal != _pImp->bReloadEnabled )
+                    bModified = sal_True;
+                _pImp->bReloadEnabled = bBoolVal;
                 break;
             default:
                 bModified = sal_False;
         }
     }
-    else if ( _pInfo && aValue.getValueType() == ::getCppuType((const sal_Int32*)0) )
+    else if ( aValue.getValueType() == ::getCppuType((const sal_Int32*)0) )
     {
         sal_Int32 nIntVal = 0;
         aValue >>= nIntVal ;
         switch ( nHandle )
         {
             case MID_DOCINFO_AUTOLOADSECS:
-                _pInfo->SetReloadDelay( nIntVal );
+                if ( nIntVal != _pImp->nReloadSecs )
+                    bModified = sal_True;
+                _pImp->nReloadSecs = nIntVal;
                 break;
             case MID_DOCINFO_EDITTIME:
-                _pInfo->SetTime( nIntVal );
+                if ( nIntVal != _pImp->nEditTime )
+                    bModified = sal_True;
+                _pImp->nEditTime = nIntVal;
             default:
                 bModified = sal_False;
         }
     }
-    else if ( _pInfo && aValue.getValueType() == ::getCppuType((const sal_Int16*)0) )
+    else if ( aValue.getValueType() == ::getCppuType((const sal_Int16*)0) )
     {
         short nIntVal = 0;
         aValue >>= nIntVal ;
         switch ( nHandle )
         {
             case MID_DOCINFO_REVISION:
-                _pInfo->SetDocumentNumber( nIntVal );
-            case WID_PRIORITY :
-                _pInfo->SetPriority( nIntVal );
-                break;
+                if ( nIntVal != _pImp->nRevision )
+                    bModified = sal_True;
+                _pImp->nRevision = nIntVal;
             default:
                 bModified = sal_False;
                 break;
@@ -920,28 +1157,51 @@ void SAL_CALL  SfxDocumentInfoObject::setFastPropertyValue(sal_Int32 nHandle, co
     }
     else if ( aValue.getValueType() == ::getCppuType((const uno::Sequence< beans::NamedValue >*)0) )
     {
-        if ( nHandle == MID_DOCINFO_STATISTIC && _bStandalone )
+        if ( nHandle == MID_DOCINFO_STATISTIC )
         {
-            aValue >>= _aStatistic;
-            bModified = sal_False;
+            uno::Sequence < beans::NamedValue > aData;
+            aValue >>= aData;
+            if ( aData != _pImp->aStatistic )
+            {
+                bModified = sal_True;
+                aValue >>= _pImp->aStatistic;
+/*
+                for ( sal_Int32 n=0; n<_pImp->aStatistic.getLength(); n++ )
+                {
+                    ::rtl::OUString aName = _pImp->aStatistic[n].Name;
+                    if ( aName.equalsAscii("bla") )
+                        bModified = sal_True;
+                }
+*/
+            }
         }
         else
             bModified = sal_False;
     }
     else if ( aValue.getValueType() == ::getCppuType((const lang::Locale*)0) )
     {
-        if ( nHandle == MID_DOCINFO_CHARLOCALE && _bStandalone )
+        if ( nHandle == MID_DOCINFO_CHARLOCALE )
         {
-            aValue >>= _aCharLocale;
-            bModified = sal_False;
+            lang::Locale aLocale;
+            aValue >>= aLocale;
+            if ( aLocale.Language != _pImp->aCharLocale.Language &&
+                 aLocale.Country !=  _pImp->aCharLocale.Country &&
+                 aLocale.Variant !=  _pImp->aCharLocale.Variant   )
+            {
+                bModified = sal_True;
+                aValue >>= _pImp->aCharLocale;
+            }
         }
         else
             bModified = sal_False;
     }
 
-    Reference < XModel > xModel( _wModel.get(), UNO_QUERY );
-    if ( bModified && xModel.is() )
-            _pImp->_pObjSh->FlushDocInfo();
+    if ( bModified )
+    {
+        _pImp->bModified = sal_True;
+        aGuard.clear();
+        NotifyModified();
+    }
 }
 
 //-----------------------------------------------------------------------------
@@ -951,159 +1211,86 @@ void SAL_CALL  SfxDocumentInfoObject::setFastPropertyValue(sal_Int32 nHandle, co
     // Attention: Only fix properties should be provided by this method.
     // Dynamic properties has no handle in real ... because it cant be used inside multithreaded environments :-)
 
-    ::vos::OGuard aGuard( Application::GetSolarMutex() );
+    ::osl::MutexGuard aGuard( _pImp->_aMutex );
     ::com::sun::star::uno::Any aValue;
-    if ( nHandle == WID_CONTENT_TYPE )
+    switch ( nHandle )
     {
-        if ( _pInfo && _pInfo->GetSpecialMimeType().Len() )
-        {
-            ::rtl::OUString sTemp ( _pInfo->GetSpecialMimeType() );
-            aValue <<= sTemp ;
-        }
-        else if ( _pFilter )
-        {
-            ::rtl::OUString sTemp ( _pFilter->GetMimeType() );
-            aValue <<= sTemp ;
-        }
-        else
-            aValue <<= ::rtl::OUString() ;
-    }
-    else if ( _pInfo )
-    {
-        switch ( nHandle )
-        {
-            case SID_VERSION :
-                aValue <<= _pInfo->IsSaveVersionOnClose();
-                break;
-            case MID_DOCINFO_REVISION :
-                aValue <<= _pInfo->GetDocumentNumber() ;
-                break;
-            case MID_DOCINFO_EDITTIME :
-                aValue <<= _pInfo->GetTime();
-                break;
-            case WID_FROM :
-            {
-                const SfxStamp& rStamp = _pInfo->GetCreated();
-                if ( rStamp.IsValid() )
-                    aValue <<= ::rtl::OUString( rStamp.GetName() );
-                else
-                    aValue <<= ::rtl::OUString() ;
-                break;
-            }
-            case WID_DATE_CREATED :
-            {
-                const SfxStamp& rStamp = _pInfo->GetCreated();
-                if ( rStamp.IsValid() )
-                    aValue <<= impl_DateTime_Object2Struct(rStamp.GetTime());
-                break;
-            }
-            case WID_TITLE :
-                aValue <<= ::rtl::OUString( _pInfo->GetTitle() );
-                break;
-            case MID_DOCINFO_SUBJECT:
-                aValue <<= ::rtl::OUString( _pInfo->GetTheme() );
-                break;
-            case MID_DOCINFO_MODIFICATIONAUTHOR:
-            {
-                const SfxStamp& rStamp = _pInfo->GetChanged();
-                if ( rStamp.IsValid() )
-                    aValue <<= ::rtl::OUString( rStamp.GetName() );
-                else
-                    aValue <<= ::rtl::OUString() ;
-                break;
-            }
-            case WID_DATE_MODIFIED :
-            {
-                const SfxStamp& rStamp = _pInfo->GetChanged();
-                if ( rStamp.IsValid() )
-                    aValue <<= impl_DateTime_Object2Struct(rStamp.GetTime());
-                break;
-            }
-            case MID_DOCINFO_PRINTEDBY:
-            {
-                const SfxStamp& rStamp = _pInfo->GetPrinted();
-                if ( rStamp.IsValid() )
-                    aValue <<= ::rtl::OUString( rStamp.GetName() );
-                else
-                    aValue <<= ::rtl::OUString() ;
-                break;
-            }
-            case MID_DOCINFO_PRINTDATE:
-            {
-                const SfxStamp& rStamp = _pInfo->GetPrinted();
-                if ( rStamp.IsValid() )
-                    aValue <<= impl_DateTime_Object2Struct(rStamp.GetTime());
-                break;
-            }
-            case WID_KEYWORDS :
-                aValue <<= rtl::OUString( _pInfo->GetKeywords() );
-                break;
-            case WID_PRIORITY :
-                aValue <<= _pInfo->GetPriority() ;
-                break;
-            case WID_CC :
-                aValue <<= rtl::OUString( _pInfo->GetCopiesTo() );
-                break;
-            case WID_MESSAGE_ID :
-                aValue <<=  rtl::OUString( _pInfo->GetOriginal() );
-                break;
-            case WID_REFERENCES :
-                aValue <<=  rtl::OUString( _pInfo->GetReferences() );
-                break;
-            case WID_TO :
-                aValue <<=  rtl::OUString( _pInfo->GetRecipient() );
-                break;
-            case WID_REPLY_TO :
-                aValue <<=  rtl::OUString( _pInfo->GetReplyTo() );
-                break;
-            case WID_BCC :
-                aValue <<=  rtl::OUString( _pInfo->GetBlindCopies() );
-                break;
-            case WID_IN_REPLY_TO :
-                aValue <<=  rtl::OUString( _pInfo->GetInReplyTo() );
-                break;
-            case WID_NEWSGROUPS :
-                aValue <<=  rtl::OUString( _pInfo->GetNewsgroups() );
-                break;
-            case MID_DOCINFO_DESCRIPTION:
-                aValue <<=  rtl::OUString( _pInfo->GetComment() );
-                break;
-            case MID_DOCINFO_TEMPLATE:
-                aValue <<=  rtl::OUString( _pInfo->GetTemplateName() );
-                break;
-            case SID_TEMPLATE_NAME:
-                aValue <<=  rtl::OUString( _pInfo->GetTemplateFileName() );
-                break;
-            case MID_DOCINFO_TEMPLATEDATE:
-                aValue <<= impl_DateTime_Object2Struct(_pInfo->GetTemplateDate());
-                break;
-            case MID_DOCINFO_AUTOLOADENABLED:
-                aValue <<=  _pInfo->IsReloadEnabled() ;
-                break;
-            case MID_DOCINFO_AUTOLOADURL:
-                aValue <<=  rtl::OUString( _pInfo->GetReloadURL() );
-                break;
-            case MID_DOCINFO_AUTOLOADSECS:
-                aValue <<=  _pInfo->GetReloadDelay() ;
-                break;
-            case MID_DOCINFO_DEFAULTTARGET:
-                aValue <<=  rtl::OUString( _pInfo->GetDefaultTarget() );
-                break;
-            case MID_DOCINFO_STATISTIC:
-                // in case it is not a standalone object the property makes no sence
-                if ( _bStandalone )
-                    aValue <<= _aStatistic;
-                break;
-            case MID_DOCINFO_CHARLOCALE:
-                // in case it is not a standalone object the property makes no sence
-                if ( _bStandalone && _aCharLocale.Language.getLength() )
-                    aValue <<= _aCharLocale;
-                break;
-
-            default:
-                aValue <<= ::rtl::OUString();
-                break;
-        }
+        case SID_APPLICATION :
+            aValue <<= lcl_GetProductName();
+            break;
+        case WID_CONTENT_TYPE :
+            aValue <<= _pImp->aMediaType;
+            break;
+        case MID_DOCINFO_REVISION :
+            aValue <<= _pImp->nRevision;
+            break;
+        case MID_DOCINFO_EDITTIME :
+            aValue <<= _pImp->nEditTime;
+            break;
+        case WID_FROM :
+            aValue <<= _pImp->aAuthor;
+            break;
+        case WID_DATE_CREATED :
+            if ( IsValidDateTime( _pImp->aCreated ) )
+                aValue <<= _pImp->aCreated;
+            break;
+        case WID_TITLE :
+            aValue <<= _pImp->aTitle;
+            break;
+        case MID_DOCINFO_SUBJECT:
+            aValue <<= _pImp->aSubject;
+            break;
+        case MID_DOCINFO_MODIFICATIONAUTHOR:
+            aValue <<= _pImp->aModifiedBy;
+            break;
+        case WID_DATE_MODIFIED :
+            if ( IsValidDateTime( _pImp->aModified ) )
+                aValue <<= _pImp->aModified;
+            break;
+        case MID_DOCINFO_PRINTEDBY:
+            aValue <<= _pImp->aPrintedBy;
+            break;
+        case MID_DOCINFO_PRINTDATE:
+            if ( IsValidDateTime( _pImp->aPrinted ) )
+                aValue <<= _pImp->aPrinted;
+            break;
+        case WID_KEYWORDS :
+            aValue <<= _pImp->aKeywords;
+            break;
+        case MID_DOCINFO_DESCRIPTION:
+            aValue <<= _pImp->aDescription;
+            break;
+        case MID_DOCINFO_TEMPLATE:
+            aValue <<= _pImp->aTemplateName;
+            break;
+        case SID_TEMPLATE_NAME:
+            aValue <<= _pImp->aTemplateFileName;
+            break;
+        case MID_DOCINFO_TEMPLATEDATE:
+            if ( IsValidDateTime( _pImp->aTemplateDate ) )
+                aValue <<= _pImp->aTemplateDate;
+            break;
+        case MID_DOCINFO_AUTOLOADENABLED:
+            aValue <<= _pImp->bReloadEnabled;
+            break;
+        case MID_DOCINFO_AUTOLOADURL:
+            aValue <<= _pImp->aReloadURL;
+            break;
+        case MID_DOCINFO_AUTOLOADSECS:
+            aValue <<= _pImp->nReloadSecs;
+            break;
+        case MID_DOCINFO_DEFAULTTARGET:
+            aValue <<= _pImp->aDefaultTarget;
+            break;
+        case MID_DOCINFO_STATISTIC:
+            aValue <<= _pImp->aStatistic;
+            break;
+        case MID_DOCINFO_CHARLOCALE:
+            aValue <<= _pImp->aCharLocale;
+            break;
+        default:
+            aValue <<= ::rtl::OUString();
+            break;
     }
 
     return aValue;
@@ -1113,17 +1300,17 @@ void SAL_CALL  SfxDocumentInfoObject::setFastPropertyValue(sal_Int32 nHandle, co
 
 sal_Int16 SAL_CALL  SfxDocumentInfoObject::getUserFieldCount() throw( ::com::sun::star::uno::RuntimeException )
 {
-    ::vos::OGuard aGuard( Application::GetSolarMutex() );
-    return _pInfo->GetUserKeyCount();
+    ::osl::MutexGuard aGuard( _pImp->_aMutex );
+    return (sal_Int16) _pImp->aUserKeys.getLength();
 }
 
 //-----------------------------------------------------------------------------
 
 ::rtl::OUString SAL_CALL  SfxDocumentInfoObject::getUserFieldName(sal_Int16 nIndex) throw( ::com::sun::star::uno::RuntimeException )
 {
-    ::vos::OGuard aGuard( Application::GetSolarMutex() );
-    if ( _pInfo && nIndex < _pInfo->GetUserKeyCount() )
-        return _pInfo->GetUserKey( nIndex ).GetTitle();
+    ::osl::MutexGuard aGuard( _pImp->_aMutex );
+    if ( nIndex < getUserFieldCount() )
+        return _pImp->aUserKeys[nIndex].First;
     else
         return ::rtl::OUString();
 }
@@ -1132,9 +1319,9 @@ sal_Int16 SAL_CALL  SfxDocumentInfoObject::getUserFieldCount() throw( ::com::sun
 
 ::rtl::OUString SAL_CALL  SfxDocumentInfoObject::getUserFieldValue(sal_Int16 nIndex) throw( ::com::sun::star::uno::RuntimeException )
 {
-    ::vos::OGuard aGuard( Application::GetSolarMutex() );
-    if ( _pInfo && nIndex < _pInfo->GetUserKeyCount() )
-        return _pInfo->GetUserKey( nIndex ).GetWord();
+    ::osl::MutexGuard aGuard( _pImp->_aMutex );
+    if ( nIndex < getUserFieldCount() )
+        return _pImp->aUserKeys[nIndex].Second;
     else
         return ::rtl::OUString();
 }
@@ -1143,14 +1330,16 @@ sal_Int16 SAL_CALL  SfxDocumentInfoObject::getUserFieldCount() throw( ::com::sun
 
 void  SAL_CALL SfxDocumentInfoObject::setUserFieldName(sal_Int16 nIndex, const ::rtl::OUString& aName ) throw( ::com::sun::star::uno::RuntimeException )
 {
-    ::vos::OGuard aGuard( Application::GetSolarMutex() );
-    if ( _pInfo && nIndex < _pInfo->GetUserKeyCount() )
+    ::osl::ClearableMutexGuard aGuard( _pImp->_aMutex );
+    if ( nIndex < getUserFieldCount() )
     {
-        const SfxDocUserKey& rKey = _pInfo->GetUserKey( nIndex );
-        _pInfo->SetUserKey( SfxDocUserKey( aName, rKey.GetWord() ), nIndex );
-        Reference < XModel > xModel( _wModel.get(), UNO_QUERY );
-        if ( xModel.is() )
-            _pImp->_pObjSh->FlushDocInfo();
+        if (_pImp->aUserKeys[nIndex].First != aName )
+        {
+            _pImp->aUserKeys[nIndex].First = aName;
+            _pImp->bModified = sal_True;
+            aGuard.clear();
+            NotifyModified();
+        }
     }
 }
 
@@ -1158,26 +1347,31 @@ void  SAL_CALL SfxDocumentInfoObject::setUserFieldName(sal_Int16 nIndex, const :
 
 void SAL_CALL  SfxDocumentInfoObject::setUserFieldValue( sal_Int16 nIndex, const ::rtl::OUString& aValue ) throw( ::com::sun::star::uno::RuntimeException )
 {
-    ::vos::OGuard aGuard( Application::GetSolarMutex() );
-    if ( _pInfo && nIndex < _pInfo->GetUserKeyCount() )
+    ::osl::ClearableMutexGuard aGuard( _pImp->_aMutex );
+    if ( nIndex < getUserFieldCount() )
     {
-        const SfxDocUserKey& rKey = _pInfo->GetUserKey( nIndex );
-        _pInfo->SetUserKey( SfxDocUserKey( rKey.GetTitle(), aValue ), nIndex );
-        Reference < XModel > xModel( _wModel.get(), UNO_QUERY );
-        if ( xModel.is() )
-            _pImp->_pObjSh->FlushDocInfo();
+        if (_pImp->aUserKeys[nIndex].Second != aValue )
+        {
+            _pImp->aUserKeys[nIndex].Second = aValue;
+            _pImp->bModified = sal_True;
+            aGuard.clear();
+            NotifyModified();
+        }
     }
 }
 
 //-----------------------------------------------------------------------------
 SFX_IMPL_XINTERFACE_2( SfxStandaloneDocumentInfoObject, SfxDocumentInfoObject, ::com::sun::star::lang::XServiceInfo, ::com::sun::star::document::XStandaloneDocumentInfo  )
-SFX_IMPL_XTYPEPROVIDER_8( SfxStandaloneDocumentInfoObject, ::com::sun::star::lang::XServiceInfo, ::com::sun::star::document::XDocumentInfo, ::com::sun::star::lang::XComponent, ::com::sun::star::beans::XPropertySet, ::com::sun::star::beans::XFastPropertySet, ::com::sun::star::beans::XPropertyAccess, ::com::sun::star::beans::XPropertyContainer, ::com::sun::star::document::XStandaloneDocumentInfo )
+SFX_IMPL_XTYPEPROVIDER_10( SfxStandaloneDocumentInfoObject, ::com::sun::star::document::XDocumentInfo, ::com::sun::star::lang::XComponent,
+    ::com::sun::star::beans::XPropertySet, ::com::sun::star::beans::XFastPropertySet, ::com::sun::star::beans::XPropertyAccess,
+    ::com::sun::star::beans::XPropertyContainer, ::com::sun::star::util::XModifiable, ::com::sun::star::util::XModifyBroadcaster,
+    ::com::sun::star::document::XStandaloneDocumentInfo, ::com::sun::star::lang::XServiceInfo )
+
 SFX_IMPL_XSERVICEINFO( SfxStandaloneDocumentInfoObject, "com.sun.star.document.StandaloneDocumentInfo", "com.sun.star.comp.sfx2.StandaloneDocumentInfo" )
 SFX_IMPL_SINGLEFACTORY( SfxStandaloneDocumentInfoObject )
 
 SfxStandaloneDocumentInfoObject::SfxStandaloneDocumentInfoObject( const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& xFactory )
-    : SfxDocumentInfoObject( sal_True )
-    , _pMedium( NULL )
+    : SfxDocumentInfoObject()
     , _xFactory( xFactory )
 {
 }
@@ -1186,39 +1380,21 @@ SfxStandaloneDocumentInfoObject::SfxStandaloneDocumentInfoObject( const ::com::s
 
 SfxStandaloneDocumentInfoObject::~SfxStandaloneDocumentInfoObject()
 {
-    if ( _pMedium )
-        delete _pMedium;
 }
 
 //-----------------------------------------------------------------------------
 
-void SfxStandaloneDocumentInfoObject::Clear()
-{
-    if ( _pInfo )
-        DELETEZ( _pInfo );
-
-    if ( _pMedium )
-        DELETEZ( _pMedium );
-
-    if ( _pFilter )
-        _pFilter = NULL;
-
-    _aStatistic.realloc( 0 );
-    _aCharLocale = lang::Locale();
-}
-
-//-----------------------------------------------------------------------------
-
-uno::Reference< embed::XStorage > SfxStandaloneDocumentInfoObject::GetStorage_Impl( const ::rtl::OUString& rName, sal_Bool bWrite )
+uno::Reference< embed::XStorage > GetStorage_Impl( const ::rtl::OUString& rName, sal_Bool bWrite, uno::Reference < lang::XMultiServiceFactory >& xFactory )
 {
     // catch unexpected exceptions under solaris
     // Client code checks the returned reference but is not interested on error details.
     try
     {
-    return ::comphelper::OStorageHelper::GetStorageFromURL(
+        ::vos::OGuard aSolarGuard( Application::GetSolarMutex() );
+        return ::comphelper::OStorageHelper::GetStorageFromURL(
                         rName,
                         bWrite ? embed::ElementModes::READWRITE : embed::ElementModes::READ,
-                        _xFactory );
+                        xFactory );
     }
     catch(const uno::Exception&)
     {}
@@ -1261,19 +1437,16 @@ void SAL_CALL  SfxStandaloneDocumentInfoObject::setUserFieldValue( sal_Int16 nIn
     SfxDocumentInfoObject::setUserFieldValue( nIndex, aValue );
 }
 //-----------------------------------------------------------------------------
-
 void SAL_CALL  SfxStandaloneDocumentInfoObject::loadFromURL(const ::rtl::OUString& aURL)
     throw( ::com::sun::star::io::IOException, ::com::sun::star::uno::RuntimeException )
 {
-    ::vos::OGuard aGuard( Application::GetSolarMutex() );
     sal_Bool bOK = sal_False;
 
-    // completely new initialization
-    Clear();
+    ::osl::ClearableMutexGuard aGuard( _pImp->_aMutex );
+    _pImp->Reset();
+    aGuard.clear();
 
-    _pInfo = new SfxDocumentInfo;
-
-    uno::Reference< embed::XStorage > xStorage = GetStorage_Impl( aURL, sal_False );
+    uno::Reference< embed::XStorage > xStorage = GetStorage_Impl( aURL, sal_False, _xFactory );
     if ( xStorage.is() )
     {
         try
@@ -1281,12 +1454,10 @@ void SAL_CALL  SfxStandaloneDocumentInfoObject::loadFromURL(const ::rtl::OUStrin
             // set the mediatype from the storage
             ::rtl::OUString aMediaType;
             uno::Reference< beans::XPropertySet > xStorProps( xStorage, uno::UNO_QUERY_THROW );
-            xStorProps->getPropertyValue( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "MediaType" ) ) ) >>= aMediaType;
-            _pInfo->SetSpecialMimeType( aMediaType );
+            xStorProps->getPropertyValue( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "MediaType" ) ) ) >>= _pImp->aMediaType;
 
             // import from XML meta data using SAX parser
-            uno::Reference< XInterface > xXMLParser = _xFactory->createInstance(
-                            ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.xml.sax.Parser" )) );
+            uno::Reference< XInterface > xXMLParser = _xFactory->createInstance( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.xml.sax.Parser" )) );
             if( xXMLParser.is() )
             {
                 // create input source for SAX parser
@@ -1296,11 +1467,8 @@ void SAL_CALL  SfxStandaloneDocumentInfoObject::loadFromURL(const ::rtl::OUStrin
                 ::rtl::OUString aDocName = ::rtl::OUString::createFromAscii( "meta.xml" );
                 if ( xStorage->hasByName( aDocName ) && xStorage->isStreamElement( aDocName ) )
                 {
-                    uno::Reference< io::XStream > xStorageStream =
-                            xStorage->openStreamElement( aDocName, embed::ElementModes::READ );
-
+                    uno::Reference< io::XStream > xStorageStream = xStorage->openStreamElement( aDocName, embed::ElementModes::READ );
                     aParserInput.aInputStream = xStorageStream->getInputStream();
-
                     if ( aParserInput.aInputStream.is() )
                     {
                         sal_Bool bOasis = ( SotStorage::GetVersion( xStorage ) > SOFFICE_FILEFORMAT_60 );
@@ -1309,17 +1477,17 @@ void SAL_CALL  SfxStandaloneDocumentInfoObject::loadFromURL(const ::rtl::OUStrin
                             : "com.sun.star.document.XMLMetaImporter";
 
                         // create importer service
-                        Reference < xml::sax::XDocumentHandler > xDocHandler( _xFactory->createInstanceWithArguments(
+                        uno::Reference < xml::sax::XDocumentHandler > xDocHandler( _xFactory->createInstanceWithArguments(
                                 rtl::OUString::createFromAscii(pServiceName),
-                                Sequence < Any >() ), UNO_QUERY );
+                                uno::Sequence < uno::Any >() ), uno::UNO_QUERY );
 
                         // connect importer with this object
-                        Reference < document::XImporter > xImporter( xDocHandler, UNO_QUERY );
+                        uno::Reference < document::XImporter > xImporter( xDocHandler, uno::UNO_QUERY );
                         if ( xImporter.is() )
                             xImporter->setTargetDocument( this );
 
                         // connect parser and filter
-                        Reference < xml::sax::XParser > xParser( xXMLParser, UNO_QUERY );
+                        uno::Reference < xml::sax::XParser > xParser( xXMLParser, uno::UNO_QUERY );
                         xParser->setDocumentHandler( xDocHandler );
 
                         // parse
@@ -1335,23 +1503,15 @@ void SAL_CALL  SfxStandaloneDocumentInfoObject::loadFromURL(const ::rtl::OUStrin
     }
     else
     {
-        _pMedium = new SfxMedium( aURL, SFX_STREAM_READONLY, sal_True );
-        _pMedium->UseInteractionHandler( sal_False );
-
-        SvStream* pStream = _pMedium->GetInStream();
-        if ( pStream )
+        uno::Reference < document::XStandaloneDocumentInfo > xBinary( _xFactory->createInstance(
+            ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.document.BinaryStandaloneDocumentInfo" ) ) ), uno::UNO_QUERY );
+        if ( xBinary.is() )
         {
-            SvStorageRef rStorage = new SvStorage( pStream, sal_False );
-            if ( !rStorage->GetName().Len() )
-                rStorage->SetName( aURL );
-
-            if ( !rStorage->GetError() && !SFX_APP()->GetFilterMatcher().GuessFilterControlDefaultUI( *_pMedium, &_pFilter, SFX_FILTER_IMPORT, SFX_FILTER_NOTINSTALLED, sal_False ) && _pFilter )
-            {
-                rStorage->SetVersion( _pFilter->GetVersion() );
-                bOK = _pInfo->LoadFromBinaryFormat( rStorage );
-            }
+            xBinary->loadFromURL( aURL );
+            bOK = sal_True;
+            uno::Reference < document::XStandaloneDocumentInfo > xTarget( static_cast < document::XStandaloneDocumentInfo*> (this), uno::UNO_QUERY );
+            Copy( xBinary, xTarget );
         }
-        DELETEZ( _pMedium );
     }
 
     if ( !bOK )
@@ -1362,22 +1522,17 @@ void SAL_CALL  SfxStandaloneDocumentInfoObject::loadFromURL(const ::rtl::OUStrin
 
 void SAL_CALL  SfxStandaloneDocumentInfoObject::storeIntoURL(const ::rtl::OUString& aURL) throw( ::com::sun::star::io::IOException )
 {
-    ::vos::OGuard aGuard( Application::GetSolarMutex() );
-    if ( !_pInfo )
-        throw uno::RuntimeException();
-
     sal_Bool bOK = sal_False;
-    uno::Reference< embed::XStorage > xStorage = GetStorage_Impl( aURL, sal_True );
+    uno::Reference< embed::XStorage > xStorage = GetStorage_Impl( aURL, sal_True, _xFactory );
     if ( xStorage.is() )
     {
         try
         {
             // set the mediatype to the storage
             ::rtl::OUString aMTPropName( RTL_CONSTASCII_USTRINGPARAM( "MediaType" ) );
-            ::rtl::OUString aMediaType;
+            //::rtl::OUString aMediaType;
             uno::Reference< beans::XPropertySet > xStorProps( xStorage, uno::UNO_QUERY_THROW );
-            xStorProps->setPropertyValue( aMTPropName,
-                                            uno::makeAny( ::rtl::OUString( _pInfo->GetSpecialMimeType() ) ) );
+            xStorProps->setPropertyValue( aMTPropName, uno::makeAny( _pImp->aMediaType ) );
 
             uno::Reference< io::XStream > xStorageStream = xStorage->openStreamElement(
                                                         ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "meta.xml" ) ),
@@ -1401,7 +1556,7 @@ void SAL_CALL  SfxStandaloneDocumentInfoObject::storeIntoURL(const ::rtl::OUStri
             uno::Reference< io::XActiveDataSource > xSaxWriter(
                             _xFactory->createInstance(
                                 rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.xml.sax.Writer" ) ) ),
-                            UNO_QUERY_THROW );
+                            uno::UNO_QUERY_THROW );
             xSaxWriter->setOutputStream( xInfoOutput );
 
             sal_Bool bOasis = ( SotStorage::GetVersion( xStorage ) > SOFFICE_FILEFORMAT_60 );
@@ -1410,14 +1565,14 @@ void SAL_CALL  SfxStandaloneDocumentInfoObject::storeIntoURL(const ::rtl::OUStri
                 : "com.sun.star.document.XMLMetaExporter";
 
             // create exporter service
-            uno::Reference< xml::sax::XDocumentHandler > xDocHandler( xSaxWriter, UNO_QUERY_THROW );
+            uno::Reference< xml::sax::XDocumentHandler > xDocHandler( xSaxWriter, uno::UNO_QUERY_THROW );
             uno::Sequence< uno::Any > aSeq( 1 );
             aSeq[0] <<= xDocHandler;
                uno::Reference< document::XExporter > xExporter(
                             _xFactory->createInstanceWithArguments(
                                 rtl::OUString::createFromAscii( pServiceName ),
                                 aSeq ),
-                            UNO_QUERY_THROW );
+                            uno::UNO_QUERY_THROW );
             xExporter->setSourceDocument( this );
 
             uno::Reference< document::XFilter > xFilter ( xExporter, uno::UNO_QUERY_THROW );
@@ -1426,7 +1581,6 @@ void SAL_CALL  SfxStandaloneDocumentInfoObject::storeIntoURL(const ::rtl::OUStri
                 uno::Reference< embed::XTransactedObject > xTransaction( xStorage, uno::UNO_QUERY );
                 if ( xTransaction.is() )
                     xTransaction->commit();
-
                 bOK = sal_True;
             }
         }
@@ -1440,52 +1594,16 @@ void SAL_CALL  SfxStandaloneDocumentInfoObject::storeIntoURL(const ::rtl::OUStri
     }
     else
     {
-        _pMedium = new SfxMedium( aURL, SFX_STREAM_READWRITE, sal_True );
-        SvStream* pStream = _pMedium->GetOutStream();
-        if ( pStream )
+        uno::Reference < document::XStandaloneDocumentInfo > xBinary( _xFactory->createInstance(
+            ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.document.BinaryStandaloneDocumentInfo" ) ) ), uno::UNO_QUERY );
+        if ( xBinary.is() )
         {
-            SvStorageRef rStorage = new SvStorage( pStream, sal_False );
-            if ( !rStorage->GetName().Len() )
-                rStorage->SetName( aURL );
-
-            if ( !rStorage->GetError() )
-            {
-                if ( !_pInfo )
-                    _pInfo = new SfxDocumentInfo;
-
-                bOK = _pInfo->SaveToBinaryFormat( rStorage ) && rStorage->Commit();
-            }
+            Copy( this, xBinary );
+            xBinary->storeIntoURL( aURL );
+            bOK = sal_True;
         }
-        DELETEZ( _pMedium );
     }
 
     if ( !bOK )
         throw task::ErrorCodeIOException( ::rtl::OUString(), uno::Reference< uno::XInterface >(), ERRCODE_IO_CANTWRITE );
 }
-
-//=============================================================================
-/* ASMUSS
-#ifdef TEST_CODE
-    // Testcode fuer DocumentInfoObject
-    // Einmal zum Holen
-    ::com::sun::star::uno::Reference< XServiceManager >  xMan = getGlobalServiceManager();
-    ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Uik > aIfaces( 2 );
-    aIfaces.getArray()[0] = ::getCppuType((const Reference< ::com::sun::star::document::XDocumentInfo >*)0);
-    aIfaces.getArray()[1] = ::getCppuType((const Reference< ::com::sun::star::beans::XFastPropertySet >*)0);
-    ::com::sun::star::uno::Reference< XServiceProvider >  xSSI = xMan->getServiceProvider(
-            "com.sun.star.document.DocumentInfo", aIfaces, ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Uik >() );
-// automatisch auskommentiert - [getIdlClass(es) or queryInterface] - Bitte XTypeProvider benutzen!
-//  ::com::sun::star::uno::Reference< ::com::sun::star::document::XDocumentInfo >  xInfo = (::com::sun::star::document::XDocumentInfo*) xSSI->newInstance()->queryInterface( ::getCppuType((const Reference< ::com::sun::star::document::XDocumentInfo >*)0) );
-
-// automatisch auskommentiert - [getIdlClass(es) or queryInterface] - Bitte XTypeProvider benutzen!
-//  ::com::sun::star::uno::Reference< ::com::sun::star::beans::XFastPropertySet >  xProps = (::com::sun::star::beans::XFastPropertySet*) xInfo->queryInterface( ::getCppuType((const Reference< ::com::sun::star::beans::XFastPropertySet >*)0) );
-
-
-    // Laden und Werte auslesen
-    xInfo->load( StringToOUString( aURL, CHARSET_SYSTEM ) );
-    ::com::sun::star::uno::Any aValue = xProps->getFastPropertyValue( WID_FROM );
-    String aAuthor = OUStringToString( aValue.getString(), CHARSET_SYSTEM );
-#endif
-*/
-
-
