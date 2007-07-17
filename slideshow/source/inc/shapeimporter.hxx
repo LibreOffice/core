@@ -4,9 +4,9 @@
  *
  *  $RCSfile: shapeimporter.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: kz $ $Date: 2006-12-13 16:02:09 $
+ *  last change: $Author: obo $ $Date: 2007-07-17 15:14:07 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -46,6 +46,8 @@
 namespace slideshow {
 namespace internal {
 
+struct SlideShowContext;
+
 /** This class imports all shapes from a given XShapes object
  */
 class ShapeImporter
@@ -82,6 +84,10 @@ public:
                    sal_Int32                                     nOrdNumStart,
                    bool                                          bConvertingMasterPage );
 
+    /** This method imports the presentation background shape
+     */
+    ShapeSharedPtr importBackgroundShape(); // throw (ShapeLoadFailedException)
+
     /** This method imports presentation-visible shapes (and skips all others).
 
         @return the generated Shape, or NULL for no more shapes.
@@ -107,19 +113,20 @@ private:
         ::com::sun::star::beans::XPropertySet> const& xPropSet,
         ::rtl::OUString const& shapeType ) const;
 
-    struct XShapesEntry {
+    struct XShapesEntry
+    {
         ShapeSharedPtr const mpGroupShape;
         ::com::sun::star::uno::Reference<
             ::com::sun::star::drawing::XShapes> const mxShapes;
         sal_Int32 const mnCount;
         sal_Int32 mnPos;
 
-        XShapesEntry( ShapeSharedPtr const& pGroupShape )
+        explicit XShapesEntry( ShapeSharedPtr const& pGroupShape )
             : mpGroupShape(pGroupShape),
               mxShapes( pGroupShape->getXShape(),
                         ::com::sun::star::uno::UNO_QUERY_THROW ),
               mnCount(mxShapes->getCount()), mnPos(0) {}
-        XShapesEntry( ::com::sun::star::uno::Reference<
+        explicit XShapesEntry( ::com::sun::star::uno::Reference<
                       ::com::sun::star::drawing::XShapes> const& xShapes )
             : mpGroupShape(), mxShapes(xShapes),
               mnCount(xShapes->getCount()), mnPos(0) {}
