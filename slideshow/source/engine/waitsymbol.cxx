@@ -4,9 +4,9 @@
  *
  *  $RCSfile: waitsymbol.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: vg $ $Date: 2006-12-15 00:48:51 $
+ *  last change: $Author: obo $ $Date: 2007-07-17 14:43:26 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -42,13 +42,16 @@
 #include <comphelper/anytostring.hxx>
 #include <cppuhelper/exc_hlp.hxx>
 
+#include <basegfx/point/b2dpoint.hxx>
+#include <basegfx/vector/b2dvector.hxx>
+
 #include "waitsymbol.hxx"
+#include "eventmultiplexer.hxx"
 
 #include <algorithm>
 
 
 using namespace com::sun::star;
-using namespace com::sun::star::uno;
 
 namespace slideshow {
 namespace internal {
@@ -57,24 +60,27 @@ const sal_Int32 LEFT_BORDER_SPACE  = 10;
 const sal_Int32 LOWER_BORDER_SPACE = 10;
 
 WaitSymbolSharedPtr WaitSymbol::create( const uno::Reference<rendering::XBitmap>& xBitmap,
+                                        ScreenUpdater&                            rScreenUpdater,
                                         EventMultiplexer&                         rEventMultiplexer,
                                         const UnoViewContainer&                   rViewContainer )
 {
-    WaitSymbolSharedPtr pRet( new WaitSymbol( xBitmap, rEventMultiplexer, rViewContainer ));
+    WaitSymbolSharedPtr pRet(
+        new WaitSymbol( xBitmap,
+                        rScreenUpdater,
+                        rViewContainer ));
 
     rEventMultiplexer.addViewHandler( pRet );
 
     return pRet;
 }
 
-WaitSymbol::WaitSymbol(
-    Reference<rendering::XBitmap> const &   xBitmap,
-    EventMultiplexer&                       rEventMultiplexer,
-    const UnoViewContainer&                 rViewContainer )
-    : m_xBitmap(xBitmap),
-      m_views(),
-      mrEventMultiplexer( rEventMultiplexer ),
-      m_bVisible(false)
+WaitSymbol::WaitSymbol( uno::Reference<rendering::XBitmap> const &   xBitmap,
+                        ScreenUpdater&                               rScreenUpdater,
+                        const UnoViewContainer&                      rViewContainer ) :
+    mxBitmap(xBitmap),
+    maViews(),
+    mrScreenUpdater( rScreenUpdater ),
+    mbVisible(false)
 {
     std::for_each( rViewContainer.begin(),
                    rViewContainer.end(),
@@ -85,58 +91,66 @@ WaitSymbol::WaitSymbol(
 
 void WaitSymbol::setVisible( const bool bVisible )
 {
-    if (m_bVisible != bVisible)
+    if( mbVisible != bVisible )
     {
-        m_bVisible = bVisible;
-        for_each_sprite( boost::bind( bVisible ? &cppcanvas::Sprite::show
-                                               : &cppcanvas::Sprite::hide,
-                                      _1 ) );
+        mbVisible = bVisible;
 
-        // force screen update, this implementation bypasses the layer
-        // manager.
-        mrEventMultiplexer.updateScreenContent( true );
+        ViewsVecT::const_iterator       aIter( maViews.begin() );
+        ViewsVecT::const_iterator const aEnd ( maViews.end() );
+        while( aIter != aEnd )
+        {
+            if( aIter->second )
+            {
+                if( bVisible )
+                    aIter->second->show();
+                else
+                    aIter->second->hide();
+            }
+
+            ++aIter;
+        }
+
+        // sprites changed, need a screen update for this frame.
+        mrScreenUpdater.requestImmediateUpdate();
     }
-}
-
-// Disposable:
-void WaitSymbol::dispose()
-{
-    m_xBitmap.clear();
-    ViewsVecT().swap( m_views );
 }
 
 basegfx::B2DPoint WaitSymbol::calcSpritePos(
     UnoViewSharedPtr const & rView ) const
 {
-    const Reference<rendering::XBitmap> xBitmap(
-        rView->getCanvas()->getUNOCanvas(), UNO_QUERY_THROW );
+    const uno::Reference<rendering::XBitmap> xBitmap( rView->getCanvas()->getUNOCanvas(),
+                                                      uno::UNO_QUERY_THROW );
     const geometry::IntegerSize2D realSize( xBitmap->getSize() );
     return basegfx::B2DPoint(
         std::min<sal_Int32>( realSize.Width, LEFT_BORDER_SPACE ),
-        std::max<sal_Int32>( 0, realSize.Height - m_xBitmap->getSize().Height
+        std::max<sal_Int32>( 0, realSize.Height - mxBitmap->getSize().Height
                                                 - LOWER_BORDER_SPACE ) );
 }
 
 void WaitSymbol::viewAdded( const UnoViewSharedPtr& rView )
 {
-    const geometry::IntegerSize2D spriteSize( m_xBitmap->getSize() );
-    cppcanvas::CustomSpriteSharedPtr sprite(
-        rView->createSprite( basegfx::B2DSize( spriteSize.Width,
-                                               spriteSize.Height ) ));
+    cppcanvas::CustomSpriteSharedPtr sprite;
+
     try
     {
+        const geometry::IntegerSize2D spriteSize( mxBitmap->getSize() );
+        sprite = rView->createSprite( basegfx::B2DVector( spriteSize.Width,
+                                                          spriteSize.Height ),
+                                      1000.0 ); // sprite should be in front of all
+                                                // other sprites
         rendering::ViewState viewState;
         canvas::tools::initViewState( viewState );
         rendering::RenderState renderState;
         canvas::tools::initRenderState( renderState );
         sprite->getContentCanvas()->getUNOCanvas()->drawBitmap(
-            m_xBitmap, viewState, renderState );
+            mxBitmap, viewState, renderState );
+
+        sprite->setAlpha( 0.9 );
+        sprite->movePixel( calcSpritePos( rView ) );
+        if( mbVisible )
+            sprite->show();
     }
-    catch (RuntimeException &)
-    {
-        throw;
-    }
-    catch (Exception &)
+    catch( uno::Exception& )
     {
         OSL_ENSURE( false,
                     rtl::OUStringToOString(
@@ -144,26 +158,20 @@ void WaitSymbol::viewAdded( const UnoViewSharedPtr& rView )
                         RTL_TEXTENCODING_UTF8 ).getStr() );
     }
 
-    sprite->setPriority(1000.0); // sprite should be in front of all
-                                 // other sprites
-    sprite->setAlpha( 0.9 );
-    sprite->movePixel( calcSpritePos( rView ) );
-    m_views.push_back( ViewsVecT::value_type( rView, sprite ) );
-    if (m_bVisible)
-        sprite->show();
+    maViews.push_back( ViewsVecT::value_type( rView, sprite ) );
 }
 
 void WaitSymbol::viewRemoved( const UnoViewSharedPtr& rView )
 {
-    m_views.erase(
+    maViews.erase(
         std::remove_if(
-            m_views.begin(), m_views.end(),
+            maViews.begin(), maViews.end(),
             boost::bind(
                 std::equal_to<UnoViewSharedPtr>(),
                 rView,
                 // select view:
                 boost::bind( std::select1st<ViewsVecT::value_type>(), _1 ) ) ),
-        m_views.end() );
+        maViews.end() );
 }
 
 void WaitSymbol::viewChanged( const UnoViewSharedPtr& rView )
@@ -171,19 +179,35 @@ void WaitSymbol::viewChanged( const UnoViewSharedPtr& rView )
     // find entry corresponding to modified view
     ViewsVecT::iterator aModifiedEntry(
         std::find_if(
-            m_views.begin(),
-            m_views.end(),
+            maViews.begin(),
+            maViews.end(),
             boost::bind(
                 std::equal_to<UnoViewSharedPtr>(),
                 rView,
                 // select view:
                 boost::bind( std::select1st<ViewsVecT::value_type>(), _1 ))));
 
-    OSL_ASSERT( aModifiedEntry != m_views.end() );
-    if( aModifiedEntry == m_views.end() )
+    OSL_ASSERT( aModifiedEntry != maViews.end() );
+    if( aModifiedEntry == maViews.end() )
         return;
 
-    aModifiedEntry->second->movePixel( calcSpritePos( m_views.begin()->first ));
+    if( aModifiedEntry->second )
+        aModifiedEntry->second->movePixel(
+            calcSpritePos(aModifiedEntry->first) );
+}
+
+void WaitSymbol::viewsChanged()
+{
+    // reposition sprites on all views
+    ViewsVecT::const_iterator       aIter( maViews.begin() );
+    ViewsVecT::const_iterator const aEnd ( maViews.end() );
+    while( aIter != aEnd )
+    {
+        if( aIter->second )
+            aIter->second->movePixel(
+                calcSpritePos( aIter->first ));
+        ++aIter;
+    }
 }
 
 } // namespace internal
