@@ -4,9 +4,9 @@
  *
  *  $RCSfile: wrtrtf.cxx,v $
  *
- *  $Revision: 1.37 $
+ *  $Revision: 1.38 $
  *
- *  last change: $Author: ihi $ $Date: 2007-07-12 10:46:15 $
+ *  last change: $Author: obo $ $Date: 2007-07-17 13:08:37 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -699,15 +699,13 @@ void SwRTFWriter::OutDocInfoStat()
         OutUnicodeSafeRecord(sRTF_KEYWORDS, pInfo->GetKeywords());
         OutUnicodeSafeRecord(sRTF_DOCCOMM, pInfo->GetComment());
 
-        const SfxStamp &rCreateStamp = pInfo->GetCreated();
-        OutUnicodeSafeRecord(sRTF_AUTHOR, rCreateStamp.GetName());
-        OutInfoDateTime(rCreateStamp.GetTime(), sRTF_CREATIM);
+        OutUnicodeSafeRecord(sRTF_AUTHOR, pInfo->GetAuthor() );
+        OutInfoDateTime(pInfo->GetCreationDate(), sRTF_CREATIM);
 
-        const SfxStamp &rChangeStamp = pInfo->GetChanged();
-        OutUnicodeSafeRecord(sRTF_AUTHOR, rChangeStamp.GetName());
-        OutInfoDateTime(rChangeStamp.GetTime(), sRTF_REVTIM);
+        OutUnicodeSafeRecord(sRTF_AUTHOR, pInfo->GetModificationAuthor() );
+        OutInfoDateTime(pInfo->GetModificationDate(), sRTF_REVTIM);
 
-        OutInfoDateTime(pInfo->GetPrinted().GetTime(), sRTF_PRINTIM);
+        OutInfoDateTime(pInfo->GetPrintDate(), sRTF_PRINTIM);
     }
 
     // fuer interne Zwecke - Versionsnummer rausschreiben
