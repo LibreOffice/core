@@ -4,9 +4,9 @@
  *
  *  $RCSfile: animatedsprite.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: kz $ $Date: 2006-12-13 15:12:08 $
+ *  last change: $Author: obo $ $Date: 2007-07-17 14:33:51 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -66,7 +66,6 @@ namespace slideshow
             mnSpritePrio(nSpritePrio),
             mnAlpha(0.0),
             maPosPixel(),
-            maPos(),
             maClip(),
             maTransform(),
             mbSpriteVisible( false )
@@ -78,14 +77,10 @@ namespace slideshow
             // the same data bits when transforming to device coordinates
             maEffectiveSpriteSizePixel += ::basegfx::B2DSize(0.5, 0.5);
 
-            mpSprite = mpViewLayer->createSprite( maEffectiveSpriteSizePixel );
-                                                  //TODO(F3): prio! mnSpritePrio );
+            mpSprite = mpViewLayer->createSprite( maEffectiveSpriteSizePixel,
+                                                  mnSpritePrio );
 
             ENSURE_AND_THROW( mpSprite, "AnimatedSprite::AnimatedSprite(): Could not create sprite" );
-        }
-
-        AnimatedSprite::~AnimatedSprite()
-        {
         }
 
         ::cppcanvas::CanvasSharedPtr AnimatedSprite::getContentCanvas() const
@@ -93,6 +88,7 @@ namespace slideshow
             ENSURE_AND_THROW( mpViewLayer->getCanvas(), "AnimatedSprite::getContentCanvas(): No view layer canvas" );
 
             const ::cppcanvas::CanvasSharedPtr pContentCanvas( mpSprite->getContentCanvas() );
+            pContentCanvas->clear();
 
             // extract linear part of canvas view transformation
             // (linear means: without translational components). The
@@ -102,7 +98,7 @@ namespace slideshow
             // We can apply that directly here, no need to call
             // aLinearTransform.translate(), since, as said above, the
             // last column of aLinearTransform is assumed [0 0 1]
-            ::basegfx::B2DHomMatrix aLinearTransform( mpViewLayer->getCanvas()->getTransformation() );
+            ::basegfx::B2DHomMatrix aLinearTransform( mpViewLayer->getTransformation() );
             aLinearTransform.set( 0, 2, maContentPixelOffset.getX() );
             aLinearTransform.set( 1, 2, maContentPixelOffset.getY() );
 
@@ -152,8 +148,8 @@ namespace slideshow
                 mpSprite->hide();
 
                 maEffectiveSpriteSizePixel = aNewSize;
-                mpSprite = mpViewLayer->createSprite( maEffectiveSpriteSizePixel );
-                                                      // TODO(F3): prio! mnSpritePrio );
+                mpSprite = mpViewLayer->createSprite( maEffectiveSpriteSizePixel,
+                                                      mnSpritePrio );
 
                 ENSURE_AND_THROW( mpSprite,
                                   "AnimatedSprite::resize(): Could not create new sprite" );
@@ -166,8 +162,6 @@ namespace slideshow
 
                     if( maPosPixel )
                         mpSprite->movePixel( *maPosPixel );
-                    else if( maPos )
-                        mpSprite->move( *maPos );
 
                     if( maClip )
                         mpSprite->setClip( *maClip );
@@ -187,12 +181,6 @@ namespace slideshow
             return maContentPixelOffset;
         }
 
-        void AnimatedSprite::move( const ::basegfx::B2DPoint& rNewPos )
-        {
-            maPos.reset( rNewPos );
-            mpSprite->move( rNewPos );
-        }
-
         void AnimatedSprite::movePixel( const ::basegfx::B2DPoint& rNewPos )
         {
             maPosPixel.reset( rNewPos );
@@ -209,6 +197,12 @@ namespace slideshow
         {
             maClip.reset( rClip );
             mpSprite->setClipPixel( rClip );
+        }
+
+        void AnimatedSprite::clip()
+        {
+            maClip.reset();
+            mpSprite->setClip();
         }
 
         void AnimatedSprite::transform( const ::basegfx::B2DHomMatrix& rTransform )
