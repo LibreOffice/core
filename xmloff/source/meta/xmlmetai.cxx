@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xmlmetai.cxx,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: hr $ $Date: 2007-06-27 15:19:39 $
+ *  last change: $Author: obo $ $Date: 2007-07-17 12:59:16 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -98,7 +98,7 @@ using namespace ::xmloff::token;
 #define PROP_EDITINGCYCLES  "EditingCycles"
 #define PROP_EDITINGDURATION "EditingDuration"
 
-#define PROP_CHARLOCALE     "CharLocale"
+#define PROP_CHARLOCALE     "Language"
 #define PROP_DOCSTATISTIC   "DocumentStatistic"
 
 //-------------------------------------------------------------------------
