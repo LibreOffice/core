@@ -4,9 +4,9 @@
  *
  *  $RCSfile: graphicdevicebase.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: kz $ $Date: 2006-12-13 14:36:17 $
+ *  last change: $Author: obo $ $Date: 2007-07-17 14:18:41 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -157,12 +157,10 @@ namespace canvas
             maPropHelper.initProperties( PropertySetHelper::MakeMap
                                          ("DeviceHandle",
                                           boost::bind(&DeviceHelper::getDeviceHandle,
-                                                      boost::ref(maDeviceHelper)),
-                                          NULL)
+                                                      boost::ref(maDeviceHelper)))
                                          ("SurfaceHandle",
                                           boost::bind(&DeviceHelper::getSurfaceHandle,
-                                                      boost::ref(maDeviceHelper)),
-                                          NULL)
+                                                      boost::ref(maDeviceHelper)))
                                          ("DumpScreenContent",
                                           boost::bind(&ThisType::getDumpScreenContent,
                                                       this),
