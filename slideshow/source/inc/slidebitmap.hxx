@@ -4,9 +4,9 @@
  *
  *  $RCSfile: slidebitmap.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: kz $ $Date: 2006-12-13 16:03:05 $
+ *  last change: $Author: obo $ $Date: 2007-07-17 15:15:33 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -33,8 +33,8 @@
  *
  ************************************************************************/
 
-#ifndef _SLIDESHOW_SLIDEBITMAP_HXX
-#define _SLIDESHOW_SLIDEBITMAP_HXX
+#ifndef INCLUDED_SLIDESHOW_SLIDEBITMAP_HXX
+#define INCLUDED_SLIDESHOW_SLIDEBITMAP_HXX
 
 #include <com/sun/star/uno/Reference.hxx>
 #include <cppcanvas/canvas.hxx>
@@ -44,7 +44,7 @@
 #include <basegfx/polygon/b2dpolypolygon.hxx>
 
 #include <boost/shared_ptr.hpp>
-#include <boost/utility.hpp>
+#include <boost/noncopyable.hpp>
 
 namespace com { namespace sun { namespace star { namespace rendering
 {
@@ -96,4 +96,4 @@ namespace slideshow
     }
 }
 
-#endif /* _SLIDESHOW_SLIDEBITMAP_HXX */
+#endif /* INCLUDED_SLIDESHOW_SLIDEBITMAP_HXX */
