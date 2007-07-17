@@ -4,9 +4,9 @@
  *
  *  $RCSfile: continuousactivitybase.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: kz $ $Date: 2006-12-13 15:25:50 $
+ *  last change: $Author: obo $ $Date: 2007-07-17 14:44:54 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -33,10 +33,10 @@
  *
  ************************************************************************/
 
-#ifndef _SLIDESHOW_CONTINUOUSACTIVITYBASE_HXX
-#define _SLIDESHOW_CONTINUOUSACTIVITYBASE_HXX
+#ifndef INCLUDED_SLIDESHOW_CONTINUOUSACTIVITYBASE_HXX
+#define INCLUDED_SLIDESHOW_CONTINUOUSACTIVITYBASE_HXX
 
-#include <simplecontinuousactivitybase.hxx>
+#include "simplecontinuousactivitybase.hxx"
 
 namespace slideshow
 {
@@ -78,4 +78,4 @@ namespace slideshow
     }
 }
 
-#endif /* _SLIDESHOW_CONTINUOUSACTIVITYBASE_HXX */
+#endif /* INCLUDED_SLIDESHOW_CONTINUOUSACTIVITYBASE_HXX */
