@@ -4,9 +4,9 @@
  *
  *  $RCSfile: interpolation.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: kz $ $Date: 2006-12-13 15:27:16 $
+ *  last change: $Author: obo $ $Date: 2007-07-17 14:45:46 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -33,10 +33,10 @@
  *
  ************************************************************************/
 
-#ifndef _SLIDESHOW_INTERPOLATION_HXX
-#define _SLIDESHOW_INTERPOLATION_HXX
+#ifndef INCLUDED_SLIDESHOW_INTERPOLATION_HXX
+#define INCLUDED_SLIDESHOW_INTERPOLATION_HXX
 
-#include <lerp.hxx>
+#include "lerp.hxx"
 
 namespace slideshow
 {
@@ -143,7 +143,7 @@ namespace slideshow
             // nTotalFrames > 1 condition below
 
             // for 1 and 0 frame animations, always take end value
-            const double nFraction( nTotalFrames > 1 ? (double)nFrame/(nTotalFrames-1) : 1.0 );
+            const double nFraction( nTotalFrames > 1 ? double(nFrame)/(nTotalFrames-1) : 1.0 );
 
             return rInterpolator( rFrom, rTo, nFraction );
         }
@@ -192,4 +192,4 @@ namespace slideshow
     }
 }
 
-#endif /* _SLIDESHOW_INTERPOLATION_HXX */
+#endif /* INCLUDED_SLIDESHOW_INTERPOLATION_HXX */
