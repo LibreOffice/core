@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.12 $
+#   $Revision: 1.13 $
 #
-#   last change: $Author: rt $ $Date: 2007-07-06 12:16:44 $
+#   last change: $Author: obo $ $Date: 2007-07-17 07:25:46 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -71,7 +71,7 @@ STDSHL+=	\
     -lmsvcrt
 .ENDIF
 
-SHL1LIBS = $(SLB)$/$(TARGET).lib 
+#SHL1LIBS = $(SLB)$/$(TARGET).lib 
 
 SHL1OBJS = $(SLOFILES)               \
     $(SLO)$/respintest.obj           \
