@@ -4,9 +4,9 @@
  *
  *  $RCSfile: srcview.cxx,v $
  *
- *  $Revision: 1.52 $
+ *  $Revision: 1.53 $
  *
- *  last change: $Author: ihi $ $Date: 2007-06-05 17:43:55 $
+ *  last change: $Author: obo $ $Date: 2007-07-17 13:11:57 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -839,7 +839,7 @@ USHORT SwSrcView::StartSearchAndReplace(const SvxSearchItem& rSearchItem,
 /*-----------------02.07.97 09:29-------------------
 
 --------------------------------------------------*/
-USHORT SwSrcView::SetPrinter(SfxPrinter* pNew, USHORT nDiffFlags )
+USHORT SwSrcView::SetPrinter(SfxPrinter* pNew, USHORT nDiffFlags, bool )
 {
     SwDocShell* pDocSh = GetDocShell();
     if ( (SFX_PRINTER_JOBSETUP | SFX_PRINTER_PRINTER) & nDiffFlags )
