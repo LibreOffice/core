@@ -4,9 +4,9 @@
  *
  *  $RCSfile: appcfg.cxx,v $
  *
- *  $Revision: 1.70 $
+ *  $Revision: 1.71 $
  *
- *  last change: $Author: hr $ $Date: 2007-06-27 22:55:07 $
+ *  last change: $Author: obo $ $Date: 2007-07-17 13:40:11 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -319,34 +319,6 @@ BOOL SfxApplication::GetOptions( SfxItemSet& rSet )
                                 bRet = FALSE;
                     }
                     break;
-                case SID_OPT_SAVEGRAPHICSCOMPRESSED :
-                {
-                    {
-                        bRet = TRUE;
-                        if (!aSaveOptions.IsReadOnly(SvtSaveOptions::E_SAVEGRAPHICS))
-                        {
-                            SfxDocumentInfo *pDocInf = SfxObjectShell::Current() ? &SfxObjectShell::Current()->GetDocInfo() : 0;
-                            bool bComprGraph = pDocInf ? pDocInf->IsSaveGraphicsCompressed() : aSaveOptions.GetSaveGraphicsMode() == SvtSaveOptions::SaveGraphicsCompressed;
-                            if (!rSet.Put( SfxBoolItem( rPool.GetWhich( SID_OPT_SAVEGRAPHICSCOMPRESSED ),bComprGraph )))
-                                bRet = FALSE;
-                        }
-                    }
-                    break;
-                }
-                case SID_OPT_SAVEORIGINALGRAPHICS :
-                {
-                    {
-                        bRet = TRUE;
-                        if (!aSaveOptions.IsReadOnly(SvtSaveOptions::E_SAVEGRAPHICS))
-                        {
-                            SfxDocumentInfo *pDocInf = SfxObjectShell::Current() ? &SfxObjectShell::Current()->GetDocInfo() : 0;
-                            bool bOrigGraph = pDocInf ? pDocInf->IsSaveOriginalGraphics() : aSaveOptions.GetSaveGraphicsMode() == SvtSaveOptions::SaveGraphicsOriginal;
-                            if (!rSet.Put( SfxBoolItem( rPool.GetWhich( SID_OPT_SAVEORIGINALGRAPHICS ), bOrigGraph )))
-                                bRet = FALSE;
-                        }
-                    }
-                    break;
-                }
                 case SID_ATTR_WORKINGSET :
                     {
                         bRet = TRUE;
@@ -708,28 +680,6 @@ void SfxApplication::SetOptions_Impl( const SfxItemSet& rSet )
         aSaveOptions.SetDocInfoSave(((const SfxBoolItem *)pItem)->GetValue());
     }
 
-    // Grafiken komprimiert speichern
-    SvtSaveOptions::SaveGraphicsMode eMode = SvtSaveOptions::SaveGraphicsNormal;
-    if ( SFX_ITEM_SET == rSet.GetItemState(rPool.GetWhich(SID_OPT_SAVEGRAPHICSCOMPRESSED), TRUE, &pItem))
-    {
-        DBG_ASSERT(pItem->ISA(SfxBoolItem), "BoolItem expected");
-        BOOL b = ((const SfxBoolItem *)pItem)->GetValue();
-        if ( b )
-            eMode = SvtSaveOptions::SaveGraphicsCompressed;
-    }
-
-    // Grafiken im Original speichern
-    if ( SFX_ITEM_SET == rSet.GetItemState(rPool.GetWhich(SID_OPT_SAVEORIGINALGRAPHICS), TRUE, &pItem))
-    {
-        DBG_ASSERT(pItem->ISA(SfxBoolItem), "BoolItem expected");
-        BOOL b = ((const SfxBoolItem *)pItem)->GetValue();
-        if ( b )
-            eMode = SvtSaveOptions::SaveGraphicsOriginal;
-    }
-
-    if ( eMode != aSaveOptions.GetSaveGraphicsMode() )
-        aSaveOptions.SetSaveGraphicsMode( eMode );
-
     // offende Dokumente merken
     if ( SFX_ITEM_SET == rSet.GetItemState(rPool.GetWhich(SID_ATTR_WORKINGSET), TRUE, &pItem))
     {
@@ -976,40 +926,10 @@ void SfxApplication::SetOptions(const SfxItemSet &rSet)
     SvtPathOptions aPathOptions;
 
     // Daten werden in DocInfo und IniManager gespeichert
-    SfxDocumentInfo *pDocInf = SfxObjectShell::Current()
-                                ? &SfxObjectShell::Current()->GetDocInfo()
-                                : 0;
     const SfxPoolItem *pItem = 0;
     SfxItemPool &rPool = GetPool();
 
     SfxAllItemSet aSendSet( rSet );
-
-    // portable Grafiken
-    if ( SFX_ITEM_SET == rSet.GetItemState(rPool.GetWhich(SID_ATTR_INDEP_METAFILE), TRUE, &pItem))
-    {
-        DBG_ASSERT(pItem->ISA(SfxBoolItem), "BoolItem expected");
-        BOOL b = ((const SfxBoolItem *)pItem)->GetValue();
-        if ( pDocInf )
-            pDocInf->SetPortableGraphics(b);
-    }
-
-    // Grafiken komprimiert speichern
-    if ( SFX_ITEM_SET == rSet.GetItemState(rPool.GetWhich(SID_OPT_SAVEGRAPHICSCOMPRESSED), TRUE, &pItem))
-    {
-        DBG_ASSERT(pItem->ISA(SfxBoolItem), "BoolItem expected");
-        BOOL b = ((const SfxBoolItem *)pItem)->GetValue();
-        if ( pDocInf )
-            pDocInf->SetSaveGraphicsCompressed(b);
-    }
-
-    // Grafiken im Original speichern
-    if ( SFX_ITEM_SET == rSet.GetItemState(rPool.GetWhich(SID_OPT_SAVEORIGINALGRAPHICS), TRUE, &pItem))
-    {
-        DBG_ASSERT(pItem->ISA(SfxBoolItem), "BoolItem expected");
-        BOOL b = ((const SfxBoolItem *)pItem)->GetValue();
-        if ( pDocInf )
-            pDocInf->SetSaveOriginalGraphics(b);
-    }
 
     // PathName
     if ( SFX_ITEM_SET == rSet.GetItemState(rPool.GetWhich(SID_ATTR_PATHNAME), TRUE, &pItem))
