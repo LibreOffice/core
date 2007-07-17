@@ -4,9 +4,9 @@
  *
  *  $RCSfile: basecontainernode.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: kz $ $Date: 2006-12-13 15:32:16 $
+ *  last change: $Author: obo $ $Date: 2007-07-17 14:48:37 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -37,16 +37,16 @@
 #include "precompiled_slideshow.hxx"
 
 // must be first
-#include "canvas/debug.hxx"
-#include "canvas/verbosetrace.hxx"
+#include <canvas/debug.hxx>
+#include <canvas/verbosetrace.hxx>
+
 #include "basecontainernode.hxx"
 #include "tools.hxx"
 #include "nodetools.hxx"
 #include "delayevent.hxx"
-#include "boost/mem_fn.hpp"
-#include <vector>
+
+#include <boost/mem_fn.hpp>
 #include <algorithm>
-#include <iterator>
 
 using namespace com::sun::star;
 
@@ -60,7 +60,7 @@ BaseContainerNode::BaseContainerNode(
     : BaseNode( xNode, rParent, rContext ),
       maChildren(),
       mnFinishedChildren(0),
-      mbDurationIndefinite( isIndefiniteTiming( xNode->getEnd() ) ||
+      mbDurationIndefinite( isIndefiniteTiming( xNode->getEnd() ) &&
                             isIndefiniteTiming( xNode->getDuration() ) )
 {
 }
