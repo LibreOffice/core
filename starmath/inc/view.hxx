@@ -4,9 +4,9 @@
  *
  *  $RCSfile: view.hxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: vg $ $Date: 2007-05-25 12:10:41 $
+ *  last change: $Author: obo $ $Date: 2007-07-17 13:23:11 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -274,7 +274,7 @@ protected:
     virtual USHORT Print(SfxProgress &rProgress, BOOL bIsAPI, PrintDialog *pPrintDialog = 0);
     virtual SfxPrinter *GetPrinter(BOOL bCreate = FALSE);
     virtual USHORT SetPrinter(SfxPrinter *pNewPrinter,
-                              USHORT     nDiffFlags = SFX_PRINTER_ALL);
+                              USHORT     nDiffFlags = SFX_PRINTER_ALL, bool bIsAPI=false);
 
     BOOL        Insert( SfxMedium& rMedium );
     BOOL        InsertFrom(SfxMedium &rMedium);
