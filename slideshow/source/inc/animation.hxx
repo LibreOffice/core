@@ -4,9 +4,9 @@
  *
  *  $RCSfile: animation.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: kz $ $Date: 2006-12-13 15:51:20 $
+ *  last change: $Author: obo $ $Date: 2007-07-17 15:01:55 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -33,8 +33,8 @@
  *
  ************************************************************************/
 
-#ifndef _SLIDESHOW_ANIMATION_HXX
-#define _SLIDESHOW_ANIMATION_HXX
+#ifndef INCLUDED_SLIDESHOW_ANIMATION_HXX
+#define INCLUDED_SLIDESHOW_ANIMATION_HXX
 
 #include <animatableshape.hxx>
 #include <shapeattributelayer.hxx>
@@ -64,7 +64,24 @@ namespace slideshow
         public:
             virtual ~Animation() {}
 
+            /** Notify that the animation going active soon.
+
+                Implementers should preload any buffers, and create
+                any expensive objects at this time.
+
+                @param rShape
+                Shape to apply this animation to.
+
+                @param rAttrLayer
+                Attribute layer to play the animation on.
+             */
+            virtual void prefetch( const AnimatableShapeSharedPtr&     rShape,
+                                   const ShapeAttributeLayerSharedPtr& rAttrLayer ) = 0;
+
             /** Notify that the animation is about to begin.
+
+                Implementers are free to start accompanying effects,
+                such as sounds, and the animation timer now.
 
                 @param rShape
                 Shape to apply this animation to.
@@ -85,4 +102,4 @@ namespace slideshow
     }
 }
 
-#endif /* _SLIDESHOW_ANIMATION_HXX */
+#endif /* INCLUDED_SLIDESHOW_ANIMATION_HXX */
