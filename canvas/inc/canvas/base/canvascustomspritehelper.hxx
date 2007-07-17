@@ -4,9 +4,9 @@
  *
  *  $RCSfile: canvascustomspritehelper.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: kz $ $Date: 2005-11-02 12:42:39 $
+ *  last change: $Author: obo $ $Date: 2007-07-17 14:18:28 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -94,6 +94,9 @@ namespace canvas
         void disposing();
 
         // XCanvas
+        /// need  to call this method for XCanvas::clear(), for opacity tracking
+        void clearingContent( const Sprite::Reference& rSprite );
+
         /// need to call this method for XCanvas::drawBitmap(), for opacity tracking
         void checkDrawBitmap( const Sprite::Reference&                                                          rSprite,
                               const ::com::sun::star::uno::Reference< ::com::sun::star::rendering::XBitmap >&   xBitmap,
@@ -115,10 +118,6 @@ namespace canvas
                           double                    nPriority );
         void show( const Sprite::Reference& rSprite );
         void hide( const Sprite::Reference& rSprite );
-
-        // XCustomSprite
-        /// Need to call this method for XCustomSprite::getContentCanvas(), for surface preparations
-        void prepareContentCanvas( const Sprite::Reference& rSprite );
 
         // Sprite
         bool isAreaUpdateOpaque( const ::basegfx::B2DRange& rUpdateArea ) const;
@@ -231,13 +230,6 @@ namespace canvas
     private:
         CanvasCustomSpriteHelper( const CanvasCustomSpriteHelper& );
         CanvasCustomSpriteHelper& operator=( const CanvasCustomSpriteHelper& );
-
-        /** Called to clear the sprite surface to fully transparent
-
-            @derive must be overridden by derived classes, and
-            implemented as to fully clear the sprite content.
-         */
-        virtual void clearSurface() = 0;
 
         /** Called to convert an API polygon to a basegfx polygon
 
