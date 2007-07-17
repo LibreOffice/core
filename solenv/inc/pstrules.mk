@@ -4,9 +4,9 @@
 #
 #   $RCSfile: pstrules.mk,v $
 #
-#   $Revision: 1.47 $
+#   $Revision: 1.48 $
 #
-#   last change: $Author: kz $ $Date: 2007-05-10 15:10:36 $
+#   last change: $Author: obo $ $Date: 2007-07-17 07:24:12 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -96,7 +96,11 @@ $(SLO)$/$(SECOND_BUILD)_%.obj : %.cxx
      $(IFEXIST) $(@:s/.obj/.o/) $(THEN) $(TOUCH) $@ $(FI)
 .ELSE
     @-$(RM) $@
+.IF "$(COM)"=="GCC"
+    $(CXX) $(CFLAGS) $(INCLUDE) $(CFLAGSCXX) $(CFLAGSSLO) $(CDEFS) $($(SECOND_BUILD)CDEFS) $(CDEFSSLO) $(CDEFSMT) $(!eq,$(EXCEPTIONSFILES),$(subst,$@, $(EXCEPTIONSFILES)) $(LOCAL_EXCEPTIONS_FLAGS) $(GLOBAL_EXCEPTIONS_FLAGS)) $(CFLAGSAPPEND) $(CFLAGSOUTOBJ)$(SLO)$/$(SECOND_BUILD)_$*.obj $(CFLAGSINCXX)$(PWD)$/$*.cxx
+.ELSE
     $(CXX) @$(mktmp $(CFLAGS) $(INCLUDE) $(CFLAGSCXX) $(CFLAGSSLO) $(CDEFS) $($(SECOND_BUILD)CDEFS) $(CDEFSSLO) $(CDEFSMT) $(!eq,$(EXCEPTIONSFILES),$(subst,$@, $(EXCEPTIONSFILES)) $(LOCAL_EXCEPTIONS_FLAGS) $(GLOBAL_EXCEPTIONS_FLAGS)) $(CFLAGSAPPEND) $(CFLAGSOUTOBJ)$(SLO)$/$(SECOND_BUILD)_$*.obj $(CFLAGSINCXX)$(PWD)$/$*.cxx )
+.ENDIF
 .ENDIF
 
 $(SLO)$/$(SECOND_BUILD)_%.obj :  %.c
