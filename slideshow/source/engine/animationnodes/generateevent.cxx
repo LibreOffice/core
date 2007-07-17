@@ -4,9 +4,9 @@
  *
  *  $RCSfile: generateevent.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: kz $ $Date: 2006-12-13 15:33:09 $
+ *  last change: $Author: obo $ $Date: 2007-07-17 14:49:16 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -37,16 +37,20 @@
 #include "precompiled_slideshow.hxx"
 
 // must be first
-#include "canvas/debug.hxx"
-#include "canvas/verbosetrace.hxx"
+#include <canvas/debug.hxx>
+#include <canvas/verbosetrace.hxx>
+
+#include <com/sun/star/drawing/XShape.hpp>
+#include <com/sun/star/animations/XAnimationNode.hpp>
+#include <com/sun/star/animations/Timing.hpp>
+#include <com/sun/star/animations/EventTrigger.hpp>
+#include <com/sun/star/animations/Event.hpp>
+
 #include "shape.hxx"
+#include "subsettableshapemanager.hxx"
+#include "usereventqueue.hxx"
 #include "slideshowcontext.hxx"
 #include "delayevent.hxx"
-#include "com/sun/star/drawing/XShape.hpp"
-#include "com/sun/star/animations/XAnimationNode.hpp"
-#include "com/sun/star/animations/Timing.hpp"
-#include "com/sun/star/animations/EventTrigger.hpp"
-#include "com/sun/star/animations/Event.hpp"
 
 namespace slideshow {
 namespace internal {
@@ -135,7 +139,7 @@ EventSharedPtr generateEvent(
         case animations::EventTrigger::ON_CLICK:
             // try to extract XShape event source
             if ((aEvent.Source >>= xShape) &&
-                (pShape = rContext.mpLayerManager->lookupShape(xShape)).get())
+                (pShape = rContext.mpSubsettableShapeManager->lookupShape(xShape)).get())
             {
                 pEvent = makeDelay( rFunctor, nDelay2 + nAdditionalDelay );
                 rContext.mrUserEventQueue.registerShapeClickEvent(
@@ -149,7 +153,7 @@ EventSharedPtr generateEvent(
         case animations::EventTrigger::ON_DBL_CLICK:
             // try to extract XShape event source
             if ((aEvent.Source >>= xShape) &&
-                (pShape = rContext.mpLayerManager->lookupShape(xShape)).get())
+                (pShape = rContext.mpSubsettableShapeManager->lookupShape(xShape)).get())
             {
                 pEvent = makeDelay( rFunctor, nDelay2 + nAdditionalDelay );
                 rContext.mrUserEventQueue.registerShapeDoubleClickEvent(
@@ -163,7 +167,7 @@ EventSharedPtr generateEvent(
         case animations::EventTrigger::ON_MOUSE_ENTER:
             // try to extract XShape event source
             if ((aEvent.Source >>= xShape) &&
-                (pShape = rContext.mpLayerManager->lookupShape(xShape)).get())
+                (pShape = rContext.mpSubsettableShapeManager->lookupShape(xShape)).get())
             {
                 pEvent = makeDelay( rFunctor, nDelay2 + nAdditionalDelay );
                 rContext.mrUserEventQueue.registerMouseEnterEvent(
@@ -177,7 +181,7 @@ EventSharedPtr generateEvent(
         case animations::EventTrigger::ON_MOUSE_LEAVE:
             // try to extract XShape event source
             if ((aEvent.Source >>= xShape) &&
-                (pShape = rContext.mpLayerManager->lookupShape(xShape)).get())
+                (pShape = rContext.mpSubsettableShapeManager->lookupShape(xShape)).get())
             {
                 pEvent = makeDelay( rFunctor, nDelay2 + nAdditionalDelay );
                 rContext.mrUserEventQueue.registerMouseLeaveEvent(
