@@ -4,9 +4,9 @@
  *
  *  $RCSfile: versdlg.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: hr $ $Date: 2007-06-27 23:17:59 $
+ *  last change: $Author: obo $ $Date: 2007-07-17 13:42:25 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -49,6 +49,7 @@
 #include <svtools/useroptions.hxx>
 #include <vcl/msgbox.hxx>
 #include <vcl/svapp.hxx>
+#include <tools/datetime.hxx>
 
 #define _SVSTDARR_STRINGSDTOR
 #include <svtools/svstdarr.hxx>
@@ -72,7 +73,8 @@ struct SfxVersionInfo
 {
     String                  aName;
     String                  aComment;
-    SfxStamp                aCreateStamp;
+    String                  aAuthor;
+    DateTime                aCreationDate;
 
                             SfxVersionInfo();
                             SfxVersionInfo( const SfxVersionInfo& rInfo )
@@ -82,7 +84,8 @@ struct SfxVersionInfo
                             {
                                 aName = rInfo.aName;
                                 aComment = rInfo.aComment;
-                                aCreateStamp = rInfo.aCreateStamp;
+                                aAuthor = rInfo.aAuthor;
+                                aCreationDate = rInfo.aCreationDate;
                                 return *this;
                             }
 };
@@ -117,12 +120,12 @@ SfxVersionTableDtor::SfxVersionTableDtor( const uno::Sequence < util::RevisionTa
         SfxVersionInfo* pInfo = new SfxVersionInfo;
         pInfo->aName = rInfo[n].Identifier;
         pInfo->aComment = rInfo[n].Comment;
-        pInfo->aCreateStamp.SetName( rInfo[n].Author );
+        pInfo->aAuthor = rInfo[n].Author;
 
         Date aDate ( rInfo[n].TimeStamp.Day, rInfo[n].TimeStamp.Month, rInfo[n].TimeStamp.Year );
         Time aTime ( rInfo[n].TimeStamp.Hours, rInfo[n].TimeStamp.Minutes, rInfo[n].TimeStamp.Seconds, rInfo[n].TimeStamp.HundredthSeconds );
 
-        pInfo->aCreateStamp.SetTime( DateTime( aDate, aTime ) );
+        pInfo->aCreationDate = DateTime( aDate, aTime );
         Insert( pInfo, Count() );
     }
 }
@@ -158,12 +161,12 @@ SfxVersionInfo::SfxVersionInfo()
 {
 }
 
-static String ConvertDateTime_Impl(const SfxStamp &rTime, const LocaleDataWrapper& rWrapper)
+static String ConvertDateTime_Impl(const DateTime& rTime, const LocaleDataWrapper& rWrapper)
 {
      const String pDelim ( DEFINE_CONST_UNICODE( ", "));
-     String aStr(rWrapper.getDate(rTime.GetTime()));
+     String aStr(rWrapper.getDate(rTime));
      aStr += pDelim;
-     aStr += rWrapper.getTime(rTime.GetTime(), TRUE, FALSE);
+     aStr += rWrapper.getTime(rTime, TRUE, FALSE);
      return aStr;
 }
 
@@ -176,7 +179,7 @@ SvStringsDtor* SfxVersionTableDtor::GetVersions() const
     {
         String *pString = new String( pInfo->aComment );
         (*pString) += DEFINE_CONST_UNICODE( "; " );
-        (*pString) += ConvertDateTime_Impl( pInfo->aCreateStamp, aLocaleWrapper );
+        (*pString) += ConvertDateTime_Impl( pInfo->aCreationDate, aLocaleWrapper );
         pList->Insert( pString, pList->Count() );
         pInfo = ((SfxVersionTableDtor*) this)->Next();
     }
@@ -212,8 +215,8 @@ SfxVersionsTabListBox_Impl::SfxVersionsTabListBox_Impl( Window* pParent, const R
 {
 }
 
-SfxVersionDialog::SfxVersionDialog ( SfxViewFrame* pVwFrame, Window *pParent )
-    : SfxModalDialog( pParent, SfxResId( DLG_VERSIONS ) )
+SfxVersionDialog::SfxVersionDialog ( SfxViewFrame* pVwFrame, BOOL bIsSaveVersionOnClose )
+    : SfxModalDialog( NULL, SfxResId( DLG_VERSIONS ) )
     , aNewGroup( this, SfxResId( GB_NEWVERSIONS ) )
     , aSaveButton( this, SfxResId( PB_SAVE ) )
     , aSaveCheckBox( this, SfxResId( CB_SAVEONCLOSE ) )
@@ -231,6 +234,7 @@ SfxVersionDialog::SfxVersionDialog ( SfxViewFrame* pVwFrame, Window *pParent )
     , pViewFrame( pVwFrame )
     , mpTable( NULL )
     , mpLocaleWrapper( NULL )
+    , mbIsSaveVersionOnClose( bIsSaveVersionOnClose )
 {
     FreeResource();
 
@@ -295,9 +299,9 @@ void SfxVersionDialog::Init_Impl()
         for ( USHORT n = 0; n < mpTable->Count(); ++n )
         {
             SfxVersionInfo *pInfo = mpTable->GetObject(n);
-            String aEntry = ConvertDateTime_Impl( pInfo->aCreateStamp, *mpLocaleWrapper );
+            String aEntry = ConvertDateTime_Impl( pInfo->aCreationDate, *mpLocaleWrapper );
             aEntry += '\t';
-            aEntry += pInfo->aCreateStamp.GetName();
+            aEntry += pInfo->aAuthor;
             aEntry += '\t';
             aEntry += ConvertWhiteSpaces_Impl( pInfo->aComment );
             SvLBoxEntry *pEntry = aVersionBox.InsertEntry( aEntry );
@@ -305,7 +309,7 @@ void SfxVersionDialog::Init_Impl()
         }
     }
 
-    aSaveCheckBox.Check( pObjShell->GetDocInfo().IsSaveVersionOnClose() );
+    aSaveCheckBox.Check( mbIsSaveVersionOnClose );
 
     BOOL bEnable = !pObjShell->IsReadOnly();
     aSaveButton.Enable( bEnable );
@@ -355,10 +359,9 @@ void SfxVersionDialog::RecalcDateColumn()
 {
     // recalculate the datetime column width
     DateTime aNow;
-    SfxStamp aStamp( aNow );
     mpLocaleWrapper = new LocaleDataWrapper(
         ::comphelper::getProcessServiceFactory(), Application::GetSettings().GetLocale() );
-    String sDateTime = ConvertDateTime_Impl( aStamp, *mpLocaleWrapper );
+    String sDateTime = ConvertDateTime_Impl( aNow, *mpLocaleWrapper );
     long nWidth = aVersionBox.GetTextWidth( sDateTime );
     nWidth += 15; // a little offset
     long nTab = aVersionBox.GetTab(1);
@@ -412,16 +415,12 @@ IMPL_LINK( SfxVersionDialog, ButtonHdl_Impl, Button*, pButton )
 
     if ( pButton == &aSaveCheckBox )
     {
-        SfxBoolItem aSave( SID_SAVE_VERSION_ON_CLOSE, aSaveCheckBox.IsChecked() );
-        const SfxPoolItem* aItems[2];
-        aItems[0] = &aSave;
-        aItems[1] = NULL;
-        pViewFrame->GetBindings().ExecuteSynchron( SID_SAVE_VERSION_ON_CLOSE, aItems, 0 );
+        mbIsSaveVersionOnClose = aSaveCheckBox.IsChecked();
     }
     else if ( pButton == &aSaveButton )
     {
         SfxVersionInfo aInfo;
-        aInfo.aCreateStamp = SfxStamp( SvtUserOptions().GetFullName() );
+        aInfo.aAuthor = SvtUserOptions().GetFullName();
         SfxViewVersionDialog_Impl* pDlg = new SfxViewVersionDialog_Impl( this, aInfo, TRUE );
         short nRet = pDlg->Execute();
         if ( nRet == RET_OK )
@@ -496,8 +495,8 @@ SfxViewVersionDialog_Impl::SfxViewVersionDialog_Impl ( Window *pParent, SfxVersi
     FreeResource();
 
     LocaleDataWrapper aLocaleWrapper( ::comphelper::getProcessServiceFactory(), Application::GetSettings().GetLocale() );
-    aDateTimeText.SetText( aDateTimeText.GetText().Append(ConvertDateTime_Impl( pInfo->aCreateStamp, aLocaleWrapper )) );
-    aSavedByText.SetText( aSavedByText.GetText().Append(pInfo->aCreateStamp.GetName()) );
+    aDateTimeText.SetText( aDateTimeText.GetText().Append(ConvertDateTime_Impl( pInfo->aCreationDate, aLocaleWrapper )) );
+    aSavedByText.SetText( aSavedByText.GetText().Append(pInfo->aAuthor) );
     aEdit.SetText( rInfo.aComment );
 
     aCloseButton.SetClickHdl ( LINK( this, SfxViewVersionDialog_Impl, ButtonHdl ) );
