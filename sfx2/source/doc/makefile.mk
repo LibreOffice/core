@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.27 $
+#   $Revision: 1.28 $
 #
-#   last change: $Author: ihi $ $Date: 2007-03-26 11:18:16 $
+#   last change: $Author: obo $ $Date: 2007-07-17 13:43:24 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -51,6 +51,9 @@ SRC1FILES = \
         doc.src new.src doctdlg.src docvor.src doctempl.src sfxbasemodel.src graphhelp.src secmacrowarnings.src
 
 SLOFILES =	\
+        $(SLO)$/printhelper.obj \
+        $(SLO)$/docinf.obj \
+        $(SLO)$/oleprops.obj \
         $(SLO)$/iframe.obj \
         $(SLO)$/applet.obj \
         $(SLO)$/commitlistener.obj \
@@ -58,7 +61,6 @@ SLOFILES =	\
         $(SLO)$/docfile.obj \
         $(SLO)$/objuno.obj \
         $(SLO)$/frmdescr.obj \
-        $(SLO)$/docinf.obj \
         $(SLO)$/objxtor.obj \
         $(SLO)$/objmisc.obj \
         $(SLO)$/objstor.obj \
