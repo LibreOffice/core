@@ -4,9 +4,9 @@
  *
  *  $RCSfile: unomodel.cxx,v $
  *
- *  $Revision: 1.101 $
+ *  $Revision: 1.102 $
  *
- *  last change: $Author: kz $ $Date: 2007-05-10 09:13:18 $
+ *  last change: $Author: obo $ $Date: 2007-07-17 13:02:12 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -2192,23 +2192,23 @@ void SAL_CALL SdXImpressDocument::dispose() throw (::com::sun::star::uno::Runtim
 {
     if( !mbDisposed )
     {
-        // Call the base class dispose() before setting the mbDisposed flag
-        // to true.  The reason for this is that if close() has not yet been
-        // called this is done in SfxBaseModel::dispose().  At the end of
-        // that dispose() is called again.  It is important to forward this
-        // second dispose() to the base class, too.
-        // As a consequence the following code has to be able to be run twice.
-        SfxBaseModel::dispose();
-
         {
             OGuard aGuard( Application::GetSolarMutex() );
-            mbDisposed = true;
 
             if( mpDoc )
             {
                 EndListening( *mpDoc );
                 mpDoc = NULL;
             }
+
+            // Call the base class dispose() before setting the mbDisposed flag
+            // to true.  The reason for this is that if close() has not yet been
+            // called this is done in SfxBaseModel::dispose().  At the end of
+            // that dispose() is called again.  It is important to forward this
+            // second dispose() to the base class, too.
+            // As a consequence the following code has to be able to be run twice.
+            SfxBaseModel::dispose();
+            mbDisposed = true;
 
             uno::Reference< container::XNameAccess > xStyles(mxStyleFamilies);
             if( xStyles.is() )
@@ -2288,33 +2288,6 @@ void SAL_CALL SdXImpressDocument::dispose() throw (::com::sun::star::uno::Runtim
             mxMarkerTable = 0;
             mxDrawingPool = 0;
         }
-    }
-}
-
-// -----------------------------------------------------------------------------
-void SAL_CALL SdXImpressDocument::setPrinter( const uno::Sequence< beans::PropertyValue >& rPrinter)
-        throw (lang::IllegalArgumentException, uno::RuntimeException)
-{
-    OGuard aGuard( Application::GetSolarMutex() );
-
-    if( NULL == mpDoc )
-        throw lang::DisposedException();
-
-    SfxViewShell* pViewSh = NULL;
-    SfxPrinter* pPrinter = NULL;
-    sal_uInt16 nChangeFlags = 0;
-    impl_setPrinter(rPrinter,pPrinter,nChangeFlags,pViewSh);
-
-    // Despite its name impl_setPrinter() does not set a printer but creates
-    // a new one.  Setting it as the current printer remains as our task.
-    ::sd::ViewShellBase* pBase = PTR_CAST(::sd::ViewShellBase, pViewSh);
-    if (pBase!=NULL && pPrinter!=NULL)
-    {
-        pBase->SetPrinterOptDlg (
-            pPrinter,
-            nChangeFlags,
-            FALSE //do not show the dialog here
-            );
     }
 }
 
