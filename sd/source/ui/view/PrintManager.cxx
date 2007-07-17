@@ -4,9 +4,9 @@
  *
  *  $RCSfile: PrintManager.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: hr $ $Date: 2007-06-27 15:46:21 $
+ *  last change: $Author: obo $ $Date: 2007-07-17 13:02:25 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -171,9 +171,9 @@ SfxPrinter* PrintManager::GetPrinter (BOOL bCreate)
 
 USHORT PrintManager::SetPrinter (
     SfxPrinter* pNewPrinter,
-    USHORT nDiffFlags)
+    USHORT nDiffFlags,bool bIsAPI)
 {
-    return SetPrinterOptDlg (pNewPrinter,nDiffFlags);
+    return SetPrinterOptDlg (pNewPrinter,nDiffFlags,!bIsAPI);
 }
 
 
