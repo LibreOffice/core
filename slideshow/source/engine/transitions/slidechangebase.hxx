@@ -4,9 +4,9 @@
  *
  *  $RCSfile: slidechangebase.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: kz $ $Date: 2006-12-13 15:45:39 $
+ *  last change: $Author: obo $ $Date: 2007-07-17 15:00:05 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -33,8 +33,8 @@
  *
  ************************************************************************/
 
-#if ! defined(INCLUDED_PRESENTATION_INTERNAL_TRANSITIONS_SLIDECHANGEBASE_HXX)
-#define INCLUDED_PRESENTATION_INTERNAL_TRANSITIONS_SLIDECHANGEBASE_HXX
+#ifndef INCLUDED_SLIDESHOW_TRANSITIONS_SLIDECHANGEBASE_HXX
+#define INCLUDED_SLIDESHOW_TRANSITIONS_SLIDECHANGEBASE_HXX
 
 #include <osl/mutex.hxx>
 
@@ -42,11 +42,18 @@
 #include "vieweventhandler.hxx"
 #include "numberanimation.hxx"
 #include "slide.hxx"
+#include "screenupdater.hxx"
 #include "soundplayer.hxx"
 
 #include <boost/enable_shared_from_this.hpp>
-#include <boost/utility.hpp>
+#include <boost/noncopyable.hpp>
 #include <boost/optional.hpp>
+
+namespace cppcanvas
+{
+    class Canvas;
+    class CustomSprite;
+}
 
 namespace slideshow {
 namespace internal {
@@ -68,6 +75,8 @@ public:
     virtual double getUnderlyingValue() const;
 
     // Animation
+    virtual void prefetch( const AnimatableShapeSharedPtr&,
+                           const ShapeAttributeLayerSharedPtr& );
     virtual void start( const AnimatableShapeSharedPtr&,
                         const ShapeAttributeLayerSharedPtr& );
     virtual void end();
@@ -76,6 +85,7 @@ public:
     virtual void viewAdded( const UnoViewSharedPtr& rView );
     virtual void viewRemoved( const UnoViewSharedPtr& rView );
     virtual void viewChanged( const UnoViewSharedPtr& rView );
+    virtual void viewsChanged();
 
 protected:
     /** Create a new SlideChanger, for the given leaving and
@@ -86,6 +96,7 @@ protected:
         const SlideSharedPtr&                     pEnteringSlide,
         const SoundPlayerSharedPtr&               pSoundPlayer,
         const UnoViewContainer&                   rViewContainer,
+        ScreenUpdater&                            rScreenUpdater,
         EventMultiplexer&                         rEventMultiplexer,
         bool                                      bCreateLeavingSprites = true,
         bool                                      bCreateEnteringSprites = true );
@@ -101,15 +112,15 @@ protected:
         }
 
         /// The view this entry is for
-        UnoViewSharedPtr                    mpView;
+        UnoViewSharedPtr                              mpView;
         /// outgoing slide sprite
-        cppcanvas::CustomSpriteSharedPtr    mpOutSprite;
+        boost::shared_ptr<cppcanvas::CustomSprite>    mpOutSprite;
         /// incoming slide sprite
-        cppcanvas::CustomSpriteSharedPtr    mpInSprite;
+        boost::shared_ptr<cppcanvas::CustomSprite>    mpInSprite;
         /// outgoing slide bitmap
-        mutable SlideBitmapSharedPtr        mpLeavingBitmap;
+        mutable SlideBitmapSharedPtr                  mpLeavingBitmap;
         /// incoming slide bitmap
-        mutable SlideBitmapSharedPtr        mpEnteringBitmap;
+        mutable SlideBitmapSharedPtr                  mpEnteringBitmap;
 
         // for algo access
         const UnoViewSharedPtr& getView() const { return mpView; }
@@ -126,10 +137,11 @@ protected:
     SlideBitmapSharedPtr createBitmap( const UnoViewSharedPtr&                pView,
                                        const boost::optional<SlideSharedPtr>& rSlide_ ) const;
 
-    ::basegfx::B2ISize getEnteringSizePixel( const UnoViewSharedPtr& pView ) const;
+    ::basegfx::B2ISize getEnteringSlideSizePixel( const UnoViewSharedPtr& pView ) const;
+    ::basegfx::B2ISize getLeavingSlideSizePixel( const UnoViewSharedPtr& pView ) const;
 
-    void renderBitmap( SlideBitmapSharedPtr const & pSlideBitmap,
-                       ::cppcanvas::CanvasSharedPtr const & pCanvas );
+    void renderBitmap( SlideBitmapSharedPtr const&                 pSlideBitmap,
+                       boost::shared_ptr<cppcanvas::Canvas> const& pCanvas );
 
     /** Called on derived classes to implement actual slide change.
 
@@ -143,10 +155,10 @@ protected:
         Current parameter value
     */
     virtual void performIn(
-        const ::cppcanvas::CustomSpriteSharedPtr&   rSprite,
-        const ViewEntry&                            rViewEntry,
-        const ::cppcanvas::CanvasSharedPtr&         rDestinationCanvas,
-        double                                      t );
+        const boost::shared_ptr<cppcanvas::CustomSprite>&   rSprite,
+        const ViewEntry&                                    rViewEntry,
+        const boost::shared_ptr<cppcanvas::Canvas>&         rDestinationCanvas,
+        double                                              t );
 
     /** Called on derived classes to implement actual slide change.
 
@@ -160,38 +172,45 @@ protected:
         Current parameter value
     */
     virtual void performOut(
-        const ::cppcanvas::CustomSpriteSharedPtr&  rSprite,
-        const ViewEntry&                           rViewEntry,
-        const ::cppcanvas::CanvasSharedPtr&        rDestinationCanvas,
-        double                                     t );
+        const boost::shared_ptr<cppcanvas::CustomSprite>& rSprite,
+        const ViewEntry&                                  rViewEntry,
+        const boost::shared_ptr<cppcanvas::Canvas>&       rDestinationCanvas,
+        double                                            t );
+
+    ScreenUpdater& getScreenUpdater() const { return mrScreenUpdater; }
 
 private:
 
-    ::cppcanvas::CustomSpriteSharedPtr createSprite(
+    boost::shared_ptr<cppcanvas::CustomSprite> createSprite(
         UnoViewSharedPtr const &   pView,
         ::basegfx::B2DSize const & rSpriteSize,
         double                     nPrio ) const;
 
     void addSprites( ViewEntry& rEntry );
+    void clearViewEntry( ViewEntry& rEntry );
 
     ViewsVecT::iterator lookupView( UnoViewSharedPtr const & pView );
     ViewsVecT::const_iterator lookupView( UnoViewSharedPtr const & pView ) const;
 
     SoundPlayerSharedPtr                mpSoundPlayer;
 
-    const UnoViewContainer&             mrViewContainer;
     EventMultiplexer&                   mrEventMultiplexer;
+    ScreenUpdater&                      mrScreenUpdater;
 
-    ::boost::optional<SlideSharedPtr>   mLeavingSlide;
+    ::boost::optional<SlideSharedPtr>   maLeavingSlide;
     SlideSharedPtr                      mpEnteringSlide;
 
     ViewsVecT                           maViewData;
+    const UnoViewContainer&             mrViewContainer;
+
     const bool                          mbCreateLeavingSprites;
     const bool                          mbCreateEnteringSprites;
     bool                                mbSpritesVisible;
+    bool                                mbFinished;
+    bool                                mbPrefetched;
 };
 
 } // namespace internal
 } // namespace presentation
 
-#endif
+#endif /* INCLUDED_SLIDESHOW_TRANSITIONS_SLIDECHANGEBASE_HXX */
