@@ -4,9 +4,9 @@
  *
  *  $RCSfile: objsh.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: ihi $ $Date: 2007-04-19 09:25:28 $
+ *  last change: $Author: obo $ $Date: 2007-07-17 13:37:42 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -72,6 +72,8 @@
 #ifndef _COM_SUN_STAR_TASK_XINTERACTIONHANDLER_HPP_
 #include <com/sun/star/task/XInteractionHandler.hpp>
 #endif
+
+ #include <com/sun/star/beans/XPropertySet.hpp>
 
 //________________________________________________________________________________________________________________
 //  include something else
@@ -270,7 +272,7 @@ private:
 //#if 0 // _SOLAR__PRIVATE
     SAL_DLLPRIVATE void Construct_Impl();
     SAL_DLLPRIVATE SfxDocumentInfo& UpdateTime_Impl(SfxDocumentInfo &);
-    SAL_DLLPRIVATE void DocInfoDlg_Impl( SfxDocumentInfo & );
+    SAL_DLLPRIVATE void DocInfoDlg_Impl( SfxDocumentInfo&, BOOL );
     SAL_DLLPRIVATE sal_Bool MakeBackup_Impl(const String &rName,
                                                 sal_Bool bCopyAllways = sal_False);
 
@@ -447,18 +449,19 @@ public:
     SvKeyValueIterator*         GetHeaderAttributes();
     void                        ClearHeaderAttributesForSourceViewHack();
     void                        SetHeaderAttributesForSourceViewHack();
-    SAL_DLLPRIVATE SbMethod* GetMethod_Impl( const String& rMacro );
-
-//REMOVE        sal_Bool        SvEmbeddedInfoObject* InsertObject( SvEmbeddedObject * pObj, const String & rName );
-
-//REMOVE        SfxConfigManager*           GetConfigManager( BOOL bCreate = FALSE );
-//REMOVE        void                        SetConfigManager(SfxConfigManager *pMgr);
-//REMOVE        void                        SetTemplateConfig(sal_Bool);
-//REMOVE        sal_Bool                    HasTemplateConfig() const;
-//REMOVE        void                        TransferConfig( SfxObjectShell& rObjSh );IsTemplate() const;
 
     sal_Bool                    IsTemplate() const;
     void                        SetTemplate(sal_Bool bIs);
+
+    sal_Bool                                  IsQueryLoadTemplate() const;
+    sal_Bool                                        IsUseUserData() const;
+    sal_Bool                                        IsLoadReadonly() const;
+    sal_Bool                                        IsSaveVersionOnClose() const;
+    void                                              SetQueryLoadTemplate( sal_Bool b );
+    void                                              SetUseUserData( sal_Bool bNew );
+    void                                            SetLoadReadonly( sal_Bool _bReadonly );
+    void                                            SetSaveVersionOnClose( sal_Bool bSet );
+    void                                              ResetFromTemplate( const String& rTemplateName, const String& rFileName );
 
     static sal_uInt32           HandleFilter( SfxMedium* pMedium, SfxObjectShell* pDoc );
 
