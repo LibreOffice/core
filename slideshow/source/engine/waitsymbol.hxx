@@ -4,9 +4,9 @@
  *
  *  $RCSfile: waitsymbol.hxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: kz $ $Date: 2006-12-13 15:23:38 $
+ *  last change: $Author: obo $ $Date: 2007-07-17 14:43:37 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -39,8 +39,8 @@
 #include <com/sun/star/rendering/XBitmap.hpp>
 #include <cppcanvas/customsprite.hxx>
 
-#include "disposable.hxx"
 #include "vieweventhandler.hxx"
+#include "screenupdater.hxx"
 #include "eventmultiplexer.hxx"
 #include "unoview.hxx"
 
@@ -52,15 +52,16 @@
 namespace slideshow {
 namespace internal {
 
+class EventMultiplexer;
 typedef boost::shared_ptr<class WaitSymbol> WaitSymbolSharedPtr;
 
-class WaitSymbol : public Disposable,
-                   public ViewEventHandler,
+class WaitSymbol : public ViewEventHandler,
                    private ::boost::noncopyable
 {
 public:
     static WaitSymbolSharedPtr create( const ::com::sun::star::uno::Reference<
                                              ::com::sun::star::rendering::XBitmap>& xBitmap,
+                                       ScreenUpdater&                               rScreenUpdater,
                                        EventMultiplexer&                            rEventMultiplexer,
                                        const UnoViewContainer&                      rViewContainer );
 
@@ -72,43 +73,41 @@ public:
      */
     void hide() { setVisible(false); }
 
-    // Disposable:
-    virtual void dispose();
-
-    // ViewEventHandler
-    void viewAdded( const UnoViewSharedPtr& rView );
-    void viewRemoved( const UnoViewSharedPtr& rView );
-    void viewChanged( const UnoViewSharedPtr& rView );
-
 private:
     WaitSymbol( const ::com::sun::star::uno::Reference<
                       ::com::sun::star::rendering::XBitmap>& xBitmap,
-                EventMultiplexer&                            rEventMultiplexer,
+                ScreenUpdater&                               rScreenUpdater,
                 const UnoViewContainer&                      rViewContainer );
 
-    ::com::sun::star::uno::Reference<
-        ::com::sun::star::rendering::XBitmap> m_xBitmap;
+    // ViewEventHandler
+    virtual void viewAdded( const UnoViewSharedPtr& rView );
+    virtual void viewRemoved( const UnoViewSharedPtr& rView );
+    virtual void viewChanged( const UnoViewSharedPtr& rView );
+    virtual void viewsChanged();
 
+    void setVisible( const bool bVisible );
     ::basegfx::B2DPoint calcSpritePos( UnoViewSharedPtr const & rView ) const;
-
-    typedef ::std::vector<
-        ::std::pair<UnoViewSharedPtr,
-                    cppcanvas::CustomSpriteSharedPtr> > ViewsVecT;
-    ViewsVecT m_views;
-
-    EventMultiplexer& mrEventMultiplexer;
 
     template <typename func_type>
     void for_each_sprite( func_type const & func ) const
     {
-        ViewsVecT::const_iterator iPos( m_views.begin() );
-        const ViewsVecT::const_iterator iEnd( m_views.end() );
+        ViewsVecT::const_iterator iPos( maViews.begin() );
+        const ViewsVecT::const_iterator iEnd( maViews.end() );
         for ( ; iPos != iEnd; ++iPos )
-            func( iPos->second );
+            if( iPos->second )
+                func( iPos->second );
     }
 
-    bool m_bVisible;
-    void setVisible( const bool bVisible );
+    typedef ::std::vector<
+        ::std::pair<UnoViewSharedPtr,
+                    cppcanvas::CustomSpriteSharedPtr> > ViewsVecT;
+
+    ::com::sun::star::uno::Reference<
+        ::com::sun::star::rendering::XBitmap>  mxBitmap;
+
+    ViewsVecT                                  maViews;
+    ScreenUpdater&                             mrScreenUpdater;
+    bool                                       mbVisible;
 };
 
 } // namespace internal
