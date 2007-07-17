@@ -4,9 +4,9 @@
  *
  *  $RCSfile: canvashelper.hxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: obo $ $Date: 2006-03-29 11:18:30 $
+ *  last change: $Author: obo $ $Date: 2007-07-17 14:25:53 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -116,6 +116,7 @@ namespace vclcanvas
 
         // XCanvas (only providing, not implementing the
         // interface. Also note subtle method parameter differences)
+        void clear();
         void drawPoint( const ::com::sun::star::rendering::XCanvas*         rCanvas,
                         const ::com::sun::star::geometry::RealPoint2D&      aPoint,
                         const ::com::sun::star::rendering::ViewState&       viewState,
