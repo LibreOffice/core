@@ -4,9 +4,9 @@
  *
  *  $RCSfile: precompiled_framework.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: kz $ $Date: 2007-05-10 15:09:16 $
+ *  last change: $Author: obo $ $Date: 2007-07-17 13:24:41 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -436,7 +436,6 @@
 #include "tools/tempfile.hxx"
 #include "tools/tenccvt.hxx"
 #include "tools/time.hxx"
-#include "tools/timestamp.hxx"
 #include "tools/urlobj.hxx"
 #include "tools/wldcrd.hxx"
 
