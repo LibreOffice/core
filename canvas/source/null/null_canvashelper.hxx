@@ -4,9 +4,9 @@
  *
  *  $RCSfile: null_canvashelper.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: kz $ $Date: 2005-11-02 12:49:09 $
+ *  last change: $Author: obo $ $Date: 2007-07-17 14:23:06 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -88,6 +88,7 @@ namespace nullcanvas
 
         // XCanvas (only providing, not implementing the
         // interface. Also note subtle method parameter differences)
+        void clear();
         void drawPoint( const ::com::sun::star::rendering::XCanvas*     pCanvas,
                         const ::com::sun::star::geometry::RealPoint2D&  aPoint,
                         const ::com::sun::star::rendering::ViewState&   viewState,
