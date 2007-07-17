@@ -4,9 +4,9 @@
  *
  *  $RCSfile: stringanimation.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: kz $ $Date: 2006-12-13 16:04:45 $
+ *  last change: $Author: obo $ $Date: 2007-07-17 15:17:03 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -33,11 +33,10 @@
  *
  ************************************************************************/
 
-#ifndef _SLIDESHOW_STRINGANIMATION_HXX
-#define _SLIDESHOW_STRINGANIMATION_HXX
+#ifndef INCLUDED_SLIDESHOW_STRINGANIMATION_HXX
+#define INCLUDED_SLIDESHOW_STRINGANIMATION_HXX
 
-#include <animation.hxx>
-
+#include "animation.hxx"
 #include <rtl/ustring.hxx>
 
 
@@ -83,4 +82,4 @@ namespace slideshow
     }
 }
 
-#endif /* _SLIDESHOW_STRINGANIMATION_HXX */
+#endif /* INCLUDED_SLIDESHOW_STRINGANIMATION_HXX */
