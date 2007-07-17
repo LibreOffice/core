@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.21 $
+#   $Revision: 1.22 $
 #
-#   last change: $Author: vg $ $Date: 2007-03-26 13:45:15 $
+#   last change: $Author: obo $ $Date: 2007-07-17 13:30:49 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -57,7 +57,6 @@ LIB7FILES=  $(LB)$/gen.lib          \
             $(LB)$/str.lib          \
             $(LB)$/mtools.lib       \
             $(LB)$/datetime.lib     \
-            $(LB)$/timestamp.lib    \
             $(LB)$/fsys.lib         \
             $(LB)$/communi.lib      \
             $(LB)$/stream.lib       \
@@ -76,7 +75,6 @@ LIB1FILES+=  \
             $(SLB)$/str.lib         \
             $(SLB)$/mtools.lib      \
             $(SLB)$/datetime.lib    \
-            $(SLB)$/timestamp.lib   \
             $(SLB)$/fsys.lib        \
             $(SLB)$/communi.lib     \
             $(SLB)$/stream.lib      \
