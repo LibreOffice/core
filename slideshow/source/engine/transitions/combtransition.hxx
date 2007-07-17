@@ -4,9 +4,9 @@
  *
  *  $RCSfile: combtransition.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: kz $ $Date: 2006-12-13 15:39:37 $
+ *  last change: $Author: obo $ $Date: 2007-07-17 14:58:51 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -33,8 +33,8 @@
  *
  ************************************************************************/
 
-#ifndef _SLIDESHOW_COMBTRANSITION_HXX
-#define _SLIDESHOW_COMBTRANSITION_HXX
+#ifndef INCLUDED_SLIDESHOW_COMBTRANSITION_HXX
+#define INCLUDED_SLIDESHOW_COMBTRANSITION_HXX
 
 #include <basegfx/polygon/b2dpolypolygon.hxx>
 #include "slidechangebase.hxx"
@@ -59,6 +59,7 @@ public:
                     const SlideSharedPtr&                     pEnteringSlide,
                     const SoundPlayerSharedPtr&               pSoundPlayer,
                     const UnoViewContainer&                   rViewContainer,
+                    ScreenUpdater&                            rScreenUpdater,
                     EventMultiplexer&                         rEventMultiplexer,
                     const ::basegfx::B2DVector&               rPushDirection,
                     sal_Int32                                 nNumStripes );
@@ -76,4 +77,4 @@ private:
 } // namespace internal
 } // namespace presentation
 
-#endif /* _SLIDESHOW_COMBTRANSITION_HXX */
+#endif /* INCLUDED_SLIDESHOW_COMBTRANSITION_HXX */
