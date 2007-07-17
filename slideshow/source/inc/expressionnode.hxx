@@ -4,9 +4,9 @@
  *
  *  $RCSfile: expressionnode.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: kz $ $Date: 2006-12-13 15:56:54 $
+ *  last change: $Author: obo $ $Date: 2007-07-17 15:06:59 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -33,10 +33,10 @@
  *
  ************************************************************************/
 
-#ifndef _SLIDESHOW_EXPRESSIONNODE_HXX
-#define _SLIDESHOW_EXPRESSIONNODE_HXX
+#ifndef INCLUDED_SLIDESHOW_EXPRESSIONNODE_HXX
+#define INCLUDED_SLIDESHOW_EXPRESSIONNODE_HXX
 
-#include <animationfunction.hxx>
+#include "animationfunction.hxx"
 
 
 /* Definition of ExpressionNode interface */
@@ -71,4 +71,4 @@ namespace slideshow
     }
 }
 
-#endif /* _SLIDESHOW_EXPRESSIONNODE_HXX */
+#endif /* INCLUDED_SLIDESHOW_EXPRESSIONNODE_HXX */

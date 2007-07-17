@@ -4,9 +4,9 @@
  *
  *  $RCSfile: eventhandler.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: kz $ $Date: 2006-12-13 15:56:15 $
+ *  last change: $Author: obo $ $Date: 2007-07-17 15:06:22 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -33,12 +33,10 @@
  *
  ************************************************************************/
 
-#ifndef _SLIDESHOW_EVENTHANDLER_HXX
-#define _SLIDESHOW_EVENTHANDLER_HXX
+#ifndef INCLUDED_SLIDESHOW_EVENTHANDLER_HXX
+#define INCLUDED_SLIDESHOW_EVENTHANDLER_HXX
 
 #include <boost/shared_ptr.hpp>
-
-#include <disposable.hxx>
 
 
 /* Definition of EventHandler interface */
@@ -54,9 +52,11 @@ namespace slideshow
             EventMultiplexer object, and are called from there to
             handle events.
          */
-        class EventHandler : public Disposable
+        class EventHandler
         {
         public:
+            virtual ~EventHandler() {}
+
             /** Handle the event.
 
                 @return true, if this handler has successfully
@@ -72,4 +72,4 @@ namespace slideshow
     }
 }
 
-#endif /* _SLIDESHOW_EVENTHANDLER_HXX */
+#endif /* INCLUDED_SLIDESHOW_EVENTHANDLER_HXX */

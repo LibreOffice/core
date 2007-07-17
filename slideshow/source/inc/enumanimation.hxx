@@ -4,9 +4,9 @@
  *
  *  $RCSfile: enumanimation.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: kz $ $Date: 2006-12-13 15:55:37 $
+ *  last change: $Author: obo $ $Date: 2007-07-17 15:05:55 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -33,10 +33,10 @@
  *
  ************************************************************************/
 
-#ifndef _SLIDESHOW_ENUMANIMATION_HXX
-#define _SLIDESHOW_ENUMANIMATION_HXX
+#ifndef INCLUDED_SLIDESHOW_ENUMANIMATION_HXX
+#define INCLUDED_SLIDESHOW_ENUMANIMATION_HXX
 
-#include <animation.hxx>
+#include "animation.hxx"
 
 
 /* Definition of EnumAnimation interface */
@@ -84,4 +84,4 @@ namespace slideshow
     }
 }
 
-#endif /* _SLIDESHOW_ENUMANIMATION_HXX */
+#endif /* INCLUDED_SLIDESHOW_ENUMANIMATION_HXX */
