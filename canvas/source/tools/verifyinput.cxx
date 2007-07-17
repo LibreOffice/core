@@ -4,9 +4,9 @@
  *
  *  $RCSfile: verifyinput.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 03:28:25 $
+ *  last change: $Author: obo $ $Date: 2007-07-17 14:24:58 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -387,7 +387,7 @@ namespace canvas
                 throw lang::IllegalArgumentException(
                     ::rtl::OUString::createFromAscii(pStr) +
                     ::rtl::OUString::createFromAscii(": verifyInput(): render state's CompositeOperation value out of range (") +
-                    ::rtl::OUString::valueOf((sal_Int32)renderState.CompositeOperation) +
+                    ::rtl::OUString::valueOf(sal::static_int_cast<sal_Int32>(renderState.CompositeOperation)) +
                     ::rtl::OUString::createFromAscii(" not known)"),
                     xIf,
                     nArgPos );
@@ -442,7 +442,7 @@ namespace canvas
                 throw lang::IllegalArgumentException(
                     ::rtl::OUString::createFromAscii(pStr) +
                     ::rtl::OUString::createFromAscii(": verifyInput(): textures' RepeatModeX value is out of range (") +
-                    ::rtl::OUString::valueOf((sal_Int32)texture.RepeatModeX) +
+                    ::rtl::OUString::valueOf(sal::static_int_cast<sal_Int32>(texture.RepeatModeX)) +
                     ::rtl::OUString::createFromAscii(" not known)"),
                     xIf,
                     nArgPos );
@@ -458,7 +458,7 @@ namespace canvas
                 throw lang::IllegalArgumentException(
                     ::rtl::OUString::createFromAscii(pStr) +
                     ::rtl::OUString::createFromAscii(": verifyInput(): textures' RepeatModeY value is out of range (") +
-                    ::rtl::OUString::valueOf((sal_Int32)texture.RepeatModeY) +
+                    ::rtl::OUString::valueOf(sal::static_int_cast<sal_Int32>(texture.RepeatModeY)) +
                     ::rtl::OUString::createFromAscii(" not known)"),
                     xIf,
                     nArgPos );
@@ -557,7 +557,7 @@ namespace canvas
                 throw lang::IllegalArgumentException(
                     ::rtl::OUString::createFromAscii(pStr) +
                     ::rtl::OUString::createFromAscii(": verifyInput(): stroke attributes' StartCapType value is out of range (") +
-                    ::rtl::OUString::valueOf((sal_Int32)strokeAttributes.StartCapType) +
+                    ::rtl::OUString::valueOf(sal::static_int_cast<sal_Int32>(strokeAttributes.StartCapType)) +
                     ::rtl::OUString::createFromAscii(" not known)"),
                     xIf,
                     nArgPos );
@@ -573,7 +573,7 @@ namespace canvas
                 throw lang::IllegalArgumentException(
                     ::rtl::OUString::createFromAscii(pStr) +
                     ::rtl::OUString::createFromAscii(": verifyInput(): stroke attributes' StartCapType value is out of range (") +
-                    ::rtl::OUString::valueOf((sal_Int32)strokeAttributes.EndCapType) +
+                    ::rtl::OUString::valueOf(sal::static_int_cast<sal_Int32>(strokeAttributes.EndCapType)) +
                     ::rtl::OUString::createFromAscii(" not known)"),
                     xIf,
                     nArgPos );
@@ -589,7 +589,7 @@ namespace canvas
                 throw lang::IllegalArgumentException(
                     ::rtl::OUString::createFromAscii(pStr) +
                     ::rtl::OUString::createFromAscii(": verifyInput(): stroke attributes' JoinType value is out of range (") +
-                    ::rtl::OUString::valueOf((sal_Int32)strokeAttributes.JoinType) +
+                    ::rtl::OUString::valueOf(sal::static_int_cast<sal_Int32>(strokeAttributes.JoinType)) +
                     ::rtl::OUString::createFromAscii(" not known)"),
                     xIf,
                     nArgPos );
@@ -682,7 +682,7 @@ namespace canvas
                 throw lang::IllegalArgumentException(
                     ::rtl::OUString::createFromAscii(pStr) +
                     ::rtl::OUString::createFromAscii(": verifyInput(): bitmap layout's Endianness value is out of range (") +
-                    ::rtl::OUString::valueOf((sal_Int32)bitmapLayout.Endianness) +
+                    ::rtl::OUString::valueOf(sal::static_int_cast<sal_Int32>(bitmapLayout.Endianness)) +
                     ::rtl::OUString::createFromAscii(" not known)"),
                     xIf,
                     nArgPos );
@@ -698,7 +698,7 @@ namespace canvas
                 throw lang::IllegalArgumentException(
                     ::rtl::OUString::createFromAscii(pStr) +
                     ::rtl::OUString::createFromAscii(": verifyInput(): bitmap layout's Format value is out of range (") +
-                    ::rtl::OUString::valueOf((sal_Int32)bitmapLayout.Format) +
+                    ::rtl::OUString::valueOf(sal::static_int_cast<sal_Int32>(bitmapLayout.Format)) +
                     ::rtl::OUString::createFromAscii(" not known)"),
                     xIf,
                     nArgPos );
@@ -774,7 +774,7 @@ namespace canvas
                 throw lang::IllegalArgumentException(
                     ::rtl::OUString::createFromAscii(pStr) +
                     ::rtl::OUString::createFromAscii(": verifyInput(): bitmap layout's Endianness value is out of range (") +
-                    ::rtl::OUString::valueOf((sal_Int32)bitmapLayout.Endianness) +
+                    ::rtl::OUString::valueOf(sal::static_int_cast<sal_Int32>(bitmapLayout.Endianness)) +
                     ::rtl::OUString::createFromAscii(" not known)"),
                     xIf,
                     nArgPos );
@@ -790,7 +790,7 @@ namespace canvas
                 throw lang::IllegalArgumentException(
                     ::rtl::OUString::createFromAscii(pStr) +
                     ::rtl::OUString::createFromAscii(": verifyInput(): bitmap layout's Format value is out of range (") +
-                    ::rtl::OUString::valueOf((sal_Int32)bitmapLayout.Format) +
+                    ::rtl::OUString::valueOf(sal::static_int_cast<sal_Int32>(bitmapLayout.Format)) +
                     ::rtl::OUString::createFromAscii(" not known)"),
                     xIf,
                     nArgPos );
