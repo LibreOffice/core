@@ -4,9 +4,9 @@
  *
  *  $RCSfile: rehearsetimingsactivity.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: vg $ $Date: 2006-12-15 00:48:44 $
+ *  last change: $Author: obo $ $Date: 2007-07-17 14:38:24 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -44,14 +44,20 @@
 #include <vcl/metric.hxx>
 #include <cppcanvas/vclfactory.hxx>
 #include <cppcanvas/basegfxfactory.hxx>
+#include <basegfx/range/b2drange.hxx>
+
+#include <comphelper/anytostring.hxx>
+#include <cppuhelper/exc_hlp.hxx>
 
 #include <com/sun/star/awt/MouseButton.hpp>
 #include <com/sun/star/awt/MouseEvent.hpp>
 #include <com/sun/star/rendering/XBitmap.hpp>
 
 #include "eventqueue.hxx"
+#include "screenupdater.hxx"
 #include "eventmultiplexer.hxx"
 #include "activitiesqueue.hxx"
+#include "slideshowcontext.hxx"
 #include "mouseeventhandler.hxx"
 #include "rehearsetimingsactivity.hxx"
 
@@ -64,18 +70,67 @@ using namespace com::sun::star::uno;
 namespace slideshow {
 namespace internal {
 
-class RehearseTimingsActivity::MouseHandler
-    : public MouseEventHandler,
-      private boost::noncopyable
+class RehearseTimingsActivity::WakeupEvent : public Event,
+                                             private ::boost::noncopyable
 {
 public:
-    MouseHandler( boost::shared_ptr<RehearseTimingsActivity> const & rta );
+    WakeupEvent( boost::shared_ptr< ::canvas::tools::ElapsedTime > const& pTimeBase,
+                 ActivitySharedPtr const&                                 rActivity,
+                 ActivitiesQueue &                                        rActivityQueue ) :
+        maTimer(pTimeBase),
+        mnNextTime(0.0),
+        mpActivity(rActivity),
+        mrActivityQueue( rActivityQueue )
+    {}
+
+    virtual void dispose() {}
+    virtual bool fire()
+    {
+        ActivitySharedPtr pActivity( mpActivity.lock() );
+        if( !pActivity )
+            return false;
+
+        return mrActivityQueue.addActivity( pActivity );
+    }
+
+    virtual bool isCharged() const { return true; }
+    virtual double getActivationTime( double nCurrentTime ) const
+    {
+        const double nElapsedTime( maTimer.getElapsedTime() );
+
+        return ::std::max( nCurrentTime,
+                           nCurrentTime - nElapsedTime + mnNextTime );
+    }
+
+    /// Start the internal timer
+    void start() { maTimer.reset(); }
+
+    /** Set the next timeout this object should generate.
+
+        @param nextTime
+        Absolute time, measured from the last start() call,
+        when this event should wakeup the Activity again. If
+        your time is relative, simply call start() just before
+        every setNextTimeout() call.
+    */
+    void setNextTimeout( double nextTime ) { mnNextTime = nextTime; }
+
+private:
+    ::canvas::tools::ElapsedTime    maTimer;
+    double                          mnNextTime;
+    boost::weak_ptr<Activity>       mpActivity;
+    ActivitiesQueue&                mrActivityQueue;
+};
+
+class RehearseTimingsActivity::MouseHandler : public MouseEventHandler,
+                                              private boost::noncopyable
+{
+public:
+    explicit MouseHandler( RehearseTimingsActivity& rta );
 
     void reset();
-    bool hasBeenClicked() const { return m_hasBeenClicked; }
+    bool hasBeenClicked() const { return mbHasBeenClicked; }
 
-    // Disposable:
-    virtual void dispose();
     // MouseEventHandler
     virtual bool handleMousePressed( awt::MouseEvent const & evt );
     virtual bool handleMouseReleased( awt::MouseEvent const & evt );
@@ -86,111 +141,125 @@ public:
 
 private:
     bool isInArea( com::sun::star::awt::MouseEvent const & evt ) const;
-    bool isDisposed() const { return !m_rta || hasBeenClicked(); }
     void updatePressedState( const bool pressedState ) const;
 
-    boost::shared_ptr<RehearseTimingsActivity> m_rta;
-    bool                                       m_hasBeenClicked;
-    bool                                       m_mouseStartedInArea;
+    RehearseTimingsActivity& mrActivity;
+    bool                     mbHasBeenClicked;
+    bool                     mbMouseStartedInArea;
 };
 
 const sal_Int32 LEFT_BORDER_SPACE  = 10;
 const sal_Int32 LOWER_BORDER_SPACE = 30;
 
-RehearseTimingsActivity::RehearseTimingsActivity( EventQueue &            rEventQueue,
-                                                  EventMultiplexer &      rEventMultiplexer,
-                                                  ActivitiesQueue &       rActivitiesQueue,
-                                                  const UnoViewContainer& rViewContainer ) :
-    m_rEventQueue(rEventQueue),
-    m_rEventMultiplexer(rEventMultiplexer),
-    m_rActivitiesQueue(rActivitiesQueue),
-    m_elapsedTime( rEventQueue.getTimer() ),
-    m_views(),
-    m_spriteRectangle(),
-    m_font( Application::GetSettings().GetStyleSettings().GetInfoFont() ),
-    m_wakeUpEvent( new WakeupEvent( rEventQueue.getTimer(),
-                                    rActivitiesQueue ) ),
-    m_mouseHandler(),
-    m_spriteSizePixel(),
-    m_nYOffset(0),
-    m_bActive(false),
-    m_drawPressed(false)
+RehearseTimingsActivity::RehearseTimingsActivity( const SlideShowContext& rContext ) :
+    mrEventQueue(rContext.mrEventQueue),
+    mrScreenUpdater(rContext.mrScreenUpdater),
+    mrEventMultiplexer(rContext.mrEventMultiplexer),
+    mrActivitiesQueue(rContext.mrActivitiesQueue),
+    maElapsedTime( rContext.mrEventQueue.getTimer() ),
+    maViews(),
+    maSpriteRectangle(),
+    maFont( Application::GetSettings().GetStyleSettings().GetInfoFont() ),
+    mpWakeUpEvent(),
+    mpMouseHandler(),
+    maSpriteSizePixel(),
+    mnYOffset(0),
+    mbActive(false),
+    mbDrawPressed(false)
 {
-    m_font.SetHeight( m_font.GetHeight() * 2 );
-    m_font.SetWidth( m_font.GetWidth() * 2 );
-    m_font.SetAlign( ALIGN_BASELINE );
-    m_font.SetColor( COL_BLACK );
+    maFont.SetHeight( maFont.GetHeight() * 2 );
+    maFont.SetWidth( maFont.GetWidth() * 2 );
+    maFont.SetAlign( ALIGN_BASELINE );
+    maFont.SetColor( COL_BLACK );
 
     // determine sprite size (in pixel):
     VirtualDevice blackHole;
     blackHole.EnableOutput(false);
-    blackHole.SetFont( m_font );
+    blackHole.SetFont( maFont );
     blackHole.SetMapMode( MAP_PIXEL );
     Rectangle rect;
     const FontMetric metric( blackHole.GetFontMetric() );
     blackHole.GetTextBoundRect(
         rect, String(RTL_CONSTASCII_USTRINGPARAM("XX:XX:XX")) );
-    m_spriteSizePixel.setX( rect.getWidth() * 12 / 10 );
-    m_spriteSizePixel.setY( metric.GetLineHeight() * 11 / 10 );
-    m_nYOffset = (metric.GetAscent() + (metric.GetLineHeight() / 20));
+    maSpriteSizePixel.setX( rect.getWidth() * 12 / 10 );
+    maSpriteSizePixel.setY( metric.GetLineHeight() * 11 / 10 );
+    mnYOffset = (metric.GetAscent() + (metric.GetLineHeight() / 20));
 
-    std::for_each( rViewContainer.begin(),
-                   rViewContainer.end(),
+    std::for_each( rContext.mrViewContainer.begin(),
+                   rContext.mrViewContainer.end(),
                    boost::bind( &RehearseTimingsActivity::viewAdded,
                                 this,
                                 _1 ));
 }
 
-boost::shared_ptr<RehearseTimingsActivity> RehearseTimingsActivity::create(
-    EventQueue &            rEventQueue,
-    EventMultiplexer &      rEventMultiplexer,
-    ActivitiesQueue &       rActivitiesQueue,
-    const UnoViewContainer& rViewContainer )
+RehearseTimingsActivity::~RehearseTimingsActivity()
 {
-    boost::shared_ptr<RehearseTimingsActivity> activity(
-        new RehearseTimingsActivity( rEventQueue,
-                                     rEventMultiplexer,
-                                     rActivitiesQueue,
-                                     rViewContainer ));
-    activity->m_mouseHandler.reset( new MouseHandler(activity) );
-    activity->m_wakeUpEvent->setActivity(activity);
-    rEventMultiplexer.addViewHandler( activity );
+    try
+    {
+        stop();
+    }
+    catch (uno::Exception &)
+    {
+        OSL_ENSURE( false, rtl::OUStringToOString(
+                        comphelper::anyToString(
+                            cppu::getCaughtException() ),
+                        RTL_TEXTENCODING_UTF8 ).getStr() );
+    }
+}
 
-    return activity;
+boost::shared_ptr<RehearseTimingsActivity> RehearseTimingsActivity::create(
+    const SlideShowContext& rContext )
+{
+    boost::shared_ptr<RehearseTimingsActivity> pActivity(
+        new RehearseTimingsActivity( rContext ));
+
+    pActivity->mpMouseHandler.reset(
+        new MouseHandler(*pActivity.get()) );
+    pActivity->mpWakeUpEvent.reset(
+        new WakeupEvent( rContext.mrEventQueue.getTimer(),
+                         pActivity,
+                         rContext.mrActivitiesQueue ));
+
+    rContext.mrEventMultiplexer.addViewHandler( pActivity );
+
+    return pActivity;
 }
 
 void RehearseTimingsActivity::start()
 {
-    m_elapsedTime.reset();
-    m_drawPressed = false;
-    m_bActive = true;
+    maElapsedTime.reset();
+    mbDrawPressed = false;
+    mbActive = true;
 
     // paint and show all sprites:
     paintAllSprites();
     for_each_sprite( boost::bind( &cppcanvas::Sprite::show, _1 ) );
 
-    m_rActivitiesQueue.addActivity( shared_from_this() );
+    mrActivitiesQueue.addActivity( shared_from_this() );
 
-    m_mouseHandler->reset();
-    m_rEventMultiplexer.addClickHandler(
-        m_mouseHandler, 42 /* highest prio of all, > 3.0 */ );
-    m_rEventMultiplexer.addMouseMoveHandler(
-        m_mouseHandler, 42 /* highest prio of all, > 3.0 */ );
+    mpMouseHandler->reset();
+    mrEventMultiplexer.addClickHandler(
+        mpMouseHandler, 42 /* highest prio of all, > 3.0 */ );
+    mrEventMultiplexer.addMouseMoveHandler(
+        mpMouseHandler, 42 /* highest prio of all, > 3.0 */ );
 }
 
 double RehearseTimingsActivity::stop()
 {
-    m_rEventMultiplexer.removeMouseMoveHandler( m_mouseHandler );
-    m_rEventMultiplexer.removeClickHandler( m_mouseHandler );
-    m_bActive = false; // will be removed from queue
+    mrEventMultiplexer.removeMouseMoveHandler( mpMouseHandler );
+    mrEventMultiplexer.removeClickHandler( mpMouseHandler );
+
+    mbActive = false; // will be removed from queue
+
     for_each_sprite( boost::bind( &cppcanvas::Sprite::hide, _1 ) );
-    return m_elapsedTime.getElapsedTime();
+
+    return maElapsedTime.getElapsedTime();
 }
 
 bool RehearseTimingsActivity::hasBeenClicked() const
 {
-    if (m_mouseHandler)
-        return m_mouseHandler->hasBeenClicked();
+    if (mpMouseHandler)
+        return mpMouseHandler->hasBeenClicked();
     return false;
 }
 
@@ -198,15 +267,11 @@ bool RehearseTimingsActivity::hasBeenClicked() const
 void RehearseTimingsActivity::dispose()
 {
     stop();
-    if (m_wakeUpEvent) {
-        m_wakeUpEvent->dispose();
-        m_wakeUpEvent.reset();
-    }
-    if (m_mouseHandler) {
-        m_mouseHandler->dispose();
-        m_mouseHandler.reset();
-    }
-    ViewsVecT().swap( m_views );
+
+    mpWakeUpEvent.reset();
+    mpMouseHandler.reset();
+
+    ViewsVecT().swap( maViews );
 }
 
 // Activity:
@@ -217,17 +282,20 @@ double RehearseTimingsActivity::calcTimeLag() const
 
 bool RehearseTimingsActivity::perform()
 {
-    if (! isActive())
-        return false;
-    OSL_ENSURE( m_wakeUpEvent, "### no wake-up event!" );
-    if (!m_wakeUpEvent)
+    if( !isActive() )
         return false;
 
-    m_wakeUpEvent->start();
-    m_wakeUpEvent->setNextTimeout( 0.5 /* secs */ );
-    m_rEventQueue.addEvent( m_wakeUpEvent );
+    if( !mpWakeUpEvent )
+        return false;
+
+    mpWakeUpEvent->start();
+    mpWakeUpEvent->setNextTimeout( 0.5 );
+    mrEventQueue.addEvent( mpWakeUpEvent );
 
     paintAllSprites();
+
+    // sprites changed, need screen update
+    mrScreenUpdater.notifyUpdate();
 
     return false; // don't reinsert, WakeupEvent will perform
                   // that after the given timeout
@@ -235,12 +303,7 @@ bool RehearseTimingsActivity::perform()
 
 bool RehearseTimingsActivity::isActive() const
 {
-    return m_bActive;
-}
-
-bool RehearseTimingsActivity::needsScreenUpdate() const
-{
-    return isActive();
+    return mbActive;
 }
 
 void RehearseTimingsActivity::dequeued()
@@ -250,30 +313,33 @@ void RehearseTimingsActivity::dequeued()
 
 void RehearseTimingsActivity::end()
 {
-    if (isActive()) {
+    if (isActive())
+    {
         stop();
-        m_bActive = false;
+        mbActive = false;
     }
 }
 
-basegfx::B2DRectangle RehearseTimingsActivity::calcSpriteRectangle(
-    UnoViewSharedPtr const & rView ) const
+basegfx::B2DRange RehearseTimingsActivity::calcSpriteRectangle( UnoViewSharedPtr const& rView ) const
 {
-    const Reference<rendering::XBitmap> xBitmap(
-        rView->getCanvas()->getUNOCanvas(), UNO_QUERY_THROW );
+    const Reference<rendering::XBitmap> xBitmap( rView->getCanvas()->getUNOCanvas(),
+                                                 UNO_QUERY );
+    if( !xBitmap.is() )
+        return basegfx::B2DRange();
+
     const geometry::IntegerSize2D realSize( xBitmap->getSize() );
     // pixel:
     basegfx::B2DPoint spritePos(
         std::min<sal_Int32>( realSize.Width, LEFT_BORDER_SPACE ),
-        std::max<sal_Int32>( 0, realSize.Height - m_spriteSizePixel.getY()
+        std::max<sal_Int32>( 0, realSize.Height - maSpriteSizePixel.getY()
                                                 - LOWER_BORDER_SPACE ) );
     basegfx::B2DHomMatrix transformation( rView->getTransformation() );
     transformation.invert();
     spritePos *= transformation;
-    basegfx::B2DSize spriteSize( m_spriteSizePixel.getX(),
-                                 m_spriteSizePixel.getY() );
+    basegfx::B2DSize spriteSize( maSpriteSizePixel.getX(),
+                                 maSpriteSizePixel.getY() );
     spriteSize *= transformation;
-    return basegfx::B2DRectangle(
+    return basegfx::B2DRange(
         spritePos.getX(), spritePos.getY(),
         spritePos.getX() + spriteSize.getX(),
         spritePos.getY() + spriteSize.getY() );
@@ -283,21 +349,21 @@ void RehearseTimingsActivity::viewAdded( const UnoViewSharedPtr& rView )
 {
     cppcanvas::CustomSpriteSharedPtr sprite(
         rView->createSprite( basegfx::B2DSize(
-                                 m_spriteSizePixel.getX()+2,
-                                 m_spriteSizePixel.getY()+2 ) ));
-    sprite->setPriority(1001.0); // sprite should be in front of all
-                                 // other sprites
+                                 maSpriteSizePixel.getX()+2,
+                                 maSpriteSizePixel.getY()+2 ),
+                             1001.0 )); // sprite should be in front of all
+                                        // other sprites
     sprite->setAlpha( 0.8 );
-    const basegfx::B2DRectangle spriteRectangle(
+    const basegfx::B2DRange spriteRectangle(
         calcSpriteRectangle( rView ) );
     sprite->move( basegfx::B2DPoint(
                       spriteRectangle.getMinX(),
                       spriteRectangle.getMinY() ) );
 
-    if( m_views.empty() )
-        m_spriteRectangle = spriteRectangle;
+    if( maViews.empty() )
+        maSpriteRectangle = spriteRectangle;
 
-    m_views.push_back( ViewsVecT::value_type( rView, sprite ) );
+    maViews.push_back( ViewsVecT::value_type( rView, sprite ) );
 
     if (isActive())
         sprite->show();
@@ -305,15 +371,15 @@ void RehearseTimingsActivity::viewAdded( const UnoViewSharedPtr& rView )
 
 void RehearseTimingsActivity::viewRemoved( const UnoViewSharedPtr& rView )
 {
-    m_views.erase(
+    maViews.erase(
         std::remove_if(
-            m_views.begin(), m_views.end(),
+            maViews.begin(), maViews.end(),
             boost::bind(
                 std::equal_to<UnoViewSharedPtr>(),
                 rView,
                 // select view:
                 boost::bind( std::select1st<ViewsVecT::value_type>(), _1 ))),
-        m_views.end() );
+        maViews.end() );
 }
 
 void RehearseTimingsActivity::viewChanged( const UnoViewSharedPtr& rView )
@@ -321,23 +387,43 @@ void RehearseTimingsActivity::viewChanged( const UnoViewSharedPtr& rView )
     // find entry corresponding to modified view
     ViewsVecT::iterator aModifiedEntry(
         std::find_if(
-            m_views.begin(),
-            m_views.end(),
+            maViews.begin(),
+            maViews.end(),
             boost::bind(
                 std::equal_to<UnoViewSharedPtr>(),
                 rView,
                 // select view:
                 boost::bind( std::select1st<ViewsVecT::value_type>(), _1 ))));
 
-    OSL_ASSERT( aModifiedEntry != m_views.end() );
-    if( aModifiedEntry == m_views.end() )
+    OSL_ASSERT( aModifiedEntry != maViews.end() );
+    if( aModifiedEntry == maViews.end() )
         return;
 
     // new sprite pos, transformation might have changed:
-    m_spriteRectangle = calcSpriteRectangle( rView );
+    maSpriteRectangle = calcSpriteRectangle( rView );
 
     // reposition sprite:
-    aModifiedEntry->second->move( m_spriteRectangle.getMinimum() );
+    aModifiedEntry->second->move( maSpriteRectangle.getMinimum() );
+
+    // sprites changed, need screen update
+    mrScreenUpdater.notifyUpdate( rView );
+}
+
+void RehearseTimingsActivity::viewsChanged()
+{
+    if( !maViews.empty() )
+    {
+        // new sprite pos, transformation might have changed:
+        maSpriteRectangle = calcSpriteRectangle( maViews.front().first );
+
+        // reposition sprites
+        for_each_sprite( boost::bind( &cppcanvas::Sprite::move,
+                                      _1,
+                                      boost::cref(maSpriteRectangle.getMinimum())) );
+
+        // sprites changed, need screen update
+        mrScreenUpdater.notifyUpdate();
+    }
 }
 
 void RehearseTimingsActivity::paintAllSprites() const
@@ -353,7 +439,7 @@ void RehearseTimingsActivity::paint( cppcanvas::CanvasSharedPtr const & canvas )
 {
     // build timer string:
     const sal_Int32 nTimeSecs =
-        static_cast<sal_Int32>(m_elapsedTime.getElapsedTime());
+        static_cast<sal_Int32>(maElapsedTime.getElapsedTime());
     rtl::OUStringBuffer buf;
     sal_Int32 n = (nTimeSecs / 3600);
     if (n < 10)
@@ -378,16 +464,18 @@ void RehearseTimingsActivity::paint( cppcanvas::CanvasSharedPtr const & canvas )
     metaFile.SetPrefSize( Size( 1, 1 ) );
     blackHole.EnableOutput(false);
     blackHole.SetMapMode( MAP_PIXEL );
-    blackHole.SetFont( m_font );
+    blackHole.SetFont( maFont );
     Rectangle rect = Rectangle( 0,0,
-                                m_spriteSizePixel.getX(),
-                                m_spriteSizePixel.getY());
-    if (m_drawPressed) {
+                                maSpriteSizePixel.getX(),
+                                maSpriteSizePixel.getY());
+    if (mbDrawPressed)
+    {
         blackHole.SetTextColor( COL_BLACK );
         blackHole.SetFillColor( COL_LIGHTGRAY );
         blackHole.SetLineColor( COL_GRAY );
     }
-    else {
+    else
+    {
         blackHole.SetTextColor( COL_BLACK );
         blackHole.SetFillColor( COL_WHITE );
         blackHole.SetLineColor( COL_GRAY );
@@ -395,8 +483,8 @@ void RehearseTimingsActivity::paint( cppcanvas::CanvasSharedPtr const & canvas )
     blackHole.DrawRect( rect );
     blackHole.GetTextBoundRect( rect, time );
     blackHole.DrawText(
-        Point( (m_spriteSizePixel.getX() - rect.getWidth()) / 2,
-               m_nYOffset ), time );
+        Point( (maSpriteSizePixel.getX() - rect.getWidth()) / 2,
+               mnYOffset ), time );
 
     metaFile.Stop();
     metaFile.WindStart();
@@ -410,46 +498,34 @@ void RehearseTimingsActivity::paint( cppcanvas::CanvasSharedPtr const & canvas )
 }
 
 
-RehearseTimingsActivity::MouseHandler::MouseHandler(
-    boost::shared_ptr<RehearseTimingsActivity> const & rta )
-    : m_rta(rta),
-      m_hasBeenClicked(false),
-      m_mouseStartedInArea(false)
-{
-}
+RehearseTimingsActivity::MouseHandler::MouseHandler( RehearseTimingsActivity& rta ) :
+    mrActivity(rta),
+    mbHasBeenClicked(false),
+    mbMouseStartedInArea(false)
+{}
 
 void RehearseTimingsActivity::MouseHandler::reset()
 {
-    m_hasBeenClicked = false;
-    m_mouseStartedInArea = false;
-}
-
-// Disposable:
-void RehearseTimingsActivity::MouseHandler::dispose()
-{
-    m_rta.reset();
+    mbHasBeenClicked = false;
+    mbMouseStartedInArea = false;
 }
 
 bool RehearseTimingsActivity::MouseHandler::isInArea(
     awt::MouseEvent const & evt ) const
 {
-    if (m_rta)
-        return m_rta->m_spriteRectangle.isInside(
-            basegfx::B2DPoint( evt.X, evt.Y ) );
-    return false;
+    return mrActivity.maSpriteRectangle.isInside(
+        basegfx::B2DPoint( evt.X, evt.Y ) );
 }
 
 void RehearseTimingsActivity::MouseHandler::updatePressedState(
     const bool pressedState ) const
 {
-    if (pressedState != m_rta->m_drawPressed)
+    if( pressedState != mrActivity.mbDrawPressed )
     {
-        m_rta->m_drawPressed = pressedState;
-        m_rta->paintAllSprites();
+        mrActivity.mbDrawPressed = pressedState;
+        mrActivity.paintAllSprites();
 
-        // update screen immediately (cannot wait for next
-        // ActivitiesQueue loop)
-        m_rta->m_rEventMultiplexer.updateScreenContent( true );
+        mrActivity.mrScreenUpdater.notifyUpdate();
     }
 }
 
@@ -457,10 +533,9 @@ void RehearseTimingsActivity::MouseHandler::updatePressedState(
 bool RehearseTimingsActivity::MouseHandler::handleMousePressed(
     awt::MouseEvent const & evt )
 {
-    if (evt.Buttons == awt::MouseButton::LEFT &&
-        !isDisposed() && isInArea(evt))
+    if( evt.Buttons == awt::MouseButton::LEFT && isInArea(evt) )
     {
-        m_mouseStartedInArea = true;
+        mbMouseStartedInArea = true;
         updatePressedState(true);
         return true; // consume event
     }
@@ -470,13 +545,12 @@ bool RehearseTimingsActivity::MouseHandler::handleMousePressed(
 bool RehearseTimingsActivity::MouseHandler::handleMouseReleased(
     awt::MouseEvent const & evt )
 {
-    if (evt.Buttons == awt::MouseButton::LEFT &&
-        !isDisposed() && m_mouseStartedInArea)
+    if( evt.Buttons == awt::MouseButton::LEFT && mbMouseStartedInArea )
     {
-        m_hasBeenClicked = isInArea(evt); // fini if in
-        m_mouseStartedInArea = false;
+        mbHasBeenClicked = isInArea(evt); // fini if in
+        mbMouseStartedInArea = false;
         updatePressedState(false);
-        if (! m_hasBeenClicked)
+        if( !mbHasBeenClicked )
             return true; // consume event, else next slide (manual advance)
     }
     return false;
@@ -497,7 +571,7 @@ bool RehearseTimingsActivity::MouseHandler::handleMouseExited(
 bool RehearseTimingsActivity::MouseHandler::handleMouseDragged(
     awt::MouseEvent const & evt )
 {
-    if (!isDisposed() && m_mouseStartedInArea)
+    if( mbMouseStartedInArea )
         updatePressedState( isInArea(evt) );
     return false;
 }
