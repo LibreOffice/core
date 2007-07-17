@@ -4,9 +4,9 @@
  *
  *  $RCSfile: AppDetailPageHelper.cxx,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: rt $ $Date: 2007-07-06 07:58:46 $
+ *  last change: $Author: obo $ $Date: 2007-07-17 13:21:33 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -158,6 +158,8 @@
 #ifndef _TOOLS_DEBUG_HXX
 #include <tools/debug.hxx>
 #endif
+
+#include <com/sun/star/document/XStandaloneDocumentInfo.hpp>
 
 using namespace ::dbaui;
 using namespace ::com::sun::star::container;
@@ -1064,7 +1066,7 @@ void OAppDetailPageHelper::showPreview(const Reference< XContent >& _xContent)
                     m_aPreview.Hide();
                     m_aDocumentInfo.Clear();
                     m_aDocumentInfo.Show();
-                    Reference<XPropertySet> xProp(aPreview,UNO_QUERY);
+                    Reference<document::XStandaloneDocumentInfo> xProp(aPreview,UNO_QUERY);
                     if ( xProp.is() )
                         m_aDocumentInfo.fill(xProp,String());
                 }
