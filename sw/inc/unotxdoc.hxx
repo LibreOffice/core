@@ -4,9 +4,9 @@
  *
  *  $RCSfile: unotxdoc.hxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: rt $ $Date: 2006-12-01 15:35:35 $
+ *  last change: $Author: obo $ $Date: 2007-07-17 13:05:35 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -489,6 +489,8 @@ public:
 
     // ::com::sun::star::xforms::XFormsSupplier
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameContainer > SAL_CALL getXForms(  ) throw (::com::sun::star::uno::RuntimeException);
+
+    virtual ::com::sun::star::uno::Reference< ::com::sun::star::document::XDocumentInfo > SAL_CALL getDocumentInfo() throw (::com::sun::star::uno::RuntimeException);
 
     //
     void                        Invalidate();
