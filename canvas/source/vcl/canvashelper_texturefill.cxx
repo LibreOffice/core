@@ -4,9 +4,9 @@
  *
  *  $RCSfile: canvashelper_texturefill.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: obo $ $Date: 2006-10-12 11:32:49 $
+ *  last change: $Author: obo $ $Date: 2007-07-17 14:26:07 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -253,14 +253,14 @@ namespace vclcanvas
                 // calculate the right border here (whereas the fill
                 // color is governed by the left edge)
                 const ::basegfx::B2DPoint& rPoint3(
-                    (nStepCount - i-1)/(double)nStepCount*aLeftTop +
-                    (i+1)/(double)nStepCount*aRightTop );
+                    (nStepCount - i-1)/double(nStepCount)*aLeftTop +
+                    (i+1)/double(nStepCount)*aRightTop );
                 aTempPoly[1] = ::Point( ::basegfx::fround( rPoint3.getX() ),
                                         ::basegfx::fround( rPoint3.getY() ) );
 
                 const ::basegfx::B2DPoint& rPoint4(
-                    (nStepCount - i-1)/(double)nStepCount*aLeftBottom +
-                    (i+1)/(double)nStepCount*aRightBottom );
+                    (nStepCount - i-1)/double(nStepCount)*aLeftBottom +
+                    (i+1)/double(nStepCount)*aRightBottom );
                 aTempPoly[2] = ::Point( ::basegfx::fround( rPoint4.getX() ),
                                         ::basegfx::fround( rPoint4.getY() ) );
 
@@ -450,7 +450,7 @@ namespace vclcanvas
                     // outer and inner polygon.
 
                     // calc interpolation parameter in [0,1] range
-                    const double nT( (nStepCount-i)/(double)nStepCount );
+                    const double nT( (nStepCount-i)/double(nStepCount) );
 
                     for( p=0; p<nNumPoints; ++p )
                     {
@@ -511,7 +511,7 @@ namespace vclcanvas
                     // start of the _next_ color strip. Thus, i+1
 
                     // calc interpolation parameter in [0,1] range
-                    const double nT( (nStepCount-i-1)/(double)nStepCount );
+                    const double nT( (nStepCount-i-1)/double(nStepCount) );
 
                     for( p=0; p<nNumPoints; ++p )
                     {
