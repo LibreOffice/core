@@ -4,9 +4,9 @@
  *
  *  $RCSfile: shapeattributelayer.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: kz $ $Date: 2006-12-13 16:01:29 $
+ *  last change: $Author: obo $ $Date: 2007-07-17 15:13:11 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -33,25 +33,23 @@
  *
  ************************************************************************/
 
-#ifndef _SLIDESHOW_SHAPEATTRIBUTELAYER_HXX
-#define _SLIDESHOW_SHAPEATTRIBUTELAYER_HXX
+#ifndef INCLUDED_SLIDESHOW_SHAPEATTRIBUTELAYER_HXX
+#define INCLUDED_SLIDESHOW_SHAPEATTRIBUTELAYER_HXX
 
-#include <com/sun/star/util/TriState.hpp>
 #include <com/sun/star/drawing/FillStyle.hpp>
 #include <com/sun/star/drawing/LineStyle.hpp>
 #include <com/sun/star/awt/FontSlant.hpp>
-
-#include <boost/shared_ptr.hpp>
 
 #include <basegfx/vector/b2dsize.hxx>
 #include <basegfx/point/b2dpoint.hxx>
 #include <basegfx/range/b2drectangle.hxx>
 #include <basegfx/polygon/b2dpolypolygon.hxx>
 
-#include <stack>
+#include "state.hxx"
+#include "rgbcolor.hxx"
 
-#include <state.hxx>
-#include <rgbcolor.hxx>
+#include <stack>
+#include <boost/shared_ptr.hpp>
 
 
 namespace slideshow
@@ -175,7 +173,7 @@ namespace slideshow
 
                 The current x position of the shape is always relative
                 to the <em>center</em> of the shape (in contrast to
-                the Shape::getPosSize() and Shape::getUpdateArea()
+                the Shape::getBounds() and Shape::getUpdateArea()
                 methods).
              */
             double getPosX() const;
@@ -183,7 +181,7 @@ namespace slideshow
 
                 The current x position of the shape is always relative
                 to the <em>center</em> of the shape (in contrast to
-                the Shape::getPosSize() and Shape::getUpdateArea()
+                the Shape::getBounds() and Shape::getUpdateArea()
                 methods).
              */
             void setPosX( const double& rNewX );
@@ -195,7 +193,7 @@ namespace slideshow
 
                 The current y position of the shape is always relative
                 to the <em>center</em> of the shape (in contrast to
-                the Shape::getPosSize() and Shape::getUpdateArea()
+                the Shape::getBounds() and Shape::getUpdateArea()
                 methods).
              */
             double getPosY() const;
@@ -203,7 +201,7 @@ namespace slideshow
 
                 The current y position of the shape is always relative
                 to the <em>center</em> of the shape (in contrast to
-                the Shape::getPosSize() and Shape::getUpdateArea()
+                the Shape::getBounds() and Shape::getUpdateArea()
                 methods).
              */
             void setPosY( const double& rNewY );
@@ -212,7 +210,7 @@ namespace slideshow
 
                 The current position of the shape is always relative
                 to the <em>center</em> of the shape (in contrast to
-                the Shape::getPosSize() and Shape::getUpdateArea()
+                the Shape::getBounds() and Shape::getUpdateArea()
                 methods).
              */
             void setPosition( const ::basegfx::B2DPoint& rNewPos );
@@ -561,4 +559,4 @@ namespace slideshow
     }
 }
 
-#endif /* _SLIDESHOW_SHAPEATTRIBUTELAYER_HXX */
+#endif /* INCLUDED_SLIDESHOW_SHAPEATTRIBUTELAYER_HXX */
