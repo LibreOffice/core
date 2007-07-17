@@ -4,9 +4,9 @@
  *
  *  $RCSfile: basenode.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: kz $ $Date: 2006-12-13 15:32:43 $
+ *  last change: $Author: obo $ $Date: 2007-07-17 14:48:50 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -37,21 +37,26 @@
 #include "precompiled_slideshow.hxx"
 
 // must be first
-#include "canvas/debug.hxx"
-#include "canvas/verbosetrace.hxx"
+#include <canvas/debug.hxx>
+#include <canvas/verbosetrace.hxx>
+
+#include <com/sun/star/animations/XAnimate.hpp>
+#include <com/sun/star/presentation/ParagraphTarget.hpp>
+#include <com/sun/star/animations/AnimationFill.hpp>
+#include <com/sun/star/animations/AnimationRestart.hpp>
+#include <com/sun/star/presentation/EffectNodeType.hpp>
+#include <com/sun/star/beans/XPropertySet.hpp>
+
 #include "basenode.hxx"
+#include "eventmultiplexer.hxx"
 #include "basecontainernode.hxx"
+#include "eventqueue.hxx"
 #include "delayevent.hxx"
 #include "tools.hxx"
 #include "nodetools.hxx"
 #include "generateevent.hxx"
-#include "com/sun/star/animations/XAnimate.hpp"
-#include "com/sun/star/presentation/ParagraphTarget.hpp"
-#include "com/sun/star/animations/AnimationFill.hpp"
-#include "com/sun/star/animations/AnimationRestart.hpp"
-#include "com/sun/star/presentation/EffectNodeType.hpp"
-#include "com/sun/star/beans/XPropertySet.hpp"
-#include "boost/bind.hpp"
+
+#include <boost/bind.hpp>
 #include <vector>
 #include <algorithm>
 #include <iterator>
@@ -327,21 +332,20 @@ private:
     NodeState meToState;
 };
 
-BaseNode::BaseNode(
-    const uno::Reference< animations::XAnimationNode >& xNode,
-    const BaseContainerNodeSharedPtr&                   rParent,
-    const NodeContext&                                  rContext )
-    : maContext( rContext.maContext ),
-      maDeactivatingListeners(),
-      mxAnimationNode( xNode ),
-      mpParent( rParent ),
-      mpSelf(),
-      mpStateTransitionTable( NULL ),
-      mnStartDelay( rContext.mnStartDelay ),
-      meCurrState( UNRESOLVED ),
-      meCurrentStateTransition( 0 ),
-      mpCurrentEvent(),
-      mbIsMainSequenceRootNode( isMainSequenceRootNode_( xNode ) )
+BaseNode::BaseNode( const uno::Reference< animations::XAnimationNode >& xNode,
+                    const BaseContainerNodeSharedPtr&                   rParent,
+                    const NodeContext&                                  rContext ) :
+    maContext( rContext.maContext ),
+    maDeactivatingListeners(),
+    mxAnimationNode( xNode ),
+    mpParent( rParent ),
+    mpSelf(),
+    mpStateTransitionTable( NULL ),
+    mnStartDelay( rContext.mnStartDelay ),
+    meCurrState( UNRESOLVED ),
+    meCurrentStateTransition( 0 ),
+    mpCurrentEvent(),
+    mbIsMainSequenceRootNode( isMainSequenceRootNode_( xNode ) )
 {
     ENSURE_AND_THROW( mxAnimationNode.is(),
                       "BaseNode::BaseNode(): Invalid XAnimationNode" );
@@ -704,7 +708,7 @@ void BaseNode::showState() const
                        "fillcolor=\"%f,1.0,1.0\"]",
                        (const char*)this+debugGetCurrentOffset(),
                        getDescription(),
-                       log((double)getState())/4.0 );
+                       log(double(getState()))/4.0 );
 
     // determine additional node information
     uno::Reference<animations::XAnimate> const xAnimate( mxAnimationNode,
