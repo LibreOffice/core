@@ -4,9 +4,9 @@
  *
  *  $RCSfile: doctreenodesupplier.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: kz $ $Date: 2006-12-13 15:54:58 $
+ *  last change: $Author: obo $ $Date: 2007-07-17 15:05:17 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -33,10 +33,10 @@
  *
  ************************************************************************/
 
-#ifndef _SLIDESHOW_DOCTREENODESUPPLIER_HXX
-#define _SLIDESHOW_DOCTREENODESUPPLIER_HXX
+#ifndef INCLUDED_SLIDESHOW_DOCTREENODESUPPLIER_HXX
+#define INCLUDED_SLIDESHOW_DOCTREENODESUPPLIER_HXX
 
-#include <doctreenode.hxx>
+#include "doctreenode.hxx"
 
 
 /* Definition of DocTreeNodeSupplier interface */
@@ -156,4 +156,4 @@ namespace slideshow
     }
 }
 
-#endif /* _SLIDESHOW_DOCTREENODESUPPLIER_HXX */
+#endif /* INCLUDED_SLIDESHOW_DOCTREENODESUPPLIER_HXX */
