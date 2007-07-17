@@ -4,9 +4,9 @@
  *
  *  $RCSfile: spriteredrawmanager.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: kz $ $Date: 2006-12-13 14:46:56 $
+ *  last change: $Author: obo $ $Date: 2007-07-17 14:24:31 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -244,6 +244,18 @@ namespace canvas
         // frequent locks of the object mutices
         SpriteComparator aSpriteComparator;
 
+        // put all sprites that have changed content into update areas
+        ListOfSprites::const_iterator       aCurrSprite( maSprites.begin() );
+        const ListOfSprites::const_iterator aEndSprite ( maSprites.end() );
+        while( aCurrSprite != aEndSprite )
+        {
+            if( (*aCurrSprite)->isContentChanged() )
+                const_cast<SpriteRedrawManager*>(this)->updateSprite( *aCurrSprite,
+                                                                      (*aCurrSprite)->getPosPixel(),
+                                                                      (*aCurrSprite)->getUpdateArea() );
+            ++aCurrSprite;
+        }
+
         // sort sprites after prio
         VectorOfSprites aSortedSpriteVector;
         ::std::copy( maSprites.begin(),
@@ -382,7 +394,7 @@ namespace canvas
                                                   ::std::size_t     nNumSprites ) const
     {
         // check whether the sprites in the update area's list will
-        // fully cover the given area _and_ to that in an opaque way
+        // fully cover the given area _and_ do that in an opaque way
         // (i.e. no alpha, no non-rectangular sprite content).
 
         // TODO(P1): Come up with a smarter early-exit criterion here
