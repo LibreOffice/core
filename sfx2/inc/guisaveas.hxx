@@ -4,9 +4,9 @@
  *
  *  $RCSfile: guisaveas.hxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: hr $ $Date: 2007-06-27 22:52:35 $
+ *  last change: $Author: obo $ $Date: 2007-07-17 13:36:28 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -68,10 +68,11 @@
 
 
 #include <comphelper/sequenceashashmap.hxx>
-#include <sfx2/docinf.hxx>
 
 class Window;
 class ModelData_Impl;
+class SfxDocumentInfo;
+
 class SfxStoringHelper
 {
     friend class ModelData_Impl;
@@ -111,15 +112,11 @@ public:
     static void FillCopy( const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XModel >& xModel,
                          SfxDocumentInfo& aDocInfoToFill );
 
-    static void PrepareDocInfoForStore( SfxDocumentInfo& aDocInfoToClear );
+    static void PrepareDocInfoForStore( SfxDocumentInfo& aDocInfoToClear, sal_Bool bUseUserData );
 
     static void SetDocInfoState( const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XModel >& xModel,
                                 const SfxDocumentInfo& aDocInfoState,
                                 sal_Bool bNoModify );
-
-    static void ExecuteInfoDlg( const ::rtl::OUString& aTargetURL,
-                                const ::rtl::OUString& aTitle, const String& rBaseURL,
-                                SfxDocumentInfo &aDocInfo );
 
     static sal_Bool WarnUnacceptableFormat(
                                     const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XModel >& xModel,
