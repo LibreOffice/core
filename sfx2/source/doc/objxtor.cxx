@@ -4,9 +4,9 @@
  *
  *  $RCSfile: objxtor.cxx,v $
  *
- *  $Revision: 1.72 $
+ *  $Revision: 1.73 $
  *
- *  last change: $Author: hr $ $Date: 2007-06-27 23:24:27 $
+ *  last change: $Author: obo $ $Date: 2007-07-17 13:44:46 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -38,12 +38,11 @@
 
 #include "arrdecl.hxx"
 
-#ifndef _COM_SUN_STAR_UTIL_XCLOSEABLE_HPP_
 #include <com/sun/star/util/XCloseable.hpp>
-#endif
-#ifndef _COM_SUN_STAR_FRAME_XCOMPONENTLOADER_HPP_
 #include <com/sun/star/frame/XComponentLoader.hpp>
-#endif
+#include <com/sun/star/util/XCloseBroadcaster.hpp>
+#include <com/sun/star/util/XCloseListener.hpp>
+#include <com/sun/star/beans/XPropertySet.hpp>
 
 #ifndef _VOS_MUTEX_HXX_
 #include <vos/mutex.hxx>
@@ -134,7 +133,6 @@
 #include "doc.hrc"
 #include "sfxlocal.hrc"
 #include <sfx2/docinf.hxx>
-#include <sfx2/objuno.hxx>
 #include "appdata.hxx"
 #include <sfx2/appuno.hxx>
 #include <sfx2/sfxsids.hrc>
@@ -143,6 +141,7 @@
 #include "helpid.hrc"
 #include <sfx2/msg.hxx>
 #include "appbaslib.hxx"
+#include "sfxbasemodel.hxx"
 
 #include <basic/basicmanagerrepository.hxx>
 
@@ -169,6 +168,55 @@ extern svtools::AsynchronLink* pPendingCloser;
 static SfxObjectShell* pWorkingDoc = NULL;
 
 //=========================================================================
+class SfxModelListener_Impl : public ::cppu::WeakImplHelper1< ::com::sun::star::util::XCloseListener >
+{
+    SfxObjectShell* mpDoc;
+public:
+    SfxModelListener_Impl( SfxObjectShell* pDoc ) : mpDoc(pDoc) {};
+    virtual void SAL_CALL queryClosing( const com::sun::star::lang::EventObject& aEvent, sal_Bool bDeliverOwnership )
+        throw ( com::sun::star::uno::RuntimeException, com::sun::star::util::CloseVetoException) ;
+    virtual void SAL_CALL notifyClosing( const com::sun::star::lang::EventObject& aEvent ) throw ( com::sun::star::uno::RuntimeException ) ;
+    virtual void SAL_CALL disposing( const com::sun::star::lang::EventObject& aEvent ) throw ( com::sun::star::uno::RuntimeException ) ;
+
+};
+
+void SAL_CALL SfxModelListener_Impl::queryClosing( const com::sun::star::lang::EventObject& , sal_Bool )
+    throw ( com::sun::star::uno::RuntimeException, com::sun::star::util::CloseVetoException)
+{
+}
+
+void SAL_CALL SfxModelListener_Impl::notifyClosing( const com::sun::star::lang::EventObject& ) throw ( com::sun::star::uno::RuntimeException )
+{
+    mpDoc->Broadcast( SfxSimpleHint(SFX_HINT_DEINITIALIZING) );
+}
+
+void SAL_CALL SfxModelListener_Impl::disposing( const com::sun::star::lang::EventObject& ) throw ( com::sun::star::uno::RuntimeException )
+{
+    // am I "ThisComponent" in AppBasic?
+    StarBASIC* pBas = SFX_APP()->GetBasic_Impl();
+    if ( pBas && SFX_APP()->Get_Impl()->pThisDocument == mpDoc )
+    {
+        // remove "ThisComponent" reference from AppBasic
+        SFX_APP()->Get_Impl()->pThisDocument = NULL;
+        SbxVariable *pCompVar = pBas->Find( DEFINE_CONST_UNICODE("ThisComponent"), SbxCLASS_OBJECT );
+        if ( pCompVar )
+        {
+            ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > xInterface;
+            ::com::sun::star::uno::Any aComponent;
+            aComponent <<= xInterface;
+            pCompVar->PutObject( GetSbUnoObject( DEFINE_CONST_UNICODE("ThisComponent"), aComponent ) );
+        }
+    }
+
+    if ( mpDoc->Get_Impl()->bHiddenLockedByAPI )
+    {
+        mpDoc->Get_Impl()->bHiddenLockedByAPI = FALSE;
+        mpDoc->OwnerLock(FALSE);
+    }
+    else if ( !mpDoc->Get_Impl()->bClosing )
+        // GCC stuerzt ab, wenn schon im dtor, also vorher Flag abfragen
+        mpDoc->DoClose();
+}
 
 TYPEINIT1(SfxObjectShell, SfxShell);
 
@@ -216,6 +264,10 @@ SfxObjectShell_Impl::SfxObjectShell_Impl()
     ,bPreserveVersions( sal_True )
     ,m_bMacroSignBroken( sal_False )
     ,m_bNoBasicCapabilities( sal_False )
+    ,bQueryLoadTemplate( sal_True )
+    ,bLoadReadonly( sal_False )
+    ,bUseUserData( sal_True )
+    ,bSaveVersionOnClose( sal_False )
     ,lErr(ERRCODE_NONE)
     ,nEventId ( 0)
     ,bDoNotTouchDocInfo( sal_False )
@@ -346,12 +398,9 @@ SfxObjectShell::~SfxObjectShell()
     if ( pSfxApp->GetDdeService() )
         pSfxApp->RemoveDdeTopic( this );
 
-    delete pImp->pDocInfo;
+    DELETEZ( pImp->pDocInfo );
     if ( pImp->xModel.is() )
         pImp->xModel = ::com::sun::star::uno::Reference< ::com::sun::star::frame::XModel > ();
-
-//REMOVE        if ( pMedium && pMedium->IsTemporary() )
-//REMOVE            HandsOff();
 
     // don't call GetStorage() here, in case of Load Failure it's possible that a storage was never assigned!
     if ( pMedium && pMedium->HasStorage_Impl() && pMedium->GetStorage() == pImp->m_xDocStorage )
@@ -608,9 +657,8 @@ sal_uInt16 SfxObjectShell::PrepareClose
             //if( SfxApplication::IsPlugin() == sal_False || bUI == 2 )
             {
                 //initiate help agent to inform about "print modifies the document"
-                SfxStamp aStamp = GetDocInfo().GetPrinted();
                 SvtPrintWarningOptions aPrintOptions;
-                if(aPrintOptions.IsModifyDocumentOnPrintingAllowed() && HasName() && aStamp.IsValid())
+                if(aPrintOptions.IsModifyDocumentOnPrintingAllowed() && HasName() && GetDocInfo().GetPrintDate().IsValid())
                 {
                     SfxHelp::OpenHelpAgent(pFirst->GetFrame(), HID_CLOSE_WARNING);
                 }
@@ -620,11 +668,9 @@ sal_uInt16 SfxObjectShell::PrepareClose
 
             if ( RET_YES == nRet )
             {
-                sal_Bool bVersion = GetDocInfo().IsSaveVersionOnClose();
-
                 // per Dispatcher speichern
                 const SfxPoolItem *pPoolItem;
-                if ( bVersion )
+                if ( IsSaveVersionOnClose() )
                 {
                     SfxStringItem aItem( SID_DOCINFO_COMMENTS, String( SfxResId( STR_AUTOMATICVERSION ) ) );
                     SfxBoolItem aWarnItem( SID_FAIL_ON_WARNING, bUI );
@@ -922,28 +968,13 @@ SEQUENCE< OUSTRING > SfxObjectShell::GetEventNames_Impl()
 }
 
 //--------------------------------------------------------------------
-/* ASDBG
-void SfxObjectShell::SetModel( SfxModel* pModel )
-{
-    if ( pImp->xModel.is() )
-        DBG_WARNING( "Model already set!" );
-    pImp->xModel = pModel;
-}
-
-//--------------------------------------------------------------------
-
-XModel* SfxObjectShell::GetModel()
-{
-    return pImp->xModel;
-}
-*/
-//--------------------------------------------------------------------
 
 void SfxObjectShell::SetModel( SfxBaseModel* pModel )
 {
-    OSL_ENSURE( !pImp->xModel.is(), "Model already set!" );
-
+    OSL_ENSURE( !pImp->xModel.is() || pModel == NULL, "Model already set!" );
     pImp->xModel = pModel;
+    if ( pModel )
+        pModel->addCloseListener( new SfxModelListener_Impl(this) );
 }
 
 //--------------------------------------------------------------------
@@ -955,9 +986,7 @@ void SfxObjectShell::SetModel( SfxBaseModel* pModel )
 
 void SfxObjectShell::SetBaseModel( SfxBaseModel* pModel )
 {
-    OSL_ENSURE( !pImp->xModel.is() || pModel == NULL, "Model already set!" );
-
-    pImp->xModel = pModel;
+    SetModel(pModel);
 }
 
 //--------------------------------------------------------------------
