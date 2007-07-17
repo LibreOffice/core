@@ -4,9 +4,9 @@
  *
  *  $RCSfile: pview.cxx,v $
  *
- *  $Revision: 1.63 $
+ *  $Revision: 1.64 $
  *
- *  last change: $Author: rt $ $Date: 2007-04-26 09:21:14 $
+ *  last change: $Author: obo $ $Date: 2007-07-17 13:11:44 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -2561,7 +2561,7 @@ SfxPrinter*  SwPagePreView::GetPrinter( BOOL bCreate )
  --------------------------------------------------------------------*/
 
 
-USHORT  SwPagePreView::SetPrinter( SfxPrinter *pNew, USHORT nDiffFlags )
+USHORT  SwPagePreView::SetPrinter( SfxPrinter *pNew, USHORT nDiffFlags, bool )
 {
     ViewShell &rSh = *GetViewShell();
     SwEditShell &rESh = (SwEditShell&)rSh;  //Buh...
