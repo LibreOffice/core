@@ -4,9 +4,9 @@
  *
  *  $RCSfile: docnew.cxx,v $
  *
- *  $Revision: 1.75 $
+ *  $Revision: 1.76 $
  *
- *  last change: $Author: ihi $ $Date: 2007-07-10 14:59:09 $
+ *  last change: $Author: obo $ $Date: 2007-07-17 13:06:56 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -792,11 +792,10 @@ const SfxDocumentInfo* SwDoc::GetpInfo() const
     return pSwgInfo;
 }
 
-SfxDocumentInfo* SwDoc::GetInfo()
+SfxDocumentInfo* SwDoc::GetDocumentInfo()
 {
     if( !pSwgInfo )
-        // Pointer-Members initialisieren
-        pSwgInfo  = new SfxDocumentInfo;
+        pSwgInfo = new SfxDocumentInfo;
     return pSwgInfo;
 }
 
@@ -960,7 +959,7 @@ void SwDoc::WriteLayoutCache( SvStream& rStream )
 
 // --> FME 2005-02-25 #i42634# Moved common code of SwReader::Read() and
 // SwDocShell::UpdateLinks() to new SwDoc::UpdateLinks():
-void SwDoc::UpdateLinks()
+void SwDoc::UpdateLinks( BOOL bUI )
 {
     SfxObjectCreateMode eMode;
     USHORT nLinkMode = getLinkUpdateMode( true );
@@ -983,7 +982,7 @@ void SwDoc::UpdateLinks()
             case ::com::sun::star::document::UpdateDocMode::QUIET_UPDATE:bAskUpdate = FALSE; break;
             case ::com::sun::star::document::UpdateDocMode::FULL_UPDATE: bAskUpdate = TRUE; break;
         }
-        if(bUpdate)
+        if( bUpdate && (bUI || !bAskUpdate) )
         {
             SfxMedium* pMedium = GetDocShell()->GetMedium();
             SfxFrame* pFrm = pMedium ? pMedium->GetLoadTargetFrame() : 0;
