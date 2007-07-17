@@ -4,9 +4,9 @@
  *
  *  $RCSfile: docsh3.cxx,v $
  *
- *  $Revision: 1.29 $
+ *  $Revision: 1.30 $
  *
- *  last change: $Author: vg $ $Date: 2007-02-27 13:07:24 $
+ *  last change: $Author: obo $ $Date: 2007-07-17 13:34:17 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -724,7 +724,7 @@ void ScDocShell::CompareDocument( ScDocument& rOtherDoc )
             //  who last saved the document
             //  (only if comparing different documents)
 
-            String aDocUser = GetDocInfo().GetChanged().GetName();
+            String aDocUser = GetDocInfo().GetModificationAuthor();
             if ( aDocUser.Len() )
                 pTrack->SetUser( aDocUser );
         }
