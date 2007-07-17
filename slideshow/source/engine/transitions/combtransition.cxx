@@ -4,9 +4,9 @@
  *
  *  $RCSfile: combtransition.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: kz $ $Date: 2006-12-13 15:39:24 $
+ *  last change: $Author: obo $ $Date: 2007-07-17 14:58:39 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -37,9 +37,16 @@
 #include "precompiled_slideshow.hxx"
 
 #include <canvas/debug.hxx>
+#include <basegfx/polygon/b2dpolygon.hxx>
 #include <basegfx/polygon/b2dpolygontools.hxx>
-#include <basegfx/polygon/b2dpolypolygontools.hxx>
+#include <basegfx/matrix/b2dhommatrix.hxx>
+
+#include <cppcanvas/spritecanvas.hxx>
+
 #include "combtransition.hxx"
+
+#include <boost/bind.hpp>
+
 
 namespace slideshow {
 namespace internal {
@@ -60,8 +67,8 @@ basegfx::B2DPolyPolygon createClipPolygon(
     {
         aClipPoly.append(
             ::basegfx::tools::createPolygonFromRect(
-                ::basegfx::B2DRectangle( (double)i/nNumStrips, 0.0,
-                                         (double)(i+1)/nNumStrips, 1.0) ) );
+                ::basegfx::B2DRectangle( double(i)/nNumStrips, 0.0,
+                                         double(i+1)/nNumStrips, 1.0) ) );
 
     }
 
@@ -90,11 +97,12 @@ CombTransition::CombTransition(
     const SlideSharedPtr&                   pEnteringSlide,
     const SoundPlayerSharedPtr&             pSoundPlayer,
     const UnoViewContainer&                 rViewContainer,
+    ScreenUpdater&                          rScreenUpdater,
     EventMultiplexer&                       rEventMultiplexer,
     const ::basegfx::B2DVector&             rPushDirection,
     sal_Int32                               nNumStripes )
     : SlideChangeBase( leavingSlide, pEnteringSlide, pSoundPlayer,
-                       rViewContainer, rEventMultiplexer,
+                       rViewContainer, rScreenUpdater, rEventMultiplexer,
                        false /* no leaving sprite */,
                        false /* no entering sprite */ ),
       maPushDirectionUnit( rPushDirection ),
@@ -120,7 +128,7 @@ void CombTransition::renderComb( double           t,
     // (i.e. pixel).
 
     // TODO(F2): Properly respect clip here. Might have to be transformed, too.
-    const basegfx::B2DHomMatrix viewTransform( pCanvas_->getTransformation() );
+    const basegfx::B2DHomMatrix viewTransform( rViewEntry.mpView->getTransformation() );
     const basegfx::B2DPoint pageOrigin( viewTransform * basegfx::B2DPoint() );
 
     // change transformation on cloned canvas to be in
@@ -133,7 +141,7 @@ void CombTransition::renderComb( double           t,
     // TODO(F1): SlideBitmap is not fully portable between different canvases!
 
     const basegfx::B2DSize enteringSizePixel(
-        getEnteringSizePixel(rViewEntry.mpView) );
+        getEnteringSlideSizePixel( rViewEntry.mpView) );
 
     const basegfx::B2DVector aPushDirection = basegfx::B2DVector(
         enteringSizePixel * maPushDirectionUnit );
@@ -197,6 +205,9 @@ bool CombTransition::operator()( double t )
                                 this,
                                 t,
                                 _1 ));
+
+    getScreenUpdater().notifyUpdate();
+
     return true;
 }
 
