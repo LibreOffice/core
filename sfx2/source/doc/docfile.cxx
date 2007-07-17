@@ -4,9 +4,9 @@
  *
  *  $RCSfile: docfile.cxx,v $
  *
- *  $Revision: 1.191 $
+ *  $Revision: 1.192 $
  *
- *  last change: $Author: hr $ $Date: 2007-06-27 23:19:29 $
+ *  last change: $Author: obo $ $Date: 2007-07-17 13:42:41 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -268,8 +268,6 @@ void SAL_CALL SfxMediumHandler_Impl::handle( const com::sun::star::uno::Referenc
     else
         m_xInter->handle( xRequest );
 }
-
-String ConvertDateTime_Impl(const SfxStamp &rTime, const LocaleDataWrapper& rWrapper);
 
 class SfxPoolCancelManager_Impl  :   public SfxCancelManager ,
                                      public SfxCancellable   ,
@@ -2880,6 +2878,64 @@ SfxMedium::SfxMedium
     bDirect = bDirectP;
     Init_Impl();
 }
+
+
+SfxMedium::SfxMedium( const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >& aArgs )
+    : IMPL_CTOR( sal_False, 0 ),  // bRoot, pURLObj
+    pFilter(0),
+    pSet(0),
+    pImp(new SfxMedium_Impl( this ))
+{
+    SfxAllItemSet *pParams = new SfxAllItemSet( SFX_APP()->GetPool() );
+    pSet = pParams;
+    TransformParameters( SID_OPENDOC, aArgs, *pParams );
+
+    String aFilterName;
+    SFX_ITEMSET_ARG( pSet, pFilterNameItem, SfxStringItem, SID_FILTER_NAME, sal_False );
+    if( pFilterNameItem )
+        aFilterName = pFilterNameItem->GetValue();
+    pFilter = SFX_APP()->GetFilterMatcher().GetFilter4FilterName( aFilterName );
+
+    sal_Bool bSalvage = sal_False;
+    SFX_ITEMSET_ARG( pSet, pSalvageItem, SfxStringItem, SID_DOC_SALVAGE, sal_False );
+    if( pSalvageItem )
+    {
+        // QUESTION: there is some treatment of Salvage in Init_Impl; align!
+        bSalvage = sal_True;
+        if ( pSalvageItem->GetValue().Len() )
+        {
+            // if an URL is provided in SalvageItem that means that the FileName refers to a temporary file
+            // that must be copied here
+
+            SFX_ITEMSET_ARG( pSet, pFileNameItem, SfxStringItem, SID_FILE_NAME, FALSE );
+            ::rtl::OUString aNewTempFileURL = SfxMedium::CreateTempCopyWithExt( pFileNameItem->GetValue() );
+            if ( aNewTempFileURL.getLength() )
+            {
+                pSet->Put( SfxStringItem( SID_FILE_NAME, aNewTempFileURL ) );
+                pSet->ClearItem( SID_INPUTSTREAM );
+                pSet->ClearItem( SID_STREAM );
+                pSet->ClearItem( SID_CONTENT );
+            }
+            else
+            {
+                OSL_ENSURE( sal_False, "Can not create a new temporary file for crash recovery!\n" );
+            }
+        }
+    }
+
+    BOOL bReadOnly = FALSE;
+    SFX_ITEMSET_ARG( pSet, pReadOnlyItem, SfxBoolItem, SID_DOC_READONLY, FALSE );
+    if ( pReadOnlyItem && pReadOnlyItem->GetValue() )
+        bReadOnly = TRUE;
+
+    SFX_ITEMSET_ARG( pSet, pFileNameItem, SfxStringItem, SID_FILE_NAME, FALSE );
+    aLogicName = pFileNameItem->GetValue();
+    nStorOpenMode = bReadOnly ? SFX_STREAM_READONLY : SFX_STREAM_READWRITE;
+    bDirect = FALSE;
+    Init_Impl();
+}
+
+
 //------------------------------------------------------------------
 
 SfxMedium::SfxMedium( const uno::Reference < embed::XStorage >& rStor, const String& rBaseURL, const SfxItemSet* p, sal_Bool bRootP )
