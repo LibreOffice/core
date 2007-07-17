@@ -4,9 +4,9 @@
  *
  *  $RCSfile: guisaveas.cxx,v $
  *
- *  $Revision: 1.28 $
+ *  $Revision: 1.29 $
  *
- *  last change: $Author: ihi $ $Date: 2007-07-10 15:22:51 $
+ *  last change: $Author: obo $ $Date: 2007-07-17 13:43:11 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -63,6 +63,12 @@
 #ifndef _COM_SUN_STAR_BEANS_XPROPERTYSET_HPP_
 #include <com/sun/star/beans/XPropertySet.hpp>
 #endif
+#ifndef _COM_SUN_STAR_BEANS_XPROPERTYCONTAINER_HPP_
+#include <com/sun/star/beans/XPropertyContainer.hpp>
+#endif
+#ifndef _COM_SUN_STAR_BEANS_PROPERTYATTRIBUTE_HPP_
+#include <com/sun/star/beans/PropertyAttribute.hpp>
+#endif
 
 #ifndef _COM_SUN_STAR_DOCUMENT_XEXPORTER_HPP_
 #include <com/sun/star/document/XExporter.hpp>
@@ -97,6 +103,15 @@
 #ifndef _COM_SUN_STAR_FRAME_XDISPATCH_HPP_
 #include <com/sun/star/frame/XDispatch.hpp>
 #endif
+#ifndef _COM_SUN_STAR_UTIL_XMODIFYLISTENER_HPP_
+#include <com/sun/star/util/XModifyListener.hpp>
+#endif
+#ifndef _COM_SUN_STAR_UTIL_XMODIFIABLE_HPP_
+#include <com/sun/star/util/XModifiable.hpp>
+#endif
+#ifndef _COM_SUN_STAR_UTIL_XMODIFYBROADCASTER_HPP_
+#include <com/sun/star/util/XModifyBroadcaster.hpp>
+#endif
 
 
 #ifndef _COM_SUN_STAR_FRAME_XMODULEMANAGER_HPP_
@@ -109,6 +124,7 @@
 
 #include "guisaveas.hxx"
 
+#include <svtools/pathoptions.hxx>
 #include <svtools/pathoptions.hxx>
 #include <svtools/itemset.hxx>
 #include <svtools/adrparse.hxx>
@@ -1539,220 +1555,61 @@ void SfxStoringHelper::FillCopy( const uno::Reference< frame::XModel >& xModel,
     if ( !xModelDocInfoSupplier.is() )
         throw uno::RuntimeException(); // TODO
 
+    uno::Reference< document::XDocumentInfo > xDocInfoToFill = aDocInfoToFill.GetInfo();
     uno::Reference< document::XDocumentInfo > xDocInfo = xModelDocInfoSupplier->getDocumentInfo();
     uno::Reference< beans::XPropertySet > xPropSet( xDocInfo, uno::UNO_QUERY );
     DBG_ASSERT( xPropSet.is(), "No access to the document info!\n" )
     if ( !xPropSet.is() )
         throw uno::RuntimeException();
 
-    uno::Any aVal;
-    ::rtl::OUString aStrVal;
-    util::DateTime aDateTime;
-    sal_Int32 nInt32Val = 0;
-
-    // ==== Author property ====
-    ::rtl::OUString aStringAuthor = ::rtl::OUString::createFromAscii( "Author" );
-    aVal = xPropSet->getPropertyValue( aStringAuthor );
-    if ( aVal >>= aStrVal )
+    try
     {
-        const SfxStamp& rStamp = aDocInfoToFill.GetCreated();
-        if ( aStrVal.getLength() > TIMESTAMP_MAXLENGTH )
+        uno::Reference< beans::XPropertySet > xSet( xDocInfoToFill, uno::UNO_QUERY );
+        uno::Reference< beans::XPropertyContainer > xContainer( xSet, uno::UNO_QUERY );
+        uno::Reference< beans::XPropertySetInfo > xSetInfo = xSet->getPropertySetInfo();
+        uno::Sequence< beans::Property > lProps = xSetInfo->getProperties();
+        const beans::Property* pProps = lProps.getConstArray();
+        sal_Int32 c = lProps.getLength();
+        sal_Int32 i = 0;
+        for (i=0; i<c; ++i)
         {
-            SvAddressParser aParser( aStrVal );
-            if ( aParser.Count() > 0 )
+            uno::Any aValue = xPropSet->getPropertyValue( pProps[i].Name );
+            if ( pProps[i].Attributes & ::com::sun::star::beans::PropertyAttribute::REMOVABLE )
+                // QUESTION: DefaultValue?!
+                xContainer->addProperty( pProps[i].Name, pProps[i].Attributes, aValue );
+            try
             {
-                ::rtl::OUString aEmail = aParser.GetEmailAddress(0);
-                ::rtl::OUString aRealname = aParser.GetRealName(0);
-
-                if ( aRealname.getLength() <= TIMESTAMP_MAXLENGTH )
-                    aStrVal = aRealname;
-                else if ( aEmail.getLength() <= TIMESTAMP_MAXLENGTH )
-                    aStrVal = aEmail;
+                // it is possible that the propertysets from XML and binary files differ; we shouldn't break then
+                xSet->setPropertyValue( pProps[i].Name, aValue );
             }
+            catch ( uno::Exception& ) {}
         }
 
-        aDocInfoToFill.SetCreated( SfxStamp( aStrVal, rStamp.GetTime() ) );
+        sal_Int16 nCount = xDocInfo->getUserFieldCount();
+        sal_Int16 nSupportedCount = xDocInfoToFill->getUserFieldCount();
+        for ( sal_Int16 nInd = 0; nInd < nCount && nInd < nSupportedCount; nInd++ )
+        {
+            ::rtl::OUString aPropName = xDocInfo->getUserFieldName( nInd );
+            xDocInfoToFill->setUserFieldName( nInd, aPropName );
+            ::rtl::OUString aPropVal = xDocInfo->getUserFieldValue( nInd );
+            xDocInfoToFill->setUserFieldValue( nInd, aPropVal );
+        }
     }
-    else
-        DBG_ERROR( "The type of parameter \"Author\" is wrong!\n" );
-
-    // ==== Generator property is not supported by SfxDocumentInfo ====
-
-
-    // ==== CreationDate property ====
-    ::rtl::OUString aStringCreationDate = ::rtl::OUString::createFromAscii( "CreationDate" );
-    SfxStamp rStamp = aDocInfoToFill.GetCreated();
-    aVal = xPropSet->getPropertyValue( aStringCreationDate );
-    if ( aVal >>= aDateTime  )
-    {
-        aDocInfoToFill.SetCreated( SfxStamp( rStamp.GetName(),
-                                    SfxDocumentInfoObject::impl_DateTime_Struct2Object( aDateTime ) ) );
-    }
-    else
-        aDocInfoToFill.SetCreated( SfxStamp( rStamp.GetName(), TIMESTAMP_INVALID_DATETIME ) );
-
-
-    // ==== Title property ====
-    ::rtl::OUString aStringTitle = ::rtl::OUString::createFromAscii( "Title" );
-    aVal = xPropSet->getPropertyValue( aStringTitle );
-    if ( aVal >>= aStrVal )
-        aDocInfoToFill.SetTitle( aStrVal );
-    else
-        DBG_ERROR( "The type of parameter \"Title\" is wrong!\n" );
-
-    // ==== Subject property ====
-    ::rtl::OUString aStringSubject = ::rtl::OUString::createFromAscii( "Subject" );
-    aVal = xPropSet->getPropertyValue( aStringSubject );
-    if ( aVal >>= aStrVal )
-        aDocInfoToFill.SetTheme( aStrVal );
-    else
-        DBG_ERROR( "The type of parameter \"Subject\" is wrong!\n" );
-
-    // ==== Description property ====
-    ::rtl::OUString aStringDescription = ::rtl::OUString::createFromAscii( "Description" );
-    aVal = xPropSet->getPropertyValue( aStringDescription );
-    if ( aVal >>= aStrVal )
-        aDocInfoToFill.SetComment( aStrVal );
-    else
-        DBG_ERROR( "The type of parameter \"Description\" is wrong!\n" );
-
-    // ==== Keywords property ====
-    ::rtl::OUString aStringKeywords = ::rtl::OUString::createFromAscii( "Keywords" );
-    aVal = xPropSet->getPropertyValue( aStringKeywords );
-    if ( aVal >>= aStrVal )
-        aDocInfoToFill.SetKeywords( aStrVal );
-    else
-        DBG_ERROR( "The type of parameter \"Keywords\" is wrong!\n" );
-
-    // ==== Language property is not supported by SfxDocumentInfo ====
-
-
-    // ==== ModifiedBy property ====
-    ::rtl::OUString aStringModifiedBy = ::rtl::OUString::createFromAscii( "ModifiedBy" );
-    aVal = xPropSet->getPropertyValue( aStringModifiedBy );
-    if ( aVal >>= aStrVal )
-    {
-        const SfxStamp& rChangedStamp = aDocInfoToFill.GetChanged();
-        aDocInfoToFill.SetChanged( SfxStamp( aStrVal, rChangedStamp.GetTime() ) );
-    }
-    else
-        DBG_ERROR( "The type of parameter \"ModifiedBy\" is wrong!\n" );
-
-    // ==== ModifyDate property ====
-    ::rtl::OUString aStringModifyDate = ::rtl::OUString::createFromAscii( "ModifyDate" );
-    aVal = xPropSet->getPropertyValue( aStringModifyDate );
-    rStamp = aDocInfoToFill.GetChanged();
-    if ( aVal >>= aDateTime  )
-    {
-        aDocInfoToFill.SetChanged( SfxStamp( rStamp.GetName(),
-                                    SfxDocumentInfoObject::impl_DateTime_Struct2Object(aDateTime) ) );
-    }
-    else
-        aDocInfoToFill.SetChanged( SfxStamp( rStamp.GetName(), TIMESTAMP_INVALID_DATETIME ) );
-
-
-    // ==== PrintedBy property ====
-    ::rtl::OUString aStringPrintedBy = ::rtl::OUString::createFromAscii( "PrintedBy" );
-    aVal = xPropSet->getPropertyValue( aStringPrintedBy );
-    if ( aVal >>= aStrVal )
-    {
-        const SfxStamp& rPrintedStamp = aDocInfoToFill.GetPrinted();
-        aDocInfoToFill.SetPrinted( SfxStamp( aStrVal, rPrintedStamp.GetTime() ) );
-    }
-    else
-        DBG_ERROR( "The type of parameter \"PrintedBy\" is wrong!\n" );
-
-    // ==== PrintDate property ====
-    ::rtl::OUString aStringPrintDate = ::rtl::OUString::createFromAscii( "PrintDate" );
-    rStamp = aDocInfoToFill.GetPrinted();
-    aVal = xPropSet->getPropertyValue( aStringPrintDate );
-    if ( aVal >>= aDateTime  )
-    {
-        aDocInfoToFill.SetPrinted( SfxStamp( rStamp.GetName(),
-                                    SfxDocumentInfoObject::impl_DateTime_Struct2Object(aDateTime) ) );
-    }
-    else
-        aDocInfoToFill.SetPrinted( SfxStamp( rStamp.GetName(), TIMESTAMP_INVALID_DATETIME ) );
-
-    // ==== Template property ====
-    ::rtl::OUString aStringTemplate = ::rtl::OUString::createFromAscii( "Template" );
-    aVal = xPropSet->getPropertyValue( aStringTemplate );
-    if ( aVal >>= aStrVal )
-        aDocInfoToFill.SetTemplateName( aStrVal ); // ???: aDocInfoToFill.SetTemplateFileName( aStrVal );
-    else
-        DBG_ERROR( "The type of parameter \"Template\" is wrong!\n" );
-
-    // ==== TemplateDate property ====
-    ::rtl::OUString aStringTemplateDate = ::rtl::OUString::createFromAscii( "TemplateDate" );
-    aVal = xPropSet->getPropertyValue( aStringTemplateDate );
-    if ( aVal >>= aDateTime  )
-        aDocInfoToFill.SetTemplateDate( SfxDocumentInfoObject::impl_DateTime_Struct2Object(aDateTime) );
-    else
-        aDocInfoToFill.SetTemplateDate( TIMESTAMP_INVALID_DATETIME );
-
-    // ==== AutoloadURL property ====
-    ::rtl::OUString aStringAutoloadURL = ::rtl::OUString::createFromAscii( "AutoloadURL" );
-    aVal = xPropSet->getPropertyValue( aStringAutoloadURL );
-    if ( aVal >>= aStrVal )
-        aDocInfoToFill.SetReloadURL( aStrVal );
-    else
-        DBG_ERROR( "The type of parameter \"AutoloadURL\" is wrong!\n" );
-
-
-    // ==== AutoloadSecs property ====
-    ::rtl::OUString aStringAutoloadSecs = ::rtl::OUString::createFromAscii( "AutoloadSecs" );
-    aVal = xPropSet->getPropertyValue( aStringAutoloadSecs );
-    if ( aVal >>= nInt32Val )
-        aDocInfoToFill.SetReloadDelay( nInt32Val );
-    else
-        DBG_ERROR( "The type of parameter \"AutoloadSecs\" is wrong!\n" );
-
-    // ==== DefaultTarget property ====
-    ::rtl::OUString aStringDefaultTarget = ::rtl::OUString::createFromAscii( "DefaultTarget" );
-    aVal = xPropSet->getPropertyValue( aStringDefaultTarget );
-    if ( aVal >>= aStrVal )
-        aDocInfoToFill.SetDefaultTarget( aStrVal );
-    else
-        DBG_ERROR( "The type of parameter \"DefaultTarget\" is wrong!\n" );
-
-
-    // now handle special properties
-    sal_Int16 nCount = xDocInfo->getUserFieldCount();
-    sal_Int16 nSupportedCount = aDocInfoToFill.GetUserKeyCount();
-    OSL_ENSURE( nCount <= nSupportedCount, "Not all user property can be stored in sfx implementation!\n" );
-
-    for ( sal_Int16 nInd = 0; nInd < nCount && nInd < nSupportedCount; nInd++ )
-    {
-        ::rtl::OUString aPropName = xDocInfo->getUserFieldName( nInd );
-        ::rtl::OUString aPropVal = xDocInfo->getUserFieldValue( nInd );
-        aDocInfoToFill.SetUserKey( SfxDocUserKey( aPropName, aPropVal ), nInd );
-    }
+    catch ( uno::Exception& ) {}
 }
 
 //-------------------------------------------------------------------------
 // static
-void SfxStoringHelper::PrepareDocInfoForStore( SfxDocumentInfo& aDocInfoToClear )
+void SfxStoringHelper::PrepareDocInfoForStore( SfxDocumentInfo& aDocInfoToClear, sal_Bool bUseUserData )
 {
-    // TODO/LATER: how preset SetUseUserData?
-    // TODO/LATER: aDocInfoToClear.SetTemplateConfig( HasTemplateConfig() ) is not covered by UNO API
-    // HasTemplateConfig() reterned false always and was removed
-
     ::rtl::OUString aUserName = SvtUserOptions().GetFullName();
-    if ( !aDocInfoToClear.IsUseUserData() )
+    if ( !bUseUserData )
        {
-           SfxStamp aCreated = aDocInfoToClear.GetCreated();
-           if ( aUserName.equals( aCreated.GetName() ) )
-           {
-               aCreated.SetName( String() );
-              aDocInfoToClear.SetCreated( aCreated );
-           }
+           if ( aUserName.equals( aDocInfoToClear.GetAuthor() ) )
+            aDocInfoToClear.SetAuthor( String() );
 
-           SfxStamp aPrinted = aDocInfoToClear.GetPrinted();
-           if ( aUserName.equals( aPrinted.GetName() ) )
-           {
-               aPrinted.SetName( String() );
-              aDocInfoToClear.SetPrinted( aPrinted );
-           }
+           if ( aUserName.equals( aDocInfoToClear.GetPrintedBy() ) )
+            aDocInfoToClear.SetPrintedBy( String() );
 
         aUserName = ::rtl::OUString();
        }
@@ -1772,7 +1629,8 @@ void SfxStoringHelper::SetDocInfoState( const uno::Reference< frame::XModel >& x
     if ( !xModelDocInfoSupplier.is() )
         throw uno::RuntimeException(); // TODO:
 
-    uno::Reference< document::XDocumentInfo > xDocInfo = xModelDocInfoSupplier->getDocumentInfo();
+    uno::Reference< document::XDocumentInfo > xDocInfo = aDocInfoState.GetInfo();
+    uno::Reference< document::XDocumentInfo > xDocInfoToFill = xModelDocInfoSupplier->getDocumentInfo();
     uno::Reference< beans::XPropertySet > xPropSet( xDocInfo, uno::UNO_QUERY );
     DBG_ASSERT( xPropSet.is(), "No access to the document info!\n" )
     if ( !xPropSet.is() )
@@ -1784,128 +1642,46 @@ void SfxStoringHelper::SetDocInfoState( const uno::Reference< frame::XModel >& x
 
     sal_Bool bIsModified = bNoModify && xModifiable->isModified();
 
-
-    // ==== Author property ====
-    ::rtl::OUString aStringAuthor = ::rtl::OUString::createFromAscii( "Author" );
-    const SfxStamp& rStamp = aDocInfoState.GetCreated();
-    if ( rStamp.IsValid() )
-        xPropSet->setPropertyValue( aStringAuthor, uno::makeAny( ::rtl::OUString( rStamp.GetName() ) ) );
-
-    // ==== Generator property is not supported by SfxDocumentInfo ====
-
-
-    // ==== CreationDate property ====
-    ::rtl::OUString aStringCreationDate = ::rtl::OUString::createFromAscii( "CreationDate" );
-    xPropSet->setPropertyValue( aStringCreationDate,
-                                uno::makeAny( SfxDocumentInfoObject::impl_DateTime_Object2Struct( rStamp.GetTime() ) ) );
-
-    // ==== Title property ====
-    ::rtl::OUString aStringTitle = ::rtl::OUString::createFromAscii( "Title" );
-    xPropSet->setPropertyValue( aStringTitle, uno::makeAny( ::rtl::OUString( aDocInfoState.GetTitle() ) ) );
-
-    // ==== Subject property ====
-    ::rtl::OUString aStringSubject = ::rtl::OUString::createFromAscii( "Subject" );
-    xPropSet->setPropertyValue( aStringSubject, uno::makeAny( ::rtl::OUString( aDocInfoState.GetTheme() ) ) );
-
-    // ==== Description property ====
-    ::rtl::OUString aStringDescription = ::rtl::OUString::createFromAscii( "Description" );
-    xPropSet->setPropertyValue( aStringDescription, uno::makeAny( ::rtl::OUString( aDocInfoState.GetComment() ) ) );
-
-    // ==== Keywords property ====
-    ::rtl::OUString aStringKeywords = ::rtl::OUString::createFromAscii( "Keywords" );
-    xPropSet->setPropertyValue( aStringKeywords, uno::makeAny( ::rtl::OUString( aDocInfoState.GetKeywords() ) ) );
-
-    // ==== Language property is not supported by SfxDocumentInfo ====
-
-    // ==== ModifiedBy property ====
-    const SfxStamp& rChangedStamp = aDocInfoState.GetChanged();
-    ::rtl::OUString aStringModifiedBy = ::rtl::OUString::createFromAscii( "ModifiedBy" );
-    if ( rChangedStamp.IsValid() )
-        xPropSet->setPropertyValue( aStringModifiedBy, uno::makeAny( ::rtl::OUString( rChangedStamp.GetName() ) ) );
-
-    // ==== ModifyDate property ====
-    ::rtl::OUString aStringModifyDate = ::rtl::OUString::createFromAscii( "ModifyDate" );
-    if ( rChangedStamp.IsValid() )
-        xPropSet->setPropertyValue( aStringModifyDate,
-                            uno::makeAny( SfxDocumentInfoObject::impl_DateTime_Object2Struct( rChangedStamp.GetTime() ) ) );
-
-    // ==== PrintedBy property ====
-    const SfxStamp& rPrintedStamp = aDocInfoState.GetPrinted();
-    ::rtl::OUString aStringPrintedBy = ::rtl::OUString::createFromAscii( "PrintedBy" );
-    if ( rPrintedStamp.IsValid() )
-        xPropSet->setPropertyValue( aStringPrintedBy, uno::makeAny( ::rtl::OUString( rPrintedStamp.GetName() ) ) );
-
-    // ==== PrintDate property ====
-    ::rtl::OUString aStringPrintDate = ::rtl::OUString::createFromAscii( "PrintDate" );
-    if ( rPrintedStamp.IsValid() )
-        xPropSet->setPropertyValue( aStringPrintDate,
-                            uno::makeAny( SfxDocumentInfoObject::impl_DateTime_Object2Struct( rPrintedStamp.GetTime() ) ) );
-
-    // ==== Template property ====
-    ::rtl::OUString aStringTemplate = ::rtl::OUString::createFromAscii( "Template" );
-    xPropSet->setPropertyValue( aStringTemplate, uno::makeAny( ::rtl::OUString( aDocInfoState.GetTemplateName() ) ) );
-
-    // ==== TemplateDate property ====
-    ::rtl::OUString aStringTemplateDate = ::rtl::OUString::createFromAscii( "TemplateDate" );
-    xPropSet->setPropertyValue( aStringTemplateDate,
-                    uno::makeAny( SfxDocumentInfoObject::impl_DateTime_Object2Struct( aDocInfoState.GetTemplateDate() ) ) );
-
-    // ==== AutoloadURL property ====
-    ::rtl::OUString aStringAutoloadURL = ::rtl::OUString::createFromAscii( "AutoloadURL" );
-    xPropSet->setPropertyValue( aStringAutoloadURL, uno::makeAny( ::rtl::OUString( aDocInfoState.GetReloadURL() ) ) );
-
-    // ==== AutoloadSecs property ====
-    ::rtl::OUString aStringAutoloadSecs = ::rtl::OUString::createFromAscii( "AutoloadSecs" );
-    xPropSet->setPropertyValue( aStringAutoloadSecs, uno::makeAny( aDocInfoState.GetReloadDelay() ) );
-
-    // ==== DefaultTarget property ====
-    ::rtl::OUString aStringDefaultTarget = ::rtl::OUString::createFromAscii( "DefaultTarget" );
-    xPropSet->setPropertyValue( aStringDefaultTarget, uno::makeAny( ::rtl::OUString( aDocInfoState.GetDefaultTarget() ) ) );
-
-
-    // now handle special properties
-    sal_Int16 nCount = xDocInfo->getUserFieldCount();
-    sal_Int16 nSupportedCount = aDocInfoState.GetUserKeyCount();
-    OSL_ENSURE( nCount <= nSupportedCount, "Not all user property can be stored in sfx implementation!\n" );
-
-    for ( sal_Int16 nInd = 0; nInd < nCount && nInd < nSupportedCount; nInd++ )
+    try
     {
-        xDocInfo->setUserFieldName( nInd, aDocInfoState.GetUserKey( nInd ).GetTitle() );
-        xDocInfo->setUserFieldValue( nInd, aDocInfoState.GetUserKey( nInd ).GetWord() );
+        uno::Reference< beans::XPropertySet > xSet( xDocInfoToFill, uno::UNO_QUERY );
+        uno::Reference< beans::XPropertyContainer > xContainer( xSet, uno::UNO_QUERY );
+        uno::Reference< beans::XPropertySetInfo > xSetInfo = xSet->getPropertySetInfo();
+        uno::Sequence< beans::Property > lProps = xSetInfo->getProperties();
+        const beans::Property* pProps = lProps.getConstArray();
+        sal_Int32 c = lProps.getLength();
+        sal_Int32 i = 0;
+        for (i=0; i<c; ++i)
+        {
+            uno::Any aValue = xPropSet->getPropertyValue( pProps[i].Name );
+            if ( pProps[i].Attributes & ::com::sun::star::beans::PropertyAttribute::REMOVABLE )
+                // QUESTION: DefaultValue?!
+                xContainer->addProperty( pProps[i].Name, pProps[i].Attributes, aValue );
+            try
+            {
+                // it is possible that the propertysets from XML and binary files differ; we shouldn't break then
+                xSet->setPropertyValue( pProps[i].Name, aValue );
+            }
+            catch ( uno::Exception& ) {}
+        }
+
+        sal_Int16 nCount = xDocInfo->getUserFieldCount();
+        sal_Int16 nSupportedCount = xDocInfoToFill->getUserFieldCount();
+        for ( sal_Int16 nInd = 0; nInd < nCount && nInd < nSupportedCount; nInd++ )
+        {
+            ::rtl::OUString aPropName = xDocInfo->getUserFieldName( nInd );
+            xDocInfoToFill->setUserFieldName( nInd, aPropName );
+            ::rtl::OUString aPropVal = xDocInfo->getUserFieldValue( nInd );
+            xDocInfoToFill->setUserFieldValue( nInd, aPropVal );
+        }
     }
+    catch ( uno::Exception& ) {}
 
     // set the modified flag back if required
     if ( bNoModify && bIsModified != xModifiable->isModified() )
         xModifiable->setModified( bIsModified );
 }
 
-//-------------------------------------------------------------------------
-// static
-void SfxStoringHelper::ExecuteInfoDlg( const ::rtl::OUString& aTargetURL,
-                                        const ::rtl::OUString& aTitle, const String& rBaseURL,
-                                        SfxDocumentInfo &aDocInfo )
-{
-    // Itemset f"ur Dialog aufbereiten
-    SfxDocumentInfoItem aDocInfoItem( aTargetURL, aDocInfo );
-    SfxItemSet aSet( SFX_APP()->GetPool(), SID_DOCINFO, SID_DOCINFO,
-                                        SID_EXPLORER_PROPS_START, SID_EXPLORER_PROPS_START, SID_BASEURL, SID_BASEURL,
-                                        0L );
-    aSet.Put( aDocInfoItem );
-    aSet.Put( SfxStringItem( SID_EXPLORER_PROPS_START, aTitle ) );
-    aSet.Put( SfxStringItem( SID_BASEURL, rBaseURL ) );
-
-    // Dialog via Factory erzeugen und ausf"uhren
-    SfxDocumentInfoDialog aDlg( 0, aSet );
-    if ( RET_OK == aDlg.Execute() )
-    {
-        // neue DocInfo aus Dialog holen
-        const SfxPoolItem *pItem = 0;
-        if ( SFX_ITEM_SET == aDlg.GetOutputItemSet()->GetItemState( SID_DOCINFO, TRUE, &pItem ) )
-        {
-            aDocInfo = (*(const SfxDocumentInfoItem *)pItem)();
-        }
-    }
-}
 //-------------------------------------------------------------------------
 // static
 sal_Bool SfxStoringHelper::WarnUnacceptableFormat( const uno::Reference< frame::XModel >& xModel,
