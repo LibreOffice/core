@@ -4,9 +4,9 @@
  *
  *  $RCSfile: swhtml.cxx,v $
  *
- *  $Revision: 1.41 $
+ *  $Revision: 1.42 $
  *
- *  last change: $Author: kz $ $Date: 2007-05-10 16:06:31 $
+ *  last change: $Author: obo $ $Date: 2007-07-17 13:08:06 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -973,13 +973,13 @@ if( pSttNdIdx->GetIndex()+1 == pPam->GetBound( FALSE ).nNode.GetIndex() )
         // und noch die DocumentInfo aufbereiten
         if( IsNewDoc() )
         {
-            const SfxDocumentInfo *pInfo = pDoc->GetInfo();
+            const SfxDocumentInfo *pInfo = pDoc->GetDocumentInfo();
             if( pInfo->IsReloadEnabled() &&
                 !pInfo->GetReloadURL().Len() )
             {
-                SfxDocumentInfo aInfo( *pDoc->GetInfo() );
+                SfxDocumentInfo aInfo( *pDoc->GetDocumentInfo() );
                 aInfo.SetReloadURL( aPathToFile );
-                pDoc->SetInfo( aInfo );
+                pDoc->SetDocumentInfo( aInfo );
             }
         }
 
@@ -1120,9 +1120,9 @@ void __EXPORT SwHTMLParser::NextToken( int nToken )
             case HTML_TITLE_OFF:
                 if( IsNewDoc() && sTitle.Len() )
                 {
-                    SfxDocumentInfo aInfo( *pDoc->GetInfo() );
+                    SfxDocumentInfo aInfo( *pDoc->GetDocumentInfo() );
                     aInfo.SetTitle( sTitle );
-                    pDoc->SetInfo( aInfo );
+                    pDoc->SetDocumentInfo( aInfo );
 
                     if( pDoc->GetDocShell() )
                         pDoc->GetDocShell()->SetTitle( sTitle );
@@ -1404,9 +1404,9 @@ void __EXPORT SwHTMLParser::NextToken( int nToken )
                 case HTML_O_TARGET:
                     if( IsNewDoc() )
                     {
-                        SfxDocumentInfo aInfo( *pDoc->GetInfo() );
+                        SfxDocumentInfo aInfo( *pDoc->GetDocumentInfo() );
                         aInfo.SetDefaultTarget( pOption->GetString() );
-                        pDoc->SetInfo( aInfo );
+                        pDoc->SetDocumentInfo( aInfo );
                     }
                     break;
                 }
@@ -1423,11 +1423,11 @@ void __EXPORT SwHTMLParser::NextToken( int nToken )
                 if( pDocSh )
                     pHTTPHeader = pDocSh->GetHeaderAttributes();
             }
-            SfxDocumentInfo aInfo( *pDoc->GetInfo() );
+            SfxDocumentInfo aInfo( *pDoc->GetDocumentInfo() );
             if( ParseMetaOptions( &aInfo, pHTTPHeader ) )
             {
                 if( IsNewDoc() )
-                    pDoc->SetInfo( aInfo );
+                    pDoc->SetDocumentInfo( aInfo );
             }
             else if( IsNewDoc() )
             {
