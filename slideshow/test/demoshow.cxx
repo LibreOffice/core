@@ -4,9 +4,9 @@
  *
  *  $RCSfile: demoshow.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: kz $ $Date: 2006-12-13 16:08:48 $
+ *  last change: $Author: obo $ $Date: 2007-07-17 15:21:06 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -45,6 +45,8 @@
 
 #include <comphelper/processfactory.hxx>
 #include <comphelper/broadcasthelper.hxx>
+#include <comphelper/anytostring.hxx>
+#include <cppuhelper/exc_hlp.hxx>
 
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
@@ -74,6 +76,9 @@
 #include <vcl/timer.hxx>
 #include <vcl/window.hxx>
 #include <vcl/svapp.hxx>
+
+#include <stdio.h>
+#include <unistd.h>
 
 
 using namespace ::com::sun::star;
@@ -200,7 +205,7 @@ private:
         maMouseMotionListeners.removeInterface( xListener );
     }
 
-    virtual void SAL_CALL setMouseCursor( ::sal_Int16 nPointerShape ) throw (uno::RuntimeException)
+    virtual void SAL_CALL setMouseCursor( ::sal_Int16 /*nPointerShape*/ ) throw (uno::RuntimeException)
     {
     }
 
@@ -223,11 +228,11 @@ public:
 
 private:
     // XDrawPage
-    virtual void SAL_CALL add( const uno::Reference< drawing::XShape >& xShape ) throw (uno::RuntimeException)
+    virtual void SAL_CALL add( const uno::Reference< drawing::XShape >& /*xShape*/ ) throw (uno::RuntimeException)
     {
     }
 
-    virtual void SAL_CALL remove( const uno::Reference< drawing::XShape >& xShape ) throw (uno::RuntimeException)
+    virtual void SAL_CALL remove( const uno::Reference< drawing::XShape >& /*xShape*/ ) throw (uno::RuntimeException)
     {
     }
 
@@ -236,7 +241,7 @@ private:
         return 0;
     }
 
-    virtual uno::Any SAL_CALL getByIndex( ::sal_Int32 Index ) throw (lang::IndexOutOfBoundsException, lang::WrappedTargetException, uno::RuntimeException)
+    virtual uno::Any SAL_CALL getByIndex( ::sal_Int32 /*Index*/ ) throw (lang::IndexOutOfBoundsException, lang::WrappedTargetException, uno::RuntimeException)
     {
         return uno::Any();
     }
@@ -257,15 +262,10 @@ private:
         return uno::Reference< beans::XPropertySetInfo >();
     }
 
-    virtual void SAL_CALL setPropertyValue( const ::rtl::OUString& aPropertyName, const uno::Any& aValue ) throw (beans::UnknownPropertyException, beans::PropertyVetoException, lang::IllegalArgumentException, lang::WrappedTargetException, uno::RuntimeException)
+    virtual void SAL_CALL setPropertyValue( const ::rtl::OUString& /*aPropertyName*/,
+                                            const uno::Any& /*aValue*/ ) throw (beans::UnknownPropertyException, beans::PropertyVetoException, lang::IllegalArgumentException, lang::WrappedTargetException, uno::RuntimeException)
     {
     }
-
-    struct PropValEntry
-    {
-        const char*     pName;
-        const sal_Int32 nVal;
-    };
 
     virtual uno::Any SAL_CALL getPropertyValue( const ::rtl::OUString& PropertyName ) throw (beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException)
     {
@@ -274,12 +274,12 @@ private:
         // fixed PropertyValue map
         static PropMapT::MapEntry lcl_propertyMap[] =
             {
-                "Height",               100,
-                "MinimalFrameNumber",   50,
-                "TransitionDuration",   10,
-                "TransitionSubtype",    animations::TransitionSubType::FROMTOPLEFT,
-                "TransitionType",       animations::TransitionType::PUSHWIPE,
-                "Width",                100
+                {"Height",               100},
+                {"MinimalFrameNumber",   50},
+                {"TransitionDuration",   10},
+                {"TransitionSubtype",    animations::TransitionSubType::FROMTOPLEFT},
+                {"TransitionType",       animations::TransitionType::PUSHWIPE},
+                {"Width",                100}
             };
 
         static PropMapT aMap( lcl_propertyMap,
@@ -293,25 +293,29 @@ private:
         return uno::makeAny(aRes);
     }
 
-    virtual void SAL_CALL addPropertyChangeListener( const ::rtl::OUString& aPropertyName, const uno::Reference< beans::XPropertyChangeListener >& xListener ) throw (beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException)
+    virtual void SAL_CALL addPropertyChangeListener( const ::rtl::OUString& /*aPropertyName*/,
+                                                     const uno::Reference< beans::XPropertyChangeListener >& /*xListener*/ ) throw (beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException)
     {
     }
 
-    virtual void SAL_CALL removePropertyChangeListener( const ::rtl::OUString& aPropertyName, const uno::Reference< beans::XPropertyChangeListener >& aListener ) throw (beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException)
+    virtual void SAL_CALL removePropertyChangeListener( const ::rtl::OUString& /*aPropertyName*/,
+                                                        const uno::Reference< beans::XPropertyChangeListener >& /*aListener*/ ) throw (beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException)
     {
     }
 
-    virtual void SAL_CALL addVetoableChangeListener( const ::rtl::OUString& PropertyName, const uno::Reference< beans::XVetoableChangeListener >& aListener ) throw (beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException)
+    virtual void SAL_CALL addVetoableChangeListener( const ::rtl::OUString& /*PropertyName*/,
+                                                     const uno::Reference< beans::XVetoableChangeListener >& /*aListener*/ ) throw (beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException)
     {
     }
 
-    virtual void SAL_CALL removeVetoableChangeListener( const ::rtl::OUString& PropertyName, const uno::Reference< beans::XVetoableChangeListener >& aListener ) throw (beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException)
+    virtual void SAL_CALL removeVetoableChangeListener( const ::rtl::OUString& /*PropertyName*/,
+                                                        const uno::Reference< beans::XVetoableChangeListener >& /*aListener*/ ) throw (beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException)
     {
     }
 };
 
 
-class SmoketestApp : public Application
+class DemoApp : public Application
 {
 public:
     virtual void Main();
@@ -375,7 +379,7 @@ void ChildWindow::init()
     }
 }
 
-void ChildWindow::Paint( const Rectangle& rRect )
+void ChildWindow::Paint( const Rectangle& /*rRect*/ )
 {
     try
     {
@@ -396,10 +400,10 @@ void ChildWindow::Resize()
         mpView->resize( GetSizePixel() );
 }
 
-class SmoketestWindow : public Dialog
+class DemoWindow : public Dialog
 {
 public:
-    SmoketestWindow();
+    DemoWindow();
     virtual void Paint( const Rectangle& rRect );
     virtual void Resize();
 
@@ -415,7 +419,7 @@ private:
     bool                                       mbSlideDisplayed;
 };
 
-SmoketestWindow::SmoketestWindow() :
+DemoWindow::DemoWindow() :
     Dialog((Window*)NULL),
     maLeftChild( this ),
     maRightTopChild( this ),
@@ -424,7 +428,7 @@ SmoketestWindow::SmoketestWindow() :
     maUpdateTimer(),
     mbSlideDisplayed( false )
 {
-    SetText( rtl::OUString::createFromAscii( "Slideshow smoketest" ) );
+    SetText( rtl::OUString::createFromAscii( "Slideshow Demo" ) );
     SetSizePixel( Size( 640, 480 ) );
     EnablePaint( true );
 
@@ -433,12 +437,12 @@ SmoketestWindow::SmoketestWindow() :
     maRightBottomChild.SetPosSizePixel( Point(320,240), Size(320,240) );
     Show();
 
-    maUpdateTimer.SetTimeoutHdl(LINK(this, SmoketestWindow, updateHdl));
+    maUpdateTimer.SetTimeoutHdl(LINK(this, DemoWindow, updateHdl));
     maUpdateTimer.SetTimeout( (ULONG)30 );
     maUpdateTimer.Start();
 }
 
-void SmoketestWindow::init()
+void DemoWindow::init()
 {
     try
     {
@@ -481,7 +485,7 @@ void SmoketestWindow::init()
     }
 }
 
-IMPL_LINK( SmoketestWindow, updateHdl, Timer*, EMPTYARG )
+IMPL_LINK( DemoWindow, updateHdl, Timer*, EMPTYARG )
 {
     init();
 
@@ -492,17 +496,17 @@ IMPL_LINK( SmoketestWindow, updateHdl, Timer*, EMPTYARG )
     return 0;
 }
 
-void SmoketestWindow::Paint( const Rectangle& rRect )
+void DemoWindow::Paint( const Rectangle& /*rRect*/ )
 {
     init();
 }
 
-void SmoketestWindow::Resize()
+void DemoWindow::Resize()
 {
     // TODO
 }
 
-USHORT SmoketestApp::Exception( USHORT nError )
+USHORT DemoApp::Exception( USHORT nError )
 {
     switch( nError & EXC_MAJORTYPE )
     {
@@ -513,8 +517,25 @@ USHORT SmoketestApp::Exception( USHORT nError )
     return 0;
 }
 
-void SmoketestApp::Main()
+void DemoApp::Main()
 {
+    bool bHelp = false;
+
+    for( USHORT i = 0; i < GetCommandLineParamCount(); i++ )
+    {
+        ::rtl::OUString aParam = GetCommandLineParam( i );
+
+        if( aParam.equalsAscii( "--help" ) ||
+            aParam.equalsAscii( "-h" ) )
+                bHelp = true;
+    }
+
+    if( bHelp )
+    {
+        printf( "demoshow - life Slideshow testbed\n" );
+        return;
+    }
+
     // bootstrap UNO
     uno::Reference< lang::XMultiServiceFactory > xFactory;
     try
@@ -525,8 +546,16 @@ void SmoketestApp::Main()
         if( xFactory.is() )
             ::comphelper::setProcessServiceFactory( xFactory );
     }
+    catch( uno::RuntimeException& )
+    {
+        throw;
+    }
     catch( uno::Exception& )
     {
+        OSL_ENSURE( false,
+                    rtl::OUStringToOString(
+                        comphelper::anyToString( cppu::getCaughtException() ),
+                        RTL_TEXTENCODING_UTF8 ).getStr() );
     }
 
     if( !xFactory.is() )
@@ -541,7 +570,7 @@ void SmoketestApp::Main()
     aArgs[ 1 ] <<= rtl::OUString::createFromAscii( UCB_CONFIGURATION_KEY2_OFFICE );
     ::ucb::ContentBroker::initialize( xFactory, aArgs );
 
-    SmoketestWindow pWindow;
+    DemoWindow pWindow;
     pWindow.Execute();
 
     // clean up UCB
@@ -549,4 +578,4 @@ void SmoketestApp::Main()
 }
 }
 
-SmoketestApp aApp;
+DemoApp aApp;
