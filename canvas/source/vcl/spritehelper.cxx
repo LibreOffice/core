@@ -4,9 +4,9 @@
  *
  *  $RCSfile: spritehelper.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: rt $ $Date: 2007-07-05 08:02:26 $
+ *  last change: $Author: obo $ $Date: 2007-07-17 14:26:36 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -410,42 +410,36 @@ namespace vclcanvas
                                                     aOutPos.Y() + aOutputSize.Height()-1) ) );
 
                     // Paint little red sprite area markers
-                    rTargetSurface.SetLineColor( Color( 255,0,0 ) );
+                    rTargetSurface.SetLineColor( COL_RED );
                     rTargetSurface.SetFillColor();
 
                     for( int i=0; i<aMarkerPoly.Count(); ++i )
                     {
                         rTargetSurface.DrawPolyLine( aMarkerPoly.GetObject((USHORT)i) );
                     }
+
+                    // paint sprite prio
+                    Font aVCLFont;
+                    aVCLFont.SetHeight( std::min(long(20),aOutputSize.Height()) );
+                    aVCLFont.SetColor( COL_RED );
+
+                    rTargetSurface.SetTextAlign(ALIGN_TOP);
+                    rTargetSurface.SetTextColor( COL_RED );
+                    rTargetSurface.SetFont( aVCLFont );
+
+                    ::rtl::OUString text( ::rtl::math::doubleToUString( getPriority(),
+                                                                        rtl_math_StringFormat_F,
+                                                                        2,'.',NULL,' ') );
+
+                    rTargetSurface.DrawText( aOutPos+Point(2,2), text );
+
+#if defined(VERBOSE) && OSL_DEBUG_LEVEL > 0
+                    OSL_TRACE( "SpriteHelper::redraw(): sprite %X has prio %f\n",
+                               this, getPriority() );
+#endif
                 }
             }
         }
-    }
-
-    void SpriteHelper::clearSurface()
-    {
-        ENSURE_AND_THROW( mpBackBuffer && mpBackBufferMask,
-                          "SpriteHelper::clearSurface(): disposed" );
-
-        const ::Point       aEmptyPoint;
-        const ::Rectangle   aSpriteRect( aEmptyPoint,
-                                 ::vcl::unotools::sizeFromB2DSize( getSizePixel() ) );
-        const ::Color       aWhiteColor( COL_WHITE );
-
-        OutputDevice& rOutDev( mpBackBuffer->getOutDev() );
-        rOutDev.EnableMapMode( FALSE );
-        rOutDev.SetFillColor( aWhiteColor );
-        rOutDev.SetLineColor();
-        rOutDev.DrawRect( aSpriteRect );
-
-        OutputDevice& rMaskOutDev( mpBackBufferMask->getOutDev() );
-        rMaskOutDev.SetDrawMode( DRAWMODE_DEFAULT );
-        rMaskOutDev.EnableMapMode( FALSE );
-        rMaskOutDev.SetFillColor( aWhiteColor );
-        rMaskOutDev.SetLineColor();
-        rMaskOutDev.DrawRect( aSpriteRect );
-        rMaskOutDev.SetDrawMode( DRAWMODE_BLACKLINE | DRAWMODE_BLACKFILL | DRAWMODE_BLACKTEXT |
-                                 DRAWMODE_BLACKGRADIENT | DRAWMODE_BLACKBITMAP );
     }
 
     ::basegfx::B2DPolyPolygon SpriteHelper::polyPolygonFromXPolyPolygon2D( uno::Reference< rendering::XPolyPolygon2D >& xPoly ) const
