@@ -4,9 +4,9 @@
  *
  *  $RCSfile: cairo_cachedbitmap.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 03:17:22 $
+ *  last change: $Author: obo $ $Date: 2007-07-17 14:19:21 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -77,7 +77,7 @@ namespace cairocanvas
     }
 
     ::sal_Int8 CachedBitmap::doRedraw( const rendering::ViewState&                  rNewState,
-                                       const rendering::ViewState&                  rOldState,
+                                       const rendering::ViewState&                  /*rOldState*/,
                                        const uno::Reference< rendering::XCanvas >&  rTargetCanvas,
                                        bool                                         bSameViewTransform )
     {
