@@ -4,9 +4,9 @@
  *
  *  $RCSfile: frmhtmlw.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: ihi $ $Date: 2007-07-11 13:10:49 $
+ *  last change: $Author: obo $ $Date: 2007-07-17 13:41:19 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -188,14 +188,13 @@ void SfxFrameHTMLWriter::Out_DocInfo( SvStream& rStrm, const String& rBaseURL,
         }
 
         // Author
-        const SfxStamp& rCreated = pInfo->GetCreated();
-        const String& rAuthor = rCreated.GetName();
+        const String& rAuthor = pInfo->GetAuthor();
         if( rAuthor.Len() )
             OutMeta( rStrm, pIndent, sHTML_META_author, rAuthor, FALSE,
                       eDestEnc, pNonConvertableChars );
 
         // created
-        const DateTime& rCreatedDT = rCreated.GetTime();
+        const DateTime& rCreatedDT = pInfo->GetCreationDate();
         String sOut(
             String::CreateFromInt32( (sal_Int32)rCreatedDT.GetDate() ) );
         (sOut += ';') +=
@@ -203,14 +202,13 @@ void SfxFrameHTMLWriter::Out_DocInfo( SvStream& rStrm, const String& rBaseURL,
         OutMeta( rStrm, pIndent, sHTML_META_created, sOut, FALSE, eDestEnc, pNonConvertableChars );
 
         // changedby
-        const SfxStamp& rChanged = pInfo->GetChanged();
-        const String& rChangedBy = rChanged.GetName();
+        const String& rChangedBy = pInfo->GetModificationAuthor();
         if( rChangedBy.Len() )
             OutMeta( rStrm, pIndent, sHTML_META_changedby, rChangedBy, FALSE,
                       eDestEnc, pNonConvertableChars );
 
         // changed
-        const DateTime& rChangedDT = rChanged.GetTime();
+        const DateTime& rChangedDT = pInfo->GetModificationDate();
         sOut = String::CreateFromInt32( (sal_Int32)rChangedDT.GetDate() );
         (sOut += ';') +=
             String::CreateFromInt32( (sal_Int32)rChangedDT.GetTime() );
@@ -238,16 +236,16 @@ void SfxFrameHTMLWriter::Out_DocInfo( SvStream& rStrm, const String& rBaseURL,
         USHORT nKeys = pInfo->GetUserKeyCount();
 
         // Leere Eintraege am Ende werden nicht ausgegeben
-        while( nKeys && !pInfo->GetUserKey(nKeys-1).GetWord().Len() )
+        while( nKeys && !pInfo->GetUserKeyWord(nKeys-1).Len() )
             nKeys--;
 
         for( USHORT i=0; i< nKeys; i++ )
         {
-            const SfxDocUserKey& rUserKey = pInfo->GetUserKey(i);
-            String aWord( rUserKey.GetWord() );
+            String aWord( pInfo->GetUserKeyWord(i) );
+            String aTitle( pInfo->GetUserKeyTitle(i) );
             aWord.EraseTrailingChars();
-            if( rUserKey.GetTitle().Len() )
-                OutMeta( rStrm, pIndent, rUserKey.GetTitle(), aWord, FALSE,
+            if( aTitle.Len() )
+                OutMeta( rStrm, pIndent, aTitle, aWord, FALSE,
                          eDestEnc, pNonConvertableChars );
         }
     }
