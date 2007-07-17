@@ -4,9 +4,9 @@
  *
  *  $RCSfile: doc.hxx,v $
  *
- *  $Revision: 1.138 $
+ *  $Revision: 1.139 $
  *
- *  last change: $Author: hr $ $Date: 2007-06-27 13:13:17 $
+ *  last change: $Author: obo $ $Date: 2007-07-17 13:04:54 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -849,7 +849,7 @@ public:
     virtual void SetVisibleLinks(bool bFlag);
     virtual SvxLinkManager& GetLinkManager();
     virtual const SvxLinkManager& GetLinkManager() const;
-    virtual void UpdateLinks();
+    virtual void UpdateLinks(BOOL bUI);
     virtual bool GetData(const String& rItem, const String& rMimeType, ::com::sun::star::uno::Any& rValue) const;
     virtual bool SetData(const String& rItem, const String& rMimeType, const ::com::sun::star::uno::Any& rValue);
     virtual ::sfx2::SvLinkSource* CreateLinkSource(const String& rItem);
@@ -949,9 +949,9 @@ public:
 
     /** IDocumentStatistics
     */
-    virtual SfxDocumentInfo* GetInfo();
+    virtual SfxDocumentInfo* GetDocumentInfo();
     virtual const SfxDocumentInfo* GetpInfo() const;
-    virtual void SetInfo(const SfxDocumentInfo& rInfo);
+    virtual void SetDocumentInfo(const SfxDocumentInfo& rInfo);
     virtual void DocInfoChgd(const SfxDocumentInfo& rInfo);
     virtual const SwDocStat &GetDocStat() const;
     virtual void SetDocStat(const SwDocStat& rStat);
