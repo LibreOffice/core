@@ -4,9 +4,9 @@
  *
  *  $RCSfile: animationaudionode.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: kz $ $Date: 2006-12-13 15:28:01 $
+ *  last change: $Author: obo $ $Date: 2007-07-17 14:46:26 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -37,8 +37,10 @@
 #include "precompiled_slideshow.hxx"
 
 // must be first
-#include "canvas/debug.hxx"
-#include "canvas/verbosetrace.hxx"
+#include <canvas/debug.hxx>
+#include <canvas/verbosetrace.hxx>
+
+#include "eventqueue.hxx"
 #include "animationaudionode.hxx"
 #include "delayevent.hxx"
 #include "tools.hxx"
@@ -82,22 +84,26 @@ void AnimationAudioNode::activate_st()
     AnimationEventHandlerSharedPtr aHandler(
         boost::dynamic_pointer_cast<AnimationEventHandler>( getSelf() ) );
     OSL_ENSURE( aHandler,
-                "could not cas self to AnimationEventHandler?" );
+                "could not cast self to AnimationEventHandler?" );
     getContext().mrEventMultiplexer.addCommandStopAudioHandler( aHandler );
 
-    if (mpPlayer && mpPlayer->startPlayback()) {
+    if (mpPlayer && mpPlayer->startPlayback())
+    {
         // TODO(F2): Handle end time attribute, too
-        if( getXAnimationNode()->getDuration().hasValue() ) {
+        if( getXAnimationNode()->getDuration().hasValue() )
+        {
             scheduleDeactivationEvent();
         }
-        else {
+        else
+        {
             // no node duration. Take inherent media time, then
             scheduleDeactivationEvent(
                 makeDelay( boost::bind( &AnimationNode::deactivate, getSelf() ),
                            mpPlayer->getDuration() ) );
         }
     }
-    else {
+    else
+    {
         // deactivate ASAP:
         scheduleDeactivationEvent(
             makeEvent( boost::bind( &AnimationNode::deactivate, getSelf() ) ) );
@@ -116,7 +122,8 @@ void AnimationAudioNode::deactivate_st( NodeState /*eDestState*/ )
     getContext().mrEventMultiplexer.removeCommandStopAudioHandler( aHandler );
 
     // force-end sound
-    if (mpPlayer) {
+    if (mpPlayer)
+    {
         mpPlayer->stopPlayback();
         resetPlayer();
     }
@@ -141,12 +148,14 @@ void AnimationAudioNode::createPlayer() const
     if (mpPlayer)
         return;
 
-    try {
+    try
+    {
         mpPlayer = SoundPlayer::create( getContext().mrEventMultiplexer,
                                         maSoundURL,
                                         getContext().mxComponentContext );
     }
-    catch( lang::NoSupportException& ) {
+    catch( lang::NoSupportException& )
+    {
         // catch possible exceptions from SoundPlayer,
         // since being not able to playback the sound
         // is not a hard error here (remainder of the
@@ -156,7 +165,8 @@ void AnimationAudioNode::createPlayer() const
 
 void AnimationAudioNode::resetPlayer() const
 {
-    if (mpPlayer) {
+    if (mpPlayer)
+    {
         mpPlayer->stopPlayback();
         mpPlayer->dispose();
         mpPlayer.reset();
