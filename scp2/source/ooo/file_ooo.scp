@@ -4,9 +4,9 @@
  *
  *  $RCSfile: file_ooo.scp,v $
  *
- *  $Revision: 1.208 $
+ *  $Revision: 1.209 $
  *
- *  last change: $Author: ihi $ $Date: 2007-07-11 15:05:50 $
+ *  last change: $Author: obo $ $Date: 2007-07-17 13:47:16 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -2362,7 +2362,7 @@ File gid_File_Rdb_Types
     Name = "types.rdb";
 End
 
-#ifdef ENABLE_VBA 
+#ifdef ENABLE_VBA
 #ifndef VBA_EXTENSION
 File gid_File_Rdb_TypesVba
     TXT_FILE_BODY;
@@ -3230,7 +3230,7 @@ File gid_Starregistry_Legacy_Binfilters_Rdb
     TXT_FILE_BODY;
     Name = "legacy_binfilters.rdb";
     Dir = gid_Dir_Program;
-    Styles = (PACKED, STARREGISTRY);
+    Styles = (PACKED, STARREGISTRY, PATCH);
 End
 #endif
 
