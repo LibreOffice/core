@@ -4,9 +4,9 @@
  *
  *  $RCSfile: elapsedtime.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: kz $ $Date: 2006-12-13 14:46:11 $
+ *  last change: $Author: obo $ $Date: 2007-07-17 14:24:02 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -105,12 +105,12 @@ double ElapsedTime::getSystemTime()
         QueryPerformanceCounter(
             reinterpret_cast<LARGE_INTEGER *>(&nCurrCount) );
         nCurrCount -= nInitialCount;
-        return (double)nCurrCount / nPerfCountFreq;
+        return double(nCurrCount) / nPerfCountFreq;
     }
     else
     {
         LONGLONG nCurrTime = timeGetTime();
-        return (double)nCurrTime / 1000.0;
+        return double(nCurrTime) / 1000.0;
     }
 }
 
