@@ -4,9 +4,9 @@
  *
  *  $RCSfile: confuno.cxx,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: rt $ $Date: 2007-07-03 15:55:56 $
+ *  last change: $Author: obo $ $Date: 2007-07-17 13:34:56 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -55,9 +55,6 @@
 
 #ifndef _SFX_PRINTER_HXX
 #include <sfx2/printer.hxx>
-#endif
-#ifndef _SFXDOCINF_HXX
-#include <sfx2/docinf.hxx>
 #endif
 #ifndef _XMLOFF_XMLUCONV_HXX
 #include <xmloff/xmluconv.hxx>
@@ -245,7 +242,11 @@ void SAL_CALL ScDocumentConfiguration::setPropertyValue(
                 }
             }
             else if ( aPropertyName.compareToAscii( SC_UNO_APPLYDOCINF ) == 0 )
-                pDocShell->GetDocInfo().SetUseUserData( ScUnoHelpFunctions::GetBoolFromAny( aValue ) );
+            {
+                sal_Bool bTmp=sal_True;
+                if ( aValue >>= bTmp )
+                    pDocShell->SetUseUserData( bTmp );
+            }
             else if ( aPropertyName.compareToAscii( SC_UNO_FORBIDDEN ) == 0 )
             {
                 //  read-only - should not be set
@@ -263,13 +264,23 @@ void SAL_CALL ScDocumentConfiguration::setPropertyValue(
                 bUpdateHeights = sal_True;
             }
             else if ( aPropertyName.compareToAscii( SCSAVEVERSION ) == 0)
-                pDocShell->GetDocInfo().SetSaveVersionOnClose( ScUnoHelpFunctions::GetBoolFromAny( aValue ) );
+            {
+                sal_Bool bTmp=sal_False;
+                if ( aValue >>= bTmp )
+                    pDocShell->SetSaveVersionOnClose( bTmp );
+            }
             else if ( aPropertyName.compareToAscii( SC_UNO_UPDTEMPL ) == 0 )
-                pDocShell->GetDocInfo().SetQueryLoadTemplate( ScUnoHelpFunctions::GetBoolFromAny( aValue ) );
-            // --> PB 2004-08-25 #i33095# Security Options
+            {
+                sal_Bool bTmp=sal_True;
+                if ( aValue >>= bTmp )
+                    pDocShell->SetQueryLoadTemplate( bTmp );
+            }
             else if ( aPropertyName.compareToAscii( SC_UNO_LOADREADONLY ) == 0 )
-                pDocShell->GetDocInfo().SetLoadReadonly( ScUnoHelpFunctions::GetBoolFromAny( aValue ) );
-            // <--
+            {
+                sal_Bool bTmp=sal_False;
+                if ( aValue >>= bTmp )
+                    pDocShell->SetLoadReadonly( bTmp );
+            }
             else
             {
                 ScGridOptions aGridOpt(aViewOpt.GetGridOptions());
@@ -383,7 +394,7 @@ uno::Any SAL_CALL ScDocumentConfiguration::getPropertyValue( const rtl::OUString
                     aRet <<= uno::Sequence<sal_Int8>();
             }
             else if ( aPropertyName.compareToAscii( SC_UNO_APPLYDOCINF ) == 0 )
-                ScUnoHelpFunctions::SetBoolInAny( aRet, pDocShell->GetDocInfo().IsUseUserData() );
+                aRet <<= pDocShell->IsUseUserData();
             else if ( aPropertyName.compareToAscii( SC_UNO_FORBIDDEN ) == 0 )
             {
                 aRet <<= uno::Reference<i18n::XForbiddenCharacters>(new ScForbiddenCharsObj( pDocShell ));
@@ -393,12 +404,11 @@ uno::Any SAL_CALL ScDocumentConfiguration::getPropertyValue( const rtl::OUString
             else if ( aPropertyName.compareToAscii( SC_UNO_ASIANKERN ) == 0 )
                 ScUnoHelpFunctions::SetBoolInAny( aRet, pDoc->GetAsianKerning() );
             else if ( aPropertyName.compareToAscii( SCSAVEVERSION ) == 0)
-                ScUnoHelpFunctions::SetBoolInAny( aRet, pDocShell->GetDocInfo().IsSaveVersionOnClose() );
+                aRet <<= pDocShell->IsSaveVersionOnClose();
             else if ( aPropertyName.compareToAscii( SC_UNO_UPDTEMPL ) == 0 )
-                ScUnoHelpFunctions::SetBoolInAny( aRet, pDocShell->GetDocInfo().IsQueryLoadTemplate());
-            // --> PB 2004-08-25 #i33095# Security Options
+                aRet <<= pDocShell->IsQueryLoadTemplate();
             else if ( aPropertyName.compareToAscii( SC_UNO_LOADREADONLY ) == 0 )
-                ScUnoHelpFunctions::SetBoolInAny( aRet, pDocShell->GetDocInfo().IsLoadReadonly() );
+                aRet <<= pDocShell->IsLoadReadonly();
             // <--
             else
             {
