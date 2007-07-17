@@ -4,9 +4,9 @@
  *
  *  $RCSfile: animationnodefactory.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: kz $ $Date: 2006-12-13 15:52:42 $
+ *  last change: $Author: obo $ $Date: 2007-07-17 15:02:58 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -33,23 +33,22 @@
  *
  ************************************************************************/
 
-#ifndef _SLIDESHOW_ANIMATIONNODEFACTORY_HXX
-#define _SLIDESHOW_ANIMATIONNODEFACTORY_HXX
-
-#include <animationnode.hxx>
+#ifndef INCLUDED_SLIDESHOW_ANIMATIONNODEFACTORY_HXX
+#define INCLUDED_SLIDESHOW_ANIMATIONNODEFACTORY_HXX
 
 #include <com/sun/star/uno/Reference.hxx>
 #include <com/sun/star/uno/XComponentContext.hpp>
 #include <com/sun/star/animations/XAnimationNode.hpp>
 
-#include <boost/utility.hpp>
-#include <vector>
+#include "subsettableshapemanager.hxx"
+#include "animationnode.hxx"
+#include "slideshowcontext.hxx"
+#include "eventqueue.hxx"
+#include "activitiesqueue.hxx"
+#include "usereventqueue.hxx"
 
-#include <slideshowcontext.hxx>
-#include <layermanager.hxx>
-#include <eventqueue.hxx>
-#include <activitiesqueue.hxx>
-#include <usereventqueue.hxx>
+#include <boost/noncopyable.hpp>
+#include <vector>
 
 
 namespace slideshow
@@ -65,6 +64,7 @@ namespace slideshow
              */
             static AnimationNodeSharedPtr createAnimationNode( const ::com::sun::star::uno::Reference<
                                                                        ::com::sun::star::animations::XAnimationNode >& xNode,
+                                                               const ::basegfx::B2DVector&                          rSlideSize,
                                                                const SlideShowContext&                              rContext );
 
 
@@ -83,4 +83,4 @@ namespace slideshow
     }
 }
 
-#endif /* _SLIDESHOW_ANIMATIONNODEFACTORY_HXX */
+#endif /* INCLUDED_SLIDESHOW_ANIMATIONNODEFACTORY_HXX */
