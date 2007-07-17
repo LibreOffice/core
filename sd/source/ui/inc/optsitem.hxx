@@ -4,9 +4,9 @@
  *
  *  $RCSfile: optsitem.hxx,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: kz $ $Date: 2006-12-12 17:46:10 $
+ *  last change: $Author: obo $ $Date: 2007-07-17 14:30:06 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -310,6 +310,8 @@ private:
     BOOL    bSummationOfParagraphs  : 1;    // misc/SummationOfParagraphs
     // #90356#
     BOOL    bShowUndoDeleteWarning  : 1;    // Misc/ShowUndoDeleteWarning
+    // #i75315#
+    BOOL    bSlideshowRespectZOrder : 1;    // Misc/SlideshowRespectZOrder
 
     sal_Bool    bPreviewNewEffects;
     sal_Bool    bPreviewChangedEffects;
@@ -362,6 +364,7 @@ public:
     USHORT  GetPrinterIndependentLayout() const { Init(); return mnPrinterIndependentLayout; };
     // #90356#
     BOOL    IsShowUndoDeleteWarning() const { Init(); return (BOOL) bShowUndoDeleteWarning; }
+    BOOL    IsSlideshowRespectZOrder() const { Init(); return (BOOL) bSlideshowRespectZOrder; }
     // #97016#
     ULONG   GetDefaultObjectSizeWidth() const { Init(); return nDefaultObjectSizeWidth; }
     ULONG   GetDefaultObjectSizeHeight() const { Init(); return nDefaultObjectSizeHeight; }
@@ -397,6 +400,7 @@ public:
     void    SetSolidMarkHdl( BOOL bOn = TRUE ) { if( bSolidMarkHdl != bOn ) { OptionsChanged(); bSolidMarkHdl = bOn; } }
     // #90356#
     void    SetShowUndoDeleteWarning( BOOL bOn = TRUE ) { if( bShowUndoDeleteWarning != bOn ) { OptionsChanged(); bShowUndoDeleteWarning = bOn; } }
+    void    SetSlideshowRespectZOrder( BOOL bOn = TRUE ) { if( bSlideshowRespectZOrder != bOn ) { OptionsChanged(); bSlideshowRespectZOrder = bOn; } }
     // #97016#
     void    SetDefaultObjectSizeWidth( ULONG nWidth ) { if( nDefaultObjectSizeWidth != nWidth ) { OptionsChanged(); nDefaultObjectSizeWidth = nWidth; } }
     void    SetDefaultObjectSizeHeight( ULONG nHeight ) { if( nDefaultObjectSizeHeight != nHeight ) { OptionsChanged(); nDefaultObjectSizeHeight = nHeight; } }
