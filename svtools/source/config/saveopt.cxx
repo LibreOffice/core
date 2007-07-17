@@ -4,9 +4,9 @@
  *
  *  $RCSfile: saveopt.cxx,v $
  *
- *  $Revision: 1.29 $
+ *  $Revision: 1.30 $
  *
- *  last change: $Author: rt $ $Date: 2007-07-05 07:28:30 $
+ *  last change: $Author: obo $ $Date: 2007-07-17 13:28:01 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -89,7 +89,6 @@ static sal_Int32           nRefCount = 0;
 class SvtSaveOptions_Impl : public utl::ConfigItem
 {
     sal_Int32                           nAutoSaveTime;
-    SvtSaveOptions::SaveGraphicsMode    eSaveGraphics;
     sal_Bool                            bUseUserData,
                                         bBackup,
                                         bAutoSave,
@@ -106,7 +105,6 @@ class SvtSaveOptions_Impl : public utl::ConfigItem
                                         bLoadDocPrinter;
 
     sal_Bool                            bROAutoSaveTime,
-                                        bROSaveGraphics,
                                         bROUseUserData,
                                         bROBackup,
                                         bROAutoSave,
@@ -134,9 +132,7 @@ public:
     BOOL                    IsAutoSave() const                  { return bAutoSave; }
     BOOL                    IsAutoSavePrompt() const            { return bAutoSavePrompt; }
     BOOL                    IsDocInfoSave() const               { return bDocInfSave; }
-    SvtSaveOptions::SaveGraphicsMode
-                            GetSaveGraphicsMode() const         { return eSaveGraphics; }
-    BOOL                    IsSaveWorkingSet() const            { return bSaveWorkingSet; }
+    BOOL                    IsSaveWorkingSet() const            { return bSaveWorkingSet;         }
     BOOL                    IsSaveDocWins() const               { return bSaveDocWins; }
     BOOL                    IsSaveDocView() const               { return bSaveDocView; }
     BOOL                    IsSaveRelINet() const               { return bSaveRelINet; }
@@ -152,7 +148,6 @@ public:
     void                    SetAutoSave( BOOL b );
     void                    SetAutoSavePrompt( BOOL b );
     void                    SetDocInfoSave( BOOL b );
-    void                    SetSaveGraphicsMode( SvtSaveOptions::SaveGraphicsMode eMode );
     void                    SetSaveWorkingSet( BOOL b );
     void                    SetSaveDocWins( BOOL b );
     void                    SetSaveDocView( BOOL b );
@@ -218,15 +213,6 @@ void SvtSaveOptions_Impl::SetDocInfoSave(BOOL b)
     if (!bRODocInfSave && bDocInfSave!=b)
     {
         bDocInfSave = b;
-        SetModified();
-    }
-}
-
-void SvtSaveOptions_Impl::SetSaveGraphicsMode( SvtSaveOptions::SaveGraphicsMode eMode )
-{
-    if (!bROSaveGraphics && eSaveGraphics!=eMode)
-    {
-        eSaveGraphics = eMode;
         SetModified();
     }
 }
@@ -319,9 +305,6 @@ sal_Bool SvtSaveOptions_Impl::IsReadOnly( SvtSaveOptions::EOption eOption ) cons
     {
         case SvtSaveOptions::E_AUTOSAVETIME :
             bReadOnly = bROAutoSaveTime;
-            break;
-        case SvtSaveOptions::E_SAVEGRAPHICS :
-            bReadOnly = bROSaveGraphics;
             break;
         case SvtSaveOptions::E_USEUSERDATA :
             bReadOnly = bROUseUserData;
@@ -422,7 +405,6 @@ Sequence< OUString > GetPropertyNames()
 SvtSaveOptions_Impl::SvtSaveOptions_Impl()
     : ConfigItem( OUString::createFromAscii("Office.Common/Save") )
     , nAutoSaveTime( 0 )
-    , eSaveGraphics( SvtSaveOptions::SaveGraphicsNormal )
     , bUseUserData( sal_False )
     , bBackup( sal_False )
     , bAutoSave( sal_False )
@@ -438,7 +420,6 @@ SvtSaveOptions_Impl::SvtSaveOptions_Impl()
     , bWarnAlienFormat( sal_True )
     , bLoadDocPrinter( sal_True )
     , bROAutoSaveTime( CFG_READONLY_DEFAULT )
-    , bROSaveGraphics( CFG_READONLY_DEFAULT )
     , bROUseUserData( CFG_READONLY_DEFAULT )
     , bROBackup( CFG_READONLY_DEFAULT )
     , bROAutoSave( CFG_READONLY_DEFAULT )
@@ -478,14 +459,6 @@ SvtSaveOptions_Impl::SvtSaveOptions_Impl()
                         else
                             DBG_ERROR( "Wrong Type!" );
                         bROAutoSaveTime = pROStates[nProp];
-                        break;
-
-                    case FORMAT :
-                        if ( pValues[nProp] >>= nTemp )
-                            eSaveGraphics = (SvtSaveOptions::SaveGraphicsMode) nTemp;
-                        else
-                            DBG_ERROR( "Wrong Type!" );
-                        bROSaveGraphics = pROStates[nProp];
                         break;
 
                     default:
@@ -612,14 +585,6 @@ void SvtSaveOptions_Impl::Commit()
                 if (!bROAutoSaveTime)
                 {
                     pValues[nRealCount] <<= nAutoSaveTime;
-                    pNames[nRealCount] = pOrgNames[i];
-                    ++nRealCount;
-                }
-                break;
-            case FORMAT :
-                if (!bROSaveGraphics)
-                {
-                    pValues[nRealCount] <<= (sal_Int16)eSaveGraphics;
                     pNames[nRealCount] = pOrgNames[i];
                     ++nRealCount;
                 }
@@ -988,16 +953,6 @@ void SvtSaveOptions::SetSaveUnpacked( sal_Bool b )
 sal_Bool SvtSaveOptions::IsSaveUnpacked() const
 {
     return pImp->pSaveOpt->IsSaveUnpacked();
-}
-SvtSaveOptions::SaveGraphicsMode SvtSaveOptions::GetSaveGraphicsMode() const
-{
-    return pImp->pSaveOpt->GetSaveGraphicsMode();
-}
-
-void SvtSaveOptions::SetSaveGraphicsMode( SvtSaveOptions::SaveGraphicsMode )
-{
-    // #87097#: don't allow setting of this property (it isn't needed anymore)
-    // pImp->pSaveOpt->SetSaveGraphicsMode( eMode );
 }
 
 void SvtSaveOptions::SetLoadUserSettings(sal_Bool b)
