@@ -4,9 +4,9 @@
  *
  *  $RCSfile: spritecanvashelper.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: kz $ $Date: 2006-12-13 14:49:07 $
+ *  last change: $Author: obo $ $Date: 2007-07-17 14:26:21 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -182,6 +182,7 @@ namespace vclcanvas
             aVCLFont.SetHeight( 20 );
             aVCLFont.SetColor( Color( INFO_COLOR ) );
 
+            rOutDev.SetTextAlign(ALIGN_TOP);
             rOutDev.SetTextColor( Color( INFO_COLOR ) );
             rOutDev.SetFont( aVCLFont );
 
