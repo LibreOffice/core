@@ -4,9 +4,9 @@
  *
  *  $RCSfile: appopen.cxx,v $
  *
- *  $Revision: 1.112 $
+ *  $Revision: 1.113 $
  *
- *  last change: $Author: hr $ $Date: 2007-06-27 22:56:38 $
+ *  last change: $Author: obo $ $Date: 2007-07-17 13:40:26 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -318,8 +318,7 @@ void SetTemplate_Impl( const String &rFileName,
 {
     // write TemplateName to DocumentInfo of document
     // TemplateDate stays as default (=current date)
-    SfxDocumentInfo &rInfo = pDoc->GetDocInfo();
-    rInfo.ResetFromTemplate( rLongName, rFileName );
+    pDoc->ResetFromTemplate( rLongName, rFileName );
     pDoc->FlushDocInfo();
 }
 
