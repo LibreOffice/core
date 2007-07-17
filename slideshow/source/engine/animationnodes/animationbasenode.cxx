@@ -4,9 +4,9 @@
  *
  *  $RCSfile: animationbasenode.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: kz $ $Date: 2006-12-13 15:28:27 $
+ *  last change: $Author: obo $ $Date: 2007-07-17 14:46:40 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -37,21 +37,22 @@
 #include "precompiled_slideshow.hxx"
 
 // must be first
-#include "canvas/debug.hxx"
-#include "canvas/verbosetrace.hxx"
-#include "cppuhelper/exc_hlp.hxx"
-#include "comphelper/anytostring.hxx"
-#include "com/sun/star/presentation/ParagraphTarget.hpp"
-#include "com/sun/star/animations/Timing.hpp"
-#include "com/sun/star/animations/AnimationAdditiveMode.hpp"
-#include "com/sun/star/presentation/ShapeAnimationSubType.hpp"
+#include <canvas/debug.hxx>
+#include <canvas/verbosetrace.hxx>
+#include <cppuhelper/exc_hlp.hxx>
+#include <comphelper/anytostring.hxx>
+#include <com/sun/star/presentation/ParagraphTarget.hpp>
+#include <com/sun/star/animations/Timing.hpp>
+#include <com/sun/star/animations/AnimationAdditiveMode.hpp>
+#include <com/sun/star/presentation/ShapeAnimationSubType.hpp>
+
 #include "nodetools.hxx"
 #include "doctreenode.hxx"
 #include "animationbasenode.hxx"
 #include "delayevent.hxx"
-#include "boost/bind.hpp"
-#include "boost/optional.hpp"
-#include <vector>
+
+#include <boost/bind.hpp>
+#include <boost/optional.hpp>
 #include <algorithm>
 
 using namespace com::sun::star;
@@ -66,9 +67,11 @@ AnimationBaseNode::AnimationBaseNode(
     : BaseNode( xNode, rParent, rContext ),
       mxAnimateNode( xNode, uno::UNO_QUERY_THROW ),
       maAttributeLayerHolder(),
+      maSlideSize( rContext.maSlideSize ),
       mpActivity(),
       mpShape(),
       mpShapeSubset(),
+      mpSubsetManager(rContext.maContext.mpSubsettableShapeManager),
       mbIsIndependentSubset( rContext.mbIsIndependentSubset )
 {
     // extract native node targets
@@ -114,7 +117,7 @@ AnimationBaseNode::AnimationBaseNode(
 
         if( xShape.is() )
         {
-            mpShape = lookupAttributableShape( getContext().mpLayerManager,
+            mpShape = lookupAttributableShape( getContext().mpSubsettableShapeManager,
                                                xShape );
         }
         else
@@ -130,7 +133,7 @@ AnimationBaseNode::AnimationBaseNode(
 
             ENSURE_AND_THROW( xShape.is(), "invalid shape in ParagraphTarget" );
 
-            mpShape = lookupAttributableShape( getContext().mpLayerManager,
+            mpShape = lookupAttributableShape( getContext().mpSubsettableShapeManager,
                                                xShape );
 
             // NOTE: For shapes with ParagraphTarget, we ignore
@@ -159,7 +162,7 @@ AnimationBaseNode::AnimationBaseNode(
             mpShapeSubset.reset(
                 new ShapeSubset( mpShape,
                                  rTreeNode,
-                                 getContext().mpLayerManager ));
+                                 mpSubsetManager ));
 
             // Override NodeContext, and flag this node as
             // a special independent subset one. This is
@@ -359,7 +362,7 @@ void AnimationBaseNode::deactivate_st( NodeState eDestState )
             // pShape->isVisible() here, removing the
             // attribute layer might actually make the
             // shape invisible!
-            getContext().mpLayerManager->notifyShapeUpdate( pShape );
+            getContext().mpSubsettableShapeManager->notifyShapeUpdate( pShape );
         }
 
         if (mpActivity) {
@@ -471,7 +474,7 @@ AnimationBaseNode::fillCommonParameters() const
         nAcceleration,
         nDeceleration,
         getShape(),
-        getContext().mpLayerManager );
+        getSlideSize() );
 }
 
 AttributableShapeSharedPtr AnimationBaseNode::getShape() const
