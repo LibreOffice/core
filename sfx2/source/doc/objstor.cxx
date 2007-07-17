@@ -4,9 +4,9 @@
  *
  *  $RCSfile: objstor.cxx,v $
  *
- *  $Revision: 1.194 $
+ *  $Revision: 1.195 $
  *
- *  last change: $Author: hr $ $Date: 2007-06-27 23:24:00 $
+ *  last change: $Author: obo $ $Date: 2007-07-17 13:44:18 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -543,32 +543,6 @@ sal_Bool SfxObjectShell::DoInitNew_Impl( const ::rtl::OUString& rName )
 {
     if ( rName.getLength() )
     {
-//REMOVE            ModifyBlocker_Impl aBlock( this );
-//REMOVE            pMedium = new SfxMedium( rName, SFX_STREAM_READONLY_MAKECOPY, sal_False );
-//REMOVE            if ( InitNew( pMedium->GetStorage() ) )
-//REMOVE            {
-//REMOVE                bIsTmp = !( pMedium->GetStorage() );
-//REMOVE                if ( SFX_CREATE_MODE_EMBEDDED == eCreateMode )
-//REMOVE                    SetTitle( String( SfxResId( STR_NONAME ) ));
-//REMOVE
-//REMOVE                uno::Reference< frame::XModel >  xModel ( GetModel(), uno::UNO_QUERY );
-//REMOVE                if ( xModel.is() )
-//REMOVE                {
-//REMOVE                    SfxItemSet *pSet = GetMedium()->GetItemSet();
-//REMOVE                    uno::Sequence< beans::PropertyValue > aArgs;
-//REMOVE                    TransformItems( SID_OPENDOC, *pSet, aArgs );
-//REMOVE                    sal_Int32 nLength = aArgs.getLength();
-//REMOVE                    aArgs.realloc( nLength + 1 );
-//REMOVE                    aArgs[nLength].Name = DEFINE_CONST_UNICODE("Title");
-//REMOVE                    aArgs[nLength].Value <<= ::rtl::OUString( GetTitle( SFX_TITLE_DETECT ) );
-//REMOVE                    xModel->attachResource( ::rtl::OUString(), aArgs );
-//REMOVE                }
-//REMOVE
-//REMOVE                SetActivateEvent_Impl( SFX_EVENT_CREATEDOC );
-//REMOVE                return sal_True;
-//REMOVE            }
-//REMOVE            return sal_False;
-
         DBG_ERROR( "This code is intended to be removed, the caller part must be checked!\n" );
         return DoInitNew(0);
     }
@@ -640,74 +614,6 @@ sal_Bool SfxObjectShell::DoInitNew( SfxMedium* pMed )
     return sal_False;
 }
 
-//REMOVE    //-------------------------------------------------------------------------
-//REMOVE
-//REMOVE    void SfxObjectShell::DoHandsOffNoMediumClose()
-//REMOVE    {
-//REMOVE        const SfxFilter *pFilter = pMedium->GetFilter();
-//REMOVE        if( !pFilter || pFilter->IsOwnFormat() || ( pFilter->GetFilterFlags() & SFX_FILTER_PACKED ) )
-//REMOVE            HandsOff();
-//REMOVE
-//REMOVE        // Force document library containers to release storage
-//REMOVE        SotStorageRef xDummyStorage;
-//REMOVE        pImp->pBasicManager->setStorage( SfxBasicManagerHolder::DIALOGS, xDummyStorage );
-//REMOVE        pImp->pBasicManager->setStorage( SfxBasicManagerHolder::SCRIPTS, xDummyStorage );
-//REMOVE    }
-
-//REMOVE    //-------------------------------------------------------------------------
-//REMOVE
-//REMOVE    void SfxObjectShell::DoHandsOff()
-//REMOVE
-//REMOVE    /*  [Beschreibung]
-//REMOVE
-//REMOVE        Diese von SvPersist geerbte virtuelle Methode wird gerufen, um
-//REMOVE        das Objekt aufzufordern, den ihm zugeteilten SvStorage freizugeben,
-//REMOVE        insbesondere Substorages und Streams zu schlie"sen.
-//REMOVE
-//REMOVE        Als Do...-Methode liegt hier nur die Steuerung. Der Implementierer
-//REMOVE        von Subclasses kann die ebenfalls virtuelle Methode HandsOff()
-//REMOVE        implementieren, um seine Substorages und Streams zu schlie"sen.
-//REMOVE
-//REMOVE        Nach dem Aufruf dieser Methode, ist dem Objekt kein SfxMedium mehr
-//REMOVE        zugeordnet, bis SaveCompleted() durchlaufen ist.
-//REMOVE    */
-//REMOVE
-//REMOVE    {
-//REMOVE        DoHandsOffNoMediumClose();
-//REMOVE        pMedium->Close();
-//REMOVE    //  DELETEZ( pMedium );
-//REMOVE    }
-
-//REMOVE    //-------------------------------------------------------------------------
-//REMOVE
-//REMOVE    sal_Bool SfxObjectShell::DoLoad(
-//REMOVE        const String& rFileName, StreamMode nStreamMode, StorageMode nStorageMode)
-//REMOVE    {
-//REMOVE        // Es wird nur die IPersistStorage-Schnittstelle angeboten
-//REMOVE        ModifyBlocker_Impl aBlock( this );
-//REMOVE        SvStorageRef xStor = new SvStorage( rFileName, nStreamMode | STREAM_WRITE, nStorageMode );
-//REMOVE        if( !xStor.Is() )
-//REMOVE            xStor = new SvStorage( rFileName, nStreamMode, nStorageMode );
-//REMOVE
-//REMOVE        if ( SVSTREAM_OK == xStor->GetError() )
-//REMOVE        {
-//REMOVE            SfxMedium* pMedium = new SfxMedium( xStor );
-//REMOVE            pMedium->SetName( rFileName );
-//REMOVE            pMedium->Init_Impl();
-//REMOVE
-//REMOVE            // Muss !!!
-//REMOVE            SetFileName( rFileName );
-//REMOVE
-//REMOVE            if( DoLoad( pMedium ) )
-//REMOVE            {
-//REMOVE                if ( SFX_CREATE_MODE_EMBEDDED == eCreateMode )
-//REMOVE                    SetTitle( rFileName );
-//REMOVE                return sal_True;
-//REMOVE            }
-//REMOVE        }
-//REMOVE        return sal_False;
-//REMOVE    }
-
 //-------------------------------------------------------------------------
 
 sal_Bool SfxObjectShell::ImportFromGeneratedStream_Impl(
@@ -746,10 +652,8 @@ sal_Bool SfxObjectShell::ImportFromGeneratedStream_Impl(
 
         if ( LoadOwnFormat( *pMedium ) )
         {
-            SfxDocumentInfo& rDocInfo = GetDocInfo();
             bHasName = sal_True;
-
-            if ( !IsReadOnly() && rDocInfo.IsLoadReadonly() )
+            if ( !IsReadOnly() && IsLoadReadonly() )
                 SetReadOnlyUI();
 
             bResult = sal_True;
@@ -770,33 +674,6 @@ sal_Bool SfxObjectShell::ImportFromGeneratedStream_Impl(
 //-------------------------------------------------------------------------
 
 sal_Bool SfxObjectShell::DoLoad( SfxMedium *pMed )
-
-/*  [Beschreibung]
-
-    Diese Methode steuert das Laden des Objektes aus dem von dem
-    "ubergebenen SfxMedium beschriebenen Medium. Hinterher ist das Objekt
-    mit diesem SfxMedium verbunden.
-
-    Handelt es sich bei dem SfxMedium um einen Storage im eigenen Format,
-    wird die virtuelle Methode SvPersit::Load(SvStorage*) gerufen, welche
-    die Implementierer von Subclasses "uberladen m"ussen, um das Objekt
-    aus einem eigenen Storage zu laden (=> Swapping m"oeglich).
-
-    Handelt es sich bei dem SfxMedium um einen Storage in einem fremden
-    Format, oder um ein Flat-File, dann wird die virtuelle Methode
-    <SfxObjectShell::ConvertFrom(SfxMedium*)> gerufen, welche die
-    Implementierer von Subclasses "uberladen m"ussen, um das Objekt
-    aus dem SfxMedium zu konvertieren. W"ahrend der Bearbeitung ist
-    das Objekt dann mit einem tempor"aren SvStorage verbunden.
-
-    Erst nach InitNew() oder Load() ist das Objekt korrekt
-    initialisiert.
-
-    [R"uckgabewert]
-    sal_True                Das Objekt wurde geladen.
-    sal_False           Das Objekt konnte nicht geladen werden
-*/
-
 {
     ModifyBlocker_Impl aBlock( this );
 
@@ -893,14 +770,9 @@ sal_Bool SfxObjectShell::DoLoad( SfxMedium *pMed )
                 bOk = xStorage.is() && LoadOwnFormat( *pMed );
                 if ( bOk )
                 {
-                    SfxDocumentInfo& rDocInfo = GetDocInfo();
-//REMOVE                        GetDocInfo().Load( xStor );
                     bHasName = sal_True;
-
-                    // --> PB 2004-08-20 #i33095#
-                    if ( !IsReadOnly() && rDocInfo.IsLoadReadonly() )
+                    if ( !IsReadOnly() && IsLoadReadonly() )
                         SetReadOnlyUI();
-                    // <--
                 }
                 else
                     SetError( ERRCODE_ABORT );
@@ -976,7 +848,7 @@ sal_Bool SfxObjectShell::DoLoad( SfxMedium *pMed )
                 {
                     aAny = aContent.getPropertyValue( aAuthor );
                     if ( ( aAny >>= aValue ) )
-                        rInfo.SetCreated( SfxStamp( String( aValue ) ) );
+                        rInfo.SetCreated( String( aValue ) );
                 }
                 if ( xProps->hasPropertyByName( aKeywords ) )
                 {
@@ -1602,8 +1474,7 @@ sal_Bool SfxObjectShell::SaveTo_Impl
                     // if not transferred as a parameter, get it from user settings
                     aInfo.Author = SvtUserOptions().GetFullName();
 
-                TimeStamp aStamp;
-                DateTime aTime = aStamp.GetTime();
+                DateTime aTime;
                 aInfo.TimeStamp.Day = aTime.GetDay();
                 aInfo.TimeStamp.Month = aTime.GetMonth();
                 aInfo.TimeStamp.Year = aTime.GetYear();
@@ -1806,7 +1677,7 @@ sal_Bool SfxObjectShell::SaveTo_Impl
                 Any aAny;
                 if ( xProps->hasPropertyByName( aAuthor ) )
                 {
-                    aAny <<= ::rtl::OUString( GetDocInfo().GetCreated().GetName() );
+                    aAny <<= ::rtl::OUString( GetDocInfo().GetAuthor() );
                     aContent.setPropertyValue( aAuthor, aAny );
                 }
                 if ( xProps->hasPropertyByName( aKeywords ) )
@@ -3029,18 +2900,12 @@ sal_Bool SfxObjectShell::HasSecurityOptOpenReadOnly() const
 
 sal_Bool SfxObjectShell::IsSecurityOptOpenReadOnly() const
 {
-    const SfxDocumentInfo& rDocInfo = const_cast< SfxObjectShell* >( this )->GetDocInfo();
-    return rDocInfo.IsLoadReadonly();
+    return IsLoadReadonly();
 }
 
 void SfxObjectShell::SetSecurityOptOpenReadOnly( sal_Bool _b )
 {
-    SfxDocumentInfo& rDocInfo = GetDocInfo();
-    if ( rDocInfo.IsLoadReadonly() != _b )
-    {
-        GetDocInfo().SetLoadReadonly( _b );
-        SetModified( sal_True );
-    }
+    SetLoadReadonly( _b );
 }
 
 sal_Bool SfxObjectShell::LoadOwnFormat( SfxMedium& rMedium )
