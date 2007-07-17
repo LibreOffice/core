@@ -4,9 +4,9 @@
  *
  *  $RCSfile: implcanvas.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 12:51:57 $
+ *  last change: $Author: obo $ $Date: 2007-07-17 15:26:44 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -98,13 +98,19 @@ namespace cppcanvas
         void ImplCanvas::setClip( const ::basegfx::B2DPolyPolygon& rClipPoly )
         {
             // TODO(T3): not thread-safe. B2DPolyPolygon employs copy-on-write
-            maClipPolyPolygon = rClipPoly;
+            maClipPolyPolygon.reset( rClipPoly );
             maViewState.Clip.clear();
         }
 
-        ::basegfx::B2DPolyPolygon ImplCanvas::getClip() const
+        void ImplCanvas::setClip()
         {
-            return maClipPolyPolygon;
+            maClipPolyPolygon.reset();
+            maViewState.Clip.clear();
+        }
+
+        ::basegfx::B2DPolyPolygon const* ImplCanvas::getClip() const
+        {
+            return !maClipPolyPolygon ? NULL : &(*maClipPolyPolygon);
         }
 
         FontSharedPtr ImplCanvas::createFont( const ::rtl::OUString& rFontName, const double& rCellSize ) const
@@ -122,6 +128,12 @@ namespace cppcanvas
             return CanvasSharedPtr( new ImplCanvas( *this ) );
         }
 
+        void ImplCanvas::clear() const
+        {
+            OSL_ENSURE( mxCanvas.is(), "ImplCanvas::clear(): Invalid XCanvas" );
+            mxCanvas->clear();
+        }
+
         uno::Reference< rendering::XCanvas > ImplCanvas::getUNOCanvas() const
         {
             OSL_ENSURE( mxCanvas.is(), "ImplCanvas::getUNOCanvas(): Invalid XCanvas" );
@@ -131,14 +143,14 @@ namespace cppcanvas
 
         rendering::ViewState ImplCanvas::getViewState() const
         {
-            if( maClipPolyPolygon.count() && !maViewState.Clip.is() )
+            if( maClipPolyPolygon && !maViewState.Clip.is() )
             {
                 if( !mxCanvas.is() )
                     return maViewState;
 
                 maViewState.Clip = ::basegfx::unotools::xPolyPolygonFromB2DPolyPolygon(
                     mxCanvas->getDevice(),
-                    maClipPolyPolygon );
+                    *maClipPolyPolygon );
             }
 
             return maViewState;
