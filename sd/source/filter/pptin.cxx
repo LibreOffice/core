@@ -4,9 +4,9 @@
  *
  *  $RCSfile: pptin.cxx,v $
  *
- *  $Revision: 1.87 $
+ *  $Revision: 1.88 $
  *
- *  last change: $Author: rt $ $Date: 2007-07-06 09:48:00 $
+ *  last change: $Author: obo $ $Date: 2007-07-17 13:00:49 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -120,6 +120,7 @@
 #include <svx/tstpitem.hxx>
 #endif
 
+#include <sfx2/docinf.hxx>
 
 #include "glob.hrc"
 #include "pptin.hxx"
