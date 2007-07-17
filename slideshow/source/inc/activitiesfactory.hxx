@@ -4,9 +4,9 @@
  *
  *  $RCSfile: activitiesfactory.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: kz $ $Date: 2006-12-13 15:50:08 $
+ *  last change: $Author: obo $ $Date: 2007-07-17 15:00:51 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -44,7 +44,6 @@
 #include "event.hxx"
 #include "eventqueue.hxx"
 #include "shape.hxx"
-#include "layermanager.hxx"
 #include "numberanimation.hxx"
 #include "enumanimation.hxx"
 #include "coloranimation.hxx"
@@ -78,7 +77,7 @@ public:
             double                                nAcceleration,
             double                                nDeceleration,
             const ShapeSharedPtr&                 rShape,
-            const LayerManagerSharedPtr&          rLayerManager )
+            const ::basegfx::B2DVector&           rSlideBounds )
             : mpEndEvent( rEndEvent ),
               mrEventQueue( rEventQueue ),
               mrActivitiesQueue( rActivitiesQueue ),
@@ -88,7 +87,7 @@ public:
               mnAcceleration( nAcceleration ),
               mnDeceleration( nDeceleration ),
               mpShape( rShape ),
-              mpLayerManager( rLayerManager ),
+              maSlideBounds( rSlideBounds ),
               mbAutoReverse( bAutoReverse ) {}
 
         /// End event to fire when animation is over
@@ -141,7 +140,7 @@ public:
         ShapeSharedPtr                                  mpShape;
 
         /// LayerManager, to get page size from
-        LayerManagerSharedPtr                           mpLayerManager;
+        ::basegfx::B2DVector                            maSlideBounds;
 
         /// When true, activity is played reversed after mnDuration.
         bool                                            mbAutoReverse;
