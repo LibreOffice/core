@@ -4,9 +4,9 @@
  *
  *  $RCSfile: viewsh.cxx,v $
  *
- *  $Revision: 1.74 $
+ *  $Revision: 1.75 $
  *
- *  last change: $Author: rt $ $Date: 2007-07-06 12:31:49 $
+ *  last change: $Author: obo $ $Date: 2007-07-17 13:46:33 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -113,7 +113,6 @@
 #include "arrdecl.hxx"
 #include <sfx2/docfac.hxx>
 #include "view.hrc"
-#include <sfx2/objuno.hxx>
 #include "sfxlocal.hrc"
 #include <sfx2/sfxbasecontroller.hxx>
 #include <sfx2/topfrm.hxx>
