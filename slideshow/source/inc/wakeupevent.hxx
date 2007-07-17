@@ -4,9 +4,9 @@
  *
  *  $RCSfile: wakeupevent.hxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: kz $ $Date: 2006-12-13 16:08:36 $
+ *  last change: $Author: obo $ $Date: 2007-07-17 15:20:53 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -32,7 +32,7 @@
  *    MA  02111-1307  USA
  *
  ************************************************************************/
-#if ! defined(INCLUDED_SLIDESHOW_WAKEUPEVENT_HXX)
+#ifndef INCLUDED_SLIDESHOW_WAKEUPEVENT_HXX
 #define INCLUDED_SLIDESHOW_WAKEUPEVENT_HXX
 
 #include <canvas/elapsedtime.hxx>
