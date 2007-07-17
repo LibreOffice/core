@@ -4,9 +4,9 @@
  *
  *  $RCSfile: basenode.hxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: kz $ $Date: 2006-12-13 15:32:56 $
+ *  last change: $Author: obo $ $Date: 2007-07-17 14:49:03 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -35,12 +35,15 @@
 #ifndef INCLUDED_SLIDESHOW_BASENODE_HXX
 #define INCLUDED_SLIDESHOW_BASENODE_HXX
 
-#include "canvas/debug.hxx"
-#include "osl/diagnose.hxx"
+#include <canvas/debug.hxx>
+#include <osl/diagnose.hxx>
+
+#include "event.hxx"
 #include "animationnode.hxx"
 #include "slideshowcontext.hxx"
 #include "shapesubset.hxx"
-#include "boost/noncopyable.hpp"
+
+#include <boost/noncopyable.hpp>
 #include <vector>
 
 namespace slideshow {
@@ -56,26 +59,35 @@ namespace internal {
 */
 struct NodeContext
 {
-    NodeContext( const SlideShowContext& rContext )
+    NodeContext( const SlideShowContext&                 rContext,
+                 const ::basegfx::B2DVector&             rSlideSize )
         : maContext( rContext ),
+          maSlideSize( rSlideSize ),
           mpMasterShapeSubset(),
           mnStartDelay(0.0),
           mbIsIndependentSubset( true )
         {}
 
-    void dispose() { maContext.dispose(); }
+    void dispose()
+    {
+        maContext.dispose();
+        mpMasterShapeSubset.reset();
+    }
 
     /// Context as passed to createAnimationNode()
-    SlideShowContext        maContext;
+    SlideShowContext                 maContext;
+
+    /// Size in user coordinate space of the corresponding slide
+    ::basegfx::B2DVector             maSlideSize;
 
     /// Shape to be used (provided by parent, e.g. for iterations)
-    ShapeSubsetSharedPtr    mpMasterShapeSubset;
+    ShapeSubsetSharedPtr             mpMasterShapeSubset;
 
     /// Additional delay to node begin (to offset iterate effects)
-    double                  mnStartDelay;
+    double                           mnStartDelay;
 
     /// When true, subset must be created during slide initialization
-    bool                    mbIsIndependentSubset;
+    bool                             mbIsIndependentSubset;
 };
 
 class BaseContainerNode;
@@ -90,8 +102,8 @@ class BaseNode : public AnimationNode,
 public:
     BaseNode( ::com::sun::star::uno::Reference<
               ::com::sun::star::animations::XAnimationNode> const& xNode,
-              ::boost::shared_ptr<BaseContainerNode> const& pParent,
-              NodeContext const& rContext );
+              ::boost::shared_ptr<BaseContainerNode> const&        pParent,
+              NodeContext const&                                   rContext );
 
     /** Provide the node with a shared_ptr to itself.
 
@@ -133,9 +145,8 @@ protected:
     void scheduleDeactivationEvent( EventSharedPtr const& pEvent =
                                     EventSharedPtr() );
 
-    SlideShowContext const& getContext() const { return maContext; }
-
-    ::boost::shared_ptr<BaseNode> const& getSelf() const { return mpSelf; }
+    SlideShowContext const&                 getContext() const { return maContext; }
+    ::boost::shared_ptr<BaseNode> const&    getSelf() const { return mpSelf; }
 
     bool isMainSequenceRootNode() const { return mbIsMainSequenceRootNode; }
 
