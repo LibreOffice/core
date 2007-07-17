@@ -4,9 +4,9 @@
  *
  *  $RCSfile: tools.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: vg $ $Date: 2007-01-18 14:16:50 $
+ *  last change: $Author: obo $ $Date: 2007-07-17 14:41:48 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -36,15 +36,10 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_slideshow.hxx"
 
-#ifndef  _USE_MATH_DEFINES
-#define  _USE_MATH_DEFINES  // needed by Visual C++ for math constants
-#endif
-#include <math.h>           // M_PI definition
-
 #include <canvas/debug.hxx>
 #include <canvas/canvastools.hxx>
 
-#include <tools.hxx>
+#include <math.h>
 
 #include <com/sun/star/beans/NamedValue.hpp>
 #include <com/sun/star/awt/Rectangle.hpp>
@@ -55,13 +50,18 @@
 
 #include <basegfx/polygon/b2dpolygon.hxx>
 #include <basegfx/polygon/b2dpolygontools.hxx>
+#include <basegfx/range/b2drange.hxx>
+#include <basegfx/vector/b2dvector.hxx>
+#include <basegfx/vector/b2ivector.hxx>
+#include <basegfx/matrix/b2dhommatrix.hxx>
 #include <basegfx/numeric/ftools.hxx>
 
 #include <cppcanvas/basegfxfactory.hxx>
 
-#include <lerp.hxx>
-#include <smilfunctionparser.hxx>
-#include <layermanager.hxx>
+#include "lerp.hxx"
+#include "unoview.hxx"
+#include "smilfunctionparser.hxx"
+#include "tools.hxx"
 
 #include <limits>
 
@@ -170,7 +170,7 @@ namespace slideshow
         bool extractValue( double&                          o_rValue,
                            const uno::Any&                  rSourceAny,
                            const ShapeSharedPtr&            rShape,
-                           const LayerManagerSharedPtr&     rLayerManager )
+                           const ::basegfx::B2DVector&      rSlideBounds )
         {
             // try to extract numeric value (double, or smaller POD, like float or int)
             if( (rSourceAny >>= o_rValue) )
@@ -187,17 +187,11 @@ namespace slideshow
             // parse the string into an ExpressionNode
             try
             {
-                // TODO(P2): Optimize the case that AttributeName and
-                // Value are identical!
-                ENSURE_AND_RETURN( rShape.get() && rLayerManager.get(),
-                                   "extractValue(): need relative shape size for parsing, "
-                                   "no shape or layer manager given" );
-
                 // Parse string into ExpressionNode, eval node at time 0.0
                 o_rValue = (*SmilFunctionParser::parseSmilValue(
                                 aString,
-                                calcRelativeShapeBounds(rLayerManager->getPageBounds(),
-                                                        rShape->getPosSize()) ))(0.0);
+                                calcRelativeShapeBounds(rSlideBounds,
+                                                        rShape->getBounds()) ))(0.0);
             }
             catch( ParseError& )
             {
@@ -211,7 +205,7 @@ namespace slideshow
         bool extractValue( sal_Int32&                       o_rValue,
                            const uno::Any&                  rSourceAny,
                            const ShapeSharedPtr&            /*rShape*/,
-                           const LayerManagerSharedPtr&     /*rLayerManager*/ )
+                           const ::basegfx::B2DVector&      /*rSlideBounds*/ )
         {
             // try to extract numeric value (int, or smaller POD, like byte)
             if( (rSourceAny >>= o_rValue) )
@@ -224,7 +218,7 @@ namespace slideshow
             drawing::FillStyle eFillStyle;
             if( (rSourceAny >>= eFillStyle) )
             {
-                o_rValue = (sal_Int16)eFillStyle;
+                o_rValue = sal::static_int_cast<sal_Int16>(eFillStyle);
 
                 // succeeded
                 return true;
@@ -233,7 +227,7 @@ namespace slideshow
             drawing::LineStyle eLineStyle;
             if( (rSourceAny >>= eLineStyle) )
             {
-                o_rValue = (sal_Int16)eLineStyle;
+                o_rValue = sal::static_int_cast<sal_Int16>(eLineStyle);
 
                 // succeeded
                 return true;
@@ -242,7 +236,7 @@ namespace slideshow
             awt::FontSlant eFontSlant;
             if( (rSourceAny >>= eFontSlant) )
             {
-                o_rValue = (sal_Int16)eFontSlant;
+                o_rValue = sal::static_int_cast<sal_Int16>(eFontSlant);
 
                 // succeeded
                 return true;
@@ -256,10 +250,10 @@ namespace slideshow
         bool extractValue( sal_Int16&                       o_rValue,
                            const uno::Any&                  rSourceAny,
                            const ShapeSharedPtr&            rShape,
-                           const LayerManagerSharedPtr&     rLayerManager )
+                           const ::basegfx::B2DVector&      rSlideBounds )
         {
             sal_Int32 aValue;
-            if( !extractValue(aValue,rSourceAny,rShape,rLayerManager) )
+            if( !extractValue(aValue,rSourceAny,rShape,rSlideBounds) )
                 return false;
 
             if( std::numeric_limits<sal_Int16>::max() < aValue ||
@@ -277,7 +271,7 @@ namespace slideshow
         bool extractValue( RGBColor&                    o_rValue,
                            const uno::Any&              rSourceAny,
                            const ShapeSharedPtr&        /*rShape*/,
-                           const LayerManagerSharedPtr& /*rLayerManager*/ )
+                           const ::basegfx::B2DVector&  /*rSlideBounds*/ )
         {
             // try to extract numeric value (double, or smaller POD, like float or int)
             {
@@ -359,7 +353,7 @@ namespace slideshow
         bool extractValue( HSLColor&                    o_rValue,
                            const uno::Any&              rSourceAny,
                            const ShapeSharedPtr&        /*rShape*/,
-                           const LayerManagerSharedPtr& /*rLayerManager*/ )
+                           const ::basegfx::B2DVector&  /*rSlideBounds*/ )
         {
             // try double sequence
             {
@@ -395,10 +389,10 @@ namespace slideshow
         }
 
         /// extract plain string from Any
-        bool extractValue( ::rtl::OUString&                 o_rValue,
-                           const uno::Any&                  rSourceAny,
-                           const ShapeSharedPtr&            /*rShape*/,
-                           const LayerManagerSharedPtr&     /*rLayerManager*/ )
+        bool extractValue( ::rtl::OUString&             o_rValue,
+                           const uno::Any&              rSourceAny,
+                           const ShapeSharedPtr&        /*rShape*/,
+                           const ::basegfx::B2DVector&  /*rSlideBounds*/ )
         {
             // try to extract string
             if( !(rSourceAny >>= o_rValue) )
@@ -408,10 +402,10 @@ namespace slideshow
         }
 
         /// extract bool value from Any
-        bool extractValue( bool&                            o_rValue,
-                           const uno::Any&                  rSourceAny,
-                           const ShapeSharedPtr&            /*rShape*/,
-                           const LayerManagerSharedPtr&     /*rLayerManager*/ )
+        bool extractValue( bool&                        o_rValue,
+                           const uno::Any&              rSourceAny,
+                           const ShapeSharedPtr&        /*rShape*/,
+                           const ::basegfx::B2DVector&  /*rSlideBounds*/ )
         {
             sal_Bool nTmp = sal_Bool();
             // try to extract bool value
@@ -448,10 +442,10 @@ namespace slideshow
         }
 
         /// extract double 2-tuple from Any
-        bool extractValue( ::basegfx::B2DTuple&             o_rPair,
-                           const uno::Any&                  rSourceAny,
-                           const ShapeSharedPtr&            rShape,
-                           const LayerManagerSharedPtr&     rLayerManager )
+        bool extractValue( ::basegfx::B2DTuple&         o_rPair,
+                           const uno::Any&              rSourceAny,
+                           const ShapeSharedPtr&        rShape,
+                           const ::basegfx::B2DVector&  rSlideBounds )
         {
             animations::ValuePair aPair;
 
@@ -459,11 +453,11 @@ namespace slideshow
                 return false;
 
             double nFirst;
-            if( !extractValue( nFirst, aPair.First, rShape, rLayerManager ) )
+            if( !extractValue( nFirst, aPair.First, rShape, rSlideBounds ) )
                 return false;
 
             double nSecond;
-            if( !extractValue( nSecond, aPair.Second, rShape, rLayerManager ) )
+            if( !extractValue( nSecond, aPair.Second, rShape, rSlideBounds ) )
                 return false;
 
             o_rPair.setX( nFirst );
@@ -513,6 +507,15 @@ namespace slideshow
             return true;
         }
 
+        basegfx::B2DRange calcRelativeShapeBounds( const basegfx::B2DVector& rPageSize,
+                                                   const basegfx::B2DRange&  rShapeBounds )
+        {
+            return basegfx::B2DRange( rShapeBounds.getMinX() / rPageSize.getX(),
+                                      rShapeBounds.getMinY() / rPageSize.getY(),
+                                      rShapeBounds.getMaxX() / rPageSize.getX(),
+                                      rShapeBounds.getMaxY() / rPageSize.getY() );
+        }
+
         // TODO(F2): Currently, the positional attributes DO NOT mirror the XShape properties.
         // First and foremost, this is because we must operate with the shape boundrect,
         // not position and size (the conversion between logic rect, snap rect and boundrect
@@ -539,8 +542,8 @@ namespace slideshow
             }
         }
 
-        ::basegfx::B2DHomMatrix getSpriteTransformation( const ::basegfx::B2DSize&              rPixelSize,
-                                                         const ::basegfx::B2DSize&              rOrigSize,
+        ::basegfx::B2DHomMatrix getSpriteTransformation( const ::basegfx::B2DVector&            rPixelSize,
+                                                         const ::basegfx::B2DVector&            rOrigSize,
                                                          const ShapeAttributeLayerSharedPtr&    pAttr )
         {
             ::basegfx::B2DHomMatrix aTransform;
@@ -558,8 +561,7 @@ namespace slideshow
                                         0.0 );
 
                 // scale, shear and rotation pivot point is the
-                // sprite's pixel center center - adapt origin
-                // accordingly
+                // sprite's pixel center - adapt origin accordingly
                 aTransform.translate( -0.5*rPixelSize.getX(),
                                       -0.5*rPixelSize.getY() );
 
@@ -639,8 +641,8 @@ namespace slideshow
                 aTransform );
         }
 
-        ::basegfx::B2DRectangle getShapeUpdateArea( const ::basegfx::B2DRectangle&      rUnitBounds,
-                                                    const ::basegfx::B2DRectangle&      rShapeBounds )
+        ::basegfx::B2DRange getShapeUpdateArea( const ::basegfx::B2DRange&      rUnitBounds,
+                                                    const ::basegfx::B2DRange&      rShapeBounds )
         {
             return ::basegfx::B2DRectangle(
                 lerp( rShapeBounds.getMinX(),
@@ -799,6 +801,28 @@ namespace slideshow
             // TODO(F2): Check and adapt the range of possible values here.
             // Maybe we can also take the total number of shapes here
             return nPrio / 65535.0;
+        }
+
+        basegfx::B2IVector getSlideSizePixel( const basegfx::B2DVector& rSlideSize,
+                                              const UnoViewSharedPtr&   pView )
+        {
+            ENSURE_AND_THROW(pView, "getSlideSizePixel(): invalid view");
+
+            // determine transformed page bounds
+            const basegfx::B2DRange aRect( 0,0,
+                                             rSlideSize.getX(),
+                                             rSlideSize.getY() );
+            basegfx::B2DRange aTmpRect;
+            canvas::tools::calcTransformedRectBounds( aTmpRect,
+                                                        aRect,
+                                                        pView->getTransformation() );
+
+            // #i42440# Returned slide size is one pixel too small, as
+            // rendering happens one pixel to the right and below the
+            // actual bound rect.
+            return basegfx::B2IVector(
+                basegfx::fround( aTmpRect.getRange().getX() ) + 1,
+                basegfx::fround( aTmpRect.getRange().getY() ) + 1 );
         }
     }
 }
