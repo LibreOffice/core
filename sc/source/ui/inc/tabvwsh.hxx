@@ -4,9 +4,9 @@
  *
  *  $RCSfile: tabvwsh.hxx,v $
  *
- *  $Revision: 1.28 $
+ *  $Revision: 1.29 $
  *
- *  last change: $Author: vg $ $Date: 2007-05-22 20:08:48 $
+ *  last change: $Author: obo $ $Date: 2007-07-17 13:34:43 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -390,7 +390,7 @@ public:
     // Drucken:
     virtual SfxPrinter*     GetPrinter( BOOL bCreate = FALSE );
     virtual USHORT          SetPrinter( SfxPrinter* pNewPrinter,
-                                          USHORT nDiffFlags = SFX_PRINTER_ALL );
+                                          USHORT nDiffFlags = SFX_PRINTER_ALL, bool bIsApi=false );
 
     virtual PrintDialog*    CreatePrintDialog( Window* pParent );
     virtual SfxTabPage*     CreatePrintOptionsPage( Window *pParent, const SfxItemSet &rOptions );
