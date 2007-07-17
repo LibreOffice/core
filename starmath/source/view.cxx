@@ -4,9 +4,9 @@
  *
  *  $RCSfile: view.cxx,v $
  *
- *  $Revision: 1.49 $
+ *  $Revision: 1.50 $
  *
- *  last change: $Author: rt $ $Date: 2007-07-05 13:08:30 $
+ *  last change: $Author: obo $ $Date: 2007-07-17 13:23:40 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1281,7 +1281,7 @@ SfxPrinter* SmViewShell::GetPrinter(BOOL bCreate)
 }
 
 
-USHORT SmViewShell::SetPrinter(SfxPrinter *pNewPrinter, USHORT nDiffFlags)
+USHORT SmViewShell::SetPrinter(SfxPrinter *pNewPrinter, USHORT nDiffFlags, bool )
 {
     RTL_LOGFILE_CONTEXT( aLog, "starmath: SmViewShell::SetPrinter" );
 
