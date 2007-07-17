@@ -4,9 +4,9 @@
  *
  *  $RCSfile: docsh.hxx,v $
  *
- *  $Revision: 1.40 $
+ *  $Revision: 1.41 $
  *
- *  last change: $Author: vg $ $Date: 2007-05-22 16:18:56 $
+ *  last change: $Author: obo $ $Date: 2007-07-17 13:05:08 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -197,9 +197,6 @@ public:
 
     void                    UpdateFontList();
     void                    UpdateChildWindows();
-
-    // DocumentInfo neu setzen
-    BOOL                    SetDocumentInfo(const SfxDocumentInfo& rInfo);
 
     // globaler IO
     virtual BOOL            Save();
