@@ -4,9 +4,9 @@
  *
  *  $RCSfile: animationtransformnode.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: kz $ $Date: 2006-12-13 15:31:17 $
+ *  last change: $Author: obo $ $Date: 2007-07-17 14:48:11 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -37,12 +37,13 @@
 #include "precompiled_slideshow.hxx"
 
 // must be first
-#include "canvas/debug.hxx"
-#include "canvas/verbosetrace.hxx"
+#include <canvas/debug.hxx>
+#include <canvas/verbosetrace.hxx>
+#include <com/sun/star/animations/AnimationTransformType.hpp>
+
 #include "animationtransformnode.hxx"
 #include "animationfactory.hxx"
 #include "activitiesfactory.hxx"
-#include "com/sun/star/animations/AnimationTransformType.hpp"
 
 using namespace com::sun::star;
 
@@ -77,7 +78,8 @@ AnimationActivitySharedPtr AnimationTransformNode::createActivity() const
             aParms,
             AnimationFactory::createPairPropertyAnimation(
                 rShape,
-                getContext().mpLayerManager,
+                getContext().mpSubsettableShapeManager,
+                getSlideSize(),
                 nTransformType ),
             getXAnimateNode() );
 
@@ -88,7 +90,8 @@ AnimationActivitySharedPtr AnimationTransformNode::createActivity() const
                 ::rtl::OUString(
                     RTL_CONSTASCII_USTRINGPARAM("Rotate") ),
                 rShape,
-                getContext().mpLayerManager ),
+                getContext().mpSubsettableShapeManager,
+                getSlideSize() ),
             getXAnimateNode() );
 
     case animations::AnimationTransformType::SKEWX:
@@ -98,7 +101,8 @@ AnimationActivitySharedPtr AnimationTransformNode::createActivity() const
                 ::rtl::OUString(
                     RTL_CONSTASCII_USTRINGPARAM("SkewX") ),
                 rShape,
-                getContext().mpLayerManager ),
+                getContext().mpSubsettableShapeManager,
+                getSlideSize() ),
             getXAnimateNode() );
 
     case animations::AnimationTransformType::SKEWY:
@@ -108,7 +112,8 @@ AnimationActivitySharedPtr AnimationTransformNode::createActivity() const
                 ::rtl::OUString(
                     RTL_CONSTASCII_USTRINGPARAM("SkewY") ),
                 rShape,
-                getContext().mpLayerManager ),
+                getContext().mpSubsettableShapeManager,
+                getSlideSize() ),
             getXAnimateNode() );
     }
 }
