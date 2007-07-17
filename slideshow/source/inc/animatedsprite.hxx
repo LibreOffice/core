@@ -4,9 +4,9 @@
  *
  *  $RCSfile: animatedsprite.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: kz $ $Date: 2006-12-13 15:51:07 $
+ *  last change: $Author: obo $ $Date: 2007-07-17 15:01:43 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -33,8 +33,8 @@
  *
  ************************************************************************/
 
-#ifndef _SLIDESHOW_ANIMATEDSPRITE_HXX
-#define _SLIDESHOW_ANIMATEDSPRITE_HXX
+#ifndef INCLUDED_SLIDESHOW_ANIMATEDSPRITE_HXX
+#define INCLUDED_SLIDESHOW_ANIMATEDSPRITE_HXX
 
 #include <cppcanvas/customsprite.hxx>
 
@@ -43,11 +43,11 @@
 #include <basegfx/point/b2dpoint.hxx>
 #include <basegfx/polygon/b2dpolypolygon.hxx>
 
-#include <viewlayer.hxx>
+#include "viewlayer.hxx"
 
 #include <boost/optional.hpp>
 #include <boost/shared_ptr.hpp>
-#include <boost/utility.hpp>
+#include <boost/noncopyable.hpp>
 
 
 /* Definition of AnimatedSprite class */
@@ -84,8 +84,6 @@ namespace slideshow
             AnimatedSprite( const ViewLayerSharedPtr&   rViewLayer,
                             const ::basegfx::B2DSize&   rSpriteSizePixel,
                             double                      nSpritePrio );
-
-            ~AnimatedSprite();
 
             /** Resize the sprite.
 
@@ -127,13 +125,6 @@ namespace slideshow
              */
             ::cppcanvas::CanvasSharedPtr getContentCanvas() const;
 
-            /** Move the sprite in user coordinate space.
-
-                If the sprite is not yet created, this method has no
-                effect.
-             */
-            void move( const ::basegfx::B2DPoint& rNewPos );
-
             /** Move the sprite in device pixel space.
 
                 If the sprite is not yet created, this method has no
@@ -154,6 +145,13 @@ namespace slideshow
                 effect.
              */
             void clip( const ::basegfx::B2DPolyPolygon& rClip );
+
+            /** Clears a sprite clip
+
+                If the sprite is not yet created, this method has no
+                effect.
+             */
+            void clip();
 
             /** Set a sprite transformation.
 
@@ -182,7 +180,6 @@ namespace slideshow
             double                                                      mnSpritePrio;
             double                                                      mnAlpha;
             ::boost::optional< ::basegfx::B2DPoint >                    maPosPixel;
-            ::boost::optional< ::basegfx::B2DPoint >                    maPos;
             ::boost::optional< ::basegfx::B2DPolyPolygon >              maClip;
             ::boost::optional< ::basegfx::B2DHomMatrix >                maTransform;
 
@@ -194,4 +191,4 @@ namespace slideshow
     }
 }
 
-#endif /* _SLIDESHOW_ANIMATEDSPRITE_HXX */
+#endif /* INCLUDED_SLIDESHOW_ANIMATEDSPRITE_HXX */
