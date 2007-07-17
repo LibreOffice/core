@@ -4,9 +4,9 @@
  *
  *  $RCSfile: smilfunctionparser.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: kz $ $Date: 2006-12-13 15:20:39 $
+ *  last change: $Author: obo $ $Date: 2007-07-17 14:41:21 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -38,11 +38,7 @@
 
 // must be first
 #include <canvas/debug.hxx>
-
-#ifndef  _USE_MATH_DEFINES
-#define  _USE_MATH_DEFINES  // needed by Visual C++ for math constants
-#endif
-#include <math.h>           // M_PI definition
+#include <math.h>
 
 #include <smilfunctionparser.hxx>
 #include <expressionnodefactory.hxx>
