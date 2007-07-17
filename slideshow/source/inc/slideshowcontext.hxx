@@ -4,9 +4,9 @@
  *
  *  $RCSfile: slideshowcontext.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: kz $ $Date: 2006-12-13 16:03:32 $
+ *  last change: $Author: obo $ $Date: 2007-07-17 15:15:45 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -33,24 +33,32 @@
  *
  ************************************************************************/
 
-#ifndef _SLIDESHOW_SLIDESHOWCONTEXT_HXX
-#define _SLIDESHOW_SLIDESHOWCONTEXT_HXX
+#ifndef INCLUDED_SLIDESHOW_SLIDESHOWCONTEXT_HXX
+#define INCLUDED_SLIDESHOW_SLIDESHOWCONTEXT_HXX
 
 #include <com/sun/star/uno/Reference.hxx>
-#include <com/sun/star/uno/XComponentContext.hpp>
+#include <boost/shared_ptr.hpp>
 
-#include "layermanager.hxx"
-#include "eventqueue.hxx"
-#include "activitiesqueue.hxx"
-#include "usereventqueue.hxx"
-#include "eventmultiplexer.hxx"
-#include "unoviewcontainer.hxx"
+namespace com{ namespace sun{ namespace star{ namespace uno
+{
+    class XComponentContext;
+}}}}
 
 
 namespace slideshow
 {
     namespace internal
     {
+        class ShapeManager;
+        class EventQueue;
+        class ActivitiesQueue;
+        class UserEventQueue;
+        class EventMultiplexer;
+        class ScreenUpdater;
+        class UnoViewContainer;
+        class CursorManager;
+        class SubsettableShapeManager;
+
         /** Common arguments for slideshow objects.
 
             This struct combines a number of object references
@@ -60,13 +68,21 @@ namespace slideshow
         {
             /** Common context for node creation
 
-                @param rLayerManager
-                Layer manager, which holds all shapes
+                @param rShapeManager
+                ShapeManager, which handles all shapes
 
                 @param rEventQueue
                 Event queue, where time-based events are to be
                 scheduled. A node must not schedule events there
                 before it's not resolved.
+
+                @param rEventMultiplexer
+                Event multiplexer. Clients can register there for
+                about any event that happens in the slideshow
+
+                @param rScreenUpdater
+                Screen updater. Gets notified of necessary screen
+                updates.
 
                 @param rActivitiesQueue
                 Activities queue, where repeating activities are
@@ -74,36 +90,32 @@ namespace slideshow
 
                 @param rUserEventQueue
                 User event queue
+
+                @param rViewContainer
+                Holds all views added to slideshow
+
+                @param rComponentContext
+                To create UNO services from
             */
-            SlideShowContext( const LayerManagerSharedPtr&                      rLayerManager,
+            SlideShowContext( boost::shared_ptr<SubsettableShapeManager>&       rSubsettableShapeManager,
                               EventQueue&                                       rEventQueue,
                               EventMultiplexer&                                 rEventMultiplexer,
+                              ScreenUpdater&                                    rScreenUpdater,
                               ActivitiesQueue&                                  rActivitiesQueue,
                               UserEventQueue&                                   rUserEventQueue,
+                              CursorManager&                                    rCursorManager,
                               const UnoViewContainer&                           rViewContainer,
                               const ::com::sun::star::uno::Reference<
-                                    ::com::sun::star::uno::XComponentContext>&  rComponentContext ) :
-                mpLayerManager( rLayerManager ),
-                mrEventQueue( rEventQueue ),
-                mrEventMultiplexer( rEventMultiplexer ),
-                mrActivitiesQueue( rActivitiesQueue ),
-                mrUserEventQueue( rUserEventQueue ),
-                mrViewContainer( rViewContainer ),
-                mxComponentContext( rComponentContext )
-            {
-            }
+                                  ::com::sun::star::uno::XComponentContext>&    rComponentContext );
+            void dispose();
 
-            void dispose()
-            {
-                mxComponentContext.clear();
-                mpLayerManager.reset();
-            }
-
-            LayerManagerSharedPtr                           mpLayerManager;
+            boost::shared_ptr<SubsettableShapeManager>&     mpSubsettableShapeManager;
             EventQueue&                                     mrEventQueue;
             EventMultiplexer&                               mrEventMultiplexer;
+            ScreenUpdater&                                  mrScreenUpdater;
             ActivitiesQueue&                                mrActivitiesQueue;
             UserEventQueue&                                 mrUserEventQueue;
+            CursorManager&                                  mrCursorManager;
             const UnoViewContainer&                         mrViewContainer;
             ::com::sun::star::uno::Reference<
                 ::com::sun::star::uno::XComponentContext>   mxComponentContext;
@@ -111,4 +123,4 @@ namespace slideshow
     }
 }
 
-#endif /* _SLIDESHOW_SLIDESHOWCONTEXT_HXX */
+#endif /* INCLUDED_SLIDESHOW_SLIDESHOWCONTEXT_HXX */
