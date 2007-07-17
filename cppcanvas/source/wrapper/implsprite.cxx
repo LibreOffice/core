@@ -4,9 +4,9 @@
  *
  *  $RCSfile: implsprite.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 12:53:06 $
+ *  last change: $Author: obo $ $Date: 2007-07-17 15:27:11 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -182,13 +182,8 @@ namespace cppcanvas
             OSL_ENSURE( mxSprite.is(), "ImplSprite::transform(): Invalid sprite");
 
             if( mxSprite.is() && mxGraphicDevice.is() )
-            {
-                if( rClipPoly.count() == 0 )
-                    mxSprite->clip( uno::Reference< rendering::XPolyPolygon2D >() );
-                else
-                    mxSprite->clip( ::basegfx::unotools::xPolyPolygonFromB2DPolyPolygon( mxGraphicDevice,
+                mxSprite->clip( ::basegfx::unotools::xPolyPolygonFromB2DPolyPolygon( mxGraphicDevice,
                                                                                          rClipPoly ) );
-            }
         }
 
         void ImplSprite::setClip( const ::basegfx::B2DPolyPolygon& rClipPoly )
@@ -198,27 +193,29 @@ namespace cppcanvas
 
             if( mxSprite.is() && mxGraphicDevice.is() )
             {
-                if( rClipPoly.count() == 0 )
-                {
-                    mxSprite->clip( uno::Reference< rendering::XPolyPolygon2D >() );
-                }
-                else
-                {
-                    ::basegfx::B2DPolyPolygon   aTransformedClipPoly( rClipPoly );
+                ::basegfx::B2DPolyPolygon   aTransformedClipPoly( rClipPoly );
 
-                    // extract linear part of canvas view transformation (linear means:
-                    // without translational components)
-                    ::basegfx::B2DHomMatrix     aViewTransform( mpTransformArbiter->getTransformation() );
-                    aViewTransform.set( 0, 2, 0.0 );
-                    aViewTransform.set( 1, 2, 0.0 );
+                // extract linear part of canvas view transformation (linear means:
+                // without translational components)
+                ::basegfx::B2DHomMatrix     aViewTransform( mpTransformArbiter->getTransformation() );
+                aViewTransform.set( 0, 2, 0.0 );
+                aViewTransform.set( 1, 2, 0.0 );
 
-                    // transform polygon from view to device coordinate space
-                    aTransformedClipPoly.transform( aViewTransform );
+                // transform polygon from view to device coordinate space
+                aTransformedClipPoly.transform( aViewTransform );
 
-                    mxSprite->clip( ::basegfx::unotools::xPolyPolygonFromB2DPolyPolygon( mxGraphicDevice,
-                                                                                         aTransformedClipPoly ) );
-                }
+                mxSprite->clip( ::basegfx::unotools::xPolyPolygonFromB2DPolyPolygon( mxGraphicDevice,
+                                                                                     aTransformedClipPoly ) );
             }
+        }
+
+        void ImplSprite::setClip()
+        {
+            OSL_ENSURE( mxGraphicDevice.is(), "ImplSprite::setClip(): Invalid canvas");
+            OSL_ENSURE( mxSprite.is(), "ImplSprite::setClip(): Invalid sprite");
+
+            if( mxSprite.is() && mxGraphicDevice.is() )
+                mxSprite->clip( uno::Reference< rendering::XPolyPolygon2D >() );
         }
 
         void ImplSprite::show()
