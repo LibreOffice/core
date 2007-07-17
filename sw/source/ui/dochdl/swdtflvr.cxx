@@ -4,9 +4,9 @@
  *
  *  $RCSfile: swdtflvr.cxx,v $
  *
- *  $Revision: 1.108 $
+ *  $Revision: 1.109 $
  *
- *  last change: $Author: ihi $ $Date: 2007-06-05 17:41:36 $
+ *  last change: $Author: obo $ $Date: 2007-07-17 13:10:39 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -260,6 +260,8 @@
 #include <comcore.hrc> // #111827#
 #endif
 #include <sot/stg.hxx>
+
+#include <sfx2/docinf.hxx>
 
 // #108584#
 #ifndef _SVDITER_HXX
@@ -619,7 +621,11 @@ sal_Bool SwTransferable::GetData( const DATA_FLAVOR& rFlavor )
 
         const SfxDocumentInfo * pInfo = pWrtShell->GetInfo();
         if (pInfo)
-            pTmpDoc->SetInfo(*pInfo);
+        {
+            DBG_ASSERT( pTmpDoc->GetDocShell(), "No DocShell?" );
+            if ( pTmpDoc->GetDocShell() )
+                pTmpDoc->GetDocShell()->GetDocInfo() = *pInfo;
+        }
 
         pTmpDoc->SetRefForDocShell( (SfxObjectShellRef*)&(long&)aDocShellRef );
         pTmpDoc->LockExpFlds();     // nie die Felder updaten - Text so belassen
@@ -1031,7 +1037,11 @@ int SwTransferable::PrepareForCopy( BOOL bIsCut )
 
         const SfxDocumentInfo * pInfo = pWrtShell->GetInfo();
         if (pInfo)
-            pTmpDoc->SetInfo(*pInfo);
+        {
+            DBG_ASSERT( pTmpDoc->GetDocShell(), "No DocShell?" );
+            if ( pTmpDoc->GetDocShell() )
+                pTmpDoc->GetDocShell()->GetDocInfo() = *pInfo;
+        }
 
         pTmpDoc->SetRefForDocShell( (SfxObjectShellRef*)&(long&)aDocShellRef );
         pTmpDoc->LockExpFlds();     // nie die Felder updaten - Text so belassen
