@@ -4,9 +4,9 @@
  *
  *  $RCSfile: fdumperole.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: vg $ $Date: 2007-02-27 12:30:05 $
+ *  last change: $Author: obo $ $Date: 2007-07-17 13:33:49 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -50,6 +50,8 @@
 #ifndef _OSL_FILE_HXX_
 #include <osl/file.hxx>
 #endif
+
+#include <rtl/tencinfo.h>
 
 namespace scf {
 namespace dump {
