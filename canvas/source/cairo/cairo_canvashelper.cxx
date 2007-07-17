@@ -4,9 +4,9 @@
  *
  *  $RCSfile: cairo_canvashelper.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: vg $ $Date: 2007-02-05 12:49:49 $
+ *  last change: $Author: obo $ $Date: 2007-07-17 14:20:31 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -81,10 +81,11 @@ namespace cairocanvas
 {
     CanvasHelper::CanvasHelper() :
         mpDevice( NULL ),
+        mpVirtualDevice( NULL ),
         mbHaveAlpha(),
         mpCairo( NULL ),
         mpSurface( NULL ),
-        mpVirtualDevice( NULL )
+        mpSurfaceProvider( NULL )
     {
     }
 
@@ -109,7 +110,7 @@ namespace cairocanvas
         }
     }
 
-    void CanvasHelper::init( const ::basegfx::B2ISize& rSize,
+    void CanvasHelper::init( const ::basegfx::B2ISize& /*rSize*/,
                              SpriteCanvas&             rDevice )
     {
         mpDevice = &rDevice;
@@ -189,16 +190,83 @@ namespace cairocanvas
                       renderState.DeviceColor [1],
                       renderState.DeviceColor [2] );
     }
+
+    cairo_operator_t compositingMode( CAIRO_OPERATOR_OVER );
+    switch( renderState.CompositeOperation )
+    {
+        case rendering::CompositeOperation::CLEAR:
+            compositingMode = CAIRO_OPERATOR_CLEAR;
+            break;
+        case rendering::CompositeOperation::SOURCE:
+            compositingMode = CAIRO_OPERATOR_SOURCE;
+            break;
+        case rendering::CompositeOperation::DESTINATION:
+            compositingMode = CAIRO_OPERATOR_DEST;
+            break;
+        case rendering::CompositeOperation::OVER:
+            compositingMode = CAIRO_OPERATOR_OVER;
+            break;
+        case rendering::CompositeOperation::UNDER:
+            compositingMode = CAIRO_OPERATOR_DEST;
+            break;
+        case rendering::CompositeOperation::INSIDE:
+            compositingMode = CAIRO_OPERATOR_IN;
+            break;
+        case rendering::CompositeOperation::INSIDE_REVERSE:
+            compositingMode = CAIRO_OPERATOR_OUT;
+            break;
+        case rendering::CompositeOperation::OUTSIDE:
+            compositingMode = CAIRO_OPERATOR_DEST_OVER;
+            break;
+        case rendering::CompositeOperation::OUTSIDE_REVERSE:
+            compositingMode = CAIRO_OPERATOR_DEST_OUT;
+            break;
+        case rendering::CompositeOperation::ATOP:
+            compositingMode = CAIRO_OPERATOR_ATOP;
+            break;
+        case rendering::CompositeOperation::ATOP_REVERSE:
+            compositingMode = CAIRO_OPERATOR_DEST_ATOP;
+            break;
+        case rendering::CompositeOperation::XOR:
+            compositingMode = CAIRO_OPERATOR_XOR;
+            break;
+        case rendering::CompositeOperation::ADD:
+            compositingMode = CAIRO_OPERATOR_ADD;
+            break;
+        case rendering::CompositeOperation::SATURATE:
+            compositingMode = CAIRO_OPERATOR_SATURATE;
+            break;
+    }
+    cairo_set_operator( mpCairo, compositingMode );
+
     }
 
-    void CanvasHelper::drawPoint( const rendering::XCanvas*     pCanvas,
-                                  const geometry::RealPoint2D&  aPoint,
-                                  const rendering::ViewState&   viewState,
-                                  const rendering::RenderState& renderState )
+    void CanvasHelper::clear()
+    {
+        if( mpCairo )
+        {
+            cairo_save( mpCairo );
+
+            cairo_identity_matrix( mpCairo );
+            cairo_set_operator( mpCairo, CAIRO_OPERATOR_SOURCE );
+            cairo_set_source_rgba( mpCairo, 0, 0, 0, 0 );
+
+            const ::basegfx::B2ISize& rSize( mpDevice->getSizePixel() );
+            cairo_rectangle( mpCairo, 0, 0, rSize.getX(), rSize.getY() );
+            cairo_fill( mpCairo );
+
+            cairo_restore( mpCairo );
+        }
+    }
+
+    void CanvasHelper::drawPoint( const rendering::XCanvas*     ,
+                                  const geometry::RealPoint2D&  ,
+                                  const rendering::ViewState&   ,
+                                  const rendering::RenderState&  )
     {
     }
 
-    void CanvasHelper::drawLine( const rendering::XCanvas*      pCanvas,
+    void CanvasHelper::drawLine( const rendering::XCanvas*      /*pCanvas*/,
                                  const geometry::RealPoint2D&   aStartPoint,
                                  const geometry::RealPoint2D&   aEndPoint,
                                  const rendering::ViewState&    viewState,
@@ -219,17 +287,43 @@ namespace cairocanvas
     }
     }
 
-    void CanvasHelper::drawBezier( const rendering::XCanvas*            pCanvas,
+    void CanvasHelper::drawBezier( const rendering::XCanvas*            ,
                                    const geometry::RealBezierSegment2D& aBezierSegment,
                                    const geometry::RealPoint2D&         aEndPoint,
                                    const rendering::ViewState&          viewState,
                                    const rendering::RenderState&        renderState )
     {
+    if( mpCairo ) {
+        cairo_save( mpCairo );
+
+        cairo_set_line_width( mpCairo, 1 );
+
+        useStates( viewState, renderState, true );
+
+        cairo_move_to( mpCairo, aBezierSegment.Px + 0.5, aBezierSegment.Py + 0.5 );
+        cairo_curve_to( mpCairo,
+                        aBezierSegment.C1x + 0.5, aBezierSegment.C1y + 0.5,
+                        aBezierSegment.C2x + 0.5, aBezierSegment.C2y + 0.5,
+                        aEndPoint.X + 0.5, aEndPoint.Y + 0.5 );
+        cairo_stroke( mpCairo );
+
+        cairo_restore( mpCairo );
+    }
     }
 
 #define CANVASBITMAP_IMPLEMENTATION_NAME "CairoCanvas::CanvasBitmap"
 #define PARAMETRICPOLYPOLYGON_IMPLEMENTATION_NAME "Canvas::ParametricPolyPolygon"
 
+
+  /** surfaceFromXBitmap Create a surface from XBitmap
+   * @param xBitmap bitmap image that will be used for the surface
+   * @param bHasAlpha will be set to true if resulting surface has alpha
+   *
+   * This is a helper function for the other surfaceFromXBitmap().
+   * This function tries to create surface from xBitmap by checking if xBitmap is CanvasBitmap or SpriteCanvas.
+   *
+   * @return created surface or NULL
+   **/
     static Surface* surfaceFromXBitmap( const uno::Reference< rendering::XBitmap >& xBitmap, bool &bHasAlpha )
     {
         CanvasBitmap* pBitmapImpl = dynamic_cast< CanvasBitmap* >( xBitmap.get() );
@@ -311,6 +405,18 @@ namespace cairocanvas
     return bIsAlpha;
     }
 
+
+  /** surfaceFromXBitmap Create a surface from XBitmap
+   * @param xBitmap bitmap image that will be used for the surface
+   * @param rDevice reference to the device into which we want to draw
+   * @param data will be filled with alpha data, if xBitmap is alpha/transparent image
+   * @param bHasAlpha will be set to true if resulting surface has alpha
+   *
+   * This function tries various methods for creating a surface from xBitmap. It also uses
+   * the helper function surfaceFromXBitmap( xBitmap, bHasAlpha )
+   *
+   * @return created surface or NULL
+   **/
     static Surface* surfaceFromXBitmap( const uno::Reference< rendering::XBitmap >& xBitmap, const DeviceRef& rDevice, unsigned char*& data, bool& bHasAlpha )
     {
         Surface* pSurface = surfaceFromXBitmap( xBitmap, bHasAlpha );
@@ -555,8 +661,7 @@ namespace cairocanvas
         cy = 0.5;
         r0 = 0;
         r1 = 0.5;
-        Matrix* pMatrix = &rMatrix;
-        Matrix aScaledMatrix, aScaleMatrix;
+        Matrix aScaleMatrix;
 
         cairo_matrix_transform_point( &rMatrix, &cx, &cy );
         cairo_matrix_transform_distance( &rMatrix, &r0, &r1 );
@@ -575,10 +680,10 @@ namespace cairocanvas
     }
 
     void doOperation( Operation aOperation,
-              Cairo* pCairo,
-              sal_uInt32 nPolygonIndex,
-              const uno::Sequence< rendering::Texture >* pTextures,
-              SpriteCanvas* pDevice )
+                      Cairo* pCairo,
+                      sal_uInt32 /*nPolygonIndex*/,
+                      const uno::Sequence< rendering::Texture >* pTextures,
+                      SpriteCanvas* pDevice )
     {
     switch( aOperation ) {
     case Fill:
@@ -596,7 +701,7 @@ namespace cairocanvas
             cairo_save( pCairo );
 
             ::com::sun::star::geometry::AffineMatrix2D aTransform( aTexture.AffineTransform );
-            Matrix aScaleMatrix, aTextureMatrix, aScaledTextureMatrix, aOrigMatrix, aNewMatrix;
+            Matrix aScaleMatrix, aTextureMatrix, aScaledTextureMatrix;
 
             cairo_matrix_init( &aTextureMatrix,
                        aTransform.m00, aTransform.m10, aTransform.m01,
@@ -733,7 +838,7 @@ namespace cairocanvas
 
     bool bOpToDo = false;
     Matrix aOrigMatrix, aIdentityMatrix;
-    double nX, nY, nBX, nBY, nPX, nPY, nAX, nAY;
+    double nX, nY, nBX, nBY, nAX, nAY;
 
     cairo_get_matrix( pCairo, &aOrigMatrix );
     cairo_matrix_init_identity( &aIdentityMatrix );
@@ -852,7 +957,7 @@ namespace cairocanvas
     doPolyPolygonImplementation( aPoly, aOperation, pCairo, pTextures, mpDevice );
     }
 
-    uno::Reference< rendering::XCachedPrimitive > CanvasHelper::drawPolyPolygon( const rendering::XCanvas*                          pCanvas,
+    uno::Reference< rendering::XCachedPrimitive > CanvasHelper::drawPolyPolygon( const rendering::XCanvas*                          ,
                                                                                  const uno::Reference< rendering::XPolyPolygon2D >& xPolyPolygon,
                                                                                  const rendering::ViewState&                        viewState,
                                                                                  const rendering::RenderState&                      renderState )
@@ -881,7 +986,7 @@ namespace cairocanvas
     return uno::Reference< rendering::XCachedPrimitive >(NULL);
     }
 
-    uno::Reference< rendering::XCachedPrimitive > CanvasHelper::strokePolyPolygon( const rendering::XCanvas*                            pCanvas,
+    uno::Reference< rendering::XCachedPrimitive > CanvasHelper::strokePolyPolygon( const rendering::XCanvas*                            ,
                                                                                    const uno::Reference< rendering::XPolyPolygon2D >&   xPolyPolygon,
                                                                                    const rendering::ViewState&                          viewState,
                                                                                    const rendering::RenderState&                        renderState,
@@ -951,40 +1056,40 @@ namespace cairocanvas
         return uno::Reference< rendering::XCachedPrimitive >(NULL);
     }
 
-    uno::Reference< rendering::XCachedPrimitive > CanvasHelper::strokeTexturedPolyPolygon( const rendering::XCanvas*                            pCanvas,
-                                                                                           const uno::Reference< rendering::XPolyPolygon2D >&   xPolyPolygon,
-                                                                                           const rendering::ViewState&                          viewState,
-                                                                                           const rendering::RenderState&                        renderState,
-                                                                                           const uno::Sequence< rendering::Texture >&           textures,
-                                                                                           const rendering::StrokeAttributes&                   strokeAttributes )
+    uno::Reference< rendering::XCachedPrimitive > CanvasHelper::strokeTexturedPolyPolygon( const rendering::XCanvas*                            ,
+                                                                                           const uno::Reference< rendering::XPolyPolygon2D >&   /*xPolyPolygon*/,
+                                                                                           const rendering::ViewState&                          /*viewState*/,
+                                                                                           const rendering::RenderState&                        /*renderState*/,
+                                                                                           const uno::Sequence< rendering::Texture >&           /*textures*/,
+                                                                                           const rendering::StrokeAttributes&                   /*strokeAttributes*/ )
     {
         // TODO
         return uno::Reference< rendering::XCachedPrimitive >(NULL);
     }
 
-    uno::Reference< rendering::XCachedPrimitive > CanvasHelper::strokeTextureMappedPolyPolygon( const rendering::XCanvas*                           pCanvas,
-                                                                                                const uno::Reference< rendering::XPolyPolygon2D >&  xPolyPolygon,
-                                                                                                const rendering::ViewState&                         viewState,
-                                                                                                const rendering::RenderState&                       renderState,
-                                                                                                const uno::Sequence< rendering::Texture >&          textures,
-                                                                                                const uno::Reference< geometry::XMapping2D >&       xMapping,
-                                                                                                const rendering::StrokeAttributes&                  strokeAttributes )
+    uno::Reference< rendering::XCachedPrimitive > CanvasHelper::strokeTextureMappedPolyPolygon( const rendering::XCanvas*                           ,
+                                                                                                const uno::Reference< rendering::XPolyPolygon2D >&  /*xPolyPolygon*/,
+                                                                                                const rendering::ViewState&                         /*viewState*/,
+                                                                                                const rendering::RenderState&                       /*renderState*/,
+                                                                                                const uno::Sequence< rendering::Texture >&          /*textures*/,
+                                                                                                const uno::Reference< geometry::XMapping2D >&       /*xMapping*/,
+                                                                                                const rendering::StrokeAttributes&                  /*strokeAttributes*/ )
     {
         // TODO
         return uno::Reference< rendering::XCachedPrimitive >(NULL);
     }
 
-    uno::Reference< rendering::XPolyPolygon2D >   CanvasHelper::queryStrokeShapes( const rendering::XCanvas*                            pCanvas,
-                                                                                   const uno::Reference< rendering::XPolyPolygon2D >&   xPolyPolygon,
-                                                                                   const rendering::ViewState&                          viewState,
-                                                                                   const rendering::RenderState&                        renderState,
-                                                                                   const rendering::StrokeAttributes&                   strokeAttributes )
+    uno::Reference< rendering::XPolyPolygon2D >   CanvasHelper::queryStrokeShapes( const rendering::XCanvas*                            ,
+                                                                                   const uno::Reference< rendering::XPolyPolygon2D >&   /*xPolyPolygon*/,
+                                                                                   const rendering::ViewState&                          /*viewState*/,
+                                                                                   const rendering::RenderState&                        /*renderState*/,
+                                                                                   const rendering::StrokeAttributes&                   /*strokeAttributes*/ )
     {
         // TODO
         return uno::Reference< rendering::XPolyPolygon2D >(NULL);
     }
 
-    uno::Reference< rendering::XCachedPrimitive > CanvasHelper::fillPolyPolygon( const rendering::XCanvas*                          pCanvas,
+    uno::Reference< rendering::XCachedPrimitive > CanvasHelper::fillPolyPolygon( const rendering::XCanvas*                          ,
                                                                                  const uno::Reference< rendering::XPolyPolygon2D >& xPolyPolygon,
                                                                                  const rendering::ViewState&                        viewState,
                                                                                  const rendering::RenderState&                      renderState )
@@ -1011,7 +1116,7 @@ namespace cairocanvas
         return uno::Reference< rendering::XCachedPrimitive >(NULL);
     }
 
-    uno::Reference< rendering::XCachedPrimitive > CanvasHelper::fillTexturedPolyPolygon( const rendering::XCanvas*                          pCanvas,
+    uno::Reference< rendering::XCachedPrimitive > CanvasHelper::fillTexturedPolyPolygon( const rendering::XCanvas*                          ,
                                                                                          const uno::Reference< rendering::XPolyPolygon2D >& xPolyPolygon,
                                                                                          const rendering::ViewState&                        viewState,
                                                                                          const rendering::RenderState&                      renderState,
@@ -1029,12 +1134,12 @@ namespace cairocanvas
         return uno::Reference< rendering::XCachedPrimitive >(NULL);
     }
 
-    uno::Reference< rendering::XCachedPrimitive > CanvasHelper::fillTextureMappedPolyPolygon( const rendering::XCanvas*                             pCanvas,
-                                                                                              const uno::Reference< rendering::XPolyPolygon2D >&    xPolyPolygon,
-                                                                                              const rendering::ViewState&                           viewState,
-                                                                                              const rendering::RenderState&                         renderState,
-                                                                                              const uno::Sequence< rendering::Texture >&            textures,
-                                                                                              const uno::Reference< geometry::XMapping2D >&         xMapping )
+    uno::Reference< rendering::XCachedPrimitive > CanvasHelper::fillTextureMappedPolyPolygon( const rendering::XCanvas*                             ,
+                                                                                              const uno::Reference< rendering::XPolyPolygon2D >&    /*xPolyPolygon*/,
+                                                                                              const rendering::ViewState&                           /*viewState*/,
+                                                                                              const rendering::RenderState&                         /*renderState*/,
+                                                                                              const uno::Sequence< rendering::Texture >&            /*textures*/,
+                                                                                              const uno::Reference< geometry::XMapping2D >&         /*xMapping*/ )
     {
         // TODO
         return uno::Reference< rendering::XCachedPrimitive >(NULL);
@@ -1044,7 +1149,7 @@ namespace cairocanvas
                                                                                        const rendering::ViewState& viewState,
                                                                                        const rendering::RenderState& renderState,
                                                                                        const geometry::IntegerSize2D& rSize,
-                                                                                       bool bModulateColors,
+                                                                                       bool /*bModulateColors*/,
                                                                                        bool bHasAlpha )
     {
         uno::Reference< rendering::XCachedPrimitive > rv = uno::Reference< rendering::XCachedPrimitive >(NULL);
@@ -1148,7 +1253,7 @@ namespace cairocanvas
         return rv; // uno::Reference< rendering::XCachedPrimitive >(NULL);
     }
 
-    uno::Reference< rendering::XCachedPrimitive > CanvasHelper::drawBitmap( const rendering::XCanvas*                   pCanvas,
+    uno::Reference< rendering::XCachedPrimitive > CanvasHelper::drawBitmap( const rendering::XCanvas*                   ,
                                                                             const uno::Reference< rendering::XBitmap >& xBitmap,
                                                                             const rendering::ViewState&                 viewState,
                                                                             const rendering::RenderState&               renderState )
@@ -1181,10 +1286,10 @@ namespace cairocanvas
     return rv;
     }
 
-    uno::Reference< rendering::XCachedPrimitive > CanvasHelper::drawBitmapModulated( const rendering::XCanvas*                      pCanvas,
-                                                                                     const uno::Reference< rendering::XBitmap >&    xBitmap,
-                                                                                     const rendering::ViewState&                    viewState,
-                                                                                     const rendering::RenderState&                  renderState )
+    uno::Reference< rendering::XCachedPrimitive > CanvasHelper::drawBitmapModulated( const rendering::XCanvas*                      ,
+                                                                                     const uno::Reference< rendering::XBitmap >&    /*xBitmap*/,
+                                                                                     const rendering::ViewState&                    /*viewState*/,
+                                                                                     const rendering::RenderState&                  /*renderState*/ )
     {
         // TODO(P1): Provide caching here.
         return uno::Reference< rendering::XCachedPrimitive >(NULL);
@@ -1195,14 +1300,14 @@ namespace cairocanvas
         return uno::Reference< rendering::XGraphicDevice >(mpDevice);
     }
 
-    void CanvasHelper::copyRect( const rendering::XCanvas*                          pCanvas,
-                                 const uno::Reference< rendering::XBitmapCanvas >&  sourceCanvas,
-                                 const geometry::RealRectangle2D&                   sourceRect,
-                                 const rendering::ViewState&                        sourceViewState,
-                                 const rendering::RenderState&                      sourceRenderState,
-                                 const geometry::RealRectangle2D&                   destRect,
-                                 const rendering::ViewState&                        destViewState,
-                                 const rendering::RenderState&                      destRenderState )
+    void CanvasHelper::copyRect( const rendering::XCanvas*                          ,
+                                 const uno::Reference< rendering::XBitmapCanvas >&  /*sourceCanvas*/,
+                                 const geometry::RealRectangle2D&                   /*sourceRect*/,
+                                 const rendering::ViewState&                        /*sourceViewState*/,
+                                 const rendering::RenderState&                      /*sourceRenderState*/,
+                                 const geometry::RealRectangle2D&                   /*destRect*/,
+                                 const rendering::ViewState&                        /*destViewState*/,
+                                 const rendering::RenderState&                      /*destRenderState*/ )
     {
         // TODO(F2): copyRect NYI
     }
@@ -1216,7 +1321,7 @@ namespace cairocanvas
     }
 
     uno::Reference< rendering::XBitmap > CanvasHelper::getScaledBitmap( const geometry::RealSize2D& newSize,
-                                                                        sal_Bool                    beFast )
+                                                                        sal_Bool                    /*beFast*/ )
     {
 #ifdef CAIRO_CANVAS_PERF_TRACE
         struct timespec aTimer;
@@ -1237,27 +1342,27 @@ namespace cairocanvas
         return uno::Reference< rendering::XBitmap >();
     }
 
-    uno::Sequence< sal_Int8 > CanvasHelper::getData( rendering::IntegerBitmapLayout&     bitmapLayout,
-                                                     const geometry::IntegerRectangle2D& rect )
+    uno::Sequence< sal_Int8 > CanvasHelper::getData( rendering::IntegerBitmapLayout&     /*bitmapLayout*/,
+                                                     const geometry::IntegerRectangle2D& /*rect*/ )
     {
         // TODO
         return uno::Sequence< sal_Int8 >();
     }
 
-    void CanvasHelper::setData( const uno::Sequence< sal_Int8 >&        data,
-                                const rendering::IntegerBitmapLayout&   bitmapLayout,
-                                const geometry::IntegerRectangle2D&     rect )
+    void CanvasHelper::setData( const uno::Sequence< sal_Int8 >&        /*data*/,
+                                const rendering::IntegerBitmapLayout&   /*bitmapLayout*/,
+                                const geometry::IntegerRectangle2D&     /*rect*/ )
     {
     }
 
-    void CanvasHelper::setPixel( const uno::Sequence< sal_Int8 >&       color,
-                                 const rendering::IntegerBitmapLayout&  bitmapLayout,
-                                 const geometry::IntegerPoint2D&        pos )
+    void CanvasHelper::setPixel( const uno::Sequence< sal_Int8 >&       /*color*/,
+                                 const rendering::IntegerBitmapLayout&  /*bitmapLayout*/,
+                                 const geometry::IntegerPoint2D&        /*pos*/ )
     {
     }
 
-    uno::Sequence< sal_Int8 > CanvasHelper::getPixel( rendering::IntegerBitmapLayout&   bitmapLayout,
-                                                      const geometry::IntegerPoint2D&   pos )
+    uno::Sequence< sal_Int8 > CanvasHelper::getPixel( rendering::IntegerBitmapLayout&   /*bitmapLayout*/,
+                                                      const geometry::IntegerPoint2D&   /*pos*/ )
     {
         return uno::Sequence< sal_Int8 >();
     }
