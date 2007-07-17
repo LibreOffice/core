@@ -4,9 +4,9 @@
  *
  *  $RCSfile: canvasgraphichelper.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: kz $ $Date: 2005-11-02 13:39:11 $
+ *  last change: $Author: obo $ $Date: 2007-07-17 15:23:50 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -36,14 +36,12 @@
 #ifndef _CPPCANVAS_CANVASGRAPHICHELPER_HXX
 #define _CPPCANVAS_CANVASGRAPHICHELPER_HXX
 
-#ifndef _COM_SUN_STAR_RENDERING_RENDERSTATE_HPP__
 #include <com/sun/star/rendering/RenderState.hpp>
-#endif
-#ifndef _BGFX_POLYGON_B2DPOLYPOLYGON_HXX
 #include <basegfx/polygon/b2dpolypolygon.hxx>
-#endif
 
 #include <cppcanvas/canvasgraphic.hxx>
+
+#include <boost/optional.hpp>
 
 namespace com { namespace sun { namespace star { namespace rendering
 {
@@ -65,14 +63,15 @@ namespace cppcanvas
             CanvasGraphicHelper( const CanvasSharedPtr& rParentCanvas );
 
             // CanvasGraphic implementation
-            virtual void                        setTransformation( const ::basegfx::B2DHomMatrix& rMatrix );
-            virtual ::basegfx::B2DHomMatrix     getTransformation() const;
-            virtual void                        setClip( const ::basegfx::B2DPolyPolygon& rClipPoly );
-            virtual ::basegfx::B2DPolyPolygon   getClip() const;
-            virtual void                        setRGBAColor( Color::IntSRGBA );
-            virtual Color::IntSRGBA             getRGBAColor() const;
-            virtual void                        setCompositeOp( CompositeOp aOp );
-            virtual CompositeOp                 getCompositeOp() const;
+            virtual void                             setTransformation( const ::basegfx::B2DHomMatrix& rMatrix );
+            virtual ::basegfx::B2DHomMatrix          getTransformation() const;
+            virtual void                             setClip( const ::basegfx::B2DPolyPolygon& rClipPoly );
+            virtual void                             setClip();
+            virtual ::basegfx::B2DPolyPolygon const* getClip() const;
+            virtual void                             setRGBAColor( Color::IntSRGBA );
+            virtual Color::IntSRGBA                  getRGBAColor() const;
+            virtual void                             setCompositeOp( CompositeOp aOp );
+            virtual CompositeOp                      getCompositeOp() const;
 
         protected:
             // for our clients
@@ -84,7 +83,7 @@ namespace cppcanvas
         private:
             mutable ::com::sun::star::rendering::RenderState                                maRenderState;
 
-            ::basegfx::B2DPolyPolygon                                                       maClipPolyPolygon;
+            boost::optional<basegfx::B2DPolyPolygon>                                        maClipPolyPolygon;
             CanvasSharedPtr                                                                 mpCanvas;
             ::com::sun::star::uno::Reference< ::com::sun::star::rendering::XGraphicDevice > mxGraphicDevice;
         };
