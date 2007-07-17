@@ -4,9 +4,9 @@
  *
  *  $RCSfile: canvascustomspritebase.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: kz $ $Date: 2005-11-02 12:42:24 $
+ *  last change: $Author: obo $ $Date: 2007-07-17 14:18:14 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -139,6 +139,16 @@ namespace canvas
         }
 
         // XCanvas: selectively override base's methods here, for opacity tracking
+        virtual void SAL_CALL clear() throw (::com::sun::star::uno::RuntimeException)
+        {
+            typename BaseType::MutexType aGuard( BaseType::m_aMutex );
+
+            maSpriteHelper.clearingContent( this );
+
+            // and forward to base class, which handles the actual rendering
+            return BaseType::clear();
+        }
+
         virtual ::com::sun::star::uno::Reference< ::com::sun::star::rendering::XCachedPrimitive > SAL_CALL
             drawBitmap( const ::com::sun::star::uno::Reference< ::com::sun::star::rendering::XBitmap >& xBitmap,
                         const ::com::sun::star::rendering::ViewState&                                   viewState,
@@ -239,11 +249,6 @@ namespace canvas
         {
             typename BaseType::MutexType aGuard( BaseType::m_aMutex );
 
-            maSpriteHelper.prepareContentCanvas( this );
-
-            BaseType::mbSurfaceDirty = true; // prepareContentCanvas() has
-                                              // cleared the surface -> dirty
-
             return this;
         }
 
@@ -253,6 +258,13 @@ namespace canvas
             typename BaseType::MutexType aGuard( BaseType::m_aMutex );
 
             return maSpriteHelper.isAreaUpdateOpaque( rUpdateArea );
+        }
+
+        virtual bool isContentChanged() const
+        {
+            typename BaseType::MutexType aGuard( BaseType::m_aMutex );
+
+            return BaseType::mbSurfaceDirty;
         }
 
         virtual ::basegfx::B2DPoint getPosPixel() const
