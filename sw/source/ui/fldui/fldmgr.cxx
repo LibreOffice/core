@@ -4,9 +4,9 @@
  *
  *  $RCSfile: fldmgr.cxx,v $
  *
- *  $Revision: 1.46 $
+ *  $Revision: 1.47 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 22:58:21 $
+ *  last change: $Author: obo $ $Date: 2007-07-17 13:10:52 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -712,7 +712,7 @@ BOOL SwFldMgr::GetSubTypes(USHORT nTypeId, SvStringsDtor& rToFill)
                         if (nTypeId == TYP_DOCINFOFLD)
                         {
                             if (i >= DI_INFO1 && i <= DI_INFO4)
-                                pNew = new String( pSh->GetInfo()->GetUserKey(i-DI_INFO1).GetTitle());
+                                pNew = new String( pSh->GetInfo()->GetUserKeyTitle(i-DI_INFO1));
                             else
                                 pNew = new String(*ViewShell::GetShellRes()->aDocInfoLst[i]);
                         }
