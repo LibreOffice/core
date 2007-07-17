@@ -4,9 +4,9 @@
  *
  *  $RCSfile: setactivity.hxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: kz $ $Date: 2006-12-13 15:35:35 $
+ *  last change: $Author: obo $ $Date: 2007-07-17 14:50:41 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -116,11 +116,6 @@ public:
     virtual bool isActive() const
     {
         return mbIsActive;
-    }
-
-    virtual bool needsScreenUpdate() const
-    {
-        return true;
     }
 
     virtual void dequeued()
