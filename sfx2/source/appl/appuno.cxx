@@ -4,9 +4,9 @@
  *
  *  $RCSfile: appuno.cxx,v $
  *
- *  $Revision: 1.123 $
+ *  $Revision: 1.124 $
  *
- *  last change: $Author: hr $ $Date: 2007-06-27 22:57:30 $
+ *  last change: $Author: obo $ $Date: 2007-07-17 13:40:42 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1865,10 +1865,13 @@ ErrCode SfxMacroLoader::loadMacro( const ::rtl::OUString& rURL, com::sun::star::
                 //rRetval = sbxToUnoValue( pRet );
 
                 SbxVariable* pRet = pMethod->GetParent()->Execute( aCall );
-                USHORT nFlags = pRet->GetFlags();
-                pRet->SetFlag( SBX_READWRITE | SBX_NO_BROADCAST );
-                rRetval = sbxToUnoValue( pRet );
-                pRet->SetFlags( nFlags );
+                if ( pRet )
+                {
+                    USHORT nFlags = pRet->GetFlags();
+                    pRet->SetFlag( SBX_READWRITE | SBX_NO_BROADCAST );
+                    rRetval = sbxToUnoValue( pRet );
+                    pRet->SetFlags( nFlags );
+                }
 
                 nErr = SbxBase::GetError();
                 if ( pBas )
