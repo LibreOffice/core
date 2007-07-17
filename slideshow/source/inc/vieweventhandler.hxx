@@ -4,9 +4,9 @@
  *
  *  $RCSfile: vieweventhandler.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: kz $ $Date: 2006-12-13 16:07:39 $
+ *  last change: $Author: obo $ $Date: 2007-07-17 15:19:37 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -33,8 +33,8 @@
  *
  ************************************************************************/
 
-#ifndef _SLIDESHOW_VIEWEVENTHANDLER_HXX
-#define _SLIDESHOW_VIEWEVENTHANDLER_HXX
+#ifndef INCLUDED_SLIDESHOW_VIEWEVENTHANDLER_HXX
+#define INCLUDED_SLIDESHOW_VIEWEVENTHANDLER_HXX
 
 #include <boost/shared_ptr.hpp>
 #include <boost/weak_ptr.hpp>
@@ -76,10 +76,26 @@ namespace slideshow
 
             /** Notify changed view.
 
+                Reasons for a viewChanged notification can be
+                different view size, transformation, or other device
+                properties (color resolution or profile, etc.)
+
                 @param rView
                 The changed view
              */
             virtual void viewChanged( const UnoViewSharedPtr& rView ) = 0;
+
+            /** Notify that all views changed.
+
+                Reasons for a viewChanged notification can be
+                different view size, transformation, or other device
+                properties (color resolution or profile, etc.)
+
+                Note that this method avoids hidden inefficiencies
+                (O(n^2) behaviour when viewChanged() needs to perform
+                linear searches)
+             */
+            virtual void viewsChanged() = 0;
         };
 
         typedef ::boost::shared_ptr< ViewEventHandler > ViewEventHandlerSharedPtr;
@@ -88,4 +104,4 @@ namespace slideshow
     }
 }
 
-#endif /* _SLIDESHOW_VIEWEVENTHANDLER_HXX */
+#endif /* INCLUDED_SLIDESHOW_VIEWEVENTHANDLER_HXX */
