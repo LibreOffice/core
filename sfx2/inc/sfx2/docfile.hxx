@@ -1,12 +1,12 @@
-/*************************************************************************
+    /*************************************************************************
  *
  *  OpenOffice.org - a multi-platform office productivity suite
  *
  *  $RCSfile: docfile.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: ihi $ $Date: 2007-06-05 18:35:35 $
+ *  last change: $Author: obo $ $Date: 2007-07-17 13:37:15 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -76,6 +76,9 @@
 #ifndef _COM_SUN_STAR_EMBED_XSTORAGE_HPP_
 #include <com/sun/star/embed/XStorage.hpp>
 #endif
+#ifndef _COM_SUN_STAR_BEANS_PROPERTYVALUE_HPP_
+#include <com/sun/star/beans/PropertyValue.hpp>
+#endif
 #ifndef _STREAM_HXX //autogen
 #include <tools/stream.hxx>
 #endif
@@ -93,9 +96,6 @@
 #include <svtools/cancel.hxx>
 #include <cppuhelper/weak.hxx>
 #include <ucbhelper/content.hxx>
-
-#include <sfx2/sfxuno.hxx>
-#include <sfx2/docinf.hxx>
 
 class SvKeyValueIterator;
 class SfxObjectFactory;
@@ -121,13 +121,6 @@ class SfxPoolCancelManager_Impl;
 #define SFX_TFPRIO_DOWNLOADS                      60
 
 #define S2BS(s) ByteString( s, RTL_TEXTENCODING_MS_1252 )
-
-////#if 0 // _SOLAR__PRIVATE
-//#ifndef STRING_LIST
-//#define STRING_LIST
-//DECLARE_LIST( StringList, String* )
-//#endif
-////#endif
 
 //____________________________________________________________________________________________________________________________________
 //  defines for namespaces
@@ -169,7 +162,7 @@ class SFX2_DLLPUBLIC SfxMedium : public SvRefBase
     com::sun::star::uno::Reference<com::sun::star::io::XInputStream>
     m_xInputStreamToLoadFrom;
 
-//#if 0 // _SOLAR__PRIVATE
+#if _SOLAR__PRIVATE
     SAL_DLLPRIVATE void SetIsRemote_Impl();
     SAL_DLLPRIVATE void CloseInStream_Impl();
     SAL_DLLPRIVATE sal_Bool CloseOutStream_Impl();
@@ -177,7 +170,7 @@ class SFX2_DLLPUBLIC SfxMedium : public SvRefBase
     DECL_DLLPRIVATE_STATIC_LINK( SfxMedium, UCBHdl_Impl, sal_uInt32 * );
 
     SAL_DLLPRIVATE void SetPasswordToStorage_Impl();
-//#endif
+#endif
 
 public:
 
@@ -196,6 +189,8 @@ public:
                                     sal_Bool bRoot = sal_False );
 
                         SfxMedium( const SfxMedium &rMedium, sal_Bool bCreateTemporary = sal_False );
+                        SfxMedium( const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >& aArgs );
+
                         ~SfxMedium();
 
     void                UseInteractionHandler( BOOL );
@@ -297,7 +292,7 @@ public:
     void                SetCharset( ::rtl::OUString );
     ::rtl::OUString     GetBaseURL( bool bForSaving=false );
 
-//#if 0 // _SOLAR__PRIVATE
+#if _SOLAR__PRIVATE
 //REMOVE        // the storage will be truncated, if it is still not open then the stream will be truncated
 //REMOVE        ::com::sun::star::uno::Reference< ::com::sun::star::embed::XStorage > GetOutputStorage_Impl();
     SAL_DLLPRIVATE ::rtl::OUString GetOutputStorageURL_Impl();
@@ -382,7 +377,7 @@ public:
     //             in this case the methods will be used generally, and might need to be renamed
     SAL_DLLPRIVATE sal_uInt16 GetCachedSignatureState_Impl();
     SAL_DLLPRIVATE void       SetCachedSignatureState_Impl( sal_uInt16 nState );
-//#endif
+#endif
 
     static com::sun::star::uno::Sequence < com::sun::star::util::RevisionTag > GetVersionList(
                     const ::com::sun::star::uno::Reference< ::com::sun::star::embed::XStorage >& xStorage );
