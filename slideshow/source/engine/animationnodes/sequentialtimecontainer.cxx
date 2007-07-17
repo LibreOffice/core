@@ -4,9 +4,9 @@
  *
  *  $RCSfile: sequentialtimecontainer.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: kz $ $Date: 2006-12-13 15:35:05 $
+ *  last change: $Author: obo $ $Date: 2007-07-17 14:50:28 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -36,12 +36,16 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_slideshow.hxx"
 
-#include "canvas/debug.hxx"
-#include "canvas/verbosetrace.hxx"
+#include <canvas/debug.hxx>
+#include <canvas/verbosetrace.hxx>
+
+#include "eventqueue.hxx"
+#include "usereventqueue.hxx"
 #include "sequentialtimecontainer.hxx"
 #include "tools.hxx"
 #include "delayevent.hxx"
-#include "boost/bind.hpp"
+
+#include <boost/bind.hpp>
 #include <algorithm>
 
 namespace slideshow {
