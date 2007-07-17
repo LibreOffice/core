@@ -4,9 +4,9 @@
  *
  *  $RCSfile: cairo_canvascustomsprite.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: vg $ $Date: 2006-11-01 14:45:15 $
+ *  last change: $Author: obo $ $Date: 2007-07-17 14:20:04 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -78,6 +78,9 @@ namespace cairocanvas
         maSpriteHelper.init( rSpriteSize,
                              rRefDevice );
         maSpriteHelper.setSurface( mpBufferSurface );
+
+        // clear sprite to 100% transparent
+        maCanvasHelper.clear();
     }
 
     ::cairo::Surface* CanvasCustomSprite::changeSurface( bool bHasAlpha, bool bCopyContent )
