@@ -4,9 +4,9 @@
  *
  *  $RCSfile: progress.cxx,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: hr $ $Date: 2007-06-27 23:04:00 $
+ *  last change: $Author: obo $ $Date: 2007-07-17 13:41:35 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -50,6 +50,7 @@
 #endif
 
 #include <svtools/eitem.hxx>
+#include <tools/time.hxx>
 
 // wg. nRescheduleLocks
 #include "appdata.hxx"
