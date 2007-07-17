@@ -4,9 +4,9 @@
 #
 #   $RCSfile: tg_def.mk,v $
 #
-#   $Revision: 1.41 $
+#   $Revision: 1.42 $
 #
-#   last change: $Author: hr $ $Date: 2007-06-27 17:50:23 $
+#   last change: $Author: obo $ $Date: 2007-07-17 07:24:25 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -121,7 +121,7 @@ $(DEF$(TNR)TARGETN) .PHONY :
 .IF "$(COM)"=="GCC"
     @-$(EXPORT$(TNR)_PROTECT) $(RM) $(MISC)$/$(SHL$(TNR)TARGET).exp
     dlltool --output-def $(MISC)$/$(SHL$(TNR)TARGET).exp --export-all-symbols \
-        `$(TYPE) $(SLB)$/$(DEFLIB$(TNR)NAME).lib | sed s#$(ROUT)#$(PRJ)$/$(ROUT)#g`
+         `$(TYPE) $(foreach,i,$(DEFLIB$(TNR)NAME) $(SLB)$/$(i).lib) | sed s#$(ROUT)#$(PRJ)$/$(ROUT)#g`
     tail --lines +3 $(MISC)$/$(SHL$(TNR)TARGET).exp | sed '/^;/d' >>$@.tmpfile
     @-$(EXPORT$(TNR)_PROTECT) $(RM) $(MISC)$/$(SHL$(TNR)TARGET).exp
 .ELSE
