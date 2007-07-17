@@ -4,9 +4,9 @@
  *
  *  $RCSfile: tabvwsh4.cxx,v $
  *
- *  $Revision: 1.67 $
+ *  $Revision: 1.68 $
  *
- *  last change: $Author: rt $ $Date: 2007-07-06 12:48:02 $
+ *  last change: $Author: obo $ $Date: 2007-07-17 13:35:24 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1183,7 +1183,7 @@ SfxPrinter* __EXPORT ScTabViewShell::GetPrinter( BOOL bCreate )
     return GetViewData()->GetDocShell()->GetPrinter(bCreate);
 }
 
-USHORT __EXPORT ScTabViewShell::SetPrinter( SfxPrinter *pNewPrinter, USHORT nDiffFlags )
+USHORT __EXPORT ScTabViewShell::SetPrinter( SfxPrinter *pNewPrinter, USHORT nDiffFlags, bool )
 {
     return GetViewData()->GetDocShell()->SetPrinter( pNewPrinter, nDiffFlags );
 }
