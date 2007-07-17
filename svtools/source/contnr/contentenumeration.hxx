@@ -4,9 +4,9 @@
  *
  *  $RCSfile: contentenumeration.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: ihi $ $Date: 2007-06-05 18:24:55 $
+ *  last change: $Author: obo $ $Date: 2007-07-17 13:28:33 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -40,8 +40,8 @@
 #ifndef _COM_SUN_STAR_UCB_XCOMMANDENVIRONMENT_HPP_
 #include <com/sun/star/ucb/XCommandEnvironment.hpp>
 #endif
-#ifndef _COM_SUN_STAR_IO_XPERSIST_HPP_
-#include <com/sun/star/io/XPersist.hpp>
+#ifndef _COM_SUN_STAR_DOCUMENT_XSTANDALONEDOCUMENTINFO_HPP_
+#include <com/sun/star/document/XStandaloneDocumentInfo.hpp>
 #endif
 /** === end UNO includes === **/
 
@@ -228,7 +228,7 @@ namespace svt
         IEnumerationResultHandler*      m_pResultHandler;
         bool                            m_bCancelled;
 
-        mutable ::com::sun::star::uno::Reference< ::com::sun::star::io::XPersist >
+        mutable ::com::sun::star::uno::Reference< ::com::sun::star::document::XStandaloneDocumentInfo >
                                         m_xDocInfo;
 
     public:
