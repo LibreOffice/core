@@ -4,9 +4,9 @@
  *
  *  $RCSfile: contentenumeration.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: hr $ $Date: 2007-06-27 21:18:57 $
+ *  last change: $Author: obo $ $Date: 2007-07-17 13:28:19 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -433,7 +433,7 @@ namespace svt
             {
                 m_xDocInfo = m_xDocInfo.query(
                     ::comphelper::getProcessServiceFactory()->createInstance(
-                        String( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.document.DocumentProperties") )
+                        String( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.document.StandaloneDocumentInfo") )
                     )
                 );
             }
@@ -442,7 +442,7 @@ namespace svt
             if ( !m_xDocInfo.is() )
                 return sal_False;
 
-            m_xDocInfo->read( _rTargetURL );
+            m_xDocInfo->loadFromURL( _rTargetURL );
             Reference< XPropertySet > xPropSet( m_xDocInfo, UNO_QUERY );
 
             Any aAny = xPropSet->getPropertyValue( OUString::createFromAscii( "Title" ) );
