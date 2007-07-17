@@ -4,9 +4,9 @@
  *
  *  $RCSfile: animationnodefactory.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: kz $ $Date: 2006-12-13 15:29:56 $
+ *  last change: $Author: obo $ $Date: 2007-07-17 14:47:27 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -37,8 +37,28 @@
 #include "precompiled_slideshow.hxx"
 
 // must be first
-#include "canvas/debug.hxx"
-#include "canvas/verbosetrace.hxx"
+#include <canvas/debug.hxx>
+#include <canvas/verbosetrace.hxx>
+
+#include <com/sun/star/drawing/XShape.hpp>
+#include <com/sun/star/animations/XAnimate.hpp>
+#include <com/sun/star/animations/AnimationNodeType.hpp>
+#include <com/sun/star/presentation/EffectNodeType.hpp>
+#include <com/sun/star/presentation/TextAnimationType.hpp>
+#include <com/sun/star/animations/XAnimateSet.hpp>
+#include <com/sun/star/animations/XIterateContainer.hpp>
+#include <com/sun/star/presentation/ShapeAnimationSubType.hpp>
+#include <com/sun/star/animations/XAnimateMotion.hpp>
+#include <com/sun/star/animations/XAnimateColor.hpp>
+#include <com/sun/star/animations/XAnimateTransform.hpp>
+#include <com/sun/star/animations/AnimationTransformType.hpp>
+#include <com/sun/star/animations/XTransitionFilter.hpp>
+#include <com/sun/star/animations/XAudio.hpp>
+#include <com/sun/star/presentation/ParagraphTarget.hpp>
+#include <com/sun/star/beans/XPropertySet.hpp>
+#include <animations/animationnodehelper.hxx>
+#include <basegfx/numeric/ftools.hxx>
+
 #include "animationnodefactory.hxx"
 #include "paralleltimecontainer.hxx"
 #include "sequentialtimecontainer.hxx"
@@ -52,29 +72,8 @@
 #include "animationcommandnode.hxx"
 #include "nodetools.hxx"
 #include "tools.hxx"
-#include "animations/animationnodehelper.hxx"
-#include "com/sun/star/drawing/XShape.hpp"
-#include "com/sun/star/animations/XAnimate.hpp"
-#include "com/sun/star/animations/AnimationNodeType.hpp"
-#include "com/sun/star/presentation/EffectNodeType.hpp"
-#include "com/sun/star/presentation/TextAnimationType.hpp"
-#include "com/sun/star/animations/XAnimateSet.hpp"
-#include "com/sun/star/animations/XIterateContainer.hpp"
-#include "com/sun/star/presentation/ShapeAnimationSubType.hpp"
-#include "com/sun/star/animations/XAnimateMotion.hpp"
-#include "com/sun/star/animations/XAnimateColor.hpp"
-#include "com/sun/star/animations/XAnimateTransform.hpp"
-#include "com/sun/star/animations/AnimationTransformType.hpp"
-#include "com/sun/star/animations/XTransitionFilter.hpp"
-#include "com/sun/star/animations/XAudio.hpp"
-#include "com/sun/star/presentation/ParagraphTarget.hpp"
-#include "com/sun/star/beans/XPropertySet.hpp"
-#include "basegfx/numeric/ftools.hxx"
-#include "boost/bind.hpp"
-#include "boost/mem_fn.hpp"
-#include <vector>
-#include <algorithm>
-#include <iterator>
+
+#include <boost/bind.hpp>
 
 using namespace ::com::sun::star;
 
@@ -146,7 +145,7 @@ public:
         // realized (i.e. if enableSubsetShape() has been
         // called already), and the original of your clone
         // goes out of scope, then your subset will be
-        // gone (LayerManager::revokeSubset() be
+        // gone (SubsettableShapeManager::revokeSubset() be
         // called). As of now, this behaviour is not
         // triggered here (we either clone, XOR we enable
         // subset initially), but one might consider
@@ -245,7 +244,7 @@ bool implCreateIteratedNodes(
     // ==================================
 
     AttributableShapeSharedPtr  pTargetShape(
-        lookupAttributableShape( rContext.maContext.mpLayerManager,
+        lookupAttributableShape( rContext.maContext.mpSubsettableShapeManager,
                                  xTargetShape ) );
 
     const DocTreeNodeSupplier& rTreeNodeSupplier(
@@ -274,7 +273,7 @@ bool implCreateIteratedNodes(
                 rTreeNodeSupplier.getTreeNode(
                     aTarget.Paragraph,
                     DocTreeNode::NODETYPE_LOGICAL_PARAGRAPH ),
-                rContext.maContext.mpLayerManager ) );
+                rContext.maContext.mpSubsettableShapeManager ) );
 
         // iterate target is not the whole shape, but only
         // the selected paragraph - subset _must_ be
@@ -298,7 +297,7 @@ bool implCreateIteratedNodes(
     {
         pTargetSubset.reset(
             new ShapeSubset( pTargetShape,
-                             rContext.maContext.mpLayerManager ) );
+                             rContext.maContext.mpSubsettableShapeManager ));
     }
 
     aContext.mpMasterShapeSubset = pTargetSubset;
@@ -601,6 +600,7 @@ BaseNodeSharedPtr implCreateAnimationNode(
 
 AnimationNodeSharedPtr AnimationNodeFactory::createAnimationNode(
     const uno::Reference< animations::XAnimationNode >&   xNode,
+    const ::basegfx::B2DVector&                           rSlideSize,
     const SlideShowContext&                               rContext )
 {
     ENSURE_AND_THROW(
@@ -610,7 +610,8 @@ AnimationNodeSharedPtr AnimationNodeFactory::createAnimationNode(
     return BaseNodeSharedPtr( implCreateAnimationNode(
                                   xNode,
                                   BaseContainerNodeSharedPtr(), // no parent
-                                  NodeContext( rContext ) ) );
+                                  NodeContext( rContext,
+                                               rSlideSize )));
 }
 
 #if defined(VERBOSE) && defined(DBG_UTIL)
