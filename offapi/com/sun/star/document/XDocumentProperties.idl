@@ -1,0 +1,330 @@
+/*************************************************************************
+ *
+ *  OpenOffice.org - a multi-platform office productivity suite
+ *
+ *  $RCSfile: XDocumentProperties.idl,v $
+ *
+ *  $Revision: 1.2 $
+ *
+ *  last change: $Author: obo $ $Date: 2007-07-17 13:16:10 $
+ *
+ *  The Contents of this file are made available subject to
+ *  the terms of GNU Lesser General Public License Version 2.1.
+ *
+ *
+ *    GNU Lesser General Public License Version 2.1
+ *    =============================================
+ *    Copyright 2005 by Sun Microsystems, Inc.
+ *    901 San Antonio Road, Palo Alto, CA 94303, USA
+ *
+ *    This library is free software; you can redistribute it and/or
+ *    modify it under the terms of the GNU Lesser General Public
+ *    License version 2.1, as published by the Free Software Foundation.
+ *
+ *    This library is distributed in the hope that it will be useful,
+ *    but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ *    Lesser General Public License for more details.
+ *
+ *    You should have received a copy of the GNU Lesser General Public
+ *    License along with this library; if not, write to the Free Software
+ *    Foundation, Inc., 59 Temple Place, Suite 330, Boston,
+ *    MA  02111-1307  USA
+ *
+ ************************************************************************/
+#ifndef __com_sun_star_document_XDocumentProperties_idl__
+#define __com_sun_star_document_XDocumentProperties_idl__
+
+#ifndef __com_sun_star_container_XNameContainer_idl__
+#include <com/sun/star/container/XNameContainer.idl>
+#endif
+
+#ifndef __com_sun_star_beans_PropertyValue_idl__
+#include <com/sun/star/beans/PropertyValue.idl>
+#endif
+
+#ifndef __com_sun_star_util_DateTime_idl__
+#include <com/sun/star/util/DateTime.idl>
+#endif
+
+#ifndef __com_sun_star_lang_Locale_idl__
+#include <com/sun/star/lang/Locale.idl>
+#endif
+
+#ifndef __com_sun_star_beans_PropertyValue_idl__
+#include <com/sun/star/beans/PropertyValue.idl>
+#endif
+
+#ifndef __com_sun_star_embed_XStorage_idl__
+#include <com/sun/star/embed/XStorage.idl>
+#endif
+
+#ifndef __com_sun_star_io_IOException_idl__
+#include <com/sun/star/io/IOException.idl>
+#endif
+
+#ifndef __com_sun_star_beans_XPropertySet_idl__
+#include <com/sun/star/beans/XPropertySet.idl>
+#endif
+
+#ifndef __com_sun_star_beans_XFastPropertySet_idl__
+#include <com/sun/star/beans/XFastPropertySet.idl>
+#endif
+
+#ifndef __com_sun_star_beans_XPropertyContainer_idl__
+#include <com/sun/star/beans/XPropertyContainer.idl>
+#endif
+
+#ifndef __com_sun_star_document_XStandaloneDocumentInfo_idl__
+#include <com/sun/star/document/XStandaloneDocumentInfo.idl>
+#endif
+
+//=============================================================================
+
+module com {   module sun {   module star {   module document {
+
+//=============================================================================
+/**
+ This interface manages access to document properties that either have been set
+ from the outside (e.g. when importing arbitrary document formats that support
+ document properties) or have been imported from an ODF package.
+ */
+interface XDocumentProperties
+{
+    //-------------------------------------------------------------------------
+    /** contains the initial author of the document
+     */
+
+    [attribute] string Author;
+
+    //-------------------------------------------------------------------------
+    /** identifies which application was used to create or last modify the document
+        <p>
+        The generating application will set this attribute when it creates a new document
+        or it saves a document. When a document is loaded that itself contains such an
+        attribute it will be preserved until the document is saved again.
+        </p>
+     */
+
+    [attribute] string Generator;
+
+    //-------------------------------------------------------------------------
+    /** contains the date and time of the first time the
+        document was stored
+     */
+
+    [attribute] com::sun::star::util::DateTime CreationDate;
+
+    //-------------------------------------------------------------------------
+    /** contains the title of the document
+     */
+
+    [attribute] string Title;
+
+    //-------------------------------------------------------------------------
+    /** contains the subject of document
+     */
+
+    [attribute] string Subject;
+
+    //-------------------------------------------------------------------------
+    /** contains a multi-line comment of the document
+        <p>
+        Line delimiters can be UNIX, Macintosh or DOS style.
+        </p>
+     */
+
+    [attribute] string Description;
+
+    //-------------------------------------------------------------------------
+    /** contains a comma separated list of keywords for
+        the document
+     */
+
+    [attribute] string Keywords;
+
+    //-------------------------------------------------------------------------
+    /** contains the MIME-type of the document's resource
+        <p>
+        The MIME-type is neither stored in the document information nor in
+        the document; it is sent within a protocol header or is
+        detected, thus it cannot be changed.
+        </p>
+     */
+
+    [readonly, attribute] string MIMEType;
+
+    //-------------------------------------------------------------------------
+    /** default language of the document
+     */
+
+    [attribute] com::sun::star::lang::Locale Language;
+
+    //-------------------------------------------------------------------------
+    /** contains the name of the editor who was the last
+        person to store this document
+     */
+
+    [attribute] string ModifiedBy;
+
+    //-------------------------------------------------------------------------
+    /** contains the date and time of the last time the
+        document was stored
+     */
+
+    [attribute] com::sun::star::util::DateTime ModifyDate;
+
+    //-------------------------------------------------------------------------
+    /** contains the name of the editor who was the last
+        person to print the document
+     */
+
+    [attribute] string PrintedBy;
+
+    //-------------------------------------------------------------------------
+    /** contains the date and time of when the document was
+        last printed
+     */
+
+    [attribute] com::sun::star::util::DateTime PrintDate;
+
+    //-------------------------------------------------------------------------
+    /** contains the path and name of the template from
+        which the document was created
+        <p>
+        The value is an empty string if the document was not created
+        from a template or if it was detached from the template.
+        </p>
+     */
+
+    [attribute] string Template;
+
+    //-------------------------------------------------------------------------
+    /** contains the date and time of when the document
+        was created or updated from the template
+     */
+
+    [attribute] com::sun::star::util::DateTime TemplateDate;
+
+    //-------------------------------------------------------------------------
+    /** contains the URL to load automatically after a
+        specified time after the document is loaded into a desktop frame
+        <p>
+        An empty URL is valid and describes a case where the document shall be
+        reloaded from its original loction after some time described by the
+        attribute AutoloadSecs. An empty string together with an AutoLoadSecs
+        value of 0 describes a case where no AutoLoad is specified.
+        </p>
+     */
+
+    [attribute] string AutoloadURL;
+
+    //-------------------------------------------------------------------------
+    /** contains the number of seconds after which a specified
+        URL is to be loaded after the document is loaded into a desktop
+        frame
+        <p>
+        A value of 0 is valid and describes a redirection. An empty string
+        together with an AutoLoadSecs value of 0 describes a case where no
+        AutoLoad is specified.
+        </p>
+     */
+
+    [attribute] long AutoloadSecs;
+
+    //-------------------------------------------------------------------------
+    /** contains the name of the default frame into which
+        links should be loaded if no target is specified
+        <p>
+        This applies to the autoload feature too, but to others as well.
+        </p>
+     */
+
+    [attribute] string DefaultTarget;
+
+    //-------------------------------------------------------------------------
+    /** returns a container for custom properties
+        <p>
+        </p>
+     */
+
+    com::sun::star::beans::XPropertyContainer getCustomProperties();
+
+    //-------------------------------------------------------------------------
+    /** loads document properties from an ODF package
+        <p>
+        This method is used for accessing an ODF package that is owned by someone else,
+        e.g. a document.
+        </p>
+
+        @param Storage
+            the <type>com.sun.star.embed.Storage</type> representing the ODF package
+     */
+
+    void loadFromStorage( [in] com::sun::star::embed::XStorage Storage )
+        raises( com::sun::star::io::IOException, com::sun::star::uno::Exception );
+
+    //-------------------------------------------------------------------------
+    /** loads document properties from an ODF package or an OLE container
+        <p>
+        For compatibility reasons this method also supports the import from former
+        StarOffice binary file formats.
+        </p>
+
+        @param URL
+            the URL of the source document
+            <p>
+            The URL could be part of the Medium parameter also but because often no other
+            parameters exept the URL are needed providing it separately was added for
+            convenience reasons.
+            </p>
+
+        @param Medium
+            the <type>com.sun.star.document.MediaDescriptor</type> representing the source
+     */
+
+    void loadFromMedium( [in] string URL, [in] sequence < com::sun::star::beans::PropertyValue > Medium )
+        raises( com::sun::star::io::IOException, com::sun::star::uno::Exception );
+
+    //-------------------------------------------------------------------------
+    /** stores document properties to an ODF package
+        <p>
+        This method is used for accessing an ODF package that is owned by someone else,
+        e.g. a document.
+        </p>
+
+        @param Storage
+            the <type>com.sun.star.embed.Storage</type> representing the ODF package
+     */
+
+    void storeToStorage( [in] com::sun::star::embed::XStorage Storage )
+        raises( com::sun::star::io::IOException, com::sun::star::uno::Exception  );
+
+    //-------------------------------------------------------------------------
+    /** stores document properties to an ODF package or an OLE container
+        <p>
+        For compatibility reasons this method also supports the export to former
+        StarOffice binary file formats.
+        </p>
+
+        @param URL
+            the URL of the target document
+            <p>
+            The URL could be part of the Medium parameter also but because often no other
+            parameters exept the URL are needed providing it separately was added for
+            convenience reasons.
+            </p>
+
+        @param Medium
+            the <type>com.sun.star.document.MediaDescriptor</type> representing the target
+     */
+
+    void storeToMedium( [in] string URL, [in] sequence < com::sun::star::beans::PropertyValue > Medium )
+        raises( com::sun::star::io::IOException, com::sun::star::uno::Exception  );
+};
+
+//=============================================================================
+
+}; }; }; };
+
+#endif
