@@ -66,7 +66,7 @@ void Registrar::RegisterForMsWord() const
         m_ContextInformation.GetWordDocumentDefaultIconEntry(),
         m_ContextInformation.GetWordDocumentDefaultShellCommand(),
         m_ContextInformation.ShellNewCommandDisplayName(),
-        RegistrationContextInformation::OFFICE_APPLICATION::Writer);
+        RegistrationContextInformation::Writer);
 
     RegisterForMsOfficeApplication(
         m_ContextInformation.GetWordTemplateFileExtension(),
@@ -74,7 +74,7 @@ void Registrar::RegisterForMsWord() const
         m_ContextInformation.GetWordTemplateDefaultIconEntry(),
         m_ContextInformation.GetWordTemplateDefaultShellCommand(),
         m_ContextInformation.ShellNewCommandDisplayName(),
-        RegistrationContextInformation::OFFICE_APPLICATION::Writer);
+        RegistrationContextInformation::Writer);
 
     RegisterForMsOfficeApplication(
         m_ContextInformation.GetRtfDocumentFileExtension(),
@@ -82,7 +82,7 @@ void Registrar::RegisterForMsWord() const
         m_ContextInformation.GetRtfDocumentDefaultIconEntry(),
         m_ContextInformation.GetRtfDocumentDefaultShellCommand(),
         m_ContextInformation.ShellNewCommandDisplayName(),
-        RegistrationContextInformation::OFFICE_APPLICATION::Writer);
+        RegistrationContextInformation::Writer);
 
     SaveRegisteredFor(MSWORD);
 }
@@ -163,7 +163,7 @@ void Registrar::RegisterForMsExcel() const
         m_ContextInformation.GetExcelSheetDefaultIconEntry(),
         m_ContextInformation.GetExcelSheetDefaultShellCommand(),
         m_ContextInformation.ShellNewCommandDisplayName(),
-        RegistrationContextInformation::OFFICE_APPLICATION::Calc);
+        RegistrationContextInformation::Calc);
 
     RegisterForMsOfficeApplication(
         m_ContextInformation.GetExcelTemplateFileExtension(),
@@ -171,7 +171,7 @@ void Registrar::RegisterForMsExcel() const
         m_ContextInformation.GetExcelTemplateDefaultIconEntry(),
         m_ContextInformation.GetExcelTemplateDefaultShellCommand(),
         m_ContextInformation.ShellNewCommandDisplayName(),
-        RegistrationContextInformation::OFFICE_APPLICATION::Calc);
+        RegistrationContextInformation::Calc);
 
     SaveRegisteredFor(MSEXCEL);
 }
@@ -215,7 +215,7 @@ void Registrar::RegisterForMsPowerPoint() const
         m_ContextInformation.GetPowerPointDocumentDefaultIconEntry(),
         m_ContextInformation.GetPowerPointDocumentDefaultShellCommand(),
         m_ContextInformation.ShellNewCommandDisplayName(),
-        RegistrationContextInformation::OFFICE_APPLICATION::Impress);
+        RegistrationContextInformation::Impress);
 
     RegisterForMsOfficeApplication(
         m_ContextInformation.GetPowerPointShowFileExtension(),
@@ -223,7 +223,7 @@ void Registrar::RegisterForMsPowerPoint() const
         m_ContextInformation.GetPowerPointShowDefaultIconEntry(),
         m_ContextInformation.GetPowerPointShowDefaultShellCommand(),
         m_ContextInformation.ShellNewCommandDisplayName(),
-        RegistrationContextInformation::OFFICE_APPLICATION::Impress);
+        RegistrationContextInformation::Impress);
 
     RegisterForMsOfficeApplication(
         m_ContextInformation.GetPowerPointTemplateFileExtension(),
@@ -231,7 +231,7 @@ void Registrar::RegisterForMsPowerPoint() const
         m_ContextInformation.GetPowerPointTemplateDefaultIconEntry(),
         m_ContextInformation.GetPowerPointTemplateDefaultShellCommand(),
         m_ContextInformation.ShellNewCommandDisplayName(),
-        RegistrationContextInformation::OFFICE_APPLICATION::Impress);
+        RegistrationContextInformation::Impress);
 
     SaveRegisteredFor(MSPOWERPOINT);
 }
