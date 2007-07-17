@@ -4,9 +4,9 @@
  *
  *  $RCSfile: sfxsids.hrc,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2007-07-06 10:16:05 $
+ *  last change: $Author: obo $ $Date: 2007-07-17 13:38:31 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -967,14 +967,11 @@
 #define SID_ATTR_BACKUP                 (SID_OPTIONS_START +  1)
 #define SID_ATTR_AUTOSAVE               (SID_OPTIONS_START +  2)
 #define SID_ATTR_AUTOSAVEPROMPT         (SID_OPTIONS_START +  3)
-#define SID_ATTR_INDEP_METAFILE         (SID_OPTIONS_START +  4)
 #define SID_ATTR_AUTOSAVEMINUTE         (SID_OPTIONS_START +  5)
 #define SID_ATTR_WORKINGSET             (SID_OPTIONS_START + 13)
 #define SID_ATTR_UNDO_COUNT             (SID_OPTIONS_START + 16)
 #define SID_ATTR_SAVEDOCWINS            (SID_OPTIONS_START + 17)
 #define SID_ATTR_SAVEDOCVIEW            (SID_OPTIONS_START + 18)
-#define SID_OPT_SAVEGRAPHICSCOMPRESSED  (SID_OPTIONS_START + 75)
-#define SID_OPT_SAVEORIGINALGRAPHICS    (SID_OPTIONS_START + 76)
 
 // GeneralTabPage
 
