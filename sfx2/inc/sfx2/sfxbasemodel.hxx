@@ -4,9 +4,9 @@
  *
  *  $RCSfile: sfxbasemodel.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: hr $ $Date: 2007-06-26 16:09:39 $
+ *  last change: $Author: obo $ $Date: 2007-07-17 13:38:09 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1432,8 +1432,6 @@ public:
 
 protected:
 
-    virtual void impl_setPrinter(const SEQUENCE< PROPERTYVALUE >& rPrinter,SfxPrinter*& pPrinter,sal_uInt16& nChangeFlags,SfxViewShell*& pViewSh);
-
     /* returns a unique id for the model that is valid as long as the document
        is loaded. The id is not saved across document close/reload. */
     rtl::OUString getRuntimeUID() const;
@@ -1460,6 +1458,7 @@ private:
         @onerror    -
     */
 
+    bool impl_getPrintHelper();
     SAL_DLLPRIVATE void ListenForStorage_Impl( const ::com::sun::star::uno::Reference< ::com::sun::star::embed::XStorage >& xStorage );
     SAL_DLLPRIVATE ::rtl::OUString GetMediumFilterName_Impl();
 
