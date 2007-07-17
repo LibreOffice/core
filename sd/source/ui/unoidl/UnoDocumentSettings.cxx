@@ -4,9 +4,9 @@
  *
  *  $RCSfile: UnoDocumentSettings.cxx,v $
  *
- *  $Revision: 1.34 $
+ *  $Revision: 1.35 $
  *
- *  last change: $Author: hr $ $Date: 2007-06-27 15:45:34 $
+ *  last change: $Author: obo $ $Date: 2007-07-17 13:01:56 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -64,10 +64,6 @@
 
 #ifndef _COMPHELPER_PROPERTSETINFO_HXX_
 #include <comphelper/propertysetinfo.hxx>
-#endif
-
-#ifndef _SFXDOCINF_HXX
-#include <sfx2/docinf.hxx>
 #endif
 
 #ifndef _URLOBJ_HXX
@@ -215,7 +211,7 @@ enum SdDocumentSettingsPropertyHandles
     HANDLE_PRINTERNAME, HANDLE_PRINTERJOB, HANDLE_PARAGRAPHSUMMATION, HANDLE_CHARCOMPRESS, HANDLE_ASIANPUNCT, HANDLE_UPDATEFROMTEMPLATE,
     HANDLE_PRINTER_INDEPENDENT_LAYOUT
     // --> PB 2004-08-23 #i33095#
-    ,HANDLE_LOAD_READONLY
+    ,HANDLE_LOAD_READONLY, HANDLE_SAVE_VERSION
     // <--
 };
 
@@ -278,6 +274,7 @@ enum SdDocumentSettingsPropertyHandles
             { MAP_LEN("PrinterIndependentLayout"),HANDLE_PRINTER_INDEPENDENT_LAYOUT,&::getCppuType((const sal_Int16*)0), 0,  0 },
             // --> PB 2004-08-23 #i33095#
             { MAP_LEN("LoadReadonly"),          HANDLE_LOAD_READONLY,       &::getBooleanCppuType(),                0,  0 },
+            { MAP_LEN("SaveVersionOnClose"),    HANDLE_SAVE_VERSION,        &::getBooleanCppuType(),                0,  0 },
             // <--
             { NULL, 0, 0, NULL, 0, 0 }
         };
@@ -476,12 +473,8 @@ void DocumentSettings::_setPropertyValues( const PropertyMapEntry** ppEntries, c
                     sal_Bool bApplyUserData = sal_False;
                     if( *pValues >>= bApplyUserData )
                     {
-                        SfxDocumentInfo& rInfo = pDocSh->GetDocInfo();
-                        if( rInfo.IsUseUserData() != bApplyUserData )
-                        {
-                            rInfo.SetUseUserData( bApplyUserData );
-                            bChanged = sal_True;
-                        }
+                        bChanged = ( bApplyUserData != pDocSh->IsUseUserData() );
+                        pDocSh->SetUseUserData( bApplyUserData );
                         bOk = sal_True;
                     }
                 }
@@ -854,8 +847,8 @@ void DocumentSettings::_setPropertyValues( const PropertyMapEntry** ppEntries, c
                 sal_Bool value = sal_False;
                 if( *pValues >>= value )
                 {
-                    SfxDocumentInfo& rInfo = pDocSh->GetDocInfo();
-                    rInfo.SetQueryLoadTemplate( value );
+                    bChanged = ( value != pDocSh->IsQueryLoadTemplate() );
+                    pDocSh->SetQueryLoadTemplate( value );
                     bOk = sal_True;
                 }
             }
@@ -881,18 +874,28 @@ void DocumentSettings::_setPropertyValues( const PropertyMapEntry** ppEntries, c
             // --> PB 2004-08-23 #i33095#
             case HANDLE_LOAD_READONLY:
             {
-                SfxDocumentInfo& rDocInfo = pDocSh->GetDocInfo();
-                sal_Bool bOldValue = rDocInfo.IsLoadReadonly();
                 sal_Bool bNewValue = sal_False;
                 if ( *pValues >>= bNewValue )
                 {
-                    rDocInfo.SetLoadReadonly( bNewValue );
-                    bChanged = ( bOldValue != bNewValue );
+                    bChanged = ( pDocSh->IsLoadReadonly() != bNewValue );
+                    pDocSh->SetLoadReadonly( bNewValue );
                     bOk = sal_True;
                 }
             }
             break;
             // <--
+
+            case HANDLE_SAVE_VERSION:
+            {
+                sal_Bool bNewValue = sal_False;
+                if ( *pValues >>= bNewValue )
+                {
+                    bChanged = ( pDocSh->IsSaveVersionOnClose() != bNewValue );
+                    pDocSh->SetSaveVersionOnClose( bNewValue );
+                    bOk = sal_True;
+                }
+            }
+            break;
 
             default:
                 throw UnknownPropertyException();
@@ -1008,7 +1011,7 @@ void DocumentSettings::_getPropertyValues( const PropertyMapEntry** ppEntries, A
                 break;
 
             case HANDLE_APPLYUSERDATA:
-                *pValue <<= (sal_Bool)pDocSh->GetDocInfo().IsUseUserData();
+                *pValue <<= pDocSh->IsUseUserData();
                 break;
 
             case HANDLE_PRINTDRAWING:
@@ -1121,8 +1124,7 @@ void DocumentSettings::_getPropertyValues( const PropertyMapEntry** ppEntries, A
 
             case HANDLE_UPDATEFROMTEMPLATE:
             {
-                SfxDocumentInfo& rInfo = pDocSh->GetDocInfo();
-                *pValue <<= (sal_Bool)rInfo.IsQueryLoadTemplate();
+                *pValue <<= pDocSh->IsQueryLoadTemplate();
             }
             break;
 
@@ -1137,11 +1139,16 @@ void DocumentSettings::_getPropertyValues( const PropertyMapEntry** ppEntries, A
             // --> PB 2004-08-23 #i33095#
             case HANDLE_LOAD_READONLY:
             {
-                sal_Bool bLoadReadonly = pDocSh->GetDocInfo().IsLoadReadonly();
-                *pValue <<= bLoadReadonly;
+                *pValue <<= pDocSh->IsLoadReadonly();
             }
             break;
             // <--
+
+            case HANDLE_SAVE_VERSION:
+            {
+                *pValue <<= pDocSh->IsSaveVersionOnClose();
+            }
+            break;
 
             default:
                 throw UnknownPropertyException();
