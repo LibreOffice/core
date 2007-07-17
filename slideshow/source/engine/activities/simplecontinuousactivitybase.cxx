@@ -4,9 +4,9 @@
  *
  *  $RCSfile: simplecontinuousactivitybase.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: kz $ $Date: 2006-12-13 15:27:30 $
+ *  last change: $Author: obo $ $Date: 2007-07-17 14:45:59 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -90,7 +90,7 @@ namespace slideshow
 
             // fraction of minimum calls performed
             const double nFractionRequiredCalls(
-                (double)mnCurrPerformCalls / mnMinNumberOfFrames );
+                double(mnCurrPerformCalls) / mnMinNumberOfFrames );
 
             // okay, so now, the decision is easy:
             //
