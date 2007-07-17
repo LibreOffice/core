@@ -4,9 +4,9 @@
  *
  *  $RCSfile: htmlfld.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 22:09:10 $
+ *  last change: $Author: obo $ $Date: 2007-07-17 13:07:51 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -297,9 +297,9 @@ void SwHTMLParser::NewField()
     {
         SvtUserOptions aOpt;
         const String& rUser = aOpt.GetFullName();
-        const SfxDocumentInfo *pDocInfo = pDoc->GetInfo();
-        const String& rChanged = pDocInfo->GetChanged().GetName();
-        const String& rCreated = pDocInfo->GetCreated().GetName();
+        const SfxDocumentInfo *pDocInfo = pDoc->GetDocumentInfo();
+        const String& rChanged = pDocInfo->GetModificationAuthor();
+        const String& rCreated = pDocInfo->GetAuthor();
         if( !rUser.Len() ||
             (rChanged.Len() ? rUser != rChanged : rUser != rCreated) )
             bFixed = TRUE;
