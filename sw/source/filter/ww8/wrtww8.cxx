@@ -4,9 +4,9 @@
  *
  *  $RCSfile: wrtww8.cxx,v $
  *
- *  $Revision: 1.82 $
+ *  $Revision: 1.83 $
  *
- *  last change: $Author: kz $ $Date: 2007-05-10 16:09:58 $
+ *  last change: $Author: obo $ $Date: 2007-07-17 13:09:18 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -331,15 +331,15 @@ static void WriteDop( SwWW8Writer& rWrt )
     rDop.cParas = rDStat.nPara;
     rDop.cLines = rDStat.nPara;
 
-    const SfxDocumentInfo *pInf = rWrt.pDoc->GetInfo();
+    const SfxDocumentInfo *pInf = rWrt.pDoc->GetDocumentInfo();
     ASSERT(pInf, "No document Info, very suspicious");
     if (!pInf)
         rDop.dttmCreated = rDop.dttmRevised = rDop.dttmLastPrint = 0x45FBAC69;
     else
     {
-        rDop.dttmCreated = sw::ms::DateTime2DTTM(pInf->GetCreated().GetTime());
-        rDop.dttmRevised = sw::ms::DateTime2DTTM(pInf->GetChanged().GetTime());
-        rDop.dttmLastPrint = sw::ms::DateTime2DTTM(pInf->GetPrinted().GetTime());
+        rDop.dttmCreated = sw::ms::DateTime2DTTM(pInf->GetCreationDate());
+        rDop.dttmRevised = sw::ms::DateTime2DTTM(pInf->GetModificationDate());
+        rDop.dttmLastPrint = sw::ms::DateTime2DTTM(pInf->GetPrintDate());
     }
 
     rDop.fProtEnabled = rWrt.pSepx ? rWrt.pSepx->DocumentIsProtected() : 0;
@@ -2483,22 +2483,15 @@ void SwWW8Writer::PrepareStorage()
     SvStorageStreamRef xStor( pStg->OpenSotStream(sCompObj) );
     xStor->Write( pData, nLen );
 
-    pInfo = pDoc->GetInfo ();
+    pInfo = pDoc->GetDocumentInfo ();
     pDocShell = pDoc->GetDocShell ();
 
+    GDIMetaFile *pMetaFile=0;
     if (pDocShell)
-    {
-        GDIMetaFile *pMetaFile;
-
         pMetaFile = pDocShell->GetPreviewMetaFile (sal_False);
-        if (pMetaFile)
-        {
-            pInfo->SetThumbnailMetaFile (*pMetaFile);
-            delete pMetaFile;
-        }
-    }
 
-    pInfo->SavePropertySet( pStg );   // DocInfo
+    pInfo->SavePropertySet( pStg, pMetaFile );   // DocInfo
+    delete pMetaFile;
 }
 
 ULONG SwWW8Writer::WriteStorage()
