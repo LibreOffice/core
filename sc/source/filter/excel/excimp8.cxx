@@ -4,9 +4,9 @@
  *
  *  $RCSfile: excimp8.cxx,v $
  *
- *  $Revision: 1.119 $
+ *  $Revision: 1.120 $
  *
- *  last change: $Author: hr $ $Date: 2007-06-27 13:45:16 $
+ *  last change: $Author: obo $ $Date: 2007-07-17 13:33:21 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -70,6 +70,8 @@
 #ifndef _SOT_EXCHANGE_HXX
 #include <sot/exchange.hxx>
 #endif
+
+#include <sfx2/docinf.hxx>
 
 #include <tools/string.hxx>
 #include <tools/urlobj.hxx>
@@ -344,7 +346,6 @@ void ImportExcel8::PostDocLoad( void )
             SfxDocumentInfo& rOldDocInfo = pShell->GetDocInfo();
             aNewDocInfo.LoadPropertySet( GetRootStorage() );
             rOldDocInfo = aNewDocInfo;
-            pShell->Broadcast( SfxDocumentInfoHint( &rOldDocInfo ) );
         }
     }
 
