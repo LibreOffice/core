@@ -4,9 +4,9 @@
  *
  *  $RCSfile: sdmod1.cxx,v $
  *
- *  $Revision: 1.44 $
+ *  $Revision: 1.45 $
  *
- *  last change: $Author: kz $ $Date: 2007-05-10 15:25:18 $
+ *  last change: $Author: obo $ $Date: 2007-07-17 13:01:04 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -76,6 +76,8 @@
 #ifndef _SVX_PAPERINF_HXX //autogen
 #include <svx/paperinf.hxx>
 #endif
+
+#include <sfx2/docinf.hxx>
 
 #ifndef _EEITEM_HXX
 #include <svx/eeitem.hxx>
@@ -746,18 +748,8 @@ SfxFrame* SdModule::ExecuteNewDocument( SfxRequest& rReq )
 
                             // clear document info
                             SfxDocumentInfo& rInfo = pDocShell->GetDocInfo();
-
-                            SfxStamp aCreated;
-                            SvtUserOptions aOptions;
-                            aCreated.SetName( aOptions.GetFullName() );
-                            rInfo.SetCreated( aCreated );
-
-                            SfxStamp aInvalid( TIMESTAMP_INVALID_DATETIME );
-                            rInfo.SetChanged( aInvalid );
-                            rInfo.SetPrinted( aInvalid );
-                            rInfo.SetTime( 0L );
-                            rInfo.SetDocumentNumber( 1 );
-                            rInfo.SetUseUserData( TRUE );
+                            rInfo.ResetUserData( SvtUserOptions().GetFullName() );
+                            pDocShell->SetUseUserData(TRUE);
 
                             // #94652# clear UNDO stack after autopilot
                             SfxUndoManager* pUndoManager = pDocShell->GetUndoManager();
