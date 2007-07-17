@@ -2,11 +2,11 @@
  *
  *  OpenOffice.org - a multi-platform office productivity suite
  *
- *  $RCSfile: eventqueue.hxx,v $
+ *  $RCSfile: eventqueue.hxx,v $o
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: kz $ $Date: 2006-12-13 15:56:39 $
+ *  last change: $Author: obo $ $Date: 2007-07-17 15:06:47 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -33,17 +33,19 @@
  *
  ************************************************************************/
 
-#ifndef _SLIDESHOW_EVENTQUEUE_HXX
-#define _SLIDESHOW_EVENTQUEUE_HXX
+#ifndef INCLUDED_SLIDESHOW_EVENTQUEUE_HXX
+#define INCLUDED_SLIDESHOW_EVENTQUEUE_HXX
 
 #include <canvas/elapsedtime.hxx>
+#include <osl/mutex.hxx>
 
+#include "event.hxx"
+
+#include <boost/noncopyable.hpp>
+#include <functional>
 #include <queue>
 #include <vector>
-#include <event.hxx>
 
-#include <boost/utility.hpp> // for boost::noncopyable
-#include <functional>
 
 /* Definition of ActivitiesQueue class */
 
@@ -124,6 +126,8 @@ namespace slideshow
             getTimer() const { return mpTimer; }
 
         private:
+            mutable ::osl::Mutex      maMutex;
+
             struct EventEntry : public ::std::unary_function<EventEntry, bool>
             {
                 EventSharedPtr  pEvent;
@@ -149,4 +153,4 @@ namespace slideshow
 
     }
 }
-#endif /* _SLIDESHOW_EVENTQUEUE_HXX */
+#endif /* INCLUDED_SLIDESHOW_EVENTQUEUE_HXX */
