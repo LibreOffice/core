@@ -4,9 +4,9 @@
  *
  *  $RCSfile: docufld.cxx,v $
  *
- *  $Revision: 1.42 $
+ *  $Revision: 1.43 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 21:11:11 $
+ *  last change: $Author: obo $ $Date: 2007-07-17 13:07:24 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -108,6 +108,8 @@
 #ifndef INCLUDED_SVTOOLS_USEROPTIONS_HXX
 #include <svtools/useroptions.hxx>
 #endif
+
+#include <sfx2/docinf.hxx>
 
 #ifndef _SHL_HXX //autogen
 #include <tools/shl.hxx>
@@ -1036,7 +1038,7 @@ String SwDocInfoFieldType::Expand( sal_uInt16 nSub, sal_uInt32 nFormat,
 {
     String aStr;
     LocaleDataWrapper *pAppLocalData = 0, *pLocalData = 0;
-    const SfxDocumentInfo*  pInf = GetDoc()->GetInfo();
+    const SfxDocumentInfo*  pInf = GetDoc()->GetDocumentInfo();
 
     sal_uInt16 nExtSub = nSub & 0xff00;
     nSub &= 0xff;   // ExtendedSubTypes nicht beachten
@@ -1050,7 +1052,7 @@ String SwDocInfoFieldType::Expand( sal_uInt16 nSub, sal_uInt32 nFormat,
     case DI_INFO1:
     case DI_INFO2:
     case DI_INFO3:
-    case DI_INFO4:  aStr = pInf->GetUserKey(nSub - DI_INFO1).GetWord();break;
+    case DI_INFO4:  aStr = pInf->GetUserKeyWord(nSub - DI_INFO1);break;
     case DI_DOCNO:  aStr = String::CreateFromInt32(
                                                 pInf->GetDocumentNumber() );
                     break;
@@ -1069,27 +1071,33 @@ String SwDocInfoFieldType::Expand( sal_uInt16 nSub, sal_uInt32 nFormat,
 
     default:
         {
-            SfxStamp aTmp;
-            aTmp = pInf->GetCreated();
+            String aName( pInf->GetAuthor() );
+            DateTime aDate( pInf->GetCreationDate() );
             if( nSub == DI_CREATE )
                 ;       // das wars schon!!
             else if( nSub == DI_CHANGE &&
-                    (pInf->GetChanged().GetTime() != aTmp.GetTime() ||
+                    (pInf->GetModificationDate() != aDate ||
                     (nExtSub & ~DI_SUB_FIXED) == DI_SUB_AUTHOR &&
                     pInf->GetDocumentNumber() > 1) )
-                aTmp = pInf->GetChanged();
+            {
+                aName = pInf->GetModificationAuthor();
+                aDate = pInf->GetModificationDate();
+            }
             else if( nSub == DI_PRINT &&
-                    pInf->GetPrinted().GetTime() != aTmp.GetTime() )
-                aTmp = pInf->GetPrinted();
+                    pInf->GetPrintDate() != aDate )
+            {
+                aName = pInf->GetPrintedBy();
+                aDate = pInf->GetPrintDate();
+            }
             else
                 break;
 
-            if (aTmp.IsValid())
+            if (aDate.IsValid())
             {
                 switch (nExtSub & ~DI_SUB_FIXED)
                 {
                 case DI_SUB_AUTHOR:
-                    aStr = aTmp.GetName();
+                    aStr = aName;
                     break;
 
                 case DI_SUB_TIME:
@@ -1097,14 +1105,14 @@ String SwDocInfoFieldType::Expand( sal_uInt16 nSub, sal_uInt32 nFormat,
                     {
                         lcl_GetLocalDataWrapper( nLang, &pAppLocalData,
                                                         &pLocalData );
-                        aStr = pLocalData->getTime( aTmp.GetTime(),
+                        aStr = pLocalData->getTime( aDate,
                                                     sal_False, sal_False);
                     }
                     else
                     {
                         // Numberformatter anwerfen!
                         double fVal = SwDateTimeField::GetDateTime( GetDoc(),
-                                                    aTmp.GetTime());
+                                                    aDate);
                         aStr = ExpandValue(fVal, nFormat, nLang);
                     }
                     break;
@@ -1114,13 +1122,13 @@ String SwDocInfoFieldType::Expand( sal_uInt16 nSub, sal_uInt32 nFormat,
                     {
                         lcl_GetLocalDataWrapper( nLang, &pAppLocalData,
                                                  &pLocalData );
-                        aStr = pLocalData->getDate( aTmp.GetTime() );
+                        aStr = pLocalData->getDate( aDate );
                     }
                     else
                     {
                         // Numberformatter anwerfen!
                         double fVal = SwDateTimeField::GetDateTime( GetDoc(),
-                                                    aTmp.GetTime());
+                                                    aDate);
                         aStr = ExpandValue(fVal, nFormat, nLang);
                     }
                     break;
@@ -1173,8 +1181,8 @@ String SwDocInfoField::GetCntnt(sal_Bool bName) const
             case DI_INFO3:
             case DI_INFO4:
             {
-                const SfxDocumentInfo*  pInf = GetDoc()->GetInfo();
-                aStr += pInf->GetUserKey(nSub - DI_INFO1).GetTitle();
+                const SfxDocumentInfo*  pInf = GetDoc()->GetDocumentInfo();
+                aStr += pInf->GetUserKeyTitle(nSub - DI_INFO1);
             }
             break;
 
