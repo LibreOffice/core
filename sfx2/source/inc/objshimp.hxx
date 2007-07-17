@@ -4,9 +4,9 @@
  *
  *  $RCSfile: objshimp.hxx,v $
  *
- *  $Revision: 1.37 $
+ *  $Revision: 1.38 $
  *
- *  last change: $Author: hr $ $Date: 2007-06-27 23:28:02 $
+ *  last change: $Author: obo $ $Date: 2007-07-17 13:45:43 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -116,7 +116,11 @@ struct SfxObjectShell_Impl
                         bModelInitialized:1, // whether the related model is initialized
                         bPreserveVersions:1,
                         m_bMacroSignBroken:1, // whether the macro signature was explicitly broken
-                        m_bNoBasicCapabilities:1;
+                        m_bNoBasicCapabilities:1,
+                        bQueryLoadTemplate:1,
+                        bLoadReadonly:1,
+                        bUseUserData:1,
+                        bSaveVersionOnClose:1;
 
     String              aNewName;  // Der Name, unter dem das Doc gespeichert
                                    // werden soll
@@ -148,7 +152,7 @@ struct SfxObjectShell_Impl
     SvRefBaseRef            xHeaderAttributes;
     sal_Bool                bHiddenLockedByAPI;
     sal_Bool                bInCloseEvent;
-    ::com::sun::star::uno::Reference< ::com::sun::star::frame::XModel >             xModel;
+    ::com::sun::star::uno::Reference< ::com::sun::star::frame::XModel > xModel;
     sal_uInt16              nStyleFilter;
     sal_Int16                nMacroMode;
     sal_Bool                bDisposing;
