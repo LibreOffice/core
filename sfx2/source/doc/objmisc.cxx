@@ -4,9 +4,9 @@
  *
  *  $RCSfile: objmisc.cxx,v $
  *
- *  $Revision: 1.90 $
+ *  $Revision: 1.91 $
  *
- *  last change: $Author: ihi $ $Date: 2007-07-11 13:12:35 $
+ *  last change: $Author: obo $ $Date: 2007-07-17 13:43:50 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -247,11 +247,7 @@ void SfxObjectShell::NotifyReloadAvailable()
 SfxDocumentInfo& SfxObjectShell::GetDocInfo()
 {
     if( !pImp->pDocInfo )
-    {
-        pImp->pDocInfo = new SfxDocumentInfo;
-        pImp->pDocInfo->SetReadOnly( IsReadOnly() );
-    }
-
+        pImp->pDocInfo = new SfxDocumentInfo(this);
     return *pImp->pDocInfo;
 }
 
@@ -419,22 +415,11 @@ void SfxObjectShell::SetModified( sal_Bool bModifiedP )
         pImp->m_bIsModified = bModifiedP;
         ModifyChanged();
     }
-
-//REMOVE        pImp->m_aModifiedTime = Time();
 }
 
 //-------------------------------------------------------------------------
 
 void SfxObjectShell::ModifyChanged()
-
-/*  [Beschreibung]
-
-    Diese virtuelle Methode wird aus der virtuellen Basisklasse SvPersist
-    gerufen, wenn sich das Modified-Flag ge"andert hat. Diese Querverbindung
-    ist notwendig, da aus einem Zweig einer virtuellen Vererbung nicht
-    quer un den anderen gerufen werden kann.
-*/
-
 {
     if ( pImp->bClosing )
         // SetModified aus dem dispose des Models!
@@ -505,8 +490,8 @@ void SfxObjectShell::SetReadOnlyUI( sal_Bool bReadOnly )
     if ( bWasRO != IsReadOnly() )
     {
         Broadcast( SfxSimpleHint(SFX_HINT_MODECHANGED) );
-        if ( pImp->pDocInfo )
-            pImp->pDocInfo->SetReadOnly( IsReadOnly() );
+        //if ( pImp->pDocInfo )
+        //  pImp->pDocInfo->SetReadOnly( IsReadOnly() );
     }
 }
 
@@ -954,7 +939,7 @@ void SfxObjectShell::SetProgress_Impl
 void SfxObjectShell::PostActivateEvent_Impl( SfxViewFrame* pFrame )
 {
     SfxApplication* pSfxApp = SFX_APP();
-    if ( !pSfxApp->IsDowning() && !IsLoading() && (!pFrame || !pFrame->GetFrame()->IsClosing_Impl() ) )
+    if ( !pSfxApp->IsDowning() && !IsLoading() && pFrame && !pFrame->GetFrame()->IsClosing_Impl() )
     {
         SFX_ITEMSET_ARG( pMedium->GetItemSet(), pHiddenItem, SfxBoolItem, SID_HIDDEN, sal_False );
         if ( !pHiddenItem || !pHiddenItem->GetValue() )
@@ -1116,11 +1101,6 @@ void SfxObjectShell::CheckMacrosOnLoading_Impl()
 //-------------------------------------------------------------------------
 void SfxObjectShell::SetAutoLoad(
     const INetURLObject& rUrl, sal_uInt32 nTime, sal_Bool bReload )
-/*  [Beschreibung ]
-    Hiermit wird automatisches Laden der Url rUrl nTime
-    Millisekunden nach Aufruf von FinishedLoading angefordert. bReload
-    bestimmt, ob das Dokument aus dem Cache geladen werden soll oder
-    nicht.  */
 {
     if ( pImp->pReloadTimer )
         DELETEZ(pImp->pReloadTimer);
