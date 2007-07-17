@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ViewShellBase.cxx,v $
  *
- *  $Revision: 1.38 $
+ *  $Revision: 1.39 $
  *
- *  last change: $Author: rt $ $Date: 2007-07-06 13:14:18 $
+ *  last change: $Author: obo $ $Date: 2007-07-17 13:02:39 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -661,10 +661,9 @@ SfxPrinter* ViewShellBase::GetPrinter (BOOL bCreate)
 
 USHORT ViewShellBase::SetPrinter (
     SfxPrinter* pNewPrinter,
-
-    USHORT nDiffFlags)
+    USHORT nDiffFlags, bool bIsAPI )
 {
-    return mpPrintManager->SetPrinter (pNewPrinter, nDiffFlags);
+    return mpPrintManager->SetPrinter (pNewPrinter, nDiffFlags,bIsAPI);
 }
 
 
