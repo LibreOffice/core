@@ -4,9 +4,9 @@
  *
  *  $RCSfile: document.cxx,v $
  *
- *  $Revision: 1.78 $
+ *  $Revision: 1.79 $
  *
- *  last change: $Author: rt $ $Date: 2007-07-03 15:47:56 $
+ *  last change: $Author: obo $ $Date: 2007-07-17 13:32:52 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -4377,10 +4377,8 @@ BOOL ScDocument::SavePool( SvStream& rStream ) const
     //  Compress-Mode fuer Grafiken in Brush-Items (Hintergrund im Seitenformat)
 
     USHORT nComprMode = rStream.GetCompressMode() & ~(COMPRESSMODE_ZBITMAP | COMPRESSMODE_NATIVE);
-    SvtSaveOptions aSaveOpt;
-    SvtSaveOptions::SaveGraphicsMode eMode = aSaveOpt.GetSaveGraphicsMode();
-    BOOL bNative = ( eMode == SvtSaveOptions::SaveGraphicsOriginal );
-    BOOL bCompr = bNative || ( eMode == SvtSaveOptions::SaveGraphicsCompressed );
+    BOOL bNative = FALSE;
+    BOOL bCompr = FALSE;
 
     if ( rStream.GetVersion() >= SOFFICE_FILEFORMAT_40 && bCompr )
         nComprMode |= COMPRESSMODE_ZBITMAP;             //  komprimiert ab 4.0
