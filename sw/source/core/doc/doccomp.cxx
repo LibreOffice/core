@@ -4,9 +4,9 @@
  *
  *  $RCSfile: doccomp.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: vg $ $Date: 2007-05-25 13:00:37 $
+ *  last change: $Author: obo $ $Date: 2007-07-17 13:06:04 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1456,13 +1456,16 @@ void SwCompareData::SetRedlinesToDoc( BOOL bUseDocInfo, const SwDoc& rSrcDoc )
     const SfxDocumentInfo* pDocInfo;
     if( bUseDocInfo && 0 != (pDocInfo = rDoc.GetpInfo()) )
     {
-        SfxStamp aTmp( 1 == pDocInfo->GetDocumentNumber()
-                            ? pDocInfo->GetCreated()
-                            : pDocInfo->GetChanged() );
-        if( aTmp.GetName().Len() )
+        String aTmp( 1 == pDocInfo->GetDocumentNumber()
+                            ? pDocInfo->GetAuthor()
+                            : pDocInfo->GetModificationAuthor() );
+        DateTime aDT( 1 == pDocInfo->GetDocumentNumber()
+                            ? pDocInfo->GetCreationDate()
+                            : pDocInfo->GetModificationDate() );
+        if( aTmp.Len() )
         {
-            nAuthor = rDoc.InsertRedlineAuthor( aTmp.GetName() );
-            aTimeStamp = aTmp.GetTime();
+            nAuthor = rDoc.InsertRedlineAuthor( aTmp );
+            aTimeStamp = aDT;
         }
     }
 
