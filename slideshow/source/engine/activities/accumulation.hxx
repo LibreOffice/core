@@ -4,9 +4,9 @@
  *
  *  $RCSfile: accumulation.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: kz $ $Date: 2006-12-13 15:24:08 $
+ *  last change: $Author: obo $ $Date: 2007-07-17 14:43:53 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -33,8 +33,8 @@
  *
  ************************************************************************/
 
-#ifndef _SLIDESHOW_ACCUMULATION_HXX
-#define _SLIDESHOW_ACCUMULATION_HXX
+#ifndef INCLUDED_SLIDESHOW_ACCUMULATION_HXX
+#define INCLUDED_SLIDESHOW_ACCUMULATION_HXX
 
 #include <sal/types.h>
 #include <rtl/ustring.hxx>
@@ -97,4 +97,4 @@ namespace slideshow
     }
 }
 
-#endif /* _SLIDESHOW_ACCUMULATION_HXX */
+#endif /* INCLUDED_SLIDESHOW_ACCUMULATION_HXX */
