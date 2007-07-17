@@ -4,9 +4,9 @@
  *
  *  $RCSfile: paralleltimecontainer.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: kz $ $Date: 2006-12-13 15:34:00 $
+ *  last change: $Author: obo $ $Date: 2007-07-17 14:49:59 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -38,9 +38,8 @@
 
 #include "paralleltimecontainer.hxx"
 #include "delayevent.hxx"
-#include "boost/bind.hpp"
-#include "boost/mem_fn.hpp"
-#include <algorithm>
+
+#include <boost/bind.hpp>
 
 namespace slideshow {
 namespace internal {
