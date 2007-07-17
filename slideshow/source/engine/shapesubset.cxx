@@ -4,9 +4,9 @@
  *
  *  $RCSfile: shapesubset.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: kz $ $Date: 2006-12-13 15:19:38 $
+ *  last change: $Author: obo $ $Date: 2007-07-17 14:39:43 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -50,16 +50,16 @@ namespace slideshow
 {
     namespace internal
     {
-        ShapeSubset::ShapeSubset( const AttributableShapeSharedPtr& rOriginalShape,
-                                  const DocTreeNode&                rTreeNode,
-                                  const LayerManagerSharedPtr&      rLayerManager ) :
+        ShapeSubset::ShapeSubset( const AttributableShapeSharedPtr&       rOriginalShape,
+                                  const DocTreeNode&                      rTreeNode,
+                                  const SubsettableShapeManagerSharedPtr& rShapeManager ) :
             mpOriginalShape( rOriginalShape ),
             mpSubsetShape(),
             maTreeNode( rTreeNode ),
-            mpLayerManager( rLayerManager )
+            mpShapeManager( rShapeManager )
         {
-            ENSURE_AND_THROW( mpLayerManager,
-                              "ShapeSubset::ShapeSubset(): Invalid layer manager" );
+            ENSURE_AND_THROW( mpShapeManager,
+                              "ShapeSubset::ShapeSubset(): Invalid shape manager" );
         }
 
         ShapeSubset::ShapeSubset( const ShapeSubsetSharedPtr&   rOriginalSubset,
@@ -69,25 +69,25 @@ namespace slideshow
                              rOriginalSubset->mpOriginalShape ),
             mpSubsetShape(),
             maTreeNode( rTreeNode ),
-            mpLayerManager( rOriginalSubset->mpLayerManager )
+            mpShapeManager( rOriginalSubset->mpShapeManager )
         {
-            ENSURE_AND_THROW( mpLayerManager,
-                              "ShapeSubset::ShapeSubset(): Invalid layer manager" );
+            ENSURE_AND_THROW( mpShapeManager,
+                              "ShapeSubset::ShapeSubset(): Invalid shape manager" );
             ENSURE_AND_THROW( rOriginalSubset->maTreeNode.isEmpty() ||
                               (rTreeNode.getStartIndex() >= rOriginalSubset->maTreeNode.getStartIndex() &&
                                rTreeNode.getEndIndex() <= rOriginalSubset->maTreeNode.getEndIndex()),
                               "ShapeSubset::ShapeSubset(): Subset is bigger than parent" );
         }
 
-        ShapeSubset::ShapeSubset( const AttributableShapeSharedPtr& rOriginalShape,
-                                  const LayerManagerSharedPtr&      rLayerManager ) :
+        ShapeSubset::ShapeSubset( const AttributableShapeSharedPtr&       rOriginalShape,
+                                  const SubsettableShapeManagerSharedPtr& rShapeManager ) :
             mpOriginalShape( rOriginalShape ),
             mpSubsetShape(),
             maTreeNode(),
-            mpLayerManager( rLayerManager )
+            mpShapeManager( rShapeManager )
         {
-            ENSURE_AND_THROW( mpLayerManager,
-                              "ShapeSubset::ShapeSubset(): Invalid layer manager" );
+            ENSURE_AND_THROW( mpShapeManager,
+                              "ShapeSubset::ShapeSubset(): Invalid shape manager" );
         }
 
         ShapeSubset::~ShapeSubset()
@@ -97,7 +97,8 @@ namespace slideshow
                 // if not done yet: revoke subset from original
                 disableSubsetShape();
             }
-            catch (uno::Exception &) {
+            catch (uno::Exception &)
+            {
                 OSL_ENSURE( false, rtl::OUStringToOString(
                                 comphelper::anyToString(
                                     cppu::getCaughtException() ),
@@ -115,7 +116,7 @@ namespace slideshow
             if( !mpSubsetShape &&
                 !maTreeNode.isEmpty() )
             {
-                mpSubsetShape = mpLayerManager->getSubsetShape(
+                mpSubsetShape = mpShapeManager->getSubsetShape(
                     mpOriginalShape,
                     maTreeNode );
             }
@@ -127,7 +128,7 @@ namespace slideshow
         {
             if( mpSubsetShape )
             {
-                mpLayerManager->revokeSubset( mpOriginalShape,
+                mpShapeManager->revokeSubset( mpOriginalShape,
                                               mpSubsetShape );
                 mpSubsetShape.reset();
             }
