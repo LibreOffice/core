@@ -4,9 +4,9 @@
  *
  *  $RCSfile: slideshowviewimpl.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: rt $ $Date: 2007-01-29 14:51:34 $
+ *  last change: $Author: obo $ $Date: 2007-07-17 14:30:36 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -297,6 +297,16 @@ void SAL_CALL SlideShowView::disposing( const lang::EventObject& ) throw(Runtime
     }
 }
 
+static void updateimpl( ::osl::ClearableMutexGuard& rGuard, SlideshowImpl* pSlideShow )
+{
+    if( pSlideShow )
+    {
+        SlideShowImplGuard aSLGuard( pSlideShow );
+        rGuard.clear();
+        pSlideShow->startUpdateTimer();
+    }
+}
+
 void SAL_CALL SlideShowView::paint( const awt::PaintEvent& e ) throw (RuntimeException)
 {
     ::osl::ClearableMutexGuard aGuard( m_aMutex );
@@ -316,6 +326,7 @@ void SAL_CALL SlideShowView::paint( const awt::PaintEvent& e ) throw (RuntimeExc
         awt::PaintEvent aEvent( e );
         aEvent.Source = static_cast< ::cppu::OWeakObject* >( this );
         mpPaintListeners->notify( aEvent );
+        updateimpl( aGuard, mpSlideShow ); // warning: clears guard!
     }
 }
 
@@ -491,16 +502,6 @@ void SAL_CALL SlideShowView::setMouseCursor( sal_Int16 nPointerShape ) throw (Ru
 
     if( mxWindowPeer.is() )
         mxWindowPeer->setPointer( mxPointer );
-}
-
-static void updateimpl( ::osl::ClearableMutexGuard& rGuard, SlideshowImpl* pSlideShow )
-{
-    if( pSlideShow )
-    {
-        SlideShowImplGuard aSLGuard( pSlideShow );
-        rGuard.clear();
-        pSlideShow->startUpdateTimer();
-    }
 }
 
 // XWindowListener methods
