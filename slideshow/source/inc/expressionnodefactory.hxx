@@ -4,9 +4,9 @@
  *
  *  $RCSfile: expressionnodefactory.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: kz $ $Date: 2006-12-13 15:57:15 $
+ *  last change: $Author: obo $ $Date: 2007-07-17 15:07:11 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -33,10 +33,10 @@
  *
  ************************************************************************/
 
-#ifndef _SLIDESHOW_EXPRESSIONNODEFACTORY_HXX
-#define _SLIDESHOW_EXPRESSIONNODEFACTORY_HXX
+#ifndef INCLUDED_SLIDESHOW_EXPRESSIONNODEFACTORY_HXX
+#define INCLUDED_SLIDESHOW_EXPRESSIONNODEFACTORY_HXX
 
-#include <expressionnode.hxx>
+#include "expressionnode.hxx"
 
 #include <basegfx/vector/b2dsize.hxx>
 #include <basegfx/range/b2drectangle.hxx>
@@ -87,4 +87,4 @@ namespace slideshow
     }
 }
 
-#endif /* _SLIDESHOW_EXPRESSIONNODEFACTORY_HXX */
+#endif /* INCLUDED_SLIDESHOW_EXPRESSIONNODEFACTORY_HXX */

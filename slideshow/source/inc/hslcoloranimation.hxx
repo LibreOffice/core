@@ -4,9 +4,9 @@
  *
  *  $RCSfile: hslcoloranimation.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: kz $ $Date: 2006-12-13 15:58:03 $
+ *  last change: $Author: obo $ $Date: 2007-07-17 15:08:10 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -33,11 +33,11 @@
  *
  ************************************************************************/
 
-#ifndef _SLIDESHOW_HSLCOLORANIMATION_HXX
-#define _SLIDESHOW_HSLCOLORANIMATION_HXX
+#ifndef INCLUDED_SLIDESHOW_HSLCOLORANIMATION_HXX
+#define INCLUDED_SLIDESHOW_HSLCOLORANIMATION_HXX
 
-#include <animation.hxx>
-#include <hslcolor.hxx>
+#include "animation.hxx"
+#include "hslcolor.hxx"
 
 
 /* Definition of HSLColorAnimation interface */
@@ -82,4 +82,4 @@ namespace slideshow
     }
 }
 
-#endif /* _SLIDESHOW_HSLCOLORANIMATION_HXX */
+#endif /* INCLUDED_SLIDESHOW_HSLCOLORANIMATION_HXX */
