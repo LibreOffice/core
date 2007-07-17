@@ -4,9 +4,9 @@
  *
  *  $RCSfile: discreteactivitybase.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: kz $ $Date: 2006-12-13 15:27:00 $
+ *  last change: $Author: obo $ $Date: 2007-07-17 14:45:35 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -33,11 +33,11 @@
  *
  ************************************************************************/
 
-#ifndef _SLIDESHOW_DISCRETEACTIVITYBASE_HXX
-#define _SLIDESHOW_DISCRETEACTIVITYBASE_HXX
+#ifndef INCLUDED_SLIDESHOW_DISCRETEACTIVITYBASE_HXX
+#define INCLUDED_SLIDESHOW_DISCRETEACTIVITYBASE_HXX
 
-#include <activitybase.hxx>
-#include <wakeupevent.hxx>
+#include "activitybase.hxx"
+#include "wakeupevent.hxx"
 
 #include <vector>
 
@@ -92,4 +92,4 @@ namespace slideshow
     }
 }
 
-#endif /* _SLIDESHOW_DISCRETEACTIVITYBASE_HXX */
+#endif /* INCLUDED_SLIDESHOW_DISCRETEACTIVITYBASE_HXX */

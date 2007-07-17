@@ -4,9 +4,9 @@
  *
  *  $RCSfile: simplecontinuousactivitybase.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: kz $ $Date: 2006-12-13 15:27:48 $
+ *  last change: $Author: obo $ $Date: 2007-07-17 14:46:14 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -33,10 +33,10 @@
  *
  ************************************************************************/
 
-#ifndef _SLIDESHOW_SIMPLECONTINUOUSACTIVITYBASE_HXX
-#define _SLIDESHOW_SIMPLECONTINUOUSACTIVITYBASE_HXX
+#ifndef INCLUDED_SLIDESHOW_SIMPLECONTINUOUSACTIVITYBASE_HXX
+#define INCLUDED_SLIDESHOW_SIMPLECONTINUOUSACTIVITYBASE_HXX
 
-#include <activitybase.hxx>
+#include "activitybase.hxx"
 #include <canvas/elapsedtime.hxx>
 
 namespace slideshow
@@ -92,4 +92,4 @@ namespace slideshow
     }
 }
 
-#endif /* _SLIDESHOW_SIMPLECONTINUOUSACTIVITYBASE_HXX */
+#endif /* INCLUDED_SLIDESHOW_SIMPLECONTINUOUSACTIVITYBASE_HXX */
