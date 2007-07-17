@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ww8par2.cxx,v $
  *
- *  $Revision: 1.130 $
+ *  $Revision: 1.131 $
  *
- *  last change: $Author: kz $ $Date: 2007-05-10 16:11:06 $
+ *  last change: $Author: obo $ $Date: 2007-07-17 13:09:51 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -4789,7 +4789,7 @@ void SwWW8ImplReader::ReadDocInfo()
             pNeu = new SfxDocumentInfo();
 
         pNeu->LoadPropertySet( pStg );  // DocInfo laden
-        rDoc.SetInfo( *pNeu );
+        rDoc.SetDocumentInfo( *pNeu );
         delete pNeu;
     }
 }
