@@ -4,9 +4,9 @@
  *
  *  $RCSfile: viewprn.cxx,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: hr $ $Date: 2007-06-27 23:36:24 $
+ *  last change: $Author: obo $ $Date: 2007-07-17 13:46:22 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -717,9 +717,10 @@ void SfxViewShell::ExecPrint_Impl( SfxRequest &rReq )
             // refresh document info
             SfxObjectShell *pObjSh = GetObjectShell();
             SfxDocumentInfo *pInfo = &pObjSh->GetDocInfo();
-            SfxStamp aOldStamp = pInfo->GetPrinted();
+            String aLastPrintedBy = pInfo->GetPrintedBy();
+            DateTime aLastPrinted = pInfo->GetPrintDate();
             String aUserName = SvtUserOptions().GetFullName();
-            if ( !pInfo->IsUseUserData() )
+            if ( !GetObjectShell()->IsUseUserData() )
                 aUserName.Erase();
 
             // Let the document stay nonmodified during the printing if the configuration says to do so
@@ -752,7 +753,8 @@ void SfxViewShell::ExecPrint_Impl( SfxRequest &rReq )
             else
             {
                 // printing not succesful, reset DocInfo
-                pInfo->SetPrinted(aOldStamp);
+                pInfo->SetPrintedBy(aLastPrintedBy);
+                pInfo->SetPrintDate(aLastPrinted);
                 pObjSh->Broadcast( SfxDocumentInfoHint( pInfo ) );
 
                 if ( nError != PRINTER_ABORT )
@@ -884,7 +886,7 @@ SfxPrinter* SfxViewShell::GetPrinter( BOOL /*bCreate*/ )
 
 //--------------------------------------------------------------------
 
-USHORT SfxViewShell::SetPrinter( SfxPrinter* /*pNewPrinter*/, USHORT /*nDiffFlags*/ )
+USHORT SfxViewShell::SetPrinter( SfxPrinter* /*pNewPrinter*/, USHORT /*nDiffFlags*/, bool )
 {
     return 0;
 }
