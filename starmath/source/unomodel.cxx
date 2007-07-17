@@ -4,9 +4,9 @@
  *
  *  $RCSfile: unomodel.cxx,v $
  *
- *  $Revision: 1.42 $
+ *  $Revision: 1.43 $
  *
- *  last change: $Author: kz $ $Date: 2007-06-18 16:34:02 $
+ *  last change: $Author: obo $ $Date: 2007-07-17 13:23:25 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -42,9 +42,6 @@
 #endif
 #ifndef _OSL_MUTEX_HXX_
 #include <osl/mutex.hxx>
-#endif
-#ifndef _SFXDOCINF_HXX
-#include <sfx2/docinf.hxx>
 #endif
 #ifndef _SFX_PRINTER_HXX
 #include <sfx2/printer.hxx>
@@ -695,7 +692,7 @@ void SmModel::_setPropertyValues(const PropertyMapEntry** ppEntries, const Any* 
                     throw IllegalArgumentException();
                 sal_Bool bReadonly = FALSE;
                 if ( *pValues >>= bReadonly )
-                    pDocSh->GetDocInfo().SetLoadReadonly( bReadonly );
+                    pDocSh->SetLoadReadonly( bReadonly );
                 break;
             }
             // <--
@@ -894,7 +891,7 @@ void SmModel::_getPropertyValues( const PropertyMapEntry **ppEntries, Any *pValu
             // --> PB 2004-08-25 #i33095# Security Options
             case HANDLE_LOAD_READONLY :
             {
-                 *pValue <<= pDocSh->GetDocInfo().IsLoadReadonly();
+                 *pValue <<= pDocSh->IsLoadReadonly();
                 break;
             }
             // <--
