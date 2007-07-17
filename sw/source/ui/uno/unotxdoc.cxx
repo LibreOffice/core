@@ -4,9 +4,9 @@
  *
  *  $RCSfile: unotxdoc.cxx,v $
  *
- *  $Revision: 1.120 $
+ *  $Revision: 1.121 $
  *
- *  last change: $Author: rt $ $Date: 2007-05-29 15:42:41 $
+ *  last change: $Author: obo $ $Date: 2007-07-17 13:13:07 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -464,6 +464,12 @@ SwXTextDocument::~SwXTextDocument()
         xNumFmtAgg = 0;
     }
 }
+
+uno::Reference< document::XDocumentInfo > SAL_CALL SwXTextDocument::getDocumentInfo() throw (::uno::RuntimeException)
+{
+    return pDocShell->GetDoc()->GetDocumentInfo()->GetInfo();
+}
+
 /*-- 18.12.98 11:55:08---------------------------------------------------
 
   -----------------------------------------------------------------------*/
@@ -3611,5 +3617,3 @@ void SwXDocumentPropertyHelper::onChange()
     if(m_pDoc)
        m_pDoc->SetModified();
 }
-
-
