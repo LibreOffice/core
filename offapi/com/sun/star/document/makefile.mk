@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.39 $
+#   $Revision: 1.40 $
 #
-#   last change: $Author: rt $ $Date: 2006-12-01 17:03:38 $
+#   last change: $Author: obo $ $Date: 2007-07-17 13:16:22 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -48,14 +48,15 @@ PACKAGE=com$/sun$/star$/document
 IDLFILES=\
     AmbigousFilterRequest.idl\
     BrokenPackageRequest.idl\
-    CorruptedFilterConfigurationException.idl\
+        CorruptedFilterConfigurationException.idl\
     DocumentInfo.idl\
+        DocumentProperties.idl\
     EventDescriptor.idl\
     EventObject.idl\
     Events.idl\
     ExportFilter.idl\
     ExtendedTypeDetection.idl\
-    ExtendedTypeDetectionFactory.idl\
+        ExtendedTypeDetectionFactory.idl\
     FilterAdapter.idl\
     FilterFactory.idl\
     FilterOptionsRequest.idl\
@@ -79,6 +80,7 @@ IDLFILES=\
     XDocumentInfo.idl\
     XDocumentInfoSupplier.idl\
     XDocumentInsertable.idl\
+        XDocumentProperties.idl\
     XDocumentSubStorageSupplier.idl\
     XEmbeddedObjectResolver.idl\
     XEmbeddedObjectSupplier.idl\
