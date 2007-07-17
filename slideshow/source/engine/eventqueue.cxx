@@ -4,9 +4,9 @@
  *
  *  $RCSfile: eventqueue.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: kz $ $Date: 2006-12-13 15:15:23 $
+ *  last change: $Author: obo $ $Date: 2007-07-17 14:36:13 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -48,9 +48,6 @@
 #include <slideshowexceptions.hxx>
 
 #include <boost/shared_ptr.hpp>
-#include <boost/mem_fn.hpp>
-#include <queue>
-#include <algorithm>
 #include <limits>
 
 
@@ -70,7 +67,8 @@ namespace slideshow
 
         EventQueue::EventQueue(
             boost::shared_ptr<canvas::tools::ElapsedTime> const & pPresTimer )
-            : maEvents(),
+            : maMutex(),
+              maEvents(),
               maNextEvents(),
               mpTimer( pPresTimer )
         {
@@ -81,7 +79,8 @@ namespace slideshow
             // add in all that have been added explicitly for this round:
             EventEntryVector::const_iterator const iEnd( maNextEvents.end() );
             for ( EventEntryVector::const_iterator iPos( maNextEvents.begin() );
-                  iPos != iEnd; ++iPos ) {
+                  iPos != iEnd; ++iPos )
+            {
                 maEvents.push(*iPos);
             }
             EventEntryVector().swap( maNextEvents );
@@ -89,10 +88,12 @@ namespace slideshow
             // dispose event queue
             while( !maEvents.empty() )
             {
-                try {
+                try
+                {
                     maEvents.top().pEvent->dispose();
                 }
-                catch (uno::Exception &) {
+                catch (uno::Exception &)
+                {
                     OSL_ENSURE( false, rtl::OUStringToOString(
                                     comphelper::anyToString(
                                         cppu::getCaughtException() ),
@@ -104,6 +105,8 @@ namespace slideshow
 
         bool EventQueue::addEvent( const EventSharedPtr& rEvent )
         {
+            ::osl::MutexGuard aGuard( maMutex );
+
             ENSURE_AND_RETURN( rEvent,
                                "EventQueue::addEvent: event ptr NULL" );
 
@@ -123,6 +126,8 @@ namespace slideshow
 
         bool EventQueue::addEventForNextRound( EventSharedPtr const& rEvent )
         {
+            ::osl::MutexGuard aGuard( maMutex );
+
             ENSURE_AND_RETURN( rEvent.get() != NULL,
                                "EventQueue::addEvent: event ptr NULL" );
             maNextEvents.push_back(
@@ -133,11 +138,15 @@ namespace slideshow
 
         void EventQueue::forceEmpty()
         {
+            ::osl::MutexGuard aGuard( maMutex );
+
             process_(true);
         }
 
         void EventQueue::process()
         {
+            ::osl::MutexGuard aGuard( maMutex );
+
             process_(false);
         }
 
@@ -187,6 +196,10 @@ namespace slideshow
 
                         event.pEvent->fire();
                     }
+                    catch( uno::RuntimeException& )
+                    {
+                        throw;
+                    }
                     catch( uno::Exception& )
                     {
                         // catch anything here, we don't want
@@ -199,7 +212,10 @@ namespace slideshow
                         // since this will also capture segmentation
                         // violations and the like. In such a case, we
                         // still better let our clients now...
-                        OSL_TRACE( "::presentation::internal::EventQueue: Event threw a uno::Exception, action might not have been fully performed" );
+                        OSL_ENSURE( false,
+                                    rtl::OUStringToOString(
+                                        comphelper::anyToString( cppu::getCaughtException() ),
+                                        RTL_TEXTENCODING_UTF8 ).getStr() );
                     }
                     catch( SlideShowException& )
                     {
@@ -229,11 +245,15 @@ namespace slideshow
 
         bool EventQueue::isEmpty() const
         {
+            ::osl::MutexGuard aGuard( maMutex );
+
             return maEvents.empty();
         }
 
         double EventQueue::nextTimeout() const
         {
+            ::osl::MutexGuard aGuard( maMutex );
+
             // return time for next entry (if any)
             return isEmpty() ?
                 ::std::numeric_limits<double>::max() :
@@ -242,6 +262,8 @@ namespace slideshow
 
         void EventQueue::clear()
         {
+            ::osl::MutexGuard aGuard( maMutex );
+
             // TODO(P1): Maybe a plain vector and vector.swap will
             // be faster here. Profile.
             maEvents = ImplQueueType();
