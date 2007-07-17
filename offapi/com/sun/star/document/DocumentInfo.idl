@@ -4,9 +4,9 @@
  *
  *  $RCSfile: DocumentInfo.idl,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-07 23:01:20 $
+ *  last change: $Author: obo $ $Date: 2007-07-17 13:15:45 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -55,6 +55,9 @@
 #include <com/sun/star/beans/XPropertyContainer.idl>
 #endif
 
+#ifndef __com_sun_star_beans_NamedValue_idl__
+#include <com/sun/star/beans/NamedValue.idl>
+#endif
 #ifndef __com_sun_star_util_DateTime_idl__
 #include <com/sun/star/util/DateTime.idl>
 #endif
@@ -121,9 +124,22 @@ published service DocumentInfo
     [property] string Author;
 
     //-------------------------------------------------------------------------
-    /** identifies application was used to create or last modify the document
+    /** @deprecated
      */
-    [property] string Generator;
+    [property] boolean AutoloadEnabled;
+
+    //-------------------------------------------------------------------------
+    /** contains the number of seconds after which a specified
+        URL is to be loaded after the document is loaded into a desktop
+        frame
+     */
+    [property] long AutoloadSecs;
+
+    //-------------------------------------------------------------------------
+    /** contains the URL to load automatically after a
+        specified time after the document is loaded into a desktop frame
+     */
+    [property] string AutoloadURL;
 
     //-------------------------------------------------------------------------
     /** contains the date and time of the first time the
@@ -132,17 +148,14 @@ published service DocumentInfo
     [property] com::sun::star::util::DateTime CreationDate;
 
     //-------------------------------------------------------------------------
-    /** contains the title of the document
-     */
-    [property] string Title;
+    /** contains the name of the default frame into which
+        links should be loaded if no target is specified
 
-    //-------------------------------------------------------------------------
-    /** subject of document
-
-        @deprecated
-        use <member>DocumentInfo::Title</member> instead.
+        <p>
+        This applies to the autoload feature too, but to others as well.
+        </p>
      */
-    [property] string Subject;
+    [property] string DefaultTarget;
 
     //-------------------------------------------------------------------------
     /** contains a multi-line comment of the document
@@ -152,6 +165,30 @@ published service DocumentInfo
         </p>
      */
     [property] string Description;
+
+    //-------------------------------------------------------------------------
+    /** contains some statistics about the document
+
+        <p>
+        The exact name and type of the values depends on the document type
+        </p>
+     */
+    [property] sequence< com::sun::star::beans::NamedValue > DocumentStatistic;
+
+    //-------------------------------------------------------------------------
+    /** describes how often the document was edited and saved
+     */
+    [property] short EditingCycles;
+
+    //-------------------------------------------------------------------------
+    /** contains the net time of editing the document (in seconds)
+     */
+    [property] long EditingDuration;
+
+    //-------------------------------------------------------------------------
+    /** identifies application was used to create or last modify the document
+     */
+    [property] string Generator;
 
     //-------------------------------------------------------------------------
     /** contains a comma separated list of keywords for
@@ -188,19 +225,24 @@ published service DocumentInfo
     [property] com::sun::star::util::DateTime ModifyDate;
 
     //-------------------------------------------------------------------------
-    /** contains the name of the editor who was the last
-        person to print the document
-     */
-    [property] string PrintedBy;
-
-    //-------------------------------------------------------------------------
     /** contains the date and time of when the document was
         last printed
      */
     [property] com::sun::star::util::DateTime PrintDate;
 
     //-------------------------------------------------------------------------
-    /** contains the path and name of the template from
+    /** contains the name of the editor who was the last
+        person to print the document
+     */
+    [property] string PrintedBy;
+
+    //-------------------------------------------------------------------------
+    /** subject of document
+     */
+    [property] string Subject;
+
+    //-------------------------------------------------------------------------
+    /** contains logical name of the template from
         which the document was created
 
         <p>
@@ -211,93 +253,22 @@ published service DocumentInfo
     [property] string Template;
 
     //-------------------------------------------------------------------------
+    /** contains the file path name of the template from
+        which the document was created
+     */
+    [property] string TemplateFileName;
+
+    //-------------------------------------------------------------------------
     /** contains the date and time of when the document
         was created or updated from the template
      */
     [property] com::sun::star::util::DateTime TemplateDate;
 
     //-------------------------------------------------------------------------
-    /** contains the URL to load automatically after a
-        specified time after the document is loaded into a desktop frame
+    /** contains the title of the document
      */
-    [property] string AutoloadURL;
+    [property] string Title;
 
-    //-------------------------------------------------------------------------
-    /** contains the number of seconds after which a specified
-        URL is to be loaded after the document is loaded into a desktop
-        frame
-     */
-    [property] long AutoloadSecs;
-
-    //-------------------------------------------------------------------------
-    /** contains the name of the default frame into which
-        links should be loaded if no target is specified
-
-        <p>
-        This applies to the autoload feature too, but to others as well.
-        </p>
-     */
-    [property] string DefaultTarget;
-
-    //-------------------------------------------------------------------------
-    /** @deprecated
-     */
-    [property] string BlindCopiesTo;
-
-    //-------------------------------------------------------------------------
-    /** @deprecated
-     */
-    [property] string CopyTo;
-
-    //-------------------------------------------------------------------------
-    /** @deprecated
-     */
-    [property] string InReplyTo;
-
-    //-------------------------------------------------------------------------
-    /** @deprecated
-     */
-    [property] string Newsgroups;
-
-    //-------------------------------------------------------------------------
-    /** @deprecated
-     */
-    [property] string Original;
-
-    //-------------------------------------------------------------------------
-    /** @deprecated
-     */
-    [property] short Priority;
-
-    //-------------------------------------------------------------------------
-    /** @deprecated
-     */
-    [property] string Recipient;
-
-    //-------------------------------------------------------------------------
-    /** @deprecated
-     */
-    [property] string References;
-
-    //-------------------------------------------------------------------------
-    /** @deprecated
-     */
-    [property] string ReplyTo;
-
-    //-------------------------------------------------------------------------
-    /** contains the theme of the document.
-     */
-    [property] string Theme;
-
-    //-------------------------------------------------------------------------
-    /** @deprecated
-     */
-    [readonly, property] boolean IsEncrypted;
-
-    //-------------------------------------------------------------------------
-    /** @deprecated
-     */
-    [property] boolean AutoloadEnabled;
 };
 
 //=============================================================================
