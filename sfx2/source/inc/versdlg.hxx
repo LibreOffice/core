@@ -4,9 +4,9 @@
  *
  *  $RCSfile: versdlg.hxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: hr $ $Date: 2007-06-27 23:30:08 $
+ *  last change: $Author: obo $ $Date: 2007-07-17 13:45:57 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -85,6 +85,7 @@ class SfxVersionDialog : public SfxModalDialog
     SfxViewFrame*               pViewFrame;
     SfxVersionTableDtor*        mpTable;
     LocaleDataWrapper*          mpLocaleWrapper;
+    sal_Bool                    mbIsSaveVersionOnClose;
 
     DECL_LINK(                  DClickHdl_Impl, Control* );
     DECL_LINK(                  SelectHdl_Impl, Control* );
@@ -94,9 +95,9 @@ class SfxVersionDialog : public SfxModalDialog
     void                        RecalcDateColumn();
 
 public:
-                                SfxVersionDialog ( SfxViewFrame* pFrame,
-                                    Window *pParent );
+                                SfxVersionDialog ( SfxViewFrame* pFrame, sal_Bool );
     virtual                     ~SfxVersionDialog ();
+    sal_Bool                    IsSaveVersionOnClose() const { return mbIsSaveVersionOnClose; }
 };
 
 class SfxViewVersionDialog_Impl : public SfxModalDialog
@@ -115,6 +116,6 @@ class SfxViewVersionDialog_Impl : public SfxModalDialog
 public:
                                 SfxViewVersionDialog_Impl( Window *pParent,
                                     SfxVersionInfo& rInfo, BOOL bEdit );
-};
+ };
 
 #endif
