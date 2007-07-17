@@ -4,9 +4,9 @@
  *
  *  $RCSfile: transitiontools.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: kz $ $Date: 2006-12-13 15:48:17 $
+ *  last change: $Author: obo $ $Date: 2007-07-17 15:00:38 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -33,8 +33,8 @@
  *
  ************************************************************************/
 
-#ifndef _SLIDESHOW_TRANSITIONTOOLS_HXX
-#define _SLIDESHOW_TRANSITIONTOOLS_HXX
+#ifndef INCLUDED_SLIDESHOW_TRANSITIONTOOLS_HXX
+#define INCLUDED_SLIDESHOW_TRANSITIONTOOLS_HXX
 
 #include <basegfx/numeric/ftools.hxx>
 #include <basegfx/polygon/b2dpolygon.hxx>
@@ -60,4 +60,4 @@ namespace internal {
 }
 }
 
-#endif /* _SLIDESHOW_TRANSITIONTOOLS_HXX */
+#endif /* INCLUDED_SLIDESHOW_TRANSITIONTOOLS_HXX */
