@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.114 $
+#   $Revision: 1.115 $
 #
-#   last change: $Author: ihi $ $Date: 2007-07-11 15:03:03 $
+#   last change: $Author: obo $ $Date: 2007-07-17 13:26:27 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -211,7 +211,6 @@ SHL4OBJS=       \
                 $(SLO)$/loaddispatcher.obj          \
                 $(SLO)$/dispatchprovider.obj		\
                 $(SLO)$/dispatchinformationprovider.obj		\
-                $(SLO)$/documentproperties.obj		\
                 $(SLO)$/droptargetlistener.obj		\
                 $(SLO)$/frame.obj					\
                 $(SLO)$/framecontainer.obj			\
@@ -232,7 +231,6 @@ SHL4OBJS=       \
                 $(SLO)$/taskcreator.obj		  		\
                 $(SLO)$/timerhelper.obj				\
                 $(SLO)$/urltransformer.obj			\
-                $(SLO)$/xmldocproperties.obj        \
                 $(SLO)$/configaccess.obj            \
                 $(SLO)$/job.obj                     \
                 $(SLO)$/jobdata.obj                 \
