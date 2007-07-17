@@ -4,9 +4,9 @@
  *
  *  $RCSfile: mouseeventhandler.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: kz $ $Date: 2006-12-13 16:00:05 $
+ *  last change: $Author: obo $ $Date: 2007-07-17 15:11:26 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -33,12 +33,10 @@
  *
  ************************************************************************/
 
-#ifndef _SLIDESHOW_MOUSEEVENTHANDLER_HXX
-#define _SLIDESHOW_MOUSEEVENTHANDLER_HXX
+#ifndef INCLUDED_SLIDESHOW_MOUSEEVENTHANDLER_HXX
+#define INCLUDED_SLIDESHOW_MOUSEEVENTHANDLER_HXX
 
 #include <boost/shared_ptr.hpp>
-
-#include <disposable.hxx>
 
 namespace com { namespace sun { namespace star { namespace awt
 {
@@ -59,9 +57,11 @@ namespace slideshow
             EventMultiplexer object, and are called from there to
             handle mouse events.
          */
-        class MouseEventHandler : public Disposable
+        class MouseEventHandler
         {
         public:
+            virtual ~MouseEventHandler() {}
+
             /** Handle a mouse button pressed event.
 
                 @param e
@@ -158,4 +158,4 @@ namespace slideshow
     }
 }
 
-#endif /* _SLIDESHOW_MOUSEEVENTHANDLER_HXX */
+#endif /* INCLUDED_SLIDESHOW_MOUSEEVENTHANDLER_HXX */
