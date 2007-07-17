@@ -4,9 +4,9 @@
  *
  *  $RCSfile: CanvasBase.java,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-07 23:08:28 $
+ *  last change: $Author: obo $ $Date: 2007-07-17 14:22:38 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -65,6 +65,13 @@ public abstract class CanvasBase
     // XCanvas interface
     // =================
     //
+    public synchronized void clear()
+    {
+        Graphics2D graphics = getGraphics();
+        // TODO(F3): retrieve true dimensions of the Graphics
+        graphics.clearRect(0,0,1000,1000);
+    }
+
     public synchronized void drawPoint( RealPoint2D aPoint,
                                         ViewState   viewState,
                                         RenderState renderState ) throws com.sun.star.lang.IllegalArgumentException
