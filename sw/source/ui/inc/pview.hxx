@@ -4,9 +4,9 @@
  *
  *  $RCSfile: pview.hxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: obo $ $Date: 2007-01-25 11:44:56 $
+ *  last change: $Author: obo $ $Date: 2007-07-17 13:11:04 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -245,7 +245,7 @@ class SW_DLLPUBLIC SwPagePreView: public SfxViewShell
     SW_DLLPRIVATE virtual USHORT          Print( SfxProgress &rProgress, BOOL bIsAPI,
                                    PrintDialog *pPrintDialog = 0 );
     SW_DLLPRIVATE virtual SfxPrinter*     GetPrinter( BOOL bCreate = FALSE );
-    SW_DLLPRIVATE virtual USHORT          SetPrinter( SfxPrinter *pNewPrinter, USHORT nDiffFlags = SFX_PRINTER_ALL );
+    SW_DLLPRIVATE virtual USHORT          SetPrinter( SfxPrinter *pNewPrinter, USHORT nDiffFlags = SFX_PRINTER_ALL, bool bIsAPI=false );
     SW_DLLPRIVATE virtual SfxTabPage*     CreatePrintOptionsPage( Window *pParent,
                                                 const SfxItemSet &rOptions );
     SW_DLLPRIVATE virtual PrintDialog*    CreatePrintDialog( Window *pParent );
