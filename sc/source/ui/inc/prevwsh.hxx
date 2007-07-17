@@ -4,9 +4,9 @@
  *
  *  $RCSfile: prevwsh.hxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: rt $ $Date: 2007-07-06 12:44:41 $
+ *  last change: $Author: obo $ $Date: 2007-07-17 13:34:30 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -136,7 +136,7 @@ public:
                          const SfxHint& rHint, const TypeId& rHintType );
 
     virtual SfxPrinter*     GetPrinter( BOOL bCreate = FALSE );
-    virtual USHORT          SetPrinter( SfxPrinter* pNewPrinter, USHORT nDiffFlags = SFX_PRINTER_ALL );
+    virtual USHORT          SetPrinter( SfxPrinter* pNewPrinter, USHORT nDiffFlags = SFX_PRINTER_ALL, bool bIsAPI=false );
     virtual PrintDialog*    CreatePrintDialog( Window* pParent );
     virtual SfxTabPage*     CreatePrintOptionsPage( Window *pParent, const SfxItemSet &rOptions );
     virtual void            PreparePrint( PrintDialog* pPrintDialog = NULL );
