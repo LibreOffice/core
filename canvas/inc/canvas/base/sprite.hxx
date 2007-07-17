@@ -4,9 +4,9 @@
  *
  *  $RCSfile: sprite.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: hr $ $Date: 2006-06-20 02:14:13 $
+ *  last change: $Author: obo $ $Date: 2007-07-17 14:18:53 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -95,6 +95,10 @@ namespace canvas
             beforehand).
          */
         virtual bool isAreaUpdateOpaque( const ::basegfx::B2DRange& rUpdateArea ) const = 0;
+
+        /** Query whether content has changed
+         */
+        virtual bool isContentChanged() const = 0;
 
         /** Query position of the left, top pixel of the sprite
          */
