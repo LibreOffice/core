@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.2 $
+#   $Revision: 1.3 $
 #
-#   last change: $Author: kz $ $Date: 2006-12-13 16:09:11 $
+#   last change: $Author: obo $ $Date: 2007-07-17 15:21:19 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -45,12 +45,16 @@ ENABLE_EXCEPTIONS=TRUE
 # --- Settings -----------------------------------------------------
 
 .INCLUDE :  settings.mk
+.INCLUDE : $(PRJ)$/util$/makefile.pmk
 
 # --- Common ----------------------------------------------------------
 
 # BEGIN target1 -------------------------------------------------------
 SHL1OBJS=  \
-    $(SLO)$/views.obj	
+    $(SLO)$/views.obj	  \
+    $(SLO)$/slidetest.obj \
+    $(SLO)$/testshape.obj \
+    $(SLO)$/testview.obj	
 
 SHL1TARGET= tests
 SHL1STDLIBS= 	$(SALLIB)		 \
@@ -64,7 +68,7 @@ SHL1STDLIBS= 	$(SALLIB)		 \
 .IF "$(OS)"=="WNT"
     SHL1STDLIBS+=$(LIBPRE) islideshowtest.lib
 .ELSE
-    SHL1STDLIBS+=-lslideshowtest$(OFFICEUPD)$(DLLPOSTFIX)
+    SHL1STDLIBS+=-lslideshowtest$(UPD)$(DLLPOSTFIX)
 .ENDIF
 
 SHL1IMPLIB= i$(SHL1TARGET)
