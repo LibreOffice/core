@@ -4,9 +4,9 @@
  *
  *  $RCSfile: docglbl.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: rt $ $Date: 2006-12-01 15:38:32 $
+ *  last change: $Author: obo $ $Date: 2007-07-17 13:06:21 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -294,7 +294,7 @@ BOOL SwDoc::SplitDoc( USHORT eDocType, const String& rPath,
                     SwDoc* pDoc = ((SwDocShell*)(&xDocSh))->GetDoc();
 
                     // die Vorlage ist das GlobalDoc
-                    SfxDocumentInfo aDocInfo( *pDoc->GetInfo() );
+                    SfxDocumentInfo aDocInfo( *pDoc->GetDocumentInfo() );
                     aDocInfo.SetTemplateName( aEmptyStr );
                     aDocInfo.SetTemplateDate( aTmplDate );
                     aDocInfo.SetTemplateFileName( rPath );
@@ -306,7 +306,7 @@ BOOL SwDoc::SplitDoc( USHORT eDocType, const String& rPath,
                         sTitle.AppendAscii( RTL_CONSTASCII_STRINGPARAM( ": " ));
                     sTitle += ((SwTxtNode*)pSttNd)->GetExpandTxt();
                     aDocInfo.SetTitle( sTitle );
-                    pDoc->SetInfo( aDocInfo );
+                    pDoc->SetDocumentInfo( aDocInfo );
 
                     // Vorlagen ersetzen
                     pDoc->ReplaceStyles( *this );
