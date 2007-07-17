@@ -4,9 +4,9 @@
  *
  *  $RCSfile: shapesubset.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: kz $ $Date: 2006-12-13 16:02:23 $
+ *  last change: $Author: obo $ $Date: 2007-07-17 15:14:53 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -33,12 +33,12 @@
  *
  ************************************************************************/
 
-#ifndef _SLIDESHOW_SHAPESUBSET_HXX
-#define _SLIDESHOW_SHAPESUBSET_HXX
+#ifndef INCLUDED_SLIDESHOW_SHAPESUBSET_HXX
+#define INCLUDED_SLIDESHOW_SHAPESUBSET_HXX
 
-#include <attributableshape.hxx>
-#include <layermanager.hxx>
-#include <doctreenode.hxx>
+#include "attributableshape.hxx"
+#include "subsettableshapemanager.hxx"
+#include "doctreenode.hxx"
 
 #include <boost/shared_ptr.hpp>
 
@@ -57,9 +57,9 @@ namespace slideshow
             functionality. Subsetting can be turned on and off. Note
             that the reason to have shape subsetting RAII implemented
             separately (i.e. not within the DrawShape) was that
-            subsetting (and de-subsetting) needs the LayerManager. And
-            holding that at the DrawShape creates one heck of a
-            circular reference.
+            subsetting (and de-subsetting) needs the
+            SubsettableShapeManager. And holding that at the DrawShape
+            creates one heck of a circular reference.
          */
         class ShapeSubset
         {
@@ -72,13 +72,13 @@ namespace slideshow
                 @param rTreeNode
                 Subset this object should represent
 
-                @param rLayerManager
+                @param rShapeManager
                 Manager object, where subsets are
                 registered/unregistered
              */
-            ShapeSubset( const AttributableShapeSharedPtr&  rOriginalShape,
-                         const DocTreeNode&                 rTreeNode,
-                         const LayerManagerSharedPtr&       rLayerManager );
+            ShapeSubset( const AttributableShapeSharedPtr&       rOriginalShape,
+                         const DocTreeNode&                      rTreeNode,
+                         const SubsettableShapeManagerSharedPtr& rSubsetManager );
 
             /** Create a subset from another subset.
 
@@ -102,8 +102,8 @@ namespace slideshow
                 Original shape, which will be represented as a whole
                 by this object
              */
-            ShapeSubset( const AttributableShapeSharedPtr&  rOriginalShape,
-                         const LayerManagerSharedPtr&       rLayerManager );
+            ShapeSubset( const AttributableShapeSharedPtr&       rOriginalShape,
+                         const SubsettableShapeManagerSharedPtr& rShapeManager );
 
             ~ShapeSubset();
 
@@ -147,12 +147,12 @@ namespace slideshow
             //ShapeSubset(const ShapeSubset&);
             //ShapeSubset& operator=( const ShapeSubset& );
 
-            AttributableShapeSharedPtr  mpOriginalShape;
-            AttributableShapeSharedPtr  mpSubsetShape;
-            DocTreeNode                 maTreeNode;
-            LayerManagerSharedPtr       mpLayerManager;
+            AttributableShapeSharedPtr       mpOriginalShape;
+            AttributableShapeSharedPtr       mpSubsetShape;
+            DocTreeNode                      maTreeNode;
+            SubsettableShapeManagerSharedPtr mpShapeManager;
         };
     }
 }
 
-#endif /* _SLIDESHOW_SHAPESUBSET_HXX */
+#endif /* INCLUDED_SLIDESHOW_SHAPESUBSET_HXX */
