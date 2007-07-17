@@ -4,9 +4,9 @@
  *
  *  $RCSfile: propertysethelper.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: kz $ $Date: 2005-11-02 12:40:50 $
+ *  last change: $Author: obo $ $Date: 2007-07-17 14:17:45 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -84,11 +84,17 @@ namespace canvas
         class MakeMap : public InputMap
         {
         public:
-            explicit MakeMap(const char*        name,
-                             const GetterType&  getter,
-                             const SetterType&  setter)
+            MakeMap(const char*        name,
+                    const GetterType&  getter,
+                    const SetterType&  setter)
             {
                 MapType::MapEntry aEntry={name, {getter, setter}};
+                this->push_back(aEntry);
+            }
+            MakeMap(const char*       name,
+                    const GetterType& getter)
+            {
+                MapType::MapEntry aEntry={name, {getter, SetterType()}};
                 this->push_back(aEntry);
             }
             MakeMap& operator()(const char*        name,
@@ -96,6 +102,13 @@ namespace canvas
                                 const SetterType&  setter)
             {
                 MapType::MapEntry aEntry={name, {getter, setter}};
+                this->push_back(aEntry);
+                return *this;
+            }
+            MakeMap& operator()(const char*       name,
+                                const GetterType& getter)
+            {
+                MapType::MapEntry aEntry={name, {getter, SetterType()}};
                 this->push_back(aEntry);
                 return *this;
             }
