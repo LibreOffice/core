@@ -4,9 +4,9 @@
  *
  *  $RCSfile: nodetools.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: kz $ $Date: 2006-12-13 15:33:48 $
+ *  last change: $Author: obo $ $Date: 2007-07-17 14:49:46 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -33,17 +33,17 @@
  *
  ************************************************************************/
 
-#ifndef _SLIDESHOW_NODETOOLS_HXX
-#define _SLIDESHOW_NODETOOLS_HXX
+#ifndef INCLUDED_SLIDESHOW_NODETOOLS_HXX
+#define INCLUDED_SLIDESHOW_NODETOOLS_HXX
 
 #include <com/sun/star/uno/Sequence.hxx>
 #include <com/sun/star/beans/NamedValue.hpp>
 #include <com/sun/star/drawing/XShape.hpp>
 
-#include <layermanager.hxx>
-#include <basenode.hxx>
-#include <doctreenode.hxx>
-#include <attributableshape.hxx>
+#include "shapemanager.hxx"
+#include "basenode.hxx"
+#include "doctreenode.hxx"
+#include "attributableshape.hxx"
 
 
 #if defined(VERBOSE) && defined(DBG_UTIL)
@@ -68,7 +68,7 @@ namespace slideshow
         void debugNodesShowTreeWithin( const BaseNode* );
 #endif
 
-        /** Look up an AttributableShape from LayerManager.
+        /** Look up an AttributableShape from ShapeManager.
 
             This method retrieves an AttributableShape pointer, given
             an XShape and a LayerManager.
@@ -76,7 +76,7 @@ namespace slideshow
             Throws a runtime exception if there's no such shape, or if
             it does not implement the AttributableShape interface.
          */
-        AttributableShapeSharedPtr lookupAttributableShape( const LayerManagerSharedPtr&                rLayerManager,
+        AttributableShapeSharedPtr lookupAttributableShape( const ShapeManagerSharedPtr&                rShapeManager,
                                                             const ::com::sun::star::uno::Reference<
                                                                 ::com::sun::star::drawing::XShape >&    xShape          );
 
@@ -93,4 +93,4 @@ namespace slideshow
     }
 }
 
-#endif /* _SLIDESHOW_NODETOOLS_HXX */
+#endif /* INCLUDED_SLIDESHOW_NODETOOLS_HXX */
