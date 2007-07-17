@@ -4,9 +4,9 @@
  *
  *  $RCSfile: shapeattributelayer.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: kz $ $Date: 2006-12-13 15:18:50 $
+ *  last change: $Author: obo $ $Date: 2007-07-17 14:39:03 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -576,11 +576,11 @@ namespace slideshow
             // mnAdditiveMode is ignored, cannot combine strings in
             // any sensible way
             if( mbFillStyleValid )
-                return (sal_Int16)meFillStyle;
+                return sal::static_int_cast<sal_Int16>(meFillStyle);
             else if( haveChild() )
-                return (sal_Int16)mpChild->getFillStyle();
+                return sal::static_int_cast<sal_Int16>(mpChild->getFillStyle());
             else
-                return (sal_Int16)drawing::FillStyle_SOLID;
+                return sal::static_int_cast<sal_Int16>(drawing::FillStyle_SOLID);
         }
 
         void ShapeAttributeLayer::setFillStyle( const sal_Int16& rStyle )
@@ -601,11 +601,11 @@ namespace slideshow
             // mnAdditiveMode is ignored, cannot combine strings in
             // any sensible way
             if( mbLineStyleValid )
-                return (sal_Int16)meLineStyle;
+                return sal::static_int_cast<sal_Int16>(meLineStyle);
             else if( haveChild() )
-                return (sal_Int16)mpChild->getLineStyle();
+                return sal::static_int_cast<sal_Int16>(mpChild->getLineStyle());
             else
-                return (sal_Int16)drawing::LineStyle_SOLID;
+                return sal::static_int_cast<sal_Int16>(drawing::LineStyle_SOLID);
         }
 
         void ShapeAttributeLayer::setLineStyle( const sal_Int16& rStyle )
@@ -767,11 +767,11 @@ namespace slideshow
             // mnAdditiveMode is ignored, cannot combine strings in
             // any sensible way
             if( mbCharPostureValid )
-                return (sal_Int16)meCharPosture;
+                return sal::static_int_cast<sal_Int16>(meCharPosture);
             else if( haveChild() )
-                return (sal_Int16)mpChild->getCharPosture();
+                return sal::static_int_cast<sal_Int16>(mpChild->getCharPosture());
             else
-                return (sal_Int16)awt::FontSlant_NONE;
+                return sal::static_int_cast<sal_Int16>(awt::FontSlant_NONE);
         }
 
         void ShapeAttributeLayer::setCharPosture( const sal_Int16& rStyle )
