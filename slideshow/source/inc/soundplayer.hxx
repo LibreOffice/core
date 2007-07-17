@@ -4,9 +4,9 @@
  *
  *  $RCSfile: soundplayer.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: hr $ $Date: 2007-06-27 15:50:29 $
+ *  last change: $Author: obo $ $Date: 2007-07-17 15:16:37 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -33,8 +33,8 @@
  *
  ************************************************************************/
 
-#ifndef _SLIDESHOW_SOUNDPLAYER_HXX
-#define _SLIDESHOW_SOUNDPLAYER_HXX
+#ifndef INCLUDED_SLIDESHOW_SOUNDPLAYER_HXX
+#define INCLUDED_SLIDESHOW_SOUNDPLAYER_HXX
 
 #include <rtl/ustring.hxx>
 
@@ -123,4 +123,4 @@ namespace slideshow
     }
 }
 
-#endif /* _SLIDESHOW_SOUNDPLAYER_HXX */
+#endif /* INCLUDED_SLIDESHOW_SOUNDPLAYER_HXX */
