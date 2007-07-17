@@ -4,9 +4,9 @@
  *
  *  $RCSfile: cairo_canvashelper.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: vg $ $Date: 2006-11-01 14:45:56 $
+ *  last change: $Author: obo $ $Date: 2007-07-17 14:20:45 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -106,6 +106,7 @@ namespace cairocanvas
 
         // XCanvas (only providing, not implementing the
         // interface. Also note subtle method parameter differences)
+        void clear();
         void drawPoint( const ::com::sun::star::rendering::XCanvas*     pCanvas,
                         const ::com::sun::star::geometry::RealPoint2D&  aPoint,
                         const ::com::sun::star::rendering::ViewState&   viewState,
