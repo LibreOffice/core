@@ -4,9 +4,9 @@
  *
  *  $RCSfile: editsh.cxx,v $
  *
- *  $Revision: 1.46 $
+ *  $Revision: 1.47 $
  *
- *  last change: $Author: vg $ $Date: 2007-05-22 16:26:54 $
+ *  last change: $Author: obo $ $Date: 2007-07-17 13:07:10 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -628,7 +628,7 @@ void SwEditShell::UpdateDocStat( SwDocStat& rStat )
 
 const SfxDocumentInfo* SwEditShell::GetInfo() const
 {
-    return GetDoc()->GetInfo();
+    return GetDoc()->GetDocumentInfo();
 }
 
 
