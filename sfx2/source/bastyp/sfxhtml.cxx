@@ -4,9 +4,9 @@
  *
  *  $RCSfile: sfxhtml.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: hr $ $Date: 2007-06-27 23:04:15 $
+ *  last change: $Author: obo $ $Date: 2007-07-17 13:41:48 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -368,13 +368,8 @@ BOOL SfxHTMLParser::ParseMetaOptions( SfxDocumentInfo *pInfo,
     switch( nAction )
     {
     case HTML_META_AUTHOR:
-        {
-            SfxStamp aStamp;
-            aStamp = pInfo->GetCreated();
-            aStamp.SetName( aContent );
-            pInfo->SetCreated( aStamp );
-            bChanged = TRUE;
-        }
+        pInfo->SetAuthor( aContent );
+        bChanged = TRUE;
         break;
     case HTML_META_DESCRIPTION:
         pInfo->SetComment( aContent );
@@ -390,31 +385,20 @@ BOOL SfxHTMLParser::ParseMetaOptions( SfxDocumentInfo *pInfo,
         break;
 
     case HTML_META_CHANGEDBY:
-        {
-            SfxStamp aStamp;
-            aStamp = pInfo->GetChanged();
-            aStamp.SetName( aContent );
-            pInfo->SetChanged( aStamp );
-            bChanged = TRUE;
-        }
+        pInfo->SetModificationAuthor( aContent );
         break;
 
     case HTML_META_CREATED:
     case HTML_META_CHANGED:
         if( aContent.Len() && aContent.GetTokenCount()==2 )
         {
-            SfxStamp aStamp;
-            aStamp = ( HTML_META_CREATED==nAction
-                                ? pInfo->GetCreated()
-                                : pInfo->GetChanged() );
             Date aDate( (ULONG)aContent.GetToken(0).ToInt32() );
             Time aTime( (ULONG)aContent.GetToken(1).ToInt32() );
             DateTime aDateTime( aDate, aTime );
-            aStamp.SetTime( aDateTime );
             if( HTML_META_CREATED==nAction )
-                pInfo->SetCreated( aStamp );
+                pInfo->SetCreationDate( aDateTime );
             else
-                pInfo->SetChanged( aStamp );
+                pInfo->SetModificationDate( aDateTime );
             bChanged = TRUE;
         }
         break;
@@ -437,18 +421,16 @@ BOOL SfxHTMLParser::ParseMetaOptions( SfxDocumentInfo *pInfo,
             {
                 rMetaCount = 0;
                 while( rMetaCount<nKeys &&
-                        pInfo->GetUserKey(rMetaCount).GetWord().Len() )
+                        pInfo->GetUserKeyWord(rMetaCount).Len() )
                 {
                     rMetaCount++;
                 }
             }
             if( rMetaCount < nKeys )
             {
-                const SfxDocUserKey& rUserKey = pInfo->GetUserKey(rMetaCount);
-                if( !rUserKey.GetWord().Len() )
+                if( !pInfo->GetUserKeyWord(rMetaCount).Len() )
                 {
-                    SfxDocUserKey aUserKey( aName, aContent );
-                    pInfo->SetUserKey( aUserKey, rMetaCount );
+                    pInfo->SetUserKey( aName, aContent, rMetaCount );
                     rMetaCount++;
                     bChanged = TRUE;
                     break;
