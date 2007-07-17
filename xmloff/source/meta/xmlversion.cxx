@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xmlversion.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: hr $ $Date: 2007-06-27 15:19:54 $
+ *  last change: $Author: obo $ $Date: 2007-07-17 12:59:27 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -81,7 +81,6 @@
 #endif
 
 #include <tools/string.hxx>
-#include <tools/timestamp.hxx>
 class SvStringsDtor;
 
 using namespace ::com::sun::star::xml::sax;
