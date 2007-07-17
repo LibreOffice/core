@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ViewShellBase.hxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: rt $ $Date: 2007-07-06 13:13:26 $
+ *  last change: $Author: obo $ $Date: 2007-07-17 13:01:29 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -155,7 +155,7 @@ public:
     /// Forwarded to the print manager.
     virtual USHORT SetPrinter (
         SfxPrinter* pNewPrinter,
-        USHORT nDiffFlags = SFX_PRINTER_ALL);
+        USHORT nDiffFlags = SFX_PRINTER_ALL, bool bIsApi=false);
 
     /// Forwarded to the print manager.
     virtual PrintDialog* CreatePrintDialog (::Window *pParent);
