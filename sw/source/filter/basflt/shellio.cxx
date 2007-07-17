@@ -4,9 +4,9 @@
  *
  *  $RCSfile: shellio.cxx,v $
  *
- *  $Revision: 1.48 $
+ *  $Revision: 1.49 $
  *
- *  last change: $Author: kz $ $Date: 2007-05-10 16:03:49 $
+ *  last change: $Author: obo $ $Date: 2007-07-17 13:07:39 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -457,7 +457,8 @@ ULONG SwReader::Read( const Reader& rOptions )
 
         // --> FME 2005-02-25 #i42634# Moved common code of SwReader::Read() and
         // SwDocShell::UpdateLinks() to new SwDoc::UpdateLinks():
-        pDoc->UpdateLinks();
+    // ATM still with Update
+        pDoc->UpdateLinks( TRUE );
         // <--
 
     eOld = (IDocumentRedlineAccess::RedlineMode_t)(pDoc->GetRedlineMode() & ~IDocumentRedlineAccess::REDLINE_IGNORE);
