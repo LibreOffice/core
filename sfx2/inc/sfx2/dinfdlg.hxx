@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dinfdlg.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2007-04-26 10:33:25 $
+ *  last change: $Author: obo $ $Date: 2007-07-17 13:37:03 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -59,8 +59,8 @@
 #include <svtools/svmedit.hxx>
 #endif
 
-#include <sfx2/tabdlg.hxx>
-#include <sfx2/docinf.hxx>
+#include "tabdlg.hxx"
+#include "docinf.hxx"
 
 // class SfxDocumentInfoItem ---------------------------------------------
 
@@ -68,23 +68,23 @@ class SFX2_DLLPUBLIC SfxDocumentInfoItem : public SfxStringItem
 {
 private:
     SfxDocumentInfo         aDocInfo;
-    FASTBOOL                bHasTemplate;
-    FASTBOOL                bOwnFormat;
+    sal_Bool                bHasTemplate;
+    sal_Bool                bDeleteUserData;
+    sal_Bool                bIsUseUserData;
 
 public:
     TYPEINFO();
     SfxDocumentInfoItem();
-    SfxDocumentInfoItem( const String &rFileName, const SfxDocumentInfo &, BOOL );
-    SfxDocumentInfoItem( const String &rFileName, const SfxDocumentInfo & );
+    SfxDocumentInfoItem( const String &rFileName, const SfxDocumentInfo&, sal_Bool bUseUserData );
     SfxDocumentInfoItem( const SfxDocumentInfoItem& );
     virtual ~SfxDocumentInfoItem();
-
-    BOOL                    IsOwnFormat() const;
 
     void                    SetTemplate( BOOL b ) { bHasTemplate = b; }
     FASTBOOL                HasTemplate() const { return bHasTemplate; }
     void                    SetDeleteUserData( BOOL bSet );
+    void                    SetUseUserData( BOOL bSet );
     BOOL                    IsDeleteUserData() const;
+    BOOL                    IsUseUserData() const;
 
     SfxDocumentInfo&        operator()() { return aDocInfo; }
     const SfxDocumentInfo&  operator()() const { return aDocInfo; }
@@ -93,8 +93,8 @@ public:
 
     virtual SfxPoolItem*    Clone( SfxItemPool* pPool = NULL ) const;
     virtual int             operator==( const SfxPoolItem& ) const;
-    virtual sal_Bool             QueryValue( com::sun::star::uno::Any& rVal, BYTE nMemberId = 0 ) const;
-    virtual sal_Bool             PutValue( const com::sun::star::uno::Any& rVal, BYTE nMemberId = 0 );
+    virtual sal_Bool        QueryValue( com::sun::star::uno::Any& rVal, BYTE nMemberId = 0 ) const;
+    virtual sal_Bool        PutValue( const com::sun::star::uno::Any& rVal, BYTE nMemberId = 0 );
 };
 
 // class SfxDocumentPage -------------------------------------------------
@@ -141,11 +141,9 @@ private:
     BOOL                        bEnableUseUserData  : 1,
                                 bHandleDelete       : 1;
 
-//#if 0 // _SOLAR__PRIVATE
     DECL_LINK(          DeleteHdl, PushButton * );
     DECL_LINK(          SignatureHdl, PushButton * );
     void                ImplUpdateSignatures();
-//#endif
 
 protected:
     SfxDocumentPage( Window* pParent, const SfxItemSet& );
@@ -202,12 +200,12 @@ private:
     PushButton              aEditLabelBtn;
     SfxDocumentInfoItem*    pInfoItem;
 
-//#if 0 // _SOLAR__PRIVATE
+#if _SOLAR__PRIVATE
     DECL_LINK( EditLabelHdl, PushButton * );
 
     String              GetLabelText_Impl( FixedText* pLabel );
     void                SetLabelText_Impl( FixedText* pLabel, const String& rNewLabel );
-//#endif
+#endif
 
 protected:
     SfxDocumentUserPage( Window* pParent, const SfxItemSet& );
@@ -292,6 +290,7 @@ protected:
 public:
     SfxDocumentInfoDialog(  Window* pParent, const SfxItemSet& );
 };
+
 
 #endif
 
