@@ -4,9 +4,9 @@
  *
  *  $RCSfile: file_library_ooo.scp,v $
  *
- *  $Revision: 1.251 $
+ *  $Revision: 1.252 $
  *
- *  last change: $Author: ihi $ $Date: 2007-07-11 11:05:58 $
+ *  last change: $Author: obo $ $Date: 2007-07-17 07:27:31 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -2536,7 +2536,11 @@ File gid_File_Lib_Xslt
        Name = STRING(CONCAT3(libxslt,UNXSUFFIX,.1.1.16));
     #endif
   #else
+   #ifdef _gcc3
+    Name = "libxslt-1.dll";
+   #else
     Name = "libxslt.dll";
+   #endif
   #endif
 End
 #endif
