@@ -4,9 +4,9 @@
  *
  *  $RCSfile: activitybase.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: kz $ $Date: 2006-12-13 15:24:38 $
+ *  last change: $Author: obo $ $Date: 2007-07-17 14:44:26 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -108,34 +108,6 @@ namespace slideshow
             return mbIsActive;
         }
 
-        bool ActivityBase::needsScreenUpdate() const
-        {
-            // animations, while active, _do_ need screen updates
-            // after perform() calls. This is because
-            // e.g. SlideChanger internally uses XCustomSprites,
-            // which don't repaint by themselves.
-            //
-            // What is actually a feature, because then, the
-            // activities thread can issue synchronized repaints,
-            // updating all visible sprites at once.
-
-            // FIXME(P1):
-            // Since by definition, the animation must not change the
-            // sprite when it is no longer active, we could possibly
-            // return true here only as long as mbIsActive is true.
-            // Unfortunately, the ActivitiesQueue asks for necessary
-            // screen updates after the perform calls, and this is a
-            // problem for the very last perform call of an activity
-            // (the one that ends the activity): this last one usually
-            // _does_ need a screen update, but has already set
-            // mbIsActive to false. I would consider delayed false returns
-            // here a hack, since it relies on call order. For the time
-            // being, we thus return true here, always (note that a
-            // finished Activity will normally be not queried for screen
-            // updates, anyway, since it's removed from the queues).
-            return true;
-        }
-
         void ActivityBase::setTargets( const AnimatableShapeSharedPtr&      rShape,
                                        const ShapeAttributeLayerSharedPtr&  rAttrLayer )
         {
@@ -174,7 +146,7 @@ namespace slideshow
 
         void ActivityBase::end()
         {
-            if (!mbIsActive || isDisposed())
+            if (!isActive() || isDisposed())
                 return;
             // assure animation is started:
             if (mbFirstPerformCall) {
@@ -184,9 +156,7 @@ namespace slideshow
             }
 
             performEnd(); // calling private virtual
-
             endAnimation();
-
             endActivity();
         }
 
