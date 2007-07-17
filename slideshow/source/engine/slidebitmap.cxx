@@ -4,9 +4,9 @@
  *
  *  $RCSfile: slidebitmap.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: kz $ $Date: 2006-12-13 15:20:24 $
+ *  last change: $Author: obo $ $Date: 2007-07-17 14:40:28 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -42,6 +42,8 @@
 
 #include <com/sun/star/rendering/XCanvas.hpp>
 #include <com/sun/star/rendering/XBitmap.hpp>
+#include <comphelper/anytostring.hxx>
+#include <cppuhelper/exc_hlp.hxx>
 
 #include <basegfx/matrix/b2dhommatrix.hxx>
 
@@ -85,18 +87,31 @@ namespace slideshow
                                     maOutputPos.getY() );
             ::canvas::tools::setRenderStateTransform( aRenderState, aTranslation );
 
-            if( maClipPoly.count() )
+            try
             {
-                // TODO(P1): Buffer the clip polygon
-                aRenderState.Clip =
-                    ::basegfx::unotools::xPolyPolygonFromB2DPolyPolygon(
-                        rCanvas->getUNOCanvas()->getDevice(),
-                        maClipPoly );
+                if( maClipPoly.count() )
+                {
+                    // TODO(P1): Buffer the clip polygon
+                    aRenderState.Clip =
+                        ::basegfx::unotools::xPolyPolygonFromB2DPolyPolygon(
+                            rCanvas->getUNOCanvas()->getDevice(),
+                            maClipPoly );
+                }
+
+                rCanvas->getUNOCanvas()->drawBitmap( mxBitmap,
+                                                     aViewState,
+                                                     aRenderState );
+            }
+            catch( uno::Exception& )
+            {
+                OSL_ENSURE( false,
+                            rtl::OUStringToOString(
+                                comphelper::anyToString( cppu::getCaughtException() ),
+                                RTL_TEXTENCODING_UTF8 ).getStr() );
+
+                return false;
             }
 
-            rCanvas->getUNOCanvas()->drawBitmap( mxBitmap,
-                                                 aViewState,
-                                                 aRenderState );
             return true;
         }
 
