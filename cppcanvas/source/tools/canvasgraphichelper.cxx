@@ -4,9 +4,9 @@
  *
  *  $RCSfile: canvasgraphichelper.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: obo $ $Date: 2006-10-12 15:00:40 $
+ *  last change: $Author: obo $ $Date: 2007-07-17 15:26:30 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -38,25 +38,15 @@
 
 #include <canvasgraphichelper.hxx>
 
-#ifndef _COM_SUN_STAR_RENDERING_XGRAPHICDEVICE_HPP_
 #include <com/sun/star/rendering/XGraphicDevice.hpp>
-#endif
-#ifndef _COM_SUN_STAR_RENDERING_XPOLYPOLYGON2D_HPP_
 #include <com/sun/star/rendering/XPolyPolygon2D.hpp>
-#endif
 
-#ifndef _CANVAS_CANVASTOOLS_HXX
 #include <canvas/canvastools.hxx>
-#endif
-#ifndef _BGFX_TOOLS_CANVASTOOLS_HXX
 #include <basegfx/tools/canvastools.hxx>
-#endif
-#ifndef _BGFX_MATRIX_B2DHOMMATRIX_HXX
 #include <basegfx/matrix/b2dhommatrix.hxx>
-#endif
 
 #include <cppcanvas/polypolygon.hxx>
-#include <tools.hxx>
+#include "tools.hxx"
 
 
 using namespace ::com::sun::star;
@@ -101,18 +91,24 @@ namespace cppcanvas
         void CanvasGraphicHelper::setClip( const ::basegfx::B2DPolyPolygon& rClipPoly )
         {
             // TODO(T3): not thread-safe. B2DPolyPolygon employs copy-on-write
-            maClipPolyPolygon = rClipPoly;
+            maClipPolyPolygon.reset( rClipPoly );
             maRenderState.Clip.clear();
         }
 
-        ::basegfx::B2DPolyPolygon CanvasGraphicHelper::getClip() const
+        void CanvasGraphicHelper::setClip()
         {
-            return maClipPolyPolygon;
+            maClipPolyPolygon.reset();
+            maRenderState.Clip.clear();
+        }
+
+        ::basegfx::B2DPolyPolygon const* CanvasGraphicHelper::getClip() const
+        {
+            return !maClipPolyPolygon ? NULL : &(*maClipPolyPolygon);
         }
 
         const rendering::RenderState& CanvasGraphicHelper::getRenderState() const
         {
-            if( maClipPolyPolygon.count() && !maRenderState.Clip.is() )
+            if( maClipPolyPolygon && !maRenderState.Clip.is() )
             {
                 uno::Reference< rendering::XCanvas > xCanvas( mpCanvas->getUNOCanvas() );
                 if( !xCanvas.is() )
@@ -120,7 +116,7 @@ namespace cppcanvas
 
                 maRenderState.Clip = ::basegfx::unotools::xPolyPolygonFromB2DPolyPolygon(
                     xCanvas->getDevice(),
-                    maClipPolyPolygon );
+                    *maClipPolyPolygon );
             }
 
             return maRenderState;
