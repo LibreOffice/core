@@ -4,9 +4,9 @@
  *
  *  $RCSfile: implcanvas.hxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: kz $ $Date: 2005-11-02 13:43:26 $
+ *  last change: $Author: obo $ $Date: 2007-07-17 15:26:57 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -36,19 +36,11 @@
 #ifndef _CPPCANVAS_IMPLCANVAS_HXX
 #define _CPPCANVAS_IMPLCANVAS_HXX
 
-#ifndef _COM_SUN_STAR_UNO_REFERENCE_HXX_
 #include <com/sun/star/uno/Reference.hxx>
-#endif
-
-#ifndef _COM_SUN_STAR_RENDERING_VIEWSTATE_HPP__
 #include <com/sun/star/rendering/ViewState.hpp>
-#endif
-
-#ifndef BOOST_SHARED_PTR_HPP_INCLUDED
-#include <boost/shared_ptr.hpp>
-#endif
-
 #include <cppcanvas/canvas.hxx>
+
+#include <boost/optional.hpp>
 
 namespace rtl
 {
@@ -82,17 +74,20 @@ namespace cppcanvas
                             ::com::sun::star::rendering::XCanvas >& rCanvas );
             virtual ~ImplCanvas();
 
-            virtual void                        setTransformation( const ::basegfx::B2DHomMatrix& rMatrix );
-            virtual ::basegfx::B2DHomMatrix     getTransformation() const;
+            virtual void                             setTransformation( const ::basegfx::B2DHomMatrix& rMatrix );
+            virtual ::basegfx::B2DHomMatrix          getTransformation() const;
 
-            virtual void                        setClip( const ::basegfx::B2DPolyPolygon& rClipPoly );
-            virtual ::basegfx::B2DPolyPolygon   getClip() const;
+            virtual void                             setClip( const ::basegfx::B2DPolyPolygon& rClipPoly );
+            virtual void                             setClip();
+            virtual ::basegfx::B2DPolyPolygon const* getClip() const;
 
-            virtual FontSharedPtr               createFont( const ::rtl::OUString& rFontName, const double& rCellSize ) const;
+            virtual FontSharedPtr                    createFont( const ::rtl::OUString& rFontName, const double& rCellSize ) const;
 
-            virtual ColorSharedPtr              createColor() const;
+            virtual ColorSharedPtr                   createColor() const;
 
-            virtual CanvasSharedPtr             clone() const;
+            virtual CanvasSharedPtr                  clone() const;
+
+            virtual void                             clear() const;
 
             virtual ::com::sun::star::uno::Reference<
                 ::com::sun::star::rendering::XCanvas >      getUNOCanvas() const;
@@ -107,7 +102,7 @@ namespace cppcanvas
             ImplCanvas& operator=( const ImplCanvas& );
 
             mutable ::com::sun::star::rendering::ViewState                                  maViewState;
-            ::basegfx::B2DPolyPolygon                                                       maClipPolyPolygon;
+            boost::optional<basegfx::B2DPolyPolygon>                                        maClipPolyPolygon;
             const ::com::sun::star::uno::Reference< ::com::sun::star::rendering::XCanvas >  mxCanvas;
         };
 
