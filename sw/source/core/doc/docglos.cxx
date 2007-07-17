@@ -4,9 +4,9 @@
  *
  *  $RCSfile: docglos.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 20:53:17 $
+ *  last change: $Author: obo $ $Date: 2007-07-17 13:06:41 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -80,7 +80,7 @@ BOOL SwDoc::InsertGlossary( SwTextBlocks& rBlock, const String& rEntry,
 
             // alle FixFelder aktualisieren. Dann aber auch mit der
             // richtigen DocInfo!
-            pGDoc->SetInfo( *GetInfo() );
+            pGDoc->SetDocumentInfo( *GetDocumentInfo() );
             pGDoc->SetFixFields(false, NULL);
 
             //StartAllAction();
