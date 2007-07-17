@@ -4,9 +4,9 @@
  *
  *  $RCSfile: swparrtf.cxx,v $
  *
- *  $Revision: 1.68 $
+ *  $Revision: 1.69 $
  *
- *  last change: $Author: kz $ $Date: 2007-06-20 09:12:53 $
+ *  last change: $Author: obo $ $Date: 2007-07-17 13:08:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -672,7 +672,7 @@ if( pSttNdIdx->GetIndex()+1 == pPam->GetBound( FALSE ).nNode.GetIndex() )
         }
         else if( GetDocInfo() )
             // evt. eingelesen DocInfo setzen
-            pDoc->SetInfo( *GetDocInfo() );
+            pDoc->SetDocumentInfo( *GetDocInfo() );
     }
     delete pSttNdIdx, pSttNdIdx = 0;
     delete pRegionEndIdx, pRegionEndIdx = 0;
