@@ -4,9 +4,9 @@
  *
  *  $RCSfile: viewfrm.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: vg $ $Date: 2007-04-11 21:31:40 $
+ *  last change: $Author: obo $ $Date: 2007-07-17 13:38:46 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -109,6 +109,14 @@ public:
             }
     BOOL    operator != ( const SvBorder & rObj ) const
             { return !(*this == rObj); }
+    SvBorder & operator = ( const SvBorder & rBorder )
+            {
+                Left()   = rBorder.Left();
+                Top()    = rBorder.Top();
+                Right()  = rBorder.Right();
+                Bottom() = rBorder.Bottom();
+                return *this;
+            }
     SvBorder & operator += ( const SvBorder & rBorder )
             {
                 Left()   += rBorder.Left();

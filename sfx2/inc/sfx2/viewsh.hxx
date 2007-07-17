@@ -4,9 +4,9 @@
  *
  *  $RCSfile: viewsh.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: vg $ $Date: 2007-04-11 21:32:05 $
+ *  last change: $Author: obo $ $Date: 2007-07-17 13:38:59 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -64,7 +64,7 @@
 #ifndef _CPPUHELPER_INTERFACECONTAINER_HXX_
 #include <cppuhelper/interfacecontainer.hxx>
 #endif
-#include <sfx2/shell.hxx>
+#include "shell.hxx"
 #include <tools/gen.hxx>
 #include <tools/errcode.hxx>
 class SfxBaseController;
@@ -287,7 +287,7 @@ public:
     virtual ErrCode             DoPrint( SfxPrinter *pPrinter, PrintDialog *pPrintDialog, BOOL bSilent, BOOL bIsAPI );
     virtual USHORT              Print( SfxProgress &rProgress, BOOL bIsAPI, PrintDialog *pPrintDialog = 0 );
     virtual SfxPrinter*         GetPrinter( BOOL bCreate = FALSE );
-    virtual USHORT              SetPrinter( SfxPrinter *pNewPrinter, USHORT nDiffFlags = SFX_PRINTER_ALL );
+    virtual USHORT              SetPrinter( SfxPrinter *pNewPrinter, USHORT nDiffFlags = SFX_PRINTER_ALL, bool bIsAPI=FALSE );
     virtual SfxTabPage*         CreatePrintOptionsPage( Window *pParent, const SfxItemSet &rOptions );
     virtual PrintDialog*        CreatePrintDialog( Window *pParent );
     void                        LockPrinter( BOOL bLock = TRUE );
@@ -319,7 +319,7 @@ public:
 
     void                        SetAdditionalPrintOptions( const com::sun::star::uno::Sequence < com::sun::star::beans::PropertyValue >& );
 
-//#if 0 // _SOLAR__PRIVATE
+#if _SOLAR__PRIVATE
     SAL_DLLPRIVATE SfxInPlaceClient* GetUIActiveIPClient_Impl() const;
     SAL_DLLPRIVATE void AddContextMenuInterceptor_Impl( const ::com::sun::star::uno::Reference < ::com::sun::star::ui::XContextMenuInterceptor >& xInterceptor );
     SAL_DLLPRIVATE void RemoveContextMenuInterceptor_Impl( const ::com::sun::star::uno::Reference < ::com::sun::star::ui::XContextMenuInterceptor >& xInterceptor );
@@ -355,7 +355,7 @@ public:
     SAL_DLLPRIVATE void TakeFrameOwnerShip_Impl();
     SAL_DLLPRIVATE BOOL ExecKey_Impl(const KeyEvent& aKey);
 
-//#endif
+#endif
 };
 
 //========================================================================
