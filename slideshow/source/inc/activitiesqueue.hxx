@@ -4,9 +4,9 @@
  *
  *  $RCSfile: activitiesqueue.hxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: kz $ $Date: 2006-12-13 15:50:23 $
+ *  last change: $Author: obo $ $Date: 2007-07-17 15:01:06 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -33,14 +33,13 @@
  *
  ************************************************************************/
 
-#ifndef _SLIDESHOW_ACTIVITIESQUEUE_HXX
-#define _SLIDESHOW_ACTIVITIESQUEUE_HXX
+#ifndef INCLUDED_SLIDESHOW_ACTIVITIESQUEUE_HXX
+#define INCLUDED_SLIDESHOW_ACTIVITIESQUEUE_HXX
 
 #include <deque>
 
 #include "activity.hxx"
 #include "unoviewcontainer.hxx"
-#include "eventmultiplexer.hxx"
 
 #include <canvas/elapsedtime.hxx>
 
@@ -67,15 +66,9 @@ namespace slideshow
                 @param pPresTimer
                 Pointer to global presentation timer. Used for
                 adjusting and holding global presentation time.
-
-                @param rEventMultiplexer
-                Handles screen updates for us, when a full round of
-                activities has been performed.
              */
             ActivitiesQueue(
-                const ::boost::shared_ptr< ::canvas::tools::ElapsedTime >&  pPresTimer,
-                EventMultiplexer&                                           rEventMultiplexer );
-
+                const ::boost::shared_ptr< ::canvas::tools::ElapsedTime >&  pPresTimer );
             ~ActivitiesQueue();
 
             /** Add the given activity to the queue.
@@ -89,6 +82,10 @@ namespace slideshow
                 activity get processed).
              */
             void process();
+
+            /** Call all dequeued activities' dequeued() method
+             */
+            void processDequeued();
 
             /** Query state of the queue
 
@@ -122,11 +119,13 @@ namespace slideshow
                                                                     // to be reinserted next
                                                                     // round
 
-            EventMultiplexer&       mrEventMultiplexer;
-
-            bool                    mbCurrentRoundNeedsScreenUpdate;
+            ActivityQueue           maDequeuedActivities; // This list collects all activities which did not request
+                                                          // a reinsertion. After the screen update has been
+                                                          // performed, those are notified via dequeued(). This
+                                                          // facilitates cleanup actions taking place _after_ the
+                                                          // current frame has been displayed.
         };
 
     }
 }
-#endif /* _SLIDESHOW_ACTIVITIESQUEUE_HXX */
+#endif /* INCLUDED_SLIDESHOW_ACTIVITIESQUEUE_HXX */
