@@ -19,7 +19,7 @@
   modifications listed above)
 
 08/18/2004 (JSC/JL): BugID=i31702
-  remove needs entry in com.sun.star.system.SimpleCommandMail because needs is 
+  remove needs entry in com.sun.star.system.SimpleCommandMail because needs is
   deprecated and it caused an assertion in the cli_ure project while generating
   the cli interfaces from type library.
 
@@ -28,7 +28,7 @@
   Interface was never implmented and the functionality was supported by properties.
 
 01/20/2005 (JSC): BugID=i40985
-  change const value com.sun.star.configuration.backend.NodeAttribute:MASK to 
+  change const value com.sun.star.configuration.backend.NodeAttribute:MASK to
   0x7F00 insterad of 0xFF00. Necessary because of a bug fix in idlc and possible
   because only 3 bits are masked.
 
@@ -40,53 +40,53 @@
   we removed the duplicated reference to XEnumerationAccess.
 
 08/26/05 (JSC): TaskID=i53814
-  I've exchanged the current type library to the type library of OO2.0 (build m125) 
+  I've exchanged the current type library to the type library of OO2.0 (build m125)
   for all further compatibility type checks.
 
 10/21/05 (JSC): TaskID=i56329
   Correct com.sun.star.sdb.OfficeDatabaseDocument, it supports one more interface
   and it is not published -> compatible change.
-  Correct com.sun.star.text.XEnumerationAccess, remove duplicate interface from 
+  Correct com.sun.star.text.XEnumerationAccess, remove duplicate interface from
   published service. Also a compatible change.
   Probably the regcompare tools needs to be improved
 
 10/26/05 (JSC): TaskID=i25406, i25472, i50417
   ..style.CharacterPropertiesAsian -> remove 3 wrong paragraph properties
-  ..style.PageProperties -> for 93 properties related to footer and header 
+  ..style.PageProperties -> for 93 properties related to footer and header
   the attribute maybevoid was inserted
   ..text.textfield.DateTime -> NumberFormat changed from short to long
   to ensure that the same format is used in all applications
 
 01/25/06 (JSC): TaskID=i611389
   change the compatibility test to use always the type library in the type_reference
-  directory. We need only one reference per source stand. I have also removed the 
+  directory. We need only one reference per source stand. I have also removed the
   types_doc.rdb because all type info is already in the normal types.rdb, even
   the service nad singleton type info.
-  In the same step i have updated the reference type library with the rdb of 
-  OOo2.0.1 and have patched the following singleton types to ensure that we need 
+  In the same step i have updated the reference type library with the rdb of
+  OOo2.0.1 and have patched the following singleton types to ensure that we need
   only one type ibrary:
     - com.sun.star.script.browse.theBrowseNodeFactory
     - com.sun.star.script.provider.theMasterScriptProviderFactory
     - com.sun.star.util.theMacroExpander
     - com.sun.star.util.theOfficeInstallationDirectories
-  
+
 01/25/06 (JSC): TaskID=i49101
-  adapt com.sun.star.text.GenericTextDocument service. Insert support of 
-  com.sun.star.lang.XMultiServiceFactory because this interface was missing but 
+  adapt com.sun.star.text.GenericTextDocument service. Insert support of
+  com.sun.star.lang.XMultiServiceFactory because this interface was missing but
   is substantial for text documents and was implemented from the beginning.
 
 03/15/06 (JSC): TaskID=i63172
-  update the reference type library with the released version of OOo2.0.2 
+  update the reference type library with the released version of OOo2.0.2
   (OOB680m5). This type library doesn't contain the already inserted singletons:
     - com.sun.star.script.browse.theBrowseNodeFactory
     - com.sun.star.script.provider.theMasterScriptProviderFactory
     - com.sun.star.util.theOfficeInstallationDirectories
-  This of course is accepted to have a 1:1 relation between the reference and 
+  This of course is accepted to have a 1:1 relation between the reference and
   OOo2.0.2. With the next update we get in sync and depending versioning processes
   won't be affected.
 
 05/15/06 (JSC, TL): TaskID=i54823,i62825
-  adapt the documentation because of specification errors which have never matched 
+  adapt the documentation because of specification errors which have never matched
   the existing implmentation.
   Style -> FollowStyle property is now of type string instead of boolean
   TextTableRow -> TableColumnSeparators is now a sequence instead of the single return
@@ -99,7 +99,7 @@
 07/19/06 (JSC): TaskID=i67534
   update reference type library with the released version of OOo2.0.3. The
   new reference type library is taken from the release source tree OOC680m7.
-  The last two changes of TL are integrated in the type library as well, at least 
+  The last two changes of TL are integrated in the type library as well, at least
   the conflicting files:
   com/sun/star/style/Style.idl
   com/sun/star/text/CellProperties.idl
@@ -113,4 +113,6 @@
   update reference type library with the rleased version of OO0.2.2.0. The new
   reference type library is taken from the release source tree OOF680 m14.
 
-  
+06/13/07 (MBA): TaskID=i26672
+  removed deprecated and unsupported properties; added long supported but
+  never documented properties.
