@@ -4,9 +4,9 @@
  *
  *  $RCSfile: svxrtf.cxx,v $
  *
- *  $Revision: 1.30 $
+ *  $Revision: 1.31 $
  *
- *  last change: $Author: ihi $ $Date: 2007-07-12 10:57:21 $
+ *  last change: $Author: obo $ $Date: 2007-07-17 13:20:01 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -714,7 +714,6 @@ void SvxRTFParser::ReadInfo( const sal_Char* pChkForVerNo )
     pSfxInfo = new SfxDocumentInfo;
     String sStr, sComment;
     long nVersNo = 0;
-    SfxStamp aCreate, aModified;
     DateTime aDT;
 
     while( _nOpenBrakets && IsParserWorking() )
@@ -748,10 +747,10 @@ void SvxRTFParser::ReadInfo( const sal_Char* pChkForVerNo )
             pSfxInfo->SetTheme( GetTextToEndGroup( sStr ) );
             break;
         case RTF_AUTHOR:
-            aCreate.SetName( GetTextToEndGroup( sStr ) );
+            pSfxInfo->SetAuthor( GetTextToEndGroup( sStr ) );
             break;
         case RTF_OPERATOR:
-            aModified.SetName( GetTextToEndGroup( sStr ) );
+            pSfxInfo->SetModificationAuthor( GetTextToEndGroup( sStr ) );
             break;
         case RTF_KEYWORDS:
             pSfxInfo->SetKeywords( GetTextToEndGroup( sStr ) );
@@ -765,19 +764,15 @@ void SvxRTFParser::ReadInfo( const sal_Char* pChkForVerNo )
             break;
 
         case RTF_CREATIM:
-            aCreate.SetTime( GetDateTimeStamp( aDT ) );
+            pSfxInfo->SetCreationDate( GetDateTimeStamp( aDT ) );
             break;
 
         case RTF_REVTIM:
-            aModified.SetTime( GetDateTimeStamp( aDT ) );
+            pSfxInfo->SetModificationDate( GetDateTimeStamp( aDT ) );
             break;
 
         case RTF_PRINTIM:
-            {
-                SfxStamp aTmp;
-                aTmp.SetTime( GetDateTimeStamp( aDT ) );
-                pSfxInfo->SetPrinted( aTmp );
-            }
+            pSfxInfo->SetPrintDate( GetDateTimeStamp( aDT ) );
             break;
 
         case RTF_COMMENT:
@@ -804,9 +799,6 @@ void SvxRTFParser::ReadInfo( const sal_Char* pChkForVerNo )
 //      default:
         }
     }
-
-    pSfxInfo->SetCreated( aCreate );
-    pSfxInfo->SetChanged( aModified );
 
     if( pChkForVerNo &&
         COMPARE_EQUAL == sComment.CompareToAscii( pChkForVerNo ))
