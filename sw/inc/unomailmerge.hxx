@@ -4,9 +4,9 @@
  *
  *  $RCSfile: unomailmerge.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 02:26:34 $
+ *  last change: $Author: obo $ $Date: 2007-07-17 13:05:22 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -72,7 +72,7 @@
 #ifndef _SFX_OBJSH_HXX
 #include <sfx2/objsh.hxx>   // SfxObjectShellRef
 #endif
-
+#include <functional>
 namespace com { namespace sun { namespace star {
 
     namespace sdbc {
