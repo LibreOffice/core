@@ -4,9 +4,9 @@
  *
  *  $RCSfile: tools.hxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: kz $ $Date: 2006-12-13 16:05:06 $
+ *  last change: $Author: obo $ $Date: 2007-07-17 15:17:25 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -33,31 +33,27 @@
  *
  ************************************************************************/
 
-#ifndef _SLIDESHOW_TOOLS_HXX
-#define _SLIDESHOW_TOOLS_HXX
+#ifndef INCLUDED_SLIDESHOW_TOOLS_HXX
+#define INCLUDED_SLIDESHOW_TOOLS_HXX
 
 #include <com/sun/star/uno/Sequence.hxx>
 #include <com/sun/star/beans/XPropertySet.hpp>
 
-#include <basegfx/matrix/b2dhommatrix.hxx>
-#include <basegfx/range/b2drectangle.hxx>
-#include <basegfx/tuple/b2dtuple.hxx>
-#include <basegfx/vector/b2dsize.hxx>
-
-#include <boost/bind.hpp>
-#include <boost/shared_ptr.hpp>
+#include <cppcanvas/color.hxx>
 
 #include "shapeattributelayer.hxx"
 #include "shape.hxx"
 #include "rgbcolor.hxx"
 #include "hslcolor.hxx"
 
+#include <boost/shared_ptr.hpp>
+#include <boost/current_function.hpp>
+
+#include <functional>
+#include <cstdlib>
 #include <string.h> // for strcmp
 #include <algorithm>
 
-#include <boost/optional.hpp>
-#include <functional>
-#include <cstdlib>
 
 #define OUSTR(x) ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM(x) )
 
@@ -65,6 +61,14 @@
 namespace com { namespace sun { namespace star { namespace beans {
     struct NamedValue;
 } } } }
+namespace basegfx
+{
+    class B2DRange;
+    class B2DVector;
+    class B2IVector;
+    class B2DHomMatrix;
+}
+namespace cppcanvas{ class Canvas; }
 
 class GDIMetaFile;
 
@@ -73,6 +77,10 @@ namespace slideshow
 {
     namespace internal
     {
+        class UnoView;
+        class Shape;
+        class ShapeAttributeLayer;
+
         typedef ::boost::shared_ptr< GDIMetaFile > GDIMetaFileSharedPtr;
 
         // xxx todo: remove with boost::hash when 1.33 is available
@@ -119,56 +127,53 @@ namespace slideshow
         // Value extraction from Any
         // =========================
 
-        class LayerManager;
-        typedef ::boost::shared_ptr< LayerManager > LayerManagerSharedPtr;
-
         /// extract unary double value from Any
         bool extractValue( double&                              o_rValue,
                            const ::com::sun::star::uno::Any&    rSourceAny,
-                           const ShapeSharedPtr&                rShape,
-                           const LayerManagerSharedPtr&         rLayerManager );
+                           const boost::shared_ptr<Shape>&      rShape,
+                           const basegfx::B2DVector&            rSlideBounds );
 
         /// extract int from Any
         bool extractValue( sal_Int32&                           o_rValue,
                            const ::com::sun::star::uno::Any&    rSourceAny,
-                           const ShapeSharedPtr&                rShape,
-                           const LayerManagerSharedPtr&         rLayerManager );
+                           const boost::shared_ptr<Shape>&      rShape,
+                           const basegfx::B2DVector&            rSlideBounds );
 
         /// extract enum/constant group value from Any
         bool extractValue( sal_Int16&                           o_rValue,
                            const ::com::sun::star::uno::Any&    rSourceAny,
-                           const ShapeSharedPtr&                rShape,
-                           const LayerManagerSharedPtr&         rLayerManager );
+                           const boost::shared_ptr<Shape>&      rShape,
+                           const basegfx::B2DVector&            rSlideBounds );
 
         /// extract color value from Any
         bool extractValue( RGBColor&                            o_rValue,
                            const ::com::sun::star::uno::Any&    rSourceAny,
-                           const ShapeSharedPtr&                rShape,
-                           const LayerManagerSharedPtr&         rLayerManager );
+                           const boost::shared_ptr<Shape>&      rShape,
+                           const basegfx::B2DVector&            rSlideBounds );
 
         /// extract color value from Any
         bool extractValue( HSLColor&                            o_rValue,
                            const ::com::sun::star::uno::Any&    rSourceAny,
-                           const ShapeSharedPtr&                rShape,
-                           const LayerManagerSharedPtr&         rLayerManager );
+                           const boost::shared_ptr<Shape>&      rShape,
+                           const basegfx::B2DVector&            rSlideBounds );
 
         /// extract plain string from Any
         bool extractValue( ::rtl::OUString&                     o_rValue,
                            const ::com::sun::star::uno::Any&    rSourceAny,
-                           const ShapeSharedPtr&                rShape,
-                           const LayerManagerSharedPtr&         rLayerManager );
+                           const boost::shared_ptr<Shape>&      rShape,
+                           const basegfx::B2DVector&            rSlideBounds );
 
         /// extract bool value from Any
         bool extractValue( bool&                                o_rValue,
                            const ::com::sun::star::uno::Any&    rSourceAny,
-                           const ShapeSharedPtr&                rShape,
-                           const LayerManagerSharedPtr&         rLayerManager );
+                           const boost::shared_ptr<Shape>&      rShape,
+                           const basegfx::B2DVector&            rSlideBounds );
 
         /// extract double 2-tuple from Any
-        bool extractValue( ::basegfx::B2DTuple&                 o_rPair,
+        bool extractValue( basegfx::B2DTuple&                   o_rPair,
                            const ::com::sun::star::uno::Any&    rSourceAny,
-                           const ShapeSharedPtr&                rShape,
-                           const LayerManagerSharedPtr&         rLayerManager );
+                           const boost::shared_ptr<Shape>&      rShape,
+                           const basegfx::B2DVector&            rSlideBounds );
 
         /** Search a sequence of NamedValues for a given element.
 
@@ -193,14 +198,8 @@ namespace slideshow
                                  ::com::sun::star::beans::NamedValue >&     rSequence,
                              const ::rtl::OUString&                     rSearchString );
 
-        inline ::basegfx::B2DRectangle calcRelativeShapeBounds( const ::basegfx::B2DRectangle& rPageBounds,
-                                                                const ::basegfx::B2DRectangle& rShapeBounds )
-        {
-            return ::basegfx::B2DRectangle( rShapeBounds.getMinX() / rPageBounds.getWidth(),
-                                            rShapeBounds.getMinY() / rPageBounds.getHeight(),
-                                            rShapeBounds.getMaxX() / rPageBounds.getWidth(),
-                                            rShapeBounds.getMaxY() / rPageBounds.getHeight() );
-        }
+        basegfx::B2DRange calcRelativeShapeBounds( const basegfx::B2DVector& rPageSize,
+                                                   const basegfx::B2DRange&  rShapeBounds );
 
         /** Get the shape transformation from the attribute set
 
@@ -212,8 +211,9 @@ namespace slideshow
             Attribute set. Might be NULL (then, rBounds is used to set
             a simple scale and translate of the unit rect to rBounds).
         */
-        ::basegfx::B2DHomMatrix getShapeTransformation( const ::basegfx::B2DRectangle&      rBounds,
-                                                        const ShapeAttributeLayerSharedPtr& pAttr );
+        basegfx::B2DHomMatrix getShapeTransformation(
+            const basegfx::B2DRange&                      rBounds,
+            const boost::shared_ptr<ShapeAttributeLayer>& pAttr );
 
         /** Get a shape's sprite transformation from the attribute set
 
@@ -230,9 +230,10 @@ namespace slideshow
 
             @return the transformation to be applied to the sprite.
         */
-        ::basegfx::B2DHomMatrix getSpriteTransformation( const ::basegfx::B2DSize&              rPixelSize,
-                                                         const ::basegfx::B2DSize&              rOrigSize,
-                                                         const ShapeAttributeLayerSharedPtr&    pAttr );
+        basegfx::B2DHomMatrix getSpriteTransformation(
+            const basegfx::B2DVector&                     rPixelSize,
+            const basegfx::B2DVector&                     rOrigSize,
+            const boost::shared_ptr<ShapeAttributeLayer>& pAttr );
 
         /** Calc update area for a shape.
 
@@ -252,9 +253,10 @@ namespace slideshow
             @param pAttr
             Current shape attributes
          */
-        ::basegfx::B2DRectangle getShapeUpdateArea( const ::basegfx::B2DRectangle&      rUnitBounds,
-                                                    const ::basegfx::B2DHomMatrix&      rShapeTransform,
-                                                    const ShapeAttributeLayerSharedPtr& pAttr );
+        basegfx::B2DRange getShapeUpdateArea(
+            const basegfx::B2DRange&                      rUnitBounds,
+            const basegfx::B2DHomMatrix&                  rShapeTransform,
+            const boost::shared_ptr<ShapeAttributeLayer>& pAttr );
 
         /** Calc update area for a shape.
 
@@ -274,8 +276,8 @@ namespace slideshow
             @param rShapeBounds
             Current shape bounding box in user coordinate space.
          */
-        ::basegfx::B2DRectangle getShapeUpdateArea( const ::basegfx::B2DRectangle&      rUnitBounds,
-                                                    const ::basegfx::B2DRectangle&      rShapeBounds );
+        basegfx::B2DRange getShapeUpdateArea( const basegfx::B2DRange& rUnitBounds,
+                                              const basegfx::B2DRange& rShapeBounds );
 
         /** Calc output position and size of shape, according to given
             attribute layer.
@@ -285,8 +287,9 @@ namespace slideshow
             it as if aBounds.getMinimum() is the output position and
             aBounds.getRange() the scaling of the shape.
          */
-        ::basegfx::B2DRectangle getShapePosSize( const ::basegfx::B2DRectangle&         rOrigBounds,
-                                                 const ShapeAttributeLayerSharedPtr&    pAttr );
+        basegfx::B2DRange getShapePosSize(
+            const basegfx::B2DRange&                      rOrigBounds,
+            const boost::shared_ptr<ShapeAttributeLayer>& pAttr );
 
         /** Convert a plain UNO API 32 bit int to RGBColor
          */
@@ -294,14 +297,14 @@ namespace slideshow
 
         /** Fill a plain rectangle on the given canvas with the given color
          */
-        void fillRect( const ::cppcanvas::CanvasSharedPtr& rCanvas,
-                       const ::basegfx::B2DRectangle&      rRect,
-                       ::cppcanvas::Color::IntSRGBA        aFillColor );
+        void fillRect( const boost::shared_ptr< cppcanvas::Canvas >& rCanvas,
+                       const basegfx::B2DRange&                      rRect,
+                       cppcanvas::Color::IntSRGBA                    aFillColor );
 
         /** Init canvas with default background (white)
          */
-        void initSlideBackground( const ::cppcanvas::CanvasSharedPtr& rCanvas,
-                                  const ::basegfx::B2ISize&           rSize );
+        void initSlideBackground( const boost::shared_ptr< cppcanvas::Canvas >& rCanvas,
+                                  const basegfx::B2IVector&                     rSize );
 
         /// Gets a random ordinal [0,n)
         inline ::std::size_t getRandomOrdinal( const ::std::size_t n )
@@ -391,13 +394,16 @@ namespace slideshow
         }
 
         /// Get the content of the BoundRect shape property
-        ::basegfx::B2DRectangle getAPIShapeBounds( const ::com::sun::star::uno::Reference<
-                                                         ::com::sun::star::drawing::XShape >& xShape );
+        basegfx::B2DRange getAPIShapeBounds( const ::com::sun::star::uno::Reference<
+                                                ::com::sun::star::drawing::XShape >& xShape );
 
         /// Get the content of the ZOrder shape property
         double getAPIShapePrio( const ::com::sun::star::uno::Reference<
                                       ::com::sun::star::drawing::XShape >& xShape );
+
+        basegfx::B2IVector getSlideSizePixel( const basegfx::B2DVector&         rSize,
+                                              const boost::shared_ptr<UnoView>& pView );
     }
 }
 
-#endif /* _SLIDESHOW_TOOLS_HXX */
+#endif /* INCLUDED_SLIDESHOW_TOOLS_HXX */
