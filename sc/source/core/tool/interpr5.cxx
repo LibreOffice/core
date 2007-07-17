@@ -4,9 +4,9 @@
  *
  *  $RCSfile: interpr5.cxx,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: rt $ $Date: 2007-07-06 12:36:09 $
+ *  last change: $Author: obo $ $Date: 2007-07-17 13:33:07 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -40,6 +40,7 @@
 
 #include <string.h>
 #include <math.h>
+#include <stdio.h>
 
 #if OSL_DEBUG_LEVEL > 1
 #include <stdio.h>
