@@ -4,9 +4,9 @@
  *
  *  $RCSfile: setup_main.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: gm $ $Date: 2007-05-10 11:08:54 $
+ *  last change: $Author: obo $ $Date: 2007-07-17 07:28:25 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -57,8 +57,8 @@ public:
     virtual boolean CheckVersion() = 0;
     virtual boolean Install( long nLanguage ) = 0;
 
-    virtual UINT    GetError() const = NULL;
-    virtual void    DisplayError( UINT nErr ) const = NULL;
+    virtual UINT    GetError() const = 0;
+    virtual void    DisplayError( UINT nErr ) const = 0;
 
     void            SetError( UINT nErr ) { m_uiRet = nErr; }
     boolean         IsWin9x() const { return m_bIsWin9x; }

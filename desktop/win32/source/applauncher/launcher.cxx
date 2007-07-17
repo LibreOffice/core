@@ -4,9 +4,9 @@
  *
  *  $RCSfile: launcher.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: hr $ $Date: 2007-06-27 17:55:43 $
+ *  last change: $Author: obo $ $Date: 2007-07-17 07:28:12 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -56,7 +56,11 @@
 #include <malloc.h>
 
 
+#ifdef __MINGW32__
+extern "C" int APIENTRY WinMain( HINSTANCE, HINSTANCE, LPSTR, int )
+#else
 extern "C" int APIENTRY _tWinMain( HINSTANCE, HINSTANCE, LPTSTR, int )
+#endif
 {
     // Retreive startup info
 
