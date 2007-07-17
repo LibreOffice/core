@@ -5,9 +5,9 @@
  *
  *  $RCSfile: Impress.xcs,v $
  *
- *  $Revision: 1.28 $
+ *  $Revision: 1.29 $
  *
- *  last change: $Author: rt $ $Date: 2007-04-03 15:31:05 $
+ *  last change: $Author: obo $ $Date: 2007-07-17 14:28:24 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -430,6 +430,18 @@
 					<author>AW</author>
 					<desc>Indicates whether the warning dialog appears when setting a new standard page layout.</desc>
 					<label>Show Undo-Stack Delete Warning</label>
+				</info>
+				<value>true</value>
+			</prop>
+
+			<prop oor:name="SlideshowRespectZOrder" oor:type="xs:boolean">
+				<!-- OldPath: -->
+				<!-- OldLocation: -->
+				<!-- UIHints: Slideshow Z order for animations -->
+				<info>
+					<author>THB</author>
+					<desc>Indicates whether the slideshow should respect shape z-order while animating shapes. Disabling this can improve slideshow performance</desc>
+					<label>Enable shape z-order during slideshow animations</label>
 				</info>
 				<value>true</value>
 			</prop>
