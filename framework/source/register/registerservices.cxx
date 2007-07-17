@@ -4,9 +4,9 @@
  *
  *  $RCSfile: registerservices.cxx,v $
  *
- *  $Revision: 1.37 $
+ *  $Revision: 1.38 $
  *
- *  last change: $Author: obo $ $Date: 2007-01-23 07:10:33 $
+ *  last change: $Author: obo $ $Date: 2007-07-17 13:25:41 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -76,9 +76,6 @@
 #include <services/desktop.hxx>
 #endif
 
-#ifndef __FRAMEWORK_SERVICES_DOCUMENTPROPERTIES_HXX_
-#include <services/documentproperties.hxx>
-#endif
 
 #ifndef __FRAMEWORK_SERVICES_FRAME_HXX_
 #include <services/frame.hxx>
@@ -284,7 +281,6 @@ COMPONENTGETIMPLEMENTATIONENVIRONMENT
 COMPONENTWRITEINFO  (   COMPONENTINFO( ::framework::URLTransformer                          )
                         COMPONENTINFO( ::framework::Desktop                                 )
                         COMPONENTINFO( ::framework::Frame                                   )
-                        COMPONENTINFO( ::framework::DocumentProperties                      )
                         COMPONENTINFO( ::framework::SoundHandler                            )
                         COMPONENTINFO( ::framework::JobExecutor                             )
                         COMPONENTINFO( ::framework::DispatchRecorderSupplier                )
@@ -338,7 +334,6 @@ COMPONENTWRITEINFO  (   COMPONENTINFO( ::framework::URLTransformer              
 COMPONENTGETFACTORY (   IFFACTORY( ::framework::URLTransformer                          )   else
                         IFFACTORY( ::framework::Desktop                                 )   else
                         IFFACTORY( ::framework::Frame                                   )   else
-                        IFFACTORY( ::framework::DocumentProperties                      )   else
                         IFFACTORY( ::framework::SoundHandler                            )   else
                         IFFACTORY( ::framework::JobExecutor                             )   else
                         IFFACTORY( ::framework::DispatchRecorderSupplier                )   else
