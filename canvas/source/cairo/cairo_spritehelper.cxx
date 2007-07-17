@@ -4,9 +4,9 @@
  *
  *  $RCSfile: cairo_spritehelper.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: vg $ $Date: 2006-11-01 14:46:36 $
+ *  last change: $Author: obo $ $Date: 2007-07-17 14:21:52 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -110,8 +110,8 @@ namespace cairocanvas
 
     void SpriteHelper::redraw( Cairo*                     pCairo,
                                const ::basegfx::B2DPoint& rPos,
-                               bool&                      io_bSurfacesDirty,
-                               bool                       bBufferedUpdate ) const
+                               bool&                      /*io_bSurfacesDirty*/,
+                               bool                       /*bBufferedUpdate*/ ) const
     {
     #ifdef CAIRO_CANVAS_PERF_TRACE
     struct timespec aTimer;
@@ -185,19 +185,6 @@ namespace cairocanvas
     #ifdef CAIRO_CANVAS_PERF_TRACE
     mxDevice->stopPerfTrace( &aTimer, "sprite redraw" );
         #endif
-    }
-
-    void SpriteHelper::clearSurface()
-    {
-    Cairo* pCairo = mpBufferSurface->getCairo();
-    const ::basegfx::B2DVector& rSize( getSizePixel() );
-
-    cairo_set_operator( pCairo, CAIRO_OPERATOR_SOURCE );
-    cairo_set_source_rgba( pCairo, 0, 0, 0, 0 );
-    cairo_rectangle( pCairo, 0, 0, rSize.getX(), rSize.getY() );
-    cairo_fill( pCairo );
-
-    cairo_destroy( pCairo );
     }
 
     ::basegfx::B2DPolyPolygon SpriteHelper::polyPolygonFromXPolyPolygon2D( uno::Reference< rendering::XPolyPolygon2D >& xPoly ) const
