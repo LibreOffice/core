@@ -4,9 +4,9 @@
  *
  *  $RCSfile: docsh.cxx,v $
  *
- *  $Revision: 1.70 $
+ *  $Revision: 1.71 $
  *
- *  last change: $Author: hr $ $Date: 2007-06-26 10:44:37 $
+ *  last change: $Author: obo $ $Date: 2007-07-17 13:10:08 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -441,23 +441,11 @@ BOOL SwDocShell::ConvertFrom( SfxMedium& rMedium )
     ULONG nErr = pRdr->Read( *pRead );
 
     // Evtl. ein altes Doc weg
-    if( pDoc )
-        RemoveLink();
-    pDoc = pRdr->GetDoc();
-
-    // die DocInfo vom Doc am DocShell-Medium setzen
-    //TODO/LATER: export DocumentInfo!
-    if( GetMedium()->GetFilter() &&
-        //TODO/LATER: OLEStorage! Obviously it's for MS import ?!
-        GetMedium()->GetFilter()->UsesStorage() )
+    if ( pDoc != pRdr->GetDoc() )
     {
-        // the code below does not work even in the current build, because it's not possible to store
-        // a DocumentInfo into a package in this way!
-        /*
-        SvStorageRef aRef = GetMedium()->GetStorage();
-        if( aRef.Is() )
-            pDoc->GetInfo()->Save(aRef);*/
-        GetDocInfo() = *pDoc->GetInfo();
+        if( pDoc )
+            RemoveLink();
+        pDoc = pRdr->GetDoc();
     }
 
     AddLink();
@@ -618,14 +606,7 @@ sal_Bool SwDocShell::SaveAs( SfxMedium& rMedium )
         {
             // when saving it in our own fileformat, then remove the template
             // name from the docinfo.
-            SfxDocumentInfo aInfo = GetDocInfo();
-            if( aInfo.GetTemplateName().Len() ||
-                aInfo.GetTemplateFileName().Len() )
-            {
-                aInfo.SetTemplateName( aEmptyStr );
-                aInfo.SetTemplateFileName( aEmptyStr );
-                SetDocumentInfo( aInfo );
-            }
+            GetDocInfo().ClearTemplateInformation();
         }
     }
 
@@ -1462,7 +1443,7 @@ void SwDocShell::CalcLayoutForOLEObjects()
 // read by the binary filter:
 void SwDocShell::UpdateLinks()
 {
-    GetDoc()->UpdateLinks();
+    GetDoc()->UpdateLinks(TRUE);
     // --> FME 2005-07-27 #i50703# Update footnote numbers
     SwTxtFtn::SetUniqueSeqRefNo( *GetDoc() );
     SwNodeIndex aTmp( GetDoc()->GetNodes() );
