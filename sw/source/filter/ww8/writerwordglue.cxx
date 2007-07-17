@@ -4,9 +4,9 @@
  *
  *  $RCSfile: writerwordglue.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: ihi $ $Date: 2006-12-19 18:54:43 $
+ *  last change: $Author: obo $ $Date: 2007-07-17 13:09:04 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -851,6 +851,8 @@ namespace sw
                                                 Saturday=6)
         */
 
+            if ( rDT.GetDate() == 0L )
+                return 0L;
             long nDT = ( rDT.GetDayOfWeek() + 1 ) % 7;
             nDT <<= 9;
             nDT += ( rDT.GetYear() - 1900 ) & 0x1ff;
