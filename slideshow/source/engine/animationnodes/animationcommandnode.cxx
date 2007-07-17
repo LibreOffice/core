@@ -4,9 +4,9 @@
  *
  *  $RCSfile: animationcommandnode.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: kz $ $Date: 2006-12-13 15:29:27 $
+ *  last change: $Author: obo $ $Date: 2007-07-17 14:47:16 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -37,13 +37,16 @@
 #include "precompiled_slideshow.hxx"
 
 // must be first
-#include "canvas/debug.hxx"
-#include "canvas/verbosetrace.hxx"
-#include "com/sun/star/presentation/EffectCommands.hpp"
+#include <canvas/debug.hxx>
+#include <canvas/verbosetrace.hxx>
+#include <com/sun/star/presentation/EffectCommands.hpp>
+
 #include "animationcommandnode.hxx"
 #include "delayevent.hxx"
 #include "tools.hxx"
 #include "nodetools.hxx"
+
+#include <boost/bind.hpp>
 
 namespace slideshow {
 namespace internal {
