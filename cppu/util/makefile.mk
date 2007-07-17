@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.9 $
+#   $Revision: 1.10 $
 #
-#   last change: $Author: kz $ $Date: 2007-05-09 13:51:06 $
+#   last change: $Author: obo $ $Date: 2007-07-17 07:26:47 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -79,7 +79,11 @@ DEF1NAME=$(SHL1TARGET)
 
 SHL2TARGET  := $(NAMEpurpenv_helper)
 DEF2NAME    := $(SHL2TARGET)
+.IF "$(GUI)$(COM)"=="WNTGCC"
+SHL2VERSIONMAP:=uno_purpenvhelper$(COMID).map
+.ELSE
 SHL2VERSIONMAP:=$(SHL2TARGET).map
+.ENDIF			# "$(GUI)$(COM)"=="WNTGCC"
 SHL2DEF     := $(MISC)$/$(SHL2TARGET).def
 SHL2IMPLIB  := i$(SHL2TARGET)
 SHL2STDLIBS := $(CPPULIB) $(SALHELPERLIB) $(SALLIB) 
