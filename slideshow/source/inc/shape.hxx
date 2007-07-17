@@ -4,9 +4,9 @@
  *
  *  $RCSfile: shape.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: kz $ $Date: 2006-12-13 16:01:16 $
+ *  last change: $Author: obo $ $Date: 2007-07-17 15:12:57 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -33,8 +33,8 @@
  *
  ************************************************************************/
 
-#ifndef _SLIDESHOW_SHAPE_HXX
-#define _SLIDESHOW_SHAPE_HXX
+#ifndef INCLUDED_SLIDESHOW_SHAPE_HXX
+#define INCLUDED_SLIDESHOW_SHAPE_HXX
 
 #include <com/sun/star/uno/Reference.hxx>
 #include <com/sun/star/drawing/XShape.hpp>
@@ -42,13 +42,16 @@
 
 #include <basegfx/range/b2drectangle.hxx>
 
+#include "viewlayer.hxx"
+
 #include <boost/shared_ptr.hpp>
-#include <boost/utility.hpp>
-
-#include <viewlayer.hxx>
+#include <boost/noncopyable.hpp>
 #include <set>
-
 #include <vector>
+
+namespace basegfx {
+    class B2DRange;
+}
 
 namespace slideshow
 {
@@ -115,16 +118,6 @@ namespace slideshow
              */
             virtual bool clearAllViewLayers() = 0;
 
-            // TODO(Q3): This is a wart. Use broadcaster, where
-            // everyone interested can register at.
-
-            /** Notify that view layer has changed
-
-                @param rNewLayer
-                View layer that changed (size, transformation etc.)
-             */
-            virtual void viewLayerChanged( const ViewLayerSharedPtr& rNewLayer ) = 0;
-
             // render methods
             //------------------------------------------------------------------
 
@@ -148,13 +141,13 @@ namespace slideshow
             */
             virtual bool render() const = 0;
 
-            /** Query whether an update is necessary.
+            /** Query whether shape content changed
 
                 This method returns true, if shape content changed
                 since the last rendering (i.e. the shape needs an
                 update to reflect that changed content on the views).
              */
-            virtual bool isUpdateNecessary() const = 0;
+            virtual bool isContentChanged() const = 0;
 
 
             // Shape attributes
@@ -174,7 +167,7 @@ namespace slideshow
                 shape as-is from the document, assuming a rotation
                 angle of 0).
              */
-            virtual ::basegfx::B2DRectangle getPosSize() const = 0;
+            virtual ::basegfx::B2DRange getBounds() const = 0;
 
             /** Get the DOM position and size of the shape.
 
@@ -187,7 +180,7 @@ namespace slideshow
                 currently take the shape as-is from the document,
                 assuming a rotation angle of 0).
              */
-            virtual ::basegfx::B2DRectangle getDOMBounds() const = 0;
+            virtual ::basegfx::B2DRange getDomBounds() const = 0;
 
             /** Get the current shape update area.
 
@@ -195,9 +188,9 @@ namespace slideshow
                 for the shape, i.e. the area that needs to be updated,
                 should the shape be painted. Normally, this will be
                 the (possibly rotated and sheared) area returned by
-                getPosSize().
+                getBounds().
              */
-            virtual ::basegfx::B2DRectangle getUpdateArea() const = 0;
+            virtual ::basegfx::B2DRange getUpdateArea() const = 0;
 
             /** Query whether the shape is visible at all.
 
@@ -228,35 +221,6 @@ namespace slideshow
              */
             virtual bool isBackgroundDetached() const = 0;
 
-            // TODO(Q1): Maybe the hasIntrinsicAnimation() method is
-            // superfluous. Depending on the RTTI implementation, that
-            // might do exactly the same.
-
-            /** Query whether shape has intrinsic animation.
-
-                This method must return true, if the shape has an
-                intrinsic animation (e.g. drawing layer animation, or
-                animated GIF), which needs external update triggers.
-
-                @return true, if this shape is intrinsically animated.
-
-                @see IntrinsicAnimation interface
-             */
-            virtual bool hasIntrinsicAnimation() const = 0;
-
-            typedef ::std::pair< ::basegfx::B2DRectangle,
-                                 ::rtl::OUString >        HyperLinkRegion;
-            typedef ::std::vector<HyperLinkRegion>        HyperLinkRegions;
-
-            /** Checks whether this shape has hyperlinks to be clicked.
-             */
-            virtual bool hasHyperlinks() const = 0;
-
-            /** @return the position and size of all hyperlinks relative to
-                        the upper left corner of the shape.
-            */
-            virtual HyperLinkRegions getHyperlinkRegions() const = 0;
-
             // Misc
             //------------------------------------------------------------------
 
@@ -285,13 +249,23 @@ namespace slideshow
                 // If, someday, the above proposition is no longer true, one directly use
                 // the shape's ZOrder property
                 //
-                inline bool operator()(const ShapeSharedPtr& rLHS, const ShapeSharedPtr& rRHS) const
+                static bool compare(const Shape* pLHS, const Shape* pRHS)
                 {
-                    const double nPrioL( rLHS->getPriority() );
-                    const double nPrioR( rRHS->getPriority() );
+                    const double nPrioL( pLHS->getPriority() );
+                    const double nPrioR( pRHS->getPriority() );
 
                     // if prios are equal, tie-break on ptr value
-                    return nPrioL == nPrioR ? rLHS.get() < rRHS.get() : nPrioL < nPrioR;
+                    return nPrioL == nPrioR ? pLHS < pRHS : nPrioL < nPrioR;
+                }
+
+                bool operator()(const ShapeSharedPtr& rLHS, const ShapeSharedPtr& rRHS) const
+                {
+                    return compare(rLHS.get(),rRHS.get());
+                }
+
+                bool operator()(const Shape* pLHS, const Shape* pRHS) const
+                {
+                    return compare(pLHS, pRHS);
                 }
             };
         };
@@ -304,4 +278,4 @@ namespace slideshow
     }
 }
 
-#endif /* _SLIDESHOW_SHAPE_HXX */
+#endif /* INCLUDED_SLIDESHOW_SHAPE_HXX */
