@@ -4,9 +4,9 @@
  *
  *  $RCSfile: animationfactory.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: kz $ $Date: 2006-12-13 15:12:24 $
+ *  last change: $Author: obo $ $Date: 2007-07-17 14:34:05 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -73,7 +73,7 @@ namespace slideshow
             template< typename ValueT > class TupleAnimation : public PairAnimation
             {
             public:
-                TupleAnimation( const LayerManagerSharedPtr&        rLayerManager,
+                TupleAnimation( const ShapeManagerSharedPtr&        rShapeManager,
                                 int                                 nFlags,
                                 bool         (ShapeAttributeLayer::*pIs1stValid)() const,
                                 bool         (ShapeAttributeLayer::*pIs2ndValid)() const,
@@ -84,7 +84,7 @@ namespace slideshow
                                 void         (ShapeAttributeLayer::*pSetValue)( const ValueT& ) ) :
                     mpShape(),
                     mpAttrLayer(),
-                    mpLayerManager( rLayerManager ),
+                    mpShapeManager( rShapeManager ),
                     mpIs1stValidFunc(pIs1stValid),
                     mpIs2ndValidFunc(pIs2ndValid),
                     mpGet1stValueFunc(pGet1stValue),
@@ -95,8 +95,8 @@ namespace slideshow
                     maDefaultValue( rDefaultValue ),
                     mbAnimationStarted( false )
                 {
-                    ENSURE_AND_THROW( rLayerManager,
-                                      "TupleAnimation::TupleAnimation(): Invalid LayerManager" );
+                    ENSURE_AND_THROW( rShapeManager,
+                                      "TupleAnimation::TupleAnimation(): Invalid ShapeManager" );
                     ENSURE_AND_THROW( pIs1stValid && pIs2ndValid && pGet1stValue && pGet2ndValue && pSetValue,
                                       "TupleAnimation::TupleAnimation(): One of the method pointers is NULL" );
                 }
@@ -108,6 +108,10 @@ namespace slideshow
 
                 // Animation interface
                 // -------------------
+                virtual void prefetch( const AnimatableShapeSharedPtr&,
+                                       const ShapeAttributeLayerSharedPtr& )
+                {}
+
                 virtual void start( const AnimatableShapeSharedPtr&     rShape,
                                     const ShapeAttributeLayerSharedPtr& rAttrLayer )
                 {
@@ -129,7 +133,7 @@ namespace slideshow
                         mbAnimationStarted = true;
 
                         if( !(mnFlags & AnimationFactory::FLAG_NO_SPRITE) )
-                            mpLayerManager->enterAnimationMode( mpShape );
+                            mpShapeManager->enterAnimationMode( mpShape );
                     }
                 }
 
@@ -141,10 +145,10 @@ namespace slideshow
                         mbAnimationStarted = false;
 
                         if( !(mnFlags & AnimationFactory::FLAG_NO_SPRITE) )
-                            mpLayerManager->leaveAnimationMode( mpShape );
+                            mpShapeManager->leaveAnimationMode( mpShape );
 
-                        if( mpShape->isUpdateNecessary() )
-                            mpLayerManager->notifyShapeUpdate( mpShape );
+                        if( mpShape->isContentChanged() )
+                            mpShapeManager->notifyShapeUpdate( mpShape );
                     }
                 }
 
@@ -166,8 +170,8 @@ namespace slideshow
 
                     ((*mpAttrLayer).*mpSetValueFunc)( aValue );
 
-                    if( mpShape->isUpdateNecessary() )
-                        mpLayerManager->notifyShapeUpdate( mpShape );
+                    if( mpShape->isContentChanged() )
+                        mpShapeManager->notifyShapeUpdate( mpShape );
 
                     return true;
                 }
@@ -202,7 +206,7 @@ namespace slideshow
             private:
                 AnimatableShapeSharedPtr           mpShape;
                 ShapeAttributeLayerSharedPtr       mpAttrLayer;
-                LayerManagerSharedPtr              mpLayerManager;
+                ShapeManagerSharedPtr              mpShapeManager;
                 bool        (ShapeAttributeLayer::*mpIs1stValidFunc)() const;
                 bool        (ShapeAttributeLayer::*mpIs2ndValidFunc)() const;
                 double      (ShapeAttributeLayer::*mpGet1stValueFunc)() const;
@@ -221,19 +225,20 @@ namespace slideshow
             {
             public:
                 PathAnimation( const ::rtl::OUString&       rSVGDPath,
-                               const LayerManagerSharedPtr& rLayerManager,
+                               const ShapeManagerSharedPtr& rShapeManager,
+                               const ::basegfx::B2DVector&  rSlideSize,
                                int                          nFlags ) :
                     maPathPoly(),
                     mpShape(),
                     mpAttrLayer(),
-                    mpLayerManager( rLayerManager ),
-                    maPageSize( rLayerManager->getPageBounds().getRange() ),
+                    mpShapeManager( rShapeManager ),
+                    maPageSize( rSlideSize ),
                     maShapeOrig(),
                     mnFlags( nFlags ),
                     mbAnimationStarted( false )
                 {
-                    ENSURE_AND_THROW( rLayerManager,
-                                      "PathAnimation::PathAnimation(): Invalid LayerManager" );
+                    ENSURE_AND_THROW( rShapeManager,
+                                      "PathAnimation::PathAnimation(): Invalid ShapeManager" );
 
                     ::basegfx::B2DPolyPolygon aPolyPoly;
 
@@ -255,6 +260,10 @@ namespace slideshow
 
                 // Animation interface
                 // -------------------
+                virtual void prefetch( const AnimatableShapeSharedPtr&,
+                                       const ShapeAttributeLayerSharedPtr& )
+                {}
+
                 virtual void start( const AnimatableShapeSharedPtr&     rShape,
                                     const ShapeAttributeLayerSharedPtr& rAttrLayer )
                 {
@@ -275,14 +284,14 @@ namespace slideshow
                     // Theoretically, our AttrLayer is way down the stack, and
                     // we only have to consider _that_ value, not the one from
                     // the top of the stack as returned by Shape::getBounds()
-                    maShapeOrig = mpShape->getPosSize().getCenter();
+                    maShapeOrig = mpShape->getBounds().getCenter();
 
                     if( !mbAnimationStarted )
                     {
                         mbAnimationStarted = true;
 
                         if( !(mnFlags & AnimationFactory::FLAG_NO_SPRITE) )
-                            mpLayerManager->enterAnimationMode( mpShape );
+                            mpShapeManager->enterAnimationMode( mpShape );
                     }
                 }
 
@@ -294,10 +303,10 @@ namespace slideshow
                         mbAnimationStarted = false;
 
                         if( !(mnFlags & AnimationFactory::FLAG_NO_SPRITE) )
-                            mpLayerManager->leaveAnimationMode( mpShape );
+                            mpShapeManager->leaveAnimationMode( mpShape );
 
-                        if( mpShape->isUpdateNecessary() )
-                            mpLayerManager->notifyShapeUpdate( mpShape );
+                        if( mpShape->isContentChanged() )
+                            mpShapeManager->notifyShapeUpdate( mpShape );
                     }
                 }
 
@@ -327,8 +336,8 @@ namespace slideshow
 
                     mpAttrLayer->setPosition( rOutPos );
 
-                    if( mpShape->isUpdateNecessary() )
-                        mpLayerManager->notifyShapeUpdate( mpShape );
+                    if( mpShape->isContentChanged() )
+                        mpShapeManager->notifyShapeUpdate( mpShape );
 
                     return true;
                 }
@@ -348,7 +357,7 @@ namespace slideshow
                 ::basegfx::B2DPolygon              maPathPoly;
                 AnimatableShapeSharedPtr           mpShape;
                 ShapeAttributeLayerSharedPtr       mpAttrLayer;
-                LayerManagerSharedPtr              mpLayerManager;
+                ShapeManagerSharedPtr              mpShapeManager;
                 const ::basegfx::B2DSize           maPageSize;
                 ::basegfx::B2DPoint                maShapeOrig;
                 const int                          mnFlags;
@@ -412,7 +421,7 @@ namespace slideshow
                     Modifies up values before passing them to the pSetValue method.
                     Must provide operator()( const ValueT& ) method.
                  */
-                GenericAnimation( const LayerManagerSharedPtr&          rLayerManager,
+                GenericAnimation( const ShapeManagerSharedPtr&          rShapeManager,
                                   int                                   nFlags,
                                   bool           (ShapeAttributeLayer::*pIsValid)() const,
                                   const ValueT&                         rDefaultValue,
@@ -422,7 +431,7 @@ namespace slideshow
                                   const ModifierFunctor&                rSetterModifier ) :
                     mpShape(),
                     mpAttrLayer(),
-                    mpLayerManager( rLayerManager ),
+                    mpShapeManager( rShapeManager ),
                     mpIsValidFunc(pIsValid),
                     mpGetValueFunc(pGetValue),
                     mpSetValueFunc(pSetValue),
@@ -432,8 +441,8 @@ namespace slideshow
                     maDefaultValue(rDefaultValue),
                     mbAnimationStarted( false )
                 {
-                    ENSURE_AND_THROW( rLayerManager,
-                                      "GenericAnimation::GenericAnimation(): Invalid LayerManager" );
+                    ENSURE_AND_THROW( rShapeManager,
+                                      "GenericAnimation::GenericAnimation(): Invalid ShapeManager" );
                     ENSURE_AND_THROW( pIsValid && pGetValue && pSetValue,
                                       "GenericAnimation::GenericAnimation(): One of the method pointers is NULL" );
                 }
@@ -445,6 +454,10 @@ namespace slideshow
 
                 // Animation interface
                 // -------------------
+                virtual void prefetch( const AnimatableShapeSharedPtr&,
+                                       const ShapeAttributeLayerSharedPtr& )
+                {}
+
                 virtual void start( const AnimatableShapeSharedPtr&     rShape,
                                     const ShapeAttributeLayerSharedPtr& rAttrLayer )
                 {
@@ -468,7 +481,7 @@ namespace slideshow
                         mbAnimationStarted = true;
 
                         if( !(mnFlags & AnimationFactory::FLAG_NO_SPRITE) )
-                            mpLayerManager->enterAnimationMode( mpShape );
+                            mpShapeManager->enterAnimationMode( mpShape );
                     }
                 }
 
@@ -485,7 +498,7 @@ namespace slideshow
                         mbAnimationStarted = false;
 
                         if( !(mnFlags & AnimationFactory::FLAG_NO_SPRITE) )
-                            mpLayerManager->leaveAnimationMode( mpShape );
+                            mpShapeManager->leaveAnimationMode( mpShape );
 
                         // Attention, this notifyShapeUpdate() is
                         // somewhat delicate here. Calling it
@@ -509,8 +522,8 @@ namespace slideshow
 
                         // force shape update, activity might have changed
                         // state in the last round.
-                        if( mpShape->isUpdateNecessary() )
-                            mpLayerManager->notifyShapeUpdate( mpShape );
+                        if( mpShape->isContentChanged() )
+                            mpShapeManager->notifyShapeUpdate( mpShape );
                     }
                 }
 
@@ -526,8 +539,8 @@ namespace slideshow
 
                     ((*mpAttrLayer).*mpSetValueFunc)( maSetterModifier( x ) );
 
-                    if( mpShape->isUpdateNecessary() )
-                        mpLayerManager->notifyShapeUpdate( mpShape );
+                    if( mpShape->isContentChanged() )
+                        mpShapeManager->notifyShapeUpdate( mpShape );
 
                     return true;
                 }
@@ -541,8 +554,8 @@ namespace slideshow
 
                     ((*mpAttrLayer).*mpSetValueFunc)( maSetterModifier( x ) );
 
-                    if( mpShape->isUpdateNecessary() )
-                        mpLayerManager->notifyShapeUpdate( mpShape );
+                    if( mpShape->isContentChanged() )
+                        mpShapeManager->notifyShapeUpdate( mpShape );
 
                     return true;
                 }
@@ -564,7 +577,7 @@ namespace slideshow
             private:
                 AnimatableShapeSharedPtr           mpShape;
                 ShapeAttributeLayerSharedPtr       mpAttrLayer;
-                LayerManagerSharedPtr              mpLayerManager;
+                ShapeManagerSharedPtr              mpShapeManager;
                 bool        (ShapeAttributeLayer::*mpIsValidFunc)() const;
                 ValueT      (ShapeAttributeLayer::*mpGetValueFunc)() const;
                 void        (ShapeAttributeLayer::*mpSetValueFunc)( const ValueT& );
@@ -585,7 +598,7 @@ namespace slideshow
                 interface GenericAnimation will implement).
              */
             template< typename AnimationBase > ::boost::shared_ptr< AnimationBase >
-                makeGenericAnimation( const LayerManagerSharedPtr&                             rLayerManager,
+                makeGenericAnimation( const ShapeManagerSharedPtr&                             rShapeManager,
                                       int                                                      nFlags,
                                       bool                              (ShapeAttributeLayer::*pIsValid)() const,
                                       const typename AnimationBase::ValueType&                 rDefaultValue,
@@ -595,7 +608,7 @@ namespace slideshow
                 return ::boost::shared_ptr< AnimationBase >(
                     new GenericAnimation< AnimationBase,
                                           ::std::identity< typename AnimationBase::ValueType > >(
-                                              rLayerManager,
+                                              rShapeManager,
                                               nFlags,
                                               pIsValid,
                                               rDefaultValue,
@@ -625,7 +638,7 @@ namespace slideshow
 
             /** Overload for NumberAnimations which need scaling (width,height,x,y currently)
              */
-            NumberAnimationSharedPtr makeGenericAnimation( const LayerManagerSharedPtr&                             rLayerManager,
+            NumberAnimationSharedPtr makeGenericAnimation( const ShapeManagerSharedPtr&                             rShapeManager,
                                                            int                                                      nFlags,
                                                            bool                              (ShapeAttributeLayer::*pIsValid)() const,
                                                            double                                                   nDefaultValue,
@@ -634,7 +647,7 @@ namespace slideshow
                                                            double                                                   nScaleValue )
             {
                 return NumberAnimationSharedPtr(
-                    new GenericAnimation< NumberAnimation, Scaler >( rLayerManager,
+                    new GenericAnimation< NumberAnimation, Scaler >( rShapeManager,
                                                                      nFlags,
                                                                      pIsValid,
                                                                      nDefaultValue / nScaleValue,
@@ -796,7 +809,8 @@ namespace slideshow
 
         NumberAnimationSharedPtr AnimationFactory::createNumberPropertyAnimation( const ::rtl::OUString&                rAttrName,
                                                                                   const AnimatableShapeSharedPtr&       rShape,
-                                                                                  const LayerManagerSharedPtr&          rLayerManager,
+                                                                                  const ShapeManagerSharedPtr&          rShapeManager,
+                                                                                  const ::basegfx::B2DVector&           rSlideSize,
                                                                                   int                                   nFlags )
         {
             // ATTENTION: When changing this map, also the classifyAttributeName() method must
@@ -836,7 +850,7 @@ namespace slideshow
                     break;
 
                 case ATTRIBUTE_CHAR_HEIGHT:
-                    return makeGenericAnimation<NumberAnimation>( rLayerManager,
+                    return makeGenericAnimation<NumberAnimation>( rShapeManager,
                                                                   nFlags,
                                                                   &ShapeAttributeLayer::isCharScaleValid,
                                                                   1.0, // CharHeight is a relative attribute, thus
@@ -845,7 +859,7 @@ namespace slideshow
                                                                   &ShapeAttributeLayer::setCharScale );
 
                 case ATTRIBUTE_CHAR_WEIGHT:
-                    return makeGenericAnimation<NumberAnimation>( rLayerManager,
+                    return makeGenericAnimation<NumberAnimation>( rShapeManager,
                                                                   nFlags,
                                                                   &ShapeAttributeLayer::isCharWeightValid,
                                                                   getDefault<double>( rShape, rAttrName ),
@@ -853,7 +867,7 @@ namespace slideshow
                                                                   &ShapeAttributeLayer::setCharWeight );
 
                 case ATTRIBUTE_CHAR_ROTATION:
-                    return makeGenericAnimation<NumberAnimation>( rLayerManager,
+                    return makeGenericAnimation<NumberAnimation>( rShapeManager,
                                                                   nFlags,
                                                                   &ShapeAttributeLayer::isCharRotationAngleValid,
                                                                   getDefault<double>( rShape, rAttrName ),
@@ -861,21 +875,21 @@ namespace slideshow
                                                                   &ShapeAttributeLayer::setCharRotationAngle );
 
                 case ATTRIBUTE_HEIGHT:
-                    return makeGenericAnimation( rLayerManager,
+                    return makeGenericAnimation( rShapeManager,
                                                  nFlags,
                                                  &ShapeAttributeLayer::isHeightValid,
                                                  // TODO(F1): Check whether _shape_ bounds are correct here.
                                                  // Theoretically, our AttrLayer is way down the stack, and
                                                  // we only have to consider _that_ value, not the one from
                                                  // the top of the stack as returned by Shape::getBounds()
-                                                 rShape->getPosSize().getHeight(),
+                                                 rShape->getBounds().getHeight(),
                                                  &ShapeAttributeLayer::getHeight,
                                                  &ShapeAttributeLayer::setHeight,
                                                  // convert expression parser value from relative page size
-                                                 rLayerManager->getPageBounds().getHeight() );
+                                                 rSlideSize.getY() );
 
                 case ATTRIBUTE_OPACITY:
-                    return makeGenericAnimation<NumberAnimation>( rLayerManager,
+                    return makeGenericAnimation<NumberAnimation>( rShapeManager,
                                                                   nFlags,
                                                                   &ShapeAttributeLayer::isAlphaValid,
                                                                   // TODO(F1): Provide shape default here (FillTransparency?)
@@ -884,7 +898,7 @@ namespace slideshow
                                                                   &ShapeAttributeLayer::setAlpha );
 
                 case ATTRIBUTE_ROTATE:
-                    return makeGenericAnimation<NumberAnimation>( rLayerManager,
+                    return makeGenericAnimation<NumberAnimation>( rShapeManager,
                                                                   nFlags,
                                                                   &ShapeAttributeLayer::isRotationAngleValid,
                                                                   // NOTE: Since we paint the shape as-is from metafile,
@@ -894,7 +908,7 @@ namespace slideshow
                                                                   &ShapeAttributeLayer::setRotationAngle );
 
                 case ATTRIBUTE_SKEW_X:
-                    return makeGenericAnimation<NumberAnimation>( rLayerManager,
+                    return makeGenericAnimation<NumberAnimation>( rShapeManager,
                                                                   nFlags,
                                                                   &ShapeAttributeLayer::isShearXAngleValid,
                                                                   // TODO(F1): Is there any shape property for skew?
@@ -903,7 +917,7 @@ namespace slideshow
                                                                   &ShapeAttributeLayer::setShearXAngle );
 
                 case ATTRIBUTE_SKEW_Y:
-                    return makeGenericAnimation<NumberAnimation>( rLayerManager,
+                    return makeGenericAnimation<NumberAnimation>( rShapeManager,
                                                                   nFlags,
                                                                   &ShapeAttributeLayer::isShearYAngleValid,
                                                                   // TODO(F1): Is there any shape property for skew?
@@ -912,46 +926,46 @@ namespace slideshow
                                                                   &ShapeAttributeLayer::setShearYAngle );
 
                 case ATTRIBUTE_WIDTH:
-                    return makeGenericAnimation( rLayerManager,
+                    return makeGenericAnimation( rShapeManager,
                                                  nFlags,
                                                  &ShapeAttributeLayer::isWidthValid,
                                                  // TODO(F1): Check whether _shape_ bounds are correct here.
                                                  // Theoretically, our AttrLayer is way down the stack, and
                                                  // we only have to consider _that_ value, not the one from
                                                  // the top of the stack as returned by Shape::getBounds()
-                                                 rShape->getPosSize().getWidth(),
+                                                 rShape->getBounds().getWidth(),
                                                  &ShapeAttributeLayer::getWidth,
                                                  &ShapeAttributeLayer::setWidth,
                                                  // convert expression parser value from relative page size
-                                                 rLayerManager->getPageBounds().getWidth() );
+                                                 rSlideSize.getX() );
 
                 case ATTRIBUTE_POS_X:
-                    return makeGenericAnimation( rLayerManager,
+                    return makeGenericAnimation( rShapeManager,
                                                  nFlags,
                                                  &ShapeAttributeLayer::isPosXValid,
                                                  // TODO(F1): Check whether _shape_ bounds are correct here.
                                                  // Theoretically, our AttrLayer is way down the stack, and
                                                  // we only have to consider _that_ value, not the one from
                                                  // the top of the stack as returned by Shape::getBounds()
-                                                 rShape->getPosSize().getCenterX(),
+                                                 rShape->getBounds().getCenterX(),
                                                  &ShapeAttributeLayer::getPosX,
                                                  &ShapeAttributeLayer::setPosX,
                                                  // convert expression parser value from relative page size
-                                                 rLayerManager->getPageBounds().getWidth() );
+                                                 rSlideSize.getX() );
 
                 case ATTRIBUTE_POS_Y:
-                    return makeGenericAnimation( rLayerManager,
+                    return makeGenericAnimation( rShapeManager,
                                                  nFlags,
                                                  &ShapeAttributeLayer::isPosYValid,
                                                  // TODO(F1): Check whether _shape_ bounds are correct here.
                                                  // Theoretically, our AttrLayer is way down the stack, and
                                                  // we only have to consider _that_ value, not the one from
                                                  // the top of the stack as returned by Shape::getBounds()
-                                                 rShape->getPosSize().getCenterY(),
+                                                 rShape->getBounds().getCenterY(),
                                                  &ShapeAttributeLayer::getPosY,
                                                  &ShapeAttributeLayer::setPosY,
                                                  // convert expression parser value from relative page size
-                                                 rLayerManager->getPageBounds().getHeight() );
+                                                 rSlideSize.getY() );
             }
 
             return NumberAnimationSharedPtr();
@@ -959,7 +973,8 @@ namespace slideshow
 
         EnumAnimationSharedPtr AnimationFactory::createEnumPropertyAnimation( const ::rtl::OUString&                rAttrName,
                                                                               const AnimatableShapeSharedPtr&       rShape,
-                                                                              const LayerManagerSharedPtr&          rLayerManager,
+                                                                              const ShapeManagerSharedPtr&          rShapeManager,
+                                                                              const ::basegfx::B2DVector&           /*rSlideSize*/,
                                                                               int                                   nFlags )
         {
             // ATTENTION: When changing this map, also the classifyAttributeName() method must
@@ -1014,31 +1029,34 @@ namespace slideshow
 
 
                 case ATTRIBUTE_FILL_STYLE:
-                    return makeGenericAnimation<EnumAnimation>( rLayerManager,
+                    return makeGenericAnimation<EnumAnimation>( rShapeManager,
                                                                 nFlags,
                                                                 &ShapeAttributeLayer::isFillStyleValid,
-                                                                (sal_Int16)getDefault<drawing::FillStyle>( rShape, rAttrName ),
+                                                                sal::static_int_cast<sal_Int16>(
+                                                                    getDefault<drawing::FillStyle>( rShape, rAttrName )),
                                                                 &ShapeAttributeLayer::getFillStyle,
                                                                 &ShapeAttributeLayer::setFillStyle );
 
                 case ATTRIBUTE_LINE_STYLE:
-                    return makeGenericAnimation<EnumAnimation>( rLayerManager,
+                    return makeGenericAnimation<EnumAnimation>( rShapeManager,
                                                                 nFlags,
                                                                 &ShapeAttributeLayer::isLineStyleValid,
-                                                                (sal_Int16)getDefault<drawing::LineStyle>( rShape, rAttrName ),
+                                                                sal::static_int_cast<sal_Int16>(
+                                                                    getDefault<drawing::LineStyle>( rShape, rAttrName )),
                                                                 &ShapeAttributeLayer::getLineStyle,
                                                                 &ShapeAttributeLayer::setLineStyle );
 
                 case ATTRIBUTE_CHAR_POSTURE:
-                    return makeGenericAnimation<EnumAnimation>( rLayerManager,
+                    return makeGenericAnimation<EnumAnimation>( rShapeManager,
                                                                 nFlags,
                                                                 &ShapeAttributeLayer::isCharPostureValid,
-                                                                (sal_Int16)getDefault<awt::FontSlant>( rShape, rAttrName ),
+                                                                sal::static_int_cast<sal_Int16>(
+                                                                    getDefault<awt::FontSlant>( rShape, rAttrName )),
                                                                 &ShapeAttributeLayer::getCharPosture,
                                                                 &ShapeAttributeLayer::setCharPosture );
 
                 case ATTRIBUTE_CHAR_UNDERLINE:
-                    return makeGenericAnimation<EnumAnimation>( rLayerManager,
+                    return makeGenericAnimation<EnumAnimation>( rShapeManager,
                                                                 nFlags,
                                                                 &ShapeAttributeLayer::isUnderlineModeValid,
                                                                 getDefault<sal_Int16>( rShape, rAttrName ),
@@ -1051,7 +1069,8 @@ namespace slideshow
 
         ColorAnimationSharedPtr AnimationFactory::createColorPropertyAnimation( const ::rtl::OUString&              rAttrName,
                                                                                 const AnimatableShapeSharedPtr&     rShape,
-                                                                                const LayerManagerSharedPtr&        rLayerManager,
+                                                                                const ShapeManagerSharedPtr&        rShapeManager,
+                                                                                const ::basegfx::B2DVector&         /*rSlideSize*/,
                                                                                 int                                 nFlags )
         {
             // ATTENTION: When changing this map, also the classifyAttributeName() method must
@@ -1103,7 +1122,7 @@ namespace slideshow
                     break;
 
                 case ATTRIBUTE_CHAR_COLOR:
-                    return makeGenericAnimation<ColorAnimation>( rLayerManager,
+                    return makeGenericAnimation<ColorAnimation>( rShapeManager,
                                                                  nFlags,
                                                                  &ShapeAttributeLayer::isCharColorValid,
                                                                  getDefault<RGBColor>( rShape, rAttrName ),
@@ -1112,7 +1131,7 @@ namespace slideshow
 
                 case ATTRIBUTE_COLOR:
                     // TODO(F2): This is just mapped to fill color to make it work
-                    return makeGenericAnimation<ColorAnimation>( rLayerManager,
+                    return makeGenericAnimation<ColorAnimation>( rShapeManager,
                                                                  nFlags,
                                                                  &ShapeAttributeLayer::isFillColorValid,
                                                                  getDefault<RGBColor>( rShape, rAttrName ),
@@ -1120,7 +1139,7 @@ namespace slideshow
                                                                  &ShapeAttributeLayer::setFillColor );
 
                 case ATTRIBUTE_DIMCOLOR:
-                    return makeGenericAnimation<ColorAnimation>( rLayerManager,
+                    return makeGenericAnimation<ColorAnimation>( rShapeManager,
                                                                  nFlags,
                                                                  &ShapeAttributeLayer::isDimColorValid,
                                                                  getDefault<RGBColor>( rShape, rAttrName ),
@@ -1128,7 +1147,7 @@ namespace slideshow
                                                                  &ShapeAttributeLayer::setDimColor );
 
                 case ATTRIBUTE_FILL_COLOR:
-                    return makeGenericAnimation<ColorAnimation>( rLayerManager,
+                    return makeGenericAnimation<ColorAnimation>( rShapeManager,
                                                                  nFlags,
                                                                  &ShapeAttributeLayer::isFillColorValid,
                                                                  getDefault<RGBColor>( rShape, rAttrName ),
@@ -1136,7 +1155,7 @@ namespace slideshow
                                                                  &ShapeAttributeLayer::setFillColor );
 
                 case ATTRIBUTE_LINE_COLOR:
-                    return makeGenericAnimation<ColorAnimation>( rLayerManager,
+                    return makeGenericAnimation<ColorAnimation>( rShapeManager,
                                                                  nFlags,
                                                                  &ShapeAttributeLayer::isLineColorValid,
                                                                  getDefault<RGBColor>( rShape, rAttrName ),
@@ -1148,18 +1167,19 @@ namespace slideshow
         }
 
         PairAnimationSharedPtr AnimationFactory::createPairPropertyAnimation( const AnimatableShapeSharedPtr&       rShape,
-                                                                              const LayerManagerSharedPtr&          rLayerManager,
+                                                                              const ShapeManagerSharedPtr&          rShapeManager,
+                                                                              const ::basegfx::B2DVector&           rSlideSize,
                                                                               sal_Int16                             nTransformType,
                                                                               int                                   nFlags )
         {
-            const ::basegfx::B2DRectangle& rBounds( rShape->getPosSize() );
+            const ::basegfx::B2DRectangle& rBounds( rShape->getBounds() );
 
             switch( nTransformType )
             {
                 case animations::AnimationTransformType::SCALE:
                     return PairAnimationSharedPtr(
                         new TupleAnimation< ::basegfx::B2DSize >(
-                            rLayerManager,
+                            rShapeManager,
                             nFlags,
                             &ShapeAttributeLayer::isWidthValid,
                             &ShapeAttributeLayer::isHeightValid,
@@ -1176,7 +1196,7 @@ namespace slideshow
                 case animations::AnimationTransformType::TRANSLATE:
                     return PairAnimationSharedPtr(
                         new TupleAnimation< ::basegfx::B2DPoint >(
-                            rLayerManager,
+                            rShapeManager,
                             nFlags,
                             &ShapeAttributeLayer::isPosXValid,
                             &ShapeAttributeLayer::isPosYValid,
@@ -1185,7 +1205,7 @@ namespace slideshow
                             // we only have to consider _that_ value, not the one from
                             // the top of the stack as returned by Shape::getBounds()
                             rBounds.getCenter(),
-                            rLayerManager->getPageBounds().getRange(),
+                            rSlideSize,
                             &ShapeAttributeLayer::getPosX,
                             &ShapeAttributeLayer::getPosY,
                             &ShapeAttributeLayer::setPosition ) );
@@ -1201,7 +1221,8 @@ namespace slideshow
 
         StringAnimationSharedPtr AnimationFactory::createStringPropertyAnimation( const ::rtl::OUString&                rAttrName,
                                                                                   const AnimatableShapeSharedPtr&       rShape,
-                                                                                  const LayerManagerSharedPtr&          rLayerManager,
+                                                                                  const ShapeManagerSharedPtr&          rShapeManager,
+                                                                                  const ::basegfx::B2DVector&           /*rSlideSize*/,
                                                                                   int                                   nFlags )
         {
             // ATTENTION: When changing this map, also the classifyAttributeName() method must
@@ -1261,7 +1282,7 @@ namespace slideshow
                     break;
 
                 case ATTRIBUTE_CHAR_FONT_NAME:
-                    return makeGenericAnimation<StringAnimation>( rLayerManager,
+                    return makeGenericAnimation<StringAnimation>( rShapeManager,
                                                                   nFlags,
                                                                   &ShapeAttributeLayer::isFontFamilyValid,
                                                                   getDefault< ::rtl::OUString >( rShape, rAttrName ),
@@ -1274,7 +1295,8 @@ namespace slideshow
 
         BoolAnimationSharedPtr AnimationFactory::createBoolPropertyAnimation( const ::rtl::OUString&                rAttrName,
                                                                               const AnimatableShapeSharedPtr&       /*rShape*/,
-                                                                              const LayerManagerSharedPtr&          rLayerManager,
+                                                                              const ShapeManagerSharedPtr&          rShapeManager,
+                                                                              const ::basegfx::B2DVector&           /*rSlideSize*/,
                                                                               int                                   nFlags )
         {
             // ATTENTION: When changing this map, also the classifyAttributeName() method must
@@ -1334,7 +1356,7 @@ namespace slideshow
                     break;
 
                 case ATTRIBUTE_VISIBILITY:
-                    return makeGenericAnimation<BoolAnimation>( rLayerManager,
+                    return makeGenericAnimation<BoolAnimation>( rShapeManager,
                                                                 nFlags,
                                                                 &ShapeAttributeLayer::isVisibilityValid,
                                                                 // TODO(F1): Is there a corresponding shape property?
@@ -1348,12 +1370,14 @@ namespace slideshow
 
         NumberAnimationSharedPtr AnimationFactory::createPathMotionAnimation( const ::rtl::OUString&            rSVGDPath,
                                                                               const AnimatableShapeSharedPtr&   /*rShape*/,
-                                                                              const LayerManagerSharedPtr&      rLayerManager,
+                                                                              const ShapeManagerSharedPtr&      rShapeManager,
+                                                                              const ::basegfx::B2DVector&       rSlideSize,
                                                                               int                               nFlags )
         {
             return NumberAnimationSharedPtr(
                 new PathAnimation( rSVGDPath,
-                                   rLayerManager,
+                                   rShapeManager,
+                                   rSlideSize,
                                    nFlags ) );
         }
 
