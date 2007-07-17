@@ -4,9 +4,9 @@
 #
 #   $RCSfile: libs.mk,v $
 #
-#   $Revision: 1.114 $
+#   $Revision: 1.115 $
 #
-#   last change: $Author: hr $ $Date: 2007-06-27 17:49:31 $
+#   last change: $Author: obo $ $Date: 2007-07-17 07:23:56 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -32,7 +32,7 @@
 #     MA  02111-1307  USA
 #
 #*************************************************************************
-LIBSMKREV!:="$$Revision: 1.114 $$"
+LIBSMKREV!:="$$Revision: 1.115 $$"
 
 .IF "$(GUI)"=="UNX" || "$(COM)"=="GCC"
 
@@ -41,20 +41,20 @@ LIBSMKREV!:="$$Revision: 1.114 $$"
 #
 .IF "$(GUI)$(COM)"=="WNTGCC"
 AWTLIB*=$(JAVA_HOME)$/lib$/jawt.lib
-.ELSE
+.ELSE			# "$(GUI)$(COM)"=="WNTGCC"
 AWTLIB*=-ljawt
-.ENDIF
+.ENDIF			# "$(GUI)$(COM)"=="WNTGCC"
 AVMEDIALIB=-lavmedia$(OFFICEUPD)$(DLLPOSTFIX)
 .IF "$(GUI)$(COM)"=="WNTGCC"
 .INCLUDE .IGNORE : icuversion.mk
 ICUINLIB=-licuin$(ICU_MAJOR)$(ICU_MINOR)
 ICULELIB=-licule$(ICU_MAJOR)$(ICU_MINOR)
 ICUUCLIB=-licuuc$(ICU_MAJOR)$(ICU_MINOR)
-.ELSE
+.ELSE			# "$(GUI)$(COM)"=="WNTGCC"
 ICUINLIB=-licui18n
 ICULELIB=-licule
 ICUUCLIB=-licuuc
-.ENDIF
+.ENDIF			# "$(GUI)$(COM)"=="WNTGCC"
 I18NUTILLIB=-li18nutil$(COMID)
 .INCLUDE .IGNORE : i18npool$/version.mk
 I18NISOLANGLIB=-li18nisolang$(ISOLANG_MAJOR)$(COMID)
@@ -63,9 +63,9 @@ GPC3RDLIB=-lgpc
 .ENDIF
 .IF "$(GUI)$(COM)"=="WNTGCC"
 SALHELPERLIB=-lsalhelper$(UDK_MAJOR)$(COMID)
-.ELSE
+.ELSE			# "$(GUI)$(COM)"=="WNTGCC"
 SALHELPERLIB=-luno_salhelper$(COMID)
-.ENDIF
+.ENDIF			# "$(GUI)$(COM)"=="WNTGCC"
 XMLSCRIPTLIB =-lxcr$(OFFICEUPD)$(DLLPOSTFIX)
 .INCLUDE .IGNORE : comphelper$/version.mk
 COMPHELPERLIB=-lcomphelp$(COMPHLP_MAJOR)$(COMID)
@@ -77,17 +77,17 @@ TOOLSLIB=-ltl$(OFFICEUPD)$(DLLPOSTFIX)
 .IF "$(GUI)$(COM)"=="WNTGCC"
 CPPULIB=-lcppu$(UDK_MAJOR)
 CPPUHELPERLIB=-lcppuhelper$(UDK_MAJOR)$(COMID)
-.ELSE
+.ELSE			# "$(GUI)$(COM)"=="WNTGCC"
 CPPULIB=-luno_cppu
 CPPUHELPERLIB=-luno_cppuhelper$(COMID)
-.ENDIF
+.ENDIF			# "$(GUI)$(COM)"=="WNTGCC"
 .INCLUDE .IGNORE : ucbhelper$/version.mk
 UCBHELPERLIB=-lucbhelper$(UCBHELPER_MAJOR)$(COMID)
 .IF "$(GUI)$(COM)"=="WNTGCC"
 REGLIB=-lreg$(UDK_MAJOR)
-.ELSE
+.ELSE			# "$(GUI)$(COM)"=="WNTGCC"
 REGLIB=-lreg
-.ENDIF
+.ENDIF			# "$(GUI)$(COM)"=="WNTGCC"
 .INCLUDE .IGNORE : vos$/version.mk
 VOSLIB=-lvos$(VOS_MAJOR)$(COMID)
 XMLOFFLIB=-lxo$(OFFICEUPD)$(DLLPOSTFIX)
@@ -95,19 +95,19 @@ XMLOFFLLIB=-lxol
 .IF "$(GUI)$(COM)"=="WNTGCC"
 STORELIB=-lstore$(UDK_MAJOR)
 SALLIB=-lsal$(UDK_MAJOR)
-.ELSE
+.ELSE			# "$(GUI)$(COM)"=="WNTGCC"
 STORELIB=-lstore
 SALLIB=-luno_sal
-.ENDIF
+.ENDIF			# "$(GUI)$(COM)"=="WNTGCC"
 .INCLUDE .IGNORE : connectivity$/version.mk
 ODBCLIB=-lodbc$(ODBC_MAJOR)
 ODBCBASELIB=-lodbcbase$(ODBC_MAJOR)
 DBFILELIB=-lfile$(OFFICEUPD)$(DLLPOSTFIX)
 .IF "$(GUI)$(COM)"=="WNTGCC"
 RMCXTLIB=-lrmcxt$(UDK_MAJOR)
-.ELSE
+.ELSE			# "$(GUI)$(COM)"=="WNTGCC"
 RMCXTLIB=-lrmcxt
-.ENDIF
+.ENDIF			# "$(GUI)$(COM)"=="WNTGCC"
 BTSTRPLIB=-lbtstrp
 BTSTRPDTLIB=-lbootstrpdt$(OFFICEUPD)$(DLLPOSTFIX)
 SOLDEPLIB=-lsoldep$(OFFICEUPD)$(DLLPOSTFIX)
@@ -120,13 +120,13 @@ MOZBASELIBST=$(STATIC) -lnspr4 -lxpcombase_s $(DYNAMIC)
 MOZBASELIB=-lnspr4 -lxpcom
 .IF "$(GUI)$(COM)"=="WNTGCC"
 LDAPSDKLIB=-lnsldap32v50
-.ELSE
+.ELSE			# "$(GUI)$(COM)"=="WNTGCC"
 .IF "$(WITH_OPENLDAP)" == "YES"
 LDAPSDKLIB=-lldap
 .ELSE
 LDAPSDKLIB=-lldap50
 .ENDIF
-.ENDIF
+.ENDIF			# "$(GUI)$(COM)"=="WNTGCC"
 ICOLIB=-lico$(OFFICEUPD)$(DLLPOSTFIX)
 VCLLIB=-lvcl$(OFFICEUPD)$(DLLPOSTFIX)
 BASEGFXLIB=-lbasegfx$(OFFICEUPD)$(DLLPOSTFIX)
@@ -150,15 +150,15 @@ SVTOOLLIB=-lsvt$(OFFICEUPD)$(DLLPOSTFIX)
 .IF "$(GUI)$(COM)"=="WNTGCC"
 XMLSECLIB=-lxmlsec1-1
 XMLSECLIB-NSS=-lxmlsec1-nss-1
-.ELSE
+.ELSE			# "$(GUI)$(COM)"=="WNTGCC"
 XMLSECLIB=-lxmlsec1
 XMLSECLIB-NSS=-lxmlsec1-nss
-.ENDIF
+.ENDIF			# "$(GUI)$(COM)"=="WNTGCC"
 .IF "$(GUI)$(COM)"=="WNTGCC"
 LIBXML2LIB=-lxml2-2
-.ELSE
+.ELSE			# "$(GUI)$(COM)"=="WNTGCC"
 LIBXML2LIB=-lxml2
-.ENDIF
+.ENDIF			# "$(GUI)$(COM)"=="WNTGCC"
 NSS3LIB=-lnss3
 NSPR4LIB=-lnspr4
 PLC4LIB=-lplc4
@@ -166,7 +166,7 @@ NSSCRYPTOLIBS=$(LIBXML2LIB) $(XMLSECLIB) $(XMLSECLIB-NSS) $(NSS3LIB) $(NSPR4LIB)
 .IF "$(GUI)$(COM)"=="WNTGCC"
 XMLSECLIB-MS=-lxmlsec1-mscrypto-1
 MSCRYPTOLIBS=$(LIBXML2LIB) $(XMLSECLIB) $(XMLSECLIB-MS) $(CRYPT32LIB) $(ADVAPI32LIB)
-.ENDIF
+.ENDIF			# "$(GUI)$(COM)"=="WNTGCC"
 BROOKERLIB=-lbrooker$(OFFICEUPD)$(DLLPOSTFIX)
 SIMPLECMLIB=-lsimplecm$(OFFICEUPD)$(DLLPOSTFIX)
 COMMUNILIB=-lcommuni$(OFFICEUPD)$(DLLPOSTFIX)
@@ -218,7 +218,7 @@ NEON3RDLIB=-lneon
 BERKELEYLIB=-ldb42
 BERKELEYCPPLIB=-ldb_cxx42
 CURLLIB=-lcurl-3
-.ELSE
+.ELSE			# "$(GUI)$(COM)"=="WNTGCC"
 .IF "$(SYSTEM_DB)" == "YES"
 BERKELEYLIB=-ldb
 BERKELEYCPPLIB=-ldb_cxx
@@ -227,7 +227,7 @@ BERKELEYLIB=-ldb-4.2
 BERKELEYCPPLIB=-ldb_cxx-4.2
 .ENDIF
 CURLLIB=-lcurl
-.ENDIF
+.ENDIF			# "$(GUI)$(COM)"=="WNTGCC"
 SFX2LIB=-lsfx$(OFFICEUPD)$(DLLPOSTFIX)
 SFXLIB=-lsfx$(OFFICEUPD)$(DLLPOSTFIX)
 EGGTRAYLIB=-leggtray$(OFFICEUPD)$(DLLPOSTFIX)
@@ -257,29 +257,27 @@ PKGCHKLIB=-lpkgchk$(OFFICEUPD)$(DLLPOSTFIX)
 SYSSHELLLIB=-lsysshell
 .IF "$(GUI)$(COM)"=="WNTGCC"
 JVMACCESSLIB = -ljvmaccess$(UDK_MAJOR)$(COMID)
-.ELSE
+.ELSE			# "$(GUI)$(COM)"=="WNTGCC"
 JVMACCESSLIB = -ljvmaccess$(COMID)
-.ENDIF
+.ENDIF			# "$(GUI)$(COM)"=="WNTGCC"
 CPPUNITLIB = -lcppunit$(DLLPOSTFIX)
 .IF "$(GUI)$(COM)"=="WNTGCC"
 XML2LIB=-lxml2-2
-.ELSE
+XSLTLIB=-lxslt-1 $(ZLIB3RD) $(XML2LIB)
+JVMFWKLIB = -ljvmfwk$(UDK_MAJOR)
+.ELSE			# "$(GUI)$(COM)"=="WNTGCC"
 .IF "$(SYSTEM_LIBXML)"=="YES"
 XML2LIB=$(LIBXML_LIBS)
 .ELSE
 XML2LIB=-lxml2
-.ENDIF
 .ENDIF
 .IF "$(SYSTEM_LIBXSLT)"=="YES"
 XSLTLIB=$(LIBXSLT_LIBS)
 .ELSE
 XSLTLIB=-lxslt $(ZLIB3RD) $(XML2LIB)
 .ENDIF
-.IF "$(GUI)$(COM)"=="WNTGCC"
-JVMFWKLIB = -ljvmfwk$(UDK_MAJOR)
-.ELSE
 JVMFWKLIB = -ljvmfwk
-.ENDIF
+.ENDIF			# "$(GUI)$(COM)"=="WNTGCC"
 
 # #110743#
 # For BinFilters, some libs were added.
