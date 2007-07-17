@@ -4,9 +4,9 @@
  *
  *  $RCSfile: PrintManager.hxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: obo $ $Date: 2007-01-25 11:38:13 $
+ *  last change: $Author: obo $ $Date: 2007-07-17 13:01:16 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -79,7 +79,7 @@ public:
     /// Forwarded to the main sub-shell.
     virtual USHORT SetPrinter (
         SfxPrinter* pNewPrinter,
-        USHORT nDiffFlags = SFX_PRINTER_ALL);
+        USHORT nDiffFlags = SFX_PRINTER_ALL, bool bIsAPI=false);
     /// Forwarded to the main sub-shell.
     virtual PrintDialog* CreatePrintDialog (::Window *pParent);
 
