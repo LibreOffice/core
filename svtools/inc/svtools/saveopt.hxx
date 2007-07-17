@@ -4,9 +4,9 @@
  *
  *  $RCSfile: saveopt.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2007-07-05 07:27:38 $
+ *  last change: $Author: obo $ $Date: 2007-07-17 13:27:45 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -50,17 +50,9 @@ class SVL_DLLPUBLIC SvtSaveOptions: public svt::detail::Options
 
 public:
 
-    enum SaveGraphicsMode
-    {
-        SaveGraphicsNormal,
-        SaveGraphicsOriginal,
-        SaveGraphicsCompressed
-    };
-
     enum EOption
     {
         E_AUTOSAVETIME,
-        E_SAVEGRAPHICS,
         E_USEUSERDATA,
         E_BACKUP,
         E_AUTOSAVE,
@@ -96,9 +88,6 @@ public:
 
     void                    SetDocInfoSave(sal_Bool b);
     sal_Bool                IsDocInfoSave() const;
-
-    void                    SetSaveGraphicsMode( SaveGraphicsMode eMode );
-    SaveGraphicsMode        GetSaveGraphicsMode() const;
 
     void                    SetSaveWorkingSet( sal_Bool b );
     sal_Bool                IsSaveWorkingSet() const;
