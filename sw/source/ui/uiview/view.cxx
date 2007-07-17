@@ -4,9 +4,9 @@
  *
  *  $RCSfile: view.cxx,v $
  *
- *  $Revision: 1.103 $
+ *  $Revision: 1.104 $
  *
- *  last change: $Author: ihi $ $Date: 2007-06-05 17:44:09 $
+ *  last change: $Author: obo $ $Date: 2007-07-17 13:12:12 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -43,6 +43,8 @@
 #ifndef _HINTIDS_HXX
 #include <hintids.hxx>
 #endif
+
+#include <sfx2/docinf.hxx>
 
 #ifndef _RTL_LOGFILE_HXX_
 #include <rtl/logfile.hxx>
@@ -1284,8 +1286,8 @@ void SwView::WriteUserData( String &rUserData, sal_Bool bBrowse )
 bool lcl_IsOwnDocument( SwView& rView )
 {
     SfxDocumentInfo& rInfo = rView.GetDocShell()->GetDocInfo();
-    const String& rCreated =   rInfo.GetCreated().GetName();
-    const String& rChanged = rInfo.GetChanged().GetName();
+    const String& rCreated =   rInfo.GetAuthor();
+    const String& rChanged = rInfo.GetModificationAuthor();
     const String& rFullName = SW_MOD()->GetUserOptions().GetFullName();
     bool bRet = rFullName.Len() &&
             (rChanged.Len() && rChanged == rFullName ) ||
