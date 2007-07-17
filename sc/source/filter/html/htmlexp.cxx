@@ -4,9 +4,9 @@
  *
  *  $RCSfile: htmlexp.cxx,v $
  *
- *  $Revision: 1.34 $
+ *  $Revision: 1.35 $
  *
- *  last change: $Author: kz $ $Date: 2007-05-10 16:49:28 $
+ *  last change: $Author: obo $ $Date: 2007-07-17 13:34:03 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -190,16 +190,15 @@ FltError ScExportHTML( SvStream& rStrm, const String& rBaseURL, ScDocument* pDoc
 }
 
 
-void lcl_AddStamp( String& rStr, const SfxStamp& rStamp, const LocaleDataWrapper& rLoc )
+void lcl_AddStamp( String& rStr, const String& rName, const DateTime& rDateTime, const LocaleDataWrapper& rLoc )
 {
-    const DateTime& rDateTime   = rStamp.GetTime();
     String          aStrDate    = rLoc.getDate( rDateTime );
     String          aStrTime    = rLoc.getTime( rDateTime );
 
     rStr += GLOBSTR( STR_BY );
     APPEND_SPACE( rStr );
-    if (rStamp.GetName().Len())
-        rStr += rStamp.GetName();
+    if (rName.Len())
+        rStr += rName;
     else
         rStr.AppendAscii( "???" );
     APPEND_SPACE( rStr );
@@ -416,12 +415,12 @@ void ScHTMLExport::WriteHeader()
         OUT_LF();
 
         //----------------------------------------------------------
-        if ( rInfo.GetPrinted().GetName().Len() )
+        if ( rInfo.GetPrintedBy().Len() )
         {
             OUT_COMMENT( GLOBSTR( STR_DOC_INFO ) );
             String aStrOut( GLOBSTR( STR_DOC_PRINTED ) );
             aStrOut.AppendAscii( ": " );
-            lcl_AddStamp( aStrOut, rInfo.GetPrinted(), *ScGlobal::pLocaleData );
+            lcl_AddStamp( aStrOut, rInfo.GetPrintedBy(), rInfo.GetPrintDate(), *ScGlobal::pLocaleData );
             OUT_COMMENT( aStrOut );
         }
         //----------------------------------------------------------
