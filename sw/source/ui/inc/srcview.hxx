@@ -4,9 +4,9 @@
  *
  *  $RCSfile: srcview.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: obo $ $Date: 2007-01-25 11:45:23 $
+ *  last change: $Author: obo $ $Date: 2007-07-17 13:11:18 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -102,7 +102,7 @@ public:
     void            Load(SwDocShell* pDocShell);
 
     virtual USHORT  SetPrinter( SfxPrinter* pNew,
-                                        USHORT nDiff = SFX_PRINTER_ALL);
+                                        USHORT nDiff = SFX_PRINTER_ALL, bool bIsAPI=false );
     virtual ErrCode DoPrint( SfxPrinter *pPrinter, PrintDialog *pPrintDialog, BOOL bSilent, BOOL bIsAPI );
     virtual         SfxPrinter*     GetPrinter( BOOL bCreate = FALSE );
 
