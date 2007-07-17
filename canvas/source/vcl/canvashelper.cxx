@@ -4,9 +4,9 @@
  *
  *  $RCSfile: canvashelper.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: obo $ $Date: 2006-10-12 11:32:36 $
+ *  last change: $Author: obo $ $Date: 2007-07-17 14:25:40 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -41,6 +41,7 @@
 #include <rtl/math.hxx>
 
 #include <com/sun/star/rendering/IntegerBitmapFormat.hpp>
+#include <com/sun/star/rendering/CompositeOperation.hpp>
 #include <com/sun/star/rendering/Endianness.hpp>
 #include <com/sun/star/rendering/TextDirection.hpp>
 #include <com/sun/star/rendering/TexturingMode.hpp>
@@ -151,6 +152,35 @@ namespace vclcanvas
     void CanvasHelper::setBackgroundOutDev( const OutDevProviderSharedPtr& rOutDev )
     {
         mp2ndOutDev = rOutDev;
+    }
+
+    void CanvasHelper::clear()
+    {
+        // are we disposed?
+        if( mpOutDev )
+        {
+            OutputDevice& rOutDev( mpOutDev->getOutDev() );
+
+            rOutDev.EnableMapMode( FALSE );
+            rOutDev.SetLineColor( COL_WHITE );
+            rOutDev.SetFillColor( COL_WHITE );
+            rOutDev.DrawRect( Rectangle( Point(),
+                                         rOutDev.GetOutputSizePixel()) );
+
+            if( mp2ndOutDev )
+            {
+                OutputDevice& rOutDev2( mp2ndOutDev->getOutDev() );
+
+                rOutDev2.SetDrawMode( DRAWMODE_DEFAULT );
+                rOutDev2.EnableMapMode( FALSE );
+                rOutDev2.SetLineColor( COL_WHITE );
+                rOutDev2.SetFillColor( COL_WHITE );
+                rOutDev2.DrawRect( Rectangle( Point(),
+                                              rOutDev2.GetOutputSizePixel()) );
+                rOutDev2.SetDrawMode( DRAWMODE_BLACKLINE | DRAWMODE_BLACKFILL | DRAWMODE_BLACKTEXT |
+                                      DRAWMODE_BLACKGRADIENT | DRAWMODE_BLACKBITMAP );
+            }
+        }
     }
 
     void CanvasHelper::drawPoint( const rendering::XCanvas*     ,
@@ -442,18 +472,40 @@ namespace vclcanvas
             const int nTransPercent( (nTransparency * 100 + 128) / 255 );  // normal rounding, no truncation here
             const PolyPolygon aPolyPoly( tools::mapPolyPolygon( ::canvas::tools::polyPolygonFromXPolyPolygon2D(xPolyPolygon),
                                                                 viewState, renderState ) );
-
-            if( !nTransparency )
+            const bool bSourceAlpha( renderState.CompositeOperation == rendering::CompositeOperation::SOURCE );
+            if( !nTransparency || bSourceAlpha )
+            {
                 mpOutDev->getOutDev().DrawPolyPolygon( aPolyPoly );
+            }
             else
+            {
                 mpOutDev->getOutDev().DrawTransparent( aPolyPoly, (USHORT)nTransPercent );
+            }
 
             if( mp2ndOutDev )
             {
-                if( !nTransparency )
-                    mp2ndOutDev->getOutDev().DrawPolyPolygon( aPolyPoly );
+                if( !nTransparency || bSourceAlpha )
+                {
+                    // HACK. Normally, CanvasHelper does not care
+                    // about actually what mp2ndOutDev is...
+                    if( bSourceAlpha && nTransparency == 255 )
+                    {
+                        mp2ndOutDev->getOutDev().SetDrawMode( DRAWMODE_WHITELINE | DRAWMODE_WHITEFILL | DRAWMODE_WHITETEXT |
+                                                              DRAWMODE_WHITEGRADIENT | DRAWMODE_WHITEBITMAP );
+                        mp2ndOutDev->getOutDev().SetFillColor( COL_WHITE );
+                        mp2ndOutDev->getOutDev().DrawPolyPolygon( aPolyPoly );
+                        mp2ndOutDev->getOutDev().SetDrawMode( DRAWMODE_BLACKLINE | DRAWMODE_BLACKFILL | DRAWMODE_BLACKTEXT |
+                                                              DRAWMODE_BLACKGRADIENT | DRAWMODE_BLACKBITMAP );
+                    }
+                    else
+                    {
+                        mp2ndOutDev->getOutDev().DrawPolyPolygon( aPolyPoly );
+                    }
+                }
                 else
+                {
                     mp2ndOutDev->getOutDev().DrawTransparent( aPolyPoly, (USHORT)nTransPercent );
+                }
             }
         }
 
@@ -882,7 +934,7 @@ namespace vclcanvas
                     pRes[ nCurrPos++ ] = pReadAccess->GetColor( y, x ).GetBlue();
                     pRes[ nCurrPos++ ] = pReadAccess->GetColor( y, x ).GetGreen();
                     pRes[ nCurrPos++ ] = pReadAccess->GetColor( y, x ).GetRed();
-                    pRes[ nCurrPos++ ] = (sal_uInt8)255L;
+                    pRes[ nCurrPos++ ] = sal_uInt8(255);
                 }
             }
 
@@ -1135,7 +1187,7 @@ namespace vclcanvas
         // accumulate non-empty clips into one region
         // ==========================================
 
-        Region aClipRegion;
+        Region aClipRegion( REGION_NULL );
 
         if( viewState.Clip.is() )
         {
@@ -1152,6 +1204,11 @@ namespace vclcanvas
                                                                     viewState.AffineTransform ) );
 
                 aClipRegion = Region::GetRegionFromPolyPolygon( ::PolyPolygon( aClipPoly ) );
+            }
+            else
+            {
+                // clip polygon is empty
+                aClipRegion.SetEmpty();
             }
         }
 
@@ -1171,11 +1228,7 @@ namespace vclcanvas
             {
                 // setup non-empty clipping
                 Region aRegion = Region::GetRegionFromPolyPolygon( ::PolyPolygon( aClipPoly ) );
-
-                if( aClipRegion.IsEmpty() )
-                    aClipRegion = aRegion;
-                else
-                    aClipRegion.Intersect( aRegion );
+                aClipRegion.Intersect( aRegion );
             }
             else
             {
@@ -1190,7 +1243,7 @@ namespace vclcanvas
         // SetClipRegion() here). When both view and render clip
         // are empty, aClipRegion remains default-constructed,
         // i.e. empty, too.
-        if( aClipRegion.IsEmpty() )
+        if( aClipRegion.IsNull() )
         {
             rOutDev.SetClipRegion();
 
