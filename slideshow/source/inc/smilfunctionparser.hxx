@@ -4,9 +4,9 @@
  *
  *  $RCSfile: smilfunctionparser.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: kz $ $Date: 2006-12-13 16:04:07 $
+ *  last change: $Author: obo $ $Date: 2007-07-17 15:16:23 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -33,15 +33,15 @@
  *
  ************************************************************************/
 
-#ifndef _SLIDESHOW_SMILFUNCTIONPARSER_HXX
-#define _SLIDESHOW_SMILFUNCTIONPARSER_HXX
+#ifndef INCLUDED_SLIDESHOW_SMILFUNCTIONPARSER_HXX
+#define INCLUDED_SLIDESHOW_SMILFUNCTIONPARSER_HXX
 
-#include <expressionnode.hxx>
-#include <slideshowexceptions.hxx>
+#include "expressionnode.hxx"
+#include "slideshowexceptions.hxx"
 
 #include <basegfx/range/b2drectangle.hxx>
 
-#include <boost/utility.hpp>
+#include <boost/noncopyable.hpp>
 
 namespace rtl
 {
@@ -172,4 +172,4 @@ namespace slideshow
     }
 }
 
-#endif /* _SLIDESHOW_SMILFUNCTIONPARSER_HXX */
+#endif /* INCLUDED_SLIDESHOW_SMILFUNCTIONPARSER_HXX */
