@@ -4,9 +4,9 @@
  *
  *  $RCSfile: activity.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: kz $ $Date: 2006-12-13 15:50:35 $
+ *  last change: $Author: obo $ $Date: 2007-07-17 15:01:19 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -33,14 +33,14 @@
  *
  ************************************************************************/
 
-#ifndef _SLIDESHOW_ACTIVITY_HXX
-#define _SLIDESHOW_ACTIVITY_HXX
+#ifndef INCLUDED_SLIDESHOW_ACTIVITY_HXX
+#define INCLUDED_SLIDESHOW_ACTIVITY_HXX
 
 #include <sal/types.h>
 
 #include <boost/shared_ptr.hpp>
 
-#include <disposable.hxx>
+#include "disposable.hxx"
 
 
 /* Definition of Activity interface */
@@ -84,17 +84,6 @@ namespace slideshow
             */
             virtual bool isActive() const = 0;
 
-            /** Query whether this activity, while active, needs a
-                screen update after perform() calls.
-
-                A prominent example for activities that need screen
-                updates are animations.
-
-                @return true, if this activity, while active, needs a
-                screen update after perform() calls.
-             */
-            virtual bool needsScreenUpdate() const = 0;
-
             /** Notifies the Activity that it has now left the
                 ActivitiesQueue
 
@@ -116,4 +105,4 @@ namespace slideshow
     }
 }
 
-#endif /* _SLIDESHOW_ACTIVITY_HXX */
+#endif /* INCLUDED_SLIDESHOW_ACTIVITY_HXX */
