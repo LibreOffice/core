@@ -4,9 +4,9 @@
  *
  *  $RCSfile: canvascustomspritehelper.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 03:25:07 $
+ *  last change: $Author: obo $ $Date: 2007-07-17 14:23:48 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -205,6 +205,12 @@ namespace canvas
     void CanvasCustomSpriteHelper::disposing()
     {
         mpSpriteCanvas.clear();
+    }
+
+    void CanvasCustomSpriteHelper::clearingContent( const Sprite::Reference& /*rSprite*/ )
+    {
+        // about to clear content to fully transparent
+        mbIsContentFullyOpaque = false;
     }
 
     void CanvasCustomSpriteHelper::checkDrawBitmap( const Sprite::Reference&                    rSprite,
@@ -416,26 +422,6 @@ namespace canvas
 
             mbVisibilityDirty = true;
         }
-    }
-
-    void CanvasCustomSpriteHelper::prepareContentCanvas( const Sprite::Reference& rSprite )
-    {
-        if( !mpSpriteCanvas.get() )
-            return; // we're disposed
-
-        if( mbActive )
-        {
-            // the client is about to render into the sprite. Thus,
-            // potentially the whole sprite area has changed.
-            mpSpriteCanvas->updateSprite( rSprite,
-                                          maPosition,
-                                          getUpdateArea() );
-        }
-
-        clearSurface();
-
-        // just cleared content to fully transparent
-        mbIsContentFullyOpaque = false;
     }
 
     // Sprite interface
