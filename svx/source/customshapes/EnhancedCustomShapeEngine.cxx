@@ -4,9 +4,9 @@
  *
  *  $RCSfile: EnhancedCustomShapeEngine.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: rt $ $Date: 2007-07-06 07:32:24 $
+ *  last change: $Author: obo $ $Date: 2007-07-18 10:52:11 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -461,7 +461,7 @@ com::sun::star::drawing::PolyPolygonBezierCoords SAL_CALL EnhancedCustomShapeEng
 
                 if ( aPP.count() )
                 {
-                    if(aPP.areControlVectorsUsed())
+                    if(aPP.areControlPointsUsed())
                     {
                         aPolyPolygon.append(basegfx::tools::adaptiveSubdivideByAngle(aPP));
                     }
