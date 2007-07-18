@@ -4,9 +4,9 @@
  *
  *  $RCSfile: soldep.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: hr $ $Date: 2007-06-27 23:39:37 $
+ *  last change: $Author: obo $ $Date: 2007-07-18 07:34:23 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -46,6 +46,7 @@
 #include <soldep/depper.hxx>
 #include <soldep/soldep.hxx>
 #include <soldep/soldlg.hxx>
+#include <soldep/XmlBuildList.hxx>
 #include "dtsodcmp.hrc"
 
 IMPLEMENT_HASHTABLE_OWNER( SolIdMapper, ByteString, ULONG* );
