@@ -4,9 +4,9 @@
  *
  *  $RCSfile: shellio.cxx,v $
  *
- *  $Revision: 1.49 $
+ *  $Revision: 1.50 $
  *
- *  last change: $Author: obo $ $Date: 2007-07-17 13:07:39 $
+ *  last change: $Author: obo $ $Date: 2007-07-18 13:35:26 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -129,6 +129,12 @@
 #endif
 
 #include <paratr.hxx>
+
+// --> OD 2007-03-30 #i73788#
+#ifndef _PAUSETHREADSTARTING_HXX
+#include <pausethreadstarting.hxx>
+#endif
+// <--
 
 using namespace ::com::sun::star;
 
@@ -884,6 +890,10 @@ SwWriter::SwWriter(SfxMedium& rMedium, SwDoc &rDoc)
 
 ULONG SwWriter::Write( WriterRef& rxWriter, const String* pRealFileName )
 {
+    // --> OD 2007-03-30 #i73788#
+    SwPauseThreadStarting aPauseThreadStarting;
+    // <--
+
     BOOL bHasMark = FALSE;
     SwPaM * pPam;
 
