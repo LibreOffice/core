@@ -4,9 +4,9 @@
  *
  *  $RCSfile: unofield.hxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: obo $ $Date: 2007-03-09 13:14:15 $
+ *  last change: $Author: obo $ $Date: 2007-07-18 12:55:08 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -158,6 +158,7 @@ class SwXTextField : public cppu::WeakImplHelper5
     SwDoc*                      m_pDoc;
 
     sal_Bool                        m_bIsDescriptor;
+    SwClient                        m_aFieldTypeClient; // required to access field master of not yet inserted fields
     sal_Bool                        m_bCallUpdate;
     sal_uInt16                      m_nServiceId;
     SwFieldProperties_Impl*     m_pProps;
