@@ -4,9 +4,9 @@
  *
  *  $RCSfile: lockhelper.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 14:13:39 $
+ *  last change: $Author: obo $ $Date: 2007-07-18 13:26:09 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -51,6 +51,8 @@
 #ifndef __FRAMEWORK_MACROS_DEBUG_HXX_
 #include <macros/debug.hxx>
 #endif
+
+#include <macros/generic.hxx>
 
 //_________________________________________________________________________________________________________________
 //  interface includes
