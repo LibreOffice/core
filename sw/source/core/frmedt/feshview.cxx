@@ -4,9 +4,9 @@
  *
  *  $RCSfile: feshview.cxx,v $
  *
- *  $Revision: 1.55 $
+ *  $Revision: 1.56 $
  *
- *  last change: $Author: rt $ $Date: 2007-07-06 09:52:22 $
+ *  last change: $Author: obo $ $Date: 2007-07-18 10:48:48 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -2944,35 +2944,49 @@ void SwFEShell::CreateDefaultShape(UINT16 eSdrObjectKind, const Rectangle& rRect
         }
         else if(pObj->ISA(SdrPathObj))
         {
-            ::basegfx::B2DPolyPolygon aPoly;
+            basegfx::B2DPolyPolygon aPoly;
 
             switch(eSdrObjectKind)
             {
                 case OBJ_PATHLINE:
                 {
-                    ::basegfx::B2DPolygon aInnerPoly;
-                    aInnerPoly.append(::basegfx::B2DPoint(aRect.Left(), aRect.Bottom()));
-                    aInnerPoly.setControlPointA(0L, ::basegfx::B2DPoint(aRect.Center().X(), aRect.Bottom()));
-                    aInnerPoly.setControlPointB(0L, aInnerPoly.getControlPointA(0L));
-                    aInnerPoly.append(::basegfx::B2DPoint(aRect.Center().X(), aRect.Center().Y()));
-                    aInnerPoly.setControlPointA(1L, ::basegfx::B2DPoint(aRect.Center().X(), aRect.Top()));
-                    aInnerPoly.setControlPointB(1L, aInnerPoly.getControlPointA(1L));
-                    aInnerPoly.append(::basegfx::B2DPoint(aRect.Right(), aRect.Top()));
+                    basegfx::B2DPolygon aInnerPoly;
+
+                    aInnerPoly.append(basegfx::B2DPoint(aRect.Left(), aRect.Bottom()));
+
+                    const basegfx::B2DPoint aCenterBottom(aRect.Center().X(), aRect.Bottom());
+                    aInnerPoly.appendBezierSegment(
+                        aCenterBottom,
+                        aCenterBottom,
+                        basegfx::B2DPoint(aRect.Center().X(), aRect.Center().Y()));
+
+                    const basegfx::B2DPoint aCenterTop(aRect.Center().X(), aRect.Top());
+                    aInnerPoly.appendBezierSegment(
+                        aCenterTop,
+                        aCenterTop,
+                        basegfx::B2DPoint(aRect.Right(), aRect.Top()));
+
                     aInnerPoly.setClosed(true);
                     aPoly.append(aInnerPoly);
                 }
                 break;
                 case OBJ_FREELINE:
                 {
-                    ::basegfx::B2DPolygon aInnerPoly;
-                    aInnerPoly.append(::basegfx::B2DPoint(aRect.Left(), aRect.Bottom()));
-                    aInnerPoly.setControlPointA(0L, ::basegfx::B2DPoint(aRect.Left(), aRect.Top()));
-                    aInnerPoly.setControlPointB(0L, ::basegfx::B2DPoint(aRect.Center().X(), aRect.Top()));
-                    aInnerPoly.append(::basegfx::B2DPoint(aRect.Center().X(), aRect.Center().Y()));
-                    aInnerPoly.setControlPointA(1L, ::basegfx::B2DPoint(aRect.Center().X(), aRect.Bottom()));
-                    aInnerPoly.setControlPointB(1L, ::basegfx::B2DPoint(aRect.Right(), aRect.Bottom()));
-                    aInnerPoly.append(::basegfx::B2DPoint(aRect.Right(), aRect.Top()));
-                    aInnerPoly.append(::basegfx::B2DPoint(aRect.Right(), aRect.Bottom()));
+                    basegfx::B2DPolygon aInnerPoly;
+
+                    aInnerPoly.append(basegfx::B2DPoint(aRect.Left(), aRect.Bottom()));
+
+                    aInnerPoly.appendBezierSegment(
+                        basegfx::B2DPoint(aRect.Left(), aRect.Top()),
+                        basegfx::B2DPoint(aRect.Center().X(), aRect.Top()),
+                        basegfx::B2DPoint(aRect.Center().X(), aRect.Center().Y()));
+
+                    aInnerPoly.appendBezierSegment(
+                        basegfx::B2DPoint(aRect.Center().X(), aRect.Bottom()),
+                        basegfx::B2DPoint(aRect.Right(), aRect.Bottom()),
+                        basegfx::B2DPoint(aRect.Right(), aRect.Top()));
+
+                    aInnerPoly.append(basegfx::B2DPoint(aRect.Right(), aRect.Bottom()));
                     aInnerPoly.setClosed(true);
                     aPoly.append(aInnerPoly);
                 }
@@ -2980,22 +2994,22 @@ void SwFEShell::CreateDefaultShape(UINT16 eSdrObjectKind, const Rectangle& rRect
                 case OBJ_POLY:
                 case OBJ_PLIN:
                 {
-                    ::basegfx::B2DPolygon aInnerPoly;
+                    basegfx::B2DPolygon aInnerPoly;
                     sal_Int32 nWdt(aRect.GetWidth());
                     sal_Int32 nHgt(aRect.GetHeight());
 
-                    aInnerPoly.append(::basegfx::B2DPoint(aRect.Left(), aRect.Bottom()));
-                    aInnerPoly.append(::basegfx::B2DPoint(aRect.Left() + (nWdt * 30) / 100, aRect.Top() + (nHgt * 70) / 100));
-                    aInnerPoly.append(::basegfx::B2DPoint(aRect.Left(), aRect.Top() + (nHgt * 15) / 100));
-                    aInnerPoly.append(::basegfx::B2DPoint(aRect.Left() + (nWdt * 65) / 100, aRect.Top()));
-                    aInnerPoly.append(::basegfx::B2DPoint(aRect.Left() + nWdt, aRect.Top() + (nHgt * 30) / 100));
-                    aInnerPoly.append(::basegfx::B2DPoint(aRect.Left() + (nWdt * 80) / 100, aRect.Top() + (nHgt * 50) / 100));
-                    aInnerPoly.append(::basegfx::B2DPoint(aRect.Left() + (nWdt * 80) / 100, aRect.Top() + (nHgt * 75) / 100));
-                    aInnerPoly.append(::basegfx::B2DPoint(aRect.Bottom(), aRect.Right()));
+                    aInnerPoly.append(basegfx::B2DPoint(aRect.Left(), aRect.Bottom()));
+                    aInnerPoly.append(basegfx::B2DPoint(aRect.Left() + (nWdt * 30) / 100, aRect.Top() + (nHgt * 70) / 100));
+                    aInnerPoly.append(basegfx::B2DPoint(aRect.Left(), aRect.Top() + (nHgt * 15) / 100));
+                    aInnerPoly.append(basegfx::B2DPoint(aRect.Left() + (nWdt * 65) / 100, aRect.Top()));
+                    aInnerPoly.append(basegfx::B2DPoint(aRect.Left() + nWdt, aRect.Top() + (nHgt * 30) / 100));
+                    aInnerPoly.append(basegfx::B2DPoint(aRect.Left() + (nWdt * 80) / 100, aRect.Top() + (nHgt * 50) / 100));
+                    aInnerPoly.append(basegfx::B2DPoint(aRect.Left() + (nWdt * 80) / 100, aRect.Top() + (nHgt * 75) / 100));
+                    aInnerPoly.append(basegfx::B2DPoint(aRect.Bottom(), aRect.Right()));
 
                     if(OBJ_PLIN == eSdrObjectKind)
                     {
-                        aInnerPoly.append(::basegfx::B2DPoint(aRect.Center().X(), aRect.Bottom()));
+                        aInnerPoly.append(basegfx::B2DPoint(aRect.Center().X(), aRect.Bottom()));
                     }
                     else
                     {
@@ -3008,9 +3022,9 @@ void SwFEShell::CreateDefaultShape(UINT16 eSdrObjectKind, const Rectangle& rRect
                 case OBJ_LINE :
                 {
                     sal_Int32 nYMiddle((aRect.Top() + aRect.Bottom()) / 2);
-                    ::basegfx::B2DPolygon aTempPoly;
-                    aTempPoly.append(::basegfx::B2DPoint(aRect.TopLeft().X(), nYMiddle));
-                    aTempPoly.append(::basegfx::B2DPoint(aRect.BottomRight().X(), nYMiddle));
+                    basegfx::B2DPolygon aTempPoly;
+                    aTempPoly.append(basegfx::B2DPoint(aRect.TopLeft().X(), nYMiddle));
+                    aTempPoly.append(basegfx::B2DPoint(aRect.BottomRight().X(), nYMiddle));
                     aPoly.append(aTempPoly);
                 }
                 break;
