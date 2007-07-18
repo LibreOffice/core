@@ -2,9 +2,9 @@
  *
  *  $RCSfile: debugplotter.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2007-04-17 13:54:47 $
+ *  last change: $Author: obo $ $Date: 2007-07-18 11:07:51 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -242,7 +242,7 @@ namespace basegfx
                 const ::std::size_t nSize( maPolygons.size() );
                 for( ::std::size_t i=0; i<nSize; ++i )
                 {
-                    if( maPolygons.at(i).first.areControlVectorsUsed() )
+                    if( maPolygons.at(i).first.areControlPointsUsed() )
                     {
                         const B2DPolygon& rCurrPoly( maPolygons.at(i).first );
 
@@ -253,8 +253,8 @@ namespace basegfx
                                 print( ", \\\n" );
 
                             const B2DPoint& rP0( rCurrPoly.getB2DPoint(k) );
-                            const B2DPoint& rP1( rCurrPoly.getControlPointA(k) );
-                            const B2DPoint& rP2( rCurrPoly.getControlPointB(k) );
+                            const B2DPoint& rP1( rCurrPoly.getNextControlPoint(k) );
+                            const B2DPoint& rP2( rCurrPoly.getPrevControlPoint((k + 1) % nCount) );
                             const B2DPoint& rP3( k+1<nCount ? rCurrPoly.getB2DPoint(k+1) : rCurrPoly.getB2DPoint(k) );
 
                             if( mpOutputStream )
@@ -340,7 +340,7 @@ namespace basegfx
                 const ::std::size_t nSize( maPolygons.size() );
                 for( ::std::size_t i=0; i<nSize; ++i )
                 {
-                    if( !maPolygons.at(i).first.areControlVectorsUsed() )
+                    if( !maPolygons.at(i).first.areControlPointsUsed() )
                     {
                         const B2DPolygon& rCurrPoly( maPolygons.at(i).first );
 
@@ -382,13 +382,8 @@ namespace basegfx
                              const sal_Char*        pTitle )
     {
         B2DPolygon aPoly;
-        aPoly.append( rBezier.getStartPoint() );
-        aPoly.setControlPointA( 0,
-                                rBezier.getControlPointA() );
-        aPoly.setControlPointB( 0,
-                                rBezier.getControlPointB() );
-        aPoly.append( rBezier.getEndPoint() );
-
+        aPoly.append(rBezier.getStartPoint());
+        aPoly.appendBezierSegment(rBezier.getControlPointA(), rBezier.getControlPointB(), rBezier.getEndPoint());
         maPolygons.push_back( ::std::make_pair( aPoly,
                                                 ::rtl::OString( pTitle ) ) );
     }
