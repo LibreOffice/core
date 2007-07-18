@@ -4,9 +4,9 @@
  *
  *  $RCSfile: b2dpolypolygontools.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 08:03:08 $
+ *  last change: $Author: obo $ $Date: 2007-07-18 11:07:10 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -72,7 +72,6 @@ namespace basegfx
 {
     namespace tools
     {
-        // B2DPolyPolygon tools
         B2DPolyPolygon correctOrientations(const B2DPolyPolygon& rCandidate)
         {
             B2DPolyPolygon aRetval(rCandidate);
@@ -133,72 +132,89 @@ namespace basegfx
 
         B2DPolyPolygon adaptiveSubdivideByDistance(const B2DPolyPolygon& rCandidate, double fDistanceBound)
         {
-            B2DPolyPolygon aRetval(rCandidate);
-
-            if(aRetval.areControlPointsUsed())
+            if(rCandidate.areControlPointsUsed())
             {
-                const sal_uInt32 nPolygonCount(aRetval.count());
+                const sal_uInt32 nPolygonCount(rCandidate.count());
+                B2DPolyPolygon aRetval;
 
-                for(sal_uInt32 a(0L); aRetval.areControlPointsUsed() && a < nPolygonCount; a++)
+                for(sal_uInt32 a(0L); a < nPolygonCount; a++)
                 {
-                    B2DPolygon aCandidate = aRetval.getB2DPolygon(a);
+                    const B2DPolygon aCandidate(rCandidate.getB2DPolygon(a));
 
                     if(aCandidate.areControlPointsUsed())
                     {
-                        aCandidate = tools::adaptiveSubdivideByDistance(aCandidate, fDistanceBound);
-                        aRetval.setB2DPolygon(a, aCandidate);
+                        aRetval.append(tools::adaptiveSubdivideByDistance(aCandidate, fDistanceBound));
+                    }
+                    else
+                    {
+                        aRetval.append(aCandidate);
                     }
                 }
-            }
 
-            return aRetval;
+                return aRetval;
+            }
+            else
+            {
+                return rCandidate;
+            }
         }
 
         B2DPolyPolygon adaptiveSubdivideByAngle(const B2DPolyPolygon& rCandidate, double fAngleBound)
         {
-            B2DPolyPolygon aRetval(rCandidate);
-
-            if(aRetval.areControlPointsUsed())
+            if(rCandidate.areControlPointsUsed())
             {
-                const sal_uInt32 nPolygonCount(aRetval.count());
+                const sal_uInt32 nPolygonCount(rCandidate.count());
+                B2DPolyPolygon aRetval;
 
-                for(sal_uInt32 a(0L); aRetval.areControlPointsUsed() && a < nPolygonCount; a++)
+                for(sal_uInt32 a(0L); a < nPolygonCount; a++)
                 {
-                    B2DPolygon aCandidate = aRetval.getB2DPolygon(a);
+                    const B2DPolygon aCandidate(rCandidate.getB2DPolygon(a));
 
                     if(aCandidate.areControlPointsUsed())
                     {
-                        aCandidate = tools::adaptiveSubdivideByAngle(aCandidate, fAngleBound);
-                        aRetval.setB2DPolygon(a, aCandidate);
+                        aRetval.append(tools::adaptiveSubdivideByAngle(aCandidate, fAngleBound));
+                    }
+                    else
+                    {
+                        aRetval.append(aCandidate);
                     }
                 }
-            }
 
-            return aRetval;
+                return aRetval;
+            }
+            else
+            {
+                return rCandidate;
+            }
         }
 
-        // #i37443#
         B2DPolyPolygon adaptiveSubdivideByCount(const B2DPolyPolygon& rCandidate, sal_uInt32 nCount)
         {
-            B2DPolyPolygon aRetval(rCandidate);
-
-            if(aRetval.areControlPointsUsed())
+            if(rCandidate.areControlPointsUsed())
             {
-                const sal_uInt32 nPolygonCount(aRetval.count());
+                const sal_uInt32 nPolygonCount(rCandidate.count());
+                B2DPolyPolygon aRetval;
 
-                for(sal_uInt32 a(0L); aRetval.areControlPointsUsed() && a < nPolygonCount; a++)
+                for(sal_uInt32 a(0L); a < nPolygonCount; a++)
                 {
-                    B2DPolygon aCandidate = aRetval.getB2DPolygon(a);
+                    const B2DPolygon aCandidate(rCandidate.getB2DPolygon(a));
 
                     if(aCandidate.areControlPointsUsed())
                     {
-                        aCandidate = tools::adaptiveSubdivideByCount(aCandidate, nCount);
-                        aRetval.setB2DPolygon(a, aCandidate);
+                        aRetval.append(tools::adaptiveSubdivideByCount(aCandidate, nCount));
+                    }
+                    else
+                    {
+                        aRetval.append(aCandidate);
                     }
                 }
-            }
 
-            return aRetval;
+                return aRetval;
+            }
+            else
+            {
+                return rCandidate;
+            }
         }
 
         bool isInside(const B2DPolyPolygon& rCandidate, const B2DPoint& rPoint, bool bWithBorder)
@@ -474,7 +490,7 @@ namespace basegfx
 
         B2DPolyPolygon setContinuity(const B2DPolyPolygon& rCandidate, B2VectorContinuity eContinuity)
         {
-            if(rCandidate.areControlVectorsUsed())
+            if(rCandidate.areControlPointsUsed())
             {
                 const sal_uInt32 nPolygonCount(rCandidate.count());
                 B2DPolyPolygon aRetval;
@@ -503,9 +519,28 @@ namespace basegfx
             return isRectangle( rPoly.getB2DPolygon(0) );
         }
 
+        // #i76891#
+        B2DPolyPolygon simplifyCurveSegments(const B2DPolyPolygon& rCandidate)
+        {
+            if(rCandidate.areControlPointsUsed())
+            {
+                B2DPolyPolygon aRetval;
+
+                for(sal_uInt32 a(0L); a < rCandidate.count(); a++)
+                {
+                    aRetval.append(simplifyCurveSegments(rCandidate.getB2DPolygon(a)));
+                }
+
+                return aRetval;
+            }
+            else
+            {
+                return rCandidate;
+            }
+        }
+
     } // end of namespace tools
 } // end of namespace basegfx
 
 //////////////////////////////////////////////////////////////////////////////
-
 // eof
