@@ -4,9 +4,9 @@
  *
  *  $RCSfile: overlaymanager.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: hr $ $Date: 2007-06-26 12:07:40 $
+ *  last change: $Author: obo $ $Date: 2007-07-18 10:54:51 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -264,12 +264,11 @@ namespace sdr
         {
             if(OUTDEV_WINDOW == getOutputDevice().GetOutDevType())
             {
-                // transform to rectangle
-                const basegfx::B2DPoint aMinimum(rRange.getMinimum());
-                const basegfx::B2DPoint aMaximum(rRange.getMaximum());
+                // #i77674# transform to rectangle. Use floor/ceil to get all covered
+                // discrete pixels, see #i75163# and OverlayManagerBuffered::invalidateRange
                 const Rectangle aInvalidateRectangle(
-                    FRound(aMinimum.getX()), FRound(aMinimum.getY()),
-                    FRound(aMaximum.getX()), FRound(aMaximum.getY()));
+                    (sal_Int32)floor(rRange.getMinX()), (sal_Int32)floor(rRange.getMinY()),
+                    (sal_Int32)ceil(rRange.getMaxX()), (sal_Int32)ceil(rRange.getMaxY()));
 
                 // simply invalidate
                 ((Window&)getOutputDevice()).Invalidate(aInvalidateRectangle, INVALIDATE_NOERASE);
