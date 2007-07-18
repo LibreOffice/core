@@ -1,0 +1,125 @@
+/*************************************************************************
+ *
+ *  OpenOffice.org - a multi-platform office productivity suite
+ *
+ *  $RCSfile: XTextConvert.idl,v $
+ *
+ *  $Revision: 1.2 $
+ *
+ *  last change: $Author: obo $ $Date: 2007-07-18 13:02:57 $
+ *
+ *  The Contents of this file are made available subject to
+ *  the terms of GNU Lesser General Public License Version 2.1.
+ *
+ *
+ *    GNU Lesser General Public License Version 2.1
+ *    =============================================
+ *    Copyright 2005 by Sun Microsystems, Inc.
+ *    901 San Antonio Road, Palo Alto, CA 94303, USA
+ *
+ *    This library is free software; you can redistribute it and/or
+ *    modify it under the terms of the GNU Lesser General Public
+ *    License version 2.1, as published by the Free Software Foundation.
+ *
+ *    This library is distributed in the hope that it will be useful,
+ *    but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ *    Lesser General Public License for more details.
+ *
+ *    You should have received a copy of the GNU Lesser General Public
+ *    License along with this library; if not, write to the Free Software
+ *    Foundation, Inc., 59 Temple Place, Suite 330, Boston,
+ *    MA  02111-1307  USA
+ *
+ ************************************************************************/
+#ifndef __com_sun_star_text_XTextConvert_idl__
+#define __com_sun_star_text_XTextConvert_idl__
+
+#ifndef __com_sun_star_uno_XInterface_idl__
+#include <com/sun/star/uno/XInterface.idl>
+#endif
+
+#ifndef __com_sun_star_beans_PropertyValues_idl__
+#include <com/sun/star/beans/PropertyValues.idl>
+#endif
+
+#ifndef __com_sun_star_lang_IllegalArgumentException_idl__
+#include <com/sun/star/lang/IllegalArgumentException.idl>
+#endif
+
+#ifndef __com_sun_star_beans_UnknownPropertyException_idl__
+#include <com/sun/star/beans/UnknownPropertyException.idl>
+#endif
+
+#ifndef __com_sun_star_text_XTextRange_idl__
+#include <com/sun/star/text/XTextRange.idl>
+#endif
+#ifndef __com_sun_star_text_XTextContent_idl__
+#include <com/sun/star/text/XTextContent.idl>
+#endif
+#ifndef __com_sun_star_text_XTextTable_idl__
+#include <com/sun/star/text/XTextTable.idl>
+#endif
+
+
+
+//=============================================================================
+
+ module com {  module sun {  module star {  module text {
+
+//=============================================================================
+
+/** .
+ */
+interface XTextConvert : com::sun::star::uno::XInterface
+{
+    //-------------------------------------------------------------------------
+
+        /** moves the paragraphs from Start to End into a text frame.
+
+                <p>FrameProperties contains the properties of the to-be-created text frame.</p>
+
+        @param
+            .
+
+        @param
+            .
+        @return
+
+     */
+    ::com::sun::star::text::XTextContent convertToTextFrame(
+                        [in] com::sun::star::text::XTextRange Start,
+                        [in] com::sun::star::text::XTextRange End,
+                        [in] com::sun::star::beans::PropertyValues FrameProperties )
+                        raises( com::sun::star::lang::IllegalArgumentException,
+                                       com::sun::star::beans::UnknownPropertyException );
+
+        /** .
+
+
+        @param TableRanges contains the TextRange interfaces of the paragraphs, cells and rows of the table.
+            <p>The innter sequence contains the start and end paragraphs of each table cell.
+            The next sequence groups the cells to a row and the outer sequence groups the rows of the table.</p>
+
+        @param CellProperties contains the properties of each cell.
+        @param RowProperties contains the properties of each table row.
+        @param TableProperties contains the properties of the table.
+        @return the created table.
+
+     */
+    ::com::sun::star::text::XTextTable convertToTable(
+                     [in] sequence< sequence< sequence< com::sun::star::text::XTextRange > > > TableRanges,
+                     [in] sequence< sequence< com::sun::star::beans::PropertyValues > > CellProperties,
+                     [in] sequence< com::sun::star::beans::PropertyValues > RowProperties,
+                     [in] com::sun::star::beans::PropertyValues TableProperties )
+                        raises( com::sun::star::lang::IllegalArgumentException,
+                                       com::sun::star::beans::UnknownPropertyException );
+
+
+};
+
+//=============================================================================
+
+}; }; }; };
+
+#endif
