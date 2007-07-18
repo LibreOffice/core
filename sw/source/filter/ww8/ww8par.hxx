@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ww8par.hxx,v $
  *
- *  $Revision: 1.149 $
+ *  $Revision: 1.150 $
  *
- *  last change: $Author: rt $ $Date: 2007-04-25 14:47:20 $
+ *  last change: $Author: obo $ $Date: 2007-07-18 14:46:14 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -700,6 +700,9 @@ public:
     sal_uInt32 GetPageLeft() const;
     sal_uInt32 GetPageRight() const;
     sal_uInt32 GetPageWidth() const;
+    // --> OD 2007-07-03 #148498#
+    sal_uInt32 GetWWPageTopMargin() const;
+    // <--
     bool empty() const { return maSegments.empty(); }
     sal_uInt32 GetTextAreaWidth() const;
 };
@@ -770,6 +773,16 @@ struct ANLDRuleMap
 
 struct SprmReadInfo;
 class SwDocShell;
+struct WW8PostProcessAttrsInfo
+{
+    bool mbCopy;
+    WW8_CP mnCpStart;
+    WW8_CP mnCpEnd;
+    SwPaM mPaM;
+    SfxItemSet mItemSet;
+
+    WW8PostProcessAttrsInfo(WW8_CP nCpStart, WW8_CP nCpEnd, SwPaM & rPaM);
+};
 
 //-----------------------------------------
 //            Storage-Reader
@@ -915,6 +928,8 @@ private:
     number of character formats created
     */
     std::vector<const SwCharFmt*> aRubyCharFmts;
+
+    WW8PostProcessAttrsInfo * mpPostProcessAttrsInfo;
 
     WW8Fib* pWwFib;
     WW8Fonts* pFonts;
@@ -1513,7 +1528,7 @@ public:     // eigentlich private, geht aber leider nur public
         com::sun::star::uno::Reference<com::sun::star::beans::XPropertySet>&
         rPropSet);
 
-    eF_ResT Read_F_Macro( WW8FieldDesc*, String& rStr );
+    eF_ResT Read_F_Macro( WW8FieldDesc*, String& rStr);
     eF_ResT Read_F_DBField( WW8FieldDesc*, String& rStr );
     eF_ResT Read_F_DBNext( WW8FieldDesc*, String& );
     eF_ResT Read_F_DBNum( WW8FieldDesc*, String& );
@@ -1555,6 +1570,8 @@ public:     // eigentlich private, geht aber leider nur public
     // Laden eines kompletten DocFiles
     ULONG LoadDoc( SwPaM&,WW8Glossary *pGloss=0);
     CharSet GetCurrentCharSet();
+
+    void PostProcessAttrs();
 };
 
 bool CanUseRemoteLink(const String &rGrfName);
