@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dialogcontrol.hxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: kz $ $Date: 2007-06-20 10:24:33 $
+ *  last change: $Author: obo $ $Date: 2007-07-18 08:43:25 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -228,11 +228,12 @@ protected:
 //  ----------------------------------------------------
 //  class UnoDialogControl
 //  ----------------------------------------------------
-typedef ::cppu::ImplHelper5 <   ::com::sun::star::container::XContainerListener
+typedef ::cppu::ImplHelper6 <   ::com::sun::star::container::XContainerListener
                             ,   ::com::sun::star::awt::XTopWindow
                             ,   ::com::sun::star::awt::XDialog
                             ,   ::com::sun::star::util::XChangesListener
                             ,   ::com::sun::star::util::XModifyListener
+                            ,   ::com::sun::star::awt::XWindowListener
                             >   UnoDialogControl_IBase;
 
 class ResourceListener  :public ::com::sun::star::util::XModifyListener,
@@ -271,6 +272,9 @@ private:
     ::com::sun::star::uno::Reference< ::com::sun::star::awt::XTabController >   mxTabController;
     ::com::sun::star::uno::Reference< ::com::sun::star::util::XModifyListener > mxListener;
     TopWindowListenerMultiplexer                                                maTopWindowListeners;
+    bool                                                                        mbWindowListener;
+    bool                                                                        mbSizeModified;
+    bool                                                                        mbPosModified;
 
 protected:
 
@@ -301,12 +305,18 @@ public:
     void SAL_CALL toBack(  ) throw (::com::sun::star::uno::RuntimeException);
     void SAL_CALL setMenuBar( const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XMenuBar >& xMenu ) throw (::com::sun::star::uno::RuntimeException);
 
+    // ::com::sun::star::awt::XWindowListener
+    virtual void SAL_CALL windowResized( const ::com::sun::star::awt::WindowEvent& e ) throw (::com::sun::star::uno::RuntimeException);
+    virtual void SAL_CALL windowMoved( const ::com::sun::star::awt::WindowEvent& e ) throw (::com::sun::star::uno::RuntimeException);
+    virtual void SAL_CALL windowShown( const ::com::sun::star::lang::EventObject& e ) throw (::com::sun::star::uno::RuntimeException);
+    virtual void SAL_CALL windowHidden( const ::com::sun::star::lang::EventObject& e ) throw (::com::sun::star::uno::RuntimeException);
+
     // ::com::sun::star::container::XContainerListener
     void SAL_CALL elementInserted( const ::com::sun::star::container::ContainerEvent& Event ) throw(::com::sun::star::uno::RuntimeException);
     void SAL_CALL elementRemoved( const ::com::sun::star::container::ContainerEvent& Event ) throw(::com::sun::star::uno::RuntimeException);
     void SAL_CALL elementReplaced( const ::com::sun::star::container::ContainerEvent& Event ) throw(::com::sun::star::uno::RuntimeException);
 
-
+    // ::com::sun::star::awt::XDialog
     void SAL_CALL setTitle( const ::rtl::OUString& Title ) throw(::com::sun::star::uno::RuntimeException);
     ::rtl::OUString SAL_CALL getTitle() throw(::com::sun::star::uno::RuntimeException);
     sal_Int16 SAL_CALL execute() throw(::com::sun::star::uno::RuntimeException);
