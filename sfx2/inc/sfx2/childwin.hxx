@@ -4,9 +4,9 @@
  *
  *  $RCSfile: childwin.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: vg $ $Date: 2007-05-22 20:17:03 $
+ *  last change: $Author: obo $ $Date: 2007-07-18 09:00:44 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -79,6 +79,7 @@ class SfxChildWinContextArr_Impl;
 #define SFX_CHILDWIN_TASK         0x10      // ChildWindow innerhalb der Task
 #define SFX_CHILDWIN_CANTGETFOCUS 0x20      // ChildWindow kann keinen Focus bekommen
 #define SFX_CHILDWIN_ALWAYSAVAILABLE 0x40   // ChildWindow is never disabled
+#define SFX_CHILDWIN_NEVERHIDE    0x80      // ChildWindow is can always made visible/is visible
 #define CHILDWIN_NOPOS            USHRT_MAX
 
 // Konfiguration eines ChildWindows
