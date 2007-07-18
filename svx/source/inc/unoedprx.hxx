@@ -4,9 +4,9 @@
  *
  *  $RCSfile: unoedprx.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: hr $ $Date: 2007-06-27 18:24:55 $
+ *  last change: $Author: obo $ $Date: 2007-07-18 13:06:53 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -94,6 +94,13 @@ public:
     virtual sal_Bool        QuickFormatDoc( BOOL bFull=FALSE );
     virtual USHORT          GetDepth( USHORT nPara ) const;
     virtual sal_Bool        SetDepth( USHORT nPara, USHORT nNewDepth );
+
+    virtual const SfxItemSet*   GetEmptyItemSetPtr();
+
+    // implementation functions for XParagraphAppend and XTextPortionAppend
+    // (not needed for accessibility, only for new import API)
+    virtual void        AppendParagraph();
+    virtual xub_StrLen  AppendTextPortion( USHORT nPara, const String &rText, const SfxItemSet &rSet );
 
     void                    SetForwarder( SvxTextForwarder& );
     sal_Bool                HaveImageBullet( USHORT nPara ) const;
