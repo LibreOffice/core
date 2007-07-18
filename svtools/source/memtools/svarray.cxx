@@ -4,9 +4,9 @@
  *
  *  $RCSfile: svarray.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: hr $ $Date: 2007-06-27 21:48:00 $
+ *  last change: $Author: obo $ $Date: 2007-07-18 08:55:53 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -72,10 +72,6 @@
 
 #ifndef _TOOLS_DEBUG_HXX //autogen
 #include <tools/debug.hxx>
-#endif
-
-#ifdef MAC
-#pragma segment NEVER_PURGE
 #endif
 
 SV_IMPL_VARARR(SvPtrarr,VoidPtr)
