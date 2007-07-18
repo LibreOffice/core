@@ -4,9 +4,9 @@
  *
  *  $RCSfile: printhelper.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: obo $ $Date: 2007-07-17 13:45:14 $
+ *  last change: $Author: obo $ $Date: 2007-07-18 06:51:58 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -458,7 +458,7 @@ class ImplUCBPrintWatcher : public ::osl::Thread
 
                     aTarget.transferContent(
                             aSource,
-                            ::ucb::InsertOperation_COPY,
+                            ::ucbhelper::InsertOperation_COPY,
                             ::rtl::OUString(sFileName),
                             ::com::sun::star::ucb::NameClash::OVERWRITE);
                 }
