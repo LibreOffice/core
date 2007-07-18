@@ -4,11 +4,11 @@
 <LC_INFO>
 <Language>
 <LangID>zh</LangID>
-<DefaultName>Chinese</DefaultName>
+<DefaultName>Traditional Chinese</DefaultName>
 </Language>
 <Country>
 <CountryID>TW</CountryID>
-<DefaultName>Taiwan, China</DefaultName>
+<DefaultName>Taiwan</DefaultName>
 </Country>
 </LC_INFO>
 <LC_CTYPE unoid="generic">
