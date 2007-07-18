@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ivctrl.hxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: hr $ $Date: 2007-06-27 14:38:11 $
+ *  last change: $Author: obo $ $Date: 2007-07-18 08:51:41 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -237,11 +237,6 @@ public:
         WB_NOASYNCSELECTHDL // Selektionshandler synchron aufrufen, d.h. Events nicht sammeln
 */
 
-#ifdef MAC
-#undef WB_ICON
-#undef WB_SMALLICON
-#undef WB_DETAILS
-#endif
 #define WB_ICON                 WB_RECTSTYLE
 #define WB_SMALLICON            WB_SMALLSTYLE
 #define WB_DETAILS              WB_VCENTER
