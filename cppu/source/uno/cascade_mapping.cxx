@@ -4,9 +4,9 @@
  *
  *  $RCSfile: cascade_mapping.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: kz $ $Date: 2007-05-09 13:38:28 $
+ *  last change: $Author: obo $ $Date: 2007-07-18 12:22:31 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -149,12 +149,12 @@ void MediatorMapping::release(void)
     }
 }
 
-extern "C" { static void s_mapInterface_v(va_list param)
+extern "C" { static void s_mapInterface_v(va_list * pParam)
 {
-    void                            ** ppOut               = va_arg(param, void **);
-    void                             * pInterface          = va_arg(param, void *);
-    typelib_InterfaceTypeDescription * pInterfaceTypeDescr = va_arg(param, typelib_InterfaceTypeDescription *);
-    uno_Mapping                      * pMapping            = va_arg(param, uno_Mapping *);
+    void                            ** ppOut               = va_arg(*pParam, void **);
+    void                             * pInterface          = va_arg(*pParam, void *);
+    typelib_InterfaceTypeDescription * pInterfaceTypeDescr = va_arg(*pParam, typelib_InterfaceTypeDescription *);
+    uno_Mapping                      * pMapping            = va_arg(*pParam, uno_Mapping *);
 
     pMapping->mapInterface(pMapping, ppOut, pInterface, pInterfaceTypeDescr);
 }}
