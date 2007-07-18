@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ndarr.hxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: rt $ $Date: 2006-12-01 15:32:55 $
+ *  last change: $Author: obo $ $Date: 2007-07-18 12:54:53 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -52,6 +52,7 @@
 #endif
 
 #include <svtools/embedhlp.hxx>
+#include <vector>
 
 class Graphic;
 class GraphicObject;
@@ -299,6 +300,14 @@ public:
                                 SwTableBoxFmt* pBoxFmt,
                                 SwTxtFmtColl* pTxtColl,
                                 SwUndoTxtToTbl* pUndo = 0 );
+    //create a table from a vector of NodeRanges - API support
+    SwTableNode* TextToTable( const std::vector< std::vector<SwNodeRange> >& rTableNodes,
+                                SwTableFmt* pTblFmt,
+                                SwTableLineFmt* pLineFmt,
+                                SwTableBoxFmt* pBoxFmt,
+                                SwTxtFmtColl* pTxtColl
+                                /*, SwUndo... pUndo*/ );
+
         // erzeuge aus der Tabelle wieder normalen Text
     BOOL TableToText( const SwNodeRange& rRange, sal_Unicode cCh,
                         SwUndoTblToTxt* = 0 );
