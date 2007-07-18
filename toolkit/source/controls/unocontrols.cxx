@@ -4,9 +4,9 @@
  *
  *  $RCSfile: unocontrols.cxx,v $
  *
- *  $Revision: 1.81 $
+ *  $Revision: 1.82 $
  *
- *  last change: $Author: rt $ $Date: 2007-07-06 14:27:55 $
+ *  last change: $Author: obo $ $Date: 2007-07-18 08:43:55 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -3606,8 +3606,20 @@ void UnoPatternFieldControl::ImplSetPeerProperty( const ::rtl::OUString& rPropNa
 
         uno::Reference < awt::XPatternField >  xPF( getPeer(), uno::UNO_QUERY );
         if (xPF.is())
-        {   // same comment as in UnoControl::ImplSetPeerProperty - see there
-            xPF->setString( Text );
+        {
+            // same comment as in UnoControl::ImplSetPeerProperty - see there
+            ::rtl::OUString sText( Text );
+            if (( Text.getLength() > 0 ) &&
+                ( Text.compareToAscii( "&", 1 ) == 0 ))
+            {
+                // Magic symbol '&' found at first place. Interpret as a place
+                // holder identifier. Now try to map it to the real value. The
+                // magic symbol must be removed.
+                rtl::OUString aKeyValue( Text.copy( 1 ));
+                if ( UnoControl::ImplMapPlaceHolder( aKeyValue ))
+                   sText = aKeyValue;
+            }
+            xPF->setString( sText );
             xPF->setMasks( EditMask, LiteralMask );
         }
     }
