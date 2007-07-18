@@ -4,9 +4,9 @@
  *
  *  $RCSfile: fltdefs.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 09:30:07 $
+ *  last change: $Author: obo $ $Date: 2007-07-18 08:51:26 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -97,7 +97,7 @@ typedef BYTE* PDIBBYTE;
 #endif
 
 
-#if defined ( OS2 ) || defined ( UNX ) || defined ( MAC )
+#if defined ( OS2 ) || defined ( UNX )
 void ReadBitmap( SvStream& rIStream, Bitmap& rBmp, USHORT nDefaultHeight = 0, ULONG nOffBits = 0 );
 void ReplaceInfoHeader( SvStream& rStm, BYTE* pBuffer );
 
@@ -109,10 +109,6 @@ void ReplaceInfoHeader( SvStream& rStm, BYTE* pBuffer );
 #define PBITMAPINFOHEADER   PBITMAPINFOHEADEROS2
 #define BITMAPINFO          BITMAPINFOOS2
 #define PBITMAPINFO         PBITMAPINFOOS2
-#endif
-
-#if defined(MAC) && (defined(powerc) || defined (__powerc))
-#pragma options align=mac68k
 #endif
 
 typedef struct RGBQUAD
@@ -161,10 +157,6 @@ typedef struct BITMAPINFO
     RGBQUAD             bmiColors[1];
 } BITMAPINFO;
 typedef BITMAPINFO* PBITMAPINFO;
-
-#if defined(MAC) && (defined(powerc) || defined (__powerc))
-#pragma options align=reset
-#endif
 
 #endif
 #endif
