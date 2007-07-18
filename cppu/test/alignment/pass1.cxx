@@ -4,9 +4,9 @@
  *
  *  $RCSfile: pass1.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 00:22:50 $
+ *  last change: $Author: obo $ $Date: 2007-07-18 12:24:36 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -35,6 +35,8 @@
 
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_cppu.hxx"
+
+#include "sal/main.h"
 
 #include <stdio.h>
 #include <vector>
@@ -87,6 +89,8 @@ static void find_all_structs(
             case RT_TYPE_STRUCT:
                 pNames->push_back( aReader.getTypeName().replace( '/', '.' ) );
                 break;
+            default:
+                break;
             }
         }
 
@@ -119,7 +123,7 @@ static OString makeCppName( OUString const & name ) SAL_THROW( () )
 }
 
 //==================================================================================================
-int SAL_CALL main( int, char const ** )
+SAL_IMPLEMENT_MAIN()
 {
     sal_Int32 argc = rtl_getAppCommandArgCount();
     if (argc < 1)
@@ -172,8 +176,8 @@ int SAL_CALL main( int, char const ** )
             if (bDumpStdOut)
             {
                 // type name on stdout
-                OString str( OSTR(name) );
-                fprintf( stdout, "%s\n", str.getStr() );
+                OString str2( OSTR(name) );
+                fprintf( stdout, "%s\n", str2.getStr() );
             }
             // all includes
             OString includeName( makeIncludeName( name ) );
@@ -182,8 +186,9 @@ int SAL_CALL main( int, char const ** )
         // include diagnose.h
         fprintf(
             hPass2,
-            "\n#include <diagnose.h>\n\n"
-            "int SAL_CALL main( int argc, char const * argv[] )\n{\n" );
+            "\n#include <diagnose.h>\n"
+            "#include \"sal/main.h\"\n\n"
+            "SAL_IMPLEMENT_MAIN()\n{\n" );
         // generate all type checks
         for ( nPos = names.size(); nPos--; )
         {
@@ -206,19 +211,19 @@ int SAL_CALL main( int, char const ** )
                     hPass2, "\tBINTEST_VERIFYALIGNMENT( %s, %d );\n",
                     cppName.getStr(), pTD->nAlignment );
                 // offset checks
-                for ( sal_Int32 nPos = pCTD->nMembers; nPos--; )
+                for ( sal_Int32 nPos2 = pCTD->nMembers; nPos2--; )
                 {
-                    OString memberName( OSTR(pCTD->ppMemberNames[ nPos ]) );
+                    OString memberName( OSTR(pCTD->ppMemberNames[ nPos2 ]) );
                     fprintf(
                         hPass2, "\tBINTEST_VERIFYOFFSET( %s, %s, %d );\n",
-                        cppName.getStr(), memberName.getStr(), pCTD->pMemberOffsets[ nPos ] );
+                        cppName.getStr(), memberName.getStr(), pCTD->pMemberOffsets[ nPos2 ] );
                 }
                 typelib_typedescription_release( pTD );
             }
             else
             {
-                OString str( OSTR(name) );
-                fprintf( stderr, "### cannot dump type %s!!!\n", str.getStr() );
+                OString str2( OSTR(name) );
+                fprintf( stderr, "### cannot dump type %s!!!\n", str2.getStr() );
             }
         }
         fprintf(
