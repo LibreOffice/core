@@ -4,9 +4,9 @@
  *
  *  $RCSfile: svdmrkv.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2007-07-06 13:18:17 $
+ *  last change: $Author: obo $ $Date: 2007-07-18 10:51:02 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -156,7 +156,7 @@ protected:
     Rectangle                   aMarkedGluePointsRect;
 
     USHORT                      nFrameHandlesLimit;
-    sal_uInt32                  mnInsPointNum;      // Nummer des InsPoint
+    ULONG                   mnInsPointNum;      // Nummer des InsPoint
     ULONG                       nMarkableObjCount;
 
     SdrDragMode                 eDragMode;        // Persistent
@@ -289,11 +289,11 @@ protected:
 public:
     // all available const methods for read access to selection
     const SdrMarkList& GetMarkedObjectList() const { return mpSdrViewSelection->GetMarkedObjectList(); }
-    sal_uInt32 TryToFindMarkedObject(const SdrObject* pObj) const { return GetMarkedObjectList().FindObject(pObj); }
-    SdrPageView* GetSdrPageViewOfMarkedByIndex(sal_uInt32 nNum) const { return GetMarkedObjectList().GetMark(nNum)->GetPageView(); }
-    SdrMark* GetSdrMarkByIndex(sal_uInt32 nNum) const { return GetMarkedObjectList().GetMark(nNum); }
-    SdrObject* GetMarkedObjectByIndex(sal_uInt32 nNum) const { return (GetMarkedObjectList().GetMark(nNum))->GetMarkedSdrObj(); }
-    sal_uInt32 GetMarkedObjectCount() const { return GetMarkedObjectList().GetMarkCount(); }
+    ULONG TryToFindMarkedObject(const SdrObject* pObj) const { return GetMarkedObjectList().FindObject(pObj); }
+    SdrPageView* GetSdrPageViewOfMarkedByIndex(ULONG nNum) const { return GetMarkedObjectList().GetMark(nNum)->GetPageView(); }
+    SdrMark* GetSdrMarkByIndex(ULONG nNum) const { return GetMarkedObjectList().GetMark(nNum); }
+    SdrObject* GetMarkedObjectByIndex(ULONG nNum) const { return (GetMarkedObjectList().GetMark(nNum))->GetMarkedSdrObj(); }
+    ULONG GetMarkedObjectCount() const { return GetMarkedObjectList().GetMarkCount(); }
     void SortMarkedObjects() const { GetMarkedObjectList().ForceSort(); }
     sal_Bool AreObjectsMarked() const { return (0L != GetMarkedObjectList().GetMarkCount()); }
     String GetDescriptionOfMarkedObjects() const { return GetMarkedObjectList().GetMarkDescription(); }

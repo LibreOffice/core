@@ -4,9 +4,9 @@
  *
  *  $RCSfile: svdmark.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2007-07-06 13:18:03 $
+ *  last change: $Author: obo $ $Date: 2007-07-18 10:50:48 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -71,7 +71,7 @@ class SVX_DLLPUBLIC SdrUShortCont
     sal_Bool                                            mbSorted;
 
 private:
-    void CheckSort(sal_uInt32 nPos);
+    void CheckSort(ULONG nPos);
 
 public:
     SdrUShortCont(sal_uInt16 nBlock, sal_uInt16 nInit, sal_uInt16 nResize)
@@ -120,9 +120,9 @@ public:
         }
     }
 
-    void Insert(sal_uInt16 nElem, sal_uInt32 nPos = CONTAINER_APPEND)
+    void Insert(sal_uInt16 nElem, ULONG nPos = CONTAINER_APPEND)
     {
-        maArray.Insert((void*)sal_uInt32(nElem),nPos);
+        maArray.Insert((void*)ULONG(nElem),nPos);
 
         if(mbSorted)
         {
@@ -130,14 +130,14 @@ public:
         }
     }
 
-    void Remove(sal_uInt32 nPos)
+    void Remove(ULONG nPos)
     {
         maArray.Remove(nPos);
     }
 
-    void Replace(sal_uInt16 nElem, sal_uInt32 nPos)
+    void Replace(sal_uInt16 nElem, ULONG nPos)
     {
-        maArray.Replace((void*)sal_uInt32(nElem), nPos);
+        maArray.Replace((void*)ULONG(nElem), nPos);
 
         if(mbSorted)
         {
@@ -145,24 +145,24 @@ public:
         }
     }
 
-    sal_uInt16 GetObject(sal_uInt32 nPos) const
+    sal_uInt16 GetObject(ULONG nPos) const
     {
         return sal_uInt16(sal_uIntPtr(maArray.GetObject(nPos)));
     }
 
-    sal_uInt32 GetPos(sal_uInt16 nElem) const
+    ULONG GetPos(sal_uInt16 nElem) const
     {
-        return maArray.GetPos((void*)(sal_uInt32)nElem);
+        return maArray.GetPos((void*)(ULONG)nElem);
     }
 
-    sal_uInt32 GetCount() const
+    ULONG GetCount() const
     {
         return maArray.Count();
     }
 
     sal_Bool Exist(sal_uInt16 nElem) const
     {
-        return (CONTAINER_ENTRY_NOTFOUND != maArray.GetPos((void*)(sal_uInt32)nElem));
+        return (CONTAINER_ENTRY_NOTFOUND != maArray.GetPos((void*)(ULONG)nElem));
     }
 };
 
@@ -343,20 +343,20 @@ public:
         mbSorted = sal_False;
     }
 
-    sal_uInt32 GetMarkCount() const
+    ULONG GetMarkCount() const
     {
         return maList.Count();
     }
 
-    SdrMark* GetMark(sal_uInt32 nNum) const
+    SdrMark* GetMark(ULONG nNum) const
     {
         return (SdrMark*)(maList.GetObject(nNum));
     }
 
-    sal_uInt32 FindObject(const SdrObject* pObj) const;
+    ULONG FindObject(const SdrObject* pObj) const;
     void InsertEntry(const SdrMark& rMark, sal_Bool bChkSort = sal_True);
-    void DeleteMark(sal_uInt32 nNum);
-    void ReplaceMark(const SdrMark& rNewMark, sal_uInt32 nNum);
+    void DeleteMark(ULONG nNum);
+    void ReplaceMark(const SdrMark& rNewMark, ULONG nNum);
     void Merge(const SdrMarkList& rSrcList, sal_Bool bReverse = sal_False);
     sal_Bool DeletePageView(const SdrPageView& rPV);
     sal_Bool InsertPageView(const SdrPageView& rPV);
