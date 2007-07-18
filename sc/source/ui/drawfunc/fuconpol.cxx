@@ -4,9 +4,9 @@
  *
  *  $RCSfile: fuconpol.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: vg $ $Date: 2007-02-27 13:11:29 $
+ *  last change: $Author: obo $ $Date: 2007-07-18 11:12:35 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -394,26 +394,40 @@ SdrObject* FuConstPolygon::CreateDefaultObject(const sal_uInt16 nID, const Recta
                 case SID_DRAW_BEZIER_NOFILL:
                 {
                     basegfx::B2DPolygon aInnerPoly;
+
                     aInnerPoly.append(basegfx::B2DPoint(rRectangle.Left(), rRectangle.Bottom()));
-                    aInnerPoly.setControlPointA(0L, basegfx::B2DPoint(rRectangle.Center().X(), rRectangle.Bottom()));
-                    aInnerPoly.setControlPointB(0L, aInnerPoly.getControlPointA(0L));
-                    aInnerPoly.append(basegfx::B2DPoint(rRectangle.Center().X(), rRectangle.Center().Y()));
-                    aInnerPoly.setControlPointA(1L, basegfx::B2DPoint(rRectangle.Center().X(), rRectangle.Top()));
-                    aInnerPoly.setControlPointB(1L, aInnerPoly.getControlPointA(1L));
-                    aInnerPoly.append(basegfx::B2DPoint(rRectangle.Right(), rRectangle.Top()));
+
+                    const basegfx::B2DPoint aCenterBottom(rRectangle.Center().X(), rRectangle.Bottom());
+                    aInnerPoly.appendBezierSegment(
+                        aCenterBottom,
+                        aCenterBottom,
+                        basegfx::B2DPoint(rRectangle.Center().X(), rRectangle.Center().Y()));
+
+                    const basegfx::B2DPoint aCenterTop(rRectangle.Center().X(), rRectangle.Top());
+                    aInnerPoly.appendBezierSegment(
+                        aCenterTop,
+                        aCenterTop,
+                        basegfx::B2DPoint(rRectangle.Right(), rRectangle.Top()));
+
                     aPoly.append(aInnerPoly);
                     break;
                 }
                 case SID_DRAW_FREELINE_NOFILL:
                 {
                     basegfx::B2DPolygon aInnerPoly;
+
                     aInnerPoly.append(basegfx::B2DPoint(rRectangle.Left(), rRectangle.Bottom()));
-                    aInnerPoly.setControlPointA(0L, basegfx::B2DPoint(rRectangle.Left(), rRectangle.Top()));
-                    aInnerPoly.setControlPointB(0L, basegfx::B2DPoint(rRectangle.Center().X(), rRectangle.Top()));
-                    aInnerPoly.append(basegfx::B2DPoint(rRectangle.Center().X(), rRectangle.Center().Y()));
-                    aInnerPoly.setControlPointA(1L, basegfx::B2DPoint(rRectangle.Center().X(), rRectangle.Bottom()));
-                    aInnerPoly.setControlPointB(1L, basegfx::B2DPoint(rRectangle.Right(), rRectangle.Bottom()));
-                    aInnerPoly.append(basegfx::B2DPoint(rRectangle.Right(), rRectangle.Top()));
+
+                    aInnerPoly.appendBezierSegment(
+                        basegfx::B2DPoint(rRectangle.Left(), rRectangle.Top()),
+                        basegfx::B2DPoint(rRectangle.Center().X(), rRectangle.Top()),
+                        basegfx::B2DPoint(rRectangle.Center().X(), rRectangle.Center().Y()));
+
+                    aInnerPoly.appendBezierSegment(
+                        basegfx::B2DPoint(rRectangle.Center().X(), rRectangle.Bottom()),
+                        basegfx::B2DPoint(rRectangle.Right(), rRectangle.Bottom()),
+                        basegfx::B2DPoint(rRectangle.Right(), rRectangle.Top()));
+
                     aPoly.append(aInnerPoly);
                     break;
                 }
@@ -421,8 +435,8 @@ SdrObject* FuConstPolygon::CreateDefaultObject(const sal_uInt16 nID, const Recta
                 case SID_DRAW_POLYGON_NOFILL:
                 {
                     basegfx::B2DPolygon aInnerPoly;
-                    sal_Int32 nWdt(rRectangle.GetWidth());
-                    sal_Int32 nHgt(rRectangle.GetHeight());
+                    const sal_Int32 nWdt(rRectangle.GetWidth());
+                    const sal_Int32 nHgt(rRectangle.GetHeight());
 
                     aInnerPoly.append(basegfx::B2DPoint(rRectangle.Left(), rRectangle.Bottom()));
                     aInnerPoly.append(basegfx::B2DPoint(rRectangle.Left() + (nWdt * 30) / 100, rRectangle.Top() + (nHgt * 70) / 100));
@@ -460,5 +474,4 @@ SdrObject* FuConstPolygon::CreateDefaultObject(const sal_uInt16 nID, const Recta
     return pObj;
 }
 
-
-
+// eof
