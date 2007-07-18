@@ -4,9 +4,9 @@
  *
  *  $RCSfile: sfxbasemodel.cxx,v $
  *
- *  $Revision: 1.125 $
+ *  $Revision: 1.126 $
  *
- *  last change: $Author: hr $ $Date: 2007-06-27 23:24:53 $
+ *  last change: $Author: obo $ $Date: 2007-07-18 06:53:49 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -22,7 +22,7 @@
  *    License version 2.1, as published by the Free Software Foundation.
  *
  *    This library is distributed in the hope that it will be useful,
- *    but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *    but WITHOUT uno::Any WARRANTY; without even the implied warranty of
  *    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
  *    Lesser General Public License for more details.
  *
@@ -40,176 +40,45 @@
 //  my own includes
 //________________________________________________________________________________________________________
 
-#ifndef _SFX_SFXBASEMODEL_HXX_
 #include <sfx2/sfxbasemodel.hxx>
-#endif
 
 //________________________________________________________________________________________________________
 //  include of other projects
 //________________________________________________________________________________________________________
 
-#ifndef _COM_SUN_STAR_TASK_XINTERACTIONHANDLER_HPP_
 #include <com/sun/star/task/XInteractionHandler.hpp>
-#endif
-
-#ifndef _COM_SUN_STAR_TASK_ERRORCODEREQUEST_HPP_
 #include <com/sun/star/task/ErrorCodeRequest.hpp>
-#endif
-
-#ifndef _COM_SUN_STAR_VIEW_XPRINTJOB_HPP_
-#include <com/sun/star/view/XPrintJob.hpp>
-#endif
-
-#ifndef _COM_SUN_STAR_VIEW_XSELECTIONSUPPLIER_HPP_
 #include <com/sun/star/view/XSelectionSupplier.hpp>
-#endif
-
-#ifndef _COM_SUN_STAR_AWT_SIZE_HPP_
-#include <com/sun/star/awt/Size.hpp>
-#endif
-
-#ifndef _COM_SUN_STAR_LANG_DISPOSEDEXCEPTION_HPP_
+#include <com/sun/star/view/XPrintJobListener.hpp>
 #include <com/sun/star/lang/DisposedException.hpp>
-#endif
-
-#ifndef _COM_SUN_STAR_LANG_ILLEGALARGUMENTEXCEPTION_HPP_
 #include <com/sun/star/lang/IllegalArgumentException.hpp>
-#endif
-
-#ifndef _COM_SUN_STAR_FRAME_ILLEGALARGUMENTIOEXCEPTION_HPP_
 #include <com/sun/star/frame/IllegalArgumentIOException.hpp>
-#endif
-
-#ifndef _COM_SUN_STAR_VIEW_PAPERFORMAT_HPP_
-#include <com/sun/star/view/PaperFormat.hpp>
-#endif
-
-#ifndef _COM_SUN_STAR_VIEW_PAPERORIENTATION_HPP_
-#include <com/sun/star/view/PaperOrientation.hpp>
-#endif
-
-#ifndef _COM_SUN_STAR_EMBED_XTRANSACTIONBROADCASTER_HPP_
 #include <com/sun/star/embed/XTransactionBroadcaster.hpp>
-#endif
-
-#ifndef _COM_SUN_STAR_EMBED_XSTORAGE_HPP_
 #include <com/sun/star/embed/XStorage.hpp>
-#endif
-
-#ifndef _COM_SUN_STAR_EMBED_EMBEDMAPUNITS_HPP_
 #include <com/sun/star/embed/EmbedMapUnits.hpp>
-#endif
-
-#ifndef _COM_SUN_STAR_DOCUMENT_XSTORAGECHANGELISTENER_HPP_
 #include <com/sun/star/document/XStorageChangeListener.hpp>
-#endif
-
-#ifndef _COM_SUN_STAR_DOCUMENT_XACTIONLOCKABLE_HPP_
 #include <com/sun/star/document/XActionLockable.hpp>
-#endif
-
-#ifndef _COM_SUN_STAR_BEANS_XPROPERTYSET_HPP_
 #include <com/sun/star/beans/XPropertySet.hpp>
-#endif
-
-#ifndef _CPPUHELPER_INTERFACECONTAINER_HXX_
-#include <cppuhelper/interfacecontainer.hxx>
-#endif
-
-#ifndef _UNOTOOLS_PROCESSFACTORY_HXX
-#include <comphelper/processfactory.hxx>
-#endif
-
-#ifndef _COM_SUN_STAR_CONTAINER_XINDEXCONTAINER_HPP_
 #include <com/sun/star/container/XIndexContainer.hpp>
-#endif
-
-#ifndef _COM_SUN_STAR_UCB_NAMECLASH_HPP_
-#include <com/sun/star/ucb/NameClash.hpp>
-#endif
-
-#ifndef  _COM_SUN_STAR_SCRIPT_PROVIDER_XSCRIPTPROVIDERFACTORY_HPP_
 #include <com/sun/star/script/provider/XScriptProviderFactory.hpp>
-#endif
-
-#ifndef _COM_SUN_STAR_SCRIPT_PROVIDER_XSCRIPTPROVIDER_HPP_
 #include <com/sun/star/script/provider/XScriptProvider.hpp>
-#endif
-
-#ifndef _COM_SUN_STAR_UI_XUICONFIGURATIONMANAGERSUPPLIER_HPP_
-#include <com/sun/star/ui/XUIConfigurationManagerSupllier.hpp>
-#endif
-
-#ifndef _COM_SUN_STAR_UI_XUICONFIGURATIONSTORAGE_HPP_
 #include <com/sun/star/ui/XUIConfigurationStorage.hpp>
-#endif
-
-#ifndef _COM_SUN_STAR_UI_XUICONFIGURATIONPERSISTENCE_HPP_
 #include <com/sun/star/ui/XUIConfigurationPersistence.hpp>
-#endif
-
-#ifndef _COM_SUN_STAR_EMBED_ELEMENTMODES_HPP_
 #include <com/sun/star/embed/ElementModes.hpp>
-#endif
-
-#ifndef _COM_SUN_STAR_EMBED_ASPECTS_HPP_
 #include <com/sun/star/embed/Aspects.hpp>
-#endif
+#include <comphelper/enumhelper.hxx>  // can be removed when this is a "real" service
 
-#ifndef _COM_SUN_STAR_FRAME_XMODULEMANAGER_HPP_
-#include <com/sun/star/frame/XModuleManager.hpp>
-#endif
-
-#ifndef _UNO_MAPPING_HXX_
-#include <uno/mapping.hxx>
-#endif
-
-#ifndef _SFXITEMSET_HXX
+#include <cppuhelper/interfacecontainer.hxx>
+#include <comphelper/processfactory.hxx>  // can be removed when this is a "real" service
 #include <svtools/itemset.hxx>
-#endif
-
-#ifndef _SFXSTRITEM_HXX
 #include <svtools/stritem.hxx>
-#endif
-
-#ifndef _SFXINTITEM_HXX
-#include <svtools/intitem.hxx>
-#endif
-
-#ifndef _SFXENUMITEM_HXX
 #include <svtools/eitem.hxx>
-#endif
-
 #include <basic/sbx.hxx>
 #include <basic/sbuno.hxx>
-
-#ifndef _OSL_FILE_HXX_
-#include <osl/file.hxx>
-#endif
-
-#ifndef _THREAD_HXX_
-#include <osl/thread.hxx>
-#endif
-
-#ifndef _URLOBJ_HXX_
 #include <tools/urlobj.hxx>
-#endif
-
-#ifndef _UNOTOOLS_TEMPFILE_HXX_
 #include <unotools/tempfile.hxx>
-#endif
-
-#ifndef _UNOTOOLS_LOCALFILEHELPER_HXX_
-#include <unotools/localfilehelper.hxx>
-#endif
-
-#ifndef _UCBHELPER_CONTENT_HXX
-#include <ucbhelper/content.hxx>
-#endif
-
 #include <vos/mutex.hxx>
 #include <vcl/salctype.hxx>
-#include <svtools/printdlg.hxx>
 #include <sot/clsids.hxx>
 #include <sot/storinfo.hxx>
 #include <comphelper/storagehelper.hxx>
@@ -219,69 +88,26 @@
 #include <svtools/sfxecode.hxx>
 #include <rtl/logfile.hxx>
 #include <framework/configimporter.hxx>
-#include <comphelper/enumhelper.hxx>
+#include <framework/interaction.hxx>
 
 //________________________________________________________________________________________________________
 //  includes of my own project
 //________________________________________________________________________________________________________
 
-#ifndef _SFX_SFXUNO_HXX
 #include <sfx2/sfxuno.hxx>
-#endif
-
-#ifndef _SFX_OBJSHIMP_HXX
 #include <objshimp.hxx>
-#endif
-
-#ifndef _SFXVIEWFRM_HXX
 #include <sfx2/viewfrm.hxx>
-#endif
-
-#ifndef _SFXVIEWSH_HXX
 #include <sfx2/viewsh.hxx>
-#endif
-
-#ifndef _SFXDOCFILE_HXX
 #include <sfx2/docfile.hxx>
-#endif
-
-#ifndef _SFXDISPATCH_HXX
 #include <sfx2/dispatch.hxx>
-#endif
-
-#ifndef _SFXREQUEST_HXX
 #include <sfx2/request.hxx>
-#endif
-
-#ifndef _SFX_OBJUNO_HXX
 #include <sfx2/objuno.hxx>
-#endif
-
-#ifndef _SFX_PRINTER_HXX
 #include <sfx2/printer.hxx>
-#endif
-
-#ifndef _SFX_BASMGR_HXX
 #include <basmgr.hxx>
-#endif
-
-#ifndef _SFXEVENT_HXX
 #include <sfx2/event.hxx>
-#endif
-
-#ifndef _SFX_EVENTSUPPLIER_HXX_
 #include <eventsupplier.hxx>
-#endif
-
-#ifndef _SFX_EVENTCONF_HXX
 #include <sfx2/evntconf.hxx>
-#endif
-
-#ifndef _SFX_HRC
 #include <sfx2/sfx.hrc>
-#endif
-
-
 #include <sfx2/app.hxx>
 #include <sfx2/topfrm.hxx>
 #include "appdata.hxx"
@@ -289,61 +115,20 @@
 #include <sfx2/fcontnr.hxx>
 #include "commitlistener.hxx"
 #include "stormodifylistener.hxx"
-#include "openflag.hxx"
+#include "openflag.hxx"                 // SFX_STREAM_READWRITE
 #include "brokenpackageint.hxx"
 #include "graphhelp.hxx"
-#include <sfx2/msgpool.hxx>
+#include <sfx2/docinf.hxx>
 
 using namespace com::sun::star;
 namespace css = ::com::sun::star;
 
 //________________________________________________________________________________________________________
-//  defines
-//________________________________________________________________________________________________________
-
-#define XFRAME                                  ::com::sun::star::frame::XFrame
-#define XINTERFACE                              ::com::sun::star::uno::XInterface
-#define OMULTITYPEINTERFACECONTAINERHELPER      ::cppu::OMultiTypeInterfaceContainerHelper
-#define UNOQUERY                                ::com::sun::star::uno::UNO_QUERY
-#define DISPOSEDEXCEPTION                       ::com::sun::star::lang::DisposedException
-#define MAPPING                                 ::com::sun::star::uno::Mapping
-#define XSELECTIONSUPPLIER                      ::com::sun::star::view::XSelectionSupplier
-#define ANY                                     ::com::sun::star::uno::Any
-#define ILLEGALARGUMENTEXCEPTION                ::com::sun::star::lang::IllegalArgumentException
-#define ILLEGALARGUMENTIOEXCEPTION              ::com::sun::star::frame::IllegalArgumentIOException
-#define OINTERFACECONTAINERHELPER               ::cppu::OInterfaceContainerHelper
-#define OINTERFACEITERATORHELPER                ::cppu::OInterfaceIteratorHelper
-#define SIZE                                    ::com::sun::star::awt::Size
-#define PAPERFORMAT                             ::com::sun::star::view::PaperFormat
-#define PAPERORIENTATION                        ::com::sun::star::view::PaperOrientation
-#define OTYPECOLLECTION                         ::cppu::OTypeCollection
-#define OIMPLEMENTATIONID                       ::cppu::OImplementationId
-#define MUTEXGUARD                              ::osl::MutexGuard
-#define XINDEXCONTAINER                         ::com::sun::star::container::XIndexContainer
-#define UNSUPPORTEDFLAVOREXCEPTION              ::com::sun::star::datatransfer::UnsupportedFlavorException
-#define XPRINTJOBLISTENER                       ::com::sun::star::view::XPrintJobListener
-#define XUICONFIGURATIONSTORAGE                 ::com::sun::star::ui::XUIConfigurationStorage
-#define XPROPERTYSET                            ::com::sun::star::beans::XPropertySet
-#define XSCRIPTPROVIDERFACTORY ::com::sun::star::script::provider::XScriptProviderFactory
-//________________________________________________________________________________________________________
 //  namespaces
 //________________________________________________________________________________________________________
 
-
-// Don't use using ... here, because there are at least two classes with the same name in use
-
-//using namespace ::osl                             ;
-//using namespace ::rtl                             ;
-//using namespace ::cppu                            ;
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
-//using namespace ::com::sun::star::container       ;
-//using namespace ::com::sun::star::frame           ;
-//using namespace ::com::sun::star::document        ;
-//using namespace ::com::sun::star::lang            ;
-//using namespace ::com::sun::star::util            ;
-//using namespace ::com::sun::star::view            ;
-//using namespace ::com::sun::star::beans           ;
 
 //________________________________________________________________________________________________________
 //  impl. declarations
@@ -352,45 +137,38 @@ using namespace ::com::sun::star::uno;
 struct IMPL_SfxBaseModel_DataContainer
 {
     // counter for SfxBaseModel instances created.
-    static sal_Int64                                g_nInstanceCounter      ;
-
-    SfxObjectShellRef                               m_pObjectShell          ;
-    //SfxObjectShellLock                                m_pObjectShellLock      ;
-    OUSTRING                                        m_sURL                  ;
-    OUSTRING                                        m_sRuntimeUID           ;
-    sal_uInt16                                      m_nControllerLockCount  ;
-    OMULTITYPEINTERFACECONTAINERHELPER              m_aInterfaceContainer   ;
-    REFERENCE< XINTERFACE >                         m_xParent               ;
-    REFERENCE< XCONTROLLER >                        m_xCurrent              ;
-    REFERENCE< XDOCUMENTINFO >                      m_xDocumentInfo         ;
-    REFERENCE< XSTARBASICACCESS >                   m_xStarBasicAccess      ;
-    REFERENCE< XNAMEREPLACE >                       m_xEvents               ;
-    SEQUENCE< PROPERTYVALUE>                        m_seqArguments          ;
-    SEQUENCE< REFERENCE< XCONTROLLER > >            m_seqControllers        ;
-    REFERENCE< XINDEXACCESS >                       m_contViewData          ;
-    sal_Bool                                        m_bClosed               ;
-    sal_Bool                                        m_bClosing              ;
-    sal_Bool                                        m_bSaving               ;
-    sal_Bool                                        m_bSuicide              ;
-    REFERENCE< com::sun::star::view::XPrintJob>     m_xPrintJob             ;
-    ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue > m_aPrintOptions;
-    REFERENCE< XSCRIPTPROVIDER >                        m_xScriptProvider;
-    REFERENCE< XUICONFIGURATIONMANAGER >                m_xUIConfigurationManager;
-    OStorageModifyListen_Impl*                          m_pStorageModifyListen;
-    ::rtl::OUString                                 m_aPreusedFilterName;
+    static sal_Int64                                        g_nInstanceCounter      ;
+    SfxObjectShellRef                                       m_pObjectShell          ;
+    ::rtl::OUString                                         m_sURL                  ;
+    ::rtl::OUString                                         m_sRuntimeUID           ;
+    ::rtl::OUString                                         m_aPreusedFilterName;
+    ::cppu::OMultiTypeInterfaceContainerHelper              m_aInterfaceContainer   ;
+    uno::Reference< uno::XInterface >                       m_xParent               ;
+    uno::Reference< frame::XController >                    m_xCurrent              ;
+    uno::Reference< document::XDocumentInfo >               m_xDocumentInfo         ;
+    uno::Reference< script::XStarBasicAccess >              m_xStarBasicAccess      ;
+    uno::Reference< container::XNameReplace >               m_xEvents               ;
+    uno::Sequence< beans::PropertyValue>                    m_seqArguments          ;
+    uno::Sequence< uno::Reference< frame::XController > >   m_seqControllers        ;
+    uno::Reference< container::XIndexAccess >               m_contViewData          ;
+    sal_uInt16                                              m_nControllerLockCount  ;
+    sal_Bool                                                m_bClosed               ;
+    sal_Bool                                                m_bClosing              ;
+    sal_Bool                                                m_bSaving               ;
+    sal_Bool                                                m_bSuicide              ;
+    uno::Reference< com::sun::star::view::XPrintable>       m_xPrintable            ;
+    uno::Reference< script::provider::XScriptProvider >     m_xScriptProvider;
+    uno::Reference< ui::XUIConfigurationManager >           m_xUIConfigurationManager;
+    OStorageModifyListen_Impl*                              m_pStorageModifyListen;
     ::rtl::OUString                                 m_sModuleIdentifier;
     ::rtl::OUString                                 m_sExternalTitle;
 
-    IMPL_SfxBaseModel_DataContainer(    MUTEX&          aMutex          ,
-                                                                        SfxObjectShell* pObjectShell    )
+    IMPL_SfxBaseModel_DataContainer( ::osl::Mutex& aMutex, SfxObjectShell* pObjectShell )
             :   m_pObjectShell          ( pObjectShell  )
-//          ,   m_pObjectShellLock      ( pObjectShell  )
-            ,   m_sURL                  ( String()      )
-//            ,   m_sRuntimeUID           ( String()      )
+            ,   m_aInterfaceContainer( aMutex )
             ,   m_nControllerLockCount  ( 0             )
-            ,   m_aInterfaceContainer   ( aMutex        )
-            ,   m_bClosed               ( sal_False     )
-            ,   m_bClosing              ( sal_False     )
+            ,   m_bClosed           ( sal_False     )
+            ,   m_bClosing          ( sal_False     )
             ,   m_bSaving               ( sal_False     )
             ,   m_bSuicide              ( sal_False     )
             ,   m_pStorageModifyListen  ( NULL          )
@@ -405,72 +183,35 @@ struct IMPL_SfxBaseModel_DataContainer
 // static member initialization.
 sal_Int64 IMPL_SfxBaseModel_DataContainer::g_nInstanceCounter = 0;
 
-SIZE impl_Size_Object2Struct( const Size& aSize )
+// =======================================================================================================
+
+// Listener that forwards notifications from the PrintHelper to the "real" listeners
+class SfxPrintHelperListener_Impl : public ::cppu::WeakImplHelper1< ::com::sun::star::view::XPrintJobListener >
 {
-    SIZE aReturnValue;
-
-    aReturnValue.Width  = aSize.Width()  ;
-    aReturnValue.Height = aSize.Height() ;
-
-    return aReturnValue ;
-}
-
-Size impl_Size_Struct2Object( const SIZE& aSize )
-{
-    Size aReturnValue;
-
-    aReturnValue.Width()  = aSize.Width  ;
-    aReturnValue.Height() = aSize.Height ;
-
-    return aReturnValue ;
-}
-
-class SfxPrintJob_Impl : public cppu::WeakImplHelper1
-<
-    com::sun::star::view::XPrintJob
->
-{
-        IMPL_SfxBaseModel_DataContainer* m_pData;
-
 public:
-        SfxPrintJob_Impl( IMPL_SfxBaseModel_DataContainer* pData );
-        virtual Sequence< ::com::sun::star::beans::PropertyValue > SAL_CALL getPrintOptions(  ) throw (RuntimeException);
-        virtual Sequence< ::com::sun::star::beans::PropertyValue > SAL_CALL getPrinter(  ) throw (RuntimeException);
-        virtual Reference< ::com::sun::star::view::XPrintable > SAL_CALL getPrintable(  ) throw (RuntimeException);
-        virtual void SAL_CALL cancelJob() throw (RuntimeException);
+    IMPL_SfxBaseModel_DataContainer* m_pData;
+    SfxPrintHelperListener_Impl( IMPL_SfxBaseModel_DataContainer* pData )
+        : m_pData( pData )
+    {}
+
+    virtual void SAL_CALL disposing( const lang::EventObject& aEvent ) throw ( uno::RuntimeException ) ;
+    virtual void SAL_CALL printJobEvent( const view::PrintJobEvent& rEvent ) throw ( uno::RuntimeException);
 };
 
-SfxPrintJob_Impl::SfxPrintJob_Impl( IMPL_SfxBaseModel_DataContainer* pData )
-    : m_pData( pData )
+void SAL_CALL SfxPrintHelperListener_Impl::disposing( const lang::EventObject& ) throw ( uno::RuntimeException )
 {
+    m_pData->m_xPrintable = 0;
 }
 
-Sequence< ::com::sun::star::beans::PropertyValue > SAL_CALL SfxPrintJob_Impl::getPrintOptions() throw (RuntimeException)
+void SAL_CALL SfxPrintHelperListener_Impl::printJobEvent( const view::PrintJobEvent& rEvent ) throw (uno::RuntimeException)
 {
-    return m_pData->m_aPrintOptions;
-}
-
-Sequence< ::com::sun::star::beans::PropertyValue > SAL_CALL SfxPrintJob_Impl::getPrinter() throw (RuntimeException)
-{
-    if( m_pData->m_pObjectShell.Is() )
+    ::cppu::OInterfaceContainerHelper* pContainer = m_pData->m_aInterfaceContainer.getContainer( ::getCppuType( ( const uno::Reference< view::XPrintJobListener >*) NULL ) );
+    if ( pContainer!=NULL )
     {
-        Reference < view::XPrintable > xPrintable( m_pData->m_pObjectShell->GetModel(), UNO_QUERY );
-        if ( xPrintable.is() )
-            return xPrintable->getPrinter();
+        ::cppu::OInterfaceIteratorHelper pIterator(*pContainer);
+        while (pIterator.hasMoreElements())
+            ((view::XPrintJobListener*)pIterator.next())->printJobEvent( rEvent );
     }
-    return Sequence< ::com::sun::star::beans::PropertyValue >();
-}
-
-Reference< ::com::sun::star::view::XPrintable > SAL_CALL SfxPrintJob_Impl::getPrintable() throw (RuntimeException)
-{
-    Reference < view::XPrintable > xPrintable( m_pData->m_pObjectShell.Is() ? m_pData->m_pObjectShell->GetModel() : NULL, UNO_QUERY );
-    return xPrintable;
-}
-
-void SAL_CALL SfxPrintJob_Impl::cancelJob() throw (RuntimeException)
-{
-    if( m_pData->m_pObjectShell.Is() )
-        m_pData->m_pObjectShell->Broadcast( SfxPrintingHint( -2, NULL, NULL ) );
 }
 
 // SfxOwnFramesLocker ====================================================================================
@@ -578,18 +319,18 @@ void SfxOwnFramesLocker::UnlockFrames()
 class SfxSaveGuard
 {
     private:
-        REFERENCE< XMODEL > m_xModel;
+        uno::Reference< frame::XModel > m_xModel;
         IMPL_SfxBaseModel_DataContainer* m_pData;
         SfxOwnFramesLocker* m_pFramesLock;
 
     public:
-        SfxSaveGuard(const REFERENCE< XMODEL >&             xModel                      ,
+        SfxSaveGuard(const uno::Reference< frame::XModel >&             xModel                      ,
                            IMPL_SfxBaseModel_DataContainer* pData                       ,
                            sal_Bool                         bRejectConcurrentSaveRequest);
         ~SfxSaveGuard();
 };
 
-SfxSaveGuard::SfxSaveGuard(const REFERENCE< XMODEL >&             xModel                      ,
+SfxSaveGuard::SfxSaveGuard(const uno::Reference< frame::XModel >&             xModel                      ,
                                  IMPL_SfxBaseModel_DataContainer* pData                       ,
                                  sal_Bool                         bRejectConcurrentSaveRequest)
     : m_xModel     (xModel)
@@ -637,11 +378,11 @@ SfxSaveGuard::~SfxSaveGuard()
         m_pData->m_bSuicide = sal_False;
         try
         {
-            REFERENCE< XCLOSEABLE > xClose(m_xModel, UNOQUERY);
+            uno::Reference< util::XCloseable > xClose(m_xModel, uno::UNO_QUERY);
             if (xClose.is())
                 xClose->close(sal_True);
         }
-        catch(const CLOSEVETOEXCEPTION&)
+        catch(const util::CloseVetoException&)
         {}
     }
 }
@@ -674,25 +415,25 @@ SfxBaseModel::~SfxBaseModel()
 //  XInterface
 //________________________________________________________________________________________________________
 
-ANY SAL_CALL SfxBaseModel::queryInterface( const UNOTYPE& rType ) throw( RUNTIMEEXCEPTION )
+uno::Any SAL_CALL SfxBaseModel::queryInterface( const UNOTYPE& rType ) throw( uno::RuntimeException )
 {
     // Attention:
     //  Don't use mutex or guard in this method!!! Is a method of XInterface.
 
     // Ask for my own supported interfaces ...
-    ANY aReturn( ::cppu::queryInterface(    rType                                           ,
+    uno::Any aReturn( ::cppu::queryInterface(    rType                                           ,
                                                static_cast< XTYPEPROVIDER*          > ( this )  ,
                                                static_cast< XCHILD*             > ( this )  ,
-                                               static_cast< XDOCUMENTINFOSUPPLIER*  > ( this )  ,
+                                            static_cast< document::XDocumentInfoSupplier* > ( this )  ,
                                                static_cast< XEVENTLISTENER*     > ( this )  ,
-                                               static_cast< XMODEL*             > ( this )  ,
+                                            static_cast< frame::XModel*                > ( this )  ,
                                                static_cast< XMODIFIABLE*            > ( this )  ,
                                             static_cast< XCOMPONENT*            > ( this )  ,
                                                static_cast< XPRINTABLE*         > ( this )  ,
-                                               static_cast< XSTARBASICACCESS*       > ( this )  ,
+                                            static_cast< script::XStarBasicAccess*      > ( this )  ,
                                             static_cast< XSTORABLE*             > ( this )  ,
                                             static_cast< XLOADABLE*             > ( this )  ,
-                                            static_cast< XCLOSEABLE*            > ( this )  ) );
+                                            static_cast< util::XCloseable*            > ( this )  ) );
 
     if ( aReturn.hasValue() == sal_False )
     {
@@ -705,9 +446,9 @@ ANY SAL_CALL SfxBaseModel::queryInterface( const UNOTYPE& rType ) throw( RUNTIME
                                                static_cast< XEVENTBROADCASTER*      > ( this )  ,
                                                static_cast< XVISUALOBJECT*          > ( this )  ,
                                                static_cast< XUNOTUNNEL*             > ( this )  ,
-                                            static_cast< XUICONFIGURATIONMANAGERSUPPLIER* > ( this ) ,
+                                            static_cast< ui::XUIConfigurationManagerSupplier* > ( this ) ,
                                                static_cast< XDOCUMENTSUBSTORAGESUPPLIER* > ( this ) ,
-                                               static_cast< XSCRIPTPROVIDERSUPPLIER* > ( this ) ,
+                                            static_cast< script::provider::XScriptProviderSupplier* > ( this )    ,
                                                static_cast< XEVENTSSUPPLIER*        > ( this ) ) ;
     }
 
@@ -764,54 +505,52 @@ void SAL_CALL SfxBaseModel::release() throw( )
 //  XTypeProvider
 //________________________________________________________________________________________________________
 
-SEQUENCE< UNOTYPE > SAL_CALL SfxBaseModel::getTypes() throw( RUNTIMEEXCEPTION )
+uno::Sequence< UNOTYPE > SAL_CALL SfxBaseModel::getTypes() throw( uno::RuntimeException )
 {
     // Optimize this method !
     // We initialize a static variable only one time. And we don't must use a mutex at every call!
     // For the first call; pTypeCollection is NULL - for the second call pTypeCollection is different from NULL!
-    static OTYPECOLLECTION* pTypeCollection = NULL ;
+    static ::cppu::OTypeCollection* pTypeCollection = NULL ;
 
     if ( pTypeCollection == NULL )
     {
         // Ready for multithreading; get global mutex for first call of this method only! see before
-        MUTEXGUARD aGuard( MUTEX::getGlobalMutex() ) ;
+        ::osl::MutexGuard aGuard( MUTEX::getGlobalMutex() ) ;
 
         // Control these pointer again ... it can be, that another instance will be faster then these!
         if ( pTypeCollection == NULL )
         {
             // Create a static typecollection ...
-            static OTYPECOLLECTION aTypeCollectionFirst( ::getCppuType(( const REFERENCE< XTYPEPROVIDER          >*)NULL ) ,
-                                                         ::getCppuType(( const REFERENCE< XCHILD                 >*)NULL ) ,
-                                                         ::getCppuType(( const REFERENCE< XDOCUMENTINFOSUPPLIER  >*)NULL ) ,
-                                                         ::getCppuType(( const REFERENCE< XEVENTLISTENER         >*)NULL ) ,
-                                                         ::getCppuType(( const REFERENCE< XMODEL                 >*)NULL ) ,
-                                                         ::getCppuType(( const REFERENCE< XMODIFIABLE2            >*)NULL ) ,
-                                                         ::getCppuType(( const REFERENCE< XPRINTABLE             >*)NULL ) ,
-                                                         ::getCppuType(( const REFERENCE< XSTORABLE2             >*)NULL ) ,
-                                                         ::getCppuType(( const REFERENCE< XLOADABLE              >*)NULL ) ,
-                                                         ::getCppuType(( const REFERENCE< XCLOSEABLE             >*)NULL ) ,
-                                                         ::getCppuType(( const REFERENCE< XSTARBASICACCESS       >*)NULL ) ,
-                                                         ::getCppuType(( const REFERENCE< XEVENTBROADCASTER      >*)NULL ) );
+            static ::cppu::OTypeCollection aTypeCollectionFirst( ::getCppuType(( const uno::Reference< XTYPEPROVIDER          >*)NULL ) ,
+                                                         ::getCppuType(( const uno::Reference< XCHILD                 >*)NULL ) ,
+                                                         ::getCppuType(( const uno::Reference< document::XDocumentInfoSupplier  >*)NULL ) ,
+                                                         ::getCppuType(( const uno::Reference< XEVENTLISTENER         >*)NULL ) ,
+                                                         ::getCppuType(( const uno::Reference< frame::XModel                 >*)NULL ) ,
+                                                         ::getCppuType(( const uno::Reference< XMODIFIABLE2            >*)NULL ) ,
+                                                         ::getCppuType(( const uno::Reference< XPRINTABLE             >*)NULL ) ,
+                                                         ::getCppuType(( const uno::Reference< XSTORABLE2             >*)NULL ) ,
+                                                         ::getCppuType(( const uno::Reference< XLOADABLE              >*)NULL ) ,
+                                                         ::getCppuType(( const uno::Reference< util::XCloseable             >*)NULL ) ,
+                                                         ::getCppuType(( const uno::Reference< script::XStarBasicAccess       >*)NULL ) ,
+                                                         ::getCppuType(( const uno::Reference< XEVENTBROADCASTER      >*)NULL ) );
 
-            static OTYPECOLLECTION aTypeCollection1     ( ::getCppuType(( const REFERENCE< XVIEWDATASUPPLIER      >*)NULL ) ,
-                                                         ::getCppuType(( const REFERENCE< XTRANSFERABLE          >*)NULL ) ,
-                                                         ::getCppuType(( const REFERENCE< XPRINTJOBBROADCASTER   >*)NULL ) ,
-                                                         ::getCppuType(( const REFERENCE< XEVENTSSUPPLIER        >*)NULL ) ,
-                                                         ::getCppuType(( const REFERENCE< XVISUALOBJECT          >*)NULL ) ,
-                                                         ::getCppuType(( const REFERENCE< XUNOTUNNEL             >*)NULL ) ,
-                                                         ::getCppuType(( const REFERENCE< XUICONFIGURATIONMANAGERSUPPLIER >*)NULL ),
-                                                         ::getCppuType(( const REFERENCE< XDOCUMENTSUBSTORAGESUPPLIER >*)NULL ) ,
-                                                         ::getCppuType(( const REFERENCE< XSTORAGEBASEDDOCUMENT >*)NULL ) ,
-                                                         ::getCppuType(( const REFERENCE< XSCRIPTPROVIDERSUPPLIER >*)NULL ) ,
-                                                         ::getCppuType(( const REFERENCE< XCLOSEBROADCASTER      >*)NULL ) ,
-                                                         ::getCppuType(( const REFERENCE< XUICONFIGURATIONMANAGERSUPPLIER >*)NULL ) ,
+            static ::cppu::OTypeCollection aTypeCollection     ( ::getCppuType(( const uno::Reference< XVIEWDATASUPPLIER      >*)NULL ) ,
+                                                         ::getCppuType(( const uno::Reference< XTRANSFERABLE          >*)NULL ) ,
+                                                         ::getCppuType(( const uno::Reference< XPRINTJOBBROADCASTER   >*)NULL ) ,
+                                                         ::getCppuType(( const uno::Reference< XEVENTSSUPPLIER        >*)NULL ) ,
+                                                         ::getCppuType(( const uno::Reference< XVISUALOBJECT          >*)NULL ) ,
+                                                         ::getCppuType(( const uno::Reference< XUNOTUNNEL             >*)NULL ) ,
+                                                         ::getCppuType(( const uno::Reference< ui::XUIConfigurationManagerSupplier >*)NULL ),
+                                                         ::getCppuType(( const uno::Reference< XDOCUMENTSUBSTORAGESUPPLIER >*)NULL ) ,
+                                                         ::getCppuType(( const uno::Reference< XSTORAGEBASEDDOCUMENT >*)NULL ) ,
+                                                         ::getCppuType(( const uno::Reference< script::provider::XScriptProviderSupplier >*)NULL ) ,
+                                                         ::getCppuType(( const uno::Reference< XCLOSEBROADCASTER      >*)NULL ) ,
                                                          aTypeCollectionFirst.getTypes()                                   );
 
-            static OTYPECOLLECTION aTypeCollection2     ( ::getCppuType(( const REFERENCE< XMODULE      >*)NULL ) ,
+            static ::cppu::OTypeCollection aTypeCollection2     ( ::getCppuType(( const REFERENCE< XMODULE      >*)NULL ) ,
                                                           ::getCppuType(( const REFERENCE< XMODEL2      >*)NULL ) ,
-                                                         aTypeCollection1.getTypes()                                   );
+                                                         aTypeCollection.getTypes()                                   );
 
-            // ... and set his address to static pointer!
             // ... and set his address to static pointer!
             pTypeCollection = &aTypeCollection2 ;
         }
@@ -824,7 +563,7 @@ SEQUENCE< UNOTYPE > SAL_CALL SfxBaseModel::getTypes() throw( RUNTIMEEXCEPTION )
 //  XTypeProvider
 //________________________________________________________________________________________________________
 
-SEQUENCE< sal_Int8 > SAL_CALL SfxBaseModel::getImplementationId() throw( RUNTIMEEXCEPTION )
+uno::Sequence< sal_Int8 > SAL_CALL SfxBaseModel::getImplementationId() throw( uno::RuntimeException )
 {
     // Create one Id for all instances of this class.
     // Use ethernet address to do this! (sal_True)
@@ -832,18 +571,18 @@ SEQUENCE< sal_Int8 > SAL_CALL SfxBaseModel::getImplementationId() throw( RUNTIME
     // Optimize this method
     // We initialize a static variable only one time. And we don't must use a mutex at every call!
     // For the first call; pID is NULL - for the second call pID is different from NULL!
-    static OIMPLEMENTATIONID* pID = NULL ;
+    static ::cppu::OImplementationId* pID = NULL ;
 
     if ( pID == NULL )
     {
         // Ready for multithreading; get global mutex for first call of this method only! see before
-        MUTEXGUARD aGuard( MUTEX::getGlobalMutex() ) ;
+        ::osl::MutexGuard aGuard( MUTEX::getGlobalMutex() ) ;
 
         // Control these pointer again ... it can be, that another instance will be faster then these!
         if ( pID == NULL )
         {
             // Create a new static ID ...
-            static OIMPLEMENTATIONID aID( sal_False ) ;
+            static ::cppu::OImplementationId aID( sal_False ) ;
             // ... and set his address to static pointer!
             pID = &aID ;
         }
@@ -856,9 +595,9 @@ SEQUENCE< sal_Int8 > SAL_CALL SfxBaseModel::getImplementationId() throw( RUNTIME
 //  XStarBasicAccess
 //________________________________________________________________________________________________________
 
-REFERENCE< XSTARBASICACCESS > implGetStarBasicAccess( SfxObjectShell* pObjectShell )
+uno::Reference< script::XStarBasicAccess > implGetStarBasicAccess( SfxObjectShell* pObjectShell )
 {
-    REFERENCE< XSTARBASICACCESS > xRet;
+    uno::Reference< script::XStarBasicAccess > xRet;
     if( pObjectShell )
     {
         BasicManager* pMgr = pObjectShell->GetBasicManager();
@@ -867,17 +606,17 @@ REFERENCE< XSTARBASICACCESS > implGetStarBasicAccess( SfxObjectShell* pObjectShe
     return xRet;
 }
 
-REFERENCE< XNAMECONTAINER > SAL_CALL SfxBaseModel::getLibraryContainer() throw( RUNTIMEEXCEPTION )
+uno::Reference< XNAMECONTAINER > SAL_CALL SfxBaseModel::getLibraryContainer() throw( uno::RuntimeException )
 {
     ::vos::OGuard aGuard( Application::GetSolarMutex() );
     if ( impl_isDisposed() )
-        throw DISPOSEDEXCEPTION();
+        throw lang::DisposedException();
 
-    REFERENCE< XSTARBASICACCESS >& rxAccess = m_pData->m_xStarBasicAccess;
+    uno::Reference< script::XStarBasicAccess >& rxAccess = m_pData->m_xStarBasicAccess;
     if( !rxAccess.is() && m_pData->m_pObjectShell.Is() )
         rxAccess = implGetStarBasicAccess( m_pData->m_pObjectShell );
 
-    REFERENCE< XNAMECONTAINER > xRet;
+    uno::Reference< XNAMECONTAINER > xRet;
     if( rxAccess.is() )
         xRet = rxAccess->getLibraryContainer();
     return xRet;
@@ -886,15 +625,15 @@ REFERENCE< XNAMECONTAINER > SAL_CALL SfxBaseModel::getLibraryContainer() throw( 
 /**___________________________________________________________________________________________________
     @seealso    XStarBasicAccess
 */
-void SAL_CALL SfxBaseModel::createLibrary( const OUSTRING& LibName, const OUSTRING& Password,
-    const OUSTRING& ExternalSourceURL, const OUSTRING& LinkTargetURL )
-        throw(ELEMENTEXISTEXCEPTION, RUNTIMEEXCEPTION)
+void SAL_CALL SfxBaseModel::createLibrary( const ::rtl::OUString& LibName, const ::rtl::OUString& Password,
+    const ::rtl::OUString& ExternalSourceURL, const ::rtl::OUString& LinkTargetURL )
+        throw(ELEMENTEXISTEXCEPTION, uno::RuntimeException)
 {
     ::vos::OGuard aGuard( Application::GetSolarMutex() );
     if ( impl_isDisposed() )
-        throw DISPOSEDEXCEPTION();
+        throw lang::DisposedException();
 
-    REFERENCE< XSTARBASICACCESS >& rxAccess = m_pData->m_xStarBasicAccess;
+    uno::Reference< script::XStarBasicAccess >& rxAccess = m_pData->m_xStarBasicAccess;
     if( !rxAccess.is() && m_pData->m_pObjectShell.Is() )
         rxAccess = implGetStarBasicAccess( m_pData->m_pObjectShell );
 
@@ -905,15 +644,15 @@ void SAL_CALL SfxBaseModel::createLibrary( const OUSTRING& LibName, const OUSTRI
 /**___________________________________________________________________________________________________
     @seealso    XStarBasicAccess
 */
-void SAL_CALL SfxBaseModel::addModule( const OUSTRING& LibraryName, const OUSTRING& ModuleName,
-    const OUSTRING& Language, const OUSTRING& Source )
-        throw( NOSUCHELEMENTEXCEPTION, RUNTIMEEXCEPTION)
+void SAL_CALL SfxBaseModel::addModule( const ::rtl::OUString& LibraryName, const ::rtl::OUString& ModuleName,
+    const ::rtl::OUString& Language, const ::rtl::OUString& Source )
+        throw( NOSUCHELEMENTEXCEPTION, uno::RuntimeException)
 {
     ::vos::OGuard aGuard( Application::GetSolarMutex() );
     if ( impl_isDisposed() )
-        throw DISPOSEDEXCEPTION();
+        throw lang::DisposedException();
 
-    REFERENCE< XSTARBASICACCESS >& rxAccess = m_pData->m_xStarBasicAccess;
+    uno::Reference< script::XStarBasicAccess >& rxAccess = m_pData->m_xStarBasicAccess;
     if( !rxAccess.is() && m_pData->m_pObjectShell.Is() )
         rxAccess = implGetStarBasicAccess( m_pData->m_pObjectShell );
 
@@ -924,15 +663,15 @@ void SAL_CALL SfxBaseModel::addModule( const OUSTRING& LibraryName, const OUSTRI
 /**___________________________________________________________________________________________________
     @seealso    XStarBasicAccess
 */
-void SAL_CALL SfxBaseModel::addDialog( const OUSTRING& LibraryName, const OUSTRING& DialogName,
+void SAL_CALL SfxBaseModel::addDialog( const ::rtl::OUString& LibraryName, const ::rtl::OUString& DialogName,
     const ::com::sun::star::uno::Sequence< sal_Int8 >& Data )
-        throw(NOSUCHELEMENTEXCEPTION, RUNTIMEEXCEPTION)
+        throw(NOSUCHELEMENTEXCEPTION, uno::RuntimeException)
 {
     ::vos::OGuard aGuard( Application::GetSolarMutex() );
     if ( impl_isDisposed() )
-        throw DISPOSEDEXCEPTION();
+        throw lang::DisposedException();
 
-    REFERENCE< XSTARBASICACCESS >& rxAccess = m_pData->m_xStarBasicAccess;
+    uno::Reference< script::XStarBasicAccess >& rxAccess = m_pData->m_xStarBasicAccess;
     if( !rxAccess.is() && m_pData->m_pObjectShell.Is() )
         rxAccess = implGetStarBasicAccess( m_pData->m_pObjectShell );
 
@@ -945,26 +684,11 @@ void SAL_CALL SfxBaseModel::addDialog( const OUSTRING& LibraryName, const OUSTRI
 //  XChild
 //________________________________________________________________________________________________________
 
-REFERENCE< XINTERFACE > SAL_CALL SfxBaseModel::getParent() throw( RUNTIMEEXCEPTION )
+uno::Reference< uno::XInterface > SAL_CALL SfxBaseModel::getParent() throw( uno::RuntimeException )
 {
-/*  #77222#
-     AS->MBA: There is one view only at the moment. We don't must search for other parents in other frames ...!?
-
-    if ( !m_pData->m_xParent.is() && m_pData->m_xCurrent.is() )
-    {
-        // If no parent is set get the parent by view hierarchy
-        REFERENCE< XFRAME >  xParentFrame( m_pData->m_xCurrent->getFrame()->getCreator(), UNOQUERY );
-        if ( xParentFrame.is() )
-        {
-            REFERENCE< XCONTROLLER >  xCtrl( xParentFrame->getController() );
-            if ( xCtrl.is() )
-                return xCtrl->getModel();
-        }
-    }
-*/
     ::vos::OGuard aGuard( Application::GetSolarMutex() );
     if ( impl_isDisposed() )
-        throw DISPOSEDEXCEPTION();
+        throw lang::DisposedException();
 
     return m_pData->m_xParent;
 }
@@ -973,15 +697,9 @@ REFERENCE< XINTERFACE > SAL_CALL SfxBaseModel::getParent() throw( RUNTIMEEXCEPTI
 //  XChild
 //________________________________________________________________________________________________________
 
-void SAL_CALL SfxBaseModel::setParent(const REFERENCE< XINTERFACE >& Parent) throw(NOSUPPORTEXCEPTION, RUNTIMEEXCEPTION)
+void SAL_CALL SfxBaseModel::setParent(const uno::Reference< uno::XInterface >& Parent) throw(NOSUPPORTEXCEPTION, uno::RuntimeException)
 {
     ::vos::OGuard aGuard( Application::GetSolarMutex() );
-
-    //if ( Parent.is() && getParent().is() )
-    //    // only set parent when no parent is available
-    //    throw NOSUPPORTEXCEPTION();
-
-    //DBG_ASSERT( !Parent.is() || !getParent().is(), "Changing parent directly is not allowed!" );
     m_pData->m_xParent = Parent;
 }
 
@@ -989,15 +707,13 @@ void SAL_CALL SfxBaseModel::setParent(const REFERENCE< XINTERFACE >& Parent) thr
 //  XChild
 //________________________________________________________________________________________________________
 
-long SfxObjectShellClose_Impl( void* pObj, void* pArg );
-
 void SAL_CALL SfxBaseModel::dispose() throw(::com::sun::star::uno::RuntimeException)
 {
     ::vos::OGuard aGuard( Application::GetSolarMutex() );
 
     // object already disposed?
     if ( impl_isDisposed() )
-        throw DISPOSEDEXCEPTION();
+        throw lang::DisposedException();
 
     if  ( !m_pData->m_bClosed )
     {
@@ -1014,16 +730,6 @@ void SAL_CALL SfxBaseModel::dispose() throw(::com::sun::star::uno::RuntimeExcept
         return;
     }
 
-    // disconnect from the listener so that no more messages from substorages come
-#if 0
-    if ( m_pData->m_pChildCommitListen )
-    {
-        m_pData->m_pChildCommitListen->OwnerIsDisposed();
-        m_pData->m_pChildCommitListen->release();
-        m_pData->m_pChildCommitListen = NULL;
-    }
-#endif
-
     if ( m_pData->m_pStorageModifyListen )
     {
         m_pData->m_pStorageModifyListen->OwnerIsDisposed();
@@ -1031,45 +737,22 @@ void SAL_CALL SfxBaseModel::dispose() throw(::com::sun::star::uno::RuntimeExcept
         m_pData->m_pStorageModifyListen = NULL;
     }
 
-    EVENTOBJECT aEvent( (XMODEL *)this );
+    lang::EventObject aEvent( (frame::XModel *)this );
     m_pData->m_aInterfaceContainer.disposeAndClear( aEvent );
 
-    // is an object shell assigned?
-    if ( m_pData->m_pObjectShell.Is() )
+    if ( m_pData->m_xDocumentInfo.is() )
     {
-        // Rekursion vermeiden
-        SfxObjectShellRef pShell;
-        //SfxObjectShellLock pShellLock;
-
-        {
-            // am I "ThisComponent" in AppBasic?
-            StarBASIC* pBas = SFX_APP()->GetBasic_Impl();
-            if ( pBas && SFX_APP()->Get_Impl()->pThisDocument == m_pData->m_pObjectShell )
-            {
-                // remove "ThisComponent" reference from AppBasic
-                SFX_APP()->Get_Impl()->pThisDocument = NULL;
-                SbxVariable *pCompVar = pBas->Find( DEFINE_CONST_UNICODE("ThisComponent"), SbxCLASS_OBJECT );
-                if ( pCompVar )
-                {
-                    ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > xInterface;
-                    ::com::sun::star::uno::Any aComponent;
-                    aComponent <<= xInterface;
-                    pCompVar->PutObject( GetSbUnoObject( DEFINE_CONST_UNICODE("ThisComponent"), aComponent ) );
-                }
-            }
-
-            pShell = m_pData->m_pObjectShell;
-            //pShellLock = m_pData->m_pObjectShellLock;
-            EndListening( *pShell );
-            m_pData->m_pObjectShell = SfxObjectShellRef();
-            //m_pData->m_pObjectShellLock = SfxObjectShellLock();
-        }
-
-        SfxObjectShellClose_Impl( 0, (void*) pShell );
+        // as long as an SfxObjectShell is assigned to an SfxBaseModel it is still existing here
+        // so we can't dispose the shared DocumentInfoObject here
+        // uno::Reference < lang::XComponent > xComp( m_pData->m_xDocumentInfo, uno::UNO_QUERY );
+        // xComp->dispose();
+        m_pData->m_xDocumentInfo = 0;
     }
 
-    m_pData->m_xCurrent = REFERENCE< XCONTROLLER > ();
-    m_pData->m_seqControllers = SEQUENCE< REFERENCE< XCONTROLLER > > () ;
+    EndListening( *m_pData->m_pObjectShell );
+
+    m_pData->m_xCurrent = uno::Reference< frame::XController > ();
+    m_pData->m_seqControllers = uno::Sequence< uno::Reference< frame::XController > > () ;
 
     DELETEZ(m_pData);
 }
@@ -1078,7 +761,7 @@ void SAL_CALL SfxBaseModel::dispose() throw(::com::sun::star::uno::RuntimeExcept
 //  XChild
 //________________________________________________________________________________________________________
 
-void SAL_CALL SfxBaseModel::addEventListener( const REFERENCE< XEVENTLISTENER >& aListener )
+void SAL_CALL SfxBaseModel::addEventListener( const uno::Reference< XEVENTLISTENER >& aListener )
     throw(::com::sun::star::uno::RuntimeException)
 {
     // object already disposed?
@@ -1086,14 +769,14 @@ void SAL_CALL SfxBaseModel::addEventListener( const REFERENCE< XEVENTLISTENER >&
     if ( impl_isDisposed() )
         return;
 
-    m_pData->m_aInterfaceContainer.addInterface( ::getCppuType((const REFERENCE< XEVENTLISTENER >*)0), aListener );
+    m_pData->m_aInterfaceContainer.addInterface( ::getCppuType((const uno::Reference< XEVENTLISTENER >*)0), aListener );
 }
 
 //________________________________________________________________________________________________________
 //  XChild
 //________________________________________________________________________________________________________
 
-void SAL_CALL SfxBaseModel::removeEventListener( const REFERENCE< XEVENTLISTENER >& aListener )
+void SAL_CALL SfxBaseModel::removeEventListener( const uno::Reference< XEVENTLISTENER >& aListener )
     throw(::com::sun::star::uno::RuntimeException)
 {
     // object already disposed?
@@ -1101,22 +784,30 @@ void SAL_CALL SfxBaseModel::removeEventListener( const REFERENCE< XEVENTLISTENER
     if ( impl_isDisposed() )
         return;
 
-    m_pData->m_aInterfaceContainer.removeInterface( ::getCppuType((const REFERENCE< XEVENTLISTENER >*)0), aListener );
+    m_pData->m_aInterfaceContainer.removeInterface( ::getCppuType((const uno::Reference< XEVENTLISTENER >*)0), aListener );
 }
 
 //________________________________________________________________________________________________________
-//  XDOCUMENTINFOSupplier
+//  document::XDocumentInfoSupplier
 //________________________________________________________________________________________________________
 
-REFERENCE< XDOCUMENTINFO > SAL_CALL SfxBaseModel::getDocumentInfo() throw(::com::sun::star::uno::RuntimeException)
+uno::Reference< document::XDocumentInfo > SAL_CALL SfxBaseModel::getDocumentInfo() throw(::com::sun::star::uno::RuntimeException)
 {
     // object already disposed?
     ::vos::OGuard aGuard( Application::GetSolarMutex() );
     if ( impl_isDisposed() )
-        throw DISPOSEDEXCEPTION();
+        throw lang::DisposedException();
 
-    if ( !m_pData->m_xDocumentInfo.is() && m_pData->m_pObjectShell.Is() )
-        ((SfxBaseModel*)this)->m_pData->m_xDocumentInfo = new SfxDocumentInfoObject( m_pData->m_pObjectShell ) ;
+    if ( !m_pData->m_xDocumentInfo.is() )
+    {
+        ((SfxBaseModel*)this)->m_pData->m_xDocumentInfo = new SfxDocumentInfoObject();
+        ::rtl::OUString aMediaType;
+        rtl::OUString aName = rtl::OUString::createFromAscii("MediaType");
+        uno::Reference < beans::XPropertySet > xSet( getDocumentStorage(), uno::UNO_QUERY );
+        uno::Any aValue = xSet->getPropertyValue( aName );
+        uno::Reference < beans::XPropertySet > xDocSet( m_pData->m_xDocumentInfo, uno::UNO_QUERY );
+        xDocSet->setPropertyValue( aName, makeAny( aMediaType ) );
+    }
 
     return m_pData->m_xDocumentInfo;
 }
@@ -1125,50 +816,36 @@ REFERENCE< XDOCUMENTINFO > SAL_CALL SfxBaseModel::getDocumentInfo() throw(::com:
 //  XEVENTLISTENER
 //________________________________________________________________________________________________________
 
-void SAL_CALL SfxBaseModel::disposing( const EVENTOBJECT& aObject )
+void SAL_CALL SfxBaseModel::disposing( const lang::EventObject& aObject )
     throw(::com::sun::star::uno::RuntimeException)
 {
     ::vos::OGuard aGuard( Application::GetSolarMutex() );
     if ( impl_isDisposed() )
         return;
 
-    REFERENCE< XMODIFYLISTENER >  xMod( aObject.Source, UNOQUERY );
-    REFERENCE< XEVENTLISTENER >  xListener( aObject.Source, UNOQUERY );
-    REFERENCE< XDOCEVENTLISTENER >  xDocListener( aObject.Source, UNOQUERY );
+    uno::Reference< XMODIFYLISTENER >  xMod( aObject.Source, uno::UNO_QUERY );
+    uno::Reference< XEVENTLISTENER >  xListener( aObject.Source, uno::UNO_QUERY );
+    uno::Reference< XDOCEVENTLISTENER >  xDocListener( aObject.Source, uno::UNO_QUERY );
 
     if ( xMod.is() )
-        m_pData->m_aInterfaceContainer.removeInterface( ::getCppuType((const REFERENCE< XMODIFYLISTENER >*)0), xMod );
+        m_pData->m_aInterfaceContainer.removeInterface( ::getCppuType((const uno::Reference< XMODIFYLISTENER >*)0), xMod );
     else if ( xListener.is() )
-        m_pData->m_aInterfaceContainer.removeInterface( ::getCppuType((const REFERENCE< XEVENTLISTENER >*)0), xListener );
+        m_pData->m_aInterfaceContainer.removeInterface( ::getCppuType((const uno::Reference< XEVENTLISTENER >*)0), xListener );
     else if ( xDocListener.is() )
-        m_pData->m_aInterfaceContainer.removeInterface( ::getCppuType((const REFERENCE< XDOCEVENTLISTENER >*)0), xListener );
-/*
-    sal_uInt32 nCount = m_pData->m_seqControllers.getLength();
-    for ( sal_uInt32 n = 0; n < nCount; n++ )
-    {
-        if( m_pData->m_seqControllers.getConstArray()[n] == aObject.Source )
-        {
-            m_pData->m_seqControllers.getArray()[n] = REFERENCE< XCONTROLLER > () ;
-            break;
-        }
-    }
-
-    if ( m_pData->m_xCurrent.is() && m_pData->m_xCurrent == aObject.Source )
-        m_pData->m_xCurrent = REFERENCE< XCONTROLLER > ();
-*/
+        m_pData->m_aInterfaceContainer.removeInterface( ::getCppuType((const uno::Reference< XDOCEVENTLISTENER >*)0), xListener );
 }
 
 //________________________________________________________________________________________________________
-//  XMODEL
+//  frame::XModel
 //________________________________________________________________________________________________________
 
-sal_Bool SAL_CALL SfxBaseModel::attachResource( const   OUSTRING&                   rURL    ,
-                                                const   SEQUENCE< PROPERTYVALUE >&  rArgs   )
+sal_Bool SAL_CALL SfxBaseModel::attachResource( const   ::rtl::OUString&                   rURL    ,
+                                                const   uno::Sequence< beans::PropertyValue >&  rArgs   )
     throw(::com::sun::star::uno::RuntimeException)
 {
     ::vos::OGuard aGuard( Application::GetSolarMutex() );
     if ( impl_isDisposed() )
-        throw DISPOSEDEXCEPTION();
+        throw lang::DisposedException();
 
     if ( rURL.getLength() == 0 && rArgs.getLength() == 1 && rArgs[0].Name.equalsAscii( "SetEmbedded" ) )
     {
@@ -1244,32 +921,32 @@ sal_Bool SAL_CALL SfxBaseModel::attachResource( const   OUSTRING&               
 }
 
 //________________________________________________________________________________________________________
-//  XMODEL
+//  frame::XModel
 //________________________________________________________________________________________________________
 
-OUSTRING SAL_CALL SfxBaseModel::getURL() throw(::com::sun::star::uno::RuntimeException)
+::rtl::OUString SAL_CALL SfxBaseModel::getURL() throw(::com::sun::star::uno::RuntimeException)
 {
     ::vos::OGuard aGuard( Application::GetSolarMutex() );
     if ( impl_isDisposed() )
-        throw DISPOSEDEXCEPTION();
+        throw lang::DisposedException();
 
     return m_pData->m_sURL ;
 }
 
 //________________________________________________________________________________________________________
-//  XMODEL
+//  frame::XModel
 //________________________________________________________________________________________________________
 
-SEQUENCE< PROPERTYVALUE > SAL_CALL SfxBaseModel::getArgs() throw(::com::sun::star::uno::RuntimeException)
+uno::Sequence< beans::PropertyValue > SAL_CALL SfxBaseModel::getArgs() throw(::com::sun::star::uno::RuntimeException)
 {
     ::vos::OGuard aGuard( Application::GetSolarMutex() );
     if ( impl_isDisposed() )
-        throw DISPOSEDEXCEPTION();
+        throw lang::DisposedException();
 
     if ( m_pData->m_pObjectShell.Is() )
     {
-        SEQUENCE< PROPERTYVALUE > seqArgsNew;
-        SEQUENCE< PROPERTYVALUE > seqArgsOld;
+        uno::Sequence< beans::PropertyValue > seqArgsNew;
+        uno::Sequence< beans::PropertyValue > seqArgsOld;
         SfxAllItemSet aSet( m_pData->m_pObjectShell->GetPool() );
 
         // we need to know which properties are supported by the transformer
@@ -1359,18 +1036,18 @@ SEQUENCE< PROPERTYVALUE > SAL_CALL SfxBaseModel::getArgs() throw(::com::sun::sta
 }
 
 //________________________________________________________________________________________________________
-//  XMODEL
+//  frame::XModel
 //________________________________________________________________________________________________________
 
-void SAL_CALL SfxBaseModel::connectController( const REFERENCE< XCONTROLLER >& xController )
+void SAL_CALL SfxBaseModel::connectController( const uno::Reference< frame::XController >& xController )
     throw(::com::sun::star::uno::RuntimeException)
 {
     ::vos::OGuard aGuard( Application::GetSolarMutex() );
     if ( impl_isDisposed() )
-        throw DISPOSEDEXCEPTION();
+        throw lang::DisposedException();
 
     sal_uInt32 nOldCount = m_pData->m_seqControllers.getLength();
-    SEQUENCE< REFERENCE< XCONTROLLER > > aNewSeq( nOldCount + 1 );
+    uno::Sequence< uno::Reference< frame::XController > > aNewSeq( nOldCount + 1 );
     for ( sal_uInt32 n = 0; n < nOldCount; n++ )
         aNewSeq.getArray()[n] = m_pData->m_seqControllers.getConstArray()[n];
     aNewSeq.getArray()[nOldCount] = xController;
@@ -1378,20 +1055,20 @@ void SAL_CALL SfxBaseModel::connectController( const REFERENCE< XCONTROLLER >& x
 }
 
 //________________________________________________________________________________________________________
-//  XMODEL
+//  frame::XModel
 //________________________________________________________________________________________________________
 
-void SAL_CALL SfxBaseModel::disconnectController( const REFERENCE< XCONTROLLER >& xController ) throw(::com::sun::star::uno::RuntimeException)
+void SAL_CALL SfxBaseModel::disconnectController( const uno::Reference< frame::XController >& xController ) throw(::com::sun::star::uno::RuntimeException)
 {
     ::vos::OGuard aGuard( Application::GetSolarMutex() );
     if ( impl_isDisposed() )
-        throw DISPOSEDEXCEPTION();
+        throw lang::DisposedException();
 
     sal_uInt32 nOldCount = m_pData->m_seqControllers.getLength();
     if ( !nOldCount )
         return;
 
-    SEQUENCE< REFERENCE< XCONTROLLER > > aNewSeq( nOldCount - 1 );
+    uno::Sequence< uno::Reference< frame::XController > > aNewSeq( nOldCount - 1 );
     for ( sal_uInt32 nOld = 0, nNew = 0; nOld < nOldCount; ++nOld )
     {
         if ( xController != m_pData->m_seqControllers.getConstArray()[nOld] )
@@ -1404,55 +1081,55 @@ void SAL_CALL SfxBaseModel::disconnectController( const REFERENCE< XCONTROLLER >
     m_pData->m_seqControllers = aNewSeq;
 
     if ( xController == m_pData->m_xCurrent )
-        m_pData->m_xCurrent = REFERENCE< XCONTROLLER > ();
+        m_pData->m_xCurrent = uno::Reference< frame::XController > ();
 }
 
 //________________________________________________________________________________________________________
-//  XMODEL
+//  frame::XModel
 //________________________________________________________________________________________________________
 
 void SAL_CALL SfxBaseModel::lockControllers() throw(::com::sun::star::uno::RuntimeException)
 {
     ::vos::OGuard aGuard( Application::GetSolarMutex() );
     if ( impl_isDisposed() )
-        throw DISPOSEDEXCEPTION();
+        throw lang::DisposedException();
     ++m_pData->m_nControllerLockCount ;
 }
 
 //________________________________________________________________________________________________________
-//  XMODEL
+//  frame::XModel
 //________________________________________________________________________________________________________
 
 void SAL_CALL SfxBaseModel::unlockControllers() throw(::com::sun::star::uno::RuntimeException)
 {
     ::vos::OGuard aGuard( Application::GetSolarMutex() );
     if ( impl_isDisposed() )
-        throw DISPOSEDEXCEPTION();
+        throw lang::DisposedException();
     --m_pData->m_nControllerLockCount ;
 }
 
 //________________________________________________________________________________________________________
-//  XMODEL
+//  frame::XModel
 //________________________________________________________________________________________________________
 
 sal_Bool SAL_CALL SfxBaseModel::hasControllersLocked() throw(::com::sun::star::uno::RuntimeException)
 {
     ::vos::OGuard aGuard( Application::GetSolarMutex() );
     if ( impl_isDisposed() )
-        throw DISPOSEDEXCEPTION();
+        throw lang::DisposedException();
     return ( m_pData->m_nControllerLockCount != 0 ) ;
 }
 
 //________________________________________________________________________________________________________
-//  XMODEL
+//  frame::XModel
 //________________________________________________________________________________________________________
 
-REFERENCE< XCONTROLLER > SAL_CALL SfxBaseModel::getCurrentController() throw(::com::sun::star::uno::RuntimeException)
+uno::Reference< frame::XController > SAL_CALL SfxBaseModel::getCurrentController() throw(::com::sun::star::uno::RuntimeException)
 {
     // object already disposed?
     ::vos::OGuard aGuard( Application::GetSolarMutex() );
     if ( impl_isDisposed() )
-        throw DISPOSEDEXCEPTION();
+        throw lang::DisposedException();
 
     // get the last active controller of this model
     if ( m_pData->m_xCurrent.is() )
@@ -1463,45 +1140,40 @@ REFERENCE< XCONTROLLER > SAL_CALL SfxBaseModel::getCurrentController() throw(::c
 }
 
 //________________________________________________________________________________________________________
-//  XMODEL
+//  frame::XModel
 //________________________________________________________________________________________________________
 
-void SAL_CALL SfxBaseModel::setCurrentController( const REFERENCE< XCONTROLLER >& xCurrentController )
+void SAL_CALL SfxBaseModel::setCurrentController( const uno::Reference< frame::XController >& xCurrentController )
         throw (::com::sun::star::container::NoSuchElementException, ::com::sun::star::uno::RuntimeException)
 {
     // object already disposed?
     ::vos::OGuard aGuard( Application::GetSolarMutex() );
     if ( impl_isDisposed() )
-        throw DISPOSEDEXCEPTION();
+        throw lang::DisposedException();
 
     m_pData->m_xCurrent = xCurrentController;
 }
 
 //________________________________________________________________________________________________________
-//  XMODEL
+//  frame::XModel
 //________________________________________________________________________________________________________
 
-REFERENCE< XINTERFACE > SAL_CALL SfxBaseModel::getCurrentSelection() throw(::com::sun::star::uno::RuntimeException)
+uno::Reference< uno::XInterface > SAL_CALL SfxBaseModel::getCurrentSelection() throw(::com::sun::star::uno::RuntimeException)
 {
     // object already disposed?
     ::vos::OGuard aGuard( Application::GetSolarMutex() );
     if ( impl_isDisposed() )
-        throw DISPOSEDEXCEPTION();
+        throw lang::DisposedException();
 
-    REFERENCE< XINTERFACE >     xReturn;
-    REFERENCE< XCONTROLLER >    xController =   getCurrentController()      ;
+    uno::Reference< uno::XInterface >     xReturn;
+    uno::Reference< frame::XController >    xController =   getCurrentController()      ;
 
     if ( xController.is() )
     {
-        REFERENCE< XSELECTIONSUPPLIER >  xDocView( xController, UNOQUERY );
+        uno::Reference< view::XSelectionSupplier >  xDocView( xController, uno::UNO_QUERY );
         if ( xDocView.is() )
         {
-            ANY xSel = xDocView->getSelection();
-
-    // automatisch auskommentiert - Wird von UNO III nicht weiter unterstuetzt!
-    //      return xSel.getReflection() == XINTERFACE_getReflection()
-    //      return xSel.getValueType() == ::getCppuType((const XINTERFACE*)0)
-    //              ? *(REFERENCE< XINTERFACE > *) xSel.get() : REFERENCE< XINTERFACE > ();
+            uno::Any xSel = xDocView->getSelection();
             xSel >>= xReturn ;
         }
     }
@@ -1564,7 +1236,7 @@ sal_Bool SAL_CALL SfxBaseModel::isModified() throw(::com::sun::star::uno::Runtim
     // object already disposed?
     ::vos::OGuard aGuard( Application::GetSolarMutex() );
     if ( impl_isDisposed() )
-        throw DISPOSEDEXCEPTION();
+        throw lang::DisposedException();
 
     return m_pData->m_pObjectShell.Is() ? m_pData->m_pObjectShell->IsModified() : sal_False;
 }
@@ -1579,7 +1251,7 @@ void SAL_CALL SfxBaseModel::setModified( sal_Bool bModified )
     // object already disposed?
     ::vos::OGuard aGuard( Application::GetSolarMutex() );
     if ( impl_isDisposed() )
-        throw DISPOSEDEXCEPTION();
+        throw lang::DisposedException();
 
     if ( m_pData->m_pObjectShell.Is() )
         m_pData->m_pObjectShell->SetModified(bModified);
@@ -1589,35 +1261,35 @@ void SAL_CALL SfxBaseModel::setModified( sal_Bool bModified )
 //  XModifiable
 //________________________________________________________________________________________________________
 
-void SAL_CALL SfxBaseModel::addModifyListener(const REFERENCE< XMODIFYLISTENER >& xListener) throw( RUNTIMEEXCEPTION )
+void SAL_CALL SfxBaseModel::addModifyListener(const uno::Reference< XMODIFYLISTENER >& xListener) throw( uno::RuntimeException )
 {
     // object already disposed?
     ::vos::OGuard aGuard( Application::GetSolarMutex() );
     if ( impl_isDisposed() )
         return;
 
-    m_pData->m_aInterfaceContainer.addInterface( ::getCppuType((const REFERENCE< XMODIFYLISTENER >*)0),xListener );
+    m_pData->m_aInterfaceContainer.addInterface( ::getCppuType((const uno::Reference< XMODIFYLISTENER >*)0),xListener );
 }
 
 //________________________________________________________________________________________________________
 //  XModifiable
 //________________________________________________________________________________________________________
 
-void SAL_CALL SfxBaseModel::removeModifyListener(const REFERENCE< XMODIFYLISTENER >& xListener) throw( RUNTIMEEXCEPTION )
+void SAL_CALL SfxBaseModel::removeModifyListener(const uno::Reference< XMODIFYLISTENER >& xListener) throw( uno::RuntimeException )
 {
     // object already disposed?
     ::vos::OGuard aGuard( Application::GetSolarMutex() );
     if ( impl_isDisposed() )
         return;
 
-    m_pData->m_aInterfaceContainer.removeInterface( ::getCppuType((const REFERENCE< XMODIFYLISTENER >*)0), xListener );
+    m_pData->m_aInterfaceContainer.removeInterface( ::getCppuType((const uno::Reference< XMODIFYLISTENER >*)0), xListener );
 }
 
 //____________________________________________________________________________________________________
 //  XCloseable
 //____________________________________________________________________________________________________
 
-void SAL_CALL SfxBaseModel::close( sal_Bool bDeliverOwnership ) throw (CLOSEVETOEXCEPTION, RUNTIMEEXCEPTION)
+void SAL_CALL SfxBaseModel::close( sal_Bool bDeliverOwnership ) throw (util::CloseVetoException, uno::RuntimeException)
 {
     static ::rtl::OUString MSG_1 = ::rtl::OUString::createFromAscii("Cant close while saving.");
 
@@ -1648,15 +1320,13 @@ void SAL_CALL SfxBaseModel::close( sal_Bool bDeliverOwnership ) throw (CLOSEVETO
     {
         if (bDeliverOwnership)
             m_pData->m_bSuicide = sal_True;
-        throw CLOSEVETOEXCEPTION(
+        throw util::CloseVetoException(
                 MSG_1,
                 static_cast< ::com::sun::star::util::XCloseable* >(this));
     }
 
     // no own objections against closing!
     m_pData->m_bClosing = sal_True;
-    if( m_pData->m_pObjectShell.Is() )
-        m_pData->m_pObjectShell->Broadcast( SfxSimpleHint(SFX_HINT_DEINITIALIZING) );
     pContainer = m_pData->m_aInterfaceContainer.getContainer( ::getCppuType( ( const uno::Reference< util::XCloseListener >*) NULL ) );
     if (pContainer!=NULL)
     {
@@ -1684,512 +1354,69 @@ void SAL_CALL SfxBaseModel::close( sal_Bool bDeliverOwnership ) throw (CLOSEVETO
 //  XCloseBroadcaster
 //____________________________________________________________________________________________________
 
-void SAL_CALL SfxBaseModel::addCloseListener( const REFERENCE< XCLOSELISTENER >& xListener ) throw (RUNTIMEEXCEPTION)
+void SAL_CALL SfxBaseModel::addCloseListener( const uno::Reference< XCLOSELISTENER >& xListener ) throw (uno::RuntimeException)
 {
     // object already disposed?
     ::vos::OGuard aGuard( Application::GetSolarMutex() );
     if ( impl_isDisposed() )
         return;
 
-    m_pData->m_aInterfaceContainer.addInterface( ::getCppuType((const REFERENCE< XCLOSELISTENER >*)0), xListener );
+    m_pData->m_aInterfaceContainer.addInterface( ::getCppuType((const uno::Reference< XCLOSELISTENER >*)0), xListener );
 }
 
 //____________________________________________________________________________________________________
 //  XCloseBroadcaster
 //____________________________________________________________________________________________________
 
-void SAL_CALL SfxBaseModel::removeCloseListener( const REFERENCE< XCLOSELISTENER >& xListener ) throw (RUNTIMEEXCEPTION)
+void SAL_CALL SfxBaseModel::removeCloseListener( const uno::Reference< XCLOSELISTENER >& xListener ) throw (uno::RuntimeException)
 {
     // object already disposed?
     ::vos::OGuard aGuard( Application::GetSolarMutex() );
     if ( impl_isDisposed() )
         return;
 
-    m_pData->m_aInterfaceContainer.removeInterface( ::getCppuType((const REFERENCE< XCLOSELISTENER >*)0), xListener );
+    m_pData->m_aInterfaceContainer.removeInterface( ::getCppuType((const uno::Reference< XCLOSELISTENER >*)0), xListener );
 }
 
 //________________________________________________________________________________________________________
 //  XPrintable
 //________________________________________________________________________________________________________
 
-SEQUENCE< PROPERTYVALUE > SAL_CALL SfxBaseModel::getPrinter() throw(::com::sun::star::uno::RuntimeException)
+uno::Sequence< beans::PropertyValue > SAL_CALL SfxBaseModel::getPrinter() throw(::com::sun::star::uno::RuntimeException)
 {
     // object already disposed?
     ::vos::OGuard aGuard( Application::GetSolarMutex() );
     if ( impl_isDisposed() )
-        throw DISPOSEDEXCEPTION();
+        throw lang::DisposedException();
 
-    // Printer beschaffen
-    SfxViewFrame *pViewFrm = m_pData->m_pObjectShell.Is() ?
-                                SfxViewFrame::GetFirst( m_pData->m_pObjectShell, 0, sal_False ) : 0;
-    if ( !pViewFrm )
-        return SEQUENCE< PROPERTYVALUE >();
-    const SfxPrinter *pPrinter = pViewFrm->GetViewShell()->GetPrinter(sal_True);
-    if ( !pPrinter )
-        return SEQUENCE< PROPERTYVALUE >();
-
-    // Printer Eigenschaften uebertragen
-    SEQUENCE< PROPERTYVALUE > aPrinter(8);
-
-    aPrinter.getArray()[7].Name = DEFINE_CONST_UNICODE( "CanSetPaperSize" );
-    aPrinter.getArray()[7].Value <<= ( pPrinter->HasSupport( SUPPORT_SET_PAPERSIZE ) );
-
-    aPrinter.getArray()[6].Name = DEFINE_CONST_UNICODE( "CanSetPaperFormat" );
-    aPrinter.getArray()[6].Value <<= ( pPrinter->HasSupport( SUPPORT_SET_PAPER ) );
-
-    aPrinter.getArray()[5].Name = DEFINE_CONST_UNICODE( "CanSetPaperOrientation" );
-    aPrinter.getArray()[5].Value <<= ( pPrinter->HasSupport( SUPPORT_SET_ORIENTATION ) );
-
-    aPrinter.getArray()[4].Name = DEFINE_CONST_UNICODE( "IsBusy" );
-    aPrinter.getArray()[4].Value <<= ( pPrinter->IsPrinting() );
-
-    aPrinter.getArray()[3].Name = DEFINE_CONST_UNICODE( "PaperSize" );
-    SIZE aSize = impl_Size_Object2Struct(pPrinter->GetPaperSize() );
-    aPrinter.getArray()[3].Value <<= aSize;
-
-    aPrinter.getArray()[2].Name = DEFINE_CONST_UNICODE( "PaperFormat" );
-    PAPERFORMAT eFormat = (PAPERFORMAT)pPrinter->GetPaper();
-    aPrinter.getArray()[2].Value <<= eFormat;
-
-    aPrinter.getArray()[1].Name = DEFINE_CONST_UNICODE( "PaperOrientation" );
-    PAPERORIENTATION eOrient = (PAPERORIENTATION)pPrinter->GetOrientation();
-    aPrinter.getArray()[1].Value <<= eOrient;
-
-    aPrinter.getArray()[0].Name = DEFINE_CONST_UNICODE( "Name" );
-    String sStringTemp = pPrinter->GetName() ;
-    aPrinter.getArray()[0].Value <<= ::rtl::OUString( sStringTemp );
-
-    return aPrinter;
+    if ( impl_getPrintHelper() )
+        return m_pData->m_xPrintable->getPrinter();
+    else
+        return uno::Sequence< beans::PropertyValue >();
 }
 
-//________________________________________________________________________________________________________
-//  XPrintable
-//________________________________________________________________________________________________________
-
-void SfxBaseModel::impl_setPrinter(const SEQUENCE< PROPERTYVALUE >& rPrinter,SfxPrinter*& pPrinter,sal_uInt16& nChangeFlags,SfxViewShell*& pViewSh)
-
-{
-    // alten Printer beschaffen
-    SfxViewFrame *pViewFrm = m_pData->m_pObjectShell.Is() ?
-                                SfxViewFrame::GetFirst( m_pData->m_pObjectShell, 0, sal_False ) : 0;
-    if ( !pViewFrm )
-        return;
-    pViewSh = pViewFrm->GetViewShell();
-    pPrinter = pViewSh->GetPrinter(sal_True);
-    if ( !pPrinter )
-        return;
-
-    // new Printer-Name available?
-    nChangeFlags = 0;
-    sal_Int32 lDummy = 0;
-    for ( int n = 0; n < rPrinter.getLength(); ++n )
-    {
-        // get Property-Value from printer description
-        const PROPERTYVALUE &rProp = rPrinter.getConstArray()[n];
-
-        // Name-Property?
-        if ( rProp.Name.compareToAscii( "Name" ) == 0 )
-        {
-            OUSTRING sTemp;
-            if ( ( rProp.Value >>= sTemp ) == sal_False )
-                throw ILLEGALARGUMENTEXCEPTION();
-
-            String aPrinterName( sTemp ) ;
-            if ( aPrinterName != pPrinter->GetName() )
-            {
-                pPrinter = new SfxPrinter( pPrinter->GetOptions().Clone(), aPrinterName );
-                nChangeFlags = SFX_PRINTER_PRINTER;
-            }
-            break;
-        }
-    }
-
-    Size aSetPaperSize( 0, 0);
-    PAPERFORMAT nPaperFormat = (PAPERFORMAT) PAPER_USER;
-    // other properties
-    for ( int i = 0; i < rPrinter.getLength(); ++i )
-    {
-        // get Property-Value from printer description
-        const PROPERTYVALUE &rProp = rPrinter.getConstArray()[i];
-
-        // PaperOrientation-Property?
-        if ( rProp.Name.compareToAscii( "PaperOrientation" ) == 0 )
-        {
-            PAPERORIENTATION eOrient;
-            if ( ( rProp.Value >>= eOrient ) == sal_False )
-            {
-                if ( ( rProp.Value >>= lDummy ) == sal_False )
-                    throw ILLEGALARGUMENTEXCEPTION();
-                eOrient = ( PAPERORIENTATION ) lDummy;
-            }
-
-            if ( (Orientation) eOrient != pPrinter->GetOrientation() )
-            {
-                pPrinter->SetOrientation( (Orientation) eOrient );
-                nChangeFlags |= SFX_PRINTER_CHG_ORIENTATION;
-            }
-        }
-
-        // PaperFormat-Property?
-        if ( rProp.Name.compareToAscii( "PaperFormat" ) == 0 )
-        {
-            if ( ( rProp.Value >>= nPaperFormat ) == sal_False )
-            {
-                if ( ( rProp.Value >>= lDummy ) == sal_False )
-                    throw ILLEGALARGUMENTEXCEPTION();
-                nPaperFormat = ( PAPERFORMAT ) lDummy;
-            }
-
-            if ( (Paper) nPaperFormat != pPrinter->GetPaper() )
-            {
-                pPrinter->SetPaper( (Paper) nPaperFormat );
-                nChangeFlags |= SFX_PRINTER_CHG_SIZE;
-            }
-        }
-
-        // PaperSize-Property?
-        if ( rProp.Name.compareToAscii( "PaperSize" ) == 0 )
-        {
-            SIZE aTempSize ;
-            if ( ( rProp.Value >>= aTempSize ) == sal_False )
-            {
-                throw ILLEGALARGUMENTEXCEPTION();
-            }
-            else
-            {
-                aSetPaperSize = impl_Size_Struct2Object(aTempSize);
-            }
-        }
-    }
-
-    //os 12.11.98: die PaperSize darf nur gesetzt werden, wenn tatsaechlich
-    //PAPER_USER gilt, sonst koennte vom Treiber ein falsches Format gewaehlt werden
-    if(nPaperFormat == PAPER_USER && aSetPaperSize.Width())
-    {
-        //JP 23.09.98 - Bug 56929 - MapMode von 100mm in die am
-        //          Device gesetzten umrechnen. Zusaetzlich nur dann
-        //          setzen, wenn sie wirklich veraendert wurden.
-        aSetPaperSize = pPrinter->LogicToPixel( aSetPaperSize, MAP_100TH_MM );
-        if( aSetPaperSize != pPrinter->GetPaperSizePixel() )
-        {
-            pPrinter->SetPaperSizeUser( pPrinter->PixelToLogic( aSetPaperSize ) );
-            nChangeFlags |= SFX_PRINTER_CHG_SIZE;
-        }
-    }
-
-    // #96772#: wait until printing is done
-    SfxPrinter* pDocPrinter = pViewSh->GetPrinter();
-    while ( pDocPrinter->IsPrinting() )
-        Application::Yield();
-}
-
-void SAL_CALL SfxBaseModel::setPrinter(const SEQUENCE< PROPERTYVALUE >& rPrinter)
+void SAL_CALL SfxBaseModel::setPrinter(const uno::Sequence< beans::PropertyValue >& rPrinter)
         throw (::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::uno::RuntimeException)
 {
     // object already disposed?
     ::vos::OGuard aGuard( Application::GetSolarMutex() );
     if ( impl_isDisposed() )
-        throw DISPOSEDEXCEPTION();
+        throw lang::DisposedException();
 
-    SfxViewShell* pViewSh = NULL;
-    SfxPrinter* pPrinter = NULL;
-    sal_uInt16 nChangeFlags = 0;
-    impl_setPrinter(rPrinter,pPrinter,nChangeFlags,pViewSh);
-    // set new printer
-    if ( pViewSh && pPrinter )
-        pViewSh->SetPrinter( pPrinter, nChangeFlags );
+    if ( impl_getPrintHelper() )
+        m_pData->m_xPrintable->setPrinter( rPrinter );
 }
 
-//________________________________________________________________________________________________________
-//  ImplPrintWatch thread for asynchronous printing with moving temp. file to ucb location
-//________________________________________________________________________________________________________
-
-/* This implements a thread which will be started to wait for asynchronous
-   print jobs to temp. localy files. If they finish we move the temp. files
-   to her right locations by using the ucb.
- */
-class ImplUCBPrintWatcher : public ::osl::Thread
-{
-    private:
-        /// of course we must know the printer which execute the job
-        SfxPrinter* m_pPrinter;
-        /// this describes the target location for the printed temp file
-        String m_sTargetURL;
-        /// it holds the temp file alive, till the print job will finish and remove it from disk automaticly if the object die
-        ::utl::TempFile* m_pTempFile;
-
-    public:
-        /* initialize this watcher but don't start it */
-        ImplUCBPrintWatcher( SfxPrinter* pPrinter, ::utl::TempFile* pTempFile, const String& sTargetURL )
-                : m_pPrinter  ( pPrinter   )
-                , m_sTargetURL( sTargetURL )
-                , m_pTempFile ( pTempFile  )
-        {}
-
-        /* waits for finishing of the print job and moves the temp file afterwards
-           Note: Starting of the job is done outside this thread!
-           But we have to free some of the given ressources on heap!
-         */
-        void SAL_CALL run()
-        {
-            /* SAFE { */
-            {
-                ::vos::OGuard aGuard( Application::GetSolarMutex() );
-                while( m_pPrinter->IsPrinting() )
-                    Application::Yield();
-                m_pPrinter = NULL; // don't delete it! It's borrowed only :-)
-            }
-            /* } SAFE */
-
-            // lock for further using of our member isn't neccessary - because
-            // we truns alone by defenition. Nobody join for us nor use us ...
-            ImplUCBPrintWatcher::moveAndDeleteTemp(&m_pTempFile,m_sTargetURL);
-
-            // finishing of this run() method will call onTerminate() automaticly
-            // kill this thread there!
-        }
-
-        /* nobody wait for this thread. We must kill ourself ...
-         */
-        void SAL_CALL onTerminated()
-        {
-            delete this;
-        }
-
-        /* static helper to move the temp. file to the target location by using the ucb
-           It's static to be useable from outside too. So it's not realy neccessary to start
-           the thread, if finishing of the job was detected outside this thread.
-           But it must be called without using a corresponding thread for the given parameter!
-         */
-        static void moveAndDeleteTemp( ::utl::TempFile** ppTempFile, const String& sTargetURL )
-        {
-            // move the file
-            try
-            {
-                INetURLObject aSplitter(sTargetURL);
-                String        sFileName = aSplitter.getName(
-                                            INetURLObject::LAST_SEGMENT,
-                                            true,
-                                            INetURLObject::DECODE_WITH_CHARSET);
-                if (aSplitter.removeSegment() && sFileName.Len()>0)
-                {
-                    ::ucbhelper::Content aSource(
-                            ::rtl::OUString((*ppTempFile)->GetURL()),
-                            ::com::sun::star::uno::Reference< ::com::sun::star::ucb::XCommandEnvironment >());
-
-                    ::ucbhelper::Content aTarget(
-                            ::rtl::OUString(aSplitter.GetMainURL(INetURLObject::NO_DECODE)),
-                            ::com::sun::star::uno::Reference< ::com::sun::star::ucb::XCommandEnvironment >());
-
-                    aTarget.transferContent(
-                            aSource,
-                            ::ucbhelper::InsertOperation_COPY,
-                            ::rtl::OUString(sFileName),
-                            ::com::sun::star::ucb::NameClash::OVERWRITE);
-                }
-            }
-            catch( ::com::sun::star::ucb::ContentCreationException& ) { DBG_ERROR("content create exception"); }
-            catch( ::com::sun::star::ucb::CommandAbortedException&  ) { DBG_ERROR("command abort exception"); }
-            catch( ::com::sun::star::uno::RuntimeException&         ) { DBG_ERROR("runtime exception"); }
-            catch( ::com::sun::star::uno::Exception&                ) { DBG_ERROR("unknown exception"); }
-
-            // kill the temp file!
-            delete *ppTempFile;
-            *ppTempFile = NULL;
-        }
-};
-
-//------------------------------------------------
-
-//________________________________________________________________________________________________________
-//  XPrintable
-//________________________________________________________________________________________________________
-void SAL_CALL SfxBaseModel::print(const SEQUENCE< PROPERTYVALUE >& rOptions)
+void SAL_CALL SfxBaseModel::print(const uno::Sequence< beans::PropertyValue >& rOptions)
         throw (::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::uno::RuntimeException)
 {
-    if( Application::GetSettings().GetMiscSettings().GetDisablePrinting() )
-        return;
-
-    // object already disposed?
     // object already disposed?
     ::vos::OGuard aGuard( Application::GetSolarMutex() );
     if ( impl_isDisposed() )
-        throw DISPOSEDEXCEPTION();
+        throw lang::DisposedException();
 
-    // get view for sfx printing capabilities
-    SfxViewFrame *pViewFrm = m_pData->m_pObjectShell.Is() ?
-                                SfxViewFrame::GetFirst( m_pData->m_pObjectShell, 0, sal_False ) : 0;
-    if ( !pViewFrm )
-        return;
-    SfxViewShell* pView = pViewFrm->GetViewShell();
-    if ( !pView )
-        return;
-
-    SfxAllItemSet aArgs( pView->GetPool() );
-    sal_Bool bMonitor = sal_False;
-    // We need this information at the end of this method, if we start the vcl printer
-    // by executing the slot. Because if it is a ucb relevant URL we must wait for
-    // finishing the print job and move the temporary local file by using the ucb
-    // to the right location. But in case of no file name is given or it is already
-    // a local one we can supress this special handling. Because then vcl makes all
-    // right for us.
-    String sUcbUrl;
-    ::utl::TempFile* pUCBPrintTempFile = NULL;
-
-    sal_Bool bWaitUntilEnd = sal_False;
-    for ( int n = 0; n < rOptions.getLength(); ++n )
-    {
-        // get Property-Value from options
-        const PROPERTYVALUE &rProp = rOptions.getConstArray()[n];
-
-        // FileName-Property?
-        if ( rProp.Name.compareToAscii( "FileName" ) == 0 )
-        {
-            // unpack th URL and check for a valid and well known protocol
-            OUSTRING sTemp;
-            if (
-                ( rProp.Value.getValueType()!=::getCppuType((const OUSTRING*)0))  ||
-                (!(rProp.Value>>=sTemp))
-               )
-            {
-                throw ILLEGALARGUMENTEXCEPTION();
-            }
-
-            String        sPath        ;
-            String        sURL  (sTemp);
-            INetURLObject aCheck(sURL );
-            if (aCheck.GetProtocol()==INET_PROT_NOT_VALID)
-            {
-                // OK - it's not a valid URL. But may it's a simple
-                // system path directly. It will be supported for historical
-                // reasons. Otherwhise we break to much external code ...
-                // We try to convert it to a file URL. If its possible
-                // we put the system path to the item set and let vcl work with it.
-                // No ucb or thread will be neccessary then. In case it couldnt be
-                // converted its not an URL nor a system path. Then we can't accept
-                // this parameter and have to throw an exception.
-                ::rtl::OUString sSystemPath(sTemp);
-                ::rtl::OUString sFileURL          ;
-                if (::osl::FileBase::getFileURLFromSystemPath(sSystemPath,sFileURL)!=::osl::FileBase::E_None)
-                    throw ILLEGALARGUMENTEXCEPTION();
-                aArgs.Put( SfxStringItem(SID_FILE_NAME,sTemp) );
-            }
-            else
-            // It's a valid URL. but now we must know, if it is a local one or not.
-            // It's a question of using ucb or not!
-            if (::utl::LocalFileHelper::ConvertURLToSystemPath(sURL,sPath))
-            {
-                // it's a local file, we can use vcl without special handling
-                // And we have to use the system notation of the incoming URL.
-                // But it into the descriptor and let the slot be executed at
-                // the end of this method.
-                aArgs.Put( SfxStringItem(SID_FILE_NAME,sPath) );
-            }
-            else
-            {
-                // it's an ucb target. So we must use a temp. file for vcl
-                // and move it after printing by using the ucb.
-                // Create a temp file on the heap (because it must delete the
-                // real file on disk automaticly if it die - bt we have to share it with
-                // some other sources ... e.g. the ImplUCBPrintWatcher).
-                // And we put the name of this temp file to the descriptor instead
-                // of the URL. The URL we save for later using seperatly.
-                // Execution of the print job will be done later by executing
-                // a slot ...
-                pUCBPrintTempFile = new ::utl::TempFile();
-                pUCBPrintTempFile->EnableKillingFile();
-                aArgs.Put( SfxStringItem(SID_FILE_NAME,pUCBPrintTempFile->GetFileName()) );
-                sUcbUrl = sURL;
-            }
-        }
-
-        // CopyCount-Property
-        else if ( rProp.Name.compareToAscii( "CopyCount" ) == 0 )
-        {
-            sal_Int32 nCopies = 0;
-            if ( ( rProp.Value >>= nCopies ) == sal_False )
-                throw ILLEGALARGUMENTEXCEPTION();
-            aArgs.Put( SfxInt16Item( SID_PRINT_COPIES, (USHORT) nCopies ) );
-        }
-
-        // Collate-Property
-        else if ( rProp.Name.compareToAscii( "Collate" ) == 0 )
-        {
-            sal_Bool bTemp = sal_Bool();
-            if ( rProp.Value >>= bTemp )
-                aArgs.Put( SfxBoolItem( SID_PRINT_COLLATE, bTemp ) );
-            else
-                throw ILLEGALARGUMENTEXCEPTION();
-        }
-
-        // Sort-Property
-        else if ( rProp.Name.compareToAscii( "Sort" ) == 0 )
-        {
-            sal_Bool bTemp = sal_Bool();
-            if( rProp.Value >>= bTemp )
-                aArgs.Put( SfxBoolItem( SID_PRINT_SORT, bTemp ) );
-            else
-                throw ILLEGALARGUMENTEXCEPTION();
-        }
-
-        // Pages-Property
-        else if ( rProp.Name.compareToAscii( "Pages" ) == 0 )
-        {
-            OUSTRING sTemp;
-            if( rProp.Value >>= sTemp )
-                aArgs.Put( SfxStringItem( SID_PRINT_PAGES, String( sTemp ) ) );
-            else
-                throw ILLEGALARGUMENTEXCEPTION();
-        }
-
-        // MonitorVisible
-        else if ( rProp.Name.compareToAscii( "MonitorVisible" ) == 0 )
-        {
-            if( !(rProp.Value >>= bMonitor) )
-                throw ILLEGALARGUMENTEXCEPTION();
-        }
-
-        // MonitorVisible
-        else if ( rProp.Name.compareToAscii( "Wait" ) == 0 )
-        {
-            if ( !(rProp.Value >>= bWaitUntilEnd) )
-                throw ILLEGALARGUMENTEXCEPTION();
-        }
-    }
-
-    // Execute the print request every time.
-    // It doesn'tmatter if it is a real printer used or we print to a local file
-    // nor if we print to a temp file and move it afterwards by using the ucb.
-    // That will be handled later. see pUCBPrintFile below!
-    aArgs.Put( SfxBoolItem( SID_SILENT, !bMonitor ) );
-    if ( bWaitUntilEnd )
-        aArgs.Put( SfxBoolItem( SID_ASYNCHRON, sal_False ) );
-    SfxRequest aReq( SID_PRINTDOC, SFX_CALLMODE_SYNCHRON | SFX_CALLMODE_API, pView->GetPool() );
-    aReq.SetArgs( aArgs );
-    pView->ExecuteSlot( aReq );
-
-    // Ok - may be execution before has finished (or started!) printing.
-    // And may it was a printing to a file.
-    // Now we have to check if we can move the file (if neccessary) via ucb to his right location.
-    // Cases:
-    //  a) printing finished                        => move the file directly and forget the watcher thread
-    //  b) printing is asynchron and runs currently => start watcher thread and exit this method
-    //                                                 This thread make all neccessary things by itself.
-    if (pUCBPrintTempFile!=NULL)
-    {
-        // a)
-        SfxPrinter* pPrinter = pView->GetPrinter();
-        if ( ! pPrinter->IsPrinting() )
-            ImplUCBPrintWatcher::moveAndDeleteTemp(&pUCBPrintTempFile,sUcbUrl);
-        // b)
-        else
-        {
-            // Note: we create(d) some ressource on the heap. (thread and tep file)
-            // They will be delected by the thread automaticly if he finish his run() method.
-            ImplUCBPrintWatcher* pWatcher = new ImplUCBPrintWatcher( pPrinter, pUCBPrintTempFile, sUcbUrl );
-            pWatcher->create();
-        }
-    }
+    if ( impl_getPrintHelper() )
+        m_pData->m_xPrintable->print( rOptions );
 }
 
 //________________________________________________________________________________________________________
@@ -2201,7 +1428,7 @@ sal_Bool SAL_CALL SfxBaseModel::hasLocation() throw(::com::sun::star::uno::Runti
     // object already disposed?
     ::vos::OGuard aGuard( Application::GetSolarMutex() );
     if ( impl_isDisposed() )
-        throw DISPOSEDEXCEPTION();
+        throw lang::DisposedException();
 
     return m_pData->m_pObjectShell.Is() ? m_pData->m_pObjectShell->HasName() : sal_False;
 }
@@ -2210,14 +1437,14 @@ sal_Bool SAL_CALL SfxBaseModel::hasLocation() throw(::com::sun::star::uno::Runti
 //  XStorable
 //________________________________________________________________________________________________________
 
-OUSTRING SAL_CALL SfxBaseModel::getLocation() throw(::com::sun::star::uno::RuntimeException)
+::rtl::OUString SAL_CALL SfxBaseModel::getLocation() throw(::com::sun::star::uno::RuntimeException)
 {
     // object already disposed?
     ::vos::OGuard aGuard( Application::GetSolarMutex() );
     if ( impl_isDisposed() )
-        throw DISPOSEDEXCEPTION();
+        throw lang::DisposedException();
 
-    return m_pData->m_pObjectShell.Is() ? OUSTRING(m_pData->m_pObjectShell->GetMedium()->GetName()) : m_pData->m_sURL;
+    return m_pData->m_pObjectShell.Is() ? ::rtl::OUString(m_pData->m_pObjectShell->GetMedium()->GetName()) : m_pData->m_sURL;
 }
 
 //________________________________________________________________________________________________________
@@ -2229,7 +1456,7 @@ sal_Bool SAL_CALL SfxBaseModel::isReadonly() throw(::com::sun::star::uno::Runtim
     // object already disposed?
     ::vos::OGuard aGuard( Application::GetSolarMutex() );
     if ( impl_isDisposed() )
-        throw DISPOSEDEXCEPTION();
+        throw lang::DisposedException();
 
     return m_pData->m_pObjectShell.Is() ? m_pData->m_pObjectShell->IsReadOnly() : sal_True;
 }
@@ -2238,7 +1465,7 @@ sal_Bool SAL_CALL SfxBaseModel::isReadonly() throw(::com::sun::star::uno::Runtim
 //  XStorable2
 //________________________________________________________________________________________________________
 
-void SAL_CALL SfxBaseModel::storeSelf( const    SEQUENCE< PROPERTYVALUE >&  aSeqArgs )
+void SAL_CALL SfxBaseModel::storeSelf( const    uno::Sequence< beans::PropertyValue >&  aSeqArgs )
         throw ( ::com::sun::star::lang::IllegalArgumentException,
                 ::com::sun::star::io::IOException,
                 ::com::sun::star::uno::RuntimeException )
@@ -2248,7 +1475,7 @@ void SAL_CALL SfxBaseModel::storeSelf( const    SEQUENCE< PROPERTYVALUE >&  aSeq
     // object already disposed?
     ::vos::OGuard aGuard( Application::GetSolarMutex() );
     if ( impl_isDisposed() )
-        throw DISPOSEDEXCEPTION();
+        throw lang::DisposedException();
 
     if ( m_pData->m_pObjectShell.Is() )
     {
@@ -2329,8 +1556,8 @@ void SAL_CALL SfxBaseModel::store() throw (::com::sun::star::io::IOException, ::
 //  XStorable
 //________________________________________________________________________________________________________
 
-void SAL_CALL SfxBaseModel::storeAsURL( const   OUSTRING&                   rURL    ,
-                                        const   SEQUENCE< PROPERTYVALUE >&  rArgs   )
+void SAL_CALL SfxBaseModel::storeAsURL( const   ::rtl::OUString&                   rURL    ,
+                                        const   uno::Sequence< beans::PropertyValue >&  rArgs   )
         throw (::com::sun::star::io::IOException, ::com::sun::star::uno::RuntimeException)
 {
     RTL_LOGFILE_PRODUCT_CONTEXT( aPerfLog, "PERFORMANCE - SfxBaseModel::storeAsURL" );
@@ -2338,7 +1565,7 @@ void SAL_CALL SfxBaseModel::storeAsURL( const   OUSTRING&                   rURL
     // object already disposed?
     ::vos::OGuard aGuard( Application::GetSolarMutex() );
     if ( impl_isDisposed() )
-        throw DISPOSEDEXCEPTION();
+        throw lang::DisposedException();
 
     if ( m_pData->m_pObjectShell.Is() )
     {
@@ -2346,7 +1573,7 @@ void SAL_CALL SfxBaseModel::storeAsURL( const   OUSTRING&                   rURL
 
         impl_store( rURL, rArgs, sal_False );
 
-        SEQUENCE< PROPERTYVALUE > aSequence ;
+        uno::Sequence< beans::PropertyValue > aSequence ;
         TransformItems( SID_OPENDOC, *m_pData->m_pObjectShell->GetMedium()->GetItemSet(), aSequence );
         attachResource( rURL, aSequence );
     }
@@ -2356,14 +1583,14 @@ void SAL_CALL SfxBaseModel::storeAsURL( const   OUSTRING&                   rURL
 //  XStorable
 //________________________________________________________________________________________________________
 
-void SAL_CALL SfxBaseModel::storeToURL( const   OUSTRING&                   rURL    ,
-                                        const   SEQUENCE< PROPERTYVALUE >&  rArgs   )
+void SAL_CALL SfxBaseModel::storeToURL( const   ::rtl::OUString&                   rURL    ,
+                                        const   uno::Sequence< beans::PropertyValue >&  rArgs   )
         throw (::com::sun::star::io::IOException, ::com::sun::star::uno::RuntimeException)
 {
     // object already disposed?
     ::vos::OGuard aGuard( Application::GetSolarMutex() );
     if ( impl_isDisposed() )
-        throw DISPOSEDEXCEPTION();
+        throw lang::DisposedException();
 
     if ( m_pData->m_pObjectShell.Is() )
     {
@@ -2385,7 +1612,7 @@ void SAL_CALL SfxBaseModel::initNew()
     // object already disposed?
     ::vos::OGuard aGuard( Application::GetSolarMutex() );
     if ( impl_isDisposed() )
-        throw DISPOSEDEXCEPTION();
+        throw lang::DisposedException();
 
     // the object shell should exist always
     DBG_ASSERT( m_pData->m_pObjectShell.Is(), "Model is useless without an ObjectShell" );
@@ -2411,7 +1638,7 @@ extern void SetTemplate_Impl( const String&, const String&, SfxObjectShell* );
 
 #include <unotools/ucbstreamhelper.hxx>
 
-void SAL_CALL SfxBaseModel::load(   const SEQUENCE< PROPERTYVALUE >& seqArguments )
+void SAL_CALL SfxBaseModel::load(   const uno::Sequence< beans::PropertyValue >& seqArguments )
         throw (::com::sun::star::frame::DoubleInitializationException,
                ::com::sun::star::io::IOException,
                ::com::sun::star::uno::RuntimeException,
@@ -2420,7 +1647,7 @@ void SAL_CALL SfxBaseModel::load(   const SEQUENCE< PROPERTYVALUE >& seqArgument
     // object already disposed?
     ::vos::OGuard aGuard( Application::GetSolarMutex() );
     if ( impl_isDisposed() )
-        throw DISPOSEDEXCEPTION();
+        throw lang::DisposedException();
 
     // the object shell should exist always
     DBG_ASSERT( m_pData->m_pObjectShell.Is(), "Model is useless without an ObjectShell" );
@@ -2431,54 +1658,17 @@ void SAL_CALL SfxBaseModel::load(   const SEQUENCE< PROPERTYVALUE >& seqArgument
             // if a Medium is present, the document is already initialized
             throw DOUBLEINITIALIZATIONEXCEPTION();
 
-        SfxAllItemSet *pParams = new SfxAllItemSet( SFX_APP()->GetPool() );
-        TransformParameters( SID_OPENDOC, seqArguments, *pParams );
-
-        rtl::OUString aFilterName;
-        SFX_ITEMSET_ARG( pParams, pFilterNameItem, SfxStringItem, SID_FILTER_NAME, sal_False );
+        SfxMedium* pMedium = new SfxMedium( seqArguments );
+        String aFilterName;
+        SFX_ITEMSET_ARG( pMedium->GetItemSet(), pFilterNameItem, SfxStringItem, SID_FILTER_NAME, sal_False );
         if( pFilterNameItem )
             aFilterName = pFilterNameItem->GetValue();
-        const SfxFilter* pFilter = SFX_APP()->GetFilterMatcher().GetFilter4FilterName( aFilterName );
         if( !m_pData->m_pObjectShell->GetFactory().GetFilterContainer()->GetFilter4FilterName( aFilterName ) )
         {
             // filtername is not valid
-            delete pParams;
-            throw ILLEGALARGUMENTIOEXCEPTION();
+            delete pMedium;
+            throw frame::IllegalArgumentIOException();
         }
-
-        sal_Bool bSalvage = sal_False;
-        SFX_ITEMSET_ARG( pParams, pSalvageItem, SfxStringItem, SID_DOC_SALVAGE, sal_False );
-        if( pSalvageItem )
-        {
-            bSalvage = sal_True;
-            if ( pSalvageItem->GetValue().Len() )
-            {
-                // if an URL is provided in SalvageItem that means that the FileName refers to a temporary file
-                // that must be copied here
-
-                SFX_ITEMSET_ARG( pParams, pFileNameItem, SfxStringItem, SID_FILE_NAME, FALSE );
-                ::rtl::OUString aNewTempFileURL = SfxMedium::CreateTempCopyWithExt( pFileNameItem->GetValue() );
-                if ( aNewTempFileURL.getLength() )
-                {
-                    pParams->Put( SfxStringItem( SID_FILE_NAME, aNewTempFileURL ) );
-                    pParams->ClearItem( SID_INPUTSTREAM );
-                    pParams->ClearItem( SID_STREAM );
-                    pParams->ClearItem( SID_CONTENT );
-                }
-                else
-                {
-                    OSL_ENSURE( sal_False, "Can not create a new temporary file for crash recovery!\n" );
-                }
-            }
-        }
-
-        BOOL bReadOnly = FALSE;
-        SFX_ITEMSET_ARG( pParams, pReadOnlyItem, SfxBoolItem, SID_DOC_READONLY, FALSE );
-        if ( pReadOnlyItem && pReadOnlyItem->GetValue() )
-            bReadOnly = TRUE;
-
-        SFX_ITEMSET_ARG( pParams, pFileNameItem, SfxStringItem, SID_FILE_NAME, FALSE );
-        SfxMedium* pMedium = new SfxMedium( pFileNameItem->GetValue(), bReadOnly ? SFX_STREAM_READONLY : SFX_STREAM_READWRITE, FALSE, pFilter, pParams );
 
         // allow to use an interactionhandler (if there is one)
         pMedium->UseInteractionHandler( TRUE );
@@ -2491,15 +1681,21 @@ void SAL_CALL SfxBaseModel::load(   const SEQUENCE< PROPERTYVALUE >& seqArgument
         //  pMedium->SetLoadTargetFrame( pFrame );
         //}
 
-        SFX_ITEMSET_ARG( pParams, pTemplateItem, SfxBoolItem, SID_TEMPLATE, sal_False);
-        BOOL bTemplate = pTemplateItem && pTemplateItem->GetValue();
-        m_pData->m_pObjectShell->SetActivateEvent_Impl( bTemplate ? SFX_EVENT_CREATEDOC : SFX_EVENT_OPENDOC );
+        SFX_ITEMSET_ARG( pMedium->GetItemSet(), pTemplateItem, SfxBoolItem, SID_TEMPLATE, sal_False);
+        sal_Bool bTemplate = pTemplateItem && pTemplateItem->GetValue();
+
+        SFX_ITEMSET_ARG( pMedium->GetItemSet(), pSalvageItem, SfxStringItem, SID_DOC_SALVAGE, sal_False );
+        sal_Bool bSalvage = pSalvageItem ? sal_True : sal_False;
+
+        // does already happen in DoLoad call
+        //m_pData->m_pObjectShell->SetActivateEvent_Impl( bTemplate ? SFX_EVENT_CREATEDOC : SFX_EVENT_OPENDOC );
 
         // load document
         sal_uInt32 nError = ERRCODE_NONE;
         if ( !m_pData->m_pObjectShell->DoLoad(pMedium) )
             nError=ERRCODE_IO_GENERAL;
 
+        // QUESTION: if the following happens outside of DoLoad, something important is missing there!
         ::com::sun::star::uno::Reference< ::com::sun::star::task::XInteractionHandler > xHandler = pMedium->GetInteractionHandler();
         if( m_pData->m_pObjectShell->GetErrorCode() )
         {
@@ -2507,7 +1703,7 @@ void SAL_CALL SfxBaseModel::load(   const SEQUENCE< PROPERTYVALUE >& seqArgument
             if ( nError == ERRCODE_IO_BROKENPACKAGE && xHandler.is() )
             {
                 ::rtl::OUString aDocName = pMedium->GetURLObject().getName( INetURLObject::LAST_SEGMENT, true, INetURLObject::DECODE_WITH_CHARSET );
-                SFX_ITEMSET_ARG( pParams, pRepairItem, SfxBoolItem, SID_REPAIRPACKAGE, FALSE );
+                SFX_ITEMSET_ARG( pMedium->GetItemSet(), pRepairItem, SfxBoolItem, SID_REPAIRPACKAGE, FALSE );
                 if ( !pRepairItem || !pRepairItem->GetValue() )
                 {
                     RequestPackageReparation* pRequest = new RequestPackageReparation( aDocName );
@@ -2688,7 +1884,7 @@ void SAL_CALL SfxBaseModel::load(   const SEQUENCE< PROPERTYVALUE >& seqArgument
 // XTransferable
 //________________________________________________________________________________________________________
 
-ANY SAL_CALL SfxBaseModel::getTransferData( const DATAFLAVOR& aFlavor )
+uno::Any SAL_CALL SfxBaseModel::getTransferData( const DATAFLAVOR& aFlavor )
         throw (::com::sun::star::datatransfer::UnsupportedFlavorException,
                ::com::sun::star::io::IOException,
                ::com::sun::star::uno::RuntimeException)
@@ -2696,9 +1892,9 @@ ANY SAL_CALL SfxBaseModel::getTransferData( const DATAFLAVOR& aFlavor )
     // object already disposed?
     ::vos::OGuard aGuard( Application::GetSolarMutex() );
     if ( impl_isDisposed() )
-        throw DISPOSEDEXCEPTION();
+        throw lang::DisposedException();
 
-    ANY aAny;
+    uno::Any aAny;
 
     if ( m_pData->m_pObjectShell.Is() )
     {
@@ -2729,7 +1925,7 @@ ANY SAL_CALL SfxBaseModel::getTransferData( const DATAFLAVOR& aFlavor )
                 aAny <<= Sequence< sal_Int8 >( reinterpret_cast< const sal_Int8* >( aMemStm.GetData() ), aMemStm.Tell() );
             }
             else
-                throw UNSUPPORTEDFLAVOREXCEPTION();
+                throw datatransfer::UnsupportedFlavorException();
         }
         else if ( aFlavor.MimeType.equalsAscii( "application/x-openoffice-embed-source;windows_formatname=\"Star EMBS\"" ) )
         {
@@ -2739,7 +1935,7 @@ ANY SAL_CALL SfxBaseModel::getTransferData( const DATAFLAVOR& aFlavor )
                 {
                     utl::TempFile aTmp;
                     aTmp.EnableKillingFile( TRUE );
-                    storeToURL( aTmp.GetURL(), SEQUENCE < PROPERTYVALUE >() );
+                    storeToURL( aTmp.GetURL(), uno::Sequence < beans::PropertyValue >() );
                     SvStream* pStream = aTmp.GetStream( STREAM_READ );
                     const sal_uInt32 nLen = pStream->Seek( STREAM_SEEK_TO_END );
                     ::com::sun::star::uno::Sequence< sal_Int8 > aSeq( nLen );
@@ -2754,7 +1950,7 @@ ANY SAL_CALL SfxBaseModel::getTransferData( const DATAFLAVOR& aFlavor )
                 }
             }
             else
-                throw UNSUPPORTEDFLAVOREXCEPTION();
+                throw datatransfer::UnsupportedFlavorException();
         }
         else if ( aFlavor.MimeType.equalsAscii( "application/x-openoffice-gdimetafile;windows_formatname=\"GDIMetaFile\"" ) )
         {
@@ -2774,7 +1970,7 @@ ANY SAL_CALL SfxBaseModel::getTransferData( const DATAFLAVOR& aFlavor )
                 }
             }
             else
-                throw UNSUPPORTEDFLAVOREXCEPTION();
+                throw datatransfer::UnsupportedFlavorException();
         }
         else if ( aFlavor.MimeType.equalsAscii( "application/x-openoffice-highcontrast-gdimetafile;windows_formatname=\"GDIMetaFile\"" ) )
         {
@@ -2794,7 +1990,7 @@ ANY SAL_CALL SfxBaseModel::getTransferData( const DATAFLAVOR& aFlavor )
                 }
             }
             else
-                throw UNSUPPORTEDFLAVOREXCEPTION();
+                throw datatransfer::UnsupportedFlavorException();
         }
         else if ( aFlavor.MimeType.equalsAscii( "application/x-openoffice-emf;windows_formatname=\"Image EMF\"" ) )
         {
@@ -2827,7 +2023,7 @@ ANY SAL_CALL SfxBaseModel::getTransferData( const DATAFLAVOR& aFlavor )
                 }
             }
             else
-                throw UNSUPPORTEDFLAVOREXCEPTION();
+                throw datatransfer::UnsupportedFlavorException();
         }
         else if ( aFlavor.MimeType.equalsAscii( "application/x-openoffice-wmf;windows_formatname=\"Image WMF\"" ) )
         {
@@ -2865,7 +2061,7 @@ ANY SAL_CALL SfxBaseModel::getTransferData( const DATAFLAVOR& aFlavor )
                 }
             }
             else
-                throw UNSUPPORTEDFLAVOREXCEPTION();
+                throw datatransfer::UnsupportedFlavorException();
         }
         else if ( aFlavor.MimeType.equalsAscii( "application/x-openoffice-bitmap;windows_formatname=\"Bitmap\"" ) )
         {
@@ -2888,7 +2084,7 @@ ANY SAL_CALL SfxBaseModel::getTransferData( const DATAFLAVOR& aFlavor )
                 }
             }
             else
-                throw UNSUPPORTEDFLAVOREXCEPTION();
+                throw datatransfer::UnsupportedFlavorException();
         }
         else if ( aFlavor.MimeType.equalsAscii( "image/png" ) )
         {
@@ -2911,10 +2107,10 @@ ANY SAL_CALL SfxBaseModel::getTransferData( const DATAFLAVOR& aFlavor )
                 }
             }
             else
-                throw UNSUPPORTEDFLAVOREXCEPTION();
+                throw datatransfer::UnsupportedFlavorException();
         }
         else
-            throw UNSUPPORTEDFLAVOREXCEPTION();
+            throw datatransfer::UnsupportedFlavorException();
     }
 
     return aAny;
@@ -2925,16 +2121,16 @@ ANY SAL_CALL SfxBaseModel::getTransferData( const DATAFLAVOR& aFlavor )
 //________________________________________________________________________________________________________
 
 
-SEQUENCE< DATAFLAVOR > SAL_CALL SfxBaseModel::getTransferDataFlavors()
+uno::Sequence< DATAFLAVOR > SAL_CALL SfxBaseModel::getTransferDataFlavors()
         throw (::com::sun::star::uno::RuntimeException)
 {
     // object already disposed?
     ::vos::OGuard aGuard( Application::GetSolarMutex() );
     if ( impl_isDisposed() )
-        throw DISPOSEDEXCEPTION();
+        throw lang::DisposedException();
 
     sal_Int32 nSuppFlavors = GraphicHelper::supportsMetaFileHandle_Impl() ? 10 : 8;
-    SEQUENCE< DATAFLAVOR > aFlavorSeq( nSuppFlavors );
+    uno::Sequence< DATAFLAVOR > aFlavorSeq( nSuppFlavors );
 
     aFlavorSeq[0].MimeType =
         ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "application/x-openoffice-gdimetafile;windows_formatname=\"GDIMetaFile\"" ) );
@@ -3003,7 +2199,7 @@ sal_Bool SAL_CALL SfxBaseModel::isDataFlavorSupported( const DATAFLAVOR& aFlavor
     // object already disposed?
     ::vos::OGuard aGuard( Application::GetSolarMutex() );
     if ( impl_isDisposed() )
-        throw DISPOSEDEXCEPTION();
+        throw lang::DisposedException();
 
     if ( aFlavor.MimeType.equalsAscii( "application/x-openoffice-gdimetafile;windows_formatname=\"GDIMetaFile\"" ) )
     {
@@ -3060,12 +2256,12 @@ sal_Bool SAL_CALL SfxBaseModel::isDataFlavorSupported( const DATAFLAVOR& aFlavor
 //  XEventsSupplier
 //--------------------------------------------------------------------------------------------------------
 
-REFERENCE< XNAMEREPLACE > SAL_CALL SfxBaseModel::getEvents() throw( RUNTIMEEXCEPTION )
+uno::Reference< container::XNameReplace > SAL_CALL SfxBaseModel::getEvents() throw( uno::RuntimeException )
 {
     // object already disposed?
     ::vos::OGuard aGuard( Application::GetSolarMutex() );
     if ( impl_isDisposed() )
-        throw DISPOSEDEXCEPTION();
+        throw lang::DisposedException();
 
     if ( ! m_pData->m_xEvents.is() )
     {
@@ -3079,28 +2275,28 @@ REFERENCE< XNAMEREPLACE > SAL_CALL SfxBaseModel::getEvents() throw( RUNTIMEEXCEP
 //  XEventBroadcaster
 //--------------------------------------------------------------------------------------------------------
 
-void SAL_CALL SfxBaseModel::addEventListener( const REFERENCE< XDOCEVENTLISTENER >& aListener ) throw( RUNTIMEEXCEPTION )
+void SAL_CALL SfxBaseModel::addEventListener( const uno::Reference< XDOCEVENTLISTENER >& aListener ) throw( uno::RuntimeException )
 {
     // object already disposed?
     ::vos::OGuard aGuard( Application::GetSolarMutex() );
     if ( impl_isDisposed() )
         return;
 
-    m_pData->m_aInterfaceContainer.addInterface( ::getCppuType((const REFERENCE< XDOCEVENTLISTENER >*)0), aListener );
+    m_pData->m_aInterfaceContainer.addInterface( ::getCppuType((const uno::Reference< XDOCEVENTLISTENER >*)0), aListener );
 }
 
 //--------------------------------------------------------------------------------------------------------
 //  XEventBroadcaster
 //--------------------------------------------------------------------------------------------------------
 
-void SAL_CALL SfxBaseModel::removeEventListener( const REFERENCE< XDOCEVENTLISTENER >& aListener ) throw( RUNTIMEEXCEPTION )
+void SAL_CALL SfxBaseModel::removeEventListener( const uno::Reference< XDOCEVENTLISTENER >& aListener ) throw( uno::RuntimeException )
 {
     // object already disposed?
     ::vos::OGuard aGuard( Application::GetSolarMutex() );
     if ( impl_isDisposed() )
         return;
 
-    m_pData->m_aInterfaceContainer.removeInterface( ::getCppuType((const REFERENCE< XDOCEVENTLISTENER >*)0), aListener );
+    m_pData->m_aInterfaceContainer.removeInterface( ::getCppuType((const uno::Reference< XDOCEVENTLISTENER >*)0), aListener );
 }
 
 //________________________________________________________________________________________________________
@@ -3186,7 +2382,7 @@ void SfxBaseModel::Notify(          SfxBroadcaster& rBC     ,
                 if ( m_pData->m_xUIConfigurationManager.is()
                   && m_pData->m_pObjectShell->GetCreateMode() != SFX_CREATE_MODE_EMBEDDED )
                 {
-                    REFERENCE< XSTORAGE > xConfigStorage;
+                    uno::Reference< XSTORAGE > xConfigStorage;
                     rtl::OUString aUIConfigFolderName( RTL_CONSTASCII_USTRINGPARAM( "Configurations2" ));
 
                     xConfigStorage = getDocumentSubStorage( aUIConfigFolderName, com::sun::star::embed::ElementModes::READWRITE );
@@ -3196,7 +2392,7 @@ void SfxBaseModel::Notify(          SfxBroadcaster& rBC     ,
                     if ( xConfigStorage.is() || !m_pData->m_pObjectShell->GetStorage()->hasByName( aUIConfigFolderName ) )
                     {
                         // the storage is different, since otherwise it could not be opened, so it must be exchanged
-                        Reference< XUICONFIGURATIONSTORAGE > xUIConfigStorage( m_pData->m_xUIConfigurationManager, UNOQUERY );
+                        Reference< ui::XUIConfigurationStorage > xUIConfigStorage( m_pData->m_xUIConfigurationManager, uno::UNO_QUERY );
                         xUIConfigStorage->setStorage( xConfigStorage );
                     }
                     else
@@ -3242,99 +2438,6 @@ void SfxBaseModel::Notify(          SfxBroadcaster& rBC     ,
             }
 */
         }
-
-        SfxPrintingHint* pPrintHint = PTR_CAST( SfxPrintingHint, &rHint );
-        if ( pPrintHint )
-        {
-            if ( pPrintHint->GetWhich() == -1 )     // -1 : Initialisation of PrintOptions
-            {
-                if ( !m_pData->m_xPrintJob.is() )
-                    m_pData->m_xPrintJob = new SfxPrintJob_Impl( m_pData );
-
-                PrintDialog* pDlg = pPrintHint->GetPrintDialog();
-                Printer* pPrinter = pPrintHint->GetPrinter();
-                ::rtl::OUString aPrintFile ( ( pPrinter && pPrinter->IsPrintFileEnabled() ) ? pPrinter->GetPrintFile() : String() );
-                ::rtl::OUString aRangeText ( ( pDlg && pDlg->IsRangeChecked(PRINTDIALOG_RANGE) ) ? pDlg->GetRangeText() : String() );
-                sal_Bool bSelectionOnly = ( ( pDlg && pDlg->IsRangeChecked(PRINTDIALOG_SELECTION) ) ? sal_True : sal_False );
-
-                sal_Int32 nArgs = 2;
-                if ( aPrintFile.getLength() )
-                    nArgs++;
-                if ( aRangeText.getLength() )
-                    nArgs++;
-                else if ( bSelectionOnly )
-                    nArgs++;
-
-                m_pData->m_aPrintOptions.realloc(nArgs);
-                m_pData->m_aPrintOptions[0].Name = DEFINE_CONST_UNICODE("CopyCount");
-                m_pData->m_aPrintOptions[0].Value <<= (sal_Int16) (pPrinter ? pPrinter->GetCopyCount() : 1 );
-                m_pData->m_aPrintOptions[1].Name = DEFINE_CONST_UNICODE("Collate");
-                m_pData->m_aPrintOptions[1].Value <<= (sal_Bool) (pDlg ? pDlg->IsCollateChecked() : sal_False );
-
-                if ( bSelectionOnly )
-                {
-                    m_pData->m_aPrintOptions[2].Name = DEFINE_CONST_UNICODE("Selection");
-                    m_pData->m_aPrintOptions[2].Value <<= bSelectionOnly;
-                }
-                else if ( aRangeText.getLength() )
-                {
-                    m_pData->m_aPrintOptions[2].Name = DEFINE_CONST_UNICODE("Pages");
-                    m_pData->m_aPrintOptions[2].Value <<= aRangeText;
-                }
-
-                if ( aPrintFile.getLength() )
-                {
-                    m_pData->m_aPrintOptions[nArgs-1].Name = DEFINE_CONST_UNICODE("FileName");
-                    m_pData->m_aPrintOptions[nArgs-1].Value <<= aPrintFile;
-                }
-            }
-            else if ( pPrintHint->GetWhich() == -3 )    // -3 : AdditionalPrintOptions
-            {
-                    uno::Sequence < beans::PropertyValue >& lOldOpts = m_pData->m_aPrintOptions;
-                    const uno::Sequence < beans::PropertyValue >& lNewOpts = pPrintHint->GetAdditionalOptions();
-                    sal_Int32 nOld = lOldOpts.getLength();
-                    sal_Int32 nAdd = lNewOpts.getLength();
-                    lOldOpts.realloc( nOld + nAdd );
-
-                    // assume that all new elements are overwriting old ones and so don't need to be added
-                    sal_Int32 nTotal = nOld;
-                    for ( sal_Int32 n=0; n<nAdd; n++ )
-                    {
-                        sal_Int32 m;
-                        for ( m=0; m<nOld; m++ )
-                            if ( lNewOpts[n].Name == lOldOpts[m].Name )
-                                // new option overwrites old one
-                                break;
-
-                        if ( m == nOld )
-                        {
-                            // this is a new option, so add it to the resulting sequence - counter must be incremented
-                            lOldOpts[nTotal].Name = lNewOpts[n].Name;
-                            lOldOpts[nTotal++].Value = lNewOpts[n].Value;
-                        }
-                        else
-                            // overwrite old option with new value, counter stays unmodified
-                            lOldOpts[m].Value = lNewOpts[n].Value;
-                    }
-
-                    if ( nTotal != lOldOpts.getLength() )
-                        // at least one new options has overwritten an old one, so we allocated too much
-                        lOldOpts.realloc(  nTotal );
-            }
-            else if ( pPrintHint->GetWhich() != -2 )    // -2 : CancelPrintJob
-            {
-                view::PrintJobEvent aEvent;
-                aEvent.Source = m_pData->m_xPrintJob;
-                aEvent.State = (com::sun::star::view::PrintableState) pPrintHint->GetWhich();
-                ::cppu::OInterfaceContainerHelper* pContainer = m_pData->m_aInterfaceContainer.getContainer( ::getCppuType( ( const uno::Reference< view::XPrintJobListener >*) NULL ) );
-                if ( pContainer!=NULL )
-                {
-                    ::cppu::OInterfaceIteratorHelper pIterator(*pContainer);
-                    while (pIterator.hasMoreElements())
-                        ((view::XPrintJobListener*)pIterator.next())->printJobEvent( aEvent );
-                }
-            }
-        }
     }
 }
 
@@ -3350,19 +2453,19 @@ void SfxBaseModel::changing()
     if ( impl_isDisposed() )
         return;
 
-    OINTERFACECONTAINERHELPER* pIC = m_pData->m_aInterfaceContainer.getContainer( ::getCppuType((const REFERENCE< XMODIFYLISTENER >*)0) );
+    ::cppu::OInterfaceContainerHelper* pIC = m_pData->m_aInterfaceContainer.getContainer( ::getCppuType((const uno::Reference< XMODIFYLISTENER >*)0) );
     if( pIC )
 
     {
-        EVENTOBJECT aEvent( (XMODEL *)this );
-        OINTERFACEITERATORHELPER aIt( *pIC );
+        lang::EventObject aEvent( (frame::XModel *)this );
+        ::cppu::OInterfaceIteratorHelper aIt( *pIC );
         while( aIt.hasMoreElements() )
         {
             try
             {
                 ((XMODIFYLISTENER *)aIt.next())->modified( aEvent );
             }
-            catch( RUNTIMEEXCEPTION& )
+            catch( uno::RuntimeException& )
             {
                 aIt.remove();
             }
@@ -3376,19 +2479,19 @@ void SfxBaseModel::impl_change()
     if ( impl_isDisposed() )
         return;
 
-    OINTERFACECONTAINERHELPER* pIC = m_pData->m_aInterfaceContainer.getContainer( ::getCppuType((const REFERENCE< XMODIFYLISTENER >*)0) );
+    ::cppu::OInterfaceContainerHelper* pIC = m_pData->m_aInterfaceContainer.getContainer( ::getCppuType((const uno::Reference< XMODIFYLISTENER >*)0) );
     if( pIC )
 
     {
-        EVENTOBJECT aEvent( (XMODEL *)this );
-        OINTERFACEITERATORHELPER aIt( *pIC );
+        lang::EventObject aEvent( (frame::XModel *)this );
+        ::cppu::OInterfaceIteratorHelper aIt( *pIC );
         while( aIt.hasMoreElements() )
         {
             try
             {
                 ((XMODIFYLISTENER *)aIt.next())->modified( aEvent );
             }
-            catch( RUNTIMEEXCEPTION& )
+            catch( uno::RuntimeException& )
             {
                 aIt.remove();
             }
@@ -3441,12 +2544,12 @@ sal_Bool SfxBaseModel::impl_isDisposed() const
     return ::rtl::OUString();
 }
 
-void SfxBaseModel::impl_store(  const   OUSTRING&                   sURL            ,
-                                const   SEQUENCE< PROPERTYVALUE >&  seqArguments    ,
+void SfxBaseModel::impl_store(  const   ::rtl::OUString&                   sURL            ,
+                                const   uno::Sequence< beans::PropertyValue >&  seqArguments    ,
                                         sal_Bool                    bSaveTo         )
 {
     if( !sURL.getLength() )
-        throw ILLEGALARGUMENTIOEXCEPTION();
+        throw frame::IllegalArgumentIOException();
 
     //sal_Bool aSaveAsTemplate = sal_False;
 
@@ -3465,7 +2568,7 @@ void SfxBaseModel::impl_store(  const   OUSTRING&                   sURL        
         SFX_ITEMSET_ARG( aParams, pCopyStreamItem, SfxBoolItem, SID_COPY_STREAM_IF_POSSIBLE, sal_False );
 
         if ( pCopyStreamItem && pCopyStreamItem->GetValue() && !bSaveTo )
-            throw ILLEGALARGUMENTIOEXCEPTION(
+            throw frame::IllegalArgumentIOException(
                     ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("CopyStreamIfPossible parameter is not acceptable for storeAsURL() call!") ),
                     uno::Reference< uno::XInterface >() );
 
@@ -3496,14 +2599,14 @@ void SfxBaseModel::impl_store(  const   OUSTRING&                   sURL        
                     ::com::sun::star::uno::Any aInteraction;
                     ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Reference< ::com::sun::star::task::XInteractionContinuation > > lContinuations(1);
                     ::framework::ContinuationApprove* pApprove = new ::framework::ContinuationApprove();
-                    lContinuations[0] = ::com::sun::star::uno::Reference< ::com::sun::star::task::XInteractionContinuation >(static_cast< ::com::sun::star::task::XInteractionContinuation* >(pApprove), UNOQUERY);
+                    lContinuations[0] = ::com::sun::star::uno::Reference< ::com::sun::star::task::XInteractionContinuation >(static_cast< ::com::sun::star::task::XInteractionContinuation* >(pApprove), uno::UNO_QUERY);
 
                     ::com::sun::star::task::ErrorCodeRequest aErrorCode;
                     aErrorCode.ErrCode = nErrCode;
                     aInteraction <<= aErrorCode;
 
                     ::framework::InteractionRequest* pRequest = new ::framework::InteractionRequest(aInteraction,lContinuations);
-                    ::com::sun::star::uno::Reference< ::com::sun::star::task::XInteractionRequest > xRequest(static_cast< ::com::sun::star::task::XInteractionRequest* >(pRequest), UNOQUERY);
+                    ::com::sun::star::uno::Reference< ::com::sun::star::task::XInteractionRequest > xRequest(static_cast< ::com::sun::star::task::XInteractionRequest* >(pRequest), uno::UNO_QUERY);
 
                     xHandler->handle(xRequest);
                 }
@@ -3537,25 +2640,25 @@ void SfxBaseModel::postEvent_Impl( ULONG nEventID )
     if ( impl_isDisposed() )
         return;
 
-    OINTERFACECONTAINERHELPER* pIC = m_pData->m_aInterfaceContainer.getContainer(
-                                        ::getCppuType((const REFERENCE< XDOCEVENTLISTENER >*)0) );
+    ::cppu::OInterfaceContainerHelper* pIC = m_pData->m_aInterfaceContainer.getContainer(
+                                        ::getCppuType((const uno::Reference< XDOCEVENTLISTENER >*)0) );
     if( pIC )
 
     {
-        OUSTRING aName = SfxEventConfiguration::GetEventName_Impl( nEventID );
-        DOCEVENTOBJECT aEvent( (XMODEL *)this, aName );
-        OINTERFACECONTAINERHELPER aIC( m_aMutex );
-        SEQUENCE < REFERENCE < XINTERFACE > > aElements = pIC->getElements();
+        ::rtl::OUString aName = SfxEventConfiguration::GetEventName_Impl( nEventID );
+        document::EventObject aEvent( (frame::XModel *)this, aName );
+        ::cppu::OInterfaceContainerHelper aIC( m_aMutex );
+        uno::Sequence < uno::Reference < uno::XInterface > > aElements = pIC->getElements();
         for ( sal_Int32 nElem=0; nElem<aElements.getLength(); nElem++ )
             aIC.addInterface( aElements[nElem] );
-        OINTERFACEITERATORHELPER aIt( aIC );
+        ::cppu::OInterfaceIteratorHelper aIt( aIC );
         while( aIt.hasMoreElements() )
         {
             try
             {
                 ((XDOCEVENTLISTENER *)aIt.next())->notifyEvent( aEvent );
             }
-            catch( RUNTIMEEXCEPTION& )
+            catch( uno::RuntimeException& )
             {
                 aIt.remove();
             }
@@ -3563,12 +2666,12 @@ void SfxBaseModel::postEvent_Impl( ULONG nEventID )
     }
 }
 
-REFERENCE < XINDEXACCESS > SAL_CALL SfxBaseModel::getViewData() throw(::com::sun::star::uno::RuntimeException)
+uno::Reference < container::XIndexAccess > SAL_CALL SfxBaseModel::getViewData() throw(::com::sun::star::uno::RuntimeException)
 {
     // object already disposed?
     ::vos::OGuard aGuard( Application::GetSolarMutex() );
     if ( impl_isDisposed() )
-        throw DISPOSEDEXCEPTION();
+        throw lang::DisposedException();
 
     if ( m_pData->m_pObjectShell.Is() && !m_pData->m_contViewData.is() )
     {
@@ -3578,22 +2681,22 @@ REFERENCE < XINDEXACCESS > SAL_CALL SfxBaseModel::getViewData() throw(::com::sun
 
         if ( !pActFrame || !pActFrame->GetViewShell() )
             // currently no frame for this document at all or View is under construction
-            return REFERENCE < XINDEXACCESS >();
+            return uno::Reference < container::XIndexAccess >();
 
-        m_pData->m_contViewData = Reference < XINDEXACCESS >(
+        m_pData->m_contViewData = Reference < container::XIndexAccess >(
                 ::comphelper::getProcessServiceFactory()->createInstance(
                 DEFINE_CONST_UNICODE("com.sun.star.document.IndexedPropertyValues") ),
-                UNOQUERY );
+                uno::UNO_QUERY );
 
         if ( !m_pData->m_contViewData.is() )
         {
             // error: no container class available!
-            return REFERENCE < XINDEXACCESS >();
+            return uno::Reference < container::XIndexAccess >();
         }
 
-        REFERENCE < XINDEXCONTAINER > xCont( m_pData->m_contViewData, UNOQUERY );
+        uno::Reference < container::XIndexContainer > xCont( m_pData->m_contViewData, uno::UNO_QUERY );
         sal_Int32 nCount = 0;
-        SEQUENCE < PROPERTYVALUE > aSeq;
+        uno::Sequence < beans::PropertyValue > aSeq;
         ::com::sun::star::uno::Any aAny;
         for ( SfxViewFrame *pFrame = SfxViewFrame::GetFirst(m_pData->m_pObjectShell, TYPE(SfxTopViewFrame) ); pFrame;
                 pFrame = SfxViewFrame::GetNext(*pFrame, m_pData->m_pObjectShell, TYPE(SfxTopViewFrame) ) )
@@ -3609,12 +2712,12 @@ REFERENCE < XINDEXACCESS > SAL_CALL SfxBaseModel::getViewData() throw(::com::sun
     return m_pData->m_contViewData;
 }
 
-void SAL_CALL SfxBaseModel::setViewData( const REFERENCE < XINDEXACCESS >& aData ) throw(::com::sun::star::uno::RuntimeException)
+void SAL_CALL SfxBaseModel::setViewData( const uno::Reference < container::XIndexAccess >& aData ) throw(::com::sun::star::uno::RuntimeException)
 {
     // object already disposed?
     ::vos::OGuard aGuard( Application::GetSolarMutex() );
     if ( impl_isDisposed() )
-        throw DISPOSEDEXCEPTION();
+        throw lang::DisposedException();
 
     m_pData->m_contViewData = aData;
 }
@@ -3626,19 +2729,19 @@ void SfxBaseModel::notifyEvent( const ::com::sun::star::document::EventObject& a
     if ( impl_isDisposed() )
         return;
 
-    OINTERFACECONTAINERHELPER* pIC = m_pData->m_aInterfaceContainer.getContainer(
-                                        ::getCppuType((const REFERENCE< XDOCEVENTLISTENER >*)0) );
+    ::cppu::OInterfaceContainerHelper* pIC = m_pData->m_aInterfaceContainer.getContainer(
+                                        ::getCppuType((const uno::Reference< XDOCEVENTLISTENER >*)0) );
     if( pIC )
 
     {
-        OINTERFACEITERATORHELPER aIt( *pIC );
+        ::cppu::OInterfaceIteratorHelper aIt( *pIC );
         while( aIt.hasMoreElements() )
         {
             try
             {
                 ((XDOCEVENTLISTENER *)aIt.next())->notifyEvent( aEvent );
             }
-            catch( RUNTIMEEXCEPTION& )
+            catch( uno::RuntimeException& )
             {
                 aIt.remove();
             }
@@ -3649,27 +2752,27 @@ void SfxBaseModel::notifyEvent( const ::com::sun::star::document::EventObject& a
 /** returns true if someone added a XEventListener to this XEventBroadcaster */
 sal_Bool SfxBaseModel::hasEventListeners() const
 {
-    return !impl_isDisposed() && (NULL != m_pData->m_aInterfaceContainer.getContainer( ::getCppuType((const REFERENCE< XDOCEVENTLISTENER >*)0) ) );
+    return !impl_isDisposed() && (NULL != m_pData->m_aInterfaceContainer.getContainer( ::getCppuType((const uno::Reference< XDOCEVENTLISTENER >*)0) ) );
 }
 
-void SAL_CALL SfxBaseModel::addPrintJobListener( const ::com::sun::star::uno::Reference< ::com::sun::star::view::XPrintJobListener >& xListener ) throw (::com::sun::star::uno::RuntimeException)
+void SAL_CALL SfxBaseModel::addPrintJobListener( const uno::Reference< view::XPrintJobListener >& xListener ) throw (uno::RuntimeException)
 {
     // object already disposed?
     ::vos::OGuard aGuard( Application::GetSolarMutex() );
     if ( impl_isDisposed() )
         return;
 
-    m_pData->m_aInterfaceContainer.addInterface( ::getCppuType((const REFERENCE< XPRINTJOBLISTENER >*)0), xListener );
+    m_pData->m_aInterfaceContainer.addInterface( ::getCppuType((const uno::Reference< view::XPrintJobListener >*)0), xListener );
 }
 
-void SAL_CALL SfxBaseModel::removePrintJobListener( const ::com::sun::star::uno::Reference< ::com::sun::star::view::XPrintJobListener >& xListener ) throw (::com::sun::star::uno::RuntimeException)
+void SAL_CALL SfxBaseModel::removePrintJobListener( const uno::Reference< view::XPrintJobListener >& xListener ) throw (uno::RuntimeException)
 {
     // object already disposed?
     ::vos::OGuard aGuard( Application::GetSolarMutex() );
     if ( impl_isDisposed() )
         return;
 
-    m_pData->m_aInterfaceContainer.removeInterface( ::getCppuType((const REFERENCE< XPRINTJOBLISTENER >*)0), xListener );
+    m_pData->m_aInterfaceContainer.removeInterface( ::getCppuType((const uno::Reference< view::XPrintJobListener >*)0), xListener );
 }
 
 // simple declaration of class SvObject is enough
@@ -3721,14 +2824,14 @@ void SfxBaseModel::StorageIsModified_Impl()
         m_pData->m_pObjectShell->SetModified( sal_True );
 }
 
-REFERENCE< XSTORAGE > SAL_CALL SfxBaseModel::getDocumentSubStorage( const ::rtl::OUString& aStorageName, sal_Int32 nMode )
-    throw ( RUNTIMEEXCEPTION)
+uno::Reference< XSTORAGE > SAL_CALL SfxBaseModel::getDocumentSubStorage( const ::rtl::OUString& aStorageName, sal_Int32 nMode )
+    throw ( uno::RuntimeException)
 {
     ::vos::OGuard aGuard( Application::GetSolarMutex() );
     if ( impl_isDisposed() )
-        throw DISPOSEDEXCEPTION();
+        throw lang::DisposedException();
 
-    REFERENCE< XSTORAGE > xResult;
+    uno::Reference< XSTORAGE > xResult;
     if ( m_pData->m_pObjectShell.Is() )
     {
         uno::Reference< embed::XStorage > xStorage = m_pData->m_pObjectShell->GetStorage();
@@ -3738,7 +2841,7 @@ REFERENCE< XSTORAGE > SAL_CALL SfxBaseModel::getDocumentSubStorage( const ::rtl:
             {
                 xResult = xStorage->openStorageElement( aStorageName, nMode );
 #if 0
-                uno::Reference< embed::XTransactionBroadcaster > xBroadcaster( xResult, UNOQUERY );
+                uno::Reference< embed::XTransactionBroadcaster > xBroadcaster( xResult, uno::UNO_QUERY );
                 if ( xBroadcaster.is() )
                 {
                     if ( m_pData->m_pChildCommitListen == NULL )
@@ -3766,7 +2869,7 @@ Sequence< ::rtl::OUString > SAL_CALL SfxBaseModel::getDocumentSubStoragesNames()
 {
     ::vos::OGuard aGuard( Application::GetSolarMutex() );
     if ( impl_isDisposed() )
-        throw DISPOSEDEXCEPTION();
+        throw lang::DisposedException();
 
     Sequence< ::rtl::OUString > aResult;
     sal_Int32 nResultSize = 0;
@@ -3802,28 +2905,28 @@ Sequence< ::rtl::OUString > SAL_CALL SfxBaseModel::getDocumentSubStoragesNames()
 //____________________________________________________________________________________________________
 
 
-REFERENCE< XSCRIPTPROVIDER > SAL_CALL SfxBaseModel::getScriptProvider()
-    throw ( RUNTIMEEXCEPTION )
+uno::Reference< script::provider::XScriptProvider > SAL_CALL SfxBaseModel::getScriptProvider()
+    throw ( uno::RuntimeException )
 {
     ::vos::OGuard aGuard( Application::GetSolarMutex() );
     if ( impl_isDisposed() )
-        throw DISPOSEDEXCEPTION();
-    REFERENCE< XSCRIPTPROVIDER > xSp;
+        throw lang::DisposedException();
+    uno::Reference< script::provider::XScriptProvider > xSp;
 
-    REFERENCE< XPROPERTYSET > xProps( ::comphelper::getProcessServiceFactory(), UNO_QUERY );
+    uno::Reference< beans::XPropertySet > xProps( ::comphelper::getProcessServiceFactory(), UNO_QUERY );
 
-    REFERENCE< XComponentContext > xCtx(
+    uno::Reference< XComponentContext > xCtx(
         xProps->getPropertyValue( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "DefaultContext" ))), UNO_QUERY );
 
     if ( xCtx.is() )
     {
-        REFERENCE< XSCRIPTPROVIDERFACTORY > xFac(
+        uno::Reference < script::provider::XScriptProviderFactory > xFac(
             xCtx->getValueByName(
                 ::rtl::OUString::createFromAscii( "/singletons/com.sun.star.script.provider.theMasterScriptProviderFactory") ), UNO_QUERY );
         if ( xFac.is() )
         {
             Any aContext;
-            REFERENCE< XMODEL > xModel( (XMODEL*)this );
+            uno::Reference< frame::XModel > xModel( (frame::XModel*)this );
             aContext <<= xModel;
             xSp.set( xFac->createScriptProvider( aContext ) );
         }
@@ -3866,7 +2969,7 @@ static void GetCommandFromSequence( rtl::OUString& rCommand, sal_Int32& nIndex, 
     }
 }
 
-static void ConvertSlotsToCommands( SfxObjectShell* pDoc, REFERENCE< XINDEXCONTAINER >& rToolbarDefinition )
+static void ConvertSlotsToCommands( SfxObjectShell* pDoc, uno::Reference< container::XIndexContainer >& rToolbarDefinition )
 {
     if ( pDoc )
     {
@@ -3905,24 +3008,24 @@ static void ConvertSlotsToCommands( SfxObjectShell* pDoc, REFERENCE< XINDEXCONTA
     }
 }
 
-REFERENCE< XUICONFIGURATIONMANAGER > SAL_CALL SfxBaseModel::getUIConfigurationManager()
-        throw ( RUNTIMEEXCEPTION )
+uno::Reference< ui::XUIConfigurationManager > SAL_CALL SfxBaseModel::getUIConfigurationManager()
+        throw ( uno::RuntimeException )
 {
     ::vos::OGuard aGuard( Application::GetSolarMutex() );
     if ( impl_isDisposed() )
-        throw DISPOSEDEXCEPTION();
+        throw lang::DisposedException();
 
     if ( !m_pData->m_xUIConfigurationManager.is() )
     {
-        REFERENCE< XUICONFIGURATIONMANAGER > xNewUIConfMan(
+        uno::Reference< ui::XUIConfigurationManager > xNewUIConfMan(
             ::comphelper::getProcessServiceFactory()->createInstance(
                 ::rtl::OUString::createFromAscii( "com.sun.star.ui.UIConfigurationManager" )),
-                UNOQUERY );
+                uno::UNO_QUERY );
 
-        Reference< XUICONFIGURATIONSTORAGE > xUIConfigStorage( xNewUIConfMan, UNOQUERY );
+        Reference< ui::XUIConfigurationStorage > xUIConfigStorage( xNewUIConfMan, uno::UNO_QUERY );
         if ( xUIConfigStorage.is() )
         {
-            REFERENCE< XSTORAGE > xConfigStorage;
+            uno::Reference< XSTORAGE > xConfigStorage;
 
             // in case of embedded object the module configuration should be used
             if ( m_pData->m_pObjectShell->GetCreateMode() != SFX_CREATE_MODE_EMBEDDED )
@@ -3936,7 +3039,7 @@ REFERENCE< XUICONFIGURATIONMANAGER > SAL_CALL SfxBaseModel::getUIConfigurationMa
                     rtl::OUString aUIConfigMediaType(
                             RTL_CONSTASCII_USTRINGPARAM( "application/vnd.sun.xml.ui.configuration" ) );
                     rtl::OUString aMediaType;
-                    REFERENCE< XPROPERTYSET > xPropSet( xConfigStorage, UNOQUERY );
+                    uno::Reference< beans::XPropertySet > xPropSet( xConfigStorage, uno::UNO_QUERY );
                     Any a = xPropSet->getPropertyValue( aMediaTypeProp );
                     if ( !( a >>= aMediaType ) || ( aMediaType.getLength() == 0 ))
                     {
@@ -3955,7 +3058,7 @@ REFERENCE< XUICONFIGURATIONMANAGER > SAL_CALL SfxBaseModel::getUIConfigurationMa
             if ( m_pData->m_pObjectShell->GetCreateMode() != SFX_CREATE_MODE_EMBEDDED )
             {
                 // Import old UI configuration from OOo 1.x
-                REFERENCE< XSTORAGE > xOOo1ConfigStorage;
+                uno::Reference< XSTORAGE > xOOo1ConfigStorage;
                 rtl::OUString         aOOo1UIConfigFolderName( RTL_CONSTASCII_USTRINGPARAM( "Configurations" ));
 
                 // Try to open with READ
@@ -3983,7 +3086,7 @@ REFERENCE< XUICONFIGURATIONMANAGER > SAL_CALL SfxBaseModel::getUIConfigurationMa
                             rtl::OUString aCustomTbxName( RTL_CONSTASCII_USTRINGPARAM( aNum ));
                             rtl::OUString aCustomTbxTitle( RTL_CONSTASCII_USTRINGPARAM( aTitle ));
 
-                            REFERENCE< XINDEXCONTAINER > xToolbar = rToolbars[i];
+                            uno::Reference< container::XIndexContainer > xToolbar = rToolbars[i];
                             ConvertSlotsToCommands( pObjShell, xToolbar );
                             if ( !xNewUIConfMan->hasSettings( aCustomTbxName ))
                             {
@@ -4031,7 +3134,7 @@ void SAL_CALL SfxBaseModel::setVisualAreaSize( sal_Int64 nAspect, const awt::Siz
 {
     ::vos::OGuard aGuard( Application::GetSolarMutex() );
     if ( impl_isDisposed() )
-        throw DISPOSEDEXCEPTION();
+        throw lang::DisposedException();
 
     if ( !m_pData->m_pObjectShell.Is() )
         throw uno::Exception(); // TODO: error handling
@@ -4065,7 +3168,7 @@ awt::Size SAL_CALL SfxBaseModel::getVisualAreaSize( sal_Int64 /*nAspect*/ )
 {
     ::vos::OGuard aGuard( Application::GetSolarMutex() );
     if ( impl_isDisposed() )
-        throw DISPOSEDEXCEPTION();
+        throw lang::DisposedException();
 
     if ( !m_pData->m_pObjectShell.Is() )
         throw uno::Exception(); // TODO: error handling
@@ -4096,7 +3199,7 @@ sal_Int32 SAL_CALL SfxBaseModel::getMapUnit( sal_Int64 /*nAspect*/ )
 {
     ::vos::OGuard aGuard( Application::GetSolarMutex() );
     if ( impl_isDisposed() )
-        throw DISPOSEDEXCEPTION();
+        throw lang::DisposedException();
 
     if ( !m_pData->m_pObjectShell.Is() )
         throw uno::Exception(); // TODO: error handling
@@ -4112,7 +3215,7 @@ embed::VisualRepresentation SAL_CALL SfxBaseModel::getPreferredVisualRepresentat
 {
     ::vos::OGuard aGuard( Application::GetSolarMutex() );
     if ( impl_isDisposed() )
-        throw DISPOSEDEXCEPTION();
+        throw lang::DisposedException();
 
     datatransfer::DataFlavor aDataFlavor(
             ::rtl::OUString::createFromAscii( "application/x-openoffice-gdimetafile;windows_formatname=\"GDIMetaFile\"" ),
@@ -4130,17 +3233,17 @@ embed::VisualRepresentation SAL_CALL SfxBaseModel::getPreferredVisualRepresentat
 //  XStorageBasedDocument
 //____________________________________________________________________________________________________
 
-void SAL_CALL SfxBaseModel::loadFromStorage( const REFERENCE< XSTORAGE >& xStorage,
-                                             const SEQUENCE< PROPERTYVALUE >& aMediaDescriptor )
-    throw ( ILLEGALARGUMENTEXCEPTION,
+void SAL_CALL SfxBaseModel::loadFromStorage( const uno::Reference< XSTORAGE >& xStorage,
+                                             const uno::Sequence< beans::PropertyValue >& aMediaDescriptor )
+    throw ( lang::IllegalArgumentException,
             DOUBLEINITIALIZATIONEXCEPTION,
             IOEXCEPTION,
             EXCEPTION,
-            RUNTIMEEXCEPTION )
+            uno::RuntimeException )
 {
     ::vos::OGuard aGuard( Application::GetSolarMutex() );
     if ( impl_isDisposed() )
-        throw DISPOSEDEXCEPTION();
+        throw lang::DisposedException();
 
     if ( !m_pData->m_pObjectShell.Is() )
         throw IOEXCEPTION(); // TODO:
@@ -4180,18 +3283,18 @@ void SAL_CALL SfxBaseModel::loadFromStorage( const REFERENCE< XSTORAGE >& xStora
     }
 }
 
-void SAL_CALL SfxBaseModel::storeToStorage( const REFERENCE< XSTORAGE >& xStorage,
-                                const SEQUENCE< PROPERTYVALUE >& aMediaDescriptor )
-    throw ( ILLEGALARGUMENTEXCEPTION,
+void SAL_CALL SfxBaseModel::storeToStorage( const uno::Reference< XSTORAGE >& xStorage,
+                                const uno::Sequence< beans::PropertyValue >& aMediaDescriptor )
+    throw ( lang::IllegalArgumentException,
             IOEXCEPTION,
             EXCEPTION,
-            RUNTIMEEXCEPTION )
+            uno::RuntimeException )
 {
     ::vos::OGuard aGuard( Application::GetSolarMutex() );
     if ( impl_isDisposed() )
-        throw DISPOSEDEXCEPTION();
+        throw lang::DisposedException();
 
-    REFERENCE< XSTORAGE > xResult;
+    uno::Reference< XSTORAGE > xResult;
     if ( !m_pData->m_pObjectShell.Is() )
         throw IOEXCEPTION(); // TODO:
 
@@ -4241,17 +3344,17 @@ void SAL_CALL SfxBaseModel::storeToStorage( const REFERENCE< XSTORAGE >& xStorag
     }
 }
 
-void SAL_CALL SfxBaseModel::switchToStorage( const REFERENCE< XSTORAGE >& xStorage )
-        throw ( ILLEGALARGUMENTEXCEPTION,
+void SAL_CALL SfxBaseModel::switchToStorage( const uno::Reference< XSTORAGE >& xStorage )
+        throw ( lang::IllegalArgumentException,
                 IOEXCEPTION,
                 EXCEPTION,
-                RUNTIMEEXCEPTION )
+                uno::RuntimeException )
 {
     ::vos::OGuard aGuard( Application::GetSolarMutex() );
     if ( impl_isDisposed() )
-        throw DISPOSEDEXCEPTION();
+        throw lang::DisposedException();
 
-    REFERENCE< XSTORAGE > xResult;
+    uno::Reference< XSTORAGE > xResult;
     if ( !m_pData->m_pObjectShell.Is() )
         throw IOEXCEPTION(); // TODO:
 
@@ -4268,16 +3371,16 @@ void SAL_CALL SfxBaseModel::switchToStorage( const REFERENCE< XSTORAGE >& xStora
     m_pData->m_pObjectShell->Get_Impl()->bOwnsStorage = FALSE;
 }
 
-REFERENCE< XSTORAGE > SAL_CALL SfxBaseModel::getDocumentStorage()
+uno::Reference< XSTORAGE > SAL_CALL SfxBaseModel::getDocumentStorage()
         throw ( IOEXCEPTION,
                 EXCEPTION,
-                RUNTIMEEXCEPTION )
+                uno::RuntimeException )
 {
     ::vos::OGuard aGuard( Application::GetSolarMutex() );
     if ( impl_isDisposed() )
-        throw DISPOSEDEXCEPTION();
+        throw lang::DisposedException();
 
-    REFERENCE< XSTORAGE > xResult;
+    uno::Reference< XSTORAGE > xResult;
     if ( !m_pData->m_pObjectShell.Is() )
         throw IOEXCEPTION(); // TODO
 
@@ -4285,29 +3388,43 @@ REFERENCE< XSTORAGE > SAL_CALL SfxBaseModel::getDocumentStorage()
 }
 
 void SAL_CALL SfxBaseModel::addStorageChangeListener(
-            const REFERENCE< document::XStorageChangeListener >& xListener )
-        throw ( RUNTIMEEXCEPTION )
+            const uno::Reference< document::XStorageChangeListener >& xListener )
+        throw ( uno::RuntimeException )
 {
     ::vos::OGuard aGuard( Application::GetSolarMutex() );
     if ( impl_isDisposed() )
         return;
 
     m_pData->m_aInterfaceContainer.addInterface(
-                                    ::getCppuType((const REFERENCE< document::XStorageChangeListener >*)0), xListener );
+                                    ::getCppuType((const uno::Reference< document::XStorageChangeListener >*)0), xListener );
 }
 
 void SAL_CALL SfxBaseModel::removeStorageChangeListener(
-            const REFERENCE< document::XStorageChangeListener >& xListener )
-        throw ( RUNTIMEEXCEPTION )
+            const uno::Reference< document::XStorageChangeListener >& xListener )
+        throw ( uno::RuntimeException )
 {
     ::vos::OGuard aGuard( Application::GetSolarMutex() );
     if ( impl_isDisposed() )
         return;
 
     m_pData->m_aInterfaceContainer.removeInterface(
-                                    ::getCppuType((const REFERENCE< document::XStorageChangeListener >*)0), xListener );
+                                    ::getCppuType((const uno::Reference< document::XStorageChangeListener >*)0), xListener );
 }
 
+#include "printhelper.hxx"
+bool SfxBaseModel::impl_getPrintHelper()
+{
+    if ( m_pData->m_xPrintable.is() )
+        return true;
+    m_pData->m_xPrintable = new SfxPrintHelper();
+    uno::Reference < lang::XInitialization > xInit( m_pData->m_xPrintable, uno::UNO_QUERY );
+    uno::Sequence < uno::Any > aValues(1);
+    aValues[0] <<= uno::Reference < frame::XModel > (static_cast< frame::XModel* >(this), uno::UNO_QUERY );
+    xInit->initialize( aValues );
+    uno::Reference < view::XPrintJobBroadcaster > xBrd( m_pData->m_xPrintable, uno::UNO_QUERY );
+    xBrd->addPrintJobListener( new SfxPrintHelperListener_Impl( m_pData ) );
+    return true;
+}
 
 // css.frame.XModule
  void SAL_CALL SfxBaseModel::setIdentifier(const ::rtl::OUString& Identifier)
