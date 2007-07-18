@@ -4,9 +4,9 @@
  *
  *  $RCSfile: unoobj.hxx,v $
  *
- *  $Revision: 1.43 $
+ *  $Revision: 1.44 $
  *
- *  last change: $Author: hr $ $Date: 2006-08-14 15:37:08 $
+ *  last change: $Author: obo $ $Date: 2007-07-18 12:55:39 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -141,6 +141,9 @@
 #endif
 #ifndef _COM_SUN_STAR_TEXT_XRELATIVETEXTCONTENTREMOVE_HPP_
 #include <com/sun/star/text/XRelativeTextContentRemove.hpp>
+#endif
+#ifndef _COM_SUN_STAR_TEXT_XTEXTAPPENDANDCONVERT_HPP_
+#include <com/sun/star/text/XTextAppendAndConvert.hpp>
 #endif
 #ifndef _CPPUHELPER_WEAK_HXX_
 #include <cppuhelper/weak.hxx>
@@ -303,18 +306,23 @@ void ClientModify(SwClient* pClient, SfxPoolItem *pOld, SfxPoolItem *pNew);
  * --------------------------------------------------*/
 class SwXTextRange;
 class SwXTextCursor;
-class SwXText : public ::com::sun::star::text::XText,
-                public ::com::sun::star::lang::XTypeProvider,
+class SwXText : public ::com::sun::star::lang::XTypeProvider,
                 public ::com::sun::star::text::XTextRangeCompare,
                 public ::com::sun::star::text::XRelativeTextContentInsert,
                 public ::com::sun::star::text::XRelativeTextContentRemove,
                 public ::com::sun::star::beans::XPropertySet,
-                public ::com::sun::star::lang::XUnoTunnel
+                public ::com::sun::star::lang::XUnoTunnel,
+                public ::com::sun::star::text::XTextAppendAndConvert
 {
     SwDoc*                      pDoc;
     BOOL                        bObjectValid;
     CursorType                  eCrsrType;
     const SfxItemPropertyMap*   _pMap;
+    virtual ::com::sun::star::uno::Reference< ::com::sun::star::text::XTextRange > SAL_CALL finishOrAppendParagraph(
+                bool bFinish,
+                const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue > & CharacterAndParagraphProperties )
+                throw (::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::uno::RuntimeException);
+
 protected:
     virtual const SwStartNode *GetStartNode() const;
 public:
@@ -372,6 +380,25 @@ public:
     //XUnoTunnel
     static const ::com::sun::star::uno::Sequence< sal_Int8 > & getUnoTunnelId();
     virtual sal_Int64 SAL_CALL getSomething( const ::com::sun::star::uno::Sequence< sal_Int8 >& aIdentifier ) throw(::com::sun::star::uno::RuntimeException);
+
+    //XParagraphAppend
+    virtual ::com::sun::star::uno::Reference< ::com::sun::star::text::XTextRange >  SAL_CALL appendParagraph( const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue > & CharacterAndParagraphProperties ) throw (::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::uno::RuntimeException);
+    virtual ::com::sun::star::uno::Reference< ::com::sun::star::text::XTextRange >  SAL_CALL finishParagraph( const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue > & CharacterAndParagraphProperties ) throw (::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::uno::RuntimeException);
+
+    //XTextPortionAppend
+    virtual ::com::sun::star::uno::Reference< ::com::sun::star::text::XTextRange > SAL_CALL appendTextPortion( const ::rtl::OUString& Text, const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue > & CharacterAndParagraphProperties ) throw (::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::uno::RuntimeException);
+
+    //XTextContentAppend
+    virtual ::com::sun::star::uno::Reference< ::com::sun::star::text::XTextRange > SAL_CALL appendTextContent( const ::com::sun::star::uno::Reference< ::com::sun::star::text::XTextContent >& TextContent, const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >& CharacterAndParagraphProperties ) throw (::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::uno::RuntimeException);
+
+    //XTextConvert
+    virtual ::com::sun::star::uno::Reference< ::com::sun::star::text::XTextContent > SAL_CALL convertToTextFrame( const ::com::sun::star::uno::Reference< ::com::sun::star::text::XTextRange >& Start, const ::com::sun::star::uno::Reference< ::com::sun::star::text::XTextRange >& End, const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >& FrameProperties ) throw (::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::uno::RuntimeException);
+    virtual ::com::sun::star::uno::Reference< ::com::sun::star::text::XTextTable > SAL_CALL convertToTable( const ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Reference< ::com::sun::star::text::XTextRange > > > >& TableRanges,
+       const ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue > > >& CellProperties,
+       const ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue > >& RowProperties,
+       const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >& TableProperties
+       ) throw (::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::uno::RuntimeException);
+
 
     //
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::text::XTextCursor >         createCursor()throw(::com::sun::star::uno::RuntimeException);
