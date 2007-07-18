@@ -4,9 +4,9 @@
  *
  *  $RCSfile: b2dcubicbezier.hxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: kz $ $Date: 2005-11-02 13:52:39 $
+ *  last change: $Author: obo $ $Date: 2007-07-18 11:02:17 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -50,7 +50,6 @@
 namespace basegfx
 {
     class B2DPolygon;
-    class B2DVector;
 } // end of namespace basegfx
 
 //////////////////////////////////////////////////////////////////////////////
@@ -69,7 +68,6 @@ namespace basegfx
         B2DCubicBezier(const B2DCubicBezier& rBezier);
         B2DCubicBezier(const B2DPoint& rStart, const B2DPoint& rEnd);
         B2DCubicBezier(const B2DPoint& rStart, const B2DPoint& rControlPointA, const B2DPoint& rControlPointB, const B2DPoint& rEnd);
-        B2DCubicBezier(const B2DPoint& rStart, const B2DVector& rControlVectorA, const B2DVector& rControlVectorB, const B2DPoint& rEnd);
         ~B2DCubicBezier();
 
         // assignment operator
@@ -105,11 +103,35 @@ namespace basegfx
         void setControlPointB(const B2DPoint& rValue) { maControlPointB = rValue; }
 
         // adaptive subdivide by angle criteria
+        // no start point is added, but all necessary created edges
         // #i37443# allow the criteria to get unsharp in recursions
-        void adaptiveSubdivideByAngle(B2DPolygon& rTarget, double fAngleBound, bool bAddLastPoint, bool bAllowUnsharpen) const;
+        void adaptiveSubdivideByAngle(B2DPolygon& rTarget, double fAngleBound, bool bAllowUnsharpen) const;
 
         // #i37443# adaptive subdivide by nCount subdivisions
-        void adaptiveSubdivideByCount(B2DPolygon& rTarget, sal_uInt32 nCount, bool bAddLastPoint) const;
+        // no start point is added, but all necessary created edges
+        void adaptiveSubdivideByCount(B2DPolygon& rTarget, sal_uInt32 nCount) const;
+
+        /** Subdivide cubic bezier segment.
+
+            This function adaptively subdivides the bezier
+            segment into as much straight line segments as necessary,
+            such that the maximal orthogonal distance from any of the
+            segments to the true curve is less than the given error
+            value.
+            No start point is added, but all necessary created edges.
+
+            @param rPoly
+            Output polygon. The subdivided bezier segment is added to
+            this polygon via B2DPolygon::append().
+
+            @param rCurve
+            The cubic bezier curve to subdivide
+
+            @param fDistanceBound
+            Bound on the maximal distance of the approximation to the
+            true curve.
+        */
+        void adaptiveSubdivideByDistance(B2DPolygon& rTarget, double fDistanceBound) const;
 
         // get point at given relative position
         B2DPoint interpolatePoint(double t) const;
