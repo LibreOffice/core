@@ -4,9 +4,9 @@
  *
  *  $RCSfile: accessibility.cxx,v $
  *
- *  $Revision: 1.32 $
+ *  $Revision: 1.33 $
  *
- *  last change: $Author: vg $ $Date: 2007-05-25 12:10:54 $
+ *  last change: $Author: obo $ $Date: 2007-07-18 12:51:10 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1550,6 +1550,20 @@ sal_Bool SmTextForwarder::InsertText( const String& rStr, const ESelection& rSel
     return bRes;
 }
 
+const SfxItemSet*   SmTextForwarder::GetEmptyItemSetPtr()
+{
+    DBG_ERROR("not yet implemented")
+    return 0;
+}
+void SmTextForwarder::AppendParagraph()
+{
+    DBG_ERROR("not yet implemented")
+}
+xub_StrLen SmTextForwarder::AppendTextPortion( USHORT /*nPara*/, const String &/*rText*/, const SfxItemSet &/*rSet*/ )
+{
+    DBG_ERROR("not yet implemented")
+    return 0;
+}
 //------------------------------------------------------------------------
 
 SmEditViewForwarder::SmEditViewForwarder( SmEditAccessible& rAcc ) :
