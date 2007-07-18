@@ -4,9 +4,9 @@
  *
  *  $RCSfile: b3dtuple.hxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-07 20:36:50 $
+ *  last change: $Author: obo $ $Date: 2007-07-18 11:04:50 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -195,14 +195,6 @@ namespace basegfx
                 ::basegfx::fTools::equal(mfX, rTup.mfX) &&
                 ::basegfx::fTools::equal(mfY, rTup.mfY) &&
                 ::basegfx::fTools::equal(mfZ, rTup.mfZ));
-        }
-
-        bool equal(const B3DTuple& rTup, const double& rfSmallValue) const
-        {
-            return (
-                ::basegfx::fTools::equal(mfX, rTup.mfX, rfSmallValue) &&
-                ::basegfx::fTools::equal(mfY, rTup.mfY, rfSmallValue) &&
-                ::basegfx::fTools::equal(mfZ, rTup.mfZ, rfSmallValue));
         }
 
         // operators
