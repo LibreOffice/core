@@ -4,9 +4,9 @@
  *
  *  $RCSfile: zforlist.cxx,v $
  *
- *  $Revision: 1.68 $
+ *  $Revision: 1.69 $
  *
- *  last change: $Author: ihi $ $Date: 2007-07-10 15:19:20 $
+ *  last change: $Author: obo $ $Date: 2007-07-18 08:56:35 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -4352,8 +4352,6 @@ sal_Char NfCurrencyEntry::GetEuroSymbol( rtl_TextEncoding eTextEncoding )
 #elif UNX
 //          return '\xA4';      // #56121# 0xA4 waere korrekt fuer iso-8859-15
             return '\x80';      // aber Windoze-Code fuer die konvertierten TrueType-Fonts
-#elif MAC
-            return '\xDB';
 #else
 #error EuroSymbol is what?
             return '\x80';
