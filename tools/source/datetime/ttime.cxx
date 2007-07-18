@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ttime.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: hr $ $Date: 2007-06-27 22:09:28 $
+ *  last change: $Author: obo $ $Date: 2007-07-18 08:57:39 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -54,20 +54,6 @@
 
 #if defined(SOLARIS) && defined(__GNUC__)
 extern long altzone;
-#endif
-
-#ifndef WNT
-#ifndef localtime_r
-extern "C" {
-struct tm *localtime_r(const time_t *timep, struct tm *buffer);
-}
-#endif
-
-#ifndef gmtime_r
-extern "C" {
-struct tm *gmtime_r(const time_t *timep, struct tm *buffer);
-}
-#endif
 #endif
 
 // =======================================================================
