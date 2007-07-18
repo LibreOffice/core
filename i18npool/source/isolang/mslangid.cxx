@@ -4,9 +4,9 @@
  *
  *  $RCSfile: mslangid.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: rt $ $Date: 2007-07-03 14:04:45 $
+ *  last change: $Author: obo $ $Date: 2007-07-18 07:09:38 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -178,6 +178,45 @@ LanguageType MsLangId::convertLocaleToLanguage(
         nRet = LANGUAGE_SYSTEM;
 
     return nRet;
+}
+
+
+// static
+LanguageType MsLangId::convertLocaleToLanguageWithFallback(
+            const ::com::sun::star::lang::Locale & rLocale )
+{
+    // empty language => LANGUAGE_SYSTEM
+    if (rLocale.Language.getLength() == 0)
+        return lookupFallbackLanguage( LANGUAGE_SYSTEM);
+
+    return lookupFallbackLanguage( rLocale);
+}
+
+
+// static
+::com::sun::star::lang::Locale MsLangId::convertLanguageToLocaleWithFallback(
+        LanguageType nLang )
+{
+    return lookupFallbackLocale( MsLangId::getRealLanguage( nLang));
+}
+
+
+// static
+::com::sun::star::lang::Locale MsLangId::getFallbackLocale(
+            const ::com::sun::star::lang::Locale & rLocale )
+{
+    // empty language => LANGUAGE_SYSTEM
+    if (rLocale.Language.getLength() == 0)
+        return convertLanguageToLocaleWithFallback( LANGUAGE_SYSTEM);
+
+    return lookupFallbackLocale( rLocale);
+}
+
+
+// static
+LanguageType MsLangId::getFallbackLanguage( LanguageType nLang )
+{
+    return lookupFallbackLanguage( MsLangId::getRealLanguage( nLang));
 }
 
 
