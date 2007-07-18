@@ -5,9 +5,9 @@
 #
 #   $RCSfile: soffice.sh,v $
 #
-#   $Revision: 1.26 $
+#   $Revision: 1.27 $
 #
-#   last change: $Author: obo $ $Date: 2007-03-07 13:14:15 $
+#   last change: $Author: obo $ $Date: 2007-07-18 15:04:16 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -87,8 +87,23 @@ fi
 
 # set search path for shared libraries
 add_moz_lib=
-for moz_lib_path in $MOZILLA_LIBRARY_PATH /usr/lib /usr/lib/mozilla /usr/lib/mozilla-firefox /usr/lib/mozilla-thunderbird /opt/mozilla/lib /opt/MozillaFirefox/lib /opt/MozillaThunderbird/lib; do
-    test -f $moz_lib_path/libnss3.so && add_moz_lib=":$moz_lib_path" && break;
+for moz_lib_path in \
+    $MOZILLA_LIBRARY_PATH \
+    /usr/lib \
+    /usr/lib/mozilla \
+    /usr/lib/mozilla-firefox \
+    /usr/lib/mozilla-thunderbird \
+    /opt/mozilla/lib \
+    /opt/MozillaFirefox/lib \
+    /opt/MozillaThunderbird/lib; \
+do
+    if [ -f $moz_lib_path/libnss3.so ]; then
+    case "$moz_lib_path" in
+        /usr/lib|/usr/lib64) : ;;
+        *) add_moz_lib=":$moz_lib_path"
+    esac
+    break
+    fi
 done
 case $sd_platform in
   AIX)
