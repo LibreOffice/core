@@ -4,9 +4,9 @@
  *
  *  $RCSfile: localedata.cxx,v $
  *
- *  $Revision: 1.49 $
+ *  $Revision: 1.50 $
  *
- *  last change: $Author: rt $ $Date: 2007-07-10 09:24:03 $
+ *  last change: $Author: obo $ $Date: 2007-07-18 07:09:52 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -37,6 +37,7 @@
 #include "precompiled_i18npool.hxx"
 
 #include <localedata.hxx>
+#include <i18npool/mslangid.hxx>
 
 #ifndef _RTL_USTRBUF_HXX_
 #include <rtl/ustrbuf.hxx>
@@ -58,7 +59,6 @@ using namespace com::sun::star;
 using namespace rtl;
 
 static const sal_Char clocaledata[] = "com.sun.star.i18n.LocaleData";
-//static sal_Char charBuffer[256];
 
 typedef sal_Unicode**   (SAL_CALL * MyFunc_Type)( sal_Int16&);
 typedef sal_Unicode***  (SAL_CALL * MyFunc_Type2)( sal_Int16&, sal_Int16& );
@@ -71,181 +71,181 @@ static const char *lcl_DATA_EURO = "localedata_euro";
 static const char *lcl_DATA_OTHERS = "localedata_others";
 
 static const struct {
-        const char* pLocale;
-        const char* pDLL;
-        const char* lLocale;
-} aDllsTable[] = {
-        { "en_US",  lcl_DATA_EN, "en" },
-        { "en_AU",  lcl_DATA_EN, NULL },
-        { "en_BZ",  lcl_DATA_EN, NULL },
-        { "en_CA",  lcl_DATA_EN, NULL },
-        { "en_GB",  lcl_DATA_EN, NULL },
-        { "en_IE",  lcl_DATA_EN, NULL },
-        { "en_JM",  lcl_DATA_EN, NULL },
-        { "en_NZ",  lcl_DATA_EN, NULL },
-        { "en_PH",  lcl_DATA_EN, NULL },
-        { "en_TT",  lcl_DATA_EN, NULL },
-        { "en_ZA",  lcl_DATA_EN, NULL },
-        { "en_ZW",  lcl_DATA_EN, NULL },
-        { "en_NA",  lcl_DATA_EN, NULL },
-        { "en_GH",  lcl_DATA_EN, NULL },
+    const char* pLocale;
+    const char* pLib;
+} aLibTable[] = {
+    { "en_US",  lcl_DATA_EN },
+    { "en_AU",  lcl_DATA_EN },
+    { "en_BZ",  lcl_DATA_EN },
+    { "en_CA",  lcl_DATA_EN },
+    { "en_GB",  lcl_DATA_EN },
+    { "en_IE",  lcl_DATA_EN },
+    { "en_JM",  lcl_DATA_EN },
+    { "en_NZ",  lcl_DATA_EN },
+    { "en_PH",  lcl_DATA_EN },
+    { "en_TT",  lcl_DATA_EN },
+    { "en_ZA",  lcl_DATA_EN },
+    { "en_ZW",  lcl_DATA_EN },
+    { "en_NA",  lcl_DATA_EN },
+    { "en_GH",  lcl_DATA_EN },
 
-        { "es_ES",  lcl_DATA_ES, "es" },
-        { "es_AR",  lcl_DATA_ES, NULL },
-        { "es_BO",  lcl_DATA_ES, NULL },
-        { "es_CL",  lcl_DATA_ES, NULL },
-        { "es_CO",  lcl_DATA_ES, NULL },
-        { "es_CR",  lcl_DATA_ES, NULL },
-        { "es_DO",  lcl_DATA_ES, NULL },
-        { "es_EC",  lcl_DATA_ES, NULL },
-        { "es_GT",  lcl_DATA_ES, NULL },
-        { "es_HN",  lcl_DATA_ES, NULL },
-        { "es_MX",  lcl_DATA_ES, NULL },
-        { "es_NI",  lcl_DATA_ES, NULL },
-        { "es_PA",  lcl_DATA_ES, NULL },
-        { "es_PE",  lcl_DATA_ES, NULL },
-        { "es_PR",  lcl_DATA_ES, NULL },
-        { "es_PY",  lcl_DATA_ES, NULL },
-        { "es_SV",  lcl_DATA_ES, NULL },
-        { "es_UY",  lcl_DATA_ES, NULL },
-        { "es_VE",  lcl_DATA_ES, NULL },
+    { "es_ES",  lcl_DATA_ES },
+    { "es_AR",  lcl_DATA_ES },
+    { "es_BO",  lcl_DATA_ES },
+    { "es_CL",  lcl_DATA_ES },
+    { "es_CO",  lcl_DATA_ES },
+    { "es_CR",  lcl_DATA_ES },
+    { "es_DO",  lcl_DATA_ES },
+    { "es_EC",  lcl_DATA_ES },
+    { "es_GT",  lcl_DATA_ES },
+    { "es_HN",  lcl_DATA_ES },
+    { "es_MX",  lcl_DATA_ES },
+    { "es_NI",  lcl_DATA_ES },
+    { "es_PA",  lcl_DATA_ES },
+    { "es_PE",  lcl_DATA_ES },
+    { "es_PR",  lcl_DATA_ES },
+    { "es_PY",  lcl_DATA_ES },
+    { "es_SV",  lcl_DATA_ES },
+    { "es_UY",  lcl_DATA_ES },
+    { "es_VE",  lcl_DATA_ES },
 
-        { "de_DE",  lcl_DATA_EURO, "de" },
-        { "de_AT",  lcl_DATA_EURO, NULL },
-        { "de_CH",  lcl_DATA_EURO, NULL },
-        { "de_LI",  lcl_DATA_EURO, NULL },
-        { "de_LU",  lcl_DATA_EURO, NULL },
-        { "fr_FR",  lcl_DATA_EURO, "fr" },
-        { "fr_BE",  lcl_DATA_EURO, NULL },
-        { "fr_CA",  lcl_DATA_EURO, NULL },
-        { "fr_CH",  lcl_DATA_EURO, NULL },
-        { "fr_LU",  lcl_DATA_EURO, NULL },
-        { "fr_MC",  lcl_DATA_EURO, NULL },
-        { "it_IT",  lcl_DATA_EURO, "it" },
-        { "it_CH",  lcl_DATA_EURO, NULL },
-        { "sl_SI",  lcl_DATA_EURO, "sl" },
-        { "sv_SE",  lcl_DATA_EURO, "sv" },
-        { "sv_FI",  lcl_DATA_EURO, NULL },
-        { "ca_ES",  lcl_DATA_EURO, "ca" },
-        { "gl_ES",  lcl_DATA_EURO, "gl" },
-        { "cs_CZ",  lcl_DATA_EURO, "cs" },
-        { "sk_SK",  lcl_DATA_EURO, "sk" },
-        { "da_DK",  lcl_DATA_EURO, "da" },
-        { "el_GR",  lcl_DATA_EURO, "el" },
-        { "fi_FI",  lcl_DATA_EURO, "fi" },
-        { "is_IS",  lcl_DATA_EURO, "is" },
-        { "nl_BE",  lcl_DATA_EURO, NULL },
-        { "nl_NL",  lcl_DATA_EURO, "nl" },
-        { "no_NO",  lcl_DATA_EURO, "no" },
-        { "nn_NO",  lcl_DATA_EURO, "nn" },
-        { "nb_NO",  lcl_DATA_EURO, "nb" },
-        { "pl_PL",  lcl_DATA_EURO, "pl" },
-        { "pt_BR",  lcl_DATA_EURO, "pt" },
-        { "pt_PT",  lcl_DATA_EURO, NULL },
-        { "ru_RU",  lcl_DATA_EURO, "ru" },
-        { "tr_TR",  lcl_DATA_EURO, "tr" },
-        { "et_EE",  lcl_DATA_EURO, "et" },
-        { "lb_LU",  lcl_DATA_EURO, "lb" },
-        { "lt_LT",  lcl_DATA_EURO, "lt" },
-        { "lv_LV",  lcl_DATA_EURO, "lv" },
-        { "uk_UA",  lcl_DATA_EURO, "uk" },
-        { "ro_RO",  lcl_DATA_EURO, "ro" },
-        { "cy_GB",  lcl_DATA_EURO, "cy" },
-        { "bg_BG",  lcl_DATA_EURO, "bg" },
-        { "sh_YU",  lcl_DATA_EURO, "sh" },
-        { "sr_YU",  lcl_DATA_EURO, "sr" },
-        { "hr_HR",  lcl_DATA_EURO, "hr" },
-        { "bs_BA",  lcl_DATA_EURO, "bs" },
-        { "eu",     lcl_DATA_EURO, "eu" },
-        { "fo_FO",  lcl_DATA_EURO, "fo" },
-        { "ga_IE",  lcl_DATA_EURO, "ga" },
-        { "ka_GE",  lcl_DATA_EURO, "ka" },
-        { "be_BY",  lcl_DATA_EURO, "be" },
-        { "kl_GL",  lcl_DATA_EURO, "kl" },
-        { "mk_MK",  lcl_DATA_EURO, "mk" },
-        { "br_FR",  lcl_DATA_EURO, "br" },
-        { "la_VA",  lcl_DATA_EURO, "la" },
-        { "cv_RU",  lcl_DATA_EURO, "cv" },
-        { "wa_BE",  lcl_DATA_EURO, "wa" },
-        { "fur_IT", lcl_DATA_EURO, "fur" },
-        { "gsc_FR", lcl_DATA_EURO, "gsc" },
-        { "fy_NL",  lcl_DATA_EURO, "fy" },
-        { "oc_FR",  lcl_DATA_EURO, "oc" },
+    { "de_DE",  lcl_DATA_EURO },
+    { "de_AT",  lcl_DATA_EURO },
+    { "de_CH",  lcl_DATA_EURO },
+    { "de_LI",  lcl_DATA_EURO },
+    { "de_LU",  lcl_DATA_EURO },
+    { "fr_FR",  lcl_DATA_EURO },
+    { "fr_BE",  lcl_DATA_EURO },
+    { "fr_CA",  lcl_DATA_EURO },
+    { "fr_CH",  lcl_DATA_EURO },
+    { "fr_LU",  lcl_DATA_EURO },
+    { "fr_MC",  lcl_DATA_EURO },
+    { "it_IT",  lcl_DATA_EURO },
+    { "it_CH",  lcl_DATA_EURO },
+    { "sl_SI",  lcl_DATA_EURO },
+    { "sv_SE",  lcl_DATA_EURO },
+    { "sv_FI",  lcl_DATA_EURO },
+    { "ca_ES",  lcl_DATA_EURO },
+    { "gl_ES",  lcl_DATA_EURO },
+    { "cs_CZ",  lcl_DATA_EURO },
+    { "sk_SK",  lcl_DATA_EURO },
+    { "da_DK",  lcl_DATA_EURO },
+    { "el_GR",  lcl_DATA_EURO },
+    { "fi_FI",  lcl_DATA_EURO },
+    { "is_IS",  lcl_DATA_EURO },
+    { "nl_BE",  lcl_DATA_EURO },
+    { "nl_NL",  lcl_DATA_EURO },
+    { "no_NO",  lcl_DATA_EURO },
+    { "nn_NO",  lcl_DATA_EURO },
+    { "nb_NO",  lcl_DATA_EURO },
+    { "pl_PL",  lcl_DATA_EURO },
+    { "pt_BR",  lcl_DATA_EURO },
+    { "pt_PT",  lcl_DATA_EURO },
+    { "ru_RU",  lcl_DATA_EURO },
+    { "tr_TR",  lcl_DATA_EURO },
+    { "et_EE",  lcl_DATA_EURO },
+    { "lb_LU",  lcl_DATA_EURO },
+    { "lt_LT",  lcl_DATA_EURO },
+    { "lv_LV",  lcl_DATA_EURO },
+    { "uk_UA",  lcl_DATA_EURO },
+    { "ro_RO",  lcl_DATA_EURO },
+    { "cy_GB",  lcl_DATA_EURO },
+    { "bg_BG",  lcl_DATA_EURO },
+    { "sh_YU",  lcl_DATA_EURO },
+    { "sr_YU",  lcl_DATA_EURO },
+    { "hr_HR",  lcl_DATA_EURO },
+    { "bs_BA",  lcl_DATA_EURO },
+    { "eu",     lcl_DATA_EURO },
+    { "fo_FO",  lcl_DATA_EURO },
+    { "ga_IE",  lcl_DATA_EURO },
+    { "ka_GE",  lcl_DATA_EURO },
+    { "be_BY",  lcl_DATA_EURO },
+    { "kl_GL",  lcl_DATA_EURO },
+    { "mk_MK",  lcl_DATA_EURO },
+    { "br_FR",  lcl_DATA_EURO },
+    { "la_VA",  lcl_DATA_EURO },
+    { "cv_RU",  lcl_DATA_EURO },
+    { "wa_BE",  lcl_DATA_EURO },
+    { "fur_IT", lcl_DATA_EURO },
+    { "gsc_FR", lcl_DATA_EURO },
+    { "fy_NL",  lcl_DATA_EURO },
+    { "oc_FR",  lcl_DATA_EURO },
 
-        { "ja_JP",  lcl_DATA_OTHERS, "ja" },
-        { "ko_KR",  lcl_DATA_OTHERS, "ko" },
-        { "zh_CN",  lcl_DATA_OTHERS, "zh" },
-        { "zh_HK",  lcl_DATA_OTHERS, NULL },
-        { "zh_SG",  lcl_DATA_OTHERS, NULL },
-        { "zh_TW",  lcl_DATA_OTHERS, NULL },
-        { "zh_MO",  lcl_DATA_OTHERS, NULL },
+    { "ja_JP",  lcl_DATA_OTHERS },
+    { "ko_KR",  lcl_DATA_OTHERS },
+    { "zh_CN",  lcl_DATA_OTHERS },
+    { "zh_HK",  lcl_DATA_OTHERS },
+    { "zh_SG",  lcl_DATA_OTHERS },
+    { "zh_TW",  lcl_DATA_OTHERS },
+    { "zh_MO",  lcl_DATA_OTHERS },
 
-        { "ar_EG",  lcl_DATA_OTHERS, "ar" },
-        { "ar_LB",  lcl_DATA_OTHERS, NULL },
-        { "ar_SA",  lcl_DATA_OTHERS, NULL },
-        { "ar_TN",  lcl_DATA_OTHERS, NULL },
-        { "he_IL",  lcl_DATA_OTHERS, "he" },
-        { "hi_IN",  lcl_DATA_OTHERS, "hi" },
-        { "kn_IN",  lcl_DATA_OTHERS, "kn" },
-        { "ta_IN",  lcl_DATA_OTHERS, "ta" },
-        { "te_IN",  lcl_DATA_OTHERS, "te" },
-        { "gu_IN",  lcl_DATA_OTHERS, "gu" },
-        { "mr_IN",  lcl_DATA_OTHERS, "mr" },
-        { "pa_IN",  lcl_DATA_OTHERS, "pa" },
-        { "bn_IN",  lcl_DATA_OTHERS, NULL },
-        { "or_IN",  lcl_DATA_OTHERS, "or" },
-        { "en_IN",  lcl_DATA_OTHERS, NULL },
-        { "ml_IN",  lcl_DATA_OTHERS, "ml" },
-        { "bn_BD",  lcl_DATA_OTHERS, "bn" },
-        { "th_TH",  lcl_DATA_OTHERS, "th" },
+    { "ar_EG",  lcl_DATA_OTHERS },
+    { "ar_LB",  lcl_DATA_OTHERS },
+    { "ar_SA",  lcl_DATA_OTHERS },
+    { "ar_TN",  lcl_DATA_OTHERS },
+    { "he_IL",  lcl_DATA_OTHERS },
+    { "hi_IN",  lcl_DATA_OTHERS },
+    { "kn_IN",  lcl_DATA_OTHERS },
+    { "ta_IN",  lcl_DATA_OTHERS },
+    { "te_IN",  lcl_DATA_OTHERS },
+    { "gu_IN",  lcl_DATA_OTHERS },
+    { "mr_IN",  lcl_DATA_OTHERS },
+    { "pa_IN",  lcl_DATA_OTHERS },
+    { "bn_IN",  lcl_DATA_OTHERS },
+    { "or_IN",  lcl_DATA_OTHERS },
+    { "en_IN",  lcl_DATA_OTHERS },
+    { "ml_IN",  lcl_DATA_OTHERS },
+    { "bn_BD",  lcl_DATA_OTHERS },
+    { "th_TH",  lcl_DATA_OTHERS },
 
-        { "af_ZA",  lcl_DATA_OTHERS, "af" },
-        { "hu_HU",  lcl_DATA_OTHERS, "hu" },
-        { "id_ID",  lcl_DATA_OTHERS, "id" },
-        { "ms_MY",  lcl_DATA_OTHERS, "ms" },
-        { "ia",     lcl_DATA_OTHERS, "ia" },
-        { "mn_MN",  lcl_DATA_OTHERS, "mn" },
-        { "az_AZ",  lcl_DATA_OTHERS, "az" },
-        { "sw_TZ",  lcl_DATA_OTHERS, "sw" },
-        { "km_KH",  lcl_DATA_OTHERS, "km" },
-        { "lo_LA",  lcl_DATA_OTHERS, "lo" },
-        { "rw_RW",  lcl_DATA_OTHERS, "rw" },
-        { "eo",     lcl_DATA_OTHERS, "eo" },
-        { "dz_BT",  lcl_DATA_OTHERS, "dz" },
-        { "ne_NP",  lcl_DATA_OTHERS, "ne" },
-        { "zu_ZA",  lcl_DATA_OTHERS, "zu" },
-        { "nso_ZA", lcl_DATA_OTHERS, "nso" },
-        { "vi_VN",  lcl_DATA_OTHERS, "vi" },
-        { "tn_ZA",  lcl_DATA_OTHERS, "tn" },
-        { "xh_ZA",  lcl_DATA_OTHERS, "xh" },
-        { "st_ZA",  lcl_DATA_OTHERS, "st" },
-        { "ss_ZA",  lcl_DATA_OTHERS, "ss" },
-        { "ve_ZA",  lcl_DATA_OTHERS, "ve" },
-        { "nr_ZA",  lcl_DATA_OTHERS, "nr" },
-        { "ts_ZA",  lcl_DATA_OTHERS, "ts" },
-        { "ku_TR",  lcl_DATA_OTHERS, "ku" },
-        { "ak_GH",  lcl_DATA_OTHERS, "ak" },
-        { "af_NA",  lcl_DATA_OTHERS, NULL },
-        { "am_ET",  lcl_DATA_OTHERS, "am" },
-        { "ti_ER",  lcl_DATA_OTHERS, "ti" },
-        { "tg_TJ",  lcl_DATA_OTHERS, "tg" },
-        { "ky_KG",  lcl_DATA_OTHERS, "ky" },
-        { "kk_KZ",  lcl_DATA_OTHERS, "kk" },
-        { "fa_IR",  lcl_DATA_OTHERS, "fa" },
-        { "ha_GH",  lcl_DATA_OTHERS, "ha" },
-        { "ee_GH",  lcl_DATA_OTHERS, "ee" },
-        { "sg_CF",  lcl_DATA_OTHERS, "sg" },
-        { "lg_UG",  lcl_DATA_OTHERS, "lg" },
-        { "uz_UZ",  lcl_DATA_OTHERS, "uz" },
-        { "ln_CD",  lcl_DATA_OTHERS, "ln" },
-        { "hy_AM",  lcl_DATA_OTHERS, "hy" },
+    { "af_ZA",  lcl_DATA_OTHERS },
+    { "hu_HU",  lcl_DATA_OTHERS },
+    { "id_ID",  lcl_DATA_OTHERS },
+    { "ms_MY",  lcl_DATA_OTHERS },
+    { "ia",     lcl_DATA_OTHERS },
+    { "mn_MN",  lcl_DATA_OTHERS },
+    { "az_AZ",  lcl_DATA_OTHERS },
+    { "sw_TZ",  lcl_DATA_OTHERS },
+    { "km_KH",  lcl_DATA_OTHERS },
+    { "lo_LA",  lcl_DATA_OTHERS },
+    { "rw_RW",  lcl_DATA_OTHERS },
+    { "eo",     lcl_DATA_OTHERS },
+    { "dz_BT",  lcl_DATA_OTHERS },
+    { "ne_NP",  lcl_DATA_OTHERS },
+    { "zu_ZA",  lcl_DATA_OTHERS },
+    { "nso_ZA", lcl_DATA_OTHERS },
+    { "vi_VN",  lcl_DATA_OTHERS },
+    { "tn_ZA",  lcl_DATA_OTHERS },
+    { "xh_ZA",  lcl_DATA_OTHERS },
+    { "st_ZA",  lcl_DATA_OTHERS },
+    { "ss_ZA",  lcl_DATA_OTHERS },
+    { "ve_ZA",  lcl_DATA_OTHERS },
+    { "nr_ZA",  lcl_DATA_OTHERS },
+    { "ts_ZA",  lcl_DATA_OTHERS },
+    { "ku_TR",  lcl_DATA_OTHERS },
+    { "ak_GH",  lcl_DATA_OTHERS },
+    { "af_NA",  lcl_DATA_OTHERS },
+    { "am_ET",  lcl_DATA_OTHERS },
+    { "ti_ER",  lcl_DATA_OTHERS },
+    { "tg_TJ",  lcl_DATA_OTHERS },
+    { "ky_KG",  lcl_DATA_OTHERS },
+    { "kk_KZ",  lcl_DATA_OTHERS },
+    { "fa_IR",  lcl_DATA_OTHERS },
+    { "ha_GH",  lcl_DATA_OTHERS },
+    { "ee_GH",  lcl_DATA_OTHERS },
+    { "sg_CF",  lcl_DATA_OTHERS },
+    { "lg_UG",  lcl_DATA_OTHERS },
+    { "uz_UZ",  lcl_DATA_OTHERS },
+    { "ln_CD",  lcl_DATA_OTHERS },
+    { "hy_AM",  lcl_DATA_OTHERS },
 };
 
 static const sal_Unicode under = sal_Unicode('_');
 
-static const sal_Int16 nbOfLocales = sizeof(aDllsTable) / sizeof(aDllsTable[0]);
+static const sal_Int16 nbOfLocales = sizeof(aLibTable) / sizeof(aLibTable[0]);
 
-LocaleData::~LocaleData(){
+LocaleData::~LocaleData()
+{
         for (size_t l = 0; l < lookupTable.size(); l++) {
             cachedItem = lookupTable[l];
             delete cachedItem->module;
@@ -1144,39 +1144,60 @@ oslGenericFunction SAL_CALL LocaleData::getFunctionSymbol( const Locale& rLocale
 
 oslGenericFunction SAL_CALL LocaleData::getFunctionSymbolByName( const OUString& localeName, const sal_Char* pFunction )
 {
-        for( sal_Int16 i = 0; i < nbOfLocales; i++) {
-            if (localeName.equalsAscii(aDllsTable[i].pLocale) ||
-                        (aDllsTable[i].lLocale && localeName.equalsAscii(aDllsTable[i].lLocale))) {
+    OUString aFallback;
+    bool bFallback = (localeName.indexOf( under) < 0);
+    if (bFallback)
+    {
+        Locale aLocale;
+        aLocale.Language = localeName;
+        Locale aFbLocale = MsLangId::getFallbackLocale( aLocale);
+        if (aFbLocale == aLocale)
+            bFallback = false;  // may be a "language-only-locale" like Interlingua (ia)
+        else if (aFbLocale.Country.getLength())
+            aFallback = aFbLocale.Language + under + aFbLocale.Country;
+        else
+            aFallback = aFbLocale.Language;
+    }
 
-                OUStringBuffer aBuf(strlen(aDllsTable[i].pLocale) + 1 + strlen(pFunction));
-                for (size_t l = 0; l < lookupTable.size(); l++) {
-                    cachedItem = lookupTable[l];
-                    if (cachedItem->dllName == aDllsTable[i].pDLL) {
-                        cachedItem->localeName = aDllsTable[i].pLocale;
-                        return cachedItem->module->getFunctionSymbol(aBuf.appendAscii(pFunction).append(under).
-                                            appendAscii(cachedItem->localeName).makeStringAndClear());
-                    }
+    for ( sal_Int16 i = 0; i < nbOfLocales; i++)
+    {
+        if (localeName.equalsAscii(aLibTable[i].pLocale) ||
+                (bFallback && localeName == aFallback))
+        {
+            OUStringBuffer aBuf(strlen(aLibTable[i].pLocale) + 1 + strlen(pFunction));
+            for (size_t l = 0; l < lookupTable.size(); l++)
+            {
+                cachedItem = lookupTable[l];
+                if (cachedItem->dllName == aLibTable[i].pLib)
+                {
+                    cachedItem->localeName = aLibTable[i].pLocale;
+                    return cachedItem->module->getFunctionSymbol(
+                            aBuf.appendAscii( pFunction).append( under).
+                            appendAscii( cachedItem->localeName).makeStringAndClear());
                 }
-                //dll not loaded, load it and add it to the list
-#ifdef SAL_DLLPREFIX
-        aBuf.ensureCapacity(strlen(aDllsTable[i].pDLL) + 6);    // mostly "lib*.so"
-                aBuf.appendAscii( SAL_DLLPREFIX ).appendAscii(aDllsTable[i].pDLL).appendAscii( SAL_DLLEXTENSION );
-#else
-        aBuf.ensureCapacity(strlen(aDllsTable[i].pDLL) + 4);    // mostly "*.dll"
-        aBuf.appendAscii(aDllsTable[i].pDLL).appendAscii( SAL_DLLEXTENSION );
-#endif
-                osl::Module *module = new osl::Module();
-                if ( module->load(aBuf.makeStringAndClear()) ) {
-                    lookupTable.push_back(cachedItem = new lookupTableItem(aDllsTable[i].pDLL, module));
-                    cachedItem->localeName = aDllsTable[i].pLocale;
-                    return module->getFunctionSymbol(aBuf.appendAscii(pFunction).append(under).
-                                            appendAscii(cachedItem->localeName).makeStringAndClear());
-                }
-                else
-                    delete module;
             }
+            // Library not loaded, load it and add it to the list.
+#ifdef SAL_DLLPREFIX
+            aBuf.ensureCapacity(strlen(aLibTable[i].pLib) + 6);    // mostly "lib*.so"
+            aBuf.appendAscii( SAL_DLLPREFIX ).appendAscii(aLibTable[i].pLib).appendAscii( SAL_DLLEXTENSION );
+#else
+            aBuf.ensureCapacity(strlen(aLibTable[i].pLib) + 4);    // mostly "*.dll"
+            aBuf.appendAscii(aLibTable[i].pLib).appendAscii( SAL_DLLEXTENSION );
+#endif
+            osl::Module *module = new osl::Module();
+            if ( module->load(aBuf.makeStringAndClear()) )
+            {
+                lookupTable.push_back(cachedItem = new lookupTableItem(aLibTable[i].pLib, module));
+                cachedItem->localeName = aLibTable[i].pLocale;
+                return module->getFunctionSymbol(
+                        aBuf.appendAscii(pFunction).append(under).
+                        appendAscii(cachedItem->localeName).makeStringAndClear());
+            }
+            else
+                delete module;
         }
-        return NULL;
+    }
+    return NULL;
 }
 
 Sequence< Locale > SAL_CALL
@@ -1187,7 +1208,7 @@ LocaleData::getAllInstalledLocaleNames() throw(RuntimeException)
         sal_Int16 nInstalled = 0;
 
         for( sal_Int16 i=0; i<nbOfLocales; i++ ) {
-            OUString name = OUString::createFromAscii( aDllsTable[i].pLocale );
+            OUString name = OUString::createFromAscii( aLibTable[i].pLocale );
 
             // Check if the locale is really available and not just in the table,
             // don't allow fall backs.
