@@ -4,9 +4,9 @@
  *
  *  $RCSfile: unofreg.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 23:30:18 $
+ *  last change: $Author: obo $ $Date: 2007-07-18 13:35:52 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -144,6 +144,19 @@ extern uno::Sequence< OUString > SAL_CALL SwXMailMerge_getSupportedServiceNames(
 extern OUString SAL_CALL SwXMailMerge_getImplementationName() throw();
 extern uno::Reference< uno::XInterface > SAL_CALL SwXMailMerge_createInstance(const uno::Reference< XMultiServiceFactory > & rSMgr) throw( uno::Exception );
 
+// --> OD 2007-05-24 #i73788#
+#include "cppuhelper/implementationentry.hxx"
+namespace comp_FinalThreadManager {
+
+// component and service helper functions:
+::rtl::OUString SAL_CALL _getImplementationName();
+com::sun::star::uno::Sequence< ::rtl::OUString > SAL_CALL _getSupportedServiceNames();
+com::sun::star::uno::Reference< com::sun::star::uno::XInterface > SAL_CALL _create(
+    com::sun::star::uno::Reference< com::sun::star::uno::XComponentContext > const & context );
+
+}
+// <--
+
 //
 #ifdef __cplusplus
 extern "C"
@@ -235,6 +248,12 @@ SAL_DLLPUBLIC_EXPORT sal_Bool SAL_CALL component_writeInfo(
             // module
             lcl_uno_writeInfo( pKey, SwUnoModule_getImplementationName(),
                                SwUnoModule_getSupportedServiceNames() );
+            // --> OD 2007-05-24 #i73788#
+            lcl_uno_writeInfo( pKey,
+                               comp_FinalThreadManager::_getImplementationName(),
+                               comp_FinalThreadManager::_getSupportedServiceNames() );
+            // <--
+
         }
         catch (registry::InvalidRegistryException &)
         {
@@ -243,6 +262,14 @@ SAL_DLLPUBLIC_EXPORT sal_Bool SAL_CALL component_writeInfo(
     }
     return sal_True;
 }
+
+static ::cppu::ImplementationEntry const entries[] = {
+    { &comp_FinalThreadManager::_create,
+      &comp_FinalThreadManager::_getImplementationName,
+      &comp_FinalThreadManager::_getSupportedServiceNames,
+      &::cppu::createSingleComponentFactory, 0, 0 },
+    { 0, 0, 0, 0, 0, 0 }
+};
 
 SAL_DLLPUBLIC_EXPORT void * SAL_CALL component_getFactory(
     const sal_Char * pImplName,
@@ -442,6 +469,14 @@ SAL_DLLPUBLIC_EXPORT void * SAL_CALL component_getFactory(
                 SwUnoModule_createInstance,
                 SwUnoModule_getSupportedServiceNames() );
         }
+        // --> OD 2007-05-24 #i73788#
+        else if( comp_FinalThreadManager::_getImplementationName().equalsAsciiL(
+                                                    pImplName, nImplNameLen ) )
+        {
+            pRet = ::cppu::component_getFactoryHelper(
+                        pImplName, pServiceManager, pRegistryKey, entries);
+        }
+        // <--
 
         if( xFactory.is())
         {
