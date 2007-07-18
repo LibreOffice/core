@@ -4,9 +4,9 @@
  *
  *  $RCSfile: editeng.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: vg $ $Date: 2007-04-11 15:46:37 $
+ *  last change: $Author: obo $ $Date: 2007-07-18 09:51:38 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -474,6 +474,9 @@ public:
     void            SetEndDropHdl( const Link& rLink );
     Link            GetEndDropHdl() const;
 
+    /// specifies if auto-correction should capitalize the first word or not (default is on)
+    void            SetFirstWordCapitalization( BOOL bCapitalize );
+    BOOL            IsFirstWordCapitalization() const;
 };
 
 #endif // _MyEDITENG_HXX
