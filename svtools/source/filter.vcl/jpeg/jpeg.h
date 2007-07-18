@@ -4,9 +4,9 @@
  *
  *  $RCSfile: jpeg.h,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: vg $ $Date: 2007-03-26 14:46:20 $
+ *  last change: $Author: obo $ $Date: 2007-07-18 08:55:38 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -42,10 +42,6 @@
 
 #if defined (UNX) || defined(__MINGW32__)
 #include <sys/types.h>
-#endif
-
-#ifdef MAC
-#include <stdlib.h>
 #endif
 
 struct JPEGCreateBitmapParam
