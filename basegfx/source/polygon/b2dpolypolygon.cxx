@@ -4,9 +4,9 @@
  *
  *  $RCSfile: b2dpolypolygon.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: ihi $ $Date: 2006-11-14 14:08:20 $
+ *  last change: $Author: obo $ $Date: 2007-07-18 11:06:41 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -266,13 +266,13 @@ namespace basegfx
             mpPolyPolygon->setB2DPolygon(nIndex, rPolygon);
     }
 
-    bool B2DPolyPolygon::areControlVectorsUsed() const
+    bool B2DPolyPolygon::areControlPointsUsed() const
     {
         for(sal_uInt32 a(0L); a < mpPolyPolygon->count(); a++)
         {
             const ::basegfx::B2DPolygon& rPolygon = mpPolyPolygon->getB2DPolygon(a);
 
-            if(rPolygon.areControlVectorsUsed())
+            if(rPolygon.areControlPointsUsed())
             {
                 return true;
             }
