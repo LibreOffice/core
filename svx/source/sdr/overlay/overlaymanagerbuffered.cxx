@@ -4,9 +4,9 @@
  *
  *  $RCSfile: overlaymanagerbuffered.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: hr $ $Date: 2007-06-26 12:07:54 $
+ *  last change: $Author: obo $ $Date: 2007-07-18 10:55:05 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -505,17 +505,17 @@ namespace sdr
             // to trigger a timer event for refresh
             maBufferTimer.Start();
 
-            // add the range to the remembered region
+            // add the discrete range to the remembered region
             // #i75163# use double precision and floor/ceil rounding to get overlapped pixel region, even
             // when the given logic region has a width/height of 0.0. This does NOT work with LogicToPixel
             // since it just transforms the top left and bottom right points equally without taking
-            // pixel coverage into account. An empty B2DRange and thus empty logic Rectangle translated
-            // to an also empty pixel rectangle what is wrong.
-            basegfx::B2DRange aPixelRange(rRange);
-            aPixelRange.transform(getOutputDevice().GetViewTransformation());
+            // discrete pixel coverage into account. An empty B2DRange and thus empty logic Rectangle translated
+            // to an also empty discrete pixel rectangle - what is wrong.
+            basegfx::B2DRange aDiscreteRange(rRange);
+            aDiscreteRange.transform(getOutputDevice().GetViewTransformation());
 
-            const basegfx::B2IPoint aTopLeft((sal_Int32)floor(aPixelRange.getMinX()), (sal_Int32)floor(aPixelRange.getMinY()));
-            const basegfx::B2IPoint aBottomRight((sal_Int32)ceil(aPixelRange.getMaxX()), (sal_Int32)ceil(aPixelRange.getMaxY()));
+            const basegfx::B2IPoint aTopLeft((sal_Int32)floor(aDiscreteRange.getMinX()), (sal_Int32)floor(aDiscreteRange.getMinY()));
+            const basegfx::B2IPoint aBottomRight((sal_Int32)ceil(aDiscreteRange.getMaxX()), (sal_Int32)ceil(aDiscreteRange.getMaxY()));
 
             maBufferRememberedRangePixel.expand(aTopLeft);
             maBufferRememberedRangePixel.expand(aBottomRight);
