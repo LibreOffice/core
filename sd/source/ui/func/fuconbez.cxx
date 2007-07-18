@@ -4,9 +4,9 @@
  *
  *  $RCSfile: fuconbez.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: rt $ $Date: 2007-07-06 13:12:38 $
+ *  last change: $Author: obo $ $Date: 2007-07-18 10:45:55 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -447,46 +447,60 @@ SdrObject* FuConstructBezierPolygon::CreateDefaultObject(const sal_uInt16 nID, c
     {
         if(pObj->ISA(SdrPathObj))
         {
-            ::basegfx::B2DPolyPolygon aPoly;
+            basegfx::B2DPolyPolygon aPoly;
 
             switch(nID)
             {
                 case SID_DRAW_BEZIER_FILL:
                 {
-                    sal_Int32 nWdt(rRectangle.GetWidth() / 2);
-                    sal_Int32 nHgt(rRectangle.GetHeight() / 2);
-                    ::basegfx::B2DPolygon aInnerPoly(::basegfx::tools::createPolygonFromEllipse(::basegfx::B2DPoint(rRectangle.Center().X(), rRectangle.Center().Y()), nWdt, nHgt));
+                    const sal_Int32 nWdt(rRectangle.GetWidth() / 2);
+                    const sal_Int32 nHgt(rRectangle.GetHeight() / 2);
+                    const basegfx::B2DPolygon aInnerPoly(basegfx::tools::createPolygonFromEllipse(basegfx::B2DPoint(rRectangle.Center().X(), rRectangle.Center().Y()), nWdt, nHgt));
+
                     aPoly.append(aInnerPoly);
                     break;
                 }
                 case SID_DRAW_BEZIER_NOFILL:
                 {
-                    ::basegfx::B2DPolygon aInnerPoly;
-                    aInnerPoly.append(::basegfx::B2DPoint(rRectangle.Left(), rRectangle.Bottom()));
-                    aInnerPoly.setControlPointA(0L, ::basegfx::B2DPoint(rRectangle.Center().X(), rRectangle.Bottom()));
-                    aInnerPoly.setControlPointB(0L, aInnerPoly.getControlPointA(0L));
-                    aInnerPoly.append(::basegfx::B2DPoint(rRectangle.Center().X(), rRectangle.Center().Y()));
-                    aInnerPoly.setControlPointA(1L, ::basegfx::B2DPoint(rRectangle.Center().X(), rRectangle.Top()));
-                    aInnerPoly.setControlPointB(1L, aInnerPoly.getControlPointA(1L));
-                    aInnerPoly.append(::basegfx::B2DPoint(rRectangle.Right(), rRectangle.Top()));
+                    basegfx::B2DPolygon aInnerPoly;
+
+                    aInnerPoly.append(basegfx::B2DPoint(rRectangle.Left(), rRectangle.Bottom()));
+
+                    const basegfx::B2DPoint aCenterBottom(rRectangle.Center().X(), rRectangle.Bottom());
+                    aInnerPoly.appendBezierSegment(
+                        aCenterBottom,
+                        aCenterBottom,
+                        basegfx::B2DPoint(rRectangle.Center().X(), rRectangle.Center().Y()));
+
+                    const basegfx::B2DPoint aCenterTop(rRectangle.Center().X(), rRectangle.Top());
+                    aInnerPoly.appendBezierSegment(
+                        aCenterTop,
+                        aCenterTop,
+                        basegfx::B2DPoint(rRectangle.Right(), rRectangle.Top()));
+
                     aPoly.append(aInnerPoly);
                     break;
                 }
                 case SID_DRAW_FREELINE:
                 case SID_DRAW_FREELINE_NOFILL:
                 {
-                    ::basegfx::B2DPolygon aInnerPoly;
-                    aInnerPoly.append(::basegfx::B2DPoint(rRectangle.Left(), rRectangle.Bottom()));
-                    aInnerPoly.setControlPointA(0L, ::basegfx::B2DPoint(rRectangle.Left(), rRectangle.Top()));
-                    aInnerPoly.setControlPointB(0L, ::basegfx::B2DPoint(rRectangle.Center().X(), rRectangle.Top()));
-                    aInnerPoly.append(::basegfx::B2DPoint(rRectangle.Center().X(), rRectangle.Center().Y()));
-                    aInnerPoly.setControlPointA(1L, ::basegfx::B2DPoint(rRectangle.Center().X(), rRectangle.Bottom()));
-                    aInnerPoly.setControlPointB(1L, ::basegfx::B2DPoint(rRectangle.Right(), rRectangle.Bottom()));
-                    aInnerPoly.append(::basegfx::B2DPoint(rRectangle.Right(), rRectangle.Top()));
+                    basegfx::B2DPolygon aInnerPoly;
+
+                    aInnerPoly.append(basegfx::B2DPoint(rRectangle.Left(), rRectangle.Bottom()));
+
+                    aInnerPoly.appendBezierSegment(
+                        basegfx::B2DPoint(rRectangle.Left(), rRectangle.Top()),
+                        basegfx::B2DPoint(rRectangle.Center().X(), rRectangle.Top()),
+                        basegfx::B2DPoint(rRectangle.Center().X(), rRectangle.Center().Y()));
+
+                    aInnerPoly.appendBezierSegment(
+                        basegfx::B2DPoint(rRectangle.Center().X(), rRectangle.Bottom()),
+                        basegfx::B2DPoint(rRectangle.Right(), rRectangle.Bottom()),
+                        basegfx::B2DPoint(rRectangle.Right(), rRectangle.Top()));
 
                     if(SID_DRAW_FREELINE == nID)
                     {
-                        aInnerPoly.append(::basegfx::B2DPoint(rRectangle.Right(), rRectangle.Bottom()));
+                        aInnerPoly.append(basegfx::B2DPoint(rRectangle.Right(), rRectangle.Bottom()));
                     }
                     else
                     {
@@ -499,17 +513,18 @@ SdrObject* FuConstructBezierPolygon::CreateDefaultObject(const sal_uInt16 nID, c
                 case SID_DRAW_XPOLYGON:
                 case SID_DRAW_XPOLYGON_NOFILL:
                 {
-                    ::basegfx::B2DPolygon aInnerPoly;
-                    aInnerPoly.append(::basegfx::B2DPoint(rRectangle.Left(), rRectangle.Bottom()));
-                    aInnerPoly.append(::basegfx::B2DPoint(rRectangle.Left(), rRectangle.Top()));
-                    aInnerPoly.append(::basegfx::B2DPoint(rRectangle.Center().X(), rRectangle.Top()));
-                    aInnerPoly.append(::basegfx::B2DPoint(rRectangle.Center().X(), rRectangle.Center().Y()));
-                    aInnerPoly.append(::basegfx::B2DPoint(rRectangle.Right(), rRectangle.Center().Y()));
-                    aInnerPoly.append(::basegfx::B2DPoint(rRectangle.Right(), rRectangle.Bottom()));
+                    basegfx::B2DPolygon aInnerPoly;
+
+                    aInnerPoly.append(basegfx::B2DPoint(rRectangle.Left(), rRectangle.Bottom()));
+                    aInnerPoly.append(basegfx::B2DPoint(rRectangle.Left(), rRectangle.Top()));
+                    aInnerPoly.append(basegfx::B2DPoint(rRectangle.Center().X(), rRectangle.Top()));
+                    aInnerPoly.append(basegfx::B2DPoint(rRectangle.Center().X(), rRectangle.Center().Y()));
+                    aInnerPoly.append(basegfx::B2DPoint(rRectangle.Right(), rRectangle.Center().Y()));
+                    aInnerPoly.append(basegfx::B2DPoint(rRectangle.Right(), rRectangle.Bottom()));
 
                     if(SID_DRAW_XPOLYGON_NOFILL == nID)
                     {
-                        aInnerPoly.append(::basegfx::B2DPoint(rRectangle.Center().X(), rRectangle.Bottom()));
+                        aInnerPoly.append(basegfx::B2DPoint(rRectangle.Center().X(), rRectangle.Bottom()));
                     }
                     else
                     {
@@ -522,22 +537,22 @@ SdrObject* FuConstructBezierPolygon::CreateDefaultObject(const sal_uInt16 nID, c
                 case SID_DRAW_POLYGON:
                 case SID_DRAW_POLYGON_NOFILL:
                 {
-                    ::basegfx::B2DPolygon aInnerPoly;
-                    sal_Int32 nWdt(rRectangle.GetWidth());
-                    sal_Int32 nHgt(rRectangle.GetHeight());
+                    basegfx::B2DPolygon aInnerPoly;
+                    const sal_Int32 nWdt(rRectangle.GetWidth());
+                    const sal_Int32 nHgt(rRectangle.GetHeight());
 
-                    aInnerPoly.append(::basegfx::B2DPoint(rRectangle.Left(), rRectangle.Bottom()));
-                    aInnerPoly.append(::basegfx::B2DPoint(rRectangle.Left() + (nWdt * 30) / 100, rRectangle.Top() + (nHgt * 70) / 100));
-                    aInnerPoly.append(::basegfx::B2DPoint(rRectangle.Left(), rRectangle.Top() + (nHgt * 15) / 100));
-                    aInnerPoly.append(::basegfx::B2DPoint(rRectangle.Left() + (nWdt * 65) / 100, rRectangle.Top()));
-                    aInnerPoly.append(::basegfx::B2DPoint(rRectangle.Left() + nWdt, rRectangle.Top() + (nHgt * 30) / 100));
-                    aInnerPoly.append(::basegfx::B2DPoint(rRectangle.Left() + (nWdt * 80) / 100, rRectangle.Top() + (nHgt * 50) / 100));
-                    aInnerPoly.append(::basegfx::B2DPoint(rRectangle.Left() + (nWdt * 80) / 100, rRectangle.Top() + (nHgt * 75) / 100));
-                    aInnerPoly.append(::basegfx::B2DPoint(rRectangle.Bottom(), rRectangle.Right()));
+                    aInnerPoly.append(basegfx::B2DPoint(rRectangle.Left(), rRectangle.Bottom()));
+                    aInnerPoly.append(basegfx::B2DPoint(rRectangle.Left() + (nWdt * 30) / 100, rRectangle.Top() + (nHgt * 70) / 100));
+                    aInnerPoly.append(basegfx::B2DPoint(rRectangle.Left(), rRectangle.Top() + (nHgt * 15) / 100));
+                    aInnerPoly.append(basegfx::B2DPoint(rRectangle.Left() + (nWdt * 65) / 100, rRectangle.Top()));
+                    aInnerPoly.append(basegfx::B2DPoint(rRectangle.Left() + nWdt, rRectangle.Top() + (nHgt * 30) / 100));
+                    aInnerPoly.append(basegfx::B2DPoint(rRectangle.Left() + (nWdt * 80) / 100, rRectangle.Top() + (nHgt * 50) / 100));
+                    aInnerPoly.append(basegfx::B2DPoint(rRectangle.Left() + (nWdt * 80) / 100, rRectangle.Top() + (nHgt * 75) / 100));
+                    aInnerPoly.append(basegfx::B2DPoint(rRectangle.Bottom(), rRectangle.Right()));
 
                     if(SID_DRAW_POLYGON_NOFILL == nID)
                     {
-                        aInnerPoly.append(::basegfx::B2DPoint(rRectangle.Center().X(), rRectangle.Bottom()));
+                        aInnerPoly.append(basegfx::B2DPoint(rRectangle.Center().X(), rRectangle.Bottom()));
                     }
                     else
                     {
@@ -563,3 +578,5 @@ SdrObject* FuConstructBezierPolygon::CreateDefaultObject(const sal_uInt16 nID, c
 }
 
 } // end of namespace sd
+
+// eof
