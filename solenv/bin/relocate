@@ -15,9 +15,9 @@
 #
 #   $RCSfile: relocate,v $
 #
-#   $Revision: 1.3 $
+#   $Revision: 1.4 $
 #
-#   last change: $Author: rt $ $Date: 2005-09-07 22:13:31 $
+#   last change: $Author: obo $ $Date: 2007-07-18 08:00:45 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -146,7 +146,7 @@ sub find_old_root($$)
     return $old_root;
 }
 
-sub rewrite_product_dpcc($$$)
+sub rewrite_product_deps($$$)
 {
     my $new_root = shift;
     my $product_path = shift;
@@ -157,9 +157,11 @@ sub rewrite_product_dpcc($$$)
     opendir ($misc_dir, $path) || return;
     my $name;
     while ($name = readdir ($misc_dir)) {
-	$name =~ /\.dpcc$/ || next;
-# Should re-write the dpcc files - but perhaps this'd screw with timestamps ?
-	unlink ("$path/$name");
+# Should try re-writing these - but perhaps this would
+# screw with timestamps ?
+	if ($name =~ m/\.dpcc$/ || $name =~ m/\.dpslo$/) {
+		unlink ("$path/$name");
+	}
     }
     closedir ($misc_dir);
 }
@@ -184,7 +186,7 @@ sub rewrite_dpcc($$)
 		    $idx = 0;
 		}
 		print "$name ";
-		rewrite_product_dpcc ($new_root, "$name/$sub_name", $old_root);
+		rewrite_product_deps ($new_root, "$name/$sub_name", $old_root);
 	    }
 	}
 	closedir ($sub_dir);
