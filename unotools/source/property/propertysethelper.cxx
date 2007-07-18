@@ -4,9 +4,9 @@
  *
  *  $RCSfile: propertysethelper.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 01:28:32 $
+ *  last change: $Author: obo $ $Date: 2007-07-18 08:59:37 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -171,7 +171,7 @@ void SAL_CALL PropertySetHelper::setPropertyValues( const Sequence< ::rtl::OUStr
         if( !bUnknown )
             _setPropertyValues( (const PropertyMapEntry**)pEntries, aValues.getConstArray() );
 
-        delete pEntries;
+        delete [] pEntries;
 
         if( bUnknown )
             throw UnknownPropertyException();
@@ -199,7 +199,7 @@ Sequence< Any > SAL_CALL PropertySetHelper::getPropertyValues( const Sequence< :
         if( !bUnknown )
             _getPropertyValues( (const PropertyMapEntry**)pEntries, aValues.getArray() );
 
-        delete pEntries;
+        delete [] pEntries;
 
         if( bUnknown )
             throw UnknownPropertyException();
@@ -266,7 +266,7 @@ Sequence< PropertyState > SAL_CALL PropertySetHelper::getPropertyStates( const S
         if( !bUnknown )
             _getPropertyStates( (const PropertyMapEntry**)pEntries, aStates.getArray() );
 
-        delete pEntries;
+        delete [] pEntries;
 
         if( bUnknown )
             throw UnknownPropertyException();
