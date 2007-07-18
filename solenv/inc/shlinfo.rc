@@ -4,9 +4,9 @@
  *
  *  $RCSfile: shlinfo.rc,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 09:40:50 $
+ *  last change: $Author: obo $ $Date: 2007-07-18 14:58:24 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -33,9 +33,9 @@
  *
  ************************************************************************/
 
-#define VERSION			8
-//#define SUBVERSION		0
-//#define VERVARIANT		0
+#define VERSION			2
+#define SUBVERSION		3
+#define VERVARIANT		0
 
 // .0 + VER_CONCEPT
 // .100 + VER_ALPHA
@@ -47,8 +47,8 @@
 #define VER_FINAL		0
 
 #define VER_DAY			1
-#define VER_MONTH		6
-#define VER_YEAR		2005
+#define VER_MONTH		9
+#define VER_YEAR		2007
 
 // -----------------------------------------------------------------------
 
