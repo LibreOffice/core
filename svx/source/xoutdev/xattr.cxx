@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xattr.cxx,v $
  *
- *  $Revision: 1.39 $
+ *  $Revision: 1.40 $
  *
- *  last change: $Author: hr $ $Date: 2007-06-27 19:33:24 $
+ *  last change: $Author: obo $ $Date: 2007-07-18 10:58:43 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1703,13 +1703,19 @@ namespace
 
                 if(bControlPoints)
                 {
-                    const basegfx::B2DVector aControlVectorA(aCandidate.getControlVectorA(b));
-                    rOut << aControlVectorA.getX();
-                    rOut << aControlVectorA.getY();
+                    const sal_uInt8 bEdgeIsCurve(aCandidate.isPrevControlPointUsed(b) || aCandidate.isNextControlPointUsed(b) ? 1 : 0);
+                    rOut << bEdgeIsCurve;
 
-                    const basegfx::B2DVector aControlVectorB(aCandidate.getControlVectorB(b));
-                    rOut << aControlVectorB.getX();
-                    rOut << aControlVectorB.getY();
+                    if(bEdgeIsCurve)
+                    {
+                        const basegfx::B2DVector aControlVectorA(aCandidate.getPrevControlPoint(b));
+                        rOut << aControlVectorA.getX();
+                        rOut << aControlVectorA.getY();
+
+                        const basegfx::B2DVector aControlVectorB(aCandidate.getNextControlPoint(b));
+                        rOut << aControlVectorB.getX();
+                        rOut << aControlVectorB.getY();
+                    }
                 }
             }
         }
@@ -1743,13 +1749,19 @@ namespace
 
                 if(0 != bControlPoints)
                 {
-                    rIn >> fX;
-                    rIn >> fY;
-                    aCandidate.setControlVectorA(b, basegfx::B2DVector(fX, fY));
+                    sal_uInt8 bEdgeIsCurve;
+                    rIn >> bEdgeIsCurve;
 
-                    rIn >> fX;
-                    rIn >> fY;
-                    aCandidate.setControlVectorA(b, basegfx::B2DVector(fX, fY));
+                    if(0 != bEdgeIsCurve)
+                    {
+                        rIn >> fX;
+                        rIn >> fY;
+                        aCandidate.setPrevControlPoint(b, basegfx::B2DVector(fX, fY));
+
+                        rIn >> fX;
+                        rIn >> fY;
+                        aCandidate.setNextControlPoint(b, basegfx::B2DVector(fX, fY));
+                    }
                 }
             }
 
