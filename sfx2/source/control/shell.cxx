@@ -4,9 +4,9 @@
  *
  *  $RCSfile: shell.cxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: ihi $ $Date: 2007-07-11 13:11:22 $
+ *  last change: $Author: obo $ $Date: 2007-07-18 09:01:29 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1139,12 +1139,12 @@ void SfxShell::SetVerbs(const com::sun::star::uno::Sequence < com::sun::star::em
     USHORT nr=0;
     for (sal_Int32 n=0; n<aVerbs.getLength(); n++)
     {
-        SfxSlot *pNewSlot = new SfxSlot;
         USHORT nSlotId = SID_VERB_START + nr++;
         DBG_ASSERT(nSlotId <= SID_VERB_END, "Zuviele Verben!");
         if (nSlotId > SID_VERB_END)
             break;
 
+        SfxSlot *pNewSlot = new SfxSlot;
         pNewSlot->nSlotId = nSlotId;
         pNewSlot->nGroupId = 0;
 
