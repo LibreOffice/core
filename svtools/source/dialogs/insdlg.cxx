@@ -4,9 +4,9 @@
  *
  *  $RCSfile: insdlg.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: rt $ $Date: 2007-07-10 09:19:39 $
+ *  last change: $Author: obo $ $Date: 2007-07-18 09:01:42 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -40,50 +40,21 @@
 
 // include ---------------------------------------------------------------
 
-//#include <stdio.h>
 #include <svtools/insdlg.hxx>
-
-//#include <tools/urlobj.hxx>
-//#include <tools/debug.hxx>
-//#include <svtools/urihelper.hxx>
 #include "sores.hxx"
 #include <svtools/svtdata.hxx>
 
-#include <sot/clsids.hxx>
 #include <tools/rc.hxx>
 #include <unotools/configmgr.hxx>
+#include <sot/clsids.hxx>
 #include <sot/stg.hxx>
 
-#ifndef  _COM_SUN_STAR_UI_DIALOGS_TEMPLATEDESCRIPTION_HPP_
-#include <com/sun/star/ui/dialogs/TemplateDescription.hpp>
-#endif
-#ifndef  _COM_SUN_STAR_UI_DIALOGS_EXECUTABLEDIALOGRESULTS_HPP_
-#include <com/sun/star/ui/dialogs/ExecutableDialogResults.hpp>
-#endif
-#ifndef _COM_SUN_STAR_LANG_XMULTISERVICEFACTORY_HPP_
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
-#endif
-#ifndef _COM_SUN_STAR_BEANS_PROPERTYVALUE_HPP_
 #include <com/sun/star/beans/PropertyValue.hpp>
-#endif
-#ifndef _COMPHELPER_PROCESSFACTORY_HXX_
 #include <comphelper/processfactory.hxx>
-#endif
-
-//#include <osl/file.hxx>
-
-#include <com/sun/star/container/XHierarchicalNameAccess.hpp>
 #include <com/sun/star/container/XNameAccess.hpp>
 
 using namespace ::com::sun::star;
-using namespace ::com::sun::star::lang;
-using namespace ::com::sun::star::uno;
-using namespace ::com::sun::star::container;
-using namespace ::com::sun::star::ui::dialogs;
-using ::rtl::OUString;
-
-#define _SVSTDARR_STRINGSDTOR
-#include <svtools/svstdarr.hxx>
 
 //---------------------------------------------
 // this struct conforms to the Microsoft
@@ -161,32 +132,31 @@ void SvObjectServerList::FillInsertObjects()
 */
 {
     try{
-    Reference< XMultiServiceFactory > _globalMSFactory= comphelper::getProcessServiceFactory();
+    uno::Reference< lang::XMultiServiceFactory > _globalMSFactory= comphelper::getProcessServiceFactory();
     if( _globalMSFactory.is())
     {
-        OUString sProviderService =
-        OUString::createFromAscii( "com.sun.star.configuration.ConfigurationProvider" );
-        Reference<XMultiServiceFactory > sProviderMSFactory(
-            _globalMSFactory->createInstance( sProviderService ),UNO_QUERY );
+        ::rtl::OUString sProviderService =
+        ::rtl::OUString::createFromAscii( "com.sun.star.configuration.ConfigurationProvider" );
+        uno::Reference< lang::XMultiServiceFactory > sProviderMSFactory(
+            _globalMSFactory->createInstance( sProviderService ), uno::UNO_QUERY );
 
         if( sProviderMSFactory.is())
         {
-            OUString sReaderService =
-                OUString::createFromAscii( "com.sun.star.configuration.ConfigurationAccess" );
-            Sequence< Any > aArguments( 1 );
+            ::rtl::OUString sReaderService =
+                ::rtl::OUString::createFromAscii( "com.sun.star.configuration.ConfigurationAccess" );
+            uno::Sequence< uno::Any > aArguments( 1 );
             beans::PropertyValue aPathProp;
             aPathProp.Name = ::rtl::OUString::createFromAscii( "nodepath" );
-            aPathProp.Value <<= OUString::createFromAscii( "/org.openoffice.Office.Embedding/ObjectNames");
+            aPathProp.Value <<= ::rtl::OUString::createFromAscii( "/org.openoffice.Office.Embedding/ObjectNames");
             aArguments[0] <<= aPathProp;
 
-            Reference< XNameAccess > xNameAccess(
+            uno::Reference< container::XNameAccess > xNameAccess(
                 sProviderMSFactory->createInstanceWithArguments( sReaderService,aArguments ),
-                UNO_QUERY );
+                uno::UNO_QUERY );
 
             if( xNameAccess.is())
             {
-                Sequence<OUString> seqNames= xNameAccess->getElementNames();
-
+                uno::Sequence< ::rtl::OUString > seqNames= xNameAccess->getElementNames();
                 sal_Int32 nInd;
 
                 ::rtl::OUString aStringProductName( RTL_CONSTASCII_USTRINGPARAM( "%PRODUCTNAME" ) );
@@ -195,11 +165,10 @@ void SvObjectServerList::FillInsertObjects()
                 ::rtl::OUString aStringProductVersion( RTL_CONSTASCII_USTRINGPARAM( "%PRODUCTVERSION" ) );
                 sal_Int32 nStringProductVersionLength = aStringProductVersion.getLength();
 
-
                 // TODO/LATER: Do the request only once ( needs incompatible change )
                 ::rtl::OUString aProductName;
                 ::rtl::OUString aProductVersion;
-                ::com::sun::star::uno::Any aProperty =
+                uno::Any aProperty =
                     ::utl::ConfigManager::GetDirectConfigProperty( ::utl::ConfigManager::PRODUCTNAME );
                 if ( !( aProperty >>= aProductName ) )
                 {
@@ -214,14 +183,14 @@ void SvObjectServerList::FillInsertObjects()
 
                 for( nInd = 0; nInd < seqNames.getLength(); nInd++ )
                 {
-                    Reference< XNameAccess > xEntry ;
+                    uno::Reference< container::XNameAccess > xEntry ;
                     xNameAccess->getByName( seqNames[nInd] ) >>= xEntry;
                     if ( xEntry.is() )
                     {
                         ::rtl::OUString aUIName;
                         ::rtl::OUString aClassID;
-                        xEntry->getByName( OUString::createFromAscii("ObjectUIName") ) >>= aUIName;
-                        xEntry->getByName( OUString::createFromAscii("ClassID") ) >>= aClassID;
+                        xEntry->getByName( ::rtl::OUString::createFromAscii("ObjectUIName") ) >>= aUIName;
+                        xEntry->getByName( ::rtl::OUString::createFromAscii("ClassID") ) >>= aClassID;
 
                         if ( aUIName.getLength() )
                         {
@@ -262,9 +231,9 @@ void SvObjectServerList::FillInsertObjects()
     Append( SvObjectServer( aOleFact, aOleObj ) );
 #endif
 
-    }catch( com::sun::star::container::NoSuchElementException)
+    }catch( container::NoSuchElementException)
     {
-    }catch( ::com::sun::star::uno::Exception)
+    }catch( uno::Exception)
     {
     }
     catch(...)
@@ -372,14 +341,14 @@ sal_Bool SvPasteObjectHelper::GetEmbeddedName(const TransferableDataHelper& rDat
     sal_Bool bRet = sal_False;
     if( _nFormat == SOT_FORMATSTR_ID_EMBED_SOURCE_OLE || _nFormat == SOT_FORMATSTR_ID_EMBEDDED_OBJ_OLE )
     {
-        ::com::sun::star::datatransfer::DataFlavor aFlavor;
+        datatransfer::DataFlavor aFlavor;
         SotExchange::GetFormatDataFlavor( SOT_FORMATSTR_ID_OBJECTDESCRIPTOR_OLE, aFlavor );
 
-        ::com::sun::star::uno::Any aAny;
+        uno::Any aAny;
         if( rData.HasFormat( aFlavor ) &&
             ( aAny = rData.GetAny( aFlavor ) ).hasValue() )
         {
-            ::com::sun::star::uno::Sequence< sal_Int8 > anySequence;
+            uno::Sequence< sal_Int8 > anySequence;
             aAny >>= anySequence;
 
             OleObjectDescriptor* pOleObjDescr =
