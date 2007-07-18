@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.32 $
+#   $Revision: 1.33 $
 #
-#   last change: $Author: ihi $ $Date: 2007-04-16 16:18:09 $
+#   last change: $Author: obo $ $Date: 2007-07-18 13:38:02 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -154,6 +154,7 @@ IDLFILES=\
     XTask.idl\
     XTasksSupplier.idl\
     XTerminateListener.idl\
+    XTerminateListener2.idl\
     XToolbarController.idl\
     XTransientDocumentsDocumentContentFactory.idl\
     XUIControllerRegistration.idl\
