@@ -4,9 +4,9 @@
  *
  *  $RCSfile: fucon3d.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: hr $ $Date: 2007-06-27 15:41:11 $
+ *  last change: $Author: obo $ $Date: 2007-07-18 10:45:42 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -176,7 +176,7 @@ E3dCompoundObject* FuConstruct3dObject::ImpCreateBasic3DShape()
             aXPoly.Scale(5.0, 5.0);
 
             ::basegfx::B2DPolygon aB2DPolygon(aXPoly.getB2DPolygon());
-            if(aB2DPolygon.areControlVectorsUsed())
+            if(aB2DPolygon.areControlPointsUsed())
             {
                 aB2DPolygon = ::basegfx::tools::adaptiveSubdivideByAngle(aB2DPolygon);
             }
@@ -203,7 +203,7 @@ E3dCompoundObject* FuConstruct3dObject::ImpCreateBasic3DShape()
             aXPoly.Insert(0, Point (0*5, 1250*5), XPOLY_NORMAL);
 
             ::basegfx::B2DPolygon aB2DPolygon(aXPoly.getB2DPolygon());
-            if(aB2DPolygon.areControlVectorsUsed())
+            if(aB2DPolygon.areControlPointsUsed())
             {
                 aB2DPolygon = ::basegfx::tools::adaptiveSubdivideByAngle(aB2DPolygon);
             }
@@ -214,7 +214,7 @@ E3dCompoundObject* FuConstruct3dObject::ImpCreateBasic3DShape()
         case SID_3D_TORUS:
         {
             ::basegfx::B2DPolygon aB2DPolygon(::basegfx::tools::createPolygonFromCircle(::basegfx::B2DPoint(1000.0, 0.0), 500.0));
-            if(aB2DPolygon.areControlVectorsUsed())
+            if(aB2DPolygon.areControlPointsUsed())
             {
                 aB2DPolygon = ::basegfx::tools::adaptiveSubdivideByAngle(aB2DPolygon);
             }
