@@ -4,9 +4,9 @@
  *
  *  $RCSfile: nranges.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: vg $ $Date: 2007-04-11 19:29:19 $
+ *  last change: $Author: obo $ $Date: 2007-07-18 08:51:55 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -64,7 +64,7 @@
 
 #if SUPD<=383
 
-#if defined MAC || ( defined SOLARIS && defined X86 ) || ( defined SINIX && defined GCC ) || defined SCO
+#if ( defined SOLARIS && defined X86 ) || ( defined SINIX && defined GCC ) || defined SCO
 #define NUMTYPE_ARG int
 #else
 #define NUMTYPE_ARG NUMTYPE
