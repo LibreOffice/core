@@ -4,9 +4,9 @@
  *
  *  $RCSfile: transfrm.hxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: hr $ $Date: 2007-06-27 17:50:42 $
+ *  last change: $Author: obo $ $Date: 2007-07-18 10:53:19 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -42,6 +42,13 @@
 #ifndef _FIXED_HXX //autogen
 #include <vcl/fixed.hxx>
 #endif
+
+// #i75273#
+#ifndef _BGFX_RANGE_B2DRANGE_HXX
+#include <basegfx/range/b2drange.hxx>
+#endif
+
+// predefines
 class SdrView;
 
 /*************************************************************************
@@ -126,10 +133,12 @@ private:
     const SfxItemSet&   mrOutAttrs;
 
     const SdrView*      mpView;
-    Rectangle           maRect;
-    Rectangle           maWorkArea;
 
-    Point               maAnchorPos;
+    // #i75273#
+    basegfx::B2DRange   maRange;
+    basegfx::B2DRange   maWorkRange;
+    basegfx::B2DPoint   maAnchor;
+
     SfxMapUnit          mePoolUnit;
     FieldUnit           meDlgUnit;
     MapUnit             meMapUnit;
@@ -139,8 +148,9 @@ private:
     bool                mbSizeDisabled;
 
     // frome size
-    UINT32              mlOldWidth;
-    UINT32              mlOldHeight;
+    // #i75273#
+    double              mfOldWidth;
+    double              mfOldHeight;
     RECT_POINT          meRP;
 
     //------------------------------------
@@ -153,7 +163,7 @@ private:
 //  DECL_LINK( SetOrientHdl, ListBox * );
 
     void SetMinMaxPosition();
-    void GetTopLeftPosition( long& rX, long& rY, const Rectangle& rRect );
+    void GetTopLeftPosition(double& rfX, double& rfY, const basegfx::B2DRange& rRange);
 #endif
 
 #if _SOLAR__PRIVATE
@@ -218,11 +228,12 @@ private:
     SvxRectCtl          aCtlAngle;
 
     const SfxItemSet&   rOutAttrs;
-
     const SdrView*      pView;
-    Rectangle           aRect;
 
-    Point               aAnchorPos;
+    // #i75273#
+    basegfx::B2DRange   maRange;
+    basegfx::B2DPoint   maAnchor;
+
     SfxMapUnit          ePoolUnit;
     FieldUnit           eDlgUnit;
     MapUnit             eMapUnit;
@@ -271,7 +282,9 @@ private:
     const SfxItemSet&   rOutAttrs;
 
     const SdrView*      pView;
-    Rectangle           aRect;
+
+    // #i75273#
+    basegfx::B2DRange   maRange;
 
     SfxMapUnit          ePoolUnit;
     FieldUnit           eDlgUnit;
