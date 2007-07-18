@@ -4,9 +4,9 @@
  *
  *  $RCSfile: lngopt.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: vg $ $Date: 2007-05-25 12:23:33 $
+ *  last change: $Author: obo $ $Date: 2007-07-18 09:47:30 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -189,7 +189,7 @@ BOOL LinguOptions::SetValue( Any &rOld, const Any &rVal, INT32 nWID )
 
     if (pbVal)
     {
-        BOOL bNew;
+        BOOL bNew = FALSE;
         rVal >>= bNew;
         if (bNew != *pbVal)
         {
@@ -200,7 +200,7 @@ BOOL LinguOptions::SetValue( Any &rOld, const Any &rVal, INT32 nWID )
     }
     if (pnVal)
     {
-        INT16 nNew;
+        INT16 nNew = 0;
         rVal >>= nNew;
         if (nNew != *pnVal)
         {
@@ -517,7 +517,7 @@ void SAL_CALL LinguProps::removePropertyChangeListener(
 
 void SAL_CALL LinguProps::addVetoableChangeListener(
             const OUString& /*rPropertyName*/,
-            const Reference< XVetoableChangeListener >& /*rListener*/ )
+            const Reference< XVetoableChangeListener >& /*xListener*/ )
         throw(UnknownPropertyException, WrappedTargetException, RuntimeException)
 {
 //  MutexGuard  aGuard( GetLinguMutex() );
@@ -525,7 +525,7 @@ void SAL_CALL LinguProps::addVetoableChangeListener(
 
 void SAL_CALL LinguProps::removeVetoableChangeListener(
             const OUString& /*rPropertyName*/,
-            const Reference< XVetoableChangeListener > & /*rListener*/ )
+            const Reference< XVetoableChangeListener >& /*xListener*/ )
         throw(UnknownPropertyException, WrappedTargetException, RuntimeException)
 {
 //  MutexGuard  aGuard( GetLinguMutex() );
