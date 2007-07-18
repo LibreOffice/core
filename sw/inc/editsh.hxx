@@ -4,9 +4,9 @@
  *
  *  $RCSfile: editsh.hxx,v $
  *
- *  $Revision: 1.57 $
+ *  $Revision: 1.58 $
  *
- *  last change: $Author: hr $ $Date: 2007-06-27 13:13:32 $
+ *  last change: $Author: obo $ $Date: 2007-07-18 13:28:46 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -618,7 +618,10 @@ public:
 
     //eindeutige Identifikation des Objektes (fuer ImageMapDlg)
     void    *GetIMapInventor() const;
-    Graphic GetIMapGraphic( BOOL bWait = TRUE ) const; //liefert eine Graphic fuer alle Flys!
+    // --> OD 2007-03-01 #i73788#
+    // remove default parameter, because method always called this default value
+    Graphic GetIMapGraphic() const; //liefert eine Graphic fuer alle Flys!
+    // <--
     const SwFlyFrmFmt* FindFlyByName( const String& rName, BYTE nNdTyp = 0 ) const;
 
     //liefert ein ClientObject, wenn CurCrsr->Point() auf einen
