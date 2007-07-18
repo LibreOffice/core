@@ -4,9 +4,9 @@
  *
  *  $RCSfile: isolang.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: rt $ $Date: 2007-07-03 14:04:00 $
+ *  last change: $Author: obo $ $Date: 2007-07-18 07:09:24 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -74,12 +74,35 @@ struct IsoLangOtherEntry
 
 // -----------------------------------------------------------------------
 
-// Entries for languages are lower case, for countries upper case,
-// as recommended by rfc3066 (obsoletes rfc1766).
-// convertIsoNamesToLanguage is case insensitive
+// Entries for languages are lower case, for countries upper case, as
+// recommended by rfc4646 (obsoletes rfc3066 (obsoletes rfc1766)).
+// convertIsoNamesToLanguage() is case insensitive
+//
+// Sort order: Most used first.
+//
+// The default entry for a LangID <-> ISO mapping has to be first. For
+// conversion of legacy mappings one LangID can map to multiple ISO codes, and
+// one ISO code combination can map to multiple LangIDs. For compatibility with
+// already existing calls it can also be a sequence as follows:
 
-// Sortorder: Most used first
-// The default entry for every language string has to be first.
+// LANGUAGE_ENGLISH,    "en", ""
+// LANGUAGE_ENGLISH_US, "en", "US"
+
+// Here, in a convertIsoNamesToLanguage() call "en-US" is converted to
+// LANGUAGE_ENGLISH_US and "en" is converted to LANGUAGE_ENGLISH. A call with
+// "en-ZZ" would result in LANGUAGE_ENGLISH because the first entry matching
+// the language and not having a country is returned, regardless of whether
+// being sorted before or after other entries of the same language with some
+// country. To obtain a _locale_ (not language only) in the order given,
+// convertLocaleToLanguageWithFallback() must be called.
+
+/* erAck: 2007-07-05T20:01+0200  TODO: The entire suite's "primary language
+ * only" usage and locale fall back should be cleaned up and made consistent. I
+ * strongly doubt that most callers exactly expect the behavior described.
+ * Currently these primary LangIDs are used literally in OOo code:
+ * LANGUAGE_ENGLISH LANGUAGE_CHINESE LANGUAGE_ARABIC LANGUAGE_MALAY
+ * LANGUAGE_AZERI LANGUAGE_UZBEK LANGUAGE_URDU LANGUAGE_KASHMIRI
+ */
 
 static MsLangId::IsoLangEntry const aImplIsoLangEntries[] =
 {
@@ -102,8 +125,8 @@ static MsLangId::IsoLangEntry const aImplIsoLangEntries[] =
     { LANGUAGE_DANISH,                      "da", "DK" },
     { LANGUAGE_GREEK,                       "el", "GR" },
     { LANGUAGE_CHINESE,                     "zh", ""   },
-    { LANGUAGE_CHINESE_TRADITIONAL,         "zh", "TW" },
     { LANGUAGE_CHINESE_SIMPLIFIED,          "zh", "CN" },
+    { LANGUAGE_CHINESE_TRADITIONAL,         "zh", "TW" },
     { LANGUAGE_CHINESE_HONGKONG,            "zh", "HK" },
     { LANGUAGE_CHINESE_SINGAPORE,           "zh", "SG" },
     { LANGUAGE_CHINESE_MACAU,               "zh", "MO" },
@@ -128,8 +151,8 @@ static MsLangId::IsoLangEntry const aImplIsoLangEntries[] =
     { LANGUAGE_ITALIAN_SWISS,               "it", "CH" },
     { LANGUAGE_ALBANIAN,                    "sq", "AL" },
     { LANGUAGE_ARABIC,                      "ar", ""   },
-    { LANGUAGE_ARABIC_SAUDI_ARABIA,         "ar", "SA" },
     { LANGUAGE_ARABIC_EGYPT,                "ar", "EG" },
+    { LANGUAGE_ARABIC_SAUDI_ARABIA,         "ar", "SA" },
     { LANGUAGE_ARABIC_UAE,                  "ar", "AE" },
     { LANGUAGE_ARABIC_IRAQ,                 "ar", "IQ" },
     { LANGUAGE_ARABIC_LIBYA,                "ar", "LY" },
@@ -402,6 +425,9 @@ static MsLangId::IsoLangEntry const aImplIsoLangEntries[] =
     { LANGUAGE_DONTKNOW,                    "",   ""   }    // marks end of table
 };
 
+static MsLangId::IsoLangEntry aLastResortFallbackEntry =
+{ LANGUAGE_ENGLISH_US, "en", "US" };
+
 // -----------------------------------------------------------------------
 
 // In this table are the countries which should mapped to a specific
@@ -513,17 +539,17 @@ static IsoLangOtherEntry const aImplOtherEntries[] =
 // =======================================================================
 
 // static
-void MsLangId::convertLanguageToIsoNames( LanguageType eLang,
+void MsLangId::convertLanguageToIsoNames( LanguageType nLang,
         rtl::OUString& rLangStr, rtl::OUString& rCountry )
 {
-    if ( eLang == LANGUAGE_SYSTEM )
-        eLang = MsLangId::getSystemLanguage();
+    if ( nLang == LANGUAGE_SYSTEM )
+        nLang = MsLangId::getSystemLanguage();
 
     // Search for LangID (in this table we find only defined ISO combinations)
     const IsoLangEntry* pEntry = aImplIsoLangEntries;
     do
     {
-        if ( pEntry->mnLang == eLang )
+        if ( pEntry->mnLang == nLang )
         {
             rLangStr = rtl::OUString::createFromAscii( pEntry->maLangStr );
             rCountry = rtl::OUString::createFromAscii( pEntry->maCountry );
@@ -539,7 +565,7 @@ void MsLangId::convertLanguageToIsoNames( LanguageType eLang,
     const IsoLangNoneStdEntry* pNoneStdEntry = aImplIsoNoneStdLangEntries;
     do
     {
-        if ( pNoneStdEntry->mnLang == eLang )
+        if ( pNoneStdEntry->mnLang == nLang )
         {
             rLangStr = rtl::OUString::createFromAscii( pNoneStdEntry->maLangStr );
             rCountry = rtl::OUString::createFromAscii( pNoneStdEntry->maCountry );
@@ -557,17 +583,17 @@ void MsLangId::convertLanguageToIsoNames( LanguageType eLang,
 // -----------------------------------------------------------------------
 
 // static
-void MsLangId::convertLanguageToIsoNames( LanguageType eLang,
+void MsLangId::convertLanguageToIsoNames( LanguageType nLang,
         rtl::OString& rLangStr, rtl::OString& rCountry )
 {
-    if ( eLang == LANGUAGE_SYSTEM )
-        eLang = MsLangId::getSystemLanguage();
+    if ( nLang == LANGUAGE_SYSTEM )
+        nLang = MsLangId::getSystemLanguage();
 
     // Search for LangID (in this table we find only defined ISO combinations)
     const IsoLangEntry* pEntry = aImplIsoLangEntries;
     do
     {
-        if ( pEntry->mnLang == eLang )
+        if ( pEntry->mnLang == nLang )
         {
             rLangStr = rtl::OString( pEntry->maLangStr );
             rCountry = rtl::OString( pEntry->maCountry );
@@ -583,7 +609,7 @@ void MsLangId::convertLanguageToIsoNames( LanguageType eLang,
     const IsoLangNoneStdEntry* pNoneStdEntry = aImplIsoNoneStdLangEntries;
     do
     {
-        if ( pNoneStdEntry->mnLang == eLang )
+        if ( pNoneStdEntry->mnLang == nLang )
         {
             rLangStr = rtl::OString( pNoneStdEntry->maLangStr );
             rCountry = rtl::OString( pNoneStdEntry->maCountry );
@@ -600,13 +626,167 @@ void MsLangId::convertLanguageToIsoNames( LanguageType eLang,
 
 // -----------------------------------------------------------------------
 
+static const MsLangId::IsoLangEntry & lcl_lookupFallbackEntry( LanguageType nLang )
+{
+    LanguageType nPrimary = MsLangId::getPrimaryLanguage( nLang);
+
+    // Search for LangID and remember first lang-only.
+    const MsLangId::IsoLangEntry* pFirstPrimary = NULL;
+    const MsLangId::IsoLangEntry* pEntry = aImplIsoLangEntries;
+    do
+    {
+        if (pEntry->mnLang == nLang)
+        {
+            if (*pEntry->maCountry)
+                return *pEntry;
+            switch (nLang)
+            {
+                // These are known to have no country assigned.
+                case LANGUAGE_BASQUE:
+                case LANGUAGE_RHAETO_ROMAN:
+                case LANGUAGE_USER_ESPERANTO:
+                case LANGUAGE_USER_INTERLINGUA:
+                    return *pEntry;
+                default:
+                    ;   // nothing
+            }
+        }
+        if (!pFirstPrimary &&
+                MsLangId::getPrimaryLanguage( pEntry->mnLang) == nPrimary)
+            pFirstPrimary = pEntry;
+        ++pEntry;
+    }
+    while ( pEntry->mnLang != LANGUAGE_DONTKNOW );
+
+    // Language not found at all => use default.
+    if (!pFirstPrimary)
+        return aLastResortFallbackEntry;
+
+    // Search for first entry of primary language with any country.
+    pEntry = pFirstPrimary;
+    do
+    {
+        if (MsLangId::getPrimaryLanguage( pEntry->mnLang) == nLang)
+        {
+            if (*pEntry->maCountry)
+                return *pEntry;
+        }
+        ++pEntry;
+    }
+    while ( pEntry->mnLang != LANGUAGE_DONTKNOW );
+
+    return aLastResortFallbackEntry;
+}
+
 // static
-rtl::OUString MsLangId::convertLanguageToIsoString( LanguageType eLang,
+LanguageType MsLangId::lookupFallbackLanguage( LanguageType nLang )
+{
+    return lcl_lookupFallbackEntry( nLang).mnLang;
+}
+
+
+// static
+::com::sun::star::lang::Locale MsLangId::lookupFallbackLocale( LanguageType nLang )
+{
+    const MsLangId::IsoLangEntry& rEntry = lcl_lookupFallbackEntry( nLang);
+    return ::com::sun::star::lang::Locale(
+            rtl::OUString::createFromAscii( rEntry.maLangStr),
+            rtl::OUString::createFromAscii( rEntry.maCountry),
+            rtl::OUString());
+}
+
+// -----------------------------------------------------------------------
+
+static const MsLangId::IsoLangEntry & lcl_lookupFallbackEntry(
+        const ::com::sun::star::lang::Locale & rLocale )
+{
+    // language is lower case in table
+    rtl::OUString aLowerLang = rLocale.Language.toAsciiLowerCase();
+    // country is upper case in table
+    rtl::OUString aUpperCountry = rLocale.Country.toAsciiUpperCase();
+    sal_Int32 nCountryLen = aUpperCountry.getLength();
+
+    // Search for locale and remember first lang-only.
+    const MsLangId::IsoLangEntry* pFirstLang = NULL;
+    const MsLangId::IsoLangEntry* pEntry = aImplIsoLangEntries;
+    do
+    {
+        if (aLowerLang.equalsAscii( pEntry->maLangStr))
+        {
+            if (*pEntry->maCountry)
+            {
+                if (nCountryLen && aUpperCountry.equalsAscii( pEntry->maCountry))
+                    return *pEntry;
+            }
+            else
+            {
+                switch (pEntry->mnLang)
+                {
+                    // These are known to have no country assigned.
+                    case LANGUAGE_BASQUE:
+                    case LANGUAGE_RHAETO_ROMAN:
+                    case LANGUAGE_USER_ESPERANTO:
+                    case LANGUAGE_USER_INTERLINGUA:
+                        return *pEntry;
+                    default:
+                        ;   // nothing
+                }
+            }
+            if (!pFirstLang)
+                pFirstLang = pEntry;
+        }
+        ++pEntry;
+    }
+    while ( pEntry->mnLang != LANGUAGE_DONTKNOW );
+
+    // Language not found at all => use default.
+    if (!pFirstLang)
+        return aLastResortFallbackEntry;
+
+    // Search for first entry of language with any country.
+    pEntry = pFirstLang;
+    do
+    {
+        if (aLowerLang.equalsAscii( pEntry->maLangStr))
+        {
+            if (*pEntry->maCountry)
+                return *pEntry;
+        }
+        ++pEntry;
+    }
+    while ( pEntry->mnLang != LANGUAGE_DONTKNOW );
+
+    return aLastResortFallbackEntry;
+}
+
+// static
+LanguageType MsLangId::lookupFallbackLanguage(
+        const ::com::sun::star::lang::Locale & rLocale )
+{
+    return lcl_lookupFallbackEntry( rLocale).mnLang;
+}
+
+
+// static
+::com::sun::star::lang::Locale MsLangId::lookupFallbackLocale(
+        const ::com::sun::star::lang::Locale & rLocale )
+{
+    const MsLangId::IsoLangEntry& rEntry = lcl_lookupFallbackEntry( rLocale);
+    return ::com::sun::star::lang::Locale(
+            rtl::OUString::createFromAscii( rEntry.maLangStr),
+            rtl::OUString::createFromAscii( rEntry.maCountry),
+            rtl::OUString());
+}
+
+// -----------------------------------------------------------------------
+
+// static
+rtl::OUString MsLangId::convertLanguageToIsoString( LanguageType nLang,
         sal_Unicode cSep )
 {
     rtl::OUString   aLangStr;
     rtl::OUString   aCountry;
-    convertLanguageToIsoNames( eLang, aLangStr, aCountry );
+    convertLanguageToIsoNames( nLang, aLangStr, aCountry );
     if ( aCountry.getLength() )
     {
         rtl::OUStringBuffer aBuf( aLangStr);
@@ -621,12 +801,12 @@ rtl::OUString MsLangId::convertLanguageToIsoString( LanguageType eLang,
 // -----------------------------------------------------------------------
 
 // static
-rtl::OString MsLangId::convertLanguageToIsoByteString( LanguageType eLang,
+rtl::OString MsLangId::convertLanguageToIsoByteString( LanguageType nLang,
         sal_Char cSep )
 {
     rtl::OString  aLangStr;
     rtl::OString  aCountry;
-    convertLanguageToIsoNames( eLang, aLangStr, aCountry );
+    convertLanguageToIsoNames( nLang, aLangStr, aCountry );
     if ( aCountry.getLength() )
     {
         rtl::OStringBuffer aBuf( aLangStr);
