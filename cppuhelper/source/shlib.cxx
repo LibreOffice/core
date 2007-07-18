@@ -4,9 +4,9 @@
  *
  *  $RCSfile: shlib.cxx,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: kz $ $Date: 2007-05-09 13:26:03 $
+ *  last change: $Author: obo $ $Date: 2007-07-18 12:18:14 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -322,13 +322,13 @@ static OUString getLibEnv(OUString         const & aModulePath,
     return aExcMsg;
 }
 
-extern "C" {static void s_getFactory(va_list param)
+extern "C" {static void s_getFactory(va_list * pParam)
 {
-    component_getFactoryFunc         pSym      = va_arg(param, component_getFactoryFunc);
-    OString                  const * pImplName = va_arg(param, OString const *);
-    void                           * pSMgr     = va_arg(param, void *);
-    void                           * pKey      = va_arg(param, void *);
-    void                          ** ppSSF     = va_arg(param, void **);
+    component_getFactoryFunc         pSym      = va_arg(*pParam, component_getFactoryFunc);
+    OString                  const * pImplName = va_arg(*pParam, OString const *);
+    void                           * pSMgr     = va_arg(*pParam, void *);
+    void                           * pKey      = va_arg(*pParam, void *);
+    void                          ** ppSSF     = va_arg(*pParam, void **);
 
     *ppSSF = pSym(pImplName->getStr(), pSMgr, pKey);
 }}
@@ -469,12 +469,12 @@ Reference< XInterface > SAL_CALL loadSharedLibComponentFactory(
 }
 
 //==============================================================================
-extern "C" { static void s_writeInfo(va_list param)
+extern "C" { static void s_writeInfo(va_list * pParam)
 {
-    component_writeInfoFunc         pSym      = va_arg(param, component_writeInfoFunc);
-    void                          * pSMgr     = va_arg(param, void *);
-    void                          * pKey      = va_arg(param, void *);
-    sal_Bool                      * pbRet     = va_arg(param, sal_Bool *);
+    component_writeInfoFunc         pSym      = va_arg(*pParam, component_writeInfoFunc);
+    void                          * pSMgr     = va_arg(*pParam, void *);
+    void                          * pKey      = va_arg(*pParam, void *);
+    sal_Bool                      * pbRet     = va_arg(*pParam, sal_Bool *);
 
     *pbRet = pSym(pSMgr, pKey);
 
