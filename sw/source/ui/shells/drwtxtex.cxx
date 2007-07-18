@@ -4,9 +4,9 @@
  *
  *  $RCSfile: drwtxtex.cxx,v $
  *
- *  $Revision: 1.38 $
+ *  $Revision: 1.39 $
  *
- *  last change: $Author: kz $ $Date: 2007-05-10 16:22:28 $
+ *  last change: $Author: obo $ $Date: 2007-07-18 09:47:09 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -219,22 +219,27 @@ void SwDrawTextShell::Execute( SfxRequest &rReq )
     sal_uInt16 nEEWhich = 0;
     switch (nSlot)
     {
-    case SID_ATTR_CHAR_FONT:
-    case SID_ATTR_CHAR_FONTHEIGHT:
-    case SID_ATTR_CHAR_WEIGHT:
-    case SID_ATTR_CHAR_POSTURE:
+        case SID_ATTR_CHAR_FONT:
+        case SID_ATTR_CHAR_FONTHEIGHT:
+        case SID_ATTR_CHAR_WEIGHT:
+        case SID_ATTR_CHAR_POSTURE:
         {
             SfxItemPool* pPool = aEditAttr.GetPool()->GetSecondaryPool();
             if( !pPool )
                 pPool = aEditAttr.GetPool();
             SvxScriptSetItem aSetItem( nSlot, *pPool );
-            aSetItem.PutItemForScriptType( pOLV->GetSelectedScriptType(),
-                                            pNewAttrs->Get( nWhich ));
+
+            // #i78017 establish the same behaviour as in Writer
+            USHORT nScriptTypes = SCRIPTTYPE_LATIN | SCRIPTTYPE_ASIAN | SCRIPTTYPE_COMPLEX;
+            if (nSlot == SID_ATTR_CHAR_FONT)
+                nScriptTypes = pOLV->GetSelectedScriptType();
+
+            aSetItem.PutItemForScriptType( nScriptTypes, pNewAttrs->Get( nWhich ) );
             aNewAttr.Put( aSetItem.GetItemSet() );
         }
         break;
 
-    case SID_ATTR_CHAR_COLOR: nEEWhich = EE_CHAR_COLOR; break;
+        case SID_ATTR_CHAR_COLOR: nEEWhich = EE_CHAR_COLOR; break;
 
         case SID_ATTR_CHAR_UNDERLINE:
         {
@@ -753,10 +758,10 @@ void SwDrawTextShell::GetDrawTxtCtrlState(SfxItemSet& rSet)
         USHORT nSlotId = GetPool().GetSlotId( nWhich );
         switch( nSlotId )
         {
-        case SID_ATTR_CHAR_FONT:
-        case SID_ATTR_CHAR_FONTHEIGHT:
-        case SID_ATTR_CHAR_WEIGHT:
-        case SID_ATTR_CHAR_POSTURE:
+            case SID_ATTR_CHAR_FONT:
+            case SID_ATTR_CHAR_FONTHEIGHT:
+            case SID_ATTR_CHAR_WEIGHT:
+            case SID_ATTR_CHAR_POSTURE:
             {
                 SfxItemPool* pPool = aEditAttr.GetPool()->GetSecondaryPool();
                 if( !pPool )
