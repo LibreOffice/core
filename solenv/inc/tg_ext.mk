@@ -4,9 +4,9 @@
 #
 #   $RCSfile: tg_ext.mk,v $
 #
-#   $Revision: 1.76 $
+#   $Revision: 1.77 $
 #
-#   last change: $Author: rt $ $Date: 2007-04-26 13:57:21 $
+#   last change: $Author: obo $ $Date: 2007-07-18 08:01:29 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -189,7 +189,7 @@ $(PACKAGE_DIR)$/$(ADD_FILES_FLAG_FILE) : $(PACKAGE_DIR)$/$(UNTAR_FLAG_FILE) $(T_
 #patch
 $(PACKAGE_DIR)$/$(PATCH_FLAG_FILE) : $(PACKAGE_DIR)$/$(ADD_FILES_FLAG_FILE)
 .IF "$(PATCH_FILE_NAME)"=="none" ||	"$(PATCH_FILE_NAME)"==""
-    echo no patch needed...
+    @echo no patch needed...
     $(TOUCH) $@
 .ELSE			# "$(PATCH_FILE_NAME)"=="none" ||	"$(PATCH_FILE_NAME)"==""
 .IF "$(GUI)"=="WNT"
@@ -217,17 +217,17 @@ $(PACKAGE_DIR)$/$(PATCH_FLAG_FILE) : $(PACKAGE_DIR)$/$(ADD_FILES_FLAG_FILE)
 .ENDIF          # "$(T_ADDITIONAL_FILES)"!=""
 
 .IF "$(CONVERTFILES)"!=""
-$(MISC)$/convert_unx_flag :  $(PACKAGE_DIR)$/$(UNTAR_FLAG_FILE)
-    $(CONVERT) unix $(foreach,i,$(CONVERTFILES) $(PACKAGE_DIR)$/$(TARFILE_ROOTDIR)$/$i) && $(TOUCH) $(MISC)$/convert_unx_flag
+$(MISC)$/$(TARGET)_convert_unx_flag :  $(PACKAGE_DIR)$/$(UNTAR_FLAG_FILE)
+    $(CONVERT) unix $(foreach,i,$(CONVERTFILES) $(PACKAGE_DIR)$/$(TARFILE_ROOTDIR)$/$i) && $(TOUCH) $(MISC)$/$(TARGET)_convert_unx_flag
 
-$(PACKAGE_DIR)$/$(PATCH_FLAG_FILE) : $(MISC)$/convert_unx_flag
+$(PACKAGE_DIR)$/$(PATCH_FLAG_FILE) : $(MISC)$/$(TARGET)_convert_unx_flag
 
-$(MISC)$/convert_dos_flag : $(PACKAGE_DIR)$/$(PATCH_FLAG_FILE)
-    $(CONVERT) dos  $(foreach,i,$(CONVERTFILES) $(PACKAGE_DIR)$/$(TARFILE_ROOTDIR)$/$i) && $(TOUCH) $(MISC)$/convert_dos_flag
+$(MISC)$/$(TARGET)_convert_dos_flag : $(PACKAGE_DIR)$/$(PATCH_FLAG_FILE)
+    $(CONVERT) dos  $(foreach,i,$(CONVERTFILES) $(PACKAGE_DIR)$/$(TARFILE_ROOTDIR)$/$i) && $(TOUCH) $(MISC)$/$(TARGET)_convert_dos_flag
 
-$(PACKAGE_DIR)$/$(CONFIGURE_FLAG_FILE) : $(MISC)$/convert_dos_flag
+$(PACKAGE_DIR)$/$(CONFIGURE_FLAG_FILE) : $(MISC)$/$(TARGET)_convert_dos_flag
 
-patch : $(MISC)$/convert_dos_flag
+patch : $(MISC)$/$(TARGET)_convert_dos_flag
 
 .ENDIF          # "$(CONVERTFILES)"!=""
 
