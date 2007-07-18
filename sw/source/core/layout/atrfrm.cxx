@@ -4,9 +4,9 @@
  *
  *  $RCSfile: atrfrm.cxx,v $
  *
- *  $Revision: 1.62 $
+ *  $Revision: 1.63 $
  *
- *  last change: $Author: ihi $ $Date: 2007-06-05 17:29:35 $
+ *  last change: $Author: obo $ $Date: 2007-07-18 14:28:02 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1230,6 +1230,7 @@ BOOL SwFmtCol::PutValue( const uno::Any& rVal, BYTE nMemberId )
                     case 0: eAdj = COLADJ_TOP;  break;  //VerticalAlignment_TOP
                     case 1: eAdj = COLADJ_CENTER;break; //VerticalAlignment_MIDDLE
                     case 2: eAdj = COLADJ_BOTTOM;break; //VerticalAlignment_BOTTOM
+                    default: ASSERT( !this, "unknown alignment" ); break;
                 }
             }
         }
