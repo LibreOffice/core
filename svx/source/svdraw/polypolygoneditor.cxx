@@ -4,9 +4,9 @@
  *
  *  $RCSfile: polypolygoneditor.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2007-07-06 13:20:04 $
+ *  last change: $Author: obo $ $Date: 2007-07-18 11:51:12 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -59,16 +59,9 @@ bool PolyPolygonEditor::DeletePoints( const std::set< sal_uInt16 >& rAbsPoints )
         sal_uInt32 nPoly, nPnt;
         if( GetRelativePolyPoint(maPolyPolygon,(*aIter), nPoly, nPnt) )
         {
+            // remove point
             basegfx::B2DPolygon aCandidate(maPolyPolygon.getB2DPolygon(nPoly));
 
-            if(aCandidate.areControlVectorsUsed() && (aCandidate.count() > 1L) && (aCandidate.isClosed() || nPnt)&& !aCandidate.getControlVectorB(nPnt).equalZero())
-            {
-                // copy control vector to predecessor to rescue it
-                const sal_uInt32 nPredecessor(basegfx::tools::getIndexOfPredecessor(nPnt, aCandidate));
-                aCandidate.setControlPointB(nPredecessor, aCandidate.getControlPointB(nPnt));
-            }
-
-            // remove point
             aCandidate.remove(nPnt);
 
             if( ( mbIsClosed && aCandidate.count() < 3L) || (aCandidate.count() < 2L) )
@@ -105,18 +98,17 @@ bool PolyPolygonEditor::SetSegmentsKind(SdrPathSegmentKind eKind, const std::set
 
             if(nCount && (nPntNum < nCount || aCandidate.isClosed()))
             {
-                const bool bContolUsed(aCandidate.areControlVectorsUsed() &&
-                    !aCandidate.getControlVectorA(nPntNum).equalZero() &&
-                    !aCandidate.getControlVectorB(nPntNum).equalZero());
+                const sal_uInt32 nNextIndex((nPntNum + 1) % nCount);
+                const bool bContolUsed(aCandidate.areControlPointsUsed()
+                    && (aCandidate.isNextControlPointUsed(nPntNum) || aCandidate.isPrevControlPointUsed(nNextIndex)));
 
                 if(bContolUsed)
                 {
                     if(SDRPATHSEGMENT_TOGGLE == eKind || SDRPATHSEGMENT_LINE == eKind)
                     {
                         // remove control
-                        const basegfx::B2DVector aEmptyVector;
-                        aCandidate.setControlVectorA(nPntNum, aEmptyVector);
-                        aCandidate.setControlVectorB(nPntNum, aEmptyVector);
+                        aCandidate.resetNextControlPoint(nPntNum);
+                        aCandidate.resetPrevControlPoint(nNextIndex);
                         bCandidateChanged = true;
                     }
                 }
@@ -125,11 +117,11 @@ bool PolyPolygonEditor::SetSegmentsKind(SdrPathSegmentKind eKind, const std::set
                     if(SDRPATHSEGMENT_TOGGLE == eKind || SDRPATHSEGMENT_CURVE == eKind)
                     {
                         // add control
-                        const sal_uInt32 nNext(basegfx::tools::getIndexOfSuccessor(nPntNum, aCandidate));
                         const basegfx::B2DPoint aStart(aCandidate.getB2DPoint(nPntNum));
-                        const basegfx::B2DPoint aEnd(aCandidate.getB2DPoint(nNext));
-                        aCandidate.setControlPointA(nPntNum, interpolate(aStart, aEnd, (1.0 / 3.0)));
-                        aCandidate.setControlPointB(nPntNum, interpolate(aStart, aEnd, (2.0 / 3.0)));
+                        const basegfx::B2DPoint aEnd(aCandidate.getB2DPoint(nNextIndex));
+
+                        aCandidate.setNextControlPoint(nPntNum, interpolate(aStart, aEnd, (1.0 / 3.0)));
+                        aCandidate.setPrevControlPoint(nNextIndex, interpolate(aStart, aEnd, (2.0 / 3.0)));
                         bCandidateChanged = true;
                     }
                 }
