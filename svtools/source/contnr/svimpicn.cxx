@@ -4,9 +4,9 @@
  *
  *  $RCSfile: svimpicn.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: hr $ $Date: 2007-06-27 21:20:53 $
+ *  last change: $Author: obo $ $Date: 2007-07-18 08:52:40 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1741,10 +1741,6 @@ void SvImpIconView::PositionScrollBars( long nRealWidth, long nRealHeight )
     aPos.X()++;
 #endif
 
-#ifdef MAC
-    aPos.Y()--;
-    aPos.X()++;
-#endif
     if( aVerSBar.GetPosPixel() != aPos )
         aVerSBar.SetPosPixel( aPos );
 }
@@ -1832,9 +1828,6 @@ void SvImpIconView::AdjustScrollBars()
 #endif
 #ifdef OS2
     aSize.Height() += 3;
-#endif
-#ifdef MAC
-    aSize.Height() += 2;
 #endif
     if( aSize != aVerSBar.GetSizePixel() )
         aVerSBar.SetSizePixel( aSize );
