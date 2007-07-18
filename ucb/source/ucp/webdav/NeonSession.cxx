@@ -4,9 +4,9 @@
  *
  *  $RCSfile: NeonSession.cxx,v $
  *
- *  $Revision: 1.47 $
+ *  $Revision: 1.48 $
  *
- *  last change: $Author: rt $ $Date: 2007-07-03 12:13:30 $
+ *  last change: $Author: obo $ $Date: 2007-07-18 07:48:52 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -680,6 +680,7 @@ sal_Bool NeonSession::CanUse( const rtl::OUString & inUri )
 // virtual
 sal_Bool NeonSession::UsesProxy()
 {
+    Init();
     return ( m_aProxyName.getLength() > 0 );
 }
 
