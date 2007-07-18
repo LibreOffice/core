@@ -4,9 +4,9 @@
  *
  *  $RCSfile: transfrm.cxx,v $
  *
- *  $Revision: 1.30 $
+ *  $Revision: 1.31 $
  *
- *  last change: $Author: hr $ $Date: 2007-06-27 17:50:27 $
+ *  last change: $Author: obo $ $Date: 2007-07-18 10:53:04 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -138,41 +138,22 @@ static USHORT pSlantRanges[] =
     0
 };
 
-
-// Funktion ConvertRect
-Rectangle lcl_ConvertRect( const Rectangle& rInRect, USHORT nDigits, MapUnit ePoolUnit, FieldUnit eDlgUnit )
+void lcl_ConvertRect(basegfx::B2DRange& rRange, const sal_uInt16 nDigits, const MapUnit ePoolUnit, const FieldUnit eDlgUnit)
 {
-    Rectangle aRect;
-    aRect.Left()   = static_cast<long>(MetricField::ConvertValue( rInRect.Left(), nDigits, ePoolUnit, eDlgUnit ));
-    aRect.Right()  = static_cast<long>(MetricField::ConvertValue( rInRect.Right(), nDigits, ePoolUnit, eDlgUnit ));
-    aRect.Top()    = static_cast<long>(MetricField::ConvertValue( rInRect.Top(), nDigits, ePoolUnit, eDlgUnit ));
-    aRect.Bottom() = static_cast<long>(MetricField::ConvertValue( rInRect.Bottom(), nDigits, ePoolUnit, eDlgUnit ));
-    return( aRect );
+    const basegfx::B2DPoint aTopLeft(
+        (double)MetricField::ConvertValue(basegfx::fround(rRange.getMinX()), nDigits, ePoolUnit, eDlgUnit),
+        (double)MetricField::ConvertValue(basegfx::fround(rRange.getMinY()), nDigits, ePoolUnit, eDlgUnit));
+    const basegfx::B2DPoint aBottomRight(
+        (double)MetricField::ConvertValue(basegfx::fround(rRange.getMaxX()), nDigits, ePoolUnit, eDlgUnit),
+        (double)MetricField::ConvertValue(basegfx::fround(rRange.getMaxY()), nDigits, ePoolUnit, eDlgUnit));
+
+    rRange = basegfx::B2DRange(aTopLeft, aBottomRight);
 }
 
-// Funktion ConvertPoint
-Point lcl_ConvertPoint( Point aInPt, USHORT nDigits, MapUnit ePoolUnit, FieldUnit eDlgUnit )
+void lcl_ScaleRect(basegfx::B2DRange& rRange, const Fraction aUIScale)
 {
-    Point aPt;
-    aPt.X() = static_cast<long>(MetricField::ConvertValue( aInPt.X(), nDigits, ePoolUnit, eDlgUnit ));
-    aPt.Y() = static_cast<long>(MetricField::ConvertValue( aInPt.Y(), nDigits, ePoolUnit, eDlgUnit ));
-    return( aPt );
-}
-
-// Funktion ScaleRect (Beruecksichtigung des Massstabes)
-void lcl_ScaleRect( Rectangle& aRect, Fraction aUIScale )
-{
-    aRect.Left()      = Fraction( aRect.Left() )   / aUIScale;
-    aRect.Right()     = Fraction( aRect.Right() )  / aUIScale;
-    aRect.Top()       = Fraction( aRect.Top() )    / aUIScale;
-    aRect.Bottom()    = Fraction( aRect.Bottom() ) / aUIScale;
-}
-
-// Funktion ScalePoint (Beruecksichtigung des Massstabes)
-void lcl_ScalePoint( Point& aPt, Fraction aUIScale )
-{
-    aPt.X() = Fraction( aPt.X() ) / aUIScale;
-    aPt.Y() = Fraction( aPt.Y() ) / aUIScale;
+    const double fFactor(1.0 / double(aUIScale));
+    rRange = basegfx::B2DRange(rRange.getMinimum() * fFactor, rRange.getMaximum() * fFactor);
 }
 
 /*************************************************************************
@@ -187,27 +168,23 @@ SvxTransformTabDialog::SvxTransformTabDialog( Window* pParent, const SfxItemSet*
     pView       ( pSdrView ),
     nAnchorCtrls(nAnchorTypes)
 {
+    DBG_ASSERT(pView, "no valid view (!)");
     FreeResource();
 
-    DBG_ASSERT( pView, "Keine gueltige View Uebergeben!" );
-
     //different positioning page in Writer
-    if(nAnchorCtrls & 0x00ff )
+    if(nAnchorCtrls & 0x00ff)
     {
-        AddTabPage( RID_SVXPAGE_SWPOSSIZE, SvxSwPosSizeTabPage::Create,
-                           SvxSwPosSizeTabPage::GetRanges );
-        RemoveTabPage( RID_SVXPAGE_POSITION_SIZE);
+        AddTabPage(RID_SVXPAGE_SWPOSSIZE, SvxSwPosSizeTabPage::Create, SvxSwPosSizeTabPage::GetRanges);
+        RemoveTabPage(RID_SVXPAGE_POSITION_SIZE);
     }
     else
     {
-        AddTabPage( RID_SVXPAGE_POSITION_SIZE, SvxPositionSizeTabPage::Create,
-                            SvxPositionSizeTabPage::GetRanges );
-        RemoveTabPage( RID_SVXPAGE_SWPOSSIZE );
+        AddTabPage(RID_SVXPAGE_POSITION_SIZE, SvxPositionSizeTabPage::Create, SvxPositionSizeTabPage::GetRanges);
+        RemoveTabPage(RID_SVXPAGE_SWPOSSIZE);
     }
-    AddTabPage( RID_SVXPAGE_ANGLE, SvxAngleTabPage::Create,
-                            SvxAngleTabPage::GetRanges );
-    AddTabPage( RID_SVXPAGE_SLANT, SvxSlantTabPage::Create,
-                            SvxSlantTabPage::GetRanges );
+
+    AddTabPage(RID_SVXPAGE_ANGLE, SvxAngleTabPage::Create, SvxAngleTabPage::GetRanges);
+    AddTabPage(RID_SVXPAGE_SLANT, SvxSlantTabPage::Create, SvxSlantTabPage::GetRanges);
 }
 
 // -----------------------------------------------------------------------
@@ -218,44 +195,65 @@ SvxTransformTabDialog::~SvxTransformTabDialog()
 
 // -----------------------------------------------------------------------
 
-void SvxTransformTabDialog::PageCreated( USHORT nId, SfxTabPage &rPage )
+void SvxTransformTabDialog::PageCreated(USHORT nId, SfxTabPage &rPage)
 {
-    switch( nId )
+    switch(nId)
     {
         case RID_SVXPAGE_POSITION_SIZE:
-            ( (SvxPositionSizeTabPage&) rPage ).SetView( pView );
-            ( (SvxPositionSizeTabPage&) rPage ).Construct();
-          if( nAnchorCtrls & SVX_OBJ_NORESIZE )
-              ( (SvxPositionSizeTabPage&) rPage ).DisableResize();
-          if( nAnchorCtrls & SVX_OBJ_NOPROTECT )
-              ( (SvxPositionSizeTabPage&) rPage ).DisableProtect();
-            ( (SvxPositionSizeTabPage&) rPage ).UpdateControlStates();
-        break;
+        {
+            SvxPositionSizeTabPage& rSvxPos =  static_cast<SvxPositionSizeTabPage&>(rPage);
+            rSvxPos.SetView(pView);
+            rSvxPos.Construct();
+
+            if(nAnchorCtrls & SVX_OBJ_NORESIZE)
+            {
+                rSvxPos.DisableResize();
+            }
+
+            if(nAnchorCtrls & SVX_OBJ_NOPROTECT)
+            {
+                rSvxPos.DisableProtect();
+                rSvxPos.UpdateControlStates();
+            }
+
+            break;
+        }
         case RID_SVXPAGE_SWPOSSIZE :
         {
             SvxSwPosSizeTabPage& rSwPos =  static_cast<SvxSwPosSizeTabPage&>(rPage);
+
             rSwPos.EnableAnchorTypes(nAnchorCtrls);
-            rSwPos.SetValidateFramePosLink( aValidateLink );
-            rSwPos.SetView( pView );
+            rSwPos.SetValidateFramePosLink(aValidateLink);
+            rSwPos.SetView(pView);
+
+            break;
         }
-        break;
 
         case RID_SVXPAGE_ANGLE:
-            ( (SvxAngleTabPage&) rPage ).SetView( pView );
-            ( (SvxAngleTabPage&) rPage ).Construct();
-        break;
+        {
+            SvxAngleTabPage& rSvxAng =  static_cast<SvxAngleTabPage&>(rPage);
+
+            rSvxAng.SetView( pView );
+            rSvxAng.Construct();
+
+            break;
+        }
 
         case RID_SVXPAGE_SLANT:
-            ( (SvxSlantTabPage&) rPage ).SetView( pView );
-            ( (SvxSlantTabPage&) rPage ).Construct();
-        break;
+        {
+            SvxSlantTabPage& rSvxSlnt =  static_cast<SvxSlantTabPage&>(rPage);
+
+            rSvxSlnt.SetView( pView );
+            rSvxSlnt.Construct();
+
+            break;
+        }
     }
 }
 
-/*-- 05.03.2004 11:47:36---------------------------------------------------
-    link for the Writer to validate positions
-  -----------------------------------------------------------------------*/
-void SvxTransformTabDialog::SetValidateFramePosLink( const Link& rLink )
+// -----------------------------------------------------------------------
+
+void SvxTransformTabDialog::SetValidateFramePosLink(const Link& rLink)
 {
     aValidateLink = rLink;
 }
@@ -287,62 +285,58 @@ SvxAngleTabPage::SvxAngleTabPage( Window* pParent, const SfxItemSet& rInAttrs  )
 {
     FreeResource();
 
-    // diese Page braucht ExchangeSupport
-//!     SetExchangeSupport(); noch nicht
-
-    // PoolUnit ermitteln
+    // calculate PoolUnit
     SfxItemPool* pPool = rOutAttrs.GetPool();
-    DBG_ASSERT( pPool, "Wo ist der Pool" );
-    ePoolUnit = pPool->GetMetric( SID_ATTR_TRANSFORM_POS_X );
+    DBG_ASSERT( pPool, "no pool (!)" );
+    ePoolUnit = pPool->GetMetric(SID_ATTR_TRANSFORM_POS_X);
 
-    aMtrAngle.SetModifyHdl( LINK( this, SvxAngleTabPage, ModifiedHdl ) );
+    aMtrAngle.SetModifyHdl(LINK( this, SvxAngleTabPage, ModifiedHdl));
 }
 
 // -----------------------------------------------------------------------
 
 void SvxAngleTabPage::Construct()
 {
-    // Setzen des Rechtecks
-    DBG_ASSERT( pView, "Keine gueltige View Uebergeben!" );
-    eDlgUnit = GetModuleFieldUnit( &GetItemSet() );
-    SetFieldUnit( aMtrPosX, eDlgUnit, TRUE );
-    SetFieldUnit( aMtrPosY, eDlgUnit, TRUE );
+    DBG_ASSERT(pView, "No valid view (!)");
+    eDlgUnit = GetModuleFieldUnit(&GetItemSet());
+    SetFieldUnit(aMtrPosX, eDlgUnit, TRUE);
+    SetFieldUnit(aMtrPosY, eDlgUnit, TRUE);
 
-    if( eDlgUnit == FUNIT_MILE ||
-        eDlgUnit == FUNIT_KM )
+    if(FUNIT_MILE == eDlgUnit || FUNIT_KM == eDlgUnit)
     {
         aMtrPosX.SetDecimalDigits( 3 );
         aMtrPosY.SetDecimalDigits( 3 );
     }
 
-    aRect = pView->GetAllMarkedRect();
-    pView->GetSdrPageView()->LogicToPagePos( aRect );
+    { // #i75273#
+        Rectangle aTempRect(pView->GetAllMarkedRect());
+        pView->GetSdrPageView()->LogicToPagePos(aTempRect);
+        maRange = basegfx::B2DRange(aTempRect.Left(), aTempRect.Top(), aTempRect.Right(), aTempRect.Bottom());
+    }
 
-    // Ankerposition beachten (Writer)
+    // Take anchor into account (Writer)
     const SdrMarkList& rMarkList = pView->GetMarkedObjectList();
-    if( rMarkList.GetMarkCount() >= 1 )
-    {
-        const SdrObject* pObj = rMarkList.GetMark( 0 )->GetMarkedSdrObj();
-        aAnchorPos = pObj->GetAnchorPos();
 
-        if( aAnchorPos != Point( 0, 0 ) ) // -> Writer
+    if(rMarkList.GetMarkCount())
+    {
+        const SdrObject* pObj = rMarkList.GetMark(0)->GetMarkedSdrObj();
+        maAnchor = basegfx::B2DPoint(pObj->GetAnchorPos().X(), pObj->GetAnchorPos().Y());
+
+        if(!maAnchor.equalZero()) // -> Writer
         {
-            aRect.Left() -= aAnchorPos.X();
-            aRect.Right() -= aAnchorPos.X();
-            aRect.Top() -= aAnchorPos.Y();
-            aRect.Bottom() -= aAnchorPos.Y();
+            maRange = basegfx::B2DRange(maRange.getMinimum() - maAnchor, maRange.getMaximum() - maAnchor);
         }
     }
 
-    // Massstab
-    Fraction aUIScale = pView->GetModel()->GetUIScale();
-    lcl_ScaleRect( aRect, aUIScale );
+    // take scale into account
+    const Fraction aUIScale(pView->GetModel()->GetUIScale());
+    lcl_ScaleRect(maRange, aUIScale);
 
-    // Umrechnung auf UI-Unit
-    USHORT nDigits = aMtrPosX.GetDecimalDigits();
-    aRect = lcl_ConvertRect( aRect, nDigits, (MapUnit) ePoolUnit, eDlgUnit );
+    // take UI units into account
+    sal_uInt16 nDigits(aMtrPosX.GetDecimalDigits());
+    lcl_ConvertRect(maRange, nDigits, (MapUnit)ePoolUnit, eDlgUnit);
 
-    if( !pView->IsRotateAllowed() )
+    if(!pView->IsRotateAllowed())
     {
         aFlPosition.Disable();
         aFtPosX.Disable();
@@ -361,87 +355,85 @@ void SvxAngleTabPage::Construct()
 
 // -----------------------------------------------------------------------
 
-BOOL SvxAngleTabPage::FillItemSet( SfxItemSet& rSet )
+BOOL SvxAngleTabPage::FillItemSet(SfxItemSet& rSet)
 {
     BOOL bModified = FALSE;
 
-    if(aMtrAngle.IsValueModified()
-        || aMtrPosX.IsValueModified()
-        || aMtrPosY.IsValueModified())
+    if(aMtrAngle.IsValueModified() || aMtrPosX.IsValueModified() || aMtrPosY.IsValueModified())
     {
-        rSet.Put( SfxInt32Item( GetWhich( SID_ATTR_TRANSFORM_ANGLE ),
-                        static_cast<INT32>(aMtrAngle.GetValue()) ) );
+        const double fUIScale(double(pView->GetModel()->GetUIScale()));
+        const double fTmpX((GetCoreValue(aMtrPosX, ePoolUnit) + maAnchor.getX()) * fUIScale);
+        const double fTmpY((GetCoreValue(aMtrPosY, ePoolUnit) + maAnchor.getY()) * fUIScale);
 
-        Fraction aUIScale = pView->GetModel()->GetUIScale();
-        long nTmp = GetCoreValue( aMtrPosX, ePoolUnit );
-        nTmp += aAnchorPos.X();
-        nTmp = Fraction( nTmp ) * aUIScale;
-        rSet.Put( SfxInt32Item( GetWhich( SID_ATTR_TRANSFORM_ROT_X ), nTmp ) );
-
-        nTmp = GetCoreValue( aMtrPosY, ePoolUnit );
-        nTmp += aAnchorPos.Y();
-        nTmp = Fraction( nTmp ) * aUIScale;
-        rSet.Put( SfxInt32Item( GetWhich( SID_ATTR_TRANSFORM_ROT_Y ), nTmp ) );
+        rSet.Put(SfxInt32Item(GetWhich(SID_ATTR_TRANSFORM_ANGLE), static_cast<sal_Int32>(aMtrAngle.GetValue())));
+        rSet.Put(SfxInt32Item(GetWhich(SID_ATTR_TRANSFORM_ROT_X), basegfx::fround(fTmpX)));
+        rSet.Put(SfxInt32Item(GetWhich(SID_ATTR_TRANSFORM_ROT_Y), basegfx::fround(fTmpY)));
 
         bModified |= TRUE;
     }
+
     return bModified;
 }
 
 // -----------------------------------------------------------------------
 
-void SvxAngleTabPage::Reset( const SfxItemSet& rAttrs )
+void SvxAngleTabPage::Reset(const SfxItemSet& rAttrs)
 {
+    const double fUIScale(double(pView->GetModel()->GetUIScale()));
+
     const SfxPoolItem* pItem = GetItem( rAttrs, SID_ATTR_TRANSFORM_ROT_X );
-
-    Fraction aUIScale = pView->GetModel()->GetUIScale();
-    if ( pItem )
+    if(pItem)
     {
-        long nTmp = ( (const SfxInt32Item*)pItem )->GetValue() - aAnchorPos.X();;
-        nTmp = Fraction( nTmp ) / aUIScale;
-        SetMetricValue( aMtrPosX, nTmp, ePoolUnit );
+        const double fTmp(((double)((const SfxInt32Item*)pItem)->GetValue() - maAnchor.getX()) / fUIScale);
+        SetMetricValue(aMtrPosX, basegfx::fround(fTmp), ePoolUnit);
     }
     else
-        aMtrPosX.SetText( String() );
-
-    pItem = GetItem( rAttrs, SID_ATTR_TRANSFORM_ROT_Y );
-    if ( pItem )
     {
-        long nTmp = ( (const SfxInt32Item*)pItem )->GetValue() - aAnchorPos.Y();;
-        nTmp = Fraction( nTmp ) / aUIScale;
-        SetMetricValue( aMtrPosY, nTmp, ePoolUnit );
+        aMtrPosX.SetText( String() );
+    }
+
+    pItem = GetItem(rAttrs, SID_ATTR_TRANSFORM_ROT_Y);
+    if(pItem)
+    {
+        const double fTmp(((double)((const SfxInt32Item*)pItem)->GetValue() - maAnchor.getY()) / fUIScale);
+        SetMetricValue(aMtrPosY, basegfx::fround(fTmp), ePoolUnit);
     }
     else
+    {
         aMtrPosX.SetText( String() );
+    }
+
     pItem = GetItem( rAttrs, SID_ATTR_TRANSFORM_ANGLE );
-
-    if ( pItem )
-        aMtrAngle.SetValue( ( (const SfxInt32Item*)pItem )->GetValue() );
+    if(pItem)
+    {
+        aMtrAngle.SetValue(((const SfxInt32Item*)pItem)->GetValue());
+    }
     else
+    {
         aMtrAngle.SetText( String() );
-    aMtrAngle.SaveValue();
+    }
 
-    ModifiedHdl( this );
+    aMtrAngle.SaveValue();
+    ModifiedHdl(this);
 }
 
 // -----------------------------------------------------------------------
 
-SfxTabPage* SvxAngleTabPage::Create( Window* pWindow,
-                                     const SfxItemSet& rSet )
+SfxTabPage* SvxAngleTabPage::Create( Window* pWindow, const SfxItemSet& rSet)
 {
-    return( new SvxAngleTabPage( pWindow, rSet ) );
+    return(new SvxAngleTabPage(pWindow, rSet));
 }
 
 //------------------------------------------------------------------------
 
 USHORT* SvxAngleTabPage::GetRanges()
 {
-    return( pAngleRanges );
+    return(pAngleRanges);
 }
 
 // -----------------------------------------------------------------------
 
-void SvxAngleTabPage::ActivatePage( const SfxItemSet& )
+void SvxAngleTabPage::ActivatePage(const SfxItemSet& /*rSet*/)
 {
 }
 
@@ -449,59 +441,79 @@ void SvxAngleTabPage::ActivatePage( const SfxItemSet& )
 
 int SvxAngleTabPage::DeactivatePage( SfxItemSet* _pSet )
 {
-    if( _pSet )
-        FillItemSet( *_pSet );
+    if(_pSet)
+    {
+        FillItemSet(*_pSet);
+    }
 
-    return( LEAVE_PAGE );
+    return LEAVE_PAGE;
 }
 
 //------------------------------------------------------------------------
 
-void SvxAngleTabPage::PointChanged( Window* pWindow, RECT_POINT eRP )
+void SvxAngleTabPage::PointChanged(Window* pWindow, RECT_POINT eRP)
 {
-    if( pWindow == &aCtlRect )
+    if(pWindow == &aCtlRect)
     {
-        switch( eRP )
+        switch(eRP)
         {
             case RP_LT:
-                aMtrPosX.SetUserValue( aRect.Left(), FUNIT_NONE );
-                aMtrPosY.SetUserValue( aRect.Top(), FUNIT_NONE );
+            {
+                aMtrPosX.SetUserValue( basegfx::fround64(maRange.getMinX()), FUNIT_NONE );
+                aMtrPosY.SetUserValue( basegfx::fround64(maRange.getMinY()), FUNIT_NONE );
                 break;
+            }
             case RP_MT:
-                aMtrPosX.SetUserValue( aRect.Center().X(), FUNIT_NONE );
-                aMtrPosY.SetUserValue( aRect.Top(), FUNIT_NONE );
+            {
+                aMtrPosX.SetUserValue( basegfx::fround64(maRange.getCenter().getX()), FUNIT_NONE );
+                aMtrPosY.SetUserValue( basegfx::fround64(maRange.getMinY()), FUNIT_NONE );
                 break;
+            }
             case RP_RT:
-                aMtrPosX.SetUserValue( aRect.Right(), FUNIT_NONE );
-                aMtrPosY.SetUserValue( aRect.Top(), FUNIT_NONE );
+            {
+                aMtrPosX.SetUserValue( basegfx::fround64(maRange.getMaxX()), FUNIT_NONE );
+                aMtrPosY.SetUserValue( basegfx::fround64(maRange.getMinY()), FUNIT_NONE );
                 break;
+            }
             case RP_LM:
-                aMtrPosX.SetUserValue( aRect.Left(), FUNIT_NONE );
-                aMtrPosY.SetUserValue( aRect.Center().Y(), FUNIT_NONE );
+            {
+                aMtrPosX.SetUserValue( basegfx::fround64(maRange.getMinX()), FUNIT_NONE );
+                aMtrPosY.SetUserValue( basegfx::fround64(maRange.getCenter().getY()), FUNIT_NONE );
                 break;
+            }
             case RP_MM:
-                aMtrPosX.SetUserValue( aRect.Center().X(), FUNIT_NONE );
-                aMtrPosY.SetUserValue( aRect.Center().Y(), FUNIT_NONE );
+            {
+                aMtrPosX.SetUserValue( basegfx::fround64(maRange.getCenter().getX()), FUNIT_NONE );
+                aMtrPosY.SetUserValue( basegfx::fround64(maRange.getCenter().getY()), FUNIT_NONE );
                 break;
+            }
             case RP_RM:
-                aMtrPosX.SetUserValue( aRect.Right(), FUNIT_NONE );
-                aMtrPosY.SetUserValue( aRect.Center().Y(), FUNIT_NONE );
+            {
+                aMtrPosX.SetUserValue( basegfx::fround64(maRange.getMaxX()), FUNIT_NONE );
+                aMtrPosY.SetUserValue( basegfx::fround64(maRange.getCenter().getY()), FUNIT_NONE );
                 break;
+            }
             case RP_LB:
-                aMtrPosX.SetUserValue( aRect.Left(), FUNIT_NONE );
-                aMtrPosY.SetUserValue( aRect.Bottom(), FUNIT_NONE );
+            {
+                aMtrPosX.SetUserValue( basegfx::fround64(maRange.getMinX()), FUNIT_NONE );
+                aMtrPosY.SetUserValue( basegfx::fround64(maRange.getMaxY()), FUNIT_NONE );
                 break;
+            }
             case RP_MB:
-                aMtrPosX.SetUserValue( aRect.Center().X(), FUNIT_NONE );
-                aMtrPosY.SetUserValue( aRect.Bottom(), FUNIT_NONE );
+            {
+                aMtrPosX.SetUserValue( basegfx::fround64(maRange.getCenter().getX()), FUNIT_NONE );
+                aMtrPosY.SetUserValue( basegfx::fround64(maRange.getMaxY()), FUNIT_NONE );
                 break;
+            }
             case RP_RB:
-                aMtrPosX.SetUserValue( aRect.Right(), FUNIT_NONE );
-                aMtrPosY.SetUserValue( aRect.Bottom(), FUNIT_NONE );
+            {
+                aMtrPosX.SetUserValue( basegfx::fround64(maRange.getMaxX()), FUNIT_NONE );
+                aMtrPosY.SetUserValue( basegfx::fround64(maRange.getMaxY()), FUNIT_NONE );
                 break;
+            }
         }
     }
-    else if( pWindow == &aCtlAngle )
+    else if(pWindow == &aCtlAngle)
     {
         switch( eRP )
         {
@@ -522,8 +534,7 @@ void SvxAngleTabPage::PointChanged( Window* pWindow, RECT_POINT eRP )
 
 IMPL_LINK( SvxAngleTabPage, ModifiedHdl, void *, EMPTYARG )
 {
-    // Setzen des Winkels im AngleControl
-    switch( aMtrAngle.GetValue() )
+    switch(aMtrAngle.GetValue())
     {
         case 13500: aCtlAngle.SetActualRP( RP_LT ); break;
         case  9000: aCtlAngle.SetActualRP( RP_MT ); break;
@@ -558,12 +569,12 @@ SvxSlantTabPage::SvxSlantTabPage( Window* pParent, const SfxItemSet& rInAttrs  )
 {
     FreeResource();
 
-    // diese Page braucht ExchangeSupport
+    // this page needs ExchangeSupport
     SetExchangeSupport();
 
-    // PoolUnit ermitteln
+    // evaluate PoolUnit
     SfxItemPool* pPool = rOutAttrs.GetPool();
-    DBG_ASSERT( pPool, "Wo ist der Pool" );
+    DBG_ASSERT( pPool, "no pool (!)" );
     ePoolUnit = pPool->GetMetric( SID_ATTR_TRANSFORM_POS_X );
 }
 
@@ -571,23 +582,26 @@ SvxSlantTabPage::SvxSlantTabPage( Window* pParent, const SfxItemSet& rInAttrs  )
 
 void SvxSlantTabPage::Construct()
 {
-    // Setzen des Rechtecks
-    DBG_ASSERT( pView, "Keine gueltige View Uebergeben!" );
-    eDlgUnit = GetModuleFieldUnit( &GetItemSet() );
-    SetFieldUnit( aMtrRadius, eDlgUnit, TRUE );
+    // get the range
+    DBG_ASSERT(pView, "no valid view (!)");
+    eDlgUnit = GetModuleFieldUnit(&GetItemSet());
+    SetFieldUnit(aMtrRadius, eDlgUnit, TRUE);
 
-    aRect = pView->GetAllMarkedRect();
-    pView->GetSdrPageView()->LogicToPagePos( aRect );
+    { // #i75273#
+        Rectangle aTempRect(pView->GetAllMarkedRect());
+        pView->GetSdrPageView()->LogicToPagePos(aTempRect);
+        maRange = basegfx::B2DRange(aTempRect.Left(), aTempRect.Top(), aTempRect.Right(), aTempRect.Bottom());
+    }
 }
 
 // -----------------------------------------------------------------------
 
-BOOL SvxSlantTabPage::FillItemSet( SfxItemSet& rAttrs )
+BOOL SvxSlantTabPage::FillItemSet(SfxItemSet& rAttrs)
 {
     BOOL  bModified = FALSE;
     INT32 nValue = 0L;
-
     String aStr = aMtrRadius.GetText();
+
     if( aStr != aMtrRadius.GetSavedValue() )
     {
         Fraction aUIScale = pView->GetModel()->GetUIScale();
@@ -599,6 +613,7 @@ BOOL SvxSlantTabPage::FillItemSet( SfxItemSet& rAttrs )
     }
 
     aStr = aMtrAngle.GetText();
+
     if( aStr != aMtrAngle.GetSavedValue() )
     {
         nValue = static_cast<INT32>(aMtrAngle.GetValue());
@@ -616,29 +631,21 @@ BOOL SvxSlantTabPage::FillItemSet( SfxItemSet& rAttrs )
 
         rAttrs.Put(SfxInt32Item(SID_ATTR_TRANSFORM_SHEAR_X, aPt.X()));
         rAttrs.Put(SfxInt32Item(SID_ATTR_TRANSFORM_SHEAR_Y, aPt.Y()));
-
-        // Referenzpunkt setzen
-//      Point aPt = aRect.Center();
-//      rAttrs.Put( SfxInt32Item( SID_ATTR_TRANSFORM_SHEAR_X, aPt.X() ) );
-//  rAttrs.Put( SfxInt32Item( SID_ATTR_TRANSFORM_SHEAR_Y, aPt.Y() ) );
-
         rAttrs.Put( SfxBoolItem( SID_ATTR_TRANSFORM_SHEAR_VERTICAL, FALSE ) );
     }
+
     return( bModified );
 }
 
 // -----------------------------------------------------------------------
 
-void SvxSlantTabPage::Reset( const SfxItemSet& rAttrs )
+void SvxSlantTabPage::Reset(const SfxItemSet& rAttrs)
 {
-    // Wenn die View selektierte Objekte besitzt, muessen entspr. Items,
-    // die SFX_ITEM_DEFAULT sind, disabled werden
+    // if the view has selected objects, items with SFX_ITEM_DEFAULT need to be disabled
     const SfxPoolItem* pItem;
 
     // Eckenradius
-//A if( bMarkedObj && SFX_ITEM_DEFAULT == rAttrs.GetItemState( SDRATTR_ECKENRADIUS ) )
-//A {
-    if( !pView->IsEdgeRadiusAllowed() )
+    if(!pView->IsEdgeRadiusAllowed())
     {
         aFlRadius.Disable();
         aFtRadius.Disable();
@@ -651,19 +658,19 @@ void SvxSlantTabPage::Reset( const SfxItemSet& rAttrs )
 
         if( pItem )
         {
-            Fraction aUIScale = pView->GetModel()->GetUIScale();
-            long nTmp = ( (const SdrEckenradiusItem*)pItem )->GetValue();
-            nTmp = Fraction( nTmp ) / aUIScale;
-            SetMetricValue( aMtrRadius, nTmp, ePoolUnit );
+            const double fUIScale(double(pView->GetModel()->GetUIScale()));
+            const double fTmp((double)((const SdrEckenradiusItem*)pItem)->GetValue() / fUIScale);
+            SetMetricValue(aMtrRadius, basegfx::fround(fTmp), ePoolUnit);
         }
         else
+        {
             aMtrRadius.SetText( String() );
+        }
     }
+
     aMtrRadius.SaveValue();
 
     // Schraegstellen: Winkel
-    //SfxItemState eState = rAttrs.GetItemState( SID_ATTR_TRANSFORM_SHEAR );
-    //if( ( bMarkedObj && SFX_ITEM_DEFAULT == eState ) ||
     if( !pView->IsShearAllowed() )
     {
         aFlAngle.Disable();
@@ -676,18 +683,21 @@ void SvxSlantTabPage::Reset( const SfxItemSet& rAttrs )
         pItem = GetItem( rAttrs, SID_ATTR_TRANSFORM_SHEAR );
 
         if( pItem )
+        {
             aMtrAngle.SetValue( ( (const SfxInt32Item*)pItem )->GetValue() );
+        }
         else
+        {
             aMtrAngle.SetText( String() );
+        }
     }
-    aMtrAngle.SaveValue();
 
+    aMtrAngle.SaveValue();
 }
 
 // -----------------------------------------------------------------------
 
-SfxTabPage* SvxSlantTabPage::Create( Window* pWindow,
-                const SfxItemSet& rOutAttrs )
+SfxTabPage* SvxSlantTabPage::Create( Window* pWindow, const SfxItemSet& rOutAttrs )
 {
     return( new SvxSlantTabPage( pWindow, rOutAttrs ) );
 }
@@ -705,10 +715,10 @@ void SvxSlantTabPage::ActivatePage( const SfxItemSet& rSet )
 {
     SfxRectangleItem* pRectItem = NULL;
 
-    if( SFX_ITEM_SET == rSet.GetItemState( GetWhich( SID_ATTR_TRANSFORM_INTERN ) , FALSE,
-                                    (const SfxPoolItem**) &pRectItem ) )
+    if( SFX_ITEM_SET == rSet.GetItemState( GetWhich( SID_ATTR_TRANSFORM_INTERN ) , FALSE, (const SfxPoolItem**) &pRectItem ) )
     {
-        aRect = pRectItem->GetValue();
+        const Rectangle aTempRect(pRectItem->GetValue());
+        maRange = basegfx::B2DRange(aTempRect.Left(), aTempRect.Top(), aTempRect.Right(), aTempRect.Bottom());
     }
 }
 
@@ -716,10 +726,12 @@ void SvxSlantTabPage::ActivatePage( const SfxItemSet& rSet )
 
 int SvxSlantTabPage::DeactivatePage( SfxItemSet* _pSet )
 {
-    if( _pSet )
-        FillItemSet( *_pSet );
+    if(_pSet)
+    {
+        FillItemSet(*_pSet);
+    }
 
-    return( LEAVE_PAGE );
+    return LEAVE_PAGE;
 }
 
 //------------------------------------------------------------------------
@@ -727,7 +739,6 @@ int SvxSlantTabPage::DeactivatePage( SfxItemSet* _pSet )
 void SvxSlantTabPage::PointChanged( Window* , RECT_POINT  )
 {
 }
-
 
 /*************************************************************************
 |*
@@ -773,19 +784,18 @@ SvxPositionSizeTabPage::SvxPositionSizeTabPage( Window* pParent, const SfxItemSe
 {
     FreeResource();
 
-    // diese Page braucht ExchangeSupport
+    // this pege needs ExchangeSupport
     SetExchangeSupport();
 
-    // PoolUnit ermitteln
+    // evaluate PoolUnit
     SfxItemPool* pPool = mrOutAttrs.GetPool();
-    DBG_ASSERT( pPool, "Wo ist der Pool" );
+    DBG_ASSERT( pPool, "no pool (!)" );
     mePoolUnit = pPool->GetMetric( SID_ATTR_TRANSFORM_POS_X );
 
     meRP = RP_LT; // s.o.
 
     maMtrWidth.SetModifyHdl( LINK( this, SvxPositionSizeTabPage, ChangeWidthHdl ) );
     maMtrHeight.SetModifyHdl( LINK( this, SvxPositionSizeTabPage, ChangeHeightHdl ) );
-
     maCbxScale.SetClickHdl( LINK( this, SvxPositionSizeTabPage, ClickAutoHdl ) );
 
     maTsbAutoGrowWidth.Disable();
@@ -802,70 +812,71 @@ SvxPositionSizeTabPage::SvxPositionSizeTabPage( Window* pParent, const SfxItemSe
 
 void SvxPositionSizeTabPage::Construct()
 {
-    // Setzen des Rechtecks und der Workingarea
-    DBG_ASSERT( mpView, "Keine gueltige View Uebergeben!" );
+    // get range and work area
+    DBG_ASSERT( mpView, "no valid view (!)" );
     meDlgUnit = GetModuleFieldUnit( &GetItemSet() );
     SetFieldUnit( maMtrPosX, meDlgUnit, TRUE );
     SetFieldUnit( maMtrPosY, meDlgUnit, TRUE );
     SetFieldUnit( maMtrWidth, meDlgUnit, TRUE );
     SetFieldUnit( maMtrHeight, meDlgUnit, TRUE );
 
-    if( meDlgUnit == FUNIT_MILE ||
-        meDlgUnit == FUNIT_KM )
+    if(FUNIT_MILE == meDlgUnit || FUNIT_KM == meDlgUnit)
     {
         maMtrPosX.SetDecimalDigits( 3 );
         maMtrPosY.SetDecimalDigits( 3 );
         maMtrWidth.SetDecimalDigits( 3 );
         maMtrHeight.SetDecimalDigits( 3 );
-
     }
 
-    maRect = mpView->GetAllMarkedRect();
-    mpView->GetSdrPageView()->LogicToPagePos( maRect );
+    { // #i75273#
+        Rectangle aTempRect(mpView->GetAllMarkedRect());
+        mpView->GetSdrPageView()->LogicToPagePos(aTempRect);
+        maRange = basegfx::B2DRange(aTempRect.Left(), aTempRect.Top(), aTempRect.Right(), aTempRect.Bottom());
+    }
 
-    // WorkArea holen und umrechnen:
-    maWorkArea = mpView->GetWorkArea();
+    { // #i75273#
+        Rectangle aTempRect(mpView->GetWorkArea());
+        mpView->GetSdrPageView()->LogicToPagePos(aTempRect);
+        maWorkRange = basegfx::B2DRange(aTempRect.Left(), aTempRect.Top(), aTempRect.Right(), aTempRect.Bottom());
+    }
 
-    // Beruecksichtigung Ankerposition (bei Writer)
+    // take anchor into account (Writer)
     const SdrMarkList& rMarkList = mpView->GetMarkedObjectList();
-    if( rMarkList.GetMarkCount() >= 1 )
-    {
-        const SdrObject* pObj = rMarkList.GetMark( 0 )->GetMarkedSdrObj();
-        maAnchorPos = pObj->GetAnchorPos();
 
-        if( maAnchorPos != Point(0,0) ) // -> Writer
+    if(rMarkList.GetMarkCount())
+    {
+        const SdrObject* pObj = rMarkList.GetMark(0)->GetMarkedSdrObj();
+        maAnchor = basegfx::B2DPoint(pObj->GetAnchorPos().X(), pObj->GetAnchorPos().Y());
+
+        if(!maAnchor.equalZero()) // -> Writer
         {
-            for( USHORT i = 1; i < rMarkList.GetMarkCount(); i++ )
+            for(sal_uInt16 i(1); i < rMarkList.GetMarkCount(); i++)
             {
-                pObj = rMarkList.GetMark( i )->GetMarkedSdrObj();
-                if( maAnchorPos != pObj->GetAnchorPos() )
+                pObj = rMarkList.GetMark(i)->GetMarkedSdrObj();
+
+                if(maAnchor != basegfx::B2DPoint(pObj->GetAnchorPos().X(), pObj->GetAnchorPos().Y()))
                 {
-                    // Unterschiedliche Ankerpositionen
+                    // diferent anchor positions
                     maMtrPosX.SetText( String() );
                     maMtrPosY.SetText( String() );
                     mbPageDisabled = TRUE;
                     return;
                 }
             }
+
+            // translate ranges about anchor
+            maRange = basegfx::B2DRange(maRange.getMinimum() - maAnchor, maRange.getMaximum() - maAnchor);
+            maWorkRange = basegfx::B2DRange(maWorkRange.getMinimum() - maAnchor, maWorkRange.getMaximum() - maAnchor);
         }
-        Point aPt = maAnchorPos * -1;
-        Point aPt2 = aPt;
-
-        aPt += maWorkArea.TopLeft();
-        maWorkArea.SetPos( aPt );
-
-        aPt2 += maRect.TopLeft();
-        maRect.SetPos( aPt2 );
     }
 
     // this should happen via SID_ATTR_TRANSFORM_AUTOSIZE
-    if( rMarkList.GetMarkCount() == 1 )
+    if(1 == rMarkList.GetMarkCount())
     {
-        const SdrObject* pObj = rMarkList.GetMark( 0 )->GetMarkedSdrObj();
-        SdrObjKind eKind = (SdrObjKind) pObj->GetObjIdentifier();
-        if( ( pObj->GetObjInventor() == SdrInventor ) &&
-            ( eKind==OBJ_TEXT || eKind==OBJ_TITLETEXT || eKind==OBJ_OUTLINETEXT) &&
-            ( (SdrTextObj*) pObj )->HasText() )
+        const SdrObject* pObj = rMarkList.GetMark(0)->GetMarkedSdrObj();
+        const SdrObjKind eKind((SdrObjKind)pObj->GetObjIdentifier());
+
+        if((pObj->GetObjInventor() == SdrInventor) && (OBJ_TEXT == eKind || OBJ_TITLETEXT == eKind || OBJ_OUTLINETEXT == eKind) && ((SdrTextObj*)pObj)->HasText())
         {
             maFlAdjust.Enable();
             maTsbAutoGrowWidth.Enable();
@@ -873,34 +884,21 @@ void SvxPositionSizeTabPage::Construct()
             maTsbAutoGrowWidth.SetClickHdl( LINK( this, SvxPositionSizeTabPage, ClickSizeProtectHdl ) );
             maTsbAutoGrowHeight.SetClickHdl( LINK( this, SvxPositionSizeTabPage, ClickSizeProtectHdl ) );
 
-            // Wird als Flag benutzt, um zu ermitteln, ob anwaehlbar ist
+            // is used as flag to evaluate if its selectable
             maTsbAutoGrowWidth.EnableTriState( FALSE );
             maTsbAutoGrowHeight.EnableTriState( FALSE );
         }
     }
 
+    // take scale into account
+    const Fraction aUIScale(mpView->GetModel()->GetUIScale());
+    lcl_ScaleRect( maWorkRange, aUIScale );
+    lcl_ScaleRect( maRange, aUIScale );
 
-    // use page offset and recalculate
-    Point aPt( mpView->GetSdrPageView()->GetPageOrigin() );
-
-    // Massstab
-    Fraction aUIScale = mpView->GetModel()->GetUIScale();
-
-    lcl_ScaleRect( maWorkArea, aUIScale );
-    lcl_ScaleRect( maRect, aUIScale );
-    lcl_ScalePoint( aPt, aUIScale );
-
-    // Metrik konvertieren
-    USHORT nDigits = maMtrPosX.GetDecimalDigits();
-
-    aPt = lcl_ConvertPoint( aPt, nDigits, (MapUnit) mePoolUnit, meDlgUnit );
-    maWorkArea = lcl_ConvertRect( maWorkArea, nDigits, (MapUnit) mePoolUnit, meDlgUnit );
-    maRect = lcl_ConvertRect( maRect, nDigits, (MapUnit) mePoolUnit, meDlgUnit );
-
-    // use page offset
-    aPt *= -1;
-    aPt += maWorkArea.TopLeft();
-    maWorkArea.SetPos( aPt );
+    // take UI units into account
+    const sal_uInt16 nDigits(maMtrPosX.GetDecimalDigits());
+    lcl_ConvertRect( maWorkRange, nDigits, (MapUnit) mePoolUnit, meDlgUnit );
+    lcl_ConvertRect( maRange, nDigits, (MapUnit) mePoolUnit, meDlgUnit );
 
     SetMinMaxPosition();
 }
@@ -909,35 +907,37 @@ void SvxPositionSizeTabPage::Construct()
 
 BOOL SvxPositionSizeTabPage::FillItemSet( SfxItemSet& rOutAttrs )
 {
-    if ( maMtrWidth.HasFocus() )
-        ChangeWidthHdl( this );
-    if ( maMtrHeight.HasFocus() )
-        ChangeHeightHdl( this );
+    BOOL bModified(FALSE);
 
-    BOOL bModified = FALSE;
+    if ( maMtrWidth.HasFocus() )
+    {
+        ChangeWidthHdl( this );
+    }
+
+    if ( maMtrHeight.HasFocus() )
+    {
+        ChangeHeightHdl( this );
+    }
+
     if( !mbPageDisabled )
     {
         if ( maMtrPosX.IsValueModified() || maMtrPosY.IsValueModified() )
         {
-            long lX = GetCoreValue( maMtrPosX, mePoolUnit );
-            long lY = GetCoreValue( maMtrPosY, mePoolUnit );
+            const double fUIScale(double(mpView->GetModel()->GetUIScale()));
+            double fX((GetCoreValue( maMtrPosX, mePoolUnit ) + maAnchor.getX()) * fUIScale);
+            double fY((GetCoreValue( maMtrPosY, mePoolUnit ) + maAnchor.getY()) * fUIScale);
 
-            // Altes Rechteck mit CoreUnit
-            maRect = mpView->GetAllMarkedRect();
-            mpView->GetSdrPageView()->LogicToPagePos( maRect );
+            { // #i75273#
+                Rectangle aTempRect(mpView->GetAllMarkedRect());
+                mpView->GetSdrPageView()->LogicToPagePos(aTempRect);
+                maRange = basegfx::B2DRange(aTempRect.Left(), aTempRect.Top(), aTempRect.Right(), aTempRect.Bottom());
+            }
 
-            Fraction aUIScale = mpView->GetModel()->GetUIScale();
-            lX += maAnchorPos.X();
-            lX = Fraction( lX ) * aUIScale;
-            lY += maAnchorPos.Y();
-            lY = Fraction( lY ) * aUIScale;
+            // #101581# GetTopLeftPosition(...) needs coordinates after UI scaling, in real PagePositions
+            GetTopLeftPosition(fX, fY, maRange);
 
-            // #101581# GetTopLeftPosition(...) needs coordinates
-            // after UI scaling, in real PagePositions.
-            GetTopLeftPosition( lX, lY, maRect );
-
-            rOutAttrs.Put( SfxInt32Item( GetWhich( SID_ATTR_TRANSFORM_POS_X ), (INT32) lX ) );
-            rOutAttrs.Put( SfxInt32Item( GetWhich( SID_ATTR_TRANSFORM_POS_Y ), (INT32) lY ) );
+            rOutAttrs.Put(SfxInt32Item(GetWhich(SID_ATTR_TRANSFORM_POS_X), basegfx::fround(fX)));
+            rOutAttrs.Put(SfxInt32Item(GetWhich(SID_ATTR_TRANSFORM_POS_Y), basegfx::fround(fY)));
 
             bModified |= TRUE;
         }
@@ -945,29 +945,19 @@ BOOL SvxPositionSizeTabPage::FillItemSet( SfxItemSet& rOutAttrs )
         if ( maTsbPosProtect.GetState() != maTsbPosProtect.GetSavedValue() )
         {
             if( maTsbPosProtect.GetState() == STATE_DONTKNOW )
+            {
                 rOutAttrs.InvalidateItem( SID_ATTR_TRANSFORM_PROTECT_POS );
+            }
             else
+            {
                 rOutAttrs.Put(
                     SfxBoolItem( GetWhich( SID_ATTR_TRANSFORM_PROTECT_POS ),
                     maTsbPosProtect.GetState() == STATE_CHECK ? TRUE : FALSE ) );
+            }
+
             bModified |= TRUE;
         }
-/*      if(maAnchorBox.IsVisible()) //nur fuer den Writer
-        {
-            if(maDdLbAnchor.GetSavedValue() != maDdLbAnchor.GetSelectEntryPos())
-            {
-                bModified |= TRUE;
-                rOutAttrs.Put(SfxUInt16Item(
-                        SID_ATTR_TRANSFORM_ANCHOR, (USHORT)(ULONG)maDdLbAnchor.GetEntryData(maDdLbAnchor.GetSelectEntryPos())));
-            }
-            if(maDdLbOrient.GetSavedValue() != maDdLbOrient.GetSelectEntryPos())
-            {
-                bModified |= TRUE;
-                rOutAttrs.Put(SfxUInt16Item(
-                        SID_ATTR_TRANSFORM_VERT_ORIENT, maDdLbOrient.GetSelectEntryPos()));
-            }
-        }
-*/  }
+    }
 
     if ( maMtrWidth.IsValueModified() || maMtrHeight.IsValueModified() )
     {
@@ -1044,27 +1034,22 @@ BOOL SvxPositionSizeTabPage::FillItemSet( SfxItemSet& rOutAttrs )
 void SvxPositionSizeTabPage::Reset( const SfxItemSet&  )
 {
     const SfxPoolItem* pItem;
+    const double fUIScale(double(mpView->GetModel()->GetUIScale()));
 
     if ( !mbPageDisabled )
     {
         pItem = GetItem( mrOutAttrs, SID_ATTR_TRANSFORM_POS_X );
-
-        Fraction aUIScale = mpView->GetModel()->GetUIScale();
         if ( pItem )
         {
-            long nTmp = ( (const SfxInt32Item*)pItem )->GetValue() - maAnchorPos.X();
-            nTmp = Fraction( nTmp ) / aUIScale;
-
-            SetMetricValue( maMtrPosX, nTmp, mePoolUnit );
+            const double fTmp((((const SfxInt32Item*)pItem)->GetValue() - maAnchor.getX()) / fUIScale);
+            SetMetricValue(maMtrPosX, basegfx::fround(fTmp), mePoolUnit);
         }
 
         pItem = GetItem( mrOutAttrs, SID_ATTR_TRANSFORM_POS_Y );
         if ( pItem )
         {
-            long nTmp = ( (const SfxInt32Item*)pItem )->GetValue() - maAnchorPos.Y();
-            nTmp = Fraction( nTmp ) / aUIScale;
-
-            SetMetricValue( maMtrPosY, nTmp, mePoolUnit );
+            const double fTmp((((const SfxInt32Item*)pItem)->GetValue() - maAnchor.getY()) / fUIScale);
+            SetMetricValue(maMtrPosY, basegfx::fround(fTmp), mePoolUnit);
         }
 
         pItem = GetItem( mrOutAttrs, SID_ATTR_TRANSFORM_PROTECT_POS );
@@ -1084,42 +1069,33 @@ void SvxPositionSizeTabPage::Reset( const SfxItemSet&  )
 
         // #i2379# Disable controls for protected objects
         ChangePosProtectHdl( this );
-
     }
 
-    pItem = GetItem( mrOutAttrs, SID_ATTR_TRANSFORM_WIDTH );
-    mlOldWidth = Max( pItem ? ( (const SfxUInt32Item*)pItem )->GetValue() : 0, (UINT32)1 );
+    { // #i75273# set width
+        pItem = GetItem( mrOutAttrs, SID_ATTR_TRANSFORM_WIDTH );
+        mfOldWidth = std::max( pItem ? (double)((const SfxUInt32Item*)pItem)->GetValue() : 0.0, 1.0 );
+        double fTmpWidth((OutputDevice::LogicToLogic(static_cast<sal_Int32>(mfOldWidth), (MapUnit)mePoolUnit, MAP_100TH_MM)) / fUIScale);
 
-    pItem = GetItem( mrOutAttrs, SID_ATTR_TRANSFORM_HEIGHT );
-    mlOldHeight = Max( pItem ? ( (const SfxUInt32Item*)pItem )->GetValue() : 0, (UINT32)1 );
+        if(maMtrWidth.GetDecimalDigits())
+            fTmpWidth *= pow(10.0, maMtrWidth.GetDecimalDigits());
 
-    Fraction aUIScale = mpView->GetModel()->GetUIScale();
+        fTmpWidth = MetricField::ConvertDoubleValue(fTmpWidth, maMtrWidth.GetBaseValue(), maMtrWidth.GetDecimalDigits(), FUNIT_100TH_MM, meDlgUnit);
+        maMtrWidth.SetValue(static_cast<sal_Int64>(fTmpWidth), meDlgUnit);
+    }
 
-    // set Width & Height
-    double nTmpWidth  = (double)OutputDevice::LogicToLogic( mlOldWidth, (MapUnit)mePoolUnit, MAP_100TH_MM );
-    double nTmpHeight = (double)OutputDevice::LogicToLogic( mlOldHeight, (MapUnit)mePoolUnit, MAP_100TH_MM );
-    nTmpWidth  = Fraction( nTmpWidth ) / aUIScale;
-    nTmpHeight = Fraction( nTmpHeight ) / aUIScale;
+    { // #i75273# set height
+        pItem = GetItem( mrOutAttrs, SID_ATTR_TRANSFORM_HEIGHT );
+        mfOldHeight = std::max( pItem ? (double)((const SfxUInt32Item*)pItem)->GetValue() : 0.0, 1.0 );
+        double fTmpHeight((OutputDevice::LogicToLogic(static_cast<sal_Int32>(mfOldHeight), (MapUnit)mePoolUnit, MAP_100TH_MM)) / fUIScale);
 
-    UINT32 nNorm = 10;
-    int i;
-    for( i = 0; i < maMtrWidth.GetDecimalDigits()-1; i++ )
-        nNorm*=10;
-    nTmpWidth*=(double)nNorm;
+        if(maMtrHeight.GetDecimalDigits())
+            fTmpHeight *= pow(10.0, maMtrHeight.GetDecimalDigits());
 
-    nNorm = 10;
-    for( i=0; i<maMtrHeight.GetDecimalDigits()-1; i++ )
-        nNorm*=10;
-    nTmpHeight*=(double)nNorm;
-
-    nTmpWidth =  MetricField::ConvertDoubleValue( (double)nTmpWidth, maMtrWidth.GetBaseValue(), maMtrWidth.GetDecimalDigits(), FUNIT_100TH_MM, meDlgUnit );
-    nTmpHeight = MetricField::ConvertDoubleValue( (double)nTmpHeight, maMtrHeight.GetBaseValue(), maMtrHeight.GetDecimalDigits(), FUNIT_100TH_MM, meDlgUnit );
-
-    maMtrWidth.SetValue( sal_Int32(nTmpWidth), meDlgUnit );
-    maMtrHeight.SetValue( sal_Int32(nTmpHeight), meDlgUnit );
+        fTmpHeight = MetricField::ConvertDoubleValue(fTmpHeight, maMtrHeight.GetBaseValue(), maMtrHeight.GetDecimalDigits(), FUNIT_100TH_MM, meDlgUnit);
+        maMtrHeight.SetValue(static_cast<sal_Int64>(fTmpHeight), meDlgUnit);
+    }
 
     pItem = GetItem( mrOutAttrs, SID_ATTR_TRANSFORM_PROTECT_SIZE );
-
     if ( pItem )
     {
         maTsbSizeProtect.SetState( ( (const SfxBoolItem*)pItem )->GetValue()
@@ -1162,8 +1138,7 @@ void SvxPositionSizeTabPage::Reset( const SfxItemSet&  )
 
 // -----------------------------------------------------------------------
 
-SfxTabPage* SvxPositionSizeTabPage::Create( Window* pWindow,
-                const SfxItemSet& rOutAttrs )
+SfxTabPage* SvxPositionSizeTabPage::Create( Window* pWindow, const SfxItemSet& rOutAttrs )
 {
     return( new SvxPositionSizeTabPage( pWindow, rOutAttrs ) );
 }
@@ -1181,11 +1156,13 @@ void SvxPositionSizeTabPage::ActivatePage( const SfxItemSet& rSet )
 {
     SfxRectangleItem* pRectItem = NULL;
 
-    if( SFX_ITEM_SET == rSet.GetItemState( GetWhich( SID_ATTR_TRANSFORM_INTERN ) , FALSE,
-                                    (const SfxPoolItem**) &pRectItem ) )
+    if( SFX_ITEM_SET == rSet.GetItemState( GetWhich( SID_ATTR_TRANSFORM_INTERN ) , FALSE, (const SfxPoolItem**) &pRectItem ) )
     {
-        // Setzen der MinMax-Position
-        maRect = pRectItem->GetValue();
+        { // #i75273#
+            const Rectangle aTempRect(pRectItem->GetValue());
+            maRange = basegfx::B2DRange(aTempRect.Left(), aTempRect.Top(), aTempRect.Right(), aTempRect.Bottom());
+        }
+
         SetMinMaxPosition();
     }
 }
@@ -1196,35 +1173,19 @@ int SvxPositionSizeTabPage::DeactivatePage( SfxItemSet* _pSet )
 {
     if( _pSet )
     {
-        long lX = static_cast<long>(maMtrPosX.GetValue());
-        long lY = static_cast<long>(maMtrPosY.GetValue());
+        double fX((double)maMtrPosX.GetValue());
+        double fY((double)maMtrPosY.GetValue());
 
-        // #106330#
-        // The below BugFix assumed that GetTopLeftPosition()
-        // needs special coordinate systems. This is not true,
-        // GetTopLeftPosition() just needs all parameters in one
-        // coor system. Thus, this part below is not necessary and
-        // leads to this new bug. Thus, i remove it again.
-        // I checked that #106330# works and #101581# is fixed, too.
-        //
-        // // #101581# GetTopLeftPosition(...) needs coordinates
-        // // after UI scaling, in real PagePositions. Thus I added
-        // // that calculation here
-        // Fraction aUIScale = mpView->GetModel()->GetUIScale();
-        // lX += maAnchorPos.X();
-        // lX = Fraction( lX ) * aUIScale;
-        // lY += maAnchorPos.Y();
-        // lY = Fraction( lY ) * aUIScale;
+        GetTopLeftPosition(fX, fY, maRange);
+        const Rectangle aOutRectangle(
+            basegfx::fround(fX), basegfx::fround(fY),
+            basegfx::fround(fX + maRange.getWidth()), basegfx::fround(fY + maRange.getHeight()));
+        _pSet->Put(SfxRectangleItem(SID_ATTR_TRANSFORM_INTERN, aOutRectangle));
 
-        GetTopLeftPosition( lX, lY, maRect );
-
-        maRect.SetPos( Point( lX, lY ) );
-
-        _pSet->Put( SfxRectangleItem( SID_ATTR_TRANSFORM_INTERN, maRect ) );
-
-        FillItemSet( *_pSet );
+        FillItemSet(*_pSet);
     }
-    return( LEAVE_PAGE );
+
+    return LEAVE_PAGE;
 }
 
 //------------------------------------------------------------------------
@@ -1232,9 +1193,7 @@ int SvxPositionSizeTabPage::DeactivatePage( SfxItemSet* _pSet )
 IMPL_LINK( SvxPositionSizeTabPage, ChangePosProtectHdl, void *, EMPTYARG )
 {
     // #106572# Remember user's last choice
-    maTsbSizeProtect.SetState( maTsbPosProtect.GetState() == STATE_CHECK ?
-                               STATE_CHECK : mnProtectSizeState );
-
+    maTsbSizeProtect.SetState( maTsbPosProtect.GetState() == STATE_CHECK ?  STATE_CHECK : mnProtectSizeState );
     UpdateControlStates();
     return( 0L );
 }
@@ -1316,195 +1275,226 @@ IMPL_LINK_INLINE_END( SvxPositionSizeTabPage, ChangePosYHdl, void *, EMPTYARG )
 void SvxPositionSizeTabPage::SetMinMaxPosition()
 {
     // position
-    Rectangle aTmpRect = maWorkArea;
+    double fLeft(maWorkRange.getMinX());
+    double fTop(maWorkRange.getMinY());
+    double fRight(maWorkRange.getMaxX());
+    double fBottom(maWorkRange.getMaxY());
 
     switch ( maCtlPos.GetActualRP() )
     {
         case RP_LT:
-            aTmpRect.Right()  -= maRect.Right() - maRect.Left();
-            aTmpRect.Bottom() -= maRect.Bottom() - maRect.Top();
+        {
+            fRight  -= maRange.getWidth();
+            fBottom -= maRange.getHeight();
             break;
+        }
         case RP_MT:
-            aTmpRect.Left()   += maRect.Center().X() - maRect.Left();
-            aTmpRect.Right()  -= maRect.Center().X() - maRect.Left();
-            aTmpRect.Bottom() -= maRect.Bottom() - maRect.Top();
+        {
+            fLeft   += maRange.getWidth() / 2.0;
+            fRight  -= maRange.getWidth() / 2.0;
+            fBottom -= maRange.getHeight();
             break;
+        }
         case RP_RT:
-            aTmpRect.Left()   += maRect.Right() - maRect.Left();
-            aTmpRect.Bottom() -= maRect.Bottom() - maRect.Top();
+        {
+            fLeft   += maRange.getWidth();
+            fBottom -= maRange.getHeight();
             break;
+        }
         case RP_LM:
-            aTmpRect.Right()  -= maRect.Right() - maRect.Left();
-            aTmpRect.Top()    += maRect.Center().Y() - maRect.Top();
-            aTmpRect.Bottom() -= maRect.Center().Y() - maRect.Top();
+        {
+            fRight  -= maRange.getWidth();
+            fTop    += maRange.getHeight() / 2.0;
+            fBottom -= maRange.getHeight() / 2.0;
             break;
+        }
         case RP_MM:
-            aTmpRect.Left()   += maRect.Center().X() - maRect.Left();
-            aTmpRect.Right()  -= maRect.Center().X() - maRect.Left();
-            aTmpRect.Top()    += maRect.Center().Y() - maRect.Top();
-            aTmpRect.Bottom() -= maRect.Center().Y() - maRect.Top();
+        {
+            fLeft   += maRange.getWidth() / 2.0;
+            fRight  -= maRange.getWidth() / 2.0;
+            fTop    += maRange.getHeight() / 2.0;
+            fBottom -= maRange.getHeight() / 2.0;
             break;
+        }
         case RP_RM:
-            aTmpRect.Left()   += maRect.Right() - maRect.Left();
-            aTmpRect.Top()    += maRect.Center().Y() - maRect.Top();
-            aTmpRect.Bottom() -= maRect.Center().Y() - maRect.Top();
+        {
+            fLeft   += maRange.getWidth();
+            fTop    += maRange.getHeight() / 2.0;
+            fBottom -= maRange.getHeight() / 2.0;
             break;
+        }
         case RP_LB:
-            aTmpRect.Right()  -= maRect.Right() - maRect.Left();
-            aTmpRect.Top()    += maRect.Bottom() - maRect.Top();
+        {
+            fRight  -= maRange.getWidth();
+            fTop    += maRange.getHeight();
             break;
+        }
         case RP_MB:
-            aTmpRect.Left()   += maRect.Center().X() - maRect.Left();
-            aTmpRect.Right()  -= maRect.Center().X() - maRect.Left();
-            aTmpRect.Top()    += maRect.Bottom() - maRect.Top();
+        {
+            fLeft   += maRange.getWidth() / 2.0;
+            fRight  -= maRange.getWidth() / 2.0;
+            fTop    += maRange.getHeight();
             break;
+        }
         case RP_RB:
-            aTmpRect.Left()   += maRect.Right() - maRect.Left();
-            aTmpRect.Top()    += maRect.Bottom() - maRect.Top();
+        {
+            fLeft   += maRange.getWidth();
+            fTop    += maRange.getHeight();
             break;
+        }
     }
 
-    long nMaxLong = static_cast<long>(MetricField::ConvertValue( LONG_MAX, 0, MAP_100TH_MM, meDlgUnit )) - 1L;
+    const double fMaxLong((double)(MetricField::ConvertValue( LONG_MAX, 0, MAP_100TH_MM, meDlgUnit ) - 1L));
+    fLeft = (fLeft > fMaxLong) ? fMaxLong : (fLeft < -fMaxLong) ? -fMaxLong : fLeft;
+    fRight = (fRight > fMaxLong) ? fMaxLong : (fRight < -fMaxLong) ? -fMaxLong : fRight;
+    fTop = (fTop > fMaxLong) ? fMaxLong : (fTop < -fMaxLong) ? -fMaxLong : fTop;
+    fBottom = (fBottom > fMaxLong) ? fMaxLong : (fBottom < -fMaxLong) ? -fMaxLong : fBottom;
 
-    if( Abs( aTmpRect.Left() ) > nMaxLong )
-    {
-        long nMult = aTmpRect.Left() < 0 ? -1 : 1;
-        aTmpRect.Left() = nMaxLong * nMult;
-    }
-    if( Abs( aTmpRect.Right() ) > nMaxLong )
-    {
-        long nMult = aTmpRect.Right() < 0 ? -1 : 1;
-        aTmpRect.Right() = nMaxLong * nMult;
-    }
-    if( Abs( aTmpRect.Top() ) > nMaxLong )
-    {
-        long nMult = aTmpRect.Top() < 0 ? -1 : 1;
-        aTmpRect.Top() = nMaxLong * nMult;
-    }
-    if( Abs( aTmpRect.Bottom() ) > nMaxLong )
-    {
-        long nMult = aTmpRect.Bottom() < 0 ? -1 : 1;
-        aTmpRect.Bottom() = nMaxLong * nMult;
-    }
-
-    maMtrPosX.SetMin( maMtrPosX.Normalize(aTmpRect.Left()) );
-    maMtrPosX.SetFirst( maMtrPosX.Normalize(aTmpRect.Left()) );
-    maMtrPosX.SetMax( maMtrPosX.Normalize(aTmpRect.Right()) );
-    maMtrPosX.SetLast( maMtrPosX.Normalize(aTmpRect.Right()) );
-
-    maMtrPosY.SetMin( maMtrPosY.Normalize(aTmpRect.Top()) );
-    maMtrPosY.SetFirst( maMtrPosY.Normalize(aTmpRect.Top()) );
-    maMtrPosY.SetMax( maMtrPosY.Normalize(aTmpRect.Bottom()) );
-    maMtrPosY.SetLast( maMtrPosY.Normalize(aTmpRect.Bottom()) );
+    // #i75273# normalizing when setting the min/max values was wrong, removed
+    maMtrPosX.SetMin(basegfx::fround64(fLeft));
+    maMtrPosX.SetFirst(basegfx::fround64(fLeft));
+    maMtrPosX.SetMax(basegfx::fround64(fRight));
+    maMtrPosX.SetLast(basegfx::fround64(fRight));
+    maMtrPosY.SetMin(basegfx::fround64(fTop));
+    maMtrPosY.SetFirst(basegfx::fround64(fTop));
+    maMtrPosY.SetMax(basegfx::fround64(fBottom));
+    maMtrPosY.SetLast(basegfx::fround64(fBottom));
 
     // size
-    aTmpRect = maWorkArea;
+    fLeft = maWorkRange.getMinX();
+    fTop = maWorkRange.getMinY();
+    fRight = maWorkRange.getMaxX();
+    fBottom = maWorkRange.getMaxY();
+    double fNewX(0);
+    double fNewY(0);
 
     switch ( maCtlSize.GetActualRP() )
     {
         case RP_LT:
-            aTmpRect.SetSize( Size(
-                aTmpRect.GetWidth() - ( maRect.Left() - aTmpRect.Left() ),
-                aTmpRect.GetHeight() - ( maRect.Top() - aTmpRect.Top() ) ) );
+        {
+            fNewX = maWorkRange.getWidth() - ( maRange.getMinX() - fLeft );
+            fNewY = maWorkRange.getHeight() - ( maRange.getMinY() - fTop );
             break;
+        }
         case RP_MT:
-            aTmpRect.SetSize( Size(
-                    Min( maRect.Center().X() - aTmpRect.Left(),
-                         aTmpRect.Right() - maRect.Center().X() ) * 2,
-                aTmpRect.GetHeight() - ( maRect.Top() - aTmpRect.Top() ) ) );
+        {
+            fNewX = std::min( maRange.getCenter().getX() - fLeft, fRight - maRange.getCenter().getX() ) * 2.0;
+            fNewY = maWorkRange.getHeight() - ( maRange.getMinY() - fTop );
             break;
+        }
         case RP_RT:
-            aTmpRect.SetSize( Size(
-                aTmpRect.GetWidth() - ( aTmpRect.Right() - maRect.Right() ),
-                aTmpRect.GetHeight() - ( maRect.Top() - aTmpRect.Top() ) ) );
+        {
+            fNewX = maWorkRange.getWidth() - ( fRight - maRange.getMaxX() );
+            fNewY = maWorkRange.getHeight() - ( maRange.getMinY() - fTop );
             break;
+        }
         case RP_LM:
-            aTmpRect.SetSize( Size(
-                aTmpRect.GetWidth() - ( maRect.Left() - aTmpRect.Left() ),
-                    Min( maRect.Center().Y() - aTmpRect.Top(),
-                          aTmpRect.Bottom() - maRect.Center().Y() ) * 2 ) );
+        {
+            fNewX = maWorkRange.getWidth() - ( maRange.getMinX() - fLeft );
+            fNewY = std::min( maRange.getCenter().getY() - fTop, fBottom - maRange.getCenter().getY() ) * 2.0;
             break;
+        }
         case RP_MM:
         {
-            long n1, n2, n3, n4, n5, n6;
-            n1 = maRect.Center().X() - aTmpRect.Left();
-            n2 = aTmpRect.Right() - maRect.Center().X();
-            n3 = Min( n1, n2 );
-            n4 = maRect.Center().Y() - aTmpRect.Top();
-            n5 = aTmpRect.Bottom() - maRect.Center().Y();
-            n6 = Min( n4, n5 );
-            aTmpRect.SetSize( Size( n3 * 2, n6 * 3 ) );
+            const double f1(maRange.getCenter().getX() - fLeft);
+            const double f2(fRight - maRange.getCenter().getX());
+            const double f3(std::min(f1, f2));
+            const double f4(maRange.getCenter().getY() - fTop);
+            const double f5(fBottom - maRange.getCenter().getY());
+            const double f6(std::min(f4, f5));
+
+            fNewX = f3 * 2.0;
+            fNewY = f6 * 3.0;
+
             break;
         }
         case RP_RM:
-            aTmpRect.SetSize( Size(
-                aTmpRect.GetWidth() - ( aTmpRect.Right() - maRect.Right() ),
-                    Min( maRect.Center().Y() - aTmpRect.Top(),
-                          aTmpRect.Bottom() - maRect.Center().Y() ) * 2 ) );
+        {
+            fNewX = maWorkRange.getWidth() - ( fRight - maRange.getMaxX() );
+            fNewY = std::min( maRange.getCenter().getY() - fTop, fBottom - maRange.getCenter().getY() ) * 2.0;
             break;
+        }
         case RP_LB:
-            aTmpRect.SetSize( Size(
-                aTmpRect.GetWidth() - ( maRect.Left() - aTmpRect.Left() ),
-                aTmpRect.GetHeight() - ( aTmpRect.Bottom() - maRect.Bottom() ) ) );
+        {
+            fNewX = maWorkRange.getWidth() - ( maRange.getMinX() - fLeft );
+            fNewY = maWorkRange.getHeight() - ( fBottom - maRange.getMaxY() );
             break;
+        }
         case RP_MB:
-            aTmpRect.SetSize( Size(
-                    Min( maRect.Center().X() - aTmpRect.Left(),
-                             aTmpRect.Right() - maRect.Center().X() ) * 2,
-                aTmpRect.GetHeight() - ( maRect.Bottom() - aTmpRect.Bottom() ) ) );
+        {
+            fNewX = std::min( maRange.getCenter().getX() - fLeft, fRight - maRange.getCenter().getX() ) * 2.0;
+            fNewY = maWorkRange.getHeight() - ( maRange.getMaxY() - fBottom );
             break;
+        }
         case RP_RB:
-            aTmpRect.SetSize( Size(
-                aTmpRect.GetWidth() - ( aTmpRect.Right() - maRect.Right() ),
-                aTmpRect.GetHeight() - ( aTmpRect.Bottom() - maRect.Bottom() ) ) );
+        {
+            fNewX = maWorkRange.getWidth() - ( fRight - maRange.getMaxX() );
+            fNewY = maWorkRange.getHeight() - ( fBottom - maRange.getMaxY() );
             break;
+        }
     }
 
-    maMtrWidth.SetMax( maMtrWidth.Normalize(aTmpRect.GetWidth()) );
-    maMtrWidth.SetLast( maMtrWidth.Normalize(aTmpRect.GetWidth()) );
-
-    maMtrHeight.SetMax( maMtrHeight.Normalize(aTmpRect.GetHeight()) );
-    maMtrHeight.SetLast( maMtrHeight.Normalize(aTmpRect.GetHeight()) );
-
+    // #i75273# normalizing when setting the min/max values was wrong, removed
+    maMtrWidth.SetMax(basegfx::fround64(fNewX));
+    maMtrWidth.SetLast(basegfx::fround64(fNewX));
+    maMtrHeight.SetMax(basegfx::fround64(fNewY));
+    maMtrHeight.SetLast(basegfx::fround64(fNewY));
 }
 
 //------------------------------------------------------------------------
 
-void SvxPositionSizeTabPage::GetTopLeftPosition( long& rX, long& rY,
-                                                const Rectangle& rRect )
+void SvxPositionSizeTabPage::GetTopLeftPosition(double& rfX, double& rfY, const basegfx::B2DRange& rRange)
 {
-    switch ( maCtlPos.GetActualRP() )
+    switch (maCtlPos.GetActualRP())
     {
         case RP_LT:
+        {
             break;
+        }
         case RP_MT:
-            rX = rX- ( rRect.Center().X() - rRect.Left() );
+        {
+            rfX -= rRange.getCenter().getX() - rRange.getMinX();
             break;
+        }
         case RP_RT:
-            rX = rX- ( rRect.Right() - rRect.Left() );
+        {
+            rfX -= rRange.getWidth();
             break;
+        }
         case RP_LM:
-            rY = rY- ( rRect.Center().Y() - rRect.Top() );
+        {
+            rfY -= rRange.getCenter().getY() - rRange.getMinY();
             break;
+        }
         case RP_MM:
-            rX = rX- ( rRect.Center().X() - rRect.Left() );
-            rY = rY- ( rRect.Center().Y() - rRect.Top() );
+        {
+            rfX -= rRange.getCenter().getX() - rRange.getMinX();
+            rfY -= rRange.getCenter().getY() - rRange.getMinY();
             break;
+        }
         case RP_RM:
-            rX = rX- ( rRect.Right() - rRect.Left() );
-            rY = rY- ( rRect.Center().Y() - rRect.Top() );
+        {
+            rfX -= rRange.getWidth();
+            rfY -= rRange.getCenter().getY() - rRange.getMinY();
             break;
+        }
         case RP_LB:
-            rY = rY- ( rRect.Bottom() - rRect.Top() );
+        {
+            rfY -= rRange.getHeight();
             break;
+        }
         case RP_MB:
-            rX = rX- ( rRect.Center().X() - rRect.Left() );
-            rY = rY- ( rRect.Bottom() - rRect.Top() );
+        {
+            rfX -= rRange.getCenter().getX() - rRange.getMinX();
+            rfY -= rRange.getHeight();
             break;
+        }
         case RP_RB:
-            rX = rX- ( rRect.Right() - rRect.Left() );
-            rY = rY- ( rRect.Bottom() - rRect.Top() );
+        {
+            rfX -= rRange.getWidth();
+            rfY -= rRange.getHeight();
             break;
+        }
     }
 }
 
@@ -1518,41 +1508,59 @@ void SvxPositionSizeTabPage::PointChanged( Window* pWindow, RECT_POINT eRP )
         switch( eRP )
         {
             case RP_LT:
-                maMtrPosX.SetValue( maRect.Left() );
-                maMtrPosY.SetValue( maRect.Top() );
+            {
+                maMtrPosX.SetValue( basegfx::fround64(maRange.getMinX()) );
+                maMtrPosY.SetValue( basegfx::fround64(maRange.getMinY()) );
                 break;
+            }
             case RP_MT:
-                maMtrPosX.SetValue( maRect.Center().X() );
-                maMtrPosY.SetValue( maRect.Top() );
+            {
+                maMtrPosX.SetValue( basegfx::fround64(maRange.getCenter().getX()) );
+                maMtrPosY.SetValue( basegfx::fround64(maRange.getMinY()) );
                 break;
+            }
             case RP_RT:
-                maMtrPosX.SetValue( maRect.Right() );
-                maMtrPosY.SetValue( maRect.Top() );
+            {
+                maMtrPosX.SetValue( basegfx::fround64(maRange.getMaxX()) );
+                maMtrPosY.SetValue( basegfx::fround64(maRange.getMinY()) );
                 break;
+            }
             case RP_LM:
-                maMtrPosX.SetValue( maRect.Left() );
-                maMtrPosY.SetValue( maRect.Center().Y() );
+            {
+                maMtrPosX.SetValue( basegfx::fround64(maRange.getMinX()) );
+                maMtrPosY.SetValue( basegfx::fround64(maRange.getCenter().getY()) );
                 break;
+            }
             case RP_MM:
-                maMtrPosX.SetValue( maRect.Center().X() );
-                maMtrPosY.SetValue( maRect.Center().Y() );
+            {
+                maMtrPosX.SetValue( basegfx::fround64(maRange.getCenter().getX()) );
+                maMtrPosY.SetValue( basegfx::fround64(maRange.getCenter().getY()) );
                 break;
+            }
             case RP_RM:
-                maMtrPosX.SetValue( maRect.Right() );
-                maMtrPosY.SetValue( maRect.Center().Y() );
+            {
+                maMtrPosX.SetValue( basegfx::fround64(maRange.getMaxX()) );
+                maMtrPosY.SetValue( basegfx::fround64(maRange.getCenter().getY()) );
                 break;
+            }
             case RP_LB:
-                maMtrPosX.SetValue( maRect.Left() );
-                maMtrPosY.SetValue( maRect.Bottom() );
+            {
+                maMtrPosX.SetValue( basegfx::fround64(maRange.getMinX()) );
+                maMtrPosY.SetValue( basegfx::fround64(maRange.getMaxY()) );
                 break;
+            }
             case RP_MB:
-                maMtrPosX.SetValue( maRect.Center().X() );
-                maMtrPosY.SetValue( maRect.Bottom() );
+            {
+                maMtrPosX.SetValue( basegfx::fround64(maRange.getCenter().getX()) );
+                maMtrPosY.SetValue( basegfx::fround64(maRange.getMaxY()) );
                 break;
+            }
             case RP_RB:
-                maMtrPosX.SetValue( maRect.Right() );
-                maMtrPosY.SetValue( maRect.Bottom() );
+            {
+                maMtrPosX.SetValue( basegfx::fround64(maRange.getMaxX()) );
+                maMtrPosY.SetValue( basegfx::fround64(maRange.getMaxY()) );
                 break;
+            }
         }
     }
     else
@@ -1582,75 +1590,88 @@ void SvxPositionSizeTabPage::DisableProtect()
 
 Rectangle SvxPositionSizeTabPage::GetRect()
 {
-    Rectangle aTmpRect( maRect );
-    aTmpRect.SetSize( Size( static_cast<long>(maMtrWidth.GetValue()),
-                            static_cast<long>(maMtrHeight.GetValue()) ) );
+    double fLeft(maRange.getMinX());
+    double fTop(maRange.getMinY());
+    double fRight(fLeft + (double)maMtrWidth.GetValue());
+    double fBottom(fTop + (double)maMtrHeight.GetValue());
 
     switch ( maCtlSize.GetActualRP() )
     {
         case RP_LT:
-            // nichts!
+        {
             break;
+        }
         case RP_MT:
-            aTmpRect.SetPos( Point( maRect.Left() -
-                        ( aTmpRect.Right() - maRect.Right() ) / 2, maRect.Top() ) );
+        {
+            fLeft = maRange.getMinX() - ( fRight - maRange.getMaxX() ) / 2.0;
             break;
+        }
         case RP_RT:
-            aTmpRect.SetPos( Point( maRect.Left() -
-                        ( aTmpRect.Right() - maRect.Right() ), maRect.Top() ) );
+        {
+            fLeft = maRange.getMinX() - ( fRight - maRange.getMaxX() );
             break;
+        }
         case RP_LM:
-            aTmpRect.SetPos( Point( maRect.Left(), maRect.Top() -
-                        ( aTmpRect.Bottom() - maRect.Bottom() ) / 2 ) );
+        {
+            fTop = maRange.getMinY() - ( fBottom - maRange.getMaxY() ) / 2.0;
             break;
+        }
         case RP_MM:
-            aTmpRect.SetPos( Point( maRect.Left() -
-                        ( aTmpRect.Right() - maRect.Right() ) / 2, maRect.Top() -
-                        ( aTmpRect.Bottom() - maRect.Bottom() ) / 2 ) );
+        {
+            fLeft = maRange.getMinX() - ( fRight - maRange.getMaxX() ) / 2.0;
+            fTop = maRange.getMinY() - ( fBottom - maRange.getMaxY() ) / 2.0;
             break;
+        }
         case RP_RM:
-            aTmpRect.SetPos( Point( maRect.Left() -
-                        ( aTmpRect.Right() - maRect.Right() ), maRect.Top() -
-                        ( aTmpRect.Bottom() - maRect.Bottom() ) / 2 ) );
+        {
+            fLeft = maRange.getMinX() - ( fRight - maRange.getMaxX() );
+            fTop = maRange.getMinY() - ( fBottom - maRange.getMaxY() ) / 2.0;
             break;
+        }
         case RP_LB:
-            aTmpRect.SetPos( Point( maRect.Left(), maRect.Top() -
-                        ( aTmpRect.Bottom() - maRect.Bottom() ) ) );
+        {
+            fTop = maRange.getMinY() - ( fBottom - maRange.getMaxY() );
             break;
+        }
         case RP_MB:
-            aTmpRect.SetPos( Point( maRect.Left() -
-                        ( aTmpRect.Right() - maRect.Right() ) / 2, maRect.Top() -
-                        ( aTmpRect.Bottom() - maRect.Bottom() ) ) );
+        {
+            fLeft = maRange.getMinX() - ( fRight - maRange.getMaxX() ) / 2.0;
+            fTop = maRange.getMinY() - ( fBottom - maRange.getMaxY() );
             break;
+        }
         case RP_RB:
-            aTmpRect.SetPos( Point( maRect.Left() -
-                        ( aTmpRect.Right() - maRect.Right() ), maRect.Top() -
-                        ( aTmpRect.Bottom() - maRect.Bottom() ) ) );
+        {
+            fLeft = maRange.getMinX() - ( fRight - maRange.getMaxX() );
+            fTop = maRange.getMinY() - ( fBottom - maRange.getMaxY() );
             break;
+        }
     }
-    return( aTmpRect );
+
+    return Rectangle(basegfx::fround(fLeft), basegfx::fround(fTop), basegfx::fround(fRight), basegfx::fround(fBottom));
 }
 
 //------------------------------------------------------------------------
 
 IMPL_LINK( SvxPositionSizeTabPage, ChangeWidthHdl, void *, EMPTYARG )
 {
-    if( maCbxScale.IsChecked() &&
-        maCbxScale.IsEnabled() )
+    if( maCbxScale.IsChecked() && maCbxScale.IsEnabled() )
     {
-        sal_Int64 nHeight = sal_Int64( ((double) mlOldHeight * (double) maMtrWidth.GetValue()) / (double) mlOldWidth );
-        if( nHeight <= maMtrHeight.GetMax( FUNIT_NONE ) )
+        sal_Int64 nHeight(basegfx::fround64((mfOldHeight * (double)maMtrWidth.GetValue()) / mfOldWidth));
+
+        if(nHeight <= maMtrHeight.GetMax(FUNIT_NONE))
         {
-            maMtrHeight.SetUserValue( nHeight, FUNIT_NONE );
+            maMtrHeight.SetUserValue(nHeight, FUNIT_NONE);
         }
         else
         {
-            nHeight = maMtrHeight.GetMax( FUNIT_NONE );
-            maMtrHeight.SetUserValue( nHeight );
-            const sal_Int64 nWidth = sal_Int64( ((double) mlOldWidth * (double) nHeight) / (double) mlOldHeight );
-            maMtrWidth.SetUserValue( nWidth, FUNIT_NONE );
+            nHeight = maMtrHeight.GetMax(FUNIT_NONE);
+            maMtrHeight.SetUserValue(nHeight);
+
+            const sal_Int64 nWidth(basegfx::fround64((mfOldWidth * (double)nHeight) / mfOldHeight));
+            maMtrWidth.SetUserValue(nWidth, FUNIT_NONE);
         }
     }
+
     return( 0L );
 }
 
@@ -1658,22 +1679,24 @@ IMPL_LINK( SvxPositionSizeTabPage, ChangeWidthHdl, void *, EMPTYARG )
 
 IMPL_LINK( SvxPositionSizeTabPage, ChangeHeightHdl, void *, EMPTYARG )
 {
-    if( maCbxScale.IsChecked() &&
-        maCbxScale.IsEnabled() )
+    if( maCbxScale.IsChecked() && maCbxScale.IsEnabled() )
     {
-        sal_Int64 nWidth = sal_Int64( ((double) mlOldWidth * (double) maMtrHeight.GetValue()) / (double) mlOldHeight );
-        if( nWidth <= maMtrWidth.GetMax( FUNIT_NONE ) )
+        sal_Int64 nWidth(basegfx::fround64((mfOldWidth * (double)maMtrHeight.GetValue()) / mfOldHeight));
+
+        if(nWidth <= maMtrWidth.GetMax(FUNIT_NONE))
         {
-            maMtrWidth.SetUserValue( nWidth, FUNIT_NONE );
+            maMtrWidth.SetUserValue(nWidth, FUNIT_NONE);
         }
         else
         {
-            nWidth = maMtrWidth.GetMax( FUNIT_NONE );
-            maMtrWidth.SetUserValue( nWidth );
-            const sal_Int64 nHeight = sal_Int64( ((double) mlOldHeight * (double) nWidth) / (double) mlOldWidth );
-            maMtrHeight.SetUserValue( nHeight, FUNIT_NONE );
+            nWidth = maMtrWidth.GetMax(FUNIT_NONE);
+            maMtrWidth.SetUserValue(nWidth);
+
+            const sal_Int64 nHeight(basegfx::fround64((mfOldHeight * (double)nWidth) / mfOldWidth));
+            maMtrHeight.SetUserValue(nHeight, FUNIT_NONE);
         }
     }
+
     return( 0L );
 }
 
@@ -1691,9 +1714,10 @@ IMPL_LINK( SvxPositionSizeTabPage, ClickAutoHdl, void *, EMPTYARG )
 {
     if( maCbxScale.IsChecked() )
     {
-        mlOldWidth  = Max( GetCoreValue( maMtrWidth,  mePoolUnit ), 1L );
-        mlOldHeight = Max( GetCoreValue( maMtrHeight, mePoolUnit ), 1L );
+        mfOldWidth  = std::max( (double)GetCoreValue( maMtrWidth,  mePoolUnit ), 1.0 );
+        mfOldHeight = std::max( (double)GetCoreValue( maMtrHeight, mePoolUnit ), 1.0 );
     }
+
     return( 0L );
 }
 
@@ -1705,3 +1729,5 @@ void SvxPositionSizeTabPage::FillUserData()
     UniString aStr = UniString::CreateFromInt32( (sal_Int32) maCbxScale.IsChecked() );
     SetUserData( aStr );
 }
+
+// eof
