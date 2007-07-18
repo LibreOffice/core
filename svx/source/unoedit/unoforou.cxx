@@ -4,9 +4,9 @@
  *
  *  $RCSfile: unoforou.cxx,v $
  *
- *  $Revision: 1.30 $
+ *  $Revision: 1.31 $
  *
- *  last change: $Author: hr $ $Date: 2007-06-27 19:29:30 $
+ *  last change: $Author: obo $ $Date: 2007-07-18 13:07:31 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -518,5 +518,34 @@ sal_Bool SvxOutlinerForwarder::SetDepth( USHORT nPara, USHORT nNewDepth )
 
     return sal_False;
 }
+
+const SfxItemSet * SvxOutlinerForwarder::GetEmptyItemSetPtr()
+{
+    EditEngine& rEditEngine = const_cast< EditEngine& >( rOutliner.GetEditEngine() );
+    return &rEditEngine.GetEmptyItemSet();
+}
+
+void SvxOutlinerForwarder::AppendParagraph()
+{
+    EditEngine& rEditEngine = const_cast< EditEngine& >( rOutliner.GetEditEngine() );
+    rEditEngine.InsertParagraph( rEditEngine.GetParagraphCount(), String::EmptyString() );
+}
+
+xub_StrLen SvxOutlinerForwarder::AppendTextPortion( USHORT nPara, const String &rText, const SfxItemSet & /*rSet*/ )
+{
+    xub_StrLen nLen = 0;
+
+    EditEngine& rEditEngine = const_cast< EditEngine& >( rOutliner.GetEditEngine() );
+    USHORT nParaCount = rEditEngine.GetParagraphCount();
+    DBG_ASSERT( nPara < nParaCount, "paragraph index out of bounds" );
+    if (/*0 <= nPara && */nPara < nParaCount)
+    {
+        nLen = rEditEngine.GetTextLen( nPara );
+        rEditEngine.QuickInsertText( rText, ESelection( nPara, nLen, nPara, nLen ) );
+    }
+
+    return nLen;
+}
+
 
 //------------------------------------------------------------------------
