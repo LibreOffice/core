@@ -4,9 +4,9 @@
  *
  *  $RCSfile: TypeGeneration.hxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: hr $ $Date: 2006-06-19 22:41:21 $
+ *  last change: $Author: obo $ $Date: 2007-07-18 13:08:12 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -125,6 +125,7 @@ namespace comphelper
         CPPUTYPE_TRANSFORMATIONINHORIL2R, //getCppuType( (drawing::HomogenMatrix3)* )
         // <--
         CPPUTYPE_SEQNAMEDVALUE,     //getCppuType( (Sequence<beans::NamedValue>*)0 )
+        CPPUTYPE_REFXGRAPHIC,       //getCppuType( Reference< graphic::XGraphic >*)0)
 
         CPPUTYPE_END
     };
