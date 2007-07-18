@@ -11,8 +11,8 @@
 #*                      Beschreibung des Moduls
 #*
 #*    Ersterstellung    XX  TT.MM.JJ
-#*    Letzte Aenderung  $Author: vg $ $Date: 2007-04-11 21:37:48 $
-#*    $Revision: 1.2 $
+#*    Letzte Aenderung  $Author: obo $ $Date: 2007-07-18 07:33:11 $
+#*    $Revision: 1.3 $
 #*
 #*    $Logfile:$
 #*
@@ -35,10 +35,9 @@
 #include <soldep/hashobj.hxx>
 #include <soldep/soldlg.hxx>
 #include <soldep/prj.hxx>
-#include <soldep/XmlBuildList.hxx>
 #include <soldep/sdtresid.hxx>
 
-DECLARE_HASHTABLE_OWNER(SolIdMapper,ByteString,MyHashObject*);
+DECLARE_HASHTABLE_OWNER(SolIdMapper,ByteString,MyHashObject*)
 
 // just for conversion - convert char* to String
 class ProgressBar;
@@ -126,7 +125,6 @@ class Depper : public SolDevDll, public Window
     FixedText*      pMainText;
     SolAutoarrangeDlg maArrangeDlg;
 
-    ULONG               AddObject( ByteString& rBodyText, Point& rPos, Size& rSize );
 
 protected:
     Prj*            mpPrj;

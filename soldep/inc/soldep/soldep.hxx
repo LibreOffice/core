@@ -10,8 +10,8 @@
 #*                      Beschreibung des Moduls
 #*
 #*    Ersterstellung    XX  TT.MM.JJ
-#*    Letzte Aenderung  $Author: vg $ $Date: 2007-04-11 21:39:34 $
-#*    $Revision: 1.2 $
+#*    Letzte Aenderung  $Author: obo $ $Date: 2007-07-18 07:34:07 $
+#*    $Revision: 1.3 $
 #*
 #*    $Logfile:$
 #*
@@ -87,6 +87,7 @@ public:
     void                Init();
     void                Init( ByteString &rVersion, GenericInformationList *pVersionList = NULL );
     BOOL                InitPrj( ByteString& rListName );
+//        using Depper::AddObject;
     virtual ULONG       AddObject( ByteString& rBodyText, BOOL Interact=TRUE );
             ULONG       AddPrjObject( ByteString& rBodyText, BOOL Interact=TRUE );
     virtual ObjectWin*  RemoveObject( USHORT nId, BOOL bDelete = TRUE );

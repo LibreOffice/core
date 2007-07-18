@@ -4,9 +4,9 @@
  *
  *  $RCSfile: prj.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: vg $ $Date: 2007-04-11 21:38:59 $
+ *  last change: $Author: obo $ $Date: 2007-07-18 07:33:53 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -41,7 +41,6 @@
 #ifndef _LISTMACR_HXX
 #include <bootstrp/listmacr.hxx>
 #endif
-#include <soldep/XmlBuildList.hxx>
 #include <vos/mutex.hxx>
 #include <tools/string.hxx>
 
@@ -64,6 +63,7 @@
 
 class SByteStringList;
 class GenericInformationList;
+class XmlBuildList;
 
 /*
 // Pfade auf Konfigurationsdateien des Build-Servers
