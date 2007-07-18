@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ftools.hxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: kz $ $Date: 2006-12-13 15:06:20 $
+ *  last change: $Author: obo $ $Date: 2007-07-18 11:02:31 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -155,7 +155,8 @@ namespace basegfx
 
         static bool equal(const double& rfValA, const double& rfValB)
         {
-            return (fabs(rfValB - rfValA) <= getSmallValue());
+            // changed to approxEqual usage for better numerical correctness
+            return rtl::math::approxEqual(rfValA, rfValB);
         }
 
         static bool less(const double& rfValA, const double& rfValB)
@@ -176,32 +177,6 @@ namespace basegfx
         static bool moreOrEqual(const double& rfValA, const double& rfValB)
         {
             return (rfValA > rfValB || equal(rfValA, rfValB));
-        }
-
-
-        static bool equal(const double& rfValA, const double& rfValB, const double& rfSmallValue)
-        {
-            return (fabs(rfValB - rfValA) <= rfSmallValue);
-        }
-
-        static bool less(const double& rfValA, const double& rfValB, const double& rfSmallValue)
-        {
-            return (rfValA < rfValB && !equal(rfValA, rfValB, rfSmallValue));
-        }
-
-        static bool lessOrEqual(const double& rfValA, const double& rfValB, const double& rfSmallValue)
-        {
-            return (rfValA < rfValB || equal(rfValA, rfValB, rfSmallValue));
-        }
-
-        static bool more(const double& rfValA, const double& rfValB, const double& rfSmallValue)
-        {
-            return (rfValA > rfValB && !equal(rfValA, rfValB, rfSmallValue));
-        }
-
-        static bool moreOrEqual(const double& rfValA, const double& rfValB, const double& rfSmallValue)
-        {
-            return (rfValA > rfValB || equal(rfValA, rfValB, rfSmallValue));
         }
     };
 } // end of namespace basegfx
