@@ -4,9 +4,9 @@
  *
  *  $RCSfile: editsh.cxx,v $
  *
- *  $Revision: 1.47 $
+ *  $Revision: 1.48 $
  *
- *  last change: $Author: obo $ $Date: 2007-07-17 13:07:10 $
+ *  last change: $Author: obo $ $Date: 2007-07-18 13:32:49 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -336,15 +336,32 @@ const Graphic* SwEditShell::GetGraphic( BOOL bWait ) const
     if ( pGrfNode )
     {
         pGrf = &(pGrfNode->GetGrf());
-        if( pGrf->IsSwapOut() ||
-            ( pGrfNode->IsLinkedFile() && GRAPHIC_DEFAULT == pGrf->GetType() ) )
+        // --> OD 2007-03-01 #i73788#
+        // no load of linked graphic, if its not needed now (bWait = FALSE).
+        if ( bWait )
         {
+            if( pGrf->IsSwapOut() ||
+                ( pGrfNode->IsLinkedFile() && GRAPHIC_DEFAULT == pGrf->GetType() ) )
+            {
 #ifndef PRODUCT
-            ASSERT( pGrfNode->SwapIn( bWait ) || !bWait, "Grafik konnte nicht geladen werden" );
+                ASSERT( pGrfNode->SwapIn( bWait ) || !bWait, "Grafik konnte nicht geladen werden" );
 #else
-            pGrfNode->SwapIn( bWait );
+                pGrfNode->SwapIn( bWait );
 #endif
+            }
         }
+        else
+        {
+            if ( pGrf->IsSwapOut() && !pGrfNode->IsLinkedFile() )
+            {
+#ifndef PRODUCT
+                ASSERT( pGrfNode->SwapIn( bWait ) || !bWait, "Grafik konnte nicht geladen werden" );
+#else
+                pGrfNode->SwapIn( bWait );
+#endif
+            }
+        }
+        // <--
     }
     return pGrf;
     // <--
@@ -774,8 +791,9 @@ void *SwEditShell::GetIMapInventor() const
     return (void*)GetCrsr()->GetNode();
 }
 
-
-Graphic SwEditShell::GetIMapGraphic( BOOL bWait ) const
+// --> OD 2007-03-01 #i73788#
+// remove default parameter, because method is always called this default value
+Graphic SwEditShell::GetIMapGraphic() const
 {
     //Liefert immer eine Graphic, wenn der Crsr in einem Fly steht.
     SET_CURR_SHELL( (ViewShell*)this );
@@ -791,9 +809,9 @@ Graphic SwEditShell::GetIMapGraphic( BOOL bWait ) const
                                     GRAPHIC_DEFAULT == rGrf.GetType() ) )
             {
 #ifndef PRODUCT
-                ASSERT( ((SwGrfNode*)pNd)->SwapIn( bWait )||!bWait, "Grafik konnte nicht geladen werden" );
+                ASSERT( ((SwGrfNode*)pNd)->SwapIn( TRUE ) || !TRUE, "Grafik konnte nicht geladen werden" );
 #else
-                ((SwGrfNode*)pNd)->SwapIn( bWait );
+                ((SwGrfNode*)pNd)->SwapIn( TRUE );
 #endif
             }
             aRet = rGrf;
