@@ -4,9 +4,9 @@
  *
  *  $RCSfile: formatsh.cxx,v $
  *
- *  $Revision: 1.35 $
+ *  $Revision: 1.36 $
  *
- *  last change: $Author: kz $ $Date: 2007-05-10 17:00:34 $
+ *  last change: $Author: obo $ $Date: 2007-07-18 09:45:01 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1167,7 +1167,9 @@ void ScFormatShell::ExecuteTextAttr( SfxRequest& rReq )
         {
             case SID_ATTR_CHAR_WEIGHT:
             {
-                BYTE nScript = pTabViewShell->GetSelectionScriptType();
+                // #i78017 establish the same behaviour as in Writer
+                BYTE nScript = SCRIPTTYPE_LATIN | SCRIPTTYPE_ASIAN | SCRIPTTYPE_COMPLEX;
+
                 SfxItemPool& rPool = GetPool();
                 SvxScriptSetItem aSetItem( nSlot, rPool );
                 if ( pSet )
@@ -1192,7 +1194,9 @@ void ScFormatShell::ExecuteTextAttr( SfxRequest& rReq )
 
             case SID_ATTR_CHAR_POSTURE:
             {
-                BYTE nScript = pTabViewShell->GetSelectionScriptType();
+                // #i78017 establish the same behaviour as in Writer
+                BYTE nScript = SCRIPTTYPE_LATIN | SCRIPTTYPE_ASIAN | SCRIPTTYPE_COMPLEX;
+
                 SfxItemPool& rPool = GetPool();
                 SvxScriptSetItem aSetItem( nSlot, rPool );
                 if ( pSet )
@@ -1469,7 +1473,10 @@ void ScFormatShell::ExecuteAttr( SfxRequest& rReq )
             case SID_ATTR_CHAR_FONT:
             case SID_ATTR_CHAR_FONTHEIGHT:
                 {
-                    BYTE nScript = pTabViewShell->GetSelectionScriptType();
+                    // #i78017 establish the same behaviour as in Writer
+                    BYTE nScript = SCRIPTTYPE_LATIN | SCRIPTTYPE_ASIAN | SCRIPTTYPE_COMPLEX;
+                    if (nSlot == SID_ATTR_CHAR_FONT)
+                        nScript = pTabViewShell->GetSelectionScriptType();
 
                     SfxItemPool& rPool = GetPool();
                     SvxScriptSetItem aSetItem( nSlot, rPool );
