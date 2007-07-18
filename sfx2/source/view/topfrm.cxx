@@ -4,9 +4,9 @@
  *
  *  $RCSfile: topfrm.cxx,v $
  *
- *  $Revision: 1.90 $
+ *  $Revision: 1.91 $
  *
- *  last change: $Author: hr $ $Date: 2007-06-27 23:35:07 $
+ *  last change: $Author: obo $ $Date: 2007-07-18 09:02:20 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -416,15 +416,7 @@ void SfxTopViewWin_Impl::StateChanged( StateChangedType nStateChange )
     {
         SfxObjectShell* pDoc = pFrame->GetObjectShell();
         if ( pDoc && !pFrame->IsVisible_Impl() )
-        {
-            pDoc->GetMedium()->GetItemSet()->ClearItem( SID_HIDDEN );
             pFrame->Show();
-            if ( pDoc->Get_Impl()->bHiddenLockedByAPI )
-            {
-                pDoc->Get_Impl()->bHiddenLockedByAPI = FALSE;
-                pDoc->OwnerLock(FALSE);
-            }
-        }
 
         pFrame->Resize();
     }
