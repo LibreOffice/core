@@ -4,9 +4,9 @@
  *
  *  $RCSfile: EnhancedCustomShape2d.cxx,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: hr $ $Date: 2007-06-27 16:42:46 $
+ *  last change: $Author: obo $ $Date: 2007-07-18 10:51:33 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1854,12 +1854,10 @@ void EnhancedCustomShape2d::CreateSubPath( sal_uInt16& rSrcPt, sal_uInt16& rSegm
                         const Point aEnd(GetPoint( seqCoordinates[ rSrcPt++ ], sal_True, sal_True ));
 
                         DBG_ASSERT(aNewB2DPolygon.count(), "EnhancedCustomShape2d::CreateSubPath: Error in adding control point (!)");
-                        aNewB2DPolygon.setControlPointA(aNewB2DPolygon.count() - 1L, basegfx::B2DPoint(aControlA.X(), aControlA.Y()));
-
-                        DBG_ASSERT(aNewB2DPolygon.count(), "EnhancedCustomShape2d::CreateSubPath: Error in adding control point (!)");
-                        aNewB2DPolygon.setControlPointB(aNewB2DPolygon.count() - 1L, basegfx::B2DPoint(aControlB.X(), aControlB.Y()));
-
-                        aNewB2DPolygon.append(basegfx::B2DPoint(aEnd.X(), aEnd.Y()));
+                        aNewB2DPolygon.appendBezierSegment(
+                            basegfx::B2DPoint(aControlA.X(), aControlA.Y()),
+                            basegfx::B2DPoint(aControlB.X(), aControlB.Y()),
+                            basegfx::B2DPoint(aEnd.X(), aEnd.Y()));
                     }
                 }
                 break;
@@ -1928,23 +1926,32 @@ void EnhancedCustomShape2d::CreateSubPath( sal_uInt16& rSrcPt, sal_uInt16& rSegm
                                 sal_Int32 nYControl = (sal_Int32)((double)aRect.GetHeight() * 0.2835 );
                                 Point aCenter( aRect.Center() );
 
+                                // append start point
                                 aNewB2DPolygon.append(basegfx::B2DPoint(aCenter.X(), aRect.Top()));
-                                aNewB2DPolygon.setControlPointA(aNewB2DPolygon.count() - 1L, basegfx::B2DPoint(aCenter.X() + nXControl, aRect.Top()));
-                                aNewB2DPolygon.setControlPointB(aNewB2DPolygon.count() - 1L, basegfx::B2DPoint(aRect.Right(), aCenter.Y() - nYControl));
 
-                                aNewB2DPolygon.append(basegfx::B2DPoint(aRect.Right(), aCenter.Y()));
-                                aNewB2DPolygon.setControlPointA(aNewB2DPolygon.count() - 1L, basegfx::B2DPoint(aRect.Right(), aCenter.Y() + nYControl));
-                                aNewB2DPolygon.setControlPointB(aNewB2DPolygon.count() - 1L, basegfx::B2DPoint(aCenter.X() + nXControl, aRect.Bottom()));
+                                // append four bezier segments
+                                aNewB2DPolygon.appendBezierSegment(
+                                    basegfx::B2DPoint(aCenter.X() + nXControl, aRect.Top()),
+                                    basegfx::B2DPoint(aRect.Right(), aCenter.Y() - nYControl),
+                                    basegfx::B2DPoint(aRect.Right(), aCenter.Y()));
 
-                                aNewB2DPolygon.append(basegfx::B2DPoint(aCenter.X(), aRect.Bottom()));
-                                aNewB2DPolygon.setControlPointA(aNewB2DPolygon.count() - 1L, basegfx::B2DPoint(aCenter.X() - nXControl, aRect.Bottom()));
-                                aNewB2DPolygon.setControlPointB(aNewB2DPolygon.count() - 1L, basegfx::B2DPoint(aRect.Left(), aCenter.Y() + nYControl));
+                                aNewB2DPolygon.appendBezierSegment(
+                                    basegfx::B2DPoint(aRect.Right(), aCenter.Y() + nYControl),
+                                    basegfx::B2DPoint(aCenter.X() + nXControl, aRect.Bottom()),
+                                    basegfx::B2DPoint(aCenter.X(), aRect.Bottom()));
 
-                                aNewB2DPolygon.append(basegfx::B2DPoint(aRect.Left(), aCenter.Y()));
-                                aNewB2DPolygon.setControlPointA(aNewB2DPolygon.count() - 1L, basegfx::B2DPoint(aRect.Left(), aCenter.Y() - nYControl));
-                                aNewB2DPolygon.setControlPointB(aNewB2DPolygon.count() - 1L, basegfx::B2DPoint(aCenter.X() - nXControl, aRect.Top()));
+                                aNewB2DPolygon.appendBezierSegment(
+                                    basegfx::B2DPoint(aCenter.X() - nXControl, aRect.Bottom()),
+                                    basegfx::B2DPoint(aRect.Left(), aCenter.Y() + nYControl),
+                                    basegfx::B2DPoint(aRect.Left(), aCenter.Y()));
 
-                                aNewB2DPolygon.setClosed(true);
+                                aNewB2DPolygon.appendBezierSegment(
+                                    basegfx::B2DPoint(aRect.Left(), aCenter.Y() - nYControl),
+                                    basegfx::B2DPoint(aCenter.X() - nXControl, aRect.Top()),
+                                    basegfx::B2DPoint(aCenter.X(), aRect.Top()));
+
+                                // close, rescue last controlpoint, remove double last point
+                                basegfx::tools::closeWithGeometryChange(aNewB2DPolygon);
                             }
                         }
                         rSrcPt += 3;
@@ -2003,10 +2010,14 @@ void EnhancedCustomShape2d::CreateSubPath( sal_uInt16& rSrcPt, sal_uInt16& rSegm
                 case ELLIPTICALQUADRANTY :
                 {
                     bool bFirstDirection(true);
+                    basegfx::B2DPoint aControlPointA;
+                    basegfx::B2DPoint aControlPointB;
+
                     for ( sal_uInt16 i = 0; ( i < nPntCount ) && ( rSrcPt < nCoordSize ); i++ )
                     {
                         sal_uInt32 nModT = ( nCommand == ELLIPTICALQUADRANTX ) ? 1 : 0;
                         Point aCurrent( GetPoint( seqCoordinates[ rSrcPt ], sal_True, sal_True ) );
+
                         if ( rSrcPt )   // we need a previous point
                         {
                             Point aPrev( GetPoint( seqCoordinates[ rSrcPt - 1 ], sal_True, sal_True ) );
@@ -2041,18 +2052,24 @@ void EnhancedCustomShape2d::CreateSubPath( sal_uInt16& rSrcPt, sal_uInt16& rSegm
                             sal_Int32 nYVec = ( nY - aPrev.Y() ) >> 1;
                             Point aControl1( aPrev.X() + nXVec, aPrev.Y() + nYVec );
 
-                            DBG_ASSERT(aNewB2DPolygon.count(), "EnhancedCustomShape2d::CreateSubPath: Error in adding control point (!)");
-                            aNewB2DPolygon.setControlPointA(aNewB2DPolygon.count() - 1L, basegfx::B2DPoint(aControl1.X(), aControl1.Y()));
+                            aControlPointA = basegfx::B2DPoint(aControl1.X(), aControl1.Y());
 
                             nXVec = ( nX - aCurrent.X() ) >> 1;
                             nYVec = ( nY - aCurrent.Y() ) >> 1;
                             Point aControl2( aCurrent.X() + nXVec, aCurrent.Y() + nYVec );
 
-                            DBG_ASSERT(aNewB2DPolygon.count(), "EnhancedCustomShape2d::CreateSubPath: Error in adding control point (!)");
-                            aNewB2DPolygon.setControlPointB(aNewB2DPolygon.count() - 1L, basegfx::B2DPoint(aControl2.X(), aControl2.Y()));
+                            aControlPointB = basegfx::B2DPoint(aControl2.X(), aControl2.Y());
+
+                            aNewB2DPolygon.appendBezierSegment(
+                                aControlPointA,
+                                aControlPointB,
+                                basegfx::B2DPoint(aCurrent.X(), aCurrent.Y()));
+                        }
+                        else
+                        {
+                            aNewB2DPolygon.append(basegfx::B2DPoint(aCurrent.X(), aCurrent.Y()));
                         }
 
-                        aNewB2DPolygon.append(basegfx::B2DPoint(aCurrent.X(), aCurrent.Y()));
                         rSrcPt++;
                     }
                 }
@@ -2116,7 +2133,13 @@ void EnhancedCustomShape2d::CreateSubPath( sal_uInt16& rSrcPt, sal_uInt16& rSegm
 
             if(!bNoStroke)
             {
-                SdrPathObj* pStroke = new SdrPathObj(OBJ_PLIN, aNewB2DPolyPolygon);
+                // there is no reason to use OBJ_PLIN here when the polygon is actually closed,
+                // the non-fill is defined by XFILL_NONE. Since SdrPathObj::ImpForceKind() needs
+                // to correct the polygon (here: open it) using the type, the last edge may get lost.
+                // Thus, use a type that fits the polygon
+                SdrPathObj* pStroke = new SdrPathObj(
+                    aNewB2DPolyPolygon.isClosed() ? OBJ_POLY : OBJ_PLIN,
+                    aNewB2DPolyPolygon);
                 SfxItemSet aTempSet(*this);
                 aTempSet.Put(SdrShadowItem(sal_False));
                 aTempSet.Put(XFillStyleItem(XFILL_NONE));
@@ -2132,7 +2155,10 @@ void EnhancedCustomShape2d::CreateSubPath( sal_uInt16& rSrcPt, sal_uInt16& rSegm
 
             if(bNoFill)
             {
-                pObj = new SdrPathObj(OBJ_PLIN, aNewB2DPolyPolygon);
+                // see comment above about OBJ_PLIN
+                pObj = new SdrPathObj(
+                    aNewB2DPolyPolygon.isClosed() ? OBJ_POLY : OBJ_PLIN,
+                    aNewB2DPolyPolygon);
                 aTempSet.Put(XFillStyleItem(XFILL_NONE));
             }
             else
