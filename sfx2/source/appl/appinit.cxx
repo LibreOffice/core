@@ -4,9 +4,9 @@
  *
  *  $RCSfile: appinit.cxx,v $
  *
- *  $Revision: 1.60 $
+ *  $Revision: 1.61 $
  *
- *  last change: $Author: ihi $ $Date: 2007-07-11 13:09:43 $
+ *  last change: $Author: obo $ $Date: 2007-07-18 13:39:40 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -46,6 +46,9 @@
 #endif
 #ifndef _COM_SUN_STAR_FRAME_XDESKTOP_HPP_
 #include <com/sun/star/frame/XDesktop.hpp>
+#endif
+#ifndef _COM_SUN_STAR_LANG_XSERVICEINFO_HPP_
+#include <com/sun/star/lang/XServiceInfo.hpp>
 #endif
 
 #include <svtools/soerr.hxx>
@@ -102,8 +105,8 @@
 #ifndef INCLUDED_SVTOOLS_MODULEOPTIONS_HXX
 #include <svtools/moduleoptions.hxx>
 #endif
-#ifndef _CPPUHELPER_IMPLBASE1_HXX_
-#include <cppuhelper/implbase1.hxx>
+#ifndef _CPPUHELPER_IMPLBASE2_HXX_
+#include <cppuhelper/implbase2.hxx>
 #endif
 
 #include <rtl/logfile.hxx>
@@ -144,12 +147,19 @@ using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star;
 namespace css = ::com::sun::star;
 
-class SfxTerminateListener_Impl : public ::cppu::WeakImplHelper1< XTerminateListener  >
+class SfxTerminateListener_Impl : public ::cppu::WeakImplHelper2< XTerminateListener, XServiceInfo >
 {
 public:
+
+    // XTerminateListener
     virtual void SAL_CALL queryTermination( const EventObject& aEvent ) throw( TerminationVetoException, RuntimeException );
     virtual void SAL_CALL notifyTermination( const EventObject& aEvent ) throw( RuntimeException );
     virtual void SAL_CALL disposing( const EventObject& Source ) throw( RuntimeException );
+
+    // XServiceInfo
+    virtual ::rtl::OUString SAL_CALL getImplementationName() throw (RuntimeException);
+    virtual ::sal_Bool SAL_CALL supportsService( const ::rtl::OUString& sServiceName ) throw (RuntimeException);
+    virtual ::com::sun::star::uno::Sequence< ::rtl::OUString > SAL_CALL getSupportedServiceNames() throw (RuntimeException);
 };
 
 void SAL_CALL SfxTerminateListener_Impl::disposing( const EventObject& ) throw( RuntimeException )
@@ -193,6 +203,41 @@ void SAL_CALL SfxTerminateListener_Impl::notifyTermination( const EventObject& a
     //pApp->Deinitialize();
     delete pApp;
     Application::Quit();
+}
+
+::rtl::OUString SAL_CALL SfxTerminateListener_Impl::getImplementationName() throw (RuntimeException)
+{
+    static const ::rtl::OUString IMPLNAME = ::rtl::OUString::createFromAscii("com.sun.star.comp.sfx2.SfxTerminateListener");
+    return IMPLNAME;
+}
+
+::sal_Bool SAL_CALL SfxTerminateListener_Impl::supportsService( const ::rtl::OUString& sServiceName ) throw (RuntimeException)
+{
+    Sequence< ::rtl::OUString > lNames  = getSupportedServiceNames();
+    ::sal_Int32                 c       = lNames.getLength();
+    ::sal_Int32                 i       = 0;
+
+    for (i=0; i<c; ++i)
+    {
+        if (lNames[i].equals(sServiceName))
+            return sal_True;
+    }
+
+    return sal_False;
+}
+
+Sequence< ::rtl::OUString > SAL_CALL SfxTerminateListener_Impl::getSupportedServiceNames() throw (RuntimeException)
+{
+    // Note: That service  does not realy exists .-)
+    // But this implementation is not thought to be registered realy within our service.rdb.
+    // At least we need the implementation name only to identify these service at the global desktop instance.
+    // The desktop must know, which listener will terminate the SfxApplication in real !
+    // It must call this special listener as last one ... otherwise we shutdown the SfxApplication BEFORE other listener
+    // can react ...
+    static const ::rtl::OUString SERVICENAME = ::rtl::OUString::createFromAscii("com.sun.star.frame.TerminateListener");
+    Sequence< ::rtl::OUString > lNames(1);
+    lNames[0] = SERVICENAME;
+    return lNames;
 }
 
 //====================================================================
