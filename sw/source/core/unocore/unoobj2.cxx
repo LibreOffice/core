@@ -4,9 +4,9 @@
  *
  *  $RCSfile: unoobj2.cxx,v $
  *
- *  $Revision: 1.59 $
+ *  $Revision: 1.60 $
  *
- *  last change: $Author: ihi $ $Date: 2007-06-05 17:34:13 $
+ *  last change: $Author: obo $ $Date: 2007-07-18 12:57:49 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -971,7 +971,7 @@ SwDoc* SwXTextCursor::GetDoc()
   -----------------------------------------------------------------------*/
 void SwXTextCursor::SetCrsrAttr(SwPaM& rPam, const SfxItemSet& rSet, USHORT nAttrMode)
 {
-    sal_uInt16 nFlags = SETATTR_APICALL;
+    sal_uInt16 nFlags = SETATTR_APICALL | (nAttrMode & SETATTR_NOFORMATATTR);
     if(nAttrMode & CRSR_ATTR_MODE_DONTREPLACE)
         nFlags |= SETATTR_DONTREPLACE;
     SwDoc* pDoc = rPam.GetDoc();
