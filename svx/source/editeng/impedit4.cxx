@@ -4,9 +4,9 @@
  *
  *  $RCSfile: impedit4.cxx,v $
  *
- *  $Revision: 1.71 $
+ *  $Revision: 1.72 $
  *
- *  last change: $Author: ihi $ $Date: 2007-07-12 10:56:43 $
+ *  last change: $Author: obo $ $Date: 2007-07-18 09:52:37 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1941,12 +1941,9 @@ Reference< XSpellAlternatives > ImpEditEngine::ImpSpell( EditView* pEditView )
             }
         }
 
-        if ( aWord.Len() > 1 )
-        {
-            LanguageType eLang = GetLanguage( aCurSel.Max() );
-            SvxSpellWrapper::CheckSpellLang( xSpeller, eLang );
-            xSpellAlt = xSpeller->spell( aWord, eLang, aEmptySeq );
-        }
+        LanguageType eLang = GetLanguage( aCurSel.Max() );
+        SvxSpellWrapper::CheckSpellLang( xSpeller, eLang );
+        xSpellAlt = xSpeller->spell( aWord, eLang, aEmptySeq );
 
         if ( !xSpellAlt.is() )
             aCurSel = WordRight( aCurSel.Min(), ::com::sun::star::i18n::WordType::DICTIONARY_WORD );
@@ -2376,66 +2373,65 @@ void ImpEditEngine::DoOnlineSpelling( ContentNode* pThisNodeOnly, sal_Bool bSpel
                     }
                 }
 
+
                 sal_Bool bChanged = sal_False;
-                if ( aWord.Len() > 1 )
+                sal_uInt16 nWStart = aSel.Min().GetIndex();
+                sal_uInt16 nWEnd= aSel.Max().GetIndex();
+                if ( !xSpeller->isValid( aWord, GetLanguage( EditPaM( aSel.Min().GetNode(), nWStart+1 ) ), aEmptySeq ) )
                 {
-                    sal_uInt16 nWStart = aSel.Min().GetIndex();
-                    sal_uInt16 nWEnd= aSel.Max().GetIndex();
-                    if ( !xSpeller->isValid( aWord, GetLanguage( EditPaM( aSel.Min().GetNode(), nWStart+1 ) ), aEmptySeq ) )
-                    {
-                        // Pruefen, ob schon richtig markiert...
-                        nWrongs++;
-                        // Nur bei SimpleRepaint stoppen, sonst zu oft VDev
+                    // Pruefen, ob schon richtig markiert...
+                    nWrongs++;
+                    // Nur bei SimpleRepaint stoppen, sonst zu oft VDev
 //                      if ( ( nWrongs > 8 ) && bSimpleRepaint )
 //                      {
 //                          bStop = sal_True;
 //                          pWrongList->MarkInvalid( aSel.Max().GetIndex(), nInvEnd );
 //                      }
-                        sal_uInt16 nXEnd = bDottAdded ? nWEnd -1 : nWEnd;
-                        if ( !pWrongList->HasWrong( nWStart, nXEnd ) )
-                        {
-                            // Wort als falsch markieren...
-                            // Aber nur, wenn nicht an Cursor-Position...
-                            sal_Bool bCursorPos = sal_False;
-                            if ( aCursorPos.GetNode() == pNode )
-                            {
-                                if ( ( nWStart <= aCursorPos.GetIndex() ) && nWEnd >= aCursorPos.GetIndex() )
-                                    bCursorPos = sal_True;
-                            }
-                            if ( bCursorPos )
-                            {
-                                // Dann weiter als ungueltig markieren...
-                                pWrongList->GetInvalidStart() = nWStart;
-                                pWrongList->GetInvalidEnd() = nWEnd;
-                                bRestartTimer = sal_True;
-                            }
-                            else
-                            {
-                                // Es kann sein, dass die Wrongs in der Liste nicht
-                                // genau ueber Woerter aufgespannt sind, weil die
-                                // WordDelimiters beim Expandieren nicht ausgewrtet werden.
-                                pWrongList->InsertWrong( nWStart, nXEnd, sal_True );
-                                bChanged = sal_True;
-                            }
-                        }
-                    }
-                    else
+                    sal_uInt16 nXEnd = bDottAdded ? nWEnd -1 : nWEnd;
+                    if ( !pWrongList->HasWrong( nWStart, nXEnd ) )
                     {
-                        // Pruefen, ob nicht als als falsch markiert....
-                        if ( pWrongList->HasAnyWrong( nWStart, nWEnd ) )
+                        // Wort als falsch markieren...
+                        // Aber nur, wenn nicht an Cursor-Position...
+                        sal_Bool bCursorPos = sal_False;
+                        if ( aCursorPos.GetNode() == pNode )
                         {
-                            pWrongList->ClearWrongs( nWStart, nWEnd, pNode );
-                            bSimpleRepaint = sal_False;
+                            if ( ( nWStart <= aCursorPos.GetIndex() ) && nWEnd >= aCursorPos.GetIndex() )
+                                bCursorPos = sal_True;
+                        }
+                        if ( bCursorPos )
+                        {
+                            // Dann weiter als ungueltig markieren...
+                            pWrongList->GetInvalidStart() = nWStart;
+                            pWrongList->GetInvalidEnd() = nWEnd;
+                            bRestartTimer = sal_True;
+                        }
+                        else
+                        {
+                            // Es kann sein, dass die Wrongs in der Liste nicht
+                            // genau ueber Woerter aufgespannt sind, weil die
+                            // WordDelimiters beim Expandieren nicht ausgewrtet werden.
+                            pWrongList->InsertWrong( nWStart, nXEnd, sal_True );
                             bChanged = sal_True;
                         }
                     }
-                    if ( bChanged  )
+                }
+                else
+                {
+                    // Pruefen, ob nicht als als falsch markiert....
+                    if ( pWrongList->HasAnyWrong( nWStart, nWEnd ) )
                     {
-                        if ( nPaintFrom == 0xFFFF )
-                            nPaintFrom = nWStart;
-                        nPaintTo = nWEnd;
+                        pWrongList->ClearWrongs( nWStart, nWEnd, pNode );
+                        bSimpleRepaint = sal_False;
+                        bChanged = sal_True;
                     }
                 }
+                if ( bChanged  )
+                {
+                    if ( nPaintFrom == 0xFFFF )
+                        nPaintFrom = nWStart;
+                    nPaintTo = nWEnd;
+                }
+
 
                 EditPaM aLastEnd( aSel.Max() );
                 aSel = WordRight( aSel.Max(), ::com::sun::star::i18n::WordType::DICTIONARY_WORD );
