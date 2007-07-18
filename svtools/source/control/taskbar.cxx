@@ -4,9 +4,9 @@
  *
  *  $RCSfile: taskbar.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 14:41:33 $
+ *  last change: $Author: obo $ $Date: 2007-07-18 08:53:53 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -243,11 +243,6 @@ void TaskBar::Tracking( const TrackingEvent& rTEvt )
     {
         Size aSize = GetOutputSizePixel();
 
-#ifdef MAC
-        if ( !Application::IsFullScreenMode() )
-            aSize.Width() -= 17;
-#endif
-
         long nMouseX = rTEvt.GetMouseEvent().GetPosPixel().X()-mnMouseOff;
         if ( nMouseX < 0 )
             nMouseX = 0;
@@ -320,11 +315,6 @@ void TaskBar::Resize()
     long            nOldStatusX = -1;
     long            nNewStatusX = -1;
     long            nTaskHeight = aSize.Height() - (TASKBAR_OFFY*2);
-
-#ifdef MAC
-    if ( !Application::IsFullScreenMode() )
-        aSize.Width() -= 17;
-#endif
 
     if ( mnWinBits & WB_BORDER )
     {
