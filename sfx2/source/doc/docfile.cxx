@@ -4,9 +4,9 @@
  *
  *  $RCSfile: docfile.cxx,v $
  *
- *  $Revision: 1.192 $
+ *  $Revision: 1.193 $
  *
- *  last change: $Author: obo $ $Date: 2007-07-17 13:42:41 $
+ *  last change: $Author: obo $ $Date: 2007-07-18 09:01:44 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -3382,6 +3382,9 @@ void SfxMedium::TryToSwitchToRepairedTemp()
             }
             else
                 SetError( ERRCODE_IO_CANTWRITE );
+
+            if (pImp->pTempFile != pTmpFile)
+                delete pTmpFile;
         }
         else
             SetError( ERRCODE_IO_CANTREAD );
