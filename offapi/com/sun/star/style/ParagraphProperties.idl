@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ParagraphProperties.idl,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 05:31:10 $
+ *  last change: $Author: obo $ $Date: 2007-07-18 09:49:29 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -81,35 +81,30 @@
 
 //=============================================================================
 
-// DocMerge from xml: service com::sun::star::style::ParagraphProperties
 /** describes the style of paragraphs.
  */
 published service ParagraphProperties
 {
     //-------------------------------------------------------------------------
 
-    // DocMerge from xml: property com::sun::star::style::ParagraphProperties::ParaAdjust
     /** determines the adjustment of a paragraph.
      */
     [property] com::sun::star::style::ParagraphAdjust ParaAdjust;
 
     //-------------------------------------------------------------------------
 
-    // DocMerge from xml: property com::sun::star::style::ParagraphProperties::ParaLineSpacing
     /** contains the type of the line spacing of a paragraph.
      */
     [optional, property] com::sun::star::style::LineSpacing ParaLineSpacing;
 
     //-------------------------------------------------------------------------
 
-    // DocMerge from xml: property com::sun::star::style::ParagraphProperties::ParaBackColor
     /** contains the paragraph background color.
      */
     [optional, property] com::sun::star::util::Color ParaBackColor;
 
     //-------------------------------------------------------------------------
 
-    // DocMerge from xml: property com::sun::star::style::ParagraphProperties::ParaBackTransparent
     /** This value is <TRUE/> if the paragraph background color
         is set to transparent.
      */
@@ -117,21 +112,18 @@ published service ParagraphProperties
 
     //-------------------------------------------------------------------------
 
-    // DocMerge from xml: property com::sun::star::style::ParagraphProperties::ParaBackGraphicURL
     /** contains the value of a link for the background graphic of a paragraph.
      */
     [optional, property] string ParaBackGraphicURL;
 
     //-------------------------------------------------------------------------
 
-    // DocMerge from xml: property com::sun::star::style::ParagraphProperties::ParaBackGraphicFilter
     /** contains the name of the graphic filter for the background graphic of a paragraph.
      */
     [optional, property] string ParaBackGraphicFilter;
 
     //-------------------------------------------------------------------------
 
-    // DocMerge from xml: property com::sun::star::style::ParagraphProperties::ParaBackGraphicLocation
     /** contains the value for the position of a background graphic.
 
         @see com::sun::star::style::GraphicLocation
@@ -148,7 +140,6 @@ published service ParagraphProperties
 
     //-------------------------------------------------------------------------
 
-    // DocMerge from xml: property com::sun::star::style::ParagraphProperties::ParaExpandSingleWord
     /** determines if single words are stretched.
 
         <p>It is only valid if <member>ParagraphProperties::ParaAdjust</member> and
@@ -158,21 +149,18 @@ published service ParagraphProperties
 
     //-------------------------------------------------------------------------
 
-    // DocMerge from xml: property com::sun::star::style::ParagraphProperties::ParaLeftMargin
     /** determines the left margin of the paragraph in 100th mm.
      */
     [property] long ParaLeftMargin;
 
     //-------------------------------------------------------------------------
 
-    // DocMerge from xml: property com::sun::star::style::ParagraphProperties::ParaRightMargin
     /** determines the right margin of the paragraph in 100th mm.
      */
     [property] long ParaRightMargin;
 
     //-------------------------------------------------------------------------
 
-    // DocMerge from xml: property com::sun::star::style::ParagraphProperties::ParaTopMargin
     /** determines the top margin of the paragraph in 100th mm.
 
         <p>The distance between two paragraphs is specified by:</p>
@@ -186,7 +174,6 @@ published service ParagraphProperties
 
     //-------------------------------------------------------------------------
 
-    // DocMerge from xml: property com::sun::star::style::ParagraphProperties::ParaBottomMargin
     /** determines the bottom margin of the paragraph in 100th mm.
 
         <p>The distance between two paragraphs is specified by:</p>
@@ -202,7 +189,6 @@ published service ParagraphProperties
 
     //-------------------------------------------------------------------------
 
-    // DocMerge from xml: property com::sun::star::style::ParagraphProperties::ParaLineNumberCount
     /** determines if the paragraph is included in the
         line numbering.
      */
@@ -210,14 +196,12 @@ published service ParagraphProperties
 
     //-------------------------------------------------------------------------
 
-    // DocMerge from xml: property com::sun::star::style::ParagraphProperties::ParaLineNumberStartValue
     /** contains the start value for the line numbering.
      */
     [optional, property] long ParaLineNumberStartValue;
 
     //-------------------------------------------------------------------------
 
-    // DocMerge from xml: property com::sun::star::style::ParagraphProperties::PageDescName
     /** If this property is set, it creates a page break before the
         paragraph it belongs to and assigns the value as the name
         of the new page style sheet to use.
@@ -226,14 +210,12 @@ published service ParagraphProperties
 
     //-------------------------------------------------------------------------
 
-    // DocMerge from xml: property com::sun::star::style::ParagraphProperties::PageNumberOffset
     /** If a page break property is set at a paragraph, this property contains the new value for the page number.
      */
     [optional, property] short PageNumberOffset;
 
     //-------------------------------------------------------------------------
 
-    // DocMerge from xml: property com::sun::star::style::ParagraphProperties::ParaRegisterModeActive
     /** determines if the register mode is applied to a
         paragraph.
 
@@ -246,7 +228,6 @@ published service ParagraphProperties
 
     //-------------------------------------------------------------------------
 
-    // DocMerge from idl: property com::sun::star::style::ParagraphProperties::ParaTabStops
     /** specifies the positions and kinds of thei tab stops within this
                 paragraph.
      */
@@ -254,14 +235,18 @@ published service ParagraphProperties
 
     //-------------------------------------------------------------------------
 
-    // DocMerge from xml: property com::sun::star::style::ParagraphProperties::ParaStyleName
     /** contains the name of the current paragraph style.
      */
     [optional, property] string ParaStyleName;
 
-    //-------------------------------------------------------------------------
+        //-------------------------------------------------------------------------
 
-    // DocMerge from xml: property com::sun::star::style::ParagraphProperties::DropCapFormat
+        /** contains the name of the current page style.
+         */
+        [optional, property, maybevoid, readonly] string PageStyleName;
+
+        //-------------------------------------------------------------------------
+
     /** specifies whether the first characters of the
         paragraph are displayed in capital letters and how they are
         formatted.
@@ -270,7 +255,6 @@ published service ParagraphProperties
 
     //-------------------------------------------------------------------------
 
-    // DocMerge from xml: property com::sun::star::style::ParagraphProperties::DropCapWholeWord
     /** specifies if the property <var>DropCapFormat</var>
         is applied to the whole first word.
      */
@@ -278,7 +262,6 @@ published service ParagraphProperties
 
     //-------------------------------------------------------------------------
 
-    // DocMerge from xml: property com::sun::star::style::ParagraphProperties::ParaKeepTogether
     /** Setting this property to <TRUE/> prevents page or column
         breaks between this and the following paragraph.
 
@@ -290,7 +273,6 @@ published service ParagraphProperties
 
     //-------------------------------------------------------------------------
 
-    // DocMerge from xml: property com::sun::star::style::ParagraphProperties::ParaSplit
     /** Setting this property to <FALSE/> prevents the paragraph from
         getting split into two pages or columns.
      */
@@ -298,7 +280,6 @@ published service ParagraphProperties
 
     //-------------------------------------------------------------------------
 
-    // DocMerge from xml: property com::sun::star::style::ParagraphProperties::NumberingLevel
     /** specifies the numbering level of the    paragraph.
      */
     [optional, property] short NumberingLevel;
@@ -310,7 +291,6 @@ published service ParagraphProperties
 
     //-------------------------------------------------------------------------
 
-    // DocMerge from xml: property com::sun::star::style::ParagraphProperties::NumberingStartValue
     /** specifies the start value for numbering if a new numbering starts at this paragraph.
      */
     [optional, property] short NumberingStartValue;
@@ -321,7 +301,6 @@ published service ParagraphProperties
     [optional, property] boolean ParaIsNumberingRestart;
     //-------------------------------------------------------------------------
 
-    // DocMerge from xml: property com::sun::star::style::ParagraphProperties::NumberingStyleName
     /** specifies the name of the style for the numbering.
 
 
@@ -331,7 +310,6 @@ published service ParagraphProperties
     [optional, property] string NumberingStyleName;
     //-------------------------------------------------------------------------
 
-    // DocMerge from xml: property com::sun::star::style::ParagraphProperties::ParaOrphans
     /** specifies the minimum number of lines of the paragraph that have
         to be at bottom of a page if the paragraph is spread over more than
         one page.
@@ -339,7 +317,6 @@ published service ParagraphProperties
     [optional, property] byte ParaOrphans;
     //-------------------------------------------------------------------------
 
-    // DocMerge from xml: property com::sun::star::style::ParagraphProperties::ParaWidows
     /** specifies the minimum number of lines of the paragraph that have
         to be at top of a page if the paragraph is spread over more than
         one page.
