@@ -4,9 +4,9 @@
  *
  *  $RCSfile: presethandler.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: ihi $ $Date: 2006-12-20 17:50:00 $
+ *  last change: $Author: obo $ $Date: 2007-07-18 08:49:44 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -43,6 +43,12 @@
 //_______________________________________________
 // own includes
 
+#ifndef __FRAMEWORK_CLASSES_FWKRESID_HXX_
+#include <classes/fwkresid.hxx>
+#endif
+
+#include "classes/resource.hrc"
+
 #ifndef __FRAMEWORK_THREADHELP_READGUARD_HXX_
 #include <threadhelp/readguard.hxx>
 #endif
@@ -57,6 +63,10 @@
 
 //_______________________________________________
 // interface includes
+
+#ifndef __COM_SUN_STAR_CONFIGURATION_CORRUPTEDUICONFIGURATIONEXCEPTION_HPP_
+#include <com/sun/star/configuration/CorruptedUIConfigurationException.hpp>
+#endif
 
 #ifndef __COM_SUN_STAR_CONTAINER_NOSUCHELEMENTEXCEPTION_HPP_
 #include <com/sun/star/container/NoSuchElementException.hpp>
@@ -110,6 +120,10 @@
 #define FILE_EXTENSION          DECLARE_ASCII(".xml")
 
 #define PATH_SEPERATOR          DECLARE_ASCII("/")
+
+static const ::sal_Int32 ID_CORRUPT_UICONFIG_SHARE   = 1;
+static const ::sal_Int32 ID_CORRUPT_UICONFIG_USER    = 2;
+static const ::sal_Int32 ID_CORRUPT_UICONFIG_GENERAL = 3;
 
 //_______________________________________________
 // namespace
@@ -237,6 +251,29 @@ void PresetHandler::forgetCachedStorages()
 }
 
 //-----------------------------------------------
+::rtl::OUString lcl_getLocalizedMessage(::sal_Int32 nID)
+{
+    ::rtl::OUString sMessage = ::rtl::OUString::createFromAscii("Unknown error.");
+
+    switch(nID)
+    {
+        case ID_CORRUPT_UICONFIG_SHARE :
+                sMessage = ::rtl::OUString( String( FwkResId( STR_CORRUPT_UICFG_SHARE )));
+                break;
+
+        case ID_CORRUPT_UICONFIG_USER :
+                sMessage = ::rtl::OUString( String( FwkResId( STR_CORRUPT_UICFG_USER )));
+                break;
+
+        case ID_CORRUPT_UICONFIG_GENERAL :
+                sMessage = ::rtl::OUString( String( FwkResId( STR_CORRUPT_UICFG_GENERAL )));
+                break;
+    }
+
+    return sMessage;
+}
+
+//-----------------------------------------------
 css::uno::Reference< css::embed::XStorage > PresetHandler::getOrCreateRootStorageShare()
 {
     css::uno::Reference< css::embed::XStorage > xRoot = m_aSharedStorages->m_lStoragesShare.getRootStorage();
@@ -279,7 +316,19 @@ css::uno::Reference< css::embed::XStorage > PresetHandler::getOrCreateRootStorag
     lArgs[1] <<= css::embed::ElementModes::READ | css::embed::ElementModes::NOCREATE;
 
     css::uno::Reference< css::lang::XSingleServiceFactory > xStorageFactory(xSMGR->createInstance(SERVICENAME_FILESYSTEMSTORAGEFACTORY)  , css::uno::UNO_QUERY_THROW);
-    css::uno::Reference< css::embed::XStorage >             xStorage       (xStorageFactory->createInstanceWithArguments(lArgs), css::uno::UNO_QUERY      );
+    css::uno::Reference< css::embed::XStorage >             xStorage;
+
+    try
+    {
+        xStorage = css::uno::Reference< css::embed::XStorage >(xStorageFactory->createInstanceWithArguments(lArgs), css::uno::UNO_QUERY_THROW);
+    }
+    catch(const css::uno::Exception& ex)
+    {
+        throw css::configuration::CorruptedUIConfigurationException(
+            lcl_getLocalizedMessage(ID_CORRUPT_UICONFIG_SHARE),
+            css::uno::Reference< css::uno::XInterface >(),
+            ex.Message);
+    }
 
     m_aSharedStorages->m_lStoragesShare.setRootStorage(xStorage);
 
@@ -318,7 +367,20 @@ css::uno::Reference< css::embed::XStorage > PresetHandler::getOrCreateRootStorag
     lArgs[1] <<= css::embed::ElementModes::READWRITE;
 
     css::uno::Reference< css::lang::XSingleServiceFactory > xStorageFactory(xSMGR->createInstance(SERVICENAME_FILESYSTEMSTORAGEFACTORY)  , css::uno::UNO_QUERY_THROW);
-    css::uno::Reference< css::embed::XStorage >             xStorage       (xStorageFactory->createInstanceWithArguments(lArgs), css::uno::UNO_QUERY      );
+    css::uno::Reference< css::embed::XStorage >             xStorage;
+
+    try
+    {
+        xStorage = css::uno::Reference< css::embed::XStorage >(xStorageFactory->createInstanceWithArguments(lArgs), css::uno::UNO_QUERY_THROW);
+    }
+    catch(const css::uno::Exception& ex)
+    {
+        throw css::configuration::CorruptedUIConfigurationException(
+            lcl_getLocalizedMessage(ID_CORRUPT_UICONFIG_USER),
+            css::uno::Reference< css::uno::XInterface >(),
+            ex.Message);
+    }
+
     m_aSharedStorages->m_lStoragesUser.setRootStorage(xStorage);
 
     return xStorage;
@@ -407,6 +469,10 @@ void PresetHandler::connectToResource(      PresetHandler::EConfigType          
         xShare = getOrCreateRootStorageShare();
         xUser  = getOrCreateRootStorageUser();
     }
+
+    // #...#
+    try
+    {
 
     // a) inside share layer we should not create any new structures ... We jave to use
     //    existing ones only!
@@ -559,6 +625,15 @@ void PresetHandler::connectToResource(      PresetHandler::EConfigType          
 
     aWriteLock.unlock();
     // <- SAFE ----------------------------------
+
+    }
+    catch(const css::uno::Exception& ex)
+    {
+        throw css::configuration::CorruptedUIConfigurationException(
+            lcl_getLocalizedMessage(ID_CORRUPT_UICONFIG_GENERAL),
+            css::uno::Reference< css::uno::XInterface >(),
+            ex.Message);
+    }
 }
 
 //-----------------------------------------------
