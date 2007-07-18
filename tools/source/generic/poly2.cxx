@@ -4,9 +4,9 @@
  *
  *  $RCSfile: poly2.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: hr $ $Date: 2007-06-27 22:14:29 $
+ *  last change: $Author: obo $ $Date: 2007-07-18 11:09:50 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -526,18 +526,18 @@ void PolyPolygon::ImplDoOperation( const PolyPolygon& rPolyPoly, PolyPolygon& rR
     // Convert to B2DPolyPolygon, temporarily. It might be
     // advantageous in the future, to have a PolyPolygon adaptor that
     // just simulates a B2DPolyPolygon here...
-    ::basegfx::B2DPolyPolygon aMergePolyPolygonA( getB2DPolyPolygon() );
-    ::basegfx::B2DPolyPolygon aMergePolyPolygonB( rPolyPoly.getB2DPolyPolygon() );
+    basegfx::B2DPolyPolygon aMergePolyPolygonA( getB2DPolyPolygon() );
+    basegfx::B2DPolyPolygon aMergePolyPolygonB( rPolyPoly.getB2DPolyPolygon() );
 
     // normalize the two polypolygons before. Force properly oriented
     // polygons.
     if( aMergePolyPolygonA.areControlPointsUsed() )
-        aMergePolyPolygonA = ::basegfx::tools::adaptiveSubdivideByAngle(aMergePolyPolygonA);
-    aMergePolyPolygonA = ::basegfx::tools::correctOrientations( aMergePolyPolygonA );
+        aMergePolyPolygonA = basegfx::tools::adaptiveSubdivideByAngle(aMergePolyPolygonA);
+    aMergePolyPolygonA = basegfx::tools::correctOrientations( aMergePolyPolygonA );
 
     if( aMergePolyPolygonB.areControlPointsUsed() )
-        aMergePolyPolygonB = ::basegfx::tools::adaptiveSubdivideByAngle(aMergePolyPolygonB);
-    aMergePolyPolygonB = ::basegfx::tools::correctOrientations( aMergePolyPolygonB );
+        aMergePolyPolygonB = basegfx::tools::adaptiveSubdivideByAngle(aMergePolyPolygonB);
+    aMergePolyPolygonB = basegfx::tools::correctOrientations( aMergePolyPolygonB );
 
     switch( nOperation )
     {
@@ -548,8 +548,8 @@ void PolyPolygon::ImplDoOperation( const PolyPolygon& rPolyPoly, PolyPolygon& rR
         {
             // simple merge all contained parts (OR)
             aMergePolyPolygonA.append(aMergePolyPolygonB);
-            aMergePolyPolygonA = ::basegfx::tools::removeAllIntersections(aMergePolyPolygonA);
-            aMergePolyPolygonA = ::basegfx::tools::removeNeutralPolygons(aMergePolyPolygonA, sal_True);
+            aMergePolyPolygonA = basegfx::tools::removeAllIntersections(aMergePolyPolygonA);
+            aMergePolyPolygonA = basegfx::tools::removeNeutralPolygons(aMergePolyPolygonA, sal_True);
             break;
         }
 
@@ -557,20 +557,20 @@ void PolyPolygon::ImplDoOperation( const PolyPolygon& rPolyPoly, PolyPolygon& rR
         {
             // take selected poly 2..n (is in Polygon B), merge them, flipdirections
             // and merge with poly 1
-            aMergePolyPolygonA = ::basegfx::tools::removeAllIntersections(aMergePolyPolygonA);
-            aMergePolyPolygonA = ::basegfx::tools::removeNeutralPolygons(aMergePolyPolygonA, sal_True);
-            aMergePolyPolygonB = ::basegfx::tools::removeAllIntersections(aMergePolyPolygonB);
-            aMergePolyPolygonB = ::basegfx::tools::removeNeutralPolygons(aMergePolyPolygonB, sal_True);
+            aMergePolyPolygonA = basegfx::tools::removeAllIntersections(aMergePolyPolygonA);
+            aMergePolyPolygonA = basegfx::tools::removeNeutralPolygons(aMergePolyPolygonA, sal_True);
+            aMergePolyPolygonB = basegfx::tools::removeAllIntersections(aMergePolyPolygonB);
+            aMergePolyPolygonB = basegfx::tools::removeNeutralPolygons(aMergePolyPolygonB, sal_True);
             aMergePolyPolygonB.flip();
             aMergePolyPolygonA.append(aMergePolyPolygonB);
-            aMergePolyPolygonA = ::basegfx::tools::removeAllIntersections(aMergePolyPolygonA);
-            aMergePolyPolygonA = ::basegfx::tools::removeNeutralPolygons(aMergePolyPolygonA, sal_True);
+            aMergePolyPolygonA = basegfx::tools::removeAllIntersections(aMergePolyPolygonA);
+            aMergePolyPolygonA = basegfx::tools::removeNeutralPolygons(aMergePolyPolygonA, sal_True);
 
             // #72995# one more call to resolve self intersections which
             // may have been built by substracting (see bug)
             //aMergePolyPolygonA.Merge(FALSE);
-            aMergePolyPolygonA = ::basegfx::tools::removeAllIntersections(aMergePolyPolygonA);
-            aMergePolyPolygonA = ::basegfx::tools::removeNeutralPolygons(aMergePolyPolygonA, sal_True);
+            aMergePolyPolygonA = basegfx::tools::removeAllIntersections(aMergePolyPolygonA);
+            aMergePolyPolygonA = basegfx::tools::removeNeutralPolygons(aMergePolyPolygonA, sal_True);
             break;
         }
 
@@ -580,27 +580,27 @@ void PolyPolygon::ImplDoOperation( const PolyPolygon& rPolyPoly, PolyPolygon& rR
             // has no direct support for this, we first compute the
             // intersection and the union of the two polygons, and
             // then subtract the intersection from the union
-            aMergePolyPolygonA = ::basegfx::tools::removeAllIntersections(aMergePolyPolygonA);
-            aMergePolyPolygonA = ::basegfx::tools::removeNeutralPolygons(aMergePolyPolygonA, sal_True);
-            aMergePolyPolygonB = ::basegfx::tools::removeAllIntersections(aMergePolyPolygonB);
-            aMergePolyPolygonB = ::basegfx::tools::removeNeutralPolygons(aMergePolyPolygonB, sal_True);
-            ::basegfx::B2DPolyPolygon aAintersectsB( aMergePolyPolygonA );
+            aMergePolyPolygonA = basegfx::tools::removeAllIntersections(aMergePolyPolygonA);
+            aMergePolyPolygonA = basegfx::tools::removeNeutralPolygons(aMergePolyPolygonA, sal_True);
+            aMergePolyPolygonB = basegfx::tools::removeAllIntersections(aMergePolyPolygonB);
+            aMergePolyPolygonB = basegfx::tools::removeNeutralPolygons(aMergePolyPolygonB, sal_True);
+            basegfx::B2DPolyPolygon aAintersectsB( aMergePolyPolygonA );
 
             // A /\ B
             aAintersectsB.append(aMergePolyPolygonB);
-            aAintersectsB = ::basegfx::tools::removeAllIntersections(aAintersectsB);
-            aAintersectsB = ::basegfx::tools::removeNeutralPolygons(aAintersectsB, sal_False);
+            aAintersectsB = basegfx::tools::removeAllIntersections(aAintersectsB);
+            aAintersectsB = basegfx::tools::removeNeutralPolygons(aAintersectsB, sal_False);
 
             // A + B
             aMergePolyPolygonA.append(aMergePolyPolygonB);
-            aMergePolyPolygonA = ::basegfx::tools::removeAllIntersections(aMergePolyPolygonA);
-            aMergePolyPolygonA = ::basegfx::tools::removeNeutralPolygons(aMergePolyPolygonA, sal_True);
+            aMergePolyPolygonA = basegfx::tools::removeAllIntersections(aMergePolyPolygonA);
+            aMergePolyPolygonA = basegfx::tools::removeNeutralPolygons(aMergePolyPolygonA, sal_True);
 
             // (A+B) \ (A/\B)
             aAintersectsB.flip();
             aMergePolyPolygonA.append(aAintersectsB);
-            aMergePolyPolygonA = ::basegfx::tools::removeAllIntersections(aMergePolyPolygonA);
-            aMergePolyPolygonA = ::basegfx::tools::removeNeutralPolygons(aMergePolyPolygonA, sal_True);
+            aMergePolyPolygonA = basegfx::tools::removeAllIntersections(aMergePolyPolygonA);
+            aMergePolyPolygonA = basegfx::tools::removeNeutralPolygons(aMergePolyPolygonA, sal_True);
             break;
         }
 
@@ -608,13 +608,13 @@ void PolyPolygon::ImplDoOperation( const PolyPolygon& rPolyPoly, PolyPolygon& rR
         case GPC_INT:
         {
             // cut poly 1 against polys 2..n (AND)
-            aMergePolyPolygonA = ::basegfx::tools::removeAllIntersections(aMergePolyPolygonA);
-            aMergePolyPolygonA = ::basegfx::tools::removeNeutralPolygons(aMergePolyPolygonA, sal_True);
-            aMergePolyPolygonB = ::basegfx::tools::removeAllIntersections(aMergePolyPolygonB);
-            aMergePolyPolygonB = ::basegfx::tools::removeNeutralPolygons(aMergePolyPolygonB, sal_True);
+            aMergePolyPolygonA = basegfx::tools::removeAllIntersections(aMergePolyPolygonA);
+            aMergePolyPolygonA = basegfx::tools::removeNeutralPolygons(aMergePolyPolygonA, sal_True);
+            aMergePolyPolygonB = basegfx::tools::removeAllIntersections(aMergePolyPolygonB);
+            aMergePolyPolygonB = basegfx::tools::removeNeutralPolygons(aMergePolyPolygonB, sal_True);
             aMergePolyPolygonA.append(aMergePolyPolygonB);
-            aMergePolyPolygonA = ::basegfx::tools::removeAllIntersections(aMergePolyPolygonA);
-            aMergePolyPolygonA = ::basegfx::tools::removeNeutralPolygons(aMergePolyPolygonA, sal_False);
+            aMergePolyPolygonA = basegfx::tools::removeAllIntersections(aMergePolyPolygonA);
+            aMergePolyPolygonA = basegfx::tools::removeNeutralPolygons(aMergePolyPolygonA, sal_False);
             break;
         }
     }
@@ -1034,10 +1034,10 @@ void PolyPolygon::Write( SvStream& rOStream ) const
 }
 
 // -----------------------------------------------------------------------
-// convert to ::basegfx::B2DPolyPolygon and return
-::basegfx::B2DPolyPolygon PolyPolygon::getB2DPolyPolygon() const
+// convert to basegfx::B2DPolyPolygon and return
+basegfx::B2DPolyPolygon PolyPolygon::getB2DPolyPolygon() const
 {
-    ::basegfx::B2DPolyPolygon aRetval;
+    basegfx::B2DPolyPolygon aRetval;
 
     for(sal_uInt16 a(0); a < mpImplPolyPolygon->mnCount; a++)
     {
@@ -1049,13 +1049,13 @@ void PolyPolygon::Write( SvStream& rOStream ) const
 }
 
 // -----------------------------------------------------------------------
-// constructor to convert from ::basegfx::B2DPolyPolygon
-PolyPolygon::PolyPolygon(const ::basegfx::B2DPolyPolygon& rPolyPolygon)
+// constructor to convert from basegfx::B2DPolyPolygon
+PolyPolygon::PolyPolygon(const basegfx::B2DPolyPolygon& rPolyPolygon)
 {
     DBG_CTOR( PolyPolygon, NULL );
     const sal_uInt16 nCount(sal_uInt16(rPolyPolygon.count()));
     DBG_ASSERT(sal_uInt32(nCount) == rPolyPolygon.count(),
-        "PolyPolygon::PolyPolygon: Too many sub-polygons in given ::basegfx::B2DPolyPolygon (!)");
+        "PolyPolygon::PolyPolygon: Too many sub-polygons in given basegfx::B2DPolyPolygon (!)");
 
     if ( nCount )
     {
@@ -1063,7 +1063,7 @@ PolyPolygon::PolyPolygon(const ::basegfx::B2DPolyPolygon& rPolyPolygon)
 
         for(sal_uInt16 a(0); a < nCount; a++)
         {
-            ::basegfx::B2DPolygon aCandidate(rPolyPolygon.getB2DPolygon(sal_uInt32(a)));
+            basegfx::B2DPolygon aCandidate(rPolyPolygon.getB2DPolygon(sal_uInt32(a)));
             mpImplPolyPolygon->mpPolyAry[a] = new Polygon( aCandidate );
         }
     }
