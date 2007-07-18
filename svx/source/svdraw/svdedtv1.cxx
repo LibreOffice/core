@@ -4,9 +4,9 @@
  *
  *  $RCSfile: svdedtv1.cxx,v $
  *
- *  $Revision: 1.28 $
+ *  $Revision: 1.29 $
  *
- *  last change: $Author: hr $ $Date: 2007-06-27 18:59:56 $
+ *  last change: $Author: obo $ $Date: 2007-07-18 10:55:50 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1295,6 +1295,14 @@ void SdrEditView::SetGeoAttrToMarked(const SfxItemSet& rAttr)
         }
 
         ShearMarkedObj(aRef,nShearAngle,bShearVert);
+
+        // #i74358#
+        // ShearMarkedObj creates a linear combination of the existing transformation and
+        // the new shear to apply. If the object is already transformed (e.g. rotated) the
+        // linear combination will not decompose to the same start values again, but to a
+        // new combination. Thus it makes no sense to check if the wanted shear is reached
+        // or not. Taking out.
+#if 0
         long nTempAngle=GetMarkedObjShear();
         if (nTempAngle!=0 && nTempAngle!=nNewShearAngle && !bShearVert) {
             // noch eine 2. Iteration zur Kompensation der Rundungsfehler
@@ -1307,6 +1315,7 @@ void SdrEditView::SetGeoAttrToMarked(const SfxItemSet& rAttr)
                 ShearMarkedObj(aRef,nTempAngle,bShearVert);
             }
         }
+#endif
     }
 
     // Position aendern
