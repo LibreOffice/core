@@ -4,9 +4,9 @@
  *
  *  $RCSfile: thread.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 00:19:42 $
+ *  last change: $Author: obo $ $Date: 2007-07-18 12:21:48 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -65,7 +65,7 @@ namespace cppu_threadpool {
 #if OSL_DEBUG_LEVEL > 1
         if( m_lst.size() )
         {
-            fprintf( stderr, "%d Threads left\n" , m_lst.size() );
+            fprintf( stderr, "%lu Threads left\n" , static_cast<unsigned long>(m_lst.size()) );
         }
 #endif
     }
