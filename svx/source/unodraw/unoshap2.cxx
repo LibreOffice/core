@@ -4,9 +4,9 @@
  *
  *  $RCSfile: unoshap2.cxx,v $
  *
- *  $Revision: 1.64 $
+ *  $Revision: 1.65 $
  *
- *  last change: $Author: rt $ $Date: 2007-07-06 07:45:14 $
+ *  last change: $Author: obo $ $Date: 2007-07-18 10:58:28 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1379,129 +1379,118 @@ SvxShapePolyPolygonBezier::~SvxShapePolyPolygonBezier() throw()
 {
 }
 
-basegfx::B2DPolyPolygon SvxConvertPolyPolygonBezierToB2DPolyPolygon( const drawing::PolyPolygonBezierCoords* pSourcePolyPolygon)
+basegfx::B2DPolyPolygon SvxConvertPolyPolygonBezierToB2DPolyPolygon(const drawing::PolyPolygonBezierCoords* pSourcePolyPolygon)
     throw( IllegalArgumentException )
 {
+    const sal_Int32 nOuterSequenceCount(pSourcePolyPolygon->Coordinates.getLength());
     basegfx::B2DPolyPolygon aNewPolyPolygon;
-    sal_Int32 nOuterSequenceCount = pSourcePolyPolygon->Coordinates.getLength();
-    if(pSourcePolyPolygon->Flags.getLength() != nOuterSequenceCount)
-        throw IllegalArgumentException();
 
-    // Zeiger auf innere sequences holen
+    if(pSourcePolyPolygon->Flags.getLength() != nOuterSequenceCount)
+    {
+        throw IllegalArgumentException();
+    }
+
+    // get pointers to inner sequence
     const drawing::PointSequence* pInnerSequence = pSourcePolyPolygon->Coordinates.getConstArray();
     const drawing::FlagSequence* pInnerSequenceFlags = pSourcePolyPolygon->Flags.getConstArray();
-    sal_Bool bIsCurve(FALSE);
-    sal_Bool bCurveValid(TRUE);
-    sal_Bool bCurveTestActive(FALSE);
 
-    for(sal_Int32 a(0); bCurveValid && a < nOuterSequenceCount; a++)
+    for(sal_Int32 a(0); a < nOuterSequenceCount; a++)
     {
-        sal_Int32 nInnerSequenceCount = pInnerSequence->getLength();
+        const sal_Int32 nInnerSequenceCount(pInnerSequence->getLength());
 
         if(pInnerSequenceFlags->getLength() != nInnerSequenceCount)
+        {
             throw IllegalArgumentException();
+        }
 
-        // Neues XPolygon vorbereiten
+        // prepare new polygon
         basegfx::B2DPolygon aNewPolygon;
-        sal_uInt32 nLastPointIndex(0L);
-        bool bFirstControlPointSet(false);
-
-        // Zeiger auf Arrays holen
         const awt::Point* pArray = pInnerSequence->getConstArray();
         const drawing::PolygonFlags* pArrayFlags = pInnerSequenceFlags->getConstArray();
 
-        for(sal_Int32 b(0); bCurveValid && b < nInnerSequenceCount; b++)
+        // get first point and flag
+        basegfx::B2DPoint aNewCoordinatePair(pArray->X, pArray->Y); pArray++;
+        XPolyFlags ePolyFlag((XPolyFlags)((sal_uInt16)*pArrayFlags)); pArrayFlags++;
+        basegfx::B2DPoint aControlA;
+        basegfx::B2DPoint aControlB;
+
+        // first point is not allowed to be a control point
+        if(XPOLY_CONTROL == ePolyFlag)
         {
-            // coordinate data
-            const basegfx::B2DPoint aNewCoordinatePair(pArray->X, pArray->Y);
-            pArray++;
+            throw IllegalArgumentException();
+        }
 
-            // flag data
-            XPolyFlags ePolyFlag = (XPolyFlags)((sal_uInt16)*pArrayFlags++);
+        // add first point as start point
+        aNewPolygon.append(aNewCoordinatePair);
 
-            // set curve flag
-            if(!bIsCurve && ePolyFlag == XPOLY_CONTROL)
-                bIsCurve = TRUE;
+        for(sal_Int32 b(1); b < nInnerSequenceCount;)
+        {
+            // prepare loop
+            bool bControlA(false);
+            bool bControlB(false);
 
-            // curve testing
-            if(bIsCurve && bCurveValid && (bCurveTestActive || ePolyFlag == XPOLY_CONTROL))
+            // get next point and flag
+            aNewCoordinatePair = basegfx::B2DPoint(pArray->X, pArray->Y);
+            ePolyFlag = XPolyFlags((XPolyFlags)((sal_uInt16)*pArrayFlags));
+            pArray++; pArrayFlags++; b++;
+
+            if(b < nInnerSequenceCount && XPOLY_CONTROL == ePolyFlag)
             {
-                if(!bCurveTestActive)
-                {
-                    // first control point found, test it
-                    if(b == 0)
-                    {
-                        // no curve startpoint possible
-                        bCurveValid = FALSE;
-                    }
-                    else
-                    {
-                        // test type of prev point
-                        XPolyFlags ePrevPolyFlag = (XPolyFlags)((sal_uInt16)*(pArrayFlags - 2));
-                        if(ePrevPolyFlag == XPOLY_CONTROL)
-                        {
-                            // curve startpoint is a control point,
-                            // this is not allowed (three control points in a row)
-                            bCurveValid = FALSE;
-                        }
-                    }
+                aControlA = aNewCoordinatePair;
+                bControlA = true;
 
-                    // next curve test state
-                    bCurveTestActive = TRUE;
-                }
-                else
-                {
-                    // prev was a valid curve start, this should be the second
-                    // curve control point, test it
-                    if(ePolyFlag != XPOLY_CONTROL)
-                    {
-                        // no second curve control point
-                        bCurveValid = FALSE;
-                    }
-                    else if(b == nInnerSequenceCount-1)
-                    {
-                        // no curve endpoint possible
-                        bCurveValid = FALSE;
-                    }
-                    else
-                    {
-                        // test type of next point
-                        XPolyFlags eNextPolyFlag = (XPolyFlags)((sal_uInt16)*pArrayFlags);
-                        if(eNextPolyFlag == XPOLY_CONTROL)
-                        {
-                            // curve endpoint is the next control point,
-                            // this is not allowed (three control points in a row)
-                            bCurveValid = FALSE;
-                        }
-                    }
-
-                    // end curve test for this segment
-                    bCurveTestActive = FALSE;
-                }
+                // get next point and flag
+                aNewCoordinatePair = basegfx::B2DPoint(pArray->X, pArray->Y);
+                ePolyFlag = XPolyFlags((XPolyFlags)((sal_uInt16)*pArrayFlags));
+                pArray++; pArrayFlags++; b++;
             }
 
-            if(ePolyFlag == XPOLY_CONTROL)
+            if(b < nInnerSequenceCount && XPOLY_CONTROL == ePolyFlag)
             {
-                if(bFirstControlPointSet)
-                {
-                    aNewPolygon.setControlPointB(nLastPointIndex, aNewCoordinatePair);
-                    bFirstControlPointSet = false;
-                }
-                else
-                {
-                    aNewPolygon.setControlPointA(nLastPointIndex, aNewCoordinatePair);
-                    bFirstControlPointSet = true;
-                }
+                aControlB = aNewCoordinatePair;
+                bControlB = true;
+
+                // get next point and flag
+                aNewCoordinatePair = basegfx::B2DPoint(pArray->X, pArray->Y);
+                ePolyFlag = XPolyFlags((XPolyFlags)((sal_uInt16)*pArrayFlags));
+                pArray++; pArrayFlags++; b++;
+            }
+
+            // two or no control points are consumed, another one would be an error.
+            // It's also an error if only one control point was read
+            if(XPOLY_CONTROL == ePolyFlag || bControlA != bControlB)
+            {
+                throw IllegalArgumentException();
+            }
+
+            // the previous writes used the B2DPolyPoygon -> PolyPolygon converter
+            // which did not create minimal PolyPolygons, but created all control points
+            // as null vectors (identical points). Because of the former P(CA)(CB)-norm of
+            // B2DPolygon and it's unused sign of being the zero-vector and CA and CB being
+            // relative to P, an empty edge was exported as P == CA == CB. Luckily, the new
+            // export format can be read without errors by the old OOo-versions, so we need only
+            // to correct here at read and do not need to export a wrong but compatible version
+            // for the future.
+            if(bControlA
+                && aControlA.equal(aControlB)
+                && aControlA.equal(aNewPolygon.getB2DPoint(aNewPolygon.count() - 1)))
+            {
+                bControlA = bControlB = false;
+            }
+
+            if(bControlA)
+            {
+                // add bezier edge
+                aNewPolygon.appendBezierSegment(aControlA, aControlB, aNewCoordinatePair);
             }
             else
             {
-                // add coordinate
-                nLastPointIndex = aNewPolygon.count();
-                bFirstControlPointSet = false;
+                // add edge
                 aNewPolygon.append(aNewCoordinatePair);
             }
         }
 
+        // next sequence
         pInnerSequence++;
         pInnerSequenceFlags++;
 
@@ -1509,13 +1498,9 @@ basegfx::B2DPolyPolygon SvxConvertPolyPolygonBezierToB2DPolyPolygon( const drawi
         // so we need to correct this to closed state here
         basegfx::tools::checkClosed(aNewPolygon);
 
-        // Neues Teilpolygon einfuegen
+        // add new subpolygon
         aNewPolyPolygon.append(aNewPolygon);
     }
-
-    // throw exception if polygon data is an invalid curve definition
-    if(bIsCurve && !bCurveValid)
-        throw IllegalArgumentException();
 
     return aNewPolyPolygon;
 }
@@ -1560,6 +1545,8 @@ void SAL_CALL SvxShapePolyPolygonBezier::setPropertyValue( const OUString& aProp
 
 void SvxConvertB2DPolyPolygonToPolyPolygonBezier( const basegfx::B2DPolyPolygon& rPolyPoly, drawing::PolyPolygonBezierCoords& rRetval )
 {
+    // use PolyPolygon converter as base. Since PolyPolygonBezierCoords uses
+    // integer coordinates, this is no precision loss at all.
     const PolyPolygon aPolyPoly(rPolyPoly);
 
     // Polygone innerhalb vrobereiten
