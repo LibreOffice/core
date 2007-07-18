@@ -4,9 +4,9 @@
  *
  *  $RCSfile: services.h,v $
  *
- *  $Revision: 1.42 $
+ *  $Revision: 1.43 $
  *
- *  last change: $Author: ihi $ $Date: 2007-07-11 15:00:59 $
+ *  last change: $Author: obo $ $Date: 2007-07-18 13:25:12 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -150,8 +150,10 @@ namespace framework{
 #define IMPLEMENTATIONNAME_DOCUMENTPROPERTIES                   DECLARE_ASCII("com.sun.star.comp.framework.DocumentProperties"      )
 #define IMPLEMENTATIONNAME_SOUNDHANDLER                         DECLARE_ASCII("com.sun.star.comp.framework.SoundHandler"            )
 #define IMPLEMENTATIONNAME_CONTENTHANDLERFACTORY                DECLARE_ASCII("com.sun.star.comp.framework.ContentHandlerFactory"   )
+#define IMPLEMENTATIONNAME_SFXTERMINATOR                        DECLARE_ASCII("com.sun.star.comp.sfx2.SfxTerminateListener"         )
 #define IMPLEMENTATIONNAME_PIPETERMINATOR                       DECLARE_ASCII("com.sun.star.comp.OfficeIPCThreadController"         )
 #define IMPLEMENTATIONNAME_QUICKLAUNCHER                        DECLARE_ASCII("com.sun.star.comp.desktop.QuickstartWrapper"         )
+#define IMPLEMENTATIONNAME_SWTHREADMANAGER                      DECLARE_ASCII("com.sun.star.util.comp.FinalThreadManager"           )
 #define IMPLEMENTATIONNAME_JOBEXECUTOR                          DECLARE_ASCII("com.sun.star.comp.framework.JobExecutor"             )
 #define IMPLEMENTATIONNAME_DISPATCHRECORDERSUPPLIER             DECLARE_ASCII("com.sun.star.comp.framework.DispatchRecorderSupplier")
 #define IMPLEMENTATIONNAME_DISPATCHRECORDER                     DECLARE_ASCII("com.sun.star.comp.framework.DispatchRecorder"        )
