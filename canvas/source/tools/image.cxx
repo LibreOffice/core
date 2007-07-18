@@ -4,9 +4,9 @@
  *
  *  $RCSfile: image.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: obo $ $Date: 2007-07-17 14:24:17 $
+ *  last change: $Author: obo $ $Date: 2007-07-18 10:42:46 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -999,50 +999,53 @@ void Image::drawLinePolyPolygonImpl( const ::basegfx::B2DPolyPolygon&   rPolyPol
 
     for(sal_uInt32 nPolygon=0; nPolygon<aPolyPolygon.count(); ++nPolygon)
     {
-        const ::basegfx::B2DPolygon& rPoly(aPolyPolygon.getB2DPolygon(nPolygon));
-        if(rPoly.areControlPointsUsed())
+        const basegfx::B2DPolygon aPolygon(aPolyPolygon.getB2DPolygon(nPolygon));
+        const sal_uInt32 nPointCount(aPolygon.count());
+
+        if(nPointCount)
         {
-            // retrieve first vertex
-            const ::basegfx::B2DPoint& rPoint(rPoly.getB2DPoint(0));
-
-            ::basegfx::B2DPoint aCtrlA(rPoly.getControlPointA(0));
-            ::basegfx::B2DPoint aCtrlB(rPoly.getControlPointB(0));
-
-            // first vertex
-            path.move_to(rPoint.getX(),
-                         rPoint.getY());
-            for(sal_uInt32 nVertex=1; nVertex<rPoly.count(); ++nVertex)
+            if(aPolygon.areControlPointsUsed())
             {
-                const ::basegfx::B2DPoint& rVertexPoint(rPoly.getB2DPoint(nVertex));
+                // prepare edge-based loop
+                basegfx::B2DPoint aCurrentPoint(aPolygon.getB2DPoint(0));
+                const sal_uInt32 nEdgeCount(aPolygon.isClosed() ? nPointCount - 1 : nPointCount);
 
-                // specify first cp, second cp, next vertex
-                path.curve4( aCtrlA.getX(),aCtrlA.getY(),
-                             aCtrlB.getX(),aCtrlB.getY(),
-                             rVertexPoint.getX(),rVertexPoint.getY() );
+                // first vertex
+                path.move_to(aCurrentPoint.getX(), aCurrentPoint.getY());
 
-                aCtrlA = rPoly.getControlPointA(nVertex);
-                aCtrlB = rPoly.getControlPointB(nVertex);
+                for(sal_uInt32 a(0); a < nEdgeCount; a++)
+                {
+                    // access next point
+                    const sal_uInt32 nNextIndex((a + 1) % nPointCount);
+                    const basegfx::B2DPoint aNextPoint(aPolygon.getB2DPoint(nNextIndex));
+
+                    // get control points
+                    const basegfx::B2DPoint aControlNext(aPolygon.getNextControlPoint(a));
+                    const basegfx::B2DPoint aControlPrev(aPolygon.getPrevControlPoint(nNextIndex));
+
+                    // specify first cp, second cp, next vertex
+                    path.curve4(
+                        aControlNext.getX(), aControlNext.getY(),
+                        aControlPrev.getX(), aControlPrev.getY(),
+                        aNextPoint.getX(), aNextPoint.getY());
+
+                    // prepare next step
+                    aCurrentPoint = aNextPoint;
+                }
             }
-
-            // submit last segment of curve, if closed
-            if(rPoly.isClosed())
-                path.curve4( aCtrlA.getX(),aCtrlA.getY(),
-                             aCtrlB.getX(),aCtrlB.getY(),
-                             rPoint.getX(),rPoint.getY() );
-        }
-        else
-        {
-            const ::basegfx::B2DPoint& rPoint(rPoly.getB2DPoint(0));
-            ras.move_to_d(rPoint.getX(),
-                          rPoint.getY());
-            for(sal_uInt32 nVertex=1; nVertex<rPoly.count(); ++nVertex)
+            else
             {
-                const ::basegfx::B2DPoint& rVertexPoint(rPoly.getB2DPoint(nVertex));
-                ras.line_to_d(rVertexPoint.getX(),
-                              rVertexPoint.getY());
-            }
+                const basegfx::B2DPoint aStartPoint(aPolygon.getB2DPoint(0));
+                ras.move_to_d(aStartPoint.getX(), aStartPoint.getY());
 
-            ras.render(rPoly.isClosed());
+                for(sal_uInt32 a(1); a < nPointCount; a++)
+                {
+                    const basegfx::B2DPoint aVertexPoint(aPolygon.getB2DPoint(a));
+                    ras.line_to_d(aVertexPoint.getX(), aVertexPoint.getY());
+                }
+
+                ras.render(aPolygon.isClosed());
+            }
         }
     }
 
@@ -1358,49 +1361,58 @@ ImageCachedPrimitiveSharedPtr Image::fillTexturedPolyPolygonImpl(
     agg::path_storage path;
     agg::conv_curve<agg::path_storage> curve(path);
 
-    for(sal_uInt32 nPolygon=0; nPolygon<rPolyPolygon.count(); ++nPolygon)
+    for(sal_uInt32 nPolygon(0); nPolygon < rPolyPolygon.count(); nPolygon++)
     {
-        const ::basegfx::B2DPolygon& rPoly(rPolyPolygon.getB2DPolygon(nPolygon));
-        if(rPoly.areControlPointsUsed())
+        const basegfx::B2DPolygon aPolygon(rPolyPolygon.getB2DPolygon(nPolygon));
+        const sal_uInt32 nPointCount(aPolygon.count());
+
+        if(nPointCount)
         {
-            // retrieve first vertex
-            const ::basegfx::B2DPoint aPoint(rPoly.getB2DPoint(0));
-
-            ::basegfx::B2DPoint aPointA(rPoly.getControlPointA(0));
-            ::basegfx::B2DPoint aPointB(rPoly.getControlPointB(0));
-
-            // first vertex
-            path.move_to(aPoint.getX(),aPoint.getY());
-            for(sal_uInt32 nVertex=1; nVertex<rPoly.count(); ++nVertex)
+            if(aPolygon.areControlPointsUsed())
             {
-                const ::basegfx::B2DPoint aVertexPoint(rPoly.getB2DPoint(nVertex));
+                // prepare edge-based loop
+                basegfx::B2DPoint aCurrentPoint(aPolygon.getB2DPoint(0));
+                const sal_uInt32 nEdgeCount(aPolygon.isClosed() ? nPointCount - 1 : nPointCount);
 
-                // specify first cp, second cp, next vertex
-                path.curve4( aPointA.getX(),aPointA.getY(),
-                                aPointB.getX(),aPointB.getY(),
-                                aVertexPoint.getX(),aVertexPoint.getY() );
+                // first vertex
+                path.move_to(aCurrentPoint.getX(), aCurrentPoint.getY());
 
-                aPointA = rPoly.getControlPointA(nVertex);
-                aPointB = rPoly.getControlPointB(nVertex);
+                for(sal_uInt32 a(0); a < nEdgeCount; a++)
+                {
+                    // access next point
+                    const sal_uInt32 nNextIndex((a + 1) % nPointCount);
+                    const basegfx::B2DPoint aNextPoint(aPolygon.getB2DPoint(nNextIndex));
+
+                    // get control points
+                    const basegfx::B2DPoint aControlNext(aPolygon.getNextControlPoint(a));
+                    const basegfx::B2DPoint aControlPrev(aPolygon.getPrevControlPoint(nNextIndex));
+
+                    // specify first cp, second cp, next vertex
+                    path.curve4(
+                        aControlNext.getX(), aControlNext.getY(),
+                        aControlPrev.getX(), aControlPrev.getY(),
+                        aNextPoint.getX(), aNextPoint.getY());
+
+                    // prepare next step
+                    aCurrentPoint = aNextPoint;
+                }
             }
-
-            // submit last segment of curve is closed
-            if(rPoly.isClosed())
-                path.curve4( aPointA.getX(),aPointA.getY(),
-                            aPointB.getX(),aPointB.getY(),
-                            aPoint.getX(),aPoint.getY() );
-        }
-        else
-        {
-            const ::basegfx::B2DPoint&   rPoint(rPoly.getB2DPoint(0));
-            pPrimitive->ras.move_to_d(rPoint.getX(),rPoint.getY());
-            for(sal_uInt32 nVertex=1; nVertex<rPoly.count(); ++nVertex)
+            else
             {
-                const ::basegfx::B2DPoint& rVertexPoint(rPoly.getB2DPoint(nVertex));
-                pPrimitive->ras.line_to_d(rVertexPoint.getX(),rVertexPoint.getY());
+                const basegfx::B2DPoint aPoint(aPolygon.getB2DPoint(0));
+                pPrimitive->ras.move_to_d(aPoint.getX(), aPoint.getY());
+
+                for(sal_uInt32 a(1); a < nPointCount; a++)
+                {
+                    const basegfx::B2DPoint aVertexPoint(aPolygon.getB2DPoint(a));
+                    pPrimitive->ras.line_to_d(aVertexPoint.getX(), aVertexPoint.getY());
+                }
+
+                if(aPolygon.isClosed())
+                {
+                    pPrimitive->ras.close_polygon();
+                }
             }
-            if(rPoly.isClosed())
-                pPrimitive->ras.close_polygon();
         }
     }
 
@@ -1632,51 +1644,59 @@ void Image::fillGradientImpl( const ParametricPolyPolygon::Values& rValues,
     agg::rasterizer_scanline_aa<> ras;
     agg::path_storage path;
     agg::conv_curve<agg::path_storage> curve(path);
-    for(sal_uInt32 nPolygon=0; nPolygon<rPolyPolygon.count(); ++nPolygon)
+
+    for(sal_uInt32 nPolygon(0); nPolygon < rPolyPolygon.count(); nPolygon++)
     {
-        const ::basegfx::B2DPolygon& rPoly(rPolyPolygon.getB2DPolygon(nPolygon));
-        if(rPoly.areControlPointsUsed())
+        const basegfx::B2DPolygon aPolygon(rPolyPolygon.getB2DPolygon(nPolygon));
+        const sal_uInt32 nPointCount(aPolygon.count());
+
+        if(nPointCount)
         {
-            // retrieve first vertex
-            const ::basegfx::B2DPoint aPoint(rPoly.getB2DPoint(0));
-
-            ::basegfx::B2DPoint aPointA(rPoly.getControlPointA(0));
-            ::basegfx::B2DPoint aPointB(rPoly.getControlPointB(0));
-
-            // first vertex
-            path.move_to(aPoint.getX(),aPoint.getY());
-            for(sal_uInt32 nVertex=1; nVertex<rPoly.count(); ++nVertex)
+            if(aPolygon.areControlPointsUsed())
             {
-                const ::basegfx::B2DPoint aVertexPoint(rPoly.getB2DPoint(nVertex));
+                // prepare edge-based loop
+                basegfx::B2DPoint aCurrentPoint(aPolygon.getB2DPoint(0));
+                const sal_uInt32 nEdgeCount(aPolygon.isClosed() ? nPointCount - 1 : nPointCount);
 
-                // specify first cp, second cp, next vertex
-                path.curve4( aPointA.getX(),aPointA.getY(),
-                                aPointB.getX(),aPointB.getY(),
-                                aVertexPoint.getX(),aVertexPoint.getY() );
+                // first vertex
+                path.move_to(aCurrentPoint.getX(), aCurrentPoint.getY());
 
-                aPointA = rPoly.getControlPointA(nVertex);
-                aPointB = rPoly.getControlPointB(nVertex);
+                for(sal_uInt32 a(0); a < nEdgeCount; a++)
+                {
+                    // access next point
+                    const sal_uInt32 nNextIndex((a + 1) % nPointCount);
+                    const basegfx::B2DPoint aNextPoint(aPolygon.getB2DPoint(nNextIndex));
+
+                    // get control points
+                    const basegfx::B2DPoint aControlNext(aPolygon.getNextControlPoint(a));
+                    const basegfx::B2DPoint aControlPrev(aPolygon.getPrevControlPoint(nNextIndex));
+
+                    // specify first cp, second cp, next vertex
+                    path.curve4(
+                        aControlNext.getX(), aControlNext.getY(),
+                        aControlPrev.getX(), aControlPrev.getY(),
+                        aNextPoint.getX(), aNextPoint.getY());
+
+                    // prepare next step
+                    aCurrentPoint = aNextPoint;
+                }
             }
-
-            // submit last segment of curve is closed
-            if(rPoly.isClosed())
-                path.curve4( aPointA.getX(),aPointA.getY(),
-                            aPointB.getX(),aPointB.getY(),
-                            aPoint.getX(),aPoint.getY() );
-        }
-        else
-        {
-            const ::basegfx::B2DPoint& rPoint(rPoly.getB2DPoint(0));
-            ras.move_to_d(rPoint.getX(),
-                        rPoint.getY());
-            for(sal_uInt32 nVertex=1; nVertex<rPoly.count(); ++nVertex)
+            else
             {
-                const ::basegfx::B2DPoint& rVertexPoint(rPoly.getB2DPoint(nVertex));
-                ras.line_to_d(rVertexPoint.getX(),
-                            rVertexPoint.getY());
+                const basegfx::B2DPoint aPoint(aPolygon.getB2DPoint(0));
+                ras.move_to_d(aPoint.getX(), aPoint.getY());
+
+                for(sal_uInt32 a(1); a < nPointCount; a++)
+                {
+                    const basegfx::B2DPoint aVertexPoint(aPolygon.getB2DPoint(a));
+                    ras.line_to_d(aVertexPoint.getX(), aVertexPoint.getY());
+                }
+
+                if(aPolygon.isClosed())
+                {
+                    ras.close_polygon();
+                }
             }
-            if(rPoly.isClosed())
-                ras.close_polygon();
         }
     }
 
@@ -1992,17 +2012,13 @@ void Image::drawBezier( const geometry::RealBezierSegment2D&    aBezierSegment,
                         const rendering::ViewState&             viewState,
                         const rendering::RenderState&           renderState )
 {
-    ::basegfx::B2DPolygon aBezierPoly;
-    aBezierPoly.append( ::basegfx::B2DPoint( aBezierSegment.Px,
-                                             aBezierSegment.Py ) );
-    aBezierPoly.setControlPointA( 0,
-        ::basegfx::B2DPoint( aBezierSegment.C1x,
-                             aBezierSegment.C1y ) );
-    aBezierPoly.setControlPointB( 0,
-        ::basegfx::B2DPoint( aBezierSegment.C2x,
-                             aBezierSegment.C2y ) );
-    aBezierPoly.append(
-        ::basegfx::unotools::b2DPointFromRealPoint2D( aEndPoint ) );
+    basegfx::B2DPolygon aBezierPoly;
+
+    aBezierPoly.append(basegfx::B2DPoint(aBezierSegment.Px, aBezierSegment.Py));
+    aBezierPoly.appendBezierSegment(
+        basegfx::B2DPoint(aBezierSegment.C1x, aBezierSegment.C1y),
+        basegfx::B2DPoint(aBezierSegment.C2x, aBezierSegment.C2y),
+        basegfx::unotools::b2DPointFromRealPoint2D(aEndPoint));
 
     drawLinePolyPolygon( ::basegfx::B2DPolyPolygon( aBezierPoly ),
                          1.0,
@@ -2112,10 +2128,10 @@ ImageCachedPrimitiveSharedPtr Image::fillPolyPolygonImpl(
 
     ARGB aFillColor;
 
-    ::basegfx::B2DPolyPolygon aPoly(rPolyPolygon);
-    setupPolyPolygon( aPoly, true, aFillColor, viewState, renderState );
+    ::basegfx::B2DPolyPolygon aPolyPolygon(rPolyPolygon);
+    setupPolyPolygon( aPolyPolygon, true, aFillColor, viewState, renderState );
 
-    if( !aPoly.count() )
+    if( !aPolyPolygon.count() )
         return ImageCachedPrimitiveSharedPtr();
 
     pixel_format pixf(maRenderingBuffer);
@@ -2131,51 +2147,58 @@ ImageCachedPrimitiveSharedPtr Image::fillPolyPolygonImpl(
     agg::path_storage path;
     agg::conv_curve<agg::path_storage> curve(path);
 
-    for(sal_uInt32 nPolygon=0; nPolygon<aPoly.count(); ++nPolygon)
+    for(sal_uInt32 nPolygon(0); nPolygon < aPolyPolygon.count(); nPolygon++)
     {
-        const ::basegfx::B2DPolygon& rPoly(aPoly.getB2DPolygon(nPolygon));
-        if(rPoly.areControlPointsUsed())
+        const basegfx::B2DPolygon aPolygon(aPolyPolygon.getB2DPolygon(nPolygon));
+        const sal_uInt32 nPointCount(aPolygon.count());
+
+        if(nPointCount)
         {
-            // retrieve first vertex
-            const ::basegfx::B2DPoint aPoint(rPoly.getB2DPoint(0));
-
-            ::basegfx::B2DPoint aPointA(rPoly.getControlPointA(0));
-            ::basegfx::B2DPoint aPointB(rPoly.getControlPointB(0));
-
-            // first vertex
-            path.move_to(aPoint.getX(),aPoint.getY());
-            for(sal_uInt32 nVertex=1; nVertex<rPoly.count(); ++nVertex)
+            if(aPolygon.areControlPointsUsed())
             {
-                const ::basegfx::B2DPoint aVertexPoint(rPoly.getB2DPoint(nVertex));
+                // prepare edge-based loop
+                basegfx::B2DPoint aCurrentPoint(aPolygon.getB2DPoint(0));
+                const sal_uInt32 nEdgeCount(aPolygon.isClosed() ? nPointCount - 1 : nPointCount);
 
-                // specify first cp, second cp, next vertex
-                path.curve4( aPointA.getX(),aPointA.getY(),
-                                aPointB.getX(),aPointB.getY(),
-                                aVertexPoint.getX(),aVertexPoint.getY() );
+                // first vertex
+                path.move_to(aCurrentPoint.getX(), aCurrentPoint.getY());
 
-                aPointA = rPoly.getControlPointA(nVertex);
-                aPointB = rPoly.getControlPointB(nVertex);
+                for(sal_uInt32 a(0); a < nEdgeCount; a++)
+                {
+                    // access next point
+                    const sal_uInt32 nNextIndex((a + 1) % nPointCount);
+                    const basegfx::B2DPoint aNextPoint(aPolygon.getB2DPoint(nNextIndex));
+
+                    // get control points
+                    const basegfx::B2DPoint aControlNext(aPolygon.getNextControlPoint(a));
+                    const basegfx::B2DPoint aControlPrev(aPolygon.getPrevControlPoint(nNextIndex));
+
+                    // specify first cp, second cp, next vertex
+                    path.curve4(
+                        aControlNext.getX(), aControlNext.getY(),
+                        aControlPrev.getX(), aControlPrev.getY(),
+                        aNextPoint.getX(), aNextPoint.getY());
+
+                    // prepare next step
+                    aCurrentPoint = aNextPoint;
+                }
             }
-
-            // submit last segment of curve is closed
-            if(rPoly.isClosed())
-                path.curve4( aPointA.getX(),aPointA.getY(),
-                            aPointB.getX(),aPointB.getY(),
-                            aPoint.getX(),aPoint.getY() );
-        }
-        else
-        {
-            const ::basegfx::B2DPoint&   rPoint(rPoly.getB2DPoint(0));
-            ras.move_to_d(rPoint.getX(),
-                        rPoint.getY());
-            for(sal_uInt32 nVertex=1; nVertex<rPoly.count(); ++nVertex)
+            else
             {
-                const ::basegfx::B2DPoint& rVertexPoint(rPoly.getB2DPoint(nVertex));
-                ras.line_to_d(rVertexPoint.getX(),
-                            rVertexPoint.getY());
+                const basegfx::B2DPoint aPoint(aPolygon.getB2DPoint(0));
+                ras.move_to_d(aPoint.getX(), aPoint.getY());
+
+                for(sal_uInt32 a(1); a < nPointCount; a++)
+                {
+                    const basegfx::B2DPoint aVertexPoint(aPolygon.getB2DPoint(a));
+                    ras.line_to_d(aVertexPoint.getX(), aVertexPoint.getY());
+                }
+
+                if(aPolygon.isClosed())
+                {
+                    ras.close_polygon();
+                }
             }
-            if(rPoly.isClosed())
-                ras.close_polygon();
         }
     }
 
