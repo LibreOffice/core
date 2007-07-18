@@ -4,9 +4,9 @@
  *
  *  $RCSfile: appopen.cxx,v $
  *
- *  $Revision: 1.113 $
+ *  $Revision: 1.114 $
  *
- *  last change: $Author: obo $ $Date: 2007-07-17 13:40:26 $
+ *  last change: $Author: obo $ $Date: 2007-07-18 09:00:58 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -991,14 +991,7 @@ void SfxApplication::OpenDocExec_Impl( SfxRequest& rReq )
             delete pURLList;
             return;
         }
-//        else
-//        {
-//            String aURL;
-//            if ( pURLList->Count() == 1 )
-//                aURL = *(pURLList->GetObject(0));
-//            rReq.AppendItem( SfxStringItem( SID_FILE_NAME, aURL ) );
-//            delete pURLList;
-//        }
+        delete pURLList;
     }
 
     if ( !rReq.IsSynchronCall() )
