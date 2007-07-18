@@ -4,9 +4,9 @@
  *
  *  $RCSfile: resource.src,v $
  *
- *  $Revision: 1.34 $
+ *  $Revision: 1.35 $
  *
- *  last change: $Author: rt $ $Date: 2007-07-03 15:40:46 $
+ *  last change: $Author: obo $ $Date: 2007-07-18 08:49:58 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -302,4 +302,19 @@ String STR_FULL_DISC_MSG
 String STR_RESTORE_TOOLBARS
 {
     Text [ en-US ] = "~Reset" ;
+};
+
+String STR_CORRUPT_UICFG_SHARE
+{
+    Text [ en-US ] = "An error occurred while loading the user interface configuration data. The application will be terminated now.\nPlease try to reinstall the application." ;
+};
+
+String STR_CORRUPT_UICFG_USER
+{
+    Text [ en-US ] = "An error occurred while loading the user interface configuration data. The application will be terminated now.\nPlease try to remove your user profile for the application." ;
+};
+
+String STR_CORRUPT_UICFG_GENERAL
+{
+    Text [ en-US ] = "An error occurred while loading the user interface configuration data. The application will be terminated now.\nPlease try to remove your user profile for the application first or try to reinstall the application." ;
 };
