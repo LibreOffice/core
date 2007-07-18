@@ -4,9 +4,9 @@
  *
  *  $RCSfile: CharacterProperties.idl,v $
  *
- *  $Revision: 1.29 $
+ *  $Revision: 1.30 $
  *
- *  last change: $Author: obo $ $Date: 2006-07-14 08:36:45 $
+ *  last change: $Author: obo $ $Date: 2007-07-18 13:01:22 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -289,7 +289,7 @@ published service CharacterProperties
     [optional, property] boolean RubyIsAbove;
 
     //-------------------------------------------------------------------------
-    /** determins the rotation of a character in degree.
+    /** determins the rotation of a character in tenths of a degree.
          <p>Depending on the implementation only certain values may be allowed.
         </p>
      */
