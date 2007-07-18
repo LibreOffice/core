@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xmlexp.cxx,v $
  *
- *  $Revision: 1.85 $
+ *  $Revision: 1.86 $
  *
- *  last change: $Author: rt $ $Date: 2007-07-06 12:17:52 $
+ *  last change: $Author: obo $ $Date: 2007-07-18 13:35:38 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -154,6 +154,11 @@
 #include <vos/mutex.hxx>
 #endif
 
+// --> OD 2007-03-30 #i73788#
+#ifndef _PAUSETHREADSTARTING_HXX
+#include <pausethreadstarting.hxx>
+#endif
+// <--
 
 using namespace ::rtl;
 using namespace ::com::sun::star::frame;
@@ -267,6 +272,10 @@ sal_uInt32 SwXMLExport::exportDoc( enum XMLTokenEnum eClass )
 {
     if( !GetModel().is() )
         return ERR_SWG_WRITE_ERROR;
+
+    // --> OD 2007-03-30 #i73788#
+    SwPauseThreadStarting aPauseThreadStarting;
+    // <--
 
     Reference < XTextDocument > xTextDoc( GetModel(), UNO_QUERY );
     Reference < XText > xText = xTextDoc->getText();
