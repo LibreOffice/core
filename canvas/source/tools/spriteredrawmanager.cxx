@@ -4,9 +4,9 @@
  *
  *  $RCSfile: spriteredrawmanager.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: obo $ $Date: 2007-07-17 14:24:31 $
+ *  last change: $Author: obo $ $Date: 2007-07-18 10:43:17 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -326,6 +326,22 @@ namespace canvas
         }
     }
 
+#if OSL_DEBUG_LEVEL > 0
+    bool impIsEqualB2DRange(const basegfx::B2DRange& rRangeA, const basegfx::B2DRange& rRangeB, double fSmallValue)
+    {
+        return fabs(rRangeB.getMinX() - rRangeA.getMinX()) <= fSmallValue
+            && fabs(rRangeB.getMinY() - rRangeA.getMinY()) <= fSmallValue
+            && fabs(rRangeB.getMaxX() - rRangeA.getMaxX()) <= fSmallValue
+            && fabs(rRangeB.getMaxY() - rRangeA.getMaxY()) <= fSmallValue;
+    }
+
+    bool impIsEqualB2DVector(const basegfx::B2DVector& rVecA, const basegfx::B2DVector& rVecB, double fSmallValue)
+    {
+        return fabs(rVecB.getX() - rVecA.getX()) <= fSmallValue
+            && fabs(rVecB.getY() - rVecA.getY()) <= fSmallValue;
+    }
+#endif
+
     bool SpriteRedrawManager::isAreaUpdateScroll( ::basegfx::B2DRectangle&  o_rMoveStart,
                                                   ::basegfx::B2DRectangle&  o_rMoveEnd,
                                                   const UpdateArea&         rUpdateArea,
@@ -366,14 +382,10 @@ namespace canvas
         ::basegfx::B2DRectangle aTotalBounds( o_rMoveStart );
         aTotalBounds.expand( o_rMoveEnd );
 
-        OSL_POSTCOND( rUpdateArea.maTotalBounds.equal(
-                          ::basegfx::unotools::b2DSurroundingIntegerRangeFromB2DRange( aTotalBounds ),
-                          0.5 ),
-                      "SpriteRedrawManager::isAreaUpdateScroll(): sprite area and total area mismatch" );
-        OSL_POSTCOND( o_rMoveStart.getRange().equal(
-                          o_rMoveEnd.getRange(),
-                          0.5 ),
-                      "SpriteRedrawManager::isAreaUpdateScroll(): scroll start and end area have mismatching size" );
+        OSL_POSTCOND(impIsEqualB2DRange(rUpdateArea.maTotalBounds, basegfx::unotools::b2DSurroundingIntegerRangeFromB2DRange(aTotalBounds), 0.5),
+            "SpriteRedrawManager::isAreaUpdateScroll(): sprite area and total area mismatch");
+        OSL_POSTCOND(impIsEqualB2DVector(o_rMoveStart.getRange(), o_rMoveEnd.getRange(), 0.5),
+            "SpriteRedrawManager::isAreaUpdateScroll(): scroll start and end area have mismatching size");
 #endif
 
         return true;
