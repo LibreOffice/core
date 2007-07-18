@@ -4,9 +4,9 @@
  *
  *  $RCSfile: untbl.cxx,v $
  *
- *  $Revision: 1.31 $
+ *  $Revision: 1.32 $
  *
- *  last change: $Author: hr $ $Date: 2007-06-26 10:43:15 $
+ *  last change: $Author: obo $ $Date: 2007-07-18 14:36:51 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -2345,10 +2345,10 @@ SwUndoTblNumFmt::SwUndoTblNumFmt( const SwTableBox& rBox,
     nNode = rBox.GetSttIdx();
 
     nNdPos = rBox.IsValidNumTxtNd( 0 == pNewSet );
+    SwDoc* pDoc = rBox.GetFrmFmt()->GetDoc();
 
     if( ULONG_MAX != nNdPos )
     {
-        SwDoc* pDoc = rBox.GetFrmFmt()->GetDoc();
         SwTxtNode* pTNd = pDoc->GetNodes()[ nNdPos ]->GetTxtNode();
 
         pHistory = new SwHistory;
@@ -2365,31 +2365,31 @@ SwUndoTblNumFmt::SwUndoTblNumFmt( const SwTableBox& rBox,
         aStr = pTNd->GetTxt();
         if( pTNd->GetpSwpHints() )
             pTNd->GetpSwpHints()->DeRegister();
+    }
 
-        pBoxSet = new SfxItemSet( pDoc->GetAttrPool(), aTableBoxSetRange );
-        pBoxSet->Put( rBox.GetFrmFmt()->GetAttrSet() );
+    pBoxSet = new SfxItemSet( pDoc->GetAttrPool(), aTableBoxSetRange );
+    pBoxSet->Put( rBox.GetFrmFmt()->GetAttrSet() );
 
-        if( pNewSet )
+    if( pNewSet )
+    {
+        const SfxPoolItem* pItem;
+        if( SFX_ITEM_SET == pNewSet->GetItemState( RES_BOXATR_FORMAT,
+                FALSE, &pItem ))
         {
-            const SfxPoolItem* pItem;
-            if( SFX_ITEM_SET == pNewSet->GetItemState( RES_BOXATR_FORMAT,
-                    FALSE, &pItem ))
-            {
-                bNewFmt = TRUE;
-                nNewFmtIdx = ((SwTblBoxNumFormat*)pItem)->GetValue();
-            }
-            if( SFX_ITEM_SET == pNewSet->GetItemState( RES_BOXATR_FORMULA,
-                    FALSE, &pItem ))
-            {
-                bNewFml = TRUE;
-                aNewFml = ((SwTblBoxFormula*)pItem)->GetFormula();
-            }
-            if( SFX_ITEM_SET == pNewSet->GetItemState( RES_BOXATR_VALUE,
-                    FALSE, &pItem ))
-            {
-                bNewValue = TRUE;
-                fNewNum = ((SwTblBoxValue*)pItem)->GetValue();
-            }
+            bNewFmt = TRUE;
+            nNewFmtIdx = ((SwTblBoxNumFormat*)pItem)->GetValue();
+        }
+        if( SFX_ITEM_SET == pNewSet->GetItemState( RES_BOXATR_FORMULA,
+                FALSE, &pItem ))
+        {
+            bNewFml = TRUE;
+            aNewFml = ((SwTblBoxFormula*)pItem)->GetFormula();
+        }
+        if( SFX_ITEM_SET == pNewSet->GetItemState( RES_BOXATR_VALUE,
+                FALSE, &pItem ))
+        {
+            bNewValue = TRUE;
+            fNewNum = ((SwTblBoxValue*)pItem)->GetValue();
         }
     }
 
@@ -2407,9 +2407,7 @@ SwUndoTblNumFmt::~SwUndoTblNumFmt()
 
 void SwUndoTblNumFmt::Undo( SwUndoIter& rIter )
 {
-    // konnte die Box veraendert werden ?
-    if( !pBoxSet )
-        return ;
+    ASSERT( pBoxSet, "Where's the stored item set?" )
 
     SwDoc& rDoc = rIter.GetDoc();
     SwStartNode* pSttNd = rDoc.GetNodes()[ nNode ]->
@@ -2423,13 +2421,16 @@ void SwUndoTblNumFmt::Undo( SwUndoIter& rIter )
     pFmt->SetAttr( *pBoxSet );
     pBox->ChgFrmFmt( pFmt );
 
+    if( ULONG_MAX == nNdPos )
+        return;
+
     SwTxtNode* pTxtNd = rDoc.GetNodes()[ nNdPos ]->GetTxtNode();
     // wenn mehr als ein Node geloescht wurde, dann wurden auch
     // alle "Node"-Attribute gespeichert
     if( pTxtNd->HasSwAttrSet() )
         pTxtNd->ResetAllAttr();
 
-    if( pTxtNd->GetpSwpHints() )
+    if( pTxtNd->GetpSwpHints() && aStr.Len() )
         pTxtNd->ClearSwpHintsArr( true );
 
     // ChgTextToNum(..) only acts when the strings are different. We
@@ -2439,9 +2440,11 @@ void SwUndoTblNumFmt::Undo( SwUndoIter& rIter )
         rDoc.DeleteRedline( *( pBox->GetSttNd() ), false, USHRT_MAX );
 
         SwIndex aIdx( pTxtNd, 0 );
-        pTxtNd->Erase( aIdx );
         if( aStr.Len() )
+        {
+            pTxtNd->Erase( aIdx );
             pTxtNd->Insert( aStr, aIdx, INS_NOHINTEXPAND );
+        }
     }
 
     if( pHistory )
