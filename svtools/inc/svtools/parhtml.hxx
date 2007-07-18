@@ -4,9 +4,9 @@
  *
  *  $RCSfile: parhtml.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: vg $ $Date: 2007-04-11 19:30:45 $
+ *  last change: $Author: obo $ $Date: 2007-07-18 08:52:11 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -58,15 +58,6 @@ class Color;
 class SvNumberFormatter;
 class SvULongs;
 
-#if defined(MAC)
-#define HTMLFONTSZ1_DFLT 9
-#define HTMLFONTSZ2_DFLT 10
-#define HTMLFONTSZ3_DFLT 12
-#define HTMLFONTSZ4_DFLT 14
-#define HTMLFONTSZ5_DFLT 18
-#define HTMLFONTSZ6_DFLT 20
-#define HTMLFONTSZ7_DFLT 32
-#else
 #define HTMLFONTSZ1_DFLT 7
 #define HTMLFONTSZ2_DFLT 10
 #define HTMLFONTSZ3_DFLT 12
@@ -74,7 +65,6 @@ class SvULongs;
 #define HTMLFONTSZ5_DFLT 18
 #define HTMLFONTSZ6_DFLT 24
 #define HTMLFONTSZ7_DFLT 36
-#endif
 
 enum HTMLTableFrame { HTML_TF_VOID, HTML_TF_ABOVE, HTML_TF_BELOW,
     HTML_TF_HSIDES, HTML_TF_LHS, HTML_TF_RHS, HTML_TF_VSIDES, HTML_TF_BOX };
