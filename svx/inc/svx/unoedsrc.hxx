@@ -4,9 +4,9 @@
  *
  *  $RCSfile: unoedsrc.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: vg $ $Date: 2007-04-11 16:43:55 $
+ *  last change: $Author: obo $ $Date: 2007-07-18 13:05:38 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -198,6 +198,12 @@ public:
     virtual XubString    CalcFieldValue( const SvxFieldItem& rField, USHORT nPara, USHORT nPos, Color*& rpTxtColor, Color*& rpFldColor ) = 0;
 
     virtual SfxItemPool* GetPool() const = 0;
+
+     virtual const SfxItemSet*   GetEmptyItemSetPtr() = 0;
+
+     // implementation functions for XParagraphAppend and XTextPortionAppend
+     virtual void        AppendParagraph() = 0;
+     virtual xub_StrLen  AppendTextPortion( USHORT nPara, const String &rText, const SfxItemSet &rSet ) = 0;
 
     /** Query state of forwarder
 

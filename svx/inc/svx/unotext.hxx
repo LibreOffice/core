@@ -4,9 +4,9 @@
  *
  *  $RCSfile: unotext.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: vg $ $Date: 2007-04-11 16:46:39 $
+ *  last change: $Author: obo $ $Date: 2007-07-18 13:06:20 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -73,8 +73,8 @@
 #ifndef _COM_SUN_STAR_TEXT_XTEXTRANGECOMPARE_HPP_
 #include <com/sun/star/text/XTextRangeCompare.hpp>
 #endif
-#ifndef _COM_SUN_STAR_LANG_LOCALE_HPP_
-#include <com/sun/star/lang/Locale.hpp>
+#ifndef _COM_SUN_STAR_TEXT_XTEXTAPPEND_HPP_
+#include <com/sun/star/text/XTextAppend.hpp>
 #endif
 
 #ifndef _CPPUHELPER_WEAK_HXX_
@@ -314,6 +314,11 @@ public:
     virtual USHORT          GetDepth( USHORT nPara ) const;
     virtual sal_Bool        SetDepth( USHORT nPara, USHORT nNewDepth );
 
+    virtual const SfxItemSet*   GetEmptyItemSetPtr();
+
+    // implementation functions for XParagraphAppend and XTextPortionAppend
+    virtual void        AppendParagraph();
+    virtual xub_StrLen  AppendTextPortion( USHORT nPara, const String &rText, const SfxItemSet &rSet );
 };
 
 namespace accessibility
@@ -461,7 +466,7 @@ public:
 };
 
 class SVX_DLLPUBLIC SvxUnoTextBase  : public SvxUnoTextRangeBase,
-                        public ::com::sun::star::text::XText,
+                        public ::com::sun::star::text::XTextAppend,
                         public ::com::sun::star::container::XEnumerationAccess,
                         public ::com::sun::star::text::XTextRangeMover,
                         public ::com::sun::star::lang::XTypeProvider
@@ -514,6 +519,13 @@ public:
 
     // ::com::sun::star::text::XTextRangeMover
     virtual void SAL_CALL moveTextRange( const ::com::sun::star::uno::Reference< ::com::sun::star::text::XTextRange >& xRange, sal_Int16 nParagraphs ) throw(::com::sun::star::uno::RuntimeException);
+
+    // com::sun::star::text::XParagraphAppend (new import API)
+    virtual ::com::sun::star::uno::Reference< ::com::sun::star::text::XTextRange > SAL_CALL appendParagraph( const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >& CharacterAndParagraphProperties ) throw (::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::uno::RuntimeException);
+    virtual ::com::sun::star::uno::Reference< ::com::sun::star::text::XTextRange > SAL_CALL finishParagraph( const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >& CharacterAndParagraphProperties ) throw (::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::uno::RuntimeException);
+
+    // com::sun::star::text::XTextPortionAppend (new import API)
+    virtual ::com::sun::star::uno::Reference< ::com::sun::star::text::XTextRange > SAL_CALL appendTextPortion( const ::rtl::OUString& Text, const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >& CharacterAndParagraphProperties ) throw (::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::uno::RuntimeException);
 
     // ::com::sun::star::lang::XServiceInfo
     virtual ::rtl::OUString SAL_CALL getImplementationName() throw(::com::sun::star::uno::RuntimeException);
