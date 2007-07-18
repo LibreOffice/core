@@ -4,9 +4,9 @@
  *
  *  $RCSfile: TextGraphicObject.idl,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 06:29:35 $
+ *  last change: $Author: obo $ $Date: 2007-07-18 13:01:35 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -51,6 +51,9 @@
 #endif
 #ifndef __com_sun_star_container_XIndexContainer_idl__
 #include <com/sun/star/container/XIndexContainer.idl>
+#endif
+#ifndef __com_sun_star_graphic_XGraphic_idl__
+#include <com/sun/star/graphic/XGraphic.idl>
 #endif
 
 //=============================================================================
@@ -170,6 +173,10 @@ published service TextGraphicObject
     /** contains the ColorMode as <type scope="com::sun::star::drawing">ColorMode</type>.
      */
     [property] com::sun::star::drawing::ColorMode  GraphicColorMode;
+    //-------------------------------------------------------------------------
+    /** contains the graphic.
+     */
+    [optional, property] com::sun::star::graphic::XGraphic    Graphic;
 
 };
 
