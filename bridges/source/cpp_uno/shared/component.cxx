@@ -4,9 +4,9 @@
  *
  *  $RCSfile: component.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: kz $ $Date: 2007-05-09 13:24:21 $
+ *  last change: $Author: obo $ $Date: 2007-07-18 12:15:51 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -107,12 +107,12 @@ const ::rtl::OUString & SAL_CALL cppu_cppenv_getStaticOIdPart() SAL_THROW( () )
 
 extern "C" {
 
-static void s_stub_computeObjectIdentifier(va_list param)
+static void s_stub_computeObjectIdentifier(va_list * pParam)
     SAL_THROW( () )
 {
-    uno_ExtEnvironment  * pEnv       = va_arg(param, uno_ExtEnvironment *);
-    rtl_uString        ** ppOId      = va_arg(param, rtl_uString **);
-    void                * pInterface = va_arg(param, void *);
+    uno_ExtEnvironment  * pEnv       = va_arg(*pParam, uno_ExtEnvironment *);
+    rtl_uString        ** ppOId      = va_arg(*pParam, rtl_uString **);
+    void                * pInterface = va_arg(*pParam, void *);
 
 
     OSL_ENSURE( pEnv && ppOId && pInterface, "### null ptr!" );
@@ -168,11 +168,11 @@ static void SAL_CALL computeObjectIdentifier(
     uno_Environment_invoke(&pExtEnv->aBase, s_stub_computeObjectIdentifier, pExtEnv, ppOId, pInterface);
 }
 
-static void s_stub_acquireInterface(va_list param)
+static void s_stub_acquireInterface(va_list * pParam)
     SAL_THROW( () )
 {
-    /*uno_ExtEnvironment * pExtEnv = */va_arg(param, uno_ExtEnvironment *);
-    void               * pCppI   = va_arg(param, void *);
+    /*uno_ExtEnvironment * pExtEnv = */va_arg(*pParam, uno_ExtEnvironment *);
+    void               * pCppI   = va_arg(*pParam, void *);
 
     reinterpret_cast< ::com::sun::star::uno::XInterface * >( pCppI )->acquire();
 }
@@ -183,11 +183,11 @@ static void SAL_CALL acquireInterface( uno_ExtEnvironment * pExtEnv, void * pCpp
     uno_Environment_invoke(&pExtEnv->aBase, s_stub_acquireInterface, pExtEnv, pCppI);
 }
 
-static void s_stub_releaseInterface(va_list param)
+static void s_stub_releaseInterface(va_list * pParam)
     SAL_THROW( () )
 {
-    /*uno_ExtEnvironment * pExtEnv = */va_arg(param, uno_ExtEnvironment *);
-    void               * pCppI   = va_arg(param, void *);
+    /*uno_ExtEnvironment * pExtEnv = */va_arg(*pParam, uno_ExtEnvironment *);
+    void               * pCppI   = va_arg(*pParam, void *);
 
     reinterpret_cast< ::com::sun::star::uno::XInterface * >( pCppI )->release();
 }
