@@ -4,9 +4,9 @@
  *
  *  $RCSfile: b2dpolygontools.hxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: ihi $ $Date: 2006-11-14 14:05:29 $
+ *  last change: $Author: obo $ $Date: 2007-07-18 11:03:01 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -69,6 +69,10 @@ namespace basegfx
     namespace tools
     {
         // B2DPolygon tools
+
+        // open/close with point add/remove and control point corrections
+        void openWithGeometryChange(B2DPolygon& rCandidate);
+        void closeWithGeometryChange(B2DPolygon& rCandidate);
 
         /** Check if given polygon is closed.
 
@@ -250,42 +254,13 @@ namespace basegfx
          */
         B2DPolygon createPolygonFromCircle( const B2DPoint& rCenter, double fRadius );
 
-        /** append a unit circle with one point and the control vectors to the given polygon
+        /** append given unit circle quadrant with start point, the control vectors and end point to the given polygon
          */
-        void appendUnitCircleQuadrant(B2DPolygon& rPolygon, sal_uInt32 nQuadrant, bool bEndPoint);
+        void appendUnitCircleQuadrant(B2DPolygon& rPolygon, sal_uInt32 nQuadrant);
 
-        /** append a segment of unit circle with one point and the control vectors to the given polygon
+        /** append a segment of unit circle with start point, the control vectors and end point to the given polygon
          */
-        void appendUnitCircleQuadrantSegment(B2DPolygon& rPolygon, sal_uInt32 nQuadrant, double fStart, double fEnd, bool bEndPoint);
-
-        /** create a polygon which describes the unit circle and close it
-         */
-        B2DPolygon createPolygonFromUnitCircle();
-
-        /** Create an ellipse polygon with given radii.
-
-            This method creates an ellipse approximation consisting of
-            four cubic bezier segments, which approximate the given
-            ellipse with an error of less than 0.5 percent.
-
-            @param rCenter
-            Center point of the circle
-
-            @param fRadiusX
-            Radius of the ellipse in X direction
-
-            @param fRadiusY
-            Radius of the ellipse in Y direction
-         */
-        B2DPolygon createPolygonFromEllipse( const B2DPoint& rCenter, double fRadiusX, double fRadiusY );
-
-        /** append a unit circle with one point and the control vectors to the given polygon
-         */
-        void appendUnitCircleQuadrant(B2DPolygon& rPolygon, sal_uInt32 nQuadrant, bool bEndPoint);
-
-        /** append a segment of unit circle with one point and the control vectors to the given polygon
-         */
-        void appendUnitCircleQuadrantSegment(B2DPolygon& rPolygon, sal_uInt32 nQuadrant, double fStart, double fEnd, bool bEndPoint);
+        void appendUnitCircleQuadrantSegment(B2DPolygon& rPolygon, sal_uInt32 nQuadrant, double fStart, double fEnd);
 
         /** create a polygon which describes the unit circle and close it
          */
@@ -427,6 +402,14 @@ namespace basegfx
         void addTriangleFan(const B2DPolygon& rCandidate, B2DPolygon& rTarget);
 
         bool isPolyPolygonEqualRectangle( const ::basegfx::B2DPolyPolygon& rPolyPoly, const ::basegfx::B2DRange& rRect );
+
+        // #i76891# Try to remove existing curve segments if they are simply edges
+        B2DPolygon simplifyCurveSegments(const B2DPolygon& rCandidate);
+
+        // makes the given indexed point the new polygon start point. To do that, the points in the
+        // polygon will be rotated. This is only valid for closed polygons, for non-closed ones
+        // an assertion will be triggered
+        B2DPolygon makeStartPoint(const B2DPolygon& rCandidate, sal_uInt32 nIndexOfNewStatPoint);
 
     } // end of namespace tools
 } // end of namespace basegfx
