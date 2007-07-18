@@ -4,9 +4,9 @@
  *
  *  $RCSfile: svdpoev.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: rt $ $Date: 2007-07-06 13:22:26 $
+ *  last change: $Author: obo $ $Date: 2007-07-18 11:49:41 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -90,7 +90,7 @@ SdrPolyEditView::~SdrPolyEditView()
 void SdrPolyEditView::ImpCheckPolyPossibilities()
 {
     ImpResetPolyPossibilityFlags();
-    const sal_uInt32 nMarkAnz(GetMarkedObjectCount());
+    const ULONG nMarkAnz(GetMarkedObjectCount());
 
     if(nMarkAnz && !ImpIsFrameHandles())
     {
@@ -101,7 +101,7 @@ void SdrPolyEditView::ImpCheckPolyPossibilities()
         bool bSegmFuz(false);
         basegfx::B2VectorContinuity eSmooth = basegfx::CONTINUITY_NONE;
 
-        for(sal_uInt32 nMarkNum(0L); nMarkNum < nMarkAnz; nMarkNum++)
+        for(ULONG nMarkNum(0L); nMarkNum < nMarkAnz; nMarkNum++)
         {
             SdrMark* pM = GetSdrMarkByIndex(nMarkNum);
             CheckPolyPossibilitiesHelper( pM, b1stSmooth, b1stSegm, bCurve, bSmoothFuz, bSegmFuz, eSmooth );
@@ -161,7 +161,7 @@ void SdrPolyEditView::CheckPolyPossibilitiesHelper( SdrMark* pM, bool& b1stSmoot
                     {
                         if(bCanSegment)
                         {
-                            bool bCrv(!aLocalPolygon.getControlVectorA(nPntNum).equalZero());
+                            bool bCrv(aLocalPolygon.isNextControlPointUsed(nPntNum));
 
                             if(b1stSegm)
                             {
@@ -228,9 +228,9 @@ void SdrPolyEditView::SetMarkedPointsSmooth(SdrPathSmoothKind eKind)
     {
         SortMarkedObjects();
         BegUndo(ImpGetResStr(STR_EditSetPointsSmooth), GetDescriptionOfMarkedPoints());
-        sal_uInt32 nMarkAnz(GetMarkedObjectCount());
+        ULONG nMarkAnz(GetMarkedObjectCount());
 
-        for(sal_uInt32 nMarkNum(nMarkAnz); nMarkNum > 0L;)
+        for(ULONG nMarkNum(nMarkAnz); nMarkNum > 0L;)
         {
             nMarkNum--;
             SdrMark* pM = GetSdrMarkByIndex(nMarkNum);
@@ -258,9 +258,9 @@ void SdrPolyEditView::SetMarkedSegmentsKind(SdrPathSegmentKind eKind)
     {
         SortMarkedObjects();
         BegUndo(ImpGetResStr(STR_EditSetSegmentsKind), GetDescriptionOfMarkedPoints());
-        sal_uInt32 nMarkAnz(GetMarkedObjectCount());
+        ULONG nMarkAnz(GetMarkedObjectCount());
 
-        for(sal_uInt32 nMarkNum(nMarkAnz); nMarkNum > 0L;)
+        for(ULONG nMarkNum(nMarkAnz); nMarkNum > 0L;)
         {
             nMarkNum--;
             SdrMark* pM = GetSdrMarkByIndex(nMarkNum);
@@ -607,21 +607,17 @@ void SdrPolyEditView::ImpTransformMarkedPoints(PPolyTrFunc pTrFunc, const void* 
 
                     const basegfx::B2DPoint aB2DPos(aNewXP.getB2DPoint(nLocalPointNum));
                     aPos = Point(FRound(aB2DPos.getX()), FRound(aB2DPos.getY()));
-                    const sal_uInt32 nPrevPointNum(basegfx::tools::getIndexOfPredecessor(nLocalPointNum, aNewXP));
 
-                    if(nPrevPointNum != nLocalPointNum)
+                    if(aNewXP.isPrevControlPointUsed(nLocalPointNum))
                     {
-                        if(!aNewXP.getControlVectorB(nPrevPointNum).equalZero())
-                        {
-                            const basegfx::B2DPoint aB2DC1(aNewXP.getControlPointB(nPrevPointNum));
-                            aC1 = Point(FRound(aB2DC1.getX()), FRound(aB2DC1.getY()));
-                            bC1 = true;
-                        }
+                        const basegfx::B2DPoint aB2DC1(aNewXP.getPrevControlPoint(nLocalPointNum));
+                        aC1 = Point(FRound(aB2DC1.getX()), FRound(aB2DC1.getY()));
+                        bC1 = true;
                     }
 
-                    if(!aNewXP.getControlVectorA(nLocalPointNum).equalZero())
+                    if(aNewXP.isNextControlPointUsed(nLocalPointNum))
                     {
-                        const basegfx::B2DPoint aB2DC2(aNewXP.getControlPointA(nLocalPointNum));
+                        const basegfx::B2DPoint aB2DC2(aNewXP.getNextControlPoint(nLocalPointNum));
                         aC2 = Point(FRound(aB2DC2.getX()), FRound(aB2DC2.getY()));
                         bC2 = true;
                     }
@@ -631,12 +627,12 @@ void SdrPolyEditView::ImpTransformMarkedPoints(PPolyTrFunc pTrFunc, const void* 
 
                     if (bC1)
                     {
-                        aNewXP.setControlPointB(nPrevPointNum, basegfx::B2DPoint(aC1.X(), aC1.Y()));
+                        aNewXP.setPrevControlPoint(nLocalPointNum, basegfx::B2DPoint(aC1.X(), aC1.Y()));
                     }
 
                     if (bC2)
                     {
-                        aNewXP.setControlPointA(nLocalPointNum, basegfx::B2DPoint(aC2.X(), aC2.Y()));
+                        aNewXP.setNextControlPoint(nLocalPointNum, basegfx::B2DPoint(aC2.X(), aC2.Y()));
                     }
 
                     aXPP.setB2DPolygon(nPolyNum, aNewXP);
