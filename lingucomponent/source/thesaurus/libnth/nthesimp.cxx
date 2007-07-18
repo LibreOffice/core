@@ -4,9 +4,9 @@
  *
  *  $RCSfile: nthesimp.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 16:12:44 $
+ *  last change: $Author: obo $ $Date: 2007-07-18 09:41:49 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -260,7 +260,7 @@ Sequence< Locale > SAL_CALL Thesaurus::getLocales()
                     aTEncs[k] = 0;
 
                     aTNames[k] = aPathOpt.GetUserDictionaryPath() + A2OU("/") + A2OU(postupthes[i]->filename);
-                    aCharSetInfo[k] = new CharClass(nLoc);
+                     aCharSetInfo[k] = new CharClass(nLoc);
                     k++;
                 }
 
@@ -405,6 +405,9 @@ Sequence < Reference < ::com::sun::star::linguistic2::XMeaning > > SAL_CALL
                pTH = aThes[i];
                    aEnc = aTEncs[i];
                    pCC = aCharSetInfo[i];
+
+               if (pTH)
+                   break;
         }
     }
 
