@@ -4,9 +4,9 @@
  *
  *  $RCSfile: notxtfrm.cxx,v $
  *
- *  $Revision: 1.35 $
+ *  $Revision: 1.36 $
  *
- *  last change: $Author: ihi $ $Date: 2006-11-14 15:08:29 $
+ *  last change: $Author: obo $ $Date: 2007-07-18 13:30:00 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -192,18 +192,6 @@ using namespace com::sun::star;
 //extern void MA_FASTCALL SwAlignRect( SwRect &rRect, ViewShell *pSh );
 //extern void SwAlignGrfRect( SwRect *pGrfRect, const OutputDevice &rOut );
 
-//Zum asynchronen (erstmaligem) anfordern von Grafiken
-class SwRequestGraphic : public SwClient
-{
-    Timer aTimer;
-    ViewShell* pSh;
-public:
-    SwRequestGraphic( ViewShell& rVSh, SwGrfNode& rNd );
-    virtual void Modify( SfxPoolItem *pOld, SfxPoolItem *pNew );
-    DECL_STATIC_LINK( SwRequestGraphic, RequestGraphic, void *);
-};
-
-
 extern void ClrContourCache( const SdrObject *pObj ); // TxtFly.Cxx
 
 
@@ -215,54 +203,6 @@ inline BOOL GetRealURL( const SwGrfNode& rNd, String& rTxt )
                                            INetURLObject::DECODE_UNAMBIGUOUS);
     return bRet;
 }
-
-SwRequestGraphic::SwRequestGraphic( ViewShell& rVSh, SwGrfNode& rNd )
-    : SwClient( &rNd ), pSh( &rVSh )
-{
-    aTimer.SetTimeout( 1 );
-    aTimer.SetTimeoutHdl( STATIC_LINK( this, SwRequestGraphic, RequestGraphic ) );
-    aTimer.Start();
-}
-
-
-void SwRequestGraphic::Modify( SfxPoolItem *pOld, SfxPoolItem *pNew )
-{
-    if( pOld && RES_OBJECTDYING == pOld->Which() &&
-        ((SwPtrMsgPoolItem *)pOld)->pObject == pRegisteredIn )
-    {
-        pRegisteredIn->Remove( this );
-        aTimer.Stop();
-        delete this;
-    }
-}
-
-
-IMPL_STATIC_LINK( SwRequestGraphic, RequestGraphic, void*, EMPTYARG )
-{
-    if ( pThis->GetRegisteredIn() && GRAPHIC_DEFAULT ==
-        ((SwGrfNode*)pThis->GetRegisteredIn())->GetGrf().GetType() )
-    {
-        SwGrfNode* pGrfNd = (SwGrfNode*)pThis->GetRegisteredIn();
-        ViewShell* pVSh, *pTmpSh;
-        pGrfNd->GetDoc()->GetEditShell( &pVSh );
-        if( pVSh )
-        {
-            pTmpSh = pVSh;
-            // existiert die Shell noch?
-            do {
-                if( pThis->pSh == pTmpSh )
-                {
-                    CurrShell aTmp( pTmpSh );
-                    pGrfNd->SetTransferPriority( SFX_TFPRIO_VISIBLE_HIGHRES_GRAPHIC );
-                    pGrfNd->SwapIn();
-                }
-            } while( pVSh != ( pTmpSh = (ViewShell*)pTmpSh->GetNext()) );
-        }
-    }
-    delete pThis;
-    return 0;
-}
-
 
 void lcl_PaintReplacement( const SwRect &rRect, const String &rText,
                            const ViewShell &rSh, const SwNoTxtFrm *pFrm,
@@ -863,10 +803,16 @@ void SwNoTxtFrm::Modify( SfxPoolItem* pOld, SfxPoolItem* pNew )
 {
     USHORT nWhich = pNew ? pNew->Which() : pOld ? pOld->Which() : 0;
 
+    // --> OD 2007-03-06 #i73788#
+    // no <SwCntntFrm::Modify(..)> for RES_LINKED_GRAPHIC_STREAM_ARRIVED
     if ( RES_GRAPHIC_PIECE_ARRIVED != nWhich &&
          RES_GRAPHIC_ARRIVED != nWhich &&
-         RES_GRF_REREAD_AND_INCACHE != nWhich )
+         RES_GRF_REREAD_AND_INCACHE != nWhich &&
+         RES_LINKED_GRAPHIC_STREAM_ARRIVED != nWhich )
+    // <--
+    {
         SwCntntFrm::Modify( pOld, pNew );
+    }
 
     FASTBOOL bCompletePaint = TRUE;
 
@@ -929,6 +875,10 @@ void SwNoTxtFrm::Modify( SfxPoolItem* pOld, SfxPoolItem* pNew )
 
     case RES_GRAPHIC_PIECE_ARRIVED:
     case RES_GRAPHIC_ARRIVED:
+    // --> OD 2007-03-06 #i73788#
+    // handle RES_LINKED_GRAPHIC_STREAM_ARRIVED as RES_GRAPHIC_ARRIVED
+    case RES_LINKED_GRAPHIC_STREAM_ARRIVED:
+    // <--
         if ( GetNode()->GetNodeType() == ND_GRFNODE )
         {
             bCompletePaint = FALSE;
@@ -1012,7 +962,13 @@ void SwNoTxtFrm::PaintPicture( OutputDevice* pOut, const SwRect &rGrfArea ) cons
 
         if( !bPrn )
         {
-            if( GRAPHIC_DEFAULT == rGrfObj.GetType() &&
+            // --> OD 2007-01-02 #i73788#
+            if ( pGrfNd->IsLinkedInputStreamReady() )
+            {
+                pGrfNd->UpdateLinkWithInputStream();
+            }
+            // <--
+            else if( GRAPHIC_DEFAULT == rGrfObj.GetType() &&
                 pGrfNd->IsLinkedFile() )
             {
                 Size aTmpSz;
@@ -1022,8 +978,9 @@ void SwNoTxtFrm::PaintPicture( OutputDevice* pOut, const SwRect &rGrfArea ) cons
                     !(aTmpSz = pGrfNd->GetTwipSize()).Width() ||
                     !aTmpSz.Height() || !pGrfNd->GetAutoFmtLvl() )
                 {
-                    pGrfNd->SetAutoFmtLvl( 1 );
-                    new SwRequestGraphic( *GetShell(), *pGrfNd );//zerstoert sich selbst!
+                    // --> OD 2006-12-22 #i73788#
+                    pGrfNd->TriggerAsyncRetrieveInputStream();
+                    // <--
                 }
                 String aTxt( pGrfNd->GetAlternateText() );
                 if ( !aTxt.Len() )
