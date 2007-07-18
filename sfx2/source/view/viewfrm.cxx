@@ -4,9 +4,9 @@
  *
  *  $RCSfile: viewfrm.cxx,v $
  *
- *  $Revision: 1.130 $
+ *  $Revision: 1.131 $
  *
- *  last change: $Author: obo $ $Date: 2007-07-17 13:46:09 $
+ *  last change: $Author: obo $ $Date: 2007-07-18 09:02:35 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -2142,6 +2142,7 @@ void SfxViewFrame::Show()
     // zuerst locken damit in UpdateTitle() gilt: IsVisible() == sal_True (:#)
     if ( xObjSh.Is() )
     {
+        xObjSh->GetMedium()->GetItemSet()->ClearItem( SID_HIDDEN );
         if ( !pImp->bObjLocked )
             LockObjectShell_Impl( sal_True );
 
@@ -2167,6 +2168,11 @@ void SfxViewFrame::Show()
             ( !pCurrent || pCurrent->GetParentViewFrame_Impl() != this ) &&
             !GetActiveChildFrame_Impl() )
         MakeActive_Impl( FALSE );*/
+    if ( xObjSh.Is() && xObjSh->Get_Impl()->bHiddenLockedByAPI )
+    {
+        xObjSh->Get_Impl()->bHiddenLockedByAPI = FALSE;
+        xObjSh->OwnerLock(FALSE);
+    }
 }
 
 //--------------------------------------------------------------------
