@@ -4,9 +4,9 @@
  *
  *  $RCSfile: b2dvector.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 08:07:57 $
+ *  last change: $Author: obo $ $Date: 2007-07-18 11:08:22 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -154,8 +154,10 @@ namespace basegfx
 
     bool areParallel( const B2DVector& rVecA, const B2DVector& rVecB )
     {
-        double fVal(rVecA.getX() * rVecB.getY() - rVecA.getY() * rVecB.getX());
-        return fTools::equalZero(fVal);
+        const double fValA(rVecA.getX() * rVecB.getY());
+        const double fValB(rVecA.getY() * rVecB.getX());
+
+        return fTools::equal(fValA, fValB);
     }
 
     B2VectorOrientation getOrientation( const B2DVector& rVecA, const B2DVector& rVecB )
@@ -201,24 +203,24 @@ namespace basegfx
 
     B2VectorContinuity getContinuity(const B2DVector& rBackVector, const B2DVector& rForwardVector )
     {
-        B2VectorContinuity eRetval(CONTINUITY_NONE);
-
-        if(!rBackVector.equalZero() && !rForwardVector.equalZero())
+        if(rBackVector.equalZero() || rForwardVector.equalZero())
         {
-            if( fTools::equal(rBackVector.getX(), -rForwardVector.getX()) &&
-                fTools::equal(rBackVector.getY(), -rForwardVector.getY()))
-            {
-                // same direction and same length -> C2
-                eRetval = CONTINUITY_C2;
-            }
-            else if(areParallel(rBackVector, rForwardVector))
-            {
-                // same direction -> C1
-                eRetval = CONTINUITY_C1;
-            }
+            return CONTINUITY_NONE;
         }
 
-        return eRetval;
+        if(fTools::equal(rBackVector.getX(), -rForwardVector.getX()) && fTools::equal(rBackVector.getY(), -rForwardVector.getY()))
+        {
+            // same direction and same length -> C2
+            return CONTINUITY_C2;
+        }
+
+        if(areParallel(rBackVector, rForwardVector))
+        {
+            // same direction -> C1
+            return CONTINUITY_C1;
+        }
+
+        return CONTINUITY_NONE;
     }
 } // end of namespace basegfx
 
