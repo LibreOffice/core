@@ -4,9 +4,9 @@
  *
  *  $RCSfile: unofored.cxx,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: hr $ $Date: 2007-06-27 19:29:14 $
+ *  last change: $Author: obo $ $Date: 2007-07-18 13:07:19 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -509,6 +509,31 @@ sal_Bool SvxEditEngineForwarder::SetDepth( USHORT, USHORT nNewDepth )
 {
     // EditEngine does not support outline depth
     return nNewDepth == 0 ? sal_True : sal_False;
+}
+
+const SfxItemSet * SvxEditEngineForwarder::GetEmptyItemSetPtr()
+{
+    return &rEditEngine.GetEmptyItemSet();
+}
+
+void SvxEditEngineForwarder::AppendParagraph()
+{
+    rEditEngine.InsertParagraph( rEditEngine.GetParagraphCount(), String::EmptyString() );
+}
+
+xub_StrLen SvxEditEngineForwarder::AppendTextPortion( USHORT nPara, const String &rText, const SfxItemSet & /*rSet*/ )
+{
+    xub_StrLen nLen = 0;
+
+    USHORT nParaCount = rEditEngine.GetParagraphCount();
+    DBG_ASSERT( nPara < nParaCount, "paragraph index out of bounds" );
+    if (/*0 <= nPara && */nPara < nParaCount)
+    {
+        nLen = rEditEngine.GetTextLen( nPara );
+        rEditEngine.QuickInsertText( rText, ESelection( nPara, nLen, nPara, nLen ) );
+    }
+
+    return nLen;
 }
 
 //------------------------------------------------------------------------
