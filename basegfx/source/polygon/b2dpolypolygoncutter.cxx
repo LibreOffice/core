@@ -4,9 +4,9 @@
  *
  *  $RCSfile: b2dpolypolygoncutter.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 08:02:41 $
+ *  last change: $Author: obo $ $Date: 2007-07-18 11:06:55 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -207,36 +207,38 @@ namespace basegfx
 
         struct impPolyPolygonPointNode
         {
-            sal_uInt32                              mnSelf;         // my own index in whole point array
+            // B2DPolyPolygon related indices
             sal_uInt32                              mnPoint;        // index of point in polygon
             sal_uInt32                              mnPoly;         // index of polygon in polyPolygon
-            sal_uInt32                              mnPrev;         // index to prev in whole point array
-            sal_uInt32                              mnNext;         // index to next in whole point array
+
+            // impPolyPolygonPointNode related indices
+            sal_uInt32                              mnSelf;         // my own PointNode index in whole point array
+            sal_uInt32                              mnPrev;         // index to prev PointNode in whole point array
+            sal_uInt32                              mnNext;         // index to next PointNode in whole point array
+            sal_uInt32                              mnNextControl;  // index to PointNode holding NextControlPoint (normally same as mnSelf)
 
             // bitfield
             unsigned                                mbUsed : 1;     // used flag for later extraction
-            unsigned                                mbControl : 1;  // hint flag if the edge of this node is a bezier segment
         };
+
+        typedef ::std::vector< impPolyPolygonPointNode > impPolyPolygonPointVector;
 
         //////////////////////////////////////////////////////////////////////////////
 
-        void impSwitchNext(impPolyPolygonPointNode& rCandA, impPolyPolygonPointNode& rCandB, ::std::vector< impPolyPolygonPointNode >& rPointNodes)
+        void impSwitchNext(impPolyPolygonPointNode& rCandA, impPolyPolygonPointNode& rCandB, impPolyPolygonPointVector& rPointVector)
         {
+            // get next nodes
+            impPolyPolygonPointNode& rNextA = rPointVector[rCandA.mnNext];
+            impPolyPolygonPointNode& rNextB = rPointVector[rCandB.mnNext];
+
             // switch prev/next indices
-            impPolyPolygonPointNode& rNextA = rPointNodes[rCandA.mnNext];
-            impPolyPolygonPointNode& rNextB = rPointNodes[rCandB.mnNext];
             rCandA.mnNext = rNextB.mnSelf;
             rNextB.mnPrev = rCandA.mnSelf;
             rCandB.mnNext = rNextA.mnSelf;
             rNextA.mnPrev = rCandB.mnSelf;
 
-            if(rCandA.mbControl || rCandB.mbControl)
-            {
-                // also switch poly, point and Control to follow the correct control vectors
-                const sal_uInt32 nPoint(rCandA.mnPoint); rCandA.mnPoint = rCandB.mnPoint; rCandB.mnPoint = nPoint;
-                const sal_uInt32 nPoly(rCandA.mnPoly); rCandA.mnPoly = rCandB.mnPoly; rCandB.mnPoly = nPoly;
-                const bool bControl(rCandA.mbControl); rCandA.mbControl = rCandB.mbControl; rCandB.mbControl = bControl;
-            }
+            // switch NextControl indices to follow the correct curve
+            ::std::swap(rCandA.mnNextControl, rCandB.mnNextControl);
         }
 
         //////////////////////////////////////////////////////////////////////////////
@@ -245,22 +247,6 @@ namespace basegfx
         {
             return rPolyPolygon.getB2DPolygon(rNode.mnPoly).getB2DPoint(rNode.mnPoint);
         }
-
-        //////////////////////////////////////////////////////////////////////////////
-
-        B2DPoint impGetControlPointA(const impPolyPolygonPointNode& rNode, const B2DPolyPolygon& rPolyPolygon)
-        {
-            return rPolyPolygon.getB2DPolygon(rNode.mnPoly).getControlPointA(rNode.mnPoint);
-        }
-
-        //////////////////////////////////////////////////////////////////////////////
-
-        B2DPoint impGetControlPointB(const impPolyPolygonPointNode& rNode, const B2DPolyPolygon& rPolyPolygon)
-        {
-            return rPolyPolygon.getB2DPolygon(rNode.mnPoly).getControlPointB(rNode.mnPoint);
-        }
-
-        //////////////////////////////////////////////////////////////////////////////
 
     } // end of anonymous namespace
 } // end of namespace basegfx
@@ -277,7 +263,7 @@ namespace basegfx
         {
             const B2DPolygon&                           maOriginal;
             B2DPolygon                                  maGeometry;
-            ::std::vector< impPolyPolygonPointNode >    maPointNodes;
+            impPolyPolygonPointVector                   maPointVector;
 
             // bitfield
             unsigned                                    mbChanged : 1;
@@ -299,7 +285,7 @@ namespace basegfx
                     case COMMON_IS_ENTER_OPPOSITE : // A entering B in opposite direction
                     case COMMON_IS_CROSS : // A crossing B
                     {
-                        impSwitchNext(rCandA, rCandB, maPointNodes);
+                        impSwitchNext(rCandA, rCandB, maPointVector);
                         mbChanged = true;
                         break;
                     }
@@ -320,25 +306,24 @@ namespace basegfx
                 // Also remove double points to always have a edge length and direction.
                 maGeometry = tools::addPointsAtCutsAndTouches(maOriginal);
                 maGeometry.removeDoublePoints();
-                const bool bControl(maGeometry.areControlPointsUsed());
 
                 // create space in point and sort vector.
                 const sal_uInt32 nCount(maGeometry.count());
                 ::std::vector< impSortNode > aSortNodes;
-                maPointNodes.resize(nCount);
+                maPointVector.resize(nCount);
                 aSortNodes.resize(nCount);
 
                 // fill data to points and sort vector
                 for(a = 0L; a < nCount; a++)
                 {
-                    impPolyPolygonPointNode& rNewPointNode = maPointNodes[a];
+                    impPolyPolygonPointNode& rNewPointNode = maPointVector[a];
                     rNewPointNode.mnSelf = a;
+                    rNewPointNode.mnNextControl = a;
                     rNewPointNode.mnPoint = a;
                     rNewPointNode.mnPoly = 0L;
                     rNewPointNode.mnPrev = (a != 0L) ? a - 1L : nCount - 1L;
                     rNewPointNode.mnNext = (a + 1L == nCount) ? 0L : a + 1L;
                     rNewPointNode.mbUsed = false;
-                    rNewPointNode.mbControl = (bControl ? !(maGeometry.getControlVectorA(a).equalZero() && maGeometry.getControlVectorB(a).equalZero()) : false);
 
                     impSortNode& rNewSortNode = aSortNodes[a];
                     rNewSortNode.maPoint = maGeometry.getB2DPoint(a);
@@ -354,7 +339,7 @@ namespace basegfx
                     // #129701# test b before using it, not after. Also use nCount instead of aSortNodes.size()
                     for(sal_uInt32 b(a + 1L); b < nCount && aSortNodes[a].maPoint.equal(aSortNodes[b].maPoint); b++)
                     {
-                        impHandleCommon(maPointNodes[aSortNodes[a].mnIndex], maPointNodes[aSortNodes[b].mnIndex]);
+                        impHandleCommon(maPointVector[aSortNodes[a].mnIndex], maPointVector[aSortNodes[b].mnIndex]);
                     }
                 }
             }
@@ -377,38 +362,56 @@ namespace basegfx
                     B2DPolyPolygon aRetval;
                     sal_uInt32 nPointsUsed(0L);
 
-                    for(sal_uInt32 a(0L); nPointsUsed != maGeometry.count() && a < maPointNodes.size(); a++)
+                    for(sal_uInt32 a(0L); nPointsUsed != maGeometry.count() && a < maPointVector.size(); a++)
                     {
-                        impPolyPolygonPointNode& rNode = maPointNodes[a];
+                        impPolyPolygonPointNode& rNode = maPointVector[a];
 
                         if(!rNode.mbUsed)
                         {
                             B2DPolygon aNew;
                             sal_uInt32 nCurr(rNode.mnSelf);
-                            bool bCurveUsed(false);
+                            const bool bControlPointsUsed(maGeometry.areControlPointsUsed());
 
                             do
                             {
-                                impPolyPolygonPointNode& rCandidate = maPointNodes[nCurr];
+                                // get and add point
+                                impPolyPolygonPointNode& rCandidate = maPointVector[nCurr];
                                 const B2DPoint aNewPoint(maGeometry.getB2DPoint(rCandidate.mnPoint));
+                                aNew.append(aNewPoint);
 
-                                if(aNew.count() > 1L && !rCandidate.mbControl && aNew.getB2DPoint(aNew.count() - 2L).equal(aNewPoint))
+                                if(bControlPointsUsed)
                                 {
-                                    // previous last and to be added point are the same, this would create a deadend
-                                    // neutral polygon. Instead of adding, remove last point to achieve the same but without
-                                    // creating deadends.
-                                    aNew.remove(aNew.count() - 1L);
+                                    // apply control points to added point
+                                    const sal_uInt32 nIndex(aNew.count() - 1);
+                                    const impPolyPolygonPointNode& rNextControl = maPointVector[rCandidate.mnNextControl];
+
+                                    aNew.setControlPoints(nIndex,
+                                        maGeometry.getPrevControlPoint(rCandidate.mnPoint),
+                                        maGeometry.getNextControlPoint(rNextControl.mnPoint));
                                 }
-                                else
-                                {
-                                    aNew.append(aNewPoint);
 
-                                    if(rCandidate.mbControl)
+                                // check if last two edges build a dead end and maybe removed
+                                const sal_uInt32 nNewPointCount(aNew.count());
+
+                                if(nNewPointCount > 2 && aNew.getB2DPoint(nNewPointCount - 3).equal(aNewPoint))
+                                {
+                                    if(bControlPointsUsed)
                                     {
-                                        const sal_uInt32 nNewIndex(aNew.count() - 1L);
-                                        aNew.setControlVectorA(nNewIndex, maGeometry.getControlVectorA(rCandidate.mnPoint));
-                                        aNew.setControlVectorB(nNewIndex, maGeometry.getControlVectorB(rCandidate.mnPoint));
-                                        bCurveUsed = true;
+                                        // check if edges are the same including control points
+                                        if(aNew.getPrevControlPoint(nNewPointCount - 2).equal(aNew.getNextControlPoint(nNewPointCount - 2)))
+                                        {
+                                            if(aNew.getPrevControlPoint(nNewPointCount - 1).equal(aNew.getNextControlPoint(nNewPointCount - 3)))
+                                            {
+                                                // rescue nextControlPoint and remove
+                                                aNew.setNextControlPoint(nNewPointCount - 3, aNew.getNextControlPoint(nNewPointCount - 1));
+                                                aNew.remove(nNewPointCount - 2, 2);
+                                            }
+                                        }
+                                    }
+                                    else
+                                    {
+                                        // edges are the same, remove
+                                        aNew.remove(nNewPointCount - 2, 2);
                                     }
                                 }
 
@@ -419,7 +422,7 @@ namespace basegfx
                             }
                             while(nCurr != rNode.mnSelf);
 
-                            if(aNew.count() > 2L || bCurveUsed)
+                            if(aNew.count())
                             {
                                 aNew.setClosed(true);
                                 aRetval.append(aNew);
@@ -454,7 +457,7 @@ namespace basegfx
             const B2DPolyPolygon&                       maOriginal;
             B2DPolyPolygon                              maGeometry;
             sal_uInt32                                  mnPointCount;
-            ::std::vector< impPolyPolygonPointNode >    maPointNodes;
+            impPolyPolygonPointVector                   maPointVector;
 
             // bitfield
             unsigned                                    mbChanged : 1;
@@ -471,10 +474,10 @@ namespace basegfx
                 // exist an entering node, so the loop will end.
                 while(bOnCommonEdge)
                 {
-                    const sal_uInt32 nCandA(maPointNodes[nIndexA].mnPrev);
-                    const sal_uInt32 nCandB((bOpposite) ? maPointNodes[nIndexB].mnNext : maPointNodes[nIndexB].mnPrev);
-                    const impPolyPolygonPointNode& rCandA = maPointNodes[nCandA];
-                    const impPolyPolygonPointNode& rCandB = maPointNodes[nCandB];
+                    const sal_uInt32 nCandA(maPointVector[nIndexA].mnPrev);
+                    const sal_uInt32 nCandB((bOpposite) ? maPointVector[nIndexB].mnNext : maPointVector[nIndexB].mnPrev);
+                    const impPolyPolygonPointNode& rCandA = maPointVector[nCandA];
+                    const impPolyPolygonPointNode& rCandB = maPointVector[nCandB];
                     const B2DPoint aPointA(impGetB2DPoint(rCandA, maGeometry));
                     const B2DPoint aPointB(impGetB2DPoint(rCandB, maGeometry));
 
@@ -493,21 +496,21 @@ namespace basegfx
 
                 // now we have the last common edge in (nIndexA, nIndexB) which must be the
                 // entering edge. Get the point values from there for the crossover test
-                impPolyPolygonPointNode& rEnterCandA = maPointNodes[nIndexA];
-                impPolyPolygonPointNode& rEnterCandB = maPointNodes[nIndexB];
+                impPolyPolygonPointNode& rEnterCandA = maPointVector[nIndexA];
+                impPolyPolygonPointNode& rEnterCandB = maPointVector[nIndexB];
                 const B2DPoint aPoint(impGetB2DPoint(rEnterCandA, maGeometry));
-                const B2DPoint aPrevA(impGetB2DPoint(maPointNodes[rEnterCandA.mnPrev], maGeometry));
-                const B2DPoint aNextA(impGetB2DPoint(maPointNodes[rEnterCandA.mnNext], maGeometry));
+                const B2DPoint aPrevA(impGetB2DPoint(maPointVector[rEnterCandA.mnPrev], maGeometry));
+                const B2DPoint aNextA(impGetB2DPoint(maPointVector[rEnterCandA.mnNext], maGeometry));
                 bool bSideOfEnter;
 
                 if(bOpposite)
                 {
-                    const B2DPoint aNextB(impGetB2DPoint(maPointNodes[rEnterCandB.mnNext], maGeometry));
+                    const B2DPoint aNextB(impGetB2DPoint(maPointVector[rEnterCandB.mnNext], maGeometry));
                     bSideOfEnter = impLeftOfEdges(aPrevA, aPoint, aNextA, aNextB);
                 }
                 else
                 {
-                    const B2DPoint aPrevB(impGetB2DPoint(maPointNodes[rEnterCandB.mnPrev], maGeometry));
+                    const B2DPoint aPrevB(impGetB2DPoint(maPointVector[rEnterCandB.mnPrev], maGeometry));
                     bSideOfEnter = impLeftOfEdges(aPrevA, aPoint, aNextA, aPrevB);
                 }
 
@@ -518,13 +521,13 @@ namespace basegfx
                     {
                         // switch at enter and leave, make the common edge(s) an own neutral
                         // polygon
-                        impSwitchNext(rEnterCandA, rEnterCandB, maPointNodes);
-                        impSwitchNext(rCandidateA, rCandidateB, maPointNodes);
+                        impSwitchNext(rEnterCandA, rEnterCandB, maPointVector);
+                        impSwitchNext(rCandidateA, rCandidateB, maPointVector);
                     }
                     else
                     {
                         // switch at leave
-                        impSwitchNext(rCandidateA, rCandidateB, maPointNodes);
+                        impSwitchNext(rCandidateA, rCandidateB, maPointVector);
                     }
 
                     // set changed flag
@@ -535,51 +538,40 @@ namespace basegfx
             void impHandleCommon(impPolyPolygonPointNode& rCandA, impPolyPolygonPointNode& rCandB)
             {
                 const B2DPoint aPoint(impGetB2DPoint(rCandA, maGeometry));
-                const impPolyPolygonPointNode& rNodePrevA = maPointNodes[rCandA.mnPrev];
-                const impPolyPolygonPointNode& rNodePrevB = maPointNodes[rCandB.mnPrev];
+                B2DPoint aPrevA(impGetB2DPoint(maPointVector[rCandA.mnPrev], maGeometry));
+                B2DPoint aNextA(impGetB2DPoint(maPointVector[rCandA.mnNext], maGeometry));
+                B2DPoint aPrevB(impGetB2DPoint(maPointVector[rCandB.mnPrev], maGeometry));
+                B2DPoint aNextB(impGetB2DPoint(maPointVector[rCandB.mnNext], maGeometry));
 
-                B2DPoint aPrevA(impGetB2DPoint(rNodePrevA, maGeometry));
-                B2DPoint aNextA(impGetB2DPoint(maPointNodes[rCandA.mnNext], maGeometry));
-                B2DPoint aPrevB(impGetB2DPoint(rNodePrevB, maGeometry));
-                B2DPoint aNextB(impGetB2DPoint(maPointNodes[rCandB.mnNext], maGeometry));
-
-                if(rNodePrevA.mbControl)
+                if(maGeometry.areControlPointsUsed())
                 {
-                    const B2DPoint aCandidate(impGetControlPointB(rNodePrevA, maGeometry));
+                    // get the control points for the common points and use them if they are different. This will use
+                    // the tangent for the touch/crossover calculation
+                    const B2DPoint aCandidatePrevA(maGeometry.getB2DPolygon(rCandA.mnPoly).getPrevControlPoint(rCandA.mnPoint));
+                    const B2DPoint aCandidatePrevB(maGeometry.getB2DPolygon(rCandB.mnPoly).getPrevControlPoint(rCandB.mnPoint));
+                    const impPolyPolygonPointNode& rNextControlA = maPointVector[rCandA.mnNextControl];
+                    const B2DPoint aCandidateNextA(maGeometry.getB2DPolygon(rNextControlA.mnPoly).getNextControlPoint(rNextControlA.mnPoint));
+                    const impPolyPolygonPointNode& rNextControlB = maPointVector[rCandB.mnNextControl];
+                    const B2DPoint aCandidateNextB(maGeometry.getB2DPolygon(rNextControlB.mnPoly).getNextControlPoint(rNextControlB.mnPoint));
 
-                    if(!aCandidate.equal(aPoint))
+                    if(!aCandidatePrevA.equal(aPoint))
                     {
-                        aPrevA = aCandidate;
+                        aPrevA = aCandidatePrevA;
                     }
-                }
 
-                if(rNodePrevB.mbControl)
-                {
-                    const B2DPoint aCandidate(impGetControlPointB(rNodePrevB, maGeometry));
-
-                    if(!aCandidate.equal(aPoint))
+                    if(!aCandidatePrevB.equal(aPoint))
                     {
-                        aPrevB = aCandidate;
+                        aPrevB = aCandidatePrevB;
                     }
-                }
 
-                if(rCandA.mbControl)
-                {
-                    const B2DPoint aCandidate(impGetControlPointA(rCandA, maGeometry));
-
-                    if(!aCandidate.equal(aPoint))
+                    if(!aCandidateNextA.equal(aPoint))
                     {
-                        aNextA = aCandidate;
+                        aNextA = aCandidateNextA;
                     }
-                }
 
-                if(rCandB.mbControl)
-                {
-                    const B2DPoint aCandidate(impGetControlPointA(rCandB, maGeometry));
-
-                    if(!aCandidate.equal(aPoint))
+                    if(!aCandidateNextB.equal(aPoint))
                     {
-                        aNextB = aCandidate;
+                        aNextB = aCandidateNextB;
                     }
                 }
 
@@ -599,7 +591,7 @@ namespace basegfx
                     }
                     case COMMON_IS_CROSS : // A crossing B
                     {
-                        impSwitchNext(rCandA, rCandB, maPointNodes);
+                        impSwitchNext(rCandA, rCandB, maPointVector);
                         mbChanged = true;
                         break;
                     }
@@ -633,27 +625,26 @@ namespace basegfx
 
                 // create space in point and sort vector.
                 ::std::vector< impSortNode > aSortNodes;
-                maPointNodes.resize(mnPointCount);
+                maPointVector.resize(mnPointCount);
                 aSortNodes.resize(mnPointCount);
 
                 // fill data to points and sort vector
                 for(a = c = 0L; a < maGeometry.count(); a++)
                 {
                     const B2DPolygon aPartGeometry(maGeometry.getB2DPolygon(a));
-                    const bool bControl(aPartGeometry.areControlPointsUsed());
                     const sal_uInt32 nPartCount(aPartGeometry.count());
                     const sal_uInt32 nNewPolyStart(c);
 
                     for(b = 0L; b < nPartCount; b++, c++)
                     {
-                        impPolyPolygonPointNode& rNewPointNode = maPointNodes[c];
+                        impPolyPolygonPointNode& rNewPointNode = maPointVector[c];
                         rNewPointNode.mnSelf = c;
+                        rNewPointNode.mnNextControl = c;
                         rNewPointNode.mnPoint = b;
                         rNewPointNode.mnPoly = a;
                         rNewPointNode.mnNext = nNewPolyStart + ((b + 1L == nPartCount) ? 0L : b + 1L);
                         rNewPointNode.mnPrev = nNewPolyStart + ((b != 0L) ? b - 1L : nPartCount - 1L);
                         rNewPointNode.mbUsed = false;
-                        rNewPointNode.mbControl = (bControl ? !(aPartGeometry.getControlVectorA(b).equalZero() && aPartGeometry.getControlVectorB(b).equalZero()) : false);
 
                         impSortNode& rNewSortNode = aSortNodes[c];
                         rNewSortNode.maPoint = aPartGeometry.getB2DPoint(b);
@@ -670,7 +661,7 @@ namespace basegfx
                     // #129701# test b before using it, not after. Also use mnPointCount instead of aSortNodes.size()
                     for(b = a + 1L; b < mnPointCount && aSortNodes[a].maPoint.equal(aSortNodes[b].maPoint); b++)
                     {
-                        impHandleCommon(maPointNodes[aSortNodes[a].mnIndex], maPointNodes[aSortNodes[b].mnIndex]);
+                        impHandleCommon(maPointVector[aSortNodes[a].mnIndex], maPointVector[aSortNodes[b].mnIndex]);
                     }
                 }
             }
@@ -694,39 +685,56 @@ namespace basegfx
                     B2DPolyPolygon aRetval;
                     sal_uInt32 nPointsUsed(0L);
 
-                    for(sal_uInt32 a(0L); nPointsUsed != mnPointCount && a < maPointNodes.size(); a++)
+                    for(sal_uInt32 a(0L); nPointsUsed != mnPointCount && a < maPointVector.size(); a++)
                     {
-                        impPolyPolygonPointNode& rNode = maPointNodes[a];
+                        impPolyPolygonPointNode& rNode = maPointVector[a];
 
                         if(!rNode.mbUsed)
                         {
                             B2DPolygon aNew;
                             sal_uInt32 nCurr(rNode.mnSelf);
-                            bool bCurveUsed(false);
+                            const bool bControlPointsUsed(maGeometry.areControlPointsUsed());
 
                             do
                             {
-                                impPolyPolygonPointNode& rCandidate = maPointNodes[nCurr];
+                                // get and add point
+                                impPolyPolygonPointNode& rCandidate = maPointVector[nCurr];
                                 const B2DPoint aNewPoint(impGetB2DPoint(rCandidate, maGeometry));
+                                aNew.append(aNewPoint);
 
-                                if(aNew.count() > 1L && !rCandidate.mbControl && aNew.getB2DPoint(aNew.count() - 2L).equal(aNewPoint))
+                                if(bControlPointsUsed)
                                 {
-                                    // previous last and to be added point are the same, this would create a deadend
-                                    // neutral polygon. Instead of adding, remove last point to achieve the same but without
-                                    // creating deadends.
-                                    aNew.remove(aNew.count() - 1L);
+                                    // apply control points to added point
+                                    const sal_uInt32 nIndex(aNew.count() - 1);
+                                    const impPolyPolygonPointNode& rNextControl = maPointVector[rCandidate.mnNextControl];
+
+                                    aNew.setControlPoints(nIndex,
+                                        maGeometry.getB2DPolygon(rCandidate.mnPoly).getPrevControlPoint(rCandidate.mnPoint),
+                                        maGeometry.getB2DPolygon(rNextControl.mnPoly).getNextControlPoint(rNextControl.mnPoint));
                                 }
-                                else
-                                {
-                                    aNew.append(aNewPoint);
 
-                                    if(rCandidate.mbControl)
+                                // check if last two edges build a dead end and maybe removed
+                                const sal_uInt32 nNewPointCount(aNew.count());
+
+                                if(nNewPointCount > 2 && aNew.getB2DPoint(nNewPointCount - 3).equal(aNewPoint))
+                                {
+                                    if(bControlPointsUsed)
                                     {
-                                        const sal_uInt32 nNewIndex(aNew.count() - 1L);
-                                        const B2DPolygon aTempPolygon(maGeometry.getB2DPolygon(rCandidate.mnPoly));
-                                        aNew.setControlVectorA(nNewIndex, aTempPolygon.getControlVectorA(rCandidate.mnPoint));
-                                        aNew.setControlVectorB(nNewIndex, aTempPolygon.getControlVectorB(rCandidate.mnPoint));
-                                        bCurveUsed = true;
+                                        // check if edges are the same including control points
+                                        if(aNew.getPrevControlPoint(nNewPointCount - 2).equal(aNew.getNextControlPoint(nNewPointCount - 2)))
+                                        {
+                                            if(aNew.getPrevControlPoint(nNewPointCount - 1).equal(aNew.getNextControlPoint(nNewPointCount - 3)))
+                                            {
+                                                // rescue nextControlPoint and remove
+                                                aNew.setNextControlPoint(nNewPointCount - 3, aNew.getNextControlPoint(nNewPointCount - 1));
+                                                aNew.remove(nNewPointCount - 2, 2);
+                                            }
+                                        }
+                                    }
+                                    else
+                                    {
+                                        // edges are the same, remove
+                                        aNew.remove(nNewPointCount - 2, 2);
                                     }
                                 }
 
@@ -736,7 +744,7 @@ namespace basegfx
                             }
                             while(nCurr != rNode.mnSelf);
 
-                            if(aNew.count() > 2L || bCurveUsed)
+                            if(aNew.count())
                             {
                                 aNew.setClosed(true);
                                 aRetval.append(aNew);
