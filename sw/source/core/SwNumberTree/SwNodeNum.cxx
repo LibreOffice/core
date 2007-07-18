@@ -4,9 +4,9 @@
  *
  *  $RCSfile: SwNodeNum.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: rt $ $Date: 2007-04-25 08:58:28 $
+ *  last change: $Author: obo $ $Date: 2007-07-18 14:27:17 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -40,6 +40,7 @@
 #include <SwNodeNum.hxx>
 #include <ndtxt.hxx>
 #include <pam.hxx>
+#include <stdio.h>
 
 SwNodeNum::SwNodeNum()
     : SwNumberTreeNode(), mpTxtNode(NULL), mpNumRule(NULL), mnStart(1),
