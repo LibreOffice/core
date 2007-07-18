@@ -4,9 +4,9 @@
  *
  *  $RCSfile: unoedprx.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: hr $ $Date: 2007-06-27 19:28:32 $
+ *  last change: $Author: obo $ $Date: 2007-07-18 13:07:06 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1173,6 +1173,24 @@ sal_Bool SvxAccessibleTextAdapter::IsEditable( const ESelection& rSel )
     return aStartIndex.IsEditableRange( aEndIndex );
 }
 
+const SfxItemSet * SvxAccessibleTextAdapter::GetEmptyItemSetPtr()
+{
+    DBG_ERROR( "not implemented" );
+    return 0;
+}
+
+void SvxAccessibleTextAdapter::AppendParagraph()
+{
+    DBG_ERROR( "not implemented" );
+}
+
+xub_StrLen SvxAccessibleTextAdapter::AppendTextPortion( USHORT, const String &, const SfxItemSet & )
+{
+    DBG_ERROR( "not implemented" );
+    return 0;
+}
+
+
 
 //---------------------------------------------------------------------------------------
 
@@ -1280,3 +1298,4 @@ void SvxAccessibleTextEditViewAdapter::SetForwarder( SvxEditViewForwarder&      
     mrViewForwarder = &rForwarder;
     mrTextForwarder = &rTextForwarder;
 }
+
