@@ -4,9 +4,9 @@
  *
  *  $RCSfile: svdtrans.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: hr $ $Date: 2007-06-27 19:12:25 $
+ *  last change: $Author: obo $ $Date: 2007-07-18 10:57:57 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -645,6 +645,20 @@ void Poly2Rect(const Polygon& rPol, Rectangle& rRect, GeoStat& rGeo)
     Point aPt3(rPol[3]-rPol[0]);
     if (rGeo.nDrehWink!=0) RotatePoint(aPt3,Point(0,0),-rGeo.nSin,rGeo.nCos); // -Sin fuer Rueckdrehung
     long nHgt=aPt3.Y();
+
+    if(aPt3.X())
+    {
+        // #i74358# the axes are not orthogonal, so for getting the correct height,
+        // calculate the length of aPt3
+
+        // #i74358# this change was wrong, in the field of the old geometry stuff
+        // it is not an error. The new height always is the same as before; shear
+        // does not change object height at all. This is different from the interactions,
+        // but obviously wanted in the old versions.
+        //
+        // nHgt = static_cast< long >(sqrt(static_cast< double >(aPt3.X() * aPt3.X() + aPt3.Y() * aPt3.Y())));
+    }
+
     long nShW=GetAngle(aPt3);
     nShW-=27000; // ShearWink wird zur Senkrechten gemessen
     nShW=-nShW;  // Negieren, denn '+' ist Rechtskursivierung
