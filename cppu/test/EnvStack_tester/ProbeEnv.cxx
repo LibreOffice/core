@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ProbeEnv.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: kz $ $Date: 2007-05-09 13:42:24 $
+ *  last change: $Author: obo $ $Date: 2007-07-18 12:23:21 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -32,6 +32,9 @@
  *    MA  02111-1307  USA
  *
  ************************************************************************/
+
+// MARKER(update_precomp.py): autogen include statement, do not remove
+#include "precompiled_cppu.hxx"
 
 #include "cppu/EnvDcp.hxx"
 
@@ -65,8 +68,8 @@ protected:
     virtual void v_enter(void);
     virtual void v_leave(void);
 
-    virtual void v_callInto_v(uno_EnvCallee * pCallee, va_list param);
-    virtual void v_callOut_v (uno_EnvCallee * pCallee, va_list param);
+    virtual void v_callInto_v(uno_EnvCallee * pCallee, va_list * pParam);
+    virtual void v_callOut_v (uno_EnvCallee * pCallee, va_list * pParam);
 
     virtual int  v_isValid   (rtl::OUString * pReason);
 };
@@ -98,24 +101,24 @@ static void s_checkGEnvValidity(void)
     }
 }
 
-void TestEnv::v_callInto_v(uno_EnvCallee * pCallee, va_list param)
+void TestEnv::v_callInto_v(uno_EnvCallee * pCallee, va_list * pParam)
 {
     g_commentStack += rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("-into"));
     g_commentStack += cppu::EnvDcp::getPurpose(m_pEnv->pTypeName);
 
     s_checkGEnvValidity();
 
-    pCallee(param);
+    pCallee(pParam);
 }
 
-void TestEnv::v_callOut_v(uno_EnvCallee * pCallee, va_list param)
+void TestEnv::v_callOut_v(uno_EnvCallee * pCallee, va_list * pParam)
 {
     g_commentStack += rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("-out"));
     g_commentStack += cppu::EnvDcp::getPurpose(m_pEnv->pTypeName);
 
     s_checkGEnvValidity();
 
-    pCallee(param);
+    pCallee(pParam);
 }
 
 void TestEnv::v_enter(void)

@@ -4,9 +4,9 @@
  *
  *  $RCSfile: EnvStack.tester.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: kz $ $Date: 2007-05-09 13:41:59 $
+ *  last change: $Author: obo $ $Date: 2007-07-18 12:23:07 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -61,9 +61,9 @@ static rtl::OUString s_getCurrentEnvDcp(void)
     return env_dcp;
 }
 
-extern "C" { static void s_getCurrentEnvDcp_v(va_list param)
+extern "C" { static void s_getCurrentEnvDcp_v(va_list * pParam)
 {
-    rtl_uString ** ppEnvDcp  = va_arg(param, rtl_uString **);
+    rtl_uString ** ppEnvDcp  = va_arg(*pParam, rtl_uString **);
 
     rtl::OUString env_dcp(s_getCurrentEnvDcp());
 
