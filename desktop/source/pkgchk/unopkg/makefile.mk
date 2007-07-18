@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.7 $
+#   $Revision: 1.8 $
 #
-#   last change: $Author: obo $ $Date: 2007-06-14 13:01:56 $
+#   last change: $Author: obo $ $Date: 2007-07-18 08:03:27 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -39,7 +39,6 @@ PRJNAME = desktop
 TARGET = unopkg
 TARGETTYPE = GUI
 ENABLE_EXCEPTIONS = TRUE
-NO_BSYMBOLIC = TRUE
 LIBTARGET=NO
 
 PRJINC += ..$/..$/deployment
