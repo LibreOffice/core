@@ -4,9 +4,9 @@
  *
  *  $RCSfile: b2dtuple.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 08:06:26 $
+ *  last change: $Author: obo $ $Date: 2007-07-18 11:08:05 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -82,13 +82,6 @@ namespace basegfx
         return (
             ::basegfx::fTools::equal(mfX, rTup.mfX) &&
             ::basegfx::fTools::equal(mfY, rTup.mfY));
-    }
-
-    bool B2DTuple::equal(const B2DTuple& rTup, const double& rfSmallValue) const
-    {
-        return (
-            ::basegfx::fTools::equal(mfX, rTup.mfX, rfSmallValue) &&
-            ::basegfx::fTools::equal(mfY, rTup.mfY, rfSmallValue));
     }
 
     void B2DTuple::correctValues(const double fCompareValue)
