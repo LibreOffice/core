@@ -4,9 +4,9 @@
  *
  *  $RCSfile: inputhdl.cxx,v $
  *
- *  $Revision: 1.72 $
+ *  $Revision: 1.73 $
  *
- *  last change: $Author: rt $ $Date: 2007-07-06 12:41:28 $
+ *  last change: $Author: obo $ $Date: 2007-07-18 09:44:22 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -511,6 +511,7 @@ void ScInputHandler::UpdateSpellSettings( BOOL bFromStartTab )
             pEngine->SetKernAsianPunctuation( pDoc->GetAsianKerning() );
             pEngine->SetDefaultHorizontalTextDirection(
                 (EEHorizontalTextDirection)pDoc->GetEditTextDirection( pViewData->GetTabNo() ) );
+            pEngine->SetFirstWordCapitalization( FALSE );
         }
 
         //  language is set separately, so the speller is needed only if online
