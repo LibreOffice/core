@@ -4,9 +4,9 @@
  *
  *  $RCSfile: svdtxhdl.cxx,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: hr $ $Date: 2007-06-27 19:12:39 $
+ *  last change: $Author: obo $ $Date: 2007-07-18 10:58:13 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -211,7 +211,7 @@ void ImpTextPortionHandler::DrawTextToPath(XOutputDevice& rXOut, FASTBOOL bDrawE
         {
             basegfx::B2DPolygon aContourPolygon(aContourPolyPolygon.getB2DPolygon(nParagraph));
 
-            if(aContourPolygon.areControlVectorsUsed())
+            if(aContourPolygon.areControlPointsUsed())
             {
                 aContourPolygon = basegfx::tools::adaptiveSubdivideByAngle(aContourPolygon);
             }
