@@ -4,9 +4,9 @@
  *
  *  $RCSfile: doc.hxx,v $
  *
- *  $Revision: 1.139 $
+ *  $Revision: 1.140 $
  *
- *  last change: $Author: obo $ $Date: 2007-07-17 13:04:54 $
+ *  last change: $Author: obo $ $Date: 2007-07-18 12:54:37 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -160,6 +160,7 @@
 #include <stringhash.hxx>
 
 #include <svtools/embedhlp.hxx>
+#include <vector>
 
 class SfxObjectShell;
 class SfxObjectShellRef;
@@ -1566,6 +1567,8 @@ public:
                                 const SwPaM& rRange, sal_Unicode cCh,
                                 SwHoriOrient eAdjust,
                                 const SwTableAutoFmt* = 0 );
+    // text to table conversion - API support
+    const SwTable* TextToTable( const std::vector< std::vector<SwNodeRange> >& rTableNodes );
         // erzeuge aus der Tabelle wieder normalen Text
     sal_Bool TableToText( const SwTableNode* pTblNd, sal_Unicode cCh );
         // einfuegen von Spalten/Zeilen in der Tabelle
