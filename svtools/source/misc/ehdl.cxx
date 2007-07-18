@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ehdl.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: ihi $ $Date: 2007-07-10 15:18:38 $
+ *  last change: $Author: obo $ $Date: 2007-07-18 08:56:07 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -54,7 +54,7 @@
 #ifndef _SV_SVAPP_HXX //autogen
 #include <vcl/svapp.hxx>
 #endif
-#if defined(MAC) || defined(OS2)
+#if defined(OS2)
 #ifndef _SV_SOUND_HXX //autogen
 #include <vcl/sound.hxx>
 #endif
