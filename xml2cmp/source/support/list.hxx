@@ -4,9 +4,9 @@
  *
  *  $RCSfile: list.hxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: hr $ $Date: 2006-06-19 20:04:23 $
+ *  last change: $Author: obo $ $Date: 2007-07-18 15:03:29 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -49,7 +49,7 @@ class List
 
     // LIFECYCLE
                         List();
-    virtual             ~List() { }
+    virtual             ~List() { delete [] inhalt; }
 
     // OPERATORS
     const XX &          operator[](
