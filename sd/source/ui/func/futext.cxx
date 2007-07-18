@@ -4,9 +4,9 @@
  *
  *  $RCSfile: futext.cxx,v $
  *
- *  $Revision: 1.60 $
+ *  $Revision: 1.61 $
  *
- *  last change: $Author: hr $ $Date: 2007-06-27 15:43:12 $
+ *  last change: $Author: obo $ $Date: 2007-07-18 10:46:11 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -469,6 +469,27 @@ BOOL FuText::MouseButtonDown(const MouseEvent& rMEvt)
                             /******************************************************
                             * Objekt oder Handle draggen
                             ******************************************************/
+
+                            // #i78748#
+                            // do the EndTextEdit first, it will delete the handles and force a
+                            // recreation. This will make aVEvt.pHdl to point to a deleted handle,
+                            // thus it is necessary to reset it and to get it again.
+                            ::Outliner* pOutl = mpView->GetTextEditOutliner();
+
+                            if (pTextObj && (pTextObj->GetOutlinerParaObject() ||
+                                (pOutl && pOutl->GetText(pOutl->GetParagraph( 0 )).Len() != 0)))
+                            {
+                                mpView->SdrEndTextEdit();
+
+                                if(aVEvt.pHdl)
+                                {
+                                    // force new handle identification, the pointer will be dead here
+                                    // since SdrEndTextEdit has resetted (deleted) the handles.
+                                    aVEvt.pHdl = 0;
+                                    mpView->PickAnything(rMEvt, SDRMOUSEBUTTONDOWN, aVEvt);
+                                }
+                            }
+
                             if (!aVEvt.pHdl)
                             {
                                 if( eHit == SDRHIT_UNMARKEDOBJECT )
@@ -482,14 +503,6 @@ BOOL FuText::MouseButtonDown(const MouseEvent& rMEvt)
                                 // Objekt draggen
                                 bFirstMouseMove = TRUE;
                                 aDragTimer.Start();
-                            }
-
-                            ::Outliner* pOutl = mpView->GetTextEditOutliner();
-
-                            if (pTextObj && (pTextObj->GetOutlinerParaObject() ||
-                                (pOutl && pOutl->GetText(pOutl->GetParagraph( 0 )).Len() != 0)))
-                            {
-                                mpView->SdrEndTextEdit();
                             }
 
                             USHORT nDrgLog = USHORT ( mpWindow->PixelToLogic(Size(DRGPIX,0)).Width() );
