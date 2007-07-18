@@ -4,9 +4,9 @@
  *
  *  $RCSfile: optionsdrawinglayer.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: hr $ $Date: 2007-06-26 11:43:30 $
+ *  last change: $Author: obo $ $Date: 2007-07-18 11:53:14 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -171,6 +171,21 @@ class SVL_DLLPUBLIC SvtOptionsDrawinglayer
         void        SetPaintBuffer_Calc( sal_Bool bState );
         void        SetPaintBuffer_Writer( sal_Bool bState );
         void        SetPaintBuffer_DrawImpress( sal_Bool bState );
+
+        // #i4219#
+        sal_uInt32 GetMaximumPaperWidth() const;
+        sal_uInt32 GetMaximumPaperHeight() const;
+        sal_uInt32 GetMaximumPaperLeftMargin() const;
+        sal_uInt32 GetMaximumPaperRightMargin() const;
+        sal_uInt32 GetMaximumPaperTopMargin() const;
+        sal_uInt32 GetMaximumPaperBottomMargin() const;
+
+        void SetMaximumPaperWidth(sal_uInt32 nNew);
+        void SetMaximumPaperHeight(sal_uInt32 nNew);
+        void SetMaximumPaperLeftMargin(sal_uInt32 nNew);
+        void SetMaximumPaperRightMargin(sal_uInt32 nNew);
+        void SetMaximumPaperTopMargin(sal_uInt32 nNew);
+        void SetMaximumPaperBottomMargin(sal_uInt32 nNew);
 
     //-------------------------------------------------------------------------------------------------------------
     //  private methods
