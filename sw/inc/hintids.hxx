@@ -4,9 +4,9 @@
  *
  *  $RCSfile: hintids.hxx,v $
  *
- *  $Revision: 1.33 $
+ *  $Revision: 1.34 $
  *
- *  last change: $Author: kz $ $Date: 2007-05-10 15:53:40 $
+ *  last change: $Author: obo $ $Date: 2007-07-18 13:29:01 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -326,6 +326,7 @@ RES_MSG_BEGIN = RES_FMT_END,
     RES_NAME_CHANGED,
     RES_ALT_TEXT_CHANGED,
     RES_UNOCURSOR_LEAVES_SECTION,
+    RES_LINKED_GRAPHIC_STREAM_ARRIVED,
 RES_MSG_END
 };
 
