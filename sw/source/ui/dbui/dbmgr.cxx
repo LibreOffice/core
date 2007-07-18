@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dbmgr.cxx,v $
  *
- *  $Revision: 1.121 $
+ *  $Revision: 1.122 $
  *
- *  last change: $Author: ihi $ $Date: 2007-07-12 10:49:57 $
+ *  last change: $Author: obo $ $Date: 2007-07-18 12:59:12 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -2277,8 +2277,10 @@ BOOL    SwNewDBMgr::IsDataSourceOpen(const String& rDataSource,
     if(pImpl->pMergeData)
     {
         return !bMergeLock &&
-                rDataSource == (String)pImpl->pMergeData->sDataSource &&
-                    rTableOrQuery == (String)pImpl->pMergeData->sCommand &&
+                ((rDataSource == (String)pImpl->pMergeData->sDataSource &&
+                    rTableOrQuery == (String)pImpl->pMergeData->sCommand)
+                    ||(!rDataSource.Len() && !rTableOrQuery.Len()))
+                    &&
                     pImpl->pMergeData->xResultSet.is();
     }
     else if(!bMergeOnly)
