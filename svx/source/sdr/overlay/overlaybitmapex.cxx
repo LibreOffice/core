@@ -4,9 +4,9 @@
  *
  *  $RCSfile: overlaybitmapex.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2006-12-05 12:12:34 $
+ *  last change: $Author: obo $ $Date: 2007-07-18 10:54:37 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -48,6 +48,11 @@
 #include <vcl/outdev.hxx>
 #endif
 
+// #i77674#
+#ifndef _BGFX_MATRIX_B2DHOMMATRIX_HXX
+#include <basegfx/matrix/b2dhommatrix.hxx>
+#endif
+
 //////////////////////////////////////////////////////////////////////////////
 
 namespace sdr
@@ -56,18 +61,17 @@ namespace sdr
     {
         void OverlayBitmapEx::drawGeometry(OutputDevice& rOutputDevice)
         {
-            // calculate position in pixel
-            Point aPositionPixel(FRound(getBasePosition().getX()), FRound(getBasePosition().getY()));
-            aPositionPixel = rOutputDevice.LogicToPixel(aPositionPixel);
-            aPositionPixel.X() -= (sal_Int32)mnCenterX;
-            aPositionPixel.Y() -= (sal_Int32)mnCenterY;
+            // #i77674# calculate discrete top-left
+            basegfx::B2DPoint aDiscreteTopLeft(rOutputDevice.GetViewTransformation() * getBasePosition());
+            aDiscreteTopLeft -= basegfx::B2DPoint((double)mnCenterX, (double)mnCenterY);
 
             // remember MapMode and switch to pixels
-            const sal_Bool bMapModeWasEnabled(rOutputDevice.IsMapModeEnabled());
-            rOutputDevice.EnableMapMode(sal_False);
+            const bool bMapModeWasEnabled(rOutputDevice.IsMapModeEnabled());
+            rOutputDevice.EnableMapMode(false);
 
             // draw the bitmap
-            rOutputDevice.DrawBitmapEx(aPositionPixel, maBitmapEx);
+            const Point aPixelTopLeft((sal_Int32)floor(aDiscreteTopLeft.getX()), (sal_Int32)floor(aDiscreteTopLeft.getY()));
+            rOutputDevice.DrawBitmapEx(aPixelTopLeft, maBitmapEx);
 
             // restore MapMode
             rOutputDevice.EnableMapMode(bMapModeWasEnabled);
@@ -75,20 +79,19 @@ namespace sdr
 
         void OverlayBitmapEx::createBaseRange(OutputDevice& rOutputDevice)
         {
-            // calculate bitmap rectangle in pixel
-            Point aPositionPixel(FRound(getBasePosition().getX()), FRound(getBasePosition().getY()));
-            aPositionPixel = rOutputDevice.LogicToPixel(aPositionPixel);
-            aPositionPixel.X() -= (sal_Int32)mnCenterX;
-            aPositionPixel.Y() -= (sal_Int32)mnCenterY;
-            const Rectangle aRectanglePixel(aPositionPixel, maBitmapEx.GetSizePixel());
+            // #i77674# calculate discrete top-left
+            basegfx::B2DPoint aDiscreteTopLeft(rOutputDevice.GetViewTransformation() * getBasePosition());
+            aDiscreteTopLeft -= basegfx::B2DPoint((double)mnCenterX, (double)mnCenterY);
 
-            // go back to logical coordinates
-            const Rectangle aRectangleLogic(rOutputDevice.PixelToLogic(aRectanglePixel));
+            // calculate discrete range
+            const Size aBitmapPixelSize(maBitmapEx.GetSizePixel());
+            const basegfx::B2DRange aDiscreteRange(
+                aDiscreteTopLeft.getX(), aDiscreteTopLeft.getY(),
+                aDiscreteTopLeft.getX() + (double)aBitmapPixelSize.getWidth(), aDiscreteTopLeft.getY() + (double)aBitmapPixelSize.getHeight());
 
-            // reset range and expand it
-            maBaseRange.reset();
-            maBaseRange.expand(basegfx::B2DPoint(aRectangleLogic.Left(), aRectangleLogic.Top()));
-            maBaseRange.expand(basegfx::B2DPoint(aRectangleLogic.Right(), aRectangleLogic.Bottom()));
+            // set and go back to logic range
+            maBaseRange = aDiscreteRange;
+            maBaseRange.transform(rOutputDevice.GetInverseViewTransformation());
         }
 
         OverlayBitmapEx::OverlayBitmapEx(
