@@ -4,9 +4,9 @@
  *
  *  $RCSfile: bitmapdevice.cxx,v $
  *
- *  $Revision: 1.28 $
+ *  $Revision: 1.29 $
  *
- *  last change: $Author: rt $ $Date: 2007-07-05 08:55:38 $
+ *  last change: $Author: obo $ $Date: 2007-07-18 11:00:18 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -521,7 +521,7 @@ namespace
                               const RawAcc&              acc )
         {
             basegfx::B2DPolygon aPoly( rPoly );
-            if( rPoly.areControlVectorsUsed() )
+            if( rPoly.areControlPointsUsed() )
                 aPoly = basegfx::tools::adaptiveSubdivideByCount( rPoly );
 
             const typename dest_iterator_type::value_type colorIndex( maColorLookup(
@@ -584,7 +584,7 @@ namespace
                                   const basegfx::B2IRange&       rBounds )
         {
             basegfx::B2DPolyPolygon aPoly( rPoly );
-            if( rPoly.areControlVectorsUsed() )
+            if( rPoly.areControlPointsUsed() )
                 aPoly = basegfx::tools::adaptiveSubdivideByCount( rPoly );
 
             renderClippedPolyPolygon( begin,
