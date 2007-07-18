@@ -4,9 +4,9 @@
  *
  *  $RCSfile: app.cxx,v $
  *
- *  $Revision: 1.207 $
+ *  $Revision: 1.208 $
  *
- *  last change: $Author: ihi $ $Date: 2007-07-11 13:15:28 $
+ *  last change: $Author: obo $ $Date: 2007-07-18 09:03:37 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -61,8 +61,11 @@
 #ifndef _COM_SUN_STAR_FRAME_XSYNCHRONOUSDISPATCH_HPP_
 #include <com/sun/star/frame/XSynchronousDispatch.hpp>
 #endif
-#ifndef _COM_SUN_STAR_DOCUMENT_CORRUPTEDFILTERCONFIGURATION_HPP_
+#ifndef _COM_SUN_STAR_DOCUMENT_CORRUPTEDFILTERCONFIGURATIONEXCEPTION_HPP_
 #include <com/sun/star/document/CorruptedFilterConfigurationException.hpp>
+#endif
+#ifndef _COM_SUN_STAR_CONFIGURATION_CORRUPTEDCONFIGURATIONEXCEPTION_HPP_
+#include <com/sun/star/configuration/CorruptedConfigurationException.hpp>
 #endif
 #ifndef _COM_SUN_STAR_FRAME_XSTORABLE_HPP_
 #include <com/sun/star/frame/XStorable.hpp>
@@ -1700,19 +1703,13 @@ void Desktop::Main()
     }
     catch(const com::sun::star::document::CorruptedFilterConfigurationException& exFilterCfg)
     {
-        // We show an ErrorBox here ... On the other side we know also, that users ignore such messages
-        // and may be try to open documents. But then the same office instance will be used for loading
-        // new documents. That must be prevented. Because this office shutdown and shouldnt be used further.
-        // => forward all pipe requests to dev/null
         OfficeIPCThread::BlockAllRequests();
-
-        // Show the error to the user.
-        // TODO: Clarify with VCL, if this is legal code .-)
-        // Because we show an ErrorBox after Execute().
         FatalError( MakeStartupErrorMessage(exFilterCfg.Message) );
-
-        // dont kill the office here! Terminate it in the right way. It shouldnt be a problem ...
-        // and we have to do some further work (e.g. removing temp. directories)
+    }
+    catch(const com::sun::star::configuration::CorruptedConfigurationException& exAnyCfg)
+    {
+        OfficeIPCThread::BlockAllRequests();
+        FatalError( MakeStartupErrorMessage(exAnyCfg.Message) );
     }
 
     delete pResMgr;
