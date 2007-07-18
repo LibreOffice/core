@@ -4,9 +4,9 @@
  *
  *  $RCSfile: overlayanimatedbitmapex.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: ihi $ $Date: 2006-11-14 13:06:30 $
+ *  last change: $Author: obo $ $Date: 2007-07-18 10:51:17 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -63,6 +63,9 @@ namespace sdr
             sal_uInt16                              mnCenterX2;
             sal_uInt16                              mnCenterY2;
 
+            // #i53216# added CursorBlinkTime (in ms)
+            sal_uInt32                              mnBlinkTime;
+
             // bitfield
             // Flag to remember which state to draw. Inited with sal_False (0)
             unsigned                                mbOverlayState : 1;
@@ -73,12 +76,19 @@ namespace sdr
             // Create the BaseRange. This method needs to calculate maBaseRange.
             virtual void createBaseRange(OutputDevice& rOutputDevice);
 
+            // #i53216# check blink time value range (currently 25 < mnBlinkTime < 10000)
+            void impCheckBlinkTimeValueRange();
+
         public:
             OverlayAnimatedBitmapEx(
                 const basegfx::B2DPoint& rBasePos,
-                const BitmapEx& rBitmapEx1, const BitmapEx& rBitmapEx2,
-                sal_uInt16 nCenX1 = 0, sal_uInt16 nCenY1 = 0,
-                sal_uInt16 nCenX2 = 0, sal_uInt16 nCenY2 = 0);
+                const BitmapEx& rBitmapEx1,
+                const BitmapEx& rBitmapEx2,
+                sal_uInt32 nBlinkTime = 500,
+                sal_uInt16 nCenX1 = 0,
+                sal_uInt16 nCenY1 = 0,
+                sal_uInt16 nCenX2 = 0,
+                sal_uInt16 nCenY2 = 0);
             virtual ~OverlayAnimatedBitmapEx();
 
             const BitmapEx& getBitmapEx1() const { return maBitmapEx1; }
@@ -92,6 +102,10 @@ namespace sdr
             sal_uInt16 getCenterY2() const { return mnCenterY2; }
             void setCenterXY1(sal_uInt16 nNewX, sal_uInt16 nNewY);
             void setCenterXY2(sal_uInt16 nNewX, sal_uInt16 nNewY);
+
+            // #i53216# added CursorBlinkTime (in ms)
+            sal_uInt32 getBlinkTime() const { return mnBlinkTime; }
+            void setBlinkTime(sal_uInt32 nNew);
 
             // execute event from base class ::sdr::animation::Event. Default
             // implementation does nothing and does not create a new event.
