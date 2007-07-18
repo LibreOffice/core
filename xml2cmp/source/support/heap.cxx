@@ -4,9 +4,9 @@
  *
  *  $RCSfile: heap.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 11:56:30 $
+ *  last change: $Author: obo $ $Date: 2007-07-18 15:03:16 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -69,6 +69,8 @@ Heap::~Heap()
             delete pValue;
         }
     }  // end for
+
+    delete [] dpColumnsArray;
 }
 
 void
