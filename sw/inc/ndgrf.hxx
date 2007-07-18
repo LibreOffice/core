@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ndgrf.hxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: rt $ $Date: 2007-04-25 08:55:25 $
+ *  last change: $Author: obo $ $Date: 2007-07-18 13:29:22 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -34,9 +34,6 @@
  ************************************************************************/
 #ifndef _NDGRF_HXX
 #define _NDGRF_HXX
-#ifndef _COM_SUN_STAR_IO_XINPUTSTREAM_HPP_
-#include <com/sun/star/io/XInputStream.hpp>
-#endif
 #ifndef _LNKBASE_HXX //autogen
 #include <sfx2/lnkbase.hxx>
 #endif
@@ -51,20 +48,22 @@
 #include <com/sun/star/embed/XStorage.hpp>
 #endif
 // <--
+// --> OD 2007-03-28 #i73788#
+#include <boost/shared_ptr.hpp>
+#include <boost/weak_ptr.hpp>
+class SwAsyncRetrieveInputStreamThreadConsumer;
+// <--
 
 class SwGrfFmtColl;
 class SwDoc;
 class GraphicAttr;
 class SvStorage;
-
 // --------------------
 // SwGrfNode
 // --------------------
 class SwGrfNode: public SwNoTxtNode
 {
-    friend long GrfNodeChanged( void*, void* );
     friend class SwNodes;
-    friend class SwGrfFrm;
 
     GraphicObject aGrfObj;
     ::sfx2::SvBaseLinkRef refLink;       // falls Grafik nur als Link, dann Pointer gesetzt
@@ -85,6 +84,12 @@ class SwGrfNode: public SwNoTxtNode
                                     //SwapIn zu verhindern.
     BOOL bScaleImageMap         :1; //Image-Map in SetTwipSize skalieren
 
+    // --> OD 2007-01-19 #i73788#
+    boost::shared_ptr< SwAsyncRetrieveInputStreamThreadConsumer > mpThreadConsumer;
+    bool mbLinkedInputStreamReady :1;
+    com::sun::star::uno::Reference<com::sun::star::io::XInputStream> mxInputStream;
+    sal_Bool mbIsStreamReadOnly;
+    // <--
     SwGrfNode( const SwNodeIndex& rWhere,
                const String& rGrfName, const String& rFltName,
                const Graphic* pGraphic,
@@ -230,6 +235,15 @@ public:
     GraphicAttr& GetGraphicAttr( GraphicAttr&, const SwFrm* pFrm ) const;
 
 #endif
+    // --> OD 2007-01-18 #i73788#
+    boost::weak_ptr< SwAsyncRetrieveInputStreamThreadConsumer > GetThreadConsumer();
+    bool IsLinkedInputStreamReady() const;
+    void TriggerAsyncRetrieveInputStream();
+    void ApplyInputStream(
+        com::sun::star::uno::Reference<com::sun::star::io::XInputStream> xInputStream,
+        const sal_Bool bIsStreamReadOnly );
+    void UpdateLinkWithInputStream();
+    // <--
 };
 
 
