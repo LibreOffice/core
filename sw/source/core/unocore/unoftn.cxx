@@ -4,9 +4,9 @@
  *
  *  $RCSfile: unoftn.cxx,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: ihi $ $Date: 2007-06-05 17:33:36 $
+ *  last change: $Author: obo $ $Date: 2007-07-18 12:57:17 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -326,8 +326,11 @@ uno::Reference< text::XTextRange >  SwXFootnote::getAnchor(void) throw( uno::Run
     if(pFmt)
     {
         const SwTxtFtn* pTxtFtn = pFmt->GetTxtFtn();
-        SwPosition aPos( pTxtFtn->GetTxtNode() );
-        aRef = SwXTextRange::CreateTextRangeFromPosition((SwDoc*)GetDoc(), aPos, 0);
+        SwPaM aPam( pTxtFtn->GetTxtNode(), *pTxtFtn->GetStart() );
+        SwPosition aMark( *aPam.Start() );
+        aPam.SetMark();
+        aPam.GetMark()->nContent++;
+        aRef = SwXTextRange::CreateTextRangeFromPosition((SwDoc*)GetDoc(), *aPam.Start(), aPam.End());
     }
     else
         throw uno::RuntimeException();
