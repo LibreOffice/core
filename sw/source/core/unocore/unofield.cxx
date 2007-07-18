@@ -4,9 +4,9 @@
  *
  *  $RCSfile: unofield.cxx,v $
  *
- *  $Revision: 1.96 $
+ *  $Revision: 1.97 $
  *
- *  last change: $Author: ihi $ $Date: 2007-06-05 17:32:51 $
+ *  last change: $Author: obo $ $Date: 2007-07-18 12:56:44 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -745,6 +745,12 @@ void SwXFieldMaster::setPropertyValue( const OUString& rPropertyName,
                     pType = m_pDoc->InsertFldType(aType);
                 }
                 break;
+                case RES_DBFLD :
+                {
+                    ::GetString( rValue, sParam3 );
+                    pType = GetFldType();
+                }
+                break;
             }
             if(pType)
             {
@@ -1284,6 +1290,8 @@ SwXTextField::SwXTextField(sal_uInt16 nServiceId) :
         m_pProps->bBool2 = sal_True;
     else if(SW_SERVICE_FIELDTYPE_TABLE_FORMULA == nServiceId)
         m_pProps->bBool1 = sal_True;
+    if(SW_SERVICE_FIELDTYPE_SET_EXP == nServiceId)
+        m_pProps->nUSHORT2 = USHRT_MAX;
 
 }
 /*-- 14.12.98 11:37:15---------------------------------------------------
@@ -1326,6 +1334,7 @@ void SwXTextField::attachTextFieldMaster(const uno::Reference< beans::XPropertyS
     if(pFieldType && pFieldType->Which() == lcl_ServiceIdToResId(m_nServiceId))
     {
         m_sTypeName = pFieldType->GetName();
+        pFieldType->Add( &m_aFieldTypeClient );
     }
     else
         throw lang::IllegalArgumentException();
@@ -1337,9 +1346,17 @@ void SwXTextField::attachTextFieldMaster(const uno::Reference< beans::XPropertyS
 uno::Reference< beans::XPropertySet >  SwXTextField::getTextFieldMaster(void) throw( uno::RuntimeException )
 {
     vos::OGuard  aGuard(Application::GetSolarMutex());
-    if(!GetRegisteredIn())
-        throw uno::RuntimeException();
-    SwFieldType* pType = pFmtFld->GetFld()->GetTyp();
+    SwFieldType* pType = 0;
+    if( m_bIsDescriptor && m_aFieldTypeClient.GetRegisteredIn() )
+    {
+        pType = (SwFieldType*)m_aFieldTypeClient.GetRegisteredIn();
+    }
+    else
+    {
+        if(!GetRegisteredIn())
+            throw uno::RuntimeException();
+        pType = pFmtFld->GetFld()->GetTyp();
+    }
     SwXFieldMaster* pMaster = (SwXFieldMaster*)
                 SwClientIter(*pType).First(TYPE(SwXFieldMaster));
     if(!pMaster)
@@ -1713,7 +1730,8 @@ void SwXTextField::attachToRange(
                         m_pProps->nFormat = -1;
                 pFld = new SwSetExpField((SwSetExpFieldType*)pFldType,
                     m_pProps->sPar2,
-                    m_pProps->nFormat);
+                    m_pProps->nUSHORT2 != USHRT_MAX ?  //#i79471# the field can have a number format or a number_ing_ format
+                    m_pProps->nUSHORT2 : m_pProps->nFormat);
 
                 sal_uInt16  nSubType = pFld->GetSubType();
                 if(m_pProps->bBool2)
@@ -1891,6 +1909,8 @@ void SwXTextField::attachToRange(
         m_pDoc = pDoc;
         m_pDoc->GetUnoCallBack()->Add(this);
         m_bIsDescriptor = sal_False;
+        if(m_aFieldTypeClient.GetRegisteredIn())
+            const_cast<SwModify*>(m_aFieldTypeClient.GetRegisteredIn())->Remove(&m_aFieldTypeClient);
         DELETEZ(m_pProps);
         if(m_bCallUpdate)
             update();
