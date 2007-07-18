@@ -4,9 +4,9 @@
  *
  *  $RCSfile: AffineBridge.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: kz $ $Date: 2007-05-14 09:32:30 $
+ *  last change: $Author: obo $ $Date: 2007-07-18 12:20:44 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -71,7 +71,7 @@ public:
 
     Msg                   m_message;
     uno_EnvCallee       * m_pCallee;
-    va_list               m_param;
+    va_list             * m_pParam;
 
     osl::Mutex            m_innerMutex;
     oslThreadIdentifier   m_innerThreadId;
@@ -87,8 +87,8 @@ public:
     explicit  AffineBridge(void);
     virtual  ~AffineBridge(void);
 
-    virtual void  v_callInto_v(uno_EnvCallee * pCallee, va_list param);
-    virtual void  v_callOut_v (uno_EnvCallee * pCallee, va_list param);
+    virtual void  v_callInto_v(uno_EnvCallee * pCallee, va_list * pParam);
+    virtual void  v_callOut_v (uno_EnvCallee * pCallee, va_list * pParam);
 
     virtual void  v_enter(void);
     virtual void  v_leave(void);
@@ -207,7 +207,7 @@ void AffineBridge::outerDispatch(int loop)
 
         case CB_FPOINTER:
         {
-            m_pCallee(m_param);
+            m_pCallee(m_pParam);
 
             m_message = CB_DONE;
             m_innerCondition.set();
@@ -241,7 +241,7 @@ void AffineBridge::innerDispatch(void)
 
         case CB_FPOINTER:
         {
-            m_pCallee(m_param);
+            m_pCallee(m_pParam);
 
             m_message = CB_DONE;
             m_outerCondition.set();
@@ -254,7 +254,7 @@ void AffineBridge::innerDispatch(void)
     while(mm != CB_DONE);
 }
 
-void AffineBridge::v_callInto_v(uno_EnvCallee * pCallee, va_list param)
+void AffineBridge::v_callInto_v(uno_EnvCallee * pCallee, va_list * pParam)
 {
     osl::MutexGuard guard(m_outerMutex); // only one thread at a time can call into
 
@@ -273,7 +273,7 @@ void AffineBridge::v_callInto_v(uno_EnvCallee * pCallee, va_list param)
 
     m_message = CB_FPOINTER;
     m_pCallee = pCallee;
-    m_param   = param;
+    m_pParam  = pParam;
     m_innerCondition.set();
 
     outerDispatch(1);
@@ -282,7 +282,7 @@ void AffineBridge::v_callInto_v(uno_EnvCallee * pCallee, va_list param)
         m_outerThreadId = 0;
 }
 
-void AffineBridge::v_callOut_v(uno_EnvCallee * pCallee, va_list param)
+void AffineBridge::v_callOut_v(uno_EnvCallee * pCallee, va_list * pParam)
 {
     OSL_ASSERT(m_innerThreadId);
 
@@ -306,7 +306,7 @@ void AffineBridge::v_callOut_v(uno_EnvCallee * pCallee, va_list param)
 
     m_message = CB_FPOINTER;
     m_pCallee = pCallee;
-    m_param   = param;
+    m_pParam  = pParam;
     m_outerCondition.set();
 
     innerDispatch();
