@@ -4,9 +4,9 @@
  *
  *  $RCSfile: b2dpolygonclipper.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 08:01:32 $
+ *  last change: $Author: obo $ $Date: 2007-07-18 11:05:55 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -443,77 +443,74 @@ namespace basegfx
                         if(nPointCount)
                         {
                             const sal_uInt32 nEdgeCount(aCandidate.isClosed() ? nPointCount : nPointCount - 1L);
-                            B2DPolygon aRun;
-                            B2DPoint aCurrent(aCandidate.getB2DPoint(0L));
 
-                            for(sal_uInt32 b(0L); b < nEdgeCount; b++)
+                            if(nEdgeCount)
                             {
-                                B2DVector aControlVectorA;
-                                B2DVector aControlVectorB;
-                                bool bCurveEdge(false);
+                                // prepare partial polygon
+                                B2DPolygon aRun;
+                                B2DPoint aCurrent(aCandidate.getB2DPoint(0L));
+                                B2DPoint aControlPointPrev;
+                                B2DPoint aControlPointNext;
+                                bool bInside(false);
 
-                                if(aCandidate.areControlPointsUsed())
+                                for(sal_uInt32 b(0L); b < nEdgeCount; b++)
                                 {
-                                    aControlVectorA = aCandidate.getControlVectorA(b);
-                                    aControlVectorB = aCandidate.getControlVectorB(b);
-                                    bCurveEdge = !(aControlVectorA.equalZero() && aControlVectorB.equalZero());
-                                }
+                                    const sal_uInt32 nNextIndex((b + 1L) % nPointCount);
+                                    const B2DPoint aNext(aCandidate.getB2DPoint(nNextIndex));
+                                    bool bCurveEdge(false);
 
-                                const sal_uInt32 nNextIndex((b + 1L == nPointCount) ? 0L : b + 1L);
-                                const B2DPoint aNext(aCandidate.getB2DPoint(nNextIndex));
-                                B2DPoint aComparePoint;
-
-                                if(bCurveEdge)
-                                {
-                                    B2DCubicBezier aCubicBezier(aCurrent, aControlVectorA, aControlVectorB, aNext);
-                                    aComparePoint = aCubicBezier.interpolatePoint(0.5);
-                                }
-                                else
-                                {
-                                    aComparePoint = average(aCurrent, aNext);
-                                }
-
-                                const bool bInside(isInside(rClip, aComparePoint) != bInvert);
-
-                                if(bInside)
-                                {
-                                    if(!aRun.count())
+                                    if(aCandidate.areControlPointsUsed())
                                     {
-                                        aRun.append(aCurrent);
-
-                                        if(bCurveEdge)
-                                        {
-                                            const sal_uInt32 nNextRunIndex(aRun.count() - 1L);
-                                            aRun.setControlVectorA(nNextRunIndex, aControlVectorA);
-                                            aRun.setControlVectorB(nNextRunIndex, aControlVectorB);
-                                        }
+                                        aControlPointNext = aCandidate.getNextControlPoint(b);
+                                        aControlPointPrev = aCandidate.getPrevControlPoint(nNextIndex);
+                                        bCurveEdge = !aControlPointNext.equal(aCurrent) || !aControlPointPrev.equal(aNext);
                                     }
-
-                                    aRun.append(aNext);
 
                                     if(bCurveEdge)
                                     {
-                                        const sal_uInt32 nNextRunIndex(aRun.count() - 1L);
-                                        aRun.setControlVectorA(nNextRunIndex, aCandidate.getControlVectorA(nNextIndex));
-                                        aRun.setControlVectorB(nNextRunIndex, aCandidate.getControlVectorB(nNextIndex));
+                                        const B2DCubicBezier aCubicBezier(aCurrent, aControlPointNext, aControlPointPrev, aNext);
+                                        const B2DPoint aComparePoint(aCubicBezier.interpolatePoint(0.5));
+                                        bInside = (isInside(rClip, aComparePoint) != bInvert);
                                     }
-                                }
-                                else
-                                {
-                                    if(aRun.count())
+                                    else
                                     {
-                                        aRetval.append(aRun);
-                                        aRun.clear();
+                                        const B2DPoint aComparePoint(average(aCurrent, aNext));
+                                        bInside = (isInside(rClip, aComparePoint) != bInvert);
                                     }
+
+                                    if(bInside)
+                                    {
+                                        if(!aRun.count())
+                                        {
+                                            aRun.append(aCurrent);
+                                        }
+
+                                        if(bCurveEdge)
+                                        {
+                                            aRun.appendBezierSegment(aControlPointNext, aControlPointPrev, aNext);
+                                        }
+                                        else
+                                        {
+                                            aRun.append(aNext);
+                                        }
+                                    }
+                                    else
+                                    {
+                                        if(aRun.count())
+                                        {
+                                            aRetval.append(aRun);
+                                            aRun.clear();
+                                        }
+                                    }
+
+                                    // prepare next step
+                                    aCurrent = aNext;
                                 }
 
-                                // prepare next step
-                                aCurrent = aNext;
-                            }
-
-                            if(aRun.count())
-                            {
-                                aRetval.append(aRun);
+                                if(aRun.count())
+                                {
+                                    aRetval.append(aRun);
+                                }
                             }
                         }
                     }
