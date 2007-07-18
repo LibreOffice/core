@@ -4,9 +4,9 @@
  *
  *  $RCSfile: optionsdrawinglayer.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: hr $ $Date: 2007-06-27 21:15:43 $
+ *  last change: $Author: obo $ $Date: 2007-07-18 11:53:51 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -95,6 +95,14 @@ using namespace ::com::sun::star::uno   ;
 #define DEFAULT_PAINTBUFFER_WRITER          sal_True
 #define DEFAULT_PAINTBUFFER_DRAWIMPRESS     sal_True
 
+// #i4219#
+#define DEFAULT_MAXIMUMPAPERWIDTH           30000
+#define DEFAULT_MAXIMUMPAPERHEIGHT          30000
+#define DEFAULT_MAXIMUMPAPERLEFTMARGIN      9999
+#define DEFAULT_MAXIMUMPAPERRIGHTMARGIN     9999
+#define DEFAULT_MAXIMUMPAPERTOPMARGIN       9999
+#define DEFAULT_MAXIMUMPAPERBOTTOMMARGIN    9999
+
 #define PROPERTYNAME_OVERLAYBUFFER      OUString(RTL_CONSTASCII_USTRINGPARAM("OverlayBuffer"    ))
 #define PROPERTYNAME_PAINTBUFFER        OUString(RTL_CONSTASCII_USTRINGPARAM("PaintBuffer"      ))
 #define PROPERTYNAME_STRIPE_COLOR_A     OUString(RTL_CONSTASCII_USTRINGPARAM("StripeColorA"     ))
@@ -110,6 +118,14 @@ using namespace ::com::sun::star::uno   ;
 #define PROPERTYNAME_PAINTBUFFER_CALC           OUString(RTL_CONSTASCII_USTRINGPARAM("PaintBuffer_Calc"))
 #define PROPERTYNAME_PAINTBUFFER_WRITER         OUString(RTL_CONSTASCII_USTRINGPARAM("PaintBuffer_Writer"))
 #define PROPERTYNAME_PAINTBUFFER_DRAWIMPRESS    OUString(RTL_CONSTASCII_USTRINGPARAM("PaintBuffer_DrawImpress"))
+
+// #i4219#
+#define PROPERTYNAME_MAXIMUMPAPERWIDTH OUString(RTL_CONSTASCII_USTRINGPARAM("MaximumPaperWidth"))
+#define PROPERTYNAME_MAXIMUMPAPERHEIGHT OUString(RTL_CONSTASCII_USTRINGPARAM("MaximumPaperHeight"))
+#define PROPERTYNAME_MAXIMUMPAPERLEFTMARGIN OUString(RTL_CONSTASCII_USTRINGPARAM("MaximumPaperLeftMargin"))
+#define PROPERTYNAME_MAXIMUMPAPERRIGHTMARGIN OUString(RTL_CONSTASCII_USTRINGPARAM("MaximumPaperRightMargin"))
+#define PROPERTYNAME_MAXIMUMPAPERTOPMARGIN OUString(RTL_CONSTASCII_USTRINGPARAM("MaximumPaperTopMargin"))
+#define PROPERTYNAME_MAXIMUMPAPERBOTTOMMARGIN OUString(RTL_CONSTASCII_USTRINGPARAM("MaximumPaperBottomMargin"))
 
 #define PROPERTYHANDLE_OVERLAYBUFFER                0
 #define PROPERTYHANDLE_PAINTBUFFER                  1
@@ -127,7 +143,15 @@ using namespace ::com::sun::star::uno   ;
 #define PROPERTYHANDLE_PAINTBUFFER_WRITER           9
 #define PROPERTYHANDLE_PAINTBUFFER_DRAWIMPRESS      10
 
-#define PROPERTYCOUNT                               11
+// #i4219#
+#define PROPERTYHANDLE_MAXIMUMPAPERWIDTH            8
+#define PROPERTYHANDLE_MAXIMUMPAPERHEIGHT           9
+#define PROPERTYHANDLE_MAXIMUMPAPERLEFTMARGIN       10
+#define PROPERTYHANDLE_MAXIMUMPAPERRIGHTMARGIN      11
+#define PROPERTYHANDLE_MAXIMUMPAPERTOPMARGIN        12
+#define PROPERTYHANDLE_MAXIMUMPAPERBOTTOMMARGIN     13
+
+#define PROPERTYCOUNT                               14
 
 class SvtOptionsDrawinglayer_Impl : public ConfigItem
 {
@@ -182,6 +206,21 @@ public:
     void        SetPaintBuffer_Writer( sal_Bool bState );
     void        SetPaintBuffer_DrawImpress( sal_Bool bState );
 
+    // #i4219#
+    sal_uInt32 GetMaximumPaperWidth() const;
+    sal_uInt32 GetMaximumPaperHeight() const;
+    sal_uInt32 GetMaximumPaperLeftMargin() const;
+    sal_uInt32 GetMaximumPaperRightMargin() const;
+    sal_uInt32 GetMaximumPaperTopMargin() const;
+    sal_uInt32 GetMaximumPaperBottomMargin() const;
+
+    void SetMaximumPaperWidth(sal_uInt32 nNew);
+    void SetMaximumPaperHeight(sal_uInt32 nNew);
+    void SetMaximumPaperLeftMargin(sal_uInt32 nNew);
+    void SetMaximumPaperRightMargin(sal_uInt32 nNew);
+    void SetMaximumPaperTopMargin(sal_uInt32 nNew);
+    void SetMaximumPaperBottomMargin(sal_uInt32 nNew);
+
 //-------------------------------------------------------------------------------------------------------------
 //  private methods
 //-------------------------------------------------------------------------------------------------------------
@@ -211,6 +250,14 @@ private:
         sal_Bool    m_bPaintBuffer_Calc;
         sal_Bool    m_bPaintBuffer_Writer;
         sal_Bool    m_bPaintBuffer_DrawImpress;
+
+        // #i4219#
+        sal_uInt32  m_nMaximumPaperWidth;
+        sal_uInt32  m_nMaximumPaperHeight;
+        sal_uInt32  m_nMaximumPaperLeftMargin;
+        sal_uInt32  m_nMaximumPaperRightMargin;
+        sal_uInt32  m_nMaximumPaperTopMargin;
+        sal_uInt32  m_nMaximumPaperBottomMargin;
 };
 
 //_________________________________________________________________________________________________________________
@@ -237,6 +284,14 @@ SvtOptionsDrawinglayer_Impl::SvtOptionsDrawinglayer_Impl() :
     m_bPaintBuffer_Calc( DEFAULT_PAINTBUFFER_CALC ),
     m_bPaintBuffer_Writer( DEFAULT_PAINTBUFFER_WRITER ),
     m_bPaintBuffer_DrawImpress( DEFAULT_PAINTBUFFER_DRAWIMPRESS )
+
+    // #i4219#
+    m_nMaximumPaperWidth(DEFAULT_MAXIMUMPAPERWIDTH),
+    m_nMaximumPaperHeight(DEFAULT_MAXIMUMPAPERHEIGHT),
+    m_nMaximumPaperLeftMargin(DEFAULT_MAXIMUMPAPERLEFTMARGIN),
+    m_nMaximumPaperRightMargin(DEFAULT_MAXIMUMPAPERRIGHTMARGIN),
+    m_nMaximumPaperTopMargin(DEFAULT_MAXIMUMPAPERTOPMARGIN),
+    m_nMaximumPaperBottomMargin(DEFAULT_MAXIMUMPAPERBOTTOMMARGIN)
 {
     Sequence< OUString >    seqNames( impl_GetPropertyNames() );
     Sequence< Any >         seqValues   = GetProperties( seqNames ) ;
@@ -335,6 +390,49 @@ SvtOptionsDrawinglayer_Impl::SvtOptionsDrawinglayer_Impl() :
                 seqValues[nProperty] >>= m_bPaintBuffer_DrawImpress;
             }
             break;
+
+            // #i4219#
+            case PROPERTYHANDLE_MAXIMUMPAPERWIDTH:
+            {
+                DBG_ASSERT(!(seqValues[nProperty].getValueTypeClass()!=TypeClass_LONG), "SvtOptionsDrawinglayer_Impl::SvtOptionsDrawinglayer_Impl()\nWho has changed the value type of \"Office.Common\\Drawinglayer\\MaximumPaperWidth\"?" );
+                seqValues[nProperty] >>= m_nMaximumPaperWidth;
+            }
+            break;
+
+            case PROPERTYHANDLE_MAXIMUMPAPERHEIGHT:
+            {
+                DBG_ASSERT(!(seqValues[nProperty].getValueTypeClass()!=TypeClass_LONG), "SvtOptionsDrawinglayer_Impl::SvtOptionsDrawinglayer_Impl()\nWho has changed the value type of \"Office.Common\\Drawinglayer\\MaximumPaperHeight\"?" );
+                seqValues[nProperty] >>= m_nMaximumPaperHeight;
+            }
+            break;
+
+            case PROPERTYHANDLE_MAXIMUMPAPERLEFTMARGIN:
+            {
+                DBG_ASSERT(!(seqValues[nProperty].getValueTypeClass()!=TypeClass_LONG), "SvtOptionsDrawinglayer_Impl::SvtOptionsDrawinglayer_Impl()\nWho has changed the value type of \"Office.Common\\Drawinglayer\\MaximumPaperLeftMargin\"?" );
+                seqValues[nProperty] >>= m_nMaximumPaperLeftMargin;
+            }
+            break;
+
+            case PROPERTYHANDLE_MAXIMUMPAPERRIGHTMARGIN:
+            {
+                DBG_ASSERT(!(seqValues[nProperty].getValueTypeClass()!=TypeClass_LONG), "SvtOptionsDrawinglayer_Impl::SvtOptionsDrawinglayer_Impl()\nWho has changed the value type of \"Office.Common\\Drawinglayer\\MaximumPaperRightMargin\"?" );
+                seqValues[nProperty] >>= m_nMaximumPaperRightMargin;
+            }
+            break;
+
+            case PROPERTYHANDLE_MAXIMUMPAPERTOPMARGIN:
+            {
+                DBG_ASSERT(!(seqValues[nProperty].getValueTypeClass()!=TypeClass_LONG), "SvtOptionsDrawinglayer_Impl::SvtOptionsDrawinglayer_Impl()\nWho has changed the value type of \"Office.Common\\Drawinglayer\\MaximumPaperTopMargin\"?" );
+                seqValues[nProperty] >>= m_nMaximumPaperTopMargin;
+            }
+            break;
+
+            case PROPERTYHANDLE_MAXIMUMPAPERBOTTOMMARGIN:
+            {
+                DBG_ASSERT(!(seqValues[nProperty].getValueTypeClass()!=TypeClass_LONG), "SvtOptionsDrawinglayer_Impl::SvtOptionsDrawinglayer_Impl()\nWho has changed the value type of \"Office.Common\\Drawinglayer\\MaximumPaperBottomMargin\"?" );
+                seqValues[nProperty] >>= m_nMaximumPaperBottomMargin;
+            }
+            break;
         }
     }
 }
@@ -404,6 +502,31 @@ void SvtOptionsDrawinglayer_Impl::Commit()
 
             case PROPERTYHANDLE_PAINTBUFFER_DRAWIMPRESS:
                 aSeqValues[nProperty] <<= m_bPaintBuffer_DrawImpress;
+            break;
+
+            // #i4219#
+            case PROPERTYHANDLE_MAXIMUMPAPERWIDTH:
+                aSeqValues[nProperty] <<= m_nMaximumPaperWidth;
+            break;
+
+            case PROPERTYHANDLE_MAXIMUMPAPERHEIGHT:
+                aSeqValues[nProperty] <<= m_nMaximumPaperHeight;
+            break;
+
+            case PROPERTYHANDLE_MAXIMUMPAPERLEFTMARGIN:
+                aSeqValues[nProperty] <<= m_nMaximumPaperLeftMargin;
+            break;
+
+            case PROPERTYHANDLE_MAXIMUMPAPERRIGHTMARGIN:
+                aSeqValues[nProperty] <<= m_nMaximumPaperRightMargin;
+            break;
+
+            case PROPERTYHANDLE_MAXIMUMPAPERTOPMARGIN:
+                aSeqValues[nProperty] <<= m_nMaximumPaperTopMargin;
+            break;
+
+            case PROPERTYHANDLE_MAXIMUMPAPERBOTTOMMARGIN:
+                aSeqValues[nProperty] <<= m_nMaximumPaperBottomMargin;
             break;
         }
     }
@@ -481,6 +604,37 @@ sal_Bool SvtOptionsDrawinglayer_Impl::IsPaintBuffer_Writer() const
 sal_Bool SvtOptionsDrawinglayer_Impl::IsPaintBuffer_DrawImpress() const
 {
     return m_bPaintBuffer_DrawImpress;
+}
+
+// #i4219#
+sal_uInt32 SvtOptionsDrawinglayer_Impl::GetMaximumPaperWidth() const
+{
+    return m_nMaximumPaperWidth;
+}
+
+sal_uInt32 SvtOptionsDrawinglayer_Impl::GetMaximumPaperHeight() const
+{
+    return m_nMaximumPaperHeight;
+}
+
+sal_uInt32 SvtOptionsDrawinglayer_Impl::GetMaximumPaperLeftMargin() const
+{
+    return m_nMaximumPaperLeftMargin;
+}
+
+sal_uInt32 SvtOptionsDrawinglayer_Impl::GetMaximumPaperRightMargin() const
+{
+    return m_nMaximumPaperRightMargin;
+}
+
+sal_uInt32 SvtOptionsDrawinglayer_Impl::GetMaximumPaperTopMargin() const
+{
+    return m_nMaximumPaperTopMargin;
+}
+
+sal_uInt32 SvtOptionsDrawinglayer_Impl::GetMaximumPaperBottomMargin() const
+{
+    return m_nMaximumPaperBottomMargin;
 }
 
 //*****************************************************************************************************************
@@ -599,6 +753,61 @@ void SvtOptionsDrawinglayer_Impl::SetPaintBuffer_DrawImpress( sal_Bool bState )
     }
 }
 
+// #i4219#
+void SvtOptionsDrawinglayer_Impl::SetMaximumPaperWidth( sal_uInt32 nNew )
+{
+    if(m_nMaximumPaperWidth != nNew)
+    {
+        m_nMaximumPaperWidth = nNew;
+        SetModified();
+    }
+}
+
+void SvtOptionsDrawinglayer_Impl::SetMaximumPaperHeight( sal_uInt32 nNew )
+{
+    if(m_nMaximumPaperHeight != nNew)
+    {
+        m_nMaximumPaperHeight = nNew;
+        SetModified();
+    }
+}
+
+void SvtOptionsDrawinglayer_Impl::SetMaximumPaperLeftMargin( sal_uInt32 nNew )
+{
+    if(m_nMaximumPaperLeftMargin != nNew)
+    {
+        m_nMaximumPaperLeftMargin = nNew;
+        SetModified();
+    }
+}
+
+void SvtOptionsDrawinglayer_Impl::SetMaximumPaperRightMargin( sal_uInt32 nNew )
+{
+    if(m_nMaximumPaperRightMargin != nNew)
+    {
+        m_nMaximumPaperRightMargin = nNew;
+        SetModified();
+    }
+}
+
+void SvtOptionsDrawinglayer_Impl::SetMaximumPaperTopMargin( sal_uInt32 nNew )
+{
+    if(m_nMaximumPaperTopMargin != nNew)
+    {
+        m_nMaximumPaperTopMargin = nNew;
+        SetModified();
+    }
+}
+
+void SvtOptionsDrawinglayer_Impl::SetMaximumPaperBottomMargin( sal_uInt32 nNew )
+{
+    if(m_nMaximumPaperBottomMargin != nNew)
+    {
+        m_nMaximumPaperBottomMargin = nNew;
+        SetModified();
+    }
+}
+
 //*****************************************************************************************************************
 //  private method
 //*****************************************************************************************************************
@@ -622,7 +831,16 @@ Sequence< OUString > SvtOptionsDrawinglayer_Impl::impl_GetPropertyNames()
         PROPERTYNAME_PAINTBUFFER_CALC,
         PROPERTYNAME_PAINTBUFFER_WRITER,
         PROPERTYNAME_PAINTBUFFER_DRAWIMPRESS
+
+        // #i4219#
+        PROPERTYNAME_MAXIMUMPAPERWIDTH,
+        PROPERTYNAME_MAXIMUMPAPERHEIGHT,
+        PROPERTYNAME_MAXIMUMPAPERLEFTMARGIN,
+        PROPERTYNAME_MAXIMUMPAPERRIGHTMARGIN,
+        PROPERTYNAME_MAXIMUMPAPERTOPMARGIN,
+        PROPERTYNAME_MAXIMUMPAPERBOTTOMMARGIN
     };
+
     // Initialize return sequence with these list ...
     static const Sequence< OUString > seqPropertyNames( pProperties, PROPERTYCOUNT );
     // ... and return it.
@@ -754,6 +972,43 @@ sal_Bool SvtOptionsDrawinglayer::IsPaintBuffer_DrawImpress() const
     return m_pDataContainer->IsPaintBuffer_DrawImpress();
 }
 
+// #i4219#
+sal_uInt32 SvtOptionsDrawinglayer::GetMaximumPaperWidth() const
+{
+    MutexGuard aGuard( GetOwnStaticMutex() );
+    return m_pDataContainer->GetMaximumPaperWidth();
+}
+
+sal_uInt32 SvtOptionsDrawinglayer::GetMaximumPaperHeight() const
+{
+    MutexGuard aGuard( GetOwnStaticMutex() );
+    return m_pDataContainer->GetMaximumPaperHeight();
+}
+
+sal_uInt32 SvtOptionsDrawinglayer::GetMaximumPaperLeftMargin() const
+{
+    MutexGuard aGuard( GetOwnStaticMutex() );
+    return m_pDataContainer->GetMaximumPaperLeftMargin();
+}
+
+sal_uInt32 SvtOptionsDrawinglayer::GetMaximumPaperRightMargin() const
+{
+    MutexGuard aGuard( GetOwnStaticMutex() );
+    return m_pDataContainer->GetMaximumPaperRightMargin();
+}
+
+sal_uInt32 SvtOptionsDrawinglayer::GetMaximumPaperTopMargin() const
+{
+    MutexGuard aGuard( GetOwnStaticMutex() );
+    return m_pDataContainer->GetMaximumPaperTopMargin();
+}
+
+sal_uInt32 SvtOptionsDrawinglayer::GetMaximumPaperBottomMargin() const
+{
+    MutexGuard aGuard( GetOwnStaticMutex() );
+    return m_pDataContainer->GetMaximumPaperBottomMargin();
+}
+
 //*****************************************************************************************************************
 //  public method
 //*****************************************************************************************************************
@@ -835,6 +1090,43 @@ void SvtOptionsDrawinglayer::SetPaintBuffer_DrawImpress( sal_Bool bState )
 {
     MutexGuard aGuard( GetOwnStaticMutex() );
     m_pDataContainer->SetPaintBuffer_DrawImpress( bState );
+}
+
+// #i4219#
+void SvtOptionsDrawinglayer::SetMaximumPaperWidth( sal_uInt32 nNew )
+{
+    MutexGuard aGuard( GetOwnStaticMutex() );
+    m_pDataContainer->SetMaximumPaperWidth( nNew );
+}
+
+void SvtOptionsDrawinglayer::SetMaximumPaperHeight( sal_uInt32 nNew )
+{
+    MutexGuard aGuard( GetOwnStaticMutex() );
+    m_pDataContainer->SetMaximumPaperHeight( nNew );
+}
+
+void SvtOptionsDrawinglayer::SetMaximumPaperLeftMargin( sal_uInt32 nNew )
+{
+    MutexGuard aGuard( GetOwnStaticMutex() );
+    m_pDataContainer->SetMaximumPaperLeftMargin( nNew );
+}
+
+void SvtOptionsDrawinglayer::SetMaximumPaperRightMargin( sal_uInt32 nNew )
+{
+    MutexGuard aGuard( GetOwnStaticMutex() );
+    m_pDataContainer->SetMaximumPaperRightMargin( nNew );
+}
+
+void SvtOptionsDrawinglayer::SetMaximumPaperTopMargin( sal_uInt32 nNew )
+{
+    MutexGuard aGuard( GetOwnStaticMutex() );
+    m_pDataContainer->SetMaximumPaperTopMargin( nNew );
+}
+
+void SvtOptionsDrawinglayer::SetMaximumPaperBottomMargin( sal_uInt32 nNew )
+{
+    MutexGuard aGuard( GetOwnStaticMutex() );
+    m_pDataContainer->SetMaximumPaperBottomMargin( nNew );
 }
 
 //*****************************************************************************************************************
