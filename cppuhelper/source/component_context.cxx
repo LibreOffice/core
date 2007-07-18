@@ -4,9 +4,9 @@
  *
  *  $RCSfile: component_context.cxx,v $
  *
- *  $Revision: 1.30 $
+ *  $Revision: 1.31 $
  *
- *  last change: $Author: kz $ $Date: 2007-05-09 13:25:10 $
+ *  last change: $Author: obo $ $Date: 2007-07-18 12:17:07 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -833,13 +833,13 @@ ComponentContext::ComponentContext(
 
 
 //##################################################################################################
-extern "C" { static void s_createComponentContext_v(va_list param)
+extern "C" { static void s_createComponentContext_v(va_list * pParam)
 {
-    ContextEntry_Init const  * pEntries     = va_arg(param, ContextEntry_Init const *);
-    sal_Int32                  nEntries     = va_arg(param, sal_Int32);
-    XComponentContext        * pDelegatee   = va_arg(param, XComponentContext *);
-    void                    ** ppContext    = va_arg(param, void **);
-    uno::Mapping             * pTarget2curr = va_arg(param, uno::Mapping *);
+    ContextEntry_Init const  * pEntries     = va_arg(*pParam, ContextEntry_Init const *);
+    sal_Int32                  nEntries     = va_arg(*pParam, sal_Int32);
+    XComponentContext        * pDelegatee   = va_arg(*pParam, XComponentContext *);
+    void                    ** ppContext    = va_arg(*pParam, void **);
+    uno::Mapping             * pTarget2curr = va_arg(*pParam, uno::Mapping *);
 
     Reference<XComponentContext> xDelegate(pDelegatee, SAL_NO_ACQUIRE);
     Reference<XComponentContext> xContext;
