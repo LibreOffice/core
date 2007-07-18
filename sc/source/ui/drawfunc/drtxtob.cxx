@@ -4,9 +4,9 @@
  *
  *  $RCSfile: drtxtob.cxx,v $
  *
- *  $Revision: 1.31 $
+ *  $Revision: 1.32 $
  *
- *  last change: $Author: kz $ $Date: 2007-05-10 16:56:23 $
+ *  last change: $Author: obo $ $Date: 2007-07-18 09:44:35 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -798,19 +798,10 @@ void __EXPORT ScDrawTextObjectBar::ExecuteAttr( SfxRequest &rReq )
         {
             // font items from toolbox controller have to be applied for the right script type
 
-            USHORT nScript = pView->GetScriptType();
-
-            if ( nSlot == SID_ATTR_CHAR_FONT || nSlot == SID_ATTR_CHAR_FONTHEIGHT )
-            {
-                // #i55929# script type for font / height depends on input language if nothing is selected
-                OutlinerView* pOutView = pView->GetTextEditOutlinerView();
-                if (pOutView && !pOutView->GetSelection().HasRange())
-                {
-                    LanguageType nInputLang = pViewData->GetActiveWin()->GetInputLanguage();
-                    if (nInputLang != LANGUAGE_DONTKNOW && nInputLang != LANGUAGE_SYSTEM)
-                        nScript = SvtLanguageOptions::GetScriptTypeOfLanguage( nInputLang );
-                }
-            }
+            // #i78017 establish the same behaviour as in Writer
+            USHORT nScript = SCRIPTTYPE_LATIN | SCRIPTTYPE_ASIAN | SCRIPTTYPE_COMPLEX;
+            if (nSlot == SID_ATTR_CHAR_FONT)
+                nScript = pView->GetScriptType();
 
             SfxItemPool& rPool = GetPool();
             SvxScriptSetItem aSetItem( nSlot, rPool );
