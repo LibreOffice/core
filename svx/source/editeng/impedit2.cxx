@@ -4,9 +4,9 @@
  *
  *  $RCSfile: impedit2.cxx,v $
  *
- *  $Revision: 1.117 $
+ *  $Revision: 1.118 $
  *
- *  last change: $Author: hr $ $Date: 2007-06-27 17:59:13 $
+ *  last change: $Author: obo $ $Date: 2007-07-18 09:52:22 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -191,6 +191,7 @@ ImpEditEngine::ImpEditEngine( EditEngine* pEE, SfxItemPool* pItemPool ) :
     bCallParaInsertedOrDeleted = FALSE;
     bVerboseTextComments= FALSE;
     bImpConvertFirstCall= FALSE;
+    bFirstWordCapitalization    = TRUE;
 
     eDefLanguage        = LANGUAGE_DONTKNOW;
     maBackgroundColor   = COL_AUTO;
@@ -2436,11 +2437,53 @@ EditPaM ImpEditEngine::AutoCorrect( const EditSelection& rCurSel, xub_Unicode c,
     {
         if ( aSel.HasRange() )
             aSel = ImpDeleteSelection( rCurSel );
+
+        // #i78661 allow application to turn off capitalization of
+        // start sentence explicitly.
+        // (This is done by setting IsFirstWordCapitalization to FALSE.)
+        BOOL bOldCptlSttSntnc = pAutoCorrect->IsAutoCorrFlag( CptlSttSntnc );
+        if (!IsFirstWordCapitalization())
+        {
+            ESelection aESel( CreateESel(aSel) );
+            EditSelection aFirstWordSel;
+            EditSelection aSecondWordSel;
+            if (aESel.nEndPara == 0)    // is this the first para?
+            {
+                // select first word...
+                // start by checking if para starts with word.
+                aFirstWordSel = SelectWord( CreateSel(ESelection()) );
+                if (aFirstWordSel.Min().GetIndex() == 0 && aFirstWordSel.Max().GetIndex() == 0)
+                {
+                    // para does not start with word -> select next/first word
+                    EditPaM aRightWord( WordRight( aFirstWordSel.Max(), 1 ) );
+                    aFirstWordSel = SelectWord( EditSelection( aRightWord ) );
+                }
+
+                // select second word
+                // (sometimes aSel mightnot point to the end of the first word
+                // but to some following char like '.'. ':', ...
+                // In those cases we need aSecondWordSel to see if aSel
+                // will actually effect the first word.)
+                EditPaM aRight2Word( WordRight( aFirstWordSel.Max(), 1 ) );
+                aSecondWordSel = SelectWord( EditSelection( aRight2Word ) );
+            }
+            BOOL bIsFirstWordInFirstPara = aESel.nEndPara == 0 &&
+                    aFirstWordSel.Max().GetIndex() <= aSel.Max().GetIndex() &&
+                    aSel.Max().GetIndex() <= aSecondWordSel.Min().GetIndex();
+
+            if (bIsFirstWordInFirstPara)
+                pAutoCorrect->SetAutoCorrFlag( CptlSttSntnc, IsFirstWordCapitalization() );
+        }
+
         ContentNode* pNode = aSel.Max().GetNode();
         USHORT nIndex = aSel.Max().GetIndex();
         EdtAutoCorrDoc aAuto( this, pNode, nIndex, c );
         pAutoCorrect->AutoCorrect( aAuto, *pNode, nIndex, c, !bOverwrite );
         aSel.Max().SetIndex( aAuto.GetCursor() );
+
+        // #i78661 since the SvxAutoCorrect object used here is
+        // shared we need to reset the value to it's original state.
+        pAutoCorrect->SetAutoCorrFlag( CptlSttSntnc, bOldCptlSttSntnc );
     }
 #endif // !SVX_LIGHT
     return aSel.Max();
