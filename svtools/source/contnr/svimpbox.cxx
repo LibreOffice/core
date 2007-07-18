@@ -4,9 +4,9 @@
  *
  *  $RCSfile: svimpbox.cxx,v $
  *
- *  $Revision: 1.52 $
+ *  $Revision: 1.53 $
  *
- *  last change: $Author: hr $ $Date: 2007-06-27 21:20:38 $
+ *  last change: $Author: obo $ $Date: 2007-07-18 08:52:26 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -2161,18 +2161,14 @@ void SvImpLBox::MouseButtonDown( const MouseEvent& rMEvt )
             && pEntry == pView->FirstSelected() && NULL == pView->NextSelected( pEntry ) )
                 // #i8234# FirstSelected() and NextSelected() ensures, that inplace editing is only triggered, when only one entry is selected
             nFlags |= F_START_EDITTIMER;
-#ifndef MAC
         if ( !pView->IsSelected( pEntry ) )
             nFlags &= ~F_START_EDITTIMER;
-#endif
     }
 
 
     if( (rMEvt.GetClicks() % 2) == 0 )
     {
-//#ifdef MAC
         nFlags &= (~F_START_EDITTIMER);
-//#endif
         pView->pHdlEntry = pEntry;
         if( pView->DoubleClickHdl() )
         {
@@ -2216,7 +2212,6 @@ void SvImpLBox::MouseButtonDown( const MouseEvent& rMEvt )
         if( ButtonDownCheckCtrl(rMEvt, pEntry, nY) == TRUE)
             return;
         // Inplace-Editing?
-//#ifndef MAC
 #if 0
         if( rMEvt.IsMod2() && pView->IsInplaceEditingEnabled() )
         {
