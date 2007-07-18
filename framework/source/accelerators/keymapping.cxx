@@ -4,9 +4,9 @@
  *
  *  $RCSfile: keymapping.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 13:41:48 $
+ *  last change: $Author: obo $ $Date: 2007-07-18 13:25:39 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -42,6 +42,8 @@
 
 //_______________________________________________
 // own includes
+
+#include <macros/generic.hxx>
 
 //_______________________________________________
 // interface includes
