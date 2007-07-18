@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ww8par6.cxx,v $
  *
- *  $Revision: 1.174 $
+ *  $Revision: 1.175 $
  *
- *  last change: $Author: kz $ $Date: 2007-05-10 16:11:56 $
+ *  last change: $Author: obo $ $Date: 2007-07-18 14:47:14 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1982,8 +1982,14 @@ bool WW8FlyPara::IsEmpty() const
 }
 
 // OD 14.10.2003 #i18732# - changes made on behalf of CMC
-WW8SwFlyPara::WW8SwFlyPara( SwPaM& rPaM, SwWW8ImplReader& rIo, WW8FlyPara& rWW,
-    sal_uInt32 nPgLeft, sal_uInt32 nPgWidth, INT32 nIniFlyDx, INT32 nIniFlyDy )
+WW8SwFlyPara::WW8SwFlyPara( SwPaM& rPaM,
+                            SwWW8ImplReader& rIo,
+                            WW8FlyPara& rWW,
+                            const sal_uInt32 nWWPgTop,
+                            const sal_uInt32 nPgLeft,
+                            const sal_uInt32 nPgWidth,
+                            const INT32 nIniFlyDx,
+                            const INT32 nIniFlyDy )
 {
     memset( this, 0, sizeof( WW8SwFlyPara ) );  // Initialisieren
     nNewNettoWidth = MINFLY;                    // Minimum
@@ -2210,6 +2216,17 @@ WW8SwFlyPara::WW8SwFlyPara( SwPaM& rPaM, SwWW8ImplReader& rIo, WW8FlyPara& rWW,
             nXPos -= nLeLMgn;
         }
     }
+
+    // --> OD 2007-07-03 #148498#
+    // adjustments for certain vertical alignments
+    if ( eVAlign == VERT_NONE && eVRel == REL_PG_PRTAREA )
+    {
+        // convert "<X> from top page text area" to
+        // "<X + page top margin> from page"
+        eVRel = REL_PG_FRAME;
+        nYPos += nWWPgTop;
+    }
+    // <--
 
     FlySecur1( nWidth, rWW.bBorderLines );          // passen Raender ?
     FlySecur1( nHeight, rWW.bBorderLines );
@@ -2516,9 +2533,15 @@ bool SwWW8ImplReader::StartApo(const ApoTestResults &rApo,
     if (!(pWFlyPara = ConstructApo(rApo, pTabPos)))
         return false;
 
-    pSFlyPara = new WW8SwFlyPara(*pPaM, *this, *pWFlyPara,
-        maSectionManager.GetPageLeft(), maSectionManager.GetTextAreaWidth(),
-        nIniFlyDx, nIniFlyDy);
+    // --> OD 2007-07-03 #148498#
+    // <WW8SwFlyPara> constructor has changed - new 4th parameter
+    // containing WW8 page top margin.
+    pSFlyPara = new WW8SwFlyPara( *pPaM, *this, *pWFlyPara,
+                                  maSectionManager.GetWWPageTopMargin(),
+                                  maSectionManager.GetPageLeft(),
+                                  maSectionManager.GetTextAreaWidth(),
+                                  nIniFlyDx, nIniFlyDy);
+    // <--
 
     // If this paragraph is a Dropcap set the flag and we will deal with it later
     if (IsDropCap())
@@ -2775,6 +2798,9 @@ void SwWW8ImplReader::NewAttr( const SfxPoolItem& rAttr )
             mpRedlineStack->open(*pPaM->GetPoint(), rAttr);
         else
             pCtrlStck->NewAttr(*pPaM->GetPoint(), rAttr);
+
+        if (mpPostProcessAttrsInfo && mpPostProcessAttrsInfo->mbCopy)
+            mpPostProcessAttrsInfo->mItemSet.Put(rAttr);
     }
 }
 
