@@ -4,9 +4,9 @@
  *
  *  $RCSfile: scdll.cxx,v $
  *
- *  $Revision: 1.40 $
+ *  $Revision: 1.41 $
  *
- *  last change: $Author: vg $ $Date: 2007-05-22 20:05:16 $
+ *  last change: $Author: obo $ $Date: 2007-07-18 08:59:12 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -330,7 +330,7 @@ void ScDLL::Init()
 
     // Redlining- Window
     ScAcceptChgDlgWrapper       ::RegisterChildWindow(FALSE, pMod);
-    ScSimpleRefDlgWrapper       ::RegisterChildWindow(FALSE, pMod, SFX_CHILDWIN_ALWAYSAVAILABLE);
+    ScSimpleRefDlgWrapper       ::RegisterChildWindow(FALSE, pMod, SFX_CHILDWIN_ALWAYSAVAILABLE|SFX_CHILDWIN_NEVERHIDE );
     ScHighlightChgDlgWrapper    ::RegisterChildWindow(FALSE, pMod);
 
     SvxSearchDialogWrapper      ::RegisterChildWindow(FALSE, pMod);
