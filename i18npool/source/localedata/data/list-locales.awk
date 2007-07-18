@@ -4,10 +4,14 @@
 #// Author: Eike Rathke <erack@sun.com>
 
 BEGIN {
+    file = ""
+    count = 0
+}
+
+function init_locale() {
     lcinfo = 0
     inlang = 0
     incoun = 0
-    file = ""
     language = ""
     country = ""
 }
@@ -15,6 +19,8 @@ BEGIN {
 FILENAME != file {
     printEntry()
     file = FILENAME
+    ++count
+    init_locale()
 }
 
 {
@@ -51,9 +57,19 @@ FILENAME != file {
 
 END {
     printEntry()
+    print "\n" count " locales"
 }
 
 function printEntry() {
     if ( file )
-        printf( "%s: %s %s\n", file, language, country )
+    {
+        tmp = file
+        gsub( /.*\//, "", tmp )
+        gsub( /\.xml/, "", tmp )
+        split( tmp, iso, /_/ )
+        if ( iso[2] )
+            printf( "%3s_%2s: %s - %s\n", iso[1], iso[2], language, country )
+        else
+            printf( "%3s %2s: %s   %s\n", iso[1], iso[2], language, country )
+    }
 }
