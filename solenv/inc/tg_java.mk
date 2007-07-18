@@ -4,9 +4,9 @@
 #
 #   $RCSfile: tg_java.mk,v $
 #
-#   $Revision: 1.11 $
+#   $Revision: 1.12 $
 #
-#   last change: $Author: rt $ $Date: 2007-07-06 09:26:21 $
+#   last change: $Author: obo $ $Date: 2007-07-18 08:01:42 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -79,9 +79,9 @@ $(JAVATARGET) :	$(JAVAFILES) $(JAVACLASSFILES)
 .ENDIF			# "$(JAVAFILES:d)"==""
 .ELSE			# "$(javauno)"!=""
 .IF "$(USE_SHELL)"=="4nt"
-    $(JAVAC) $(JAVACPS) $(CLASSPATH) -d $(CLASSDIR) $(JAVAFLAGS) @$(mktmp $(JAVAFILES))
+    $(JAVAC) $(JAVACPS) $(CLASSPATH) -d $(CLASSDIR) $(JAVAFLAGS) @$(mktmp $(strip $(JAVAFILES)))
 .ELSE			# "$(USE_SHELL)"=="4nt"
-    $(JAVAC) $(JAVACPS) "$(CLASSPATH)" -d $(CLASSDIR) $(JAVAFLAGS) @$(mktmp $(JAVAFILES))
+    $(JAVAC) $(JAVACPS) "$(CLASSPATH)" -d $(CLASSDIR) $(JAVAFLAGS) @$(mktmp $(strip $(JAVAFILES)))
 .ENDIF			# "$(USE_SHELL)"=="4nt"
 .ENDIF			# "$(javauno)"!=""
 .ENDIF			# "$(use_jdep)"!=""
