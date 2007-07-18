@@ -4,9 +4,9 @@
  *
  *  $RCSfile: layoutmanager.cxx,v $
  *
- *  $Revision: 1.65 $
+ *  $Revision: 1.66 $
  *
- *  last change: $Author: ihi $ $Date: 2007-07-10 15:09:24 $
+ *  last change: $Author: obo $ $Date: 2007-07-18 08:50:27 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -3233,7 +3233,10 @@ void LayoutManager::implts_updateUIElementsVisibleState( sal_Bool bSetVisible )
     }
 
     if ( bSetVisible )
+    {
+        implts_createNonContextSensitiveToolBars();
         doLayout();
+    }
     else
     {
         // Set docking area window size to zero
