@@ -4,9 +4,9 @@
  *
  *  $RCSfile: environment.hxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: kz $ $Date: 2007-05-09 13:35:05 $
+ *  last change: $Author: obo $ $Date: 2007-07-18 12:20:30 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -167,10 +167,10 @@ public:
     /** Invoke the passed function in this environment.
 
         @param pCallee  the function to call
-        @param param    the parameter pointer to be passed to the function
+        @param pParam   the parameter pointer to be passed to the function
         @since UDK 3.2.7
     */
-    inline void SAL_CALL invoke_v(uno_EnvCallee * pCallee, va_list param) const SAL_THROW( () );
+    inline void SAL_CALL invoke_v(uno_EnvCallee * pCallee, va_list * pParam) const SAL_THROW( () );
 
     /** Invoke the passed function in this environment.
 
@@ -242,10 +242,10 @@ inline Environment & Environment::operator = ( uno_Environment * pEnv ) SAL_THRO
     return *this;
 }
 //__________________________________________________________________________________________________
-inline void SAL_CALL Environment::invoke_v(uno_EnvCallee * pCallee, va_list param) const SAL_THROW( () )
+inline void SAL_CALL Environment::invoke_v(uno_EnvCallee * pCallee, va_list * pParam) const SAL_THROW( () )
 {
     if (_pEnv)
-        uno_Environment_invoke_v(_pEnv, pCallee, param);
+        uno_Environment_invoke_v(_pEnv, pCallee, pParam);
 }
 //__________________________________________________________________________________________________
 inline void SAL_CALL Environment::invoke(uno_EnvCallee * pCallee, ...) const SAL_THROW( () )
@@ -255,7 +255,7 @@ inline void SAL_CALL Environment::invoke(uno_EnvCallee * pCallee, ...) const SAL
         va_list param;
 
         va_start(param, pCallee);
-        uno_Environment_invoke_v(_pEnv, pCallee, param);
+        uno_Environment_invoke_v(_pEnv, pCallee, &param);
         va_end(param);
     }
 
