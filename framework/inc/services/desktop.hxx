@@ -4,9 +4,9 @@
  *
  *  $RCSfile: desktop.hxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: hr $ $Date: 2006-06-19 10:58:30 $
+ *  last change: $Author: obo $ $Date: 2007-07-18 13:25:25 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -267,9 +267,14 @@ class Desktop   :   // interfaces
                     public  ::cppu::OPropertySetHelper           ,
                     public  ::cppu::OWeakObject
 {
-    //-------------------------------------------------------------------------------------------------------------
-    //  public methods
-    //-------------------------------------------------------------------------------------------------------------
+    // internal used types, const etcpp.
+    private:
+
+        //---------------------------------------------------------------------
+        /** used temporary to know which listener was already called or not. */
+        typedef ::std::vector< css::uno::Reference< css::frame::XTerminateListener > > TTerminateListenerList;
+
+    // public methods
     public:
 
         //  constructor / destructor
@@ -281,10 +286,83 @@ class Desktop   :   // interfaces
         FWK_DECLARE_XTYPEPROVIDER
         DECLARE_XSERVICEINFO
 
-        //  XDesktop
-        virtual sal_Bool                                                            SAL_CALL terminate                  (                                                                                 ) throw( css::uno::RuntimeException          );
-        virtual void                                                                SAL_CALL addTerminateListener       ( const css::uno::Reference< css::frame::XTerminateListener >&   xListener        ) throw( css::uno::RuntimeException          );
-        virtual void                                                                SAL_CALL removeTerminateListener    ( const css::uno::Reference< css::frame::XTerminateListener >&   xListener        ) throw( css::uno::RuntimeException          );
+        //---------------------------------------------------------------------
+        /**
+            @interface  XDesktop
+
+            @short      try to shutdown these desktop environment.
+
+            @descr      Will try to close all frames. If at least one frame could
+                        not be closed successfully termination will be stopped.
+
+                        Registered termination listener will be taken into account
+                        also. As special feature some of our registered listener
+                        are well known by it's UNO implementation name. They are handled
+                        different to all other listener.
+
+                        Btw: Desktop.terminate() was designed in the past to be used
+                        within an UI based envrionment. So it's allowed e.g. to
+                        call XController.suspend() here. If UI isnt an option ... please
+                        use XCloseable.close() at these desktop implementation.
+                        ... if it will be supported in the future .-))
+
+            @seealso    XTerminateListener
+            @seealso    XTerminateListener2
+
+            @return     true if all open frames could be closed and no listener throwed
+                        a veto exception; false otherwise.
+
+            @onerror    False will be returned.
+            @threadsafe yes
+         */
+        virtual ::sal_Bool SAL_CALL terminate()
+            throw( css::uno::RuntimeException );
+
+        //---------------------------------------------------------------------
+        /**
+            @interface  XDesktop
+
+            @short      add a listener for termination events
+
+            @descr      Additional to adding normal listener these method was implemented special.
+                        Every listener will be asked for it's uno implementation name.
+                        Some of them are well known ... and the corresponding listener wont be added
+                        to the container of "normal listener". Those listener will be set as special
+                        member.
+                        see e.g. member m_xSfxTerminator
+
+            @seealso    terminate()
+
+            @param      xListener
+                        the listener for registration.
+
+            @threadsafe yes
+         */
+        virtual void SAL_CALL addTerminateListener( const css::uno::Reference< css::frame::XTerminateListener >& xListener )
+            throw( css::uno::RuntimeException );
+
+        //---------------------------------------------------------------------
+        /**
+            @interface  XDesktop
+
+            @short      remove a listener from this container.
+
+            @descr      Additional to removing normal listener these method was implemented special.
+                        Every listener will be asked for it's uno implementation name.
+                        Some of them are well known ... and the corresponding listener was set as special member.
+                        Now those special member will be reseted also.
+                        see e.g. member m_xSfxTerminator
+
+            @seealso    terminate()
+
+            @param      xListener
+                        the listener for deregistration.
+
+            @threadsafe yes
+         */
+        virtual void SAL_CALL removeTerminateListener( const css::uno::Reference< css::frame::XTerminateListener >& xListener )
+            throw( css::uno::RuntimeException );
+
         virtual css::uno::Reference< css::container::XEnumerationAccess >           SAL_CALL getComponents              (                                                                                 ) throw( css::uno::RuntimeException          );
         virtual css::uno::Reference< css::lang::XComponent >                        SAL_CALL getCurrentComponent        (                                                                                 ) throw( css::uno::RuntimeException          );
         virtual css::uno::Reference< css::frame::XFrame >                           SAL_CALL getCurrentFrame            (                                                                                 ) throw( css::uno::RuntimeException          );
@@ -378,8 +456,70 @@ class Desktop   :   // interfaces
 
         css::uno::Reference< css::lang::XComponent >            impl_getFrameComponent          ( const css::uno::Reference< css::frame::XFrame >&  xFrame          ) const;
         static const css::uno::Sequence< css::beans::Property > impl_getStaticPropertyDescriptor(                                                                   );
-        void                                                    impl_sendQueryTerminationEvent  (                                                                   ) throw( css::frame::TerminationVetoException );
-        void                                                    impl_sendNotifyTerminationEvent (                                                                   );
+
+        //---------------------------------------------------------------------
+        /** calls queryTermination() on every registered termination listener.
+         *
+         *  Note: Only normal termination listener (registered in list m_aListenerContainer
+         *        will be recognized here. Special listener like quick starter, pipe or others
+         *        has to be handled explicitly !
+         *
+         *  @param  [out] lCalledListener
+         *          every called listener will be returned here.
+         *          Those list will be used to informa all called listener
+         *          about cancel this termination request.
+         *
+         *  @param  [out] bVeto
+         *          will be true if at least one listener throwed a veto exception;
+         *          false otherwise.
+         *
+         *  @see    impl_sendCancelTerminationEvent()
+         */
+        void impl_sendQueryTerminationEvent(TTerminateListenerList& lCalledListener,
+                                            ::sal_Bool&             bVeto          );
+
+        //---------------------------------------------------------------------
+        /** calls cancelTermination() on every termination listener
+         *  where queryTermination() was called before.
+         *
+         *  Note: Only normal termination listener (registered in list m_aListenerContainer
+         *        will be recognized here. Special listener like quick starter, pipe or others
+         *        has to be handled explicitly !
+         *
+         *  @param  [in] lCalledListener
+         *          every listener in this list was called within its method
+         *          queryTermination() before.
+         *
+         *  @see    impl_sendQueryTerminationEvent()
+         */
+        void impl_sendCancelTerminationEvent(const TTerminateListenerList& lCalledListener);
+
+        //---------------------------------------------------------------------
+        /** calls notifyTermination() on every registered termination listener.
+         *
+         *  Note: Only normal termination listener (registered in list m_aListenerContainer
+         *        will be recognized here. Special listener like quick starter, pipe or others
+         *        has to be handled explicitly !
+         */
+        void impl_sendNotifyTerminationEvent();
+
+        //---------------------------------------------------------------------
+        /** try to close all open frames.
+         *
+         *  Iterates over all child frames and try to close them.
+         *  Given parameter bAllowUI enable/disable showing any UI
+         *  (which mostly occure on calling XController->suspend()).
+         *
+         *  These method doesnt stop if one frame could not be closed.
+         *  It will ignore such frames and try all other ones.
+         *  But it returns false in such case - true otherwise.
+         *
+         *  @param  bAllowUI
+         *          enable/disable showing of UI.
+         *
+         *  @return true if all frames could be closed; false otherwise.
+         */
+        ::sal_Bool impl_closeFrames(::sal_Bool bAllowUI);
 
     //-------------------------------------------------------------------------------------------------------------
     //  debug methods
@@ -415,14 +555,52 @@ class Desktop   :   // interfaces
         css::uno::Reference< css::frame::XDispatchProvider >            m_xDispatchHelper           ;   /// helper to dispatch something for new tasks, created by "_blank"!
         ELoadState                                                      m_eLoadState                ;   /// hold information about state of asynchron loading of component for loadComponentFromURL()!
         css::uno::Reference< css::frame::XFrame >                       m_xLastFrame                ;   /// last target of "loadComponentFromURL()"!
-        css::uno::Reference< css::frame::XTerminateListener >           m_xPipeTerminator           ;   /// special terminate listener to close pipe and block external requests during/after terminate
-        css::uno::Reference< css::frame::XTerminateListener >           m_xQuickLauncher            ;   /// special terminate listener to block terminate if tray-icon is active
         css::uno::Any                                                   m_aInteractionRequest       ;
         sal_Bool                                                        m_bSuspendQuickstartVeto    ;   /// don't ask quickstart for a veto
         SvtCommandOptions                                               m_aCommandOptions           ;   /// ref counted class to support disabling commands defined by configuration file
         ::rtl::OUString                                                 m_sName                     ;
         ::rtl::OUString                                                 m_sTitle                    ;
         css::uno::Reference< css::frame::XDispatchRecorderSupplier >    m_xDispatchRecorderSupplier ;
+
+        //---------------------------------------------------------------------
+        /** special terminate listener to close pipe and block external requests
+          * during/after termination process is/was running
+          */
+        css::uno::Reference< css::frame::XTerminateListener > m_xPipeTerminator;
+
+        //---------------------------------------------------------------------
+        /** special terminate listener shown inside system tray (quick starter)
+          * Will hinder the office on shutdown ... but wish to allow closing
+          * of open documents. And because thats different to a normal terminate listener
+          * it has to be handled special .-)
+          */
+        css::uno::Reference< css::frame::XTerminateListener > m_xQuickLauncher;
+
+        //---------------------------------------------------------------------
+        /** special terminate listener which loads images asynchronous for current open documents.
+          * Because internaly it uses blocking system APIs ... it cant be guaranteed that
+          * running jobs can be cancelled successfully if the corressponding document will be closed ...
+          * it will not hinder those documents on closing. Instead it let all jobs running ...
+          * but at least on terminate we have to wait for all those blocked requests.
+          * So these implementation must be a special terminate listener too .-(
+          */
+        css::uno::Reference< css::frame::XTerminateListener > m_xSWThreadManager;
+
+        //---------------------------------------------------------------------
+        /** special terminate listener shuting down the SfxApplication.
+          * Because these desktop instance closes documents and informs listener
+          * only ... it does not realy shutdown the whole application.
+          *
+          * Btw: That wouldnt be possible by design ... because Desktop.terminate()
+          * has to return a boolean value about success ... it cant realy shutdown the
+          * process .-)
+          *
+          * So we uses a trick: A special listener (exactly these one here) listen for notifyTermination()
+          * and shutdown the process asynchronous. But desktop has to make this special
+          * notification as realy last one ... Otherwhise it can happen that asynchronous
+          * shutdown will be faster then all other code around Desktop.terminate() .-))
+          */
+        css::uno::Reference< css::frame::XTerminateListener > m_xSfxTerminator;
 
 };      //  class Desktop
 
