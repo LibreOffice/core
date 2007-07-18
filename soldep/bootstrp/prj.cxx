@@ -4,9 +4,9 @@
  *
  *  $RCSfile: prj.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: hr $ $Date: 2007-06-27 23:37:51 $
+ *  last change: $Author: obo $ $Date: 2007-07-18 07:32:32 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -42,6 +42,8 @@
 #include <tools/geninfo.hxx>
 #include <soldep/prj.hxx>
 #include <bootstrp/inimgr.hxx>
+#include <soldep/XmlBuildList.hxx>
+#include "XmlBuildListDef.hxx"
 
 #pragma hdrstop
 
