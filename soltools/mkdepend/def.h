@@ -38,6 +38,8 @@ in this Software without prior written authorization from the X Consortium.
 
 #include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
+#include <unistd.h>
 
 #include <ctype.h>
 #ifndef X_NOT_POSIX
