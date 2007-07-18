@@ -4,9 +4,9 @@
  *
  *  $RCSfile: b2dpolypolygontools.hxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: kz $ $Date: 2006-12-13 15:06:35 $
+ *  last change: $Author: obo $ $Date: 2007-07-18 11:03:30 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -207,6 +207,9 @@ namespace basegfx
         ::rtl::OUString exportToSvgD( const B2DPolyPolygon& rPolyPoly,
                                       bool                  bUseRelativeCoordinates=true,
                                       bool                  bDetectQuadraticBeziers=true );
+
+        // #i76891# Try to remove existing curve segments if they are simply edges
+        B2DPolyPolygon simplifyCurveSegments(const B2DPolyPolygon& rCandidate);
 
     } // end of namespace tools
 } // end of namespace basegfx
