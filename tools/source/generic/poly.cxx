@@ -4,9 +4,9 @@
  *
  *  $RCSfile: poly.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: hr $ $Date: 2007-06-27 22:14:17 $
+ *  last change: $Author: obo $ $Date: 2007-07-18 11:09:35 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -80,6 +80,10 @@
 
 #ifndef _BGFX_POLYGON_B2DPOLYGONTOOLS_HXX
 #include <basegfx/polygon/b2dpolygontools.hxx>
+#endif
+
+#ifndef _BGFX_CURVE_B2DCUBICBEZIER_HXX
+#include <basegfx/curve/b2dcubicbezier.hxx>
 #endif
 
 #include <vector>
@@ -2184,133 +2188,138 @@ void Polygon::Write( SvStream& rOStream ) const
 
 // -----------------------------------------------------------------------
 // #i74631# numerical correction method for B2DPolygon
-bool impCorrectVectorAForContinuity(basegfx::B2DVector& rNewVectorA, BYTE nCFlag, const basegfx::B2DPolygon& rTarget, sal_uInt32 nCurrentIndex, sal_uInt32 nPreviousIndex)
+void impCorrectContinuity(basegfx::B2DPolygon& roPolygon, sal_uInt32 nIndex, BYTE nCFlag)
 {
-    if(POLY_SMOOTH == nCFlag || POLY_SYMMTR == nCFlag)
+    const sal_uInt32 nPointCount(roPolygon.count());
+    OSL_ENSURE(nIndex < nPointCount, "impCorrectContinuity: index access out of range (!)");
+
+    if(nIndex < nPointCount && (POLY_SMOOTH == nCFlag || POLY_SYMMTR == nCFlag))
     {
-        // get previous vectorB
-        const basegfx::B2DVector aPreviousVectorB(rTarget.getControlVectorB(nPreviousIndex));
-
-        if(!aPreviousVectorB.equalZero())
+        if(roPolygon.isPrevControlPointUsed(nIndex) && roPolygon.isNextControlPointUsed(nIndex))
         {
-            // aPreviousVectorB is used. Make it relative to the new start point
-            const basegfx::B2DVector aRelativeVectorB((rTarget.getB2DPoint(nPreviousIndex) + aPreviousVectorB) - rTarget.getB2DPoint(nCurrentIndex));
+            const basegfx::B2DPoint aPoint(roPolygon.getB2DPoint(nIndex));
 
-            if(!aRelativeVectorB.equalZero())
+            if(POLY_SMOOTH == nCFlag)
             {
-                if(POLY_SMOOTH == nCFlag)
-                {
-                    // apply inverse direction of aRelativeVectorB to aVectorA, keep length
-                    const double fOriginalLength(rNewVectorA.getLength());
-                    rNewVectorA = -aRelativeVectorB;
-                    rNewVectorA.setLength(fOriginalLength);
-                }
-                else // POLY_SYMMTR
-                {
-                    // apply inverse aRelativeVectorB to rNewVectorA
-                    rNewVectorA = -aRelativeVectorB;
-                }
+                // C1: apply inverse direction of prev to next, keep length of next
+                const basegfx::B2DVector aOriginalNext(roPolygon.getNextControlPoint(nIndex) - aPoint);
+                basegfx::B2DVector aNewNext(aPoint - roPolygon.getPrevControlPoint(nIndex));
 
-                return true;
+                aNewNext.setLength(aOriginalNext.getLength());
+                roPolygon.setNextControlPoint(nIndex, basegfx::B2DPoint(aPoint + aNewNext));
+            }
+            else // POLY_SYMMTR
+            {
+                // C2: apply inverse control point to next
+                roPolygon.setNextControlPoint(nIndex, (2.0 * aPoint) - roPolygon.getPrevControlPoint(nIndex));
             }
         }
     }
-
-    return false;
 }
 
 // -----------------------------------------------------------------------
-// convert to ::basegfx::B2DPolygon and return
-::basegfx::B2DPolygon Polygon::getB2DPolygon() const
+// convert to basegfx::B2DPolygon and return
+basegfx::B2DPolygon Polygon::getB2DPolygon() const
 {
     basegfx::B2DPolygon aRetval;
     const sal_uInt16 nCount(mpImplPolygon->mnPoints);
 
-    if(mpImplPolygon->mpFlagAry)
+    if(nCount)
     {
-        // handling for curves. Will work with non-curves too (add test for mpFlagAry
-        // again where commented below), but the more used non-curve case is faster this way
-        for(sal_uInt16 a(0); a < nCount;)
+        if(mpImplPolygon->mpFlagAry)
         {
-            // get start point and add
-            const BYTE nStartPointFlag(mpImplPolygon->mpFlagAry[a]);
-            const Point aStartPoint(mpImplPolygon->mpPointAry[a++]);
-            const basegfx::B2DPoint aB2DStartPoint(aStartPoint.X(), aStartPoint.Y());
-            aRetval.append(aB2DStartPoint);
+            // handling for curves. Add start point
+            const Point aStartPoint(mpImplPolygon->mpPointAry[0]);
+            BYTE nPointFlag(mpImplPolygon->mpFlagAry[0]);
+            aRetval.append(basegfx::B2DPoint(aStartPoint.X(), aStartPoint.Y()));
+            Point aControlA, aControlB;
 
-            // test flags of next point if available, maybe it's a control point
-            if(a < nCount && /*mpImplPolygon->mpFlagAry &&*/ POLY_CONTROL == mpImplPolygon->mpFlagAry[a])
+            for(sal_uInt16 a(1); a < nCount;)
             {
-                // check if there are two control points
-                if(a + 1 < nCount && POLY_CONTROL == mpImplPolygon->mpFlagAry[a + 1])
-                {
-                    // get the two control points and calculate the vectors
-                    const Point aControlA(mpImplPolygon->mpPointAry[a++]);
-                    const Point aControlB(mpImplPolygon->mpPointAry[a++]);
-                    basegfx::B2DVector aVectorA(aControlA.X() - aStartPoint.X(), aControlA.Y() - aStartPoint.Y());
-                    const basegfx::B2DVector aVectorB(aControlB.X() - aStartPoint.X(), aControlB.Y() - aStartPoint.Y());
-                    const sal_uInt32 nDestIndex(aRetval.count() - 1L);
+                bool bControlA(false);
+                bool bControlB(false);
 
-                    if(nDestIndex)
+                if(POLY_CONTROL == mpImplPolygon->mpFlagAry[a])
+                {
+                    aControlA = mpImplPolygon->mpPointAry[a++];
+                    bControlA = true;
+                }
+
+                if(a < nCount && POLY_CONTROL == mpImplPolygon->mpFlagAry[a])
+                {
+                    aControlB = mpImplPolygon->mpPointAry[a++];
+                    bControlB = true;
+                }
+
+                // assert invalid polygons
+                OSL_ENSURE(bControlA == bControlB, "Polygon::getB2DPolygon: Invalid source polygon (!)");
+
+                if(a < nCount)
+                {
+                    const Point aEndPoint(mpImplPolygon->mpPointAry[a]);
+
+                    if(bControlA)
                     {
-                        // #i74631# check if we have a C1 or C2 flagged continuity in the source. If yes,
-                        // we will need to correct the to-be-set VectorA to have the numerically
-                        // correct value for double precision
-                        impCorrectVectorAForContinuity(aVectorA, nStartPointFlag, aRetval, nDestIndex, nDestIndex - 1);
+                        // bezier edge, add
+                        aRetval.appendBezierSegment(
+                            basegfx::B2DPoint(aControlA.X(), aControlA.Y()),
+                            basegfx::B2DPoint(aControlB.X(), aControlB.Y()),
+                            basegfx::B2DPoint(aEndPoint.X(), aEndPoint.Y()));
+
+                        impCorrectContinuity(aRetval, aRetval.count() - 2, nPointFlag);
+                    }
+                    else
+                    {
+                        // no bezier edge, add end point
+                        aRetval.append(basegfx::B2DPoint(aEndPoint.X(), aEndPoint.Y()));
                     }
 
-                    // add Vectors
-                    aRetval.setControlVectorA(nDestIndex, aVectorA);
-                    aRetval.setControlVectorB(nDestIndex, aVectorB);
-                }
-                else
-                {
-                    // we have an invalid polygon (!), inform the user
-                    DBG_ASSERT(false, "Polygon::getB2DPolygon(): invalid source polygon (curve edge with only one control point detected)" );
+                    nPointFlag = mpImplPolygon->mpFlagAry[a++];
                 }
             }
-        }
 
-        // set closed flag
-        ::basegfx::tools::checkClosed(aRetval);
+            // if exist, remove double first/last points, set closed and correct control points
+            basegfx::tools::checkClosed(aRetval);
 
-        if(aRetval.isClosed() && nCount && aRetval.count())
-        {
-            // #i74631# when a closed poly is produced we need to evtl. correct continuity in start point, too
-            const BYTE nStartPointFlag(mpImplPolygon->mpFlagAry[0]);
-            basegfx::B2DVector aStartVector(aRetval.getControlVectorA(0));
-
-            if(impCorrectVectorAForContinuity(aStartVector, nStartPointFlag, aRetval, 0, aRetval.count() - 1))
+            if(aRetval.isClosed())
             {
-                aRetval.setControlVectorA(0, aStartVector);
+                // closeWithGeometryChange did really close, so last point(s) were removed.
+                // Correct the continuity in the changed point
+                impCorrectContinuity(aRetval, 0, mpImplPolygon->mpFlagAry[0]);
             }
         }
-    }
-    else
-    {
-        // extra handling for non-curves for speedup
-        for(sal_uInt16 a(0); a < nCount; a++)
+        else
         {
-            // get point and add
-            const Point aPoint(mpImplPolygon->mpPointAry[a]);
-            aRetval.append(basegfx::B2DPoint(aPoint.X(), aPoint.Y()));
-        }
+            // extra handling for non-curves (most-used case) for speedup
+            for(sal_uInt16 a(0); a < nCount; a++)
+            {
+                // get point and add
+                const Point aPoint(mpImplPolygon->mpPointAry[a]);
+                aRetval.append(basegfx::B2DPoint(aPoint.X(), aPoint.Y()));
+            }
 
-        // set closed flag
-        ::basegfx::tools::checkClosed(aRetval);
+            // set closed flag
+            basegfx::tools::checkClosed(aRetval);
+        }
     }
 
     return aRetval;
 }
 
 // -----------------------------------------------------------------------
-// constructor to convert from ::basegfx::B2DPolygon
-Polygon::Polygon(const ::basegfx::B2DPolygon& rPolygon)
+// constructor to convert from basegfx::B2DPolygon
+// #i76891# Needed to change from adding all control points (even for unused
+// edges) and creating a fixed-size Polygon in the first run to creating the
+// minimal Polygon. This requires a temporary Point- and Flag-Array for curves
+// and a memcopy at ImplPolygon creation, but contains no zero-controlpoints
+// for straight edges.
+Polygon::Polygon(const basegfx::B2DPolygon& rPolygon)
+:   mpImplPolygon(0)
 {
     DBG_CTOR( Polygon, NULL );
 
-    const sal_Bool bCurve(rPolygon.areControlPointsUsed());
-    const sal_Bool bClosed(rPolygon.isClosed());
+    const bool bCurve(rPolygon.areControlPointsUsed());
+    const bool bClosed(rPolygon.isClosed());
     sal_uInt32 nB2DLocalCount(rPolygon.count());
 
     if(bCurve)
@@ -2322,86 +2331,88 @@ Polygon::Polygon(const ::basegfx::B2DPolygon& rPolygon)
             nB2DLocalCount = ((0x0000ffff / 3L) - 1L);
         }
 
-        // curve creation
+        // calculate target point count
         const sal_uInt32 nLoopCount(bClosed ? nB2DLocalCount : (nB2DLocalCount ? nB2DLocalCount - 1L : 0L ));
-        const sal_uInt32 nTargetCount(nLoopCount ? (nLoopCount * 3L) + 1L : 0L);
-        mpImplPolygon = new ImplPolygon( sal_uInt16(nTargetCount) );
-        mpImplPolygon->ImplCreateFlagArray();
 
         if(nLoopCount)
         {
-            sal_uInt16 nIndex(0);
+            // calculate maximum array size and allocate; prepare insert index
+            const sal_uInt32 nMaxTargetCount((nLoopCount * 3) + 1);
+            mpImplPolygon = new ImplPolygon(static_cast< sal_uInt16 >(nMaxTargetCount), true);
+
+            // prepare insert index and current point
+            sal_uInt32 nArrayInsert(0);
+            basegfx::B2DCubicBezier aBezier;
+            aBezier.setStartPoint(rPolygon.getB2DPoint(0));
 
             for(sal_uInt32 a(0L); a < nLoopCount; a++)
             {
-                // get and add start point
-                ::basegfx::B2DPoint aB2DPointA(rPolygon.getB2DPoint(a));
-                Point aPointA(FRound(aB2DPointA.getX()), FRound(aB2DPointA.getY()));
-                sal_uInt16 nPointIndex(nIndex++);
-                mpImplPolygon->mpPointAry[nPointIndex] = aPointA;
-                mpImplPolygon->mpFlagAry[nPointIndex] = (BYTE)POLY_NORMAL;
+                // add current point (always) and remember StartPointIndex for evtl. later corrections
+                const Point aStartPoint(FRound(aBezier.getStartPoint().getX()), FRound(aBezier.getStartPoint().getY()));
+                const sal_uInt32 nStartPointIndex(nArrayInsert);
+                mpImplPolygon->mpPointAry[nStartPointIndex] = aStartPoint;
+                mpImplPolygon->mpFlagAry[nStartPointIndex] = (BYTE)POLY_NORMAL;
+                nArrayInsert++;
 
-                // get and add first control point
-                ::basegfx::B2DVector aB2DVectorA(rPolygon.getControlVectorA(a));
-                const sal_Bool bVectorAUsed(!aB2DVectorA.equalZero());
-                Point aVecA(aPointA);
+                // prepare next segment
+                const sal_uInt32 nNextIndex((a + 1) % nB2DLocalCount);
+                aBezier.setEndPoint(rPolygon.getB2DPoint(nNextIndex));
+                aBezier.setControlPointA(rPolygon.getNextControlPoint(a));
+                aBezier.setControlPointB(rPolygon.getPrevControlPoint(nNextIndex));
 
-                if(bVectorAUsed)
+                if(aBezier.isBezier())
                 {
-                    aVecA = Point(
-                        FRound(aB2DPointA.getX() + aB2DVectorA.getX()),
-                        FRound(aB2DPointA.getY() + aB2DVectorA.getY()));
+                    // if one is used, add always two control points due to the old schema
+                    mpImplPolygon->mpPointAry[nArrayInsert] = Point(FRound(aBezier.getControlPointA().getX()), FRound(aBezier.getControlPointA().getY()));
+                    mpImplPolygon->mpFlagAry[nArrayInsert] = (BYTE)POLY_CONTROL;
+                    nArrayInsert++;
+
+                    mpImplPolygon->mpPointAry[nArrayInsert] = Point(FRound(aBezier.getControlPointB().getX()), FRound(aBezier.getControlPointB().getY()));
+                    mpImplPolygon->mpFlagAry[nArrayInsert] = (BYTE)POLY_CONTROL;
+                    nArrayInsert++;
                 }
 
-                mpImplPolygon->mpPointAry[nIndex] = aVecA;
-                mpImplPolygon->mpFlagAry[nIndex++] = (BYTE)POLY_CONTROL;
-
-                // get and add second control point
-                ::basegfx::B2DVector aB2DVectorB(rPolygon.getControlVectorB(a));
-                const sal_Bool bVectorBUsed(!aB2DVectorB.equalZero());
-                Point aVecB(aPointA);
-
-                if(bVectorBUsed)
+                // test continuity with previous control point to set flag value
+                if(aBezier.getControlPointA() != aBezier.getStartPoint() && (bClosed || a))
                 {
-                    aVecB = Point(
-                        FRound(aB2DPointA.getX() + aB2DVectorB.getX()),
-                        FRound(aB2DPointA.getY() + aB2DVectorB.getY()));
-                }
+                    const basegfx::B2VectorContinuity eCont(rPolygon.getContinuityInPoint(a));
 
-                mpImplPolygon->mpPointAry[nIndex] = aVecB;
-                mpImplPolygon->mpFlagAry[nIndex++] = (BYTE)POLY_CONTROL;
-
-                // test continuity with previous control point
-                if(bVectorAUsed && (bClosed || a))
-                {
-                    const sal_uInt32 nPrevInd(a == 0L ? nB2DLocalCount  - 1L : a - 1L);
-                    ::basegfx::B2DVector aB2DVectorPrev(rPolygon.getControlPointB(nPrevInd) - aB2DPointA);
-                    ::basegfx::B2VectorContinuity eCont = ::basegfx::getContinuity(aB2DVectorPrev, aB2DVectorA);
-
-                    if(::basegfx::CONTINUITY_C1 == eCont)
+                    if(basegfx::CONTINUITY_C1 == eCont)
                     {
-                        mpImplPolygon->mpFlagAry[nPointIndex] = (BYTE)POLY_SMOOTH;
+                        mpImplPolygon->mpFlagAry[nStartPointIndex] = (BYTE)POLY_SMOOTH;
                     }
-                    else if(::basegfx::CONTINUITY_C2 == eCont)
+                    else if(basegfx::CONTINUITY_C2 == eCont)
                     {
-                        mpImplPolygon->mpFlagAry[nPointIndex] = (BYTE)POLY_SYMMTR;
+                        mpImplPolygon->mpFlagAry[nStartPointIndex] = (BYTE)POLY_SYMMTR;
                     }
                 }
+
+                // prepare next polygon step
+                aBezier.setStartPoint(aBezier.getEndPoint());
             }
 
             if(bClosed)
             {
-                // add first point as closing point
-                mpImplPolygon->mpPointAry[nIndex] = mpImplPolygon->mpPointAry[0];
-                mpImplPolygon->mpFlagAry[nIndex] = (BYTE)POLY_NORMAL;
+                // add first point again as closing point due to old definition
+                mpImplPolygon->mpPointAry[nArrayInsert] = mpImplPolygon->mpPointAry[0];
+                mpImplPolygon->mpFlagAry[nArrayInsert] = (BYTE)POLY_NORMAL;
+                nArrayInsert++;
             }
             else
             {
                 // add last point as closing point
-                ::basegfx::B2DPoint aClosingPoint(rPolygon.getB2DPoint(nB2DLocalCount - 1L));
-                Point aEnd(FRound(aClosingPoint.getX()), FRound(aClosingPoint.getY()));
-                mpImplPolygon->mpPointAry[nIndex] = aEnd;
-                mpImplPolygon->mpFlagAry[nIndex] = (BYTE)POLY_NORMAL;
+                const basegfx::B2DPoint aClosingPoint(rPolygon.getB2DPoint(nB2DLocalCount - 1L));
+                const Point aEnd(FRound(aClosingPoint.getX()), FRound(aClosingPoint.getY()));
+                mpImplPolygon->mpPointAry[nArrayInsert] = aEnd;
+                mpImplPolygon->mpFlagAry[nArrayInsert] = (BYTE)POLY_NORMAL;
+                nArrayInsert++;
+            }
+
+            DBG_ASSERT(nArrayInsert <= nMaxTargetCount, "Polygon::Polygon from basegfx::B2DPolygon: wrong max point count estimation (!)");
+
+            if(nArrayInsert != nMaxTargetCount)
+            {
+                mpImplPolygon->ImplSetSize(static_cast< sal_uInt16 >(nArrayInsert), true);
             }
         }
     }
@@ -2414,17 +2425,16 @@ Polygon::Polygon(const ::basegfx::B2DPolygon& rPolygon)
             nB2DLocalCount = (0x0000ffff - 1L);
         }
 
-        // point list creation
-        const sal_uInt32 nTargetCount(nB2DLocalCount + (bClosed ? 1L : 0L));
-        mpImplPolygon = new ImplPolygon( sal_uInt16(nTargetCount) );
-
         if(nB2DLocalCount)
         {
+            // point list creation
+            const sal_uInt32 nTargetCount(nB2DLocalCount + (bClosed ? 1L : 0L));
+            mpImplPolygon = new ImplPolygon( static_cast< sal_uInt16 >(nTargetCount) );
             sal_uInt16 nIndex(0);
 
             for(sal_uInt32 a(0L); a < nB2DLocalCount; a++)
             {
-                ::basegfx::B2DPoint aB2DPoint(rPolygon.getB2DPoint(a));
+                basegfx::B2DPoint aB2DPoint(rPolygon.getB2DPoint(a));
                 Point aPoint(FRound(aB2DPoint.getX()), FRound(aB2DPoint.getY()));
                 mpImplPolygon->mpPointAry[nIndex++] = aPoint;
             }
@@ -2435,6 +2445,12 @@ Polygon::Polygon(const ::basegfx::B2DPolygon& rPolygon)
                 mpImplPolygon->mpPointAry[nIndex] = mpImplPolygon->mpPointAry[0];
             }
         }
+    }
+
+    if(!mpImplPolygon)
+    {
+        // no content yet, create empty polygon
+        mpImplPolygon = (ImplPolygon*)(&aStaticImplPolygon);
     }
 }
 
