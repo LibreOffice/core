@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ww8par2.cxx,v $
  *
- *  $Revision: 1.131 $
+ *  $Revision: 1.132 $
  *
- *  last change: $Author: obo $ $Date: 2007-07-17 13:09:51 $
+ *  last change: $Author: obo $ $Date: 2007-07-18 14:46:30 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -434,6 +434,13 @@ sal_uInt32 wwSectionManager::GetTextAreaWidth() const
 {
     return !maSegments.empty() ? maSegments.back().GetTextAreaWidth() : 0;
 }
+
+// --> OD 2007-07-03 #148498#
+sal_uInt32 wwSectionManager::GetWWPageTopMargin() const
+{
+    return !maSegments.empty() ? maSegments.back().maSep.dyaTop : 0;
+}
+// <--
 
 sal_uInt16 SwWW8ImplReader::End_Ftn()
 {
@@ -2948,9 +2955,6 @@ void WW8TabDesc::FinishSwTable()
         }
         DELETEZ( pMergeGroups );
     }
-    // nun noch ggfs. die doppelten Innenraender korrigieren (Bug #53525#)
-    if( pTable )
-        ((SwTable*)pTable)->GCBorderLines();    // Garbage Collect
 }
 
 
@@ -3613,9 +3617,14 @@ bool SwWW8ImplReader::StartTable(WW8_CP nStartCp)
             pTableWFlyPara = ConstructApo( aApo, pNestedTabPos );
             if ( pTableWFlyPara )
             {
+                // --> OD 2007-07-03 #148498#
+                // <WW8SwFlyPara> constructor has changed - new 4th parameter
+                // containing WW8 page top margin.
                 pTableSFlyPara = new WW8SwFlyPara(*pPaM, *this, *pTableWFlyPara,
+                    maSectionManager.GetWWPageTopMargin(),
                     maSectionManager.GetPageLeft(), maSectionManager.GetTextAreaWidth(),
                     nIniFlyDx, nIniFlyDy);
+                // <--
                 // --> OD 2005-03-21 #i45301# - anchor nested table Writer fly
                 // frame at-character
                 eAnchor = FLY_AUTO_CNTNT;
