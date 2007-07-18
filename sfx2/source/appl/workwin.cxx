@@ -4,9 +4,9 @@
  *
  *  $RCSfile: workwin.cxx,v $
  *
- *  $Revision: 1.71 $
+ *  $Revision: 1.72 $
  *
- *  last change: $Author: obo $ $Date: 2007-07-17 13:41:04 $
+ *  last change: $Author: obo $ $Date: 2007-07-18 09:01:14 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -328,11 +328,13 @@ throw (css::uno::RuntimeException)
         {
             m_pWrkWin->MakeVisible_Impl( TRUE );
             m_pWrkWin->ShowChilds_Impl();
+            m_pWrkWin->ArrangeChilds_Impl( TRUE );
         }
         else if ( eLayoutEvent == css::frame::LayoutManagerEvents::INVISIBLE )
         {
             m_pWrkWin->MakeVisible_Impl( FALSE );
             m_pWrkWin->HideChilds_Impl();
+            m_pWrkWin->ArrangeChilds_Impl( TRUE );
         }
         else if ( eLayoutEvent == css::frame::LayoutManagerEvents::LOCK )
         {
@@ -826,14 +828,14 @@ void SfxWorkWindow::DeleteControllers_Impl()
 //====================================================================
 // Virtuelle Methode zum Anordnen der Childfenster.
 
-void SfxWorkWindow::ArrangeChilds_Impl()
+void SfxWorkWindow::ArrangeChilds_Impl( BOOL /*bForce*/)
 {
     Arrange_Impl();
 }
 
-void SfxFrameWorkWin_Impl::ArrangeChilds_Impl()
+void SfxFrameWorkWin_Impl::ArrangeChilds_Impl( BOOL bForce )
 {
-    if ( pFrame->IsClosing_Impl() || m_nLock )
+    if ( pFrame->IsClosing_Impl() || ( m_nLock && !bForce ))
         return;
 
     SfxInPlaceClient *pClient = 0;
@@ -850,7 +852,10 @@ void SfxFrameWorkWin_Impl::ArrangeChilds_Impl()
 
     SvBorder aBorder;
     if ( nChilds )
-        aBorder = Arrange_Impl();
+    {
+        if ( IsVisible_Impl() )
+            aBorder = Arrange_Impl();
+    }
 
     // Wenn das aktuelle Dokument der Applikation einen IPClient enth"alt, mu\s
     // dem dazugeh"origen Objekt durch SetTopToolFramePixel der zur Verf"ugung
@@ -1156,16 +1161,40 @@ void SfxWorkWindow::ShowChilds_Impl()
 {
     DBG_CHKTHIS(SfxWorkWindow, 0);
 
-    if ( !pWorkWin->IsReallyVisible() && !pWorkWin->IsReallyShown() )
-        return;
+    bool bInvisible = ( !IsVisible_Impl() || ( !pWorkWin->IsReallyVisible() && !pWorkWin->IsReallyShown() ));
 
     SfxChild_Impl *pCli = 0;
     for ( USHORT nPos = 0; nPos < pChilds->Count(); ++nPos )
     {
+        SfxChildWin_Impl* pCW = 0;
         pCli = (*pChilds)[nPos];
-        if (pCli && pCli->pWin)
+
+        if ( pCli && pCli->pWin )
         {
-            if ( CHILD_VISIBLE == (pCli->nVisible & CHILD_VISIBLE) )
+            // We have to find the SfxChildWin_Impl to retrieve the
+            // SFX_CHILDWIN flags that can influence visibility.
+            for (USHORT n=0; n<pChildWins->Count(); n++)
+            {
+                SfxChildWin_Impl* pCWin = (*pChildWins)[n];
+                SfxChild_Impl*    pChild  = pCWin->pCli;
+                if ( pChild == pCli )
+                {
+                    pCW = pCWin;
+                    break;
+                }
+            }
+
+            bool bVisible( !bInvisible );
+            if ( pCW )
+            {
+                // Check flag SFX_CHILDWIN_NEVERHIDE that forces us to show
+                // the child window even in situations where no child window is
+                // visible.
+                sal_uInt16 nFlags = pCW->aInfo.nFlags;
+                bVisible = !bInvisible || ( bInvisible & (( nFlags & SFX_CHILDWIN_NEVERHIDE ) != 0 ));
+            }
+
+            if ( CHILD_VISIBLE == (pCli->nVisible & CHILD_VISIBLE) && bVisible )
             {
                 USHORT nFlags = pCli->bSetFocus ? 0 : SHOW_NOFOCUSCHANGE | SHOW_NOACTIVATE;
                 switch ( pCli->pWin->GetType() )
@@ -1355,7 +1384,7 @@ void SfxFrameWorkWin_Impl::UpdateObjectBars_Impl()
             pWork = pWork->GetParent_Impl();
         }
 
-        ArrangeChilds_Impl();
+        ArrangeChilds_Impl( FALSE );
 
         pWork = pParent;
         while ( pWork )
