@@ -4,9 +4,9 @@
  *
  *  $RCSfile: unomap.cxx,v $
  *
- *  $Revision: 1.198 $
+ *  $Revision: 1.199 $
  *
- *  last change: $Author: vg $ $Date: 2007-05-22 16:34:29 $
+ *  last change: $Author: obo $ $Date: 2007-07-18 12:57:36 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1020,6 +1020,7 @@ const SfxItemPropertyMap* SwUnoPropertyMapProvider::GetPropertyMap(sal_uInt16 nP
                     { SW_PROP_NMID(UNO_NAME_PAGE_DESC_NAME), RES_PAGEDESC,           CPPU_E2T(CPPUTYPE_OUSTRING),         PropertyAttribute::MAYBEVOID, 0xff},
                     { SW_PROP_NMID(UNO_NAME_RELATIVE_WIDTH), FN_TABLE_RELATIVE_WIDTH,CPPU_E2T(CPPUTYPE_INT16)  ,        PROPERTY_NONE, 0xff },
                     { SW_PROP_NMID(UNO_NAME_REPEAT_HEADLINE), FN_TABLE_HEADLINE_REPEAT,CPPU_E2T(CPPUTYPE_BOOLEAN),      PROPERTY_NONE, 0xff},
+                    { SW_PROP_NMID(UNO_NAME_HEADER_ROW_COUNT), FN_TABLE_HEADLINE_COUNT,  CPPU_E2T(CPPUTYPE_INT32),      PROPERTY_NONE, 0xff},
                     { SW_PROP_NMID(UNO_NAME_SHADOW_FORMAT), RES_SHADOW,             CPPU_E2T(CPPUTYPE_SHADOWFMT),   PROPERTY_NONE, 0},
                     { SW_PROP_NMID(UNO_NAME_TOP_MARGIN), RES_UL_SPACE,          CPPU_E2T(CPPUTYPE_INT32), PROPERTY_NONE, MID_UP_MARGIN|CONVERT_TWIPS},
                     { SW_PROP_NMID(UNO_NAME_BOTTOM_MARGIN), RES_UL_SPACE,           CPPU_E2T(CPPUTYPE_INT32), PROPERTY_NONE, MID_LO_MARGIN|CONVERT_TWIPS},
@@ -1224,6 +1225,7 @@ const SfxItemPropertyMap* SwUnoPropertyMapProvider::GetPropertyMap(sal_uInt16 nP
                     { SW_PROP_NMID(UNO_NAME_VERT_MIRRORED), RES_GRFATR_MIRRORGRF,   CPPU_E2T(CPPUTYPE_BOOLEAN),             PROPERTY_NONE,     MID_MIRROR_VERT            },
                     { SW_PROP_NMID(UNO_NAME_GRAPHIC_URL), FN_UNO_GRAPHIC_U_R_L, CPPU_E2T(CPPUTYPE_OUSTRING), 0, 0 },
                     { SW_PROP_NMID(UNO_NAME_GRAPHIC_FILTER), FN_UNO_GRAPHIC_FILTER,      CPPU_E2T(CPPUTYPE_OUSTRING), 0, 0 },
+                    { SW_PROP_NMID(UNO_NAME_GRAPHIC), FN_UNO_GRAPHIC, CPPU_E2T(CPPUTYPE_REFXGRAPHIC), 0, 0 },
                     { SW_PROP_NMID(UNO_NAME_ACTUAL_SIZE), FN_UNO_ACTUAL_SIZE,    CPPU_E2T(CPPUTYPE_AWTSIZE),  PropertyAttribute::READONLY, CONVERT_TWIPS},
                     { SW_PROP_NMID(UNO_NAME_ALTERNATIVE_TEXT), FN_UNO_ALTERNATIVE_TEXT,CPPU_E2T(CPPUTYPE_OUSTRING),   PROPERTY_NONE , 0   },
                     { SW_PROP_NMID(UNO_NAME_CONTOUR_POLY_POLYGON), FN_PARAM_COUNTOUR_PP, CPPU_E2T(CPPUTYPE_PNTSEQSEQ), PropertyAttribute::MAYBEVOID, 0 },
@@ -1872,6 +1874,8 @@ const SfxItemPropertyMap* SwUnoPropertyMapProvider::GetPropertyMap(sal_uInt16 nP
                     {SW_PROP_NMID(UNO_NAME_NUMBER_FORMAT),      FIELD_PROP_FORMAT,  CPPU_E2T(CPPUTYPE_INT32), PROPERTY_NONE,    0},
                     {SW_PROP_NMID(UNO_NAME_NUMBERING_TYPE),     FIELD_PROP_USHORT2, CPPU_E2T(CPPUTYPE_INT16), PROPERTY_NONE,    0},
                     {SW_PROP_NMID(UNO_NAME_IS_INPUT),       FIELD_PROP_BOOL1,   CPPU_E2T(CPPUTYPE_BOOLEAN), PROPERTY_NONE, 0},
+                    // #i69733# wrong name - UNO_NAME_IS_INPUT expanded to "Input" instead of "IsInput"
+                    {SW_PROP_NMID(UNO_NAME_INPUT),          FIELD_PROP_BOOL1,   CPPU_E2T(CPPUTYPE_BOOLEAN), PROPERTY_NONE, 0},
                     {SW_PROP_NMID(UNO_NAME_IS_SHOW_FORMULA), FIELD_PROP_BOOL3,  CPPU_E2T(CPPUTYPE_BOOLEAN), PROPERTY_NONE,  0},
                     {SW_PROP_NMID(UNO_NAME_IS_VISIBLE),       FIELD_PROP_BOOL2,   CPPU_E2T(CPPUTYPE_BOOLEAN),    PROPERTY_NONE, 0},
                     //TODO: UNO_NAME_VARIABLE_NAME gibt es das wirklich?
@@ -2434,6 +2438,7 @@ const SfxItemPropertyMap* SwUnoPropertyMapProvider::GetPropertyMap(sal_uInt16 nP
                     // them as DataSource and it does not matter which one it is.
 
                     {SW_PROP_NMID(UNO_NAME_DATA_BASE_NAME ) ,  FIELD_PROP_PAR1, CPPU_E2T(CPPUTYPE_OUSTRING),   PROPERTY_NONE, 0},
+                    {SW_PROP_NMID(UNO_NAME_NAME),              FIELD_PROP_PAR3,  CPPU_E2T(CPPUTYPE_OUSTRING), PropertyAttribute::MAYBEVOID, 0},
                     {SW_PROP_NMID(UNO_NAME_DATA_TABLE_NAME  ), FIELD_PROP_PAR2, CPPU_E2T(CPPUTYPE_OUSTRING),   PROPERTY_NONE, 0},
                     {SW_PROP_NMID(UNO_NAME_DATA_COLUMN_NAME ), FIELD_PROP_PAR3, CPPU_E2T(CPPUTYPE_OUSTRING),   PROPERTY_NONE, 0},
                     {SW_PROP_NMID(UNO_NAME_INSTANCE_NAME),     FIELD_PROP_PAR4, CPPU_E2T(CPPUTYPE_OUSTRING), PropertyAttribute::READONLY, 0},
