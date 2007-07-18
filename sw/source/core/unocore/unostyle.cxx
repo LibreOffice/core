@@ -4,9 +4,9 @@
  *
  *  $RCSfile: unostyle.cxx,v $
  *
- *  $Revision: 1.72 $
+ *  $Revision: 1.73 $
  *
- *  last change: $Author: ihi $ $Date: 2007-06-05 17:36:55 $
+ *  last change: $Author: obo $ $Date: 2007-07-18 12:58:25 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1610,6 +1610,8 @@ void SwXStyle::setParentStyle(const OUString& rParentStyle)
         if(pBase)
         {
             SwDocStyleSheet aBase(*(SwDocStyleSheet*)pBase);
+            //make it a 'real' style - necessary for pooled styles
+            aBase.GetItemSet();
             if(aBase.GetParent() != sParentStyle)
             {
                 bExcept = !aBase.SetParent(sParentStyle);
