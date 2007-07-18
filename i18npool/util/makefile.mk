@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.21 $
+#   $Revision: 1.22 $
 #
-#   last change: $Author: ihi $ $Date: 2006-12-19 18:05:56 $
+#   last change: $Author: obo $ $Date: 2007-07-18 07:10:33 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -42,6 +42,7 @@ TARGET=i18npool.uno
 
 .INCLUDE :	settings.mk
 DLLPRE =
+.INCLUDE :	$(PRJ)/version.mk
 
 # --- Allgemein ----------------------------------------------------------
 
@@ -65,7 +66,8 @@ SHL1TARGET= $(TARGET)
 # WNT needs implib name even if there is none
 SHL1IMPLIB= i$(SHL1TARGET)
 
-SHL1DEPN=	makefile.mk
+SHL1DEPN=	makefile.mk \
+        $(SLB)/i18nisolang$(ISOLANG_MAJOR)$(COMID).lib
 SHL1VERSIONMAP=$(PRJNAME).map
 SHL1DEF=$(MISC)$/$(SHL1TARGET).def
 DEF1NAME=$(SHL1TARGET)
@@ -73,6 +75,7 @@ DEF1NAME=$(SHL1TARGET)
 SHL1LIBS=$(LIB1TARGET)
 SHL1STDLIBS= \
         $(I18NUTILLIB) \
+        $(I18NISOLANGLIB) \
         $(CPPUHELPERLIB) \
         $(CPPULIB) \
         $(SALLIB) \
