@@ -4,9 +4,9 @@
  *
  *  $RCSfile: EnhancedCustomShapeFontWork.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: hr $ $Date: 2007-06-27 16:43:58 $
+ *  last change: $Author: obo $ $Date: 2007-07-18 10:52:27 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -831,7 +831,7 @@ void FitTextOutlinesToShapeOutlines( const PolyPolygon& aOutlines2d, FWData& rFW
                                 // #i35928#
                                 basegfx::B2DPolygon aCandidate(rPolyPoly[ i ].getB2DPolygon());
 
-                                if(aCandidate.areControlVectorsUsed())
+                                if(aCandidate.areControlPointsUsed())
                                 {
                                     aCandidate = basegfx::tools::adaptiveSubdivideByAngle(aCandidate);
                                 }
