@@ -4,9 +4,9 @@
  *
  *  $RCSfile: unotext.cxx,v $
  *
- *  $Revision: 1.61 $
+ *  $Revision: 1.62 $
  *
- *  last change: $Author: hr $ $Date: 2007-06-27 19:29:57 $
+ *  last change: $Author: obo $ $Date: 2007-07-18 13:07:45 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -113,6 +113,7 @@ using namespace ::com::sun::star;
         return uno::makeAny(uno::Reference< xint >(this))
 
 extern const SfxItemPropertyMap* ImplGetSvxTextPortionPropertyMap();
+extern const SfxItemPropertyMap* ImplGetSvxUnoOutlinerTextCursorPropertyMap();
 
 // ====================================================================
 // helper fuer Item/Property Konvertierung
@@ -1673,7 +1674,7 @@ SvxUnoTextBase::SvxUnoTextBase( const SvxEditSource* pSource, const SfxItemPrope
 
 SvxUnoTextBase::SvxUnoTextBase( const SvxUnoTextBase& rText ) throw()
 :   SvxUnoTextRangeBase( rText )
-,   text::XText()
+, text::XTextAppend()
 ,   container::XEnumerationAccess()
 ,   text::XTextRangeMover()
 ,   lang::XTypeProvider()
@@ -1722,6 +1723,9 @@ uno::Any SAL_CALL SvxUnoTextBase::queryAggregation( const uno::Type & rType )
     QUERYINT( text::XTextRangeCompare );
     QUERYINT( lang::XServiceInfo );
     QUERYINT( text::XTextRangeMover );
+    QUERYINT( text::XTextAppend );
+    QUERYINT( text::XParagraphAppend );
+    QUERYINT( text::XTextPortionAppend );
     QUERYINT( lang::XTypeProvider );
     QUERYINT( lang::XUnoTunnel );
 
@@ -1734,7 +1738,7 @@ uno::Sequence< uno::Type > SAL_CALL SvxUnoTextBase::getStaticTypes() throw()
 {
     if( maTypeSequence.getLength() == 0 )
     {
-        maTypeSequence.realloc( 10 ); // !DANGER! keep this updated
+        maTypeSequence.realloc( 13 ); // !DANGER! keep this updated
         uno::Type* pTypes = maTypeSequence.getArray();
 
         *pTypes++ = ::getCppuType(( const uno::Reference< text::XText >*)0);
@@ -1744,6 +1748,9 @@ uno::Sequence< uno::Type > SAL_CALL SvxUnoTextBase::getStaticTypes() throw()
 //      *pTypes++ = ::getCppuType(( const uno::Reference< beans::XTolerantMultiPropertySet >*)0);
         *pTypes++ = ::getCppuType(( const uno::Reference< beans::XPropertyState >*)0);
         *pTypes++ = ::getCppuType(( const uno::Reference< text::XTextRangeMover >*)0);
+        *pTypes++ = ::getCppuType(( const uno::Reference< text::XTextAppend >*)0);
+        *pTypes++ = ::getCppuType(( const uno::Reference< text::XParagraphAppend >*)0);
+        *pTypes++ = ::getCppuType(( const uno::Reference< text::XTextPortionAppend >*)0);
         *pTypes++ = ::getCppuType(( const uno::Reference< lang::XServiceInfo >*)0);
         *pTypes++ = ::getCppuType(( const uno::Reference< lang::XTypeProvider >*)0);
         *pTypes++ = ::getCppuType(( const uno::Reference< lang::XUnoTunnel >*)0);
@@ -2040,6 +2047,149 @@ sal_Bool SAL_CALL SvxUnoTextBase::hasElements(  ) throw(uno::RuntimeException)
 void SAL_CALL SvxUnoTextBase::moveTextRange( const uno::Reference< text::XTextRange >&, sal_Int16 )
     throw(uno::RuntimeException)
 {
+}
+
+void SvxPropertyValuesToItemSet(
+        SfxItemSet &rItemSet,
+        const uno::Sequence< beans::PropertyValue > rPropertyVaules,
+        const SfxItemPropertyMap &rMap,
+        SvxTextForwarder *pForwarder /*needed for WID_NUMLEVEL*/,
+        USHORT nPara /*needed for WID_NUMLEVEL*/)
+    throw(lang::IllegalArgumentException, beans::UnknownPropertyException, uno::RuntimeException)
+{
+    SfxItemPropertySet aPropSet( &rMap );
+    sal_Int32 nProps = rPropertyVaules.getLength();
+    const beans::PropertyValue *pProps = rPropertyVaules.getConstArray();
+    for (sal_Int32 i = 0;  i < nProps;  ++i)
+    {
+        const SfxItemPropertyMap *pEntry = SfxItemPropertyMap::GetByName( &rMap, pProps[i].Name );
+        if (pEntry)
+        {
+            // Note: there is no need to take special care of the properties
+            //      TextField (EE_FEATURE_FIELD) and
+            //      TextPortionType (WID_PORTIONTYPE)
+            //  since they are read-only and thus are already taken care of below.
+
+            if (pEntry->nFlags & beans::PropertyAttribute::READONLY)
+                // should be PropertyVetoException which is not yet defined for the new import API's functions
+                throw uno::RuntimeException( OUString ( RTL_CONSTASCII_USTRINGPARAM ( "Property is read-only: " ) ) + pProps[i].Name, static_cast < cppu::OWeakObject * > ( 0 ) );
+                //throw PropertyVetoException ( OUString ( RTL_CONSTASCII_USTRINGPARAM ( "Property is read-only: " ) ) + pProps[i].Name, static_cast < cppu::OWeakObject * > ( 0 ) );
+
+            if (pEntry->nWID == WID_FONTDESC)
+            {
+                awt::FontDescriptor aDesc;
+                if (pProps[i].Value >>= aDesc)
+                    SvxUnoFontDescriptor::FillItemSet( aDesc, rItemSet );
+            }
+            else if (pEntry->nWID == WID_NUMLEVEL)
+            {
+                if (pForwarder)
+                {
+                    sal_Int16 nLevel = 0;
+                    if (pProps[i].Value >>= nLevel)
+                    {
+                        // #101004# Call interface method instead of unsafe cast
+                        if (!pForwarder->SetDepth( nPara, nLevel ))
+                            throw lang::IllegalArgumentException();
+                    }
+                }
+            }
+            else
+                aPropSet.setPropertyValue( *pEntry, pProps[i].Value, rItemSet );
+        }
+        else
+            throw beans::UnknownPropertyException(OUString ( RTL_CONSTASCII_USTRINGPARAM ( "Unknown property: " ) ) + pProps[i].Name, static_cast < cppu::OWeakObject * > ( 0 ) );
+    }
+}
+
+// com::sun::star::text::XParagraphAppend (new import API)
+uno::Reference< text::XTextRange > SAL_CALL SvxUnoTextBase::appendParagraph(
+        const uno::Sequence< beans::PropertyValue >& rCharAndParaProps )
+    throw (lang::IllegalArgumentException, beans::UnknownPropertyException, uno::RuntimeException)
+{
+    OGuard aGuard( Application::GetSolarMutex() );
+    uno::Reference< text::XTextRange > xRet;
+    SvxEditSource *pEditSource = GetEditSource();
+    SvxTextForwarder *pTextForwarder = pEditSource ? pEditSource->GetTextForwarder() : 0;
+    if (pTextForwarder)
+    {
+        USHORT nParaCount = pTextForwarder->GetParagraphCount();
+        DBG_ASSERT( nParaCount > 0, "paragraph count is 0 or negative" );
+        pTextForwarder->AppendParagraph();
+
+        // set properties for new appended (now last) paragraph
+        ESelection aSel( nParaCount, 0, nParaCount, 0 );
+        SfxItemSet aItemSet( *pTextForwarder->GetEmptyItemSetPtr() );
+        const SfxItemPropertyMap *pMap = ImplGetSvxUnoOutlinerTextCursorPropertyMap();
+        SvxPropertyValuesToItemSet( aItemSet, rCharAndParaProps, *pMap, pTextForwarder, nParaCount );
+        pTextForwarder->QuickSetAttribs( aItemSet, aSel );
+        SvxUnoTextRange* pRange = new SvxUnoTextRange( *this );
+        xRet = pRange;
+        pRange->SetSelection( aSel );
+    }
+    return xRet;
+}
+
+uno::Reference< text::XTextRange > SAL_CALL SvxUnoTextBase::finishParagraph(
+        const uno::Sequence< beans::PropertyValue >& rCharAndParaProps )
+    throw (lang::IllegalArgumentException, beans::UnknownPropertyException, uno::RuntimeException)
+{
+    OGuard aGuard( Application::GetSolarMutex() );
+
+    uno::Reference< text::XTextRange > xRet;
+    SvxEditSource *pEditSource = GetEditSource();
+    SvxTextForwarder *pTextForwarder = pEditSource ? pEditSource->GetTextForwarder() : 0;
+    if (pTextForwarder)
+    {
+        USHORT nParaCount = pTextForwarder->GetParagraphCount();
+        DBG_ASSERT( nParaCount > 0, "paragraph count is 0 or negative" );
+        pTextForwarder->AppendParagraph();
+
+        // set properties for the previously last paragraph
+        USHORT nPara = nParaCount - 1;
+        ESelection aSel( nPara, 0, nPara, 0 );
+        SfxItemSet aItemSet( *pTextForwarder->GetEmptyItemSetPtr() );
+        const SfxItemPropertyMap *pMap = ImplGetSvxUnoOutlinerTextCursorPropertyMap();
+        SvxPropertyValuesToItemSet( aItemSet, rCharAndParaProps, *pMap, pTextForwarder, nPara );
+        pTextForwarder->QuickSetAttribs( aItemSet, aSel );
+        SvxUnoTextRange* pRange = new SvxUnoTextRange( *this );
+        xRet = pRange;
+        pRange->SetSelection( aSel );
+    }
+    return xRet;
+}
+
+// com::sun::star::text::XTextPortionAppend (new import API)
+uno::Reference< text::XTextRange > SAL_CALL SvxUnoTextBase::appendTextPortion(
+        const ::rtl::OUString& rText,
+        const uno::Sequence< beans::PropertyValue >& rCharAndParaProps )
+    throw (lang::IllegalArgumentException, beans::UnknownPropertyException, uno::RuntimeException)
+{
+    OGuard aGuard( Application::GetSolarMutex() );
+
+    SvxEditSource *pEditSource = GetEditSource();
+    SvxTextForwarder *pTextForwarder = pEditSource ? pEditSource->GetTextForwarder() : 0;
+    uno::Reference< text::XTextRange > xRet;
+    if (pTextForwarder)
+    {
+        USHORT nParaCount = pTextForwarder->GetParagraphCount();
+        DBG_ASSERT( nParaCount > 0, "paragraph count is 0 or negative" );
+        USHORT nPara = nParaCount - 1;
+        SfxItemSet aSet( pTextForwarder->GetParaAttribs( nPara ) );
+        xub_StrLen nStart = pTextForwarder->AppendTextPortion( nPara, rText, aSet );
+        xub_StrLen nEnd   = pTextForwarder->GetTextLen( nPara );
+
+        // set properties for the new text portion
+        ESelection aSel( nPara, nStart, nPara, nEnd );
+        SfxItemSet aItemSet( *pTextForwarder->GetEmptyItemSetPtr() );
+        const SfxItemPropertyMap *pMap = ImplGetSvxTextPortionPropertyMap();
+        SvxPropertyValuesToItemSet( aItemSet, rCharAndParaProps, *pMap, pTextForwarder, nPara );
+        pTextForwarder->QuickSetAttribs( aItemSet, aSel );
+        SvxUnoTextRange* pRange = new SvxUnoTextRange( *this );
+        xRet = pRange;
+        pRange->SetSelection( aSel );
+    }
+    return xRet;
 }
 
 // lang::XServiceInfo
@@ -2402,3 +2552,19 @@ sal_Bool SvxDummyTextSource::InsertText( const String&, const ESelection& )
 {
     return sal_False;
 }
+
+const SfxItemSet * SvxDummyTextSource::GetEmptyItemSetPtr()
+{
+    return 0;
+}
+
+void SvxDummyTextSource::AppendParagraph()
+{
+}
+
+xub_StrLen SvxDummyTextSource::AppendTextPortion( USHORT, const String &, const SfxItemSet & )
+{
+    return 0;
+}
+
+
