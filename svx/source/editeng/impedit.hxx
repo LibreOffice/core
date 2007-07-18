@@ -4,9 +4,9 @@
  *
  *  $RCSfile: impedit.hxx,v $
  *
- *  $Revision: 1.84 $
+ *  $Revision: 1.85 $
  *
- *  last change: $Author: hr $ $Date: 2007-06-27 17:58:59 $
+ *  last change: $Author: obo $ $Date: 2007-07-18 09:52:07 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -538,6 +538,7 @@ private:
                                               // comments for text
                                               // layout (paras, lines etc)
     sal_Bool            bImpConvertFirstCall;   // specifies if ImpConvert is called the very first time after Convert was called
+    sal_Bool            bFirstWordCapitalization;   // specifies if auto-correction should capitalize the first word or not
 
     // Fuer Formatierung / Update....
     DeletedNodesList    aDeletedNodes;
@@ -1073,6 +1074,10 @@ public:
     /** sets a link that is called at the end of a drag operation at an edit view */
     void            SetEndDropHdl( const Link& rLink ) { maEndDropHdl = rLink; }
     Link            GetEndDropHdl() const { return maEndDropHdl; }
+
+    /// specifies if auto-correction should capitalize the first word or not (default is on)
+    void            SetFirstWordCapitalization( BOOL bCapitalize )  { bFirstWordCapitalization = bCapitalize; }
+    BOOL            IsFirstWordCapitalization() const   { return bFirstWordCapitalization; }
 };
 
 inline EPaM ImpEditEngine::CreateEPaM( const EditPaM& rPaM )
