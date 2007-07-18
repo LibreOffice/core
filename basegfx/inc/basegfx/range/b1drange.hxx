@@ -4,9 +4,9 @@
  *
  *  $RCSfile: b1drange.hxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-07 20:31:25 $
+ *  last change: $Author: obo $ $Date: 2007-07-18 11:03:46 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -100,11 +100,6 @@ namespace basegfx
         bool equal(const B1DRange& rRange) const
         {
             return (maRange.equal(rRange.maRange));
-        }
-
-        bool equal(const B1DRange& rRange, const double& rfSmallValue) const
-        {
-            return (maRange.equal(rRange.maRange,rfSmallValue));
         }
 
         double getMinimum() const
