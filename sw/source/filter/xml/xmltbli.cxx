@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xmltbli.cxx,v $
  *
- *  $Revision: 1.57 $
+ *  $Revision: 1.58 $
  *
- *  last change: $Author: rt $ $Date: 2007-07-06 09:54:57 $
+ *  last change: $Author: obo $ $Date: 2007-07-18 14:29:48 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -2493,7 +2493,7 @@ void SwXMLTableContext::_MakeTable( SwTableBox *pBox )
             // The absolute space that is available for all columns with a
             // relative width.
             sal_Int32 nAbsForRelWidth =
-                    nWidth > nAbsWidth ? nWidth - nAbsWidth : 0L;
+                    nWidth > nAbsWidth ? nWidth - nAbsWidth : (sal_Int32)0L;
 
             // The relative width that has to be distributed in addition to
             // equally widthed columns.
@@ -2503,7 +2503,7 @@ void SwXMLTableContext::_MakeTable( SwTableBox *pBox )
             // minumum widthed columns.
             sal_Int32 nMinAbs = nRelCols * MINLAY;
             sal_Int32 nExtraAbs =
-                    nAbsForRelWidth > nMinAbs ? nAbsForRelWidth - nMinAbs : 0L;
+                    nAbsForRelWidth > nMinAbs ? nAbsForRelWidth - nMinAbs : (sal_Int32)0L;
 
             sal_Bool bMin = sal_False;      // Do all columns get the mininum width?
             sal_Bool bMinExtra = sal_False; // Do all columns get the minimum width plus
@@ -2844,9 +2844,18 @@ const SwStartNode *SwXMLTableContext::InsertTableSection(
     }
     else
     {
-        SwDoc* pDoc = pTxtCrsr->GetDoc();
         const SwEndNode *pEndNd = pPrevSttNd ? pPrevSttNd->EndOfSectionNode()
                                              : pTableNode->EndOfSectionNode();
+        SwDoc* pDoc = pTxtCrsr->GetDoc();
+        // --> OD 2007-07-02 #i78921# - make code robust
+#if OSL_DEBUG_LEVEL > 1
+        ASSERT( pDoc, "<SwXMLTableContext::InsertTableSection(..)> - no <pDoc> at <SwXTextCursor> instance - <SwXTextCurosr> doesn't seem to be registered at a <SwUnoCrsr> instance." );
+#endif
+        if ( !pDoc )
+        {
+            pDoc = const_cast<SwDoc*>(pEndNd->GetDoc());
+        }
+        // <--
         sal_uInt32 nOffset = pPrevSttNd ? 1UL : 0UL;
         SwNodeIndex aIdx( *pEndNd, nOffset );
         SwTxtFmtColl *pColl =
