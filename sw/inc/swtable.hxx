@@ -4,9 +4,9 @@
  *
  *  $RCSfile: swtable.hxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: rt $ $Date: 2007-07-06 12:16:12 $
+ *  last change: $Author: obo $ $Date: 2007-07-18 14:45:01 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -297,8 +297,6 @@ public:
 
         // Struktur ein wenig aufraeumen
     void GCLines();
-        // BorderLine ein wenig aufraeumen
-    void GCBorderLines();
 
     // returns the table node via aSortCntBoxes or pTableNode
     SwTableNode* GetTableNode() const;
