@@ -4,9 +4,9 @@
  *
  *  $RCSfile: b2dpolygon.hxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: obo $ $Date: 2006-07-13 09:54:38 $
+ *  last change: $Author: obo $ $Date: 2007-07-18 11:02:46 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -42,6 +42,10 @@
 
 #ifndef INCLUDED_O3TL_COW_WRAPPER_HXX
 #include <o3tl/cow_wrapper.hxx>
+#endif
+
+#ifndef _BGFX_VECTOR_B2ENUMS_HXX
+#include <basegfx/vector/b2enums.hxx>
 #endif
 
 //////////////////////////////////////////////////////////////////////////////
@@ -89,26 +93,35 @@ namespace basegfx
         sal_uInt32 count() const;
 
         // Coordinate interface
-        ::basegfx::B2DPoint getB2DPoint(sal_uInt32 nIndex) const;
-        void setB2DPoint(sal_uInt32 nIndex, const ::basegfx::B2DPoint& rValue);
+        basegfx::B2DPoint getB2DPoint(sal_uInt32 nIndex) const;
+        void setB2DPoint(sal_uInt32 nIndex, const basegfx::B2DPoint& rValue);
 
         // Coordinate insert/append
-        void insert(sal_uInt32 nIndex, const ::basegfx::B2DPoint& rPoint, sal_uInt32 nCount = 1);
-        void append(const ::basegfx::B2DPoint& rPoint, sal_uInt32 nCount = 1);
-
-        // ControlVector interface
-        ::basegfx::B2DVector getControlVectorA(sal_uInt32 nIndex) const;
-        void setControlVectorA(sal_uInt32 nIndex, const ::basegfx::B2DVector& rValue);
-        ::basegfx::B2DVector getControlVectorB(sal_uInt32 nIndex) const;
-        void setControlVectorB(sal_uInt32 nIndex, const ::basegfx::B2DVector& rValue);
-        bool areControlVectorsUsed() const;
+        void insert(sal_uInt32 nIndex, const basegfx::B2DPoint& rPoint, sal_uInt32 nCount = 1);
+        void append(const basegfx::B2DPoint& rPoint, sal_uInt32 nCount = 1);
 
         // ControlPoint interface
-        ::basegfx::B2DPoint getControlPointA(sal_uInt32 nIndex) const;
-        void setControlPointA(sal_uInt32 nIndex, const ::basegfx::B2DPoint& rValue);
-        ::basegfx::B2DPoint getControlPointB(sal_uInt32 nIndex) const;
-        void setControlPointB(sal_uInt32 nIndex, const ::basegfx::B2DPoint& rValue);
-        bool areControlPointsUsed() const { return areControlVectorsUsed(); }
+        basegfx::B2DPoint getPrevControlPoint(sal_uInt32 nIndex) const;
+        basegfx::B2DPoint getNextControlPoint(sal_uInt32 nIndex) const;
+        void setPrevControlPoint(sal_uInt32 nIndex, const basegfx::B2DPoint& rValue);
+        void setNextControlPoint(sal_uInt32 nIndex, const basegfx::B2DPoint& rValue);
+        void setControlPoints(sal_uInt32 nIndex, const basegfx::B2DPoint& rPrev, const basegfx::B2DPoint& rNext);
+
+        // ControlPoint resets
+        void resetPrevControlPoint(sal_uInt32 nIndex);
+        void resetNextControlPoint(sal_uInt32 nIndex);
+        void resetControlPoints(sal_uInt32 nIndex);
+        void resetControlPoints();
+
+        // Bezier segment append with control points. The currently last
+        // polygon point is implicitly taken as start point.
+        void appendBezierSegment(const basegfx::B2DPoint& rNextControlPoint, const basegfx::B2DPoint& rPrevControlPoint, const basegfx::B2DPoint& rPoint);
+
+        // ControlPoint checks
+        bool areControlPointsUsed() const;
+        bool isPrevControlPointUsed(sal_uInt32 nIndex) const;
+        bool isNextControlPointUsed(sal_uInt32 nIndex) const;
+        B2VectorContinuity getContinuityInPoint(sal_uInt32 nIndex) const;
 
         // insert/append other 2D polygons
         void insert(sal_uInt32 nIndex, const B2DPolygon& rPoly, sal_uInt32 nIndex2 = 0, sal_uInt32 nCount = 0);
@@ -134,7 +147,7 @@ namespace basegfx
         void removeDoublePoints();
 
         // apply transformation given in matrix form to the polygon
-        void transform(const ::basegfx::B2DHomMatrix& rMatrix);
+        void transform(const basegfx::B2DHomMatrix& rMatrix);
     };
 } // end of namespace basegfx
 
