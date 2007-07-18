@@ -5,9 +5,9 @@
  *
  *  $RCSfile: Setup.xcu,v $
  *
- *  $Revision: 1.32 $
+ *  $Revision: 1.33 $
  *
- *  last change: $Author: rt $ $Date: 2007-07-06 06:49:42 $
+ *  last change: $Author: obo $ $Date: 2007-07-18 08:42:55 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -200,7 +200,7 @@
                     <value >math8</value>
                 </prop>
                 <prop oor:name="ooSetupFactoryActualTemplateFilter" oor:finalized="true" />
-                <prop oor:name="ooSetupFactoryDefaultFilter" oor:finalized="true">
+                <prop oor:name="ooSetupFactoryDefaultFilter">
                     <value >math8</value>
                 </prop>
                 <prop oor:name="ooSetupFactoryEmptyDocumentURL" oor:finalized="true">
@@ -239,7 +239,7 @@
                     <value >writerglobal8</value>
                 </prop>
                 <prop oor:name="ooSetupFactoryActualTemplateFilter" oor:finalized="true" />
-                <prop oor:name="ooSetupFactoryDefaultFilter" oor:finalized="true">
+                <prop oor:name="ooSetupFactoryDefaultFilter">
                     <value >writerglobal8</value>
                 </prop>
                 <prop oor:name="ooSetupFactoryEmptyDocumentURL" oor:finalized="true">
@@ -430,7 +430,7 @@
                     <value >HTML</value>
                 </prop>
                 <prop oor:name="ooSetupFactoryActualTemplateFilter" oor:finalized="true" />
-                <prop oor:name="ooSetupFactoryDefaultFilter" oor:finalized="true">
+                <prop oor:name="ooSetupFactoryDefaultFilter">
                     <value >HTML</value>
                 </prop>
                 <prop oor:name="ooSetupFactoryEmptyDocumentURL" oor:finalized="true">
