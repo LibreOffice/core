@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.11 $
+#   $Revision: 1.12 $
 #
-#   last change: $Author: rt $ $Date: 2006-12-01 17:01:36 $
+#   last change: $Author: obo $ $Date: 2007-07-18 08:46:22 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -49,6 +49,8 @@ IDLFILES=\
     AdministrationProvider.idl \
     DefaultProvider.idl \
     CannotLoadConfigurationException.idl \
+    CorruptedConfigurationException.idl \
+    CorruptedUIConfigurationException.idl \
     InvalidBootstrapFileException.idl \
     MissingBootstrapFileException.idl \
     InstallationIncompleteException.idl \
