@@ -4,9 +4,9 @@
  *
  *  $RCSfile: editsh.cxx,v $
  *
- *  $Revision: 1.32 $
+ *  $Revision: 1.33 $
  *
- *  last change: $Author: kz $ $Date: 2007-05-10 17:00:21 $
+ *  last change: $Author: obo $ $Date: 2007-07-18 09:44:48 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -754,15 +754,12 @@ void ScEditShell::ExecuteAttr(SfxRequest& rReq)
             {
                 if (pArgs)
                 {
-                    USHORT nScript = pEditView->GetSelectedScriptType();
-                    if (nScript == 0) nScript = ScGlobal::GetDefaultScriptType();
-
-                    // #i55929# script type for font / height depends on input language if nothing is selected
-                    if ( !pEditView->GetSelection().HasRange() )
+                    // #i78017 establish the same behaviour as in Writer
+                    USHORT nScript = SCRIPTTYPE_LATIN | SCRIPTTYPE_ASIAN | SCRIPTTYPE_COMPLEX;
+                    if (nSlot == SID_ATTR_CHAR_FONT)
                     {
-                        LanguageType nInputLang = pViewData->GetActiveWin()->GetInputLanguage();
-                        if (nInputLang != LANGUAGE_DONTKNOW && nInputLang != LANGUAGE_SYSTEM)
-                            nScript = SvtLanguageOptions::GetScriptTypeOfLanguage( nInputLang );
+                        nScript = pEditView->GetSelectedScriptType();
+                        if (nScript == 0) nScript = ScGlobal::GetDefaultScriptType();
                     }
 
                     SfxItemPool& rPool = GetPool();
@@ -789,8 +786,9 @@ void ScEditShell::ExecuteAttr(SfxRequest& rReq)
 
         case SID_ATTR_CHAR_WEIGHT:
             {
-                USHORT nScript = pEditView->GetSelectedScriptType();
-                if (nScript == 0) nScript = ScGlobal::GetDefaultScriptType();
+                // #i78017 establish the same behaviour as in Writer
+                USHORT nScript = SCRIPTTYPE_LATIN | SCRIPTTYPE_ASIAN | SCRIPTTYPE_COMPLEX;
+
                 SfxItemPool& rPool = GetPool();
 
                 BOOL bOld = FALSE;
@@ -811,8 +809,9 @@ void ScEditShell::ExecuteAttr(SfxRequest& rReq)
 
         case SID_ATTR_CHAR_POSTURE:
             {
-                USHORT nScript = pEditView->GetSelectedScriptType();
-                if (nScript == 0) nScript = ScGlobal::GetDefaultScriptType();
+                // #i78017 establish the same behaviour as in Writer
+                USHORT nScript = SCRIPTTYPE_LATIN | SCRIPTTYPE_ASIAN | SCRIPTTYPE_COMPLEX;
+
                 SfxItemPool& rPool = GetPool();
 
                 BOOL bOld = FALSE;
