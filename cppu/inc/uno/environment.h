@@ -4,9 +4,9 @@
  *
  *  $RCSfile: environment.h,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: kz $ $Date: 2007-05-09 13:34:52 $
+ *  last change: $Author: obo $ $Date: 2007-07-18 12:20:15 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -349,16 +349,16 @@ void SAL_CALL uno_getCurrentEnvironment(uno_Environment ** ppEnv, rtl_uString * 
 
 /** Typedef for variable argument function.
  */
-typedef void SAL_CALL uno_EnvCallee(va_list param);
+typedef void SAL_CALL uno_EnvCallee(va_list * pParam);
 
 /** Invoke the passed function in the given environment.
 
     @param pEnv     the target environment
     @param pCallee  the function to call
-    @param param    the parameter pointer passed to the function
+    @param pParam   the parameter pointer passed to the function
     @since UDK 3.2.7
  */
-void SAL_CALL uno_Environment_invoke_v(uno_Environment * pEnv, uno_EnvCallee * pCallee, va_list param)
+void SAL_CALL uno_Environment_invoke_v(uno_Environment * pEnv, uno_EnvCallee * pCallee, va_list * pParam)
     SAL_THROW_EXTERN_C();
 
 /** Invoke the passed function in the given environment.
