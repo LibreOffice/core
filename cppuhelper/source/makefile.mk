@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.46 $
+#   $Revision: 1.47 $
 #
-#   last change: $Author: kz $ $Date: 2007-05-09 13:25:49 $
+#   last change: $Author: obo $ $Date: 2007-07-18 12:17:44 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -72,6 +72,8 @@ UNOTYPES= \
         com.sun.star.bridge.UnoUrlResolver \
         com.sun.star.bridge.XUnoUrlResolver \
         com.sun.star.connection.SocketPermission \
+        com.sun.star.container.XElementAccess \
+        com.sun.star.container.XEnumerationAccess \
         com.sun.star.container.XHierarchicalNameAccess \
         com.sun.star.container.XNameAccess \
         com.sun.star.container.XNameContainer \
@@ -173,16 +175,8 @@ DEF1NAME=$(SHL1TARGET)
 SHL1VERSIONMAP=msvc_win32_intel.map
 .ELIF "$(COMNAME)"=="sunpro5"
 SHL1VERSIONMAP=cc5_solaris_sparc.map
-.ELIF "$(OS)$(CPU)$(COMNAME)"=="LINUXIgcc3"
-SHL1VERSIONMAP=gcc3_linux_intel.map
-.ELIF "$(OS)$(CPU)$(COMNAME)"=="FREEBSDIgcc3"
-SHL1VERSIONMAP=gcc3_linux_intel.map
-.ELIF "$(OS)$(CPU)$(COMNAME)"=="LINUXSgcc3"
-SHL1VERSIONMAP=gcc3_linux_intel.map
-.ELIF "$(OS)$(CPU)$(COMNAME)"=="MACOSXIgcc3"
-SHL1VERSIONMAP=gcc3_linux_intel.map
-.ELIF "$(GUI)$(COM)"=="WNTGCC"
-SHL1VERSIONMAP=mingw.map
+.ELIF "$(COMNAME)"=="gcc3"
+SHL1VERSIONMAP=gcc3.map
 .ENDIF
 
 # --- Targets ------------------------------------------------------
