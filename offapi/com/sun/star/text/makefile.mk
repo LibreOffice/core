@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.42 $
+#   $Revision: 1.43 $
 #
-#   last change: $Author: hr $ $Date: 2007-06-27 13:34:30 $
+#   last change: $Author: obo $ $Date: 2007-07-18 13:03:22 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -260,7 +260,14 @@ IDLFILES=\
       XTextTablesSupplier.idl\
       XTextViewCursor.idl\
       XTextViewCursorSupplier.idl\
-      XWordCursor.idl
+    XWordCursor.idl \
+    XParagraphAppend.idl \
+    XTextPortionAppend.idl \
+    XTextContentAppend.idl \
+    XTextConvert.idl \
+    XTextAppendAndConvert.idl \
+    XTextAppend.idl 
+    
 
 # ------------------------------------------------------------------
 
