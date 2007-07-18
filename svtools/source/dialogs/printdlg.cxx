@@ -4,9 +4,9 @@
  *
  *  $RCSfile: printdlg.cxx,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: rt $ $Date: 2007-07-10 09:19:51 $
+ *  last change: $Author: obo $ $Date: 2007-07-18 09:04:49 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -85,10 +85,8 @@
 #include <comphelper/processfactory.hxx>
 #endif
 
-using namespace com::sun::star::uno;
-using namespace com::sun::star::lang;
-using namespace com::sun::star::ui::dialogs;
 using rtl::OUString;
+using namespace com::sun::star;
 
 struct SvtPrinterImpl
 {
@@ -390,20 +388,19 @@ IMPL_LINK( PrintDialog, ImplChangePrinterHdl, void*, EMPTYARG )
 
 bool PrintDialog::ImplGetFilename()
 {
-    Reference< XMultiServiceFactory > xFactory( ::comphelper::getProcessServiceFactory() );
-    static OUString aOldFile;
+    uno::Reference< lang::XMultiServiceFactory > xFactory( ::comphelper::getProcessServiceFactory() );
+    static ::rtl::OUString aOldFile;
     if( xFactory.is() )
     {
-        Sequence< Any > aTempl( 1 );
-        aTempl.getArray()[0] <<= TemplateDescription::FILESAVE_AUTOEXTENSION;
-
-        Reference< XFilePicker > xFilePicker( xFactory->
-                                              createInstanceWithArguments( OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.ui.dialogs.FilePicker" ) ),
-                                                                           aTempl ),
-                                              UNO_QUERY );
+        uno::Sequence< uno::Any > aTempl( 1 );
+        aTempl.getArray()[0] <<= ui::dialogs::TemplateDescription::FILESAVE_AUTOEXTENSION;
+        uno::Reference< ui::dialogs::XFilePicker > xFilePicker(
+            xFactory->createInstanceWithArguments(
+                ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.ui.dialogs.FilePicker" ) ),
+                aTempl ), uno::UNO_QUERY );
         DBG_ASSERT( xFilePicker.is(), "could not get FilePicker service" );
 
-        Reference< XFilterManager > xFilterMgr( xFilePicker, UNO_QUERY );
+        uno::Reference< ui::dialogs::XFilterManager > xFilterMgr( xFilePicker, uno::UNO_QUERY );
         if( xFilePicker.is() && xFilterMgr.is() )
         {
             try
@@ -420,18 +417,18 @@ bool PrintDialog::ImplGetFilename()
                         bPDF = false;
                 }
                 if( bPS )
-                    xFilterMgr->appendFilter( OUString( RTL_CONSTASCII_USTRINGPARAM( "PostScript" ) ), OUString( RTL_CONSTASCII_USTRINGPARAM( "*.ps" ) ) );
+                    xFilterMgr->appendFilter( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "PostScript" ) ), ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "*.ps" ) ) );
                 if( bPDF )
-                    xFilterMgr->appendFilter( OUString( RTL_CONSTASCII_USTRINGPARAM( "Portable Document Format" ) ), OUString( RTL_CONSTASCII_USTRINGPARAM( "*.pdf" ) ) );
+                    xFilterMgr->appendFilter( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Portable Document Format" ) ), ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "*.pdf" ) ) );
 #elif defined WNT
-                xFilterMgr->appendFilter( OUString( RTL_CONSTASCII_USTRINGPARAM( "*.PRN" ) ), OUString( RTL_CONSTASCII_USTRINGPARAM( "*.prn" ) ) );
+                xFilterMgr->appendFilter( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "*.PRN" ) ), ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "*.prn" ) ) );
 #endif
                 // add arbitrary files
-                xFilterMgr->appendFilter( maAllFilterStr, OUString( RTL_CONSTASCII_USTRINGPARAM( "*.*" ) ) );
+                xFilterMgr->appendFilter( maAllFilterStr, ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "*.*" ) ) );
             }
-            catch( IllegalArgumentException rExc )
+            catch( lang::IllegalArgumentException rExc )
             {
-                DBG_ASSERT( 0, "caught IllegalArgumentException when registering filter\n" );
+                DBG_ERRORFILE( "caught IllegalArgumentException when registering filter\n" );
             }
 
             if( aOldFile.getLength() )
@@ -442,9 +439,9 @@ bool PrintDialog::ImplGetFilename()
                 xFilePicker->setDisplayDirectory( aUrl.GetMainURL( INetURLObject::DECODE_TO_IURI ) );
             }
 
-            if( xFilePicker->execute() == ExecutableDialogResults::OK )
+            if( xFilePicker->execute() == ui::dialogs::ExecutableDialogResults::OK )
             {
-                Sequence< OUString > aPathSeq( xFilePicker->getFiles() );
+                uno::Sequence< ::rtl::OUString > aPathSeq( xFilePicker->getFiles() );
                 INetURLObject aObj( aPathSeq[0] );
                 maFiPrintFile.SetText( aOldFile = aObj.PathToFileName() );
                 return true;
