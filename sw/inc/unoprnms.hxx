@@ -4,9 +4,9 @@
  *
  *  $RCSfile: unoprnms.hxx,v $
  *
- *  $Revision: 1.120 $
+ *  $Revision: 1.121 $
  *
- *  last change: $Author: vg $ $Date: 2007-05-22 16:22:03 $
+ *  last change: $Author: obo $ $Date: 2007-07-18 12:55:53 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -787,7 +787,9 @@ enum SwPropNameIds
 /* 0713 */  UNO_NAME_TOOLTIP,
 // --> #i73329# / 2007-01-11 / frank.schoenheit@sun.com
 /* 0714 */  UNO_NAME_DIALOG_LIBRARIES,
-/* 0715 */  SW_PROPNAME_END
+/* 0715 */  UNO_NAME_HEADER_ROW_COUNT,
+/* 0716 */  UNO_NAME_INPUT,
+/* 0716 */  SW_PROPNAME_END
 };
 
 
