@@ -4,9 +4,9 @@
  *
  *  $RCSfile: calendar.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: hr $ $Date: 2007-06-27 21:22:45 $
+ *  last change: $Author: obo $ $Date: 2007-07-18 08:53:09 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1823,6 +1823,7 @@ void Calendar::KeyInput( const KeyEvent& rKEvt )
             SelectionChanging();
             mbInSelChange = FALSE;
             ImplUpdateSelection( pOldSel );
+            delete pOldSel;
         }
         else
         {
