@@ -4,9 +4,9 @@
  *
  *  $RCSfile: unotbl.cxx,v $
  *
- *  $Revision: 1.106 $
+ *  $Revision: 1.107 $
  *
- *  last change: $Author: obo $ $Date: 2007-07-18 12:58:42 $
+ *  last change: $Author: obo $ $Date: 2007-07-18 14:29:18 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1533,6 +1533,7 @@ void SwXTextTableRow::setPropertyValue(const OUString& rPropertyName,
                 break;
                 case FN_UNO_TABLE_COLUMN_SEPARATORS:
                 {
+                    UnoActionContext aContext(pDoc);
                     SwTable* pTable = SwTable::FindTable( pFmt );
                     lcl_SetTblSeparators(aValue, pTable, pLine->GetTabBoxes()[0], sal_True, pDoc);
                 }
@@ -3514,7 +3515,7 @@ void SwXTextTable::setPropertyValue(const OUString& rPropertyName,
                 break;
                 case FN_UNO_TABLE_COLUMN_SEPARATORS:
                 {
-                    UnoActionContext(pFmt->GetDoc());
+                    UnoActionContext aContext(pFmt->GetDoc());
                     SwTable* pTable = SwTable::FindTable( pFmt );
                     lcl_SetTblSeparators(aValue, pTable, pTable->GetTabLines()[0]->GetTabBoxes()[0], sal_False, pFmt->GetDoc());
                 }
