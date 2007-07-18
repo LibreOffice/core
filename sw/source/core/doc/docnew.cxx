@@ -4,9 +4,9 @@
  *
  *  $RCSfile: docnew.cxx,v $
  *
- *  $Revision: 1.76 $
+ *  $Revision: 1.77 $
  *
- *  last change: $Author: obo $ $Date: 2007-07-17 13:06:56 $
+ *  last change: $Author: obo $ $Date: 2007-07-18 13:29:46 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -224,6 +224,12 @@
 #endif
 
 using namespace ::com::sun::star;
+// <--
+
+// --> OD 2007-03-16 #i73788#
+#ifndef _PAUSETHREADSTARTING_HXX
+#include <pausethreadstarting.hxx>
+#endif
 // <--
 
 using namespace ::com::sun::star::document;
@@ -496,6 +502,10 @@ SwDoc::SwDoc() :
 
 SwDoc::~SwDoc()
 {
+    // --> OD 2007-03-16 #i73788#
+    SwPauseThreadStarting aPauseThreadStarting;
+    // <--
+
     // clean up chart related structures...
     // Note: the chart data provider gets already diposed in ~SwDocShell
     // since all UNO API related functionality requires an existing SwDocShell
@@ -697,6 +707,7 @@ SwDoc::~SwDoc()
     delete pDfltFrmFmt;
     delete pLayoutCache;
     delete pVirDev;
+
 }
 
 //---------------------------------------------------
