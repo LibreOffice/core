@@ -4,9 +4,9 @@
  *
  *  $RCSfile: accessibility.hxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: vg $ $Date: 2007-05-25 12:11:15 $
+ *  last change: $Author: obo $ $Date: 2007-07-18 12:51:24 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -300,6 +300,11 @@ public:
 
     virtual USHORT          GetDepth( USHORT nPara ) const;
     virtual sal_Bool        SetDepth( USHORT nPara, USHORT nNewDepth );
+
+    virtual const SfxItemSet*   GetEmptyItemSetPtr();
+    // implementation functions for XParagraphAppend and XTextPortionAppend
+    virtual void        AppendParagraph();
+    virtual xub_StrLen  AppendTextPortion( USHORT nPara, const String &rText, const SfxItemSet &rSet );
 };
 
 
