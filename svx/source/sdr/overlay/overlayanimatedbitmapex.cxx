@@ -4,9 +4,9 @@
  *
  *  $RCSfile: overlayanimatedbitmapex.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2006-12-05 12:11:02 $
+ *  last change: $Author: obo $ $Date: 2007-07-18 10:54:05 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -52,26 +52,45 @@
 #include <svx/sdr/overlay/overlaymanager.hxx>
 #endif
 
+// #i77674#
+#ifndef _BGFX_MATRIX_B2DHOMMATRIX_HXX
+#include <basegfx/matrix/b2dhommatrix.hxx>
+#endif
+
 //////////////////////////////////////////////////////////////////////////////
 
 namespace sdr
 {
     namespace overlay
     {
+        // #i53216# check blink time value range
+        void OverlayAnimatedBitmapEx::impCheckBlinkTimeValueRange()
+        {
+            if(mnBlinkTime < 25)
+            {
+                mnBlinkTime = 25;
+            }
+            else if(mnBlinkTime > 10000)
+            {
+                mnBlinkTime = 10000;
+            }
+        }
+
         void OverlayAnimatedBitmapEx::drawGeometry(OutputDevice& rOutputDevice)
         {
-            // calculate position in pixel
-            Point aPositionPixel(FRound(getBasePosition().getX()), FRound(getBasePosition().getY()));
-            aPositionPixel = rOutputDevice.LogicToPixel(aPositionPixel);
-            aPositionPixel.X() -= (mbOverlayState) ? (sal_Int32)mnCenterX1 : (sal_Int32)mnCenterX2;
-            aPositionPixel.Y() -= (mbOverlayState) ? (sal_Int32)mnCenterY1 : (sal_Int32)mnCenterY2;
+            // #i77674# calculate discrete top-left
+            basegfx::B2DPoint aDiscreteTopLeft(rOutputDevice.GetViewTransformation() * getBasePosition());
+            aDiscreteTopLeft -= (mbOverlayState)
+                ? basegfx::B2DPoint((double)mnCenterX1, (double)mnCenterY1)
+                : basegfx::B2DPoint((double)mnCenterX2, (double)mnCenterY2);
 
             // remember MapMode and switch to pixels
-            const sal_Bool bMapModeWasEnabled(rOutputDevice.IsMapModeEnabled());
-            rOutputDevice.EnableMapMode(sal_False);
+            const bool bMapModeWasEnabled(rOutputDevice.IsMapModeEnabled());
+            rOutputDevice.EnableMapMode(false);
 
             // draw the bitmap
-            rOutputDevice.DrawBitmapEx(aPositionPixel, (mbOverlayState) ? maBitmapEx1 : maBitmapEx2);
+            const Point aPixelTopLeft((sal_Int32)floor(aDiscreteTopLeft.getX()), (sal_Int32)floor(aDiscreteTopLeft.getY()));
+            rOutputDevice.DrawBitmapEx(aPixelTopLeft, (mbOverlayState) ? maBitmapEx1 : maBitmapEx2);
 
             // restore MapMode
             rOutputDevice.EnableMapMode(bMapModeWasEnabled);
@@ -79,37 +98,45 @@ namespace sdr
 
         void OverlayAnimatedBitmapEx::createBaseRange(OutputDevice& rOutputDevice)
         {
-            // calculate bitmap rectangle in pixel
-            Point aPositionPixel(FRound(getBasePosition().getX()), FRound(getBasePosition().getY()));
-            aPositionPixel = rOutputDevice.LogicToPixel(aPositionPixel);
-            aPositionPixel.X() -= (mbOverlayState) ? (sal_Int32)mnCenterX1 : (sal_Int32)mnCenterX2;
-            aPositionPixel.Y() -= (mbOverlayState) ? (sal_Int32)mnCenterY1 : (sal_Int32)mnCenterY2;
-            const Rectangle aRectanglePixel(aPositionPixel,
-                (mbOverlayState) ? maBitmapEx1.GetSizePixel() : maBitmapEx2.GetSizePixel());
+            // #i77674# calculate discrete top-left
+            basegfx::B2DPoint aDiscreteTopLeft(rOutputDevice.GetViewTransformation() * getBasePosition());
+            aDiscreteTopLeft -= (mbOverlayState)
+                ? basegfx::B2DPoint((double)mnCenterX1, (double)mnCenterY1)
+                : basegfx::B2DPoint((double)mnCenterX2, (double)mnCenterY2);
 
-            // go back to logical coordinates
-            const Rectangle aRectangleLogic(rOutputDevice.PixelToLogic(aRectanglePixel));
+            // calculate discrete range
+            const Size aBitmapPixelSize((mbOverlayState) ? maBitmapEx1.GetSizePixel() : maBitmapEx2.GetSizePixel());
+            const basegfx::B2DRange aDiscreteRange(
+                aDiscreteTopLeft.getX(), aDiscreteTopLeft.getY(),
+                aDiscreteTopLeft.getX() + (double)aBitmapPixelSize.getWidth(), aDiscreteTopLeft.getY() + (double)aBitmapPixelSize.getHeight());
 
-            // reset range and expand it
-            maBaseRange.reset();
-            maBaseRange.expand(basegfx::B2DPoint(aRectangleLogic.Left(), aRectangleLogic.Top()));
-            maBaseRange.expand(basegfx::B2DPoint(aRectangleLogic.Right(), aRectangleLogic.Bottom()));
+            // set and go back to logic range
+            maBaseRange = aDiscreteRange;
+            maBaseRange.transform(rOutputDevice.GetInverseViewTransformation());
         }
 
         OverlayAnimatedBitmapEx::OverlayAnimatedBitmapEx(
             const basegfx::B2DPoint& rBasePos,
-            const BitmapEx& rBitmapEx1, const BitmapEx& rBitmapEx2,
-            sal_uInt16 nCenX1, sal_uInt16 nCenY1,
-            sal_uInt16 nCenX2, sal_uInt16 nCenY2)
+            const BitmapEx& rBitmapEx1,
+            const BitmapEx& rBitmapEx2,
+            sal_uInt32 nBlinkTime,
+            sal_uInt16 nCenX1,
+            sal_uInt16 nCenY1,
+            sal_uInt16 nCenX2,
+            sal_uInt16 nCenY2)
         :   OverlayObjectWithBasePosition(rBasePos, Color(COL_WHITE)),
             maBitmapEx1(rBitmapEx1),
             maBitmapEx2(rBitmapEx2),
             mnCenterX1(nCenX1), mnCenterY1(nCenY1),
             mnCenterX2(nCenX2), mnCenterY2(nCenY2),
+            mnBlinkTime(nBlinkTime),
             mbOverlayState(sal_False)
         {
             // set AllowsAnimation flag to mark this object as animation capable
             mbAllowsAnimation = sal_True;
+
+            // #i53216# check blink time value range
+            impCheckBlinkTimeValueRange();
         }
 
         OverlayAnimatedBitmapEx::~OverlayAnimatedBitmapEx()
@@ -180,20 +207,36 @@ namespace sdr
             }
         }
 
+        void OverlayAnimatedBitmapEx::setBlinkTime(sal_uInt32 nNew)
+        {
+            if(mnBlinkTime != nNew)
+            {
+                // remember new value
+                mnBlinkTime = nNew;
+
+                // #i53216# check blink time value range
+                impCheckBlinkTimeValueRange();
+
+                // register change (after change)
+                objectChange();
+            }
+        }
+
         void OverlayAnimatedBitmapEx::Trigger(sal_uInt32 nTime)
         {
             if(getOverlayManager())
             {
-                // produce event after nTime + x
+                // #i53216# produce event after nTime + x
+                SetTime(nTime + mnBlinkTime);
+
+                // switch state
                 if(mbOverlayState)
                 {
                     mbOverlayState = sal_False;
-                    SetTime(nTime + 800); // 0.8 seconds
                 }
                 else
                 {
                     mbOverlayState = sal_True;
-                    SetTime(nTime + 300); // 0.3 seconds
                 }
 
                 // re-insert me as event
