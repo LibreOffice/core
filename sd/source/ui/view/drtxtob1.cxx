@@ -4,9 +4,9 @@
  *
  *  $RCSfile: drtxtob1.cxx,v $
  *
- *  $Revision: 1.28 $
+ *  $Revision: 1.29 $
  *
- *  last change: $Author: kz $ $Date: 2007-05-10 15:33:37 $
+ *  last change: $Author: obo $ $Date: 2007-07-18 09:42:55 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -592,30 +592,10 @@ void TextObjectBar::Execute( SfxRequest &rReq )
                       nSlot == SID_ATTR_CHAR_POSTURE    ||
                       nSlot == SID_ATTR_CHAR_WEIGHT )
             {
-                USHORT nScriptType = mpView->GetScriptType();
-
-                if( (nSlot == SID_ATTR_CHAR_FONT) || (nSlot == SID_ATTR_CHAR_FONTHEIGHT) )
-                {
-                    // #42732# input language should be preferred over
-                    // current cursor position to detect script type
-                    OutlinerView* pOutlinerView = mpView->GetTextEditOutlinerView();
-
-                    if (mpView->ISA(OutlineView))
-                    {
-                        pOutlinerView = static_cast<OutlineView*>(mpView)->GetViewByWindow(
-                            mpViewShell->GetActiveWindow());
-                    }
-
-                    if(pOutlinerView && !pOutlinerView->GetSelection().HasRange())
-                    {
-                        if( mpViewShell && mpViewShell->GetViewShell() && mpViewShell->GetViewShell()->GetWindow() )
-                        {
-                            LanguageType nInputLang = mpViewShell->GetViewShell()->GetWindow()->GetInputLanguage();
-                            if(nInputLang != LANGUAGE_DONTKNOW && nInputLang != LANGUAGE_SYSTEM)
-                                nScriptType = SvtLanguageOptions::GetScriptTypeOfLanguage( nInputLang );
-                        }
-                    }
-                }
+                // #i78017 establish the same behaviour as in Writer
+                USHORT nScriptType = SCRIPTTYPE_LATIN | SCRIPTTYPE_ASIAN | SCRIPTTYPE_COMPLEX;
+                if (nSlot == SID_ATTR_CHAR_FONT)
+                    nScriptType = mpView->GetScriptType();
 
                 SfxItemPool& rPool = mpView->GetDoc()->GetPool();
                 SvxScriptSetItem aSvxScriptSetItem( nSlot, rPool );
