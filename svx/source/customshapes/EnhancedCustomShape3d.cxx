@@ -4,9 +4,9 @@
  *
  *  $RCSfile: EnhancedCustomShape3d.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: rt $ $Date: 2007-07-06 07:32:10 $
+ *  last change: $Author: obo $ $Date: 2007-07-18 10:51:56 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -464,7 +464,7 @@ SdrObject* EnhancedCustomShape3d::Create3DObject( const SdrObject* pShape2d, con
             {
                 aPolyPoly = ((SdrPathObj*)pNext)->GetPathPoly();
 
-                if(aPolyPoly.areControlVectorsUsed())
+                if(aPolyPoly.areControlPointsUsed())
                 {
                     aPolyPoly = basegfx::tools::adaptiveSubdivideByAngle(aPolyPoly);
                 }
