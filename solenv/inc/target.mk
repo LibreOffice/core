@@ -4,9 +4,9 @@
 #
 #   $RCSfile: target.mk,v $
 #
-#   $Revision: 1.200 $
+#   $Revision: 1.201 $
 #
-#   last change: $Author: obo $ $Date: 2007-07-17 14:27:45 $
+#   last change: $Author: obo $ $Date: 2007-07-18 08:01:14 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -1967,7 +1967,11 @@ ZIPALLTARGET:
 
 #temporary workaround for non-existing delzip in extras
 delzip:
-    echo > $@
+    @echo
+    @echo ERROR: ZIPnTARGETS need a file named "delzip" to exist beside their makefile.mk
+    @echo ERROR: Create an empty file named delzip and commit it
+    @echo ERROR: for details see #i78434#
+    force_dmake_to_error
 
 .IF "$(make_srs_deps)"==""
 $(MISC)$/$(TARGET).dpr : $(SRCFILES) $(SRC1FILES) $(SRC2FILES) $(SRC3FILES)
