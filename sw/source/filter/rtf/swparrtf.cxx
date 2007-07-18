@@ -4,9 +4,9 @@
  *
  *  $RCSfile: swparrtf.cxx,v $
  *
- *  $Revision: 1.70 $
+ *  $Revision: 1.71 $
  *
- *  last change: $Author: obo $ $Date: 2007-07-18 10:08:00 $
+ *  last change: $Author: obo $ $Date: 2007-07-18 14:45:44 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -476,13 +476,6 @@ void SwRTFParser::Continue( int nToken )
 
     if( SVPAR_PENDING == GetStatus() )
         return ;                // weiter gehts beim naechsten mal
-
-    // JP 13.08.98: TabellenUmrandungen optimieren - Bug 53525
-    for( USHORT n = aTblFmts.Count(); n; )
-    {
-        if (SwTable* pTbl = SwTable::FindTable( (SwFrmFmt*)aTblFmts[ --n ] ))
-            pTbl->GCBorderLines();
-    }
 
     pRelNumRule->SetNumRelSpaces( *pDoc );
 
