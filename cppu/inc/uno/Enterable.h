@@ -4,9 +4,9 @@
  *
  *  $RCSfile: Enterable.h,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: kz $ $Date: 2007-05-09 13:33:57 $
+ *  last change: $Author: obo $ $Date: 2007-07-18 12:19:55 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -68,10 +68,10 @@ typedef void uno_Enterable_leave     (void * context);
 
     @param context
     @param pCallee  the function to be called
-    @param param    the parameter pointer to be passed to the function
+    @param pParam   the parameter pointer to be passed to the function
     @since UDK 3.2.7
 */
-typedef void uno_Enterable_callInto_v(void * context, uno_EnvCallee * pCallee, va_list param);
+typedef void uno_Enterable_callInto_v(void * context, uno_EnvCallee * pCallee, va_list * pParam);
 
 
 /** Generic function type declaration for calling out of an Environment.
@@ -79,10 +79,10 @@ typedef void uno_Enterable_callInto_v(void * context, uno_EnvCallee * pCallee, v
 
     @param context
     @param pCallee  the function to be called
-    @param param    the parameter pointer to be passed to the function
+    @param pParam   the parameter pointer to be passed to the function
     @since UDK 3.2.7
 */
-typedef void uno_Enterable_callOut_v (void * context, uno_EnvCallee * pCallee, va_list param);
+typedef void uno_Enterable_callOut_v (void * context, uno_EnvCallee * pCallee, va_list * pParam);
 
 
 /** Generic function type declaration for checking if calling on managed object is

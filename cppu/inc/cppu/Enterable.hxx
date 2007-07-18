@@ -4,9 +4,9 @@
  *
  *  $RCSfile: Enterable.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: kz $ $Date: 2007-05-09 13:32:35 $
+ *  last change: $Author: obo $ $Date: 2007-07-18 12:19:42 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -52,11 +52,11 @@ class Enterable : public uno_Enterable
 public:
     /* These methods need to be implemented in a derived class.
      */
-    virtual void v_enter     (void)                                   = 0;
-    virtual void v_leave     (void)                                   = 0;
-    virtual void v_callInto_v(uno_EnvCallee * pCallee, va_list param) = 0;
-    virtual void v_callOut_v (uno_EnvCallee * pCallee, va_list param) = 0;
-    virtual int  v_isValid   (rtl::OUString * pReason)                = 0;
+    virtual void v_enter     (void)                                      = 0;
+    virtual void v_leave     (void)                                      = 0;
+    virtual void v_callInto_v(uno_EnvCallee * pCallee, va_list * pParam) = 0;
+    virtual void v_callOut_v (uno_EnvCallee * pCallee, va_list * pParam) = 0;
+    virtual int  v_isValid   (rtl::OUString * pReason)                   = 0;
 
     virtual ~Enterable() {};
 
@@ -66,8 +66,8 @@ public:
     inline void enter(void) {m_enter(this);};
     inline void leave(void) {m_leave(this);};
 
-    inline void callInto_v(uno_EnvCallee * pCallee, va_list param) {m_callInto_v(this, pCallee, param);};
-    inline void callOut_v (uno_EnvCallee * pCallee, va_list param) {m_callOut_v (this, pCallee, param);};
+    inline void callInto_v(uno_EnvCallee * pCallee, va_list * pParam) {m_callInto_v(this, pCallee, pParam);};
+    inline void callOut_v (uno_EnvCallee * pCallee, va_list * pParam) {m_callOut_v (this, pCallee, pParam);};
 
     inline void callInto(uno_EnvCallee * pCallee, ...);
     inline void callOut (uno_EnvCallee * pCallee, ...);
@@ -81,10 +81,10 @@ private:
 
 extern "C" inline void Enterable_call_enter (void * context) { ((Enterable *)context)->v_enter(); };
 extern "C" inline void Enterable_call_leave (void * context) { ((Enterable *)context)->v_leave(); };
-extern "C" inline void Enterable_call_callInto_v(void * context, uno_EnvCallee * pCallee, va_list param)
-    { ((Enterable *)context)->v_callInto_v(pCallee, param); };
-extern "C" inline void Enterable_call_callOut_v (void * context, uno_EnvCallee * pCallee, va_list param)
-    { ((Enterable *)context)->v_callOut_v(pCallee, param); };
+extern "C" inline void Enterable_call_callInto_v(void * context, uno_EnvCallee * pCallee, va_list * pParam)
+    { ((Enterable *)context)->v_callInto_v(pCallee, pParam); };
+extern "C" inline void Enterable_call_callOut_v (void * context, uno_EnvCallee * pCallee, va_list * pParam)
+    { ((Enterable *)context)->v_callOut_v(pCallee, pParam); };
 extern "C" inline int  Enterable_call_isValid   (void * context, rtl_uString ** pReason)
     {return ((Enterable *)context)->v_isValid((rtl::OUString *)pReason);}
 
@@ -103,7 +103,7 @@ void Enterable::callInto(uno_EnvCallee * pCallee, ...)
     va_list param;
 
     va_start(param, pCallee);
-    callInto_v(pCallee, param);
+    callInto_v(pCallee, &param);
     va_end(param);
 }
 
@@ -112,7 +112,7 @@ void Enterable::callOut(uno_EnvCallee * pCallee, ...)
     va_list param;
 
     va_start(param, pCallee);
-    callOut_v(pCallee, param);
+    callOut_v(pCallee, &param);
     va_end(param);
 }
 
