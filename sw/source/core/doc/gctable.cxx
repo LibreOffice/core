@@ -4,9 +4,9 @@
  *
  *  $RCSfile: gctable.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 20:56:22 $
+ *  last change: $Author: obo $ $Date: 2007-07-18 14:45:14 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -335,7 +335,6 @@ BOOL lcl_GC_Line_Border( const SwTableLine*& rpLine, void* pPara )
     return TRUE;
 }
 
-
 BOOL lcl_GC_Box_Border( const SwTableBox*& rpBox, void* pPara )
 {
     if( rpBox->GetTabLines().Count() )
@@ -346,29 +345,6 @@ BOOL lcl_GC_Box_Border( const SwTableBox*& rpBox, void* pPara )
     }
     return TRUE;
 }
-
-
-void SwTable::GCBorderLines()
-{
-    // alle doppleten Borderlines benachbarter Tabellen-Content-Boxen
-    // entfernen. Und zwar wird versucht, die Struktur unserer default
-    // Border wiederherzustellen, die wie folgt aussieht:
-    //
-    //   +-- +--+
-    //   |   |  |
-    //   +-- +--+
-    //
-    //   |   |  |
-    //   +-- +--+
-
-    SwShareBoxFmts aShareFmts;
-    _SwGCLineBorder aPara( *this );
-    aPara.pShareFmts = &aShareFmts;
-    GetTabLines().ForEach( &lcl_GC_Line_Border, &aPara );
-}
-
-
-/*  */
 
 struct _GCLinePara
 {
