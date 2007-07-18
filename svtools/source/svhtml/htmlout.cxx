@@ -4,9 +4,9 @@
  *
  *  $RCSfile: htmlout.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: hr $ $Date: 2007-06-27 22:00:25 $
+ *  last change: $Author: obo $ $Date: 2007-07-18 08:56:49 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -68,9 +68,7 @@
 #define RTL_CONSTASCII_STRINGPARAM( c ) c, sizeof(c)-1
 #endif
 
-#if defined(MAC)
-const sal_Char HTMLOutFuncs::sNewLine = '\015';
-#elif defined(UNX)
+#if defined(UNX)
 const sal_Char HTMLOutFuncs::sNewLine = '\012';
 #else
 const sal_Char __FAR_DATA HTMLOutFuncs::sNewLine[] = "\015\012";
