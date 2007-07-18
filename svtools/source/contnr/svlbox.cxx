@@ -4,9 +4,9 @@
  *
  *  $RCSfile: svlbox.cxx,v $
  *
- *  $Revision: 1.30 $
+ *  $Revision: 1.31 $
  *
- *  last change: $Author: hr $ $Date: 2007-06-27 21:21:18 $
+ *  last change: $Author: obo $ $Date: 2007-07-18 08:52:54 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -743,10 +743,6 @@ SvLBox::SvLBox( Window* pParent, WinBits nWinStyle  ) :
     pEdCtrl = 0;
     SetSelectionMode( SINGLE_SELECTION );  // pruefen ob TreeListBox gecallt wird
     SetDragDropMode( SV_DRAGDROP_NONE );
-#ifdef MAC
-    Font aFont( "Geneva", Size( 0, 10 ) );
-    SetFont( aFont );
-#endif
     SetType(WINDOW_TREELISTBOX);
 }
 
@@ -768,10 +764,6 @@ SvLBox::SvLBox( Window* pParent, const ResId& rResId ) :
     pHdlEntry = 0;
     pEdCtrl = 0;
     pModel->SetCloneLink( LINK(this, SvLBox, CloneHdl_Impl ));
-#ifdef MAC
-    Font aFont( "Geneva", Size( 0, 10 ) );
-    SetFont( aFont );
-#endif
     SetType(WINDOW_TREELISTBOX);
 }
 
