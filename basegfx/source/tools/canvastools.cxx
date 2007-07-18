@@ -4,9 +4,9 @@
  *
  *  $RCSfile: canvastools.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 08:05:36 $
+ *  last change: $Author: obo $ $Date: 2007-07-18 11:07:38 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -101,44 +101,23 @@ namespace basegfx
     {
         namespace
         {
-            uno::Sequence< geometry::RealBezierSegment2D > bezierSequenceFromB2DPolygon( const ::basegfx::B2DPolygon& rPoly )
+            uno::Sequence< geometry::RealBezierSegment2D > bezierSequenceFromB2DPolygon(const ::basegfx::B2DPolygon& rPoly)
             {
-                const sal_uInt32 nNumPoints( rPoly.count() );
-
-                uno::Sequence< geometry::RealBezierSegment2D > outputSequence( nNumPoints );
+                const sal_uInt32 nPointCount(rPoly.count());
+                uno::Sequence< geometry::RealBezierSegment2D > outputSequence(nPointCount);
                 geometry::RealBezierSegment2D* pOutput = outputSequence.getArray();
 
-                // fill sequence from polygon
-                sal_uInt32 i;
-                for( i=0; i<nNumPoints; ++i )
+                // fill sequences and imply clodes polygon on this implementation layer
+                for(sal_uInt32 a(0); a < nPointCount; a++)
                 {
-                    const ::basegfx::B2DPoint   aStartPoint( rPoly.getB2DPoint(i) );
-                    const ::basegfx::B2DPoint   aEndPoint( i+1<nNumPoints ? rPoly.getB2DPoint(i+1) : aStartPoint );
-                    const ::basegfx::B2DPoint   aCtrl1( rPoly.getControlPointA(i) );
-                    const ::basegfx::B2DPoint   aCtrl2( rPoly.getControlPointB(i) );
+                    const basegfx::B2DPoint aStart(rPoly.getB2DPoint(a));
+                    const basegfx::B2DPoint aControlA(rPoly.getNextControlPoint(a));
+                    const basegfx::B2DPoint aControlB(rPoly.getPrevControlPoint((a + 1) % nPointCount));
 
-                    if( aStartPoint.equal( aCtrl1 ) &&
-                        aStartPoint.equal( aCtrl2 ) )
-                    {
-                        const double nX( aStartPoint.getX() );
-                        const double nY( aStartPoint.getY() );
-
-                        // ATTN: The following line should match the
-                        // comparison below in
-                        // polygonFromBezier2DSequence()!
-                        pOutput[i] = geometry::RealBezierSegment2D( nX, nY,
-                                                                    nX, nY,
-                                                                    nX, nY );
-                    }
-                    else
-                    {
-                        pOutput[i] = geometry::RealBezierSegment2D( aStartPoint.getX(),
-                                                                    aStartPoint.getY(),
-                                                                    aCtrl1.getX(),
-                                                                    aCtrl1.getY(),
-                                                                    aCtrl2.getX(),
-                                                                    aCtrl2.getY() );
-                    }
+                    pOutput[a] = geometry::RealBezierSegment2D(
+                        aStart.getX(), aStart.getY(),
+                        aControlA.getX(), aControlA.getY(),
+                        aControlB.getX(), aControlB.getY());
                 }
 
                 return outputSequence;
@@ -262,8 +241,7 @@ namespace basegfx
 
             for( i=0; i<nNumPolies; ++i )
             {
-                if( rPolyPoly.getB2DPolygon(i).isClosed() )
-                    xRes->setClosed( i, sal_True );
+                xRes->setClosed( i, rPolyPoly.getB2DPolygon(i).isClosed() );
             }
 
             return xRes;
@@ -301,38 +279,34 @@ namespace basegfx
 
         ::basegfx::B2DPolygon polygonFromBezier2DSequence( const uno::Sequence< geometry::RealBezierSegment2D >& curves )
         {
-            const sal_Int32 nSize( curves.getLength() );
+            const sal_Int32 nSize(curves.getLength());
+            basegfx::B2DPolygon aRetval;
 
-            ::basegfx::B2DPolygon aPoly;
-
-            for( sal_Int32 nCurrPoint=0; nCurrPoint<nSize; ++nCurrPoint )
+            if(nSize)
             {
-                const geometry::RealBezierSegment2D aCurrSegment( curves[nCurrPoint] );
+                // prepare start with providing a start point. Use the first point from
+                // the sequence for this
+                const geometry::RealBezierSegment2D& rFirstSegment(curves[nSize - 1]);
+                aRetval.append(basegfx::B2DPoint(rFirstSegment.Px, rFirstSegment.Py));
 
-                // ATTN: This line should match the setup in
-                // bezierSequenceFromB2DPolygon()!
-                if( aCurrSegment.Px == aCurrSegment.C1x &&
-                    aCurrSegment.Px == aCurrSegment.C2x &&
-                    aCurrSegment.Py == aCurrSegment.C1y &&
-                    aCurrSegment.Py == aCurrSegment.C2y     )
+                for(sal_Int32 a(0); a < nSize; a++)
                 {
-                    aPoly.append( ::basegfx::B2DPoint( aCurrSegment.Px,
-                                                       aCurrSegment.Py ) );
+                    const geometry::RealBezierSegment2D& rCurrSegment(curves[a]);
+                    const geometry::RealBezierSegment2D& rNextSegment(curves[(a + 1) % nSize]);
+
+                    // append curved edge with the control points and the next point
+                    aRetval.appendBezierSegment(
+                        basegfx::B2DPoint(rCurrSegment.C1x, rCurrSegment.C1y),
+                        basegfx::B2DPoint(rCurrSegment.C2x, rCurrSegment.C2x),
+                        basegfx::B2DPoint(rNextSegment.Px, rNextSegment.Py));
                 }
-                else
-                {
-                    aPoly.append( ::basegfx::B2DPoint( aCurrSegment.Px,
-                                                       aCurrSegment.Py ) );
-                    aPoly.setControlPointA( nCurrPoint,
-                                            ::basegfx::B2DPoint( aCurrSegment.C1x,
-                                                                 aCurrSegment.C1y ) );
-                    aPoly.setControlPointB( nCurrPoint,
-                                            ::basegfx::B2DPoint( aCurrSegment.C2x,
-                                                                 aCurrSegment.C2y ) );
-                }
+
+                // rescue the control point and remove the now double-added point
+                aRetval.setPrevControlPoint(0, aRetval.getPrevControlPoint(aRetval.count() - 1));
+                aRetval.remove(aRetval.count() - 1);
             }
 
-            return aPoly;
+            return aRetval;
         }
 
         //---------------------------------------------------------------------------------------
