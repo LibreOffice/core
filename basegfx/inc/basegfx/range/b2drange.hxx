@@ -4,9 +4,9 @@
  *
  *  $RCSfile: b2drange.hxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: ihi $ $Date: 2006-11-14 14:06:16 $
+ *  last change: $Author: obo $ $Date: 2007-07-18 11:04:01 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -137,12 +137,6 @@ namespace basegfx
         {
             return (maRangeX.equal(rRange.maRangeX)
                     && maRangeY.equal(rRange.maRangeY));
-        }
-
-        bool equal(const B2DRange& rRange, const double& rfSmallValue) const
-        {
-            return (maRangeX.equal(rRange.maRangeX,rfSmallValue)
-                    && maRangeY.equal(rRange.maRangeY,rfSmallValue));
         }
 
         double getMinX() const
