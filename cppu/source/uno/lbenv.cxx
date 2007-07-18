@@ -4,9 +4,9 @@
  *
  *  $RCSfile: lbenv.cxx,v $
  *
- *  $Revision: 1.36 $
+ *  $Revision: 1.37 $
  *
- *  last change: $Author: kz $ $Date: 2007-05-09 13:39:11 $
+ *  last change: $Author: obo $ $Date: 2007-07-18 12:22:45 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -375,10 +375,10 @@ static void SAL_CALL defenv_registerProxyInterface(
 }
 
 //------------------------------------------------------------------------------
-static void SAL_CALL s_stub_defenv_revokeInterface(va_list param)
+static void SAL_CALL s_stub_defenv_revokeInterface(va_list * pParam)
 {
-    uno_ExtEnvironment * pEnv       = va_arg(param, uno_ExtEnvironment *);
-    void               * pInterface = va_arg(param, void *);
+    uno_ExtEnvironment * pEnv       = va_arg(*pParam, uno_ExtEnvironment *);
+    void               * pInterface = va_arg(*pParam, void *);
 
     OSL_ENSURE( pEnv && pInterface, "### null ptr!" );
     uno_DefaultEnvironment * that =
