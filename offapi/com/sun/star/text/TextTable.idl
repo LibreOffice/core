@@ -4,9 +4,9 @@
  *
  *  $RCSfile: TextTable.idl,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: obo $ $Date: 2006-07-14 08:38:36 $
+ *  last change: $Author: obo $ $Date: 2007-07-18 13:01:49 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -202,7 +202,11 @@ published service TextTable
     /** determins if the first row of the table is repeated on every new page.
      */
     [property] boolean RepeatHeadline;
-    //-------------------------------------------------------------------------
+        //-------------------------------------------------------------------------
+        /** determins the number of rows of the table repeated on every new page.
+         */
+        [optional, property] long HeaderRowCount;
+        //-------------------------------------------------------------------------
 
     /** determins the type, color and size of the shadow.@see com.sun.star.table.ShadowFormat
      */
