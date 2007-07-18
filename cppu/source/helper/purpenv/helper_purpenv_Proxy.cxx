@@ -4,9 +4,9 @@
  *
  *  $RCSfile: helper_purpenv_Proxy.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: obo $ $Date: 2007-06-13 09:27:55 $
+ *  last change: $Author: obo $ $Date: 2007-07-18 12:21:35 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -211,12 +211,12 @@ static void SAL_CALL s_Proxy_release(uno_Interface * pUnoI) SAL_THROW_EXTERN_C()
     pProxy->release();
 }
 
-static void s_acquireAndRegister_v(va_list param)
+static void s_acquireAndRegister_v(va_list * pParam)
 {
-    uno_Interface                    * pUnoI      = va_arg(param, uno_Interface *);
-    rtl_uString                      * pOid       = va_arg(param, rtl_uString *);
-    typelib_InterfaceTypeDescription * pTypeDescr = va_arg(param, typelib_InterfaceTypeDescription *);
-    uno_ExtEnvironment               * pEnv       = va_arg(param, uno_ExtEnvironment *);
+    uno_Interface                    * pUnoI      = va_arg(*pParam, uno_Interface *);
+    rtl_uString                      * pOid       = va_arg(*pParam, rtl_uString *);
+    typelib_InterfaceTypeDescription * pTypeDescr = va_arg(*pParam, typelib_InterfaceTypeDescription *);
+    uno_ExtEnvironment               * pEnv       = va_arg(*pParam, uno_ExtEnvironment *);
 
     pUnoI->acquire(pUnoI);
      pEnv->registerInterface(pEnv, reinterpret_cast<void **>(&pUnoI), pOid, pTypeDescr);
@@ -260,10 +260,10 @@ Proxy::Proxy(uno::Mapping                  const & to_from,
     uno_Interface::pDispatcher = s_Proxy_dispatch;
 }
 
-extern "C" { static void s_releaseAndRevoke_v(va_list param)
+extern "C" { static void s_releaseAndRevoke_v(va_list * pParam)
 {
-    uno_ExtEnvironment * pEnv  = va_arg(param, uno_ExtEnvironment *);
-    uno_Interface      * pUnoI = va_arg(param, uno_Interface *);
+    uno_ExtEnvironment * pEnv  = va_arg(*pParam, uno_ExtEnvironment *);
+    uno_Interface      * pUnoI = va_arg(*pParam, uno_Interface *);
 
     pEnv->revokeInterface(pEnv, reinterpret_cast<void *>(pUnoI));
     pUnoI->release(pUnoI);
@@ -383,21 +383,21 @@ void Proxy::release(void)
 
 
 extern "C" {
-static void s_type_destructData_v(va_list param)
+static void s_type_destructData_v(va_list * pParam)
 {
-    void * ret = va_arg(param, void *);
-    typelib_TypeDescriptionReference * pReturnTypeRef = va_arg(param, typelib_TypeDescriptionReference *);
+    void * ret = va_arg(*pParam, void *);
+    typelib_TypeDescriptionReference * pReturnTypeRef = va_arg(*pParam, typelib_TypeDescriptionReference *);
 
     uno_type_destructData(ret, pReturnTypeRef, 0);
 }
 
-static void s_dispatcher_v(va_list param)
+static void s_dispatcher_v(va_list * pParam)
 {
-    uno_Interface                 * pUnoI       = va_arg(param, uno_Interface *);
-    typelib_TypeDescription const * pMemberType = va_arg(param, typelib_TypeDescription const *);
-    void                          * pReturn     = va_arg(param, void *);
-    void                         ** pArgs       = va_arg(param, void **);
-    uno_Any                      ** ppException = va_arg(param, uno_Any **);
+    uno_Interface                 * pUnoI       = va_arg(*pParam, uno_Interface *);
+    typelib_TypeDescription const * pMemberType = va_arg(*pParam, typelib_TypeDescription const *);
+    void                          * pReturn     = va_arg(*pParam, void *);
+    void                         ** pArgs       = va_arg(*pParam, void **);
+    uno_Any                      ** ppException = va_arg(*pParam, uno_Any **);
 
     pUnoI->pDispatcher(pUnoI, pMemberType, pReturn, pArgs, ppException);
 }
