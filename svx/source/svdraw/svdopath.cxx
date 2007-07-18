@@ -4,9 +4,9 @@
  *
  *  $RCSfile: svdopath.cxx,v $
  *
- *  $Revision: 1.44 $
+ *  $Revision: 1.45 $
  *
- *  last change: $Author: rt $ $Date: 2007-07-09 08:11:04 $
+ *  last change: $Author: obo $ $Date: 2007-07-18 10:57:35 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1609,8 +1609,20 @@ basegfx::B2DPolyPolygon ImpPathForDragAndCreate::TakeObjectPolyPolygon(const Sdr
     if(pU->IsFormFlag() && aNewPolygon.count() > 1L)
     {
         // remove last segment and replace with current
-        aNewPolygon.remove(aNewPolygon.count() - 2L, 2L);
+        // do not forget to rescue the previous control point which will be lost when
+        // the point it's associated with is removed
+        const sal_uInt32 nChangeIndex(aNewPolygon.count() - 2);
+        const basegfx::B2DPoint aSavedPrevCtrlPoint(aNewPolygon.getPrevControlPoint(nChangeIndex));
+
+        aNewPolygon.remove(nChangeIndex, 2L);
         aNewPolygon.append(pU->GetFormPoly().getB2DPolygon());
+
+        if(nChangeIndex < aNewPolygon.count())
+        {
+            // if really something was added, set the saved prev control point at the
+            // point where it belongs
+            aNewPolygon.setPrevControlPoint(nChangeIndex, aSavedPrevCtrlPoint);
+        }
     }
 
     if(aRetval.count())
@@ -1742,7 +1754,7 @@ void SdrPathObj::ImpForceKind()
     if (meKind==OBJ_PATHPLIN) meKind=OBJ_PLIN;
     if (meKind==OBJ_PATHPOLY) meKind=OBJ_POLY;
 
-    if(GetPathPoly().areControlVectorsUsed())
+    if(GetPathPoly().areControlPointsUsed())
     {
         switch (meKind)
         {
@@ -1807,25 +1819,7 @@ void SdrPathObj::ImpForceKind()
 
         if((bool)IsClosed() != aCandidate.isClosed())
         {
-            if(aCandidate.isClosed())
-            {
-                // add first point as last point
-                if(aCandidate.count())
-                {
-                    aCandidate.append(aCandidate.getB2DPoint(0));
-                }
-
-                // open polygon
-                aCandidate.setClosed(false);
-            }
-            else
-            {
-                // remove evtl. equal start and end points and close it
-                basegfx::tools::checkClosed(aCandidate);
-                aCandidate.setClosed(true);
-            }
-
-            // write back
+            aCandidate.setClosed(IsClosed());
             maPathPolygon.setB2DPolygon(a, aCandidate);
         }
     }
@@ -2022,7 +2016,7 @@ SdrObject* SdrPathObj::CheckHit(const Point& rPnt, USHORT nTol, const SetOfByte*
     if(GetPathPoly().isClosed() && (bTextFrame || HasFill()))
     {
         // hit in filled polygon?
-        if(GetPathPoly().areControlVectorsUsed())
+        if(GetPathPoly().areControlPointsUsed())
         {
             bHit = basegfx::tools::isInside(basegfx::tools::adaptiveSubdivideByAngle(GetPathPoly()), aHitPoint);
         }
@@ -2729,12 +2723,12 @@ sal_uInt32 SdrPathObj::NbcInsPoint(sal_uInt32 /*nHdlNum*/, const Point& rPos, sa
             // before first point
             aCandidate.insert(0L, aTestPoint);
 
-            if(aCandidate.areControlVectorsUsed())
+            if(aCandidate.areControlPointsUsed())
             {
-                if(!aCandidate.getControlVectorA(1L).equalZero())
+                if(aCandidate.isNextControlPointUsed(1))
                 {
-                    aCandidate.setControlPointA(0L, interpolate(aTestPoint, aCandidate.getB2DPoint(1L), (1.0 / 3.0)));
-                    aCandidate.setControlPointB(0L, interpolate(aTestPoint, aCandidate.getB2DPoint(1L), (2.0 / 3.0)));
+                    aCandidate.setNextControlPoint(0, interpolate(aTestPoint, aCandidate.getB2DPoint(1), (1.0 / 3.0)));
+                    aCandidate.setPrevControlPoint(1, interpolate(aTestPoint, aCandidate.getB2DPoint(1), (2.0 / 3.0)));
                 }
             }
 
@@ -2745,13 +2739,12 @@ sal_uInt32 SdrPathObj::NbcInsPoint(sal_uInt32 /*nHdlNum*/, const Point& rPos, sa
             // after last point
             aCandidate.append(aTestPoint);
 
-            if(aCandidate.areControlVectorsUsed())
+            if(aCandidate.areControlPointsUsed())
             {
-                if(!aCandidate.getControlVectorA(aCandidate.count() - 2L).equalZero()
-                    || !aCandidate.getControlVectorB(aCandidate.count() - 2L).equalZero())
+                if(aCandidate.isPrevControlPointUsed(aCandidate.count() - 2))
                 {
-                    aCandidate.setControlPointA(0L, interpolate(aCandidate.getB2DPoint(aCandidate.count() - 2L), aTestPoint, (1.0 / 3.0)));
-                    aCandidate.setControlPointB(0L, interpolate(aCandidate.getB2DPoint(aCandidate.count() - 2L), aTestPoint, (2.0 / 3.0)));
+                    aCandidate.setNextControlPoint(aCandidate.count() - 2, interpolate(aCandidate.getB2DPoint(aCandidate.count() - 2), aTestPoint, (1.0 / 3.0)));
+                    aCandidate.setPrevControlPoint(aCandidate.count() - 1, interpolate(aCandidate.getB2DPoint(aCandidate.count() - 2), aTestPoint, (2.0 / 3.0)));
                 }
             }
 
@@ -2760,33 +2753,38 @@ sal_uInt32 SdrPathObj::NbcInsPoint(sal_uInt32 /*nHdlNum*/, const Point& rPos, sa
         else
         {
             // in between
-            sal_Bool bSegmentSplit(sal_False);
+            bool bSegmentSplit(false);
+            const sal_uInt32 nNextIndex((nSmallestEdgeIndex + 1) % aCandidate.count());
 
-            if(aCandidate.areControlVectorsUsed())
+            if(aCandidate.areControlPointsUsed())
             {
-                if(!aCandidate.getControlVectorA(nSmallestEdgeIndex).equalZero()
-                    || !aCandidate.getControlVectorB(nSmallestEdgeIndex + 1L).equalZero())
+                if(aCandidate.isNextControlPointUsed(nSmallestEdgeIndex) || aCandidate.isPrevControlPointUsed(nNextIndex))
                 {
-                    bSegmentSplit = sal_True;
+                    bSegmentSplit = true;
                 }
             }
 
             if(bSegmentSplit)
             {
                 // rebuild original segment to get the split data
-                const basegfx::B2DPoint aControlA(aCandidate.getControlPointA(nSmallestEdgeIndex));
-                const basegfx::B2DPoint aControlB(aCandidate.getControlPointB(nSmallestEdgeIndex));
-                const basegfx::B2DPoint aPointA(aCandidate.getB2DPoint(nSmallestEdgeIndex));
-                const basegfx::B2DPoint aPointB(aCandidate.getB2DPoint(basegfx::tools::getIndexOfSuccessor(nSmallestEdgeIndex, aCandidate)));
-                const basegfx::B2DCubicBezier aBezier(aPointA, aControlA, aControlB, aPointB);
                 basegfx::B2DCubicBezier aBezierA, aBezierB;
+                const basegfx::B2DCubicBezier aBezier(
+                    aCandidate.getB2DPoint(nSmallestEdgeIndex),
+                    aCandidate.getNextControlPoint(nSmallestEdgeIndex),
+                    aCandidate.getPrevControlPoint(nNextIndex),
+                    aCandidate.getB2DPoint(nNextIndex));
 
+                // split and insert hit point
                 aBezier.split(fSmallestCut, aBezierA, aBezierB);
-                aCandidate.insert(nSmallestEdgeIndex + 1L, aTestPoint);
-                aCandidate.setControlPointA(nSmallestEdgeIndex, aBezierA.getControlPointA());
-                aCandidate.setControlPointB(nSmallestEdgeIndex, aBezierA.getControlPointB());
-                aCandidate.setControlPointA(nSmallestEdgeIndex + 1L, aBezierB.getControlPointA());
-                aCandidate.setControlPointB(nSmallestEdgeIndex + 1L, aBezierB.getControlPointB());
+                aCandidate.insert(nSmallestEdgeIndex + 1, aTestPoint);
+
+                // since we inserted hit point and not split point, we need to add an offset
+                // to the control points to get the C1 continuity we want to achieve
+                const basegfx::B2DVector aOffset(aTestPoint - aBezierA.getEndPoint());
+                aCandidate.setNextControlPoint(nSmallestEdgeIndex, aBezierA.getControlPointA() + aOffset);
+                aCandidate.setPrevControlPoint(nSmallestEdgeIndex + 1, aBezierA.getControlPointB() + aOffset);
+                aCandidate.setNextControlPoint(nSmallestEdgeIndex + 1, aBezierB.getControlPointA() + aOffset);
+                aCandidate.setPrevControlPoint((nSmallestEdgeIndex + 2) % aCandidate.count(), aBezierB.getControlPointB() + aOffset);
             }
             else
             {
@@ -2822,50 +2820,31 @@ SdrObject* SdrPathObj::RipPoint(sal_uInt32 nHdlNum, sal_uInt32& rNewPt0Index)
             const basegfx::B2DPolygon aCandidate(aLocalPolyPolygon.getB2DPolygon(nPoly));
             const sal_uInt32 nPointCount(aCandidate.count());
 
-            if(IsClosed())
+            if(nPointCount)
             {
-                if(nPointCount > 1L && nPnt != 0L)
+                if(IsClosed())
                 {
-                    // rotate polygon to make nPnt the new first point
-                    basegfx::B2DPolygon aNewPolygon;
-
-                    for(sal_uInt32 a(0L); a < nPointCount; a++)
-                    {
-                        const sal_uInt32 nSourceIndex((a + nPnt) % nPointCount);
-
-                        if(0L == nSourceIndex)
-                        {
-                            rNewPt0Index = a;
-                        }
-
-                        aNewPolygon.append(aCandidate.getB2DPoint(nSourceIndex));
-
-                        if(aCandidate.areControlVectorsUsed())
-                        {
-                            aNewPolygon.setControlVectorA(a, aCandidate.getControlVectorA(nSourceIndex));
-                            aNewPolygon.setControlVectorB(a, aCandidate.getControlVectorB(nSourceIndex));
-                        }
-                    }
-
+                    // when closed, RipPoint means to open the polygon at the selected point. To
+                    // be able to do that, it is necessary to make the selected point the first one
+                    basegfx::B2DPolygon aNewPolygon(basegfx::tools::makeStartPoint(aCandidate, nPnt));
                     SetPathPoly(basegfx::B2DPolyPolygon(aNewPolygon));
-                }
-
-                if(nPointCount)
-                {
                     ToggleClosed();
-                }
-            }
-            else
-            {
-                if(nPointCount >= 3L && nPnt != 0L && nPnt + 1L < nPointCount)
-                {
-                    // split in two objects at point nPnt
-                    basegfx::B2DPolygon aSplitPolyA(aCandidate, 0L, nPnt + 1L);
-                    SetPathPoly(basegfx::B2DPolyPolygon(aSplitPolyA));
 
-                    pNewObj = (SdrPathObj*)Clone();
-                    basegfx::B2DPolygon aSplitPolyB(aCandidate, nPnt, nPointCount - nPnt);
-                    pNewObj->SetPathPoly(basegfx::B2DPolyPolygon(aSplitPolyB));
+                    // give back new position of old start point (historical reasons)
+                    rNewPt0Index = (nPointCount - nPnt) % nPointCount;
+                }
+                else
+                {
+                    if(nPointCount >= 3L && nPnt != 0L && nPnt + 1L < nPointCount)
+                    {
+                        // split in two objects at point nPnt
+                        basegfx::B2DPolygon aSplitPolyA(aCandidate, 0L, nPnt + 1L);
+                        SetPathPoly(basegfx::B2DPolyPolygon(aSplitPolyA));
+
+                        pNewObj = (SdrPathObj*)Clone();
+                        basegfx::B2DPolygon aSplitPolyB(aCandidate, nPnt, nPointCount - nPnt);
+                        pNewObj->SetPathPoly(basegfx::B2DPolyPolygon(aSplitPolyB));
+                    }
                 }
             }
         }
@@ -2881,7 +2860,7 @@ SdrObject* SdrPathObj::DoConvertToPolyObj(BOOL bBezier) const
 
     if(pPath)
     {
-        if(pPath->GetPathPoly().areControlVectorsUsed())
+        if(pPath->GetPathPoly().areControlPointsUsed())
         {
             if(!bBezier)
             {
