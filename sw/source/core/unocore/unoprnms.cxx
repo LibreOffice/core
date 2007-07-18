@@ -4,9 +4,9 @@
  *
  *  $RCSfile: unoprnms.cxx,v $
  *
- *  $Revision: 1.129 $
+ *  $Revision: 1.130 $
  *
- *  last change: $Author: vg $ $Date: 2007-05-22 16:34:48 $
+ *  last change: $Author: obo $ $Date: 2007-07-18 12:58:06 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -329,7 +329,7 @@ const SwPropNameTab aPropNameTab = {
 /* 0273 HYPER_LINK_EVENTS */            {MAP_CHAR_LEN("HyperLinkEvents")},
 /* 0274 INFO_TYPE */                    {MAP_CHAR_LEN("InfoType")},
 /* 0275 INFO_FORMAT */                  {MAP_CHAR_LEN("InfoFormat")},
-/* 0276 IS_INPUT */                     {MAP_CHAR_LEN("Input")},
+/* 0276 IS_INPUT */                     {MAP_CHAR_LEN("IsInput")},
 /* 0277 LEVEL */                        {MAP_CHAR_LEN("Level")},
 /* 0278 INTERVAL */                     {MAP_CHAR_LEN("Interval")},
 /* 0279 LINK_REGION */                  {MAP_CHAR_LEN("LinkRegion")},
@@ -769,7 +769,9 @@ const SwPropNameTab aPropNameTab = {
 /* 0711 UNO_NAME_LAYOUT_SIZE*/ {MAP_CHAR_LEN("LayoutSize")},
 /* 0712 UNO_NAME_HELP */ {MAP_CHAR_LEN("Help")},
 /* 0713 UNO_NAME_TOOLTIP */ {MAP_CHAR_LEN("Tooltip")},
-/* 0714 UNO_NAME_DIALOG_LIBRARIES*/     {MAP_CHAR_LEN("DialogLibraries")}
+/* 0714 UNO_NAME_DIALOG_LIBRARIES*/     {MAP_CHAR_LEN("DialogLibraries")},
+/* 0715 UNO_NAME_HEADER_ROW_COUNT*/     {MAP_CHAR_LEN("HeaderRowCount")},
+/* 0716 UNO_NAME_INPUT */                {MAP_CHAR_LEN("Input")}
 };
 
 const SwPropNameLen& SwGetPropName( USHORT nId )
