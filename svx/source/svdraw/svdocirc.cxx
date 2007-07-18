@@ -4,9 +4,9 @@
  *
  *  $RCSfile: svdocirc.cxx,v $
  *
- *  $Revision: 1.33 $
+ *  $Revision: 1.34 $
  *
- *  last change: $Author: hr $ $Date: 2007-06-27 19:05:40 $
+ *  last change: $Author: obo $ $Date: 2007-07-18 10:57:20 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -268,11 +268,14 @@ basegfx::B2DPolygon SdrCircObj::ImpCalcXPolyCirc(const SdrObjKind eCicrleKind, c
         // create full circle. Do not use createPolygonFromEllipse, but the single
         // calls to appendUnitCircleQuadrant() to get the start point to the bottom of the
         // circle to keep compatible to old geometry creation
-        basegfx::tools::appendUnitCircleQuadrant(aCircPolygon, 1L, false);
-        basegfx::tools::appendUnitCircleQuadrant(aCircPolygon, 2L, false);
-        basegfx::tools::appendUnitCircleQuadrant(aCircPolygon, 3L, false);
-        basegfx::tools::appendUnitCircleQuadrant(aCircPolygon, 0L, false);
+        basegfx::tools::appendUnitCircleQuadrant(aCircPolygon, 1);
+        basegfx::tools::appendUnitCircleQuadrant(aCircPolygon, 2);
+        basegfx::tools::appendUnitCircleQuadrant(aCircPolygon, 3);
+        basegfx::tools::appendUnitCircleQuadrant(aCircPolygon, 0);
         aCircPolygon.setClosed(true);
+
+        // remove double points between segments created by segmented creation
+        aCircPolygon.removeDoublePoints();
 
         // needs own scaling and translation from unit circle to target size
         basegfx::B2DHomMatrix aMatrix;
