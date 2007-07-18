@@ -4,9 +4,9 @@
  *
  *  $RCSfile: volume3d.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: hr $ $Date: 2007-06-27 18:07:20 $
+ *  last change: $Author: obo $ $Date: 2007-07-18 10:53:35 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -224,7 +224,8 @@ Vol3DPointIterator::Vol3DPointIterator(const basegfx::B3DRange& rVol, const base
     pTransform(pTf),
     nIndex(0)
 {
-    DBG_ASSERT(!rVol.isEmpty(), "Vol3DPointIterator-Aufruf mit ungueltigem Volume3D!");
+    // #i72532# Assert not needed, nothing bad happens when the volume is empty.
+    // DBG_ASSERT(!rVol.isEmpty(), "Vol3DPointIterator-Aufruf mit ungueltigem Volume3D!");
     a3DExtent = rVolume.getMaximum() - rVolume.getMinimum();
 }
 
