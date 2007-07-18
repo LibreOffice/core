@@ -4,9 +4,9 @@
  *
  *  $RCSfile: svdedtv2.cxx,v $
  *
- *  $Revision: 1.31 $
+ *  $Revision: 1.32 $
  *
- *  last change: $Author: rt $ $Date: 2007-07-06 07:39:50 $
+ *  last change: $Author: obo $ $Date: 2007-07-18 10:56:06 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -978,42 +978,23 @@ void SdrEditView::MergeMarkedObjects(SdrMergeMode eMode)
                 pInsPV = pM->GetPageView();
                 pInsOL = pObj->GetObjList();
 
-                // get the polygons; do NOT use ImpGetXPolyPoly here - it does fetch all
-                // the polygons, but they are all put in one single XPolyPolygon so that
-                // no SetDirections() on single objects can be made. This would lead to
-                // wrong results.
-                SdrObjList* pObjectList = pObj->GetSubList();
+                // #i76891# use single iter from SJ here whcih works on SdrObjects and takes
+                // groups into account by itself
+                SdrObjListIter aIter(*pObj, IM_DEEPWITHGROUPS);
 
-                if(pObjectList)
+                while(aIter.IsMore())
                 {
-                    SdrObjListIter aIter(*pObjectList, IM_DEEPWITHGROUPS);
-
-                    while(aIter.IsMore())
-                    {
-                        SdrObject* pCandidate = aIter.Next();
-                        SdrPathObj* pPathObj = PTR_CAST(SdrPathObj, pCandidate);
-                        if(pPathObj)
-                        {
-                            basegfx::B2DPolyPolygon aTmpPoly(pPathObj->GetPathPoly());
-                            aTmpPoly = basegfx::tools::correctOrientations(aTmpPoly);
-
-                            if(!bFirstObjectComplete)
-                            {
-                                aMergePolyPolygonA.append(aTmpPoly);
-                            }
-                            else
-                            {
-                                aMergePolyPolygonB.append(aTmpPoly);
-                            }
-                        }
-                    }
-                }
-                else
-                {
-                    SdrPathObj* pPathObj = PTR_CAST(SdrPathObj, pObj);
+                    SdrObject* pCandidate = aIter.Next();
+                    SdrPathObj* pPathObj = PTR_CAST(SdrPathObj, pCandidate);
                     if(pPathObj)
                     {
                         basegfx::B2DPolyPolygon aTmpPoly(pPathObj->GetPathPoly());
+
+                        // #i76891# unfortunately ConvertMarkedToPathObj has converted all
+                        // involved polygon data to curve segments, even if not necessary.
+                        // It is better to try to reduce to more simple polygons.
+                        aTmpPoly = basegfx::tools::simplifyCurveSegments(aTmpPoly);
+
                         aTmpPoly = basegfx::tools::correctOrientations(aTmpPoly);
 
                         if(!bFirstObjectComplete)
@@ -1441,15 +1422,21 @@ void SdrEditView::ImpDismantleOneObject(const SdrObject* pObj, SdrObjList& rOL, 
                 {
                     SdrObjKind eKind(OBJ_PLIN);
                     basegfx::B2DPolygon aNewPolygon;
+                    const sal_uInt32 nNextIndex((b + 1) % nPointCount);
 
                     aNewPolygon.append(rCandidate.getB2DPoint(b));
-                    aNewPolygon.append(rCandidate.getB2DPoint((b + 1) % nPointCount));
 
                     if(rCandidate.areControlPointsUsed())
                     {
-                        aNewPolygon.setControlVectorA(0, rCandidate.getControlVectorA(b));
-                        aNewPolygon.setControlVectorB(0, rCandidate.getControlVectorB(b));
+                        aNewPolygon.appendBezierSegment(
+                            rCandidate.getNextControlPoint(b),
+                            rCandidate.getPrevControlPoint(nNextIndex),
+                            rCandidate.getB2DPoint(nNextIndex));
                         eKind = OBJ_PATHLINE;
+                    }
+                    else
+                    {
+                        aNewPolygon.append(rCandidate.getB2DPoint(nNextIndex));
                     }
 
                     SdrPathObj* pPath = new SdrPathObj(eKind, basegfx::B2DPolyPolygon(aNewPolygon));
@@ -1935,7 +1922,7 @@ void SdrEditView::DoImportMarkedMtf(SvdProgressInfo *pProgrInfo)
     if(aNewMarked.GetMarkCount())
     {
         // Neue Selektion bilden
-        for(sal_uInt32 a(0); a < aNewMarked.GetMarkCount(); a++)
+        for(ULONG a(0); a < aNewMarked.GetMarkCount(); a++)
         {
             GetMarkedObjectListWriteAccess().InsertEntry(*aNewMarked.GetMark(a));
         }
