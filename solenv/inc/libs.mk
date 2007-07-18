@@ -4,9 +4,9 @@
 #
 #   $RCSfile: libs.mk,v $
 #
-#   $Revision: 1.115 $
+#   $Revision: 1.116 $
 #
-#   last change: $Author: obo $ $Date: 2007-07-17 07:23:56 $
+#   last change: $Author: obo $ $Date: 2007-07-18 08:01:00 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -32,7 +32,7 @@
 #     MA  02111-1307  USA
 #
 #*************************************************************************
-LIBSMKREV!:="$$Revision: 1.115 $$"
+LIBSMKREV!:="$$Revision: 1.116 $$"
 
 .IF "$(GUI)"=="UNX" || "$(COM)"=="GCC"
 
@@ -283,7 +283,6 @@ JVMFWKLIB = -ljvmfwk
 # For BinFilters, some libs were added.
 #
 
-BFSFXLIB=-lbf_sfx
 BFSVXLIB=-lbf_svx$(OFFICEUPD)$(DLLPOSTFIX)
 BFSCHLIB=-lbf_ysch
 BFSMLIB=-lbf_ysm
@@ -457,7 +456,6 @@ JVMFWKLIB = ijvmfwk.lib
 #
 
 BFSVXLIB=bf_svx.lib
-BFSFXLIB=bf_sfx.lib
 BFSCHLIB=bf_ysch.lib
 BFSMLIB=bf_ysm.lib
 BFSCLIB=bf_sclib.lib
