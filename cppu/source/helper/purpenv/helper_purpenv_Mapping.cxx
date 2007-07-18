@@ -4,9 +4,9 @@
  *
  *  $RCSfile: helper_purpenv_Mapping.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: kz $ $Date: 2007-05-14 09:32:30 $
+ *  last change: $Author: obo $ $Date: 2007-07-18 12:21:22 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -116,11 +116,11 @@ static void SAL_CALL s_release(uno_Mapping * puno_Mapping)
 }
 
 
-static void s_getIdentifier_v(va_list param)
+static void s_getIdentifier_v(va_list * pParam)
 {
-    uno_ExtEnvironment *  pEnv  = va_arg(param, uno_ExtEnvironment *);
-    rtl_uString        ** ppOid = va_arg(param, rtl_uString **);
-    uno_Interface      *  pUnoI = va_arg(param, uno_Interface *);
+    uno_ExtEnvironment *  pEnv  = va_arg(*pParam, uno_ExtEnvironment *);
+    rtl_uString        ** ppOid = va_arg(*pParam, rtl_uString **);
+    uno_Interface      *  pUnoI = va_arg(*pParam, uno_Interface *);
 
     pEnv->getObjectIdentifier(pEnv, ppOid, pUnoI);
 }

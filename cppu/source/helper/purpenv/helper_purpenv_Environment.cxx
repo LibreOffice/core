@@ -4,9 +4,9 @@
  *
  *  $RCSfile: helper_purpenv_Environment.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: kz $ $Date: 2007-05-14 09:32:30 $
+ *  last change: $Author: obo $ $Date: 2007-07-18 12:21:10 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -119,8 +119,8 @@ public:
 
     virtual void v_enter     (void);
     virtual void v_leave     (void);
-    virtual void v_callInto_v(uno_EnvCallee * pCallee, va_list param);
-    virtual void v_callOut_v (uno_EnvCallee * pCallee, va_list param);
+    virtual void v_callInto_v(uno_EnvCallee * pCallee, va_list * pParam);
+    virtual void v_callOut_v (uno_EnvCallee * pCallee, va_list * pParam);
     virtual int  v_isValid   (rtl::OUString * pReason);
 
 protected:
@@ -331,15 +331,15 @@ void Base::releaseWeak(void)
 }
 
 
-extern "C" { static void s_registerProxyInterface_v(va_list param)
+extern "C" { static void s_registerProxyInterface_v(va_list * pParam)
 {
-    uno_ExtEnvironment                   * pExtEnv    = va_arg(param, uno_ExtEnvironment *);
-    void                                ** ppProxy    = va_arg(param, void **);
-    uno_freeProxyFunc                      freeProxy  = va_arg(param, uno_freeProxyFunc);
-    rtl_uString                          * pOId       = va_arg(param, rtl_uString *);
-    typelib_InterfaceTypeDescription     * pTypeDescr = va_arg(param, typelib_InterfaceTypeDescription *);
+    uno_ExtEnvironment                   * pExtEnv    = va_arg(*pParam, uno_ExtEnvironment *);
+    void                                ** ppProxy    = va_arg(*pParam, void **);
+    uno_freeProxyFunc                      freeProxy  = va_arg(*pParam, uno_freeProxyFunc);
+    rtl_uString                          * pOId       = va_arg(*pParam, rtl_uString *);
+    typelib_InterfaceTypeDescription     * pTypeDescr = va_arg(*pParam, typelib_InterfaceTypeDescription *);
     ExtEnv_registerProxyInterface  * pRegisterProxyInterface
-        = va_arg(param, ExtEnv_registerProxyInterface *);
+        = va_arg(*pParam, ExtEnv_registerProxyInterface *);
 
     pRegisterProxyInterface(pExtEnv, ppProxy, freeProxy, pOId, pTypeDescr);
 }}
@@ -360,11 +360,11 @@ void Base::registerProxyInterface(void                                  ** ppPro
 }
 
 
-extern "C" { static void s_revokeInterface_v(va_list param)
+extern "C" { static void s_revokeInterface_v(va_list * pParam)
 {
-    uno_ExtEnvironment * pExtEnv    = va_arg(param, uno_ExtEnvironment *);
-    void               * pInterface = va_arg(param, void *);
-    ExtEnv_revokeInterface * pRevokeInterface = va_arg(param, ExtEnv_revokeInterface *);
+    uno_ExtEnvironment * pExtEnv    = va_arg(*pParam, uno_ExtEnvironment *);
+    void               * pInterface = va_arg(*pParam, void *);
+    ExtEnv_revokeInterface * pRevokeInterface = va_arg(*pParam, ExtEnv_revokeInterface *);
 
     pRevokeInterface(pExtEnv, pInterface);
 }}
@@ -379,13 +379,13 @@ void Base::revokeInterface(void * pInterface)
 }
 
 
-extern "C" { static void s_getObjectIdentifier_v(va_list param)
+extern "C" { static void s_getObjectIdentifier_v(va_list * pParam)
 {
-    uno_ExtEnvironment * pExtEnv    = va_arg(param, uno_ExtEnvironment *);
-    void               * pInterface = va_arg(param, void *);
-    rtl::OUString      * pOId       = va_arg(param, rtl::OUString *);
+    uno_ExtEnvironment * pExtEnv    = va_arg(*pParam, uno_ExtEnvironment *);
+    void               * pInterface = va_arg(*pParam, void *);
+    rtl::OUString      * pOId       = va_arg(*pParam, rtl::OUString *);
     ExtEnv_getObjectIdentifier * pGetObjectIdentifier
-        = va_arg(param, ExtEnv_getObjectIdentifier *);
+        = va_arg(*pParam, ExtEnv_getObjectIdentifier *);
 
     pGetObjectIdentifier(pExtEnv, reinterpret_cast<rtl_uString **>(pOId), pInterface);
 }}
@@ -401,14 +401,14 @@ void Base::getObjectIdentifier(void * pInterface, rtl::OUString * pOid)
 }
 
 
-extern "C" { static void s_getRegisteredInterface_v(va_list param)
+extern "C" { static void s_getRegisteredInterface_v(va_list * pParam)
 {
-    uno_ExtEnvironment                   * pExtEnv     = va_arg(param, uno_ExtEnvironment *);
-    void                                ** ppInterface = va_arg(param, void **);
-    rtl_uString                          * pOId        = va_arg(param, rtl_uString *);
-    typelib_InterfaceTypeDescription     * pTypeDescr  = va_arg(param, typelib_InterfaceTypeDescription *);
+    uno_ExtEnvironment                   * pExtEnv     = va_arg(*pParam, uno_ExtEnvironment *);
+    void                                ** ppInterface = va_arg(*pParam, void **);
+    rtl_uString                          * pOId        = va_arg(*pParam, rtl_uString *);
+    typelib_InterfaceTypeDescription     * pTypeDescr  = va_arg(*pParam, typelib_InterfaceTypeDescription *);
     ExtEnv_getRegisteredInterface  * pGetRegisteredInterface
-        = va_arg(param, ExtEnv_getRegisteredInterface *);
+        = va_arg(*pParam, ExtEnv_getRegisteredInterface *);
 
     pGetRegisteredInterface(pExtEnv, ppInterface, pOId, pTypeDescr);
 }}
@@ -427,14 +427,14 @@ void Base::getRegisteredInterface(void ** ppInterface,
 }
 
 
-extern "C" { static void s_getRegisteredInterfaces_v(va_list param)
+extern "C" { static void s_getRegisteredInterfaces_v(va_list * pParam)
 {
-    uno_ExtEnvironment   * pExtEnv      = va_arg(param, uno_ExtEnvironment *);
-    void               *** pppInterface = va_arg(param, void ***);
-    sal_Int32            * pnLen        = va_arg(param, sal_Int32 *);
-    uno_memAlloc           memAlloc     = va_arg(param, uno_memAlloc);
+    uno_ExtEnvironment   * pExtEnv      = va_arg(*pParam, uno_ExtEnvironment *);
+    void               *** pppInterface = va_arg(*pParam, void ***);
+    sal_Int32            * pnLen        = va_arg(*pParam, sal_Int32 *);
+    uno_memAlloc           memAlloc     = va_arg(*pParam, uno_memAlloc);
     ExtEnv_getRegisteredInterfaces * pGetRegisteredInterfaces
-        = va_arg(param, ExtEnv_getRegisteredInterfaces *);
+        = va_arg(*pParam, ExtEnv_getRegisteredInterfaces *);
 
     pGetRegisteredInterfaces(pExtEnv, pppInterface, pnLen, memAlloc);
 }}
@@ -453,13 +453,13 @@ void Base::getRegisteredInterfaces(void         *** pppInterface,
 }
 
 
-extern "C" { static void s_computeObjectIdentifier_v(va_list param)
+extern "C" { static void s_computeObjectIdentifier_v(va_list * pParam)
 {
-    uno_ExtEnvironment * pExtEnv    = va_arg(param, uno_ExtEnvironment *);
-    void               * pInterface = va_arg(param, void *);
-    rtl::OUString      * pOId       = va_arg(param, rtl::OUString *);
+    uno_ExtEnvironment * pExtEnv    = va_arg(*pParam, uno_ExtEnvironment *);
+    void               * pInterface = va_arg(*pParam, void *);
+    rtl::OUString      * pOId       = va_arg(*pParam, rtl::OUString *);
     ExtEnv_computeObjectIdentifier * pComputeObjectIdentifier
-        = va_arg(param, ExtEnv_computeObjectIdentifier *);
+        = va_arg(*pParam, ExtEnv_computeObjectIdentifier *);
 
     pComputeObjectIdentifier(pExtEnv, reinterpret_cast<rtl_uString **>(pOId), pInterface);
 }}
@@ -475,12 +475,12 @@ void Base::computeObjectIdentifier(void * pInterface, rtl::OUString * pOid)
 }
 
 
-extern "C" { static void s_acquireInterface_v(va_list param)
+extern "C" { static void s_acquireInterface_v(va_list * pParam)
 {
-    uno_ExtEnvironment * pExtEnv    = va_arg(param, uno_ExtEnvironment *);
-    void               * pInterface = va_arg(param, void *);
+    uno_ExtEnvironment * pExtEnv    = va_arg(*pParam, uno_ExtEnvironment *);
+    void               * pInterface = va_arg(*pParam, void *);
     ExtEnv_acquireInterface * pAcquireInterface
-        = va_arg(param, ExtEnv_acquireInterface *);
+        = va_arg(*pParam, ExtEnv_acquireInterface *);
 
     pAcquireInterface(pExtEnv, pInterface);
 }}
@@ -491,12 +491,12 @@ void Base::acquireInterface(void * pInterface)
 }
 
 
-extern "C" { static void s_releaseInterface_v(va_list param)
+extern "C" { static void s_releaseInterface_v(va_list * pParam)
 {
-    uno_ExtEnvironment * pExtEnv    = va_arg(param, uno_ExtEnvironment *);
-    void               * pInterface = va_arg(param, void *);
+    uno_ExtEnvironment * pExtEnv    = va_arg(*pParam, uno_ExtEnvironment *);
+    void               * pInterface = va_arg(*pParam, void *);
     ExtEnv_releaseInterface * pReleaseInterface
-        = va_arg(param, ExtEnv_releaseInterface *);
+        = va_arg(*pParam, ExtEnv_releaseInterface *);
 
     pReleaseInterface(pExtEnv, pInterface);
 }}
@@ -520,14 +520,14 @@ void Base::v_leave(void)
     m_pEnterable->leave();
 }
 
-void Base::v_callInto_v(uno_EnvCallee * pCallee, va_list param)
+void Base::v_callInto_v(uno_EnvCallee * pCallee, va_list * pParam)
 {
-    m_pEnterable->callInto_v(pCallee, param);
+    m_pEnterable->callInto_v(pCallee, pParam);
 }
 
-void Base::v_callOut_v(uno_EnvCallee * pCallee, va_list param)
+void Base::v_callOut_v(uno_EnvCallee * pCallee, va_list * pParam)
 {
-    m_pEnterable->callOut_v(pCallee, param);
+    m_pEnterable->callOut_v(pCallee, pParam);
 }
 
 int Base::v_isValid(rtl::OUString * pReason)
