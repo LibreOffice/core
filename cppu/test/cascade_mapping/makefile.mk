@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.3 $
+#   $Revision: 1.4 $
 #
-#   last change: $Author: hr $ $Date: 2007-06-26 17:21:19 $
+#   last change: $Author: obo $ $Date: 2007-07-18 12:25:02 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -43,6 +43,7 @@ NO_BSYMBOLIC       := TRUE
 
 .INCLUDE :  settings.mk
 
+CFLAGS += -fPIC
 
 VERSIONOBJ := # NO GetVersionInfo symbols :-)
 ENVINCPRE  := -I$(OUT)$/inc$/$(TARGET)
