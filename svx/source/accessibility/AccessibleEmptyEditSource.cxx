@@ -4,9 +4,9 @@
  *
  *  $RCSfile: AccessibleEmptyEditSource.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: hr $ $Date: 2007-06-27 16:36:55 $
+ *  last change: $Author: obo $ $Date: 2007-07-18 13:06:39 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -149,6 +149,11 @@ namespace accessibility
         void            QuickInsertField( const SvxFieldItem& /*rFld*/, const ESelection& /*rSel*/ ) {}
         void            QuickSetAttribs( const SfxItemSet& /*rSet*/, const ESelection& /*rSel*/ ) {}
         void            QuickInsertLineBreak( const ESelection& /*rSel*/ ) {}
+
+        const SfxItemSet * GetEmptyItemSetPtr() { return 0; }
+
+        void        AppendParagraph() {}
+        xub_StrLen  AppendTextPortion( USHORT /*nPara*/, const String & /*rText*/, const SfxItemSet & /*rSet*/ ) { return 0; }
 
         XubString       CalcFieldValue( const SvxFieldItem& /*rField*/, USHORT /*nPara*/, USHORT /*nPos*/, Color*& /*rpTxtColor*/, Color*& /*rpFldColor*/ )
         {
