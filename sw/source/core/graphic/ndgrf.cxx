@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ndgrf.cxx,v $
  *
- *  $Revision: 1.39 $
+ *  $Revision: 1.40 $
  *
- *  last change: $Author: kz $ $Date: 2007-05-10 15:59:47 $
+ *  last change: $Author: obo $ $Date: 2007-07-18 13:33:02 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -135,6 +135,11 @@
 #ifndef _COM_SUN_STAR_IO_XSEEKABLE_HPP_
 #include <com/sun/star/io/XSeekable.hpp>
 #endif
+// --> OD 2007-03-28 #i73788#
+#ifndef _RETRIEVEINPUTSTREAMCONSUMER_HXX
+#include <retrieveinputstreamconsumer.hxx>
+#endif
+// <--
 
 using namespace com::sun::star;
 
@@ -147,7 +152,11 @@ SwGrfNode::SwGrfNode(
     const Graphic* pGraphic,
     SwGrfFmtColl *pGrfColl,
     SwAttrSet* pAutoAttr )
-    : SwNoTxtNode( rWhere, ND_GRFNODE, pGrfColl, pAutoAttr )
+    // --> OD 2007-01-23 #i73788#
+    : mbLinkedInputStreamReady( false ),
+      mbIsStreamReadOnly( sal_False ),
+    // <--
+      SwNoTxtNode( rWhere, ND_GRFNODE, pGrfColl, pAutoAttr )
 {
     aGrfObj.SetSwapStreamHdl( LINK( this, SwGrfNode, SwapGraphic ) );
     bInSwapIn = bChgTwipSize = bChgTwipSizeFromPixel = bLoadLowResGrf =
@@ -160,7 +169,11 @@ SwGrfNode::SwGrfNode(
 SwGrfNode::SwGrfNode( const SwNodeIndex & rWhere,
                           const GraphicObject& rGrfObj,
                       SwGrfFmtColl *pGrfColl, SwAttrSet* pAutoAttr )
-    : SwNoTxtNode( rWhere, ND_GRFNODE, pGrfColl, pAutoAttr )
+    // --> OD 2007-01-23 #i73788#
+    : mbLinkedInputStreamReady( false ),
+      mbIsStreamReadOnly( sal_False ),
+    // <--
+      SwNoTxtNode( rWhere, ND_GRFNODE, pGrfColl, pAutoAttr )
 {
     aGrfObj = rGrfObj;
     aGrfObj.SetSwapStreamHdl( LINK( this, SwGrfNode, SwapGraphic ) );
@@ -179,7 +192,11 @@ SwGrfNode::SwGrfNode( const SwNodeIndex & rWhere,
                       const String& rGrfName, const String& rFltName,
                       SwGrfFmtColl *pGrfColl,
                       SwAttrSet* pAutoAttr )
-    : SwNoTxtNode( rWhere, ND_GRFNODE, pGrfColl, pAutoAttr )
+    // --> OD 2007-01-23 #i73788#
+    : mbLinkedInputStreamReady( false ),
+      mbIsStreamReadOnly( sal_False ),
+    // <--
+      SwNoTxtNode( rWhere, ND_GRFNODE, pGrfColl, pAutoAttr )
 {
     aGrfObj.SetSwapStreamHdl( LINK( this, SwGrfNode, SwapGraphic ) );
 
@@ -378,6 +395,10 @@ BOOL SwGrfNode::ReRead(
 
 SwGrfNode::~SwGrfNode()
 {
+    // --> OD 2007-03-30 #i73788#
+    mpThreadConsumer.reset();
+    // <--
+
     SwDoc* pDoc = GetDoc();
     if( refLink.Is() )
     {
@@ -1204,3 +1225,66 @@ BOOL SwGrfNode::IsSelected() const
     }
     return bRet;
 }
+
+// --> OD 2006-12-22 #i73788#
+boost::weak_ptr< SwAsyncRetrieveInputStreamThreadConsumer > SwGrfNode::GetThreadConsumer()
+{
+    return mpThreadConsumer;
+}
+
+void SwGrfNode::TriggerAsyncRetrieveInputStream()
+{
+    if ( !IsLinkedFile() )
+    {
+        ASSERT( false,
+                "<SwGrfNode::TriggerAsyncLoad()> - Method is misused. Method call is only valid for graphic nodes, which refer a linked graphic file" );
+        return;
+    }
+
+    if ( mpThreadConsumer.get() == 0 )
+    {
+        mpThreadConsumer.reset( new SwAsyncRetrieveInputStreamThreadConsumer( *this ) );
+
+        String sGrfNm;
+        refLink->GetLinkManager()->GetDisplayNames( refLink, 0, &sGrfNm, 0, 0 );
+
+        mpThreadConsumer->CreateThread( sGrfNm );
+    }
+}
+
+bool SwGrfNode::IsLinkedInputStreamReady() const
+{
+    return mbLinkedInputStreamReady;
+}
+
+void SwGrfNode::ApplyInputStream(
+    com::sun::star::uno::Reference<com::sun::star::io::XInputStream> xInputStream,
+    const sal_Bool bIsStreamReadOnly )
+{
+    if ( IsLinkedFile() )
+    {
+        if ( xInputStream.is() )
+        {
+            mxInputStream = xInputStream;
+            mbIsStreamReadOnly = bIsStreamReadOnly;
+            mbLinkedInputStreamReady = true;
+            SwMsgPoolItem aMsgHint( RES_LINKED_GRAPHIC_STREAM_ARRIVED );
+            Modify( &aMsgHint, &aMsgHint );
+        }
+    }
+}
+
+void SwGrfNode::UpdateLinkWithInputStream()
+{
+    if ( IsLinkedFile() )
+    {
+        GetLink()->setStreamToLoadFrom( mxInputStream, mbIsStreamReadOnly );
+        GetLink()->Update();
+        SwMsgPoolItem aMsgHint( RES_GRAPHIC_ARRIVED );
+        Modify( &aMsgHint, &aMsgHint );
+
+        mbLinkedInputStreamReady = false;
+        mpThreadConsumer.reset();
+    }
+}
+// <--
