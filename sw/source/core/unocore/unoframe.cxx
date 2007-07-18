@@ -4,9 +4,9 @@
  *
  *  $RCSfile: unoframe.cxx,v $
  *
- *  $Revision: 1.111 $
+ *  $Revision: 1.112 $
  *
- *  last change: $Author: ihi $ $Date: 2007-06-05 17:33:19 $
+ *  last change: $Author: obo $ $Date: 2007-07-18 12:57:02 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -56,6 +56,9 @@
 #endif
 #ifndef _COM_SUN_STAR_EMBED_ASPECTS_HPP_
 #include <com/sun/star/embed/Aspects.hpp>
+#endif
+#ifndef _COM_SUN_STAR_GRAPHIC_XGRAPHICPROVIDER_HPP_
+#include <com/sun/star/graphic/XGraphicProvider.hpp>
 #endif
 
 #include <swtypes.hxx>
@@ -711,7 +714,7 @@ protected:
         BaseFrameProperties_Impl(pMap){}
 public:
     SwFrameProperties_Impl();
-    ~SwFrameProperties_Impl(){}
+    virtual ~SwFrameProperties_Impl(){}
 
     virtual sal_Bool        AnyToItemSet( SwDoc* pDoc, SfxItemSet& rFrmSet, SfxItemSet& rSet, sal_Bool& rSizeFound);
 };
@@ -780,7 +783,7 @@ class SwGraphicProperties_Impl : public BaseFrameProperties_Impl
 {
 public:
     SwGraphicProperties_Impl();
-    ~SwGraphicProperties_Impl(){}
+    virtual ~SwGraphicProperties_Impl(){}
 
     virtual sal_Bool                AnyToItemSet( SwDoc* pDoc, SfxItemSet& rFrmSet, SfxItemSet& rSet, sal_Bool& rSizeFound);
 };
@@ -890,7 +893,7 @@ class SwOLEProperties_Impl : public SwFrameProperties_Impl
 public:
     SwOLEProperties_Impl() :
         SwFrameProperties_Impl(aSwMapProvider.GetPropertyMap(PROPERTY_MAP_EMBEDDED_OBJECT) ){}
-    ~SwOLEProperties_Impl(){}
+    virtual ~SwOLEProperties_Impl(){}
 
     virtual sal_Bool        AnyToItemSet( SwDoc* pDoc, SfxItemSet& rFrmSet, SfxItemSet& rSet, sal_Bool& rSizeFound);
 };
@@ -979,7 +982,8 @@ SwXFrame::SwXFrame(FlyCntType eSet, const SfxItemPropertyMap* pMap, SwDoc *pDoc)
     aPropSet(pMap),
     _pMap(pMap),
     bIsDescriptor(sal_True),
-    mpDoc ( pDoc )
+    mpDoc ( pDoc ),
+    m_pCopySource( 0 )
 {
     // Register ourselves as a listener to the document (via the page descriptor)
     pDoc->GetPageDescFromPool(RES_POOLPAGE_STANDARD)->Add(this);
@@ -1015,7 +1019,6 @@ SwXFrame::SwXFrame(FlyCntType eSet, const SfxItemPropertyMap* pMap, SwDoc *pDoc)
         {
             uno::Any aAny = mxStyleFamily->getByName ( OUString ( RTL_CONSTASCII_USTRINGPARAM ( "OLE" ) ) );
             aAny >>= mxStyleData;
-            pProps = 0;
             pProps = new SwOLEProperties_Impl( );
         }
         break;
@@ -1032,7 +1035,8 @@ SwXFrame::SwXFrame(SwFrmFmt& rFrmFmt, FlyCntType eSet, const SfxItemPropertyMap*
     aPropSet(pMap),
     _pMap(pMap),
     bIsDescriptor(sal_False),
-    pProps(0)
+    pProps(0),
+    m_pCopySource(0)
 {
 
 }
@@ -1041,6 +1045,7 @@ SwXFrame::SwXFrame(SwFrmFmt& rFrmFmt, FlyCntType eSet, const SfxItemPropertyMap*
   -----------------------------------------------------------------------*/
 SwXFrame::~SwXFrame()
 {
+    delete m_pCopySource;
     delete pProps;
 }
 /*-- 11.12.98 15:05:03---------------------------------------------------
@@ -1111,6 +1116,17 @@ uno::Reference< beans::XPropertySetInfo >  SwXFrame::getPropertySetInfo(void) th
         break;
     }
     return xRef;
+}
+/*-- 15.05.06 12:21:43---------------------------------------------------
+
+  -----------------------------------------------------------------------*/
+void SwXFrame::SetSelection(SwPaM& rCopySource)
+{
+    if(m_pCopySource)
+        delete m_pCopySource;
+    m_pCopySource = new SwPaM( *rCopySource.Start() );
+    m_pCopySource->SetMark();
+    *m_pCopySource->GetMark() = *rCopySource.End();
 }
 /*-- 11.12.98 15:05:04---------------------------------------------------
 
@@ -1343,6 +1359,27 @@ void SwXFrame::setPropertyValue(const OUString& rPropertyName, const uno::Any& a
                                         pGrfObj );
             }
             delete pGrfObj;
+        }
+        else if( FN_UNO_GRAPHIC == pCur->nWID )
+        {
+            uno::Reference< graphic::XGraphic > xGraphic;
+            aValue >>= xGraphic;
+            if(xGraphic.is())
+            {
+                const SwNodeIndex* pIdx = pFmt->GetCntnt().GetCntntIdx();
+                if(pIdx)
+                {
+                    SwNodeIndex aIdx(*pIdx, 1);
+                    SwGrfNode* pGrfNode = aIdx.GetNode().GetGrfNode();
+                    if(!pGrfNode)
+                    {
+                        throw uno::RuntimeException();
+                    }
+                    SwPaM aGrfPaM(*pGrfNode);
+                    Graphic aGraphic( xGraphic );
+                    pFmt->GetDoc()->ReRead( aGrfPaM, String(), String(), &aGraphic, 0 );
+                }
+            }
         }
         else if( FN_UNO_REPLACEMENT_GRAPHIC_URL == pCur->nWID )
         {
@@ -1662,6 +1699,18 @@ uno::Any SwXFrame::getPropertyValue(const OUString& rPropertyName)
             String sFltName;
             pFmt->GetDoc()->GetGrfNms( *(SwFlyFrmFmt*)pFmt, 0, &sFltName );
                 aAny <<= OUString(sFltName);
+        }
+        else if( FN_UNO_GRAPHIC == pCur->nWID )
+        {
+            const SwNodeIndex* pIdx = pFmt->GetCntnt().GetCntntIdx();
+            if(pIdx)
+            {
+                SwNodeIndex aIdx(*pIdx, 1);
+                SwGrfNode* pGrfNode = aIdx.GetNode().GetGrfNode();
+                if(!pGrfNode)
+                    throw uno::RuntimeException();
+                aAny <<= pGrfNode->GetGrf().GetXGraphic();
+            }
         }
         else if(FN_UNO_FRAME_STYLE_NAME == pCur->nWID)
         {
@@ -2144,16 +2193,18 @@ void SwXFrame::attachToRange(const uno::Reference< text::XTextRange > & xTextRan
         }
 
         const SfxPoolItem* pItem;
+        RndStdIds eAnchorId = FLY_AT_CNTNT;
         if(SFX_ITEM_SET == aFrmSet.GetItemState(RES_ANCHOR, sal_False, &pItem) )
         {
-            if( FLY_AT_FLY ==((const SwFmtAnchor*)pItem)->GetAnchorId() &&
+            eAnchorId = ((const SwFmtAnchor*)pItem)->GetAnchorId();
+            if( FLY_AT_FLY == eAnchorId &&
                 !aPam.GetNode()->FindFlyStartNode())
             {
                 //rahmengebunden geht nur dort, wo ein Rahmen ist!
                 SwFmtAnchor aAnchor(FLY_AT_CNTNT);
                 aFrmSet.Put(aAnchor);
             }
-            else if( FLY_PAGE ==((const SwFmtAnchor*)pItem)->GetAnchorId() &&
+            else if( FLY_PAGE == eAnchorId &&
                      0 == ((const SwFmtAnchor*)pItem)->GetPageNum() )
             {
                 SwFmtAnchor aAnchor( *((const SwFmtAnchor*)pItem) );
@@ -2171,7 +2222,33 @@ void SwXFrame::attachToRange(const uno::Reference< text::XTextRange > & xTextRan
         if( eType == FLYCNTTYPE_FRM)
         {
             UnoActionContext aCont(pDoc);
-            pFmt = pDoc->MakeFlySection( FLY_AT_CNTNT, aPam.GetPoint(),
+            if(m_pCopySource)
+            {
+                SwFmtAnchor* pAnchorItem = 0;
+                // the frame is inserted bound to page
+                // to prevent conflicts if the to-be-anchored position is part of the to-be-copied text
+                if(eAnchorId != FLY_PAGE)
+                {
+                    pAnchorItem = static_cast<SwFmtAnchor*>(aFrmSet.Get(RES_ANCHOR).Clone());
+                    aFrmSet.Put( SwFmtAnchor( FLY_PAGE, 1 ));
+                }
+
+                pFmt = pDoc->MakeFlyAndMove( *m_pCopySource, aFrmSet,
+                               0,
+                               pParentFrmFmt );
+                if(pAnchorItem && pFmt)
+                {
+                    pFmt->DelFrms();
+                    pAnchorItem->SetAnchor( m_pCopySource->Start() );
+                    SfxItemSet aAnchorSet( pDoc->GetAttrPool(), RES_ANCHOR, RES_ANCHOR );
+                    aAnchorSet.Put( *pAnchorItem );
+                    pDoc->SetFlyFrmAttr( *pFmt, aAnchorSet );
+                    delete pAnchorItem;
+                }
+                DELETEZ( m_pCopySource );
+            }
+            else
+                pFmt = pDoc->MakeFlySection( FLY_AT_CNTNT, aPam.GetPoint(),
                                          &aFrmSet, pParentFrmFmt );
             if(pFmt)
             {
@@ -2210,6 +2287,14 @@ void SwXFrame::attachToRange(const uno::Reference< text::XTextRange > & xTextRan
                     sGraphicURL.Erase();
                 }
             }
+            Graphic aGraphic;
+            uno::Any* pGraphic;
+            if( pProps->GetProperty( FN_UNO_GRAPHIC, 0, pGraphic ))
+            {
+                uno::Reference< graphic::XGraphic > xGraphic;
+                (*pGraphic) >>= xGraphic;
+                aGraphic = Graphic( xGraphic );
+            }
 
             String sFltName;
             uno::Any* pFilter;
@@ -2223,7 +2308,7 @@ void SwXFrame::attachToRange(const uno::Reference< text::XTextRange > & xTextRan
             pFmt =
                 pGrfObj ? pDoc->Insert( aPam, *pGrfObj, &aFrmSet, &aGrSet,
                                         pParentFrmFmt )
-                         : pDoc->Insert( aPam, sGraphicURL, sFltName, 0,
+                        : pDoc->Insert( aPam, sGraphicURL, sFltName, &aGraphic,
                                         &aFrmSet, &aGrSet, pParentFrmFmt  );
             delete pGrfObj;
             if(pFmt)
