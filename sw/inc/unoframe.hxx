@@ -4,9 +4,9 @@
  *
  *  $RCSfile: unoframe.hxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: obo $ $Date: 2006-10-13 11:08:29 $
+ *  last change: $Author: obo $ $Date: 2007-07-18 12:55:23 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -93,6 +93,8 @@ class SwXFrame : public cppu::WeakImplHelper6
     sal_Bool                        bIsDescriptor;
     String                          sName;
 
+    SwPaM*                          m_pCopySource;
+
 protected:
     com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet > mxStyleData;
     com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess >  mxStyleFamily;
@@ -168,6 +170,8 @@ public:
 
     sal_Bool            IsDescriptor() const {return bIsDescriptor;}
     void            ResetDescriptor();
+    //copy text from a given source PaM
+    void            SetSelection(SwPaM& rCopySource);
     static SdrObject *GetOrCreateSdrObject( SwFlyFrmFmt *pFmt );
 };
 /*-----------------20.02.98 11:28-------------------
