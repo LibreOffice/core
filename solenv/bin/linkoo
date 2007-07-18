@@ -14,9 +14,9 @@
 #
 #   $RCSfile: linkoo,v $
 #
-#   $Revision: 1.15 $
+#   $Revision: 1.16 $
 #
-#   last change: $Author: rt $ $Date: 2007-07-05 09:01:53 $
+#   last change: $Author: obo $ $Date: 2007-07-18 14:59:37 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -61,7 +61,7 @@ export OOO_DISABLE_RECOVERY=1
 $program_dir = 'program';
 $program_dir = 'MacOS' if ($ENV{OS} eq 'MACOSX');
 
-my @exceptions = ( 'cppuhelper', 'configmgr2', 'sunjavaplugin' );
+my @exceptions = ( 'cppuhelper', 'configmgr2', 'sunjavaplugin', 'libjvmfwk' );
 
 %replaceable = (
 	$program_dir => '\.so',
@@ -154,18 +154,7 @@ sub do_link($$$$@)
     my $dest_name = shift;
     my $dont_check_link = shift;
 
-	$is_link=0;
-	$is_versioned_lib=0;
     if (-l "$dest/$dest_name" ) {
-		$is_link=1;
-		my $link = readlink ("$dest/$dest_name");
-		my ($stripped_link) = $link =~ /(.*)\.\d+\.\d+/;		
-	    if( $stripped_link eq $dest_name ) {
-			$is_versioned_lib=1;
-		}
-	}			
-		
-    if ($is_link && not $is_versioned_lib ) {
 	my $link = readlink ("$dest/$dest_name");
 	if ($link =~ /^\//) { # Absolute path
 	    if (!$dry_run) {
@@ -183,11 +172,6 @@ sub do_link($$$$@)
 	check_create_linked ($dest);
 	if (!$dry_run) {
 	    # move / write the link
-		if( $is_versioned_lib ) {
-			$link = readlink ("$dest/$dest_name");
-			rename ( "$dest/$link", "$dest/linked/$link" ) ||
-			defined $dont_check_link || die "Failed rename of $dest/$link: $!";
-		}
 	    rename ("$dest/$dest_name", "$dest/linked/$dest_name") ||
 		defined $dont_check_link || die "Failed rename of $dest/$dest_name: $!";
 
@@ -383,3 +367,5 @@ if (!-f "$OOO_INSTALL/" . $program_dir . "/ooenv") {
 }
 
 evilness ('do');
+
+print "\nlinkoo finished, please don't forget to source ooenv before ./soffice.\n";
