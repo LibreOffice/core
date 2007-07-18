@@ -4,9 +4,9 @@
  *
  *  $RCSfile: merge.cxx,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 08:19:21 $
+ *  last change: $Author: obo $ $Date: 2007-07-18 07:13:16 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -63,7 +63,8 @@ BOOL PFormEntrys::GetText( ByteString &rReturn,
     USHORT nTyp, const ByteString &nLangIndex, BOOL bDel )
 /*****************************************************************************/
 {
-/*  printf("DBG: PFormEntrys::GetText(nId=%s)\n",nLangIndex.GetBuffer() );
+
+    /*printf("DBG: PFormEntrys::GetText(nId=%s)\n",nLangIndex.GetBuffer() );
 
             // DEBUG******************
             ByteStringHashMap::const_iterator idbg;
