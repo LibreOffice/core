@@ -4,9 +4,9 @@
  *
  *  $RCSfile: valueset.cxx,v $
  *
- *  $Revision: 1.31 $
+ *  $Revision: 1.32 $
  *
- *  last change: $Author: hr $ $Date: 2007-06-27 21:26:38 $
+ *  last change: $Author: obo $ $Date: 2007-07-18 08:54:08 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -2565,11 +2565,7 @@ BOOL ValueSet::StartDrag( const CommandEvent& rCEvt, Region& rRegion )
         Select();
     }
 
-#ifdef MAC
-    Region aRegion( GetItemRect( nSelId ) );
-#else
     Region aRegion;
-#endif
 
     // Region zuweisen
     rRegion = aRegion;
