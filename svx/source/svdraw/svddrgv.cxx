@@ -4,9 +4,9 @@
  *
  *  $RCSfile: svddrgv.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: rt $ $Date: 2007-07-09 08:10:42 $
+ *  last change: $Author: obo $ $Date: 2007-07-18 10:55:35 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -678,7 +678,10 @@ void SdrDragView::MovDragObj(const Point& rPnt)
 BOOL SdrDragView::EndDragObj(BOOL bCopy)
 {
     bool bRet(false);
-    if (pDragBla!=NULL && aDragStat.IsMinMoved() && aDragStat.GetNow()!=aDragStat.GetPrev()) {
+
+    // #i73341# If insert GluePoint, do not insist on last points being different
+    if(pDragBla && aDragStat.IsMinMoved() && (IsInsertGluePoint() || aDragStat.GetNow() != aDragStat.GetPrev()))
+    {
         ULONG nHdlAnzMerk=0;
         if (bEliminatePolyPoints) { // IBM Special
             nHdlAnzMerk=GetMarkablePointCount();
