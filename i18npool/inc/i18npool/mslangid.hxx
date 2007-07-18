@@ -4,9 +4,9 @@
  *
  *  $RCSfile: mslangid.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2006-05-04 09:10:57 $
+ *  last change: $Author: obo $ $Date: 2007-07-18 07:08:51 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -150,6 +150,34 @@ public:
     static LanguageType convertLocaleToLanguage( const ::com::sun::star::lang::Locale & rLocale );
 
 
+    /** Convert a LanguageType to a Locale, resolving LANGUAGE_SYSTEM, falling
+        back to a default locale if no exact match was found.
+     */
+    static ::com::sun::star::lang::Locale convertLanguageToLocaleWithFallback( LanguageType nLang );
+
+
+    /** Convert a Locale to a LanguageType with handling of an empty language
+        name designating the SYSTEM language, falling back to a default locale
+        if no exact match was found.
+      */
+    static LanguageType convertLocaleToLanguageWithFallback(
+            const ::com::sun::star::lang::Locale & rLocale );
+
+
+    /** Get fall-back Locale for Locale with handling of an empty language name
+        designating the SYSTEM language. Returns the same Locale if an exact
+        match was found.
+      */
+    static ::com::sun::star::lang::Locale getFallbackLocale(
+            const ::com::sun::star::lang::Locale & rLocale );
+
+
+    /** Get fall-back LanguageType for LanguageType, resolving LANGUAGE_SYSTEM.
+        Returns the same LanguageType if an exact match was found.
+      */
+    static LanguageType getFallbackLanguage( LanguageType nLang );
+
+
     // -----------------------------
     // - ConvertLanguageToIsoNames -
     // -----------------------------
@@ -261,6 +289,14 @@ private:
     // Substitute LANGUAGE_SYSTEM for LANGUAGE_SYSTEM_DEFAULT and
     // LANGUAGE_PROCESS_OR_USER_DEFAULT, other values aren't touched.
     I18NPOOL_DLLPRIVATE static inline LanguageType simplifySystemLanguages( LanguageType nLang );
+
+    // Several locale lookups with fall-back
+    I18NPOOL_DLLPRIVATE static LanguageType lookupFallbackLanguage( LanguageType nLang );
+    I18NPOOL_DLLPRIVATE static LanguageType lookupFallbackLanguage(
+            const ::com::sun::star::lang::Locale & rLocale );
+    I18NPOOL_DLLPRIVATE static ::com::sun::star::lang::Locale lookupFallbackLocale( LanguageType nLang );
+    I18NPOOL_DLLPRIVATE static ::com::sun::star::lang::Locale lookupFallbackLocale(
+            const ::com::sun::star::lang::Locale & rLocale );
 };
 
 
