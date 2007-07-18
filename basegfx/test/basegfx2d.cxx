@@ -4,9 +4,9 @@
  *
  *  $RCSfile: basegfx2d.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: kz $ $Date: 2006-12-13 15:09:26 $
+ *  last change: $Author: obo $ $Date: 2007-07-18 11:08:37 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -379,29 +379,56 @@ public:
                                tools::importFromSvgD( aPoly,
                                                       aPath1 ));
         aExport = tools::exportToSvgD( aPoly );
-        CPPUNIT_ASSERT_MESSAGE("exporting bezier polygon to SVG-D",
-                               aExport == aPath1);
 
-        CPPUNIT_ASSERT_MESSAGE("importing '@' from SVG-D",
-                               tools::importFromSvgD( aPoly,
-                                                      aPath2 ));
+        // Adaptions for B2DPolygon bezier change (see #i77162#):
+        //
+        // The import/export of aPath1 does not reproduce aExport again. This is
+        // correct since aPath1 contains a segment with non-used control points
+        // which gets exported now correctly as 'l' and also a point (#4, index 3)
+        // with C2 continuity which produces a 's' staement now.
+        //
+        // The old SVGexport identified nun-used ControlVectors erraneously as bezier segments
+        // because the 2nd vector at the start point was used, even when added
+        // with start point was identical to end point. Exactly for that reason
+        // i reworked the B2DPolygon to use prev, next control points.
+        //
+        // so for correct unit test i add the new exported string here as sExportStringSimpleBezier
+        // and compare to it.
+        const char* sExportStringSimpleBezier =
+            "m11430 0c-8890 3810 5715 6985 5715 6985"
+            "l-17145-1905c0 0 22860-10160 16510 6350"
+            "s-3810-11430-3810-11430z";
+        CPPUNIT_ASSERT_MESSAGE("exporting bezier polygon to SVG-D", !aExport.compareToAscii(sExportStringSimpleBezier));
+
+        // Adaptions for B2DPolygon bezier change (see #i77162#):
+        //
+        // a 2nd good test is that re-importing of aExport has to create the same
+        // B2DPolPolygon again:
+        B2DPolyPolygon aReImport;
+        CPPUNIT_ASSERT_MESSAGE("importing simple bezier polygon from SVG-D", tools::importFromSvgD( aReImport, aExport));
+        CPPUNIT_ASSERT_MESSAGE("re-imported polygon needs to be identical", aReImport == aPoly);
+
+        CPPUNIT_ASSERT_MESSAGE("importing '@' from SVG-D", tools::importFromSvgD( aPoly, aPath2 ));
         aExport = tools::exportToSvgD( aPoly );
+
+        // Adaptions for B2DPolygon bezier change (see #i77162#):
+        //
+        // same here, the corrected export with the corrected B2DPolygon is simply more efficient,
+        // so i needed to change the compare string. Also adding the re-import comparison below.
         const char* sExportString1 =
-            "m1917 1114c-89-189-233-284-430-284-167 0-306 91-419 273-113 182-"
-            "170 370-170 564 0 145 33 259 98 342 65 84 150 126 257 126q115.5 0 231-57c77-38 1"
-            "47-97 210-176 63-79 99-143 109-190 38-199 76-398 114-598zm840 1646c-133 73-312 1"
-            "39-537 197-225 57-440 86-644 87-483-1-866-132-1150-392-284-261-426-619-426-1076 "
-            "0-292 67-560 200-803 133-243 321-433 562-569 241-136 514-204 821-204 405 0 739 1"
-            "25 1003 374 264 250 396 550 396 899 0 313-88 576-265 787q-265.5 318-627 318c-191"
-            " 0-308-94-352-281-133 187-315 281-546 281-172 0-315-67-428-200-113-133-170-301-1"
-            "70-505 0-277 90-527 271-751 181-223 394-335 640-335 196 0 353 83 470 250 13-68 2"
-            "6-136 41-204q144 0 288 0c-74 376-148 752-224 1128-21 101-31 183-31 245 0 39 9 70"
-            " 26 93 17 24 39 36 67 36 145 0 279-80 400-240 121-160 182-365 182-615 0-288-107-"
-            "533-322-734-215-201-487-301-816-301-395 0-715 124-960 373-245 249-368 569-368 95"
-            "8q0 577.5 357 900c237 216 557 324 958 325 189-1 389-27 600-77 211-52 378-110 503"
-            "-174q40.5 105 81 210z";
-        CPPUNIT_ASSERT_MESSAGE("exporting '@' to SVG-D",
-                               !aExport.compareToAscii(sExportString1));
+            "m1917 1114c-89-189-233-284-430-284-167 0-306 91-419 273s-170 370-17"
+            "0 564c0 145 33 259 98 342 65 84 150 126 257 126q115.5 0 231-57s147-97 210-176 99-143 109-190c38-199 76-398 114"
+            "-598zm840 1646c-133 73-312 139-537 197-225 57-440 86-644 87-483-1-866-132-1150-392-284-261-426-619-426-1076 0-"
+            "292 67-560 200-803s321-433 562-569 514-204 821-204c405 0 739 125 1003 374 264 250 396 550 396 899 0 313-88 576"
+            "-265 787q-265.5 318-627 318c-191 0-308-94-352-281-133 187-315 281-546 281-172 0-315-67-428-200s-170-301-170-50"
+            "5c0-277 90-527 271-751 181-223 394-335 640-335 196 0 353 83 470 250 13-68 26-136 41-204q144 0 288 0c-74 376-14"
+            "8 752-224 1128-21 101-31 183-31 245 0 39 9 70 26 93 17 24 39 36 67 36 145 0 279-80 400-240s182-365 182-615c0-2"
+            "88-107-533-322-734s-487-301-816-301c-395 0-715 124-960 373s-368 569-368 958q0 577.5 357 900c237 216 557 324 95"
+            "8 325 189-1 389-27 600-77 211-52 378-110 503-174q40.5 105 81 210z";
+        CPPUNIT_ASSERT_MESSAGE("re-importing '@' from SVG-D", tools::importFromSvgD( aReImport, aExport));
+        CPPUNIT_ASSERT_MESSAGE("re-imported '@' needs to be identical", aReImport == aPoly);
+
+        CPPUNIT_ASSERT_MESSAGE("exporting '@' to SVG-D", !aExport.compareToAscii(sExportString1));
         CPPUNIT_ASSERT_MESSAGE("importing '@' from SVG-D (round-trip",
                                tools::importFromSvgD( aPoly,
                                                       aExport ));
@@ -575,39 +602,39 @@ public:
         const double fBound( 0.0001 );
         B2DPolygon result;
 
-        adaptiveSubdivideByDistance( result, aHalfCircle, fBound, true );
+        aHalfCircle.adaptiveSubdivideByDistance(result, fBound);
         aPlotter.plot(result,
                       "half circle"); result.clear();
 
-        adaptiveSubdivideByDistance( result, aQuarterCircle, fBound, true );
+        aQuarterCircle.adaptiveSubdivideByDistance(result, fBound);
         aPlotter.plot(result,
                       "quarter circle"); result.clear();
 
-        adaptiveSubdivideByDistance( result, aLoop, fBound, true );
+        aLoop.adaptiveSubdivideByDistance(result, fBound);
         aPlotter.plot(result,
                       "loop"); result.clear();
 
-        adaptiveSubdivideByDistance( result, aStraightLineDistinctEndPoints, fBound, true );
+        aStraightLineDistinctEndPoints.adaptiveSubdivideByDistance(result, fBound);
         aPlotter.plot(result,
                       "straight line 0"); result.clear();
 
-        adaptiveSubdivideByDistance( result, aStraightLineDistinctEndPoints2, fBound, true );
+        aStraightLineDistinctEndPoints2.adaptiveSubdivideByDistance(result, fBound);
         aPlotter.plot(result,
                       "straight line 1"); result.clear();
 
-        adaptiveSubdivideByDistance( result, aStraightLineIdenticalEndPoints, fBound, true );
+        aStraightLineIdenticalEndPoints.adaptiveSubdivideByDistance(result, fBound);
         aPlotter.plot(result,
                       "straight line 2"); result.clear();
 
-        adaptiveSubdivideByDistance( result, aStraightLineIdenticalEndPoints2, fBound, true );
+        aStraightLineIdenticalEndPoints2.adaptiveSubdivideByDistance(result, fBound);
         aPlotter.plot(result,
                       "straight line 3"); result.clear();
 
-        adaptiveSubdivideByDistance( result, aCrossing, fBound, true );
+        aCrossing.adaptiveSubdivideByDistance(result, fBound);
         aPlotter.plot(result,
                       "straight line 4"); result.clear();
 
-        adaptiveSubdivideByDistance( result, aCusp, fBound, true );
+        aCusp.adaptiveSubdivideByDistance(result, fBound);
         aPlotter.plot(result,
                       "straight line 5"); result.clear();
 
@@ -623,39 +650,39 @@ public:
         DebugPlotter aPlotter( "angle-adaptive subdivision",
                                output );
 
-        adaptiveSubdivideByAngle( result, aHalfCircle, fBound, true );
+        aHalfCircle.adaptiveSubdivideByAngle(result, fBound, true);
         aPlotter.plot(result,
                       "half circle"); result.clear();
 
-        adaptiveSubdivideByAngle( result, aQuarterCircle, fBound, true );
+        aQuarterCircle.adaptiveSubdivideByAngle(result, fBound, true);
         aPlotter.plot(result,
                       "quarter cirle"); result.clear();
 
-        adaptiveSubdivideByAngle( result, aLoop, fBound, true );
+        aLoop.adaptiveSubdivideByAngle(result, fBound, true);
         aPlotter.plot(result,
                       "loop"); result.clear();
 
-        adaptiveSubdivideByAngle( result, aStraightLineDistinctEndPoints, fBound, true );
+        aStraightLineDistinctEndPoints.adaptiveSubdivideByAngle(result, fBound, true);
         aPlotter.plot(result,
                       "straight line 0"); result.clear();
 
-        adaptiveSubdivideByAngle( result, aStraightLineDistinctEndPoints2, fBound, true );
+        aStraightLineDistinctEndPoints2.adaptiveSubdivideByAngle(result, fBound, true);
         aPlotter.plot(result,
                       "straight line 1"); result.clear();
 
-        adaptiveSubdivideByAngle( result, aStraightLineIdenticalEndPoints, fBound, true );
+        aStraightLineIdenticalEndPoints.adaptiveSubdivideByAngle(result, fBound, true);
         aPlotter.plot(result,
                       "straight line 2"); result.clear();
 
-        adaptiveSubdivideByAngle( result, aStraightLineIdenticalEndPoints2, fBound, true );
+        aStraightLineIdenticalEndPoints2.adaptiveSubdivideByAngle(result, fBound, true);
         aPlotter.plot(result,
                       "straight line 3"); result.clear();
 
-        adaptiveSubdivideByAngle( result, aCrossing, fBound, true );
+        aCrossing.adaptiveSubdivideByAngle(result, fBound, true);
         aPlotter.plot(result,
                       "straight line 4"); result.clear();
 
-        adaptiveSubdivideByAngle( result, aCusp, fBound, true );
+        aCusp.adaptiveSubdivideByAngle(result, fBound, true);
         aPlotter.plot(result,
                       "straight line 5"); result.clear();
 
@@ -1001,16 +1028,64 @@ public:
     }
 
     // insert your test code here.
-    void EmptyMethod()
+    void testBasics()
     {
-        CPPUNIT_ASSERT_STUB();
+        B2DPolygon aPoly;
+
+        aPoly.appendBezierSegment(B2DPoint(1,1),B2DPoint(2,2),B2DPoint(3,3));
+
+        CPPUNIT_ASSERT_MESSAGE("#1 first polygon point wrong",
+                               aPoly.getB2DPoint(0) == B2DPoint(3,3));
+        CPPUNIT_ASSERT_MESSAGE("#1 first control point wrong",
+                               aPoly.getPrevControlPoint(0) == B2DPoint(2,2));
+        CPPUNIT_ASSERT_MESSAGE("#1 second control point wrong",
+                               aPoly.getNextControlPoint(0) == B2DPoint(3,3));
+        CPPUNIT_ASSERT_MESSAGE("next control point not used",
+                               aPoly.isNextControlPointUsed(0) == false);
+
+        aPoly.setNextControlPoint(0,B2DPoint(4,4));
+        CPPUNIT_ASSERT_MESSAGE("#1.1 second control point wrong",
+                               aPoly.getNextControlPoint(0) == B2DPoint(4,4));
+        CPPUNIT_ASSERT_MESSAGE("next control point used",
+                               aPoly.isNextControlPointUsed(0) == true);
+        CPPUNIT_ASSERT_MESSAGE("areControlPointsUsed() wrong",
+                               aPoly.areControlPointsUsed() == true);
+        CPPUNIT_ASSERT_MESSAGE("getContinuityInPoint() wrong",
+                               aPoly.getContinuityInPoint(0) == CONTINUITY_C2);
+
+        aPoly.resetControlPoints();
+        CPPUNIT_ASSERT_MESSAGE("resetControlPoints() did not clear",
+                               aPoly.getB2DPoint(0) == B2DPoint(3,3));
+        CPPUNIT_ASSERT_MESSAGE("resetControlPoints() did not clear",
+                               aPoly.getPrevControlPoint(0) == B2DPoint(3,3));
+        CPPUNIT_ASSERT_MESSAGE("resetControlPoints() did not clear",
+                               aPoly.getNextControlPoint(0) == B2DPoint(3,3));
+        CPPUNIT_ASSERT_MESSAGE("areControlPointsUsed() wrong #2",
+                               aPoly.areControlPointsUsed() == false);
+
+        aPoly.clear();
+        aPoly.append(B2DPoint(0,0));
+        aPoly.appendBezierSegment(B2DPoint(1,1),B2DPoint(2,2),B2DPoint(3,3));
+
+        CPPUNIT_ASSERT_MESSAGE("#2 first polygon point wrong",
+                               aPoly.getB2DPoint(0) == B2DPoint(0,0));
+        CPPUNIT_ASSERT_MESSAGE("#2 first control point wrong",
+                               aPoly.getPrevControlPoint(0) == B2DPoint(0,0));
+        CPPUNIT_ASSERT_MESSAGE("#2 second control point wrong",
+                               aPoly.getNextControlPoint(0) == B2DPoint(1,1));
+        CPPUNIT_ASSERT_MESSAGE("#2 third control point wrong",
+                               aPoly.getPrevControlPoint(1) == B2DPoint(2,2));
+        CPPUNIT_ASSERT_MESSAGE("#2 fourth control point wrong",
+                               aPoly.getNextControlPoint(1) == B2DPoint(3,3));
+        CPPUNIT_ASSERT_MESSAGE("#2 second polygon point wrong",
+                               aPoly.getB2DPoint(1) == B2DPoint(3,3));
     }
     // Change the following lines only, if you add, remove or rename
     // member functions of the current class,
     // because these macros are need by auto register mechanism.
 
     CPPUNIT_TEST_SUITE(b2dpolygon);
-    CPPUNIT_TEST(EmptyMethod);
+    CPPUNIT_TEST(testBasics);
     CPPUNIT_TEST_SUITE_END();
 }; // class b2dpolygon
 
