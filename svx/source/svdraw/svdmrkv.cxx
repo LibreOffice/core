@@ -4,9 +4,9 @@
  *
  *  $RCSfile: svdmrkv.cxx,v $
  *
- *  $Revision: 1.33 $
+ *  $Revision: 1.34 $
  *
- *  last change: $Author: hr $ $Date: 2007-06-27 19:04:07 $
+ *  last change: $Author: obo $ $Date: 2007-07-18 10:56:51 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -938,7 +938,7 @@ void SdrMarkView::AddDragModeHdl(SdrDragMode eMode)
         case SDRDRAG_TRANSPARENCE:
         {
             // add interactive transparence handle
-            UINT32 nMarkAnz = GetMarkedObjectCount();
+            ULONG nMarkAnz = GetMarkedObjectCount();
             if(nMarkAnz == 1)
             {
                 SdrObject* pObj = GetMarkedObjectByIndex(0);
@@ -1000,7 +1000,7 @@ void SdrMarkView::AddDragModeHdl(SdrDragMode eMode)
         case SDRDRAG_GRADIENT:
         {
             // add interactive gradient handle
-            UINT32 nMarkAnz = GetMarkedObjectCount();
+            ULONG nMarkAnz = GetMarkedObjectCount();
             if(nMarkAnz == 1)
             {
                 SdrObject* pObj = GetMarkedObjectByIndex(0);
@@ -1311,8 +1311,8 @@ BOOL SdrMarkView::MarkNextObj(BOOL bPrev)
 
     SortMarkedObjects();
     ULONG  nMarkAnz=GetMarkedObjectCount();
-    ULONG  nChgMarkNum=0xFFFFFFFF; // Nummer des zu ersetzenden MarkEntries
-    ULONG  nSearchObjNum=bPrev ? 0 : 0xFFFFFFFF;
+    ULONG  nChgMarkNum = ULONG_MAX; // Nummer des zu ersetzenden MarkEntries
+    ULONG  nSearchObjNum = bPrev ? 0 : ULONG_MAX;
     if (nMarkAnz!=0) {
         nChgMarkNum=bPrev ? 0 : ULONG(nMarkAnz-1);
         SdrMark* pM=GetSdrMarkByIndex(nChgMarkNum);
@@ -1341,7 +1341,7 @@ BOOL SdrMarkView::MarkNextObj(BOOL bPrev)
         return FALSE;
     }
 
-    if (nChgMarkNum!=0xFFFFFFFF)
+    if (nChgMarkNum!=ULONG_MAX)
     {
         GetMarkedObjectListWriteAccess().DeleteMark(nChgMarkNum);
     }
@@ -1793,7 +1793,7 @@ BOOL SdrMarkView::PickMarkedObj(const Point& rPnt, SdrObject*& rpObj, SdrPageVie
         SdrObject* pBestObj=NULL;
         SdrPageView* pBestPV=NULL;
         ULONG nBestMarkNum=0;
-        ULONG nBestDist=0xFFFFFFFF;
+        ULONG nBestDist=ULONG_MAX;
         for (nMarkNum=nMarkAnz; nMarkNum>0 && !bFnd;) {
             nMarkNum--;
             SdrMark* pM=GetSdrMarkByIndex(nMarkNum);
