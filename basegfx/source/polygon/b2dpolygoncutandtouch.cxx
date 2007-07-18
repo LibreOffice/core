@@ -4,9 +4,9 @@
  *
  *  $RCSfile: b2dpolygoncutandtouch.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 08:01:45 $
+ *  last change: $Author: obo $ $Date: 2007-07-18 11:06:12 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -140,93 +140,97 @@ namespace basegfx
 
         B2DPolygon mergeTemporaryPointsAndPolygon(const B2DPolygon& rCandidate, temporaryPointVector& rTempPoints)
         {
+            // #i76891# mergeTemporaryPointsAndPolygon redesigned to be able to correctly handle
+            // single edges with/without control points
             if(rTempPoints.size())
             {
                 B2DPolygon aRetval;
-                sal_uInt32 nNewInd(0L);
                 const sal_uInt32 nCount(rCandidate.count());
-                const bool bCurvesInvolved(rCandidate.areControlPointsUsed());
 
-                // sort by indices to assure increasing fCut values and increasing indices
-                ::std::sort(rTempPoints.begin(), rTempPoints.end());
-
-                // add found cut and touch points
-                if(bCurvesInvolved)
+                if(nCount)
                 {
-                    // merge new polygon by indices
+                    // sort temp points to assure increasing fCut values and increasing indices
+                    ::std::sort(rTempPoints.begin(), rTempPoints.end());
+
+                    // prepare loop
+                    B2DPoint aCurrent(rCandidate.getB2DPoint(0));
+                    B2DPoint aControlPointNext;
+                    B2DPoint aControlPointPrev;
+                    sal_uInt32 nNewInd(0L);
+                    bool bCurveEdge(false);
+
+                    // add start point
+                    aRetval.append(aCurrent);
+
                     for(sal_uInt32 a(0L); a < nCount; a++)
                     {
-                        // get cubic bezier snippet
-                        B2DCubicBezier aCubicBezier(
-                            rCandidate.getB2DPoint(a),
-                            rCandidate.getControlVectorA(a),
-                            rCandidate.getControlVectorB(a),
-                            rCandidate.getB2DPoint(a + 1L == nCount ? 0L : a + 1L));
-                        double fLeftStart(0.0);
+                        // get next
+                        const sal_uInt32 nNextIndex((a + 1) % nCount);
+                        const B2DPoint aNext(rCandidate.getB2DPoint(nNextIndex));
 
-                        // add original point
-                        aRetval.append(aCubicBezier.getStartPoint());
-
-                        if(aCubicBezier.isBezier())
+                        if(rCandidate.areControlPointsUsed())
                         {
-                            // if really bezier, copy control vectors to added point, too
-                            const sal_uInt32 nRetvalIndex(aRetval.count() - 1L);
-                            aRetval.setControlPointA(nRetvalIndex, aCubicBezier.getControlPointA());
-                            aRetval.setControlPointB(nRetvalIndex, aCubicBezier.getControlPointB());
+                            // get control points
+                            aControlPointNext = rCandidate.getNextControlPoint(a);
+                            aControlPointPrev = rCandidate.getPrevControlPoint(nNextIndex);
+                            bCurveEdge = !aControlPointNext.equal(aCurrent) || !aControlPointPrev.equal(aNext);
                         }
 
-                        // now add all points targeted to be at this index
-                        while(nNewInd < rTempPoints.size() && rTempPoints[nNewInd].getIndex() == a)
+                        if(bCurveEdge)
                         {
-                            const temporaryPoint& rTempPoint = rTempPoints[nNewInd++];
+                            // control vectors involved for this edge
+                            double fLeftStart(0.0);
+                            B2DCubicBezier aCubicBezier(
+                                aCurrent, rCandidate.getNextControlPoint(a),
+                                rCandidate.getPrevControlPoint(nNextIndex), aNext);
 
-                            // split curve segment. Splits need to come sorted and need to be < 1.0. Also,
-                            // since original segment is consumed from left to right, the cut values need
-                            // to be scaled to the remaining part
-                            B2DCubicBezier aLeftPart;
-                            const double fRelativeSplitPoint((rTempPoint.getCut() - fLeftStart) / (1.0 - fLeftStart));
-                            aCubicBezier.split(fRelativeSplitPoint, aLeftPart, aCubicBezier);
-                            fLeftStart = rTempPoint.getCut();
-
-                            // correct vectors on last added point
-                            const sal_uInt32 nRetvalCount(aRetval.count());
-                            aRetval.setControlPointA(nRetvalCount - 1L, aLeftPart.getControlPointA());
-                            aRetval.setControlPointB(nRetvalCount - 1L, aLeftPart.getControlPointB());
-
-                            // append new point, use point from rTempPoint for numerical reasons. This
-                            // will guarantee the usage of exactly the same point in different curves
-                            aRetval.append(rTempPoint.getPoint());
-
-                            // set new vectors for newly added point
-                            aRetval.setControlPointA(nRetvalCount, aCubicBezier.getControlPointA());
-                            aRetval.setControlPointB(nRetvalCount, aCubicBezier.getControlPointB());
-                        }
-                    }
-                }
-                else
-                {
-                    // merge new polygon by indices
-                    for(sal_uInt32 a(0L); a < nCount; a++)
-                    {
-                        // add original point
-                        aRetval.append(rCandidate.getB2DPoint(a));
-
-                        // add all points targeted to be at this index
-                        while(nNewInd < rTempPoints.size() && rTempPoints[nNewInd].getIndex() == a)
-                        {
-                            const temporaryPoint& rTempPoint = rTempPoints[nNewInd++];
-                            const B2DPoint aNewPoint(rTempPoint.getPoint());
-
-                            // do not add points double
-                            if(!aRetval.getB2DPoint(aRetval.count() - 1L).equal(aNewPoint))
+                            // now add all points targeted to be at this index
+                            while(nNewInd < rTempPoints.size() && rTempPoints[nNewInd].getIndex() == a)
                             {
-                                aRetval.append(aNewPoint);
+                                const temporaryPoint& rTempPoint = rTempPoints[nNewInd++];
+
+                                // split curve segment. Splits need to come sorted and need to be < 1.0. Also,
+                                // since original segment is consumed from left to right, the cut values need
+                                // to be scaled to the remaining part
+                                B2DCubicBezier aLeftPart;
+                                const double fRelativeSplitPoint((rTempPoint.getCut() - fLeftStart) / (1.0 - fLeftStart));
+                                aCubicBezier.split(fRelativeSplitPoint, aLeftPart, aCubicBezier);
+                                fLeftStart = rTempPoint.getCut();
+
+                                // add left bow
+                                aRetval.appendBezierSegment(aLeftPart.getControlPointA(), aLeftPart.getControlPointB(), rTempPoint.getPoint());
                             }
+
+                            // add remaining bow
+                            aRetval.appendBezierSegment(aCubicBezier.getControlPointA(), aCubicBezier.getControlPointB(), aNext);
                         }
+                        else
+                        {
+                            // add all points targeted to be at this index
+                            while(nNewInd < rTempPoints.size() && rTempPoints[nNewInd].getIndex() == a)
+                            {
+                                const temporaryPoint& rTempPoint = rTempPoints[nNewInd++];
+                                const B2DPoint aNewPoint(rTempPoint.getPoint());
+
+                                // do not add points double
+                                if(!aRetval.getB2DPoint(aRetval.count() - 1L).equal(aNewPoint))
+                                {
+                                    aRetval.append(aNewPoint);
+                                }
+                            }
+
+                            // add edge end point
+                            aRetval.append(aNext);
+                        }
+
+                        // prepare next edge
+                        aCurrent = aNext;
                     }
                 }
 
+                // copy closed flag
                 aRetval.setClosed(rCandidate.isClosed());
+
                 return aRetval;
             }
             else
@@ -334,6 +338,126 @@ namespace basegfx
 
         ////////////////////////////////////////////////////////////////////////////////
 
+        void findCutsAndTouchesAndCommonForBezier(const B2DPolygon& rCandidateA, const B2DPolygon& rCandidateB, temporaryPointVector& rTempPointsA, temporaryPointVector& rTempPointsB)
+        {
+            // #i76891#
+            // This new method is necessary since in findEdgeCutsBezierAndEdge and in findEdgeCutsTwoBeziers
+            // it is not sufficient to use findCuts() recursively. This will indeed find the cuts between the
+            // segments of the two temporarily adaptive subdivided bezier segments, but not the touches or
+            // equal points of them.
+            // It would be possible to find the toches using findTouches(), but at last with commpn points
+            // the adding of cut points (temporary points) would fail. But for these temporarily adaptive
+            // subdivided bezier segments, common points may be not very likely, but the bug shows that it
+            // happens.
+            // Touch points are a little bit more likely than common points. All in all it is best to use
+            // a specialized method here which can profit from knowing that it is working on a special
+            // family of B2DPolygons: no curve segments included and not closed.
+            OSL_ENSURE(!rCandidateA.areControlPointsUsed() && !rCandidateB.areControlPointsUsed(), "findCutsAndTouchesAndCommonForBezier only works with subdivided polygons (!)");
+            OSL_ENSURE(!rCandidateA.isClosed() && !rCandidateB.isClosed(), "findCutsAndTouchesAndCommonForBezier only works with opened polygons (!)");
+            const sal_uInt32 nPointCountA(rCandidateA.count());
+            const sal_uInt32 nPointCountB(rCandidateB.count());
+
+            if(nPointCountA > 1 && nPointCountB > 1)
+            {
+                const sal_uInt32 nEdgeCountA(nPointCountA - 1);
+                const sal_uInt32 nEdgeCountB(nPointCountB - 1);
+                B2DPoint aCurrA(rCandidateA.getB2DPoint(0L));
+
+                for(sal_uInt32 a(0L); a < nEdgeCountA; a++)
+                {
+                    const B2DPoint aNextA(rCandidateA.getB2DPoint(a + 1L));
+                    const B2DRange aRangeA(aCurrA, aNextA);
+                    B2DPoint aCurrB(rCandidateB.getB2DPoint(0L));
+
+                    for(sal_uInt32 b(0L); b < nEdgeCountB; b++)
+                    {
+                        const B2DPoint aNextB(rCandidateB.getB2DPoint(b + 1L));
+                        const B2DRange aRangeB(aCurrB, aNextB);
+
+                        if(aRangeA.overlaps(aRangeB))
+                        {
+                            // no null length edges
+                            if(!(aCurrA.equal(aNextA) || aCurrB.equal(aNextB)))
+                            {
+                                const B2DVector aVecA(aNextA - aCurrA);
+                                const B2DVector aVecB(aNextB - aCurrB);
+                                double fCutA(aVecA.cross(aVecB));
+
+                                if(!fTools::equalZero(fCutA))
+                                {
+                                    const double fZero(0.0);
+                                    const double fOne(1.0);
+                                    fCutA = (aVecB.getY() * (aCurrB.getX() - aCurrA.getX()) + aVecB.getX() * (aCurrA.getY() - aCurrB.getY())) / fCutA;
+
+                                    // use range [0.0 .. 1.0[, thus in the loop, all direct aCurrA cuts will be registered
+                                    // as 0.0 cut. The 1.0 cut will be registered in the next loop step
+                                    if(fTools::moreOrEqual(fCutA, fZero) && fTools::less(fCutA, fOne))
+                                    {
+                                        // it's a candidate, but also need to test parameter value of cut on line 2
+                                        double fCutB;
+
+                                        // choose the more precise version
+                                        if(fabs(aVecB.getX()) > fabs(aVecB.getY()))
+                                        {
+                                            fCutB = (aCurrA.getX() + (fCutA * aVecA.getX()) - aCurrB.getX()) / aVecB.getX();
+                                        }
+                                        else
+                                        {
+                                            fCutB = (aCurrA.getY() + (fCutA * aVecA.getY()) - aCurrB.getY()) / aVecB.getY();
+                                        }
+
+                                        // use range [0.0 .. 1.0[, thus in the loop, all direct aCurrA cuts will be registered
+                                        // as 0.0 cut. The 1.0 cut will be registered in the next loop step
+                                        if(fTools::moreOrEqual(fCutB, fZero) && fTools::less(fCutB, fOne))
+                                        {
+                                            // cut is in both ranges. Add points for A and B
+                                            if(fTools::equalZero(fCutA))
+                                            {
+                                                // ignore for start point in first edge; this is handled
+                                                // by outer methods and would just produce a double point
+                                                if(a)
+                                                {
+                                                    rTempPointsA.push_back(temporaryPoint(aCurrA, a, 0.0));
+                                                }
+                                            }
+                                            else
+                                            {
+                                                const B2DPoint aCutPoint(interpolate(aCurrA, aNextA, fCutA));
+                                                rTempPointsA.push_back(temporaryPoint(aCutPoint, a, fCutA));
+                                            }
+
+                                            if(fTools::equalZero(fCutB))
+                                            {
+                                                // ignore for start point in first edge; this is handled
+                                                // by outer methods and would just produce a double point
+                                                if(b)
+                                                {
+                                                    rTempPointsB.push_back(temporaryPoint(aCurrB, b, 0.0));
+                                                }
+                                            }
+                                            else
+                                            {
+                                                const B2DPoint aCutPoint(interpolate(aCurrB, aNextB, fCutB));
+                                                rTempPointsB.push_back(temporaryPoint(aCutPoint, b, fCutB));
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+
+                        // prepare next step
+                        aCurrB = aNextB;
+                    }
+
+                    // prepare next step
+                    aCurrA = aNextA;
+                }
+            }
+        }
+
+        ////////////////////////////////////////////////////////////////////////////////
+
         void findEdgeCutsBezierAndEdge(
             const B2DCubicBezier& rCubicA,
             const B2DPoint& rCurrB, const B2DPoint& rNextB,
@@ -349,10 +473,13 @@ namespace basegfx
             temporaryPointVector aTempPointVectorEdge;
 
             // create subdivided polygons and find cuts between them
-            rCubicA.adaptiveSubdivideByCount(aTempPolygonA, SUBDIVIDE_FOR_CUT_TEST_COUNT, true);
+            aTempPolygonA.append(rCubicA.getStartPoint());
+            rCubicA.adaptiveSubdivideByCount(aTempPolygonA, SUBDIVIDE_FOR_CUT_TEST_COUNT);
             aTempPolygonEdge.append(rCurrB);
             aTempPolygonEdge.append(rNextB);
-            findCuts(aTempPolygonA, aTempPolygonEdge, aTempPointVectorA, aTempPointVectorEdge);
+
+            // #i76891# using findCuts recursively is not sufficient here
+            findCutsAndTouchesAndCommonForBezier(aTempPolygonA, aTempPolygonEdge, aTempPointVectorA, aTempPointVectorEdge);
 
             if(aTempPointVectorA.size())
             {
@@ -385,9 +512,13 @@ namespace basegfx
             temporaryPointVector aTempPointVectorB;
 
             // create subdivided polygons and find cuts between them
-            rCubicA.adaptiveSubdivideByCount(aTempPolygonA, SUBDIVIDE_FOR_CUT_TEST_COUNT, true);
-            rCubicB.adaptiveSubdivideByCount(aTempPolygonB, SUBDIVIDE_FOR_CUT_TEST_COUNT, true);
-            findCuts(aTempPolygonA, aTempPolygonB, aTempPointVectorA, aTempPointVectorB);
+            aTempPolygonA.append(rCubicA.getStartPoint());
+            rCubicA.adaptiveSubdivideByCount(aTempPolygonA, SUBDIVIDE_FOR_CUT_TEST_COUNT);
+            aTempPolygonB.append(rCubicB.getStartPoint());
+            rCubicB.adaptiveSubdivideByCount(aTempPolygonB, SUBDIVIDE_FOR_CUT_TEST_COUNT);
+
+            // #i76891# using findCuts recursively is not sufficient here
+            findCutsAndTouchesAndCommonForBezier(aTempPolygonA, aTempPolygonB, aTempPointVectorA, aTempPointVectorB);
 
             if(aTempPointVectorA.size())
             {
@@ -415,7 +546,8 @@ namespace basegfx
             temporaryPointVector aTempPointVector;
 
             // create subdivided polygon and find cuts on it
-            rCubicA.adaptiveSubdivideByCount(aTempPolygon, SUBDIVIDE_FOR_CUT_TEST_COUNT, true);
+            aTempPolygon.append(rCubicA.getStartPoint());
+            rCubicA.adaptiveSubdivideByCount(aTempPolygon, SUBDIVIDE_FOR_CUT_TEST_COUNT);
             findCuts(aTempPolygon, aTempPointVector);
 
             if(aTempPointVector.size())
@@ -445,21 +577,27 @@ namespace basegfx
                     {
                         for(sal_uInt32 a(0L); a < nEdgeCount - 1L; a++)
                         {
-                            const B2DCubicBezier aCubicA(
-                                rCandidate.getB2DPoint(a),
-                                rCandidate.getControlVectorA(a),
-                                rCandidate.getControlVectorB(a),
-                                rCandidate.getB2DPoint(a + 1L == nPointCount ? 0L : a + 1L));
+                            const sal_uInt32 nNextIndexA((a + 1) % nEdgeCount);
+                            B2DCubicBezier aCubicA(
+                                rCandidate.getB2DPoint(a), rCandidate.getNextControlPoint(a),
+                                rCandidate.getPrevControlPoint(nNextIndexA), rCandidate.getB2DPoint(nNextIndexA));
+                            aCubicA.testAndSolveTrivialBezier();
                             const bool bEdgeAIsCurve(aCubicA.isBezier());
                             const B2DRange aRangeA(aCubicA.getRange());
 
+                            if(bEdgeAIsCurve)
+                            {
+                                // curved segments may have self-intersections, do not forget those (!)
+                                findEdgeCutsOneBezier(aCubicA, a, rTempPoints);
+                            }
+
                             for(sal_uInt32 b(a + 1L); b < nEdgeCount; b++)
                             {
-                                const B2DCubicBezier aCubicB(
-                                    rCandidate.getB2DPoint(b),
-                                    rCandidate.getControlVectorA(b),
-                                    rCandidate.getControlVectorB(b),
-                                    rCandidate.getB2DPoint(b + 1L == nPointCount ? 0L : b + 1L));
+                                const sal_uInt32 nNextIndexB((b + 1) % nEdgeCount);
+                                B2DCubicBezier aCubicB(
+                                    rCandidate.getB2DPoint(b), rCandidate.getNextControlPoint(b),
+                                    rCandidate.getPrevControlPoint(nNextIndexB), rCandidate.getB2DPoint(nNextIndexB));
+                                aCubicB.testAndSolveTrivialBezier();
                                 const bool bEdgeBIsCurve(aCubicB.isBezier());
                                 const B2DRange aRangeB(aCubicB.getRange());
 
@@ -591,7 +729,8 @@ namespace basegfx
             temporaryPointVector aTempPointVector;
 
             // create subdivided polygon and find cuts on it
-            rCubicA.adaptiveSubdivideByCount(aTempPolygon, SUBDIVIDE_FOR_CUT_TEST_COUNT, true);
+            aTempPolygon.append(rCubicA.getStartPoint());
+            rCubicA.adaptiveSubdivideByCount(aTempPolygon, SUBDIVIDE_FOR_CUT_TEST_COUNT);
             findTouches(aTempPolygon, rPointPolygon, aTempPointVector);
 
             if(aTempPointVector.size())
@@ -613,11 +752,12 @@ namespace basegfx
             if(nPointCount && nEdgePointCount)
             {
                 const sal_uInt32 nEdgeCount(rEdgePolygon.isClosed() ? nEdgePointCount : nEdgePointCount - 1L);
+                B2DPoint aCurr(rEdgePolygon.getB2DPoint(0));
 
                 for(sal_uInt32 a(0L); a < nEdgeCount; a++)
                 {
-                    const B2DPoint aCurr(rEdgePolygon.getB2DPoint(a));
-                    const B2DPoint aNext(rEdgePolygon.getB2DPoint(a + 1L == nEdgePointCount ? 0L : a + 1L));
+                    const sal_uInt32 nNextIndex((a + 1) % nEdgePointCount);
+                    const B2DPoint aNext(rEdgePolygon.getB2DPoint(nNextIndex));
 
                     if(!aCurr.equal(aNext))
                     {
@@ -625,14 +765,14 @@ namespace basegfx
 
                         if(rEdgePolygon.areControlPointsUsed())
                         {
-                            const B2DVector aCVecA(rEdgePolygon.getControlVectorA(a));
-                            const B2DVector aCVecB(rEdgePolygon.getControlVectorB(a));
-                            const bool bEdgeIsCurve(!aCVecA.equalZero() || !aCVecB.equalZero());
+                            const B2DPoint aNextControlPoint(rEdgePolygon.getNextControlPoint(a));
+                            const B2DPoint aPrevControlPoint(rEdgePolygon.getPrevControlPoint(nNextIndex));
+                            const bool bEdgeIsCurve(!aNextControlPoint.equal(aCurr) || !aPrevControlPoint.equal(aNext));
 
                             if(bEdgeIsCurve)
                             {
                                 bHandleAsSimpleEdge = false;
-                                const B2DCubicBezier aCubicA(aCurr, aCVecA, aCVecB, aNext);
+                                const B2DCubicBezier aCubicA(aCurr, aNextControlPoint, aPrevControlPoint, aNext);
                                 findTouchesOnCurve(aCubicA, rPointPolygon, a, rTempPoints);
                             }
                         }
@@ -642,6 +782,9 @@ namespace basegfx
                             findTouchesOnEdge(aCurr, aNext, rPointPolygon, a, rTempPoints);
                         }
                     }
+
+                    // next step
+                    aCurr = aNext;
                 }
             }
         }
@@ -679,21 +822,21 @@ namespace basegfx
                     {
                         for(sal_uInt32 a(0L); a < nEdgeCountA; a++)
                         {
-                            const B2DCubicBezier aCubicA(
-                                rCandidateA.getB2DPoint(a),
-                                rCandidateA.getControlVectorA(a),
-                                rCandidateA.getControlVectorB(a),
-                                rCandidateA.getB2DPoint(a + 1L == nPointCountA ? 0L : a + 1L));
+                            const sal_uInt32 nNextIndexA((a + 1) % nPointCountA);
+                            B2DCubicBezier aCubicA(
+                                rCandidateA.getB2DPoint(a), rCandidateA.getNextControlPoint(a),
+                                rCandidateA.getPrevControlPoint(nNextIndexA), rCandidateA.getB2DPoint(nNextIndexA));
+                            aCubicA.testAndSolveTrivialBezier();
                             const bool bEdgeAIsCurve(aCubicA.isBezier());
                             const B2DRange aRangeA(aCubicA.getRange());
 
                             for(sal_uInt32 b(0L); b < nEdgeCountB; b++)
                             {
-                                const B2DCubicBezier aCubicB(
-                                    rCandidateB.getB2DPoint(b),
-                                    rCandidateB.getControlVectorA(b),
-                                    rCandidateB.getControlVectorB(b),
-                                    rCandidateB.getB2DPoint(b + 1L == nPointCountB ? 0L : b + 1L));
+                                const sal_uInt32 nNextIndexB((b + 1) % nPointCountB);
+                                B2DCubicBezier aCubicB(
+                                    rCandidateB.getB2DPoint(b), rCandidateB.getNextControlPoint(b),
+                                    rCandidateB.getPrevControlPoint(nNextIndexB), rCandidateB.getB2DPoint(nNextIndexB));
+                                aCubicB.testAndSolveTrivialBezier();
                                 const bool bEdgeBIsCurve(aCubicB.isBezier());
                                 const B2DRange aRangeB(aCubicB.getRange());
 
