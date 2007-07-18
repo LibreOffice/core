@@ -4,9 +4,9 @@
  *
  *  $RCSfile: editeng.cxx,v $
  *
- *  $Revision: 1.108 $
+ *  $Revision: 1.109 $
  *
- *  last change: $Author: ihi $ $Date: 2007-07-12 10:56:30 $
+ *  last change: $Author: obo $ $Date: 2007-07-18 09:51:53 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1093,7 +1093,7 @@ sal_Bool EditEngine::PostKeyEvent( const KeyEvent& rKeyEvent, EditView* pEditVie
                     if ( ( pImpEditEngine->GetStatus().DoAutoCorrect() ) &&
                          (  ( nCharCode == ' ' ) || ( nCharCode == '*' ) ||
                              ( nCharCode == '\"' ) || ( nCharCode == '\'' ) ||
-                            ( nCharCode == '_' )  ) )
+                            ( nCharCode == '_' )  ))
                     {
                         aCurSel = pImpEditEngine->AutoCorrect( aCurSel, nCharCode, !pEditView->IsInsertMode() );
                     }
@@ -1501,7 +1501,7 @@ void EditEngine::InsertParagraph( sal_uInt16 nPara, const EditTextObject& rTxtOb
     DBG_CHKTHIS( EditEngine, 0 );
     if ( nPara > GetParagraphCount() )
     {
-        DBG_ASSERTWARNING( nPara == USHRT_MAX, "AbsatzNr zu Groá, aber nicht LIST_APPEND! " );
+        DBG_ASSERTWARNING( nPara == USHRT_MAX, "AbsatzNr zu Groï¿½, aber nicht LIST_APPEND! " );
         nPara = GetParagraphCount();
     }
 
@@ -1524,7 +1524,7 @@ void EditEngine::InsertParagraph( sal_uInt16 nPara, const XubString& rTxt )
     DBG_CHKTHIS( EditEngine, 0 );
     if ( nPara > GetParagraphCount() )
     {
-        DBG_ASSERTWARNING( nPara == USHRT_MAX, "AbsatzNr zu Groá, aber nicht LIST_APPEND! " );
+        DBG_ASSERTWARNING( nPara == USHRT_MAX, "AbsatzNr zu Groï¿½, aber nicht LIST_APPEND! " );
         nPara = GetParagraphCount();
     }
 
@@ -2809,6 +2809,15 @@ Link EditEngine::GetEndDropHdl() const
     return pImpEditEngine->GetEndDropHdl();
 }
 
+void EditEngine::SetFirstWordCapitalization( BOOL bCapitalize )
+{
+    pImpEditEngine->SetFirstWordCapitalization( bCapitalize );
+}
+
+BOOL EditEngine::IsFirstWordCapitalization() const
+{
+    return pImpEditEngine->IsFirstWordCapitalization();
+}
 
 
 // ---------------------------------------------------
