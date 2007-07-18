@@ -4,9 +4,9 @@
  *
  *  $RCSfile: cppinterfaceproxy.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 15:56:12 $
+ *  last change: $Author: obo $ $Date: 2007-07-18 12:16:06 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -33,6 +33,7 @@
  *
  ************************************************************************/
 
+
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_bridges.hxx"
 
@@ -54,12 +55,39 @@
 #include <cstddef>
 #include <new>
 
+
+static bridges::cpp_uno::shared::VtableFactory * pInstance;
+
+#ifdef __GNUG__
+void dso_init(void) __attribute__((constructor));
+void dso_exit(void) __attribute__((destructor));
+#endif
+
+void dso_init(void) {
+    if (!pInstance)
+        pInstance = new bridges::cpp_uno::shared::VtableFactory();
+}
+
+void dso_exit(void) {
+    if (pInstance)
+    {
+        delete pInstance;
+        pInstance = NULL;
+    }
+}
+
+#ifdef __SUNPRO_CC
+# pragma init(dso_init)
+# pragma fini(dso_exit)
+#endif
+
+
+
 namespace {
 
 struct InitVtableFactory {
     bridges::cpp_uno::shared::VtableFactory * operator()() {
-        static bridges::cpp_uno::shared::VtableFactory instance;
-        return &instance;
+        return pInstance;
     }
 };
 
