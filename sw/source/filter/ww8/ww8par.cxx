@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ww8par.cxx,v $
  *
- *  $Revision: 1.179 $
+ *  $Revision: 1.180 $
  *
- *  last change: $Author: obo $ $Date: 2007-07-17 13:09:35 $
+ *  last change: $Author: obo $ $Date: 2007-07-18 14:46:00 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -280,6 +280,10 @@
 
 #ifndef _COM_SUN_STAR_BEANS_XPROPERTYCONTAINER_HPP_
 #include <com/sun/star/beans/XPropertyContainer.hpp>
+#endif
+
+#ifndef _SFXITEMITER_HXX
+#   include <svtools/itemiter.hxx>  //SfxItemIter
 #endif
 
 #define MM_250 1417             // WW-Default fuer Hor. Seitenraender: 2.5 cm
@@ -2432,6 +2436,30 @@ CharSet SwWW8ImplReader::GetCurrentCharSet()
     return eSrcCharSet;
 }
 
+void SwWW8ImplReader::PostProcessAttrs()
+{
+    if (mpPostProcessAttrsInfo != NULL)
+    {
+        SfxItemIter aIter(mpPostProcessAttrsInfo->mItemSet);
+
+        const SfxPoolItem * pItem = aIter.GetCurItem();
+        if (pItem != NULL)
+        {
+            do
+            {
+                pCtrlStck->NewAttr(*mpPostProcessAttrsInfo->mPaM.GetPoint(),
+                                   *pItem);
+                pCtrlStck->SetAttr(*mpPostProcessAttrsInfo->mPaM.GetMark(),
+                                   pItem->Which(), true);
+            }
+            while (!aIter.IsAtEnd() && (pItem = aIter.NextItem()));
+        }
+
+        delete mpPostProcessAttrsInfo;
+        mpPostProcessAttrsInfo = NULL;
+    }
+}
+
 /*
  #i9241#
  It appears that some documents that are in a baltic 8 bit encoding which has
@@ -2955,11 +2983,24 @@ long SwWW8ImplReader::ReadTextAttr(WW8_CP& rTxtPos, bool& rbStartLine)
         if( bDoPlcxManPlusPLus )
             (*pPlcxMan)++;
         nNext = pPlcxMan->Where();
+
+        if (mpPostProcessAttrsInfo &&
+            mpPostProcessAttrsInfo->mnCpStart == nNext)
+        {
+            mpPostProcessAttrsInfo->mbCopy = true;
+        }
+
         if( (0 <= nNext) && (nSkipPos >= nNext) )
         {
             nNext = ReadTextAttr( rTxtPos, rbStartLine );
             bDoPlcxManPlusPLus = false;
             bIgnoreText = true;
+        }
+
+        if (mpPostProcessAttrsInfo &&
+            nNext > mpPostProcessAttrsInfo->mnCpEnd)
+        {
+            mpPostProcessAttrsInfo->mbCopy = false;
         }
     }
     while( nSkipPos >= nNext );
@@ -3058,6 +3099,9 @@ bool SwWW8ImplReader::ReadText(long nStartCp, long nTextLen, short nType)
     {
         ReadAttrs( nNext, l, bStartLine );// behandelt auch Section-Breaks
         ASSERT(pPaM->GetNode()->GetTxtNode(), "Missing txtnode");
+
+        if (mpPostProcessAttrsInfo != NULL)
+            PostProcessAttrs();
 
         if( l>= nStartCp + nTextLen )
             break;
@@ -3247,6 +3291,8 @@ SwWW8ImplReader::SwWW8ImplReader(BYTE nVersionPara, SvStorage* pStorage,
     bShdTxtCol = bCharShdTxtCol = bAnl = bHdFtFtnEdn = bFtnEdn
                = bIsHeader = bIsFooter = bIsUnicode = bCpxStyle = bStyNormal =
                  bWWBugNormal  = false;
+
+    mpPostProcessAttrsInfo = 0;
 
     bNoAttrImport = bPgChpLevel = bEmbeddObj = false;
     bAktAND_fNumberAcross = false;
