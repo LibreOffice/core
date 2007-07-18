@@ -4,9 +4,9 @@
  *
  *  $RCSfile: rtfout.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 15:27:54 $
+ *  last change: $Author: obo $ $Date: 2007-07-18 08:57:03 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -61,9 +61,7 @@
 
 using namespace rtl;
 
-#if defined(MAC)
-const sal_Char RTFOutFuncs::sNewLine = '\015';
-#elif defined(UNX)
+#if defined(UNX)
 const sal_Char RTFOutFuncs::sNewLine = '\012';
 #else
 const sal_Char __FAR_DATA RTFOutFuncs::sNewLine[] = "\015\012";
