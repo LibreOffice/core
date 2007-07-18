@@ -4,9 +4,9 @@
  *
  *  $RCSfile: swtable.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: rt $ $Date: 2007-07-06 09:52:34 $
+ *  last change: $Author: obo $ $Date: 2007-07-18 12:56:27 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1458,7 +1458,7 @@ void SwTable::NewSetTabCols( Parm &rParm, const SwTabCols &rNew,
                 bGoOn = aRowSpanPos.size() > 0 && j+1 < rLines.Count();
             };
         }
-        ::lcl_AdjustWidthsInLine( rLines[nCurr], aOldNew, rParm, 0 );
+        ::lcl_AdjustWidthsInLine( rLines[nCurr], aOldNew, rParm, 1 );
     }
     else for( USHORT i = 0; i < rLines.Count(); ++i )
         ::lcl_AdjustWidthsInLine( rLines[i], aOldNew, rParm, COLFUZZY );
