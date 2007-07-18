@@ -4,9 +4,9 @@
  *
  *  $RCSfile: workwin.hxx,v $
  *
- *  $Revision: 1.28 $
+ *  $Revision: 1.29 $
  *
- *  last change: $Author: hr $ $Date: 2007-06-27 23:30:34 $
+ *  last change: $Author: obo $ $Date: 2007-07-18 09:01:59 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -343,7 +343,7 @@ public:
     void                    HideChilds_Impl();
     void                    Close_Impl();
     BOOL                    PrepareClose_Impl();
-    virtual void            ArrangeChilds_Impl();
+    virtual void            ArrangeChilds_Impl( BOOL bForce = TRUE );
     void                    DeleteControllers_Impl();
     void                    SaveStatus_Impl();
     void                    HidePopups_Impl(BOOL bHide, BOOL bParent=FALSE, USHORT nId=0);
@@ -408,7 +408,7 @@ class SfxFrameWorkWin_Impl : public SfxWorkWindow
     SfxFrame*           pFrame;
 public:
                         SfxFrameWorkWin_Impl( Window* pWin, SfxFrame* pFrm, SfxFrame* pMaster );
-    virtual void        ArrangeChilds_Impl();
+    virtual void        ArrangeChilds_Impl( BOOL bForce = TRUE );
     virtual void        UpdateObjectBars_Impl();
     virtual Rectangle   GetTopRect_Impl();
 };
