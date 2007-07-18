@@ -4,9 +4,9 @@
  *
  *  $RCSfile: swtable.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: obo $ $Date: 2007-07-18 12:56:27 $
+ *  last change: $Author: obo $ $Date: 2007-07-18 14:28:19 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -2626,39 +2626,57 @@ ULONG SwTableBox::IsValidNumTxtNd( BOOL bCheckAttr ) const
     if( pSttNd )
     {
         SwNodeIndex aIdx( *pSttNd );
-        const SwCntntNode* pCNd = pSttNd->GetNodes().GoNext( &aIdx );
-        if( pCNd && pCNd->IsTxtNode() &&
-            pSttNd->GetNodes()[ aIdx.GetIndex() + 1 ]->IsEndNode() )
+        ULONG nIndex = aIdx.GetIndex();
+        const ULONG nIndexEnd = pSttNd->GetNodes()[ nIndex ]->EndOfSectionIndex();
+        const SwTxtNode *pTextNode = 0;
+        while( ++nIndex < nIndexEnd )
+        {
+            const SwNode* pNode = pSttNd->GetNodes()[nIndex];
+            if( pNode->IsTableNode() )
+            {    /*return ULONG_MAX if the cell contains a table(in table)*/
+                pTextNode = 0;
+                break;
+            }
+            if( pNode->IsTxtNode() )
+            {
+                if( pTextNode )
+                {    /*return ULONG_MAX if the cell contains complex paragraphs*/
+                    pTextNode = 0;
+                    break;
+                }
+                else
+                {
+                    pTextNode = pNode->GetTxtNode();
+                    nPos = nIndex;
+                }
+            }
+        }
+        if( pTextNode )
         {
             if( bCheckAttr )
             {
-                const SwpHints* pHts = ((SwTxtNode*)pCNd)->GetpSwpHints();
-                const String& rTxt = ((SwTxtNode*)pCNd)->GetTxt();
-//              if( rTxt.Len() )
+                const SwpHints* pHts = pTextNode->GetpSwpHints();
+                const String& rTxt = pTextNode->GetTxt();
+                // dann teste doch mal, ob das wirklich nur Text im Node steht!
+                // Flys/Felder/..
+                if( pHts )
                 {
-                    nPos = aIdx.GetIndex();
-
-                    // dann teste doch mal, ob das wirklich nur Text im Node steht!
-                    // Flys/Felder/..
-                    if( pHts )
+                    for( USHORT n = 0; n < pHts->Count(); ++n )
                     {
-                        for( USHORT n = 0; n < pHts->Count(); ++n )
+                        const SwTxtAttr* pAttr = (*pHts)[ n ];
+                        if( RES_TXTATR_NOEND_BEGIN <= pAttr->Which() ||
+                            *pAttr->GetStart() ||
+                            *pAttr->GetAnyEnd() < rTxt.Len() )
                         {
-                            const SwTxtAttr* pAttr = (*pHts)[ n ];
-                            if( RES_TXTATR_NOEND_BEGIN <= pAttr->Which() ||
-                                *pAttr->GetStart() ||
-                                *pAttr->GetAnyEnd() < rTxt.Len() )
-                            {
-                                nPos = ULONG_MAX;
-                                break;
-                            }
+                            nPos = ULONG_MAX;
+                            break;
                         }
                     }
                 }
             }
-            else
-                nPos = aIdx.GetIndex();
         }
+        else
+            nPos = ULONG_MAX;
     }
     return nPos;
 }
