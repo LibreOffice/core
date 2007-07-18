@@ -4,9 +4,9 @@
  *
  *  $RCSfile: tabbar.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: rt $ $Date: 2007-07-03 15:42:20 $
+ *  last change: $Author: obo $ $Date: 2007-07-18 08:53:38 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -2384,32 +2384,7 @@ BOOL TabBar::StartDrag( const CommandEvent& rCEvt, Region& rRegion )
     }
     mbInSelect = FALSE;
 
-
-#ifdef MAC
-    PolyPolygon aPolyPoly;
-
-    ImplTabBarItem* pItem = mpItemList->First();
-    while ( pItem )
-    {
-        if ( pItem->mbSelect && !pItem->maRect.IsEmpty() )
-        {
-            // Polygon fuer DragRegion aufbauen
-            Rectangle aRect = pItem->maRect;
-            Polygon   aPoly( 4 );
-            aPoly[0] = Point( aRect.Left(), mnOffY );
-            aPoly[1] = Point( aRect.Left()+TABBAR_OFFSET_X, aRect.Bottom() );
-            aPoly[2] = Point( aRect.Right()-TABBAR_OFFSET_X, aRect.Bottom() );
-            aPoly[3] = Point( aRect.Right(), mnOffY );
-            aPolyPoly.Insert( aPoly );
-        }
-
-        pItem = mpItemList->Next();
-    }
-
-    Region aRegion( aPolyPoly );
-#else
     Region aRegion;
-#endif
 
     // Region zuweisen
     rRegion = aRegion;
