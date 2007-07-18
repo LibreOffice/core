@@ -4,9 +4,9 @@
  *
  *  $RCSfile: cmdid.h,v $
  *
- *  $Revision: 1.72 $
+ *  $Revision: 1.73 $
  *
- *  last change: $Author: hr $ $Date: 2007-06-27 13:12:47 $
+ *  last change: $Author: obo $ $Date: 2007-07-18 12:54:22 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -600,6 +600,7 @@ Achtung: Ab sofort sind in diesem File keine C++-Kommentare (//) mehr
 #define FN_GOTO_PREV_CELL           (FN_FORMAT + 146)  /* Table: go to previous cell */
 
 
+#define FN_TABLE_HEADLINE_COUNT     (FN_FORMAT + 147) /* number of repeated headlines of tables */
 //hier geht's weiter !
 /*--------------------------------------------------------------------
     Bereich: Ribbon
@@ -894,6 +895,7 @@ Achtung: Ab sofort sind in diesem File keine C++-Kommentare (//) mehr
 #define FN_XFORMS_DESIGN_MODE               (FN_EXTRA2 + 100)
 
 #define FN_UNO_PARA_STYLE_CONDITIONS        (FN_EXTRA2 + 101)
+#define FN_UNO_GRAPHIC                      (FN_EXTRA2 + 102)
 
 #define FN_UNO_REPLACEMENT_GRAPHIC_URL      (FN_EXTRA2 + 102)
 
