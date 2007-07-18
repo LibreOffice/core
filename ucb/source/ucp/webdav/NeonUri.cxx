@@ -4,9 +4,9 @@
  *
  *  $RCSfile: NeonUri.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: rt $ $Date: 2007-07-03 12:13:56 $
+ *  last change: $Author: obo $ $Date: 2007-07-18 07:49:06 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -185,6 +185,20 @@ void NeonUri::init( const rtl::OString & rUri, const ne_uri * pUri )
     mPath     = rtl::OStringToOUString(
                     pUri->path ? pUri->path : pUriDefs->path,
                     RTL_TEXTENCODING_UTF8 );
+
+    if ( pUri->query )
+    {
+        mPath += rtl::OUString::createFromAscii( "?" );
+        mPath += rtl::OStringToOUString(
+            pUri->query,  RTL_TEXTENCODING_UTF8 );
+    }
+
+    if ( pUri->fragment )
+    {
+        mPath += rtl::OUString::createFromAscii( "#" );
+        mPath += rtl::OStringToOUString(
+            pUri->fragment,  RTL_TEXTENCODING_UTF8 );
+    }
 }
 
 // -------------------------------------------------------------------
