@@ -4,7 +4,7 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.3 $
+#   $Revision: 1.4 $
 #
 #   last change: $Author: ericb
 #
@@ -46,10 +46,10 @@ TARGET=fondu
 
 TARFILE_NAME=fondu_src-051010
 
-.IF "$(OS)"!="MACOSX"
+.IF "$(OS)"!="MACOSX" || "$(GUIBASE)"=="aqua"
 dummy:
     @echo "Nothing to build for OS $(OS)"
-.ENDIF # "$(OS)"!="MACOSX"
+.ENDIF # "$(OS)"!="MACOSX" || "$(GUIBASE)"=="aqua"
 
 CONFIGURE_DIR=.
 
