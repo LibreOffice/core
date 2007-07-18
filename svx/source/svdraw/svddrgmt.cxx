@@ -4,9 +4,9 @@
  *
  *  $RCSfile: svddrgmt.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: rt $ $Date: 2007-07-06 13:20:33 $
+ *  last change: $Author: obo $ $Date: 2007-07-18 10:55:20 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1676,10 +1676,10 @@ basegfx::B2DPolyPolygon ImplCreateDragRaster(const Rectangle& rRect, sal_uInt32 
 
             const double fNewX(rRect.Left() + (b * fXLen));
             aHorLineSegment.append(basegfx::B2DPoint(fNewX, fYPos));
-            aHorLineSegment.append(basegfx::B2DPoint(fNewX + fXLen, fYPos));
-            aHorLineSegment.setControlVectorA(0L, basegfx::B2DVector(fXLen * (1.0 / 3.0), 0.0));
-            aHorLineSegment.setControlVectorB(0L, basegfx::B2DVector(fXLen * (2.0 / 3.0), 0.0));
-
+            aHorLineSegment.appendBezierSegment(
+                basegfx::B2DPoint(fNewX + (fXLen * (1.0 / 3.0)), fYPos),
+                basegfx::B2DPoint(fNewX + (fXLen * (2.0 / 3.0)), fYPos),
+                basegfx::B2DPoint(fNewX + fXLen, fYPos));
             aRetval.append(aHorLineSegment);
         }
 
@@ -1698,10 +1698,10 @@ basegfx::B2DPolyPolygon ImplCreateDragRaster(const Rectangle& rRect, sal_uInt32 
 
             const double fNewY(rRect.Top() + (b * fYLen));
             aVerLineSegment.append(basegfx::B2DPoint(fXPos, fNewY));
-            aVerLineSegment.append(basegfx::B2DPoint(fXPos, fNewY + fYLen));
-            aVerLineSegment.setControlVectorA(0L, basegfx::B2DVector(0.0, fYLen * (1.0 / 3.0)));
-            aVerLineSegment.setControlVectorB(0L, basegfx::B2DVector(0.0, fYLen * (2.0 / 3.0)));
-
+            aVerLineSegment.appendBezierSegment(
+                basegfx::B2DPoint(fXPos, fNewY + (fYLen * (1.0 / 3.0))),
+                basegfx::B2DPoint(fXPos, fNewY + (fYLen * (2.0 / 3.0))),
+                basegfx::B2DPoint(fXPos, fNewY + fYLen));
             aRetval.append(aVerLineSegment);
         }
 
