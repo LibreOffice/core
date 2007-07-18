@@ -4,9 +4,9 @@
  *
  *  $RCSfile: desktop.cxx,v $
  *
- *  $Revision: 1.61 $
+ *  $Revision: 1.62 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 14:08:27 $
+ *  last change: $Author: obo $ $Date: 2007-07-18 13:25:55 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -188,6 +188,10 @@
 #include <com/sun/star/document/UpdateDocMode.hpp>
 #endif
 
+#ifndef _COM_SUN_STAR_FRAME_XTERMINATELISTENER2_HPP_
+#include <com/sun/star/frame/XTerminateListener2.hpp>
+#endif
+
 //_________________________________________________________________________________________________________________
 //  includes of other projects
 //_________________________________________________________________________________________________________________
@@ -321,14 +325,6 @@ DEFINE_INIT_SERVICE                     (   Desktop,
                                                 InterceptionHelper* pInterceptionHelper = new InterceptionHelper( this, xDispatchProvider );
                                                 m_xDispatchHelper = css::uno::Reference< css::frame::XDispatchProvider >( static_cast< ::cppu::OWeakObject* >(pInterceptionHelper), css::uno::UNO_QUERY );
 
-                                                //-------------------------------------------------------------------------------------------------------------
-                                                // I'am the desktop - and use my frame container in a special mode.
-                                                // If last child task is removed, I must die!
-                                                // My container should terminate me asynchronous by using a timer.
-                                                // Enable timer at container.
-                                                // (The timer will be initialized with right timeout value automaticly by himself. see class AsyncQuit for further informations!)
-                                                m_aChildTaskContainer.enableQuitTimer( this );
-
                                                 // Safe impossible cases
                                                 // We can't work without this helper!
                                                 LOG_ASSERT2( m_xFramesHelper.is  ()==sal_False, "Desktop::Desktop()", "Frames helper is not valid. XFrames, XIndexAccess and XElementAcces are not supported!\n")
@@ -378,9 +374,20 @@ Desktop::Desktop( const css::uno::Reference< css::lang::XMultiServiceFactory >& 
         ,   m_xFactory              ( xFactory                                      )
         ,   m_aChildTaskContainer   (                                               )
         ,   m_aListenerContainer    ( m_aLock.getShareableOslMutex()                )
+        ,   m_xFramesHelper         (                                               )
+        ,   m_xDispatchHelper       (                                               )
         ,   m_eLoadState            ( E_NOTSET                                      )
+        ,   m_xLastFrame            (                                               )
         ,   m_aInteractionRequest   (                                               )
-     ,   m_bSuspendQuickstartVeto( sal_False                                        )
+        ,   m_bSuspendQuickstartVeto( sal_False                                     )
+        ,   m_aCommandOptions       (                                               )
+        ,   m_sName                 (                                               )
+        ,   m_sTitle                (                                               )
+        ,   m_xDispatchRecorderSupplier(                                            )
+        ,   m_xPipeTerminator       (                                               )
+        ,   m_xQuickLauncher        (                                               )
+        ,   m_xSWThreadManager      (                                               )
+        ,   m_xSfxTerminator        (                                               )
 {
     // Safe impossible cases
     // We don't accept all incoming parameter.
@@ -404,337 +411,229 @@ Desktop::~Desktop()
     LOG_ASSERT2( m_aTransactionManager.getWorkingMode()!=E_CLOSE  , "Desktop::~Desktop()", "Who forgot to dispose this service?"          )
 }
 
-/*-************************************************************************************************************//**
-    @interface  XDesktop
-    @short      ask desktop before terminate it
-    @descr      The desktop ask his components and if all say "yes" it will destroy this components
-                and return "yes" to caller of this method. Otherwhise, desktop will not be destroied!
-                But a TerminateListener with a veto - will be the new owner of this service and MUST
-                call terminate again, if he stop using of it!
-
-    @seealso    interface XTerminateListener
-
-    @param      -
-    @return     sal_True  ,if all components say "yes" for terminate
-                sal_False ,otherwise
-
-    @onerror    We return sal_False.
-    @threadsafe yes
-*//*-*************************************************************************************************************/
-sal_Bool SAL_CALL Desktop::terminate() throw( css::uno::RuntimeException )
+//=============================================================================
+sal_Bool SAL_CALL Desktop::terminate()
+    throw( css::uno::RuntimeException )
 {
-    /* UNSAFE AREA --------------------------------------------------------------------------------------------- */
-    // Register transaction and reject wrong calls.
     TransactionGuard aTransaction( m_aTransactionManager, E_HARDEXCEPTIONS );
 
-    /* SAFE AREA ----------------------------------------------------------------------------------------------- */
-    ReadGuard aReadLock( m_aLock );
-    // Attention, Our timer hold a reference to use ... and sometimes (e.g. for headless office mode)
-    // he forget this one insteandly during his own instantiation! So we can die during next call.
-    // That's why it's agood idea to hold use self alive.
-    css::uno::Reference< css::frame::XDesktop > xThis( static_cast< ::cppu::OWeakObject* >(this), css::uno::UNO_QUERY );
-    // Get other neccessary references.
-    css::uno::Reference< css::frame::XTerminateListener > xPipeTerminator    = m_xPipeTerminator                          ;
-    css::uno::Reference< css::frame::XTerminateListener > xQuickLauncher     = m_xQuickLauncher                           ;
-    css::lang::EventObject                                aEvent             ( static_cast< ::cppu::OWeakObject* >(this) );
-    sal_Bool                                              bAskQuickStart     = !m_bSuspendQuickstartVeto                  ;
-    aReadLock.unlock();
-    /* UNSAFE AREA --------------------------------------------------------------------------------------------- */
+    SYNCHRONIZED_START
+        ReadGuard aReadLock( m_aLock );
 
-    // Set default. If a veto occure - break operation and
-    // return "not terminated". Otherwise termination was successfully.
-    sal_Bool bNormalListenerVeto = sal_False;
-    sal_Bool bQuickLaunchVeto    = sal_False;
-    sal_Bool bPipeVeto           = sal_False;
-    sal_Bool bTaskVeto           = sal_False;
+        css::uno::Reference< css::frame::XTerminateListener > xPipeTerminator    = m_xPipeTerminator;
+        css::uno::Reference< css::frame::XTerminateListener > xQuickLauncher     = m_xQuickLauncher;
+        css::uno::Reference< css::frame::XTerminateListener > xSWThreadManager   = m_xSWThreadManager;
+        css::uno::Reference< css::frame::XTerminateListener > xSfxTerminator     = m_xSfxTerminator;
+
+        css::lang::EventObject                                aEvent             ( static_cast< ::cppu::OWeakObject* >(this) );
+        ::sal_Bool                                            bAskQuickStart     = !m_bSuspendQuickstartVeto                  ;
+
+        aReadLock.unlock();
+    SYNCHRONIZED_END
 
     //-------------------------------------------------------------------------------------------------------------
-    // Disable our async quit timer ... we terminate ourself!
-    // But if termination fail ... don't forget to enable it again!
-    // Member is threadsafe himself!
-    m_aChildTaskContainer.disableQuitTimer();
+    // Ask normal terminate listener. They could stop terminate without closing any open document.
+    Desktop::TTerminateListenerList lCalledTerminationListener;
+    ::sal_Bool                      bVeto = sal_False;
+    impl_sendQueryTerminationEvent(lCalledTerminationListener, bVeto);
+    if ( bVeto )
+    {
+        impl_sendCancelTerminationEvent(lCalledTerminationListener);
+        return sal_False;
+    }
 
     //-------------------------------------------------------------------------------------------------------------
-    // Ask normal terminate listener. They could stop complete terminate AND closing of currently open documents!
+    // try to close all open frames.
+    // Allow using of any UI ... because Desktop.terminate() was designed as UI functionality in the past.
+    ::sal_Bool bAllowUI      = sal_True;
+    ::sal_Bool bFramesClosed = impl_closeFrames(bAllowUI);
+    if ( ! bFramesClosed )
+    {
+        impl_sendCancelTerminationEvent(lCalledTerminationListener);
+        return sal_False;
+    }
+
+    //-------------------------------------------------------------------------------------------------------------
+    // Normal listener had no problem ...
+    // all frames was closed ...
+    // now it's time to ask our specialized listener.
+    // They are handled these way because they wish to hinder the office on termination
+    // but they wish also closing of all frames.
+
+    // Note further:
+    //    We shouldn't ask quicklauncher in case it was allowed from outside only.
+    //    This is special trick to "ignore existing quick starter" for debug purposes.
+
+    // Attention:
+    // Order of alled listener is important !
+    // some of them are harmless .-)
+    // But some of them can be dangerous. E.g. it would be dangerous if we close our pipe
+    // and dont terminate in real because another listener throws a veto exception .-)
+
+    ::sal_Bool bTerminate = sal_False;
     try
     {
-        impl_sendQueryTerminationEvent();
-    }
-    catch( css::frame::TerminationVetoException& )
-    {
-        bNormalListenerVeto = sal_True;
-    }
-
-    //-------------------------------------------------------------------------------------------------------------
-    // If no veto comes we should ask our quicklauncher.
-    // He stop termination of whole office .. but not closing of open tasks!!!
-    // We shouldn't ask quicklauncher if property "SuspendQuickstartVeto" is set to FALSE!!
-    if(
-        ( bNormalListenerVeto == sal_False  )   &&
-        ( bAskQuickStart      == sal_True   )   &&
-        ( xQuickLauncher.is() == sal_True   )
-      )
-    {
-        try
+        if(
+            ( bAskQuickStart      ) &&
+            ( xQuickLauncher.is() )
+          )
         {
             xQuickLauncher->queryTermination( aEvent );
+            lCalledTerminationListener.push_back( xQuickLauncher );
         }
-        catch( css::frame::TerminationVetoException& )
-        {
-            bQuickLaunchVeto = sal_True;
-        }
-    }
 
-    //-------------------------------------------------------------------------------------------------------------
-    // If no veto comes from quick launcher ... we should ask our pipe terminator too.
-    // He close pipe if no external requests are pending.
-    // Otherwise he throw the veto exception and we don't terminate AND don't close open tasks!
-    // Attention: If quick launcher exist - ask him before pipe terminator. Otherwise pipe will be closed
-    // quick launcher stop real termination ... but pipe will not reopened! So no further external requests
-    // could come in!!!
-    if(
-        ( bNormalListenerVeto  == sal_False )    &&
-        ( bQuickLaunchVeto     == sal_False )    &&
-        ( xPipeTerminator.is() == sal_True  )
-      )
-    {
-        try
+        if ( xSWThreadManager.is() )
+        {
+            xSWThreadManager->queryTermination( aEvent );
+            lCalledTerminationListener.push_back( xSWThreadManager );
+        }
+
+        if ( xPipeTerminator.is() )
         {
             xPipeTerminator->queryTermination( aEvent );
+            lCalledTerminationListener.push_back( xPipeTerminator );
         }
-        catch( css::frame::TerminationVetoException& )
+
+        if ( xSfxTerminator.is() )
         {
-            bPipeVeto = sal_True;
+            xSfxTerminator->queryTermination( aEvent );
+            lCalledTerminationListener.push_back( xSfxTerminator );
         }
+
+        bTerminate = sal_True;
+    }
+    catch(const css::frame::TerminationVetoException&)
+    {
+        bTerminate = sal_False;
     }
 
-    //-------------------------------------------------------------------------------------------------------------
-    // Close tasks only, if no veto exist ... but if veto comes from our quick launcher ...
-    // DO IT! He stop termination - not closing tasks. => It doesn't matter, if bQuickLaunchVeto is true or false.
-    // We close tasks for both cases!
-    if(
-        ( bNormalListenerVeto == sal_False )    &&
-        ( bPipeVeto           == sal_False )
-      )
+    if ( ! bTerminate )
+        impl_sendCancelTerminationEvent(lCalledTerminationListener);
+    else
     {
-        // Step over all child tasks and ask they "WOULD YOU DIE?"
-        css::uno::Sequence< css::uno::Reference< css::frame::XFrame > > lTasks = m_aChildTaskContainer.getAllElements();
-        sal_Int32                                                       c      = lTasks.getLength();
-        sal_Int32                                                       i      = 0;
-        for(i=0; !bTaskVeto && i<c; ++i)
-        {
-            try
-            {
-                // Get an element from container and cast it to task.
-                // Ignore already gone references.
-                // So it can happen that a frame was still closed by another client.
-                css::uno::Reference< css::frame::XFrame > xTask = lTasks[i];
-                if (! xTask.is())
-                    continue;
+        #ifdef ENABLE_ASSERTIONS
+            // "Protect" us against dispose before terminate calls!
+            // see dispose() for further informations.
+            /* SAFE AREA --------------------------------------------------------------------------------------- */
+            WriteGuard aWriteLock( m_aLock );
+            m_bIsTerminated = sal_True;
+            aWriteLock.unlock();
+            /* UNSAFE AREA ------------------------------------------------------------------------------------- */
+        #endif
 
-                // Terminate allow showing of UI ... so it can ask a controller
-                // if it agree with a close. If it disagree .. stop terminate!
-                css::uno::Reference< css::frame::XController > xController( xTask->getController(), css::uno::UNO_QUERY );
-                sal_Bool bReactivateController = sal_False;
-                if (xController.is())
-                {
-                    sal_Bool bSuspended = xController->suspend(sal_True);
-                    if (!bSuspended)
-                    {
-                        bTaskVeto = sal_True;
-                        continue;
-                    }
-                    else
-                        bReactivateController = sal_True;
-                }
-
-                css::uno::Reference< css::util::XCloseable > xClose(xTask, css::uno::UNO_QUERY);
-                if (xClose.is())
-                {
-                    try
-                    {
-                        // Don't deliver ownership of this task to any other one! => means call close(sal_False).
-                        // Desktop::terminate() can be called by the user ... using "File->Exit()" again!
-                        xClose->close(sal_False);
-                        // Don't remove the task from our child container!
-                        // A task do it by itself inside close
-                    }
-                    catch( css::util::CloseVetoException& )
-                    {
-                        // Any internal process of this task disagree with our request.
-                        // Safe this state and break this loop. Following task willn't be asked!
-                        bTaskVeto = sal_True;
-
-                        if (
-                            (bReactivateController) &&
-                            (xController.is()     )
-                           )
-                            xController->suspend(sal_False);
-                    }
-
-                    // It doesnt matter if this task was closed sucesfully or not.
-                    // It's not allowed to try other possible interfaces to kill this task.
-                    // Try the next one !
-                    continue;
-                }
-
-                css::uno::Reference< css::lang::XComponent > xDispose(xTask, css::uno::UNO_QUERY);
-                if (xDispose.is())
-                    xDispose->dispose();
-            }
-            catch(const css::lang::DisposedException&)
-            {
-                // Task already closed / disposed by another thread or user ...
-                // It doesn't matter! Because dead is dead is dead ...!
-                // Do nothing and try to close next one.
-                // But may it's agood idea to release this task from our container
-                m_aChildTaskContainer.remove( lTasks[i] );
-            }
-        }
-    }
-
-    //-------------------------------------------------------------------------------------------------------------
-    // All listener has no problem with our termination!
-    // Send NotifyTermination event to all and return with true.
-    sal_Bool bTerminated =  (
-                                ( bNormalListenerVeto == sal_False )    &&
-                                ( bQuickLaunchVeto    == sal_False )    &&
-                                ( bPipeVeto           == sal_False )    &&
-                                ( bTaskVeto           == sal_False )
-                            );
-    #ifdef ENABLE_ASSERTIONS
-        // "Protect" us against dispose before terminate calls!
-        // see dispose() for further informations.
-        // Follow notify will start shutdown of office and somewhere call dispose() at us ...
-        // Set debug variable BEFORE notify!
-        /* SAFE AREA --------------------------------------------------------------------------------------- */
-        WriteGuard aWriteLock( m_aLock );
-        m_bIsTerminated = bTerminated;
-        aWriteLock.unlock();
-        /* UNSAFE AREA ------------------------------------------------------------------------------------- */
-    #endif
-    if( bTerminated == sal_True )
-    {
-        // Send event to normal listener ...
         impl_sendNotifyTerminationEvent();
-        // ... but don't forget to send it to our special terminat listener too!
-        if( xPipeTerminator.is() == sal_True )
-        {
-            xPipeTerminator->notifyTermination( aEvent );
-        }
-        if( xQuickLauncher.is() == sal_True )
+
+        if(
+            ( bAskQuickStart      ) &&
+            ( xQuickLauncher.is() )
+          )
         {
             xQuickLauncher->notifyTermination( aEvent );
         }
-    }
-    // If somewhere break this terminate operation and we must return FALSE ...
-    // we must reactivate our quit timer!
-    // Otherwise we live for ever.
-    else
-    {
-        m_aChildTaskContainer.enableQuitTimer( xThis );
+
+        if ( xSWThreadManager.is() )
+            xSWThreadManager->notifyTermination( aEvent );
+
+        if ( xPipeTerminator.is() )
+            xPipeTerminator->notifyTermination( aEvent );
+
+        // Must be realy the last listener to be called.
+        // Because it shutdown the whole process asynchronous !
+        if ( xSfxTerminator.is() )
+            xSfxTerminator->notifyTermination( aEvent );
     }
 
-    // Return result of this question.
-    return bTerminated;
+    return bTerminate;
 }
 
-/*-************************************************************************************************************//**
-    @interface  XDesktop
-    @short      add/remove a listener for terminate events
-    @descr      You can add a listener, if you wish to get an event, if desktop will be terminate.
-                Then it's possible to say "NO" by using a TerminateVetoException!
 
-    @attention  a)  We know a special terminate listener - the pipe terminator. He is called as last of all terminate
-                    listeners. If no request stands in our office pipe - he has no veto. Otherwise
-                    he close the pipe and external requests are rejected.
-                b)  Another special listener is our quick launcher. He throw a veto exception, if tray-icon
-                    is still active. But he doesn't block closing of tasks! So we must call him after closing of these ones!
-                c)  May be we dispose our listener during our own dispose methode ... after closing object for
-                    real working. They call us back to remove her interfaces from our listener container.
-                    So we should allow that by using E_SOFTEXCEPTIONS and suppress rejection of this calls!
-
-    @seealso    method terminate()
-
-    @param      "xListener" is a reference to the listener. His value must be valid!
-    @return     -
-
-    @onerror    We do nothing.
-    @threadsafe yes
-*//*-*************************************************************************************************************/
-void SAL_CALL Desktop::addTerminateListener( const css::uno::Reference< css::frame::XTerminateListener >& xListener ) throw( css::uno::RuntimeException )
+//=============================================================================
+void SAL_CALL Desktop::addTerminateListener( const css::uno::Reference< css::frame::XTerminateListener >& xListener )
+    throw( css::uno::RuntimeException )
 {
-    /* UNSAFE AREA --------------------------------------------------------------------------------------------- */
-    // Safe impossible cases
-    // Method not defined for all incoming parameter.
-    LOG_ASSERT2( implcp_addTerminateListener( xListener ), "Desktop::addTerminateListener()", "Invalid parameter detected!" )
-    // Register transaction and reject wrong calls.
     TransactionGuard aTransaction( m_aTransactionManager, E_HARDEXCEPTIONS );
 
-    sal_Bool                                       bSpecialListener = sal_False                       ;
-    css::uno::Reference< css::lang::XServiceInfo > xInfo            ( xListener, css::uno::UNO_QUERY );
-    if( xInfo.is() == sal_True )
+    css::uno::Reference< css::lang::XServiceInfo > xInfo( xListener, css::uno::UNO_QUERY );
+    if ( xInfo.is() )
     {
         ::rtl::OUString sImplementationName = xInfo->getImplementationName();
-        /* SAFE AREA ------------------------------------------------------------------------------------------- */
+
+        // SYCNHRONIZED ->
         WriteGuard aWriteLock( m_aLock );
-        if( sImplementationName == IMPLEMENTATIONNAME_PIPETERMINATOR )
+
+        if( sImplementationName.equals(IMPLEMENTATIONNAME_SFXTERMINATOR) )
+        {
+            m_xSfxTerminator = xListener;
+            return;
+        }
+        if( sImplementationName.equals(IMPLEMENTATIONNAME_PIPETERMINATOR) )
         {
             m_xPipeTerminator = xListener;
-            bSpecialListener  = sal_True ;
+            return;
         }
-        else
-        if( sImplementationName == IMPLEMENTATIONNAME_QUICKLAUNCHER )
+        if( sImplementationName.equals(IMPLEMENTATIONNAME_QUICKLAUNCHER) )
         {
             m_xQuickLauncher = xListener;
-            bSpecialListener = sal_True ;
+            return;
         }
+        if( sImplementationName.equals(IMPLEMENTATIONNAME_SWTHREADMANAGER) )
+        {
+            m_xSWThreadManager = xListener;
+            return;
+        }
+
         aWriteLock.unlock();
-        /* UNSAFE AREA ----------------------------------------------------------------------------------------- */
+        // <- SYCNHRONIZED
     }
 
-    if( bSpecialListener == sal_False )
-    {
-        m_aListenerContainer.addInterface( ::getCppuType( ( const css::uno::Reference< css::frame::XTerminateListener >*) NULL ), xListener );
-    }
+    // No lock required ... container is threadsafe by itself.
+    m_aListenerContainer.addInterface( ::getCppuType( ( const css::uno::Reference< css::frame::XTerminateListener >*) NULL ), xListener );
 }
 
-//*****************************************************************************************************************
-void SAL_CALL Desktop::removeTerminateListener( const css::uno::Reference< css::frame::XTerminateListener >& xListener ) throw( css::uno::RuntimeException )
+//=============================================================================
+void SAL_CALL Desktop::removeTerminateListener( const css::uno::Reference< css::frame::XTerminateListener >& xListener )
+    throw( css::uno::RuntimeException )
 {
-    /* UNSAFE AREA --------------------------------------------------------------------------------------------- */
-    // Safe impossible cases
-    // Method not defined for all incoming parameter.
-    LOG_ASSERT2( implcp_removeTerminateListener( xListener ), "Desktop::removeTerminateListener()", "Invalid parameter detected!" )
-    // Register transaction and reject wrong calls.
     TransactionGuard aTransaction( m_aTransactionManager, E_SOFTEXCEPTIONS );
 
-    sal_Bool                                       bSpecialListener = sal_False                       ;
-    css::uno::Reference< css::lang::XServiceInfo > xInfo            ( xListener, css::uno::UNO_QUERY );
-    if( xInfo.is() == sal_True )
+    css::uno::Reference< css::lang::XServiceInfo > xInfo( xListener, css::uno::UNO_QUERY );
+    if ( xInfo.is() )
     {
         ::rtl::OUString sImplementationName = xInfo->getImplementationName();
-        /* SAFE AREA ------------------------------------------------------------------------------------------- */
+
+        // SYCNHRONIZED ->
         WriteGuard aWriteLock( m_aLock );
-        if( sImplementationName == IMPLEMENTATIONNAME_PIPETERMINATOR )
+
+        if( sImplementationName.equals(IMPLEMENTATIONNAME_SFXTERMINATOR) )
         {
-            m_xPipeTerminator = css::uno::Reference< css::frame::XTerminateListener >();
-            bSpecialListener  = sal_True;
+            m_xSfxTerminator.clear();
+            return;
         }
-        else
-        if( sImplementationName == IMPLEMENTATIONNAME_QUICKLAUNCHER )
+
+        if( sImplementationName.equals(IMPLEMENTATIONNAME_PIPETERMINATOR) )
         {
-            m_xQuickLauncher = css::uno::Reference< css::frame::XTerminateListener >();
-            bSpecialListener = sal_True;
+            m_xPipeTerminator.clear();
+            return;
         }
+
+        if( sImplementationName.equals(IMPLEMENTATIONNAME_QUICKLAUNCHER) )
+        {
+            m_xQuickLauncher.clear();
+            return;
+        }
+
+        if( sImplementationName.equals(IMPLEMENTATIONNAME_SWTHREADMANAGER) )
+        {
+            m_xSWThreadManager.clear();
+            return;
+        }
+
         aWriteLock.unlock();
-        /* UNSAFE AREA ----------------------------------------------------------------------------------------- */
+        // <- SYCNHRONIZED
     }
 
-    if( bSpecialListener == sal_False )
-    {
-        m_aListenerContainer.removeInterface( ::getCppuType( ( const css::uno::Reference< css::frame::XTerminateListener >*) NULL ), xListener );
-    }
+    // No lock required ... container is threadsafe by itself.
+    m_aListenerContainer.removeInterface( ::getCppuType( ( const css::uno::Reference< css::frame::XTerminateListener >*) NULL ), xListener );
 }
 
 /*-************************************************************************************************************//**
@@ -1397,96 +1296,73 @@ css::uno::Reference< css::frame::XFrame > SAL_CALL Desktop::findFrame( const ::r
     return xTarget;
 }
 
-/*-************************************************************************************************************//**
-    @interface  XComponent
-    @short      release all reference
-    @descr      The owner of this object calles the dispose method if the object
-                should be destroyed. All other objects and components, that are registered
-                as an EventListener are forced to release their references to this object.
-                The reference attributes are disposed and released also.
-
-    @seealso    -
-
-    @param      -
-    @return     -
-
-    @onerror    -
-    @threadsafe yes
-*//*-*************************************************************************************************************/
-void SAL_CALL Desktop::dispose() throw( css::uno::RuntimeException )
+//=============================================================================
+void SAL_CALL Desktop::dispose()
+    throw( css::uno::RuntimeException )
 {
     // Safe impossible cases
     // It's an programming error if dispose is called before terminate!
     LOG_ASSERT2( m_bIsTerminated==sal_False, "Desktop::dispose()", "It's not allowed to dispose the desktop before terminate() is called!" )
 
-    /*ATTENTION
-        Make it threadsafe ... but this method is a special one!
-        We must close objet for working BEFORE we dispose it realy ...
-        After successful closing all interface calls are rejected by our
-        transaction manager automaticly.
-     */
+    SYNCHRONIZED_START
+        WriteGuard aWriteLock( m_aLock );
 
-    /* SAFE AREA ----------------------------------------------------------------------------------------------- */
-    // Create an exclusiv access!
-    // It's neccessary for follow transaction check ...
-    // Another reason: We can recylce these write lock at later time ..
-    // and it's superflous to create read- and write- locks in combination.
-    WriteGuard aWriteLock( m_aLock );
+        // Look for multiple calls of this method!
+        // If somewhere call dispose() twice - he will be stopped here realy!!!
+        TransactionGuard aTransaction( m_aTransactionManager, E_HARDEXCEPTIONS );
 
-    // Look for multiple calls of this method!
-    // If somewhere call dispose() twice - he will be stopped here realy!!!
-    TransactionGuard aTransaction( m_aTransactionManager, E_HARDEXCEPTIONS );
+        // Now - we are alone and its the first call of this method ...
+        // otherwise call before had thrown a DisposedException / hopefully .-)
+        // But we dont use the transaction object created before ... we reset it immediatly ...
+        // two lines of code ... for what ?
+        // The answer: We wished to synchronize concurrent dispose() calls -> OK
+        // But next line will wait for all currently running transaction (even if they
+        // are running within the same thread!) So we would block ourself there if aTransaction
+        // will stay registered .-)
+        aTransaction.stop();
 
-    // Now - we are alone and its the first call of this method ...
-    // otherwise call before must throw a DisposedException!
-    // Don't forget to release this registered transaction here ...
-    // because next "setWorkingMode()" call blocks till all current existing one
-    // are finished!
-    aTransaction.stop();
+        // Disable this instance for further work.
+        // This will wait for all current running transactions ...
+        // and reject all new incoming requests!
+        m_aTransactionManager.setWorkingMode( E_BEFORECLOSE );
 
-    // Disable this instance for further work.
-    // This will wait for all current running ones ...
-    // and reject all further requests!
-    m_aTransactionManager.setWorkingMode( E_BEFORECLOSE );
+        aWriteLock.unlock();
+    SYNCHRONIZED_END
 
-    // We should hold a reference to ourself ...
-    // because our owner dispose us and release our reference ...
-    // May be we will die before we could finish this method ...
-    // Make snapshot of other neecessary member too.
-    css::uno::Reference< css::uno::XInterface > xThis( static_cast< ::cppu::OWeakObject* >(this), css::uno::UNO_QUERY );
+    // Following lines of code can be called outside a synchronized block ...
+    // Because our transaction manager will block all new requests to this object.
+    // So nobody can use us any longer.
+    // Exception: Only removing of listener will work ... and this code cant be dangerous.
 
-    // We don't need this lock any longer ... this method couldn't be called twice ... it was disabled for working!
-    aWriteLock.unlock();
-    /* UNSAFE AREA --------------------------------------------------------------------------------------------- */
+    // First we has to kill all listener connections.
+    // They might rely on our member and can hinder us on releasing them.
+    css::uno::Reference< css::uno::XInterface > xThis ( static_cast< ::cppu::OWeakObject* >(this), css::uno::UNO_QUERY );
+    css::lang::EventObject                      aEvent( xThis );
+    m_aListenerContainer.disposeAndClear( aEvent );
 
-    // We must disable the special quit timer of our frame container.
-    // Because it will call terminate at THESE instance if last task will be removed!.
-    m_aChildTaskContainer.disableQuitTimer();
-
-    // We must send the dispose message to all listener.
-    // Otherwise our child tasks are disposed and try to remove it by himself at our container ...
-    css::lang::EventObject aDisposeEvent( xThis         );
-    m_aListenerContainer.disposeAndClear( aDisposeEvent );
-
-    // Clear our child task container and forget all task references.
+    // Clear our child task container and forget all task references hardly.
+    // Normaly all open document was already closed by our terminate() function before ...
+    // New opened frames will have a problem now .-)
     m_aChildTaskContainer.clear();
 
     // Dispose our helper too.
-    css::uno::Reference< css::lang::XEventListener > xFramesHelper  ( m_xFramesHelper  , css::uno::UNO_QUERY );
-    if( xFramesHelper.is() == sal_True )
-    {
-        xFramesHelper->disposing( aDisposeEvent );
-    }
+    css::uno::Reference< css::lang::XEventListener > xFramesHelper( m_xFramesHelper, css::uno::UNO_QUERY );
+    if( xFramesHelper.is() )
+        xFramesHelper->disposing( aEvent );
 
-    // Release all member references.
-    m_xDispatchHelper   = css::uno::Reference< css::frame::XDispatchProvider >();
-    m_xFramesHelper     = css::uno::Reference< css::frame::XFrames >();
-    m_xLastFrame        = css::uno::Reference< css::frame::XFrame >();
-    m_xFactory          = css::uno::Reference< css::lang::XMultiServiceFactory >();
-    m_xPipeTerminator   = css::uno::Reference< css::frame::XTerminateListener >();
-    m_xQuickLauncher    = css::uno::Reference< css::frame::XTerminateListener >();
+    // At least clean up other member references.
+    m_xDispatchHelper.clear();
+    m_xFramesHelper.clear();
+    m_xLastFrame.clear();
+    m_xFactory.clear();
 
-    // Disable object for further working.
+    m_xPipeTerminator.clear();
+    m_xQuickLauncher.clear();
+    m_xSWThreadManager.clear();
+    m_xSfxTerminator.clear();
+
+    // From this point nothing will work further on this object ...
+    // excepting our dtor() .-)
     m_aTransactionManager.setWorkingMode( E_CLOSE );
 }
 
@@ -2014,83 +1890,188 @@ const css::uno::Sequence< css::beans::Property > Desktop::impl_getStaticProperty
     return lPropertyDescriptor;
 }
 
-/*-************************************************************************************************************//**
-    @short      work with our terminate listener
-    @descr      If somewhere call terminate on this object, we must notify our listener. They could throw a veto exception
-                to break it or accept it by doing nothing. These two helper methods send right events to all registered
-                listener.
-
-    @attention  We don't need any lock here - our container is threadsafe himself!
-
-    @seealso    method terminate()
-
-    @param      -
-    @return     -
-
-    @onerror    -
-    @threadsafe yes
-*//*-*************************************************************************************************************/
-void Desktop::impl_sendQueryTerminationEvent() throw( css::frame::TerminationVetoException )
+//=============================================================================
+void Desktop::impl_sendQueryTerminationEvent(Desktop::TTerminateListenerList& lCalledListener,
+                                             ::sal_Bool&                      bVeto          )
 {
-    /* UNSAFE AREA --------------------------------------------------------------------------------------------- */
-    // Register transaction and reject wrong calls.
+    bVeto = sal_False;
+
     TransactionGuard aTransaction( m_aTransactionManager, E_HARDEXCEPTIONS );
 
-    // Send QueryTermination event to all listener.
-    // Get container for right listener.
     ::cppu::OInterfaceContainerHelper* pContainer = m_aListenerContainer.getContainer( ::getCppuType( ( const css::uno::Reference< css::frame::XTerminateListener >*) NULL ) );
-    if( pContainer != NULL )
+    if ( ! pContainer )
+        return;
+
+    css::lang::EventObject aEvent( static_cast< ::cppu::OWeakObject* >(this) );
+
+    ::cppu::OInterfaceIteratorHelper aIterator( *pContainer );
+    while ( aIterator.hasMoreElements() )
     {
-        // Build QueryTermination event.
-        css::lang::EventObject aEvent( static_cast< ::cppu::OWeakObject* >(this) );
-        // Get iterator for access to listener.
-        ::cppu::OInterfaceIteratorHelper aIterator( *pContainer );
-        // Send message to all listener.
-        // Somewhere can throw a TerminationVetoException.
-        // We don't look for that(!) ... caller of this method will catch these.
-        while( aIterator.hasMoreElements() == sal_True )
+        try
         {
-            try
-            {
-                ((css::frame::XTerminateListener*)aIterator.next())->queryTermination( aEvent );
-            }
-            catch( css::uno::RuntimeException& )
-            {
-                aIterator.remove();
-            }
+            css::uno::Reference< css::frame::XTerminateListener > xListener(aIterator.next(), css::uno::UNO_QUERY);
+            if ( ! xListener.is() )
+                continue;
+            xListener->queryTermination( aEvent );
+            lCalledListener.push_back(xListener);
+        }
+        catch( const css::frame::TerminationVetoException& )
+        {
+            // first veto will stop notification loop.
+            bVeto = sal_True;
+            return;
+        }
+        catch( const css::uno::Exception& )
+        {
+            // clean up container.
+            // E.g. dead remote listener objects can make trouble otherwise.
+            // Iterator implementation allows removing objects during it's used !
+            aIterator.remove();
         }
     }
 }
 
-//*****************************************************************************************************************
-void Desktop::impl_sendNotifyTerminationEvent()
+//=============================================================================
+void Desktop::impl_sendCancelTerminationEvent(const Desktop::TTerminateListenerList& lCalledListener)
 {
-    /* UNSAFE AREA --------------------------------------------------------------------------------------------- */
-    // Register transaction and reject wrong calls.
     TransactionGuard aTransaction( m_aTransactionManager, E_HARDEXCEPTIONS );
 
-    // Send NotifyTermination event to all listener.
-    // Get container for right listener.
-    ::cppu::OInterfaceContainerHelper* pContainer = m_aListenerContainer.getContainer( ::getCppuType( ( const css::uno::Reference< css::frame::XTerminateListener >*) NULL ) );
-    if( pContainer != NULL )
+    css::lang::EventObject                          aEvent( static_cast< ::cppu::OWeakObject* >(this) );
+    Desktop::TTerminateListenerList::const_iterator pIt;
+    for (  pIt  = lCalledListener.begin();
+           pIt != lCalledListener.end  ();
+         ++pIt                           )
     {
-        // Build QueryTermination event.
-        css::lang::EventObject aEvent( static_cast< ::cppu::OWeakObject* >(this) );
-        // Get iterator for access to listener.
-        ::cppu::OInterfaceIteratorHelper aIterator( *pContainer );
-        // Send message to all listener.
-        while( aIterator.hasMoreElements() == sal_True )
+        try
         {
-            try
-            {
-                ((css::frame::XTerminateListener*)aIterator.next())->notifyTermination( aEvent );
-            }
-            catch( css::uno::RuntimeException& )
-            {
-                aIterator.remove();
-            }
+            // Note: cancelTermination() is a new and optional interface method !
+            css::uno::Reference< css::frame::XTerminateListener  > xListener           = *pIt;
+            css::uno::Reference< css::frame::XTerminateListener2 > xListenerGeneration2(xListener, css::uno::UNO_QUERY);
+            if ( ! xListenerGeneration2.is() )
+                continue;
+            xListenerGeneration2->cancelTermination( aEvent );
+        }
+        catch( const css::uno::Exception& )
+        {}
+    }
+}
+
+//=============================================================================
+void Desktop::impl_sendNotifyTerminationEvent()
+{
+    TransactionGuard aTransaction( m_aTransactionManager, E_HARDEXCEPTIONS );
+
+    ::cppu::OInterfaceContainerHelper* pContainer = m_aListenerContainer.getContainer( ::getCppuType( ( const css::uno::Reference< css::frame::XTerminateListener >*) NULL ) );
+    if ( ! pContainer )
+        return;
+
+    css::lang::EventObject aEvent( static_cast< ::cppu::OWeakObject* >(this) );
+
+    ::cppu::OInterfaceIteratorHelper aIterator( *pContainer );
+    while ( aIterator.hasMoreElements() )
+    {
+        try
+        {
+            css::uno::Reference< css::frame::XTerminateListener > xListener(aIterator.next(), css::uno::UNO_QUERY);
+            if ( ! xListener.is() )
+                continue;
+            xListener->notifyTermination( aEvent );
+        }
+        catch( const css::uno::Exception& )
+        {
+            // clean up container.
+            // E.g. dead remote listener objects can make trouble otherwise.
+            // Iterator implementation allows removing objects during it's used !
+            aIterator.remove();
         }
     }
+}
+
+//=============================================================================
+::sal_Bool Desktop::impl_closeFrames(::sal_Bool bAllowUI)
+{
+    SYNCHRONIZED_START
+        ReadGuard aReadLock( m_aLock );
+        css::uno::Sequence< css::uno::Reference< css::frame::XFrame > > lFrames = m_aChildTaskContainer.getAllElements();
+        aReadLock.unlock();
+    SYNCHRONIZED_END
+
+    ::sal_Int32 c                = lFrames.getLength();
+    ::sal_Int32 i                = 0;
+    ::sal_Int32 nNonClosedFrames = 0;
+
+    for( i=0; i<c; ++i )
+    {
+        try
+        {
+            css::uno::Reference< css::frame::XFrame > xFrame = lFrames[i];
+
+            // XController.suspend() will show an UI ...
+            // Use it in case it was allowed from outside only.
+            sal_Bool                                       bSuspended = sal_False;
+            css::uno::Reference< css::frame::XController > xController( xFrame->getController(), css::uno::UNO_QUERY );
+            if (
+                ( bAllowUI         ) &&
+                ( xController.is() )
+               )
+            {
+                bSuspended = xController->suspend( sal_True );
+                if ( ! bSuspended )
+                {
+                    ++nNonClosedFrames;
+                    continue;
+                }
+            }
+
+            // Try to close frame (in case no UI was allowed without calling XController->suspend() before!)
+            // But don't deliver ownership to any other one!
+            // This method can be called again.
+            css::uno::Reference< css::util::XCloseable > xClose( xFrame, css::uno::UNO_QUERY );
+            if ( xClose.is() )
+            {
+                try
+                {
+                    xClose->close(sal_False);
+                }
+                catch(const css::util::CloseVetoException&)
+                {
+                    // Any internal process of this frame disagree with our request.
+                    // Safe this state but dont break these loop. Other frames has to be closed!
+                    ++nNonClosedFrames;
+
+                    // Reactivate controller.
+                    // It can happen that XController.suspend() returned true ... but a registered close listener
+                    // throwed these veto exception. Then the controller has to be reactivated. Otherwise
+                    // these document doesnt work any more.
+                    if (
+                        (bSuspended      ) &&
+                        (xController.is())
+                       )
+                        xController->suspend(sal_False);
+                }
+
+                // If interface XClosable interface exists and was used ...
+                // it's not allowed to use XComponent->dispose() also !
+                continue;
+            }
+
+            // XClosable not supported ?
+            // Then we have to dispose these frame hardly.
+            css::uno::Reference< css::lang::XComponent > xDispose( xFrame, css::uno::UNO_QUERY );
+            if ( xDispose.is() )
+                xDispose->dispose();
+
+            // Don't remove these frame from our child container!
+            // A frame do it by itself inside close()/dispose() method.
+        }
+        catch(const css::lang::DisposedException&)
+        {
+            // Dispose frames are closed frames.
+            // So we can count it here .-)
+        }
+    }
+
+    return (nNonClosedFrames < 1);
 }
 
 //_________________________________________________________________________________________________________________
