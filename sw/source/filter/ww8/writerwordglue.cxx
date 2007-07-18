@@ -4,9 +4,9 @@
  *
  *  $RCSfile: writerwordglue.cxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: obo $ $Date: 2007-07-17 13:09:04 $
+ *  last change: $Author: obo $ $Date: 2007-07-18 14:29:34 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -977,16 +977,36 @@ namespace sw
                         nLen++;
                     }
 
-                    if(rLang == LANGUAGE_GERMAN)
+                    // Deal with language differences in date format expression.
+                    // Should be made with i18n framework.
+                    switch ( rLang )
                     {
-                        // MM German word documents understand yy and dd.
-                        // We do not, we use jj and tt instead.
-                        if(nChar == 'y' || nChar == 'Y')
-                            rParams.SetChar(nI, 'J');
-                        else if(nChar == 'd' || nChar == 'D')
-                            rParams.SetChar(nI, 'T');
+                    case LANGUAGE_GERMAN:
+                        {
+                            if (nChar == 'y' || nChar == 'Y')
+                                rParams.SetChar (nI, 'J');
+                            else if (nChar == 'd' || nChar == 'D')
+                                rParams.SetChar (nI, 'T');
+                        }
+                        break;
+                    case LANGUAGE_FRENCH:
+                    case LANGUAGE_FRENCH_BELGIAN:
+                    case LANGUAGE_FRENCH_CANADIAN:
+                    case LANGUAGE_FRENCH_SWISS:
+                    case LANGUAGE_FRENCH_LUXEMBOURG:
+                    case LANGUAGE_FRENCH_MONACO:
+                        {
+                            if (nChar == 'y' || nChar == 'Y')
+                                rParams.SetChar (nI, 'A');
+                            else if (nChar == 'd' || nChar == 'D')
+                                rParams.SetChar (nI, 'J');
+                        }
+                        break;
+                    default:
+                        {
+                            ; // Nothing
+                        }
                     }
-
                 }
                 ++nI;
             }
