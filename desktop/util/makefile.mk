@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.71 $
+#   $Revision: 1.72 $
 #
-#   last change: $Author: vg $ $Date: 2007-05-25 11:00:42 $
+#   last change: $Author: obo $ $Date: 2007-07-18 08:03:40 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -131,15 +131,6 @@ APP1STDLIBS=			\
         $(SALLIB)
 
 
-#	$(APP1_STDPRE)		\
-#	$(SVLLIB)			\
-#	$(VCLLIB)			\
-#   $(APP1_STDPOST)		\
-#	$(UNOTOOLSLIB)		\
-#	$(UCBHELPERLIB)		\
-#	$(COMPHELPERLIB)	\
-#	$(SALHELPERLIB)		\
-
 APP1OBJS=$(TARGETOBJS)
 APP1OBJS += $(OBJ)$/copyright_ascii_sun.obj
 
@@ -229,8 +220,16 @@ STDLIB7=$(ADVAPI32LIB)
 .INCLUDE :  target.mk
 
 .IF "$(APP1TARGETN)"!=""
-$(APP1TARGETN) : $(BIN)$/so
+$(APP1TARGETN) :  $(MISC)$/binso_created.flg
 .ENDIF			# "$(APP1TARGETN)"!=""
+
+.IF "$(APP5TARGETN)"!=""
+$(APP5TARGETN) :  $(MISC)$/binso_created.flg
+.ENDIF			# "$(APP6TARGETN)"!=""
+
+.IF "$(APP6TARGETN)"!=""
+$(APP6TARGETN) :  $(MISC)$/binso_created.flg
+.ENDIF			# "$(APP6TARGETN)"!=""
 
 .IF "$(GUI)" == "WNT"
 ALLTAR: $(MISC)$/$(TARGET).exe.manifest
@@ -284,7 +283,5 @@ $(BIN)$/so$/$(TARGET).bin: $(BIN)$/so$/$(TARGET)$(EXECPOST)
 
 .ENDIF # WNT
 
-$(BIN)$/so: makefile.mk
-    @echo APP5 : $(APP5TARGET)
-    @@-$(MKDIR) $(BIN)$/so
-
+$(MISC)$/binso_created.flg :
+    @@-$(MKDIRHIER) $(BIN)$/so && $(TOUCH) $@
