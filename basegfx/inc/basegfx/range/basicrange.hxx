@@ -4,9 +4,9 @@
  *
  *  $RCSfile: basicrange.hxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: kz $ $Date: 2005-11-02 13:55:39 $
+ *  last change: $Author: obo $ $Date: 2007-07-18 11:04:35 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -176,13 +176,6 @@ namespace basegfx
             return (
                 fTools::equal(mnMinimum, rRange.mnMinimum) &&
                 fTools::equal(mnMaximum, rRange.mnMaximum));
-        }
-
-        bool equal(const BasicRange& rRange, const double& rfSmallValue) const
-        {
-            return (
-                fTools::equal(mnMinimum, rRange.mnMinimum, rfSmallValue) &&
-                fTools::equal(mnMaximum, rRange.mnMaximum, rfSmallValue));
         }
 
         void expand(T nValue)
