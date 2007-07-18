@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ww8par5.cxx,v $
  *
- *  $Revision: 1.102 $
+ *  $Revision: 1.103 $
  *
- *  last change: $Author: ihi $ $Date: 2007-06-05 17:38:45 $
+ *  last change: $Author: obo $ $Date: 2007-07-18 14:46:57 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -2167,7 +2167,7 @@ eF_ResT SwWW8ImplReader::Read_F_PgRef( WW8FieldDesc*, String& rStr )
 }
 
 // "MACROSCHALTFL"ACHE"
-eF_ResT SwWW8ImplReader::Read_F_Macro( WW8FieldDesc*, String& rStr )
+eF_ResT SwWW8ImplReader::Read_F_Macro( WW8FieldDesc*, String& rStr)
 {
     String aName;
     String aVText;
@@ -2175,6 +2175,9 @@ eF_ResT SwWW8ImplReader::Read_F_Macro( WW8FieldDesc*, String& rStr )
     bool bNewVText = true;
     bool bBracket  = false;
     _ReadFieldParams aReadParam( rStr );
+
+    xub_StrLen nOffset = 0;
+
     while( -1 != ( nRet = aReadParam.SkipToNextToken() ))
     {
         switch( nRet )
@@ -2184,6 +2187,8 @@ eF_ResT SwWW8ImplReader::Read_F_Macro( WW8FieldDesc*, String& rStr )
                 aName = aReadParam.GetResult();
             else if( !aVText.Len() || bBracket )
             {
+                nOffset = aReadParam.GetTokenSttPtr() + 1;
+
                 if( bBracket )
                     aVText += ' ';
                 aVText += aReadParam.GetResult();
@@ -2207,7 +2212,28 @@ eF_ResT SwWW8ImplReader::Read_F_Macro( WW8FieldDesc*, String& rStr )
     SwMacroField aFld( (SwMacroFieldType*)
                     rDoc.GetSysFldType( RES_MACROFLD ), aName, aVText );
     rDoc.Insert( *pPaM, SwFmtFld( aFld ), 0 );
+
+
+    WW8_CP nOldCp = pPlcxMan->Where();
+    WW8_CP nCp = nOldCp + nOffset;
+
+    SwPaM aPaM(*pPaM);
+    aPaM.SetMark();
+    aPaM.Move(fnMoveBackward);
+    aPaM.Exchange();
+
+    mpPostProcessAttrsInfo = new WW8PostProcessAttrsInfo(nCp, nCp, aPaM);
+
     return FLD_OK;
+}
+
+WW8PostProcessAttrsInfo::WW8PostProcessAttrsInfo(WW8_CP nCpStart, WW8_CP nCpEnd,
+                                                 SwPaM & rPaM)
+: mbCopy(false),
+
+mnCpStart(nCpStart), mnCpEnd(nCpEnd), mPaM(*rPaM.GetPoint(), *rPaM.GetMark()),
+  mItemSet(rPaM.GetDoc()->GetAttrPool(), RES_CHRATR_BEGIN, RES_PARATR_END - 1)
+{
 }
 
 bool CanUseRemoteLink(const String &rGrfName)
