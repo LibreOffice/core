@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ww8par2.hxx,v $
  *
- *  $Revision: 1.44 $
+ *  $Revision: 1.45 $
  *
- *  last change: $Author: kz $ $Date: 2007-05-10 16:11:19 $
+ *  last change: $Author: obo $ $Date: 2007-07-18 14:46:43 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -130,9 +130,16 @@ struct WW8SwFlyPara
     bool bAutoWidth;
     bool bToggelPos;
 
-    WW8SwFlyPara(SwPaM& rPaM, SwWW8ImplReader& rIo, WW8FlyPara& rWW,
-        sal_uInt32 nPgLeft, sal_uInt32 nPgWidth, INT32 nIniFlyDx,
-        INT32 nIniFlyDy);
+    // --> OD 2007-07-03 #148498#
+    // add parameter <nWWPgTop> - WW8's page top margin
+    WW8SwFlyPara( SwPaM& rPaM,
+                  SwWW8ImplReader& rIo,
+                  WW8FlyPara& rWW,
+                  const sal_uInt32 nWWPgTop,
+                  const sal_uInt32 nPgLeft,
+                  const sal_uInt32 nPgWidth,
+                  const INT32 nIniFlyDx,
+                  const INT32 nIniFlyDy );
 
     void BoxUpWidth( long nWidth );
     SwWW8FltAnchorStack *pOldAnchorStck;
