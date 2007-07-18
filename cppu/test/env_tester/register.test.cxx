@@ -4,9 +4,9 @@
  *
  *  $RCSfile: register.test.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: kz $ $Date: 2007-05-09 13:48:45 $
+ *  last change: $Author: obo $ $Date: 2007-07-18 12:25:50 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -50,7 +50,7 @@ static rtl::OUString s_test_getEnvironment(rtl::OUString const & envDcp, void * 
     rtl::OUString result(RTL_CONSTASCII_USTRINGPARAM("\ts_test_getEnvironment("));
     result += envDcp;
     result += rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(", "));
-    result += rtl::OUString::valueOf((sal_Int32)pContext);
+    result += rtl::OUString::valueOf((long)pContext);
     result += rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(")\n"));
 
     uno::Environment env(envDcp, pContext);
@@ -80,9 +80,9 @@ static rtl::OUString s_test_regetEnvironment(rtl::OUString const & envDcp1,
     result += rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(", "));
     result += envDcp2;
     result += rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(", "));
-    result += rtl::OUString::valueOf((sal_Int32)pContext1);
+    result += rtl::OUString::valueOf((long)pContext1);
     result += rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(", " ));
-    result += rtl::OUString::valueOf((sal_Int32)pContext2);
+    result += rtl::OUString::valueOf((long)pContext2);
     result += rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(")\n"));
 
     uno::Environment env1(envDcp1, pContext1);
@@ -135,7 +135,7 @@ static rtl::OUString s_test_uno_getRegisteredEnvironments_registered(rtl::OUStri
     rtl::OUString result(RTL_CONSTASCII_USTRINGPARAM("\ts_test_uno_getRegisteredEnvironments_registered("));
     result += envDcp;
     result += rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(", "));
-    result += rtl::OUString::valueOf((sal_Int32)pContext);
+    result += rtl::OUString::valueOf((long)pContext);
     result += rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(")\n"));
 
     uno::Environment env(envDcp, pContext);
@@ -151,7 +151,7 @@ static rtl::OUString s_test_uno_getRegisteredEnvironments_notRegistered(rtl::OUS
     rtl::OUString result(RTL_CONSTASCII_USTRINGPARAM("\ts_test_uno_getRegisteredEnvironments_notRegistered("));
     result += envDcp;
     result += rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(", "));
-    result += rtl::OUString::valueOf((sal_Int32)pContext);
+    result += rtl::OUString::valueOf((long)pContext);
     result += rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(")\n"));
 
     uno::Environment env(envDcp, pContext);
@@ -168,7 +168,7 @@ static rtl::OUString s_test_uno_createEnvironment(rtl::OUString const & envDcp, 
     rtl::OUString result(RTL_CONSTASCII_USTRINGPARAM("\ts_test_uno_createEnvironment("));
     result += envDcp;
     result += rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(", "));
-    result += rtl::OUString::valueOf((sal_Int32)pContext);
+    result += rtl::OUString::valueOf((long)pContext);
     result += rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(")\n"));
 
     uno_Environment * pEnv = NULL;
