@@ -4,9 +4,9 @@
  *
  *  $RCSfile: tabfrm.cxx,v $
  *
- *  $Revision: 1.95 $
+ *  $Revision: 1.96 $
  *
- *  last change: $Author: vg $ $Date: 2007-02-28 15:49:26 $
+ *  last change: $Author: obo $ $Date: 2007-07-18 14:45:30 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -2836,13 +2836,16 @@ BOOL SwTabFrm::CalcFlyOffsets( SwTwips& rUpper,
 
     // --> #108724# Page header/footer content doesn't have to wrap around
     //              floating screen objects
-    const sal_Bool bWrapAllowed = GetFmt()->getIDocumentSettingAccess()->get(IDocumentSettingAccess::USE_FORMER_TEXT_WRAPPING) ||
+
+    const IDocumentSettingAccess* pIDSA = GetFmt()->getIDocumentSettingAccess();
+    const bool bWrapAllowed = pIDSA->get(IDocumentSettingAccess::USE_FORMER_TEXT_WRAPPING) ||
                                 ( !IsInFtn() && 0 == FindFooterOrHeader() );
     // <--
 
     if ( pPage->GetSortedObjs() && bWrapAllowed )
     {
         SWRECTFN( this )
+        const bool bConsiderWrapOnObjPos = pIDSA->get(IDocumentSettingAccess::CONSIDER_WRAP_ON_OBJECT_POSITION);
         long nPrtPos = (Frm().*fnRect->fnGetTop)();
         nPrtPos = (*fnRect->fnYInc)( nPrtPos, rUpper );
         SwRect aRect( Frm() );
@@ -2886,7 +2889,7 @@ BOOL SwTabFrm::CalcFlyOffsets( SwTwips& rUpper,
                 //     ( pFly->GetAnchorFrm()->FindFooterOrHeader() ==
                 //       FindFooterOrHeader() ) )
                 const SwTxtFrm* pAnchorCharFrm = pFly->FindAnchorCharFrm();
-                const bool bConsiderFly =
+                bool bConsiderFly =
                     // --> OD 2005-04-06 #i46807# - do not consider invalid
                     // Writer fly frames.
                     pFly->IsValid() &&
@@ -2916,10 +2919,22 @@ BOOL SwTabFrm::CalcFlyOffsets( SwTwips& rUpper,
                     // anchor character text frame on same page
                     ( !pAnchorCharFrm ||
                       pAnchorCharFrm->FindPageFrm()->GetPhyPageNum() ==
-                        pPage->GetPhyPageNum() ) &&
-                    // anchor frame should be in same page body/header/footer
-                    pFly->GetAnchorFrm()->FindFooterOrHeader() ==
-                                                        FindFooterOrHeader();
+                        pPage->GetPhyPageNum() );
+
+                if ( bConsiderFly )
+                {
+                    const SwFrm* pFlyHeaderFooterFrm = pFly->GetAnchorFrm()->FindFooterOrHeader();
+                    const SwFrm* pThisHeaderFooterFrm = FindFooterOrHeader();
+
+                    if ( pFlyHeaderFooterFrm != pThisHeaderFooterFrm &&
+                        // --> FME 2007-07-02 #148493# If bConsiderWrapOnObjPos is set,
+                        // we want to consider the fly if it is located in the header and
+                        // the table is located in the body:
+                         ( !bConsiderWrapOnObjPos || 0 != pThisHeaderFooterFrm || !pFlyHeaderFooterFrm->IsHeaderFrm() ) )
+                        bConsiderFly = false;
+                        // <--
+                }
+
                 if ( bConsiderFly )
                 // <--
                 {
