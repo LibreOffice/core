@@ -4,9 +4,9 @@
  *
  *  $RCSfile: NeonSession.cxx,v $
  *
- *  $Revision: 1.48 $
+ *  $Revision: 1.49 $
  *
- *  last change: $Author: obo $ $Date: 2007-07-18 07:48:52 $
+ *  last change: $Author: obo $ $Date: 2007-07-18 07:55:41 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -803,70 +803,70 @@ void NeonSession::PROPPATCH( const rtl::OUString &                   inPath,
         = new ne_proppatch_operation[ nPropCount + 1 ];
     for ( n = 0; n < nPropCount; ++n )
     {
-    const ProppatchValue & rValue = inValues[ n ];
+        const ProppatchValue & rValue = inValues[ n ];
 
-    // Split fullname into namespace and name!
+        // Split fullname into namespace and name!
         ne_propname * pName = new ne_propname;
-    DAVProperties::createNeonPropName( rValue.name, *pName );
-    pItems[ n ].name = pName;
+        DAVProperties::createNeonPropName( rValue.name, *pName );
+        pItems[ n ].name = pName;
 
-    if ( rValue.operation == PROPSET )
-    {
+        if ( rValue.operation == PROPSET )
+        {
             pItems[ n ].type = ne_propset;
 
             rtl::OUString aStringValue;
-        if ( DAVProperties::isUCBDeadProperty( *pName ) )
-        {
-        // DAV dead property added by WebDAV UCP?
-        if ( !UCBDeadPropertyValue::toXML(
-             rValue.value, aStringValue ) )
-        {
-            // Error!
-            pItems[ n ].value = 0;
+            if ( DAVProperties::isUCBDeadProperty( *pName ) )
+            {
+                // DAV dead property added by WebDAV UCP?
+                if ( !UCBDeadPropertyValue::toXML(
+                         rValue.value, aStringValue ) )
+                {
+                    // Error!
+                    pItems[ n ].value = 0;
                     theRetVal = NE_ERROR;
-            nPropCount = n + 1;
-            break;
-        }
-        }
-        else if ( !( rValue.value >>= aStringValue ) )
-        {
-        // complex properties...
-        if ( rValue.name == DAVProperties::SOURCE )
-        {
+                    nPropCount = n + 1;
+                    break;
+                }
+            }
+            else if ( !( rValue.value >>= aStringValue ) )
+            {
+                // complex properties...
+                if ( rValue.name == DAVProperties::SOURCE )
+                {
                     uno::Sequence< ::com::sun::star::ucb::Link > aLinks;
-            if ( rValue.value >>= aLinks )
-            {
-            LinkSequence::toXML( aLinks, aStringValue );
-            }
-            else
-            {
-            // Error!
-            pItems[ n ].value = 0;
+                    if ( rValue.value >>= aLinks )
+                    {
+                        LinkSequence::toXML( aLinks, aStringValue );
+                    }
+                    else
+                    {
+                        // Error!
+                        pItems[ n ].value = 0;
                         theRetVal = NE_ERROR;
-            nPropCount = n + 1;
-            break;
+                        nPropCount = n + 1;
+                        break;
+                    }
+                }
+                else
+                {
+                    OSL_ENSURE( sal_False,
+                                "NeonSession::PROPPATCH - unsupported type!" );
+                    // Error!
+                    pItems[ n ].value = 0;
+                    theRetVal = NE_ERROR;
+                    nPropCount = n + 1;
+                    break;
+                }
             }
+            pItems[ n ].value
+                = strdup( rtl::OUStringToOString( aStringValue,
+                                                  RTL_TEXTENCODING_UTF8 ) );
         }
         else
         {
-            OSL_ENSURE( sal_False,
-                "NeonSession::PROPPATCH - unsupported type!" );
-            // Error!
-            pItems[ n ].value = 0;
-                    theRetVal = NE_ERROR;
-            nPropCount = n + 1;
-            break;
-        }
-        }
-        pItems[ n ].value
-                = strdup( rtl::OUStringToOString( aStringValue,
-                                                  RTL_TEXTENCODING_UTF8 ) );
-    }
-    else
-    {
             pItems[ n ].type  = ne_propremove;
-        pItems[ n ].value = 0;
-    }
+            pItems[ n ].value = 0;
+        }
     }
 
     if ( theRetVal == NE_OK )
@@ -877,24 +877,22 @@ void NeonSession::PROPPATCH( const rtl::OUString &                   inPath,
 
         m_aEnv = rEnv;
 
-    pItems[ n ].name = NULL;
+        pItems[ n ].name = 0;
 
         theRetVal = ne_proppatch( m_pHttpSession,
                                   rtl::OUStringToOString(
-                      inPath, RTL_TEXTENCODING_UTF8 ),
+                                      inPath, RTL_TEXTENCODING_UTF8 ),
                                   pItems );
     }
 
     for ( n = 0; n < nPropCount; ++n )
     {
-    free( (void *)pItems[ n ].name->name );
-    delete pItems[ n ].name;
-    free( (void *)pItems[ n ].value );
+        free( (void *)pItems[ n ].name->name );
+        delete pItems[ n ].name;
+        free( (void *)pItems[ n ].value );
     }
-#if 0
-    // FIXME: shouldn't we delete the list ?
+
     delete [] pItems;
-#endif
 
     HandleError( theRetVal );
 }
