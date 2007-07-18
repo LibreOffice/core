@@ -4,9 +4,9 @@
  *
  *  $RCSfile: TypeGeneration.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 17:17:28 $
+ *  last change: $Author: obo $ $Date: 2007-07-18 13:08:25 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -327,6 +327,9 @@
 #include <com/sun/star/drawing/HomogenMatrix3.hpp>
 #endif
 // <--
+#ifndef _COM_SUN_STAR_GRAPHIC_XGRAPHICPROVIDER_HPP_
+#include <com/sun/star/graphic/XGraphicProvider.hpp>
+#endif
 
 using ::rtl::OUString;
 using namespace ::com::sun::star;
@@ -422,7 +425,7 @@ namespace comphelper
             break;
             // <--
             case CPPUTYPE_SEQNAMEDVALUE:    pType = &::getCppuType( (Sequence<beans::NamedValue>*)0 ); break;
-
+            case CPPUTYPE_REFXGRAPHIC:      pType = &::getCppuType( (Reference< graphic::XGraphic >*)0); break;
             default:
                 OSL_ASSERT( "Unknown CPPU type" );
         }
