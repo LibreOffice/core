@@ -4,9 +4,9 @@
  *
  *  $RCSfile: UnsafeBridge.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: kz $ $Date: 2007-05-14 09:32:30 $
+ *  last change: $Author: obo $ $Date: 2007-07-18 12:20:58 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -68,8 +68,8 @@ class SAL_DLLPRIVATE UnsafeBridge : public cppu::Enterable
 public:
     explicit UnsafeBridge(void);
 
-    virtual void v_callInto_v(uno_EnvCallee * pCallee, va_list param);
-    virtual void v_callOut_v (uno_EnvCallee * pCallee, va_list param);
+    virtual void v_callInto_v(uno_EnvCallee * pCallee, va_list * pParam);
+    virtual void v_callOut_v (uno_EnvCallee * pCallee, va_list * pParam);
 
     virtual void v_enter(void);
     virtual void v_leave(void);
@@ -91,19 +91,19 @@ UnsafeBridge::~UnsafeBridge(void)
     OSL_ASSERT(m_count >= 0);
 }
 
-void UnsafeBridge::v_callInto_v(uno_EnvCallee * pCallee, va_list param)
+void UnsafeBridge::v_callInto_v(uno_EnvCallee * pCallee, va_list * pParam)
 {
     enter();
-    pCallee(param);
+    pCallee(pParam);
     leave();
 }
 
-void UnsafeBridge::v_callOut_v(uno_EnvCallee * pCallee, va_list param)
+void UnsafeBridge::v_callOut_v(uno_EnvCallee * pCallee, va_list * pParam)
 {
     OSL_ASSERT(m_count > 0);
 
     -- m_count;
-    pCallee(param);
+    pCallee(pParam);
     ++ m_count;
 
     if (!m_threadId)
