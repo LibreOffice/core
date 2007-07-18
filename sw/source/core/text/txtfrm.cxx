@@ -4,9 +4,9 @@
  *
  *  $RCSfile: txtfrm.cxx,v $
  *
- *  $Revision: 1.98 $
+ *  $Revision: 1.99 $
  *
- *  last change: $Author: hr $ $Date: 2007-06-27 13:20:06 $
+ *  last change: $Author: obo $ $Date: 2007-07-18 14:28:36 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -2242,8 +2242,15 @@ void SwTxtFrm::_CalcHeightOfLastLine( const bool _bUseFont )
     const SwTwips mnOldHeightOfLastLine( mnHeightOfLastLine );
     // <--
     // determine output device
-    ViewShell* pVsh = (ViewShell*)GetShell();
-    ASSERT( pVsh, "<SwTxtFrm::_GetHeightOfLastLineForPropLineSpacing()> - no ViewShell -> crash" );
+    ViewShell* pVsh = GetShell();
+    ASSERT( pVsh, "<SwTxtFrm::_GetHeightOfLastLineForPropLineSpacing()> - no ViewShell" );
+    // --> OD 2007-07-02 #i78921# - make code robust, according to provided patch
+    // There could be no <ViewShell> instance in the case of loading a binary
+    // StarOffice file format containing an embedded Writer document.
+    if ( !pVsh )
+    {
+        return;
+    }
     OutputDevice* pOut = pVsh->GetOut();
     const IDocumentSettingAccess* pIDSA = GetTxtNode()->getIDocumentSettingAccess();
     if ( !pIDSA->get(IDocumentSettingAccess::BROWSE_MODE) ||
@@ -2251,7 +2258,13 @@ void SwTxtFrm::_CalcHeightOfLastLine( const bool _bUseFont )
     {
         pOut = GetTxtNode()->getIDocumentDeviceAccess()->getReferenceDevice( true );
     }
-    ASSERT( pOut, "<SwTxtFrm::_GetHeightOfLastLineForPropLineSpacing()> - no OutputDevice -> crash" );
+    ASSERT( pOut, "<SwTxtFrm::_GetHeightOfLastLineForPropLineSpacing()> - no OutputDevice" );
+    // --> OD 2007-07-02 #i78921# - make code robust, according to provided patch
+    if ( !pOut )
+    {
+        return;
+    }
+    // <--
 
     // determine height of last line
 
@@ -2518,13 +2531,13 @@ void SwTxtFrm::RecalcAllLines()
         const ULONG nOld = GetAllLines();
         const SwFmtLineNumber &rLineNum = pAttrSet->GetLineNumber();
         ULONG nNewNum;
+        const bool bRestart = GetTxtNode()->getIDocumentLineNumberAccess()->GetLineNumberInfo().IsRestartEachPage();
 
         if ( !IsFollow() && rLineNum.GetStartValue() && rLineNum.IsCount() )
             nNewNum = rLineNum.GetStartValue() - 1;
         //If it is a follow or not has not be considered if it is a restart at each page; the
         //restart should also take affekt at follows.
-        else if ( GetTxtNode()->getIDocumentLineNumberAccess()->GetLineNumberInfo().IsRestartEachPage() &&
-                  FindPageFrm()->FindFirstBodyCntnt() == this )
+        else if ( bRestart && FindPageFrm()->FindFirstBodyCntnt() == this )
         {
             nNewNum = 0;
         }
@@ -2534,6 +2547,12 @@ void SwTxtFrm::RecalcAllLines()
             while ( pPrv &&
                     (pPrv->IsInTab() || pPrv->IsInDocBody() != IsInDocBody()) )
                 pPrv = pPrv->GetPrevCntntFrm();
+
+            // --> FME 2007-06-22 #i78254# Restart line numbering at page change:
+            // First body content may be in table!
+            if ( bRestart && pPrv && pPrv->FindPageFrm() != FindPageFrm() )
+                pPrv = 0;
+            // <--
 
             nNewNum = pPrv ? ((SwTxtFrm*)pPrv)->GetAllLines() : 0;
         }
