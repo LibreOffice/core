@@ -4,9 +4,9 @@
  *
  *  $RCSfile: svdhdl.cxx,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: rt $ $Date: 2007-07-06 13:21:19 $
+ *  last change: $Author: obo $ $Date: 2007-07-18 10:56:21 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -773,22 +773,25 @@ BitmapEx SdrHdl::ImpGetBitmapEx(BitmapMarkerKind eKindOfMarker, sal_uInt16 nInd,
         BitmapEx aBmpEx1 = ImpGetBitmapEx(eKindOfMarker, (sal_uInt16)eColIndex, bIsFineHdl, bIsHighContrast);
         BitmapEx aBmpEx2 = ImpGetBitmapEx(eNextBigger, (sal_uInt16)eColIndex, bIsFineHdl, bIsHighContrast);
 
+        // #i53216# Use system cursor blink time. Use the unsigned value.
+        const sal_uInt32 nBlinkTime((sal_uInt32)Application::GetSettings().GetStyleSettings().GetCursorBlinkTime());
+
         if(eKindOfMarker == Anchor || eKindOfMarker == AnchorPressed)
         {
             // #98388# when anchor is used take upper left as reference point inside the handle
-            pRetval = new ::sdr::overlay::OverlayAnimatedBitmapEx(rPos, aBmpEx1, aBmpEx2);
+            pRetval = new ::sdr::overlay::OverlayAnimatedBitmapEx(rPos, aBmpEx1, aBmpEx2, nBlinkTime);
         }
         else if(eKindOfMarker == AnchorTR || eKindOfMarker == AnchorPressedTR)
         {
             // #101688# AnchorTR for SW, take top right as (0,0)
-            pRetval = new ::sdr::overlay::OverlayAnimatedBitmapEx(rPos, aBmpEx1, aBmpEx2,
+            pRetval = new ::sdr::overlay::OverlayAnimatedBitmapEx(rPos, aBmpEx1, aBmpEx2, nBlinkTime,
                 (UINT16)(aBmpEx1.GetSizePixel().Width() - 1), 0,
                 (UINT16)(aBmpEx2.GetSizePixel().Width() - 1), 0);
         }
         else
         {
             // create centered handle as default
-            pRetval = new ::sdr::overlay::OverlayAnimatedBitmapEx(rPos, aBmpEx1, aBmpEx2,
+            pRetval = new ::sdr::overlay::OverlayAnimatedBitmapEx(rPos, aBmpEx1, aBmpEx2, nBlinkTime,
                 (UINT16)(aBmpEx1.GetSizePixel().Width() - 1) >> 1,
                 (UINT16)(aBmpEx1.GetSizePixel().Height() - 1) >> 1,
                 (UINT16)(aBmpEx2.GetSizePixel().Width() - 1) >> 1,
