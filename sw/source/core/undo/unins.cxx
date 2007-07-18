@@ -4,9 +4,9 @@
  *
  *  $RCSfile: unins.cxx,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: kz $ $Date: 2007-05-10 16:02:13 $
+ *  last change: $Author: obo $ $Date: 2007-07-18 14:28:52 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -497,8 +497,8 @@ void SwUndoInsert::Repeat( SwUndoIter& rUndoIter )
             rDoc.DoGroupUndo( FALSE );
             rDoc.Insert( *rUndoIter.pAktPam, aTxt.Copy( nCntnt - nLen, nLen ), true);
             rDoc.DoGroupUndo( bGroupUndo );
-            break;
         }
+        break;
     case ND_GRFNODE:
         {
             SwGrfNode* pGrfNd = (SwGrfNode*)pCNd;
