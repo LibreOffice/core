@@ -4,9 +4,9 @@
  *
  *  $RCSfile: list.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-07 16:43:06 $
+ *  last change: $Author: obo $ $Date: 2007-07-18 14:30:11 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -97,7 +97,6 @@ public:
     void set( const int n );    /// set iterator to position n
 
     void reset( );              /// set iterator to first element
-    void resetLast();           /// set iterator to last element
 
     // bug-compatible with original LinkedList.h/cpp: Ignore parameter!
     void operator++( int );   /// advance iterator by one step (ignore n !!!)
@@ -260,14 +259,6 @@ void LinkedListIterator<T>::reset()
 {
     ASSERT( mpList != NULL );
     mnPosition = 0;
-    ASSERT( valid() );
-}
-
-template<class T>
-void LinkedListIterator<T>::resetLast()
-{
-    ASSERT( mpList != NULL );
-    mnPosition = mpList.size() - 1;
     ASSERT( valid() );
 }
 
