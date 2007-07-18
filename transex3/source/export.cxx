@@ -4,9 +4,9 @@
  *
  *  $RCSfile: export.cxx,v $
  *
- *  $Revision: 1.55 $
+ *  $Revision: 1.56 $
  *
- *  last change: $Author: rt $ $Date: 2007-04-24 16:08:48 $
+ *  last change: $Author: obo $ $Date: 2007-07-18 07:13:03 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -375,10 +375,12 @@ void ResData::Dump(){
 }
 
 void ResData::addFallbackData( ByteString& sId_in , const ByteString& sText_in ){
+    //printf(" ResData::addFallbackData ( sId = %s , sText = %s )\n", sId_in.GetBuffer() , sText_in.GetBuffer() );
     aFallbackData[ sId_in ] = sText_in;
 }
 bool ResData::getFallbackData( ByteString& sId_in , ByteString& sText_inout ){
     sText_inout = aFallbackData[ sId_in ];
+    //printf("ResData::getFallbackData( sId = %s , return sText = %s \n" , sId_in.GetBuffer(), sText_inout.GetBuffer());
     return sText_inout.Len() > 0;
 }
 
@@ -1672,6 +1674,18 @@ void Export::InsertListEntry( const ByteString &rText, const ByteString &rLine )
             ByteString sKey = MergeDataFile::CreateKey( sPlist , pResData->sId , GetPairedListID( rLine ) , sFilename );
             pResData->addFallbackData( sKey , rText );
         }
+        // new fallback
+        else{
+            const ByteString sPlist("list");
+            ByteString a( pResData->sGId );
+            a.Append( "." );
+            a.Append( pResData->sId );
+            sal_Int64 x = nListIndex+1;
+            ByteString b( ByteString::CreateFromInt64( x ) );
+            ByteString sKey = MergeDataFile::CreateKey( sPlist , a , b  , sFilename );
+            pResData->addFallbackData( sKey , rText );
+        }
+        // new fallback
     }
 
     //if ( nListLang.EqualsIgnoreCaseAscii("en-US")  ) {
@@ -1795,7 +1809,7 @@ void Export::WriteToMerged( const ByteString &rText , bool bSDFContent )
 {
     static ByteString SLASH  ('\\');
     static ByteString RETURN ('\n');
-
+    //printf("%s\n",rText.GetBuffer() );
 
     #if 0
     // statement has no effect
@@ -1837,11 +1851,14 @@ void Export::WriteToMerged( const ByteString &rText , bool bSDFContent )
             }
         }
         for ( USHORT i = 0; i < sText.Len(); i++ ) {
-            if ( sText.GetChar( i ) != '\n' )
+            if ( sText.GetChar( i ) != '\n' ){
                 aOutput.Write( ByteString( sText.GetChar( i )).GetBuffer(), 1 );
+
+            }
             else{
                 aOutput.WriteLine( ByteString());
             }
+
         }
     }
 }
@@ -2075,7 +2092,7 @@ BOOL Export::PrepareTextToMerge( ByteString &rText, USHORT nTyp,
 //  printf("Dumping ResData\n");
 //  pResData->Dump();
     PFormEntrys *pEntrys = pMergeDataFile->GetPFormEntrys( pResData );
-//  printf("Dumping pEntrys\n");
+    //printf("Dumping pEntrys\n");
     //if( pEntrys ) pEntrys->Dump();
     pResData->sId = sOldId;
     pResData->sGId = sOldGId;
@@ -2314,7 +2331,6 @@ void Export::MergeRest( ResData *pResData, USHORT nMode )
                     ByteString sCur;
                     for( unsigned int n = 0; n < aLanguages.size(); n++ ){
                         sCur = aLanguages[ n ];
-
                         USHORT nIdx = 1;
 
                         // Set matching pairedlist identifier
@@ -2332,7 +2348,7 @@ void Export::MergeRest( ResData *pResData, USHORT nMode )
                             nMaxIndex = pList->GetSourceLanguageListEntryCount();
                         pEntrys = pMergeDataFile->GetPFormEntrys( pResData );
                         while( pEntrys  && ( nLIndex < nMaxIndex )) {
-
+                            //printf("Lang %s, List Index %d\n",sCur.GetBuffer(),(int)nLIndex);
                             ByteString sText;
                             BOOL bText;
                             bText = pEntrys->GetText( sText, STRING_TYP_TEXT, sCur, TRUE );
@@ -2346,7 +2362,12 @@ void Export::MergeRest( ResData *pResData, USHORT nMode )
                                 const ByteString sPlist("pairedlist");
                                 ByteString sKey = MergeDataFile::CreateKey( sPlist , pResData->sGId , pResData->sId , sFilename );
                                 bText = pResData->getFallbackData( sKey , sText );
-                            }
+                            }else if ( !bText ){// new fallback
+                                if( pResData->isMerged( sCur ) ) break;
+                                const ByteString sPlist("list");
+                                ByteString sKey = MergeDataFile::CreateKey( sPlist , pResData->sGId , pResData->sId , sFilename );
+                                bText = pResData->getFallbackData( sKey , sText );
+                            } // new fallback
 
                             if ( bText && sText.Len()) {
                                 //if( pEntrys ) pEntrys->Dump();
@@ -2442,7 +2463,10 @@ void Export::MergeRest( ResData *pResData, USHORT nMode )
                             else
                                 break;
                             nLIndex ++;
-                            pEntrys = pMergeDataFile->GetPFormEntrys( pResData );
+                            PFormEntrys *oldEntry = pEntrys;
+                            pEntrys = pMergeDataFile->GetPFormEntrys( pResData ); // <--- game over
+                            if( !pEntrys )
+                                pEntrys = oldEntry;
                         }
                         if ( nIdx > 1 ) {
                             ByteString sFooter( sSpace.Copy( 1 ));
