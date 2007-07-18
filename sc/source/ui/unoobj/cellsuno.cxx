@@ -4,9 +4,9 @@
  *
  *  $RCSfile: cellsuno.cxx,v $
  *
- *  $Revision: 1.105 $
+ *  $Revision: 1.106 $
  *
- *  last change: $Author: rt $ $Date: 2007-07-06 12:45:43 $
+ *  last change: $Author: obo $ $Date: 2007-07-18 11:55:57 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -3223,7 +3223,7 @@ void SAL_CALL ScCellRangesBase::setColumnDescriptions(
                     for (long nCol=0; nCol<nColCount; nCol++)
                     {
                         const ScAddress* pPos = pPosMap->GetColHeaderPosition(
-                                static_cast<SCCOL>(nCol) );
+                                static_cast< SCCOL >(nCol) );
                         if (pPos)
                         {
                             String aStr(pArray[nCol]);
