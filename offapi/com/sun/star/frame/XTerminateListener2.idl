@@ -1,0 +1,77 @@
+/*************************************************************************
+ *
+ *  OpenOffice.org - a multi-platform office productivity suite
+ *
+ *  $RCSfile: XTerminateListener2.idl,v $
+ *
+ *  $Revision: 1.2 $
+ *
+ *  last change: $Author: obo $ $Date: 2007-07-18 13:37:49 $
+ *
+ *  The Contents of this file are made available subject to
+ *  the terms of GNU Lesser General Public License Version 2.1.
+ *
+ *
+ *    GNU Lesser General Public License Version 2.1
+ *    =============================================
+ *    Copyright 2005 by Sun Microsystems, Inc.
+ *    901 San Antonio Road, Palo Alto, CA 94303, USA
+ *
+ *    This library is free software; you can redistribute it and/or
+ *    modify it under the terms of the GNU Lesser General Public
+ *    License version 2.1, as published by the Free Software Foundation.
+ *
+ *    This library is distributed in the hope that it will be useful,
+ *    but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ *    Lesser General Public License for more details.
+ *
+ *    You should have received a copy of the GNU Lesser General Public
+ *    License along with this library; if not, write to the Free Software
+ *    Foundation, Inc., 59 Temple Place, Suite 330, Boston,
+ *    MA  02111-1307  USA
+ *
+ ************************************************************************/
+#ifndef __com_sun_star_frame_XTerminateListener2_idl__
+#define __com_sun_star_frame_XTerminateListener2_idl__
+
+#ifndef __com_sun_star_frame_XTerminateListener_idl__
+#include <com/sun/star/frame/XTerminateListener.idl>
+#endif
+
+//=============================================================================
+
+ module com {  module sun {  module star {  module frame {
+
+//=============================================================================
+/** extend interface XTerminateListener so a listener will be informed
+    in case termination process was cancelled by other reasons.
+ */
+interface XTerminateListener2 : ::com::sun::star::frame::XTerminateListener
+{
+    //-------------------------------------------------------------------------
+    /** is called when the master environment (e.g., desktop) was cancelled in
+        it's terminate request.
+
+        <p>
+        Termination can be intercepted by throwing <type>TerminationVetoException</type>.
+        But if a listener was queried for termination .. doesnt throwed a veto exception ...
+        it doesnt know if termination will be real next time.
+        Because any other listener can throw those exception too ... and so it can happen
+        that after queryTermination() no notifyTermination() will occure. But these listener
+        doesnt know if its allowed to start new processes then.
+        Using this optional(!) interface will make it possible to be informed about
+        cancelled termination requests also.
+        </p>
+
+        @param Event
+               describe the source of the event (e.g., the desktop)
+     */
+    void cancelTermination( [in] com::sun::star::lang::EventObject Event );
+};
+
+//=============================================================================
+
+}; }; }; };
+
+#endif
