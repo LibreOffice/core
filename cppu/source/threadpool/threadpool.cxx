@@ -4,9 +4,9 @@
  *
  *  $RCSfile: threadpool.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 00:20:10 $
+ *  last change: $Author: obo $ $Date: 2007-07-18 12:22:02 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -72,7 +72,7 @@ namespace cppu_threadpool
 #if OSL_DEBUG_LEVEL > 1
         if( !m_lst.empty() )
         {
-            printf( "DisposedCallerList : %d left\n" , m_lst.size( ));
+            printf( "DisposedCallerList : %lu left\n" , static_cast<unsigned long>(m_lst.size( )));
         }
 #endif
     }
@@ -120,7 +120,7 @@ namespace cppu_threadpool
 #if OSL_DEBUG_LEVEL > 1
         if( m_mapQueue.size() )
         {
-            printf( "ThreadIdHashMap : %d left\n" , m_mapQueue.size() );
+            printf( "ThreadIdHashMap : %lu left\n" , static_cast<unsigned long>(m_mapQueue.size()) );
         }
 #endif
     }
