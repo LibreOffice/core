@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dialogcontrol.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: rt $ $Date: 2007-07-06 14:27:12 $
+ *  last change: $Author: obo $ $Date: 2007-07-18 08:43:40 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1289,7 +1289,11 @@ throw ( RuntimeException )
 // = class UnoDialogControl
 // ============================================================================
 
-UnoDialogControl::UnoDialogControl() : maTopWindowListeners( *this )
+UnoDialogControl::UnoDialogControl() :
+    maTopWindowListeners( *this ),
+    mbWindowListener(false),
+    mbSizeModified(false),
+    mbPosModified(false)
 {
     maComponentInfos.nWidth = 300;
     maComponentInfos.nHeight = 450;
@@ -1576,6 +1580,14 @@ void UnoDialogControl::createPeer( const Reference< XToolkit > & rxToolkit, cons
     if ( xTW.is() )
     {
         xTW->setMenuBar( mxMenuBar );
+
+        if ( !mbWindowListener )
+        {
+            Reference< XWindowListener > xWL( static_cast< cppu::OWeakObject*>( this ), UNO_QUERY );
+            addWindowListener( xWL );
+            mbWindowListener = true;
+        }
+
         if ( maTopWindowListeners.getLength() )
             xTW->addTopWindowListener( &maTopWindowListeners );
     }
@@ -1683,6 +1695,79 @@ void UnoDialogControl::setMenuBar( const Reference< XMenuBar >& rxMenuBar ) thro
     }
 }
 
+static ::Size ImplMapPixelToAppFont( OutputDevice* pOutDev, const ::Size& aSize )
+{
+    ::Size aTmp = pOutDev->PixelToLogic( aSize, MAP_APPFONT );
+    return aTmp;
+}
+
+// ::com::sun::star::awt::XWindowListener
+void SAL_CALL UnoDialogControl::windowResized( const ::com::sun::star::awt::WindowEvent& e )
+throw (::com::sun::star::uno::RuntimeException)
+{
+    OutputDevice*pOutDev = Application::GetDefaultDevice();
+    DBG_ASSERT( pOutDev, "Missing Default Device!" );
+    if ( pOutDev && !mbSizeModified )
+    {
+        // Currentley we are simply using MAP_APPFONT
+        Any    aAny;
+        ::Size aTmp( e.Width, e.Height );
+        aTmp = ImplMapPixelToAppFont( pOutDev, aTmp );
+
+        // Remember that changes have been done by listener. No need to
+        // update the position because of property change event.
+        mbSizeModified = true;
+        Sequence< rtl::OUString > aProps( 2 );
+        Sequence< Any > aValues( 2 );
+        aProps[0] = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Width"  ));
+        aProps[1] = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Height" ));
+        aValues[0] <<= aTmp.Width();
+        aValues[1] <<= aTmp.Height();
+
+        ImplSetPropertyValues( aProps, aValues, true );
+        mbSizeModified = false;
+    }
+}
+
+void SAL_CALL UnoDialogControl::windowMoved( const ::com::sun::star::awt::WindowEvent& e )
+throw (::com::sun::star::uno::RuntimeException)
+{
+    OutputDevice*pOutDev = Application::GetDefaultDevice();
+    DBG_ASSERT( pOutDev, "Missing Default Device!" );
+    if ( pOutDev && !mbPosModified )
+    {
+        // Currentley we are simply using MAP_APPFONT
+        Any    aAny;
+        ::Size aTmp( e.X, e.Y );
+        aTmp = ImplMapPixelToAppFont( pOutDev, aTmp );
+
+        // Remember that changes have been done by listener. No need to
+        // update the position because of property change event.
+        mbPosModified = true;
+        Sequence< rtl::OUString > aProps( 2 );
+        Sequence< Any > aValues( 2 );
+        aProps[0] = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "PositionX"  ));
+        aProps[1] = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "PositionY" ));
+        aValues[0] <<= aTmp.Width();
+        aValues[1] <<= aTmp.Height();
+
+        ImplSetPropertyValues( aProps, aValues, true );
+        mbPosModified = false;
+    }
+}
+
+void SAL_CALL UnoDialogControl::windowShown( const ::com::sun::star::lang::EventObject& e )
+throw (::com::sun::star::uno::RuntimeException)
+{
+    (void)e;
+}
+
+void SAL_CALL UnoDialogControl::windowHidden( const ::com::sun::star::lang::EventObject& e )
+throw (::com::sun::star::uno::RuntimeException)
+{
+    (void)e;
+}
+
 // XPropertiesChangeListener
 void UnoDialogControl::ImplModelPropertiesChanged( const Sequence< PropertyChangeEvent >& rEvents ) throw(RuntimeException)
 {
@@ -1706,8 +1791,12 @@ void UnoDialogControl::ImplModelPropertiesChanged( const Sequence< PropertyChang
             {
                 if ( bOwnModel )
                 {
-                    Reference< XControl > xThis( (XAggregation*)(::cppu::OWeakAggObject*)this, UNO_QUERY );
-                    ImplSetPosSize( xThis );
+                    if ( !mbPosModified && !mbSizeModified )
+                    {
+                        // Don't set new pos/size if we get new values from window listener
+                        Reference< XControl > xThis( (XAggregation*)(::cppu::OWeakAggObject*)this, UNO_QUERY );
+                        ImplSetPosSize( xThis );
+                    }
                 }
                 else
                 {
