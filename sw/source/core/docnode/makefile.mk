@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.5 $
+#   $Revision: 1.6 $
 #
-#   last change: $Author: vg $ $Date: 2007-05-22 16:26:06 $
+#   last change: $Author: obo $ $Date: 2007-07-18 13:30:57 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -46,8 +46,12 @@ TARGET=docnode
 
 # --- Files --------------------------------------------------------
 
-EXCEPTIONSFILES=    \
-    $(SLO)$/ndtbl.obj
+EXCEPTIONSFILES=        \
+        $(SLO)$/ndtbl.obj \
+        $(SLO)$/retrievedinputstreamdata.obj \
+        $(SLO)$/observablethread.obj \
+        $(SLO)$/cancellablejob.obj \
+        $(SLO)$/finalthreadmanager.obj
 
 SLOFILES =	\
         $(SLO)$/ndindex.obj \
@@ -61,7 +65,18 @@ SLOFILES =	\
         $(SLO)$/node2lay.obj \
         $(SLO)$/nodes.obj \
         $(SLO)$/section.obj \
-        $(SLO)$/swbaslnk.obj
+                $(SLO)$/swbaslnk.obj \
+                $(SLO)$/retrievedinputstreamdata.obj \
+                $(SLO)$/observablethread.obj \
+                $(SLO)$/cancellablejob.obj \
+                $(SLO)$/retrieveinputstream.obj \
+                $(SLO)$/retrieveinputstreamconsumer.obj \
+                $(SLO)$/threadlistener.obj \
+                $(SLO)$/threadmanager.obj \
+                $(SLO)$/swthreadmanager.obj \
+                $(SLO)$/swthreadjoiner.obj \
+                $(SLO)$/pausethreadstarting.obj \
+                $(SLO)$/finalthreadmanager.obj
 
 # --- Tagets -------------------------------------------------------
 
