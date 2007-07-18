@@ -4,9 +4,9 @@
  *
  *  $RCSfile: transactionmanager.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 14:14:35 $
+ *  last change: $Author: obo $ $Date: 2007-07-18 13:26:25 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -51,6 +51,8 @@
 #ifndef __FRAMEWORK_MACROS_DEBUG_HXX_
 #include <macros/debug.hxx>
 #endif
+
+#include <macros/generic.hxx>
 
 //_________________________________________________________________________________________________________________
 //  interface includes
