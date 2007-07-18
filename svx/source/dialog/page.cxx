@@ -4,9 +4,9 @@
  *
  *  $RCSfile: page.cxx,v $
  *
- *  $Revision: 1.38 $
+ *  $Revision: 1.39 $
  *
- *  last change: $Author: ihi $ $Date: 2007-07-10 15:02:54 $
+ *  last change: $Author: obo $ $Date: 2007-07-18 11:48:04 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -119,6 +119,12 @@
 #endif
 
 #include <svx/svxids.hrc> //CHINA001
+
+// #i4219#
+#ifndef INCLUDED_SVTOOLS_OPTIONSDRAWINGLAYER_HXX
+#include <svtools/optionsdrawinglayer.hxx>
+#endif
+
 #ifndef _SFXSLSTITM_HXX //CHINA001
 #include <svtools/slstitm.hxx> //CHINA001
 #endif //CHINA001
@@ -445,6 +451,26 @@ SvxPageDescPage::SvxPageDescPage( Window* pParent, const SfxItemSet& rAttr ) :
     aBottomMarginEdit.SetLast( aBottomMarginEdit.Normalize(
         aPrintOffset.Y() + aPrintSize.Height() ), FUNIT_TWIP );
     nLastBottomMargin = static_cast<long>(aBottomMarginEdit.GetLast());
+
+    // #i4219# get DrawingLayer options
+    const SvtOptionsDrawinglayer aDrawinglayerOpt;
+
+    // #i4219# take Maximum now from configuration (1/100th cm)
+    // was: 11900 -> 119 cm ;new value 3 meters -> 300 cm -> 30000
+    aPaperWidthEdit.SetMax(aDrawinglayerOpt.GetMaximumPaperWidth());
+    aPaperWidthEdit.SetLast(aDrawinglayerOpt.GetMaximumPaperWidth());
+    aPaperHeightEdit.SetMax(aDrawinglayerOpt.GetMaximumPaperHeight());
+    aPaperHeightEdit.SetLast(aDrawinglayerOpt.GetMaximumPaperHeight());
+
+    // #i4219# also for margins (1/100th cm). Was: 9999, keeping.
+    aLeftMarginEdit.SetMax(aDrawinglayerOpt.GetMaximumPaperLeftMargin());
+    aLeftMarginEdit.SetLast(aDrawinglayerOpt.GetMaximumPaperLeftMargin());
+    aRightMarginEdit.SetMax(aDrawinglayerOpt.GetMaximumPaperRightMargin());
+    aRightMarginEdit.SetLast(aDrawinglayerOpt.GetMaximumPaperRightMargin());
+    aTopMarginEdit.SetMax(aDrawinglayerOpt.GetMaximumPaperTopMargin());
+    aTopMarginEdit.SetLast(aDrawinglayerOpt.GetMaximumPaperTopMargin());
+    aBottomMarginEdit.SetMax(aDrawinglayerOpt.GetMaximumPaperBottomMargin());
+    aBottomMarginEdit.SetLast(aDrawinglayerOpt.GetMaximumPaperBottomMargin());
 }
 
 // -----------------------------------------------------------------------
