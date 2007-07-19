@@ -4,9 +4,9 @@
  *
  *  $RCSfile: sfxbasemodel.cxx,v $
  *
- *  $Revision: 1.126 $
+ *  $Revision: 1.127 $
  *
- *  last change: $Author: obo $ $Date: 2007-07-18 06:53:49 $
+ *  last change: $Author: vg $ $Date: 2007-07-19 15:29:47 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -119,6 +119,7 @@
 #include "brokenpackageint.hxx"
 #include "graphhelp.hxx"
 #include <sfx2/docinf.hxx>
+#include <sfx2/msgpool.hxx>
 
 using namespace com::sun::star;
 namespace css = ::com::sun::star;
