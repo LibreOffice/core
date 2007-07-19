@@ -4,9 +4,9 @@
  *
  *  $RCSfile: printhelper.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: obo $ $Date: 2007-07-18 06:51:58 $
+ *  last change: $Author: vg $ $Date: 2007-07-19 15:08:40 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -63,14 +63,14 @@
 #include <svtools/printdlg.hxx>
 #include <cppuhelper/implbase1.hxx>
 
-#include "viewfrm.hxx"
-#include "viewsh.hxx"
-#include "dispatch.hxx"
-#include "request.hxx"
-#include "printer.hxx"
-#include "app.hxx"
-#include "objsh.hxx"
-#include "event.hxx"
+#include <sfx2/viewfrm.hxx>
+#include <sfx2/viewsh.hxx>
+#include <sfx2/dispatch.hxx>
+#include <sfx2/request.hxx>
+#include <sfx2/printer.hxx>
+#include <sfx2/app.hxx>
+#include <sfx2/objsh.hxx>
+#include <sfx2/event.hxx>
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
@@ -448,11 +448,11 @@ class ImplUCBPrintWatcher : public ::osl::Thread
                                             INetURLObject::DECODE_WITH_CHARSET);
                 if (aSplitter.removeSegment() && sFileName.Len()>0)
                 {
-                    ::ucb::Content aSource(
+                    ::ucbhelper::Content aSource(
                             ::rtl::OUString((*ppTempFile)->GetURL()),
                             ::com::sun::star::uno::Reference< ::com::sun::star::ucb::XCommandEnvironment >());
 
-                    ::ucb::Content aTarget(
+                    ::ucbhelper::Content aTarget(
                             ::rtl::OUString(aSplitter.GetMainURL(INetURLObject::NO_DECODE)),
                             ::com::sun::star::uno::Reference< ::com::sun::star::ucb::XCommandEnvironment >());
 
