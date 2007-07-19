@@ -110,21 +110,12 @@ fi
 # Check and get the list of packages to install
 #
 
-RPMLIST=`find $PACKAGE_PATH -maxdepth 2 -type f -name "*.rpm" ! -name "*-menus-*" ! -name "*-desktop-integration-*" ! -name "adabas*" ! -name "jre*" ! -name "*-gnome*" -print`
+RPMLIST=`find $PACKAGE_PATH -maxdepth 2 -type f -name "*.rpm" ! -name "*-menus-*" ! -name "*-desktop-integration-*" ! -name "adabas*" ! -name "jre*" -print`
 
 if [ -z "$RPMLIST" ]
 then
   printf "\n$0: No packages found in $PACKAGE_PATH\n"
   exit 2
-fi
-
-# Do not install gnome-integration package on systems without GNOME
-# check for /bin/rpm first, otherwise the rpm database is most likely
-# empty anyway
-if [ -x /bin/rpm ]
-then
-  GNOMERPM=`find $PACKAGE_PATH -type f -name "*.rpm" -name "*-gnome*" -print`
-  /bin/rpm -q --whatprovides libgnomevfs-2.so.0 libgconf-2.so.4 >/dev/null || GNOMERPM=""
 fi
 
 #
@@ -202,6 +193,11 @@ then
   if [ ! "${RPM_DB_PATH:0:1}" = "/" ]; then
     RPM_DB_PATH=`cd ${RPM_DB_PATH}; pwd`
   fi
+
+  # we should use --freshen for updates to not add languages with patches, but this will break
+  # language packs, so leave it for now ..
+#  RPMCMD="--freshen"
+  RPMCMD="--upgrade"
 else
   rmdir ${INSTALLDIR} 2>/dev/null
 
@@ -222,10 +218,22 @@ else
 
   # Creating RPM database and initializing
   rpm --initdb --dbpath $RPM_DB_PATH
+
+  # Default install command
+  RPMCMD="--install"
 fi
 
+# populate the private rpm database with the dependencies needed
+FAKEDBRPM=/tmp/fake-db-1.0-$$.noarch.rpm
+linenum=???
+tail +$linenum $0 > $FAKEDBRPM
+
+rpm --upgrade --justdb --ignoresize --dbpath $RPM_DB_PATH $FAKEDBRPM
+
+rm -f $FAKEDBRPM
+
 echo "Packages found:"
-for i in $RPMLIST $GNOMERPM; do
+for i in $RPMLIST ; do
   echo `basename $i`
 done
 
@@ -246,8 +254,8 @@ echo "Installing the RPMs"
 
 # inject a second slash to the last path segment to avoid rpm 3 concatination bug
 NEWPREFIX=`cd ${INSTALLDIR}; pwd | sed -e 's|\(.*\)\/\(.*\)|\1\/\/\2|'`
-RELOCATIONS=`rpm -qp --qf "--relocate %{PREFIXES}=${NEWPREFIX} \n" $RPMLIST $GNOMERPM | sort -u | tr -d "\012"`
-rpm --upgrade --nodeps --ignoresize -vh $RELOCATIONS --dbpath $RPM_DB_PATH $RPMLIST $GNOMERPM
+RELOCATIONS=`rpm -qp --qf "--relocate %{PREFIXES}=${NEWPREFIX} \n" $RPMLIST | sort -u | tr -d "\012"`
+UserInstallation=\$ORIGIN/../UserInstallation rpm $RPMCMD --ignoresize -vh $RELOCATIONS --dbpath $RPM_DB_PATH $RPMLIST
 
 #
 # Create a link into the users home directory
@@ -264,11 +272,11 @@ if [ "$UPDATE" = "yes" -a ! -f $INSTALLDIR/program/bootstraprc ]
 then
   echo
   echo "Update failed due to a bug in RPM, uninstalling .."
-  rpm --erase -v --nodeps --dbpath $RPM_DB_PATH `rpm --query --queryformat "%{NAME} " --package $RPMLIST $GNOMERPM --dbpath $RPM_DB_PATH`
+  rpm --erase -v --nodeps --dbpath $RPM_DB_PATH `rpm --query --queryformat "%{NAME} " --package $RPMLIST --dbpath $RPM_DB_PATH`
   echo
   echo "Now re-installing new packages .."
   echo
-  rpm --upgrade --nodeps --ignoresize -vh $RELOCATIONS --dbpath $RPM_DB_PATH $RPMLIST $GNOMERPM
+  rpm --install --nodeps --ignoresize -vh $RELOCATIONS --dbpath $RPM_DB_PATH $RPMLIST
   echo
 fi
 
