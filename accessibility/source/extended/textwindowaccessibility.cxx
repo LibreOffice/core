@@ -4,9 +4,9 @@
  *
  *  $RCSfile: textwindowaccessibility.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: hr $ $Date: 2007-06-27 15:34:57 $
+ *  last change: $Author: obo $ $Date: 2007-07-19 07:24:23 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -333,6 +333,11 @@ ParagraphImpl::getAccessibleAtPoint(::css::awt::Point const &)
 void SAL_CALL ParagraphImpl::grabFocus() throw (::css::uno::RuntimeException)
 {
     checkDisposed();
+    Window* pWindow = m_xDocument->GetWindow();
+    if ( pWindow )
+    {
+        pWindow->GrabFocus();
+    }
     try
     {
         m_xDocument->changeParagraphSelection(this, 0, 0);
