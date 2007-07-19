@@ -2,9 +2,9 @@
  *
  *  $RCSfile: slideview.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: obo $ $Date: 2007-07-17 14:41:02 $
+ *  last change: $Author: vg $ $Date: 2007-07-19 14:53:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -58,6 +58,7 @@
  *
  *
  ************************************************************************/
+#include "precompiled_slideshow.hxx"
 
 #include <canvas/debug.hxx>
 #include <canvas/canvastools.hxx>
