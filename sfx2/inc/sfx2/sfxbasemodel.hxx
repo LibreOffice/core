@@ -4,9 +4,9 @@
  *
  *  $RCSfile: sfxbasemodel.hxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: obo $ $Date: 2007-07-17 13:38:09 $
+ *  last change: $Author: vg $ $Date: 2007-07-19 15:31:22 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -260,7 +260,7 @@
 #define ELEMENTEXISTEXCEPTION   ::com::sun::star::container::ElementExistException
 #define XNAMEREPLACE            ::com::sun::star::container::XNameReplace
 #define XINDEXCONTAINER         ::com::sun::star::container::XIndexContainer
-
+#define DISPOSEDEXCEPTION       ::com::sun::star::lang::DisposedException
 #define DOCEVENTOBJECT          ::com::sun::star::document::EventObject
 #define XDOCEVENTLISTENER       ::com::sun::star::document::XEventListener
 #define XDOCUMENTINFO           ::com::sun::star::document::XDocumentInfo
