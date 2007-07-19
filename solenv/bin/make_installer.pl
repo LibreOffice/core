@@ -4,9 +4,9 @@
 #
 #   $RCSfile: make_installer.pl,v $
 #
-#   $Revision: 1.90 $
+#   $Revision: 1.91 $
 #
-#   last change: $Author: ihi $ $Date: 2007-07-12 11:15:22 $
+#   last change: $Author: obo $ $Date: 2007-07-19 07:16:05 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -398,7 +398,12 @@ if ( $installer::globals::globallogging ) { installer::files::save_array_of_hash
 $filesinproductarrayref = installer::scriptitems::remove_delete_only_files_from_productlists($filesinproductarrayref);
 if ( $installer::globals::globallogging ) { installer::files::save_array_of_hashes($loggingdir . "productfiles2.log", $filesinproductarrayref); }
 
-if (( ! $installer::globals::iswindowsbuild ) && ( ! $installer::globals::islinuxrpmbuild )) { installer::control::check_oxtfiles($filesinproductarrayref); }
+if (( ! $installer::globals::iswindowsbuild ) &&
+    ( ! $installer::globals::islinuxrpmbuild ) &&
+    ( ! $installer::globals::issolarispkgbuild ) &&
+    ( $installer::globals::packageformat ne "installed" ) &&
+    ( $installer::globals::packageformat ne "archive" ))
+    { installer::control::check_oxtfiles($filesinproductarrayref); }
 
 if ($installer::globals::product =~ /suite/i ) { $filesinproductarrayref = installer::scriptitems::remove_notinsuite_files_from_productlists($filesinproductarrayref); }
 if ( $installer::globals::globallogging ) { installer::files::save_array_of_hashes($loggingdir . "productfiles2aa.log", $filesinproductarrayref); }
