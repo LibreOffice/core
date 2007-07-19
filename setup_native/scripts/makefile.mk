@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.12 $
+#   $Revision: 1.13 $
 #
-#   last change: $Author: ihi $ $Date: 2007-07-11 15:05:11 $
+#   last change: $Author: obo $ $Date: 2007-07-19 07:19:43 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -56,17 +56,31 @@ UNIXTEXT= \
 UNIXTEXT+= $(BIN)$/stclient_wrapper.sh
 .ENDIF
 
+FAKEDB=$(BIN)$/noarch/fake-db-1.0-0.noarch.rpm
+FAKEDBROOT=$(COMMONMISC)/$(TARGET)/fake-db-root
+
 # --- Targets ------------------------------------------------------
 
 .INCLUDE :	target.mk
 
-.IF "$(OS)" == "LINUX"
+.IF "$(OS)" == "SOLARIS" || "$(OS)" == "LINUX"
 
-ALLTAR : $(BIN)$/install $(BIN)$/uninstall 
+ALLTAR: $(BIN)$/install $(BIN)$/uninstall
 
-$(BIN)$/install: install_linux.sh
-    $(TYPE) $< | tr -d "\015" > $@
+$(BIN)$/install: install_$(OS:l).sh 
+    $(PERL) install_create.pl $& $@
     -chmod 775 $@
+
+.ENDIF
+
+.IF "$(OS)" == "LINUX"
+.INCLUDE : packtools.mk
+
+$(FAKEDB) : fake-db.spec 
+    $(MKDIRHIER) $(FAKEDBROOT)
+    $(RPM) --define "_builddir $(shell cd $(FAKEDBROOT) && pwd)" --define "_rpmdir $(BIN)" -bb $<
+
+$(BIN)$/install: $(FAKEDB)
 
 $(BIN)$/uninstall: uninstall_linux.sh
     $(TYPE) $< | tr -d "\015" > $@
@@ -76,14 +90,10 @@ $(BIN)$/uninstall: uninstall_linux.sh
 
 .IF "$(OS)" == "SOLARIS"
 
-ALLTAR: $(BIN)$/install $(BIN)$/uninstall $(LB)$/getuid.so.stripped
-
-$(BIN)$/install: install_solaris.sh $(LB)$/getuid.so.stripped
-    $(PERL) install_create.pl install_$(OS).sh $(LB)$/getuid.so.stripped $@
-    -chmod 775 $@
+$(BIN)$/install: $(LB)$/getuid.so.stripped
 
 $(BIN)$/uninstall: uninstall_solaris.sh $(LB)$/getuid.so.stripped
-    $(PERL) install_create.pl uninstall_$(OS).sh $(LB)$/getuid.so.stripped $@
+    $(PERL) install_create.pl $<  $@
     -chmod 775 $@
 
 $(LB)$/getuid.so.stripped: $(LB)$/getuid.so
