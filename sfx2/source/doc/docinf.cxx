@@ -4,9 +4,9 @@
  *
  *  $RCSfile: docinf.cxx,v $
  *
- *  $Revision: 1.49 $
+ *  $Revision: 1.50 $
  *
- *  last change: $Author: obo $ $Date: 2007-07-17 13:42:55 $
+ *  last change: $Author: vg $ $Date: 2007-07-19 14:41:58 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -36,7 +36,7 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_sfx2.hxx"
 
-#include "docinf.hxx"
+#include <sfx2/docinf.hxx>
 
 #include <com/sun/star/beans/PropertyAttribute.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
@@ -71,7 +71,7 @@
 #include <sfx2/objsh.hxx>
 #include "sfxresid.hxx"
 #include "doc.hrc"
-#include "objuno.hxx"
+#include <sfx2/objuno.hxx>
 
 // ============================================================================
 
