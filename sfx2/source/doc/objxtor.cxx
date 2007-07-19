@@ -4,9 +4,9 @@
  *
  *  $RCSfile: objxtor.cxx,v $
  *
- *  $Revision: 1.73 $
+ *  $Revision: 1.74 $
  *
- *  last change: $Author: obo $ $Date: 2007-07-17 13:44:46 $
+ *  last change: $Author: vg $ $Date: 2007-07-19 14:50:30 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -141,7 +141,7 @@
 #include "helpid.hrc"
 #include <sfx2/msg.hxx>
 #include "appbaslib.hxx"
-#include "sfxbasemodel.hxx"
+#include <sfx2/sfxbasemodel.hxx>
 
 #include <basic/basicmanagerrepository.hxx>
 
