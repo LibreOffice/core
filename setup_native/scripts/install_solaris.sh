@@ -78,6 +78,11 @@ pkg_error()
   exit 1
 }
 
+get_pkg_list()
+{
+  cd $1; ls -1
+}
+
 #
 # this script is for userland not for root
 #
@@ -137,11 +142,37 @@ else
   fi
 
   #
-  # Check and get the list of packages to install
+  # Create sed filter script for unwanted packages
   #
-  PKG_LIST=`cd $PACKAGE_PATH ; find * -type d -prune ! -name "*adabas*" \
-    ! -name "*j5*" ! -name "*-desktop-int*" ! -name "*-shared-mime-info" \
-    ! -name "*-cde*" ! -name "*-gnome*" -print`
+
+  cat > /tmp/userinstall_filer.$$ << EOF
+/SUNWadabas/d
+/^SUNWj[0-9]/d
+/-desktop-int/d
+/-shared-mime-info/d
+/-cde/d
+EOF
+
+  # Do not install gnome-integration package on systems without GNOME
+  pkginfo -q SUNWgnome-vfs
+  if [ $? -ne 0 ]
+  then
+
+    echo '/-gnome/d' >> /tmp/userinstall_filer.$$
+  fi
+
+  # pkgdep sorts the packages based on their dependencies
+  PKGDEP="`dirname $0`/pkgdep"
+  if [ ! -x $PKGDEP ]; then
+    PKGDEP="get_pkg_list"
+  fi
+
+  #
+  # Get the list of packages to install
+  #
+
+  PKG_LIST=`$PKGDEP $PACKAGE_PATH | sed -f  /tmp/userinstall_filer.$$`
+  rm -f /tmp/userinstall_filer.$$
 
   if [ -z "$PKG_LIST" ]
   then
@@ -149,15 +180,8 @@ else
     exit 2
   fi
 
-  # Do not install gnome-integration package on systems without GNOME
-  pkginfo -q SUNWgnome-vfs
-  if [ $? -eq 0 ]
-  then
-    GNOMEPKG=`cd $PACKAGE_PATH ; find * -type d -prune -name "*-gnome*" -print`
-  fi
-
   echo "Packages found:"
-  for i in $PKG_LIST $GNOMEPKG; do
+  for i in $PKG_LIST ; do
     echo $i
   done
 fi
@@ -192,6 +216,33 @@ mail=
 EOF
 fi
 
+if [ ! "${INSTALL_ROOT:0:1}" = "/" ]; then
+  INSTALL_ROOT=`cd ${INSTALL_ROOT}; pwd`
+fi
+
+# This script must exist to make extension registration work
+# always overwrite to get the latest version.
+mkdir -p ${INSTALL_ROOT}/usr/lib
+cat > ${INSTALL_ROOT}/usr/lib/postrun << EOF
+#!/bin/sh
+
+# Override UserInstallation in bootstraprc for unopkg ..
+UserInstallation='\$ORIGIN/../UserInstallation'
+export UserInstallation
+
+if [ -x /usr/bin/mktemp ]
+then
+  CMD=`/usr/bin/mktemp /tmp/userinstall.XXXXXX`
+else
+  CMD=/tmp/userinstall.\$\$; echo "" > \$CMD
+fi
+
+sed -e "s|^/|${INSTALL_ROOT}/|" -e "s| /| ${INSTALL_ROOT}/|g" > \$CMD
+/bin/sh \$CMD
+rm -f \$CMD
+EOF
+chmod +x ${INSTALL_ROOT}/usr/lib/postrun 2>/dev/null
+
 # create local tmp directory to install on S10
 LOCAL_TMP=
 if [ -x /usr/bin/mktemp ]
@@ -215,10 +266,6 @@ tail +$linenum $0 > $GETUID_SO
 #
 if [ "$UPDATE" = "yes" ]
 then
-  if [ ! "${INSTALL_ROOT:0:1}" = "/" ]; then
-    INSTALL_ROOT=`cd ${INSTALL_ROOT}; pwd`
-  fi
-
   OFFICE_DIR=${INSTALL_ROOT}`pkgparam -f ${INSTALL_ROOT}/var/sadm/pkg/*core01/pkginfo BASEDIR 2>/dev/null`
 
   # restore original "bootstraprc" and "soffice" prior to patching
@@ -275,7 +322,7 @@ else
   echo "Path to the packages       : " $PACKAGE_PATH
   echo "Path to the installation   : " $INSTALL_ROOT
 
-  LD_PRELOAD_32=$GETUID_SO /usr/sbin/pkgadd -d ${PACKAGE_PATH} -R ${INSTALL_ROOT} ${PKG_LIST} ${GNOMEPKG} >/dev/null || pkg_error
+  LD_PRELOAD_32=$GETUID_SO /usr/sbin/pkgadd -d ${PACKAGE_PATH} -R ${INSTALL_ROOT} ${PKG_LIST} >/dev/null || pkg_error
 fi
 
 rm -f $GETUID_SO
