@@ -4,9 +4,9 @@
  *
  *  $RCSfile: optionsdrawinglayer.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: obo $ $Date: 2007-07-18 11:53:51 $
+ *  last change: $Author: obo $ $Date: 2007-07-19 13:10:24 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -144,14 +144,14 @@ using namespace ::com::sun::star::uno   ;
 #define PROPERTYHANDLE_PAINTBUFFER_DRAWIMPRESS      10
 
 // #i4219#
-#define PROPERTYHANDLE_MAXIMUMPAPERWIDTH            8
-#define PROPERTYHANDLE_MAXIMUMPAPERHEIGHT           9
-#define PROPERTYHANDLE_MAXIMUMPAPERLEFTMARGIN       10
-#define PROPERTYHANDLE_MAXIMUMPAPERRIGHTMARGIN      11
-#define PROPERTYHANDLE_MAXIMUMPAPERTOPMARGIN        12
-#define PROPERTYHANDLE_MAXIMUMPAPERBOTTOMMARGIN     13
+#define PROPERTYHANDLE_MAXIMUMPAPERWIDTH            11
+#define PROPERTYHANDLE_MAXIMUMPAPERHEIGHT           12
+#define PROPERTYHANDLE_MAXIMUMPAPERLEFTMARGIN       13
+#define PROPERTYHANDLE_MAXIMUMPAPERRIGHTMARGIN      14
+#define PROPERTYHANDLE_MAXIMUMPAPERTOPMARGIN        15
+#define PROPERTYHANDLE_MAXIMUMPAPERBOTTOMMARGIN     16
 
-#define PROPERTYCOUNT                               14
+#define PROPERTYCOUNT                               17
 
 class SvtOptionsDrawinglayer_Impl : public ConfigItem
 {
@@ -283,7 +283,7 @@ SvtOptionsDrawinglayer_Impl::SvtOptionsDrawinglayer_Impl() :
     // #i74769#, #i75172#
     m_bPaintBuffer_Calc( DEFAULT_PAINTBUFFER_CALC ),
     m_bPaintBuffer_Writer( DEFAULT_PAINTBUFFER_WRITER ),
-    m_bPaintBuffer_DrawImpress( DEFAULT_PAINTBUFFER_DRAWIMPRESS )
+    m_bPaintBuffer_DrawImpress( DEFAULT_PAINTBUFFER_DRAWIMPRESS ),
 
     // #i4219#
     m_nMaximumPaperWidth(DEFAULT_MAXIMUMPAPERWIDTH),
@@ -830,7 +830,7 @@ Sequence< OUString > SvtOptionsDrawinglayer_Impl::impl_GetPropertyNames()
         // #i74769#, #i75172#
         PROPERTYNAME_PAINTBUFFER_CALC,
         PROPERTYNAME_PAINTBUFFER_WRITER,
-        PROPERTYNAME_PAINTBUFFER_DRAWIMPRESS
+        PROPERTYNAME_PAINTBUFFER_DRAWIMPRESS,
 
         // #i4219#
         PROPERTYNAME_MAXIMUMPAPERWIDTH,
@@ -1155,3 +1155,4 @@ Mutex& SvtOptionsDrawinglayer::GetOwnStaticMutex()
 }
 
 // eof
+
