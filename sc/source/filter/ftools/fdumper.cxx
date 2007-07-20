@@ -4,9 +4,9 @@
  *
  *  $RCSfile: fdumper.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: vg $ $Date: 2007-02-27 12:29:53 $
+ *  last change: $Author: vg $ $Date: 2007-07-20 07:08:24 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -41,7 +41,7 @@
 #endif
 
 #if SCF_INCL_DUMPER
-
+#include <tools/datetime.hxx>
 #ifndef INCLUDED_RTL_MATH_HXX
 #include <rtl/math.hxx>
 #endif

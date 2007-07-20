@@ -4,9 +4,9 @@
  *
  *  $RCSfile: fdumperole.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: obo $ $Date: 2007-07-17 13:33:49 $
+ *  last change: $Author: vg $ $Date: 2007-07-20 07:08:17 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -40,7 +40,7 @@
 #endif
 
 #if SCF_INCL_DUMPER
-
+#include <tools/datetime.hxx>
 #ifndef _STREAM_HXX
 #include <tools/stream.hxx>
 #endif
