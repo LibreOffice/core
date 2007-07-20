@@ -4,9 +4,9 @@
  *
  *  $RCSfile: document.cxx,v $
  *
- *  $Revision: 1.90 $
+ *  $Revision: 1.91 $
  *
- *  last change: $Author: hr $ $Date: 2007-06-27 12:39:58 $
+ *  last change: $Author: vg $ $Date: 2007-07-20 06:15:24 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -281,8 +281,8 @@ void SmDocShell::LoadSymbols()
 const String &SmDocShell::GetComment() const
 {
     RTL_LOGFILE_CONTEXT( aLog, "starmath: SmDocShell::GetComment" );
-
-    return ((SmDocShell *) this)->GetDocInfo().GetComment();
+    static String aString(((SmDocShell *) this)->GetDocInfo().GetComment());
+    return aString;// ((SmDocShell *) this)->GetDocInfo().GetComment();
 }
 
 
