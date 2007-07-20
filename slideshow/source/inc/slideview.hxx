@@ -4,9 +4,9 @@
  *
  *  $RCSfile: slideview.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: vg $ $Date: 2007-07-20 05:30:21 $
+ *  last change: $Author: vg $ $Date: 2007-07-20 06:24:59 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -67,3 +67,4 @@ namespace slideshow
 }
 
 #endif /* INCLUDED_SLIDESHOW_SLIDEVIEW_HXX */
+

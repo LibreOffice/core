@@ -4,9 +4,9 @@
  *
  *  $RCSfile: slideshowimpl.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: obo $ $Date: 2007-07-17 14:40:52 $
+ *  last change: $Author: vg $ $Date: 2007-07-20 06:25:05 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1751,3 +1751,4 @@ namespace sdecl = comphelper::service_decl;
 
 // The C shared lib entry points
 COMPHELPER_SERVICEDECL_EXPORTS1(slideShowDecl)
+
