@@ -4,9 +4,9 @@
  *
  *  $RCSfile: accel.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: hr $ $Date: 2007-06-27 20:27:45 $
+ *  last change: $Author: rt $ $Date: 2007-07-24 10:17:55 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -50,7 +50,7 @@
 #include <vcl/svapp.hxx>
 #endif
 #ifndef _SV_ACCEL_H
-#include <accel.h>
+#include <vcl/accel.h>
 #endif
 #ifndef _SV_ACCEL_HXX
 #include <vcl/accel.hxx>
