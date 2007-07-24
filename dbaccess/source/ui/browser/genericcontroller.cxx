@@ -4,9 +4,9 @@
  *
  *  $RCSfile: genericcontroller.cxx,v $
  *
- *  $Revision: 1.78 $
+ *  $Revision: 1.79 $
  *
- *  last change: $Author: rt $ $Date: 2007-07-06 08:04:34 $
+ *  last change: $Author: rt $ $Date: 2007-07-24 12:07:21 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -982,8 +982,7 @@ Reference< XConnection > OGenericUnoController::connect(
 {
     WaitObject aWaitCursor(getView());
 
-    const ::rtl::OUString sNoContext;
-    ODatasourceConnector aConnector(getORB(), getView(), sNoContext, sNoContext);
+    ODatasourceConnector aConnector( getORB(), getView(), ::rtl::OUString() );
     Reference<XConnection> xConnection = aConnector.connect(_xDataSource);
 
     // be notified when connection is in disposing
@@ -995,11 +994,11 @@ Reference< XConnection > OGenericUnoController::connect(
 // -----------------------------------------------------------------------------
 Reference< XConnection > OGenericUnoController::connect(
     const ::rtl::OUString& _rDataSourceName, const ::rtl::OUString& _rContextInformation,
-    const ::rtl::OUString& _rContextDetails, sal_Bool _bStartListening )
+    sal_Bool _bStartListening )
 {
     WaitObject aWaitCursor(getView());
 
-    ODatasourceConnector aConnector(getORB(), getView(), _rContextInformation, _rContextDetails);
+    ODatasourceConnector aConnector( getORB(), getView(), _rContextInformation );
     Reference<XConnection> xConnection = aConnector.connect(_rDataSourceName);
 
     // be notified when connection is in disposing
