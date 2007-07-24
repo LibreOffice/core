@@ -4,9 +4,9 @@
  *
  *  $RCSfile: field.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: hr $ $Date: 2007-06-27 20:05:24 $
+ *  last change: $Author: rt $ $Date: 2007-07-24 10:06:28 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -52,7 +52,7 @@
 #include <tools/resary.hxx>
 #endif
 #ifndef _SV_SVIDS_HRC
-#include <svids.hrc>
+#include <vcl/svids.hrc>
 #endif
 #include <vcl/field.hxx>
 #include <vcl/event.hxx>
