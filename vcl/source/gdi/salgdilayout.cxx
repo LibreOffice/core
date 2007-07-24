@@ -4,9 +4,9 @@
  *
  *  $RCSfile: salgdilayout.cxx,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: hr $ $Date: 2007-06-27 20:23:13 $
+ *  last change: $Author: rt $ $Date: 2007-07-24 10:14:39 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -70,13 +70,13 @@
 #include <vcl/region.hxx>
 #endif
 #ifndef _SV_REGION_H
-#include <region.h>
+#include <vcl/region.h>
 #endif
 #ifndef _SV_VIRDEV_HXX
 #include <vcl/virdev.hxx>
 #endif
 #ifndef _SV_WINDOW_H
-#include <window.h>
+#include <vcl/window.h>
 #endif
 #ifndef _SV_WINDOW_HXX
 #include <vcl/window.hxx>
@@ -88,7 +88,7 @@
 #include <vcl/gdimtf.hxx>
 #endif
 #ifndef _SV_OUTDATA_HXX
-#include <outdata.hxx>
+#include <vcl/outdata.hxx>
 #endif
 #ifndef _SV_PRINT_HXX
 #include <vcl/print.hxx>
@@ -106,7 +106,7 @@
 #include <vcl/outdev3d.hxx>
 #endif
 #ifndef _SV_OUTDEV_H
-#include <outdev.h>
+#include <vcl/outdev.h>
 #endif
 #ifndef _SV_OUTDEV_HXX
 #include <vcl/outdev.hxx>
