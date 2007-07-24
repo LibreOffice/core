@@ -4,9 +4,9 @@
  *
  *  $RCSfile: pdfwriter_impl.hxx,v $
  *
- *  $Revision: 1.48 $
+ *  $Revision: 1.49 $
  *
- *  last change: $Author: hr $ $Date: 2007-06-27 20:21:30 $
+ *  last change: $Author: rt $ $Date: 2007-07-24 10:13:58 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -67,7 +67,7 @@
 #include <vcl/wall.hxx>
 #endif
 #ifndef _SV_OUTDATA_HXX
-#include <outdata.hxx>
+#include <vcl/outdata.hxx>
 #endif
 #ifndef _RTL_STRBUF_HXX
 #include <rtl/strbuf.hxx>
