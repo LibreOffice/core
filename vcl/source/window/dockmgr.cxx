@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dockmgr.cxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: hr $ $Date: 2007-06-27 20:30:40 $
+ *  last change: $Author: rt $ $Date: 2007-07-24 10:19:42 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -49,7 +49,7 @@
 #include <vcl/event.hxx>
 #endif
 #ifndef _SV_BRDWIN_HXX
-#include <brdwin.hxx>
+#include <vcl/brdwin.hxx>
 #endif
 #ifndef _SV_FLOATWIN_HXX
 #include <vcl/floatwin.hxx>
@@ -73,7 +73,7 @@
 #include <vcl/lineinfo.hxx>
 #endif
 #ifndef _SV_WINDOW_H
-#include <window.h>
+#include <vcl/window.h>
 #endif
 #include <vcl/unowrap.hxx>
 #include <vcl/salframe.hxx>
