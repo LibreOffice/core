@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.5 $
+#   $Revision: 1.6 $
 #
-#   last change: $Author: ihi $ $Date: 2007-03-26 12:19:43 $
+#   last change: $Author: rt $ $Date: 2007-07-24 13:27:15 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -107,5 +107,5 @@ RUN: run
 #    @echo Exit
 #.ELSE
 run:
-    java -cp $(CLASSPATH) $(CT_APP) $(CT_TESTBASE) $(CT_APPEXECCOMMAND) $(CT_NOOFFICE) $(CT_PACKAGE).RecoveryTest
+    +java -cp $(CLASSPATH) $(CT_APP) $(CT_TESTBASE) $(CT_APPEXECCOMMAND) $(CT_NOOFFICE) $(CT_PACKAGE).RecoveryTest
 
