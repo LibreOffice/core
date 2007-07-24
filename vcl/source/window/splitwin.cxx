@@ -4,9 +4,9 @@
  *
  *  $RCSfile: splitwin.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: hr $ $Date: 2007-06-27 20:33:43 $
+ *  last change: $Author: rt $ $Date: 2007-07-24 10:21:50 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -64,7 +64,7 @@
 #include <vcl/symbol.hxx>
 #endif
 #ifndef _SV_SVIDS_HRC
-#include <svids.hrc>
+#include <vcl/svids.hrc>
 #endif
 #ifndef _SV_IMAGE_HXX
 #include <vcl/image.hxx>
