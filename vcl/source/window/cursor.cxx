@@ -4,9 +4,9 @@
  *
  *  $RCSfile: cursor.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: hr $ $Date: 2007-06-27 20:28:56 $
+ *  last change: $Author: rt $ $Date: 2007-07-24 10:18:37 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -49,7 +49,7 @@
 #include <vcl/window.hxx>
 #endif
 #ifndef _SV_WINDOW_H
-#include <window.h>
+#include <vcl/window.h>
 #endif
 #ifndef _TL_POLY_HXX
 #include <tools/poly.hxx>
