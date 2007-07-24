@@ -4,9 +4,9 @@
  *
  *  $RCSfile: pspgraphics.cxx,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: hr $ $Date: 2007-06-28 10:21:59 $
+ *  last change: $Author: rt $ $Date: 2007-07-24 10:32:10 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1332,6 +1332,7 @@ ImplDevFontAttributes PspGraphics::Info2DevFontAttributes( const psp::FastPrintF
         if( bHasMapNames )
             aDFA.maMapNames.Append( ';' );
         aDFA.maMapNames.Append( (*it).getStr() );
+    bHasMapNames = true;
     }
 
 #if OSL_DEBUG_LEVEL > 2
