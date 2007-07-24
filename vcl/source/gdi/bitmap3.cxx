@@ -4,9 +4,9 @@
  *
  *  $RCSfile: bitmap3.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: hr $ $Date: 2007-06-27 20:09:54 $
+ *  last change: $Author: rt $ $Date: 2007-07-24 10:07:24 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -41,7 +41,7 @@
 #include <vcl/bmpacc.hxx>
 #endif
 #ifndef _SV_IMPOCT_HXX
-#include <impoct.hxx>
+#include <vcl/impoct.hxx>
 #endif
 #ifndef _SV_OCTREE_HXX
 #include <vcl/octree.hxx>
