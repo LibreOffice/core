@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dbtreemodel.hxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: rt $ $Date: 2007-07-06 08:03:44 $
+ *  last change: $Author: rt $ $Date: 2007-07-24 12:06:54 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -48,9 +48,6 @@
 #ifndef _SBA_UNODATBR_HXX_
 #include "unodatbr.hxx"
 #endif
-#ifndef DBACCESS_SOURCE_UI_INC_DOCUMENTCONTROLLER_HXX
-#include "documentcontroller.hxx"
-#endif
 #ifndef _DBAUI_COMMON_TYPES_HXX_
 #include "commontypes.hxx"
 #endif
@@ -85,10 +82,6 @@ namespace dbaui
                                             xContainer;
             /// if the entry denotes a data source, this is the connection for this data source (if already connection)
             SharedConnection                xConnection;
-            /** if the entry denotes a data source, this is the connector between the model and the controller,
-                keeping the model alive as long as necessary
-            */
-            ModelControllerConnector        aController;
             SbaTableQueryBrowser::EntryType eType;
             String                          sAccessor;
 
