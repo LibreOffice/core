@@ -4,9 +4,9 @@
  *
  *  $RCSfile: combobox.cxx,v $
  *
- *  $Revision: 1.42 $
+ *  $Revision: 1.43 $
  *
- *  last change: $Author: hr $ $Date: 2007-06-27 20:04:44 $
+ *  last change: $Author: rt $ $Date: 2007-07-24 10:06:00 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -53,7 +53,7 @@
 #include <vcl/decoview.hxx>
 #endif
 #ifndef _SV_ILSTBOX_HXX
-#include <ilstbox.hxx>
+#include <vcl/ilstbox.hxx>
 #endif
 #ifndef _SV_LSTBOX_H
 #include <vcl/lstbox.h>
@@ -62,7 +62,7 @@
 #include <vcl/button.hxx>
 #endif
 #ifndef _SV_SUBEDIT_HXX
-#include <subedit.hxx>
+#include <vcl/subedit.hxx>
 #endif
 #ifndef _SV_EVENT_HXX
 #include <vcl/event.hxx>
