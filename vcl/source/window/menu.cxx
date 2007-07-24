@@ -4,9 +4,9 @@
  *
  *  $RCSfile: menu.cxx,v $
  *
- *  $Revision: 1.153 $
+ *  $Revision: 1.154 $
  *
- *  last change: $Author: rt $ $Date: 2007-07-05 08:42:17 $
+ *  last change: $Author: rt $ $Date: 2007-07-24 10:20:54 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -68,7 +68,7 @@
 #include <vcl/help.hxx>
 #endif
 #ifndef _SV_SVIDS_HRC
-#include <svids.hrc>
+#include <vcl/svids.hrc>
 #endif
 #ifndef _SV_FLOATWIN_HXX
 #include <vcl/floatwin.hxx>
@@ -107,7 +107,7 @@
 #include <vcl/taskpanelist.hxx>
 #endif
 #ifndef _SV_WINDOW_H
-#include <window.h>
+#include <vcl/window.h>
 #endif
 #ifndef _VCL_CONTROLLAYOUT_HXX
 #include <vcl/controllayout.hxx>
@@ -117,7 +117,7 @@
 #endif
 #include <tools/stream.hxx>
 #ifndef _SV_SALMENU_HXX
-#include <salmenu.hxx>
+#include <vcl/salmenu.hxx>
 #endif
 #ifndef _SV_SALFRAME_HXX
 #include <vcl/salframe.hxx>
@@ -153,7 +153,7 @@
 #include <vcl/configsettings.hxx>
 #endif
 
-#include "lazydelete.hxx"
+#include "vcl/lazydelete.hxx"
 
 #include <map>
 
