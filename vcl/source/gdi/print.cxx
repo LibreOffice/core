@@ -4,9 +4,9 @@
  *
  *  $RCSfile: print.cxx,v $
  *
- *  $Revision: 1.61 $
+ *  $Revision: 1.62 $
  *
- *  last change: $Author: hr $ $Date: 2007-06-27 20:22:20 $
+ *  last change: $Author: rt $ $Date: 2007-07-24 10:14:12 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -81,7 +81,7 @@
 #include <vcl/jobset.h>
 #endif
 #ifndef _SV_OUTDEV_H
-#include <outdev.h>
+#include <vcl/outdev.h>
 #endif
 #ifndef _SV_VIRDEV_HXX
 #include <vcl/virdev.hxx>
@@ -99,7 +99,7 @@
 #include <vcl/metaact.hxx>
 #endif
 #ifndef _SV_IMPPRN_HXX
-#include <impprn.hxx>
+#include <vcl/impprn.hxx>
 #endif
 #ifndef _SV_PRINT_HXX
 #include <vcl/print.hxx>
