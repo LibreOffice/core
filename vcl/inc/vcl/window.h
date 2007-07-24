@@ -1,0 +1,387 @@
+/*************************************************************************
+ *
+ *  OpenOffice.org - a multi-platform office productivity suite
+ *
+ *  $RCSfile: window.h,v $
+ *
+ *  $Revision: 1.2 $
+ *
+ *  last change: $Author: rt $ $Date: 2007-07-24 10:03:09 $
+ *
+ *  The Contents of this file are made available subject to
+ *  the terms of GNU Lesser General Public License Version 2.1.
+ *
+ *
+ *    GNU Lesser General Public License Version 2.1
+ *    =============================================
+ *    Copyright 2005 by Sun Microsystems, Inc.
+ *    901 San Antonio Road, Palo Alto, CA 94303, USA
+ *
+ *    This library is free software; you can redistribute it and/or
+ *    modify it under the terms of the GNU Lesser General Public
+ *    License version 2.1, as published by the Free Software Foundation.
+ *
+ *    This library is distributed in the hope that it will be useful,
+ *    but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ *    Lesser General Public License for more details.
+ *
+ *    You should have received a copy of the GNU Lesser General Public
+ *    License along with this library; if not, write to the Free Software
+ *    Foundation, Inc., 59 Temple Place, Suite 330, Boston,
+ *    MA  02111-1307  USA
+ *
+ ************************************************************************/
+
+#ifndef _SV_WINDOW_H
+#define _SV_WINDOW_H
+
+#include <vector>
+
+#ifndef _SV_SV_H
+#include <vcl/sv.h>
+#endif
+
+#ifndef _SV_OUTDEV_HXX
+#include <vcl/outdev.hxx>
+#endif
+#ifndef _SV_TIMER_HXX
+#include <vcl/timer.hxx>
+#endif
+#ifndef _SV_INPUTCTX_HXX
+#include <vcl/inputctx.hxx>
+#endif
+#ifndef _SV_POINTR_HXX
+#include <vcl/pointr.hxx>
+#endif
+#ifndef _SV_WINTYPES_HXX
+#include <vcl/wintypes.hxx>
+#endif
+#ifndef _VCL_VCLEVENT_HXX
+#include <vcl/vclevent.hxx>
+#endif
+
+#ifndef _COM_SUN_STAR_UNO_REFERENCE_HXX_
+#include <com/sun/star/uno/Reference.hxx>
+#endif
+#ifndef _CPPUHELPER_WEAKREF_HXX_
+#include <cppuhelper/weakref.hxx>
+#endif
+
+#include <list>
+
+struct SalPaintEvent;
+struct ImplDelData;
+struct ImplAccessibleInfos;
+
+class Window;
+class VirtualDevice;
+class Cursor;
+class ImplDevFontList;
+class ImplFontCache;
+class SalControlHandle;
+class SmartId;
+class VCLXWindow;
+class SalFrame;
+class SalObject;
+
+
+namespace com {
+namespace sun {
+namespace star {
+namespace accessibility {
+    class XAccessible;
+}}}}
+
+namespace com {
+namespace sun {
+namespace star {
+namespace rendering {
+    class XCanvas;
+}}}}
+
+namespace com {
+namespace sun {
+namespace star {
+namespace awt {
+    class XWindowPeer;
+    class XWindow;
+}
+namespace uno {
+    class Any;
+    class XInterface;
+}
+namespace datatransfer {
+namespace clipboard {
+    class XClipboard;
+}
+
+namespace dnd {
+    class XDropTargetListener;
+    class XDragGestureRecognizer;
+    class XDragSource;
+    class XDropTarget;
+} } } } }
+
+namespace vcl { struct ControlLayoutData; }
+
+
+
+
+// ---------------
+// - ImplWinData -
+// ---------------
+
+struct ImplWinData
+{
+    UniString*          mpExtOldText;
+    USHORT*             mpExtOldAttrAry;
+    Rectangle*          mpCursorRect;
+    long                mnCursorExtWidth;
+    Rectangle*          mpFocusRect;
+    Rectangle*          mpTrackRect;
+    USHORT              mnTrackFlags;
+    USHORT              mnIsTopWindow;
+    BOOL                mbMouseOver;          // tracks mouse over for native widget paint effect
+    SalControlHandle*   mpSalControlHandle;   // native data for NWF
+    BOOL                mbEnableNativeWidget; // toggle native widget rendering
+    SmartId*            mpSmartHelpId;
+    SmartId*            mpSmartUniqueId;
+    ::std::list< Window* >
+                        maTopWindowChildren;
+};
+
+// -------------------
+// - ImplOverlapData -
+// -------------------
+
+struct ImplOverlapData
+{
+    VirtualDevice*      mpSaveBackDev;      // Gesicherte Hintergrund-Bitmap
+    Region*             mpSaveBackRgn;      // Gesicherte Region, was invalidiert werden muss
+    Window*             mpNextBackWin;      // Naechstes Fenster mit Hintergrund-Sicherung
+    ULONG               mnSaveBackSize;     // Groesse Bitmap fuer Hintergrund-Sicherung
+    BOOL                mbSaveBack;         // TRUE: Background sichern
+    BYTE                mnTopLevel;         // Level for Overlap-Window
+};
+
+// -----------------
+// - ImplFrameData -
+// -----------------
+
+struct ImplFrameData
+{
+    Timer               maPaintTimer;       // paint timer
+    Timer               maResizeTimer;      // resize timer
+    InputContext        maOldInputContext;  // Last set Input Context
+    Window*             mpNextFrame;        // next frame window
+    Window*             mpFirstOverlap;     // first overlap window
+    Window*             mpFocusWin;         // focus window (is also set, when frame doesn't have the focous)
+    Window*             mpMouseMoveWin;     // last window, where MouseMove() called
+    Window*             mpMouseDownWin;     // last window, where MouseButtonDown() called
+    Window*             mpFirstBackWin;     // Erstes Overlap-Window mit Hintergrund-Sicherung
+    ::std::vector<Window *> maOwnerDrawList; // List of system windows with owner draw decoration
+    ImplDevFontList*    mpFontList;         // Font-List for this frame
+    ImplFontCache*      mpFontCache;        // Font-Cache for this frame
+    sal_Int32           mnDPIX;             // Original Screen Resolution
+    sal_Int32           mnDPIY;             // Original Screen Resolution
+    sal_Int32           mnFontDPIX;         // Original Font Resolution
+    sal_Int32           mnFontDPIY;         // Original Font Resolution
+    ImplMapRes          maMapUnitRes;       // for LogicUnitToPixel
+    ULONG               mnAllSaveBackSize;  // Groesse aller Bitmaps fuer Hintergrund-Sicherung
+    ULONG               mnFocusId;          // FocusId for PostUserLink
+    ULONG               mnMouseMoveId;      // MoveId for PostUserLink
+    long                mnLastMouseX;       // last x mouse position
+    long                mnLastMouseY;       // last y mouse position
+    long                mnBeforeLastMouseX; // last but one x mouse position
+    long                mnBeforeLastMouseY; // last but one y mouse position
+    long                mnFirstMouseX;      // first x mouse position by mousebuttondown
+    long                mnFirstMouseY;      // first y mouse position by mousebuttondown
+    long                mnLastMouseWinX;    // last x mouse position, rel. to pMouseMoveWin
+    long                mnLastMouseWinY;    // last y mouse position, rel. to pMouseMoveWin
+    USHORT              mnModalMode;        // frame based modal count (app based makes no sense anymore)
+    ULONG               mnMouseDownTime;    // mouse button down time for double click
+    USHORT              mnClickCount;       // mouse click count
+    USHORT              mnFirstMouseCode;   // mouse code by mousebuttondown
+    USHORT              mnMouseCode;        // mouse code
+    USHORT              mnMouseMode;        // mouse mode
+    MapUnit             meMapUnit;          // last MapUnit for LogicUnitToPixel
+    BOOL                mbHasFocus;         // focus
+    BOOL                mbInMouseMove;      // is MouseMove on stack
+    BOOL                mbMouseIn;          // is Mouse inside the frame
+    BOOL                mbStartDragCalled;  // is command startdrag called
+    BOOL                mbNeedSysWindow;    // set, when FrameSize <= IMPL_MIN_NEEDSYSWIN
+    BOOL                mbMinimized;        // set, when FrameSize <= 0
+    BOOL                mbStartFocusState;  // FocusState, beim abschicken des Events
+    BOOL                mbInSysObjFocusHdl; // Innerhalb vom GetFocus-Handler eines SysChilds
+    BOOL                mbInSysObjToTopHdl; // Innerhalb vom ToTop-Handler eines SysChilds
+    BOOL                mbSysObjFocus;      // Hat ein SysChild den Focus
+
+    ::com::sun::star::uno::Reference< ::com::sun::star::datatransfer::dnd::XDragSource > mxDragSource;
+    ::com::sun::star::uno::Reference< ::com::sun::star::datatransfer::dnd::XDropTarget > mxDropTarget;
+    ::com::sun::star::uno::Reference< ::com::sun::star::datatransfer::dnd::XDropTargetListener > mxDropTargetListener;
+    ::com::sun::star::uno::Reference< ::com::sun::star::datatransfer::clipboard::XClipboard > mxClipboard;
+    ::com::sun::star::uno::Reference< ::com::sun::star::datatransfer::clipboard::XClipboard > mxSelection;
+
+    BOOL                mbInternalDragGestureRecognizer;
+};
+
+// ---------------
+// - WindowImpl -
+// ---------------
+
+class WindowImpl
+{
+public:
+    WindowImpl();
+    ~WindowImpl();
+
+    ImplWinData*        mpWinData;
+    ImplOverlapData*    mpOverlapData;
+    ImplFrameData*      mpFrameData;
+    SalFrame*           mpFrame;
+    SalObject*          mpSysObj;
+    Window*             mpFrameWindow;
+    Window*             mpOverlapWindow;
+    Window*             mpBorderWindow;
+    Window*             mpClientWindow;
+    Window*             mpParent;
+    Window*             mpRealParent;
+    Window*             mpFirstChild;
+    Window*             mpLastChild;
+    Window*             mpFirstOverlap;
+    Window*             mpLastOverlap;
+    Window*             mpPrev;
+    Window*             mpNext;
+    Window*             mpNextOverlap;
+    Window*             mpLastFocusWindow;
+    Window*             mpDlgCtrlDownWindow;
+    VclEventListeners   maEventListeners;
+    VclEventListeners   maChildEventListeners;
+
+    // The canvas interface for this VCL window. Is persistent after the first GetCanvas() call
+    ::com::sun::star::uno::WeakReference< ::com::sun::star::rendering::XCanvas >    mxCanvas;
+
+    ImplDelData*        mpFirstDel;
+    void*               mpUserData;
+    Cursor*             mpCursor;
+    Pointer             maPointer;
+    Fraction            maZoom;
+    XubString           maText;
+    Font*               mpControlFont;
+    Color               maControlForeground;
+    Color               maControlBackground;
+    sal_Int32           mnLeftBorder;
+    sal_Int32           mnTopBorder;
+    sal_Int32           mnRightBorder;
+    sal_Int32           mnBottomBorder;
+    long                mnX;
+    long                mnY;
+    long                mnAbsScreenX;
+    Point               maPos;
+    ULONG               mnHelpId;
+    ULONG               mnUniqId;
+    XubString           maHelpText;
+    XubString           maQuickHelpText;
+    InputContext        maInputContext;
+    ::com::sun::star::uno::Reference< ::com::sun::star::awt::XWindowPeer > mxWindowPeer;
+    ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible > mxAccessible;
+    ImplAccessibleInfos* mpAccessibleInfos;
+    VCLXWindow*         mpVCLXWindow;
+    Region              maWinRegion;        // region to 'shape' the VCL window (frame coordinates)
+    Region              maWinClipRegion;    // the (clipping) region that finally corresponds to the VCL window (frame coordinates)
+    Region              maInvalidateRegion; // region that has to be redrawn (frame coordinates)
+    Region*             mpChildClipRegion;  // child clip region if CLIPCHILDREN is set (frame coordinates)
+    Region*             mpPaintRegion;      // only set during Paint() method call (window coordinates)
+    WinBits             mnStyle;
+    WinBits             mnPrevStyle;
+    WinBits             mnExtendedStyle;
+    WinBits             mnPrevExtendedStyle;
+    WindowType          mnType;
+    USHORT              mnWaitCount;
+    USHORT              mnPaintFlags;
+    USHORT              mnGetFocusFlags;
+    USHORT              mnParentClipMode;
+    USHORT              mnActivateMode;
+    USHORT              mnDlgCtrlFlags;
+    USHORT              mnLockCount;
+    BOOL                mbFrame:1,
+                        mbBorderWin:1,
+                        mbOverlapWin:1,
+                        mbSysWin:1,
+                        mbDialog:1,
+                        mbDockWin:1,
+                        mbFloatWin:1,
+                        mbPushButton:1,
+                        mbVisible:1,
+                        mbDisabled:1,
+                        mbInputDisabled:1,
+                        mbAlwaysEnableInput:1,
+                        mbDropDisabled:1,
+                        mbNoUpdate:1,
+                        mbNoParentUpdate:1,
+                        mbActive:1,
+                        mbParentActive:1,
+                        mbReallyVisible:1,
+                        mbReallyShown:1,
+                        mbInInitShow:1,
+                        mbChildNotify:1,
+                        mbChildPtrOverwrite:1,
+                        mbNoPtrVisible:1,
+                        mbPaintFrame:1,
+                        mbInPaint:1,
+                        mbMouseMove:1,
+                        mbMouseButtonDown:1,
+                        mbMouseButtonUp:1,
+                        mbKeyInput:1,
+                        mbKeyUp:1,
+                        mbCommand:1,
+                        mbDefPos:1,
+                        mbDefSize:1,
+                        mbCallMove:1,
+                        mbCallResize:1,
+                        mbWaitSystemResize:1,
+                        mbInitWinClipRegion:1,
+                        mbInitChildRegion:1,
+                        mbWinRegion:1,
+                        mbClipChildren:1,
+                        mbClipSiblings:1,
+                        mbChildTransparent:1,
+                        mbPaintTransparent:1,
+                        mbMouseTransparent:1,
+                        mbDlgCtrlStart:1,
+                        mbFocusVisible:1,
+                        mbTrackVisible:1,
+                        mbControlForeground:1,
+                        mbControlBackground:1,
+                        mbAlwaysOnTop:1,
+                        mbCompoundControl:1,
+                        mbCompoundControlHasFocus:1,
+                        mbPaintDisabled:1,
+                        mbAllResize:1,
+                        mbInDtor:1,
+                        mbExtTextInput:1,
+                        mbInFocusHdl:1,
+                        mbOverlapVisible:1,
+                        mbCreatedWithToolkit:1,
+                        mbToolBox:1,
+                        mbSplitter:1,
+                        mbSuppressAccessibilityEvents:1,
+                        mbMenuFloatingWindow:1,
+                        mbDrawSelectionBackground:1,
+                        mbIsInTaskPaneList:1,
+                        mbToolbarFloatingWindow:1;
+
+    ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > mxDNDListenerContainer;
+};
+
+// -----------------
+// - Hilfsmethoden -
+// -----------------
+
+long ImplHandleMouseEvent( Window* pWindow, USHORT nSVEvent, BOOL bMouseLeave,
+                           long nX, long nY, ULONG nMsgTime,
+                           USHORT nCode, USHORT nMode );
+void ImplHandleResize( Window* pWindow, long nNewWidth, long nNewHeight );
+
+#endif // _SV_WINDOW_H
