@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xmlDataSource.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 06:45:38 $
+ *  last change: $Author: rt $ $Date: 2007-07-24 12:05:57 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -74,6 +74,9 @@
 #ifndef _TOOLS_DEBUG_HXX
 #include <tools/debug.hxx>
 #endif
+#ifndef TOOLS_DIAGNOSE_EX_H
+#include <tools/diagnose_ex.h>
+#endif
 
 namespace dbaxml
 {
@@ -118,7 +121,7 @@ OXMLDataSource::OXMLDataSource( ODBFilter& rImport,
                 }
                 catch(Exception)
                 {
-                    OSL_ENSURE(0,"Could not set property!");
+                    DBG_UNHANDLED_EXCEPTION();
                 }
                 break;
             case XML_TOK_SUPPRESS_VERSION_COLUMNS:
@@ -128,7 +131,7 @@ OXMLDataSource::OXMLDataSource( ODBFilter& rImport,
                 }
                 catch(Exception)
                 {
-                    OSL_ENSURE(0,"Could not set property!");
+                    DBG_UNHANDLED_EXCEPTION();
                 }
                 break;
             case XML_TOK_JAVA_DRIVER_CLASS:
@@ -262,7 +265,7 @@ void OXMLDataSource::EndElement()
         }
         catch(Exception)
         {
-            OSL_ENSURE(0,"Could not set property!");
+            DBG_UNHANDLED_EXCEPTION();
         }
     }
 }
