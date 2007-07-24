@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.4 $
+#   $Revision: 1.5 $
 #
-#   last change: $Author: obo $ $Date: 2007-01-25 13:17:46 $
+#   last change: $Author: rt $ $Date: 2007-07-24 13:04:58 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -38,8 +38,14 @@ PRJ=..$/..
 PRJNAME=toolkit
 TARGET=qa_unoapi
 
-ALLTAR:
-    $(SOLARENV)$/bin$/checkapi -sce toolkit.sce -xcl knownissues.xcl -tdoc $(PWD)$/testdocuments
+.INCLUDE: settings.mk
+
+.INCLUDE: target.mk
+
+ALLTAR : UNOAPI_TEST
+
+UNOAPI_TEST:
+    +$(SOLARENV)$/bin$/checkapi -sce toolkit.sce -xcl knownissues.xcl -tdoc $(PWD)$/testdocuments
     @echo =======================================================================
     @echo In case you noticed a failures of toolkit.AccessibleToolBoxItem make sure that the object bar is configured as text and not as icons
     @echo =======================================================================	
