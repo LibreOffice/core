@@ -3,5 +3,16 @@
 SET JARFOLDER=%SOLARVERSION%\%INPATH%\bin%UPDMINOREXT%
 SET CLASSPATH=%JARFOLDER%\OOoRunner.jar;%JARFOLDER%\ridl.jar;%JARFOLDER%\unoil.jar;%JARFOLDER%\jurt.jar;%JARFOLDER%\juh.jar;%JARFOLDER%\java_uno.jar
 
-echo java -Xmx120m -cp %CLASSPATH% org.openoffice.Runner %&
-java -Xmx120m -cp %CLASSPATH% org.openoffice.Runner %&
+IFF "%JAVAI%" != "" THEN
+    SET JAVABIN=%JAVAI%
+ELSEIFF "%JAVA_HOME%" != "" THEN
+    SET JAVABIN=%JAVA_HOME%\bin\java
+ELSE
+   echo please set environment variable JAVA_HOME
+   exit 1
+ENDIFF
+
+set COMMAND=%JAVABIN% -Xmx120m -cp %CLASSPATH% org.openoffice.Runner %&
+
+echo %COMMAND
+%COMMAND
