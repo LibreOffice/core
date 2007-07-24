@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.4 $
+#   $Revision: 1.5 $
 #
-#   last change: $Author: kz $ $Date: 2007-05-10 10:45:58 $
+#   last change: $Author: rt $ $Date: 2007-07-24 13:19:26 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -84,8 +84,8 @@ ALL: 	ALLDEP
 .INCLUDE :  target.mk
 
 run:
-    java $(RUNNER_CLASSPATH) $(RUNNER_ARGS) -sce extensions_complex.sce
+    +java $(RUNNER_CLASSPATH) $(RUNNER_ARGS) -sce extensions_complex.sce
 
 run_%:
-    java $(RUNNER_CLASSPATH) $(RUNNER_ARGS) -o integration.$(PRJNAME).$(@:s/run_//)
+    +java $(RUNNER_CLASSPATH) $(RUNNER_ARGS) -o integration.$(PRJNAME).$(@:s/run_//)
 
