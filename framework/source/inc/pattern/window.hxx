@@ -4,9 +4,9 @@
  *
  *  $RCSfile: window.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 01:33:52 $
+ *  last change: $Author: rt $ $Date: 2007-07-24 11:52:30 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -50,6 +50,10 @@
 #include <com/sun/star/awt/XWindow.hpp>
 #endif
 
+#ifndef _COM_SUN_STAR_AWT_XTOPWINDOW_HPP_
+#include <com/sun/star/awt/XTopWindow.hpp>
+#endif
+
 //_______________________________________________
 // other includes
 
@@ -89,14 +93,16 @@ namespace css = ::com::sun::star;
 #endif
 
 namespace framework{
-    namespace pattern{
-        namespace window{
 
 //_______________________________________________
 // definitions
 
+class WindowHelper
+{
+    public:
+
 //-----------------------------------------------
-::rtl::OUString getWindowState(const css::uno::Reference< css::awt::XWindow >& xWindow)
+static ::rtl::OUString getWindowState(const css::uno::Reference< css::awt::XWindow >& xWindow)
 {
     if (!xWindow.is())
         return ::rtl::OUString();
@@ -121,8 +127,8 @@ namespace framework{
 }
 
 //-----------------------------------------------
-void setWindowState(const css::uno::Reference< css::awt::XWindow >& xWindow     ,
-                    const ::rtl::OUString&                          sWindowState)
+static void setWindowState(const css::uno::Reference< css::awt::XWindow >& xWindow     ,
+                           const ::rtl::OUString&                          sWindowState)
 {
     if (
         (!xWindow.is()            ) ||
@@ -152,8 +158,32 @@ void setWindowState(const css::uno::Reference< css::awt::XWindow >& xWindow     
     // <- SOLAR SAFE ----------------------------
 }
 
-        } // namespace config
-    } // namespace pattern
+//-----------------------------------------------
+static ::sal_Bool isTopWindow(const css::uno::Reference< css::awt::XWindow >& xWindow)
+{
+    // even child frame containing top level windows (e.g. query designer of database) will be closed
+    css::uno::Reference< css::awt::XTopWindow > xTopWindowCheck(xWindow, css::uno::UNO_QUERY);
+    if (xTopWindowCheck.is())
+    {
+        // Note: Toolkit interface XTopWindow sometimes is used by real VCL-child-windows also .-)
+        // Be sure that these window is realy a "top system window".
+        // Attention ! Checking Window->GetParent() isnt the right approach here.
+        // Because sometimes VCL create "implicit border windows" as parents even we created
+        // a simple XWindow using the toolkit only .-(
+        ::vos::OGuard aSolarLock(&Application::GetSolarMutex());
+        Window* pWindow = VCLUnoHelper::GetWindow( xWindow );
+        if (
+            (pWindow                  ) &&
+            (pWindow->IsSystemWindow())
+           )
+            return sal_True;
+    }
+
+    return sal_False;
+}
+
+};
+
 } // namespace framework
 
 #endif // __FRAMEWORK_PATTERN_WINDOW_HXX_
