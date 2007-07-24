@@ -4,9 +4,9 @@
  *
  *  $RCSfile: window2.cxx,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: rt $ $Date: 2007-07-05 08:43:42 $
+ *  last change: $Author: rt $ $Date: 2007-07-24 10:23:17 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -58,7 +58,7 @@
 #include <vcl/svdata.hxx>
 #endif
 #ifndef _SV_IMPBMP_HXX
-#include <impbmp.hxx>
+#include <vcl/impbmp.hxx>
 #endif
 #ifndef _SV_BITMAP_HXX
 #include <vcl/bitmap.hxx>
@@ -76,7 +76,7 @@
 #include <vcl/outfont.hxx>
 #endif
 #ifndef _SV_OUTDEV_H
-#include <outdev.h>
+#include <vcl/outdev.h>
 #endif
 #ifndef _TL_POLY_HXX
 #include <tools/poly.hxx>
@@ -85,7 +85,7 @@
 #include <vcl/virdev.hxx>
 #endif
 #ifndef _SV_WINDOW_H
-#include <window.h>
+#include <vcl/window.h>
 #endif
 #ifndef _SV_WINDOW_HXX
 #include <vcl/window.hxx>
