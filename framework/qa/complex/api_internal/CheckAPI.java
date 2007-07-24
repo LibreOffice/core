@@ -1,0 +1,234 @@
+/*************************************************************************
+ *
+ *  $RCSfile: CheckAPI.java,v $
+ *
+ *  $Revision: 1.2 $
+ *
+ *  last change: $Date: 2007-07-24 13:24:22 $
+ *
+ *  The Contents of this file are made available subject to the terms of
+ *  either of the following licenses
+ *
+ *         - GNU Lesser General Public License Version 2.1
+ *         - Sun Industry Standards Source License Version 1.1
+ *
+ *  Sun Microsystems Inc., October, 2000
+ *
+ *  GNU Lesser General Public License Version 2.1
+ *  =============================================
+ *  Copyright 2000 by Sun Microsystems, Inc.
+ *  901 San Antonio Road, Palo Alto, CA 94303, USA
+ *
+ *  This library is free software; you can redistribute it and/or
+ *  modify it under the terms of the GNU Lesser General Public
+ *  License version 2.1, as published by the Free Software Foundation.
+ *
+ *  This library is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ *  Lesser General Public License for more details.
+ *
+ *  You should have received a copy of the GNU Lesser General Public
+ *  License along with this library; if not, write to the Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston,
+ *  MA  02111-1307  USA
+ *
+ *
+ *  Sun Industry Standards Source License Version 1.1
+ *  =================================================
+ *  The contents of this file are subject to the Sun Industry Standards
+ *  Source License Version 1.1 (the "License"); You may not use this file
+ *  except in compliance with the License. You may obtain a copy of the
+ *  License at http://www.openoffice.org/license.html.
+ *
+ *  Software provided under this License is provided on an "AS IS" basis,
+ *  WITHOUT WARRANTY OF ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING,
+ *  WITHOUT LIMITATION, WARRANTIES THAT THE SOFTWARE IS FREE OF DEFECTS,
+ *  MERCHANTABLE, FIT FOR A PARTICULAR PURPOSE, OR NON-INFRINGING.
+ *  See the License for the specific provisions governing your rights and
+ *  obligations concerning the Software.
+ *
+ *  The Initial Developer of the Original Code is: Sun Microsystems, Inc.
+ *
+ *  Copyright: 2000 by Sun Microsystems, Inc.
+ *
+ *  All Rights Reserved.
+ *
+ *  Contributor(s): _______________________________________
+ *
+ *
+ ************************************************************************/
+// package name: as default, start with complex
+package complex.api_internal;
+
+// imports
+import complexlib.ComplexTestCase;
+import helper.OfficeProvider;
+import helper.ProcessHandler;
+import com.sun.star.task.XJob;
+import com.sun.star.beans.XPropertyAccess;
+import com.sun.star.lang.XMultiServiceFactory;
+import com.sun.star.beans.PropertyValue;
+import com.sun.star.uno.UnoRuntime;
+import com.sun.star.beans.NamedValue;
+
+import java.io.PrintWriter;
+import java.util.Vector;
+import java.util.StringTokenizer;
+
+/**
+ * This test executes the API tests internally in StarOffice. Prerequiste is
+ * that a OOoRunner.jar is registered inseide of StarOffice. Adjust the joblist
+ * inside of the ChekAPI.props to determine which tetss will be executed.
+ */
+public class CheckAPI extends ComplexTestCase {
+
+    // The name of the tested service
+    private final String testName = "StarOfficeAPI";
+
+    /**
+     * Return all test methods.
+     * @return The test methods.
+     */
+    public String[] getTestMethodNames() {
+        return new String[]{"checkAPI"};
+    }
+
+    /**
+     * Execute the API tests inside of the Office. If the Office crashes, it
+     * will be restarted and the job will continue after the one that caused the crash.
+     */
+    public void checkAPI() {
+        log.println("Start with test");
+        // if test is idle for 5 minutes, assume that it hangs and kill it.
+        param.put("TimeOut", new Integer("300000"));
+/*        AppProvider office = (AppProvider)dcl.getInstance("helper.OfficeProvider");
+        Object msf = office.getManager(param);
+        if (msf == null) {
+            failed("Could not connect an Office.");
+        }
+        param.put("ServiceFactory",msf); */
+        XMultiServiceFactory xMSF = (XMultiServiceFactory)param.getMSF();
+        Object oObj = null;
+        try {
+            oObj = xMSF.createInstance("org.openoffice.RunnerService");
+        }
+        catch(com.sun.star.uno.Exception e) {
+            failed("Could not create Instance of 'org.openoffice.RunnerService'");
+        }
+        if ( oObj == null ) {
+            failed("Cannot create 'org.openoffice.RunnerService'");
+        }
+        // get the parameters for the internal test
+        String paramList = (String)param.get("ParamList");
+        Vector p = new Vector();
+        StringTokenizer paramTokens = new StringTokenizer(paramList, " ");
+        while(paramTokens.hasMoreTokens()) {
+            p.add(paramTokens.nextToken());
+        }
+        int length = p.size()/2+1;
+        NamedValue[] internalParams = new NamedValue[length];
+        for (int i=0; i<length-1; i++) {
+            internalParams[i] = new NamedValue();
+            internalParams[i].Name = (String)p.get(i*2);
+            internalParams[i].Value = p.get(i*2+1);
+            log.println("Name: "+internalParams[i].Name);
+            log.println("Value: "+(String)internalParams[i].Value);
+        }
+
+        // do we have test jobs?
+        String testJob = (String)param.get("job");
+        PropertyValue[]props;
+        if (testJob==null) {
+            if ( param.get("job1")==null ) {
+                // get all test jobs from runner service
+                XPropertyAccess xPropAcc = (XPropertyAccess)UnoRuntime.queryInterface(XPropertyAccess.class, oObj);
+                props = xPropAcc.getPropertyValues();
+            }
+            else  {
+                int index=1;
+                p = new Vector();
+                while ( param.get("job"+index) != null ) {
+                    p.add(param.get("job"+index));
+                    index++;
+                }
+                props = new PropertyValue[p.size()];
+                for ( int i=0; i<props.length; i++ ) {
+                    props[i] = new PropertyValue();
+                    props[i].Value = p.get(i);
+                }
+            }
+        }
+        else  {
+            props = new PropertyValue[1];
+            props[0] = new PropertyValue();
+            props[0].Value = testJob;
+        }
+
+        log.println("Props length: "+ props.length);
+        for (int i=0; i<props.length; i++) {
+            XJob xJob = (XJob)UnoRuntime.queryInterface(XJob.class, oObj);
+            internalParams[length-1] = new NamedValue();
+            internalParams[length-1].Name = "-o";
+            internalParams[length-1].Value = props[i].Value;
+            log.println("Executing: " + (String)props[i].Value);
+
+            String erg = null;
+
+            try {
+                erg = (String)xJob.execute(internalParams);
+            }
+            catch(Throwable t) {
+                // restart and go on with test!!
+                t.printStackTrace((PrintWriter)log);
+                failed("Test run '" + (String)props[i].Value +"' could not be executed: Office crashed and is killed!", true);
+                xMSF = null;
+                ProcessHandler handler = (ProcessHandler)param.get("AppProvider");
+                handler.kill();
+                try {
+                    Thread.sleep(10000);
+                }
+                catch(java.lang.InterruptedException e) {}
+                OfficeProvider op = new OfficeProvider();
+                //                op.closeExistingOffice(param, true);
+                xMSF = (XMultiServiceFactory)op.getManager(param);
+                param.put("ServiceFactory",xMSF);
+                try {
+                    oObj = xMSF.createInstance("org.openoffice.RunnerService");
+                }
+                catch(com.sun.star.uno.Exception e) {
+                    failed("Could not create Instance of 'org.openoffice.RunnerService'");
+                }
+            }
+            log.println(erg);
+            String processedErg = parseResult(erg);
+            assure("Run '" + (String)props[i].Value + "' has result '" + processedErg + "'", processedErg == null, true);
+        }
+    }
+
+    private String parseResult(String erg) {
+        String lineFeed = System.getProperty("line.separator");
+        String processedErg = null;
+        if (erg != null) {
+            StringTokenizer token = new StringTokenizer(erg, lineFeed);
+            String previousLine = null;
+            while ( token.hasMoreTokens() ) {
+                String line = token.nextToken();
+                // got a failure!
+                if ( line.indexOf("FAILED") != -1 ) {
+                    processedErg = (processedErg == null)?"":processedErg + ";";
+                    processedErg += previousLine + ":" + line;
+                }
+                if ( line.startsWith("Execute:") ) {
+                    previousLine = line;
+                }
+                else  {
+                    previousLine += " " + line;
+                }
+            }
+        }
+        return processedErg;
+    }
+}
+
+
