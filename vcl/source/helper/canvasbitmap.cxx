@@ -4,9 +4,9 @@
  *
  *  $RCSfile: canvasbitmap.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: hr $ $Date: 2007-06-27 20:26:04 $
+ *  last change: $Author: rt $ $Date: 2007-07-24 10:15:36 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -46,7 +46,7 @@
 #include <vos/mutex.hxx>
 #endif
 
-#include <canvasbitmap.hxx>
+#include <vcl/canvasbitmap.hxx>
 #include <vcl/canvastools.hxx>
 #include <vcl/bmpacc.hxx>
 #include <vcl/svapp.hxx>
