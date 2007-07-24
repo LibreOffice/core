@@ -4,9 +4,9 @@
  *
  *  $RCSfile: file_library_ooo.scp,v $
  *
- *  $Revision: 1.253 $
+ *  $Revision: 1.254 $
  *
- *  last change: $Author: obo $ $Date: 2007-07-17 13:46:57 $
+ *  last change: $Author: rt $ $Date: 2007-07-24 11:25:04 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1733,18 +1733,9 @@ File gid_File_Lib_Basebmp
 End
 #endif
 
-#if defined(UNX) && ! defined(QUARTZ)
-#ifdef ENABLE_HEADLESS
-File gid_File_Lib_Vclplug_Hidden
-    Name = LIBNAME(vclplug_svp);
-    TXT_FILE_BODY;
-    Styles = (PACKED,PATCH);
-    Dir = gid_Dir_Program;
-End
-
+#ifdef UNX
+STD_LIB_FILE_PATCH( gid_File_Lib_Vclplug_Svp, vclplug_svp )
 STD_LIB_FILE_PATCH( gid_File_Lib_BaseBmp, basebmp )
-
-#endif
 #endif
 
 File gid_File_Lib_Rdbtdp
