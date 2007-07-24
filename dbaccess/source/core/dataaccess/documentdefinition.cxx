@@ -4,9 +4,9 @@
  *
  *  $RCSfile: documentdefinition.cxx,v $
  *
- *  $Revision: 1.43 $
+ *  $Revision: 1.44 $
  *
- *  last change: $Author: rt $ $Date: 2007-07-06 07:54:16 $
+ *  last change: $Author: rt $ $Date: 2007-07-24 12:05:15 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -455,9 +455,7 @@ namespace dbaccess
         {
             // the object must be based on storage
 
-            Reference< XPropertySet > xPropSet( xStorage->openStorageElement( sEntName, ElementModes::READ ), UNO_QUERY );
-            if ( !xPropSet.is() )
-                throw RuntimeException();
+            Reference< XPropertySet > xPropSet( xStorage->openStorageElement( sEntName, ElementModes::READ ), UNO_QUERY_THROW );
 
             ::rtl::OUString aMediaType;
             try {
@@ -498,17 +496,12 @@ namespace dbaccess
                 }
             }
 
-            try
-            {
-                ::comphelper::disposeComponent(xPropSet);
-            }
-            catch ( Exception& )
-            {
-            }
+            ::comphelper::disposeComponent( xPropSet );
         }
     }
     catch ( Exception& )
     {
+        DBG_UNHANDLED_EXCEPTION();
     }
     return sResult;
 }
