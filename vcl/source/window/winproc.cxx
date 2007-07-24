@@ -62,10 +62,10 @@
 #include <vcl/svdata.hxx>
 #endif
 #ifndef _SV_DBGGUI_HXX
-#include <dbggui.hxx>
+#include <vcl/dbggui.hxx>
 #endif
 #ifndef _SV_WINDATA_HXX
-#include <windata.hxx>
+#include <vcl/windata.hxx>
 #endif
 #ifndef _SV_TIMER_HXX
 #include <vcl/timer.hxx>
@@ -86,13 +86,13 @@
 #include <vcl/cursor.hxx>
 #endif
 #ifndef _SV_ACCMGR_HXX
-#include <accmgr.hxx>
+#include <vcl/accmgr.hxx>
 #endif
 #ifndef _SV_PRINT_H
 #include <vcl/print.h>
 #endif
 #ifndef _SV_WINDOW_H
-#include <window.h>
+#include <vcl/window.h>
 #endif
 #ifndef _SV_WRKWIN_HXX
 #include <vcl/wrkwin.hxx>
@@ -107,10 +107,10 @@
 #include <vcl/help.hxx>
 #endif
 #ifndef _SV_HELPWIN_HXX
-#include <helpwin.hxx>
+#include <vcl/helpwin.hxx>
 #endif
 #ifndef _SV_BRDWIN_HXX
-#include <brdwin.hxx>
+#include <vcl/brdwin.hxx>
 #endif
 #ifndef _SV_DOCKWIN_HXX
 #include <vcl/dockwin.hxx>
