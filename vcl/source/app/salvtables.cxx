@@ -4,9 +4,9 @@
  *
  *  $RCSfile: salvtables.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: hr $ $Date: 2007-06-27 20:01:29 $
+ *  last change: $Author: rt $ $Date: 2007-07-24 10:04:17 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -47,7 +47,7 @@
 #include <vcl/salsys.hxx>
 #include <vcl/salbmp.hxx>
 #include <vcl/salobj.hxx>
-#include <salmenu.hxx>
+#include <vcl/salmenu.hxx>
 #include <vcl/salctrlhandle.hxx>
 
 // this file contains the virtual destructors of the sal interface
