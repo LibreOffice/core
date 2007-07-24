@@ -4,9 +4,9 @@
  *
  *  $RCSfile: outdev2.cxx,v $
  *
- *  $Revision: 1.36 $
+ *  $Revision: 1.37 $
  *
- *  last change: $Author: hr $ $Date: 2007-06-27 20:19:08 $
+ *  last change: $Author: rt $ $Date: 2007-07-24 10:12:08 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -46,7 +46,7 @@
 #include <vcl/salgdi.hxx>
 #endif
 #ifndef _SV_IMPBMP_HXX
-#include <impbmp.hxx>
+#include <vcl/impbmp.hxx>
 #endif
 #ifndef _DEBUG_HXX
 #include <tools/debug.hxx>
@@ -70,16 +70,16 @@
 #include <vcl/virdev.hxx>
 #endif
 #ifndef _SV_OUTDATA_HXX
-#include <outdata.hxx>
+#include <vcl/outdata.hxx>
 #endif
 #ifndef _SV_OUTDEV_H
-#include <outdev.h>
+#include <vcl/outdev.h>
 #endif
 #ifndef _SV_BMPACC_HXX
 #include <vcl/bmpacc.hxx>
 #endif
 #ifndef _SV_REGION_H
-#include <region.h>
+#include <vcl/region.h>
 #endif
 #ifndef _SV_OUTDEV_HXX
 #include <vcl/outdev.hxx>
@@ -88,19 +88,19 @@
 #include <vcl/window.hxx>
 #endif
 #ifndef _SV_WINDOW_H
-#include <window.h>
+#include <vcl/window.h>
 #endif
 #ifndef _SV_SALLAYOUT_HXX
 #include <vcl/sallayout.hxx>
 #endif
 #ifndef _SV_IMAGE_H
-#include <image.h>
+#include <vcl/image.h>
 #endif
 #ifndef _SV_IMAGE_HXX
 #include <vcl/image.hxx>
 #endif
 #ifndef _SV_BMPFAST_HXX
-#include <bmpfast.hxx>
+#include <vcl/bmpfast.hxx>
 #endif
 
 #define BAND_MAX_SIZE 512000
