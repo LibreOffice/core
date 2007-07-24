@@ -4,9 +4,9 @@
  *
  *  $RCSfile: persistentwindowstate.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: ihi $ $Date: 2007-04-16 16:41:24 $
+ *  last change: $Author: rt $ $Date: 2007-07-24 11:52:15 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -116,8 +116,6 @@
 //  namespace
 
 namespace framework{
-
-namespace fpw = ::framework::pattern::window;
 
 //_________________________________________________________________________________________________________________
 //  definitions
