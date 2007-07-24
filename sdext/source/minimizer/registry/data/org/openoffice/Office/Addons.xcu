@@ -41,36 +41,75 @@
                 </node>
             </node>
         </node>
-        <node oor:name="AddonMenu">
-            <node oor:name="org.openoffice.Office.SunPresentationMinimizerExecute" oor:op="replace">
-                <prop oor:name="URL" oor:type="xs:string">
-                    <value>vnd.com.sun.star.comp.SunPresentationMinimizer:execute</value>
-                </prop>
-                <prop oor:name="Title" oor:type="xs:string">
-                    <value xml:lang="en-US">~Minimize Presentation...</value>
-                    <value xml:lang="de">~Präsentation minimieren...</value>
-                </prop>
-                <prop oor:name="Target" oor:type="xs:string">
-                    <value>_self</value>
-                </prop>
-                <prop oor:name="Context" oor:type="xs:string">
-                    <value>com.sun.star.presentation.PresentationDocument</value>
-                </prop>
-            </node>
-            <node oor:name="org.openoffice.Office.SunPresentationMinimizerAbout" oor:op="replace">
-                <prop oor:name="URL" oor:type="xs:string">
-                    <value>vnd.com.sun.star.comp.SunPresentationMinimizer:about</value>
-                </prop>
-                <prop oor:name="Title" oor:type="xs:string">
-                    <value xml:lang="en-US">~Info über Sun Presentation Minimizer</value>
-                    <value xml:lang="de">About Sun Presentation Minimizer</value>
-                </prop>
-                <prop oor:name="Target" oor:type="xs:string">
-                    <value>_self</value>
-                </prop>
-                <prop oor:name="Context" oor:type="xs:string">
-                    <value>com.sun.star.presentation.PresentationDocument</value>
-                </prop>
+        <node oor:name="OfficeMenuBarMerging">
+            <node oor:name="org.openoffice.Office.SunPresentationMinimizer" oor:op="replace">
+                <node oor:name="org.openoffice.Office.SunPresentationMinimizerCommand1" oor:op="replace">
+                    <prop oor:name="MergePoint">
+                        <value>.uno:ToolsMenu\.uno:AVMediaPlayer</value>
+                    </prop>
+                    <prop oor:name="MergeCommand">
+                        <value>AddAfter</value>
+                    </prop>
+                    <prop oor:name="MergeFallback">
+                        <value>AddPath</value>
+                    </prop>
+                    <prop oor:name="MergeContext">
+                        <value>com.sun.star.presentation.PresentationDocument</value>
+                    </prop>
+                    <node oor:name="MenuItems">
+                        <node oor:name="org.openoffice.Office.SunPresentationMinimizerExecute1" oor:op="replace">
+                            <prop oor:name="URL" oor:type="xs:string">
+                                <value>private:separator</value>
+                            </prop>
+                        </node>
+                        <node oor:name="org.openoffice.Office.SunPresentationMinimizerExecute2" oor:op="replace">
+                            <prop oor:name="URL" oor:type="xs:string">
+                                <value>vnd.com.sun.star.comp.SunPresentationMinimizer:execute</value>
+                            </prop>
+                            <prop oor:name="Title" oor:type="xs:string">
+                                <value xml:lang="en-US">~Minimize Presentation...</value>
+                                <value xml:lang="de">~Präsentation minimieren...</value>
+                            </prop>
+                            <prop oor:name="Target" oor:type="xs:string">
+                                <value>_self</value>
+                            </prop>
+                            <prop oor:name="Context" oor:type="xs:string">
+                                <value>com.sun.star.presentation.PresentationDocument</value>
+                            </prop>
+                        </node>
+                    </node>
+                </node>
+                <node oor:name="org.openoffice.Office.SunPresentationMinimizerCommand2" oor:op="replace">
+                    <prop oor:name="MergePoint">
+                        <value>.uno:HelpMenu\.uno:About</value>
+                    </prop>
+                    <prop oor:name="MergeCommand">
+                        <value>AddBefore</value>
+                    </prop>
+                    <prop oor:name="MergeFallback">
+                        <value>AddPath</value>
+                    </prop>
+                    <prop oor:name="MergeContext">
+                        <value>com.sun.star.presentation.PresentationDocument</value>
+                    </prop>
+                    <node oor:name="MenuItems">
+                        <node oor:name="org.openoffice.Office.SunPresentationMinimizerAbout1" oor:op="replace">
+                            <prop oor:name="URL" oor:type="xs:string">
+                                <value>vnd.com.sun.star.comp.SunPresentationMinimizer:about</value>
+                            </prop>
+                            <prop oor:name="Title" oor:type="xs:string">
+                                <value xml:lang="en-US">~Info über Sun Presentation Minimizer</value>
+                                <value xml:lang="de">About Sun Presentation Minimizer</value>
+                            </prop>
+                            <prop oor:name="Target" oor:type="xs:string">
+                                <value>_self</value>
+                            </prop>
+                            <prop oor:name="Context" oor:type="xs:string">
+                                <value>com.sun.star.presentation.PresentationDocument</value>
+                            </prop>
+                        </node>
+                    </node>
+                </node>
             </node>
         </node>
     </node>
