@@ -4,9 +4,9 @@
  *
  *  $RCSfile: salmenu.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: hr $ $Date: 2007-06-27 20:58:28 $
+ *  last change: $Author: rt $ $Date: 2007-07-24 10:34:15 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -59,13 +59,13 @@
 #include <vcl/menu.hxx>
 #endif
 #ifndef _SV_SYSDATA_HXX
-#include <sysdata.hxx>
+#include <vcl/sysdata.hxx>
 #endif
 #ifndef _SV_SALFRAME_H
 #include <salframe.h>
 #endif
 #ifndef _SV_IMPBMP_HXX
-#include <impbmp.hxx>
+#include <vcl/impbmp.hxx>
 #endif
 
 // uncomment the following line to have ownerdrawn menues, ie, with bitmaps
