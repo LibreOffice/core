@@ -4,9 +4,9 @@
  *
  *  $RCSfile: javachild.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: rt $ $Date: 2007-07-05 08:41:45 $
+ *  last change: $Author: rt $ $Date: 2007-07-24 10:20:37 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -68,7 +68,7 @@
 #endif
 #include <vcl/javachild.hxx>
 #include <vcl/svdata.hxx>
-#include <sysdata.hxx>
+#include <vcl/sysdata.hxx>
 
 using namespace ::com::sun::star;
 
