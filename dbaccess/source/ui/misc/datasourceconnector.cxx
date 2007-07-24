@@ -4,9 +4,9 @@
  *
  *  $RCSfile: datasourceconnector.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: rt $ $Date: 2007-07-06 08:36:26 $
+ *  last change: $Author: rt $ $Date: 2007-07-24 12:10:26 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -123,11 +123,10 @@ namespace dbaui
 
     //---------------------------------------------------------------------
     ODatasourceConnector::ODatasourceConnector( const Reference< XMultiServiceFactory >& _rxORB, Window* _pMessageParent,
-        const ::rtl::OUString& _rContextInformation, const ::rtl::OUString& _rContextDetails )
+        const ::rtl::OUString& _rContextInformation )
         :m_pErrorMessageParent(_pMessageParent)
         ,m_xORB(_rxORB)
         ,m_sContextInformation( _rContextInformation )
-        ,m_sContextDetails( _rContextDetails )
     {
         implConstruct();
     }
@@ -241,13 +240,11 @@ namespace dbaui
         {
             if ( m_sContextInformation.getLength() )
             {
-                SQLContext aContext;
+                SQLException aError;
+                aError.Message = m_sContextInformation;
+                aError.NextException = aInfo.get();
 
-                aContext.Message = m_sContextInformation;
-                aContext.Details = m_sContextDetails;
-                aContext.NextException = aInfo.get();
-
-                aInfo = aContext;
+                aInfo = aError;
             }
 
             showError(aInfo, m_pErrorMessageParent, m_xORB);
