@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.94 $
+#   $Revision: 1.95 $
 #
-#   last change: $Author: rt $ $Date: 2007-07-05 08:44:46 $
+#   last change: $Author: rt $ $Date: 2007-07-24 10:33:00 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -118,7 +118,7 @@ HXXDEPNLST= $(INC)$/vcl$/accel.hxx       \
             $(INC)$/vcl$/sv.h            \
             $(INC)$/vcl$/svapp.hxx       \
             $(INC)$/vcl$/syschild.hxx    \
-            $(INC)$/sysdata.hxx     \
+            $(INC)$/vcl$/sysdata.hxx     \
             $(INC)$/vcl$/syswin.hxx      \
             $(INC)$/vcl$/tabctrl.hxx     \
             $(INC)$/vcl$/tabdlg.hxx      \
@@ -325,29 +325,6 @@ SHL2STDLIBS+= -ldl
 
 .ENDIF          # "$(GUIBASE)"=="unx"
 
-# dummy plugin
-LIB3TARGET=$(SLB)$/idummy_plug_
-LIB3FILES= \
-            $(SLB)$/dapp.lib
-SHL3TARGET=vclplug_dummy$(UPD)$(DLLPOSTFIX)
-SHL3IMPLIB=idummy_plug_
-SHL3LIBS=$(LIB3TARGET)
-SHL3DEPN=$(SHL1IMPLIBN) $(SHL1TARGETN)
-
-# libs for dummy plugin
-SHL3STDLIBS=\
-            $(VCLLIB)\
-            -lpsp$(VERSION)$(DLLPOSTFIX)\
-            $(SOTLIB)           \
-            $(UNOTOOLSLIB)      \
-            $(TOOLSLIB)         \
-            $(COMPHELPERLIB)	\
-            $(UCBHELPERLIB)     \
-            $(CPPUHELPERLIB)    \
-            $(CPPULIB)          \
-            $(VOSLIB)           \
-            $(SALLIB)
-
 # gtk plugin
 .IF "$(ENABLE_GTK)" != ""
 PKGCONFIG_MODULES=gtk+-2.0 gthread-2.0
@@ -374,7 +351,7 @@ SHL4NOCHECK=TRUE
 
 
 SHL4STDLIBS+=-l$(SHL2TARGET)
-SHL4STDLIBS+=$(SHL3STDLIBS)
+SHL4STDLIBS+=$(SHL2STDLIBS)
 .ENDIF # "$(ENABLE_GTK)" != ""
 
 # KDE plugin
@@ -388,49 +365,14 @@ SHL5DEPN=$(SHL2TARGETN)
 # libs for KDE plugin
 SHL5STDLIBS=$(KDE_LIBS)
 SHL5STDLIBS+=-l$(SHL2TARGET)
-SHL5STDLIBS+=$(SHL3STDLIBS)
+SHL5STDLIBS+=\
+        $(VCLLIB)       \
+        -lpsp$(VERSION)$(DLLPOSTFIX)\
+        $(TOOLSLIB)     \
+        $(VOSLIB)       \
+        $(SALLIB)
 .ENDIF # "$(ENABLE_KDE)" != ""
 
-# headless plugin
-.IF "$(ENABLE_HEADLESS)" != ""
-LIB6TARGET=$(SLB)$/iheadless_plug_
-LIB6FILES= \
-            $(SLB)$/headless.lib
-SHL6TARGET=vclplug_svp$(UPD)$(DLLPOSTFIX)
-SHL6IMPLIB=iheadless_plug_
-SHL6LIBS=$(LIB6TARGET)
-SHL6DEPN=$(SHL1IMPLIBN) $(SHL1TARGETN) $(SHL2IMPLIBN) $(SHL2TARGETN)
-
-# libs for headless plugin
-SHL6STDLIBS=\
-        $(BASEBMPLIB)	\
-        $(BASEGFXLIB)	\
-        $(VCLLIB)		\
-        -lpsp$(VERSION)$(DLLPOSTFIX)\
-            $(SOTLIB)           \
-            $(UNOTOOLSLIB)      \
-            $(TOOLSLIB)         \
-            $(COMPHELPERLIB)	\
-            $(UCBHELPERLIB)     \
-            $(CPPUHELPERLIB)    \
-            $(CPPULIB)          \
-            $(VOSLIB)           \
-            $(SALLIB)
-
-SHL6STDLIBS+=-l$(SHL2TARGET)
-.IF "$(PKGCONFIG)" == ""
-PKGCONFIG_MODULES=glib-2.0
-.INCLUDE: pkg_config.mk
-.ENDIF
-PKG6CONFIG_LIBS:=$(shell $(PKGCONFIG) $(PKGCONFIG_PREFIX) --libs glib-2.0)
-SHL6STDLIBS+=$(PKG6CONFIG_LIBS)
-
-.IF "$(PKGCONFIG_ROOT)"!=""
-SHL6SONAME+=-z nodefs
-SHL6NOCHECK=TRUE
-.ENDIF          # "$(PKGCONFIG_ROOT)"!=""
-
-.ENDIF
 .ENDIF # UNX
 
 # --- Allgemein ----------------------------------------------------------
