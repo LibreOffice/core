@@ -4,9 +4,9 @@
  *
  *  $RCSfile: settings.cxx,v $
  *
- *  $Revision: 1.71 $
+ *  $Revision: 1.72 $
  *
- *  last change: $Author: rt $ $Date: 2007-07-05 08:37:31 $
+ *  last change: $Author: rt $ $Date: 2007-07-24 10:04:42 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -61,7 +61,7 @@
 #endif
 
 #ifndef _VCL_FONTCFG_HXX
-#include <fontcfg.hxx>
+#include <vcl/fontcfg.hxx>
 #endif
 #ifndef VCL_INC_CONFIGSETTINGS_HXX
 #include <vcl/configsettings.hxx>
