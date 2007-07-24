@@ -4,9 +4,9 @@
  *
  *  $RCSfile: toolbox2.cxx,v $
  *
- *  $Revision: 1.50 $
+ *  $Revision: 1.51 $
  *
- *  last change: $Author: hr $ $Date: 2007-06-27 20:35:33 $
+ *  last change: $Author: rt $ $Date: 2007-07-24 10:22:46 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -62,7 +62,7 @@
 #include <vcl/toolbox.hxx>
 #endif
 #ifndef _SV_TOOLBOX_H
-#include <toolbox.h>
+#include <vcl/toolbox.h>
 #endif
 #ifndef _SV_MNEMONIC_HXX
 #include <vcl/mnemonic.hxx>
@@ -71,7 +71,7 @@
 #include <vcl/menu.hxx>
 #endif
 #ifndef _SV_BRDWIN_HXX
-#include <brdwin.hxx>
+#include <vcl/brdwin.hxx>
 #endif
 
 #include <vcl/unohelp.hxx>
