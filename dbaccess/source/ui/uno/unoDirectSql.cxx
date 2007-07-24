@@ -4,9 +4,9 @@
  *
  *  $RCSfile: unoDirectSql.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 07:34:20 $
+ *  last change: $Author: rt $ $Date: 2007-07-24 12:10:39 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -143,11 +143,14 @@ DBG_NAME(ODirectSQLDialog)
         {
             if (0 == aProperty.Name.compareToAscii("InitialSelection"))
             {
-                aProperty.Value >>= m_sInitialSelection;
+                OSL_VERIFY( aProperty.Value >>= m_sInitialSelection );
+                return;
             }
             else if (0 == aProperty.Name.compareToAscii("ActiveConnection"))
             {
-                m_xActiveConnection.set(aProperty.Value,UNO_QUERY);
+                m_xActiveConnection.set( aProperty.Value, UNO_QUERY );
+                OSL_ENSURE( m_xActiveConnection.is(), "ODirectSQLDialog::implInitialize: invalid connection!" );
+                return;
             }
         }
         ODirectSQLDialog_BASE::implInitialize(_rValue);
