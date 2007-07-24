@@ -2,5 +2,15 @@
 
 JARFOLDER=$SOLARVERSION/$INPATH/bin$UPDMINOREXT
 CLASSPATH=$JARFOLDER/OOoRunner.jar:$JARFOLDER/ridl.jar:$JARFOLDER/unoil.jar:$JARFOLDER/jurt.jar:$JARFOLDER/juh.jar:$JARFOLDER/java_uno.jar
-echo java -Xmx120m -cp $CLASSPATH org.openoffice.Runner $*
-java -Xmx120m -cp $CLASSPATH org.openoffice.Runner $*
+
+if [ -n "$JAVAI" ]; then
+	JAVABIN=$JAVAI
+elif [ -n "$JAVA_HOME" ]; then
+	JAVABIN=$JAVA_HOME/bin/java
+else
+	echo "please set environment variable JAVA_HOME"
+	exit 1
+fi
+
+echo $JAVABIN -Xmx120m -cp $CLASSPATH org.openoffice.Runner $*
+$JAVABIN -Xmx120m -cp $CLASSPATH org.openoffice.Runner $*
