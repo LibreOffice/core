@@ -4,9 +4,9 @@
  *
  *  $RCSfile: bitmapex.cxx,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: hr $ $Date: 2007-06-27 20:10:21 $
+ *  last change: $Author: rt $ $Date: 2007-07-24 10:07:37 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -56,7 +56,7 @@
 #include <vcl/alpha.hxx>
 #endif
 #ifndef _SV_IMAGE_H
-#include <image.h>
+#include <vcl/image.h>
 #endif
 #ifndef _SV_BITMAPEX_HXX
 #include <vcl/bitmapex.hxx>
@@ -65,7 +65,7 @@
 #include <vcl/pngread.hxx>
 #endif
 #ifndef _SV_IMPIMAGETREE_H
-#include <impimagetree.hxx>
+#include <vcl/impimagetree.hxx>
 #endif
 #ifndef _SV_RC_H
 #include <tools/rc.h>
