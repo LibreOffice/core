@@ -4,9 +4,9 @@
  *
  *  $RCSfile: fmctrler.cxx,v $
  *
- *  $Revision: 1.65 $
+ *  $Revision: 1.66 $
  *
- *  last change: $Author: rt $ $Date: 2007-07-06 07:36:06 $
+ *  last change: $Author: rt $ $Date: 2007-07-24 12:01:33 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -36,41 +36,24 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_svx.hxx"
 
-#define USE_PROPERTY_HELPER
-
-#ifndef _SVX_FMCTRLER_HXX
 #include "fmctrler.hxx"
-#endif
-#ifndef _SVX_FMTOOLS_HXX
 #include "fmtools.hxx"
-#endif
-#ifndef _SVX_FMPROP_HRC
 #include "fmprop.hrc"
-#endif
-#ifndef _SVX_FMSHELL_HXX
-#include <svx/fmshell.hxx>
-#endif
-#ifndef SVX_FORM_CONFIRMDELETE_HXX
+#include "svx/fmshell.hxx"
 #include "confirmdelete.hxx"
-#endif
-#ifndef SVX_SOURCE_INC_FMCONTROLBORDERMANAGER_HXX
 #include "fmcontrolbordermanager.hxx"
-#endif
-#ifndef SVX_SOURCE_INC_FMDOCUMENTCLASSIFICATION_HXX
 #include "fmdocumentclassification.hxx"
-#endif
-#ifndef SVX_SOURCE_INC_FMCONTROLLAYOUT_HXX
 #include "fmcontrollayout.hxx"
-#endif
-#ifndef _SVX_FMURL_HXX
 #include "fmurl.hxx"
-#endif
-#ifndef SVX_FMDISPATCH_HXX
 #include "fmdispatch.hxx"
-#endif
-#ifndef _TRACE_HXX_
 #include "trace.hxx"
-#endif
+#include "fmshimp.hxx"
+#include "svx/fmview.hxx"
+#include "svx/svdpagv.hxx"
+#include "fmresids.hrc"
+#include "svx/dialmgr.hxx"
+#include "fmservs.hxx"
+#include "svx/sdrpagewindow.hxx"
 
 #ifndef _COM_SUN_STAR_BEANS_NAMEDVALUE_HPP_
 #include <com/sun/star/beans/NamedValue.hpp>
@@ -134,99 +117,31 @@
 #include <com/sun/star/container/XIdentifierReplace.hpp>
 #endif
 
-#ifndef _TOOLS_DEBUG_HXX //autogen
-#include <tools/debug.hxx>
-#endif
-
-#ifndef _SV_SVAPP_HXX //autogen
-#include <vcl/svapp.hxx>
-#endif
-
-#ifndef _SVDPAGV_HXX //autogen
-#include <svx/svdpagv.hxx>
-#endif
-
-#ifndef _SVX_FMSHIMP_HXX
-#include <fmshimp.hxx>
-#endif
-
-#ifndef _SVX_FMVIEW_HXX
-#include <svx/fmview.hxx>
-#endif
-
-#ifndef _SV_MSGBOX_HXX //autogen wg. RET_YES
-#include <vcl/msgbox.hxx>
-#endif
-
-#ifndef _SVX_FMRESIDS_HRC
-#include "fmresids.hrc"
-#endif
-
-#ifndef _SFXVIEWSH_HXX
 #include <sfx2/viewsh.hxx>
-#endif
-#ifndef _SFXVIEWFRM_HXX
 #include <sfx2/viewfrm.hxx>
-#endif
-#ifndef _SFX_BINDINGS_HXX
 #include <sfx2/bindings.hxx>
-#endif
 
-#ifndef _SHL_HXX
-#include <tools/shl.hxx>
-#endif
-
-#ifndef _SVX_DIALMGR_HXX
-#include <svx/dialmgr.hxx>
-#endif
-
-#ifndef _SVX_FMSERVS_HXX
-#include "fmservs.hxx"
-#endif
-
-#ifndef _COMPHELPER_PROPERTY_HXX_
-#include <comphelper/property.hxx>
-#endif
-#ifndef _COMPHELPER_UNO3_HXX_
-#include <comphelper/uno3.hxx>
-#endif
-#ifndef _COMPHELPER_PROPERTY_AGGREGATION_HXX_
-#include <comphelper/propagg.hxx>
-#endif
-#ifndef _COMPHELPER_ENUMHELPER_HXX_
-#include <comphelper/enumhelper.hxx>
-#endif
-#ifndef _COMPHELPER_SEQUENCE_HXX_
-#include <comphelper/sequence.hxx>
-#endif
-#ifndef _CPPUHELPER_QUERYINTERFACE_HXX_
-#include <cppuhelper/queryinterface.hxx>
-#endif
-#ifndef _CPPUHELPER_TYPEPROVIDER_HXX_
-#include <cppuhelper/typeprovider.hxx>
-#endif
-#ifndef _CPPUHELPER_TYPEPROVIDER_HXX_
-#include <cppuhelper/typeprovider.hxx>
-#endif
-#ifndef _COMPHELPER_EXTRACT_HXX_
-#include <comphelper/extract.hxx>
-#endif
-#ifndef _TOOLKIT_UNOHLP_HXX
 #include <toolkit/helper/vclunohelper.hxx>
-#endif
-#ifndef _COMPHELPER_SEQUENCE_HXX_
-#include <comphelper/sequence.hxx>
-#endif
-#ifndef _COMPHELPER_INTERACTION_HXX_
-#include <comphelper/interaction.hxx>
-#endif
-#ifndef _TOOLKIT_CONTROLS_UNOCONTROL_HXX_
 #include <toolkit/controls/unocontrol.hxx>
-#endif
 
-#ifndef _SDRPAGEWINDOW_HXX
-#include <svx/sdrpagewindow.hxx>
-#endif
+#include <vcl/svapp.hxx>
+#include <vcl/msgbox.hxx>
+
+#include <tools/shl.hxx>
+#include <tools/debug.hxx>
+#include <tools/diagnose_ex.h>
+
+#include <comphelper/property.hxx>
+#include <comphelper/uno3.hxx>
+#include <comphelper/propagg.hxx>
+#include <comphelper/enumhelper.hxx>
+#include <comphelper/sequence.hxx>
+#include <comphelper/interaction.hxx>
+#include <comphelper/extract.hxx>
+
+#include <cppuhelper/queryinterface.hxx>
+#include <cppuhelper/typeprovider.hxx>
+#include <cppuhelper/typeprovider.hxx>
 
 #include <algorithm>
 #include <functional>
@@ -3199,11 +3114,52 @@ namespace
                 xControlWindow->setFocus();
         }
     }
+
+    sal_Bool lcl_shouldValidateRequiredFields_nothrow( const Reference< XInterface >& _rxForm )
+    {
+        try
+        {
+            static ::rtl::OUString s_sFormsCheckRequiredFields( RTL_CONSTASCII_USTRINGPARAM( "FormsCheckRequiredFields" ) );
+
+            // first, check whether the form has a property telling us the answer
+            // this allows people to use the XPropertyContainer interface of a form to control
+            // the behaviour on a per-form basis.
+            Reference< XPropertySet > xFormProps( _rxForm, UNO_QUERY_THROW );
+            Reference< XPropertySetInfo > xPSI( xFormProps->getPropertySetInfo() );
+            if ( xPSI->hasPropertyByName( s_sFormsCheckRequiredFields ) )
+            {
+                sal_Bool bShouldValidate = true;
+                OSL_VERIFY( xFormProps->getPropertyValue( s_sFormsCheckRequiredFields ) >>= bShouldValidate );
+                return bShouldValidate;
+            }
+
+            // next, check the data source which created the connection
+            Reference< XChild > xConnectionAsChild( xFormProps->getPropertyValue( FM_PROP_ACTIVE_CONNECTION ), UNO_QUERY_THROW );
+            Reference< XPropertySet > xDataSource( xConnectionAsChild->getParent(), UNO_QUERY );
+            if ( !xDataSource.is() )
+                // seldom (but possible): this is not a connection created by a data source
+                return sal_True;
+
+            Reference< XPropertySet > xDataSourceSettings(
+                xDataSource->getPropertyValue( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Settings" ) ) ),
+                UNO_QUERY_THROW );
+
+            sal_Bool bShouldValidate = true;
+            OSL_VERIFY( xDataSourceSettings->getPropertyValue( s_sFormsCheckRequiredFields ) >>= bShouldValidate );
+            return bShouldValidate;
+        }
+        catch( const Exception& )
+        {
+            DBG_UNHANDLED_EXCEPTION();
+        }
+
+        return sal_True;
+    }
 }
 
 // XRowSetApproveListener
 //------------------------------------------------------------------------------
-sal_Bool SAL_CALL FmXFormController::approveRowChange(const RowChangeEvent& aEvent) throw( RuntimeException )
+sal_Bool SAL_CALL FmXFormController::approveRowChange(const RowChangeEvent& _rEvent) throw( RuntimeException )
 {
     ::osl::MutexGuard aGuard( m_aMutex );
     OSL_ENSURE(!FmXFormController_BASE1::rBHelper.bDisposed,"FmXFormController: Object already disposed!");
@@ -3211,62 +3167,63 @@ sal_Bool SAL_CALL FmXFormController::approveRowChange(const RowChangeEvent& aEve
     sal_Bool bValid = sal_True;
     if (aIter.hasMoreElements())
     {
-        RowChangeEvent aEvt(aEvent);
+        RowChangeEvent aEvt( _rEvent );
         aEvt.Source = *this;
         bValid = ((XRowSetApproveListener*)aIter.next())->approveRowChange(aEvt);
     }
 
-    if (bValid && (
-        aEvent.Action == RowChangeAction::INSERT ||
-        aEvent.Action == RowChangeAction::UPDATE))
+    if ( !bValid )
+        return bValid;
+
+    if  (   ( _rEvent.Action != RowChangeAction::INSERT )
+        &&  ( _rEvent.Action != RowChangeAction::UPDATE )
+        )
+        return bValid;
+
+    // if some of the control models are bound to validators, check them
+    ::rtl::OUString sInvalidityExplanation;
+    Reference< XControlModel > xInvalidModel;
+    if ( !checkFormComponentValidity( sInvalidityExplanation, xInvalidModel ) )
     {
-        // if some of the control modes are bound to validators, check them
-        ::rtl::OUString sInvalidityExplanation;
-        Reference< XControlModel > xInvalidModel;
-        if ( !checkFormComponentValidity( sInvalidityExplanation, xInvalidModel ) )
-        {
-            displayErrorSetFocus( sInvalidityExplanation, locateControl( xInvalidModel ), getDialogParentWindow() );
-            return false;
-        }
+        displayErrorSetFocus( sInvalidityExplanation, locateControl( xInvalidModel ), getDialogParentWindow() );
+        return false;
+    }
 
-        // check Values on NULL and required flag
-        Reference< XColumnsSupplier >  xSupplyCols(aEvent.Source, UNO_QUERY);
-        Reference< XEnumerationAccess >  xEnumAccess;
-        if (xSupplyCols.is())
-            xEnumAccess = Reference< XEnumerationAccess > (xSupplyCols->getColumns(),UNO_QUERY);
+    // check values on NULL and required flag
+    if ( !lcl_shouldValidateRequiredFields_nothrow( _rEvent.Source ) )
+        return sal_True;
 
-        if (!xSupplyCols.is() || !xEnumAccess.is())
-        {
-            DBG_ERROR("FmXFormController::approveRowChange : source is no columns supplier or columns aren't enumerable !");
-            // can't do anything here ...
-            return sal_True;
-        }
+    try
+    {
+        Reference< XColumnsSupplier > xSupplyCols( _rEvent.Source, UNO_QUERY_THROW );
+        Reference< XEnumerationAccess > xEnumAccess( xSupplyCols->getColumns(), UNO_QUERY_THROW );
+        Reference< XEnumeration > xEnumeration( xEnumAccess->createEnumeration(), UNO_QUERY_THROW );
 
-        Reference< XEnumeration >  xEnumeration = xEnumAccess->createEnumeration();
         Reference< XPropertySet >  xFieldSet;
-        while (xEnumeration->hasMoreElements())
+        while ( xEnumeration->hasMoreElements() )
         {
             xEnumeration->nextElement() >>= xFieldSet;
-            Reference< XColumn >  xColumn(xFieldSet, UNO_QUERY);
-            if (!xFieldSet.is() || !xColumn.is())
+            Reference< XColumn > xColumn( xFieldSet, UNO_QUERY);
+            if ( !xColumn.is() )
             {
-                DBG_ERROR("FmXFormController::approveRowChange : invalid field !");
+                DBG_ERROR( "FmXFormController::approveRowChange: invalid field !" );
                 continue;
             }
 
-            sal_Bool bRequired = ::comphelper::getINT32(xFieldSet->getPropertyValue(FM_PROP_ISNULLABLE)) == ColumnValue::NO_NULLS;
-            if (!bRequired)
+            sal_Bool bRequired = ::comphelper::getINT32( xFieldSet->getPropertyValue( FM_PROP_ISNULLABLE ) ) == ColumnValue::NO_NULLS;
+            if ( !bRequired )
                 continue;
 
-            sal_Bool bAutoIncrement = ::comphelper::getBOOL(xFieldSet->getPropertyValue(FM_PROP_AUTOINCREMENT));
-            if (bAutoIncrement)
+            sal_Bool bAutoIncrement = ::comphelper::getBOOL( xFieldSet->getPropertyValue( FM_PROP_AUTOINCREMENT ) );
+            if ( bAutoIncrement )
                 continue;
 
-            ::rtl::OUString aFieldName(::comphelper::getString(xFieldSet->getPropertyValue(FM_PROP_NAME)));
+            ::rtl::OUString aFieldName( ::comphelper::getString( xFieldSet->getPropertyValue( FM_PROP_NAME ) ) );
 
-            if (!xColumn->getString().getLength() && xColumn->wasNull())
+            // TODO: in case of binary fields, this "getString" below is extremely expensive
+            if ( !xColumn->getString().getLength() && xColumn->wasNull() )
             {
-                Sequence< Reference< XControl > > aControls(getControls());
+                Sequence< Reference< XControl > > aControls( getControls() );
                 sal_Int32 nLength = aControls.getLength();
                 sal_Int32 i(0);
                 const Reference< XControl > * pControls = aControls.getConstArray();
@@ -3288,14 +3245,19 @@ sal_Bool SAL_CALL FmXFormController::approveRowChange(const RowChangeEvent& aEve
                 }
 
                 String sMessage( SVX_RES( RID_ERR_FIELDREQUIRED ) );
-                sMessage.SearchAndReplace('#', aFieldName.getStr());
+                sMessage.SearchAndReplace( '#', aFieldName.getStr() );
                 displayErrorSetFocus( sMessage, ( i < nLength ) ? pControls[i] : Reference< XControl >(), getDialogParentWindow() );
 
                 return sal_False;
             }
         }
     }
-    return bValid;
+    catch( const Exception& )
+    {
+        DBG_UNHANDLED_EXCEPTION();
+    }
+
+    return true;
 }
 
 //------------------------------------------------------------------------------
