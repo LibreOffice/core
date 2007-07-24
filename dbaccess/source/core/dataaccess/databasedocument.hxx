@@ -4,9 +4,9 @@
  *
  *  $RCSfile: databasedocument.hxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: ihi $ $Date: 2007-04-16 16:24:16 $
+ *  last change: $Author: rt $ $Date: 2007-07-24 12:04:48 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -92,6 +92,9 @@ namespace dbaccess
 //........................................................................
 
 class ODatabaseContext;
+
+typedef ::std::vector< ::com::sun::star::uno::Reference< ::com::sun::star::frame::XController > >   Controllers;
+
 //============================================================
 //= ODatabaseDocument
 //============================================================
@@ -119,6 +122,9 @@ class ODatabaseDocument :public ModelDependentComponent             // ModelDepe
     ::cppu::OInterfaceContainerHelper                                                   m_aModifyListeners;
     ::cppu::OInterfaceContainerHelper                                                   m_aCloseListener;
     ::cppu::OInterfaceContainerHelper                                                   m_aDocEventListeners;
+
+    ::com::sun::star::uno::Reference< ::com::sun::star::frame::XController >            m_xCurrentController;
+    Controllers                                                                         m_aControllers;
 
     ::com::sun::star::uno::WeakReference< ::com::sun::star::container::XNameAccess >    m_xForms;
     ::com::sun::star::uno::WeakReference< ::com::sun::star::container::XNameAccess >    m_xReports;
@@ -332,6 +338,10 @@ private:
         if the closing was vetoed by any instance
     */
     void    impl_closeControllerFrames( sal_Bool _bDeliverOwnership );
+
+    /** disposes the frames of all controllers which are still left in m_aControllers.
+    */
+    void    impl_disposeControllerFrames_nothrow();
 
     /** does a reparenting at the given object container to ourself
 
