@@ -4,9 +4,9 @@
  *
  *  $RCSfile: unodatbr.hxx,v $
  *
- *  $Revision: 1.68 $
+ *  $Revision: 1.69 $
  *
- *  last change: $Author: kz $ $Date: 2007-05-10 10:34:04 $
+ *  last change: $Author: rt $ $Date: 2007-07-24 12:09:55 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -464,10 +464,6 @@ namespace dbaui
         // checks whether the given tree entry denotes a data source
         bool impl_isDataSourceEntry( SvLBoxEntry* _pEntry ) const;
 #endif
-
-        /// retrieves the database document to which a given connection belongs
-        ::com::sun::star::uno::Reference< ::com::sun::star::frame::XModel >
-            impl_nf_getDBDocumentForConnection( const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection >& _rxConnection );
 
         /// retrieves the data source URL/name for the given entry representing a data source
         String  getDataSourceAcessor( SvLBoxEntry* _pDataSourceEntry ) const;
