@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.5 $
+#   $Revision: 1.6 $
 #
-#   last change: $Author: obo $ $Date: 2007-01-25 13:26:11 $
+#   last change: $Author: rt $ $Date: 2007-07-24 13:32:02 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -34,12 +34,17 @@
 #*************************************************************************
 
 PRJ=..$/..
-
 PRJNAME=configmgr
 TARGET=qa_unoapi
 
-ALLTAR:
-    $(SOLARENV)$/bin$/checkapi -sce cfgmgr2.sce -xcl knownissues.xcl -tdoc $(PWD)$/testdocuments
+.INCLUDE: settings.mk
+
+.INCLUDE: target.mk
+
+ALLTAR : UNOAPI_TEST
+
+UNOAPI_TEST:
+    +$(SOLARENV)$/bin$/checkapi -sce cfgmgr2.sce -xcl knownissues.xcl -tdoc $(PWD)$/testdocuments
     @echo =======================================================================
     @echo In case of problems with sysmgr1.SystemIntegration make sure that you 
     @echo =======================================================================
