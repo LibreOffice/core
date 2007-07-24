@@ -4,9 +4,9 @@
  *
  *  $RCSfile: runtests.cs,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2006-03-09 10:50:57 $
+ *  last change: $Author: rt $ $Date: 2007-07-24 09:16:56 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -61,7 +61,8 @@ public class RunTests
         //cliversion.Version class
 		foreach (FileInfo fiTemp in fi)
 		{
-			if (fiTemp.Extension != ".dll")
+			if (fiTemp.Extension != ".dll" 
+                || ! fiTemp.Name.StartsWith("version"))
 				continue;
 
             Assembly ass = null;
