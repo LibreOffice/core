@@ -4,9 +4,9 @@
  *
  *  $RCSfile: window.cxx,v $
  *
- *  $Revision: 1.260 $
+ *  $Revision: 1.261 $
  *
- *  last change: $Author: rt $ $Date: 2007-07-05 10:29:27 $
+ *  last change: $Author: rt $ $Date: 2007-07-24 10:23:04 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -72,19 +72,19 @@
 #include <vcl/svdata.hxx>
 #endif
 #ifndef _SV_WINDATA_HXX
-#include <windata.hxx>
+#include <vcl/windata.hxx>
 #endif
 #ifndef _SV_DBGGUI_HXX
-#include <dbggui.hxx>
+#include <vcl/dbggui.hxx>
 #endif
 #ifndef _SV_OUTFONT_HXX
 #include <vcl/outfont.hxx>
 #endif
 #ifndef _SV_OUTDEV_H
-#include <outdev.h>
+#include <vcl/outdev.h>
 #endif
 #ifndef _SV_REGION_H
-#include <region.h>
+#include <vcl/region.h>
 #endif
 #ifndef _SV_EVENT_HXX
 #include <vcl/event.hxx>
@@ -99,7 +99,7 @@
 #include <vcl/svapp.hxx>
 #endif
 #ifndef _SV_WINDOW_H
-#include <window.h>
+#include <vcl/window.h>
 #endif
 #ifndef _SV_WINDOW_HXX
 #include <vcl/window.hxx>
@@ -111,10 +111,10 @@
 #include <vcl/syschild.hxx>
 #endif
 #ifndef _SV_BRDWIN_HXX
-#include <brdwin.hxx>
+#include <vcl/brdwin.hxx>
 #endif
 #ifndef _SV_HELPWIN_HXX
-#include <helpwin.hxx>
+#include <vcl/helpwin.hxx>
 #endif
 #ifndef _SV_DOCKWIN_HXX
 #include <vcl/dockwin.hxx>
@@ -129,12 +129,12 @@
 #include <vcl/wall.hxx>
 #endif
 #ifndef _SV_TOOLBOX_H
-#include <toolbox.h>
+#include <vcl/toolbox.h>
 #endif
 #ifndef _VCL_FONTCFG_HXX
-#include <fontcfg.hxx>
+#include <vcl/fontcfg.hxx>
 #endif
-#include <sysdata.hxx>
+#include <vcl/sysdata.hxx>
 #ifndef _SV_SALLAYOUT_HXX
 #include <vcl/sallayout.hxx>
 #endif
@@ -190,7 +190,7 @@
 #include <vcl/unowrap.hxx>
 #include <dndlcon.hxx>
 #include <dndevdis.hxx>
-#include <impbmpconv.hxx>
+#include <vcl/impbmpconv.hxx>
 
 #ifndef _UNOTOOLS_CONFIGNODE_HXX_
 #include <unotools/confignode.hxx>
@@ -201,7 +201,7 @@
 #endif
 
 #include <vcl/pdfextoutdevdata.hxx>
-#include "lazydelete.hxx"
+#include "vcl/lazydelete.hxx"
 
 using namespace rtl;
 using namespace ::com::sun::star::uno;
