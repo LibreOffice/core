@@ -4,9 +4,9 @@
  *
  *  $RCSfile: bmpfast.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: hr $ $Date: 2007-06-27 20:11:24 $
+ *  last change: $Author: rt $ $Date: 2007-07-24 10:08:31 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -36,12 +36,11 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_vcl.hxx"
 
-#include <bmpfast.hxx>
+#include <vcl/bmpfast.hxx>
 
 #ifndef NO_OPTIMIZED_BITMAP_ACCESS
 
 #include <tools/debug.hxx>
-#define _SOLAR__PRIVATE 1
 #include <vcl/bmpacc.hxx>
 
 #define FAST_ARGB_BGRA
