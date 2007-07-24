@@ -4,9 +4,9 @@
  *
  *  $RCSfile: compiler.hxx,v $
  *
- *  $Revision: 1.31 $
+ *  $Revision: 1.32 $
  *
- *  last change: $Author: obo $ $Date: 2007-06-13 09:04:48 $
+ *  last change: $Author: rt $ $Date: 2007-07-24 09:22:32 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -215,13 +215,6 @@ typedef ScSimpleIntrusiveReference< struct ScRawToken > ScRawTokenRef;
 
 struct ScArrayStack;
 
-struct ScStringHashCode
-{
-    size_t operator()( const String& rStr ) const
-    {
-        return rtl_ustr_hashCode_WithLength( rStr.GetBuffer(), rStr.Len() );
-    }
-};
 typedef ::std::hash_map< String, OpCode, ScStringHashCode, ::std::equal_to< String > > ScOpCodeHashMap;
 
 using namespace ::com::sun::star::i18n;
