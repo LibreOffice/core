@@ -4,9 +4,9 @@
  *
  *  $RCSfile: sm.hxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: kz $ $Date: 2005-11-01 10:36:58 $
+ *  last change: $Author: rt $ $Date: 2007-07-24 10:30:13 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -38,7 +38,7 @@
 #include <tools/link.hxx>
 #include <salunx.h>
 #include <X11/SM/SMlib.h>
-#include <salsession.hxx>
+#include <vcl/salsession.hxx>
 
 class SessionManagerClient
 {
