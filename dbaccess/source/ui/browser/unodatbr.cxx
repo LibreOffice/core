@@ -4,9 +4,9 @@
  *
  *  $RCSfile: unodatbr.cxx,v $
  *
- *  $Revision: 1.189 $
+ *  $Revision: 1.190 $
  *
- *  last change: $Author: rt $ $Date: 2007-07-06 08:05:39 $
+ *  last change: $Author: rt $ $Date: 2007-07-24 12:07:37 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -117,9 +117,6 @@
 #endif
 #ifndef _UNOTOOLS_CONFIGNODE_HXX_
 #include <unotools/confignode.hxx>
-#endif
-#ifndef INCLUDED_SVTOOLS_MODULEOPTIONS_HXX
-#include <svtools/moduleoptions.hxx>
 #endif
 #ifndef _SV_WAITOBJ_HXX
 #include <vcl/waitobj.hxx>
@@ -2031,8 +2028,6 @@ void SbaTableQueryBrowser::implAddDatasource(const String& _rDbName, Image& _rDb
     pDSData->eType = etDatasource;
     pDSData->sAccessor = sDataSourceId;
     pDSData->xConnection = _rxConnection;
-    if ( _rxConnection.is() )
-        pDSData->aController = ModelControllerConnector( impl_nf_getDBDocumentForConnection( _rxConnection ), this );
     pDatasourceEntry->SetUserData(pDSData);
 
     // the child for the queries container
@@ -2906,13 +2901,7 @@ void SbaTableQueryBrowser::disposeConnection( SvLBoxEntry* _pDSEntry )
     {
         DBTreeListModel::DBTreeListUserData* pTreeListData = static_cast< DBTreeListModel::DBTreeListUserData* >( _pDSEntry->GetUserData() );
         if ( pTreeListData )
-        {
-            DBG_ASSERT( !pTreeListData->xConnection.is() == !!pTreeListData->aController.empty(),
-                "SbaTableQueryBrowser::disposeConnection: inconsistency: there should either be a connection and a controller, or none of both!" );
-
             impl_releaseConnection( pTreeListData->xConnection );
-            pTreeListData->aController.clear();
-        }
     }
 }
 
@@ -3254,23 +3243,6 @@ bool SbaTableQueryBrowser::impl_isDataSourceEntry( SvLBoxEntry* _pEntry ) const
 }
 #endif
 
-// -------------------------------------------------------------------------
-Reference< XModel > SbaTableQueryBrowser::impl_nf_getDBDocumentForConnection( const Reference< XConnection >& _rxConnection )
-{
-    Reference< XModel > xModel;
-    try
-    {
-        Reference< XChild > xChild( _rxConnection, UNO_QUERY_THROW );
-        Reference< XDocumentDataSource > xDS( xChild->getParent(), UNO_QUERY_THROW );
-        xModel = Reference< XModel >( xDS->getDatabaseDocument(), UNO_QUERY_THROW );
-    }
-    catch( const Exception& )
-    {
-        OSL_ENSURE( sal_False, "SbaTableQueryBrowser::impl_nf_getDBDocumentForConnection: caught an exception!" );
-    }
-    return xModel;
-}
-
 // -----------------------------------------------------------------------------
 sal_Bool SbaTableQueryBrowser::ensureConnection( SvLBoxEntry* _pDSEntry, void* pDSData, SharedConnection& _rConnection )
 {
@@ -3296,16 +3268,9 @@ sal_Bool SbaTableQueryBrowser::ensureConnection( SvLBoxEntry* _pDSEntry, void* p
 
             // connect
             _rConnection.reset(
-                connect( getDataSourceAcessor( _pDSEntry ), sConnectingContext, rtl::OUString(), sal_True ),
+                connect( getDataSourceAcessor( _pDSEntry ), sConnectingContext, sal_True ),
                 SharedConnection::TakeOwnership
             );
-            if ( _rConnection.is() )
-            {
-                DBG_ASSERT( impl_isDataSourceEntry( _pDSEntry ), "SbaTableQueryBrowser::ensureConnection: this is no data source entry!" );
-                    // if this fails, we can't expect pTreeListData->aController to point to a valid
-                    // instance, since those instances are only filled for data source entries
-                pTreeListData->aController = ModelControllerConnector( impl_nf_getDBDocumentForConnection( _rConnection ), this );
-            }
 
             // remember the connection
             pTreeListData->xConnection = _rConnection;
