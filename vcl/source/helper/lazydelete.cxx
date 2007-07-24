@@ -4,9 +4,9 @@
  *
  *  $RCSfile: lazydelete.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: hr $ $Date: 2007-06-27 20:26:42 $
+ *  last change: $Author: rt $ $Date: 2007-07-24 10:16:06 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -40,7 +40,7 @@
 
 #include <vcl/window.hxx>
 #include <vcl/menu.hxx>
-#include <lazydelete.hxx>
+#include <vcl/lazydelete.hxx>
 
 namespace vcl {
 
