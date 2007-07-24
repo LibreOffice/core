@@ -4,9 +4,9 @@
  *
  *  $RCSfile: soicon.cxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: hr $ $Date: 2007-06-27 20:48:01 $
+ *  last change: $Author: rt $ $Date: 2007-07-24 10:31:56 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -48,7 +48,7 @@
 #include <vcl/salbtype.hxx>
 #endif
 #ifndef _SV_IMPBMP_HXX
-#include <impbmp.hxx>
+#include <vcl/impbmp.hxx>
 #endif
 #ifndef _SV_BITMAP_HXX
 #include <vcl/bitmap.hxx>
@@ -68,7 +68,7 @@
 #ifndef _SV_SALBMP_H
 #include <salbmp.h>
 #endif
-#include <svids.hrc>
+#include <vcl/svids.hrc>
 
 BOOL SelectAppIconPixmap( SalDisplay *pDisplay, int nScreen,USHORT nIcon, USHORT iconSize,
                           Pixmap& icon_pixmap, Pixmap& icon_mask)
