@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xmlLogin.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 06:47:42 $
+ *  last change: $Author: rt $ $Date: 2007-07-24 12:06:10 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -59,7 +59,9 @@
 #ifndef _TOOLS_DEBUG_HXX
 #include <tools/debug.hxx>
 #endif
-
+#ifndef TOOLS_DIAGNOSE_EX_H
+#include <tools/diagnose_ex.h>
+#endif
 
 #include <vector>
 
@@ -106,7 +108,7 @@ OXMLLogin::OXMLLogin( ODBFilter& rImport,
         }
         catch(Exception)
         {
-            OSL_ENSURE(0,"OXMLLogin::OXMLLogin: Could not set login!");
+            DBG_UNHANDLED_EXCEPTION();
         }
     }
 }
