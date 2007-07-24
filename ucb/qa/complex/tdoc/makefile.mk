@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.5 $
+#   $Revision: 1.6 $
 #
-#   last change: $Author: obo $ $Date: 2007-01-25 15:40:18 $
+#   last change: $Author: rt $ $Date: 2007-07-24 13:21:56 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -91,4 +91,4 @@ run: ALLTAR
 .INCLUDE :  target.mk
 
 Check%:
-    java -cp $(CLASSPATH) $(CT_APP) $(CT_TESTBASE) $(CT_TESTDOCS) $(CT_APPEXECCOMMAND) $(CT_PACKAGE).$@
+    +java -cp $(CLASSPATH) $(CT_APP) $(CT_TESTBASE) $(CT_TESTDOCS) $(CT_APPEXECCOMMAND) $(CT_PACKAGE).$@
