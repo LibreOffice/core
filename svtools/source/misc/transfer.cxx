@@ -4,9 +4,9 @@
  *
  *  $RCSfile: transfer.cxx,v $
  *
- *  $Revision: 1.77 $
+ *  $Revision: 1.78 $
  *
- *  last change: $Author: hr $ $Date: 2007-06-27 21:52:43 $
+ *  last change: $Author: rt $ $Date: 2007-07-24 11:53:43 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1098,7 +1098,7 @@ const Sequence< sal_Int8 >& TransferableHelper::getUnoTunnelId()
 class TransferableClipboardNotifier : public ::cppu::WeakImplHelper1< XClipboardListener >
 {
 private:
-    ::osl::Mutex                    maMutex;
+    ::osl::Mutex&                   mrMutex;
     Reference< XClipboardNotifier > mxNotifier;
     TransferableDataHelper*         mpListener;
 
@@ -1110,7 +1110,7 @@ protected:
     virtual void SAL_CALL disposing( const EventObject& Source ) throw (RuntimeException);
 
 public:
-    TransferableClipboardNotifier( const Reference< XClipboard >& _rxClipboard, TransferableDataHelper& _rListener );
+    TransferableClipboardNotifier( const Reference< XClipboard >& _rxClipboard, TransferableDataHelper& _rListener, ::osl::Mutex& _rMutex );
 
     /// determines whether we're currently listening
     inline bool isListening() const { return !isDisposed(); }
@@ -1124,8 +1124,9 @@ public:
 
 // -----------------------------------------------------------------------------
 
-TransferableClipboardNotifier::TransferableClipboardNotifier( const Reference< XClipboard >& _rxClipboard, TransferableDataHelper& _rListener )
-    :mxNotifier( _rxClipboard, UNO_QUERY )
+TransferableClipboardNotifier::TransferableClipboardNotifier( const Reference< XClipboard >& _rxClipboard, TransferableDataHelper& _rListener, ::osl::Mutex& _rMutex )
+    :mrMutex( _rMutex )
+    ,mxNotifier( _rxClipboard, UNO_QUERY )
     ,mpListener( &_rListener )
 {
     osl_incrementInterlockedCount( &m_refCount );
@@ -1143,7 +1144,12 @@ TransferableClipboardNotifier::TransferableClipboardNotifier( const Reference< X
 
 void SAL_CALL TransferableClipboardNotifier::changedContents( const clipboard::ClipboardEvent& event ) throw (RuntimeException)
 {
-    ::osl::MutexGuard aGuard( maMutex );
+    ::vos::OGuard aSolarGuard( Application::GetSolarMutex() );
+        // the SolarMutex here is necessary, since
+        // - we cannot call mpListener without our own mutex locked
+        // - Rebind respectively InitFormats (called by Rebind) will
+        // try to lock the SolarMutex, too
+    ::osl::MutexGuard aGuard( mrMutex );
     if( mpListener )
         mpListener->Rebind( event.Contents );
 }
@@ -1160,12 +1166,13 @@ void SAL_CALL TransferableClipboardNotifier::disposing( const EventObject& ) thr
 
 void TransferableClipboardNotifier::dispose()
 {
-    ::osl::MutexGuard aGuard( maMutex );
+    ::osl::MutexGuard aGuard( mrMutex );
 
     Reference< XClipboardListener > xKeepMeAlive( this );
 
     if ( mxNotifier.is() )
         mxNotifier->removeClipboardListener( this );
+    mxNotifier.clear();
 
     mpListener = NULL;
 }
@@ -2089,7 +2096,7 @@ sal_Bool TransferableDataHelper::StartClipboardListening( )
 
     StopClipboardListening( );
 
-    mpImpl->mpClipboardListener = new TransferableClipboardNotifier( mxClipboard, *this );
+    mpImpl->mpClipboardListener = new TransferableClipboardNotifier( mxClipboard, *this, mpImpl->maMutex );
     mpImpl->mpClipboardListener->acquire();
 
     return mpImpl->mpClipboardListener->isListening();
