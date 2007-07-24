@@ -4,9 +4,9 @@
  *
  *  $RCSfile: closedispatcher.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: ihi $ $Date: 2007-04-16 16:37:38 $
+ *  last change: $Author: rt $ $Date: 2007-07-24 11:52:00 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -45,6 +45,10 @@
 
 #ifndef __FRAMEWORK_PATTERN_FRAME_HXX_
 #include <pattern/frame.hxx>
+#endif
+
+#ifndef __FRAMEWORK_PATTERN_WINDOW_HXX_
+#include <pattern/window.hxx>
 #endif
 
 #ifndef __FRAMEWORK_THREADHELP_READGUARD_HXX_
@@ -603,24 +607,9 @@ css::uno::Reference< css::frame::XFrame > CloseDispatcher::static_impl_searchRig
         if (xTarget->isTop())
             return xTarget;
 
-        // b) even child frame containing top level windows (e.g. query designer of database) will be closed
-        css::uno::Reference< css::awt::XWindow >    xWindow        = xTarget->getContainerWindow();
-        css::uno::Reference< css::awt::XTopWindow > xTopWindowCheck(xWindow, css::uno::UNO_QUERY);
-        if (xTopWindowCheck.is())
-        {
-            // b1) Note: Toolkit interface XTopWindow sometimes is used by real VCL-child-windows also .-)
-            //     Be sure that these window is realy a "top system window".
-            //     Attention ! Checking Window->GetParent() isnt the right approach here.
-            //     Because sometimes VCL create "implicit border windows" as parents even we created
-            //     a simple XWindow using the toolkit only .-(
-            ::vos::OGuard aSolarLock(&Application::GetSolarMutex());
-            Window* pWindow = VCLUnoHelper::GetWindow( xWindow );
-            if (
-                (pWindow                  ) &&
-                (pWindow->IsSystemWindow())
-               )
-                return xTarget;
-        }
+        // b) frames (not top by herself) containing a top level window must be closed also.
+        if (WindowHelper::isTopWindow(xTarget->getContainerWindow()))
+            return xTarget;
 
         // c) try to find better results on parent frame
         //    If no parent frame exists (because this frame is used outside the desktop tree)
