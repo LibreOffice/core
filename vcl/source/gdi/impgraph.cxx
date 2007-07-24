@@ -5,9 +5,9 @@
  *
  *  $RCSfile: impgraph.cxx,v $
  *
- *  $Revision: 1.30 $
+ *  $Revision: 1.31 $
  *
- *  last change: $Author: hr $ $Date: 2007-06-27 20:15:32 $
+ *  last change: $Author: rt $ $Date: 2007-07-24 10:10:34 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -67,7 +67,7 @@
 #ifndef _STREAM_HXX
 #include <tools/stream.hxx>
 #endif
-#include <impgraph.hxx>
+#include <vcl/impgraph.hxx>
 #ifndef _GFXLINK_HXX
 #include <vcl/gfxlink.hxx>
 #endif
