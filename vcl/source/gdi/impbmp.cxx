@@ -4,9 +4,9 @@
  *
  *  $RCSfile: impbmp.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: hr $ $Date: 2007-06-27 20:15:19 $
+ *  last change: $Author: rt $ $Date: 2007-07-24 10:10:19 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -45,7 +45,7 @@
 #ifndef _DEBUG_HXX
 #include <tools/debug.hxx>
 #endif
-#include <impbmp.hxx>
+#include <vcl/impbmp.hxx>
 #include <vcl/bitmap.hxx>
 #include <vcl/svdata.hxx>
 #include <vcl/salinst.hxx>
