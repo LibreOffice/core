@@ -4,9 +4,9 @@
  *
  *  $RCSfile: impimagetree.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: hr $ $Date: 2007-06-27 20:15:57 $
+ *  last change: $Author: rt $ $Date: 2007-07-24 10:11:00 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -89,7 +89,7 @@
 #include <com/sun/star/ucb/XSimpleFileAccess.hpp>
 #endif
 
-#include "impimagetree.hxx"
+#include "vcl/impimagetree.hxx"
 
 #include <vector>
 #include <hash_map>
