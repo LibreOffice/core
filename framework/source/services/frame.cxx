@@ -4,9 +4,9 @@
  *
  *  $RCSfile: frame.cxx,v $
  *
- *  $Revision: 1.103 $
+ *  $Revision: 1.104 $
  *
- *  last change: $Author: rt $ $Date: 2007-07-06 12:22:50 $
+ *  last change: $Author: rt $ $Date: 2007-07-24 11:52:47 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -102,6 +102,10 @@
 
 #ifndef __FRAMEWORK_THREADHELP_TRANSACTIONGUARD_HXX_
 #include <threadhelp/transactionguard.hxx>
+#endif
+
+#ifndef __FRAMEWORK_PATTERN_WINDOW_HXX_
+#include <pattern/window.hxx>
 #endif
 
 #ifndef __FRAMEWORK_SERVICES_H_
@@ -950,9 +954,10 @@ css::uno::Reference< css::frame::XFrame > SAL_CALL Frame::findFrame( const ::rtl
     // get threadsafe some neccessary member which are neccessary for following functionality
     /* SAFE { */
     ReadGuard aReadLock( m_aLock );
-    css::uno::Reference< css::frame::XFrame >              xParent  ( m_xParent, css::uno::UNO_QUERY );
-    css::uno::Reference< css::lang::XMultiServiceFactory > xFactory = m_xFactory;
-    sal_Bool                                               bIsTop   = m_bIsFrameTop;
+    css::uno::Reference< css::frame::XFrame >              xParent      ( m_xParent, css::uno::UNO_QUERY );
+    css::uno::Reference< css::lang::XMultiServiceFactory > xFactory     = m_xFactory;
+    sal_Bool                                               bIsTopFrame  = m_bIsFrameTop;
+    sal_Bool                                               bIsTopWindow = WindowHelper::isTopWindow(m_xContainerWindow);
     aReadLock.unlock();
     /* } SAFE */
 
@@ -986,7 +991,7 @@ css::uno::Reference< css::frame::XFrame > SAL_CALL Frame::findFrame( const ::rtl
     else
     if ( sTargetFrameName==SPECIALTARGET_TOP )
     {
-        if (bIsTop)
+        if (bIsTopFrame)
             xTarget = this;
         else
         if (xParent.is()) // If we are not top - the parent MUST exist. But may it's better to check it again .-)
@@ -1016,7 +1021,7 @@ css::uno::Reference< css::frame::XFrame > SAL_CALL Frame::findFrame( const ::rtl
     if ( sTargetFrameName==SPECIALTARGET_BEAMER )
     {
         // We are a task => search or create the beamer
-        if (bIsTop)
+        if (bIsTopWindow)
         {
             xTarget = m_aChildFrameContainer.searchOnDirectChildrens(SPECIALTARGET_BEAMER);
             if ( ! xTarget.is() )
@@ -1087,8 +1092,8 @@ css::uno::Reference< css::frame::XFrame > SAL_CALL Frame::findFrame( const ::rtl
         //  or we can ignore it if we have no valid parent.
         //-------------------------------------------------------------------------------------------------
         if (
-            ( bIsTop && (nSearchFlags & css::frame::FrameSearchFlag::TASKS) )   ||
-            ( !bIsTop                                                       )
+            (   bIsTopFrame && (nSearchFlags & css::frame::FrameSearchFlag::TASKS) )   ||
+            ( ! bIsTopFrame                                                        )
            )
         {
             //-------------------------------------------------------------------------------------------------
