@@ -4,9 +4,9 @@
  *
  *  $RCSfile: genericunodialog.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 15:29:30 $
+ *  last change: $Author: rt $ $Date: 2007-07-24 11:53:58 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -53,6 +53,9 @@
 #endif
 #ifndef _OSL_DIAGNOSE_H_
 #include <osl/diagnose.h>
+#endif
+#ifndef TOOLS_DIAGNOSE_EX_H
+#include <tools/diagnose_ex.h>
 #endif
 #ifndef _SV_MSGBOX_HXX
 #include <vcl/msgbox.hxx>
@@ -357,7 +360,10 @@ void OGenericUnoDialog::implInitialize(const Any& _rValue)
             setPropertyValue( aValue.Name, aValue.Value );
         }
     }
-    catch(Exception&) { }
+    catch(const Exception&)
+    {
+        DBG_UNHANDLED_EXCEPTION();
+    }
 }
 
 //-------------------------------------------------------------------------
