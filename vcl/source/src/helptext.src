@@ -4,9 +4,9 @@
  *
  *  $RCSfile: helptext.src,v $
  *
- *  $Revision: 1.40 $
+ *  $Revision: 1.41 $
  *
- *  last change: $Author: ihi $ $Date: 2007-04-19 15:55:43 $
+ *  last change: $Author: rt $ $Date: 2007-07-24 10:16:48 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -36,7 +36,7 @@
 #define _SV_HELPTEXT_SRC
 
 #ifndef _SV_SVIDS_HRC
-#include <svids.hrc>
+#include <vcl/svids.hrc>
 #endif
 
 String SV_HELPTEXT_CLOSE
