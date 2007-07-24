@@ -4,9 +4,9 @@
  *
  *  $RCSfile: global.hxx,v $
  *
- *  $Revision: 1.49 $
+ *  $Revision: 1.50 $
  *
- *  last change: $Author: rt $ $Date: 2007-07-06 12:30:02 $
+ *  last change: $Author: rt $ $Date: 2007-07-24 09:22:45 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -475,6 +475,14 @@ struct ScImportParam
     ScImportParam&  operator=   ( const ScImportParam& r );
     BOOL            operator==  ( const ScImportParam& r ) const;
     void            Clear       ();
+};
+
+struct ScStringHashCode
+{
+    size_t operator()( const String& rStr ) const
+    {
+        return rtl_ustr_hashCode_WithLength( rStr.GetBuffer(), rStr.Len() );
+    }
 };
 
 // -----------------------------------------------------------------------
