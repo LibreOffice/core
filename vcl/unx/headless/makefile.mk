@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.2 $
+#   $Revision: 1.3 $
 #
-#   last change: $Author: vg $ $Date: 2007-05-25 14:36:39 $
+#   last change: $Author: rt $ $Date: 2007-07-24 10:25:44 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -35,36 +35,40 @@
 
 PRJ=..$/..
 
+
+ENABLE_EXCEPTIONS=true
+
 PRJNAME=vcl
-TARGET=headless
-.INCLUDE :  $(PRJ)$/util$/makefile.pmk
+TARGET=svpplug
 
 # --- Settings -----------------------------------------------------
 
 .INCLUDE :  settings.mk
-.INCLUDE :  $(PRJ)$/util$/makefile2.pmk
+
+.IF "$(listening)"!="" || "$(LISTENING)"!=""
+CDEFS+= -DWITH_SVP_LISTENING
+.ENDIF
 
 # --- Files --------------------------------------------------------
 
-.IF "$(GUIBASE)"!="unx"
-
-dummy:
-    @echo "Nothing to build for GUIBASE $(GUIBASE)"
-
-.ELSE		# "$(GUIBASE)"!="unx"
-.IF "$(ENABLE_HEADLESS)" != ""
-
-PKGCONFIG_MODULES=glib-2.0
-.INCLUDE : pkg_config.mk
+.IF "$(GUI)" == "UNX"
 
 SLOFILES=\
-    $(SLO)$/headless.obj\
+        $(SLO)$/svpinst.obj\
+        $(SLO)$/svpdummies.obj\
+        $(SLO)$/svpframe.obj\
+        $(SLO)$/svpgdi.obj\
+        $(SLO)$/svptext.obj\
+        $(SLO)$/svpprn.obj\
+        $(SLO)$/svppspgraphics.obj\
+        $(SLO)$/svpvd.obj\
+        $(SLO)$/svpbmp.obj\
+        $(SLO)$/svpelement.obj
 
 .ENDIF
-.ENDIF		# "$(GUIBASE)"!="unx"
 
 # --- Targets ------------------------------------------------------
 
 .INCLUDE :  target.mk
 
-.INCLUDE :  $(PRJ)$/util$/target.pmk
+
