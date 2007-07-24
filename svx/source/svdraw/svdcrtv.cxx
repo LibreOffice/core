@@ -4,9 +4,9 @@
  *
  *  $RCSfile: svdcrtv.cxx,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: rt $ $Date: 2007-07-06 07:39:12 $
+ *  last change: $Author: rt $ $Date: 2007-07-24 12:02:15 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -63,10 +63,6 @@
 #ifndef _SDR_CONTACT_DISPLAYINFO_HXX
 #include <svx/sdr/contact/displayinfo.hxx>
 #endif
-
-//#ifndef _SVX_FMGLOB_HXX
-//#include <svx/fmglob.hxx>
-//#endif
 
 #ifndef _SVDOUNO_HXX
 #include <svx/svdouno.hxx>
@@ -831,7 +827,7 @@ void SdrCreateView::ShowCreateObj(/*OutputDevice* pOut, BOOL bFull*/)
             // check for form controls
             if(bUseSolidDragging)
             {
-                if(pAktCreate->ISA(SdrUnoObj)) // OBJ_FM_CONTROL == pAktCreate->GetObjIdentifier())
+                if(pAktCreate->ISA(SdrUnoObj))
                 {
                     bUseSolidDragging = sal_False;
                 }
