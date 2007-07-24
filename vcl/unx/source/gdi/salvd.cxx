@@ -4,9 +4,9 @@
  *
  *  $RCSfile: salvd.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: hr $ $Date: 2007-06-27 20:50:29 $
+ *  last change: $Author: rt $ $Date: 2007-07-24 10:32:35 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -58,7 +58,7 @@
 #include <salvd.h>
 #endif
 #ifndef _SV_SYSDATA_HXX
-#include <sysdata.hxx>
+#include <vcl/sysdata.hxx>
 #endif
 
 // -=-= SalInstance =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
