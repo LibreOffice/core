@@ -4,9 +4,9 @@
  *
  *  $RCSfile: session.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: hr $ $Date: 2007-06-27 20:01:40 $
+ *  last change: $Author: rt $ $Date: 2007-07-24 10:04:29 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -46,7 +46,7 @@
 #include <vcl/salinst.hxx>
 #endif
 #ifndef _VCL_SALSESSION_HXX
-#include <salsession.hxx>
+#include <vcl/salsession.hxx>
 #endif
 #ifndef _CPPUHELPER_COMPBASE1_HXX_
 #include <cppuhelper/compbase1.hxx>
