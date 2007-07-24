@@ -4,9 +4,9 @@
  *
  *  $RCSfile: odbcconfig.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: rt $ $Date: 2007-07-06 08:18:35 $
+ *  last change: $Author: rt $ $Date: 2007-07-24 12:08:47 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -48,8 +48,17 @@
 #ifndef _OSL_DIAGNOSE_H_
 #include <osl/diagnose.h>
 #endif
+#ifndef _OSL_PROCESS_H_
+#include <osl/process.h>
+#endif
+#ifndef _THREAD_HXX_
+#include <osl/thread.hxx>
+#endif
 #ifndef _TOOLS_DEBUG_HXX
 #include <tools/debug.hxx>
+#endif
+#ifndef _SV_SVAPP_HXX
+#include <vcl/svapp.hxx>
 #endif
 
 #ifdef HAVE_ODBC_SUPPORT
@@ -277,13 +286,13 @@ void OOdbcEnumeration::freeEnv()
 //-------------------------------------------------------------------------
 void OOdbcEnumeration::getDatasourceNames(StringBag& _rNames)
 {
-    OSL_ENSURE(isLoaded(), "OOdbcManagement::getDatasourceNames: not loaded!");
+    OSL_ENSURE(isLoaded(), "OOdbcEnumeration::getDatasourceNames: not loaded!");
     if (!isLoaded())
         return;
 
     if (!allocEnv())
     {
-        OSL_ENSURE(sal_False, "OOdbcManagement::getDatasourceNames: could not allocate an ODBC environment!");
+        OSL_ENSURE(sal_False, "OOdbcEnumeration::getDatasourceNames: could not allocate an ODBC environment!");
         return;
     }
 
@@ -312,42 +321,76 @@ void OOdbcEnumeration::getDatasourceNames(StringBag& _rNames)
 #endif
 }
 
+#ifdef HAVE_ODBC_ADMINISTRATION
+
+//=========================================================================
+//= ProcessTerminationWait
+//=========================================================================
+class ProcessTerminationWait : public ::osl::Thread
+{
+    oslProcess  m_hProcessHandle;
+    Link        m_aFinishHdl;
+
+public:
+    ProcessTerminationWait( oslProcess _hProcessHandle, const Link& _rFinishHdl )
+        :m_hProcessHandle( _hProcessHandle )
+        ,m_aFinishHdl( _rFinishHdl )
+    {
+    }
+
+protected:
+    virtual void SAL_CALL run()
+    {
+        osl_joinProcess( m_hProcessHandle );
+        Application::PostUserEvent( m_aFinishHdl );
+    }
+};
+
 //=========================================================================
 //= OOdbcManagement
 //=========================================================================
 //-------------------------------------------------------------------------
-OOdbcManagement::OOdbcManagement()
-#ifdef HAVE_ODBC_SUPPORT
-:m_pSQLManageDataSource(NULL)
-#endif
+OOdbcManagement::OOdbcManagement( const Link& _rAsyncFinishCallback )
+    :m_pProcessWait( NULL )
+    ,m_aAsyncFinishCallback( _rAsyncFinishCallback )
 {
-    sal_Bool bLoaded = load(ODBC_UI_LIBRARY);
-#ifdef ODBC_UI_LIBRARY_1
-    if ( !bLoaded )
-        bLoaded = load(ODBC_UI_LIBRARY_1);
-#endif
-    if ( bLoaded )
-    {
-#ifdef HAVE_ODBC_SUPPORT
-        m_pSQLManageDataSource = loadSymbol("SQLManageDataSources");
-        if (!m_pSQLManageDataSource)
-            unload();
-#endif // HAVE_ODBC_SUPPORT
-    }
 }
 
 //-------------------------------------------------------------------------
-void OOdbcManagement::manageDataSources(void* _pParentSysWindowHandle)
+OOdbcManagement::~OOdbcManagement()
 {
-    OSL_ENSURE(isLoaded(), "OOdbcManagement::manageDataSources: not loaded!");
-    OSL_ENSURE(_pParentSysWindowHandle, "OOdbcManagement::manageDataSources: invalid parent window!");
-    if (!isLoaded())
-        return;
-
-#ifdef HAVE_ODBC_SUPPORT
-    NSQLManageDataSource(_pParentSysWindowHandle);
-#endif // HAVE_ODBC_SUPPORT
+    // wait for our thread to be finished
+    if ( m_pProcessWait.get() )
+        m_pProcessWait->join();
 }
+
+//-------------------------------------------------------------------------
+bool OOdbcManagement::manageDataSources_async()
+{
+    OSL_PRECOND( !isRunning(), "OOdbcManagement::manageDataSources_async: still running from the previous call!" );
+    if ( isRunning() )
+        return false;
+
+    // this is done in an external process, due to #i78733#
+    // (and note this whole functionality is supported on Windows only, ATM)
+    ::rtl::OUString sExecutableName( RTL_CONSTASCII_USTRINGPARAM( "odbcconfig.exe" ) );
+    oslProcess hProcessHandle(0);
+    oslProcessError eError = osl_executeProcess( sExecutableName.pData, NULL, 0, 0, NULL, NULL, NULL, 0, &hProcessHandle );
+    if ( eError != osl_Process_E_None )
+        return false;
+
+    m_pProcessWait.reset( new ProcessTerminationWait( hProcessHandle, m_aAsyncFinishCallback ) );
+    m_pProcessWait->create();
+    return true;
+}
+
+//-------------------------------------------------------------------------
+bool OOdbcManagement::isRunning() const
+{
+    return ( m_pProcessWait.get() && m_pProcessWait->isRunning() );
+}
+
+#endif // HAVE_ODBC_ADMINISTRATION
 
 //.........................................................................
 }   // namespace dbaui
