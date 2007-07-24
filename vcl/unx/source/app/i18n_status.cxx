@@ -4,9 +4,9 @@
  *
  *  $RCSfile: i18n_status.cxx,v $
  *
- *  $Revision: 1.38 $
+ *  $Revision: 1.39 $
  *
- *  last change: $Author: hr $ $Date: 2007-06-27 20:45:53 $
+ *  last change: $Author: rt $ $Date: 2007-07-24 10:31:44 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -60,7 +60,7 @@
 #include <saldisp.hxx>
 #include <salframe.h>
 #include <saldata.hxx>
-#include <sysdata.hxx>
+#include <vcl/sysdata.hxx>
 
 using namespace vcl;
 using namespace rtl;
