@@ -4,9 +4,9 @@
  *
  *  $RCSfile: odbcconfig.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: hr $ $Date: 2006-06-20 03:09:04 $
+ *  last change: $Author: rt $ $Date: 2007-07-24 12:09:02 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -36,19 +36,20 @@
 #ifndef _DBAUI_ODBC_CONFIG_HXX_
 #define _DBAUI_ODBC_CONFIG_HXX_
 
+#include "commontypes.hxx"
+
 #if defined(WIN) || defined(WNT) || defined (UNX)
 #define HAVE_ODBC_SUPPORT
 #endif
+
 #if ( defined(WIN) || defined(WNT) ) && defined(HAVE_ODBC_SUPPORT)
 #define HAVE_ODBC_ADMINISTRATION
 #endif
 
-#ifndef _OSL_MODULE_H_
+#include <tools/link.hxx>
 #include <osl/module.h>
-#endif
-#ifndef _DBAUI_COMMON_TYPES_HXX_
-#include "commontypes.hxx"
-#endif
+
+#include <memory>
 
 //.........................................................................
 namespace dbaui
@@ -122,22 +123,21 @@ protected:
 //=========================================================================
 //= OOdbcManagement
 //=========================================================================
-class OOdbcManagement : public OOdbcLibWrapper
+#ifdef HAVE_ODBC_ADMINISTRATION
+class ProcessTerminationWait;
+class OOdbcManagement
 {
-#ifdef HAVE_ODBC_SUPPORT
-    // entry points for ODBC administration
-    oslGenericFunction  m_pSQLManageDataSource;
-    oslModule           m_pOdbcLib;
-
-    OdbcTypesImpl*  m_pImpl;
-        // needed because we can't have a member of type SQLHANDLE: this would require us to include the respective
-        // ODBC file, which would lead to a lot of conflicts with other includes
-#endif
+    ::std::auto_ptr< ProcessTerminationWait >   m_pProcessWait;
+    Link                                        m_aAsyncFinishCallback;
 
 public:
-    OOdbcManagement();
-    void        manageDataSources(void* _pParentSysWindowHandle);
+    OOdbcManagement( const Link& _rAsyncFinishCallback );
+    ~OOdbcManagement();
+
+    bool    manageDataSources_async();
+    bool    isRunning() const;
 };
+#endif
 
 //.........................................................................
 }   // namespace dbaui
