@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ZPoolCollection.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 02:04:31 $
+ *  last change: $Author: rt $ $Date: 2007-07-24 11:49:56 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -353,8 +353,11 @@ OConnectionPool* OPoolCollection::getConnectionPool(const ::rtl::OUString& _sImp
                                                     const Reference< XDriver >& _xDriver,
                                                     const Reference< XInterface >& _xDriverNode)
 {
+    OConnectionPool *pRet = 0;
     OConnectionPools::const_iterator aFind = m_aPools.find(_sImplName);
-    if(aFind == m_aPools.end() && _xDriver.is() && _xDriverNode.is())
+    if (aFind != m_aPools.end())
+        pRet = aFind->second;
+    else if (_xDriver.is() && _xDriverNode.is())
     {
         Reference<XPropertySet> xProp(_xDriverNode,UNO_QUERY);
         if(xProp.is())
@@ -362,11 +365,12 @@ OConnectionPool* OPoolCollection::getConnectionPool(const ::rtl::OUString& _sImp
         OConnectionPool* pConnectionPool = new OConnectionPool(_xDriver,_xDriverNode,m_xProxyFactory);
         pConnectionPool->acquire();
         aFind = m_aPools.insert(OConnectionPools::value_type(_sImplName,pConnectionPool)).first;
+        pRet = aFind->second;
     }
 
-    OSL_ENSURE(aFind->second,"Could not query DriverManager from ConnectionPool!");
+    OSL_ENSURE(pRet, "Could not query DriverManager from ConnectionPool!");
 
-    return aFind->second;
+    return pRet;
 }
 // -----------------------------------------------------------------------------
 Reference< XInterface > OPoolCollection::createWithServiceFactory(const ::rtl::OUString& _rPath) const
