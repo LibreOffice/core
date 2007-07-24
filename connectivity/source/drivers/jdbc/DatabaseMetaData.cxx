@@ -4,9 +4,9 @@
  *
  *  $RCSfile: DatabaseMetaData.cxx,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: hr $ $Date: 2007-06-27 14:35:44 $
+ *  last change: $Author: rt $ $Date: 2007-07-24 11:50:25 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -605,7 +605,7 @@ sal_Bool java_sql_DatabaseMetaData::impl_callBooleanMethod( const char* _pMethod
         }
     }
 
-    m_aLogger.log( LogLevel::FINEST, STR_LOG_META_DATA_RESULT, _pMethodName, out );
+    m_aLogger.log< const sal_Char*, sal_Int16>( LogLevel::FINEST, STR_LOG_META_DATA_RESULT, _pMethodName, out );
     return out;
 }
 
@@ -696,7 +696,7 @@ sal_Bool java_sql_DatabaseMetaData::impl_callBooleanMethodWithIntArg( const char
         }
     }
 
-    m_aLogger.log( LogLevel::FINEST, STR_LOG_META_DATA_RESULT, _pMethodName, out );
+    m_aLogger.log< const sal_Char*, sal_Int16 >( LogLevel::FINEST, STR_LOG_META_DATA_RESULT, _pMethodName, out );
     return out;
 }
 
@@ -1144,7 +1144,7 @@ sal_Bool SAL_CALL java_sql_DatabaseMetaData::supportsConvert( sal_Int32 fromType
         }
     }
 
-    m_aLogger.log( LogLevel::FINEST, STR_LOG_META_DATA_RESULT, pMethodName, out );
+    m_aLogger.log< const sal_Char*, sal_Int16 >( LogLevel::FINEST, STR_LOG_META_DATA_RESULT, pMethodName, out );
     return out;
 }
 // -------------------------------------------------------------------------
@@ -1492,7 +1492,7 @@ sal_Bool SAL_CALL java_sql_DatabaseMetaData::supportsResultSetConcurrency( sal_I
         }
     }
 
-    m_aLogger.log( LogLevel::FINEST, STR_LOG_META_DATA_RESULT, pMethodName, out );
+    m_aLogger.log< const sal_Char*, sal_Int16 >( LogLevel::FINEST, STR_LOG_META_DATA_RESULT, pMethodName, out );
     return out;
 }
 // -------------------------------------------------------------------------
