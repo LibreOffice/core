@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.5 $
+#   $Revision: 1.6 $
 #
-#   last change: $Author: obo $ $Date: 2007-01-25 13:50:08 $
+#   last change: $Author: rt $ $Date: 2007-07-24 13:18:17 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -38,8 +38,15 @@ PRJ=..$/..
 PRJNAME=dbaccess
 TARGET=qa_unoapi
 
-ALLTAR:
-    $(SOLARENV)$/bin$/checkapi -sce dbaccess.sce -ini dbaccess.props -xcl knownissues.xcl -tdoc $(PWD)$/testdocuments
+.INCLUDE: settings.mk
+
+.INCLUDE: target.mk
+
+
+ALLTAR : UNOAPI_TEST
+
+UNOAPI_TEST:	
+    +$(SOLARENV)$/bin$/checkapi -sce dbaccess.sce -ini dbaccess.props -xcl knownissues.xcl -tdoc $(PWD)$/testdocuments
     @echo =======================================================================
     @echo In case of problems make sure that you put valid values in the dbaccess.props and added an appropriate jdbc-driver to your office installation
     @echo =======================================================================
@@ -47,4 +54,4 @@ ALLTAR:
     @echo =======================================================================		
 
 run_%:
-    $(SOLARENV)$/bin$/checkapi -o dbaccess.$(@:s/run_//) -ini dbaccess.props -xcl knownissues.xcl -tdoc $(PWD)$/testdocuments
+    +$(SOLARENV)$/bin$/checkapi -o dbaccess.$(@:s/run_//) -ini dbaccess.props -xcl knownissues.xcl -tdoc $(PWD)$/testdocuments
