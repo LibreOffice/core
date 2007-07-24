@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.4 $
+#   $Revision: 1.5 $
 #
-#   last change: $Author: obo $ $Date: 2007-01-25 13:48:44 $
+#   last change: $Author: rt $ $Date: 2007-07-24 13:12:48 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -38,5 +38,11 @@ PRJ=..$/..
 PRJNAME=linguistic
 TARGET=qa_unoapi
 
-ALLTAR:
-    $(SOLARENV)$/bin$/checkapi -sce lng.sce -xcl knownissues.xcl -tdoc $(PWD)$/testdocuments
+.INCLUDE: settings.mk
+
+.INCLUDE: target.mk
+
+ALLTAR : UNOAPI_TEST
+
+UNOAPI_TEST:
+    +$(SOLARENV)$/bin$/checkapi -sce lng.sce -xcl knownissues.xcl -tdoc $(PWD)$/testdocuments
