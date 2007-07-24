@@ -4,9 +4,9 @@
  *
  *  $RCSfile: salplug.cxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: hr $ $Date: 2007-06-27 20:52:11 $
+ *  last change: $Author: rt $ $Date: 2007-07-24 10:32:48 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -421,7 +421,7 @@ static const char* autodetect_plugin()
 
     // no server at all: dummy plugin
     if ( desktop == desktop_strings[DESKTOP_NONE] )
-        pRet = "dummy";
+        pRet = "svp";
     else if ( desktop == desktop_strings[DESKTOP_GNOME] )
         pRet = "gtk";
     else if( desktop == desktop_strings[DESKTOP_KDE] )
