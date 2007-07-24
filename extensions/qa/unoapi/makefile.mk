@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.3 $
+#   $Revision: 1.4 $
 #
-#   last change: $Author: obo $ $Date: 2007-01-25 12:13:44 $
+#   last change: $Author: rt $ $Date: 2007-07-24 13:19:38 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -38,5 +38,11 @@ PRJ=..$/..
 PRJNAME=extensions
 TARGET=qa_unoapi
 
-ALLTAR:
-    $(SOLARENV)$/bin$/checkapi -sce $(PRJNAME).sce -THRCNT 1
+.INCLUDE: settings.mk
+
+.INCLUDE: target.mk
+
+ALLTAR : UNOAPI_TEST
+
+UNOAPI_TEST:
+    +$(SOLARENV)$/bin$/checkapi -sce $(PRJNAME).sce -THRCNT 1
