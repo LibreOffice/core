@@ -4,9 +4,9 @@
  *
  *  $RCSfile: image.cxx,v $
  *
- *  $Revision: 1.32 $
+ *  $Revision: 1.33 $
  *
- *  last change: $Author: rt $ $Date: 2007-07-03 14:05:24 $
+ *  last change: $Author: rt $ $Date: 2007-07-24 10:09:52 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -69,10 +69,10 @@
 #include <vcl/svapp.hxx>
 #endif
 #ifndef _SV_IMPIMAGETREE_H
-#include <impimagetree.hxx>
+#include <vcl/impimagetree.hxx>
 #endif
 #ifndef _SV_IMAGE_H
-#include <image.h>
+#include <vcl/image.h>
 #endif
 #ifndef _SV_IMAGE_HXX
 #include <vcl/image.hxx>
