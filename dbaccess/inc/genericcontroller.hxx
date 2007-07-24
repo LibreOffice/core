@@ -4,9 +4,9 @@
  *
  *  $RCSfile: genericcontroller.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2007-07-09 08:44:32 $
+ *  last change: $Author: rt $ $Date: 2007-07-24 12:03:20 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -386,7 +386,6 @@ namespace dbaui
         ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection > connect(
             const ::rtl::OUString& _rsDataSourceName,
             const ::rtl::OUString& _rContextInformation,
-            const ::rtl::OUString& _rContextDetails = ::rtl::OUString(),
             sal_Bool _bStartListening = sal_False
         );
 
