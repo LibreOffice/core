@@ -4,9 +4,9 @@
  *
  *  $RCSfile: salvd.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: obo $ $Date: 2007-06-11 14:26:28 $
+ *  last change: $Author: rt $ $Date: 2007-07-24 10:33:46 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -56,7 +56,7 @@
 #include <salvd.h>
 #endif
 #ifndef _SV_SYSDATA_HXX
-#include <sysdata.hxx>
+#include <vcl/sysdata.hxx>
 #endif
 
 // =======================================================================
