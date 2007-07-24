@@ -4,9 +4,9 @@
  *
  *  $RCSfile: pdfwriter_impl.cxx,v $
  *
- *  $Revision: 1.112 $
+ *  $Revision: 1.113 $
  *
- *  last change: $Author: rt $ $Date: 2007-07-03 14:06:22 $
+ *  last change: $Author: rt $ $Date: 2007-07-24 10:13:42 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -52,7 +52,7 @@
 #include <vcl/bmpacc.hxx>
 #include <vcl/bitmapex.hxx>
 #include <vcl/image.hxx>
-#include <outdev.h>
+#include <vcl/outdev.h>
 #include <vcl/sallayout.hxx>
 #include <vcl/metric.hxx>
 #include <svsys.h>
