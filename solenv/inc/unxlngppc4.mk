@@ -4,9 +4,9 @@
 #
 #   $RCSfile: unxlngppc4.mk,v $
 #
-#   $Revision: 1.27 $
+#   $Revision: 1.28 $
 #
-#   last change: $Author: kz $ $Date: 2007-06-18 16:33:51 $
+#   last change: $Author: rt $ $Date: 2007-07-24 09:14:04 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -82,7 +82,7 @@ CFLAGSEXCEPTIONS=-fexceptions -fno-enforce-eh-specs
 CFLAGS_NO_EXCEPTIONS=-fno-exceptions
 
 CFLAGSCXX= -fsigned-char -pipe -frtti $(ARCH_FLAGS)
-
+PICSWITCH:=-fPIC
 
 # Compiler flags for compiling static object in multi threaded environment with graphical user interface
 CFLAGSOBJGUIMT=$(PICSWITCH)
