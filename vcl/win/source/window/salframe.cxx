@@ -4,9 +4,9 @@
  *
  *  $RCSfile: salframe.cxx,v $
  *
- *  $Revision: 1.144 $
+ *  $Revision: 1.145 $
  *
- *  last change: $Author: hr $ $Date: 2007-06-27 20:58:16 $
+ *  last change: $Author: rt $ $Date: 2007-07-24 10:34:02 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -85,7 +85,7 @@
 #include <salids.hrc>
 #endif
 #ifndef _SV_SYSDATA_HXX
-#include <sysdata.hxx>
+#include <vcl/sysdata.hxx>
 #endif
 #ifndef _SV_SALDATA_HXX
 #include <saldata.hxx>
@@ -115,7 +115,7 @@
 #include <salobj.h>
 #endif
 #ifndef _SV_IMPBMP_HXX
-#include <impbmp.hxx>
+#include <vcl/impbmp.hxx>
 #endif
 #ifndef _SV_TIMER_HXX
 #include <vcl/timer.hxx>
@@ -130,7 +130,7 @@
 #include <vcl/keycodes.hxx>
 #endif
 #ifndef _SV_WINDOW_H
-#include <window.h>
+#include <vcl/window.h>
 #endif
 #ifndef _SV_WINDOW_HXX
 #include <vcl/window.hxx>
