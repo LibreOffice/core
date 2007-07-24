@@ -4,9 +4,9 @@
  *
  *  $RCSfile: font.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: rt $ $Date: 2007-07-05 08:39:18 $
+ *  last change: $Author: rt $ $Date: 2007-07-24 10:08:45 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -54,10 +54,10 @@
 #include <vcl/impfont.hxx>
 #endif
 #ifndef _VCL_FONTCFG_HXX
-#include <fontcfg.hxx>
+#include <vcl/fontcfg.hxx>
 #endif
 #ifndef _VCL_OUTDEV_H
-#include <outdev.h> // just for ImplGetEnglishSearchFontName! TODO: move it
+#include <vcl/outdev.h> // just for ImplGetEnglishSearchFontName! TODO: move it
 #endif
 
 #include <algorithm>
