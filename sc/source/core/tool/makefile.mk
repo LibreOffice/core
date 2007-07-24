@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.20 $
+#   $Revision: 1.21 $
 #
-#   last change: $Author: hr $ $Date: 2007-06-27 13:45:00 $
+#   last change: $Author: rt $ $Date: 2007-07-24 09:23:45 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -67,6 +67,7 @@ SLOFILES =  \
         $(SLO)$/autoform.obj \
         $(SLO)$/callform.obj \
         $(SLO)$/cellform.obj \
+        $(SLO)$/cellkeytranslator.obj \
         $(SLO)$/chartarr.obj \
         $(SLO)$/chartpos.obj \
         $(SLO)$/chartlis.obj \
@@ -116,6 +117,8 @@ SLOFILES =  \
         $(SLO)$/zforauto.obj
 
 EXCEPTIONSFILES= \
+        $(SLO)$/addincol.obj \
+        $(SLO)$/cellkeytranslator.obj \
         $(SLO)$/chartarr.obj \
         $(SLO)$/compiler.obj \
         $(SLO)$/interpr1.obj \
@@ -123,8 +126,7 @@ EXCEPTIONSFILES= \
         $(SLO)$/interpr3.obj \
         $(SLO)$/interpr4.obj \
         $(SLO)$/interpr5.obj \
-        $(SLO)$/prnsave.obj \
-        $(SLO)$/addincol.obj
+        $(SLO)$/prnsave.obj
 
 # [kh] POWERPC compiler problem
 .IF "$(OS)$(COM)$(CPUNAME)"=="LINUXGCCPOWERPC"
