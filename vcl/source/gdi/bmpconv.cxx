@@ -4,9 +4,9 @@
  *
  *  $RCSfile: bmpconv.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: hr $ $Date: 2007-06-27 20:11:11 $
+ *  last change: $Author: rt $ $Date: 2007-07-24 10:08:18 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -37,7 +37,7 @@
 #include "precompiled_vcl.hxx"
 
 #include <vcl/bitmap.hxx>
-#include <impbmpconv.hxx>
+#include <vcl/impbmpconv.hxx>
 #include <vcl/svapp.hxx>
 #include <vos/mutex.hxx>
 
