@@ -4,9 +4,9 @@
  *
  *  $RCSfile: AppControllerDnD.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: kz $ $Date: 2007-05-10 10:16:36 $
+ *  last change: $Author: rt $ $Date: 2007-07-24 12:06:24 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -482,7 +482,7 @@ const SharedConnection& OApplicationController::ensureConnection()
         String sConnectingContext( ModuleRes( STR_COULDNOTCONNECT_DATASOURCE ) );
         sConnectingContext.SearchAndReplaceAscii("$name$", getStrippedDatabaseName());
 
-        m_xDataSourceConnection.reset( connect( getDatabaseName(), sConnectingContext, rtl::OUString(), sal_True ) );
+        m_xDataSourceConnection.reset( connect( getDatabaseName(), sConnectingContext, sal_True ) );
         if ( m_xDataSourceConnection.is() )
             m_xMetaData = m_xDataSourceConnection->getMetaData();
 
