@@ -4,9 +4,9 @@
  *
  *  $RCSfile: datatypes_impl.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 23:16:57 $
+ *  last change: $Author: rt $ $Date: 2007-07-24 11:55:39 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -58,7 +58,7 @@ template< typename CONCRETE_DATA_TYPE_IMPL, typename SUPERCLASS >
 template< typename CONCRETE_DATA_TYPE_IMPL, typename SUPERCLASS >
 ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySetInfo > SAL_CALL ODerivedDataType< CONCRETE_DATA_TYPE_IMPL, SUPERCLASS >::getPropertySetInfo() throw( ::com::sun::star::uno::RuntimeException )
 {
-    return createPropertySetInfo( getInfoHelper() );
+        return ::cppu::OPropertySetHelper::createPropertySetInfo( getInfoHelper() );
 }
 
 //--------------------------------------------------------------------
