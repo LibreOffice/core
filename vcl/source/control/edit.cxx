@@ -4,9 +4,9 @@
  *
  *  $RCSfile: edit.cxx,v $
  *
- *  $Revision: 1.86 $
+ *  $Revision: 1.87 $
  *
- *  last change: $Author: hr $ $Date: 2007-06-27 20:05:10 $
+ *  last change: $Author: rt $ $Date: 2007-07-24 10:06:15 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -55,16 +55,16 @@
 #include <vcl/virdev.hxx>
 #endif
 #ifndef _SV_SVIDS_HRC
-#include <svids.hrc>
+#include <vcl/svids.hrc>
 #endif
 #ifndef _SV_MENU_HXX
 #include <vcl/menu.hxx>
 #endif
 #ifndef _VCL_CMDEVT_H
-#include <cmdevt.h>
+#include <vcl/cmdevt.h>
 #endif
 #ifndef _SV_SUBEDIT_HXX
-#include <subedit.hxx>
+#include <vcl/subedit.hxx>
 #endif
 #ifndef _SV_EDIT_HXX
 #include <vcl/edit.hxx>
