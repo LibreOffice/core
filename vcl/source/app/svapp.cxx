@@ -4,9 +4,9 @@
  *
  *  $RCSfile: svapp.cxx,v $
  *
- *  $Revision: 1.78 $
+ *  $Revision: 1.79 $
  *
- *  last change: $Author: hr $ $Date: 2007-06-27 20:02:34 $
+ *  last change: $Author: rt $ $Date: 2007-07-24 10:05:08 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -36,7 +36,6 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_vcl.hxx"
 
-#include <stdio.h>
 #ifndef _SV_SVSYS_HXX
 #include <svsys.h>
 #endif
@@ -75,7 +74,7 @@
 #include <vcl/settings.hxx>
 #endif
 #ifndef _ACCMGR_HXX
-#include <accmgr.hxx>
+#include <vcl/accmgr.hxx>
 #endif
 #ifndef _SV_KEYCOD_HXX
 #include <vcl/keycod.hxx>
@@ -87,16 +86,16 @@
 #include <vcl/virdev.hxx>
 #endif
 #ifndef _SV_WINDATA_HXX
-#include <windata.hxx>
+#include <vcl/windata.hxx>
 #endif
 #ifndef _SV_WINDOW_H
-#include <window.h>
+#include <vcl/window.h>
 #endif
 #ifndef _SV_WRKWIN_HXX
 #include <vcl/wrkwin.hxx>
 #endif
 #ifndef _SV_IDLEMGR_HXX
-#include <idlemgr.hxx>
+#include <vcl/idlemgr.hxx>
 #endif
 #ifndef _SV_SVAPP_HXX
 #include <vcl/svapp.hxx>
@@ -108,10 +107,10 @@
 #include <vcl/unowrap.hxx>
 #endif
 #ifndef _VCL_XCONNECTION_HXX
-#include <xconnection.hxx>
+#include <vcl/xconnection.hxx>
 #endif
 #ifndef _SV_SVIDS_HRC
-#include <svids.hrc>
+#include <vcl/svids.hrc>
 #endif
 #ifndef _SV_TIMER_HXX
 #include <vcl/timer.hxx>
@@ -143,7 +142,7 @@
 #endif
 
 #include <utility>
-#include "lazydelete.hxx"
+#include <vcl/lazydelete.hxx>
 
 using namespace ::com::sun::star::uno;
 
