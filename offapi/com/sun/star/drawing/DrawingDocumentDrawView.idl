@@ -4,9 +4,9 @@
  *
  *  $RCSfile: DrawingDocumentDrawView.idl,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-07 23:28:41 $
+ *  last change: $Author: rt $ $Date: 2007-07-24 11:56:51 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -69,6 +69,11 @@
 
 
 //=============================================================================
+module com {  module sun {  module star {  module view {
+    published interface XFormLayerAccess;
+}; }; }; };
+
+//=============================================================================
 
  module com {  module sun {  module star {  module drawing {
 
@@ -93,6 +98,10 @@ published service DrawingDocumentDrawView
         @since OOo 1.1.2
     */
     [optional] interface com::sun::star::awt::XWindow;
+
+    /** let's you access the view part of the form layer contained in the document's view
+    */
+    [optional] interface com::sun::star::view::XFormLayerAccess;
 
     //-------------------------------------------------------------------------
 
