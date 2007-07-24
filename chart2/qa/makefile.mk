@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.4 $
+#   $Revision: 1.5 $
 #
-#   last change: $Author: vg $ $Date: 2007-05-22 17:13:45 $
+#   last change: $Author: rt $ $Date: 2007-07-24 13:20:29 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -75,4 +75,4 @@ ALLTAR: runtest
 runtest: $(subst,.class,.run $(JAVACLASSFILES))
 
 %.run: %.class
-    java -classpath $(CLASSPATH) org.openoffice.Runner -TestBase java_complex -o $(subst,$(CLASSDIR)$/$(PACKAGE)$/,$(PACKAGE). $(subst,.class, $<))
+    +@java -classpath $(CLASSPATH) org.openoffice.Runner -TestBase java_complex -o $(subst,$(CLASSDIR)$/$(PACKAGE)$/,$(PACKAGE). $(subst,.class, $<))
