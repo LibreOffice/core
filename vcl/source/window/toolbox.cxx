@@ -4,9 +4,9 @@
  *
  *  $RCSfile: toolbox.cxx,v $
  *
- *  $Revision: 1.101 $
+ *  $Revision: 1.102 $
  *
- *  last change: $Author: hr $ $Date: 2007-06-27 20:35:19 $
+ *  last change: $Author: rt $ $Date: 2007-07-24 10:22:32 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -87,7 +87,7 @@
 #include <vcl/toolbox.hxx>
 #endif
 #ifndef _SV_TOOLBOX_H
-#include <toolbox.h>
+#include <vcl/toolbox.h>
 #endif
 #ifndef _SV_BITMAP_HXX
 #include <vcl/bitmap.hxx>
@@ -108,7 +108,7 @@
 #include <vcl/menu.hxx>
 #endif
 #ifndef _SV_WINDOW_H
-#include <window.h>
+#include <vcl/window.h>
 #endif
 
 // =======================================================================
