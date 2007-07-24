@@ -4,9 +4,9 @@
  *
  *  $RCSfile: help.cxx,v $
  *
- *  $Revision: 1.37 $
+ *  $Revision: 1.38 $
  *
- *  last change: $Author: hr $ $Date: 2007-06-27 20:00:49 $
+ *  last change: $Author: rt $ $Date: 2007-07-24 10:03:51 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -55,7 +55,7 @@
 #include <vcl/help.hxx>
 #endif
 #ifndef _SV_HELPWIN_HXX
-#include <helpwin.hxx>
+#include <vcl/helpwin.hxx>
 #endif
 #ifndef _DEBUG_HXX
 #include <tools/debug.hxx>
