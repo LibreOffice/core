@@ -4,9 +4,9 @@
  *
  *  $RCSfile: file_base.scp,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: rt $ $Date: 2007-07-06 09:27:31 $
+ *  last change: $Author: rt $ $Date: 2007-07-24 12:14:11 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -41,6 +41,15 @@ File gid_File_Exe_Sbase
     Name = EXENAME(sbase);
     Styles = (PACKED, PATCH);
 End
+
+#if defined WNT
+File gid_File_Exe_Odbcconfig
+    BIN_FILE_BODY;
+    Dir = gid_Dir_Program;
+    Name = EXENAME(odbcconfig);
+    Styles = (PACKED, PATCH);
+End
+#endif
 
 STD_UNO_LIB_FILE_PATCH( gid_File_Lib_Abp, abp)
 STD_RES_FILE_PATCH( gid_File_Res_Abp, abp)
