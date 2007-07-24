@@ -4,9 +4,9 @@
  *
  *  $RCSfile: stdtext.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: hr $ $Date: 2007-06-27 20:02:22 $
+ *  last change: $Author: rt $ $Date: 2007-07-24 10:04:56 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -37,7 +37,7 @@
 #include "precompiled_vcl.hxx"
 
 #ifndef _SV_SVIDS_HRC
-#include <svids.hrc>
+#include <vcl/svids.hrc>
 #endif
 #ifndef _SV_SVDATA_HXX
 #include <vcl/svdata.hxx>
