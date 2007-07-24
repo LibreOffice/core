@@ -4,9 +4,9 @@
  *
  *  $RCSfile: introwin.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: hr $ $Date: 2007-06-27 20:31:20 $
+ *  last change: $Author: rt $ $Date: 2007-07-24 10:20:24 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -55,7 +55,7 @@
 #endif
 
 #include <vcl/bitmap.hxx>
-#include <impbmp.hxx>
+#include <vcl/impbmp.hxx>
 #include <vcl/introwin.hxx>
 
 
