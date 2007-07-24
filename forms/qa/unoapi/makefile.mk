@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.6 $
+#   $Revision: 1.7 $
 #
-#   last change: $Author: obo $ $Date: 2007-01-25 12:26:34 $
+#   last change: $Author: rt $ $Date: 2007-07-24 13:13:54 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -38,8 +38,14 @@ PRJ=..$/..
 PRJNAME=forms
 TARGET=qa_unoapi
 
-ALLTAR:
-    $(SOLARENV)$/bin$/checkapi -sce forms.sce -xcl knownissues.xcl -DOCPTH $(PWD)$/testdocuments -THRCNT 1 -tdoc $(PWD)$/testdocuments
+.INCLUDE: settings.mk
+
+.INCLUDE: target.mk
+
+ALLTAR : UNOAPI_TEST
+
+UNOAPI_TEST:
+    +$(SOLARENV)$/bin$/checkapi -sce forms.sce -xcl knownissues.xcl -DOCPTH $(PWD)$/testdocuments -THRCNT 1 -tdoc $(PWD)$/testdocuments
     @echo =======================================================================
     @echo Problems with controls might me focus problems during the run of XView
     @echo these seems to appear by chance ... just re-run those testcases with
@@ -47,4 +53,4 @@ ALLTAR:
     @echo =======================================================================			
 
 run_%:
-    $(SOLARENV)$/bin$/checkapi -o $(PRJNAME).$(@:s/run_//) -xcl knownissues.xcl -DOCPTH $(PWD)$/testdocuments -THRCNT 1 -tdoc $(PWD)$/testdocuments
+    +$(SOLARENV)$/bin$/checkapi -o $(PRJNAME).$(@:s/run_//) -xcl knownissues.xcl -DOCPTH $(PWD)$/testdocuments -THRCNT 1 -tdoc $(PWD)$/testdocuments
