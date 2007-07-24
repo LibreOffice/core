@@ -1,0 +1,3 @@
+job1=cfgmgr2.AdministrationProvider
+job2=sc.ScIndexEnumeration_CellAnnotationsEnumeration
+job3=sw.SwXBodyText
