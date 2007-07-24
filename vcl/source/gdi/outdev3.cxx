@@ -4,9 +4,9 @@
  *
  *  $RCSfile: outdev3.cxx,v $
  *
- *  $Revision: 1.229 $
+ *  $Revision: 1.230 $
  *
- *  last change: $Author: rt $ $Date: 2007-07-03 14:05:45 $
+ *  last change: $Author: rt $ $Date: 2007-07-24 10:12:25 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -77,7 +77,7 @@
 #include <vcl/gdimtf.hxx>
 #endif
 #ifndef _SV_OUTDATA_HXX
-#include <outdata.hxx>
+#include <vcl/outdata.hxx>
 #endif
 #ifndef _SV_OUTFONT_HXX
 #include <vcl/outfont.hxx>
@@ -95,7 +95,7 @@
 #include <tools/poly.hxx>
 #endif
 #ifndef _SV_OUTDEV_H
-#include <outdev.h>
+#include <vcl/outdev.h>
 #endif
 #ifndef _SV_VIRDEV_HXX
 #include <vcl/virdev.hxx>
@@ -107,7 +107,7 @@
 #include <vcl/event.hxx>
 #endif
 #ifndef _SV_WINDOW_H
-#include <window.h>
+#include <vcl/window.h>
 #endif
 #ifndef _SV_WINDOW_HXX
 #include <vcl/window.hxx>
@@ -128,7 +128,7 @@
 #include <vcl/edit.hxx>
 #endif
 #ifndef _VCL_FONTCFG_HXX
-#include <fontcfg.hxx>
+#include <vcl/fontcfg.hxx>
 #endif
 #ifndef _OSL_FILE_H
 #include <osl/file.h>
