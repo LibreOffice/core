@@ -4,9 +4,9 @@
  *
  *  $RCSfile: OFunctiondefs.hxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: hr $ $Date: 2006-06-20 02:05:55 $
+ *  last change: $Author: rt $ $Date: 2007-07-24 11:51:18 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -63,13 +63,6 @@
 #define SDB_ODBC_CHAR UCHAR
 
 #endif
-
-//--------------------------------------------------------------------------
-
-#ifdef MAC
-#include <odbc/sqlext.h>
-#define SDB_ODBC_CHAR UCHAR
-#endif // MAC
 
 //--------------------------------------------------------------------------
 
