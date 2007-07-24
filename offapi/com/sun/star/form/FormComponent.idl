@@ -4,9 +4,9 @@
  *
  *  $RCSfile: FormComponent.idl,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: obo $ $Date: 2007-03-09 13:44:17 $
+ *  last change: $Author: rt $ $Date: 2007-07-24 11:57:03 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -111,12 +111,15 @@ published service FormComponent
         removeable. That is, the <member scope="com::sun::star::beans">PropertyAttribute::REMOVEABLE</member>
         will always be set, even if you do not specify it in the
         <member scope="com::sun::star::beans">XPropertyContainer::addProperty</member> call.</p>
+
+        @since OpenOffice.org 2.3.0
     */
     [optional] service com::sun::star::beans::PropertyBag;
 
     //-------------------------------------------------------------------------
 
     /** the name of the component.
+
         <p>Note that the name accessed here is the same as when using the
         <type scope="com::sun::star::container">XNamed</type> interface.</p>
      */
