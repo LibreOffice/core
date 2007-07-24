@@ -4,9 +4,9 @@
  *
  *  $RCSfile: graph.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: hr $ $Date: 2007-06-27 20:13:35 $
+ *  last change: $Author: rt $ $Date: 2007-07-24 10:09:39 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -37,7 +37,7 @@
 #include "precompiled_vcl.hxx"
 
 #ifndef _SV_IMPGRAPH_HXX
-#include <impgraph.hxx>
+#include <vcl/impgraph.hxx>
 #endif
 #ifndef _SV_OUTDEV_HXX
 #include <vcl/outdev.hxx>
