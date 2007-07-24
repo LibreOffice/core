@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.5 $
+#   $Revision: 1.6 $
 #
-#   last change: $Author: obo $ $Date: 2007-01-25 13:43:02 $
+#   last change: $Author: rt $ $Date: 2007-07-24 09:16:44 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -66,13 +66,12 @@ CSCFLAGS += -optimize+
 
 
 
-OUTDIR=$(BIN)$/qa$/versioning
-EXETARGET2=$(OUTDIR)$/runtests.exe 
+EXETARGET2=$(BIN)$/runtests.exe 
 
 .IF "$(name)" != ""
-TESTLIB=$(OUTDIR)$/$(name)
+TESTLIB=$(BIN)$/$(name)
 .ELSE
-TESTLIB=$(OUTDIR)$/version_current.dll
+TESTLIB=$(BIN)$/version_current.dll
 .ENDIF
 VERSIONLIBS=version_libs
 
@@ -86,20 +85,17 @@ ALLTAR:
 .ENDIF
 
 
-MAKEOUTDIR:
-     $(MKDIR) $(OUTDIR)
-
-COPYVERSIONLIBS: MAKEOUTDIR
-        -$(GNUCOPY) -p $(VERSIONLIBS)$/* $(OUTDIR)
+COPYVERSIONLIBS: 
+        -$(GNUCOPY) -p $(VERSIONLIBS)$/* $(BIN)
 
 CSFILES2 = runtests.cs
-$(EXETARGET2): $(CSFILES2) MAKEOUTDIR
+$(EXETARGET2): $(CSFILES2)
     $(CSC) $(CSCFLAGS) -target:exe -out:$(EXETARGET2) \
         $(CSFILES2)
 
 
 CSFILESLIB = version.cs
-$(TESTLIB): $(CSFILESLIB) MAKEOUTDIR
+$(TESTLIB): $(CSFILESLIB) $(BIN)$/cliureversion.mk
     $(CSC) $(CSCFLAGS) -target:library -out:$(TESTLIB) \
         -reference:$(BIN)$/cli_ure.dll \
          -reference:$(BIN)$/cli_types.dll \
@@ -109,7 +105,7 @@ $(TESTLIB): $(CSFILESLIB) MAKEOUTDIR
 
 #This target only checks if the the office/program/assembly directory
 #contains the proper libraries.
-$(OUTDIR)$/buildwithofficelibs.dll: MAKEOUTDIR
+$(BIN)$/buildwithofficelibs.dll: 
     $(CSC) $(CSCFLAGS) -target:library -out:$@ \
         -reference:"$(office)"$/program$/assembly$/cli_ure.dll \
          -reference:"$(office)"$/program$/assembly$/cli_types.dll \
@@ -138,12 +134,13 @@ RUNINSTRUCTIONS :
     @echo .
     @echo ###########################   N O T E  ######################################
     @echo . 
-    @echo "To run the test you have to provide the path to the  office location."
+    @echo To run the test you have to provide the path to the  office location.
     @echo Example:
     @echo dmake run office="d:\myOffice"
     @echo .
-    @echo "To build a test library with a particular name run"
-    @echo "dmake name=name_of_library.dll"	
+    @echo To build a test library with a particular name run. The namese must start with "version". 
+    @echo For example:
+    @echo "dmake name=version_10_10_10.dll"	
     @echo ###########################   N O T E  ######################################
     @echo .
     @echo .	
@@ -162,7 +159,7 @@ CT_APP      = org.openoffice.Runner
 CT_NOOFFICE = -NoOffice
 # --- Targets ------------------------------------------------------
 
-RUN: $(OUTDIR)$/buildwithofficelibs.dll
+RUN: $(BIN)$/buildwithofficelibs.dll
     java -cp $(CLASSPATH) -DSystemRoot=$(SystemRoot) -Dcli_test_program=$(EXETARGET2) -Duno_path="$(office)"\program $(CT_APP) $(CT_NOOFFICE) $(CT_TESTBASE) $(CT_TEST)
 
 run: RUN
