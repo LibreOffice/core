@@ -4,9 +4,9 @@
  *
  *  $RCSfile: wall.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: hr $ $Date: 2007-06-27 20:24:18 $
+ *  last change: $Author: rt $ $Date: 2007-07-24 10:15:22 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -55,7 +55,7 @@
 #include <vcl/wall.hxx>
 #endif
 #ifndef _SV_WALL2_HXX
-#include <wall2.hxx>
+#include <vcl/wall2.hxx>
 #endif
 #ifndef _SV_SVAPP_HXX
 #include <vcl/svapp.hxx>
