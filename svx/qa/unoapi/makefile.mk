@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.5 $
+#   $Revision: 1.6 $
 #
-#   last change: $Author: obo $ $Date: 2007-01-25 12:42:51 $
+#   last change: $Author: rt $ $Date: 2007-07-24 13:17:15 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -38,5 +38,11 @@ PRJ=..$/..
 PRJNAME=svx
 TARGET=qa_unoapi
 
-ALLTAR:
-    $(SOLARENV)$/bin$/checkapi -sce svx.sce -xcl knownissues.xcl -tdoc $(PWD)$/testdocuments
+.INCLUDE: settings.mk
+
+.INCLUDE: target.mk
+
+ALLTAR : UNOAPI_TEST
+
+UNOAPI_TEST:
+    +$(SOLARENV)$/bin$/checkapi -sce svx.sce -xcl knownissues.xcl -tdoc $(PWD)$/testdocuments
