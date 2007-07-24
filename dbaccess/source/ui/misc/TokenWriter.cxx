@@ -4,9 +4,9 @@
  *
  *  $RCSfile: TokenWriter.cxx,v $
  *
- *  $Revision: 1.32 $
+ *  $Revision: 1.33 $
  *
- *  last change: $Author: rt $ $Date: 2007-07-06 08:33:42 $
+ *  last change: $Author: rt $ $Date: 2007-07-24 12:10:12 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -140,9 +140,7 @@ using namespace ::com::sun::star::awt;
 using namespace ::com::sun::star::util;
 using ::com::sun::star::frame::XModel;
 
-#if defined(MAC)
-const char __FAR_DATA ODatabaseImportExport::sNewLine = '\015';
-#elif defined(UNX)
+#if defined(UNX)
 const char __FAR_DATA ODatabaseImportExport::sNewLine = '\012';
 #else
 const char __FAR_DATA ODatabaseImportExport::sNewLine[] = "\015\012";
@@ -400,13 +398,8 @@ void ODatabaseImportExport::initialize()
 BOOL ORTFImportExport::Write()
 {
     (*m_pStream) << '{'     << sRTF_RTF;
-#ifdef MAC
-    (*m_pStream) << sRTF_MAC    << ODatabaseImportExport::sNewLine;
-    rtl_TextEncoding eDestEnc = RTL_TEXTENCODING_APPLE_ROMAN;
-#else
     (*m_pStream) << sRTF_ANSI   << ODatabaseImportExport::sNewLine;
     rtl_TextEncoding eDestEnc = RTL_TEXTENCODING_MS_1252;
-#endif
 
     /*
     // Access RTF Export Beispiel
