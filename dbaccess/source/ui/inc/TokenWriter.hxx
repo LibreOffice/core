@@ -4,9 +4,9 @@
  *
  *  $RCSfile: TokenWriter.hxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: rt $ $Date: 2007-07-06 08:25:44 $
+ *  last change: $Author: rt $ $Date: 2007-07-24 12:09:26 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -122,7 +122,7 @@ namespace dbaui
         ::rtl::OUString m_sDataSourceName;
         sal_Int32       m_nCommandType;
 
-#if defined UNX || defined MAC
+#if defined UNX
         static const char __FAR_DATA sNewLine;
 #else
         static const char __FAR_DATA sNewLine[];
