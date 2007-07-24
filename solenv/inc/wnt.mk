@@ -4,9 +4,9 @@
 #
 #   $RCSfile: wnt.mk,v $
 #
-#   $Revision: 1.78 $
+#   $Revision: 1.79 $
 #
-#   last change: $Author: kz $ $Date: 2007-05-10 15:11:57 $
+#   last change: $Author: rt $ $Date: 2007-07-24 13:31:29 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -62,7 +62,7 @@ WRAPCMD_ENV*=$(WRAPCMD) -env
 STARDEP=$(WRAPCMD) javadep
 JAVAC=$(WRAPCMD) javac
 JAVA=$(WRAPCMD) java
-JAVAI!=$(WRAPCMD) java
+JAVAI!:=$(WRAPCMD) java
 .ENDIF # "$(USE_SHELL)"!="4nt"
 
 # --- general WNT settings ---
