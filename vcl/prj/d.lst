@@ -24,7 +24,7 @@ mkdir: %_DEST%\inc%_EXT%\vcl\plug\vcl
 ..\inc\vcl\btndlg.hxx %_DEST%\inc%_EXT%\vcl\btndlg.hxx
 ..\inc\vcl\button.hxx %_DEST%\inc%_EXT%\vcl\button.hxx
 ..\inc\vcl\button.hxx %_DEST%\inc%_EXT%\vcl\imagebtn.hxx
-..\inc\cmdevt.h %_DEST%\inc%_EXT%\vcl\cmdevt.h
+..\inc\vcl\cmdevt.h %_DEST%\inc%_EXT%\vcl\cmdevt.h
 ..\inc\vcl\cmdevt.hxx %_DEST%\inc%_EXT%\vcl\cmdevt.hxx
 ..\inc\vcl\combobox.h %_DEST%\inc%_EXT%\vcl\combobox.h
 ..\inc\vcl\combobox.hxx %_DEST%\inc%_EXT%\vcl\combobox.hxx
@@ -114,7 +114,7 @@ mkdir: %_DEST%\inc%_EXT%\vcl\plug\vcl
 ..\inc\vcl\svapp.hxx %_DEST%\inc%_EXT%\vcl\svapp.hxx
 ..\inc\vcl\symbol.hxx %_DEST%\inc%_EXT%\vcl\symbol.hxx
 ..\inc\vcl\syschild.hxx %_DEST%\inc%_EXT%\vcl\syschild.hxx
-..\inc\sysdata.hxx %_DEST%\inc%_EXT%\vcl\sysdata.hxx
+..\inc\vcl\sysdata.hxx %_DEST%\inc%_EXT%\vcl\sysdata.hxx
 ..\inc\vcl\syswin.hxx %_DEST%\inc%_EXT%\vcl\syswin.hxx
 ..\inc\vcl\tabctrl.hxx %_DEST%\inc%_EXT%\vcl\tabctrl.hxx
 ..\inc\vcl\tabdlg.hxx %_DEST%\inc%_EXT%\vcl\tabdlg.hxx
@@ -148,32 +148,4 @@ mkdir: %_DEST%\inc%_EXT%\vcl\plug\vcl
 ..\inc\vcl\pngwrite.hxx %_DEST%\inc%_EXT%\vcl\pngwrite.hxx
 ..\inc\vcl\smartid.hxx %_DEST%\inc%_EXT%\vcl\smartid.hxx
 ..\inc\vcl\configsettings.hxx %_DEST%\inc%_EXT%\vcl\configsettings.hxx
-
-..\inc\vcl\salinst.hxx %_DEST%\inc%_EXT%\vcl\plug\vcl\salinst.hxx
-..\inc\vcl\salwtype.hxx %_DEST%\inc%_EXT%\vcl\plug\vcl\salwtype.hxx
-..\inc\vcl\salgtype.hxx %_DEST%\inc%_EXT%\vcl\plug\vcl\salgtype.hxx
-..\inc\vcl\salframe.hxx %_DEST%\inc%_EXT%\vcl\plug\vcl\salframe.hxx
-..\inc\vcl\salgeom.hxx %_DEST%\inc%_EXT%\vcl\plug\vcl\salgeom.hxx
-..\inc\vcl\impdel.hxx %_DEST%\inc%_EXT%\vcl\plug\vcl\impdel.hxx
-..\inc\vcl\saltimer.hxx %_DEST%\inc%_EXT%\vcl\plug\vcl\saltimer.hxx
-..\inc\vcl\svdata.hxx %_DEST%\inc%_EXT%\vcl\plug\vcl\svdata.hxx
-..\inc\vcl\salogl.hxx %_DEST%\inc%_EXT%\vcl\plug\vcl\salogl.hxx
-..\inc\vcl\salsound.hxx %_DEST%\inc%_EXT%\vcl\plug\vcl\salsound.hxx
-..\inc\vcl\salobj.hxx %_DEST%\inc%_EXT%\vcl\plug\vcl\salobj.hxx
-..\inc\vcl\salgdi.hxx %_DEST%\inc%_EXT%\vcl\plug\vcl\salgdi.hxx
-..\inc\vcl\salprn.hxx %_DEST%\inc%_EXT%\vcl\plug\vcl\salprn.hxx
-..\inc\vcl\salbmp.hxx %_DEST%\inc%_EXT%\vcl\plug\vcl\salbmp.hxx
-..\inc\vcl\jobset.h %_DEST%\inc%_EXT%\vcl\plug\vcl\jobset.h
-..\inc\vcl\sallayout.hxx %_DEST%\inc%_EXT%\vcl\plug\vcl\sallayout.hxx
-..\inc\vcl\salctrlhandle.hxx %_DEST%\inc%_EXT%\vcl\plug\vcl\salctrlhandle.hxx
-..\inc\vcl\glyphcache.hxx %_DEST%\inc%_EXT%\vcl\plug\vcl\glyphcache.hxx
-..\inc\vcl\outfont.hxx %_DEST%\inc%_EXT%\vcl\plug\vcl\outfont.hxx
-..\inc\vcl\impfont.hxx %_DEST%\inc%_EXT%\vcl\plug\vcl\impfont.hxx
-..\inc\vcl\salptype.hxx %_DEST%\inc%_EXT%\vcl\plug\vcl\salptype.hxx
-..\inc\vcl\salatype.hxx %_DEST%\inc%_EXT%\vcl\plug\vcl\salatype.hxx
-..\inc\vcl\print.h %_DEST%\inc%_EXT%\vcl\plug\vcl\print.h
-..\inc\vcl\salimestatus.hxx %_DEST%\inc%_EXT%\vcl\plug\vcl\salimestatus.hxx
-..\inc\vcl\salsys.hxx %_DEST%\inc%_EXT%\vcl\plug\vcl\salsys.hxx
-..\inc\vcl\salvd.hxx %_DEST%\inc%_EXT%\vcl\plug\vcl\salvd.hxx
-..\inc\vcl\saldatabasic.hxx %_DEST%\inc%_EXT%\vcl\plug\vcl\saldatabasic.hxx
 
