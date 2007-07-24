@@ -4,9 +4,9 @@
  *
  *  $RCSfile: accmgr.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: hr $ $Date: 2007-06-27 20:27:58 $
+ *  last change: $Author: rt $ $Date: 2007-07-24 10:18:09 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -44,13 +44,13 @@
 #endif
 
 #ifndef _SV_ACCEL_H
-#include <accel.h>
+#include <vcl/accel.h>
 #endif
 #ifndef _SV_ACCEL_HXX
 #include <vcl/accel.hxx>
 #endif
 #ifndef _SV_ACCMGR_HXX
-#include <accmgr.hxx>
+#include <vcl/accmgr.hxx>
 #endif
 
 
