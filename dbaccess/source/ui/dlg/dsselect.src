@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dsselect.src,v $
  *
- *  $Revision: 1.43 $
+ *  $Revision: 1.44 $
  *
- *  last change: $Author: ihi $ $Date: 2007-04-19 15:01:56 $
+ *  last change: $Author: rt $ $Date: 2007-07-24 12:08:32 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -109,10 +109,6 @@ ModalDialog DLG_DATASOURCE_SELECTION
     String STR_DESCRIPTION2
     {
         Text [ en-US ] = "Choose a database";
-    };
-    String STR_COULDNOTLOAD_CONFIGLIB
-    {
-        Text [ en-US ] = "Could not load the program library #lib# or it is corrupted. The ODBC data source configuration is not available.";
     };
 };
 
