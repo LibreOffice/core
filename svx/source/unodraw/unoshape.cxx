@@ -4,9 +4,9 @@
  *
  *  $RCSfile: unoshape.cxx,v $
  *
- *  $Revision: 1.159 $
+ *  $Revision: 1.160 $
  *
- *  last change: $Author: rt $ $Date: 2007-07-06 07:45:48 $
+ *  last change: $Author: rt $ $Date: 2007-07-24 12:02:29 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -4170,30 +4170,27 @@ uno::Sequence< OUString > SAL_CALL SvxShape::_getSupportedServiceNames()
     }
     else if( mpObj.is() && mpObj->GetObjInventor() == FmFormInventor)
     {
+#if OSL_DEBUG_LEVEL > 0
         const UINT16 nIdent = mpObj->GetObjIdentifier();
-
-        switch(nIdent)
+        OSL_ENSURE( nIdent == OBJ_UNO, "SvxShape::_getSupportedServiceNames: FmFormInventor, but no UNO object?" );
+#endif
+        static uno::Sequence< OUString > *pSeq = 0;
+        if( 0 == pSeq )
         {
-        case OBJ_FM_CONTROL:
+//          OGuard aGuard( Application::GetSolarMutex() );
+//          if( 0 == pSeq )
             {
-                static uno::Sequence< OUString > *pSeq = 0;
-                if( 0 == pSeq )
-                {
-//                  OGuard aGuard( Application::GetSolarMutex() );
-//                  if( 0 == pSeq )
-                    {
-                        static uno::Sequence< OUString > SvxShape_UnoServices;
-                        SvxServiceInfoHelper::addToSequence( SvxShape_UnoServices, 2,
-                            sUNO_service_drawing_ControlShape,
-                            sUNO_service_drawing_Shape );
+                static uno::Sequence< OUString > SvxShape_UnoServices;
+                SvxServiceInfoHelper::addToSequence( SvxShape_UnoServices, 2,
+                    sUNO_service_drawing_ControlShape,
+                    sUNO_service_drawing_Shape );
 
-                        pSeq = &SvxShape_UnoServices;
-                    }
-                }
-                return *pSeq;
+                pSeq = &SvxShape_UnoServices;
             }
         }
+        return *pSeq;
     }
+    OSL_ENSURE( false, "SvxShape::_getSupportedServiceNames: could not determine object type!" );
     uno::Sequence< OUString > aSeq;
     return aSeq;
 }
