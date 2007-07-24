@@ -4,9 +4,9 @@
  *
  *  $RCSfile: interpr5.cxx,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: obo $ $Date: 2007-07-17 13:33:07 $
+ *  last change: $Author: rt $ $Date: 2007-07-24 09:23:32 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -61,6 +61,7 @@
 #include "dociter.hxx"
 #include "scmatrix.hxx"
 #include "globstr.hrc"
+#include "cellkeytranslator.hxx"
 
 const double fInvEpsilon = 1.0E-7;
 
@@ -3977,6 +3978,7 @@ void ScInterpreter::ScInfo()
     if( MustHaveParamCount( GetByte(), 1 ) )
     {
         String aStr = String( GetString() ).ToUpperAscii();
+        ScCellKeywordTranslator::transKeyword(aStr, ScGlobal::pLocale, ocInfo);
         if( aStr.EqualsAscii( "SYSTEM" ) )
             PushString( String( RTL_CONSTASCII_USTRINGPARAM( SC_INFO_OSVERSION ) ) );
         else if( aStr.EqualsAscii( "OSVERSION" ) )
