@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dbexception.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: rt $ $Date: 2006-12-01 16:50:11 $
+ *  last change: $Author: rt $ $Date: 2007-07-24 11:49:40 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -178,11 +178,16 @@ SQLExceptionInfo::SQLExceptionInfo(const staruno::Any& _rError)
 void SQLExceptionInfo::implDetermineType()
 {
     staruno::Type aContentType = m_aContent.getValueType();
-    if (isA(aContentType, static_cast< ::com::sun::star::sdb::SQLContext*>(NULL)))
+
+    const Type& aSQLExceptionType = ::getCppuType( reinterpret_cast< SQLException* >( NULL ) );
+    const Type& aSQLWarningType = ::getCppuType( reinterpret_cast< SQLWarning* >( NULL ) );
+    const Type& aSQLContextType  = ::getCppuType( reinterpret_cast< SQLContext* >( NULL ) );
+
+    if ( isAssignableFrom( aSQLContextType, m_aContent.getValueType() ) )
         m_eType = SQL_CONTEXT;
-    else if (isA(aContentType, static_cast< ::com::sun::star::sdbc::SQLWarning*>(NULL)))
+    else if ( isAssignableFrom( aSQLWarningType, m_aContent.getValueType() ) )
         m_eType = SQL_WARNING;
-    else if (isA(aContentType, static_cast< ::com::sun::star::sdbc::SQLException*>(NULL)))
+    else if ( isAssignableFrom( aSQLExceptionType, m_aContent.getValueType() ) )
         m_eType = SQL_EXCEPTION;
     else
     {
