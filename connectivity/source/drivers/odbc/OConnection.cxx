@@ -4,9 +4,9 @@
  *
  *  $RCSfile: OConnection.cxx,v $
  *
- *  $Revision: 1.40 $
+ *  $Revision: 1.41 $
  *
- *  last change: $Author: kz $ $Date: 2006-12-13 16:21:28 $
+ *  last change: $Author: rt $ $Date: 2007-07-24 11:50:49 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -202,12 +202,11 @@ SQLRETURN OConnection::OpenConnection(const ::rtl::OUString& aConnectStr,sal_Int
     {
     }
 
-#ifndef MAC
+
     // autocoomit ist immer default
 
     if (!bReadOnly)
         N3SQLSetConnectAttr(m_aConnectionHandle,SQL_ATTR_AUTOCOMMIT,(SQLPOINTER)SQL_AUTOCOMMIT_ON,SQL_IS_INTEGER);
-#endif
 
     return nSQLRETURN;
 }
