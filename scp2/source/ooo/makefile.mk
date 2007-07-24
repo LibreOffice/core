@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.55 $
+#   $Revision: 1.56 $
 #
-#   last change: $Author: ihi $ $Date: 2007-06-05 11:53:45 $
+#   last change: $Author: rt $ $Date: 2007-07-24 10:35:13 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -77,10 +77,6 @@ SCPDEFS+=-DENABLE_SYSTRAY_GTK
 
 .IF "$(ENABLE_PASF)" != ""
 SCPDEFS+=-DUSE_PASF
-.ENDIF
-
-.IF "$(ENABLE_HEADLESS)" != ""
-SCPDEFS+=-DENABLE_HEADLESS
 .ENDIF
 
 .IF "$(ENABLE_KDE)" != ""
@@ -276,10 +272,8 @@ ULFFILES=                          \
         module_systemint.ulf
 
 .IF "$(GUI)"=="UNX"
-.IF "$(ENABLE_HEADLESS)" == "TRUE"
     PARFILES+=module_headless.par
     ULFFILES+=module_headless.ulf
-.ENDIF
 .ENDIF
 
 # --- File ---------------------------------------------------------
