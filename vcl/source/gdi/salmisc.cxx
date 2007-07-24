@@ -4,9 +4,9 @@
  *
  *  $RCSfile: salmisc.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: hr $ $Date: 2007-06-27 20:23:39 $
+ *  last change: $Author: rt $ $Date: 2007-07-24 10:14:52 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -41,7 +41,7 @@
 #endif
 #include <vcl/bmpacc.hxx>
 #include <vcl/salbtype.hxx>
-#include <bmpfast.hxx>
+#include <vcl/bmpfast.hxx>
 
 // -----------
 // - Defines -
