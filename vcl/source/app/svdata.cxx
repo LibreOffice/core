@@ -4,9 +4,9 @@
  *
  *  $RCSfile: svdata.cxx,v $
  *
- *  $Revision: 1.53 $
+ *  $Revision: 1.54 $
  *
- *  last change: $Author: hr $ $Date: 2007-06-27 20:02:48 $
+ *  last change: $Author: rt $ $Date: 2007-07-24 10:05:20 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -66,7 +66,7 @@
 #endif
 
 #ifndef _VCL_FONTCFG_HXX
-#include <fontcfg.hxx>
+#include <vcl/fontcfg.hxx>
 #endif
 #ifndef VCL_INC_CONFIGSETTINGS_HXX
 #include <vcl/configsettings.hxx>
@@ -75,7 +75,7 @@
 #include <vcl/svdata.hxx>
 #endif
 #ifndef _SV_WINDOW_H
-#include <window.h>
+#include <vcl/window.h>
 #endif
 #ifndef _SV_SVAPP_HXX
 #include <vcl/svapp.hxx>
@@ -125,7 +125,7 @@
 
 #include <stdio.h>
 #include <vcl/salsys.hxx>
-#include <svids.hrc>
+#include <vcl/svids.hrc>
 #ifndef INCLUDED_RTL_INSTANCE_HXX
 #include <rtl/instance.hxx>
 #endif
