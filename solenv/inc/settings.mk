@@ -4,9 +4,9 @@
 #
 #   $RCSfile: settings.mk,v $
 #
-#   $Revision: 1.218 $
+#   $Revision: 1.219 $
 #
-#   last change: $Author: rt $ $Date: 2007-07-10 09:21:45 $
+#   last change: $Author: rt $ $Date: 2007-07-24 13:31:15 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -156,7 +156,7 @@ JAVADOC=javadoc -J-Xmx120m
 
 #required arguments
 JAVAC=$(JAVACOMPILER)
-JAVAI=$(JAVAINTERPRETER)
+JAVAI:=$(JAVAINTERPRETER)
 .IF "$(JAVACISGCJ)" == "yes"
 JAVAC+=--encoding=UTF-8 -O2 -fno-assert -Wno-deprecated -C
 .ENDIF
@@ -982,10 +982,12 @@ CPPUMAKER*=$(WRAPCMD) cppumaker
 JAVAMAKER*=$(WRAPCMD) javamaker
 RDBMAKER*=$(WRAPCMD) rdbmaker
 .IF "$(JAVAINTERPRETER)" == ""
-JAVA*=java
+JAVA*:=java
 .ELSE
-JAVA*=$(JAVAINTERPRETER)
+JAVA*:=$(JAVAINTERPRETER)
 .ENDIF
+.EXPORT : JAVA JAVAI
+
 # Define SCPCOMP without wrapper because pre2par.pl chokes on DOS style
 # pathes. (See iz57443)
 SCPCOMP=$(PERL) $(SOLARENV)$/bin$/pre2par.pl
