@@ -4,9 +4,9 @@
  *
  *  $RCSfile: svmain.cxx,v $
  *
- *  $Revision: 1.69 $
+ *  $Revision: 1.70 $
  *
- *  last change: $Author: hr $ $Date: 2007-06-27 20:03:01 $
+ *  last change: $Author: rt $ $Date: 2007-07-24 10:05:33 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -85,7 +85,7 @@
 #include <vcl/svdata.hxx>
 #endif
 #ifndef _SV_DBGGUI_HXX
-#include <dbggui.hxx>
+#include <vcl/dbggui.hxx>
 #endif
 #ifndef _SV_SVAPP_HXX
 #include <vcl/svapp.hxx>
@@ -103,13 +103,13 @@
 #include <tools/resmgr.hxx>
 #endif
 #ifndef _SV_ACCMGR_HXX
-#include <accmgr.hxx>
+#include <vcl/accmgr.hxx>
 #endif
 #ifndef _SV_IDLEMGR_HXX
-#include <idlemgr.hxx>
+#include <vcl/idlemgr.hxx>
 #endif
 #ifndef _SV_OUTDEV_H
-#include <outdev.h>
+#include <vcl/outdev.h>
 #endif
 #ifndef _SV_OUTFONT_HXX
 #include <vcl/outfont.hxx>
@@ -133,10 +133,10 @@
 #include <vcl/salimestatus.hxx>
 #endif
 #ifndef _SV_IMPIMAGETREE_HXX
-#include <impimagetree.hxx>
+#include <vcl/impimagetree.hxx>
 #endif
 #ifndef _VCL_XCONNECTION_HXX
-#include <xconnection.hxx>
+#include <vcl/xconnection.hxx>
 #endif
 
 #include <vos/process.hxx>
@@ -163,7 +163,7 @@ using namespace ::rtl;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::lang;
 
-#include <fontcfg.hxx>
+#include <vcl/fontcfg.hxx>
 #include <vcl/configsettings.hxx>
 
 #ifndef _CPPUHELPER_IMPLBASE1_HXX_
