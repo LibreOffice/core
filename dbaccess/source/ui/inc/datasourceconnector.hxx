@@ -4,9 +4,9 @@
  *
  *  $RCSfile: datasourceconnector.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 15:46:48 $
+ *  last change: $Author: rt $ $Date: 2007-07-24 12:09:40 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -67,7 +67,6 @@ namespace dbaui
         ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess >
                         m_xDatabaseContext;
         ::rtl::OUString m_sContextInformation;
-        ::rtl::OUString m_sContextDetails;
 
     public:
         ODatasourceConnector(
@@ -77,8 +76,7 @@ namespace dbaui
         ODatasourceConnector(
             const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& _rxORB,
             Window* _pMessageParent,
-            const ::rtl::OUString& _rContextInformation,
-            const ::rtl::OUString& _rContextDetails = ::rtl::OUString()
+            const ::rtl::OUString& _rContextInformation
         );
 
         /// returns <TRUE/> if the object is able to create data source connections
