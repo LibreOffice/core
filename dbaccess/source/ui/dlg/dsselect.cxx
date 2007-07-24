@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dsselect.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: rt $ $Date: 2007-07-06 08:16:45 $
+ *  last change: $Author: rt $ $Date: 2007-07-24 12:07:51 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -35,10 +35,6 @@
 
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_dbaccess.hxx"
-
-#ifndef _DBAUI_ODBC_CONFIG_HXX_
-#include "odbcconfig.hxx"
-#endif
 
 #ifndef _DBAUI_DSSELECT_HXX_
 #include "dsselect.hxx"
@@ -132,7 +128,9 @@ ODatasourceSelectDialog::ODatasourceSelectDialog(Window* _pParent, const StringB
      ,m_aOk                 (this, ModuleRes(PB_OK))
      ,m_aCancel             (this, ModuleRes(PB_CANCEL))
      ,m_aHelp               (this, ModuleRes(PB_HELP))
+#ifdef HAVE_ODBC_ADMINISTRATION
      ,m_aManageDatasources  (this, ModuleRes(PB_MANAGE))
+#endif
      ,m_aCreateAdabasDB     (this, ModuleRes(PB_CREATE))
      ,m_pOutputSet(_pOutputSet)
 {
@@ -183,6 +181,11 @@ ODatasourceSelectDialog::ODatasourceSelectDialog(Window* _pParent, const StringB
 #endif
     m_aDatasource.SetDoubleClickHdl(LINK(this,ODatasourceSelectDialog,ListDblClickHdl));
     FreeResource();
+}
+
+// -----------------------------------------------------------------------
+ODatasourceSelectDialog::~ODatasourceSelectDialog()
+{
 }
 
 // -----------------------------------------------------------------------
@@ -249,33 +252,57 @@ IMPL_LINK( ODatasourceSelectDialog, CreateDBClickHdl, PushButton*, /*pButton*/ )
     }
     return 0L;
 }
+
+// -----------------------------------------------------------------------
+BOOL ODatasourceSelectDialog::Close()
+{
+#ifdef HAVE_ODBC_ADMINISTRATION
+    if ( m_pODBCManagement.get() && m_pODBCManagement->isRunning() )
+        return FALSE;
+#endif
+
+    return ModalDialog::Close();
+}
+
 // -----------------------------------------------------------------------
 #ifdef HAVE_ODBC_ADMINISTRATION
 IMPL_LINK( ODatasourceSelectDialog, ManageClickHdl, PushButton*, EMPTYARG )
 {
-    OOdbcManagement aOdbcConfig;
-    if (!aOdbcConfig.isLoaded())
+    if ( !m_pODBCManagement.get() )
+        m_pODBCManagement.reset( new OOdbcManagement( LINK( this, ODatasourceSelectDialog, ManageProcessFinished ) ) );
+
+    if ( !m_pODBCManagement->manageDataSources_async() )
     {
-        // show an error message
-        LocalResourceAccess aLocRes(DLG_DATASOURCE_SELECTION, RSC_MODALDIALOG);
-        String sError(ModuleRes(STR_COULDNOTLOAD_CONFIGLIB));
-        sError.SearchAndReplaceAscii("#lib#", aOdbcConfig.getLibraryName());
-        ErrorBox aDialog(this, WB_OK, sError);
-        aDialog.Execute();
+        // TODO: error message
         m_aDatasource.GrabFocus();
         m_aManageDatasources.Disable();
         return 1L;
     }
 
-    aOdbcConfig.manageDataSources(GetSystemData()->hWnd);
-    // now we have to look if there are any new datasources added
+    m_aDatasource.Disable();
+    m_aOk.Disable();
+    m_aCancel.Disable();
+    m_aManageDatasources.Disable();
+
+    OSL_POSTCOND( m_pODBCManagement->isRunning(), "ODatasourceSelectDialog::ManageClickHdl: success, but not running - you were *fast*!" );
+    return 0L;
+}
+
+IMPL_LINK( ODatasourceSelectDialog, ManageProcessFinished, void*, /**/ )
+{
     StringBag aOdbcDatasources;
     OOdbcEnumeration aEnumeration;
-    aEnumeration.getDatasourceNames(aOdbcDatasources);
-    fillListBox(aOdbcDatasources);
+    aEnumeration.getDatasourceNames( aOdbcDatasources );
+    fillListBox( aOdbcDatasources );
+
+    m_aDatasource.Enable();
+    m_aOk.Enable();
+    m_aCancel.Enable();
+    m_aManageDatasources.Enable();
 
     return 0L;
 }
+
 #endif
 // -----------------------------------------------------------------------------
 void ODatasourceSelectDialog::fillListBox(const StringBag& _rDatasources)
