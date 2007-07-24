@@ -4,9 +4,9 @@
  *
  *  $RCSfile: AppControllerGen.cxx,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: rt $ $Date: 2007-07-06 07:58:32 $
+ *  last change: $Author: rt $ $Date: 2007-07-24 12:06:39 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -256,10 +256,11 @@ void OApplicationController::pasteFormat(sal_uInt32 _nFormatId)
 // -----------------------------------------------------------------------------
 void OApplicationController::openDataSourceAdminDialog()
 {
-    openDialog(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.sdb.DatasourceAdministrationDialog")));
+    openDialog( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.sdb.DatasourceAdministrationDialog" ) ) );
 }
+
 // -----------------------------------------------------------------------------
-void OApplicationController::openDialog(const ::rtl::OUString& _sServiceName)
+void OApplicationController::openDialog( const ::rtl::OUString& _sServiceName )
 {
     try
     {
@@ -267,8 +268,8 @@ void OApplicationController::openDialog(const ::rtl::OUString& _sServiceName)
         ::osl::MutexGuard aGuard(m_aMutex);
         WaitObject aWO(getView());
 
-        SharedConnection xConnection( getConnection() );
-        Sequence< Any > aArgs(xConnection.is() ? 3 : 2);
+        Sequence< Any > aArgs(3);
+        sal_Int32 nArgPos = 0;
 
         Reference< ::com::sun::star::awt::XWindow> xWindow = getTopMostContainerWindow();
         if ( !xWindow.is() )
@@ -278,7 +279,7 @@ void OApplicationController::openDialog(const ::rtl::OUString& _sServiceName)
                 xWindow = VCLUnoHelper::GetInterface(getView()->Window::GetParent());
         }
         // the parent window
-        aArgs[0] <<= PropertyValue( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ParentWindow")),
+        aArgs[nArgPos++] <<= PropertyValue( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ParentWindow")),
                                     0,
                                     makeAny(xWindow),
                                     PropertyState_DIRECT_VALUE);
@@ -287,13 +288,21 @@ void OApplicationController::openDialog(const ::rtl::OUString& _sServiceName)
         ::rtl::OUString sInitialSelection;
         if ( getContainer() )
             sInitialSelection = getDatabaseName();
-        aArgs[1] <<= PropertyValue(
-            ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("InitialSelection")), 0,
-            makeAny(sInitialSelection), PropertyState_DIRECT_VALUE);
+        if ( sInitialSelection.getLength() )
+        {
+            aArgs[ nArgPos++ ] <<= PropertyValue(
+                ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "InitialSelection" ) ), 0,
+                makeAny( sInitialSelection ), PropertyState_DIRECT_VALUE );
+        }
+
+        SharedConnection xConnection( getConnection() );
         if ( xConnection.is() )
-            aArgs[2] <<= PropertyValue(
+        {
+            aArgs[ nArgPos++ ] <<= PropertyValue(
                 PROPERTY_ACTIVECONNECTION, 0,
-                makeAny( xConnection ), PropertyState_DIRECT_VALUE);
+                makeAny( xConnection ), PropertyState_DIRECT_VALUE );
+        }
+        aArgs.realloc( nArgPos );
 
         // create the dialog
         Reference< XExecutableDialog > xAdminDialog;
@@ -312,8 +321,9 @@ void OApplicationController::openDialog(const ::rtl::OUString& _sServiceName)
 // -----------------------------------------------------------------------------
 void OApplicationController::openTableFilterDialog()
 {
-    openDialog(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.sdb.TableFilterDialog")));
+    openDialog( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.sdb.TableFilterDialog" ) ) );
 }
+
 // -----------------------------------------------------------------------------
 void OApplicationController::refreshTables()
 {
@@ -339,7 +349,7 @@ void OApplicationController::refreshTables()
 // -----------------------------------------------------------------------------
 void OApplicationController::openDirectSQLDialog()
 {
-    openDialog(::rtl::OUString(SERVICE_SDB_DIRECTSQLDIALOG));
+    openDialog( SERVICE_SDB_DIRECTSQLDIALOG );
 }
 // -----------------------------------------------------------------------------
 void SAL_CALL OApplicationController::propertyChange( const PropertyChangeEvent& evt ) throw (RuntimeException)
