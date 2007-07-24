@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ModelImpl.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: kz $ $Date: 2006-12-13 16:44:58 $
+ *  last change: $Author: rt $ $Date: 2007-07-24 12:04:04 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -47,6 +47,9 @@
 #endif
 #ifndef _TOOLS_DEBUG_HXX
 #include <tools/debug.hxx>
+#endif
+#ifndef TOOLS_DIAGNOSE_EX_H
+#include <tools/diagnose_ex.h>
 #endif
 #ifndef _CPPUHELPER_TYPEPROVIDER_HXX_
 #include <cppuhelper/typeprovider.hxx>
@@ -389,6 +392,7 @@ ODatabaseModelImpl::ODatabaseModelImpl(const Reference< XMultiServiceFactory >& 
             ,m_pStorageAccess( NULL )
             ,m_xMutex( new SharedMutex )
             ,m_xServiceFactory(_rxFactory)
+            ,m_aContainer(4)
             ,m_nLoginTimeout(0)
             ,m_bReadOnly(sal_False) // we're created as service and have to allow the setting of properties
             ,m_bPasswordRequired(sal_False)
@@ -407,7 +411,7 @@ ODatabaseModelImpl::ODatabaseModelImpl(const Reference< XMultiServiceFactory >& 
     m_sConnectURL = ::rtl::OUString::createFromAscii("jdbc:");
     m_aTableFilter.realloc(1);
     m_aTableFilter[0] = ::rtl::OUString::createFromAscii("%");
-    lateInit();
+    impl_construct_nothrow();
 }
 
 //--------------------------------------------------------------------------
@@ -419,9 +423,10 @@ ODatabaseModelImpl::ODatabaseModelImpl(
             :m_pStorageAccess( NULL )
             ,m_xMutex( new SharedMutex )
             ,m_xServiceFactory(_rxFactory)
+            ,m_aContainer(4)
             ,m_sName(_rRegistrationName)
             ,m_nLoginTimeout(0)
-            ,m_bReadOnly(sal_True)      // assume readonly for the moment, adjusted below
+            ,m_bReadOnly(sal_False)
             ,m_bPasswordRequired(sal_False)
             ,m_bSuppressVersionColumns(sal_True)
             ,m_bModified(sal_False)
@@ -436,7 +441,7 @@ ODatabaseModelImpl::ODatabaseModelImpl(
     DBG_CTOR(ODatabaseModelImpl,NULL);
     // adjust our readonly flag
 
-    lateInit();
+    impl_construct_nothrow();
 }
 
 //--------------------------------------------------------------------------
@@ -444,12 +449,10 @@ ODatabaseModelImpl::~ODatabaseModelImpl()
 {
     DBG_DTOR(ODatabaseModelImpl,NULL);
 }
-// -----------------------------------------------------------------------------
-void ODatabaseModelImpl::lateInit()
-{
-    m_bReadOnly = sal_False;
-    m_aContainer.resize(4);
 
+// -----------------------------------------------------------------------------
+void ODatabaseModelImpl::impl_construct_nothrow()
+{
     // create the property bag to hold the settings (also known as "Info" property)
     try
     {
@@ -478,22 +481,29 @@ void ODatabaseModelImpl::lateInit()
         ) );
 
         // insert the default settings
-        Reference< XPropertyContainer > xContainer( m_xSettings, UNO_QUERY );
-        OSL_ENSURE( xContainer.is(), "ODatabaseModelImpl::lateInit: invalid property bag - this will crash, sooner or later!" );
+        Reference< XPropertyContainer > xContainer( m_xSettings, UNO_QUERY_THROW );
         const AsciiPropertyValue* pSettings = getDefaultDataSourceSettings();
         for ( ; pSettings->AsciiName; ++pSettings )
         {
             xContainer->addProperty(
                 ::rtl::OUString::createFromAscii( pSettings->AsciiName ),
-                PropertyAttribute::BOUND,
+                PropertyAttribute::BOUND | PropertyAttribute::MAYBEDEFAULT,
                 pSettings->DefaultValue
             );
         }
     }
     catch( const Exception& )
     {
-      OSL_ENSURE( sal_False, "ODatabaseModelImpl::lateInit: could not create the PropertyBag for the Info/Settings properties!" );
+        DBG_UNHANDLED_EXCEPTION();
     }
+}
+
+// -----------------------------------------------------------------------------
+void ODatabaseModelImpl::reset()
+{
+    m_bReadOnly = sal_False;
+    ::std::vector< TContentPtr > aEmptyContainers( 4 );
+    m_aContainer.swap( aEmptyContainers );
 
     if ( m_pStorageAccess )
     {
@@ -574,14 +584,13 @@ void ODatabaseModelImpl::dispose()
     {
         Reference< XDataSource > xDS( m_xDataSource );
         ::comphelper::disposeComponent( xDS );
-        m_xDataSource = WeakReference< XDataSource >();
 
         Reference< XModel > xModel( m_xModel );
         ::comphelper::disposeComponent( xModel );
-        m_xModel = WeakReference< XModel >();
     }
     catch( const Exception& )
     {
+        DBG_UNHANDLED_EXCEPTION();
     }
     m_xDataSource = WeakReference<XDataSource>();
     m_xModel = WeakReference< XModel >();
@@ -597,9 +606,6 @@ void ODatabaseModelImpl::dispose()
 
     clearConnections();
 
-    disposeControllerFrames();
-
-    m_xCurrentController = NULL;
     m_xNumberFormatsSupplier = NULL;
 
     try
@@ -873,21 +879,7 @@ void ODatabaseModelImpl::setModified( sal_Bool _bModified )
         OSL_ENSURE(0,"ODatabaseModelImpl::setModified: Exception caught!");
     }
 }
-// -----------------------------------------------------------------------------
-void ODatabaseModelImpl::disposeControllerFrames()
-{
-    ::std::vector< Reference< XController> > aCopy = m_aControllers;
-    ::std::vector< Reference< XController> >::iterator aIter = aCopy.begin();
-    ::std::vector< Reference< XController> >::iterator aEnd = aCopy.end();
-    for (;aIter != aEnd ; ++aIter)
-    {
-        if ( aIter->is() )
-        {
-            Reference< XFrame> xFrame = (*aIter)->getFrame();
-            ::comphelper::disposeComponent(xFrame);
-        }
-    }
-}
+
 // -----------------------------------------------------------------------------
 Reference<XDataSource> ODatabaseModelImpl::getDataSource( bool _bCreateIfNecessary )
 {
@@ -1002,6 +994,7 @@ const AsciiPropertyValue* ODatabaseModelImpl::getDefaultDataSourceSettings()
         AsciiPropertyValue( "UseCatalogInSelect",         makeAny( (sal_Bool)sal_True ) ),
         AsciiPropertyValue( "EnableOuterJoinEscape",      makeAny( (sal_Bool)sal_True ) ),
         AsciiPropertyValue( "PreferDosLikeLineEnds",      makeAny( (sal_Bool)sal_False ) ),
+        AsciiPropertyValue( "FormsCheckRequiredFields",   makeAny( (sal_Bool)sal_True ) ),
         AsciiPropertyValue( NULL, Any() )
     };
     return aKnownSettings;
