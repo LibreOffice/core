@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.5 $
+#   $Revision: 1.6 $
 #
-#   last change: $Author: vg $ $Date: 2007-02-06 12:59:13 $
+#   last change: $Author: rt $ $Date: 2007-07-24 13:19:08 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -97,10 +97,10 @@ RUNNER_CLASSPATH = -cp $(CLASSPATH)$(PATH_SEPERATOR)$(SOLARBINDIR)$/OOoRunner.ja
 RUNNER_ARGS = org.openoffice.Runner -TestBase java_complex
 
 run:copy_resources
-    java $(RUNNER_CLASSPATH) $(RUNNER_ARGS) -sce extensions_all.sce
+    +java $(RUNNER_CLASSPATH) $(RUNNER_ARGS) -sce extensions_all.sce
 
 run_%:copy_resources
-    java $(RUNNER_CLASSPATH) $(RUNNER_ARGS) -o complex.$(PRJNAME).$(@:s/run_//)
+    +java $(RUNNER_CLASSPATH) $(RUNNER_ARGS) -o complex.$(PRJNAME).$(@:s/run_//)
 
 
 copy_resources: $(RESLIB1TARGETN) $(RESLIB2TARGETN)
