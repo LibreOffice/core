@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dsbrowserDnD.cxx,v $
  *
- *  $Revision: 1.77 $
+ *  $Revision: 1.78 $
  *
- *  last change: $Author: rt $ $Date: 2007-07-06 08:04:01 $
+ *  last change: $Author: rt $ $Date: 2007-07-24 12:07:07 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -311,11 +311,10 @@ namespace dbaui
                     if ( pData->xConnection.is() )
                     {
                         DBG_ASSERT( impl_isDataSourceEntry( pEntryLoop ), "SbaTableQueryBrowser::clearTreeModel: no data source entry, but a connection?" );
-                        // without this, pData->aController might not really be a valid ModelControllerConnector
+                        // connections are to be stored *only* at the data source entries
                         impl_releaseConnection( pData->xConnection );
                     }
 
-                    pData->aController.clear();
                     delete pData;
                 }
                 pEntryLoop = m_pTreeModel->Next(pEntryLoop);
