@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dndevdis.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: hr $ $Date: 2007-06-27 20:29:48 $
+ *  last change: $Author: rt $ $Date: 2007-07-24 10:19:29 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -38,7 +38,7 @@
 
 #include <dndevdis.hxx>
 #include <dndlcon.hxx>
-#include <window.h>
+#include <vcl/window.h>
 
 #include <vos/mutex.hxx>
 #include <vcl/svapp.hxx>
