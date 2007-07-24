@@ -4,9 +4,9 @@
  *
  *  $RCSfile: communi.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: vg $ $Date: 2007-04-11 18:20:35 $
+ *  last change: $Author: rt $ $Date: 2007-07-24 11:28:49 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -69,6 +69,9 @@ public:
     virtual BOOL IsLinkValid( CommunicationLink* pCL );
     virtual USHORT GetCommunicationLinkCount();
     virtual CommunicationLinkRef GetCommunicationLink( USHORT nNr );
+
+    void DoQuickShutdown( BOOL bQuickShutdown = TRUE) { bGracefullShutdown = !bQuickShutdown; }
+
 protected:
     virtual void CallConnectionOpened( CommunicationLink* pCL );
     virtual void CallConnectionClosed( CommunicationLink* pCL );
@@ -76,6 +79,8 @@ protected:
     CommunicationLinkList *InactiveLinks;       /// Hier sind die CommunicationLinks drin, die sich noch nicht selbst abgemeldet haben.
                                                 /// allerdings schon ein StopCommunication gekriegt haben, bzw ein ConnectionTerminated
     virtual void DestroyingLink( CommunicationLink *pCL );  // Link trägt sich im Destruktor aus
+
+    BOOL bGracefullShutdown;
 };
 
 class CommunicationManagerServer : public MultiCommunicationManager
