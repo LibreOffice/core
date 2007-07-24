@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ModelImpl.hxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: rt $ $Date: 2006-12-01 17:29:08 $
+ *  last change: $Author: rt $ $Date: 2007-07-24 12:04:18 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -213,8 +213,6 @@ private:
 //============================================================
 DECLARE_STL_USTRINGACCESS_MAP(::com::sun::star::uno::Reference< ::com::sun::star::embed::XStorage >,TStorages);
 
-typedef ::std::vector< ::com::sun::star::uno::Reference< ::com::sun::star::frame::XController > >   ControllerArray;
-
 class ODatabaseContext;
 class DocumentStorageAccess;
 class OSharedConnectionManager;
@@ -242,7 +240,6 @@ public:
 
     ::std::vector<TContentPtr>      m_aContainer;
     TStorages                       m_aStorages;
-    ControllerArray                 m_aControllers;
 
     ::com::sun::star::uno::WeakReference< ::com::sun::star::container::XNameAccess >    m_xCommandDefinitions;
     ::com::sun::star::uno::WeakReference< ::com::sun::star::container::XNameAccess >    m_xTableDefinitions;
@@ -287,7 +284,6 @@ public:
     // ::cppu::OInterfaceContainerHelper                    m_aStorageListeners;
 
     ::com::sun::star::uno::Reference< ::com::sun::star::lang::XEventListener>               m_xSharedConnectionManager;
-    ::com::sun::star::uno::Reference< ::com::sun::star::frame::XController>                 m_xCurrentController;
     ::com::sun::star::uno::Reference< ::com::sun::star::embed::XStorage >                   m_xStorage;
 
     ODatabaseContext*                                   m_pDBContext;
@@ -297,7 +293,7 @@ public:
     sal_Bool                                            m_bOwnStorage;
 
 
-    void lateInit();
+    void reset();
 
     /** determines whether the database document has an embedded data storage
     */
@@ -320,22 +316,6 @@ public:
             SAL_THROW(( ::com::sun::star::io::IOException, ::com::sun::star::uno::RuntimeException ));
 
 
-    /** dispose all frames for registered controllers
-    */
-    void disposeControllerFrames();
-
-    /** notifies the global event broadcaster
-        @param  _sEventName
-            One of
-            OnNew      => new document
-            OnLoad      => load document
-            OnUnload   => close document
-            OnSaveDone   => "Save" ended
-            OnSaveAsDone   => "SaveAs" ended
-            OnModifyChanged   => modified/unmodified
-    */
-    void notifyEvent(const ::rtl::OUString& _sEventName);
-
     ODatabaseModelImpl(
         const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& _rxFactory
         , const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XModel>& _xModel = ::com::sun::star::uno::Reference< ::com::sun::star::frame::XModel>()
@@ -348,43 +328,14 @@ public:
         ,ODatabaseContext* _pDBContext = NULL
         );
 
-// com::sun::star::beans::XPropertySet
-    ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySetInfo > SAL_CALL getPropertySetInfo(  ) throw(::com::sun::star::uno::RuntimeException);
     // XEventListener
     void SAL_CALL disposing( const ::com::sun::star::lang::EventObject& Source ) throw(::com::sun::star::uno::RuntimeException);
 
     void setModified( sal_Bool bModified );
-// ::com::sun::star::sdb::XCompletedConnection
-    ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection > SAL_CALL connectWithCompletion( const ::com::sun::star::uno::Reference< ::com::sun::star::task::XInteractionHandler >& handler ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
-
-// ::com::sun::star::sdbc::XDataSource
-    ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection > SAL_CALL getConnection( const ::rtl::OUString& user, const ::rtl::OUString& password ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
-    void SAL_CALL setLoginTimeout( sal_Int32 seconds ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
-    sal_Int32 SAL_CALL getLoginTimeout(  ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
-
-// :: com::sun::star::sdb::XBookmarksSupplier
-    ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess > SAL_CALL getBookmarks(  ) throw (::com::sun::star::uno::RuntimeException);
-
-// :: com::sun::star::sdb::XQueryDefinitionsSupplier
-    ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess > SAL_CALL getQueryDefinitions(  ) throw(::com::sun::star::uno::RuntimeException);
-
-// ::com::sun::star::sdbc::XIsolatedConnection
-    ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection > SAL_CALL getIsolatedConnection( const ::rtl::OUString& user, const ::rtl::OUString& password ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
-    ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection > SAL_CALL getIsolatedConnectionWithCompletion( const ::com::sun::star::uno::Reference< ::com::sun::star::task::XInteractionHandler >& handler ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
 
     void dispose();
 
     ::rtl::OUString getURL();
-
-// ::com::sun::star::util::XModifyBroadcaster
-    void SAL_CALL addModifyListener( const ::com::sun::star::uno::Reference< ::com::sun::star::util::XModifyListener >& aListener ) throw (::com::sun::star::uno::RuntimeException);
-    void SAL_CALL removeModifyListener( const ::com::sun::star::uno::Reference< ::com::sun::star::util::XModifyListener >& aListener ) throw (::com::sun::star::uno::RuntimeException);
-
-// ::com::sun::star::document::XEventListener
-    void SAL_CALL notifyEvent( const ::com::sun::star::document::EventObject& aEvent ) throw (::com::sun::star::uno::RuntimeException);
-
-// XCloseable
-    void SAL_CALL close( sal_Bool DeliverOwnership ) throw (::com::sun::star::util::CloseVetoException, ::com::sun::star::uno::RuntimeException);
 
     ::com::sun::star::uno::Reference< ::com::sun::star::embed::XStorage> getStorage(const ::rtl::OUString& _sStorageName,sal_Int32 nMode = ::com::sun::star::embed::ElementModes::READWRITE);
 // helper
@@ -468,6 +419,9 @@ public:
 
     /// returns a all known data source settings, including their default values
     static const AsciiPropertyValue* getDefaultDataSourceSettings();
+
+private:
+    void    impl_construct_nothrow();
 };
 
 /** a small base class for UNO components whose functionality depends on a ODatabaseModelImpl
