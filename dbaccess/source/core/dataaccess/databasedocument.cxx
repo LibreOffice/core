@@ -4,9 +4,9 @@
  *
  *  $RCSfile: databasedocument.cxx,v $
  *
- *  $Revision: 1.32 $
+ *  $Revision: 1.33 $
  *
- *  last change: $Author: ihi $ $Date: 2007-04-16 16:23:47 $
+ *  last change: $Author: rt $ $Date: 2007-07-24 12:04:32 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -81,6 +81,9 @@
 #endif
 #ifndef _URLOBJ_HXX
 #include <tools/urlobj.hxx>
+#endif
+#ifndef TOOLS_DIAGNOSE_EX_H
+#include <tools/diagnose_ex.h>
 #endif
 #ifndef _ERRCODE_HXX
 #include <tools/errcode.hxx>
@@ -252,8 +255,7 @@ sal_Bool SAL_CALL ODatabaseDocument::attachResource( const ::rtl::OUString& _rUR
         clearObjectContainer( m_pImpl->m_xTableDefinitions);
         clearObjectContainer( m_pImpl->m_xCommandDefinitions);
 
-        m_pImpl->m_aContainer.clear();
-        m_pImpl->lateInit();
+        m_pImpl->reset();
     }
     catch(const Exception&)
     {
@@ -338,9 +340,7 @@ Sequence< PropertyValue > SAL_CALL ODatabaseDocument::getArgs(  ) throw (Runtime
 void SAL_CALL ODatabaseDocument::connectController( const Reference< XController >& _xController ) throw (RuntimeException)
 {
     ModelMethodGuard aGuard( *this );
-    OSL_ENSURE(m_pImpl.is(),"Impl is NULL");
-
-    m_pImpl->m_aControllers.push_back(_xController);
+    m_aControllers.push_back( _xController );
 }
 // -----------------------------------------------------------------------------
 void SAL_CALL ODatabaseDocument::disconnectController( const Reference< XController >& _xController ) throw (RuntimeException)
@@ -348,15 +348,15 @@ void SAL_CALL ODatabaseDocument::disconnectController( const Reference< XControl
     ModelMethodGuard aGuard( *this );
     OSL_ENSURE(m_pImpl.is(),"Impl is NULL");
 
-    ControllerArray::iterator pos = ::std::find( m_pImpl->m_aControllers.begin(), m_pImpl->m_aControllers.end(), _xController );
-    OSL_ENSURE( pos != m_pImpl->m_aControllers.end(), "ODatabaseDocument::disconnectController: don't know this controller!" );
-    if ( pos != m_pImpl->m_aControllers.end() )
-        m_pImpl->m_aControllers.erase( pos );
+    Controllers::iterator pos = ::std::find( m_aControllers.begin(), m_aControllers.end(), _xController );
+    OSL_ENSURE( pos != m_aControllers.end(), "ODatabaseDocument::disconnectController: don't know this controller!" );
+    if ( pos != m_aControllers.end() )
+        m_aControllers.erase( pos );
 
-    if ( m_pImpl->m_xCurrentController == _xController )
-        m_pImpl->m_xCurrentController = NULL;
+    if ( m_xCurrentController == _xController )
+        m_xCurrentController = NULL;
 
-    if ( m_pImpl->m_aControllers.empty() )
+    if ( m_aControllers.empty() )
     {
         // if this was the last view, close the document as a whole
         // #i51157# / 2006-03-16 / frank.schoenheit@sun.com
@@ -400,7 +400,7 @@ Reference< XController > SAL_CALL ODatabaseDocument::getCurrentController() thro
     ModelMethodGuard aGuard( *this );
     OSL_ENSURE(m_pImpl.is(),"Impl is NULL");
 
-    return m_pImpl->m_xCurrentController.is() ? m_pImpl->m_xCurrentController : ( m_pImpl->m_aControllers.empty() ? Reference< XController >() : *m_pImpl->m_aControllers.begin() );
+    return m_xCurrentController.is() ? m_xCurrentController : ( m_aControllers.empty() ? Reference< XController >() : *m_aControllers.begin() );
 }
 // -----------------------------------------------------------------------------
 void SAL_CALL ODatabaseDocument::setCurrentController( const Reference< XController >& _xController ) throw (NoSuchElementException, RuntimeException)
@@ -408,7 +408,7 @@ void SAL_CALL ODatabaseDocument::setCurrentController( const Reference< XControl
     ModelMethodGuard aGuard( *this );
     OSL_ENSURE(m_pImpl.is(),"Impl is NULL");
 
-    m_pImpl->m_xCurrentController = _xController;
+    m_xCurrentController = _xController;
 }
 // -----------------------------------------------------------------------------
 Reference< XInterface > SAL_CALL ODatabaseDocument::getCurrentSelection(  ) throw (RuntimeException)
@@ -752,30 +752,57 @@ Reference< XNameAccess > ODatabaseDocument::impl_getDocumentContainer_throw( ODa
     }
     return xContainer;
 }
+
 // -----------------------------------------------------------------------------
 void ODatabaseDocument::impl_closeControllerFrames( sal_Bool _bDeliverOwnership )
 {
-    ::std::vector< Reference< XController> > aCopy = m_pImpl->m_aControllers;
+    Controllers aCopy = m_aControllers;
 
-    ::std::vector< Reference< XController> >::iterator aIter = aCopy.begin();
-    ::std::vector< Reference< XController> >::iterator aEnd = aCopy.end();
-    for ( ;aIter != aEnd ; ++aIter )
+    for ( Controllers::iterator aIter = aCopy.begin(); aIter != aCopy.end() ; ++aIter )
     {
-        if ( aIter->is() )
+        if ( !aIter->is() )
+            continue;
+
+        try
         {
-            try
-            {
-                Reference< XCloseable> xFrame( (*aIter)->getFrame(), UNO_QUERY );
-                if ( xFrame.is() )
-                    xFrame->close( _bDeliverOwnership );
-            }
-            catch( const CloseVetoException& ) { throw; }
-            catch( const Exception& )
-            {
-                OSL_ENSURE( sal_False, "ODatabaseDocument::impl_closeControllerFrames: caught an unexpected exception!" );
-            }
+            Reference< XCloseable> xFrame( (*aIter)->getFrame(), UNO_QUERY );
+            if ( xFrame.is() )
+                xFrame->close( _bDeliverOwnership );
+        }
+        catch( const CloseVetoException& ) { throw; }
+        catch( const Exception& )
+        {
+            DBG_UNHANDLED_EXCEPTION();
         }
     }
+}
+
+// -----------------------------------------------------------------------------
+struct DisposeControllerFrame : public ::std::unary_function< Reference< XController >, void >
+{
+    void operator()( const Reference< XController >& _rxController ) const
+    {
+        try
+        {
+            if ( !_rxController.is() )
+                return;
+
+            Reference< XFrame > xFrame( _rxController->getFrame() );
+            ::comphelper::disposeComponent( xFrame );
+        }
+        catch( const Exception& )
+        {
+            DBG_UNHANDLED_EXCEPTION();
+        }
+    };
+};
+
+// -----------------------------------------------------------------------------
+void ODatabaseDocument::impl_disposeControllerFrames_nothrow()
+{
+    Controllers aCopy;
+    aCopy.swap( m_aControllers );   // ensure m_aControllers is empty afterwards
+    ::std::for_each( aCopy.begin(), aCopy.end(), DisposeControllerFrame() );
 }
 
 // -----------------------------------------------------------------------------
@@ -1083,7 +1110,7 @@ void ODatabaseDocument::disposing()
         return;
     }
 
-    DBG_ASSERT( m_pImpl->m_aControllers.empty(), "ODatabaseDocument::disposing: there still are controllers!" );
+    DBG_ASSERT( m_aControllers.empty(), "ODatabaseDocument::disposing: there still are controllers!" );
         // normally, nobody should explicitly dispose, but only XCloseable::close the document. And upon
         // closing, our controllers are closed, too
 
@@ -1108,7 +1135,8 @@ void ODatabaseDocument::disposing()
 
         // now, at the latest, the controller array should be empty. Controllers are
         // expected to listen for our disposal, and disconnect then
-        DBG_ASSERT( m_pImpl->m_aControllers.empty(), "ODatabaseDocument::disposing: there still are controllers!" );
+        DBG_ASSERT( m_aControllers.empty(), "ODatabaseDocument::disposing: there still are controllers!" );
+        impl_disposeControllerFrames_nothrow();
     }
 
     m_pImpl.clear();
@@ -1189,18 +1217,19 @@ Reference< XInterface > ODatabaseDocument::getThis()
 }
 // -----------------------------------------------------------------------------
 struct CreateAny : public ::std::unary_function< Reference<XController>, Any>
-        {
-            Any operator() (const Reference<XController>& lhs) const
-            {
-                return makeAny(lhs);
-            }
-        };
+{
+    Any operator() (const Reference<XController>& lhs) const
+    {
+        return makeAny(lhs);
+    }
+};
+
 // XModel2
 Reference< XEnumeration > SAL_CALL ODatabaseDocument::getControllers(  ) throw (RuntimeException)
 {
     ModelMethodGuard aGuard( *this );
-    uno::Sequence< Any> aController(m_pImpl->m_aControllers.size());
-    ::std::transform(m_pImpl->m_aControllers.begin(),m_pImpl->m_aControllers.end(),aController.getArray(),CreateAny());
+    uno::Sequence< Any> aController( m_aControllers.size() );
+    ::std::transform( m_aControllers.begin(), m_aControllers.end(), aController.getArray(), CreateAny() );
     return new ::comphelper::OAnyEnumeration(aController);
 }
 // -----------------------------------------------------------------------------
