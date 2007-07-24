@@ -4,9 +4,9 @@
  *
  *  $RCSfile: OTools.cxx,v $
  *
- *  $Revision: 1.29 $
+ *  $Revision: 1.30 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 03:07:57 $
+ *  last change: $Author: rt $ $Date: 2007-07-24 11:51:04 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -564,7 +564,7 @@ Sequence<sal_Int8> OTools::getBytesValue(OConnection* _pConnection,
         {
             sal_Unicode waCharArray[2048];
             // read the unicode data
-            sal_Int32 nMaxLen = sizeof(waCharArray) - sizeof(sal_Unicode);
+            sal_Int32 nMaxLen = (sizeof(waCharArray) / sizeof(sal_Unicode)) - 1;
             //  GETDATA(SQL_C_WCHAR, waCharArray, nMaxLen + sizeof(sal_Unicode));
 
             SQLINTEGER pcbValue=0;
