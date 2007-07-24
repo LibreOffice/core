@@ -4,9 +4,9 @@
  *
  *  $RCSfile: gtkobject.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: hr $ $Date: 2007-06-27 20:45:02 $
+ *  last change: $Author: rt $ $Date: 2007-07-24 10:30:41 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -40,7 +40,7 @@
 #include <vcl/sv.h>
 #endif
 #ifndef _SV_SYSDATA_HXX
-#include <sysdata.hxx>
+#include <vcl/sysdata.hxx>
 #endif
 #ifndef _SV_SALOBJ_HXX
 #include <vcl/salobj.hxx>
