@@ -4,9 +4,9 @@
  *
  *  $RCSfile: DataSource.idl,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: hr $ $Date: 2006-08-15 10:34:35 $
+ *  last change: $Author: rt $ $Date: 2007-07-24 11:58:45 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -162,16 +162,44 @@ published service DataSource
         of an existing value), the <member>Settings</member> property wraps the <member>Info</member>
         property for easier single-value access.</p>
 
+        <p>You should use the <member>Setting</member> property if you need to access a few properties only,
+        and the <member>Info</member> property if you need access to all existent settings at once.</p>
+
         <p>The object represented by this property supports the <type scope="com::sun::star::beans">PropertyBag</type>
         service. That is, you can at runtime add arbitrary new properties to the bag.</p>
 
         <p>Additionally, the property bag supports default values of properties, and thus the
         <type scope="com::sun::star::beans">XPropertyState</type> interface. If you add an own property to
         the bag using <member scope="com::sun::star::beans">XPropertyContainer::addProperty</member>, you need
-        to specifiy an initial value, which is also used as default value.</p>
+        to specifiy an initial value, which is also used as default value (exceptions see below).</p>
 
-        <p>You should use the <member>Setting</member> property if you need to access a few properties only,
-        and the <member>Info</member> property if you need access to all existent settings at once.</p>
+        <p>Effectively, the property bag represented by <code>Settings</code> contains two classes of properties:
+        Pre-defined ones and user-defined ones.</p>
+
+        <p><em>Pre-defined</em> properties are properties which are potentially used by the data source, the
+        application UI for the data source, or a particular backend driver employed by the data source. There's
+        a large set of such properties, no all of them are effectively used for a concrete data source, nonetheless,
+        they're all present in the <code>Settings</code>.<br/>
+        Such properties are not removeable from the bag, that is, their
+        <member scope="com::sun::star::beans">PropertyAttribute::REMOVEABLE</member> attribute is <em>not</em> set.<br/>
+        Usually, you'll find that all of this properties have the
+        <member scope="com::sun::star::beans::">PropertyState::PropertyState_DEFAULT_VALUE</member> state.</p>
+
+        <p><em>User-defined</em> properties are the ones which are added at runtime by any instance. They might or might
+        not be removeable, this depends on whether or not the code adding them specifies the
+        <member scope="com::sun::star::beans">PropertyAttribute::REMOVEABLE</member> attribute. Also, they might
+        or might not have a default value, determined by the
+        <member scope="com::sun::star::beans">PropertyAttribute::MAYBEDEFAULT</member> attribute at the time they're added
+        to the bag.</p>
+
+        <p>When a data source is made persistent, then properties which are not removeable (which are assumed to be the
+        pre-defined properties) are ignored when they are in <code>DEFAULT</code> state. All other properties are
+        always made persistent, except when an explicit
+        <member scope="com::sun::star::beans">PropertyAttribute::TRANSIENT</member> attribute prohibits this.</p>
+
+        <p>Similar, when you obtain the <member>Info</member> property of a <code>DataSource</code>, the
+        <code>Settings</code> bag is asked for all its property values, and the ones which are removeable and
+        in state default are stripped, and <em>not</em> returned in the <code>Info</code> sequence.</p>
     */
     [property, readonly, optional] com::sun::star::beans::XPropertySet Settings;
 
