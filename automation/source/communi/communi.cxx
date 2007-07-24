@@ -4,9 +4,9 @@
  *
  *  $RCSfile: communi.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: hr $ $Date: 2007-06-27 20:59:20 $
+ *  last change: $Author: rt $ $Date: 2007-07-24 11:29:04 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -286,6 +286,7 @@ IMPL_LINK( CommunicationLinkViaSocket, PutDataReceivedHdl, CommunicationLinkViaS
 
 MultiCommunicationManager::MultiCommunicationManager( BOOL bUseMultiChannel )
 : CommunicationManager( bUseMultiChannel )
+, bGracefullShutdown( TRUE )
 {
     ActiveLinks = new CommunicationLinkList;
     InactiveLinks = new CommunicationLinkList;
@@ -295,21 +296,24 @@ MultiCommunicationManager::~MultiCommunicationManager()
 {
     StopCommunication();
 
-    Timer aTimeout;
-    aTimeout.SetTimeout( 40000 );
-    aTimeout.Start();
-    USHORT nLinkCount = 0;
-    USHORT nNewLinkCount = 0;
-    while ( aTimeout.IsActive() )
+    if ( bGracefullShutdown )   // first try to collect all callbacks for closing channels
     {
-        GetpApp()->Yield();
-        nNewLinkCount = GetCommunicationLinkCount();
-        if ( nNewLinkCount == 0 )
-            aTimeout.Stop();
-        if ( nNewLinkCount != nLinkCount )
+        Timer aTimeout;
+        aTimeout.SetTimeout( 40000 );
+        aTimeout.Start();
+        USHORT nLinkCount = 0;
+        USHORT nNewLinkCount = 0;
+        while ( aTimeout.IsActive() )
         {
-            aTimeout.Start();
-            nLinkCount = nNewLinkCount;
+            GetpApp()->Yield();
+            nNewLinkCount = GetCommunicationLinkCount();
+            if ( nNewLinkCount == 0 )
+                aTimeout.Stop();
+            if ( nNewLinkCount != nLinkCount )
+            {
+                aTimeout.Start();
+                nLinkCount = nNewLinkCount;
+            }
         }
     }
 
