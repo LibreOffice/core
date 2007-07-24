@@ -4,9 +4,9 @@
  *
  *  $RCSfile: fmshimp.hxx,v $
  *
- *  $Revision: 1.32 $
+ *  $Revision: 1.33 $
  *
- *  last change: $Author: hr $ $Date: 2007-06-27 18:22:51 $
+ *  last change: $Author: rt $ $Date: 2007-07-24 12:02:02 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -255,7 +255,7 @@ typedef ::cppu::WeakComponentImplHelper4<   ::com::sun::star::beans::XPropertyCh
 //========================================================================
 class SAL_DLLPRIVATE FmXFormShell_Base_Disambiguation : public FmXFormShell_BD_BASE
 {
-    using ::com::sun::star::lang::XEventListener::disposing;
+    using ::com::sun::star::beans::XPropertyChangeListener::disposing;
 protected:
     FmXFormShell_Base_Disambiguation( ::osl::Mutex& _rMutex );
     virtual void SAL_CALL disposing();
