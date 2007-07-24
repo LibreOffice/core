@@ -4,9 +4,9 @@
  *
  *  $RCSfile: gtkframe.cxx,v $
  *
- *  $Revision: 1.64 $
+ *  $Revision: 1.65 $
  *
- *  last change: $Author: hr $ $Date: 2007-06-27 20:38:26 $
+ *  last change: $Author: rt $ $Date: 2007-07-24 10:25:16 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -57,8 +57,8 @@
 #include <dlfcn.h>
 #include <vcl/salbtype.hxx>
 #include <vcl/bitmapex.hxx>
-#include <impbmp.hxx>
-#include <svids.hrc>
+#include <vcl/impbmp.hxx>
+#include <vcl/svids.hrc>
 
 #include <algorithm>
 
