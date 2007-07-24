@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.19 $
+#   $Revision: 1.20 $
 #
-#   last change: $Author: rt $ $Date: 2007-07-05 08:45:17 $
+#   last change: $Author: rt $ $Date: 2007-07-24 10:43:56 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -112,6 +112,41 @@ APP3STDLIBS=	$(CPPULIB)			\
 
 
 # --- Targets ------------------------------------------------------
+.IF "$(GUIBASE)" == "unx"
+
+APP4NOSAL=              TRUE
+APP4TARGET=     svptest
+APP4OBJS=               $(OBJ)$/svptest.obj
+
+APP4STDLIBS=    $(CPPULIB)                      \
+                                $(CPPUHELPERLIB)        \
+                                $(COMPHELPERLIB)        \
+                                $(VCLLIB)                       \
+                                $(TOOLSLIB)             \
+                                $(SALLIB)                       \
+                                $(VOSLIB)                       \
+                                $(SOTLIB)                       \
+                                $(VCLLIB)
+
+APP5NOSAL=              TRUE
+APP5TARGET=     svpclient
+APP5OBJS=               $(OBJ)$/svpclient.obj
+
+APP5STDLIBS=    $(CPPULIB)                      \
+                                $(CPPUHELPERLIB)        \
+                                $(COMPHELPERLIB)        \
+                                $(VCLLIB)                       \
+                                $(TOOLSLIB)             \
+                                $(SALLIB)                       \
+                                $(VOSLIB)                       \
+                                $(SOTLIB)                       \
+                                $(VCLLIB)
+
+.IF "$(OS)" == "SOLARIS"
+APP5STDLIBS+=-lsocket
+.ENDIF
+
+.ENDIF
 
 .INCLUDE :	target.mk
 
