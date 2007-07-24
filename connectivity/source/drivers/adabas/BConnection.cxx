@@ -4,9 +4,9 @@
  *
  *  $RCSfile: BConnection.cxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 02:05:38 $
+ *  last change: $Author: rt $ $Date: 2007-07-24 11:50:10 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -187,11 +187,10 @@ SQLRETURN OAdabasConnection::openConnectionWithAuth(const ::rtl::OUString& aConn
         return nSQLRETURN;
 
     m_bClosed = sal_False;
-#ifndef MAC
+
     // autocoomit ist immer default
 
     N3SQLSetConnectAttr(m_aConnectionHandle,SQL_ATTR_AUTOCOMMIT,(SQLPOINTER)SQL_AUTOCOMMIT_ON,SQL_IS_INTEGER);
-#endif
 
     return nSQLRETURN;
 }
