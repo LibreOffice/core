@@ -4,9 +4,9 @@
  *
  *  $RCSfile: RowSetBase.cxx,v $
  *
- *  $Revision: 1.92 $
+ *  $Revision: 1.93 $
  *
- *  last change: $Author: kz $ $Date: 2007-05-10 10:11:05 $
+ *  last change: $Author: rt $ $Date: 2007-07-24 12:03:50 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -255,19 +255,17 @@ sal_Bool SAL_CALL ORowSetBase::wasNull(  ) throw(SQLException, RuntimeException)
 // -----------------------------------------------------------------------------
 const ORowSetValue& ORowSetBase::getValue(sal_Int32 columnIndex)
 {
-    DBG_TRACE2("DBACCESS ORowSetBase::getValue() Clone = %i ID = %i\n",m_bClone,osl_getThreadIdentifier(NULL));
-
     checkCache();
 
     if ( m_bBeforeFirst || m_bAfterLast )
     {
         OSL_ENSURE(0,"ORowSetBase::getValue: Illegal call here (we're before first or after last)!");
         throwSQLException( "The cursor points to before the first or after the last row.", SQL_INVALID_CURSOR_POSITION, *m_pMySelf );
+            // TODO: resource
     }
 
     if ( rowDeleted() )
     {
-        DBG_TRACE2("DBACCESS ORowSetBase::getValue() Clone = %i rowDeleted()  ID = %i\n",m_bClone,osl_getThreadIdentifier(NULL));
         return m_aEmptyValue;
     }
 
@@ -308,7 +306,6 @@ const ORowSetValue& ORowSetBase::getValue(sal_Int32 columnIndex)
         return (*(*m_aCurrentRow))[m_nLastColumnIndex = columnIndex];
     }
 
-    DBG_TRACE2("DBACCESS ORowSetBase::getValue() Clone = %i EmptyValue ID = %i\n",m_bClone,osl_getThreadIdentifier(NULL));
     // we should normally never reach this
     return m_aEmptyValue;
 }
@@ -390,27 +387,32 @@ Reference< ::com::sun::star::io::XInputStream > SAL_CALL ORowSetBase::getBinaryS
     ::osl::MutexGuard aGuard( *m_pMutex );
     checkCache();
 
-
-    if( !m_aCurrentRow.isNull() && m_aCurrentRow != m_pCache->getEnd())
-        return new ::comphelper::SequenceInputStream((*(*m_aCurrentRow))[m_nLastColumnIndex = columnIndex].getSequence());
-    else
+    if ( m_bBeforeFirst || m_bAfterLast )
     {
-        if(!m_aCurrentRow.isNull())
-            OSL_ENSURE((m_bBeforeFirst || m_bAfterLast),"ORowSetBase::getBinaryStream: we don't stand on a valid row! Row is equal to end of matrix");
-        else
-        {
-            if ( rowDeleted() )
-                return NULL;
-
-            positionCache( MOVE_NONE_REFRESH_ONLY );
-            m_aCurrentRow   = m_pCache->m_aMatrixIter;
-
-            OSL_ENSURE(!m_aCurrentRow.isNull(),"ORowSetBase::getBinaryStream: we don't stand on a valid row! Row is null.");
-            return getBinaryStream(columnIndex);
-        }
+        OSL_ENSURE(0,"ORowSetBase::getBinaryStream: Illegal call here (we're before first or after last)!");
+        throwSQLException( "The cursor points to before the first or after the last row.", SQL_INVALID_CURSOR_POSITION, *m_pMySelf );
+            // TODO: resource
     }
 
+    if ( rowDeleted() )
+    {
+        return NULL;
+    }
 
+    bool bValidCurrentRow = ( !m_aCurrentRow.isNull() && m_aCurrentRow != m_pCache->getEnd() && m_aCurrentRow->isValid() );
+    if ( !bValidCurrentRow )
+    {
+        positionCache( MOVE_NONE_REFRESH_ONLY );
+        m_aCurrentRow   = m_pCache->m_aMatrixIter;
+        OSL_ENSURE(!m_aCurrentRow.isNull(),"ORowSetBase::getBinaryStream: we don't stand on a valid row! Row is null.");
+
+        bValidCurrentRow = ( !m_aCurrentRow.isNull() && m_aCurrentRow != m_pCache->getEnd() && m_aCurrentRow->isValid() );
+    }
+
+    if ( bValidCurrentRow )
+        return new ::comphelper::SequenceInputStream((*(*m_aCurrentRow))[m_nLastColumnIndex = columnIndex].getSequence());
+
+    // we should normally never reach this
     return Reference< ::com::sun::star::io::XInputStream >();
 }
 // -------------------------------------------------------------------------
@@ -461,9 +463,11 @@ Any SAL_CALL ORowSetBase::getBookmark(  ) throw(SQLException, RuntimeException)
 
     if ( m_bBeforeFirst || m_bAfterLast )
         throwSQLException( "The rows before the first and after the last row don't have a bookmark.", SQL_INVALID_CURSOR_POSITION, *m_pMySelf );
+            // TODO: resource
 
     if ( rowDeleted() )
-        throwSQLException( "The current row is deleted, and this doesn't have a bookmark.", SQL_INVALID_CURSOR_POSITION, *m_pMySelf );
+        throwSQLException( "The current row is deleted, and thus doesn't have a bookmark.", SQL_INVALID_CURSOR_POSITION, *m_pMySelf );
+            // TODO: resource
 
     OSL_ENSURE( m_aBookmark.hasValue(), "ORowSetBase::getBookmark: bookmark has no value!" );
     return m_aBookmark;
