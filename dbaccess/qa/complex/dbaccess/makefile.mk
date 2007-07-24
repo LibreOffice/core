@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.9 $
+#   $Revision: 1.10 $
 #
-#   last change: $Author: vg $ $Date: 2007-01-15 14:29:47 $
+#   last change: $Author: rt $ $Date: 2007-07-24 13:18:05 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -85,7 +85,7 @@ ALL: 	ALLDEP
 
 
 run: $(CLASSDIR)$/$(JARTARGET)
-    java $(RUNNER_ARGS) -sce dbaccess.sce
+    +java $(RUNNER_ARGS) -sce dbaccess.sce
 
 run_%: $(CLASSDIR)$/$(JARTARGET)
-    java $(RUNNER_ARGS) -o complex.dbaccess.$(@:s/run_//)
+    +java $(RUNNER_ARGS) -o complex.dbaccess.$(@:s/run_//)
