@@ -4,9 +4,9 @@
  *
  *  $RCSfile: bmpacc.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: hr $ $Date: 2007-06-27 20:10:35 $
+ *  last change: $Author: rt $ $Date: 2007-07-24 10:07:51 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -40,7 +40,7 @@
 #include <vcl/salbtype.hxx>
 #endif
 #ifndef _SV_IMPBMP_HXX
-#include <impbmp.hxx>
+#include <vcl/impbmp.hxx>
 #endif
 #ifndef _SV_BITMAP_HXX
 #include <vcl/bitmap.hxx>
