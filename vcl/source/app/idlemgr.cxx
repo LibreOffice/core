@@ -4,9 +4,9 @@
  *
  *  $RCSfile: idlemgr.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: hr $ $Date: 2007-06-27 20:01:16 $
+ *  last change: $Author: rt $ $Date: 2007-07-24 10:04:04 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -41,7 +41,7 @@
 #endif
 
 #ifndef _SV_IDLEMGR_HXX
-#include <idlemgr.hxx>
+#include <vcl/idlemgr.hxx>
 #endif
 #ifndef _SV_SVAPP_HXX
 #include <vcl/svapp.hxx>
