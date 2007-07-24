@@ -4,9 +4,9 @@
  *
  *  $RCSfile: brdwin.cxx,v $
  *
- *  $Revision: 1.29 $
+ *  $Revision: 1.30 $
  *
- *  last change: $Author: hr $ $Date: 2007-06-27 20:28:10 $
+ *  last change: $Author: rt $ $Date: 2007-07-24 10:18:23 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -36,7 +36,7 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_vcl.hxx"
 #ifndef _SV_SVIDS_HRC
-#include <svids.hrc>
+#include <vcl/svids.hrc>
 #endif
 #ifndef _SV_SVDATA_HXX
 #include <vcl/svdata.hxx>
@@ -75,10 +75,10 @@
 #include <vcl/edit.hxx>
 #endif
 #ifndef _SV_BRDWIN_HXX
-#include <brdwin.hxx>
+#include <vcl/brdwin.hxx>
 #endif
 #ifndef _SV_WINDOW_H
-#include <window.h>
+#include <vcl/window.h>
 #endif
 #ifndef _SV_METRIC_HXX
 #include <vcl/metric.hxx>
