@@ -4,9 +4,9 @@
  *
  *  $RCSfile: datasource.cxx,v $
  *
- *  $Revision: 1.72 $
+ *  $Revision: 1.73 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 06:39:41 $
+ *  last change: $Author: rt $ $Date: 2007-07-24 12:05:01 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -589,11 +589,30 @@ namespace dbaccess
         }
 
         //------------------------------------------------------------------
-        struct CheckForDefaultPropertyValue : public ::std::unary_function< PropertyValue, bool >
+        typedef ::std::map< ::rtl::OUString, sal_Int32 > PropertyAttributeCache;
+
+        //------------------------------------------------------------------
+        struct IsDefaultAndNotRemoveable : public ::std::unary_function< PropertyValue, bool >
         {
+        private:
+            const PropertyAttributeCache& m_rAttribs;
+
+        public:
+            IsDefaultAndNotRemoveable( const PropertyAttributeCache& _rAttribs ) : m_rAttribs( _rAttribs ) { }
+
             bool operator()( const PropertyValue& _rProp )
             {
-                return _rProp.State == PropertyState_DEFAULT_VALUE;
+                if ( _rProp.State != PropertyState_DEFAULT_VALUE )
+                    return false;
+
+                bool bRemoveable = true;
+
+                PropertyAttributeCache::const_iterator pos = m_rAttribs.find( _rProp.Name );
+                OSL_ENSURE( pos != m_rAttribs.end(), "IsDefaultAndNotRemoveable: illegal property name!" );
+                if ( pos != m_rAttribs.end() )
+                    bRemoveable = ( ( pos->second & PropertyAttribute::REMOVEABLE ) != 0 );
+
+                return !bRemoveable;
             }
         };
     }
@@ -1127,16 +1146,40 @@ void ODatabaseSource::getFastPropertyValue( Any& rValue, sal_Int32 nHandle ) con
                 break;
             case PROPERTY_ID_INFO:
             {
-                Sequence< PropertyValue > aValues( m_pImpl->m_xSettings->getPropertyValues() );
-                Sequence< PropertyValue > aNonDefaultValues( aValues.getLength() );
-                const PropertyValue* pCopyEnd = ::std::remove_copy_if(
-                    aValues.getConstArray(),
-                    aValues.getConstArray() + aValues.getLength(),
-                    aNonDefaultValues.getArray(),
-                    CheckForDefaultPropertyValue()
-                );
-                aNonDefaultValues.realloc( pCopyEnd - aNonDefaultValues.getArray() );
-                rValue <<= aNonDefaultValues;
+                try
+                {
+                    // collect the property attributes of all current settings
+                    Reference< XPropertySet > xSettingsAsProps( m_pImpl->m_xSettings, UNO_QUERY_THROW );
+                    Reference< XPropertySetInfo > xPST( xSettingsAsProps->getPropertySetInfo(), UNO_QUERY_THROW );
+                    Sequence< Property > aSettings( xPST->getProperties() );
+                    ::std::map< ::rtl::OUString, sal_Int32 > aPropertyAttributes;
+                    for (   const Property* pSettings = aSettings.getConstArray();
+                            pSettings != aSettings.getConstArray() + aSettings.getLength();
+                            ++pSettings
+                        )
+                    {
+                        aPropertyAttributes[ pSettings->Name ] = pSettings->Attributes;
+                    }
+
+                    // get all current settings with their values
+                    Sequence< PropertyValue > aValues( m_pImpl->m_xSettings->getPropertyValues() );
+
+                    // transform them so that only property values which fulfill certain
+                    // criterions survive
+                    Sequence< PropertyValue > aNonDefaultOrUserDefined( aValues.getLength() );
+                    const PropertyValue* pCopyEnd = ::std::remove_copy_if(
+                        aValues.getConstArray(),
+                        aValues.getConstArray() + aValues.getLength(),
+                        aNonDefaultOrUserDefined.getArray(),
+                        IsDefaultAndNotRemoveable( aPropertyAttributes )
+                    );
+                    aNonDefaultOrUserDefined.realloc( pCopyEnd - aNonDefaultOrUserDefined.getArray() );
+                    rValue <<= aNonDefaultOrUserDefined;
+                }
+                catch( const Exception& )
+                {
+                    DBG_UNHANDLED_EXCEPTION();
+                }
             }
             break;
             case PROPERTY_ID_SETTINGS:
