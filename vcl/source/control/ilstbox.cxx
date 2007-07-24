@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ilstbox.cxx,v $
  *
- *  $Revision: 1.59 $
+ *  $Revision: 1.60 $
  *
- *  last change: $Author: hr $ $Date: 2007-06-27 20:06:30 $
+ *  last change: $Author: rt $ $Date: 2007-07-24 10:06:42 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -62,7 +62,7 @@
 #include <vcl/lstbox.h>
 #endif
 #ifndef _SV_ILSTBOX_HXX
-#include <ilstbox.hxx>
+#include <vcl/ilstbox.hxx>
 #endif
 #ifndef _VCL_I18NHELP_HXX
 #include <vcl/i18nhelp.hxx>
