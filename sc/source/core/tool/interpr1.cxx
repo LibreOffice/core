@@ -4,9 +4,9 @@
  *
  *  $RCSfile: interpr1.cxx,v $
  *
- *  $Revision: 1.48 $
+ *  $Revision: 1.49 $
  *
- *  last change: $Author: rt $ $Date: 2007-07-06 12:35:07 $
+ *  last change: $Author: rt $ $Date: 2007-07-24 09:23:19 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -69,7 +69,7 @@
 #include "globstr.hrc"
 #include "attrib.hxx"
 #include "jumpmatrix.hxx"
-
+#include "cellkeytranslator.hxx"
 
 #define SC_DOUBLE_MAXVALUE  1.7e307
 
@@ -1649,6 +1649,7 @@ void ScInterpreter::ScCell()
             ScBaseCell*     pCell = GetCell( aCellPos );
 
             aInfoType.ToUpperAscii();
+            ScCellKeywordTranslator::transKeyword(aInfoType, ScGlobal::pLocale, ocCell);
 
 // *** ADDRESS INFO ***
             if( aInfoType.EqualsAscii( "COL" ) )
