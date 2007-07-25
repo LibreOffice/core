@@ -4,9 +4,9 @@
  *
  *  $RCSfile: OIndexContainer.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 13:27:38 $
+ *  last change: $Author: rt $ $Date: 2007-07-25 08:59:01 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -86,7 +86,7 @@ void SAL_CALL OIndexContainer::insertByIndex( sal_Int32 Index, const uno::Any& E
     // /--
     MutexGuard aGuard( GetMutex());
 
-    if( nIndex < 0 ||
+    if( Index < 0 ||
         nIndex > m_aContainer.size() )
         throw lang::IndexOutOfBoundsException();
 
@@ -113,7 +113,7 @@ void SAL_CALL OIndexContainer::removeByIndex( sal_Int32 Index )
     // /--
     MutexGuard aGuard( GetMutex());
 
-    if( nIndex < 0 ||
+    if( Index < 0 ||
         nIndex > m_aContainer.size() )
         throw lang::IndexOutOfBoundsException();
 
@@ -135,7 +135,7 @@ void SAL_CALL OIndexContainer::replaceByIndex( sal_Int32 Index, const uno::Any& 
     // /--
     MutexGuard aGuard( GetMutex());
 
-    if( nIndex < 0 ||
+    if( Index < 0 ||
         nIndex > m_aContainer.size() )
         throw lang::IndexOutOfBoundsException();
 
@@ -169,7 +169,7 @@ uno::Any SAL_CALL OIndexContainer::getByIndex( sal_Int32 Index )
     // /--
     MutexGuard aGuard( GetMutex());
 
-    if( nIndex < 0 ||
+    if( Index < 0 ||
         nIndex > m_aContainer.size() )
         throw lang::IndexOutOfBoundsException();
 
