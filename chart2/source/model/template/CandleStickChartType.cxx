@@ -4,9 +4,9 @@
  *
  *  $RCSfile: CandleStickChartType.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: vg $ $Date: 2007-05-22 18:45:29 $
+ *  last change: $Author: rt $ $Date: 2007-07-25 08:53:01 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -110,6 +110,7 @@ void lcl_AddDefaultsToMap(
     ::chart::tPropertyValueMap & rOutMap,
     ::osl::Mutex & rMutex )
 {
+    ::osl::MutexGuard aGuard( rMutex );
     // must match default in CTOR!
     OSL_ASSERT( rOutMap.end() == rOutMap.find( PROP_CANDLESTICKCHARTTYPE_JAPANESE ));
     rOutMap[ PROP_CANDLESTICKCHARTTYPE_JAPANESE ] =
