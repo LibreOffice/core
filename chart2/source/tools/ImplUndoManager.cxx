@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ImplUndoManager.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: vg $ $Date: 2007-05-22 18:59:30 $
+ *  last change: $Author: rt $ $Date: 2007-07-25 08:57:23 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -65,6 +65,29 @@ namespace chart
 namespace impl
 {
 
+void ImplApplyDataToModel(
+    Reference< frame::XModel > & xInOutModelToChange,
+    const Reference< chart2::XInternalDataProvider > & xData )
+{
+    Reference< chart2::XChartDocument > xDoc( xInOutModelToChange, uno::UNO_QUERY );
+    OSL_ASSERT( xDoc.is() && xDoc->hasInternalDataProvider());
+
+    // copy data from stored internal data provider
+    if( xDoc.is() && xDoc->hasInternalDataProvider())
+    {
+        Reference< XChartDataArray > xCurrentData( xDoc->getDataProvider(), uno::UNO_QUERY );
+        Reference< XChartDataArray > xSavedData( xData, uno::UNO_QUERY );
+        if( xCurrentData.is() && xSavedData.is())
+        {
+            xCurrentData->setData( xSavedData->getData());
+            xCurrentData->setRowDescriptions( xSavedData->getRowDescriptions());
+            xCurrentData->setColumnDescriptions( xSavedData->getColumnDescriptions());
+        }
+    }
+}
+
+// ----------------------------------------
+
 UndoElement::UndoElement(
     const OUString & rActionString,
     const Reference< frame::XModel > & xModel ) :
@@ -90,10 +113,7 @@ UndoElement::~UndoElement()
 
 void UndoElement::initialize( const Reference< frame::XModel > & xModel )
 {
-    uno::Reference< util::XCloneable > xCloneable( xModel, uno::UNO_QUERY );
-    OSL_ENSURE( xCloneable.is(), "Cannot clone model" );
-    if( xCloneable.is())
-        m_xModel.set( xCloneable->createClone(), uno::UNO_QUERY );
+    m_xModel.set( UndoElement::cloneModel( xModel ));
 }
 
 void UndoElement::dispose()
@@ -105,15 +125,53 @@ void UndoElement::dispose()
 }
 
 void UndoElement::applyToModel(
-    const Reference< frame::XModel > & xInOutModelToChange )
+    Reference< frame::XModel > & xInOutModelToChange )
 {
-    if( m_xModel.is() && xInOutModelToChange.is())
+    UndoElement::applyModelContentToModel( xInOutModelToChange, m_xModel );
+}
+
+UndoElement * UndoElement::createFromModel(
+    const Reference< frame::XModel > & xModel )
+{
+    return new UndoElement( getActionString(), xModel );
+}
+
+void UndoElement::setActionString( const ::rtl::OUString & rActionString )
+{
+    m_aActionString = rActionString;
+}
+
+OUString UndoElement::getActionString() const
+{
+    return m_aActionString;
+}
+
+// static
+Reference< frame::XModel > UndoElement::cloneModel( const Reference< frame::XModel > & xModel )
+{
+    Reference< frame::XModel > xResult;
+    uno::Reference< util::XCloneable > xCloneable( xModel, uno::UNO_QUERY );
+    OSL_ENSURE( xCloneable.is(), "Cannot clone model" );
+    if( xCloneable.is())
+        xResult.set( xCloneable->createClone(), uno::UNO_QUERY );
+
+    return xResult;
+}
+
+// static
+void UndoElement::applyModelContentToModel(
+    Reference< frame::XModel > & xInOutModelToChange,
+    const Reference< frame::XModel > & xModelToCopyFrom,
+    const Reference< chart2::XInternalDataProvider > & xData /* = 0 */ )
+{
+
+    if( xModelToCopyFrom.is() && xInOutModelToChange.is())
     {
         try
         {
             // /-- loccked controllers of destination
             ControllerLockGuard aLockedControllers( xInOutModelToChange );
-            Reference< chart2::XChartDocument > xSource( m_xModel, uno::UNO_QUERY_THROW );
+            Reference< chart2::XChartDocument > xSource( xModelToCopyFrom, uno::UNO_QUERY_THROW );
             Reference< chart2::XChartDocument > xDestination( xInOutModelToChange, uno::UNO_QUERY_THROW );
 
             // diagram
@@ -130,17 +188,18 @@ void UndoElement::applyToModel(
                 xDestination->getPageBackground() );
 
             // apply data (not applied in standard Undo)
-            applyDataToModel( xInOutModelToChange );
+            if( xData.is())
+                ImplApplyDataToModel( xInOutModelToChange, xData );
 
             // register all sequences at the internal data provider to get adapted
             // indexes when columns are added/removed
             if( xDestination->hasInternalDataProvider())
             {
                 Reference< chart2::XInternalDataProvider > xNewDataProvider( xDestination->getDataProvider(), uno::UNO_QUERY );
-                Reference< chart2::data::XDataSource > xData( DataSourceHelper::getUsedData( xInOutModelToChange ));
-                if( xData.is() && xNewDataProvider.is())
+                Reference< chart2::data::XDataSource > xUsedData( DataSourceHelper::getUsedData( xInOutModelToChange ));
+                if( xUsedData.is() && xNewDataProvider.is())
                 {
-                    Sequence< Reference< chart2::data::XLabeledDataSequence > > aData( xData->getDataSequences());
+                    Sequence< Reference< chart2::data::XLabeledDataSequence > > aData( xUsedData->getDataSequences());
                     for( sal_Int32 i=0; i<aData.getLength(); ++i )
                     {
                         xNewDataProvider->registerDataSequenceForChanges( aData[i]->getValues());
@@ -165,28 +224,6 @@ void UndoElement::applyToModel(
     }
 }
 
-void UndoElement::applyDataToModel(
-    const Reference< frame::XModel > & )
-{
-    // do nothing (this is overwritten by UndoElementWithData)
-}
-
-UndoElement * UndoElement::createFromModel(
-    const Reference< frame::XModel > & xModel )
-{
-    return new UndoElement( getActionString(), xModel );
-}
-
-void UndoElement::setActionString( const ::rtl::OUString & rActionString )
-{
-    m_aActionString = rActionString;
-}
-
-OUString UndoElement::getActionString() const
-{
-    return m_aActionString;
-}
-
 // ----------------------------------------
 
 UndoElementWithData::UndoElementWithData(
@@ -194,14 +231,14 @@ UndoElementWithData::UndoElementWithData(
     const Reference< frame::XModel > & xModel ) :
         UndoElement( rActionString, xModel )
 {
-    initialize();
+    initializeData();
 }
 
 UndoElementWithData::UndoElementWithData(
     const Reference< frame::XModel > & xModel ) :
         UndoElement( xModel )
 {
-    initialize();
+    initializeData();
 }
 
 
@@ -209,13 +246,13 @@ UndoElementWithData::UndoElementWithData(
     const UndoElementWithData & rOther ) :
         UndoElement( rOther )
 {
-    initialize();
+    initializeData();
 }
 
 UndoElementWithData::~UndoElementWithData()
 {}
 
-void UndoElementWithData::initialize()
+void UndoElementWithData::initializeData()
 {
     try
     {
@@ -240,24 +277,10 @@ void UndoElementWithData::dispose()
     m_xData.set( 0 );
 }
 
-void UndoElementWithData::applyDataToModel(
-    const Reference< frame::XModel > & xInOutModelToChange )
+void UndoElementWithData::applyToModel(
+    Reference< frame::XModel > & xInOutModelToChange )
 {
-    Reference< chart2::XChartDocument > xDoc( xInOutModelToChange, uno::UNO_QUERY );
-    OSL_ASSERT( xDoc.is() && xDoc->hasInternalDataProvider());
-
-    // copy data from stored internal data provider
-    if( xDoc.is() && xDoc->hasInternalDataProvider())
-    {
-        Reference< XChartDataArray > xCurrentData( xDoc->getDataProvider(), uno::UNO_QUERY );
-        Reference< XChartDataArray > xSavedData( m_xData, uno::UNO_QUERY );
-        if( xCurrentData.is() && xSavedData.is())
-        {
-            xCurrentData->setData( xSavedData->getData());
-            xCurrentData->setRowDescriptions( xSavedData->getRowDescriptions());
-            xCurrentData->setColumnDescriptions( xSavedData->getColumnDescriptions());
-        }
-    }
+    UndoElement::applyModelContentToModel( xInOutModelToChange, m_xModel, m_xData );
 }
 
 UndoElement * UndoElementWithData::createFromModel(
