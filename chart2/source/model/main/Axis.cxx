@@ -4,9 +4,9 @@
  *
  *  $RCSfile: Axis.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: rt $ $Date: 2007-07-03 13:42:15 $
+ *  last change: $Author: rt $ $Date: 2007-07-25 08:48:41 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -325,6 +325,7 @@ void lcl_CloneSubGrids(
         ++pDestIt;
     }
     OSL_ASSERT( pDestIt == pDestEnd );
+    (void)(pDestEnd); // avoid warning
 }
 
 } // anonymous namespace
@@ -354,6 +355,8 @@ Axis::Axis( Reference< uno::XComponentContext > const & /* xContext */ ) :
 }
 
 Axis::Axis( const Axis & rOther ) :
+        MutexContainer(),
+        impl::Axis_Base(),
         ::property::OPropertySet( rOther, m_aMutex ),
     m_xModifyEventForwarder( new ModifyListenerHelper::ModifyEventForwarder( m_aMutex )),
     m_aScaleData( rOther.m_aScaleData )
@@ -375,7 +378,7 @@ Axis::Axis( const Axis & rOther ) :
 }
 
 // late initialization to call after copy-constructing
-void Axis::Init( const Axis & rOther )
+void Axis::Init( const Axis & /* rOther */ )
 {
     if( m_aScaleData.Categories.is())
         EventListenerHelper::addListener( m_aScaleData.Categories, this );
