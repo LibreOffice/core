@@ -4,9 +4,9 @@
  *
  *  $RCSfile: SeriesOptionsItemConverter.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: vg $ $Date: 2007-05-22 18:02:05 $
+ *  last change: $Author: rt $ $Date: 2007-07-25 08:41:51 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -148,7 +148,7 @@ const USHORT * SeriesOptionsItemConverter::GetWhichPairs() const
     return nSeriesOptionsWhichPairs;
 }
 
-bool SeriesOptionsItemConverter::GetItemProperty( tWhichIdType nWhichId, tPropertyNameWithMemberId & rOutProperty ) const
+bool SeriesOptionsItemConverter::GetItemProperty( tWhichIdType /*nWhichId*/, tPropertyNameWithMemberId & /*rOutProperty*/ ) const
 {
     return false;
 }
@@ -161,7 +161,7 @@ bool SeriesOptionsItemConverter::ApplySpecialItem( USHORT nWhichId, const SfxIte
     {
         case SCHATTR_AXIS:
         {
-            sal_Int32 nItemValue = reinterpret_cast< const SfxInt32Item & >(
+            sal_Int32 nItemValue = static_cast< const SfxInt32Item & >(
                     rItemSet.Get( nWhichId )).GetValue();
             bool bAttachToMainAxis = nItemValue == CHART_AXIS_PRIMARY_Y;
             if( bAttachToMainAxis != m_bAttachToMainAxis )
@@ -182,7 +182,7 @@ bool SeriesOptionsItemConverter::ApplySpecialItem( USHORT nWhichId, const SfxIte
             if( m_bSupportingOverlapAndGapWidthProperties )
             {
                 sal_Int32& rBarPosition = ( SCHATTR_BAR_OVERLAP == nWhichId ) ? m_nBarOverlap : m_nGapWidth;
-                rBarPosition = reinterpret_cast< const SfxInt32Item & >( rItemSet.Get( nWhichId )).GetValue();
+                rBarPosition = static_cast< const SfxInt32Item & >( rItemSet.Get( nWhichId )).GetValue();
 
                 rtl::OUString aPropName( C2U( "GapwidthSequence" ) );
                 if( SCHATTR_BAR_OVERLAP == nWhichId )
@@ -214,7 +214,7 @@ bool SeriesOptionsItemConverter::ApplySpecialItem( USHORT nWhichId, const SfxIte
         case SCHATTR_BAR_CONNECT:
         {
             sal_Bool bOldConnectBars = sal_False;
-            m_bConnectBars = reinterpret_cast< const SfxBoolItem & >(
+            m_bConnectBars = static_cast< const SfxBoolItem & >(
                 rItemSet.Get( nWhichId )).GetValue();
             if( m_bSupportingBarConnectors )
             {
