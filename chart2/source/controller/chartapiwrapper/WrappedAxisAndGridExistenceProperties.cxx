@@ -4,9 +4,9 @@
  *
  *  $RCSfile: WrappedAxisAndGridExistenceProperties.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: vg $ $Date: 2007-05-22 17:20:49 $
+ *  last change: $Author: rt $ $Date: 2007-07-25 08:28:11 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -196,7 +196,7 @@ void WrappedAxisAndGridExistenceProperty::setPropertyValue( const Any& rOuterVal
     }
 }
 
-Any WrappedAxisAndGridExistenceProperty::getPropertyValue( const Reference< beans::XPropertySet >& xInnerPropertySet ) const
+Any WrappedAxisAndGridExistenceProperty::getPropertyValue( const Reference< beans::XPropertySet >& /* xInnerPropertySet */ ) const
                         throw (beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException)
 {
     Any aRet;
@@ -214,7 +214,7 @@ Any WrappedAxisAndGridExistenceProperty::getPropertyValue( const Reference< bean
     return aRet;
 }
 
-Any WrappedAxisAndGridExistenceProperty::getPropertyDefault( const Reference< beans::XPropertyState >& xInnerPropertyState ) const
+Any WrappedAxisAndGridExistenceProperty::getPropertyDefault( const Reference< beans::XPropertyState >& /*xInnerPropertyState*/ ) const
                         throw (beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException)
 {
     Any aRet;
@@ -308,7 +308,7 @@ void WrappedAxisTitleExistenceProperty::setPropertyValue( const Any& rOuterValue
     }
 }
 
-Any WrappedAxisTitleExistenceProperty::getPropertyValue( const Reference< beans::XPropertySet >& xInnerPropertySet ) const
+Any WrappedAxisTitleExistenceProperty::getPropertyValue( const Reference< beans::XPropertySet >& /*xInnerPropertySet*/ ) const
                         throw (beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException)
 {
     sal_Bool bHasTitle = sal_False;
@@ -323,7 +323,7 @@ Any WrappedAxisTitleExistenceProperty::getPropertyValue( const Reference< beans:
 
 }
 
-Any WrappedAxisTitleExistenceProperty::getPropertyDefault( const Reference< beans::XPropertyState >& xInnerPropertyState ) const
+Any WrappedAxisTitleExistenceProperty::getPropertyDefault( const Reference< beans::XPropertyState >& /*xInnerPropertyState*/ ) const
                         throw (beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException)
 {
     Any aRet;
@@ -420,7 +420,7 @@ void WrappedAxisLabelExistenceProperty::setPropertyValue( const Any& rOuterValue
         xProp->setPropertyValue( C2U( "DisplayLabels" ), rOuterValue );
 }
 
-Any WrappedAxisLabelExistenceProperty::getPropertyValue( const Reference< beans::XPropertySet >& xInnerPropertySet ) const
+Any WrappedAxisLabelExistenceProperty::getPropertyValue( const Reference< beans::XPropertySet >& /*xInnerPropertySet*/ ) const
                         throw (beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException)
 {
     Any aRet;
@@ -433,7 +433,7 @@ Any WrappedAxisLabelExistenceProperty::getPropertyValue( const Reference< beans:
     return aRet;
 }
 
-Any WrappedAxisLabelExistenceProperty::getPropertyDefault( const Reference< beans::XPropertyState >& xInnerPropertyState ) const
+Any WrappedAxisLabelExistenceProperty::getPropertyDefault( const Reference< beans::XPropertyState >& /*xInnerPropertyState*/ ) const
                         throw (beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException)
 {
     Any aRet;

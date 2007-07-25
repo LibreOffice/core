@@ -4,9 +4,9 @@
  *
  *  $RCSfile: WrappedAddInProperty.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: vg $ $Date: 2007-05-22 17:20:29 $
+ *  last change: $Author: rt $ $Date: 2007-07-25 08:27:59 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -60,7 +60,7 @@ WrappedAddInProperty::~WrappedAddInProperty()
 {
 }
 
-void WrappedAddInProperty::setPropertyValue( const Any& rOuterValue, const Reference< beans::XPropertySet >& xInnerPropertySet ) const
+void WrappedAddInProperty::setPropertyValue( const Any& rOuterValue, const Reference< beans::XPropertySet >& /*xInnerPropertySet*/ ) const
                         throw (beans::UnknownPropertyException, beans::PropertyVetoException, lang::IllegalArgumentException, lang::WrappedTargetException, uno::RuntimeException)
 {
     Reference< util::XRefreshable > xAddIn;
@@ -70,7 +70,7 @@ void WrappedAddInProperty::setPropertyValue( const Any& rOuterValue, const Refer
     m_rChartDocumentWrapper.setAddIn( xAddIn );
 }
 
-Any WrappedAddInProperty::getPropertyValue( const Reference< beans::XPropertySet >& xInnerPropertySet ) const
+Any WrappedAddInProperty::getPropertyValue( const Reference< beans::XPropertySet >& /*xInnerPropertySet*/ ) const
                     throw (beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException)
 {
     return uno::makeAny( m_rChartDocumentWrapper.getAddIn() );
@@ -89,7 +89,7 @@ WrappedBaseDiagramProperty::~WrappedBaseDiagramProperty()
 {
 }
 
-void WrappedBaseDiagramProperty::setPropertyValue( const Any& rOuterValue, const Reference< beans::XPropertySet >& xInnerPropertySet ) const
+void WrappedBaseDiagramProperty::setPropertyValue( const Any& rOuterValue, const Reference< beans::XPropertySet >& /*xInnerPropertySet*/ ) const
                         throw (beans::UnknownPropertyException, beans::PropertyVetoException, lang::IllegalArgumentException, lang::WrappedTargetException, uno::RuntimeException)
 {
     rtl::OUString aBaseDiagram;
@@ -99,7 +99,7 @@ void WrappedBaseDiagramProperty::setPropertyValue( const Any& rOuterValue, const
     m_rChartDocumentWrapper.setBaseDiagram( aBaseDiagram );
 }
 
-Any WrappedBaseDiagramProperty::getPropertyValue( const Reference< beans::XPropertySet >& xInnerPropertySet ) const
+Any WrappedBaseDiagramProperty::getPropertyValue( const Reference< beans::XPropertySet >& /*xInnerPropertySet*/ ) const
                     throw (beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException)
 {
     return uno::makeAny( m_rChartDocumentWrapper.getBaseDiagram() );
@@ -118,13 +118,13 @@ WrappedAdditionalShapesProperty::~WrappedAdditionalShapesProperty()
 {
 }
 
-void WrappedAdditionalShapesProperty::setPropertyValue( const Any& rOuterValue, const Reference< beans::XPropertySet >& xInnerPropertySet ) const
+void WrappedAdditionalShapesProperty::setPropertyValue( const Any& /*rOuterValue*/, const Reference< beans::XPropertySet >& /*xInnerPropertySet*/ ) const
                         throw (beans::UnknownPropertyException, beans::PropertyVetoException, lang::IllegalArgumentException, lang::WrappedTargetException, uno::RuntimeException)
 {
     throw lang::IllegalArgumentException( C2U("AdditionalShapes is a read only property"), 0, 0 );
 }
 
-Any WrappedAdditionalShapesProperty::getPropertyValue( const Reference< beans::XPropertySet >& xInnerPropertySet ) const
+Any WrappedAdditionalShapesProperty::getPropertyValue( const Reference< beans::XPropertySet >& /*xInnerPropertySet*/ ) const
                     throw (beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException)
 {
     return uno::makeAny( m_rChartDocumentWrapper.getAdditionalShapes() );
@@ -143,7 +143,7 @@ WrappedRefreshAddInAllowedProperty::~WrappedRefreshAddInAllowedProperty()
 {
 }
 
-void WrappedRefreshAddInAllowedProperty::setPropertyValue( const Any& rOuterValue, const Reference< beans::XPropertySet >& xInnerPropertySet ) const
+void WrappedRefreshAddInAllowedProperty::setPropertyValue( const Any& rOuterValue, const Reference< beans::XPropertySet >& /* xInnerPropertySet */ ) const
                         throw (beans::UnknownPropertyException, beans::PropertyVetoException, lang::IllegalArgumentException, lang::WrappedTargetException, uno::RuntimeException)
 {
     sal_Bool bUpdateAddIn = sal_True;
@@ -153,7 +153,7 @@ void WrappedRefreshAddInAllowedProperty::setPropertyValue( const Any& rOuterValu
     m_rChartDocumentWrapper.setUpdateAddIn( bUpdateAddIn );
 }
 
-Any WrappedRefreshAddInAllowedProperty::getPropertyValue( const Reference< beans::XPropertySet >& xInnerPropertySet ) const
+Any WrappedRefreshAddInAllowedProperty::getPropertyValue( const Reference< beans::XPropertySet >& /* xInnerPropertySet */ ) const
                     throw (beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException)
 {
     return uno::makeAny( m_rChartDocumentWrapper.getUpdateAddIn() );

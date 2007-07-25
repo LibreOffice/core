@@ -4,9 +4,9 @@
  *
  *  $RCSfile: UpDownBarWrapper.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: vg $ $Date: 2007-05-22 17:19:45 $
+ *  last change: $Author: rt $ $Date: 2007-07-25 08:27:47 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -177,10 +177,7 @@ uno::Reference< beans::XPropertySetInfo > SAL_CALL UpDownBarWrapper::getProperty
         // /--
         ::osl::MutexGuard aGuard( GetMutex() );
         if( !m_xInfo.is() )
-        {
-            sal_Bool bSorted = sal_True;
             m_xInfo = ::cppu::OPropertySetHelper::createPropertySetInfo( getInfoHelper() );
-        }
         // \--
     }
     return m_xInfo;
@@ -259,22 +256,22 @@ uno::Any SAL_CALL UpDownBarWrapper::getPropertyValue( const ::rtl::OUString& rPr
     return aRet;
 }
 
-void SAL_CALL UpDownBarWrapper::addPropertyChangeListener( const ::rtl::OUString& aPropertyName, const uno::Reference< beans::XPropertyChangeListener >& xListener )
+void SAL_CALL UpDownBarWrapper::addPropertyChangeListener( const ::rtl::OUString& /*aPropertyName*/, const uno::Reference< beans::XPropertyChangeListener >& /*xListener*/ )
                     throw (beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException)
 {
     OSL_ENSURE(false,"not implemented");
 }
-void SAL_CALL UpDownBarWrapper::removePropertyChangeListener( const ::rtl::OUString& aPropertyName, const uno::Reference< beans::XPropertyChangeListener >& aListener )
+void SAL_CALL UpDownBarWrapper::removePropertyChangeListener( const ::rtl::OUString& /*aPropertyName*/, const uno::Reference< beans::XPropertyChangeListener >& /*aListener*/ )
                     throw (beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException)
 {
     OSL_ENSURE(false,"not implemented");
 }
-void SAL_CALL UpDownBarWrapper::addVetoableChangeListener( const ::rtl::OUString& PropertyName, const uno::Reference< beans::XVetoableChangeListener >& aListener )
+void SAL_CALL UpDownBarWrapper::addVetoableChangeListener( const ::rtl::OUString& /*PropertyName*/, const uno::Reference< beans::XVetoableChangeListener >& /*aListener*/ )
                     throw (beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException)
 {
     OSL_ENSURE(false,"not implemented");
 }
-void SAL_CALL UpDownBarWrapper::removeVetoableChangeListener( const ::rtl::OUString& PropertyName, const uno::Reference< beans::XVetoableChangeListener >& aListener )
+void SAL_CALL UpDownBarWrapper::removeVetoableChangeListener( const ::rtl::OUString& /*PropertyName*/, const uno::Reference< beans::XVetoableChangeListener >& /*aListener*/ )
                     throw (beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException)
 {
     OSL_ENSURE(false,"not implemented");
@@ -319,17 +316,17 @@ uno::Sequence< uno::Any > SAL_CALL UpDownBarWrapper::getPropertyValues( const un
     }
     return aRetSeq;
 }
-void SAL_CALL UpDownBarWrapper::addPropertiesChangeListener( const uno::Sequence< ::rtl::OUString >& aPropertyNames, const uno::Reference< beans::XPropertiesChangeListener >& xListener )
+void SAL_CALL UpDownBarWrapper::addPropertiesChangeListener( const uno::Sequence< ::rtl::OUString >& /* aPropertyNames */, const uno::Reference< beans::XPropertiesChangeListener >& /* xListener */ )
                     throw (uno::RuntimeException)
 {
     OSL_ENSURE(false,"not implemented");
 }
-void SAL_CALL UpDownBarWrapper::removePropertiesChangeListener( const uno::Reference< beans::XPropertiesChangeListener >& xListener )
+void SAL_CALL UpDownBarWrapper::removePropertiesChangeListener( const uno::Reference< beans::XPropertiesChangeListener >& /* xListener */ )
                     throw (uno::RuntimeException)
 {
     OSL_ENSURE(false,"not implemented");
 }
-void SAL_CALL UpDownBarWrapper::firePropertiesChangeEvent( const uno::Sequence< ::rtl::OUString >& aPropertyNames, const uno::Reference< beans::XPropertiesChangeListener >& xListener )
+void SAL_CALL UpDownBarWrapper::firePropertiesChangeEvent( const uno::Sequence< ::rtl::OUString >& /* aPropertyNames */, const uno::Reference< beans::XPropertiesChangeListener >& /* xListener */ )
                     throw (uno::RuntimeException)
 {
     OSL_ENSURE(false,"not implemented");
