@@ -4,9 +4,9 @@
  *
  *  $RCSfile: WrappedIgnoreProperty.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: vg $ $Date: 2007-05-22 18:24:36 $
+ *  last change: $Author: rt $ $Date: 2007-07-25 08:48:15 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -66,7 +66,8 @@ public:
                         throw (::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::uno::RuntimeException);
 
 protected:
-    ::com::sun::star::uno::Any     m_aDefaultValue;
+    ::com::sun::star::uno::Any          m_aDefaultValue;
+    mutable ::com::sun::star::uno::Any  m_aCurrentValue;
 };
 
 class WrappedIgnoreProperties
