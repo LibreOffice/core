@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ChartController_EditData.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: vg $ $Date: 2007-05-22 18:03:19 $
+ *  last change: $Author: rt $ $Date: 2007-07-25 08:42:58 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -82,9 +82,10 @@ void ChartController::executeDispatch_EditData()
         {
             // /--
             ::vos::OGuard aSolarGuard( Application::GetSolarMutex());
-            UndoLiveUpdateGuardWithData aUndoGuard(
+            // using assignment for broken gcc 3.3
+            UndoLiveUpdateGuardWithData aUndoGuard = UndoLiveUpdateGuardWithData(
                 ::rtl::OUString( String( SchResId( STR_ACTION_EDIT_CHART_DATA ))),
-                m_aUndoManager, m_aModel->getModel());
+                m_xUndoManager, m_aModel->getModel());
             DataEditor aDataEditorDialog( pParent, xChartDoc, m_xCC );
             // the dialog has no OK/Cancel
             aDataEditorDialog.Execute();
