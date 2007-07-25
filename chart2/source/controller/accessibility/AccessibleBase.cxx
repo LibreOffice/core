@@ -4,9 +4,9 @@
  *
  *  $RCSfile: AccessibleBase.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: vg $ $Date: 2007-05-22 17:14:25 $
+ *  last change: $Author: rt $ $Date: 2007-07-25 08:25:20 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -125,11 +125,12 @@ AccessibleBase::AccessibleBase(
         m_bIsDisposed( false ),
         m_bMayHaveChildren( bMayHaveChildren ),
         m_bChildrenInitialized( false ),
+        m_nEventNotifierId(0),
         m_pStateSetHelper( new ::utl::AccessibleStateSetHelper() ),
         m_aStateSet( m_pStateSetHelper ),
         m_aAccInfo( rAccInfo ),
         m_bAlwaysTransparent( bAlwaysTransparent ),
-        m_nEventNotifierId(0)
+        m_bStateSetInitialized( false )
 {
     // initialize some states
     OSL_ASSERT( m_pStateSetHelper );
@@ -995,7 +996,7 @@ uno::Sequence< OUString > SAL_CALL AccessibleBase::getSupportedServiceNames()
 }
 
 // ________ AccessibleBase::XEventListener ________
-void SAL_CALL AccessibleBase::disposing( const lang::EventObject& Source )
+void SAL_CALL AccessibleBase::disposing( const lang::EventObject& /*Source*/ )
     throw (RuntimeException)
 {
 }
