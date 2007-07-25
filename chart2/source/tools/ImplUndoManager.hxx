@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ImplUndoManager.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: vg $ $Date: 2007-05-22 18:59:40 $
+ *  last change: $Author: rt $ $Date: 2007-07-25 08:57:35 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -74,18 +74,22 @@ public:
         const ::com::sun::star::uno::Reference<
             ::com::sun::star::frame::XModel > & xModel );
 
-    void applyToModel(
-        const ::com::sun::star::uno::Reference<
+    virtual void applyToModel(
+        ::com::sun::star::uno::Reference<
             ::com::sun::star::frame::XModel > & xInOutModelToChange );
 
     void setActionString( const ::rtl::OUString & rActionString );
     ::rtl::OUString getActionString() const;
 
-protected:
-    virtual void applyDataToModel(
-        const ::com::sun::star::uno::Reference<
-            ::com::sun::star::frame::XModel > & xInOutModelToChange );
+    static ::com::sun::star::uno::Reference< ::com::sun::star::frame::XModel > cloneModel(
+        const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XModel > & xModel );
 
+    static void applyModelContentToModel(
+        ::com::sun::star::uno::Reference< ::com::sun::star::frame::XModel > & xInOutModelToChange,
+        const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XModel > & xModelToCopyFrom,
+        const ::com::sun::star::uno::Reference< ::com::sun::star::chart2::XInternalDataProvider > & xData = 0 );
+
+protected:
     ::com::sun::star::uno::Reference<
             ::com::sun::star::frame::XModel > m_xModel;
 
@@ -112,13 +116,12 @@ public:
         const ::com::sun::star::uno::Reference<
             ::com::sun::star::frame::XModel > & xModel );
 
-protected:
-        virtual void applyDataToModel(
-        const ::com::sun::star::uno::Reference<
+    virtual void applyToModel(
+        ::com::sun::star::uno::Reference<
             ::com::sun::star::frame::XModel > & xInOutModelToChange );
 
 private:
-    void initialize();
+    void initializeData();
 
     ::com::sun::star::uno::Reference<
             ::com::sun::star::chart2::XInternalDataProvider > m_xData;
