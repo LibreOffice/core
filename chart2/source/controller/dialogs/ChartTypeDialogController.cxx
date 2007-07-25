@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ChartTypeDialogController.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2007-07-03 13:36:54 $
+ *  last change: $Author: rt $ $Date: 2007-07-25 08:29:58 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -161,7 +161,7 @@ ChartTypeDialogController::ChartTypeDialogController()
 ChartTypeDialogController::~ChartTypeDialogController()
 {
 }
-Image ChartTypeDialogController::getImage( bool bIsHighContrast )
+Image ChartTypeDialogController::getImage( bool /*bIsHighContrast*/ )
 {
     return Image();
 }
@@ -208,7 +208,7 @@ ChartTypeParameter ChartTypeDialogController::getChartTypeParameterForService(
     }
     return aRet;
 }
-void ChartTypeDialogController::adjustSubTypeAndEnableControls( ChartTypeParameter& rParameter )
+void ChartTypeDialogController::adjustSubTypeAndEnableControls( ChartTypeParameter& /*rParameter*/ )
 {
 }
 void ChartTypeDialogController::adjustParameterToSubType( ChartTypeParameter& rParameter )
@@ -385,7 +385,7 @@ bool ChartTypeDialogController::commitToModel( const ChartTypeParameter& rParame
     }
     return false;
 }
-void ChartTypeDialogController::fillSubTypeList( ValueSet& rSubTypeList, bool bIsHighContrast, const ChartTypeParameter& rParameter )
+void ChartTypeDialogController::fillSubTypeList( ValueSet& rSubTypeList, bool /*bIsHighContrast*/, const ChartTypeParameter& /*rParameter*/ )
 {
     rSubTypeList.Clear();
 }
@@ -418,18 +418,18 @@ bool ChartTypeDialogController::shouldShow_SortByXValuesResourceGroup() const
     return false;
 }
 
-void ChartTypeDialogController::showExtraControls( Window* pParent, const Point& rPosition, const Size& rSize )
+void ChartTypeDialogController::showExtraControls( Window* /*pParent*/, const Point& /*rPosition*/, const Size& /*rSize*/ )
 {
 }
 void ChartTypeDialogController::hideExtraControls() const
 {
 }
-void ChartTypeDialogController::fillExtraControls( const ChartTypeParameter& rParameter
-                                                  , const uno::Reference< XChartDocument >& xChartModel
-                                                  , const uno::Reference< beans::XPropertySet >& xTemplateProps ) const
+void ChartTypeDialogController::fillExtraControls( const ChartTypeParameter& /*rParameter*/
+                                                  , const uno::Reference< XChartDocument >& /*xChartModel*/
+                                                  , const uno::Reference< beans::XPropertySet >& /*xTemplateProps*/ ) const
 {
 }
-void ChartTypeDialogController::setTemplateProperties( const uno::Reference< beans::XPropertySet >& xTemplateProps ) const throw (uno::RuntimeException)
+void ChartTypeDialogController::setTemplateProperties( const uno::Reference< beans::XPropertySet >& /*xTemplateProps*/ ) const throw (uno::RuntimeException)
 {
 }
 //--------------------------------------------------------------------------
@@ -1082,7 +1082,7 @@ const tTemplateServiceChartTypeParameterMap& StockChartDialogController::getTemp
     ;
     return m_aTemplateMap;
 }
-void StockChartDialogController::fillSubTypeList( ValueSet& rSubTypeList, bool bIsHighContrast, const ChartTypeParameter& rParameter )
+void StockChartDialogController::fillSubTypeList( ValueSet& rSubTypeList, bool bIsHighContrast, const ChartTypeParameter& /*rParameter*/ )
 {
     rSubTypeList.Clear();
     rSubTypeList.InsertItem( 1, SELECT_BITMAP( BMP_STOCK_1 ) );
@@ -1131,7 +1131,7 @@ const tTemplateServiceChartTypeParameterMap& CombiColumnLineChartDialogControlle
     ;
     return m_aTemplateMap;
 }
-void CombiColumnLineChartDialogController::fillSubTypeList( ValueSet& rSubTypeList, bool bIsHighContrast, const ChartTypeParameter& rParameter )
+void CombiColumnLineChartDialogController::fillSubTypeList( ValueSet& rSubTypeList, bool bIsHighContrast, const ChartTypeParameter& /*rParameter*/ )
 {
     rSubTypeList.Clear();
     rSubTypeList.InsertItem( 1, SELECT_BITMAP( BMP_COLUMN_LINE ) );
@@ -1182,7 +1182,7 @@ void CombiColumnLineChartDialogController::hideExtraControls() const
     if(m_pMF_NumberOfLines)
         m_pMF_NumberOfLines->Hide();
 }
-void CombiColumnLineChartDialogController::fillExtraControls( const ChartTypeParameter& rParameter
+void CombiColumnLineChartDialogController::fillExtraControls( const ChartTypeParameter& /*rParameter*/
                 , const uno::Reference< XChartDocument >& xChartModel
                 , const uno::Reference< beans::XPropertySet >& xTemplateProps ) const
 {
@@ -1220,7 +1220,7 @@ void CombiColumnLineChartDialogController::setTemplateProperties( const uno::Ref
 {
     if( xTemplateProps.is() )
     {
-        sal_Int32 nNumLines = m_pMF_NumberOfLines->GetValue();
+        sal_Int32 nNumLines = static_cast< sal_Int32 >( m_pMF_NumberOfLines->GetValue());
         xTemplateProps->setPropertyValue( C2U( "NumberOfLines" ), uno::makeAny(nNumLines) );
     }
 }
