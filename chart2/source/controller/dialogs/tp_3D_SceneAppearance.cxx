@@ -4,9 +4,9 @@
  *
  *  $RCSfile: tp_3D_SceneAppearance.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2007-07-03 13:38:55 $
+ *  last change: $Author: rt $ $Date: 2007-07-25 08:35:32 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -127,8 +127,8 @@ ThreeD_SceneAppearance_TabPage::ThreeD_SceneAppearance_TabPage(
                 , m_aCB_RoundedEdge ( this, SchResId( CB_ROUNDEDEDGE ) )
                 , m_aCB_Shading     ( this, SchResId( CB_SHADING ) )
                 , m_aCB_ObjectLines ( this, SchResId( CB_OBJECTLINES ) )
-                , m_bCommitToModel( true )
                 , m_bUpdateOtherControls( true )
+                , m_bCommitToModel( true )
                 , m_rControllerLockHelper( rControllerLockHelper )
 {
     FreeResource();
