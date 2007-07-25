@@ -4,9 +4,9 @@
  *
  *  $RCSfile: unochart.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2007-07-05 13:11:07 $
+ *  last change: $Author: rt $ $Date: 2007-07-25 08:15:00 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -210,13 +210,20 @@ class SwChartDataProvider :
     SwChartDataProvider( const SwChartDataProvider & );
     SwChartDataProvider & operator = ( const SwChartDataProvider & );
 
+    ::com::sun::star::uno::Reference< ::com::sun::star::chart2::data::XDataSource > SAL_CALL Impl_createDataSource( const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >& aArguments, sal_Bool bTestOnly = sal_False ) throw (::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::uno::RuntimeException);
+    ::com::sun::star::uno::Reference< ::com::sun::star::chart2::data::XDataSequence > SAL_CALL Impl_createDataSequenceByRangeRepresentation( const ::rtl::OUString& aRangeRepresentation, sal_Bool bTestOnly = sal_False  ) throw (::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::uno::RuntimeException);
+
+    rtl::OUString GetBrokenCellRangeForExport( const rtl::OUString &rCellRangeRepresentation );
+
 public:
     SwChartDataProvider( const SwDoc* pDoc );
     virtual ~SwChartDataProvider();
 
     // XDataProvider
+    virtual ::sal_Bool SAL_CALL createDataSourcePossible( const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >& aArguments ) throw (::com::sun::star::uno::RuntimeException);
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::chart2::data::XDataSource > SAL_CALL createDataSource( const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >& aArguments ) throw (::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::uno::RuntimeException);
     virtual ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue > SAL_CALL detectArguments( const ::com::sun::star::uno::Reference< ::com::sun::star::chart2::data::XDataSource >& xDataSource ) throw (::com::sun::star::uno::RuntimeException);
+    virtual ::sal_Bool SAL_CALL createDataSequenceByRangeRepresentationPossible( const ::rtl::OUString& aRangeRepresentation ) throw (::com::sun::star::uno::RuntimeException);
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::chart2::data::XDataSequence > SAL_CALL createDataSequenceByRangeRepresentation( const ::rtl::OUString& aRangeRepresentation ) throw (::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::uno::RuntimeException);
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::sheet::XRangeSelection > SAL_CALL getRangeSelection(  ) throw (::com::sun::star::uno::RuntimeException);
 
