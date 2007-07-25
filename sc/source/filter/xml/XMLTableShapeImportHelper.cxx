@@ -4,9 +4,9 @@
  *
  *  $RCSfile: XMLTableShapeImportHelper.cxx,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: vg $ $Date: 2007-05-22 20:03:11 $
+ *  last change: $Author: rt $ $Date: 2007-07-25 08:08:58 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -175,6 +175,17 @@ void XMLTableShapeImportHelper::finishShape(
             }
             else
             {
+                if ( pRangeList )
+                {
+                    // #i78086# If there are notification ranges, the ChartListener must be created
+                    // also when anchored to the sheet
+                    // -> call AddShape with invalid cell position (checked in ScMyShapeResizer::ResizeShapes)
+
+                    table::CellAddress aInvalidPos( -1, -1, -1 );
+                    static_cast<ScXMLImport&>(mrImporter).GetTables().AddShape(rShape,
+                        pRangeList, aInvalidPos, aInvalidPos, 0, 0);
+                }
+
                 SvxShape* pShapeImp = SvxShape::getImplementation(rShape);
                 if (pShapeImp)
                 {
