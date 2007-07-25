@@ -4,9 +4,9 @@
  *
  *  $RCSfile: WrappedNumberFormatProperty.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: obo $ $Date: 2007-06-11 14:57:34 $
+ *  last change: $Author: rt $ $Date: 2007-07-25 08:28:45 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -112,7 +112,7 @@ Any WrappedNumberFormatProperty::getPropertyValue( const Reference< beans::XProp
     return aRet;
 }
 
-Any WrappedNumberFormatProperty::getPropertyDefault( const Reference< beans::XPropertyState >& xInnerPropertyState ) const
+Any WrappedNumberFormatProperty::getPropertyDefault( const Reference< beans::XPropertyState >& /*xInnerPropertyState*/ ) const
                         throw (beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException)
 {
     return uno::makeAny( sal_Int32( 0 ) );
@@ -184,7 +184,7 @@ Any WrappedLinkNumberFormatProperty::getPropertyValue( const Reference< beans::X
     return uno::makeAny( bLink );
 }
 
-Any WrappedLinkNumberFormatProperty::getPropertyDefault( const Reference< beans::XPropertyState >& xInnerPropertyState ) const
+Any WrappedLinkNumberFormatProperty::getPropertyDefault( const Reference< beans::XPropertyState >& /*xInnerPropertyState*/ ) const
                         throw (beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException)
 {
     bool bLink = true;
