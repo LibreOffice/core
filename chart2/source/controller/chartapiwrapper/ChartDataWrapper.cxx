@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ChartDataWrapper.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: vg $ $Date: 2007-05-22 17:16:54 $
+ *  last change: $Author: rt $ $Date: 2007-07-25 08:26:21 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -358,7 +358,7 @@ void SAL_CALL ChartDataWrapper::removeEventListener(
 }
 
 // ____ XEventListener ____
-void SAL_CALL ChartDataWrapper::disposing( const lang::EventObject& Source )
+void SAL_CALL ChartDataWrapper::disposing( const lang::EventObject& /* Source */ )
     throw (uno::RuntimeException)
 {
 }
@@ -500,7 +500,7 @@ void ChartDataWrapper::refreshData()
 
                 for( sal_Int32 nInner=0; nInner<nInnerSize; ++nInner )
                 {
-                    uno::Sequence< double > aValues(
+                    uno::Sequence< double > aValues = uno::Sequence< double > (
                         lcl_DataSequenceToDoubleSeq() (aSequenceVector[nInner] ));
                     sal_Int32 nMax = ::std::min( nOuterSize, aValues.getLength());
                     for( sal_Int32 nOuter=0; nOuter<nMax; ++nOuter )
@@ -673,6 +673,12 @@ void ChartDataWrapper::applyData( bool bSetValues, bool bSetRowDescriptions, boo
         bool bOnlyAtFirstChartType = false;
         DiagramHelper::setStackMode( xDia, eStackMode, bOnlyAtFirstChartType );
     }
+
+    // notify listeners
+    ::com::sun::star::chart::ChartDataChangeEvent aEvent(
+        static_cast< ::cppu::OWeakObject* >( this ),
+        ::com::sun::star::chart::ChartDataChangeType_ALL, 0, 0, 0, 0 );
+    fireChartDataChangeEvent( aEvent );
     // \-- locked controllers
 }
 
