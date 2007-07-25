@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ImplChartModel.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: rt $ $Date: 2007-07-03 13:43:15 $
+ *  last change: $Author: rt $ $Date: 2007-07-25 08:50:37 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -49,6 +49,7 @@
 #include "ModifyListenerHelper.hxx"
 #include "DataSourceHelper.hxx"
 #include "DisposeHelper.hxx"
+#include "UndoManager.hxx"
 #include "ThreeDHelper.hxx"
 
 // header for class SvNumberFormatter
@@ -149,7 +150,10 @@ ImplChartModel::ImplChartModel(
     Reference< uno::XComponentContext > const & xContext,
     const Reference< util::XModifyListener > & xListener ) :
         m_xContext( xContext ),
+        m_spChartData( new ChartData( m_xContext )),
         m_bIsDisposed( false ),
+        m_xPageBackground( new PageBackground( m_xContext )),
+        m_xUndoManager( new UndoManager()),
         m_xDashTable( new NameContainer( ::getCppuType( reinterpret_cast< const drawing::LineDash * >(0)),
                 C2U( "com.sun.star.drawing.DashTable" ), C2U( "com.sun.star.comp.chart.DashTable" ) )),
         m_xGradientTable( new NameContainer( ::getCppuType( reinterpret_cast< const awt::Gradient * >(0)),
@@ -164,8 +168,6 @@ ImplChartModel::ImplChartModel(
                 C2U( "com.sun.star.xml.NamespaceMap" ), C2U( "com.sun.star.comp.chart.XMLNameSpaceMap" ) )),
         m_xModifyListener( xListener )
 {
-    m_spChartData.reset( new ChartData( m_xContext ));
-    m_xPageBackground.set( new PageBackground( m_xContext ));
     ModifyListenerHelper::addListener( m_xPageBackground, m_xModifyListener );
     m_xChartTypeManager.set(
         xContext->getServiceManager()->createInstanceWithContext(
@@ -594,6 +596,11 @@ void ImplChartModel::dispose()
 Reference< beans::XPropertySet > ImplChartModel::GetPageBackground()
 {
     return m_xPageBackground;
+}
+
+Reference< chart2::XUndoManager > ImplChartModel::GetUndoManager()
+{
+    return m_xUndoManager;
 }
 
 // OUString
