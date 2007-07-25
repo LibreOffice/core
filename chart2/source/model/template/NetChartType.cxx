@@ -4,9 +4,9 @@
  *
  *  $RCSfile: NetChartType.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: vg $ $Date: 2007-05-22 18:49:59 $
+ *  last change: $Author: rt $ $Date: 2007-07-25 08:54:06 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -66,12 +66,12 @@ namespace
 {
 
 void lcl_AddPropertiesToVector(
-    ::std::vector< Property > & rOutProperties )
+    ::std::vector< Property > & /* rOutProperties */ )
 {
 }
 
 void lcl_AddDefaultsToMap(
-    ::chart::tPropertyValueMap & rOutMap )
+    ::chart::tPropertyValueMap & /* rOutMap */ )
 {
 }
 
