@@ -4,9 +4,9 @@
  *
  *  $RCSfile: RegressionCurveHelper.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: vg $ $Date: 2007-05-22 19:03:52 $
+ *  last change: $Author: rt $ $Date: 2007-07-25 09:00:04 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -360,7 +360,7 @@ void RegressionCurveHelper::removeMeanValueLine(
 void RegressionCurveHelper::addRegressionCurve(
     tRegressionType eType,
     uno::Reference< XRegressionCurveContainer > & xRegCnt,
-    const uno::Reference< XComponentContext > & xContext,
+    const uno::Reference< XComponentContext > & /* xContext */,
     const uno::Reference< beans::XPropertySet >& xPropertySource )
 {
     if( !xRegCnt.is() )
