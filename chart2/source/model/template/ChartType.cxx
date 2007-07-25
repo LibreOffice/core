@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ChartType.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: vg $ $Date: 2007-05-22 18:45:53 $
+ *  last change: $Author: rt $ $Date: 2007-07-25 08:53:14 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -74,6 +74,8 @@ ChartType::ChartType(
 {}
 
 ChartType::ChartType( const ChartType & rOther ) :
+        MutexContainer(),
+        impl::ChartType_Base(),
         ::property::OPropertySet( rOther, m_aMutex ),
     m_xModifyEventForwarder( new ModifyListenerHelper::ModifyEventForwarder( m_aMutex )),
     m_xContext( rOther.m_xContext ),
@@ -236,7 +238,7 @@ void SAL_CALL ChartType::setDataSeries( const Sequence< Reference< chart2::XData
 }
 
 // ____ OPropertySet ____
-uno::Any ChartType::GetDefaultValue( sal_Int32 nHandle ) const
+uno::Any ChartType::GetDefaultValue( sal_Int32 /* nHandle */ ) const
     throw(beans::UnknownPropertyException)
 {
     return uno::Any();
@@ -245,7 +247,8 @@ uno::Any ChartType::GetDefaultValue( sal_Int32 nHandle ) const
 // ____ OPropertySet ____
 ::cppu::IPropertyArrayHelper & SAL_CALL ChartType::getInfoHelper()
 {
-    static ::cppu::OPropertyArrayHelper aArrayHelper(
+    // using assignment for broken gcc 3.3
+    static ::cppu::OPropertyArrayHelper aArrayHelper = ::cppu::OPropertyArrayHelper(
         Sequence< beans::Property >(), /* bSorted */ sal_True );
 
     return aArrayHelper;
@@ -308,7 +311,7 @@ void SAL_CALL ChartType::modified( const lang::EventObject& aEvent )
 }
 
 // ____ XEventListener (base of XModifyListener) ____
-void SAL_CALL ChartType::disposing( const lang::EventObject& Source )
+void SAL_CALL ChartType::disposing( const lang::EventObject& /* Source */ )
     throw (uno::RuntimeException)
 {
     // nothing
