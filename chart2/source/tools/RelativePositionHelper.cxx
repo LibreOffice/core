@@ -4,9 +4,9 @@
  *
  *  $RCSfile: RelativePositionHelper.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: vg $ $Date: 2007-05-22 19:04:27 $
+ *  last change: $Author: rt $ $Date: 2007-07-25 09:00:27 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -92,6 +92,8 @@ chart2::RelativePosition RelativePositionHelper::getReanchoredPosition(
                 nShiftHalfWidths  -= 2;
                 nShiftHalfHeights -= 2;
                 break;
+            case drawing::Alignment_MAKE_FIXED_SIZE:
+                break;
         }
 
         // transform
@@ -126,6 +128,8 @@ chart2::RelativePosition RelativePositionHelper::getReanchoredPosition(
             case drawing::Alignment_BOTTOM_RIGHT:
                 nShiftHalfWidths  += 2;
                 nShiftHalfHeights += 2;
+                break;
+            case drawing::Alignment_MAKE_FIXED_SIZE:
                 break;
         }
 
@@ -298,6 +302,8 @@ bool RelativePositionHelper::centerGrow(
         case drawing::Alignment_BOTTOM_RIGHT:
             aPos.Primary += fShiftAmountX;
             break;
+        case drawing::Alignment_MAKE_FIXED_SIZE:
+            break;
     }
 
     // shift Y
@@ -317,6 +323,8 @@ bool RelativePositionHelper::centerGrow(
         case drawing::Alignment_BOTTOM_LEFT:
         case drawing::Alignment_BOTTOM_RIGHT:
             aPos.Secondary += fShiftAmountY;
+            break;
+        case drawing::Alignment_MAKE_FIXED_SIZE:
             break;
     }
 

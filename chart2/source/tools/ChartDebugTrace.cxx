@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ChartDebugTrace.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: vg $ $Date: 2007-05-22 18:55:48 $
+ *  last change: $Author: rt $ $Date: 2007-07-25 08:55:40 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -344,8 +344,8 @@ namespace debug
 {
 
 void ChartDebugTraceDocument(
-    const Reference< XChartDocument > & xDoc,
-    int nIndent )
+    const Reference< XChartDocument > & /*xDoc*/,
+    int /*nIndent*/ )
 {
     /*
 #if OSL_DEBUG_LEVEL >= CHART_TRACE_OSL_DEBUG_LEVEL
@@ -379,8 +379,8 @@ void ChartDebugTraceDocument(
 }
 
 void ChartDebugTraceDiagram(
-    const Reference< XDiagram > & xDiagram,
-    int nIndent )
+    const Reference< XDiagram > & /*xDiagram*/,
+    int /*nIndent*/ )
 {
     /*
 #if OSL_DEBUG_LEVEL >= CHART_TRACE_OSL_DEBUG_LEVEL

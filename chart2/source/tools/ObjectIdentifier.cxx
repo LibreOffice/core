@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ObjectIdentifier.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: vg $ $Date: 2007-05-22 19:03:13 $
+ *  last change: $Author: rt $ $Date: 2007-07-25 08:59:27 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -400,8 +400,8 @@ OUString ObjectIdentifier::createClassifiedIdentifierForParticles(
 
 //static
 OUString ObjectIdentifier::createParticleForDiagram(
-          const Reference< XDiagram >& xDiagram
-        , const Reference< frame::XModel >& xChartModel )
+          const Reference< XDiagram >& /*xDiagram*/
+        , const Reference< frame::XModel >& /*xChartModel*/ )
 {
     static OUString aRet(C2U("D=0"));
     //todo: if more than one diagram is implemeted, add the correct diagram index here
@@ -536,7 +536,7 @@ OUString ObjectIdentifier::createParticleForSeries(
 
 //static
 OUString ObjectIdentifier::createParticleForLegend(
-          const Reference< XLegend >& xLegend
+          const Reference< XLegend >& /*xLegend*/
         , const Reference< frame::XModel >& xChartModel )
 {
     OUStringBuffer aRet;
@@ -1319,7 +1319,7 @@ Reference< XDiagram > ObjectIdentifier::getDiagramForCID(
 
 TitleHelper::eTitleType ObjectIdentifier::getTitleTypeForCID( const OUString& rCID )
 {
-    TitleHelper::eTitleType eRet;
+    TitleHelper::eTitleType eRet( TitleHelper::MAIN_TITLE );
 
     OUString aParentParticle = ObjectIdentifier::getFullParentParticle( rCID );
     const tTitleMap& rMap = lcl_getTitleMap();

@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ModifyListenerCallBack.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: vg $ $Date: 2007-05-22 19:01:37 $
+ *  last change: $Author: rt $ $Date: 2007-07-25 08:58:25 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -87,13 +87,13 @@ ModifyListenerCallBack_impl::~ModifyListenerCallBack_impl()
 }
 
 //XModifyListener
-void SAL_CALL ModifyListenerCallBack_impl::modified( const lang::EventObject& aEvent ) throw (uno::RuntimeException)
+void SAL_CALL ModifyListenerCallBack_impl::modified( const lang::EventObject& /*aEvent*/ ) throw (uno::RuntimeException)
 {
     m_aLink.Call(0);
 }
 
 //XEventListener
-void SAL_CALL ModifyListenerCallBack_impl::disposing( const lang::EventObject& Source ) throw (uno::RuntimeException)
+void SAL_CALL ModifyListenerCallBack_impl::disposing( const lang::EventObject& /*Source*/ ) throw (uno::RuntimeException)
 {
     m_xBroadcaster.clear();
 }
