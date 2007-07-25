@@ -4,9 +4,9 @@
  *
  *  $RCSfile: WrappedSymbolProperties.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: vg $ $Date: 2007-05-22 17:24:48 $
+ *  last change: $Author: rt $ $Date: 2007-07-25 08:29:46 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -61,6 +61,8 @@
 #include <com/sun/star/drawing/LineStyle.hpp>
 #endif
 
+#include <com/sun/star/graphic/XGraphicProvider.hpp>
+
 // for UNO_NAME_GRAPHOBJ_URLPREFIX
 #include <svx/unoprnms.hxx>
 
@@ -73,6 +75,7 @@
 #include <goodies/grfmgr.hxx>
 #endif
 
+#include <comphelper/processfactory.hxx>
 
 using namespace ::com::sun::star;
 using ::com::sun::star::uno::Any;
@@ -340,9 +343,30 @@ void WrappedSymbolBitmapURLProperty::setValueToSeries(
         OSL_ENSURE( bMatchesPrefix, "Invalid URL for Symbol Bitmap" );
         if( bMatchesPrefix )
         {
-            GraphicObject aGrObj( ByteString( U2C( aNewGraphicURL.copy( sizeof( UNO_NAME_GRAPHOBJ_URLPREFIX ) - 1 ))));
+            GraphicObject aGrObj = GraphicObject(
+                ByteString( U2C( aNewGraphicURL.copy( sizeof( UNO_NAME_GRAPHOBJ_URLPREFIX ) - 1 ))));
             aSymbol.Graphic.set( aGrObj.GetGraphic().GetXGraphic());
             xSeriesPropertySet->setPropertyValue( C2U("Symbol"), uno::makeAny( aSymbol ) );
+        }
+        else
+        {
+            try
+            {
+                // @todo: get factory from some context?
+                Reference< lang::XMultiServiceFactory > xFact( comphelper::getProcessServiceFactory(), uno::UNO_QUERY_THROW );
+                Reference< graphic::XGraphicProvider > xGraphProv(
+                    xFact->createInstance( C2U("com.sun.star.graphic.GraphicProvider")), uno::UNO_QUERY_THROW );
+                Sequence< beans::PropertyValue > aArgs(1);
+                aArgs[0] = beans::PropertyValue(
+                    C2U("URL"), -1, uno::makeAny( aNewGraphicURL ),
+                    beans::PropertyState_DIRECT_VALUE );
+                aSymbol.Graphic.set( xGraphProv->queryGraphic( aArgs ));
+                xSeriesPropertySet->setPropertyValue( C2U("Symbol"), uno::makeAny( aSymbol ) );
+            }
+            catch( const uno::Exception & ex )
+            {
+                ASSERT_EXCEPTION( ex );
+            }
         }
     }
 }
