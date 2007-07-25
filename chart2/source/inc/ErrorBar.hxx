@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ErrorBar.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: vg $ $Date: 2007-05-22 18:16:01 $
+ *  last change: $Author: rt $ $Date: 2007-07-25 08:46:31 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -104,9 +104,8 @@ protected:
     // ____ OPropertySet ____
     virtual ::com::sun::star::uno::Any GetDefaultValue( sal_Int32 nHandle ) const
         throw(::com::sun::star::beans::UnknownPropertyException);
-
-    // ____ OPropertySet ____
     virtual ::cppu::IPropertyArrayHelper & SAL_CALL getInfoHelper();
+    using OPropertySet::disposing;
 
     // ____ XPropertySet ____
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySetInfo > SAL_CALL
