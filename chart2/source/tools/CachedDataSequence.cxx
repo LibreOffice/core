@@ -4,9 +4,9 @@
  *
  *  $RCSfile: CachedDataSequence.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: vg $ $Date: 2007-05-22 18:55:26 $
+ *  last change: $Author: rt $ $Date: 2007-07-25 08:55:17 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -64,6 +64,8 @@ using ::osl::MutexGuard;
 
 // necessary for MS compiler
 using ::comphelper::OPropertyContainer;
+using ::comphelper::OMutexAndBroadcastHelper;
+using ::comphelper::OPropertyArrayUsageHelper;
 using ::chart::impl::CachedDataSequence_Base;
 
 namespace
@@ -142,7 +144,9 @@ CachedDataSequence::CachedDataSequence( const ::std::vector< Any > & rVector )
 }
 
 CachedDataSequence::CachedDataSequence( const CachedDataSequence & rSource )
-        : OPropertyContainer( GetBroadcastHelper()),
+        : OMutexAndBroadcastHelper(),
+          OPropertyContainer( GetBroadcastHelper()),
+          OPropertyArrayUsageHelper< CachedDataSequence >(),
           CachedDataSequence_Base( GetMutex()),
           m_nNumberFormatKey( rSource.m_nNumberFormatKey ),
           m_sRole( rSource.m_sRole ),
@@ -448,14 +452,14 @@ OUString SAL_CALL CachedDataSequence::getSourceRangeRepresentation()
     return m_sRole;
 }
 
-Sequence< OUString > SAL_CALL CachedDataSequence::generateLabel( chart2::data::LabelOrigin eLabelOrigin )
+Sequence< OUString > SAL_CALL CachedDataSequence::generateLabel( chart2::data::LabelOrigin  /*eLabelOrigin*/ )
     throw (uno::RuntimeException)
 {
     // return empty label, as we have no range representaions to determine something useful
     return Sequence< OUString >();
 }
 
-::sal_Int32 SAL_CALL CachedDataSequence::getNumberFormatKeyByIndex( ::sal_Int32 nIndex )
+::sal_Int32 SAL_CALL CachedDataSequence::getNumberFormatKeyByIndex( ::sal_Int32 /*nIndex*/ )
     throw (lang::IndexOutOfBoundsException,
            uno::RuntimeException)
 {
