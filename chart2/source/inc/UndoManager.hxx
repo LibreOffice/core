@@ -4,9 +4,9 @@
  *
  *  $RCSfile: UndoManager.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: vg $ $Date: 2007-05-22 18:23:57 $
+ *  last change: $Author: rt $ $Date: 2007-07-25 08:47:48 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -36,23 +36,17 @@
 #define CHART2_UNDOMANAGER_HXX
 
 #include "ConfigItemListener.hxx"
+#include "MutexContainer.hxx"
 
-#ifndef _COM_SUN_STAR_UNO_REFERENCE_HXX_
 #include <com/sun/star/uno/Reference.hxx>
-#endif
-#ifndef _COM_SUN_STAR_UNO_SEQUENCE_HXX_
 #include <com/sun/star/uno/Sequence.hxx>
-#endif
-#ifndef _COM_SUN_STAR_UTIL_XMODIFYBROADCASTER_HPP_
 #include <com/sun/star/util/XModifyBroadcaster.hpp>
-#endif
-#ifndef _COM_SUN_STAR_UTIL_XMODIFYLISTENER_HPP_
 #include <com/sun/star/util/XModifyListener.hpp>
-#endif
+#include <com/sun/star/chart2/XUndoManager.hpp>
+#include <com/sun/star/chart2/XUndoHelper.hpp>
 
-#ifndef _RTL_USTRING_HXX_
+#include <cppuhelper/compbase3.hxx>
 #include <rtl/ustring.hxx>
-#endif
 
 // for pair
 #include <utility>
@@ -76,6 +70,12 @@ class UndoElement;
 class  UndoStack;
 class  ModifyBroadcaster;
 
+typedef ::cppu::WeakComponentImplHelper3<
+            ::com::sun::star::util::XModifyBroadcaster,
+            ::com::sun::star::chart2::XUndoManager,
+            ::com::sun::star::chart2::XUndoHelper >
+    UndoManager_Base;
+
 } // namespace impl
 // ----------------------------------------
 
@@ -86,68 +86,71 @@ class  ModifyBroadcaster;
     redo-stacks support the css::util::XCloneable interface, which is
     implemented such that the entire model is cloned.
  */
-class UndoManager : public ConfigItemListener
+class UndoManager :
+        public MutexContainer,
+        public ConfigItemListener,
+        public impl::UndoManager_Base
 {
 public:
     explicit UndoManager();
     virtual ~UndoManager();
 
-    /// call this before you change the xCurrentModel
-    void preAction( const ::com::sun::star::uno::Reference<
-                    ::com::sun::star::frame::XModel > & xCurrentModel );
-    /// call this after you successfully did changes to your current model
-    void postAction( const ::rtl::OUString & rUndoString );
-    /// call this if you aborted the current action.
-    void cancelAction();
-    /** same as cancelAction() but restores the given model to the state set in
-        preAction.  This is useful for cancellation in live-preview dialogs.
-    */
-    void cancelActionUndo( const ::com::sun::star::uno::Reference<
-                               ::com::sun::star::frame::XModel > & xModelToRestore );
-
-    /// same as preAction but with cloning the data for the chart in addition to the model
-    void preActionWithData( const ::com::sun::star::uno::Reference<
-                            ::com::sun::star::frame::XModel > & xCurrentModel );
-
-    /// give the current model to be put into the redo-stack
-    void undo( const ::com::sun::star::uno::Reference<
-               ::com::sun::star::frame::XModel > & xCurrentModel );
-    /// give the current model to be put into the undo-stack
-    void redo( const ::com::sun::star::uno::Reference<
-               ::com::sun::star::frame::XModel > & xCurrentModel );
-
-    bool canUndo() const;
-    bool canRedo() const;
-
-    ::rtl::OUString getCurrentUndoString() const;
-    ::rtl::OUString getCurrentRedoString() const;
-
-    ::com::sun::star::uno::Sequence< ::rtl::OUString > getUndoStrings() const;
-    ::com::sun::star::uno::Sequence< ::rtl::OUString > getRedoStrings() const;
-
-    /** limits the size of the undo- and the redo-stack
-
-        The default is defined by the registry entry Common/Undo/Steps.
-        (Default is 100, the allowed range is 1 to 1000)
-    */
-//     void setMaximumNumberOfUndoSteps( sal_Int32 nMaxUndoSteps );
-    /// gets the current maximum size of the undo- and the redo-stack
-    sal_Int32 getMaximumNumberOfUndoSteps();
-
-    void addModifyListener( const ::com::sun::star::uno::Reference<
-                                ::com::sun::star::util::XModifyListener >& xListener );
-    void removeModifyListener( const ::com::sun::star::uno::Reference<
-                                   ::com::sun::star::util::XModifyListener >& xListener );
-
 protected:
     // ____ ConfigItemListener ____
     virtual void notify( const ::rtl::OUString & rPropertyName );
+
+    // ____ util::XModifyBroadcaster ____
+    virtual void SAL_CALL addModifyListener(
+        const ::com::sun::star::uno::Reference< ::com::sun::star::util::XModifyListener >& aListener )
+        throw (::com::sun::star::uno::RuntimeException);
+    virtual void SAL_CALL removeModifyListener(
+        const ::com::sun::star::uno::Reference< ::com::sun::star::util::XModifyListener >& aListener )
+        throw (::com::sun::star::uno::RuntimeException);
+
+    // ____ chart2::XUndoManager ____
+    virtual void SAL_CALL preAction( const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XModel >& xModelBeforeChange )
+        throw (::com::sun::star::uno::RuntimeException);
+    virtual void SAL_CALL preActionWithArguments(
+        const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XModel >& xModelBeforeChange,
+        const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >& aArguments )
+        throw (::com::sun::star::uno::RuntimeException);
+    virtual void SAL_CALL postAction( const ::rtl::OUString& aUndoText )
+        throw (::com::sun::star::uno::RuntimeException);
+    virtual void SAL_CALL cancelAction()
+        throw (::com::sun::star::uno::RuntimeException);
+    virtual void SAL_CALL cancelActionWithUndo( ::com::sun::star::uno::Reference< ::com::sun::star::frame::XModel >& xModelToRestore )
+        throw (::com::sun::star::uno::RuntimeException);
+    virtual void SAL_CALL undo( ::com::sun::star::uno::Reference< ::com::sun::star::frame::XModel >& xCurrentModel )
+        throw (::com::sun::star::uno::RuntimeException);
+    virtual void SAL_CALL redo( ::com::sun::star::uno::Reference< ::com::sun::star::frame::XModel >& xCurrentModel )
+        throw (::com::sun::star::uno::RuntimeException);
+    virtual ::sal_Bool SAL_CALL undoPossible()
+        throw (::com::sun::star::uno::RuntimeException);
+    virtual ::sal_Bool SAL_CALL redoPossible()
+        throw (::com::sun::star::uno::RuntimeException);
+    virtual ::rtl::OUString SAL_CALL getCurrentUndoString()
+        throw (::com::sun::star::uno::RuntimeException);
+    virtual ::rtl::OUString SAL_CALL getCurrentRedoString()
+        throw (::com::sun::star::uno::RuntimeException);
+    virtual ::com::sun::star::uno::Sequence< ::rtl::OUString > SAL_CALL getAllUndoStrings()
+        throw (::com::sun::star::uno::RuntimeException);
+    virtual ::com::sun::star::uno::Sequence< ::rtl::OUString > SAL_CALL getAllRedoStrings()
+        throw (::com::sun::star::uno::RuntimeException);
+
+    // ____ XUndoHelper ____
+    virtual ::com::sun::star::uno::Reference< ::com::sun::star::frame::XModel > SAL_CALL getModelCloneForUndo(
+        const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XModel >& xModelBeforeChange )
+        throw (::com::sun::star::uno::RuntimeException);
+    virtual void SAL_CALL applyModelContent(
+        ::com::sun::star::uno::Reference< ::com::sun::star::frame::XModel >& xModelToChange,
+        const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XModel >& xModelToCopyFrom )
+        throw (::com::sun::star::uno::RuntimeException);
 
 private:
     void retrieveConfigUndoSteps();
     void fireModifyEvent();
     void impl_undoRedo(
-        const ::com::sun::star::uno::Reference<
+        ::com::sun::star::uno::Reference<
             ::com::sun::star::frame::XModel > & xCurrentModel,
         impl::UndoStack * pStackToRemoveFrom,
         impl::UndoStack * pStackToAddTo );
