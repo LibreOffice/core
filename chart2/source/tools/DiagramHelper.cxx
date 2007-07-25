@@ -4,9 +4,9 @@
  *
  *  $RCSfile: DiagramHelper.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: rt $ $Date: 2007-07-03 13:44:26 $
+ *  last change: $Author: rt $ $Date: 2007-07-25 08:56:49 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -188,7 +188,7 @@ void DiagramHelper::setVertical(
                 bool bChanged = false;
                 if( xProp.is() )
                 {
-                    sal_Bool bOldSwap = sal_False;
+                    bool bOldSwap = sal_False;
                     if( !(xProp->getPropertyValue( C2U("SwapXAndYAxis") ) >>= bOldSwap)
                         || bVertical != bOldSwap )
                         bChanged = true;
@@ -901,10 +901,13 @@ void DiagramHelper::setCategoriesToDiagram(
         {
             ScaleData aScaleData( xCatAxis->getScaleData());
             aScaleData.Categories = xCategories;
-            if( bCategoryAxis )
-                aScaleData.AxisType = AxisType::CATEGORY;
-            else if( aScaleData.AxisType == AxisType::CATEGORY )
-                aScaleData.AxisType = AxisType::REALNUMBER;
+            if( bSetAxisType )
+            {
+                if( bCategoryAxis )
+                    aScaleData.AxisType = AxisType::CATEGORY;
+                else if( aScaleData.AxisType == AxisType::CATEGORY )
+                    aScaleData.AxisType = AxisType::REALNUMBER;
+            }
             xCatAxis->setScaleData( aScaleData );
         }
     }
@@ -1175,8 +1178,6 @@ bool lcl_moveSeriesOrCheckIfMoveIsAllowed(
                         // We found the series we are interrested in !
                         if( xGivenDataSeries==aSeriesList[nS] )
                         {
-                            sal_Int32 nOldCooSysIndex = nCS;
-                            sal_Int32 nOldChartTypeIndex = nT;
                             sal_Int32 nOldSeriesIndex = nS;
                             bFound = true;
 
