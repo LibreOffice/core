@@ -4,9 +4,9 @@
  *
  *  $RCSfile: AxisWrapper.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: vg $ $Date: 2007-05-22 17:16:13 $
+ *  last change: $Author: rt $ $Date: 2007-07-25 08:26:11 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -347,7 +347,7 @@ awt::Point SAL_CALL AxisWrapper::getPosition()
     return aResult;
 }
 
-void SAL_CALL AxisWrapper::setPosition( const awt::Point& aPosition )
+void SAL_CALL AxisWrapper::setPosition( const awt::Point& /*aPosition*/ )
     throw (uno::RuntimeException)
 {
     OSL_ENSURE( false, "trying to set position of Axis" );
@@ -360,7 +360,7 @@ awt::Size SAL_CALL AxisWrapper::getSize()
     return aSize;
 }
 
-void SAL_CALL AxisWrapper::setSize( const awt::Size& aSize )
+void SAL_CALL AxisWrapper::setSize( const awt::Size& /*aSize*/ )
     throw (beans::PropertyVetoException,
            uno::RuntimeException)
 {
@@ -513,7 +513,7 @@ const std::vector< WrappedProperty* > AxisWrapper::createWrappedProperties()
     aWrappedProperties.push_back( new WrappedProperty( C2U( "TextCanOverlap" ), C2U( "TextOverlap" ) ) );
     aWrappedProperties.push_back( new WrappedProperty( C2U( "ArrangeOrder" ), C2U( "ArrangeOrder" ) ) );
     aWrappedProperties.push_back( new WrappedProperty( C2U( "Visible" ), C2U( "Show" ) ) );
-    aWrappedProperties.push_back( new WrappedDefaultProperty( C2U( "DisplayLabels" ), C2U( "DisplayLabels" ), uno::makeAny( false ) ) );
+    aWrappedProperties.push_back( new WrappedDirectStateProperty( C2U( "DisplayLabels" ), C2U( "DisplayLabels" ) ) );
     aWrappedProperties.push_back( new WrappedDirectStateProperty( C2U( "TextBreak" ), C2U( "TextBreak" ) ) );
     WrappedNumberFormatProperty* pWrappedNumberFormatProperty = new WrappedNumberFormatProperty( m_spChart2ModelContact );
     aWrappedProperties.push_back( pWrappedNumberFormatProperty );
