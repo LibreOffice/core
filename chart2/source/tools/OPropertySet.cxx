@@ -4,9 +4,9 @@
  *
  *  $RCSfile: OPropertySet.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: vg $ $Date: 2007-05-22 19:02:51 $
+ *  last change: $Author: rt $ $Date: 2007-07-25 08:59:16 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -77,11 +77,11 @@ OPropertySet::OPropertySet( ::osl::Mutex & par_rMutex ) :
 {
 }
 
-OPropertySet::OPropertySet( const OPropertySet & rOther, ::osl::Mutex & rMutex ) :
-        OBroadcastHelper( rMutex ),
+OPropertySet::OPropertySet( const OPropertySet & rOther, ::osl::Mutex & par_rMutex ) :
+        OBroadcastHelper( par_rMutex ),
         // the following causes a warning; there seems to be no way to avoid it
         OPropertySetHelper( static_cast< OBroadcastHelper & >( *this )),
-        m_rMutex( rMutex )
+        m_rMutex( par_rMutex )
 {
     // /--
     MutexGuard aGuard( m_rMutex );
