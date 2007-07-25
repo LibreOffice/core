@@ -4,9 +4,9 @@
  *
  *  $RCSfile: InternalDataProvider.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: vg $ $Date: 2007-05-22 18:17:36 $
+ *  last change: $Author: rt $ $Date: 2007-07-25 08:46:44 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -78,6 +78,14 @@ namespace chart
 namespace impl
 {
 class InternalData;
+
+typedef ::cppu::WeakImplHelper5<
+        ::com::sun::star::chart2::XInternalDataProvider,
+        ::com::sun::star::chart2::data::XRangeXMLConversion,
+        ::com::sun::star::chart::XChartDataArray,
+        ::com::sun::star::util::XCloneable,
+        ::com::sun::star::lang::XServiceInfo >
+    InternalDataProvider_Base;
 }
 
 /** Data provider that handles data internally.  This is used for charts with
@@ -91,12 +99,7 @@ class InternalData;
     that?)</p>
  */
 class InternalDataProvider :
-        public ::cppu::WeakImplHelper5<
-            ::com::sun::star::chart2::XInternalDataProvider,
-            ::com::sun::star::chart2::data::XRangeXMLConversion,
-            ::com::sun::star::chart::XChartDataArray,
-            ::com::sun::star::util::XCloneable,
-            ::com::sun::star::lang::XServiceInfo >
+        public impl::InternalDataProvider_Base
 {
 public:
     explicit InternalDataProvider();
@@ -141,12 +144,18 @@ public:
         throw (::com::sun::star::uno::RuntimeException);
 
     // ____ XDataProvider (base of XInternalDataProvider) ____
+    virtual ::sal_Bool SAL_CALL createDataSourcePossible(
+        const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >& aArguments )
+        throw (::com::sun::star::uno::RuntimeException);
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::chart2::data::XDataSource > SAL_CALL createDataSource(
         const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >& aArguments )
         throw (::com::sun::star::lang::IllegalArgumentException,
                ::com::sun::star::uno::RuntimeException);
     virtual ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue > SAL_CALL detectArguments(
         const ::com::sun::star::uno::Reference< ::com::sun::star::chart2::data::XDataSource >& xDataSource )
+        throw (::com::sun::star::uno::RuntimeException);
+    virtual ::sal_Bool SAL_CALL createDataSequenceByRangeRepresentationPossible(
+        const ::rtl::OUString& aRangeRepresentation )
         throw (::com::sun::star::uno::RuntimeException);
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::chart2::data::XDataSequence > SAL_CALL createDataSequenceByRangeRepresentation(
         const ::rtl::OUString& aRangeRepresentation )
