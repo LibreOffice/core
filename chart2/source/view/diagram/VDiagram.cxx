@@ -4,9 +4,9 @@
  *
  *  $RCSfile: VDiagram.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: rt $ $Date: 2007-07-03 13:45:24 $
+ *  last change: $Author: rt $ $Date: 2007-07-25 09:05:32 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -40,7 +40,6 @@
 #include "ViewDefines.hxx"
 #include "Stripe.hxx"
 #include "macros.hxx"
-#include "Rotation.hxx"
 #include "ObjectIdentifier.hxx"
 #include "DiagramHelper.hxx"
 #include "BaseGFXHelper.hxx"
@@ -187,7 +186,8 @@ void VDiagram::createShapes( const awt::Point& rPos, const awt::Size& rSize )
     if( m_aPreferredAspectRatio.DirectionX > 0 && m_aPreferredAspectRatio.DirectionY > 0)
     {
         //do not change aspect ratio
-        awt::Size  aAspectRatio( m_aPreferredAspectRatio.DirectionX*FIXED_SIZE_FOR_3D_CHART_VOLUME, m_aPreferredAspectRatio.DirectionY*FIXED_SIZE_FOR_3D_CHART_VOLUME );
+        awt::Size  aAspectRatio( static_cast<sal_Int32>(m_aPreferredAspectRatio.DirectionX*FIXED_SIZE_FOR_3D_CHART_VOLUME),
+                                 static_cast<sal_Int32>(m_aPreferredAspectRatio.DirectionY*FIXED_SIZE_FOR_3D_CHART_VOLUME ));
         m_aCurrentSizeWithoutAxes = awt::Size( ShapeFactory::calculateNewSizeRespectingAspectRatio(
                         rAvailableSize, aAspectRatio ) );
         //center diagram position
@@ -386,9 +386,9 @@ void VDiagram::adjustAspectRatio3d( const awt::Size& rAvailableSize )
                 double fW = rAvailableSize.Width;
                 double fH = rAvailableSize.Height;
 
-                double cx = fabs(cos(m_fXAnglePi));
+//                 double cx = fabs(cos(m_fXAnglePi));
                 double sx = fabs(sin(m_fXAnglePi));
-                double cy = fabs(cos(m_fYAnglePi));
+//                 double cy = fabs(cos(m_fYAnglePi));
                 double sy = fabs(sin(m_fYAnglePi));
                 double cz = fabs(cos(m_fZAnglePi));
                 double sz = fabs(sin(m_fZAnglePi));
@@ -791,14 +791,14 @@ void VDiagram::reduceToMimimumSize()
     ::basegfx::B2IRectangle rAvailableOuterRect(
         BaseGFXHelper::makeRectangle(m_aAvailablePosIncludingAxes,m_aAvailableSizeIncludingAxes) );
 
-    sal_Int32 nDeltaWidth = rAvailableOuterRect.getWidth() - rConsumedOuterRect.getWidth();
-    sal_Int32 nDeltaHeight = rAvailableOuterRect.getHeight() - rConsumedOuterRect.getHeight();
+    sal_Int32 nDeltaWidth = static_cast<sal_Int32>(rAvailableOuterRect.getWidth() - rConsumedOuterRect.getWidth());
+    sal_Int32 nDeltaHeight = static_cast<sal_Int32>(rAvailableOuterRect.getHeight() - rConsumedOuterRect.getHeight());
     if( (aNewSize.Width + nDeltaWidth) < rAvailableOuterRect.getWidth()/3 )
-        nDeltaWidth = rAvailableOuterRect.getWidth()/3 - aNewSize.Width;
+        nDeltaWidth = static_cast<sal_Int32>(rAvailableOuterRect.getWidth()/3 - aNewSize.Width);
     aNewSize.Width += nDeltaWidth;
 
     if( (aNewSize.Height + nDeltaHeight) < rAvailableOuterRect.getHeight()/3 )
-        nDeltaHeight = rAvailableOuterRect.getHeight()/3 - aNewSize.Height;
+        nDeltaHeight = static_cast<sal_Int32>(rAvailableOuterRect.getHeight()/3 - aNewSize.Height);
     aNewSize.Height += nDeltaHeight;
 
     sal_Int32 nDiffLeft = rConsumedOuterRect.getMinX() - rAvailableOuterRect.getMinX();
