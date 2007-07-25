@@ -4,9 +4,9 @@
  *
  *  $RCSfile: tbcontrl.cxx,v $
  *
- *  $Revision: 1.79 $
+ *  $Revision: 1.80 $
  *
- *  last change: $Author: rt $ $Date: 2007-07-06 07:44:06 $
+ *  last change: $Author: rt $ $Date: 2007-07-25 08:23:00 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1108,7 +1108,7 @@ void SvxFontSizeBox_Impl::DataChanged( const DataChangedEvent& rDCEvt )
 #endif
 
 #define PALETTE_X 10
-#define PALETTE_Y 10
+#define PALETTE_Y 11
 #define PALETTE_SIZE (PALETTE_X * PALETTE_Y)
 
 SvxColorWindow_Impl::SvxColorWindow_Impl( const OUString&            rCommand,
