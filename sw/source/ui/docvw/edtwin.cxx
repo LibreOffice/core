@@ -4,9 +4,9 @@
  *
  *  $RCSfile: edtwin.cxx,v $
  *
- *  $Revision: 1.143 $
+ *  $Revision: 1.144 $
  *
- *  last change: $Author: ihi $ $Date: 2007-07-12 10:50:27 $
+ *  last change: $Author: rt $ $Date: 2007-07-25 09:37:59 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -544,7 +544,7 @@ void SwEditWin::UpdatePointer(const Point &rLPt, USHORT nModifier )
     //BOOL bExecHyperlinks = rSh.GetViewOptions()->IsExecHyperlinks() ^
     //                     (nModifier == KEY_MOD2 ? TRUE : FALSE);
 
-    const BOOL bExecHyperlinks = nModifier == KEY_MOD1;
+    const BOOL bExecHyperlinks = rView.GetDocShell()->IsReadOnly() || nModifier == KEY_MOD1;
 
     SdrView *pSdrView = rSh.GetDrawView();
     BOOL bPrefSdrPointer = FALSE;
@@ -2823,7 +2823,7 @@ void SwEditWin::MouseButtonDown(const MouseEvent& _rMEvt)
                 }
         }
 
-        const BOOL bExecHyperlinks = rMEvt.GetModifier() == KEY_MOD1;
+        const BOOL bExecHyperlinks = rView.GetDocShell()->IsReadOnly() || rMEvt.GetModifier() == KEY_MOD1;
 
         // --> FME 2004-07-30 #i32329# Enhanced selection
         BYTE nNumberOfClicks = rMEvt.GetClicks() % 4;
@@ -4113,7 +4113,7 @@ void SwEditWin::MouseButtonUp(const MouseEvent& rMEvt)
                         if( KEY_MOD1 == rMEvt.GetModifier() )
                             nFilter |= URLLOAD_NEWVIEW;
 
-                        BOOL bExecHyperlinks = rMEvt.GetModifier() == KEY_MOD1;
+                        BOOL bExecHyperlinks = rView.GetDocShell()->IsReadOnly() || rMEvt.GetModifier() == KEY_MOD1;
                         if(pApplyTempl)
                             bExecHyperlinks = FALSE;
                         SwContentAtPos aCntntAtPos( SwContentAtPos::SW_CLICKFIELD |
