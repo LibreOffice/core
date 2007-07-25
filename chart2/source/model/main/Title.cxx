@@ -4,9 +4,9 @@
  *
  *  $RCSfile: Title.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: vg $ $Date: 2007-05-22 18:41:54 $
+ *  last change: $Author: rt $ $Date: 2007-07-25 08:51:45 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -267,12 +267,14 @@ const uno::Sequence< Property > & lcl_GetPropertySequence()
 namespace chart
 {
 
-Title::Title( uno::Reference< uno::XComponentContext > const & xContext ) :
+Title::Title( uno::Reference< uno::XComponentContext > const & /* xContext */ ) :
         ::property::OPropertySet( m_aMutex ),
         m_xModifyEventForwarder( new ModifyListenerHelper::ModifyEventForwarder( m_aMutex ))
 {}
 
 Title::Title( const Title & rOther ) :
+        MutexContainer(),
+        impl::Title_Base(),
         ::property::OPropertySet( rOther, m_aMutex ),
         m_xModifyEventForwarder( new ModifyListenerHelper::ModifyEventForwarder( m_aMutex ))
 {
@@ -411,7 +413,7 @@ void SAL_CALL Title::modified( const lang::EventObject& aEvent )
 }
 
 // ____ XEventListener (base of XModifyListener) ____
-void SAL_CALL Title::disposing( const lang::EventObject& Source )
+void SAL_CALL Title::disposing( const lang::EventObject& /* Source */ )
     throw (uno::RuntimeException)
 {
     // nothing
