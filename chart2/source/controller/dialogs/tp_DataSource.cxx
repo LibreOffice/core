@@ -4,9 +4,9 @@
  *
  *  $RCSfile: tp_DataSource.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: vg $ $Date: 2007-05-22 17:44:53 $
+ *  last change: $Author: rt $ $Date: 2007-07-25 08:36:56 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -665,7 +665,8 @@ IMPL_LINK( DataSourceTabPage, MainRangeButtonClickedHdl, void *, EMPTYARG )
 {
     OSL_ASSERT( m_pCurrentRangeChoosingField == 0 );
     m_pCurrentRangeChoosingField = & m_aEDT_RANGE;
-    if( ! updateModelFromControl( m_pCurrentRangeChoosingField ))
+    if( m_aEDT_RANGE.GetText().Len() > 0 &&
+        ! updateModelFromControl( m_pCurrentRangeChoosingField ))
         return 0;
 
     SeriesEntry * pEntry = dynamic_cast< SeriesEntry * >( m_apLB_SERIES->FirstSelected());
@@ -708,7 +709,8 @@ IMPL_LINK( DataSourceTabPage, CategoriesRangeButtonClickedHdl, void *, EMPTYARG 
 {
     OSL_ASSERT( m_pCurrentRangeChoosingField == 0 );
     m_pCurrentRangeChoosingField = & m_aEDT_CATEGORIES;
-    if( ! updateModelFromControl( m_pCurrentRangeChoosingField ))
+    if( m_aEDT_CATEGORIES.GetText().Len() > 0 &&
+        ! updateModelFromControl( m_pCurrentRangeChoosingField ))
         return 0;
 
     String aStr( SchResId( m_aFT_CATEGORIES.IsVisible() ? STR_DATA_SELECT_RANGE_FOR_CATEGORIES : STR_DATA_SELECT_RANGE_FOR_DATALABELS ));
