@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ItemConverter.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: vg $ $Date: 2007-05-22 18:00:55 $
+ *  last change: $Author: rt $ $Date: 2007-07-25 08:41:02 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -185,14 +185,14 @@ void ItemConverter::FillItemSet( SfxItemSet & rOutItemSet ) const
 }
 
 void ItemConverter::FillSpecialItem(
-    USHORT nWhichId, SfxItemSet & rOutItemSet ) const
+    USHORT /*nWhichId*/, SfxItemSet & /*rOutItemSet*/ ) const
     throw( uno::Exception )
 {
     OSL_ENSURE( false, "ItemConverter: Unhandled special item found!" );
 }
 
 bool ItemConverter::ApplySpecialItem(
-    USHORT nWhichId, const SfxItemSet & rItemSet )
+    USHORT /*nWhichId*/, const SfxItemSet & /*rItemSet*/ )
     throw( uno::Exception )
 {
     OSL_ENSURE( false, "ItemConverter: Unhandled special item found!" );

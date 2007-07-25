@@ -4,9 +4,9 @@
  *
  *  $RCSfile: CharacterPropertyItemConverter.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: vg $ $Date: 2007-05-22 18:00:20 $
+ *  last change: $Author: rt $ $Date: 2007-07-25 08:40:27 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -318,7 +318,7 @@ bool CharacterPropertyItemConverter::ApplySpecialItem(
                 aPostfix = C2U( "Complex" );
 
             const SvxFontItem & rItem =
-                reinterpret_cast< const SvxFontItem & >(
+                static_cast< const SvxFontItem & >(
                     rItemSet.Get( nWhichId ));
 
             if( rItem.QueryValue( aValue, MID_FONT_FAMILY_NAME ))
@@ -367,7 +367,7 @@ bool CharacterPropertyItemConverter::ApplySpecialItem(
         case EE_CHAR_UNDERLINE:
         {
             const SvxUnderlineItem & rItem =
-                reinterpret_cast< const SvxUnderlineItem & >(
+               static_cast< const SvxUnderlineItem & >(
                     rItemSet.Get( nWhichId ));
 
             if( rItem.QueryValue( aValue, MID_UNDERLINE ))
@@ -410,7 +410,7 @@ bool CharacterPropertyItemConverter::ApplySpecialItem(
                 aPostfix = C2U( "Complex" );
 
             const SvxPostureItem & rItem =
-                reinterpret_cast< const SvxPostureItem & >(
+                static_cast< const SvxPostureItem & >(
                     rItemSet.Get( nWhichId ));
 
             if( rItem.QueryValue( aValue, MID_POSTURE ))
@@ -435,7 +435,7 @@ bool CharacterPropertyItemConverter::ApplySpecialItem(
                 aPostfix = C2U( "Complex" );
 
             const SvxWeightItem & rItem =
-                reinterpret_cast< const SvxWeightItem & >(
+                static_cast< const SvxWeightItem & >(
                     rItemSet.Get( nWhichId ));
 
             if( rItem.QueryValue( aValue, MID_WEIGHT ))
@@ -460,7 +460,7 @@ bool CharacterPropertyItemConverter::ApplySpecialItem(
                 aPostfix = C2U( "Complex" );
 
             const SvxFontHeightItem & rItem =
-                reinterpret_cast< const SvxFontHeightItem & >(
+                static_cast< const SvxFontHeightItem & >(
                     rItemSet.Get( nWhichId ));
 
             try
