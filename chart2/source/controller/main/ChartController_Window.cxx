@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ChartController_Window.cxx,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: obo $ $Date: 2007-06-11 14:58:40 $
+ *  last change: $Author: rt $ $Date: 2007-07-25 08:44:15 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -211,11 +211,32 @@ const short HITPIX=2; //hit-tolerance in pixel
         {
             //change map mode to fit new size
             awt::Size aModelPageSize = ChartModelHelper::getPageSize( m_aModel->getModel() );
+            sal_Int32 nScaleXNumerator = aLogicSize.Width();
+            sal_Int32 nScaleXDenominator = aModelPageSize.Width;
+            sal_Int32 nScaleYNumerator = aLogicSize.Height();
+            sal_Int32 nScaleYDenominator = aModelPageSize.Height;
             MapMode aNewMapMode( MAP_100TH_MM, Point(0,0)
-            , Fraction(aLogicSize.Width(),aModelPageSize.Width)
-            , Fraction(aLogicSize.Height(),aModelPageSize.Height) );
+            , Fraction(nScaleXNumerator,nScaleXDenominator)
+            , Fraction(nScaleYNumerator,nScaleYDenominator) );
             pWindow->SetMapMode(aNewMapMode);
             pWindow->SetPosSizePixel( X, Y, Width, Height, Flags );
+
+            //#i75867# poor quality of ole's alternative view with 3D scenes and zoomfactors besides 100%
+            uno::Reference< beans::XPropertySet > xProp( m_xChartView, uno::UNO_QUERY );
+            if( xProp.is() )
+            {
+                uno::Sequence< beans::PropertyValue > aZoomFactors(4);
+                aZoomFactors[0].Name = C2U("ScaleXNumerator");
+                aZoomFactors[0].Value = uno::makeAny( nScaleXNumerator );
+                aZoomFactors[1].Name = C2U("ScaleXDenominator");
+                aZoomFactors[1].Value = uno::makeAny( nScaleXDenominator );
+                aZoomFactors[2].Name = C2U("ScaleYNumerator");
+                aZoomFactors[2].Value = uno::makeAny( nScaleYNumerator );
+                aZoomFactors[3].Name = C2U("ScaleYDenominator");
+                aZoomFactors[3].Value = uno::makeAny( nScaleYDenominator );
+                xProp->setPropertyValue( C2U("ZoomFactors"), uno::makeAny( aZoomFactors ));
+            }
+
             //a correct work area is at least necessary for correct values in the position and  size dialog and for dragging area
             if(m_pDrawViewWrapper)
             {
@@ -509,7 +530,7 @@ IMPL_LINK( ChartController, DoubleClickWaitingHdl, void*, EMPTYARG )
         {
             Window::PointerState aPointerState( m_pChartWindow->GetPointerState() );
             MouseEvent aMouseEvent( aPointerState.maPos,1/*nClicks*/,
-                                    0/*nMode*/, aPointerState.mnState/*nButtons*/,
+                                    0/*nMode*/, static_cast< USHORT >( aPointerState.mnState )/*nButtons*/,
                                     0/*nModifier*/ );
             impl_SetMousePointer( aMouseEvent );
         }
@@ -688,7 +709,7 @@ void ChartController::execute_MouseButtonUp( const MouseEvent& rMEvt )
             {
                 ControllerLockGuard aCLGuard( m_aModel->getModel());
                 UndoGuard aUndoGuard( pChartDragMethod->getUndoDescription(),
-                        m_aUndoManager, m_aModel->getModel() );
+                        m_xUndoManager, m_aModel->getModel() );
 
                 if( pDrawViewWrapper->EndDragObj(false) )
                 {
@@ -721,7 +742,7 @@ void ChartController::execute_MouseButtonUp( const MouseEvent& rMEvt )
                             ActionDescriptionProvider::createDescription(
                                 eActionType,
                                 ObjectNameProvider::getName( ObjectIdentifier::getObjectType( m_aSelection.getSelectedCID() ))),
-                            m_aUndoManager, m_aModel->getModel() );
+                            m_xUndoManager, m_aModel->getModel() );
                         bool bChanged = PositionAndSizeHelper::moveObject( m_aSelection.getSelectedCID()
                                         , m_aModel->getModel()
                                         , awt::Rectangle(aObjectRect.getX(),aObjectRect.getY(),aObjectRect.getWidth(),aObjectRect.getHeight())
@@ -893,7 +914,7 @@ bool ChartController::execute_KeyInput( const KeyEvent& rKEvt )
 
     KeyCode aKeyCode( rKEvt.GetKeyCode());
     sal_uInt16 nCode = aKeyCode.GetCode();
-    bool bShift = aKeyCode.IsShift();
+//     bool bShift = aKeyCode.IsShift();
     bool bAlternate = aKeyCode.IsMod2();
 
     if( m_apAccelExecute.get() )
@@ -1060,8 +1081,8 @@ bool ChartController::execute_KeyInput( const KeyEvent& rKEvt )
                             awt::Point aPos( xShape->getPosition() );
                             awt::Size aSize( xShape->getSize() );
                             awt::Size aPageSize( ChartModelHelper::getPageSize( m_aModel->getModel() ) );
-                            aPos.X += fShiftAmountX;
-                            aPos.Y += fShiftAmountY;
+                            aPos.X = static_cast< long >( static_cast< double >( aPos.X ) + fShiftAmountX );
+                            aPos.Y = static_cast< long >( static_cast< double >( aPos.Y ) + fShiftAmountY );
                             if( aPos.X + aSize.Width > aPageSize.Width )
                                 aPos.X = aPageSize.Width - aSize.Width;
                             if( aPos.X < 0 )
@@ -1150,6 +1171,12 @@ bool ChartController::requestQuickHelp(
     ::rtl::OUString & rOutQuickHelpText,
     awt::Rectangle & rOutEqualRect )
 {
+    uno::Reference< frame::XModel > xChartModel;
+    if( m_aModel.is())
+        xChartModel.set( m_aModel->getModel());
+    if( !xChartModel.is())
+        return false;
+
     // help text
     ::rtl::OUString aCID;
     if( m_pDrawViewWrapper )
@@ -1162,7 +1189,7 @@ bool ChartController::requestQuickHelp(
     if( bResult )
     {
         // get help text
-        rOutQuickHelpText = ObjectNameProvider::getHelpText( aCID, m_aModel->getModel(), bIsBalloonHelp /* bVerbose */ );
+        rOutQuickHelpText = ObjectNameProvider::getHelpText( aCID, xChartModel, bIsBalloonHelp /* bVerbose */ );
 
         // set rectangle
         ExplicitValueProvider * pValueProvider(
@@ -1325,7 +1352,7 @@ bool ChartController::impl_moveOrResizeObject(
                 ActionDescriptionProvider::createDescription(
                     eActionType,
                     ObjectNameProvider::getName( ObjectIdentifier::getObjectType( rCID ))),
-                m_aUndoManager, xChartModel );
+                m_xUndoManager, xChartModel );
             {
                 ControllerLockGuard aCLGuard( xChartModel );
                 if( bNeedShift )
