@@ -4,9 +4,9 @@
  *
  *  $RCSfile: tp_3D_SceneIllumination.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: vg $ $Date: 2007-05-22 17:42:51 $
+ *  last change: $Author: rt $ $Date: 2007-07-25 08:35:57 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -218,6 +218,7 @@ namespace
             }
             catch( const uno::Exception & ex )
             {
+                (void)(ex); // no warning in non-debug builds
                 OSL_ENSURE( false, ::rtl::OUStringToOString(
                                 ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Property Exception caught. Message: " )) +
                                 ex.Message, RTL_TEXTENCODING_ASCII_US ).getStr());
@@ -249,6 +250,7 @@ namespace
             }
             catch( const uno::Exception & ex )
             {
+                (void)(ex); // no warning in non-debug builds
                 OSL_ENSURE( false, ::rtl::OUStringToOString(
                                 ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Property Exception caught. Message: " )) +
                                 ex.Message, RTL_TEXTENCODING_ASCII_US ).getStr());
@@ -267,6 +269,7 @@ namespace
         }
         catch( const uno::Exception & ex )
         {
+            (void)(ex); // no warning in non-debug builds
             OSL_ENSURE( false, ::rtl::OUStringToOString(
                             ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Property Exception caught. Message: " )) +
                             ex.Message, RTL_TEXTENCODING_ASCII_US ).getStr());
@@ -286,6 +289,7 @@ namespace
         }
         catch( const uno::Exception & ex )
         {
+            (void)(ex); // no warning in non-debug builds
             OSL_ENSURE( false, ::rtl::OUStringToOString(
                             ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Property Exception caught. Message: " )) +
                             ex.Message, RTL_TEXTENCODING_ASCII_US ).getStr());
