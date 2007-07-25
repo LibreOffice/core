@@ -4,9 +4,9 @@
  *
  *  $RCSfile: tp_AxisLabel.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: vg $ $Date: 2007-05-22 17:43:33 $
+ *  last change: $Author: rt $ $Date: 2007-07-25 08:36:09 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -133,7 +133,7 @@ BOOL SchAxisLabelTabPage::FillItemSet( SfxItemSet& rOutAttrs )
 
     if( m_bShowStaggeringControls )
     {
-        SvxChartTextOrder eOrder;
+        SvxChartTextOrder eOrder = CHTXTORDER_SIDEBYSIDE;
         bool bRadioButtonChecked = true;
 
         if( aRbUpDown.IsChecked())

@@ -4,9 +4,9 @@
  *
  *  $RCSfile: tp_Scale.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: vg $ $Date: 2007-05-22 17:48:21 $
+ *  last change: $Author: rt $ $Date: 2007-07-25 08:37:32 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -283,7 +283,7 @@ int SchScaleYAxisTabPage::DeactivatePage(SfxItemSet* pItemSet)
     fMin = aFmtFldMin.GetValue();
     fOrigin = aFmtFldOrigin.GetValue();
     fStepMain = aFmtFldStepMain.GetValue();
-    nStepHelp = aMtStepHelp.GetValue();
+    nStepHelp = static_cast< sal_Int32 >( aMtStepHelp.GetValue());
 
     //do some reasonable automatic correction of user input if necessary
     if (!aCbxAutoMax.IsChecked() && !aCbxAutoMin.IsChecked() &&
