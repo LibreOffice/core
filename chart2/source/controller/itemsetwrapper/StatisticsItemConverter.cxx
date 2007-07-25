@@ -4,9 +4,9 @@
  *
  *  $RCSfile: StatisticsItemConverter.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: vg $ $Date: 2007-05-22 18:02:17 $
+ *  last change: $Author: rt $ $Date: 2007-07-25 08:42:03 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -197,7 +197,9 @@ const USHORT * StatisticsItemConverter::GetWhichPairs() const
     return nStatWhichPairs;
 }
 
-bool StatisticsItemConverter::GetItemProperty( tWhichIdType nWhichId, tPropertyNameWithMemberId & rOutProperty ) const
+bool StatisticsItemConverter::GetItemProperty(
+    tWhichIdType /* nWhichId */,
+    tPropertyNameWithMemberId & /* rOutProperty */ ) const
 {
     return false;
 }
@@ -218,7 +220,7 @@ bool StatisticsItemConverter::ApplySpecialItem(
             bool bOldHasMeanValueLine = RegressionCurveHelper::hasMeanValueLine( xRegCnt );
 
             bool bNewHasMeanValueLine =
-                reinterpret_cast< const SfxBoolItem & >( rItemSet.Get( nWhichId )).GetValue();
+                static_cast< const SfxBoolItem & >( rItemSet.Get( nWhichId )).GetValue();
 
             if( bOldHasMeanValueLine != bNewHasMeanValueLine )
             {
@@ -241,7 +243,7 @@ bool StatisticsItemConverter::ApplySpecialItem(
                 lcl_GetYErrorBar( GetPropertySet() ));
 
             SvxChartKindError eErrorKind =
-                reinterpret_cast< const SvxChartKindErrorItem & >(
+                static_cast< const SvxChartKindErrorItem & >(
                     rItemSet.Get( nWhichId )).GetValue();
 
             if( !xOldErrorBarProp.is() && eErrorKind == CHERROR_NONE)
@@ -290,7 +292,7 @@ bool StatisticsItemConverter::ApplySpecialItem(
             bool bOldHasErrorBar = xOldErrorBarProp.is();
 
             double fValue =
-                reinterpret_cast< const SvxDoubleItem & >(
+                static_cast< const SvxDoubleItem & >(
                     rItemSet.Get( nWhichId )).GetValue();
             double fPos, fNeg;
             lcl_getErrorValues( xOldErrorBarProp, fPos, fNeg );
@@ -317,7 +319,7 @@ bool StatisticsItemConverter::ApplySpecialItem(
             bool bOldHasErrorBar = xOldErrorBarProp.is();
 
             double fValue =
-                reinterpret_cast< const SvxDoubleItem & >(
+                static_cast< const SvxDoubleItem & >(
                     rItemSet.Get( nWhichId )).GetValue();
             double fPos, fNeg;
             lcl_getErrorValues( xOldErrorBarProp, fPos, fNeg );
@@ -340,7 +342,7 @@ bool StatisticsItemConverter::ApplySpecialItem(
             bool bOldHasErrorBar = xOldErrorBarProp.is();
 
             double fValue =
-                reinterpret_cast< const SvxDoubleItem & >(
+                static_cast< const SvxDoubleItem & >(
                     rItemSet.Get( nWhichId )).GetValue();
             double fPos, fNeg;
             lcl_getErrorValues( xOldErrorBarProp, fPos, fNeg );
@@ -359,7 +361,7 @@ bool StatisticsItemConverter::ApplySpecialItem(
         case SCHATTR_STAT_REGRESSTYPE:
         {
             SvxChartRegress eRegress =
-                reinterpret_cast< const SvxChartRegressItem & >(
+                static_cast< const SvxChartRegressItem & >(
                     rItemSet.Get( nWhichId )).GetValue();
 
             uno::Reference< chart2::XRegressionCurveContainer > xRegCnt(
@@ -397,7 +399,7 @@ bool StatisticsItemConverter::ApplySpecialItem(
             bool bOldHasErrorBar = xOldErrorBarProp.is();
 
             SvxChartIndicate eIndicate =
-                reinterpret_cast< const SvxChartIndicateItem & >(
+                static_cast< const SvxChartIndicateItem & >(
                     rItemSet.Get( nWhichId )).GetValue();
 
             bool bNewIndPos = (eIndicate == CHINDICATE_BOTH || eIndicate == CHINDICATE_UP );
