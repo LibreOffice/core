@@ -4,9 +4,9 @@
  *
  *  $RCSfile: fuins2.cxx,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: vg $ $Date: 2007-05-22 20:06:02 $
+ *  last change: $Author: rt $ $Date: 2007-07-25 08:09:23 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -180,6 +180,11 @@ void lcl_ChartInit( const uno::Reference < embed::XEmbeddedObject >& xObj, ScVie
             aRangeListRef->Parse( aRangeString, pScDoc );
             if ( aRangeListRef->Count() )
             {
+                pScDoc->LimitChartIfAll( aRangeListRef );               // limit whole columns/rows to used area
+                String aTmpStr;
+                aRangeListRef->Format( aTmpStr, SCR_ABS_3D, pScDoc );   // update string from changed ranges
+                aRangeString = aTmpStr;
+
                 ScChartPositioner aChartPositioner( pScDoc, aRangeListRef );
                 if ( eDataRowSource == chart::ChartDataRowSource_COLUMNS )
                 {
