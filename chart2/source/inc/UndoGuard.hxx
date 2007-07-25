@@ -4,9 +4,9 @@
  *
  *  $RCSfile: UndoGuard.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: vg $ $Date: 2007-05-22 18:23:47 $
+ *  last change: $Author: rt $ $Date: 2007-07-25 08:47:36 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -35,15 +35,11 @@
 #ifndef CHART2_UNDOGUARD_HXX
 #define CHART2_UNDOGUARD_HXX
 
-#ifndef _COM_SUN_STAR_FRAME_XMODEL_HPP_
 #include <com/sun/star/frame/XModel.hpp>
-#endif
-// header for class OUString
-#ifndef _RTL_USTRING_HXX_
-#include <rtl/ustring.hxx>
-#endif
+#include <com/sun/star/chart2/XUndoManager.hpp>
 
-#include "UndoManager.hxx"
+// header for class OUString
+#include <rtl/ustring.hxx>
 
 namespace chart
 {
@@ -52,8 +48,9 @@ namespace chart
 class UndoGuard_Base
 {
 public:
-    explicit UndoGuard_Base( const rtl::OUString& rUndoMessage
-        , UndoManager& rUndoManager
+    explicit UndoGuard_Base( const rtl::OUString & rUndoMessage
+        , const ::com::sun::star::uno::Reference<
+            ::com::sun::star::chart2::XUndoManager > & xUndoManager
         , const ::com::sun::star::uno::Reference<
             ::com::sun::star::frame::XModel > & xModel );
     virtual ~UndoGuard_Base();
@@ -63,8 +60,9 @@ public:
 protected:
     ::com::sun::star::uno::Reference<
             ::com::sun::star::frame::XModel > m_xModel;
+    ::com::sun::star::uno::Reference<
+            ::com::sun::star::chart2::XUndoManager > m_xUndoManager;
 
-    UndoManager&    m_rUndoManager;
     rtl::OUString   m_aUndoString;
     bool            m_bActionPosted;
 };
@@ -77,7 +75,8 @@ class UndoGuard : public UndoGuard_Base
 {
 public:
     explicit UndoGuard( const rtl::OUString& rUndoMessage
-        , UndoManager& rUndoManager
+        , const ::com::sun::star::uno::Reference<
+            ::com::sun::star::chart2::XUndoManager > & xUndoManager
         , const ::com::sun::star::uno::Reference<
             ::com::sun::star::frame::XModel > & xModel );
     virtual ~UndoGuard();
@@ -91,7 +90,8 @@ class UndoLiveUpdateGuard : public UndoGuard_Base
 {
 public:
     explicit UndoLiveUpdateGuard( const rtl::OUString& rUndoMessage
-        , UndoManager& rUndoManager
+        , const ::com::sun::star::uno::Reference<
+            ::com::sun::star::chart2::XUndoManager > & xUndoManager
         , const ::com::sun::star::uno::Reference<
             ::com::sun::star::frame::XModel > & xModel );
     virtual ~UndoLiveUpdateGuard();
@@ -104,7 +104,8 @@ class UndoLiveUpdateGuardWithData : public UndoGuard_Base
 {
 public:
     explicit UndoLiveUpdateGuardWithData( const rtl::OUString& rUndoMessage
-        , UndoManager& rUndoManager
+        , const ::com::sun::star::uno::Reference<
+            ::com::sun::star::chart2::XUndoManager > & xUndoManager
         , const ::com::sun::star::uno::Reference<
             ::com::sun::star::frame::XModel > & xModel );
     virtual ~UndoLiveUpdateGuardWithData();
