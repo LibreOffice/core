@@ -4,9 +4,9 @@
  *
  *  $RCSfile: PieChart.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: vg $ $Date: 2007-05-22 19:16:08 $
+ *  last change: $Author: rt $ $Date: 2007-07-25 09:04:54 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -168,7 +168,7 @@ PieChart::~PieChart()
 //-----------------------------------------------------------------
 
 void SAL_CALL PieChart::setScales( const uno::Sequence< ExplicitScaleData >& rScales
-                                     , sal_Bool bSwapXAndYAxis )
+                                     , sal_Bool /* bSwapXAndYAxis */ )
                             throw (uno::RuntimeException)
 {
     DBG_ASSERT(m_nDimension<=rScales.getLength(),"Dimension of Plotter does not fit two dimension of given scale sequence");
@@ -255,7 +255,7 @@ uno::Reference< drawing::XShape > PieChart::createDataPoint(
     return xShape;
 }
 
-void PieChart::addSeries( VDataSeries* pSeries, sal_Int32 zSlot, sal_Int32 xSlot, sal_Int32 ySlot )
+void PieChart::addSeries( VDataSeries* pSeries, sal_Int32 /* zSlot */, sal_Int32 /* xSlot */, sal_Int32 /* ySlot */ )
 {
     VSeriesPlotter::addSeries( pSeries, 0, -1, 0 );
 }
@@ -310,37 +310,37 @@ double PieChart::getMaximumX()
         return m_aZSlots[0].size()+0.5+fMaxOffset;
     return 1.5+fMaxOffset;
 }
-double PieChart::getMinimumYInRange( double fMinimumX, double fMaximumX, sal_Int32 nAxisIndex )
+double PieChart::getMinimumYInRange( double /* fMinimumX */, double /* fMaximumX */, sal_Int32 /* nAxisIndex */ )
 {
     return 0.0;
 }
 
-double PieChart::getMaximumYInRange( double fMinimumX, double fMaximumX, sal_Int32 nAxisIndex )
+double PieChart::getMaximumYInRange( double /* fMinimumX */, double /* fMaximumX */, sal_Int32 /* nAxisIndex */ )
 {
     return 1.0;
 }
 
-bool PieChart::isExpandBorderToIncrementRhythm( sal_Int32 nDimensionIndex )
+bool PieChart::isExpandBorderToIncrementRhythm( sal_Int32 /* nDimensionIndex */ )
 {
     return false;
 }
 
-bool PieChart::isExpandIfValuesCloseToBorder( sal_Int32 nDimensionIndex )
+bool PieChart::isExpandIfValuesCloseToBorder( sal_Int32 /* nDimensionIndex */ )
 {
     return false;
 }
 
-bool PieChart::isExpandWideValuesToZero( sal_Int32 nDimensionIndex )
+bool PieChart::isExpandWideValuesToZero( sal_Int32 /* nDimensionIndex */ )
 {
     return false;
 }
 
-bool PieChart::isExpandNarrowValuesTowardZero( sal_Int32 nDimensionIndex )
+bool PieChart::isExpandNarrowValuesTowardZero( sal_Int32 /* nDimensionIndex */ )
 {
     return false;
 }
 
-bool PieChart::isSeperateStackingForDifferentSigns( sal_Int32 nDimensionIndex )
+bool PieChart::isSeperateStackingForDifferentSigns( sal_Int32 /* nDimensionIndex */ )
 {
     return false;
 }
