@@ -4,9 +4,9 @@
  *
  *  $RCSfile: InternalDataProvider.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: vg $ $Date: 2007-05-22 18:59:49 $
+ *  last change: $Author: rt $ $Date: 2007-07-25 08:57:46 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -322,12 +322,14 @@ Sequence< Sequence< double > > InternalData::getData( bool bDataInColumns ) cons
     if( bDataInColumns )
     {
         for( sal_Int32 i=0; i<m_nColumnCount; ++i )
-            aResult[i] = lcl_ValarrayToSequence( m_aData[ ::std::slice( i, m_nRowCount, m_nColumnCount ) ] );
+            aResult[i] = lcl_ValarrayToSequence< tDataType::value_type >(
+                m_aData[ ::std::slice( i, m_nRowCount, m_nColumnCount ) ] );
     }
     else
     {
         for( sal_Int32 i=0; i<m_nRowCount; ++i )
-            aResult[i] = lcl_ValarrayToSequence( m_aData[ ::std::slice( i*m_nColumnCount, m_nColumnCount, 1 ) ] );
+            aResult[i] = lcl_ValarrayToSequence< tDataType::value_type >(
+                m_aData[ ::std::slice( i*m_nColumnCount, m_nColumnCount, 1 ) ] );
     }
 
     return aResult;
@@ -340,12 +342,14 @@ Sequence< double > InternalData::getDataAt( sal_Int32 nIndex, bool bDataInColumn
     if( bDataInColumns )
     {
         if( nIndex < m_nColumnCount )
-            return lcl_ValarrayToSequence( m_aData[ ::std::slice( nIndex, m_nRowCount, m_nColumnCount ) ] );
+            return lcl_ValarrayToSequence< tDataType::value_type >(
+                m_aData[ ::std::slice( nIndex, m_nRowCount, m_nColumnCount ) ] );
     }
     else
     {
         if( nIndex < m_nRowCount )
-            return lcl_ValarrayToSequence( m_aData[ ::std::slice( nIndex*m_nColumnCount, m_nColumnCount, 1 ) ] );
+            return lcl_ValarrayToSequence< tDataType::value_type >(
+                m_aData[ ::std::slice( nIndex*m_nColumnCount, m_nColumnCount, 1 ) ] );
     }
 
     return Sequence< double >();
@@ -732,7 +736,7 @@ struct lcl_DataProviderRangeCreator : public unary_function< OUString, Reference
             {
                 // data provider cannot create single data sequences, but then
                 // detectArguments should work also with an empty data source
-                (void*)(&ex);
+                (void)(ex);
             }
             catch( const uno::Exception & ex )
             {
@@ -898,6 +902,7 @@ InternalDataProvider::InternalDataProvider(
 
 // copy-CTOR
 InternalDataProvider::InternalDataProvider( const InternalDataProvider & rOther ) :
+        impl::InternalDataProvider_Base(),
         m_aSequenceMap( rOther.m_aSequenceMap ),
         m_apData( new impl::InternalData( rOther.getInternalData())),
         m_bDataInColumns( rOther.m_bDataInColumns )
@@ -939,7 +944,7 @@ void InternalDataProvider::adaptMapReferences(
     const OUString & rNewRangeRepresentation )
 {
     tSequenceMapRange aRange( m_aSequenceMap.equal_range( rOldRangeRepresentation ));
-    ::std::vector< tSequenceMap::value_type > aNewElements;
+    tSequenceMap aNewElements;
     for( tSequenceMap::iterator aIt( aRange.first ); aIt != aRange.second; ++aIt )
     {
         Reference< chart2::data::XDataSequence > xSeq( aIt->second );
@@ -949,7 +954,7 @@ void InternalDataProvider::adaptMapReferences(
             if( xNamed.is())
                 xNamed->setName( rNewRangeRepresentation );
         }
-        aNewElements.push_back( tSequenceMap::value_type( rNewRangeRepresentation, aIt->second ));
+        aNewElements.insert( tSequenceMap::value_type( rNewRangeRepresentation, aIt->second ));
     }
     // erase map values for old index
     m_aSequenceMap.erase( aRange.first, aRange.second );
@@ -1026,6 +1031,12 @@ void InternalDataProvider::createDefaultData()
 }
 
 // ____ XDataProvider ____
+::sal_Bool SAL_CALL InternalDataProvider::createDataSourcePossible( const Sequence< beans::PropertyValue >& /* aArguments */ )
+    throw (uno::RuntimeException)
+{
+    return true;
+}
+
 Reference< chart2::data::XDataSource > SAL_CALL InternalDataProvider::createDataSource(
     const Sequence< beans::PropertyValue >& aArguments )
     throw (lang::IllegalArgumentException,
@@ -1183,28 +1194,33 @@ Sequence< beans::PropertyValue > SAL_CALL InternalDataProvider::detectArguments(
     return aArguments;
 }
 
+::sal_Bool SAL_CALL InternalDataProvider::createDataSequenceByRangeRepresentationPossible( const OUString& /* aRangeRepresentation */ )
+    throw (uno::RuntimeException)
+{
+    return true;
+}
+
 Reference< chart2::data::XDataSequence > SAL_CALL InternalDataProvider::createDataSequenceByRangeRepresentation(
     const OUString& aRangeRepresentation )
     throw (lang::IllegalArgumentException,
            uno::RuntimeException)
 {
     if( aRangeRepresentation.equals( lcl_aCategoriesRangeName ))
+    {
         // categories
         return createDataSequenceAndAddToMap( lcl_aCategoriesRangeName, lcl_aCategoriesRoleName );
+    }
     else if( aRangeRepresentation.match( lcl_aLabelRangePrefix ))
     {
         // label
         sal_Int32 nIndex = aRangeRepresentation.copy( lcl_aLabelRangePrefix.getLength()).toInt32();
         return createDataSequenceAndAddToMap( lcl_aLabelRangePrefix + OUString::valueOf( nIndex ));
     }
-    else
-    {
-        // data
-        sal_Int32 nIndex = aRangeRepresentation.toInt32();
-        return createDataSequenceAndAddToMap( OUString::valueOf( nIndex ));
-    }
+    // else
 
-    return Reference< chart2::data::XDataSequence >();
+    // data
+    sal_Int32 nIndex = aRangeRepresentation.toInt32();
+    return createDataSequenceAndAddToMap( OUString::valueOf( nIndex ));
 }
 
 Reference< sheet::XRangeSelection > SAL_CALL InternalDataProvider::getRangeSelection()
