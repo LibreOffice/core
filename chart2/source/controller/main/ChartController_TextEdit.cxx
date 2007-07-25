@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ChartController_TextEdit.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: vg $ $Date: 2007-05-22 18:04:08 $
+ *  last change: $Author: rt $ $Date: 2007-07-25 08:43:49 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -104,7 +104,7 @@ void ChartController::StartTextEdit()
     if(!pTextObj)
         return;
 
-    m_aUndoManager.preAction( m_aModel->getModel());
+    m_xUndoManager->preAction( m_aModel->getModel());
     SdrOutliner* pOutliner = m_pDrawViewWrapper->getOutliner();
     //pOutliner->SetRefDevice(m_pChartWindow);
     //pOutliner->SetStyleSheetPool((SfxStyleSheetPool*)pStyleSheetPool);
@@ -162,7 +162,7 @@ bool ChartController::EndTextEdit()
             ::com::sun::star::chart2::XTitle >::query( xPropSet ), m_xCC );
         try
         {
-            m_aUndoManager.postAction( C2U("Edit Text") );
+            m_xUndoManager->postAction( C2U("Edit Text") );
         }
         catch( uno::RuntimeException& e)
         {
