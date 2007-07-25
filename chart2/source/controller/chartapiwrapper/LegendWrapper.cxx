@@ -4,9 +4,9 @@
  *
  *  $RCSfile: LegendWrapper.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: rt $ $Date: 2007-07-03 13:36:32 $
+ *  last change: $Author: rt $ $Date: 2007-07-25 08:27:11 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -168,14 +168,17 @@ void WrappedLegendAlignmentProperty::setPropertyValue( const Any& rOuterValue, c
         chart2::LegendPosition eNewInnerPos(chart2::LegendPosition_LINE_END);
         if( aInnerValue >>= eNewInnerPos )
         {
-            chart2::LegendExpansion eNewExpansion = chart2::LegendExpansion_WIDE;
-            if( eNewInnerPos == chart2::LegendPosition_LINE_END || eNewInnerPos == chart2::LegendPosition_LINE_START )
-                eNewExpansion = chart2::LegendExpansion_HIGH;
+            chart2::LegendExpansion eNewExpansion =
+                ( eNewInnerPos == chart2::LegendPosition_LINE_END ||
+                  eNewInnerPos == chart2::LegendPosition_LINE_START )
+                ? chart2::LegendExpansion_HIGH
+                : chart2::LegendExpansion_WIDE;
 
-            chart2::LegendExpansion eOldExpansion( chart2::LegendExpansion_WIDE );
-            xInnerPropertySet->getPropertyValue( C2U( "Expansion" ) ) >>= eOldExpansion;
+            chart2::LegendExpansion eOldExpansion( chart2::LegendExpansion_HIGH );
+            bool bExpansionWasSet(
+                xInnerPropertySet->getPropertyValue( C2U( "Expansion" ) ) >>= eOldExpansion );
 
-            if(eOldExpansion != eNewExpansion)
+            if( !bExpansionWasSet || (eOldExpansion != eNewExpansion))
                 xInnerPropertySet->setPropertyValue( C2U( "Expansion" ), uno::makeAny( eNewExpansion ));
         }
 
