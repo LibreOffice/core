@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ChartTypeManager.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: vg $ $Date: 2007-05-22 18:46:20 $
+ *  last change: $Author: rt $ $Date: 2007-07-25 08:53:27 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -552,7 +552,7 @@ uno::Reference< uno::XInterface > SAL_CALL ChartTypeManager::createInstance(
 
 uno::Reference< uno::XInterface > SAL_CALL ChartTypeManager::createInstanceWithArguments(
     const OUString& ServiceSpecifier,
-    const uno::Sequence< uno::Any >& Arguments )
+    const uno::Sequence< uno::Any >& /* Arguments */ )
     throw (uno::Exception,
            uno::RuntimeException)
 {
