@@ -1,0 +1,98 @@
+/*************************************************************************
+ *
+ *  OpenOffice.org - a multi-platform office productivity suite
+ *
+ *  $RCSfile: XUndoHelper.idl,v $
+ *
+ *  $Revision: 1.2 $
+ *
+ *  last change: $Author: rt $ $Date: 2007-07-25 08:19:18 $
+ *
+ *  The Contents of this file are made available subject to
+ *  the terms of GNU Lesser General Public License Version 2.1.
+ *
+ *
+ *    GNU Lesser General Public License Version 2.1
+ *    =============================================
+ *    Copyright 2005 by Sun Microsystems, Inc.
+ *    901 San Antonio Road, Palo Alto, CA 94303, USA
+ *
+ *    This library is free software; you can redistribute it and/or
+ *    modify it under the terms of the GNU Lesser General Public
+ *    License version 2.1, as published by the Free Software Foundation.
+ *
+ *    This library is distributed in the hope that it will be useful,
+ *    but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ *    Lesser General Public License for more details.
+ *
+ *    You should have received a copy of the GNU Lesser General Public
+ *    License along with this library; if not, write to the Free Software
+ *    Foundation, Inc., 59 Temple Place, Suite 330, Boston,
+ *    MA  02111-1307  USA
+ *
+ ************************************************************************/
+#ifndef com_sun_star_chart2_XUndoHelper_idl
+#define com_sun_star_chart2_XUndoHelper_idl
+
+#include <com/sun/star/uno/XInterface.idl>
+#include <com/sun/star/frame/XModel.idl>
+// #include <com/sun/star/beans/PropertyValue.idl>
+
+module com
+{
+module sun
+{
+module star
+{
+module chart2
+{
+
+/** An interface for storing frame::XModel objects for container undo.
+ */
+interface XUndoHelper : ::com::sun::star::uno::XInterface
+{
+    /** call this before you change the xCurrentModel
+
+        @return a clone of the current model that can later be used to
+                restore the state of a changed model
+     */
+    ::com::sun::star::frame::XModel getModelCloneForUndo(
+        [in] ::com::sun::star::frame::XModel xModelBeforeChange );
+
+    /** call this before you change the xCurrentModel. You can pass
+        parameters to refine the information that is cloned.
+
+        @return a clone of the current model that can later be used to
+                restore the state of a changed model using the same
+                arguments in applyModelContentWithArguments.
+     */
+//     ::com::sun::star::frame::XModel getModelCloneForUndoWithArguments(
+//         [in] ::com::sun::star::frame::XModel xModelBeforeChange,
+//         [in] sequence< ::com::sun::star::beans::PropertyValue > aArguments );
+
+    /** apply the content of xModelToCopyFrom to the XModel in xModelToChange
+     */
+    void applyModelContent( [inout] ::com::sun::star::frame::XModel xModelToChange,
+                            [in] ::com::sun::star::frame::XModel xModelToCopyFrom );
+
+    /** apply the content of xModelToCopyFrom to the XModel in
+        xModelToChange. You can pass parameters to refine the
+        information that is applied.
+
+        <p>Note that xModelToCopyFrom should have been created with
+        getModelCloneForUndoWithArguments using the same arguments as
+        are passed here.</p>
+     */
+//     void applyModelContentWithArguments(
+//         [inout] ::com::sun::star::frame::XModel xModelToChange,
+//         [in] ::com::sun::star::frame::XModel xModelToCopyFrom,
+//         [in] sequence< ::com::sun::star::beans::PropertyValue > aArguments );
+};
+
+} ; // chart2
+} ; // com
+} ; // sun
+} ; // star
+
+#endif
