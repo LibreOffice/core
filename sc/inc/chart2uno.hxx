@@ -4,9 +4,9 @@
  *
  *  $RCSfile: chart2uno.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: vg $ $Date: 2007-05-22 19:37:54 $
+ *  last change: $Author: rt $ $Date: 2007-07-25 08:08:45 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -129,6 +129,10 @@ public:
 
     // XDataProvider ---------------------------------------------------------
 
+    virtual ::sal_Bool SAL_CALL createDataSourcePossible(
+        const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >& aArguments )
+        throw (::com::sun::star::uno::RuntimeException);
+
     virtual ::com::sun::star::uno::Reference<
         ::com::sun::star::chart2::data::XDataSource > SAL_CALL createDataSource(
             const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >& aArguments )
@@ -138,6 +142,10 @@ public:
         ::com::sun::star::beans::PropertyValue > SAL_CALL detectArguments(
             const ::com::sun::star::uno::Reference< ::com::sun::star::chart2::data::XDataSource >& xDataSource )
             throw (::com::sun::star::uno::RuntimeException);
+
+    virtual ::sal_Bool SAL_CALL createDataSequenceByRangeRepresentationPossible(
+        const ::rtl::OUString& aRangeRepresentation )
+        throw (::com::sun::star::uno::RuntimeException);
 
     virtual ::com::sun::star::uno::Reference<
         ::com::sun::star::chart2::data::XDataSequence > SAL_CALL createDataSequenceByRangeRepresentation(
