@@ -4,9 +4,9 @@
  *
  *  $RCSfile: WrappedStatisticProperties.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: vg $ $Date: 2007-05-22 17:24:08 $
+ *  last change: $Author: rt $ $Date: 2007-07-25 08:29:19 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -726,8 +726,8 @@ Reference< beans::XPropertySet > WrappedStatisticPropertySetProperty::getValueFr
 }
 
 void WrappedStatisticPropertySetProperty::setValueToSeries(
-    const Reference< beans::XPropertySet >& xSeriesPropertySet
-    , Reference< beans::XPropertySet > xNewValue ) const
+    const Reference< beans::XPropertySet >& /* xSeriesPropertySet */
+    , Reference< beans::XPropertySet > /* xNewValue */ ) const
 {
     OSL_ENSURE( false, "Trying to set a read-only property" );
 }
