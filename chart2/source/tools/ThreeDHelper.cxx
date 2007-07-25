@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ThreeDHelper.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2007-07-03 13:44:51 $
+ *  last change: $Author: rt $ $Date: 2007-07-25 09:00:51 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -184,7 +184,6 @@ bool lcl_isLightScheme( const uno::Reference< beans::XPropertySet >& xDiagramPro
         xDiagramProps->getPropertyValue( C2U("RightAngledAxes")) >>= bRightAngledAxes;
         if(!bRightAngledAxes)
         {
-            uno::Reference< chart2::XDiagram > xDiagram( xDiagramProps, uno::UNO_QUERY );
             if( ChartTypeHelper::isSupportingRightAngledAxes(
                     DiagramHelper::getChartTypeByIndex( xDiagram, 0 ) ) )
             {
@@ -230,7 +229,6 @@ void lcl_setLightsForScheme( const uno::Reference< beans::XPropertySet >& xDiagr
         xDiagramProps->getPropertyValue( C2U("RightAngledAxes")) >>= bRightAngledAxes;
         if(!bRightAngledAxes)
         {
-            uno::Reference< chart2::XDiagram > xDiagram( xDiagramProps, uno::UNO_QUERY );
             if( ChartTypeHelper::isSupportingRightAngledAxes( xChartType ) )
             {
                 ::basegfx::B3DHomMatrix aRotation( lcl_getCompleteRotationMatrix( xDiagramProps ) );
@@ -691,7 +689,7 @@ void ThreeDHelper::getRoundedEdgesAndObjectLines(
         bool bDifferentRoundedEdges = false;
         bool bDifferentObjectLines = false;
 
-        drawing::LineStyle aLineStyle;
+        drawing::LineStyle aLineStyle( drawing::LineStyle_SOLID );
 
         ::std::vector< uno::Reference< XDataSeries > > aSeriesList(
             DiagramHelper::getDataSeriesFromDiagram( xDiagram ) );
