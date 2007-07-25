@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ChartView.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: vg $ $Date: 2007-05-22 19:22:55 $
+ *  last change: $Author: rt $ $Date: 2007-07-25 09:06:07 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -251,6 +251,12 @@ private: //member
 
     //better performance for big data
     ::com::sun::star::awt::Size m_aPageResolution;
+
+    //#i75867# poor quality of ole's alternative view with 3D scenes and zoomfactors besides 100%
+    sal_Int32 m_nScaleXNumerator;
+    sal_Int32 m_nScaleXDenominator;
+    sal_Int32 m_nScaleYNumerator;
+    sal_Int32 m_nScaleYDenominator;
 };
 
 //.............................................................................
