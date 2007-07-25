@@ -4,9 +4,9 @@
  *
  *  $RCSfile: SchXMLExport.cxx,v $
  *
- *  $Revision: 1.88 $
+ *  $Revision: 1.89 $
  *
- *  last change: $Author: hr $ $Date: 2007-06-27 14:47:51 $
+ *  last change: $Author: rt $ $Date: 2007-07-25 08:06:32 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -3298,21 +3298,16 @@ void SchXMLExportHelper::InitRangeSegmentationProperties( const Reference< chart
             {
                 Reference< chart2::data::XDataSource > xDataSource( lcl_pressUsedDataIntoRectangularFormat( xChartDoc, mbHasCategoryLabels ));
                 Sequence< beans::PropertyValue > aArgs( xDataProvider->detectArguments( xDataSource ));
+                ::rtl::OUString sCellRange, sBrokenRange;
+                bool bBrokenRangeAvailable = false;
                 for( sal_Int32 i=0; i<aArgs.getLength(); ++i )
                 {
                     if( aArgs[i].Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("CellRangeRepresentation")))
+                        aArgs[i].Value >>= sCellRange;
+                    else if( aArgs[i].Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("BrokenCellRangeForExport")))
                     {
-                        ::rtl::OUString sAddressFromDataProvider;
-                        aArgs[i].Value >>= sAddressFromDataProvider;
-                        // convert format to XML-conform one
-                        if( sAddressFromDataProvider.getLength() > 0 )
-                        {
-                            Reference< chart2::data::XRangeXMLConversion > xConversion( xDataProvider, uno::UNO_QUERY );
-                            if( xConversion.is())
-                                msChartAddress = xConversion->convertRangeToXML( sAddressFromDataProvider );
-                            else
-                                msChartAddress = sAddressFromDataProvider;
-                        }
+                        if( aArgs[i].Value >>= sBrokenRange )
+                            bBrokenRangeAvailable = true;
                     }
                     else if( aArgs[i].Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("DataRowSource")))
                     {
@@ -3326,6 +3321,18 @@ void SchXMLExportHelper::InitRangeSegmentationProperties( const Reference< chart
                         aArgs[i].Value >>= maSequenceMapping;
                     else if( aArgs[i].Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("TableNumberList")))
                         aArgs[i].Value >>= msTableNumberList;
+                }
+
+                // #i79009# For Writer we have to export a broken version of the
+                // range, where every row number is noe too large, so that older
+                // version can correctly read those files.
+                msChartAddress = (bBrokenRangeAvailable ? sBrokenRange : sCellRange);
+                if( msChartAddress.getLength() > 0 )
+                {
+                    // convert format to XML-conform one
+                    Reference< chart2::data::XRangeXMLConversion > xConversion( xDataProvider, uno::UNO_QUERY );
+                    if( xConversion.is())
+                        msChartAddress = xConversion->convertRangeToXML( msChartAddress );
                 }
             }
         }
