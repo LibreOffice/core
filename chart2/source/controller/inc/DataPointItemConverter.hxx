@@ -4,9 +4,9 @@
  *
  *  $RCSfile: DataPointItemConverter.hxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: vg $ $Date: 2007-05-22 17:53:07 $
+ *  last change: $Author: rt $ $Date: 2007-07-25 08:39:12 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -81,7 +81,8 @@ public:
             ::std::auto_ptr< ::com::sun::star::awt::Size >(),
         bool bDataSeries = false,
         bool bUseSpecialFillColor = false,
-        sal_Int32 nSpecialFillColor = 0 );
+        sal_Int32 nSpecialFillColor = 0,
+        bool bOverwriteLabelsForAttributedDataPointsAlso=false );
 
     virtual ~DataPointItemConverter();
 
@@ -101,6 +102,7 @@ private:
     ::std::vector< ItemConverter * >    m_aConverters;
     NumberFormatterWrapper *            m_pNumberFormatterWrapper;
     bool                                m_bDataSeries;
+    bool                                m_bOverwriteLabelsForAttributedDataPointsAlso;
     bool                                m_bColorPerPoint;
     bool                                m_bUseSpecialFillColor;
     sal_Int32                           m_nSpecialFillColor;
