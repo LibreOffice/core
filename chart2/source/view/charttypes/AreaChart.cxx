@@ -4,9 +4,9 @@
  *
  *  $RCSfile: AreaChart.cxx,v $
  *
- *  $Revision: 1.47 $
+ *  $Revision: 1.48 $
  *
- *  last change: $Author: obo $ $Date: 2007-06-11 15:03:07 $
+ *  last change: $Author: rt $ $Date: 2007-07-25 09:04:11 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -738,9 +738,8 @@ void AreaChart::createShapes()
                         }
                     }
 
-                    bool bCreateSymbol = m_bSymbol;
-                    Symbol* pSymbolProperties = (*aSeriesIter)->getSymbolProperties( nIndex );
-                    bCreateSymbol = pSymbolProperties && (pSymbolProperties->Style != SymbolStyle_NONE);
+                    Symbol* pSymbolProperties = m_bSymbol ? (*aSeriesIter)->getSymbolProperties( nIndex ) : 0;
+                    bool bCreateSymbol = pSymbolProperties && (pSymbolProperties->Style != SymbolStyle_NONE);
 
                     if( !bCreateSymbol && !bCreateErrorBar && !pSeries->getDataPointLabelIfLabel(nIndex) )
                         continue;
