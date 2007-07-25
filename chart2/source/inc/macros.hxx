@@ -4,9 +4,9 @@
  *
  *  $RCSfile: macros.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: vg $ $Date: 2007-05-22 18:25:29 $
+ *  last change: $Author: rt $ $Date: 2007-07-25 08:48:28 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -52,7 +52,7 @@
     ex.Message, RTL_TEXTENCODING_ASCII_US ).getStr())
 #else
 //avoid compilation warnings
-#define ASSERT_EXCEPTION(ex) ex.Context.is();
+#define ASSERT_EXCEPTION(ex) (void)(ex);
 #endif
 
 #define U2C(ouString) (::rtl::OUStringToOString(ouString,RTL_TEXTENCODING_ASCII_US).getStr())
