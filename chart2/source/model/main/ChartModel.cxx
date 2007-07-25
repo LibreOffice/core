@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ChartModel.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: obo $ $Date: 2007-06-11 14:59:54 $
+ *  last change: $Author: rt $ $Date: 2007-07-25 08:49:07 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -47,6 +47,7 @@
 #include "RangeHighlighter.hxx"
 #include "DisposeHelper.hxx"
 #include "ControllerLockGuard.hxx"
+#include "ObjectIdentifier.hxx"
 
 #ifndef INCLUDED_COMPHELPER_INLINE_CONTAINER_HXX
 #include <comphelper/InlineContainer.hxx>
@@ -186,7 +187,8 @@ ChartModel::ChartModel(uno::Reference<uno::XComponentContext > const & xContext)
 }
 
 ChartModel::ChartModel( const ChartModel & rOther )
-    : m_aLifeTimeManager( this, this )
+    : impl::ChartModel_Base()
+    , m_aLifeTimeManager( this, this )
     , m_bReadOnly( rOther.m_bReadOnly )
     , m_bModified( rOther.m_bModified )
     , m_nInLoad(0)
@@ -507,9 +509,7 @@ APPHELPER_XSERVICEINFO_IMPL(ChartModel,CHART_MODEL_SERVICE_IMPLEMENTATION_NAME)
             rtl::OUString aObjectCID;
             if( aSel >>= aObjectCID )
             {
-                OSL_ENSURE( false, "getCurrentSelection(): not implemented yet.");
-                //todo get the accessory model object
-                //xReturn = ;
+                xReturn.set( ObjectIdentifier::getObjectPropertySet( aObjectCID, Reference< XChartDocument >(this)));
             }
         }
     }
@@ -568,7 +568,7 @@ APPHELPER_XSERVICEINFO_IMPL(ChartModel,CHART_MODEL_SERVICE_IMPLEMENTATION_NAME)
     if( m_aLifeTimeManager.impl_isDisposedOrClosed() )
         return; //behave passive if already disposed or closed
 
-    m_aLifeTimeManager.m_aListenerContainer.addInterface( ::getCppuType((const uno::Reference< util::XCloseListener >*)0), xListener );
+    m_aLifeTimeManager.m_aListenerContainer.addInterface( ::getCppuType((const uno::Reference< lang::XEventListener >*)0), xListener );
 }
 
         void SAL_CALL ChartModel
@@ -578,7 +578,7 @@ APPHELPER_XSERVICEINFO_IMPL(ChartModel,CHART_MODEL_SERVICE_IMPLEMENTATION_NAME)
     if( m_aLifeTimeManager.impl_isDisposedOrClosed() )
         return; //behave passive if already disposed or closed
 
-    m_aLifeTimeManager.m_aListenerContainer.removeInterface( ::getCppuType((const uno::Reference< util::XCloseListener >*)0), xListener );
+    m_aLifeTimeManager.m_aListenerContainer.removeInterface( ::getCppuType((const uno::Reference< lang::XEventListener >*)0), xListener );
     return;
 }
 
@@ -826,12 +826,14 @@ APPHELPER_XSERVICEINFO_IMPL(ChartModel,CHART_MODEL_SERVICE_IMPLEMENTATION_NAME)
             throw (uno::RuntimeException)
 {
     OSL_ASSERT( m_pImplChartModel.get() != 0 );
-    // /--
-    MutexGuard aGuard( m_aModelMutex );
-    m_pImplChartModel->RemoveAllDiagrams();
-    m_pImplChartModel->AppendDiagram( xDiagram );
+    {
+        // /--
+        MutexGuard aGuard( m_aModelMutex );
+        m_pImplChartModel->RemoveAllDiagrams();
+        m_pImplChartModel->AppendDiagram( xDiagram );
+        // \--
+    }
     setModified( sal_True );
-    // \--
 }
 
         void SAL_CALL ChartModel
@@ -872,11 +874,13 @@ sal_Bool SAL_CALL ChartModel::hasInternalDataProvider()
             throw (uno::RuntimeException)
 {
     OSL_ASSERT( m_pImplChartModel.get() != 0 );
-    // /--
-    MutexGuard aGuard( m_aModelMutex );
-    m_pImplChartModel->SetDataProvider( xProvider );
+    {
+        // /--
+        MutexGuard aGuard( m_aModelMutex );
+        m_pImplChartModel->SetDataProvider( xProvider );
+        // \--
+    }
     setModified( sal_True );
-    // \--
 }
 
             void SAL_CALL ChartModel
@@ -884,11 +888,13 @@ sal_Bool SAL_CALL ChartModel::hasInternalDataProvider()
             throw (uno::RuntimeException)
 {
     OSL_ASSERT( m_pImplChartModel.get() != 0 );
-    // /--
-    MutexGuard aGuard( m_aModelMutex );
-    m_pImplChartModel->SetNumberFormatsSupplier( xSupplier );
+    {
+        // /--
+        MutexGuard aGuard( m_aModelMutex );
+        m_pImplChartModel->SetNumberFormatsSupplier( xSupplier );
+        // \--
+    }
     setModified( sal_True );
-    // \--
 }
 
         void SAL_CALL ChartModel
@@ -897,20 +903,22 @@ sal_Bool SAL_CALL ChartModel::hasInternalDataProvider()
                    uno::RuntimeException)
 {
     OSL_ASSERT( m_pImplChartModel.get() != 0 );
-    // /--
-    MutexGuard aGuard( m_aModelMutex );
-    lockControllers();
-    try
     {
-        m_pImplChartModel->SetArguments( aArguments, true /* bSetData */ );
+        // /--
+        MutexGuard aGuard( m_aModelMutex );
+        lockControllers();
+        try
+        {
+            m_pImplChartModel->SetArguments( aArguments, true /* bSetData */ );
+        }
+        catch( const uno::Exception & ex )
+        {
+            ASSERT_EXCEPTION( ex );
+        }
+        unlockControllers();
+        // \--
     }
-    catch( const uno::Exception & ex )
-    {
-        ASSERT_EXCEPTION( ex );
-    }
-    unlockControllers();
     setModified( sal_True );
-    // \--
 }
 
         Sequence< OUString > SAL_CALL ChartModel
@@ -946,11 +954,13 @@ sal_Bool SAL_CALL ChartModel::hasInternalDataProvider()
             throw (uno::RuntimeException)
 {
     OSL_ASSERT( m_pImplChartModel.get() != 0 );
-    // /--
-    MutexGuard aGuard( m_aModelMutex );
-    m_pImplChartModel->SetChartTypeManager( xNewManager );
+    {
+        // /--
+        MutexGuard aGuard( m_aModelMutex );
+        m_pImplChartModel->SetChartTypeManager( xNewManager );
+        // \--
+    }
     setModified( sal_True );
-    // \--
 }
 
         uno::Reference< chart2::XChartTypeManager > SAL_CALL ChartModel
@@ -992,11 +1002,13 @@ void SAL_CALL ChartModel::setTitle(
     throw (uno::RuntimeException)
 {
     OSL_ASSERT( m_pImplChartModel.get() != 0 );
-    // /--
-    MutexGuard aGuard( m_aModelMutex );
-    m_pImplChartModel->SetTitle( Title );
+    {
+        // /--
+        MutexGuard aGuard( m_aModelMutex );
+        m_pImplChartModel->SetTitle( Title );
+        // \--
+    }
     setModified( sal_True );
-    // \--
 }
 
 void ChartModel::impl_createOldModelAgg()
@@ -1072,6 +1084,7 @@ awt::Size SAL_CALL ChartModel::getVisualAreaSize( ::sal_Int64 nAspect )
 {
     OSL_ENSURE( nAspect == embed::Aspects::MSOLE_CONTENT,
                 "No aspects other than content are supported" );
+    (void)(nAspect); // avoid warning in non-debug builds
     // other possible aspects are MSOLE_THUMBNAIL, MSOLE_ICON and MSOLE_DOCPRINT
 
     return m_aVisualAreaSize;
@@ -1085,6 +1098,7 @@ embed::VisualRepresentation SAL_CALL ChartModel::getPreferredVisualRepresentatio
 {
     OSL_ENSURE( nAspect == embed::Aspects::MSOLE_CONTENT,
                 "No aspects other than content are supported" );
+    (void)(nAspect); // avoid warning in non-debug builds
 
     embed::VisualRepresentation aResult;
 
@@ -1124,6 +1138,7 @@ embed::VisualRepresentation SAL_CALL ChartModel::getPreferredVisualRepresentatio
 {
     OSL_ENSURE( nAspect == embed::Aspects::MSOLE_CONTENT,
                 "No aspects other than content are supported" );
+    (void)(nAspect); // avoid warning in non-debug builds
     return embed::EmbedMapUnits::ONE_100TH_MM;
 }
 
@@ -1277,6 +1292,7 @@ Reference< uno::XInterface > SAL_CALL ChartModel::createInstanceWithArguments(
             throw( uno::Exception, uno::RuntimeException )
 {
     OSL_ENSURE( Arguments.getLength(), "createInstanceWithArguments: Warning: Arguments are ignored" );
+    (void)(Arguments); // avoid warning in non-debug builds
     return createInstance( rServiceSpecifier );
 }
 
@@ -1357,6 +1373,13 @@ void SAL_CALL ChartModel::setParent( const Reference< uno::XInterface >& Parent 
 {
     if( Parent != m_xParent )
         m_xParent.set( Parent, uno::UNO_QUERY );
+}
+
+// ____ XUndoManager ____
+Reference< chart2::XUndoManager > SAL_CALL ChartModel::getUndoManager()
+    throw (uno::RuntimeException)
+{
+    return m_pImplChartModel->GetUndoManager();
 }
 
 }  // namespace chart
