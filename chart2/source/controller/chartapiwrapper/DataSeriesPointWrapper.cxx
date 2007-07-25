@@ -4,9 +4,9 @@
  *
  *  $RCSfile: DataSeriesPointWrapper.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: vg $ $Date: 2007-05-22 17:17:29 $
+ *  last change: $Author: rt $ $Date: 2007-07-25 08:26:45 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -155,7 +155,7 @@ void lcl_AddPropertiesToVector_SeriesOnly(
                   | beans::PropertyAttribute::MAYBEDEFAULT ));
 }
 
-const uno::Sequence< Property > & lcl_GetPropertySequence( DataSeriesPointWrapper::eType eType )
+const uno::Sequence< Property > & lcl_GetPropertySequence( DataSeriesPointWrapper::eType _eType )
 {
     static uno::Sequence< Property > aSeriesPropSeq;
     static uno::Sequence< Property > aPointPropSeq;
@@ -163,14 +163,14 @@ const uno::Sequence< Property > & lcl_GetPropertySequence( DataSeriesPointWrappe
     // /--
     MutexGuard aGuard( ::osl::Mutex::getGlobalMutex() );
     uno::Sequence< Property >& rPropSeq =
-        (eType == DataSeriesPointWrapper::DATA_SERIES) ? aSeriesPropSeq : aPointPropSeq;
+        (_eType == DataSeriesPointWrapper::DATA_SERIES) ? aSeriesPropSeq : aPointPropSeq;
     if( 0 == rPropSeq.getLength() )
     {
         // get properties
         ::std::vector< ::com::sun::star::beans::Property > aProperties;
 
         lcl_AddPropertiesToVector_PointProperties( aProperties );
-        if( eType == DataSeriesPointWrapper::DATA_SERIES )
+        if( _eType == DataSeriesPointWrapper::DATA_SERIES )
         {
             lcl_AddPropertiesToVector_SeriesOnly( aProperties );
             WrappedStatisticProperties::addProperties( aProperties );
@@ -228,7 +228,7 @@ WrappedAttachedAxisProperty::~WrappedAttachedAxisProperty()
 {
 }
 
-Any WrappedAttachedAxisProperty::getPropertyDefault( const Reference< beans::XPropertyState >& xInnerPropertyState ) const
+Any WrappedAttachedAxisProperty::getPropertyDefault( const Reference< beans::XPropertyState >& /*xInnerPropertyState*/ ) const
                         throw (beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException)
 {
     Any aRet;
@@ -552,15 +552,15 @@ void SAL_CALL DataSeriesPointWrapper::initialize( const uno::Sequence< uno::Any 
         m_eType = DATA_SERIES;
 }
 
-DataSeriesPointWrapper::DataSeriesPointWrapper( eType eType
+DataSeriesPointWrapper::DataSeriesPointWrapper( eType _eType
             , sal_Int32 nSeriesIndexInNewAPI
             , sal_Int32 nPointIndex //ignored for series
             , ::boost::shared_ptr< Chart2ModelContact > spChart2ModelContact )
         : m_spChart2ModelContact( spChart2ModelContact )
         , m_aEventListenerContainer( m_aMutex )
-        , m_eType( DATA_SERIES )
+        , m_eType( _eType )
         , m_nSeriesIndexInNewAPI( nSeriesIndexInNewAPI )
-        , m_nPointIndex( 0 )
+        , m_nPointIndex( (_eType == DATA_POINT) ? nPointIndex : -1 )
         , m_xDataSeries(0)
 {
 }
@@ -595,7 +595,7 @@ void SAL_CALL DataSeriesPointWrapper::removeEventListener(
 }
 
 // ____ XEventListener ____
-void SAL_CALL DataSeriesPointWrapper::disposing( const lang::EventObject& Source )
+void SAL_CALL DataSeriesPointWrapper::disposing( const lang::EventObject& /*Source*/ )
     throw (uno::RuntimeException)
 {
 }
@@ -749,6 +749,7 @@ Any SAL_CALL DataSeriesPointWrapper::getPropertyDefault( const ::rtl::OUString& 
     }
     catch( beans::UnknownPropertyException& ex )
     {
+        (void)(ex);
         aRet = WrappedPropertySet::getPropertyDefault( rPropertyName );
     }
     return aRet;
