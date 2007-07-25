@@ -4,9 +4,9 @@
  *
  *  $RCSfile: PageBackground.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: obo $ $Date: 2007-06-11 15:01:05 $
+ *  last change: $Author: rt $ $Date: 2007-07-25 08:51:18 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -128,6 +128,8 @@ PageBackground::PageBackground( const uno::Reference< uno::XComponentContext > &
 {}
 
 PageBackground::PageBackground( const PageBackground & rOther ) :
+        MutexContainer(),
+        impl::PageBackground_Base(),
         ::property::OPropertySet( rOther, m_aMutex ),
     m_xContext( rOther.m_xContext ),
     m_xModifyEventForwarder( new ModifyListenerHelper::ModifyEventForwarder( m_aMutex ))
@@ -235,7 +237,7 @@ void SAL_CALL PageBackground::modified( const lang::EventObject& aEvent )
 }
 
 // ____ XEventListener (base of XModifyListener) ____
-void SAL_CALL PageBackground::disposing( const lang::EventObject& Source )
+void SAL_CALL PageBackground::disposing( const lang::EventObject& /* Source */ )
     throw (uno::RuntimeException)
 {
     // nothing
