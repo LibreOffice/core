@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ImplChartModel.hxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: obo $ $Date: 2007-06-11 15:00:52 $
+ *  last change: $Author: rt $ $Date: 2007-07-25 08:50:50 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -35,50 +35,23 @@
 #ifndef CHART_IMPLCHARTMODEL_HXX
 #define CHART_IMPLCHARTMODEL_HXX
 
-#ifndef _COM_SUN_STAR_CHART2_DATA_XDATASOURCE_HPP_
 #include <com/sun/star/chart2/data/XDataSource.hpp>
-#endif
-#ifndef _COM_SUN_STAR_CHART2_XDATASERIES_HPP_
 #include <com/sun/star/chart2/XDataSeries.hpp>
-#endif
-#ifndef _COM_SUN_STAR_CHART2_DATA_XLABELEDDATASEQUENCE_HPP_
 #include <com/sun/star/chart2/data/XLabeledDataSequence.hpp>
-#endif
-#ifndef _COM_SUN_STAR_CHART2_XDIAGRAM_HPP_
 #include <com/sun/star/chart2/XDiagram.hpp>
-#endif
-#ifndef _COM_SUN_STAR_CHART2_DATA_XDATAPROVIDER_HPP_
 #include <com/sun/star/chart2/data/XDataProvider.hpp>
-#endif
-#ifndef _COM_SUN_STAR_CHART2_XCHARTTYPEMANAGER_HPP_
 #include <com/sun/star/chart2/XChartTypeManager.hpp>
-#endif
-#ifndef _COM_SUN_STAR_CHART2_XCHARTTYPETEMPLATE_HPP_
 #include <com/sun/star/chart2/XChartTypeTemplate.hpp>
-#endif
-#ifndef _COM_SUN_STAR_CHART2_XTITLE_HPP_
 #include <com/sun/star/chart2/XTitle.hpp>
-#endif
-#ifndef _COM_SUN_STAR_CHART2_XCHARTDOCUMENT_HPP_
 #include <com/sun/star/chart2/XChartDocument.hpp>
-#endif
+#include <com/sun/star/chart2/XUndoManager.hpp>
 
-#ifndef _COM_SUN_STAR_CONTAINER_XNAMECONTAINER_HPP_
 #include <com/sun/star/container/XNameContainer.hpp>
-#endif
-#ifndef _COM_SUN_STAR_CONTAINER_NOSUCHELEMENTEXCEPTION_HPP_
 #include <com/sun/star/container/NoSuchElementException.hpp>
-#endif
-#ifndef _COM_SUN_STAR_IO_IOEXCEPTION_HPP_
 #include <com/sun/star/io/IOException.hpp>
-#endif
-#ifndef _COM_SUN_STAR_UTIL_XNUMBERFORMATSSUPPLIER_HPP_
 #include <com/sun/star/util/XNumberFormatsSupplier.hpp>
-#endif
 
-#ifndef _CPPUHELPER_WEAKREF_HXX_
 #include <cppuhelper/weakref.hxx>
-#endif
 
 #include "ChartData.hxx"
 
@@ -195,6 +168,9 @@ public:
     ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >
         GetPageBackground();
 
+    ::com::sun::star::uno::Reference< ::com::sun::star::chart2::XUndoManager >
+        GetUndoManager();
+
     ::std::vector< ::com::sun::star::uno::Reference<
             ::com::sun::star::chart2::data::XLabeledDataSequence > > GetData();
 
@@ -270,6 +246,8 @@ private:
     bool                                  m_bIsDisposed;
     ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >
                                           m_xPageBackground;
+    ::com::sun::star::uno::Reference< ::com::sun::star::chart2::XUndoManager >
+                                          m_xUndoManager;
 
     ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameContainer > m_xDashTable;
     ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameContainer > m_xGradientTable;
