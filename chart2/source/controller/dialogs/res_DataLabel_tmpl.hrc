@@ -4,9 +4,9 @@
  *
  *  $RCSfile: res_DataLabel_tmpl.hrc,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: vg $ $Date: 2007-05-22 17:39:35 $
+ *  last change: $Author: rt $ $Date: 2007-07-25 08:34:37 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -36,6 +36,7 @@
 #define _CHART2_RESOURCE_DATALABEL_HXX
 
 #include "HelpIds.hrc"
+#include "res_DataLabel_IDs.hrc"
 
 #define RESOURCE_DATALABEL( xpos, ypos ) \
 CheckBox CB_VALUE \
