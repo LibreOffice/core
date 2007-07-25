@@ -4,9 +4,9 @@
  *
  *  $RCSfile: RangeSelectionHelper.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: vg $ $Date: 2007-05-22 17:29:07 $
+ *  last change: $Author: rt $ $Date: 2007-07-25 08:31:20 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -297,58 +297,16 @@ bool RangeSelectionHelper::verifyCellRange( const OUString & rRangeStr )
     if( ! xDataProvider.is())
         return false;
 
-    bool bResult = false;
+    return xDataProvider->createDataSequenceByRangeRepresentationPossible( rRangeStr );
+}
 
-    // 1. check if range is valid by converting it to XML format
-    Reference< chart2::data::XRangeXMLConversion > xConversion( xDataProvider, uno::UNO_QUERY );
-    if( xConversion.is())
-    {
-        try
-        {
-            xConversion->convertRangeToXML( rRangeStr );
-            bResult = true;
-        }
-        catch( const uno::Exception & ex )
-        {
-            bResult = false;
-        }
-    }
-    else
-    {
-        // 2. check via the XCellRangesAccess interface
-        Reference< sheet::XCellRangesAccess > xRangesAccess( getCellRangesAccess());
-        if( xRangesAccess.is() )
-        {
-            // @todo: the interface should provide a method to determine if a cell
-            // range is correct, rather than waiting for an exception
-            try
-            {
-                xRangesAccess->getCellRangesByName( rRangeStr );
-                bResult = true;
-            }
-            catch( const uno::Exception & )
-            {
-                bResult = false;
-            }
-        }
-        else
-        {
-            // 3. check via createDataSequenceByRangeRepresentation. Note, that
-            // this may only work for "simple" ranges (in Writer)
-            try
-            {
-                // if creation fails, we get an exception
-                xDataProvider->createDataSequenceByRangeRepresentation( rRangeStr );
-                bResult = true;
-            }
-            catch( const uno::Exception & ex )
-            {
-                bResult = false;
-            }
-        }
-    }
+bool RangeSelectionHelper::verifyArguments( const Sequence< beans::PropertyValue > & rArguments )
+{
+    Reference< chart2::data::XDataProvider > xDataProvider( m_xChartDocument->getDataProvider());
+    if( ! xDataProvider.is())
+        return false;
 
-    return bResult;
+    return xDataProvider->createDataSourcePossible( rArguments );
 }
 
 OUString RangeSelectionHelper::getCellRangeContent( const OUString & rRangeStr )
@@ -364,8 +322,9 @@ OUString RangeSelectionHelper::getCellRangeContent( const OUString & rRangeStr )
         {
             aResult = lcl_getTextFromRanges( xRangesAccess->getCellRangesByName( rRangeStr ) );
         }
-        catch( uno::Exception )
+        catch( const uno::Exception & ex )
         {
+            ASSERT_EXCEPTION( ex );
         }
     }
 
