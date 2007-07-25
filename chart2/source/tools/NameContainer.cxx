@@ -4,9 +4,9 @@
  *
  *  $RCSfile: NameContainer.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: vg $ $Date: 2007-05-22 19:02:13 $
+ *  last change: $Author: rt $ $Date: 2007-07-25 08:58:49 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -70,7 +70,8 @@ NameContainer::NameContainer( const ::com::sun::star::uno::Type& rType, const OU
 
 NameContainer::NameContainer(
     const NameContainer & rOther )
-    : m_aType( rOther.m_aType )
+    : impl::NameContainer_Base()
+    , m_aType( rOther.m_aType )
     , m_aServicename( rOther.m_aServicename )
     , m_aImplementationName( rOther.m_aImplementationName )
     , m_aMap( rOther.m_aMap )
