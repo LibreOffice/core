@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ChartController.hxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: vg $ $Date: 2007-05-22 18:03:06 $
+ *  last change: $Author: rt $ $Date: 2007-07-25 08:42:47 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -37,93 +37,43 @@
 
 #include "LifeTime.hxx"
 #include "ServiceMacros.hxx"
-#include "UndoManager.hxx"
 #include "CommandDispatchContainer.hxx"
 #include "SelectionHelper.hxx"
 
 // header for enum SdrDragMode
-#ifndef _SVDTYPES_HXX
 #include <svx/svdtypes.hxx>
-#endif
 // header for class Timer
-#ifndef _SV_TIMER_HXX
 #include <vcl/timer.hxx>
-#endif
-
-#ifndef _COM_SUN_STAR_ACCESSIBILITY_XACCESSIBLE_HPP_
-#include <com/sun/star/accessibility/XAccessible.hpp>
-#endif
-#ifndef _COM_SUN_STAR_FRAME_XCONTROLLER_HPP_
-#include <com/sun/star/frame/XController.hpp>
-#endif
-#ifndef _COM_SUN_STAR_FRAME_XDISPATCHPROVIDER_HPP_
-#include <com/sun/star/frame/XDispatchProvider.hpp>
-#endif
-#ifndef _COM_SUN_STAR_FRAME_XDISPATCH_HPP_
-#include <com/sun/star/frame/XDispatch.hpp>
-#endif
-#ifndef _COM_SUN_STAR_VIEW_XSELECTIONSUPPLIER_HPP_
-#include <com/sun/star/view/XSelectionSupplier.hpp>
-#endif
-#ifndef _COM_SUN_STAR_UI_XCONTEXTMENUINTERCEPTION_HPP_
-#include <com/sun/star/ui/XContextMenuInterception.hpp>
-#endif
-#ifndef _COM_SUN_STAR_UNO_XWEAK_HPP_
-#include <com/sun/star/uno/XWeak.hpp>
-#endif
-#ifndef _COM_SUN_STAR_SDBC_XCLOSELISTENER_HPP_
-#include <com/sun/star/util/XCloseListener.hpp>
-#endif
-#ifndef _COM_SUN_STAR_SDBC_XCLOSEABLE_HPP_
-#include <com/sun/star/util/XCloseable.hpp>
-#endif
-#ifndef _COM_SUN_STAR_LANG_XINITIALIZATION_HPP_
-#include <com/sun/star/lang/XInitialization.hpp>
-#endif
-#ifndef _COM_SUN_STAR_LANG_XSERVICEINFO_HPP_
-#include <com/sun/star/lang/XServiceInfo.hpp>
-#endif
-#ifndef _COM_SUN_STAR_UNO_XCOMPONENTCONTEXT_HPP_
-#include <com/sun/star/uno/XComponentContext.hpp>
-#endif
-#ifndef _COM_SUN_STAR_lang_XMULTISERVICEFACTORY_HPP_
-#include <com/sun/star/lang/XMultiServiceFactory.hpp>
-#endif
-#ifndef _COM_SUN_STAR_UTIL_XMODIFYLISTENER_HPP_
-#include <com/sun/star/util/XModifyListener.hpp>
-#endif
-#ifndef _COM_SUN_STAR_UTIL_XMODECHANGELISTENER_HPP_
-#include <com/sun/star/util/XModeChangeListener.hpp>
-#endif
-#ifndef _COM_SUN_STAR_AWT_SIZE_HPP_
-#include <com/sun/star/awt/Size.hpp>
-#endif
-#ifndef _COM_SUN_STAR_UTIL_XURLTRANSFORMER_HPP_
-#include <com/sun/star/util/XURLTransformer.hpp>
-#endif
-#ifndef _COM_SUN_STAR_FRAME_XLAYOUTMANAGERLISTENER_HPP_
-#include <com/sun/star/frame/XLayoutManagerListener.hpp>
-#endif
-#ifndef _COM_SUN_STAR_FRAME_XLAYOUTMANAGEREVENTBROADCASTER_HPP_
-#include <com/sun/star/frame/XLayoutManagerEventBroadcaster.hpp>
-#endif
-
-#ifndef _CPPUHELPER_IMPLBASE12_HXX_
-#include <cppuhelper/implbase12.hxx>
-#endif
-
 // header for class MouseEvent
-#ifndef _SV_EVENT_HXX
 #include <vcl/event.hxx>
-#endif
+
+#include <cppuhelper/implbase12.hxx>
+
+#include <com/sun/star/accessibility/XAccessible.hpp>
+#include <com/sun/star/chart2/XUndoManager.hpp>
+#include <com/sun/star/frame/XController.hpp>
+#include <com/sun/star/frame/XDispatchProvider.hpp>
+#include <com/sun/star/frame/XDispatch.hpp>
+#include <com/sun/star/view/XSelectionSupplier.hpp>
+#include <com/sun/star/ui/XContextMenuInterception.hpp>
+#include <com/sun/star/uno/XWeak.hpp>
+#include <com/sun/star/util/XCloseListener.hpp>
+#include <com/sun/star/util/XCloseable.hpp>
+#include <com/sun/star/lang/XInitialization.hpp>
+#include <com/sun/star/lang/XServiceInfo.hpp>
+#include <com/sun/star/uno/XComponentContext.hpp>
+#include <com/sun/star/lang/XMultiServiceFactory.hpp>
+#include <com/sun/star/util/XModifyListener.hpp>
+#include <com/sun/star/util/XModeChangeListener.hpp>
+#include <com/sun/star/awt/Size.hpp>
+#include <com/sun/star/util/XURLTransformer.hpp>
+#include <com/sun/star/frame/XLayoutManagerListener.hpp>
+#include <com/sun/star/frame/XLayoutManagerEventBroadcaster.hpp>
 
 #include <memory>
 #include <boost/shared_ptr.hpp>
 #include <set>
 
-//=============================================================================
-/** this is an example implementation for the service ::com::sun::star::frame::Controller
-*/
 
 class SdrModel;
 
@@ -517,8 +467,7 @@ public:
     //-----------------------------------------------------------------
     //-----------------------------------------------------------------
 
-    static bool isObjectDeleteable( const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XController > & xController
-                                  , const ::com::sun::star::uno::Any& rSelection );
+    static bool isObjectDeleteable( const ::com::sun::star::uno::Any& rSelection );
 
 public:
     //-----------------------------------------------------------------
@@ -621,7 +570,7 @@ private:
 
     bool volatile       m_bConnectingToView;
 
-    UndoManager         m_aUndoManager;
+    ::com::sun::star::uno::Reference< ::com::sun::star::chart2::XUndoManager > m_xUndoManager;
     /// needed for dispatching URLs in FeatureStateEvents
     mutable ::com::sun::star::uno::Reference< ::com::sun::star::util::XURLTransformer > m_xURLTransformer;
 
