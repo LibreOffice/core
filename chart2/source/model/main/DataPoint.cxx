@@ -4,9 +4,9 @@
  *
  *  $RCSfile: DataPoint.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: vg $ $Date: 2007-05-22 18:33:22 $
+ *  last change: $Author: rt $ $Date: 2007-07-25 08:49:31 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -114,6 +114,8 @@ DataPoint::DataPoint( const uno::Reference< beans::XPropertySet > & rParentPrope
 {}
 
 DataPoint::DataPoint( const DataPoint & rOther ) :
+        MutexContainer(),
+        impl::DataPoint_Base(),
         ::property::OPropertySet( rOther, m_aMutex ),
         m_xModifyEventForwarder( new ModifyListenerHelper::ModifyEventForwarder( m_aMutex ))
 {
