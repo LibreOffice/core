@@ -4,9 +4,9 @@
  *
  *  $RCSfile: BaseGFXHelper.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2007-07-03 13:43:56 $
+ *  last change: $Author: rt $ $Date: 2007-07-25 08:55:06 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -95,14 +95,16 @@ awt::Point B2IRectangleToAWTPoint( const ::basegfx::B2IRectangle& rB2IRectangle 
 
 awt::Size B2IRectangleToAWTSize( const ::basegfx::B2IRectangle& rB2IRectangle )
 {
-    return awt::Size( rB2IRectangle.getWidth(), rB2IRectangle.getHeight() );
+    return awt::Size( static_cast< sal_Int32 >( rB2IRectangle.getWidth()),
+                      static_cast< sal_Int32 >( rB2IRectangle.getHeight()));
 }
 
 awt::Rectangle B2IRectangleToAWTRectangle(
     const ::basegfx::B2IRectangle& rB2IRectangle )
 {
-    return awt::Rectangle( rB2IRectangle.getMinX(), rB2IRectangle.getMinY()
-        , rB2IRectangle.getWidth(), rB2IRectangle.getHeight() );
+    return awt::Rectangle( rB2IRectangle.getMinX(), rB2IRectangle.getMinY(),
+                           static_cast< sal_Int32 >( rB2IRectangle.getWidth()),
+                           static_cast< sal_Int32 >( rB2IRectangle.getHeight()));
 }
 
 B3DVector Direction3DToB3DVector( const Direction3D& rDirection )
