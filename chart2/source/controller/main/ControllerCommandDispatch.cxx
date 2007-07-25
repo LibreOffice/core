@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ControllerCommandDispatch.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: vg $ $Date: 2007-05-22 18:06:56 $
+ *  last change: $Author: rt $ $Date: 2007-07-25 08:45:04 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -183,7 +183,7 @@ void ControllerState::update(
             ObjectIdentifier::getDataSeriesForCID(
                 aSelObjCID, xModel ) );
 
-        bIsDeleteableObjectSelected = ChartController::isObjectDeleteable( xController, aSelObj );
+        bIsDeleteableObjectSelected = ChartController::isObjectDeleteable( aSelObj );
 
         bMayMoveSeriesForward = DiagramHelper::isSeriesMoveable(
             ChartModelHelper::findDiagram( xModel ),
@@ -523,7 +523,7 @@ void SAL_CALL ControllerCommandDispatch::disposing()
 }
 
 // ____ XEventListener (base of XModifyListener) ____
-void SAL_CALL ControllerCommandDispatch::disposing( const lang::EventObject& Source )
+void SAL_CALL ControllerCommandDispatch::disposing( const lang::EventObject& /* Source */ )
     throw (uno::RuntimeException)
 {
     m_xController.clear();

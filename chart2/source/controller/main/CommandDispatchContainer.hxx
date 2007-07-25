@@ -4,9 +4,9 @@
  *
  *  $RCSfile: CommandDispatchContainer.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: vg $ $Date: 2007-05-22 18:06:27 $
+ *  last change: $Author: rt $ $Date: 2007-07-25 08:44:52 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -35,24 +35,13 @@
 #ifndef CHART2_COMMANDDISPATCHCONTAINER_HXX
 #define CHART2_COMMANDDISPATCHCONTAINER_HXX
 
-#include "UndoManager.hxx"
-
-#ifndef _COM_SUN_STAR_UNO_XCOMPONENTCONTEXT_HPP_
 #include <com/sun/star/uno/XComponentContext.hpp>
-#endif
-#ifndef _COM_SUN_STAR_FRAME_XDISPATCH_HPP_
+#include <com/sun/star/chart2/XUndoManager.hpp>
 #include <com/sun/star/frame/XDispatch.hpp>
-#endif
-#ifndef _COM_SUN_STAR_FRAME_XMODEL_HPP_
 #include <com/sun/star/frame/XModel.hpp>
-#endif
-#ifndef _COM_SUN_STAR_FRAME_DISPATCHDESCRIPTOR_HPP_
 #include <com/sun/star/frame/DispatchDescriptor.hpp>
-#endif
 
-#ifndef _CPPUHELPER_INTERFACECONTAINER_HXX_
 #include <cppuhelper/interfacecontainer.hxx>
-#endif
 
 #include <set>
 #include <map>
@@ -99,7 +88,9 @@ public:
     void setModel(
         const ::com::sun::star::uno::Reference<
             ::com::sun::star::frame::XModel > & xModel );
-    void setUndoManager( UndoManager * pUndoManager );
+//     void setUndoManager(
+//         const ::com::sun::star::uno::Reference<
+//             ::com::sun::star::chart2::XUndoManager > & xUndoManager );
 
     /** Set a fallback dispatcher that is used for all commands contained in
         rFallbackCommands
@@ -144,7 +135,7 @@ private:
 
     ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext > m_xContext;
     ::com::sun::star::uno::Reference< ::com::sun::star::frame::XModel > m_xModel;
-    UndoManager * m_pUndoManager;
+    ::com::sun::star::uno::Reference< ::com::sun::star::chart2::XUndoManager > m_xUndoManager;
 
     ::com::sun::star::uno::Reference< ::com::sun::star::frame::XDispatch > m_xFallbackDispatcher;
     ::std::set< ::rtl::OUString >                                          m_aFallbackCommands;

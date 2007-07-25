@@ -4,9 +4,9 @@
  *
  *  $RCSfile: CommandDispatchContainer.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: vg $ $Date: 2007-05-22 18:06:17 $
+ *  last change: $Author: rt $ $Date: 2007-07-25 08:44:40 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -76,10 +76,11 @@ void CommandDispatchContainer::setModel(
     m_xModel.set( xModel );
 }
 
-void CommandDispatchContainer::setUndoManager( UndoManager * pUndoManager )
-{
-    m_pUndoManager = pUndoManager;
-}
+// void CommandDispatchContainer::setUndoManager(
+//     const Reference< chart2::XUndoManager > & xUndoManager )
+// {
+//     m_xUndoManager = xUndoManager;
+// }
 
 void CommandDispatchContainer::setFallbackDispatch(
     const Reference< frame::XDispatch > xFallbackDispatch,
@@ -104,7 +105,7 @@ Reference< frame::XDispatch > CommandDispatchContainer::getDispatchForURL(
         if( rURL.Path.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "Undo" ))
             || rURL.Path.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "Redo" )))
         {
-            CommandDispatch * pDispatch = new UndoCommandDispatch( m_xContext, m_pUndoManager, m_xModel );
+            CommandDispatch * pDispatch = new UndoCommandDispatch( m_xContext, m_xModel );
             xResult.set( pDispatch );
             pDispatch->initialize();
             m_aCachedDispatches[ C2U(".uno:Undo") ].set( xResult );

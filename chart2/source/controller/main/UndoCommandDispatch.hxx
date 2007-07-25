@@ -4,9 +4,9 @@
  *
  *  $RCSfile: UndoCommandDispatch.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: vg $ $Date: 2007-05-22 18:09:58 $
+ *  last change: $Author: rt $ $Date: 2007-07-25 08:46:07 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -36,11 +36,9 @@
 #define CHART2_UNDOCOMMANDDISPATCH_HXX
 
 #include "CommandDispatch.hxx"
-#include "UndoManager.hxx"
 
-#ifndef _COM_SUN_STAR_FRAME_XMODEL_HPP_
 #include <com/sun/star/frame/XModel.hpp>
-#endif
+#include <com/sun/star/chart2/XUndoManager.hpp>
 
 namespace chart
 {
@@ -56,7 +54,6 @@ public:
     explicit UndoCommandDispatch(
         const ::com::sun::star::uno::Reference<
             ::com::sun::star::uno::XComponentContext > & xContext,
-        UndoManager * pUndoManager,
         const ::com::sun::star::uno::Reference<
             ::com::sun::star::frame::XModel > & xModel );
     virtual ~UndoCommandDispatch();
@@ -85,9 +82,10 @@ protected:
         const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XStatusListener > & xSingleListener );
 
 private:
-    UndoManager * m_pUndoManager;
     ::com::sun::star::uno::Reference<
             ::com::sun::star::frame::XModel > m_xModel;
+    ::com::sun::star::uno::Reference<
+            ::com::sun::star::chart2::XUndoManager > m_xUndoManager;
 };
 
 } //  namespace chart
