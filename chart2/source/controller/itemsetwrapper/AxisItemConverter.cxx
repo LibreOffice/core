@@ -4,9 +4,9 @@
  *
  *  $RCSfile: AxisItemConverter.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: vg $ $Date: 2007-05-22 18:00:06 $
+ *  last change: $Author: rt $ $Date: 2007-07-25 08:40:16 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -386,7 +386,7 @@ bool AxisItemConverter::ApplySpecialItem( USHORT nWhichId, const SfxItemSet & rI
     switch( nWhichId )
     {
         case SCHATTR_AXIS_AUTO_MAX:
-            if( (reinterpret_cast< const SfxBoolItem & >(
+            if( (static_cast< const SfxBoolItem & >(
                      rItemSet.Get( nWhichId )).GetValue() ))
             {
                 aScale.Maximum.clear();
@@ -397,7 +397,7 @@ bool AxisItemConverter::ApplySpecialItem( USHORT nWhichId, const SfxItemSet & rI
 
         case SCHATTR_AXIS_MAX:
             // only if auto if false
-            if( ! (reinterpret_cast< const SfxBoolItem & >(
+            if( ! (static_cast< const SfxBoolItem & >(
                        rItemSet.Get( SCHATTR_AXIS_AUTO_MAX )).GetValue() ))
             {
                 rItemSet.Get( nWhichId ).QueryValue( aValue );
@@ -411,7 +411,7 @@ bool AxisItemConverter::ApplySpecialItem( USHORT nWhichId, const SfxItemSet & rI
             break;
 
         case SCHATTR_AXIS_AUTO_MIN:
-            if( (reinterpret_cast< const SfxBoolItem & >(
+            if( (static_cast< const SfxBoolItem & >(
                      rItemSet.Get( nWhichId )).GetValue() ))
             {
                 aScale.Minimum.clear();
@@ -422,7 +422,7 @@ bool AxisItemConverter::ApplySpecialItem( USHORT nWhichId, const SfxItemSet & rI
 
         case SCHATTR_AXIS_MIN:
             // only if auto if false
-            if( ! (reinterpret_cast< const SfxBoolItem & >(
+            if( ! (static_cast< const SfxBoolItem & >(
                        rItemSet.Get( SCHATTR_AXIS_AUTO_MIN )).GetValue() ))
             {
                 rItemSet.Get( nWhichId ).QueryValue( aValue );
@@ -445,7 +445,7 @@ bool AxisItemConverter::ApplySpecialItem( USHORT nWhichId, const SfxItemSet & rI
                   (xServiceName->getServiceName()).equals(
                       C2U( "com.sun.star.chart2.LogarithmicScaling" )));
 
-            if( (reinterpret_cast< const SfxBoolItem & >(
+            if( (static_cast< const SfxBoolItem & >(
                      rItemSet.Get( nWhichId )).GetValue() ))
             {
                 // logarithm is true
@@ -469,7 +469,7 @@ bool AxisItemConverter::ApplySpecialItem( USHORT nWhichId, const SfxItemSet & rI
 
         // Increment
         case SCHATTR_AXIS_AUTO_STEP_MAIN:
-            if( (reinterpret_cast< const SfxBoolItem & >(
+            if( (static_cast< const SfxBoolItem & >(
                      rItemSet.Get( nWhichId )).GetValue() ))
             {
                 aScale.IncrementData.Distance.clear();
@@ -480,7 +480,7 @@ bool AxisItemConverter::ApplySpecialItem( USHORT nWhichId, const SfxItemSet & rI
 
         case SCHATTR_AXIS_STEP_MAIN:
             // only if auto if false
-            if( ! (reinterpret_cast< const SfxBoolItem & >(
+            if( ! (static_cast< const SfxBoolItem & >(
                        rItemSet.Get( SCHATTR_AXIS_AUTO_STEP_MAIN )).GetValue() ))
             {
                 rItemSet.Get( nWhichId ).QueryValue( aValue );
@@ -495,7 +495,7 @@ bool AxisItemConverter::ApplySpecialItem( USHORT nWhichId, const SfxItemSet & rI
 
         // SubIncrement
         case SCHATTR_AXIS_AUTO_STEP_HELP:
-            if( (reinterpret_cast< const SfxBoolItem & >(
+            if( (static_cast< const SfxBoolItem & >(
                      rItemSet.Get( nWhichId )).GetValue() ) &&
                 aScale.IncrementData.SubIncrements.getLength() > 0 &&
                 aScale.IncrementData.SubIncrements[0].IntervalCount.hasValue() )
@@ -508,7 +508,7 @@ bool AxisItemConverter::ApplySpecialItem( USHORT nWhichId, const SfxItemSet & rI
 
         case SCHATTR_AXIS_STEP_HELP:
             // only if auto if false
-            if( ! (reinterpret_cast< const SfxBoolItem & >(
+            if( ! (static_cast< const SfxBoolItem & >(
                        rItemSet.Get( SCHATTR_AXIS_AUTO_STEP_HELP )).GetValue() ) &&
                 aScale.IncrementData.SubIncrements.getLength() > 0 )
             {
@@ -526,7 +526,7 @@ bool AxisItemConverter::ApplySpecialItem( USHORT nWhichId, const SfxItemSet & rI
 
         case SCHATTR_AXIS_AUTO_ORIGIN:
         {
-            if( (reinterpret_cast< const SfxBoolItem & >(
+            if( (static_cast< const SfxBoolItem & >(
                      rItemSet.Get( nWhichId )).GetValue() ))
             {
                 aScale.Origin.clear();
@@ -538,7 +538,7 @@ bool AxisItemConverter::ApplySpecialItem( USHORT nWhichId, const SfxItemSet & rI
         case SCHATTR_AXIS_ORIGIN:
         {
             // only if auto is false
-            if( ! (reinterpret_cast< const SfxBoolItem & >(
+            if( ! (static_cast< const SfxBoolItem & >(
                        rItemSet.Get( SCHATTR_AXIS_AUTO_ORIGIN )).GetValue() ))
             {
                 rItemSet.Get( nWhichId ).QueryValue( aValue );
@@ -556,7 +556,7 @@ bool AxisItemConverter::ApplySpecialItem( USHORT nWhichId, const SfxItemSet & rI
         {
             // convert int to double (divided by 100)
             double fVal = static_cast< double >(
-                reinterpret_cast< const SfxInt32Item & >(
+                static_cast< const SfxInt32Item & >(
                     rItemSet.Get( nWhichId )).GetValue()) / 100.0;
             double fOldVal = 0.0;
             bool bPropExisted =
@@ -577,13 +577,13 @@ bool AxisItemConverter::ApplySpecialItem( USHORT nWhichId, const SfxItemSet & rI
             if( m_pExplicitScale )
             {
                 bool bUseSourceFormat =
-                    (reinterpret_cast< const SfxBoolItem & >(
+                    (static_cast< const SfxBoolItem & >(
                         rItemSet.Get( SID_ATTR_NUMBERFORMAT_SOURCE )).GetValue() );
 
                 if( ! bUseSourceFormat )
                 {
                     sal_Int32 nFmt = static_cast< sal_Int32 >(
-                        reinterpret_cast< const SfxUInt32Item & >(
+                        static_cast< const SfxUInt32Item & >(
                             rItemSet.Get( nWhichId )).GetValue());
 
                     aValue = uno::makeAny(nFmt);
@@ -600,7 +600,7 @@ bool AxisItemConverter::ApplySpecialItem( USHORT nWhichId, const SfxItemSet & rI
         case SID_ATTR_NUMBERFORMAT_SOURCE:
         {
             bool bUseSourceFormat =
-                (reinterpret_cast< const SfxBoolItem & >(
+                (static_cast< const SfxBoolItem & >(
                     rItemSet.Get( nWhichId )).GetValue() );
             bool bNumberFormatIsSet = ( GetPropertySet()->getPropertyValue( C2U( "NumberFormat" )).hasValue());
 
@@ -609,13 +609,11 @@ bool AxisItemConverter::ApplySpecialItem( USHORT nWhichId, const SfxItemSet & rI
             {
                 if( ! bUseSourceFormat )
                 {
-                    sal_Int32 nTest = 0;
-
                     SfxItemState aState = rItemSet.GetItemState( SID_ATTR_NUMBERFORMAT_VALUE );
                     if( aState == SFX_ITEM_SET )
                     {
                         sal_Int32 nFormatKey = static_cast< sal_Int32 >(
-                        reinterpret_cast< const SfxUInt32Item & >(
+                        static_cast< const SfxUInt32Item & >(
                             rItemSet.Get( SID_ATTR_NUMBERFORMAT_VALUE )).GetValue());
                         aValue <<= nFormatKey;
                     }

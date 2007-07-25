@@ -4,9 +4,9 @@
  *
  *  $RCSfile: TitleItemConverter.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: vg $ $Date: 2007-05-22 18:02:28 $
+ *  last change: $Author: rt $ $Date: 2007-07-25 08:42:13 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -214,7 +214,7 @@ bool TitleItemConverter::ApplySpecialItem(
         {
             // convert int to double (divided by 100)
             double fVal = static_cast< double >(
-                reinterpret_cast< const SfxInt32Item & >(
+                static_cast< const SfxInt32Item & >(
                     rItemSet.Get( nWhichId )).GetValue()) / 100.0;
             double fOldVal = 0.0;
             bool bPropExisted =

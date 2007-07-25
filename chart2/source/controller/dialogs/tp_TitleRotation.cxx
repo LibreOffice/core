@@ -4,9 +4,9 @@
  *
  *  $RCSfile: tp_TitleRotation.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: vg $ $Date: 2007-05-22 17:49:40 $
+ *  last change: $Author: rt $ $Date: 2007-07-25 08:38:37 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -90,7 +90,6 @@ BOOL SchAlignmentTabPage::FillItemSet(SfxItemSet& rOutAttrs)
 
 void SchAlignmentTabPage::Reset(const SfxItemSet& rInAttrs)
 {
-    const SfxPoolItem *pPoolItem = NULL;
     const SfxPoolItem* pItem = GetItem( rInAttrs, SCHATTR_TEXT_DEGREES );
 
     sal_Int32 nDegrees = pItem ? ((const SfxInt32Item*)pItem)->GetValue() : 0;

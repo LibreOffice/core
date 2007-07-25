@@ -4,9 +4,9 @@
  *
  *  $RCSfile: GraphicPropertyItemConverter.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: vg $ $Date: 2007-05-22 18:00:42 $
+ *  last change: $Author: rt $ $Date: 2007-07-25 08:40:50 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -555,7 +555,7 @@ bool GraphicPropertyItemConverter::ApplySpecialItem(
             if( lcl_supportsFillProperties( m_eGraphicObjectType ))
             {
                 const ::rtl::OUString aModePropName = C2U("FillBitmapMode");
-                bool bStretched = reinterpret_cast< const XFillBmpStretchItem & >(
+                bool bStretched = static_cast< const XFillBmpStretchItem & >(
                     rItemSet.Get( XATTR_FILLBMP_STRETCH )).GetValue();
                 drawing::BitmapMode aMode =
                     (bStretched ? drawing::BitmapMode_STRETCH : drawing::BitmapMode_NO_REPEAT);
@@ -573,7 +573,7 @@ bool GraphicPropertyItemConverter::ApplySpecialItem(
             if( lcl_supportsFillProperties( m_eGraphicObjectType ))
             {
                 const ::rtl::OUString aModePropName = C2U("FillBitmapMode");
-                bool bTiled = reinterpret_cast< const XFillBmpTileItem & >(
+                bool bTiled = static_cast< const XFillBmpTileItem & >(
                     rItemSet.Get( XATTR_FILLBMP_TILE )).GetValue();
                 drawing::BitmapMode aMode =
                     (bTiled ? drawing::BitmapMode_REPEAT : drawing::BitmapMode_NO_REPEAT);
@@ -622,7 +622,7 @@ bool GraphicPropertyItemConverter::ApplySpecialItem(
                           : C2U( "FillTransparenceGradientName" );
 
                     const XFillFloatTransparenceItem & rItem =
-                        reinterpret_cast< const XFillFloatTransparenceItem & >(
+                        static_cast< const XFillFloatTransparenceItem & >(
                             rItemSet.Get( nWhichId ));
 
                     if( rItem.IsEnabled() &&
@@ -672,7 +672,7 @@ bool GraphicPropertyItemConverter::ApplySpecialItem(
                     ? C2U( "GradientStepCount" )
                     : C2U( "FillGradientStepCount" );
 
-                sal_Int16 nStepCount = ( reinterpret_cast< const XGradientStepCountItem & >(
+                sal_Int16 nStepCount = ( static_cast< const XGradientStepCountItem & >(
                             rItemSet.Get( nWhichId ))).GetValue();
 
                 aValue <<= nStepCount;
@@ -697,7 +697,7 @@ bool GraphicPropertyItemConverter::ApplySpecialItem(
                     : C2U( "LineDashName" );
 
                 const XLineDashItem & rItem =
-                    reinterpret_cast< const XLineDashItem & >(
+                    static_cast< const XLineDashItem & >(
                         rItemSet.Get( nWhichId ));
 
                 if( rItem.QueryValue( aValue, MID_NAME ))
@@ -730,7 +730,7 @@ bool GraphicPropertyItemConverter::ApplySpecialItem(
                     : C2U( "FillGradientName" );
 
                 const XFillGradientItem & rItem =
-                    reinterpret_cast< const XFillGradientItem & >(
+                    static_cast< const XFillGradientItem & >(
                         rItemSet.Get( nWhichId ));
 
                 if( rItem.QueryValue( aValue, MID_NAME ))
@@ -763,7 +763,7 @@ bool GraphicPropertyItemConverter::ApplySpecialItem(
                     : C2U( "FillHatchName" );
 
                 const XFillHatchItem & rItem =
-                    reinterpret_cast< const XFillHatchItem & >(
+                    static_cast< const XFillHatchItem & >(
                         rItemSet.Get( nWhichId ));
 
                 if( rItem.QueryValue( aValue, MID_NAME ))
@@ -791,7 +791,7 @@ bool GraphicPropertyItemConverter::ApplySpecialItem(
             if( lcl_supportsFillProperties( m_eGraphicObjectType ))
             {
                 const XFillBitmapItem & rItem =
-                    reinterpret_cast< const XFillBitmapItem & >(
+                    static_cast< const XFillBitmapItem & >(
                         rItemSet.Get( nWhichId ));
 
                 if( rItem.QueryValue( aValue, MID_NAME ))
@@ -827,7 +827,7 @@ bool GraphicPropertyItemConverter::ApplySpecialItem(
                       : C2U( "LineTransparence" );
 
                 const XLineTransparenceItem & rItem =
-                    reinterpret_cast< const XLineTransparenceItem & >(
+                    static_cast< const XLineTransparenceItem & >(
                         rItemSet.Get( nWhichId ));
 
                 if( rItem.QueryValue( aValue ))
@@ -864,7 +864,7 @@ bool GraphicPropertyItemConverter::ApplySpecialItem(
                       : C2U( "FillTransparence" );
 
                 const XFillTransparenceItem & rItem =
-                    reinterpret_cast< const XFillTransparenceItem & >(
+                    static_cast< const XFillTransparenceItem & >(
                         rItemSet.Get( nWhichId ));
 
                 if( rItem.QueryValue( aValue ))
@@ -972,7 +972,7 @@ void GraphicPropertyItemConverter::ApplyBitmapItem(
             case XATTR_FILLBITMAP:
             {
                 const XFillBitmapItem & rBitmapItem =
-                    reinterpret_cast< const XFillBitmapItem & >(
+                    static_cast< const XFillBitmapItem & >(
                         rItemSet.Get( nWhichId ));
                 rBitmapItem.QueryValue( aValue, MID_GRAFURL );
                 aValue >>= aBitmap.aURL;
@@ -988,10 +988,10 @@ void GraphicPropertyItemConverter::ApplyBitmapItem(
             case XATTR_FILLBMP_STRETCH:
             {
                 const XFillBmpStretchItem & rStretchItem =
-                    reinterpret_cast< const XFillBmpStretchItem & >(
+                    static_cast< const XFillBmpStretchItem & >(
                         rItemSet.Get( XATTR_FILLBMP_STRETCH ));
                 const XFillBmpTileItem & rTileItem =
-                    reinterpret_cast< const XFillBmpTileItem & >(
+                    static_cast< const XFillBmpTileItem & >(
                         rItemSet.Get( XATTR_FILLBMP_TILE ));
 
                 if( rTileItem.GetValue() != FALSE )
