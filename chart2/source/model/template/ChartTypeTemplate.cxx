@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ChartTypeTemplate.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: vg $ $Date: 2007-05-22 18:46:33 $
+ *  last change: $Author: rt $ $Date: 2007-07-25 08:53:40 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -357,7 +357,7 @@ void SAL_CALL ChartTypeTemplate::changeDiagramData(
 
 sal_Bool SAL_CALL ChartTypeTemplate::matchesTemplate(
     const Reference< chart2::XDiagram >& xDiagram,
-    sal_Bool bAdaptProperties )
+    sal_Bool /* bAdaptProperties */ )
     throw (uno::RuntimeException)
 {
     sal_Bool bResult = sal_False;
@@ -420,8 +420,8 @@ Reference< chart2::XDataInterpreter > SAL_CALL ChartTypeTemplate::getDataInterpr
 void SAL_CALL ChartTypeTemplate::applyStyle(
     const Reference< chart2::XDataSeries >& xSeries,
     ::sal_Int32 nChartTypeIndex,
-    ::sal_Int32 nSeriesIndex,
-    ::sal_Int32 nSeriesCount )
+    ::sal_Int32 /* nSeriesIndex */,
+    ::sal_Int32 /* nSeriesCount */ )
     throw (uno::RuntimeException)
 {
     // sset stacking mode
@@ -487,7 +487,7 @@ sal_Int32 ChartTypeTemplate::getDimension() const
     return 2;
 }
 
-StackMode ChartTypeTemplate::getStackMode( sal_Int32 nChartTypeIndex ) const
+StackMode ChartTypeTemplate::getStackMode( sal_Int32 /* nChartTypeIndex */ ) const
 {
     return StackMode_NONE;
 }
@@ -629,7 +629,7 @@ void ChartTypeTemplate::adaptScales(
     }
 }
 
-void ChartTypeTemplate::adaptDiagram( const Reference< XDiagram > & xDiagram )
+void ChartTypeTemplate::adaptDiagram( const Reference< XDiagram > & /* xDiagram */ )
 {
     return;
 }
@@ -722,7 +722,7 @@ void ChartTypeTemplate::FillDiagram(
     const Sequence< Sequence< Reference< XDataSeries > > >& aSeriesSeq,
     Reference< data::XLabeledDataSequence > xCategories,
     const Sequence< Reference< XChartType > >& aOldChartTypesSeq,
-    bool bCreate )
+    bool /* bCreate */ )
 {
     adaptDiagram( xDiagram );
 
