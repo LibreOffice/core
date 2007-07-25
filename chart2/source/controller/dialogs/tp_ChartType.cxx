@@ -4,9 +4,9 @@
  *
  *  $RCSfile: tp_ChartType.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2007-07-03 13:40:13 $
+ *  last change: $Author: rt $ $Date: 2007-07-25 08:36:20 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -158,7 +158,7 @@ void AxisTypeResourceGroup::fillParameter( ChartTypeParameter& rParameter )
 {
     rParameter.bXAxisWithValues = !m_aCB_XAxis_Categories.IsChecked();
 }
-IMPL_LINK( AxisTypeResourceGroup, AxisTypeCheckHdl, CheckBox*, pCheckBox )
+IMPL_LINK( AxisTypeResourceGroup, AxisTypeCheckHdl, CheckBox*, EMPTYARG )
 {
     if( m_pChangeListener )
         m_pChangeListener->stateChanged(this);
@@ -254,7 +254,7 @@ void Dim3DLookResourceGroup::fillParameter( ChartTypeParameter& rParameter )
     else
         rParameter.eThreeDLookScheme = ThreeDLookScheme_Unknown;
 }
-IMPL_LINK( Dim3DLookResourceGroup, Dim3DLookCheckHdl, CheckBox*, pCheckBox )
+IMPL_LINK( Dim3DLookResourceGroup, Dim3DLookCheckHdl, CheckBox*, EMPTYARG )
 {
     if(m_pChangeListener)
         m_pChangeListener->stateChanged(this);
@@ -322,7 +322,7 @@ void SortByXValuesResourceGroup::fillParameter( ChartTypeParameter& rParameter )
 {
     rParameter.bSortByXValues = m_aCB_XValueSorting.IsChecked();
 }
-IMPL_LINK( SortByXValuesResourceGroup, SortByXValuesCheckHdl, CheckBox*, pCheckBox )
+IMPL_LINK( SortByXValuesResourceGroup, SortByXValuesCheckHdl, CheckBox*, EMPTYARG )
 {
     if(m_pChangeListener)
         m_pChangeListener->stateChanged(this);
@@ -577,10 +577,10 @@ void SplinePropertiesDialog::fillParameter( ChartTypeParameter& rParameter, bool
     else if(m_aRB_Splines_B.IsChecked())
         rParameter.eCurveStyle=CurveStyle_B_SPLINES;
 
-    rParameter.nCurveResolution = m_aMF_SplineResolution.GetValue();
-    rParameter.nSplineOrder = m_aMF_SplineOrder.GetValue();
+    rParameter.nCurveResolution = static_cast< sal_Int32 >( m_aMF_SplineResolution.GetValue());
+    rParameter.nSplineOrder = static_cast< sal_Int32 >( m_aMF_SplineOrder.GetValue());
 }
-IMPL_LINK( SplinePropertiesDialog, SplineModeRadioHdl, RadioButton*, pButton )
+IMPL_LINK( SplinePropertiesDialog, SplineModeRadioHdl, RadioButton*, EMPTYARG )
 {
     m_aFT_SplineOrder.Enable(m_aRB_Splines_B.IsChecked());
     m_aMF_SplineOrder.Enable(m_aRB_Splines_B.IsChecked());
@@ -917,7 +917,7 @@ void ChartTypeTabPage::commitToModel( const ChartTypeParameter& rParameter )
     ControllerLockGuard aLockedControllers( uno::Reference< frame::XModel >( m_xChartModel, uno::UNO_QUERY ) );
     m_pCurrentMainType->commitToModel( rParameter, m_xChartModel );
 }
-void ChartTypeTabPage::stateChanged( ChangingResource* pResource )
+void ChartTypeTabPage::stateChanged( ChangingResource* /*pResource*/ )
 {
     if(m_nChangingCalls)
         return;
@@ -1056,7 +1056,7 @@ void ChartTypeTabPage::showAllControls( ChartTypeDialogController& rTypeControll
     rTypeController.showExtraControls( this, Point( nXPos, nYPos ), aRemainingSize );
 }
 
-void ChartTypeTabPage::fillAllControls( const ChartTypeParameter& rParameter, const uno::Reference< beans::XPropertySet >& xTemplateProps )
+void ChartTypeTabPage::fillAllControls( const ChartTypeParameter& rParameter, const uno::Reference< beans::XPropertySet >& /*xTemplateProps*/ )
 {
     m_nChangingCalls++;
     if( m_pCurrentMainType )
@@ -1127,7 +1127,7 @@ void ChartTypeTabPage::initializePage()
     }
 }
 
-sal_Bool ChartTypeTabPage::commitPage( COMMIT_REASON eReason )
+sal_Bool ChartTypeTabPage::commitPage( COMMIT_REASON /*eReason*/ )
 {
     //commit changes to model
     if( !m_bDoLiveUpdate && m_pCurrentMainType )
