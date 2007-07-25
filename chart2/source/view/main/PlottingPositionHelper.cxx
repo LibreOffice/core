@@ -4,9 +4,9 @@
  *
  *  $RCSfile: PlottingPositionHelper.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: vg $ $Date: 2007-05-22 19:25:05 $
+ *  last change: $Author: rt $ $Date: 2007-07-25 09:06:19 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -570,9 +570,9 @@ double PolarPlottingPositionHelper::transformToRadius( double fLogicValueOnRadiu
         }
 
         if( bMinIsInnerRadius )
-            fInnerScaledLogicRadius -= abs(m_fRadiusOffset);
+            fInnerScaledLogicRadius -= fabs(m_fRadiusOffset);
         else
-            fInnerScaledLogicRadius += abs(m_fRadiusOffset);
+            fInnerScaledLogicRadius += fabs(m_fRadiusOffset);
         fNormalRadius = (fScaledLogicRadiusValue-fInnerScaledLogicRadius)/(fOuterScaledLogicRadius-fInnerScaledLogicRadius);
     }
     return fNormalRadius;
@@ -596,7 +596,7 @@ drawing::Position3D PolarPlottingPositionHelper::transformScaledLogicToScene( do
     return this->transformAngleRadiusToScene( fLogicValueOnAngleAxis, fLogicValueOnRadiusAxis, fZ, false );
 }
 drawing::Position3D PolarPlottingPositionHelper::transformUnitCircleToScene( double fUnitAngleDegree, double fUnitRadius
-                                                                            , double fLogicZ, bool bDoScaling ) const
+                                                                            , double fLogicZ, bool /* bDoScaling */ ) const
 {
     double fAnglePi = fUnitAngleDegree*F_PI/180.0;
 
