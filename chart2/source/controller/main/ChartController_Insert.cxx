@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ChartController_Insert.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: vg $ $Date: 2007-05-22 18:03:30 $
+ *  last change: $Author: rt $ $Date: 2007-07-25 08:43:11 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -56,6 +56,7 @@
 #include "ResId.hxx"
 #include "Strings.hrc"
 #include "ReferenceSizeProvider.hxx"
+#include "chartview/NumberFormatterWrapper.hxx"
 
 #ifndef _SVX_ACTIONDESCRIPTIONPROVIDER_HXX
 #include <svx/ActionDescriptionProvider.hxx>
@@ -96,7 +97,7 @@ void SAL_CALL ChartController::executeDispatch_InsertAxis()
     UndoGuard aUndoGuard(
         ActionDescriptionProvider::createDescription(
             ActionDescriptionProvider::INSERT, ::rtl::OUString( String( SchResId( STR_OBJECT_AXES )))),
-        m_aUndoManager, m_aModel->getModel() );
+        m_xUndoManager, m_aModel->getModel() );
 
     try
     {
@@ -134,7 +135,7 @@ void SAL_CALL ChartController::executeDispatch_InsertGrid()
     UndoGuard aUndoGuard(
         ActionDescriptionProvider::createDescription(
             ActionDescriptionProvider::INSERT, ::rtl::OUString( String( SchResId( STR_OBJECT_GRIDS )))),
-        m_aUndoManager, m_aModel->getModel() );
+        m_xUndoManager, m_aModel->getModel() );
 
     try
     {
@@ -171,7 +172,7 @@ void SAL_CALL ChartController::executeDispatch_InsertTitle()
     UndoGuard aUndoGuard(
         ActionDescriptionProvider::createDescription(
             ActionDescriptionProvider::INSERT, ::rtl::OUString( String( SchResId( STR_OBJECT_TITLES )))),
-        m_aUndoManager, m_aModel->getModel() );
+        m_xUndoManager, m_aModel->getModel() );
 
     try
     {
@@ -202,7 +203,7 @@ void SAL_CALL ChartController::executeDispatch_InsertLegend()
     UndoGuard aUndoGuard(
         ActionDescriptionProvider::createDescription(
             ActionDescriptionProvider::INSERT, ::rtl::OUString( String( SchResId( STR_OBJECT_LEGEND )))),
-        m_aUndoManager, m_aModel->getModel() );
+        m_xUndoManager, m_aModel->getModel() );
 
     try
     {
@@ -233,7 +234,7 @@ void SAL_CALL ChartController::executeDispatch_InsertDataLabel()
     UndoGuard aUndoGuard(
         ActionDescriptionProvider::createDescription(
             ActionDescriptionProvider::INSERT, ::rtl::OUString( String( SchResId( STR_OBJECT_DATALABELS )))),
-        m_aUndoManager, m_aModel->getModel() );
+        m_xUndoManager, m_aModel->getModel() );
 
     try
     {
@@ -247,11 +248,18 @@ void SAL_CALL ChartController::executeDispatch_InsertDataLabel()
 
         //prepare and open dialog
         ::vos::OGuard aGuard( Application::GetSolarMutex());
-        SchDataDescrDlg aDlg( m_pChartWindow, aItemSet);
+
+        //get number formatter
+        uno::Reference< util::XNumberFormatsSupplier > xNumberFormatsSupplier( m_aModel->getModel(), uno::UNO_QUERY );
+        NumberFormatterWrapper aNumberFormatterWrapper( xNumberFormatsSupplier );
+        SvNumberFormatter* pNumberFormatter = aNumberFormatterWrapper.getSvNumberFormatter();
+
+        DataLabelsDialog aDlg( m_pChartWindow, aItemSet, pNumberFormatter);
+
         if( aDlg.Execute() == RET_OK )
         {
             SfxItemSet aOutItemSet = aItemConverter.CreateEmptyItemSet();
-            aDlg.GetAttr( aOutItemSet );
+            aDlg.FillItemSet( aOutItemSet );
             // lock controllers till end of block
             ControllerLockGuard aCLGuard( m_aModel->getModel());
             bool bChanged = aItemConverter.ApplyItemSet( aOutItemSet );//model should be changed now
@@ -270,7 +278,7 @@ void SAL_CALL ChartController::executeDispatch_InsertStatistic()
     UndoGuard aUndoGuard(
         ActionDescriptionProvider::createDescription(
             ActionDescriptionProvider::INSERT, ::rtl::OUString( String( SchResId( STR_PAGE_STATISTICS )))),
-        m_aUndoManager, m_aModel->getModel() );
+        m_xUndoManager, m_aModel->getModel() );
 
     try
     {
@@ -282,13 +290,15 @@ void SAL_CALL ChartController::executeDispatch_InsertStatistic()
         //prepare and open dialog
         ::vos::OGuard aGuard( Application::GetSolarMutex());
         SchDataStatisticsDlg aDlg( m_pChartWindow, aItemSet);
-//         aDlg.EnableRegression( ChartTypeHelper::isSupportingRegressionProperties( xChartType ));
-        aDlg.EnableRegression( true );
+//         aDlg.EnableTrendLine( ChartTypeHelper::isSupportingRegressionProperties( xChartType ));
+        aDlg.EnableTrendLine( true );
+        aDlg.SetAxisMinorStepWidthForErrorBarDecimals(
+            SchDataStatisticsDlg::getAxisMinorStepWidthForErrorBarDecimals( m_aModel->getModel(), m_xChartView, rtl::OUString() ) );
 
         if( aDlg.Execute() == RET_OK )
         {
             SfxItemSet aOutItemSet = aItemConverter.CreateEmptyItemSet();
-            aDlg.GetAttr( aOutItemSet );
+            aDlg.FillItemSet( aOutItemSet );
 
             // lock controllers till end of block
             ControllerLockGuard aCLGuard( m_aModel->getModel());
