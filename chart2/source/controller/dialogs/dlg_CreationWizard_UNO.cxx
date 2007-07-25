@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dlg_CreationWizard_UNO.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: vg $ $Date: 2007-05-22 17:32:46 $
+ *  last change: $Author: rt $ $Date: 2007-07-25 08:32:40 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -207,7 +207,7 @@ uno::Sequence< sal_Int8 > SAL_CALL CreationWizardUnoDlg::getImplementationId( vo
 //-------------------------------------------------------------------------
 
 // XTerminateListener
-void SAL_CALL CreationWizardUnoDlg::queryTermination( const lang::EventObject& Event ) throw( frame::TerminationVetoException, uno::RuntimeException)
+void SAL_CALL CreationWizardUnoDlg::queryTermination( const lang::EventObject& /*Event*/ ) throw( frame::TerminationVetoException, uno::RuntimeException)
 {
     ::vos::OGuard aSolarGuard( Application::GetSolarMutex());
 
@@ -221,19 +221,19 @@ void SAL_CALL CreationWizardUnoDlg::queryTermination( const lang::EventObject& E
 
 //-------------------------------------------------------------------------
 
-void SAL_CALL CreationWizardUnoDlg::notifyTermination( const lang::EventObject& Event ) throw (uno::RuntimeException)
+void SAL_CALL CreationWizardUnoDlg::notifyTermination( const lang::EventObject& /*Event*/ ) throw (uno::RuntimeException)
 {
     // we are going down, so dispose us!
     dispose();
 }
 
-void SAL_CALL CreationWizardUnoDlg::disposing( const lang::EventObject& Source ) throw (uno::RuntimeException)
+void SAL_CALL CreationWizardUnoDlg::disposing( const lang::EventObject& /*Source*/ ) throw (uno::RuntimeException)
 {
     //Listener should deregister himself and relaese all references to the closing object.
 }
 
 //-------------------------------------------------------------------------
-void SAL_CALL CreationWizardUnoDlg::setTitle( const ::rtl::OUString& rTitle ) throw(uno::RuntimeException)
+void SAL_CALL CreationWizardUnoDlg::setTitle( const ::rtl::OUString& /*rTitle*/ ) throw(uno::RuntimeException)
 {
 }
 //-------------------------------------------------------------------------
@@ -434,25 +434,25 @@ uno::Any SAL_CALL CreationWizardUnoDlg::getPropertyValue( const ::rtl::OUString&
 }
 
 void SAL_CALL CreationWizardUnoDlg::addPropertyChangeListener(
-        const ::rtl::OUString& aPropertyName, const uno::Reference< beans::XPropertyChangeListener >& xListener )
+        const ::rtl::OUString& /* aPropertyName */, const uno::Reference< beans::XPropertyChangeListener >& /* xListener */ )
         throw (beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException)
 {
     OSL_ENSURE(false,"not implemented");
 }
 void SAL_CALL CreationWizardUnoDlg::removePropertyChangeListener(
-    const ::rtl::OUString& aPropertyName, const uno::Reference< beans::XPropertyChangeListener >& aListener )
+    const ::rtl::OUString& /* aPropertyName */, const uno::Reference< beans::XPropertyChangeListener >& /* aListener */ )
     throw (beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException)
 {
     OSL_ENSURE(false,"not implemented");
 }
 
-void SAL_CALL CreationWizardUnoDlg::addVetoableChangeListener( const ::rtl::OUString& PropertyName, const uno::Reference< beans::XVetoableChangeListener >& aListener )
+void SAL_CALL CreationWizardUnoDlg::addVetoableChangeListener( const ::rtl::OUString& /* PropertyName */, const uno::Reference< beans::XVetoableChangeListener >& /* aListener */ )
     throw (beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException)
 {
     OSL_ENSURE(false,"not implemented");
 }
 
-void SAL_CALL CreationWizardUnoDlg::removeVetoableChangeListener( const ::rtl::OUString& PropertyName, const uno::Reference< beans::XVetoableChangeListener >& aListener )
+void SAL_CALL CreationWizardUnoDlg::removeVetoableChangeListener( const ::rtl::OUString& /* PropertyName */, const uno::Reference< beans::XVetoableChangeListener >& /* aListener */ )
     throw (beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException)
 {
     OSL_ENSURE(false,"not implemented");

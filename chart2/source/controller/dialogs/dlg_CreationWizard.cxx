@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dlg_CreationWizard.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: vg $ $Date: 2007-05-22 17:32:17 $
+ *  last change: $Author: rt $ $Date: 2007-07-25 08:32:28 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -201,7 +201,7 @@ svt::OWizardPage* CreationWizard::createPage(WizardState nState)
     return pRet;
 }
 
-sal_Bool CreationWizard::leaveState( WizardState _nState )
+sal_Bool CreationWizard::leaveState( WizardState /*_nState*/ )
 {
     return m_bCanTravel;
 }

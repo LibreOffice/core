@@ -4,9 +4,9 @@
  *
  *  $RCSfile: AreaWrapper.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: vg $ $Date: 2007-05-22 17:15:43 $
+ *  last change: $Author: rt $ $Date: 2007-07-25 08:26:00 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -124,7 +124,7 @@ awt::Point SAL_CALL AreaWrapper::getPosition()
     return awt::Point(0,0);
 }
 
-void SAL_CALL AreaWrapper::setPosition( const awt::Point& aPosition )
+void SAL_CALL AreaWrapper::setPosition( const awt::Point& /*aPosition*/ )
     throw (uno::RuntimeException)
 {
     OSL_ENSURE( false, "trying to set position of chart area" );
@@ -136,7 +136,7 @@ awt::Size SAL_CALL AreaWrapper::getSize()
     return m_spChart2ModelContact->GetPageSize();
 }
 
-void SAL_CALL AreaWrapper::setSize( const awt::Size& aSize )
+void SAL_CALL AreaWrapper::setSize( const awt::Size& /*aSize*/ )
     throw (beans::PropertyVetoException,
            uno::RuntimeException)
 {
