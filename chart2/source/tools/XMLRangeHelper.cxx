@@ -4,9 +4,9 @@
  *
  *  $RCSfile: XMLRangeHelper.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: vg $ $Date: 2007-05-22 19:07:25 $
+ *  last change: $Author: rt $ $Date: 2007-07-25 09:02:25 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -323,7 +323,7 @@ CellRange getCellRangeFromXMLString( const OUString & rXMLString )
 {
     static const sal_Unicode aSpace( ' ' );
     static const sal_Unicode aQuote( '\'' );
-    static const sal_Unicode aDoubleQuote( '\"' );
+//     static const sal_Unicode aDoubleQuote( '\"' );
     static const sal_Unicode aDollar( '$' );
     static const sal_Unicode aBackslash( '\\' );
 
