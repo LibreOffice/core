@@ -4,9 +4,9 @@
  *
  *  $RCSfile: DataSeries.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: vg $ $Date: 2007-05-22 18:34:26 $
+ *  last change: $Author: rt $ $Date: 2007-07-25 08:49:44 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -140,6 +140,8 @@ DataSeries::DataSeries( const uno::Reference< uno::XComponentContext > & xContex
 }
 
 DataSeries::DataSeries( const DataSeries & rOther ) :
+        MutexContainer(),
+        impl::DataSeries_Base(),
         ::property::OPropertySet( rOther, m_aMutex ),
     m_xContext( rOther.m_xContext ),
     m_xModifyEventForwarder( new ModifyListenerHelper::ModifyEventForwarder( m_aMutex ))
