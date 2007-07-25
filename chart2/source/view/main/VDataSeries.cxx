@@ -4,9 +4,9 @@
  *
  *  $RCSfile: VDataSeries.cxx,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: obo $ $Date: 2007-06-11 15:04:31 $
+ *  last change: $Author: rt $ $Date: 2007-07-25 09:06:43 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -154,12 +154,15 @@ VDataSeries::VDataSeries()
 }
 
 VDataSeries::VDataSeries( const uno::Reference< XDataSeries >& xDataSeries )
-    : m_xGroupShape(NULL)
+    : m_nPolygonIndex(0)
+    , m_fLogicMinX(0.0)
+    , m_fLogicMaxX(0.0)
+    , m_fLogicZPos(0.0)
+    , m_xGroupShape(NULL)
     , m_xLabelsGroupShape(NULL)
     , m_xErrorBarsGroupShape(NULL)
     , m_xFrontSubGroupShape(NULL)
     , m_xBackSubGroupShape(NULL)
-    , m_nPolygonIndex(0)
     , m_xDataSeries(xDataSeries)
     , m_aDataSequences()
     , m_nPointCount(0)
@@ -188,14 +191,14 @@ VDataSeries::VDataSeries( const uno::Reference< XDataSeries >& xDataSeries )
     , m_apLabel_Series(NULL)
     , m_apLabelPropNames_Series(NULL)
     , m_apLabelPropValues_Series(NULL)
+    , m_apSymbolProperties_Series(NULL)
+
     , m_apLabel_AttributedPoint(NULL)
     , m_apLabelPropNames_AttributedPoint(NULL)
     , m_apLabelPropValues_AttributedPoint(NULL)
-
-    , m_nCurrentAttributedPoint(-1)
-    , m_apSymbolProperties_Series(NULL)
     , m_apSymbolProperties_AttributedPoint(NULL)
     , m_apSymbolProperties_InvisibleSymbolForSelection(NULL)
+    , m_nCurrentAttributedPoint(-1)
 {
     uno::Reference<data::XDataSource> xDataSource =
             uno::Reference<data::XDataSource>( xDataSeries, uno::UNO_QUERY );
