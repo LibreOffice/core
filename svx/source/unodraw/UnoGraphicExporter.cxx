@@ -4,9 +4,9 @@
  *
  *  $RCSfile: UnoGraphicExporter.cxx,v $
  *
- *  $Revision: 1.38 $
+ *  $Revision: 1.39 $
  *
- *  last change: $Author: hr $ $Date: 2007-06-27 19:21:23 $
+ *  last change: $Author: rt $ $Date: 2007-07-25 08:23:14 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -650,6 +650,8 @@ sal_Bool SAL_CALL GraphicExporter::filter( const Sequence< PropertyValue >& aDes
     com::sun::star::uno::Reference< com::sun::star::graphic::XGraphicRenderer > xGraphicRenderer;
     com::sun::star::uno::Reference< com::sun::star::task::XStatusIndicator >    xStatusIndicator;
     com::sun::star::uno::Reference< com::sun::star::task::XInteractionHandler > xInteractionHandler;
+    Fraction    aScaleX( mpDoc->GetScaleFraction() );
+    Fraction    aScaleY( mpDoc->GetScaleFraction() );
     {
         sal_Int32 nArgs = aDescriptor.getLength();
         const PropertyValue* pValues = aDescriptor.getConstArray();
@@ -766,6 +768,30 @@ sal_Bool SAL_CALL GraphicExporter::filter( const Sequence< PropertyValue >& aDes
                                 mpCurrentPage = pUnoPage->GetSdrPage();
                         }
                     }
+                    else if( pDataValues->Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "ScaleXNumerator" ) ) )
+                    {
+                        sal_Int32 nVal = 1;
+                        if( pDataValues->Value >>= nVal )
+                            aScaleX = Fraction( nVal, aScaleX.GetDenominator() );
+                    }
+                    else if( pDataValues->Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "ScaleXDenominator" ) ) )
+                    {
+                        sal_Int32 nVal = 1;
+                        if( pDataValues->Value >>= nVal )
+                            aScaleX = Fraction( aScaleX.GetNumerator(), nVal );
+                    }
+                    else if( pDataValues->Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "ScaleYNumerator" ) ) )
+                    {
+                        sal_Int32 nVal = 1;
+                        if( pDataValues->Value >>= nVal )
+                            aScaleY = Fraction( nVal, aScaleY.GetDenominator() );
+                    }
+                    else if( pDataValues->Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "ScaleYDenominator" ) ) )
+                    {
+                        sal_Int32 nVal = 1;
+                        if( pDataValues->Value >>= nVal )
+                            aScaleY = Fraction( aScaleY.GetNumerator(), nVal );
+                    }
 
                     pDataValues++;
                 }
@@ -789,8 +815,7 @@ sal_Bool SAL_CALL GraphicExporter::filter( const Sequence< PropertyValue >& aDes
 
     Graphic             aGraphic;
     VirtualDevice       aVDev;
-    const Fraction      aFrac( mpDoc->GetScaleFraction() );
-    const MapMode       aMap( mpDoc->GetScaleUnit(), Point(), aFrac, aFrac );
+    const MapMode       aMap( mpDoc->GetScaleUnit(), Point(), aScaleX, aScaleY );
     const sal_uInt16    nFilter = aMediaType.getLength()
                             ? pFilter->GetExportFormatNumberForMediaType( aMediaType )
                             : pFilter->GetExportFormatNumberForShortName( aFilterName );
