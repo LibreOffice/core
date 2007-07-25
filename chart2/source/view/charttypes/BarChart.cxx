@@ -4,9 +4,9 @@
  *
  *  $RCSfile: BarChart.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: vg $ $Date: 2007-05-22 19:14:43 $
+ *  last change: $Author: rt $ $Date: 2007-07-25 09:04:22 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -362,7 +362,7 @@ void BarChart::createShapes()
     //---------------------------------------------
     //check necessary here that different Y axis can not be stacked in the same group? ... hm?
 
-    double fLogicZ        = 1.0;//as defined
+    double fLogicZ        = 0.0;//as defined
 
     bool bDrawConnectionLines = false;
     bool bDrawConnectionLinesInited = false;
