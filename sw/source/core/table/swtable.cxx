@@ -4,9 +4,9 @@
  *
  *  $RCSfile: swtable.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: obo $ $Date: 2007-07-18 14:28:19 $
+ *  last change: $Author: rt $ $Date: 2007-07-25 08:15:28 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1475,11 +1475,26 @@ void SwTable::NewSetTabCols( Parm &rParm, const SwTabCols &rNew,
 |*  Letzte Aenderung    JP 30. Jun. 93
 |*
 |*************************************************************************/
+
+
+BOOL IsValidRowName( const String& rStr )
+{
+    BOOL bIsValid = TRUE;
+    xub_StrLen nLen = rStr.Len();
+    for (xub_StrLen i = 0;  i < nLen && bIsValid;  ++i)
+    {
+        const sal_Unicode cChar = rStr.GetChar(i);
+        if (cChar < '0' || cChar > '9')
+            bIsValid = FALSE;
+    }
+    return bIsValid;
+}
+
 USHORT SwTable::_GetBoxNum( String& rStr, BOOL bFirst )
 {
     USHORT nRet = 0;
     xub_StrLen nPos = 0;
-    if( bFirst )
+    if( bFirst )    // TRUE == column; FALSE == row
     {
         // die 1. ist mit Buchstaben addressiert!
         sal_Unicode cChar;
@@ -1501,12 +1516,17 @@ USHORT SwTable::_GetBoxNum( String& rStr, BOOL bFirst )
     }
     else if( STRING_NOTFOUND == ( nPos = rStr.Search( aDotStr ) ))
     {
-        nRet = static_cast<USHORT>(rStr.ToInt32());
+        nRet = 0;
+        if (IsValidRowName( rStr ))
+            nRet = static_cast<USHORT>(rStr.ToInt32());
         rStr.Erase();
     }
     else
     {
-        nRet = static_cast<USHORT>(rStr.Copy( 0, nPos ).ToInt32());
+        nRet = 0;
+        String aTxt( rStr.Copy( 0, nPos ) );
+        if (IsValidRowName( aTxt ))
+            nRet = static_cast<USHORT>(aTxt.ToInt32());
         rStr.Erase( 0, nPos+1 );
     }
     return nRet;
