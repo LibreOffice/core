@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.11 $
+#   $Revision: 1.12 $
 #
-#   last change: $Author: rt $ $Date: 2007-07-03 13:38:39 $
+#   last change: $Author: rt $ $Date: 2007-07-25 08:33:54 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -63,8 +63,10 @@ SLOFILES=   	\
                 $(SLO)$/DialogModel.obj \
                 $(SLO)$/TitleDialogData.obj \
                 $(SLO)$/res_Titles.obj \
+                $(SLO)$/res_ErrorBar.obj \
                 $(SLO)$/res_BarGeometry.obj \
                 $(SLO)$/res_LegendPosition.obj \
+                $(SLO)$/res_DataLabel.obj \
                 $(SLO)$/ChartTypeDialogController.obj \
                 $(SLO)$/tp_ChartType.obj \
                 $(SLO)$/tp_RangeChooser.obj \
