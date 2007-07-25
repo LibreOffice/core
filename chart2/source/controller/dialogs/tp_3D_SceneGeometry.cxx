@@ -4,9 +4,9 @@
  *
  *  $RCSfile: tp_3D_SceneGeometry.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2007-07-03 13:39:11 $
+ *  last change: $Author: rt $ $Date: 2007-07-25 08:35:45 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -277,7 +277,7 @@ void ThreeD_SceneGeometry_TabPage::applyPerspectiveToModel()
         m_xSceneProperties->setPropertyValue( C2U("D3DScenePerspective"), uno::makeAny( aMode ));
 
         ThreeDHelper::setCameraDistance( m_xSceneProperties
-            , lcl_PerspectiveToCameraDistance( m_aMFPerspective.GetValue() ) );
+            , lcl_PerspectiveToCameraDistance( (double)m_aMFPerspective.GetValue() ) );
     }
     catch( const uno::Exception & ex )
     {
@@ -320,12 +320,12 @@ IMPL_LINK( ThreeD_SceneGeometry_TabPage, RightAngledAxesToggled, void*, EMPTYARG
         m_nYRotation = m_aMFYRotation.GetValue();
         m_nZRotation = m_aMFZRotation.GetValue();
 
-        m_aMFXRotation.SetValue(ThreeDHelper::getValueClippedToRange(m_nXRotation, ThreeDHelper::getXDegreeAngleLimitForRightAngledAxes() ));
-        m_aMFYRotation.SetValue(ThreeDHelper::getValueClippedToRange(m_nYRotation, ThreeDHelper::getYDegreeAngleLimitForRightAngledAxes() ));
+        m_aMFXRotation.SetValue(static_cast<sal_Int64>(ThreeDHelper::getValueClippedToRange(static_cast<double>(m_nXRotation), ThreeDHelper::getXDegreeAngleLimitForRightAngledAxes())));
+        m_aMFYRotation.SetValue(static_cast<sal_Int64>(ThreeDHelper::getValueClippedToRange(static_cast<double>(m_nYRotation), ThreeDHelper::getYDegreeAngleLimitForRightAngledAxes())));
         m_aMFZRotation.SetEmptyFieldValue();
 
-        lcl_SetMetricFieldLimits( m_aMFXRotation, ThreeDHelper::getXDegreeAngleLimitForRightAngledAxes() );
-        lcl_SetMetricFieldLimits( m_aMFYRotation, ThreeDHelper::getYDegreeAngleLimitForRightAngledAxes() );
+        lcl_SetMetricFieldLimits( m_aMFXRotation, static_cast<sal_Int64>(ThreeDHelper::getXDegreeAngleLimitForRightAngledAxes()));
+        lcl_SetMetricFieldLimits( m_aMFYRotation, static_cast<sal_Int64>(ThreeDHelper::getYDegreeAngleLimitForRightAngledAxes()));
     }
     else
     {
