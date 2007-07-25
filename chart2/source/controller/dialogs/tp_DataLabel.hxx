@@ -4,9 +4,9 @@
  *
  *  $RCSfile: tp_DataLabel.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 00:14:37 $
+ *  last change: $Author: rt $ $Date: 2007-07-25 08:36:44 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -35,9 +35,13 @@
 #ifndef _CHART2_TP_DATALABEL_HXX
 #define _CHART2_TP_DATALABEL_HXX
 
+#include "res_DataLabel.hxx"
+
 #ifndef _SFXTABDLG_HXX
 #include <sfx2/tabdlg.hxx>
 #endif
+
+class SvNumberFormatter;
 
 //.............................................................................
 namespace chart
@@ -48,24 +52,21 @@ namespace chart
 /**
 */
 
-class SchDataDescrTabPage : public SfxTabPage
+class DataLabelsTabPage : public SfxTabPage
 {
-private:
-    CheckBox            aCbValue;
-    RadioButton         aRbNumber;
-    RadioButton         aRbPercent;
-    CheckBox            aCbText;
-    CheckBox            aCbSymbol;
-
-    DECL_LINK(EnableHdl, CheckBox * );
-
 public:
-    SchDataDescrTabPage(Window* pParent, const SfxItemSet& rInAttrs);
-    virtual ~SchDataDescrTabPage();
+    DataLabelsTabPage(Window* pParent, const SfxItemSet& rInAttrs);
+    virtual ~DataLabelsTabPage();
 
     static SfxTabPage* Create(Window* pParent, const SfxItemSet& rInAttrs);
-    virtual BOOL FillItemSet(SfxItemSet& rOutAttrs);
+
+    void SetNumberFormatter( SvNumberFormatter* pFormatter );
+
     virtual void Reset(const SfxItemSet& rInAttrs);
+    virtual BOOL FillItemSet(SfxItemSet& rOutAttrs);
+
+private:
+    DataLabelResources  m_aDataLabelResources;
 };
 
 //.............................................................................
