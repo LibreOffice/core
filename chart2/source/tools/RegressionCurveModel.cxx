@@ -4,9 +4,9 @@
  *
  *  $RCSfile: RegressionCurveModel.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: vg $ $Date: 2007-05-22 19:04:04 $
+ *  last change: $Author: rt $ $Date: 2007-07-25 09:00:15 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -124,6 +124,8 @@ RegressionCurveModel::RegressionCurveModel(
 }
 
 RegressionCurveModel::RegressionCurveModel( const RegressionCurveModel & rOther ) :
+        MutexContainer(),
+        impl::RegressionCurveModel_Base(),
         ::property::OPropertySet( rOther, m_aMutex ),
     m_xContext( rOther.m_xContext ),
     m_eRegressionCurveType( rOther.m_eRegressionCurveType ),
@@ -199,7 +201,7 @@ void SAL_CALL RegressionCurveModel::modified( const lang::EventObject& aEvent )
 }
 
 // ____ XEventListener (base of XModifyListener) ____
-void SAL_CALL RegressionCurveModel::disposing( const lang::EventObject& Source )
+void SAL_CALL RegressionCurveModel::disposing( const lang::EventObject& /* Source */ )
     throw (uno::RuntimeException)
 {
     // nothing
