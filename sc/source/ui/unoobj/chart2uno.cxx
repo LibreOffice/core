@@ -4,9 +4,9 @@
  *
  *  $RCSfile: chart2uno.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: vg $ $Date: 2007-05-22 20:11:06 $
+ *  last change: $Author: rt $ $Date: 2007-07-25 08:09:44 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -272,6 +272,33 @@ void lcl_SeperateOneRowRange(ScRange aR, const ScAddress& rPos, ScRangeListRef& 
         xRanges->Join(ScRange(aR.aStart, ScAddress(rPos.Col() - 1, rPos.Row(), rPos.Tab())));
         xRanges->Join(ScRange(ScAddress(rPos.Col() + 1, rPos.Row(), rPos.Tab()), aR.aEnd ));
     }
+}
+
+::sal_Bool SAL_CALL ScChart2DataProvider::createDataSourcePossible( const uno::Sequence< beans::PropertyValue >& aArguments )
+    throw (uno::RuntimeException)
+{
+    ScUnoGuard aGuard;
+    if( ! m_pDocument )
+        return false;
+
+    rtl::OUString aRangeRepresentation;
+    for(sal_Int32 i = 0; i < aArguments.getLength(); ++i)
+    {
+        rtl::OUString sName(aArguments[i].Name);
+        if (aArguments[i].Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("CellRangeRepresentation")))
+        {
+            aArguments[i].Value >>= aRangeRepresentation;
+        }
+    }
+
+    ScRangeList aRangeList;
+    USHORT nResult = aRangeList.Parse( aRangeRepresentation, m_pDocument );
+    //! if anything is missing, SCA_VALID shouldn't be set
+    const USHORT nNeeded = SCA_VALID | SCA_VALID_COL | SCA_VALID_ROW | SCA_VALID_TAB |
+                           SCA_VALID_COL2 | SCA_VALID_ROW2 | SCA_VALID_TAB2;
+    bool bValid = ( (nResult & nNeeded ) == nNeeded );
+
+    return bValid;
 }
 
 uno::Reference< chart2::data::XDataSource> SAL_CALL
@@ -933,6 +960,23 @@ void ScChart2DataProvider::detectArguments(
         lcl_HasCategories( xDataSource, rHasCategories );
         lcl_HasFirstCellAsLabel( xDataSource, rHasFirtCellLabels );
     }
+}
+
+::sal_Bool SAL_CALL ScChart2DataProvider::createDataSequenceByRangeRepresentationPossible( const ::rtl::OUString& aRangeRepresentation )
+    throw (uno::RuntimeException)
+{
+    ScUnoGuard aGuard;
+    if( ! m_pDocument )
+        return false;
+
+    ScRangeList aRangeList;
+    USHORT nResult = aRangeList.Parse( aRangeRepresentation, m_pDocument );
+    //! if anything is missing, SCA_VALID shouldn't be set
+    const USHORT nNeeded = SCA_VALID | SCA_VALID_COL | SCA_VALID_ROW | SCA_VALID_TAB |
+                           SCA_VALID_COL2 | SCA_VALID_ROW2 | SCA_VALID_TAB2;
+    bool bValid = ( (nResult & nNeeded ) == nNeeded );
+
+    return bValid;
 }
 
 uno::Reference< chart2::data::XDataSequence > SAL_CALL
