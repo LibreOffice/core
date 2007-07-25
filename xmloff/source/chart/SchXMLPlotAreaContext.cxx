@@ -4,9 +4,9 @@
  *
  *  $RCSfile: SchXMLPlotAreaContext.cxx,v $
  *
- *  $Revision: 1.39 $
+ *  $Revision: 1.40 $
  *
- *  last change: $Author: hr $ $Date: 2007-06-27 14:48:55 $
+ *  last change: $Author: rt $ $Date: 2007-07-25 08:06:44 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1016,6 +1016,8 @@ void SchXMLAxisContext::CreateAxis()
     uno::Reference< beans::XPropertySet > xProp;
     uno::Any aTrueBool;
     aTrueBool <<= (sal_Bool)(sal_True);
+    uno::Any aFalseBool;
+    aFalseBool <<= (sal_Bool)(sal_False);
     uno::Reference< frame::XModel > xDoc( mrImportHelper.GetChartDocument(), uno::UNO_QUERY );
 
     switch( maCurrentAxis.eClass )
@@ -1127,6 +1129,8 @@ void SchXMLAxisContext::CreateAxis()
     // set properties
     if( xProp.is())
     {
+        xProp->setPropertyValue( rtl::OUString::createFromAscii( "DisplayLabels" ), aFalseBool );
+
         // #88077# AutoOrigin 'on' is default
         xProp->setPropertyValue( rtl::OUString::createFromAscii( "AutoOrigin" ), aTrueBool );
 
