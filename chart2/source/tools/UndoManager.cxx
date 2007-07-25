@@ -4,9 +4,9 @@
  *
  *  $RCSfile: UndoManager.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: vg $ $Date: 2007-05-22 19:06:21 $
+ *  last change: $Author: rt $ $Date: 2007-07-25 09:01:26 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -118,14 +118,15 @@ void ModifyBroadcaster::fireEvent()
     }
 }
 
-}
+} // namespace impl
 
 UndoManager::UndoManager() :
-        m_apUndoStack( new impl::UndoStack()),
-        m_apRedoStack( new impl::UndoStack()),
-        m_pLastRemeberedUndoElement( 0 ),
-        m_nMaxNumberOfUndos( 100 ),
-        m_pModifyBroadcaster( 0 )
+        impl::UndoManager_Base( m_aMutex ),
+    m_apUndoStack( new impl::UndoStack()),
+    m_apRedoStack( new impl::UndoStack()),
+    m_pLastRemeberedUndoElement( 0 ),
+    m_nMaxNumberOfUndos( 100 ),
+    m_pModifyBroadcaster( 0 )
 {}
 
 UndoManager::~UndoManager()
@@ -139,7 +140,7 @@ UndoManager::~UndoManager()
 }
 
 void UndoManager::impl_undoRedo(
-    const Reference< frame::XModel > & xCurrentModel,
+    Reference< frame::XModel > & xCurrentModel,
     impl::UndoStack * pStackToRemoveFrom,
     impl::UndoStack * pStackToAddTo )
 {
@@ -166,66 +167,92 @@ void UndoManager::impl_undoRedo(
     }
 }
 
-void UndoManager::undo( const Reference< frame::XModel > & xCurrentModel )
+void UndoManager::fireModifyEvent()
 {
-    OSL_ASSERT( m_apUndoStack.get() && m_apRedoStack.get());
-    impl_undoRedo( xCurrentModel, m_apUndoStack.get(), m_apRedoStack.get());
+    if( m_xModifyBroadcaster.is())
+        m_pModifyBroadcaster->fireEvent();
 }
 
-void UndoManager::redo( const Reference< frame::XModel > & xCurrentModel )
+
+// ____ ConfigItemListener ____
+void UndoManager::notify( const ::rtl::OUString & rPropertyName )
 {
-    OSL_ASSERT( m_apUndoStack.get() && m_apRedoStack.get());
-    impl_undoRedo( xCurrentModel, m_apRedoStack.get(), m_apUndoStack.get());
+    OSL_ENSURE( rPropertyName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "Steps" )),
+                "Unwanted config property change Notified" );
+    if( rPropertyName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "Steps" )))
+        retrieveConfigUndoSteps();
 }
 
-bool UndoManager::canUndo() const
+void UndoManager::retrieveConfigUndoSteps()
 {
-    return ! m_apUndoStack->empty();
+    if( ! m_apUndoStepsConfigItem.get())
+        m_apUndoStepsConfigItem.reset( new impl::UndoStepsConfigItem( *this ));
+    m_nMaxNumberOfUndos = m_apUndoStepsConfigItem->getUndoSteps();
+    m_apUndoStack->limitSize( m_nMaxNumberOfUndos );
+    m_apRedoStack->limitSize( m_nMaxNumberOfUndos );
+
+    // a list of available undo steps could shrink here
+    fireModifyEvent();
 }
 
-bool UndoManager::canRedo() const
+// ____ XModifyBroadcaster ____
+void SAL_CALL UndoManager::addModifyListener( const Reference< util::XModifyListener >& aListener )
+    throw (uno::RuntimeException)
 {
-    return ! m_apRedoStack->empty();
+    if( ! m_xModifyBroadcaster.is())
+    {
+        m_pModifyBroadcaster = new impl::ModifyBroadcaster();
+        m_xModifyBroadcaster.set( static_cast< cppu::OWeakObject* >( m_pModifyBroadcaster ), uno::UNO_QUERY );
+    }
+    m_xModifyBroadcaster->addModifyListener( aListener );
 }
 
-OUString UndoManager::getCurrentUndoString() const
+void SAL_CALL UndoManager::removeModifyListener( const Reference< util::XModifyListener >& aListener )
+    throw (uno::RuntimeException)
 {
-    return m_apUndoStack->topUndoString();
+    if( ! m_xModifyBroadcaster.is())
+    {
+        m_pModifyBroadcaster = new impl::ModifyBroadcaster();
+        m_xModifyBroadcaster.set( static_cast< cppu::OWeakObject* >( m_pModifyBroadcaster ), uno::UNO_QUERY );
+    }
+    m_xModifyBroadcaster->removeModifyListener( aListener );
 }
 
-OUString UndoManager::getCurrentRedoString() const
-{
-    return m_apRedoStack->topUndoString();
-}
-
-Sequence< OUString > UndoManager::getUndoStrings() const
-{
-    return m_apUndoStack->getUndoStrings();
-}
-
-Sequence< OUString > UndoManager::getRedoStrings() const
-{
-    return m_apRedoStack->getUndoStrings();
-}
-
-void UndoManager::preAction( const Reference< frame::XModel > & xCurrentModel )
+// ____ chart2::XUndoManager ____
+void SAL_CALL UndoManager::preAction( const Reference< frame::XModel >& xModelBeforeChange )
+    throw (uno::RuntimeException)
 {
     OSL_ENSURE( ! m_pLastRemeberedUndoElement, "Looks like postAction or cancelAction call was missing" );
-    m_pLastRemeberedUndoElement = new impl::UndoElement( xCurrentModel );
+    m_pLastRemeberedUndoElement = new impl::UndoElement( xModelBeforeChange );
 }
 
-void UndoManager::preActionWithData( const Reference< frame::XModel > & xCurrentModel )
+void SAL_CALL UndoManager::preActionWithArguments(
+    const Reference< frame::XModel >& xModelBeforeChange,
+    const Sequence< beans::PropertyValue >& aArguments )
+    throw (uno::RuntimeException)
 {
+    bool bActionHandled( false );
     OSL_ENSURE( ! m_pLastRemeberedUndoElement, "Looks like postAction or cancelAction call was missing" );
-    m_pLastRemeberedUndoElement = new impl::UndoElementWithData( xCurrentModel );
+    if( aArguments.getLength() > 0 )
+    {
+        if( aArguments[0].Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("WithData")))
+        {
+            m_pLastRemeberedUndoElement = new impl::UndoElementWithData( xModelBeforeChange );
+            bActionHandled = true;
+        }
+    }
+
+    if( !bActionHandled )
+        preAction( xModelBeforeChange );
 }
 
-void UndoManager::postAction( const OUString & rUndoString )
+void SAL_CALL UndoManager::postAction( const OUString& aUndoText )
+    throw (uno::RuntimeException)
 {
     OSL_ENSURE( m_pLastRemeberedUndoElement, "Looks like preAction call was missing" );
     if( m_pLastRemeberedUndoElement )
     {
-        m_pLastRemeberedUndoElement->setActionString( rUndoString );
+        m_pLastRemeberedUndoElement->setActionString( aUndoText );
         m_apUndoStack->push( m_pLastRemeberedUndoElement );
         m_pLastRemeberedUndoElement = 0;
 
@@ -241,13 +268,15 @@ void UndoManager::postAction( const OUString & rUndoString )
     }
 }
 
-void UndoManager::cancelAction()
+void SAL_CALL UndoManager::cancelAction()
+    throw (uno::RuntimeException)
 {
     delete m_pLastRemeberedUndoElement;
     m_pLastRemeberedUndoElement = 0;
 }
 
-void UndoManager::cancelActionUndo( const Reference< frame::XModel > & xModelToRestore )
+void SAL_CALL UndoManager::cancelActionWithUndo( Reference< frame::XModel >& xModelToRestore )
+    throw (uno::RuntimeException)
 {
     if( m_pLastRemeberedUndoElement )
     {
@@ -256,59 +285,70 @@ void UndoManager::cancelActionUndo( const Reference< frame::XModel > & xModelToR
     }
 }
 
-void UndoManager::fireModifyEvent()
+void SAL_CALL UndoManager::undo( Reference< frame::XModel >& xCurrentModel )
+    throw (uno::RuntimeException)
 {
-    if( m_xModifyBroadcaster.is())
-        m_pModifyBroadcaster->fireEvent();
+    OSL_ASSERT( m_apUndoStack.get() && m_apRedoStack.get());
+    impl_undoRedo( xCurrentModel, m_apUndoStack.get(), m_apRedoStack.get());
 }
 
-
-// ____ ConfigItemListener ____
-void UndoManager::notify( const ::rtl::OUString & rPropertyName )
+void SAL_CALL UndoManager::redo( Reference< frame::XModel >& xCurrentModel )
+    throw (uno::RuntimeException)
 {
-    OSL_ENSURE( rPropertyName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "Steps" )),
-                "Unwanted config property change Notified" );
-    retrieveConfigUndoSteps();
+    OSL_ASSERT( m_apUndoStack.get() && m_apRedoStack.get());
+    impl_undoRedo( xCurrentModel, m_apRedoStack.get(), m_apUndoStack.get());
 }
 
-sal_Int32 UndoManager::getMaximumNumberOfUndoSteps()
+::sal_Bool SAL_CALL UndoManager::undoPossible()
+    throw (uno::RuntimeException)
 {
-    return m_nMaxNumberOfUndos;
+    return ! m_apUndoStack->empty();
 }
 
-void UndoManager::retrieveConfigUndoSteps()
+::sal_Bool SAL_CALL UndoManager::redoPossible()
+    throw (uno::RuntimeException)
 {
-    if( ! m_apUndoStepsConfigItem.get())
-        m_apUndoStepsConfigItem.reset( new impl::UndoStepsConfigItem( *this ));
-    m_nMaxNumberOfUndos = m_apUndoStepsConfigItem->getUndoSteps();
-    m_apUndoStack->limitSize( m_nMaxNumberOfUndos );
-    m_apRedoStack->limitSize( m_nMaxNumberOfUndos );
-
-    // a list of available undo steps could shrink here
-    fireModifyEvent();
+    return ! m_apRedoStack->empty();
 }
 
-void UndoManager::addModifyListener(
-    const Reference< util::XModifyListener >& xListener )
+OUString SAL_CALL UndoManager::getCurrentUndoString()
+    throw (uno::RuntimeException)
 {
-    if( ! m_xModifyBroadcaster.is())
-    {
-        m_pModifyBroadcaster = new impl::ModifyBroadcaster();
-        m_xModifyBroadcaster.set( static_cast< cppu::OWeakObject* >( m_pModifyBroadcaster ), uno::UNO_QUERY );
-    }
-    m_xModifyBroadcaster->addModifyListener( xListener );
+    return m_apUndoStack->topUndoString();
 }
 
-void UndoManager::removeModifyListener(
-    const Reference< util::XModifyListener >& xListener )
+OUString SAL_CALL UndoManager::getCurrentRedoString()
+    throw (uno::RuntimeException)
 {
-    if( ! m_xModifyBroadcaster.is())
-    {
-        m_pModifyBroadcaster = new impl::ModifyBroadcaster();
-        m_xModifyBroadcaster.set( static_cast< cppu::OWeakObject* >( m_pModifyBroadcaster ), uno::UNO_QUERY );
-    }
-    m_xModifyBroadcaster->removeModifyListener( xListener );
+    return m_apRedoStack->topUndoString();
 }
 
+Sequence< OUString > SAL_CALL UndoManager::getAllUndoStrings()
+    throw (uno::RuntimeException)
+{
+    return m_apUndoStack->getUndoStrings();
+}
+
+Sequence< OUString > SAL_CALL UndoManager::getAllRedoStrings()
+    throw (uno::RuntimeException)
+{
+    return m_apRedoStack->getUndoStrings();
+}
+
+// ____ XUndoHelper ____
+Reference< frame::XModel > SAL_CALL UndoManager::getModelCloneForUndo(
+    const Reference< frame::XModel >& xModelBeforeChange )
+    throw (uno::RuntimeException)
+{
+    return impl::UndoElement::cloneModel( xModelBeforeChange );
+}
+
+void SAL_CALL UndoManager::applyModelContent(
+    Reference< frame::XModel >& xModelToChange,
+    const Reference< frame::XModel >& xModelToCopyFrom )
+    throw (uno::RuntimeException)
+{
+    impl::UndoElement::applyModelContentToModel( xModelToChange, xModelToCopyFrom );
+}
 
 } //  namespace chart
