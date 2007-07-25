@@ -4,9 +4,9 @@
  *
  *  $RCSfile: tp_RangeChooser.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: vg $ $Date: 2007-05-22 17:47:43 $
+ *  last change: $Author: rt $ $Date: 2007-07-25 08:37:07 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -177,10 +177,10 @@ RangeChooserTabPage::RangeChooserTabPage( Window* pParent
     // #i75179# enable setting the background to a different color
     m_aED_Range.SetStyle( m_aED_Range.GetStyle() | WB_FORCECTRLBACKGROUND );
 
-    m_aED_Range.SetModifyHdl( LINK( this, RangeChooserTabPage, EditRangeHdl ));
-    m_aRB_Rows.SetToggleHdl( LINK( this, RangeChooserTabPage, ToogleRowsColumnsHdl ) );
-    m_aCB_FirstRowAsLabel.SetToggleHdl( LINK( this, RangeChooserTabPage, ToogleLabelHdl ) );
-    m_aCB_FirstColumnAsLabel.SetToggleHdl( LINK( this, RangeChooserTabPage, ToogleLabelHdl ) );
+    m_aED_Range.SetModifyHdl( LINK( this, RangeChooserTabPage, ControlChangedHdl ));
+    m_aRB_Rows.SetToggleHdl( LINK( this, RangeChooserTabPage, ControlChangedHdl ) );
+    m_aCB_FirstRowAsLabel.SetToggleHdl( LINK( this, RangeChooserTabPage, ControlChangedHdl ) );
+    m_aCB_FirstColumnAsLabel.SetToggleHdl( LINK( this, RangeChooserTabPage, ControlChangedHdl ) );
 }
 
 RangeChooserTabPage::~RangeChooserTabPage()
@@ -280,8 +280,14 @@ void RangeChooserTabPage::changeDialogModelAccordingToControls()
 bool RangeChooserTabPage::isValid()
 {
     ::rtl::OUString aRange( m_aED_Range.GetText());
+    sal_Bool bFirstCellAsLabel = ( m_aCB_FirstColumnAsLabel.IsChecked() && !m_aRB_Columns.IsChecked() )
+        || ( m_aCB_FirstRowAsLabel.IsChecked()    && !m_aRB_Rows.IsChecked() );
+    sal_Bool bHasCategories = ( m_aCB_FirstColumnAsLabel.IsChecked() && m_aRB_Columns.IsChecked() )
+        || ( m_aCB_FirstRowAsLabel.IsChecked()    && m_aRB_Rows.IsChecked() );
     bool bIsValid = ( aRange.getLength() == 0 ) ||
-        m_rDialogModel.getRangeSelectionHelper()->verifyCellRange( aRange );
+        m_rDialogModel.getRangeSelectionHelper()->verifyArguments(
+            DataSourceHelper::createArguments(
+                aRange, Sequence< sal_Int32 >(), m_aRB_Columns.IsChecked(), bFirstCellAsLabel, bHasCategories ));
 
     if( bIsValid )
     {
@@ -300,10 +306,37 @@ bool RangeChooserTabPage::isValid()
     }
 
     // enable/disable controls
-    m_aRB_Rows.Enable( bIsValid );
-    m_aRB_Columns.Enable( bIsValid );
-    m_aCB_FirstRowAsLabel.Enable( bIsValid );
-    m_aCB_FirstColumnAsLabel.Enable( bIsValid );
+    // #i79531# if the range is valid but an action of one of these buttons
+    // would render it invalid, the button should be disabled
+    if( bIsValid )
+    {
+        bool bDataInColumns = m_aRB_Columns.IsChecked();
+        bool bIsSwappedRangeValid = m_rDialogModel.getRangeSelectionHelper()->verifyArguments(
+            DataSourceHelper::createArguments(
+                aRange, Sequence< sal_Int32 >(), ! bDataInColumns, bHasCategories, bFirstCellAsLabel ));
+        m_aRB_Rows.Enable( bIsSwappedRangeValid );
+        m_aRB_Columns.Enable( bIsSwappedRangeValid );
+
+        m_aCB_FirstRowAsLabel.Enable(
+            m_rDialogModel.getRangeSelectionHelper()->verifyArguments(
+                DataSourceHelper::createArguments(
+                    aRange, Sequence< sal_Int32 >(), m_aRB_Columns.IsChecked(),
+                    bDataInColumns ? ! bFirstCellAsLabel : bFirstCellAsLabel,
+                    bDataInColumns ? bHasCategories : ! bHasCategories )));
+        m_aCB_FirstColumnAsLabel.Enable(
+            m_rDialogModel.getRangeSelectionHelper()->verifyArguments(
+                DataSourceHelper::createArguments(
+                    aRange, Sequence< sal_Int32 >(), m_aRB_Columns.IsChecked(),
+                    bDataInColumns ? bFirstCellAsLabel : ! bFirstCellAsLabel,
+                    bDataInColumns ? ! bHasCategories : bHasCategories )));
+    }
+    else
+    {
+        m_aRB_Rows.Enable( bIsValid );
+        m_aRB_Columns.Enable( bIsValid );
+        m_aCB_FirstRowAsLabel.Enable( bIsValid );
+        m_aCB_FirstColumnAsLabel.Enable( bIsValid );
+}
     BOOL bShowIB = m_rDialogModel.getRangeSelectionHelper()->hasRangeSelection();
     lcl_ShowChooserButton( m_aIB_Range, m_aED_Range, bShowIB );
 
@@ -311,29 +344,19 @@ bool RangeChooserTabPage::isValid()
 }
 
 
-IMPL_LINK( RangeChooserTabPage, ToogleRowsColumnsHdl, void*, EMPTYARG )
-{
-    setDirty();
-    changeDialogModelAccordingToControls();
-    return 0;
-}
-IMPL_LINK( RangeChooserTabPage, ToogleLabelHdl, CheckBox*, EMPTYARG /* pCheckBox */ )
-{
-    setDirty();
-    changeDialogModelAccordingToControls();
-    return 0;
-}
-IMPL_LINK( RangeChooserTabPage, EditRangeHdl, void*, EMPTYARG )
+IMPL_LINK( RangeChooserTabPage, ControlChangedHdl, void*, EMPTYARG )
 {
     setDirty();
     if( isValid())
         changeDialogModelAccordingToControls();
     return 0;
 }
+
 IMPL_LINK( RangeChooserTabPage, ChooseRangeHdl, void *, EMPTYARG )
 {
     rtl::OUString aRange = m_aED_Range.GetText();
-    rtl::OUString aTitle( String( SchResId( STR_PAGE_DATA_RANGE ) ));
+    // using assignment for broken gcc 3.3
+    rtl::OUString aTitle = ::rtl::OUString( String( SchResId( STR_PAGE_DATA_RANGE ) ));
 
     lcl_enableRangeChoosing( true, m_pParentDialog );
     m_rDialogModel.getRangeSelectionHelper()->chooseRange( aRange, aTitle, *this );
