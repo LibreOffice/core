@@ -4,9 +4,9 @@
  *
  *  $RCSfile: tp_SeriesToAxis.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: obo $ $Date: 2007-06-11 14:58:16 $
+ *  last change: $Author: rt $ $Date: 2007-07-25 08:38:24 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -106,10 +106,10 @@ BOOL SchOptionTabPage::FillItemSet(SfxItemSet& rOutAttrs)
         rOutAttrs.Put(SfxInt32Item(SCHATTR_AXIS,CHART_AXIS_PRIMARY_Y));
 
     if(aMTGap.IsVisible())
-        rOutAttrs.Put(SfxInt32Item(SCHATTR_BAR_GAPWIDTH,aMTGap.GetValue()));
+        rOutAttrs.Put(SfxInt32Item(SCHATTR_BAR_GAPWIDTH,static_cast< sal_Int32 >( aMTGap.GetValue())));
 
     if(aMTOverlap.IsVisible())
-        rOutAttrs.Put(SfxInt32Item(SCHATTR_BAR_OVERLAP,aMTOverlap.GetValue()));
+        rOutAttrs.Put(SfxInt32Item(SCHATTR_BAR_OVERLAP,static_cast< sal_Int32 >( aMTOverlap.GetValue())));
 
     if(aCBConnect.IsVisible())
         rOutAttrs.Put(SfxBoolItem(SCHATTR_BAR_CONNECT,aCBConnect.IsChecked()));
