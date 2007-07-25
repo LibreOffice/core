@@ -4,9 +4,9 @@
  *
  *  $RCSfile: UncachedDataSequence.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: vg $ $Date: 2007-05-22 19:06:00 $
+ *  last change: $Author: rt $ $Date: 2007-07-25 09:01:02 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -113,7 +113,9 @@ UncachedDataSequence::UncachedDataSequence(
 }
 
 UncachedDataSequence::UncachedDataSequence( const UncachedDataSequence & rSource )
-        : OPropertyContainer( GetBroadcastHelper()),
+        : ::comphelper::OMutexAndBroadcastHelper(),
+          OPropertyContainer( GetBroadcastHelper()),
+          ::comphelper::OPropertyArrayUsageHelper< UncachedDataSequence >(),
           UncachedDataSequence_Base( GetMutex()),
           m_nNumberFormatKey( rSource.m_nNumberFormatKey ),
           m_sRole( rSource.m_sRole ),
