@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ObjectNameProvider.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2007-07-03 13:37:23 $
+ *  last change: $Author: rt $ $Date: 2007-07-25 08:31:07 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -192,7 +192,7 @@ OUString lcl_getDataPointValueText( const Reference< XDataSeries >& xSeries, sal
 
     if( aX.getLength() == 0 )
     {
-        rtl::OUString aCategory(String(SchResId(STR_TIP_CATEGORY_VALUE)));
+        rtl::OUString aCategory = ::rtl::OUString( String(SchResId(STR_TIP_CATEGORY_VALUE)));
 
         replaceParamterInString( aCategory
             , C2U("%CATEGORYVALUE")
