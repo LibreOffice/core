@@ -4,9 +4,9 @@
  *
  *  $RCSfile: XMLTableShapeResizer.cxx,v $
  *
- *  $Revision: 1.28 $
+ *  $Revision: 1.29 $
  *
- *  last change: $Author: vg $ $Date: 2007-05-22 20:03:22 $
+ *  last change: $Author: rt $ $Date: 2007-07-25 08:09:09 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -217,159 +217,164 @@ void ScMyShapeResizer::ResizeShapes()
                 rImport.LockSolarMutex();
                 while (aItr != aEndItr)
                 {
-                    if ((nOldSheet != aItr->aEndCell.Sheet) || !xSheet.is())
+                    // #i78086# invalid cell position is used to call CreateChartListener only
+                    if ( aItr->aEndCell.Sheet >= 0 )
                     {
-                        nOldSheet = aItr->aEndCell.Sheet;
-                        xSheet.set(xIndex->getByIndex(nOldSheet), uno::UNO_QUERY);
-                        if (xSheet.is())
+                        if ((nOldSheet != aItr->aEndCell.Sheet) || !xSheet.is())
                         {
-                            uno::Reference<table::XColumnRowRange> xColumnRowRange (xSheet, uno::UNO_QUERY);
-                            if (xColumnRowRange.is())
-                                xTableRows = xColumnRowRange->getRows();
-                        }
-                    }
-                    if (xTableRows.is())
-                    {
-                        if (nOldRow != aItr->aEndCell.Row || !xTableRow.is())
-                        {
-                            nOldRow = aItr->aEndCell.Row;
-                            xTableRows->getByIndex(nOldRow) >>= xTableRow;
-                        }
-                        if (xTableRow.is())
-                        {
-                            uno::Reference <beans::XPropertySet> xRowProperties(xTableRow, uno::UNO_QUERY);
-                            if (xRowProperties.is())
+                            nOldSheet = aItr->aEndCell.Sheet;
+                            xSheet.set(xIndex->getByIndex(nOldSheet), uno::UNO_QUERY);
+                            if (xSheet.is())
                             {
-                                sal_Int32 nHeight;
-                                if (xRowProperties->getPropertyValue(sRowHeight) >>= nHeight)
+                                uno::Reference<table::XColumnRowRange> xColumnRowRange (xSheet, uno::UNO_QUERY);
+                                if (xColumnRowRange.is())
+                                    xTableRows = xColumnRowRange->getRows();
+                            }
+                        }
+                        if (xTableRows.is())
+                        {
+                            if (nOldRow != aItr->aEndCell.Row || !xTableRow.is())
+                            {
+                                nOldRow = aItr->aEndCell.Row;
+                                xTableRows->getByIndex(nOldRow) >>= xTableRow;
+                            }
+                            if (xTableRow.is())
+                            {
+                                uno::Reference <beans::XPropertySet> xRowProperties(xTableRow, uno::UNO_QUERY);
+                                if (xRowProperties.is())
                                 {
-                                    Rectangle aRec = pDoc->GetMMRect(static_cast<SCCOL>(aItr->aStartCell.Column), static_cast<SCROW>(aItr->aStartCell.Row),
-                                        static_cast<SCCOL>(aItr->aStartCell.Column), static_cast<SCROW>(aItr->aStartCell.Row), aItr->aStartCell.Sheet);
-                                    awt::Point aPoint(aItr->xShape->getPosition());
-                                    awt::Size aSize(aItr->xShape->getSize());
-                                    if (pDoc->IsNegativePage(static_cast<SCTAB>(nOldSheet)))
-                                        aPoint.X += aSize.Width;
-                                    if (aItr->nEndY >= 0 && aItr->nEndX >= 0)
+                                    sal_Int32 nHeight;
+                                    if (xRowProperties->getPropertyValue(sRowHeight) >>= nHeight)
                                     {
-                                        if (aItr->xShape->getShapeType().equals(sConnectorShape))
+                                        Rectangle aRec = pDoc->GetMMRect(static_cast<SCCOL>(aItr->aStartCell.Column), static_cast<SCROW>(aItr->aStartCell.Row),
+                                            static_cast<SCCOL>(aItr->aStartCell.Column), static_cast<SCROW>(aItr->aStartCell.Row), aItr->aStartCell.Sheet);
+                                        awt::Point aPoint(aItr->xShape->getPosition());
+                                        awt::Size aSize(aItr->xShape->getSize());
+                                        if (pDoc->IsNegativePage(static_cast<SCTAB>(nOldSheet)))
+                                            aPoint.X += aSize.Width;
+                                        if (aItr->nEndY >= 0 && aItr->nEndX >= 0)
                                         {
-                                            //#103122#; handle connected Connectorshapes
-                                            uno::Reference<beans::XPropertySet> xShapeProps (aItr->xShape, uno::UNO_QUERY);
-                                            if(xShapeProps.is())
+                                            if (aItr->xShape->getShapeType().equals(sConnectorShape))
                                             {
-                                                uno::Reference<drawing::XShape> xStartShape(xShapeProps->getPropertyValue(  sStartShape ), uno::UNO_QUERY);
-                                                uno::Reference<drawing::XShape> xEndShape(xShapeProps->getPropertyValue( sEndShape ), uno::UNO_QUERY);
-                                                if (!xStartShape.is() && !xEndShape.is())
+                                                //#103122#; handle connected Connectorshapes
+                                                uno::Reference<beans::XPropertySet> xShapeProps (aItr->xShape, uno::UNO_QUERY);
+                                                if(xShapeProps.is())
                                                 {
-                                                    awt::Size aOldSize(aSize);
-                                                    GetNewShapeSizePos(pDoc, aRec, aItr->aEndCell, aPoint, aSize, aItr->nEndX, aItr->nEndY);
-                                                    aItr->xShape->setPosition(aPoint);
-                                                    if( (aSize.Width != aOldSize.Width) ||
-                                                        (aSize.Height != aOldSize.Height) )
-                                                        aItr->xShape->setSize(aSize);
-                                                }
-                                                else if (xStartShape.is() && xEndShape.is())
-                                                {
-                                                    // do nothing, because they are connected
-                                                }
-                                                else
-                                                {
-                                                    // only one point is connected, the other should be moved
-
-                                                    rtl::OUString sProperty;
-                                                    if (xStartShape.is())
+                                                    uno::Reference<drawing::XShape> xStartShape(xShapeProps->getPropertyValue(  sStartShape ), uno::UNO_QUERY);
+                                                    uno::Reference<drawing::XShape> xEndShape(xShapeProps->getPropertyValue( sEndShape ), uno::UNO_QUERY);
+                                                    if (!xStartShape.is() && !xEndShape.is())
                                                     {
-                                                        awt::Point aEndPoint;
-                                                        xShapeProps->getPropertyValue(sEndPosition) >>= aEndPoint;
-                                                        aPoint.X = aRec.Left() + aEndPoint.X;
-                                                        aPoint.Y = aRec.Top() + aEndPoint.Y;
-                                                        sProperty = sEndPosition;
+                                                        awt::Size aOldSize(aSize);
+                                                        GetNewShapeSizePos(pDoc, aRec, aItr->aEndCell, aPoint, aSize, aItr->nEndX, aItr->nEndY);
+                                                        aItr->xShape->setPosition(aPoint);
+                                                        if( (aSize.Width != aOldSize.Width) ||
+                                                            (aSize.Height != aOldSize.Height) )
+                                                            aItr->xShape->setSize(aSize);
+                                                    }
+                                                    else if (xStartShape.is() && xEndShape.is())
+                                                    {
+                                                        // do nothing, because they are connected
                                                     }
                                                     else
                                                     {
-                                                        awt::Point aStartPoint;
-                                                        xShapeProps->getPropertyValue(sStartPosition) >>= aStartPoint;
-                                                        aPoint.X = aRec.Left() + aStartPoint.X;
-                                                        aPoint.Y = aRec.Top() + aStartPoint.Y;
-                                                        sProperty = sStartPosition;
+                                                        // only one point is connected, the other should be moved
+
+                                                        rtl::OUString sProperty;
+                                                        if (xStartShape.is())
+                                                        {
+                                                            awt::Point aEndPoint;
+                                                            xShapeProps->getPropertyValue(sEndPosition) >>= aEndPoint;
+                                                            aPoint.X = aRec.Left() + aEndPoint.X;
+                                                            aPoint.Y = aRec.Top() + aEndPoint.Y;
+                                                            sProperty = sEndPosition;
+                                                        }
+                                                        else
+                                                        {
+                                                            awt::Point aStartPoint;
+                                                            xShapeProps->getPropertyValue(sStartPosition) >>= aStartPoint;
+                                                            aPoint.X = aRec.Left() + aStartPoint.X;
+                                                            aPoint.Y = aRec.Top() + aStartPoint.Y;
+                                                            sProperty = sStartPosition;
+                                                        }
+                                                        xShapeProps->setPropertyValue(sProperty, uno::makeAny(aPoint));
                                                     }
-                                                    xShapeProps->setPropertyValue(sProperty, uno::makeAny(aPoint));
                                                 }
                                             }
-                                        }
-                                        else
-                                        {
-                                            awt::Size aOldSize(aSize);
-                                            GetNewShapeSizePos(pDoc, aRec, aItr->aEndCell, aPoint, aSize, aItr->nEndX, aItr->nEndY);
-                                            if (pDoc->IsNegativePage(static_cast<SCTAB>(nOldSheet)))
-                                                aPoint.X -= aSize.Width;
-                                            aItr->xShape->setPosition(aPoint);
-                                            if( (aSize.Width != aOldSize.Width) ||
-                                                (aSize.Height != aOldSize.Height) )
-                                                aItr->xShape->setSize(aSize);
-                                        }
-                                    }
-                                    else
-                                    {
-                                        if (aItr->xShape->getShapeType().equals(sCaptionShape))
-                                        {
-                                            Rectangle aRectangle(aPoint.X, aPoint.Y, aPoint.X + aSize.Width, aPoint.Y + aSize.Height);
-
-                                            awt::Point aCaptionPoint;
-                                            uno::Reference< beans::XPropertySet > xShapeProps(aItr->xShape, uno::UNO_QUERY);
-                                            if (xShapeProps.is())
+                                            else
                                             {
-                                                try
-                                                {
-                                                    xShapeProps->getPropertyValue( sCaptionPoint ) >>= aCaptionPoint;
-                                                }
-                                                catch ( uno::Exception& )
-                                                {
-                                                    DBG_ERROR("This Captionshape has no CaptionPoint property.");
-                                                }
+                                                awt::Size aOldSize(aSize);
+                                                GetNewShapeSizePos(pDoc, aRec, aItr->aEndCell, aPoint, aSize, aItr->nEndX, aItr->nEndY);
+                                                if (pDoc->IsNegativePage(static_cast<SCTAB>(nOldSheet)))
+                                                    aPoint.X -= aSize.Width;
+                                                aItr->xShape->setPosition(aPoint);
+                                                if( (aSize.Width != aOldSize.Width) ||
+                                                    (aSize.Height != aOldSize.Height) )
+                                                    aItr->xShape->setSize(aSize);
                                             }
-                                            Point aCorePoint(aPoint.X, aPoint.Y);
-                                            Point aCoreCaptionPoint(aCaptionPoint.X, aCaptionPoint.Y);
-                                            aCoreCaptionPoint += aCorePoint;
-                                            aRectangle.Union(Rectangle(aCoreCaptionPoint, aCoreCaptionPoint));
-
-                                            Point aBeforeRightBottomPoint(aRectangle.BottomRight());
-
-                                            aRectangle += aRec.TopLeft();
-                                            if (aRectangle.Left() > aRec.Right())
-                                                aRectangle -= (Point(aRectangle.Left() - aRec.Right() + 2, 0));
-                                            if (aRectangle.Top() > aRec.Bottom())
-                                                aRectangle -= (Point(0, aRectangle.Top() - aRec.Bottom() + 2));
-
-                                            Point aDifferencePoint(aRectangle.BottomRight() - aBeforeRightBottomPoint);
-                                            aPoint.X += aDifferencePoint.X();
-                                            aPoint.Y += aDifferencePoint.Y();
-
-                                            aItr->xShape->setPosition(aPoint);
                                         }
                                         else
                                         {
-                                            // #96159# it is possible, that shapes have a negative position
-                                            // this is now handled here
-                                            DBG_ERROR("no or negative end address of this shape");
-                                            awt::Point aRefPoint;
-                                            aRefPoint.X = aRec.Left();
-                                            aRefPoint.Y = aRec.Top();
-                                            aPoint.X += aRefPoint.X;
-                                            if (aPoint.X > aRec.Right())
-                                                aPoint.X = aRec.Right() - 2; // decrement by 2 100th_mm because the cellheight is internal in twips
-                                            aPoint.Y += aRefPoint.Y;
-                                            if (aPoint.Y > aRec.Bottom())
-                                                aPoint.Y = aRec.Bottom() - 2; // decrement by 2 100th_mm because the cellheight is internal in twips
-                                            aItr->xShape->setPosition(aPoint);
+                                            if (aItr->xShape->getShapeType().equals(sCaptionShape))
+                                            {
+                                                Rectangle aRectangle(aPoint.X, aPoint.Y, aPoint.X + aSize.Width, aPoint.Y + aSize.Height);
+
+                                                awt::Point aCaptionPoint;
+                                                uno::Reference< beans::XPropertySet > xShapeProps(aItr->xShape, uno::UNO_QUERY);
+                                                if (xShapeProps.is())
+                                                {
+                                                    try
+                                                    {
+                                                        xShapeProps->getPropertyValue( sCaptionPoint ) >>= aCaptionPoint;
+                                                    }
+                                                    catch ( uno::Exception& )
+                                                    {
+                                                        DBG_ERROR("This Captionshape has no CaptionPoint property.");
+                                                    }
+                                                }
+                                                Point aCorePoint(aPoint.X, aPoint.Y);
+                                                Point aCoreCaptionPoint(aCaptionPoint.X, aCaptionPoint.Y);
+                                                aCoreCaptionPoint += aCorePoint;
+                                                aRectangle.Union(Rectangle(aCoreCaptionPoint, aCoreCaptionPoint));
+
+                                                Point aBeforeRightBottomPoint(aRectangle.BottomRight());
+
+                                                aRectangle += aRec.TopLeft();
+                                                if (aRectangle.Left() > aRec.Right())
+                                                    aRectangle -= (Point(aRectangle.Left() - aRec.Right() + 2, 0));
+                                                if (aRectangle.Top() > aRec.Bottom())
+                                                    aRectangle -= (Point(0, aRectangle.Top() - aRec.Bottom() + 2));
+
+                                                Point aDifferencePoint(aRectangle.BottomRight() - aBeforeRightBottomPoint);
+                                                aPoint.X += aDifferencePoint.X();
+                                                aPoint.Y += aDifferencePoint.Y();
+
+                                                aItr->xShape->setPosition(aPoint);
+                                            }
+                                            else
+                                            {
+                                                // #96159# it is possible, that shapes have a negative position
+                                                // this is now handled here
+                                                DBG_ERROR("no or negative end address of this shape");
+                                                awt::Point aRefPoint;
+                                                aRefPoint.X = aRec.Left();
+                                                aRefPoint.Y = aRec.Top();
+                                                aPoint.X += aRefPoint.X;
+                                                if (aPoint.X > aRec.Right())
+                                                    aPoint.X = aRec.Right() - 2; // decrement by 2 100th_mm because the cellheight is internal in twips
+                                                aPoint.Y += aRefPoint.Y;
+                                                if (aPoint.Y > aRec.Bottom())
+                                                    aPoint.Y = aRec.Bottom() - 2; // decrement by 2 100th_mm because the cellheight is internal in twips
+                                                aItr->xShape->setPosition(aPoint);
+                                            }
                                         }
                                     }
                                 }
                             }
                         }
+                        else
+                            DBG_ERROR("something wents wrong");
                     }
-                    else
-                        DBG_ERROR("something wents wrong");
+                    // #i78086# call CreateChartListener also for invalid position (anchored to sheet)
                     if (IsOLE(aItr->xShape))
                     {
                         uno::Reference < beans::XPropertySet > xShapeProps ( aItr->xShape, uno::UNO_QUERY );
