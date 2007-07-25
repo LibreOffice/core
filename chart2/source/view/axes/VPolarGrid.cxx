@@ -4,9 +4,9 @@
  *
  *  $RCSfile: VPolarGrid.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: vg $ $Date: 2007-05-22 19:13:27 $
+ *  last change: $Author: rt $ $Date: 2007-07-25 09:03:58 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -127,7 +127,7 @@ void VPolarGrid::createLinePointSequence_ForAngleAxis(
 }
 
 void VPolarGrid::create2DAngleGrid( const Reference< drawing::XShapes >& xLogicTarget
-        , ::std::vector< ::std::vector< TickInfo > >& rRadiusTickInfos
+        , ::std::vector< ::std::vector< TickInfo > >& /* rRadiusTickInfos */
         , ::std::vector< ::std::vector< TickInfo > >& rAngleTickInfos
         , const ::std::vector<VLineProperties>& rLinePropertiesList )
 {

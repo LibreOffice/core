@@ -4,9 +4,9 @@
  *
  *  $RCSfile: VPolarCoordinateSystem.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: vg $ $Date: 2007-05-22 19:13:04 $
+ *  last change: $Author: rt $ $Date: 2007-07-25 09:03:47 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -93,7 +93,7 @@ void VPolarCoordinateSystem::createVAxisList(
     //    return;
 
     sal_Int32 nDimensionCount = m_xCooSysModel->getDimension();
-    bool bSwapXAndY = this->getPropertySwapXAndYAxis();
+//     bool bSwapXAndY = this->getPropertySwapXAndYAxis();
 
     sal_Int32 nDimensionIndex = 0;
 
