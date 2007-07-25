@@ -4,9 +4,9 @@
  *
  *  $RCSfile: VCartesianAxis.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: vg $ $Date: 2007-05-22 19:10:36 $
+ *  last change: $Author: rt $ $Date: 2007-07-25 09:03:24 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -493,7 +493,7 @@ B2DVector lcl_getStaggerDistance( LabelIterator& rIter, const B2DVector& rDistan
         DBG_ASSERT(xShape2DText.is(),"LabelIterator does not work correctly");
 
         awt::Size aSize  = xShape2DText->getSize();
-        if(abs(aStaggerDirection.getX())>abs(aStaggerDirection.getY()))
+        if(fabs(aStaggerDirection.getX())>fabs(aStaggerDirection.getY()))
             nDistance = ::std::max(nDistance,aSize.Width);
         else
             nDistance = ::std::max(nDistance,aSize.Height);
@@ -502,7 +502,7 @@ B2DVector lcl_getStaggerDistance( LabelIterator& rIter, const B2DVector& rDistan
     aRet = aStaggerDirection*nDistance;
 
     //add extra distance for vertical distance
-    if(abs(aStaggerDirection.getX())>abs(aStaggerDirection.getY()))
+    if(fabs(aStaggerDirection.getX())>fabs(aStaggerDirection.getY()))
         aRet += rDistanceTickToText;
 
     return aRet;
@@ -948,8 +948,8 @@ sal_Int32 VCartesianAxis::estimateMaximumAutoMainIncrementCount()
     B2DVector aStart, aEnd;
     this->get2DAxisMainLine( aStart, aEnd, this->getLogicValueWhereMainLineCrossesOtherAxis() );
 
-    sal_Int32 nMaxHeight = static_cast<sal_Int32>(abs(aEnd.getY()-aStart.getY()));
-    sal_Int32 nMaxWidth = static_cast<sal_Int32>(abs(aEnd.getX()-aStart.getX()));
+    sal_Int32 nMaxHeight = static_cast<sal_Int32>(fabs(aEnd.getY()-aStart.getY()));
+    sal_Int32 nMaxWidth = static_cast<sal_Int32>(fabs(aEnd.getX()-aStart.getX()));
 
     sal_Int32 nTotalAvailable = nMaxHeight;
     sal_Int32 nSingleNeeded = m_nMaximumTextHeightSoFar;
