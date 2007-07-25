@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.23 $
+#   $Revision: 1.24 $
 #
-#   last change: $Author: rt $ $Date: 2007-07-03 13:45:07 $
+#   last change: $Author: rt $ $Date: 2007-07-25 09:03:00 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -87,7 +87,6 @@ SLOFILES=	\
     $(SLO)$/PotentialRegressionCurveCalculator.obj \
     $(SLO)$/RegressionCurveHelper.obj \
     $(SLO)$/RegressionCurveModel.obj \
-    $(SLO)$/Rotation.obj \
     $(SLO)$/RelativeSizeHelper.obj \
     $(SLO)$/RelativePositionHelper.obj \
     $(SLO)$/Scaling.obj \
