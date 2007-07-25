@@ -4,9 +4,9 @@
  *
  *  $RCSfile: tp_RangeChooser.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: vg $ $Date: 2007-05-22 17:48:01 $
+ *  last change: $Author: rt $ $Date: 2007-07-25 08:37:20 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -101,9 +101,7 @@ protected: //methods
     bool isDirty() const;
 
     DECL_LINK( ChooseRangeHdl, void* );
-    DECL_LINK( EditRangeHdl, void* );
-    DECL_LINK( ToogleRowsColumnsHdl, void* );
-    DECL_LINK( ToogleLabelHdl, CheckBox* );
+    DECL_LINK( ControlChangedHdl, void* );
 
 protected: //member
 
