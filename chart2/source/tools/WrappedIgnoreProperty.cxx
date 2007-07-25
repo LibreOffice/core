@@ -4,9 +4,9 @@
  *
  *  $RCSfile: WrappedIgnoreProperty.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: vg $ $Date: 2007-05-22 19:06:58 $
+ *  last change: $Author: rt $ $Date: 2007-07-25 09:02:01 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -78,38 +78,43 @@ namespace chart
 WrappedIgnoreProperty::WrappedIgnoreProperty( const OUString& rOuterName, const Any& rDefaultValue )
                          : WrappedProperty( rOuterName, OUString() )
                          , m_aDefaultValue( rDefaultValue )
+                         , m_aCurrentValue( rDefaultValue )
 {
 }
 WrappedIgnoreProperty::~WrappedIgnoreProperty()
 {
 }
 
-void WrappedIgnoreProperty::setPropertyValue( const Any& rOuterValue, const Reference< beans::XPropertySet >& xInnerPropertySet ) const
+void WrappedIgnoreProperty::setPropertyValue( const Any& rOuterValue, const Reference< beans::XPropertySet >& /* xInnerPropertySet */ ) const
                 throw (beans::UnknownPropertyException, beans::PropertyVetoException, lang::IllegalArgumentException, lang::WrappedTargetException, uno::RuntimeException)
 {
+    m_aCurrentValue = rOuterValue;
 }
 
-Any WrappedIgnoreProperty::getPropertyValue( const Reference< beans::XPropertySet >& xInnerPropertySet ) const
+Any WrappedIgnoreProperty::getPropertyValue( const Reference< beans::XPropertySet >& /* xInnerPropertySet */ ) const
                         throw (beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException)
 {
-    return getPropertyDefault(0);
+    return m_aCurrentValue;
 }
 
-void WrappedIgnoreProperty::setPropertyToDefault( const Reference< beans::XPropertyState >& xInnerPropertyState ) const
+void WrappedIgnoreProperty::setPropertyToDefault( const Reference< beans::XPropertyState >& /* xInnerPropertyState */ ) const
                         throw (::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::uno::RuntimeException)
 {
+    m_aCurrentValue = m_aDefaultValue;
 }
 
-Any WrappedIgnoreProperty::getPropertyDefault( const Reference< beans::XPropertyState >& xInnerPropertyState ) const
+Any WrappedIgnoreProperty::getPropertyDefault( const Reference< beans::XPropertyState >& /* xInnerPropertyState */ ) const
                         throw (beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException)
 {
     return m_aDefaultValue;
 }
 
-beans::PropertyState WrappedIgnoreProperty::getPropertyState( const Reference< beans::XPropertyState >& xInnerPropertyState ) const
+beans::PropertyState WrappedIgnoreProperty::getPropertyState( const Reference< beans::XPropertyState >& /* xInnerPropertyState */ ) const
                         throw (beans::UnknownPropertyException, uno::RuntimeException)
 {
-    return beans::PropertyState_DEFAULT_VALUE;
+    return ( m_aCurrentValue == m_aDefaultValue
+             ? beans::PropertyState_DEFAULT_VALUE
+             : beans::PropertyState_DIRECT_VALUE );
 }
 
 //static
