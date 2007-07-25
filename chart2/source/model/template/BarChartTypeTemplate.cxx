@@ -4,9 +4,9 @@
  *
  *  $RCSfile: BarChartTypeTemplate.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: rt $ $Date: 2007-07-03 13:43:29 $
+ *  last change: $Author: rt $ $Date: 2007-07-25 08:52:50 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -164,7 +164,7 @@ sal_Int32 BarChartTypeTemplate::getDimension() const
     return m_nDim;
 }
 
-StackMode BarChartTypeTemplate::getStackMode( sal_Int32 nChartTypeIndex ) const
+StackMode BarChartTypeTemplate::getStackMode( sal_Int32 /* nChartTypeIndex */ ) const
 {
     return m_eStackMode;
 }
@@ -197,7 +197,7 @@ sal_Bool SAL_CALL BarChartTypeTemplate::matchesTemplate(
         ::std::vector< Reference< chart2::XDataSeries > > aSeriesVec(
             DiagramHelper::getDataSeriesFromDiagram( xDiagram ));
 
-        sal_Int32 aCommonGeom;
+        sal_Int32 aCommonGeom( 0 );
         bool bGeomFound = false, bAdaptGeom = false;
         for( ::std::vector< Reference< chart2::XDataSeries > >::const_iterator aIt =
                  aSeriesVec.begin(); aIt != aSeriesVec.end(); ++aIt )
