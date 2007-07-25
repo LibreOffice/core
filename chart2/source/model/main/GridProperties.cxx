@@ -4,9 +4,9 @@
  *
  *  $RCSfile: GridProperties.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2007-07-03 13:43:00 $
+ *  last change: $Author: rt $ $Date: 2007-07-25 08:50:24 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -142,7 +142,7 @@ const Sequence< Property > & lcl_getPropertySequence()
 namespace chart
 {
 
-GridProperties::GridProperties( Reference< uno::XComponentContext > const & xContext ) :
+GridProperties::GridProperties( Reference< uno::XComponentContext > const & /* xContext */ ) :
         ::property::OPropertySet( m_aMutex ),
     m_xModifyEventForwarder( new ModifyListenerHelper::ModifyEventForwarder( m_aMutex ))
 {
@@ -154,6 +154,8 @@ GridProperties::GridProperties() :
 {}
 
 GridProperties::GridProperties( const GridProperties & rOther ) :
+        MutexContainer(),
+        impl::GridProperties_Base(),
         ::property::OPropertySet( rOther, m_aMutex ),
     m_xModifyEventForwarder( new ModifyListenerHelper::ModifyEventForwarder( m_aMutex ))
 {
@@ -256,7 +258,7 @@ void SAL_CALL GridProperties::modified( const lang::EventObject& aEvent )
 }
 
 // ____ XEventListener (base of XModifyListener) ____
-void SAL_CALL GridProperties::disposing( const lang::EventObject& Source )
+void SAL_CALL GridProperties::disposing( const lang::EventObject& /* Source */ )
     throw (uno::RuntimeException)
 {
     // nothing
