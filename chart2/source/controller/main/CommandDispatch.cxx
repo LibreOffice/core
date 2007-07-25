@@ -4,9 +4,9 @@
  *
  *  $RCSfile: CommandDispatch.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: vg $ $Date: 2007-05-22 18:05:57 $
+ *  last change: $Author: rt $ $Date: 2007-07-25 08:44:28 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -106,7 +106,7 @@ void SAL_CALL CommandDispatch::disposing()
 }
 
 // ____ XDispatch ____
-void SAL_CALL CommandDispatch::dispatch( const util::URL& URL, const Sequence< beans::PropertyValue >& Arguments )
+void SAL_CALL CommandDispatch::dispatch( const util::URL& /* URL */, const Sequence< beans::PropertyValue >& /* Arguments */ )
     throw (uno::RuntimeException)
 {}
 
@@ -135,14 +135,14 @@ void SAL_CALL CommandDispatch::removeStatusListener( const Reference< frame::XSt
 }
 
 // ____ XModifyListener ____
-void SAL_CALL CommandDispatch::modified( const lang::EventObject& aEvent )
+void SAL_CALL CommandDispatch::modified( const lang::EventObject& /* aEvent */ )
     throw (uno::RuntimeException)
 {
     fireAllStatusEvents( 0 );
 }
 
 // ____ XEventListener (base of XModifyListener) ____
-void SAL_CALL CommandDispatch::disposing( const lang::EventObject& Source )
+void SAL_CALL CommandDispatch::disposing( const lang::EventObject& /* Source */ )
     throw (uno::RuntimeException)
 {}
 

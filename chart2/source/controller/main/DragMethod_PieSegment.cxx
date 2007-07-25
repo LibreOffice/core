@@ -4,9 +4,9 @@
  *
  *  $RCSfile: DragMethod_PieSegment.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: vg $ $Date: 2007-05-22 18:07:37 $
+ *  last change: $Author: rt $ $Date: 2007-07-25 08:45:17 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -148,7 +148,7 @@ void DragMethod_PieSegment::Mov(const Point& rPnt)
         }
     }
 }
-FASTBOOL DragMethod_PieSegment::End(FASTBOOL bCopy)
+FASTBOOL DragMethod_PieSegment::End(FASTBOOL /* bCopy */)
 {
     Hide();
 

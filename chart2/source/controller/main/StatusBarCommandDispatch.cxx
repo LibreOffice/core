@@ -4,9 +4,9 @@
  *
  *  $RCSfile: StatusBarCommandDispatch.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: vg $ $Date: 2007-05-22 18:09:28 $
+ *  last change: $Author: rt $ $Date: 2007-07-25 08:45:42 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -120,8 +120,8 @@ void StatusBarCommandDispatch::fireStatusEvent(
 
 // ____ XDispatch ____
 void SAL_CALL StatusBarCommandDispatch::dispatch(
-    const util::URL& URL,
-    const Sequence< beans::PropertyValue >& Arguments )
+    const util::URL& /* URL */,
+    const Sequence< beans::PropertyValue >& /* Arguments */ )
     throw (uno::RuntimeException)
 {
     // nothing to do here
@@ -136,7 +136,7 @@ void SAL_CALL StatusBarCommandDispatch::disposing()
 }
 
 // ____ XEventListener (base of XModifyListener) ____
-void SAL_CALL StatusBarCommandDispatch::disposing( const lang::EventObject& Source )
+void SAL_CALL StatusBarCommandDispatch::disposing( const lang::EventObject& /* Source */ )
     throw (uno::RuntimeException)
 {
     m_xModifiable.clear();
@@ -154,7 +154,7 @@ void SAL_CALL StatusBarCommandDispatch::modified( const lang::EventObject& aEven
 }
 
 // ____ XSelectionChangeListener ____
-void SAL_CALL StatusBarCommandDispatch::selectionChanged( const lang::EventObject& aEvent )
+void SAL_CALL StatusBarCommandDispatch::selectionChanged( const lang::EventObject& /* aEvent */ )
     throw (uno::RuntimeException)
 {
     if( m_xSelectionSupplier.is())
