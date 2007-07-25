@@ -4,9 +4,9 @@
  *
  *  $RCSfile: unochart.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2007-07-09 12:29:49 $
+ *  last change: $Author: rt $ $Date: 2007-07-25 08:15:41 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -614,9 +614,8 @@ SwChartDataProvider::~SwChartDataProvider()
 {
 }
 
-
-uno::Reference< chart2::data::XDataSource > SAL_CALL SwChartDataProvider::createDataSource(
-        const uno::Sequence< beans::PropertyValue >& rArguments )
+uno::Reference< chart2::data::XDataSource > SwChartDataProvider::Impl_createDataSource(
+        const uno::Sequence< beans::PropertyValue >& rArguments, sal_Bool bTestOnly )
     throw (lang::IllegalArgumentException, uno::RuntimeException)
 {
     vos::OGuard aGuard( Application::GetSolarMutex() );
@@ -744,10 +743,12 @@ uno::Reference< chart2::data::XDataSource > SAL_CALL SwChartDataProvider::create
 #endif
 
     // get table format for that single table from above
-    SwFrmFmt    *pTblFmt    = 0;    // pointer to table format
+    SwFrmFmt    *pTblFmt  = 0;      // pointer to table format
+    SwUnoCrsr   *pUnoCrsr = 0;      // here required to check if the cells in the range do actually exist
+    std::auto_ptr< SwUnoCrsr > pAuto( pUnoCrsr );  // to end lifetime of object pointed to by pUnoCrsr
     if (aSubRanges.getLength() > 0)
-        GetFormatAndCreateCursorFromRangeRep( pDoc, pSubRanges[0], &pTblFmt, NULL );
-    if (!pTblFmt)
+        GetFormatAndCreateCursorFromRangeRep( pDoc, pSubRanges[0], &pTblFmt, &pUnoCrsr );
+    if (!pTblFmt || !pUnoCrsr)
         throw lang::IllegalArgumentException();
 
     if(pTblFmt)
@@ -890,7 +891,12 @@ uno::Reference< chart2::data::XDataSource > SAL_CALL SwChartDataProvider::create
                 }
             }
             if (nNumLDS == 0)
-                throw uno::RuntimeException();
+                throw lang::IllegalArgumentException();
+
+            // now we should have all necessary data to build a proper DataSource
+            // thus if we came this far there should be no further problem
+            if (bTestOnly)
+                return xRes;    // have createDataSourcePossible return true
 
             // create data source from found label and data sequences
             uno::Sequence< uno::Reference< chart2::data::XDataSequence > > aLabelSeqs( nNumLDS );
@@ -1025,6 +1031,71 @@ uno::Reference< chart2::data::XDataSource > SAL_CALL SwChartDataProvider::create
     return xRes;
 }
 
+sal_Bool SAL_CALL SwChartDataProvider::createDataSourcePossible(
+        const uno::Sequence< beans::PropertyValue >& rArguments )
+    throw (uno::RuntimeException)
+{
+    vos::OGuard aGuard( Application::GetSolarMutex() );
+
+    sal_Bool bPossible = sal_True;
+    try
+    {
+        Impl_createDataSource( rArguments, sal_True );
+    }
+    catch (lang::IllegalArgumentException &)
+    {
+        bPossible = sal_False;
+    }
+
+    return bPossible;
+}
+
+uno::Reference< chart2::data::XDataSource > SAL_CALL SwChartDataProvider::createDataSource(
+        const uno::Sequence< beans::PropertyValue >& rArguments )
+    throw (lang::IllegalArgumentException, uno::RuntimeException)
+{
+    vos::OGuard aGuard( Application::GetSolarMutex() );
+    return Impl_createDataSource( rArguments );
+}
+
+////////////////////////////////////////////////////////////
+// SwChartDataProvider::GetBrokenCellRangeForExport
+//
+// fix for #i79009
+// we need to return a property that has the same value as the property
+// 'CellRangeRepresentation' but for all rows which are increased by one.
+// E.g. Table1:A1:D5 -> Table1:A2:D6
+// Since the problem is only for old charts which did not support multiple
+// we do not need to provide that property/string if the 'CellRangeRepresentation'
+// contains multiple ranges.
+OUString SwChartDataProvider::GetBrokenCellRangeForExport(
+    const OUString &rCellRangeRepresentation )
+{
+    OUString aRes;
+
+    // check that we do not have multiple ranges
+    if (-1 == rCellRangeRepresentation.indexOf( ';' ))
+    {
+        // get current cell and table names
+        String aTblName, aStartCell, aEndCell;
+        GetTableAndCellsFromRangeRep( rCellRangeRepresentation,
+            aTblName, aStartCell, aEndCell, sal_False );
+        sal_Int32 nStartCol = -1, nStartRow = -1, nEndCol = -1, nEndRow = -1;
+        lcl_GetCellPosition( aStartCell, nStartCol, nStartRow );
+        lcl_GetCellPosition( aEndCell, nEndCol, nEndRow );
+
+        // get new cell names
+        ++nStartRow;
+        ++nEndRow;
+        aStartCell = lcl_GetCellName( nStartCol, nStartRow );
+        aEndCell   = lcl_GetCellName( nEndCol, nEndRow );
+
+        aRes = GetRangeRepFromTableAndCells( aTblName,
+                aStartCell, aEndCell, sal_False );
+    }
+
+    return aRes;
+}
 
 uno::Sequence< beans::PropertyValue > SAL_CALL SwChartDataProvider::detectArguments(
         const uno::Reference< chart2::data::XDataSource >& xDataSource )
@@ -1346,13 +1417,19 @@ uno::Sequence< beans::PropertyValue > SAL_CALL SwChartDataProvider::detectArgume
         bFirstCellIsLabel = sal_True;
     //
     DBG_ASSERT( aSortedCellRanges.getLength(), "CellRangeRepresentation missing" );
+    OUString aBrokenCellRangeForExport( GetBrokenCellRangeForExport( aSortedCellRanges ) );
     //
-    aResult.realloc(4);
+    aResult.realloc(5);
     sal_Int32 nProps = 0;
     aResult[nProps  ].Name = C2U("FirstCellAsLabel");
     aResult[nProps++].Value <<= bFirstCellIsLabel;
     aResult[nProps  ].Name = C2U("CellRangeRepresentation");
     aResult[nProps++].Value <<= aSortedCellRanges;
+    if (0 != aBrokenCellRangeForExport.getLength())
+    {
+        aResult[nProps  ].Name = C2U("BrokenCellRangeForExport");
+        aResult[nProps++].Value <<= aBrokenCellRangeForExport;
+    }
     if (nDtaSrcIsColumns == 0 || nDtaSrcIsColumns == 1)
     {
         chart::ChartDataRowSource eDataRowSource = (nDtaSrcIsColumns == 1) ?
@@ -1371,11 +1448,10 @@ uno::Sequence< beans::PropertyValue > SAL_CALL SwChartDataProvider::detectArgume
     return aResult;
 }
 
-uno::Reference< chart2::data::XDataSequence > SAL_CALL SwChartDataProvider::createDataSequenceByRangeRepresentation(
-        const OUString& rRangeRepresentation )
+uno::Reference< chart2::data::XDataSequence > SwChartDataProvider::Impl_createDataSequenceByRangeRepresentation(
+        const OUString& rRangeRepresentation, sal_Bool bTestOnly )
     throw (lang::IllegalArgumentException, uno::RuntimeException)
 {
-    vos::OGuard aGuard( Application::GetSolarMutex() );
     if (bDisposed)
         throw lang::DisposedException();
 
@@ -1386,8 +1462,46 @@ uno::Reference< chart2::data::XDataSequence > SAL_CALL SwChartDataProvider::crea
     if (!pTblFmt || !pUnoCrsr)
         throw lang::IllegalArgumentException();
 
+    // check that cursors point and mark are in a single row or column.
+    String aCellRange( GetCellRangeName( *pTblFmt, *pUnoCrsr ) );
+    SwRangeDescriptor aDesc;
+    FillRangeDescriptor( aDesc, aCellRange );
+    if (aDesc.nTop != aDesc.nBottom  &&  aDesc.nLeft != aDesc.nRight)
+        throw lang::IllegalArgumentException();
+
     DBG_ASSERT( pTblFmt && pUnoCrsr, "table format or cursor missing" );
-    return new SwChartDataSequence( *this, *pTblFmt, pUnoCrsr );
+    uno::Reference< chart2::data::XDataSequence > xDataSeq;
+    if (!bTestOnly)
+        xDataSeq = new SwChartDataSequence( *this, *pTblFmt, pUnoCrsr );
+
+    return xDataSeq;
+}
+
+sal_Bool SAL_CALL SwChartDataProvider::createDataSequenceByRangeRepresentationPossible(
+        const OUString& rRangeRepresentation )
+    throw (uno::RuntimeException)
+{
+    vos::OGuard aGuard( Application::GetSolarMutex() );
+
+    sal_Bool bPossible = sal_True;
+    try
+    {
+        Impl_createDataSequenceByRangeRepresentation( rRangeRepresentation, sal_True );
+    }
+    catch (lang::IllegalArgumentException &)
+    {
+        bPossible = sal_False;
+    }
+
+    return bPossible;
+}
+
+uno::Reference< chart2::data::XDataSequence > SAL_CALL SwChartDataProvider::createDataSequenceByRangeRepresentation(
+        const OUString& rRangeRepresentation )
+    throw (lang::IllegalArgumentException, uno::RuntimeException)
+{
+    vos::OGuard aGuard( Application::GetSolarMutex() );
+    return Impl_createDataSequenceByRangeRepresentation( rRangeRepresentation );
 }
 
 
@@ -1723,10 +1837,11 @@ rtl::OUString SAL_CALL SwChartDataProvider::convertRangeToXML( const rtl::OUStri
     for (USHORT i = 0;  i < nNumRanges;  ++i)
     {
         String aRange( aRangeRepresentation.GetToken(i, ';') );
-        SwFrmFmt    *pTblFmt    = 0;    // pointer to table format
-        //SwUnoCrsr   *pUnoCrsr   = 0;    // pointer to new created cursor spanning the cell range
-        GetFormatAndCreateCursorFromRangeRep( pDoc, aRange,
-                                              &pTblFmt, /*&pUnoCrsr*/ NULL );
+        SwFrmFmt    *pTblFmt  = 0;      // pointer to table format
+        // BM: For what should the check be necessary? for #i79009# it is required that NO check is done
+//         SwUnoCrsr   *pUnoCrsr = 0;      // here required to check if the cells in the range do actually exist
+//         std::auto_ptr< SwUnoCrsr > pAuto( pUnoCrsr );  // to end lifetime of object pointed to by pUnoCrsr
+        GetFormatAndCreateCursorFromRangeRep( pDoc, aRange, &pTblFmt, NULL );
         if (!pTblFmt)
             throw lang::IllegalArgumentException();
 //    if (!pUnoCrsr)
