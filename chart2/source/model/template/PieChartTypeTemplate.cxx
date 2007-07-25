@@ -4,9 +4,9 @@
  *
  *  $RCSfile: PieChartTypeTemplate.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: rt $ $Date: 2007-07-03 13:43:43 $
+ *  last change: $Author: rt $ $Date: 2007-07-25 08:54:31 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -41,7 +41,6 @@
 #include "CommonConverters.hxx"
 #include "DiagramHelper.hxx"
 #include "servicenames_charttypes.hxx"
-#include "Rotation.hxx"
 #include "DataSeriesHelper.hxx"
 #include "ContainerHelper.hxx"
 #include "BaseGFXHelper.hxx"
@@ -326,7 +325,7 @@ void PieChartTypeTemplate::adaptScales(
 void PieChartTypeTemplate::createChartTypes(
     const Sequence< Sequence< Reference< chart2::XDataSeries > > > & aSeriesSeq,
     const Sequence< Reference< chart2::XCoordinateSystem > > & rCoordSys,
-    const Sequence< Reference< chart2::XChartType > >& aOldChartTypesSeq )
+    const Sequence< Reference< chart2::XChartType > >& /* aOldChartTypesSeq */ )
 {
     if( rCoordSys.getLength() == 0 ||
         ! rCoordSys[0].is() )
