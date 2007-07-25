@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ChartController_Properties.cxx,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: vg $ $Date: 2007-05-22 18:03:55 $
+ *  last change: $Author: rt $ $Date: 2007-07-25 08:43:35 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -43,6 +43,7 @@
 #include "macros.hxx"
 #include "dlg_ObjectProperties.hxx"
 #include "dlg_View3D.hxx"
+#include "dlg_InsertStatistic.hxx"
 #include "ViewElementListProvider.hxx"
 #include "DataPointItemConverter.hxx"
 #include "AxisItemConverter.hxx"
@@ -422,7 +423,7 @@ rtl::OUString lcl_getGridCIDForCommand( const ::rtl::OString& rDispatchCommand, 
 }
 rtl::OUString lcl_getObjectCIDForCommand( const ::rtl::OString& rDispatchCommand, const uno::Reference< XChartDocument > & xChartDocument )
 {
-    ObjectType eObjectType;
+    ObjectType eObjectType = OBJECTTYPE_UNKNOWN;
     rtl::OUString aParticleID;
 
     uno::Reference< frame::XModel > xChartModel( xChartDocument, uno::UNO_QUERY );
@@ -555,7 +556,7 @@ void SAL_CALL ChartController::executeDlg_ObjectProperties( const ::rtl::OUStrin
             ActionDescriptionProvider::createDescription(
                 ActionDescriptionProvider::FORMAT,
                 ObjectNameProvider::getName( ObjectIdentifier::getObjectType( aObjectCID ))),
-            m_aUndoManager, m_aModel->getModel() );
+            m_xUndoManager, m_aModel->getModel() );
 
         //-------------------------------------------------------------
         //convert properties to ItemSet
@@ -606,6 +607,11 @@ void SAL_CALL ChartController::executeDlg_ObjectProperties( const ::rtl::OUStrin
             Graphic*    pAutoSymbolGraphic = new Graphic( aViewElementListProvider.GetSymbolGraphic( nStandardSymbol, pSymbolShapeProperties ) );
             // note: the dialog takes the ownership of pSymbolShapeProperties and pAutoSymbolGraphic
             aDlg.setSymbolInformation( pSymbolShapeProperties, pAutoSymbolGraphic );
+        }
+        if( aDialogParameter.HasRegressionProperties() )
+        {
+            aDlg.SetAxisMinorStepWidthForErrorBarDecimals(
+                SchDataStatisticsDlg::getAxisMinorStepWidthForErrorBarDecimals( m_aModel->getModel(), m_xChartView, aObjectCID ) );
         }
 
         //-------------------------------------------------------------
@@ -682,8 +688,10 @@ void SAL_CALL ChartController::executeDispatch_View3D()
 {
     try
     {
-        UndoLiveUpdateGuard aUndoGuard( ::rtl::OUString( String( SchResId( STR_ACTION_EDIT_3D_VIEW ))),
-                              m_aUndoManager, m_aModel->getModel());
+        // using assignment for broken gcc 3.3
+        UndoLiveUpdateGuard aUndoGuard = UndoLiveUpdateGuard(
+            ::rtl::OUString( String( SchResId( STR_ACTION_EDIT_3D_VIEW ))),
+            m_xUndoManager, m_aModel->getModel());
 
         // /--
         //open dialog
