@@ -4,9 +4,9 @@
  *
  *  $RCSfile: UndoCommandDispatch.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: vg $ $Date: 2007-05-22 18:09:48 $
+ *  last change: $Author: rt $ $Date: 2007-07-25 08:45:54 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -39,16 +39,11 @@
 #include "UndoCommandDispatch.hxx"
 #include "macros.hxx"
 
-#ifndef _COM_SUN_STAR_UTIL_XMODIFYBROADCASTER_HPP_
+#include <com/sun/star/chart2/XUndoSupplier.hpp>
 #include <com/sun/star/util/XModifyBroadcaster.hpp>
-#endif
 
-#ifndef _VOS_MUTEX_HXX_
 #include <vos/mutex.hxx>
-#endif
-#ifndef _SV_SVAPP_HXX
 #include <vcl/svapp.hxx>
-#endif
 
 // for ressource strings STR_UNDO and STR_REDO
 #include <sfx2/sfx.hrc>
@@ -66,21 +61,25 @@ namespace chart
 
 UndoCommandDispatch::UndoCommandDispatch(
     const Reference< uno::XComponentContext > & xContext,
-    UndoManager * pUndoManager,
     const Reference< frame::XModel > & xModel ) :
         CommandDispatch( xContext ),
-        m_pUndoManager( pUndoManager ),
         m_xModel( xModel )
-{}
+{
+    Reference< chart2::XUndoSupplier > xUndoSupplier( xModel, uno::UNO_QUERY );
+    OSL_ASSERT( xUndoSupplier.is());
+    if( xUndoSupplier.is())
+        m_xUndoManager.set( xUndoSupplier->getUndoManager());
+}
 
 UndoCommandDispatch::~UndoCommandDispatch()
 {}
 
 void UndoCommandDispatch::initialize()
 {
-    if( m_pUndoManager )
+    Reference< util::XModifyBroadcaster > xBroadcaster( m_xUndoManager, uno::UNO_QUERY );
+    if( xBroadcaster.is() )
     {
-        m_pUndoManager->addModifyListener( this );
+        xBroadcaster->addModifyListener( this );
     }
 }
 
@@ -88,43 +87,45 @@ void UndoCommandDispatch::fireStatusEvent(
     const OUString & rURL,
     const Reference< frame::XStatusListener > & xSingleListener /* = 0 */ )
 {
-    if( m_pUndoManager )
+    if( m_xUndoManager.is() )
     {
         bool bFireAll = (rURL.getLength() == 0);
         uno::Any aUndoState, aRedoState;
-        if( m_pUndoManager->canUndo())
+        if( m_xUndoManager->undoPossible())
         {
-            OUString aUndo( String( SchResId( STR_UNDO )));
-            aUndoState <<= ( aUndo + m_pUndoManager->getCurrentUndoString());
+            // using assignment for broken gcc 3.3
+            OUString aUndo = OUString( String( SchResId( STR_UNDO )));
+            aUndoState <<= ( aUndo + m_xUndoManager->getCurrentUndoString());
         }
-        if( m_pUndoManager->canRedo())
+        if( m_xUndoManager->redoPossible())
         {
-            OUString aRedo( String( SchResId( STR_REDO )));
-            aRedoState <<= ( aRedo + m_pUndoManager->getCurrentRedoString());
+            // using assignment for broken gcc 3.3
+            OUString aRedo = OUString( String( SchResId( STR_REDO )));
+            aRedoState <<= ( aRedo + m_xUndoManager->getCurrentRedoString());
         }
 
         if( bFireAll || rURL.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM(".uno:Undo")))
-            fireStatusEventForURL( C2U(".uno:Undo"), aUndoState, m_pUndoManager->canUndo(), xSingleListener );
+            fireStatusEventForURL( C2U(".uno:Undo"), aUndoState, m_xUndoManager->undoPossible(), xSingleListener );
         if( bFireAll || rURL.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM(".uno:Redo")))
-            fireStatusEventForURL( C2U(".uno:Redo"), aRedoState, m_pUndoManager->canRedo(), xSingleListener );
+            fireStatusEventForURL( C2U(".uno:Redo"), aRedoState, m_xUndoManager->redoPossible(), xSingleListener );
     }
 }
 
 // ____ XDispatch ____
 void SAL_CALL UndoCommandDispatch::dispatch(
     const util::URL& URL,
-    const Sequence< beans::PropertyValue >& Arguments )
+    const Sequence< beans::PropertyValue >& /* Arguments */ )
     throw (uno::RuntimeException)
 {
-    if( m_pUndoManager )
+    if( m_xUndoManager.is() )
     {
         // why is it necessary to lock the solar mutex here?
         // /--
         ::vos::OGuard aSolarGuard( Application::GetSolarMutex());
         if( URL.Path.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "Undo" )))
-            m_pUndoManager->undo( m_xModel );
+            m_xUndoManager->undo( m_xModel );
         else
-            m_pUndoManager->redo( m_xModel );
+            m_xUndoManager->redo( m_xModel );
         // \--
     }
 }
@@ -133,21 +134,21 @@ void SAL_CALL UndoCommandDispatch::dispatch(
 /// is called when this is disposed
 void SAL_CALL UndoCommandDispatch::disposing()
 {
-    if( m_pUndoManager )
+    Reference< util::XModifyBroadcaster > xBroadcaster( m_xUndoManager, uno::UNO_QUERY );
+    if( xBroadcaster.is() )
     {
-        m_pUndoManager->removeModifyListener( this );
-        // not owner
-        m_pUndoManager = 0;
+        xBroadcaster->removeModifyListener( this );
     }
 
+    m_xUndoManager.clear();
     m_xModel.clear();
 }
 
 // ____ XEventListener (base of XModifyListener) ____
-void SAL_CALL UndoCommandDispatch::disposing( const lang::EventObject& Source )
+void SAL_CALL UndoCommandDispatch::disposing( const lang::EventObject& /* Source */ )
     throw (uno::RuntimeException)
 {
-    m_pUndoManager = 0;
+    m_xUndoManager.clear();
     m_xModel.clear();
 }
 
