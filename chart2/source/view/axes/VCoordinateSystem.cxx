@@ -4,9 +4,9 @@
  *
  *  $RCSfile: VCoordinateSystem.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: vg $ $Date: 2007-05-22 19:11:44 $
+ *  last change: $Author: rt $ $Date: 2007-07-25 09:03:35 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -103,14 +103,14 @@ VCoordinateSystem* VCoordinateSystem::createCoordinateSystem(
 
 VCoordinateSystem::VCoordinateSystem( const Reference< XCoordinateSystem >& xCooSys )
     : m_xCooSysModel(xCooSys)
-    , m_aExplicitScales(3)
-    , m_aExplicitIncrements(3)
     , m_xLogicTargetForGrids(0)
     , m_xLogicTargetForAxes(0)
     , m_xFinalTarget(0)
     , m_xShapeFactory(0)
     , m_aMatrixSceneToScreen()
     , m_aMergedMinimumAndMaximumSupplier()
+    , m_aExplicitScales(3)
+    , m_aExplicitIncrements(3)
     , m_aExplicitCategoriesProvider( new ExplicitCategoriesProvider( m_xCooSysModel ) )
 {
     if( !m_xCooSysModel.is() || m_xCooSysModel->getDimension()<3 )
@@ -197,15 +197,15 @@ uno::Sequence< sal_Int32 > VCoordinateSystem::getCoordinateSystemResolution(
         BaseGFXHelper::HomogenMatrixToB3DHomMatrix(
             m_aMatrixSceneToScreen ) ) );
 
-    double fCoosysWidth = abs(aScale.getX()*FIXED_SIZE_FOR_3D_CHART_VOLUME);
-    double fCoosysHeight = abs(aScale.getY()*FIXED_SIZE_FOR_3D_CHART_VOLUME);
+    double fCoosysWidth = static_cast< double >( fabs(aScale.getX()*FIXED_SIZE_FOR_3D_CHART_VOLUME));
+    double fCoosysHeight = static_cast< double >( fabs(aScale.getY()*FIXED_SIZE_FOR_3D_CHART_VOLUME));
 
     double fPageWidth = rPageSize.Width;
     double fPageHeight = rPageSize.Height;
 
     //factor 2 to avoid rounding problems
-    sal_Int32 nXResolution = 2*rPageResolution.Width*fCoosysWidth/fPageWidth;
-    sal_Int32 nYResolution = 2*rPageResolution.Height*fCoosysHeight/fPageHeight;
+    sal_Int32 nXResolution = static_cast<sal_Int32>(2.0*static_cast<double>(rPageResolution.Width)*fCoosysWidth/fPageWidth);
+    sal_Int32 nYResolution = static_cast<sal_Int32>(2.0*static_cast<double>(rPageResolution.Height)*fCoosysHeight/fPageHeight);
 
     if( nXResolution < 10 )
         nXResolution = 10;
@@ -364,12 +364,12 @@ sal_Int32 VCoordinateSystem::getMaximumIncrementIndexByDimension( sal_Int32 nDim
     return nRet;
 }
 
-rtl::OUString VCoordinateSystem::createCIDForAxis( const Reference< chart2::XAxis >& xAxis, sal_Int32 nDimensionIndex, sal_Int32 nAxisIndex )
+rtl::OUString VCoordinateSystem::createCIDForAxis( const Reference< chart2::XAxis >& /* xAxis */, sal_Int32 nDimensionIndex, sal_Int32 nAxisIndex )
 {
     rtl::OUString aAxisParticle( ObjectIdentifier::createParticleForAxis( nDimensionIndex, nAxisIndex ) );
     return ObjectIdentifier::createClassifiedIdentifierForParticles( m_aCooSysParticle, aAxisParticle );
 }
-rtl::OUString VCoordinateSystem::createCIDForGrid( const Reference< chart2::XAxis >& xAxis, sal_Int32 nDimensionIndex, sal_Int32 nAxisIndex )
+rtl::OUString VCoordinateSystem::createCIDForGrid( const Reference< chart2::XAxis >& /* xAxis */, sal_Int32 nDimensionIndex, sal_Int32 nAxisIndex )
 {
     rtl::OUString aGridParticle( ObjectIdentifier::createParticleForGrid( nDimensionIndex, nAxisIndex ) );
     return ObjectIdentifier::createClassifiedIdentifierForParticles( m_aCooSysParticle, aGridParticle );
@@ -393,9 +393,9 @@ sal_Int32 VCoordinateSystem::getMaximumAxisIndexByDimension( sal_Int32 nDimensio
 }
 
 void VCoordinateSystem::createVAxisList(
-              const uno::Reference< util::XNumberFormatsSupplier > & xNumberFormatsSupplier
-            , const awt::Size& rFontReferenceSize
-            , const awt::Rectangle& rMaximumSpaceForLabels
+              const uno::Reference< util::XNumberFormatsSupplier > & /* xNumberFormatsSupplier */
+            , const awt::Size& /* rFontReferenceSize */
+            , const awt::Rectangle& /* rMaximumSpaceForLabels */
             )
 {
 }
