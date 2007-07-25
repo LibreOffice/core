@@ -4,9 +4,9 @@
  *
  *  $RCSfile: NetChartTypeTemplate.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: vg $ $Date: 2007-05-22 18:50:23 $
+ *  last change: $Author: rt $ $Date: 2007-07-25 08:54:19 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -87,7 +87,7 @@ NetChartTypeTemplate::NetChartTypeTemplate(
 NetChartTypeTemplate::~NetChartTypeTemplate()
 {}
 
-StackMode NetChartTypeTemplate::getStackMode( sal_Int32 nChartTypeIndex ) const
+StackMode NetChartTypeTemplate::getStackMode( sal_Int32 /* nChartTypeIndex */ ) const
 {
     return m_eStackMode;
 }
@@ -130,9 +130,6 @@ sal_Bool SAL_CALL NetChartTypeTemplate::matchesTemplate(
     {
         ::std::vector< Reference< chart2::XDataSeries > > aSeriesVec(
             DiagramHelper::getDataSeriesFromDiagram( xDiagram ));
-        chart2::SymbolStyle eStyle = m_bHasSymbols
-            ? chart2::SymbolStyle_STANDARD
-            : chart2::SymbolStyle_NONE;
 
         for( ::std::vector< Reference< chart2::XDataSeries > >::const_iterator aIt =
                  aSeriesVec.begin(); aIt != aSeriesVec.end(); ++aIt )

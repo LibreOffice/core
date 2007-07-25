@@ -4,9 +4,9 @@
  *
  *  $RCSfile: StockChartTypeTemplate.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: vg $ $Date: 2007-05-22 18:52:27 $
+ *  last change: $Author: rt $ $Date: 2007-07-25 08:54:55 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -343,7 +343,7 @@ void SAL_CALL StockChartTypeTemplate::resetStyles(
 void StockChartTypeTemplate::createChartTypes(
     const Sequence< Sequence< Reference< XDataSeries > > > & aSeriesSeq,
     const Sequence< Reference< XCoordinateSystem > > & rCoordSys,
-    const Sequence< Reference< XChartType > >& aOldChartTypesSeq )
+    const Sequence< Reference< XChartType > >& /* aOldChartTypesSeq */ )
 {
     if( rCoordSys.getLength() < 1 )
         return;
@@ -431,7 +431,7 @@ void StockChartTypeTemplate::createChartTypes(
 // ____ XChartTypeTemplate ____
 sal_Bool SAL_CALL StockChartTypeTemplate::matchesTemplate(
     const uno::Reference< XDiagram >& xDiagram,
-    sal_Bool bAdaptProperties )
+    sal_Bool /* bAdaptProperties */ )
     throw (uno::RuntimeException)
 {
     sal_Bool bResult = sal_False;
