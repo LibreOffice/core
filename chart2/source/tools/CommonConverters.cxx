@@ -4,9 +4,9 @@
  *
  *  $RCSfile: CommonConverters.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: vg $ $Date: 2007-05-22 18:56:47 $
+ *  last change: $Author: rt $ $Date: 2007-07-25 08:56:03 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -444,7 +444,7 @@ drawing::PolyPolygonShape3D BezierToPoly(
     const drawing::PolyPolygonBezierCoords& rBezier )
 {
     const drawing::PointSequenceSequence& rPointSequence = rBezier.Coordinates;
-    const drawing::FlagSequenceSequence& rFlags = rBezier.Flags;
+//     const drawing::FlagSequenceSequence& rFlags = rBezier.Flags;
 
     drawing::PolyPolygonShape3D aRet;
     aRet.SequenceX.realloc( rPointSequence.getLength() );
