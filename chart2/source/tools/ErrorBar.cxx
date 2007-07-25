@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ErrorBar.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: vg $ $Date: 2007-05-22 18:58:26 $
+ *  last change: $Author: rt $ $Date: 2007-07-25 08:57:00 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -192,6 +192,8 @@ ErrorBar::ErrorBar(
 {}
 
 ErrorBar::ErrorBar( const ErrorBar & rOther ) :
+        MutexContainer(),
+        impl::ErrorBar_Base(),
         ::property::OPropertySet( rOther, m_aMutex ),
     m_xContext( rOther.m_xContext ),
     m_xModifyEventForwarder( new ModifyListenerHelper::ModifyEventForwarder( m_aMutex ))
@@ -295,7 +297,7 @@ void SAL_CALL ErrorBar::modified( const lang::EventObject& aEvent )
 }
 
 // ____ XEventListener (base of XModifyListener) ____
-void SAL_CALL ErrorBar::disposing( const lang::EventObject& Source )
+void SAL_CALL ErrorBar::disposing( const lang::EventObject& /* Source */ )
     throw (uno::RuntimeException)
 {
     // nothing
