@@ -4,9 +4,9 @@
  *
  *  $RCSfile: MultipleChartConverters.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: vg $ $Date: 2007-05-22 18:01:18 $
+ *  last change: $Author: rt $ $Date: 2007-07-25 08:41:26 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -64,7 +64,7 @@ AllAxisItemConverter::AllAxisItemConverter(
     const uno::Reference< frame::XModel > & xChartModel,
     SfxItemPool& rItemPool,
     SdrModel& rDrawModel,
-    const uno::Reference< lang::XMultiServiceFactory > & xNamedPropertyContainerFactory,
+    const uno::Reference< lang::XMultiServiceFactory > & /*xNamedPropertyContainerFactory*/,
     ::std::auto_ptr< awt::Size > pRefSize )
         : MultipleItemConverter( rItemPool )
 {
@@ -143,17 +143,17 @@ AllDataLabelItemConverter::AllDataLabelItemConverter(
     {
         uno::Reference< beans::XPropertySet > xObjectProperties( *aIt, uno::UNO_QUERY);
         uno::Reference< uno::XComponentContext> xContext(0);//do not need Context for label properties
-        if( pRefSize.get())
-            m_aConverters.push_back( new ::chart::wrapper::DataPointItemConverter(
+        m_aConverters.push_back( new ::chart::wrapper::DataPointItemConverter(
                                          xChartModel, xContext,
                                          xObjectProperties, rItemPool, rDrawModel, NULL,
                                          xNamedPropertyContainerFactory,
                                          GraphicPropertyItemConverter::FILLED_DATA_POINT,
-                                         ::std::auto_ptr< awt::Size >( new awt::Size( *pRefSize )) ));
-        else
-            m_aConverters.push_back( new ::chart::wrapper::DataPointItemConverter(
-                                         xChartModel, xContext, xObjectProperties, rItemPool, rDrawModel, NULL,
-                                         xNamedPropertyContainerFactory ));
+                                         ::std::auto_ptr< awt::Size >( pRefSize.get() ? new awt::Size( *pRefSize ) : 0),
+                                         true, /*bDataSeries*/
+                                         false, /*bUseSpecialFillColor*/
+                                         0, /*nSpecialFillColor*/
+                                         true /*bOverwriteLabelsForAttributedDataPointsAlso*/
+                                         ));
     }
 }
 
