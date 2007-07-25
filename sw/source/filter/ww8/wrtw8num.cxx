@@ -4,9 +4,9 @@
  *
  *  $RCSfile: wrtw8num.cxx,v $
  *
- *  $Revision: 1.39 $
+ *  $Revision: 1.40 $
  *
- *  last change: $Author: ihi $ $Date: 2007-06-04 14:02:49 $
+ *  last change: $Author: rt $ $Date: 2007-07-25 14:36:30 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -296,7 +296,13 @@ void SwWW8Writer::OutListTab()
                 if (sw::util::IsStarSymbol(sFontName))
                     SubstituteBullet(sNumStr,eChrSet,sFontName);
 
-                nFlags = 0;     // ixchFollow: 0 - tab, 1 - blank, 2 - nothing
+                // --> OD 2007-07-23 #148661#
+                // <nFlags = 2>, if minimum label width equals 0 and
+                // minimum distance between label and text equals 0
+                nFlags = ( rFmt.GetFirstLineOffset() == 0 &&
+                           rFmt.GetCharTextDistance() == 0 )
+                         ? 2 : 0;     // ixchFollow: 0 - tab, 1 - blank, 2 - nothing
+                // <--
             }
             else
             {
@@ -320,7 +326,13 @@ void SwWW8Writer::OutListTab()
                             sNumStr.SetChar( nFnd, (char)i );
                         }
                     }
-                    nFlags = 0;     // ixchFollow: 0 - tab, 1 - blank, 2 - nothing
+                    // --> OD 2007-07-23 #148661#
+                    // <nFlags = 2>, if minimum label width equals 0 and
+                    // minimum distance between label and text equals 0
+                    nFlags = ( rFmt.GetFirstLineOffset() == 0 &&
+                               rFmt.GetCharTextDistance() == 0 )
+                             ? 2 : 0;     // ixchFollow: 0 - tab, 1 - blank, 2 - nothing
+                    // <--
                 }
 
                 if( rFmt.GetPrefix().Len() )
@@ -388,8 +400,8 @@ void SwWW8Writer::OutListTab()
             // reserved
             SwWW8Writer::WriteShort( *pTableStrm, 0 );
 
-            sal_uInt16 nAbsLSpace = rFmt.GetAbsLSpace();
-            sal_Int16 nFirstLineOffset = GetWordFirstLineOffset(rFmt);
+            const sal_uInt16 nAbsLSpace = rFmt.GetAbsLSpace();
+            const sal_Int16 nFirstLineOffset = GetWordFirstLineOffset(rFmt);
 
             // write Papx
             BYTE* pData = aPapSprms + 2;
