@@ -4,9 +4,9 @@
  *
  *  $RCSfile: LegendItemConverter.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: vg $ $Date: 2007-05-22 18:01:06 $
+ *  last change: $Author: rt $ $Date: 2007-07-25 08:41:14 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -115,7 +115,7 @@ const USHORT * LegendItemConverter::GetWhichPairs() const
     return nLegendWhichPairs;
 }
 
-bool LegendItemConverter::GetItemProperty( tWhichIdType nWhichId, tPropertyNameWithMemberId & rOutProperty ) const
+bool LegendItemConverter::GetItemProperty( tWhichIdType /*nWhichId*/, tPropertyNameWithMemberId & /*rOutProperty*/ ) const
 {
     // No own (non-special) properties
     return false;
@@ -132,12 +132,13 @@ bool LegendItemConverter::ApplySpecialItem(
     {
         case SCHATTR_LEGEND_POS:
         {
-            chart2::LegendPosition eNewPos, eOldPos;
+            chart2::LegendPosition eNewPos = chart2::LegendPosition_LINE_END;
+            chart2::LegendPosition eOldPos;
             bool bIsWide = false;
             sal_Bool bShow = sal_True;
 
             SvxChartLegendPos eItemPos =
-                reinterpret_cast< const SvxChartLegendPosItem & >(
+                static_cast< const SvxChartLegendPosItem & >(
                     rItemSet.Get( nWhichId )).GetValue();
             switch( eItemPos )
             {
