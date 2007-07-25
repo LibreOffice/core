@@ -4,9 +4,9 @@
  *
  *  $RCSfile: Legend.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: vg $ $Date: 2007-05-22 18:39:27 $
+ *  last change: $Author: rt $ $Date: 2007-07-25 08:51:04 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -135,6 +135,9 @@ void lcl_AddDefaultsToMap(
     OSL_ASSERT( rOutMap.end() == rOutMap.find( PROP_LEGEND_ANCHOR_POSITION ));
     rOutMap[ PROP_LEGEND_ANCHOR_POSITION ] =
         uno::makeAny( chart2::LegendPosition_LINE_END );
+    OSL_ASSERT( rOutMap.end() == rOutMap.find( PROP_LEGEND_PREFERRED_EXPANSION ));
+    rOutMap[ PROP_LEGEND_PREFERRED_EXPANSION ] =
+        uno::makeAny( chart2::LegendExpansion_HIGH );
 
     OSL_ASSERT( rOutMap.end() == rOutMap.find( PROP_LEGEND_SHOW ));
     rOutMap[ PROP_LEGEND_SHOW ] =
@@ -190,13 +193,15 @@ const Sequence< Property > & lcl_GetPropertySequence()
 namespace chart
 {
 
-Legend::Legend( Reference< uno::XComponentContext > const & xContext ) :
+Legend::Legend( Reference< uno::XComponentContext > const & /* xContext */ ) :
         ::property::OPropertySet( m_aMutex ),
         m_xModifyEventForwarder( new ModifyListenerHelper::ModifyEventForwarder( m_aMutex ))
 {
 }
 
 Legend::Legend( const Legend & rOther ) :
+        MutexContainer(),
+        impl::Legend_Base(),
         ::property::OPropertySet( rOther, m_aMutex ),
     m_xModifyEventForwarder( new ModifyListenerHelper::ModifyEventForwarder( m_aMutex ))
 {
@@ -298,7 +303,7 @@ void SAL_CALL Legend::modified( const lang::EventObject& aEvent )
 }
 
 // ____ XEventListener (base of XModifyListener) ____
-void SAL_CALL Legend::disposing( const lang::EventObject& Source )
+void SAL_CALL Legend::disposing( const lang::EventObject& /* Source */ )
     throw (uno::RuntimeException)
 {
     // nothing
