@@ -4,9 +4,9 @@
  *
  *  $RCSfile: RegressionCalculationHelper.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 01:33:26 $
+ *  last change: $Author: rt $ $Date: 2007-07-25 08:59:53 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -65,7 +65,7 @@ typedef ::std::pair< ::std::vector< double >, ::std::vector< double > > tDoubleV
     used to pass as parameter aPred.</p>
  */
 template< class Pred >
-static tDoubleVectorPair
+tDoubleVectorPair
     cleanup( const ::com::sun::star::uno::Sequence< double > & rXValues,
              const ::com::sun::star::uno::Sequence< double > & rYValues,
              Pred aPred )
