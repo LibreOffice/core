@@ -4,9 +4,9 @@
  *
  *  $RCSfile: StockBar.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: vg $ $Date: 2007-05-22 18:41:18 $
+ *  last change: $Author: rt $ $Date: 2007-07-25 08:51:31 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -140,6 +140,8 @@ StockBar::StockBar( bool bRisingCourse ) :
 }
 
 StockBar::StockBar( const StockBar & rOther ) :
+        MutexContainer(),
+        impl::StockBar_Base(),
         ::property::OPropertySet( rOther, m_aMutex ),
     m_bRisingCourse( rOther.m_bRisingCourse ),
     m_xModifyEventForwarder( new ModifyListenerHelper::ModifyEventForwarder( m_aMutex ))
@@ -246,7 +248,7 @@ void SAL_CALL StockBar::modified( const lang::EventObject& aEvent )
 }
 
 // ____ XEventListener (base of XModifyListener) ____
-void SAL_CALL StockBar::disposing( const lang::EventObject& Source )
+void SAL_CALL StockBar::disposing( const lang::EventObject& /* Source */ )
     throw (uno::RuntimeException)
 {
     // nothing
