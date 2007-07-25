@@ -4,9 +4,9 @@
  *
  *  $RCSfile: CandleStickChart.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: vg $ $Date: 2007-05-22 19:15:23 $
+ *  last change: $Author: rt $ $Date: 2007-07-25 09:04:43 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -107,7 +107,7 @@ double CandleStickChart::getMaximumX()
     }
     return VSeriesPlotter::getMaximumX();
 }
-bool CandleStickChart::isSeperateStackingForDifferentSigns( sal_Int32 nDimensionIndex )
+bool CandleStickChart::isSeperateStackingForDifferentSigns( sal_Int32 /* nDimensionIndex */ )
 {
     return false;
 }
@@ -153,7 +153,7 @@ drawing::Direction3D CandleStickChart::getPreferredDiagramAspectRatio() const
     return drawing::Direction3D(-1,-1,-1);
 }
 
-void CandleStickChart::addSeries( VDataSeries* pSeries, sal_Int32 zSlot, sal_Int32 xSlot, sal_Int32 ySlot )
+void CandleStickChart::addSeries( VDataSeries* pSeries, sal_Int32 /* zSlot */, sal_Int32 xSlot, sal_Int32 ySlot )
 {
     //ignore y stacking for candle stick chart
     VSeriesPlotter::addSeries( pSeries, 0, xSlot, ySlot );
