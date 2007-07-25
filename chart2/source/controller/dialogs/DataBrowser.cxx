@@ -4,9 +4,9 @@
  *
  *  $RCSfile: DataBrowser.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: obo $ $Date: 2007-06-11 14:57:46 $
+ *  last change: $Author: rt $ $Date: 2007-07-25 08:30:12 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -640,13 +640,14 @@ void DataBrowser::RenewTable()
 
     sal_Int32 nColumnWidth( GetDataWindow().LogicToPixel( Size( nDefaultColumnWidth, 0 )).getWidth());
     sal_Int32 nColumnCount = m_apDataBrowserModel->getColumnCount();
-    sal_Int32 nRowCount = m_apDataBrowserModel->getMaxRowCount();
+    // nRowCount is a member of a base class
+    sal_Int32 nRowCountLocal = m_apDataBrowserModel->getMaxRowCount();
     for( sal_Int32 nColIdx=1; nColIdx<=nColumnCount; ++nColIdx )
     {
         InsertDataColumn( static_cast< sal_uInt16 >( nColIdx ), GetColString( nColIdx ), nColumnWidth );
     }
 
-    RowInserted( 1, nRowCount );
+    RowInserted( 1, nRowCountLocal );
     GoToRow( ::std::min( nOldRow, GetRowCount() - 1 ));
     GoToColumnId( ::std::min( nOldColId, static_cast< USHORT >( ColCount() - 1 )));
 
