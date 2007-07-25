@@ -4,9 +4,9 @@
  *
  *  $RCSfile: wrtw8esh.cxx,v $
  *
- *  $Revision: 1.99 $
+ *  $Revision: 1.100 $
  *
- *  last change: $Author: hr $ $Date: 2007-06-27 12:25:32 $
+ *  last change: $Author: rt $ $Date: 2007-07-25 14:36:15 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -221,6 +221,9 @@
 #ifndef _ESCHER_HXX
 #include "escher.hxx"
 #endif
+// --> OD 2007-07-24 #148096#
+#include <ndtxt.hxx>
+// <--
 
 using namespace com::sun::star;
 using namespace sw::util;
@@ -2459,6 +2462,26 @@ bool WinwordAnchoring::ConvertPosition( SwFmtHoriOrient& _iorHoriOri,
     // at page areas have to be converted, if it's set.
     const bool bFollowTextFlow = _rFrmFmt.GetFollowTextFlow().GetValue();
 
+    // --> OD 2007-07-24 #148096#
+    // check, if horizontal and vertical position have to be converted due to
+    // the fact, that the object is anchored at a paragraph, which has a "column
+    // break before" attribute
+    bool bConvDueToAnchoredAtColBreakPara( false );
+    if ( ( eAnchor == FLY_AT_CNTNT || eAnchor == FLY_AUTO_CNTNT ) &&
+         _rFrmFmt.GetAnchor().GetCntntAnchor() &&
+         _rFrmFmt.GetAnchor().GetCntntAnchor()->nNode.GetNode().IsTxtNode() )
+    {
+        SwTxtNode& rAnchorTxtNode =
+            dynamic_cast<SwTxtNode&>(_rFrmFmt.GetAnchor().GetCntntAnchor()->nNode.GetNode());
+        const SvxFmtBreakItem* pBreak = &(ItemGet<SvxFmtBreakItem>(rAnchorTxtNode, RES_BREAK));
+        if ( pBreak &&
+             pBreak->GetBreak() == SVX_BREAK_COLUMN_BEFORE )
+        {
+            bConvDueToAnchoredAtColBreakPara = true;
+        }
+    }
+    // <--
+
     // convert horizontal position, if needed
     {
         enum HoriConv { NO_CONV, CONV2PG, CONV2COL, CONV2CHAR };
@@ -2474,46 +2497,55 @@ bool WinwordAnchoring::ConvertPosition( SwFmtHoriOrient& _iorHoriOri,
         }
 
         // determine conversion type due to the position relation
-        switch ( _iorHoriOri.GetRelationOrient() )
+        // --> OD 2007-07-24 #148096#
+        if ( bConvDueToAnchoredAtColBreakPara )
         {
-            case REL_PG_FRAME:
-            case REL_PG_PRTAREA:
-            {
-                if ( bConvDueToOrientation || bFollowTextFlow )
-                    eHoriConv = CONV2PG;
-            }
-            break;
-            case REL_PG_LEFT:
-            case REL_PG_RIGHT:
-            {
-                // relation not supported by WW8. Thus, conversion always needed.
-                eHoriConv = CONV2PG;
-            }
-            break;
-            case FRAME:
-            {
-                if ( bConvDueToOrientation )
-                    eHoriConv = CONV2COL;
-            }
-            break;
-            case PRTAREA:
-            case REL_FRM_LEFT:
-            case REL_FRM_RIGHT:
-            {
-                // relation not supported by WW8. Thus, conversion always needed.
-                eHoriConv = CONV2COL;
-            }
-            break;
-            case REL_CHAR:
-            {
-                if ( bConvDueToOrientation )
-                    eHoriConv = CONV2CHAR;
-            }
-            break;
-            default:
-                ASSERT( false,
-                        "<WinwordAnchoring::ConvertPosition(..)> - unknown horizontal relation" );
+            eHoriConv = CONV2PG;
         }
+        else
+        {
+            switch ( _iorHoriOri.GetRelationOrient() )
+            {
+                case REL_PG_FRAME:
+                case REL_PG_PRTAREA:
+                {
+                    if ( bConvDueToOrientation || bFollowTextFlow )
+                        eHoriConv = CONV2PG;
+                }
+                break;
+                case REL_PG_LEFT:
+                case REL_PG_RIGHT:
+                {
+                    // relation not supported by WW8. Thus, conversion always needed.
+                    eHoriConv = CONV2PG;
+                }
+                break;
+                case FRAME:
+                {
+                    if ( bConvDueToOrientation )
+                        eHoriConv = CONV2COL;
+                }
+                break;
+                case PRTAREA:
+                case REL_FRM_LEFT:
+                case REL_FRM_RIGHT:
+                {
+                    // relation not supported by WW8. Thus, conversion always needed.
+                    eHoriConv = CONV2COL;
+                }
+                break;
+                case REL_CHAR:
+                {
+                    if ( bConvDueToOrientation )
+                        eHoriConv = CONV2CHAR;
+                }
+                break;
+                default:
+                    ASSERT( false,
+                            "<WinwordAnchoring::ConvertPosition(..)> - unknown horizontal relation" );
+            }
+        }
+        // <--
         if ( eHoriConv != NO_CONV )
         {
             _iorHoriOri.SetHoriOrient( HORI_NONE );
@@ -2572,53 +2604,62 @@ bool WinwordAnchoring::ConvertPosition( SwFmtHoriOrient& _iorHoriOri,
         }
 
         // determine conversion type due to the position relation
-        switch ( _iorVertOri.GetRelationOrient() )
+        // --> OD 2007-07-24 #148096#
+        if ( bConvDueToAnchoredAtColBreakPara )
         {
-            case REL_PG_FRAME:
-            case REL_PG_PRTAREA:
+            eVertConv = CONV2PG;
+        }
+        else
+        {
+            switch ( _iorVertOri.GetRelationOrient() )
             {
-                if ( bConvDueToOrientation || bFollowTextFlow )
-                    eVertConv = CONV2PG;
-            }
-            break;
-            case FRAME:
-            {
-                if ( bConvDueToOrientation ||
-                     _iorVertOri.GetVertOrient() == VERT_CENTER )
+                case REL_PG_FRAME:
+                case REL_PG_PRTAREA:
                 {
+                    if ( bConvDueToOrientation || bFollowTextFlow )
+                        eVertConv = CONV2PG;
+                }
+                break;
+                case FRAME:
+                {
+                    if ( bConvDueToOrientation ||
+                         _iorVertOri.GetVertOrient() == VERT_CENTER )
+                    {
+                        eVertConv = CONV2PARA;
+                    }
+                }
+                break;
+                case PRTAREA:
+                {
+                    // relation not supported by WW8. Thus, conversion always needed.
                     eVertConv = CONV2PARA;
                 }
-            }
-            break;
-            case PRTAREA:
-            {
-                // relation not supported by WW8. Thus, conversion always needed.
-                eVertConv = CONV2PARA;
-            }
-            break;
-            case REL_CHAR:
-            {
-                // relation not supported by WW8. Thus, conversion always needed.
-                eVertConv = CONV2PARA;
-            }
-            break;
-            case REL_VERT_LINE:
-            {
-                if ( bConvDueToOrientation ||
-                     _iorVertOri.GetVertOrient() == VERT_NONE )
+                break;
+                case REL_CHAR:
                 {
-                    eVertConv = CONV2LINE;
+                    // relation not supported by WW8. Thus, conversion always needed.
+                    eVertConv = CONV2PARA;
                 }
+                break;
+                case REL_VERT_LINE:
+                {
+                    if ( bConvDueToOrientation ||
+                         _iorVertOri.GetVertOrient() == VERT_NONE )
+                    {
+                        eVertConv = CONV2LINE;
+                    }
+                }
+                break;
+                case REL_PG_LEFT:
+                case REL_PG_RIGHT:
+                case REL_FRM_LEFT:
+                case REL_FRM_RIGHT:
+                default:
+                    ASSERT( false,
+                            "<WinwordAnchoring::ConvertPosition(..)> - unknown vertical relation" );
             }
-            break;
-            case REL_PG_LEFT:
-            case REL_PG_RIGHT:
-            case REL_FRM_LEFT:
-            case REL_FRM_RIGHT:
-            default:
-                ASSERT( false,
-                        "<WinwordAnchoring::ConvertPosition(..)> - unknown vertical relation" );
         }
+        // <--
         if ( eVertConv != NO_CONV )
         {
             _iorVertOri.SetVertOrient( VERT_NONE );
