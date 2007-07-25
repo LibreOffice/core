@@ -1,0 +1,119 @@
+/*************************************************************************
+ *
+ *  OpenOffice.org - a multi-platform office productivity suite
+ *
+ *  $RCSfile: XUndoManager.idl,v $
+ *
+ *  $Revision: 1.2 $
+ *
+ *  last change: $Author: rt $ $Date: 2007-07-25 08:19:28 $
+ *
+ *  The Contents of this file are made available subject to
+ *  the terms of GNU Lesser General Public License Version 2.1.
+ *
+ *
+ *    GNU Lesser General Public License Version 2.1
+ *    =============================================
+ *    Copyright 2005 by Sun Microsystems, Inc.
+ *    901 San Antonio Road, Palo Alto, CA 94303, USA
+ *
+ *    This library is free software; you can redistribute it and/or
+ *    modify it under the terms of the GNU Lesser General Public
+ *    License version 2.1, as published by the Free Software Foundation.
+ *
+ *    This library is distributed in the hope that it will be useful,
+ *    but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ *    Lesser General Public License for more details.
+ *
+ *    You should have received a copy of the GNU Lesser General Public
+ *    License along with this library; if not, write to the Free Software
+ *    Foundation, Inc., 59 Temple Place, Suite 330, Boston,
+ *    MA  02111-1307  USA
+ *
+ ************************************************************************/
+#ifndef com_sun_star_chart2_XUndoManager_idl
+#define com_sun_star_chart2_XUndoManager_idl
+
+#include <com/sun/star/uno/XInterface.idl>
+#include <com/sun/star/frame/XModel.idl>
+#include <com/sun/star/beans/PropertyValue.idl>
+
+module com
+{
+module sun
+{
+module star
+{
+module chart2
+{
+
+/** An interface for undo functionality based on passing frame::XModel
+    objects.
+ */
+interface XUndoManager : ::com::sun::star::uno::XInterface
+{
+    /** call this before you change the xCurrentModel
+     */
+    void preAction( [in] ::com::sun::star::frame::XModel xModelBeforeChange );
+
+    /** call this before you change the xCurrentModel. You can pass
+        parameters to refine the undo action.
+     */
+    void preActionWithArguments( [in] ::com::sun::star::frame::XModel xModelBeforeChange,
+                                 [in] sequence< ::com::sun::star::beans::PropertyValue > aArguments );
+
+    /** call this after you successfully did changes to your current model
+     */
+    void postAction( [in] string aUndoText );
+    /** call this if you aborted the current action.
+     */
+    void cancelAction();
+
+    /** same as cancelAction() but restores the given model to the
+        state set in preAction.  This is useful for cancellation in
+        live-preview dialogs.
+    */
+    void cancelActionWithUndo( [inout] ::com::sun::star::frame::XModel xModelToRestore );
+
+    /** give the current model to be put into the redo-stack
+     */
+    void undo( [inout] ::com::sun::star::frame::XModel xCurrentModel );
+
+    /** give the current model to be put into the undo-stack
+     */
+    void redo( [inout] ::com::sun::star::frame::XModel xCurrentModel );
+
+    /** @return </TRUE> if the undo stack is not empty, i.e. a call to undo() will succeed
+     */
+    boolean undoPossible();
+
+    /** @return </TRUE> if the redo stack is not empty, i.e. a call to redo() will succeed
+     */
+    boolean redoPossible();
+
+    /** Retrieves the undo string for the most recent undo step
+     */
+    string getCurrentUndoString();
+
+    /** Retrieves the redo string for the most recent undo step
+     */
+    string getCurrentRedoString();
+
+    /** Retrieves the undo strings of all stored undo actions in
+        chronological order starting with the most recent.
+     */
+    sequence< string > getAllUndoStrings();
+
+    /** Retrieves the redo strings of all stored undo actions in
+        chronological order starting with the most recent.
+    */
+    sequence< string > getAllRedoStrings();
+};
+
+} ; // chart2
+} ; // com
+} ; // sun
+} ; // star
+
+#endif
