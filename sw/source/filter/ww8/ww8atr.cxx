@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ww8atr.cxx,v $
  *
- *  $Revision: 1.106 $
+ *  $Revision: 1.107 $
  *
- *  last change: $Author: hr $ $Date: 2007-06-27 12:25:49 $
+ *  last change: $Author: rt $ $Date: 2007-07-25 14:36:45 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -3561,7 +3561,7 @@ ULONG SwWW8Writer::ReplaceCr( BYTE nChar )
                 nUCode = 0x0;
             }
             //And the para is not of len 0, then replace this cr with the mark
-            if (nUCode == 0x0d)
+            if( nChar == 0x0e || nUCode == 0x0d )
                 bReplaced = false;
             else
             {
