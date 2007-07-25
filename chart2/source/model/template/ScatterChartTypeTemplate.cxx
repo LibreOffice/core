@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ScatterChartTypeTemplate.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: obo $ $Date: 2007-06-11 15:01:16 $
+ *  last change: $Author: rt $ $Date: 2007-07-25 08:54:42 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -240,7 +240,7 @@ sal_Int32 ScatterChartTypeTemplate::getDimension() const
     return m_nDim;
 }
 
-StackMode ScatterChartTypeTemplate::getStackMode( sal_Int32 nChartTypeIndex ) const
+StackMode ScatterChartTypeTemplate::getStackMode( sal_Int32 /* nChartTypeIndex */ ) const
 {
     if( m_nDim == 3 )
         return StackMode_Z_STACKED;
