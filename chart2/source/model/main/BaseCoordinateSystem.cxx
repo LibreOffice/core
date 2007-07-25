@@ -4,9 +4,9 @@
  *
  *  $RCSfile: BaseCoordinateSystem.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: vg $ $Date: 2007-05-22 18:31:16 $
+ *  last change: $Author: rt $ $Date: 2007-07-25 08:48:55 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -125,9 +125,9 @@ BaseCoordinateSystem::BaseCoordinateSystem(
     sal_Bool bSwapXAndYAxis /* = sal_False */ ) :
         ::property::OPropertySet( m_aMutex ),
         m_xContext( xContext ),
-        m_nDimensionCount( nDimensionCount ),
-        m_xModifyEventForwarder( new ModifyListenerHelper::ModifyEventForwarder( m_aMutex ))
-{
+        m_xModifyEventForwarder( new ModifyListenerHelper::ModifyEventForwarder( m_aMutex )),
+        m_nDimensionCount( nDimensionCount )
+ {
     m_aAllAxis.resize( m_nDimensionCount );
     for( sal_Int32 nN=0; nN<m_nDimensionCount; nN++ )
     {
@@ -162,11 +162,13 @@ BaseCoordinateSystem::BaseCoordinateSystem(
 // explicit
 BaseCoordinateSystem::BaseCoordinateSystem(
     const BaseCoordinateSystem & rSource ) :
+        impl::BaseCoordinateSystem_Base(),
+        MutexContainer(),
         ::property::OPropertySet( rSource, m_aMutex ),
     m_xContext( rSource.m_xContext ),
+    m_xModifyEventForwarder( new ModifyListenerHelper::ModifyEventForwarder( m_aMutex )),
     m_nDimensionCount( rSource.m_nDimensionCount ),
-    m_aOrigin( rSource.m_aOrigin ),
-    m_xModifyEventForwarder( new ModifyListenerHelper::ModifyEventForwarder( m_aMutex ))
+    m_aOrigin( rSource.m_aOrigin )
 {
     m_aAllAxis.resize(rSource.m_aAllAxis.size());
     tAxisVecVecType::size_type nN=0;
@@ -343,7 +345,7 @@ void SAL_CALL BaseCoordinateSystem::modified( const lang::EventObject& aEvent )
 }
 
 // ____ XEventListener (base of XModifyListener) ____
-void SAL_CALL BaseCoordinateSystem::disposing( const lang::EventObject& Source )
+void SAL_CALL BaseCoordinateSystem::disposing( const lang::EventObject& /* Source */ )
     throw (uno::RuntimeException)
 {
     // nothing
