@@ -4,9 +4,9 @@
  *
  *  $RCSfile: WrappedPropertySet.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: vg $ $Date: 2007-05-22 19:07:16 $
+ *  last change: $Author: rt $ $Date: 2007-07-25 09:02:13 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -129,23 +129,23 @@ void SAL_CALL WrappedPropertySet::setPropertyValue( const OUString& rPropertyNam
     }
     catch( beans::UnknownPropertyException& ex )
     {
-        throw;
+        throw ex;
     }
     catch( beans::PropertyVetoException& ex )
     {
-        throw;
+        throw ex;
     }
     catch( lang::IllegalArgumentException& ex )
     {
-        throw;
+        throw ex;
     }
     catch( lang::WrappedTargetException& ex )
     {
-        throw;
+        throw ex;
     }
     catch( uno::RuntimeException& ex )
     {
-        throw;
+        throw ex;
     }
     catch( uno::Exception& ex )
     {
@@ -174,15 +174,15 @@ Any SAL_CALL WrappedPropertySet::getPropertyValue( const OUString& rPropertyName
     }
     catch( beans::UnknownPropertyException& ex )
     {
-        throw;
+        throw ex;
     }
     catch( lang::WrappedTargetException& ex )
     {
-        throw;
+        throw ex;
     }
     catch( uno::RuntimeException& ex )
     {
-        throw;
+        throw ex;
     }
     catch( uno::Exception& ex )
     {
@@ -198,9 +198,6 @@ Any SAL_CALL WrappedPropertySet::getPropertyValue( const OUString& rPropertyName
 void SAL_CALL WrappedPropertySet::addPropertyChangeListener( const OUString& rPropertyName, const Reference< beans::XPropertyChangeListener >& xListener )
                                     throw (beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException)
 {
-    OSL_ENSURE(false,"not implemented yet");
-    //todo
-    /*
     Reference< beans::XPropertySet > xInnerPropertySet( this->getInnerPropertySet() );
     if( xInnerPropertySet.is() )
     {
@@ -210,26 +207,46 @@ void SAL_CALL WrappedPropertySet::addPropertyChangeListener( const OUString& rPr
         else
             xInnerPropertySet->addPropertyChangeListener( rPropertyName, xListener );
     }
-    m_aBoundListenerContainer.addInterface( (sal_Int32)nHandle, xListener );
-    */
+//     m_aBoundListenerContainer.addInterface( (sal_Int32)nHandle, xListener );
 }
 void SAL_CALL WrappedPropertySet::removePropertyChangeListener( const OUString& rPropertyName, const Reference< beans::XPropertyChangeListener >& aListener )
                                     throw (beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException)
 {
-    OSL_ENSURE(false,"not implemented yet");
-    //todo
+    Reference< beans::XPropertySet > xInnerPropertySet( this->getInnerPropertySet() );
+    if( xInnerPropertySet.is() )
+    {
+        const WrappedProperty* pWrappedProperty = getWrappedProperty( rPropertyName );
+        if( pWrappedProperty )
+            xInnerPropertySet->removePropertyChangeListener( pWrappedProperty->getInnerName(), aListener );
+        else
+            xInnerPropertySet->removePropertyChangeListener( rPropertyName, aListener );
+    }
 }
 void SAL_CALL WrappedPropertySet::addVetoableChangeListener( const OUString& rPropertyName, const Reference< beans::XVetoableChangeListener >& aListener )
                                     throw (beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException)
 {
-    OSL_ENSURE(false,"not implemented yet");
-    //todo
+    Reference< beans::XPropertySet > xInnerPropertySet( this->getInnerPropertySet() );
+    if( xInnerPropertySet.is() )
+    {
+        const WrappedProperty* pWrappedProperty = getWrappedProperty( rPropertyName );
+        if( pWrappedProperty )
+            xInnerPropertySet->addVetoableChangeListener( pWrappedProperty->getInnerName(), aListener );
+        else
+            xInnerPropertySet->addVetoableChangeListener( rPropertyName, aListener );
+    }
 }
 void SAL_CALL WrappedPropertySet::removeVetoableChangeListener( const OUString& rPropertyName, const Reference< beans::XVetoableChangeListener >& aListener )
                                     throw (beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException)
 {
-    OSL_ENSURE(false,"not implemented yet");
-    //todo
+    Reference< beans::XPropertySet > xInnerPropertySet( this->getInnerPropertySet() );
+    if( xInnerPropertySet.is() )
+    {
+        const WrappedProperty* pWrappedProperty = getWrappedProperty( rPropertyName );
+        if( pWrappedProperty )
+            xInnerPropertySet->removeVetoableChangeListener( pWrappedProperty->getInnerName(), aListener );
+        else
+            xInnerPropertySet->removeVetoableChangeListener( rPropertyName, aListener );
+    }
 }
 
 //XMultiPropertySet
@@ -281,19 +298,19 @@ Sequence< Any > SAL_CALL WrappedPropertySet::getPropertyValues( const Sequence< 
     }
     return aRetSeq;
 }
-void SAL_CALL WrappedPropertySet::addPropertiesChangeListener( const Sequence< OUString >& rNameSeq, const Reference< beans::XPropertiesChangeListener >& xListener )
+void SAL_CALL WrappedPropertySet::addPropertiesChangeListener( const Sequence< OUString >& /* rNameSeq */, const Reference< beans::XPropertiesChangeListener >& /* xListener */ )
                                     throw (uno::RuntimeException)
 {
     OSL_ENSURE(false,"not implemented yet");
     //todo
 }
-void SAL_CALL WrappedPropertySet::removePropertiesChangeListener( const Reference< beans::XPropertiesChangeListener >& xListener )
+void SAL_CALL WrappedPropertySet::removePropertiesChangeListener( const Reference< beans::XPropertiesChangeListener >& /* xListener */ )
                                     throw (uno::RuntimeException)
 {
     OSL_ENSURE(false,"not implemented yet");
     //todo
 }
-void SAL_CALL WrappedPropertySet::firePropertiesChangeEvent( const Sequence< OUString >& rNameSeq, const Reference< beans::XPropertiesChangeListener >& xListener )
+void SAL_CALL WrappedPropertySet::firePropertiesChangeEvent( const Sequence< OUString >& /* rNameSeq */, const Reference< beans::XPropertiesChangeListener >& /* xListener */ )
                                     throw (uno::RuntimeException)
 {
     OSL_ENSURE(false,"not implemented yet");
