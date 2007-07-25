@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dlg_InsertDataLabel.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: vg $ $Date: 2007-05-22 17:34:31 $
+ *  last change: $Author: rt $ $Date: 2007-07-25 08:32:53 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -35,187 +35,46 @@
 
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_chart2.hxx"
+
 #include "dlg_InsertDataLabel.hxx"
 #include "dlg_InsertDataLabel.hrc"
 #include "ResId.hxx"
-#include "chartview/ChartSfxItemIds.hxx"
-#include "NoWarningThisInCTOR.hxx"
 #include "ObjectNameProvider.hxx"
-
-// header for class SfxBoolItem
-#ifndef _SFXENUMITEM_HXX
-#include <svtools/eitem.hxx>
-#endif
-// header for class SvxChartDataDescrItem
-#ifndef _SVX_CHRTITEM_HXX
-#include <svx/chrtitem.hxx>
-#endif
+#include "res_DataLabel.hxx"
 
 //.............................................................................
 namespace chart
 {
 //.............................................................................
 
-/*************************************************************************
-|*
-|* Dialog zum Aendern der Beschriftungen
-|*
-\************************************************************************/
-
-SchDataDescrDlg::SchDataDescrDlg(Window* pWindow, const SfxItemSet& rInAttrs) :
+DataLabelsDialog::DataLabelsDialog(Window* pWindow, const SfxItemSet& rInAttrs, SvNumberFormatter* pFormatter) :
     ModalDialog(pWindow, SchResId(DLG_DATA_DESCR)),
-    aCbValue(this, SchResId(CB_VALUE)),
-    aRbNumber(this, SchResId(RB_NUMBER)),
-    aRbPercent(this, SchResId(RB_PERCENT)),
-    aCbText(this, SchResId(CB_TEXT)),
-    aFlDescr(this, SchResId(FL_DESCR)),
-    aCbSymbol(this, SchResId(CB_SYMBOL)),
-    aBtnOK(this, SchResId(BTN_OK)),
-    aBtnCancel(this, SchResId(BTN_CANCEL)),
-    aBtnHelp(this, SchResId(BTN_HELP)),
+    m_aBtnOK(this, SchResId(BTN_OK)),
+    m_aBtnCancel(this, SchResId(BTN_CANCEL)),
+    m_aBtnHelp(this, SchResId(BTN_HELP)),
+    m_apDataLabelResources( new DataLabelResources(this,rInAttrs) ),
+    m_aFlDescr(this, SchResId(FL_DESCR)),
     m_rInAttrs(rInAttrs)
 {
     FreeResource();
-
     SetText( ObjectNameProvider::getName(OBJECTTYPE_DATA_LABELS) );
-    aFlDescr.SetText( ObjectNameProvider::getName(OBJECTTYPE_DATA_LABELS) );
-
-    aCbValue.SetClickHdl( LINK( this, SchDataDescrDlg, EnableHdl ));
-    aCbText.SetClickHdl(  LINK( this, SchDataDescrDlg, EnableHdl ));
-
+    m_aFlDescr.SetText( ObjectNameProvider::getName(OBJECTTYPE_DATA_LABELS) );
+    m_apDataLabelResources->SetNumberFormatter( pFormatter );
     Reset();
 }
 
-/*************************************************************************
-|*
-|* Dtor
-|*
-\************************************************************************/
-
-SchDataDescrDlg::~SchDataDescrDlg()
+DataLabelsDialog::~DataLabelsDialog()
 {
 }
 
-/*************************************************************************
-|*
-|*  handler for enable/disable 'show symbol' and options for value
-|*
-\*************************************************************************/
-
-IMPL_LINK( SchDataDescrDlg, EnableHdl, CheckBox *, pControl )
+void DataLabelsDialog::Reset()
 {
-    aCbSymbol.Enable( aCbValue.IsChecked() || aCbText.IsChecked() );
-    if( pControl == &aCbValue )
-    {
-        aRbPercent.Enable( aCbValue.IsChecked() );
-        aRbNumber.Enable( aCbValue.IsChecked() );
-    }
-
-    return 0;
+    m_apDataLabelResources->Reset(m_rInAttrs);
 }
 
-/*************************************************************************
-|*
-|*  Initialisierung
-|*
-\*************************************************************************/
-
-void SchDataDescrDlg::Reset()
+void DataLabelsDialog::FillItemSet(SfxItemSet& rOutAttrs)
 {
-    const SfxPoolItem *pPoolItem = NULL;
-
-    // default state
-    aRbNumber.Enable( FALSE );
-    aRbPercent.Enable( FALSE );
-    aCbSymbol.Enable( FALSE );
-
-    SfxItemState aState = m_rInAttrs.GetItemState(SCHATTR_DATADESCR_SHOW_SYM, TRUE, &pPoolItem);
-    if( aState == SFX_ITEM_SET )
-        aCbSymbol.Check( ((const SfxBoolItem*)pPoolItem)->GetValue() );
-    else
-    {
-        aCbSymbol.EnableTriState( TRUE );
-        aCbSymbol.SetState( STATE_DONTKNOW );
-    }
-
-    aState = m_rInAttrs.GetItemState(SCHATTR_DATADESCR_DESCR, TRUE, &pPoolItem);
-    if( aState == SFX_ITEM_SET )
-    {
-        switch( ((const SvxChartDataDescrItem*)pPoolItem)->GetValue() )
-        {
-            case CHDESCR_VALUE:
-                aCbValue.Check();
-                aRbNumber.Check();
-                EnableHdl( &aCbValue );
-                break;
-
-            case CHDESCR_PERCENT:
-                aCbValue.Check();
-                aRbPercent.Check();
-                EnableHdl( &aCbValue );
-                break;
-
-            case CHDESCR_TEXT:
-                aCbText.Check();
-                EnableHdl( &aCbText );
-                break;
-
-            case CHDESCR_TEXTANDPERCENT:
-                aCbText.Check();
-                aCbValue.Check();
-                aRbPercent.Check();
-                EnableHdl( &aCbValue );
-                break;
-
-            case CHDESCR_TEXTANDVALUE:
-                aCbText.Check();
-                aCbValue.Check();
-                aRbNumber.Check();
-                EnableHdl( &aCbValue );
-                break;
-
-            default:
-                break;
-        }
-    }
-    else
-    {
-        aCbText.EnableTriState( TRUE );
-        aCbText.SetState( STATE_DONTKNOW );
-
-        aCbValue.EnableTriState( TRUE );
-        aCbValue.SetState( STATE_DONTKNOW );
-    }
-    if( !aRbNumber.IsChecked() && !aRbPercent.IsChecked() )
-        aRbNumber.Check();
-}
-
-/*************************************************************************
-|*
-|*    Fuellt uebergebenen Item-Set mit Dialogbox-Attributen
-|*
-\*************************************************************************/
-
-void SchDataDescrDlg::GetAttr(SfxItemSet& rOutAttrs)
-{
-    BOOL bText = aCbText.IsChecked();
-    SvxChartDataDescr eDescr;
-
-    if( aCbValue.IsChecked() )
-    {
-        if( aRbNumber.IsChecked() )
-            eDescr = (bText? CHDESCR_TEXTANDVALUE : CHDESCR_VALUE);
-        else
-            eDescr = (bText? CHDESCR_TEXTANDPERCENT : CHDESCR_PERCENT);
-    }
-    else if( aCbText.IsChecked() )
-        eDescr = CHDESCR_TEXT;
-    else
-        eDescr = CHDESCR_NONE;
-
-    rOutAttrs.Put(SvxChartDataDescrItem(eDescr, SCHATTR_DATADESCR_DESCR));
-    rOutAttrs.Put(SfxBoolItem( SCHATTR_DATADESCR_SHOW_SYM,
-                                aCbSymbol.IsChecked()) );
+    m_apDataLabelResources->FillItemSet(rOutAttrs);
 }
 
 //.............................................................................
