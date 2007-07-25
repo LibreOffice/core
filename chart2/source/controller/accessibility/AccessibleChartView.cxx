@@ -4,9 +4,9 @@
  *
  *  $RCSfile: AccessibleChartView.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: vg $ $Date: 2007-05-22 17:14:55 $
+ *  last change: $Author: rt $ $Date: 2007-07-25 08:25:48 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -381,7 +381,7 @@ ExplicitValueProvider* AccessibleChartView::getExplicitValueProvider()
 // view::XSelectionChangeListener
 //-------------------------------------------------------------------------
 
-void SAL_CALL AccessibleChartView::selectionChanged( const lang::EventObject& rEvent )
+void SAL_CALL AccessibleChartView::selectionChanged( const lang::EventObject& /*rEvent*/ )
                 throw (uno::RuntimeException)
 {
     Reference< view::XSelectionSupplier > xSelectionSupplier;
@@ -416,7 +416,7 @@ void SAL_CALL AccessibleChartView::disposing()
 //-------------------------------------------------------------------------
 // XEventListener
 //-------------------------------------------------------------------------
-void SAL_CALL AccessibleChartView::disposing( const lang::EventObject& Source )
+void SAL_CALL AccessibleChartView::disposing( const lang::EventObject& /*Source*/ )
     throw (uno::RuntimeException)
 {
 }
