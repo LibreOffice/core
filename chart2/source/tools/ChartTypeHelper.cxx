@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ChartTypeHelper.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: rt $ $Date: 2007-07-03 13:44:14 $
+ *  last change: $Author: rt $ $Date: 2007-07-25 08:55:51 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -167,7 +167,7 @@ sal_Bool ChartTypeHelper::isSupportingMainAxis( const uno::Reference< XChartType
     return sal_True;
 }
 
-sal_Bool ChartTypeHelper::isSupportingSecondaryAxis( const uno::Reference< XChartType >& xChartType, sal_Int32 nDimensionCount, sal_Int32 nDimensionIndex )
+sal_Bool ChartTypeHelper::isSupportingSecondaryAxis( const uno::Reference< XChartType >& xChartType, sal_Int32 nDimensionCount, sal_Int32 /*nDimensionIndex*/ )
 {
     //3D, pie and net charts do not support a secondary axis at all
 
