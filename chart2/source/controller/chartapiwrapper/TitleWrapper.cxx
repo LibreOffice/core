@@ -4,9 +4,9 @@
  *
  *  $RCSfile: TitleWrapper.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: vg $ $Date: 2007-05-22 17:19:25 $
+ *  last change: $Author: rt $ $Date: 2007-07-25 08:27:35 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -131,7 +131,7 @@ Any WrappedTitleStringProperty::getPropertyValue( const Reference< beans::XPrope
     }
     return aRet;
 }
-Any WrappedTitleStringProperty::getPropertyDefault( const Reference< beans::XPropertyState >& xInnerPropertyState ) const
+Any WrappedTitleStringProperty::getPropertyDefault( const Reference< beans::XPropertyState >& /*xInnerPropertyState*/ ) const
                         throw (beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException)
 {
     return uno::makeAny( rtl::OUString() );//default title is a empty String
@@ -277,7 +277,7 @@ awt::Size SAL_CALL TitleWrapper::getSize()
     return m_spChart2ModelContact->GetTitleSize( this->getTitle() );
 }
 
-void SAL_CALL TitleWrapper::setSize( const awt::Size& aSize )
+void SAL_CALL TitleWrapper::setSize( const awt::Size& /*aSize*/ )
     throw (beans::PropertyVetoException,
            uno::RuntimeException)
 {
@@ -412,7 +412,7 @@ Any SAL_CALL TitleWrapper::getPropertyValue( const OUString& rPropertyName )
 beans::PropertyState SAL_CALL TitleWrapper::getPropertyState( const OUString& rPropertyName )
                                     throw (beans::UnknownPropertyException, uno::RuntimeException)
 {
-    beans::PropertyState aState;
+    beans::PropertyState aState( beans::PropertyState_DIRECT_VALUE );
 
     sal_Int32 nHandle = getInfoHelper().getHandleByName( rPropertyName );
     if( CharacterProperties::IsCharacterPropertyHandle( nHandle ) )
