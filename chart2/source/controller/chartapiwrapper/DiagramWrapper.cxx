@@ -4,9 +4,9 @@
  *
  *  $RCSfile: DiagramWrapper.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: rt $ $Date: 2007-07-03 13:36:19 $
+ *  last change: $Author: rt $ $Date: 2007-07-25 08:26:58 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1093,7 +1093,7 @@ WrappedDataRowSourceProperty::~WrappedDataRowSourceProperty()
 {
 }
 
-void WrappedDataRowSourceProperty::setPropertyValue( const Any& rOuterValue, const Reference< beans::XPropertySet >& xInnerPropertySet ) const
+void WrappedDataRowSourceProperty::setPropertyValue( const Any& rOuterValue, const Reference< beans::XPropertySet >& /*xInnerPropertySet*/ ) const
                 throw (beans::UnknownPropertyException, beans::PropertyVetoException, lang::IllegalArgumentException, lang::WrappedTargetException, uno::RuntimeException)
 {
     ::com::sun::star::chart::ChartDataRowSource eChartDataRowSource = ::com::sun::star::chart::ChartDataRowSource_ROWS;
@@ -1123,7 +1123,7 @@ void WrappedDataRowSourceProperty::setPropertyValue( const Any& rOuterValue, con
     }
 }
 
-Any WrappedDataRowSourceProperty::getPropertyValue( const Reference< beans::XPropertySet >& xInnerPropertySet ) const
+Any WrappedDataRowSourceProperty::getPropertyValue( const Reference< beans::XPropertySet >& /*xInnerPropertySet*/ ) const
                         throw (beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException)
 {
     ::rtl::OUString aRangeString;
@@ -1146,7 +1146,7 @@ Any WrappedDataRowSourceProperty::getPropertyValue( const Reference< beans::XPro
     return m_aOuterValue;
 }
 
-Any WrappedDataRowSourceProperty::getPropertyDefault( const Reference< beans::XPropertyState >& xInnerPropertyState ) const
+Any WrappedDataRowSourceProperty::getPropertyDefault( const Reference< beans::XPropertyState >& /*xInnerPropertyState*/ ) const
                         throw (beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException)
 {
     Any aRet;
@@ -1230,7 +1230,7 @@ bool WrappedStackingProperty::detectInnerValue( StackMode& eStackMode ) const
     return bHasDetectableInnerValue;
 }
 
-void WrappedStackingProperty::setPropertyValue( const Any& rOuterValue, const Reference< beans::XPropertySet >& xInnerPropertySet ) const
+void WrappedStackingProperty::setPropertyValue( const Any& rOuterValue, const Reference< beans::XPropertySet >& /*xInnerPropertySet*/ ) const
                 throw (beans::UnknownPropertyException, beans::PropertyVetoException, lang::IllegalArgumentException, lang::WrappedTargetException, uno::RuntimeException)
 {
     sal_Bool bNewValue;
@@ -1259,7 +1259,7 @@ void WrappedStackingProperty::setPropertyValue( const Any& rOuterValue, const Re
     }
 }
 
-Any WrappedStackingProperty::getPropertyValue( const Reference< beans::XPropertySet >& xInnerPropertySet ) const
+Any WrappedStackingProperty::getPropertyValue( const Reference< beans::XPropertySet >& /*xInnerPropertySet*/ ) const
                         throw (beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException)
 {
     StackMode eInnerStackMode;
@@ -1273,7 +1273,7 @@ Any WrappedStackingProperty::getPropertyValue( const Reference< beans::XProperty
     return m_aOuterValue;
 }
 
-Any WrappedStackingProperty::getPropertyDefault( const Reference< beans::XPropertyState >& xInnerPropertyState ) const
+Any WrappedStackingProperty::getPropertyDefault( const Reference< beans::XPropertyState >& /*xInnerPropertyState*/ ) const
                         throw (beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException)
 {
     Any aRet;
@@ -1318,7 +1318,7 @@ WrappedDim3DProperty::~WrappedDim3DProperty()
 {
 }
 
-void WrappedDim3DProperty::setPropertyValue( const Any& rOuterValue, const Reference< beans::XPropertySet >& xInnerPropertySet ) const
+void WrappedDim3DProperty::setPropertyValue( const Any& rOuterValue, const Reference< beans::XPropertySet >& /*xInnerPropertySet*/ ) const
                 throw (beans::UnknownPropertyException, beans::PropertyVetoException, lang::IllegalArgumentException, lang::WrappedTargetException, uno::RuntimeException)
 {
     sal_Bool bNew3D;
@@ -1336,7 +1336,7 @@ void WrappedDim3DProperty::setPropertyValue( const Any& rOuterValue, const Refer
         DiagramHelper::setDimension( xDiagram, bNew3D ? 3 : 2 );
 }
 
-Any WrappedDim3DProperty::getPropertyValue( const Reference< beans::XPropertySet >& xInnerPropertySet ) const
+Any WrappedDim3DProperty::getPropertyValue( const Reference< beans::XPropertySet >& /*xInnerPropertySet*/ ) const
                         throw (beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException)
 {
     Reference< chart2::XDiagram > xDiagram( m_spChart2ModelContact->getChart2Diagram() );
@@ -1348,7 +1348,7 @@ Any WrappedDim3DProperty::getPropertyValue( const Reference< beans::XPropertySet
     return m_aOuterValue;
 }
 
-Any WrappedDim3DProperty::getPropertyDefault( const Reference< beans::XPropertyState >& xInnerPropertyState ) const
+Any WrappedDim3DProperty::getPropertyDefault( const Reference< beans::XPropertyState >& /*xInnerPropertyState*/ ) const
                         throw (beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException)
 {
     Any aRet;
@@ -1393,7 +1393,7 @@ WrappedVerticalProperty::~WrappedVerticalProperty()
 {
 }
 
-void WrappedVerticalProperty::setPropertyValue( const Any& rOuterValue, const Reference< beans::XPropertySet >& xInnerPropertySet ) const
+void WrappedVerticalProperty::setPropertyValue( const Any& rOuterValue, const Reference< beans::XPropertySet >& /*xInnerPropertySet*/ ) const
                 throw (beans::UnknownPropertyException, beans::PropertyVetoException, lang::IllegalArgumentException, lang::WrappedTargetException, uno::RuntimeException)
 {
     sal_Bool bNewVertical;
@@ -1413,7 +1413,7 @@ void WrappedVerticalProperty::setPropertyValue( const Any& rOuterValue, const Re
         DiagramHelper::setVertical( xDiagram, bNewVertical );
 }
 
-Any WrappedVerticalProperty::getPropertyValue( const Reference< beans::XPropertySet >& xInnerPropertySet ) const
+Any WrappedVerticalProperty::getPropertyValue( const Reference< beans::XPropertySet >& /*xInnerPropertySet*/ ) const
                         throw (beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException)
 {
     bool bFound = false;
@@ -1428,7 +1428,7 @@ Any WrappedVerticalProperty::getPropertyValue( const Reference< beans::XProperty
     return m_aOuterValue;
 }
 
-Any WrappedVerticalProperty::getPropertyDefault( const Reference< beans::XPropertyState >& xInnerPropertyState ) const
+Any WrappedVerticalProperty::getPropertyDefault( const Reference< beans::XPropertyState >& /*xInnerPropertyState*/ ) const
                         throw (beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException)
 {
     Any aRet;
@@ -1510,7 +1510,7 @@ bool WrappedNumberOfLinesProperty::detectInnerValue( uno::Any& rInnerValue ) con
     return bHasDetectableInnerValue;
 }
 
-void WrappedNumberOfLinesProperty::setPropertyValue( const Any& rOuterValue, const Reference< beans::XPropertySet >& xInnerPropertySet ) const
+void WrappedNumberOfLinesProperty::setPropertyValue( const Any& rOuterValue, const Reference< beans::XPropertySet >& /*xInnerPropertySet*/ ) const
                 throw (beans::UnknownPropertyException, beans::PropertyVetoException, lang::IllegalArgumentException, lang::WrappedTargetException, uno::RuntimeException)
 {
     sal_Int32 nNewValue;
@@ -1578,7 +1578,7 @@ void WrappedNumberOfLinesProperty::setPropertyValue( const Any& rOuterValue, con
     }
 }
 
-Any WrappedNumberOfLinesProperty::getPropertyValue( const Reference< beans::XPropertySet >& xInnerPropertySet ) const
+Any WrappedNumberOfLinesProperty::getPropertyValue( const Reference< beans::XPropertySet >& /*xInnerPropertySet*/ ) const
                         throw (beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException)
 {
     Any aRet;
@@ -1587,7 +1587,7 @@ Any WrappedNumberOfLinesProperty::getPropertyValue( const Reference< beans::XPro
     return aRet;
 }
 
-Any WrappedNumberOfLinesProperty::getPropertyDefault( const Reference< beans::XPropertyState >& xInnerPropertyState ) const
+Any WrappedNumberOfLinesProperty::getPropertyDefault( const Reference< beans::XPropertyState >& /*xInnerPropertyState*/ ) const
                         throw (beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException)
 {
     Any aRet;
@@ -1632,7 +1632,7 @@ WrappedAttributedDataPointsProperty::~WrappedAttributedDataPointsProperty()
 {
 }
 
-void WrappedAttributedDataPointsProperty::setPropertyValue( const Any& rOuterValue, const Reference< beans::XPropertySet >& xInnerPropertySet ) const
+void WrappedAttributedDataPointsProperty::setPropertyValue( const Any& rOuterValue, const Reference< beans::XPropertySet >& /*xInnerPropertySet*/ ) const
                 throw (beans::UnknownPropertyException, beans::PropertyVetoException, lang::IllegalArgumentException, lang::WrappedTargetException, uno::RuntimeException)
 {
     uno::Sequence< uno::Sequence< sal_Int32 > > aNewValue;
@@ -1674,7 +1674,7 @@ void WrappedAttributedDataPointsProperty::setPropertyValue( const Any& rOuterVal
     }
 }
 
-Any WrappedAttributedDataPointsProperty::getPropertyValue( const Reference< beans::XPropertySet >& xInnerPropertySet ) const
+Any WrappedAttributedDataPointsProperty::getPropertyValue( const Reference< beans::XPropertySet >& /*xInnerPropertySet*/ ) const
                         throw (beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException)
 {
     Reference< chart2::XDiagram >    xDiagram( m_spChart2ModelContact->getChart2Diagram() );
@@ -1707,7 +1707,7 @@ Any WrappedAttributedDataPointsProperty::getPropertyValue( const Reference< bean
     return m_aOuterValue;
 }
 
-Any WrappedAttributedDataPointsProperty::getPropertyDefault( const Reference< beans::XPropertyState >& xInnerPropertyState ) const
+Any WrappedAttributedDataPointsProperty::getPropertyDefault( const Reference< beans::XPropertyState >& /*xInnerPropertyState*/ ) const
                         throw (beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException)
 {
     Any aRet;
@@ -1724,7 +1724,7 @@ Reference< chart2::XDiagram > SAL_CALL DiagramWrapper::getDiagram()
 }
 
 void SAL_CALL DiagramWrapper::setDiagram(
-    const Reference< chart2::XDiagram >& xDiagram )
+    const Reference< chart2::XDiagram >& /*xDiagram*/ )
     throw (uno::RuntimeException)
 {
     //@todo: remove this method from interface
