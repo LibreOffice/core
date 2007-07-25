@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ChartDocumentWrapper.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: obo $ $Date: 2007-06-11 14:57:09 $
+ *  last change: $Author: rt $ $Date: 2007-07-25 08:26:34 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -312,7 +312,7 @@ WrappedDataSourceLabelsInFirstRowProperty::~WrappedDataSourceLabelsInFirstRowPro
 {
 }
 
-void WrappedDataSourceLabelsInFirstRowProperty::setPropertyValue( const Any& rOuterValue, const Reference< beans::XPropertySet >& xInnerPropertySet ) const
+void WrappedDataSourceLabelsInFirstRowProperty::setPropertyValue( const Any& rOuterValue, const Reference< beans::XPropertySet >& /*xInnerPropertySet*/ ) const
                 throw (beans::UnknownPropertyException, beans::PropertyVetoException, lang::IllegalArgumentException, lang::WrappedTargetException, uno::RuntimeException)
 {
     sal_Bool bLabelsInFirstRow = sal_True;
@@ -345,7 +345,7 @@ void WrappedDataSourceLabelsInFirstRowProperty::setPropertyValue( const Any& rOu
     }
 }
 
-Any WrappedDataSourceLabelsInFirstRowProperty::getPropertyValue( const Reference< beans::XPropertySet >& xInnerPropertySet ) const
+Any WrappedDataSourceLabelsInFirstRowProperty::getPropertyValue( const Reference< beans::XPropertySet >& /*xInnerPropertySet*/ ) const
                         throw (beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException)
 {
     ::rtl::OUString aRangeString;
@@ -369,7 +369,7 @@ Any WrappedDataSourceLabelsInFirstRowProperty::getPropertyValue( const Reference
     return m_aOuterValue;
 }
 
-Any WrappedDataSourceLabelsInFirstRowProperty::getPropertyDefault( const Reference< beans::XPropertyState >& xInnerPropertyState ) const
+Any WrappedDataSourceLabelsInFirstRowProperty::getPropertyDefault( const Reference< beans::XPropertyState >& /*xInnerPropertyState*/ ) const
                         throw (beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException)
 {
     Any aRet;
@@ -414,7 +414,7 @@ WrappedDataSourceLabelsInFirstColumnProperty::~WrappedDataSourceLabelsInFirstCol
 {
 }
 
-void WrappedDataSourceLabelsInFirstColumnProperty::setPropertyValue( const Any& rOuterValue, const Reference< beans::XPropertySet >& xInnerPropertySet ) const
+void WrappedDataSourceLabelsInFirstColumnProperty::setPropertyValue( const Any& rOuterValue, const Reference< beans::XPropertySet >& /*xInnerPropertySet*/ ) const
                 throw (beans::UnknownPropertyException, beans::PropertyVetoException, lang::IllegalArgumentException, lang::WrappedTargetException, uno::RuntimeException)
 {
     sal_Bool bLabelsInFirstRow = sal_True;
@@ -447,7 +447,7 @@ void WrappedDataSourceLabelsInFirstColumnProperty::setPropertyValue( const Any& 
     }
 }
 
-Any WrappedDataSourceLabelsInFirstColumnProperty::getPropertyValue( const Reference< beans::XPropertySet >& xInnerPropertySet ) const
+Any WrappedDataSourceLabelsInFirstColumnProperty::getPropertyValue( const Reference< beans::XPropertySet >& /*xInnerPropertySet*/ ) const
                         throw (beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException)
 {
     ::rtl::OUString aRangeString;
@@ -471,7 +471,7 @@ Any WrappedDataSourceLabelsInFirstColumnProperty::getPropertyValue( const Refere
     return m_aOuterValue;
 }
 
-Any WrappedDataSourceLabelsInFirstColumnProperty::getPropertyDefault( const Reference< beans::XPropertyState >& xInnerPropertyState ) const
+Any WrappedDataSourceLabelsInFirstColumnProperty::getPropertyDefault( const Reference< beans::XPropertyState >& /*xInnerPropertyState*/ ) const
                         throw (beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException)
 {
     Any aRet;
@@ -513,7 +513,7 @@ WrappedHasLegendProperty::~WrappedHasLegendProperty()
 {
 }
 
-void WrappedHasLegendProperty::setPropertyValue( const Any& rOuterValue, const Reference< beans::XPropertySet >& xInnerPropertySet ) const
+void WrappedHasLegendProperty::setPropertyValue( const Any& rOuterValue, const Reference< beans::XPropertySet >& /*xInnerPropertySet*/ ) const
                 throw (beans::UnknownPropertyException, beans::PropertyVetoException, lang::IllegalArgumentException, lang::WrappedTargetException, uno::RuntimeException)
 {
     sal_Bool bNewValue = sal_True;
@@ -539,7 +539,7 @@ void WrappedHasLegendProperty::setPropertyValue( const Any& rOuterValue, const R
     }
 }
 
-Any WrappedHasLegendProperty::getPropertyValue( const Reference< beans::XPropertySet >& xInnerPropertySet ) const
+Any WrappedHasLegendProperty::getPropertyValue( const Reference< beans::XPropertySet >& /*xInnerPropertySet*/ ) const
                         throw (beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException)
 {
     Any aRet;
@@ -559,7 +559,7 @@ Any WrappedHasLegendProperty::getPropertyValue( const Reference< beans::XPropert
     return aRet;
 }
 
-Any WrappedHasLegendProperty::getPropertyDefault( const Reference< beans::XPropertyState >& xInnerPropertyState ) const
+Any WrappedHasLegendProperty::getPropertyDefault( const Reference< beans::XPropertyState >& /*xInnerPropertyState*/ ) const
                         throw (beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException)
 {
     Any aRet;
@@ -601,7 +601,7 @@ WrappedHasMainTitleProperty::~WrappedHasMainTitleProperty()
 {
 }
 
-void WrappedHasMainTitleProperty::setPropertyValue( const Any& rOuterValue, const Reference< beans::XPropertySet >& xInnerPropertySet ) const
+void WrappedHasMainTitleProperty::setPropertyValue( const Any& rOuterValue, const Reference< beans::XPropertySet >& /*xInnerPropertySet*/ ) const
                 throw (beans::UnknownPropertyException, beans::PropertyVetoException, lang::IllegalArgumentException, lang::WrappedTargetException, uno::RuntimeException)
 {
     sal_Bool bNewValue = sal_True;
@@ -621,7 +621,7 @@ void WrappedHasMainTitleProperty::setPropertyValue( const Any& rOuterValue, cons
     }
 }
 
-Any WrappedHasMainTitleProperty::getPropertyValue( const Reference< beans::XPropertySet >& xInnerPropertySet ) const
+Any WrappedHasMainTitleProperty::getPropertyValue( const Reference< beans::XPropertySet >& /*xInnerPropertySet*/ ) const
                         throw (beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException)
 {
     Any aRet;
@@ -636,7 +636,7 @@ Any WrappedHasMainTitleProperty::getPropertyValue( const Reference< beans::XProp
     return aRet;
 }
 
-Any WrappedHasMainTitleProperty::getPropertyDefault( const Reference< beans::XPropertyState >& xInnerPropertyState ) const
+Any WrappedHasMainTitleProperty::getPropertyDefault( const Reference< beans::XPropertyState >& /*xInnerPropertyState*/ ) const
                         throw (beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException)
 {
     Any aRet;
@@ -678,7 +678,7 @@ WrappedHasSubTitleProperty::~WrappedHasSubTitleProperty()
 {
 }
 
-void WrappedHasSubTitleProperty::setPropertyValue( const Any& rOuterValue, const Reference< beans::XPropertySet >& xInnerPropertySet ) const
+void WrappedHasSubTitleProperty::setPropertyValue( const Any& rOuterValue, const Reference< beans::XPropertySet >& /*xInnerPropertySet*/ ) const
                 throw (beans::UnknownPropertyException, beans::PropertyVetoException, lang::IllegalArgumentException, lang::WrappedTargetException, uno::RuntimeException)
 {
     sal_Bool bNewValue = sal_True;
@@ -699,7 +699,7 @@ void WrappedHasSubTitleProperty::setPropertyValue( const Any& rOuterValue, const
     }
 }
 
-Any WrappedHasSubTitleProperty::getPropertyValue( const Reference< beans::XPropertySet >& xInnerPropertySet ) const
+Any WrappedHasSubTitleProperty::getPropertyValue( const Reference< beans::XPropertySet >& /*xInnerPropertySet*/ ) const
                         throw (beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException)
 {
     Any aRet;
@@ -714,7 +714,7 @@ Any WrappedHasSubTitleProperty::getPropertyValue( const Reference< beans::XPrope
     return aRet;
 }
 
-Any WrappedHasSubTitleProperty::getPropertyDefault( const Reference< beans::XPropertyState >& xInnerPropertyState ) const
+Any WrappedHasSubTitleProperty::getPropertyDefault( const Reference< beans::XPropertyState >& /*xInnerPropertyState*/ ) const
                         throw (beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException)
 {
     Any aRet;
@@ -729,8 +729,8 @@ Any WrappedHasSubTitleProperty::getPropertyDefault( const Reference< beans::XPro
 ChartDocumentWrapper::ChartDocumentWrapper(
     const Reference< uno::XComponentContext > & xContext ) :
         m_spChart2ModelContact( new Chart2ModelContact( xContext ) ),
-        m_bIsDisposed( false ),
-        m_bUpdateAddIn( sal_True )
+        m_bUpdateAddIn( sal_True ),
+        m_bIsDisposed( false )
 {
 }
 
@@ -1549,6 +1549,7 @@ uno::Reference< uno::XInterface > SAL_CALL ChartDocumentWrapper::createInstanceW
            uno::RuntimeException)
 {
     OSL_ENSURE( Arguments.getLength(), "createInstanceWithArguments: Warning: Arguments are ignored" );
+    (void)(Arguments);
 
     return createInstance( ServiceSpecifier );
 }
