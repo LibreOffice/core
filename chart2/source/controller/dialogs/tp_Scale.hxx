@@ -4,9 +4,9 @@
  *
  *  $RCSfile: tp_Scale.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: vg $ $Date: 2007-05-22 17:48:32 $
+ *  last change: $Author: rt $ $Date: 2007-07-25 08:37:44 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -127,6 +127,7 @@ public:
     static SfxTabPage* Create( Window* pParent, const SfxItemSet& rInAttrs );
     virtual BOOL FillItemSet( SfxItemSet& rOutAttrs );
     virtual void Reset( const SfxItemSet& rInAttrs );
+    using TabPage::DeactivatePage;
     virtual int DeactivatePage( SfxItemSet* pItemSet = NULL );
 
     void SetNumFormatter( SvNumberFormatter* pFormatter );
