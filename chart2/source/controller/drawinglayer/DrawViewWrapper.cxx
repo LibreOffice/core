@@ -4,9 +4,9 @@
  *
  *  $RCSfile: DrawViewWrapper.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: vg $ $Date: 2007-05-22 17:51:08 $
+ *  last change: $Author: rt $ $Date: 2007-07-25 08:39:00 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -278,7 +278,9 @@ void DrawViewWrapper::setMarkHandleProvider( MarkHandleProvider* pMarkHandleProv
     m_pMarkHandleProvider = pMarkHandleProvider;
 }
 
-void DrawViewWrapper::CompleteRedraw( OutputDevice* pOut, const Region& rReg )
+void DrawViewWrapper::CompleteRedraw(
+    OutputDevice* pOut, const Region& rReg, USHORT /* nPaintMode */,
+    ::sdr::contact::ViewObjectContactRedirector* /* pRedirector */ )
 {
     svtools::ColorConfig aColorConfig;
     Color aFillColor = Color( aColorConfig.GetColorValue( svtools::DOCCOLOR ).nColor );
@@ -333,7 +335,7 @@ SfxItemSet DrawViewWrapper::getPositionAndSizeItemSetFromMarkedObject() const
                     0);
     SfxItemSet aGeoSet( E3dView::GetGeoAttrFromMarked() );
     aFullSet.Put( aGeoSet );
-    aFullSet.Put( SfxUInt16Item(SID_ATTR_METRIC,ConfigurationAccess::getConfigurationAccess()->getFieldUnit()) );
+    aFullSet.Put( SfxUInt16Item(SID_ATTR_METRIC,static_cast< sal_uInt16 >( ConfigurationAccess::getConfigurationAccess()->getFieldUnit())));
     return aFullSet;
 }
 
