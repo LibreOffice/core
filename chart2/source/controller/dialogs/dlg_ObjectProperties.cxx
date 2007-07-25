@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dlg_ObjectProperties.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: vg $ $Date: 2007-05-22 17:37:01 $
+ *  last change: $Author: rt $ $Date: 2007-07-25 08:33:41 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -268,6 +268,11 @@ void SchAttribTabDlg::setSymbolInformation( SfxItemSet* pSymbolShapeProperties,
     m_pAutoSymbolGraphic = pAutoSymbolGraphic;
 }
 
+void SchAttribTabDlg::SetAxisMinorStepWidthForErrorBarDecimals( double fMinorStepWidth )
+{
+    m_fAxisMinorStepWidthForErrorBarDecimals = fMinorStepWidth;
+}
+
 SchAttribTabDlg::SchAttribTabDlg(Window* pParent,
                                  const SfxItemSet* pAttr,
                                  const ObjectPropertiesDialogParameter* pDialogParameter,
@@ -283,6 +288,7 @@ SchAttribTabDlg::SchAttribTabDlg(Window* pParent,
     , m_pNumberFormatter(0)
     , m_pSymbolShapeProperties(NULL)
     , m_pAutoSymbolGraphic(NULL)
+    , m_fAxisMinorStepWidthForErrorBarDecimals(0.1)
 {
     FreeResource();
 
@@ -323,7 +329,7 @@ SchAttribTabDlg::SchAttribTabDlg(Window* pParent,
             }
             AddTabPage(RID_SVXPAGE_CHAR_NAME, String(SchResId(STR_PAGE_CHARACTERS)));
             AddTabPage(RID_SVXPAGE_CHAR_EFFECTS, String(SchResId(STR_PAGE_FONT_EFFECTS)));
-            AddTabPage(TP_DATA_DESCR, String(SchResId(STR_OBJECT_DATALABELS)), SchDataDescrTabPage::Create, NULL);
+            AddTabPage(TP_DATA_DESCR, String(SchResId(STR_OBJECT_DATALABELS)), DataLabelsTabPage::Create, NULL);
             if( m_pParameter->HasStatisticProperties() )
                 AddTabPage(TP_STAT, String(SchResId(STR_PAGE_STATISTICS)), SchStatisticTabPage::Create, NULL);
             if( m_pParameter->HasGeometryProperties() )
@@ -493,6 +499,12 @@ void SchAttribTabDlg::PageCreated(USHORT nId, SfxTabPage &rPage)
                 rAxisTabPage.SetNumFormatter( &aNumberFormatter );
             }
             break;
+//DLNF         case TP_DATA_DESCR:
+//DLNF             {
+//DLNF                 DataLabelsTabPage & rLabelPage = static_cast< DataLabelsTabPage & >( rPage );
+//DLNF                 rLabelPage.SetNumberFormatter( m_pNumberFormatter );
+//DLNF             }
+//DLNF             break;
 
         case RID_SVXPAGE_NUMBERFORMAT:
                aSet.Put (SvxNumberInfoItem( m_pNumberFormatter, (const USHORT)SID_ATTR_NUMBERFORMAT_INFO));
@@ -500,8 +512,10 @@ void SchAttribTabDlg::PageCreated(USHORT nId, SfxTabPage &rPage)
             break;
 
         case TP_STAT:
-            static_cast< SchStatisticTabPage & >( rPage ).EnableRegression(
+            static_cast< SchStatisticTabPage & >( rPage ).EnableTrendLine(
                 m_pParameter->HasRegressionProperties() );
+            static_cast< SchStatisticTabPage & >( rPage ).SetAxisMinorStepWidthForErrorBarDecimals(
+                m_fAxisMinorStepWidthForErrorBarDecimals );
             break;
     }
 }
