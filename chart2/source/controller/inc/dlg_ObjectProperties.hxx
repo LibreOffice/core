@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dlg_ObjectProperties.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: vg $ $Date: 2007-05-22 17:59:32 $
+ *  last change: $Author: rt $ $Date: 2007-07-25 08:40:02 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -117,6 +117,8 @@ private:
     SfxItemSet*     m_pSymbolShapeProperties;
     Graphic*        m_pAutoSymbolGraphic;
 
+    double          m_fAxisMinorStepWidthForErrorBarDecimals;
+
     virtual void PageCreated(USHORT nId, SfxTabPage& rPage);
 
 public:
@@ -131,6 +133,8 @@ public:
     //pAutoSymbolGraphic: Graphic to be shown if AutoSymbol gets selected
     //this class takes ownership over both parameter
     void setSymbolInformation( SfxItemSet* pSymbolShapeProperties, Graphic* pAutoSymbolGraphic );
+
+    void SetAxisMinorStepWidthForErrorBarDecimals( double fMinorStepWidth );
 };
 
 //.............................................................................
