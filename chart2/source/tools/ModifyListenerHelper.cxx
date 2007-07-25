@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ModifyListenerHelper.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: vg $ $Date: 2007-05-22 19:01:48 $
+ *  last change: $Author: rt $ $Date: 2007-07-25 08:58:36 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -205,7 +205,7 @@ void SAL_CALL ModifyEventForwarder::modified( const lang::EventObject& aEvent )
 }
 
 // ____ XEventListener (base of XModifyListener) ____
-void SAL_CALL ModifyEventForwarder::disposing( const lang::EventObject& Source )
+void SAL_CALL ModifyEventForwarder::disposing( const lang::EventObject& /* Source */ )
     throw (uno::RuntimeException)
 {
     // nothing
@@ -255,7 +255,7 @@ bool ModifyListenerOnDemmandRefresh::needsUpdate() const
 
 // ____ XModifyListener ____
 void SAL_CALL ModifyListenerOnDemmandRefresh::modified(
-    const lang::EventObject& aEvent )
+    const lang::EventObject& /* aEvent */ )
     throw (uno::RuntimeException)
 {
     m_bNeedsUpdate = true;
@@ -263,7 +263,7 @@ void SAL_CALL ModifyListenerOnDemmandRefresh::modified(
 
 // ____ XEventListener (base of XModifyListener) ____
 void SAL_CALL ModifyListenerOnDemmandRefresh::disposing(
-    const lang::EventObject& Source )
+    const lang::EventObject& /* Source */ )
     throw (uno::RuntimeException)
 {
     m_bNeedsUpdate = true;
