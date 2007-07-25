@@ -4,9 +4,9 @@
  *
  *  $RCSfile: LifeTime.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: vg $ $Date: 2007-05-22 19:00:40 $
+ *  last change: $Author: rt $ $Date: 2007-07-25 08:57:58 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -41,11 +41,9 @@
 #ifndef _OSL_DIAGNOSE_H_
 #include <osl/diagnose.h>
 #endif
-/*
-#ifndef _COM_SUN_STAR_LANG_XEVENTLISTENER_HPP_
-#include <com/sun/star/lang/XEventListener.hpp>
-#endif
-*/
+
+#include <com/sun/star/util/XModifyListener.hpp>
+#include <com/sun/star/util/XCloseListener.hpp>
 
 using namespace ::com::sun::star;
 
@@ -158,13 +156,9 @@ LifeTimeManager::~LifeTimeManager()
             uno::Reference< lang::XComponent >(m_pComponent);;
         if(xComponent.is())
         {
-            ::cppu::OInterfaceContainerHelper* pIC = m_aListenerContainer.getContainer(
-                        ::getCppuType((const uno::Reference< lang::XEventListener >*)0) );
-            if( pIC )
-            {
-                lang::EventObject aEvent( xComponent );
-                pIC->disposeAndClear( aEvent );
-            }
+            // notify XCLoseListeners
+            lang::EventObject aEvent( xComponent );
+            m_aListenerContainer.disposeAndClear( aEvent );
         }
     }
 
@@ -271,13 +265,14 @@ CloseableLifeTimeManager::~CloseableLifeTimeManager()
     {
         //no mutex is acquired
         g_close_endTryClose(bDeliverOwnership, sal_False);
+        (void)(ex);
         throw;
     }
     return sal_True;
 }
 
     void CloseableLifeTimeManager
-::g_close_endTryClose(sal_Bool bDeliverOwnership, sal_Bool bMyVeto)
+::g_close_endTryClose(sal_Bool bDeliverOwnership, sal_Bool /* bMyVeto */ )
 {
     //this method is called, if the try to close was not successfull
     osl::Guard< osl::Mutex > aGuard( m_aAccessMutex );
