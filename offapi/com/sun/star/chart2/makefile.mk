@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.5 $
+#   $Revision: 1.6 $
 #
-#   last change: $Author: vg $ $Date: 2007-05-22 15:06:14 $
+#   last change: $Author: rt $ $Date: 2007-07-25 08:19:51 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -109,7 +109,10 @@ IDLFILES= \
     XTarget.idl \
     XTitle.idl \
     XTitled.idl \
-    XTransformation.idl
+    XTransformation.idl \
+    XUndoManager.idl \
+    XUndoSupplier.idl \
+    XUndoHelper.idl
 
 # --- Targets ------------------------------------------------------
 
