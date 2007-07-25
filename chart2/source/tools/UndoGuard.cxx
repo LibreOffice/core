@@ -4,9 +4,9 @@
  *
  *  $RCSfile: UndoGuard.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: vg $ $Date: 2007-05-22 19:06:12 $
+ *  last change: $Author: rt $ $Date: 2007-07-25 09:01:14 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -47,11 +47,11 @@ using ::rtl::OUString;
 namespace chart
 {
 
-UndoGuard_Base::UndoGuard_Base( const rtl::OUString& rUndoString
-        , UndoManager& rUndoManager
+UndoGuard_Base::UndoGuard_Base( const OUString& rUndoString
+        , const uno::Reference< chart2::XUndoManager > & xUndoManager
         , const uno::Reference< frame::XModel > & xModel )
         : m_xModel( xModel )
-        , m_rUndoManager( rUndoManager )
+        , m_xUndoManager( xUndoManager )
         , m_aUndoString( rUndoString )
         , m_bActionPosted( false )
 {
@@ -64,56 +64,60 @@ UndoGuard_Base::~UndoGuard_Base()
 void UndoGuard_Base::commitAction()
 {
     if( !m_bActionPosted )
-        m_rUndoManager.postAction( m_aUndoString );
+        m_xUndoManager->postAction( m_aUndoString );
     m_bActionPosted = true;
 }
 
 //-----------------------------------------------------------------------------
 
-UndoGuard::UndoGuard( const rtl::OUString& rUndoString
-        , UndoManager& rUndoManager
+UndoGuard::UndoGuard( const OUString& rUndoString
+        , const uno::Reference< chart2::XUndoManager > & xUndoManager
         , const uno::Reference< frame::XModel > & xModel )
-        : UndoGuard_Base( rUndoString, rUndoManager, xModel )
+        : UndoGuard_Base( rUndoString, xUndoManager, xModel )
 {
-    m_rUndoManager.preAction( m_xModel );
+    m_xUndoManager->preAction( m_xModel );
 }
 
 UndoGuard::~UndoGuard()
 {
     if( !m_bActionPosted )
-        m_rUndoManager.cancelAction();
+        m_xUndoManager->cancelAction();
 }
 
 //-----------------------------------------------------------------------------
 
-UndoLiveUpdateGuard::UndoLiveUpdateGuard( const rtl::OUString& rUndoString
-        , UndoManager& rUndoManager
+UndoLiveUpdateGuard::UndoLiveUpdateGuard( const OUString& rUndoString
+        , const uno::Reference< chart2::XUndoManager > & xUndoManager
         , const uno::Reference< frame::XModel > & xModel )
-        : UndoGuard_Base( rUndoString, rUndoManager, xModel )
+        : UndoGuard_Base( rUndoString, xUndoManager, xModel )
 {
-    m_rUndoManager.preAction( m_xModel );
+    m_xUndoManager->preAction( m_xModel );
 }
 
 UndoLiveUpdateGuard::~UndoLiveUpdateGuard()
 {
     if( !m_bActionPosted )
-        m_rUndoManager.cancelActionUndo( m_xModel );
+        m_xUndoManager->cancelActionWithUndo( m_xModel );
 }
 
 //-----------------------------------------------------------------------------
 
-UndoLiveUpdateGuardWithData::UndoLiveUpdateGuardWithData( const rtl::OUString& rUndoString
-        , UndoManager& rUndoManager
+UndoLiveUpdateGuardWithData::UndoLiveUpdateGuardWithData( const OUString& rUndoString
+        , const uno::Reference< chart2::XUndoManager > & xUndoManager
         , const uno::Reference< frame::XModel > & xModel )
-        : UndoGuard_Base( rUndoString, rUndoManager, xModel )
+        : UndoGuard_Base( rUndoString, xUndoManager, xModel )
 {
-    m_rUndoManager.preActionWithData( m_xModel );
+    Sequence< beans::PropertyValue > aArgs(1);
+    aArgs[0] = beans::PropertyValue(
+        OUString( RTL_CONSTASCII_USTRINGPARAM("WithData")), -1, uno::Any(),
+        beans::PropertyState_DIRECT_VALUE );
+    m_xUndoManager->preActionWithArguments( m_xModel, aArgs );
 }
 
 UndoLiveUpdateGuardWithData::~UndoLiveUpdateGuardWithData()
 {
     if( !m_bActionPosted )
-        m_rUndoManager.cancelActionUndo( m_xModel );
+        m_xUndoManager->cancelActionWithUndo( m_xModel );
 }
 
 } //  namespace chart
