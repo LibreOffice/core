@@ -4,9 +4,9 @@
  *
  *  $RCSfile: VSeriesPlotter.cxx,v $
  *
- *  $Revision: 1.35 $
+ *  $Revision: 1.36 $
  *
- *  last change: $Author: vg $ $Date: 2007-05-22 19:17:25 $
+ *  last change: $Author: rt $ $Date: 2007-07-25 09:05:19 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1770,6 +1770,9 @@ std::vector< ViewLegendEntry > SAL_CALL VSeriesPlotter::createLegendEntriesForSe
         }
 
         // regression curves
+        if ( 3 == m_nDimension )  // #i63016#
+            return aResult;
+
         Reference< XRegressionCurveContainer > xRegrCont( rSeries.getModel(), uno::UNO_QUERY );
         if( xRegrCont.is())
         {
@@ -1820,10 +1823,10 @@ std::vector< ViewLegendEntry > SAL_CALL VSeriesPlotter::createLegendEntriesForSe
 }
 
 std::vector< ViewLegendEntry > SAL_CALL VSeriesPlotter::createLegendEntriesForChartType(
-            const Reference< beans::XPropertySet >& xTextProperties,
-            const Reference< drawing::XShapes >& xTarget,
-            const Reference< lang::XMultiServiceFactory >& xShapeFactory,
-            const Reference< uno::XComponentContext >& xContext
+            const Reference< beans::XPropertySet >& /* xTextProperties */,
+            const Reference< drawing::XShapes >& /* xTarget */,
+            const Reference< lang::XMultiServiceFactory >& /* xShapeFactory */,
+            const Reference< uno::XComponentContext >& /* xContext */
                 )
 {
     return std::vector< ViewLegendEntry >();
