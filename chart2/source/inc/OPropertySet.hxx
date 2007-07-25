@@ -4,9 +4,9 @@
  *
  *  $RCSfile: OPropertySet.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: vg $ $Date: 2007-05-22 18:20:42 $
+ *  last change: $Author: rt $ $Date: 2007-07-25 08:47:10 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -151,9 +151,9 @@ protected:
 
         @see ::cppu::OPropertySetHelper
     */
-    virtual ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySetInfo > SAL_CALL
-        getPropertySetInfo()
-        throw (::com::sun::star::uno::RuntimeException) = 0;
+//     virtual ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySetInfo > SAL_CALL
+//         getPropertySetInfo()
+//         throw (::com::sun::star::uno::RuntimeException) = 0;
 
     /** Try to convert the value <code>rValue</code> to the type required by the
         property associated with <code>nHandle</code>.
