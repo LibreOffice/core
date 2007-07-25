@@ -4,9 +4,9 @@
  *
  *  $RCSfile: DataPointItemConverter.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: vg $ $Date: 2007-05-22 18:00:32 $
+ *  last change: $Author: rt $ $Date: 2007-07-25 08:40:39 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -44,6 +44,7 @@
 #include "CharacterPropertyItemConverter.hxx"
 #include "StatisticsItemConverter.hxx"
 #include "SeriesOptionsItemConverter.hxx"
+#include "DataSeriesHelper.hxx"
 
 #ifndef _SVX_CHRTITEM_HXX
 #include <svx/chrtitem.hxx>
@@ -85,6 +86,7 @@
 #include <algorithm>
 
 using namespace ::com::sun::star;
+using ::com::sun::star::uno::Reference;
 
 namespace
 {
@@ -144,11 +146,13 @@ DataPointItemConverter::DataPointItemConverter(
     ::std::auto_ptr< awt::Size > pRefSize /* = NULL */,
     bool bDataSeries /* = false */,
     bool bUseSpecialFillColor /* = false */,
-    sal_Int32 nSpecialFillColor /* =0 */
+    sal_Int32 nSpecialFillColor /* =0 */,
+    bool bOverwriteLabelsForAttributedDataPointsAlso /*false*/
     ) :
         ItemConverter( rPropertySet, rItemPool ),
         m_pNumberFormatterWrapper( pNumFormatter ),
         m_bDataSeries( bDataSeries ),
+        m_bOverwriteLabelsForAttributedDataPointsAlso(m_bDataSeries && bOverwriteLabelsForAttributedDataPointsAlso),
         m_bUseSpecialFillColor(bUseSpecialFillColor),
         m_nSpecialFillColor(nSpecialFillColor)
 {
@@ -228,7 +232,7 @@ bool DataPointItemConverter::ApplySpecialItem(
         case SCHATTR_DATADESCR_DESCR:
         {
             const SvxChartDataDescrItem & rItem =
-                reinterpret_cast< const SvxChartDataDescrItem & >(
+                static_cast< const SvxChartDataDescrItem & >(
                     rItemSet.Get( nWhichId ));
 
             chart2::DataPointLabel aLabel;
@@ -271,7 +275,19 @@ bool DataPointItemConverter::ApplySpecialItem(
                 }
 
                 aValue <<= aLabel;
-                if( aValue != GetPropertySet()->getPropertyValue( C2U( "Label" ) ))
+
+                uno::Any aOldValue( GetPropertySet()->getPropertyValue( C2U( "Label" ) ));
+                if( m_bOverwriteLabelsForAttributedDataPointsAlso )
+                {
+                    Reference< chart2::XDataSeries > xSeries( GetPropertySet(), uno::UNO_QUERY);
+                    if( aValue != aOldValue ||
+                        DataSeriesHelper::hasAttributedDataPointDifferentValue( xSeries, C2U( "Label" ), aOldValue ) )
+                    {
+                        DataSeriesHelper::setPropertyAlsoToAllAttributedDataPoints( xSeries, C2U( "Label" ), aValue );
+                        bChanged = true;
+                    }
+                }
+                else if( aValue != aOldValue )
                 {
                     GetPropertySet()->setPropertyValue( C2U( "Label" ), aValue );
                     bChanged = true;
@@ -283,15 +299,26 @@ bool DataPointItemConverter::ApplySpecialItem(
         case SCHATTR_DATADESCR_SHOW_SYM:
         {
             const SvxChartDataDescrItem & rItem =
-                reinterpret_cast< const SvxChartDataDescrItem & >(
+                static_cast< const SvxChartDataDescrItem & >(
                     rItemSet.Get( nWhichId ));
 
+            uno::Any aOldValue( GetPropertySet()->getPropertyValue( C2U( "Label" ) ));
             chart2::DataPointLabel aLabel;
-            if( GetPropertySet()->getPropertyValue( C2U( "Label" )) >>= aLabel )
+            if( aOldValue >>= aLabel )
             {
                 sal_Bool bOldValue = aLabel.ShowLegendSymbol;
                 aLabel.ShowLegendSymbol = static_cast< sal_Bool >( rItem.GetValue() );
-                if( bOldValue != aLabel.ShowLegendSymbol )
+                if( m_bOverwriteLabelsForAttributedDataPointsAlso )
+                {
+                    Reference< chart2::XDataSeries > xSeries( GetPropertySet(), uno::UNO_QUERY);
+                    if( bOldValue != aLabel.ShowLegendSymbol ||
+                        DataSeriesHelper::hasAttributedDataPointDifferentValue( xSeries, C2U( "Label" ), aOldValue ) )
+                    {
+                        DataSeriesHelper::setPropertyAlsoToAllAttributedDataPoints( xSeries, C2U( "Label" ), uno::makeAny( aLabel ) );
+                        bChanged = true;
+                    }
+                }
+                else if( bOldValue != aLabel.ShowLegendSymbol )
                 {
                     GetPropertySet()->setPropertyValue( C2U( "Label" ), uno::makeAny( aLabel ));
                     bChanged = true;
@@ -305,7 +332,7 @@ bool DataPointItemConverter::ApplySpecialItem(
             if( m_pNumberFormatterWrapper )
             {
                 sal_Int32 nFmt = static_cast< sal_Int32 >(
-                    reinterpret_cast< const SfxUInt32Item & >(
+                    static_cast< const SfxUInt32Item & >(
                         rItemSet.Get( nWhichId )).GetValue());
 
                 aValue = uno::makeAny(nFmt);
@@ -325,7 +352,7 @@ bool DataPointItemConverter::ApplySpecialItem(
         case SCHATTR_STYLE_SYMBOL:
         {
             sal_Int32 nStyle =
-                reinterpret_cast< const SfxInt32Item & >(
+                static_cast< const SfxInt32Item & >(
                     rItemSet.Get( nWhichId )).GetValue();
             chart2::Symbol aSymbol;
 
@@ -367,7 +394,7 @@ bool DataPointItemConverter::ApplySpecialItem(
 
         case SCHATTR_SYMBOL_SIZE:
         {
-            Size aSize = reinterpret_cast< const SvxSizeItem & >(
+            Size aSize = static_cast< const SvxSizeItem & >(
                 rItemSet.Get( nWhichId )).GetSize();
             chart2::Symbol aSymbol;
 
@@ -386,7 +413,7 @@ bool DataPointItemConverter::ApplySpecialItem(
 
         case SCHATTR_SYMBOL_BRUSH:
         {
-            const SvxBrushItem & rBrshItem( reinterpret_cast< const SvxBrushItem & >(
+            const SvxBrushItem & rBrshItem( static_cast< const SvxBrushItem & >(
                                                 rItemSet.Get( nWhichId )));
             uno::Any aXGraphicAny;
             const Graphic *pGraphic( rBrshItem.GetGraphic());
@@ -451,6 +478,16 @@ void DataPointItemConverter::FillSpecialItem(
 
                 rOutItemSet.Put( SvxChartDataDescrItem( aDescr, SCHATTR_DATADESCR_DESCR ));
                 rOutItemSet.Put( SfxBoolItem( SCHATTR_DATADESCR_SHOW_SYM, aLabel.ShowLegendSymbol ));
+
+                if( m_bOverwriteLabelsForAttributedDataPointsAlso )
+                {
+                    if( DataSeriesHelper::hasAttributedDataPointDifferentValue(
+                        Reference< chart2::XDataSeries >( GetPropertySet(), uno::UNO_QUERY), C2U( "Label" ), uno::makeAny(aLabel) ) )
+                    {
+                        rOutItemSet.InvalidateItem(SCHATTR_DATADESCR_DESCR);
+                        rOutItemSet.InvalidateItem(SCHATTR_DATADESCR_SHOW_SYM);
+                    }
+                }
             }
         }
         break;
