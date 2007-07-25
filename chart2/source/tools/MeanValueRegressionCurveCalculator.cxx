@@ -4,9 +4,9 @@
  *
  *  $RCSfile: MeanValueRegressionCurveCalculator.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 13:26:17 $
+ *  last change: $Author: rt $ $Date: 2007-07-25 08:58:13 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -67,7 +67,7 @@ MeanValueRegressionCurveCalculator::~MeanValueRegressionCurveCalculator()
 
 // ____ XRegressionCurveCalculator ____
 void SAL_CALL MeanValueRegressionCurveCalculator::recalculateRegression(
-    const uno::Sequence< double >& aXValues,
+    const uno::Sequence< double >& /*aXValues*/,
     const uno::Sequence< double >& aYValues )
     throw (uno::RuntimeException)
 {
@@ -93,7 +93,7 @@ void SAL_CALL MeanValueRegressionCurveCalculator::recalculateRegression(
 //     m_fCorrelationCoeffitient = ?;
 }
 
-double SAL_CALL MeanValueRegressionCurveCalculator::getCurveValue( double x )
+double SAL_CALL MeanValueRegressionCurveCalculator::getCurveValue( double /*x*/ )
     throw (lang::IllegalArgumentException,
            uno::RuntimeException)
 {
