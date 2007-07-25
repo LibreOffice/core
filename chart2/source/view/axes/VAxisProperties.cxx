@@ -4,9 +4,9 @@
  *
  *  $RCSfile: VAxisProperties.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: vg $ $Date: 2007-05-22 19:10:13 $
+ *  last change: $Author: rt $ $Date: 2007-07-25 09:03:12 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -122,7 +122,7 @@ double lcl_getTickOffset(sal_Int32 nLength,sal_Int32 nTickmarkStyle)
     return fPercent*nLength;
 }
 
-VLineProperties AxisProperties::makeLinePropertiesForDepth( sal_Int32 nDepth ) const
+VLineProperties AxisProperties::makeLinePropertiesForDepth( sal_Int32 /* nDepth */ ) const
 {
     //@todo get this from somewhere; maybe for each subincrement
     //so far the model does not offer different settings for each tick depth
