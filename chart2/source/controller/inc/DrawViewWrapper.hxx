@@ -4,9 +4,9 @@
  *
  *  $RCSfile: DrawViewWrapper.hxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: vg $ $Date: 2007-05-22 17:53:29 $
+ *  last change: $Author: rt $ $Date: 2007-07-25 08:39:24 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -94,8 +94,8 @@ public:
     //----------------------
     //pMarkHandleProvider can be NULL; ownership is not taken
     void setMarkHandleProvider( MarkHandleProvider* pMarkHandleProvider );
-
-    void CompleteRedraw( OutputDevice* pOut, const Region& rReg );
+    void CompleteRedraw( OutputDevice* pOut, const Region& rReg, USHORT nPaintMode = 0,
+                         ::sdr::contact::ViewObjectContactRedirector* pRedirector = 0L );
 
     SdrObject*   getSelectedObject() const;
     SdrObject*   getTextEditObject() const;
