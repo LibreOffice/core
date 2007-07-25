@@ -4,9 +4,9 @@
  *
  *  $RCSfile: DialogModel.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: vg $ $Date: 2007-05-22 17:28:10 $
+ *  last change: $Author: rt $ $Date: 2007-07-25 08:30:38 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -52,32 +52,17 @@
 #include "ControllerLockGuard.hxx"
 #include "ChartTypeHelper.hxx"
 
-#ifndef _COM_SUN_STAR_UTIL_XCLONEABLE_HPP_
 #include <com/sun/star/util/XCloneable.hpp>
-#endif
-#ifndef _COM_SUN_STAR_CHART2_AXISTYPE_HPP_
 #include <com/sun/star/chart2/AxisType.hpp>
-#endif
-#ifndef _COM_SUN_STAR_CHART2_XTITLED_HPP_
 #include <com/sun/star/chart2/XTitled.hpp>
-#endif
-#ifndef _COM_SUN_STAR_CHART2_XCOORDINATESYSTEMCONTAINER_HPP_
 #include <com/sun/star/chart2/XCoordinateSystemContainer.hpp>
-#endif
-#ifndef _COM_SUN_STAR_CHART2_XCHARTTYPECONTAINER_HPP_
 #include <com/sun/star/chart2/XChartTypeContainer.hpp>
-#endif
-#ifndef _COM_SUN_STAR_CHART2_XDATASERIESCONTAINER_HPP_
 #include <com/sun/star/chart2/XDataSeriesContainer.hpp>
-#endif
-#ifndef _COM_SUN_STAR_CHART2_DATA_XDATASINK_HPP_
 #include <com/sun/star/chart2/data/XDataSink.hpp>
-#endif
 
-#ifndef _STRING_HXX
 #include <tools/string.hxx>
-#endif
 
+#include <utility>
 #include <algorithm>
 #include <iterator>
 #include <functional>
@@ -330,10 +315,10 @@ Reference< XDataSeries > lcl_CreateNewSeries(
         if( xChartType.is() && xSink.is())
         {
             ::std::vector< Reference< data::XLabeledDataSequence > > aNewSequences;
-            OUString aRoleOfSeqForSeriesLabel = xChartType->getRoleOfSequenceForSeriesLabel();
-            OUString aLabel( String( ::chart::SchResId( STR_DATA_UNNAMED_SERIES )));
-            Sequence< OUString > aRoles( xChartType->getSupportedMandatoryRoles());
-            Sequence< OUString > aOptRoles( xChartType->getSupportedOptionalRoles());
+            const OUString aRoleOfSeqForSeriesLabel = xChartType->getRoleOfSequenceForSeriesLabel();
+            const OUString aLabel( String( ::chart::SchResId( STR_DATA_UNNAMED_SERIES )));
+            const Sequence< OUString > aRoles( xChartType->getSupportedMandatoryRoles());
+            const Sequence< OUString > aOptRoles( xChartType->getSupportedOptionalRoles());
             sal_Int32 nI = 0;
 
             for(nI=0; nI<aRoles.getLength(); ++nI)
@@ -372,7 +357,7 @@ Reference< XDataSeries > lcl_CreateNewSeries(
 struct lcl_addSeriesNumber : public ::std::binary_function<
         sal_Int32, Reference< XDataSeriesContainer >, sal_Int32 >
 {
-    sal_Int32 operator() ( sal_Int32 nCurrentNumber, const Reference< XDataSeriesContainer > & xCnt )
+    sal_Int32 operator() ( sal_Int32 nCurrentNumber, const Reference< XDataSeriesContainer > & xCnt ) const
     {
         if( xCnt.is())
             return nCurrentNumber + (xCnt->getDataSeries().getLength());
@@ -408,7 +393,7 @@ void DialogModel::setTemplate(
 }
 
 ::boost::shared_ptr< RangeSelectionHelper >
-    DialogModel::getRangeSelectionHelper() const throw()
+    DialogModel::getRangeSelectionHelper() const
 {
     if( ! m_spRangeSelectionHelper.get())
         m_spRangeSelectionHelper.reset(
@@ -417,13 +402,13 @@ void DialogModel::setTemplate(
     return m_spRangeSelectionHelper;
 }
 
-Reference< frame::XModel > DialogModel::getChartModel() const throw()
+Reference< frame::XModel > DialogModel::getChartModel() const
 {
     Reference< frame::XModel > xResult( m_xChartDocument, uno::UNO_QUERY );
     return xResult;
 }
 
-Reference< data::XDataProvider > DialogModel::getDataProvider() const throw()
+Reference< data::XDataProvider > DialogModel::getDataProvider() const
 {
     Reference< data::XDataProvider > xResult;
     if( m_xChartDocument.is())
@@ -432,7 +417,7 @@ Reference< data::XDataProvider > DialogModel::getDataProvider() const throw()
 }
 
 ::std::vector< Reference< XDataSeriesContainer > >
-    DialogModel::getAllDataSeriesContainers() const throw()
+    DialogModel::getAllDataSeriesContainers() const
 {
     ::std::vector< Reference< XDataSeriesContainer > > aResult;
 
@@ -467,7 +452,7 @@ Reference< data::XDataProvider > DialogModel::getDataProvider() const throw()
 }
 
 ::std::vector< DialogModel::tSeriesWithChartTypeByName >
-    DialogModel::getAllDataSeriesWithLabel() const throw()
+    DialogModel::getAllDataSeriesWithLabel() const
 {
     ::std::vector< tSeriesWithChartTypeByName > aResult;
     ::std::vector< Reference< XDataSeriesContainer > > aContainers(
@@ -481,13 +466,13 @@ Reference< data::XDataProvider > DialogModel::getDataProvider() const throw()
 DialogModel::tRolesWithRanges DialogModel::getRolesWithRanges(
     const Reference< XDataSeries > & xSeries,
     const ::rtl::OUString & aRoleOfSequenceForLabel,
-    const Reference< chart2::XChartType > & xChartType )
+    const Reference< chart2::XChartType > & xChartType ) const
 {
     DialogModel::tRolesWithRanges aResult;
     try
     {
         Reference< data::XDataSource > xSource( xSeries, uno::UNO_QUERY_THROW );
-        Sequence< Reference< data::XLabeledDataSequence > > aSeq( xSource->getDataSequences());
+        const Sequence< Reference< data::XLabeledDataSequence > > aSeq( xSource->getDataSequences());
         ::std::copy( aSeq.getConstArray(), aSeq.getConstArray() + aSeq.getLength(),
                      lcl_RolesWithRangeAppend( aResult, aRoleOfSequenceForLabel ));
         if( xChartType.is())
@@ -532,7 +517,7 @@ void DialogModel::moveSeries(
 Reference< chart2::XDataSeries > DialogModel::insertSeriesAfter(
     const Reference< XDataSeries > & xSeries,
     const Reference< XChartType > & xChartType,
-    bool bCreateDataCachedSequences /* = false */ ) throw()
+    bool bCreateDataCachedSequences /* = false */ )
 {
     m_aTimerTriggeredControllerLock.startTimer();
     ControllerLockGuard aLockedControllers( Reference< frame::XModel >( m_xChartDocument, uno::UNO_QUERY ) );
@@ -541,7 +526,7 @@ Reference< chart2::XDataSeries > DialogModel::insertSeriesAfter(
     try
     {
         sal_Int32 nSeriesInChartType = 0;
-        sal_Int32 nTotalSeries = countSeries();
+        const sal_Int32 nTotalSeries = countSeries();
         if( xChartType.is())
         {
             Reference< XDataSeriesContainer > xCnt( xChartType, uno::UNO_QUERY_THROW );
@@ -586,7 +571,7 @@ Reference< chart2::XDataSeries > DialogModel::insertSeriesAfter(
 
 void DialogModel::deleteSeries(
     const Reference< XDataSeries > & xSeries,
-    const Reference< XChartType > & xChartType ) throw()
+    const Reference< XChartType > & xChartType )
 {
     m_aTimerTriggeredControllerLock.startTimer();
     ControllerLockGuard aLockedControllers( Reference< frame::XModel >( m_xChartDocument, uno::UNO_QUERY ) );
@@ -594,7 +579,7 @@ void DialogModel::deleteSeries(
     DataSeriesHelper::deleteSeries( xSeries, xChartType );
 }
 
-Reference< data::XLabeledDataSequence > DialogModel::getCategories() const throw()
+Reference< data::XLabeledDataSequence > DialogModel::getCategories() const
 {
     Reference< data::XLabeledDataSequence > xResult;
     try
@@ -633,7 +618,7 @@ void DialogModel::setCategories( const Reference< chart2::data::XLabeledDataSequ
     }
 }
 
-OUString DialogModel::getCategoriesRange() const throw()
+OUString DialogModel::getCategoriesRange() const
 {
     Reference< data::XLabeledDataSequence > xLSeq( getCategories());
     OUString aRange;
@@ -646,7 +631,7 @@ OUString DialogModel::getCategoriesRange() const throw()
     return aRange;
 }
 
-bool DialogModel::isCategoryDiagram() const throw()
+bool DialogModel::isCategoryDiagram() const
 {
     bool bRet = false;
     if( m_xChartDocument.is())
@@ -658,7 +643,7 @@ void DialogModel::detectArguments(
     OUString & rOutRangeString,
     bool & rOutUseColumns,
     bool & rOutFirstCellAsLabel,
-    bool & rOutHasCategories ) const throw()
+    bool & rOutHasCategories ) const
 {
     try
     {
@@ -687,7 +672,7 @@ void DialogModel::startControllerLockTimer()
 }
 
 bool DialogModel::setData(
-    const Sequence< beans::PropertyValue > & rArguments ) throw()
+    const Sequence< beans::PropertyValue > & rArguments )
 {
     m_aTimerTriggeredControllerLock.startTimer();
     ControllerLockGuard aLockedControllers( Reference< frame::XModel >( m_xChartDocument, uno::UNO_QUERY ) );
@@ -807,10 +792,10 @@ bool DialogModel::isSeriesValid(
         sal_Int32 nFoundRoles = 0;
         DialogModel::tRolesWithRanges aRolesWithRanges;
         Reference< data::XDataSource > xSource( xSeries, uno::UNO_QUERY_THROW );
-        Sequence< Reference< data::XLabeledDataSequence > > aSeq( xSource->getDataSequences());
+        const Sequence< Reference< data::XLabeledDataSequence > > aSeq( xSource->getDataSequences());
         ::std::copy( aSeq.getConstArray(), aSeq.getConstArray() + aSeq.getLength(),
                      lcl_RolesWithRangeAppend( aRolesWithRanges, aRoleOfSequenceForLabel ));
-        Sequence< OUString > aRoles( xChartType->getSupportedMandatoryRoles());
+        const Sequence< OUString > aRoles( xChartType->getSupportedMandatoryRoles());
         for( sal_Int32 nI = 0; nI < aRoles.getLength(); ++nI )
             if( !aRoles[nI].equals( lcl_aLabelRole ) && aRolesWithRanges.find( aRoles[nI] ) != aRolesWithRanges.end() )
                 ++nFoundRoles;
@@ -818,7 +803,7 @@ bool DialogModel::isSeriesValid(
 //             if( !aRoles[nI].equals( lcl_aLabelRole ) && aRolesWithRanges.find( aRoles[nI] ) == aRolesWithRanges.end() )
 //                 return false;
         // weak condition: one mandatory role exists
-        if( aRoles.getLength() > 0 & nFoundRoles == 0 )
+        if( aRoles.getLength() > 0 && nFoundRoles == 0 )
             return false;
     }
     catch( uno::Exception & ex )
@@ -861,8 +846,11 @@ void DialogModel::applyInterpretedData(
         // styles
         if( bSetStyles && m_xTemplate.is() )
         {
-            sal_Int32 nGroup=0, nOuterSize=rNewData.Series.getLength(),
-                nSeriesCounter=0, nNewSeriesIndex = static_cast< sal_Int32 >( rSeriesToReUse.size());
+            sal_Int32 nGroup = 0;
+            sal_Int32 nSeriesCounter = 0;
+            sal_Int32 nNewSeriesIndex = static_cast< sal_Int32 >( rSeriesToReUse.size());
+            const sal_Int32 nOuterSize=rNewData.Series.getLength();
+
             for(; nGroup < nOuterSize; ++nGroup)
             {
                 Sequence< Reference< XDataSeries > > aSeries( rNewData.Series[ nGroup ] );

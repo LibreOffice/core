@@ -4,9 +4,9 @@
  *
  *  $RCSfile: DialogModel.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: vg $ $Date: 2007-05-22 17:28:19 $
+ *  last change: $Author: rt $ $Date: 2007-07-25 08:30:51 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -94,29 +94,29 @@ public:
             ::com::sun::star::chart2::XChartTypeTemplate > & xTemplate );
 
     ::boost::shared_ptr< RangeSelectionHelper >
-        getRangeSelectionHelper() const throw();
+        getRangeSelectionHelper() const;
 
     ::com::sun::star::uno::Reference<
         ::com::sun::star::frame::XModel >
-        getChartModel() const throw();
+        getChartModel() const;
 
     ::com::sun::star::uno::Reference<
             ::com::sun::star::chart2::data::XDataProvider >
-        getDataProvider() const throw();
+        getDataProvider() const;
 
     ::std::vector< ::com::sun::star::uno::Reference<
             ::com::sun::star::chart2::XDataSeriesContainer > >
-        getAllDataSeriesContainers() const throw();
+        getAllDataSeriesContainers() const;
 
     ::std::vector< tSeriesWithChartTypeByName >
-        getAllDataSeriesWithLabel() const throw();
+        getAllDataSeriesWithLabel() const;
 
     tRolesWithRanges getRolesWithRanges(
         const ::com::sun::star::uno::Reference<
             ::com::sun::star::chart2::XDataSeries > & xSeries,
         const ::rtl::OUString & aRoleOfSequenceForLabel,
         const ::com::sun::star::uno::Reference<
-            ::com::sun::star::chart2::XChartType > & xChartType );
+            ::com::sun::star::chart2::XChartType > & xChartType ) const;
 
     enum eMoveDirection
     {
@@ -135,33 +135,33 @@ public:
                     ::com::sun::star::chart2::XDataSeries > & xSeries,
                 const ::com::sun::star::uno::Reference<
                     ::com::sun::star::chart2::XChartType > & xChartType,
-                bool bCreateDataCachedSequences = false ) throw();
+                bool bCreateDataCachedSequences = false );
 
     void deleteSeries(
         const ::com::sun::star::uno::Reference<
             ::com::sun::star::chart2::XDataSeries > & xSeries,
         const ::com::sun::star::uno::Reference<
-            ::com::sun::star::chart2::XChartType > & xChartType ) throw();
+            ::com::sun::star::chart2::XChartType > & xChartType );
 
     ::com::sun::star::uno::Reference<
             ::com::sun::star::chart2::data::XLabeledDataSequence >
-        getCategories() const throw();
+        getCategories() const;
 
     void setCategories( const ::com::sun::star::uno::Reference<
                         ::com::sun::star::chart2::data::XLabeledDataSequence > & xCategories );
 
-    ::rtl::OUString getCategoriesRange() const throw();
+    ::rtl::OUString getCategoriesRange() const;
 
-    bool isCategoryDiagram() const throw();
+    bool isCategoryDiagram() const;
 
     void detectArguments(
         ::rtl::OUString & rOutRangeString,
-        bool & rOutUseColumns, bool & rOutFirstCellAsLabel, bool & rOutHasCategories ) const throw();
+        bool & rOutUseColumns, bool & rOutFirstCellAsLabel, bool & rOutHasCategories ) const;
 
     bool allArgumentsForRectRangeDetected() const;
 
     bool setData( const ::com::sun::star::uno::Sequence<
-                      ::com::sun::star::beans::PropertyValue > & rArguments ) throw();
+                      ::com::sun::star::beans::PropertyValue > & rArguments );
 
     void startControllerLockTimer();
 
