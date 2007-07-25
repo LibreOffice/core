@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ShapeFactory.cxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: obo $ $Date: 2007-06-11 15:04:20 $
+ *  last change: $Author: rt $ $Date: 2007-07-25 09:06:32 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -250,7 +250,7 @@ uno::Any createPolyPolygon_Cube(
     //fWidthH stands for Half Width
     const double fWidthH = rSize.DirectionX >=0.0?  rSize.DirectionX/2.0  : -rSize.DirectionX/2.0;
     const double fHeight = rSize.DirectionY;
-    const double fDepth  = rSize.DirectionZ >=0.0?  rSize.DirectionZ      : -rSize.DirectionZ ;
+//     const double fDepth  = rSize.DirectionZ >=0.0?  rSize.DirectionZ      : -rSize.DirectionZ ;
 
     const double fHeightSign = fHeight >= 0.0 ? 1.0 : -1.0;
 
