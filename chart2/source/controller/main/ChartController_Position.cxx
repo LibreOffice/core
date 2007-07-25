@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ChartController_Position.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: vg $ $Date: 2007-05-22 18:03:42 $
+ *  last change: $Author: rt $ $Date: 2007-07-25 08:43:23 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -115,7 +115,7 @@ void SAL_CALL ChartController::executeDispatch_PositionAndSize()
         ActionDescriptionProvider::createDescription(
             ActionDescriptionProvider::POS_SIZE,
             ObjectNameProvider::getName( ObjectIdentifier::getObjectType( aCID ))),
-        m_aUndoManager, m_aModel->getModel() );
+        m_xUndoManager, m_aModel->getModel() );
 
     SfxAbstractTabDialog * pDlg = NULL;
     try
