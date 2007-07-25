@@ -4,9 +4,9 @@
  *
  *  $RCSfile: CharacterProperties.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: vg $ $Date: 2007-05-22 18:55:38 $
+ *  last change: $Author: rt $ $Date: 2007-07-25 08:55:28 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -82,7 +82,8 @@ void CharacterProperties::AddPropertiesToVector(
                   PROP_CHAR_FONT_STYLE_NAME,
                   ::getCppuType( reinterpret_cast< const  OUString * >(0)),
                   beans::PropertyAttribute::BOUND
-                  | beans::PropertyAttribute::MAYBEDEFAULT ));
+                  | beans::PropertyAttribute::MAYBEDEFAULT
+                  | beans::PropertyAttribute::MAYBEVOID ));
     // CharFontFamily (see awt.FontFamily)
     rOutProperties.push_back(
         Property( C2U( "CharFontFamily" ),
@@ -329,7 +330,8 @@ void CharacterProperties::AddPropertiesToVector(
                   PROP_CHAR_ASIAN_FONT_STYLE_NAME,
                   ::getCppuType( reinterpret_cast< const OUString * >(0)),
                   beans::PropertyAttribute::BOUND
-                  | beans::PropertyAttribute::MAYBEDEFAULT ));
+                  | beans::PropertyAttribute::MAYBEDEFAULT
+                  | beans::PropertyAttribute::MAYBEVOID ));
     // CharFontFamilyAsian (see awt.FontFamily)
     rOutProperties.push_back(
         Property( C2U( "CharFontFamilyAsian" ),
@@ -395,7 +397,8 @@ void CharacterProperties::AddPropertiesToVector(
                   PROP_CHAR_COMPLEX_FONT_STYLE_NAME,
                   ::getCppuType( reinterpret_cast< const OUString * >(0)),
                   beans::PropertyAttribute::BOUND
-                  | beans::PropertyAttribute::MAYBEDEFAULT ));
+                  | beans::PropertyAttribute::MAYBEDEFAULT
+                  | beans::PropertyAttribute::MAYBEVOID ));
     // CharFontFamilyComplex (see awt.FontFamily)
     rOutProperties.push_back(
         Property( C2U( "CharFontFamilyComplex" ),
@@ -458,8 +461,6 @@ void CharacterProperties::AddDefaultsToMap(
     //todo correct font default:
     //see static Font OutputDevice::GetDefaultFont( USHORT nType, LanguageType eLang, ULONG nFlags, const OutputDevice* pOutDev = NULL );
     //or  SvxFontItem ... (old chart source/core/chtmodel.cxx :Font aCJKFont )
-    OSL_ASSERT( rOutMap.end() == rOutMap.find( PROP_CHAR_FONT_STYLE_NAME ));
-    rOutMap[ PROP_CHAR_FONT_STYLE_NAME ] = uno::Any();
     OSL_ASSERT( rOutMap.end() == rOutMap.find( PROP_CHAR_FONT_FAMILY ));
     rOutMap[ PROP_CHAR_FONT_FAMILY ] =
         uno::makeAny( awt::FontFamily::SWISS );
@@ -580,8 +581,6 @@ void CharacterProperties::AddDefaultsToMap(
     //todo correct font default:
     //see static Font OutputDevice::GetDefaultFont( USHORT nType, LanguageType eLang, ULONG nFlags, const OutputDevice* pOutDev = NULL );
     //or  SvxFontItem ... (old chart source/core/chtmodel.cxx :Font aCJKFont )
-    OSL_ASSERT( rOutMap.end() == rOutMap.find( PROP_CHAR_ASIAN_FONT_STYLE_NAME ));
-    rOutMap[ PROP_CHAR_ASIAN_FONT_STYLE_NAME ] = uno::Any();
     OSL_ASSERT( rOutMap.end() == rOutMap.find( PROP_CHAR_ASIAN_FONT_FAMILY ));
     rOutMap[ PROP_CHAR_ASIAN_FONT_FAMILY ] =
         uno::makeAny( awt::FontFamily::SWISS );//todo correct default
@@ -611,8 +610,6 @@ void CharacterProperties::AddDefaultsToMap(
     //todo correct font default:
     //see static Font OutputDevice::GetDefaultFont( USHORT nType, LanguageType eLang, ULONG nFlags, const OutputDevice* pOutDev = NULL );
     //or  SvxFontItem ... (old chart source/core/chtmodel.cxx :Font aCJKFont )
-    OSL_ASSERT( rOutMap.end() == rOutMap.find( PROP_CHAR_COMPLEX_FONT_STYLE_NAME ));
-    rOutMap[ PROP_CHAR_COMPLEX_FONT_STYLE_NAME ] = uno::Any();
     OSL_ASSERT( rOutMap.end() == rOutMap.find( PROP_CHAR_COMPLEX_FONT_FAMILY ));
     rOutMap[ PROP_CHAR_COMPLEX_FONT_FAMILY ] =
         uno::makeAny( awt::FontFamily::SWISS );//todo correct default
