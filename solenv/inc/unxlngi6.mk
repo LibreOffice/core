@@ -4,9 +4,9 @@
 #
 #   $RCSfile: unxlngi6.mk,v $
 #
-#   $Revision: 1.37 $
+#   $Revision: 1.38 $
 #
-#   last change: $Author: obo $ $Date: 2007-07-18 07:26:52 $
+#   last change: $Author: rt $ $Date: 2007-07-25 09:12:51 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -139,7 +139,6 @@ CFLAGSWERRCC=-Werror
 # COMPILER_WARN_ERRORS=TRUE here instead of setting MODULES_WITH_WARNINGS (see
 # settings.mk):
 MODULES_WITH_WARNINGS := \
-    chart2 \
     extensions \
     soldep \
     sw
