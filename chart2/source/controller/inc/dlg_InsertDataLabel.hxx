@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dlg_InsertDataLabel.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 00:27:02 $
+ *  last change: $Author: rt $ $Date: 2007-07-25 08:39:38 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -32,8 +32,8 @@
  *    MA  02111-1307  USA
  *
  ************************************************************************/
-#ifndef _CHART2_DLG_INSERT_DATALABELS_GRID_HXX
-#define _CHART2_DLG_INSERT_DATALABELS_GRID_HXX
+#ifndef CHART2_DLG_INSERT_DATALABELS_GRID_HXX
+#define CHART2_DLG_INSERT_DATALABELS_GRID_HXX
 
 // header for class ModalDialog
 #ifndef _SV_DIALOG_HXX
@@ -51,41 +51,35 @@
 #ifndef _SFXITEMSET_HXX
 #include <svtools/itemset.hxx>
 #endif
+//for auto_ptr
+#include <memory>
+
+class SvNumberFormatter;
 
 //.............................................................................
 namespace chart
 {
 //.............................................................................
 
-/*************************************************************************
-|*
-|* Datenbeschriftungen-Dialog
-|*
-\************************************************************************/
-class SchDataDescrDlg : public ModalDialog
+class DataLabelResources;
+class DataLabelsDialog : public ModalDialog
 {
 private:
-    CheckBox            aCbValue;
-    RadioButton         aRbNumber;
-    RadioButton         aRbPercent;
-    CheckBox            aCbText;
-    FixedLine           aFlDescr;
-    CheckBox            aCbSymbol;
-    OKButton            aBtnOK;
-    CancelButton        aBtnCancel;
-    HelpButton          aBtnHelp;
+    OKButton            m_aBtnOK;
+    CancelButton        m_aBtnCancel;
+    HelpButton          m_aBtnHelp;
+    ::std::auto_ptr< DataLabelResources >    m_apDataLabelResources;
+    FixedLine           m_aFlDescr;
 
     const SfxItemSet&   m_rInAttrs;
-
-    DECL_LINK( EnableHdl, CheckBox * );
 
     void Reset();
 
 public:
-    SchDataDescrDlg(Window* pParent, const SfxItemSet& rInAttrs);
-    virtual ~SchDataDescrDlg();
+    DataLabelsDialog(Window* pParent, const SfxItemSet& rInAttrs, SvNumberFormatter* pFormatter);
+    virtual ~DataLabelsDialog();
 
-    void GetAttr(SfxItemSet& rOutAttrs);
+    void FillItemSet(SfxItemSet& rOutAttrs);
 };
 
 //.............................................................................
