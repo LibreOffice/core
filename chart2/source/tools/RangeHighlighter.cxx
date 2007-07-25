@@ -4,9 +4,9 @@
  *
  *  $RCSfile: RangeHighlighter.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: obo $ $Date: 2007-06-11 15:02:20 $
+ *  last change: $Author: rt $ $Date: 2007-07-25 08:59:41 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -295,7 +295,7 @@ void SAL_CALL RangeHighlighter::removeSelectionChangeListener( const Reference< 
 }
 
 // ____ XSelectionChangeListener ____
-void SAL_CALL RangeHighlighter::selectionChanged( const lang::EventObject& aEvent )
+void SAL_CALL RangeHighlighter::selectionChanged( const lang::EventObject& /*aEvent*/ )
     throw (uno::RuntimeException)
 {
     determineRanges();
