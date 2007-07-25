@@ -4,9 +4,9 @@
  *
  *  $RCSfile: Diagram.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: rt $ $Date: 2007-07-03 13:42:45 $
+ *  last change: $Author: rt $ $Date: 2007-07-25 08:49:57 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -226,6 +226,8 @@ Diagram::Diagram( uno::Reference< uno::XComponentContext > const & xContext ) :
 }
 
 Diagram::Diagram( const Diagram & rOther ) :
+        MutexContainer(),
+        impl::Diagram_Base(),
         ::property::OPropertySet( rOther, m_aMutex ),
     m_xContext( rOther.m_xContext ),
     m_xModifyEventForwarder( new ModifyListenerHelper::ModifyEventForwarder( m_aMutex ))
@@ -483,7 +485,7 @@ void SAL_CALL Diagram::modified( const lang::EventObject& aEvent )
 }
 
 // ____ XEventListener (base of XModifyListener) ____
-void SAL_CALL Diagram::disposing( const lang::EventObject& Source )
+void SAL_CALL Diagram::disposing( const lang::EventObject& /* Source */ )
     throw (uno::RuntimeException)
 {
     // nothing
