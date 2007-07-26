@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dp_gui_updatedialog.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: rt $ $Date: 2007-07-06 12:35:27 $
+ *  last change: $Author: rt $ $Date: 2007-07-26 08:54:10 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -389,37 +389,41 @@ void UpdateDialog::Thread::execute() {
         }
     }
     if (!map.empty()) {
-        css::uno::Sequence< css::uno::Reference< css::xml::dom::XElement > >
-            infos(
-                getUpdateInformation(
-                    css::uno::Reference< css::deployment::XPackage >(),
-                    css::uno::Sequence< rtl::OUString >(), rtl::OUString()));
-        for (sal_Int32 i = 0; i < infos.getLength(); ++i) {
-            css::uno::Reference< css::xml::dom::XNode > node(
-                infos[i], css::uno::UNO_QUERY_THROW);
-            dp_misc::DescriptionInfoset infoset(m_context, node);
-            boost::optional< rtl::OUString > id(infoset.getIdentifier());
-            if (!id) {
-                continue;
-            }
-            Map::iterator end(map.upper_bound(*id));
-            for (Map::iterator j(map.lower_bound(*id)); j != end; ++j) {
-                rtl::OUString v(infoset.getVersion());
-                if (dp_misc::compareVersions(v, j->second.version) ==
-                    dp_misc::GREATER)
-                {
-                    j->second.version = v;
-                    j->second.info = node;
+        const rtl::OUString sDefaultURL(dp_misc::getExtensionDefaultUpdateURL());
+        if (sDefaultURL.getLength())
+        {
+            css::uno::Sequence< css::uno::Reference< css::xml::dom::XElement > >
+                infos(
+                    getUpdateInformation(
+                        css::uno::Reference< css::deployment::XPackage >(),
+                        css::uno::Sequence< rtl::OUString >(&sDefaultURL, 1), rtl::OUString()));
+            for (sal_Int32 i = 0; i < infos.getLength(); ++i) {
+                css::uno::Reference< css::xml::dom::XNode > node(
+                    infos[i], css::uno::UNO_QUERY_THROW);
+                dp_misc::DescriptionInfoset infoset(m_context, node);
+                boost::optional< rtl::OUString > id(infoset.getIdentifier());
+                if (!id) {
+                    continue;
+                }
+                Map::iterator end(map.upper_bound(*id));
+                for (Map::iterator j(map.lower_bound(*id)); j != end; ++j) {
+                    rtl::OUString v(infoset.getVersion());
+                    if (dp_misc::compareVersions(v, j->second.version) ==
+                        dp_misc::GREATER)
+                    {
+                        j->second.version = v;
+                        j->second.info = node;
+                    }
                 }
             }
-        }
-        for (Map::const_iterator i(map.begin()); i != map.end(); ++i) {
-            if (i->second.info.is() &&
-                !update(
-                    i->second.package, i->second.packageManager,
-                    i->second.info))
-            {
-                break;
+            for (Map::const_iterator i(map.begin()); i != map.end(); ++i) {
+                if (i->second.info.is() &&
+                    !update(
+                        i->second.package, i->second.packageManager,
+                        i->second.info))
+                {
+                    break;
+                }
             }
         }
     }
