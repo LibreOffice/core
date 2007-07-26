@@ -4,9 +4,9 @@
  *
  *  $RCSfile: genindex_data.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 09:17:59 $
+ *  last change: $Author: rt $ $Date: 2007-07-26 09:09:26 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -43,6 +43,9 @@
 #include <sal/types.h>
 #include <rtl/ustring.hxx>
 
+#define MAX_ADDRESS 0x30000
+#define MAX_INDEX MAX_ADDRESS/0x100
+
 using namespace ::rtl;
 
 /* Main Procedure */
@@ -61,8 +64,8 @@ SAL_IMPLEMENT_MAIN_WITH_ARGS(argc, argv)
 
 
     sal_Int32 i, j, k;
-    sal_Int32 address[0x10000];
-    for (i=0; i<0x10000; i++) address[i]=-1;
+    sal_Int32 address[MAX_ADDRESS];
+    for (i=0; i<MAX_ADDRESS; i++) address[i]=-1;
     OUString sep=OUString(sal_Unicode('|'));
     OUString result=sep;
     sal_Int32 max=0;
@@ -81,13 +84,19 @@ SAL_IMPLEMENT_MAIN_WITH_ARGS(argc, argv)
         if (len == 0)
             continue; // skip empty line.
 
-        OUString key=Ostr.copy(2)+sep;
+        sal_Int32 nPos=0;
+        sal_uInt32 nChar = Ostr.iterateCodePoints(&nPos, 2);
+        if (nChar > MAX_ADDRESS) {
+            printf("Code point 0x%lx exceeds MAX_ADDRESS 0x%x, Please increase MAX_ADDRESS", nChar, MAX_ADDRESS);
+            exit(1);
+        }
+        OUString key=Ostr.copy(nPos)+sep;
         sal_Int32 idx = result.indexOf(key);
         if (key.getLength() > max) max=key.getLength();
         if (idx >= 0) {
-            address[Ostr.toChar()]=idx;
+            address[nChar]=idx;
         } else {
-            address[Ostr.toChar()]=result.getLength();
+            address[nChar]=result.getLength();
             result+=key;
         }
     }
@@ -107,11 +116,13 @@ SAL_IMPLEMENT_MAIN_WITH_ARGS(argc, argv)
     fprintf(fp, "#include <sal/types.h>\n");
     fprintf(fp, "\nextern \"C\" {\n");
 
-    sal_Int32 index[0x100];
-    for (i=k=0; i<0x100; i++) {
+    sal_Int32 index[MAX_INDEX];
+    sal_Int32 max_index=0;
+    for (i=k=0; i<MAX_INDEX; i++) {
         index[i] = 0xFFFF;
         for (j=0; j<0x100; j++) {
             if (address[i*0x100+j] >=0) {
+                max_index=i;
                 index[i]=0x100*k++;
                 break;
             }
@@ -119,7 +130,7 @@ SAL_IMPLEMENT_MAIN_WITH_ARGS(argc, argv)
     }
 
     fprintf(fp, "\nstatic const sal_uInt16 idx1[] = {");
-    for (i = k = 0; i < 0x100;  i++) {
+    for (i = k = 0; i <= max_index;  i++) {
         if (k++ % 16 == 0) fprintf(fp, "\n\t");
         fprintf(
             fp, "0x%04lx, ", sal::static_int_cast< unsigned long >(index[i]));
@@ -129,7 +140,7 @@ SAL_IMPLEMENT_MAIN_WITH_ARGS(argc, argv)
     sal_Int32 len=result.getLength();
     const sal_Unicode *ustr=result.getStr();
     fprintf(fp, "\nstatic const sal_uInt16 idx2[] = {");
-    for (i = k = 0; i<0x100; i++) {
+    for (i = k = 0; i <= max_index; i++) {
         if (index[i] != 0xFFFF) {
             for (j = 0; j<0x100; j++) {
                 if (k++ % 16 == 0) fprintf(fp, "\n\t");
@@ -155,7 +166,7 @@ SAL_IMPLEMENT_MAIN_WITH_ARGS(argc, argv)
         fprintf(fp, "\n};\n\n");
     }
 
-    fprintf(fp, "const sal_uInt16** get_%s()\n{\n\tstatic const sal_uInt16 *idx[]={idx1, idx2, idx3};\n\treturn idx;\n}\n\n", argv[3]);
+    fprintf(fp, "const sal_uInt16** get_%s(sal_Int16 &max_index)\n{\n\tstatic const sal_uInt16 *idx[]={idx1, idx2, idx3};\n\tmax_index=0x%x;\n\treturn idx;\n}\n\n", argv[3], static_cast<unsigned int>(max_index));
     fprintf (fp, "}\n");
 
     fclose(fp);
