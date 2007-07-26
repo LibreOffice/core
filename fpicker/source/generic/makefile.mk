@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.3 $
+#   $Revision: 1.4 $
 #
-#   last change: $Author: rt $ $Date: 2005-09-08 23:27:58 $
+#   last change: $Author: rt $ $Date: 2007-07-26 08:39:20 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -56,6 +56,7 @@ SHL1OBJS=	$(SLOFILES)
 SHL1STDLIBS=\
     $(VCLLIB) \
     $(SVLLIB) \
+        $(SVTOOLLIB) \
     $(CPPUHELPERLIB) \
     $(CPPULIB) \
     $(SALLIB)
