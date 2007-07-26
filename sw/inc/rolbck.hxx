@@ -4,9 +4,9 @@
  *
  *  $RCSfile: rolbck.hxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: hr $ $Date: 2006-08-14 15:31:02 $
+ *  last change: $Author: rt $ $Date: 2007-07-26 08:17:31 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -79,6 +79,10 @@ class SwNode;
 #include <tox.hxx>
 #endif
 
+// --> OD 2007-07-09 #i77372#
+#include <SwNodeNum.hxx>
+// <--
+
 #ifndef PRODUCT
 class Writer;
 #define OUT_HSTR_HINT( name )   \
@@ -121,9 +125,13 @@ class SwSetFmtHint : public SwHstryHint
 {
     SfxPoolItem* pAttr;
     ULONG nNode;
-    USHORT nSetStt;
-    BYTE nNumLvl;
-    BOOL bNumStt;
+    // --> OD 2007-07-09 #i77372#
+    // adjust (naming and type) and extend (add <mbIsCounted>) numbering attributes
+    int mnNumLvl;
+    bool mbIsRestart;
+    SwNodeNum::tSwNumTreeNumber mnRestartVal;
+    bool mbIsCounted;
+    // <--
 public:
     SwSetFmtHint( const SfxPoolItem* pFmtHt, ULONG nNode );
     virtual ~SwSetFmtHint();
@@ -137,8 +145,17 @@ class SwResetFmtHint : public SwHstryHint
 {
     ULONG nNode;
     USHORT nWhich;
+    // --> OD 2007-07-11 #i56253#
+    int mnNumLvl;
+    bool mbIsRestart;
+    SwNodeNum::tSwNumTreeNumber mnRestartVal;
+    bool mbIsCounted;
+    // <--
 public:
-    SwResetFmtHint( const SfxPoolItem* pFmtHt, ULONG nNode );
+    // --> OD 2007-07-11 #i56253#
+    // add 3rd parameter <rDoc>
+    SwResetFmtHint( const SfxPoolItem* pFmtHt, ULONG nNodeIdx, SwDoc& rDoc );
+    // <--
     virtual void SetInDoc( SwDoc* pDoc, BOOL bTmpSet );
     OUT_HSTR_HINT(ResetFmtHnt)
 };
@@ -235,9 +252,14 @@ class SwChgFmtColl : public SwHstryHint
 {
     const SwFmtColl* pColl;
     ULONG nNode;
-    USHORT nSetStt;
-    BYTE nNdWhich, nNumLvl;
-    BOOL bNumStt;
+    BYTE nNdWhich;
+    // --> OD 2007-07-09 #i77372#
+    // adjust (naming and type) and extend (add <mbIsCounted>) numbering attributes
+    int mnNumLvl;
+    bool mbIsRestart;
+    SwNodeNum::tSwNumTreeNumber mnRestartVal;
+    bool mbIsCounted;
+    // <--
 public:
     SwChgFmtColl( const SwFmtColl* pColl, ULONG nNode, BYTE nNodeWhich );
     virtual void SetInDoc( SwDoc* pDoc, BOOL bTmpSet );
@@ -278,9 +300,13 @@ class SwHstrySetAttrSet : public SwHstryHint
     SfxItemSet aOldSet;
     SvUShorts aResetArr;
     ULONG nNode;
-    USHORT nSetStt;
-    BYTE nNumLvl;
-    BOOL bNumStt;
+    // --> OD 2007-07-09 #i77372#
+    // adjust (naming and type) and extend (add <mbIsCounted>) numbering attributes
+    int mnNumLvl;
+    bool mbIsRestart;
+    SwNodeNum::tSwNumTreeNumber mnRestartVal;
+    bool mbIsCounted;
+    // <--
 public:
     SwHstrySetAttrSet( const SfxItemSet& rSet, ULONG nNode,
                         const SvUShortsSort& rSetArr );
@@ -359,8 +385,11 @@ public:
     // den Start als temporaeres Ende speichern
     BOOL TmpRollback( SwDoc* pDoc, USHORT nStart, BOOL ToFirst = TRUE );
 
+    // --> OD 2007-07-11 #i56253#
+    // <SwDoc> instance needed
     void Add( const SfxPoolItem* pOldValue, const SfxPoolItem* pNewValue,
-                ULONG nNodeIdx );
+              ULONG nNodeIdx, SwDoc& rDoc );
+    // <--
     void Add( const SwTxtAttr* pTxtHt, ULONG nNodeIdx,
                 BOOL bNewAttr = TRUE );
     void Add( const SwFmtColl*, ULONG nNodeIdx, BYTE nWhichNd );
@@ -390,7 +419,10 @@ public:
         // Wird von UndoKlasse benutzt (Delete/Overwrite/Inserts)
     void CopyAttr( const SwpHints* pHts, ULONG nNodeIdx, xub_StrLen nStt,
                     xub_StrLen nEnd, BOOL bFields );
-    void CopyFmtAttr( const SfxItemSet& rSet, ULONG nNodeIdx );
+    // --> OD 2007-07-12 #i56253#
+    // <SwDoc> instance needed
+    void CopyFmtAttr( const SfxItemSet& rSet, ULONG nNodeIdx, SwDoc& rDoc );
+    // <--
 };
 
 #ifndef ROLBCK_HISTORY_ONLY
@@ -400,10 +432,16 @@ class SwRegHistory : public SwClient
     SvUShortsSort aSetWhichIds;
     SwHistory* pHstry;
     ULONG nNodeIdx;
+    // --> OD 2007-07-11 #i56253#
+    SwDoc& mrDoc;
+    // <--
 
     void _MakeSetWhichIds();
 public:
-    SwRegHistory( SwHistory* pHst );
+    // --> OD 2007-07-11 #i56253#
+    // <SwDoc> instance needed.
+    SwRegHistory( SwDoc& rDoc, SwHistory* pHst );
+    // <--
     SwRegHistory( SwTxtNode* pTxtNode, const SfxItemSet& rSet,
                 xub_StrLen nStart, xub_StrLen nEnd, USHORT nFlags,
                 SwHistory* pHst );
