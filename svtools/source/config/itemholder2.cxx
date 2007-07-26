@@ -4,9 +4,9 @@
  *
  *  $RCSfile: itemholder2.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: hr $ $Date: 2007-06-27 21:13:25 $
+ *  last change: $Author: rt $ $Date: 2007-07-26 08:44:56 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -68,6 +68,8 @@
 #include <svtools/undoopt.hxx>
 #include <svtools/useroptions.hxx>
 #include <svtools/options.hxx>
+#include <svtools/miscopt.hxx>
+
 
 #include <tools/debug.hxx>
 
@@ -233,6 +235,9 @@ void ItemHolder2::impl_newItem(TItemInfo& rItem)
 
         case E_USEROPTIONS :
             rItem.pItem = new SvtUserOptions();
+            break;
+        case E_MISCOPTIONS :
+            rItem.pItem = new SvtMiscOptions();
             break;
 
         default:
