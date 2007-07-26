@@ -4,9 +4,9 @@
  *
  *  $RCSfile: autocdlg.cxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: ihi $ $Date: 2007-07-12 10:53:56 $
+ *  last change: $Author: rt $ $Date: 2007-07-26 08:24:48 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -2693,10 +2693,10 @@ void OfaSmartTagOptionsTabPage::FillListBox( const SmartTagMgr& rSmartTagMgr )
         for ( sal_Int32 j = 0; j < nNumberOfSupportedSmartTags; ++j )
         {
             const rtl::OUString aSmartTagType = xRec->getSmartTagName(j);
-            const rtl::OUString aSmartTagCaption = rSmartTagMgr.GetSmartTagCaption( aSmartTagType, aLocale );
+            rtl::OUString aSmartTagCaption = rSmartTagMgr.GetSmartTagCaption( aSmartTagType, aLocale );
 
             if ( !aSmartTagCaption.getLength() )
-                continue;
+                aSmartTagCaption = aSmartTagType;
 
             const rtl::OUString aLBEntry = aSmartTagCaption +
                                            OUString::createFromAscii(" (") +
@@ -2708,7 +2708,7 @@ void OfaSmartTagOptionsTabPage::FillListBox( const SmartTagMgr& rSmartTagMgr )
             {
                 const bool bCheck = rSmartTagMgr.IsSmartTagTypeEnabled( aSmartTagType );
                 m_aSmartTagTypesLB.SetCheckButtonState( pEntry, bCheck ? SV_BUTTON_CHECKED : SV_BUTTON_UNCHECKED );
-                pEntry->SetUserData(static_cast<void*>(new ImplSmartTagLBUserData( aSmartTagType, xRec, nNumberOfSupportedSmartTags ) ) );
+                pEntry->SetUserData(static_cast<void*>(new ImplSmartTagLBUserData( aSmartTagType, xRec, j ) ) );
             }
         }
     }
