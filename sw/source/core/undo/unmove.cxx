@@ -4,9 +4,9 @@
  *
  *  $RCSfile: unmove.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: rt $ $Date: 2006-12-01 15:49:40 $
+ *  last change: $Author: rt $ $Date: 2007-07-26 08:20:45 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -84,7 +84,7 @@ SwUndoMove::SwUndoMove( const SwPaM& rRange, const SwPosition& rMvPos )
             pHistory->CopyAttr( pTxtNd->GetpSwpHints(), nSttNode,
                                 0, pTxtNd->GetTxt().Len(), FALSE );
         if( pTxtNd->HasSwAttrSet() )
-            pHistory->CopyFmtAttr( *pTxtNd->GetpSwAttrSet(), nSttNode );
+            pHistory->CopyFmtAttr( *pTxtNd->GetpSwAttrSet(), nSttNode, *(pTxtNd->GetDoc()) );
     }
     if( pEndTxtNd && pEndTxtNd != pTxtNd )
     {
@@ -93,7 +93,7 @@ SwUndoMove::SwUndoMove( const SwPaM& rRange, const SwPosition& rMvPos )
             pHistory->CopyAttr( pEndTxtNd->GetpSwpHints(), nEndNode,
                                 0, pEndTxtNd->GetTxt().Len(), FALSE );
         if( pEndTxtNd->HasSwAttrSet() )
-            pHistory->CopyFmtAttr( *pEndTxtNd->GetpSwAttrSet(), nEndNode );
+            pHistory->CopyFmtAttr( *pEndTxtNd->GetpSwAttrSet(), nEndNode, *(pEndTxtNd->GetDoc()) );
     }
 
     if( 0 != (pTxtNd = rRange.GetDoc()->GetNodes()[ rMvPos.nNode ]->GetTxtNode() ))
@@ -103,7 +103,7 @@ SwUndoMove::SwUndoMove( const SwPaM& rRange, const SwPosition& rMvPos )
             pHistory->CopyAttr( pTxtNd->GetpSwpHints(), nMvDestNode,
                                 0, pTxtNd->GetTxt().Len(), FALSE );
         if( pTxtNd->HasSwAttrSet() )
-            pHistory->CopyFmtAttr( *pTxtNd->GetpSwAttrSet(), nMvDestNode );
+            pHistory->CopyFmtAttr( *pTxtNd->GetpSwAttrSet(), nMvDestNode, *(pTxtNd->GetDoc()) );
     }
 
 
