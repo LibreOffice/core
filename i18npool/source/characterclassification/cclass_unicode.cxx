@@ -4,9 +4,9 @@
  *
  *  $RCSfile: cclass_unicode.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 09:15:51 $
+ *  last change: $Author: rt $ $Date: 2007-07-26 09:09:03 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -39,7 +39,8 @@
 #include <cclass_unicode.hxx>
 #include <com/sun/star/i18n/UnicodeScript.hpp>
 #include <com/sun/star/i18n/UnicodeType.hpp>
-#include <i18nutil/unicode.hxx>
+#include <com/sun/star/i18n/KCharacterType.hpp>
+#include <unicode/uchar.h>
 #include <i18nutil/x_rtl_ustring.h>
 #include <breakiteratorImpl.hxx>
 
@@ -123,40 +124,105 @@ cclass_Unicode::toTitle( const OUString& Text, sal_Int32 nPos, sal_Int32 nCount,
 
 sal_Int16 SAL_CALL
 cclass_Unicode::getType( const OUString& Text, sal_Int32 nPos ) throw(RuntimeException) {
-    if ( Text.getLength() <= nPos ) return 0;
-    return unicode::getUnicodeType(Text[nPos]);
+    if ( nPos < 0 || Text.getLength() <= nPos ) return 0;
+    return (sal_Int16) u_charType(Text.iterateCodePoints(&nPos, 0));
 }
 
 sal_Int16 SAL_CALL
 cclass_Unicode::getCharacterDirection( const OUString& Text, sal_Int32 nPos ) throw(RuntimeException) {
-    if ( Text.getLength() <= nPos ) return 0;
-    return unicode::getUnicodeDirection(Text[nPos]);
+    if ( nPos < 0 || Text.getLength() <= nPos ) return 0;
+    return (sal_Int16) u_charDirection(Text.iterateCodePoints(&nPos, 0));
 }
 
 
 sal_Int16 SAL_CALL
 cclass_Unicode::getScript( const OUString& Text, sal_Int32 nPos ) throw(RuntimeException) {
-    if ( Text.getLength() <= nPos ) return 0;
-    return unicode::getUnicodeScriptType(Text[nPos], (ScriptTypeList*) 0, 0);
+    if ( nPos < 0 || Text.getLength() <= nPos ) return 0;
+    // ICU Unicode script type UBlockCode starts from 1 for Basci Latin,
+    // while OO.o enum UnicideScript starts from 0.
+    // To map ICU UBlockCode to OO.o UnicodeScript, it needs to shift 1.
+    return (sal_Int16) ublock_getCode(Text.iterateCodePoints(&nPos, 0))-1;
 }
 
 
 sal_Int32 SAL_CALL
+cclass_Unicode::getCharType( const OUString& Text, sal_Int32* nPos, sal_Int32 increment) {
+    using namespace ::com::sun::star::i18n::KCharacterType;
+
+    switch ( u_charType( Text.iterateCodePoints(nPos, increment) ) ) {
+    // Upper
+    case U_UPPERCASE_LETTER :
+        return UPPER|LETTER|PRINTABLE|BASE_FORM;
+
+    // Lower
+    case U_LOWERCASE_LETTER :
+        return LOWER|LETTER|PRINTABLE|BASE_FORM;
+
+    // Title
+    case U_TITLECASE_LETTER :
+        return TITLE_CASE|LETTER|PRINTABLE|BASE_FORM;
+
+    // Letter
+    case U_MODIFIER_LETTER :
+    case U_OTHER_LETTER :
+        return LETTER|PRINTABLE|BASE_FORM;
+
+    // Digit
+    case U_DECIMAL_DIGIT_NUMBER:
+    case U_LETTER_NUMBER:
+    case U_OTHER_NUMBER:
+        return DIGIT|PRINTABLE|BASE_FORM;
+
+    // Base
+    case U_NON_SPACING_MARK:
+    case U_ENCLOSING_MARK:
+    case U_COMBINING_SPACING_MARK:
+        return BASE_FORM|PRINTABLE;
+
+    // Print
+    case U_SPACE_SEPARATOR:
+
+    case U_DASH_PUNCTUATION:
+    case U_INITIAL_PUNCTUATION:
+    case U_FINAL_PUNCTUATION:
+    case U_CONNECTOR_PUNCTUATION:
+    case U_OTHER_PUNCTUATION:
+
+    case U_MATH_SYMBOL:
+    case U_CURRENCY_SYMBOL:
+    case U_MODIFIER_SYMBOL:
+    case U_OTHER_SYMBOL:
+        return PRINTABLE;
+
+    // Control
+    case U_CONTROL_CHAR:
+    case U_FORMAT_CHAR:
+        return CONTROL;
+
+    case U_LINE_SEPARATOR:
+    case U_PARAGRAPH_SEPARATOR:
+        return CONTROL|PRINTABLE;
+
+    // for all others
+    default:
+        return U_GENERAL_OTHER_TYPES;
+    }
+}
+
+sal_Int32 SAL_CALL
 cclass_Unicode::getCharacterType( const OUString& Text, sal_Int32 nPos, const Locale& /*rLocale*/ ) throw(RuntimeException) {
-    if ( Text.getLength() <= nPos ) return 0;
-    return unicode::getCharType(Text[nPos]);
+    if ( nPos < 0 || Text.getLength() <= nPos ) return 0;
+    return getCharType(Text, &nPos, 0);
+
 }
 
 sal_Int32 SAL_CALL
 cclass_Unicode::getStringType( const OUString& Text, sal_Int32 nPos, sal_Int32 nCount, const Locale& /*rLocale*/ ) throw(RuntimeException) {
-    if ( Text.getLength() <= nPos ) return 0;
+    if ( nPos < 0 || Text.getLength() <= nPos ) return 0;
 
-    if ( Text.getLength() < nPos + nCount )
-        nCount = Text.getLength() - nPos;
-
-    sal_Int32 result = 0;
-    for (int i = 0; i < nCount; i++)
-    result |= unicode::getCharType(Text[nPos+i]);
+    sal_Int32 result = getCharType(Text, &nPos, 0);
+    for (sal_Int32 i = 1; i < nCount && nPos < Text.getLength(); i++)
+        result |= getCharType(Text, &nPos, 1);
     return result;
 }
 
