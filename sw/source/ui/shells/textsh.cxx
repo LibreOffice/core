@@ -4,9 +4,9 @@
  *
  *  $RCSfile: textsh.cxx,v $
  *
- *  $Revision: 1.54 $
+ *  $Revision: 1.55 $
  *
- *  last change: $Author: vg $ $Date: 2007-05-22 16:39:17 $
+ *  last change: $Author: rt $ $Date: 2007-07-26 08:22:40 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1290,20 +1290,43 @@ void SwTextShell::InsertSymbol( SfxRequest& rReq )
             aNewFontItem.GetPitch()      = aNewFont.GetPitch();
             aNewFontItem.GetCharSet()    = aNewFont.GetCharSet();
 
+            SfxItemSet aRestoreSet( GetPool(), RES_CHRATR_FONT, RES_CHRATR_FONT,
+                                               RES_CHRATR_CJK_FONT, RES_CHRATR_CJK_FONT,
+                                               RES_CHRATR_CTL_FONT, RES_CHRATR_CTL_FONT, 0 );
+
             nScript = pBreakIt->GetAllScriptsOfText( aChars );
             if( SCRIPTTYPE_LATIN & nScript )
+            {
+                aRestoreSet.Put( aSet.Get( RES_CHRATR_FONT, TRUE ) );
                 aSet.Put( aNewFontItem, RES_CHRATR_FONT);
+            }
             if( SCRIPTTYPE_ASIAN & nScript )
+            {
+                aRestoreSet.Put( aSet.Get( RES_CHRATR_CJK_FONT, TRUE ) );
                 aSet.Put( aNewFontItem, RES_CHRATR_CJK_FONT );
+            }
             if( SCRIPTTYPE_COMPLEX & nScript )
+            {
+                aRestoreSet.Put( aSet.Get( RES_CHRATR_CTL_FONT, TRUE ) );
                 aSet.Put( aNewFontItem, RES_CHRATR_CTL_FONT );
+            }
 
             rSh.SetMark();
             rSh.ExtendSelection( FALSE, aChars.Len() );
+
             rSh.SetAttr( aSet, SETATTR_DONTEXPAND | SETATTR_NOFORMATATTR );
+
             if( !rSh.IsCrsrPtAtEnd() )
                 rSh.SwapPam();
+
             rSh.ClearMark();
+
+            // --> FME 2007-07-09 #i75891#
+            // SETATTR_DONTEXPAND does not work if there are already hard attributes.
+            // Therefore we have to restore the font attributes.
+            rSh.SetAttr( aRestoreSet );
+            // <--
+
             rSh.UpdateAttr();
             aFont = aNewFontItem;
         }
