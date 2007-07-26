@@ -4,9 +4,9 @@
  *
  *  $RCSfile: breakiteratorImpl.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: ihi $ $Date: 2007-06-06 12:16:58 $
+ *  last change: $Author: rt $ $Date: 2007-07-26 09:08:02 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -37,7 +37,7 @@
 #include "precompiled_i18npool.hxx"
 
 #include <breakiteratorImpl.hxx>
-#include <i18nutil/unicode.hxx>
+#include <unicode/uchar.h>
 #include <rtl/ustrbuf.hxx>
 
 using namespace ::com::sun::star::uno;
@@ -84,30 +84,37 @@ sal_Int32 SAL_CALL BreakIteratorImpl::previousCharacters( const OUString& Text, 
 
 static sal_Int32 skipSpace(const OUString& Text, sal_Int32 nPos, sal_Int32 len, sal_Int16 rWordType, sal_Bool bDirection)
 {
+        sal_uInt32 ch;
+        if (bDirection && nPos < len) {
+            ch=Text.iterateCodePoints(&nPos, 0);
+        } else if (!bDirection && nPos > 0) {
+            ch=Text.iterateCodePoints(&nPos, -1);
+        } else {
+            return nPos;
+        }
         switch (rWordType) {
             case WordType::ANYWORD_IGNOREWHITESPACES:
                 if (bDirection)
-                    while (nPos < len && unicode::isWhiteSpace(Text[nPos])) nPos++;
+                    while (nPos < len && u_isWhitespace(ch)) ch=Text.iterateCodePoints(&nPos, 1);
                 else
-                    while (nPos > 0 && unicode::isWhiteSpace(Text[nPos-1])) nPos--;
+                    while (nPos > 0 && u_isWhitespace(ch)) ch=Text.iterateCodePoints(&nPos, -1);
             break;
             case WordType::DICTIONARY_WORD:
                 if (bDirection)
-                    while (nPos < len && (unicode::isWhiteSpace(Text[nPos]) ||
-                            ! (Text[nPos] == 0x002E || unicode::isAlphaDigit(Text[nPos])))) nPos++;
+                    while (nPos < len && (u_isWhitespace(ch) ||
+                            ! (ch == 0x002E || u_isalnum(ch)))) ch=Text.iterateCodePoints(&nPos, 1);
                 else
-                    while (nPos > 0 && (unicode::isWhiteSpace(Text[nPos-1]) ||
-                            ! (Text[nPos-1] == 0x002E || unicode::isAlphaDigit(Text[nPos-1])))) nPos--;
+                    while (nPos > 0 && (u_isWhitespace(ch) ||
+                            ! (ch == 0x002E || u_isalnum(ch)))) ch=Text.iterateCodePoints(&nPos, -1);
             break;
             case WordType::WORD_COUNT:
                 if (bDirection)
-                    while (nPos < len && (unicode::isWhiteSpace(Text[nPos]) ||
-                                        ! unicode::isAlphaDigit(Text[nPos]))) nPos++;
+                    while (nPos < len && (u_isWhitespace(ch) || ! u_isalnum(ch))) ch=Text.iterateCodePoints(&nPos, 1);
                 else
-                    while (nPos > 0 && (unicode::isWhiteSpace(Text[nPos-1]) ||
-                                        ! unicode::isAlphaDigit(Text[nPos-1]))) nPos--;
+                    while (nPos > 0 && (u_isWhitespace(ch) || ! u_isalnum(ch))) ch=Text.iterateCodePoints(&nPos, -1);
             break;
         }
+        if (!bDirection) Text.iterateCodePoints(&nPos, 1);
         return nPos;
 }
 
@@ -154,13 +161,13 @@ Boundary SAL_CALL BreakIteratorImpl::previousWord( const OUString& Text, sal_Int
 
         // if some spaces are skiped, and the script type is Asian with no CJK rLocale, we have to return
         // (nStartPos, -1) for caller to send correct rLocale for loading correct dictionary.
-        if (nPos != nStartPos && !isCJK(rLocale) && getScriptClass(Text[nPos-1]) == ScriptType::ASIAN) {
-            result.startPos = nPos;
+        result.startPos = nPos;
+        if (nPos != nStartPos && nPos > 0 && !isCJK(rLocale) && getScriptClass(Text.iterateCodePoints(&nPos, -1)) == ScriptType::ASIAN) {
             result.endPos = -1;
             return result;
         }
 
-        return LBI->previousWord(Text, nPos, rLocale, rWordType);
+        return LBI->previousWord(Text, result.startPos, rLocale, rWordType);
 }
 
 
@@ -255,7 +262,8 @@ LineBreakResults SAL_CALL BreakIteratorImpl::getLineBreak( const OUString& Text,
 sal_Int16 SAL_CALL BreakIteratorImpl::getScriptType( const OUString& Text, sal_Int32 nPos )
         throw(RuntimeException)
 {
-        return getScriptClass(Text[nPos]);
+        return (nPos < 0 || nPos >= Text.getLength()) ? ScriptType::WEAK :
+                            getScriptClass(Text.iterateCodePoints(&nPos, 0));
 }
 
 sal_Int32 SAL_CALL BreakIteratorImpl::beginOfScript( const OUString& Text,
@@ -264,12 +272,12 @@ sal_Int32 SAL_CALL BreakIteratorImpl::beginOfScript( const OUString& Text,
         if (nStartPos < 0 || nStartPos >= Text.getLength())
             return -1;
 
-        if(ScriptType != getScriptClass(Text[nStartPos]))
+        if(ScriptType != getScriptClass(Text.iterateCodePoints(&nStartPos, 0)))
             return -1;
 
-        while (--nStartPos >= 0 && ScriptType == getScriptClass(Text[nStartPos])) {}
+        while (nStartPos > 0 && ScriptType == getScriptClass(Text.iterateCodePoints(&nStartPos, -1))) {}
 
-        return  ++nStartPos;
+        return  nStartPos;
 }
 
 sal_Int32 SAL_CALL BreakIteratorImpl::endOfScript( const OUString& Text,
@@ -278,12 +286,12 @@ sal_Int32 SAL_CALL BreakIteratorImpl::endOfScript( const OUString& Text,
         if (nStartPos < 0 || nStartPos >= Text.getLength())
             return -1;
 
-        if(ScriptType != getScriptClass(Text[nStartPos]))
+        if(ScriptType != getScriptClass(Text.iterateCodePoints(&nStartPos, 0)))
             return -1;
 
         sal_Int32 strLen = Text.getLength();
         while(++nStartPos < strLen ) {
-            sal_Int16 currentCharScriptType = getScriptClass(Text[nStartPos]);
+            sal_Int16 currentCharScriptType = getScriptClass(Text.iterateCodePoints(&nStartPos, 0));
             if(ScriptType != currentCharScriptType && currentCharScriptType != ScriptType::WEAK)
                 break;
         }
@@ -294,22 +302,21 @@ sal_Int32  SAL_CALL BreakIteratorImpl::previousScript( const OUString& Text,
         sal_Int32 nStartPos, sal_Int16 ScriptType ) throw(RuntimeException)
 {
         if (nStartPos < 0)
-            nStartPos = 0;
+            return -1;
         if (nStartPos > Text.getLength())
             nStartPos = Text.getLength();
 
-        sal_Int16 numberOfChange = (ScriptType == getScriptClass(Text[nStartPos])) ? 3 : 2;
+        sal_Int16 numberOfChange = (ScriptType == getScriptClass(Text.iterateCodePoints(&nStartPos, 0))) ? 3 : 2;
 
-        while (numberOfChange > 0 && --nStartPos >= 0) {
-            if (((numberOfChange % 2) == 0) ^ (ScriptType != getScriptClass(Text[nStartPos])))
+        while (numberOfChange > 0 && nStartPos > 0) {
+            if ((((numberOfChange % 2) == 0) ^ (ScriptType != getScriptClass(Text.iterateCodePoints(&nStartPos, -1)))) || nStartPos == 0)
                 numberOfChange--;
-            else if (nStartPos == 0) {
-                if (numberOfChange > 0)
-                    numberOfChange--;
-                nStartPos--;
-            }
         }
-        return numberOfChange == 0 ? nStartPos + 1 : -1;
+        if (numberOfChange > 0 || nStartPos >= Text.getLength())
+            nStartPos=-1;
+        else if (ScriptType != getScriptClass(Text.iterateCodePoints(&nStartPos, 0)))
+            getScriptClass(Text.iterateCodePoints(&nStartPos, 1));
+        return nStartPos;
 }
 
 sal_Int32 SAL_CALL BreakIteratorImpl::nextScript( const OUString& Text, sal_Int32 nStartPos,
@@ -318,14 +325,14 @@ sal_Int32 SAL_CALL BreakIteratorImpl::nextScript( const OUString& Text, sal_Int3
 {
         if (nStartPos < 0)
             nStartPos = 0;
-        if (nStartPos > Text.getLength())
-            nStartPos = Text.getLength();
-
-        sal_Int16 numberOfChange = (ScriptType == getScriptClass(Text[nStartPos])) ? 2 : 1;
         sal_Int32 strLen = Text.getLength();
+        if (nStartPos > strLen)
+            return -1;
 
-        while (numberOfChange > 0 && ++nStartPos < strLen) {
-            sal_Int16 currentCharScriptType = getScriptClass(Text[nStartPos]);
+        sal_Int16 numberOfChange = (ScriptType == getScriptClass(Text.iterateCodePoints(&nStartPos, 0))) ? 2 : 1;
+
+        while (numberOfChange > 0 && nStartPos < strLen - 1) {
+            sal_Int16 currentCharScriptType = getScriptClass(Text.iterateCodePoints(&nStartPos, 1));
             if ((numberOfChange == 1) ? (ScriptType == currentCharScriptType) :
                     (ScriptType != currentCharScriptType && currentCharScriptType != ScriptType::WEAK))
                 numberOfChange--;
@@ -339,10 +346,11 @@ sal_Int32 SAL_CALL BreakIteratorImpl::beginOfCharBlock( const OUString& Text, sa
 {
         if (CharType == CharType::ANY_CHAR) return 0;
         if (nStartPos < 0 || nStartPos >= Text.getLength()) return -1;
-        if (CharType != unicode::getUnicodeType(Text[nStartPos])) return -1;
+        if (CharType != (sal_Int16)u_charType( Text.iterateCodePoints(&nStartPos, 0))) return -1;
 
-        while(nStartPos-- > 0 && CharType == unicode::getUnicodeType(Text[nStartPos])) {}
-        return nStartPos + 1; // begin of char block is inclusive
+        sal_Int32 nPos=nStartPos;
+        while(nStartPos > 0 && CharType == (sal_Int16)u_charType(Text.iterateCodePoints(&nPos, -1))) {nStartPos=nPos;}
+        return nStartPos; // begin of char block is inclusive
 }
 
 sal_Int32 SAL_CALL BreakIteratorImpl::endOfCharBlock( const OUString& Text, sal_Int32 nStartPos,
@@ -352,9 +360,9 @@ sal_Int32 SAL_CALL BreakIteratorImpl::endOfCharBlock( const OUString& Text, sal_
 
         if (CharType == CharType::ANY_CHAR) return strLen; // end of char block is exclusive
         if (nStartPos < 0 || nStartPos >= strLen) return -1;
-        if (CharType != unicode::getUnicodeType(Text[nStartPos])) return -1;
+        if (CharType != (sal_Int16)u_charType(Text.iterateCodePoints(&nStartPos, 0))) return -1;
 
-        while(++nStartPos < strLen && CharType == unicode::getUnicodeType(Text[nStartPos])) {}
+        while(nStartPos < strLen-1 && CharType == (sal_Int16)u_charType(Text.iterateCodePoints(&nStartPos, 1))) {}
         return nStartPos; // end of char block is exclusive
 }
 
@@ -364,11 +372,11 @@ sal_Int32 SAL_CALL BreakIteratorImpl::nextCharBlock( const OUString& Text, sal_I
         if (CharType == CharType::ANY_CHAR) return -1;
         if (nStartPos < 0 || nStartPos >= Text.getLength()) return -1;
 
-        sal_Int16 numberOfChange = (CharType == unicode::getUnicodeType(Text[nStartPos])) ? 2 : 1;
+        sal_Int16 numberOfChange = (CharType == (sal_Int16)u_charType(Text.iterateCodePoints(&nStartPos, 0))) ? 2 : 1;
         sal_Int32 strLen = Text.getLength();
 
-        while (numberOfChange > 0 && ++nStartPos < strLen) {
-            if ((numberOfChange == 1) ^ (CharType != unicode::getUnicodeType(Text[nStartPos])))
+        while (numberOfChange > 0 && nStartPos < strLen-1) {
+            if ((CharType != (sal_Int16)u_charType(Text.iterateCodePoints(&nStartPos, 1))) ^ (numberOfChange == 1))
                 numberOfChange--;
         }
         return numberOfChange == 0 ? nStartPos : -1;
@@ -380,17 +388,21 @@ sal_Int32 SAL_CALL BreakIteratorImpl::previousCharBlock( const OUString& Text, s
         if(CharType == CharType::ANY_CHAR) return -1;
         if (nStartPos < 0 || nStartPos >= Text.getLength()) return -1;
 
-        sal_Int16 numberOfChange = (CharType == unicode::getUnicodeType(Text[nStartPos])) ? 3 : 2;
+        sal_Int16 numberOfChange = (CharType == (sal_Int16)u_charType(Text.iterateCodePoints(&nStartPos, 0))) ? 3 : 2;
 
-        while (numberOfChange > 0 && --nStartPos >= 0) {
-            if (((numberOfChange % 2) == 0) ^ (CharType != unicode::getUnicodeType(Text[nStartPos])))
+        while (numberOfChange > 0 && nStartPos > 0) {
+            if (((numberOfChange % 2) == 0) ^ (CharType != (sal_Int16)u_charType(Text.iterateCodePoints(&nStartPos, -1))))
                 numberOfChange--;
             if (nStartPos == 0 && numberOfChange > 0) {
                 numberOfChange--;
-                nStartPos--;
+                if (numberOfChange == 0) return nStartPos;
             }
         }
-        return numberOfChange == 0 ? nStartPos + 1 : -1;
+        if (numberOfChange == 0) {
+            Text.iterateCodePoints(&nStartPos, 1);
+            return nStartPos;
+        }
+        return -1;
 }
 
 
@@ -400,35 +412,38 @@ sal_Int16 SAL_CALL BreakIteratorImpl::getWordType( const OUString& /*Text*/,
         return 0;
 }
 
-static ScriptTypeList typeList[] = {
-    { UnicodeScript_kBasicLatin, UnicodeScript_kArmenian,   ScriptType::LATIN },    // 0-9,
-    { UnicodeScript_kHebrew, UnicodeScript_kMyanmar,        ScriptType::COMPLEX },  // 10-27,
-    { UnicodeScript_kGeorgian, UnicodeScript_kGeorgian,     ScriptType::LATIN },    // 28,
-    { UnicodeScript_kHangulJamo, UnicodeScript_kHangulJamo, ScriptType::ASIAN },    // 29,
-    { UnicodeScript_kEthiopic, UnicodeScript_kEthiopic,     ScriptType::COMPLEX },    // 30
-    { UnicodeScript_kCherokee, UnicodeScript_kRunic,        ScriptType::LATIN },    // 31-34,
-    { UnicodeScript_kKhmer, UnicodeScript_kMongolian,       ScriptType::COMPLEX },  // 35-36,
-    { UnicodeScript_kLatinExtendedAdditional,
-      UnicodeScript_kGreekExtended,                         ScriptType::LATIN },    // 37-38,
-    { UnicodeScript_kCJKRadicalsSupplement,
-      UnicodeScript_kHangulSyllable,                        ScriptType::ASIAN },    // 57-73,
-    { UnicodeScript_kCJKCompatibilityIdeograph,
-      UnicodeScript_kCJKCompatibilityIdeograph,             ScriptType::ASIAN },    // 78,
-    { UnicodeScript_kArabicPresentationA,
-      UnicodeScript_kArabicPresentationA,                   ScriptType::COMPLEX },  // 80,
-    { UnicodeScript_kCJKCompatibilityForm,
-      UnicodeScript_kCJKCompatibilityForm,                  ScriptType::ASIAN },    // 82,
-    { UnicodeScript_kArabicPresentationB,
-      UnicodeScript_kArabicPresentationB,                   ScriptType::COMPLEX },  // 84,
-    { UnicodeScript_kHalfwidthFullwidthForm,
-      UnicodeScript_kHalfwidthFullwidthForm,                ScriptType::ASIAN },    // 86,
-    { UnicodeScript_kScriptCount,
-      UnicodeScript_kScriptCount,                           ScriptType::WEAK }      // 88
+typedef struct {
+    UBlockCode from;
+    UBlockCode to;
+    sal_Int16 script;
+} UBlock2Script;
+
+static UBlock2Script scriptList[] = {
+    {UBLOCK_NO_BLOCK, UBLOCK_NO_BLOCK, ScriptType::WEAK},
+    {UBLOCK_BASIC_LATIN, UBLOCK_ARMENIAN, ScriptType::LATIN},
+    {UBLOCK_HEBREW, UBLOCK_MYANMAR, ScriptType::COMPLEX},
+    {UBLOCK_GEORGIAN, UBLOCK_GEORGIAN, ScriptType::LATIN},
+    {UBLOCK_HANGUL_JAMO, UBLOCK_HANGUL_JAMO, ScriptType::ASIAN},
+    {UBLOCK_ETHIOPIC, UBLOCK_ETHIOPIC, ScriptType::COMPLEX},
+    {UBLOCK_CHEROKEE, UBLOCK_RUNIC, ScriptType::LATIN},
+    {UBLOCK_KHMER, UBLOCK_MONGOLIAN, ScriptType::COMPLEX},
+    {UBLOCK_LATIN_EXTENDED_ADDITIONAL, UBLOCK_GREEK_EXTENDED, ScriptType::LATIN},
+    {UBLOCK_CJK_RADICALS_SUPPLEMENT, UBLOCK_HANGUL_SYLLABLES, ScriptType::ASIAN},
+    {UBLOCK_CJK_COMPATIBILITY_IDEOGRAPHS, UBLOCK_CJK_COMPATIBILITY_IDEOGRAPHS, ScriptType::ASIAN},
+    {UBLOCK_ARABIC_PRESENTATION_FORMS_A, UBLOCK_ARABIC_PRESENTATION_FORMS_A, ScriptType::COMPLEX},
+    {UBLOCK_CJK_COMPATIBILITY_FORMS, UBLOCK_CJK_COMPATIBILITY_FORMS, ScriptType::ASIAN},
+    {UBLOCK_ARABIC_PRESENTATION_FORMS_B, UBLOCK_ARABIC_PRESENTATION_FORMS_B, ScriptType::COMPLEX},
+    {UBLOCK_HALFWIDTH_AND_FULLWIDTH_FORMS, UBLOCK_HALFWIDTH_AND_FULLWIDTH_FORMS, ScriptType::ASIAN},
+    {UBLOCK_CJK_UNIFIED_IDEOGRAPHS_EXTENSION_B, UBLOCK_CJK_COMPATIBILITY_IDEOGRAPHS_SUPPLEMENT, ScriptType::ASIAN},
+    {UBLOCK_CJK_STROKES, UBLOCK_CJK_STROKES, ScriptType::ASIAN},
+    {UBLOCK_LATIN_EXTENDED_C, UBLOCK_LATIN_EXTENDED_D, ScriptType::LATIN}
 };
 
-sal_Int16  BreakIteratorImpl::getScriptClass(sal_Unicode currentChar )
+#define scriptListCount sizeof (scriptList) / sizeof (UBlock2Script)
+
+sal_Int16  BreakIteratorImpl::getScriptClass(sal_uInt32 currentChar)
 {
-        static sal_Unicode lastChar = 0;
+        static sal_uInt32 lastChar = 0;
         static sal_Int16 nRet = 0;
 
         if (currentChar != lastChar) {
@@ -443,8 +458,14 @@ sal_Int16  BreakIteratorImpl::getScriptClass(sal_Unicode currentChar )
             // workaround for Coptic
             else if ( 0x2C80 <= currentChar && 0x2CE3 >= currentChar)
                 nRet = ScriptType::LATIN;
-            else
-                nRet = unicode::getUnicodeScriptType( currentChar, typeList, ScriptType::WEAK );
+            else {
+                UBlockCode block=ublock_getCode(currentChar);
+                sal_uInt16 i;
+                for ( i = 0; i < scriptListCount; i++) {
+                    if (block <= scriptList[i].to) break;
+                }
+                nRet=(i < scriptListCount && block >= scriptList[i].from) ? scriptList[i].script : ScriptType::WEAK;
+            }
         }
         return nRet;
 }
