@@ -4,9 +4,9 @@
  *
  *  $RCSfile: miscopt.cxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: hr $ $Date: 2007-06-27 21:14:41 $
+ *  last change: $Author: rt $ $Date: 2007-07-26 08:45:43 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -38,6 +38,10 @@
 //_________________________________________________________________________________________________________________
 //  includes
 //_________________________________________________________________________________________________________________
+#ifdef  SVL_DLLIMPLEMENTATION
+#undef  SVL_DLLIMPLEMENTATION
+#endif
+#define SVT_DLLIMPLEMENTATION
 
 #include <svtools/miscopt.hxx>
 
@@ -75,7 +79,7 @@
 #endif
 
 #include <rtl/logfile.hxx>
-#include "itemholder1.hxx"
+#include "itemholder2.hxx"
 
 #include <imgdef.hxx>
 #include <vcl/svapp.hxx>
@@ -677,7 +681,7 @@ SvtMiscOptions::SvtMiscOptions()
     {
        RTL_LOGFILE_CONTEXT(aLog, "svtools ( ??? ) ::SvtMiscOptions_Impl::ctor()");
        m_pDataContainer = new SvtMiscOptions_Impl;
-       ItemHolder1::holdConfigItem(E_MISCOPTIONS);
+       ItemHolder2::holdConfigItem(E_MISCOPTIONS);
     }
 }
 
