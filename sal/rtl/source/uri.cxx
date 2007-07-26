@@ -4,9 +4,9 @@
  *
  *  $RCSfile: uri.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: rt $ $Date: 2007-07-03 14:20:27 $
+ *  last change: $Author: rt $ $Date: 2007-07-26 09:06:27 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -37,6 +37,8 @@
 #include "precompiled_sal.hxx"
 
 #include "rtl/uri.h"
+
+#include "surrogates.h"
 
 #include "osl/diagnose.h"
 #include "rtl/strbuf.hxx"
@@ -70,12 +72,17 @@ inline bool isAlpha(sal_uInt32 nUtf32)
 
 inline bool isHighSurrogate(sal_uInt32 nUtf16)
 {
-    return nUtf16 >= 0xD800 && nUtf16 <= 0xDBFF;
+    return SAL_RTL_IS_HIGH_SURROGATE(nUtf16);
 }
 
 inline bool isLowSurrogate(sal_uInt32 nUtf16)
 {
-    return nUtf16 >= 0xDC00 && nUtf16 <= 0xDFFF;
+    return SAL_RTL_IS_LOW_SURROGATE(nUtf16);
+}
+
+inline sal_uInt32 combineSurrogates(sal_uInt32 high, sal_uInt32 low)
+{
+    return SAL_RTL_COMBINE_SURROGATES(high, low);
 }
 
 inline int getHexWeight(sal_uInt32 nUtf32)
@@ -214,9 +221,7 @@ sal_uInt32 readUcs4(sal_Unicode const ** pBegin, sal_Unicode const * pEnd,
                         || (nDstSize == 2 && isHighSurrogate(aDst[0])
                             && isLowSurrogate(aDst[1])));
                     return nDstSize == 1
-                        ? aDst[0]
-                        : (((aDst[0] & 0x3FF) << 10) + (aDst[1] & 0x3FF)
-                           + 0x10000);
+                        ? aDst[0] : combineSurrogates(aDst[0], aDst[1]);
                 }
                 else if (nInfo == RTL_TEXTTOUNICODE_INFO_SRCBUFFERTOSMALL
                          && pEnd - p >= 3 && p[0] == cEscapePrefix
@@ -249,8 +254,7 @@ sal_uInt32 readUcs4(sal_Unicode const ** pBegin, sal_Unicode const * pEnd,
         *pType = EscapeNo;
         return isHighSurrogate(nChar) && *pBegin < pEnd
                && isLowSurrogate(**pBegin) ?
-                   ((nChar & 0x3FF) << 10 | *(*pBegin)++ & 0x3FF) + 0x10000 :
-                   nChar;
+                   combineSurrogates(nChar, *(*pBegin)++) : nChar;
     }
 }
 
