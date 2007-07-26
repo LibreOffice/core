@@ -4,9 +4,9 @@
 #
 #   $RCSfile: setupscript.pm,v $
 #
-#   $Revision: 1.10 $
+#   $Revision: 1.11 $
 #
-#   last change: $Author: hr $ $Date: 2007-01-02 15:24:13 $
+#   last change: $Author: rt $ $Date: 2007-07-26 08:48:09 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -381,6 +381,35 @@ sub add_predefined_folder
 
                 push(@{$folderref}, \%folder);
             }
+        }
+    }
+}
+
+#####################################################################################
+# If folderitems are non-advertised, the component needs to have a registry key
+# below HKCU as key path. Therefore it is required, to mark the file belonging
+# to a non-advertised shortcut, that a special userreg_xxx registry key can be
+# created during packing process.
+#####################################################################################
+
+sub prepare_non_advertised_files
+{
+    my ( $folderitemref, $filesref ) = @_;
+
+    for ( my $i = 0; $i <= $#{$folderitemref}; $i++ )
+    {
+        my $folderitem = ${$folderitemref}[$i];
+        my $styles = "";
+        if ( $folderitem->{'Styles'} ) { $styles = $folderitem->{'Styles'}; }
+
+        if ( $styles =~ /\bNON_ADVERTISED\b/ )
+        {
+            my $fileid = $folderitem->{'FileID'};
+            my $onefile = installer::worker::find_file_by_id($filesref, $fileid);
+
+            if ( $onefile eq "" ) { installer::exiter::exit_program("ERROR: Could not find file belonging to FolderItem. Missing file: $fileid !", "prepare_non_advertised_files"); }
+
+            $onefile->{'needs_user_registry_key'} = 1;
         }
     }
 }
