@@ -4,9 +4,9 @@
  *
  *  $RCSfile: gendict.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 09:14:30 $
+ *  last change: $Author: rt $ $Date: 2007-07-26 09:08:39 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -94,7 +94,9 @@ SAL_IMPLEMENT_MAIN_WITH_ARGS(argc, argv)
 
         sal_Int32 len = Ostr.getLength();
 
-        if (len == 1) continue; // skip one character word
+        i=0;
+        Ostr.iterateCodePoints(&i, 1);
+        if (len == i) continue; // skip one character word
 
         if (*u != current) {
         if (*u < current)
