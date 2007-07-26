@@ -4,9 +4,9 @@
  *
  *  $RCSfile: docnum.cxx,v $
  *
- *  $Revision: 1.66 $
+ *  $Revision: 1.67 $
  *
- *  last change: $Author: kz $ $Date: 2007-05-10 15:55:59 $
+ *  last change: $Author: rt $ $Date: 2007-07-26 08:18:47 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1340,7 +1340,10 @@ BOOL SwDoc::ReplaceNumRule( const SwPosition& rPos,
                     pUndo->SetSttNum( pTxtNd->GetIndex() );
             }
 
-            SwRegHistory aRegH( pUndo ? pUndo->GetHistory() : 0 );
+            // --> OD 2007-07-11 #i56253#
+            SwRegHistory aRegH( *this,
+                                pUndo ? pUndo->GetHistory() : 0 );
+            // <--
             USHORT nChgFmtLevel = 0;
             for( BYTE n = 0; n < MAXLEVEL; ++n )
             {
@@ -1470,7 +1473,10 @@ BOOL SwDoc::DelNumRules( const SwPaM& rPam )
     else
         pUndo = 0;
 
-    SwRegHistory aRegH( pUndo ? pUndo->GetHistory() : 0 );
+    // --> OD 2007-07-11 #i56253#
+    SwRegHistory aRegH( *this,
+                        pUndo ? pUndo->GetHistory() : 0 );
+    // <--
 
     SwNumRuleItem aEmptyRule( aEmptyStr );
     SvxLRSpaceItem aLRSpace( RES_LR_SPACE );
