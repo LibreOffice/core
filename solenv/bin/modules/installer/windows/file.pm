@@ -4,9 +4,9 @@
 #
 #   $RCSfile: file.pm,v $
 #
-#   $Revision: 1.13 $
+#   $Revision: 1.14 $
 #
-#   last change: $Author: kz $ $Date: 2007-05-21 10:40:56 $
+#   last change: $Author: rt $ $Date: 2007-07-26 08:48:33 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -482,7 +482,7 @@ sub create_files_table
         my $destdir = "";
         if ( $onefile->{'Dir'} ) { $destdir = $onefile->{'Dir'}; }
 
-        if ( $destdir =~ /\bPREDEFINED_OSSHELLNEWDIR\b/ )
+        if (( $destdir =~ /\bPREDEFINED_OSSHELLNEWDIR\b/ ) || ( $onefile->{'needs_user_registry_key'} ))
         {
             my $keypath = generate_registry_keypath($onefile);
             $onefile->{'userregkeypath'} = $keypath;
