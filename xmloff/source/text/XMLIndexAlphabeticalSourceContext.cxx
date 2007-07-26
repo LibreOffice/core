@@ -4,9 +4,9 @@
  *
  *  $RCSfile: XMLIndexAlphabeticalSourceContext.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: hr $ $Date: 2007-06-27 15:56:01 $
+ *  last change: $Author: rt $ $Date: 2007-07-26 08:15:26 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -165,8 +165,14 @@ void XMLIndexAlphabeticalSourceContext::ProcessAttribute(
     switch (eParam)
     {
         case XML_TOK_INDEXSOURCE_MAIN_ENTRY_STYLE:
-            sMainEntryStyleName = rValue;
-            bMainEntryStyleNameOK = sal_True;
+            {
+                sMainEntryStyleName = rValue;
+                OUString sDisplayStyleName = GetImport().GetStyleDisplayName(
+                    XML_STYLE_FAMILY_TEXT_TEXT, sMainEntryStyleName );
+                const Reference < ::com::sun::star::container::XNameContainer >&
+                    rStyles = GetImport().GetTextImport()->GetTextStyles();
+                bMainEntryStyleNameOK = rStyles.is() && rStyles->hasByName( sDisplayStyleName );
+            }
             break;
 
         case XML_TOK_INDEXSOURCE_IGNORE_CASE:
