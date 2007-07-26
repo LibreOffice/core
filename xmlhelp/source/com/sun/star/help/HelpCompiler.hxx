@@ -4,9 +4,9 @@
  *
  *  $RCSfile: HelpCompiler.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: hr $ $Date: 2007-06-26 12:38:07 $
+ *  last change: $Author: rt $ $Date: 2007-07-26 08:49:05 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -66,6 +66,7 @@
 #include <osl/file.hxx>
 
 #define EMULATEORIGINAL 1
+
 #ifdef CMCDEBUG
     #define HCDBG(foo) do { if (1) foo; } while(0)
 #else
