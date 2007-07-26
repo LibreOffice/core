@@ -4,9 +4,9 @@
  *
  *  $RCSfile: indexentrysupplier_default.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 09:18:56 $
+ *  last change: $Author: rt $ $Date: 2007-07-26 09:10:01 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -172,7 +172,9 @@ OUString Index::getIndexDescription(const OUString& rIndexEntry)
         else
             return keys[wgt].mkey;
     }
-    return rIndexEntry.copy(0, 1);
+    sal_Int32 nPos=0;
+    sal_uInt32 indexChar=rIndexEntry.iterateCodePoints(&nPos, 0);
+    return OUString(&indexChar, 1);
 }
 
 #define LOCALE_EN lang::Locale(OUString::createFromAscii("en"), OUString(), OUString())
