@@ -4,9 +4,9 @@
  *
  *  $RCSfile: cclass_unicode.hxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: kz $ $Date: 2005-11-01 14:51:41 $
+ *  last change: $Author: rt $ $Date: 2007-07-26 09:07:35 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -187,7 +187,7 @@ private:
     sal_Bool setupInternational( const com::sun::star::lang::Locale& rLocale );
 
     /// Implementation of getCharacterType() for one single character
-    sal_Int32 getCharType( sal_Unicode c );
+    sal_Int32 SAL_CALL getCharType( const rtl::OUString& Text, sal_Int32 *nPos, sal_Int32 increment);
 
 };
 
