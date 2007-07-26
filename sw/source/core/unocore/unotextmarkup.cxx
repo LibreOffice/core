@@ -4,9 +4,9 @@
  *
  *  $RCSfile: unotextmarkup.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: hr $ $Date: 2007-06-27 13:22:26 $
+ *  last change: $Author: rt $ $Date: 2007-07-26 08:21:34 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -130,6 +130,12 @@ void SAL_CALL SwXTextMarkup::commitTextMarkup( ::sal_Int32 nType, const ::rtl::O
 
 void SwXTextMarkup::Modify( SfxPoolItem* /*pOld*/, SfxPoolItem* /*pNew*/ )
 {
+    // FME 2007-07-16 #i79641# In my opinion this is perfectly legal,
+    // therefore I remove the assertion in SwModify::_Remove()
+    if ( pRegisteredIn )
+        pRegisteredIn->Remove( this );
+    // <--
+
     mpTxtNode = 0;
 }
 
