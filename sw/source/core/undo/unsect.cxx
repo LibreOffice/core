@@ -4,9 +4,9 @@
  *
  *  $RCSfile: unsect.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: rt $ $Date: 2006-12-01 15:50:15 $
+ *  last change: $Author: rt $ $Date: 2007-07-26 08:20:56 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -155,7 +155,7 @@ SwUndoInsSection::SwUndoInsSection( const SwPaM& rPam, const SwSection& rNew,
             if( aBrkSet.Count() )
             {
                 pHistory = new SwHistory;
-                pHistory->CopyFmtAttr( aBrkSet, pCNd->GetIndex() );
+                pHistory->CopyFmtAttr( aBrkSet, pCNd->GetIndex(), rDoc );
             }
         }
     }
