@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dp_misc.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 09:41:35 $
+ *  last change: $Author: rt $ $Date: 2007-07-26 08:54:46 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -339,5 +339,16 @@ Reference<XInterface> resolveUnoURL(
         }
     }
 }
+
+OUString getExtensionDefaultUpdateURL()
+{
+    ::rtl::OUString sUrl(
+        RTL_CONSTASCII_USTRINGPARAM(
+        "${$SYSBINDIR/" SAL_CONFIGFILE("version")
+        ":Version:ExtensionUpdateURL"));
+    ::rtl::Bootstrap::expandMacros(sUrl);
+    return sUrl;
+}
+
 
 }
