@@ -4,9 +4,9 @@
  *
  *  $RCSfile: string.c,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: rt $ $Date: 2007-04-03 14:05:53 $
+ *  last change: $Author: rt $ $Date: 2007-07-26 09:06:02 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -55,6 +55,7 @@
 #endif
 
 #include "strimp.h"
+#include "surrogates.h"
 
 #ifndef _RTL_STRING_H_
 #include <rtl/string.h>
@@ -136,17 +137,6 @@ double SAL_CALL rtl_str_toDouble(sal_Char const * pStr)
 
 /* ======================================================================= */
 
-#define RTL_UNICODE_START_HIGH_SURROGATES                   0xD800
-#define RTL_UNICODE_END_HIGH_SURROGATES                     0xDBFF
-#define RTL_UNICODE_START_LOW_SURROGATES                    0xDC00
-#define RTL_UNICODE_END_LOW_SURROGATES                      0xDFFF
-
-#define RTL_UNICODE_SURROGATES_HALFMASK                     0x03FFUL
-#define RTL_UNICODE_SURROGATES_HALFBASE                     0x0010000UL
-#define RTL_UNICODE_SURROGATES_HALFSHIFT                    10
-
-/* ----------------------------------------------------------------------- */
-
 static int rtl_ImplGetFastUTF8ByteLen( const sal_Unicode* pStr, sal_Int32 nLen )
 {
     int                 n;
@@ -166,8 +156,7 @@ static int rtl_ImplGetFastUTF8ByteLen( const sal_Unicode* pStr, sal_Int32 nLen )
             n += 2;
         else
         {
-            if ( (c < RTL_UNICODE_START_HIGH_SURROGATES) ||
-                 (c > RTL_UNICODE_END_HIGH_SURROGATES) )
+            if ( !SAL_RTL_IS_HIGH_SURROGATE(c) )
                 n += 3;
             else
             {
@@ -176,12 +165,9 @@ static int rtl_ImplGetFastUTF8ByteLen( const sal_Unicode* pStr, sal_Int32 nLen )
                 if ( pStr+1 < pEndStr )
                 {
                     c = *(pStr+1);
-                    if ( (c >= RTL_UNICODE_START_LOW_SURROGATES) &&
-                         (c <= RTL_UNICODE_END_LOW_SURROGATES) )
+                    if ( SAL_RTL_IS_LOW_SURROGATE(c) )
                     {
-                        nUCS4Char -= RTL_UNICODE_START_HIGH_SURROGATES;
-                        nUCS4Char <<= RTL_UNICODE_SURROGATES_HALFSHIFT;
-                        nUCS4Char += (c-RTL_UNICODE_START_LOW_SURROGATES) + RTL_UNICODE_SURROGATES_HALFBASE;
+                        nUCS4Char = SAL_RTL_COMBINE_SURROGATES(nUCS4Char, c);
                         pStr++;
                     }
                 }
