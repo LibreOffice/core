@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ustring.hxx,v $
  *
- *  $Revision: 1.29 $
+ *  $Revision: 1.30 $
  *
- *  last change: $Author: hr $ $Date: 2007-06-27 13:24:20 $
+ *  last change: $Author: rt $ $Date: 2007-07-26 09:05:41 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -51,9 +51,12 @@
 #include <rtl/memory.h>
 #endif
 
-#if !defined EXCEPTIONS_OFF
+#if defined EXCEPTIONS_OFF
+#include <stdlib.h>
+#else
 #include <new>
 #endif
+
 namespace rtl
 {
 /* ======================================================================= */
@@ -204,6 +207,37 @@ public:
         }
 #endif
     }
+
+    /** Create a new string from an array of Unicode code points.
+
+        @param codePoints
+        an array of at least codePointCount code points, which each must be in
+        the range from 0 to 0x10FFFF, inclusive.  May be null if codePointCount
+        is zero.
+
+        @param codePointCount
+        the non-negative number of code points.
+
+        @exception std::bad_alloc
+        is thrown if either an out-of-memory condition occurs or the resulting
+        number of UTF-16 code units would have been larger than SAL_MAX_INT32.
+
+        @since UDK 3.2.7
+    */
+    inline explicit OUString(
+        sal_uInt32 const * codePoints, sal_Int32 codePointCount):
+        pData(NULL)
+    {
+        rtl_uString_newFromCodePoints(&pData, codePoints, codePointCount);
+        if (pData == NULL) {
+#if defined EXCEPTIONS_OFF
+            abort();
+#else
+            throw std::bad_alloc();
+#endif
+        }
+    }
+
     /**
       Release the string data.
     */
@@ -1262,6 +1296,64 @@ public:
     {
         return rtl_convertUStringToString(&pTarget->pData, pData->buffer,
                                             pData->length, nEncoding, nFlags);
+    }
+
+    /** Iterate through this string based on code points instead of UTF-16 code
+        units.
+
+        See Chapter 3 of The Unicode Standard 5.0 (Addison--Wesley, 2006) for
+        definitions of the various terms used in this description.
+
+        This string is interpreted as a sequence of zero or more UTF-16 code
+        units.  For each index into this sequence (from zero to one less than
+        the length of the sequence, inclusive), a code point represented
+        starting at the given index is computed as follows:
+
+        - If the UTF-16 code unit addressed by the index constitutes a
+        well-formed UTF-16 code unit sequence, the computed code point is the
+        scalar value encoded by that UTF-16 code unit sequence.
+
+        - Otherwise, if the index is at least two UTF-16 code units away from
+        the end of the sequence, and the sequence of two UTF-16 code units
+        addressed by the index constitutes a well-formed UTF-16 code unit
+        sequence, the computed code point is the scalar value encoded by that
+        UTF-16 code unit sequence.
+
+        - Otherwise, the computed code point is the UTF-16 code unit addressed
+        by the index.  (This last case catches unmatched surrogates as well as
+        indices pointing into the middle of surrogate pairs.)
+
+        @param indexUtf16
+        pointer to a UTF-16 based index into this string; must not be null.  On
+        entry, the index must be in the range from zero to the length of this
+        string (in UTF-16 code units), inclusive.  Upon successful return, the
+        index will be updated to address the UTF-16 code unit that is the given
+        incrementCodePoints away from the initial index.
+
+        @param incrementCodePoints
+        the number of code points to move the given *indexUtf16.  If
+        non-negative, moving is done after determining the code point at the
+        index.  If negative, moving is done before determining the code point
+        at the (then updated) index.  The value must be such that the resulting
+        UTF-16 based index is in the range from zero to the length of this
+        string (in UTF-16 code units), inclusive.
+
+        @return
+        the code point (an integer in the range from 0 to 0x10FFFF, inclusive)
+        that is represented within this string starting at the index computed as
+        follows:  If incrementCodePoints is non-negative, the index is the
+        initial value of *indexUtf16; if incrementCodePoints is negative, the
+        index is the updated value of *indexUtf16.  In either case, the computed
+        index must be in the range from zero to one less than the length of this
+        string (in UTF-16 code units), inclusive.
+
+        @since UDK 3.2.7
+    */
+    inline sal_uInt32 iterateCodePoints(
+        sal_Int32 * indexUtf16, sal_Int32 incrementCodePoints = 1) const
+    {
+        return rtl_uString_iterateCodePoints(
+            pData, indexUtf16, incrementCodePoints);
     }
 
     /**
