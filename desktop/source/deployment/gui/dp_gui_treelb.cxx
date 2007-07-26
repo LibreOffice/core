@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dp_gui_treelb.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: rt $ $Date: 2007-07-06 12:35:10 $
+ *  last change: $Author: rt $ $Date: 2007-07-26 08:53:32 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -38,6 +38,7 @@
 
 #include "dp_misc.h"
 #include "dp_gui.h"
+#include "dp_gui_shared.hxx"
 #include "dp_ucb.h"
 #include "cppuhelper/exc_hlp.hxx"
 #include "comphelper/anytostring.hxx"
@@ -591,8 +592,11 @@ PopupMenu * DialogImpl::TreeListBoxImpl::CreateContextMenu(void)
         menu->InsertItem( RID_BTN_EXPORT, m_strCtxExport );
     }
 
-    bool updateUrl = deployment::UpdateInformationProvider::create(m_context)->
-        hasPredeterminedUpdateURL();
+    bool updateUrl = false;
+    OUString sExtUpdateUrl;
+    if (dp_misc::getExtensionDefaultUpdateURL().getLength() > 0)
+        updateUrl = true;
+
     for (SvLBoxEntry * e = FirstSelected(); e != NULL; e = NextSelected(e))
     {
         if (isFirstLevelChild(e))
