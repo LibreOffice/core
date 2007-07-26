@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dp_misc.h,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: ihi $ $Date: 2006-12-20 14:26:49 $
+ *  last change: $Author: rt $ $Date: 2007-07-26 08:54:22 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -113,6 +113,14 @@ DESKTOP_DEPLOYMENTMISC_DLLPUBLIC bool office_is_running();
 DESKTOP_DEPLOYMENTMISC_DLLPUBLIC
 oslProcess raiseProcess( ::rtl::OUString const & appURL,
                          ::com::sun::star::uno::Sequence< ::rtl::OUString > const & args );
+
+//==============================================================================
+/** returns the default update URL (for the update information) which
+    is used when an extension does not provide its own URL.
+*/
+DESKTOP_DEPLOYMENTMISC_DLLPUBLIC
+::rtl::OUString getExtensionDefaultUpdateURL();
+
 
 }
 
