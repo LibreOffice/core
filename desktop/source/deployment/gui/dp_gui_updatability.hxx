@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dp_gui_updatability.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: ihi $ $Date: 2006-12-20 14:24:22 $
+ *  last change: $Author: rt $ $Date: 2007-07-26 08:53:58 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -78,9 +78,6 @@ public:
     /**
        Create an instance.
 
-       @param context
-       a non-null component context
-
        @param packageManagers
        a list of non-null package managers
 
@@ -89,9 +86,7 @@ public:
        button; will only be accessed with the solar mutex locked
     */
     Updatability(
-        com::sun::star::uno::Reference< com::sun::star::uno::XComponentContext >
-            const & context,
-        com::sun::star::uno::Sequence< com::sun::star::uno::Reference<
+         com::sun::star::uno::Sequence< com::sun::star::uno::Reference<
             com::sun::star::deployment::XPackageManager > > const &
             packageManagers,
         Window & enabled);
