@@ -4,9 +4,9 @@
  *
  *  $RCSfile: cellatr.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 20:39:34 $
+ *  last change: $Author: rt $ $Date: 2007-07-26 08:18:09 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -231,7 +231,8 @@ void SwTblBoxFormula::ChangeState( const SfxPoolItem* pItem )
                     // und dann in der externen Darstellung
                     aCopy.PtrToBoxNm( &pTblNd->GetTable() );
                     pUpdtFld->pHistory->Add( &aCopy, &aCopy,
-                                pNd->FindTableBoxStartNode()->GetIndex() );
+                                pNd->FindTableBoxStartNode()->GetIndex(),
+                                const_cast<SwDoc&>(*(pNd->GetDoc())) );
                 }
             }
             else
