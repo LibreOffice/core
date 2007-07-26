@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xdictionary.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 09:14:44 $
+ *  last change: $Author: rt $ $Date: 2007-07-26 09:08:51 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -47,7 +47,7 @@
 
 #include <com/sun/star/i18n/WordType.hpp>
 #include <xdictionary.hxx>
-#include <i18nutil/unicode.hxx>
+#include <unicode/uchar.h>
 #include <string.h>
 #include <breakiteratorImpl.hxx>
 
@@ -168,13 +168,13 @@ sal_Bool SAL_CALL xdictionary::seekSegment(const sal_Unicode *text, sal_Int32 po
                 sal_Int32 len, Boundary& segBoundary) {
         for (segBoundary.startPos = pos - 1;
             segBoundary.startPos >= 0 &&
-                (unicode::isWhiteSpace(text[segBoundary.startPos]) || exists(text[segBoundary.startPos]));
+                (u_isWhitespace((sal_uInt32)text[segBoundary.startPos]) || exists(text[segBoundary.startPos]));
             segBoundary.startPos--);
         segBoundary.startPos++;
 
         for (segBoundary.endPos = pos;
             segBoundary.endPos < len &&
-                    (unicode::isWhiteSpace(text[segBoundary.endPos]) || exists(text[segBoundary.endPos]));
+                    (u_isWhitespace((sal_uInt32)text[segBoundary.endPos]) || exists(text[segBoundary.endPos]));
             segBoundary.endPos++);
 
         return segBoundary.endPos > segBoundary.startPos + 1;
@@ -224,7 +224,7 @@ WordBreakCache& SAL_CALL xdictionary::getCache(const sal_Unicode *text, Boundary
         while (aCache.wordboundary[i] < aCache.length) {
             len = 0;
             // look the continuous white space as one word and cashe it
-            while (unicode::isWhiteSpace(text[wordBoundary.startPos + aCache.wordboundary[i] + len]))
+            while (u_isWhitespace((sal_uInt32)text[wordBoundary.startPos + aCache.wordboundary[i] + len]))
                 len ++;
 
             if (len == 0) {
@@ -272,25 +272,33 @@ WordBreakCache& SAL_CALL xdictionary::getCache(const sal_Unicode *text, Boundary
         return aCache;
 }
 
-Boundary SAL_CALL xdictionary::previousWord(const sal_Unicode *text, sal_Int32 anyPos, sal_Int32 len, sal_Int16 wordType)
+Boundary SAL_CALL xdictionary::previousWord(const OUString& rText, sal_Int32 anyPos, sal_Int16 wordType)
 {
         // looking for the first non-whitespace character from anyPos
-        while (unicode::isWhiteSpace(text[anyPos - 1])) anyPos --;
-        return getWordBoundary(text, anyPos - 1, len, wordType, true);
+        sal_uInt32 ch = rText.iterateCodePoints(&anyPos, -1);
+
+        while (anyPos > 0 && u_isWhitespace(ch)) ch = rText.iterateCodePoints(&anyPos, -1);
+
+        return getWordBoundary(rText, anyPos, wordType, true);
 }
 
-Boundary SAL_CALL xdictionary::nextWord(const sal_Unicode *text, sal_Int32 anyPos, sal_Int32 len, sal_Int16 wordType)
+Boundary SAL_CALL xdictionary::nextWord(const OUString& rText, sal_Int32 anyPos, sal_Int16 wordType)
 {
-        boundary = getWordBoundary(text, anyPos, len, wordType, true);
-        // looknig for the first non-whitespace character from anyPos
+        boundary = getWordBoundary(rText, anyPos, wordType, true);
         anyPos = boundary.endPos;
-        while (unicode::isWhiteSpace(text[anyPos])) anyPos ++;
+        if (anyPos < rText.getLength()) {
+            // looknig for the first non-whitespace character from anyPos
+            sal_uInt32 ch = rText.iterateCodePoints(&anyPos, 0);
+            while (u_isWhitespace(ch)) ch=rText.iterateCodePoints(&anyPos, 1);
+        }
 
-        return getWordBoundary(text, anyPos, len, wordType, true);
+        return getWordBoundary(rText, anyPos, wordType, true);
 }
 
-Boundary SAL_CALL xdictionary::getWordBoundary(const sal_Unicode *text, sal_Int32 anyPos, sal_Int32 len, sal_Int16 wordType, sal_Bool bDirection)
+Boundary SAL_CALL xdictionary::getWordBoundary(const OUString& rText, sal_Int32 anyPos, sal_Int16 wordType, sal_Bool bDirection)
 {
+        const sal_Unicode *text=rText.getStr();
+        sal_Int32 len=rText.getLength();
         if (anyPos >= len || anyPos < 0) {
             boundary.startPos = boundary.endPos = anyPos < 0 ? 0 : len;
         } else if (seekSegment(text, anyPos, len, boundary)) {          // character in dict
@@ -302,17 +310,18 @@ Boundary SAL_CALL xdictionary::getWordBoundary(const sal_Unicode *text, sal_Int3
             sal_Int32 startPos = aCache.wordboundary[i - 1];
             // if bDirection is false
             if (!bDirection && startPos > 0 && startPos == (anyPos - boundary.startPos) &&
-                                                unicode::isWhiteSpace(text[anyPos - 1]))
+                                                u_isWhitespace((sal_uInt32) text[anyPos - 1]))
                 i--;
             boundary.endPos = aCache.wordboundary[i] + boundary.startPos;
             boundary.startPos += aCache.wordboundary[i - 1];
         } else {
-            boundary.startPos = anyPos++;
+            boundary.startPos = anyPos;
+            if (anyPos < len) rText.iterateCodePoints(&anyPos, 1);
             boundary.endPos = anyPos < len ? anyPos : len;
         }
         if (wordType == WordType::WORD_COUNT) {
             // skip punctuation for word count.
-            while (boundary.endPos < len && unicode::isPunctuation(text[boundary.endPos]))
+            while (boundary.endPos < len && u_ispunct((sal_uInt32)text[boundary.endPos]))
                 boundary.endPos++;
         }
 
