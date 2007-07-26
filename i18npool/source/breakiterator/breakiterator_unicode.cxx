@@ -4,9 +4,9 @@
  *
  *  $RCSfile: breakiterator_unicode.cxx,v $
  *
- *  $Revision: 1.29 $
+ *  $Revision: 1.30 $
  *
- *  last change: $Author: ihi $ $Date: 2007-06-06 12:17:25 $
+ *  last change: $Author: rt $ $Date: 2007-07-26 09:08:27 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -37,7 +37,7 @@
 #include "precompiled_i18npool.hxx"
 #include <breakiterator_unicode.hxx>
 #include <localedata.hxx>
-#include <i18nutil/unicode.hxx>
+#include <unicode/uchar.h>
 #include <unicode/locid.h>
 #include <unicode/rbbi.h>
 #include <unicode/udata.h>
@@ -198,10 +198,8 @@ sal_Int32 SAL_CALL BreakIterator_Unicode::nextCharacters( const OUString& Text,
                     return Text.getLength();
             }
         } else { // for CHARACTER mode
-            nDone = Text.getLength() - nStartPos;
-            if (nDone > nCount)
-                nDone = nCount;
-            nStartPos += nDone;
+            for (nDone = 0; nDone < nCount && nStartPos < Text.getLength(); nDone++)
+                Text.iterateCodePoints(&nStartPos, 1);
         }
         return nStartPos;
 }
@@ -219,8 +217,8 @@ sal_Int32 SAL_CALL BreakIterator_Unicode::previousCharacters( const OUString& Te
                     return 0;
             }
         } else { // for BS to delete one char and CHARACTER mode.
-            nDone = (nStartPos > nCount) ? nCount : nStartPos;
-            nStartPos -= nDone;
+            for (nDone = 0; nDone < nCount && nStartPos > 0; nDone++)
+                Text.iterateCodePoints(&nStartPos, -1);
         }
         return nStartPos;
 }
@@ -237,7 +235,7 @@ Boundary SAL_CALL BreakIterator_Unicode::nextWord( const OUString& Text, sal_Int
         else {
             if ( (rWordType == WordType::ANYWORD_IGNOREWHITESPACES ||
                     rWordType == WordType::DICTIONARY_WORD ) &&
-                        unicode::isWhiteSpace(Text[result.startPos]) )
+                        u_isWhitespace(Text.iterateCodePoints(&result.startPos, 0)) )
                 result.startPos = word.aBreakIterator->following(result.startPos);
 
             result.endPos = word.aBreakIterator->following(result.startPos);
@@ -259,7 +257,7 @@ Boundary SAL_CALL BreakIterator_Unicode::previousWord(const OUString& Text, sal_
         else {
             if ( (rWordType == WordType::ANYWORD_IGNOREWHITESPACES ||
                     rWordType == WordType::DICTIONARY_WORD) &&
-                        unicode::isWhiteSpace(Text[result.startPos]) )
+                        u_isWhitespace(Text.iterateCodePoints(&result.startPos, 0)) )
                 result.startPos = word.aBreakIterator->preceding(result.startPos);
 
             result.endPos = word.aBreakIterator->following(result.startPos);
@@ -310,12 +308,13 @@ sal_Int32 SAL_CALL BreakIterator_Unicode::beginOfSentence( const OUString& Text,
 
         sal_Int32 len = Text.getLength();
         if (len > 0 && nStartPos == len)
-            nStartPos--; // issue #i27703# treat end position as part of last sentence
+            Text.iterateCodePoints(&nStartPos, -1); // issue #i27703# treat end position as part of last sentence
         if (!sentence.aBreakIterator->isBoundary(nStartPos))
             nStartPos = sentence.aBreakIterator->preceding(nStartPos);
 
         // skip preceding space.
-        while (nStartPos < len && unicode::isWhiteSpace(Text[nStartPos])) nStartPos++;
+        sal_uInt32 ch = Text.iterateCodePoints(&nStartPos, 0);
+        while (nStartPos < len && u_isWhitespace(ch)) ch = Text.iterateCodePoints(&nStartPos, 1);
 
         return nStartPos;
 }
@@ -327,12 +326,13 @@ sal_Int32 SAL_CALL BreakIterator_Unicode::endOfSentence( const OUString& Text, s
 
         sal_Int32 len = Text.getLength();
         if (len > 0 && nStartPos == len)
-            nStartPos--; // issue #i27703# treat end position as part of last sentence
+            Text.iterateCodePoints(&nStartPos, -1); // issue #i27703# treat end position as part of last sentence
         nStartPos = sentence.aBreakIterator->following(nStartPos);
 
-        while (--nStartPos >= 0 && unicode::isWhiteSpace(Text[nStartPos]));
+        sal_Int32 nPos=nStartPos;
+        while (nPos > 0 && u_isWhitespace(Text.iterateCodePoints(&nPos, -1))) nStartPos=nPos;
 
-        return ++nStartPos;
+        return nStartPos;
 }
 
 LineBreakResults SAL_CALL BreakIterator_Unicode::getLineBreak(
@@ -380,7 +380,7 @@ LineBreakResults SAL_CALL BreakIterator_Unicode::getLineBreak(
                 if (Text[nStartPos--] == WJ)
                     GlueSpace=sal_True;
                 while (nStartPos >= 0 &&
-                    (unicode::isWhiteSpace(Text[nStartPos]) || Text[nStartPos] == WJ)) {
+                    (u_isWhitespace(Text.iterateCodePoints(&nStartPos, 0)) || Text[nStartPos] == WJ)) {
                     if (Text[nStartPos--] == WJ)
                         GlueSpace=sal_True;
                 }
