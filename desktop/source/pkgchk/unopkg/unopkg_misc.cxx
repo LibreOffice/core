@@ -4,9 +4,9 @@
  *
  *  $RCSfile: unopkg_misc.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: ihi $ $Date: 2007-06-05 15:08:06 $
+ *  last change: $Author: rt $ $Date: 2007-07-26 08:55:07 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -443,33 +443,31 @@ Reference<XComponentContext> getUNO(
     {
         if (! s_lockfile.check( 0 ))
         {
-            //We show a message box or print to the console that there
-            //is another instance already running
-             if ( ! InitVCL( Reference<lang::XMultiServiceFactory>(
-                               xComponentContext->getServiceManager(),
-                               UNO_QUERY_THROW ) ))
-                throw RuntimeException( OUSTR("Cannot initialize VCL!"),
-                        NULL );
-
+            if (bGui)
             {
-                ResId warnId(WARNINGBOX_CONCURRENTINSTANCE,*DeploymentGuiResMgr::get() );
-                WarningBox warn(NULL, warnId);
-                warn.SetText(::utl::ConfigManager::GetDirectConfigProperty(
-                    ::utl::ConfigManager::PRODUCTNAME).get<OUString>());
-
-                warn.SetIcon(0);
-                if (bGui)
+                //We show a message box or print to the console that there
+                //is another instance already running
+                if ( ! InitVCL( Reference<lang::XMultiServiceFactory>(
+                                    xComponentContext->getServiceManager(),
+                                    UNO_QUERY_THROW ) ))
+                    throw RuntimeException( OUSTR("Cannot initialize VCL!"),
+                                            NULL );
                 {
+                    ResId warnId(WARNINGBOX_CONCURRENTINSTANCE,*DeploymentGuiResMgr::get() );
+                    WarningBox warn(NULL, warnId);
+                    warn.SetText(::utl::ConfigManager::GetDirectConfigProperty(
+                                     ::utl::ConfigManager::PRODUCTNAME).get<OUString>());
+                    warn.SetIcon(0);
                     warn.Execute();
                 }
-                else
-                {
-                    ::rtl::OString osWarn = ::rtl::OUStringToOString(
-                        warn.GetMessText(), osl_getThreadTextEncoding());
-                    fprintf(stdout,"\n%s\n\n", osWarn.getStr());
-                }
+                DeInitVCL();
             }
-            DeInitVCL();
+            else
+            {
+                //ToDo issue i79333
+                fprintf(stdout,"You need to close the already opened Extension Manager to continue.\n");
+
+            }
             throw RuntimeException(
                 OUSTR("Lock file indicates that a concurrent Office process "
                     "is running!"), Reference<XInterface>() );
