@@ -4,9 +4,9 @@
 #
 #   $RCSfile: component.pm,v $
 #
-#   $Revision: 1.9 $
+#   $Revision: 1.10 $
 #
-#   last change: $Author: rt $ $Date: 2007-02-19 13:49:42 $
+#   last change: $Author: rt $ $Date: 2007-07-26 08:48:21 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -204,9 +204,9 @@ sub get_file_component_attributes
         $attributes = 0;    # Assembly files cannot run from source
     }
 
-    if ( $onefile->{'Dir'} =~ /\bPREDEFINED_OSSHELLNEWDIR\b/ )
+    if (( $onefile->{'Dir'} =~ /\bPREDEFINED_OSSHELLNEWDIR\b/ ) || ( $onefile->{'needs_user_registry_key'} ))
     {
-        $attributes = 4;    # Files in shellnew dir must have user registry key as KeyPath
+        $attributes = 4;    # Files in shellnew dir and in non advertised startmenu entries must have user registry key as KeyPath
     }
 
     return $attributes
