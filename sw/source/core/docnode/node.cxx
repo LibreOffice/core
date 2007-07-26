@@ -4,9 +4,9 @@
  *
  *  $RCSfile: node.cxx,v $
  *
- *  $Revision: 1.36 $
+ *  $Revision: 1.37 $
  *
- *  last change: $Author: obo $ $Date: 2007-06-12 05:55:19 $
+ *  last change: $Author: rt $ $Date: 2007-07-26 08:19:14 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1787,7 +1787,12 @@ BOOL SwCntntNode::SetAttr( const SfxItemSet& rSet )
             // style name property has already been set during the import!)
             // In case we do not have a conditional style, we make use of the
             // fact that nobody else uses the attribute set behind the handle.
-            if ( 0 != GetCondFmtColl() )
+            // FME 2007-07-10 #i78124# If autostyle does not have a parent,
+            // the string is empty.
+            const SfxPoolItem* pNameItem = 0;
+            if ( 0 != GetCondFmtColl() ||
+                 SFX_ITEM_SET != mpAttrSet->GetItemState( RES_FRMATR_STYLE_NAME, FALSE, &pNameItem ) ||
+                 0 == static_cast<const SfxStringItem*>(pNameItem)->GetValue().Len() )
                 AttrSetHandleHelper::SetParent( mpAttrSet, *this, &GetAnyFmtColl(), GetFmtColl() );
             else
                 const_cast<SfxItemSet*>(mpAttrSet.get())->SetParent( &GetFmtColl()->GetAttrSet() );
