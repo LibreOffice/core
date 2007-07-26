@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.59 $
+#   $Revision: 1.60 $
 #
-#   last change: $Author: rt $ $Date: 2007-07-06 10:04:36 $
+#   last change: $Author: rt $ $Date: 2007-07-26 08:45:24 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -76,7 +76,6 @@ LIB1OBJFILES=  \
     $(SLO)$/optionsdrawinglayer.obj		\
     $(SLO)$/fontoptions.obj				\
     $(SLO)$/addxmltostorageoptions.obj	\
-    $(SLO)$/miscopt.obj					\
     $(SLO)$/defaultoptions.obj			\
     $(SLO)$/searchopt.obj				\
     $(SLO)$/printwarningoptions.obj		\
@@ -91,6 +90,7 @@ LIB1OBJFILES=  \
     $(SLO)$/itemholder1.obj \
     $(SLO)$/options.obj
 
+#	$(SLO)$/miscopt.obj					\
 # --- heavyconfig.lib Files --------------------------------------------------------
 LIB2TARGET= $(SLB)$/$(TARGET1).lib
 
@@ -109,7 +109,8 @@ LIB2OBJFILES=  \
     $(SLO)$/undoopt.obj                 \
     $(SLO)$/useroptions.obj      \
     $(SLO)$/syslocaleoptions.obj \
-    $(SLO)$/itemholder2.obj
+    $(SLO)$/itemholder2.obj \
+    $(SLO)$/miscopt.obj
 
 # --- Targets ------------------------------------------------------
 
