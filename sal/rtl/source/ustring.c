@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ustring.c,v $
  *
- *  $Revision: 1.28 $
+ *  $Revision: 1.29 $
  *
- *  last change: $Author: hr $ $Date: 2007-06-27 13:25:42 $
+ *  last change: $Author: rt $ $Date: 2007-07-26 09:06:39 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -61,6 +61,7 @@
 
 #include "hash.h"
 #include "strimp.h"
+#include "surrogates.h"
 
 #ifndef _RTL_USTRING_H_
 #include <rtl/ustring.h>
@@ -479,6 +480,56 @@ void SAL_CALL rtl_uString_newFromAscii( rtl_uString** ppThis,
     }
 }
 
+void SAL_CALL rtl_uString_newFromCodePoints(
+    rtl_uString ** newString, sal_uInt32 const * codePoints,
+    sal_Int32 codePointCount)
+{
+    sal_Int32 n;
+    sal_Int32 i;
+    sal_Unicode * p;
+    OSL_ASSERT(
+        newString != NULL &&
+        (codePoints != NULL || codePointCount == 0) &&
+        codePointCount >= 0);
+    if (codePointCount == 0) {
+        rtl_uString_new(newString);
+        return;
+    }
+    if (*newString != NULL) {
+        rtl_uString_release(*newString);
+    }
+    n = codePointCount;
+    for (i = 0; i < codePointCount; ++i) {
+        OSL_ASSERT(codePoints[i] <= 0x10FFFF);
+        if (codePoints[i] >= 0x10000) {
+            ++n;
+        }
+    }
+    /* Builds on the assumption that sal_Int32 uses 32 bit two's complement
+       representation with wrap around (the necessary number of UTF-16 code
+       units will be no larger than 2 * SAL_MAX_INT32, represented as
+       sal_Int32 -2): */
+    if (n < 0) {
+        *newString = NULL;
+        return;
+    }
+    *newString = rtl_uString_ImplAlloc(n);
+    if (*newString == NULL) {
+        return;
+    }
+    p = (*newString)->buffer;
+    for (i = 0; i < codePointCount; ++i) {
+        sal_uInt32 c = codePoints[i];
+        if (c < 0x10000) {
+            *p++ = (sal_Unicode) c;
+        } else {
+            c -= 0x10000;
+            *p++ = (sal_Unicode) ((c >> 10) | SAL_RTL_FIRST_HIGH_SURROGATE);
+            *p++ = (sal_Unicode) ((c & 0x3FF) | SAL_RTL_FIRST_LOW_SURROGATE);
+        }
+    }
+}
+
 /* ======================================================================= */
 
 static int rtl_ImplGetFastUTF8UnicodeLen( const sal_Char* pStr, sal_Int32 nLen )
@@ -831,4 +882,48 @@ internRelease (rtl_uString *pThis)
     }
     if (pFree)
         rtl_freeMemory (pFree);
+}
+
+sal_uInt32 SAL_CALL rtl_uString_iterateCodePoints(
+    rtl_uString const * string, sal_Int32 * indexUtf16,
+    sal_Int32 incrementCodePoints)
+{
+    sal_Int32 n;
+    sal_Unicode cu;
+    sal_uInt32 cp;
+    OSL_ASSERT(string != NULL && indexUtf16 != NULL);
+    n = *indexUtf16;
+    OSL_ASSERT(n >= 0 && n <= string->length);
+    while (incrementCodePoints < 0) {
+        OSL_ASSERT(n > 0);
+        cu = string->buffer[--n];
+        if (SAL_RTL_IS_LOW_SURROGATE(cu) && n != 0 &&
+            SAL_RTL_IS_HIGH_SURROGATE(string->buffer[n - 1]))
+        {
+            --n;
+        }
+        ++incrementCodePoints;
+    }
+    OSL_ASSERT(n >= 0 && n < string->length);
+    cu = string->buffer[n];
+    if (SAL_RTL_IS_HIGH_SURROGATE(cu) && string->length - n >= 2 &&
+        SAL_RTL_IS_LOW_SURROGATE(string->buffer[n + 1]))
+    {
+        cp = SAL_RTL_COMBINE_SURROGATES(cu, string->buffer[n + 1]);
+    } else {
+        cp = cu;
+    }
+    while (incrementCodePoints > 0) {
+        OSL_ASSERT(n < string->length);
+        cu = string->buffer[n++];
+        if (SAL_RTL_IS_HIGH_SURROGATE(cu) && n != string->length &&
+            SAL_RTL_IS_LOW_SURROGATE(string->buffer[n]))
+        {
+            ++n;
+        }
+        --incrementCodePoints;
+    }
+    OSL_ASSERT(n >= 0 && n <= string->length);
+    *indexUtf16 = n;
+    return cp;
 }
