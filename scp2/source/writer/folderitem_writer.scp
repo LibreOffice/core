@@ -4,9 +4,9 @@
  *
  *  $RCSfile: folderitem_writer.scp,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 01:49:01 $
+ *  last change: $Author: rt $ $Date: 2007-07-26 08:52:01 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -44,6 +44,6 @@ FolderItem gid_Folderitem_Swriter
     IconID = 0;
     WkDir = gid_Dir_Program;
     Parameter = "";
-    Styles = (NOWEB);
+    Styles = (NOWEB, NON_ADVERTISED);
     ALL_LANG(Tooltip, STR_FI_TOOLTIP_WRITER);
 End
