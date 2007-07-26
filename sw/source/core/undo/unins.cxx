@@ -4,9 +4,9 @@
  *
  *  $RCSfile: unins.cxx,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: obo $ $Date: 2007-07-18 14:28:52 $
+ *  last change: $Author: rt $ $Date: 2007-07-26 08:20:32 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -713,7 +713,7 @@ _UnReplaceData::_UnReplaceData( const SwPaM& rPam, const String& rIns,
     if( bSplitNext )
     {
         if( pNd->HasSwAttrSet() )
-            pHistory->CopyFmtAttr( *pNd->GetpSwAttrSet(), nNewPos );
+            pHistory->CopyFmtAttr( *pNd->GetpSwAttrSet(), nNewPos, *(pNd->GetDoc()) );
         pHistory->Add( pNd->GetTxtColl(), nNewPos, ND_TEXTNODE );
 
         SwTxtNode* pNext = pEnd->nNode.GetNode().GetTxtNode();
@@ -721,7 +721,7 @@ _UnReplaceData::_UnReplaceData( const SwPaM& rPam, const String& rIns,
         pHistory->CopyAttr( pNext->GetpSwpHints(), nTmp, 0,
                             pNext->GetTxt().Len(), TRUE );
         if( pNext->HasSwAttrSet() )
-            pHistory->CopyFmtAttr( *pNext->GetpSwAttrSet(), nTmp );
+            pHistory->CopyFmtAttr( *pNext->GetpSwAttrSet(), nTmp, *(pNext->GetDoc()) );
         pHistory->Add( pNext->GetTxtColl(),nTmp, ND_TEXTNODE );
     }
 
