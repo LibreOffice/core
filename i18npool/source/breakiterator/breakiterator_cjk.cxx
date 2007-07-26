@@ -4,9 +4,9 @@
  *
  *  $RCSfile: breakiterator_cjk.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: ihi $ $Date: 2007-06-06 12:17:12 $
+ *  last change: $Author: rt $ $Date: 2007-07-26 09:08:14 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -60,7 +60,7 @@ BreakIterator_CJK::previousWord(const OUString& text, sal_Int32 anyPos,
         const lang::Locale& nLocale, sal_Int16 wordType) throw(RuntimeException)
 {
         if (dict) {
-            result = dict->previousWord(text.getStr(), anyPos, text.getLength(), wordType);
+            result = dict->previousWord(text, anyPos, wordType);
             // #109813# for non-CJK, single character word, fallback to ICU breakiterator.
             if (result.endPos - result.startPos != 1 ||
                     getScriptType(text, result.startPos) == ScriptType::ASIAN)
@@ -77,7 +77,7 @@ BreakIterator_CJK::nextWord(const OUString& text, sal_Int32 anyPos,
         const lang::Locale& nLocale, sal_Int16 wordType) throw(RuntimeException)
 {
         if (dict) {
-            result = dict->nextWord(text.getStr(), anyPos, text.getLength(), wordType);
+            result = dict->nextWord(text, anyPos, wordType);
             // #109813# for non-CJK, single character word, fallback to ICU breakiterator.
             if (result.endPos - result.startPos != 1 ||
                     getScriptType(text, result.startPos) == ScriptType::ASIAN)
@@ -95,7 +95,7 @@ BreakIterator_CJK::getWordBoundary( const OUString& text, sal_Int32 anyPos,
         throw(RuntimeException)
 {
         if (dict) {
-            result = dict->getWordBoundary(text.getStr(), anyPos, text.getLength(), wordType, bDirection);
+            result = dict->getWordBoundary(text, anyPos, wordType, bDirection);
             // #109813# for non-CJK, single character word, fallback to ICU breakiterator.
             if (result.endPos - result.startPos != 1 ||
                     getScriptType(text, result.startPos) == ScriptType::ASIAN)
