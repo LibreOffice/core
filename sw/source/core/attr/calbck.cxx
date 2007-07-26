@@ -4,9 +4,9 @@
  *
  *  $RCSfile: calbck.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 20:39:20 $
+ *  last change: $Author: rt $ $Date: 2007-07-26 08:17:56 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -51,6 +51,10 @@
 #endif
 #ifndef _SWFNTCCH_HXX
 #include <swfntcch.hxx>
+#endif
+
+#ifndef PRODUCT
+#include <unotextmarkup.hxx>
 #endif
 
 static SwClientIter* pClientIters = 0;
@@ -249,7 +253,8 @@ void SwModify::Modify( SfxPoolItem* pOldValue, SfxPoolItem* pNewValue )
     SwClientIter aIter( *this );
     SwClient * pLast = aIter.GoStart();
     if( pLast )     // konnte zum Anfang gesprungen werden ??
-        do {
+        do
+        {
             pLast->Modify( pOldValue, pNewValue );
             if( !pRoot )    // Baum schon Weg ??
                 break;
@@ -341,7 +346,8 @@ void SwModify::Add(SwClient *pDepend)
 
 SwClient *SwModify::_Remove(SwClient * pDepend)
 {
-    ASSERT( !bInModify, "Client innerhalb des eigenen Modifies loeschen?" );
+    // FME 2007-07-16 #i79641# SwXTextMarkup is allowed to be removed ...
+    ASSERT( !bInModify || 0 != dynamic_cast<SwXTextMarkup*>(pDepend), "Client innerhalb des eigenen Modifies loeschen?" );
 
     // loesche das Object aus der Liste und setze den
     // Registrierungs-Pointer zurueck
