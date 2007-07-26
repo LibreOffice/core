@@ -4,9 +4,9 @@
  *
  *  $RCSfile: cclass_unicode_parser.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 09:16:07 $
+ *  last change: $Author: rt $ $Date: 2007-07-26 09:09:15 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -37,7 +37,7 @@
 #include "precompiled_i18npool.hxx"
 
 #include <cclass_unicode.hxx>
-#include <i18nutil/unicode.hxx>
+#include <unicode/uchar.h>
 
 #ifndef INCLUDED_RTL_MATH_HXX
 #include <rtl/math.hxx>
@@ -389,27 +389,27 @@ sal_Int32 cclass_Unicode::getParseTokensType( const sal_Unicode* aStr, sal_Int32
     {
 
         //! all KParseTokens::UNI_... must be matched
-        switch ( unicode::getUnicodeType( c ) )
+        switch ( u_charType( (sal_uInt32) c ) )
         {
-            case UnicodeType::UPPERCASE_LETTER :
+            case U_UPPERCASE_LETTER :
                 return KParseTokens::UNI_UPALPHA;
-            case UnicodeType::LOWERCASE_LETTER :
+            case U_LOWERCASE_LETTER :
                 return KParseTokens::UNI_LOALPHA;
-            case UnicodeType::TITLECASE_LETTER :
+            case U_TITLECASE_LETTER :
                 return KParseTokens::UNI_TITLE_ALPHA;
-            case UnicodeType::MODIFIER_LETTER :
+            case U_MODIFIER_LETTER :
                 return KParseTokens::UNI_MODIFIER_LETTER;
-            case UnicodeType::OTHER_LETTER :
+            case U_OTHER_LETTER :
                 // Non_Spacing_Mark could not be as leading character
                 if (nPos == 0) break;
                 // fall through, treat it as Other_Letter.
-            case UnicodeType::NON_SPACING_MARK :
+            case U_NON_SPACING_MARK :
                 return KParseTokens::UNI_OTHER_LETTER;
-            case UnicodeType::DECIMAL_DIGIT_NUMBER :
+            case U_DECIMAL_DIGIT_NUMBER :
                 return KParseTokens::UNI_DIGIT;
-            case UnicodeType::LETTER_NUMBER :
+            case U_LETTER_NUMBER :
                 return KParseTokens::UNI_LETTER_NUMBER;
-            case UnicodeType::OTHER_NUMBER :
+            case U_OTHER_NUMBER :
                 return KParseTokens::UNI_OTHER_NUMBER;
         }
 
@@ -658,48 +658,48 @@ UPT_FLAG_TYPE cclass_Unicode::getFlagsExtended( const sal_Unicode* aStr, sal_Int
     sal_Int32 nTypes = (bStart ? nStartTypes : nContTypes);
 
     //! all KParseTokens::UNI_... must be matched
-    switch ( unicode::getUnicodeType( c ) )
+    switch ( u_charType( (sal_uInt32) c ) )
     {
-        case UnicodeType::UPPERCASE_LETTER :
+        case U_UPPERCASE_LETTER :
             return (nTypes & KParseTokens::UNI_UPALPHA) ?
                 (bStart ? TOKEN_CHAR_WORD : TOKEN_WORD) :
                 TOKEN_ILLEGAL;
-        case UnicodeType::LOWERCASE_LETTER :
+        case U_LOWERCASE_LETTER :
             return (nTypes & KParseTokens::UNI_LOALPHA) ?
                 (bStart ? TOKEN_CHAR_WORD : TOKEN_WORD) :
                 TOKEN_ILLEGAL;
-        case UnicodeType::TITLECASE_LETTER :
+        case U_TITLECASE_LETTER :
             return (nTypes & KParseTokens::UNI_TITLE_ALPHA) ?
                 (bStart ? TOKEN_CHAR_WORD : TOKEN_WORD) :
                 TOKEN_ILLEGAL;
-        case UnicodeType::MODIFIER_LETTER :
+        case U_MODIFIER_LETTER :
             return (nTypes & KParseTokens::UNI_MODIFIER_LETTER) ?
                 (bStart ? TOKEN_CHAR_WORD : TOKEN_WORD) :
                 TOKEN_ILLEGAL;
-        case UnicodeType::NON_SPACING_MARK :
-        case UnicodeType::COMBINING_SPACING_MARK :
+        case U_NON_SPACING_MARK :
+        case U_COMBINING_SPACING_MARK :
             // Non_Spacing_Mark can't be a leading character,
             // nor can a spacing combining mark.
             if (bStart)
                 return TOKEN_ILLEGAL;
             // fall through, treat it as Other_Letter.
-        case UnicodeType::OTHER_LETTER :
+        case U_OTHER_LETTER :
             return (nTypes & KParseTokens::UNI_OTHER_LETTER) ?
                 (bStart ? TOKEN_CHAR_WORD : TOKEN_WORD) :
                 TOKEN_ILLEGAL;
-        case UnicodeType::DECIMAL_DIGIT_NUMBER :
+        case U_DECIMAL_DIGIT_NUMBER :
             return ((nTypes & KParseTokens::UNI_DIGIT) ?
                 (bStart ? TOKEN_CHAR_WORD : TOKEN_WORD) :
                 TOKEN_ILLEGAL) | TOKEN_DIGIT_FLAGS;
-        case UnicodeType::LETTER_NUMBER :
+        case U_LETTER_NUMBER :
             return ((nTypes & KParseTokens::UNI_LETTER_NUMBER) ?
                 (bStart ? TOKEN_CHAR_WORD : TOKEN_WORD) :
                 TOKEN_ILLEGAL) | TOKEN_DIGIT_FLAGS;
-        case UnicodeType::OTHER_NUMBER :
+        case U_OTHER_NUMBER :
             return ((nTypes & KParseTokens::UNI_OTHER_NUMBER) ?
                 (bStart ? TOKEN_CHAR_WORD : TOKEN_WORD) :
                 TOKEN_ILLEGAL) | TOKEN_DIGIT_FLAGS;
-        case UnicodeType::SPACE_SEPARATOR :
+        case U_SPACE_SEPARATOR :
             return ((nTypes & KParseTokens::IGNORE_LEADING_WS) ?
                 TOKEN_CHAR_DONTCARE : (bStart ? TOKEN_CHAR_WORD : (TOKEN_CHAR_DONTCARE | TOKEN_WORD_SEP | TOKEN_VALUE_SEP) ));
     }
