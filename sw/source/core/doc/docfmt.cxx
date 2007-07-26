@@ -4,9 +4,9 @@
  *
  *  $RCSfile: docfmt.cxx,v $
  *
- *  $Revision: 1.44 $
+ *  $Revision: 1.45 $
  *
- *  last change: $Author: rt $ $Date: 2007-04-25 09:00:59 $
+ *  last change: $Author: rt $ $Date: 2007-07-26 08:18:22 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -2395,24 +2395,33 @@ void SwDoc::ChgFmt(SwFmt & rFmt, const SfxItemSet & rSet)
 {
     if (DoesUndo())
     {
+        // copying <rSet> to <aSet>
         SfxItemSet aSet(rSet);
-
+        // remove from <aSet> all items, which are already set at the format
         aSet.Differentiate(rFmt.GetAttrSet());
+        // <aSet> contains now all *new* items for the format
 
+        // copying current format item set to <aOldSet>
         SfxItemSet aOldSet(rFmt.GetAttrSet());
+        // insert new items into <aOldSet>
         aOldSet.Put(aSet);
-
-        SfxItemIter aIter(aSet);
-
-        const SfxPoolItem * pItem = aIter.FirstItem();
-        while (pItem != NULL)
+        // invalidate all new items in <aOldSet> in order to clear these items,
+        // if the undo action is triggered.
         {
-            aOldSet.InvalidateItem(pItem->Which());
+            SfxItemIter aIter(aSet);
 
-            pItem = aIter.NextItem();
+            const SfxPoolItem * pItem = aIter.FirstItem();
+            while (pItem != NULL)
+            {
+                aOldSet.InvalidateItem(pItem->Which());
+
+                pItem = aIter.NextItem();
+            }
         }
 
-        SwUndo * pUndo = new SwUndoFmtAttr(aOldSet, rFmt);
+        // --> OD 2007-07-11 #i56253#
+        SwUndo * pUndo = new SwUndoFmtAttr(aOldSet, rSet, rFmt);
+        // <--
 
         AppendUndo(pUndo);
     }
