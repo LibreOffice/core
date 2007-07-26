@@ -4,9 +4,9 @@
  *
  *  $RCSfile: basesh.cxx,v $
  *
- *  $Revision: 1.81 $
+ *  $Revision: 1.82 $
  *
- *  last change: $Author: kz $ $Date: 2007-05-10 16:22:02 $
+ *  last change: $Author: rt $ $Date: 2007-07-26 08:22:26 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1684,11 +1684,22 @@ void SwBaseShell::GetState( SfxItemSet &rSet )
                     {
                         if( AddGrfUpdateSlot( nWhich ))
                             rSh.GetGraphic(FALSE);  // start the loading
+                        // --> OD 2007-07-04 #i75481#
+                        bDisable = TRUE;
+                        // <--
                     }
                     else if( bHas && bOk )
                         bDisable = !lcl_UpdateContourDlg( rSh, nSel );
                     else if( bOk )
-                        bDisable = GRAPHIC_NONE == rSh.GetGraphicType();
+                    {
+                        // --> OD 2007-07-04 #i75481#
+                        // apply fix #i59688# only for selected graphics
+                        if ( nSel & SwWrtShell::SEL_GRF )
+                            bDisable = GRAPHIC_NONE == rSh.GetGraphicType();
+                        else
+                            bDisable = GRAPHIC_NONE == rSh.GetIMapGraphic().GetType();
+                        // <--
+                    }
                     // <--
 
                     if( bDisable )
