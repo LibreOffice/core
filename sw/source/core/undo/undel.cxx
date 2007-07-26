@@ -4,9 +4,9 @@
  *
  *  $RCSfile: undel.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: vg $ $Date: 2007-05-25 13:01:43 $
+ *  last change: $Author: rt $ $Date: 2007-07-26 08:20:20 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -420,7 +420,7 @@ BOOL SwUndoDelete::SaveCntnt( const SwPosition* pStt, const SwPosition* pEnd,
         pHistory->CopyAttr( pSttTxtNd->GetpSwpHints(), nNdIdx,
                             0, pSttTxtNd->GetTxt().Len(), TRUE );
         if( !bOneNode && pSttTxtNd->HasSwAttrSet() )
-                pHistory->CopyFmtAttr( *pSttTxtNd->GetpSwAttrSet(), nNdIdx );
+                pHistory->CopyFmtAttr( *pSttTxtNd->GetpSwAttrSet(), nNdIdx, *(pSttTxtNd->GetDoc()) );
 
         // die Laenge kann sich veraendert haben (!!Felder!!)
         nLen = ( bOneNode ? pEnd->nContent.GetIndex() : pSttTxtNd->GetTxt().Len() )
@@ -452,7 +452,7 @@ BOOL SwUndoDelete::SaveCntnt( const SwPosition* pStt, const SwPosition* pEnd,
                             pEndTxtNd->GetTxt().Len(), TRUE );
 
         if( pEndTxtNd->HasSwAttrSet() )
-            pHistory->CopyFmtAttr( *pEndTxtNd->GetpSwAttrSet(), nNdIdx );
+            pHistory->CopyFmtAttr( *pEndTxtNd->GetpSwAttrSet(), nNdIdx, *(pEndTxtNd->GetDoc()) );
 
         // loesche jetzt noch den Text (alle Attribut-Aenderungen kommen in
         // die Undo-History
