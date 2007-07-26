@@ -559,6 +559,8 @@ UDK_3.6 { # OOo 2.3
         rtl_uString_internConvert;
         rtl_ustr_indexOfAscii_WithLength;
         rtl_ustr_lastIndexOfAscii_WithLength;
+        rtl_uString_iterateCodePoints;
+        rtl_uString_newFromCodePoints;
 } UDK_3.5;
 
 PRIVATE_1.0 {
