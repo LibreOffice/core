@@ -4,9 +4,9 @@
  *
  *  $RCSfile: DataSeriesPointWrapper.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: rt $ $Date: 2007-07-25 08:26:45 $
+ *  last change: $Author: rt $ $Date: 2007-07-26 08:06:45 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -481,7 +481,7 @@ void WrappedLineStyleProperty::setPropertyToDefault( const Reference< beans::XPr
 Any WrappedLineStyleProperty::getPropertyDefault( const Reference< beans::XPropertyState >& xInnerPropertyState ) const
                         throw (beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException)
 {
-    if( m_pDataSeriesPointWrapper && !m_pDataSeriesPointWrapper->isSupportingAreaProperties() )
+    if( m_pDataSeriesPointWrapper && m_pDataSeriesPointWrapper->isLinesForbidden() )
         return m_aDefaultValue;
     else
         return WrappedSeriesAreaOrLineProperty::getPropertyDefault( xInnerPropertyState );
@@ -490,7 +490,7 @@ Any WrappedLineStyleProperty::getPropertyDefault( const Reference< beans::XPrope
 beans::PropertyState WrappedLineStyleProperty::getPropertyState( const Reference< beans::XPropertyState >& xInnerPropertyState ) const
                         throw (beans::UnknownPropertyException, uno::RuntimeException)
 {
-    if( m_pDataSeriesPointWrapper && !m_pDataSeriesPointWrapper->isSupportingAreaProperties() )
+    if( m_pDataSeriesPointWrapper && m_pDataSeriesPointWrapper->isLinesForbidden() )
     {
         beans::PropertyState aState = beans::PropertyState_DIRECT_VALUE;
         if( m_aOuterValue == m_aDefaultValue )
