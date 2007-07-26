@@ -4,9 +4,9 @@
  *
  *  $RCSfile: indexentrysupplier_common.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 09:18:42 $
+ *  last change: $Author: rt $ $Date: 2007-07-26 09:09:50 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -92,7 +92,9 @@ sal_Bool SAL_CALL IndexEntrySupplier_Common::loadAlgorithm( const lang::Locale& 
 OUString SAL_CALL IndexEntrySupplier_Common::getIndexKey( const OUString& rIndexEntry,
     const OUString&, const lang::Locale& ) throw (RuntimeException)
 {
-    return rIndexEntry.copy(0, 1);
+    sal_Int32 nPos=0;
+    sal_uInt32 indexChar=rIndexEntry.iterateCodePoints(&nPos, 0);
+    return OUString(&indexChar, 1);
 }
 
 sal_Int16 SAL_CALL IndexEntrySupplier_Common::compareIndexEntry(
@@ -106,9 +108,9 @@ sal_Int16 SAL_CALL IndexEntrySupplier_Common::compareIndexEntry(
 }
 
 OUString SAL_CALL IndexEntrySupplier_Common::getIndexCharacter( const OUString& rIndexEntry,
-    const lang::Locale&, const OUString& ) throw (RuntimeException)
+    const lang::Locale& rLocale, const OUString& ) throw (RuntimeException)
 {
-    return rIndexEntry.copy(0, 1);
+    return getIndexKey(rIndexEntry, rIndexEntry, rLocale);
 }
 
 OUString SAL_CALL IndexEntrySupplier_Common::getIndexFollowPageWord( sal_Bool,
