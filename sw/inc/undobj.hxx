@@ -4,9 +4,9 @@
  *
  *  $RCSfile: undobj.hxx,v $
  *
- *  $Revision: 1.34 $
+ *  $Revision: 1.35 $
  *
- *  last change: $Author: obo $ $Date: 2007-07-18 14:32:17 $
+ *  last change: $Author: rt $ $Date: 2007-07-26 08:17:43 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -607,6 +607,9 @@ public:
     OUT_UNDOBJ( ResetAttr )
 };
 
+// --> OD 2007-07-11 #i56253#
+struct TxtNodeNumberingAttrs;
+// <--
 
 class SwUndoFmtAttr : public SwUndo
 {
@@ -614,8 +617,11 @@ class SwUndoFmtAttr : public SwUndo
     SwFmt* pFmt;
     SfxItemSet* pOldSet;            // die alten Attribute
     ULONG nNode;
-    USHORT nFmtWhich;
-    BOOL bSaveDrawPt;
+    const USHORT nFmtWhich;
+    const BOOL bSaveDrawPt;
+    // --> OD 2007-07-11 #i56253#
+    ::std::vector<TxtNodeNumberingAttrs>* mpNumAttrsOfTxtNodes;
+    // <--
 
     int IsFmtInDoc( SwDoc* );       // ist das Attribut-Format noch im Doc ?
     void SaveFlyAnchor( BOOL bSaveDrawPt = FALSE );
@@ -629,14 +635,27 @@ class SwUndoFmtAttr : public SwUndo
     //          This situation occurs for undo of styles.
     bool RestoreFlyAnchor( SwUndoIter& rIter );
     // <--
-    void Init();
+    // --> OD 2007-07-11 #i56253#
+    // add parameter <rAffectedItemSet>
+    void Init( const SfxItemSet& rAffectedItems );
+    // <--
+
+    // --> OD 2007-07-11 #i56253#
+    ::std::vector<TxtNodeNumberingAttrs>* GetActualNumAttrsOfTxtNodes( const SfxItemSet* pAffectedItems = 0 );
+    // <--
 
 public:
     // meldet sich im Format an und sichert sich die alten Attribute
-    SwUndoFmtAttr( const SfxItemSet& rOldSet, SwFmt& rFmt,
-                    BOOL bSaveDrawPt = TRUE );
-    SwUndoFmtAttr( const SfxPoolItem& rItem, SwFmt& rFmt,
-                    BOOL bSaveDrawPt = TRUE );
+    // --> OD 2007-07-11 #i56253#
+    // add new 2nd parameter <rNewSet>
+    SwUndoFmtAttr( const SfxItemSet& rOldSet,
+                   const SfxItemSet& rNewSet,
+                   SwFmt& rFmt,
+                   BOOL bSaveDrawPt = TRUE );
+    // <--
+    SwUndoFmtAttr( const SfxPoolItem& rItem,
+                   SwFmt& rFmt,
+                   BOOL bSaveDrawPt = TRUE );
     virtual ~SwUndoFmtAttr();
     virtual void Undo( SwUndoIter& );
     // --> OD 2004-10-26 #i35443# - <Redo(..)> calls <Undo(..)> - nothing else
