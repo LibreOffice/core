@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ndtxt.cxx,v $
  *
- *  $Revision: 1.71 $
+ *  $Revision: 1.72 $
  *
- *  last change: $Author: hr $ $Date: 2007-06-27 13:21:21 $
+ *  last change: $Author: rt $ $Date: 2007-07-26 08:19:40 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -507,28 +507,36 @@ SwCntntNode *SwTxtNode::SplitNode( const SwPosition &rPos )
     // at the newly created text node, if needed.
     const int nLevel( GetLevel() );
     // <--
+    // --> OD 2007-07-09 #i77372# - complete fixes i55459 and i64660
+    // keep all numbering attributes before calling <_MakeNewTxtNode>
+    const SwNumRule* pRule( GetNumRule() );
+    const bool bIsRestart( IsRestart() );
+    const SwNodeNum::tSwNumTreeNumber nRestartVal( GetStart() );
+    // <--
 
     SwTxtNode* pNode = _MakeNewTxtNode( rPos.nNode, FALSE, nSplitPos==nTxtLen );
 
-    // --> OD 2005-10-19 #126009#
-    // improvement: first set level of new node
-    if ( GetNumRule() != NULL && GetNumRule() == pNode->GetNumRule() )
+    // --> OD 2007-07-09 #i77372# - restore all numbering attributes at new text node
+    if ( pRule != NULL && pRule == pNode->GetNumRule() )
     {
-        // --> OD 2006-04-26 #i64660#
         pNode->SetLevel( nLevel );
-        // <--
+        pNode->SetRestart( bIsRestart );
+        pNode->SetStart( nRestartVal );
+        pNode->SetCounted( bIsCounted );
     }
     // <--
-    pNode->SetRestart(IsRestart());
-    pNode->SetStart(GetStart());
-    // --> OD 2005-10-17 #i55459#
-    pNode->SetCounted(bIsCounted);
-    // <--
+
     //pNode->SetOutlineLevel(GetOutlineLevel());
 
-    SetRestart(false);
-    SetStart(1);
-    SetCounted(true);
+    // --> OD 2007-07-09 #i77372#
+    // reset numbering attribute at current node, only if it is numbered.
+    if ( GetNumRule() != NULL )
+    {
+        SetRestart(false);
+        SetStart(1);
+        SetCounted(true);
+    }
+    // <--
 
     if( GetDepends() && aText.Len() && (nTxtLen / 2) < nSplitPos )
     {
@@ -2469,6 +2477,9 @@ SwTxtNode* SwTxtNode::_MakeNewTxtNode( const SwNodeIndex& rPos, BOOL bNext,
 {
     /* hartes PageBreak/PageDesc/ColumnBreak aus AUTO-Set ignorieren */
     SwAttrSet* pNewAttrSet = 0;
+    // --> OD 2007-07-10 #i75353#
+    bool bClearHardSetNumRuleWhenFmtCollChanges( false );
+    // <--
     if( HasSwAttrSet() )
     {
         pNewAttrSet = new SwAttrSet( *GetpSwAttrSet() );
@@ -2518,7 +2529,14 @@ SwTxtNode* SwTxtNode::_MakeNewTxtNode( const SwNodeIndex& rPos, BOOL bNext,
                 if ( bNext )
                     pNewAttrSet->ClearItem(RES_PARATR_NUMRULE);
                 else
-                    aClearWhichIds.push_back( RES_PARATR_NUMRULE );
+                {
+                    // --> OD 2007-07-10 #i75353#
+                    // No clear of hard set numbering rule at an outline paragraph at this point.
+                    // Only if the paragraph style changes - see below.
+//                    aClearWhichIds.push_back( RES_PARATR_NUMRULE );
+                    bClearHardSetNumRuleWhenFmtCollChanges = true;
+                    // <--
+                }
                 bRemoveFromCache = TRUE;
             }
         }
@@ -2578,8 +2596,20 @@ SwTxtNode* SwTxtNode::_MakeNewTxtNode( const SwNodeIndex& rPos, BOOL bNext,
             SetLevel(nLevel);
             //SetOutlineLevel(nLevel);
         }
-
         /* <- HB #i47372# */
+
+        // --> OD 2007-07-10 #i75353#
+        if ( bClearHardSetNumRuleWhenFmtCollChanges )
+        {
+            std::vector<USHORT> aClearWhichIds;
+            aClearWhichIds.push_back( RES_PARATR_NUMRULE );
+            if ( ClearItemsFromAttrSet( aClearWhichIds ) != 0 && IsInCache() )
+            {
+                SwFrm::GetCache().Delete( this );
+                SetInCache( FALSE );
+            }
+        }
+        // <--
     }
 
     return pNode;
