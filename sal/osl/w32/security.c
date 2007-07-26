@@ -4,9 +4,9 @@
  *
  *  $RCSfile: security.c,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 15:11:10 $
+ *  last change: $Author: rt $ $Date: 2007-07-26 08:50:26 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -81,6 +81,11 @@ typedef BOOL (STDMETHODCALLTYPE FAR * LPFNGETUSERPROFILEDIR) (
   LPDWORD lpcchSize
 );
 
+/* To get an impersonation token we need to create an impersonation
+   duplicate so every access token has to be created with duplicate
+   access rights */
+
+#define TOKEN_DUP_QUERY (TOKEN_QUERY|TOKEN_DUPLICATE)
 
 /*****************************************************************************/
 /* Static Module Function Declarations */
@@ -221,6 +226,7 @@ oslSecurityError SAL_CALL osl_loginUserOnFileServer(rtl_uString *strUserName,
     return ret;
 }
 
+
 sal_Bool SAL_CALL osl_isAdministrator(oslSecurity Security)
 {
     if (Security != NULL)
@@ -232,42 +238,46 @@ sal_Bool SAL_CALL osl_isAdministrator(oslSecurity Security)
         }
         else
         {
-            HANDLE                      hAccessToken = ((oslSecurityImpl*)Security)->m_hToken;
-            UCHAR                       InfoBuffer[1024];
-            PTOKEN_GROUPS               ptgGroups = (PTOKEN_GROUPS)InfoBuffer;
-            DWORD                       dwInfoBufferSize;
+            HANDLE                      hImpersonationToken = NULL;
             PSID                        psidAdministrators;
             SID_IDENTIFIER_AUTHORITY    siaNtAuthority = SECURITY_NT_AUTHORITY;
-            UINT                        x;
             sal_Bool                    bSuccess = sal_False;
 
 
-            if (hAccessToken == NULL)
-                OpenProcessToken(GetCurrentProcess(), TOKEN_QUERY, &hAccessToken);
+            /* If Security contains an access token we need to duplicate it to an impersonation
+               access token. NULL works with CheckTokenMembership() as the current effective
+               impersonation token
+             */
 
-            if (GetTokenInformation(hAccessToken, TokenGroups,
-                                     InfoBuffer, 1024,
-                                      &dwInfoBufferSize))
+            if ( ((oslSecurityImpl*)Security)->m_hToken )
             {
-                if (AllocateAndInitializeSid(&siaNtAuthority,
-                                             2,
-                                              SECURITY_BUILTIN_DOMAIN_RID,
-                                              DOMAIN_ALIAS_RID_ADMINS,
-                                              0, 0, 0, 0, 0, 0,
-                                              &psidAdministrators))
-                {
-                    for (x = 0; (!bSuccess) && (x < ptgGroups->GroupCount); x++)
-                    {
-                        if (EqualSid(psidAdministrators, ptgGroups->Groups[x].Sid))
-                            bSuccess = sal_True;
-                    }
-
-                    FreeSid(psidAdministrators);
-                }
+                if ( !DuplicateToken (((oslSecurityImpl*)Security)->m_hToken, SecurityImpersonation, &hImpersonationToken) )
+                    return sal_False;
             }
 
-            if (((oslSecurityImpl*)Security)->m_hToken == NULL)
-                CloseHandle(hAccessToken);
+            /* CheckTokenMembership() can be used on W2K and higher (NT4 no longer supported by OOo)
+               and also works on Vista to retrieve the effective user rights. Just checking for
+               membership of Administrators group is not enough on Vista this would require additional
+               complicated checks as described in KB arcticle Q118626: http://support.microsoft.com/kb/118626/en-us
+            */
+
+            if (AllocateAndInitializeSid(&siaNtAuthority,
+                                         2,
+                                          SECURITY_BUILTIN_DOMAIN_RID,
+                                          DOMAIN_ALIAS_RID_ADMINS,
+                                          0, 0, 0, 0, 0, 0,
+                                          &psidAdministrators))
+            {
+                BOOL    fSuccess = FALSE;
+
+                if ( CheckTokenMembership( hImpersonationToken, psidAdministrators, &fSuccess ) && fSuccess )
+                    bSuccess = sal_True;
+
+                FreeSid(psidAdministrators);
+            }
+
+            if ( hImpersonationToken )
+                CloseHandle( hImpersonationToken );
 
             return (bSuccess);
         }
@@ -311,7 +321,7 @@ sal_Bool SAL_CALL osl_getUserIdent(oslSecurity Security, rtl_uString **strIdent)
         HANDLE hAccessToken = pSecImpl->m_hToken;
 
         if (hAccessToken == NULL)
-            OpenProcessToken(GetCurrentProcess(), TOKEN_QUERY, &hAccessToken);
+            OpenProcessToken(GetCurrentProcess(), TOKEN_DUP_QUERY, &hAccessToken);
 
         if (hAccessToken)
         {
@@ -834,7 +844,7 @@ static BOOL Privilege(LPTSTR strPrivilege, BOOL bEnable)
     /*
         obtain the processes token
     */
-    if (!OpenProcessToken(GetCurrentProcess(), TOKEN_ADJUST_PRIVILEGES | TOKEN_QUERY, &hToken))
+    if (!OpenProcessToken(GetCurrentProcess(), TOKEN_ADJUST_PRIVILEGES | TOKEN_DUP_QUERY, &hToken))
         return FALSE;
 
     /*
@@ -871,7 +881,7 @@ static sal_Bool SAL_CALL getUserNameImpl(oslSecurity Security, rtl_uString **str
         HANDLE hAccessToken = pSecImpl->m_hToken;
 
         if (hAccessToken == NULL)
-            OpenProcessToken(GetCurrentProcess(), TOKEN_QUERY, &hAccessToken);
+            OpenProcessToken(GetCurrentProcess(), TOKEN_DUP_QUERY, &hAccessToken);
 
         if (hAccessToken)
         {
