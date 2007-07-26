@@ -4,9 +4,9 @@
  *
  *  $RCSfile: miscopt.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: vg $ $Date: 2007-04-11 19:28:24 $
+ *  last change: $Author: rt $ $Date: 2007-07-26 08:41:43 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -39,8 +39,8 @@
 //  includes
 //_________________________________________________________________________________________________________________
 
-#ifndef INCLUDED_SVLDLLAPI_H
-#include "svtools/svldllapi.h"
+#ifndef INCLUDED_SVTDLLAPI_H
+#include "svtools/svtdllapi.h"
 #endif
 
 #ifndef _SAL_TYPES_H_
@@ -93,7 +93,7 @@ class Link;
     @devstatus      ready to use
 *//*-*************************************************************************************************************/
 
-class SVL_DLLPUBLIC SvtMiscOptions: public svt::detail::Options
+class SVT_DLLPUBLIC SvtMiscOptions: public svt::detail::Options
 {
     //-------------------------------------------------------------------------------------------------------------
     //  public methods
@@ -178,7 +178,7 @@ class SVL_DLLPUBLIC SvtMiscOptions: public svt::detail::Options
             @onerror    -
         *//*-*****************************************************************************************************/
 
-        SVL_DLLPRIVATE static ::osl::Mutex& GetInitMutex();
+        SVT_DLLPRIVATE static ::osl::Mutex& GetInitMutex();
 
     //-------------------------------------------------------------------------------------------------------------
     //  private member
