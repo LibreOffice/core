@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dp_manager.cxx,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: rt $ $Date: 2007-07-06 12:36:15 $
+ *  last change: $Author: rt $ $Date: 2007-07-26 08:54:34 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -236,8 +236,19 @@ Reference<deployment::XPackageManager> PackageManagerImpl::create(
                                       "USER_PACKAGES_CACHE/registry");
         logFile = OUSTR("vnd.sun.star.expand:$UNO_"
                         "USER_PACKAGES_CACHE/log.txt");
+        //We use the extension .sys for the file because on Windows Vista a sys
+        //(as well as exe and dll) file
+        //will not be written in the VirtualStore. For example if the process has no
+        //admin right once cannot write to the %programfiles% folder. However, when
+        //virtualization is used, the file will be written into the VirtualStore and
+        //it appears as if one could write to %programfiles%. When we test for write
+        //access to the office/shared folder for shared extensions then this typically
+        //fails because a normal user typically cannot write to this folder. However,
+        //using virtualization it appears that he/she can. Then a shared extension can
+        //be installed but is only visible for the user (because the extension is in
+        //the virtual store).
         stampURL = OUSTR("vnd.sun.star.expand:$UNO_"
-                         "USER_PACKAGES_CACHE/stamp");
+                         "USER_PACKAGES_CACHE/stamp.sys");
     }
     else if (context.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("shared") )) {
         that->m_activePackages = OUSTR("vnd.sun.star.expand:$UNO_"
@@ -246,8 +257,9 @@ Reference<deployment::XPackageManager> PackageManagerImpl::create(
                                       "SHARED_PACKAGES_CACHE/registry");
         logFile = OUSTR("vnd.sun.star.expand:$UNO_"
                         "SHARED_PACKAGES_CACHE/log.txt");
+        //See description for stampURL for user packages.
         stampURL = OUSTR("vnd.sun.star.expand:$UNO_"
-                         "SHARED_PACKAGES_CACHE/stamp");
+                         "SHARED_PACKAGES_CACHE/stamp.sys");
     }
     else if (! context.matchAsciiL(
                  RTL_CONSTASCII_STRINGPARAM("vnd.sun.star.tdoc:/") )) {
