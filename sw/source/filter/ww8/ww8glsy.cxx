@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ww8glsy.cxx,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 22:22:58 $
+ *  last change: $Author: rt $ $Date: 2007-07-26 08:22:12 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -167,13 +167,8 @@ bool WW8Glossary::MakeEntries(SwDoc *pD, SwTextBlocks &rBlocks,
                 rIdx++;
                 if( 0 == ( pCNd = rIdx.GetNode().GetTxtNode() ) )
                 {
-                    if( rIdx.GetNode().IsTableNode() )
-                        pCNd = pD->GetNodes().GoNext( &rIdx );
-                    else
-                    {
-                        pCNd = pD->GetNodes().MakeTxtNode( rIdx, pColl );
-                        rIdx = *pCNd;
-                    }
+                    pCNd = pD->GetNodes().MakeTxtNode( rIdx, pColl );
+                    rIdx = *pCNd;
                 }
             }
             aPam.GetPoint()->nContent.Assign( pCNd, 0 );
