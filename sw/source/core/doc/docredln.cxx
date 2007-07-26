@@ -4,9 +4,9 @@
  *
  *  $RCSfile: docredln.cxx,v $
  *
- *  $Revision: 1.44 $
+ *  $Revision: 1.45 $
  *
- *  last change: $Author: rt $ $Date: 2006-12-01 15:39:47 $
+ *  last change: $Author: rt $ $Date: 2007-07-26 08:19:01 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -210,6 +210,8 @@ void SwDoc::SetRedlineMode( IDocumentRedlineAccess::RedlineMode_t eMode )
         if( (IDocumentRedlineAccess::REDLINE_SHOW_MASK & eRedlineMode) != (IDocumentRedlineAccess::REDLINE_SHOW_MASK & eMode)
             || 0 == (IDocumentRedlineAccess::REDLINE_SHOW_MASK & eMode) )
         {
+            bool bSaveInXMLImportFlag = IsInXMLImport();
+            SetInXMLImport( false );
             // und dann alles verstecken, anzeigen
             void (SwRedline::*pFnc)( USHORT ) = 0;
 
@@ -238,6 +240,7 @@ void SwDoc::SetRedlineMode( IDocumentRedlineAccess::RedlineMode_t eMode )
                     for( USHORT i = 0; i < pRedlineTbl->Count(); ++i )
                         ((*pRedlineTbl)[ i ]->*pFnc)( nLoop );
             _CHECK_REDLINE( this )
+            SetInXMLImport( bSaveInXMLImportFlag );
         }
         eRedlineMode = eMode;
     }
