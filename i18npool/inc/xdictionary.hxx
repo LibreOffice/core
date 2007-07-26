@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xdictionary.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-07 16:59:59 $
+ *  last change: $Author: rt $ $Date: 2007-07-26 09:07:48 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -71,10 +71,9 @@ private:
 public:
     xdictionary(const sal_Char *lang);
     ~xdictionary();
-    Boundary SAL_CALL nextWord( const sal_Unicode *text, sal_Int32 nPos, sal_Int32 len, sal_Int16 wordType);
-    Boundary SAL_CALL previousWord( const sal_Unicode *text, sal_Int32 nPos, sal_Int32 len, sal_Int16 wordType);
-    Boundary SAL_CALL getWordBoundary( const sal_Unicode *text, sal_Int32 nPos, sal_Int32 len, sal_Int16 wordType,
-        sal_Bool bDirection );
+    Boundary SAL_CALL nextWord( const rtl::OUString& rText, sal_Int32 nPos, sal_Int16 wordType);
+    Boundary SAL_CALL previousWord( const rtl::OUString& rText, sal_Int32 nPos, sal_Int16 wordType);
+    Boundary SAL_CALL getWordBoundary( const rtl::OUString& rText, sal_Int32 nPos, sal_Int16 wordType, sal_Bool bDirection );
     void SAL_CALL setCellBoundary(sal_Int32* cellBondary);
     void SAL_CALL setJapaneseWordBreak();
 
