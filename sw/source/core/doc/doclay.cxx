@@ -4,9 +4,9 @@
  *
  *  $RCSfile: doclay.cxx,v $
  *
- *  $Revision: 1.49 $
+ *  $Revision: 1.50 $
  *
- *  last change: $Author: vg $ $Date: 2007-05-22 16:24:51 $
+ *  last change: $Author: rt $ $Date: 2007-07-26 08:18:35 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1118,7 +1118,11 @@ SwDrawFrmFmt* SwDoc::Insert( const SwPaM &rRg,
         pFmt->MakeFrms();
         // --> OD 2005-02-09 #i42319# - follow-up of #i35635#
         // move object to visible layer
-        pContact->MoveObjToVisibleLayer( &rDrawObj );
+        // --> OD 2007-07-10 #i79391#
+        if ( pContact->GetAnchorFrm() )
+        {
+            pContact->MoveObjToVisibleLayer( &rDrawObj );
+        }
         // <--
     }
 
