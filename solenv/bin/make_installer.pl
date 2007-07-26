@@ -4,9 +4,9 @@
 #
 #   $RCSfile: make_installer.pl,v $
 #
-#   $Revision: 1.91 $
+#   $Revision: 1.92 $
 #
-#   last change: $Author: obo $ $Date: 2007-07-19 07:16:05 $
+#   last change: $Author: rt $ $Date: 2007-07-26 08:47:55 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -482,6 +482,9 @@ if ( $installer::globals::iswindowsbuild )  # Windows specific items: Folder, Fo
 
     installer::setupscript::add_predefined_folder($folderitemsinproductarrayref, $folderinproductarrayref);
     if ( $installer::globals::globallogging ) { installer::files::save_array_of_hashes($loggingdir . "folder1b.log", $folderinproductarrayref); }
+
+    installer::setupscript::prepare_non_advertised_files($folderitemsinproductarrayref, $filesinproductarrayref);
+    if ( $installer::globals::globallogging ) { installer::files::save_array_of_hashes($loggingdir . "productfiles2d.log", $filesinproductarrayref); }
 
     installer::logger::print_message( "... analyzing registryitems ... \n" );
 
