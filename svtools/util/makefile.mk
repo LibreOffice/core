@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.62 $
+#   $Revision: 1.63 $
 #
-#   last change: $Author: hr $ $Date: 2007-06-27 14:56:07 $
+#   last change: $Author: rt $ $Date: 2007-07-26 08:47:25 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -192,9 +192,8 @@ DEF1DES 	=SvTools
 SHL2TARGET= svl$(VERSION)$(DLLPOSTFIX)
 SHL2IMPLIB= _isvl
 SHL2USE_EXPORTS=ordinal
-
+#Do not link with VCL or any other library that links with VCL
 SHL2STDLIBS= \
-        $(VCLLIB)			\
         $(UNOTOOLSLIB)		\
         $(TOOLSLIB) 		\
         $(I18NISOLANGLIB)   \
