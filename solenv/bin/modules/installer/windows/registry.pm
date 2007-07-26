@@ -4,9 +4,9 @@
 #
 #   $RCSfile: registry.pm,v $
 #
-#   $Revision: 1.10 $
+#   $Revision: 1.11 $
 #
-#   last change: $Author: ihi $ $Date: 2007-03-26 12:45:56 $
+#   last change: $Author: rt $ $Date: 2007-07-26 08:48:44 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -221,11 +221,16 @@ sub add_userregs_to_registry_table
     {
         my $onefile = $installer::globals::userregistrycollector[$i];
 
+        my $styles = "";
+        if ( $onefile->{'Styles'} ) { $styles = $onefile->{'Styles'}; }
+
         my %registry = ();
 
         $registry{'Registry'} = $onefile->{'userregkeypath'};
         $registry{'Root'} = "1";  # always HKCU
-        $registry{'Key'} = "Software/$allvariables->{'MANUFACTURER'}/$allvariables->{'PRODUCTNAME'} $allvariables->{'PRODUCTVERSION'}/ShellNew";
+        $registry{'Key'} = "Software/$allvariables->{'MANUFACTURER'}/$allvariables->{'PRODUCTNAME'} $allvariables->{'PRODUCTVERSION'}/";
+        if ( $onefile->{'needs_user_registry_key'} ) { $registry{'Key'} = $registry{'Key'} . "StartMenu"; }
+        else { $registry{'Key'} = $registry{'Key'} . "ShellNew"; }
         $registry{'Name'} = $onefile->{'Name'};
         $registry{'Value'} = "1";
         $registry{'Component_'} = $onefile->{'componentname'};
