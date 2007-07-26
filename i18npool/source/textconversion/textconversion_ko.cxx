@@ -4,9 +4,9 @@
  *
  *  $RCSfile: textconversion_ko.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 09:24:16 $
+ *  last change: $Author: rt $ $Date: 2007-07-26 09:10:13 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -43,7 +43,7 @@
 #include <com/sun/star/linguistic2/ConversionDictionaryType.hpp>
 #include <rtl/ustrbuf.hxx>
 #include <i18nutil/x_rtl_ustring.h>
-#include <i18nutil/unicode.hxx>
+#include <unicode/uchar.h>
 
 using namespace com::sun::star::lang;
 using namespace com::sun::star::i18n;
@@ -104,20 +104,31 @@ TextConversion_ko::TextConversion_ko( const Reference < XMultiServiceFactory >& 
 
 sal_Int16 SAL_CALL checkScriptType(sal_Unicode c)
 {
-    static ScriptTypeList typeList[] = {
-        { UnicodeScript_kHangulJamo, UnicodeScript_kHangulJamo, SCRIPT_HANGUL }, // 29
-        { UnicodeScript_kCJKRadicalsSupplement, UnicodeScript_kBopomofo, SCRIPT_HANJA },// 57-63
-        { UnicodeScript_kHangulCompatibilityJamo, UnicodeScript_kHangulCompatibilityJamo, SCRIPT_HANGUL },      // 64,
-        { UnicodeScript_kKanbun, UnicodeScript_kYiRadicals, SCRIPT_HANJA },     // 65-72
-        { UnicodeScript_kHangulSyllable, UnicodeScript_kHangulSyllable, SCRIPT_HANGUL },// 73,
-        { UnicodeScript_kCJKCompatibilityIdeograph, UnicodeScript_kCJKCompatibilityIdeograph, SCRIPT_HANJA },       // 78,
-        { UnicodeScript_kCombiningHalfMark, UnicodeScript_kSmallFormVariant, SCRIPT_HANJA },// 81-83
-        { UnicodeScript_kHalfwidthFullwidthForm, UnicodeScript_kHalfwidthFullwidthForm, SCRIPT_HANJA },     // 86,
+    typedef struct {
+        UBlockCode from;
+        UBlockCode to;
+        sal_Int16 script;
+    } UBlock2Script;
 
-        { UnicodeScript_kScriptCount, UnicodeScript_kScriptCount, SCRIPT_OTHERS } // 87,
+    static UBlock2Script scriptList[] = {
+        {UBLOCK_HANGUL_JAMO, UBLOCK_HANGUL_JAMO, SCRIPT_HANGUL},
+        {UBLOCK_CJK_RADICALS_SUPPLEMENT, UBLOCK_BOPOMOFO, SCRIPT_HANJA},
+        {UBLOCK_HANGUL_COMPATIBILITY_JAMO, UBLOCK_HANGUL_COMPATIBILITY_JAMO, SCRIPT_HANGUL},
+        {UBLOCK_KANBUN, UBLOCK_YI_RADICALS, SCRIPT_HANJA},
+        {UBLOCK_HANGUL_SYLLABLES, UBLOCK_HANGUL_SYLLABLES, SCRIPT_HANGUL},
+        {UBLOCK_CJK_COMPATIBILITY_IDEOGRAPHS, UBLOCK_CJK_COMPATIBILITY_IDEOGRAPHS, SCRIPT_HANJA},
+        {UBLOCK_COMBINING_HALF_MARKS, UBLOCK_SMALL_FORM_VARIANTS, SCRIPT_HANJA},
+        {UBLOCK_HALFWIDTH_AND_FULLWIDTH_FORMS, UBLOCK_HALFWIDTH_AND_FULLWIDTH_FORMS, SCRIPT_HANJA},
     };
 
-    return unicode::getUnicodeScriptType(c, typeList, SCRIPT_OTHERS);
+#define scriptListCount sizeof (scriptList) / sizeof (UBlock2Script)
+
+    UBlockCode block=ublock_getCode((sal_uInt32) c);
+    sal_uInt16 i;
+    for ( i = 0; i < scriptListCount; i++) {
+        if (block <= scriptList[i].to) break;
+    }
+    return (i < scriptListCount && block >= scriptList[i].from) ? scriptList[i].script : SCRIPT_OTHERS;
 }
 
 Sequence< OUString > SAL_CALL
