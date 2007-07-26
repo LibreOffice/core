@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dp_gui_updatability.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: kz $ $Date: 2007-02-12 14:31:17 $
+ *  last change: $Author: rt $ $Date: 2007-07-26 08:53:45 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -64,6 +64,7 @@
 #include "vcl/window.hxx"
 #include "vos/mutex.hxx"
 
+#include "dp_misc.h"
 #include "dp_gui_thread.hxx"
 #include "dp_gui_updatability.hxx"
 
@@ -82,7 +83,6 @@ namespace css = com::sun::star;
 class Updatability::Thread: public dp_gui::Thread {
 public:
     Thread(
-        css::uno::Reference< css::uno::XComponentContext > const & context,
         css::uno::Sequence< css::uno::Reference<
             css::deployment::XPackageManager > > const & packageManagers,
         Window & enabled);
@@ -113,13 +113,10 @@ private:
 };
 
 Updatability::Thread::Thread(
-    css::uno::Reference< css::uno::XComponentContext > const & context,
     css::uno::Sequence< css::uno::Reference<
         css::deployment::XPackageManager > > const & packageManagers,
     Window & enabled):
-    m_predeterminedUpdateUrl(
-        css::deployment::UpdateInformationProvider::create(context)->
-        hasPredeterminedUpdateURL()),
+    m_predeterminedUpdateUrl(dp_misc::getExtensionDefaultUpdateURL().getLength() > 0),
     m_packageManagers(packageManagers),
     m_enabled(&enabled),
     m_input(NONE)
@@ -258,12 +255,11 @@ void Updatability::Thread::execute() {
 }
 
 Updatability::Updatability(
-    css::uno::Reference< css::uno::XComponentContext > const & context,
     css::uno::Sequence<
         css::uno::Reference< css::deployment::XPackageManager > > const &
         packageManagers,
     Window & enabled):
-    m_thread(new Thread(context, packageManagers, enabled))
+    m_thread(new Thread(packageManagers, enabled))
 {
     m_thread->launch();
 }
