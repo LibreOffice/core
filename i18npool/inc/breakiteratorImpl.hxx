@@ -4,9 +4,9 @@
  *
  *  $RCSfile: breakiteratorImpl.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-07 16:46:40 $
+ *  last change: $Author: rt $ $Date: 2007-07-26 09:07:12 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -125,7 +125,7 @@ public:
     virtual com::sun::star::uno::Sequence< rtl::OUString > SAL_CALL getSupportedServiceNames()
         throw( com::sun::star::uno::RuntimeException );
 
-    static sal_Int16 SAL_CALL getScriptClass(sal_Unicode cChar );
+    static sal_Int16 SAL_CALL getScriptClass(sal_uInt32 currentChar);
 protected:
     Boundary result; // for word break iterator
 
