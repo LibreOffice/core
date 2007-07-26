@@ -4,9 +4,9 @@
  *
  *  $RCSfile: rtl_OUString2.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: hr $ $Date: 2007-06-27 13:25:26 $
+ *  last change: $Author: rt $ $Date: 2007-07-26 09:23:37 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1126,6 +1126,73 @@ void endsWith::test() {
             RTL_CONSTASCII_STRINGPARAM("bar")));
 }
 
+class createFromCodePoints: public CppUnit::TestFixture {
+public:
+    void test();
+
+    CPPUNIT_TEST_SUITE(createFromCodePoints);
+    CPPUNIT_TEST(test);
+    CPPUNIT_TEST_SUITE_END();
+};
+
+void createFromCodePoints::test() {
+    CPPUNIT_ASSERT_EQUAL(
+        sal_Int32(0),
+        rtl::OUString(static_cast< sal_uInt32 const * >(NULL), 0).getLength());
+    static sal_uInt32 const cp[] = { 0, 0xD800, 0xFFFF, 0x10000, 0x10FFFF };
+    rtl::OUString s(cp, sizeof cp / sizeof (sal_uInt32));
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(7), s.getLength());
+    CPPUNIT_ASSERT_EQUAL(sal_Unicode(0), s[0]);
+    CPPUNIT_ASSERT_EQUAL(sal_Unicode(0xD800), s[1]);
+    CPPUNIT_ASSERT_EQUAL(sal_Unicode(0xFFFF), s[2]);
+    CPPUNIT_ASSERT_EQUAL(sal_Unicode(0xD800), s[3]);
+    CPPUNIT_ASSERT_EQUAL(sal_Unicode(0xDC00), s[4]);
+    CPPUNIT_ASSERT_EQUAL(sal_Unicode(0xDBFF), s[5]);
+    CPPUNIT_ASSERT_EQUAL(sal_Unicode(0xDFFF), s[6]);
+}
+
+class iterateCodePoints: public CppUnit::TestFixture {
+public:
+    void testNotWellFormed();
+
+    CPPUNIT_TEST_SUITE(iterateCodePoints);
+    CPPUNIT_TEST(testNotWellFormed);
+    CPPUNIT_TEST_SUITE_END();
+};
+
+void iterateCodePoints::testNotWellFormed() {
+    static sal_Unicode const utf16[] =
+        { 0xD800, 0xDC00, 0x0041, 0xDBFF, 0xDFFF, 0xDDEF, 0xD9AB };
+    rtl::OUString s(utf16, sizeof utf16 / sizeof (sal_Unicode));
+    sal_Int32 i = 0;
+    CPPUNIT_ASSERT_EQUAL(sal_uInt32(0x10000), s.iterateCodePoints(&i));
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(2), i);
+    CPPUNIT_ASSERT_EQUAL(sal_uInt32(0x0041), s.iterateCodePoints(&i));
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(3), i);
+    CPPUNIT_ASSERT_EQUAL(sal_uInt32(0x10FFFF), s.iterateCodePoints(&i));
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(5), i);
+    CPPUNIT_ASSERT_EQUAL(sal_uInt32(0xDDEF), s.iterateCodePoints(&i));
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(6), i);
+    CPPUNIT_ASSERT_EQUAL(sal_uInt32(0xD9AB), s.iterateCodePoints(&i));
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(7), i);
+    CPPUNIT_ASSERT_EQUAL(sal_uInt32(0xD9AB), s.iterateCodePoints(&i, -1));
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(6), i);
+    CPPUNIT_ASSERT_EQUAL(sal_uInt32(0xDDEF), s.iterateCodePoints(&i, -1));
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(5), i);
+    CPPUNIT_ASSERT_EQUAL(sal_uInt32(0x10FFFF), s.iterateCodePoints(&i, -1));
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(3), i);
+    CPPUNIT_ASSERT_EQUAL(sal_uInt32(0x0041), s.iterateCodePoints(&i, -1));
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(2), i);
+    CPPUNIT_ASSERT_EQUAL(sal_uInt32(0x10000), s.iterateCodePoints(&i, -1));
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(0), i);
+    i = 1;
+    CPPUNIT_ASSERT_EQUAL(sal_uInt32(0xDC00), s.iterateCodePoints(&i, 2));
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(3), i);
+    i = 4;
+    CPPUNIT_ASSERT_EQUAL(sal_uInt32(0x10000), s.iterateCodePoints(&i, -3));
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(0), i);
+}
+
 // -----------------------------------------------------------------------------
 CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(rtl_OUString::valueOf, "rtl_OUString");
 CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(rtl_OUString::toDouble, "rtl_OUString");
@@ -1138,6 +1205,10 @@ CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(rtl_OUString::construction, "rtl_OUString"
 CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(
     rtl_OUString::indexOfAscii, "rtl_OUString");
 CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(rtl_OUString::endsWith, "rtl_OUString");
+CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(
+    rtl_OUString::createFromCodePoints, "rtl_OUString");
+CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(
+    rtl_OUString::iterateCodePoints, "rtl_OUString");
 
 } // namespace rtl_OUString
 
