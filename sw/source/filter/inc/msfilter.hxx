@@ -4,9 +4,9 @@
  *
  *  $RCSfile: msfilter.hxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: obo $ $Date: 2006-10-11 08:51:03 $
+ *  last change: $Author: rt $ $Date: 2007-07-26 08:21:46 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -84,14 +84,14 @@ class SwNoTxtNode;
 class SwTxtNode;
 class WW8TabDesc;
 
-namespace
+namespace myImplHelpers
 {
     template<class C> class StyleMapperImpl;
 }
 class SwTxtFmtColl;
 class SwCharFmt;
-typedef StyleMapperImpl<SwTxtFmtColl> ParaMapper;
-typedef StyleMapperImpl<SwCharFmt> CharMapper;
+typedef myImplHelpers::StyleMapperImpl<SwTxtFmtColl> ParaMapper;
+typedef myImplHelpers::StyleMapperImpl<SwCharFmt> CharMapper;
 
 namespace sw
 {
