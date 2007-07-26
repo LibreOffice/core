@@ -4,9 +4,9 @@
  *
  *  $RCSfile: untbl.cxx,v $
  *
- *  $Revision: 1.32 $
+ *  $Revision: 1.33 $
  *
- *  last change: $Author: obo $ $Date: 2007-07-18 14:36:51 $
+ *  last change: $Author: rt $ $Date: 2007-07-26 08:21:08 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -471,7 +471,7 @@ SwTblToTxtSave::SwTblToTxtSave( SwDoc& rDoc, ULONG nNd, ULONG nEndIdx, xub_StrLe
             pHstry->CopyAttr( pNd->GetpSwpHints(), nNd, 0,
                         pNd->GetTxt().Len(), FALSE );
         if( pNd->HasSwAttrSet() )
-            pHstry->CopyFmtAttr( *pNd->GetpSwAttrSet(), nNd );
+            pHstry->CopyFmtAttr( *pNd->GetpSwAttrSet(), nNd, rDoc );
 
         if( !pHstry->Count() )
             delete pHstry, pHstry = 0;
@@ -2330,7 +2330,7 @@ void SwUndoTblMerge::SaveCollection( const SwTableBox& rBox )
 
     pHistory->Add( pCNd->GetFmtColl(), aIdx.GetIndex(), pCNd->GetNodeType());
     if( pCNd->HasSwAttrSet() )
-        pHistory->CopyFmtAttr( *pCNd->GetpSwAttrSet(), aIdx.GetIndex() );
+        pHistory->CopyFmtAttr( *pCNd->GetpSwAttrSet(), aIdx.GetIndex(), *(pCNd->GetDoc()) );
 }
 
 /*  */
@@ -2360,7 +2360,7 @@ SwUndoTblNumFmt::SwUndoTblNumFmt( const SwTableBox& rBox,
                             pTNd->GetTxt().Len(), TRUE );
 
         if( pTNd->HasSwAttrSet() )
-            pHistory->CopyFmtAttr( *pTNd->GetpSwAttrSet(), nNdPos );
+            pHistory->CopyFmtAttr( *pTNd->GetpSwAttrSet(), nNdPos, *pDoc );
 
         aStr = pTNd->GetTxt();
         if( pTNd->GetpSwpHints() )
