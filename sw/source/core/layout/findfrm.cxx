@@ -4,9 +4,9 @@
  *
  *  $RCSfile: findfrm.cxx,v $
  *
- *  $Revision: 1.41 $
+ *  $Revision: 1.42 $
  *
- *  last change: $Author: vg $ $Date: 2007-02-28 15:47:20 $
+ *  last change: $Author: rt $ $Date: 2007-07-26 08:19:27 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1054,11 +1054,14 @@ SwCntntFrm* SwFrm::_FindPrevCnt( const bool _bInSameFtn )
                             SwFtnFrm* pMasterFtnFrmOfCurr(
                                         const_cast<SwFtnFrm*>(pFtnFrmOfCurr) );
                             pPrevCntntFrm = 0L;
+                            // --> OD 2007-07-05 #146872#
+                            // correct wrong loop-condition
                             do {
                                 pMasterFtnFrmOfCurr = pMasterFtnFrmOfCurr->GetMaster();
                                 pPrevCntntFrm = pMasterFtnFrmOfCurr->FindLastCntnt();
                             } while ( !pPrevCntntFrm &&
-                                      pMasterFtnFrmOfCurr->GetFollow() );
+                                      pMasterFtnFrmOfCurr->GetMaster() );
+                            // <--
                         }
                         else
                         {
