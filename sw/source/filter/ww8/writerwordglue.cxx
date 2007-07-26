@@ -4,9 +4,9 @@
  *
  *  $RCSfile: writerwordglue.cxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: obo $ $Date: 2007-07-18 14:29:34 $
+ *  last change: $Author: rt $ $Date: 2007-07-26 08:21:57 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -112,7 +112,7 @@
 
 #define ASSIGN_CONST_ASC(s) AssignAscii(RTL_CONSTASCII_STRINGPARAM(s))
 
-namespace
+namespace myImplHelpers
 {
     class closeenough : public std::unary_function<long, bool>
     {
@@ -468,7 +468,7 @@ namespace sw
             const long nWriggleRoom = 5;
             const long *pEnd = aSizes + sizeof(aSizes) / sizeof(aSizes[0]);
             const long *pEntry =
-                std::find_if(aSizes, pEnd, closeenough(nSize, nWriggleRoom));
+                std::find_if(aSizes, pEnd, myImplHelpers::closeenough(nSize, nWriggleRoom));
 
             if (pEntry != pEnd)
                 nSize = *pEntry;
@@ -536,7 +536,7 @@ namespace sw
             if (pHd && pHd->IsActive() && pHd->GetHeaderFmt())
             {
                 mbHasHeader = true;
-                dyaTop += (CalcHdDist(*(pHd->GetHeaderFmt())));
+                dyaTop += (myImplHelpers::CalcHdDist(*(pHd->GetHeaderFmt())));
             }
             else
                 mbHasHeader = false;
@@ -545,7 +545,7 @@ namespace sw
             if (pFt && pFt->IsActive() && pFt->GetFooterFmt())
             {
                 mbHasFooter = true;
-                dyaBottom += (CalcFtDist(*(pFt->GetFooterFmt())));
+                dyaBottom += (myImplHelpers::CalcFtDist(*(pFt->GetFooterFmt())));
             }
             else
                 mbHasFooter = false;
@@ -558,7 +558,7 @@ namespace sw
         }
 
         ParaStyleMapper::ParaStyleMapper(SwDoc &rDoc)
-            : mpImpl(new StyleMapperImpl<SwTxtFmtColl>(rDoc))
+            : mpImpl(new myImplHelpers::StyleMapperImpl<SwTxtFmtColl>(rDoc))
         {
         }
 
@@ -574,7 +574,7 @@ namespace sw
         }
 
         CharStyleMapper::CharStyleMapper(SwDoc &rDoc)
-            : mpImpl(new StyleMapperImpl<SwCharFmt>(rDoc))
+            : mpImpl(new myImplHelpers::StyleMapperImpl<SwCharFmt>(rDoc))
         {
         }
 
@@ -592,7 +592,7 @@ namespace sw
         FontMapExport::FontMapExport(const String &rFamilyName)
         {
             msPrimary = GetFontToken(rFamilyName, 0);
-            msSecondary = FindBestMSSubstituteFont(msPrimary);
+            msSecondary = myImplHelpers::FindBestMSSubstituteFont(msPrimary);
             if (!msSecondary.Len())
                 msSecondary = GetFontToken(rFamilyName, 1);
         }
@@ -714,10 +714,10 @@ namespace sw
                 while (nPos != nLen)
                 {
                     rtl_TextEncoding ScriptType =
-                        getScriptClass(rTxt.GetChar(nPos++));
+                        myImplHelpers::getScriptClass(rTxt.GetChar(nPos++));
                     while (
                             (nPos != nLen) &&
-                            (ScriptType == getScriptClass(rTxt.GetChar(nPos)))
+                            (ScriptType == myImplHelpers::getScriptClass(rTxt.GetChar(nPos)))
                           )
                     {
                         ++nPos;
@@ -809,7 +809,7 @@ namespace sw
             }
 
             aRunChanges.erase(std::remove_if(aRunChanges.begin(),
-                aRunChanges.end(), IfBeforeStart(nTxtStart)), aRunChanges.end());
+                aRunChanges.end(), myImplHelpers::IfBeforeStart(nTxtStart)), aRunChanges.end());
 
             return aRunChanges;
         }
