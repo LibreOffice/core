@@ -2,9 +2,9 @@
  *
  *  OpenOffice.org - a multi-platform office productivity suite
  *
- *  $RCSfile: markerarrayprimitive2d.hxx,v $
+ *  $RCSfile: pointarrayprimitive2d.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.1 $
  *
  *  last change: $Author: aw $ $Date: 2007-07-27 09:03:17 $
  *
@@ -33,8 +33,8 @@
  *
  ************************************************************************/
 
-#ifndef INCLUDED_DRAWINGLAYER_PRIMITIVE2D_MARKERARRAYPRIMITIVE2D_HXX
-#define INCLUDED_DRAWINGLAYER_PRIMITIVE2D_MARKERARRAYPRIMITIVE2D_HXX
+#ifndef INCLUDED_DRAWINGLAYER_PRIMITIVE2D_POINTARRAYPRIMITIVE2D_HXX
+#define INCLUDED_DRAWINGLAYER_PRIMITIVE2D_POINTARRAYPRIMITIVE2D_HXX
 
 #ifndef INCLUDED_DRAWINGLAYER_PRIMITIVE2D_BASEPRIMITIVE2D_HXX
 #include <drawinglayer/primitive2d/baseprimitive2d.hxx>
@@ -51,40 +51,20 @@ namespace drawinglayer
 {
     namespace primitive2d
     {
-        enum MarkerStyle2D
-        {
-            /// Point: Uses RGBColor, 1x1 pixel
-            MARKERSTYLE2D_POINT,
-
-            /// Cross: Uses RGBColor, 3x3 pixel, centered, form of a plus sign
-            MARKERSTYLE2D_CROSS,
-
-            /// Gluepoint: Uses RGBColor as outline and hardcoded COL_LIGHTBLUE as inner
-            /// line pen, 7x7 pixel, centered, looks like a x with thee pixel lines
-            MARKERSTYLE2D_GLUEPOINT
-        };
-
-        class MarkerArrayPrimitive2D : public BasePrimitive2D
+        class PointArrayPrimitive2D : public BasePrimitive2D
         {
         private:
             std::vector< basegfx::B2DPoint >                maPositions;
             basegfx::BColor                                 maRGBColor;
-            MarkerStyle2D                                   meStyle;
-
-        protected:
-            // create local decomposition
-            virtual Primitive2DSequence createLocalDecomposition(const geometry::ViewInformation2D& rViewInformation) const;
 
         public:
-            MarkerArrayPrimitive2D(
+            PointArrayPrimitive2D(
                 const std::vector< basegfx::B2DPoint >& rPositions,
-                MarkerStyle2D eStyle,
                 const basegfx::BColor& rRGBColor);
 
             // get data
             const std::vector< basegfx::B2DPoint >& getPositions() const { return maPositions; }
             const basegfx::BColor& getRGBColor() const { return maRGBColor; }
-            MarkerStyle2D getStyle() const { return meStyle; }
 
             // compare operator
             virtual bool operator==(const BasePrimitive2D& rPrimitive) const;
@@ -100,7 +80,7 @@ namespace drawinglayer
 
 //////////////////////////////////////////////////////////////////////////////
 
-#endif //INCLUDED_DRAWINGLAYER_PRIMITIVE2D_MARKERARRAYPRIMITIVE2D_HXX
+#endif //INCLUDED_DRAWINGLAYER_PRIMITIVE2D_POINTARRAYPRIMITIVE2D_HXX
 
 //////////////////////////////////////////////////////////////////////////////
 // eof

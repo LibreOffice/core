@@ -4,9 +4,9 @@
  *
  *  $RCSfile: gridprimitive2d.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: aw $ $Date: 2007-03-06 12:34:29 $
+ *  last change: $Author: aw $ $Date: 2007-07-27 09:03:33 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -39,6 +39,10 @@
 
 #ifndef _BGFX_TOOLS_CANVASTOOLS_HXX
 #include <basegfx/tools/canvastools.hxx>
+#endif
+
+#ifndef INCLUDED_DRAWINGLAYER_PRIMITIVE2D_POINTRARRAYPRIMITIVE2D_HXX
+#include <drawinglayer/primitive2d/pointarrayprimitive2d.hxx>
 #endif
 
 #ifndef INCLUDED_DRAWINGLAYER_PRIMITIVE2D_MARKERARRAYPRIMITIVE2D_HXX
@@ -213,10 +217,10 @@ namespace drawinglayer
 
                 aRetval.realloc(nRetvalCount);
 
-                // add MarkerArrayPrimitive2D if point markers were added
+                // add PointArrayPrimitive2D if point markers were added
                 if(nCountPoint)
                 {
-                    aRetval[nInsertCounter++] = Primitive2DReference(new MarkerArrayPrimitive2D(aPositionsPoint, MARKERSTYLE2D_POINT, getBColor()));
+                    aRetval[nInsertCounter++] = Primitive2DReference(new PointArrayPrimitive2D(aPositionsPoint, getBColor()));
                 }
 
                 // add MarkerArrayPrimitive2D if cross markers were added

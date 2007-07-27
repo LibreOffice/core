@@ -28,6 +28,7 @@ mkdir: %_DEST%\inc%_EXT%\drawinglayer\primitive2d
 ..\inc\drawinglayer\primitive2d\metafileprimitive2d.hxx %_DEST%\inc%_EXT%\drawinglayer\primitive2d\metafileprimitive2d.hxx
 ..\inc\drawinglayer\primitive2d\modifiedcolorprimitive2d.hxx %_DEST%\inc%_EXT%\drawinglayer\primitive2d\modifiedcolorprimitive2d.hxx
 ..\inc\drawinglayer\primitive2d\oleprimitive2d.hxx %_DEST%\inc%_EXT%\drawinglayer\primitive2d\oleprimitive2d.hxx
+..\inc\drawinglayer\primitive2d\pointarrayprimitive2d.hxx %_DEST%\inc%_EXT%\drawinglayer\primitive2d\pointarrayprimitive2d.hxx
 ..\inc\drawinglayer\primitive2d\polygonprimitive2d.hxx %_DEST%\inc%_EXT%\drawinglayer\primitive2d\polygonprimitive2d.hxx
 ..\inc\drawinglayer\primitive2d\polypolygonprimitive2d.hxx %_DEST%\inc%_EXT%\drawinglayer\primitive2d\polypolygonprimitive2d.hxx
 ..\inc\drawinglayer\primitive2d\sceneprimitive2d.hxx %_DEST%\inc%_EXT%\drawinglayer\primitive2d\sceneprimitive2d.hxx
@@ -69,6 +70,8 @@ mkdir: %_DEST%\inc%_EXT%\drawinglayer\geometry
 mkdir: %_DEST%\inc%_EXT%\drawinglayer\processor2d
 ..\inc\drawinglayer\processor2d\baseprocessor2d.hxx %_DEST%\inc%_EXT%\drawinglayer\processor2d\baseprocessor2d.hxx
 ..\inc\drawinglayer\processor2d\vclprocessor2d.hxx %_DEST%\inc%_EXT%\drawinglayer\processor2d\vclprocessor2d.hxx
+..\inc\drawinglayer\processor2d\vclpixelprocessor2d.hxx %_DEST%\inc%_EXT%\drawinglayer\processor2d\vclpixelprocessor2d.hxx
+..\inc\drawinglayer\processor2d\vclmetafileprocessor2d.hxx %_DEST%\inc%_EXT%\drawinglayer\processor2d\vclmetafileprocessor2d.hxx
 
 mkdir: %_DEST%\inc%_EXT%\drawinglayer\processor3d
 ..\inc\drawinglayer\processor3d\baseprocessor3d.hxx %_DEST%\inc%_EXT%\drawinglayer\processor3d\baseprocessor3d.hxx

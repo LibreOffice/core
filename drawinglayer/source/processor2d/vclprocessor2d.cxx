@@ -4,9 +4,9 @@
  *
  *  $RCSfile: vclprocessor2d.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: aw $ $Date: 2007-07-10 11:28:08 $
+ *  last change: $Author: aw $ $Date: 2007-07-27 09:03:34 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -39,6 +39,10 @@
 
 #ifndef INCLUDED_DRAWINGLAYER_PRIMITIVE_TEXTPRIMITIVE2D_HXX
 #include <drawinglayer/primitive2d/textprimitive2d.hxx>
+#endif
+
+#ifndef _TOOLS_DEBUG_HXX
+#include <tools/debug.hxx>
 #endif
 
 #ifndef _SV_OUTDEV_HXX
@@ -117,16 +121,12 @@
 #include <drawinglayer/primitive2d/markerarrayprimitive2d.hxx>
 #endif
 
+#ifndef INCLUDED_DRAWINGLAYER_PRIMITIVE2D_POINTRARRAYPRIMITIVE2D_HXX
+#include <drawinglayer/primitive2d/pointarrayprimitive2d.hxx>
+#endif
+
 #ifndef _BGFX_TOOLS_CANVASTOOLS_HXX
 #include <basegfx/tools/canvastools.hxx>
-#endif
-
-#ifndef _BGFX_POLYPOLYGON_B2DPOLYGONCLIPPER_HXX
-#include <basegfx/polygon/b2dpolygonclipper.hxx>
-#endif
-
-#ifndef INCLUDED_DRAWINGLAYER_PRIMITIVE2D_PRIMITIVETYPES2D_HXX
-#include <drawinglayer/primitive2d/drawinglayer_primitivetypes2d.hxx>
 #endif
 
 //////////////////////////////////////////////////////////////////////////////
@@ -605,7 +605,7 @@ namespace drawinglayer
         }
 
         // mask group. Force output to VDev and create mask from given mask
-        void VclProcessor2D::RenderMaskPrimitive2D(const primitive2d::MaskPrimitive2D& rMaskCandidate)
+        void VclProcessor2D::RenderMaskPrimitive2DPixel(const primitive2d::MaskPrimitive2D& rMaskCandidate)
         {
             if(rMaskCandidate.getChildren().hasElements())
             {
@@ -712,69 +712,97 @@ namespace drawinglayer
         // marker
         void VclProcessor2D::RenderMarkerArrayPrimitive2D(const primitive2d::MarkerArrayPrimitive2D& rMarkArrayCandidate)
         {
-            const std::vector< basegfx::B2DPoint >& rPositions = rMarkArrayCandidate.getPositions();
-            const basegfx::BColor aRGBColor(maBColorModifierStack.getModifiedColor(rMarkArrayCandidate.getRGBColor()));
-            const Color aVCLColor(aRGBColor);
-
-            if(primitive2d::MARKERSTYLE2D_POINT == rMarkArrayCandidate.getStyle())
+            static bool bCheckCompleteMarkerDecompose(false);
+            if(bCheckCompleteMarkerDecompose)
             {
-                for(std::vector< basegfx::B2DPoint >::const_iterator aIter(rPositions.begin()); aIter != rPositions.end(); aIter++)
-                {
-                    const basegfx::B2DPoint aViewPosition(maCurrentTransformation * (*aIter));
-                    const Point aPos(basegfx::fround(aViewPosition.getX()), basegfx::fround(aViewPosition.getY()));
-
-                    mpOutputDevice->DrawPixel(aPos, aVCLColor);
-                }
+                process(rMarkArrayCandidate.get2DDecomposition(getViewInformation2D()));
+                return;
             }
-            else
+
+            switch(rMarkArrayCandidate.getStyle())
             {
-                const bool bWasEnabled(mpOutputDevice->IsMapModeEnabled());
-
-                for(std::vector< basegfx::B2DPoint >::const_iterator aIter(rPositions.begin()); aIter != rPositions.end(); aIter++)
+                default :
                 {
-                    const basegfx::B2DPoint aViewPosition(maCurrentTransformation * (*aIter));
-                    Point aPos(basegfx::fround(aViewPosition.getX()), basegfx::fround(aViewPosition.getY()));
+                    // not handled/unknown MarkerArrayPrimitive2D, use decomposition
+                    process(rMarkArrayCandidate.get2DDecomposition(getViewInformation2D()));
+                    break;
+                }
+                case primitive2d::MARKERSTYLE2D_CROSS :
+                case primitive2d::MARKERSTYLE2D_GLUEPOINT :
+                {
+                    // directly supported markers
+                    const std::vector< basegfx::B2DPoint >& rPositions = rMarkArrayCandidate.getPositions();
+                    const basegfx::BColor aRGBColor(maBColorModifierStack.getModifiedColor(rMarkArrayCandidate.getRGBColor()));
+                    const Color aVCLColor(aRGBColor);
+                    const bool bWasEnabled(mpOutputDevice->IsMapModeEnabled());
 
-                    aPos = mpOutputDevice->LogicToPixel(aPos);
-                    mpOutputDevice->EnableMapMode(false);
-
-                    switch(rMarkArrayCandidate.getStyle())
+                    for(std::vector< basegfx::B2DPoint >::const_iterator aIter(rPositions.begin()); aIter != rPositions.end(); aIter++)
                     {
-                        default : // not implemented types; MARKERSTYLE2D_POINT is already handled above
-                        {
-                            break;
-                        }
-                        case primitive2d::MARKERSTYLE2D_CROSS :
-                        {
-                            mpOutputDevice->DrawPixel(aPos, aVCLColor);
-                            mpOutputDevice->DrawPixel(Point(aPos.X() - 1L, aPos.Y()), aVCLColor);
-                            mpOutputDevice->DrawPixel(Point(aPos.X() + 1L, aPos.Y()), aVCLColor);
-                            mpOutputDevice->DrawPixel(Point(aPos.X(), aPos.Y() - 1L), aVCLColor);
-                            mpOutputDevice->DrawPixel(Point(aPos.X(), aPos.Y() + 1L), aVCLColor);
+                        const basegfx::B2DPoint aViewPosition(maCurrentTransformation * (*aIter));
+                        Point aPos(basegfx::fround(aViewPosition.getX()), basegfx::fround(aViewPosition.getY()));
 
-                            break;
-                        }
-                        case primitive2d::MARKERSTYLE2D_GLUEPOINT :
+                        aPos = mpOutputDevice->LogicToPixel(aPos);
+                        mpOutputDevice->EnableMapMode(false);
+
+                        switch(rMarkArrayCandidate.getStyle())
                         {
-                            // backpen
-                            mpOutputDevice->SetLineColor(aVCLColor);
-                            mpOutputDevice->DrawLine(aPos + Point(-2, -3), aPos + Point(+3, +2));
-                            mpOutputDevice->DrawLine(aPos + Point(-3, -2), aPos + Point(+2, +3));
-                            mpOutputDevice->DrawLine(aPos + Point(-3, +2), aPos + Point(+2, -3));
-                            mpOutputDevice->DrawLine(aPos + Point(-2, +3), aPos + Point(+3, -2));
+                            default :
+                            {
+                                // this would be an error, ther cases here need to be consistent with the initially
+                                // accepted ones
+                                OSL_ENSURE(false, "Inconsistent RenderMarkerArrayPrimitive2D implementation (!)");
+                                break;
+                            }
+                            case primitive2d::MARKERSTYLE2D_CROSS :
+                            {
+                                mpOutputDevice->DrawPixel(aPos, aVCLColor);
+                                mpOutputDevice->DrawPixel(Point(aPos.X() - 1L, aPos.Y()), aVCLColor);
+                                mpOutputDevice->DrawPixel(Point(aPos.X() + 1L, aPos.Y()), aVCLColor);
+                                mpOutputDevice->DrawPixel(Point(aPos.X(), aPos.Y() - 1L), aVCLColor);
+                                mpOutputDevice->DrawPixel(Point(aPos.X(), aPos.Y() + 1L), aVCLColor);
 
-                            // frontpen (hard coded)
-                            const basegfx::BColor aRGBFrontColor(maBColorModifierStack.getModifiedColor(Color(COL_LIGHTBLUE).getBColor()));
-                            mpOutputDevice->SetLineColor(Color(aRGBFrontColor));
-                            mpOutputDevice->DrawLine(aPos + Point(-2, -2), aPos + Point(+2, +2));
-                            mpOutputDevice->DrawLine(aPos + Point(-2, +2), aPos + Point(+2, -2));
+                                break;
+                            }
+                            case primitive2d::MARKERSTYLE2D_GLUEPOINT :
+                            {
+                                // backpen
+                                mpOutputDevice->SetLineColor(aVCLColor);
+                                mpOutputDevice->DrawLine(aPos + Point(-2, -3), aPos + Point(+3, +2));
+                                mpOutputDevice->DrawLine(aPos + Point(-3, -2), aPos + Point(+2, +3));
+                                mpOutputDevice->DrawLine(aPos + Point(-3, +2), aPos + Point(+2, -3));
+                                mpOutputDevice->DrawLine(aPos + Point(-2, +3), aPos + Point(+3, -2));
 
-                            break;
+                                // frontpen (hard coded)
+                                const basegfx::BColor aRGBFrontColor(maBColorModifierStack.getModifiedColor(Color(COL_LIGHTBLUE).getBColor()));
+                                mpOutputDevice->SetLineColor(Color(aRGBFrontColor));
+                                mpOutputDevice->DrawLine(aPos + Point(-2, -2), aPos + Point(+2, +2));
+                                mpOutputDevice->DrawLine(aPos + Point(-2, +2), aPos + Point(+2, -2));
+
+                                break;
+                            }
                         }
+
+                        mpOutputDevice->EnableMapMode(bWasEnabled);
                     }
 
-                    mpOutputDevice->EnableMapMode(bWasEnabled);
+                    break;
                 }
+            }
+        }
+
+        // point
+        void VclProcessor2D::RenderPointArrayPrimitive2D(const primitive2d::PointArrayPrimitive2D& rPointArrayCandidate)
+        {
+            const std::vector< basegfx::B2DPoint >& rPositions = rPointArrayCandidate.getPositions();
+            const basegfx::BColor aRGBColor(maBColorModifierStack.getModifiedColor(rPointArrayCandidate.getRGBColor()));
+            const Color aVCLColor(aRGBColor);
+
+            for(std::vector< basegfx::B2DPoint >::const_iterator aIter(rPositions.begin()); aIter != rPositions.end(); aIter++)
+            {
+                const basegfx::B2DPoint aViewPosition(maCurrentTransformation * (*aIter));
+                const Point aPos(basegfx::fround(aViewPosition.getX()), basegfx::fround(aViewPosition.getY()));
+
+                mpOutputDevice->DrawPixel(aPos, aVCLColor);
             }
         }
 
@@ -830,230 +858,6 @@ namespace drawinglayer
 
         VclProcessor2D::~VclProcessor2D()
         {
-        }
-    } // end of namespace processor2d
-} // end of namespace drawinglayer
-
-//////////////////////////////////////////////////////////////////////////////
-
-namespace drawinglayer
-{
-    namespace processor2d
-    {
-        VclMetafileProcessor2D::VclMetafileProcessor2D(const geometry::ViewInformation2D& rViewInformation, OutputDevice& rOutDev)
-        :   VclProcessor2D(rViewInformation, rOutDev)
-        {
-            // draw to logic coordinates, do not initialize maCurrentTransformation to viewTransformation,
-            // do not change MapMode of destination
-        }
-
-        VclMetafileProcessor2D::~VclMetafileProcessor2D()
-        {
-            // MapMode was not changed, no restore necessary
-        }
-
-        void VclMetafileProcessor2D::processBasePrimitive2D(const primitive2d::BasePrimitive2D& rCandidate)
-        {
-            switch(rCandidate.getPrimitiveID())
-            {
-                case PRIMITIVE2D_ID_TEXTSIMPLEPORTIONPRIMITIVE2D :
-                case PRIMITIVE2D_ID_TEXTDECORATEDPORTIONPRIMITIVE2D :
-                {
-                    // directdraw of text simple portion
-                    RenderTextSimpleOrDecoratedPortionPrimitive2D(static_cast< const primitive2d::TextSimplePortionPrimitive2D& >(rCandidate));
-                    break;
-                }
-                case PRIMITIVE2D_ID_POLYGONHAIRLINEPRIMITIVE2D :
-                {
-                    // direct draw of hairline
-                    RenderPolygonHairlinePrimitive2D(static_cast< const primitive2d::PolygonHairlinePrimitive2D& >(rCandidate));
-                    break;
-                }
-                case PRIMITIVE2D_ID_BITMAPPRIMITIVE2D :
-                {
-                    // direct draw of transformed BitmapEx primitive
-                    RenderBitmapPrimitive2D(static_cast< const primitive2d::BitmapPrimitive2D& >(rCandidate));
-                    break;
-                }
-                case PRIMITIVE2D_ID_FILLBITMAPPRIMITIVE2D :
-                {
-                    // direct draw of fillBitmapPrimitive
-                    RenderFillBitmapPrimitive2D(static_cast< const primitive2d::FillBitmapPrimitive2D& >(rCandidate));
-                    break;
-                }
-                case PRIMITIVE2D_ID_POLYPOLYGONGRADIENTPRIMITIVE2D :
-                {
-                    // direct draw of gradient
-                    RenderPolyPolygonGradientPrimitive2D(static_cast< const primitive2d::PolyPolygonGradientPrimitive2D& >(rCandidate));
-                    break;
-                }
-                case PRIMITIVE2D_ID_POLYPOLYGONCOLORPRIMITIVE2D :
-                {
-                    // direct draw of PolyPolygon with color
-                    RenderPolyPolygonColorPrimitive2D(static_cast< const primitive2d::PolyPolygonColorPrimitive2D& >(rCandidate));
-                    break;
-                }
-                case PRIMITIVE2D_ID_METAFILEPRIMITIVE2D :
-                {
-                    // direct draw of MetaFile
-                    RenderMetafilePrimitive2D(static_cast< const primitive2d::MetafilePrimitive2D& >(rCandidate));
-                    break;
-                }
-                case PRIMITIVE2D_ID_MASKPRIMITIVE2D :
-                {
-                    // mask group.
-                    RenderMaskPrimitive2D(static_cast< const primitive2d::MaskPrimitive2D& >(rCandidate));
-                    break;
-                }
-                case PRIMITIVE2D_ID_MODIFIEDCOLORPRIMITIVE2D :
-                {
-                    // modified color group. Force output to unified color.
-                    RenderModifiedColorPrimitive2D(static_cast< const primitive2d::ModifiedColorPrimitive2D& >(rCandidate));
-                    break;
-                }
-                case PRIMITIVE2D_ID_ALPHAPRIMITIVE2D :
-                {
-                    // sub-transparence group. Draw to VDev first.
-                    RenderAlphaPrimitive2D(static_cast< const primitive2d::AlphaPrimitive2D& >(rCandidate));
-                    break;
-                }
-                case PRIMITIVE2D_ID_TRANSFORMPRIMITIVE2D :
-                {
-                    // transform group.
-                    RenderTransformPrimitive2D(static_cast< const primitive2d::TransformPrimitive2D& >(rCandidate));
-                    break;
-                }
-                case PRIMITIVE2D_ID_MARKERARRAYPRIMITIVE2D :
-                {
-                    // marker array
-                    RenderMarkerArrayPrimitive2D(static_cast< const primitive2d::MarkerArrayPrimitive2D& >(rCandidate));
-                    break;
-                }
-                default :
-                {
-                    // process recursively
-                    process(rCandidate.get2DDecomposition(getViewInformation2D()));
-                    break;
-                }
-            }
-        }
-    } // end of namespace processor2d
-} // end of namespace drawinglayer
-
-//////////////////////////////////////////////////////////////////////////////
-
-namespace drawinglayer
-{
-    namespace processor2d
-    {
-        VclPixelProcessor2D::VclPixelProcessor2D(const geometry::ViewInformation2D& rViewInformation, OutputDevice& rOutDev)
-        :   VclProcessor2D(rViewInformation, rOutDev)
-        {
-            // prepare maCurrentTransformation matrix with viewTransformation to target directly to pixels
-            maCurrentTransformation = rViewInformation.getViewTransformation();
-        }
-
-        VclPixelProcessor2D::~VclPixelProcessor2D()
-        {
-        }
-
-        void VclPixelProcessor2D::processBasePrimitive2D(const primitive2d::BasePrimitive2D& rCandidate)
-        {
-            switch(rCandidate.getPrimitiveID())
-            {
-                case PRIMITIVE2D_ID_TEXTSIMPLEPORTIONPRIMITIVE2D :
-                case PRIMITIVE2D_ID_TEXTDECORATEDPORTIONPRIMITIVE2D :
-                {
-                    // directdraw of text simple portion
-                    RenderTextSimpleOrDecoratedPortionPrimitive2D(static_cast< const primitive2d::TextSimplePortionPrimitive2D& >(rCandidate));
-                    break;
-                }
-                case PRIMITIVE2D_ID_POLYGONHAIRLINEPRIMITIVE2D :
-                {
-                    // direct draw of hairline
-                    RenderPolygonHairlinePrimitive2D(static_cast< const primitive2d::PolygonHairlinePrimitive2D& >(rCandidate));
-                    break;
-                }
-                case PRIMITIVE2D_ID_BITMAPPRIMITIVE2D :
-                {
-                    // direct draw of transformed BitmapEx primitive
-                    RenderBitmapPrimitive2D(static_cast< const primitive2d::BitmapPrimitive2D& >(rCandidate));
-                    break;
-                }
-                case PRIMITIVE2D_ID_FILLBITMAPPRIMITIVE2D :
-                {
-                    // direct draw of fillBitmapPrimitive
-                    RenderFillBitmapPrimitive2D(static_cast< const primitive2d::FillBitmapPrimitive2D& >(rCandidate));
-                    break;
-                }
-                case PRIMITIVE2D_ID_POLYPOLYGONGRADIENTPRIMITIVE2D :
-                {
-                    // direct draw of gradient
-                    RenderPolyPolygonGradientPrimitive2D(static_cast< const primitive2d::PolyPolygonGradientPrimitive2D& >(rCandidate));
-                    break;
-                }
-                case PRIMITIVE2D_ID_POLYPOLYGONCOLORPRIMITIVE2D :
-                {
-                    // direct draw of PolyPolygon with color
-                    RenderPolyPolygonColorPrimitive2D(static_cast< const primitive2d::PolyPolygonColorPrimitive2D& >(rCandidate));
-                    break;
-                }
-                case PRIMITIVE2D_ID_METAFILEPRIMITIVE2D :
-                {
-                    // direct draw of MetaFile
-                    RenderMetafilePrimitive2D(static_cast< const primitive2d::MetafilePrimitive2D& >(rCandidate));
-                    break;
-                }
-                case PRIMITIVE2D_ID_MASKPRIMITIVE2D :
-                {
-                    // mask group.
-                    RenderMaskPrimitive2D(static_cast< const primitive2d::MaskPrimitive2D& >(rCandidate));
-                    break;
-                }
-                case PRIMITIVE2D_ID_MODIFIEDCOLORPRIMITIVE2D :
-                {
-                    // modified color group. Force output to unified color.
-                    RenderModifiedColorPrimitive2D(static_cast< const primitive2d::ModifiedColorPrimitive2D& >(rCandidate));
-                    break;
-                }
-                case PRIMITIVE2D_ID_ALPHAPRIMITIVE2D :
-                {
-                    // sub-transparence group. Draw to VDev first.
-                    RenderAlphaPrimitive2D(static_cast< const primitive2d::AlphaPrimitive2D& >(rCandidate));
-                    break;
-                }
-                case PRIMITIVE2D_ID_TRANSFORMPRIMITIVE2D :
-                {
-                    // transform group.
-                    RenderTransformPrimitive2D(static_cast< const primitive2d::TransformPrimitive2D& >(rCandidate));
-                    break;
-                }
-                case PRIMITIVE2D_ID_MARKERARRAYPRIMITIVE2D :
-                {
-                    // marker array
-                    RenderMarkerArrayPrimitive2D(static_cast< const primitive2d::MarkerArrayPrimitive2D& >(rCandidate));
-                    break;
-                }
-                default :
-                {
-                    // process recursively
-                    process(rCandidate.get2DDecomposition(getViewInformation2D()));
-                    break;
-                }
-            }
-        }
-
-        void VclPixelProcessor2D::process(const primitive2d::Primitive2DSequence& rSource)
-        {
-            // prepare output directly to pixels
-            mpOutputDevice->Push(PUSH_MAPMODE);
-            mpOutputDevice->SetMapMode();
-
-            // call parent
-            VclProcessor2D::process(rSource);
-
-            // restore MapMode
-            mpOutputDevice->Pop();
         }
     } // end of namespace processor2d
 } // end of namespace drawinglayer

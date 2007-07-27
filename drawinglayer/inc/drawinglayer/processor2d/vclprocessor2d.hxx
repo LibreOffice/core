@@ -4,9 +4,9 @@
  *
  *  $RCSfile: vclprocessor2d.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: aw $ $Date: 2007-07-10 11:28:08 $
+ *  last change: $Author: aw $ $Date: 2007-07-27 09:03:17 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -56,10 +56,6 @@
 // predefines
 class OutputDevice;
 
-namespace basegfx {
-    class BColor;
-}
-
 namespace drawinglayer { namespace primitive2d {
     class TextSimplePortionPrimitive2D;
     class PolygonHairlinePrimitive2D;
@@ -72,6 +68,7 @@ namespace drawinglayer { namespace primitive2d {
     class AlphaPrimitive2D;
     class TransformPrimitive2D;
     class MarkerArrayPrimitive2D;
+    class PointArrayPrimitive2D;
     class ModifiedColorPrimitive2D;
 }}
 
@@ -94,7 +91,8 @@ namespace drawinglayer
             basegfx::B2DHomMatrix                                   maCurrentTransformation;
 
             //////////////////////////////////////////////////////////////////////////////
-            // rendering support
+            // common VCL rendering support
+
             void RenderTextSimpleOrDecoratedPortionPrimitive2D(const primitive2d::TextSimplePortionPrimitive2D& rTextCandidate);
             void RenderPolygonHairlinePrimitive2D(const primitive2d::PolygonHairlinePrimitive2D& rPolygonCandidate);
             void RenderBitmapPrimitive2D(const primitive2d::BitmapPrimitive2D& rBitmapCandidate);
@@ -102,11 +100,12 @@ namespace drawinglayer
             void RenderPolyPolygonGradientPrimitive2D(const primitive2d::PolyPolygonGradientPrimitive2D& rPolygonCandidate);
             void RenderPolyPolygonColorPrimitive2D(const primitive2d::PolyPolygonColorPrimitive2D& rPolygonCandidate);
             void RenderMetafilePrimitive2D(const primitive2d::MetafilePrimitive2D& rPolygonCandidate);
-            void RenderMaskPrimitive2D(const primitive2d::MaskPrimitive2D& rMaskCandidate);
+            void RenderMaskPrimitive2DPixel(const primitive2d::MaskPrimitive2D& rMaskCandidate);
             void RenderModifiedColorPrimitive2D(const primitive2d::ModifiedColorPrimitive2D& rModifiedCandidate);
             void RenderAlphaPrimitive2D(const primitive2d::AlphaPrimitive2D& rTransCandidate);
             void RenderTransformPrimitive2D(const primitive2d::TransformPrimitive2D& rTransformCandidate);
             void RenderMarkerArrayPrimitive2D(const primitive2d::MarkerArrayPrimitive2D& rMarkerArrayCandidate);
+            void RenderPointArrayPrimitive2D(const primitive2d::PointArrayPrimitive2D& rPointArrayCandidate);
 
             // as tooling, the process() implementation takes over API handling and calls this
             // virtual render method when the primitive implementation is BasePrimitive2D-based.
@@ -123,55 +122,6 @@ namespace drawinglayer
             // This VCL base implementation takes over the API handling and calls processBasePrimitive2D
             // directly when it's a BasePrinitive2D implementation. This is used as tooling from derived
             // implementations
-            virtual void process(const primitive2d::Primitive2DSequence& rSource);
-        };
-    } // end of namespace processor2d
-} // end of namespace drawinglayer
-
-//////////////////////////////////////////////////////////////////////////////
-
-namespace drawinglayer
-{
-    namespace processor2d
-    {
-        class VclMetafileProcessor2D : public VclProcessor2D
-        {
-        protected:
-            // the local processor for BasePrinitive2D-Implementation based primitives,
-            // called from the common process()-implementation
-            virtual void processBasePrimitive2D(const primitive2d::BasePrimitive2D& rCandidate);
-
-        public:
-            // constructor/destructor
-            VclMetafileProcessor2D(
-                const geometry::ViewInformation2D& rViewInformation,
-                OutputDevice& rOutDev);
-            virtual ~VclMetafileProcessor2D();
-        };
-    } // end of namespace processor2d
-} // end of namespace drawinglayer
-
-//////////////////////////////////////////////////////////////////////////////
-
-namespace drawinglayer
-{
-    namespace processor2d
-    {
-        class VclPixelProcessor2D : public VclProcessor2D
-        {
-        protected:
-            // the local processor for BasePrinitive2D-Implementation based primitives,
-            // called from the common process()-implementation
-            virtual void processBasePrimitive2D(const primitive2d::BasePrimitive2D& rCandidate);
-
-        public:
-            // constructor/destructor
-            VclPixelProcessor2D(
-                const geometry::ViewInformation2D& rViewInformation,
-                OutputDevice& rOutDev);
-            virtual ~VclPixelProcessor2D();
-
-            // overloaded here to reset the MapMode at the target OutDev
             virtual void process(const primitive2d::Primitive2DSequence& rSource);
         };
     } // end of namespace processor2d

@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.3 $
+#   $Revision: 1.4 $
 #
-#   last change: $Author: aw $ $Date: 2007-03-06 12:34:29 $
+#   last change: $Author: aw $ $Date: 2007-07-27 09:03:33 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -60,6 +60,7 @@ SLOFILES= \
         $(SLO)$/groupprimitive2d.obj			\
         $(SLO)$/helplineprimitive2d.obj			\
         $(SLO)$/markerarrayprimitive2d.obj		\
+        $(SLO)$/pointarrayprimitive2d.obj		\
         $(SLO)$/maskprimitive2d.obj				\
         $(SLO)$/mediaprimitive2d.obj			\
         $(SLO)$/metafileprimitive2d.obj			\
