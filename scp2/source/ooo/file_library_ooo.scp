@@ -4,9 +4,9 @@
  *
  *  $RCSfile: file_library_ooo.scp,v $
  *
- *  $Revision: 1.254 $
+ *  $Revision: 1.255 $
  *
- *  last change: $Author: rt $ $Date: 2007-07-24 11:25:04 $
+ *  last change: $Author: rt $ $Date: 2007-07-27 10:32:48 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1733,7 +1733,7 @@ File gid_File_Lib_Basebmp
 End
 #endif
 
-#ifdef UNX
+#if defined UNX && ! defined QUARTZ
 STD_LIB_FILE_PATCH( gid_File_Lib_Vclplug_Svp, vclplug_svp )
 STD_LIB_FILE_PATCH( gid_File_Lib_BaseBmp, basebmp )
 #endif

@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.56 $
+#   $Revision: 1.57 $
 #
-#   last change: $Author: rt $ $Date: 2007-07-24 10:35:13 $
+#   last change: $Author: rt $ $Date: 2007-07-27 10:32:55 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -271,7 +271,7 @@ ULFFILES=                          \
         registryitem_ooo.ulf       \
         module_systemint.ulf
 
-.IF "$(GUI)"=="UNX"
+.IF "$(GUIBASE)"=="unx"
     PARFILES+=module_headless.par
     ULFFILES+=module_headless.ulf
 .ENDIF
