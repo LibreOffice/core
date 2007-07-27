@@ -4,9 +4,9 @@
 #
 #   $RCSfile: setupscript.pm,v $
 #
-#   $Revision: 1.11 $
+#   $Revision: 1.12 $
 #
-#   last change: $Author: rt $ $Date: 2007-07-26 08:48:09 $
+#   last change: $Author: rt $ $Date: 2007-07-27 14:29:17 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -407,9 +407,9 @@ sub prepare_non_advertised_files
             my $fileid = $folderitem->{'FileID'};
             my $onefile = installer::worker::find_file_by_id($filesref, $fileid);
 
-            if ( $onefile eq "" ) { installer::exiter::exit_program("ERROR: Could not find file belonging to FolderItem. Missing file: $fileid !", "prepare_non_advertised_files"); }
-
-            $onefile->{'needs_user_registry_key'} = 1;
+            # Attention: If $onefile with "FileID" is not found, this is not always an error.
+            # FileID can also contain an executable file, for example msiexec.exe.
+            if ( $onefile ne "" ) { $onefile->{'needs_user_registry_key'} = 1; }
         }
     }
 }
