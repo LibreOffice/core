@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.95 $
+#   $Revision: 1.96 $
 #
-#   last change: $Author: rt $ $Date: 2007-07-24 10:33:00 $
+#   last change: $Author: rt $ $Date: 2007-07-27 10:25:23 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -351,7 +351,19 @@ SHL4NOCHECK=TRUE
 
 
 SHL4STDLIBS+=-l$(SHL2TARGET)
-SHL4STDLIBS+=$(SHL2STDLIBS)
+SHL4STDLIBS+=\
+            $(VCLLIB)\
+            -lpsp$(VERSION)$(DLLPOSTFIX)\
+            $(SOTLIB)           \
+            $(UNOTOOLSLIB)      \
+            $(TOOLSLIB)         \
+            $(COMPHELPERLIB)	\
+            $(UCBHELPERLIB)     \
+            $(CPPUHELPERLIB)    \
+            $(CPPULIB)          \
+            $(VOSLIB)           \
+            $(SALLIB)
+
 .ENDIF # "$(ENABLE_GTK)" != ""
 
 # KDE plugin
