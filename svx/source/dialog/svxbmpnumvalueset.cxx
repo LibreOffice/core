@@ -4,9 +4,9 @@
  *
  *  $RCSfile: svxbmpnumvalueset.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: ihi $ $Date: 2007-07-12 10:55:39 $
+ *  last change: $Author: rt $ $Date: 2007-07-27 10:13:19 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -65,9 +65,6 @@
 #endif
 #ifndef _SV_SVAPP_HXX
 #include <vcl/svapp.hxx>
-#endif
-#ifndef _SV_SALLAYOUT_HXX
-#include <vcl/plug/vcl/sallayout.hxx>
 #endif
 #ifndef _GALLERY_HXX_ //autogen
 #include <gallery.hxx>
