@@ -4,9 +4,9 @@
  *
  *  $RCSfile: outdev6.cxx,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: rt $ $Date: 2007-07-24 10:13:08 $
+ *  last change: $Author: rt $ $Date: 2007-07-27 07:44:09 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -80,7 +80,7 @@
 #include <com/sun/star/uno/Sequence.hxx>
 #endif
 
-#include <window.h>
+#include <vcl/window.h>
 #include <vcl/svdata.hxx>
 
 // ========================================================================

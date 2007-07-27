@@ -4,9 +4,9 @@
  *
  *  $RCSfile: sysdata.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2007-07-24 10:02:22 $
+ *  last change: $Author: rt $ $Date: 2007-07-27 07:43:29 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -36,6 +36,12 @@
 #ifndef _SV_SYSDATA_HXX
 #define _SV_SYSDATA_HXX
 
+#if defined( QUARTZ )
+#include <premac.h>
+#include <Carbon/Carbon.h>
+#include <postmac.h>
+#endif
+
 // -----------------
 // - SystemEnvData -
 // -----------------
@@ -45,7 +51,11 @@ struct SystemEnvData
     unsigned long       nSize;          // size in bytes of this structure
 #if defined( WNT )
     HWND                hWnd;           // the window hwnd
-#elif defined( UNX )
+#elif defined( QUARTZ )
+    WindowRef           rWindow;        // Window reference
+#endif
+
+#if defined( UNX )
     void*               pDisplay;       // the relevant display connection
     long                aWindow;        // the window of the object
     void*               pSalFrame;      // contains a salframe, if object has one
@@ -70,6 +80,8 @@ struct SystemParentData
     unsigned long   nSize;          // size in bytes of this structure
 #if defined( WNT )
     HWND            hWnd;           // the window hwnd
+#elif defined( QUARTZ )
+    WindowRef       rWindow;        // Window reference
 #elif defined( UNX )
     long            aWindow;        // the window of the object
 #endif
@@ -98,6 +110,8 @@ struct SystemGraphicsData
     unsigned long   nSize;          // size in bytes of this structure
 #if defined( WNT )
     HDC             hDC;            // handle to a device context
+#elif defined( QUARTZ )
+    CGContextRef            rCGContext;     // QUARTZ graphic context
 #elif defined( UNX )
     long            hDrawable;      // a drawable
     void*           pRenderFormat;  // render format for drawable
@@ -113,6 +127,7 @@ struct SystemWindowData
 {
     unsigned long   nSize;          // size in bytes of this structure
 #if defined( WNT )                  // meaningless on Windows
+#elif defined( QUARTZ )             // meaningless on Mac OS X / Quartz
 #elif defined( UNX )
     void*           pVisual;        // the visual to be used
 #endif

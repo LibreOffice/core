@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dbggui.cxx,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: hr $ $Date: 2007-06-27 20:00:23 $
+ *  last change: $Author: rt $ $Date: 2007-07-27 07:44:34 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -95,7 +95,7 @@
 #include <vcl/threadex.hxx>
 
 #ifndef _SV_DBGGUI_HXX
-#include <dbggui.hxx>
+#include <vcl/dbggui.hxx>
 #endif
 
 #ifndef _COM_SUN_STAR_I18N_XCHARACTERCLASSIFICATION_HPP_

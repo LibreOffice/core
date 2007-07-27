@@ -4,9 +4,9 @@
  *
  *  $RCSfile: salmenu.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2007-07-05 08:31:52 $
+ *  last change: $Author: rt $ $Date: 2007-07-27 07:43:00 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -36,8 +36,8 @@
 #include <saldata.hxx>
 #include <salinst.h>
 #include <salmenu.h>
-#include <impbmp.hxx>
-#include <svids.hrc>
+#include <vcl/impbmp.hxx>
+#include <vcl/svids.hrc>
 
 
 // nPos is 0 based, MenuItemIndex is 1 based

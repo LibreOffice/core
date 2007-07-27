@@ -4,9 +4,9 @@
  *
  *  $RCSfile: window.h,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2007-07-24 10:03:09 $
+ *  last change: $Author: rt $ $Date: 2007-07-27 07:44:49 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -67,6 +67,8 @@
 #ifndef _CPPUHELPER_WEAKREF_HXX_
 #include <cppuhelper/weakref.hxx>
 #endif
+
+#include <vcl/salnativewidgets.hxx>
 
 #include <list>
 
@@ -298,6 +300,7 @@ public:
     WinBits             mnExtendedStyle;
     WinBits             mnPrevExtendedStyle;
     WindowType          mnType;
+    ControlPart         mnNativeBackground;
     USHORT              mnWaitCount;
     USHORT              mnPaintFlags;
     USHORT              mnGetFocusFlags;
@@ -352,6 +355,10 @@ public:
                         mbDlgCtrlStart:1,
                         mbFocusVisible:1,
                         mbTrackVisible:1,
+                        mbUseNativeFocus:1,
+                        mbNativeFocusVisible:1,
+                        mbInShowFocus:1,
+                        mbInHideFocus:1,
                         mbControlForeground:1,
                         mbControlBackground:1,
                         mbAlwaysOnTop:1,

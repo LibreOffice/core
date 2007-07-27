@@ -4,9 +4,9 @@
  *
  *  $RCSfile: salmenu.h,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2007-07-05 16:02:07 $
+ *  last change: $Author: rt $ $Date: 2007-07-27 07:43:42 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -48,7 +48,7 @@
 #endif
 
 #ifndef _SV_SALMENU_HXX
-#include <salmenu.hxx>
+#include <vcl/salmenu.hxx>
 #endif
 
 

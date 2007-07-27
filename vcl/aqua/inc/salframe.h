@@ -4,9 +4,9 @@
  *
  *  $RCSfile: salframe.h,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: rt $ $Date: 2007-07-05 16:00:33 $
+ *  last change: $Author: rt $ $Date: 2007-07-27 07:42:47 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -45,7 +45,7 @@
 #endif
 
 #ifndef _SV_SYSDATA_HXX
-#include <sysdata.hxx>
+#include <vcl/sysdata.hxx>
 #endif
 
 #include <aquavcltypes.h>

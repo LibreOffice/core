@@ -4,9 +4,9 @@
  *
  *  $RCSfile: salobj.h,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: rt $ $Date: 2007-07-05 16:03:05 $
+ *  last change: $Author: rt $ $Date: 2007-07-27 07:44:22 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -41,7 +41,7 @@
 #endif
 
 #ifndef _SV_SYSDATA_HXX
-#include <sysdata.hxx>
+#include <vcl/sysdata.hxx>
 #endif
 
 #include <vcl/salobj.hxx>

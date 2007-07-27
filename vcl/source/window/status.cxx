@@ -4,9 +4,9 @@
  *
  *  $RCSfile: status.cxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: rt $ $Date: 2007-07-05 08:42:49 $
+ *  last change: $Author: rt $ $Date: 2007-07-27 07:43:18 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -67,7 +67,7 @@
 #ifndef _SV_VIRDEV_HXX
 #include <vcl/virdev.hxx>
 #endif
-#include <window.h>
+#include <vcl/window.h>
 
 // =======================================================================
 
