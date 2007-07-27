@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.6 $
+#   $Revision: 1.7 $
 #
-#   last change: $Author: obo $ $Date: 2007-07-18 13:30:57 $
+#   last change: $Author: rt $ $Date: 2007-07-27 09:54:00 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -51,6 +51,7 @@ EXCEPTIONSFILES=        \
         $(SLO)$/retrievedinputstreamdata.obj \
         $(SLO)$/observablethread.obj \
         $(SLO)$/cancellablejob.obj \
+        $(SLO)$/threadmanager.obj \
         $(SLO)$/finalthreadmanager.obj
 
 SLOFILES =	\
