@@ -4,9 +4,9 @@
  *
  *  $RCSfile: sallayout.cxx,v $
  *
- *  $Revision: 1.88 $
+ *  $Revision: 1.89 $
  *
- *  last change: $Author: hr $ $Date: 2007-06-27 20:23:27 $
+ *  last change: $Author: rt $ $Date: 2007-07-27 10:02:43 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -162,7 +162,7 @@ sal_UCS4 GetVerticalChar( sal_UCS4 )
 
 // -----------------------------------------------------------------------
 
-sal_UCS4 GetMirroredChar( sal_UCS4 nChar )
+VCL_DLLPUBLIC sal_UCS4 GetMirroredChar( sal_UCS4 nChar )
 {
     nChar = u_charMirror( nChar );
     return nChar;

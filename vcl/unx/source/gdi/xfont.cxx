@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xfont.cxx,v $
  *
- *  $Revision: 1.47 $
+ *  $Revision: 1.48 $
  *
- *  last change: $Author: hr $ $Date: 2007-06-27 20:50:42 $
+ *  last change: $Author: rt $ $Date: 2007-07-27 10:02:13 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -59,6 +59,9 @@
 #ifndef _SV_SALGDI_H
 #include <salgdi.h>
 #endif
+
+// for GetMirroredChar
+#include <vcl/svapp.hxx>
 
 #if OSL_DEBUG_LEVEL > 1
 #include <cstdio>

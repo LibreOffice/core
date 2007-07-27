@@ -4,9 +4,9 @@
  *
  *  $RCSfile: vclenum.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: vg $ $Date: 2007-04-11 18:16:05 $
+ *  last change: $Author: rt $ $Date: 2007-07-27 10:02:50 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -302,5 +302,8 @@ enum KeyFuncType { KEYFUNC_DONTKNOW, KEYFUNC_NEW, KEYFUNC_OPEN, KEYFUNC_SAVE,
                    KeyFuncType_FORCE_EQUAL_SIZE=SAL_MAX_ENUM };
 
 #endif
+
+typedef sal_uInt32 sal_UCS4;    // TODO: this should be moved to rtl
+
 
 #endif  // _VCL_VCLENUM_HXX

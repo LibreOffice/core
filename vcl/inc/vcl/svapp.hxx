@@ -4,9 +4,9 @@
  *
  *  $RCSfile: svapp.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: kz $ $Date: 2007-05-11 12:01:09 $
+ *  last change: $Author: rt $ $Date: 2007-07-27 10:02:36 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -101,6 +101,8 @@ namespace awt {
 }
 } } }
 
+// helper needed by SalLayout implementations as well as svx/source/dialog/svxbmpnumbalueset.cxx
+VCL_DLLPUBLIC sal_UCS4 GetMirroredChar( sal_UCS4 );
 
 // --------------------
 // - SystemWindowMode -

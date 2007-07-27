@@ -4,9 +4,9 @@
  *
  *  $RCSfile: winlayout.cxx,v $
  *
- *  $Revision: 1.107 $
+ *  $Revision: 1.108 $
  *
- *  last change: $Author: hr $ $Date: 2007-06-27 20:57:59 $
+ *  last change: $Author: rt $ $Date: 2007-07-27 10:02:29 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -65,6 +65,8 @@
 #endif // GCP_KERN_HACK
 
 #include <psprint/sft.h>
+// for GetMirroredChar
+#include <vcl/svapp.hxx>
 
 #ifdef USE_UNISCRIBE
 #include <Usp10.h>

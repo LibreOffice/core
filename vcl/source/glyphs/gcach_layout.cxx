@@ -4,9 +4,9 @@
  *
  *  $RCSfile: gcach_layout.cxx,v $
  *
- *  $Revision: 1.43 $
+ *  $Revision: 1.44 $
  *
- *  last change: $Author: hr $ $Date: 2007-06-27 20:24:59 $
+ *  last change: $Author: rt $ $Date: 2007-07-27 10:02:21 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -48,6 +48,8 @@
 #ifndef _SV_SALGDI_HXX
 #include <vcl/salgdi.hxx>
 #endif
+
+#include <vcl/svapp.hxx>
 
 #include <sal/alloca.h>
 

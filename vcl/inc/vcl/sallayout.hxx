@@ -4,9 +4,9 @@
  *
  *  $RCSfile: sallayout.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: vg $ $Date: 2007-04-11 18:07:29 $
+ *  last change: $Author: rt $ $Date: 2007-07-27 10:02:57 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -57,7 +57,8 @@ typedef unsigned short LanguageType;
 #include <vcl/dllapi.h>
 #endif
 
-typedef sal_uInt32 sal_UCS4;    // TODO: this should be moved to rtl
+// for typedef sal_UCS4
+#include <vcl/vclenum.hxx>
 
 class SalGraphics;
 class ImplFontData;
@@ -155,7 +156,8 @@ protected:
 // helper functions often used with ImplLayoutArgs
 int GetVerticalFlags( sal_UCS4 );
 sal_UCS4 GetVerticalChar( sal_UCS4 );
-VCL_DLLPUBLIC sal_UCS4 GetMirroredChar( sal_UCS4 );
+// #i80090# GetMirroredChar also needed outside vcl, moved to svapp.hxx
+// VCL_DLLPUBLIC sal_UCS4 GetMirroredChar( sal_UCS4 );
 sal_UCS4 GetLocalizedChar( sal_UCS4, LanguageType );
 VCL_DLLPUBLIC const char* GetAutofallback( sal_UCS4 ) ;
 
