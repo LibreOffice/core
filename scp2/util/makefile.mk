@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.39 $
+#   $Revision: 1.40 $
 #
-#   last change: $Author: ihi $ $Date: 2007-06-05 11:54:09 $
+#   last change: $Author: rt $ $Date: 2007-07-27 15:31:38 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -150,7 +150,7 @@ SCP1FILES += \
              file_kde.par
 .ENDIF
 
-.IF "$(ENABLE_HEADLESS)" == "TRUE"
+.IF "$(GUIBASE)" == "unx"
 SCP1FILES += module_headless.par
 .ENDIF
 .ENDIF
@@ -284,7 +284,7 @@ SCP2FILES += \
              file_kde.par
 .ENDIF
 
-.IF "$(ENABLE_HEADLESS)" == "TRUE"
+.IF "$(GUIBASE)" == "unx"
 SCP2FILES += module_headless.par
 .ENDIF
 .ENDIF
