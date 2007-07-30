@@ -4,9 +4,9 @@
  *
  *  $RCSfile: b2dpolygontools.cxx,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: obo $ $Date: 2007-07-18 11:06:27 $
+ *  last change: $Author: rt $ $Date: 2007-07-30 10:54:30 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -140,7 +140,8 @@ namespace basegfx
 
         void checkClosed(B2DPolygon& rCandidate)
         {
-            OSL_ENSURE(!rCandidate.isClosed(), "checkClosed: already closed (!)");
+            // #i80172# Removed unnecessary assertion
+            // OSL_ENSURE(!rCandidate.isClosed(), "checkClosed: already closed (!)");
 
             if(rCandidate.count() > 1 && rCandidate.getB2DPoint(0) == rCandidate.getB2DPoint(rCandidate.count() - 1))
             {
