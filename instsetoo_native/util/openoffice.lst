@@ -204,8 +204,8 @@ OpenOffice_SDK
             NOVERSIONINDIRNAME 0
             NOSPACEINDIRECTORYNAME 1
             CHANGETARGETDIR 1
-            DOWNLOADBANNER ooobanner.bmp
-            DOWNLOADBITMAP ooobitmap.bmp
+            DOWNLOADBANNER ooosdkbanner.bmp
+            DOWNLOADBITMAP ooosdkbitmap.bmp
             DOWNLOADSETUPICO ooosetup.ico
             DONTUSESTARTMENUFOLDER 1
             RELATIVE_PATHES_IN_DDF 1
@@ -386,8 +386,8 @@ BrOffice_SDK
             NOVERSIONINDIRNAME 0
             NOSPACEINDIRECTORYNAME 1
             CHANGETARGETDIR 1
-            DOWNLOADBANNER brobanner.bmp
-            DOWNLOADBITMAP brobitmap.bmp
+            DOWNLOADBANNER brosdkbanner.bmp
+            DOWNLOADBITMAP ooosdkbitmap.bmp
             DOWNLOADSETUPICO ooosetup.ico
             RELATIVE_PATHES_IN_DDF 1
         }
