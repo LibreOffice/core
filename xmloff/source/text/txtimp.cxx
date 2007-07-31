@@ -4,9 +4,9 @@
  *
  *  $RCSfile: txtimp.cxx,v $
  *
- *  $Revision: 1.129 $
+ *  $Revision: 1.130 $
  *
- *  last change: $Author: rt $ $Date: 2007-07-06 12:10:01 $
+ *  last change: $Author: hr $ $Date: 2007-07-31 17:35:40 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -985,6 +985,7 @@ OUString XMLTextImportHelper::SetStyleAndAttrs(
         const Reference < XTextCursor >& rCursor,
         const OUString& rStyleName,
         sal_Bool bPara,
+        sal_Bool bOutlineLevelAttrFound,
         sal_Int8 nOutlineLevel )
 {
     const sal_uInt16 nFamily = bPara ? XML_STYLE_FAMILY_TEXT_PARAGRAPH
@@ -1270,11 +1271,16 @@ OUString XMLTextImportHelper::SetStyleAndAttrs(
             sal_Int32 nUPD( 0 );
             sal_Int32 nBuild( 0 );
             rImport.getBuildIds( nUPD, nBuild );
-            if ( nUPD < 680 ||
-                 ( nUPD == 680 && nBuild <= 9073 ) /* BuildId of OOo 2.0.4/SO8 PU4 */ )
+            // --> OD 2007-07-25 #i73509#
+            if ( nUPD < 680 )
             {
                 bOutlineStyleCandidate = true;
             }
+            else if ( nUPD == 680 && nBuild <= 9073 ) /* BuildId of OOo 2.0.4/SO8 PU4 */
+            {
+                bOutlineStyleCandidate = bOutlineLevelAttrFound;
+            }
+            // <--
             else
             {
                 Reference< XPropertyState > xStylePropState(
