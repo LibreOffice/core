@@ -4,9 +4,9 @@
  *
  *  $RCSfile: docfld.cxx,v $
  *
- *  $Revision: 1.28 $
+ *  $Revision: 1.29 $
  *
- *  last change: $Author: vg $ $Date: 2006-09-27 10:51:50 $
+ *  last change: $Author: hr $ $Date: 2007-07-31 17:40:23 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -2396,7 +2396,7 @@ void SwDocUpdtFld::_MakeFldList( SwDoc& rDoc, int eGetMode )
         for( n = rArr.Count(); n; )
         {
             SwSection* pSect = rArr[ --n ]->GetSection();
-            if( pSect->IsHidden() && pSect->GetCondition().Len() &&
+            if( pSect && pSect->IsHidden() && pSect->GetCondition().Len() &&
                 0 != ( pSectNd = pSect->GetFmt()->GetSectionNode() ))
             {
                 ULONG nIdx = pSectNd->GetIndex();
