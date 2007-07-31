@@ -4,9 +4,9 @@
  *
  *  $RCSfile: updatecheckconfig.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2007-07-06 14:37:01 $
+ *  last change: $Author: hr $ $Date: 2007-07-31 15:57:08 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -82,6 +82,7 @@ namespace uno = com::sun::star::uno ;
 #define AUTODOWNLOAD_ENABLED    "AutoDownloadEnabled"
 #define CHECK_INTERVAL          "CheckInterval"
 #define LOCAL_FILE              "LocalFile"
+#define DOWNLOAD_SIZE           "DownloadSize"
 #define DOWNLOAD_PAUSED         "DownloadPaused"
 #define DOWNLOAD_DESTINATION    "DownloadDestination"
 #define RELEASE_NOTE            "ReleaseNote"
@@ -162,9 +163,20 @@ UpdateCheckROModel::getStringValue(const sal_Char * pStr) const
 
 //------------------------------------------------------------------------------
 
-bool UpdateCheckROModel::hasLocalFile() const
+rtl::OUString UpdateCheckROModel::getLocalFileName() const
 {
-    return getStringValue(LOCAL_FILE).getLength() > 0;
+    return getStringValue(LOCAL_FILE);
+};
+
+//------------------------------------------------------------------------------
+
+sal_Int64 UpdateCheckROModel::getDownloadSize() const
+{
+    uno::Any aAny( m_aNameAccess.getValue(DOWNLOAD_SIZE) );
+    sal_Int64 nRet = -1;
+
+    aAny >>= nRet;
+    return nRet;
 };
 
 //------------------------------------------------------------------------------
@@ -209,7 +221,10 @@ rtl::OUString UpdateCheckConfig::getDesktopDirectory()
     WCHAR szPath[MAX_PATH];
 
     if( ! FAILED( SHGetSpecialFolderPathW( NULL, szPath, CSIDL_DESKTOPDIRECTORY, true ) ) )
+    {
         aRet = rtl::OUString( szPath );
+        osl::FileBase::getFileURLFromSystemPath( aRet, aRet );
+    }
 #else
     // This should become a desktop specific setting in some system backend ..
     osl::Security().getHomeDir(aRet);
@@ -383,15 +398,19 @@ UpdateCheckConfig::getDownloadDestination() const
 //------------------------------------------------------------------------------
 
 void
-UpdateCheckConfig::storeLocalFileName(const rtl::OUString& rLocalFileName)
+UpdateCheckConfig::storeLocalFileName(const rtl::OUString& rLocalFileName, sal_Int64 nFileSize)
 {
-    rtl::OUString aName = UNISTRING(LOCAL_FILE);
-    uno::Any aValue(rLocalFileName);
+    const sal_uInt8 nItems = 2;
+    const rtl::OUString aNameList[nItems] = { UNISTRING(LOCAL_FILE), UNISTRING(DOWNLOAD_SIZE) };
+    const uno::Any aValueList[nItems] = { uno::makeAny(rLocalFileName), uno::makeAny(nFileSize) };
 
-    if( m_xContainer->hasByName(aName) )
-        m_xContainer->replaceByName(aName, aValue);
-    else
-        m_xContainer->insertByName(aName,aValue);
+    for( sal_uInt8 i=0; i < nItems; ++i )
+    {
+        if( m_xContainer->hasByName(aNameList[i]) )
+            m_xContainer->replaceByName(aNameList[i], aValueList[i]);
+        else
+            m_xContainer->insertByName(aNameList[i],aValueList[i]);
+    }
 
     commitChanges();
 }
@@ -401,10 +420,14 @@ UpdateCheckConfig::storeLocalFileName(const rtl::OUString& rLocalFileName)
 void
 UpdateCheckConfig::clearLocalFileName()
 {
-    rtl::OUString aName = UNISTRING(LOCAL_FILE);
+    const sal_uInt8 nItems = 2;
+    const rtl::OUString aNameList[nItems] = { UNISTRING(LOCAL_FILE), UNISTRING(DOWNLOAD_SIZE) };
 
-    if( m_xContainer->hasByName(aName) )
-        m_xContainer->removeByName(aName);
+    for( sal_uInt8 i=0; i < nItems; ++i )
+    {
+        if( m_xContainer->hasByName(aNameList[i]) )
+            m_xContainer->removeByName(aNameList[i]);
+    }
 
     commitChanges();
 }
