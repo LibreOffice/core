@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.13 $
+#   $Revision: 1.14 $
 #
-#   last change: $Author: obo $ $Date: 2007-03-09 08:49:53 $
+#   last change: $Author: hr $ $Date: 2007-07-31 13:07:55 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -96,10 +96,10 @@ SHL1STDLIBS= \
         $(LNGLIB) \
         $(HNJLIB)
 
-.IF "$(SYSTEM_MYSPELL)" != "YES"
+.IF "$(SYSTEM_HUNSPELL)" != "YES"
 SHL1STDLIBS+=   $(ULINGULIB)
 .ELSE
-SHL1STDLIBS+=   $(MYSPELL_LIBS)
+SHL1STDLIBS+=   $(HUNSPELL_LIBS)
 .ENDIF
 
 
