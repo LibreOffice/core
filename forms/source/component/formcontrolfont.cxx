@@ -4,9 +4,9 @@
  *
  *  $RCSfile: formcontrolfont.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: obo $ $Date: 2007-03-09 13:33:03 $
+ *  last change: $Author: hr $ $Date: 2007-07-31 13:48:23 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -197,7 +197,10 @@ namespace frm
     //---------------------------------------------------------------------
     bool FontControlModel::isFontAggregateProperty( sal_Int32 _nPropertyHandle ) const
     {
-        return ( _nPropertyHandle == PROPERTY_ID_FONT_NAME )
+        return ( _nPropertyHandle == PROPERTY_ID_FONT_CHARWIDTH )
+            || ( _nPropertyHandle == PROPERTY_ID_FONT_ORIENTATION )
+            || ( _nPropertyHandle == PROPERTY_ID_FONT_WIDTH )
+            || ( _nPropertyHandle == PROPERTY_ID_FONT_NAME )
             || ( _nPropertyHandle == PROPERTY_ID_FONT_STYLENAME )
             || ( _nPropertyHandle == PROPERTY_ID_FONT_FAMILY )
             || ( _nPropertyHandle == PROPERTY_ID_FONT_CHARSET )
