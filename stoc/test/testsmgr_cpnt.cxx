@@ -4,9 +4,9 @@
  *
  *  $RCSfile: testsmgr_cpnt.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2006-12-01 17:23:35 $
+ *  last change: $Author: hr $ $Date: 2007-07-31 14:01:22 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -77,7 +77,7 @@
 #include <com/sun/star/container/XEnumerationAccess.hpp>
 #include <com/sun/star/container/XEnumeration.hpp>
 
-#if defined ( UNX ) || defined( MAC )
+#if defined ( UNX )
 #include <limits.h>
 #define _MAX_PATH PATH_MAX
 #endif
