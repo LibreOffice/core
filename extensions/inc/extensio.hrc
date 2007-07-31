@@ -4,9 +4,9 @@
  *
  *  $RCSfile: extensio.hrc,v $
  *
- *  $Revision: 1.31 $
+ *  $Revision: 1.32 $
  *
- *  last change: $Author: rt $ $Date: 2007-07-06 14:35:06 $
+ *  last change: $Author: hr $ $Date: 2007-07-31 15:55:26 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -139,11 +139,22 @@
 #define HID_DLG_MAPPING                         (HID_EXTENSIONS_START + 74)
 #define HID_DLG_DBCHANGE                        (HID_EXTENSIONS_START + 75)
 #define HID_SELECTION_TLB                       (HID_EXTENSIONS_START + 76)
+
 #define HID_CHECK_FOR_UPD_DLG                   (HID_EXTENSIONS_START + 77)
+#define HID_CHECK_FOR_UPD_CLOSE                 (HID_EXTENSIONS_START + 78)
+#define HID_CHECK_FOR_UPD_PAUSE                 (HID_EXTENSIONS_START + 80)
+#define HID_CHECK_FOR_UPD_RESUME                (HID_EXTENSIONS_START + 81)
+#define HID_CHECK_FOR_UPD_DOWNLOAD              (HID_EXTENSIONS_START + 82)
+#define HID_CHECK_FOR_UPD_DOWNLOAD2             (HID_EXTENSIONS_START + 83)
+#define HID_CHECK_FOR_UPD_INSTALL               (HID_EXTENSIONS_START + 84)
+#define HID_CHECK_FOR_UPD_STATUS                (HID_EXTENSIONS_START + 85)
+#define HID_CHECK_FOR_UPD_DESCRIPTION           (HID_EXTENSIONS_START + 86)
+#define HID_CHECK_FOR_UPD_CANCEL                (HID_EXTENSIONS_START + 87)
 
 // please adjust HID_LAST_EXTENSIONS_ID if you add new ids here!
+// you probably have to insert your new helpid into util/hidother.hrc, too!
 
-#define HID_LAST_EXTENSIONS_ID  HID_CHECK_FOR_UPD_DLG
+#define HID_LAST_EXTENSIONS_ID  HID_CHECK_FOR_UPD_CANCEL
 
 #if HID_LAST_EXTENSIONS_ID > HID_EXTENSIONS_END
     #error id overflow
