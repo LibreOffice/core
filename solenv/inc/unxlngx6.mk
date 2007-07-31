@@ -4,9 +4,9 @@
 #
 #   $RCSfile: unxlngx6.mk,v $
 #
-#   $Revision: 1.9 $
+#   $Revision: 1.10 $
 #
-#   last change: $Author: obo $ $Date: 2007-03-09 09:10:48 $
+#   last change: $Author: hr $ $Date: 2007-07-31 13:07:28 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -82,6 +82,11 @@ CFLAGSENABLESYMBOLS=-g1
 .ELSE
 CFLAGSENABLESYMBOLS=-g # was temporarily commented out, reenabled before Beta
 
+.ENDIF
+.IF "$(HAVE_LD_HASH_STYLE)"  == "TRUE"
+LINKFLAGS += -Wl,--hash-style=both
+.ELSE
+LINKFLAGS += -Wl,-zdynsort
 .ENDIF
 
 # flags for the C++ Compiler
