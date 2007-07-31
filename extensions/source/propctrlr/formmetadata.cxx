@@ -4,9 +4,9 @@
  *
  *  $RCSfile: formmetadata.cxx,v $
  *
- *  $Revision: 1.45 $
+ *  $Revision: 1.46 $
  *
- *  last change: $Author: rt $ $Date: 2007-07-03 13:06:11 $
+ *  last change: $Author: hr $ $Date: 2007-07-31 14:07:38 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -318,7 +318,7 @@ namespace pcr
         DEF_INFO_4( VISUALEFFECT,      VISUALEFFECT,       VISUALEFFECT,      FORM_VISIBLE, DIALOG_VISIBLE, ENUM_ONE, COMPOSEABLE ),
         DEF_INFO_4( ALIGN,             ALIGN,              ALIGN,             FORM_VISIBLE, DIALOG_VISIBLE, ENUM, COMPOSEABLE ),
         DEF_INFO_3( VERTICAL_ALIGN,    VERTICAL_ALIGN,     VERTICAL_ALIGN,    FORM_VISIBLE, ENUM, COMPOSEABLE ),
-        DEF_INFO_2( ROWHEIGHT,         ROWHEIGHT,          ROWHEIGHT,         FORM_VISIBLE, COMPOSEABLE ),
+        DEF_INFO_3( ROWHEIGHT,         ROWHEIGHT,          ROWHEIGHT,         FORM_VISIBLE, DIALOG_VISIBLE, COMPOSEABLE ),
         DEF_INFO_3( BACKGROUNDCOLOR,   BACKGROUNDCOLOR,    BACKGROUNDCOLOR,   FORM_VISIBLE, DIALOG_VISIBLE, COMPOSEABLE ),
         DEF_INFO_3( SYMBOLCOLOR,       SYMBOLCOLOR,        SYMBOLCOLOR,       FORM_VISIBLE, DIALOG_VISIBLE, COMPOSEABLE ),
         DEF_INFO_3( FILLCOLOR,         FILLCOLOR,          FILLCOLOR,         FORM_VISIBLE, DIALOG_VISIBLE, COMPOSEABLE ),
@@ -374,8 +374,6 @@ namespace pcr
         DEF_INFO_2( SHOWS_ROOT_HANDLES, SHOWS_ROOT_HANDLES, SHOWS_ROOT_HANDLES,             DIALOG_VISIBLE, COMPOSEABLE ),
         DEF_INFO_2( EDITABLE,          EDITABLE,           EDITABLE,                        DIALOG_VISIBLE, COMPOSEABLE ),
         DEF_INFO_2( INVOKES_STOP_NOT_EDITING, INVOKES_STOP_NOT_EDITING, INVOKES_STOP_NOT_EDITING, DIALOG_VISIBLE, COMPOSEABLE ),
-        DEF_INFO_2( ROW_HEIGHT,        ROW_HEIGHT,         ROW_HEIGHT,                      DIALOG_VISIBLE, COMPOSEABLE ),
-        DEF_INFO_3( HELPURL,           HELPURL,            HELPURL,           FORM_VISIBLE, DIALOG_VISIBLE, COMPOSEABLE ),
         DEF_INFO_2( DECORATION,        DECORATION,         DECORATION,        DIALOG_VISIBLE, COMPOSEABLE )
         };
 
@@ -387,6 +385,13 @@ namespace pcr
                 s_nCount,
                 sizeof(OPropertyInfoImpl),
                 &PropertyInfoCompare);
+
+#if OSL_DEBUG_LEVEL > 0
+        for ( const OPropertyInfoImpl* pCheck = s_pPropertyInfos; pCheck != s_pPropertyInfos + s_nCount - 1; ++pCheck )
+        {
+            OSL_ENSURE( pCheck->sName != ( pCheck + 1 )->sName, "OPropertyInfoService::getPropertyInfo: duplicate entry in the table!" );
+        }
+#endif
 
         return s_pPropertyInfos;
     }
