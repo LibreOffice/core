@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ListBox.cxx,v $
  *
- *  $Revision: 1.51 $
+ *  $Revision: 1.52 $
  *
- *  last change: $Author: obo $ $Date: 2007-03-09 13:29:22 $
+ *  last change: $Author: hr $ $Date: 2007-07-31 13:48:10 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -201,14 +201,17 @@ namespace frm
         :OBoundControlModel( _pOriginal, _rxFactory )
         ,OEntryListHelper( *_pOriginal, m_aMutex )
         ,OErrorBroadcaster( OComponentHelper::rBHelper )
+        ,m_eListSourceType( _pOriginal->m_eListSourceType )
+        ,m_aBoundColumn( _pOriginal->m_aBoundColumn )
+        ,m_aListSourceSeq( _pOriginal->m_aListSourceSeq )
+        ,m_aValueSeq( _pOriginal->m_aValueSeq )
+        ,m_aDefaultSelectSeq( _pOriginal->m_aDefaultSelectSeq )
         ,m_aRefreshListeners( m_aMutex )
         ,m_nNULLPos(-1)
         ,m_bBoundComponent(sal_False)
         ,m_eTransferSelectionAs( tsEntry )
     {
         DBG_CTOR(OListBoxModel,NULL);
-        m_eListSourceType = _pOriginal->m_eListSourceType;
-        m_aBoundColumn = _pOriginal->m_aBoundColumn;
     }
 
     //------------------------------------------------------------------
