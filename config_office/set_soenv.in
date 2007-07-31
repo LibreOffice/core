@@ -1,8 +1,8 @@
 #!@PERL@ -w
 #
 # Program:     set_soenv.in
-# Version:     $Revision: 1.152 $
-# Date:        $Date: 2007-06-27 17:52:06 $
+# Version:     $Revision: 1.153 $
+# Date:        $Date: 2007-07-31 13:09:45 $
 # Author:      Willem van Dorp, Ross Nicholson, Oisin Boydell - Sun Microsystems, Ireland.
 #
 #---------------------------------------------------------------------------
@@ -1733,6 +1733,7 @@ ToFile( "JAVAHOME",          $JAVAHOME,          "e" );
 ToFile( "CC",                $CC,                "e" );
 ToFile( "HAVE_GCC_VISIBILITY_FEATURE",
 		"@HAVE_GCC_VISIBILITY_FEATURE@", "e" );
+ToFile( "HAVE_LD_HASH_STYLE","@HAVE_LD_HASH_STYLE@","e" );
 ToFile( "CXX",               $CXX,               "e" );
 ToFile( "MINGWCXX",          "@MINGWCXX@",       "e" );
 ToFile( "MINGWSTRIP",        "@MINGWSTRIP@",     "e" );
@@ -1839,7 +1840,10 @@ ToFile( "NAS_INCLUDES",      "@NAS_INCLUDES@",     "e" );
 ToFile( "ENABLE_NAS",        "@ENABLE_NAS@",       "e" );
 ToFile( "ENABLE_PASF",       "@ENABLE_PASF@",      "e" );
 ToFile( "SYSTEM_SNDFILE",    "@SYSTEM_SNDFILE@",   "e" );
+ToFile( "SNDFILE_CFLAGS",    "@SNDFILE_CFLAGS@",   "e" );
+ToFile( "SNDFILE_LIBS",	     "@SNDFILE_LIBS@",	   "e" );
 ToFile( "SYSTEM_PORTAUDIO",  "@SYSTEM_PORTAUDIO@", "e" );
+ToFile( "PA_VER",            "@PA_VER@",           "e" );
 ToFile( "SYSTEM_NEON",       "@SYSTEM_NEON@",      "e" );
 ToFile( "NEON_VERSION",      "@NEON_VERSION@",     "e" );
 ToFile( "NEON_LIBS",         "@NEON_LIBS@",        "e" );
@@ -1855,6 +1859,7 @@ ToFile( "USE_XINERAMA",      "@USE_XINERAMA@",     "e" );
 ToFile( "XINERAMA_LINK",     "@XINERAMA_LINK@",    "e" );
 ToFile( "SYSTEM_HUNSPELL",   "@SYSTEM_HUNSPELL@",  "e" );
 ToFile( "HUNSPELL_CFLAGS",   "@HUNSPELL_CFLAGS@",  "e" );
+ToFile( "HUNSPELL_LIBS",     "@HUNSPELL_LIBS@",    "e" );
 ToFile( "SYSTEM_HYPH",       "@SYSTEM_HYPH@",      "e" );
 ToFile( "SYSTEM_MYTHES",     "@SYSTEM_MYTHES@",    "e" );
 ToFile( "PAM",               "@PAM@",              "e" );
