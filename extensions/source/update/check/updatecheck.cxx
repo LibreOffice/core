@@ -4,9 +4,9 @@
  *
  *  $RCSfile: updatecheck.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: ihi $ $Date: 2007-07-13 11:15:08 $
+ *  last change: $Author: hr $ $Date: 2007-07-31 15:56:29 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -85,6 +85,13 @@
 #include <osl/module.hxx>
 #include <osl/file.hxx>
 
+#ifdef WNT
+#pragma warning(push,1) // disable warnings within system headers
+//#pragma warning(disable: 4917)
+#include <objbase.h>
+#pragma warning(pop)
+#endif
+
 #include "updateprotocol.hxx"
 #include "updatecheckconfig.hxx"
 
@@ -126,7 +133,7 @@ rtl::OUString getReleaseNote(const UpdateInfo& rInfo, sal_uInt8 pos, bool autoDo
         else if( (pos == iter->Pos2) && ((1 == iter->Pos) || (2 == iter->Pos)) && autoDownloadEnabled )
             return iter->URL2;
 
-        iter++;
+        ++iter;
     }
 
     return rtl::OUString();
@@ -302,6 +309,23 @@ private:
 };
 
 //------------------------------------------------------------------------------
+class ShutdownThread :  public osl::Thread
+{
+public:
+    ShutdownThread( const uno::Reference<uno::XComponentContext>& xContext );
+
+    virtual void SAL_CALL run();
+    virtual void SAL_CALL onTerminated();
+
+protected:
+    ~ShutdownThread();
+
+private:
+    osl::Condition m_aCondition;
+    const uno::Reference<uno::XComponentContext> m_xContext;
+};
+
+//------------------------------------------------------------------------------
 
 UpdateCheckThread::UpdateCheckThread( osl::Condition& rCondition,
                                       const uno::Reference<uno::XComponentContext>& xContext ) :
@@ -394,6 +418,8 @@ UpdateCheckThread::runCheck()
         aController->setUpdateInfo(aInfo);
         ret = true;
     }
+    else
+        aController->setCheckFailedState();
 
     // joining with this thread is safe again
     clearProvider();
@@ -557,24 +583,22 @@ DownloadThread::~DownloadThread()
 void SAL_CALL
 DownloadThread::run()
 {
+#ifdef WNT
+    CoUninitialize();
+    CoInitialize( NULL );
+#endif
+
     while( schedule() )
     {
         rtl::Reference< UpdateCheckConfig > rModel = UpdateCheckConfig::get(m_xContext);
 
-        bool bResumeDownload = true;
         rtl::OUString aLocalFile = rModel->getLocalFileName();
-
-        // pass destination directory as file name for new downloads
-        if( ! ( aLocalFile.getLength() > 0 ) )
-        {
-            bResumeDownload = false;
-            aLocalFile = rModel->getDownloadDestination();
-        }
+        rtl::OUString aDownloadDest = rModel->getDownloadDestination();
 
         // release config class for now
         rModel.clear();
 
-        if( ! m_aDownload.start(m_aURL, aLocalFile, bResumeDownload) )
+        if( ! m_aDownload.start(m_aURL, aLocalFile, aDownloadDest ) )
         {
             static sal_uInt8 n = 0;
 
@@ -624,6 +648,50 @@ void SAL_CALL DownloadThread::onTerminated()
 }
 
 //------------------------------------------------------------------------------
+ShutdownThread::ShutdownThread( const uno::Reference<uno::XComponentContext>& xContext) :
+    m_xContext( xContext )
+{
+    create();
+}
+
+//------------------------------------------------------------------------------
+ShutdownThread::~ShutdownThread()
+{
+}
+
+//------------------------------------------------------------------------------
+void SAL_CALL
+ShutdownThread::run()
+{
+    TimeValue tv = { 0, 250 };
+
+    m_aCondition.wait(&tv);
+
+    // Tell QuickStarter not to veto ..
+    uno::Reference< beans::XFastPropertySet > xQuickStarter(
+        UpdateCheck::createService(UNISTRING("com.sun.star.office.Quickstart"), m_xContext),
+        uno::UNO_QUERY
+    );
+
+    if (xQuickStarter.is())
+        xQuickStarter->setFastPropertyValue(0, uno::makeAny(false));
+
+    // Shutdown the office
+    uno::Reference< frame::XDesktop > xDesktop(
+        UpdateCheck::createService(UNISTRING("com.sun.star.frame.Desktop"), m_xContext),
+        uno::UNO_QUERY);
+
+    if( xDesktop.is() )
+        xDesktop->terminate();
+}
+
+//------------------------------------------------------------------------------
+void SAL_CALL ShutdownThread::onTerminated()
+{
+    delete this;
+}
+
+//------------------------------------------------------------------------------
 
 } // anonymous namespace
 
@@ -648,13 +716,27 @@ UpdateCheck::initialize(const uno::Sequence< beans::NamedValue >& rValues,
         aModel.getUpdateEntry(m_aUpdateInfo);
 
         bool obsoleteUpdateInfo = isObsoleteUpdateInfo(aUpdateEntryVersion);
+        rtl::OUString aLocalFileName = aModel.getLocalFileName();
 
-        if( aModel.hasLocalFile() )
+        if( aLocalFileName.getLength() > 0 )
         {
             bool downloadPaused = aModel.isDownloadPaused();
 
             enableDownload(true, downloadPaused);
             setUIState(downloadPaused ? UPDATESTATE_DOWNLOAD_PAUSED : UPDATESTATE_DOWNLOADING);
+
+            // Try to get the number of bytes already on disk
+            osl::DirectoryItem aDirectoryItem;
+            if( osl::DirectoryItem::E_None == osl::DirectoryItem::get(aLocalFileName, aDirectoryItem) )
+            {
+                osl::FileStatus aFileStatus(FileStatusMask_FileSize);
+                if( osl::DirectoryItem::E_None == aDirectoryItem.getFileStatus(aFileStatus) )
+                {
+                    // Calculate initial percent value.
+                    sal_Int32 nPercent = (sal_Int32) (100 * aFileStatus.getFileSize() / aModel.getDownloadSize());
+                    getUpdateHandler()->setProgress(nPercent);
+                }
+            }
         }
         else
         {
@@ -675,7 +757,7 @@ UpdateCheck::initialize(const uno::Sequence< beans::NamedValue >& rValues,
             else
             {
                 enableAutoCheck(aModel.isAutoCheckEnabled());
-                setUIState(m_aUpdateInfo);
+                setUIState(getUIState(m_aUpdateInfo));
             }
         }
     }
@@ -703,13 +785,14 @@ UpdateCheck::cancel()
     osl::ClearableMutexGuard aGuard(m_aMutex);
 
     WorkerThread *pThread = m_pThread;
+    UpdateState eUIState = getUIState(m_aUpdateInfo);
+
     aGuard.clear();
 
     if( NULL != pThread )
         pThread->cancel();
 
-    osl::MutexGuard aGuard2(m_aMutex);
-    setUIState(m_aUpdateInfo);
+    setUIState(eUIState);
 }
 
 //------------------------------------------------------------------------------
@@ -729,8 +812,9 @@ UpdateCheck::download()
         {
             shutdownThread(true);
 
-            osl::MutexGuard aGuard2(m_aMutex);
+            osl::ClearableMutexGuard aGuard2(m_aMutex);
             enableDownload(true);
+            aGuard2.clear();
             setUIState(UPDATESTATE_DOWNLOADING);
         }
     }
@@ -770,23 +854,7 @@ UpdateCheck::install()
             rtl::OUString aInstallImage(m_aImageName);
             osl::FileBase::getSystemPathFromFileURL(aInstallImage, aInstallImage);
             xShellExecute->execute(aInstallImage, rtl::OUString(), c3s::SystemShellExecuteFlags::DEFAULTS);
-
-            // Tell QuickStarter not to veto ..
-            uno::Reference< beans::XFastPropertySet > xQuickStarter(
-                createService(UNISTRING("com.sun.star.office.Quickstart"), m_xContext),
-                uno::UNO_QUERY
-            );
-
-            if (xQuickStarter.is())
-                xQuickStarter->setFastPropertyValue(0, uno::makeAny(false));
-
-            // Shutdown the office
-            uno::Reference< frame::XDesktop > xDesktop(
-                createService(UNISTRING("com.sun.star.frame.Desktop"), m_xContext),
-                uno::UNO_QUERY);
-
-            if( xDesktop.is() )
-                xDesktop->terminate();
+            ShutdownThread *pShutdownThread = new ShutdownThread( m_xContext );
         }
     } catch(c3s::SystemShellExecuteException&) {
         m_aUpdateHandler->setErrorMessage( m_aUpdateHandler->getDefaultInstErrMsg() );
@@ -798,14 +866,15 @@ UpdateCheck::install()
 void
 UpdateCheck::pause()
 {
-    osl::MutexGuard aGuard(m_aMutex);
+    osl::ClearableMutexGuard aGuard(m_aMutex);
 
     if( NULL != m_pThread )
         m_pThread->suspend();
 
     rtl::Reference< UpdateCheckConfig > rModel = UpdateCheckConfig::get(m_xContext);
-    rModel->storeDownloadPaused(true);
+    aGuard.clear();
 
+    rModel->storeDownloadPaused(true);
     setUIState(UPDATESTATE_DOWNLOAD_PAUSED);
 }
 
@@ -814,15 +883,31 @@ UpdateCheck::pause()
 void
 UpdateCheck::resume()
 {
-    osl::MutexGuard aGuard(m_aMutex);
+    osl::ClearableMutexGuard aGuard(m_aMutex);
 
     if( NULL != m_pThread )
         m_pThread->resume();
 
     rtl::Reference< UpdateCheckConfig > rModel = UpdateCheckConfig::get(m_xContext);
-    rModel->storeDownloadPaused(false);
+    aGuard.clear();
 
+    rModel->storeDownloadPaused(false);
     setUIState(UPDATESTATE_DOWNLOADING);
+}
+
+//------------------------------------------------------------------------------
+
+void
+UpdateCheck::closeAfterFailure()
+{
+    osl::ClearableMutexGuard aGuard(m_aMutex);
+
+    if ( ( m_eState == DISABLED ) || ( m_eState == CHECK_SCHEDULED ) )
+    {
+        const UpdateState eUIState = getUIState( m_aUpdateInfo );
+        aGuard.clear();
+        setUIState( eUIState, true );
+    }
 }
 
 //------------------------------------------------------------------------------
@@ -892,7 +977,7 @@ UpdateCheck::enableDownload(bool enable, bool paused)
 bool
 UpdateCheck::downloadTargetExists(const rtl::OUString& rFileName)
 {
-    osl::MutexGuard aGuard(m_aMutex);
+    osl::ClearableMutexGuard aGuard(m_aMutex);
 
     rtl::Reference< UpdateHandler > aUpdateHandler(getUpdateHandler());
 
@@ -909,8 +994,15 @@ UpdateCheck::downloadTargetExists(const rtl::OUString& rFileName)
                 cont = false;
             }
         }
+        else
+        {
+            UpdateState eUIState = getUIState(m_aUpdateInfo);
+            aGuard.clear();
+            setUIState(eUIState);
+        }
     }
-    else // this is a automatic download trigger
+
+    if( !cont )
     {
         shutdownThread(false);
         enableDownload(false);
@@ -924,8 +1016,11 @@ UpdateCheck::downloadTargetExists(const rtl::OUString& rFileName)
 void
 UpdateCheck::downloadStalled(const rtl::OUString& rErrorMessage)
 {
-    osl::MutexGuard aGuard(m_aMutex);
-    getUpdateHandler()->setErrorMessage(rErrorMessage);
+    osl::ClearableMutexGuard aGuard(m_aMutex);
+    rtl::Reference< UpdateHandler > aUpdateHandler(getUpdateHandler());
+    aGuard.clear();
+
+    aUpdateHandler->setErrorMessage(rErrorMessage);
     setUIState(UPDATESTATE_ERROR_DOWNLOADING);
 }
 
@@ -934,19 +1029,22 @@ UpdateCheck::downloadStalled(const rtl::OUString& rErrorMessage)
 void
 UpdateCheck::downloadProgressAt(sal_Int8 nPercent)
 {
-    osl::MutexGuard aGuard(m_aMutex);
-    getUpdateHandler()->setProgress(nPercent);
+    osl::ClearableMutexGuard aGuard(m_aMutex);
+    rtl::Reference< UpdateHandler > aUpdateHandler(getUpdateHandler());
+    aGuard.clear();
+
+    aUpdateHandler->setProgress(nPercent);
 }
 
 //------------------------------------------------------------------------------
 
 void
-UpdateCheck::downloadStarted(const rtl::OUString& rLocalFileName)
+UpdateCheck::downloadStarted(const rtl::OUString& rLocalFileName, sal_Int64 nFileSize)
 {
     osl::MutexGuard aGuard(m_aMutex);
 
     rtl::Reference< UpdateCheckConfig > aModel(UpdateCheckConfig::get(m_xContext));
-    aModel->storeLocalFileName(rLocalFileName);
+    aModel->storeLocalFileName(rLocalFileName, nFileSize);
 
     // Bring-up release note for position 1 ..
     const rtl::OUString aURL(getReleaseNote(m_aUpdateInfo, 1, aModel->isAutoDownloadEnabled()));
@@ -959,7 +1057,7 @@ UpdateCheck::downloadStarted(const rtl::OUString& rLocalFileName)
 void
 UpdateCheck::downloadFinished(const rtl::OUString& rLocalFileName)
 {
-    osl::MutexGuard aGuard(m_aMutex);
+    osl::ClearableMutexGuard aGuard(m_aMutex);
 
     // no more retries
     m_pThread->terminate();
@@ -968,10 +1066,13 @@ UpdateCheck::downloadFinished(const rtl::OUString& rLocalFileName)
     rModel->clearLocalFileName();
 
     m_aImageName = rLocalFileName;
+    UpdateInfo aUpdateInfo(m_aUpdateInfo);
+
+    aGuard.clear();
     setUIState(UPDATESTATE_DOWNLOAD_AVAIL);
 
     // Bring-up release note for position 2 ..
-    const rtl::OUString aURL(getReleaseNote(m_aUpdateInfo, 2, rModel->isAutoDownloadEnabled()));
+    const rtl::OUString aURL(getReleaseNote(aUpdateInfo, 2, rModel->isAutoDownloadEnabled()));
     if( aURL.getLength() > 0 )
         showReleaseNote(aURL);
 }
@@ -1008,7 +1109,7 @@ UpdateCheck::cancelDownload()
 void
 UpdateCheck::showDialog(bool forceCheck)
 {
-    osl::MutexGuard aGuard(m_aMutex);
+    osl::ResettableMutexGuard aGuard(m_aMutex);
 
     bool update_found = m_aUpdateInfo.BuildId.getLength() > 0;
     bool bSetUIState = ! m_aUpdateHandler.is();
@@ -1038,12 +1139,17 @@ UpdateCheck::showDialog(bool forceCheck)
         eDialogState = UPDATESTATE_DOWNLOAD_PAUSED;
         break;
 
-    default:
+    case NOT_INITIALIZED:
         OSL_ASSERT( false );
+        break;
     }
 
     if( bSetUIState )
+    {
+        aGuard.clear();
         setUIState(eDialogState, true); // suppress bubble as Dialog will be visible soon
+        aGuard.reset();
+    }
 
     getUpdateHandler()->setVisible(true);
 
@@ -1065,7 +1171,7 @@ UpdateCheck::showDialog(bool forceCheck)
 void
 UpdateCheck::setUpdateInfo(const UpdateInfo& aInfo)
 {
-    osl::MutexGuard aGuard(m_aMutex);
+    osl::ClearableMutexGuard aGuard(m_aMutex);
 
     bool bSuppressBubble = (sal_True == aInfo.BuildId.equals(m_aUpdateInfo.BuildId));
     m_aUpdateInfo = aInfo;
@@ -1079,15 +1185,14 @@ UpdateCheck::setUpdateInfo(const UpdateInfo& aInfo)
         if( iter->IsDirect )
             break;
 
-        iter++;
+        ++iter;
     }
 
     if( (iter != m_aUpdateInfo.Sources.begin()) &&
         (iter != m_aUpdateInfo.Sources.end()) &&
         iter->IsDirect )
     {
-        iter--;
-        m_aUpdateInfo.Sources.erase(m_aUpdateInfo.Sources.begin(), iter);
+        m_aUpdateInfo.Sources.erase(m_aUpdateInfo.Sources.begin(), --iter);
     }
 
     rtl::Reference< UpdateCheckConfig > rModel = UpdateCheckConfig::get(m_xContext, *this);
@@ -1107,7 +1212,7 @@ UpdateCheck::setUpdateInfo(const UpdateInfo& aInfo)
             iter2->Pos2 = 0;
         }
 
-        iter2++;
+        ++iter2;
     }
 
     // do not move below store/clear ..
@@ -1138,62 +1243,83 @@ UpdateCheck::setUpdateInfo(const UpdateInfo& aInfo)
         rModel->clearUpdateFound();
     }
 
+    aGuard.clear();
     setUIState(eUIState, bSuppressBubble);
+}
+
+//------------------------------------------------------------------------------
+
+void
+UpdateCheck::setCheckFailedState()
+{
+    setUIState(UPDATESTATE_ERROR_CHECKING);
 }
 
 //------------------------------------------------------------------------------
 
 void UpdateCheck::setUIState(UpdateState eState, bool suppressBubble)
 {
+    osl::ClearableMutexGuard aGuard(m_aMutex);
+
     if( ! m_xMenuBarUI.is() &&
         (DISABLED != m_eState) &&
-        (UPDATESTATE_NO_UPDATE_AVAIL != eState)
+        (UPDATESTATE_NO_UPDATE_AVAIL != eState) &&
+        (UPDATESTATE_CHECKING != eState) &&
+        (UPDATESTATE_ERROR_CHECKING != eState)
     )
     {
         m_xMenuBarUI = createMenuBarUI(m_xContext, new MenuBarButtonJob(this));
     }
 
-    rtl::Reference<UpdateHandler> aUpdateHandler(getUpdateHandler());
+    uno::Reference< uno::XComponentContext > xContext(m_xContext);
 
+    uno::Reference<beans::XPropertySet> xMenuBarUI(m_xMenuBarUI);
+    rtl::Reference<UpdateHandler> aUpdateHandler(getUpdateHandler());
     OSL_ASSERT( aUpdateHandler.is() );
 
-    if( m_xMenuBarUI.is() )
+    UpdateInfo aUpdateInfo(m_aUpdateInfo);
+    rtl::OUString aImageName(m_aImageName);
+
+    aGuard.clear();
+
+    if( xMenuBarUI.is() )
     {
-        sal_Bool bShowMenuIcon = sal_False;
-
-        if( UPDATESTATE_NO_UPDATE_AVAIL != eState )
+        if( UPDATESTATE_NO_UPDATE_AVAIL == eState )
         {
-            bShowMenuIcon = sal_True;
-
-            m_xMenuBarUI->setPropertyValue( PROPERTY_TITLE, uno::makeAny(aUpdateHandler->getBubbleTitle(eState)) );
-            m_xMenuBarUI->setPropertyValue( PROPERTY_TEXT, uno::makeAny(aUpdateHandler->getBubbleText(eState)) );
+            xMenuBarUI->setPropertyValue( PROPERTY_SHOW_MENUICON, uno::makeAny(sal_False) );
+        }
+        else
+        {
+            xMenuBarUI->setPropertyValue( PROPERTY_TITLE, uno::makeAny(aUpdateHandler->getBubbleTitle(eState)) );
+            xMenuBarUI->setPropertyValue( PROPERTY_TEXT, uno::makeAny(aUpdateHandler->getBubbleText(eState)) );
 
             if( ! suppressBubble && ( ! aUpdateHandler->isVisible() || aUpdateHandler->isMinimized() ) )
-                m_xMenuBarUI->setPropertyValue( PROPERTY_SHOW_BUBBLE, uno::makeAny( sal_True ) );
-        }
+                xMenuBarUI->setPropertyValue( PROPERTY_SHOW_BUBBLE, uno::makeAny( sal_True ) );
 
-        m_xMenuBarUI->setPropertyValue( PROPERTY_SHOW_MENUICON, uno::makeAny(bShowMenuIcon) );
+            if( UPDATESTATE_CHECKING != eState )
+                xMenuBarUI->setPropertyValue( PROPERTY_SHOW_MENUICON, uno::makeAny(sal_True) );
+        }
     }
 
     if( UPDATESTATE_UPDATE_AVAIL == eState )
     {
-        aUpdateHandler->setNextVersion(m_aUpdateInfo.Version);
+        aUpdateHandler->setNextVersion(aUpdateInfo.Version);
 
-        rtl::OUString aDesktopDirectory =
-            UpdateCheckConfig::get(m_xContext, this)->getDownloadDestination();
+        rtl::OUString aDownloadDestination =
+            UpdateCheckConfig::get(xContext, this)->getDownloadDestination();
 
-        osl_getSystemPathFromFileURL(aDesktopDirectory.pData, &aDesktopDirectory.pData);
+        osl_getSystemPathFromFileURL(aDownloadDestination.pData, &aDownloadDestination.pData);
 
-        aUpdateHandler->setDownloadPath(aDesktopDirectory);
+        aUpdateHandler->setDownloadPath(aDownloadDestination);
     }
     else if( UPDATESTATE_DOWNLOAD_AVAIL == eState )
     {
-        aUpdateHandler->setDownloadFile(m_aImageName);
+        aUpdateHandler->setDownloadFile(aImageName);
     }
 
     if( (UPDATESTATE_UPDATE_AVAIL == eState) || (UPDATESTATE_UPDATE_NO_DOWNLOAD == eState) )
     {
-        aUpdateHandler->setDescription(m_aUpdateInfo.Description);
+        aUpdateHandler->setDescription(aUpdateInfo.Description);
     }
 
     aUpdateHandler->setState(eState);
@@ -1201,8 +1327,8 @@ void UpdateCheck::setUIState(UpdateState eState, bool suppressBubble)
 
 //------------------------------------------------------------------------------
 
-void
-UpdateCheck::setUIState(const UpdateInfo& rInfo, bool suppressBubble)
+UpdateState
+UpdateCheck::getUIState(const UpdateInfo& rInfo)
 {
     UpdateState eUIState = UPDATESTATE_NO_UPDATE_AVAIL;
 
@@ -1214,7 +1340,7 @@ UpdateCheck::setUIState(const UpdateInfo& rInfo, bool suppressBubble)
             eUIState = UPDATESTATE_UPDATE_NO_DOWNLOAD;
     }
 
-    setUIState(eUIState, suppressBubble);
+    return eUIState;
 }
 
 //------------------------------------------------------------------------------
@@ -1347,7 +1473,7 @@ UpdateCheck::isDialogShowing() const
 void
 UpdateCheck::autoCheckStatusChanged(bool enabled)
 {
-    osl::MutexGuard aGuard(m_aMutex);
+    osl::ClearableMutexGuard aGuard(m_aMutex);
 
     if( (CHECK_SCHEDULED == m_eState) && !enabled )
         shutdownThread(false);
@@ -1355,7 +1481,9 @@ UpdateCheck::autoCheckStatusChanged(bool enabled)
     if( (DISABLED == m_eState) || (CHECK_SCHEDULED == m_eState) )
     {
         enableAutoCheck(enabled);
-        setUIState(m_aUpdateInfo);
+        UpdateState eState = getUIState(m_aUpdateInfo);
+        aGuard.clear();
+        setUIState(eState);
     }
 };
 
