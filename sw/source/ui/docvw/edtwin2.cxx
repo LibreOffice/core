@@ -4,9 +4,9 @@
  *
  *  $RCSfile: edtwin2.cxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: hr $ $Date: 2007-06-27 13:24:38 $
+ *  last change: $Author: hr $ $Date: 2007-07-31 17:43:27 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -250,8 +250,13 @@ void SwEditWin::RequestHelp(const HelpEvent &rEvt)
                 sTxt = URIHelper::removePassword( sTxt,
                                         INetURLObject::WAS_ENCODED,
                                            INetURLObject::DECODE_UNAMBIGUOUS);
-                sTxt.InsertAscii( ": ", 0 );
-                sTxt.Insert( ViewShell::GetShellRes()->aHyperlinkClick, 0 );
+                // --> OD 2007-07-26 #i80029#
+                if ( !rView.GetDocShell()->IsReadOnly() )
+                {
+                    sTxt.InsertAscii( ": ", 0 );
+                    sTxt.Insert( ViewShell::GetShellRes()->aHyperlinkClick, 0 );
+                }
+                // <--
                 break;
 
             case SwContentAtPos::SW_SMARTTAG:
