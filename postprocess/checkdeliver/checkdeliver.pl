@@ -7,9 +7,9 @@ eval 'exec perl -wS $0 ${1+"$@"}'
 #
 #   $RCSfile: checkdeliver.pl,v $
 #
-#   $Revision: 1.8 $
+#   $Revision: 1.9 $
 #
-#   last change: $Author: vg $ $Date: 2006-11-01 10:13:33 $
+#   last change: $Author: hr $ $Date: 2007-07-31 13:10:47 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -148,7 +148,7 @@ sub check
     my %delivered;
     my $module;
     my $islinked = 0;
-    if ( $listname =~ /\/(\w+?)\/deliver.log$/o ) {
+    if ( $listname =~ quotemeta(/\/(\w+?)\/deliver.log$/o) ) {
         $module = $1;
     } else {
         print STDERR "Error: cannot determine module name from \'$listname\'\n";
