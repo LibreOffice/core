@@ -4,9 +4,9 @@
  *
  *  $RCSfile: inputwin.cxx,v $
  *
- *  $Revision: 1.53 $
+ *  $Revision: 1.54 $
  *
- *  last change: $Author: kz $ $Date: 2007-06-20 13:32:39 $
+ *  last change: $Author: hr $ $Date: 2007-07-31 16:36:58 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -96,8 +96,6 @@
 #ifndef _SC_ACCESSIBLETEXT_HXX
 #include "AccessibleText.hxx"
 #endif
-
-#include <boost/scoped_ptr.hpp>
 
 #define TEXT_STARTPOS       3
 #define THESIZE             1000000 //!!! langt... :-)
@@ -391,19 +389,19 @@ void __EXPORT ScInputWindow::Select()
                 ScTabViewShell* pViewSh = PTR_CAST( ScTabViewShell, SfxViewShell::Current() );
                 if ( pViewSh )
                 {
-                    ScMarkData& rMark = pViewSh->GetViewData()->GetMarkData();
+                    const ScMarkData& rMark = pViewSh->GetViewData()->GetMarkData();
                     if ( rMark.IsMarked() || rMark.IsMultiMarked() )
                     {
-                        boost::scoped_ptr< ScRangeList > pMarkRangeList( new ScRangeList() );
-                        rMark.FillRangeListWithMarks( pMarkRangeList.get(), FALSE );
+                        ScRangeList aMarkRangeList;
+                        rMark.FillRangeListWithMarks( &aMarkRangeList, FALSE );
                         ScDocument* pDoc = pViewSh->GetViewData()->GetDocument();
 
                         // check if one of the marked ranges is empty
                         bool bEmpty = false;
-                        ULONG nCount = pMarkRangeList->Count();
+                        const ULONG nCount = aMarkRangeList.Count();
                         for ( ULONG i = 0; i < nCount; ++i )
                         {
-                            ScRange aRange( *pMarkRangeList->GetObject( i ) );
+                            const ScRange aRange( *aMarkRangeList.GetObject( i ) );
                             if ( pDoc->IsBlockEmpty( aRange.aStart.Tab(),
                                     aRange.aStart.Col(), aRange.aStart.Row(),
                                     aRange.aEnd.Col(), aRange.aEnd.Row() ) )
@@ -415,24 +413,29 @@ void __EXPORT ScInputWindow::Select()
 
                         if ( bEmpty )
                         {
-                            boost::scoped_ptr< ScRangeList > pRangeList( new ScRangeList() );
-                            BOOL bDataFound = pViewSh->GetAutoSumArea( *pRangeList );
+                            ScRangeList aRangeList;
+                            const BOOL bDataFound = pViewSh->GetAutoSumArea( aRangeList );
                             if ( bDataFound )
                             {
-                                sal_Bool bSubTotal( UseSubTotal( pRangeList.get() ) );
-                                pViewSh->EnterAutoSum( *pRangeList, bSubTotal );    // Block mit Summen fuellen
+                                const sal_Bool bSubTotal( UseSubTotal( &aRangeList ) );
+                                pViewSh->EnterAutoSum( aRangeList, bSubTotal ); // Block mit Summen fuellen
                             }
                         }
                         else
                         {
-                            sal_Bool bSubTotal( UseSubTotal( pMarkRangeList.get() ) );
+                            const sal_Bool bSubTotal( UseSubTotal( &aMarkRangeList ) );
                             for ( ULONG i = 0; i < nCount; ++i )
                             {
-                                ScRange aRange( *pMarkRangeList->GetObject( i ) );
-                                bool bSetCursor = ( i == nCount - 1 ? true : false );
-                                bool bContinue = ( i != 0  ? true : false );
+                                const ScRange aRange( *aMarkRangeList.GetObject( i ) );
+                                const bool bSetCursor = ( i == nCount - 1 ? true : false );
+                                const bool bContinue = ( i != 0  ? true : false );
                                 if ( !pViewSh->AutoSum( aRange, bSubTotal, bSetCursor, bContinue ) )
                                 {
+                                    pViewSh->MarkRange( aRange, FALSE, FALSE );
+                                    pViewSh->SetCursor( aRange.aEnd.Col(), aRange.aEnd.Row() );
+                                    const ScRangeList aRangeList;
+                                    const String aFormula = pViewSh->GetAutoSumFormula( aRangeList, bSubTotal );
+                                    SetFuncString( aFormula );
                                     break;
                                 }
                             }
@@ -440,10 +443,10 @@ void __EXPORT ScInputWindow::Select()
                     }
                     else                                    // nur in Eingabezeile einfuegen
                     {
-                        boost::scoped_ptr< ScRangeList > pRangeList( new ScRangeList() );
-                        BOOL bDataFound = pViewSh->GetAutoSumArea( *pRangeList );
-                        sal_Bool bSubTotal( UseSubTotal( pRangeList.get() ) );
-                        String aFormula = pViewSh->GetAutoSumFormula( *pRangeList, bSubTotal );
+                        ScRangeList aRangeList;
+                        const BOOL bDataFound = pViewSh->GetAutoSumArea( aRangeList );
+                        const sal_Bool bSubTotal( UseSubTotal( &aRangeList ) );
+                        const String aFormula = pViewSh->GetAutoSumFormula( aRangeList, bSubTotal );
                         SetFuncString( aFormula );
 
                         if ( bDataFound && pScMod->IsEditMode() )
@@ -455,8 +458,8 @@ void __EXPORT ScInputWindow::Select()
 
                                 //! SetSelection am InputHandler ???
                                 //! bSelIsRef setzen ???
-                                xub_StrLen nOpen = aFormula.Search('(');
-                                xub_StrLen nLen = aFormula.Len();
+                                const xub_StrLen nOpen = aFormula.Search('(');
+                                const xub_StrLen nLen = aFormula.Len();
                                 if ( nOpen != STRING_NOTFOUND && nLen > nOpen )
                                 {
                                     sal_uInt8 nAdd(1);
