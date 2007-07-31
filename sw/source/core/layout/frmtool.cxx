@@ -4,9 +4,9 @@
  *
  *  $RCSfile: frmtool.cxx,v $
  *
- *  $Revision: 1.97 $
+ *  $Revision: 1.98 $
  *
- *  last change: $Author: hr $ $Date: 2007-06-26 10:42:19 $
+ *  last change: $Author: hr $ $Date: 2007-07-31 17:42:03 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -3274,7 +3274,9 @@ void Notify_Background( const SdrObject* pObj,
 //              pFrm->Frm().IsOver( rRect ) ) ) )
 //           pFrm->InvalidateSize();
 //  }
-    if( pPage->GetSortedObjs() )
+    // --> OD 2007-07-24 #128702# - make code robust
+    if ( pPage && pPage->GetSortedObjs() )
+    // <--
     {
         pObj->GetOrdNum();
         const SwSortedObjs &rObjs = *pPage->GetSortedObjs();
