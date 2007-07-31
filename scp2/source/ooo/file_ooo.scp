@@ -4,9 +4,9 @@
  *
  *  $RCSfile: file_ooo.scp,v $
  *
- *  $Revision: 1.210 $
+ *  $Revision: 1.211 $
  *
- *  last change: $Author: obo $ $Date: 2007-07-18 07:18:13 $
+ *  last change: $Author: hr $ $Date: 2007-07-31 13:12:50 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -609,8 +609,6 @@ STD_RES_FILE( gid_File_Res_Ept, ept )
 
 STD_RES_FILE( gid_File_Res_Eme, eme )
 
-#ifdef SOLAR_JAVA
-
 File gid_File_Help_Common_Zip
     Dir = gid_Dir_Help_Isolanguage;
     ARCHIVE_TXT_FILE_BODY_PATCH;
@@ -654,8 +652,6 @@ File gid_File_Help_Schart_Zip
     ARCHIVE_TXT_FILE_BODY_PATCH;
     EXTRA_ALL_GOOD_HELP_LOCALIZATIONS_LANG(schart);
 End
-
-#endif
 
 File gid_File_Html_Thirdpartylicensereadme
     Name = "THIRDPARTYLICENSEREADME.html";
