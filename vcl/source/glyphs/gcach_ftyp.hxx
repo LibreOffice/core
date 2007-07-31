@@ -4,9 +4,9 @@
  *
  *  $RCSfile: gcach_ftyp.hxx,v $
  *
- *  $Revision: 1.38 $
+ *  $Revision: 1.39 $
  *
- *  last change: $Author: hr $ $Date: 2007-06-27 20:24:45 $
+ *  last change: $Author: hr $ $Date: 2007-07-31 16:09:30 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -223,6 +223,7 @@ private:
     FT_FaceRec_*                maFaceFT;
     FT_SizeRec_*                maSizeFT;
 
+    bool                        mbFaceOk;
     bool            mbArtItalic;
     bool            mbArtBold;
     bool            mbUseGamma;
