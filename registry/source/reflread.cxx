@@ -4,9 +4,9 @@
  *
  *  $RCSfile: reflread.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 01:53:05 $
+ *  last change: $Author: hr $ $Date: 2007-07-31 14:02:48 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -39,9 +39,8 @@
 #include <memory>
 #include <new>
 
-#ifndef MAC
 #include <string.h>
-#endif
+
 #ifndef _SAL_TYPES_H_
 #include <sal/types.h>
 #endif
