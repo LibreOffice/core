@@ -4,9 +4,9 @@
  *
  *  $RCSfile: SalGtkFilePicker.cxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: kz $ $Date: 2007-05-10 13:02:50 $
+ *  last change: $Author: hr $ $Date: 2007-07-31 16:00:02 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1392,7 +1392,10 @@ throw( uno::RuntimeException )
 
     GtkWidget *pWidget;
 
-    if( ( pWidget = getWidget( nControlId ) ) )
+    if ( nControlId == ExtendedFilePickerElementIds::LISTBOX_FILTER_SELECTOR )
+        gtk_expander_set_expanded( GTK_EXPANDER( m_pFilterExpander ), bEnable );
+
+    else if( ( pWidget = getWidget( nControlId ) ) )
     {
         if( bEnable )
         {
