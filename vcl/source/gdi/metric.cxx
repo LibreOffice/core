@@ -4,9 +4,9 @@
  *
  *  $RCSfile: metric.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: hr $ $Date: 2007-06-27 20:18:07 $
+ *  last change: $Author: hr $ $Date: 2007-07-31 16:09:03 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -611,6 +611,9 @@ bool ParseCMAP( const unsigned char* pCmap, int nLength, CmapResult& rResult )
 
     if( nRangeCount <= 0 )
     {
+        delete[] pCodePairs;
+        delete[] pStartGlyphs;
+
         // even when no CMAP is available we know it for symbol fonts
         if( rResult.mbSymbolic )
         {
@@ -624,8 +627,6 @@ bool ParseCMAP( const unsigned char* pCmap, int nLength, CmapResult& rResult )
             return true;
         }
 
-        delete[] pCodePairs;
-        delete[] pStartGlyphs;
         return false;
     }
 
@@ -702,6 +703,10 @@ bool ParseCMAP( const unsigned char* pCmap, int nLength, CmapResult& rResult )
             aSupportedRanges.back() = *itChar + 1;
         }
 
+        // glyph mapping for non-unicode fonts not implemented
+        delete[] pStartGlyphs;
+        pStartGlyphs = NULL;
+
         // make a pCodePairs array using the vector from above
         delete[] pCodePairs;
         nRangeCount = aSupportedRanges.size() / 2;
@@ -711,10 +716,6 @@ bool ParseCMAP( const unsigned char* pCmap, int nLength, CmapResult& rResult )
         IntVector::const_iterator itInt = aSupportedRanges.begin();
         for( pCP = pCodePairs; itInt != aSupportedRanges.end(); ++itInt )
             *(pCP++) = *itInt;
-
-        // glyph mapping for non-unicode fonts not implemented
-        delete[] pStartGlyphs;
-        pStartGlyphs = NULL;
     }
 
     rResult.mpPairCodes = pCodePairs;
