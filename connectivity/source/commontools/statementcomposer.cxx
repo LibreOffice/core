@@ -4,9 +4,9 @@
  *
  *  $RCSfile: statementcomposer.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2007-07-09 08:20:41 $
+ *  last change: $Author: hr $ $Date: 2007-07-31 13:38:39 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -250,6 +250,7 @@ namespace dbtools
                     sStatement = xComposer->getQuery();
 
                     _rData.xComposer = xComposer;
+                    _rData.bComposerDirty = false;
                 }
             }
             catch( const SQLException& )
