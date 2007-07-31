@@ -4,9 +4,9 @@
  *
  *  $RCSfile: MultiStratumBackend.idl,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-07 22:35:47 $
+ *  last change: $Author: hr $ $Date: 2007-07-31 16:12:18 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -68,7 +68,7 @@ service MultiStratumBackend
       <p>If present a type
          <type scope="com::sun::star::configuration::bootstrap">BootstrapContext</type>
          must be passed, that provides further backend initialization settings.
-      </p
+      </p>
 
 
     */

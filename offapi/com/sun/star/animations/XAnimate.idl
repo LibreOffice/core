@@ -4,9 +4,9 @@
  *
  *  $RCSfile: XAnimate.idl,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-07 20:39:40 $
+ *  last change: $Author: hr $ $Date: 2007-07-31 16:12:06 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -88,7 +88,7 @@ interface XAnimate : XAnimationNode
     [attribute] sequence< double > KeyTimes;
 
     /**
-        @see <const>AnimationValueType</const>
+        @see AnimationValueType
     */
     [attribute] short ValueType;
 
@@ -110,7 +110,7 @@ interface XAnimate : XAnimationNode
 
     /** Controls whether or not the animation is additive.
 
-        @see <const>AnimationAdditiveMode</const>
+        @see AnimationAdditiveMode
         @see http://www.w3.org/TR/smil20/animation.html#adef-additive
     */
     [attribute] short Additive;
