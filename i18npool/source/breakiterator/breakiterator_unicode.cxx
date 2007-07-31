@@ -4,9 +4,9 @@
  *
  *  $RCSfile: breakiterator_unicode.cxx,v $
  *
- *  $Revision: 1.30 $
+ *  $Revision: 1.31 $
  *
- *  last change: $Author: rt $ $Date: 2007-07-26 09:08:27 $
+ *  last change: $Author: hr $ $Date: 2007-07-31 17:09:13 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -96,9 +96,9 @@ void SAL_CALL BreakIterator_Unicode::loadICUBreakIterator(const com::sun::star::
         case LOAD_CHARACTER_BREAKITERATOR: icuBI=&character; breakType = 3; break;
         case LOAD_WORD_BREAKITERATOR: icuBI=&word;
             switch (rWordType) {
-                case WordType::ANYWORD_IGNOREWHITESPACES: breakType = 0; wordRule = "edit_word"; break;
-                case WordType::DICTIONARY_WORD: breakType = 1; wordRule = "dict_word"; break;
-                case WordType::WORD_COUNT: breakType = 2; wordRule = "count_word"; break;
+                case WordType::ANYWORD_IGNOREWHITESPACES: breakType = 0; rule=wordRule = "edit_word"; break;
+                case WordType::DICTIONARY_WORD: breakType = 1; rule=wordRule = "dict_word"; break;
+                case WordType::WORD_COUNT: breakType = 2; rule=wordRule = "count_word"; break;
             }
             break;
         case LOAD_SENTENCE_BREAKITERATOR: icuBI=&sentence; break;
@@ -122,8 +122,6 @@ void SAL_CALL BreakIterator_Unicode::loadICUBreakIterator(const com::sun::star::
                 icuBI->aBreakIterator = new RuleBasedBreakIterator(udata_open("OpenOffice", "brk",
                     OUStringToOString(breakRules[breakType], RTL_TEXTENCODING_ASCII_US).getStr(), &status), status);
             } else {
-                if (rWordType) rule = wordRule;
-
                 status = U_ZERO_ERROR;
                 OStringBuffer aUDName(64);
                 aUDName.append(rule);
