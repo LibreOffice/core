@@ -4,9 +4,9 @@
  *
  *  $RCSfile: sqliterator.cxx,v $
  *
- *  $Revision: 1.53 $
+ *  $Revision: 1.54 $
  *
- *  last change: $Author: kz $ $Date: 2006-12-13 16:24:48 $
+ *  last change: $Author: hr $ $Date: 2007-07-31 13:39:08 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -384,7 +384,9 @@ void OSQLParseTreeIterator::impl_getQueryParameterColumns( const OSQLTable& _rQu
         break;
 
     OSQLParseTreeIterator aSubQueryIterator( *this, m_rParser, pSubQueryNode.get() );
-    aSubQueryIterator.traverseSome( Parameters );
+    aSubQueryIterator.traverseSome( Parameters | SelectColumns );
+        // SelectColumns might also contain parameters
+        // #i77635# - 2007-07-23 / frank.schoenheit@sun.com
     pSubQueryParameterColumns = aSubQueryIterator.getParameters();
     aSubQueryIterator.dispose();
 
