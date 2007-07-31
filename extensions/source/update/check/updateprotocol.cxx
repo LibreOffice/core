@@ -4,9 +4,9 @@
  *
  *  $RCSfile: updateprotocol.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: rt $ $Date: 2007-07-06 14:38:58 $
+ *  last change: $Author: hr $ $Date: 2007-07-31 15:58:00 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -144,6 +144,9 @@ checkForUpdates(
     {
         uno::Reference< container::XEnumeration > aUpdateInfoEnumeration =
             rUpdateInfoProvider->getUpdateInformationEnumeration( aRepositoryList, aInstallSetID );
+
+        if ( !aUpdateInfoEnumeration.is() )
+            return false; // something went wrong ..
 
         rtl::OUStringBuffer aBuffer;
         aBuffer.appendAscii("/child::inst:description[inst:os=\'");
