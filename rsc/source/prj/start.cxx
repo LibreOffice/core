@@ -4,9 +4,9 @@
  *
  *  $RCSfile: start.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: rt $ $Date: 2007-07-03 14:00:49 $
+ *  last change: $Author: hr $ $Date: 2007-07-31 16:02:23 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -75,11 +75,7 @@
 #ifdef UNX
 #define P_WAIT 0
     int spawnvp( int, const char * cmdname, char *const*  argv ){
-        int rc;
-        /*
-        union wait rc;
-        rc.w_status = 0;
-        */
+        int rc(0);
 
         switch( fork() ){
             case -1:
