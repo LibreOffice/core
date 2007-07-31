@@ -4,9 +4,9 @@
  *
  *  $RCSfile: property.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: vg $ $Date: 2007-01-15 14:44:49 $
+ *  last change: $Author: hr $ $Date: 2007-07-31 14:02:24 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -100,6 +100,7 @@ void copyProperties(const Reference<XPropertySet>& _rxSource,
     if (!_rxSource.is() || !_rxDest.is())
     {
         OSL_ENSURE(sal_False, "copyProperties: invalid arguments !");
+        return;
     }
 
     Reference< XPropertySetInfo > xSourceProps = _rxSource->getPropertySetInfo();
