@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ChartInCalc.java,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: hr $ $Date: 2003-06-30 15:09:06 $
+ *  last change: $Author: hr $ $Date: 2007-07-31 13:53:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  the BSD license.
@@ -267,7 +267,7 @@ public class ChartInCalc
             }
 
             // first parameter is the index of the point, the second one is the series
-            XPropertySet aPointProp = maDiagram.getDataPointProperties( nMaxIndex, 1 );
+            XPropertySet aPointProp = maDiagram.getDataPointProperties( 0, 1 );
 
             // set a different, larger symbol
             aPointProp.setPropertyValue( "SymbolType", new Integer( ChartSymbolType.SYMBOL6 ));
@@ -322,6 +322,10 @@ public class ChartInCalc
                com.sun.star.lang.IllegalArgumentException, WrappedTargetException
     {
         // change main title
+        XPropertySet aDocProp = (XPropertySet) UnoRuntime.queryInterface(
+            XPropertySet.class, maChartDocument );
+        aDocProp.setPropertyValue( "HasMainTitle", new Boolean( true ));
+
         XShape aTitle = maChartDocument.getTitle();
         XPropertySet aTitleProp = (XPropertySet) UnoRuntime.queryInterface( XPropertySet.class, aTitle );
 
@@ -329,6 +333,7 @@ public class ChartInCalc
         if( aTitleProp != null )
         {
             aTitleProp.setPropertyValue( "String", "Random Scatter Chart" );
+            aTitleProp.setPropertyValue( "CharHeight", new Float(14.0) );
         }
 
         // align title with y axis
