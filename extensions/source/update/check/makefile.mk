@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.10 $
+#   $Revision: 1.11 $
 #
-#   last change: $Author: rt $ $Date: 2007-07-06 14:36:21 $
+#   last change: $Author: hr $ $Date: 2007-07-31 15:56:16 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -87,7 +87,8 @@ SHL1STDLIBS=    \
         $(CPPULIB) \
         $(CURLLIB) \
         $(SALLIB) \
-        $(SHELL32LIB)
+        $(SHELL32LIB) \
+        $(OLE32LIB)
         
 SHL1VERSIONMAP=..$/exports.map
 SHL1DEF=$(MISC)$/$(SHL1TARGET).def
