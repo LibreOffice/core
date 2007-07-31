@@ -1,7 +1,7 @@
 %{
 //--------------------------------------------------------------------------
 //
-// $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/connectivity/source/parse/sqlbison.y,v 1.56 2007-01-25 11:57:58 obo Exp $
+// $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/connectivity/source/parse/sqlbison.y,v 1.57 2007-07-31 13:38:53 hr Exp $
 //
 // Copyright 2000 Sun Microsystems, Inc. All Rights Reserved.
 //
@@ -9,7 +9,7 @@
 //	OJ
 //
 // Last change:
-//	$Author: obo $ $Date: 2007-01-25 11:57:58 $ $Revision: 1.56 $
+//	$Author: hr $ $Date: 2007-07-31 13:38:53 $ $Revision: 1.57 $
 //
 // Description:
 //
@@ -3452,7 +3452,8 @@ OSQLParseNode* OSQLParser::parseTree(::rtl::OUString& rErrorMessage,
 			case SQL_TOKEN_MIN: eKeyCode = IParseContext::KEY_MIN; break;
 			case SQL_TOKEN_SUM: eKeyCode = IParseContext::KEY_SUM; break;
 		}
-		aStr = pContext->getIntlKeywordAscii(eKeyCode);
+		if ( eKeyCode != IParseContext::KEY_NONE )
+		    aStr = pContext->getIntlKeywordAscii(eKeyCode);
 	}
 
 	if (!aStr.getLength())
