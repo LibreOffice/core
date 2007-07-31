@@ -4,9 +4,9 @@
  *
  *  $RCSfile: tabctrl.cxx,v $
  *
- *  $Revision: 1.31 $
+ *  $Revision: 1.32 $
  *
- *  last change: $Author: hr $ $Date: 2007-06-27 20:08:50 $
+ *  last change: $Author: hr $ $Date: 2007-07-31 16:08:07 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -523,7 +523,7 @@ Rectangle TabControl::ImplGetTabRect( USHORT nItemPos, long nWidth, long nHeight
             USHORT          nLines = 0;
             USHORT          nCurLine = 0;
             long            nLineWidthAry[100];
-            USHORT          nLinePosAry[100];
+            USHORT          nLinePosAry[101];
 
             nLineWidthAry[0] = 0;
             nLinePosAry[0] = 0;
