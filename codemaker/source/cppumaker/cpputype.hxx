@@ -4,9 +4,9 @@
  *
  *  $RCSfile: cpputype.hxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: hr $ $Date: 2006-06-20 02:24:11 $
+ *  last change: $Author: hr $ $Date: 2007-07-31 13:48:15 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -103,8 +103,8 @@ public:
     virtual void dumpNormalGetCppuType(FileStream& o);
     virtual void dumpComprehensiveGetCppuType(FileStream& o);
 
-    virtual void dumpType(FileStream& o, const ::rtl::OString& type, sal_Bool bConst=sal_False,
-                          sal_Bool bRef=sal_False, sal_Bool bNative=sal_False)
+    virtual void dumpType(FileStream& o, const ::rtl::OString& type, bool bConst=false,
+                          bool bRef=false, bool bNative=false, bool cppuUnoType=false)
         const throw( CannotDumpException );
     ::rtl::OString  getTypeClass(const ::rtl::OString& type="", sal_Bool bCStyle=sal_False);
     void    dumpCppuGetType(FileStream& o, const ::rtl::OString& type, sal_Bool bDecl=sal_False, CppuTypeDecl eDeclFlag=CPPUTYPEDECL_ALLTYPES);
