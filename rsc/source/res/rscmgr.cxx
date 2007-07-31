@@ -4,9 +4,9 @@
  *
  *  $RCSfile: rscmgr.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 16:02:35 $
+ *  last change: $Author: hr $ $Date: 2007-07-31 16:02:36 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -445,7 +445,7 @@ ERRTYPE RscMgr::WriteHxxHeader( const RSCINST & rInst, FILE * fOutput,
         aError = aRefI.pClass->WriteHxxHeader( aRefI, fOutput, pTC,
                                                rId );
     }
-    else
+    else if (pTC)
     {
         fprintf( fOutput, "class %s",
                           MakeName( pTC, rInst.pClass,
@@ -533,7 +533,7 @@ ERRTYPE RscMgr::WriteCxxHeader( const RSCINST & rInst, FILE * fOutput,
         aError = aRefI.pClass->WriteCxxHeader( aRefI, fOutput, pTC,
                                                rId );
     }
-    else
+    else if (pTC)
     {
         fprintf( fOutput, "%s::%s",
                  MakeName( pTC, rInst.pClass, rId.GetName() ).GetBuffer(),
