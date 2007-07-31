@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dlgfact.cxx,v $
  *
- *  $Revision: 1.40 $
+ *  $Revision: 1.41 $
  *
- *  last change: $Author: hr $ $Date: 2007-06-27 17:01:48 $
+ *  last change: $Author: hr $ $Date: 2007-07-31 13:56:46 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1912,12 +1912,11 @@ AbstractSvxHpLinkDlg * AbstractDialogFactory_Impl::CreateSvxHpLinkDlg (Window* p
 //CHINA001  FmSearchDialog begin
 AbstractFmSearchDialog*  AbstractDialogFactory_Impl::CreateFmSearchDialog(Window* pParent, //add for FmSearchDialog
                                                         const String& strInitialText,
-                                                        const String& strContexts,
+                                                        const ::std::vector< String >& _rContexts,
                                                         sal_Int16 nInitialContext,
-                                                        const Link& lnkContextSupplier,
-                                                        FMSEARCH_MODE eMode )
+                                                        const Link& lnkContextSupplier)
 {
-    FmSearchDialog* pDlg = new FmSearchDialog( pParent, strInitialText, strContexts, nInitialContext, lnkContextSupplier, eMode );
+    FmSearchDialog* pDlg = new FmSearchDialog( pParent, strInitialText, _rContexts, nInitialContext, lnkContextSupplier );
     if ( pDlg )
         return new AbstractFmSearchDialog_Impl( pDlg );
     return 0;
