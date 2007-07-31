@@ -4,9 +4,9 @@
  *
  *  $RCSfile: createaddresslistdialog.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: rt $ $Date: 2007-04-26 08:52:24 $
+ *  last change: $Author: hr $ $Date: 2007-07-31 15:24:53 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -779,7 +779,7 @@ void SwCreateAddressListDialog::Find(const String& rSearch, sal_Int32 nColumn)
                 bFound = -1 != aData[(sal_uInt32)nColumn].toAsciiLowerCase().indexOf(sSearch);
             else
             {
-                for( nElement = 0; nElement <= aData.size(); ++nElement)
+                for( nElement = 0; nElement < aData.size(); ++nElement)
                 {
                     bFound = aData[nElement].toAsciiLowerCase().indexOf(sSearch);
                     if(bFound)
