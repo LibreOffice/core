@@ -2,9 +2,9 @@
 #
 #  $RCSfile: Makefile,v $
 #
-#  $Revision: 1.4 $
+#  $Revision: 1.5 $
 #
-#  last change: $Author: obo $ $Date: 2007-01-25 11:07:47 $
+#  last change: $Author: hr $ $Date: 2007-07-31 13:57:07 $
 #
 #  The Contents of this file are made available subject to the terms of
 #  the BSD license.
@@ -71,8 +71,7 @@ SDK_CLASSPATH = $(subst $(EMPTYSTRING) $(PATH_SEPARATOR),$(PATH_SEPARATOR),$(CLA
 
 # Targets
 .PHONY: ALL
-ALL : \
-    $(SAMPLE_NAME)
+ALL : ScriptSelectorExample
 
 include $(SETTINGS)/stdtarget.mk
 
@@ -80,19 +79,19 @@ $(CLASSFILES) : $(JAVAFILES)
 	-$(MKDIR) $(subst /,$(PS),$(@D))
 	$(SDK_JAVAC) $(JAVAC_FLAGS) -classpath "$(SDK_CLASSPATH)" -d $(SCRIPT_CLASS_OUT) $(JAVAFILES)
 
-$(SCRIPT_JAR) : $(CLASSFILES) $(SAMPLE_NAME)/container.gif $(SAMPLE_NAME)/script.gif $(SAMPLE_NAME)/soffice.gif
+$(SCRIPT_JAR) : $(CLASSFILES) $(SCRIPT_NAME)/container.gif $(SCRIPT_NAME)/script.gif $(SCRIPT_NAME)/soffice.gif
 	-$(DEL) $(subst \\,\,$(subst /,$(PS),$@))
 	-$(MKDIR) $(subst /,$(PS),$(@D))
-	$(COPY) $(subst /,$(PS),$(SAMPLE_NAME)/container.gif) $(subst /,$(PS),$(SCRIPT_CLASS_OUT))
-	$(COPY) $(subst /,$(PS),$(SAMPLE_NAME)/script.gif) $(subst /,$(PS),$(SCRIPT_CLASS_OUT))
-	$(COPY) $(subst /,$(PS),$(SAMPLE_NAME)/soffice.gif) $(subst /,$(PS),$(SCRIPT_CLASS_OUT))
+	$(COPY) $(subst /,$(PS),$(SCRIPT_NAME)/container.gif) $(subst /,$(PS),$(SCRIPT_CLASS_OUT))
+	$(COPY) $(subst /,$(PS),$(SCRIPT_NAME)/script.gif) $(subst /,$(PS),$(SCRIPT_CLASS_OUT))
+	$(COPY) $(subst /,$(PS),$(SCRIPT_NAME)/soffice.gif) $(subst /,$(PS),$(SCRIPT_CLASS_OUT))
 	$(SDK_JAR) cvf $@ -C $(SCRIPT_CLASS_OUT) .
 
 # rule for component package file
-$(SCRIPT_PACKAGE) : $(SCRIPT_JAR) META-INF/manifest.xml $(SAMPLE_NAME)/parcel-descriptor.xml 
+$(SCRIPT_PACKAGE) : $(SCRIPT_JAR) META-INF/manifest.xml $(SCRIPT_NAME)/parcel-descriptor.xml 
 	-$(DEL) $(subst \\,\,$(subst /,$(PS),$@))
 	-$(MKDIR) $(subst /,$(PS),$(@D))
-	$(SDK_ZIP) $@ META-INF/manifest.xml $(SAMPLE_NAME)/parcel-descriptor.xml
+	$(SDK_ZIP) $@ META-INF/manifest.xml $(SCRIPT_NAME)/parcel-descriptor.xml
 	cd $(subst /,$(PS),$(SAMPLE_CLASS_OUT)/..) && $(SDK_ZIP) -u ../../bin/$(@F) $(SAMPLE_NAME)/$(SCRIPT_JAR_NAME)
 
 $(SCRIPT_REGISTERFLAG) : $(SCRIPT_PACKAGE)
@@ -110,7 +109,7 @@ else
 endif
 
 
-$(SAMPLE_NAME) : $(SCRIPT_REGISTERFLAG)
+ScriptSelectorExample : $(SCRIPT_REGISTERFLAG)
 	@echo --------------------------------------------------------------------------------
 	@echo The "$(QM)$(SCRIPT_NAME)$(QM)" scripting package was installed in your office installation 
 	@echo if SDK_AUTO_DEPLOYMENT = YES. If you want to run the script, start the Office 

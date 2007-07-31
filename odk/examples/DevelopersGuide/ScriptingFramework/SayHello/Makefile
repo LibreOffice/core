@@ -2,9 +2,9 @@
 #
 #  $RCSfile: Makefile,v $
 #
-#  $Revision: 1.4 $
+#  $Revision: 1.5 $
 #
-#  last change: $Author: obo $ $Date: 2007-01-25 11:07:21 $
+#  last change: $Author: hr $ $Date: 2007-07-31 13:56:54 $
 #
 #  The Contents of this file are made available subject to the terms of
 #  the BSD license.
@@ -72,7 +72,7 @@ SDK_CLASSPATH = $(subst $(EMPTYSTRING) $(PATH_SEPARATOR),$(PATH_SEPARATOR),$(CLA
 # Targets
 .PHONY: ALL
 ALL : \
-    $(SAMPLE_NAME)
+	SayHelloExample
 
 include $(SETTINGS)/stdtarget.mk
 
@@ -107,7 +107,7 @@ else
 endif
 
 
-$(SAMPLE_NAME) : $(SCRIPT_REGISTERFLAG)
+SayHelloExample : $(SCRIPT_REGISTERFLAG)
 	@echo --------------------------------------------------------------------------------
 	@echo The "$(QM)$(SCRIPT_NAME)$(QM)" scripting package was installed in your office installation 
 	@echo if SDK_AUTO_DEPLOYMENT = YES. If you want to run the script, start the Office 
