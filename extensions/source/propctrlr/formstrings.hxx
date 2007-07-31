@@ -4,9 +4,9 @@
  *
  *  $RCSfile: formstrings.hxx,v $
  *
- *  $Revision: 1.36 $
+ *  $Revision: 1.37 $
  *
- *  last change: $Author: rt $ $Date: 2007-07-06 08:49:03 $
+ *  last change: $Author: hr $ $Date: 2007-07-31 14:08:37 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -213,7 +213,6 @@ namespace pcr
     PCR_CONSTASCII_STRING( PROPERTY_SHOWS_ROOT_HANDLES,     "ShowsRootHandles");
     PCR_CONSTASCII_STRING( PROPERTY_EDITABLE,               "Editable");
     PCR_CONSTASCII_STRING( PROPERTY_INVOKES_STOP_NOT_EDITING, "InvokesStopNodeEditing");
-    PCR_CONSTASCII_STRING( PROPERTY_ROW_HEIGHT,             "RowHeight");
 
     PCR_CONSTASCII_STRING( PROPERTY_HARDLINEBREAKS,         "HardLineBreaks");
 
