@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.3 $
+#   $Revision: 1.4 $
 #
-#   last change: $Author: kz $ $Date: 2006-10-06 10:37:17 $
+#   last change: $Author: hr $ $Date: 2007-07-31 15:58:24 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -39,11 +39,6 @@ TARGET=updchkui
 
 LIBTARGET=NO
 ENABLE_EXCEPTIONS=TRUE
-
-COMP1TYPELIST=$(TARGET)
-COMPRDB=$(SOLARBINDIR)$/types.rdb
-UNOUCROUT=$(OUT)$/inc$/$(TARGET)
-INCPRE=$(UNOUCROUT)
 
 # --- Settings ---
 
