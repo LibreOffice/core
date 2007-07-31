@@ -47,3 +47,22 @@ Issue
 
 
 ====================================================================================
+File name
+---------
+  view_asterisk_replacement.patch
+
+Description
+-----------
+  modifies HSQLDB so that views behave more standard-conform. That is, per SQL standard
+  views are requested to return the columns as they existed at the time of definition
+  of the view. I.e., if the table gets new columns later on, they're not included in the
+  view.
+  This indirectly fixes the below issue.
+
+Issue
+-----
+  http://www.openoffice.org/issues/show_bug.cgi?id=78296
+  adding a column to a HSQLDB table which is referred in a view renders the database useless
+
+
+====================================================================================
