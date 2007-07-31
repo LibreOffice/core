@@ -2,9 +2,9 @@
  *
  *  $RCSfile: MethodParametersDialog.java,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2007-04-04 09:19:35 $
+ *  last change: $Author: hr $ $Date: 2007-07-31 13:57:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  the BSD license.
@@ -89,7 +89,6 @@ public class MethodParametersDialog extends JDialog{
 
 
     public Vector getMethodObjects() {
-        setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         super.setModal(true);
         addBorderPanel(getContentPane(), BorderLayout.NORTH);
         addBorderPanel(getContentPane(), BorderLayout.WEST);
@@ -116,7 +115,7 @@ public class MethodParametersDialog extends JDialog{
         super.setFocusableWindowState(true);
         super.requestFocus();
         m_aParameterPanels[0].getInputComponent().requestFocusInWindow();
-        show();
+        setVisible(true);
         if (!bisdiposed){
             Vector aMethodObjects = new Vector();
             for (int i = 0; i < m_aParameterPanels.length; i++){

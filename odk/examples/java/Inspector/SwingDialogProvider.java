@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SwingDialogProvider.java,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2007-04-04 09:20:50 $
+ *  last change: $Author: hr $ $Date: 2007-07-31 13:57:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  the BSD license.
@@ -83,7 +83,6 @@ public class SwingDialogProvider implements XDialogProvider{
         m_xComponentContext = _oInspector.getXComponentContext();
         insertMenus();
         initializePopupMenu();
-        m_jInspectorDialog.setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         cp = m_jInspectorDialog.getContentPane();
         cp.setLayout(new java.awt.BorderLayout(0, 10));
         m_jTabbedPane1.setTabLayoutPolicy(JTabbedPane.SCROLL_TAB_LAYOUT);
@@ -433,7 +432,7 @@ public class SwingDialogProvider implements XDialogProvider{
             m_jInspectorDialog.pack();
         }
 //            m_jInspectorDialog.paint(m_jInspectorDialog.getGraphics());
-        m_jInspectorDialog.show();
+        m_jInspectorDialog.setVisible(true);
     }
 
         public void paint(){
