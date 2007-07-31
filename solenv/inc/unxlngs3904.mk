@@ -4,9 +4,9 @@
 #
 #   $RCSfile: unxlngs3904.mk,v $
 #
-#   $Revision: 1.16 $
+#   $Revision: 1.17 $
 #
-#   last change: $Author: obo $ $Date: 2007-03-09 09:10:36 $
+#   last change: $Author: hr $ $Date: 2007-07-31 13:07:15 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -62,9 +62,9 @@ JAVA_RUNTIME=-ljava_g
 ARCH_FLAGS*=
 
 # name of C++ Compiler
-CXX*=g++-3.2
+CXX*=g++
 # name of C Compiler
-CC*=gcc-3.2
+CC*=gcc
 
 CFLAGS+=-fsigned-char -fmessage-length=0 -c
 
@@ -120,7 +120,7 @@ STATIC		= -Wl,-Bstatic
 DYNAMIC		= -Wl,-Bdynamic
 
 # name of linker
-LINK*=g++-3.2
+LINK*=$(CXX)
 # default linker flags
 LINKFLAGS=
 
