@@ -4,9 +4,9 @@
  *
  *  $RCSfile: gcach_xpeer.cxx,v $
  *
- *  $Revision: 1.48 $
+ *  $Revision: 1.49 $
  *
- *  last change: $Author: obo $ $Date: 2007-01-25 11:00:30 $
+ *  last change: $Author: hr $ $Date: 2007-07-31 16:10:16 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -463,7 +463,7 @@ GlyphSet X11GlyphPeer::GetGlyphSet( ServerFont& rServerFont, int nScreen )
 Pixmap X11GlyphPeer::GetPixmap( ServerFont& rServerFont, int nGlyphIndex, int nReqScreen )
 {
     if( rServerFont.IsGlyphInvisible( nGlyphIndex ) )
-        return NO_PIXMAP;
+        return None;
 
     GlyphData& rGlyphData = rServerFont.GetGlyphData( nGlyphIndex );
     Pixmap aPixmap = GetPixmap( rGlyphData, nReqScreen );
