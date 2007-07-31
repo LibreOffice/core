@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.39 $
+#   $Revision: 1.40 $
 #
-#   last change: $Author: vg $ $Date: 2007-03-26 15:38:49 $
+#   last change: $Author: hr $ $Date: 2007-07-31 13:10:28 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -153,6 +153,9 @@ BUILD_FLAGS=-f vc7.mak EXFLAGS="/EHa /Zc:wchar_t-" CCNUMVER=$(CCNUMVER)
     BUILD_ACTION=$(GNUMAKE)
     # build in parallel
     BUILD_FLAGS+= -j$(MAXPROCESS)
+.ENDIF
+.IF "$(HAVE_LD_HASH_STYLE)"  == "TRUE"
+CXX+= -Wl,--hash-style=both
 .ENDIF
 
 .IF "$(COM)"=="C52"
