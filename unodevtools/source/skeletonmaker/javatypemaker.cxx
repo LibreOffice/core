@@ -4,9 +4,9 @@
  *
  *  $RCSfile: javatypemaker.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: hr $ $Date: 2006-06-20 00:50:45 $
+ *  last change: $Author: hr $ $Date: 2007-07-31 14:00:20 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -527,21 +527,21 @@ void printMethods(std::ostream & o,
             codemaker::convertString(
                 reader.getMethodReturnTypeName(method)),
             false);
-        o << ' '
-          << (codemaker::convertString(reader.getMethodName(method)).
-              getStr())
-          << '(';
+
+        const OString methodName(codemaker::convertString(reader.getMethodName(method)));
+
+        o << ' ' << methodName.getStr() << '(';
         printMethodParameters(o, options, manager, reader, method, false, true);
         o << ')';
         printExceptionSpecification(o, options, manager, reader, method);
         if ( body ) {
             static OUString s(RTL_CONSTASCII_USTRINGPARAM("void"));
             if ( defaultbody ) {
-                o << "\n" << indentation << "{\n" << indentation
-                  << "    // TODO !!!\n";
+                o << "\n" << indentation << "{\n";
                 if ( !reader.getMethodReturnTypeName(method).equals(s) ) {
-                    o << indentation << "    // Exchange the default return "
-                        "implementation.\n" << indentation << "    // NOTE: "
+                    o << indentation << "    // TODO: Exchange the default return "
+                      << "implementation for \"" << methodName << "\" !!!\n";
+                    o << indentation << "    // NOTE: "
                         "Default initialized polymorphic structs can cause problems"
                         "\n" << indentation << "    // because of missing default "
                         "initialization of primitive types of\n" << indentation
@@ -556,7 +556,8 @@ void printMethods(std::ostream & o,
                         false, true);
                     o << ";";
                 } else {
-                    o << indentation << "    // Insert your implementation here.";
+                    o << indentation << "    // TODO: Insert your implementation for \""
+                      << methodName << "\" here.";
                 }
                 o << "\n" << indentation << "}\n\n";
             } else {
