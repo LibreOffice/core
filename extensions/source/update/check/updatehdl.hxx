@@ -4,9 +4,9 @@
  *
  *  $RCSfile: updatehdl.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2007-07-06 14:38:22 $
+ *  last change: $Author: hr $ $Date: 2007-07-31 15:57:48 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -72,6 +72,10 @@
 #include "com/sun/star/beans/NamedValue.hpp"
 #endif
 
+#ifndef  _COM_SUN_STAR_FRAME_XTERMINATELISTENER_HPP_
+#include "com/sun/star/frame/XTerminateListener.hpp"
+#endif
+
 #ifndef  _COM_SUN_STAR_RESOURCE_XRESOURCEBUNDLE_HPP_
 #include <com/sun/star/resource/XResourceBundle.hpp>
 #endif
@@ -80,8 +84,8 @@
 #include <com/sun/star/task/XInteractionHandler.hpp>
 #endif
 
-#ifndef  _CPPUHELPER_IMPLBASE3_HXX_
-#include "cppuhelper/implbase3.hxx"
+#ifndef  _CPPUHELPER_IMPLBASE4_HXX_
+#include "cppuhelper/implbase4.hxx"
 #endif
 
 #include "actionlistener.hxx"
@@ -115,9 +119,10 @@ enum UpdateState {
 };
 
 class UpdateHandler : ::boost::noncopyable,
-                      public cppu::WeakImplHelper3< com::sun::star::awt::XActionListener,
+                      public cppu::WeakImplHelper4< com::sun::star::awt::XActionListener,
                                                     com::sun::star::awt::XTopWindowListener,
-                                                    com::sun::star::task::XInteractionHandler >
+                                                    com::sun::star::task::XInteractionHandler,
+                                                    com::sun::star::frame::XTerminateListener >
 {
 private:
     com::sun::star::uno::Reference< com::sun::star::uno::XComponentContext > mxContext;
@@ -126,6 +131,7 @@ private:
     rtl::Reference< IActionListener > mxActionListener;
 
     UpdateState             meCurState;
+    UpdateState             meLastState;
     sal_Int32               mnPercent;
     short                   mnLastCtrlState;
     bool                    mbDownloadBtnHasDots;
@@ -174,11 +180,12 @@ private:
     rtl::OUString           msBubbleTitles[ UPDATESTATES_COUNT ];
 
     void                    createDialog();
+    void                    updateState( UpdateState eNewState );
     void                    startThrobber( bool bStart = true );
     void                    setControlProperty( const rtl::OUString &rCtrlName,
                                                 const rtl::OUString &rPropName,
                                                 const com::sun::star::uno::Any &rPropValue );
-    void                    showControl( const rtl::OUString &rCtrlName, sal_Bool bShow = sal_True );
+    void                    showControl( const rtl::OUString &rCtrlName, bool bShow = true );
     void                    showControls( short nControls );
     void                    focusControl( DialogControls eID );
     void                    enableControls( short nCtrlState );
@@ -214,7 +221,7 @@ public:
     void                    setErrorMessage( const rtl::OUString &rErrorMsg );
     void                    setDescription( const rtl::OUString &rDescription ){ msDescriptionMsg = rDescription; }
 
-    UpdateState             setState( UpdateState eState );
+    void                    setState( UpdateState eState );
     rtl::OUString           getBubbleText( UpdateState eState );
     rtl::OUString           getBubbleTitle( UpdateState eState );
     rtl::OUString           getDefaultInstErrMsg();
@@ -241,6 +248,10 @@ public:
     // XInteractionHandler
     virtual void SAL_CALL   handle( const com::sun::star::uno::Reference< com::sun::star::task::XInteractionRequest >& Request )
                                 throw( com::sun::star::uno::RuntimeException );
+
+    // XTerminateListener
+    virtual void SAL_CALL queryTermination( const ::com::sun::star::lang::EventObject& e ) throw (::com::sun::star::frame::TerminationVetoException, ::com::sun::star::uno::RuntimeException);
+    virtual void SAL_CALL notifyTermination( const ::com::sun::star::lang::EventObject& e ) throw (::com::sun::star::uno::RuntimeException);
 };
 
 #endif /* INCLUDED_UPDATE_HDL_HXX */
