@@ -4,9 +4,9 @@
  *
  *  $RCSfile: svdfppt.cxx,v $
  *
- *  $Revision: 1.153 $
+ *  $Revision: 1.154 $
  *
- *  last change: $Author: rt $ $Date: 2007-07-06 07:40:11 $
+ *  last change: $Author: hr $ $Date: 2007-07-31 17:32:32 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -6989,9 +6989,60 @@ PPTTextObj::PPTTextObj( SvStream& rIn, SdrPowerPointImport& rSdrPowerPointImport
                                                 case PPT_PST_SlideNumberMCAtom:
                                                     pEntry->pField1 = new SvxFieldItem( SvxPageField(), EE_FEATURE_FIELD );
                                                 break;
+
                                                 case PPT_PST_RTFDateTimeMCAtom:
-                                                    pEntry->pField1 = new SvxFieldItem( SvxDateField( Date(), SVXDATETYPE_FIX ), EE_FEATURE_FIELD );
-                                                break;
+                                                {
+                                                    // Rude workaround for one specal case reported
+                                                    // by a customer. (#i75203#)
+
+                                                    // Don't even attempt to handle the general use
+                                                    // case for PPT_PST_RTFDateTimeMCAtom (a generic
+                                                    // MS style date/time format string). Just handle
+                                                    // the special case where the format string
+                                                    // contains only one or several possibly empty
+                                                    // quoted strings. I.e. something that doesn't
+                                                    // expand to any date or time at all, but to a
+                                                    // fixed string. How on earth somebody manages to
+                                                    // produce such things in PPT slides I have no
+                                                    // idea.
+                                                    if (nVal == 0)
+                                                    {
+                                                        sal_Unicode n;
+                                                        xub_StrLen nLen;
+                                                        String aStr;
+                                                        bool inquote = FALSE;
+                                                        for (nLen = 0, n = 0; nLen < 64; nLen++)
+                                                        {
+                                                            rIn >> n;
+
+                                                            // Collect quoted characters into aStr
+                                                            if ( n == '\'')
+                                                                inquote = !inquote;
+                                                            else if (!n)
+                                                            {
+                                                                // End of format string
+                                                                pEntry->pString = new String( aStr );
+                                                                break;
+                                                            }
+                                                            else if (!inquote)
+                                                            {
+                                                                // Non-quoted character, i.e. a real
+                                                                // format specifier. We don't handle
+                                                                // those. Sorry.
+                                                                break;
+                                                            }
+                                                            else
+                                                            {
+                                                                aStr += n;
+                                                            }
+                                                        }
+                                                    }
+                                                    if ( pEntry->pString == NULL )
+                                                    {
+                                                        // Handle as previously
+                                                        pEntry->pField1 = new SvxFieldItem( SvxDateField( Date(), SVXDATETYPE_FIX ), EE_FEATURE_FIELD );
+                                                    }
+                                                }
                                             }
                                         }
                                     }
