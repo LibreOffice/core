@@ -4,9 +4,9 @@
  *
  *  $RCSfile: msdffimp.cxx,v $
  *
- *  $Revision: 1.151 $
+ *  $Revision: 1.152 $
  *
- *  last change: $Author: rt $ $Date: 2007-07-06 07:38:49 $
+ *  last change: $Author: hr $ $Date: 2007-07-31 17:32:16 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -6968,7 +6968,7 @@ BOOL SvxMSDffManager::GetBLIPDirect( SvStream& rBLIPStream, Graphic& rData, Rect
 
     // nachschauen, ob es sich auch wirklich um ein BLIP handelt
     UINT32 nLength;
-    USHORT nInst, nFbt;
+    USHORT nInst, nFbt( 0 );
     BYTE   nVer;
     if( ReadCommonRecordHeader( rBLIPStream, nVer, nInst, nFbt, nLength) && ( 0xF018 <= nFbt ) && ( 0xF117 >= nFbt ) )
     {
