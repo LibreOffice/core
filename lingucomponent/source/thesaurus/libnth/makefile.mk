@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.9 $
+#   $Revision: 1.10 $
 #
-#   last change: $Author: obo $ $Date: 2007-03-09 08:50:17 $
+#   last change: $Author: hr $ $Date: 2007-07-31 13:08:34 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -66,22 +66,22 @@ ULINGULIB=libulingu.lib
 
 # --- Files --------------------------------------------------------
 
-.IF "$(SYSTEM_MYSPELL)" == "YES" && "$(SYSTEM_MYTHES)" == "YES"
-CXXFLAGS += $(MYSPELL_CFLAGS)
-CFLAGSCXX += $(MYSPELL_CFLAGS)
-CFLAGSCC += $(MYSPELL_CFLAGS)
+.IF "$(SYSTEM_HUNSPELL)" == "YES" && "$(SYSTEM_MYTHES)" == "YES"
+CXXFLAGS += $(HUNSPELL_CFLAGS)
+CFLAGSCXX += $(HUNSPELL_CFLAGS)
+CFLAGSCC += $(HUNSPELL_CFLAGS)
 .ENDIF
-.IF "$(SYSTEM_MYSPELL)" == "YES" && "$(SYSTEM_MYTHES)" != "YES"
-CXXFLAGS += -I..$/mythes $(MYSPELL_CFLAGS)
-CFLAGSCXX += -I..$/mythes $(MYSPELL_CFLAGS)
-CFLAGSCC += -I..$/mythes $(MYSPELL_CFLAGS)
+.IF "$(SYSTEM_HUNSPELL)" == "YES" && "$(SYSTEM_MYTHES)" != "YES"
+CXXFLAGS += -I..$/mythes $(HUNSPELL_CFLAGS)
+CFLAGSCXX += -I..$/mythes $(HUNSPELL_CFLAGS)
+CFLAGSCC += -I..$/mythes $(HUNSPELL_CFLAGS)
 .ENDIF
-.IF "$(SYSTEM_MYPSPELL)" != "YES" && "$(SYSTEM_MYTHES)" == "YES"
+.IF "$(SYSTEM_HUNSPELL)" != "YES" && "$(SYSTEM_MYTHES)" == "YES"
 CXXFLAGS += -I..$/..$/lingutil
 CFLAGSCXX += -I..$/..$/lingutil
 CFLAGSCC += -I..$/..$/lingutil
 .ENDIF
-.IF "$(SYSTEM_MYSPELL)" != "YES" && "$(SYSTEM_MYTHES)" != "YES"
+.IF "$(SYSTEM_HUNSPELL)" != "YES" && "$(SYSTEM_MYTHES)" != "YES"
 CXXFLAGS += -I..$/mythes -I..$/..$/lingutil
 CFLAGSCXX += -I..$/mythes -I..$/..$/lingutil
 CFLAGSCC += -I..$/mythes -I..$/..$/lingutil
@@ -114,10 +114,10 @@ SHL1STDLIBS= \
         $(LNGLIB) \
                 $(MYTHESLIB)
 
-.IF "$(SYSTEM_MYSPELL)" != "YES"
+.IF "$(SYSTEM_HUNSPELL)" != "YES"
 SHL1STDLIBS+=   $(ULINGULIB)
 .ELSE
-SHL1STDLIBS+=   $(MYSPELL_LIBS)
+SHL1STDLIBS+=   $(HUNSPELL_LIBS)
 .ENDIF
 # build DLL
 SHL1LIBS=		$(SLB)$/$(TARGET).lib
