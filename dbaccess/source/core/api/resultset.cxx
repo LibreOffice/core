@@ -4,9 +4,9 @@
  *
  *  $RCSfile: resultset.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 06:36:14 $
+ *  last change: $Author: hr $ $Date: 2007-07-31 14:01:15 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -128,7 +128,12 @@ OResultSet::OResultSet(const ::com::sun::star::uno::Reference< ::com::sun::star:
         {
             Reference <XPropertySetInfo > xInfo(xSet->getPropertySetInfo());
             if (xInfo->hasPropertyByName(PROPERTY_ISBOOKMARKABLE))
+            {
                 m_bIsBookmarkable = ::comphelper::getBOOL(xSet->getPropertyValue(PROPERTY_ISBOOKMARKABLE));
+                OSL_ENSURE( !m_bIsBookmarkable || Reference< XRowLocate >(m_xDelegatorResultSet, UNO_QUERY).is(),
+                    "OResultSet::OResultSet: aggregate is inconsistent in it's bookmarkable attribute!" );
+                m_bIsBookmarkable = m_bIsBookmarkable && Reference< XRowLocate >(m_xDelegatorResultSet, UNO_QUERY).is();
+            }
         }
     }
     catch(Exception&)
