@@ -4,9 +4,9 @@
  *
  *  $RCSfile: pe_iface.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 17:10:12 $
+ *  last change: $Author: hr $ $Date: 2007-07-31 16:09:17 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -119,7 +119,7 @@ PE_Interface::PE_Interface()
         pPE_Attribute(0),
         pPE_Type(0),
         nCurParsed_Base(0),
-        bOptional(false)
+        bOptionalMember(false)
 {
     pPE_Function    = new PE_Function(nCurInterface);
     pPE_Type        = new PE_Type(nCurParsed_Base);
@@ -343,6 +343,11 @@ PE_Interface::On_std_Stereotype(const char * i_sText)
     else if (    strcmp(i_sText,"readonly") ==  0
               OR strcmp(i_sText,"bound") ==  0 )
         On_std_GotoAttribute(i_sText);
+    else if (strcmp(i_sText,"optional") ==  0)
+    {
+        bOptionalMember = true;
+        SetResult(done, stay);
+    }
     else
         SetResult(not_done, pop_failure);
 }
@@ -399,7 +404,7 @@ PE_Interface::InitData()
     pCurInterface = 0;
     nCurInterface = 0;
     nCurParsed_Base = 0;
-    bOptional = false;
+    bOptionalMember = false;
 }
 
 void
@@ -435,10 +440,10 @@ PE_Interface::ReceiveData()
                 eState = e_std;
                 break;
         case in_base_interface:
-                if (bOptional)
+                if (bOptionalMember)
                 {
                     pPE_Type->SetOptional();
-                    bOptional = false;
+                    bOptionalMember = false;
                 }
                 pCurInterface->Add_Base(
                                     nCurParsed_Base,
