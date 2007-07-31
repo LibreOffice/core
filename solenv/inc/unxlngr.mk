@@ -4,9 +4,9 @@
 #
 #   $RCSfile: unxlngr.mk,v $
 #
-#   $Revision: 1.14 $
+#   $Revision: 1.15 $
 #
-#   last change: $Author: obo $ $Date: 2007-03-09 09:10:14 $
+#   last change: $Author: hr $ $Date: 2007-07-31 13:06:47 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -108,7 +108,7 @@ STATIC		= -Wl,-Bstatic
 DYNAMIC		= -Wl,-Bdynamic
 
 # name of linker
-LINK=gcc
+LINK=$(CC)
 # default linker flags
 LINKFLAGS=
 
