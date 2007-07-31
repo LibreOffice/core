@@ -4,9 +4,9 @@
  *
  *  $RCSfile: svxdlg.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: hr $ $Date: 2007-06-26 13:49:32 $
+ *  last change: $Author: hr $ $Date: 2007-07-31 13:56:06 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -51,7 +51,6 @@ using namespace svx;
 #ifndef _COM_SUN_STAR_CONTAINER_XNAMEREPLACE_HPP_
 #include <com/sun/star/container/XNameReplace.hpp> //add for SvxMacroAssignDlg
 #endif
-#include <svx/fmsearch.hxx> //add for FmSearchDialog
 #ifndef INCLUDED_SVXDLLAPI_H
 #include "svx/svxdllapi.h"
 #endif
@@ -482,10 +481,9 @@ public:
                                             sal_uInt32 nResId)=0;
     virtual AbstractFmSearchDialog* CreateFmSearchDialog(Window* pParent, //add for FmSearchDialog
                                                         const String& strInitialText,
-                                                        const String& strContexts,
+                                                        const ::std::vector< String >& _rContexts,
                                                         sal_Int16 nInitialContext,
-                                                        const Link& lnkContextSupplier,
-                                                        FMSEARCH_MODE eMode = SM_ALLOWSCHEDULE)=0;
+                                                        const Link& lnkContextSupplier)=0;
     virtual AbstractGraphicFilterDialog *   CreateGraphicFilterEmboss (Window* pParent,  //add for GraphicFilterEmboss
                                                 const Graphic& rGraphic,
                                                 RECT_POINT eLightSource,
