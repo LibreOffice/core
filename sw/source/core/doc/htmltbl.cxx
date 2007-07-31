@@ -4,9 +4,9 @@
  *
  *  $RCSfile: htmltbl.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: rt $ $Date: 2006-12-01 15:40:16 $
+ *  last change: $Author: hr $ $Date: 2007-07-31 17:40:36 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -616,11 +616,48 @@ void SwHTMLTableLayout::AutoLayoutPass1()
                                 if( nAbsMinNoAlignCnts > nAbsMinNoAlignCell )
                                     nAbsMinNoAlignCell = nAbsMinNoAlignCnts;
                             }
+                            else
+                            {
+                                SwTableNode *pTabNd = (pDoc->GetNodes()[nIdx])->GetTableNode();
+                                if( pTabNd )
+                                {
+                                    SwHTMLTableLayout *pChild = pTabNd->GetTable().GetHTMLTableLayout();
+                                    if( pChild )
+                                    {
+                                        pChild->AutoLayoutPass1();
+                                        ULONG nMaxTableCnts = pChild->nMax;
+                                        ULONG nAbsMinTableCnts = pChild->nMin;
+
+                                        // Eine feste Tabellen-Breite wird als Minimum
+                                        // und Maximum gleichzeitig uebernommen
+                                        if( !pChild->bPrcWidthOption && pChild->nWidthOption )
+                                        {
+                                            ULONG nTabWidth = pChild->nWidthOption;
+                                            if( nTabWidth >= nAbsMinTableCnts  )
+                                            {
+                                                nMaxTableCnts = nTabWidth;
+                                                nAbsMinTableCnts = nTabWidth;
+                                            }
+                                            else
+                                            {
+                                                nMaxTableCnts = nAbsMinTableCnts;
+                                            }
+                                        }
+
+                                        if( nMaxTableCnts > nMaxTableCell )
+                                            nMaxTableCell = nMaxTableCnts;
+                                        if( nAbsMinTableCnts > nAbsMinTableCell )
+                                            nAbsMinTableCell = nAbsMinTableCnts;
+                                    }
+                                    nIdx = pTabNd->EndOfSectionNode()->GetIndex();
+                                }
+                            }
                             nIdx++;
                         }
                     }
                     else
                     {
+                        ASSERT( !this, "Sub tables in HTML import?" )
                         SwHTMLTableLayout *pChild = pCnts->GetTable();
                         pChild->AutoLayoutPass1();
                         ULONG nMaxTableCnts = pChild->nMax;
@@ -1821,6 +1858,8 @@ IMPL_STATIC_LINK( SwHTMLTableLayout, DelayedResize_Impl, void*, EMPTYARG )
 BOOL SwHTMLTableLayout::Resize( USHORT nAbsAvail, BOOL bRecalc,
                                 BOOL bForce, ULONG nDelay )
 {
+    if( 0 == nAbsAvail )
+        return FALSE;
     ASSERT( IsTopTable(), "Resize darf nur an Top-Tabellen aufgerufen werden" );
 
     // Darf die Tabelle uberhaupt Resized werden oder soll sie es trotzdem?
