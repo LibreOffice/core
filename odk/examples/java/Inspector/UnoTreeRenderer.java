@@ -2,9 +2,9 @@
  *
  *  $RCSfile: UnoTreeRenderer.java,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2007-04-04 09:23:30 $
+ *  last change: $Author: hr $ $Date: 2007-07-31 13:57:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  the BSD license.
@@ -66,14 +66,14 @@ public class UnoTreeRenderer extends DefaultTreeCellRenderer{
     /** Creates a new instance of UnoTreeRenderer */
     public UnoTreeRenderer(){
         super();
-        final ClassLoader loader = ClassLoader.getSystemClassLoader();
-    m_oMethodIcon = new ImageIcon(loader.getResource("images/methods_16.png"));
-        m_oPropertyIcon = new ImageIcon("images/properties_16.png");
-        m_oPropertyValueIcon = new ImageIcon("images/properties_16.png");
-        m_oContainerIcon = new ImageIcon("images/containers_16.png");
-        m_oServiceIcon = new ImageIcon("images/services_16.png");
-        m_oInterfaceIcon = new ImageIcon("images/interfaces_16.png");
-        m_oContentIcon = new ImageIcon("images/content_16.png");
+        final ClassLoader loader = this.getClass().getClassLoader();
+        m_oMethodIcon = new ImageIcon(loader.getResource("images/methods_16.png"));
+        m_oPropertyIcon = new ImageIcon(loader.getResource("images/properties_16.png"));
+        m_oPropertyValueIcon = new ImageIcon(loader.getResource("images/properties_16.png"));
+        m_oContainerIcon = new ImageIcon(loader.getResource("images/containers_16.png"));
+        m_oServiceIcon = new ImageIcon(loader.getResource("images/services_16.png"));
+        m_oInterfaceIcon = new ImageIcon(loader.getResource("images/interfaces_16.png"));
+        m_oContentIcon = new ImageIcon(loader.getResource("images/content_16.png"));
     }
 
 
@@ -84,28 +84,28 @@ public class UnoTreeRenderer extends DefaultTreeCellRenderer{
         String  sLabelText = (String)node.getUserObject();
         if (sLabelText != null){
             if (sLabelText.equals(XUnoFacetteNode.SCONTAINERDESCRIPTION)){
-//                setIcon(m_oContainerIcon);
+                setIcon(m_oContainerIcon);
             }
             else if (sLabelText.equals(XUnoFacetteNode.SCONTENTDESCRIPTION)){
-//                setIcon(m_oContentIcon);
+                setIcon(m_oContentIcon);
             }
             else if (sLabelText.equals(XUnoFacetteNode.SINTERFACEDESCRIPTION)){
-//                setIcon(m_oInterfaceIcon);
+                setIcon(m_oInterfaceIcon);
             }
             else if (sLabelText.equals(XUnoFacetteNode.SMETHODDESCRIPTION)){
-//                setIcon(m_oMethodIcon);
+                setIcon(m_oMethodIcon);
             }
             else if (sLabelText.equals(XUnoFacetteNode.SPROPERTYDESCRIPTION)){
-//                setIcon(m_oPropertyIcon);
+                setIcon(m_oPropertyIcon);
             }
             else if (sLabelText.startsWith(XUnoFacetteNode.SPROPERTYINFODESCRIPTION)){
-//                setIcon(m_oPropertyIcon);
+                setIcon(m_oPropertyIcon);
             }
             else if (sLabelText.equals(XUnoFacetteNode.SPROPERTYVALUEDESCRIPTION)){
-//                setIcon(m_oPropertyValueIcon);
+                setIcon(m_oPropertyValueIcon);
             }
             else if (sLabelText.equals(XUnoFacetteNode.SSERVICEDESCRIPTION)){
-//                setIcon(m_oServiceIcon);
+                setIcon(m_oServiceIcon);
             }
             else{
                 setText(sLabelText);
