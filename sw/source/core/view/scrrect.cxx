@@ -4,9 +4,9 @@
  *
  *  $RCSfile: scrrect.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: hr $ $Date: 2007-06-26 11:57:41 $
+ *  last change: $Author: hr $ $Date: 2007-07-31 17:42:46 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -848,6 +848,17 @@ void SwViewImp::_RefreshScrolledArea( const SwRect &rRect )
 
 void SwViewImp::RefreshScrolledArea( SwRect &rRect )
 {
+    // --> OD 2007-07-24 #123003# - make code robust
+    // avoid recursive call
+    static bool bRunning( false );
+
+    if ( bRunning )
+    {
+        ASSERT( false, "<SwViewImp::RefreshScrolledArea(..)> - recursive method call - please inform OD" );
+        return;
+    }
+    // <--
+
     //1. Wird auch von der CrsrShell gerufen, um ggf. den Bereich, in den der
     //Crsr gesetzt wird (Absatz, ganze Zeile bei einer Tabelle) aufzufrischen.
     //Allerdings kann es dann natuerlich sein, dass das Rechteck ueberhaupt
@@ -859,6 +870,10 @@ void SwViewImp::RefreshScrolledArea( SwRect &rRect )
     {
         return;
     }
+
+    // --> OD 2007-07-27 #123003#
+    bRunning = true;
+    // <--
 
     if( pScrolledArea && pScrolledArea->Count() &&
         !( ( GetShell()->IsA( TYPE(SwCrsrShell) ) &&
@@ -928,6 +943,10 @@ void SwViewImp::RefreshScrolledArea( SwRect &rRect )
         SetNextScroll();
         aScrollTimer.Stop();
     }
+
+    // --> OD 2007-07-24 #123003#
+    bRunning = false;
+    // <--
 }
 
 SwStripes& SwStripes::Plus( const SwStripes& rOther, BOOL bVert )
