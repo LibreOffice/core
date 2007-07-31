@@ -4,9 +4,9 @@
  *
  *  $RCSfile: fmsrcimp.hxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: hr $ $Date: 2007-06-27 18:23:05 $
+ *  last change: $Author: hr $ $Date: 2007-07-31 13:59:01 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -47,10 +47,6 @@
 #ifndef _OSL_MUTEX_HXX_ //autogen
 #include <osl/mutex.hxx>
 #endif
-
-#ifndef _FMSEARCH_HXX
-#include <svx/fmsearch.hxx>
-#endif // _FMSEARCH_HXX
 
 #ifndef _COM_SUN_STAR_AWT_XTEXTCOMPONENT_HPP_
 #include <com/sun/star/awt/XTextComponent.hpp>
@@ -95,6 +91,7 @@ SV_DECL_OBJARR(SvInt32Array, sal_Int32, 16, 16)
 // = class FmSearchThread - wie der Name schon sagt
 // ===================================================================================================
 
+class FmSearchEngine;
 class FmSearchThread : public ::vos::OThread
 {
     FmSearchEngine*     m_pEngine;
@@ -210,6 +207,10 @@ namespace svxform {
         virtual ::rtl::OUString getCurrentText() const;
     };
 }
+
+enum FMSEARCH_MODE { SM_BRUTE, SM_ALLOWSCHEDULE, SM_USETHREAD };
+
+DECLARE_STL_VECTOR( ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface>, InterfaceArray);
 
 class SVX_DLLPUBLIC FmSearchEngine
 {
