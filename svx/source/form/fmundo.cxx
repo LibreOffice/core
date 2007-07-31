@@ -4,9 +4,9 @@
  *
  *  $RCSfile: fmundo.cxx,v $
  *
- *  $Revision: 1.41 $
+ *  $Revision: 1.42 $
  *
- *  last change: $Author: hr $ $Date: 2007-06-27 18:16:17 $
+ *  last change: $Author: hr $ $Date: 2007-07-31 13:58:18 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -252,7 +252,10 @@ void FmXUndoEnvironment::dispose()
 
     UnLock();
 
-    EndListening( *rModel.GetObjectShell() );
+    OSL_PRECOND( rModel.GetObjectShell(), "FmXUndoEnvironment::dispose: no object shell anymore!" );
+    if ( rModel.GetObjectShell() )
+        EndListening( *rModel.GetObjectShell() );
+
     if ( IsListening( rModel ) )
         EndListening( rModel );
 
@@ -264,6 +267,10 @@ void FmXUndoEnvironment::dispose()
 //------------------------------------------------------------------------------
 void FmXUndoEnvironment::ModeChanged()
 {
+    OSL_PRECOND( rModel.GetObjectShell(), "FmXUndoEnvironment::ModeChanged: no object shell anymore!" );
+    if ( !rModel.GetObjectShell() )
+        return;
+
     if (bReadOnly != (rModel.GetObjectShell()->IsReadOnly() || rModel.GetObjectShell()->IsReadOnlyUI()))
     {
         bReadOnly = !bReadOnly;
@@ -329,6 +336,7 @@ void FmXUndoEnvironment::Notify( SfxBroadcaster& /*rBC*/, const SfxHint& rHint )
         {
             case SFX_HINT_DYING:
                 dispose();
+                rModel.SetObjectShell( NULL );
                 break;
             case SFX_HINT_MODECHANGED:
                 ModeChanged();
