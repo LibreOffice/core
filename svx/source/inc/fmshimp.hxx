@@ -4,9 +4,9 @@
  *
  *  $RCSfile: fmshimp.hxx,v $
  *
- *  $Revision: 1.33 $
+ *  $Revision: 1.34 $
  *
- *  last change: $Author: rt $ $Date: 2007-07-24 12:02:02 $
+ *  last change: $Author: hr $ $Date: 2007-07-31 13:58:47 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -105,7 +105,9 @@
 #ifndef _SVDMARK_HXX
 #include <svx/svdmark.hxx>
 #endif
-
+#ifndef _FMSEARCH_HXX
+#include <svx/fmsearch.hxx>
+#endif
 #ifndef _SVX_SVXIDS_HRC
 #include <svx/svxids.hrc>
 #endif
@@ -129,9 +131,6 @@
 #endif
 #ifndef _SVX_FMTOOLS_HXX
 #include "fmtools.hxx"
-#endif
-#ifndef _FMSEARCH_HXX
-#include <svx/fmsearch.hxx>
 #endif
 #ifndef _FMSRCCF_HXX_
 #include "fmsrccfg.hxx"
@@ -178,6 +177,7 @@
 
 #include <queue>
 #include <set>
+#include <vector>
 
 SV_DECL_PTRARR(SdrObjArray, SdrObject*, 32, 16)
 //  SV_DECL_OBJARR(FmFormArray, ::com::sun::star::uno::Reference< ::com::sun::star::form::XForm>, 32, 16);
@@ -289,7 +289,7 @@ class SAL_DLLPRIVATE FmXFormShell   :public FmXFormShell_BASE
     Timer               m_aMarkTimer;
     SdrObjArray         m_arrSearchedControls;
         // We enable a permanent cursor for the grid we found a searched text, it's disabled in the next "found" event.
-    FmFormArray         m_arrSearchContexts;
+    FmFormArray         m_aSearchForms;
 
     SvUShorts   m_arrInvalidSlots;
     SvBytes     m_arrInvalidSlots_Flags;
@@ -471,8 +471,13 @@ protected:
 
     ::com::sun::star::uno::Reference< ::com::sun::star::awt::XControl>  GetControlFromModel(const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XControlModel>& xModel);
         // liefert das Control, welches das angegebene Model hat
-    void CollectFormContexts(const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface>& xStartingPoint, const UniString& strCurrentLevelPrefix, UniString& strNames);
-        // sammelt in strNames die Namen aller Formulare, fuegt die entsprechenden XFormRefs in m_arrSearchContexts ein
+
+    // sammelt in strNames die Namen aller Formulare
+    static void impl_collectFormSearchContexts_nothrow(
+        const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface>& _rxStartingPoint,
+        const ::rtl::OUString& _rCurrentLevelPrefix,
+        FmFormArray& _out_rForms,
+        ::std::vector< String >& _out_rNames );
 
 public:
     // methode fuer nicht designmode (alive mode)
