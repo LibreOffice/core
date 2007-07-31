@@ -4,9 +4,9 @@
  *
  *  $RCSfile: updatecheck.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2007-07-06 14:36:47 $
+ *  last change: $Author: hr $ $Date: 2007-07-31 15:56:55 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -108,6 +108,17 @@ public:
     // Update internal update info member
     void setUpdateInfo(const UpdateInfo& aInfo);
 
+    /* This method turns on the menubar icon, triggers the bubble window or
+     * updates the dialog text when appropriate
+     */
+    void setUIState(UpdateState eState, bool suppressBubble = false);
+
+    // Returns the UI state that matches rInfo best
+    static UpdateState getUIState(const UpdateInfo& rInfo);
+
+    // Check for updates failed
+    void setCheckFailedState();
+
     // Executes the update check dialog for manual checks and downloads interaction
     void showDialog(bool forceCheck = false);
 
@@ -118,7 +129,7 @@ public:
     virtual bool downloadTargetExists(const rtl::OUString& rFileName);
     virtual void downloadStalled(const rtl::OUString& rErrorMessage);
     virtual void downloadProgressAt(sal_Int8 nProcent);
-    virtual void downloadStarted(const rtl::OUString& rLocalFileName);
+    virtual void downloadStarted(const rtl::OUString& rLocalFileName, sal_Int64 nFileSize);
     virtual void downloadFinished(const rtl::OUString& rLocalFileName);
 
     // Cancels the download action (and resumes checking if enabled)
@@ -137,6 +148,7 @@ public:
     void install();
     void pause();
     void resume();
+    void closeAfterFailure();
 
     // rtl::IReference
     virtual oslInterlockedCount SAL_CALL acquire() SAL_THROW(());
@@ -155,12 +167,6 @@ private:
 
     // Returns the update handler instance
     rtl::Reference<UpdateHandler> getUpdateHandler();
-
-    /* This method turns on the menubar icon, triggers the bubble window or
-     * updates the dialog text when appropriate
-     */
-    void setUIState(UpdateState eState, bool suppressBubble = false);
-    void setUIState(const UpdateInfo& rInfo, bool suppressBubble = false);
 
     // Open the given URL in a browser
     void showReleaseNote(const rtl::OUString& rURL) const;
