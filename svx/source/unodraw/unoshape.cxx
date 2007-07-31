@@ -4,9 +4,9 @@
  *
  *  $RCSfile: unoshape.cxx,v $
  *
- *  $Revision: 1.160 $
+ *  $Revision: 1.161 $
  *
- *  last change: $Author: rt $ $Date: 2007-07-24 12:02:29 $
+ *  last change: $Author: hr $ $Date: 2007-07-31 17:32:47 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -4217,7 +4217,7 @@ uno::Reference< container::XIndexContainer > SAL_CALL SvxShape::getGluePoints()
     OGuard aGuard( Application::GetSolarMutex() );
     uno::Reference< container::XIndexContainer > xGluePoints( mxGluePoints );
 
-    if( !xGluePoints.is() )
+    if( mpObj.is() && !xGluePoints.is() )
     {
         uno::Reference< container::XIndexContainer > xNew( SvxUnoGluePointAccess_createInstance( mpObj.get() ), uno::UNO_QUERY );
         mxGluePoints = xGluePoints = xNew;
