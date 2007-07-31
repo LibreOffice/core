@@ -4,9 +4,9 @@
  *
  *  $RCSfile: eventhandler.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: hr $ $Date: 2006-10-24 15:17:34 $
+ *  last change: $Author: hr $ $Date: 2007-07-31 14:07:23 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -145,6 +145,8 @@
 #ifndef _RTL_REF_HXX_
 #include <rtl/ref.hxx>
 #endif
+
+#include <map>
 
 //------------------------------------------------------------------------
 extern "C" void SAL_CALL createRegistryInfo_EventHandler()
