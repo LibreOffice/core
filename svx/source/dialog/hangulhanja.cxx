@@ -4,9 +4,9 @@
  *
  *  $RCSfile: hangulhanja.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: hr $ $Date: 2007-06-27 17:09:37 $
+ *  last change: $Author: hr $ $Date: 2007-07-31 13:57:14 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -41,6 +41,7 @@
 #ifndef _SV_MSGBOX_HXX
 #include <vcl/msgbox.hxx> //add CHINA001
 #endif
+#include <vcl/button.hxx>
 // header for class SvtLinguConfig
 #ifndef _SVTOOLS_LINGUCFG_HXX_
 #include <svtools/lingucfg.hxx>
