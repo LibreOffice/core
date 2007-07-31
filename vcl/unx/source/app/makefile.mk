@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.27 $
+#   $Revision: 1.28 $
 #
-#   last change: $Author: vg $ $Date: 2007-02-06 14:19:12 $
+#   last change: $Author: hr $ $Date: 2007-07-31 13:01:37 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -92,10 +92,11 @@ CDEFS+=-DUSE_NAS
 .ENDIF
 
 .IF "$(ENABLE_PASF)" != ""
-CDEFS+=-DUSE_PASF
+CDEFS+=-DUSE_PASF -DPA_VER=$(PA_VER)
 SLOFILES+=$(SLO)$/pasfsound.obj
 .IF "$(SYSTEM_SNDFILE)" == "YES"
 CDEFS+=-DSYSTEM_SNDFILE
+CFLAGS+=$(SNDFILE_CFLAGS)
 .ENDIF
 .IF "$(SYSTEM_PORTAUDIO)" == "YES"
 CDEFS+=-DSYSTEM_PORTAUDIO
