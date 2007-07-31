@@ -4,9 +4,9 @@
  *
  *  $RCSfile: svdpntv.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: hr $ $Date: 2007-06-26 12:01:28 $
+ *  last change: $Author: hr $ $Date: 2007-07-31 16:43:34 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -442,7 +442,8 @@ public:
     ////////////////////////////////////////////////////////////////////////////////////////////////////
     // used for the other applications basctl/sc/sw which call DrawLayer at PageViews
     // #i74769# Interface change to use common BeginCompleteRedraw/EndCompleteRedraw
-    SdrPaintWindow* BeginDrawLayers(OutputDevice* pOut, const Region& rReg);
+    // #i76114# bDisableIntersect disables intersecting rReg with the Window's paint region
+    SdrPaintWindow* BeginDrawLayers(OutputDevice* pOut, const Region& rReg, bool bDisableIntersect = false);
     void EndDrawLayers(SdrPaintWindow& rPaintWindow);
 
 protected:
