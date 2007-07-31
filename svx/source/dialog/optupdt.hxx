@@ -4,9 +4,9 @@
  *
  *  $RCSfile: optupdt.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2007-04-04 07:46:04 $
+ *  last change: $Author: hr $ $Date: 2007-07-31 15:54:15 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -71,7 +71,6 @@ private:
     DECL_LINK(  FileDialogHdl_Impl, PushButton* ) ;
     DECL_LINK(  CheckNowHdl_Impl, PushButton* ) ;
     DECL_LINK(  AutoCheckHdl_Impl, CheckBox* ) ;
-    DECL_LINK(  AutoDownloadHdl_Impl, CheckBox* ) ;
 
     void        CalcButtonWidth();
 
