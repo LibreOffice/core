@@ -4,9 +4,9 @@
  *
  *  $RCSfile: viewsh.cxx,v $
  *
- *  $Revision: 1.73 $
+ *  $Revision: 1.74 $
  *
- *  last change: $Author: ihi $ $Date: 2007-07-10 14:59:22 $
+ *  last change: $Author: hr $ $Date: 2007-07-31 17:43:00 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -383,6 +383,13 @@ void ViewShell::ImplEndAction( const BOOL bIdleEnd )
                         if ( bSizeOK )
                         {
                             bPaint = FALSE;
+
+                            // --> OD 2007-07-26 #i79947#
+                            // #i72754# start Pre/PostPaint encapsulation before pOut is changed to the buffering VDev
+                            const Region aRepaintRegion(aRect.SVRect());
+                            DLPrePaint2(aRepaintRegion);
+                            // <--
+
                             OutputDevice  *pOld = GetOut();
                             pVout->SetLineColor( pOld->GetLineColor() );
                             pVout->SetFillColor( pOld->GetFillColor() );
@@ -390,10 +397,6 @@ void ViewShell::ImplEndAction( const BOOL bIdleEnd )
                             aOrigin.X() = -aOrigin.X(); aOrigin.Y() = -aOrigin.Y();
                             aMapMode.SetOrigin( aOrigin );
                             pVout->SetMapMode( aMapMode );
-
-                            // #i72754# start Pre/PostPaint encapsulation before pOut is changed to the buffering VDev
-                            const Region aRepaintRegion(aRect.SVRect());
-                            DLPrePaint2(aRepaintRegion);
 
                             pOut = pVout;
                             if ( bPaintsFromSystem )
