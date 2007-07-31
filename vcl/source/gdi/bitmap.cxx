@@ -4,9 +4,9 @@
  *
  *  $RCSfile: bitmap.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: rt $ $Date: 2007-07-24 10:07:09 $
+ *  last change: $Author: hr $ $Date: 2007-07-31 16:08:21 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -404,10 +404,10 @@ ULONG Bitmap::GetChecksum() const
 
                 nCrc = rtl_crc32( nCrc, pRAcc->GetBuffer(), pRAcc->GetScanlineSize() * pRAcc->Height() );
 
-                ( (Bitmap*) this )->ReleaseAccess( pRAcc );
-
                 mpImpBmp->ImplSetChecksum( nRet = nCrc );
             }
+
+            if (pRAcc) ( (Bitmap*) this )->ReleaseAccess( pRAcc );
         }
     }
 
