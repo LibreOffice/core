@@ -4,9 +4,9 @@
  *
  *  $RCSfile: docu_pe2.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-07 18:56:34 $
+ *  last change: $Author: hr $ $Date: 2007-07-31 16:09:44 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -141,6 +141,12 @@ class SapiDocu_PE : public TokenInterpreter
     void                SetCurSeeAlsoAtTagLinkText(
                             DYN ary::info::DocuToken &
                                                 let_drNewToken );
+    void                SetCurSeeAlsoAtTagLinkText_2(
+                            DYN ary::info::DocuToken &
+                                                let_drNewToken );
+    void                SetCurSeeAlsoAtTagLinkText_3(
+                            DYN ary::info::DocuToken &
+                                                let_drNewToken );
     void                SetCurSinceAtTagVersion(
                             DYN ary::info::DocuToken &
                                                 let_drNewToken );
@@ -157,6 +163,7 @@ class SapiDocu_PE : public TokenInterpreter
 
     Dyn<DT_AtTag>       pCurAtTag;
     String              sCurDimAttribute;
+    StreamStr           sCurAtSeeType_byXML;
 };
 
 }   // namespace dsapi
