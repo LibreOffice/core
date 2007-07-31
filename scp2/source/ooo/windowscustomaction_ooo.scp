@@ -4,9 +4,9 @@
  *
  *  $RCSfile: windowscustomaction_ooo.scp,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: rt $ $Date: 2007-07-06 14:34:30 $
+ *  last change: $Author: hr $ $Date: 2007-07-31 18:20:34 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -298,6 +298,7 @@ WindowsCustomAction gid_Customaction_Patch_Register_Extensions
 	Target = "RegisterExtensions";
 	Inbinarytable = 1;
 	Assignment1 = ("InstallExecuteSequence", "", "end");
+	Assignment2 = ("AdminExecuteSequence", "", "end");
 End
 
 WindowsCustomAction gid_Customaction_Patch_Deregister_Extensions
