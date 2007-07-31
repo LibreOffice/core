@@ -4,9 +4,9 @@
  *
  *  $RCSfile: txtparai.cxx,v $
  *
- *  $Revision: 1.61 $
+ *  $Revision: 1.62 $
  *
- *  last change: $Author: rt $ $Date: 2007-07-09 07:54:03 $
+ *  last change: $Author: hr $ $Date: 2007-07-31 17:35:52 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1581,6 +1581,9 @@ XMLParaContext::XMLParaContext(
     xStart( rImport.GetTextImport()->GetCursorAsRange()->getStart() ),
     nOutlineLevel( IsXMLToken( rLName, XML_H ) ? 1 : -1 ),
     pHints( 0 ),
+    // --> OD 2007-07-25 #i73509#
+    mbOutlineLevelAttrFound( sal_False ),
+    // <--
     bIgnoreLeadingSpace( sal_True ),
     bHeading( bHead ),
     bIsListHeader( false ),
@@ -1623,6 +1626,9 @@ XMLParaContext::XMLParaContext(
                         nTmp = 127;
                     nOutlineLevel = (sal_Int8)nTmp;
                 }
+                // --> OD 2007-07-25 #i73509#
+                mbOutlineLevelAttrFound = sal_True;
+                // <--
             }
             break;
         case XML_TOK_TEXT_P_IS_LIST_HEADER:
@@ -1699,7 +1705,9 @@ XMLParaContext::~XMLParaContext()
         sStyleName = xTxtImport->sCellParaStyleDefault;
 
     // set style and hard attributes at the previous paragraph
-    sStyleName = xTxtImport->SetStyleAndAttrs( GetImport(), xAttrCursor, sStyleName, sal_True, bHeading ? nOutlineLevel : -1 );
+    // --> OD 2007-07-25 #i73509# - add paramter <mbOutlineLevelAttrFound>
+    sStyleName = xTxtImport->SetStyleAndAttrs( GetImport(), xAttrCursor, sStyleName, sal_True, mbOutlineLevelAttrFound, bHeading ? nOutlineLevel : -1 );
+    // <--
 
     // handle list style header
     if (bHeading && (bIsListHeader || bIsRestart))
