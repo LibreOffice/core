@@ -41,7 +41,7 @@ if (office_or_ure == "office") {
 }
 var oo_sdk_make_home = getMakeHome();
 var oo_sdk_zip_home = getZipHome();
-var oo_sdk_vc8_used;
+var oo_sdk_vc8_used = "";
 var oo_sdk_cpp_home = getCppHome();
 var oo_sdk_cli_home = getCliHome();
 var oo_sdk_java_home = getJavaHome();
@@ -327,13 +327,13 @@ function getZipHome()
 function getCppHome()
 {
     var sSuggestedHome = WshSysEnv("OO_SDK_CPP_HOME");
+//    var sVC8="";
     if (sSuggestedHome.length == 0)
     {       
         var sVC="";
-		var sVC8="";
         try {
             sVC = WshShell.RegRead(regKeyVCExpress80);
-			sVC8="true";
+//			sVC8="true";
         }catch (exc) {}
 
         if (sVC.length == 0)
@@ -392,6 +392,7 @@ function getCppHome()
 		if ( !bSkip) {
 		    //Check if the C++ compiler exist
 		    var cl = sHome + "\\cl.exe";
+		    var mt = sHome + "\\mt.exe";
         
 			if (! aFileSystemObject.FileExists(cl))
 			{
@@ -399,6 +400,10 @@ function getCppHome()
 								 + cl + "\".");
 				sHome = "";
 				bSkip = true;
+			} else {
+			    if (aFileSystemObject.FileExists(mt)) {
+				    oo_sdk_vc8_used="true";				   
+				}
 			}
 		}
 
@@ -410,9 +415,7 @@ function getCppHome()
 			   continue;
 		   }
 		}
-        
-		if (sVC8.length > 0)
-		   oo_sdk_vc8_used=sVC8;
+
         return sHome;
     }   
 }
