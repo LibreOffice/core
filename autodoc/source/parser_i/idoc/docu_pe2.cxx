@@ -4,9 +4,9 @@
  *
  *  $RCSfile: docu_pe2.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 17:14:32 $
+ *  last change: $Author: hr $ $Date: 2007-07-31 16:09:31 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -74,7 +74,9 @@ SapiDocu_PE::SapiDocu_PE(ParserInfo & io_rPositionInfo)
         eState(e_none),
         pPositionInfo(&io_rPositionInfo),
         fCurTokenAddFunction(&SapiDocu_PE::AddDocuToken2Void),
-        pCurAtTag(0)
+        pCurAtTag(0),
+        sCurDimAttribute(),
+        sCurAtSeeType_byXML(200)
 {
 }
 
@@ -399,14 +401,81 @@ void
 SapiDocu_PE::SetCurSeeAlsoAtTagLinkText( DYN ary::info::DocuToken & let_drNewToken )
 {
     csv_assert(pCurAtTag);
-    DT_TextToken * dpText = dynamic_cast< DT_TextToken* >(&let_drNewToken);
-    if (dpText != 0)
-        pCurAtTag->SetName(dpText->GetText());
+    DT_TextToken * pText = dynamic_cast< DT_TextToken* >(&let_drNewToken);
+    if (pText != 0)
+        pCurAtTag->SetName(pText->GetText());
     else
-        pCurAtTag->SetName("unknown ?");
+    {
+        DT_MupType *
+            pTypeBegin = dynamic_cast< DT_MupType* >(&let_drNewToken);
+        DT_MupMember *
+            pMemberBegin = dynamic_cast< DT_MupMember* >(&let_drNewToken);
+        if (pTypeBegin != 0 OR pMemberBegin != 0)
+        {
+            sCurAtSeeType_byXML.reset();
+
+            sCurAtSeeType_byXML
+                << ( pTypeBegin != 0
+                        ?   pTypeBegin->Scope()
+                        :   pMemberBegin->Scope() );
+
+            if (sCurAtSeeType_byXML.tellp() > 0)
+            {
+                sCurAtSeeType_byXML
+                    << "::";
+            }
+            delete &let_drNewToken;
+            fCurTokenAddFunction = &SapiDocu_PE::SetCurSeeAlsoAtTagLinkText_2;
+            return;
+        }
+        else
+        {
+            pCurAtTag->SetName("? (no identifier found)");
+        }
+    }
     delete &let_drNewToken;
     fCurTokenAddFunction = &SapiDocu_PE::AddDocuToken2CurAtTag;
 }
+
+void
+SapiDocu_PE::SetCurSeeAlsoAtTagLinkText_2( DYN ary::info::DocuToken & let_drNewToken )
+{
+    csv_assert(pCurAtTag);
+    DT_TextToken *
+        pText = dynamic_cast< DT_TextToken* >(&let_drNewToken);
+    if (pText != 0)
+    {
+        sCurAtSeeType_byXML
+            << pText->GetText();
+        pCurAtTag->SetName(sCurAtSeeType_byXML.c_str());
+    }
+    else
+    {
+        pCurAtTag->SetName("? (no identifier found)");
+    }
+    sCurAtSeeType_byXML.reset();
+    delete &let_drNewToken;
+    fCurTokenAddFunction = &SapiDocu_PE::SetCurSeeAlsoAtTagLinkText_3;
+}
+
+void
+SapiDocu_PE::SetCurSeeAlsoAtTagLinkText_3( DYN ary::info::DocuToken & let_drNewToken )
+{
+    csv_assert(pCurAtTag);
+
+
+    /// Could emit warning, but don't because this parser is obsolete.
+//  Tok_XmlLink_BeginTag *
+//      pLinkEnd = dynamic_cast< Tok_XmlLink_EndTag* >(&let_drNewToken);
+//  if (pLinkEnd == 0)
+//  {
+//      warn_aboutMissingClosingTag();
+//  }
+
+    delete &let_drNewToken;
+    fCurTokenAddFunction = &SapiDocu_PE::AddDocuToken2CurAtTag;
+}
+
 
 
 void
