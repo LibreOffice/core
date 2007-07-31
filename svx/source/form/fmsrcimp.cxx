@@ -4,9 +4,9 @@
  *
  *  $RCSfile: fmsrcimp.cxx,v $
  *
- *  $Revision: 1.35 $
+ *  $Revision: 1.36 $
  *
- *  last change: $Author: hr $ $Date: 2007-06-27 18:15:19 $
+ *  last change: $Author: hr $ $Date: 2007-07-31 13:58:04 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -168,7 +168,6 @@ using namespace ::svxform;
 // ***************************************************************************************************
 
 SV_IMPL_OBJARR(SvInt32Array, sal_Int32);
-DECLARE_STL_VECTOR( Reference< XInterface > ,InterfaceArray);
 
 //========================================================================
 // = FmSearchThread
