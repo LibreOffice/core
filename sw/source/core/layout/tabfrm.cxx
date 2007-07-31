@@ -4,9 +4,9 @@
  *
  *  $RCSfile: tabfrm.cxx,v $
  *
- *  $Revision: 1.96 $
+ *  $Revision: 1.97 $
  *
- *  last change: $Author: obo $ $Date: 2007-07-18 14:45:30 $
+ *  last change: $Author: hr $ $Date: 2007-07-31 17:42:21 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -996,12 +996,14 @@ bool SwTabFrm::RemoveFollowFlowLine()
             pFollowFlowLine &&
             pLastLine, "There should be a flowline in the follow" )
 
-    if ( !pFollowFlowLine || !pLastLine ) return false;
-
     // We have to reset the flag here, because lcl_MoveRowContent
     // calls a GrowFrm(), which has a different bahavior if
     // this flag is set.
     SetFollowFlowLine( FALSE );
+
+    // --> FME 2007-07-19 #140081# Make code robust.
+    if ( !pFollowFlowLine || !pLastLine )
+        return true;
 
     // Move content
     lcl_MoveRowContent( *pFollowFlowLine, *(SwRowFrm*)pLastLine );
@@ -1136,9 +1138,11 @@ bool SwTabFrm::Split( const SwTwips nCutPos, bool bTryToSplit, bool bTableRowKee
                                             pRow->GetBottomLineSize() :
                                             0 ) ) )
     {
+        if( bTryToSplit || !pRow->IsRowSpanLine() ||
+            0 != (pRow->Frm().*fnRect->fnGetHeight)() )
+            ++nRowCount;
         nRemainingSpaceForLastRow -= (pRow->Frm().*fnRect->fnGetHeight)();
         pRow = static_cast<SwRowFrm*>(pRow->GetNext());
-        ++nRowCount;
     }
 
     //
@@ -1217,6 +1221,8 @@ bool SwTabFrm::Split( const SwTwips nCutPos, bool bTryToSplit, bool bTableRowKee
     if ( bKeepNextRow )
     {
         pRow = GetFirstNonHeadlineRow();
+        if( pRow && pRow->IsRowSpanLine() && 0 == (pRow->Frm().*fnRect->fnGetHeight)() )
+            pRow = static_cast<SwRowFrm*>(pRow->GetNext());
         if ( pRow )
         {
             pRow = static_cast<SwRowFrm*>(pRow->GetNext());
@@ -2040,6 +2046,7 @@ void SwTabFrm::MakeAll()
         }
     }
 
+    int nUnSplitted = 5; // Just another loop control :-(
     SWRECTFN( this )
     while ( !bValidPos || !bValidSize || !bValidPrtArea )
     {
@@ -2345,10 +2352,13 @@ void SwTabFrm::MakeAll()
                             SwFrm* pLastLine = const_cast<SwFrm*>(GetLastLower());
                             RemoveFollowFlowLine();
                             // invalidate and rebuild last row
-                            ::SwInvalidateAll( pLastLine, LONG_MAX );
-                            SetRebuildLastLine( TRUE );
-                            lcl_RecalcRow( static_cast<SwRowFrm&>(*pLastLine), LONG_MAX );
-                            SetRebuildLastLine( FALSE );
+                            if ( pLastLine )
+                            {
+                                ::SwInvalidateAll( pLastLine, LONG_MAX );
+                                SetRebuildLastLine( TRUE );
+                                lcl_RecalcRow( static_cast<SwRowFrm&>(*pLastLine), LONG_MAX );
+                                SetRebuildLastLine( FALSE );
+                            }
 
                             SwFrm* pRow = GetFollow()->GetFirstNonHeadlineRow();
 
@@ -2525,7 +2535,7 @@ void SwTabFrm::MakeAll()
         SwFrm* pIndPrev = GetIndPrev();
         const SwRowFrm* pFirstNonHeadlineRow = GetFirstNonHeadlineRow();
 
-        if ( pFirstNonHeadlineRow &&
+        if ( pFirstNonHeadlineRow && nUnSplitted > 0 &&
              ( !bTableRowKeep || pFirstNonHeadlineRow->GetNext() || !pFirstNonHeadlineRow->ShouldRowKeepWithNext() ) &&
              ( !bDontSplit || !pIndPrev ) )
         {
@@ -2621,6 +2631,8 @@ void SwTabFrm::MakeAll()
                         RemoveFollowFlowLine();
 
                     const bool bSplitError = !Split( nDeadLine, bTryToSplit, bTableRowKeep );
+                    if( !bTryToSplit && !bSplitError && nUnSplitted > 0 )
+                        --nUnSplitted;
                     ASSERT( bTryToSplit || !bSplitError,
                             "We did not try to split, why do we get a split error?" )
                     bTryToSplit = !bSplitError;
@@ -2744,7 +2756,10 @@ void SwTabFrm::MakeAll()
 
         // --> FME 2004-06-09 #i29771# Reset bSplitError flag on change of upper
         if ( GetUpper() != pOldUpper )
+        {
             bTryToSplit = true;
+            nUnSplitted = 5;
+        }
         // <--
 
         SWREFRESHFN( this )
@@ -5383,7 +5398,7 @@ void SwCellFrm::Format( const SwBorderAttrs *pAttrs )
          !(pPg = FindPageFrm())->HasGrid() )
     // <--
     {
-        if ( !Lower()->IsCntntFrm() && !Lower()->IsSctFrm() )
+        if ( !Lower()->IsCntntFrm() && !Lower()->IsSctFrm() && !Lower()->IsTabFrm() )
         {
             //ASSERT fuer HTML-Import!
             ASSERT( !this, "VAlign an Zelle ohne Inhalt" );
