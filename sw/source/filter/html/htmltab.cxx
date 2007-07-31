@@ -4,9 +4,9 @@
  *
  *  $RCSfile: htmltab.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: kz $ $Date: 2007-05-10 16:05:57 $
+ *  last change: $Author: hr $ $Date: 2007-07-31 17:43:14 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -3637,17 +3637,7 @@ void SwHTMLParser::BuildTableCell( HTMLTable *pCurTable, sal_Bool bReadOptions,
             sal_Bool bParentLFStripped = sal_False;
             if( bTopTable )
             {
-                // Sind wir in einer Tabelle in der Tabelle?
-                const SwNode *pNd = pDoc->GetNodes()[pPam->GetPoint()->nNode];
-                const SwTableNode *pTblNd = pNd->FindTableNode();
-
                 SvxAdjust eTblAdjust = pTable->GetTableAdjust(sal_False);
-
-                // Wenn das Table-Tag in einem Rahmen stand, den es nicht
-                // mehr gibt, muessen wir die Tabelle in einen Rahmen
-                // stecken.
-                if( pCurTable->IsMakeTopSubTable() && pTblNd!=0 )
-                    pCurTable->SetHasToFly();
 
                 // Wenn die Tabelle links oder rechts ausgerivchtet ist,
                 // oder in einen Rahmen soll, dann kommt sie auch in einen
@@ -3655,12 +3645,6 @@ void SwHTMLParser::BuildTableCell( HTMLTable *pCurTable, sal_Bool bReadOptions,
                 bForceFrame = eTblAdjust == SVX_ADJUST_LEFT ||
                               eTblAdjust == SVX_ADJUST_RIGHT ||
                               pCurTable->HasToFly();
-
-                // Da Tabelle in Tabelle nicht geht, muss die Tabelle
-                // entweder in einen Rahmen, oder sie steht in einem
-                // Rahmen sie steht in keiner anderen Tabelle.
-                ASSERT( bForceFrame || !pTblNd,
-                        "Tabelle in der Tabelle geht nur mit oder in Rahmen" );
 
                 // Entweder kommt die Tabelle in keinen Rahmen und befindet
                 // sich in keinem Rahmen (wird also durch Zellen simuliert),
@@ -4222,8 +4206,8 @@ void SwHTMLParser::BuildTableCell( HTMLTable *pCurTable, sal_Bool bReadOptions,
             InsertTableSection( pSaveStruct->IsHeaderCell()
                                         ? RES_POOLCOLL_TABLE_HDLN
                                         : RES_POOLCOLL_TABLE );
-
-        SwCntntNode *pCNd = pDoc->GetNodes()[pStNd->GetIndex()+1] ->GetCntntNode();
+        const SwEndNode *pEndNd = pStNd->EndOfSectionNode();
+        SwCntntNode *pCNd = pDoc->GetNodes()[pEndNd->GetIndex()-1] ->GetCntntNode();
         SvxFontHeightItem aFontHeight( 40, 100, RES_CHRATR_FONTSIZE );
         pCNd->SetAttr( aFontHeight );
         aFontHeight.SetWhich( RES_CHRATR_CJK_FONTSIZE );
@@ -5331,21 +5315,12 @@ HTMLTable *SwHTMLParser::BuildTable( SvxAdjust eParentAdjust,
     }
     else
     {
+        pTable = 0;
         HTMLTableOptions *pTblOptions =
             new HTMLTableOptions( GetOptions(), eParentAdjust );
 
         if( pTblOptions->aId.Len() )
             InsertBookmark( pTblOptions->aId );
-
-        // Wenn die Tabelle in einem Rahmen steht oder link oder rechts
-        // ausgerichtet ist, wird in jedem Fall eine "echte" Tabelle daraus.
-        if( bMakeTopSubTable || bHasToFly ||
-            (pTblOptions->bTableAdjust &&
-             (SVX_ADJUST_LEFT==pTblOptions->eAdjust ||
-              SVX_ADJUST_RIGHT==pTblOptions->eAdjust)) )
-        {
-            pTable = 0;
-        }
 
         HTMLTable *pCurTable = new HTMLTable( this, pTable,
                                               bIsParentHead,
