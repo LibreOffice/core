@@ -4,9 +4,9 @@
  *
  *  $RCSfile: cuifmsearch.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: hr $ $Date: 2007-06-27 16:57:47 $
+ *  last change: $Author: hr $ $Date: 2007-07-31 13:56:33 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -83,11 +83,15 @@
 #include <tools/string.hxx>
 #endif
 
+namespace svxform {
+    class FmSearchConfigItem;
+}
 
 // ===================================================================================================
 // = class FmSearchDialog - Dialog fuer Suchen in Formularen/Tabellen
 // ===================================================================================================
 
+struct FmSearchProgress;
 
 class FmSearchDialog : public ModalDialog
 {
@@ -145,28 +149,7 @@ class FmSearchDialog : public ModalDialog
 
     ::svxform::FmSearchConfigItem*      m_pConfig;
 public:
-    /** die drei moeglichen Such-Modi :
-        SM_BRUTE sucht einfach nur ... da wird das Office in der Zeit wohl stehen
-        SM_ALLOWSCHEDULE ruft nach jedem durchsuchten Feld ein Application::Reschedule auf, so dass die Suche zwar im aufrufenden
-        Thread laeuft, aber die Office-UI wenigstens noch funktionieren sollte. Soweit das den Dialog angeht, achtet der selber
-        darauf, dass keine Inkonsistenzen entstehen, was dabei ausserhalb des Dialoges liegt, muss natuerlich vom Aufrufer
-        erledigt werden (Was nicht allzu kompliziert sein duerfte, da der Dialog hier ja modal sein sollte)
-        SM_USETHREAD startet einen eigenen Thread, der die Suche erledigt, so dass also die UI auch hier weiterhin funktioniert.
-    */
-    //CHINA001 enum SEARCH_MODE { SM_BRUTE, SM_ALLOWSCHEDULE, SM_USETHREAD };
-
-    /** Constructor 1:
-        gesucht wird mittels des uebergebenen Iterators, wenn man also seinen Original-Cursor nicht bewegen will, muss
-        man hier einen Clone uebergeben
-        strVisibleFields muss eine (durch ; getrennte) Liste aller Felder, die zur Auswahl stehen sollen, enthalten
-        xFormatter wird benutzt, wenn die Daten aus den Feldern vor dem Vergleich entsprechend ihrem FormatKey formatiert
-        werden sollen
-        Zu eMode siehe SEARCH_MODE.
-    */
-    FmSearchDialog(Window* pParent, const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XResultSet>& xCursor, const String& strVisibleFields, const String& strInitialText,
-        const ::com::sun::star::uno::Reference< ::com::sun::star::util::XNumberFormatsSupplier>& xFormatSupplier, FMSEARCH_MODE eMode = SM_ALLOWSCHEDULE);
-    /** Constructor 2:
-        hiermit kann in verschiedenen Saetzen von Feldern gesucht werden. Es gibt eine Reihe von Kontexten, deren Namen in
+    /** hiermit kann in verschiedenen Saetzen von Feldern gesucht werden. Es gibt eine Reihe von Kontexten, deren Namen in
         strContexts stehen (getrennt durch ';'), der Benutzer kann einen davon auswaehlen.
         Wenn der Benutzer einen Kontext auswaehlt, wird lnkContextSupplier aufgerufen, er bekommt einen Zeiger auf eine
         FmSearchContext-Struktur, die gefuellt werden muss.
@@ -180,8 +163,8 @@ public:
         (natuerlich zwingend erforderlich : der String Nummer i in strUsedFields eines Kontexts muss mit dem Interface Nummer i
         in arrFields des Kontexts korrespondieren)
     */
-    FmSearchDialog(Window* pParent, const String& strInitialText, const String& strContexts, sal_Int16 nInitialContext,
-        const Link& lnkContextSupplier, FMSEARCH_MODE eMode = SM_ALLOWSCHEDULE);
+    FmSearchDialog(Window* pParent, const String& strInitialText, const ::std::vector< String >& _rContexts, sal_Int16 nInitialContext,
+        const Link& lnkContextSupplier);
 
     virtual ~FmSearchDialog();
 
@@ -242,9 +225,6 @@ private:
     DECL_LINK( OnCheckBoxToggled, CheckBox* );
 
     DECL_LINK( OnContextSelection, ListBox* );
-
-    // um sich den Fokus nach einem Found wiederzuholen ... (wenn der Found-Handler das entsprechende Flag zurueckgibt)
-    DECL_LINK( AsyncGrabFocus, void* );
 
     // Such-Fortschritt
     DECL_LINK( OnSearchProgress, FmSearchProgress* );
