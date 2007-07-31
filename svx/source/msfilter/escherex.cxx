@@ -4,9 +4,9 @@
  *
  *  $RCSfile: escherex.cxx,v $
  *
- *  $Revision: 1.72 $
+ *  $Revision: 1.73 $
  *
- *  last change: $Author: hr $ $Date: 2007-06-27 18:33:11 $
+ *  last change: $Author: hr $ $Date: 2007-07-31 17:31:58 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -2315,11 +2315,10 @@ void EscherPropertyContainer::CreateCustomShapeProperties( const MSO_SPT eShapeT
                                 {
                                     double fForeDepth = fDepth * fFraction;
                                     double fBackDepth = fDepth - fForeDepth;
-                                    if ( fBackDepth != 0.0 )
-                                    {
-                                        fBackDepth *= 360.0;
-                                        AddOpt( DFF_Prop_c3DExtrudeBackward, (sal_Int32)fBackDepth );
-                                    }
+
+                                    fBackDepth *= 360.0;
+                                    AddOpt( DFF_Prop_c3DExtrudeBackward, (sal_Int32)fBackDepth );
+
                                     if ( fForeDepth != 0.0 )
                                     {
                                         fForeDepth *= 360.0;
