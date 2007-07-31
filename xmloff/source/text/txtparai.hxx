@@ -4,9 +4,9 @@
  *
  *  $RCSfile: txtparai.hxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: hr $ $Date: 2007-06-27 16:16:43 $
+ *  last change: $Author: hr $ $Date: 2007-07-31 17:36:04 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -62,6 +62,9 @@ class XMLParaContext : public SvXMLImportContext
     ::rtl::OUString             sId;
     sal_Int8                nOutlineLevel;
     XMLHints_Impl           *pHints;
+    // --> OD 2007-07-25 #i73509#
+    sal_Bool                mbOutlineLevelAttrFound;
+    // <--
     sal_Bool                bIgnoreLeadingSpace;
     sal_Bool                bHeading;
     sal_Bool                bIsListHeader;
