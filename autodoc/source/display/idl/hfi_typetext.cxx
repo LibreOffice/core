@@ -4,9 +4,9 @@
  *
  *  $RCSfile: hfi_typetext.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 16:49:24 $
+ *  last change: $Author: hr $ $Date: 2007-07-31 16:09:00 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -137,6 +137,14 @@ HF_IdlTypeText::Produce_byData( ary::idl::Ce_id i_idCe ) const
 void
 HF_IdlTypeText::Produce_byData( const String & i_sFullName ) const
 {
+    if ( strncmp(i_sFullName,"http://", 7) == 0 )
+    {
+        CurOut()
+            >> *new Html::Link(i_sFullName)
+                << i_sFullName;
+        return;
+    }
+
     StringVector        aModule_;
     String              sCe,
                         sMember;
