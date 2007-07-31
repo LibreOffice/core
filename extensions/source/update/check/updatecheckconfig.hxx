@@ -4,9 +4,9 @@
  *
  *  $RCSfile: updatecheckconfig.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2007-07-06 14:37:15 $
+ *  last change: $Author: hr $ $Date: 2007-07-31 15:57:22 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -97,7 +97,8 @@ public:
     bool isAutoCheckEnabled() const;
     bool isAutoDownloadEnabled() const;
     bool isDownloadPaused() const;
-    bool hasLocalFile() const;
+    rtl::OUString getLocalFileName() const;
+    sal_Int64 getDownloadSize() const;
 
     rtl::OUString getUpdateEntryVersion() const;
     void getUpdateEntry(UpdateInfo& rInfo) const;
@@ -167,7 +168,7 @@ public:
     rtl::OUString getDownloadDestination() const;
 
     // stores the local file name of a just started download
-    void storeLocalFileName(const rtl::OUString& rFileName);
+    void storeLocalFileName(const rtl::OUString& rFileName, sal_Int64 nFileSize);
 
     // Removes the local file name of a download
     void clearLocalFileName();
