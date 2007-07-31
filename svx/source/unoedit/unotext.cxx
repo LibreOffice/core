@@ -4,9 +4,9 @@
  *
  *  $RCSfile: unotext.cxx,v $
  *
- *  $Revision: 1.62 $
+ *  $Revision: 1.63 $
  *
- *  last change: $Author: obo $ $Date: 2007-07-18 13:07:45 $
+ *  last change: $Author: hr $ $Date: 2007-07-31 17:33:01 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1979,9 +1979,12 @@ uno::Reference< text::XText > SAL_CALL SvxUnoTextBase::getText()
 {
     OGuard aGuard( Application::GetSolarMutex() );
 
-    ESelection aSelection;
-    ::GetSelection( aSelection, GetEditSource()->GetTextForwarder() );
-    ((SvxUnoTextBase*)this)->SetSelection( aSelection );
+    if (GetEditSource())
+    {
+        ESelection aSelection;
+        ::GetSelection( aSelection, GetEditSource()->GetTextForwarder() );
+        ((SvxUnoTextBase*)this)->SetSelection( aSelection );
+    }
 
     return (text::XText*)this;
 }
