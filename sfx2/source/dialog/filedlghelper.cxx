@@ -4,9 +4,9 @@
  *
  *  $RCSfile: filedlghelper.cxx,v $
  *
- *  $Revision: 1.133 $
+ *  $Revision: 1.134 $
  *
- *  last change: $Author: ihi $ $Date: 2007-07-11 11:04:11 $
+ *  last change: $Author: hr $ $Date: 2007-07-31 16:06:30 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1209,7 +1209,14 @@ FileDialogHelper_Impl::FileDialogHelper_Impl( FileDialogHelper* _pAntiImpl, sal_
 
     // Export dialog
     if ( mbExport )
+    {
         mxFileDlg->setTitle( OUString( String( SfxResId( STR_SFX_EXPLORERFILE_EXPORT ) ) ) );
+        try {
+                com::sun::star::uno::Reference < XFilePickerControlAccess > xCtrlAccess( mxFileDlg, UNO_QUERY_THROW );
+                xCtrlAccess->enableControl( ExtendedFilePickerElementIds::LISTBOX_FILTER_SELECTOR, sal_True );
+        }
+        catch( const Exception & ) { }
+    }
 
     // the "insert file" dialog needs another title
     if ( mbInsert )
