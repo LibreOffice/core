@@ -4,9 +4,9 @@
  *
  *  $RCSfile: sft.c,v $
  *
- *  $Revision: 1.42 $
+ *  $Revision: 1.43 $
  *
- *  last change: $Author: rt $ $Date: 2007-04-04 08:02:37 $
+ *  last change: $Author: hr $ $Date: 2007-07-31 16:01:46 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1012,9 +1012,9 @@ static int BSplineToPSPath(ControlPoint *srcA, int srcCount, PSPathElement **pat
             memcpy(p + i, listCurrent(pList), sizeof(PSPathElement));
             listNext(pList);
         }
-        listDispose(pList);
         *path = p;
     }
+    listDispose(pList);
 
     return pCount;
 }
