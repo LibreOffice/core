@@ -4,9 +4,9 @@
  *
  *  $RCSfile: cpptypemaker.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: ihi $ $Date: 2006-12-20 12:43:16 $
+ *  last change: $Author: hr $ $Date: 2007-07-31 14:00:05 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -608,16 +608,19 @@ void printMethods(std::ostream & o,
         if (classname.getLength() > 0)
             o << classname;
 
-        o << (codemaker::convertString(reader.getMethodName(method)).getStr())
-          << '(';
+        const OString methodName(codemaker::convertString(reader.getMethodName(method)));
+
+        o << methodName << '(';
         printMethodParameters(o, options, manager, reader, method, false, true);
         o << ')';
         printExceptionSpecification(o, options, manager, reader, method);
         if (body) {
             static OUString s(RTL_CONSTASCII_USTRINGPARAM("void"));
             if (defaultbody) {
-                o << "\n{\n    // TODO !!!\n";
+                o << "\n{\n";
                 if (!reader.getMethodReturnTypeName(method).equals(s)) {
+                    o << "    // TODO: Exchange the default return implementation for \""
+                      << methodName << "\" !!!\n";
                     o << "    // Exchange the default return implementation.\n"
                         "    // NOTE: Default initialized polymorphic structs "
                         "can cause problems because of\n    // missing default "
@@ -629,7 +632,8 @@ void printMethods(std::ostream & o,
                             reader.getMethodReturnTypeName(method)), 8, true);
                     o << ";";
                 } else {
-                    o << "    // Insert your implementation here.";
+                    o << "    // TODO: Insert your implementation for \""
+                      << methodName << "\" here.";
                 }
                 o << "\n}\n\n";
             } else {
