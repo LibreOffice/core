@@ -4,9 +4,9 @@
  *
  *  $RCSfile: registry.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 05:03:13 $
+ *  last change: $Author: hr $ $Date: 2007-07-31 14:01:44 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -118,6 +118,11 @@ public:
         : m_pImpl(toCopy.m_pImpl)
     {
         acquire();
+    }
+
+    inline ~TypeReader()
+    {
+        release();
     }
 
     inline void acquire()
