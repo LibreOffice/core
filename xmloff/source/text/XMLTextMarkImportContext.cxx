@@ -4,9 +4,9 @@
  *
  *  $RCSfile: XMLTextMarkImportContext.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: hr $ $Date: 2007-06-27 16:10:36 $
+ *  last change: $Author: hr $ $Date: 2007-07-31 17:35:27 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -241,10 +241,17 @@ void XMLTextMarkImportContext::CreateAndInsertMark(
             Reference<XTextContent> xTextContent(xIfc, UNO_QUERY);
             if (xTextContent.is())
             {
+                try
+                {
                 // if inserting marks, bAbsorb==sal_False will cause
                 // collapsing of the given XTextRange.
-                rImport.GetTextImport()->GetText()->insertTextContent(rRange,
-                                                     xTextContent, sal_True);
+                    rImport.GetTextImport()->GetText()->insertTextContent(rRange,
+                        xTextContent, sal_True);
+                }
+                catch (com::sun::star::lang::IllegalArgumentException e)
+                {
+                    // ignore
+                }
             }
         }
     }
