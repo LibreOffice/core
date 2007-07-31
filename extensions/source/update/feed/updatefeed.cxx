@@ -4,9 +4,9 @@
  *
  *  $RCSfile: updatefeed.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2007-07-06 14:39:27 $
+ *  last change: $Author: hr $ $Date: 2007-07-31 15:58:11 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -466,19 +466,25 @@ class UpdateInformationEnumeration : public ::cppu::WeakImplHelper1< container::
 public:
     UpdateInformationEnumeration(const uno::Reference< xml::dom::XNodeList >& xNodeList,
                                  const uno::Reference< UpdateInformationProvider > xUpdateInformationProvider) :
-        m_nCount(0), m_nNodes(0), m_xNodeList(xNodeList),
-        m_xUpdateInformationProvider(xUpdateInformationProvider)
+        m_xUpdateInformationProvider(xUpdateInformationProvider),
+        m_xNodeList(xNodeList),
+        m_nNodes(xNodeList.is() ? xNodeList->getLength() : 0),
+        m_nCount(0)
     {
-        if( xNodeList.is() )
-            m_nNodes = xNodeList->getLength();
     };
 
-    ~UpdateInformationEnumeration() {};
+    virtual ~UpdateInformationEnumeration() {};
 
     // XEnumeration
     sal_Bool SAL_CALL hasMoreElements() throw (uno::RuntimeException) { return m_nCount < m_nNodes; };
     uno::Any SAL_CALL nextElement() throw (container::NoSuchElementException, lang::WrappedTargetException, uno::RuntimeException)
     {
+        OSL_ASSERT( m_xNodeList.is() );
+        OSL_ASSERT( m_xUpdateInformationProvider.is() );
+
+        if( !(m_nCount < m_nNodes ) )
+            throw container::NoSuchElementException(rtl::OUString::valueOf(m_nCount), *this);
+
         try
         {
             deployment::UpdateInformationEntry aEntry;
@@ -514,10 +520,10 @@ public:
     }
 
 private:
-    sal_Int32 m_nCount;
-    sal_Int32 m_nNodes;
-    const uno::Reference< xml::dom::XNodeList > m_xNodeList;
     const uno::Reference< UpdateInformationProvider > m_xUpdateInformationProvider;
+    const uno::Reference< xml::dom::XNodeList > m_xNodeList;
+    const sal_Int32 m_nNodes;
+    sal_Int32 m_nCount;
 };
 
 //------------------------------------------------------------------------------
@@ -527,7 +533,7 @@ class SingleUpdateInformationEnumeration : public ::cppu::WeakImplHelper1< conta
 public:
     SingleUpdateInformationEnumeration(const uno::Reference< xml::dom::XElement >& xElement)
         : m_nCount(0) { m_aEntry.UpdateDocument = xElement; };
-    ~SingleUpdateInformationEnumeration() {};
+    virtual ~SingleUpdateInformationEnumeration() {};
 
     // XEnumeration
     sal_Bool SAL_CALL hasMoreElements() throw (uno::RuntimeException) { return 0 == m_nCount; };
@@ -783,6 +789,8 @@ UpdateInformationProvider::load(const rtl::OUString& rURL)
 uno::Reference< xml::dom::XElement >
 UpdateInformationProvider::getDocumentRoot(const uno::Reference< xml::dom::XNode >& rxNode)
 {
+    OSL_ASSERT(m_xDocumentBuilder.is());
+
     uno::Reference< xml::dom::XElement > xElement(rxNode, uno::UNO_QUERY_THROW);
 
     // load the document referenced in 'src' attribute ..
@@ -827,6 +835,7 @@ uno::Reference< xml::dom::XNode >
 UpdateInformationProvider::getChildNode(const uno::Reference< xml::dom::XNode >& rxNode,
                                         const rtl::OUString& rName)
 {
+    OSL_ASSERT(m_xXPathAPI.is());
     return m_xXPathAPI->selectSingleNode(rxNode, UNISTRING( "./atom:" ) + rName);
 }
 
@@ -845,6 +854,8 @@ UpdateInformationProvider::getUpdateInformationEnumeration(
         aDefaultRepository[0] = m_aUpdateURL;
         return getUpdateInformationEnumeration(aDefaultRepository, extensionId);
     }
+
+    OSL_ASSERT(m_xDocumentBuilder.is());
 
     // reset cancelled flag
     m_bCancelled.reset();
