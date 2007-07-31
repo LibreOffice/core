@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.6 $
+#   $Revision: 1.7 $
 #
-#   last change: $Author: rt $ $Date: 2005-09-07 19:40:54 $
+#   last change: $Author: hr $ $Date: 2007-07-31 13:08:08 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -43,9 +43,9 @@ LIBTARGET=NO
 
 .INCLUDE : settings.mk
 
-.IF "$(SYSTEM_MYSPELL)" == "YES"
+.IF "$(SYSTEM_HUNSPELL)" == "YES"
 @all:
-    @echo "Nothing to do here; using system myspell..."
+    @echo "Nothing to do here; using system hunspell..."
 .ENDIF
 
 SLOFILES=	\
