@@ -4,9 +4,9 @@
  *
  *  $RCSfile: bitmap4.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: hr $ $Date: 2007-06-27 20:10:08 $
+ *  last change: $Author: hr $ $Date: 2007-07-31 16:08:35 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -308,11 +308,14 @@ BOOL Bitmap::ImplMedianFilter( const BmpFilterParam* /*pFilterParam*/, const Lin
             pRows[ nHeight + 1 ] = pRows[ nHeight ];
 
             // read first three rows of bitmap color
-            for( i = 0; i < nWidth2; i++ )
+            if (nHeight2 > 2)
             {
-                pColRow1[ i ] = pReadAcc->GetColor( pRows[ 0 ], pColm[ i ] );
-                pColRow2[ i ] = pReadAcc->GetColor( pRows[ 1 ], pColm[ i ] );
-                pColRow3[ i ] = pReadAcc->GetColor( pRows[ 2 ], pColm[ i ] );
+                for( i = 0; i < nWidth2; i++ )
+                {
+                    pColRow1[ i ] = pReadAcc->GetColor( pRows[ 0 ], pColm[ i ] );
+                    pColRow2[ i ] = pReadAcc->GetColor( pRows[ 1 ], pColm[ i ] );
+                    pColRow3[ i ] = pReadAcc->GetColor( pRows[ 2 ], pColm[ i ] );
+                }
             }
 
             // do median filtering
