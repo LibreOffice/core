@@ -2,9 +2,9 @@
 #
 #   $RCSfile: odk_rules.pmk,v $
 #
-#   $Revision: 1.25 $
+#   $Revision: 1.26 $
 #
-#   last change: $Author: hr $ $Date: 2007-06-26 17:01:25 $
+#   last change: $Author: hr $ $Date: 2007-07-31 13:58:22 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -116,16 +116,10 @@ $(DESTDIRXML)$/%.xml : $(XMLOUT)$/%.xml
 $(DESTDIRBIN)$/%$(EXEPOSTFIX) : $(BINOUT)$/%$(EXEPOSTFIX)
     @@-rm -f $@
     $(GNUCOPY) $(BINOUT)$/$(@:f) $@
-.IF "$(GUI)"=="UNX"
-    -strip $@
-.ENDIF
 
 $(DESTDIRBIN)$/%.bin : $(BINOUT)$/%.bin
     @@-rm -f $@
     $(GNUCOPY) $(BINOUT)$/$(@:f) $@
-.IF "$(GUI)"=="UNX"
-    -strip $@
-.ENDIF
 
 $(DESTDIRBIN)$/regcomp : $(BINOUT)$/regcomp
     @@-rm -f $@
@@ -137,9 +131,6 @@ $(DESTDIRBIN)$/regcomp : $(BINOUT)$/regcomp
 $(DESTDIRBIN)$/unoapploader$(EXEPOSTFIX) : $(BIN)$/unoapploader$(EXEPOSTFIX)
     @@-rm -f $@
     $(GNUCOPY) $(BIN)$/$(@:f) $@
-.IF "$(GUI)"=="UNX"
-    -strip $@
-.ENDIF
 
 # special rule for special Java UNO native library
 # (used for all platforms but built only under windows;
