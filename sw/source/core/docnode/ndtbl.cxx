@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ndtbl.cxx,v $
  *
- *  $Revision: 1.46 $
+ *  $Revision: 1.47 $
  *
- *  last change: $Author: obo $ $Date: 2007-07-18 12:56:12 $
+ *  last change: $Author: hr $ $Date: 2007-07-31 17:40:51 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -2096,8 +2096,13 @@ BOOL SwDoc::DeleteRowCol( const SwSelBoxes& rBoxes, bool bColumn )
     SwTable &rTable = pTblNd->GetTable();
     long nMin = 0;
     long nMax = 0;
-    if( bColumn && rTable.IsNewModel() )
-        rTable.ExpandColumnSelection( aSelBoxes, nMin, nMax );
+    if( rTable.IsNewModel() )
+    {
+        if( bColumn )
+            rTable.ExpandColumnSelection( aSelBoxes, nMin, nMax );
+        else
+            rTable.FindSuperfluousRows( aSelBoxes );
+    }
 
 #ifdef DEL_TABLE_REDLINES
     lcl_DelRedlines aDelRedl( *pTblNd, TRUE );
