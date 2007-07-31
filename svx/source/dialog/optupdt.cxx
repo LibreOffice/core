@@ -4,9 +4,9 @@
  *
  *  $RCSfile: optupdt.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: hr $ $Date: 2007-06-27 17:31:10 $
+ *  last change: $Author: hr $ $Date: 2007-07-31 15:54:02 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -129,7 +129,6 @@ SvxOnlineUpdateTabPage::SvxOnlineUpdateTabPage( Window* pParent, const SfxItemSe
 
     m_aAutoCheckCheckBox.SetClickHdl( LINK( this, SvxOnlineUpdateTabPage, AutoCheckHdl_Impl ) );
     m_aCheckNowButton.SetClickHdl( LINK( this, SvxOnlineUpdateTabPage, CheckNowHdl_Impl ) );
-    m_aAutoDownloadCheckBox.SetClickHdl( LINK( this, SvxOnlineUpdateTabPage, AutoDownloadHdl_Impl ) );
     m_aChangePathButton.SetClickHdl( LINK( this, SvxOnlineUpdateTabPage, FileDialogHdl_Impl ) );
 
     uno::Reference < lang::XMultiServiceFactory > xFactory( ::comphelper::getProcessServiceFactory() );
@@ -326,9 +325,9 @@ void SvxOnlineUpdateTabPage::Reset( const SfxItemSet& )
 
     m_xUpdateAccess->getByName( UNISTRING("AutoDownloadEnabled") ) >>= bValue;
     m_aAutoDownloadCheckBox.Check(bValue);
-    m_aDestPathLabel.Enable(bValue);
-    m_aDestPath.Enable(bValue);
-    m_aChangePathButton.Enable(bValue);
+    m_aDestPathLabel.Enable(TRUE);
+    m_aDestPath.Enable(TRUE);
+    m_aChangePathButton.Enable(TRUE);
 
     rtl::OUString sValue, aPath;
     m_xUpdateAccess->getByName( UNISTRING("DownloadDestination") ) >>= sValue;
@@ -354,19 +353,6 @@ IMPL_LINK( SvxOnlineUpdateTabPage, AutoCheckHdl_Impl, CheckBox *, pBox )
     m_aEveryDayButton.Enable(bEnabled);
     m_aEveryWeekButton.Enable(bEnabled);
     m_aEveryMonthButton.Enable(bEnabled);
-
-    return 0;
-}
-
-// -----------------------------------------------------------------------
-
-IMPL_LINK( SvxOnlineUpdateTabPage, AutoDownloadHdl_Impl, CheckBox *, pBox )
-{
-    BOOL bEnabled = pBox->IsChecked();
-
-    m_aDestPathLabel.Enable(bEnabled);
-    m_aDestPath.Enable(bEnabled);
-    m_aChangePathButton.Enable(bEnabled);
 
     return 0;
 }
