@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.36 $
+#   $Revision: 1.37 $
 #
-#   last change: $Author: vg $ $Date: 2007-05-25 11:06:34 $
+#   last change: $Author: hr $ $Date: 2007-07-31 13:04:47 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -84,6 +84,10 @@ icu_CXXFLAGS+=-O $(ARCH_FLAGS)
 .IF "$(OS)"=="SOLARIS"
 DISABLE_64BIT=--enable-64bit-libs=no
 .ENDIF			# "$(OS)"=="SOLARIS"
+
+.IF "$(HAVE_LD_HASH_STYLE)"  == "TRUE"
+LDFLAGSADD += -Wl,--hash-style=both
+.ENDIF
 
 CONFIGURE_DIR=source
 
