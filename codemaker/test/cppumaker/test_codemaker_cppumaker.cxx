@@ -4,9 +4,9 @@
  *
  *  $RCSfile: test_codemaker_cppumaker.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 03:40:19 $
+ *  last change: $Author: hr $ $Date: 2007-07-31 13:48:28 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -445,12 +445,28 @@ void Test::testBigStruct() {
     CPPUNIT_ASSERT_EQUAL(guard.p->m19, static_cast< sal_Int8 >(0));
     CPPUNIT_ASSERT_EQUAL(
         guard.p->m20, test::codemaker::cppumaker::HelperEnum_ZERO);
+    CPPUNIT_ASSERT_EQUAL(guard.p->m21.getLength(), static_cast< sal_Int32 >(0));
+    CPPUNIT_ASSERT_EQUAL(guard.p->m22.getLength(), static_cast< sal_Int32 >(0));
+    CPPUNIT_ASSERT_EQUAL(guard.p->m23.getLength(), static_cast< sal_Int32 >(0));
 
 #if defined __GNUC__ && __GNUC__ >= 3
     CPPUNIT_ASSERT_EQUAL(
         static_cast< std::size_t >(16),
         sizeof (test::codemaker::cppumaker::AlignmentDerivedStruct));
 #endif
+
+    com::sun::star::uno::Type t(
+        cppu::UnoType< test::codemaker::cppumaker::BigStruct >::get());
+    typelib_TypeDescription * td = NULL;
+    t.getDescription(&td);
+    typelib_typedescription_complete(&td);
+    fprintf(stdout, "#### 1\n");
+    CPPUNIT_ASSERT(td != NULL);
+    CPPUNIT_ASSERT_EQUAL(typelib_TypeClass_STRUCT, td->eTypeClass);
+    typelib_StructTypeDescription * std =
+        reinterpret_cast< typelib_StructTypeDescription * >(td);
+    CPPUNIT_ASSERT_EQUAL(typelib_TypeClass_UNSIGNED_SHORT, std->aBase.ppTypeRefs[3]->eTypeClass); // unsigned short m4;
+    CPPUNIT_ASSERT_EQUAL(typelib_TypeClass_CHAR, std->aBase.ppTypeRefs[10]->eTypeClass); // char m11;
 }
 
 void Test::testPolyCharStruct() {
@@ -487,7 +503,7 @@ void Test::testExceptions() {
         rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("abc")), 0, 1,
         com::sun::star::uno::makeAny(123.0),
         test::codemaker::cppumaker::HelperEnum_ONE,
-        test::codemaker::cppumaker::Struct<sal_Int32, sal_Int32>(5, 0));
+        test::codemaker::cppumaker::Struct<sal_Int32, sal_Int32>(5, 0), 2);
     test::codemaker::cppumaker::TestException1 e12(e11);
     CPPUNIT_ASSERT_EQUAL(e11, e12);
     test::codemaker::cppumaker::TestException1 e13;
@@ -497,7 +513,7 @@ void Test::testExceptions() {
         rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("abc")), 0, 1,
         com::sun::star::uno::makeAny(123.0),
         test::codemaker::cppumaker::HelperEnum_ONE,
-        test::codemaker::cppumaker::Struct<sal_Int32, sal_Int32>(5, 0));
+        test::codemaker::cppumaker::Struct<sal_Int32, sal_Int32>(5, 0), 2);
     test::codemaker::cppumaker::TestException2 e22(e21);
     CPPUNIT_ASSERT_EQUAL(e21, e22);
     test::codemaker::cppumaker::TestException2 e23;
