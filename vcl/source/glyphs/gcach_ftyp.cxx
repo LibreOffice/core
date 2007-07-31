@@ -701,6 +701,7 @@ FreetypeServerFont::FreetypeServerFont( const ImplFontSelectData& rFSD, FtFontIn
     mpFontInfo( pFI ),
     maFaceFT( NULL ),
     maSizeFT( NULL ),
+    mbFaceOk( false ),
     maRecodeConverter( NULL ),
     mpLayoutEngine( NULL )
 {
@@ -720,10 +721,9 @@ FreetypeServerFont::FreetypeServerFont( const ImplFontSelectData& rFSD, FtFontIn
         mnWidth = rFSD.mnHeight;
     mfStretch = (double)mnWidth / rFSD.mnHeight;
     // sanity check (e.g. #i66394#, #i66244#, #66537#)
-    if( (mnWidth < 0) || (mfStretch > +64.0) || (mfStretch < -64.0) ) {
-        maFaceFT->num_glyphs = 0;
+    if( (mnWidth < 0) || (mfStretch > +64.0) || (mfStretch < -64.0) )
         return;
-    }
+
     // perf: use maSizeFT if available
     if( bEnableSizeFT )
     {
@@ -731,6 +731,8 @@ FreetypeServerFont::FreetypeServerFont( const ImplFontSelectData& rFSD, FtFontIn
         pFTActivateSize( maSizeFT );
     }
     FT_Error rc = FT_Set_Pixel_Sizes( maFaceFT, mnWidth, rFSD.mnHeight );
+    if( rc != FT_Err_Ok )
+        return;
 
     // prepare for font encodings other than unicode or symbol
     FT_Encoding eEncoding = FT_ENCODING_UNICODE;
@@ -746,6 +748,8 @@ FreetypeServerFont::FreetypeServerFont( const ImplFontSelectData& rFSD, FtFontIn
 #endif
     }
     rc = FT_Select_Charmap( maFaceFT, eEncoding );
+    if( rc != FT_Err_Ok )
+        return;
 
     // no standard encoding applies => we need an encoding converter
     if( rc != FT_Err_Ok )
@@ -811,14 +815,13 @@ FreetypeServerFont::FreetypeServerFont( const ImplFontSelectData& rFSD, FtFontIn
         }
 
         if( FT_Err_Ok != FT_Select_Charmap( maFaceFT, eEncoding ) )
-        {
-            maFaceFT->num_glyphs = 0;
             return;
-        }
 
         if( eRecodeFrom != RTL_TEXTENCODING_UNICODE )
             maRecodeConverter = rtl_createUnicodeToTextConverter( eRecodeFrom );
     }
+
+    mbFaceOk = true;
 
     ApplyGSUB( rFSD );
 
@@ -873,7 +876,7 @@ FreetypeServerFont::FreetypeServerFont( const ImplFontSelectData& rFSD, FtFontIn
 
 bool FreetypeServerFont::TestFont() const
 {
-    return (maFaceFT != NULL) && (maFaceFT->num_glyphs > 0);
+    return mbFaceOk;
 }
 
 // -----------------------------------------------------------------------
