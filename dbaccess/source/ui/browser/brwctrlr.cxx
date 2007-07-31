@@ -4,9 +4,9 @@
  *
  *  $RCSfile: brwctrlr.cxx,v $
  *
- *  $Revision: 1.99 $
+ *  $Revision: 1.100 $
  *
- *  last change: $Author: rt $ $Date: 2007-07-06 08:02:38 $
+ *  last change: $Author: hr $ $Date: 2007-07-31 14:01:29 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1793,7 +1793,11 @@ void SbaXDataBrowserController::ExecuteSearch()
     SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
     AbstractFmSearchDialog* pDialog = NULL;
     if ( pFact )
-        pDialog = pFact->CreateFmSearchDialog(getBrowserView(), sInitialText, String::CreateFromAscii("Standard"), 0, LINK(this, SbaXDataBrowserController, OnSearchContextRequest),SM_ALLOWSCHEDULE);
+    {
+        ::std::vector< String > aContextNames;
+        aContextNames.push_back( String::CreateFromAscii("Standard") );
+        pDialog = pFact->CreateFmSearchDialog(getBrowserView(), sInitialText, aContextNames, 0, LINK(this, SbaXDataBrowserController, OnSearchContextRequest));
+    }
     DBG_ASSERT( pDialog, "SbaXDataBrowserController::ExecuteSearch: could not get the search dialog!" );
     if ( pDialog )
     {
