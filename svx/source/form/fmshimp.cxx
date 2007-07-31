@@ -4,9 +4,9 @@
  *
  *  $RCSfile: fmshimp.cxx,v $
  *
- *  $Revision: 1.84 $
+ *  $Revision: 1.85 $
  *
- *  last change: $Author: hr $ $Date: 2007-06-27 18:15:05 $
+ *  last change: $Author: hr $ $Date: 2007-07-31 13:57:49 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -117,6 +117,9 @@
 #ifndef _COM_SUN_STAR_FORM_XLOADABLE_HPP_
 #include <com/sun/star/form/XLoadable.hpp>
 #endif
+#ifndef _COM_SUN_STAR_CONTAINER_XNAMED_HPP_
+#include <com/sun/star/container/XNamed.hpp>
+#endif
 #ifndef _COM_SUN_STAR_CONTAINER_XCONTAINER_HPP_
 #include <com/sun/star/container/XContainer.hpp>
 #endif
@@ -134,6 +137,12 @@
 #endif
 #ifndef _COM_SUN_STAR_AWT_XTEXTCOMPONENT_HPP_
 #include <com/sun/star/awt/XTextComponent.hpp>
+#endif
+#ifndef _COM_SUN_STAR_AWT_XLISTBOX_HPP_
+#include <com/sun/star/awt/XListBox.hpp>
+#endif
+#ifndef _COM_SUN_STAR_AWT_XCHECKBOX_HPP_
+#include <com/sun/star/awt/XCheckBox.hpp>
 #endif
 #ifndef _COM_SUN_STAR_FORM_XBOUNDCOMPONENT_HPP_
 #include <com/sun/star/form/XBoundComponent.hpp>
@@ -427,6 +436,7 @@ using namespace ::svx;
 //==============================================================================
 namespace
 {
+    //....................................................................
     void collectInterfacesFromMarkList( const SdrMarkList& _rMarkList, InterfaceBag& /* [out] */ _rInterfaces )
     {
         _rInterfaces.clear();
@@ -462,6 +472,50 @@ namespace
                 delete pGroupIterator;
         }
     }
+
+}
+
+//------------------------------------------------------------------------------
+// check if the control has one of the interfaces we can use for searching
+// *_pCurrentText will be filled with the current text of the control (as used when searching this control)
+sal_Bool IsSearchableControl( const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface>& _rxControl,
+    ::rtl::OUString* _pCurrentText )
+{
+    if ( !_rxControl.is() )
+        return sal_False;
+
+    Reference< XTextComponent > xAsText( _rxControl, UNO_QUERY );
+    if ( xAsText.is() )
+    {
+        if ( _pCurrentText )
+            *_pCurrentText = xAsText->getText();
+        return sal_True;
+    }
+
+    Reference< XListBox > xListBox( _rxControl, UNO_QUERY );
+    if ( xListBox.is() )
+    {
+        if ( _pCurrentText )
+            *_pCurrentText = xListBox->getSelectedItem();
+        return sal_True;
+    }
+
+    Reference< XCheckBox > xCheckBox( _rxControl, UNO_QUERY );
+    if ( xCheckBox.is() )
+    {
+        if ( _pCurrentText )
+        {
+            switch ( (TriState)xCheckBox->getState() )
+            {
+                case STATE_NOCHECK: *_pCurrentText = ::rtl::OUString::createFromAscii( "0" ); break;
+                case STATE_CHECK: *_pCurrentText = ::rtl::OUString::createFromAscii( "1" ); break;
+                default: *_pCurrentText = ::rtl::OUString(); break;
+            }
+        }
+        return sal_True;
+    }
+
+    return sal_False;
 }
 
 //------------------------------------------------------------------------------
@@ -1431,45 +1485,37 @@ void FmXFormShell::ExecuteTabOrderDialog( const Reference< XTabControllerModel >
 void FmXFormShell::ExecuteSearch()
 {
     OSL_ENSURE(!FmXFormShell_BASE::rBHelper.bDisposed,"FmXFormShell: Object already disposed!");
-    UniString sTestContexts;
-    //  m_arrSearchContexts.Remove(0, m_arrSearchContexts.Count());
-    m_arrSearchContexts.clear();
 
     // eine Sammlung aller (logischen) Formulare
-    Reference< XInterface> xAllForms(m_pShell->GetCurPage()->GetForms(),UNO_QUERY);
-    CollectFormContexts(xAllForms, String(), sTestContexts);
-    sTestContexts.EraseLeadingChars(';');
+    FmFormArray aEmpty;
+    m_aSearchForms.swap( aEmpty );
+    ::std::vector< String > aContextNames;
+    impl_collectFormSearchContexts_nothrow( m_pShell->GetCurPage()->GetForms(), ::rtl::OUString(), m_aSearchForms, aContextNames );
+    OSL_POSTCOND( m_aSearchForms.size() == aContextNames.size(),
+        "FmXFormShell::ExecuteSearch: nonsense!" );
+    if ( m_aSearchForms.size() != aContextNames.size() )
+        return;
 
-    // hier sind jetzt dummerweise noch alle Forms drin, die ueberhaupt keine gueltigen Controls enthalten
-    // um das auszufiltern, benutze ich einfach meinen OnSearchContextRequest-Handler, der genau die gueltigen Controls einer Form sammelt
-    FmFormArray::reverse_iterator aIter = m_arrSearchContexts.rbegin();
-    sal_Int32 i = m_arrSearchContexts.size();
-    for (; aIter != m_arrSearchContexts.rend(); ++aIter,i--)
+    // filter out the forms which do not contain valid controls at all
+    FmFormArray::reverse_iterator form = m_aSearchForms.rbegin();
+    ::std::vector< String >::reverse_iterator contextName = aContextNames.rbegin();
+    sal_Int32 i = m_aSearchForms.size();
+    for (   ;
+            form != m_aSearchForms.rend();
+            ++form, ++contextName, --i
+        )
     {
-        FmSearchContext fmscTest;
-        fmscTest.nContext = static_cast< sal_Int16 >(i-1);
-        sal_uInt32 lValidControls = LINK(this, FmXFormShell, OnSearchContextRequest).Call(&fmscTest);
-        if (lValidControls == 0)
+        FmSearchContext aTestContext;
+        aTestContext.nContext = static_cast< sal_Int16 >( i-1 );
+        sal_uInt32 nValidControls = OnSearchContextRequest( &aTestContext );
+        if ( nValidControls == 0 )
         {
-            m_arrSearchContexts.erase(aIter.base()-1);
-            sTestContexts.SetToken( static_cast< USHORT >(i-1), ';', String() );
+            m_aSearchForms.erase( form.base() - 1 );
+            aContextNames.erase( contextName.base() - 1 );
         }
     }
 
-    // jetzt enthaelt die Context-Liste noch ein paar Leer-Token
-    UniString strRealContexts,strCurrentToken;
-    for (xub_StrLen j=0; j<sTestContexts.GetTokenCount(';'); ++j)
-    {
-        strCurrentToken = sTestContexts.GetToken(j);
-        if (strCurrentToken.Len() != 0)
-        {
-            strRealContexts += ';';
-            strRealContexts += strCurrentToken;
-        }
-    }
-    strRealContexts.EraseLeadingChars(';');
-
-    if (m_arrSearchContexts.size() == 0)
+    if (m_aSearchForms.size() == 0)
     {   // es gibt keine Controls, die alle Bedingungen fuer eine Suche erfuellen
         ErrorBox(NULL, WB_OK, SVX_RESSTR(RID_STR_NODATACONTROLS)).Execute();
         return;
@@ -1478,9 +1524,9 @@ void FmXFormShell::ExecuteSearch()
     // jetzt brauche ich noch einen 'initial context'
     sal_Int16 nInitialContext = 0;
     Reference< XForm> xActiveForm( getActiveForm());
-    for (i=0; i<(sal_Int32)m_arrSearchContexts.size(); ++i)
+    for (i=0; i<(sal_Int32)m_aSearchForms.size(); ++i)
     {
-        if (m_arrSearchContexts.at(i) == xActiveForm)
+        if (m_aSearchForms.at(i) == xActiveForm)
         {
             nInitialContext = (sal_Int16)i;
             break;
@@ -1553,15 +1599,13 @@ void FmXFormShell::ExecuteSearch()
     LoopGrids(GA_DISABLE_SYNC /*| GA_ENABLE_ROCTRLR*/);
 
     // jetzt bin ich reif fuer den Dialog
-    //CHINA001 FmSearchDialog dlg(&m_pShell->GetViewShell()->GetViewFrame()->GetWindow(), strInitialText, strRealContexts, nInitialContext, LINK(this, FmXFormShell, OnSearchContextRequest),
-//CHINA001      SM_ALLOWSCHEDULE); //CHINA001 FmSearchDialog::SM_ALLOWSCHEDULE);
     // wenn die potentiellen Deadlocks, die durch die Benutzung des Solar-Mutex in MTs VCLX...-Klasen entstehen, irgendwann mal
     // ausgeraeumt sind, sollte hier ein SM_USETHREAD rein, denn die Suche in einem eigenen Thread ist doch etwas fluessiger
     // sollte allerdings irgendwie von dem unterliegenden Cursor abhaengig gemacht werden, DAO zum Beispiel ist nicht thread-sicher
     SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
     AbstractFmSearchDialog* pDialog = NULL;
     if ( pFact )
-        pDialog = pFact->CreateFmSearchDialog( &m_pShell->GetViewShell()->GetViewFrame()->GetWindow(), strInitialText, strRealContexts, nInitialContext, LINK( this, FmXFormShell, OnSearchContextRequest ), SM_ALLOWSCHEDULE );
+        pDialog = pFact->CreateFmSearchDialog( &m_pShell->GetViewShell()->GetViewFrame()->GetWindow(), strInitialText, aContextNames, nInitialContext, LINK( this, FmXFormShell, OnSearchContextRequest ) );
     DBG_ASSERT( pDialog, "FmXFormShell::ExecuteSearch: could not create the search dialog!" );
     if ( pDialog )
     {
@@ -2142,9 +2186,9 @@ void FmXFormShell::ShowSelectionProperties( sal_Bool bShow )
 IMPL_LINK(FmXFormShell, OnFoundData, FmFoundRecordInformation*, pfriWhere)
 {
     OSL_ENSURE(!FmXFormShell_BASE::rBHelper.bDisposed,"FmXFormShell: Object already disposed!");
-    DBG_ASSERT((pfriWhere->nContext >= 0) && (pfriWhere->nContext < (sal_Int16)m_arrSearchContexts.size()),
+    DBG_ASSERT((pfriWhere->nContext >= 0) && (pfriWhere->nContext < (sal_Int16)m_aSearchForms.size()),
         "FmXFormShell::OnFoundData : ungueltiger Kontext !");
-    Reference< XForm> xForm( m_arrSearchContexts.at(pfriWhere->nContext));
+    Reference< XForm> xForm( m_aSearchForms.at(pfriWhere->nContext));
     DBG_ASSERT(xForm.is(), "FmXFormShell::OnFoundData : ungueltige Form !");
 
     Reference< XRowLocate> xCursor(xForm, UNO_QUERY);
@@ -2220,9 +2264,9 @@ IMPL_LINK(FmXFormShell, OnFoundData, FmFoundRecordInformation*, pfriWhere)
 IMPL_LINK(FmXFormShell, OnCanceledNotFound, FmFoundRecordInformation*, pfriWhere)
 {
     OSL_ENSURE(!FmXFormShell_BASE::rBHelper.bDisposed,"FmXFormShell: Object already disposed!");
-    DBG_ASSERT((pfriWhere->nContext >= 0) && (pfriWhere->nContext < (sal_Int16)m_arrSearchContexts.size()),
+    DBG_ASSERT((pfriWhere->nContext >= 0) && (pfriWhere->nContext < (sal_Int16)m_aSearchForms.size()),
         "FmXFormShell::OnCanceledNotFound : ungueltiger Kontext !");
-    Reference< XForm> xForm( m_arrSearchContexts.at(pfriWhere->nContext));
+    Reference< XForm> xForm( m_aSearchForms.at(pfriWhere->nContext));
     DBG_ASSERT(xForm.is(), "FmXFormShell::OnCanceledNotFound : ungueltige Form !");
 
     Reference< XRowLocate> xCursor(xForm, UNO_QUERY);
@@ -2248,8 +2292,8 @@ IMPL_LINK(FmXFormShell, OnCanceledNotFound, FmFoundRecordInformation*, pfriWhere
 IMPL_LINK(FmXFormShell, OnSearchContextRequest, FmSearchContext*, pfmscContextInfo)
 {
     OSL_ENSURE(!FmXFormShell_BASE::rBHelper.bDisposed,"FmXFormShell: Object already disposed!");
-    DBG_ASSERT(pfmscContextInfo->nContext < (sal_Int16)m_arrSearchContexts.size(), "FmXFormShell::OnSearchContextRequest : invalid parameter !");
-    Reference< XForm> xForm( m_arrSearchContexts.at(pfmscContextInfo->nContext));
+    DBG_ASSERT(pfmscContextInfo->nContext < (sal_Int16)m_aSearchForms.size(), "FmXFormShell::OnSearchContextRequest : invalid parameter !");
+    Reference< XForm> xForm( m_aSearchForms.at(pfmscContextInfo->nContext));
     DBG_ASSERT(xForm.is(), "FmXFormShell::OnSearchContextRequest : unexpected : invalid context !");
 
     Reference< XResultSet> xIter(xForm, UNO_QUERY);
@@ -2770,54 +2814,57 @@ Reference< XControl> FmXFormShell::GetControlFromModel(const Reference< XControl
 }
 
 //------------------------------------------------------------------------------
-void FmXFormShell::CollectFormContexts(const Reference< XInterface>& xStartingPoint, const UniString& sCurrentLevelPrefix, UniString& sNames)
+void FmXFormShell::impl_collectFormSearchContexts_nothrow( const Reference< XInterface>& _rxStartingPoint,
+    const ::rtl::OUString& _rCurrentLevelPrefix, FmFormArray& _out_rForms, ::std::vector< String >& _out_rNames )
 {
-    OSL_ENSURE(!FmXFormShell_BASE::rBHelper.bDisposed,"FmXFormShell: Object already disposed!");
-    Reference< XIndexAccess> xAllComponentIndizies(xStartingPoint, UNO_QUERY);
-
-    if (xAllComponentIndizies.is() && xAllComponentIndizies->getCount())
+    try
     {
-        // work through all children
-        UniString sCurrentFormName, sNextLevelPrefix;
-        Reference< XForm> xCurrentAsForm;
-        for (sal_Int32 i=0; i<xAllComponentIndizies->getCount(); ++i)
+        Reference< XIndexAccess> xContainer( _rxStartingPoint, UNO_QUERY );
+        if ( !xContainer.is() )
+            return;
+
+        sal_Int32 nCount( xContainer->getCount() );
+        if ( nCount == 0 )
+            return;
+
+        ::rtl::OUString sCurrentFormName;
+        ::rtl::OUStringBuffer aNextLevelPrefix;
+        for ( sal_Int32 i=0; i<nCount; ++i )
         {
-            xAllComponentIndizies->getByIndex(i) >>= xCurrentAsForm;;
             // is the current child a form?
-            if (xCurrentAsForm.is())
+            Reference< XForm > xCurrentAsForm( xContainer->getByIndex(i), UNO_QUERY );
+            if ( !xCurrentAsForm.is() )
+                continue;
+
+            Reference< XNamed > xNamed( xCurrentAsForm, UNO_QUERY_THROW );
+            sCurrentFormName = xNamed->getName();
+
+            // the name of the current form
+            ::rtl::OUStringBuffer sCompleteCurrentName( sCurrentFormName );
+            if ( _rCurrentLevelPrefix.getLength() )
             {
-                Reference< XPropertySet> xAskForName(xCurrentAsForm, UNO_QUERY);
-                if (xAskForName.is())
-                {
-                    try { sCurrentFormName = ::comphelper::getString(xAskForName->getPropertyValue(FM_PROP_NAME)).getStr(); }
-                    catch(Exception&)
-                    {
-                        DBG_ERROR("FmXFormShell::CollectFormContexts: Exception occured!");
-                    }
-                }
-                // den Namen an die Aufzaehlung haengen
-                sNames += ';';
-                sNames += sCurrentFormName;
-                if (sCurrentLevelPrefix.Len() != 0)
-                {
-                    sNames.AppendAscii(" (");
-                    sNames += sCurrentLevelPrefix;
-                    sNames += ')';
-                }
-
-                // den Prefix fuer den naechsten Level
-                sNextLevelPrefix = sCurrentLevelPrefix;
-                if (sCurrentLevelPrefix.Len() != 0)
-                    sNextLevelPrefix += '/';
-                sNextLevelPrefix += sCurrentFormName;
-
-                // das Interface merken
-                m_arrSearchContexts.push_back(xCurrentAsForm);
-
-                // und absteigen
-                CollectFormContexts(xCurrentAsForm, sNextLevelPrefix, sNames);
+                sCompleteCurrentName.appendAscii( " (" );
+                sCompleteCurrentName.append     ( _rCurrentLevelPrefix );
+                sCompleteCurrentName.appendAscii( ")" );
             }
+
+            // the prefix for the next level
+            aNextLevelPrefix = _rCurrentLevelPrefix;
+            if ( _rCurrentLevelPrefix.getLength() )
+                aNextLevelPrefix.append( (sal_Unicode)'/' );
+            aNextLevelPrefix.append( sCurrentFormName );
+
+            // remember both the form and it's "display name"
+            _out_rForms.push_back( xCurrentAsForm );
+            _out_rNames.push_back( sCompleteCurrentName.makeStringAndClear() );
+
+            // und absteigen
+            impl_collectFormSearchContexts_nothrow( xCurrentAsForm, aNextLevelPrefix.makeStringAndClear(), _out_rForms, _out_rNames );
         }
+    }
+    catch( const Exception& )
+    {
+        DBG_UNHANDLED_EXCEPTION();
     }
 }
 
