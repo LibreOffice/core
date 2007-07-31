@@ -4,9 +4,9 @@
  *
  *  $RCSfile: MasterPropertySet.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 17:17:01 $
+ *  last change: $Author: hr $ $Date: 2007-07-31 14:02:23 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -76,8 +76,9 @@ AutoOGuardArray::AutoOGuardArray( sal_Int32 nNumElements )
 
 AutoOGuardArray::~AutoOGuardArray()
 {
-    for (sal_Int32 i = 0;  i < nSize;  ++i)
-        pGuardArray = 0;    //!! release auto_ptr's and thus the mutexes locks
+    //!! release auto_ptr's and thus the mutexes locks
+    delete [] pGuardArray;
+
 }
 
 //////////////////////////////////////////////////////////////////////
