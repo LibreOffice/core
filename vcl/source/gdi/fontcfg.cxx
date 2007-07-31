@@ -4,9 +4,9 @@
  *
  *  $RCSfile: fontcfg.cxx,v $
  *
- *  $Revision: 1.46 $
+ *  $Revision: 1.47 $
  *
- *  last change: $Author: rt $ $Date: 2007-07-24 10:09:11 $
+ *  last change: $Author: hr $ $Date: 2007-07-31 16:08:49 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -979,7 +979,20 @@ void FontSubstConfiguration::fillSubstVector( const com::sun::star::uno::Referen
         {
             const OUString* pLine = (const OUString*)aAny.getValue();
             sal_Int32 nIndex = 0;
-            if( pLine->getLength() )
+            sal_Int32 nLength = pLine->getLength();
+            if( nLength )
+            {
+                const sal_Unicode* pStr = pLine->getStr();
+                sal_Int32 nTokens = 0;
+                // count tokens
+                while( nLength-- )
+                {
+                    if( *pStr++ == sal_Unicode(';') )
+                        nTokens++;
+                }
+                rSubstVector.clear();
+                // optimize performance, heap fragmentation
+                rSubstVector.reserve( nTokens );
                 while( nIndex != -1 )
                 {
                     OUString aSubst( pLine->getToken( 0, ';', nIndex ) );
@@ -993,6 +1006,7 @@ void FontSubstConfiguration::fillSubstVector( const com::sun::star::uno::Referen
                         rSubstVector.push_back( aSubst );
                     }
                 }
+            }
         }
     }
     catch( NoSuchElementException )
@@ -1129,6 +1143,8 @@ void FontSubstConfiguration::readLocaleSubst( const com::sun::star::lang::Locale
                 Sequence< OUString > aFonts = xNode->getElementNames();
                 int nFonts = aFonts.getLength();
                 const OUString* pFontNames = aFonts.getConstArray();
+                // improve performance, heap fragmentation
+                it->second.aSubstAttributes.reserve( nFonts );
 
                 // strings for subst retrieval, construct only once
                 OUString aSubstFontsStr     ( RTL_CONSTASCII_USTRINGPARAM( "SubstFonts" ) );
