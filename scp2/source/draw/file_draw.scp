@@ -4,9 +4,9 @@
  *
  *  $RCSfile: file_draw.scp,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: kz $ $Date: 2007-05-09 13:22:50 $
+ *  last change: $Author: hr $ $Date: 2007-07-31 13:12:04 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -42,8 +42,6 @@ File gid_File_Registry_Spool_Oo_Office_Embedding_Draw_Xcu
     Name = "/registry/spool/org/openoffice/Office/Embedding-draw.xcu";
 End
 
-#ifdef SOLAR_JAVA
-
 File gid_File_Help_Sdraw_Zip
     Dir = gid_Dir_Help_Isolanguage;
     ARCHIVE_TXT_FILE_BODY_PATCH;
@@ -62,8 +60,6 @@ File gid_File_Help_Sdraw_Zip
                   "sdraw.idx/POSITIONS",
                   "sdraw.idx/SCHEMA"); 
 End
-
-#endif
 
 File gid_File_Exe_Sdraw
     BIN_FILE_BODY;
