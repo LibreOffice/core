@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.96 $
+#   $Revision: 1.97 $
 #
-#   last change: $Author: rt $ $Date: 2007-07-27 10:25:23 $
+#   last change: $Author: hr $ $Date: 2007-07-31 13:02:17 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -43,6 +43,10 @@ USE_DEFFILE=TRUE
 
 .IF "$(OS)" == "SOLARIS"
 LINKFLAGSRUNPATH=-R/usr/sfw/lib -R\''$$ORIGIN'\'
+.ENDIF
+
+.IF "$(SNDFILE_LIBS)"!=""
+SNDFILELIB=$(SNDFILE_LIBS)
 .ENDIF
 
 # --- Settings -----------------------------------------------------------
@@ -294,7 +298,7 @@ SHL2STDLIBS+=`pkg-config --libs xrender`
 
 
 .IF "$(ENABLE_PASF)" != ""
-SHL2STDLIBS += -lsndfile -lportaudio
+SHL2STDLIBS += $(SNDFILELIB) -lportaudio
 .IF "$(OS)"=="MACOSX"
 SHL2STDLIBS += -framework CoreAudio -framework AudioToolbox
 .ENDIF # "$(OS)"=="MACOSX"
