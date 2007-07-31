@@ -4,9 +4,9 @@
 #
 #   $RCSfile: worker.pm,v $
 #
-#   $Revision: 1.50 $
+#   $Revision: 1.51 $
 #
-#   last change: $Author: rt $ $Date: 2007-07-03 11:46:26 $
+#   last change: $Author: hr $ $Date: 2007-07-31 13:59:14 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -36,6 +36,8 @@
 package installer::worker;
 
 use Cwd;
+use File::Copy;
+use File::stat;
 use File::Temp qw(tmpnam);
 use installer::control;
 use installer::converter;
@@ -787,10 +789,13 @@ sub install_simple ($$$$$)
         $destination =~ s/\$\$/\$/;
         $sourcepath =~ s/\$\$/\$/;
 
-        # printf "mv $sourcepath $destdir$destination\n";
-        `$gnucp $copyopts '$sourcepath' '$destdir$destination'`;
-        `chmod $unixrights '$destdir$destination'`;
         push @lines, "$destination\n";
+        # printf "cp $sourcepath $destdir$destination\n";
+        copy ("$sourcepath", "$destdir$destination") || die "Can't copy file: $!";
+        my $sourcestat = stat($sourcepath);
+        utime ($sourcestat->atime, $sourcestat->mtime, "$destdir$destination");
+        chmod (oct($unixrights), "$destdir$destination") || die "Can't change permissions: $!";
+         push @lines, "$destination\n";
     }
 
     for ( my $i = 0; $i <= $#{$linksarray}; $i++ )
@@ -800,7 +805,7 @@ sub install_simple ($$$$$)
         my $destinationfile = $onelink->{'destinationfile'};
 
         # print "link $destinationfile -> $destdir$destination\n";
-        `ln -sf '$destinationfile' '$destdir$destination'`;
+        symlink ("$destinationfile", "$destdir$destination") || die "Can't create symlink: $!";
         push @lines, "$destination\n";
     }
 
