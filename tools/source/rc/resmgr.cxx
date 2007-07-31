@@ -4,9 +4,9 @@
  *
  *  $RCSfile: resmgr.cxx,v $
  *
- *  $Revision: 1.47 $
+ *  $Revision: 1.48 $
  *
- *  last change: $Author: rt $ $Date: 2007-07-06 10:12:31 $
+ *  last change: $Author: hr $ $Date: 2007-07-31 16:00:38 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -367,7 +367,10 @@ InternalResMgr* ResMgrContainer::getResMgr( const OUString& rPrefix,
                 InternalResMgr* pImp =
                     new InternalResMgr( it->second.aFileURL, rPrefix, it->first, aLocale );
                 if( ! pImp->Create() )
+                {
+                    delete pImp;
                     continue;
+                }
                 it->second.pResMgr = pImp;
             }
             break;
@@ -402,7 +405,10 @@ InternalResMgr* ResMgrContainer::getResMgr( const OUString& rPrefix,
                                                 it->first,
                                                 aLocale );
                         if( ! pImp->Create() )
+                        {
+                            delete pImp;
                             continue;
+                        }
                         it->second.pResMgr = pImp;
                     }
                     // try to guess locale
@@ -465,7 +471,10 @@ InternalResMgr* ResMgrContainer::getResMgr( const OUString& rPrefix,
             pImp = new InternalResMgr( it->second.aFileURL, rPrefix, it->first, aLocale );
             pImp->bSingular = true;
             if( !pImp->Create() )
+            {
+                delete pImp;
                 pImp = NULL;
+            }
             else
                 it->second.nLoadCount++;
         }
