@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.15 $
+#   $Revision: 1.16 $
 #
-#   last change: $Author: obo $ $Date: 2007-03-09 08:50:05 $
+#   last change: $Author: hr $ $Date: 2007-07-31 13:08:22 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -40,18 +40,8 @@ TARGET	= spell
 ENABLE_EXCEPTIONS=TRUE
 USE_DEFFILE=TRUE
 
-.IF "$(MYSPELLLIB)"==""
-.ELSE
-@echo "Build Hunspell instead of system Myspell."
-.ENDIF
-
-.IF "$(HUNSPELLLIB)"==""
-.IF "$(GUI)"=="UNX"
-HUNSPELLLIB=-lhunspell
-.ENDIF # unx
-.IF "$(GUI)"=="WNT"
-HUNSPELLLIB=hunspell.lib
-.ENDIF # wnt
+.IF "$(HUNSPELL_LIBS)"!=""
+HUNSPELLLIB=$(HUNSPELL_LIBS)
 .ENDIF
 
 .IF "$(ULINGULIB)"==""
@@ -77,7 +67,7 @@ CXXFLAGS += -I..$/hunspell -I..$/..$/lingutil
 CFLAGSCXX += -I..$/hunspell -I..$/..$/lingutil
 CFLAGSCC += -I..$/hunspell  -I..$/..$/lingutil
 .ELSE
-CXXGLAGS += $(HUNSPELL_CFLAGS)
+CXXFLAGS += $(HUNSPELL_CFLAGS)
 CFLAGSCXX += $(HUNSPELL_CFLAGS)
 CFLAGSCC += $(HUNSPELL_CFLAGS)
 .ENDIF
@@ -105,11 +95,12 @@ SHL1STDLIBS= \
         $(SALLIB)		\
         $(UCBHELPERLIB)	\
         $(UNOTOOLSLIB)	\
-        $(LNGLIB) \
-                $(HUNSPELLLIB)
+        $(LNGLIB)
 
 .IF "$(SYSTEM_HUNSPELL)" != "YES"
-SHL1STDLIBS+=   $(ULINGULIB)
+SHL1STDLIBS+=   $(ULINGULIB) $(HUNSPELLLIB)
+.ELSE
+SHL1STDLIBS+=   $(HUNSPELLLIB)
 .ENDIF
 
 # build DLL
