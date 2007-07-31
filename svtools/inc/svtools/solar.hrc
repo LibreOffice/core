@@ -4,9 +4,9 @@
  *
  *  $RCSfile: solar.hrc,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2007-07-06 10:01:49 $
+ *  last change: $Author: hr $ $Date: 2007-07-31 15:46:48 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -196,10 +196,7 @@
 //please note: There is also HID_WIZARD2 below
 
 #define HID_EXTENSIONS_START        (HID_LIB_START+1000)
-#define HID_EXTENSIONS_END          (HID_LIB_START+1079)
-
-#define HID_EXTBROWSER_START        (HID_LIB_START+1080)
-#define HID_EXTBROWSER_END          (HID_LIB_START+1099)
+#define HID_EXTENSIONS_END          (HID_LIB_START+1099)
 
 #define HID_SO2_START               (HID_LIB_START+1100)
 #define HID_SO2_END                 (HID_LIB_START+1149)
