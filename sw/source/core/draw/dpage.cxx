@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dpage.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: hr $ $Date: 2007-06-29 16:04:41 $
+ *  last change: $Author: hr $ $Date: 2007-07-31 17:41:05 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -273,8 +273,13 @@ BOOL SwDPage::RequestHelp( Window* pWindow, SdrView* pView,
 
             if ( sTxt.Len() )
             {
-                sTxt.InsertAscii( ": ", 0 );
-                sTxt.Insert( ViewShell::GetShellRes()->aHyperlinkClick, 0 );
+                // --> OD 2007-07-26 #i80029#
+                if ( !rDoc.GetDocShell()->IsReadOnly() )
+                {
+                    sTxt.InsertAscii( ": ", 0 );
+                    sTxt.Insert( ViewShell::GetShellRes()->aHyperlinkClick, 0 );
+                }
+                // <--
 
                 if( rEvt.GetMode() & HELPMODE_BALLOON )
                 {
