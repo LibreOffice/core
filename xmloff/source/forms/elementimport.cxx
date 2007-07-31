@@ -4,9 +4,9 @@
  *
  *  $RCSfile: elementimport.cxx,v $
  *
- *  $Revision: 1.57 $
+ *  $Revision: 1.58 $
  *
- *  last change: $Author: hr $ $Date: 2007-06-27 15:14:07 $
+ *  last change: $Author: hr $ $Date: 2007-07-31 13:40:33 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1827,6 +1827,11 @@ namespace xmloff
 
             case OControlElement::PASSWORD:
                 return new OColumnImport<OPasswordImport>(m_rFormImport, m_rEventManager, _nPrefix, _rLocalName, m_xParentContainer, _eType );
+
+            case OControlElement::TEXT:
+            case OControlElement::TEXT_AREA:
+            case OControlElement::FORMATTED_TEXT:
+                return new OColumnImport< OTextLikeImport >( m_rFormImport, m_rEventManager, _nPrefix, _rLocalName, m_xParentContainer, _eType );
 
             default:
                 return new OColumnImport<OControlImport>(m_rFormImport, m_rEventManager, _nPrefix, _rLocalName, m_xParentContainer, _eType );
