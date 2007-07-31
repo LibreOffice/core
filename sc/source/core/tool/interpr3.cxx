@@ -4,9 +4,9 @@
  *
  *  $RCSfile: interpr3.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: rt $ $Date: 2007-07-06 12:35:41 $
+ *  last change: $Author: hr $ $Date: 2007-07-31 16:36:46 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -2136,16 +2136,15 @@ void ScInterpreter::ScChiTest()
         return;
     }
     double fChi = 0.0;
-    SCSIZE i, j;
-    double fValX, fValE;
-    for (i = 0; i < nC1; i++)
-        for (j = 0; j < nR1; j++)
+    for (SCSIZE i = 0; i < nC1; i++)
+    {
+        for (SCSIZE j = 0; j < nR1; j++)
         {
             if (!pMat1->IsString(i,j) && !pMat2->IsString(i,j))
             {
-                fValX = pMat1->GetDouble(i,j);
-                fValE = pMat2->GetDouble(i,j);
-                fChi += (fValX-fValE)*(fValX-fValE)/fValE;
+                double fValX = pMat1->GetDouble(i,j);
+                double fValE = pMat2->GetDouble(i,j);
+                fChi += (fValX - fValE) * (fValX - fValE) / fValE;
             }
             else
             {
@@ -2153,6 +2152,7 @@ void ScInterpreter::ScChiTest()
                 return;
             }
         }
+    }
     double fDF;
     if (nC1 == 1 || nR1 == 1)
     {
@@ -3604,52 +3604,8 @@ void ScInterpreter::ScProbability()
 
 void ScInterpreter::ScCorrel()
 {
-    if ( !MustHaveParamCount( GetByte(), 2 ) )
-        return;
-    ScMatrixRef pMat1 = GetMatrix();
-    ScMatrixRef pMat2 = GetMatrix();
-    if (!pMat1 || !pMat2)
-    {
-        SetIllegalParameter();
-        return;
-    }
-    SCSIZE nC1, nC2;
-    SCSIZE nR1, nR2;
-    pMat1->GetDimensions(nC1, nR1);
-    pMat2->GetDimensions(nC2, nR2);
-    if (nR1 != nR2 || nC1 != nC2)
-    {
-        SetIllegalParameter();
-        return;
-    }
-    double fCount   = 0.0;
-    double fSumX    = 0.0;
-    double fSumSqrX = 0.0;
-    double fSumY    = 0.0;
-    double fSumSqrY = 0.0;
-    double fSumXY   = 0.0;
-    double fValX, fValY;
-    for (SCSIZE i = 0; i < nC1; i++)
-        for (SCSIZE j = 0; j < nR1; j++)
-        {
-            if (!pMat1->IsString(i,j) && !pMat2->IsString(i,j))
-            {
-                fValX = pMat1->GetDouble(i,j);
-                fValY = pMat2->GetDouble(i,j);
-                fSumX    += fValX;
-                fSumSqrX += fValX * fValX;
-                fSumY    += fValY;
-                fSumSqrY += fValY * fValY;
-                fSumXY   += fValX*fValY;
-                fCount++;
-            }
-        }
-    if (fCount < 2.0)
-        SetNoValue();
-    else
-        PushDouble( (fSumXY-fSumX*fSumY/fCount)/
-                     sqrt((fSumSqrX-fSumX*fSumX/fCount)*
-                          (fSumSqrY-fSumY*fSumY/fCount)));
+    // This is identical to ScPearson()
+    ScPearson();
 }
 
 void ScInterpreter::ScCovar()
@@ -3672,28 +3628,49 @@ void ScInterpreter::ScCovar()
         SetIllegalParameter();
         return;
     }
-    double fCount   = 0.0;
-    double fSumX    = 0.0;
-    double fSumY    = 0.0;
-    double fSumXY   = 0.0;
-    double fValX, fValY;
+    /* #i78250#
+     * (sum((X-MeanX)(Y-MeanY)))/N equals (SumXY)/N-MeanX*MeanY mathematically,
+     * but the latter produces wrong results if the absolute values are high,
+     * for example above 10^8
+     */
+    double fCount           = 0.0;
+    double fSumX            = 0.0;
+    double fSumY            = 0.0;
+    double fSumDeltaXDeltaY = 0.0; // sum of (ValX-MeanX)*(ValY-MeanY)
     for (SCSIZE i = 0; i < nC1; i++)
+    {
         for (SCSIZE j = 0; j < nR1; j++)
         {
             if (!pMat1->IsString(i,j) && !pMat2->IsString(i,j))
             {
-                fValX = pMat1->GetDouble(i,j);
-                fValY = pMat2->GetDouble(i,j);
-                fSumX    += fValX;
-                fSumY    += fValY;
-                fSumXY   += fValX*fValY;
+                double fValX = pMat1->GetDouble(i,j);
+                double fValY = pMat2->GetDouble(i,j);
+                fSumX += fValX;
+                fSumY += fValY;
                 fCount++;
             }
         }
+    }
     if (fCount < 1.0)
         SetNoValue();
     else
-        PushDouble( (fSumXY-fSumX*fSumY/fCount)/fCount);
+    {
+        double fMeanX = fSumX / fCount;
+        double fMeanY = fSumY / fCount;
+        for (SCSIZE i = 0; i < nC1; i++)
+        {
+            for (SCSIZE j = 0; j < nR1; j++)
+            {
+                if (!pMat1->IsString(i,j) && !pMat2->IsString(i,j))
+                {
+                    double fValX = pMat1->GetDouble(i,j);
+                    double fValY = pMat2->GetDouble(i,j);
+                    fSumDeltaXDeltaY += (fValX - fMeanX) * (fValY - fMeanY);
+                }
+            }
+        }
+        PushDouble( fSumDeltaXDeltaY / fCount);
+    }
 }
 
 void ScInterpreter::ScPearson()
@@ -3716,83 +3693,77 @@ void ScInterpreter::ScPearson()
         SetIllegalParameter();
         return;
     }
-    double fCount   = 0.0;
-    double fSumX    = 0.0;
-    double fSumSqrX = 0.0;
-    double fSumY    = 0.0;
-    double fSumSqrY = 0.0;
-    double fSumXY   = 0.0;
-    double fValX, fValY;
+    /* #i78250#
+     * (sum((X-MeanX)(Y-MeanY)))/N equals (SumXY)/N-MeanX*MeanY mathematically,
+     * but the latter produces wrong results if the absolute values are high,
+     * for example above 10^8
+     */
+    double fCount           = 0.0;
+    double fSumX            = 0.0;
+    double fSumY            = 0.0;
+    double fSumDeltaXDeltaY = 0.0; // sum of (ValX-MeanX)*(ValY-MeanY)
+    double fSumSqrDeltaX    = 0.0; // sum of (ValX-MeanX)^2
+    double fSumSqrDeltaY    = 0.0; // sum of (ValY-MeanY)^2
     for (SCSIZE i = 0; i < nC1; i++)
+    {
         for (SCSIZE j = 0; j < nR1; j++)
         {
             if (!pMat1->IsString(i,j) && !pMat2->IsString(i,j))
             {
-                fValX = pMat1->GetDouble(i,j);
-                fValY = pMat2->GetDouble(i,j);
-                fSumX    += fValX;
-                fSumSqrX += fValX * fValX;
-                fSumY    += fValY;
-                fSumSqrY += fValY * fValY;
-                fSumXY   += fValX*fValY;
+                double fValX = pMat1->GetDouble(i,j);
+                double fValY = pMat2->GetDouble(i,j);
+                fSumX += fValX;
+                fSumY += fValY;
                 fCount++;
             }
         }
-    if (fCount < 2.0)
+    }
+    if (fCount < 1.0) // fCount==1 is handled by checking denominator later on
         SetNoValue();
     else
-        PushDouble( (fCount*fSumXY-fSumX*fSumY)/
-                     sqrt((fCount*fSumSqrX-fSumX*fSumX)*
-                          (fCount*fSumSqrY-fSumY*fSumY)));
+    {
+        double fMeanX = fSumX / fCount;
+        double fMeanY = fSumY / fCount;
+        for (SCSIZE i = 0; i < nC1; i++)
+        {
+            for (SCSIZE j = 0; j < nR1; j++)
+            {
+                if (!pMat1->IsString(i,j) && !pMat2->IsString(i,j))
+                {
+                    double fValX = pMat1->GetDouble(i,j);
+                    double fValY = pMat2->GetDouble(i,j);
+                    fSumDeltaXDeltaY += (fValX - fMeanX) * (fValY - fMeanY);
+                    fSumSqrDeltaX    += (fValX - fMeanX) * (fValX - fMeanX);
+                    fSumSqrDeltaY    += (fValY - fMeanY) * (fValY - fMeanY);
+                }
+            }
+        }
+        if (fSumSqrDeltaX == 0.0 || fSumSqrDeltaY == 0.0)
+            PushError( errDivisionByZero);
+        else
+            PushDouble( fSumDeltaXDeltaY / sqrt( fSumSqrDeltaX * fSumSqrDeltaY));
+    }
 }
 
 void ScInterpreter::ScRSQ()
 {
-    if ( !MustHaveParamCount( GetByte(), 2 ) )
-        return;
-    ScMatrixRef pMat1 = GetMatrix();
-    ScMatrixRef pMat2 = GetMatrix();
-    if (!pMat1 || !pMat2)
+    // Same as ScPearson()*ScPearson()
+    ScPearson();
+    if (!nGlobalError)
     {
-        SetIllegalParameter();
-        return;
-    }
-    SCSIZE nC1, nC2;
-    SCSIZE nR1, nR2;
-    pMat1->GetDimensions(nC1, nR1);
-    pMat2->GetDimensions(nC2, nR2);
-    if (nR1 != nR2 || nC1 != nC2)
-    {
-        SetIllegalParameter();
-        return;
-    }
-    double fCount   = 0.0;
-    double fSumX    = 0.0;
-    double fSumSqrX = 0.0;
-    double fSumY    = 0.0;
-    double fSumSqrY = 0.0;
-    double fSumXY   = 0.0;
-    double fValX, fValY;
-    for (SCSIZE i = 0; i < nC1; i++)
-        for (SCSIZE j = 0; j < nR1; j++)
+        switch (GetStackType())
         {
-            if (!pMat1->IsString(i,j) && !pMat2->IsString(i,j))
-            {
-                fValX = pMat1->GetDouble(i,j);
-                fValY = pMat2->GetDouble(i,j);
-                fSumX    += fValX;
-                fSumSqrX += fValX * fValX;
-                fSumY    += fValY;
-                fSumSqrY += fValY * fValY;
-                fSumXY   += fValX*fValY;
-                fCount++;
-            }
+            case svDouble:
+                {
+                    double fVal = PopDouble();
+                    PushDouble( fVal * fVal);
+                }
+                break;
+            default:
+                Pop();
+                SetNoValue();
         }
-    if (fCount < 2.0)
-        SetNoValue();
-    else
-        PushDouble( (fCount*fSumXY-fSumX*fSumY)*(fCount*fSumXY-fSumX*fSumY)/
-                     (fCount*fSumSqrX-fSumX*fSumX)/(fCount*fSumSqrY-fSumY*fSumY));
+    }
 }
 
 void ScInterpreter::ScSTEXY()
@@ -3815,34 +3786,53 @@ void ScInterpreter::ScSTEXY()
         SetIllegalParameter();
         return;
     }
-    double fCount   = 0.0;
-    double fSumX    = 0.0;
-    double fSumSqrX = 0.0;
-    double fSumY    = 0.0;
-    double fSumSqrY = 0.0;
-    double fSumXY   = 0.0;
-    double fValX, fValY;
+    // #i78250# numerical stability improved
+    double fCount           = 0.0;
+    double fSumX            = 0.0;
+    double fSumY            = 0.0;
+    double fSumDeltaXDeltaY = 0.0; // sum of (ValX-MeanX)*(ValY-MeanY)
+    double fSumSqrDeltaX    = 0.0; // sum of (ValX-MeanX)^2
+    double fSumSqrDeltaY    = 0.0; // sum of (ValY-MeanY)^2
     for (SCSIZE i = 0; i < nC1; i++)
+    {
         for (SCSIZE j = 0; j < nR1; j++)
         {
             if (!pMat1->IsString(i,j) && !pMat2->IsString(i,j))
             {
-                fValX = pMat1->GetDouble(i,j);
-                fValY = pMat2->GetDouble(i,j);
-                fSumX    += fValX;
-                fSumSqrX += fValX * fValX;
-                fSumY    += fValY;
-                fSumSqrY += fValY * fValY;
-                fSumXY   += fValX*fValY;
+                double fValX = pMat1->GetDouble(i,j);
+                double fValY = pMat2->GetDouble(i,j);
+                fSumX += fValX;
+                fSumY += fValY;
                 fCount++;
             }
         }
+    }
     if (fCount < 3.0)
         SetNoValue();
     else
-        PushDouble(sqrt((fCount*fSumSqrY - fSumY*fSumY -
-        (fCount*fSumXY -fSumX*fSumY)*(fCount*fSumXY -fSumX*fSumY)/
-        (fCount*fSumSqrX-fSumX*fSumX) )/(fCount*(fCount-2.0))));
+    {
+        double fMeanX = fSumX / fCount;
+        double fMeanY = fSumY / fCount;
+        for (SCSIZE i = 0; i < nC1; i++)
+        {
+            for (SCSIZE j = 0; j < nR1; j++)
+            {
+                if (!pMat1->IsString(i,j) && !pMat2->IsString(i,j))
+                {
+                    double fValX = pMat1->GetDouble(i,j);
+                    double fValY = pMat2->GetDouble(i,j);
+                    fSumDeltaXDeltaY += (fValX - fMeanX) * (fValY - fMeanY);
+                    fSumSqrDeltaX    += (fValX - fMeanX) * (fValX - fMeanX);
+                    fSumSqrDeltaY    += (fValY - fMeanY) * (fValY - fMeanY);
+                }
+            }
+        }
+        if (fSumSqrDeltaX == 0.0)
+            PushError( errDivisionByZero);
+        else
+            PushDouble( sqrt( (fSumSqrDeltaY - fSumDeltaXDeltaY *
+                            fSumDeltaXDeltaY / fSumSqrDeltaX) / (fCount-2)));
+    }
 }
 
 void ScInterpreter::ScSlope()
@@ -3865,31 +3855,50 @@ void ScInterpreter::ScSlope()
         SetIllegalParameter();
         return;
     }
-    double fCount   = 0.0;
-    double fSumX    = 0.0;
-    double fSumSqrX = 0.0;
-    double fSumY    = 0.0;
-    double fSumXY   = 0.0;
-    double fValX, fValY;
+    // #i78250# numerical stability improved
+    double fCount           = 0.0;
+    double fSumX            = 0.0;
+    double fSumY            = 0.0;
+    double fSumDeltaXDeltaY = 0.0; // sum of (ValX-MeanX)*(ValY-MeanY)
+    double fSumSqrDeltaX    = 0.0; // sum of (ValX-MeanX)^2
     for (SCSIZE i = 0; i < nC1; i++)
+    {
         for (SCSIZE j = 0; j < nR1; j++)
         {
             if (!pMat1->IsString(i,j) && !pMat2->IsString(i,j))
             {
-                fValX = pMat1->GetDouble(i,j);
-                fValY = pMat2->GetDouble(i,j);
-                fSumX    += fValX;
-                fSumSqrX += fValX * fValX;
-                fSumY    += fValY;
-                fSumXY   += fValX*fValY;
+                double fValX = pMat1->GetDouble(i,j);
+                double fValY = pMat2->GetDouble(i,j);
+                fSumX += fValX;
+                fSumY += fValY;
                 fCount++;
             }
         }
+    }
     if (fCount < 1.0)
         SetNoValue();
     else
-        PushDouble( (fCount*fSumXY-fSumX*fSumY)/
-                    (fCount*fSumSqrX-fSumX*fSumX) );
+    {
+        double fMeanX = fSumX / fCount;
+        double fMeanY = fSumY / fCount;
+        for (SCSIZE i = 0; i < nC1; i++)
+        {
+            for (SCSIZE j = 0; j < nR1; j++)
+            {
+                if (!pMat1->IsString(i,j) && !pMat2->IsString(i,j))
+                {
+                    double fValX = pMat1->GetDouble(i,j);
+                    double fValY = pMat2->GetDouble(i,j);
+                    fSumDeltaXDeltaY += (fValX - fMeanX) * (fValY - fMeanY);
+                    fSumSqrDeltaX    += (fValX - fMeanX) * (fValX - fMeanX);
+                }
+            }
+        }
+        if (fSumSqrDeltaX == 0.0)
+            PushError( errDivisionByZero);
+        else
+            PushDouble( fSumDeltaXDeltaY / fSumSqrDeltaX);
+    }
 }
 
 void ScInterpreter::ScIntercept()
@@ -3912,32 +3921,50 @@ void ScInterpreter::ScIntercept()
         SetIllegalParameter();
         return;
     }
-    double fCount   = 0.0;
-    double fSumX    = 0.0;
-    double fSumSqrX = 0.0;
-    double fSumY    = 0.0;
-    double fSumXY   = 0.0;
-    double fValX, fValY;
+    // #i78250# numerical stability improved
+    double fCount           = 0.0;
+    double fSumX            = 0.0;
+    double fSumY            = 0.0;
+    double fSumDeltaXDeltaY = 0.0; // sum of (ValX-MeanX)*(ValY-MeanY)
+    double fSumSqrDeltaX    = 0.0; // sum of (ValX-MeanX)^2
     for (SCSIZE i = 0; i < nC1; i++)
+    {
         for (SCSIZE j = 0; j < nR1; j++)
         {
             if (!pMat1->IsString(i,j) && !pMat2->IsString(i,j))
             {
-                fValX = pMat1->GetDouble(i,j);
-                fValY = pMat2->GetDouble(i,j);
-                fSumX    += fValX;
-                fSumSqrX += fValX * fValX;
-                fSumY    += fValY;
-                fSumXY   += fValX*fValY;
+                double fValX = pMat1->GetDouble(i,j);
+                double fValY = pMat2->GetDouble(i,j);
+                fSumX += fValX;
+                fSumY += fValY;
                 fCount++;
             }
         }
+    }
     if (fCount < 1.0)
         SetNoValue();
     else
-        PushDouble( fSumY/fCount - (fCount*fSumXY-fSumX*fSumY)/
-                    (fCount*fSumSqrX-fSumX*fSumX)*fSumX/fCount );
-
+    {
+        double fMeanX = fSumX / fCount;
+        double fMeanY = fSumY / fCount;
+        for (SCSIZE i = 0; i < nC1; i++)
+        {
+            for (SCSIZE j = 0; j < nR1; j++)
+            {
+                if (!pMat1->IsString(i,j) && !pMat2->IsString(i,j))
+                {
+                    double fValX = pMat1->GetDouble(i,j);
+                    double fValY = pMat2->GetDouble(i,j);
+                    fSumDeltaXDeltaY += (fValX - fMeanX) * (fValY - fMeanY);
+                    fSumSqrDeltaX    += (fValX - fMeanX) * (fValX - fMeanX);
+                }
+            }
+        }
+        if (fSumSqrDeltaX == 0.0)
+            PushError( errDivisionByZero);
+        else
+            PushDouble( fMeanY - fSumDeltaXDeltaY / fSumSqrDeltaX * fMeanX);
+    }
 }
 
 void ScInterpreter::ScForecast()
@@ -3961,33 +3988,48 @@ void ScInterpreter::ScForecast()
         return;
     }
     double fVal = GetDouble();
-    double fCount   = 0.0;
-    double fSumX    = 0.0;
-    double fSumSqrX = 0.0;
-    double fSumY    = 0.0;
-    double fSumXY   = 0.0;
-    double fValX, fValY;
+    // #i78250# numerical stability improved
+    double fCount           = 0.0;
+    double fSumX            = 0.0;
+    double fSumY            = 0.0;
+    double fSumDeltaXDeltaY = 0.0; // sum of (ValX-MeanX)*(ValY-MeanY)
+    double fSumSqrDeltaX    = 0.0; // sum of (ValX-MeanX)^2
     for (SCSIZE i = 0; i < nC1; i++)
+    {
         for (SCSIZE j = 0; j < nR1; j++)
         {
             if (!pMat1->IsString(i,j) && !pMat2->IsString(i,j))
             {
-                fValX = pMat1->GetDouble(i,j);
-                fValY = pMat2->GetDouble(i,j);
-                fSumX    += fValX;
-                fSumSqrX += fValX * fValX;
-                fSumY    += fValY;
-                fSumXY   += fValX*fValY;
+                double fValX = pMat1->GetDouble(i,j);
+                double fValY = pMat2->GetDouble(i,j);
+                fSumX += fValX;
+                fSumY += fValY;
                 fCount++;
             }
         }
+    }
     if (fCount < 1.0)
         SetNoValue();
     else
-        PushDouble( fSumY/fCount + (fCount*fSumXY-fSumX*fSumY)/
-                    (fCount*fSumSqrX-fSumX*fSumX) * (fVal - fSumX/fCount) );
+    {
+        double fMeanX = fSumX / fCount;
+        double fMeanY = fSumY / fCount;
+        for (SCSIZE i = 0; i < nC1; i++)
+        {
+            for (SCSIZE j = 0; j < nR1; j++)
+            {
+                if (!pMat1->IsString(i,j) && !pMat2->IsString(i,j))
+                {
+                    double fValX = pMat1->GetDouble(i,j);
+                    double fValY = pMat2->GetDouble(i,j);
+                    fSumDeltaXDeltaY += (fValX - fMeanX) * (fValY - fMeanY);
+                    fSumSqrDeltaX    += (fValX - fMeanX) * (fValX - fMeanX);
+                }
+            }
+        }
+        if (fSumSqrDeltaX == 0.0)
+            PushError( errDivisionByZero);
+        else
+            PushDouble( fMeanY + fSumDeltaXDeltaY / fSumSqrDeltaX * (fVal - fMeanX));
+    }
 }
-
-
-
-
