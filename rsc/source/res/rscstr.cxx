@@ -4,9 +4,9 @@
  *
  *  $RCSfile: rscstr.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 16:03:01 $
+ *  last change: $Author: hr $ $Date: 2007-07-31 16:02:49 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -266,10 +266,6 @@ BOOL RscString::IsValueDefault( const RSCINST & rInst, CLASS_DATA pDef ){
             if( !bStrEmpty || !bDefStrEmpty ){
                 return FALSE;
             }
-            else if( !(bStrEmpty || bDefStrEmpty) ){
-                if( strcmp( pData->pStr, pDefData->pStr ) )
-                    return FALSE;
-            }
             return TRUE;
         }
     }
@@ -388,7 +384,7 @@ ERRTYPE RscString::WriteRc( const RSCINST & rInst, RscWriteRc & rMem,
         }
         else
         {
-            if( ((RscStringInst *)rInst.pData)->pStr )
+            if( ((RscStringInst *)rInst.pData)->pStr && pTC )
             {
                 char * pStr = RscChar::MakeUTF8( ((RscStringInst *)rInst.pData)->pStr,
                                                 pTC->GetSourceCharSet() );
