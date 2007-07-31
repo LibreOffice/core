@@ -3,7 +3,7 @@ dnl *     vi:set sw=3 ts=3 et:
 dnl *
 dnl * Name: configure.in
 dnl * Auth: Willem van Dorp, Ross Nicholson, Oisin Boydell - Sun Microsystems Ireland
-dnl * Date: $Date: 2007-07-03 12:15:43 $
+dnl * Date: $Date: 2007-07-31 13:09:29 $
 dnl *
 dnl * Desc: This file serves as input for the GNU autoconf package
 dnl *       in order to create a configure script.
@@ -12,7 +12,7 @@ dnl *       necessary to build OpenOffice.org
 dnl *
 dnl *
 dnl ******************************************************************/
-AC_REVISION( $Revision: 1.213 $ )
+AC_REVISION( $Revision: 1.214 $ )
 AC_PREREQ(2.50)
 AC_INIT()
 echo "$@" >config.parms
@@ -67,14 +67,6 @@ AC_ARG_ENABLE(mozilla,
                           binary for your platform, to build without this
                           version, use this option.
 ],,enable_mozilla="yes")
-AC_ARG_WITH(firefox,
-[  --with-firefox          Use Firefox instead of Mozilla Suite for building.
-                          Only honoured with --with-system-mozilla
-],,)
-AC_ARG_WITH(xulrunner,
-[  --with-xulrunner        Use XULRunner instead of Mozilla Suite for building.
-                          Only honoured with --with-system-mozilla
-],,)
 AC_ARG_WITH(fonts,
 [  --without-fonts         Removes Bitstream Vera fonts from
                           openoffice.org installation set, for people building
@@ -309,10 +301,6 @@ AC_ARG_WITH(system-icu,
 AC_ARG_WITH(system-db,
 [  --with-system-db        Use berkeley db already on system
 ],,)
-AC_ARG_WITH(db-jar,
-[  --with-db-jar=JARFILE   Specify path to jarfile manually ],
-[ DB_JAR="$withval"
-])
 AC_ARG_WITH(system-hsqldb,
 [  --with-system-hsqldb    Use hsqldb already on system
 ],,)
@@ -404,8 +392,10 @@ AC_ARG_WITH(system-altlinuxhyph,
 AC_ARG_WITH(system-mozilla,
 [  --with-system-mozilla   Use mozilla already on system. Note that some
                           components cannot be built against a contemporary
-                          mozilla
-],,)
+                          mozilla. The flavour used can be specified by
+                          --with-system-mozilla=<flavour>. Supported are:
+                          xulrunner (default), firefox, seamonkey, mozilla
+], WITH_SYSTEM_MOZILLA=$withval, WITH_SYSTEM_MOZILLA=no)
 AC_ARG_WITH(stlport4,
 [  --with-stlport4         The location that STLport4 is installed in. The STL
                           header files are assumed to be in
@@ -1352,6 +1342,24 @@ if test "$_os" = "SunOS"; then
       fi
    fi
 fi
+
+if test "$GCC" = "yes"; then
+   AC_MSG_CHECKING( for --hash-style=both linker support )
+   hash_style_ldflags_save=$LDFLAGS
+   LDFLAGS="$LDFLAGS -Wl,--hash-style=both"
+   AC_LINK_IFELSE([AC_LANG_PROGRAM([
+   #include <stdio.h>
+   ],[
+    printf ("hello world\n");
+   ])], HAVE_LD_HASH_STYLE=TRUE, HAVE_LD_HASH_STYLE=FALSE)
+   if test "z$HAVE_LD_HASH_STYLE" = "zTRUE"; then
+     AC_MSG_RESULT( found )
+   else
+     AC_MSG_RESULT( not found )
+   fi
+   LDFLAGS=$hash_style_ldflags_save
+fi
+AC_SUBST(HAVE_LD_HASH_STYLE)
 
 dnl ===================================================================
 dnl  Test the IRIX SGI Mips pro compiler
@@ -2542,16 +2550,16 @@ else
        AC_MSG_CHECKING([the dmake version])
        DMAKE_VERSION=`$DMAKE -V | $SED -n 's/.*Version \([[0-9.]]\+\).*/\1/p'`
        if test "$DMAKE_VERSION" = "4.10"; then
-	 AC_MSG_RESULT([too old. >= 4.6 is needed. (Your old 4.1 version identifies itself as 4.10, PL 0.)])
+	 AC_MSG_RESULT([too old. >= 4.7 is needed. (Your old 4.1 version identifies itself as 4.10, PL 0.)])
 	 echo "A newer dmake will be built on ./bootstrap"
 	 BUILD_DMAKE=YES
        elif test "`echo $DMAKE_VERSION | cut -d'.' -f1`" -gt "4"; then
-	 AC_MSG_RESULT([OK, >= 4.6])
+	 AC_MSG_RESULT([OK, >= 4.7])
        elif test "`echo $DMAKE_VERSION | cut -d'.' -f1`" = "4" && \
-	    test "`echo $DMAKE_VERSION | cut -d'.' -f2`" -ge "6"; then
-	 AC_MSG_RESULT([OK, >= 4.6])
+	    test "`echo $DMAKE_VERSION | cut -d'.' -f2`" -ge "7"; then
+	 AC_MSG_RESULT([OK, >= 4.7])
        else
-	 AC_MSG_RESULT([too old. >= 4.6 is needed])
+	 AC_MSG_RESULT([too old. >= 4.7 is needed])
 	 echo "A newer dmake will be built on ./bootstrap"
 	 BUILD_DMAKE=YES
        fi
@@ -3131,8 +3139,7 @@ if test -n "$with_system_db" -o -n "$with_system_libs" && \
         ], []
     )
     AC_MSG_CHECKING([whether db is at least 4.1])
-    # FIXME: Will db 4.3 work? Can't test it since the 4.3 java bindings are not packaged :/
-    for v in 1 2; do
+    for v in 1 2 3 4 5; do
        AC_TRY_RUN([
 #include <db.h>
 
@@ -3153,33 +3160,6 @@ int main(int argc, char **argv) {
     #  [AC_MSG_ERROR([db library not installed or functional])], [])
     AC_HAVE_LIBRARY(db, [],
       [AC_MSG_ERROR([db not installed or functional])], [])
-     if test "$SOLAR_JAVA" = "TRUE"; then
-       if test -z "$DB_JAR"; then
-         # three different naming methods *grumble* Are there even more?
-         AC_CHECK_FILE(/usr/share/java/db.jar, [ JARVER=0 ],
-           [
-             AC_CHECK_FILE(/usr/share/java/db-$DB_VERSION.jar, [ JARVER=1 ],
-               [ AC_CHECK_FILE(/usr/share/java/libdb$DB_VERSION-java.jar,
-                   [ JARVER_LONGSTYLE=1 ],
-                   [ AC_MSG_ERROR(db$DB_VERSION_MAJOR Java bindings not found)]
-                 )
-               ]
-             )
-           ]
-         )
-         if test "$JARVER" = "1"; then
-           DB_JAR=/usr/share/java/jar-$DB_VERSION.jar
-         else
-           DB_JAR=/usr/share/java/db.jar
-         fi
-         if test "$JARVER_LONGSTYLE" = "1"; then
-           DB_JAR=/usr/share/java/libdb$DB_VERSION-java.jar
-         fi
-	  if test -z "$DB_JAR"; then
-	    AC_MSG_ERROR([libdb $DB_VERSION jar not found. Install it or specify path with --with-db-jar=/path/to/jar])
-	  fi
-       fi
-    fi
     SCPDEFS="$SCPDEFS -DSYSTEM_DB"
 else
     AC_MSG_RESULT([internal])
@@ -3506,12 +3486,16 @@ if test -n "$with_system_mozilla" && test "$with_system_mozilla" != "no"; then
     AC_MSG_RESULT([external])
     SYSTEM_MOZILLA=YES
     AC_MSG_CHECKING([which Mozilla flavour to use])
-    if test -n "$with_firefox" && test "$with_firefox" != "no"; then
-      MOZ_FLAVOUR=firefox
-    elif test -n "$with_xulrunner" && test "$with_xulrunner" != "no"; then
+    if test -n "$with_system_mozilla" && test "$with_system_mozilla" = "xulrunner"; then
       MOZ_FLAVOUR=xulrunner
-    else
+    elif test -n "$with_system_mozilla" && test "$with_system_mozilla" = "seamonkey"; then
+      MOZ_FLAVOUR=seamonkey
+    elif test -n "$with_system_mozilla" && test "$with_system_mozilla" = "firefox"; then
+      MOZ_FLAVOUR=firefox
+    elif test -n "$with_system_mozilla" && test "$with_system_mozilla" = "mozilla"; then
       MOZ_FLAVOUR=mozilla
+    else
+      MOZ_FLAVOUR=xulrunner
     fi
     tmp=`echo $MOZ_FLAVOUR | $PERL -e 'print ucfirst(<STDIN>);'`
     AC_MSG_RESULT($tmp)
@@ -3951,16 +3935,16 @@ if test "$_os" != "WINNT" && \
 	if test -n "$with_system_sndfile" -o -n "$with_system_libs" && \
 		test "$with_system_sndfile" != "no"; then
 	   AC_MSG_RESULT([external])
-	   AC_CHECK_HEADER(sndfile.h, [],
-		[AC_MSG_ERROR(sndfile header not found. install sndfile)], [])
-	   AC_CHECK_LIB(sndfile, sf_open, [],
-		[AC_MSG_ERROR(sndfile library not found or functional)], [])
+	   PKG_CHECK_MODULES(SNDFILE, sndfile)
 	   SYSTEM_SNDFILE=YES
 	else
            AC_MSG_RESULT([internal])
 	   SYSTEM_SNDFILE=NO
+       SNDFILE_LIBS=-lsndfile
 	    BUILD_TYPE="$BUILD_TYPE SNDFILE"
 	fi
+
+   PA_VER=18
 	AC_MSG_CHECKING([which portaudio to use])
 	if test -n "$with_system_portaudio" -o -n "$with_system_libs" && \
 		test "$with_system_portaudio" != "no"; then
@@ -3971,11 +3955,9 @@ if test "$_os" != "WINNT" && \
 		[AC_MSG_ERROR(portaudio library not found or functional)], [])
 	   AC_MSG_CHECKING(portaudio version)
 	   AC_TRY_LINK([#include <portaudio.h>], [
-void main(int argc, char **argv) {
 	 /* Pa_GetVersion() only exists in v19, so this fails to build with v18 */
         int v = Pa_GetVersion();
-}
-	   ], [AC_MSG_ERROR([portaudio too new. you need v18])], [AC_MSG_RESULT([OK, v18])])
+	   ], [PA_VER=19; AC_MSG_RESULT([OK, v$PA_VER])], [AC_MSG_RESULT([OK, v$PA_VER])])
       SYSTEM_PORTAUDIO=YES
 	else
 	   AC_MSG_RESULT([internal])
@@ -3986,7 +3968,10 @@ else
 	AC_MSG_RESULT([no])
 fi
 AC_SUBST(ENABLE_PASF)
+AC_SUBST(PA_VER)
 AC_SUBST(SYSTEM_PORTAUDIO)
+AC_SUBST(SNDFILE_LIBS)
+AC_SUBST(SNDFILE_CFLAGS)
 AC_SUBST(SYSTEM_SNDFILE)
 AC_SUBST(BUILD_TYPE)
 
@@ -4079,19 +4064,24 @@ if test -n "$with_system_hunspell" && test "$with_system_hunspell" != "no"; then
     AC_MSG_RESULT([external])
     SYSTEM_HUNSPELL=YES
     AC_LANG(C++)
-    AC_CHECK_HEADER(hunspell.hxx, [],
-    [
-    AC_CHECK_HEADER(hunspell/hunspell.hxx, [ HUNSPELL_CFLAGS=-I/usr/include/hunspell ],
-        [AC_MSG_ERROR(hunspell headers not found.)], [])
-       ], [])
-    AC_CHECK_LIB(hunspell, main, [],
+    PKG_CHECK_MODULES(HUNSPELL, hunspell, HUNSPELL_PC="TRUE", HUNSPELL_PC="" )
+    if test "$HUNSPELL_PC" != "TRUE"; then
+      AC_CHECK_HEADER(hunspell.hxx, [],
+      [
+      AC_CHECK_HEADER(hunspell/hunspell.hxx, [ HUNSPELL_CFLAGS=-I/usr/include/hunspell ],
+           [AC_MSG_ERROR(hunspell headers not found.)], [])
+         ], [])
+      AC_CHECK_LIB(hunspell, main, [],
            [ AC_MSG_ERROR(hunspell library not found.) ], [])
+      HUNSPELL_LIBS=-lhunspell
+     fi
 else
     AC_MSG_RESULT([internal])
     SYSTEM_HUNSPELL=NO
 fi
 AC_SUBST(SYSTEM_HUNSPELL)
 AC_SUBST(HUNSPELL_CFLAGS)
+AC_SUBST(HUNSPELL_LIBS)
 
 dnl ===================================================================
 dnl Checking for altlinuxhyph
@@ -4782,7 +4772,7 @@ if test "$test_kde" = "yes" -a "$ENABLE_KDE" = "TRUE" ; then
     qt_test_include="qstyle.h"
     qt_test_library="libqt-mt.so"
     kde_test_include="ksharedptr.h"
-    kde_test_library="libkdeui.la"
+    kde_test_library="libkdeui.so"
 
     dnl Check for Qt headers
     AC_MSG_CHECKING([for Qt headers])
