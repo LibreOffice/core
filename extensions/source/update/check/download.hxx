@@ -4,9 +4,9 @@
  *
  *  $RCSfile: download.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2007-07-06 14:36:05 $
+ *  last change: $Author: hr $ $Date: 2007-07-31 15:56:04 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -55,7 +55,7 @@ struct DownloadInteractionHandler : public rtl::IReference
     virtual void downloadProgressAt(sal_Int8 nPercent) = 0;
 
     // called on first progress notification
-    virtual void downloadStarted(const rtl::OUString& rFileName) = 0;
+    virtual void downloadStarted(const rtl::OUString& rFileName, sal_Int64 nFileSize) = 0;
 
     // called when download has been finished
     virtual void downloadFinished(const rtl::OUString& rFileName) = 0;
@@ -69,7 +69,7 @@ public:
              const rtl::Reference< DownloadInteractionHandler >& rHandler) : m_xContext(xContext), m_aHandler(rHandler) {};
 
     // returns true when the content of rURL was successfully written to rLocalFile
-    bool start(const rtl::OUString& rURL, const rtl::OUString& rLocalFile, bool resume);
+    bool start(const rtl::OUString& rURL, const rtl::OUString& rFile, const rtl::OUString& rDestinationDir);
 
     // stops the download after the next write operation
     void stop();
