@@ -4,9 +4,9 @@
 #
 #   $RCSfile: unxlngi6.mk,v $
 #
-#   $Revision: 1.38 $
+#   $Revision: 1.39 $
 #
-#   last change: $Author: rt $ $Date: 2007-07-25 09:12:51 $
+#   last change: $Author: hr $ $Date: 2007-07-31 13:06:20 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -193,6 +193,11 @@ STDLIBGUIMT+=-ltcmalloc
 STDLIBCUIMT+=-ltcmalloc
 STDSHLGUIMT+=-ltcmalloc
 STDSHLCUIMT+=-ltcmalloc
+.ENDIF
+.IF "$(HAVE_LD_HASH_STYLE)"  == "TRUE"
+LINKFLAGS += -Wl,--hash-style=both
+.ELSE
+LINKFLAGS += -Wl,-zdynsort
 .ENDIF
 
 # libraries for linking applications
