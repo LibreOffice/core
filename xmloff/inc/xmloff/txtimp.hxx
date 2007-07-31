@@ -4,9 +4,9 @@
  *
  *  $RCSfile: txtimp.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2007-07-06 12:08:57 $
+ *  last change: $Author: hr $ $Date: 2007-07-31 17:35:14 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -612,13 +612,16 @@ public:
     void InsertTextContent( ::com::sun::star::uno::Reference <
                             ::com::sun::star::text::XTextContent > & xContent);
 
+    // --> OD 2007-07-25 #i73509# - add parameter <bOutlineLevelAttrFound>
     ::rtl::OUString SetStyleAndAttrs(
             SvXMLImport& rImport,
             const ::com::sun::star::uno::Reference <
                 ::com::sun::star::text::XTextCursor >& rCursor,
             const ::rtl::OUString& rStyleName,
             sal_Bool bPara,
+            sal_Bool bOutlineLevelAttrFound = sal_False,
             sal_Int8 nOutlineLevel = -1 );
+    // <--
 
     /** Find a suitable name for the given outline level.
      *  If rStyleName is empty, change it to a previously used or default style
