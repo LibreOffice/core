@@ -4,9 +4,9 @@
  *
  *  $RCSfile: svdpntv.cxx,v $
  *
- *  $Revision: 1.36 $
+ *  $Revision: 1.37 $
  *
- *  last change: $Author: hr $ $Date: 2007-06-27 19:11:27 $
+ *  last change: $Author: hr $ $Date: 2007-07-31 16:43:46 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1039,7 +1039,7 @@ void SdrPaintView::EndCompleteRedraw(SdrPaintWindow& rPaintWindow)
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 
-SdrPaintWindow* SdrPaintView::BeginDrawLayers(OutputDevice* pOut, const Region& rReg)
+SdrPaintWindow* SdrPaintView::BeginDrawLayers(OutputDevice* pOut, const Region& rReg, bool bDisableIntersect)
 {
     // #i74769# use BeginCompleteRedraw() as common base
     SdrPaintWindow* pPaintWindow = BeginCompleteRedraw(pOut);
@@ -1057,7 +1057,11 @@ SdrPaintWindow* SdrPaintView::BeginDrawLayers(OutputDevice* pOut, const Region& 
             // rectangle which was derived from exactly that repaint region
             Region aOptimizedRepaintRegion(rReg);
 
-            if(pOut && OUTDEV_WINDOW == pOut->GetOutDevType())
+            // #i76114# Intersecting the region with the Window's paint region is disabled
+            // for print preview in Calc, because the intersection can be empty (if the paint
+            // region is outside of the table area of the page), and then no clip region
+            // would be set.
+            if(pOut && OUTDEV_WINDOW == pOut->GetOutDevType() && !bDisableIntersect)
             {
                 Window* pWindow = (Window*)pOut;
 
