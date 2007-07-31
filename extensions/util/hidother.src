@@ -4,9 +4,9 @@
  *
  *  $RCSfile: hidother.src,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 21:01:05 $
+ *  last change: $Author: hr $ $Date: 2007-07-31 15:58:49 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -299,3 +299,15 @@ hidspecial HID_PROP_UNCHECKEDREFVALUE           { HelpId = HID_PROP_UNCHECKEDREF
 hidspecial HID_PROP_SUBMISSION_ID               { HelpId = HID_PROP_SUBMISSION_ID; }
 hidspecial HID_PROP_LIST_BINDING                { HelpId = HID_PROP_LIST_BINDING; }
 hidspecial HID_PROP_BINDING_NAME                { HelpId = HID_PROP_BINDING_NAME; }
+
+hidspecial HID_CHECK_FOR_UPD_DLG                { HelpId = HID_CHECK_FOR_UPD_DLG; }
+hidspecial HID_CHECK_FOR_UPD_CLOSE              { HelpId = HID_CHECK_FOR_UPD_CLOSE; }
+hidspecial HID_CHECK_FOR_UPD_PAUSE              { HelpId = HID_CHECK_FOR_UPD_PAUSE; }
+hidspecial HID_CHECK_FOR_UPD_RESUME             { HelpId = HID_CHECK_FOR_UPD_RESUME; }
+hidspecial HID_CHECK_FOR_UPD_DOWNLOAD           { HelpId = HID_CHECK_FOR_UPD_DOWNLOAD; }
+hidspecial HID_CHECK_FOR_UPD_DOWNLOAD2          { HelpId = HID_CHECK_FOR_UPD_DOWNLOAD2; }
+hidspecial HID_CHECK_FOR_UPD_INSTALL            { HelpId = HID_CHECK_FOR_UPD_INSTALL; }
+hidspecial HID_CHECK_FOR_UPD_STATUS             { HelpId = HID_CHECK_FOR_UPD_STATUS; }
+hidspecial HID_CHECK_FOR_UPD_DESCRIPTION        { HelpId = HID_CHECK_FOR_UPD_DESCRIPTION; }
+hidspecial HID_CHECK_FOR_UPD_CANCEL             { HelpId = HID_CHECK_FOR_UPD_CANCEL; }
+
