@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xfont.cxx,v $
  *
- *  $Revision: 1.48 $
+ *  $Revision: 1.49 $
  *
- *  last change: $Author: rt $ $Date: 2007-07-27 10:02:13 $
+ *  last change: $Author: hr $ $Date: 2007-07-31 16:10:40 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -126,6 +126,8 @@ ExtendedFontStruct::~ExtendedFontStruct()
     for ( int nIdx = 0; nIdx < mpXlfd->NumEncodings(); nIdx++ )
         if ( mpXFontStruct[nIdx] != NULL )
             XFreeFont( mpDisplay, mpXFontStruct[nIdx] );
+
+    free(mpXFontStruct);
 }
 
 rtl_TextEncoding
