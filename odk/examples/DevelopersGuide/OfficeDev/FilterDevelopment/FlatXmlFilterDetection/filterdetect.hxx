@@ -2,9 +2,9 @@
  *
  *  $RCSfile: filterdetect.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: hr $ $Date: 2003-06-30 15:39:03 $
+ *  last change: $Author: hr $ $Date: 2007-07-31 13:56:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  the BSD license.
@@ -107,7 +107,7 @@ public:
     virtual ~FilterDetect() {}
 
      //XExtendedFilterDetection
-    virtual ::rtl::OUString SAL_CALL FilterDetect::detect( com::sun::star::uno::Sequence< com::sun::star::beans::PropertyValue >& lDescriptor )
+    virtual ::rtl::OUString SAL_CALL detect( com::sun::star::uno::Sequence< com::sun::star::beans::PropertyValue >& lDescriptor )
         throw( com::sun::star::uno::RuntimeException );
 
     // XInitialization
