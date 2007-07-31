@@ -4,9 +4,9 @@
  *
  *  $RCSfile: window.cxx,v $
  *
- *  $Revision: 1.261 $
+ *  $Revision: 1.262 $
  *
- *  last change: $Author: rt $ $Date: 2007-07-24 10:23:04 $
+ *  last change: $Author: hr $ $Date: 2007-07-31 16:09:47 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -4755,6 +4755,7 @@ Window::~Window()
         delete mpWindowImpl->mpChildClipRegion;
 
     delete mpWindowImpl->mpAccessibleInfos;
+    delete mpWindowImpl->mpControlFont;
 
     // should be the last statements
     delete mpWindowImpl; mpWindowImpl = NULL;
