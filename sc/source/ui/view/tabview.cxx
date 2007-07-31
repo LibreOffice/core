@@ -4,9 +4,9 @@
  *
  *  $RCSfile: tabview.cxx,v $
  *
- *  $Revision: 1.32 $
+ *  $Revision: 1.33 $
  *
- *  last change: $Author: rt $ $Date: 2007-07-06 12:47:23 $
+ *  last change: $Author: hr $ $Date: 2007-07-31 16:37:51 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -2412,9 +2412,14 @@ void ScTabView::SetNewVisArea()
     if (pDrawView)
         pDrawView->VisAreaChanged();    // kein Window uebergeben -> alle Fenster
 
+    UpdateAllOverlays();                // #i79909# with drawing MapMode set
+
     for (i=0; i<4; i++)
         if (pGridWin[i] && aDrawMode[i] != aOldMode[i])
+        {
+            pGridWin[i]->flushOverlayManager();     // #i79909# flush overlays before switching to edit MapMode
             pGridWin[i]->SetMapMode(aOldMode[i]);
+        }
 
     SfxViewFrame* pViewFrame = aViewData.GetViewShell()->GetViewFrame();
     if (pViewFrame)
@@ -2433,8 +2438,6 @@ void ScTabView::SetNewVisArea()
     }
     if (aViewData.GetViewShell()->HasAccessibilityObjects())
         aViewData.GetViewShell()->BroadcastAccessibility(SfxSimpleHint(SC_HINT_ACC_VISAREACHANGED));
-
-    UpdateAllOverlays();
 }
 
 sal_Bool ScTabView::HasPageFieldDataAtCursor() const
