@@ -4,9 +4,9 @@
  *
  *  $RCSfile: saldisp.cxx,v $
  *
- *  $Revision: 1.90 $
+ *  $Revision: 1.91 $
  *
- *  last change: $Author: rt $ $Date: 2007-07-03 14:07:57 $
+ *  last change: $Author: hr $ $Date: 2007-07-31 16:10:02 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1880,7 +1880,7 @@ KeySym SalDisplay::GetKeySym( XKeyEvent        *pEvent,
 
 XLIB_Cursor SalDisplay::GetPointer( int ePointerStyle )
 {
-    if( ePointerStyle > POINTER_COUNT )
+    if( ePointerStyle >= POINTER_COUNT )
         return 0;
 
     XLIB_Cursor &aCur = aPointerCache_[ePointerStyle];
