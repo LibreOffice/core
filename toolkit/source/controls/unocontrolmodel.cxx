@@ -4,9 +4,9 @@
  *
  *  $RCSfile: unocontrolmodel.cxx,v $
  *
- *  $Revision: 1.56 $
+ *  $Revision: 1.57 $
  *
- *  last change: $Author: rt $ $Date: 2007-07-06 14:27:38 $
+ *  last change: $Author: hr $ $Date: 2007-07-31 16:01:16 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1020,10 +1020,7 @@ void UnoControlModel::read( const ::com::sun::star::uno::Reference< ::com::sun::
                             pFD = new ::com::sun::star::awt::FontDescriptor;
                             ImplControlProperty* pProp = mpData->Get( BASEPROPERTY_FONTDESCRIPTOR );
                             if ( pProp ) // wegen den Defaults...
-                            {
-                                pFD = new ::com::sun::star::awt::FontDescriptor;
                                 pProp->GetValue() >>= *pFD;
-                            }
                         }
                         pFD->Name = InStream->readUTF();
                         pFD->StyleName = InStream->readUTF();
