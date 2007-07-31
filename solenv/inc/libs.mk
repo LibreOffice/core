@@ -4,9 +4,9 @@
 #
 #   $RCSfile: libs.mk,v $
 #
-#   $Revision: 1.116 $
+#   $Revision: 1.117 $
 #
-#   last change: $Author: obo $ $Date: 2007-07-18 08:01:00 $
+#   last change: $Author: hr $ $Date: 2007-07-31 13:06:06 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -32,7 +32,7 @@
 #     MA  02111-1307  USA
 #
 #*************************************************************************
-LIBSMKREV!:="$$Revision: 1.116 $$"
+LIBSMKREV!:="$$Revision: 1.117 $$"
 
 .IF "$(GUI)"=="UNX" || "$(COM)"=="GCC"
 
@@ -129,6 +129,7 @@ LDAPSDKLIB=-lldap50
 .ENDIF			# "$(GUI)$(COM)"=="WNTGCC"
 ICOLIB=-lico$(OFFICEUPD)$(DLLPOSTFIX)
 VCLLIB=-lvcl$(OFFICEUPD)$(DLLPOSTFIX)
+SNDFILELIB*=-lsndfile
 BASEGFXLIB=-lbasegfx$(OFFICEUPD)$(DLLPOSTFIX)
 BASEBMPLIB=-lbasebmp$(OFFICEUPD)$(DLLPOSTFIX)
 CANVASTOOLSLIB=-lcanvastools$(OFFICEUPD)$(DLLPOSTFIX)
@@ -322,7 +323,7 @@ HNJLIB=-lhnj
 MYSPELLLIB=-lmyspell
 COSVLIB=-lcosv
 UDMLIB=-ludm
-HUNSPELLLIB=-lhunspell
+HUNSPELLLIB*=-lhunspell
 ULINGULIB=-lulingu
 MYTHESLIB=-lmythes
 PYUNOLIB=-lpyuno
@@ -474,7 +475,7 @@ HNJLIB= libhnj.lib
 MYSPELLLIB= $(LIBPRE) myspell.lib
 COSVLIB= $(LIBPRE) cosv.lib
 UDMLIB= $(LIBPRE) udm.lib
-HUNSPELLLIB=hunspell.lib
+HUNSPELLLIB*=hunspell.lib
 ULINGULIB=$(LIBPRE) libulingu.lib
 MYTHESLIB=libmythes.lib
 PYUNOLIB=ipyuno.lib
