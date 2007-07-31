@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ListenAtCalcRangeInDraw.java,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2005-01-31 16:10:57 $
+ *  last change: $Author: hr $ $Date: 2007-07-31 13:54:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  the BSD license.
@@ -189,6 +189,10 @@ public class ListenAtCalcRangeInDraw implements XChartDataChangeEventListener
 
         try
         {
+            XPropertySet aDocProp = (XPropertySet) UnoRuntime.queryInterface(
+                XPropertySet.class, maChartDocument );
+            aDocProp.setPropertyValue( "HasMainTitle", new Boolean( true ));
+
             ((XPropertySet) UnoRuntime.queryInterface(
                 XPropertySet.class, maChartDocument.getSubTitle())).setPropertyValue(
                 "String", aTitle );

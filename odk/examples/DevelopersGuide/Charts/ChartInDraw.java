@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ChartInDraw.java,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2005-01-31 16:10:09 $
+ *  last change: $Author: hr $ $Date: 2007-07-31 13:54:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  the BSD license.
@@ -190,6 +190,10 @@ public class ChartInDraw
                com.sun.star.lang.IllegalArgumentException, WrappedTargetException
     {
         // change main title
+        XPropertySet aDocProp = (XPropertySet) UnoRuntime.queryInterface(
+            XPropertySet.class, maChartDocument );
+        aDocProp.setPropertyValue( "HasMainTitle", new Boolean( true ));
+
         XShape aTitle = maChartDocument.getTitle();
         XPropertySet aTitleProp = (XPropertySet) UnoRuntime.queryInterface( XPropertySet.class, aTitle );
 
@@ -282,7 +286,6 @@ public class ChartInDraw
         aMatrix.Line3.Column3 =  fCosX *  fCosY;
 
         aDiaProp.setPropertyValue( "D3DTransformMatrix", aMatrix );
-
 
         // add a red light source
 
