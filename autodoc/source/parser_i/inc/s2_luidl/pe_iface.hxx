@@ -4,9 +4,9 @@
  *
  *  $RCSfile: pe_iface.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-07 19:01:48 $
+ *  last change: $Author: hr $ $Date: 2007-07-31 16:10:01 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -176,7 +176,7 @@ class PE_Interface : public UnoIDL_PE,
 
     Dyn<PE_Type>        pPE_Type;
     ary::idl::Type_id   nCurParsed_Base;
-    bool                bOptional;
+    bool                bOptionalMember;
 };
 
 
