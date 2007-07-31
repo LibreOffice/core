@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.30 $
+#   $Revision: 1.31 $
 #
-#   last change: $Author: obo $ $Date: 2007-01-25 12:43:18 $
+#   last change: $Author: hr $ $Date: 2007-07-31 13:58:33 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -99,7 +99,6 @@ SLOFILES = \
     $(SLO)$/fmtools.obj     \
     $(SLO)$/fmshimp.obj     \
     $(SLO)$/fmshell.obj     \
-    $(SLO)$/fmsearch.obj	\
     $(SLO)$/fmsrcimp.obj	\
     $(SLO)$/fmview.obj		\
     $(SLO)$/sdbdatacolumn.obj \
