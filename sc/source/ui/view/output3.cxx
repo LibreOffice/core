@@ -4,9 +4,9 @@
  *
  *  $RCSfile: output3.cxx,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: hr $ $Date: 2007-06-26 11:52:21 $
+ *  last change: $Author: hr $ $Date: 2007-07-31 16:37:24 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -122,10 +122,20 @@ Point ScOutputData::PrePrintDrawingLayer(long nLogStX, long nLogStY )
 
         if(pLocalDrawView)
         {
+            // #i76114# MapMode has to be set because BeginDrawLayers uses GetPaintRegion
+            MapMode aOldMode = pDev->GetMapMode();
+            if (!bMetaFile)
+                pDev->SetMapMode( MapMode( MAP_100TH_MM, aMMOffset, aOldMode.GetScaleX(), aOldMode.GetScaleY() ) );
+
             // #i74769# work with SdrPaintWindow directly
+            // #i76114# pass bDisableIntersect = true, because the intersection of the table area
+            // with the Window's paint region can be empty
             Region aRectRegion(aRect);
-            mpTargetPaintWindow = pLocalDrawView->BeginDrawLayers(pDev, aRectRegion);
+            mpTargetPaintWindow = pLocalDrawView->BeginDrawLayers(pDev, aRectRegion, true);
             OSL_ENSURE(mpTargetPaintWindow, "BeginDrawLayers: Got no SdrPaintWindow (!)");
+
+            if (!bMetaFile)
+                pDev->SetMapMode( aOldMode );
         }
     }
 
