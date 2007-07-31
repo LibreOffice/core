@@ -4,9 +4,9 @@
  *
  *  $RCSfile: types.idl,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: kz $ $Date: 2006-07-20 16:08:09 $
+ *  last change: $Author: hr $ $Date: 2007-07-31 13:48:41 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -665,6 +665,9 @@ struct BigStruct {
     com::sun::star::uno::XInterface m18;
     TDByte m19;
     TDEnum m20;
+    sequence<unsigned short> m21;
+    sequence<char> m22;
+    sequence< sequence<char> > m23;
 };
 
 struct Struct<T, U> {
@@ -696,6 +699,7 @@ exception TestException1: com::sun::star::uno::RuntimeException {
     any m2;
     HelperEnum m3;
     Struct<long, long> m4;
+    unsigned short m5;
 };
 
 exception TestException2: TestException1 {};
