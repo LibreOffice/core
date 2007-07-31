@@ -7,9 +7,9 @@ eval 'exec perl -wS $0 ${1+"$@"}'
 #
 #   $RCSfile: smoketest.pl,v $
 #
-#   $Revision: 1.24 $
+#   $Revision: 1.25 $
 #
-#   last change: $Author: vg $ $Date: 2007-02-05 11:40:45 $
+#   last change: $Author: hr $ $Date: 2007-07-31 13:03:42 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -256,7 +256,7 @@ if ( $ARGV[0] ) {
 
 ( $script_name = $0 ) =~ s/^.*\b(\w+)\.pl$/$1/;
 
-$id_str = ' $Revision: 1.24 $ ';
+$id_str = ' $Revision: 1.25 $ ';
 $id_str =~ /Revision:\s+(\S+)\s+\$/
   ? ($script_rev = $1) : ($script_rev = "-");
 
@@ -574,7 +574,7 @@ sub doInstall {
             if ( $ENV{'SYSTEM_MOZILLA'} eq 'YES' ) {
             $ENV{'LD_LIBRARY_PATH'} = "$ENV{'MOZ_LIB'}:$ENV{'LD_LIBRARY_PATH'}";
             }
-            $ENV{'PYTHONPATH'} = "$ENV{SOLARROOT}/instsetoo_native/$ENV{INPATH}/bin:$ENV{SOLARVER}/$ENV{UPD}/$ENV{INPATH}/lib";
+            $ENV{'PYTHONPATH'} = "$ENV{SOLARROOT}/instsetoo_native/$ENV{INPATH}/bin:$ENV{SOLARVERSION}/$ENV{INPATH}/lib";
             $ENV{OUT} = "../$ENV{INPATH}";
             $ENV{LOCAL_OUT} = "../$ENV{INPATH}";
             $ENV{LOCAL_COMMON_OUT} = "../$ENV{INPATH}";
