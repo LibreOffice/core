@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dlgfact.hxx,v $
  *
- *  $Revision: 1.30 $
+ *  $Revision: 1.31 $
  *
- *  last change: $Author: hr $ $Date: 2007-06-27 17:02:03 $
+ *  last change: $Author: hr $ $Date: 2007-07-31 13:57:00 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -762,10 +762,9 @@ public:
                                             sal_uInt32 nResId);
     virtual AbstractFmSearchDialog* CreateFmSearchDialog(Window* pParent, //add for FmSearchDialog
                                                         const String& strInitialText,
-                                                        const String& strContexts,
+                                                        const ::std::vector< String >& _rContexts,
                                                         sal_Int16 nInitialContext,
-                                                        const Link& lnkContextSupplier,
-                                                        FMSEARCH_MODE eMode = SM_ALLOWSCHEDULE);
+                                                        const Link& lnkContextSupplier);
     virtual AbstractGraphicFilterDialog *   CreateGraphicFilterEmboss (Window* pParent,  //add for GraphicFilterEmboss
                                             const Graphic& rGraphic,
                                             RECT_POINT eLightSource,
