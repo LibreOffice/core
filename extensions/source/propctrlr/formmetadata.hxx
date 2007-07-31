@@ -4,9 +4,9 @@
  *
  *  $RCSfile: formmetadata.hxx,v $
  *
- *  $Revision: 1.32 $
+ *  $Revision: 1.33 $
  *
- *  last change: $Author: rt $ $Date: 2007-07-03 13:06:35 $
+ *  last change: $Author: hr $ $Date: 2007-07-31 14:07:52 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -348,7 +348,6 @@ namespace pcr
     #define PROPERTY_ID_SHOWS_ROOT_HANDLES           192
     #define PROPERTY_ID_EDITABLE                     193
     #define PROPERTY_ID_INVOKES_STOP_NOT_EDITING     194
-    #define PROPERTY_ID_ROW_HEIGHT                   195
 
 //............................................................................
 } // namespace pcr
