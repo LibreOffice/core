@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ttcr.c,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: hr $ $Date: 2006-06-19 10:25:29 $
+ *  last change: $Author: hr $ $Date: 2007-07-31 16:01:59 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -33,7 +33,7 @@
  *
  ************************************************************************/
 
-/* $Id: ttcr.c,v 1.8 2006-06-19 10:25:29 hr Exp $ */
+/* $Id: ttcr.c,v 1.9 2007-07-31 16:01:59 hr Exp $ */
 
 /*
  * TrueTypeCreator method implementation
@@ -406,10 +406,9 @@ int StreamToFile(TrueTypeCreator *_this, const char* fname)
     int r;
     FILE* fd;
 
+    if ((r = StreamToMemory(_this, &ptr, &length)) != SF_OK) return r;
     if (!fname) return SF_BADFILE;
     if ((fd = fopen(fname, "wb")) == NULL) return SF_BADFILE;
-
-    if ((r = StreamToMemory(_this, &ptr, &length)) != SF_OK) return r;
 
     if (fwrite(ptr, 1, length, fd) != length) {
         r = SF_FILEIO;
