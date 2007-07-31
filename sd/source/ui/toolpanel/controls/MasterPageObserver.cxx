@@ -4,9 +4,9 @@
  *
  *  $RCSfile: MasterPageObserver.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: kz $ $Date: 2006-12-12 18:49:35 $
+ *  last change: $Author: hr $ $Date: 2007-07-31 17:25:53 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -234,7 +234,9 @@ void MasterPageObserver::Implementation::UnregisterDocument (
 {
     EndListening (rDocument);
 
-    maUsedMasterPages.erase(maUsedMasterPages.find(&rDocument));
+    MasterPageContainer::iterator aMasterPageDescriptor(maUsedMasterPages.find(&rDocument));
+    if(aMasterPageDescriptor != maUsedMasterPages.end())
+        maUsedMasterPages.erase(aMasterPageDescriptor);
 }
 
 
