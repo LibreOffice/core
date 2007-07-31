@@ -4,9 +4,9 @@
  *
  *  $RCSfile: fmsearch.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: vg $ $Date: 2007-04-11 15:51:49 $
+ *  last change: $Author: hr $ $Date: 2007-07-31 13:55:52 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -85,21 +85,13 @@
 #include "svx/svxdllapi.h"
 #endif
 
-//FORWARD_DECLARE_INTERFACE(uno,Reference)
 FORWARD_DECLARE_INTERFACE(util,XNumberFormatsSupplier)
-
-// ===================================================================================================
-// moegliche Rueckgabewerte fuer den Found-Handler
-#define FM_SEARCH_GETFOCUS_ASYNC    0x0001
-    // setzt den Fokus auf den Dialog nicht sofort nach dem Aufruf des Found-Handlers, sondern postet sich selber dafuer
-    // ein Ereignis
-
-#define MAX_HISTORY_ENTRIES     50
 
 // ===================================================================================================
 // Hilfsmethoden
 
-SVX_DLLPUBLIC sal_Bool IsSearchableControl(const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface>& _xControl, ::rtl::OUString* pCurrentText = NULL);
+SVX_DLLPUBLIC sal_Bool IsSearchableControl( const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface>& _xControl,
+                                            ::rtl::OUString* pCurrentText = NULL);
     // check if the control has one of the interfaces we can use for searching
     // *pCurrentText will be filled with the current text of the control (as used when searching this control)
 
@@ -113,9 +105,6 @@ struct FmFoundRecordInformation
     sal_Int16       nContext;   // Kontext, in dem gesucht und gefunden wurde (falls die aktuelle Suche verschiedene solche kennt)
 };
 
-DECLARE_STL_VECTOR( ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface>, InterfaceArray);
-    // TODO : use stl
-
 // ===================================================================================================
 // = struct FmSearchContext - Informationen fuer Suche in verschiedenen Kontexten
 // ===================================================================================================
@@ -127,18 +116,9 @@ struct FmSearchContext
     // [out]
     ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XResultSet>           xCursor;        // der Iterator fuer diesen Kontext
     String                  strUsedFields;  // eine Liste von durch ';' getrennten Feldnamen
-    InterfaceArray          arrFields;      // die korrespondierenden Text-Interfaces fuer die Felder in strUsedFields
+    ::std::vector< ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > >
+                            arrFields;      // die korrespondierenden Text-Interfaces fuer die Felder in strUsedFields
     String                  sFieldDisplayNames;     // if not empty : names to be displayed for the searchable fields (must have the same token count as strUsedFields !)
 };
 
-// ===================================================================================================
-// = class FmSearchDialog - Dialog fuer Suchen in Formularen/Tabellen
-// ===================================================================================================
-namespace svxform {
-    class FmSearchConfigItem;
-}
-
-class FmSearchEngine;
-struct FmSearchProgress;
-enum FMSEARCH_MODE { SM_BRUTE, SM_ALLOWSCHEDULE, SM_USETHREAD };
 #endif // _FMSEARCH_HXX
