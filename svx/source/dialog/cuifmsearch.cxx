@@ -4,9 +4,9 @@
  *
  *  $RCSfile: cuifmsearch.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: hr $ $Date: 2007-06-27 16:57:30 $
+ *  last change: $Author: hr $ $Date: 2007-07-31 13:56:19 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -65,9 +65,6 @@
 #include <svx/dialmgr.hxx>
 #endif
 
-//CHINA001 #ifndef _SVX_SRCHXTRA_HXX
-//CHINA001 #include "srchxtra.hxx"
-//CHINA001 #endif // _SVX_SRCHXTRA_HXX
 #include <sfx2/tabdlg.hxx> //add by CHINA001 for SfxItemSet
 #ifndef _OSL_MUTEX_HXX_
 #include <osl/mutex.hxx>
@@ -124,79 +121,7 @@ using namespace ::svxform;
 using namespace ::com::sun::star::sdbc;
 using namespace ::com::sun::star::util;
 
-
-
-//========================================================================
-#define INIT_MEMBERS()  \
-     m_flSearchFor              (this, SVX_RES(FL_SEARCHFOR))         \
-    ,m_rbSearchForText          (this, SVX_RES(RB_SEARCHFORTEXT))       \
-    ,m_rbSearchForNull          (this, SVX_RES(RB_SEARCHFORNULL))       \
-    ,m_rbSearchForNotNull       (this, SVX_RES(RB_SEARCHFORNOTNULL))    \
-    ,m_cmbSearchText            (this, SVX_RES(CMB_SEARCHTEXT))     \
-    ,m_flWhere                  (this, SVX_RES(FL_WHERE))             \
-    ,m_ftForm                   (this, SVX_RES(FT_FORM))                \
-    ,m_lbForm                   (this, SVX_RES(LB_FORM))                \
-    ,m_rbAllFields              (this, SVX_RES(RB_ALLFIELDS))           \
-    ,m_rbSingleField            (this, SVX_RES(RB_SINGLEFIELD))     \
-    ,m_lbField                  (this, SVX_RES(LB_FIELD))               \
-    ,m_flOptions                (this, SVX_RES(FL_OPTIONS))           \
-    ,m_ftPosition               (this, SVX_RES(FT_POSITION))            \
-    ,m_lbPosition               (this, SVX_RES(LB_POSITION))            \
-    ,m_cbUseFormat              (this, SVX_RES(CB_USEFORMATTER))        \
-    ,m_cbCase                   (this, SVX_RES(CB_CASE))                \
-    ,m_cbBackwards              (this, SVX_RES(CB_BACKWARD))            \
-    ,m_cbStartOver              (this, SVX_RES(CB_STARTOVER))           \
-    ,m_cbWildCard               (this, SVX_RES(CB_WILDCARD))            \
-    ,m_cbRegular                (this, SVX_RES(CB_REGULAR))         \
-    ,m_cbApprox                 (this, SVX_RES(CB_APPROX))          \
-    ,m_pbApproxSettings         (this, SVX_RES(PB_APPROXSETTINGS))  \
-    ,m_aHalfFullFormsCJK        (this, SVX_RES(CB_HALFFULLFORMS))       \
-    ,m_aSoundsLikeCJK           (this, SVX_RES(CB_SOUNDSLIKECJK))       \
-    ,m_aSoundsLikeCJKSettings   (this, SVX_RES(PB_SOUNDSLIKESETTINGS))  \
-    ,m_flState                  (this, SVX_RES(FL_STATE))             \
-    ,m_ftRecordLabel            (this, SVX_RES(FT_RECORDLABEL))     \
-    ,m_ftRecord                 (this, SVX_RES(FT_RECORD))          \
-    ,m_ftHint                   (this, SVX_RES(FT_HINT))                \
-    ,m_pbSearchAgain            (this, SVX_RES(PB_SEARCH))          \
-    ,m_pbClose                  (this, SVX_RES(1))                  \
-    ,m_pbHelp                   (this, SVX_RES(1))                  \
-    ,m_pPreSearchFocus( NULL )
-
-//------------------------------------------------------------------------
-FmSearchDialog::FmSearchDialog(Window* pParent, const Reference< XResultSet >& xCursor, const UniString& strVisibleFields,
-    const UniString& sInitialText, const Reference< XNumberFormatsSupplier >& xFormatSupplier, FMSEARCH_MODE eMode)
-    :ModalDialog(pParent, SVX_RES(RID_SVXDLG_SEARCHFORM))
-    ,INIT_MEMBERS()
-    ,m_pConfig( NULL )
-
-{
-    // hier muss ich die ListBox fuer die Kontextauswahl entfernen :
-    sal_Int32 nUpper = m_lbForm.GetPosPixel().Y();
-    sal_Int32 nDifference = m_rbAllFields.GetPosPixel().Y() - nUpper;
-
-    // einige Controls muessen nach oben verschoben werden
-    Control* pFieldsToMove[] = { &m_rbAllFields, &m_rbSingleField, &m_lbField, &m_flOptions, &m_ftPosition, &m_lbPosition,
-            &m_cbUseFormat, &m_cbCase, &m_cbBackwards, &m_cbStartOver, &m_cbWildCard, &m_cbRegular, &m_cbApprox,
-            &m_pbApproxSettings, &m_aHalfFullFormsCJK, &m_aSoundsLikeCJK, &m_aSoundsLikeCJKSettings,
-            &m_flState, &m_ftRecordLabel, &m_ftRecord, &m_ftHint };
-    implMoveControls(pFieldsToMove, sizeof(pFieldsToMove)/sizeof(pFieldsToMove[0]), nDifference, &m_flWhere);
-
-    Point pt = m_rbAllFields.GetPosPixel();
-    pt.X() = m_ftForm.GetPosPixel().X();
-    m_rbAllFields.SetPosPixel( pt );
-    pt = m_rbSingleField.GetPosPixel();
-    pt.X() = m_ftForm.GetPosPixel().X();
-    m_rbSingleField.SetPosPixel( pt );
-
-    // und die beiden ueberfluessigen muessen weg
-    m_ftForm.Hide();
-    m_lbForm.Hide();
-
-    m_pSearchEngine = new FmSearchEngine(
-        ::comphelper::getProcessServiceFactory(), xCursor, strVisibleFields, xFormatSupplier, eMode );
-    initCommon( xCursor );
-    Init(strVisibleFields, sInitialText);
-}
+#define MAX_HISTORY_ENTRIES     50
 
 //------------------------------------------------------------------------
 void FmSearchDialog::initCommon( const Reference< XResultSet >& _rxCursor )
@@ -235,10 +160,42 @@ void FmSearchDialog::initCommon( const Reference< XResultSet >& _rxCursor )
 }
 
 //------------------------------------------------------------------------
-FmSearchDialog::FmSearchDialog(Window* pParent, const UniString& sInitialText, const UniString& strContexts, sal_Int16 nInitialContext,
-    const Link& lnkContextSupplier, FMSEARCH_MODE eMode)
+FmSearchDialog::FmSearchDialog(Window* pParent, const UniString& sInitialText, const ::std::vector< String >& _rContexts, sal_Int16 nInitialContext,
+    const Link& lnkContextSupplier)
     :ModalDialog(pParent, SVX_RES(RID_SVXDLG_SEARCHFORM))
-    ,INIT_MEMBERS()
+    ,m_flSearchFor              (this, SVX_RES(FL_SEARCHFOR))
+    ,m_rbSearchForText          (this, SVX_RES(RB_SEARCHFORTEXT))
+    ,m_rbSearchForNull          (this, SVX_RES(RB_SEARCHFORNULL))
+    ,m_rbSearchForNotNull       (this, SVX_RES(RB_SEARCHFORNOTNULL))
+    ,m_cmbSearchText            (this, SVX_RES(CMB_SEARCHTEXT))
+    ,m_flWhere                  (this, SVX_RES(FL_WHERE))
+    ,m_ftForm                   (this, SVX_RES(FT_FORM))
+    ,m_lbForm                   (this, SVX_RES(LB_FORM))
+    ,m_rbAllFields              (this, SVX_RES(RB_ALLFIELDS))
+    ,m_rbSingleField            (this, SVX_RES(RB_SINGLEFIELD))
+    ,m_lbField                  (this, SVX_RES(LB_FIELD))
+    ,m_flOptions                (this, SVX_RES(FL_OPTIONS))
+    ,m_ftPosition               (this, SVX_RES(FT_POSITION))
+    ,m_lbPosition               (this, SVX_RES(LB_POSITION))
+    ,m_cbUseFormat              (this, SVX_RES(CB_USEFORMATTER))
+    ,m_cbCase                   (this, SVX_RES(CB_CASE))
+    ,m_cbBackwards              (this, SVX_RES(CB_BACKWARD))
+    ,m_cbStartOver              (this, SVX_RES(CB_STARTOVER))
+    ,m_cbWildCard               (this, SVX_RES(CB_WILDCARD))
+    ,m_cbRegular                (this, SVX_RES(CB_REGULAR))
+    ,m_cbApprox                 (this, SVX_RES(CB_APPROX))
+    ,m_pbApproxSettings         (this, SVX_RES(PB_APPROXSETTINGS))
+    ,m_aHalfFullFormsCJK        (this, SVX_RES(CB_HALFFULLFORMS))
+    ,m_aSoundsLikeCJK           (this, SVX_RES(CB_SOUNDSLIKECJK))
+    ,m_aSoundsLikeCJKSettings   (this, SVX_RES(PB_SOUNDSLIKESETTINGS))
+    ,m_flState                  (this, SVX_RES(FL_STATE))
+    ,m_ftRecordLabel            (this, SVX_RES(FT_RECORDLABEL))
+    ,m_ftRecord                 (this, SVX_RES(FT_RECORD))
+    ,m_ftHint                   (this, SVX_RES(FT_HINT))
+    ,m_pbSearchAgain            (this, SVX_RES(PB_SEARCH))
+    ,m_pbClose                  (this, SVX_RES(1))
+    ,m_pbHelp                   (this, SVX_RES(1))
+    ,m_pPreSearchFocus( NULL )
     ,m_lnkContextSupplier(lnkContextSupplier)
     ,m_pConfig( NULL )
 {
@@ -256,10 +213,13 @@ FmSearchDialog::FmSearchDialog(Window* pParent, const UniString& sInitialText, c
         DBG_ASSERT(fmscInitial.arrFields.at(i).is(), "FmSearchDialog::FmSearchDialog : invalid data supplied by ContextSupplier !");
 #endif // (OSL_DEBUG_LEVEL > 1) || DBG_UTIL
 
-    for (xub_StrLen j=0; j<strContexts.GetTokenCount(';'); ++j)
+    for (   ::std::vector< String >::const_iterator context = _rContexts.begin();
+            context != _rContexts.end();
+            ++context
+        )
     {
         m_arrContextFields.push_back(String());
-        m_lbForm.InsertEntry(strContexts.GetToken(j, ';'));
+        m_lbForm.InsertEntry(*context);
     }
     m_lbForm.SelectEntryPos(nInitialContext);
 
@@ -291,7 +251,7 @@ FmSearchDialog::FmSearchDialog(Window* pParent, const UniString& sInitialText, c
     }
 
     m_pSearchEngine = new FmSearchEngine(
-        ::comphelper::getProcessServiceFactory(), fmscInitial.xCursor, fmscInitial.strUsedFields, fmscInitial.arrFields, eMode );
+        ::comphelper::getProcessServiceFactory(), fmscInitial.xCursor, fmscInitial.strUsedFields, fmscInitial.arrFields, SM_ALLOWSCHEDULE );
     initCommon( fmscInitial.xCursor );
 
     if (fmscInitial.sFieldDisplayNames.Len() != 0)
@@ -659,9 +619,10 @@ void FmSearchDialog::InitContext(sal_Int16 nContext)
     fmscContext.nContext = nContext;
 
 #ifdef DBG_UTIL
-    sal_uInt32 nResult = m_lnkContextSupplier.Call(&fmscContext);
-    DBG_ASSERT(nResult > 0, "FmSearchDialog::InitContext : ContextSupplier didn't give me any controls !");
+    sal_uInt32 nResult =
 #endif
+    m_lnkContextSupplier.Call(&fmscContext);
+    DBG_ASSERT(nResult > 0, "FmSearchDialog::InitContext : ContextSupplier didn't give me any controls !");
 
     // packen wir zuerst die Feld-Namen in die entsprechende Listbox
     m_lbField.Clear();
@@ -854,20 +815,10 @@ void FmSearchDialog::OnFound(const ::com::sun::star::uno::Any& aCursorPos, sal_I
         // genau das wird auch in RebuildUsedFields sichergestellt
 
     // dem Handler Bescheid sagen
-    sal_Int16 nResult = (sal_Int16)m_lnkFoundHandler.Call(&friInfo);
+    m_lnkFoundHandler.Call(&friInfo);
 
     // und wieder Focus auf mich
-    if (nResult & FM_SEARCH_GETFOCUS_ASYNC)
-        Application::PostUserEvent(LINK(this, FmSearchDialog, AsyncGrabFocus));
-    else
-        m_cmbSearchText.GrabFocus();
-}
-
-//------------------------------------------------------------------------------
-IMPL_LINK(FmSearchDialog, AsyncGrabFocus, void*, EMPTYARG)
-{
     m_cmbSearchText.GrabFocus();
-    return 0;
 }
 
 //------------------------------------------------------------------------
