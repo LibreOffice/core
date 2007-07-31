@@ -4,9 +4,9 @@
  *
  *  $RCSfile: feshview.cxx,v $
  *
- *  $Revision: 1.56 $
+ *  $Revision: 1.57 $
  *
- *  last change: $Author: obo $ $Date: 2007-07-18 10:48:48 $
+ *  last change: $Author: hr $ $Date: 2007-07-31 17:41:19 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -199,7 +199,14 @@ extern BOOL bNoInterrupt;       // in swapp.cxx
         bNoInterrupt = FALSE;
     }
     else if( !pFlyFmt || RES_DRAWFRMFMT == pFlyFmt->Which() )
+    {
+        // --> OD 2007-07-25 #136039#
+        // assure consistent cursor
+        pSh->KillPams();
+        pSh->ClearMark();
+        // <--
         pSh->SetCrsr( pSh->Imp()->GetDrawView()->GetAllMarkedRect().TopLeft(), TRUE);
+    }
 }
 
 /*************************************************************************
@@ -847,6 +854,11 @@ const SwFrmFmt* SwFEShell::SelFlyGrabCrsr()
             if ( pCFrm )
             {
                 SwCntntNode *pCNode = pCFrm->GetNode();
+                // --> OD 2007-07-25 #126039#
+                // assure, that the cursor is consistent.
+                KillPams();
+                ClearMark();
+                // <--
                 SwPaM       *pCrsr  = GetCrsr();
 
                 pCrsr->GetPoint()->nNode = *pCNode;
@@ -2605,10 +2617,16 @@ BOOL SwFEShell::GetObjAttr( SfxItemSet &rSet ) const
     {
         SdrObject *pObj = rMrkList.GetMark( i )->GetMarkedSdrObj();
         SwDrawContact *pContact = (SwDrawContact*)GetUserCall(pObj);
-        if ( i )
-            rSet.MergeValues( pContact->GetFmt()->GetAttrSet() );
-        else
-            rSet.Put( pContact->GetFmt()->GetAttrSet() );
+        // --> OD 2007-07-24 #143008# - make code robust
+        ASSERT( pContact, "<SwFEShell::GetObjAttr(..)> - missing <pContact> - please inform OD." );
+        if ( pContact )
+        {
+            if ( i )
+                rSet.MergeValues( pContact->GetFmt()->GetAttrSet() );
+            else
+                rSet.Put( pContact->GetFmt()->GetAttrSet() );
+        }
+        // <--
     }
     return TRUE;
 }
