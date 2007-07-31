@@ -4,9 +4,9 @@
  *
  *  $RCSfile: interpr1.cxx,v $
  *
- *  $Revision: 1.49 $
+ *  $Revision: 1.50 $
  *
- *  last change: $Author: rt $ $Date: 2007-07-24 09:23:19 $
+ *  last change: $Author: hr $ $Date: 2007-07-31 16:36:31 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -2581,6 +2581,8 @@ static ::rtl::OUString lcl_convertIntoHalfWidth( const ::rtl::OUString & rStr )
                     aRes.append((sal_Unicode)0xff9e); break;
                 case 0x309c:    // KATAKANA-HIRAGANA SEMI-VOICED SOUND MARK
                     aRes.append((sal_Unicode)0xff9f); break;
+                case 0x30fb:    // KATAKANA MIDDLE DOT
+                    aRes.append((sal_Unicode)0xff65); break;
                 case 0x30fc:    // KATAKANA-HIRAGANA PROLONGED SOUND MARK
                     aRes.append((sal_Unicode)0xff70); break;
                 case 0xffe5:    // FULLWIDTH YEN SIGN => REVERSE SOLIDUS "\"
@@ -2716,6 +2718,8 @@ static ::rtl::OUString lcl_convertIntoFullWidth( const ::rtl::OUString & rStr )
                     aRes.append((sal_Unicode)0x300d); break;
                 case 0xff64:    // HALFWIDTH IDEOGRAPHIC COMMA
                     aRes.append((sal_Unicode)0x3001); break;
+                case 0xff65:    // HALFWIDTH KATAKANA MIDDLE DOT
+                    aRes.append((sal_Unicode)0x30fb); break;
                 default:
                     aRes.append( pSrc[i] );
             }
