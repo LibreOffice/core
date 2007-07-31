@@ -4,9 +4,9 @@
  *
  *  $RCSfile: findfrm.cxx,v $
  *
- *  $Revision: 1.42 $
+ *  $Revision: 1.43 $
  *
- *  last change: $Author: rt $ $Date: 2007-07-26 08:19:27 $
+ *  last change: $Author: hr $ $Date: 2007-07-31 17:41:48 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1612,7 +1612,8 @@ SwCellFrm* SwCellFrm::GetPreviousCell() const
             if ( pMaster && pMaster->HasFollowFlowLine() )
             {
                 SwRowFrm* pMasterRow = static_cast<SwRowFrm*>(pMaster->GetLastLower());
-                pRet = lcl_FindCorrespondingCellFrm( *((SwRowFrm*)pRow), *this, *pMasterRow, false );
+                if ( pMasterRow )
+                    pRet = lcl_FindCorrespondingCellFrm( *((SwRowFrm*)pRow), *this, *pMasterRow, false );
                 if ( pRet && pRet->GetTabBox()->getRowSpan() < 1 )
                     pRet = &const_cast<SwCellFrm&>(pRet->FindStartEndOfRowSpanCell( true, true ));
             }
