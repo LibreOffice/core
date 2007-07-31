@@ -4,9 +4,9 @@
  *
  *  $RCSfile: unostyle.cxx,v $
  *
- *  $Revision: 1.73 $
+ *  $Revision: 1.74 $
  *
- *  last change: $Author: obo $ $Date: 2007-07-18 12:58:25 $
+ *  last change: $Author: hr $ $Date: 2007-07-31 17:42:34 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -2935,7 +2935,12 @@ void SAL_CALL SwXStyle::setAllPropertiesToDefault(  )
             case SFX_STYLE_FAMILY_PARA :
                 {
                     pTargetFmt = aStyle.GetCollection();
-                    aStyle.GetCollection()->SetOutlineLevel( NO_NUMBERING );
+                    // --> OD 2007-07-25 #132402# - make code robust
+                    if ( aStyle.GetCollection() )
+                    {
+                        aStyle.GetCollection()->SetOutlineLevel( NO_NUMBERING );
+                    }
+                    // <--
                 }
                 break;
             case SFX_STYLE_FAMILY_FRAME:
