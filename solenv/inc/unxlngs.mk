@@ -4,9 +4,9 @@
 #
 #   $RCSfile: unxlngs.mk,v $
 #
-#   $Revision: 1.20 $
+#   $Revision: 1.21 $
 #
-#   last change: $Author: obo $ $Date: 2007-03-09 09:10:26 $
+#   last change: $Author: hr $ $Date: 2007-07-31 13:07:01 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -78,6 +78,11 @@ CFLAGS+=-fmessage-length=0 -c
 CFLAGSENABLESYMBOLS=-g1
 .ELSE
 CFLAGSENABLESYMBOLS=-g
+.ENDIF
+.IF "$(HAVE_LD_HASH_STYLE)"  == "TRUE"
+LINKFLAGS += -Wl,--hash-style=both
+.ELSE
+LINKFLAGS += -Wl,-zdynsort
 .ENDIF
 
 # flags for the C++ Compiler
