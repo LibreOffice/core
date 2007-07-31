@@ -4,9 +4,9 @@
  *
  *  $RCSfile: file_impress.scp,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: hr $ $Date: 2007-06-27 15:50:55 $
+ *  last change: $Author: hr $ $Date: 2007-07-31 13:12:16 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -52,8 +52,6 @@ File gid_File_Registry_Spool_Oo_Office_Embedding_Impress_Xcu
     Name = "/registry/spool/org/openoffice/Office/Embedding-impress.xcu";
 End
 
-#ifdef SOLAR_JAVA
-
 File gid_File_Help_Simpress_Zip
     Dir = gid_Dir_Help_Isolanguage;
     TXT_FILE_BODY;
@@ -74,8 +72,6 @@ File gid_File_Help_Simpress_Zip
                   "simpress.idx/POSITIONS",
                   "simpress.idx/SCHEMA"); 
 End
-
-#endif
 
 File gid_File_Exe_Simpress
     BIN_FILE_BODY;
