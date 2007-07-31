@@ -4,9 +4,9 @@
  *
  *  $RCSfile: cpputype.cxx,v $
  *
- *  $Revision: 1.43 $
+ *  $Revision: 1.44 $
  *
- *  last change: $Author: obo $ $Date: 2006-10-12 11:33:25 $
+ *  last change: $Author: hr $ $Date: 2007-07-31 13:48:00 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -63,14 +63,26 @@ using namespace codemaker::cpp;
 
 namespace {
 
-rtl::OString translateSimpleUnoType(rtl::OString const & unoType) {
+rtl::OString translateSimpleUnoType(rtl::OString const & unoType, bool cppuUnoType=false) {
     static rtl::OString const trans[codemaker::UnoType::SORT_COMPLEX + 1] = {
         "void", "::sal_Bool", "::sal_Int8", "::sal_Int16", "::sal_uInt16",
         "::sal_Int32", "::sal_uInt32", "::sal_Int64", "::sal_uInt64", "float",
         "double", "::sal_Unicode", "::rtl::OUString",
         "::com::sun::star::uno::Type", "::com::sun::star::uno::Any",
         rtl::OString() };
-    return trans[codemaker::UnoType::getSort(unoType)];
+
+    const codemaker::UnoType::Sort sort = codemaker::UnoType::getSort(unoType);
+    if (cppuUnoType &&
+        (sort == codemaker::UnoType::SORT_UNSIGNED_SHORT ||
+         sort == codemaker::UnoType::SORT_CHAR) )
+    {
+        if (sort == codemaker::UnoType::SORT_CHAR)
+            return "::cppu::UnoCharType";
+        else
+            return "::cppu::UnoUnsignedShortType";
+    }
+
+    return trans[sort];
 }
 
 }
@@ -500,9 +512,9 @@ void CppuType::dumpNormalGetCppuType(FileStream& o)
             bIsBaseException = sal_True;
         } else
         {
-            o << indent() << "const ::com::sun::star::uno::Type& rBaseType = getCppuType( ( ";
-            dumpType(o, superType, sal_True, sal_False);
-            o << " *)0 );\n\n";
+            o << indent() << "const ::com::sun::star::uno::Type& rBaseType = ::cppu::UnoType< ";
+            dumpType(o, superType, true, false, false, true);
+            o << " >::get();\n\n";
         }
     }
 
@@ -539,10 +551,10 @@ void CppuType::dumpNormalGetCppuType(FileStream& o)
             if ( findIter == generatedTypeSet.end() )
             {
                 generatedTypeSet.insert(fieldType);
-                o << indent() << "const ::com::sun::star::uno::Type& rMemberType_"
-                  << modFieldType/*i*/ << " = getCppuType( ( ";
-                dumpType(o, fieldType, sal_True, sal_False);
-                o << " *)0 );\n";
+                 o << indent() << "const ::com::sun::star::uno::Type& rMemberType_"
+                  << modFieldType/*i*/ << " = ::cppu::UnoType< ";
+                dumpType(o, fieldType, false, false, false, true);
+                o << " >::get();\n";
             }
 
             o << indent() << "aMemberRefs[" << i << "] = rMemberType_"
@@ -609,9 +621,9 @@ void CppuType::dumpComprehensiveGetCppuType(FileStream& o)
     }
     if (superType.getLength() > 0) {
         o << indent()
-          << "const ::com::sun::star::uno::Type& rSuperType = getCppuType( ( ";
-        dumpType(o, superType, sal_True, sal_False);
-        o << " *)0 );\n";
+          << "const ::com::sun::star::uno::Type& rSuperType = ::cppu::UnoType< ";
+        dumpType(o, superType, false, false, false, true);
+        o << " >::get();\n";
     }
 
     dumpCppuGetTypeMemberDecl(o, CPPUTYPEDECL_ALLTYPES);
@@ -874,7 +886,7 @@ OString CppuType::getTypeClass(const OString& type, sal_Bool bCStyle)
 }
 
 void CppuType::dumpType(FileStream& o, const OString& type,
-                        sal_Bool bConst, sal_Bool bRef, sal_Bool bNative)
+                        bool bConst, bool bRef, bool bNative, bool cppuUnoType)
     const throw( CannotDumpException )
 {
     sal_Int32 seqNum;
@@ -888,7 +900,10 @@ void CppuType::dumpType(FileStream& o, const OString& type,
     if (bConst) o << "const ";
 
     {for (sal_Int32 i = 0; i < seqNum; ++i) {
-        o << "::com::sun::star::uno::Sequence< ";
+        if (cppuUnoType)
+            o << "::cppu::UnoSequenceType< ";
+        else
+            o << "::com::sun::star::uno::Sequence< ";
     }}
 
     switch (typeClass)
@@ -902,7 +917,7 @@ void CppuType::dumpType(FileStream& o, const OString& type,
             break;
         case RT_TYPE_INVALID:
             {
-                OString tmp(translateSimpleUnoType(relType));
+                OString tmp(translateSimpleUnoType(relType, cppuUnoType));
                 if (tmp.getLength() > 0)
                 {
                     o << tmp;
@@ -952,9 +967,9 @@ void CppuType::dumpCppuGetType(FileStream& o, const OString& type, sal_Bool bDec
     {
          if (m_typeMgr.getTypeClass(relType) == RT_TYPE_INTERFACE)
         {
-            o << indent() << "getCppuType( (";
-            dumpType(o, type, sal_True, sal_False);
-            o << "*)0 )";
+            o << indent() << "::cppu::UnoType< ";
+            dumpType(o, type, false, false, false, true);
+            o << " >::get()";
 
             if (bDecl)
                 o << ";\n";
@@ -976,9 +991,9 @@ void CppuType::dumpCppuGetType(FileStream& o, const OString& type, sal_Bool bDec
 //              o << indent() << "get_" << type.replace('/', '_') << "_Type()";
 //          } else
 //          {
-                o << indent() << "getCppuType( (";
-                dumpType(o, type, sal_True, sal_False);
-                o << "*)0 )";
+                o << indent() << "::cppu::UnoType< ";
+                dumpType(o, type, false, false, false, true);
+                o << " >::get()";
 //          }
         }
         if (bDecl)
@@ -1007,6 +1022,11 @@ OString CppuType::typeToIdentifier(const OString& type)
           == codemaker::UnoType::SORT_COMPLEX)
          ? '/' : ' '),
         '_');
+
+    // TODO: find better solution to create an identifier
+    sIdentifier = sIdentifier.replace('<', '_');
+    sIdentifier = sIdentifier.replace('>', '_');
+    sIdentifier = sIdentifier.replace(',', '_');
 
     return sIdentifier;
 }
@@ -1472,13 +1492,13 @@ void InterfaceType::dumpNormalGetCppuType(FileStream& o)
         o << indent() << "typelib_TypeDescriptionReference * aSuperTypes["
           << nBases << "];\n";
         for (sal_Int16 i = 0; i < nBases; ++i) {
-            o << indent() << "aSuperTypes[" << i << "] = getCppuType( ( ";
+            o << indent() << "aSuperTypes[" << i << "] = ::cppu::UnoType< ";
             dumpType(
                 o,
                 rtl::OUStringToOString(
                     m_reader.getSuperTypeName(i), RTL_TEXTENCODING_UTF8),
-                sal_True, sal_False);
-            o << " *)0 ).getTypeLibType();\n";
+                true, false, false, true);
+            o << " >::get().getTypeLibType();\n";
         }
     }
 
@@ -1524,13 +1544,13 @@ void InterfaceType::dumpComprehensiveGetCppuType(FileStream& o)
     o << indent() << "typelib_TypeDescriptionReference * aSuperTypes["
       << m_reader.getSuperTypeCount() << "];\n";
     for (sal_Int16 i = 0; i < m_reader.getSuperTypeCount(); ++i) {
-        o << indent() << "aSuperTypes[" << i << "] = getCppuType( ( ";
+        o << indent() << "aSuperTypes[" << i << "] = ::cppu::UnoType< ";
         dumpType(
             o,
             rtl::OUStringToOString(
                 m_reader.getSuperTypeName(i), RTL_TEXTENCODING_UTF8),
-            true, false);
-        o << " *)0 ).getTypeLibType();\n";
+            false, false, false, true);
+        o << " >::get().getTypeLibType();\n";
     }
 
     sal_uInt32 count = getMemberCount();
@@ -2673,11 +2693,13 @@ void StructureType::dumpNormalGetCppuType(FileStream & out) {
         if ((m_reader.getFieldFlags(i) & RT_ACCESS_PARAMETERIZED_TYPE) != 0) {
             out << "::cppu::getTypeFavourChar(static_cast< ";
             dumpTypeParameterName(out, type);
+            out << " * >(0))";
         } else {
-            out << "::getCppuType(static_cast< ";
-            dumpType(out, type);
+            out << "::cppu::UnoType< ";
+            dumpType(out, type, false, false, false, true);
+            out << " >::get()";
         }
-        out << " * >(0)).getTypeLibType()" << (i == fields - 1 ? " };" : ",")
+        out << ".getTypeLibType()" << (i == fields - 1 ? " };" : ",")
             << "\n";
     }
     dec();
@@ -2704,12 +2726,13 @@ void StructureType::dumpNormalGetCppuType(FileStream & out) {
     if (m_reader.getSuperTypeCount() == 0) {
         out << "0";
     } else {
-        out << "::getCppuType(static_cast< ";
+        out << "::cppu::UnoType< ";
         dumpType(
             out,
             rtl::OUStringToOString(
-                m_reader.getSuperTypeName(0), RTL_TEXTENCODING_UTF8));
-        out << " * >(0)).getTypeLibType()";
+                m_reader.getSuperTypeName(0), RTL_TEXTENCODING_UTF8),
+            false, false, false, true);
+        out << " >::get().getTypeLibType()";
     }
     out << ", " << fields << ", the_members, "
         << (isPolymorphic() ? "the_parameterizedTypes" : "0") << ");\n";
@@ -2791,9 +2814,9 @@ void StructureType::dumpComprehensiveGetCppuType(FileStream & out) {
             if (codemaker::UnoType::getSort(type)
                 == codemaker::UnoType::SORT_COMPLEX)
             {
-                out << indent() << "::getCppuType(static_cast< ";
-                dumpType(out, type);
-                out << " * >(0));\n";
+                out << indent() << "::cppu::UnoType< ";
+                dumpType(out, type, false, false, false, true);
+                out << " >::get();\n";
             }
             // For typedefs, use the resolved type name, as there will be no
             // information available about the typedef itself at runtime (the
@@ -2838,12 +2861,13 @@ void StructureType::dumpComprehensiveGetCppuType(FileStream & out) {
     if (m_reader.getSuperTypeCount() == 0) {
         out << "0";
     } else {
-        out << "::getCppuType(static_cast< ";
+        out << "::cppu::UnoType< ";
         dumpType(
             out,
             rtl::OUStringToOString(
-                m_reader.getSuperTypeName(0), RTL_TEXTENCODING_UTF8));
-        out << " * >(0)).getTypeLibType()";
+                m_reader.getSuperTypeName(0), RTL_TEXTENCODING_UTF8),
+            false, false, false, true);
+        out << " >::get().getTypeLibType()";
     }
     out << ", " << fields << ", the_members);\n";
     out << indent() << "::typelib_typedescription_register(&the_newType);\n";
