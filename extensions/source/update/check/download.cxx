@@ -4,9 +4,9 @@
  *
  *  $RCSfile: download.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2007-07-06 14:35:55 $
+ *  last change: $Author: hr $ $Date: 2007-07-31 15:55:50 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -69,7 +69,8 @@ namespace uno = com::sun::star::uno ;
 struct OutData
 {
     rtl::Reference< DownloadInteractionHandler >Handler;
-    rtl::OUString   FilePath;
+    rtl::OUString   File;
+    rtl::OUString   DestinationDir;
     oslFileHandle   FileHandle;
     sal_uInt64      Offset;
     osl::Condition& StopCondition;
@@ -115,6 +116,9 @@ write_function( void *ptr, size_t size, size_t nmemb, void *stream )
         char * effective_url;
         curl_easy_getinfo(out->curl, CURLINFO_EFFECTIVE_URL, &effective_url);
 
+        double fDownloadSize;
+        curl_easy_getinfo(out->curl, CURLINFO_CONTENT_LENGTH_DOWNLOAD, &fDownloadSize);
+
         rtl::OString aURL(effective_url);
 
         // ensure no trailing '/'
@@ -126,7 +130,7 @@ write_function( void *ptr, size_t size, size_t nmemb, void *stream )
         sal_Int32 nIndex = aURL.lastIndexOf('/');
         if( nIndex > 0 )
         {
-            out->FilePath += rtl::OStringToOUString(aURL.copy(nIndex), RTL_TEXTENCODING_UTF8);
+            out->File = out->DestinationDir + rtl::OStringToOUString(aURL.copy(nIndex), RTL_TEXTENCODING_UTF8);
 
             oslFileError rc;
 
@@ -134,15 +138,18 @@ write_function( void *ptr, size_t size, size_t nmemb, void *stream )
             const sal_Int32 openFlags = osl_File_OpenFlag_Write | osl_File_OpenFlag_Create;
             do
             {
-                rc = osl_openFile(out->FilePath.pData, &out->FileHandle, openFlags);
+                rc = osl_openFile(out->File.pData, &out->FileHandle, openFlags);
 
-                if( osl_File_E_EXIST == rc && ! out->Handler->downloadTargetExists(out->FilePath) )
+                if( osl_File_E_EXIST == rc && ! out->Handler->downloadTargetExists(out->File) )
+                {
+                    out->StopCondition.set();
                     break;
+                }
 
             } while( osl_File_E_EXIST == rc );
 
             if( osl_File_E_None == rc )
-                out->Handler->downloadStarted(out->FilePath);
+                out->Handler->downloadStarted(out->File, (sal_Int64) fDownloadSize);
         }
     }
 
@@ -168,15 +175,15 @@ progress_callback( void *clientp, double dltotal, double dlnow, double ultotal, 
 
     if( ! out->StopCondition.check() )
     {
-        double fProcent = (dlnow + out->Offset) * 100 / (dltotal + out->Offset);
-        if( fProcent < 0 )
-            fProcent = 0;
+        double fPercent = (dlnow + out->Offset) * 100 / (dltotal + out->Offset);
+        if( fPercent < 0 )
+            fPercent = 0;
 
         // Do not report progress for redirection replies
         long nCode;
         curl_easy_getinfo(out->curl, CURLINFO_RESPONSE_CODE, &nCode);
         if( (nCode != 302) && (nCode != 303) )
-            out->Handler->downloadProgressAt((sal_Int8)fProcent);
+            out->Handler->downloadProgressAt((sal_Int8)fPercent);
 
         return 0;
     }
@@ -288,12 +295,12 @@ bool curl_run(const rtl::OUString& rURL, OutData& out, const rtl::OString& aProx
 
         if( CURLE_OK == cc )
         {
-            out.Handler->downloadFinished(out.FilePath);
+            out.Handler->downloadFinished(out.File);
             ret = true;
         }
 
         // Avoid target file being removed
-        else if( CURLE_ABORTED_BY_CALLBACK == cc )
+        else if( (CURLE_ABORTED_BY_CALLBACK == cc) || out.StopCondition.check() )
             ret = true;
 
         // Only report errors when not stopped
@@ -317,18 +324,19 @@ bool curl_run(const rtl::OUString& rURL, OutData& out, const rtl::OString& aProx
 //------------------------------------------------------------------------------
 
 bool
-Download::start(const rtl::OUString& rURL, const rtl::OUString& rLocalFile, bool resume)
+Download::start(const rtl::OUString& rURL, const rtl::OUString& rFile, const rtl::OUString& rDestinationDir)
 {
     OSL_ASSERT( m_aHandler.is() );
 
     OutData out(m_aCondition);
 
-    out.FilePath = rLocalFile;
+    out.File = rFile;
+    out.DestinationDir = rDestinationDir;
     out.Handler = m_aHandler;
 
-    if( resume )
+    if( rFile.getLength() > 0 )
     {
-        oslFileError rc = osl_openFile(rLocalFile.pData, &out.FileHandle, osl_File_OpenFlag_Write);
+        oslFileError rc = osl_openFile(rFile.pData, &out.FileHandle, osl_File_OpenFlag_Write);
 
         if( osl_File_E_None == rc )
         {
@@ -339,7 +347,7 @@ Download::start(const rtl::OUString& rURL, const rtl::OUString& rLocalFile, bool
             }
         }
         else if( osl_File_E_NOENT == rc ) // file has been deleted meanwhile ..
-            resume = false;
+            out.File = rtl::OUString();
     }
 
     rtl::OString aProxyHost;
@@ -354,7 +362,7 @@ Download::start(const rtl::OUString& rURL, const rtl::OUString& rLocalFile, bool
         osl_closeFile(out.FileHandle);
 
         if( ! ret )
-            osl_removeFile(out.FilePath.pData);
+            osl_removeFile(out.File.pData);
     }
 
     m_aCondition.reset();
