@@ -4,9 +4,9 @@
  *
  *  $RCSfile: syslocaleoptions.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: hr $ $Date: 2007-06-27 21:17:26 $
+ *  last change: $Author: hr $ $Date: 2007-08-01 10:55:53 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -508,8 +508,10 @@ Mutex& SvtSysLocaleOptions::GetMutex()
         MutexGuard aGuard( Mutex::getGlobalMutex() );
         if( !pMutex )
         {
-            static Mutex aMutex;
-            pMutex = &aMutex;
+            // #i77768# Due to a static reference in the toolkit lib
+            // we need a mutex that lives longer than the svtools library.
+            // Otherwise the dtor would use a destructed mutex!!
+            pMutex = new Mutex;
         }
     }
     return *pMutex;
