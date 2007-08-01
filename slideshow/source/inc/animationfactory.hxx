@@ -4,9 +4,9 @@
  *
  *  $RCSfile: animationfactory.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: obo $ $Date: 2007-07-17 15:02:31 $
+ *  last change: $Author: hr $ $Date: 2007-08-01 11:10:40 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -149,6 +149,7 @@ namespace slideshow
                                                                          int                                    nFlags=0 );
 
             static NumberAnimationSharedPtr createPathMotionAnimation( const ::rtl::OUString&                   rSVGDPath,
+                                                                       sal_Int16                                nAdditive,
                                                                        const AnimatableShapeSharedPtr&          rShape,
                                                                        const ShapeManagerSharedPtr&             rShapeManager,
                                                                        const ::basegfx::B2DVector&              rSlideSize,
