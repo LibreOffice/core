@@ -4,9 +4,9 @@
  *
  *  $RCSfile: zforlist.cxx,v $
  *
- *  $Revision: 1.69 $
+ *  $Revision: 1.70 $
  *
- *  last change: $Author: obo $ $Date: 2007-07-18 08:56:35 $
+ *  last change: $Author: hr $ $Date: 2007-08-01 10:56:09 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -338,8 +338,10 @@ void SvNumberFormatter::ChangeIntl(LanguageType eLnge)
         ::osl::MutexGuard aGuard( ::osl::Mutex::getGlobalMutex() );
         if( !pMutex )
         {
-            static ::osl::Mutex aMutex;
-            pMutex = &aMutex;
+            // #i77768# Due to a static reference in the toolkit lib
+            // we need a mutex that lives longer than the svtools library.
+            // Otherwise the dtor would use a destructed mutex!!
+            pMutex = new ::osl::Mutex;
         }
     }
     return *pMutex;
