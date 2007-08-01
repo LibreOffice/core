@@ -4,9 +4,9 @@
  *
  *  $RCSfile: animationpathmotionnode.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: obo $ $Date: 2007-07-17 14:47:40 $
+ *  last change: $Author: hr $ $Date: 2007-08-01 11:10:28 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -63,6 +63,7 @@ AnimationActivitySharedPtr AnimationPathMotionNode::createActivity() const
         aParms,
         AnimationFactory::createPathMotionAnimation(
             aString,
+            mxPathMotionNode->getAdditive(),
             getShape(),
             getContext().mpSubsettableShapeManager,
             getSlideSize() ),
