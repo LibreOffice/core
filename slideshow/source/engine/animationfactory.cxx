@@ -4,9 +4,9 @@
  *
  *  $RCSfile: animationfactory.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: obo $ $Date: 2007-07-17 14:34:05 $
+ *  last change: $Author: hr $ $Date: 2007-08-01 11:17:09 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -43,6 +43,7 @@
 #include <animationfactory.hxx>
 #include <attributemap.hxx>
 
+#include <com/sun/star/animations/AnimationAdditiveMode.hpp>
 #include <com/sun/star/animations/AnimationTransformType.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/drawing/FillStyle.hpp>
@@ -225,6 +226,7 @@ namespace slideshow
             {
             public:
                 PathAnimation( const ::rtl::OUString&       rSVGDPath,
+                               sal_Int16                    nAdditive,
                                const ShapeManagerSharedPtr& rShapeManager,
                                const ::basegfx::B2DVector&  rSlideSize,
                                int                          nFlags ) :
@@ -235,7 +237,8 @@ namespace slideshow
                     maPageSize( rSlideSize ),
                     maShapeOrig(),
                     mnFlags( nFlags ),
-                    mbAnimationStarted( false )
+                    mbAnimationStarted( false ),
+                    mnAdditive( nAdditive )
                 {
                     ENSURE_AND_THROW( rShapeManager,
                                       "PathAnimation::PathAnimation(): Invalid ShapeManager" );
@@ -284,7 +287,10 @@ namespace slideshow
                     // Theoretically, our AttrLayer is way down the stack, and
                     // we only have to consider _that_ value, not the one from
                     // the top of the stack as returned by Shape::getBounds()
-                    maShapeOrig = mpShape->getBounds().getCenter();
+                    if( mnAdditive == animations::AnimationAdditiveMode::SUM )
+                        maShapeOrig = mpShape->getBounds().getCenter();
+                    else
+                        maShapeOrig = mpShape->getDOMBounds().getCenter();
 
                     if( !mbAnimationStarted )
                     {
@@ -362,6 +368,7 @@ namespace slideshow
                 ::basegfx::B2DPoint                maShapeOrig;
                 const int                          mnFlags;
                 bool                               mbAnimationStarted;
+                sal_Int16                          mnAdditive;
             };
 
 
@@ -1369,13 +1376,14 @@ namespace slideshow
         }
 
         NumberAnimationSharedPtr AnimationFactory::createPathMotionAnimation( const ::rtl::OUString&            rSVGDPath,
+                                                                              sal_Int16                         nAdditive,
                                                                               const AnimatableShapeSharedPtr&   /*rShape*/,
                                                                               const ShapeManagerSharedPtr&      rShapeManager,
                                                                               const ::basegfx::B2DVector&       rSlideSize,
                                                                               int                               nFlags )
         {
             return NumberAnimationSharedPtr(
-                new PathAnimation( rSVGDPath,
+                new PathAnimation( rSVGDPath, nAdditive,
                                    rShapeManager,
                                    rSlideSize,
                                    nFlags ) );
