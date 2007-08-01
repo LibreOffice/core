@@ -4,9 +4,9 @@
  *
  *  $RCSfile: uicommanddescription.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: ihi $ $Date: 2006-12-19 14:02:18 $
+ *  last change: $Author: hr $ $Date: 2007-08-01 10:53:23 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -726,14 +726,23 @@ sal_Bool ConfigurationAccess_UICommand::initializeConfigAccess()
 // container.XContainerListener
 void SAL_CALL ConfigurationAccess_UICommand::elementInserted( const ContainerEvent& ) throw(RuntimeException)
 {
+    ResetableGuard aLock( m_aLock );
+    m_bCacheFilled = sal_False;
+    fillCache();
 }
 
 void SAL_CALL ConfigurationAccess_UICommand::elementRemoved( const ContainerEvent& ) throw(RuntimeException)
 {
+    ResetableGuard aLock( m_aLock );
+    m_bCacheFilled = sal_False;
+    fillCache();
 }
 
 void SAL_CALL ConfigurationAccess_UICommand::elementReplaced( const ContainerEvent& ) throw(RuntimeException)
 {
+    ResetableGuard aLock( m_aLock );
+    m_bCacheFilled = sal_False;
+    fillCache();
 }
 
 // lang.XEventListener
