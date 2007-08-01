@@ -4,9 +4,9 @@
  *
  *  $RCSfile: CustomAnimationCreateDialog.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: rt $ $Date: 2007-07-06 13:10:50 $
+ *  last change: $Author: hr $ $Date: 2007-08-01 11:08:21 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -83,7 +83,7 @@ private:
     const std::vector< ::com::sun::star::uno::Any >& mrTargets;
 
     double mfDuration;
-    sal_Bool mbIsPreview;
+    bool mbIsPreview;
 
     TabControl* mpTabControl;
     OKButton* mpOKButton;
