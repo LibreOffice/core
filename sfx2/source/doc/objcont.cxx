@@ -4,9 +4,9 @@
  *
  *  $RCSfile: objcont.cxx,v $
  *
- *  $Revision: 1.69 $
+ *  $Revision: 1.70 $
  *
- *  last change: $Author: obo $ $Date: 2007-07-17 13:43:36 $
+ *  last change: $Author: hr $ $Date: 2007-08-01 11:04:26 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1207,7 +1207,7 @@ void SfxObjectShell::LoadStyles
         if(pFound[i].pSource->HasFollowSupport())
             pFound[i].pDest->SetFollow(pFound[i].pSource->GetParent());
     }
-    delete pFound;
+    delete [] pFound;
 }
 
 //--------------------------------------------------------------------
