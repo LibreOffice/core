@@ -4,9 +4,9 @@
  *
  *  $RCSfile: WindowDescriptor.idl,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-07 21:34:35 $
+ *  last change: $Author: hr $ $Date: 2007-08-01 10:59:32 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -69,7 +69,75 @@ published struct WindowDescriptor
     /** specifies the name of the component service.
 
         <p>A zero length name means that the vcl creates a blank top,
-        a container, or a simple window.</p>
+        a container, or a simple window.
+        The following service names are defined:<br/>
+        <ul>
+            <li>buttondialog</li>
+            <li>cancelbutton</li>
+            <li>checkbox</li>
+            <li>combobox</li>
+            <li>control</li>
+            <li>currencybox</li>
+            <li>currencyfield</li>
+            <li>datebox</li>
+            <li>datefield</li>
+            <li>dialog</li>
+            <li>dockingarea</li>
+            <li>dockingwindow</li>
+            <li>edit</li>
+            <li>errorbox</li>
+            <li>fixedbitmap</li>
+            <li>fixedimage</li>
+            <li>fixedline</li>
+            <li>fixedtext</li>
+            <li>floatingwindow</li>
+            <li>framewindow</li>
+            <li>groupbox</li>
+            <li>helpbutton</li>
+            <li>imagebutton</li>
+            <li>imageradiobutton</li>
+            <li>infobox</li>
+            <li>listbox</li>
+            <li>longcurrencybox</li>
+            <li>longcurrencyfield</li>
+            <li>menubutton</li>
+            <li>messbox</li>
+            <li>metricbox</li>
+            <li>metricfield</li>
+            <li>modaldialog</li>
+            <li>modelessdialog</li>
+            <li>morebutton</li>
+            <li>multilistbox</li>
+            <li>numericbox</li>
+            <li>numericfield</li>
+            <li>okbutton</li>
+            <li>patternbox</li>
+            <li>patternfield</li>
+            <li>pushbutton</li>
+            <li>querybox</li>
+            <li>radiobutton</li>
+            <li>scrollbar</li>
+            <li>scrollbarbox</li>
+            <li>simpleanimation</li>
+            <li>spinbutton</li>
+            <li>spinfield</li>
+            <li>throbber</li>
+            <li>splitter</li>
+            <li>splitwindow</li>
+            <li>statusbar</li>
+            <li>systemchildwindow</li>
+            <li>tabcontrol</li>
+            <li>tabdialog</li>
+            <li>tabpage</li>
+            <li>timebox</li>
+            <li>timefield</li>
+            <li>toolbox</li>
+            <li>tristatebox</li>
+            <li>warningbox</li>
+            <li>window</li>
+            <li>workwindow</li>
+        </ul>
+        </p>
      */
     string WindowServiceName;
 
