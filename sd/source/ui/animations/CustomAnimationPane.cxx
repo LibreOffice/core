@@ -4,9 +4,9 @@
  *
  *  $RCSfile: CustomAnimationPane.cxx,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: rt $ $Date: 2007-07-06 13:11:24 $
+ *  last change: $Author: hr $ $Date: 2007-08-01 11:08:35 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -2364,11 +2364,31 @@ void CustomAnimationPane::onPreview( bool bForcePreview )
 
     if( maListSelection.empty() )
     {
-        Reference< XAnimationNodeSupplier > xNodeSupplier( mxCurrentPage, UNO_QUERY );
-        if( !xNodeSupplier.is() )
-            return;
+        rtl::Reference< MotionPathTag > xMotionPathTag;
+        MotionPathTagVector::iterator aIter;
+        for( aIter = maMotionPathTags.begin(); aIter != maMotionPathTags.end(); aIter++ )
+        {
+            if( (*aIter)->isSelected() )
+            {
+                xMotionPathTag = (*aIter);
+                break;
+            }
+        }
 
-        preview( xNodeSupplier->getAnimationNode() );
+        if( xMotionPathTag.is() )
+        {
+            MainSequencePtr pSequence( new MainSequence() );
+            pSequence->append( xMotionPathTag->getEffect()->clone() );
+            preview( pSequence->getRootNode() );
+        }
+        else
+        {
+            Reference< XAnimationNodeSupplier > xNodeSupplier( mxCurrentPage, UNO_QUERY );
+            if( !xNodeSupplier.is() )
+                return;
+
+            preview( xNodeSupplier->getAnimationNode() );
+        }
     }
     else
     {
