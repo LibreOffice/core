@@ -4,9 +4,9 @@
  *
  *  $RCSfile: shutdowniconw32.cxx,v $
  *
- *  $Revision: 1.43 $
+ *  $Revision: 1.44 $
  *
- *  last change: $Author: vg $ $Date: 2007-05-25 11:14:50 $
+ *  last change: $Author: hr $ $Date: 2007-08-01 11:04:12 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -38,7 +38,8 @@
 
 #ifdef WNT
 
-#pragma warning(disable:4668 4715 4917 4005 4239 4245 4100 4189 4505 )
+// necessary to include system headers without warnings
+#pragma warning(disable:4668 4917)
 
 // Support Windows 95 too
 #undef WINVER
@@ -112,13 +113,10 @@ using namespace ::osl;
 
 
 #if defined(USE_APP_SHORTCUTS)
-#define WRITER_URL      "private:factory/swriter"
-#define CALC_URL        "private:factory/scalc"
-#define IMPRESS_URL     "private:factory/simpress"
+#ifdef IMPRESS_WIZARD_URL
+#undef IMPRESS_WIZARD_URL
+#endif
 #define IMPRESS_WIZARD_URL     "private:factory/simpress?slot=6686"
-#define DRAW_URL        "private:factory/sdraw"
-#define MATH_URL        "private:factory/smath"
-#define BASE_URL        "private:factory/sdatabase?Interactive"
 #endif
 
 #define ICON_SO_DEFAULT                 1
@@ -295,12 +293,12 @@ static HMENU createSystrayMenu( )
     // insert the remaining menu entries
     addMenuItem( hMenu, IDM_TEMPLATE, ICON_TEMPLATE,
         pShutdownIcon->GetResString( STR_QUICKSTART_FROMTEMPLATE ), pos, true);
-    addMenuItem( hMenu, -1,         0, OUString(), pos, false );
+    addMenuItem( hMenu, static_cast< UINT >( -1 ), 0, OUString(), pos, false );
     addMenuItem( hMenu, IDM_OPEN,   ICON_OPEN, pShutdownIcon->GetResString( STR_QUICKSTART_FILEOPEN ), pos, true );
-    addMenuItem( hMenu, -1,         0, OUString(), pos, false );
+    addMenuItem( hMenu, static_cast< UINT >( -1 ), 0, OUString(), pos, false );
 #endif
     addMenuItem( hMenu, IDM_INSTALL,0, pShutdownIcon->GetResString( STR_QUICKSTART_PRELAUNCH ), pos, false );
-    addMenuItem( hMenu, -1,         0, OUString(), pos, false );
+    addMenuItem( hMenu, static_cast< UINT >( -1 ), 0, OUString(), pos, false );
     addMenuItem( hMenu, IDM_EXIT,   0, pShutdownIcon->GetResString( STR_QUICKSTART_EXIT ), pos, false );
 
     // indicate status of autostart folder
@@ -363,6 +361,7 @@ static void addTaskbarIcon( HWND hWnd )
 
 // -------------------------------
 
+/*
 static void removeTaskbarIcon()
 {
     ShutdownIcon *pShutdownIcon = ShutdownIcon::getInstance();
@@ -382,6 +381,7 @@ static void removeTaskbarIcon()
         Shell_NotifyIconA(NIM_DELETE, &nid);
     }
 }
+*/
 
 // -------------------------------
 
@@ -521,8 +521,8 @@ static sal_Bool checkOEM() {
     {
         Any aResult = rOemJob->execute(args);
         aResult >>= bResult;
-        return bResult;
     } else bResult = sal_True;
+    return bResult;
 }
 
 LRESULT CALLBACK executerWndProc( HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
@@ -588,7 +588,7 @@ LRESULT CALLBACK executerWndProc( HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lP
 // -------------------------------
 
 
-DWORD WINAPI SystrayThread( LPVOID lpParam )
+DWORD WINAPI SystrayThread( LPVOID /*lpParam*/ )
 {
     aListenerWindow = CreateWindowExA(0,
         QUICKSTART_CLASSNAME,       // registered class name
@@ -722,7 +722,7 @@ void OnMeasureItem(HWND hwnd, LPMEASUREITEMSTRUCT lpmis)
     ReleaseDC(hwnd, hdc);
 }
 
-void OnDrawItem(HWND hwnd, LPDRAWITEMSTRUCT lpdis)
+void OnDrawItem(HWND /*hwnd*/, LPDRAWITEMSTRUCT lpdis)
 {
     MYITEM *pMyItem = (MYITEM *) lpdis->itemData;
     COLORREF clrPrevText, clrPrevBkgnd;
@@ -924,7 +924,7 @@ bool ShutdownIcon::IsQuickstarterInstalled()
     else
     {
         char szPathA[_MAX_PATH];
-        int len = GetModuleFileNameA( NULL, szPathA, _MAX_PATH-1);
+        GetModuleFileNameA( NULL, szPathA, _MAX_PATH-1);
 
         // calc the string wcstr len
         int nNeededWStrBuffSize = MultiByteToWideChar( CP_ACP, 0, szPathA, -1, NULL, 0 );
@@ -953,7 +953,7 @@ void ShutdownIcon::EnableAutostartW32( const rtl::OUString &aShortcut )
     else
     {
         char szPathA[_MAX_PATH];
-        int len = GetModuleFileNameA( NULL, szPathA, _MAX_PATH-1);
+        GetModuleFileNameA( NULL, szPathA, _MAX_PATH-1);
 
         // calc the string wcstr len
         int nNeededWStrBuffSize = MultiByteToWideChar( CP_ACP, 0, szPathA, -1, NULL, 0 );
