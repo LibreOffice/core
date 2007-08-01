@@ -4,9 +4,9 @@
  *
  *  $RCSfile: itiff.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: ihi $ $Date: 2006-11-14 16:17:15 $
+ *  last change: $Author: hr $ $Date: 2007-08-01 12:39:29 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -132,7 +132,7 @@ private:
     double  ReadDoubleData();
 
     void    ReadHeader();
-    void    ReadTagData( USHORT nTagType, ULONG nDataLen );
+    void    ReadTagData( USHORT nTagType, sal_uInt32 nDataLen );
 
     BOOL    ReadMap( ULONG nMinPercent, ULONG nMaxPercent );
         // Liesst/dekomprimert die Bitmap-Daten, und fuellt pMap
@@ -290,7 +290,7 @@ double TIFFReader::ReadDoubleData()
 
 // ---------------------------------------------------------------------------------
 
-void TIFFReader::ReadTagData( USHORT nTagType, ULONG nDataLen)
+void TIFFReader::ReadTagData( USHORT nTagType, sal_uInt32 nDataLen)
 {
     if ( bStatus == FALSE )
         return;
@@ -353,16 +353,25 @@ void TIFFReader::ReadTagData( USHORT nTagType, ULONG nDataLen)
         case 0x0111: { // Strip Offset(s)
             ULONG nOldNumSO, i, * pOldSO;
             pOldSO = pStripOffsets;
-            if ( pOldSO == NULL ) nNumStripOffsets = 0; // Sicherheitshalber
+            if ( pOldSO == NULL )
+                nNumStripOffsets = 0;
             nOldNumSO = nNumStripOffsets;
-            nNumStripOffsets += nDataLen;
-            pStripOffsets = new ULONG[ nNumStripOffsets ];
-            for ( i = 0; i < nOldNumSO; i++ )
-                pStripOffsets[ i ] = pOldSO[ i ] + nOrigPos;
-            for ( i = nOldNumSO; i < nNumStripOffsets; i++ )
-                pStripOffsets[ i ] = ReadIntData() + nOrigPos;
-            if ( pOldSO != NULL )
+            nDataLen += nOldNumSO;
+            if ( ( nDataLen > nOldNumSO ) && ( nDataLen < SAL_MAX_UINT32 / sizeof( sal_uInt32 ) ) )
+            {
+                nNumStripOffsets = nDataLen;
+                pStripOffsets = new ULONG[ nNumStripOffsets ];
+                if ( !pStripOffsets )
+                    nNumStripOffsets = 0;
+                else
+                {
+                    for ( i = 0; i < nOldNumSO; i++ )
+                        pStripOffsets[ i ] = pOldSO[ i ] + nOrigPos;
+                    for ( i = nOldNumSO; i < nNumStripOffsets; i++ )
+                        pStripOffsets[ i ] = ReadIntData() + nOrigPos;
+                }
                 delete[] pOldSO;
+            }
             OOODEBUG("StripOffsets (Anzahl:)",nDataLen);
             break;
         }
@@ -384,16 +393,25 @@ void TIFFReader::ReadTagData( USHORT nTagType, ULONG nDataLen)
         case 0x0117: { // Strip Byte Counts
             ULONG nOldNumSBC, i, * pOldSBC;
             pOldSBC = pStripByteCounts;
-            if ( pOldSBC == NULL ) nNumStripByteCounts = 0; // Sicherheitshalber
+            if ( pOldSBC == NULL )
+                nNumStripByteCounts = 0; // Sicherheitshalber
             nOldNumSBC = nNumStripByteCounts;
-            nNumStripByteCounts += nDataLen;
-            pStripByteCounts = new ULONG[ nNumStripByteCounts ];
-            for ( i = 0; i < nOldNumSBC; i++ )
-                pStripByteCounts[ i ] = pOldSBC[ i ];
-            for ( i = nOldNumSBC; i < nNumStripByteCounts; i++)
-                pStripByteCounts[ i ] = ReadIntData();
-            if ( pOldSBC != NULL )
+            nDataLen += nOldNumSBC;
+            if ( ( nDataLen > nOldNumSBC ) && ( nDataLen < SAL_MAX_UINT32 / sizeof( sal_uInt32 ) ) )
+            {
+                nNumStripByteCounts = nDataLen;
+                pStripByteCounts = new ULONG[ nNumStripByteCounts ];
+                if ( !nNumStripByteCounts )
+                    nNumStripByteCounts = 0;
+                else
+                {
+                    for ( i = 0; i < nOldNumSBC; i++ )
+                        pStripByteCounts[ i ] = pOldSBC[ i ];
+                    for ( i = nOldNumSBC; i < nNumStripByteCounts; i++)
+                        pStripByteCounts[ i ] = ReadIntData();
+                }
                 delete[] pOldSBC;
+            }
             OOODEBUG("StripByteCounts (Anzahl:)",nDataLen);
             break;
         }
