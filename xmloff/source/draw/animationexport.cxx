@@ -4,9 +4,9 @@
  *
  *  $RCSfile: animationexport.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: hr $ $Date: 2007-06-27 15:31:48 $
+ *  last change: $Author: hr $ $Date: 2007-08-01 11:04:22 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1318,10 +1318,10 @@ void AnimationsExporterImpl::exportAnimate( const Reference< XAnimate >& xAnimat
                     mrExport.AddAttribute( XML_NAMESPACE_SMIL, XML_ACCUMULATE, XML_SUM );
 
                 nTemp = xAnimate->getAdditive();
-                if( nTemp != AnimationAdditiveMode::BASE )
+                if( nTemp != AnimationAdditiveMode::REPLACE )
                 {
                     SvXMLUnitConverter::convertEnum( sTmp, (USHORT)nTemp, getAnimationsEnumMap(Animations_EnumMap_AdditiveMode) );
-                    mrExport.AddAttribute( XML_NAMESPACE_PRESENTATION, XML_ADDITIVE, sTmp.makeStringAndClear() );
+                    mrExport.AddAttribute( XML_NAMESPACE_SMIL, XML_ADDITIVE, sTmp.makeStringAndClear() );
                 }
             }
 
