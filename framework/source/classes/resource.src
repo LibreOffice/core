@@ -4,9 +4,9 @@
  *
  *  $RCSfile: resource.src,v $
  *
- *  $Revision: 1.35 $
+ *  $Revision: 1.36 $
  *
- *  last change: $Author: obo $ $Date: 2007-07-18 08:49:58 $
+ *  last change: $Author: hr $ $Date: 2007-08-01 10:53:01 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -132,7 +132,7 @@ String STR_TOOLBAR_TITLE_ADDON
 
 String STR_STATUSBAR_LOGOTEXT
 {
-    Text [ en-US ] = "A StarOffice product by Sun Microsystems, Inc.";
+    Text [ en-US ] = "A %PRODUCTNAME product by Sun Microsystems, Inc.";
 };
 
 // ***********************************************************************
