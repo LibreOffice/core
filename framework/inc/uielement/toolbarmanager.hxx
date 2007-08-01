@@ -4,9 +4,9 @@
  *
  *  $RCSfile: toolbarmanager.hxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: ihi $ $Date: 2007-07-10 15:08:40 $
+ *  last change: $Author: hr $ $Date: 2007-08-01 10:52:48 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -191,6 +191,7 @@ class ToolBarManager : public ::com::sun::star::frame::XFrameActionListener     
             rtl::OUString   aToolbarResName;
             ExecuteCommand  nCmd;
             ::com::sun::star::uno::Reference< ::com::sun::star::frame::XLayoutManager > xLayoutManager;
+            ::com::sun::star::uno::Reference< ::com::sun::star::awt::XWindow > xWindow;
         };
         struct ControllerParams
         {
@@ -229,6 +230,7 @@ class ToolBarManager : public ::com::sun::star::frame::XFrameActionListener     
         sal_uInt16 ConvertStyleToToolboxItemBits( sal_Int32 nStyle );
         ::com::sun::star::uno::Reference< ::com::sun::star::frame::XModel > GetModelFromFrame() const;
         sal_Bool IsPluginMode() const;
+        Image QueryAddonsImage( const ::rtl::OUString& aCommandURL, bool bBigImages, bool bHiContrast );
 
     protected:
         struct CommandInfo
