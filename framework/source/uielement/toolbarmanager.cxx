@@ -4,9 +4,9 @@
  *
  *  $RCSfile: toolbarmanager.cxx,v $
  *
- *  $Revision: 1.34 $
+ *  $Revision: 1.35 $
  *
- *  last change: $Author: ihi $ $Date: 2007-07-10 15:13:31 $
+ *  last change: $Author: hr $ $Date: 2007-08-01 11:09:39 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -468,10 +468,12 @@ void ToolBarManager::RefreshImages()
         if ( nId > 0 )
         {
             OUString aCommandURL = m_pToolBar->GetItemCommand( nId );
-            m_pToolBar->SetItemImage( nId, GetImageFromURL( m_xFrame,
-                                                            aCommandURL,
-                                                            bBigImages,
-                                                            m_bIsHiContrast ));
+            Image aImage = GetImageFromURL( m_xFrame, aCommandURL, bBigImages, m_bIsHiContrast );
+            // Try also to query for add-on images before giving up and use an
+            // empty image.
+            if ( !aImage )
+                aImage = QueryAddonsImage( aCommandURL, bBigImages, m_bIsHiContrast );
+            m_pToolBar->SetItemImage( nId, aImage );
         }
     }
 
@@ -1475,6 +1477,7 @@ void ToolBarManager::RequestImages()
         ++pIter;
     }
 
+    sal_Bool  bBigImages( SvtMiscOptions().AreCurrentSymbolsLarge() );
     m_bIsHiContrast = m_pToolBar->GetSettings().GetStyleSettings().GetFaceColor().IsDark();
     sal_Int16 p = getImageTypeFromBools( SvtMiscOptions().AreCurrentSymbolsLarge(), m_bIsHiContrast );
 
@@ -1492,6 +1495,10 @@ void ToolBarManager::RequestImages()
         if ( !aImage )
         {
             aImage = Image( aModGraphicSeq[i] );
+            // Try also to query for add-on images before giving up and use an
+            // empty image.
+            if ( !aImage )
+                aImage = QueryAddonsImage( aCmdURLSeq[i], bBigImages, m_bIsHiContrast );
             m_pToolBar->SetItemImage( pIter->second.nId, aImage );
             if ( pIter->second.aIds.size() > 0 )
             {
@@ -1910,6 +1917,7 @@ IMPL_LINK( ToolBarManager, MenuSelect, Menu*, pMenu )
                 pExecuteInfo->aToolbarResName = m_aResourceName;
                 pExecuteInfo->nCmd            = EXEC_CMD_CLOSETOOLBAR;
                 pExecuteInfo->xLayoutManager  = getLayoutManagerFromFrame( m_xFrame );
+                pExecuteInfo->xWindow         = VCLUnoHelper::GetInterface( m_pToolBar );
 
                 Application::PostUserEvent( STATIC_LINK(0, ToolBarManager, ExecuteHdl_Impl), pExecuteInfo );
             }
@@ -2108,9 +2116,16 @@ IMPL_STATIC_LINK_NOINSTANCE( ToolBarManager, ExecuteHdl_Impl, ExecuteInfo*, pExe
     {
         // Asynchronous execution as this can lead to our own destruction!
         if (( pExecuteInfo->nCmd == EXEC_CMD_CLOSETOOLBAR ) &&
-            ( pExecuteInfo->xLayoutManager.is() ))
+            ( pExecuteInfo->xLayoutManager.is() ) &&
+            ( pExecuteInfo->xWindow.is() ))
         {
-            pExecuteInfo->xLayoutManager->destroyElement( pExecuteInfo->aToolbarResName );
+            // Use docking window close to close the toolbar. The layout manager is
+            // listener and will react correctly according to the context sensitive
+            // flag of our toolbar.
+            Window* pWin = VCLUnoHelper::GetWindow( pExecuteInfo->xWindow );
+            DockingWindow* pDockWin = dynamic_cast< DockingWindow* >( pWin );
+            if ( pDockWin )
+                pDockWin->Close();
         }
     }
     catch ( Exception& )
@@ -2119,6 +2134,12 @@ IMPL_STATIC_LINK_NOINSTANCE( ToolBarManager, ExecuteHdl_Impl, ExecuteInfo*, pExe
 
     delete pExecuteInfo;
     return 0;
+}
+
+Image ToolBarManager::QueryAddonsImage( const ::rtl::OUString& aCommandURL, bool bBigImages, bool bHiContrast )
+{
+    Image aImage = framework::AddonsOptions().GetImageFromURL( aCommandURL, bBigImages, bHiContrast );
+    return aImage;
 }
 
 }
