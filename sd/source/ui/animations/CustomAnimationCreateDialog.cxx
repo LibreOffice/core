@@ -4,9 +4,9 @@
  *
  *  $RCSfile: CustomAnimationCreateDialog.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: rt $ $Date: 2007-07-06 13:10:37 $
+ *  last change: $Author: hr $ $Date: 2007-08-01 11:08:09 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -141,10 +141,18 @@ public:
     CategoryListBox( Window* pParent, const ResId& rResId );
     ~CategoryListBox();
 
+    virtual void        MouseButtonUp( const MouseEvent& rMEvt );
+
     USHORT          InsertCategory( const XubString& rStr, USHORT nPos = LISTBOX_APPEND );
+
+    void            SetDoubleClickLink( const Link& rDoubleClickHdl ) { maDoubleClickHdl = rDoubleClickHdl; }
+
+    DECL_LINK( implDoubleClickHdl, Control* );
 
 private:
     virtual void    UserDraw( const UserDrawEvent& rUDEvt );
+
+    Link            maDoubleClickHdl;
 };
 
 CategoryListBox::CategoryListBox( Window* pParent, WinBits nStyle /* = WB_BORDER */ )
@@ -157,6 +165,7 @@ CategoryListBox::CategoryListBox( Window* pParent, const ResId& rResId )
 : ListBox( pParent, rResId )
 {
     EnableUserDraw( TRUE );
+    SetDoubleClickHdl( LINK( this, CategoryListBox, implDoubleClickHdl ) );
 }
 
 CategoryListBox::~CategoryListBox()
@@ -206,6 +215,30 @@ void CategoryListBox::UserDraw( const UserDrawEvent& rUDEvt )
 
 // --------------------------------------------------------------------
 
+IMPL_LINK( CategoryListBox, implDoubleClickHdl, Control*, EMPTYARG )
+{
+    CaptureMouse();
+    return 0;
+}
+
+// --------------------------------------------------------------------
+
+void CategoryListBox::MouseButtonUp( const MouseEvent& rMEvt )
+{
+    if( rMEvt.IsLeft() && (rMEvt.GetClicks() == 2) )
+    {
+        ReleaseMouse();
+        if( maDoubleClickHdl.IsSet() )
+            maDoubleClickHdl.Call( this );
+    }
+    else
+    {
+        CategoryListBox::MouseButtonUp( rMEvt );
+    }
+}
+
+// --------------------------------------------------------------------
+
 class CustomAnimationCreateTabPage : public TabPage
 {
 public:
@@ -239,6 +272,7 @@ private:
     USHORT mnCurvePathPos;
     USHORT mnPolygonPathPos;
     USHORT mnFreeformPathPos;
+
 };
 
 struct ImplStlEffectCategorySortHelper
@@ -335,7 +369,7 @@ CustomAnimationCreateTabPage::CustomAnimationCreateTabPage( Window* pParent, Cus
         onSelectEffect();
 
     mpLBEffects->SetSelectHdl( LINK( this, CustomAnimationCreateTabPage, implSelectHdl ) );
-    mpLBEffects->SetDoubleClickHdl( LINK( this, CustomAnimationCreateTabPage, implDoubleClickHdl ) );
+    mpLBEffects->SetDoubleClickLink( LINK( this, CustomAnimationCreateTabPage, implDoubleClickHdl ) );
 }
 
 CustomAnimationCreateTabPage::~CustomAnimationCreateTabPage()
