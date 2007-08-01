@@ -4,9 +4,9 @@
  *
  *  $RCSfile: animcore.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: hr $ $Date: 2006-06-19 10:36:09 $
+ *  last change: $Author: hr $ $Date: 2007-08-01 11:09:11 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -494,7 +494,7 @@ AnimationNode::AnimationNode( sal_Int16 nNodeType )
     mnValueType( 0 ),
     mnSubItem( 0 ),
     mnCalcMode( (nNodeType == AnimationNodeType::ANIMATEMOTION) ? AnimationCalcMode::PACED : AnimationCalcMode::LINEAR),
-    mnAdditive(AnimationAdditiveMode::BASE),
+    mnAdditive(AnimationAdditiveMode::REPLACE),
     mbAccumulate(sal_False),
     mnColorSpace( AnimationColorSpace::RGB ),
     mbDirection( sal_True ),
