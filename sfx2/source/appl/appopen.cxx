@@ -4,9 +4,9 @@
  *
  *  $RCSfile: appopen.cxx,v $
  *
- *  $Revision: 1.114 $
+ *  $Revision: 1.115 $
  *
- *  last change: $Author: obo $ $Date: 2007-07-18 09:00:58 $
+ *  last change: $Author: hr $ $Date: 2007-08-02 17:07:02 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -380,23 +380,61 @@ ULONG CheckPasswd_Impl
                         Reference< ::com::sun::star::task::XInteractionHandler > xInteractionHandler = pFile->GetInteractionHandler();
                         if( xInteractionHandler.is() )
                         {
-                            RequestDocumentPassword* pPasswordRequest = new RequestDocumentPassword(
-                                ::com::sun::star::task::PasswordRequestMode_PASSWORD_ENTER,
-                                INetURLObject( pFile->GetOrigURL() ).GetName( INetURLObject::DECODE_WITH_CHARSET ) );
+                            sal_Bool bRetry = sal_True;
+                            sal_Bool bGotPasswd = sal_False;
+                            ::rtl::OUString aPassword;
 
-                            Reference< XInteractionRequest > rRequest( pPasswordRequest );
-                            xInteractionHandler->handle( rRequest );
-
-                            if ( pPasswordRequest->isPassword() )
+                            while( bRetry )
                             {
-                                pSet->Put( SfxStringItem( SID_PASSWORD, pPasswordRequest->getPassword() ) );
+                                bRetry = sal_False;
+
+                                RequestDocumentPassword* pPasswordRequest = new RequestDocumentPassword(
+                                    ::com::sun::star::task::PasswordRequestMode_PASSWORD_ENTER,
+                                    INetURLObject( pFile->GetOrigURL() ).GetName( INetURLObject::DECODE_WITH_CHARSET ) );
+
+                                Reference< XInteractionRequest > rRequest( pPasswordRequest );
+                                xInteractionHandler->handle( rRequest );
+
+                                if ( pPasswordRequest->isPassword() )
+                                {
+                                    aPassword = pPasswordRequest->getPassword();
+                                    bGotPasswd = sal_True;
+
+                                    try
+                                    {
+                                        // check the password
+                                        // if the password correct is the stream will be opened successfuly
+                                        // and immediatelly closed
+                                        ::comphelper::OStorageHelper::SetCommonStoragePassword(
+                                                                        xStorage,
+                                                                        aPassword );
+
+                                        xStorage->openStreamElement(
+                                                ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "content.xml" ) ),
+                                                embed::ElementModes::READ | embed::ElementModes::NOCREATE );
+                                    }
+                                    catch( const packages::WrongPasswordException& )
+                                    {
+                                        // reask for the password
+                                        ErrorHandler::HandleError( ERRCODE_SFX_WRONGPASSWORD );
+                                        bRetry = sal_True;
+                                    }
+                                    catch( const uno::Exception& )
+                                    {
+                                        // do nothing special
+                                        // the error will be detected by loading
+                                    }
+                                }
+                                else
+                                    bGotPasswd = sal_False;
+                            }
+
+                            if ( bGotPasswd )
+                            {
+                                pSet->Put( SfxStringItem( SID_PASSWORD, aPassword ) );
 
                                 try
                                 {
-                                    ::comphelper::OStorageHelper::SetCommonStoragePassword(
-                                                                    xStorage,
-                                                                    pPasswordRequest->getPassword() );
-
                                     // update the version list of the medium using the new password
                                     pFile->GetVersionList();
                                 }
