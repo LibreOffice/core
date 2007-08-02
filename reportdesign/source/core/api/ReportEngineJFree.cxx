@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ReportEngineJFree.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2007-07-09 11:56:14 $
+ *  last change: $Author: hr $ $Date: 2007-08-02 14:30:29 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -288,8 +288,10 @@ void SAL_CALL OReportEngineJFree::setStatusIndicator( const uno::Reference< task
                     xRowSetProp->setPropertyValue(PROPERTY_ACTIVECONNECTION,uno::makeAny(m_xActiveConnection));
 
                     ::rtl::OUString sOrder = getOrderStatement();
-                    xRowSetProp->setPropertyValue(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Order")),uno::makeAny(sOrder));
-
+                    if (sOrder.getLength() > 0)
+                    {
+                        xRowSetProp->setPropertyValue(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Order")),uno::makeAny(sOrder));
+                    }
                     if ( m_xReport->getFilter().getLength() )
                         xRowSetProp->setPropertyValue(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ApplyFilter")),uno::makeAny(sal_True));
 
@@ -492,7 +494,8 @@ void SAL_CALL OReportEngineJFree::setActiveConnection( const uno::Reference< sdb
         if ( xColumns->hasByName(sExpression) )
             sExpression = ::dbtools::quoteName( sQuote, sExpression );
         aOrder.append( sExpression );
-        aOrder.appendAscii( " " );
+        if (aOrder.getLength() > 0)
+            aOrder.appendAscii( " " );
         if ( !xGroup->getSortAscending() )
             aOrder.appendAscii( "DESC" );
         if ( (i+1) < nCount )
