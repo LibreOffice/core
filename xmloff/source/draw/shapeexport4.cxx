@@ -4,9 +4,9 @@
  *
  *  $RCSfile: shapeexport4.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: hr $ $Date: 2007-06-27 15:06:49 $
+ *  last change: $Author: hr $ $Date: 2007-08-02 18:19:35 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -259,6 +259,7 @@ void ImpExportHandles( SvXMLExport& rExport, const uno::Sequence< beans::Propert
 
         for ( i = 0; i < nElements; i++ )
         {
+            sal_Bool bPosition = sal_False;
             const uno::Sequence< beans::PropertyValue >& rPropSeq = rHandles[ i ];
             for ( j = 0; j < (sal_uInt32)rPropSeq.getLength(); j++ )
             {
@@ -274,6 +275,7 @@ void ImpExportHandles( SvXMLExport& rExport, const uno::Sequence< beans::Propert
                             ExportParameter( aStrBuffer, aPosition.Second );
                             aStr = aStrBuffer.makeStringAndClear();
                             rExport.AddAttribute( XML_NAMESPACE_DRAW, XML_HANDLE_POSITION, aStr );
+                            bPosition = sal_True;
                         }
                     }
                     break;
@@ -383,12 +385,11 @@ void ImpExportHandles( SvXMLExport& rExport, const uno::Sequence< beans::Propert
                         break;
                 }
             }
-            SvXMLElementExport aOBJ( rExport, XML_NAMESPACE_DRAW, XML_HANDLE, sal_True, sal_True );
+            if ( bPosition )
+                SvXMLElementExport aOBJ( rExport, XML_NAMESPACE_DRAW, XML_HANDLE, sal_True, sal_True );
+            else
+                rExport.ClearAttrList();
         }
-    }
-    else
-    {
-        SvXMLElementExport aOBJ( rExport, XML_NAMESPACE_DRAW, XML_HANDLE, sal_True, sal_True );
     }
 }
 
