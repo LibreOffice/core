@@ -4,9 +4,9 @@
  *
  *  $RCSfile: salinst.cxx,v $
  *
- *  $Revision: 1.38 $
+ *  $Revision: 1.39 $
  *
- *  last change: $Author: hr $ $Date: 2007-06-27 20:56:53 $
+ *  last change: $Author: hr $ $Date: 2007-08-02 18:29:24 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1001,6 +1001,22 @@ bool WinSalInstance::AnyInput( USHORT nType )
         {
             // Test for paint input
             if ( ImplPeekMessage( &aMsg, 0, WM_PAINT, WM_PAINT,
+                                  PM_NOREMOVE | PM_NOYIELD ) )
+                return true;
+
+            if ( ImplPeekMessage( &aMsg, 0, WM_SIZE, WM_SIZE,
+                                  PM_NOREMOVE | PM_NOYIELD ) )
+                return true;
+
+            if ( ImplPeekMessage( &aMsg, 0, SAL_MSG_POSTCALLSIZE, SAL_MSG_POSTCALLSIZE,
+                                  PM_NOREMOVE | PM_NOYIELD ) )
+                return true;
+
+            if ( ImplPeekMessage( &aMsg, 0, WM_MOVE, WM_MOVE,
+                                  PM_NOREMOVE | PM_NOYIELD ) )
+                return true;
+
+            if ( ImplPeekMessage( &aMsg, 0, SAL_MSG_POSTMOVE, SAL_MSG_POSTMOVE,
                                   PM_NOREMOVE | PM_NOYIELD ) )
                 return true;
         }
