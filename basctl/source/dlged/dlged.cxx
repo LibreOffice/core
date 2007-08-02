@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dlged.cxx,v $
  *
- *  $Revision: 1.49 $
+ *  $Revision: 1.50 $
  *
- *  last change: $Author: hr $ $Date: 2007-06-26 12:09:32 $
+ *  last change: $Author: hr $ $Date: 2007-08-02 17:31:03 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -729,9 +729,11 @@ IMPL_LINK( DlgEditor, PaintTimeout, Timer *, EMPTYARG )
     }
 
     // draw background self using wallpaper
+    // #i79128# ...and use correct OutDev for that
     if(pWindow)
     {
-        pWindow->DrawWallpaper(aPaintRect, Wallpaper(Color(COL_WHITE)));
+        OutputDevice& rTargetOutDev = pTargetPaintWindow->GetTargetOutputDevice();
+        rTargetOutDev.DrawWallpaper(aPaintRect, Wallpaper(Color(COL_WHITE)));
     }
 
     // do paint (unbuffered) and mark repaint end
