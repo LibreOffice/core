@@ -4,9 +4,9 @@
  *
  *  $RCSfile: guisaveas.hxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: obo $ $Date: 2007-07-17 13:36:28 $
+ *  last change: $Author: hr $ $Date: 2007-08-02 17:06:47 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -97,7 +97,8 @@ public:
     sal_Bool GUIStoreModel(
                     const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XModel >& xModel,
                     const ::rtl::OUString& aSlotName,
-                    ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >& aArgsSequence);
+                    ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >& aArgsSequence,
+                    sal_Bool bPreselectPassword );
 
     static ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue > SearchForFilter(
                     const ::com::sun::star::uno::Reference< ::com::sun::star::container::XContainerQuery >& xFilterQuery,
