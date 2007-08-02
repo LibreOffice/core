@@ -4,9 +4,9 @@
  *
  *  $RCSfile: padialog.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: obo $ $Date: 2006-07-10 16:39:26 $
+ *  last change: $Author: hr $ $Date: 2007-08-02 15:01:18 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -163,6 +163,9 @@ void PADialog::updateSettings()
 
 void PADialog::Init()
 {
+    // #i79787# initially ensure printer discovery has ended
+    m_rPIManager.checkPrintersChanged( true );
+
     UpdateDevice();
     UpdateText();
 
