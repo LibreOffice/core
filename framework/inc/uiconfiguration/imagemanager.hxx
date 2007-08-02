@@ -4,9 +4,9 @@
  *
  *  $RCSfile: imagemanager.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: hr $ $Date: 2006-06-19 11:02:41 $
+ *  last change: $Author: hr $ $Date: 2007-08-02 17:03:15 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -149,6 +149,7 @@
 namespace framework
 {
     class ImageManager :    public com::sun::star::lang::XTypeProvider                    ,
+                            public  css::lang::XServiceInfo                         ,
                             public ::com::sun::star::ui::XImageManager              ,
                             private ThreadHelpBase                                        , // Struct for right initalization of mutex member! Must be first of baseclasses.
                             public ::cppu::OWeakObject
@@ -157,6 +158,7 @@ namespace framework
             //  XInterface, XTypeProvider, XServiceInfo
             FWK_DECLARE_XINTERFACE
             FWK_DECLARE_XTYPEPROVIDER
+            DECLARE_XSERVICEINFO
 
             ImageManager( com::sun::star::uno::Reference< com::sun::star::lang::XMultiServiceFactory > xServiceManager );
             virtual ~ImageManager();
