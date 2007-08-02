@@ -4,9 +4,9 @@
  *
  *  $RCSfile: typedetection.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 07:38:38 $
+ *  last change: $Author: hr $ $Date: 2007-08-02 17:01:36 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1007,6 +1007,10 @@ void TypeDetection::impl_seekStreamToZero(comphelper::MediaDescriptor& rDescript
     // Catch it on the highest detection level only !!!
     impl_openStream(rDescriptor);
 
+    // seek to 0 is an optional feature to be more robust against
+    // "simple implemented detect services" .-)
+    impl_seekStreamToZero(rDescriptor);
+
     css::uno::Reference< css::document::XExtendedFilterDetection > xDetector;
     css::uno::Reference< css::lang::XMultiServiceFactory >         xSMGR;
 
@@ -1016,48 +1020,41 @@ void TypeDetection::impl_seekStreamToZero(comphelper::MediaDescriptor& rDescript
     aLock.clear();
     // <- SAFE
 
-    if (!xSMGR.is())
-        return ::rtl::OUString();
+    // Attention! If e.g. an office module was not installed sometimes we find a
+    // registered detect service, which is referred inside the configuration ... but not realy
+    // installed. On the other side we use third party components here, which can make trouble anyway.
+    // So we should handle errors during creation of such services more gracefully .-)
+    xDetector = css::uno::Reference< css::document::XExtendedFilterDetection >(
+            xSMGR->createInstance(sDetectService),
+            css::uno::UNO_QUERY);
 
-    // seek to 0 is an optional feature to be more robust against
-    // "simple implemented detect services" .-)
-    impl_seekStreamToZero(rDescriptor);
+    if ( ! xDetector.is())
+        return ::rtl::OUString();
 
     ::rtl::OUString sDeepType;
     try
     {
-        xDetector = css::uno::Reference< css::document::XExtendedFilterDetection >(
-                xSMGR->createInstance(sDetectService),
-                css::uno::UNO_QUERY);
-        // Attention! If e.g. an office module was not installed sometimes we find a
-        // registered detect service, which is referred inside the configuration ... but not realy
-        // installed. On the other side we use third party components here, which can make trouble anyway.
-        // So we should handle errors during creation of such services more gracefully .-)
-        if (xDetector.is())
-        {
-            // start deep detection
-            // Dont forget to convert stl descriptor to its uno representation.
+        // start deep detection
+        // Dont forget to convert stl descriptor to its uno representation.
 
-            /* Attention!
-                    You have to use an explicit instance of this uno sequence ...
-                    Because its used as an in out parameter. And in case of a temp. used object
-                    we will run into memory corruptions!
-            */
-            css::uno::Sequence< css::beans::PropertyValue > lDescriptor;
-            rDescriptor >> lDescriptor;
-            sDeepType = xDetector->detect(lDescriptor);
-            rDescriptor << lDescriptor;
-        }
+        /* Attention!
+                You have to use an explicit instance of this uno sequence ...
+                Because its used as an in out parameter. And in case of a temp. used object
+                we will run into memory corruptions!
+        */
+        css::uno::Sequence< css::beans::PropertyValue > lDescriptor;
+        rDescriptor >> lDescriptor;
+        sDeepType = xDetector->detect(lDescriptor);
+        rDescriptor << lDescriptor;
     }
-    catch(const css::uno::RuntimeException& exRun)
-        {
-            // ... Errors during creation time of such detect service was handled gracefully ... see before.
-            // But runtime errors during real detection should be handled more strictly.
-            // Otherwhise we hide errors!
-            throw exRun;
-        }
     catch(const css::uno::Exception&)
-        { sDeepType = ::rtl::OUString(); }
+        {
+            // We should ignore errors here.
+            // Thrown exceptions mostly will end in crash recovery ...
+            // But might be we find another deep detection service which can detect the same
+            // document without a problem .-)
+            sDeepType = ::rtl::OUString();
+        }
 
     // seek to 0 is an optional feature to be more robust against
     // "simple implemented detect services" .-)
@@ -1073,8 +1070,8 @@ void TypeDetection::impl_seekStreamToZero(comphelper::MediaDescriptor& rDescript
     sal_Bool bValidType = impl_validateAndSetTypeOnDescriptor(rDescriptor, sDeepType);
     if (bValidType)
         return sDeepType;
-    else
-        return ::rtl::OUString();
+
+    return ::rtl::OUString();
 }
 
 /*-----------------------------------------------
