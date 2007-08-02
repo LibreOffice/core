@@ -4,9 +4,9 @@
  *
  *  $RCSfile: RotationDescriptor.idl,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-07 23:47:22 $
+ *  last change: $Author: hr $ $Date: 2007-08-02 17:26:49 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -44,6 +44,11 @@
 
 /** This abstract service specifies the general characteristics of an optional
     rotation and shearing for a <type>Shape</type>.
+
+    This service is depricated, instead please use the <code>Transformation</code>
+    property of the service <type>Shape</type>.
+
+    @deprecated
  */
 published service RotationDescriptor
 {
@@ -52,7 +57,13 @@ published service RotationDescriptor
     /** This is the angle for rotation of this <type>Shape</type>.
         The shape is rotated counter-clockwise around the center
         of the bounding box.
-     */
+
+        This property contains an error, the rotation angle is mathematically
+        inverted when You take into account that the Y-Axis of the coordinate
+        system is pointing down. Please use the <code>Transformation</code>
+        property of the service <type>Shape</type> instead.
+        @deprecated
+    */
     [property] long RotateAngle;
 
     //-------------------------------------------------------------------------
@@ -60,7 +71,9 @@ published service RotationDescriptor
     /** This is the amount of shearing for this <type>Shape</type>.
         The shape is sheared counter-clockwise around the center
         of the bounding box
-     */
+
+        @deprecated
+    */
     [optional, property] long ShearAngle;
 };
 
