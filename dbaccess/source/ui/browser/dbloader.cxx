@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dbloader.cxx,v $
  *
- *  $Revision: 1.29 $
+ *  $Revision: 1.30 $
  *
- *  last change: $Author: rt $ $Date: 2007-07-06 08:03:30 $
+ *  last change: $Author: hr $ $Date: 2007-08-02 14:26:15 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -105,6 +105,7 @@
 #ifndef DBAUI_TOOLS_HXX
 #include "UITools.hxx"
 #endif
+
 
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::frame;
@@ -330,6 +331,7 @@ void SAL_CALL DBContentLoader::load(const Reference< XFrame > & rFrame, const ::
 
             OSL_ENSURE( bSuccess, "DBContentLoader::load: missing the required arguments - could not initialize the query design!" );
         }
+        // init controller
         if ( bSuccess )
         {
             ::vos::OGuard aGuard(Application::GetSolarMutex());
@@ -368,6 +370,7 @@ void SAL_CALL DBContentLoader::load(const Reference< XFrame > & rFrame, const ::
 
     }
 
+    // assign controller and frame
     if (bSuccess && rListener.is())
     {
         if ( xController.is() && rFrame.is() )
