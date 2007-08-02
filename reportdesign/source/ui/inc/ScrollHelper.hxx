@@ -6,9 +6,9 @@
  *
  *  $RCSfile: ScrollHelper.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2007-07-09 11:56:30 $
+ *  last change: $Author: hr $ $Date: 2007-08-02 14:37:38 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -86,7 +86,6 @@ namespace rptui
         ScrollBar           m_aHScroll;
         ScrollBar           m_aVScroll;
         ScrollBarBox        m_aCornerWin;       // window in the bottom right corner
-        Point               m_aScrollOffset;
         Size                m_aTotalPixelSize;
         Point               m_aPixOffset;       // offset to virtual window (pixel)
         ODesignView*        m_pParent;
@@ -95,12 +94,10 @@ namespace rptui
                             m_pReportDefintionMultiPlexer; // listener for property changes
 
         DECL_LINK( ScrollHdl, ScrollBar*);
-        DECL_LINK( EndScrollHdl, ScrollBar*);
         Size ResizeScrollBars();
-        void ScrollPane( long nDeltaX, long nDeltaY );
-            void ImplInitSettings();
-            void    impl_initScrollBar( ScrollBar& _rScrollBar ) const;
-        void    impl_scrollContent( long nDeltaX, long nDeltaY );
+        void ImplInitSettings();
+        void impl_initScrollBar( ScrollBar& _rScrollBar ) const;
+        void impl_scrollContent( long nDeltaX, long nDeltaY );
 
         OScrollWindowHelper(OScrollWindowHelper&);
         void operator =(OScrollWindowHelper&);
@@ -121,7 +118,7 @@ namespace rptui
 
         void                    EndScroll( long nDeltaX, long nDeltaY );
 
-        inline Point            getScrollOffset() const { return m_aScrollOffset; }
+        inline Point            getScrollOffset() const { return Point(m_aHScroll.GetThumbPos(),m_aVScroll.GetThumbPos())/*m_aScrollOffset*/; }
         inline OReportWindow*   getReportWindow() const { return m_pChild; }
         void                    setTotalSize(sal_Int32 _nWidth ,sal_Int32 _nHeight);
         inline Size             getTotalSize() const { return m_aTotalPixelSize; }
@@ -131,6 +128,7 @@ namespace rptui
         // forwards
         void                    SetMode( DlgEdMode _eMode );
         void                    SetInsertObj( USHORT eObj,const ::rtl::OUString& _sShapeType = ::rtl::OUString());
+        rtl::OUString           GetInsertObjString() const;
         void                    setGridSnap(BOOL bOn);
         void                    setDragStripes(BOOL bOn);
         BOOL                    isDragStripes() const;
