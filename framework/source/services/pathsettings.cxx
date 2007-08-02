@@ -4,9 +4,9 @@
  *
  *  $RCSfile: pathsettings.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: rt $ $Date: 2006-12-04 08:10:08 $
+ *  last change: $Author: hr $ $Date: 2007-08-02 13:30:55 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -202,6 +202,7 @@ PathSettings::PathSettings( const css::uno::Reference< css::lang::XMultiServiceF
     // Init member
     ,   m_xSMGR    (xSMGR)
     ,   m_pPropHelp(0    )
+    ,  m_bIgnoreEvents(sal_False)
 {
 }
 
@@ -216,6 +217,11 @@ PathSettings::~PathSettings()
 void SAL_CALL PathSettings::changesOccurred(const css::util::ChangesEvent& aEvent)
     throw (css::uno::RuntimeException)
 {
+    /*
+    if (m_bIgnoreEvents)
+        return;
+    */
+
     sal_Int32 c                 = aEvent.Changes.getLength();
     sal_Int32 i                 = 0;
     sal_Bool  bUpdateDescriptor = sal_False;
@@ -349,6 +355,8 @@ PathSettings::PathInfo PathSettings::impl_readNewFormat(const ::rtl::OUString& s
 //-----------------------------------------------------------------------------
 void PathSettings::impl_storePath(const PathSettings::PathInfo& aPath)
 {
+    m_bIgnoreEvents = sal_True;
+
     css::uno::Reference< css::container::XNameAccess > xCfgNew = fa_getCfgNew();
     css::uno::Reference< css::container::XNameAccess > xCfgOld = fa_getCfgOld();
 
@@ -386,6 +394,8 @@ void PathSettings::impl_storePath(const PathSettings::PathInfo& aPath)
         xProps->setPropertyValue(aResubstPath.sPathName, css::uno::Any());
         ::comphelper::ConfigurationHelper::flush(xCfgOld);
     }
+
+    m_bIgnoreEvents = sal_False;
 }
 
 //-----------------------------------------------------------------------------
@@ -901,7 +911,13 @@ void PathSettings::impl_setPathValue(      sal_Int32      nID ,
                 }
                 else
                 {
-                    aChangePath.lUserPaths = lList;
+                    OUStringList::const_iterator pIt;
+                    for (  pIt  = lList.begin();
+                           pIt != lList.end()  ;
+                         ++pIt                 )
+                    {
+                        aChangePath.lUserPaths.push_back(*pIt);
+                    }
                 }
              }
              break;
