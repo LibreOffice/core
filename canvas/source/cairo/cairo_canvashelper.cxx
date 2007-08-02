@@ -4,9 +4,9 @@
  *
  *  $RCSfile: cairo_canvashelper.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: obo $ $Date: 2007-07-17 14:20:31 $
+ *  last change: $Author: hr $ $Date: 2007-08-02 16:32:02 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -845,9 +845,10 @@ namespace cairocanvas
     cairo_set_matrix( pCairo, &aIdentityMatrix );
 
     for( sal_uInt32 nPolygonIndex = 0; nPolygonIndex < aPolyPolygon.count(); nPolygonIndex++ ) {
-        ::basegfx::B2DPolygon aPolygon = aPolyPolygon.getB2DPolygon( nPolygonIndex );
+        ::basegfx::B2DPolygon aPolygon( aPolyPolygon.getB2DPolygon( nPolygonIndex ) );
+        const sal_uInt32 nPointCount( aPolygon.count() );
 
-        if( aPolygon.count() > 1) {
+        if( nPointCount > 1) {
         bool bIsBezier = aPolygon.areControlPointsUsed();
         ::basegfx::B2DPoint aA, aB, aP;
 
@@ -871,11 +872,11 @@ namespace cairocanvas
         OSL_TRACE( "move to %f,%f\n", nX, nY );
 
         if( bIsBezier ) {
-            aA = aPolygon.getControlPointA( 0 );
-            aB = aPolygon.getControlPointB( 0 );
+            aA = aPolygon.getNextControlPoint( 0 );
+            aB = aPolygon.getPrevControlPoint( 1 );
         }
 
-        for( sal_uInt32 j = 1; j < aPolygon.count(); j++ ) {
+        for( sal_uInt32 j = 1; j < nPointCount; j++ ) {
             aP = aPolygon.getB2DPoint( j );
 
             nX = aP.getX();
@@ -908,8 +909,8 @@ namespace cairocanvas
             cairo_matrix_transform_point( &aOrigMatrix, &nBX, &nBY );
             cairo_curve_to( pCairo, nAX, nAY, nBX, nBY, nX, nY );
 
-            aA = aPolygon.getControlPointA( j );
-            aB = aPolygon.getControlPointB( j );
+            aA = aPolygon.getNextControlPoint( j );
+            aB = aPolygon.getPrevControlPoint( ( j + 1 ) % nPointCount );
             } else {
             cairo_line_to( pCairo, nX, nY );
             OSL_TRACE( "line to %f,%f\n", nX, nY );
