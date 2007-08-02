@@ -4,9 +4,9 @@
  *
  *  $RCSfile: bitmap2.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: hr $ $Date: 2007-06-27 20:09:42 $
+ *  last change: $Author: hr $ $Date: 2007-08-02 18:29:10 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -81,17 +81,17 @@
 
 struct DIBInfoHeader
 {
-    UINT32          nSize;
-    UINT32          nWidth;
-    UINT32          nHeight;
-    UINT16          nPlanes;
-    UINT16          nBitCount;
-    UINT32          nCompression;
-    UINT32          nSizeImage;
-    UINT32          nXPelsPerMeter;
-    UINT32          nYPelsPerMeter;
-    UINT32          nColsUsed;
-    UINT32          nColsImportant;
+    sal_uInt32      nSize;
+    sal_Int32       nWidth;
+    sal_Int32       nHeight;
+    sal_uInt16      nPlanes;
+    sal_uInt16      nBitCount;
+    sal_uInt32      nCompression;
+    sal_uInt32      nSizeImage;
+    sal_Int32       nXPelsPerMeter;
+    sal_Int32       nYPelsPerMeter;
+    sal_uInt32      nColsUsed;
+    sal_uInt32      nColsImportant;
 
                     DIBInfoHeader() :
                         nSize( 0UL ),
@@ -182,8 +182,9 @@ BOOL Bitmap::ImplReadDIB( SvStream& rIStm, Bitmap& rBmp, ULONG nOffset )
     DIBInfoHeader   aHeader;
     const ULONG     nStmPos = rIStm.Tell();
     BOOL            bRet = FALSE;
+    sal_Bool        bTopDown = sal_False;
 
-    if( ImplReadDIBInfoHeader( rIStm, aHeader ) && aHeader.nWidth && aHeader.nHeight && aHeader.nBitCount )
+    if( ImplReadDIBInfoHeader( rIStm, aHeader, bTopDown ) && aHeader.nWidth && aHeader.nHeight && aHeader.nBitCount )
     {
         const USHORT nBitCount( discretizeBitcount(aHeader.nBitCount) );
 
@@ -250,7 +251,7 @@ BOOL Bitmap::ImplReadDIB( SvStream& rIStm, Bitmap& rBmp, ULONG nOffset )
                 if( nOffset )
                     pIStm->SeekRel( nOffset - ( pIStm->Tell() - nStmPos ) );
 
-                bRet = ImplReadDIBBits( *pIStm, aHeader, *pAcc );
+                bRet = ImplReadDIBBits( *pIStm, aHeader, *pAcc, bTopDown );
 
                 if( bRet && aHeader.nXPelsPerMeter && aHeader.nYPelsPerMeter )
                 {
@@ -314,7 +315,7 @@ BOOL Bitmap::ImplReadDIBFileHeader( SvStream& rIStm, ULONG& rOffset )
 
 // ------------------------------------------------------------------
 
-BOOL Bitmap::ImplReadDIBInfoHeader( SvStream& rIStm, DIBInfoHeader& rHeader )
+BOOL Bitmap::ImplReadDIBInfoHeader( SvStream& rIStm, DIBInfoHeader& rHeader, sal_Bool& bTopDown )
 {
     // BITMAPINFOHEADER or BITMAPCOREHEADER
     rIStm >> rHeader.nSize;
@@ -322,12 +323,12 @@ BOOL Bitmap::ImplReadDIBInfoHeader( SvStream& rIStm, DIBInfoHeader& rHeader )
     // BITMAPCOREHEADER
     if ( rHeader.nSize == DIBCOREHEADERSIZE )
     {
-        UINT16  nTmp16;
+        sal_Int16 nTmp16;
 
         rIStm >> nTmp16; rHeader.nWidth = nTmp16;
         rIStm >> nTmp16; rHeader.nHeight = nTmp16;
-        rIStm >> nTmp16; rHeader.nPlanes = nTmp16;
-        rIStm >> nTmp16; rHeader.nBitCount = nTmp16;
+        rIStm >> rHeader.nPlanes;
+        rIStm >> rHeader.nBitCount;
     }
     else
     {
@@ -395,9 +396,19 @@ BOOL Bitmap::ImplReadDIBInfoHeader( SvStream& rIStm, DIBInfoHeader& rHeader )
         if ( rHeader.nSize > DIBINFOHEADERSIZE )
             rIStm.SeekRel( rHeader.nSize - DIBINFOHEADERSIZE );
     }
+    if ( rHeader.nHeight < 0 )
+    {
+        bTopDown = sal_True;
+        rHeader.nHeight *= -1;
+    }
+    else
+        bTopDown = sal_False;
+
+    if ( rHeader.nWidth < 0 )
+        rIStm.SetError( SVSTREAM_FILEFORMAT_ERROR );
 
     // #144105# protect a little against damaged files
-    if( rHeader.nSizeImage > (16 * rHeader.nWidth * rHeader.nHeight) )
+    if( rHeader.nSizeImage > ( 16 * static_cast< sal_uInt32 >( rHeader.nWidth * rHeader.nHeight ) ) )
         rHeader.nSizeImage = 0;
 
     return( ( rHeader.nPlanes == 1 ) && ( rIStm.GetError() == 0UL ) );
@@ -434,7 +445,7 @@ BOOL Bitmap::ImplReadDIBPalette( SvStream& rIStm, BitmapWriteAccess& rAcc, BOOL 
 
 // ------------------------------------------------------------------
 
-BOOL Bitmap::ImplReadDIBBits( SvStream& rIStm, DIBInfoHeader& rHeader, BitmapWriteAccess& rAcc )
+BOOL Bitmap::ImplReadDIBBits( SvStream& rIStm, DIBInfoHeader& rHeader, BitmapWriteAccess& rAcc, sal_Bool bTopDown )
 {
     const ULONG nAlignedWidth = AlignedWidth4Bytes( rHeader.nWidth * rHeader.nBitCount );
     UINT32      nRMask = 0;
@@ -452,14 +463,13 @@ BOOL Bitmap::ImplReadDIBBits( SvStream& rIStm, DIBInfoHeader& rHeader, BitmapWri
         case( BMP_FORMAT_4BIT_MSN_PAL ):
         case( BMP_FORMAT_8BIT_PAL ):
         case( BMP_FORMAT_24BIT_TC_BGR ):
-            bNative = ( rAcc.IsBottomUp() && !bRLE && !bTCMask && ( rAcc.GetScanlineSize() == nAlignedWidth ) );
+            bNative = ( ( rAcc.IsBottomUp() != bTopDown ) && !bRLE && !bTCMask && ( rAcc.GetScanlineSize() == nAlignedWidth ) );
         break;
 
         default:
             bNative = FALSE;
         break;
     }
-
     // Read data
     if( bNative )
     {
@@ -517,6 +527,10 @@ BOOL Bitmap::ImplReadDIBBits( SvStream& rIStm, DIBInfoHeader& rHeader, BitmapWri
             if( rHeader.nColsUsed && rHeader.nBitCount > 8 )
                 rIStm.SeekRel( rHeader.nColsUsed * ( ( rHeader.nSize != DIBCOREHEADERSIZE ) ? 4 : 3 ) );
 
+            const long nI = bTopDown ? 1 : -1;
+            long nY = bTopDown ? 0 : nHeight - 1;
+            long nCount = nHeight;
+
             switch( rHeader.nBitCount )
             {
                 case( 1 ):
@@ -524,7 +538,7 @@ BOOL Bitmap::ImplReadDIBBits( SvStream& rIStm, DIBInfoHeader& rHeader, BitmapWri
                     BYTE*   pTmp;
                     BYTE    cTmp;
 
-                    for( long nY = nHeight - 1; nY >= 0L; nY-- )
+                    for( ; nCount--; nY += nI )
                     {
                         rIStm.Read( pTmp = pBuf, nAlignedWidth );
                         cTmp = *pTmp++;
@@ -548,7 +562,7 @@ BOOL Bitmap::ImplReadDIBBits( SvStream& rIStm, DIBInfoHeader& rHeader, BitmapWri
                     BYTE*   pTmp;
                     BYTE    cTmp;
 
-                    for( long nY = nHeight - 1; nY >= 0L; nY-- )
+                    for( ; nCount--; nY += nI )
                     {
                         rIStm.Read( pTmp = pBuf, nAlignedWidth );
                         cTmp = *pTmp++;
@@ -571,7 +585,7 @@ BOOL Bitmap::ImplReadDIBBits( SvStream& rIStm, DIBInfoHeader& rHeader, BitmapWri
                 {
                     BYTE*   pTmp;
 
-                    for( long nY = nHeight - 1; nY >= 0L; nY-- )
+                    for( ; nCount--; nY += nI )
                     {
                         rIStm.Read( pTmp = pBuf, nAlignedWidth );
 
@@ -587,7 +601,7 @@ BOOL Bitmap::ImplReadDIBBits( SvStream& rIStm, DIBInfoHeader& rHeader, BitmapWri
                     BitmapColor aColor;
                     UINT16*     pTmp16;
 
-                    for( long nY = rHeader.nHeight - 1L; nY >= 0L; nY-- )
+                    for( ; nCount--; nY += nI )
                     {
                         rIStm.Read( (char*)( pTmp16 = (UINT16*) pBuf ), nAlignedWidth );
 
@@ -605,7 +619,7 @@ BOOL Bitmap::ImplReadDIBBits( SvStream& rIStm, DIBInfoHeader& rHeader, BitmapWri
                     BitmapColor aPixelColor;
                     BYTE*       pTmp;
 
-                    for( long nY = nHeight - 1; nY >= 0L; nY-- )
+                    for( ; nCount--; nY += nI )
                     {
                         rIStm.Read( pTmp = pBuf, nAlignedWidth );
 
@@ -626,7 +640,7 @@ BOOL Bitmap::ImplReadDIBBits( SvStream& rIStm, DIBInfoHeader& rHeader, BitmapWri
                     BitmapColor aColor;
                     UINT32*     pTmp32;
 
-                    for( long nY = rHeader.nHeight - 1L; nY >= 0L; nY-- )
+                    for( ; nCount--; nY += nI )
                     {
                         rIStm.Read( (char*)( pTmp32 = (UINT32*) pBuf ), nAlignedWidth );
 
