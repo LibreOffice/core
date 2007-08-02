@@ -4,9 +4,9 @@
  *
  *  $RCSfile: drawdoc.cxx,v $
  *
- *  $Revision: 1.83 $
+ *  $Revision: 1.84 $
  *
- *  last change: $Author: rt $ $Date: 2007-07-06 09:47:02 $
+ *  last change: $Author: hr $ $Date: 2007-08-02 18:20:58 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -155,7 +155,6 @@
 #include "sdresid.hxx"
 #include "cusshow.hxx"
 
-#ifndef MAC
 #ifndef SD_DRAW_DOC_SHELL_HXX
 #include "../ui/inc/DrawDocShell.hxx"
 #endif
@@ -169,22 +168,6 @@
 #include "../ui/inc/optsitem.hxx"
 #ifndef SD_FRAME_VIEW_HXX
 #include "../ui/inc/FrameView.hxx"
-#endif
-#else
-#ifndef SD_DRAW_DOC_SHELL_HXX
-#include "DrawDocShell.hxx"
-#endif
-#ifndef SD_GRAPHIC_DOC_SHELL_HXX
-#include "GraphicDocShell.hxx"
-#endif
-#include "sdxfer.hxx"
-#ifndef SD_VIEW_SHELL_HXX
-#include "ViewShell.hxx"
-#endif
-#include "optsitem.hxx"
-#ifndef SD_FRAME_VIEW_HXX
-#include "FrameView.hxx"
-#endif
 #endif
 
 // #90477#
