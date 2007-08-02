@@ -4,9 +4,9 @@
  *
  *  $RCSfile: sdpage.cxx,v $
  *
- *  $Revision: 1.61 $
+ *  $Revision: 1.62 $
  *
- *  last change: $Author: rt $ $Date: 2007-07-06 09:47:24 $
+ *  last change: $Author: hr $ $Date: 2007-08-02 18:21:53 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -112,18 +112,7 @@
 
 #include <svx/adjitem.hxx>
 
-
-#ifndef SD_DRAW_DOC_SHELL_HXX
-#ifdef MAC
-#include "::ui:inc:DrawDocShell.hxx"
-#else
-#ifdef UNX
 #include "../ui/inc/DrawDocShell.hxx"
-#else
-#include "..\ui\inc\DrawDocShell.hxx"
-#endif
-#endif
-#endif
 
 #ifndef SD_OUTLINER_HXX
 #include "Outliner.hxx"
@@ -882,9 +871,14 @@ void SdPage::CreateTitleAndLayout(BOOL bInit, BOOL bCreate )
             Point aPos(nX, nY + NOTES_HEADER_FOOTER_HEIGHT);
             USHORT nPgNum = 0;
 
+            sal_Bool    bRTL = ( GetModel() && static_cast< SdDrawDocument* >( GetModel() )->GetDefaultWritingMode() == ::com::sun::star::text::WritingMode_RL_TB );
             for (USHORT nRow = 0; nRow < nRowCnt; nRow++)
             {
                 aPos.X() = nX;
+                if (bRTL)
+                    aPos.X() = nX + (aPartArea.Width() + nGapW)*(nColCnt - 1);
+                else
+                    aPos.X() = nX;
 
                 for (USHORT nCol = 0; nCol < nColCnt; nCol++)
                 {
@@ -903,7 +897,11 @@ void SdPage::CreateTitleAndLayout(BOOL bInit, BOOL bCreate )
                     }
 
                     nPgNum++;
-                    aPos.X() += aPartArea.Width() + nGapW;
+
+                    if (bRTL)
+                        aPos.X() -= aPartArea.Width() + nGapW;
+                    else
+                        aPos.X() += aPartArea.Width() + nGapW;
                 }
                 aPos.Y() += aPartArea.Height() + nGapH;
             }
