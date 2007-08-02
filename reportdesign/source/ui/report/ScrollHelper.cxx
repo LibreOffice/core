@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ScrollHelper.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2007-07-09 11:56:33 $
+ *  last change: $Author: hr $ $Date: 2007-08-02 14:40:50 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -73,7 +73,8 @@ void lcl_setScrollBar(sal_Int32 _nNewValue,sal_Int32 _nOffSet,const Point& _aPos
     _rScrollBar.SetPosSizePixel(_aPos,_aSize);
     _rScrollBar.SetPageSize( _nNewValue );
     _rScrollBar.SetVisibleSize( _nNewValue );
-    _rScrollBar.SetThumbPos( -_nOffSet );
+    (void)_nOffSet;
+    //_rScrollBar.SetThumbPos( -_nOffSet );
 }
 
 // -----------------------------------------------------------------------------
@@ -120,12 +121,12 @@ void OScrollWindowHelper::impl_initScrollBar( ScrollBar& _rScrollBar ) const
 {
     AllSettings aSettings( _rScrollBar.GetSettings() );
     StyleSettings aStyle( aSettings.GetStyleSettings() );
-    aStyle.SetDragFullOptions( aStyle.GetDragFullOptions() | DRAGFULL_OPTION_SCROLL );
+    aStyle.SetDragFullOptions( aStyle.GetDragFullOptions() | DRAGFULL_OPTION_SCROLL ); // live scrolling
     aSettings.SetStyleSettings( aStyle );
     _rScrollBar.SetSettings( aSettings );
 
     _rScrollBar.SetScrollHdl( LINK( this, OScrollWindowHelper, ScrollHdl ) );
-    _rScrollBar.SetEndScrollHdl( LINK( this, OScrollWindowHelper, ScrollHdl ) );
+    _rScrollBar.SetLineSize( SCR_LINE_SIZE );
 }
 
 // -----------------------------------------------------------------------------
@@ -139,22 +140,18 @@ void OScrollWindowHelper::initialize()
 //------------------------------------------------------------------------------
 void OScrollWindowHelper::setTotalSize(sal_Int32 _nWidth ,sal_Int32 _nHeight)
 {
-    // the width never change
-    //if ( !m_aTotalPixelSize.Width() )
     m_aTotalPixelSize.Width() = _nWidth;
     m_aTotalPixelSize.Height() = _nHeight;
     m_aHScroll.SetRangeMax( m_aTotalPixelSize.Width() );
-    m_aHScroll.SetLineSize( SCR_LINE_SIZE );
     m_aVScroll.SetRangeMax( m_aTotalPixelSize.Height() );
-    m_aVScroll.SetLineSize( SCR_LINE_SIZE );
-    Point aNewPixOffset(-m_aHScroll.GetThumbPos(),-m_aVScroll.GetThumbPos());
+    /*Point aNewPixOffset(-m_aHScroll.GetThumbPos(),-m_aVScroll.GetThumbPos());
     if ( m_aPixOffset != aNewPixOffset )
     {
         const long nX = aNewPixOffset.X() - m_aPixOffset.X();
         const long nY = aNewPixOffset.Y() - m_aPixOffset.Y();
         impl_scrollContent( -nX, -nY );
         m_aPixOffset = aNewPixOffset;
-    }
+    }*/
 
     Resize();
 }
@@ -168,65 +165,33 @@ Size OScrollWindowHelper::ResizeScrollBars()
 
     // determine the size of the output-area and if we need scrollbars
     const long nScrSize = GetSettings().GetStyleSettings().GetScrollBarSize();
-    BOOL bVVisible = FALSE; // by default no vertical-ScrollBar
-    BOOL bHVisible = FALSE; // by default no horizontal-ScrollBar
-    BOOL bChanged;          // determines if a visiblility was changed
+    bool bVVisible = false; // by default no vertical-ScrollBar
+    bool bHVisible = false; // by default no horizontal-ScrollBar
+    bool bChanged;          // determines if a visiblility was changed
     do
     {
-        bChanged = FALSE;
+        bChanged = false;
 
         // does we need a vertical ScrollBar
         if ( aOutPixSz.Width() < m_aTotalPixelSize.Width() && !bHVisible )
         {
-            bHVisible = TRUE;
+            bHVisible = true;
             aOutPixSz.Height() -= nScrSize;
-            bChanged = TRUE;
+            bChanged = true;
         }
 
         // does we need a horizontal ScrollBar
         if ( aOutPixSz.Height() < m_aTotalPixelSize.Height() && !bVVisible )
         {
-            bVVisible = TRUE;
+            bVVisible = true;
             aOutPixSz.Width() -= nScrSize;
-            bChanged = TRUE;
+            bChanged = true;
         }
 
     }
     while ( bChanged );   // until no visibility has changed
 
     const Point aOldPixOffset( m_aPixOffset );
-
-    // justify (right/bottom borders should never exceed the window)
-    //Size aPixDelta;
-    //if ( m_aPixOffset.X() < 0 && (m_aTotalPixelSize.Width()  + m_aPixOffset.X()) < aOutPixSz.Width() )
-    //  aPixDelta.Width()  = aOutPixSz.Width()  - ( m_aPixOffset.X() + m_aTotalPixelSize.Width() );
-    //if ( m_aPixOffset.Y() < 0 && (m_aTotalPixelSize.Height() + m_aPixOffset.Y()) < aOutPixSz.Height() )
-    //  aPixDelta.Height() = aOutPixSz.Height() - ( m_aPixOffset.Y() + m_aTotalPixelSize.Height() );
-    //if ( aPixDelta.Width() || aPixDelta.Height() )
-    //{
-    //  m_aPixOffset.X() += aPixDelta.Width();
-    //  m_aPixOffset.Y() += aPixDelta.Height();
-    //}
-
-    // for axis without scrollbar restore the origin
-    if ( !bVVisible || !bHVisible )
-    {
-        m_aPixOffset = Point(
-                     bHVisible
-                     ? m_aPixOffset.X()
-                     : 0 ,
-                     bVVisible
-                     ? m_aPixOffset.Y()
-                     : 0 );
-    }
-
-    // select the shifted map-mode
-    if ( m_aPixOffset != aOldPixOffset )
-    {
-        const long nX = m_aPixOffset.X() - aOldPixOffset.X();
-        const long nY = m_aPixOffset.Y() - aOldPixOffset.Y();
-        impl_scrollContent( -nX, -nY );
-    }
 
     // show or hide scrollbars
     m_aVScroll.Show( bVVisible );
@@ -243,24 +208,31 @@ Size OScrollWindowHelper::ResizeScrollBars()
 
     const Point aOffset = LogicToPixel( Point( SECTION_OFFSET, SECTION_OFFSET ), MAP_APPFONT );
     // resize scrollbars and set their ranges
-    if ( bHVisible )
     {
+        const sal_Int32 nOldThumbPos = m_aHScroll.GetThumbPos();
         const sal_Int32 nNewWidth = aOutPixSz.Width() - aOffset.X();
         lcl_setScrollBar(nNewWidth,m_aPixOffset.X(),Point( REPORT_STARTMARKER_WIDTH, aOutPixSz.Height() ),Size( aOutPixSz.Width() - REPORT_STARTMARKER_WIDTH, nScrSize ),m_aHScroll);
+        m_aPixOffset.X() += nOldThumbPos - m_aHScroll.GetThumbPos();
     }
-    if ( bVVisible )
     {
+        const sal_Int32 nOldThumbPos = m_aVScroll.GetThumbPos();
         const sal_Int32 nNewHeight = aOutPixSz.Height() - m_pChild->getRulerHeight();
         lcl_setScrollBar(nNewHeight,m_aPixOffset.Y(),Point( aOutPixSz.Width(), m_pChild->getRulerHeight() ),Size( nScrSize,nNewHeight),m_aVScroll);
-        Invalidate(Rectangle(Point(aOutPixSz.Width(),0),Size(nScrSize,m_pChild->getRulerHeight())));
+        m_aPixOffset.Y() += nOldThumbPos - m_aVScroll.GetThumbPos();
+    }
+
+    // select the shifted map-mode
+    if ( m_aPixOffset != aOldPixOffset )
+    {
+        const long nX = m_aPixOffset.X() - aOldPixOffset.X();
+        const long nY = m_aPixOffset.Y() - aOldPixOffset.Y();
+        impl_scrollContent( -nX, -nY );
     }
     return aOutPixSz;
 }
 //------------------------------------------------------------------------------
 void OScrollWindowHelper::EndScroll( long nDeltaX, long nDeltaY )
 {
-    ScrollPane( nDeltaX, nDeltaY );
-
     impl_scrollContent( nDeltaX, nDeltaY );
     Resize();
 
@@ -268,7 +240,6 @@ void OScrollWindowHelper::EndScroll( long nDeltaX, long nDeltaY )
 //------------------------------------------------------------------------------
 void OScrollWindowHelper::impl_scrollContent( long nDeltaX, long nDeltaY )
 {
-    m_aScrollOffset += Point( nDeltaX, nDeltaY );
     if ( m_pChild )
         m_pChild->ScrollChildren(nDeltaX,nDeltaY);
 }
@@ -283,105 +254,10 @@ void OScrollWindowHelper::Resize()
         m_pChild->SetPosSizePixel(Point( 0, 0 ),Size( aTotalOutputSize.Width(), aTotalOutputSize.Height()));
 }
 //------------------------------------------------------------------------------
-IMPL_LINK( OScrollWindowHelper, ScrollHdl, ScrollBar*, pScroll )
+IMPL_LINK( OScrollWindowHelper, ScrollHdl, ScrollBar*, /*pScroll*/ )
 {
-    // get the delta in logic coordinates
-    const Size aDelta( m_aHScroll.GetDelta(), m_aVScroll.GetDelta() );
-
-    // scroll the window, if this is not already done
-    if ( pScroll == &m_aHScroll )
-        ScrollPane( aDelta.Width(), 0 );
-    else
-        ScrollPane( 0, aDelta.Height() );
-
     impl_scrollContent( m_aHScroll.GetDelta(), m_aVScroll.GetDelta() );
-
     return 0;
-}
-//------------------------------------------------------------------------------
-void OScrollWindowHelper::ScrollPane( long nDeltaX, long nDeltaY )
-{
-    // get the delta in pixel
-    Size aDeltaPix( nDeltaX, nDeltaY );
-    Size aOutPixSz( GetOutputSizePixel() );
-    const long nScrSize = GetSettings().GetStyleSettings().GetScrollBarSize();
-
-    if ( m_aVScroll.IsVisible() )
-        aOutPixSz.Width() -= nScrSize;
-
-    if ( m_aHScroll.IsVisible() )
-        aOutPixSz.Height() -= nScrSize;
-
-    Point aNewPixOffset( m_aPixOffset );
-
-    // scrolling horizontally?
-    if ( nDeltaX != 0 )
-    {
-        aNewPixOffset.X() -= nDeltaX;
-        if ( ( aOutPixSz.Width() - aNewPixOffset.X() ) > m_aTotalPixelSize.Width() )
-            aNewPixOffset.X() = - ( m_aTotalPixelSize.Width() - aOutPixSz.Width() );
-        else if ( aNewPixOffset.X() > 0 )
-            aNewPixOffset.X() = 0;
-    }
-
-    // scrolling vertically?
-    if ( nDeltaY != 0 )
-    {
-        aNewPixOffset.Y() -= aDeltaPix.Height();
-        if ( ( aOutPixSz.Height() - aNewPixOffset.Y() ) > m_aTotalPixelSize.Height() )
-            aNewPixOffset.Y() = - ( m_aTotalPixelSize.Height() - aOutPixSz.Height() );
-        else if ( aNewPixOffset.Y() > 0 )
-            aNewPixOffset.Y() = 0;
-    }
-
-    // recompute the logical scroll units
-    aDeltaPix.Width() = m_aPixOffset.X() - aNewPixOffset.X();
-    aDeltaPix.Height() = m_aPixOffset.Y() - aNewPixOffset.Y();
-    /*nDeltaX = aDeltaPix.Width();
-    nDeltaY = aDeltaPix.Height();*/
-    m_aPixOffset = Point(-m_aHScroll.GetThumbPos(),-m_aVScroll.GetThumbPos());
-
-
-    // scrolling?
-    if ( nDeltaX != 0 || nDeltaY != 0 )
-    {
-        Update();
-
-        // does the new area overlap the old one?
-        if ( Abs( (int)aDeltaPix.Height() ) < aOutPixSz.Height() ||
-             Abs( (int)aDeltaPix.Width() ) < aOutPixSz.Width() )
-        {
-            // scroll the overlapping area
-            //SetMapMode( aMap );
-            //EndScroll(-nDeltaX,-nDeltaY);
-            //Size aDelta( PixelToLogic(aDeltaPix) );
-            //if ( aDelta.Width() )
-            //{
-            //  Rectangle aRect(PixelToLogic(Rectangle(Point(REPORT_STARTMARKER_WIDTH,0),Size(aOutPixSz.Width() - REPORT_STARTMARKER_WIDTH,aOutPixSz.Height()))));
-            //  Window::Scroll(-aDelta.Width(),0,aRect, SCROLL_CLIP|SCROLL_CHILDREN);
-            //} // if ( aDelta.Width() )
-            //if ( aDelta.Height() )
-            //{
-            //  Rectangle aRect(PixelToLogic(Rectangle(Point(0,0),Size(aOutPixSz.Width(),aOutPixSz.Height() - m_pChild->getRulerHeight()))));
-            //  Window::Scroll(0,-aDelta.Height(),aRect, SCROLL_CLIP|SCROLL_CHILDREN);
-            //}
-        }
-        else
-        {
-            // repaint all
-            //SetMapMode( aMap );
-            Invalidate();
-        }
-
-        Update();
-    }
-
-    m_aPixOffset.X() -= nDeltaX;
-    m_aPixOffset.Y() -= nDeltaY;
-    if ( nDeltaX )
-        m_aHScroll.SetThumbPos( -m_aPixOffset.X() );
-    if ( nDeltaY )
-        m_aVScroll.SetThumbPos( -m_aPixOffset.Y() );
 }
 //------------------------------------------------------------------------------
 void OScrollWindowHelper::addSection(const uno::Reference< report::XSection >& _xSection
@@ -409,6 +285,11 @@ USHORT OScrollWindowHelper::getSectionCount() const
 void OScrollWindowHelper::SetInsertObj( USHORT eObj,const ::rtl::OUString& _sShapeType )
 {
     m_pChild->SetInsertObj(eObj,_sShapeType);
+}
+//----------------------------------------------------------------------------
+rtl::OUString OScrollWindowHelper::GetInsertObjString() const
+{
+    return m_pChild->GetInsertObjString();
 }
 //------------------------------------------------------------------------------
 void OScrollWindowHelper::SetMode( DlgEdMode _eNewMode )
