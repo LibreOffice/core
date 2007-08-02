@@ -4,9 +4,9 @@
  *
  *  $RCSfile: layoutmanager.cxx,v $
  *
- *  $Revision: 1.66 $
+ *  $Revision: 1.67 $
  *
- *  last change: $Author: obo $ $Date: 2007-07-18 08:50:27 $
+ *  last change: $Author: hr $ $Date: 2007-08-02 17:03:44 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -990,6 +990,16 @@ void LayoutManager::implts_createAddonsToolBars()
         aAddonToolBarData = m_pAddonOptions->GetAddonsToolBarPart( i );
         aPropSeq[1].Value = makeAny( aAddonToolBarData );
 
+        aWriteLock.lock();
+        UIElement aElement = impl_findElement( aAddonToolBarName );
+        aWriteLock.unlock();
+
+        // #i79828
+        // It's now possible that we are called more than once. Be sure to not create
+        // add-on toolbars more than once!
+        if ( aElement.m_xUIElement.is() )
+            continue;
+
         try
         {
             xUIElement = xUIElementFactory->createUIElement( aAddonToolBarName, aPropSeq );
@@ -1013,18 +1023,16 @@ void LayoutManager::implts_createAddonsToolBars()
 
                 OUString aGenericAddonTitle = implts_generateGenericAddonToolbarTitle( i+1 );
 
-                aWriteLock.lock();
-                UIElement& rElement = impl_findElement( aAddonToolBarName );
-                if ( rElement.m_aName.getLength() > 0 )
+                if ( aElement.m_aName.getLength() > 0 )
                 {
                     // Reuse a local entry so we are able to use the latest
                     // UI changes for this document.
-                    implts_setElementData( rElement, xDockWindow );
-                    rElement.m_xUIElement = xUIElement;
-                    if ( rElement.m_aUIName.getLength() == 0 )
+                    implts_setElementData( aElement, xDockWindow );
+                    aElement.m_xUIElement = xUIElement;
+                    if ( aElement.m_aUIName.getLength() == 0 )
                     {
-                        rElement.m_aUIName = aGenericAddonTitle;
-                        implts_writeWindowStateData( rElement.m_aName, rElement );
+                        aElement.m_aUIName = aGenericAddonTitle;
+                        implts_writeWindowStateData( aElement.m_aName, aElement );
                     }
                 }
                 else
@@ -1041,7 +1049,6 @@ void LayoutManager::implts_createAddonsToolBars()
                     }
                     m_aUIElements.push_back( aNewToolbar );
                 }
-                aWriteLock.unlock();
 
                 Reference< css::awt::XWindow > xWindow( xDockWindow, UNO_QUERY );
                 if ( xWindow.is() )
