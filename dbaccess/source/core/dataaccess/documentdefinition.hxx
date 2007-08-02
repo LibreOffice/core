@@ -4,9 +4,9 @@
  *
  *  $RCSfile: documentdefinition.hxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: rt $ $Date: 2007-07-06 07:54:31 $
+ *  last change: $Author: hr $ $Date: 2007-08-02 14:25:38 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -207,10 +207,6 @@ public:
             the controller which belongs to the XModel of our (active) embedded object
     */
     void impl_initObjectEditView( const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XController >& _rxController );
-
-    /** appends the given frame to the frames collection of our database document's current controller
-    */
-    void impl_appendFrameToDocumentFrames_throw( const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >& _rxFrame );
 
     /** removes the given frame from the desktop's frame collection
         @raises ::com::sun::star::uno::RuntimeException
