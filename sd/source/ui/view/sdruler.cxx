@@ -4,9 +4,9 @@
  *
  *  $RCSfile: sdruler.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: kz $ $Date: 2006-12-12 19:19:51 $
+ *  last change: $Author: hr $ $Date: 2007-08-02 18:24:16 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -219,10 +219,6 @@ void Ruler::Command(const CommandEvent& rCEvt)
     if( rCEvt.GetCommand() == COMMAND_CONTEXTMENU &&
         !pDrViewShell->GetView()->IsTextEdit() )
     {
-#ifdef MAC
-        pDrViewShell->GetView()->BrkAction();   // Aktion wieder abbrechen
-#endif
-
         SvxRuler::Command( rCEvt );
     }
 }
