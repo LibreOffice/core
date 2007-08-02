@@ -4,9 +4,9 @@
  *
  *  $RCSfile: epptso.cxx,v $
  *
- *  $Revision: 1.98 $
+ *  $Revision: 1.99 $
  *
- *  last change: $Author: kz $ $Date: 2007-05-10 15:24:02 $
+ *  last change: $Author: hr $ $Date: 2007-08-02 16:35:49 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -2561,7 +2561,13 @@ void ParagraphObj::ImplGetNumberingLevel( PPTExBulletProvider& rBuProv, sal_Int1
                         else if ( aPropName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "GraphicSize" ) ) )
                         {
                             if ( pPropValue[ i ].Value.getValueType() == ::getCppuType( (::com::sun::star::awt::Size*)0) )
-                                aBuGraSize =  *(Size*)pValue;
+                            {
+                                // don't cast awt::Size to Size as on 64-bits they are not the same.
+                                ::com::sun::star::awt::Size aSize;
+                                pPropValue[ i ].Value >>= aSize;
+                                aBuGraSize.nA = aSize.Width;
+                                aBuGraSize.nB = aSize.Height;
+                            }
                         }
                         else if ( aPropName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "StartWith" ) ) )
                             nStartWith = *( (sal_Int16*)pValue );
