@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dlgepng.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: ihi $ $Date: 2007-07-10 15:17:38 $
+ *  last change: $Author: hr $ $Date: 2007-08-02 18:18:36 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -66,7 +66,7 @@ DlgExportEPNG::DlgExportEPNG( FltCallDialogParameter& rPara ) :
 
     // Config-Parameter lesen
     sal_Int32   nCompression = ReadInt32( OUString( RTL_CONSTASCII_USTRINGPARAM( "Compression" ) ), 6 );
-    if ( ( nCompression < 0 ) && ( nCompression > 9 ) )
+    if ( ( nCompression < 0 ) || ( nCompression > 9 ) )
         nCompression = 6;
     aNumCompression.SetValue( nCompression );
 
