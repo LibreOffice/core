@@ -4,9 +4,9 @@
  *
  *  $RCSfile: unomodel.cxx,v $
  *
- *  $Revision: 1.43 $
+ *  $Revision: 1.44 $
  *
- *  last change: $Author: obo $ $Date: 2007-07-17 13:23:25 $
+ *  last change: $Author: hr $ $Date: 2007-08-02 13:54:17 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -316,7 +316,6 @@ uno::Any SAL_CALL SmModel::queryInterface( const uno::Type& rType ) throw(uno::R
   -----------------------------------------------------------------------*/
 void SAL_CALL SmModel::acquire() throw()
 {
-    ::vos::OGuard aGuard(Application::GetSolarMutex());
     OWeakObject::acquire();
 }
 /*-- 28.03.00 14:18:18---------------------------------------------------
@@ -324,7 +323,6 @@ void SAL_CALL SmModel::acquire() throw()
   -----------------------------------------------------------------------*/
 void SAL_CALL SmModel::release() throw()
 {
-    ::vos::OGuard aGuard(Application::GetSolarMutex());
     OWeakObject::release();
 }
 /*-- 28.03.00 14:18:19---------------------------------------------------
