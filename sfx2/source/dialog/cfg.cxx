@@ -4,9 +4,9 @@
  *
  *  $RCSfile: cfg.cxx,v $
  *
- *  $Revision: 1.60 $
+ *  $Revision: 1.61 $
  *
- *  last change: $Author: hr $ $Date: 2007-06-27 23:09:39 $
+ *  last change: $Author: hr $ $Date: 2007-08-02 17:07:16 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -618,7 +618,7 @@ SfxConfigGroupListBox_Impl::SfxConfigGroupListBox_Impl(
     SetNodeBitmaps( Image( ResId(BMP_COLLAPSED_HC,*rResId.GetResMgr()) ), Image( ResId(BMP_EXPANDED_HC,*rResId.GetResMgr()) ), BMP_COLOR_HIGHCONTRAST );
 
     // Check configuration to see whether only Basic macros,
-  // only Scripting Framework scripts, or both should be listed
+    // only Scripting Framework scripts, or both should be listed
     Any value;
     sal_Bool tmp = false;
 
@@ -1649,9 +1649,11 @@ void SfxConfigGroupListBox_Impl::RequestingChilds( SvLBoxEntry *pEntry )
                             bIsRootNode = TRUE;
                         }
 
-                        for ( sal_Int32 n = 0; n < children.getLength(); n++ )
+                        sal_Int32 nLen = children.getLength();
+                        for ( sal_Int32 n = 0; n < nLen; n++ )
                         {
                             Reference< browse::XBrowseNode >& theChild = children[n];
+                            ::rtl::OUString aName( theChild->getName() );
                             BOOL bDisplay = TRUE;
                             /* To mimic current starbasic behaviour we
                             need to make sure that only the current document
@@ -1661,16 +1663,12 @@ void SfxConfigGroupListBox_Impl::RequestingChilds( SvLBoxEntry *pEntry )
                             either the current document, user or share */
                             ::rtl::OUString currentDocTitle;
                                if ( SfxObjectShell::GetWorkingDocument() )
-                            {
-                                currentDocTitle = SfxObjectShell::GetWorkingDocument()->GetTitle();
-                            }
+                                currentDocTitle = SfxObjectShell::GetWorkingDocument()->GetTitle(SFX_TITLE_FILENAME);
+
                             if ( bIsRootNode )
                             {
-                                if (  ! ((theChild->getName().equals( user )  ||                                    theChild->getName().equals( share ) ||
-                                    theChild->getName().equals( currentDocTitle ) ) ) )
-                                {
+                                if ( !( (aName.equals(user) || aName.equals(share) || aName.equals(currentDocTitle) ) ) )
                                     bDisplay=FALSE;
-                                }
                             }
                             if ( children[n].is() && children[n]->getType() != browse::BrowseNodeTypes::SCRIPT && bDisplay )
                             {
