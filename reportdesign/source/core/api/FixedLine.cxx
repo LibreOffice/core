@@ -4,9 +4,9 @@
  *
  *  $RCSfile: FixedLine.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2007-07-09 11:56:13 $
+ *  last change: $Author: hr $ $Date: 2007-08-02 14:29:24 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -118,6 +118,9 @@ uno::Sequence< ::rtl::OUString > lcl_getLineOptionals()
             ,PROPERTY_VISITEDCHARSTYLENAME
             ,PROPERTY_UNVISITEDCHARSTYLENAME
             ,PROPERTY_CHARKERNING
+            ,PROPERTY_PRINTREPEATEDVALUES
+            ,PROPERTY_CONDITIONALPRINTEXPRESSION
+            ,PROPERTY_PRINTWHENGROUPCHANGE
     };
     return uno::Sequence< ::rtl::OUString >(pProps,sizeof(pProps)/sizeof(pProps[0]));
 }
@@ -219,7 +222,7 @@ sal_Bool SAL_CALL OFixedLine::supportsService(const ::rtl::OUString& ServiceName
 }
 // -----------------------------------------------------------------------------
 // XReportComponent
-REPORTCOMPONENT_IMPL(OFixedLine)
+REPORTCOMPONENT_IMPL3(OFixedLine)
 // -----------------------------------------------------------------------------
 ::sal_Int16  SAL_CALL OFixedLine::getControlBorder( ) throw (beans::UnknownPropertyException, uno::RuntimeException)
 {
@@ -320,28 +323,24 @@ void SAL_CALL OFixedLine::setControlBackgroundTransparent( ::sal_Bool /*_control
 // -----------------------------------------------------------------------------
 ::sal_Bool SAL_CALL OFixedLine::getPrintWhenGroupChange() throw (beans::UnknownPropertyException, uno::RuntimeException)
 {
-    ::osl::MutexGuard aGuard(m_aMutex);
-    return m_aProps.bPrintWhenGroupChange;
+    throw beans::UnknownPropertyException();
 }
 // -----------------------------------------------------------------------------
-void SAL_CALL OFixedLine::setPrintWhenGroupChange( ::sal_Bool _printwhengroupchange ) throw (beans::UnknownPropertyException, uno::RuntimeException)
+void SAL_CALL OFixedLine::setPrintWhenGroupChange( ::sal_Bool /*_printwhengroupchange*/ ) throw (beans::UnknownPropertyException, uno::RuntimeException)
 {
-    set(PROPERTY_PRINTWHENGROUPCHANGE,_printwhengroupchange,m_aProps.bPrintWhenGroupChange);
+    throw beans::UnknownPropertyException();
 }
 // -----------------------------------------------------------------------------
 ::rtl::OUString SAL_CALL OFixedLine::getConditionalPrintExpression() throw (beans::UnknownPropertyException, uno::RuntimeException)
 {
-    ::osl::MutexGuard aGuard(m_aMutex);
-    return m_aProps.aConditionalPrintExpression;
+    throw beans::UnknownPropertyException();
 }
 // -----------------------------------------------------------------------------
-void SAL_CALL OFixedLine::setConditionalPrintExpression( const ::rtl::OUString& _conditionalprintexpression ) throw (beans::UnknownPropertyException, uno::RuntimeException)
+void SAL_CALL OFixedLine::setConditionalPrintExpression( const ::rtl::OUString& /*_conditionalprintexpression*/ ) throw (beans::UnknownPropertyException, uno::RuntimeException)
 {
-    set(PROPERTY_CONDITIONALPRINTEXPRESSION,_conditionalprintexpression,m_aProps.aConditionalPrintExpression);
+    throw beans::UnknownPropertyException();
 }
-
 // -----------------------------------------------------------------------------
-
 // XCloneable
 uno::Reference< util::XCloneable > SAL_CALL OFixedLine::createClone(  ) throw (uno::RuntimeException)
 {
@@ -544,6 +543,16 @@ void SAL_CALL OFixedLine::setHyperLinkName(const ::rtl::OUString & /*the_value*/
 }
 
 NO_REPORTCONTROLFORMAT_IMPL(OFixedLine)
+
+::sal_Bool SAL_CALL OFixedLine::getPrintRepeatedValues() throw (beans::UnknownPropertyException, uno::RuntimeException)
+{
+    throw beans::UnknownPropertyException();
+}
+void SAL_CALL OFixedLine::setPrintRepeatedValues( ::sal_Bool /*_printrepeatedvalues*/ ) throw (beans::UnknownPropertyException, uno::RuntimeException)
+{
+    throw beans::UnknownPropertyException();
+}
+
 // -----------------------------------------------------------------------------
 // =============================================================================
 } // namespace reportdesign
