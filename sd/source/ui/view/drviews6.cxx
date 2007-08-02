@@ -4,9 +4,9 @@
  *
  *  $RCSfile: drviews6.cxx,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: rt $ $Date: 2007-04-03 16:30:10 $
+ *  last change: $Author: hr $ $Date: 2007-08-02 18:23:49 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -462,7 +462,9 @@ void DrawViewShell::ExecBmpMask( SfxRequest& rReq )
 
         case ( SID_BMPMASK_EXEC ) :
         {
-            SdrGrafObj* pObj = (SdrGrafObj*) mpDrawView->GetMarkedObjectList().GetMark(0)->GetMarkedSdrObj();
+            SdrGrafObj* pObj = 0;
+            if( mpDrawView && mpDrawView->GetMarkedObjectList().GetMarkCount() )
+                pObj = dynamic_cast< SdrGrafObj* >( mpDrawView->GetMarkedObjectList().GetMark(0)->GetMarkedSdrObj() );
 
             if ( pObj && !mpDrawView->IsTextEdit() )
             {
