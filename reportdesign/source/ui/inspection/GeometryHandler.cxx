@@ -4,9 +4,9 @@
  *
  *  $RCSfile: GeometryHandler.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2007-07-09 11:56:31 $
+ *  last change: $Author: hr $ $Date: 2007-08-02 14:38:38 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -414,6 +414,14 @@ uno::Any SAL_CALL GeometryHandler::getPropertyValue(const ::rtl::OUString & Prop
         case PROPERTY_ID_DATAFIELD:
             lcl_convertFormulaTo(aPropertyValue,aPropertyValue);
             break;
+        case PROPERTY_ID_BACKCOLOR:
+        case PROPERTY_ID_CONTROLBACKGROUND:
+            {
+                sal_Int32 nColor = COL_TRANSPARENT;
+                if ( (aPropertyValue >>= nColor) && static_cast<sal_Int32>(COL_TRANSPARENT) == nColor )
+                    aPropertyValue.clear();
+            }
+            break;
         default:
             break;
     }
@@ -751,6 +759,15 @@ uno::Any SAL_CALL GeometryHandler::convertToPropertyValue(const ::rtl::OUString 
         case PROPERTY_ID_PAGEFOOTEROPTION:
             aPropertyValue = getConstantValue(sal_False,RID_STR_REPORTPRINTOPTION_CONST,_rControlValue,::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.report.ReportPrintOption")),PropertyName);
             break;
+        case PROPERTY_ID_BACKCOLOR:
+        case PROPERTY_ID_CONTROLBACKGROUND:
+            if ( !_rControlValue.hasValue() )
+            {
+                aPropertyValue <<= static_cast<sal_Int32>(COL_TRANSPARENT);
+                break;
+            }
+            // run through
+
         case PROPERTY_ID_KEEPTOGETHER:
             if ( uno::Reference< report::XGroup>(m_xReportComponent,uno::UNO_QUERY).is())
             {
@@ -758,6 +775,7 @@ uno::Any SAL_CALL GeometryHandler::convertToPropertyValue(const ::rtl::OUString 
                 break;
             }
             // run through
+
         case PROPERTY_ID_VISIBLE:
         case PROPERTY_ID_CANGROW:
         case PROPERTY_ID_CANSHRINK:
@@ -769,8 +787,6 @@ uno::Any SAL_CALL GeometryHandler::convertToPropertyValue(const ::rtl::OUString 
         case PROPERTY_ID_DEEPTRAVERSING:
         case PROPERTY_ID_PREEVALUATED:
         case PROPERTY_ID_PRESERVEIRI:
-        case PROPERTY_ID_BACKCOLOR:
-        case PROPERTY_ID_CONTROLBACKGROUND:
         case PROPERTY_ID_BACKTRANSPARENT:
         case PROPERTY_ID_CONTROLBACKGROUNDTRANSPARENT:
         {
@@ -835,25 +851,27 @@ uno::Any SAL_CALL GeometryHandler::convertToControlValue(const ::rtl::OUString &
         // NULL is converted to NULL
         return aControlValue;
 
+    uno::Any aPropertyValue(_rPropertyValue);
+
     ::osl::MutexGuard aGuard( m_aMutex );
     const sal_Int32 nId = m_pInfoService->getPropertyId(PropertyName);
     switch(nId)
     {
         case PROPERTY_ID_FORCENEWPAGE:
         case PROPERTY_ID_NEWROWORCOL:
-            aControlValue = getConstantValue(sal_True,RID_STR_FORCENEWPAGE_CONST,_rPropertyValue,::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.report.ForceNewPage")),PropertyName);
+            aControlValue = getConstantValue(sal_True,RID_STR_FORCENEWPAGE_CONST,aPropertyValue,::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.report.ForceNewPage")),PropertyName);
             break;
         case PROPERTY_ID_GROUPKEEPTOGETHER:
-            aControlValue = getConstantValue(sal_True,RID_STR_GROUPKEEPTOGETHER_CONST,_rPropertyValue,::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.report.GroupKeepTogether")),PropertyName);
+            aControlValue = getConstantValue(sal_True,RID_STR_GROUPKEEPTOGETHER_CONST,aPropertyValue,::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.report.GroupKeepTogether")),PropertyName);
             break;
         case PROPERTY_ID_PAGEHEADEROPTION:
         case PROPERTY_ID_PAGEFOOTEROPTION:
-            aControlValue = getConstantValue(sal_True,RID_STR_REPORTPRINTOPTION_CONST,_rPropertyValue,::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.report.ReportPrintOption")),PropertyName);
+            aControlValue = getConstantValue(sal_True,RID_STR_REPORTPRINTOPTION_CONST,aPropertyValue,::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.report.ReportPrintOption")),PropertyName);
             break;
         case PROPERTY_ID_KEEPTOGETHER:
             if ( uno::Reference< report::XGroup>(m_xReportComponent,uno::UNO_QUERY).is())
             {
-                aControlValue = getConstantValue(sal_True,RID_STR_KEEPTOGETHER_CONST,_rPropertyValue,::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.report.KeepTogether")),PropertyName);
+                aControlValue = getConstantValue(sal_True,RID_STR_KEEPTOGETHER_CONST,aPropertyValue,::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.report.KeepTogether")),PropertyName);
                 break;
             }
             // run through
@@ -868,21 +886,19 @@ uno::Any SAL_CALL GeometryHandler::convertToControlValue(const ::rtl::OUString &
         case PROPERTY_ID_DEEPTRAVERSING:
         case PROPERTY_ID_PREEVALUATED:
         case PROPERTY_ID_PRESERVEIRI:
-        case PROPERTY_ID_BACKCOLOR:
-        case PROPERTY_ID_CONTROLBACKGROUND:
         case PROPERTY_ID_BACKTRANSPARENT:
         case PROPERTY_ID_CONTROLBACKGROUNDTRANSPARENT:
         {
             if ( _rControlValueType.getTypeClass() == uno::TypeClass_STRING )
             {
                 uno::Reference< inspection::XStringRepresentation > xConversionHelper = inspection::StringRepresentation::create( m_xContext,m_xTypeConverter );
-                aControlValue <<= xConversionHelper->convertToControlValue( _rPropertyValue );
+                aControlValue <<= xConversionHelper->convertToControlValue( aPropertyValue );
             }
             else
             {
                 try
                 {
-                    aControlValue = m_xTypeConverter->convertTo( _rPropertyValue, _rControlValueType );
+                    aControlValue = m_xTypeConverter->convertTo( aPropertyValue, _rControlValueType );
                 }
                 catch( const uno::Exception& )
                 {
@@ -895,28 +911,34 @@ uno::Any SAL_CALL GeometryHandler::convertToControlValue(const ::rtl::OUString &
         case PROPERTY_ID_INITIALFORMULA:
         case PROPERTY_ID_FORMULA:
         case PROPERTY_ID_DATAFIELD:
-            lcl_convertFormulaTo(_rPropertyValue,aControlValue);
+            lcl_convertFormulaTo(aPropertyValue,aControlValue);
             break;
         case PROPERTY_ID_CHARFONTNAME:
-            aControlValue = m_xFormComponentHandler->convertToControlValue(PROPERTY_FONTNAME, _rPropertyValue, _rControlValueType);
+            aControlValue = m_xFormComponentHandler->convertToControlValue(PROPERTY_FONTNAME, aPropertyValue, _rControlValueType);
             break;
         case PROPERTY_ID_POSITIONX:
             {
-                uno::Any aTemp = _rPropertyValue;
                 sal_Int32 nPosX = 0;
-                aTemp >>= nPosX;
+                aPropertyValue >>= nPosX;
                 uno::Reference< report::XReportComponent> xSourceReportComponent(m_xReportComponent,uno::UNO_QUERY);
                 nPosX -= getStyleProperty<sal_Int32>(xSourceReportComponent->getSection()->getReportDefinition(),PROPERTY_LEFTMARGIN);
-                aTemp <<= nPosX;
-                aControlValue = m_xFormComponentHandler->convertToControlValue(PropertyName, aTemp, _rControlValueType);
+                aPropertyValue <<= nPosX;
+                aControlValue = m_xFormComponentHandler->convertToControlValue(PropertyName, aPropertyValue, _rControlValueType);
             }
             break;
+        case PROPERTY_ID_BACKCOLOR:
+        case PROPERTY_ID_CONTROLBACKGROUND:
+            {
+                sal_Int32 nColor = COL_TRANSPARENT;
+                if ( (aPropertyValue >>= nColor) && static_cast<sal_Int32>(COL_TRANSPARENT) == nColor )
+                    aPropertyValue.clear();
+            }
+            // run through
         default:
-            aControlValue = m_xFormComponentHandler->convertToControlValue(PropertyName, _rPropertyValue, _rControlValueType);
+            aControlValue = m_xFormComponentHandler->convertToControlValue(PropertyName, aPropertyValue, _rControlValueType);
     }
     return aControlValue;
 }
-
 void SAL_CALL GeometryHandler::addPropertyChangeListener(const uno::Reference< beans::XPropertyChangeListener > & Listener) throw (uno::RuntimeException, lang::NullPointerException)
 {
     m_xFormComponentHandler->addPropertyChangeListener(Listener);
@@ -1005,7 +1027,11 @@ uno::Sequence< ::rtl::OUString > SAL_CALL GeometryHandler::getSupersededProperti
 uno::Sequence< ::rtl::OUString > SAL_CALL GeometryHandler::getActuatingProperties() throw (uno::RuntimeException)
 {
     ::osl::MutexGuard aGuard( m_aMutex );
-    return m_xFormComponentHandler->getActuatingProperties();
+
+    uno::Sequence< ::rtl::OUString > aSeq(2);
+    aSeq[0] = PROPERTY_BACKTRANSPARENT;
+    aSeq[1] = PROPERTY_CONTROLBACKGROUNDTRANSPARENT;
+    return ::comphelper::concatSequences(m_xFormComponentHandler->getActuatingProperties(),aSeq);
 }
 
 ::sal_Bool SAL_CALL GeometryHandler::isComposable(const ::rtl::OUString & _rPropertyName) throw (uno::RuntimeException, beans::UnknownPropertyException)
@@ -1057,7 +1083,43 @@ void SAL_CALL GeometryHandler::actuatingPropertyChanged(const ::rtl::OUString & 
         throw lang::NullPointerException();
 
     ::osl::MutexGuard aGuard( m_aMutex );
-    m_xFormComponentHandler->actuatingPropertyChanged(ActuatingPropertyName, NewValue, OldValue, _rxInspectorUI, FirstTimeInit);
+    const sal_Int32 nId = m_pInfoService->getPropertyId(ActuatingPropertyName);
+    switch(nId)
+    {
+        case PROPERTY_ID_BACKTRANSPARENT:
+        case PROPERTY_ID_CONTROLBACKGROUNDTRANSPARENT:
+            {
+                sal_Bool bValue = sal_False;
+                NewValue >>= bValue;
+                bValue = !bValue;
+                _rxInspectorUI->enablePropertyUI(PROPERTY_BACKCOLOR,bValue);
+                _rxInspectorUI->enablePropertyUI(PROPERTY_CONTROLBACKGROUND,bValue);
+                if ( bValue )
+                    try
+                    {
+                        const ::rtl::OUString pProps[] ={PROPERTY_BACKCOLOR,PROPERTY_CONTROLBACKGROUND};
+                        for (size_t i = 0; i < sizeof(pProps)/sizeof(pProps[0]); ++i)
+                        {
+                            if ( m_xReportComponent->getPropertySetInfo()->hasPropertyByName(pProps[i]) )
+                            {
+                                sal_Int32 nColor = COL_TRANSPARENT;
+                                m_xReportComponent->getPropertyValue(pProps[i]) >>= nColor;
+                                if ( COL_TRANSPARENT == static_cast<sal_uInt32>(nColor) )
+                                    m_xReportComponent->setPropertyValue(pProps[i],uno::makeAny(COL_WHITE));
+                                break;
+                            }
+                        }
+                    }
+                    catch(const uno::Exception&)
+                    {
+                        // not interested in
+                    }
+            }
+            break;
+        default:
+            m_xFormComponentHandler->actuatingPropertyChanged(ActuatingPropertyName, NewValue, OldValue, _rxInspectorUI, FirstTimeInit);
+            break;
+    }
 }
 
 ::sal_Bool SAL_CALL GeometryHandler::suspend(::sal_Bool Suspend) throw (uno::RuntimeException)
