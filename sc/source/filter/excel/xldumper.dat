@@ -1417,7 +1417,7 @@ begin
   0x0040=align-auto-format
   0x0080=border-auto-format
   0x0100=pattern-auto-format
-  0x0200=numer-auto-format
+  0x0200=number-auto-format
 end
 
 # SXVS -----------------------------------------------------------------------
