@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ipclient.cxx,v $
  *
- *  $Revision: 1.28 $
+ *  $Revision: 1.29 $
  *
- *  last change: $Author: hr $ $Date: 2007-06-27 23:34:03 $
+ *  last change: $Author: hr $ $Date: 2007-08-02 17:08:57 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -990,7 +990,8 @@ ErrCode SfxInPlaceClient::DoVerb( long nVerb )
 
                     aHelper.GUIStoreModel( xEmbModel,
                                             ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "SaveAs" ) ),
-                                            aDispatchArgs );
+                                            aDispatchArgs,
+                                            sal_False );
                 }
                 catch( task::ErrorCodeIOException& aErrorEx )
                 {
