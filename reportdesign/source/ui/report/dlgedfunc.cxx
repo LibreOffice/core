@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dlgedfunc.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2007-07-09 11:56:33 $
+ *  last change: $Author: hr $ $Date: 2007-08-02 14:41:30 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -93,6 +93,11 @@
 #include <svx/svditer.hxx>
 #endif
 
+#include <com/sun/star/beans/XPropertySet.hpp>
+#include <uistrings.hrc>
+#include "UndoEnv.hxx"
+#include <RptModel.hxx>
+
 #define DEFAUL_MOVE_SIZE    100
 namespace rptui
 {
@@ -151,16 +156,58 @@ void DlgEdFunc::ForceScroll( const Point& rPos )
 //----------------------------------------------------------------------------
 
 DlgEdFunc::DlgEdFunc( OReportSection* _pParent )
+:pParent(_pParent),
+ m_xOverlappingObj(NULL),
+ m_pOverlappingObj(NULL),
+ m_bSelectionMode(false)
 {
-    pParent = _pParent;
+    // pParent = _pParent;
     aScrollTimer.SetTimeoutHdl( LINK( this, DlgEdFunc, ScrollTimeout ) );
     aScrollTimer.SetTimeout( SELENG_AUTOREPEAT_INTERVAL );
 }
 
 //----------------------------------------------------------------------------
+    void DlgEdFunc::setOverlappedControlColor(sal_Int32 _nColor)
+    {
+        m_nOverlappedControlColor = _nColor;
+    }
 
+// -----------------------------------------------------------------------------
+sal_Int32 lcl_setColorOfObject(uno::Reference< uno::XInterface > _xObj, long _nColorTRGB)
+{
+    sal_Int32 nBackColor = 0;
+    try
+    {
+        uno::Reference<report::XReportComponent> xComponent(_xObj, uno::UNO_QUERY_THROW);
+        // NOT NEED if UNO_QUERY_THROW:
+        // if (xComponent.is())
+        // {
+        uno::Reference< beans::XPropertySet > xProp(xComponent, uno::UNO_QUERY_THROW);
+        // if (xProp.is())
+        // {
+        // ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ControlBackground"))
+        // is PROPERTY_CONTROLBACKGROUND
+        uno::Any aAny = xProp->getPropertyValue(PROPERTY_CONTROLBACKGROUND);
+        if (aAny.hasValue())
+        {
+            aAny >>= nBackColor;
+            // try to set background color at the ReportComponent
+            uno::Any aBlackColorAny = uno::makeAny(_nColorTRGB);
+            xProp->setPropertyValue(PROPERTY_CONTROLBACKGROUND, aBlackColorAny);
+        }
+        // aCopies.push_back(xComponent->createClone());
+    }
+    catch(uno::Exception&)
+    {
+        // bit my shiny metal as!
+        // OSL_ENSURE(0,"Can't copy report elements!");
+    }
+    return nBackColor;
+}
+// -----------------------------------------------------------------------------
 DlgEdFunc::~DlgEdFunc()
 {
+    unColorizeOverlappedObj();
     aScrollTimer.Stop();
 }
 
@@ -187,15 +234,14 @@ BOOL DlgEdFunc::MouseButtonDown( const MouseEvent& rMEvt )
     else if ( rMEvt.IsRight() && !rMEvt.IsLeft() && rMEvt.GetClicks() == 1 ) // mark object when context menu was selected
     {
         OSectionView* pView = pParent->getView();
-        //const USHORT nHitLog = USHORT ( pParent->PixelToLogic(Size(3,0)).Width() );
         SdrPageView* pPV = pView->GetSdrPageView();
         SdrViewEvent aVEvt;
-        pView->PickAnything(rMEvt, SDRMOUSEBUTTONDOWN, aVEvt);
+        if ( pView->PickAnything(rMEvt, SDRMOUSEBUTTONDOWN, aVEvt) != SDRHIT_MARKEDOBJECT && !rMEvt.IsShift() )
+            pParent->getViewsWindow()->unmarkAllObjects(NULL);
         if ( aVEvt.pRootObj )
             pView->MarkObj(aVEvt.pRootObj, pPV);
         else
             pParent->getViewsWindow()->unmarkAllObjects(NULL);
-
 
         bHandled = TRUE;
     }
@@ -206,6 +252,7 @@ BOOL DlgEdFunc::MouseButtonDown( const MouseEvent& rMEvt )
 
 BOOL DlgEdFunc::MouseButtonUp( const MouseEvent& /*rMEvt*/ )
 {
+    unColorizeOverlappedObj();
     aScrollTimer.Stop();
     return TRUE;
 }
@@ -462,12 +509,62 @@ sal_Bool DlgEdFunc::handleKeyEvent(const KeyEvent& _rEvent)
     return bReturn;
 }
 // -----------------------------------------------------------------------------
+void DlgEdFunc::colorizeOverlappedObject(SdrObject* _pOverlappedObj)
+{
+    OObjectBase* pObj = dynamic_cast<OObjectBase*>(_pOverlappedObj);
+    if ( pObj )
+    {
+        uno::Reference<report::XReportComponent> xComponent = pObj->getReportComponent();
+        if (xComponent.is() && xComponent != m_xOverlappingObj)
+        {
+            OReportModel* pRptModel = static_cast<OReportModel*>(_pOverlappedObj->GetModel());
+            if ( pRptModel )
+            {
+                OXUndoEnvironment::OUndoEnvLock aLock(pRptModel->GetUndoEnv());
+
+                // uncolorize an old object, if there is one
+                unColorizeOverlappedObj();
+
+                m_nOldColor = lcl_setColorOfObject(xComponent, m_nOverlappedControlColor);
+                m_xOverlappingObj = xComponent;
+                m_pOverlappingObj = _pOverlappedObj;
+            }
+        }
+    }
+}
+// -----------------------------------------------------------------------------
+void DlgEdFunc::unColorizeOverlappedObj()
+{
+    // uncolorize an old object, if there is one
+    if (m_xOverlappingObj.is())
+    {
+        OReportModel* pRptModel = static_cast<OReportModel*>(m_pOverlappingObj->GetModel());
+        if ( pRptModel )
+        {
+            OXUndoEnvironment::OUndoEnvLock aLock(pRptModel->GetUndoEnv());
+
+            lcl_setColorOfObject(m_xOverlappingObj, m_nOldColor);
+            m_xOverlappingObj = NULL;
+            m_pOverlappingObj = NULL;
+        }
+    }
+}
+// -----------------------------------------------------------------------------
 bool DlgEdFunc::isOverlapping(const MouseEvent& rMEvt)
 {
     bool bOverlapping = false;
     OSectionView* pView  = pParent->getView();
     SdrViewEvent aVEvt;
     bOverlapping = pView->PickAnything(rMEvt, SDRMOUSEBUTTONUP, aVEvt) != SDRHIT_NONE;
+    if (bOverlapping && aVEvt.pObj)
+    {
+        colorizeOverlappedObject(aVEvt.pObj);
+    }
+    else
+    {
+        unColorizeOverlappedObj();
+    }
+
     return bOverlapping;
 }
 // -----------------------------------------------------------------------------
@@ -479,7 +576,10 @@ void DlgEdFunc::checkMovementAllowed(const MouseEvent& rMEvt)
         if ( isRectangleHit(rMEvt) )
             pView->BrkAction();
         // object was dragged
-        pView->EndDragObj( rMEvt.IsMod1() );
+        pView->EndDragObj( FALSE /* rMEvt.IsMod1() */   ); // Copy by CTRL-Key not allowed at the moment.
+                                                           // we create a wrong object here, with no content
+                                                           // which results in a wrong report, which can't execute
+                                                           // therefore no copy. LLA: 20070710
         pView->ForceMarkedToAnotherPage();
         pParent->Invalidate();
     }
@@ -487,9 +587,34 @@ void DlgEdFunc::checkMovementAllowed(const MouseEvent& rMEvt)
         pView->EndAction();
 }
 // -----------------------------------------------------------------------------
-bool DlgEdFunc::isRectangleHit(const MouseEvent& rMEvt)
+bool DlgEdFunc::isOnlyCustomShapeMarked()
 {
     OSectionView* pView  = pParent->getView();
+    bool bReturn = true;
+    const SdrMarkList& rMarkList = pView->GetMarkedObjectList();
+    for (sal_uInt32 i =  0; i < rMarkList.GetMarkCount();++i )
+    {
+        SdrMark* pMark = rMarkList.GetMark(i);
+        // bCheck = dynamic_cast<OUnoObject*>(pMark->GetMarkedSdrObj()) != NULL;
+        SdrObject* pObj = pMark->GetMarkedSdrObj();
+        if (pObj->GetObjIdentifier() != OBJ_CUSTOMSHAPE)
+        {
+            // we found an object in the marked objects, which is not a custom shape.
+            bReturn = false;
+            break;
+        }
+    }
+    return bReturn;
+}
+// -----------------------------------------------------------------------------
+bool DlgEdFunc::isRectangleHit(const MouseEvent& rMEvt)
+{
+    if (isOnlyCustomShapeMarked())
+    {
+        return false;
+    }
+    OSectionView* pView  = pParent->getView();
+
     SdrViewEvent aVEvt;
     const SdrHitKind eHit = pView->PickAnything(rMEvt, SDRMOUSEMOVE, aVEvt);
     bool bIsSetPoint = (eHit == SDRHIT_UNMARKEDOBJECT);
@@ -498,33 +623,45 @@ bool DlgEdFunc::isRectangleHit(const MouseEvent& rMEvt)
         // no drag rect, we have to check every single select rect
         //const Rectangle& rRect = pView->GetDragStat().GetActionRect();
         const SdrDragStat& rDragStat = pView->GetDragStat();
-        SdrObjListIter aIter(*pParent->getPage(),IM_DEEPNOGROUPS);
-        SdrObject* pObjIter = NULL;
-        // loop through all marked objects and check if there new rect overlapps an old one.
-        while( (pObjIter = aIter.Next()) != NULL && !bIsSetPoint)
+        if (rDragStat.GetDragMethod() != NULL)
         {
-            if ( pView->IsObjMarked(pObjIter)
-                && dynamic_cast<OUnoObject*>(pObjIter) != NULL )
+            SdrObjListIter aIter(*pParent->getPage(),IM_DEEPNOGROUPS);
+            SdrObject* pObjIter = NULL;
+            // loop through all marked objects and check if there new rect overlapps an old one.
+            while( (pObjIter = aIter.Next()) != NULL && !bIsSetPoint)
             {
-                Rectangle aNewRect = pObjIter->GetLastBoundRect();
-                long nDx = rDragStat.IsHorFixed() ? 0 : rDragStat.GetDX();
-                long nDy = rDragStat.IsVerFixed() ? 0 : rDragStat.GetDY();
-                if ( (nDx + aNewRect.Left()) < 0 )
-                    nDx = -aNewRect.Left();
-                if ( (nDy + aNewRect.Top()) < 0 )
-                    nDy = -aNewRect.Top();
+                if ( pView->IsObjMarked(pObjIter)
+                     && dynamic_cast<OUnoObject*>(pObjIter) != NULL )
+                {
+                    Rectangle aNewRect = pObjIter->GetLastBoundRect();
+                    long nDx = rDragStat.IsHorFixed() ? 0 : rDragStat.GetDX();
+                    long nDy = rDragStat.IsVerFixed() ? 0 : rDragStat.GetDY();
+                    if ( (nDx + aNewRect.Left()) < 0 )
+                        nDx = -aNewRect.Left();
+                    if ( (nDy + aNewRect.Top()) < 0 )
+                        nDy = -aNewRect.Top();
 
-                Point aTest;
-                rDragStat.GetDragMethod()->MovPoint(aTest);
-                if ( rDragStat.GetDragMethod()->IsMoveOnly() )
-                    aNewRect.Move(nDx,nDy);
-                else
-                    ::ResizeRect(aNewRect,rDragStat.GetRef1(),rDragStat.GetXFact(),rDragStat.GetYFact());
+                    Point aTest;
+                    rDragStat.GetDragMethod()->MovPoint(aTest);
+                    if ( rDragStat.GetDragMethod()->IsMoveOnly() )
+                        aNewRect.Move(nDx,nDy);
+                    else
+                        ::ResizeRect(aNewRect,rDragStat.GetRef1(),rDragStat.GetXFact(),rDragStat.GetYFact());
 
 
-                bIsSetPoint = isOver(aNewRect,*pParent->getPage(),*pView,false,pObjIter);
+                    SdrObject* pObjOverlapped = isOver(aNewRect,*pParent->getPage(),*pView,false,pObjIter);
+                    bIsSetPoint = pObjOverlapped ? true : false;
+                    if (pObjOverlapped && !m_bSelectionMode)
+                    {
+                        colorizeOverlappedObject(pObjOverlapped);
+                }
             }
         }
+    }
+    }
+    else if ( aVEvt.pObj && !m_bSelectionMode)
+    {
+        colorizeOverlappedObject(aVEvt.pObj);
     }
     return bIsSetPoint;
 }
@@ -712,6 +849,7 @@ DlgEdFuncSelect::~DlgEdFuncSelect()
 
 BOOL DlgEdFuncSelect::MouseButtonDown( const MouseEvent& rMEvt )
 {
+    m_bSelectionMode = false;
     if ( DlgEdFunc::MouseButtonDown(rMEvt) )
         return TRUE;
     // get view from parent
@@ -776,7 +914,10 @@ BOOL DlgEdFuncSelect::MouseButtonDown( const MouseEvent& rMEvt )
                     //pView->UnmarkAll();
 
                 if ( rMEvt.GetClicks() == 1 )
+                {
+                    m_bSelectionMode = true;
                     pView->BegMarkObj( m_aMDPos );
+                }
                 else
                     pView->SdrBeginTextEdit( aVEvt.pRootObj,pView->GetSdrPageView(),pParent,sal_False );
             }
@@ -811,6 +952,7 @@ BOOL DlgEdFuncSelect::MouseButtonUp( const MouseEvent& rMEvt )
     pParent->ReleaseMouse();
 
     pParent->getViewsWindow()->getView()->getReportView()->UpdatePropertyBrowserDelayed(pView);
+    m_bSelectionMode = false;
     return TRUE;
 }
 
@@ -835,6 +977,9 @@ BOOL DlgEdFuncSelect::MouseMove( const MouseEvent& rMEvt )
     {
         const USHORT nHitLog = USHORT ( pParent->PixelToLogic(Size(3,0)).Width() );
         pParent->SetPointer( pView->GetPreferedPointer( aPnt, pParent, nHitLog ) );
+
+        // restore color
+        unColorizeOverlappedObj();
     }
 
     return TRUE;
