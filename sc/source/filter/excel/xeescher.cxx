@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xeescher.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: vg $ $Date: 2007-05-22 19:46:51 $
+ *  last change: $Author: hr $ $Date: 2007-08-02 13:30:41 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -769,7 +769,7 @@ XclExpChartObj::XclExpChartObj( const XclExpRoot& rRoot, Reference< XShape > xSh
 
     // client anchor
     if( SdrObject* pSdrObj = ::GetSdrObjectFromXShape( xShape ) )
-        XclExpEscherAnchor( GetRoot(), *pSdrObj ).WriteData( rEscherEx );
+        XclExpEscherAnchor( rRoot, *pSdrObj ).WriteData( rEscherEx );
 
     // client data (the following OBJ record)
     rEscherEx.AddAtom( 0, ESCHER_ClientData );
