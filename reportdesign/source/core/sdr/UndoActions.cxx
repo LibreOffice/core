@@ -4,9 +4,9 @@
  *
  *  $RCSfile: UndoActions.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2007-07-09 11:56:16 $
+ *  last change: $Author: hr $ $Date: 2007-08-02 14:32:37 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -35,6 +35,7 @@
 #include "UndoActions.hxx"
 #include "UndoEnv.hxx"
 #include "formatnormalizer.hxx"
+#include "conditionupdater.hxx"
 #include "corestrings.hrc"
 #include "rptui_slotid.hrc"
 #include "RptDef.hxx"
@@ -107,6 +108,9 @@ OCommentUndoAction::OCommentUndoAction(SdrModel& _rMod,USHORT nCommentID)
     m_pController = static_cast< OReportModel& >( _rMod ).getController();
     if ( nCommentID )
         m_strComment = String(ModuleRes(nCommentID));
+}
+OCommentUndoAction::~OCommentUndoAction()
+{
 }
 //----------------------------------------------------------------------------
 void OCommentUndoAction::Undo()
@@ -208,11 +212,8 @@ void OUndoContainerAction::implReRemove( ) SAL_THROW( ( Exception ) )
 //------------------------------------------------------------------------------
 void OUndoContainerAction::Undo()
 {
-    OXUndoEnvironment& rEnv = static_cast< OReportModel& >( rMod ).GetUndoEnv();
-
-    if ( !rEnv.IsLocked() && m_xElement.is() )
+    if ( m_xElement.is() )
     {
-        OXUndoEnvironment::OUndoEnvLock aLock(rEnv);
         // prevents that an undo action will be created for elementInserted
         try
         {
@@ -240,11 +241,8 @@ void OUndoContainerAction::Undo()
 //------------------------------------------------------------------------------
 void OUndoContainerAction::Redo()
 {
-    OXUndoEnvironment& rEnv = static_cast< OReportModel& >( rMod ).GetUndoEnv();
-    if ( !rEnv.IsLocked() && m_xElement.is() )
+    if ( m_xElement.is() )
     {
-        //rEnv.Lock(); // redo doesn't work when locked
-        OXUndoEnvironment::OUndoEnvLock aLock(rEnv);
         try
         {
             switch ( m_eAction )
@@ -265,7 +263,6 @@ void OUndoContainerAction::Redo()
         {
             OSL_ENSURE( sal_False, "OUndoContainerAction::Redo: caught an exception!" );
         }
-        //rEnv.UnLock();
     }
 }
 // -----------------------------------------------------------------------------
@@ -393,12 +390,10 @@ Reference< XPropertySet> ORptUndoPropertyAction::getObject()
 // -----------------------------------------------------------------------------
 void ORptUndoPropertyAction::setProperty(sal_Bool _bOld)
 {
-    OXUndoEnvironment& rEnv = static_cast< OReportModel& >( rMod ).GetUndoEnv();
     Reference< XPropertySet> xObj = getObject();
 
-    if (xObj.is() && !rEnv.IsLocked())
+    if (xObj.is() )
     {
-        OXUndoEnvironment::OUndoEnvLock aLock(rEnv);
         try
         {
             xObj->setPropertyValue( m_aPropertyName, _bOld ? m_aOldValue : m_aNewValue );
@@ -462,6 +457,7 @@ public:
     OReportModel&                                       m_rModel;
     PropertySetInfoCache                                m_aPropertySetCache;
     FormatNormalizer                                    m_aFormatNormalizer;
+    ConditionUpdater                                    m_aConditionUpdater;
     ::osl::Mutex                                        m_aMutex;
     ::std::vector< uno::Reference< container::XChild> > m_aSections;
     oslInterlockedCount                                 m_nLocks;
@@ -472,6 +468,7 @@ public:
 
 OXUndoEnvironmentImpl::OXUndoEnvironmentImpl(OReportModel& _rModel) : m_rModel(_rModel)
         ,m_aFormatNormalizer( _rModel )
+        ,m_aConditionUpdater()
         ,m_nLocks(0)
         ,m_bReadOnly(sal_False)
 {
@@ -650,8 +647,9 @@ void SAL_CALL OXUndoEnvironment::propertyChange( const PropertyChangeEvent& _rEv
     if ( aPropertyPos->second )
         return;
 
-    // give our format normalizer a chance
+    // give components with sub responsibilities a chance
     m_pImpl->m_aFormatNormalizer.notifyPropertyChange( _rEvent );
+    m_pImpl->m_aConditionUpdater.notifyPropertyChange( _rEvent );
 
     aGuard.clear();
     // TODO: this is a potential race condition: two threads here could in theory
