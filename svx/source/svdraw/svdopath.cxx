@@ -4,9 +4,9 @@
  *
  *  $RCSfile: svdopath.cxx,v $
  *
- *  $Revision: 1.45 $
+ *  $Revision: 1.46 $
  *
- *  last change: $Author: obo $ $Date: 2007-07-18 10:57:35 $
+ *  last change: $Author: hr $ $Date: 2007-08-02 17:29:27 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -619,7 +619,10 @@ FASTBOOL ImpPathForDragAndCreate::BegDrag(SdrDragStat& rDrag) const
 
             if(pTestHdl
                 && pTestHdl->IsSelected()
-                && pTestHdl->GetObj() == (SdrObject*)this)
+                    // #i77148# OOps - comparison need to be done with the SdrObject, not with his.
+                    // This is an error from drag isolation and a good example that direct c-casts
+                    // are bad.
+                && pTestHdl->GetObj() == &mrSdrPathObject)
             {
                 nSelectedPoints++;
             }
@@ -1819,7 +1822,18 @@ void SdrPathObj::ImpForceKind()
 
         if((bool)IsClosed() != aCandidate.isClosed())
         {
-            aCandidate.setClosed(IsClosed());
+            // #i80213# really change polygon geometry; else e.g. the last point which
+            // needs to be identical with the first one will be missing when opening
+            // due to OBJ_PATH type
+            if(aCandidate.isClosed())
+            {
+                basegfx::tools::openWithGeometryChange(aCandidate);
+            }
+            else
+            {
+                basegfx::tools::closeWithGeometryChange(aCandidate);
+            }
+
             maPathPolygon.setB2DPolygon(a, aCandidate);
         }
     }
@@ -3098,10 +3112,30 @@ sal_Bool SdrPathObj::TRGetBaseGeometry(basegfx::B2DHomMatrix& rMatrix, basegfx::
 
     // build return value matrix
     rMatrix.identity();
-    rMatrix.scale(aScale.getX(), aScale.getY());
-    rMatrix.shearX(tan(fShearX));
-    rMatrix.rotate(fRotate);
-    rMatrix.translate(aTranslate.getX(), aTranslate.getY());
+
+    if(!basegfx::fTools::equal(aScale.getX(), 1.0) || !basegfx::fTools::equal(aScale.getY(), 1.0))
+    {
+        rMatrix.scale(aScale.getX(), aScale.getY());
+    }
+
+    if(!basegfx::fTools::equalZero(fShearX))
+    {
+        rMatrix.shearX(tan(fShearX));
+    }
+
+    if(!basegfx::fTools::equalZero(fRotate))
+    {
+        // #i78696#
+        // fRotate is from the old GeoStat and thus mathematically wrong orientated. For
+        // the linear combination of matrices it needed to be fixed in the API, so it needs to
+        // be mirrored here
+        rMatrix.rotate(-fRotate);
+    }
+
+    if(!aTranslate.equalZero())
+    {
+        rMatrix.translate(aTranslate.getX(), aTranslate.getY());
+    }
 
     return sal_True;
 }
@@ -3197,12 +3231,19 @@ void SdrPathObj::TRSetBaseGeometry(const basegfx::B2DHomMatrix& rMatrix, const b
 
     if(!basegfx::fTools::equalZero(fRotate))
     {
-        aTransform.rotate(-fRotate);
-        aGeo.nDrehWink = FRound(fRotate / F_PI18000);
+        // #i78696#
+        // fRotate is matematically correct for linear transformations, so it's
+        // the one to use for the geometry change
+        aTransform.rotate(fRotate);
+
+        // #i78696#
+        // fRotate is matematically correct, but aGeoStat.nDrehWink is
+        // mirrored -> mirror value here
+        aGeo.nDrehWink = NormAngle360(FRound(-fRotate / F_PI18000));
         aGeo.RecalcSinCos();
     }
 
-    if(!basegfx::fTools::equalZero(aTranslate.getX()) || !basegfx::fTools::equalZero(aTranslate.getY()))
+    if(!aTranslate.equalZero())
     {
         // #i39529# absolute positioning, so get current position (without control points (!))
         const basegfx::B2DRange aCurrentRange(basegfx::tools::getRange(basegfx::tools::adaptiveSubdivideByAngle(aNewPolyPolygon)));
