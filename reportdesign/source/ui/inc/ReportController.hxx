@@ -6,9 +6,9 @@
  *
  *  $RCSfile: ReportController.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2007-07-09 11:56:30 $
+ *  last change: $Author: hr $ $Date: 2007-08-02 14:37:02 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -145,6 +145,7 @@ namespace rptui
         ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >            m_xContext;
         ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XRowSet >                     m_xRowSet;
         ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertyChangeListener >    m_xRowSetMediator;
+        ::com::sun::star::uno::Reference< ::com::sun::star::util::XNumberFormatter >            m_xFormatter;   // a number formatter working with the report's NumberFormatsSupplier
 
         ::boost::shared_ptr<rptui::OReportModel>
                                 m_aReportModel;
@@ -290,10 +291,18 @@ namespace rptui
         */
         void markSection(const bool _bNext);
 
-        OReportController(OReportController&);
-        void operator =(OReportController&);
+        OReportController(OReportController const&);
+        OReportController& operator =(OReportController const&);
 
         ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame > getXFrame();
+
+        // open the help agent of report designer at start time
+        void doOpenHelpAgent();
+
+        /** creates a new default control for the currently set type when the modifier KEY_MOD1 was pressed
+        * \param _aArgs must contain a properyvalue with name "KeyModifier" and value KEY_MOD1 when control should be created.
+        */
+        void createDefaultControl(const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue>& _aArgs);
 
     protected:
         DECL_LINK( OnInvalidateClipboard, void* );
@@ -301,6 +310,7 @@ namespace rptui
         DECL_LINK( OnExecuteReport, void* );
         DECL_LINK( OnSave, void* );
         DECL_LINK( OnSaveAs, void* );
+        DECL_LINK( OnOpenHelpAgent, void* );
         short saveModified();
         // all the features which should be handled by this class
         virtual void            describeSupportedFeatures();
@@ -408,6 +418,10 @@ namespace rptui
         * \param _bShow If <TRUE/> show floaters otherwise hide them.
         */
         void displayDesignFloater(sal_Bool _bShow);
+
+        /** returns the number formatter
+        */
+        ::com::sun::star::uno::Reference< ::com::sun::star::util::XNumberFormatter >    getReportNumberFormatter() const;
 
         /** return the SdrModel of the real model
         *
