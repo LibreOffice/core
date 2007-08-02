@@ -4,9 +4,9 @@
  *
  *  $RCSfile: Undo.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2007-07-09 11:56:32 $
+ *  last change: $Author: hr $ $Date: 2007-08-02 14:39:14 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -179,8 +179,6 @@ OSectionUndo::~OSectionUndo()
 // -----------------------------------------------------------------------------
 void OSectionUndo::collectControls(const uno::Reference< report::XSection >& _xSection)
 {
-    OXUndoEnvironment& rEnv = static_cast< OReportModel& >( rMod ).GetUndoEnv();
-    const OXUndoEnvironment::OUndoEnvLock aLock(rEnv);
     m_aControls.clear();
     try
     {
@@ -203,62 +201,47 @@ void OSectionUndo::collectControls(const uno::Reference< report::XSection >& _xS
 //----------------------------------------------------------------------------
 void OSectionUndo::Undo()
 {
-    OXUndoEnvironment& rEnv = static_cast< OReportModel& >( rMod ).GetUndoEnv();
-    if ( !rEnv.IsLocked() )
+    try
     {
-        const OXUndoEnvironment::OUndoEnvLock aLock(rEnv);
-        //rEnv.Lock();
-        try
+        switch ( m_eAction )
         {
-            switch ( m_eAction )
-            {
-            case Inserted:
-                implReRemove();
-                break;
+        case Inserted:
+            implReRemove();
+            break;
 
-            case Removed:
-                implReInsert();
-                break;
-            }
+        case Removed:
+            implReInsert();
+            break;
         }
-        catch( const Exception& )
-        {
-            OSL_ENSURE( sal_False, "OSectionUndo::Undo: caught an exception!" );
-        }
-        //rEnv.UnLock();
     }
-
+    catch( const Exception& )
+    {
+        OSL_ENSURE( sal_False, "OSectionUndo::Undo: caught an exception!" );
+    }
 }
 //----------------------------------------------------------------------------
 void OSectionUndo::Redo()
 {
-    OXUndoEnvironment& rEnv = static_cast< OReportModel& >( rMod ).GetUndoEnv();
-    if ( !rEnv.IsLocked() )
+    try
     {
-        OXUndoEnvironment::OUndoEnvLock aLock(rEnv);
-        //rEnv.Lock();
-        try
+        switch ( m_eAction )
         {
-            switch ( m_eAction )
-            {
-            case Inserted:
-                implReInsert();
-                break;
+        case Inserted:
+            implReInsert();
+            break;
 
-            case Removed:
-                implReRemove();
-                break;
-            }
+        case Removed:
+            implReRemove();
+            break;
         }
-        catch( const Exception& )
-        {
-            OSL_ENSURE( sal_False, "OSectionUndo::Redo: caught an exception!" );
-        }
-        //rEnv.UnLock();
+    }
+    catch( const Exception& )
+    {
+        OSL_ENSURE( sal_False, "OSectionUndo::Redo: caught an exception!" );
     }
 }
 //----------------------------------------------------------------------------
-TYPEINIT1( OReportSectionUndo,         OCommentUndoAction );
+TYPEINIT1( OReportSectionUndo,         OSectionUndo );
 //----------------------------------------------------------------------------
 OReportSectionUndo::OReportSectionUndo(OReportModel& _rMod,sal_uInt16 _nSlot
                                        ,::std::mem_fun_t< uno::Reference< report::XSection >
@@ -427,8 +410,6 @@ void OGroupUndo::implReRemove( )
 //----------------------------------------------------------------------------
 void OGroupUndo::Undo()
 {
-    OXUndoEnvironment& rEnv = static_cast< OReportModel& >( rMod ).GetUndoEnv();
-    const OXUndoEnvironment::OUndoEnvLock aLock(rEnv);
     switch ( m_eAction )
     {
     case Inserted:
@@ -444,8 +425,6 @@ void OGroupUndo::Undo()
 //----------------------------------------------------------------------------
 void OGroupUndo::Redo()
 {
-    OXUndoEnvironment& rEnv = static_cast< OReportModel& >( rMod ).GetUndoEnv();
-    const OXUndoEnvironment::OUndoEnvLock aLock(rEnv);
     switch ( m_eAction )
     {
     case Inserted:
