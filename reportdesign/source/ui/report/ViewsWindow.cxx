@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ViewsWindow.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2007-07-09 11:56:33 $
+ *  last change: $Author: hr $ $Date: 2007-08-02 14:41:16 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -76,6 +76,8 @@
 #ifndef _REPORT_RPTUICLIP_HXX
 #include "dlgedclip.hxx"
 #endif
+#include "RptObject.hxx"
+#include "RptObject.hxx"
 #ifndef _RPTUI_MODULE_HELPER_RPT_HXX_
 #include "ModuleHelper.hxx"
 #endif
@@ -146,11 +148,17 @@ bool lcl_getNewRectSize(const Rectangle& _aObjRect,long& _nXMov, long& _nYMov,Sd
                         bMoveAllowed = _nYMov != nYTemp;
                         break;
                     case ControlModification::CENTER_HORIZONTAL:
-                        nXTemp += aOverlappingRect.Center().X() - aNewRect.Center().X();
+                        if ( _aObjRect.Left() < aOverlappingRect.Left() )
+                            nXTemp += aOverlappingRect.Left() - aNewRect.Left() - aNewRect.getWidth();
+                        else
+                            nXTemp += aOverlappingRect.Right() - aNewRect.Left();
                         bMoveAllowed = _nXMov != nXTemp;
                         break;
                     case ControlModification::CENTER_VERTICAL:
-                        nYTemp += aOverlappingRect.Center().Y() - aNewRect.Center().Y();
+                        if ( _aObjRect.Top() < aOverlappingRect.Top() )
+                            nYTemp += aOverlappingRect.Top() - aNewRect.Top() - aNewRect.getHeight();
+                        else
+                            nYTemp += aOverlappingRect.Bottom() - aNewRect.Top();
                         bMoveAllowed = _nYMov != nYTemp;
                         break;
                     case ControlModification::HEIGHT_GREATEST:
@@ -505,6 +513,11 @@ void OViewsWindow::SetInsertObj( USHORT eObj,const ::rtl::OUString& _sShapeType 
     m_sShapeType = _sShapeType;
 }
 //----------------------------------------------------------------------------
+rtl::OUString OViewsWindow::GetInsertObjString() const
+{
+    return m_sShapeType;
+}
+
 //------------------------------------------------------------------------------
 void OViewsWindow::SetMode( DlgEdMode eNewMode )
 {
@@ -1047,10 +1060,19 @@ void OViewsWindow::alignMarkedObjects(sal_Int32 _nControlModification,bool _bAli
                     case ControlModification::WIDTH_SMALLEST:
                     case ControlModification::HEIGHT_SMALLEST:
                         pView->AddUndo( pView->GetModel()->GetSdrUndoFactory().CreateUndoGeoObject(*pObj));
-                        if ( _nControlModification == ControlModification::WIDTH_SMALLEST || _nControlModification == ControlModification::WIDTH_GREATEST )
-                            pObj->Resize(aObjRect.TopLeft(),Fraction(nXMov,aObjRect.getWidth()),Fraction(1,1));
-                        else if ( _nControlModification == ControlModification::HEIGHT_GREATEST || _nControlModification == ControlModification::HEIGHT_SMALLEST )
-                            pObj->Resize(aObjRect.TopLeft(),Fraction(1,1),Fraction(nYMov,aObjRect.getHeight()));
+                        {
+                            OObjectBase* pObjBase = dynamic_cast<OObjectBase*>(pObj);
+                            OSL_ENSURE(pObjBase,"Where comes this object from?");
+                            if ( pObjBase )
+                            {
+                                if ( _nControlModification == ControlModification::WIDTH_SMALLEST || _nControlModification == ControlModification::WIDTH_GREATEST )
+                                    pObjBase->getReportComponent()->setSize(awt::Size(nXMov,aObjRect.getWidth()));
+                                    //pObj->Resize(aObjRect.TopLeft(),Fraction(nXMov,aObjRect.getWidth()),Fraction(1,1));
+                                else if ( _nControlModification == ControlModification::HEIGHT_GREATEST || _nControlModification == ControlModification::HEIGHT_SMALLEST )
+                                    pObjBase->getReportComponent()->setSize(awt::Size(nYMov,aObjRect.getHeight()));
+                                    //pObj->Resize(aObjRect.TopLeft(),Fraction(1,1),Fraction(nYMov,aObjRect.getHeight()));
+                            }
+                        }
                         break;
                     default:
                         break;
