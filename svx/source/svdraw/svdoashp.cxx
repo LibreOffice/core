@@ -4,9 +4,9 @@
  *
  *  $RCSfile: svdoashp.cxx,v $
  *
- *  $Revision: 1.43 $
+ *  $Revision: 1.44 $
  *
- *  last change: $Author: obo $ $Date: 2007-07-18 10:57:06 $
+ *  last change: $Author: hr $ $Date: 2007-08-02 17:29:13 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -3755,7 +3755,7 @@ void SdrObjCustomShape::TRSetBaseGeometry(const basegfx::B2DHomMatrix& rMatrix, 
     SetSnapRect(aBaseRect);
 
     // shear?
-//  if(0.0 != fShearX)
+//  if(!basegfx::fTools::equalZero(fShearX))
 //  {
 //      GeoStat aGeoStat;
 //      aGeoStat.nShearWink = FRound((atan(fShearX) / F_PI180) * 100.0);
@@ -3764,16 +3764,20 @@ void SdrObjCustomShape::TRSetBaseGeometry(const basegfx::B2DHomMatrix& rMatrix, 
 //  }
 
     // rotation?
-    if(0.0 != fRotate)
+    if(!basegfx::fTools::equalZero(fRotate))
     {
         GeoStat aGeoStat;
-        aGeoStat.nDrehWink = FRound((fRotate / F_PI180) * 100.0);
+
+        // #i78696#
+        // fRotate is mathematically correct, but aGeoStat.nDrehWink is
+        // mirrored -> mirror value here
+        aGeoStat.nDrehWink = NormAngle360(FRound(-fRotate / F_PI18000));
         aGeoStat.RecalcSinCos();
         Rotate(Point(), aGeoStat.nDrehWink, aGeoStat.nSin, aGeoStat.nCos);
     }
 
     // translate?
-    if(0.0 != aTranslate.getX() || 0.0 != aTranslate.getY())
+    if(!aTranslate.equalZero())
     {
         Move(Size(FRound(aTranslate.getX()), FRound(aTranslate.getY())));
     }
@@ -3884,22 +3888,26 @@ sal_Bool SdrObjCustomShape::TRGetBaseGeometry(basegfx::B2DHomMatrix& rMatrix, ba
     // build matrix
     rMatrix.identity();
 
-    if(1.0 != aScale.getX() || 1.0 != aScale.getY())
+    if(!basegfx::fTools::equal(aScale.getX(), 1.0) || !basegfx::fTools::equal(aScale.getY(), 1.0))
     {
         rMatrix.scale(aScale.getX(), aScale.getY());
     }
 
-    if(0.0 != fShearX)
+    if(!basegfx::fTools::equalZero(fShearX))
     {
         rMatrix.shearX(tan(fShearX));
     }
 
-    if(0.0 != fRotate)
+    if(!basegfx::fTools::equalZero(fRotate))
     {
-        rMatrix.rotate(fRotate);
+        // #i78696#
+        // fRotate is from the old GeoStat struct and thus mathematically wrong orientated. For
+        // the linear combination of matrices it needed to be fixed in the API, so it needs to
+        // be mirrored here
+        rMatrix.rotate(-fRotate);
     }
 
-    if(0.0 != aTranslate.getX() || 0.0 != aTranslate.getY())
+    if(!aTranslate.equalZero())
     {
         rMatrix.translate(aTranslate.getX(), aTranslate.getY());
     }
