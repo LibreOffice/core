@@ -4,9 +4,9 @@
  *
  *  $RCSfile: UITools.cxx,v $
  *
- *  $Revision: 1.72 $
+ *  $Revision: 1.73 $
  *
- *  last change: $Author: rt $ $Date: 2007-07-06 08:34:20 $
+ *  last change: $Author: hr $ $Date: 2007-08-02 14:26:51 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1436,8 +1436,6 @@ void fillAutoIncrementValue(const Reference<XConnection>& _xConnection,
     return sName;
 }
 // -----------------------------------------------------------------------------
-namespace
-{
     void AppendConfigToken_Impl( ::rtl::OUString& _rURL, sal_Bool _bQuestionMark )
     {
         // this completes a help url with the system parameters "Language" and "System"
@@ -1464,6 +1462,8 @@ namespace
         _rURL += SvtHelpOptions().GetSystem();
     }
 
+namespace
+{
     // -----------------------------------------------------------------------
 
     sal_Bool GetHelpAnchor_Impl( const ::rtl::OUString& _rURL, ::rtl::OUString& _rAnchor )
