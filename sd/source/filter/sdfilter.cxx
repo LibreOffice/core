@@ -4,9 +4,9 @@
  *
  *  $RCSfile: sdfilter.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: kz $ $Date: 2006-12-12 16:37:08 $
+ *  last change: $Author: hr $ $Date: 2007-08-02 18:22:44 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -52,21 +52,8 @@
 #include <svtools/itemset.hxx>
 #endif
 
-#ifndef MAC
-#ifndef SVX_LIGHT
-#ifndef SD_DRAW_DOC_SHELL_HXX
 #include "../ui/inc/DrawDocShell.hxx"
-#endif
 #include "../ui/inc/strings.hrc"
-#endif //!SVX_LIGHT
-#else  //MAC
-#ifndef SVX_LIGHT
-#ifndef SD_DRAW_DOC_SHELL_HXX
-#include "DrawDocShell.hxx"
-#endif
-#include "strings.hrc"
-#endif //!SVX_LIGHT
-#endif //!MAC
 
 #include "sdresid.hxx"
 #include "pres.hxx"
