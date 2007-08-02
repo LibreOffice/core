@@ -4,9 +4,9 @@
  *
  *  $RCSfile: canvastools.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: obo $ $Date: 2007-07-18 11:07:38 $
+ *  last change: $Author: hr $ $Date: 2007-08-02 17:22:21 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -286,7 +286,7 @@ namespace basegfx
             {
                 // prepare start with providing a start point. Use the first point from
                 // the sequence for this
-                const geometry::RealBezierSegment2D& rFirstSegment(curves[nSize - 1]);
+                const geometry::RealBezierSegment2D& rFirstSegment(curves[0]); // #i79917# first segment, not last
                 aRetval.append(basegfx::B2DPoint(rFirstSegment.Px, rFirstSegment.Py));
 
                 for(sal_Int32 a(0); a < nSize; a++)
@@ -297,7 +297,7 @@ namespace basegfx
                     // append curved edge with the control points and the next point
                     aRetval.appendBezierSegment(
                         basegfx::B2DPoint(rCurrSegment.C1x, rCurrSegment.C1y),
-                        basegfx::B2DPoint(rCurrSegment.C2x, rCurrSegment.C2x),
+                        basegfx::B2DPoint(rCurrSegment.C2x, rCurrSegment.C2y), // #i79917# Argh! An x for an y!!
                         basegfx::B2DPoint(rNextSegment.Px, rNextSegment.Py));
                 }
 
