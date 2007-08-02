@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ReportWindow.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2007-07-09 11:56:33 $
+ *  last change: $Author: hr $ $Date: 2007-08-02 14:40:37 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -120,7 +120,7 @@ OReportWindow::OReportWindow(OScrollWindowHelper* _pParent,ODesignView* _pView)
 ,m_pParent(_pParent)
 {
     DBG_CTOR( rpt_OReportWindow,NULL);
-    SetUniqueId(UID_REPORTWINDOW);
+    SetHelpId(UID_REPORTWINDOW);
     SetMapMode( MapMode( MAP_100TH_MM ) );
 
     m_pSections = new OSectionsWindow(this,this);
@@ -167,6 +167,14 @@ void OReportWindow::SetInsertObj( USHORT eObj,const ::rtl::OUString& _sShapeType
 {
     if ( m_pViews )
         m_pViews->SetInsertObj( eObj,_sShapeType);
+}
+
+//----------------------------------------------------------------------------
+rtl::OUString OReportWindow::GetInsertObjString() const
+{
+    if ( m_pViews )
+        return m_pViews->GetInsertObjString();
+    return rtl::OUString();
 }
 //------------------------------------------------------------------------------
 void OReportWindow::SetMode( DlgEdMode eNewMode )

@@ -4,9 +4,9 @@
  *
  *  $RCSfile: DesignView.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2007-07-09 11:56:32 $
+ *  last change: $Author: hr $ $Date: 2007-08-02 14:39:56 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -122,7 +122,7 @@ ODesignView::ODesignView(   Window* pParent,
     ,m_bInSplitHandler( FALSE )
 {
     DBG_CTOR( rpt_ODesignView,NULL);
-    SetUniqueId(UID_RPT_APP_VIEW);
+    SetHelpId(UID_RPT_APP_VIEW);
     ImplInitSettings();
 
     SetMapMode( MapMode( MAP_100TH_MM ) );
@@ -325,7 +325,13 @@ void ODesignView::SetInsertObj( USHORT eObj,const ::rtl::OUString& _sShapeType )
     if ( m_pScrollWindow )
         m_pScrollWindow->SetInsertObj( eObj,_sShapeType );
 }
-
+//----------------------------------------------------------------------------
+rtl::OUString ODesignView::GetInsertObjString() const
+{
+    if ( m_pScrollWindow )
+        return m_pScrollWindow->GetInsertObjString();
+    return rtl::OUString();
+}
 //----------------------------------------------------------------------------
 
 USHORT ODesignView::GetInsertObj() const
