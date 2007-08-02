@@ -4,9 +4,9 @@
  *
  *  $RCSfile: socket.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: hr $ $Date: 2006-06-20 04:07:44 $
+ *  last change: $Author: hr $ $Date: 2007-08-02 14:22:09 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1214,6 +1214,7 @@ OAcceptorSocket::~OAcceptorSocket()
         osl_closeSocket((*m_pSockRef)());
         osl_releaseSocket((*m_pSockRef)());
         delete m_pSockRef;
+        m_pSockRef = 0;
     }
 }
 
