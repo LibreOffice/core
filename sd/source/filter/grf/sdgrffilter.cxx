@@ -4,9 +4,9 @@
  *
  *  $RCSfile: sdgrffilter.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: vg $ $Date: 2007-01-09 11:21:59 $
+ *  last change: $Author: hr $ $Date: 2007-08-02 18:23:12 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -61,35 +61,11 @@
 #include <svx/svdograf.hxx>
 #include <svx/svdpagv.hxx>
 
-#ifndef MAC
 #include "../../ui/inc/strings.hrc"
-#ifndef SD_DRAW_VIEW_SHELL_HXX
 #include "../../ui/inc/DrawViewShell.hxx"
-#endif
-#ifndef SD_DRAW_DOC_SHELL_HXX
 #include "../../ui/inc/DrawDocShell.hxx"
-#endif
-#ifndef SD_CLIENT_VIEW_HXX
 #include "../../ui/inc/ClientView.hxx"
-#endif
-#ifndef SD_FRAME_VIEW_HXX
 #include "../../ui/inc/FrameView.hxx"
-#endif
-#else  //MAC
-#include "strings.hrc"
-#ifndef SD_DRAW_VIEW_SHELL_HXX
-#include "DrawViewShell.hxx"
-#endif
-#ifndef SD_DRAW_DOC_SHELL_HXX
-#include "DrawDocShell.hxx"
-#endif
-#ifndef SD_CLIENT_VIEW_HXX
-#include "ClientView.hxx"
-#endif
-#ifndef SD_FRAME_VIEW_HXX
-#include "FrameView.hxx"
-#endif
-#endif //!MAC
 
 #include "comphelper/anytostring.hxx"
 #include "cppuhelper/exc_hlp.hxx"
