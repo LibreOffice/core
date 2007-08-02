@@ -4,9 +4,9 @@
  *
  *  $RCSfile: DateTime.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2007-07-09 11:56:29 $
+ *  last change: $Author: hr $ $Date: 2007-08-02 14:36:18 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -178,12 +178,15 @@ short ODateTimeDialog::Execute()
         try
         {
             sal_Int32 nLength = 0;
-            uno::Sequence<beans::PropertyValue> aValues( 4 );
+            uno::Sequence<beans::PropertyValue> aValues( 5 );
             aValues[nLength].Name = PROPERTY_SECTION;
             aValues[nLength++].Value <<= m_xHoldAlive;
 
-            aValues[nLength].Name = PROPERTY_STATE;
+            aValues[nLength].Name = PROPERTY_TIME_STATE;
             aValues[nLength++].Value <<= m_aTime.IsChecked();
+
+            aValues[nLength].Name = PROPERTY_DATE_STATE;
+            aValues[nLength++].Value <<= m_aDate.IsChecked();
 
             aValues[nLength].Name = PROPERTY_FORMATKEYDATE;
             aValues[nLength++].Value <<= getFormatKey(getFormatIndex(sal_True));
@@ -204,7 +207,7 @@ short ODateTimeDialog::Execute()
 ::rtl::OUString ODateTimeDialog::getFormatString(::sal_Int16 _nNumberFormatIndex)
 {
     DBG_CHKTHIS( rpt_ODateTimeDialog,NULL);
-    uno::Reference< util::XNumberFormatter> xNumberFormatter = m_pController->getNumberFormatter();
+    uno::Reference< util::XNumberFormatter> xNumberFormatter = m_pController->getReportNumberFormatter();
     uno::Reference< util::XNumberFormats> xFormats = xNumberFormatter->getNumberFormatsSupplier()->getNumberFormats();
     uno::Reference< util::XNumberFormatTypes> xNumType(xFormats,uno::UNO_QUERY);
     sal_Int32 nFormatKey = xNumType->getFormatIndex(_nNumberFormatIndex,m_nLocale);
@@ -272,7 +275,7 @@ sal_Int16 ODateTimeDialog::getFormatIndex(sal_Bool _bDate)
 // -----------------------------------------------------------------------------
 sal_Int32 ODateTimeDialog::getFormatKey(::sal_Int16 _nNumberFormatIndex)
 {
-    uno::Reference< util::XNumberFormatter> xNumberFormatter = m_pController->getNumberFormatter();
+    uno::Reference< util::XNumberFormatter> xNumberFormatter = m_pController->getReportNumberFormatter();
     uno::Reference< util::XNumberFormats> xFormats = xNumberFormatter->getNumberFormatsSupplier()->getNumberFormats();
     uno::Reference< util::XNumberFormatTypes> xNumType(xFormats,uno::UNO_QUERY);
     return xNumType->getFormatIndex(_nNumberFormatIndex,m_nLocale);
