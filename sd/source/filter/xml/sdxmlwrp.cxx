@@ -4,9 +4,9 @@
  *
  *  $RCSfile: sdxmlwrp.cxx,v $
  *
- *  $Revision: 1.65 $
+ *  $Revision: 1.66 $
  *
- *  last change: $Author: hr $ $Date: 2007-06-26 10:02:15 $
+ *  last change: $Author: hr $ $Date: 2007-08-02 18:23:24 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -71,19 +71,8 @@
 #include <svx/xmlgrhlp.hxx>
 #endif
 
-#ifndef MAC
-#ifndef SVX_LIGHT
-#ifndef SD_DRAW_DOC_SHELL_HXX
 #include "../../ui/inc/DrawDocShell.hxx"
-#endif
-#endif //!SVX_LIGHT
-#else  //MAC
-#ifndef SVX_LIGHT
-#ifndef SD_DRAW_DOC_SHELL_HXX
-#include "DrawDocShell.hxx"
-#endif
-#endif //!SVX_LIGHT
-#endif //!MAC
+
 #include "sdxmlwrp.hxx"
 #include "strmname.h"
 
