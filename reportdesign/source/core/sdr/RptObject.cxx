@@ -4,9 +4,9 @@
  *
  *  $RCSfile: RptObject.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2007-07-09 15:47:26 $
+ *  last change: $Author: hr $ $Date: 2007-08-02 14:32:23 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -211,12 +211,15 @@ SdrObject* OObjectBase::createObject(const uno::Reference< report::XReportCompon
                                     ,nType);
             break;
         case OBJ_CUSTOMSHAPE:
-            pNewObj = new OCustomShape(_xComponent);
+            pNewObj = OCustomShape::Create( _xComponent );
             break;
         default:
             OSL_ENSURE(0,"Unknown object id");
             break;
     }
+
+    ensureSdrObjectOwnership( _xComponent );
+
     return pNewObj;
 }
 // -----------------------------------------------------------------------------
@@ -502,6 +505,27 @@ sal_Bool OObjectBase::supportsService( const sal_Char* _pServiceName ) const
 }
 
 //----------------------------------------------------------------------------
+void OObjectBase::ensureSdrObjectOwnership( const uno::Reference< uno::XInterface >& _rxShape )
+{
+    // UNDO in the report designer is implemented at the level of the XShapes, not
+    // at the level of SdrObjects. That is, if an object is removed from the report
+    // design, then this happens by removing the XShape from the UNO DrawPage, and
+    // putting this XShape (resp. the ReportComponent which wraps it) into an UNDO
+    // action.
+    // Unfortunately, the SvxDrawPage implementation usually deletes SdrObjects
+    // which are removed from it, which is deadly for us. To prevent this,
+    // we give the XShape implementation the ownership of the SdrObject, which
+    // ensures the SvxDrawPage won't delete it.
+    SvxShape* pShape = SvxShape::getImplementation( _rxShape );
+    OSL_ENSURE( pShape, "OObjectBase::ensureSdrObjectOwnership: can't access the SvxShape!" );
+    if ( pShape )
+    {
+        OSL_ENSURE( !pShape->HasSdrObjectOwnership(), "OObjectBase::ensureSdrObjectOwnership: called twice?" );
+        pShape->TakeSdrObjectOwnership();
+    }
+}
+
+//----------------------------------------------------------------------------
 uno::Reference< uno::XInterface > OObjectBase::getUnoShapeOf( SdrObject& _rSdrObject )
 {
     uno::Reference< uno::XInterface > xShape( _rSdrObject.getWeakUnoShape() );
@@ -512,19 +536,7 @@ uno::Reference< uno::XInterface > OObjectBase::getUnoShapeOf( SdrObject& _rSdrOb
     if ( !xShape.is() )
         return xShape;
 
-    // UNDO in the report designer is implemented at the level of the XShapes, not
-    // at the level of SdrObjects. That is, if an object is removed from the report
-    // design, then this happens by removing the XShape from the UNO DrawPage, and
-    // putting this XShape (resp. the ReportComponent which wraps it) into an UNDO
-    // action.
-    // Unfortunately, the SvxDrawPage implementation usually deletes SdrObjects
-    // which are removed from it, which is deadly for us. To prevent this,
-    // we given the XShape implementation the ownership of the SdrObject, which
-    // ensures the SvxDrawPage won't delete it.
-    SvxShape* pShape = SvxShape::getImplementation( xShape );
-    OSL_ENSURE( pShape, "OObjectBase::getUnoShapeOf: can't access the SvxShape!" );
-    if ( pShape )
-        pShape->TakeSdrObjectOwnership();
+    ensureSdrObjectOwnership( xShape );
 
     m_xKeepShapeAlive = xShape;
     return xShape;
@@ -577,10 +589,23 @@ sal_Int32 OCustomShape::GetStep() const
 //----------------------------------------------------------------------------
 void OCustomShape::NbcMove( const Size& rSize )
 {
-    SdrObjCustomShape::NbcMove( rSize );
+    if ( m_bIsListening )
+    {
+        m_bIsListening = sal_False;
 
-    // set geometry properties
-    SetPropsFromRect(GetSnapRect());
+        if ( m_xReportComponent.is() )
+        {
+            m_xReportComponent->setPositionX(m_xReportComponent->getPositionX() + rSize.A());
+            m_xReportComponent->setPositionY(m_xReportComponent->getPositionY() + rSize.B());
+        }
+
+        // set geometry properties
+        SetPropsFromRect(GetSnapRect());
+
+        m_bIsListening = sal_True;
+    }
+    else
+        SdrObjCustomShape::NbcMove( rSize );
 }
 //----------------------------------------------------------------------------
 void OCustomShape::NbcResize(const Point& rRef, const Fraction& xFract, const Fraction& yFract)
@@ -609,6 +634,7 @@ FASTBOOL OCustomShape::EndCreate(SdrDragStat& rStat, SdrCreateCmd eCmd)
             if ( !m_xReportComponent.is() )
                 m_xReportComponent.set(getUnoShape(),uno::UNO_QUERY);
         }
+        SetPropsFromRect(GetSnapRect());
     }
 
     return bResult;
@@ -713,16 +739,28 @@ sal_Int32 OUnoObject::GetStep() const
 void OUnoObject::NbcMove( const Size& rSize )
 {
     DBG_CHKTHIS( rpt_OUnoObject,NULL);
-    SdrUnoObj::NbcMove( rSize );
 
-    // stop listening
-    OObjectBase::EndListening(sal_False);
+    if ( m_bIsListening )
+    {
+        // stop listening
+        OObjectBase::EndListening(sal_False);
 
-    // set geometry properties
-    SetPropsFromRect(GetLogicRect());
+        if ( m_xReportComponent.is() )
+        {
+            OReportModel* pRptModel = static_cast<OReportModel*>(GetModel());
+            OXUndoEnvironment::OUndoEnvLock aLock(pRptModel->GetUndoEnv());
+            m_xReportComponent->setPositionX(m_xReportComponent->getPositionX() + rSize.A());
+            m_xReportComponent->setPositionY(m_xReportComponent->getPositionY() + rSize.B());
+        }
 
-    // start listening
-    OObjectBase::StartListening();
+        // set geometry properties
+        SetPropsFromRect(GetLogicRect());
+
+        // start listening
+        OObjectBase::StartListening();
+    }
+    else
+        SdrUnoObj::NbcMove( rSize );
 }
 
 //----------------------------------------------------------------------------
@@ -740,7 +778,6 @@ void OUnoObject::NbcResize(const Point& rRef, const Fraction& xFract, const Frac
 
     // start listening
     OObjectBase::StartListening();
-
 }
 //----------------------------------------------------------------------------
 void OUnoObject::NbcSetLogicRect(const Rectangle& rRect)
@@ -771,31 +808,32 @@ FASTBOOL OUnoObject::EndCreate(SdrDragStat& rStat, SdrCreateCmd eCmd)
                 m_xReportComponent.set(getUnoShape(),uno::UNO_QUERY);
             // set labels
             if ( m_xReportComponent.is() && supportsService( "com.sun.star.report.FixedText" ) )
-                m_xReportComponent->setPropertyValue( PROPERTY_LABEL, uno::makeAny(GetDefaultName()) );
+                m_xReportComponent->setPropertyValue( PROPERTY_LABEL, uno::makeAny(GetDefaultName(this)) );
         }
+        // set geometry properties
+        SetPropsFromRect(GetLogicRect());
     }
 
     return bResult;
 }
 //----------------------------------------------------------------------------
-::rtl::OUString OUnoObject::GetDefaultName() const
+::rtl::OUString OUnoObject::GetDefaultName(const OUnoObject* _pObj)
 {
-    DBG_CHKTHIS( rpt_OUnoObject,NULL);
     sal_uInt16 nResId = 0;
     ::rtl::OUString aDefaultName = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("HERE WE HAVE TO INSERT OUR NAME!"));
-    if ( supportsService( "com.sun.star.report.FixedText" ) )
+    if ( _pObj->supportsService( "com.sun.star.report.FixedText" ) )
     {
         nResId = RID_STR_CLASS_FIXEDTEXT;
     }
-    else if ( supportsService( "com.sun.star.report.FixedLine" ) )
+    else if ( _pObj->supportsService( "com.sun.star.report.FixedLine" ) )
     {
         nResId = RID_STR_CLASS_FIXEDLINE;
     }
-    else if ( supportsService( "com.sun.star.report.ImageControl" ) )
+    else if ( _pObj->supportsService( "com.sun.star.report.ImageControl" ) )
     {
         nResId = RID_STR_CLASS_IMAGECONTROL;
     }
-    else if ( supportsService( "com.sun.star.report.FormattedField" ) )
+    else if ( _pObj->supportsService( "com.sun.star.report.FormattedField" ) )
     {
         nResId = RID_STR_CLASS_FORMATTEDFIELD;
     }
