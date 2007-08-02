@@ -4,9 +4,9 @@
  *
  *  $RCSfile: file_math.scp,v $
  *
- *  $Revision: 1.33 $
+ *  $Revision: 1.34 $
  *
- *  last change: $Author: hr $ $Date: 2007-07-31 14:03:57 $
+ *  last change: $Author: hr $ $Date: 2007-08-02 17:20:28 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -72,7 +72,7 @@ STD_RES_FILE_PATCH( gid_File_Res_Bf_Sm, bf_sm)
 
 File gid_File_Registry_Spool_Oo_Office_Embedding_Math_Xcu
     TXT_FILE_BODY;
-    Styles = (PACKED,PATCH);
+    Styles = (PACKED, PATCH);
     Dir = gid_Dir_Share_Registry_Modules_Oo_Office_Embedding;
     Name = "/registry/spool/org/openoffice/Office/Embedding-math.xcu";
 End
