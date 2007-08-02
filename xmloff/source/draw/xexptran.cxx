@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xexptran.cxx,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: hr $ $Date: 2007-06-27 15:07:46 $
+ *  last change: $Author: hr $ $Date: 2007-08-02 17:23:20 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -698,7 +698,13 @@ void SdXMLImExTransform2D::GetFullTransform(::basegfx::B2DHomMatrix& rFullTrans)
         {
             case IMP_SDXMLEXP_TRANSOBJ2D_ROTATE     :
             {
-                rFullTrans.rotate(((ImpSdXMLExpTransObj2DRotate*)pObj)->mfRotate);
+                // #i78696#
+                // mfRotate is mathematically wrong oriented since we export/import the angle
+                // values mirrored. This error is fixed in the API, but not yet in the FileFormat.
+                // For the FileFormat there is a follow-up task (#i78698#) to fix this in the next
+                // ODF FileFormat version. For now - to emulate the old behaviour - it is necessary
+                // to mirror the value here
+                rFullTrans.rotate(((ImpSdXMLExpTransObj2DRotate*)pObj)->mfRotate * -1.0);
                 break;
             }
             case IMP_SDXMLEXP_TRANSOBJ2D_SCALE      :
