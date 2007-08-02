@@ -4,9 +4,9 @@
  *
  *  $RCSfile: pathsettings.hxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: vg $ $Date: 2006-09-26 14:08:38 $
+ *  last change: $Author: hr $ $Date: 2007-08-02 13:30:13 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -220,6 +220,8 @@ class PathSettings : public  css::lang::XTypeProvider             ,
         css::uno::Reference< css::container::XNameAccess > m_xCfgNew;
 
         ::cppu::OPropertyArrayHelper* m_pPropHelp;
+
+        ::sal_Bool m_bIgnoreEvents;
 
     // ___________________________________________
     // interface
