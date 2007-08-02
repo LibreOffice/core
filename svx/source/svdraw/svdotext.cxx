@@ -4,9 +4,9 @@
  *
  *  $RCSfile: svdotext.cxx,v $
  *
- *  $Revision: 1.83 $
+ *  $Revision: 1.84 $
  *
- *  last change: $Author: rt $ $Date: 2007-07-06 07:41:46 $
+ *  last change: $Author: hr $ $Date: 2007-08-02 17:29:40 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -2178,22 +2178,26 @@ sal_Bool SdrTextObj::TRGetBaseGeometry(basegfx::B2DHomMatrix& rMatrix, basegfx::
     // build matrix
     rMatrix.identity();
 
-    if(1.0 != aScale.getX() || 1.0 != aScale.getY())
+    if(!basegfx::fTools::equal(aScale.getX(), 1.0) || !basegfx::fTools::equal(aScale.getY(), 1.0))
     {
         rMatrix.scale(aScale.getX(), aScale.getY());
     }
 
-    if(0.0 != fShearX)
+    if(!basegfx::fTools::equalZero(fShearX))
     {
         rMatrix.shearX(tan(fShearX));
     }
 
-    if(0.0 != fRotate)
+    if(!basegfx::fTools::equalZero(fRotate))
     {
-        rMatrix.rotate(fRotate);
+        // #i78696#
+        // fRotate is from the old GeoStat and thus mathematically wrong orientated. For
+        // the linear combination of matrices it needed to be fixed in the API, so it needs to
+        // be mirrored here
+        rMatrix.rotate(-fRotate);
     }
 
-    if(0.0 != aTranslate.getX() || 0.0 != aTranslate.getY())
+    if(!aTranslate.equalZero())
     {
         rMatrix.translate(aTranslate.getX(), aTranslate.getY());
     }
@@ -2268,7 +2272,7 @@ void SdrTextObj::TRSetBaseGeometry(const basegfx::B2DHomMatrix& rMatrix, const b
     SetSnapRect(aBaseRect);
 
     // shear?
-    if(0.0 != fShearX)
+    if(!basegfx::fTools::equalZero(fShearX))
     {
         GeoStat aGeoStat;
         aGeoStat.nShearWink = FRound((atan(fShearX) / F_PI180) * 100.0);
@@ -2277,16 +2281,20 @@ void SdrTextObj::TRSetBaseGeometry(const basegfx::B2DHomMatrix& rMatrix, const b
     }
 
     // rotation?
-    if(0.0 != fRotate)
+    if(!basegfx::fTools::equalZero(fRotate))
     {
         GeoStat aGeoStat;
-        aGeoStat.nDrehWink = FRound((fRotate / F_PI180) * 100.0);
+
+        // #i78696#
+        // fRotate is matematically correct, but aGeoStat.nDrehWink is
+        // mirrored -> mirror value here
+        aGeoStat.nDrehWink = NormAngle360(FRound(-fRotate / F_PI18000));
         aGeoStat.RecalcSinCos();
         Rotate(Point(), aGeoStat.nDrehWink, aGeoStat.nSin, aGeoStat.nCos);
     }
 
     // translate?
-    if(0.0 != aTranslate.getX() || 0.0 != aTranslate.getY())
+    if(!aTranslate.equalZero())
     {
         Move(Size(FRound(aTranslate.getX()), FRound(aTranslate.getY())));
     }
