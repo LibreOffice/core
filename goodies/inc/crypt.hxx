@@ -4,9 +4,9 @@
  *
  *  $RCSfile: crypt.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 02:16:37 $
+ *  last change: $Author: hr $ $Date: 2007-08-02 18:24:51 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -48,7 +48,7 @@ extern "C"
 //ULONG testdll(const String& ,const String& , const String&, BOOL DoCrypt );
 //ULONG __EXPORT testdll(const char* pCrInName, const char* pCrOutName,
 //    const char* pCrKey, BOOL DoCrypt=1);
-#if defined (MAC) || defined (UNX)
+#if defined (UNX)
 extern ULONG cryptit(const char* pCrInName, const char* pCrOutName,
 #else
 #ifdef WNT

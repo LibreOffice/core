@@ -4,9 +4,9 @@
  *
  *  $RCSfile: agsdkdll.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 02:10:51 $
+ *  last change: $Author: hr $ $Date: 2007-08-02 18:24:39 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -113,7 +113,7 @@ struct ChannelApiFncs
 //  Agent API Functions
 //
 
-#if defined(WIN) || defined(WNT) || defined(OS2) || defined(UNX) || defined(MAC)
+#if defined(WIN) || defined(WNT) || defined(OS2) || defined(UNX)
 extern "C" {
 #endif
 
@@ -149,7 +149,7 @@ void  _SV_CALL RegisterChannels(AgentInst, ChannelApiFncs*);
 typedef void (_SV_CALL *FncRegisterUpdateTransmitter)(AgentInst, ChannelApiFncs*);
 void  _SV_CALL RegisterUpdateTransmitter(AgentInst, ChannelApiFncs*);
 
-#if defined(WIN) || defined(WNT) || defined(OS2) || defined(UNX) || defined(MAC)
+#if defined(WIN) || defined(WNT) || defined(OS2) || defined(UNX)
 }
 #endif
 
