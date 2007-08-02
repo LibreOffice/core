@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xmlfilter.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2007-07-09 11:56:18 $
+ *  last change: $Author: hr $ $Date: 2007-08-02 14:34:35 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -557,13 +557,13 @@ sal_Bool ORptFilter::implImport( const Sequence< PropertyValue >& rDescriptor )
         if ( !m_xReportDefinition.is() )
             return sal_False;
 
-        m_pReportModel = reportdesign::OReportDefinition::getSdrModel(m_xReportDefinition);
-        if ( !m_pReportModel )
-            return sal_False;
+        //m_pReportModel = reportdesign::OReportDefinition::getSdrModel(m_xReportDefinition);
+        //if ( !m_pReportModel )
+        //    return sal_False;
 
-        if ( !xNumberFormatsSupplier.is() )
-            xNumberFormatsSupplier = OXMLHelper::GetNumberFormatsSupplier(m_xReportDefinition);
-        SetNumberFormatsSupplier(xNumberFormatsSupplier);
+        //if ( !xNumberFormatsSupplier.is() )
+        //    xNumberFormatsSupplier = OXMLHelper::GetNumberFormatsSupplier(m_xReportDefinition);
+        //SetNumberFormatsSupplier(xNumberFormatsSupplier);
 
 
         uno::Reference<XComponent> xModel(GetModel(),UNO_QUERY);
@@ -1040,8 +1040,9 @@ void SAL_CALL ORptFilter::startDocument( void )
         m_pReportModel = reportdesign::OReportDefinition::getSdrModel(m_xReportDefinition);
         OSL_ENSURE(m_pReportModel,"Report model is NULL!");
 
-        uno::Reference< util::XNumberFormatsSupplier > xNumberFormatsSupplier = OXMLHelper::GetNumberFormatsSupplier(m_xReportDefinition);
-        SetNumberFormatsSupplier(xNumberFormatsSupplier);
+        //uno::Reference< util::XNumberFormatsSupplier > xNumberFormatsSupplier = OXMLHelper::GetNumberFormatsSupplier(m_xReportDefinition);
+        //if ( xNumberFormatsSupplier.is() )
+        //    SetNumberFormatsSupplier(xNumberFormatsSupplier);
     }
 }
 // -----------------------------------------------------------------------------
@@ -1062,6 +1063,16 @@ void ORptFilter::endDocument( void )
 
     // delegate to parent: takes care of error handling
     SvXMLImport::endDocument();
+}
+// -----------------------------------------------------------------------------
+void ORptFilter::removeFunction(const ::rtl::OUString& _sFunctionName)
+{
+    m_aFunctions.erase(_sFunctionName);
+}
+// -----------------------------------------------------------------------------
+void ORptFilter::insertFunction(const ::com::sun::star::uno::Reference< ::com::sun::star::report::XFunction > & _xFunction)
+{
+    m_aFunctions.insert(TGroupFunctionMap::value_type(_xFunction->getName(),_xFunction));
 }
 // -----------------------------------------------------------------------------
 }// rptxml
