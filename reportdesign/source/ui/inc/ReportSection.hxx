@@ -6,9 +6,9 @@
  *
  *  $RCSfile: ReportSection.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2007-07-09 11:56:30 $
+ *  last change: $Author: hr $ $Date: 2007-08-02 14:37:14 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -187,11 +187,18 @@ namespace rptui
         */
         void fillControlModelSelection(::std::vector< ::com::sun::star::uno::Reference< ::com::sun::star::report::XReportComponent > >& _rSelection) const;
 
-        /** creates a default object
+        /** creates a default object (custom shape)
         *
         * @param _sType
         */
         void createDefault(const ::rtl::OUString& _sType);
+
+        /** creates a new default custom shape
+        *
+        * \param _sType
+        * \param _pObj
+        */
+        void createDefault(const ::rtl::OUString& _sType,SdrObject* _pObj);
 
         /** calls on the section BrkAction
         *
