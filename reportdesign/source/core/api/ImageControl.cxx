@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ImageControl.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2007-07-09 11:56:14 $
+ *  last change: $Author: hr $ $Date: 2007-08-02 14:30:02 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -264,8 +264,10 @@ void SAL_CALL OImageControl::setParaAdjust( ::sal_Int16 _align ) throw (uno::Run
 
 void SAL_CALL OImageControl::setControlBackground( ::sal_Int32 _backgroundcolor ) throw (uno::RuntimeException, beans::UnknownPropertyException)
 {
-    setControlBackgroundTransparent(_backgroundcolor == static_cast<sal_Int32>(COL_TRANSPARENT));
-    set(PROPERTY_CONTROLBACKGROUND,_backgroundcolor,m_aProps.aFormatProperties.nBackgroundColor);
+    sal_Bool bTransparent = _backgroundcolor == static_cast<sal_Int32>(COL_TRANSPARENT);
+    setControlBackgroundTransparent(bTransparent);
+    if ( !bTransparent )
+        set(PROPERTY_CONTROLBACKGROUND,_backgroundcolor,m_aProps.aFormatProperties.nBackgroundColor);
 }
 
 ::sal_Bool SAL_CALL OImageControl::getControlBackgroundTransparent() throw (beans::UnknownPropertyException, uno::RuntimeException)
@@ -277,6 +279,8 @@ void SAL_CALL OImageControl::setControlBackground( ::sal_Int32 _backgroundcolor 
 void SAL_CALL OImageControl::setControlBackgroundTransparent( ::sal_Bool _controlbackgroundtransparent ) throw (beans::UnknownPropertyException, uno::RuntimeException)
 {
     set(PROPERTY_CONTROLBACKGROUNDTRANSPARENT,_controlbackgroundtransparent,m_aProps.aFormatProperties.m_bBackgroundTransparent);
+    if ( _controlbackgroundtransparent )
+        set(PROPERTY_CONTROLBACKGROUND,static_cast<sal_Int32>(COL_TRANSPARENT),m_aProps.aFormatProperties.nBackgroundColor);
 }
 
 // -----------------------------------------------------------------------------
