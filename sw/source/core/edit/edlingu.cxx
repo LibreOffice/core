@@ -4,9 +4,9 @@
  *
  *  $RCSfile: edlingu.cxx,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: hr $ $Date: 2007-06-27 13:18:24 $
+ *  last change: $Author: hr $ $Date: 2007-08-02 13:57:01 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1449,6 +1449,7 @@ bool SwSpellIter::SpellSentence(::svx::SpellPortions& rPortions)
         //save the end position of the error to continue from here
         SwPosition aSaveStartPos = *pCrsr->GetMark();
 
+        BOOL bEndSent = 0 != pSh->GoEndSentence();
         lcl_CutRedlines( aDeletedRedlines, pSh );
         //save the 'global' end of the spellchecking
         const SwPosition aSaveEndPos = *GetEnd();
