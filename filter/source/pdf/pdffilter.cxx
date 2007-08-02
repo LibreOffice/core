@@ -4,9 +4,9 @@
  *
  *  $RCSfile: pdffilter.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: ihi $ $Date: 2007-03-26 11:14:53 $
+ *  last change: $Author: hr $ $Date: 2007-08-02 14:58:02 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -153,7 +153,10 @@ class FocusWindowWaitCursor
     ~FocusWindowWaitCursor()
     {
         if( m_pFocusWindow )
+        {
             m_pFocusWindow->LeaveWait();
+            m_pFocusWindow->RemoveEventListener( LINK( this, FocusWindowWaitCursor, DestroyedLink ) );
+        }
     }
 
     DECL_LINK( DestroyedLink, VclWindowEvent* );
