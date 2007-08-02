@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ReportController.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2007-07-09 11:56:32 $
+ *  last change: $Author: hr $ $Date: 2007-08-02 14:40:09 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -145,6 +145,7 @@
 #ifndef _COM_SUN_STAR_REPORT_XImageControl_HPP_
 #include <com/sun/star/report/XImageControl.hpp>
 #endif
+#include <com/sun/star/report/XFixedLine.hpp>
 #ifndef _COM_SUN_STAR_REPORT_FUNCTION_HPP_
 #include <com/sun/star/report/Function.hpp>
 #endif
@@ -286,21 +287,22 @@
 #include <com/sun/star/sdbc/SQLWarning.hpp>
 
 #include <cppuhelper/exc_hlp.hxx>
+#include <helpids.hrc>
 
 using namespace ::com::sun::star;
-using namespace ::com::sun::star::uno;
-using namespace ::com::sun::star::io;
-using namespace ::com::sun::star::beans;
-using namespace ::com::sun::star::frame;
-using namespace ::com::sun::star::util;
-using namespace ::com::sun::star::lang;
-using namespace ::com::sun::star::container;
-using namespace ::com::sun::star::sdbcx;
-using namespace ::com::sun::star::sdbc;
-using namespace ::com::sun::star::sdb;
-using namespace ::com::sun::star::ui;
-using namespace ::com::sun::star::ui::dialogs;
-using namespace ::com::sun::star::util;
+using namespace uno;
+using namespace io;
+using namespace beans;
+using namespace frame;
+using namespace util;
+using namespace lang;
+using namespace container;
+using namespace sdbcx;
+using namespace sdbc;
+using namespace sdb;
+using namespace ui;
+using namespace ui::dialogs;
+using namespace util;
 using namespace ::dbtools;
 using namespace ::rptui;
 using namespace ::dbaui;
@@ -309,6 +311,18 @@ using namespace ::comphelper;
 // -----------------------------------------------------------------------------
 namespace
 {
+    // comparing two PropertyValue instances
+    struct PropertyValueCompare : public ::std::binary_function< beans::PropertyValue, ::rtl::OUString , bool >
+    {
+        bool operator() (const beans::PropertyValue& x, const ::rtl::OUString& y) const
+        {
+            return x.Name.equals(y);// ? true : false;
+        }
+        bool operator() (const ::rtl::OUString& x,const beans::PropertyValue& y) const
+        {
+            return x.equals(y.Name);// ? true : false;
+        }
+    };
     class UndoManagerListAction
     {
     private:
@@ -345,7 +359,7 @@ uno::Reference< report::XReportControlFormat> lcl_getReportControlFormat(const S
 }
 // -----------------------------------------------------------------------------
 // check overlapping
-void lcl_correctOverlapping(SdrUnoObj* pControl,::boost::shared_ptr<OReportSection> _pReportSection)
+void lcl_correctOverlapping(SdrObject* pControl,::boost::shared_ptr<OReportSection> _pReportSection)
 {
     OSectionView* pSectionView = _pReportSection->getView();
     uno::Reference< report::XReportComponent> xComponent(pControl->getUnoShape(),uno::UNO_QUERY);
@@ -355,10 +369,11 @@ void lcl_correctOverlapping(SdrUnoObj* pControl,::boost::shared_ptr<OReportSecti
     bool bOverlapping = true;
     while ( bOverlapping )
     {
-        bOverlapping = isOver(aRet,*_pReportSection->getPage(),*pSectionView,true,pControl);
+        SdrObject* pOverlappedObj = isOver(aRet,*_pReportSection->getPage(),*pSectionView,true,pControl);
+        bOverlapping = pOverlappedObj != NULL;
         if ( bOverlapping )
         {
-            aRet.Move(0,aRet.getHeight());
+            aRet.Move(0,pOverlappedObj->GetLogicRect().getHeight());
             xComponent->setPositionY(aRet.Top());
         }
     }
@@ -424,7 +439,6 @@ IMPLEMENT_FORWARD_XINTERFACE2(OReportController,OReportController_BASE,OReportCo
 // -----------------------------------------------------------------------------
 void OReportController::disposing()
 {
-    OReportController_BASE::disposing();
 
     if ( getView() && m_pClipbordNotifier )
     {
@@ -461,7 +475,8 @@ void OReportController::disposing()
         {
         }
     }
-    disconnect();
+    OReportController_BASE::disposing();
+    // disconnect();
     try
     {
         m_xReportDefinition.clear();
@@ -705,11 +720,14 @@ FeatureState OReportController::GetState(sal_uInt16 _nId) const
         case SID_DRAWTBX_CS_BASIC20:
         case SID_DRAWTBX_CS_BASIC21:
         case SID_DRAWTBX_CS_BASIC22:
+            {
+                aReturn.bEnabled = isEditable();
+                rtl::OUString sShapeType = m_pMyOwnView->GetInsertObjString();
+                aReturn.bChecked = m_pMyOwnView->GetInsertObj() == OBJ_CUSTOMSHAPE &&
+                                   sShapeType.compareToAscii("diamond") == 0;
+            }
+            break;
         case SID_DRAWTBX_CS_SYMBOL:
-        case SID_DRAWTBX_CS_ARROW:
-        case SID_DRAWTBX_CS_FLOWCHART:
-        case SID_DRAWTBX_CS_CALLOUT:
-        case SID_DRAWTBX_CS_STAR:
         case SID_DRAWTBX_CS_SYMBOL1:
         case SID_DRAWTBX_CS_SYMBOL2:
         case SID_DRAWTBX_CS_SYMBOL3:
@@ -728,6 +746,14 @@ FeatureState OReportController::GetState(sal_uInt16 _nId) const
         case SID_DRAWTBX_CS_SYMBOL16:
         case SID_DRAWTBX_CS_SYMBOL17:
         case SID_DRAWTBX_CS_SYMBOL18:
+            {
+                aReturn.bEnabled = isEditable();
+                rtl::OUString sShapeType = m_pMyOwnView->GetInsertObjString();
+                aReturn.bChecked = m_pMyOwnView->GetInsertObj() == OBJ_CUSTOMSHAPE &&
+                                   sShapeType.compareToAscii("smiley") == 0;
+            }
+            break;
+        case SID_DRAWTBX_CS_ARROW:
         case SID_DRAWTBX_CS_ARROW1:
         case SID_DRAWTBX_CS_ARROW2:
         case SID_DRAWTBX_CS_ARROW3:
@@ -754,6 +780,14 @@ FeatureState OReportController::GetState(sal_uInt16 _nId) const
         case SID_DRAWTBX_CS_ARROW24:
         case SID_DRAWTBX_CS_ARROW25:
         case SID_DRAWTBX_CS_ARROW26:
+            {
+                aReturn.bEnabled = isEditable();
+                rtl::OUString sShapeType = m_pMyOwnView->GetInsertObjString();
+                aReturn.bChecked = m_pMyOwnView->GetInsertObj() == OBJ_CUSTOMSHAPE &&
+                                   sShapeType.compareToAscii("left-right-arrow") == 0;
+            }
+            break;
+        case SID_DRAWTBX_CS_STAR:
         case SID_DRAWTBX_CS_STAR1:
         case SID_DRAWTBX_CS_STAR2:
         case SID_DRAWTBX_CS_STAR3:
@@ -766,6 +800,14 @@ FeatureState OReportController::GetState(sal_uInt16 _nId) const
         case SID_DRAWTBX_CS_STAR10:
         case SID_DRAWTBX_CS_STAR11:
         case SID_DRAWTBX_CS_STAR12:
+            {
+                aReturn.bEnabled = isEditable();
+                rtl::OUString sShapeType = m_pMyOwnView->GetInsertObjString();
+                aReturn.bChecked = m_pMyOwnView->GetInsertObj() == OBJ_CUSTOMSHAPE &&
+                                   sShapeType.compareToAscii("star5") == 0;
+            }
+            break;
+        case SID_DRAWTBX_CS_FLOWCHART:
         case SID_DRAWTBX_CS_FLOWCHART1:
         case SID_DRAWTBX_CS_FLOWCHART2:
         case SID_DRAWTBX_CS_FLOWCHART3:
@@ -794,6 +836,14 @@ FeatureState OReportController::GetState(sal_uInt16 _nId) const
         case SID_DRAWTBX_CS_FLOWCHART26:
         case SID_DRAWTBX_CS_FLOWCHART27:
         case SID_DRAWTBX_CS_FLOWCHART28:
+            {
+                aReturn.bEnabled = isEditable();
+                rtl::OUString sShapeType = m_pMyOwnView->GetInsertObjString();
+                aReturn.bChecked = m_pMyOwnView->GetInsertObj() == OBJ_CUSTOMSHAPE &&
+                                   sShapeType.compareToAscii("flowchart-internal-storage") == 0;
+            }
+            break;
+        case SID_DRAWTBX_CS_CALLOUT:
         case SID_DRAWTBX_CS_CALLOUT1:
         case SID_DRAWTBX_CS_CALLOUT2:
         case SID_DRAWTBX_CS_CALLOUT3:
@@ -801,8 +851,12 @@ FeatureState OReportController::GetState(sal_uInt16 _nId) const
         case SID_DRAWTBX_CS_CALLOUT5:
         case SID_DRAWTBX_CS_CALLOUT6:
         case SID_DRAWTBX_CS_CALLOUT7:
+            {
             aReturn.bEnabled = isEditable();
-            aReturn.bChecked = m_pMyOwnView->GetInsertObj() == OBJ_CUSTOMSHAPE;
+                rtl::OUString sShapeType = m_pMyOwnView->GetInsertObjString();
+                aReturn.bChecked = m_pMyOwnView->GetInsertObj() == OBJ_CUSTOMSHAPE &&
+                                   sShapeType.compareToAscii("round-rectangular-callout") == 0;
+            }
             break;
         case SID_RPT_SHOWREPORTEXPLORER:
             aReturn.bEnabled = m_xReportDefinition.is();
@@ -882,7 +936,7 @@ FeatureState OReportController::GetState(sal_uInt16 _nId) const
         case SID_ATTR_CHAR_COLOR2:
             {
                 uno::Reference< report::XReportControlFormat> xReportControlFormat(m_pMyOwnView->getCurrentControlModel(),uno::UNO_QUERY);
-                aReturn.bEnabled = isEditable() && xReportControlFormat.is();
+                aReturn.bEnabled = isEditable() && xReportControlFormat.is() && !uno::Reference< report::XFixedLine>(xReportControlFormat,uno::UNO_QUERY).is();
                 if ( aReturn.bEnabled )
                 {
                     try
@@ -901,7 +955,7 @@ FeatureState OReportController::GetState(sal_uInt16 _nId) const
             if ( aReturn.bEnabled )
             {
                 uno::Reference< report::XReportControlModel> xControlModel(m_pMyOwnView->getCurrentControlModel(),uno::UNO_QUERY);
-                aReturn.bEnabled = xControlModel.is();
+                aReturn.bEnabled = xControlModel.is() && !uno::Reference< report::XFixedLine>(xControlModel,uno::UNO_QUERY).is();
                 if ( aReturn.bEnabled )
                 {
                     try
@@ -920,7 +974,7 @@ FeatureState OReportController::GetState(sal_uInt16 _nId) const
             if ( aReturn.bEnabled )
             {
                 uno::Reference< report::XReportControlModel> xControlModel(m_pMyOwnView->getCurrentControlModel(),uno::UNO_QUERY);
-                aReturn.bEnabled = xControlModel.is();
+                aReturn.bEnabled = xControlModel.is() && !uno::Reference< report::XFixedLine>(xControlModel,uno::UNO_QUERY).is();
                 if ( aReturn.bEnabled )
                 {
                     try
@@ -1093,15 +1147,14 @@ void OReportController::Execute(sal_uInt16 _nId, const Sequence< PropertyValue >
             addPairControls(aArgs);
             break;
         case SID_REDO:
-            OReportController_BASE::Execute(_nId,aArgs);
+        case SID_UNDO:
+        {
+            const OXUndoEnvironment::OUndoEnvLock aLock( m_aReportModel->GetUndoEnv() );
+            OReportController_BASE::Execute( _nId, aArgs );
             InvalidateFeature( SID_UNDO );
             updateFloater();
-            break;
-        case SID_UNDO:
-            OReportController_BASE::Execute(_nId,aArgs);
-            InvalidateFeature( SID_REDO );
-            updateFloater();
-            break;
+        }
+        break;
         case SID_CUT:
             executeMethodWithUndo(RID_STR_UNDO_REMOVE_SELECTION,::std::mem_fun(&ODesignView::Cut));
             break;
@@ -1236,26 +1289,31 @@ void OReportController::Execute(sal_uInt16 _nId, const Sequence< PropertyValue >
         case SID_FM_FIXEDTEXT:
             m_pMyOwnView->SetMode( RPTUI_INSERT );
             m_pMyOwnView->SetInsertObj( OBJ_DLG_FIXEDTEXT );
+            createDefaultControl(aArgs);
             InvalidateAll();
             break;
         case SID_INSERT_HFIXEDLINE:
             m_pMyOwnView->SetMode( RPTUI_INSERT );
             m_pMyOwnView->SetInsertObj( OBJ_DLG_HFIXEDLINE );
+            createDefaultControl(aArgs);
             InvalidateAll();
             break;
         case SID_INSERT_VFIXEDLINE:
             m_pMyOwnView->SetMode( RPTUI_INSERT );
             m_pMyOwnView->SetInsertObj( OBJ_DLG_VFIXEDLINE );
+            createDefaultControl(aArgs);
             InvalidateAll();
             break;
         case SID_FM_EDIT:
             m_pMyOwnView->SetMode( RPTUI_INSERT );
             m_pMyOwnView->SetInsertObj( OBJ_DLG_FORMATTEDFIELD );
+            createDefaultControl(aArgs);
             InvalidateAll();
             break;
         case SID_FM_IMAGECONTROL:
             m_pMyOwnView->SetMode( RPTUI_INSERT );
             m_pMyOwnView->SetInsertObj( OBJ_DLG_IMAGECONTROL );
+            createDefaultControl(aArgs);
             InvalidateAll();
             break;
         case SID_DRAWTBX_CS_BASIC:
@@ -1410,6 +1468,7 @@ void OReportController::Execute(sal_uInt16 _nId, const Sequence< PropertyValue >
                     sType = aUrl.Complete.getToken(0,'.',nIndex);
 
                 m_pMyOwnView->SetInsertObj( OBJ_CUSTOMSHAPE ,sType);
+                createDefaultControl(aArgs);
             }
             InvalidateAll();
             break;
@@ -1748,6 +1807,9 @@ void OReportController::impl_initialize( )
 
             listen(true);
             setEditable( !m_aReportModel->IsReadOnly() );
+            m_xFormatter.set(getORB()->createInstance(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.util.NumberFormatter"))), UNO_QUERY);
+            m_xFormatter->attachNumberFormatsSupplier(Reference< XNumberFormatsSupplier>(m_xReportDefinition,uno::UNO_QUERY));
+
 
         } // if ( m_xReportDefinition.is() )
 
@@ -1785,10 +1847,38 @@ void OReportController::impl_initialize( )
         }
 
         setModified(sal_False);     // and we are not modified yet
+
+        // open the global help agent
+        // we need a Frame but at this time there is no frame, therefore we send a UserEvent
+        getView()->PostUserEvent(LINK(this, OReportController, OnOpenHelpAgent));
     }
     catch(const SQLException&)
     {
         OSL_ENSURE(sal_False, "OReportController::initialize: caught an exception!");
+    }
+}
+// -----------------------------------------------------------------------------
+IMPL_LINK( OReportController, OnOpenHelpAgent, void* ,/*_pMemfun*/)
+{
+    //m_nExecuteReportEvent = 0;
+    doOpenHelpAgent();
+    return 0L;
+}
+// -----------------------------------------------------------------------------
+
+void OReportController::doOpenHelpAgent()
+{
+    if (getFrame().is())
+    {
+        rtl::OUString suURL = rtl::OUString::createFromAscii("vnd.sun.star.help://shared/text/shared/explorer/database/rep_main.xhp?UseDB=no&DbPAR=swriter");
+        openHelpAgent(suURL);
+        // openHelpAgent(68245 /* HID_REPORT_DESIGN... UNKNOWN */ );
+        // HID_APP_REPORT_TREE
+    }
+    else
+    {
+        // as long as we don't get a Frame, we send the user event again.
+        getView()->PostUserEvent(LINK(this, OReportController, OnOpenHelpAgent));
     }
 }
 // -----------------------------------------------------------------------------
@@ -1806,7 +1896,7 @@ sal_Bool OReportController::Construct(Window* pParent)
     m_pClipbordNotifier->AddRemoveListener( getView(), sal_True );
 
     OReportController_BASE::Construct(pParent);
-    getView()->Show();
+    //getView()->Show();
     return sal_True;
 }
 // -----------------------------------------------------------------------------
@@ -2742,7 +2832,7 @@ IMPL_LINK( OReportController, EventLstHdl, VclWindowEvent*, _pEvent )
 sal_Bool OReportController::isFormatCommandEnabled(sal_uInt16 _nCommand,const uno::Reference< report::XReportControlFormat>& _xReportControlFormat) const
 {
     sal_Bool bRet = sal_False;
-    if ( _xReportControlFormat.is() )
+    if ( _xReportControlFormat.is() && !uno::Reference< report::XFixedLine>(_xReportControlFormat,uno::UNO_QUERY).is() ) // this command is really often called so we nedd a short cut here
     {
         try
         {
@@ -3186,46 +3276,76 @@ void OReportController::createControl(const Sequence< PropertyValue >& _aArgs,co
     if ( aPos.X < nLeftMargin )
         aPos.X = nLeftMargin;
 
-    SdrUnoObj* pLabel,*pControl;
-    FmFormView::createControlLabelPair(NULL,m_pMyOwnView
-                        ,nLeftMargin,0
-                        ,NULL,NULL,_nObjectId,::rtl::OUString(),ReportInventor,OBJ_DLG_FIXEDTEXT,
-                        NULL,pReportSection->getPage(),m_aReportModel.get(),
-                        pLabel,pControl);
-
-    delete pLabel;
-
-    OUnoObject* pObj = dynamic_cast<OUnoObject*>(pControl);
-    uno::Reference<beans::XPropertySet> xUnoProp(pObj->GetUnoControlModel(),uno::UNO_QUERY);
-    uno::Reference< report::XReportComponent> xShapeProp(pObj->getUnoShape(),uno::UNO_QUERY);
-    xUnoProp->setPropertyValue(PROPERTY_NAME,xShapeProp->getPropertyValue(PROPERTY_NAME));
-
-    uno::Reference<beans::XPropertySetInfo> xInfo = xUnoProp->getPropertySetInfo();
-    if ( xInfo->hasPropertyByName(PROPERTY_FONTDESCRIPTOR) )
-        xUnoProp->setPropertyValue(PROPERTY_FONTDESCRIPTOR,xShapeProp->getPropertyValue(PROPERTY_FONTDESCRIPTOR));
-    if ( xInfo->hasPropertyByName(PROPERTY_BORDER) )
-        xUnoProp->setPropertyValue(PROPERTY_BORDER,xShapeProp->getPropertyValue(PROPERTY_CONTROLBORDER));
-    if ( xInfo->hasPropertyByName(PROPERTY_DATAFIELD) )
+    SdrObject* pNewControl = NULL;
+    uno::Reference< report::XReportComponent> xShapeProp;
+    if ( _nObjectId == OBJ_CUSTOMSHAPE )
     {
-        ReportFormula aFunctionFormula( ReportFormula::Expression, _sFunction );
-        xUnoProp->setPropertyValue( PROPERTY_DATAFIELD, uno::makeAny( aFunctionFormula.getCompleteFormula() ) );
+        pNewControl = SdrObjFactory::MakeNewObject( ReportInventor, _nObjectId, pReportSection->getPage(),m_aReportModel.get() );
+        xShapeProp.set(pNewControl->getUnoShape(),uno::UNO_QUERY);
+        pReportSection->createDefault(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("diamond")),pNewControl); // TODO: use real custom shape type
     }
-    sal_Int32 nFormatKey = aMap.getUnpackedValueOrDefault(PROPERTY_FORMATKEY,sal_Int32(0));
-    if ( nFormatKey && xInfo->hasPropertyByName(PROPERTY_FORMATKEY) )
-        xUnoProp->setPropertyValue( PROPERTY_FORMATKEY, uno::makeAny( nFormatKey ) );
+    else
+    {
+        SdrUnoObj* pLabel,*pControl;
+        FmFormView::createControlLabelPair(NULL,m_pMyOwnView
+                            ,nLeftMargin,0
+                            ,NULL,NULL,_nObjectId,::rtl::OUString(),ReportInventor,OBJ_DLG_FIXEDTEXT,
+                         NULL,pReportSection->getPage(),m_aReportModel.get(),
+                         pLabel,pControl);
 
-    ::rtl::OUString sUrl = aMap.getUnpackedValueOrDefault(PROPERTY_IMAGEURL,::rtl::OUString());
-    if ( sUrl.getLength() && xInfo->hasPropertyByName(PROPERTY_IMAGEURL) )
-        xUnoProp->setPropertyValue( PROPERTY_IMAGEURL, uno::makeAny( sUrl ) );
+        delete pLabel;
 
-    pObj->CreateMediator(sal_True);
+        pNewControl = pControl;
+        OUnoObject* pObj = dynamic_cast<OUnoObject*>(pControl);
+        uno::Reference<beans::XPropertySet> xUnoProp(pObj->GetUnoControlModel(),uno::UNO_QUERY);
+        xShapeProp.set(pObj->getUnoShape(),uno::UNO_QUERY);
+        uno::Reference<beans::XPropertySetInfo> xShapeInfo = xShapeProp->getPropertySetInfo();
+        uno::Reference<beans::XPropertySetInfo> xInfo = xUnoProp->getPropertySetInfo();
+
+        if ( xInfo->hasPropertyByName(PROPERTY_NAME) )
+            xUnoProp->setPropertyValue(PROPERTY_NAME,xShapeProp->getPropertyValue(PROPERTY_NAME));
+
+        if ( xInfo->hasPropertyByName(PROPERTY_FONTDESCRIPTOR) && xShapeInfo->hasPropertyByName(PROPERTY_FONTDESCRIPTOR) )
+            xUnoProp->setPropertyValue(PROPERTY_FONTDESCRIPTOR,xShapeProp->getPropertyValue(PROPERTY_FONTDESCRIPTOR));
+        if ( xInfo->hasPropertyByName(PROPERTY_ORIENTATION) && xShapeInfo->hasPropertyByName(PROPERTY_ORIENTATION) )
+            xUnoProp->setPropertyValue(PROPERTY_ORIENTATION,xShapeProp->getPropertyValue(PROPERTY_ORIENTATION));
+        if ( xInfo->hasPropertyByName(PROPERTY_BORDER) && xShapeInfo->hasPropertyByName(PROPERTY_CONTROLBORDER) )
+            xUnoProp->setPropertyValue(PROPERTY_BORDER,xShapeProp->getPropertyValue(PROPERTY_CONTROLBORDER));
+        if ( xInfo->hasPropertyByName(PROPERTY_DATAFIELD) && _sFunction.getLength() )
+        {
+            ReportFormula aFunctionFormula( ReportFormula::Expression, _sFunction );
+            xUnoProp->setPropertyValue( PROPERTY_DATAFIELD, uno::makeAny( aFunctionFormula.getCompleteFormula() ) );
+        }
+
+        if ( xInfo->hasPropertyByName(PROPERTY_FORMATSSUPPLIER) && xShapeInfo->hasPropertyByName(PROPERTY_FORMATSSUPPLIER)  )
+            xUnoProp->setPropertyValue( PROPERTY_FORMATSSUPPLIER, xShapeProp->getPropertyValue( PROPERTY_FORMATSSUPPLIER) );
+
+        sal_Int32 nFormatKey = aMap.getUnpackedValueOrDefault(PROPERTY_FORMATKEY,sal_Int32(0));
+        if ( nFormatKey && xInfo->hasPropertyByName(PROPERTY_FORMATKEY) )
+            xUnoProp->setPropertyValue( PROPERTY_FORMATKEY, uno::makeAny( nFormatKey ) );
+
+        ::rtl::OUString sUrl = aMap.getUnpackedValueOrDefault(PROPERTY_IMAGEURL,::rtl::OUString());
+        if ( sUrl.getLength() && xInfo->hasPropertyByName(PROPERTY_IMAGEURL) )
+            xUnoProp->setPropertyValue( PROPERTY_IMAGEURL, uno::makeAny( sUrl ) );
+
+        pObj->CreateMediator(sal_True);
+
+        if ( _nObjectId == OBJ_DLG_FIXEDTEXT ) // special case for fixed text
+            xUnoProp->setPropertyValue(PROPERTY_LABEL,uno::makeAny(OUnoObject::GetDefaultName(pObj)));
+        else if ( _nObjectId == OBJ_DLG_VFIXEDLINE )
+        {
+            awt::Size aOlSize = xShapeProp->getSize();
+            xShapeProp->setSize(awt::Size(aOlSize.Height,aOlSize.Width)); // switch height and width
+        }
+    }
+
     const sal_Int32 nShapeWidth = xShapeProp->getWidth();
     const bool bChangedPos = (aPos.X + nShapeWidth) > nPaperWidth;
     if ( bChangedPos )
         aPos.X = nPaperWidth - nShapeWidth;
     xShapeProp->setPosition(aPos);
 
-    lcl_correctOverlapping(pControl,pReportSection);
+    lcl_correctOverlapping(pNewControl,pReportSection);
 }
 // -----------------------------------------------------------------------------
 void OReportController::createDateTime(const Sequence< PropertyValue >& _aArgs)
@@ -3239,9 +3359,15 @@ void OReportController::createDateTime(const Sequence< PropertyValue >& _aArgs)
     aMap.createItemIfMissing(PROPERTY_FORMATKEY,aMap.getUnpackedValueOrDefault(PROPERTY_FORMATKEYDATE,sal_Int32(0)));
 
     uno::Reference< report::XSection> xSection = aMap.getUnpackedValueOrDefault(PROPERTY_SECTION,uno::Reference< report::XSection>());
-    ::rtl::OUString sFunction(RTL_CONSTASCII_USTRINGPARAM("TODAY()"));
-    createControl(aMap.getAsConstPropertyValueList(),xSection,sFunction);
-    sal_Bool bTime = aMap.getUnpackedValueOrDefault(PROPERTY_STATE,sal_False);
+    ::rtl::OUString sFunction;
+
+    sal_Bool bDate = aMap.getUnpackedValueOrDefault(PROPERTY_DATE_STATE,sal_False);
+    if ( bDate )
+    {
+        sFunction = ::rtl::OUString (RTL_CONSTASCII_USTRINGPARAM("TODAY()"));
+        createControl(aMap.getAsConstPropertyValueList(),xSection,sFunction);
+    }
+    sal_Bool bTime = aMap.getUnpackedValueOrDefault(PROPERTY_TIME_STATE,sal_False);
     if ( bTime )
     {
         sFunction = ::rtl::OUString (RTL_CONSTASCII_USTRINGPARAM("NOW()"));
@@ -3431,7 +3557,7 @@ void OReportController::addPairControls(const Sequence< PropertyValue >& aArgs)
             if ( !nOBJID )
                 continue;
 
-            Reference< util::XNumberFormatsSupplier >  xSupplier = getNumberFormatter()->getNumberFormatsSupplier();
+            Reference< util::XNumberFormatsSupplier >  xSupplier = getReportNumberFormatter()->getNumberFormatsSupplier();
             if ( !xSupplier.is() )
                 continue;
 
@@ -3666,6 +3792,7 @@ void OReportController::switchReportSection(const sal_Int16 _nId)
 
     if ( m_xReportDefinition.is() )
     {
+                const OXUndoEnvironment::OUndoEnvLock aLock( m_aReportModel->GetUndoEnv() );
         const bool bSwitchOn = !m_xReportDefinition->getReportHeaderOn();
         if ( SID_REPORTHEADERFOOTER == _nId )
         {
@@ -3712,6 +3839,7 @@ void OReportController::switchPageSection(const sal_Int16 _nId)
     OSL_ENSURE(_nId == SID_PAGEHEADERFOOTER || _nId == SID_PAGEHEADER_WITHOUT_UNDO || _nId == SID_PAGEFOOTER_WITHOUT_UNDO ,"Illegal id given!");
     if ( m_xReportDefinition.is() )
     {
+                const OXUndoEnvironment::OUndoEnvLock aLock( m_aReportModel->GetUndoEnv() );
         const bool bSwitchOn = !m_xReportDefinition->getPageHeaderOn();
 
         if ( SID_PAGEHEADERFOOTER == _nId )
@@ -3847,5 +3975,28 @@ void OReportController::markSection(const bool _bNext)
             select(uno::makeAny(pSection->getSection()));
     }
 }
-
+// -----------------------------------------------------------------------------
+void OReportController::createDefaultControl(const uno::Sequence< beans::PropertyValue>& _aArgs)
+{
+    uno::Reference< report::XSection > xSection = m_pMyOwnView->getCurrentSection();
+    if ( xSection.is() )
+    {
+        const ::rtl::OUString sKeyModifier(RTL_CONSTASCII_USTRINGPARAM("KeyModifier"));
+        const beans::PropertyValue* pIter = _aArgs.getConstArray();
+        const beans::PropertyValue* pEnd  = pIter + _aArgs.getLength();
+        const beans::PropertyValue* pFind = ::std::find_if(pIter,pEnd,::std::bind2nd(PropertyValueCompare(),boost::cref(sKeyModifier)));
+        sal_Int16 nKeyModifier = 0;
+        if ( pFind != pEnd && (pFind->Value >>= nKeyModifier) && nKeyModifier == KEY_MOD1 )
+        {
+            Sequence< PropertyValue > aCreateArgs;
+            m_pMyOwnView->unmarkAllObjects(NULL);
+            createControl(aCreateArgs,xSection,::rtl::OUString(),m_pMyOwnView->GetInsertObj());
+        }
+    }
+}
+// -----------------------------------------------------------------------------
+uno::Reference< util::XNumberFormatter > OReportController::getReportNumberFormatter() const
+{
+    return m_xFormatter;
+}
 
