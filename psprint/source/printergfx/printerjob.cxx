@@ -4,9 +4,9 @@
  *
  *  $RCSfile: printerjob.cxx,v $
  *
- *  $Revision: 1.43 $
+ *  $Revision: 1.44 $
  *
- *  last change: $Author: obo $ $Date: 2007-03-05 15:23:00 $
+ *  last change: $Author: hr $ $Date: 2007-08-02 14:58:21 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -842,13 +842,12 @@ bool PrinterJob::writeFeatureList( osl::File* pFile, const JobData& rJob, bool b
             if( bEmit )
             {
                 const PPDValue* pValue = rJob.m_aContext.getValue( pKey );
-                if(pValue
-                   && pValue->m_eType == eInvocation
-                   && pValue->m_aValue.Len()
-                   && ( m_aLastJobData.m_pParser == NULL
-                        || m_aLastJobData.m_aContext.getValue( pKey ) != pValue
-                        || bDocumentSetup
-                        )
+                if( pValue
+                    && pValue->m_eType == eInvocation
+                    && ( m_aLastJobData.m_pParser == NULL
+                         || m_aLastJobData.m_aContext.getValue( pKey ) != pValue
+                         || bDocumentSetup
+                         )
                    )
                 {
                     // try to avoid PS level 2 feature commands if level is set to 1
