@@ -3,7 +3,7 @@ dnl *     vi:set sw=3 ts=3 et:
 dnl *
 dnl * Name: configure.in
 dnl * Auth: Willem van Dorp, Ross Nicholson, Oisin Boydell - Sun Microsystems Ireland
-dnl * Date: $Date: 2007-08-02 14:58:57 $
+dnl * Date: $Date: 2007-08-02 15:55:25 $
 dnl *
 dnl * Desc: This file serves as input for the GNU autoconf package
 dnl *       in order to create a configure script.
@@ -12,7 +12,7 @@ dnl *       necessary to build OpenOffice.org
 dnl *
 dnl *
 dnl ******************************************************************/
-AC_REVISION( $Revision: 1.215 $ )
+AC_REVISION( $Revision: 1.216 $ )
 AC_PREREQ(2.50)
 AC_INIT()
 echo "$@" >config.parms
@@ -357,6 +357,9 @@ AC_ARG_WITH(system-curl,
 ],,)
 AC_ARG_WITH(system-boost,
 [  --with-system-boost     Use boost already on system
+],,)
+AC_ARG_WITH(system-vigra,
+[  --with-system-vigra     Use vigra already on system
 ],,)
 AC_ARG_WITH(system-nas,
 [  --with-system-nas       Use nas already on system
@@ -3392,6 +3395,25 @@ else
    SYSTEM_BOOST=NO
 fi
 AC_SUBST(SYSTEM_BOOST)
+
+dnl ===================================================================
+dnl Check for system vigra
+dnl ===================================================================
+AC_MSG_CHECKING([which vigra to use])
+if test -n "$with_system_vigra" && test "$with_system_vigra" != "no"; then
+   AC_MSG_RESULT([external])
+   SYSTEM_VIGRA=YES
+   AC_LANG_SAVE
+   AC_LANG_CPLUSPLUS
+   AC_CHECK_HEADER(vigra/copyimage.hxx, [],
+       [AC_MSG_ERROR(vigra/copyimage.hxx not found. install vigra)], [])
+   AC_LANG_RESTORE
+else
+   AC_MSG_RESULT([internal])
+   BUILD_TYPE="$BUILD_TYPE VIGRA"
+   SYSTEM_VIGRA=NO
+fi
+AC_SUBST(SYSTEM_VIGRA)
 
 dnl ===================================================================
 dnl Check for system odbc
