@@ -6,9 +6,9 @@
  *
  *  $RCSfile: ViewsWindow.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2007-07-09 11:56:30 $
+ *  last change: $Author: hr $ $Date: 2007-08-02 14:37:50 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -225,6 +225,7 @@ namespace rptui
         inline bool     empty() const { return m_aSections.empty(); }
         void            SetMode( DlgEdMode m_eMode );
         void            SetInsertObj( USHORT eObj,const ::rtl::OUString& _sShapeType = ::rtl::OUString());
+        rtl::OUString   GetInsertObjString() const;
         /** copies the current selection in this section
         */
         void Copy();
