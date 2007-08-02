@@ -4,9 +4,9 @@
  *
  *  $RCSfile: autorecovery.cxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: ihi $ $Date: 2007-06-05 14:45:48 $
+ *  last change: $Author: hr $ $Date: 2007-08-02 17:04:13 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -2398,6 +2398,10 @@ void AutoRecovery::implts_saveOneDoc(const ::rtl::OUString&                     
     if (xExternalProgress.is())
         lNewArgs[::comphelper::MediaDescriptor::PROP_STATUSINDICATOR()] <<= xExternalProgress;
     impl_establishProgress(rInfo, lNewArgs, css::uno::Reference< css::frame::XFrame >());
+
+    // #i66598# use special handling of property "DocumentBaseURL" (it must be an empty string!)
+    // for make hyperlinks working
+    lNewArgs[::comphelper::MediaDescriptor::PROP_DOCUMENTBASEURL()] <<= ::rtl::OUString();
 
     // try to save this document as a new temp file everytimes.
     // Mark AutoSave state as "INCOMPLETE" if it failed.
