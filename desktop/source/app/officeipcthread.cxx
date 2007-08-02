@@ -4,9 +4,9 @@
  *
  *  $RCSfile: officeipcthread.cxx,v $
  *
- *  $Revision: 1.55 $
+ *  $Revision: 1.56 $
  *
- *  last change: $Author: rt $ $Date: 2006-11-07 15:30:00 $
+ *  last change: $Author: hr $ $Date: 2007-08-02 14:23:33 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -486,10 +486,10 @@ OfficeIPCThread::Status OfficeIPCThread::EnableOfficeIPCThread()
         delete pThread;
         if (aToken.CompareTo(aReceiveBuffer)!= COMPARE_EQUAL) {
             // something went wrong
-            delete aReceiveBuffer;
+            delete[] aReceiveBuffer;
             return IPC_STATUS_BOOTSTRAP_ERROR;
         } else {
-            delete aReceiveBuffer;
+            delete[] aReceiveBuffer;
             return IPC_STATUS_2ND_OFFICE;
         }
     }
