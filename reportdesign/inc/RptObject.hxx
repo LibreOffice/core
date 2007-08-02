@@ -4,9 +4,9 @@
  *
  *  $RCSfile: RptObject.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2007-07-09 11:56:02 $
+ *  last change: $Author: hr $ $Date: 2007-08-02 14:27:28 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -114,8 +114,8 @@ class REPORTDESIGN_DLLPUBLIC OObjectBase
 {
 public:
     typedef ::comphelper::ImplementationReference<OPropertyMediator,::com::sun::star::beans::XPropertyChangeListener> TMediator;
-protected:
 
+protected:
     mutable TMediator                                                                           m_xMediator;
     mutable ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertyChangeListener> m_xPropertyChangeListener;
     //mutable ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertyChangeListener>
@@ -145,6 +145,10 @@ protected:
     */
     ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >
             getUnoShapeOf( SdrObject& _rSdrObject );
+
+private:
+    static void    ensureSdrObjectOwnership(
+                    const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >& _rxShape );
 
 public:
     void StartListening();
@@ -178,8 +182,13 @@ public:
 class REPORTDESIGN_DLLPUBLIC OCustomShape: public SdrObjCustomShape , public OObjectBase
 {
     friend class OReportPage;
-    friend class OObjectBase;
     friend class DlgEdFactory;
+
+public:
+    static OCustomShape* Create( const ::com::sun::star::uno::Reference< ::com::sun::star::report::XReportComponent>& _xComponent )
+    {
+        return new OCustomShape( _xComponent );
+    }
 
 protected:
     OCustomShape(const ::com::sun::star::uno::Reference< ::com::sun::star::report::XReportComponent>& _xComponent);
@@ -217,8 +226,6 @@ class REPORTDESIGN_DLLPUBLIC OUnoObject: public SdrUnoObj , public OObjectBase
     friend class DlgEdFactory;
 
     sal_uInt16   m_nObjectType;
-
-    ::rtl::OUString GetDefaultName() const;
 protected:
     OUnoObject(  const ::com::sun::star::uno::Reference< ::com::sun::star::report::XReportComponent>& _xComponent
                 ,const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XControlModel >& _xControlModel
@@ -256,6 +263,8 @@ public:
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet> getAwtComponent();
 
     inline sal_uInt16 getObjectId() const { return m_nObjectType; }
+
+    static ::rtl::OUString GetDefaultName(const OUnoObject* _pObj);
 
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > getUnoShape();
 };
