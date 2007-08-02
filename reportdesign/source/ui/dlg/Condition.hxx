@@ -4,9 +4,9 @@
  *
  *  $RCSfile: Condition.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2007-07-09 11:56:29 $
+ *  last change: $Author: hr $ $Date: 2007-08-02 14:36:02 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -36,38 +36,23 @@
 #ifndef RPTUI_CONDITION_HXX
 #define RPTUI_CONDITION_HXX
 
-#ifndef _FIXED_HXX //autogen
-#include <vcl/fixed.hxx>
-#endif
-#ifndef _SV_LSTBOX_HXX
-#include <vcl/lstbox.hxx>
-#endif
-#ifndef _SV_FIELD_HXX
-#include <vcl/field.hxx>
-#endif
-#ifndef _SV_BUTTON_HXX
-#include <vcl/button.hxx>
-#endif
-#ifndef _SV_TOOLBOX_HXX
-#include <vcl/toolbox.hxx>
-#endif
-#ifndef DBAUI_TOOLBOXHELPER_HXX
-#include <dbaccess/ToolBoxHelper.hxx>
-#endif
-#ifndef _COM_SUN_STAR_REPORT_XFORMATCONDITION_HPP_
-#include <com/sun/star/report/XFormatCondition.hpp>
-#endif
-#ifndef _SVX_FNTCTRL_HXX
-#include <svx/fntctrl.hxx>
-#endif
-#ifndef _VALUESET_HXX
-#include <svtools/valueset.hxx>
-#endif
+#include "conditionalexpression.hxx"
 
-#include <boost/shared_ptr.hpp>
+#include <com/sun/star/report/XFormatCondition.hpp>
+
+#include <dbaccess/ToolBoxHelper.hxx>
+
+#include <svx/fntctrl.hxx>
+
+#include <svtools/valueset.hxx>
+
+#include <vcl/fixed.hxx>
+#include <vcl/lstbox.hxx>
+#include <vcl/field.hxx>
+#include <vcl/button.hxx>
+#include <vcl/toolbox.hxx>
 
 #include <memory>
-#include <map>
 
 namespace svx { class ToolboxButtonColorUpdater; }
 
@@ -78,33 +63,6 @@ namespace rptui
     class OReportController;
     class IConditionalFormatAction;
 
-    //========================================================================
-    //= ConditionType
-    //========================================================================
-    enum ConditionType
-    {
-        eFieldValueComparison   = 0,
-        eExpression             = 1
-    };
-
-    //========================================================================
-    //= ComparisonOperation
-    //========================================================================
-    enum ComparisonOperation
-    {
-        eBetween        = 0,
-        eNotBetween     = 1,
-        eEqualTo        = 2,
-        eNotEqualTo     = 3,
-        eGreaterThan    = 4,
-        eLessThan       = 5,
-        eGreaterOrEqual = 6,
-        eLessOrEqual    = 7
-    };
-
-    class IExpressionFactory;
-    typedef ::boost::shared_ptr< IExpressionFactory >               PExpressionFactory;
-    typedef ::std::map< ComparisonOperation, PExpressionFactory >   ExpressionFactories;
     //========================================================================
     //= Condition
     //========================================================================
@@ -135,7 +93,7 @@ namespace rptui
         long                            m_nLastKnownWindowWidth;
         bool                            m_bInDestruction;
 
-        ExpressionFactories             m_aFieldExprFactories;
+        ConditionalExpressions          m_aConditionalExpressions;
 
         DECL_LINK( OnFormatAction,      ToolBox* );
         DECL_LINK( DropdownClick,       ToolBox* );
