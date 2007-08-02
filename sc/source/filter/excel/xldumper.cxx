@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xldumper.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: obo $ $Date: 2007-06-13 09:11:16 $
+ *  last change: $Author: hr $ $Date: 2007-08-02 13:31:26 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -2137,6 +2137,11 @@ void WorkbookStreamObject::ImplDumpRecord()
             DumpHex< sal_uInt16, sal_uInt8 >( eBiff != EXC_BIFF2, "flags", "FORMULA-FLAGS" );
             if( eBiff >= EXC_BIFF5 ) DumpUnused( 4 );
             GetFormulaDumper().DumpCellFormula();
+        break;
+
+        case EXC_ID_HLINK:
+            DumpRange();
+            DumpGuid( "std-link" );
         break;
 
         case EXC_ID2_INTEGER:
