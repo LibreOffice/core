@@ -4,9 +4,9 @@
  *
  *  $RCSfile: unoshape.cxx,v $
  *
- *  $Revision: 1.161 $
+ *  $Revision: 1.162 $
  *
- *  last change: $Author: hr $ $Date: 2007-07-31 17:32:47 $
+ *  last change: $Author: hr $ $Date: 2007-08-02 18:28:18 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -842,37 +842,6 @@ uno::Sequence< uno::Type > SAL_CALL SvxShape::_getTypes()
             }
             return aTypeSequence;
         }
-    case OBJ_CUSTOMSHAPE:
-        {
-            static ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Type > aTypeSequence;
-
-            if( aTypeSequence.getLength() == 0 )
-            {
-                // Ready for multithreading; get global mutex for first call of this method only! see before
-                MutexGuard aGuard( osl::Mutex::getGlobalMutex() ) ;
-
-                // Control these pointer again ... it can be, that another instance will be faster then these!
-                if( aTypeSequence.getLength() == 0 )
-                {
-                    aTypeSequence.realloc( 12 );
-                    uno::Type* pTypes = aTypeSequence.getArray();
-                    *pTypes++ = ::getCppuType((const uno::Reference< drawing::XShape >*)0);
-                    *pTypes++ = ::getCppuType((const uno::Reference< lang::XComponent >*)0);
-                    *pTypes++ = ::getCppuType((const uno::Reference< beans::XPropertySet >*)0);
-                    *pTypes++ = ::getCppuType((const uno::Reference< beans::XMultiPropertySet >*)0);
-//                  *pTypes++ = ::getCppuType((const uno::Reference< beans::XTolerantMultiPropertySet >*)0);
-                    *pTypes++ = ::getCppuType((const uno::Reference< beans::XPropertyState >*)0);
-                    *pTypes++ = beans::XMultiPropertyStates::static_type();
-                    *pTypes++ = ::getCppuType((const uno::Reference< drawing::XGluePointsSupplier >*)0);
-                    *pTypes++ = ::getCppuType((const uno::Reference< container::XChild >*)0);
-                    *pTypes++ = ::getCppuType((const uno::Reference< lang::XServiceInfo >*)0);
-                    *pTypes++ = ::getCppuType((const uno::Reference< lang::XTypeProvider >*)0);
-                    *pTypes++ = ::getCppuType((const uno::Reference< lang::XUnoTunnel >*)0);
-                    *pTypes++ = ::getCppuType((const uno::Reference< container::XNamed >*)0);
-                }
-            }
-            return aTypeSequence;
-        }
     // connector shape
     case OBJ_EDGE:
         {
@@ -995,6 +964,7 @@ uno::Sequence< uno::Type > SAL_CALL SvxShape::_getTypes()
     case OBJ_GRAF:
     case OBJ_TEXT:
     case OBJ_CAPTION:
+    case OBJ_CUSTOMSHAPE:
     default:
         {
             static ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Type > aTypeSequence;
