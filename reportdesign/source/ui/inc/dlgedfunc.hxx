@@ -6,9 +6,9 @@
  *
  *  $RCSfile: dlgedfunc.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2007-07-09 11:56:30 $
+ *  last change: $Author: hr $ $Date: 2007-08-02 14:38:02 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -43,6 +43,7 @@ class Timer;
 class MouseEvent;
 class Point;
 class SdrTextObj;
+class SdrObject;
 namespace rptui
 {
 
@@ -77,7 +78,11 @@ protected:
     bool    setMovementPointer(const MouseEvent& rMEvt);
 
     bool    isRectangleHit(const MouseEvent& rMEvt);
-
+    /**
+        returns true, as long as only customshapes in the marked list,
+        custom shapes can drop every where
+    */
+    bool    isOnlyCustomShapeMarked();
 public:
     DlgEdFunc( OReportSection* pParent );
     virtual ~DlgEdFunc();
@@ -98,6 +103,17 @@ public:
     * \return <TRUE/> if overlapping, otherwise <FALSE/>
     */
     bool    isOverlapping(const MouseEvent& rMEvt);
+    void setOverlappedControlColor(sal_Int32 _nColor);
+protected:
+    void colorizeOverlappedObject(SdrObject* _pOverlappedObj);
+    void unColorizeOverlappedObj();
+
+    com::sun::star::uno::Reference<com::sun::star::uno::XInterface> m_xOverlappingObj;
+    SdrObject *m_pOverlappingObj;
+    sal_Int32 m_nOverlappedControlColor;
+    sal_Int32 m_nOldColor;
+
+    bool m_bSelectionMode;
 };
 
 //============================================================================
