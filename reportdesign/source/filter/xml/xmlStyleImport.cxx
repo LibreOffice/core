@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xmlStyleImport.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2007-07-09 11:56:18 $
+ *  last change: $Author: hr $ $Date: 2007-08-02 14:34:22 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -164,8 +164,8 @@ void OControlStyleContext::FillPropertySet(const Reference< XPropertySet > & rPr
         {
             if ((m_nNumberFormat == -1) && m_sDataStyleName.getLength())
             {
-                SvXMLNumFormatContext* pStyle = PTR_CAST(SvXMLNumFormatContext,pStyles->FindStyleChildContext(
-                    XML_STYLE_FAMILY_DATA_STYLE, m_sDataStyleName, sal_True));
+                SvXMLNumFormatContext* pStyle = const_cast< SvXMLNumFormatContext*>(dynamic_cast<const SvXMLNumFormatContext*>(pStyles->FindStyleChildContext(
+                    XML_STYLE_FAMILY_DATA_STYLE, m_sDataStyleName, sal_True)));
                 if ( !pStyle )
                 {
                     OReportStylesContext* pMyStyles = PTR_CAST(OReportStylesContext,GetOwnImport().GetAutoStyles());
