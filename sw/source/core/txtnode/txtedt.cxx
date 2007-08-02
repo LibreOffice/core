@@ -4,9 +4,9 @@
  *
  *  $RCSfile: txtedt.cxx,v $
  *
- *  $Revision: 1.81 $
+ *  $Revision: 1.82 $
  *
- *  last change: $Author: obo $ $Date: 2007-07-18 09:50:54 $
+ *  last change: $Author: hr $ $Date: 2007-08-02 13:57:16 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -977,7 +977,7 @@ USHORT SwTxtNode::Spell(SwSpellArgs* pArgs)
             // within the word
             LanguageType eActLang = aScanner.GetCurrentLanguage();
 
-            if( rWord.Len() > 1 && LANGUAGE_NONE != eActLang )
+            if( rWord.Len() > 0 && LANGUAGE_NONE != eActLang )
             {
                 if (pArgs->xSpeller.is())
                 {
