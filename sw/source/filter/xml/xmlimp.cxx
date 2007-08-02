@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xmlimp.cxx,v $
  *
- *  $Revision: 1.101 $
+ *  $Revision: 1.102 $
  *
- *  last change: $Author: kz $ $Date: 2007-06-20 10:11:30 $
+ *  last change: $Author: hr $ $Date: 2007-08-02 14:21:22 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -884,7 +884,7 @@ void SwXMLImport::endDocument( void )
             {
                 // If the PaM points to the first new node, move the PaM to the
                 // end of the previous node.
-                if( pPaM->GetPoint()->nNode == aNxtIdx )
+                if( pPaM && pPaM->GetPoint()->nNode == aNxtIdx )
                 {
                     pPaM->GetPoint()->nNode = *pSttNdIdx;
                     pPaM->GetPoint()->nContent.Assign( pTxtNode,
@@ -1702,6 +1702,18 @@ OUString SAL_CALL SwXMLImport::getImplementationName()
                 "com.sun.star.comp.Writer.SwXMLImport" ) );
             break;
     }
+}
+
+SwDoc* SwImport::GetDocFromXMLImport( SvXMLImport& rImport )
+{
+    uno::Reference<lang::XUnoTunnel> xModelTunnel( rImport.GetModel(), uno::UNO_QUERY );
+    SwXTextDocument *pTxtDoc = (SwXTextDocument*)xModelTunnel->getSomething(
+                                        SwXTextDocument::getUnoTunnelId() );
+    ASSERT( pTxtDoc, "Where is my model?" )
+    ASSERT( pTxtDoc->GetDocShell(), "Where is my shell?" )
+    SwDoc* pDoc = pTxtDoc->GetDocShell()->GetDoc();
+    ASSERT( pDoc, "Where is my document?" )
+    return pDoc;
 }
 
 
