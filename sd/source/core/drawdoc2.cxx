@@ -4,9 +4,9 @@
  *
  *  $RCSfile: drawdoc2.cxx,v $
  *
- *  $Revision: 1.42 $
+ *  $Revision: 1.43 $
  *
- *  last change: $Author: kz $ $Date: 2007-05-10 15:22:21 $
+ *  last change: $Author: hr $ $Date: 2007-08-02 18:21:12 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -118,36 +118,10 @@
 #include "cusshow.hxx"
 #include "undo/undomanager.hxx"
 
-#ifdef MAC
-#ifndef SD_DRAW_DOC_SHELL_HXX
-#include "::ui:inc:DrawDocShell.hxx"
-#endif
-#ifndef SD_FRAME_VIEW_HXX
-#include "::ui:inc:FrameView.hxx"
-#endif
-#include "::ui:inc:cfgids.hxx"
-#include "::ui:inc:strings.hrc"
-#else
-#ifdef UNX
-#ifndef SD_DRAW_DOC_SHELL_HXX
 #include "../ui/inc/DrawDocShell.hxx"
-#endif
-#ifndef SD_FRAME_VIEW_HXX
 #include "../ui/inc/FrameView.hxx"
-#endif
 #include "../ui/inc/cfgids.hxx"
 #include "../ui/inc/strings.hrc"
-#else
-#ifndef SD_DRAW_DOC_SHELL_HXX
-#include "..\ui\inc\DrawDocShell.hxx"
-#endif
-#ifndef SD_FRAME_VIEW_HXX
-#include "..\ui\inc\FrameView.hxx"
-#endif
-#include "..\ui\inc\cfgids.hxx"
-#include "..\ui\inc\strings.hrc"
-#endif
-#endif
 
 #include "PageListWatcher.hxx"
 
