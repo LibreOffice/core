@@ -4,9 +4,9 @@
  *
  *  $RCSfile: docfile.cxx,v $
  *
- *  $Revision: 1.193 $
+ *  $Revision: 1.194 $
  *
- *  last change: $Author: obo $ $Date: 2007-07-18 09:01:44 $
+ *  last change: $Author: hr $ $Date: 2007-08-02 17:07:32 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -591,10 +591,10 @@ Reference < XContent > SfxMedium::GetContent() const
         catch ( ::com::sun::star::uno::Exception& )
         {
         }
-    }
 
-    if ( !aBaseURL.getLength() )
-        aBaseURL = GetURLObject().GetMainURL( INetURLObject::NO_DECODE );
+        if ( !aBaseURL.getLength() )
+            aBaseURL = GetURLObject().GetMainURL( INetURLObject::NO_DECODE );
+    }
 
     if ( bForSaving )
     {
