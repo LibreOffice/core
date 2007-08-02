@@ -4,9 +4,9 @@
  *
  *  $RCSfile: objcont.cxx,v $
  *
- *  $Revision: 1.70 $
+ *  $Revision: 1.71 $
  *
- *  last change: $Author: hr $ $Date: 2007-08-01 11:04:26 $
+ *  last change: $Author: hr $ $Date: 2007-08-02 17:08:00 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -334,7 +334,7 @@ SfxViewFrame* SfxObjectShell::LoadWindows_Impl( SfxTopFrame *pPreferedFrame )
             break;
 
         // check for minimized/maximized/size
-        if ( aPosSize.EqualsAscii( "min" ) )
+        if ( aPosSize.EqualsAscii( "max" ) )
             bMaximized = TRUE;
         else if ( aPosSize.EqualsAscii( "min" ) )
         {
