@@ -4,9 +4,9 @@
  *
  *  $RCSfile: pdfwriter_impl.cxx,v $
  *
- *  $Revision: 1.113 $
+ *  $Revision: 1.114 $
  *
- *  last change: $Author: rt $ $Date: 2007-07-24 10:13:42 $
+ *  last change: $Author: hr $ $Date: 2007-08-02 15:00:04 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -8931,7 +8931,7 @@ void PDFWriterImpl::drawPolyPolygon( const PolyPolygon& rPolyPoly, sal_Int32 nPa
         checkAndEnableStreamEncryption( nXObject );
         writeBuffer( aMemStream.GetData(), nStreamLen );
         disableStreamEncryption();
-        writeBuffer( "\nendobj\n\n", 9 );
+        writeBuffer( "\nendstream\nendobj\n\n", 19 );
     }
     m_aPages.back().beginStream();
     OStringBuffer aLine( 80 );
