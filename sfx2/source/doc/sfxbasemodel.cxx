@@ -4,9 +4,9 @@
  *
  *  $RCSfile: sfxbasemodel.cxx,v $
  *
- *  $Revision: 1.127 $
+ *  $Revision: 1.128 $
  *
- *  last change: $Author: vg $ $Date: 2007-07-19 15:29:47 $
+ *  last change: $Author: hr $ $Date: 2007-08-02 13:32:40 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -755,7 +755,12 @@ void SAL_CALL SfxBaseModel::dispose() throw(::com::sun::star::uno::RuntimeExcept
     m_pData->m_xCurrent = uno::Reference< frame::XController > ();
     m_pData->m_seqControllers = uno::Sequence< uno::Reference< frame::XController > > () ;
 
-    DELETEZ(m_pData);
+    // m_pData member must be set to zero before 0delete is called to
+    // force disposed exception whenever someone tries to access our
+    // instance while in the dtor.
+    IMPL_SfxBaseModel_DataContainer* pData = m_pData;
+    m_pData = 0;
+    delete pData;
 }
 
 //________________________________________________________________________________________________________
