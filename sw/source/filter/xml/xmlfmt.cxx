@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xmlfmt.cxx,v $
  *
- *  $Revision: 1.36 $
+ *  $Revision: 1.37 $
  *
- *  last change: $Author: rt $ $Date: 2007-07-06 09:54:35 $
+ *  last change: $Author: hr $ $Date: 2007-08-02 14:21:07 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -137,7 +137,8 @@
 #include <SwStyleNameMapper.hxx>
 #endif
 #include <xmloff/attrlist.hxx>
-
+#include <unotxdoc.hxx>
+#include <docsh.hxx>
 
 using namespace ::com::sun::star;
 using namespace ::rtl;
@@ -616,13 +617,9 @@ SvXMLImportContext *SwXMLItemSetStyleContext_Impl::CreateItemSetContext(
 
     SvXMLImportContext *pContext = 0;
 
-    uno::Reference<lang::XUnoTunnel> xCrsrTunnel( GetImport().GetTextImport()->GetCursor(),
-                                       uno::UNO_QUERY);
-    ASSERT( xCrsrTunnel.is(), "missing XUnoTunnel for Cursor" );
-    OTextCursorHelper *pTxtCrsr = (OTextCursorHelper*)xCrsrTunnel->getSomething(
-                                        OTextCursorHelper::getUnoTunnelId() );
-    ASSERT( pTxtCrsr, "SwXTextCursor missing" );
-    SfxItemPool& rItemPool = pTxtCrsr->GetDoc()->GetAttrPool();
+    SwDoc* pDoc = SwImport::GetDocFromXMLImport( GetSwImport() );
+
+    SfxItemPool& rItemPool = pDoc->GetAttrPool();
     switch( GetFamily() )
     {
     case XML_STYLE_FAMILY_TABLE_TABLE:
@@ -731,13 +728,7 @@ void SwXMLItemSetStyleContext_Impl::ConnectPageDesc()
         return;
     bPageDescConnected = sal_True;
 
-    uno::Reference<lang::XUnoTunnel> xCrsrTunnel( GetImport().GetTextImport()->GetCursor(),
-                                       uno::UNO_QUERY);
-    ASSERT( xCrsrTunnel.is(), "missing XUnoTunnel for Cursor" );
-    OTextCursorHelper *pTxtCrsr = (OTextCursorHelper*)xCrsrTunnel->getSomething(
-                                        OTextCursorHelper::getUnoTunnelId() );
-    ASSERT( pTxtCrsr, "SwXTextCursor missing" );
-    SwDoc *pDoc = pTxtCrsr->GetDoc();
+    SwDoc *pDoc = SwImport::GetDocFromXMLImport( GetSwImport() );
 
     String sName;
     // --> OD 2005-02-01 #i40788# - first determine the display name of the
@@ -803,13 +794,7 @@ sal_Bool SwXMLItemSetStyleContext_Impl::ResolveDataStyleName()
         {
             if( !pItemSet )
             {
-                uno::Reference<lang::XUnoTunnel> xCrsrTunnel( GetImport().GetTextImport()->GetCursor(),
-                                                   uno::UNO_QUERY);
-                ASSERT( xCrsrTunnel.is(), "missing XUnoTunnel for Cursor" );
-                OTextCursorHelper *pTxtCrsr = (OTextCursorHelper*)xCrsrTunnel->getSomething(
-                                                    OTextCursorHelper::getUnoTunnelId() );
-                ASSERT( pTxtCrsr, "SwXTextCursor missing" );
-                SwDoc *pDoc = pTxtCrsr->GetDoc();
+                SwDoc *pDoc = SwImport::GetDocFromXMLImport( GetSwImport() );
 
                 SfxItemPool& rItemPool = pDoc->GetAttrPool();
                 pItemSet = new SfxItemSet( rItemPool, aTableBoxSetRange );
@@ -1148,18 +1133,7 @@ void SwXMLImport::FinishStyles()
 void SwXMLImport::UpdateTxtCollConditions( SwDoc *pDoc )
 {
     if( !pDoc )
-    {
-        uno::Reference<lang::XUnoTunnel> xCrsrTunnel( GetTextImport()->GetCursor(),
-                                              uno::UNO_QUERY);
-        ASSERT( xCrsrTunnel.is(), "missing XUnoTunnel for Cursor" );
-        OTextCursorHelper *pTxtCrsr =
-                (OTextCursorHelper*)xCrsrTunnel->getSomething(
-                                            OTextCursorHelper::getUnoTunnelId() );
-        ASSERT( pTxtCrsr, "SwXTextCursor missing" );
-        pDoc = pTxtCrsr->GetDoc();
-
-        ASSERT( pDoc, "document missing" );
-    }
+        pDoc = SwImport::GetDocFromXMLImport( *this );
 
     const SwTxtFmtColls& rColls = *pDoc->GetTxtFmtColls();
     sal_uInt16 nCount = rColls.Count();
