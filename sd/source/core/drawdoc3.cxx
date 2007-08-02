@@ -4,9 +4,9 @@
  *
  *  $RCSfile: drawdoc3.cxx,v $
  *
- *  $Revision: 1.48 $
+ *  $Revision: 1.49 $
  *
- *  last change: $Author: hr $ $Date: 2007-06-27 12:42:06 $
+ *  last change: $Author: hr $ $Date: 2007-08-02 18:21:24 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -106,63 +106,15 @@
 #include "strmname.h"
 #include "anminfo.hxx"
 
-#ifdef MAC
-#include "::ui:inc:unmovss.hxx"
-#include "::ui:inc:unchss.hxx"
-#include "::ui:inc:unprlout.hxx"
-#ifndef SD_DRAW_DOC_SHELL_HXX
-#include "::ui:inc:DrawDocShell.hxx"
-#endif
-#ifndef SD_GRAPHIC_DOC_SHELL_HXX
-#include "::ui:inc:GraphicDocShell.hxx"
-#endif
-#ifndef SD_VIEW_SHELL_HXX
-#include "::ui:inc:ViewShell.hxx"
-#endif
-#ifndef SD_VIEW_HXX
-#include "::ui:inc:View.hxx"
-#endif
-#include "::ui:inc:cfgids.hxx"
-#include "::ui:inc:strings.hrc"
-#else
-#ifdef UNX
 #include "../ui/inc/unmovss.hxx"
 #include "../ui/inc/unchss.hxx"
 #include "../ui/inc/unprlout.hxx"
-#ifndef SD_DRAW_DOC_SHELL_HXX
 #include "../ui/inc/DrawDocShell.hxx"
-#endif
-#ifndef SD_GRAPHIC_DOC_SHELL_HXX
 #include "../ui/inc/GraphicDocShell.hxx"
-#endif
-#ifndef SD_VIEW_SHELL_HXX
 #include "../ui/inc/ViewShell.hxx"
-#endif
-#ifndef SD_VIEW_HXX
 #include "../ui/inc/View.hxx"
-#endif
 #include "../ui/inc/cfgids.hxx"
 #include "../ui/inc/strings.hrc"
-#else
-#include "..\ui\inc\unmovss.hxx"
-#include "..\ui\inc\unchss.hxx"
-#include "..\ui\inc\unprlout.hxx"
-#ifndef SD_DRAW_DOC_SHELL_HXX
-#include "..\ui\inc\DrawDocShell.hxx"
-#endif
-#ifndef SD_GRAPHIC_DOC_SHELL_HXX
-#include "..\ui\inc\GraphicDocShell.hxx"
-#endif
-#ifndef SD_VIEW_SHELL_HXX
-#include "..\ui\inc\ViewShell.hxx"
-#endif
-#ifndef SD_VIEW_HXX
-#include "..\ui\inc\View.hxx"
-#endif
-#include "..\ui\inc\cfgids.hxx"
-#include "..\ui\inc\strings.hrc"
-#endif
-#endif
 
 using namespace ::com::sun::star;
 
