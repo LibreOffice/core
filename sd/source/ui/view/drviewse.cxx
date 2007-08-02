@@ -4,9 +4,9 @@
  *
  *  $RCSfile: drviewse.cxx,v $
  *
- *  $Revision: 1.68 $
+ *  $Revision: 1.69 $
  *
- *  last change: $Author: rt $ $Date: 2007-07-06 13:14:44 $
+ *  last change: $Author: hr $ $Date: 2007-08-02 18:24:03 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1631,7 +1631,7 @@ void DrawViewShell::InsertURLField(const String& rURL, const String& rText,
         Rectangle aLogicRect(aPos, aSize);
         pRectObj->SetLogicRect(aLogicRect);
         pRectObj->SetOutlinerParaObject( pOutlParaObject );
-        mpActualPage->InsertObject(pRectObj);
+        mpDrawView->InsertObjectAtView(pRectObj, *mpDrawView->GetSdrPageView());
         pOutl->Init( nOutlMode );
     }
 }
