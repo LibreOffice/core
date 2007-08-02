@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.2 $
+#   $Revision: 1.3 $
 #
-#   last change: $Author: rt $ $Date: 2007-07-09 11:56:41 $
+#   last change: $Author: hr $ $Date: 2007-08-02 14:42:41 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -47,6 +47,7 @@ no_common_build_zip=true
 .INCLUDE :	settings.mk
 # ------------------------------------------------------------------
 
+
 # --- reportdesign core (rpt) -----------------------------------
 
 LIB1TARGET=$(SLB)$/$(TARGET).lib
@@ -54,7 +55,8 @@ LIB1FILES=\
         $(SLB)$/api.lib				\
         $(SLB)$/coreshared.lib		\
         $(SLB)$/core_resource.lib	\
-        $(SLB)$/core_sdr.lib
+        $(SLB)$/core_sdr.lib        \
+        $(SLB)$/core_misc.lib
 
 SHL1TARGET=$(TARGET)$(UPD)$(DLLPOSTFIX)
 
@@ -200,17 +202,24 @@ DEF3NAME=$(SHL3TARGET)
 
 # create Extension -----------------------------
 
-ZIP1TARGET=reportdesign
+.IF "$(SOLAR_JAVA)"!="
+
+ZIP1TARGET=sun-report-builder
 ZIP1FLAGS=-r
-ZIP1DIR=$(OUT)$/zip
+ZIP1DIR=$(MISC)$/zip
 ZIP1LIST=*
 ZIP1EXT=.oxt
 
 XMLFILES := $(ZIP1DIR)$/description.xml \
             $(ZIP1DIR)$/META-INF$/manifest.xml
 
-TXTFILES := $(ZIP1DIR)$/registration$/license_de.txt \
-            $(ZIP1DIR)$/registration$/license_en_US.txt
+.IF "$(GUI)"!="WNT"
+TXTFILES:=$(foreach,i,$(WITH_LANG) $(ZIP1DIR)$/registration$/LICENSE_$i)
+LICLINES:=$(foreach,i,$(TXTFILES) 				<license-text xlink:href="registration/$(i:f)" lang="$(subst,LICENSE_, $(i:f))" />) 
+.ELSE			# "$(GUI)"!="WNT"
+TXTFILES:=$(foreach,i,$(WITH_LANG) $(ZIP1DIR)$/registration$/license_$i.txt)
+LICLINES:=$(foreach,i,$(TXTFILES) 				<license-text xlink:href="registration/$(i:f)" lang="$(subst,.txt, $(subst,license_, $(i:f)))" />) 
+.ENDIF			# "$(GUI)"!="WNT"
 
 HTMLFILES := $(ZIP1DIR)$/THIRDPARTYREADMELICENSE.html
 
@@ -226,13 +235,21 @@ REPRORTJARFILES := \
     $(ZIP1DIR)$/librepository-0.1.1.jar									\
     $(ZIP1DIR)$/libfonts-0.2.6.jar										\
     $(ZIP1DIR)$/jcommon-serializer-0.1.0.jar							\
-    $(ZIP1DIR)$/reportdesign.jar
+    $(ZIP1DIR)$/sun-report-builder.jar
 
-.INCLUDE : target.mk
 # --- Targets ----------------------------------
-.IF "$(ZIP1TARGETN)"!=""
+.INCLUDE : target.mk
+
+.IF "$(ZIP1TARGETN)"!="
 $(ZIP1TARGETN) :  $(TXTFILES) $(XMLFILES) $(HTMLFILES) $(REPRORTJARFILES)
-.ENDIF          # "$(ZIP1TARGETN)"!=""
+.ENDIF          # "$(ZIP1TARGETN)"!="
+
+$(ZIP1DIR)$/description.xml : pre.xml post.xml
+    @@-$(MKDIRHIER) $(@:d)
+    @@-$(RM) $(ZIP1DIR)$/description.xml
+    $(TYPE) pre.xml > $@
+    $(TYPE) $(mktmp  $(LICLINES)) >> $@
+    $(TYPE) post.xml >> $@
 
 $(ZIP1DIR)$/%.xml : %.xml
     @@-$(MKDIRHIER) $(@:d)
@@ -250,10 +267,19 @@ $(ZIP1DIR)$/META-INF$/%.xml : %.xml
     @@-$(MKDIRHIER) $(@:d)
     $(COPY) $< $@
 
-$(ZIP1DIR)$/registration$/%.txt : %.txt
+$(ZIP1DIR)$/registration$/license_%.txt : $(SOLARBINDIR)$/osl$/license_%.txt
+    @@-$(MKDIRHIER) $(@:d)
+    $(COPY) $< $@
+
+$(ZIP1DIR)$/registration$/LICENSE_% : $(SOLARBINDIR)$/osl$/LICENSE_%
     @@-$(MKDIRHIER) $(@:d)
     $(COPY) $< $@
 
 $(ZIP1DIR)$/THIRDPARTYREADMELICENSE.html : THIRDPARTYREADMELICENSE.html
     @@-$(MKDIRHIER) $(@:d)
     $(COPY) $< $@
+
+.ELSE			# "$(SOLAR_JAVA)"!="
+.INCLUDE : target.mk
+.ENDIF			# "$(SOLAR_JAVA)"!="
+#
