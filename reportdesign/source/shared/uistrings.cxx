@@ -4,9 +4,9 @@
  *
  *  $RCSfile: uistrings.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2007-07-09 11:56:29 $
+ *  last change: $Author: hr $ $Date: 2007-08-02 14:35:37 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -58,5 +58,6 @@ namespace rptui
     IMPLEMENT_CONSTASCII_USTRING(PROPERTY_POSITION              , "Position");
     IMPLEMENT_CONSTASCII_USTRING(PROPERTY_FORMATKEYDATE         , "FormatKeyDate");
     IMPLEMENT_CONSTASCII_USTRING(PROPERTY_FORMATKEYTIME         , "FormatKeyTime");
+    IMPLEMENT_CONSTASCII_USTRING(DBOVERLAPPEDCONTROL            , "OverlappedControl");
 }
 
