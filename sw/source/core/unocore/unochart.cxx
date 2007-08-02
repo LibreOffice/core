@@ -4,9 +4,9 @@
  *
  *  $RCSfile: unochart.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: rt $ $Date: 2007-07-25 08:15:41 $
+ *  last change: $Author: hr $ $Date: 2007-08-02 13:57:30 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1386,6 +1386,7 @@ uno::Sequence< beans::PropertyValue > SAL_CALL SwChartDataProvider::detectArgume
     sal_Int32 *pSortedMapping = aSortedMapping.getArray();
     std::sort( pSortedMapping, pSortedMapping + aSortedMapping.getLength() );
     DBG_ASSERT( aSortedMapping.getLength() == nNumDS_LDS, "unexpected size of sequence" );
+    sal_Bool bNeedSequenceMapping = sal_False;
     for (sal_Int32 i = 0;  i < nNumDS_LDS;  ++i)
     {
         sal_Int32 *pIt = std::find( pSortedMapping, pSortedMapping + nNumDS_LDS,
@@ -1394,7 +1395,17 @@ uno::Sequence< beans::PropertyValue > SAL_CALL SwChartDataProvider::detectArgume
         if (!pIt)
             return aResult; // failed -> return empty property sequence
         pSequenceMapping[i] = pIt - pSortedMapping;
+
+        if (i != pSequenceMapping[i])
+            bNeedSequenceMapping = sal_True;
     }
+
+    // check if 'SequenceMapping' is actually not required...
+    // (don't write unnecessary properties to the XML file)
+    if (!bNeedSequenceMapping)
+        aSequenceMapping.realloc(0);
+
+
 #ifdef TL_NOT_USED  // in the end chart2 did not want to have the sequence minimized
     // try to shorten the 'SequenceMapping' as much as possible
     sal_Int32 k;
