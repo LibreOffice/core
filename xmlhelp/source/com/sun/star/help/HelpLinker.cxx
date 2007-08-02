@@ -4,9 +4,9 @@
  *
  *  $RCSfile: HelpLinker.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: ihi $ $Date: 2007-07-12 13:24:50 $
+ *  last change: $Author: hr $ $Date: 2007-08-02 15:56:00 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -4687,7 +4687,7 @@ namespace URLEncoder
 {
     static std::string encode(const std::string &rIn)
     {
-        const char *good = "!$&'()*+,-.:=@_";
+        const char *good = "!$&'()*+,-.=@_";
         static const char hex[17] = "0123456789ABCDEF";
 
         std::string result;
