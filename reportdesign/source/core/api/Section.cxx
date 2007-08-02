@@ -4,9 +4,9 @@
  *
  *  $RCSfile: Section.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2007-07-09 11:56:14 $
+ *  last change: $Author: hr $ $Date: 2007-08-02 14:30:39 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -315,8 +315,10 @@ void SAL_CALL OSection::setHeight( ::sal_uInt32 _height ) throw (uno::RuntimeExc
 // -----------------------------------------------------------------------------
 void SAL_CALL OSection::setBackColor( ::sal_Int32 _backgroundcolor ) throw (uno::RuntimeException)
 {
-    setBackTransparent(_backgroundcolor == static_cast<sal_Int32>(COL_TRANSPARENT));
-    set(PROPERTY_BACKCOLOR,_backgroundcolor,m_nBackgroundColor);
+    sal_Bool bTransparent = _backgroundcolor == static_cast<sal_Int32>(COL_TRANSPARENT);
+    setBackTransparent(bTransparent);
+    if ( !bTransparent )
+        set(PROPERTY_BACKCOLOR,_backgroundcolor,m_nBackgroundColor);
 }
 // -----------------------------------------------------------------------------
 ::sal_Bool SAL_CALL OSection::getBackTransparent() throw (uno::RuntimeException)
@@ -328,6 +330,8 @@ void SAL_CALL OSection::setBackColor( ::sal_Int32 _backgroundcolor ) throw (uno:
 void SAL_CALL OSection::setBackTransparent( ::sal_Bool _backtransparent ) throw (uno::RuntimeException)
 {
     set(PROPERTY_BACKTRANSPARENT,_backtransparent,m_bBacktransparent);
+    if ( _backtransparent )
+        set(PROPERTY_BACKCOLOR,static_cast<sal_Int32>(COL_TRANSPARENT),m_nBackgroundColor);
 }
 // -----------------------------------------------------------------------------
 ::rtl::OUString SAL_CALL OSection::getConditionalPrintExpression() throw (uno::RuntimeException)
