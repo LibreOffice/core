@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ReportHelperImpl.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2007-07-09 11:56:15 $
+ *  last change: $Author: hr $ $Date: 2007-08-02 14:30:52 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -35,7 +35,7 @@
 #ifndef INCLUDED_REPORTHELPERIMPL_HXX
 #define INCLUDED_REPORTHELPERIMPL_HXX
 // ::com::sun::star::report::XReportComponent:
-#define REPORTCOMPONENT_IMPL(clazz) \
+#define REPORTCOMPONENT_IMPL3(clazz) \
 ::rtl::OUString SAL_CALL clazz::getName() throw (uno::RuntimeException) \
 { \
     ::osl::MutexGuard aGuard(m_aMutex); \
@@ -85,6 +85,15 @@ void SAL_CALL clazz::setWidth( ::sal_Int32 _width ) throw (uno::RuntimeException
     aSize.Width = _width; \
     setSize(aSize); \
 } \
+uno::Reference< report::XSection > SAL_CALL clazz::getSection() throw (uno::RuntimeException) \
+{ \
+    ::osl::MutexGuard aGuard(m_aMutex); \
+    uno::Reference< container::XChild > xParent(getParent(  ),uno::UNO_QUERY); \
+    return lcl_getSection(xParent); \
+}
+
+#define REPORTCOMPONENT_IMPL(clazz) \
+REPORTCOMPONENT_IMPL3(clazz)\
 ::sal_Bool SAL_CALL clazz::getPrintRepeatedValues() throw (beans::UnknownPropertyException, uno::RuntimeException) \
 { \
     ::osl::MutexGuard aGuard(m_aMutex); \
@@ -93,13 +102,8 @@ void SAL_CALL clazz::setWidth( ::sal_Int32 _width ) throw (uno::RuntimeException
 void SAL_CALL clazz::setPrintRepeatedValues( ::sal_Bool _printrepeatedvalues ) throw (beans::UnknownPropertyException, uno::RuntimeException) \
 { \
     set(PROPERTY_PRINTREPEATEDVALUES,_printrepeatedvalues,m_aProps.aComponent.m_bPrintRepeatedValues); \
-} \
-uno::Reference< report::XSection > SAL_CALL clazz::getSection() throw (uno::RuntimeException) \
-{ \
-    ::osl::MutexGuard aGuard(m_aMutex); \
-    uno::Reference< container::XChild > xParent(getParent(  ),uno::UNO_QUERY); \
-    return lcl_getSection(xParent); \
 }
+
 #define REPORTCOMPONENT_IMPL2(clazz) \
 ::sal_Int16  SAL_CALL clazz::getControlBorder() throw (beans::UnknownPropertyException, uno::RuntimeException) \
 { \
@@ -130,8 +134,10 @@ void SAL_CALL clazz::setControlBorderColor( ::sal_Int32 _bordercolor ) throw (un
  \
 void SAL_CALL clazz::setControlBackground( ::sal_Int32 _backgroundcolor ) throw (uno::RuntimeException, beans::UnknownPropertyException)\
 { \
-    setControlBackgroundTransparent(_backgroundcolor == static_cast<sal_Int32>(COL_TRANSPARENT)); \
-    set(PROPERTY_CONTROLBACKGROUND,_backgroundcolor,varName.nBackgroundColor); \
+    sal_Bool bTransparent = _backgroundcolor == static_cast<sal_Int32>(COL_TRANSPARENT);\
+    setControlBackgroundTransparent(bTransparent);\
+    if ( !bTransparent )\
+        set(PROPERTY_CONTROLBACKGROUND,_backgroundcolor,varName.nBackgroundColor);\
 } \
  \
 ::sal_Bool SAL_CALL clazz::getControlBackgroundTransparent() throw (beans::UnknownPropertyException, uno::RuntimeException) \
@@ -142,7 +148,9 @@ void SAL_CALL clazz::setControlBackground( ::sal_Int32 _backgroundcolor ) throw 
  \
 void SAL_CALL clazz::setControlBackgroundTransparent( ::sal_Bool _controlbackgroundtransparent ) throw (beans::UnknownPropertyException, uno::RuntimeException) \
 { \
-    set(PROPERTY_CONTROLBACKGROUNDTRANSPARENT,_controlbackgroundtransparent,varName.m_bBackgroundTransparent); \
+    set(PROPERTY_CONTROLBACKGROUNDTRANSPARENT,_controlbackgroundtransparent,varName.m_bBackgroundTransparent);\
+    if ( _controlbackgroundtransparent )\
+        set(PROPERTY_CONTROLBACKGROUND,static_cast<sal_Int32>(COL_TRANSPARENT),varName.nBackgroundColor);\
 }
 
 #define REPORTCONTROLFORMAT_IMPL2(clazz,varName)  \
