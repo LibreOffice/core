@@ -4,9 +4,9 @@
  *
  *  $RCSfile: svdmark.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: obo $ $Date: 2007-07-18 10:56:37 $
+ *  last change: $Author: hr $ $Date: 2007-08-02 18:27:46 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -391,12 +391,28 @@ void SdrMarkList::ImpForceSort()
         mbSorted = sal_True;
         ULONG nAnz = maList.Count();
 
+        // remove invalid
+        if(nAnz > 0 )
+        {
+            SdrMark* pAkt = (SdrMark*)maList.First();
+            while( pAkt )
+            {
+                if(pAkt->GetMarkedSdrObj() == 0)
+                {
+                    maList.Remove();
+                    delete pAkt;
+                }
+                pAkt= (SdrMark*)maList.Next();
+            }
+            nAnz = maList.Count();
+        }
+
         if(nAnz > 1)
         {
             ImpSdrMarkListSorter aSort(maList);
             aSort.DoSort();
 
-            // und nun doppelte rauswerfen
+            // remove duplicates
             if(maList.Count() > 1)
             {
                 SdrMark* pAkt = (SdrMark*)maList.Last();
