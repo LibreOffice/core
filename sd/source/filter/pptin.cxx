@@ -4,9 +4,9 @@
  *
  *  $RCSfile: pptin.cxx,v $
  *
- *  $Revision: 1.88 $
+ *  $Revision: 1.89 $
  *
- *  last change: $Author: obo $ $Date: 2007-07-17 13:00:49 $
+ *  last change: $Author: hr $ $Date: 2007-08-02 18:22:31 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -177,21 +177,10 @@
 #include <vcl/bmpacc.hxx>
 #endif
 
-#ifndef MAC
-#ifndef SD_DRAW_DOC_SHELL_HXX
 #include "../ui/inc/DrawDocShell.hxx"
-#endif
-#else
-#ifndef SD_DRAW_DOC_SHELL_HXX
-#include "DrawDocShell.hxx"
-#endif
-#endif
-#ifndef SD_FRAME_VIEW_HXX
 #include <../ui/inc/FrameView.hxx>
-#endif
-#ifndef _SD_OPTSITEM_HXX
 #include <../ui/inc/optsitem.hxx>
-#endif
+
 #ifndef _OFA_FLTRCFG_HXX
 #include <svtools/fltrcfg.hxx>
 #endif
