@@ -4,9 +4,9 @@
  *
  *  $RCSfile: parse.cxx,v $
  *
- *  $Revision: 1.33 $
+ *  $Revision: 1.34 $
  *
- *  last change: $Author: vg $ $Date: 2007-05-25 12:14:21 $
+ *  last change: $Author: hr $ $Date: 2007-08-02 13:54:04 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -563,8 +563,10 @@ void SmParser::NextToken()
         CurToken.aText      = BufferString.Copy( nRealStart, sal::static_int_cast< xub_StrLen >(n) );
 
 #if OSL_DEBUG_LEVEL > 1
-            if (!IsDelimiter( BufferString, aRes.EndPos ))
-                DBG_WARNING( "identifier really finished? (compatibility!)" );
+        if (!IsDelimiter( BufferString, static_cast< xub_StrLen >(aRes.EndPos) ))
+        {
+            DBG_WARNING( "identifier really finished? (compatibility!)" );
+        }
 #endif
     }
     else if (aRes.TokenType & KParseType::DOUBLE_QUOTE_STRING)
@@ -601,8 +603,10 @@ void SmParser::NextToken()
             CurToken.aText      = aName;
 
 #if OSL_DEBUG_LEVEL > 1
-            if (!IsDelimiter( BufferString, aRes.EndPos ))
+            if (!IsDelimiter( BufferString, static_cast< xub_StrLen >(aRes.EndPos) ))
+            {
                 DBG_WARNING( "identifier really finished? (compatibility!)" );
+            }
 #endif
         }
     }
