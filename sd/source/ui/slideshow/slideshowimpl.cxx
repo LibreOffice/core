@@ -4,9 +4,9 @@
  *
  *  $RCSfile: slideshowimpl.cxx,v $
  *
- *  $Revision: 1.45 $
+ *  $Revision: 1.46 $
  *
- *  last change: $Author: obo $ $Date: 2007-07-17 14:30:22 $
+ *  last change: $Author: hr $ $Date: 2007-08-02 18:23:37 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1991,7 +1991,7 @@ IMPL_LINK( SlideshowImpl, updateHdl, Timer*, EMPTYARG )
         Reference< XSlideShow > xShow( mxShow );
 
         double fUpdate = -1.0;
-        while(mxShow.is() && ( fUpdate < 1.0 ))
+        while(mxShow.is() && ( fUpdate < 0.25 ))
         {
              if( !xShow->update(fUpdate) )
              {
@@ -2032,6 +2032,8 @@ IMPL_LINK( SlideshowImpl, updateHdl, Timer*, EMPTYARG )
     }
 
     --mnEntryCounter;
+
+    Application::Reschedule(true);
 
     return 0;
 }
