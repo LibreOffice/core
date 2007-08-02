@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.97 $
+#   $Revision: 1.98 $
 #
-#   last change: $Author: hr $ $Date: 2007-07-31 13:02:17 $
+#   last change: $Author: hr $ $Date: 2007-08-02 15:00:59 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -332,6 +332,9 @@ SHL2STDLIBS+= -ldl
 # gtk plugin
 .IF "$(ENABLE_GTK)" != ""
 PKGCONFIG_MODULES=gtk+-2.0 gthread-2.0
+.IF "$(ENABLE_DBUS)" != ""
+PKGCONFIG_MODULES+= dbus-glib-1
+.ENDIF
 .INCLUDE: pkg_config.mk
 
 LIB4TARGET=$(SLB)$/igtk_plug_
