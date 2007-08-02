@@ -4,9 +4,9 @@
  *
  *  $RCSfile: VPolarAngleAxis.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: vg $ $Date: 2007-05-22 19:12:19 $
+ *  last change: $Author: hr $ $Date: 2007-08-02 17:32:04 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -153,7 +153,9 @@ bool VPolarAngleAxis::createTextShapes_ForAngleAxis(
                     eLabelAlignment, fLogicAngle, fLogicRadius, fLogicZ, nScreenValueOffsetInRadiusDirection ));
             LabelPositionHelper::changeTextAdjustment( aPropValues, aPropNames, eLabelAlignment );
 
-            double fRotationAnglePi = rAxisLabelProperties.fRotationAngleDegree*F_PI/180.0;
+            // #i78696# use mathematically correct rotation now
+            const double fRotationAnglePi(rAxisLabelProperties.fRotationAngleDegree * (F_PI / -180.0));
+
             uno::Any aATransformation = ShapeFactory::makeTransformation( aAnchorScreenPosition2D, fRotationAnglePi );
             rtl::OUString aStackedLabel = ShapeFactory::getStackedString( aLabel, rAxisLabelProperties.bStackCharacters );
 
