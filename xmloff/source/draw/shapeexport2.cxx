@@ -4,9 +4,9 @@
  *
  *  $RCSfile: shapeexport2.cxx,v $
  *
- *  $Revision: 1.61 $
+ *  $Revision: 1.62 $
  *
- *  last change: $Author: rt $ $Date: 2007-07-06 12:28:29 $
+ *  last change: $Author: hr $ $Date: 2007-08-02 17:23:07 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -271,7 +271,15 @@ void XMLShapeExport::ImpExportNewTrans_FeaturesAndWrite(::basegfx::B2DTuple& rTR
         SdXMLImExTransform2D aTransform;
 
         aTransform.AddSkewX(atan(fTRShear));
-        aTransform.AddRotate(fTRRotate);
+
+        // #i78696#
+        // fTRRotate is mathematically correct, but due to the error
+        // we export/import it mirrored. Since the API implementation is fixed and
+        // uses the correctly oriented angle, it is necessary for compatibility to
+        // mirror the angle here to stay at the old behaviour. There is a follow-up
+        // task (#i78698#) to fix this in the next ODF FileFormat version
+        aTransform.AddRotate(-fTRRotate);
+
         aTransform.AddTranslate(rTRTranslate);
 
         // does transformation need to be exported?
