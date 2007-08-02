@@ -4,9 +4,9 @@
  *
  *  $RCSfile: EnhancedCustomShape3d.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: obo $ $Date: 2007-07-18 10:51:56 $
+ *  last change: $Author: hr $ $Date: 2007-08-02 18:27:06 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -484,7 +484,7 @@ SdrObject* EnhancedCustomShape3d::Create3DObject( const SdrObject* pShape2d, con
                 const Rectangle aBoundRect(FRound(aTempRange.getMinX()), FRound(aTempRange.getMinY()), FRound(aTempRange.getMaxX()), FRound(aTempRange.getMaxY()));
                 aBoundRect2d.Union( aBoundRect );
 
-                E3dCompoundObject* p3DObj = new E3dExtrudeObj( a3DDefaultAttr, aPolyPoly, bUseTwoFillStyles ? 0 : fDepth );
+                E3dCompoundObject* p3DObj = new E3dExtrudeObj( a3DDefaultAttr, aPolyPoly, bUseTwoFillStyles ? 10 : fDepth );
                 p3DObj->NbcSetLayer( pShape2d->GetLayer() );
                 p3DObj->SetMergedItemSet( aSet );
                 if ( bIsPlaceholderObject )
@@ -539,7 +539,7 @@ SdrObject* EnhancedCustomShape3d::Create3DObject( const SdrObject* pShape2d, con
                     p3DObj->SetMergedItem( Svx3DCloseFrontItem( sal_False ) );
                     p3DObj->SetMergedItem( Svx3DCloseBackItem( sal_False ) );
                     pScene->Insert3DObj( p3DObj );
-                    p3DObj = new E3dExtrudeObj( a3DDefaultAttr, aPolyPoly, 0 );
+                    p3DObj = new E3dExtrudeObj( a3DDefaultAttr, aPolyPoly, 10 );
                     p3DObj->NbcSetLayer( pShape2d->GetLayer() );
                     p3DObj->SetMergedItemSet( aSet );
 
