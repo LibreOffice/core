@@ -4,9 +4,9 @@
  *
  *  $RCSfile: genericcontroller.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2007-07-24 12:03:20 $
+ *  last change: $Author: hr $ $Date: 2007-08-02 14:25:13 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -318,6 +318,14 @@ namespace dbaui
                 The help id to dispatch.
         */
         void openHelpAgent(sal_Int32 _nHelpId);
+        /** open the help agent for the given help url.
+            @param  _pHelpStringURL
+                The help url to dispatch.
+        */
+        void openHelpAgent(rtl::OUString const& _suHelpStringURL );
+        // void openHelpAgent(URL aURL);
+
+        void openHelpAgent(com::sun::star::util::URL aURL);
 
         // closes the task when possible
         void closeTask();
