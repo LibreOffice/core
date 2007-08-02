@@ -4,9 +4,9 @@
  *
  *  $RCSfile: viewsh.cxx,v $
  *
- *  $Revision: 1.75 $
+ *  $Revision: 1.76 $
  *
- *  last change: $Author: obo $ $Date: 2007-07-17 13:46:33 $
+ *  last change: $Author: hr $ $Date: 2007-08-02 17:09:11 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -79,6 +79,9 @@
 #ifndef _COM_SUN_STAR_SYSTEM_SYSTEMSHELLEXECUTEFLAGS_HPP_
 #include <com/sun/star/system/SystemShellExecuteFlags.hpp>
 #endif
+#ifndef  _COM_SUN_STAR_CONTAINER_XCONTAINERQUERY_HPP_
+#include <com/sun/star/container/XContainerQuery.hpp>
+#endif
 
 #include <osl/file.hxx>
 #include <vos/mutex.hxx>
@@ -96,6 +99,7 @@
 #include <basic/sbuno.hxx>
 #include <framework/actiontriggerhelper.hxx>
 #include <comphelper/processfactory.hxx>
+#include <comphelper/sequenceashashmap.hxx>
 
 #ifndef GCC
 #endif
@@ -152,6 +156,48 @@ SFX_IMPL_INTERFACE(SfxViewShell,SfxShell,SfxResId(0))
 }
 
 TYPEINIT2(SfxViewShell,SfxShell,SfxListener);
+
+//--------------------------------------------------------------------
+/** search for a filter name dependent on type and module
+ */
+
+static ::rtl::OUString impl_retrieveFilterNameFromTypeAndModule(
+    const css::uno::Reference< css::container::XContainerQuery >& rContainerQuery,
+    const ::rtl::OUString& rType,
+    const ::rtl::OUString& rModuleIdentifier,
+    const sal_Int32 nFlags )
+{
+    // Retrieve filter from type
+    css::uno::Sequence< css::beans::NamedValue > aQuery( 2 );
+    aQuery[0].Name  = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Type" ));
+    aQuery[0].Value = css::uno::makeAny( rType );
+    aQuery[1].Name  = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "DocumentService" ));
+    aQuery[1].Value = css::uno::makeAny( rModuleIdentifier );
+
+    css::uno::Reference< css::container::XEnumeration > xEnumeration =
+        rContainerQuery->createSubSetEnumerationByProperties( aQuery );
+
+    ::rtl::OUString aFoundFilterName;
+    while ( xEnumeration->hasMoreElements() )
+    {
+        ::comphelper::SequenceAsHashMap aFilterPropsHM( xEnumeration->nextElement() );
+        ::rtl::OUString aFilterName = aFilterPropsHM.getUnpackedValueOrDefault(
+                                    ::rtl::OUString::createFromAscii( "Name" ),
+                                    ::rtl::OUString() );
+
+        sal_Int32 nFilterFlags = aFilterPropsHM.getUnpackedValueOrDefault(
+                                    ::rtl::OUString::createFromAscii( "Flags" ),
+                                    sal_Int32( 0 ) );
+
+        if ( nFilterFlags & nFlags )
+        {
+            aFoundFilterName = aFilterName;
+            break;
+        }
+    }
+
+    return aFoundFilterName;
+}
 
 //--------------------------------------------------------------------
 /** search for an internal typename, which map to the current app module
@@ -324,92 +370,150 @@ void SfxViewShell::ExecMisc_Impl( SfxRequest &rReq )
          // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
         case SID_WEBHTML:
         {
-            String aHTMLExtension = String::CreateFromAscii( ".htm" );
-            const SfxFilter* pFilter = NULL;
-            SfxFilterContainer* pFilterContainer =GetObjectShell()-> GetFactory().GetFilterContainer();
+            static const char HTML_DOCUMENT_TYPE[] = "writer_web_HTML";
+            static const char HTML_GRAPHIC_TYPE[]  = "graphic_HTML";
+            const sal_Int32   FILTERFLAG_EXPORT    = 0x00000002;
 
-            if ( pFilterContainer )
-                pFilter = pFilterContainer->GetFilter4Extension( aHTMLExtension, SFX_FILTER_EXPORT );
+            css::uno::Reference< lang::XMultiServiceFactory > xSMGR(::comphelper::getProcessServiceFactory(), css::uno::UNO_QUERY_THROW);
+            css::uno::Reference < css::frame::XFrame >        xFrame( pFrame->GetFrame()->GetFrameInterface() );
+            css::uno::Reference< css::frame::XModel >         xModel;
 
-            if ( NULL == pFilter )
+            const rtl::OUString aModuleManager( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.frame.ModuleManager" ));
+            css::uno::Reference< css::frame::XModuleManager > xModuleManager( xSMGR->createInstance( aModuleManager ), css::uno::UNO_QUERY_THROW );
+            if ( !xModuleManager.is() )
             {
-                OSL_ASSERT("ERROR: cannot get filter for \"htm\"\n");
-                break;
+                rReq.Done(FALSE);
+                return;
             }
 
-            SfxObjectShellRef xDocShell = SfxObjectShell::Current();
-            SfxDispatcher*    pDisp = xDocShell->GetFrame()->GetDispatcher();
-            String            rFileName;
-
-            // save the document as HTML format
-            BOOL bRet( FALSE );
-            if ( xDocShell.Is() && xDocShell->GetMedium() )
+            rtl::OUString aModule;
+            try
             {
-                // save old settings
-                BOOL bModified = xDocShell->IsModified();
+                 aModule = xModuleManager->identify( xFrame );
+            }
+            catch ( css::uno::RuntimeException& )
+            {
+                throw;
+            }
+            catch ( css::uno::Exception& )
+            {
+            }
 
-                // detect filter
-                sal_Bool bHasFilter = pFilter ? sal_True : sal_False;
+            if ( xFrame.is() )
+            {
+                css::uno::Reference< css::frame::XController > xController = xFrame->getController();
+                if ( xController.is() )
+                    xModel = xController->getModel();
+            }
 
-                // create temp file name with leading chars and extension
-                sal_Bool    bHasName = xDocShell->HasName();
-                String      aLeadingStr;
+            // We need at least a valid module name and model reference
+            css::uno::Reference< css::frame::XStorable > xStorable( xModel, css::uno::UNO_QUERY );
+            if ( xModel.is() && xStorable.is() )
+            {
+                rtl::OUString aFilterName;
+                rtl::OUString aTypeName( RTL_CONSTASCII_USTRINGPARAM( HTML_DOCUMENT_TYPE ));
+                rtl::OUString aFileName;
+                rtl::OUString aExtension( RTL_CONSTASCII_USTRINGPARAM( "htm" ));
 
-                if ( !bHasName )
-                    aLeadingStr = String( DEFINE_CONST_UNICODE( "noname" ) );
+                rtl::OUString aLocation = xStorable->getLocation();
+                INetURLObject aFileObj( aLocation );
 
-                ::utl::TempFile aTempFile( aLeadingStr, &aHTMLExtension );
+                bool bPrivateProtocol = ( aFileObj.GetProtocol() == INET_PROT_PRIV_SOFFICE );
+                bool bHasLocation = ( aLocation.getLength() > 0 ) && !bPrivateProtocol;
 
-                rFileName = aTempFile.GetURL();
+                css::uno::Reference< css::container::XContainerQuery > xContainerQuery(
+                    xSMGR->createInstance( rtl::OUString(
+                        RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.document.FilterFactory" ))),
+                        css::uno::UNO_QUERY_THROW );
 
-                // save document to temp file
-                SfxStringItem aFileName( SID_FILE_NAME, rFileName );
-                SfxBoolItem   aPicklist( SID_PICKLIST, FALSE );
-                SfxBoolItem   aSaveTo( SID_SAVETO, TRUE );
+                // Retrieve filter from type
+                sal_Int32 nFilterFlags = FILTERFLAG_EXPORT;
+                aFilterName = impl_retrieveFilterNameFromTypeAndModule( xContainerQuery, aTypeName, aModule, nFilterFlags );
+                if ( aFilterName.getLength() == 0 )
+                {
+                    // Draw/Impress uses a different type. 2nd chance try to use alternative type name
+                    aFilterName = impl_retrieveFilterNameFromTypeAndModule(
+                        xContainerQuery, ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( HTML_GRAPHIC_TYPE )), aModule, nFilterFlags );
+                }
 
-                SfxStringItem* pFilterName = NULL;
-                String sFilterName = ((class SfxFilter*) pFilter)->GetFilterName();
+                // No filter found => error
+                // No type and no location => error
+                if (( aFilterName.getLength() == 0 ) || ( aTypeName.getLength() == 0 ))
+                {
+                    rReq.Done(FALSE);
+                    return;
+                }
 
-                if ( pFilter && bHasFilter )
-                    pFilterName = new SfxStringItem( SID_FILTER_NAME, sFilterName);
+                // Use provided save file name. If empty determine file name
+                if ( !bHasLocation )
+                {
+                    // Create a default file name with the correct extension
+                    const rtl::OUString aPreviewFileName( RTL_CONSTASCII_USTRINGPARAM( "webpreview" ));
+                    aFileName = aPreviewFileName;
+                }
+                else
+                {
+                    // Determine file name from model
+                    INetURLObject aFObj( xStorable->getLocation() );
+                    aFileName = aFObj.getName( INetURLObject::LAST_SEGMENT, true, INetURLObject::NO_DECODE );
+                }
 
-                const SfxBoolItem *pRet = (const SfxBoolItem*)pDisp->Execute(
-                    SID_SAVEASDOC, SFX_CALLMODE_SYNCHRON, &aFileName, &aPicklist, &aSaveTo,
-                    pFilterName , 0L, 0L );
-                bRet = pRet ? pRet->GetValue() : FALSE;
+                OSL_ASSERT( aFilterName.getLength() > 0 );
+                OSL_ASSERT( aFileName.getLength() > 0 );
 
-                delete pFilterName;
+                // Creates a temporary directory to store our predefined file into it.
+                ::utl::TempFile aTempDir( NULL, sal_True );
 
-                // restore old settings
-                if ( !bModified && xDocShell->IsEnableSetModified() )
-                    xDocShell->SetModified( FALSE );
+                INetURLObject aFilePathObj( aTempDir.GetURL() );
+                aFilePathObj.insertName( aFileName );
+                aFilePathObj.setExtension( aExtension );
+
+                rtl::OUString aFileURL = aFilePathObj.GetMainURL( INetURLObject::NO_DECODE );
+
+                css::uno::Sequence< css::beans::PropertyValue > aArgs( 1 );
+                aArgs[0].Name  = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "FilterName" ));
+                aArgs[0].Value = css::uno::makeAny( aFilterName );
+
+                // Store document in the html format
+                try
+                {
+                    xStorable->storeToURL( aFileURL, aArgs );
+                }
+                catch ( com::sun::star::io::IOException& )
+                {
+                    rReq.Done(FALSE);
+                    return;
+                }
+
+                ::com::sun::star::uno::Reference< XSystemShellExecute > xSystemShellExecute( xSMGR->createInstance(
+                    ::rtl::OUString::createFromAscii( "com.sun.star.system.SystemShellExecute" )),
+                    css::uno::UNO_QUERY );
+
+                BOOL bRet( TRUE );
+                if ( xSystemShellExecute.is() )
+                {
+                    try
+                    {
+                        xSystemShellExecute->execute(
+                            aFileURL, ::rtl::OUString(), SystemShellExecuteFlags::DEFAULTS );
+                    }
+                    catch ( uno::Exception& )
+                    {
+                        vos::OGuard aGuard( Application::GetSolarMutex() );
+                        Window *pParent = SFX_APP()->GetTopWindow();
+                        ErrorBox( pParent, SfxResId( MSG_ERROR_NO_WEBBROWSER_FOUND )).Execute();
+                        bRet = FALSE;
+                    }
+                }
+
+                rReq.Done(bRet);
+                break;
             }
             else
             {
                 rReq.Done(FALSE);
                 return;
             }
-
-            ::com::sun::star::uno::Reference< XSystemShellExecute > xSystemShellExecute(::comphelper::getProcessServiceFactory()->createInstance(::rtl::OUString::createFromAscii( "com.sun.star.system.SystemShellExecute" )), UNO_QUERY );
-
-            if ( xSystemShellExecute.is() && bRet )
-            {
-                try
-                {
-                    xSystemShellExecute->execute(
-                        rFileName, ::rtl::OUString(), SystemShellExecuteFlags::DEFAULTS );
-                }
-                catch ( uno::Exception& )
-                {
-                    vos::OGuard aGuard( Application::GetSolarMutex() );
-                    Window *pParent = SFX_APP()->GetTopWindow();
-                    ErrorBox( pParent, SfxResId( MSG_ERROR_NO_WEBBROWSER_FOUND )).Execute();
-                    bRet = FALSE;
-                }
-            }
-
-            rReq.Done(bRet);
-            break;
         }
 
         // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
