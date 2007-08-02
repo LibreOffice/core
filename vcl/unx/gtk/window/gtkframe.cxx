@@ -4,9 +4,9 @@
  *
  *  $RCSfile: gtkframe.cxx,v $
  *
- *  $Revision: 1.65 $
+ *  $Revision: 1.66 $
  *
- *  last change: $Author: rt $ $Date: 2007-07-24 10:25:16 $
+ *  last change: $Author: hr $ $Date: 2007-08-02 15:00:20 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -68,6 +68,14 @@
 
 #include <com/sun/star/accessibility/XAccessibleContext.hpp>
 #include <com/sun/star/accessibility/AccessibleRole.hpp>
+
+#ifdef ENABLE_DBUS
+#include <dbus/dbus-glib.h>
+
+#define GSS_DBUS_SERVICE        "org.gnome.ScreenSaver"
+#define GSS_DBUS_PATH           "/org/gnome/ScreenSaver"
+#define GSS_DBUS_INTERFACE      "org.gnome.ScreenSaver"
+#endif
 
 using namespace com::sun::star;
 
@@ -509,6 +517,7 @@ void GtkSalFrame::InitCommon()
     m_pIMHandler        = NULL;
     m_hBackgroundPixmap = None;
     m_nSavedScreenSaverTimeout = 0;
+    m_nGSSCookie = 0;
     m_nExtStyle         = 0;
     m_pRegion           = NULL;
     m_ePointerStyle     = 0xffff;
@@ -795,7 +804,7 @@ void GtkSalFrame::Init( SalFrame* pParent, ULONG nStyle )
     {
         bool bNoDecor = ! (nStyle & (SAL_FRAME_STYLE_MOVEABLE | SAL_FRAME_STYLE_SIZEABLE | SAL_FRAME_STYLE_CLOSEABLE ) );
         GdkWindowTypeHint eType = GDK_WINDOW_TYPE_HINT_NORMAL;
-        if( (nStyle & SAL_FRAME_STYLE_DIALOG) )
+        if( (nStyle & SAL_FRAME_STYLE_DIALOG) && m_pParent != 0 )
             eType = GDK_WINDOW_TYPE_HINT_DIALOG;
         if( (nStyle & SAL_FRAME_STYLE_INTRO) )
         {
@@ -1680,6 +1689,115 @@ void GtkSalFrame::setAutoLock( bool bLock )
                      sizeof( nMessage ) );
 }
 
+#ifdef ENABLE_DBUS
+/** cookie is returned as an unsigned integer */
+static guint
+dbus_inhibit_gss (const gchar *appname,
+                  const gchar *reason)
+{
+        gboolean         res;
+        guint            cookie;
+        GError          *error = NULL;
+        DBusGProxy      *proxy = NULL;
+        DBusGConnection *session_connection = NULL;
+
+        /* get the DBUS session connection */
+        session_connection = dbus_g_bus_get (DBUS_BUS_SESSION, &error);
+        if (error != NULL) {
+                g_warning ("DBUS cannot connect : %s", error->message);
+                g_error_free (error);
+                return -1;
+        }
+
+        /* get the proxy with gnome-screensaver */
+        proxy = dbus_g_proxy_new_for_name (session_connection,
+                                           GSS_DBUS_SERVICE,
+                                           GSS_DBUS_PATH,
+                                           GSS_DBUS_INTERFACE);
+        if (proxy == NULL) {
+                g_warning ("Could not get DBUS proxy: %s", GSS_DBUS_SERVICE);
+                return -1;
+        }
+
+        res = dbus_g_proxy_call (proxy,
+                                 "Inhibit", &error,
+                                 G_TYPE_STRING, appname,
+                                 G_TYPE_STRING, reason,
+                                 G_TYPE_INVALID,
+                                 G_TYPE_UINT, &cookie,
+                                 G_TYPE_INVALID);
+
+        /* check the return value */
+        if (! res) {
+                cookie = -1;
+                g_warning ("Inhibit method failed");
+        }
+
+        /* check the error value */
+        if (error != NULL) {
+                g_warning ("Inhibit problem : %s", error->message);
+                g_error_free (error);
+                cookie = -1;
+        }
+
+        g_object_unref (G_OBJECT (proxy));
+        return cookie;
+}
+
+static void
+dbus_uninhibit_gss (guint cookie)
+{
+        gboolean         res;
+        GError          *error = NULL;
+        DBusGProxy      *proxy = NULL;
+        DBusGConnection *session_connection = NULL;
+
+        /* cookies have to be positive as unsigned */
+        if (cookie < 0) {
+                g_warning ("Invalid cookie");
+                return;
+        }
+
+        /* get the DBUS session connection */
+        session_connection = dbus_g_bus_get (DBUS_BUS_SESSION, &error);
+        if (error) {
+                g_warning ("DBUS cannot connect : %s", error->message);
+                g_error_free (error);
+                return;
+        }
+
+        /* get the proxy with gnome-screensaver */
+        proxy = dbus_g_proxy_new_for_name (session_connection,
+                                           GSS_DBUS_SERVICE,
+                                           GSS_DBUS_PATH,
+                                           GSS_DBUS_INTERFACE);
+        if (proxy == NULL) {
+                g_warning ("Could not get DBUS proxy: %s", GSS_DBUS_SERVICE);
+                return;
+        }
+
+        res = dbus_g_proxy_call (proxy,
+                                 "UnInhibit",
+                                 &error,
+                                 G_TYPE_UINT, cookie,
+                                 G_TYPE_INVALID,
+                                 G_TYPE_INVALID);
+
+        /* check the return value */
+        if (! res) {
+                g_warning ("UnInhibit method failed");
+        }
+
+        /* check the error value */
+        if (error != NULL) {
+                g_warning ("Inhibit problem : %s", error->message);
+                g_error_free (error);
+                cookie = -1;
+        }
+        g_object_unref (G_OBJECT (proxy));
+}
+#endif
+
 void GtkSalFrame::StartPresentation( BOOL bStart )
 {
     Display *pDisplay = GDK_DISPLAY_XDISPLAY( getGdkDisplay() );
@@ -1699,6 +1817,9 @@ void GtkSalFrame::StartPresentation( BOOL bStart )
             XSetScreenSaver( pDisplay, 0, nInterval,
                              bPreferBlanking, bAllowExposures );
         }
+#ifdef ENABLE_DBUS
+        m_nGSSCookie = dbus_inhibit_gss(g_get_application_name(), "presentation");
+#endif
     }
     else
     {
@@ -1707,6 +1828,9 @@ void GtkSalFrame::StartPresentation( BOOL bStart )
                              nInterval, bPreferBlanking,
                              bAllowExposures );
         m_nSavedScreenSaverTimeout = 0;
+#ifdef ENABLE_DBUS
+        dbus_uninhibit_gss(m_nGSSCookie);
+#endif
     }
 }
 
