@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dispatchprovider.cxx,v $
  *
- *  $Revision: 1.35 $
+ *  $Revision: 1.36 $
  *
- *  last change: $Author: ihi $ $Date: 2007-04-16 16:38:44 $
+ *  last change: $Author: hr $ $Date: 2007-08-02 14:43:58 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -69,6 +69,8 @@
 #ifndef __FRAMEWORK_CLASSES_TARGETFINDER_HXX_
 #include <classes/targetfinder.hxx>
 #endif
+
+#include <pattern/window.hxx>
 
 #ifndef __FRAMEWORK_THREADHELP_TRANSACTIONGUARD_HXX_
 #include <threadhelp/transactionguard.hxx>
@@ -449,7 +451,7 @@ css::uno::Reference< css::frame::XDispatch > DispatchProvider::implts_queryFrame
     else
     if (sTargetName==SPECIALTARGET_HELPAGENT)
     {
-        if (xFrame->isTop())
+        if (WindowHelper::isTopWindow(xFrame->getContainerWindow()))
             xDispatcher = implts_getOrCreateDispatchHelper( E_HELPAGENTDISPATCHER, xFrame );
         else
         {
