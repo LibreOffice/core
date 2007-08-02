@@ -4,9 +4,9 @@
  *
  *  $RCSfile: editsh.cxx,v $
  *
- *  $Revision: 1.48 $
+ *  $Revision: 1.49 $
  *
- *  last change: $Author: obo $ $Date: 2007-07-18 13:32:49 $
+ *  last change: $Author: hr $ $Date: 2007-08-02 16:59:39 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -668,22 +668,49 @@ USHORT SwEditShell::GetRefMarks( SvStringsDtor* pStrings ) const
 
 String SwEditShell::GetDropTxt( const USHORT nChars ) const
 {
+    /**
+     * pb: made changes for #i74939#
+     *
+     * always return a string even though there is a selection
+     */
+
     String aTxt;
     SwPaM* pCrsr = GetCrsr();
-    if( pCrsr->GetPoint()->nNode.GetIndex() ==
-        pCrsr->GetMark()->nNode.GetIndex() )
+    if ( IsMultiSelection() )
     {
-        SwTxtNode* pTxtNd = pCrsr->GetNode()->GetTxtNode();
-        if( pTxtNd )
+        // if a multi selection exists, search for the first line
+        // -> it is the cursor with the lowest index
+        ULONG nIndex = pCrsr->GetMark()->nNode.GetIndex();
+        bool bPrev = true;
+        SwPaM* pLast = pCrsr;
+        SwPaM* pTemp = pCrsr;
+        while ( bPrev )
         {
-            xub_StrLen nDropLen = pTxtNd->GetDropLen( nChars );
-            if( nDropLen )
-                aTxt = pTxtNd->GetTxt().Copy( 0, nDropLen );
+            SwPaM* pPrev = dynamic_cast< SwPaM* >( pTemp->GetPrev() );
+            bPrev = ( pPrev && pPrev != pLast );
+            if ( bPrev )
+            {
+                pTemp = pPrev;
+                ULONG nTemp = pPrev->GetMark()->nNode.GetIndex();
+                if ( nTemp < nIndex )
+                {
+                    nIndex = nTemp;
+                    pCrsr = pPrev;
+                }
+            }
         }
     }
+
+    SwTxtNode* pTxtNd = pCrsr->GetNode( !pCrsr->HasMark() )->GetTxtNode();
+    if( pTxtNd )
+    {
+        xub_StrLen nDropLen = pTxtNd->GetDropLen( nChars );
+        if( nDropLen )
+            aTxt = pTxtNd->GetTxt().Copy( 0, nDropLen );
+    }
+
     return aTxt;
 }
-
 
 void SwEditShell::ReplaceDropTxt( const String &rStr )
 {
