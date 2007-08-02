@@ -4,9 +4,9 @@
  *
  *  $RCSfile: imagetype.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 00:39:43 $
+ *  last change: $Author: hr $ $Date: 2007-08-02 13:30:42 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -48,8 +48,8 @@ namespace framework
 enum ImageType
 {
     ImageType_Color = 0,
-    ImageType_HC,
     ImageType_Color_Large,
+    ImageType_HC,
     ImageType_HC_Large,
     ImageType_COUNT
 };
