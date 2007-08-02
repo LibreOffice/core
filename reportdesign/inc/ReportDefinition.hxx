@@ -6,9 +6,9 @@
  *
  *  $RCSfile: ReportDefinition.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2007-07-09 11:56:02 $
+ *  last change: $Author: hr $ $Date: 2007-08-02 14:27:17 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -38,8 +38,8 @@
 #ifndef _COM_SUN_STAR_REPORT_XREPORTDEFINITION_HPP_
 #include <com/sun/star/report/XReportDefinition.hpp>
 #endif
-#ifndef _CPPUHELPER_COMPBASE6_HXX_
-#include <cppuhelper/compbase6.hxx>
+#ifndef _CPPUHELPER_COMPBASE7_HXX_
+#include <cppuhelper/compbase7.hxx>
 #endif
 #ifndef _CPPUHELPER_BASEMUTEX_HXX_
 #include <cppuhelper/basemutex.hxx>
@@ -81,11 +81,12 @@ namespace comphelper
 namespace reportdesign
 {
     class OReportComponentProperties;
-    typedef ::cppu::WeakComponentImplHelper6<  com::sun::star::report::XReportDefinition
+    typedef ::cppu::WeakComponentImplHelper7<  com::sun::star::report::XReportDefinition
                                  ,com::sun::star::document::XEventBroadcaster
                                  ,com::sun::star::lang::XServiceInfo
                                  ,com::sun::star::frame::XModule
                                  ,com::sun::star::lang::XUnoTunnel
+                                 ,com::sun::star::util::XNumberFormatsSupplier
                                  ,SvxUnoDrawMSFactory> ReportDefinitionBase;
     typedef ::cppu::PropertySetMixin<com::sun::star::report::XReportDefinition> ReportDefinitionPropertySet;
 
@@ -335,6 +336,10 @@ namespace reportdesign
         // XModule
         virtual void SAL_CALL setIdentifier( const ::rtl::OUString& Identifier ) throw (::com::sun::star::uno::RuntimeException);
         virtual ::rtl::OUString SAL_CALL getIdentifier(  ) throw (::com::sun::star::uno::RuntimeException);
+
+        // XNumberFormatsSupplier
+        virtual ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet > SAL_CALL getNumberFormatSettings(  ) throw (::com::sun::star::uno::RuntimeException);
+        virtual ::com::sun::star::uno::Reference< ::com::sun::star::util::XNumberFormats > SAL_CALL getNumberFormats(  ) throw (::com::sun::star::uno::RuntimeException);
 
         ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext > getContext();
 

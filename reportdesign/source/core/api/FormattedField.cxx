@@ -4,9 +4,9 @@
  *
  *  $RCSfile: FormattedField.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2007-07-09 11:56:14 $
+ *  last change: $Author: hr $ $Date: 2007-08-02 14:29:38 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -295,10 +295,14 @@ uno::Reference< util::XNumberFormatsSupplier > SAL_CALL OFormattedField::getForm
     ::osl::MutexGuard aGuard(m_aMutex);
     if ( !m_xFormatsSupplier.is() )
     {
-        uno::Reference< beans::XPropertySet> xProp(::dbtools::findDataSource(getParent()),uno::UNO_QUERY);
-        if ( xProp.is() )
+        uno::Reference< report::XSection> xSection = getSection();
+        if ( xSection.is() )
+            m_xFormatsSupplier.set(xSection->getReportDefinition(),uno::UNO_QUERY);
+        if ( !m_xFormatsSupplier.is() )
         {
-            m_xFormatsSupplier.set(xProp->getPropertyValue(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("NumberFormatsSupplier"))),uno::UNO_QUERY);
+            uno::Reference< beans::XPropertySet> xProp(::dbtools::findDataSource(getParent()),uno::UNO_QUERY);
+            if ( xProp.is() )
+                m_xFormatsSupplier.set(xProp->getPropertyValue(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("NumberFormatsSupplier"))),uno::UNO_QUERY);
         }
     }
     return m_xFormatsSupplier;

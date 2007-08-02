@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ReportDefinition.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2007-07-09 11:56:14 $
+ *  last change: $Author: hr $ $Date: 2007-08-02 14:30:16 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1397,12 +1397,20 @@ void OReportDefinition::fillArgs(::comphelper::MediaDescriptor& _aDescriptor)
 {
     uno::Sequence<beans::PropertyValue> aComponentData;
     aComponentData = _aDescriptor.getUnpackedValueOrDefault(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ComponentData")),aComponentData);
-    if ( aComponentData.getLength() )
+    if ( aComponentData.getLength() && !m_pImpl->m_xNumberFormatsSupplier.is() )
     {
         ::comphelper::SequenceAsHashMap aComponentDataMap( aComponentData );
         uno::Reference<sdbc::XConnection> xConnection;
         xConnection = aComponentDataMap.getUnpackedValueOrDefault(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ActiveConnection")),xConnection);
         m_pImpl->m_xNumberFormatsSupplier = dbtools::getNumberFormats(xConnection);
+    }
+    if ( !m_pImpl->m_xNumberFormatsSupplier.is() )
+    {
+        m_pImpl->m_xNumberFormatsSupplier.set(
+                    m_aProps->m_xContext->getServiceManager()->createInstanceWithContext(
+                        ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.util.NumberFormatsSupplier")) ,m_aProps->m_xContext),
+                        uno::UNO_QUERY_THROW
+                );
     }
     lcl_stripLoadArguments( _aDescriptor, m_pImpl->m_aArgs );
 }
@@ -2045,6 +2053,12 @@ sal_Int64 SAL_CALL OReportDefinition::getSomething( const uno::Sequence< sal_Int
 {
     if (rId.getLength() == 16 && 0 == rtl_compareMemory(getUnoTunnelImplementationId().getConstArray(),  rId.getConstArray(), 16 ) )
         return reinterpret_cast<sal_Int64>(this);
+    else
+    {
+        uno::Reference< lang::XUnoTunnel> xUnoTunnel(m_pImpl->m_xNumberFormatsSupplier,uno::UNO_QUERY);
+        if ( xUnoTunnel.is() )
+            return xUnoTunnel->getSomething(rId);
+    }
 
     return 0;
 }
@@ -2111,7 +2125,7 @@ uno::Reference< uno::XInterface > SAL_CALL OReportDefinition::createInstanceWith
             xReportComponent = xProp;
             if ( xShape.is() )
                 throw uno::Exception();
-            xProp->setPropertyValue( PROPERTY_FORMATSSUPPLIER, uno::makeAny(m_pImpl->m_xNumberFormatsSupplier) );
+            xProp->setPropertyValue( PROPERTY_FORMATSSUPPLIER, uno::makeAny(uno::Reference< util::XNumberFormatsSupplier >(*this,uno::UNO_QUERY)) );
         }
         else if ( aServiceSpecifier == SERVICE_FIXEDTEXT)
         {
@@ -2449,6 +2463,20 @@ void SAL_CALL OReportDefinition::setIdentifier( const ::rtl::OUString& Identifie
     m_pImpl->m_sIdentifier = Identifier;
 }
 // -----------------------------------------------------------------------------
+// XNumberFormatsSupplier
+uno::Reference< beans::XPropertySet > SAL_CALL OReportDefinition::getNumberFormatSettings(  ) throw (uno::RuntimeException)
+{
+    if ( m_pImpl->m_xNumberFormatsSupplier.is() )
+        return m_pImpl->m_xNumberFormatsSupplier->getNumberFormatSettings();
+    return uno::Reference< beans::XPropertySet >();
+}
+// -----------------------------------------------------------------------------
+uno::Reference< util::XNumberFormats > SAL_CALL OReportDefinition::getNumberFormats(  ) throw (uno::RuntimeException)
+{
+    if ( m_pImpl->m_xNumberFormatsSupplier.is() )
+        return m_pImpl->m_xNumberFormatsSupplier->getNumberFormats();
+    return uno::Reference< util::XNumberFormats >();
+}
 // -----------------------------------------------------------------------------
 // =============================================================================
 }// namespace reportdesign
