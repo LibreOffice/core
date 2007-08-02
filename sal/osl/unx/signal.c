@@ -4,9 +4,9 @@
  *
  *  $RCSfile: signal.c,v $
  *
- *  $Revision: 1.33 $
+ *  $Revision: 1.34 $
  *
- *  last change: $Author: vg $ $Date: 2007-01-18 14:18:28 $
+ *  last change: $Author: hr $ $Date: 2007-08-02 14:22:51 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -472,7 +472,7 @@ static int ReportCrash( int Signal )
                 int  iFrame;
                 int  nFrames = backtrace( stackframes, sizeof(stackframes)/sizeof(stackframes[0]));
 
-                FILE *xmlout, *stackout, *checksumout;
+                FILE *xmlout = NULL, *stackout = NULL, *checksumout = NULL;
                 int fdxml, fdstk, fdchksum;
 
                 strncpy( szXMLTempNameBuffer, P_tmpdir, sizeof(szXMLTempNameBuffer) );
@@ -606,10 +606,6 @@ static int ReportCrash( int Signal )
 
                     fprintf( xmlout, "</errormail:Stack>\n" );
                     fprintf( checksumout, "</errormail:Checksums>\n" );
-
-                    fclose( stackout );
-                    fclose( xmlout );
-                    fclose( checksumout );
                 }
                 else
                 {
@@ -617,6 +613,13 @@ static int ReportCrash( int Signal )
                     pStackTempName = NULL;
                     pChecksumTempName = NULL;
                 }
+
+                if ( stackout )
+                    fclose( stackout );
+                if ( xmlout )
+                    fclose( xmlout );
+                if ( checksumout )
+                    fclose( checksumout );
 
 #if defined( LINUX )
                 if ( pXMLTempName && pChecksumTempName && pStackTempName )
