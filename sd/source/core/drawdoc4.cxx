@@ -4,9 +4,9 @@
  *
  *  $RCSfile: drawdoc4.cxx,v $
  *
- *  $Revision: 1.53 $
+ *  $Revision: 1.54 $
  *
- *  last change: $Author: kz $ $Date: 2007-05-10 15:22:32 $
+ *  last change: $Author: hr $ $Date: 2007-08-02 18:21:39 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -50,17 +50,8 @@
 #ifndef _OUTLINER_HXX //autogen wg. Outliner
 #include <svx/outliner.hxx>
 #endif
-#ifndef SD_DRAW_DOC_SHELL_HXX
-#ifdef MAC
-#include "::ui:inc:DrawDocShell.hxx"
-#else
-#ifdef UNX
+
 #include "../ui/inc/DrawDocShell.hxx"
-#else
-#include "..\ui\inc\DrawDocShell.hxx"
-#endif
-#endif
-#endif
 
 #ifndef _EEITEM_HXX //autogen
 #include <svx/eeitem.hxx>
