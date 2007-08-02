@@ -4,9 +4,9 @@
  *
  *  $RCSfile: imagemanager.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: rt $ $Date: 2007-07-06 12:23:04 $
+ *  last change: $Author: hr $ $Date: 2007-08-02 17:04:28 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -188,6 +188,14 @@ DEFINE_XTYPEPROVIDER_6                  (   ImageManager                        
                                             ::com::sun::star::ui::XUIConfiguration                ,
                                             ::com::sun::star::ui::XUIConfigurationPersistence
                                         )
+
+DEFINE_XSERVICEINFO_MULTISERVICE        (   ImageManager                        ,
+                                            ::cppu::OWeakObject                 ,
+                                            SERVICENAME_IMAGEMANAGER            ,
+                                            IMPLEMENTATIONNAME_IMAGEMANAGER
+                                        )
+
+DEFINE_INIT_SERVICE                     (   ImageManager, {} )
 
 static sal_Bool implts_checkAndScaleGraphic( uno::Reference< XGraphic >& rOutGraphic, const uno::Reference< XGraphic >& rInGraphic, sal_Int16 nImageType )
 {
