@@ -4,9 +4,9 @@
  *
  *  $RCSfile: AppController.cxx,v $
  *
- *  $Revision: 1.42 $
+ *  $Revision: 1.43 $
  *
- *  last change: $Author: rt $ $Date: 2007-07-06 07:57:53 $
+ *  last change: $Author: hr $ $Date: 2007-08-02 14:25:50 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1689,20 +1689,20 @@ Reference< XComponent > OApplicationController::openElement(const ::rtl::OUStrin
                 Reference< XEnumeration > xEnumDrivers = xEnumAccess->createContentEnumeration(s_sReportDesign);
                 if ( !xEnumDrivers.is() || !xEnumDrivers->hasMoreElements() )
                 {
-                    OExtensionNotPresentDialog aDlg(getView(), getORB());
-                    aDlg.Execute();
-                    // // is there no report designer available?
-                    // static const ::rtl::OUString sStatus = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("S1000"));
-                    // String sMsg = String( ModuleRes( RID_STR_ERROR_NO_REPORT_INSTALLED ) );
-                    // // sMsg.SearchAndReplace('#',e.Message);
-                    // SQLExceptionInfo aInfo;
-                    //
-                    // SQLException aSQLException;
-                    // aSQLException.Message = sMsg;
+                    //OExtensionNotPresentDialog aDlg(getView(), getORB());
+                    //aDlg.Execute();
+                     // is there no report designer available?
+                    static const ::rtl::OUString sStatus = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("S1000"));
+                    String sMsg = String( ModuleRes( RID_STR_ERROR_NO_REPORT_INSTALLED ) );
+                    // sMsg.SearchAndReplace('#',e.Message);
+                    SQLExceptionInfo aInfo;
+
+                    SQLException aSQLException;
+                    aSQLException.Message = sMsg;
                     // // aSQLException.Context = e.Context;
-                    // aInfo = SQLExceptionInfo(aSQLException);
+                    aInfo = SQLExceptionInfo(aSQLException);
                     //
-                    // showError(aInfo);
+                    showError(aInfo);
 
                     break;
                 }
