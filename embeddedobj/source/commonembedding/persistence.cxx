@@ -4,9 +4,9 @@
  *
  *  $RCSfile: persistence.cxx,v $
  *
- *  $Revision: 1.31 $
+ *  $Revision: 1.32 $
  *
- *  last change: $Author: rt $ $Date: 2007-07-06 10:06:51 $
+ *  last change: $Author: hr $ $Date: 2007-08-02 17:05:11 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1034,9 +1034,9 @@ void SAL_CALL OCommonEmbeddedObject::setPersistentEntry(
             lObjArgs[nObjInd].Value >>= xObj;
             if ( xObj.is() )
             {
-                m_bHasCachedSize = sal_True;
-                m_aCachedSize = xObj->getVisualAreaSize( embed::Aspects::MSOLE_CONTENT );
-                m_nMapUnit = xObj->getMapUnit( embed::Aspects::MSOLE_CONTENT );
+                m_bHasClonedSize = sal_True;
+                m_aClonedSize = xObj->getVisualAreaSize( embed::Aspects::MSOLE_CONTENT );
+                m_nClonedMapUnit = xObj->getMapUnit( embed::Aspects::MSOLE_CONTENT );
             }
         }
         else if ( lObjArgs[nObjInd].Name.equalsAscii( "OutplaceFrameProperties" ) )
