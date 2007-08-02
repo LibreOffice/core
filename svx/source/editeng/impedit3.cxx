@@ -4,9 +4,9 @@
  *
  *  $RCSfile: impedit3.cxx,v $
  *
- *  $Revision: 1.117 $
+ *  $Revision: 1.118 $
  *
- *  last change: $Author: hr $ $Date: 2007-06-27 17:59:31 $
+ *  last change: $Author: hr $ $Date: 2007-08-02 13:59:22 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -3509,6 +3509,18 @@ void ImpEditEngine::Paint( ImpEditView* pView, const Rectangle& rRec, sal_Bool b
             Color aFontColor( aTmpFont.GetColor() );
             if( aFontColor == COL_AUTO )
                 aFontColor = GetAutoColor();
+
+            // #i69346# check for reverse color of input method attribute
+            if( mpIMEInfos && (mpIMEInfos->aPos.GetNode() == pNode &&
+                mpIMEInfos->pAttribs))
+            {
+                sal_uInt16 nAttr = mpIMEInfos->pAttribs[ 0 ];
+                if ( nAttr & EXTTEXTINPUT_ATTR_HIGHLIGHT )
+                {
+                    const StyleSettings& rStyleSettings = Application::GetSettings().GetStyleSettings();
+                    aFontColor = rStyleSettings.GetHighlightColor() ;
+                }
+            }
 
             UINT8 nColorDiff = aFontColor.GetColorError( aBackgroundColor );
             if( nColorDiff < 8 )
