@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xmltbli.cxx,v $
  *
- *  $Revision: 1.58 $
+ *  $Revision: 1.59 $
  *
- *  last change: $Author: obo $ $Date: 2007-07-18 14:29:48 $
+ *  last change: $Author: hr $ $Date: 2007-08-02 14:22:16 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -56,6 +56,7 @@
 #ifndef _SFXITEMSET_HXX
 #include <svtools/itemset.hxx>
 #endif
+#include <svtools/zformat.hxx>
 
 #ifndef _XMLOFF_XMLNMSPE_HXX
 #include <xmloff/xmlnmspe.hxx>
@@ -182,6 +183,7 @@ enum SwXMLTableCellAttrTokens
     XML_TOK_TABLE_DATE_VALUE,
     XML_TOK_TABLE_BOOLEAN_VALUE,
     XML_TOK_TABLE_PROTECTED,
+    XML_TOK_TABLE_STRING_VALUE,
     XML_TOK_TABLE_CELL_ATTR_END=XML_TOK_UNKNOWN
 };
 
@@ -221,7 +223,7 @@ static __FAR_DATA SvXMLTokenMapEntry aTableCellAttrTokenMap[] =
     { XML_NAMESPACE_OFFICE, XML_BOOLEAN_VALUE, XML_TOK_TABLE_BOOLEAN_VALUE },
     { XML_NAMESPACE_TABLE, XML_PROTECTED, XML_TOK_TABLE_PROTECTED },
     { XML_NAMESPACE_TABLE, XML_PROTECT, XML_TOK_TABLE_PROTECTED }, // for backwards compatibility with SRC629 (and before)
-
+    { XML_NAMESPACE_OFFICE, XML_STRING_VALUE, XML_TOK_TABLE_STRING_VALUE },
     XML_TOKEN_MAP_END
 };
 
@@ -259,6 +261,7 @@ class SwXMLTableCell_Impl
     sal_Bool bProtected : 1;
     sal_Bool bHasValue; // determines whether dValue attribute is valid
     sal_Bool mbCovered;
+    sal_Bool mbTextValue;
 
 public:
 
@@ -277,7 +280,8 @@ public:
                      const OUString* pFormula = NULL,
                      sal_Bool bHasValue = sal_False,
                      sal_Bool mbCovered = sal_False,
-                     double dVal = 0.0 );
+                     double dVal = 0.0,
+                     sal_Bool mbTextValue = sal_False );
 
     sal_Bool IsUsed() const { return pStartNode!=0 ||
                                      xSubTable.Is() || bProtected;}
@@ -291,6 +295,7 @@ public:
     sal_Bool HasValue() const { return bHasValue; }
     sal_Bool IsProtected() const { return bProtected; }
     sal_Bool IsCovered() const { return mbCovered; }
+    sal_Bool HasTextValue() const { return mbTextValue; }
 
     const SwStartNode *GetStartNode() const { return pStartNode; }
     inline void SetStartNode( const SwStartNode *pSttNd );
@@ -308,7 +313,8 @@ inline void SwXMLTableCell_Impl::Set( const OUString& rStyleName,
                                       const OUString* pFormula,
                                       sal_Bool bHasVal,
                                       sal_Bool bCov,
-                                      double dVal)
+                                      double dVal,
+                                      sal_Bool bTextVal )
 {
     aStyleName = rStyleName;
     nRowSpan = nRSpan;
@@ -318,6 +324,7 @@ inline void SwXMLTableCell_Impl::Set( const OUString& rStyleName,
     dValue = dVal;
     bHasValue = bHasVal;
     mbCovered = bCov;
+    mbTextValue = bTextVal;
     bProtected = bProtect;
 
     // set formula, if valid
@@ -452,6 +459,7 @@ class SwXMLTableCellContext_Impl : public SvXMLImportContext
 
     double fValue;
     sal_Bool bHasValue;
+    sal_Bool bHasTextValue;
     sal_Bool bProtect;
 
     sal_uInt32                  nRowSpan;
@@ -500,6 +508,7 @@ SwXMLTableCellContext_Impl::SwXMLTableCellContext_Impl(
     sFormula(),
     fValue( 0.0 ),
     bHasValue( sal_False ),
+    bHasTextValue( sal_False ),
     bProtect( sal_False )
 {
     sSaveParaDefault = GetImport().GetTextImport()->sCellParaStyleDefault;
@@ -594,6 +603,11 @@ SwXMLTableCellContext_Impl::SwXMLTableCellContext_Impl(
                 }
             }
             break;
+        case XML_TOK_TABLE_STRING_VALUE:
+            {
+                bHasTextValue = sal_True;
+            }
+            break;
         }
     }
 }
@@ -606,14 +620,14 @@ inline void SwXMLTableCellContext_Impl::_InsertContent()
 {
     GetTable()->InsertCell( aStyleName, nRowSpan, nColSpan,
                             GetTable()->InsertTableSection(),
-                            NULL, bProtect, &sFormula, bHasValue, fValue);
+                            NULL, bProtect, &sFormula, bHasValue, fValue, bHasTextValue );
 }
 
 inline void SwXMLTableCellContext_Impl::InsertContent()
 {
     ASSERT( !HasContent(), "content already there" );
-    _InsertContent();
     bHasTextContent = sal_True;
+    _InsertContent();
 }
 
 inline void SwXMLTableCellContext_Impl::InsertContentIfNotThere()
@@ -1352,15 +1366,7 @@ SwXMLTableContext::SwXMLTableContext( SwXMLImport& rImport,
         }
     }
 
-    SwXMLImport& rSwImport = GetSwImport();
-    Reference<XUnoTunnel> xCrsrTunnel( GetImport().GetTextImport()->GetCursor(),
-                                       UNO_QUERY);
-    ASSERT( xCrsrTunnel.is(), "missing XUnoTunnel for Cursor" );
-    OTextCursorHelper *pTxtCrsr =
-                (OTextCursorHelper*)xCrsrTunnel->getSomething(
-                                            OTextCursorHelper::getUnoTunnelId() );
-    ASSERT( pTxtCrsr, "SwXTextCursor missing" );
-    SwDoc *pDoc = pTxtCrsr->GetDoc();
+    SwDoc *pDoc = SwImport::GetDocFromXMLImport( GetSwImport() );
 
     String sTblName;
     if( aName.getLength() )
@@ -1599,7 +1605,8 @@ void SwXMLTableContext::InsertCell( const OUString& rStyleName,
                                     sal_Bool bProtect,
                                     const OUString* pFormula,
                                     sal_Bool bHasValue,
-                                    double fValue)
+                                    double fValue,
+                                    sal_Bool bTextValue )
 {
     ASSERT( nCurCol < GetColumnCount(),
             "SwXMLTableContext::InsertCell: row is full" );
@@ -1694,7 +1701,7 @@ void SwXMLTableContext::InsertCell( const OUString& rStyleName,
             const bool bCovered = i != nColSpan || j != nRowSpan;
             GetCell( nRowsReq-j, nColsReq-i )
                 ->Set( sStyleName, j, i, pStartNode,
-                       pTable, bProtect, pFormula, bHasValue, bCovered, fValue);
+                       pTable, bProtect, pFormula, bHasValue, bCovered, fValue, bTextValue);
         }
     }
 
@@ -1759,7 +1766,8 @@ void SwXMLTableContext::InsertRepRows( sal_uInt32 nCount )
                             pSrcCell->GetColSpan(),
                             InsertTableSection(), 0, pSrcCell->IsProtected(),
                             &pSrcCell->GetFormula(),
-                            pSrcCell->HasValue(), pSrcCell->GetValue() );
+                            pSrcCell->HasValue(), pSrcCell->GetValue(),
+                            pSrcCell->HasTextValue() );
             }
         }
         FinishRow();
@@ -2155,7 +2163,26 @@ SwTableBox *SwXMLTableContext::MakeTableBox(
                 SwTblBoxFormula aFormulaItem( rFormula );
                 pBoxFmt->SetAttr( aFormulaItem );
             }
-
+            else if( !pCell->HasValue() && pCell->HasTextValue() )
+            {
+                // Check for another inconsistency:
+                // No value but a non-textual format, i.e. a number format
+                // Solution: the number format will be removed,
+                // the cell gets the default text format.
+                const SfxPoolItem* pItem = NULL;
+                if( pBoxFmt->GetItemState( RES_BOXATR_FORMAT, FALSE, &pItem )
+                    == SFX_ITEM_SET )
+                {
+                    const SwDoc* pDoc = pBoxFmt->GetDoc();
+                    const SvNumberFormatter* pNumberFormatter = pDoc ?
+                        pDoc->GetNumberFormatter() : 0;
+                    const SwTblBoxNumFormat* pNumFormat =
+                        static_cast<const SwTblBoxNumFormat*>( pItem );
+                    if( pNumFormat != NULL && pNumberFormatter &&
+                        !pNumberFormatter->GetEntry( pNumFormat->GetValue() )->IsTextFormat() )
+                        pBoxFmt->ResetAttr( RES_BOXATR_FORMAT );
+                }
+            }
             // always insert value, even if default
             if( pCell->HasValue() )
             {
@@ -2844,9 +2871,9 @@ const SwStartNode *SwXMLTableContext::InsertTableSection(
     }
     else
     {
+        SwDoc* pDoc = SwImport::GetDocFromXMLImport( GetSwImport() );
         const SwEndNode *pEndNd = pPrevSttNd ? pPrevSttNd->EndOfSectionNode()
                                              : pTableNode->EndOfSectionNode();
-        SwDoc* pDoc = pTxtCrsr->GetDoc();
         // --> OD 2007-07-02 #i78921# - make code robust
 #if OSL_DEBUG_LEVEL > 1
         ASSERT( pDoc, "<SwXMLTableContext::InsertTableSection(..)> - no <pDoc> at <SwXTextCursor> instance - <SwXTextCurosr> doesn't seem to be registered at a <SwUnoCrsr> instance." );
