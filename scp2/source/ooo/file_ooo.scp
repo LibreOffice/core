@@ -4,9 +4,9 @@
  *
  *  $RCSfile: file_ooo.scp,v $
  *
- *  $Revision: 1.212 $
+ *  $Revision: 1.213 $
  *
- *  last change: $Author: hr $ $Date: 2007-07-31 14:04:26 $
+ *  last change: $Author: hr $ $Date: 2007-08-02 14:57:11 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1740,7 +1740,7 @@ End
 
 File gid_File_Oo_Office_Ui_Controller_Xcu
     TXT_FILE_BODY;
-    Styles = (PACKED,PACKED);
+    Styles = (PACKED,PATCH);
     Dir = gid_Dir_Share_Registry_Data_Org_Openoffice_Office_Ui;
     Name = "/registry/data/org/openoffice/Office/UI/Controller.xcu";
 End
@@ -1888,7 +1888,7 @@ End
 
 File gid_File_Oo_Office_Embedding_Xcu
     TXT_FILE_BODY;
-    Styles = (PACKED,PATCH);
+    Styles = (PACKED, PATCH);
     Dir = gid_Dir_Share_Registry_Data_Org_Openoffice_Office;
 	Name = "/registry/data/org/openoffice/Office/Embedding.xcu";
 End
@@ -2725,7 +2725,25 @@ File gid_File_Share_Config_Sofficecfg_uiconfig_Zip
                   "modules/swxform/toolbar/tableobjectbar.xml",
                   "modules/swxform/toolbar/textobjectbar.xml",
                   "modules/swxform/toolbar/toolbar.xml",
-                  "modules/swxform/toolbar/viewerbar.xml");
+                  "modules/swxform/toolbar/viewerbar.xml",
+
+                  "modules/dbreport/toolbar/Formatting.xml",
+                  "modules/dbreport/toolbar/alignmentbar.xml",
+                  "modules/dbreport/toolbar/arrowshapes.xml",
+                  "modules/dbreport/toolbar/basicshapes.xml",
+                  "modules/dbreport/toolbar/calloutshapes.xml",
+                  "modules/dbreport/toolbar/flowchartshapes.xml",
+                  "modules/dbreport/toolbar/reportcontrols.xml",
+                  "modules/dbreport/toolbar/resizebar.xml",
+                  "modules/dbreport/toolbar/sectionalignmentbar.xml",
+                  "modules/dbreport/toolbar/starshapes.xml",
+                  "modules/dbreport/toolbar/symbolshapes.xml",
+                  "modules/dbreport/toolbar/toolbar.xml",
+                  "modules/dbreport/menubar/menubar.xml",
+                  "modules/dbreport/statusbar/statusbar.xml",
+                  "modules/dbreport/accelerator/de-DE/default.xml",
+                  "modules/dbreport/accelerator/en-GB/default.xml",
+                  "modules/dbreport/accelerator/en-US/default.xml");
 End
 
 #ifdef WNT
