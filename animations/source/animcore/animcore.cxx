@@ -4,9 +4,9 @@
  *
  *  $RCSfile: animcore.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: hr $ $Date: 2007-08-01 11:09:11 $
+ *  last change: $Author: hr $ $Date: 2007-08-02 18:25:21 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -367,8 +367,8 @@ private:
     const sal_Int16 mnNodeType;
 
     // for XTypeProvider
-    static Sequence< Type >* mpTypes[10];
-    static Sequence< sal_Int8 >* mpId[10];
+    static Sequence< Type >* mpTypes[12];
+    static Sequence< sal_Int8 >* mpId[12];
 
     // attributes for the XAnimationNode interface implementation
     Any maBegin, maDuration, maEnd, maEndSync, maRepeatCount, maRepeatDuration;
@@ -477,8 +477,8 @@ Any SAL_CALL TimeContainerEnumeration::nextElement()
 
 // ====================================================================
 
-Sequence< Type >* AnimationNode::mpTypes[] = { NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL };
-Sequence< sal_Int8 >* AnimationNode::mpId[] = { NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL };
+Sequence< Type >* AnimationNode::mpTypes[] = { NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL };
+Sequence< sal_Int8 >* AnimationNode::mpId[] = { NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL };
 
 AnimationNode::AnimationNode( sal_Int16 nNodeType )
 :   maChangeListener(maMutex),
@@ -508,6 +508,7 @@ AnimationNode::AnimationNode( sal_Int16 nNodeType )
     mnIterateType( ::com::sun::star::presentation::ShapeAnimationSubType::AS_WHOLE ),
     mfIterateInterval(0.0)
 {
+    OSL_ENSURE(nNodeType < sizeof(mpTypes)/sizeof(Sequence<Type>*), "NodeType out of range");
 }
 
 AnimationNode::AnimationNode( const AnimationNode& rNode )
