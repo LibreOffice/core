@@ -4,9 +4,9 @@
  *
  *  $RCSfile: guisaveas.cxx,v $
  *
- *  $Revision: 1.29 $
+ *  $Revision: 1.30 $
  *
- *  last change: $Author: obo $ $Date: 2007-07-17 13:43:11 $
+ *  last change: $Author: hr $ $Date: 2007-08-02 17:07:45 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -290,7 +290,8 @@ public:
     sal_Bool OutputFileDialog( sal_Int8 nStoreMode,
                                 const ::comphelper::SequenceAsHashMap& aPreselectedFilterPropsHM,
                                 sal_Bool bSetStandardName,
-                                ::rtl::OUString& aUserSelectedName );
+                                ::rtl::OUString& aUserSelectedName,
+                                sal_Bool bPreselectPassword );
 
     sal_Bool ShowDocumentInfoDialog();
 };
@@ -778,7 +779,8 @@ sal_Bool ModelData_Impl::CheckFilterOptionsDialogExistence()
 sal_Bool ModelData_Impl::OutputFileDialog( sal_Int8 nStoreMode,
                                             const ::comphelper::SequenceAsHashMap& aPreselectedFilterPropsHM,
                                             sal_Bool bSetStandardName,
-                                            ::rtl::OUString& aUserSelectedName )
+                                            ::rtl::OUString& aUserSelectedName,
+                                            sal_Bool bPreselectPassword )
 {
     sal_Bool bUseFilterOptions = sal_False;
 
@@ -987,6 +989,15 @@ sal_Bool ModelData_Impl::OutputFileDialog( sal_Int8 nStoreMode,
                          GetMediaDescr().getAsConstPropertyValueList(),
                          aDialogParams,
                          NULL );
+
+    const SfxPoolItem* pItem = NULL;
+    if ( bPreselectPassword && aDialogParams.GetItemState( SID_PASSWORD, sal_True, &pItem ) != SFX_ITEM_SET )
+    {
+        // the file dialog preselects the password checkbox if the provided mediadescriptor has password entry
+        // after dialog execution the password entry will be either removed or replaced with the password
+        // entered by the user
+        aDialogParams.Put( SfxStringItem( SID_PASSWORD, String() ) );
+    }
 
     // aStringTypeFN is a pure output parameter, pDialogParams is an in/out parameter
     String aStringTypeFN;
@@ -1216,7 +1227,8 @@ uno::Reference< container::XNameAccess > SfxStoringHelper::GetNamedModuleManager
 //-------------------------------------------------------------------------
 sal_Bool SfxStoringHelper::GUIStoreModel( const uno::Reference< frame::XModel >& xModel,
                                             const ::rtl::OUString& aSlotName,
-                                            uno::Sequence< beans::PropertyValue >& aArgsSequence )
+                                            uno::Sequence< beans::PropertyValue >& aArgsSequence,
+                                            sal_Bool bPreselectPassword )
 {
     ModelData_Impl aModelData( *this, xModel, aArgsSequence );
 
@@ -1254,8 +1266,10 @@ sal_Bool SfxStoringHelper::GUIStoreModel( const uno::Reference< frame::XModel >&
         if ( nStatusSave == STATUS_NO_ACTION )
             throw task::ErrorCodeIOException( ::rtl::OUString(), uno::Reference< uno::XInterface >(), ERRCODE_IO_ABORT );
         else if ( nStatusSave == STATUS_SAVE )
+        {
             // check whether it is possible to use save operation
             nStatusSave = aModelData.CheckStateForSave();
+        }
 
         if ( nStatusSave == STATUS_NO_ACTION )
         {
@@ -1339,7 +1353,7 @@ sal_Bool SfxStoringHelper::GUIStoreModel( const uno::Reference< frame::XModel >&
         ::rtl::OUString aUserSelectedName;
         while ( !bExit )
         {
-            bUseFilterOptions = aModelData.OutputFileDialog( nStoreMode, aFilterProps, bSetStandardName, aUserSelectedName );
+            bUseFilterOptions = aModelData.OutputFileDialog( nStoreMode, aFilterProps, bSetStandardName, aUserSelectedName, bPreselectPassword );
             if ( nStoreMode == SAVEAS_REQUESTED )
             {
                 // in case of saving check filter for possible alien warning
