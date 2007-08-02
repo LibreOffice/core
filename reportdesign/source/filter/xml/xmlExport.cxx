@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xmlExport.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2007-07-09 11:56:17 $
+ *  last change: $Author: hr $ $Date: 2007-08-02 14:32:49 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -90,6 +90,7 @@
 #include <com/sun/star/util/NumberFormat.hpp>
 #include <com/sun/star/style/ParagraphAdjust.hpp>
 #include <com/sun/star/awt/TextAlign.hpp>
+#include <com/sun/star/report/GroupOn.hpp>
 #ifndef _COM_SUN_STAR_REPORT_XFIXEDTEXT_HPP_
 #include <com/sun/star/report/XFixedText.hpp>
 #endif
@@ -420,19 +421,23 @@ void ORptExport::exportFunctions(const Reference<XIndexAccess>& _xFunctions)
     {
         uno::Reference< report::XFunction> xFunction(_xFunctions->getByIndex(i),uno::UNO_QUERY_THROW);
         OSL_ENSURE(xFunction.is(),"Function object is NULL!");
-
-        exportFormula(XML_FORMULA,xFunction->getFormula());
-        beans::Optional< ::rtl::OUString> aInitial = xFunction->getInitialFormula();
-        if ( aInitial.IsPresent )
-            exportFormula(XML_INITIAL_FORMULA ,aInitial.Value );
-        AddAttribute( XML_NAMESPACE_REPORT, XML_NAME , xFunction->getName() );
-        if ( xFunction->getPreEvaluated() )
-            AddAttribute( XML_NAMESPACE_REPORT, XML_PRE_EVALUATED , XML_TRUE );
-        if ( xFunction->getDeepTraversing() )
-            AddAttribute( XML_NAMESPACE_REPORT, XML_DEEP_TRAVERSING , XML_TRUE );
-
-        SvXMLElementExport aFunction(*this,XML_NAMESPACE_REPORT, XML_FUNCTION, sal_True, sal_True);
+        exportFunction(xFunction);
     }
+}
+// -----------------------------------------------------------------------------
+void ORptExport::exportFunction(const uno::Reference< XFunction>& _xFunction)
+{
+    exportFormula(XML_FORMULA,_xFunction->getFormula());
+    beans::Optional< ::rtl::OUString> aInitial = _xFunction->getInitialFormula();
+    if ( aInitial.IsPresent && aInitial.Value.getLength() )
+        exportFormula(XML_INITIAL_FORMULA ,aInitial.Value );
+    AddAttribute( XML_NAMESPACE_REPORT, XML_NAME , _xFunction->getName() );
+    if ( _xFunction->getPreEvaluated() )
+        AddAttribute( XML_NAMESPACE_REPORT, XML_PRE_EVALUATED , XML_TRUE );
+    if ( _xFunction->getDeepTraversing() )
+        AddAttribute( XML_NAMESPACE_REPORT, XML_DEEP_TRAVERSING , XML_TRUE );
+
+    SvXMLElementExport aFunction(*this,XML_NAMESPACE_REPORT, XML_FUNCTION, sal_True, sal_True);
 }
 // -----------------------------------------------------------------------------
 void ORptExport::exportMasterDetailFields(const Reference<XReportDefinition>& _xReportDefinition)
@@ -463,6 +468,7 @@ void ORptExport::exportReport(const Reference<XReportDefinition>& _xReportDefini
     if ( _xReportDefinition.is() )
     {
         exportFunctions(_xReportDefinition->getFunctions().get());
+        exportGroupsExpressionAsFunction(_xReportDefinition->getGroups());
 
         if ( _xReportDefinition->getReportHeaderOn() )
         {
@@ -959,11 +965,13 @@ void ORptExport::exportContainer(const Reference< XSection>& _xSection)
                         sal_Int32 nFormatKey = xFormattedField->getFormatKey();
                         if ( 0 != nFormatKey )
                         {
+                            XMLNumberFormatAttributesExportHelper aHelper(GetNumberFormatsSupplier(),*this);
+                            sal_Bool bIsStandard = sal_False;
                             ::rtl::OUString sEmpty;
-                            if ( util::NumberFormat::TEXT == nFormatKey )
-                                XMLNumberFormatAttributesExportHelper::SetNumberFormatAttributes(*this, sEmpty, sEmpty);
+                            if ( util::NumberFormat::TEXT == aHelper.GetCellType(nFormatKey,bIsStandard) )
+                                aHelper.SetNumberFormatAttributes(sEmpty, sEmpty);
                             else
-                                XMLNumberFormatAttributesExportHelper::SetNumberFormatAttributes(*this, nFormatKey, 0.0);
+                                aHelper.SetNumberFormatAttributes(nFormatKey, 0.0,sal_False);
                         }
                     }
                     SvXMLElementExport aCell(*this,XML_NAMESPACE_TABLE, XML_TABLE_CELL, sal_True, sal_False);
@@ -1228,10 +1236,19 @@ sal_Bool ORptExport::exportGroup(const Reference<XReportDefinition>& _xReportDef
                     if ( xGroup->getResetPageNumber() )
                         AddAttribute(XML_NAMESPACE_REPORT, XML_RESET_PAGE_NUMBER, XML_TRUE );
 
-                    ::rtl::OUString sFormula(RTL_CONSTASCII_USTRINGPARAM("rpt:HASCHANGED(\""));
-                    sFormula += xGroup->getExpression();
-                    sFormula += ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("\")"));
-                    AddAttribute(XML_NAMESPACE_REPORT, XML_GROUP_EXPRESSION,sFormula);
+                    ::rtl::OUString sExpression = xGroup->getExpression();
+                    if ( sExpression.getLength() )
+                    {
+                        ::rtl::OUString sFormula(RTL_CONSTASCII_USTRINGPARAM("rpt:HASCHANGED(\""));
+
+                        TGroupFunctionMap::iterator aGroupFind = m_aGroupFunctionMap.find(xGroup);
+                        if ( aGroupFind != m_aGroupFunctionMap.end() )
+                            sExpression = aGroupFind->second->getName();
+                        sFormula += sExpression;
+                        sFormula += ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("\")"));
+                        sExpression = sFormula;
+                    }
+                    AddAttribute(XML_NAMESPACE_REPORT, XML_GROUP_EXPRESSION,sExpression);
                     sal_Int16 nRet = xGroup->getKeepTogether();
                     ::rtl::OUStringBuffer sValue;
                     const SvXMLEnumMapEntry* aXML_KeepTogetherEnumMap = OXMLHelper::GetKeepTogetherOptions();
@@ -1281,6 +1298,7 @@ void ORptExport::exportAutoStyle(XPropertySet* _xProp)
         try
         {
             awt::FontDescriptor aFont = xFormat->getFontDescriptor();
+            OSL_ENSURE(aFont.Name.getLength(),"No Font Name !");
             GetFontAutoStylePool()->Add(aFont.Name,aFont.StyleName,aFont.Family,aFont.Pitch,aFont.CharSet );
         }
         catch(beans::UnknownPropertyException&)
@@ -1611,7 +1629,8 @@ void SAL_CALL ORptExport::setSourceDocument( const Reference< XComponent >& xDoc
     m_xReportDefinition.set(xDoc,UNO_QUERY_THROW);
     OSL_ENSURE(m_xReportDefinition.is(),"DataSource is NULL!");
 
-    SetNumberFormatsSupplier(OXMLHelper::GetNumberFormatsSupplier(m_xReportDefinition));
+    //if ( !GetNumberFormatsSupplier().is() )
+    //    SetNumberFormatsSupplier(OXMLHelper::GetNumberFormatsSupplier(m_xReportDefinition));
 
     SvXMLExport::setSourceDocument(xDoc);
 }
@@ -1657,6 +1676,88 @@ void ORptExport::exportShapes(const Reference< XSection>& _xSection)
             SvXMLElementExport aParagraphContent(*this,XML_NAMESPACE_TEXT, XML_P, sal_False, sal_False);
             AddAttribute( XML_NAMESPACE_TEXT, XML_ANCHOR_TYPE, XML_PARAGRAPH );
             xShapeExport->exportShape(xShape.get(),SEF_DEFAULT,&aRefPoint);
+        }
+    }
+}
+// -----------------------------------------------------------------------------
+void ORptExport::exportGroupsExpressionAsFunction(const Reference< XGroups>& _xGroups)
+{
+    if ( _xGroups.is() )
+    {
+        uno::Reference< XFunctions> xFunctions = _xGroups->getReportDefinition()->getFunctions();
+        const sal_Int32 nCount = _xGroups->getCount();
+        for (sal_Int32 i = 0; i < nCount; ++i)
+        {
+            uno::Reference< XGroup> xGroup(_xGroups->getByIndex(i),uno::UNO_QUERY_THROW);
+            const ::sal_Int16 nGroupOn = xGroup->getGroupOn();
+            if ( nGroupOn != report::GroupOn::DEFAULT )
+            {
+                uno::Reference< XFunction> xFunction = xFunctions->createFunction();
+                ::rtl::OUString sFunction,sPrefix,sPostfix;
+                ::rtl::OUString sExpression = xGroup->getExpression();
+                switch(nGroupOn)
+                {
+                    case report::GroupOn::PREFIX_CHARACTERS:
+                        sFunction = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("LEFT"));
+                        sPrefix = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(";")) + ::rtl::OUString::valueOf(xGroup->getGroupInterval());
+                        break;
+                    case report::GroupOn::YEAR:
+                        sFunction = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("YEAR"));
+                        break;
+                    case report::GroupOn::QUARTAL:
+                        sFunction = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("MONTH"));
+                        sPostfix = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("/4"));
+                        break;
+                    case report::GroupOn::MONTH:
+                        sFunction = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("MONTH"));
+                        break;
+                    case report::GroupOn::WEEK:
+                        sFunction = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("WEEK"));
+                        break;
+                    case report::GroupOn::DAY:
+                        sFunction = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("DAY"));
+                        break;
+                    case report::GroupOn::HOUR:
+                        sFunction = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("HOUR"));
+                        break;
+                    case report::GroupOn::MINUTE:
+                        sFunction = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("MINUTE"));
+                        break;
+                    case report::GroupOn::INTERVAL:
+                        {
+                            sFunction = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("INT"));
+                            uno::Reference< XFunction> xCountFunction = xFunctions->createFunction();
+                            xCountFunction->setInitialFormula(beans::Optional< ::rtl::OUString>(sal_True,::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("rpt:1"))));
+                            ::rtl::OUString sCountName = sFunction + ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("_count_")) + sExpression;
+                            xCountFunction->setName(sCountName);
+                            xCountFunction->setFormula(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("rpt:[")) + sCountName + ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("] + 1")));
+                            exportFunction(xCountFunction);
+                            sExpression = sCountName;
+                            sPrefix = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(" / ")) + ::rtl::OUString::valueOf(xGroup->getGroupInterval());
+                        }
+                        break;
+                    default:
+                        ;
+                }
+                if ( sFunction.getLength() )
+                {
+
+                    xFunction->setName(sFunction + ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("_")) + sExpression);
+                    sFunction = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("rpt:")) + sFunction;
+                    sFunction += ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("(["));
+                    sFunction += sExpression;
+                    sFunction += ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("]"));
+
+                    if ( sPrefix.getLength() )
+                        sFunction += sPrefix;
+                    sFunction += ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(")"));
+                    if ( sPostfix.getLength() )
+                        sFunction += sPostfix;
+                    xFunction->setFormula(sFunction);
+                    exportFunction(xFunction);
+                    m_aGroupFunctionMap.insert(TGroupFunctionMap::value_type(xGroup,xFunction));
+                }
+            }
         }
     }
 }
