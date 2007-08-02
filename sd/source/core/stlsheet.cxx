@@ -4,9 +4,9 @@
  *
  *  $RCSfile: stlsheet.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: kz $ $Date: 2007-05-10 15:23:08 $
+ *  last change: $Author: hr $ $Date: 2007-08-02 18:22:18 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -66,9 +66,6 @@
 #include "app.hrc"
 #include "glob.hxx"
 
-#ifndef SVX_LIGHT
-
-#ifndef MAC
 #ifndef SD_VIEW_SHELL_HXX
 #include "../ui/inc/ViewShell.hxx"
 #endif
@@ -99,21 +96,6 @@
 #ifndef SD_VIEW_SHELL_BASE_HXX
 #include "../ui/inc/ViewShellBase.hxx"
 #endif
-
-#else
-
-#ifndef SD_VIEW_SHELL_BASE_HXX
-#include "ViewShellBase.hxx"
-#endif
-#ifndef SD_DRAW_VIEW_SHELL_HXX
-#include "DrawViewShell.hxx"
-#endif
-#ifndef SD_OUTLINE_VIEW_SHELL_HXX
-#include "OutlineViewShell.hxx"
-#endif
-
-#endif
-#endif // !SVX_LIGHT
 
 TYPEINIT1(SdStyleSheet, SfxStyleSheet);
 
