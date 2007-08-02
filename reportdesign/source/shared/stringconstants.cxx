@@ -4,9 +4,9 @@
  *
  *  $RCSfile: stringconstants.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2007-07-09 11:56:29 $
+ *  last change: $Author: hr $ $Date: 2007-08-02 14:35:24 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -147,6 +147,8 @@ IMPLEMENT_CONSTASCII_USTRING(PROPERTY_STARTNEWCOLUMN        , "StartNewColumn");
 IMPLEMENT_CONSTASCII_USTRING(PROPERTY_RESETPAGENUMBER       , "ResetPageNumber");
 IMPLEMENT_CONSTASCII_USTRING(PROPERTY_PRINTWHENGROUPCHANGE      , "PrintWhenGroupChange");
 IMPLEMENT_CONSTASCII_USTRING(PROPERTY_STATE                 , "State");
+IMPLEMENT_CONSTASCII_USTRING(PROPERTY_TIME_STATE            , "TimeState");
+IMPLEMENT_CONSTASCII_USTRING(PROPERTY_DATE_STATE            , "DateState");
 IMPLEMENT_CONSTASCII_USTRING(PROPERTY_TRISTATE              , "TriState");
 IMPLEMENT_CONSTASCII_USTRING(PROPERTY_LISTSOURCETYPE        , "ListSourceType");
 IMPLEMENT_CONSTASCII_USTRING(PROPERTY_FONTCHARWIDTH,    "FontCharWidth");
