@@ -4,9 +4,9 @@
  *
  *  $RCSfile: objserv.cxx,v $
  *
- *  $Revision: 1.99 $
+ *  $Revision: 1.100 $
  *
- *  last change: $Author: obo $ $Date: 2007-07-17 13:44:02 $
+ *  last change: $Author: hr $ $Date: 2007-08-02 17:08:44 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -713,10 +713,10 @@ void SfxObjectShell::ExecFile_Impl(SfxRequest &rReq)
                 }
                 // ========================================================================================================
 
-                SFX_REQUEST_ARG( rReq, pPasswordItem, SfxStringItem, SID_PASSWORD, FALSE );
+                sal_Bool bPreselectPassword = sal_False;
                 SFX_ITEMSET_ARG( GetMedium()->GetItemSet(), pOldPasswordItem, SfxStringItem, SID_PASSWORD, FALSE );
-                if ( pOldPasswordItem && !pPasswordItem )
-                    rReq.AppendItem( SfxStringItem( SID_PASSWORD, String() ) );
+                if ( pOldPasswordItem )
+                    bPreselectPassword = sal_True;
 
                 uno::Sequence< beans::PropertyValue > aDispatchArgs;
                 if ( rReq.GetArgs() )
@@ -735,7 +735,8 @@ void SfxObjectShell::ExecFile_Impl(SfxRequest &rReq)
                 if ( QueryHiddenInformation( bIsPDFExport ? WhenCreatingPDF : WhenSaving, NULL ) == RET_YES )
                     bDialogUsed = aHelper.GUIStoreModel( GetModel(),
                                                     ::rtl::OUString::createFromAscii( pSlot->GetUnoName() ),
-                                                    aDispatchArgs );
+                                                    aDispatchArgs,
+                                                    bPreselectPassword );
 
                 // the scripting signature might be preserved
                 // pImp->nScriptingSignatureState = SIGNATURESTATE_NOSIGNATURES;
