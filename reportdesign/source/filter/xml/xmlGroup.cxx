@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xmlGroup.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2007-07-09 11:56:17 $
+ *  last change: $Author: hr $ $Date: 2007-08-02 14:33:34 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -151,6 +151,62 @@ OXMLGroup::OXMLGroup( ORptFilter& _rImport
                                 --nLen;
                             }
                             sValue = sValue.copy(nPos,nLen-nPos-1);
+                            const ORptFilter::TGroupFunctionMap& aFunctions = _rImport.getFunctions();
+                            ORptFilter::TGroupFunctionMap::const_iterator aFind = aFunctions.find(sValue);
+                            if ( aFind != aFunctions.end() )
+                            {
+                                sal_Int32 nIndex = 0;
+                                const ::rtl::OUString sCompleteFormula = aFind->second->getFormula();
+                                ::rtl::OUString sExpression = sCompleteFormula.getToken(1,'[',nIndex);
+                                nIndex = 0;
+                                sExpression = sExpression.getToken(0,']',nIndex);
+                                nIndex = 0;
+                                const ::rtl::OUString sFormula = sCompleteFormula.getToken(0,'(',nIndex);
+                                ::sal_Int16 nGroupOn = report::GroupOn::DEFAULT;
+
+                                if ( sFormula ==::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("rpt:LEFT")))
+                                {
+                                    nGroupOn = report::GroupOn::PREFIX_CHARACTERS;
+                                    ::rtl::OUString sInterval = sCompleteFormula.getToken(1,';',nIndex);
+                                    nIndex = 0;
+                                    sInterval = sInterval.getToken(0,')',nIndex);
+                                    m_xGroup->setGroupInterval(sInterval.toInt32());
+                                }
+                                else if ( sFormula ==::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("rpt:YEAR")))
+                                    nGroupOn = report::GroupOn::YEAR;
+                                else if ( sFormula ==::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("rpt:MONTH")))
+                                {
+                                    if ( sCompleteFormula.endsWithIgnoreAsciiCaseAsciiL("\4",2) )
+                                        nGroupOn = report::GroupOn::QUARTAL;
+                                    else
+                                        nGroupOn = report::GroupOn::MONTH;
+                                }
+                                else if ( sFormula ==::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("rpt:WEEK")))
+                                    nGroupOn = report::GroupOn::WEEK;
+                                else if ( sFormula ==::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("rpt:DAY")))
+                                    nGroupOn = report::GroupOn::DAY;
+                                else if ( sFormula ==::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("rpt:HOUR")))
+                                    nGroupOn = report::GroupOn::HOUR;
+                                else if ( sFormula ==::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("rpt:MINUTE")))
+                                    nGroupOn = report::GroupOn::MINUTE;
+                                else if ( sFormula ==::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("rpt:INT")))
+                                {
+                                    nGroupOn = report::GroupOn::INTERVAL;
+                                    _rImport.removeFunction(sExpression);
+                                    sExpression = sExpression.copy(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("INT_count_")).getLength());
+
+                                    nIndex = 0;
+                                    ::rtl::OUString sInterval = sCompleteFormula.getToken(1,'/',nIndex);
+                                    nIndex = 0;
+                                    sInterval = sInterval.getToken(0,')',nIndex);
+                                    m_xGroup->setGroupInterval(sInterval.toInt32());
+                                }
+
+                                m_xGroup->setGroupOn(nGroupOn);
+
+                                _rImport.removeFunction(sValue);
+                                sValue = sExpression;
+                            }
                             m_xGroup->setExpression(sValue);
                         }
                     }

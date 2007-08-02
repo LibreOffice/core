@@ -6,9 +6,9 @@
  *
  *  $RCSfile: xmlFunction.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2007-07-09 11:56:17 $
+ *  last change: $Author: hr $ $Date: 2007-08-02 14:33:23 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -57,6 +57,7 @@ namespace rptxml
     protected:
         ::com::sun::star::uno::Reference< ::com::sun::star::report::XFunctions >    m_xFunctions;
         ::com::sun::star::uno::Reference< ::com::sun::star::report::XFunction >     m_xFunction;
+        bool                                                                        m_bAddToReport;
 
         ORptFilter& GetOwnImport();
 
@@ -69,6 +70,7 @@ namespace rptxml
                     ,const ::rtl::OUString& rLName
                     ,const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XAttributeList > & xAttrList
                     ,const ::com::sun::star::uno::Reference< ::com::sun::star::report::XFunctionsSupplier >&    _xFunctions
+                    ,bool _bAddToReport = false
                     );
         virtual ~OXMLFunction();
 

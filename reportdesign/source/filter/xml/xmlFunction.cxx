@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xmlFunction.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2007-07-09 11:56:17 $
+ *  last change: $Author: hr $ $Date: 2007-08-02 14:33:12 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -75,9 +75,11 @@ OXMLFunction::OXMLFunction( ORptFilter& _rImport
                 ,const OUString& _sLocalName
                 ,const Reference< XAttributeList > & _xAttrList
                 ,const Reference< XFunctionsSupplier >& _xFunctions
+                ,bool _bAddToReport
                 ) :
     SvXMLImportContext( _rImport, nPrfx, _sLocalName )
     ,m_xFunctions(_xFunctions->getFunctions())
+    ,m_bAddToReport(_bAddToReport)
 {
     DBG_CTOR( rpt_OXMLFunction,NULL);
 
@@ -112,7 +114,8 @@ OXMLFunction::OXMLFunction( ORptFilter& _rImport
                     m_xFunction->setPreEvaluated(sValue == s_sTRUE);
                     break;
                 case XML_TOK_INITIAL_FORMULA:
-                    m_xFunction->setInitialFormula(beans::Optional< ::rtl::OUString>(sal_True,ORptFilter::convertFormula(sValue)));
+                    if ( sValue.getLength() )
+                        m_xFunction->setInitialFormula(beans::Optional< ::rtl::OUString>(sal_True,ORptFilter::convertFormula(sValue)));
                     break;
                 case XML_TOK_DEEP_TRAVERSING:
                     m_xFunction->setDeepTraversing(sValue == s_sTRUE);
@@ -141,13 +144,21 @@ ORptFilter& OXMLFunction::GetOwnImport()
 // -----------------------------------------------------------------------------
 void OXMLFunction::EndElement()
 {
-    try
+    if ( m_bAddToReport )
     {
-        m_xFunctions->insertByIndex(m_xFunctions->getCount(),uno::makeAny(m_xFunction));
+        GetOwnImport().insertFunction(m_xFunction);
         m_xFunction.clear();
-    }catch(uno::Exception&)
+    }
+    else
     {
-        OSL_ENSURE(0,"Exception catched!");
+        try
+        {
+            m_xFunctions->insertByIndex(m_xFunctions->getCount(),uno::makeAny(m_xFunction));
+            m_xFunction.clear();
+        }catch(uno::Exception&)
+        {
+            OSL_ENSURE(0,"Exception catched!");
+        }
     }
 }
 // -----------------------------------------------------------------------------

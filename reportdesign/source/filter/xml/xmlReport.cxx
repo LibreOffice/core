@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xmlReport.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2007-07-09 11:56:18 $
+ *  last change: $Author: hr $ $Date: 2007-08-02 14:33:57 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -197,7 +197,7 @@ SvXMLImportContext* OXMLReport::CreateChildContext(
         case XML_TOK_REPORT_FUNCTION:
             {
                 m_rImport.GetProgressBarHelper()->Increment( PROGRESS_BAR_STEP );
-                pContext = new OXMLFunction( m_rImport, nPrefix, rLocalName,xAttrList,m_xComponent.get());
+                pContext = new OXMLFunction( m_rImport, nPrefix, rLocalName,xAttrList,m_xComponent.get(),true);
             }
             break;
         case XML_TOK_REPORT_HEADER:
@@ -249,6 +249,15 @@ SvXMLImportContext* OXMLReport::CreateChildContext(
     return pContext;
 }
 // -----------------------------------------------------------------------------
+void OXMLReport::EndElement()
+{
+    Reference< XFunctions > xFunctions = m_xComponent->getFunctions();
+    const ORptFilter::TGroupFunctionMap& aFunctions = m_rImport.getFunctions();
+    ORptFilter::TGroupFunctionMap::const_iterator aIter = aFunctions.begin();
+    const ORptFilter::TGroupFunctionMap::const_iterator aEnd = aFunctions.end();
+    for (; aIter != aEnd; ++aIter)
+        xFunctions->insertByIndex(xFunctions->getCount(),uno::makeAny(aIter->second));
+}
 //----------------------------------------------------------------------------
 } // namespace rptxml
 // -----------------------------------------------------------------------------

@@ -6,9 +6,9 @@
  *
  *  $RCSfile: xmlfilter.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2007-07-09 11:56:18 $
+ *  last change: $Author: hr $ $Date: 2007-08-02 14:34:48 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -132,8 +132,10 @@ class ORptFilter : public SvXMLImport
 {
 public:
     DECLARE_STL_USTRINGACCESS_MAP(Sequence<PropertyValue>,TPropertyNameMap);
-
+    DECLARE_STL_USTRINGACCESS_MAP( Reference<XFunction> ,TGroupFunctionMap);
 private:
+
+    TGroupFunctionMap                               m_aFunctions;
     com::sun::star::uno::Any                        m_aViewSettings;
     Reference< XComponent >                         m_xSrcDoc;
     mutable ::std::auto_ptr<SvXMLTokenMap>          m_pDocElemTokenMap;
@@ -225,6 +227,13 @@ public:
     inline UniReference < XMLPropertySetMapper > GetRowStylesPropertySetMapper()       const   { return m_xRowStylesPropertySetMapper;     }
     inline UniReference < XMLPropertySetMapper > GetTableStylesPropertySetMapper()     const   { return m_xTableStylesPropertySetMapper;   }
     static ::rtl::OUString convertFormula(const ::rtl::OUString& _sFormula);
+    /** inserts a new function
+    *
+    * \param _xFunction
+    */
+    void insertFunction(const ::com::sun::star::uno::Reference< ::com::sun::star::report::XFunction > & _xFunction);
+    void removeFunction(const ::rtl::OUString& _sFunctionName);
+    inline const TGroupFunctionMap& getFunctions() const { return m_aFunctions; }
 
     virtual SvXMLImport&                getGlobalContext();
 

@@ -6,9 +6,9 @@
  *
  *  $RCSfile: xmlExport.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2007-07-09 11:56:17 $
+ *  last change: $Author: hr $ $Date: 2007-08-02 14:33:01 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -174,6 +174,7 @@ public:
     typedef ::std::vector< TCell >                                  TRow;
     typedef ::std::vector< ::std::pair< sal_Bool, TRow > >          TGrid;
     typedef ::std::map< Reference<XPropertySet> ,TGrid >            TSectionsGrid;
+    typedef ::std::map< Reference<XGroup> ,Reference<XFunction> >   TGroupFunctionMap;
 private:
     ::std::auto_ptr< TStringPair >                  m_aAutoIncrement;
     ::std::auto_ptr< TDelimiter >                   m_aDelimiter;
@@ -183,6 +184,7 @@ private:
     TPropertyStyleMap                               m_aAutoStyleNames;
     TGridStyleMap                                   m_aColumnStyleNames;
     TGridStyleMap                                   m_aRowStyleNames;
+    TGroupFunctionMap                               m_aGroupFunctionMap;
 
     ::rtl::OUString                                 m_sCharSet;
     ::rtl::OUString                                 m_sTableStyle;
@@ -206,6 +208,7 @@ private:
 
     void                    exportReport(const Reference<XReportDefinition>& _xReportDefinition); /// <element name="office:report">
     void                    exportFunctions(const Reference<XIndexAccess>& _xFunctions); /// <ref name="rpt-function"/>
+    void                    exportFunction(const Reference< XFunction>& _xFunction);
     void                    exportMasterDetailFields(const Reference<XReportDefinition>& _xReportDefinition);
     void                    exportComponent(const Reference<XReportComponent>& _xReportComponent);
     void                    exportImagePosition(sal_Int16 _nImagePosition);
@@ -224,7 +227,8 @@ private:
     void                    collectComponentStyles();
     void                    collectStyleNames(sal_Int32 _nFamily,const ::std::vector< sal_Int32>& _aSize, ORptExport::TStringVec& _rStyleNames);
     void                    exportParagraph(const Reference< XReportControlModel >& _xReportElement);
-    bool                   exportFormula(enum ::xmloff::token::XMLTokenEnum eName,const ::rtl::OUString& _sFormula);
+    bool                    exportFormula(enum ::xmloff::token::XMLTokenEnum eName,const ::rtl::OUString& _sFormula);
+    void                    exportGroupsExpressionAsFunction(const Reference< XGroups>& _xGroups);
     ::rtl::OUString         convertFormula(const ::rtl::OUString& _sFormula);
 
     ::rtl::OUString         implConvertAny(const Any& _rValue);
