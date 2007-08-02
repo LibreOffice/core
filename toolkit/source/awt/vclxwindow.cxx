@@ -4,9 +4,9 @@
  *
  *  $RCSfile: vclxwindow.cxx,v $
  *
- *  $Revision: 1.76 $
+ *  $Revision: 1.77 $
  *
- *  last change: $Author: rt $ $Date: 2007-07-06 14:26:58 $
+ *  last change: $Author: hr $ $Date: 2007-08-02 14:18:21 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1730,8 +1730,8 @@ void VCLXWindow::setProperty( const ::rtl::OUString& PropertyName, const ::com::
                     if ( Value >>= nColor )
                     {
                         Color aColor( nColor );
-                        pWindow->SetBackground( aColor );
                         pWindow->SetControlBackground( aColor );
+                        pWindow->SetBackground( aColor );
                         pWindow->Invalidate();  // Falls das Control nicht drauf reagiert
                     }
                 }
