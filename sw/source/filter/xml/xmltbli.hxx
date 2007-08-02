@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xmltbli.hxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: vg $ $Date: 2007-02-28 15:55:52 $
+ *  last change: $Author: hr $ $Date: 2007-08-02 14:22:29 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -189,7 +189,8 @@ public:
                      sal_Bool bIsProtected = sal_False,
                      const ::rtl::OUString *pFormula=0,
                      sal_Bool bHasValue = sal_False,
-                     double fValue = 0.0 );
+                     double fValue = 0.0,
+                     sal_Bool bTextValue = sal_False );
     void InsertRow( const ::rtl::OUString& rStyleName,
                     const ::rtl::OUString& rDfltCellStyleName,
                     sal_Bool bInHead );
