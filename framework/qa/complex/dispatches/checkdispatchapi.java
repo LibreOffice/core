@@ -4,9 +4,9 @@
  *
  *  $RCSfile: checkdispatchapi.java,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: obo $ $Date: 2006-07-13 15:15:31 $
+ *  last change: $Author: hr $ $Date: 2007-08-02 17:03:27 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -99,7 +99,8 @@ public class checkdispatchapi extends ComplexTestCase
             "checkDispatchInfoOfRelationDesign",
             "checkDispatchInfoOfBasic",
             "checkDispatchInfoOfStartModule",
-            "checkInterceptorLifeTime"
+            "checkInterceptorLifeTime",
+            "checkInterception"
         };
     }
 
@@ -283,6 +284,35 @@ public class checkdispatchapi extends ComplexTestCase
             failed("Interceptor was not deregistered automaticly on closing the corresponding frame.");
 
         log.println("Destruction of interception chain works as designed .-)");
+    }
+
+    //-------------------------------------------
+    public void checkInterception()
+    {
+        String [] lDisabledURLs    = new String [1];
+                  lDisabledURLs[0] = ".uno:Open";
+
+        log.println("create and initialize interceptor ...");
+        Interceptor aInterceptor = new Interceptor(log);
+        aInterceptor.setURLs4URLs4Blocking(lDisabledURLs);
+
+        com.sun.star.frame.XDispatchProviderInterceptor xInterceptor = (com.sun.star.frame.XDispatchProviderInterceptor)UnoRuntime.queryInterface(
+                                                                                com.sun.star.frame.XDispatchProviderInterceptor.class,
+                                                                                aInterceptor);
+
+        log.println("create and initialize frame ...");
+        com.sun.star.frame.XFrame xFrame = impl_createNewFrame();
+        impl_loadIntoFrame(xFrame, "private:factory/swriter", null);
+
+        com.sun.star.frame.XDispatchProviderInterception xInterception = (com.sun.star.frame.XDispatchProviderInterception)UnoRuntime.queryInterface(
+                                                                                com.sun.star.frame.XDispatchProviderInterception.class,
+                                                                                xFrame);
+
+        log.println("register interceptor ...");
+        xInterception.registerDispatchProviderInterceptor(xInterceptor);
+
+        log.println("deregister interceptor ...");
+        xInterception.releaseDispatchProviderInterceptor(xInterceptor);
     }
 
     //-------------------------------------------
