@@ -6,9 +6,9 @@
  *
  *  $RCSfile: metadata.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2007-07-09 11:56:31 $
+ *  last change: $Author: hr $ $Date: 2007-08-02 14:38:13 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -130,7 +130,7 @@ namespace rptui
     #define PROPERTY_ID_CANGROW                         4
     #define PROPERTY_ID_CANSHRINK                       5
     #define PROPERTY_ID_REPEATSECTION                   6
-    #define PROPERTY_ID_BACKCOLOR                       7
+    #define PROPERTY_ID_PRESERVEIRI                     7
     #define PROPERTY_ID_VISIBLE                         8
     #define PROPERTY_ID_GROUPKEEPTOGETHER               9
     #define PROPERTY_ID_PAGEHEADEROPTION                10
@@ -146,14 +146,14 @@ namespace rptui
     #define PROPERTY_ID_STARTNEWCOLUMN                  20
     #define PROPERTY_ID_DATAFIELD                       21
     #define PROPERTY_ID_RESETPAGENUMBER                 22
-    #define PROPERTY_ID_CONTROLBACKGROUND               23
-    #define PROPERTY_ID_CHARFONTNAME                    25
-    #define PROPERTY_ID_PRINTWHENGROUPCHANGE            26
-    #define PROPERTY_ID_DEEPTRAVERSING                  27
-    #define PROPERTY_ID_PREEVALUATED                    28
-    #define PROPERTY_ID_PRESERVEIRI                     29
-    #define PROPERTY_ID_BACKTRANSPARENT                 30
-    #define PROPERTY_ID_CONTROLBACKGROUNDTRANSPARENT    31
+    #define PROPERTY_ID_CHARFONTNAME                    23
+    #define PROPERTY_ID_PRINTWHENGROUPCHANGE            24
+    #define PROPERTY_ID_DEEPTRAVERSING                  25
+    #define PROPERTY_ID_PREEVALUATED                    26
+    #define PROPERTY_ID_BACKCOLOR                       27
+    #define PROPERTY_ID_BACKTRANSPARENT                 28
+    #define PROPERTY_ID_CONTROLBACKGROUND               29
+    #define PROPERTY_ID_CONTROLBACKGROUNDTRANSPARENT    30
 
 //............................................................................
 } // namespace rptui
