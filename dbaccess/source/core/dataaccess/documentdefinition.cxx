@@ -4,9 +4,9 @@
  *
  *  $RCSfile: documentdefinition.cxx,v $
  *
- *  $Revision: 1.44 $
+ *  $Revision: 1.45 $
  *
- *  last change: $Author: rt $ $Date: 2007-07-24 12:05:15 $
+ *  last change: $Author: hr $ $Date: 2007-08-02 14:25:26 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -658,30 +658,6 @@ void ODocumentDefinition::impl_removeFrameFromDesktop_throw( const Reference< XF
 }
 
 // -----------------------------------------------------------------------------
-void ODocumentDefinition::impl_appendFrameToDocumentFrames_throw( const Reference< XFrame >& _rxFrame )
-{
-    Reference< XModel > xDatabaseDocumentModel;
-    if ( m_pImpl->m_pDataSource )
-        xDatabaseDocumentModel = m_pImpl->m_pDataSource->getModel_noCreate();
-
-    Reference< XController > xDatabaseDocumentController;
-    if ( xDatabaseDocumentModel.is() )
-        xDatabaseDocumentController = xDatabaseDocumentModel->getCurrentController();
-
-    Reference< XFramesSupplier > xDatabaseDocumentFramesSupp;
-    if ( xDatabaseDocumentController.is() )
-        xDatabaseDocumentFramesSupp = xDatabaseDocumentFramesSupp.query( xDatabaseDocumentController->getFrame() );
-
-    Reference< XFrames > xDatabaseDocumentFrames;
-    if ( xDatabaseDocumentFramesSupp.is() )
-        xDatabaseDocumentFrames = xDatabaseDocumentFramesSupp->getFrames();
-
-    OSL_ENSURE( xDatabaseDocumentFrames.is(), "ODocumentDefinition::impl_appendFrameToDocumentFrames_throw: cannot append the component frame to the document's frame!" );
-    if ( xDatabaseDocumentFrames.is() )
-        xDatabaseDocumentFrames->append( _rxFrame );
-}
-
-// -----------------------------------------------------------------------------
 void ODocumentDefinition::impl_onActivateEmbeddedObject( bool _bOpenedInDesignMode )
 {
     try
@@ -705,9 +681,6 @@ void ODocumentDefinition::impl_onActivateEmbeddedObject( bool _bOpenedInDesignMo
 
             // remove the frame from the desktop's frame collection because we need full control of it.
             impl_removeFrameFromDesktop_throw( xFrame );
-
-            // ensure that the component's frame is a child of the database document's frame
-            impl_appendFrameToDocumentFrames_throw( xFrame );
         }
 
         // ensure that we ourself are kept alive as long as the embedded object's frame is
@@ -1273,10 +1246,34 @@ void ODocumentDefinition::fillLoadArgs(Sequence<PropertyValue>& _rArgs,Sequence<
     m_pInterceptor->acquire();
     Reference<XDispatchProviderInterceptor> xInterceptor = m_pInterceptor;
 
-    _rEmbeddedObjectDescriptor.realloc(1);
+    _rEmbeddedObjectDescriptor.realloc(2);
     nLen = 0;
     _rEmbeddedObjectDescriptor[nLen].Name = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("OutplaceDispatchInterceptor"));
     _rEmbeddedObjectDescriptor[nLen++].Value <<= xInterceptor;
+
+    uno::Sequence< uno::Any > aOutFrameProps(2);
+    PropertyValue aProp;
+    aProp.Name = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("TopWindow"));
+    aProp.Value <<= sal_True;
+    aOutFrameProps[0] <<= aProp;
+
+    Reference< XModel > xDatabaseDocumentModel;
+    if ( m_pImpl->m_pDataSource )
+        xDatabaseDocumentModel = m_pImpl->m_pDataSource->getModel_noCreate();
+
+    Reference< XController > xDatabaseDocumentController;
+    if ( xDatabaseDocumentModel.is() )
+        xDatabaseDocumentController = xDatabaseDocumentModel->getCurrentController();
+
+    if ( xDatabaseDocumentController.is() )
+    {
+        aProp.Name = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ParentFrame"));
+        aProp.Value <<= xDatabaseDocumentController->getFrame();
+        aOutFrameProps[1] <<= aProp;
+    }
+
+    _rEmbeddedObjectDescriptor[nLen].Name = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("OutplaceFrameProperties"));
+    _rEmbeddedObjectDescriptor[nLen++].Value <<= aOutFrameProps;
 }
 // -----------------------------------------------------------------------------
 void ODocumentDefinition::loadEmbeddedObject(const Sequence< sal_Int8 >& _aClassID,const Reference<XConnection>& _xConnection,sal_Bool _bReadOnly)
