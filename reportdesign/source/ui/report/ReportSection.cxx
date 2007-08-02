@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ReportSection.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2007-07-09 11:56:32 $
+ *  last change: $Author: hr $ $Date: 2007-08-02 14:40:24 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -112,11 +112,23 @@
 #include <svtools/itempool.hxx>
 #endif
 #include <svx/unoshape.hxx>
+#include <unotools/confignode.hxx>
+#include <svtools/extcolorcfg.hxx>
+
 // =============================================================================
 namespace rptui
 {
 // =============================================================================
 using namespace ::com::sun::star;
+// -----------------------------------------------------------------------------
+
+sal_Int32 lcl_getOverlappedControlColor(/*const uno::Reference <lang::XMultiServiceFactory> _rxFactory*/)
+{
+    svtools::ExtendedColorConfig aConfig;
+    // sal_Int32 nColor = aConfig.GetColorValue(rtl::OUString::createFromAscii("ReportDesigner"), rtl::OUString::createFromAscii("OverlappedControl")).nColor;
+    sal_Int32 nColor = aConfig.GetColorValue(rtl::OUString::createFromAscii("ReportDesigner"), DBOVERLAPPEDCONTROL).nColor;
+    return nColor;
+}
 //------------------------------------------------------------------------------
 DBG_NAME( rpt_OReportSection )
 OReportSection::OReportSection(OViewsWindow* _pParent,const uno::Reference< report::XSection >& _xSection)
@@ -136,12 +148,13 @@ OReportSection::OReportSection(OViewsWindow* _pParent,const uno::Reference< repo
 {
     DBG_CTOR( rpt_OReportSection,NULL);
     EnableChildTransparentMode();
-    SetUniqueId(HID_REPORTSECTION);
+    SetHelpId(HID_REPORTSECTION);
     SetMapMode( MapMode( MAP_100TH_MM ) );
     m_pFunc.reset(new DlgEdFuncSelect( this ));
     try
     {
         fill();
+            m_pFunc->setOverlappedControlColor(lcl_getOverlappedControlColor( /* m_pParent->getView()->getReportView()->getController()->getORB() */ ) );
     }
     catch(uno::Exception&)
     {
@@ -348,10 +361,14 @@ void OReportSection::SetMode( DlgEdMode eNewMode )
     if ( eNewMode != m_eMode )
     {
         if ( eNewMode == RPTUI_INSERT )
+        {
             m_pFunc.reset(new DlgEdFuncInsert( this ));
+        }
         else
+        {
             m_pFunc.reset(new DlgEdFuncSelect( this ));
-
+        }
+        m_pFunc->setOverlappedControlColor(lcl_getOverlappedControlColor( /* m_pParent->getView()->getReportView()->getController()->getORB()  */ ) );
         m_pModel->SetReadOnly(eNewMode == RPTUI_READONLY);
         m_eMode = eNewMode;
     }
@@ -552,6 +569,11 @@ void OReportSection::createDefault(const ::rtl::OUString& _sType)
     SdrObject* pObj = m_pView->GetCreateObj();//rMarkList.GetMark(0)->GetObj();
     if ( !pObj )
         return;
+    createDefault(_sType,pObj);
+}
+// -----------------------------------------------------------------------------
+void OReportSection::createDefault(const ::rtl::OUString& _sType,SdrObject* _pObj)
+{
     sal_Bool bAttributesAppliedFromGallery = sal_False;
 
     if ( GalleryExplorer::GetSdrObjCount( GALLERY_THEME_POWERPOINT ) )
@@ -574,7 +596,7 @@ void OReportSection::createDefault(const ::rtl::OUString& _sType)
                         if( pSourceObj )
                         {
                             const SfxItemSet& rSource = pSourceObj->GetMergedItemSet();
-                            SfxItemSet aDest( pObj->GetModel()->GetItemPool(),              // ranges from SdrAttrObj
+                            SfxItemSet aDest( _pObj->GetModel()->GetItemPool(),                 // ranges from SdrAttrObj
                             SDRATTR_START, SDRATTR_SHADOW_LAST,
                             SDRATTR_MISC_FIRST, SDRATTR_MISC_LAST,
                             SDRATTR_TEXTDIRECTION, SDRATTR_TEXTDIRECTION,
@@ -589,12 +611,12 @@ void OReportSection::createDefault(const ::rtl::OUString& _sType)
                             // end
                             0, 0);
                             aDest.Set( rSource );
-                            pObj->SetMergedItemSet( aDest );
+                            _pObj->SetMergedItemSet( aDest );
                             sal_Int32 nAngle = pSourceObj->GetRotateAngle();
                             if ( nAngle )
                             {
                                 double a = nAngle * F_PI18000;
-                                pObj->NbcRotate( pObj->GetSnapRect().Center(), nAngle, sin( a ), cos( a ) );
+                                _pObj->NbcRotate( _pObj->GetSnapRect().Center(), nAngle, sin( a ), cos( a ) );
                             }
                             bAttributesAppliedFromGallery = sal_True;
                         }
@@ -606,11 +628,11 @@ void OReportSection::createDefault(const ::rtl::OUString& _sType)
     }
     if ( !bAttributesAppliedFromGallery )
     {
-        pObj->SetMergedItem( SvxAdjustItem( SVX_ADJUST_CENTER ,ITEMID_ADJUST) );
-        pObj->SetMergedItem( SdrTextVertAdjustItem( SDRTEXTVERTADJUST_CENTER ) );
-        pObj->SetMergedItem( SdrTextHorzAdjustItem( SDRTEXTHORZADJUST_BLOCK ) );
-        pObj->SetMergedItem( SdrTextAutoGrowHeightItem( sal_False ) );
-        ((SdrObjCustomShape*)pObj)->MergeDefaultAttributes( &_sType );
+        _pObj->SetMergedItem( SvxAdjustItem( SVX_ADJUST_CENTER ,ITEMID_ADJUST) );
+        _pObj->SetMergedItem( SdrTextVertAdjustItem( SDRTEXTVERTADJUST_CENTER ) );
+        _pObj->SetMergedItem( SdrTextHorzAdjustItem( SDRTEXTHORZADJUST_BLOCK ) );
+        _pObj->SetMergedItem( SdrTextAutoGrowHeightItem( sal_False ) );
+        ((SdrObjCustomShape*)_pObj)->MergeDefaultAttributes( &_sType );
     }
 }
 // -----------------------------------------------------------------------------
