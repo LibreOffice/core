@@ -4,9 +4,9 @@
  *
  *  $RCSfile: filter.cxx,v $
  *
- *  $Revision: 1.69 $
+ *  $Revision: 1.70 $
  *
- *  last change: $Author: ihi $ $Date: 2007-07-10 15:18:06 $
+ *  last change: $Author: hr $ $Date: 2007-08-02 18:18:50 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -595,19 +595,16 @@ static BOOL ImpPeekGraphicFormat( SvStream& rStream, String& rFormatExtension, B
     if( !bTest || ( rFormatExtension.CompareToAscii( "PCT", 3 ) == COMPARE_EQUAL ) )
     {
         bSomethingTested = TRUE;
-        if( nStreamLen >= 525 )
+        BYTE sBuf[4];
+        sal_uInt32 nOffset; // in ms documents the pict format is used without the first 512 bytes
+        for ( nOffset = 10; ( nOffset <= 522 ) && ( ( nStreamPos + nOffset + 3 ) <= nStreamLen ); nOffset += 512 )
         {
-            BYTE sBuf[4];
-            sal_uInt32 nOffset; // in ms documents the pict format is used without the first 512 bytes
-            for ( nOffset = 10; nOffset <= 522; nOffset += 512 )
+            rStream.Seek( nStreamPos + nOffset );
+            rStream.Read( sBuf,3 );
+            if ( sBuf[ 0 ] == 0x00 && sBuf[ 1 ] == 0x11 && ( sBuf[ 2 ] == 0x01 || sBuf[ 2 ] == 0x02 ) )
             {
-                rStream.Seek( nStreamPos + nOffset );
-                rStream.Read( sBuf,3 );
-                if ( sBuf[ 0 ] == 0x00 && sBuf[ 1 ] == 0x11 && ( sBuf[ 2 ] == 0x01 || sBuf[ 2 ] == 0x02 ) )
-                {
-                    rFormatExtension = UniString::CreateFromAscii( "PCT", 3 );
-                    return TRUE;
-                }
+                rFormatExtension = UniString::CreateFromAscii( "PCT", 3 );
+                return TRUE;
             }
         }
     }
