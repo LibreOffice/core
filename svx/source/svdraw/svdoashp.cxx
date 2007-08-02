@@ -4,9 +4,9 @@
  *
  *  $RCSfile: svdoashp.cxx,v $
  *
- *  $Revision: 1.44 $
+ *  $Revision: 1.45 $
  *
- *  last change: $Author: hr $ $Date: 2007-08-02 17:29:13 $
+ *  last change: $Author: hr $ $Date: 2007-08-02 18:27:59 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -651,82 +651,87 @@ basegfx::B2DPolyPolygon SdrObjCustomShape::GetLineGeometry( const SdrObjCustomSh
 std::vector< SdrCustomShapeInteraction > SdrObjCustomShape::GetInteractionHandles( const SdrObjCustomShape* pCustomShape ) const
 {
     std::vector< SdrCustomShapeInteraction > xRet;
-
-    Reference< XCustomShapeEngine > xCustomShapeEngine( GetCustomShapeEngine( pCustomShape ) );
-    if ( xCustomShapeEngine.is() )
+    try
     {
-        int i;
-        Sequence< Reference< XCustomShapeHandle > > xInteractionHandles( xCustomShapeEngine->getInteraction() );
-        for ( i = 0; i < xInteractionHandles.getLength(); i++ )
+        Reference< XCustomShapeEngine > xCustomShapeEngine( GetCustomShapeEngine( pCustomShape ) );
+        if ( xCustomShapeEngine.is() )
         {
-            if ( xInteractionHandles[ i ].is() )
+            int i;
+            Sequence< Reference< XCustomShapeHandle > > xInteractionHandles( xCustomShapeEngine->getInteraction() );
+            for ( i = 0; i < xInteractionHandles.getLength(); i++ )
             {
-                SdrCustomShapeInteraction aSdrCustomShapeInteraction;
-                aSdrCustomShapeInteraction.xInteraction = xInteractionHandles[ i ];
-                aSdrCustomShapeInteraction.aPosition = xInteractionHandles[ i ]->getPosition();
-
-                sal_Int32 nMode = 0;
-                switch( ImpGetCustomShapeType( *this ) )
+                if ( xInteractionHandles[ i ].is() )
                 {
-                    case mso_sptAccentBorderCallout90 :     // 2 ortho
-                    {
-                        if ( !i )
-                            nMode |= CUSTOMSHAPE_HANDLE_RESIZE_FIXED | CUSTOMSHAPE_HANDLE_CREATE_FIXED;
-                        else if ( i == 1)
-                            nMode |= CUSTOMSHAPE_HANDLE_RESIZE_ABSOLUTE_X | CUSTOMSHAPE_HANDLE_RESIZE_ABSOLUTE_Y | CUSTOMSHAPE_HANDLE_MOVE_SHAPE | CUSTOMSHAPE_HANDLE_ORTHO4;
-                    }
-                    break;
+                    SdrCustomShapeInteraction aSdrCustomShapeInteraction;
+                    aSdrCustomShapeInteraction.xInteraction = xInteractionHandles[ i ];
+                    aSdrCustomShapeInteraction.aPosition = xInteractionHandles[ i ]->getPosition();
 
-                    case mso_sptWedgeRectCallout :
-                    case mso_sptWedgeRRectCallout :
-                    case mso_sptCloudCallout :
-                    case mso_sptWedgeEllipseCallout :
+                    sal_Int32 nMode = 0;
+                    switch( ImpGetCustomShapeType( *this ) )
                     {
-                        if ( !i )
-                            nMode |= CUSTOMSHAPE_HANDLE_RESIZE_FIXED;
-                    }
-                    break;
+                        case mso_sptAccentBorderCallout90 :     // 2 ortho
+                        {
+                            if ( !i )
+                                nMode |= CUSTOMSHAPE_HANDLE_RESIZE_FIXED | CUSTOMSHAPE_HANDLE_CREATE_FIXED;
+                            else if ( i == 1)
+                                nMode |= CUSTOMSHAPE_HANDLE_RESIZE_ABSOLUTE_X | CUSTOMSHAPE_HANDLE_RESIZE_ABSOLUTE_Y | CUSTOMSHAPE_HANDLE_MOVE_SHAPE | CUSTOMSHAPE_HANDLE_ORTHO4;
+                        }
+                        break;
 
-                    case mso_sptBorderCallout1 :            // 2 diag
-                    {
-                        if ( !i )
-                            nMode |= CUSTOMSHAPE_HANDLE_RESIZE_FIXED | CUSTOMSHAPE_HANDLE_CREATE_FIXED;
-                        else if ( i == 1 )
-                            nMode |= CUSTOMSHAPE_HANDLE_RESIZE_ABSOLUTE_X | CUSTOMSHAPE_HANDLE_RESIZE_ABSOLUTE_Y | CUSTOMSHAPE_HANDLE_MOVE_SHAPE;
+                        case mso_sptWedgeRectCallout :
+                        case mso_sptWedgeRRectCallout :
+                        case mso_sptCloudCallout :
+                        case mso_sptWedgeEllipseCallout :
+                        {
+                            if ( !i )
+                                nMode |= CUSTOMSHAPE_HANDLE_RESIZE_FIXED;
+                        }
+                        break;
+
+                        case mso_sptBorderCallout1 :            // 2 diag
+                        {
+                            if ( !i )
+                                nMode |= CUSTOMSHAPE_HANDLE_RESIZE_FIXED | CUSTOMSHAPE_HANDLE_CREATE_FIXED;
+                            else if ( i == 1 )
+                                nMode |= CUSTOMSHAPE_HANDLE_RESIZE_ABSOLUTE_X | CUSTOMSHAPE_HANDLE_RESIZE_ABSOLUTE_Y | CUSTOMSHAPE_HANDLE_MOVE_SHAPE;
+                        }
+                        break;
+                        case mso_sptBorderCallout2 :            // 3
+                        {
+                            if ( !i )
+                                nMode |= CUSTOMSHAPE_HANDLE_RESIZE_FIXED | CUSTOMSHAPE_HANDLE_CREATE_FIXED;
+                            else if ( i == 2 )
+                                nMode |= CUSTOMSHAPE_HANDLE_RESIZE_ABSOLUTE_X | CUSTOMSHAPE_HANDLE_RESIZE_ABSOLUTE_Y | CUSTOMSHAPE_HANDLE_MOVE_SHAPE;
+                        }
+                        break;
+                        case mso_sptCallout90 :
+                        case mso_sptAccentCallout90 :
+                        case mso_sptBorderCallout90 :
+                        case mso_sptCallout1 :
+                        case mso_sptCallout2 :
+                        case mso_sptCallout3 :
+                        case mso_sptAccentCallout1 :
+                        case mso_sptAccentCallout2 :
+                        case mso_sptAccentCallout3 :
+                        case mso_sptBorderCallout3 :
+                        case mso_sptAccentBorderCallout1 :
+                        case mso_sptAccentBorderCallout2 :
+                        case mso_sptAccentBorderCallout3 :
+                        {
+                            if ( !i )
+                                nMode |= CUSTOMSHAPE_HANDLE_RESIZE_FIXED | CUSTOMSHAPE_HANDLE_CREATE_FIXED;
+                        }
+                        break;
+                        default: break;
                     }
-                    break;
-                    case mso_sptBorderCallout2 :            // 3
-                    {
-                        if ( !i )
-                            nMode |= CUSTOMSHAPE_HANDLE_RESIZE_FIXED | CUSTOMSHAPE_HANDLE_CREATE_FIXED;
-                        else if ( i == 2 )
-                            nMode |= CUSTOMSHAPE_HANDLE_RESIZE_ABSOLUTE_X | CUSTOMSHAPE_HANDLE_RESIZE_ABSOLUTE_Y | CUSTOMSHAPE_HANDLE_MOVE_SHAPE;
-                    }
-                    break;
-                    case mso_sptCallout90 :
-                    case mso_sptAccentCallout90 :
-                    case mso_sptBorderCallout90 :
-                    case mso_sptCallout1 :
-                    case mso_sptCallout2 :
-                    case mso_sptCallout3 :
-                    case mso_sptAccentCallout1 :
-                    case mso_sptAccentCallout2 :
-                    case mso_sptAccentCallout3 :
-                    case mso_sptBorderCallout3 :
-                    case mso_sptAccentBorderCallout1 :
-                    case mso_sptAccentBorderCallout2 :
-                    case mso_sptAccentBorderCallout3 :
-                    {
-                        if ( !i )
-                            nMode |= CUSTOMSHAPE_HANDLE_RESIZE_FIXED | CUSTOMSHAPE_HANDLE_CREATE_FIXED;
-                    }
-                    break;
-                    default: break;
+                    aSdrCustomShapeInteraction.nMode = nMode;
+                    xRet.push_back( aSdrCustomShapeInteraction );
                 }
-                aSdrCustomShapeInteraction.nMode = nMode;
-                xRet.push_back( aSdrCustomShapeInteraction );
             }
         }
+    }
+    catch( const uno::RuntimeException& )
+    {
     }
     return xRet;
 }
@@ -1856,6 +1861,7 @@ void SdrObjCustomShape::NbcSetSnapRect( const Rectangle& rRect )
 {
     aRect=rRect;
     ImpJustifyRect(aRect);
+    InvalidateRenderGeometry();
     Rectangle aTextBound( aRect );
     if ( GetTextBounds( aTextBound ) )
     {
@@ -1875,7 +1881,6 @@ void SdrObjCustomShape::NbcSetSnapRect( const Rectangle& rRect )
     ImpCheckShear();
     SetRectsDirty();
     SetChanged();
-    InvalidateRenderGeometry();
 }
 void SdrObjCustomShape::SetSnapRect( const Rectangle& rRect )
 {
@@ -1890,6 +1895,7 @@ void SdrObjCustomShape::NbcSetLogicRect( const Rectangle& rRect )
 {
     aRect = rRect;
     ImpJustifyRect( aRect );
+    InvalidateRenderGeometry();
     Rectangle aTextBound( aRect );
     if ( GetTextBounds( aTextBound ) )
     {
@@ -1906,7 +1912,6 @@ void SdrObjCustomShape::NbcSetLogicRect( const Rectangle& rRect )
     }
     SetRectsDirty();
     SetChanged();
-    InvalidateRenderGeometry();
 }
 void SdrObjCustomShape::SetLogicRect( const Rectangle& rRect )
 {
@@ -2422,6 +2427,7 @@ void SdrObjCustomShape::DragResizeCustomShape( const Rectangle& rNewRect, SdrObj
     if ( aNewRect != pObj->aRect )
     {
         pObj->SetLogicRect( aNewRect );
+        pObj->InvalidateRenderGeometry();
 
         if ( rNewRect.Left() > rNewRect.Right() )
         {
