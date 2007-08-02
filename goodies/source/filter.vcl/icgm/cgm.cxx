@@ -4,9 +4,9 @@
  *
  *  $RCSfile: cgm.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 15:46:13 $
+ *  last change: $Author: hr $ $Date: 2007-08-02 18:25:02 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -219,7 +219,7 @@ CGM::~CGM()
     delete mpOutAct;
     delete pCopyOfE;
     delete pElement;
-    delete mpBuf;
+    delete [] mpBuf;
 };
 
 // ---------------------------------------------------------------
