@@ -4,9 +4,9 @@
  *
  *  $RCSfile: embedobj.cxx,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: rt $ $Date: 2007-07-06 10:06:37 $
+ *  last change: $Author: hr $ $Date: 2007-08-02 13:31:19 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -250,7 +250,7 @@ void OCommonEmbeddedObject::SwitchStateTo_Impl( sal_Int32 nNextState )
             }
 
             if ( !m_pDocHolder->GetComponent().is() )
-                embed::UnreachableStateException(); //TODO: can't open document
+                throw embed::UnreachableStateException(); //TODO: can't open document
 
             m_nObjectState = nNextState;
         }
