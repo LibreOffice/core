@@ -4,9 +4,9 @@
  *
  *  $RCSfile: GroupsSorting.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: ihi $ $Date: 2007-07-12 13:51:08 $
+ *  last change: $Author: hr $ $Date: 2007-08-02 14:36:30 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -260,9 +260,9 @@ uno::Sequence<uno::Any> OFieldExpressionControl::fillSelectedGroups()
                 if ( m_aGroupPositions[nIndex] != NO_GROUP )
                 {
                     uno::Reference< report::XGroup> xOrgGroup(xGroups->getByIndex(m_aGroupPositions[nIndex]),uno::UNO_QUERY);
-                    uno::Reference< report::XGroup> xCopy = xGroups->createGroup();
-                    ::comphelper::copyProperties(xOrgGroup.get(),xCopy.get());
-                    vClipboardList.push_back( uno::makeAny(xCopy) );
+                    /*uno::Reference< report::XGroup> xCopy = xGroups->createGroup();
+                    ::comphelper::copyProperties(xOrgGroup.get(),xCopy.get());*/
+                    vClipboardList.push_back( uno::makeAny(xOrgGroup) );
                 }
             }
             catch(uno::Exception&)
@@ -292,11 +292,11 @@ void OFieldExpressionControl::StartDrag( sal_Int8 /*_nAction*/ , const Point& /*
     }
 }
 //------------------------------------------------------------------------------
-sal_Int8 OFieldExpressionControl::AcceptDrop( const BrowserAcceptDropEvent& /*rEvt*/ )
+sal_Int8 OFieldExpressionControl::AcceptDrop( const BrowserAcceptDropEvent& rEvt )
 {
     DBG_CHKTHIS( rpt_OFieldExpressionControl,NULL);
     sal_Int8 nAction = DND_ACTION_NONE;
-    if ( IsDropFormatSupported( OGroupExchange::getReportGroupId() ) && m_pParent->getGroups()->getCount() > 1 )
+    if ( IsDropFormatSupported( OGroupExchange::getReportGroupId() ) && m_pParent->getGroups()->getCount() > 1 && rEvt.GetWindow() == &GetDataWindow() )
     {
         nAction = DND_ACTION_MOVE;
     }
@@ -508,10 +508,15 @@ BOOL OFieldExpressionControl::SaveModified(bool _bAppendRow)
             if ( xGroup.is() )
             {
                 USHORT nPos = m_pComboCell->GetSelectEntryPos();
+                ::rtl::OUString sExpression;
                 if ( COMBOBOX_ENTRY_NOTFOUND == nPos )
-                    xGroup->setExpression( m_pComboCell->GetText() );
+                    sExpression = m_pComboCell->GetText();
                 else
-                    xGroup->setExpression( m_pComboCell->GetEntry(nPos) );
+                {
+                    sExpression = m_pComboCell->GetEntry(nPos);
+                }
+                xGroup->setExpression( sExpression );
+
                 ::rptui::adjustSectionName(xGroup,nPos);
 
                 if ( bAppend )
