@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xlpivot.hxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: vg $ $Date: 2006-11-22 12:23:53 $
+ *  last change: $Author: hr $ $Date: 2007-08-02 13:31:51 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -85,6 +85,7 @@ const sal_uInt16 EXC_PT_MAXSTRLEN           = 0xFFFE;
 // pivot cache fields
 const size_t EXC_PC_MAXFIELDCOUNT           = 0xFFFE;
 const sal_uInt16 EXC_PC_NOFIELD             = 0xFFFF;
+const xub_StrLen EXC_PC_MAXSTRLEN           = 255;
 
 // pivot cache items
 const size_t EXC_PC_MAXITEMCOUNT            = 32500;
