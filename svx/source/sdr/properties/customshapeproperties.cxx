@@ -4,9 +4,9 @@
  *
  *  $RCSfile: customshapeproperties.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: hr $ $Date: 2007-06-27 18:50:15 $
+ *  last change: $Author: hr $ $Date: 2007-08-02 18:27:19 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -167,7 +167,7 @@ namespace sdr
         }
         void CustomShapeProperties::ItemChange(const sal_uInt16 nWhich, const SfxPoolItem* pNewItem)
         {
-            SdrTextObj& rObj = (SdrTextObj&)GetSdrObject();
+            SdrObjCustomShape& rObj = (SdrObjCustomShape&)GetSdrObject();
             //OutlinerParaObject* pParaObj = rObj.GetOutlinerParaObject();
 
             if( pNewItem && ( SDRATTR_TEXT_AUTOGROWHEIGHT == nWhich ) )
@@ -176,6 +176,8 @@ namespace sdr
             }
             // call parent
             TextProperties::ItemChange( nWhich, pNewItem );
+
+            rObj.InvalidateRenderGeometry();
         }
         void CustomShapeProperties::SetStyleSheet(SfxStyleSheet* pNewStyleSheet, sal_Bool bDontRemoveHardAttr)
         {
