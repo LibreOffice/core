@@ -4,9 +4,9 @@
  *
  *  $RCSfile: txtflde.cxx,v $
  *
- *  $Revision: 1.75 $
+ *  $Revision: 1.76 $
  *
- *  last change: $Author: hr $ $Date: 2007-06-27 16:14:38 $
+ *  last change: $Author: hr $ $Date: 2007-08-02 18:19:49 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1787,7 +1787,7 @@ void XMLTextFieldExport::ExportFieldHelper(
         // this field is a special case because it gets mapped onto a
         // hyperlink, rather than one of the regular text field.
         ProcessString(XML_HREF, GetExport().GetRelativeReference(GetStringProperty(sPropertyURL, rPropSet)),
-                      sal_True, XML_NAMESPACE_XLINK);
+                      sal_False, XML_NAMESPACE_XLINK);
         ProcessString(XML_TARGET_FRAME_NAME,
                       GetStringProperty(sPropertyTargetFrame,rPropSet),
                       sal_True, XML_NAMESPACE_OFFICE);
