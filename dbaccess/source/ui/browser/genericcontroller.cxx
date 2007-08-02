@@ -4,9 +4,9 @@
  *
  *  $RCSfile: genericcontroller.cxx,v $
  *
- *  $Revision: 1.79 $
+ *  $Revision: 1.80 $
  *
- *  last change: $Author: rt $ $Date: 2007-07-24 12:07:21 $
+ *  last change: $Author: hr $ $Date: 2007-08-02 14:26:28 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1243,13 +1243,46 @@ namespace
 }
 
 //------------------------------------------------------------------------------
-void OGenericUnoController::openHelpAgent(sal_Int32 _nHelpId)
+// prototype out of UITools.cxx
+namespace dbaui
 {
-    try
+    void AppendConfigToken_Impl( ::rtl::OUString& _rURL, sal_Bool _bQuestionMark );
+}
+// -----------------------------------------------------------------------------
+
+void OGenericUnoController::openHelpAgent(rtl::OUString const& _suHelpStringURL )
+{
+    rtl::OUString suURL(_suHelpStringURL);
+    rtl::OUString sLanguage = rtl::OUString::createFromAscii("Language=");
+    if (suURL.indexOf(sLanguage) == -1)
+    {
+        dbaui::AppendConfigToken_Impl(suURL, sal_False /* sal_False := add '&' */ );
+    }
+    URL aURL;
+    aURL.Complete = suURL;
+
+    if (m_xUrlTransformer.is())
+        m_xUrlTransformer->parseStrict(aURL);
+
+    openHelpAgent(aURL);
+}
+
+void OGenericUnoController::openHelpAgent(sal_Int32 _nHelpId)
     {
         URL aURL = createHelpAgentURL(lcl_getModuleHelpModuleName( getFrame() ),_nHelpId);
         if (m_xUrlTransformer.is())
             m_xUrlTransformer->parseStrict(aURL);
+
+    openHelpAgent(aURL);
+}
+
+void OGenericUnoController::openHelpAgent(URL aURL)
+{
+    try
+    {
+        // URL aURL = createHelpAgentURL(lcl_getModuleHelpModuleName( getFrame() ),_nHelpId);
+        // if (m_xUrlTransformer.is())
+        //  m_xUrlTransformer->parseStrict(aURL);
 
         Reference< XDispatchProvider > xDispProv(m_xCurrentFrame, UNO_QUERY);
         Reference< XDispatch > xHelpDispatch;
