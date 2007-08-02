@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xmlimp.hxx,v $
  *
- *  $Revision: 1.31 $
+ *  $Revision: 1.32 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 06:22:13 $
+ *  last change: $Author: hr $ $Date: 2007-08-02 14:21:50 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -64,6 +64,10 @@ class SvXMLEmbeddedObjectHelper;
 // define, how many steps ( = paragraphs ) the progress bar should advance
 // for styles, autostyles and settings + meta
 #define PROGRESS_BAR_STEP 20
+
+namespace SwImport {
+    SwDoc* GetDocFromXMLImport( SvXMLImport& );
+}
 
 class SwXMLImport: public SvXMLImport
 {
