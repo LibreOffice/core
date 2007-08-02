@@ -4,9 +4,9 @@
  *
  *  $RCSfile: sdpage2.cxx,v $
  *
- *  $Revision: 1.34 $
+ *  $Revision: 1.35 $
  *
- *  last change: $Author: rt $ $Date: 2007-07-06 09:47:46 $
+ *  last change: $Author: hr $ $Date: 2007-08-02 18:22:06 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -83,25 +83,8 @@
 //#include "strmname.h"
 #include "anminfo.hxx"
 
-#ifdef MAC
-#include "::ui:inc:strings.hrc"
-#ifndef SD_DRAW_DOC_SHELL_HXX
-#include "::ui:inc:DrawDocShell.hxx"
-#endif
-#else
-#ifdef UNX
 #include "../ui/inc/strings.hrc"
-#ifndef SD_DRAW_DOC_SHELL_HXX
 #include "../ui/inc/DrawDocShell.hxx"
-#endif
-#else
-#include "..\ui\inc\cfgids.hxx"
-#include "..\ui\inc\strings.hrc"
-#ifndef SD_DRAW_DOC_SHELL_HXX
-#include "..\ui\inc\DrawDocShell.hxx"
-#endif
-#endif
-#endif
 
 // #90477#
 #ifndef _TOOLS_TENCCVT_HXX
