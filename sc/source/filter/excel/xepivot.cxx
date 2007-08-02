@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xepivot.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: vg $ $Date: 2007-05-22 19:47:54 $
+ *  last change: $Author: hr $ $Date: 2007-08-02 13:30:55 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -152,7 +152,7 @@ static const sal_uInt16 spnPCItemFlags[] =
 // ----------------------------------------------------------------------------
 
 XclExpPCItem::XclExpPCItem( const String& rText ) :
-    XclExpRecord( rText.Len() ? EXC_ID_SXSTRING : EXC_ID_SXEMPTY, 0 ),
+    XclExpRecord( (rText.Len() > 0) ? EXC_ID_SXSTRING : EXC_ID_SXEMPTY, 0 ),
     mnTypeFlag( EXC_PCITEM_DATA_STRING )
 {
     if( rText.Len() )
@@ -400,6 +400,8 @@ void XclExpPCField::InitStandardField( const ScRange& rRange )
     // field name is in top cell of the range
     ScAddress aPos( rRange.aStart );
     rDoc.GetString( aPos.Col(), aPos.Row(), aPos.Tab(), maFieldInfo.maName );
+    // #i76047# maximum field name length in pivot cache is 255
+    maFieldInfo.maName.Erase( ::std::min( maFieldInfo.maName.Len(), EXC_PC_MAXSTRLEN ) );
 
     // loop over all cells, create pivot cache items
     for( aPos.IncRow(); (aPos.Row() <= rRange.aEnd.Row()) && (maOrigItemList.GetSize() < EXC_PC_MAXITEMCOUNT); aPos.IncRow() )
@@ -525,11 +527,13 @@ void XclExpPCField::InsertOrigTextItem( const String& rText )
 {
     size_t nPos = 0;
     bool bFound = false;
+    // #i76047# maximum item text length in pivot cache is 255
+    String aShortText( rText, 0, ::std::min( rText.Len(), EXC_PC_MAXSTRLEN ) );
     for( size_t nSize = maOrigItemList.GetSize(); !bFound && (nPos < nSize); ++nPos )
-        if( (bFound = maOrigItemList.GetRecord( nPos )->EqualsText( rText )) == true )
+        if( (bFound = maOrigItemList.GetRecord( nPos )->EqualsText( aShortText )) == true )
             InsertItemArrayIndex( nPos );
     if( !bFound )
-        InsertOrigItem( new XclExpPCItem( rText ) );
+        InsertOrigItem( new XclExpPCItem( aShortText ) );
 }
 
 void XclExpPCField::InsertOrigDoubleItem( double fValue )
