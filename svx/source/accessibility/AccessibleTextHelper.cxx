@@ -4,9 +4,9 @@
  *
  *  $RCSfile: AccessibleTextHelper.cxx,v $
  *
- *  $Revision: 1.46 $
+ *  $Revision: 1.47 $
  *
- *  last change: $Author: hr $ $Date: 2007-06-27 16:40:25 $
+ *  last change: $Author: hr $ $Date: 2007-08-02 13:59:06 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1300,12 +1300,14 @@ namespace accessibility
                 ::accessibility::AccessibleParaManager::VectorOfChildren::const_iterator end = begin;
                 ::std::advance( end, 1 );
 
-                // send remove event
-                AccessibleTextHelper_LostChildEvent aLooseFunctor( *this );
-                ::std::for_each( begin, end, aLooseFunctor );
+                // #i61812# remember para to be removed for later notification
+                // AFTER the new state is applied (that after the para got removed)
+                ::uno::Reference< XAccessible > xPara;
+                ::accessibility::AccessibleParaManager::WeakPara::HardRefType aHardRef( begin->first.get() );
+                if( aHardRef.is() )
+                    xPara = ::uno::Reference< XAccessible >( aHardRef.getRef(), ::uno::UNO_QUERY );
 
                 // release everything from the remove position until the end
-                // #102235# Perform the release after the CHILD_EVENT notification
                 maParaManager.Release(aFunctor.GetParaIndex(), nCurrParas);
 
                 // update num of paras
@@ -1316,6 +1318,10 @@ namespace accessibility
                 // update children, _don't_ broadcast
                 UpdateVisibleChildren( false );
                 UpdateBoundRect();
+
+                // #i61812# notification for removed para
+                if (xPara.is())
+                    FireEvent(AccessibleEventId::CHILD, uno::Any(), uno::makeAny( xPara) );
             }
 #ifdef DBG_UTIL
             else
@@ -1324,11 +1330,6 @@ namespace accessibility
         }
         else if( nNewParas != nCurrParas )
         {
-            // number of paragraphs somehow changed - but we have no
-            // chance determining how. Thus, throw away everything and
-            // create from scratch.
-            FireEvent(AccessibleEventId::INVALIDATE_ALL_CHILDREN);
-
             // release all paras
             maParaManager.Release(0, nCurrParas);
 
@@ -1338,6 +1339,12 @@ namespace accessibility
             // #109864# create from scratch, don't broadcast
             UpdateVisibleChildren( false );
             UpdateBoundRect();
+
+            // number of paragraphs somehow changed - but we have no
+            // chance determining how. Thus, throw away everything and
+            // create from scratch.
+            // (child events should be broadcast after the changes are done...)
+            FireEvent(AccessibleEventId::INVALIDATE_ALL_CHILDREN);
 
             // no need for further updates later on
             bEverythingUpdated = true;
