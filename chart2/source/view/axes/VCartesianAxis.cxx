@@ -4,9 +4,9 @@
  *
  *  $RCSfile: VCartesianAxis.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: rt $ $Date: 2007-07-25 09:03:24 $
+ *  last change: $Author: hr $ $Date: 2007-08-02 17:31:52 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -310,7 +310,8 @@ Reference< drawing::XShape > createSingleLabel(
     if(!rLabel.getLength())
         return 0;
 
-    double fRotationAnglePi = rAxisLabelProperties.fRotationAngleDegree*F_PI/180.0;
+    // #i78696# use mathematically correct rotation now
+    const double fRotationAnglePi(rAxisLabelProperties.fRotationAngleDegree * (F_PI / -180.0));
     uno::Any aATransformation = ShapeFactory::makeTransformation( rAnchorScreenPosition2D, fRotationAnglePi );
     rtl::OUString aLabel = ShapeFactory::getStackedString( rLabel, rAxisLabelProperties.bStackCharacters );
 
@@ -1095,8 +1096,9 @@ void SAL_CALL VCartesianAxis::updatePositions()
                     static_cast<sal_Int32>(aTickScreenPos2D.getX())
                     ,static_cast<sal_Int32>(aTickScreenPos2D.getY()));
 
-                uno::Any aATransformation = ShapeFactory::makeTransformation(
-                    aAnchorScreenPosition2D, m_aAxisLabelProperties.fRotationAngleDegree*F_PI/180.0 );
+                // #i78696# use mathematically correct rotation now
+                const double fRotationAnglePi(m_aAxisLabelProperties.fRotationAngleDegree * (F_PI / -180.0));
+                uno::Any aATransformation = ShapeFactory::makeTransformation(aAnchorScreenPosition2D, fRotationAnglePi);
 
                 //set new position
                 uno::Reference< beans::XPropertySet > xProp( xShape2DText, uno::UNO_QUERY );
