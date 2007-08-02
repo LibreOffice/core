@@ -4,9 +4,9 @@
  *
  *  $RCSfile: objmisc.cxx,v $
  *
- *  $Revision: 1.91 $
+ *  $Revision: 1.92 $
  *
- *  last change: $Author: obo $ $Date: 2007-07-17 13:43:50 $
+ *  last change: $Author: hr $ $Date: 2007-08-02 17:08:29 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -701,12 +701,12 @@ String SfxObjectShell::GetTitle
     if ( IsLoading() )
         return String();
 
-    if ( !nMaxLength && pImp->pDocInfo )
+/*    if ( !nMaxLength && pImp->pDocInfo )
     {
         String aTitle = pImp->pDocInfo->GetTitle();
         if ( aTitle.Len() )
             return aTitle;
-    }
+    } */
 
     // Titel erzeugen?
     if ( SFX_TITLE_DETECT == nMaxLength && !pImp->aTitle.Len() )
@@ -727,18 +727,10 @@ String SfxObjectShell::GetTitle
         }
 
         if ( !aTitle.Len() )
-        {
-            // evtl. ist Titel aus DocInfo verwendbar
-            //aTitle = pThis->GetDocInfo().GetTitle();
-            //aTitle.EraseLeadingChars();
-            //aTitle.EraseTrailingChars();
+            aTitle = GetTitle( SFX_TITLE_FILENAME );
 
-            if ( !aTitle.Len() )
-                // sonst wie SFX_TITLE_FILENAME
-                aTitle = GetTitle( SFX_TITLE_FILENAME );
-        }
-
-        pThis->SetTitle( aTitle );
+        if ( IsTemplate() )
+            pThis->SetTitle( aTitle );
         bRecur = sal_False;
         return X(aTitle);
     }
@@ -781,7 +773,7 @@ String SfxObjectShell::GetTitle
     }
 
     const INetURLObject& aURL = INetURLObject( pMed->GetName() );
-    if ( nMaxLength >= SFX_TITLE_CAPTION && nMaxLength <= SFX_TITLE_HISTORY )
+    if ( nMaxLength > SFX_TITLE_CAPTION && nMaxLength <= SFX_TITLE_HISTORY )
     {
         sal_uInt16 nRemote;
         if( !pMed || aURL.GetProtocol() == INET_PROT_FILE )
@@ -795,23 +787,14 @@ String SfxObjectShell::GetTitle
     if ( aURL.GetProtocol() == INET_PROT_FILE )
     {
         String aName( aURL.HasMark() ? INetURLObject( aURL.GetURLNoMark() ).PathToFileName() : aURL.PathToFileName() );
-
-//      if ( nMaxLength > SFX_TITLE_MAXLEN )
-//          return X( DirEntry( aName ).GetFull( FSYS_STYLE_HOST, sal_False, nMaxLength ) );
-//      else
         if ( nMaxLength == SFX_TITLE_FULLNAME )
             return X( aName );
-
-        if ( !pImp->aTitle.Len() )
-        {
-            if ( nMaxLength == SFX_TITLE_FILENAME )
-                return X( aURL.getName( INetURLObject::LAST_SEGMENT,
-                                        true, INetURLObject::DECODE_WITH_CHARSET ) );
-
-            // sonst Titel aus Dateiname generieren
+        else if ( nMaxLength == SFX_TITLE_FILENAME )
+            return X( aURL.getName( INetURLObject::LAST_SEGMENT,
+                true, INetURLObject::DECODE_WITH_CHARSET ) );
+        else if ( !pImp->aTitle.Len() )
             pImp->aTitle = aURL.getBase( INetURLObject::LAST_SEGMENT,
                                          true, INetURLObject::DECODE_WITH_CHARSET );
-        }
     }
     else
     {
@@ -867,7 +850,7 @@ void SfxObjectShell::InvalidateName()
     // Title neu erzeugen
     pImp->aTitle.Erase();
 //  pImp->nVisualDocumentNumber = USHRT_MAX;
-    GetTitle( SFX_TITLE_DETECT );
+    //GetTitle( SFX_TITLE_DETECT );
     SetName( GetTitle( SFX_TITLE_APINAME ) );
 
     // Benachrichtigungen
