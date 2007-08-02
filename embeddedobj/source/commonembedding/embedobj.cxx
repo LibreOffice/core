@@ -4,9 +4,9 @@
  *
  *  $RCSfile: embedobj.cxx,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: hr $ $Date: 2007-08-02 13:31:19 $
+ *  last change: $Author: hr $ $Date: 2007-08-02 17:04:47 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -216,6 +216,9 @@ void OCommonEmbeddedObject::SwitchStateTo_Impl( sal_Int32 nNextState )
     {
         if ( nNextState == embed::EmbedStates::RUNNING )
         {
+            // after the object reaches the running state the cloned size is not necessary any more
+            m_bHasClonedSize = sal_False;
+
             if ( m_bIsLink )
             {
                 m_pDocHolder->SetComponent( LoadLink_Impl(), m_bReadOnly );
