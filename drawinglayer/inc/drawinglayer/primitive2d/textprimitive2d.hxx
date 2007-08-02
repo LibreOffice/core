@@ -4,9 +4,9 @@
  *
  *  $RCSfile: textprimitive2d.hxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: hdu $ $Date: 2007-04-20 08:09:43 $
+ *  last change: $Author: aw $ $Date: 2007-08-02 11:43:43 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -57,6 +57,10 @@
 #endif
 
 #include <vector>
+
+#ifndef _COM_SUN_STAR_LANG_LOCALE_HPP_
+#include <com/sun/star/lang/Locale.hpp>
+#endif
 
 //////////////////////////////////////////////////////////////////////////////
 
@@ -109,9 +113,9 @@ namespace drawinglayer
         private:
             basegfx::B2DHomMatrix                   maTextTransform;    // text range transformation from unit range ([0.0 .. 1.0]) to text range
             String                                  maText;             // the text
-            // TODO: int mnSubstringStartIndex, mnSubstringEndIndex;
             ::std::vector< double >                 maDXArray;          // the DX array scale-independent in unit coordinates
             FontAttributes                          maFontAttributes;   // the font to use
+            ::com::sun::star::lang::Locale          maLocale;           // the Locale for the text
             basegfx::BColor                         maFontColor;        // font color
 
         protected:
@@ -124,6 +128,7 @@ namespace drawinglayer
                 const String& rText,
                 const ::std::vector< double >& rDXArray,
                 const FontAttributes& rFontAttributes,
+                const ::com::sun::star::lang::Locale& rLocale,
                 const basegfx::BColor& rFontColor);
 
             // get data
@@ -131,6 +136,7 @@ namespace drawinglayer
             const String& getText() const { return maText; }
             const ::std::vector< double >& getDXArray() const { return maDXArray; }
             const FontAttributes& getFontAttributes() const { return maFontAttributes; }
+            const ::com::sun::star::lang::Locale& getLocale() const { return  maLocale; }
             const basegfx::BColor& getFontColor() const { return maFontColor; }
 
             // helper to have a central conversion to font-size-scaled integer DXArray
@@ -150,119 +156,7 @@ namespace drawinglayer
 
 //////////////////////////////////////////////////////////////////////////////
 
-namespace drawinglayer
-{
-    namespace primitive2d
-    {
-        enum FontUnderline
-        {
-            FONT_UNDERLINE_NONE,
-            FONT_UNDERLINE_SINGLE,
-            FONT_UNDERLINE_DOUBLE,
-            FONT_UNDERLINE_DOTTED,
-            FONT_UNDERLINE_DASH,
-            FONT_UNDERLINE_LONGDASH,
-            FONT_UNDERLINE_DASHDOT,
-            FONT_UNDERLINE_DASHDOTDOT,
-            FONT_UNDERLINE_SMALLWAVE,
-            FONT_UNDERLINE_WAVE,
-            FONT_UNDERLINE_DOUBLEWAVE,
-            FONT_UNDERLINE_BOLD,
-            FONT_UNDERLINE_BOLDDOTTED,
-            FONT_UNDERLINE_BOLDDASH,
-            FONT_UNDERLINE_BOLDLONGDASH,
-            FONT_UNDERLINE_BOLDDASHDOT,
-            FONT_UNDERLINE_BOLDDASHDOTDOT,
-            FONT_UNDERLINE_BOLDWAVE
-        };
-
-        enum FontStrikeout
-        {
-            FONT_STRIKEOUT_NONE,
-            FONT_STRIKEOUT_SINGLE,
-            FONT_STRIKEOUT_DOUBLE,
-            FONT_STRIKEOUT_BOLD,
-            FONT_STRIKEOUT_SLASH,
-            FONT_STRIKEOUT_X
-        };
-
-        enum FontEmphasisMark
-        {
-            FONT_EMPHASISMARK_NONE,
-            FONT_EMPHASISMARK_DOT,
-            FONT_EMPHASISMARK_CIRCLE,
-            FONT_EMPHASISMARK_DISC,
-            FONT_EMPHASISMARK_ACCENT
-        };
-
-        enum FontRelief
-        {
-            FONT_RELIEF_NONE,
-            FONT_RELIEF_EMBOSSED,
-            FONT_RELIEF_ENGRAVED
-        };
-
-        class TextDecoratedPortionPrimitive2D : public TextSimplePortionPrimitive2D
-        {
-        private:
-            basegfx::BColor                             maTextlineColor;
-            FontUnderline                               meFontUnderline;
-            FontStrikeout                               meFontStrikeout;
-            FontEmphasisMark                            meFontEmphasisMark;
-            FontRelief                                  meFontRelief;
-
-            // bitfield
-            unsigned                                    mbUnderlineAbove : 1;
-            unsigned                                    mbWordLineMode : 1;
-            unsigned                                    mbEmphasisMarkAbove : 1;
-            unsigned                                    mbEmphasisMarkBelow : 1;
-            unsigned                                    mbShadow : 1;
-
-        protected:
-            // local decomposition.
-            virtual Primitive2DSequence createLocalDecomposition(const geometry::ViewInformation2D& rViewInformation) const;
-
-        public:
-            TextDecoratedPortionPrimitive2D(
-                const basegfx::B2DHomMatrix& rNewTransform,
-                const String& rText,
-                const ::std::vector< double >& rDXArray,
-                const FontAttributes& rFontAttributes,
-                const basegfx::BColor& rFontColor,
-                const basegfx::BColor& rTextlineColor,
-                FontUnderline eFontUnderline = FONT_UNDERLINE_NONE,
-                bool bUnderlineAbove = false,
-                FontStrikeout eFontStrikeout = FONT_STRIKEOUT_NONE,
-                bool bWordLineMode = false,
-                FontEmphasisMark eFontEmphasisMark = FONT_EMPHASISMARK_NONE,
-                bool bEmphasisMarkAbove = true,
-                bool bEmphasisMarkBelow = false,
-                FontRelief eFontRelief = FONT_RELIEF_NONE,
-                bool bShadow = false);
-
-            // get data
-            FontUnderline getFontUnderline() const { return meFontUnderline; }
-            FontStrikeout getFontStrikeout() const { return meFontStrikeout; }
-            FontEmphasisMark getFontEmphasisMark() const { return meFontEmphasisMark; }
-            FontRelief getFontRelief() const { return meFontRelief; }
-            basegfx::BColor getTextlineColor() const { return maTextlineColor; }
-            bool getUnderlineAbove() const { return mbUnderlineAbove; }
-            bool getWordLineMode() const { return mbWordLineMode; }
-            bool getEmphasisMarkAbove() const { return mbEmphasisMarkAbove; }
-            bool getEmphasisMarkBelow() const { return mbEmphasisMarkBelow; }
-            bool getShadow() const { return mbShadow; }
-
-            // compare operator
-            virtual bool operator==( const BasePrimitive2D& rPrimitive ) const;
-
-            // provide unique ID
-            DeclPrimitrive2DIDBlock()
-        };
-    } // end of namespace primitive2d
-} // end of namespace drawinglayer
+#endif //INCLUDED_DRAWINGLAYER_PRIMITIVE2D_TEXTPRIMITIVE2D_HXX
 
 //////////////////////////////////////////////////////////////////////////////
-
-#endif //_DRAWINGLAYER_PRIMITIVE_TEXTPRIMITIVE_HXX
-
 // eof

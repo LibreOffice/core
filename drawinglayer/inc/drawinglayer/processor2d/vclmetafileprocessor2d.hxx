@@ -4,9 +4,9 @@
  *
  *  $RCSfile: vclmetafileprocessor2d.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: aw $ $Date: 2007-07-27 09:03:17 $
+ *  last change: $Author: aw $ $Date: 2007-08-02 11:43:44 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -38,6 +38,10 @@
 
 #ifndef INCLUDED_DRAWINGLAYER_PROCESSOR2D_VCLPROCESSOR2D_HXX
 #include <drawinglayer/processor2d/vclprocessor2d.hxx>
+#endif
+
+#ifndef _COM_SUN_STAR_I18N_XBREAKITERATOR_HPP_
+#include <com/sun/star/i18n/XBreakIterator.hpp>
 #endif
 
 //////////////////////////////////////////////////////////////////////////////
@@ -82,21 +86,27 @@ namespace drawinglayer
             void impEndSvtGraphicStroke(SvtGraphicStroke* pSvtGraphicStroke);
 
             // the current clipping PolyPolygon from MaskPrimitive2D
-            basegfx::B2DPolyPolygon         maClipPolyPolygon;
+            basegfx::B2DPolyPolygon             maClipPolyPolygon;
 
             // the target MetaFile
-            GDIMetaFile&                    mrMetaFile;
+            GDIMetaFile&                        mrMetaFile;
 
             // do not allow embedding SvtGraphicFills into each other,
             // use a counter to prevent that
-            sal_uInt32                      mnSvtGraphicFillCount;
+            sal_uInt32                          mnSvtGraphicFillCount;
 
             // same for SvtGraphicStroke
-            sal_uInt32                      mnSvtGraphicStrokeCount;
+            sal_uInt32                          mnSvtGraphicStrokeCount;
 
             // hold the last unified transparence value to have ot handy
             // on SvtGraphicStroke creation
-            double                          mfCurrentUnifiedTransparence;
+            double                              mfCurrentUnifiedTransparence;
+
+            // break iterator support
+            // made static so it only needs to be fetched once, even with many single
+            // constructed VclMetafileProcessor2D. It's still incarnated on demand,
+            // but exists for OOo runtime now by purpose.
+            static ::com::sun::star::uno::Reference< ::com::sun::star::i18n::XBreakIterator >   mxBreakIterator;
 
         protected:
             // the local processor for BasePrinitive2D-Implementation based primitives,

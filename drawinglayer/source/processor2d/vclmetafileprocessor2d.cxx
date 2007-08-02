@@ -4,9 +4,9 @@
  *
  *  $RCSfile: vclmetafileprocessor2d.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: aw $ $Date: 2007-07-27 09:03:34 $
+ *  last change: $Author: aw $ $Date: 2007-08-02 11:43:45 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -135,6 +135,30 @@
 
 #ifndef _SV_METAACT_HXX
 #include <vcl/metaact.hxx>
+#endif
+
+#ifndef INCLUDED_DRAWINGLAYER_PRIMITIVE2D_TEXTFIELDPRIMITIVE2D_HXX
+#include <drawinglayer/primitive2d/textfieldprimitive2d.hxx>
+#endif
+
+#ifndef INCLUDED_DRAWINGLAYER_PRIMITIVE_TEXTDECORATEDPRIMITIVE2D_HXX
+#include <drawinglayer/primitive2d/textdecoratedprimitive2d.hxx>
+#endif
+
+#ifndef _COMPHELPER_PROCESSFACTORY_HXX_
+#include <comphelper/processfactory.hxx>
+#endif
+
+#ifndef _RTL_USTRING_HXX
+#include <rtl/ustring.hxx>
+#endif
+
+#ifndef _COM_SUN_STAR_I18N_CHARACTERITERATORMODE_HDL_
+#include <com/sun/star/i18n/CharacterIteratorMode.hdl>
+#endif
+
+#ifndef _COM_SUN_STAR_I18N_WORDTYPE_HPP_
+#include <com/sun/star/i18n/WordType.hpp>
 #endif
 
 //////////////////////////////////////////////////////////////////////////////
@@ -378,6 +402,9 @@ namespace drawinglayer
             }
         }
 
+        // init static break iterator
+        ::com::sun::star::uno::Reference< ::com::sun::star::i18n::XBreakIterator > VclMetafileProcessor2D::mxBreakIterator;
+
         VclMetafileProcessor2D::VclMetafileProcessor2D(const geometry::ViewInformation2D& rViewInformation, OutputDevice& rOutDev)
         :   VclProcessor2D(rViewInformation, rOutDev),
             mrMetaFile(*rOutDev.GetConnectMetaFile()),
@@ -433,13 +460,8 @@ namespace drawinglayer
                 PRIMITIVE2D_ID_POLYPOLYGONCOLORPRIMITIVE2D,
                 and for PRIMITIVE2D_ID_UNIFIEDALPHAPRIMITIVE2D when detected unified alpha
 
-
-
-
-            To be done:
-
-
             XPATHSTROKE_SEQ_BEGIN, XPATHSTROKE_SEQ_END:
+
             Similar to pathfill, but using SvtGraphicStroke instead. It also has two producers where one
             is also the GDIMetaFile::Rotate. Another user is MetaCommentAction::Move which modifies the
             contained path accordingly.
@@ -457,21 +479,52 @@ namespace drawinglayer
 
 
 
+            To be done:
 
 
 
 
-            FIELD_SEQ_BEGIN
+
+
+
+
+            FIELD_SEQ_BEGIN, FIELD_SEQ_END
+            Used from slideshow for URLs, created from diverse SvxField implementations inside
+            createBeginComment()/createEndComment(). createBeginComment() is used from editeng\impedit3.cxx
+            inside ImpEditEngine::Paint.
+            Created TextFieldPrimitive2D and added needed infos there; it is an group primitive and wraps
+            text primitives (but is not limited to that). It contains the Prolog string (normally FIELD_SEQ_BEGIN,
+            but there are others), the Epilog string and the URL if it was an URL field.
             FIELD_SEQ_BEGIN;PageField
             FIELD_SEQ_END
 
+
+
+
+
+
             EPSReplacementGraphic
 
+
+
             XTEXT
-            XTEXT_EOC
-            XTEXT_EOS
-            XTEXT_EOL
-            XTEXT_EOP
+
+            XTEXT_EOC(i) end of character
+            XTEXT_EOW(i) end of word
+            XTEXT_EOS(i) end of sentence
+            this three are with index and are created with the help of a i18n::XBreakIterator in
+            ImplDrawWithComments. Simplifying, moving out text painting, reworking to create some
+            data structure for holding those TEXT infos.
+
+            XTEXT_EOL() end of line
+            XTEXT_EOP() end of paragraph
+            this two are boolean marks, created by the loop in ImpEditEngine::Paint
+
+
+
+
+
+
 
             XTEXT_PAINTSHAPE_BEGIN
             XTEXT_PAINTSHAPE_END
@@ -479,20 +532,121 @@ namespace drawinglayer
             XTEXT_SCROLLRECT
             XTEXT_PAINTRECT
 
+
+
             PRNSPOOL_TRANSPARENTBITMAP_BEGIN
             PRNSPOOL_TRANSPARENTBITMAP_END
 
+
+
+
+
+            Evtl. support for vcl::PDFExtOutDevData ?!?!
         */
 
         void VclMetafileProcessor2D::processBasePrimitive2D(const primitive2d::BasePrimitive2D& rCandidate)
         {
             switch(rCandidate.getPrimitiveID())
             {
+                case PRIMITIVE2D_ID_TEXTFIELDPRIMITIVE2D :
+                {
+                    // support for FIELD_SEQ_BEGIN, FIELD_SEQ_END and URL. It wraps text primitives (but is not limited to)
+                    // thus do the extra stuff but handle recursively.
+                    const primitive2d::TextFieldPrimitive2D& rTextFieldPrimitive = static_cast< const primitive2d::TextFieldPrimitive2D& >(rCandidate);
+                    const bool bUsePrologEpilog(0 != rTextFieldPrimitive.getProlog().Len() || 0 != rTextFieldPrimitive.getEpilog().Len());
+                    const bool bIsURL(0 != rTextFieldPrimitive.getURL().Len());
+
+                    if(bUsePrologEpilog)
+                    {
+                        if(bIsURL)
+                        {
+                            const String& rURL = rTextFieldPrimitive.getURL();
+                            mrMetaFile.AddAction(new MetaCommentAction(rTextFieldPrimitive.getProlog(),
+                                0,  reinterpret_cast<const BYTE*>(rURL.GetBuffer()),
+                                2 * rURL.Len()));
+                        }
+                        else
+                        {
+                            mrMetaFile.AddAction(new MetaCommentAction(rTextFieldPrimitive.getProlog()));
+                        }
+                    }
+
+                    // process recursively
+                    process(rTextFieldPrimitive.get2DDecomposition(getViewInformation2D()));
+
+                    if(bUsePrologEpilog)
+                    {
+                        mrMetaFile.AddAction(new MetaCommentAction(rTextFieldPrimitive.getEpilog()));
+                    }
+
+                    break;
+                }
                 case PRIMITIVE2D_ID_TEXTSIMPLEPORTIONPRIMITIVE2D :
                 case PRIMITIVE2D_ID_TEXTDECORATEDPORTIONPRIMITIVE2D :
                 {
+                    // for supporting TEXT_ MetaFile actions there is more to do here; get the candidate
+                    const primitive2d::TextSimplePortionPrimitive2D& rTextCandidate = static_cast< const primitive2d::TextSimplePortionPrimitive2D& >(rCandidate);
+                    const primitive2d::TextDecoratedPortionPrimitive2D* pTextDecoratedCandidate = dynamic_cast< const primitive2d::TextDecoratedPortionPrimitive2D* >(&rCandidate);
+
                     // directdraw of text simple portion; use default processing
-                    RenderTextSimpleOrDecoratedPortionPrimitive2D(static_cast< const primitive2d::TextSimplePortionPrimitive2D& >(rCandidate));
+                    RenderTextSimpleOrDecoratedPortionPrimitive2D(rTextCandidate);
+
+                    if(pTextDecoratedCandidate)
+                    {
+                        // support for TEXT_ MetaFile actions only for decorated texts
+                        if(!mxBreakIterator.is())
+                        {
+                            ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > xMSF(::comphelper::getProcessServiceFactory());
+                            mxBreakIterator.set(xMSF->createInstance(rtl::OUString::createFromAscii("com.sun.star.i18n.BreakIterator")), ::com::sun::star::uno::UNO_QUERY);
+                        }
+
+                        if(mxBreakIterator.is())
+                        {
+                            const String& rTxt = rTextCandidate.getText();
+                            const sal_uInt16 nLen(rTxt.Len());
+
+                            if(nLen)
+                            {
+                                const ::com::sun::star::lang::Locale& rLocale = rTextCandidate.getLocale();
+
+                                sal_Int32 nDone;
+                                sal_Int32 nNextCellBreak(mxBreakIterator->nextCharacters(rTxt, 0, rLocale, ::com::sun::star::i18n::CharacterIteratorMode::SKIPCELL, 0, nDone));
+                                ::com::sun::star::i18n::Boundary nNextWordBoundary(mxBreakIterator->getWordBoundary(rTxt, 0, rLocale, ::com::sun::star::i18n::WordType::ANY_WORD, sal_True));
+                                sal_Int32 nNextSentenceBreak(mxBreakIterator->endOfSentence(rTxt, 0, rLocale));
+
+                                for(sal_Int32 i(0); i < nLen; i++)
+                                {
+                                    // create the entries for the respective break positions
+                                    if(i == nNextCellBreak)
+                                    {
+                                        mrMetaFile.AddAction(new MetaCommentAction("XTEXT_EOC", i));
+                                        nNextCellBreak = mxBreakIterator->nextCharacters(rTxt, i, rLocale, ::com::sun::star::i18n::CharacterIteratorMode::SKIPCELL, 1, nDone);
+                                    }
+                                    if(i == nNextWordBoundary.endPos)
+                                    {
+                                        mrMetaFile.AddAction(new MetaCommentAction("XTEXT_EOW", i));
+                                        nNextWordBoundary = mxBreakIterator->getWordBoundary(rTxt, i + 1, rLocale, ::com::sun::star::i18n::WordType::ANY_WORD, sal_True);
+                                    }
+                                    if(i == nNextSentenceBreak)
+                                    {
+                                        mrMetaFile.AddAction(new MetaCommentAction("XTEXT_EOS", i));
+                                        nNextSentenceBreak = mxBreakIterator->endOfSentence(rTxt, i + 1, rLocale);
+                                    }
+                                }
+                            }
+                        }
+
+                        if(pTextDecoratedCandidate->getEndOfLine())
+                        {
+                            mrMetaFile.AddAction( new MetaCommentAction( "XTEXT_EOL" ) );
+                        }
+
+                        if(pTextDecoratedCandidate->getEndOfParagraph())
+                        {
+                            mrMetaFile.AddAction( new MetaCommentAction( "XTEXT_EOP" ) );
+                        }
+                    }
+
                     break;
                 }
                 case PRIMITIVE2D_ID_POLYGONHAIRLINEPRIMITIVE2D :
@@ -550,11 +704,15 @@ namespace drawinglayer
 
                         if(aLocalPolyPolygon.count())
                         {
-                            // calculate transformation. To get the needed start offset, get the range from the
-                            // outline and compare top left with top left of FillBitmapAttribute
+                            // calculate transformation. Get real object size, all values in FillBitmapAttribute
+                            // are relative to the unified object
                             const attribute::FillBitmapAttribute& rFillBitmapAttribute = rBitmapCandidate .getFillBitmap();
                             const basegfx::B2DRange aOutlineRange(basegfx::tools::getRange(basegfx::tools::adaptiveSubdivideByAngle(aLocalPolyPolygon)));
-                            const basegfx::B2DVector aStartOffset(rFillBitmapAttribute.getTopLeft() - aOutlineRange.getMinimum());
+                            const basegfx::B2DVector aOutlineSize(aOutlineRange.getRange());
+
+                            // get absolute values
+                            const basegfx::B2DVector aFillBitmapSize(rFillBitmapAttribute.getSize() * aOutlineSize);
+                            const basegfx::B2DPoint aFillBitmapTopLeft(rFillBitmapAttribute.getTopLeft() * aOutlineSize);
 
                             // the scaling needs scale from pixel to logic coordinate system
                             const Bitmap& rBitmap = rFillBitmapAttribute.getBitmap();
@@ -570,16 +728,16 @@ namespace drawinglayer
                                 aBmpSizePixel.Height() = 1;
                             }
 
-                            const double fScaleX(rFillBitmapAttribute.getSize().getX() / aBmpSizePixel.Width());
-                            const double fScaleY(rFillBitmapAttribute.getSize().getY() / aBmpSizePixel.Height());
-
                             // setup transformation like in impgrfll
                             SvtGraphicFill::Transform aTransform;
 
-                            aTransform.matrix[0] *= fScaleX;
-                            aTransform.matrix[4] *= fScaleY;
-                            aTransform.matrix[2] += aStartOffset.getX();
-                            aTransform.matrix[5] += aStartOffset.getY();
+                            // scale values are divided by bitmap pixel sizes
+                            aTransform.matrix[0] = aFillBitmapSize.getX() / aBmpSizePixel.Width();
+                            aTransform.matrix[4] = aFillBitmapSize.getY() / aBmpSizePixel.Height();
+
+                            // translates are absolute
+                            aTransform.matrix[2] = aFillBitmapTopLeft.getX();
+                            aTransform.matrix[5] = aFillBitmapTopLeft.getY();
 
                             // setup fill graphic like in impgrfll
                             Graphic aFillGraphic = Graphic(rBitmap);
