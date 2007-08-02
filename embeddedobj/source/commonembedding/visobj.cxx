@@ -4,9 +4,9 @@
  *
  *  $RCSfile: visobj.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: vg $ $Date: 2007-05-22 19:35:35 $
+ *  last change: $Author: hr $ $Date: 2007-08-02 17:05:22 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -85,7 +85,7 @@ void SAL_CALL OCommonEmbeddedObject::setVisualAreaSize( sal_Int64 nAspect, const
         throw embed::WrongStateException( ::rtl::OUString::createFromAscii( "The own object has no persistence!\n" ),
                                     uno::Reference< uno::XInterface >( static_cast< ::cppu::OWeakObject* >(this) ) );
 
-    m_bHasCachedSize = sal_False;
+    m_bHasClonedSize = sal_False;
 
     if ( m_nObjectState == embed::EmbedStates::LOADED )
         changeState( embed::EmbedStates::RUNNING );
@@ -112,8 +112,8 @@ awt::Size SAL_CALL OCommonEmbeddedObject::getVisualAreaSize( sal_Int64 nAspect )
 
     OSL_ENSURE( nAspect != embed::Aspects::MSOLE_ICON, "For iconified objects no graphical replacement is required!\n" );
 
-    if ( m_bHasCachedSize )
-        return m_aCachedSize;
+    if ( m_bHasClonedSize )
+        return m_aClonedSize;
 
     if ( m_nObjectState == embed::EmbedStates::LOADED )
         changeState( embed::EmbedStates::RUNNING );
@@ -142,8 +142,8 @@ sal_Int32 SAL_CALL OCommonEmbeddedObject::getMapUnit( sal_Int64 nAspect )
         throw embed::WrongStateException( ::rtl::OUString::createFromAscii( "The own object has no persistence!\n" ),
                                     uno::Reference< uno::XInterface >( static_cast< ::cppu::OWeakObject* >(this) ) );
 
-    if ( m_bHasCachedSize )
-        return m_nMapUnit;
+    if ( m_bHasClonedSize )
+        return m_nClonedMapUnit;
 
     if ( m_nObjectState == embed::EmbedStates::LOADED )
         changeState( embed::EmbedStates::RUNNING );
