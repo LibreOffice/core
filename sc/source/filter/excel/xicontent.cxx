@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xicontent.cxx,v $
  *
- *  $Revision: 1.28 $
+ *  $Revision: 1.29 $
  *
- *  last change: $Author: rt $ $Date: 2007-07-06 12:37:07 $
+ *  last change: $Author: hr $ $Date: 2007-08-02 13:31:10 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -294,6 +294,9 @@ void XclImpHyperlink::ReadHlink( XclImpStream& rStrm )
 {
     XclRange aXclRange( ScAddress::UNINITIALIZED );
     rStrm >> aXclRange;
+    // #i80006# Excel silently ignores invalid hi-byte of column index (TODO: everywhere?)
+    aXclRange.maFirst.mnCol &= 0xFF;
+    aXclRange.maLast.mnCol &= 0xFF;
     String aString = ReadEmbeddedData( rStrm );
     if ( aString.Len() > 0 )
         rStrm.GetRoot().GetXFRangeBuffer().SetHyperlink( aXclRange, aString );
