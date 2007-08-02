@@ -4,9 +4,9 @@
  *
  *  $RCSfile: epptso.cxx,v $
  *
- *  $Revision: 1.99 $
+ *  $Revision: 1.100 $
  *
- *  last change: $Author: hr $ $Date: 2007-08-02 16:35:49 $
+ *  last change: $Author: hr $ $Date: 2007-08-02 18:22:59 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1642,19 +1642,19 @@ void PPTWriter::ImplWritePortions( SvStream& rOut, TextObj& rTextObj )
                 nPropertyFlags |= nCharAttr & 0x217;    // not all attributes ar inherited
             else
             {
-                if ( ( pPortion->mnCharAttrHard & 1 ) ||
+                if ( /* ( pPortion->mnCharAttrHard & 1 ) || */
                     ( mpStyleSheet->IsHardAttribute( nInstance, pPara->nDepth, CharAttr_Bold, nCharAttr ) ) )
                     nPropertyFlags |= 1;
-                if ( ( pPortion->mnCharAttrHard & 2 ) ||
+                if ( /* ( pPortion->mnCharAttrHard & 2 ) || */
                     ( mpStyleSheet->IsHardAttribute( nInstance, pPara->nDepth, CharAttr_Italic, nCharAttr ) ) )
                     nPropertyFlags |= 2;
-                if ( ( pPortion->mnCharAttrHard & 4 ) ||
+                if ( /* ( pPortion->mnCharAttrHard & 4 ) || */
                     ( mpStyleSheet->IsHardAttribute( nInstance, pPara->nDepth, CharAttr_Underline, nCharAttr ) ) )
                     nPropertyFlags |= 4;
-                if ( ( pPortion->mnCharAttrHard & 0x10 ) ||
+                if ( /* ( pPortion->mnCharAttrHard & 0x10 ) || */
                     ( mpStyleSheet->IsHardAttribute( nInstance, pPara->nDepth, CharAttr_Shadow, nCharAttr ) ) )
                     nPropertyFlags |= 0x10;
-                if ( ( pPortion->mnCharAttrHard & 0x200 ) ||
+                if ( /* ( pPortion->mnCharAttrHard & 0x200 ) || */
                     ( mpStyleSheet->IsHardAttribute( nInstance, pPara->nDepth, CharAttr_Embossed, nCharAttr ) ) )
                     nPropertyFlags |= 512;
             }
