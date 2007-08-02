@@ -4,9 +4,9 @@
  *
  *  $RCSfile: bitmap.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2007-07-05 08:33:42 $
+ *  last change: $Author: hr $ $Date: 2007-08-02 18:28:58 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -289,9 +289,9 @@ public:
 
     SAL_DLLPRIVATE static BOOL          ImplReadDIB( SvStream& rIStm, Bitmap& rBmp, ULONG nOffset );
     SAL_DLLPRIVATE static BOOL          ImplReadDIBFileHeader( SvStream& rIStm, ULONG& rOffset );
-    SAL_DLLPRIVATE static BOOL          ImplReadDIBInfoHeader( SvStream& rIStm, DIBInfoHeader& rHeader );
+    SAL_DLLPRIVATE static BOOL          ImplReadDIBInfoHeader( SvStream& rIStm, DIBInfoHeader& rHeader, sal_Bool& bTopDown );
     SAL_DLLPRIVATE static BOOL          ImplReadDIBPalette( SvStream& rIStm, BitmapWriteAccess& rAcc, BOOL bQuad );
-    SAL_DLLPRIVATE static BOOL          ImplReadDIBBits( SvStream& rIStm, DIBInfoHeader& rHeader, BitmapWriteAccess& rAcc );
+    SAL_DLLPRIVATE static BOOL          ImplReadDIBBits( SvStream& rIStm, DIBInfoHeader& rHeader, BitmapWriteAccess& rAcc, sal_Bool bTopDown );
     SAL_DLLPRIVATE BOOL                 ImplWriteDIB( SvStream& rOStm, BitmapReadAccess& rAcc, BOOL bCompressed ) const;
     SAL_DLLPRIVATE static BOOL          ImplWriteDIBFileHeader( SvStream& rOStm, BitmapReadAccess& rAcc );
     SAL_DLLPRIVATE static BOOL          ImplWriteDIBPalette( SvStream& rOStm, BitmapReadAccess& rAcc );
