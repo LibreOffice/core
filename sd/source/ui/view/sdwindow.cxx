@@ -4,9 +4,9 @@
  *
  *  $RCSfile: sdwindow.cxx,v $
  *
- *  $Revision: 1.35 $
+ *  $Revision: 1.36 $
  *
- *  last change: $Author: kz $ $Date: 2006-12-12 19:21:28 $
+ *  last change: $Author: hr $ $Date: 2007-08-02 17:24:43 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -127,6 +127,9 @@ Window::Window(::Window* pParent)
     // Hilfe-ID setzen
     // SetHelpId(HID_SD_WIN_DOCUMENT);
     SetUniqueId(HID_SD_WIN_DOCUMENT);
+
+    // #i78183# Added after discussed with AF
+    EnableRTL(FALSE);
 }
 
 /*************************************************************************
