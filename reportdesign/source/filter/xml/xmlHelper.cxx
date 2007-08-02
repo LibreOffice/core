@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xmlHelper.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2007-07-09 11:56:17 $
+ *  last change: $Author: hr $ $Date: 2007-08-02 14:33:46 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -416,6 +416,8 @@ void OXMLHelper::copyStyleElements(const ::rtl::OUString& _sStyleName,const SvXM
         };
         try
         {
+            pAutoStyle->FillPropertySet(_xProp);
+
             uno::Reference<beans::XPropertySet> xProp = comphelper::GenericPropertySet_CreateInstance(new comphelper::PropertySetInfo(pMap));
             pAutoStyle->FillPropertySet(xProp);
             xProp->getPropertyValue(PROPERTY_FONTNAME) >>=          aFont.Name;
@@ -435,13 +437,13 @@ void OXMLHelper::copyStyleElements(const ::rtl::OUString& _sStyleName,const SvXM
             xProp->getPropertyValue(PROPERTY_CHARWORDMODE) >>=  aFont.WordLineMode;
             xProp->getPropertyValue(PROPERTY_FONTTYPE) >>=          aFont.Type;
             uno::Reference<report::XReportControlFormat> xReportControlModel(_xProp,uno::UNO_QUERY);
-            if ( xReportControlModel.is() )
+            if ( xReportControlModel.is() && aFont.Name.getLength() )
                 try
                 {
                     xReportControlModel->setFontDescriptor(aFont);
                 }
                 catch(beans::UnknownPropertyException){}
-            pAutoStyle->FillPropertySet(_xProp);
+
             if ( xReportControlModel.is() )
             {
                 sal_Int16 nTextAlign = xReportControlModel->getParaAdjust();
