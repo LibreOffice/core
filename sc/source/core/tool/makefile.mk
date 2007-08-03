@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.21 $
+#   $Revision: 1.22 $
 #
-#   last change: $Author: rt $ $Date: 2007-07-24 09:23:45 $
+#   last change: $Author: hr $ $Date: 2007-08-03 13:07:55 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -71,6 +71,7 @@ SLOFILES =  \
         $(SLO)$/chartarr.obj \
         $(SLO)$/chartpos.obj \
         $(SLO)$/chartlis.obj \
+        $(SLO)$/chartlock.obj \
         $(SLO)$/chgtrack.obj \
         $(SLO)$/chgviset.obj \
         $(SLO)$/collect.obj  \
@@ -120,6 +121,7 @@ EXCEPTIONSFILES= \
         $(SLO)$/addincol.obj \
         $(SLO)$/cellkeytranslator.obj \
         $(SLO)$/chartarr.obj \
+        $(SLO)$/chartlock.obj \
         $(SLO)$/compiler.obj \
         $(SLO)$/interpr1.obj \
         $(SLO)$/interpr2.obj \
