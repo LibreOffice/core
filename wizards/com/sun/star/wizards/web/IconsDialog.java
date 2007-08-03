@@ -4,9 +4,9 @@
  *
  *  $RCSfile: IconsDialog.java,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: obo $ $Date: 2006-07-13 12:20:31 $
+ *  last change: $Author: hr $ $Date: 2007-08-03 13:56:08 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -34,6 +34,7 @@
  ************************************************************************/
 package com.sun.star.wizards.web;
 
+import com.sun.star.wizards.ui.UIConsts;
 import javax.swing.ListModel;
 
 import com.sun.star.awt.Size;
