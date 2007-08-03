@@ -4,9 +4,9 @@
  *
  *  $RCSfile: doc.cxx,v $
  *
- *  $Revision: 1.58 $
+ *  $Revision: 1.59 $
  *
- *  last change: $Author: obo $ $Date: 2007-07-17 13:05:50 $
+ *  last change: $Author: hr $ $Date: 2007-08-03 10:59:51 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1169,9 +1169,13 @@ void SwDoc::UpdateDocStat( SwDocStat& rStat )
         aStat[n].Name = ::rtl::OUString::createFromAscii("CharacterCount");
         aStat[n++].Value <<= (sal_Int32)rStat.nChar;
 
-        com::sun::star::uno::Reference < com::sun::star::beans::XPropertySet > xSet( pSwgInfo->GetInfo(), com::sun::star::uno::UNO_QUERY );
-        if ( xSet.is() )
-            xSet->setPropertyValue( ::rtl::OUString::createFromAscii("DocumentStatistic"), com::sun::star::uno::makeAny( aStat ) );
+        // For e.g. autotext documents there is no pSwgInfo (#i79945)
+        if( pSwgInfo )
+        {
+            com::sun::star::uno::Reference < com::sun::star::beans::XPropertySet > xSet( pSwgInfo->GetInfo(), com::sun::star::uno::UNO_QUERY );
+            if ( xSet.is() )
+                xSet->setPropertyValue( ::rtl::OUString::createFromAscii("DocumentStatistic"), com::sun::star::uno::makeAny( aStat ) );
+        }
 
         // event. Stat. Felder Updaten
         SwFieldType *pType = GetSysFldType(RES_DOCSTATFLD);
