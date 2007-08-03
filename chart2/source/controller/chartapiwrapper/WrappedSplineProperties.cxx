@@ -4,9 +4,9 @@
  *
  *  $RCSfile: WrappedSplineProperties.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2007-07-25 08:29:09 $
+ *  last change: $Author: hr $ $Date: 2007-08-03 12:33:26 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -97,7 +97,7 @@ public:
                 ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet > xChartTypePropertySet( aChartTypes[nN], ::com::sun::star::uno::UNO_QUERY );
 
                 Any aSingleValue = this->convertInnerToOuterValue( xChartTypePropertySet->getPropertyValue(m_aOwnInnerName) );
-                PROPERTYTYPE aCurValue;
+                PROPERTYTYPE aCurValue = PROPERTYTYPE();
                 aSingleValue >>= aCurValue;
                 if( !bHasDetectableInnerValue )
                     rValue = aCurValue;

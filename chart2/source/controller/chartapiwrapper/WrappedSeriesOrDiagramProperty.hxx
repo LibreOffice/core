@@ -4,9 +4,9 @@
  *
  *  $RCSfile: WrappedSeriesOrDiagramProperty.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2007-07-25 08:28:57 $
+ *  last change: $Author: hr $ $Date: 2007-08-03 12:33:14 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -123,7 +123,7 @@ public:
     void setPropertyValue( const ::com::sun::star::uno::Any& rOuterValue, const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& xInnerPropertySet ) const
                     throw (::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::beans::PropertyVetoException, ::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException)
     {
-        PROPERTYTYPE aNewValue;
+        PROPERTYTYPE aNewValue = PROPERTYTYPE();
         if( ! (rOuterValue >>= aNewValue) )
             throw ::com::sun::star::lang::IllegalArgumentException( C2U("statistic property requires different type"), 0, 0 );
 
@@ -132,7 +132,7 @@ public:
             m_aOuterValue = rOuterValue;
 
             bool bHasAmbiguousValue = false;
-            PROPERTYTYPE aOldValue;
+            PROPERTYTYPE aOldValue = PROPERTYTYPE();
             if( detectInnerValue( aOldValue, bHasAmbiguousValue ) )
             {
                 if( bHasAmbiguousValue || aNewValue != aOldValue )

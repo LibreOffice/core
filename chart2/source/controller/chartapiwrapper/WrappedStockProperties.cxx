@@ -4,9 +4,9 @@
  *
  *  $RCSfile: WrappedStockProperties.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2007-07-25 08:29:33 $
+ *  last change: $Author: hr $ $Date: 2007-08-03 12:33:52 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -107,7 +107,7 @@ WrappedStockProperty::~WrappedStockProperty()
 void WrappedStockProperty::setPropertyValue( const ::com::sun::star::uno::Any& rOuterValue, const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& /*xInnerPropertySet*/ ) const
                 throw (::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::beans::PropertyVetoException, ::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException)
 {
-    sal_Bool bNewValue;
+    sal_Bool bNewValue = false;
     if( ! (rOuterValue >>= bNewValue) )
         throw lang::IllegalArgumentException( C2U("stock properties require type sal_Bool"), 0, 0 );
 

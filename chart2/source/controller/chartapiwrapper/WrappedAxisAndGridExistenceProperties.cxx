@@ -4,9 +4,9 @@
  *
  *  $RCSfile: WrappedAxisAndGridExistenceProperties.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2007-07-25 08:28:11 $
+ *  last change: $Author: hr $ $Date: 2007-08-03 12:32:08 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -169,11 +169,11 @@ WrappedAxisAndGridExistenceProperty::~WrappedAxisAndGridExistenceProperty()
 void WrappedAxisAndGridExistenceProperty::setPropertyValue( const Any& rOuterValue, const Reference< beans::XPropertySet >& xInnerPropertySet ) const
                 throw (beans::UnknownPropertyException, beans::PropertyVetoException, lang::IllegalArgumentException, lang::WrappedTargetException, uno::RuntimeException)
 {
-    sal_Bool bNewValue;
+    sal_Bool bNewValue = false;
     if( ! (rOuterValue >>= bNewValue) )
         throw lang::IllegalArgumentException( C2U("Has axis or grid properties require boolean values"), 0, 0 );
 
-    sal_Bool bOldValue;
+    sal_Bool bOldValue = false;
     getPropertyValue( xInnerPropertySet ) >>= bOldValue;
 
     if( bOldValue == bNewValue )
@@ -286,11 +286,11 @@ WrappedAxisTitleExistenceProperty::~WrappedAxisTitleExistenceProperty()
 void WrappedAxisTitleExistenceProperty::setPropertyValue( const Any& rOuterValue, const Reference< beans::XPropertySet >& xInnerPropertySet ) const
                 throw (beans::UnknownPropertyException, beans::PropertyVetoException, lang::IllegalArgumentException, lang::WrappedTargetException, uno::RuntimeException)
 {
-    sal_Bool bNewValue;
+    sal_Bool bNewValue = false;
     if( ! (rOuterValue >>= bNewValue) )
         throw lang::IllegalArgumentException( C2U("Has axis or grid properties require boolean values"), 0, 0 );
 
-    sal_Bool bOldValue;
+    sal_Bool bOldValue = false;
     getPropertyValue( xInnerPropertySet ) >>= bOldValue;
 
     if( bOldValue == bNewValue )
@@ -397,11 +397,11 @@ WrappedAxisLabelExistenceProperty::~WrappedAxisLabelExistenceProperty()
 void WrappedAxisLabelExistenceProperty::setPropertyValue( const Any& rOuterValue, const Reference< beans::XPropertySet >& xInnerPropertySet ) const
                 throw (beans::UnknownPropertyException, beans::PropertyVetoException, lang::IllegalArgumentException, lang::WrappedTargetException, uno::RuntimeException)
 {
-    sal_Bool bNewValue;
+    sal_Bool bNewValue = false;
     if( ! (rOuterValue >>= bNewValue) )
         throw lang::IllegalArgumentException( C2U("Has axis or grid properties require boolean values"), 0, 0 );
 
-    sal_Bool bOldValue;
+    sal_Bool bOldValue = false;
     getPropertyValue( xInnerPropertySet ) >>= bOldValue;
 
     if( bOldValue == bNewValue )

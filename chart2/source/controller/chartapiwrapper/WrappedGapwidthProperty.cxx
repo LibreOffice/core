@@ -4,9 +4,9 @@
  *
  *  $RCSfile: WrappedGapwidthProperty.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2007-07-25 08:28:34 $
+ *  last change: $Author: hr $ $Date: 2007-08-03 12:32:35 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -87,7 +87,7 @@ WrappedBarPositionProperty_Base::~WrappedBarPositionProperty_Base()
 void WrappedBarPositionProperty_Base::setPropertyValue( const Any& rOuterValue, const Reference< beans::XPropertySet >& /*xInnerPropertySet*/ ) const
                 throw (beans::UnknownPropertyException, beans::PropertyVetoException, lang::IllegalArgumentException, lang::WrappedTargetException, uno::RuntimeException)
 {
-    sal_Int32 nNewValue;
+    sal_Int32 nNewValue = 0;
     if( ! (rOuterValue >>= nNewValue) )
         throw lang::IllegalArgumentException( C2U("GapWidth and Overlap property require value of type sal_Int32"), 0, 0 );
 

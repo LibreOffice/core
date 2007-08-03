@@ -4,9 +4,9 @@
  *
  *  $RCSfile: WrappedCharacterHeightProperty.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2007-07-25 08:28:23 $
+ *  last change: $Author: hr $ $Date: 2007-08-03 12:32:23 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -99,7 +99,7 @@ Any WrappedCharacterHeightProperty_Base::getPropertyValue( const Reference< bean
     if( xInnerPropertySet.is() )
     {
         aRet = xInnerPropertySet->getPropertyValue( m_aInnerName );
-        float fHeight;
+        float fHeight = 0;
         if( aRet >>= fHeight )
         {
             if( m_pRefSizePropProvider )
