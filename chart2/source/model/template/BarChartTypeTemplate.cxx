@@ -4,9 +4,9 @@
  *
  *  $RCSfile: BarChartTypeTemplate.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: rt $ $Date: 2007-07-25 08:52:50 $
+ *  last change: $Author: hr $ $Date: 2007-08-03 12:35:37 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -204,7 +204,7 @@ sal_Bool SAL_CALL BarChartTypeTemplate::matchesTemplate(
         {
             try
             {
-                sal_Int32 aGeom;
+                sal_Int32 aGeom = 0;
                 Reference< beans::XPropertySet > xProp( *aIt, uno::UNO_QUERY_THROW );
                 if( xProp->getPropertyValue( C2U( "Geometry3D" )) >>= aGeom )
                 {
