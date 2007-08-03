@@ -4,9 +4,9 @@
  *
  *  $RCSfile: command.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: hr $ $Date: 2007-06-27 22:05:51 $
+ *  last change: $Author: hr $ $Date: 2007-08-03 12:30:11 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -195,6 +195,8 @@ CommandLine& CommandLine::operator=(const CommandLine& CCommandLine)
         delete [] ppArgv[i];
     }
     delete [] ppArgv;
+        ppArgv = new char * [1];
+        ppArgv[0] = NULL;
     BuildCommand(CommandBuffer);
     return *this;
 }
@@ -208,6 +210,8 @@ CommandLine& CommandLine::operator=(const char *CommandString)
         delete [] ppArgv[i];
     }
     delete [] ppArgv;
+        ppArgv = new char * [1];
+        ppArgv[0] = NULL;
     BuildCommand(CommandBuffer);
 
     return *this;
