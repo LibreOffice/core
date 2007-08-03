@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.3 $
+#   $Revision: 1.4 $
 #
-#   last change: $Author: rt $ $Date: 2005-09-09 12:20:03 $
+#   last change: $Author: hr $ $Date: 2007-08-03 10:17:39 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -60,24 +60,28 @@ SHL1STDLIBS=\
        $(SALLIB) \
         $(CPPUHELPERLIB) \
         $(COMPHELPERLIB) \
-        $(CPPULIB) 
+        $(CPPULIB) \
+        $(CPPUNITLIB)
 
-.IF "$(GUI)" == "WNT"
-SHL1STDLIBS+=	$(SOLARLIBDIR)$/cppunit.lib
-.ENDIF
-.IF "$(GUI)" == "UNX"
-SHL1STDLIBS+=$(SOLARLIBDIR)$/libcppunit$(DLLPOSTFIX).a
-.ENDIF
+# link $(CPPUNIT) to SHL1STDLIBS instead
+# .IF "$(GUI)" == "WNT"
+# SHL1STDLIBS+=	$(SOLARLIBDIR)$/cppunit.lib
+# .ENDIF
+# .IF "$(GUI)" == "UNX"
+# SHL1STDLIBS+=$(SOLARLIBDIR)$/libcppunit$(DLLPOSTFIX).a
+# .ENDIF
 
 SHL1IMPLIB= i$(SHL1TARGET)
-SHL1DEF=    $(MISC)$/$(SHL1TARGET).def
+# SHL1DEF=    $(MISC)$/$(SHL1TARGET).def
 
 DEF1NAME    =$(SHL1TARGET)
-DEF1EXPORTFILE= export.exp
+# DEF1EXPORTFILE= export.exp
+SHL1VERSIONMAP = export.map
 
 
 
 # --- Targets ------------------------------------------------------
 
 .INCLUDE :  target.mk
+.INCLUDE : _cppunit.mk
 
