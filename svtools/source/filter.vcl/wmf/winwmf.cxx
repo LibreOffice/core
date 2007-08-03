@@ -4,9 +4,9 @@
  *
  *  $RCSfile: winwmf.cxx,v $
  *
- *  $Revision: 1.34 $
+ *  $Revision: 1.35 $
  *
- *  last change: $Author: hr $ $Date: 2007-08-03 11:51:07 $
+ *  last change: $Author: hr $ $Date: 2007-08-03 12:28:27 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -893,7 +893,7 @@ void WMFReader::ReadRecordParams( USHORT nFunc )
                                 break;
                             }
                         }
-                        delete pData;
+                        delete[] pData;
                     }
                 }
             }
