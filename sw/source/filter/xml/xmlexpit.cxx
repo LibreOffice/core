@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xmlexpit.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: kz $ $Date: 2007-05-10 16:12:10 $
+ *  last change: $Author: hr $ $Date: 2007-08-03 12:58:28 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -150,7 +150,8 @@ using namespace ::xmloff::token;
 using ::com::sun::star::uno::Any;
 
 /** fills the given attribute list with the items in the given set */
-void SvXMLExportItemMapper::exportXML( SvXMLAttributeList& rAttrList,
+void SvXMLExportItemMapper::exportXML( const SvXMLExport& rExport,
+                                SvXMLAttributeList& rAttrList,
                                 const SfxItemSet& rSet,
                                 const SvXMLUnitConverter& rUnitConverter,
                                 const SvXMLNamespaceMap& rNamespaceMap,
@@ -182,7 +183,7 @@ void SvXMLExportItemMapper::exportXML( SvXMLAttributeList& rAttrList,
                 }
                 else
                 {
-                    exportXML( rAttrList, *pItem, *pEntry, rUnitConverter,
+                    exportXML( rExport, rAttrList, *pItem, *pEntry, rUnitConverter,
                                   rNamespaceMap, nFlags, &rSet );
                 }
             }
@@ -196,7 +197,8 @@ void SvXMLExportItemMapper::exportXML( SvXMLAttributeList& rAttrList,
     }
 }
 
-void SvXMLExportItemMapper::exportXML( SvXMLAttributeList& rAttrList,
+void SvXMLExportItemMapper::exportXML( const SvXMLExport& rExport,
+                                 SvXMLAttributeList& rAttrList,
                                  const SfxPoolItem& rItem,
                                  const SvXMLItemMapEntry& rEntry,
                                  const SvXMLUnitConverter& rUnitConverter,
@@ -208,15 +210,33 @@ void SvXMLExportItemMapper::exportXML( SvXMLAttributeList& rAttrList,
     {
         if( rItem.ISA( SwFmtRowSplit ) )
         {
-            OUStringBuffer aOut;
-            const SfxBoolItem* pSplit = PTR_CAST(SfxBoolItem, &rItem);
-            DBG_ASSERT( pSplit != NULL, "Wrong Which-ID" );
-            sal_uInt16 eEnum = pSplit->GetValue() ? 1 : 0;
-            rUnitConverter.convertEnum( aOut, eEnum, aXML_KeepTogetherType );
-            OUString aValue = aOut.makeStringAndClear();
-            OUString sName( rNamespaceMap.GetQNameByKey( rEntry.nNameSpace,
-                            GetXMLToken(rEntry.eLocalName) ) );
-            rAttrList.AddAttribute( sName, aValue );
+            OUString aValue;
+            bool bAddAttribute = true;
+            if( rEntry.nNameSpace == XML_NAMESPACE_STYLE )
+            {
+                if( (rExport.getExportFlags() & EXPORT_SAVEBACKWARDCOMPATIBLE ) == 0 ||
+                    !QueryXMLValue(rItem, aValue,
+                    static_cast< sal_uInt16 >( rEntry.nMemberId & MID_SW_FLAG_MASK ),
+                    rUnitConverter ) )
+                {
+                    bAddAttribute = false;
+                }
+            }
+            else
+            {
+                OUStringBuffer aOut;
+                const SfxBoolItem* pSplit = PTR_CAST(SfxBoolItem, &rItem);
+                DBG_ASSERT( pSplit != NULL, "Wrong Which-ID" );
+                sal_uInt16 eEnum = pSplit->GetValue() ? 1 : 0;
+                rUnitConverter.convertEnum( aOut, eEnum, aXML_KeepTogetherType );
+                aValue = aOut.makeStringAndClear();
+            }
+            if( bAddAttribute )
+            {
+                OUString sName( rNamespaceMap.GetQNameByKey( rEntry.nNameSpace,
+                                GetXMLToken(rEntry.eLocalName) ) );
+                rAttrList.AddAttribute( sName, aValue );
+            }
         }
         if( rItem.ISA( SvXMLAttrContainerItem ) )
         {
@@ -369,7 +389,7 @@ void SvXMLExportItemMapper::exportXML( SvXMLExport& rExport,
 {
     SvUShorts aIndexArray;
 
-    exportXML( rExport.GetAttrList(), rSet, rUnitConverter,
+    exportXML( rExport, rExport.GetAttrList(), rSet, rUnitConverter,
                rExport.GetNamespaceMap(), nFlags, &aIndexArray );
 
     if( rExport.GetAttrList().getLength() > 0L ||
