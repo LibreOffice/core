@@ -6,9 +6,9 @@
  *
  *  $RCSfile: ViewsWindow.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: hr $ $Date: 2007-08-02 14:37:50 $
+ *  last change: $Author: hr $ $Date: 2007-08-03 10:01:53 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -141,6 +141,7 @@ namespace rptui
         svtools::ColorConfig                    m_aColorConfig;
         OReportWindow*                          m_pParent;
         ::rtl::OUString                         m_sShapeType;
+        Point                                   m_aPoint;
         sal_Bool                                m_bInSplitHandler;
         sal_Bool                                m_bInUnmark;
 
@@ -317,13 +318,28 @@ namespace rptui
         /** calls on every section BrkAction
         *
         */
-        void breakAction();
-
-        void BegDragObj(const Point& _aPnt, SdrHdl* _pHdl);
-        void EndDragObj(BOOL _bCopy = FALSE);
+        void BrkAction();
+        void BegMarkObj(const Point& _aPnt,const OSectionView* _pSection);
+        void BegDragObj(const Point& _aPnt, SdrHdl* _pHdl,const OSectionView* _pSection);
+        void EndDragObj(BOOL _bDragIntoNewSection,const OSectionView* _pSection,const Point& _aPnt);
         void EndAction();
+        void ForceMarkedToAnotherPage();
+        BOOL IsAction() const;
+        BOOL IsDragObj() const;
+        void handleKey(const KeyCode& _rCode);
+        void stopScrollTimer();
 
-        void MovAction(const Point& rPnt);
+        /** return the section at the given point which is relative to the given section
+        *
+        * \param _pSection the section which is used as reference point
+        * \param _rPnt the point, it will be changed that it is inside the section which will be returned
+        * \return the section
+        */
+        OSectionView* getSectionRelativeToPosition(const OSectionView* _pSection,Point& _rPnt);
+
+        void MovAction(const Point& rPnt,const OSectionView* _pSection,bool _bMove = true);
+        void setPoint(const Point& _aPnt);
+        inline Point getPoint() const { return m_aPoint; }
 
         sal_uInt32 getMarkedObjectCount() const;
     };
