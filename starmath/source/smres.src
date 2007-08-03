@@ -4,9 +4,9 @@
  *
  *  $RCSfile: smres.src,v $
  *
- *  $Revision: 1.116 $
+ *  $Revision: 1.117 $
  *
- *  last change: $Author: ihi $ $Date: 2007-04-19 15:16:49 $
+ *  last change: $Author: hr $ $Date: 2007-08-03 13:54:09 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1294,6 +1294,16 @@ ModalDialog RID_SYMDEFINEDIALOG
         Center = TRUE ;
         Pos  = MAP_APPFONT ( 303 , 182 ) ;
         Size = MAP_APPFONT ( 54 , 8 ) ;
+    };
+    Image 1
+    {
+        ImageBitmap = Bitmap { File = "ar_right.bmp" ; };
+        MaskColor = IMAGE_STDBTN_COLOR ;
+    };
+    Image 2
+    {
+        ImageBitmap = Bitmap { File = "ar_right_h.bmp" ; };
+        MaskColor = IMAGE_STDBTN_COLOR ;
     };
     FixedImage BMP_ARROW_RIGHT
     {
