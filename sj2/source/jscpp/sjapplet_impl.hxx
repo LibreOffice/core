@@ -12,6 +12,7 @@
 #endif // SOLAR_JAVA
 
 #include "rtl/ref.hxx"
+#include "com/sun/star/uno/Reference.hxx"
 #include "jvmaccess/virtualmachine.hxx"
 
 class Window;
