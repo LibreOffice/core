@@ -4,9 +4,9 @@
  *
  *  $RCSfile: prhdlfac.cxx,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: hr $ $Date: 2007-06-27 15:42:57 $
+ *  last change: $Author: hr $ $Date: 2007-08-03 12:54:30 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -501,6 +501,9 @@ const XMLPropertyHandler* XMLPropertyHandlerFactory::CreatePropertyHandler( sal_
             break;
         case XML_TYPE_NUMBER16_NO_ZERO:
             pPropHdl = new XMLNumberWithoutZeroPropHdl( 2 );
+            break;
+        case XML_TYPE_NUMBER16_AUTO:
+            pPropHdl = new XMLNumberWithAutoInsteadZeroPropHdl();
             break;
     }
 
