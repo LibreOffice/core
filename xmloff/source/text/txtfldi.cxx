@@ -4,9 +4,9 @@
  *
  *  $RCSfile: txtfldi.cxx,v $
  *
- *  $Revision: 1.64 $
+ *  $Revision: 1.65 $
  *
- *  last change: $Author: hr $ $Date: 2007-06-27 16:15:02 $
+ *  last change: $Author: hr $ $Date: 2007-08-03 12:55:24 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -619,6 +619,7 @@ XMLTextFieldImportContext::CreateTextFieldImportContext(
                                                       nPrefix, rName );
             break;
         case XML_TOK_TEXT_PAGE_CONTINUATION_STRING:
+        case XML_TOK_TEXT_PAGE_CONTINUATION:
             pContext = new XMLPageContinuationImportContext( rImport, rHlp,
                                                              nPrefix, rName );
             break;
