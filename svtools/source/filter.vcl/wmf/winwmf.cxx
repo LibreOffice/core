@@ -4,9 +4,9 @@
  *
  *  $RCSfile: winwmf.cxx,v $
  *
- *  $Revision: 1.33 $
+ *  $Revision: 1.34 $
  *
- *  last change: $Author: ihi $ $Date: 2006-11-14 15:42:51 $
+ *  last change: $Author: hr $ $Date: 2007-08-03 11:51:07 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -307,9 +307,16 @@ void WMFReader::ReadRecordParams( USHORT nFunc )
 
         case W_META_PIE:
         {
-            Point aEnd( ReadYX() );
-            Point aStart( ReadYX() );
-            pOut->DrawPie( ReadRectangle(), aStart, aEnd );
+            Point     aEnd( ReadYX() );
+            Point     aStart( ReadYX() );
+            Rectangle aRect( ReadRectangle() );
+
+            // #i73608# OutputDevice deviates from WMF
+            // semantics. start==end means full ellipse here.
+            if( aStart == aEnd )
+                pOut->DrawEllipse( aRect );
+            else
+                pOut->DrawPie( aRect, aStart, aEnd );
         }
         break;
 
