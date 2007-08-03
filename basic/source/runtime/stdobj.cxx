@@ -4,9 +4,9 @@
  *
  *  $RCSfile: stdobj.cxx,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: hr $ $Date: 2007-06-27 14:26:41 $
+ *  last change: $Author: hr $ $Date: 2007-08-03 09:56:10 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -177,7 +177,7 @@ static Methods aMethods[] = {
 { "CVErr",          SbxVARIANT,   1 | _FUNCTION, RTLNAME(CVErr),0           },
   { "expression",   SbxVARIANT, 0,NULL,0 },
 
-{ "Date",           SbxSTRING,        _LFUNCTION,RTLNAME(Date),0            },
+{ "Date",           SbxDATE,          _LFUNCTION,RTLNAME(Date),0            },
 { "DateAdd",        SbxDATE,      3 | _FUNCTION, RTLNAME(DateAdd),0         },
   { "Interval",     SbxSTRING, 0,NULL,0 },
   { "Number",       SbxLONG, 0,NULL,0 },
