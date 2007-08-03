@@ -4,9 +4,9 @@
  *
  *  $RCSfile: LabelPositionHelper.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: vg $ $Date: 2007-05-22 19:24:00 $
+ *  last change: $Author: hr $ $Date: 2007-08-03 12:37:24 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -128,7 +128,7 @@ void lcl_doDynamicFontResize( uno::Any* pAOldAndNewFontHeightAny
                           , const awt::Size& rOldReferenceSize
                           , const awt::Size& rNewReferenceSize  )
 {
-    double fOldFontHeight, fNewFontHeight;
+    double fOldFontHeight = 0, fNewFontHeight;
     if( pAOldAndNewFontHeightAny && ( *pAOldAndNewFontHeightAny >>= fOldFontHeight ) )
     {
         fNewFontHeight = RelativeSizeHelper::calculate( fOldFontHeight, rOldReferenceSize, rNewReferenceSize );
