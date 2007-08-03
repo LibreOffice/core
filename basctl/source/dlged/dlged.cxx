@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dlged.cxx,v $
  *
- *  $Revision: 1.50 $
+ *  $Revision: 1.51 $
  *
- *  last change: $Author: hr $ $Date: 2007-08-02 17:31:03 $
+ *  last change: $Author: hr $ $Date: 2007-08-03 09:59:18 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -929,20 +929,6 @@ void DlgEditor::Copy()
     Reference< XInputStream > xStream( xISP->createInputStream() );
     Sequence< sal_Int8 > DialogModelBytes;
     implCopyStreamToByteSequence( xStream, DialogModelBytes );
-    /*
-    sal_Int32 nRead = xStream->readBytes( bytes, xStream->available() );
-    for (;;)
-    {
-        Sequence< sal_Int8 > readBytes;
-        nRead = xStream->readBytes( readBytes, 1024 );
-        if (! nRead)
-            break;
-
-        sal_Int32 nPos = bytes.getLength();
-        bytes.realloc( nPos + nRead );
-        ::rtl_copyMemory( bytes.getArray() + nPos, readBytes.getConstArray(), (sal_uInt32)nRead );
-    }
-    */
     xStream->closeInput();
 
     // set clipboard content
@@ -1175,7 +1161,7 @@ void DlgEditor::Paste()
                             {
                                 Reference< resource::XStringResourceResolver >
                                     xSourceStringResolver( xStringResourcePersistence, UNO_QUERY );
-                                LocalizationMgr::moveResourcesForPastedEditorObject( this,
+                                LocalizationMgr::copyResourcesForPastedEditorObject( this,
                                     aControlAny, aOUniqueName, xSourceStringResolver );
                             }
                             else
