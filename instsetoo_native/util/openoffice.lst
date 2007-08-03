@@ -263,7 +263,7 @@ BrOffice
 		script			setup_osl
 		downloadname	BrOo_{productversion}_{os}_install_{languages}
 		langpackdownloadname	BrOo_{productversion}_languagepack_{os}_install_{languages}
-		include			.,{localcommonpath}/bin,{localpath}/bin,{solarpath}/bin.{minor}/broffice,{solarpath}/bin.{minor}/osl,{solarpath}/bin.{minor}/desktop-integration/{pkgtype},{solarpath}/bin.{minor},{solarpath}/lib.{minor},{solarpath}/pck.{minor}/broffice,{solarpath}/pck.{minor}/openoffice,{solarpath}/pck.{minor},{solarpath}/xml.{minor}/office/instance,{solarpath}/xml.{minor},{solarcommonpath}/bin.{minor},{solarcommonpath}/pck.{minor}/broffice,{solarcommonpath}/pck.{minor}/openoffice,{solarcommonpath}/pck.{minor},../../external/common,{solarenvpath}/{os}/OOo_external
+		include			.,{localpath}/bin/broffice,{localcommonpath}/bin,{localpath}/bin,{solarpath}/bin.{minor}/broffice,{solarpath}/bin.{minor}/osl,{solarpath}/bin.{minor}/desktop-integration/{pkgtype},{solarpath}/bin.{minor},{solarpath}/lib.{minor},{solarpath}/pck.{minor}/broffice,{solarpath}/pck.{minor}/openoffice,{solarpath}/pck.{minor},{solarpath}/xml.{minor}/office/instance,{solarpath}/xml.{minor},{solarcommonpath}/bin.{minor},{solarcommonpath}/pck.{minor}/broffice,{solarcommonpath}/pck.{minor}/openoffice,{solarcommonpath}/pck.{minor},../../external/common,{solarenvpath}/{os}/OOo_external
 		fail sun.star.releng.pack.errors@staroffice-news.germany.sun.com
 		mailinfo ms-eham02-01,packager,packager
 	}
@@ -313,7 +313,7 @@ BrOffice_wJRE
 		compression		5
 		script			setup_osljre
 		downloadname	BrOo_{productversion}_{os}_installwjre_{languages}
-		include			.,{localcommonpath}/bin,{localpath}/bin,{solarpath}/bin.{minor}/broffice,{solarpath}/bin.{minor}/osl,{solarpath}/bin.{minor}/desktop-integration/{pkgtype},{solarpath}/bin.{minor},{solarpath}/lib.{minor},{solarpath}/pck.{minor}/broffice,{solarpath}/pck.{minor}/openoffice,{solarpath}/pck.{minor},{solarpath}/xml.{minor}/office/instance,{solarpath}/xml.{minor},{solarcommonpath}/bin.{minor},{solarcommonpath}/pck.{minor}/broffice,{solarcommonpath}/pck.{minor}/openoffice,{solarcommonpath}/pck.{minor},../../external/common,{solarenvpath}/{os}/OOo_external
+		include			.,{localpath}/bin/broffice,{localcommonpath}/bin,{localpath}/bin,{solarpath}/bin.{minor}/broffice,{solarpath}/bin.{minor}/osl,{solarpath}/bin.{minor}/desktop-integration/{pkgtype},{solarpath}/bin.{minor},{solarpath}/lib.{minor},{solarpath}/pck.{minor}/broffice,{solarpath}/pck.{minor}/openoffice,{solarpath}/pck.{minor},{solarpath}/xml.{minor}/office/instance,{solarpath}/xml.{minor},{solarcommonpath}/bin.{minor},{solarcommonpath}/pck.{minor}/broffice,{solarcommonpath}/pck.{minor}/openoffice,{solarcommonpath}/pck.{minor},../../external/common,{solarenvpath}/{os}/OOo_external
 		fail sun.star.releng.pack.errors@staroffice-news.germany.sun.com
 		mailinfo ms-eham02-01,packager,packager
 	}
@@ -364,7 +364,7 @@ BrOffice_Dev
 		script			setup_osl
 		downloadname	BrOo-dev_{productversion}_{os}_install_{languages}
 		langpackdownloadname	BrOo_{productversion}_languagepack_{os}_install_{languages}
-		include			.,{localcommonpath}/bin,{localpath}/bin,{solarpath}/bin.{minor}/broffice,{solarpath}/bin.{minor}/osl,{solarpath}/bin.{minor},{solarpath}/lib.{minor},{solarpath}/pck.{minor}/broffice,{solarpath}/pck.{minor}/openoffice,{solarpath}/pck.{minor},{solarpath}/xml.{minor}/office/instance,{solarpath}/xml.{minor},{solarcommonpath}/bin.{minor},{solarcommonpath}/pck.{minor}/broffice_dev,{solarcommonpath}/pck.{minor}/broffice,{solarcommonpath}/pck.{minor}/openoffice_dev,{solarcommonpath}/pck.{minor}/openoffice,{solarcommonpath}/pck.{minor},../../external/common,{solarenvpath}/{os}/OOo_external
+		include			.,{localpath}/bin/broffice_dev,{localcommonpath}/bin,{localpath}/bin,{solarpath}/bin.{minor}/broffice,{solarpath}/bin.{minor}/osl,{solarpath}/bin.{minor},{solarpath}/lib.{minor},{solarpath}/pck.{minor}/broffice,{solarpath}/pck.{minor}/openoffice,{solarpath}/pck.{minor},{solarpath}/xml.{minor}/office/instance,{solarpath}/xml.{minor},{solarcommonpath}/bin.{minor},{solarcommonpath}/pck.{minor}/broffice_dev,{solarcommonpath}/pck.{minor}/broffice,{solarcommonpath}/pck.{minor}/openoffice_dev,{solarcommonpath}/pck.{minor}/openoffice,{solarcommonpath}/pck.{minor},../../external/common,{solarenvpath}/{os}/OOo_external
 		fail sun.star.releng.pack.errors@staroffice-news.germany.sun.com
 		mailinfo ms-eham02-01,packager,packager
 	}
