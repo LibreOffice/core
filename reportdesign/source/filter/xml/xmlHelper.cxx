@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xmlHelper.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: hr $ $Date: 2007-08-02 14:33:46 $
+ *  last change: $Author: hr $ $Date: 2007-08-03 09:57:18 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -124,13 +124,15 @@ namespace rptxml
     using namespace ::com::sun::star::sdb;
     using namespace ::com::sun::star::form;
     using namespace ::com::sun::star::beans;
-
+DBG_NAME(rpt_OPropertyHandlerFactory)
 OPropertyHandlerFactory::OPropertyHandlerFactory()
 {
+    DBG_CTOR(rpt_OPropertyHandlerFactory,NULL);
 }
 // -----------------------------------------------------------------------------
 OPropertyHandlerFactory::~OPropertyHandlerFactory()
 {
+    DBG_DTOR(rpt_OPropertyHandlerFactory,NULL);
 }
 // -----------------------------------------------------------------------------
 const XMLPropertyHandler* OPropertyHandlerFactory::GetPropertyHandler(sal_Int32 _nType) const

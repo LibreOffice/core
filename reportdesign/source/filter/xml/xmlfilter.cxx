@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xmlfilter.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: hr $ $Date: 2007-08-02 14:34:35 $
+ *  last change: $Author: hr $ $Date: 2007-08-03 09:58:48 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -178,7 +178,7 @@ public:
 };
 
 TYPEINIT1( RptMLMasterStylesContext_Impl, XMLTextMasterStylesContext );
-
+DBG_NAME(rpt_RptMLMasterStylesContext_Impl)
 RptMLMasterStylesContext_Impl::RptMLMasterStylesContext_Impl(
         ORptFilter& rImport, sal_uInt16 nPrfx,
         const ::rtl::OUString& rLName ,
@@ -186,10 +186,12 @@ RptMLMasterStylesContext_Impl::RptMLMasterStylesContext_Impl(
     XMLTextMasterStylesContext( rImport, nPrfx, rLName, xAttrList )
     ,m_rImport(rImport)
 {
+    DBG_CTOR(rpt_RptMLMasterStylesContext_Impl,NULL);
 }
 
 RptMLMasterStylesContext_Impl::~RptMLMasterStylesContext_Impl()
 {
+    DBG_DTOR(rpt_RptMLMasterStylesContext_Impl,NULL);
 }
 
 void RptMLMasterStylesContext_Impl::EndElement()
@@ -416,10 +418,11 @@ Sequence< ::rtl::OUString > ORptStylesImportHelper::getSupportedServiceNames_Sta
 // -------------
 // - ORptFilter -
 // -------------
-
+DBG_NAME(rpt_ORptFilter)
 ORptFilter::ORptFilter( const uno::Reference< XMultiServiceFactory >& _rxMSF,sal_uInt16 nImportFlags )
     :SvXMLImport(_rxMSF,nImportFlags)
 {
+    DBG_CTOR(rpt_ORptFilter,NULL);
     GetMM100UnitConverter().setCoreMeasureUnit(MAP_100TH_MM);
     GetMM100UnitConverter().setXMLMeasureUnit(MAP_CM);
     GetNamespaceMap().Add( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM ( sXML_np__rpt) ),
@@ -441,6 +444,7 @@ ORptFilter::ORptFilter( const uno::Reference< XMultiServiceFactory >& _rxMSF,sal
 
 ORptFilter::~ORptFilter() throw()
 {
+    DBG_DTOR(rpt_ORptFilter,NULL);
 }
 //------------------------------------------------------------------------------
 uno::Reference< XInterface > ORptFilter::create(uno::Reference< XComponentContext > const & xContext)
@@ -654,7 +658,9 @@ SvXMLImportContext* ORptFilter::CreateContext( sal_uInt16 nPrefix,
             pContext = CreateStylesContext( rLocalName, xAttrList, sal_False);
             break;
         case XML_TOK_DOC_AUTOSTYLES:
-            GetProgressBarHelper()->Increment( PROGRESS_BAR_STEP );
+            // don't use the autostyles from the styles-document for the progress
+            if ( ! IsXMLToken( rLocalName, XML_DOCUMENT_STYLES ) )
+                GetProgressBarHelper()->Increment( PROGRESS_BAR_STEP );
             pContext = CreateStylesContext( rLocalName, xAttrList, sal_True);
             break;
         case XML_TOK_DOC_FONTDECLS:
