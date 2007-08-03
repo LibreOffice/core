@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xmlexp.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2007-04-18 07:55:09 $
+ *  last change: $Author: hr $ $Date: 2007-08-03 12:52:43 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -169,19 +169,20 @@ namespace com { namespace sun { namespace star {
 } } }
 namespace comphelper { class UnoInterfaceToUniqueIdentifierMapper; }
 
-#define EXPORT_META         0x0001
-#define EXPORT_STYLES       0x0002
-#define EXPORT_MASTERSTYLES 0x0004
-#define EXPORT_AUTOSTYLES   0x0008
-#define EXPORT_CONTENT      0x0010
-#define EXPORT_SCRIPTS      0x0020
-#define EXPORT_SETTINGS     0x0040
-#define EXPORT_FONTDECLS    0x0080
-#define EXPORT_EMBEDDED     0x0100
-#define EXPORT_NODOCTYPE    0x0200
-#define EXPORT_PRETTY       0x0400
-#define EXPORT_OASIS        0x8000
-#define EXPORT_ALL          0x7fff
+#define EXPORT_META                     0x0001
+#define EXPORT_STYLES                   0x0002
+#define EXPORT_MASTERSTYLES             0x0004
+#define EXPORT_AUTOSTYLES               0x0008
+#define EXPORT_CONTENT                  0x0010
+#define EXPORT_SCRIPTS                  0x0020
+#define EXPORT_SETTINGS                 0x0040
+#define EXPORT_FONTDECLS                0x0080
+#define EXPORT_EMBEDDED                 0x0100
+#define EXPORT_NODOCTYPE                0x0200
+#define EXPORT_PRETTY                   0x0400
+#define EXPORT_SAVEBACKWARDCOMPATIBLE   0x0800
+#define EXPORT_OASIS                    0x8000
+#define EXPORT_ALL                      0x7fff
 
 class XMLOFF_DLLPUBLIC SvXMLExport : public ::cppu::WeakImplHelper6<
              ::com::sun::star::document::XFilter,
