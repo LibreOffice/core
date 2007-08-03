@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xmlCell.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2007-07-09 11:56:17 $
+ *  last change: $Author: hr $ $Date: 2007-08-03 09:56:01 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -73,6 +73,7 @@
 #ifndef _COM_SUN_STAR_BEANS_PROPERTYATTRIBUTE_HXX_
 #include <com/sun/star/beans/PropertyAttribute.hpp>
 #endif
+#include <com/sun/star/report/XShape.hpp>
 #include <com/sun/star/report/XFixedLine.hpp>
 #include <com/sun/star/table/BorderLine.hpp>
 #ifndef RPT_SHARED_XMLSTRINGS_HRC
@@ -117,7 +118,8 @@ OXMLCell::OXMLCell( ORptFilter& rImport
     SvXMLImportContext( rImport, nPrfx, _sLocalName )
     ,m_pContainer(_pContainer)
     ,m_pCell(_pCell)
-    ,m_bShape(false)
+    ,m_nCurrentCount(0)
+    ,m_bContainsShape(false)
 {
     DBG_CTOR( rpt_OXMLCell,NULL);
     if ( !m_pCell )
@@ -223,10 +225,12 @@ SvXMLImportContext* OXMLCell::CreateChildContext(
             break;
         case XML_TOK_CUSTOM_SHAPE:
             {
+                if ( !m_bContainsShape )
+                    m_nCurrentCount = m_pContainer->getSection()->getCount();
                 UniReference< XMLShapeImportHelper > xShapeImportHelper = rImport.GetShapeImport();
                 uno::Reference< drawing::XShapes > xShapes = m_pContainer->getSection().get();
                 pContext = xShapeImportHelper->CreateGroupChildContext(rImport,_nPrefix,_rLocalName,xAttrList,xShapes);
-                m_bShape = true;
+                m_bContainsShape = true;
             }
             break;
         default:
@@ -244,13 +248,20 @@ SvXMLImportContext* OXMLCell::CreateChildContext(
 // -----------------------------------------------------------------------------
 void OXMLCell::EndElement()
 {
-    if ( m_bShape )
+    if ( m_bContainsShape )
     {
-        m_xComponent.set(m_pContainer->getSection()->getByIndex(m_pContainer->getSection()->getCount()-1),uno::UNO_QUERY);
-        m_pContainer->addCell(m_xComponent);
-        m_pCell->setComponent(m_xComponent);
+        const sal_Int32 nCount = m_pContainer->getSection()->getCount();
+        for (sal_Int32 i = m_nCurrentCount; i < nCount; ++i)
+        {
+            uno::Reference<report::XShape> xShape(m_pContainer->getSection()->getByIndex(i),uno::UNO_QUERY);
+            if ( xShape.is() )
+                m_pContainer->addCell(xShape.get());
+        }
+        //m_xComponent.set(,uno::UNO_QUERY);
+
+        //m_pCell->setComponent(m_xComponent);
     }
-    else if ( m_pCell != this && m_sText.getLength() )
+    if ( m_pCell != this && m_sText.getLength() )
     {
         ORptFilter& rImport = GetOwnImport();
         Reference<XMultiServiceFactory> xFactor(rImport.GetModel(),uno::UNO_QUERY);
