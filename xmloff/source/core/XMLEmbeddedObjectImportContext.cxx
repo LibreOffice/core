@@ -4,9 +4,9 @@
  *
  *  $RCSfile: XMLEmbeddedObjectImportContext.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: hr $ $Date: 2007-06-27 14:55:45 $
+ *  last change: $Author: hr $ $Date: 2007-08-03 10:21:40 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -120,6 +120,7 @@ const XMLServiceMapEntry_Impl aServiceMap[] =
     SERVICE_MAP_ENTRY( ONLINE_TEXT, WRITER ),
     SERVICE_MAP_ENTRY( SPREADSHEET, CALC ),
     SERVICE_MAP_ENTRY( DRAWING, DRAW ),
+    SERVICE_MAP_ENTRY( GRAPHICS, DRAW ),
     SERVICE_MAP_ENTRY( PRESENTATION, IMPRESS ),
     SERVICE_MAP_ENTRY( CHART, CHART ),
     { XML_TOKEN_INVALID, 0, 0 }
@@ -269,16 +270,22 @@ XMLEmbeddedObjectImportContext::XMLEmbeddedObjectImportContext(
         }
 
         OUString sClass;
-        OUString aTmp( RTL_CONSTASCII_USTRINGPARAM("application/vnd.oasis.openoffice.") );
-        if( 0 == sMime.compareTo( aTmp, aTmp.getLength() ) )
+        static const char * aTmp[] =
         {
-            sClass = sMime.copy( aTmp.getLength() );
-        }
-        else
+            "application/vnd.oasis.openoffice.",
+            "application/x-vnd.oasis.openoffice.",
+            "application/vnd.oasis.opendocument.",
+            "application/x-vnd.oasis.opendocument.",
+            NULL
+        };
+        for (int k=0; aTmp[k]; k++)
         {
-            aTmp = OUString( RTL_CONSTASCII_USTRINGPARAM("application/x-vnd.oasis.openoffice.") );
-            if( 0 == sMime.compareTo( aTmp, aTmp.getLength() ) )
-                sClass = sMime.copy( aTmp.getLength() );
+            ::rtl::OUString sTmpString = ::rtl::OUString::createFromAscii(aTmp[k]);
+            if( sMime.matchAsciiL( aTmp[k], sTmpString.getLength() ) )
+            {
+                sClass = sMime.copy( sTmpString.getLength() );
+                break;
+            }
         }
 
         if( sClass.getLength() )
@@ -297,7 +304,9 @@ XMLEmbeddedObjectImportContext::XMLEmbeddedObjectImportContext(
                     case XML_TEXT:          aName = SvGlobalName(SO3_SW_CLASSID); break;
                     case XML_ONLINE_TEXT:   aName = SvGlobalName(SO3_SWWEB_CLASSID); break;
                     case XML_SPREADSHEET:   aName = SvGlobalName(SO3_SC_CLASSID); break;
-                    case XML_DRAWING:       aName = SvGlobalName(SO3_SDRAW_CLASSID); break;
+                    case XML_DRAWING:
+                    case XML_GRAPHICS:
+                    case XML_IMAGE:     aName = SvGlobalName(SO3_SDRAW_CLASSID); break;
                     case XML_PRESENTATION:  aName = SvGlobalName(SO3_SIMPRESS_CLASSID); break;
                     case XML_CHART:         aName = SvGlobalName(SO3_SCH_CLASSID); break;
                     default:
