@@ -4,9 +4,9 @@
  *
  *  $RCSfile: svmainhook.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2007-07-05 08:37:51 $
+ *  last change: $Author: hr $ $Date: 2007-08-03 14:06:28 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -71,6 +71,11 @@ static  pascal  void    MainRunLoopForThreadedApps( EventLoopTimerRef inTimer, v
 BOOL ImplSVMainHook( BOOL * pbInit )
 {
     gpbInit = pbInit;
+
+    // install handlers of AppleEvents BEFORE handling event loops
+    // else we miss the for initial OpenDocument apple events
+    extern void InstallAEHandlers();
+    InstallAEHandlers();
 
     EventLoopTimerRef aMainRunLoopTimerRef;
     (void) InstallEventLoopTimer( GetCurrentEventLoop(), 0, 0, NewEventLoopTimerUPP( MainRunLoopForThreadedApps ), NULL, &aMainRunLoopTimerRef );
