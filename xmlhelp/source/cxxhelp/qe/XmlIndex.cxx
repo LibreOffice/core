@@ -4,9 +4,9 @@
  *
  *  $RCSfile: XmlIndex.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: obo $ $Date: 2006-10-12 11:28:24 $
+ *  last change: $Author: hr $ $Date: 2007-08-03 09:57:10 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -230,7 +230,7 @@ XmlIndex::XmlIndex( const rtl::OUString& indexDir )
             if( bff[i] )
                 bff1[ len1++ ] = bff[i];
         }
-        bff1[len] = 0;
+        bff1[len1] = 0;
         delete[] bff;
         rtl::OString aStr( bff1 );  // build a string from the densified buffer;
         delete[] bff1;
