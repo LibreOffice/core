@@ -6,9 +6,9 @@
  *
  *  $RCSfile: xmlExport.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: hr $ $Date: 2007-08-02 14:33:01 $
+ *  last change: $Author: hr $ $Date: 2007-08-03 09:56:41 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -216,7 +216,7 @@ private:
     void                    exportStyleName(XPropertySet* _xProp,SvXMLAttributeList& _rAtt,const ::rtl::OUString& _sName);
     void                    exportSection(const Reference<XSection>& _xProp,bool bHeader = false);
     void                    exportContainer(const Reference< XSection>& _xSection);
-    void                    exportShapes(const Reference< XSection>& _xSection);
+    void                    exportShapes(const Reference< XSection>& _xSection,bool _bAddParagraph = true);
     void                    exportTableColumns(const Reference< XSection>& _xSection);
     void                    exportSectionAutoStyle(const Reference<XSection>& _xProp);
     void                    exportReportElement(const Reference<XReportControlModel>& _xReportElement);
