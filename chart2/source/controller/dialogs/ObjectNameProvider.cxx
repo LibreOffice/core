@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ObjectNameProvider.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2007-07-25 08:31:07 $
+ *  last change: $Author: hr $ $Date: 2007-08-03 12:34:30 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -122,7 +122,7 @@ OUString lcl_getDataPointValueText( const Reference< XDataSeries >& xSeries, sal
     Sequence< Reference< data::XLabeledDataSequence > > aDataSequences( xDataSource->getDataSequences() );
 
     rtl::OUString aX, aY, aY_Min, aY_Max, aY_First, aY_Last;
-    double fValue;
+    double fValue = 0;
 
     uno::Reference< util::XNumberFormatsSupplier > xNumberFormatsSupplier( xChartModel, uno::UNO_QUERY );
     NumberFormatterWrapper aNumberFormatterWrapper( xNumberFormatsSupplier );
