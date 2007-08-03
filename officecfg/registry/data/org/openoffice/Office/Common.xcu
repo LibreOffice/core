@@ -5,9 +5,9 @@
  *
  *  $RCSfile: Common.xcu,v $
  *
- *  $Revision: 1.38 $
+ *  $Revision: 1.39 $
  *
- *  last change: $Author: rt $ $Date: 2007-07-24 11:54:35 $
+ *  last change: $Author: hr $ $Date: 2007-08-03 12:51:29 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -557,5 +557,12 @@
     <prop oor:name="UseSystemFileDialog"  install:module="UseOOoFileDialogs">
       <value>false</value>
     </prop>
+  </node>
+  <node oor:name="Save">
+    <node oor:name="Document">
+      <prop oor:name="SaveBackwardCompatibleODF" oor:type="xs:boolean">
+        <value>true</value>
+      </prop>
+    </node>
   </node>
 </oor:component-data>
