@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ScrollHelper.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: hr $ $Date: 2007-08-02 14:40:50 $
+ *  last change: $Author: hr $ $Date: 2007-08-03 12:45:48 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -233,6 +233,7 @@ Size OScrollWindowHelper::ResizeScrollBars()
 //------------------------------------------------------------------------------
 void OScrollWindowHelper::EndScroll( long nDeltaX, long nDeltaY )
 {
+    m_aHScroll.SetThumbPos(m_aHScroll.GetThumbPos()+nDeltaX);
     impl_scrollContent( nDeltaX, nDeltaY );
     Resize();
 
