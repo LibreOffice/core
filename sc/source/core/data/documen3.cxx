@@ -4,9 +4,9 @@
  *
  *  $RCSfile: documen3.cxx,v $
  *
- *  $Revision: 1.36 $
+ *  $Revision: 1.37 $
  *
- *  last change: $Author: hr $ $Date: 2007-06-27 13:43:05 $
+ *  last change: $Author: hr $ $Date: 2007-08-03 13:07:05 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -114,6 +114,7 @@
 #include "autoform.hxx"
 #include "rangelst.hxx"
 #include "chartarr.hxx"
+#include "chartlock.hxx"
 #include "refupdat.hxx"
 #include "docoptio.hxx"
 #include "viewopti.hxx"
@@ -334,6 +335,12 @@ void ScDocument::SetChartCollection(ScChartCollection* pNewChartCollection)
     if (pChartCollection)
         delete pChartCollection;
     pChartCollection = pNewChartCollection;
+}
+
+void ScDocument::StopTemporaryChartLock()
+{
+    if( apTemporaryChartLock.get() )
+        apTemporaryChartLock->StopLocking();
 }
 
 void ScDocument::SetChartListenerCollection(
@@ -807,6 +814,7 @@ void ScDocument::BroadcastUno( const SfxHint &rHint )
             // are not nested, instead the calls are collected in the list, and the
             // outermost call executes them all.
 
+            ScChartLockGuard aChartLockGuard(this);
             bInUnoListenerCall = TRUE;
             pUnoListenerCalls->ExecuteAndClear();
             bInUnoListenerCall = FALSE;
