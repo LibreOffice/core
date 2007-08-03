@@ -4,9 +4,9 @@
  *
  *  $RCSfile: UndoActions.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: hr $ $Date: 2007-08-02 14:32:37 $
+ *  last change: $Author: hr $ $Date: 2007-08-03 12:44:17 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -101,16 +101,19 @@ DECLARE_STL_USTRINGACCESS_MAP(bool, AllProperties);
 DECLARE_STL_STDKEY_MAP(uno::Reference< beans::XPropertySet >, AllProperties, PropertySetInfoCache);
 //------------------------------------------------------------------------------
 TYPEINIT1( OCommentUndoAction,          SdrUndoAction );
+DBG_NAME(rpt_OCommentUndoAction)
 //----------------------------------------------------------------------------
 OCommentUndoAction::OCommentUndoAction(SdrModel& _rMod,USHORT nCommentID)
     :SdrUndoAction(_rMod)
 {
+    DBG_CTOR(rpt_OCommentUndoAction,NULL);
     m_pController = static_cast< OReportModel& >( _rMod ).getController();
     if ( nCommentID )
         m_strComment = String(ModuleRes(nCommentID));
 }
 OCommentUndoAction::~OCommentUndoAction()
 {
+    DBG_DTOR(rpt_OCommentUndoAction,NULL);
 }
 //----------------------------------------------------------------------------
 void OCommentUndoAction::Undo()
@@ -408,7 +411,7 @@ void ORptUndoPropertyAction::setProperty(sal_Bool _bOld)
 //------------------------------------------------------------------------------
 String ORptUndoPropertyAction::GetComment() const
 {
-    String aStr(String(ModuleRes(RID_STR_UNDO_PROPERTY)));
+    String aStr(ModuleRes(RID_STR_UNDO_PROPERTY));
 
     aStr.SearchAndReplace( '#', m_aPropertyName );
     return aStr;
