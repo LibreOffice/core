@@ -4,9 +4,9 @@
  *
  *  $RCSfile: salinst.cxx,v $
  *
- *  $Revision: 1.37 $
+ *  $Revision: 1.38 $
  *
- *  last change: $Author: rt $ $Date: 2007-07-05 15:59:02 $
+ *  last change: $Author: hr $ $Date: 2007-08-03 14:00:41 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -53,7 +53,6 @@
 #ifndef _SV_SALOBJ_HXX
 #include <vcl/salobj.hxx>
 #endif
-#include <salobj.h>
 #ifndef _SV_SALOBJ_H
 #include <salobj.h>
 #endif
@@ -79,6 +78,8 @@
 #include <vcl/salimestatus.hxx>
 #endif
 
+#include <vcl/svapp.hxx>
+
 #include <salprn.h>
 #include <vcl/print.h>
 
@@ -89,7 +90,19 @@
 
 #include <aquavclevents.hxx>
 
+#include <premac.h>
+#include <ApplicationServices/ApplicationServices.h>
+#include <postmac.h>
+
 using namespace std;
+
+// -----------------------------------------------------------------------
+
+// the AppEventList must be available before any SalData/SalInst/etc. objects are ready
+typedef std::list<const ApplicationEvent*> AppEventList;
+static AppEventList aAppEventList;
+
+// -----------------------------------------------------------------------
 
 FILE* SalData::s_pLog = NULL;
 
@@ -143,11 +156,11 @@ void DeInitSalData()
 
 // -----------------------------------------------------------------------
 
-#ifdef QUARTZ
 extern "C" {
 #include <crt_externs.h>
 }
-#endif
+
+// -----------------------------------------------------------------------
 
 void InitSalMain()
 {
@@ -305,17 +318,20 @@ SalInstance* CreateSalInstance()
     else
         SalData::s_pLog = fopen( pLogEnv, "w" );
 
-  SalData* pSalData = GetSalData();
-  AquaSalInstance* pInst = new AquaSalInstance;
+    AquaSalInstance* pInst = new AquaSalInstance;
 
-  EventLoopTimerUPP eventLoopTimer = NewEventLoopTimerUPP(AquaSalInstance::TimerEventHandler);
-  InstallEventLoopTimer(GetMainEventLoop(), 1, 0, eventLoopTimer, pInst, &pInst->mEventLoopTimerRef);
+    EventLoopTimerUPP eventLoopTimer = NewEventLoopTimerUPP(AquaSalInstance::TimerEventHandler);
+    InstallEventLoopTimer(GetMainEventLoop(), 1, 0, eventLoopTimer, pInst, &pInst->mEventLoopTimerRef);
 
-  // init instance (only one instance in this version !!!)
-  pSalData->mpFirstInstance = pInst;
-  ImplGetSVData()->maNWFData.mbNoFocusRects = true;
+    // init instance (only one instance in this version !!!)
+    SalData* pSalData = GetSalData();
+    pSalData->mpFirstInstance = pInst;
+    ImplGetSVData()->maNWFData.mbNoFocusRects = true;
+    ImplGetSVData()->maNWFData.mbNoBoldTabFocus = true;
+    ImplGetSVData()->maNWFData.mbCenteredTabs = true;
+    ImplGetSVData()->maNWFData.mbProgressNeedsErase = true;
 
-  return pInst;
+    return pInst;
 }
 
 // -----------------------------------------------------------------------
@@ -338,6 +354,12 @@ AquaSalInstance::AquaSalInstance()
     mEventLoopTimerRef = NULL;
     mbForceDispatchPaintEvents = false;
     mpSalYieldMutex->acquire();
+
+    // In order to receive events, we put the application in foreground
+    ProcessSerialNumber psn;
+    GetCurrentProcess(&psn);
+    TransformProcessType(&psn, kProcessTransformToForegroundApplication);
+    SetFrontProcess(&psn);
 }
 
 // -----------------------------------------------------------------------
@@ -480,6 +502,29 @@ void AquaSalInstance::Yield( bool bWait, bool bHandleAllCurrentEvents )
 
     // Reset all locks
     AcquireYieldMutex( nCount );
+
+    // we get some apple events way too early
+    // before the application is ready to handle them,
+    // so their corresponding application events need to be delayed
+    // now is a good time to handle at least one of them
+    if( bWait && !aAppEventList.empty() )
+    {
+        // make sure that only one application event is active at a time
+        static bool bInAppEvent = false;
+        if( !bInAppEvent )
+        {
+            bInAppEvent = true;
+            // get the next delayed application event
+            const ApplicationEvent* pAppEvent = aAppEventList.front();
+            aAppEventList.pop_front();
+            // handle one application event (no recursion)
+            const ImplSVData* pSVData = ImplGetSVData();
+            pSVData->mpApp->AppEvent( *pAppEvent );
+            delete pAppEvent;
+            // allow the next delayed application event
+            bInAppEvent = false;
+        }
+    }
 }
 
 // -----------------------------------------------------------------------
@@ -747,7 +792,129 @@ SalI18NImeStatus* AquaSalInstance::CreateI18NImeStatus()
     return new MacImeStatus();
 }
 
+// =======================================================================
+
+static OSErr OpenOrPrintDoc( const AppleEvent* pAEvent, bool bPrint )
+{
+    // get the list of document URLs
+    AEDescList aAEDocList;
+    OSErr eErr = AEGetParamDesc( pAEvent, keyDirectObject, typeAEList, &aAEDocList );
+    if( eErr != noErr )
+        return errAEEventNotHandled;
+
+    // prepare the URL-names string for the ApplicationEvent parameter
+    long nFullLength = 0;
+    std::vector<char> aNameBuffer;
+    for( int i = 1;; ++i )
+    {
+        AEKeyword aAEKeyword;
+        DescType aDescType;
+        // get the URL's encoded name length
+        long nNeedLength = 0;
+        if( AEGetNthPtr( &aAEDocList, i, typeFileURL, &aAEKeyword, &aDescType,
+            NULL, 0, &nNeedLength ) != noErr )
+            break;
+        // resize the name buffer for the new URL+delimiter
+        if( nFullLength )
+            aNameBuffer[ nFullLength++ ] = APPEVENT_PARAM_DELIMITER;
+        aNameBuffer.resize( nFullLength + nNeedLength + 1 );
+        // get the URL's encoded name data
+        long nNewLength = 0;
+        if( AEGetNthPtr( &aAEDocList, i, typeFileURL, &aAEKeyword, &aDescType,
+            (void*)&aNameBuffer[nFullLength], nNeedLength, &nNewLength ) != noErr )
+            break;
+        nFullLength += nNewLength;
+        aNameBuffer[ nFullLength ] = '\0';
+    }
+
+    // the AEdescriptor is no longer needed
+    AEDisposeDesc( &aAEDocList );
+
+    // convert the URL names to unicode
+    // TODO: is the original encoding always UTF8?
+    const String aUrlNames( (sal_Char*)&aNameBuffer[0], RTL_TEXTENCODING_UTF8 );
+    // create and send the event to the application
+    // send an open or print event to the application
+    const String aEmptySender;
+    const ApplicationAddress aEmptyAddr;
+    const char* pEvtType = bPrint ? APPEVENT_PRINT_STRING : APPEVENT_OPEN_STRING;
+    const ApplicationEvent* pAppEvent = new ApplicationEvent( aEmptySender, aEmptyAddr, pEvtType, aUrlNames );
+    aAppEventList.push_back( pAppEvent );
+
+    return noErr;
+}
+
+// -----------------------------------------------------------------------
+
+OSErr HandleAEventOpenDoc( const AppleEvent* pAEvent,
+    AppleEvent* /*pAEReply*/, long /*nHandlerRefConstant*/ )
+{
+    return OpenOrPrintDoc( pAEvent, false );
+}
+
+// -----------------------------------------------------------------------
+
+OSErr HandleAEventPrintDoc( const AppleEvent* pAEvent,
+    AppleEvent* /*pAEReply*/, long /*nHandlerRefConstant*/ )
+{
+    return OpenOrPrintDoc( pAEvent, true );
+}
+
+// -----------------------------------------------------------------------
+
+OSErr HandleAEventOpenApp( const AppleEvent* /*pAEvent*/,
+    AppleEvent* /*pAEReply*/, long /*nHandlerRefConstant*/ )
+{
+    const SalData* pSalData = GetSalData();
+    if( !pSalData->maFrames.empty() )
+        pSalData->maFrames.front()->CallCallback( SALEVENT_SHUTDOWN, NULL );
+    return noErr;
+}
+
+// -----------------------------------------------------------------------
+
+OSErr HandleAEventQuitApp( const AppleEvent* pAEvent,
+    AppleEvent* /*pAEReply*/, long /*nHandlerRefConstant*/ )
+{
+    const SalData* pSalData = GetSalData();
+    if( !pSalData->maFrames.empty() )
+        pSalData->maFrames.front()->CallCallback( SALEVENT_SHUTDOWN, NULL );
+    return noErr;
+}
+
+// -----------------------------------------------------------------------
+
+extern void InstallAEHandlers()
+{
+    // check if it is possible to install AppleEvent handlers
+    long nGestaltAttrs;
+    OSStatus eStatus = Gestalt( gestaltAppleEventsAttr, &nGestaltAttrs );
+    if( eStatus != noErr )
+        return;
+    if( ((nGestaltAttrs >> gestaltAppleEventsPresent) & 1) == 0 )
+        return;
+
+    // prepare to handle "open document" events
+    AEEventHandlerUPP aAEHandler = NewAEEventHandlerUPP( HandleAEventOpenDoc );
+    AEInstallEventHandler( kCoreEventClass, kAEOpenDocuments, aAEHandler, 0L, false );
+
+    // prepare to handle "print document" events
+    aAEHandler = NewAEEventHandlerUPP( HandleAEventPrintDoc );
+    AEInstallEventHandler( kCoreEventClass, kAEPrintDocuments, aAEHandler, 0L, false );
+
+    // prepare to handle "open application" events
+    aAEHandler = NewAEEventHandlerUPP( HandleAEventOpenApp );
+    AEInstallEventHandler( kCoreEventClass, kAEOpenApplication, aAEHandler, 0L, false );
+
+    // prepare to handle "quit application" events
+    aAEHandler = NewAEEventHandlerUPP( HandleAEventQuitApp );
+    AEInstallEventHandler( kCoreEventClass, kAEQuitApplication, aAEHandler, 0L, false );
+
+    // TODO: handle other events from the AppleEventManager too
+}
+
 //////////////////////////////////////////////////////////////
+// TODO: are these debug-convenience functions still needed?
 rtl::OUString GetOUString( CFStringRef rStr )
 {
     if( rStr == 0 )
