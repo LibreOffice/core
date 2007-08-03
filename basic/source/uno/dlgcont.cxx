@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dlgcont.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: ihi $ $Date: 2007-06-05 15:11:35 $
+ *  last change: $Author: hr $ $Date: 2007-08-03 09:56:49 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -98,6 +98,8 @@
 #include <svtools/pathoptions.hxx>
 #include <xmlscript/xmldlg_imexp.hxx>
 #include <cppuhelper/factory.hxx>
+#include <svtools/sfxecode.hxx>
+#include <svtools/ehdl.hxx>
 
 
 namespace basic
@@ -365,9 +367,19 @@ Any SAL_CALL SfxDialogLibraryContainer::importLibraryElement
     source.aInputStream = xInput;
     source.sSystemId    = aFile;
 
-    // start parsing
-    xParser->setDocumentHandler( ::xmlscript::importDialogModel( xDialogModel, xContext ) );
-    xParser->parseStream( source );
+    try {
+        // start parsing
+        xParser->setDocumentHandler( ::xmlscript::importDialogModel( xDialogModel, xContext ) );
+        xParser->parseStream( source );
+    }
+    catch( Exception& )
+    {
+        OSL_ENSURE( 0, "Parsing error\n" );
+        SfxErrorContext aEc( ERRCTX_SFX_LOADBASIC, aFile );
+        ULONG nErrorCode = ERRCODE_IO_GENERAL;
+        ErrorHandler::HandleError( nErrorCode );
+        return aRetAny;
+    }
 
     // Create InputStream, TODO: Implement own InputStreamProvider
     // to avoid creating the DialogModel here!
