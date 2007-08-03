@@ -4,9 +4,9 @@
  *
  *  $RCSfile: salbmp.cxx,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: rt $ $Date: 2007-07-05 10:13:21 $
+ *  last change: $Author: hr $ $Date: 2007-08-03 14:01:55 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -55,6 +55,8 @@
 #include <basebmp/scanlineformats.hxx>
 #include <basebmp/color.hxx>
 #include <basegfx/vector/b2ivector.hxx>
+
+#include <boost/bind.hpp>
 
 #include "salinst.h"
 
@@ -260,9 +262,7 @@ bool AquaSalBitmap::CreateContext()
                            mnBits, mnBytesPerRow, maPalette, maUserBuffer.get() );
     }
 
-    CGColorSpaceRef xColorSpace( CGColorSpaceCreateWithName(kCGColorSpaceGenericRGB) );
-    mxGraphicContext = CGBitmapContextCreate( maContextBuffer.get(), mnWidth, mnHeight, bitsPerComponent, nContextBytesPerRow, xColorSpace, kCGImageAlphaNoneSkipFirst );
-    CFRelease( xColorSpace );
+    mxGraphicContext = CGBitmapContextCreate( maContextBuffer.get(), mnWidth, mnHeight, bitsPerComponent, nContextBytesPerRow, GetSalData()->mxRGBSpace, kCGImageAlphaNoneSkipFirst );
 
     if( mxGraphicContext )
     {
@@ -659,7 +659,7 @@ CGImageRef AquaSalBitmap::CreateCroppedImage( int nX, int nY, int nWidth, int nH
 
 // ------------------------------------------------------------------
 
-/*static*/ CGImageRef AquaSalBitmap::CreateCroppedImage( CGContextRef xContext, int nX, int nY, int nWidth, int nHeight )
+CGImageRef AquaSalBitmap::CreateCroppedImage( CGContextRef xContext, int nX, int nY, int nWidth, int nHeight )
 {
     CGImageRef xImage = 0;
     if( xContext )
@@ -676,6 +676,11 @@ CGImageRef AquaSalBitmap::CreateCroppedImage( int nX, int nY, int nWidth, int nH
 }
 
 // ------------------------------------------------------------------
+
+static void CFRTLFree(void* /*info*/, const void* data, size_t /*size*/)
+{
+    rtl_freeMemory( const_cast<void*>(data) );
+}
 
 /** TODO: Optimize me, merge the bitmap and alpha mask ourself
 */
@@ -702,59 +707,28 @@ CGImageRef AquaSalBitmap::CreateWithMask( const AquaSalBitmap& rMask, sal_uInt32
             rMaskNew.Destroy();//destroy old context with a size which could be different from
             //the xMaskedImage, xImage, xMask size (the three have the same size=(nDX, nDY))
             // and are part of the original image
-            rMaskNew.Create(xMask);//and create one which will fit to image
 
-            //This code should be replaced by rMaskNew.invert() before the line containing
-            //rMaskNew.CreateCroppedImage when the AquaSalGraphic::invert function will be
-            //implemented (salgdi.cxx)
-            rMaskNew.CreateContext();
-            CGContextTranslateCTM (rMaskNew.mxGraphicContext, 0, mnHeight);
-            CGContextScaleCTM (rMaskNew.mxGraphicContext, 1.0, -1.0);
-            CGContextSetGrayFillColor(rMaskNew.mxGraphicContext, 1.0, 1.0);
             CGRect xImageRect=CGRectMake( 0, 0, nDX, nDY);//the rect has no offset
-            CGContextFillRect(rMaskNew.mxGraphicContext, xImageRect);
-            CGContextSetBlendMode(rMaskNew.mxGraphicContext,  kCGBlendModeDifference);
-            CGContextDrawImage(rMaskNew.mxGraphicContext, xImageRect, xMask);
+
+            // create the alpha mask image fitting our image
+            int nMaskBytesPerRow = ((nDX + 3 ) & ~3);
+            void* pMaskMem = rtl_allocateMemory( nMaskBytesPerRow * nDY );
+            CGContextRef xMaskContext = CGBitmapContextCreate( pMaskMem, nDX, nDY, 8, nMaskBytesPerRow, GetSalData()->mxGraySpace, kCGImageAlphaNone );
+            CGContextDrawImage( xMaskContext, xImageRect, xMask );
             CFRelease( xMask );
-            xMask=CGBitmapContextCreateImage(rMaskNew.mxGraphicContext);
+            CGDataProviderRef xDataProvider( CGDataProviderCreateWithData(NULL, pMaskMem, nDY * nMaskBytesPerRow, &CFRTLFree) );
+            xMask = CGImageMaskCreate( nDX, nDY, 8, 8, nMaskBytesPerRow, xDataProvider, NULL, false );
+            CFRelease( xDataProvider );
+            CFRelease( xMaskContext );
 
-            //we create the new image which has width and height equal to nDX and nDY
-            AquaSalBitmap xMaskedBmp;
-            xMaskedBmp.Create(xImage);
-
-            CGContextSaveGState(mxGraphicContext);
-
-            //we create the transparent image
-            CGContextBeginTransparencyLayer(xMaskedBmp.mxGraphicContext, NULL);
-            CGContextClipToMask(xMaskedBmp.mxGraphicContext, xImageRect, xMask);
-            CGContextClearRect (xMaskedBmp.mxGraphicContext, xImageRect);
-            CGContextDrawImage(xMaskedBmp.mxGraphicContext, xImageRect, xImage );
-            xMaskedImage=CGBitmapContextCreateImage(xMaskedBmp.mxGraphicContext);
-            CGContextEndTransparencyLayer(xMaskedBmp.mxGraphicContext);
-
-            //we revert it as its top was on the bottom and vice versa
-            CGContextBeginTransparencyLayer(xMaskedBmp.mxGraphicContext, NULL);
-            CGContextClearRect (xMaskedBmp.mxGraphicContext, xImageRect);
-            CGContextDrawImage(xMaskedBmp.mxGraphicContext, xImageRect, xMaskedImage );
-            CFRelease( xMaskedImage );
-
-            xMaskedImage=CGBitmapContextCreateImage(xMaskedBmp.mxGraphicContext);
-            CGContextEndTransparencyLayer(xMaskedBmp.mxGraphicContext);
-
-            CGContextRestoreGState(mxGraphicContext);
+            // combine image and alpha mask
+            xMaskedImage = CGImageCreateWithMask( xImage, xMask );
 
             CFRelease( xMask );
         }
         CFRelease( xImage );
     }
     return xMaskedImage;
-}
-
-// ------------------------------------------------------------------
-
-static void CFMallocDeleter(void* /*info*/, const void* data, size_t /*size*/)
-{
-    free( const_cast<void*>(data) );
 }
 
 // ------------------------------------------------------------------
@@ -766,7 +740,7 @@ CGImageRef AquaSalBitmap::CreateColorMask( int nX, int nY, int nWidth, int nHeig
     if( maUserBuffer.get() && (static_cast<unsigned int>(nX + nWidth) <= mnWidth) && (static_cast<unsigned int>(nY + nHeight) <= mnHeight)  )
     {
         const sal_uInt32 nDestBytesPerRow = nWidth << 2;
-        sal_uInt32* pMaskBuffer = static_cast<sal_uInt32*>( malloc( nHeight * nDestBytesPerRow ) );
+        sal_uInt32* pMaskBuffer = static_cast<sal_uInt32*>( rtl_allocateMemory( nHeight * nDestBytesPerRow ) );
         sal_uInt32* pDest = pMaskBuffer;
 
         ImplPixelFormat* pSourcePixels = ImplPixelFormat::GetFormat( mnBits, maPalette );
@@ -796,11 +770,9 @@ CGImageRef AquaSalBitmap::CreateColorMask( int nX, int nY, int nWidth, int nHeig
                 pSource += mnBytesPerRow;
             }
 
-            CGColorSpaceRef xColorSpace( CGColorSpaceCreateWithName(kCGColorSpaceGenericRGB) );
-            CGDataProviderRef xDataProvider( CGDataProviderCreateWithData(NULL, pMaskBuffer, nHeight * nDestBytesPerRow, &CFMallocDeleter) );
-            xMask = CGImageCreate(nWidth, nHeight, 8, 32, nDestBytesPerRow, xColorSpace, kCGImageAlphaPremultipliedFirst, xDataProvider, NULL, true, kCGRenderingIntentDefault);
+            CGDataProviderRef xDataProvider( CGDataProviderCreateWithData(NULL, pMaskBuffer, nHeight * nDestBytesPerRow, &CFRTLFree) );
+            xMask = CGImageCreate(nWidth, nHeight, 8, 32, nDestBytesPerRow, GetSalData()->mxRGBSpace, kCGImageAlphaPremultipliedFirst, xDataProvider, NULL, true, kCGRenderingIntentDefault);
             CFRelease(xDataProvider);
-            CFRelease(xColorSpace);
         }
         else
         {
