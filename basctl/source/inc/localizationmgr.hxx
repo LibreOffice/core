@@ -4,9 +4,9 @@
  *
  *  $RCSfile: localizationmgr.hxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: hr $ $Date: 2007-06-26 16:53:22 $
+ *  last change: $Author: hr $ $Date: 2007-08-03 10:00:15 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -136,15 +136,25 @@ public:
         getStringResourceFromDialogLibrary( ::com::sun::star::uno::Reference
             < ::com::sun::star::container::XNameContainer > xDialogLib );
 
-    // Clipboard
+    // Clipboard / Drag & Drop
     static void resetResourceForDialog(
         ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameContainer > xDialogModel,
         ::com::sun::star::uno::Reference< ::com::sun::star::resource::XStringResourceManager > xStringResourceManager );
 
-    static void moveResourcesForPastedEditorObject( DlgEditor* pEditor,
+    static void setResourceIDsForDialog(
+        ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameContainer > xDialogModel,
+        ::com::sun::star::uno::Reference< ::com::sun::star::resource::XStringResourceManager > xStringResourceManager );
+
+    static void copyResourcesForPastedEditorObject( DlgEditor* pEditor,
         ::com::sun::star::uno::Any aControlAny, const ::rtl::OUString& aCtrlName,
         ::com::sun::star::uno::Reference< ::com::sun::star::resource::
         XStringResourceResolver > xSourceStringResolver );
+
+    static void copyResourceForDroppedDialog(
+        ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameContainer > xDialogModel,
+        const ::rtl::OUString& aDialogName,
+        ::com::sun::star::uno::Reference< ::com::sun::star::resource::XStringResourceManager > xStringResourceManager,
+        ::com::sun::star::uno::Reference< ::com::sun::star::resource::XStringResourceResolver > xSourceStringResolver );
 
     static void copyResourceForDialog(
         const ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameContainer >& xDialogModel,
