@@ -5,9 +5,9 @@
  *
  *  $RCSfile: Common.xcs,v $
  *
- *  $Revision: 1.139 $
+ *  $Revision: 1.140 $
  *
- *  last change: $Author: rt $ $Date: 2007-07-24 11:54:52 $
+ *  last change: $Author: hr $ $Date: 2007-08-03 12:51:43 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -2109,6 +2109,13 @@ Dymamic border coloring means that when the mouse is hovered over a control, and
 						<desc>If the option is set, every time a user triggers a plain Save operation, SaveAs operation with possible additional user notifications will be started.</desc>
 					</info>
 					<value>false</value>
+				</prop>
+				<prop oor:name="SaveBackwardCompatibleODF" oor:type="xs:boolean">
+					<info>
+						<author>PB</author>
+						<desc>If the  value is "true", then the ODF that is saved by OpenOffice.org will be backward compatible to previous minor versions.</desc>
+					</info>
+					<value>true</value>
 				</prop>
 				<prop oor:name="LoadPrinter" oor:type="xs:boolean">
 					<!-- UIHints: Tools - Options - Load/Save - General - Load - Load printer settings with the document -->
