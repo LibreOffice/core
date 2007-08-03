@@ -4,9 +4,9 @@
  *
  *  $RCSfile: notxtfrm.cxx,v $
  *
- *  $Revision: 1.36 $
+ *  $Revision: 1.37 $
  *
- *  last change: $Author: obo $ $Date: 2007-07-18 13:30:00 $
+ *  last change: $Author: hr $ $Date: 2007-08-03 13:39:32 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -251,29 +251,8 @@ void lcl_PaintReplacement( const SwRect &rRect, const String &rText,
     pFont->SetUnderline( eUnderline );
     pFont->SetColor( aCol );
 
-    const Bitmap& rBmp = SwNoTxtFrm::GetBitmap( bDefect );
-    ((Graphic*)0)->Draw( rSh.GetOut(), rText, *pFont, rBmp,
-                         rRect.Pos(), rRect.SSize() );
-}
-
-const Bitmap& SwNoTxtFrm::GetBitmap( BOOL bErrorBmp )
-{
-    Bitmap** ppRet;
-    USHORT nResId;
-    if( bErrorBmp )
-    {
-        ppRet = &pErrorBmp;
-        nResId = RID_GRAPHIC_ERRORBMP;
-    }
-    else
-    {
-        ppRet = &pReplaceBmp;
-        nResId = RID_GRAPHIC_REPLACEBMP;
-    }
-
-    if( !*ppRet )
-        *ppRet = new Bitmap( SW_RES( nResId ) );
-    return **ppRet;
+    const BitmapEx& rBmp = ViewShell::GetReplacementBitmap( bDefect != FALSE );
+    Graphic::DrawEx( rSh.GetOut(), rText, *pFont, rBmp, rRect.Pos(), rRect.SSize() );
 }
 
 /*************************************************************************
