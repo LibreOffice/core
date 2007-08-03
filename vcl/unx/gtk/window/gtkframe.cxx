@@ -4,9 +4,9 @@
  *
  *  $RCSfile: gtkframe.cxx,v $
  *
- *  $Revision: 1.66 $
+ *  $Revision: 1.67 $
  *
- *  last change: $Author: hr $ $Date: 2007-08-02 15:00:20 $
+ *  last change: $Author: hr $ $Date: 2007-08-03 14:09:39 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -2466,11 +2466,7 @@ gboolean GtkSalFrame::signalExpose( GtkWidget*, GdkEventExpose* pEvent, gpointer
 {
     GtkSalFrame* pThis = (GtkSalFrame*)frame;
 
-    struct SalPaintEvent aEvent;
-    aEvent.mnBoundX         = pEvent->area.x;
-    aEvent.mnBoundY         = pEvent->area.y;
-    aEvent.mnBoundWidth     = pEvent->area.width;
-    aEvent.mnBoundHeight    = pEvent->area.height;
+    struct SalPaintEvent aEvent( pEvent->area.x, pEvent->area.y, pEvent->area.width, pEvent->area.height );
 
     GTK_YIELD_GRAB();
     pThis->CallCallback( SALEVENT_PAINT, &aEvent );
