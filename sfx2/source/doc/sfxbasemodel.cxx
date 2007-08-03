@@ -4,9 +4,9 @@
  *
  *  $RCSfile: sfxbasemodel.cxx,v $
  *
- *  $Revision: 1.128 $
+ *  $Revision: 1.129 $
  *
- *  last change: $Author: hr $ $Date: 2007-08-02 13:32:40 $
+ *  last change: $Author: hr $ $Date: 2007-08-03 10:24:13 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -393,11 +393,12 @@ SfxSaveGuard::~SfxSaveGuard()
 //________________________________________________________________________________________________________
 //  constructor
 //________________________________________________________________________________________________________
-
+DBG_NAME(sfx2_SfxBaseModel)
 SfxBaseModel::SfxBaseModel( SfxObjectShell *pObjectShell )
 : IMPL_SfxBaseModel_MutexContainer()
 , m_pData( new IMPL_SfxBaseModel_DataContainer( m_aMutex, pObjectShell ) )
 {
+    DBG_CTOR(sfx2_SfxBaseModel,NULL);
     if ( pObjectShell != NULL )
     {
         StartListening( *pObjectShell ) ;
@@ -410,6 +411,7 @@ SfxBaseModel::SfxBaseModel( SfxObjectShell *pObjectShell )
 
 SfxBaseModel::~SfxBaseModel()
 {
+    DBG_DTOR(sfx2_SfxBaseModel,NULL);
 }
 
 //________________________________________________________________________________________________________
