@@ -4,9 +4,9 @@
  *
  *  $RCSfile: component_context.cxx,v $
  *
- *  $Revision: 1.31 $
+ *  $Revision: 1.32 $
  *
- *  last change: $Author: obo $ $Date: 2007-07-18 12:17:07 $
+ *  last change: $Author: hr $ $Date: 2007-08-03 10:16:02 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -370,7 +370,7 @@ protected:
             , lateInit( lateInit_ )
             {}
     };
-    typedef ::std::hash_map< OUString, ContextEntry *, OUStringHash > t_map;
+    typedef ::std::hash_map< OUString, ContextEntry * , OUStringHash > t_map;
     t_map m_map;
 
     Reference< lang::XMultiComponentFactory > m_xSMgr;
@@ -426,7 +426,7 @@ void ComponentContext::insertByName(
     throw (lang::IllegalArgumentException, container::ElementExistException,
            lang::WrappedTargetException, RuntimeException)
 {
-    ::std::auto_ptr<ContextEntry> entry(
+    t_map::mapped_type entry(
         new ContextEntry(
             element,
             /* lateInit_: */
@@ -434,12 +434,11 @@ void ComponentContext::insertByName(
             !element.hasValue() ) );
     MutexGuard guard( m_mutex );
     ::std::pair<t_map::iterator, bool> insertion( m_map.insert(
-        t_map::value_type( name, entry.get() ) ) );
+        t_map::value_type( name, entry ) ) );
     if (! insertion.second)
         throw container::ElementExistException(
             OUSTR("element already exists: ") + name,
             static_cast<OWeakObject *>(this) );
-    entry.release();
 }
 
 //______________________________________________________________________________
@@ -448,11 +447,14 @@ void ComponentContext::removeByName( OUString const & name )
                lang::WrappedTargetException, RuntimeException)
 {
     MutexGuard guard( m_mutex );
-    ::std::size_t erased = m_map.erase( name );
-    if (erased == 0)
+    t_map::iterator iFind( m_map.find( name ) );
+    if (iFind == m_map.end())
         throw container::NoSuchElementException(
             OUSTR("no such element: ") + name,
             static_cast<OWeakObject *>(this) );
+
+    delete iFind->second;
+    m_map.erase(iFind);
 }
 
 // XNameReplace
@@ -556,7 +558,7 @@ Any ComponentContext::lookupMap( OUString const & rName )
     if (iFind == m_map.end())
         return Any();
 
-    ContextEntry * pEntry = iFind->second;
+    t_map::mapped_type pEntry = iFind->second;
     if (! pEntry->lateInit)
         return pEntry->value;
 
@@ -689,6 +691,11 @@ ComponentContext::~ComponentContext()
 #ifdef CONTEXT_DIAG
     ::fprintf( stderr, "> destructed context %p\n", this );
 #endif
+    t_map::const_iterator iPos( m_map.begin() );
+    t_map::const_iterator const iEnd( m_map.end() );
+    for ( ; iPos != iEnd; ++iPos )
+        delete iPos->second;
+    m_map.clear();
 }
 //__________________________________________________________________________________________________
 void ComponentContext::disposing()
@@ -701,10 +708,10 @@ void ComponentContext::disposing()
 
     // dispose all context objects
     t_map::const_iterator iPos( m_map.begin() );
-    t_map::const_iterator iEnd( m_map.end() );
+    t_map::const_iterator const iEnd( m_map.end() );
     for ( ; iPos != iEnd; ++iPos )
     {
-        ContextEntry * pEntry = iPos->second;
+        t_map::mapped_type pEntry = iPos->second;
 
         // service manager disposed separately
         if (!m_xSMgr.is() ||
@@ -756,13 +763,9 @@ void ComponentContext::disposing()
     // dispose tdmgr; revokes callback from cppu runtime
     try_dispose( xTDMgr );
 
-    // everything is disposed, hopefully nobody accesses the context anymore...
     iPos = m_map.begin();
-    while (iPos != iEnd)
-    {
+    for ( ; iPos != iEnd; ++iPos )
         delete iPos->second;
-        ++iPos;
-    }
     m_map.clear();
 }
 //__________________________________________________________________________________________________
