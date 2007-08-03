@@ -4,9 +4,9 @@
  *
  *  $RCSfile: fmPropBrw.hxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: kz $ $Date: 2007-05-10 10:07:27 $
+ *  last change: $Author: hr $ $Date: 2007-08-03 10:20:42 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -48,6 +48,7 @@
 #ifndef _COM_SUN_STAR_INSPECTION_XOBJECTINSPECTORMODEL_HPP_
 #include <com/sun/star/inspection/XObjectInspectorModel.hpp>
 #endif
+#include <com/sun/star/uno/XComponentContext.hpp>
 /** === end UNO includes === **/
 #ifndef _BASEDLGS_HXX
 #include <sfx2/basedlgs.hxx>
@@ -78,7 +79,8 @@ class FmPropBrw : public SfxFloatingWindow, public SfxControllerItem
 {
     sal_Bool        m_bInitialStateChange;
     ::rtl::OUString m_sLastActivePage;
-
+    ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >
+                        m_xInspectorContext;
     ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >
                     m_xORB;
     ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >
