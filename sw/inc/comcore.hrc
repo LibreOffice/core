@@ -4,9 +4,9 @@
  *
  *  $RCSfile: comcore.hrc,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 01:37:27 $
+ *  last change: $Author: hr $ $Date: 2007-08-03 13:38:53 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -93,6 +93,10 @@
 #define STR_TABLE_NAME                      (RC_COMCORE_BEGIN + 46)
 #define STR_PARAGRAPH_UNDO                  (RC_COMCORE_BEGIN + 47)
 // <- #115575#
+// -> PB #146850#
+#define RID_GRAPHIC_REPLACEBMP_HC           (RC_COMCORE_BEGIN + 48)
+#define RID_GRAPHIC_ERRORBMP_HC             (RC_COMCORE_BEGIN + 49)
+// <- #146850#
 
 // defines fuer die Autoformat Redline Kommentare
 #define STR_AUTOFMTREDL_DEL_EMPTY_PARA          0
