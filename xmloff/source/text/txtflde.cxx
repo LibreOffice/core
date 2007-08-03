@@ -4,9 +4,9 @@
  *
  *  $RCSfile: txtflde.cxx,v $
  *
- *  $Revision: 1.76 $
+ *  $Revision: 1.77 $
  *
- *  last change: $Author: hr $ $Date: 2007-08-02 18:19:49 $
+ *  last change: $Author: hr $ $Date: 2007-08-03 12:55:10 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1240,7 +1240,9 @@ void XMLTextFieldExport::ExportFieldHelper(
         ProcessValueAndType(IsStringField(nToken, rPropSet),
                             GetIntProperty(sPropertyNumberFormat, rPropSet),
                             sEmpty, sEmpty, 0.0, // values not used
-                            sal_False, !bCmd, !bCmd,
+                            sal_False,
+                            sal_False, //#148500# value_type not exported anymore
+                            !bCmd,
                             ! GetOptionalBoolProperty(
                                  sPropertyIsFixedLanguage,
                                  rPropSet, xPropSetInfo, sal_False ) );
@@ -1473,7 +1475,10 @@ void XMLTextFieldExport::ExportFieldHelper(
                       sPresentation);
         sal_Int32 nDummy = 0; // MapPageNumberName need int
         ProcessString(XML_SELECT_PAGE, MapPageNumberName(rPropSet, nDummy));
-        ExportElement(XML_PAGE_CONTINUATION_STRING, sPresentation);
+        if( 0 == ( GetExport().getExportFlags() & EXPORT_SAVEBACKWARDCOMPATIBLE ) )
+            ExportElement(XML_PAGE_CONTINUATION, sPresentation);
+        else
+            ExportElement(XML_PAGE_CONTINUATION_STRING, sPresentation);
         break;
     }
 
