@@ -1076,7 +1076,11 @@ static long ImplHandleKey( Window* pWindow, USHORT nSVEvent,
     {
 #ifdef DBG_UTIL
         // #105224# use Ctrl-Alt-Shift-D, Ctrl-Shift-D must be useable by app
+        #ifdef MACOSX
+        if ( aKeyCode.IsShift() && aKeyCode.IsMod1() && (aKeyCode.IsMod2() || aKeyCode.IsMod5()) && (aKeyCode.GetCode() == KEY_D) )
+        #else
         if ( aKeyCode.IsShift() && aKeyCode.IsMod1() && aKeyCode.IsMod2() && (aKeyCode.GetCode() == KEY_D) )
+        #endif
         {
             DBGGUI_START();
             return 1;
@@ -1604,7 +1608,7 @@ static long ImplHandleWheelEvent( Window* pWindow, const SalWheelMouseEvent& rEv
 // -----------------------------------------------------------------------
 #define IMPL_PAINT_CHECKRTL         ((USHORT)0x0020)
 
-static void ImplHandlePaint( Window* pWindow, const Rectangle& rBoundRect )
+static void ImplHandlePaint( Window* pWindow, const Rectangle& rBoundRect, bool bImmediateUpdate )
 {
     // give up background save when sytem paints arrive
     Window* pSaveBackWin = pWindow->ImplGetWindowImpl()->mpFrameData->mpFirstBackWin;
@@ -1624,6 +1628,8 @@ static void ImplHandlePaint( Window* pWindow, const Rectangle& rBoundRect )
     // trigger paint for all windows that live in the new paint region
     Region aRegion( rBoundRect );
     pWindow->ImplInvalidateOverlapFrameRegion( aRegion );
+    if( bImmediateUpdate )
+        pWindow->Update();
 }
 
 // -----------------------------------------------------------------------
@@ -2439,7 +2445,7 @@ long ImplWindowFrameProc( void* pInst, SalFrame* /*pFrame*/,
 
             Rectangle aBoundRect( Point( pPaintEvt->mnBoundX, pPaintEvt->mnBoundY ),
                                   Size( pPaintEvt->mnBoundWidth, pPaintEvt->mnBoundHeight ) );
-            ImplHandlePaint( pWindow, aBoundRect );
+            ImplHandlePaint( pWindow, aBoundRect, pPaintEvt->mbImmediateUpdate );
             }
             break;
 
