@@ -4,9 +4,9 @@
 #
 #   $RCSfile: unxmacx.mk,v $
 #
-#   $Revision: 1.19 $
+#   $Revision: 1.20 $
 #
-#   last change: $Author: hr $ $Date: 2007-08-03 12:28:15 $
+#   last change: $Author: hr $ $Date: 2007-08-03 13:55:43 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -231,14 +231,16 @@ STDSLOCUI=
 
 .IF "$(GUIBASE)" == "aqua"
     STDLIBCUIMT=CPPRUNTIME -lm
-    STDSHLGUIMT=-lpthread CPPRUNTIME -lm -framework CoreFoundation -framework Carbon
+    STDLIBGUIMT=-framework Carbon -lpthread CPPRUNTIME -lm
+    STDSHLCUIMT=-lpthread CPPRUNTIME -lm
+    STDSHLGUIMT=-framework Carbon -framework CoreFoundation -lpthread CPPRUNTIME -lm
     PSPLIB=-lpsp
 .ELSE
-    STDLIBCUIMT=-lX11 CPPRUNTIME -lm
+    STDLIBCUIMT= CPPRUNTIME -lm
+    STDLIBGUIMT=-lX11 -lpthread CPPRUNTIME -lm
+    STDSHLCUIMT=-lpthread CPPRUNTIME -lm
     STDSHLGUIMT=-lX11 -lXext -lpthread CPPRUNTIME -lm -framework CoreFoundation
 .ENDIF
-STDLIBGUIMT=-lpthread CPPRUNTIME -lm
-STDSHLCUIMT=-lpthread CPPRUNTIME -lm
 
 LIBMGR=ar
 LIBFLAGS=-r
