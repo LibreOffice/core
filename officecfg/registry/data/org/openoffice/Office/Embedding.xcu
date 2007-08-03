@@ -5,9 +5,9 @@
  *
  *  $RCSfile: Embedding.xcu,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: rt $ $Date: 2007-07-06 06:50:09 $
+ *  last change: $Author: hr $ $Date: 2007-08-03 10:14:54 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -238,15 +238,6 @@
             </prop>
             <prop oor:name="ClassID">
                 <value>8BC6B165-B1B2-4EDD-AA47-DAE2EE689DD6</value>
-            </prop>
-        </node>
-        <node oor:name="Report" oor:op="replace" install:module="report">
-            <prop oor:name="ObjectUIName">
-                <value xml:lang="de">%PRODUCTNAME %PRODUCTVERSION Datenbank Bericht</value>
-                 <value xml:lang="en-US">%PRODUCTNAME %PRODUCTVERSION Database Report</value>
-            </prop>
-            <prop oor:name="ClassID">
-                <value>D7896D52-B7AF-4820-9DFE-D404D015960F</value>
             </prop>
         </node>
     </node>
