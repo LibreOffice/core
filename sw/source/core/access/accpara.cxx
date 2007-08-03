@@ -4,9 +4,9 @@
  *
  *  $RCSfile: accpara.cxx,v $
  *
- *  $Revision: 1.70 $
+ *  $Revision: 1.71 $
  *
- *  last change: $Author: ihi $ $Date: 2007-06-05 17:28:07 $
+ *  last change: $Author: hr $ $Date: 2007-08-03 13:34:22 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -2352,7 +2352,9 @@ sal_Int32 SAL_CALL SwAccessibleParagraph::getHyperLinkCount()
     CHECK_FOR_DEFUNC( XAccessibleHypertext );
 
     sal_Int32 nCount = 0;
-    if( !IsEditableState() )
+    // --> OD 2007-06-27 #i77108# - provide hyperlinks also in editable documents.
+//    if( !IsEditableState() )
+    // <--
     {
         const SwTxtFrm *pTxtFrm = static_cast<const SwTxtFrm*>( GetFrm() );
         SwHyperlinkIter_Impl aIter( pTxtFrm );
@@ -2372,7 +2374,9 @@ Reference< XAccessibleHyperlink > SAL_CALL
 
     Reference< XAccessibleHyperlink > xRet;
 
-    if( !IsEditableState() )
+    // --> OD 2007-06-27 #i77108# - provide hyperlinks also in editable documents.
+//    if( !IsEditableState() )
+    // <--
     {
         const SwTxtFrm *pTxtFrm = static_cast<const SwTxtFrm*>( GetFrm() );
         SwHyperlinkIter_Impl aHIter( pTxtFrm );
@@ -2431,7 +2435,9 @@ sal_Int32 SAL_CALL SwAccessibleParagraph::getHyperLinkIndex( sal_Int32 nCharInde
     }
 
     sal_Int32 nRet = -1;
-    if( !IsEditableState() )
+    // --> OD 2007-06-27 #i77108# - provide hyperlinks also in editable documents.
+//    if( !IsEditableState() )
+    // <--
     {
         const SwTxtFrm *pTxtFrm = static_cast<const SwTxtFrm*>( GetFrm() );
         SwHyperlinkIter_Impl aHIter( pTxtFrm );
