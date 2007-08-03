@@ -6,9 +6,9 @@
  *
  *  $RCSfile: xmlTable.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2007-07-09 11:56:18 $
+ *  last change: $Author: hr $ $Date: 2007-08-03 09:58:35 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -55,7 +55,7 @@ namespace rptxml
             sal_Int32 nHeight;
             sal_Int32 nColSpan;
             sal_Int32 nRowSpan;
-            ::com::sun::star::uno::Reference< ::com::sun::star::report::XReportComponent> xElement;
+            ::std::vector< ::com::sun::star::uno::Reference< ::com::sun::star::report::XReportComponent> > xElements;
             TCell() : nWidth(0),nHeight(0),nColSpan(1),nRowSpan(1){}
         };
     private:
