@@ -4,9 +4,9 @@
  *
  *  $RCSfile: basobj3.cxx,v $
  *
- *  $Revision: 1.40 $
+ *  $Revision: 1.41 $
  *
- *  last change: $Author: obo $ $Date: 2007-03-15 15:54:47 $
+ *  last change: $Author: hr $ $Date: 2007-08-03 09:58:33 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -219,6 +219,14 @@ bool BasicIDE::RenameDialog( Window* pErrorParent, const ScriptDocument& rDocume
     if ( rDocument.hasDialog( rLibName, rNewName ) )
     {
         ErrorBox aError( pErrorParent, WB_OK | WB_DEF_OK, String( IDEResId( RID_STR_SBXNAMEALLREADYUSED2 ) ) );
+        aError.Execute();
+        return false;
+    }
+
+    // #i74440
+    if ( rNewName.Len() == 0 )
+    {
+        ErrorBox aError( pErrorParent, WB_OK | WB_DEF_OK, String( IDEResId( RID_STR_BADSBXNAME ) ) );
         aError.Execute();
         return false;
     }
