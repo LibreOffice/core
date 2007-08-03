@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xml2utf.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: rt $ $Date: 2006-06-26 09:42:10 $
+ *  last change: $Author: hr $ $Date: 2007-08-03 12:32:06 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -459,7 +459,7 @@ Sequence<sal_Unicode> Text2UnicodeConverter::convert( const Sequence<sal_Int8> &
 
 
     if( pbTempMem ) {
-        delete pbTempMem;
+        delete [] pbTempMem;
     }
 
     // set to correct unicode size
@@ -574,7 +574,7 @@ Sequence<sal_Int8> Unicode2TextConverter::convert(const sal_Unicode *puSource , 
     }
 
     if( puTempMem ) {
-        delete puTempMem;
+        delete [] puTempMem;
     }
 
     // reduce the size of the buffer (fast, no copy necessary)
