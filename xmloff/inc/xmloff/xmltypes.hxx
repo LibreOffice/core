@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xmltypes.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2007-07-06 12:09:36 $
+ *  last change: $Author: hr $ $Date: 2007-08-03 12:53:09 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -277,8 +277,9 @@
 #define XML_TYPE_NUMBER_NO_ZERO         (XML_TEXT_TYPES_START + 102)
 #define XML_TYPE_NUMBER8_NO_ZERO        (XML_TEXT_TYPES_START + 103)
 #define XML_TYPE_NUMBER16_NO_ZERO       (XML_TEXT_TYPES_START + 104)
-#define XML_TYPE_TEXT_SOFT_PAGE_BREAK   (XML_TEXT_TYPES_START + 105)
-#define XML_TYPE_TEXT_USE_SOFT_PAGE_BREAKS (XML_TEXT_TYPES_START + 106)
+#define XML_TYPE_NUMBER16_AUTO          (XML_TEXT_TYPES_START + 105)
+#define XML_TYPE_TEXT_SOFT_PAGE_BREAK   (XML_TEXT_TYPES_START + 106)
+#define XML_TYPE_TEXT_USE_SOFT_PAGE_BREAKS (XML_TEXT_TYPES_START + 107)
 
 #define XML_SCH_TYPES_START (0x4 << XML_TYPE_APP_SHIFT)
 #define XML_PM_TYPES_START  (0x5 << XML_TYPE_APP_SHIFT) // page master
