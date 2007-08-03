@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xmlexp.cxx,v $
  *
- *  $Revision: 1.130 $
+ *  $Revision: 1.131 $
  *
- *  last change: $Author: hr $ $Date: 2007-06-27 14:57:25 $
+ *  last change: $Author: hr $ $Date: 2007-08-03 10:21:53 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1321,7 +1321,7 @@ sal_uInt32 SvXMLExport::exportDoc( enum ::xmloff::token::XMLTokenEnum eClass )
             // office:mimetype = ... (only for stream containing the content)
             if( eClass != XML_TOKEN_INVALID )
             {
-                OUString aTmp( RTL_CONSTASCII_USTRINGPARAM("application/x-vnd.oasis.openoffice.") );
+                OUString aTmp( RTL_CONSTASCII_USTRINGPARAM("application/vnd.oasis.opendocument.") );
                 aTmp += GetXMLToken( eClass );
                 AddAttribute( XML_NAMESPACE_OFFICE, XML_MIMETYPE, aTmp );
             }
