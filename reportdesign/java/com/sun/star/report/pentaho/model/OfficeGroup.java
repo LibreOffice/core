@@ -4,9 +4,9 @@
  *
  *  $RCSfile: OfficeGroup.java,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2007-07-09 11:56:06 $
+ *  last change: $Author: hr $ $Date: 2007-08-03 09:50:20 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -37,8 +37,9 @@
 
 package com.sun.star.report.pentaho.model;
 
-import org.jfree.report.structure.Group;
 import com.sun.star.report.pentaho.OfficeNamespaces;
+import org.jfree.report.structure.Section;
+import org.jfree.report.structure.Element;
 
 /**
  * An office group is a virtual section that contains the group header, footer
@@ -47,7 +48,7 @@ import com.sun.star.report.pentaho.OfficeNamespaces;
  * @author Thomas Morgner
  * @since 02.03.2007
  */
-public class OfficeGroup extends Group
+public class OfficeGroup extends Section
 {
   public OfficeGroup()
   {
@@ -63,5 +64,31 @@ public class OfficeGroup extends Group
   {
     return "true".equals
         (getAttribute(OfficeNamespaces.OOREPORT_NS, "reset-page-number"));
+  }
+
+  public OfficeGroupSection getHeader()
+  {
+    final OfficeGroupInstanceSection instanceSection =
+        (OfficeGroupInstanceSection) findFirstChild(OfficeNamespaces.INTERNAL_NS, "group-instance");
+    if (instanceSection == null)
+    {
+      return null;
+    }
+    return (OfficeGroupSection) instanceSection.findFirstChild
+        (OfficeNamespaces.OOREPORT_NS, "group-header");
+
+  }
+
+  public OfficeGroupSection getFooter()
+  {
+    final OfficeGroupInstanceSection instanceSection =
+        (OfficeGroupInstanceSection) findFirstChild(OfficeNamespaces.INTERNAL_NS, "group-instance");
+    if (instanceSection == null)
+    {
+      return null;
+    }
+    return (OfficeGroupSection) instanceSection.findFirstChild
+        (OfficeNamespaces.OOREPORT_NS, "group-footer");
+
   }
 }

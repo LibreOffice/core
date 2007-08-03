@@ -4,9 +4,9 @@
  *
  *  $RCSfile: OfficeGroupLayoutController.java,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2007-07-09 11:56:05 $
+ *  last change: $Author: hr $ $Date: 2007-08-03 09:49:50 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -40,15 +40,16 @@ package com.sun.star.report.pentaho.layoutprocessor;
 import com.sun.star.report.pentaho.OfficeNamespaces;
 import com.sun.star.report.pentaho.model.OfficeGroup;
 import com.sun.star.report.pentaho.model.OfficeGroupSection;
-import com.sun.star.report.pentaho.model.VariablesDeclarationSection;
+import org.jfree.layouting.util.AttributeMap;
 import org.jfree.report.DataSourceException;
 import org.jfree.report.ReportDataFactoryException;
 import org.jfree.report.ReportProcessingException;
 import org.jfree.report.flow.FlowController;
 import org.jfree.report.flow.ReportTarget;
+import org.jfree.report.flow.layoutprocessor.ElementLayoutController;
 import org.jfree.report.flow.layoutprocessor.LayoutController;
 import org.jfree.report.flow.layoutprocessor.SectionLayoutController;
-import org.jfree.report.flow.layoutprocessor.ElementLayoutController;
+import org.jfree.report.structure.Element;
 
 /**
  * Todo: Document me!
@@ -61,11 +62,12 @@ public class OfficeGroupLayoutController extends SectionLayoutController
 {
   public static final int STATE_PROCESS_REPEATING_HEADER = 0;
   public static final int STATE_PROCESS_REPEATING_FOOTER = 1;
-  public static final int STATE_PROCESS_VARIABLES = 2;
   public static final int STATE_PROCESS_NORMAL_FLOW = 3;
   private boolean waitForJoin;
   private int state;
   private VariablesCollection variablesCollection;
+  private boolean repeatHeader;
+  private boolean repeatFooter;
 
   public OfficeGroupLayoutController()
   {
@@ -99,6 +101,14 @@ public class OfficeGroupLayoutController extends SectionLayoutController
     super.initialize(node, flowController, parent);
     state = OfficeGroupLayoutController.STATE_PROCESS_REPEATING_HEADER;
     variablesCollection = new VariablesCollection(computeVariablesPrefix());
+
+
+    final OfficeGroup group = (OfficeGroup) getElement();
+    final OfficeGroupSection header = group.getHeader();
+    repeatHeader = (header != null && header.isRepeatSection());
+
+    final OfficeGroupSection footer = group.getFooter();
+    repeatFooter = (footer != null && footer.isRepeatSection());
   }
 
 
@@ -108,65 +118,47 @@ public class OfficeGroupLayoutController extends SectionLayoutController
   {
     if (state == OfficeGroupLayoutController.STATE_PROCESS_REPEATING_HEADER)
     {
-      final OfficeGroup group = (OfficeGroup) getElement();
-      final OfficeGroupSection header =
-          (OfficeGroupSection) group.findFirstChild
-          (OfficeNamespaces.OOREPORT_NS, "group-header");
 
       final OfficeGroupLayoutController controller =
           (OfficeGroupLayoutController) clone();
       controller.state =
           OfficeGroupLayoutController.STATE_PROCESS_REPEATING_FOOTER;
 
-      if (header == null || header.isRepeatSection() == false)
+      if (repeatHeader == false)
       {
         return controller;
       }
 
+      final OfficeGroup group = (OfficeGroup) getElement();
+      final OfficeGroupSection header = group.getHeader();
       controller.waitForJoin = true;
       return processChild(controller, header, getFlowController());
     }
 
     if (state == OfficeGroupLayoutController.STATE_PROCESS_REPEATING_FOOTER)
     {
-      final OfficeGroup group = (OfficeGroup) getElement();
-      final OfficeGroupSection footer =
-          (OfficeGroupSection) group.findFirstChild
-          (OfficeNamespaces.OOREPORT_NS, "group-footer");
 
       final OfficeGroupLayoutController controller =
           (OfficeGroupLayoutController) clone();
-      controller.state =
-          OfficeGroupLayoutController.STATE_PROCESS_VARIABLES;
+      controller.state = OfficeGroupLayoutController.STATE_PROCESS_NORMAL_FLOW;
 
-      if (footer == null || footer.isRepeatSection() == false)
+      if (repeatFooter == false)
       {
         return controller;
       }
 
+      final OfficeGroup group = (OfficeGroup) getElement();
+      final OfficeGroupSection footer = group.getFooter();
       controller.waitForJoin = true;
       return processChild(controller, footer, getFlowController());
     }
 
-    if (state == OfficeGroupLayoutController.STATE_PROCESS_VARIABLES)
-    {
-      // todo: Fill the variables section with something sensible ..
-      final VariablesDeclarationSection variables =
-          new VariablesDeclarationSection();
-      final OfficeGroupLayoutController controller =
-          (OfficeGroupLayoutController) clone();
-      controller.state =
-          OfficeGroupLayoutController.STATE_PROCESS_NORMAL_FLOW;
-      controller.waitForJoin = true;
-      return processChild(controller, variables, getFlowController());
-    }
     return super.processContent(target);
   }
 
   protected void resetSectionForRepeat()
   {
     super.resetSectionForRepeat();
-    state = STATE_PROCESS_VARIABLES;
   }
 
   /**
@@ -214,5 +206,14 @@ public class OfficeGroupLayoutController extends SectionLayoutController
   public VariablesCollection getVariablesCollection()
   {
     return variablesCollection;
+  }
+
+  protected AttributeMap computeAttributes(final FlowController fc, final Element element, final ReportTarget target)
+      throws DataSourceException
+  {
+    final AttributeMap map = super.computeAttributes(fc, element, target);
+    final String value = String.valueOf(repeatHeader || repeatFooter);
+    map.setAttribute(OfficeNamespaces.INTERNAL_NS, "repeating-header-or-footer", value);
+    return map;
   }
 }

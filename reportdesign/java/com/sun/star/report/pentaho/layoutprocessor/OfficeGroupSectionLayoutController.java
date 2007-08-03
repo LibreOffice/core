@@ -4,9 +4,9 @@
  *
  *  $RCSfile: OfficeGroupSectionLayoutController.java,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2007-07-09 11:56:05 $
+ *  last change: $Author: hr $ $Date: 2007-08-03 09:50:03 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -39,12 +39,16 @@ package com.sun.star.report.pentaho.layoutprocessor;
 
 import org.jfree.report.flow.layoutprocessor.SectionLayoutController;
 import org.jfree.report.flow.layoutprocessor.LayoutController;
+import org.jfree.report.flow.layoutprocessor.ElementLayoutController;
 import org.jfree.report.flow.FlowController;
 import org.jfree.report.flow.ReportTarget;
 import org.jfree.report.structure.Element;
 import org.jfree.report.DataSourceException;
+import org.jfree.report.ReportProcessingException;
+import org.jfree.report.ReportDataFactoryException;
 import org.jfree.layouting.util.AttributeMap;
 import com.sun.star.report.pentaho.OfficeNamespaces;
+import com.sun.star.report.pentaho.model.OfficeGroupSection;
 
 /**
  * This layoutcontroller simply checks, whether the parent layout controller
@@ -63,6 +67,31 @@ public class OfficeGroupSectionLayoutController extends SectionLayoutController
   {
   }
 
+  protected LayoutController startElement(final ReportTarget target)
+      throws DataSourceException, ReportProcessingException, ReportDataFactoryException
+  {
+    final OfficeGroupSection section = (OfficeGroupSection) getElement();
+    if (section.isRepeatSection() == false)
+    {
+      return super.startElement(target);
+    }
+
+    final LayoutController controller = getParent();
+    if (controller instanceof OfficeGroupLayoutController == false)
+    {
+      return super.startElement(target);
+    }
+    final OfficeGroupLayoutController oglc = (OfficeGroupLayoutController) controller;
+    if (oglc.isNormalFlowProcessing() == false)
+    {
+      return super.startElement(target);
+    }
+
+    // Skip the processing if the section is a repeating header or footer and we are processing the normal flow ..
+    final ElementLayoutController clone = (ElementLayoutController) this.clone();
+    clone.setProcessingState(ElementLayoutController.FINISHED);
+    return clone;
+  }
 
   protected AttributeMap computeAttributes(final FlowController fc,
                                            final Element element,
@@ -75,8 +104,7 @@ public class OfficeGroupSectionLayoutController extends SectionLayoutController
     {
       return attrs;
     }
-    final OfficeGroupLayoutController oglc =
-        (OfficeGroupLayoutController) controller;
+    final OfficeGroupLayoutController oglc = (OfficeGroupLayoutController) controller;
     if (oglc.isNormalFlowProcessing())
     {
       return attrs;
@@ -85,4 +113,6 @@ public class OfficeGroupSectionLayoutController extends SectionLayoutController
     attrs.setAttribute(OfficeNamespaces.INTERNAL_NS, "repeated-section", "true");
     return attrs;
   }
+
+
 }
