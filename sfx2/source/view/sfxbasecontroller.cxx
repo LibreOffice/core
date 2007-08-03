@@ -4,9 +4,9 @@
  *
  *  $RCSfile: sfxbasecontroller.cxx,v $
  *
- *  $Revision: 1.72 $
+ *  $Revision: 1.73 $
  *
- *  last change: $Author: hr $ $Date: 2007-06-27 23:34:53 $
+ *  last change: $Author: hr $ $Date: 2007-08-03 10:24:26 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -605,11 +605,12 @@ void SAL_CALL IMPL_SfxBaseController_ListenerHelper::disposing( const EVENTOBJEC
 //________________________________________________________________________________________________________
 //  SfxBaseController -> constructor
 //________________________________________________________________________________________________________
-
+DBG_NAME(sfx2_SfxBaseController)
 SfxBaseController::SfxBaseController( SfxViewShell* pViewShell )
     :   IMPL_SfxBaseController_MutexContainer   (                                                                       )
     ,   m_pData                                 ( new IMPL_SfxBaseController_DataContainer( m_aMutex, pViewShell, this ))
 {
+    DBG_CTOR(sfx2_SfxBaseController,NULL);
     m_pData->m_pViewShell->SetController( this );
 }
 
@@ -619,6 +620,7 @@ SfxBaseController::SfxBaseController( SfxViewShell* pViewShell )
 
 SfxBaseController::~SfxBaseController()
 {
+    DBG_DTOR(sfx2_SfxBaseController,NULL);
     delete m_pData;
 }
 
