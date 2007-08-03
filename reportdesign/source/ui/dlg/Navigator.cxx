@@ -4,9 +4,9 @@
  *
  *  $RCSfile: Navigator.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2007-07-09 11:56:29 $
+ *  last change: $Author: hr $ $Date: 2007-08-03 10:00:48 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -265,7 +265,7 @@ public:
 private:
     using SvTreeListBox::ExecuteDrop;
 };
-
+DBG_NAME(rpt_NavigatorTree)
 // -----------------------------------------------------------------------------
 NavigatorTree::NavigatorTree( Window* pParent,OReportController* _pController )
         :SvTreeListBox( pParent, WB_HASBUTTONS|WB_HASLINES|WB_BORDER|WB_HSCROLL|WB_HASBUTTONSATROOT )
@@ -278,6 +278,7 @@ NavigatorTree::NavigatorTree( Window* pParent,OReportController* _pController )
         ,m_pDragedEntry(NULL)
         ,m_nTimerCounter( DROP_ACTION_TIMER_INITIAL_TICKS )
 {
+    DBG_CTOR(rpt_NavigatorTree,NULL);
     m_pReportListener = new OPropertyChangeMultiplexer(this,m_pController->getReportDefinition().get());
     m_pReportListener->addProperty(PROPERTY_PAGEHEADERON);
     m_pReportListener->addProperty(PROPERTY_PAGEFOOTERON);
@@ -322,6 +323,7 @@ NavigatorTree::~NavigatorTree()
     }
     m_pReportListener->dispose();
     m_pSelectionListener->dispose();
+    DBG_DTOR(rpt_NavigatorTree,NULL);
 }
 //------------------------------------------------------------------------------
 void NavigatorTree::Command( const CommandEvent& rEvt )
@@ -822,6 +824,7 @@ void NavigatorTree::removeEntry(SvLBoxEntry* _pEntry,bool _bRemove)
             GetModel()->Remove(_pEntry);
     }
 }
+DBG_NAME(rpt_NavigatorTree_UserData)
 // -----------------------------------------------------------------------------
 NavigatorTree::UserData::UserData(NavigatorTree* _pTree,const uno::Reference<uno::XInterface>& _xContent)
     : OPropertyChangeListener(m_aMutex)
@@ -829,6 +832,7 @@ NavigatorTree::UserData::UserData(NavigatorTree* _pTree,const uno::Reference<uno
     , m_xContent(_xContent)
     , m_pTree(_pTree)
 {
+    DBG_CTOR(rpt_NavigatorTree_UserData,NULL);
     uno::Reference<beans::XPropertySet> xProp(m_xContent,uno::UNO_QUERY);
     if ( xProp.is() )
     {
@@ -855,6 +859,7 @@ NavigatorTree::UserData::UserData(NavigatorTree* _pTree,const uno::Reference<uno
 // -----------------------------------------------------------------------------
 NavigatorTree::UserData::~UserData()
 {
+    DBG_DTOR(rpt_NavigatorTree_UserData,NULL);
     if ( m_pContainerListener.is() )
         m_pContainerListener->dispose();
     if ( m_pListener.is() )

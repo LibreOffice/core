@@ -6,9 +6,9 @@
  *
  *  $RCSfile: propbrw.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2007-07-09 11:56:31 $
+ *  last change: $Author: hr $ $Date: 2007-08-03 10:02:24 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -54,7 +54,7 @@
 #ifndef _COM_SUN_STAR_INSPECTION_XOBJECTINSPECTOR_HPP_
 #include <com/sun/star/inspection/XObjectInspector.hpp>
 #endif
-
+#include <com/sun/star/uno/XComponentContext.hpp>
 #ifndef _SFXBRDCST_HXX //autogen
 #include <svtools/brdcst.hxx>
 #endif
@@ -87,6 +87,8 @@ class PropBrw : public DockingWindow , public SfxListener, public SfxBroadcaster
 {
 private:
     OModuleClient       m_aModuleClient;
+    ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >
+                        m_xInspectorContext;
     ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >
                         m_xORB;
     ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >
