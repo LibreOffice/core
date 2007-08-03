@@ -4,9 +4,9 @@
  *
  *  $RCSfile: appwin.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: hr $ $Date: 2007-06-27 14:13:14 $
+ *  last change: $Author: hr $ $Date: 2007-08-03 13:56:36 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -250,8 +250,14 @@ long AppWin::InitMenu( Menu* pMenu )
 {
 
     ::rtl::OUString aTemp;
-    TextSelection r = pDataEdit->GetSelection();
-    BOOL bMarked = r.HasRange();
+    BOOL bMarked;
+    if( pDataEdit )
+    {
+        TextSelection r = pDataEdit->GetSelection();
+        bMarked = r.HasRange();
+    }
+    else
+        bMarked = FALSE;
     pMenu->EnableItem( RID_EDITREPEAT,  (aFind.Len() != 0 ) );
     pMenu->EnableItem( RID_EDITCUT,     bMarked );
     pMenu->EnableItem( RID_EDITCOPY,    bMarked );
@@ -259,7 +265,11 @@ long AppWin::InitMenu( Menu* pMenu )
     pMenu->EnableItem( RID_EDITDEL,     bMarked );
 //  pMenu->EnableItem( RID_HELPTOPIC,   bMarked );
 
-    BOOL bHasText = pDataEdit->HasText();
+    BOOL bHasText;
+    if( pDataEdit )
+        bHasText = pDataEdit->HasText();
+    else
+        bHasText = FALSE;
     BOOL bRunning = pFrame->Basic().IsRunning();
     BOOL bCanExecute = BOOL( (!bRunning && bHasText) || pFrame->bInBreak );
     pMenu->EnableItem( RID_RUNSTART,    bCanExecute );
