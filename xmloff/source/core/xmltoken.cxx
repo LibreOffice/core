@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xmltoken.cxx,v $
  *
- *  $Revision: 1.109 $
+ *  $Revision: 1.110 $
  *
- *  last change: $Author: rt $ $Date: 2007-07-06 12:21:09 $
+ *  last change: $Author: hr $ $Date: 2007-08-03 12:53:36 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -2946,6 +2946,7 @@ namespace xmloff { namespace token {
         TOKEN( "deep-traversing",       XML_DEEP_TRAVERSING),
         TOKEN( "preserve-IRI",       XML_PRESERVE_IRI),
         TOKEN( "sort-by-x-values",      XML_SORT_BY_X_VALUES ),
+        TOKEN( "page-continuation",        XML_PAGE_CONTINUATION ),
         TOKEN( "right-angled-axes",      XML_RIGHT_ANGLED_AXES ),
         TOKEN( "soft-page-break",                 XML_SOFT_PAGE_BREAK ),
         TOKEN( "use-soft-page-breaks",            XML_USE_SOFT_PAGE_BREAKS ),
