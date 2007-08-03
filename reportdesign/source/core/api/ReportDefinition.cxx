@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ReportDefinition.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: hr $ $Date: 2007-08-02 14:30:16 $
+ *  last change: $Author: hr $ $Date: 2007-08-03 09:53:39 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -637,7 +637,6 @@ struct OReportDefinitionImpl
     uno::Reference< report::XSection>                       m_xDetail;
     uno::Reference< embed::XStorage >                       m_xStorage;
     uno::Reference< frame::XController >                    m_xCurrentController;
-    uno::Reference< document::XEventListener >              m_xDocEventBroadcaster;
     uno::Reference< container::XIndexAccess >               m_xViewData;
     uno::Reference< container::XNameAccess >                m_xStyles;
     uno::Reference< report::XFunctions >                    m_xFunctions;
@@ -785,13 +784,11 @@ void OReportDefinition::init()
         SdrLayerAdmin& rAdmin = m_pImpl->m_pReportModel->GetLayerAdmin();
         rAdmin.NewStandardLayer();
         rAdmin.NewLayer( UniString::CreateFromAscii( RTL_CONSTASCII_STRINGPARAM( "HiddenLayer" ) ) );
-        m_pImpl->m_xDocEventBroadcaster.set(m_aProps->m_xContext->getServiceManager()->createInstanceWithContext(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.frame.GlobalEventBroadcaster")),m_aProps->m_xContext),
-            uno::UNO_QUERY);
         m_pImpl->m_xFunctions = new OFunctions(this,m_aProps->m_xContext);
     }
     catch(uno::Exception)
     {
-        OSL_ENSURE(0,"Could not create GlobalEventBroadcaster!");
+        OSL_ENSURE(0,"Error!");
     }
 }
 // -----------------------------------------------------------------------------
@@ -815,8 +812,6 @@ void SAL_CALL OReportDefinition::disposing()
         m_pImpl->m_aDocEventListeners.disposeAndClear( aDisposeEvent );
         m_pImpl->m_aStorageChangeListeners.disposeAndClear( aDisposeEvent );
 
-        m_pImpl->m_xDocEventBroadcaster.clear();
-
         ::comphelper::disposeComponent(m_pImpl->m_xGroups);
         ::comphelper::disposeComponent(m_pImpl->m_xReportHeader);
         ::comphelper::disposeComponent(m_pImpl->m_xReportFooter);
@@ -836,6 +831,7 @@ void SAL_CALL OReportDefinition::disposing()
         m_pImpl->m_xStyles.clear();
         m_pImpl->m_xUIConfigurationManager.clear();
         m_pImpl->m_pReportModel.reset();
+        m_pImpl->m_aArgs.realloc(0);
     }
 }
 // -----------------------------------------------------------------------------
@@ -1345,6 +1341,8 @@ void SAL_CALL OReportDefinition::removeCloseListener( const uno::Reference< util
 // XCloseable
 void SAL_CALL OReportDefinition::close( ::sal_Bool _bDeliverOwnership ) throw (util::CloseVetoException, uno::RuntimeException)
 {
+    vos::OGuard aSolarGuard( Application::GetSolarMutex() );
+
     ::osl::ResettableMutexGuard aGuard(m_aMutex);
     ::connectivity::checkDisposed(ReportDefinitionBase::rBHelper.bDisposed);
     // notify our container listeners
@@ -1413,6 +1411,9 @@ void OReportDefinition::fillArgs(::comphelper::MediaDescriptor& _aDescriptor)
                 );
     }
     lcl_stripLoadArguments( _aDescriptor, m_pImpl->m_aArgs );
+    ::rtl::OUString sCaption;
+    sCaption = _aDescriptor.getUnpackedValueOrDefault(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("DocumentTitle")),sCaption);
+    setCaption(sCaption);
 }
 // -----------------------------------------------------------------------------
 ::rtl::OUString SAL_CALL OReportDefinition::getURL(  ) throw (uno::RuntimeException)
@@ -1886,20 +1887,7 @@ void OReportDefinition::notifyEvent(const ::rtl::OUString& _sEventName)
         ::osl::ResettableMutexGuard aGuard(m_aMutex);
         ::connectivity::checkDisposed(ReportDefinitionBase::rBHelper.bDisposed);
         document::EventObject aEvt(*this, _sEventName);
-        /// TODO: this code has to be deleted after as cws will be integrated
-        uno::Reference< document::XEventListener > xDocEventBroadcaster;
-        try
-        {
-            xDocEventBroadcaster.set(m_aProps->m_xContext->getServiceManager()->createInstanceWithContext(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.frame.GlobalEventBroadcaster")),m_aProps->m_xContext),
-                uno::UNO_QUERY);
-        }
-        catch(uno::Exception)
-        {
-            OSL_ENSURE(0,"Could not create GlobalEventBroadcaster!");
-        }
         aGuard.clear();
-        if ( xDocEventBroadcaster.is() )
-            xDocEventBroadcaster->notifyEvent(aEvt);
         m_pImpl->m_aDocEventListeners.notifyEach(&document::XEventListener::notifyEvent,aEvt);
     }
     catch(uno::Exception&)
