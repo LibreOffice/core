@@ -4,9 +4,9 @@
  *
  *  $RCSfile: unofield.cxx,v $
  *
- *  $Revision: 1.97 $
+ *  $Revision: 1.98 $
  *
- *  last change: $Author: obo $ $Date: 2007-07-18 12:56:44 $
+ *  last change: $Author: hr $ $Date: 2007-08-03 12:58:14 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1764,6 +1764,13 @@ void SwXTextField::attachToRange(
                         DBG_ERROR("wrong value");
                         nSubType = GSE_EXPR;
                 }
+                //make sure the SubType matches the field type
+                SwFieldType* pSetExpFld = pDoc->GetFldType(RES_SETEXPFLD, m_pProps->sPar1, sal_False);
+                if( pSetExpFld && nSubType != GSE_STRING &&
+                    static_cast< SwSetExpFieldType* >(pSetExpFld)->GetType() == GSE_STRING
+                    )
+                    nSubType = GSE_STRING;
+
                 if(m_pProps->bBool2)
                     nSubType |= SUB_CMD;
                 else
