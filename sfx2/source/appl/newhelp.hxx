@@ -4,9 +4,9 @@
  *
  *  $RCSfile: newhelp.hxx,v $
  *
- *  $Revision: 1.56 $
+ *  $Revision: 1.57 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-07 17:45:23 $
+ *  last change: $Author: hr $ $Date: 2007-08-03 13:57:53 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -98,8 +98,6 @@ class ContentListBox_Impl : public SvTreeListBox
 private:
     Image           aOpenBookImage;
     Image           aClosedBookImage;
-    Image           aOpenChapterImage;
-    Image           aClosedChapterImage;
     Image           aDocumentImage;
 
     void            InitRoot();
