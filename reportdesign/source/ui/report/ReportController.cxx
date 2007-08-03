@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ReportController.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: hr $ $Date: 2007-08-02 14:40:09 $
+ *  last change: $Author: hr $ $Date: 2007-08-03 12:45:38 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -323,22 +323,6 @@ namespace
             return x.equals(y.Name);// ? true : false;
         }
     };
-    class UndoManagerListAction
-    {
-    private:
-        SfxUndoManager& m_rManager;
-
-    public:
-        UndoManagerListAction( SfxUndoManager& _rManager, const String& _rListActionComment )
-            :m_rManager( _rManager )
-        {
-            m_rManager.EnterListAction( _rListActionComment, String() );
-        }
-        ~UndoManagerListAction()
-        {
-            m_rManager.LeaveListAction();
-        }
-    };
 }
 
 // -----------------------------------------------------------------------------
@@ -456,6 +440,7 @@ void OReportController::disposing()
     {
         ::comphelper::disposeComponent( m_xRowSet );
         ::comphelper::disposeComponent( m_xRowSetMediator );
+        ::comphelper::disposeComponent( m_xFormatter );
     }
     catch(uno::Exception&)
     {
@@ -1258,10 +1243,9 @@ void OReportController::Execute(sal_uInt16 _nId, const Sequence< PropertyValue >
                 {
                     uno::Reference< report::XFunctions> xFunctions(xFunction->getParent(),uno::UNO_QUERY_THROW);
                     sal_Int32 nIndex = getPositionInIndexAccess(xFunctions.get(),xFunction);
-                    String sComment = String((ModuleRes(RID_STR_UNDO_REMOVE_FUNCTION)));
-                    m_aUndoManager.EnterListAction(sComment,String());
+                    String sUndoAction = String((ModuleRes(RID_STR_UNDO_REMOVE_FUNCTION)));
+                    UndoManagerListAction aListAction(m_aUndoManager,sUndoAction);
                     xFunctions->removeByIndex(nIndex);
-                    m_aUndoManager.LeaveListAction();
                     select(uno::makeAny(xFunctions->getParent()));
                     InvalidateFeature( SID_SAVEDOC );
                     InvalidateFeature( SID_UNDO );
@@ -1645,10 +1629,11 @@ void OReportController::Execute(sal_uInt16 _nId, const Sequence< PropertyValue >
                 uno::Reference< report::XReportControlFormat> xReportControlFormat = lcl_getReportControlFormat(aArgs,m_pMyOwnView,xWindow);
                 if ( xReportControlFormat.is() )
                 {
-                    const String sUndoAction(String(ModuleRes(RID_STR_UNDO_CHANGEFONT)));
-                    getUndoMgr()->EnterListAction( sUndoAction, String() );
-                    rptui::openCharDialog(xReportControlFormat,xWindow);
-                    getUndoMgr()->LeaveListAction();
+                    {
+                        const String sUndoAction(ModuleRes(RID_STR_UNDO_CHANGEFONT));
+                        UndoManagerListAction aListAction(m_aUndoManager,sUndoAction);
+                        rptui::openCharDialog(xReportControlFormat,xWindow);
+                    }
                     InvalidateAll();
                 }
             }
@@ -1729,18 +1714,18 @@ void OReportController::Execute(sal_uInt16 _nId, const Sequence< PropertyValue >
             InvalidateAll();
             return;
         case SID_GROUP:
-            {
-                ::boost::shared_ptr<OReportSection> pReportSection = m_pMyOwnView->getMarkedSection();
-                if ( pReportSection.get() )
-                {
-                    ::std::vector< uno::Reference< report::XReportComponent > > aSelection;
-                    uno::Reference<report::XSection> xSection = pReportSection->getSection();
-                    const String sUndoAction(String(ModuleRes(RID_STR_UNDO_GROUP)));
-                    getUndoMgr()->EnterListAction( sUndoAction, String() );
+    //        {
+    //            ::boost::shared_ptr<OReportSection> pReportSection = m_pMyOwnView->getMarkedSection();
+                //if ( pReportSection.get() )
+                //{
+    //                ::std::vector< uno::Reference< report::XReportComponent > > aSelection;
+    //                uno::Reference<report::XSection> xSection = pReportSection->getSection();
+    //                const String sUndoAction(ModuleRes(RID_STR_UNDO_GROUP));
+    //                getUndoMgr()->EnterListAction( sUndoAction, String() );
 
-                    getUndoMgr()->LeaveListAction();
-                }
-            }
+    //                getUndoMgr()->LeaveListAction();
+    //            }
+    //        }
             break;
         default:
             OReportController_BASE::Execute(_nId,aArgs);
@@ -2341,6 +2326,8 @@ void SAL_CALL OReportController::propertyChange( const beans::PropertyChangeEven
                 if ( !m_pMyOwnView->isAddFieldVisible() )
                     m_pMyOwnView->toggleAddField();
             }
+            else if (   evt.PropertyName.equals( PROPERTY_CAPTION ) )
+                updateTitle();
         } // if ( evt.Source == m_xReportDefinition )
         else
         {
@@ -2360,9 +2347,9 @@ void SAL_CALL OReportController::propertyChange( const beans::PropertyChangeEven
 }
 
 // -----------------------------------------------------------------------------
-void SAL_CALL OReportController::disposing( const lang::EventObject& /*Source*/ ) throw(uno::RuntimeException)
+void SAL_CALL OReportController::disposing( const lang::EventObject& Source ) throw(uno::RuntimeException)
 {
-    // not interested in
+    OReportController_BASE::disposing(Source);
 }
 
 // -----------------------------------------------------------------------------
@@ -2488,7 +2475,8 @@ sal_Bool OReportController::doSaveDoc(sal_Bool _bSaveAs)
                             sDefault = String(::dbtools::createUniqueName(xNames.get(),aName));
                         }
 
-                        const ::rtl::OUString sLabel(String(ModuleRes(STR_RPT_LABEL)));
+                        String aGcc3WorkaroundTemporary( ModuleRes(STR_RPT_LABEL));
+                        const ::rtl::OUString sLabel(aGcc3WorkaroundTemporary);
                         Sequence< Any > aArgs(4);
                         Reference< awt::XWindow> xWindow = getTopMostContainerWindow();
                         if ( !xWindow.is() )
@@ -2744,8 +2732,8 @@ void OReportController::openPageDialog(const uno::Reference<report::XSection>& _
                 }
                 else
                 {
-                    const String sUndoAction(String(ModuleRes(RID_STR_UNDO_CHANGEPAGE)));
-                    getUndoMgr()->EnterListAction( sUndoAction, String() );
+                    const String sUndoAction(ModuleRes(RID_STR_UNDO_CHANGEPAGE));
+                    UndoManagerListAction aListAction(m_aUndoManager,sUndoAction);
                     const SfxPoolItem* pItem = NULL;
                     if ( SFX_ITEM_SET == pSet->GetItemState( RPTUI_ID_SIZE,sal_True,&pItem))
                     {
@@ -2777,7 +2765,6 @@ void OReportController::openPageDialog(const uno::Reference<report::XSection>& _
                         setStyleProperty(m_xReportDefinition,PROPERTY_BACKTRANSPARENT,aBackColor == COL_TRANSPARENT);
                         setStyleProperty(m_xReportDefinition,PROPERTY_BACKCOLOR,aBackColor.GetColor());
                     }
-                    getUndoMgr()->LeaveListAction();
                 }
             }
         }
@@ -2876,20 +2863,18 @@ void OReportController::Notify(SfxBroadcaster & /*rBc*/, SfxHint const & rHint)
 // -----------------------------------------------------------------------------
 void OReportController::executeMethodWithUndo(USHORT _nUndoStrId,const ::std::mem_fun_t<void,ODesignView>& _pMemfun)
 {
-    const String sComment = String((ModuleRes(_nUndoStrId)));
-    m_aUndoManager.EnterListAction(sComment,String());
+    const String sUndoAction = String((ModuleRes(_nUndoStrId)));
+    UndoManagerListAction aListAction(m_aUndoManager,sUndoAction);
     _pMemfun(m_pMyOwnView);
-    m_aUndoManager.LeaveListAction();
     InvalidateFeature( SID_SAVEDOC );
     InvalidateFeature( SID_UNDO );
 }
 // -----------------------------------------------------------------------------
 void OReportController::alignControlsWithUndo(USHORT _nUndoStrId,sal_Int32 _nControlModification,bool _bAlignAtSection)
 {
-    const String sComment = String((ModuleRes(_nUndoStrId)));
-    m_aUndoManager.EnterListAction(sComment,String());
+    const String sUndoAction = String((ModuleRes(_nUndoStrId)));
+    UndoManagerListAction aListAction(m_aUndoManager,sUndoAction);
     m_pMyOwnView->alignMarkedObjects(_nControlModification,_bAlignAtSection);
-    m_aUndoManager.LeaveListAction();
     InvalidateFeature( SID_SAVEDOC );
     InvalidateFeature( SID_UNDO );
 }
@@ -3327,6 +3312,8 @@ void OReportController::createControl(const Sequence< PropertyValue >& _aArgs,co
         ::rtl::OUString sUrl = aMap.getUnpackedValueOrDefault(PROPERTY_IMAGEURL,::rtl::OUString());
         if ( sUrl.getLength() && xInfo->hasPropertyByName(PROPERTY_IMAGEURL) )
             xUnoProp->setPropertyValue( PROPERTY_IMAGEURL, uno::makeAny( sUrl ) );
+        if ( xInfo->hasPropertyByName(PROPERTY_BACKGROUNDCOLOR) )
+            xUnoProp->setPropertyValue(PROPERTY_BACKGROUNDCOLOR,xShapeProp->getPropertyValue(PROPERTY_CONTROLBACKGROUND));
 
         pObj->CreateMediator(sal_True);
 
@@ -3352,8 +3339,8 @@ void OReportController::createDateTime(const Sequence< PropertyValue >& _aArgs)
 {
     m_pMyOwnView->unmarkAllObjects(NULL);
 
-    const String sUndoAction(String(ModuleRes(RID_STR_UNDO_INSERT_CONTROL)));
-    getUndoMgr()->EnterListAction( sUndoAction, String() );
+    const String sUndoAction(ModuleRes(RID_STR_UNDO_INSERT_CONTROL));
+    UndoManagerListAction aListAction(m_aUndoManager,sUndoAction);
 
     SequenceAsHashMap aMap(_aArgs);
     aMap.createItemIfMissing(PROPERTY_FORMATKEY,aMap.getUnpackedValueOrDefault(PROPERTY_FORMATKEYDATE,sal_Int32(0)));
@@ -3374,16 +3361,14 @@ void OReportController::createDateTime(const Sequence< PropertyValue >& _aArgs)
         aMap[PROPERTY_FORMATKEY] <<= aMap.getUnpackedValueOrDefault(PROPERTY_FORMATKEYTIME,sal_Int32(0));
         createControl(aMap.getAsConstPropertyValueList(),xSection,sFunction);
     }
-
-    getUndoMgr()->LeaveListAction();
 }
 // -----------------------------------------------------------------------------
 void OReportController::createPageNumber(const Sequence< PropertyValue >& _aArgs)
 {
     m_pMyOwnView->unmarkAllObjects(NULL);
 
-    const String sUndoAction(String(ModuleRes(RID_STR_UNDO_INSERT_CONTROL)));
-    getUndoMgr()->EnterListAction( sUndoAction, String() );
+    const String sUndoAction(ModuleRes(RID_STR_UNDO_INSERT_CONTROL));
+    UndoManagerListAction aListAction(m_aUndoManager,sUndoAction);
 
     if ( !m_xReportDefinition->getPageHeaderOn() )
     {
@@ -3407,8 +3392,6 @@ void OReportController::createPageNumber(const Sequence< PropertyValue >& _aArgs
 
     sal_Bool bInPageHeader = aMap.getUnpackedValueOrDefault(PROPERTY_PAGEHEADERON,sal_True);
     createControl(_aArgs,bInPageHeader ? m_xReportDefinition->getPageHeader() : m_xReportDefinition->getPageFooter(),sFunction);
-
-    getUndoMgr()->LeaveListAction();
 }
 
 // -----------------------------------------------------------------------------
@@ -3610,6 +3593,8 @@ void OReportController::addPairControls(const Sequence< PropertyValue >& aArgs)
                             ReportFormula aFormula( ReportFormula::Field, sName );
                             xUnoProp->setPropertyValue( PROPERTY_DATAFIELD, uno::makeAny( aFormula.getCompleteFormula() ) );
                         }
+                        if ( xInfo->hasPropertyByName(PROPERTY_BACKGROUNDCOLOR) )
+                            xUnoProp->setPropertyValue(PROPERTY_BACKGROUNDCOLOR,xShapeProp->getPropertyValue(PROPERTY_CONTROLBACKGROUND));
 
                         pObjs[i]->CreateMediator(sal_True);
                         // need SectionView from the above or follow Section
@@ -3713,7 +3698,7 @@ void OReportController::listen(const bool _bAdd)
 {
     const ::rtl::OUString aProps [] = {    PROPERTY_REPORTHEADERON,PROPERTY_REPORTFOOTERON
                                             ,PROPERTY_PAGEHEADERON,PROPERTY_PAGEFOOTERON
-                                            ,PROPERTY_COMMAND, PROPERTY_COMMANDTYPE
+                                            ,PROPERTY_COMMAND, PROPERTY_COMMANDTYPE,PROPERTY_CAPTION
     };
 
     void (SAL_CALL XPropertySet::*pPropertyListenerAction)( const ::rtl::OUString&, const uno::Reference< XPropertyChangeListener >& ) =
@@ -3792,11 +3777,11 @@ void OReportController::switchReportSection(const sal_Int16 _nId)
 
     if ( m_xReportDefinition.is() )
     {
-                const OXUndoEnvironment::OUndoEnvLock aLock( m_aReportModel->GetUndoEnv() );
+        const OXUndoEnvironment::OUndoEnvLock aLock( m_aReportModel->GetUndoEnv() );
         const bool bSwitchOn = !m_xReportDefinition->getReportHeaderOn();
         if ( SID_REPORTHEADERFOOTER == _nId )
         {
-            const String sUndoAction(String(ModuleRes(bSwitchOn ? RID_STR_UNDO_ADD_REPORTHEADERFOOTER : RID_STR_UNDO_REMOVE_REPORTHEADERFOOTER)));
+            const String sUndoAction(ModuleRes(bSwitchOn ? RID_STR_UNDO_ADD_REPORTHEADERFOOTER : RID_STR_UNDO_REMOVE_REPORTHEADERFOOTER));
             getUndoMgr()->EnterListAction( sUndoAction, String() );
 
             addUndoActionAndInvalidate(new OReportSectionUndo(*(m_aReportModel),SID_REPORTHEADER_WITHOUT_UNDO
@@ -3839,12 +3824,12 @@ void OReportController::switchPageSection(const sal_Int16 _nId)
     OSL_ENSURE(_nId == SID_PAGEHEADERFOOTER || _nId == SID_PAGEHEADER_WITHOUT_UNDO || _nId == SID_PAGEFOOTER_WITHOUT_UNDO ,"Illegal id given!");
     if ( m_xReportDefinition.is() )
     {
-                const OXUndoEnvironment::OUndoEnvLock aLock( m_aReportModel->GetUndoEnv() );
+        const OXUndoEnvironment::OUndoEnvLock aLock( m_aReportModel->GetUndoEnv() );
         const bool bSwitchOn = !m_xReportDefinition->getPageHeaderOn();
 
         if ( SID_PAGEHEADERFOOTER == _nId )
         {
-            const String sUndoAction(String(ModuleRes(bSwitchOn ? RID_STR_UNDO_ADD_REPORTHEADERFOOTER : RID_STR_UNDO_REMOVE_REPORTHEADERFOOTER)));
+            const String sUndoAction(ModuleRes(bSwitchOn ? RID_STR_UNDO_ADD_REPORTHEADERFOOTER : RID_STR_UNDO_REMOVE_REPORTHEADERFOOTER));
             getUndoMgr()->EnterListAction( sUndoAction, String() );
 
             addUndoActionAndInvalidate(new OReportSectionUndo(*m_aReportModel
@@ -3999,4 +3984,4 @@ uno::Reference< util::XNumberFormatter > OReportController::getReportNumberForma
 {
     return m_xFormatter;
 }
-
+// -----------------------------------------------------------------------------
