@@ -4,9 +4,9 @@
  *
  *  $RCSfile: DataPointItemConverter.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: rt $ $Date: 2007-07-25 08:40:39 $
+ *  last change: $Author: hr $ $Date: 2007-08-03 12:34:53 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -496,7 +496,7 @@ void DataPointItemConverter::FillSpecialItem(
         {
             if( m_pNumberFormatterWrapper )
             {
-                sal_Int32 nKey;
+                sal_Int32 nKey = 0;
                 if( GetPropertySet()->getPropertyValue( C2U( "NumberFormat" )) >>= nKey )
                 {
                     rOutItemSet.Put( SfxUInt32Item( nWhichId, nKey ));
