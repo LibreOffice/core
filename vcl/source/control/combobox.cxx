@@ -4,9 +4,9 @@
  *
  *  $RCSfile: combobox.cxx,v $
  *
- *  $Revision: 1.43 $
+ *  $Revision: 1.44 $
  *
- *  last change: $Author: rt $ $Date: 2007-07-24 10:06:00 $
+ *  last change: $Author: hr $ $Date: 2007-08-03 14:06:48 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -169,8 +169,25 @@ void ComboBox::ImplCalcEditHeight()
     sal_Int32 nLeft, nTop, nRight, nBottom;
     GetBorder( nLeft, nTop, nRight, nBottom );
     mnDDHeight = (USHORT)(mpSubEdit->GetTextHeight() + nTop + nBottom + 4);
+
     if ( !IsDropDownBox() )
         mnDDHeight += 4;
+
+    // FIXME: currently only on aqua; see if we can use this on other platforms
+    if( ImplGetSVData()->maNWFData.mbNoFocusRects && ! IsDropDownBox() )
+    {
+        Region aCtrlRegion( Rectangle( Point(), Size( 10, 10 ) ) );
+        Region aBoundRegion, aContentRegion;
+        ImplControlValue aControlValue;
+        if( GetNativeControlRegion( CTRL_EDITBOX, PART_ENTIRE_CONTROL,
+                                    aCtrlRegion,
+                                    CTRL_STATE_ENABLED,
+                                    aControlValue, rtl::OUString(),
+                                    aBoundRegion, aContentRegion ) )
+        {
+            mnDDHeight = sal::static_int_cast<USHORT>(aBoundRegion.GetBoundRect().GetHeight());
+        }
+    }
 }
 
 // -----------------------------------------------------------------------
