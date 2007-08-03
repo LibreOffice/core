@@ -4,9 +4,9 @@
  *
  *  $RCSfile: DataSeriesHelper.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: rt $ $Date: 2007-07-25 08:56:15 $
+ *  last change: $Author: hr $ $Date: 2007-08-03 12:36:26 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -295,7 +295,7 @@ OUString lcl_getDataSequenceLabel( const Reference< chart2::data::XDataSequence 
         const sal_Int32 nMax = aSeq.getLength() - 1;
         OUString aVal;
         OUStringBuffer aBuf;
-        double fNum;
+        double fNum = 0;
 
         for( sal_Int32 i = 0; i <= nMax; ++i )
         {

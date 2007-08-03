@@ -4,9 +4,9 @@
  *
  *  $RCSfile: OPropertySet.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: rt $ $Date: 2007-07-25 08:59:16 $
+ *  last change: $Author: hr $ $Date: 2007-08-03 12:36:50 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -316,14 +316,14 @@ sal_Bool SAL_CALL OPropertySet::convertFastPropertyValue
         sal_Int16 nValue;
         if( (rOldValue>>=nValue) && !(rValue>>=nValue) )
         {
-            sal_Int32 n32Value;
+            sal_Int32 n32Value = 0;
             if( rValue>>=n32Value )
             {
                 rConvertedValue = uno::makeAny( static_cast<sal_Int16>(n32Value) );
                 return sal_True;
             }
 
-            sal_Int64 n64Value;
+            sal_Int64 n64Value = 0;
             if( rValue>>=n64Value )
             {
                 rConvertedValue = uno::makeAny( static_cast<sal_Int16>(n64Value) );
