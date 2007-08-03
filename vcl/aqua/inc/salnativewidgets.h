@@ -4,9 +4,9 @@
  *
  *  $RCSfile: salnativewidgets.h,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2007-07-05 08:13:44 $
+ *  last change: $Author: hr $ $Date: 2007-08-03 13:59:04 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -39,6 +39,30 @@
 // since 10.4 ... no metrics are returned, and we have to fix the values
 #define BUTTON_WIDTH 16
 #define BUTTON_HEIGHT 17
+
+//standard height of the AHIG
+//tabs
+#define TAB_HEIGHT_NORMAL 20
+#define TAB_HEIGHT_SMALL  17
+#define TAB_HEIGHT_MINI   15
+
+#define TAB_TEXT_OFFSET     12
+#define VCL_TAB_TEXT_OFFSET 2
+
+//listboxes, comboboxes (they have the same dimensions)
+#define COMBOBOX_HEIGHT_NORMAL 20
+#define DROPDOWN_BUTTON_WIDTH 20
+
+//text edit
+#define TEXT_EDIT_HEIGHT_NORMAL 22
+
+//spin box
+#define SPIN_BUTTON_SPACE           2
+#define SPIN_BUTTON_WIDTH           13
+#define SPIN_UPPER_BUTTON_HEIGHT    11
+#define SPIN_LOWER_BUTTON_HEIGHT    10
+#define SPIN_TWO_BUTTONS_HEIGHT     21
+
 
 // for some controls, like spinbuttons + spinboxes, or listboxes
 // we need it to adjust text position beside radio and check buttons
