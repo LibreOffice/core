@@ -4,9 +4,9 @@
  *
  *  $RCSfile: localizationmgr.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: hr $ $Date: 2007-06-26 16:52:14 $
+ *  last change: $Author: hr $ $Date: 2007-08-03 09:58:50 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -208,6 +208,9 @@ void LocalizationMgr::implEnableDisableResourceForAllLibraryDialogs( HandleResou
     aPureIdStr += aPropName;
     return aPureIdStr;
 }
+
+extern bool localesAreEqual( const ::com::sun::star::lang::Locale& rLocaleLeft,
+                             const ::com::sun::star::lang::Locale& rLocaleRight );
 
 // Works on xStringResourceManager's current language for SET_IDS/RESET_IDS,
 // anyway only one language should exist when calling this method then,
@@ -670,6 +673,7 @@ sal_Int32 LocalizationMgr::implHandleControlResourceProperties
     return nChangedCount;
 }
 
+/*
 void TEST_simulateDialogAddRemoveLocale( bool bAdd )
 {
     Sequence< Locale > aLocaleSeq( 1 );
@@ -712,6 +716,7 @@ void TEST_simulateDialogRemoveLocale( void )
 {
     TEST_simulateDialogAddRemoveLocale( false );
 }
+*/
 
 void LocalizationMgr::handleAddLocales( Sequence< Locale > aLocaleSeq )
 {
@@ -745,6 +750,7 @@ void LocalizationMgr::handleAddLocales( Sequence< Locale > aLocaleSeq )
     handleTranslationbar();
 }
 
+
 void LocalizationMgr::handleRemoveLocales( Sequence< Locale > aLocaleSeq )
 {
     const Locale* pLocales = aLocaleSeq.getConstArray();
@@ -762,9 +768,7 @@ void LocalizationMgr::handleRemoveLocales( Sequence< Locale > aLocaleSeq )
         if( aResLocaleSeq.getLength() == 1 )
         {
             const Locale& rLastResLocale = aResLocaleSeq.getConstArray()[ 0 ];
-            if( rLocale.Language == rLastResLocale.Language &&
-                rLocale.Country  == rLastResLocale.Country &&
-                rLocale.Variant  == rLastResLocale.Variant )
+            if( localesAreEqual( rLocale, rLastResLocale ) )
             {
                 disableResourceForAllLibraryDialogs();
             }
@@ -952,14 +956,9 @@ void LocalizationMgr::renameControlResourceIDsForEditorObject( DlgEditor* pEdito
 
     ::rtl::OUString aDialogName = pDlgWin->GetName();
     Reference< XStringResourceResolver > xDummyStringResolver;
-    sal_Int32 nChangedCount = implHandleControlResourceProperties
+    implHandleControlResourceProperties
         ( aControlAny, aDialogName, aNewCtrlName, xStringResourceManager,
           xDummyStringResolver, RENAME_CONTROL_IDS );
-    // HACK to make code warning free
-    // What did you really use nChangedCount for?
-    if( nChangedCount )
-        nChangedCount ++;
-
 }
 
 
@@ -1110,7 +1109,34 @@ void LocalizationMgr::resetResourceForDialog( Reference< container::XNameContain
     }
 }
 
-void LocalizationMgr::moveResourcesForPastedEditorObject( DlgEditor* pEditor,
+void LocalizationMgr::setResourceIDsForDialog( Reference< container::XNameContainer > xDialogModel,
+    Reference< XStringResourceManager > xStringResourceManager )
+{
+    if( !xStringResourceManager.is() )
+        return;
+
+    // Dialog as control
+    ::rtl::OUString aDummyName;
+    Any aDialogCtrl;
+    aDialogCtrl <<= xDialogModel;
+    Reference< XStringResourceResolver > xDummyStringResolver;
+    implHandleControlResourceProperties( aDialogCtrl, aDummyName,
+        aDummyName, xStringResourceManager, xDummyStringResolver, SET_IDS );
+
+    // Handle all controls
+    Sequence< ::rtl::OUString > aNames = xDialogModel->getElementNames();
+    const ::rtl::OUString* pNames = aNames.getConstArray();
+    sal_Int32 nCtrls = aNames.getLength();
+    for( sal_Int32 i = 0 ; i < nCtrls ; ++i )
+    {
+        ::rtl::OUString aCtrlName( pNames[i] );
+        Any aCtrl = xDialogModel->getByName( aCtrlName );
+        implHandleControlResourceProperties( aCtrl, aDummyName,
+            aCtrlName, xStringResourceManager, xDummyStringResolver, SET_IDS );
+    }
+}
+
+void LocalizationMgr::copyResourcesForPastedEditorObject( DlgEditor* pEditor,
     Any aControlAny, const ::rtl::OUString& aCtrlName,
     Reference< XStringResourceResolver > xSourceStringResolver )
 {
@@ -1119,7 +1145,7 @@ void LocalizationMgr::moveResourcesForPastedEditorObject( DlgEditor* pEditor,
     if( !pDlgWin )
         return;
     ScriptDocument aDocument( pDlgWin->GetDocument() );
-    DBG_ASSERT( aDocument.isValid(), "LocalizationMgr::moveResourcesForPastedEditorObject: invalid document!" );
+    DBG_ASSERT( aDocument.isValid(), "LocalizationMgr::copyResourcesForPastedEditorObject: invalid document!" );
     if ( !aDocument.isValid() )
         return;
     const String& rLibName = pDlgWin->GetLibName();
@@ -1135,6 +1161,33 @@ void LocalizationMgr::moveResourcesForPastedEditorObject( DlgEditor* pEditor,
     implHandleControlResourceProperties
         ( aControlAny, aDialogName, aCtrlName, xStringResourceManager,
           xSourceStringResolver, MOVE_RESOURCES );
+}
+
+void LocalizationMgr::copyResourceForDroppedDialog( Reference< container::XNameContainer > xDialogModel,
+    const ::rtl::OUString& aDialogName, Reference< XStringResourceManager > xStringResourceManager,
+    Reference< XStringResourceResolver > xSourceStringResolver )
+{
+    if( !xStringResourceManager.is() )
+        return;
+
+    // Dialog as control
+    ::rtl::OUString aDummyName;
+    Any aDialogCtrl;
+    aDialogCtrl <<= xDialogModel;
+    implHandleControlResourceProperties( aDialogCtrl, aDialogName,
+        aDummyName, xStringResourceManager, xSourceStringResolver, MOVE_RESOURCES );
+
+    // Handle all controls
+    Sequence< ::rtl::OUString > aNames = xDialogModel->getElementNames();
+    const ::rtl::OUString* pNames = aNames.getConstArray();
+    sal_Int32 nCtrls = aNames.getLength();
+    for( sal_Int32 i = 0 ; i < nCtrls ; ++i )
+    {
+        ::rtl::OUString aCtrlName( pNames[i] );
+        Any aCtrl = xDialogModel->getByName( aCtrlName );
+        implHandleControlResourceProperties( aCtrl, aDialogName,
+            aCtrlName, xStringResourceManager, xSourceStringResolver, MOVE_RESOURCES );
+    }
 }
 
 void LocalizationMgr::copyResourceForDialog(
