@@ -4,9 +4,9 @@
  *
  *  $RCSfile: graph.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: vg $ $Date: 2007-04-11 17:55:29 $
+ *  last change: $Author: hr $ $Date: 2007-08-03 13:51:21 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -151,6 +151,9 @@ public:
                               const Size& rDestSize ) const;
     static void         Draw( OutputDevice* pOutDev, const String& rText,
                               Font& rFont, const Bitmap& rBitmap,
+                              const Point& rDestPt, const Size& rDestSize );
+    static void         DrawEx( OutputDevice* pOutDev, const String& rText,
+                              Font& rFont, const BitmapEx& rBitmap,
                               const Point& rDestPt, const Size& rDestSize );
 
     void                StartAnimation( OutputDevice* pOutDev,
