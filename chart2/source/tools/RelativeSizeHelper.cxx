@@ -4,9 +4,9 @@
  *
  *  $RCSfile: RelativeSizeHelper.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: vg $ $Date: 2007-05-22 19:04:38 $
+ *  last change: $Author: hr $ $Date: 2007-08-03 12:37:01 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -78,7 +78,7 @@ void RelativeSizeHelper::adaptFontSizes(
     if( ! xTargetProperties.is())
         return;
 
-    float fFontHeight;
+    float fFontHeight = 0;
 
     vector< OUString > aProperties;
     aProperties.push_back( OUString( RTL_CONSTASCII_USTRINGPARAM( "CharHeight" )));
