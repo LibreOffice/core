@@ -4,9 +4,9 @@
  *
  *  $RCSfile: salnativewidgets.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2007-07-05 08:35:00 $
+ *  last change: $Author: hr $ $Date: 2007-08-03 14:04:48 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -134,12 +134,16 @@ typedef sal_uInt32      ControlType;
 
 // The statusbar
 #define CTRL_STATUSBAR          130
+#define CTRL_PROGRESS           131
 
 // tool tips
 #define CTRL_TOOLTIP            140
 
 // to draw the implemented theme
 #define CTRL_WINDOW_BACKGROUND  150
+
+//to draw border of frames natively
+#define CTRL_FRAME              160
 
 /* Control Parts:
  *
@@ -199,6 +203,9 @@ typedef sal_uInt32      ControlPart;
 
 #define PART_BACKGROUND_WINDOW  6000
 #define PART_BACKGROUND_DIALOG  6001
+
+//to draw natively the border of frames
+#define PART_BORDER             7000
 
 /* Control State:
  *
