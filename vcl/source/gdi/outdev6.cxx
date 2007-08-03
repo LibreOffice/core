@@ -4,9 +4,9 @@
  *
  *  $RCSfile: outdev6.cxx,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: rt $ $Date: 2007-07-27 07:44:09 $
+ *  last change: $Author: hr $ $Date: 2007-08-03 12:30:35 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -952,7 +952,8 @@ void OutputDevice::Erase()
         if( aCtrlPart != 0 && ! pWindow->IsControlBackground() )
         {
             ImplControlValue    aControlValue;
-            Region              aCtrlRegion( Rectangle( Point(), GetOutputSizePixel() ) );
+            Point               aGcc3WorkaroundTemporary;
+            Region              aCtrlRegion( Rectangle( aGcc3WorkaroundTemporary, GetOutputSizePixel() ) );
             ControlState        nState = 0;
 
             if( pWindow->IsEnabled() )              nState |= CTRL_STATE_ENABLED;
