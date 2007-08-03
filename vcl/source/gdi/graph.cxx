@@ -4,9 +4,9 @@
  *
  *  $RCSfile: graph.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: rt $ $Date: 2007-07-24 10:09:39 $
+ *  last change: $Author: hr $ $Date: 2007-08-03 13:51:32 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -84,14 +84,14 @@ using namespace ::com::sun::star;
 // -----------------------
 
 static void ImplDrawDefault( OutputDevice* pOutDev, const UniString* pText,
-                             Font* pFont, const Bitmap* pBitmap,
+                             Font* pFont, const Bitmap* pBitmap, const BitmapEx* pBitmapEx,
                              const Point& rDestPt, const Size& rDestSize )
 {
     USHORT      nPixel = (USHORT) pOutDev->PixelToLogic( Size( 1, 1 ) ).Width();
     USHORT      nPixelWidth = nPixel;
     Point       aPoint( rDestPt.X() + nPixelWidth, rDestPt.Y() + nPixelWidth );
     Size        aSize( rDestSize.Width() - ( nPixelWidth << 1 ), rDestSize.Height() - ( nPixelWidth << 1 ) );
-    BOOL        bFilled = ( pBitmap != NULL || pFont != NULL );
+    BOOL        bFilled = ( pBitmap != NULL || pBitmapEx != NULL || pFont != NULL );
     Rectangle   aBorderRect( aPoint, aSize );
 
     pOutDev->Push();
@@ -123,13 +123,17 @@ static void ImplDrawDefault( OutputDevice* pOutDev, const UniString* pText,
     aSize.Width() -= 2*nPixelWidth + 4*nPixel;
     aSize.Height() -= 2*nPixelWidth + 4*nPixel;
 
-    if( aSize.Width() > 0 && aSize.Height() > 0 && pBitmap && !!*pBitmap )
+    if( aSize.Width() > 0 && aSize.Height() > 0
+        && (  ( pBitmap && !!*pBitmap ) || ( pBitmapEx && !!*pBitmapEx ) ) )
     {
-        Size aBitmapSize( pOutDev->PixelToLogic(pBitmap->GetSizePixel() ) );
+        Size aBitmapSize( pOutDev->PixelToLogic( pBitmap ? pBitmap->GetSizePixel() : pBitmapEx->GetSizePixel() ) );
 
         if( aSize.Height() > aBitmapSize.Height() && aSize.Width() > aBitmapSize.Width() )
         {
-            pOutDev->DrawBitmap( aPoint, *pBitmap );
+            if ( pBitmap )
+                pOutDev->DrawBitmap( aPoint, *pBitmap );
+            else
+                pOutDev->DrawBitmapEx( aPoint, *pBitmapEx );
             aPoint.X() += aBitmapSize.Width() + 2*nPixel;
             aSize.Width() -= aBitmapSize.Width() + 2*nPixel;
         }
@@ -601,7 +605,7 @@ void Graphic::Draw( OutputDevice* pOutDev,
                     const Point& rDestPt, const Size& rDestSz ) const
 {
     if( GRAPHIC_DEFAULT == mpImpGraphic->ImplGetType() )
-        ImplDrawDefault( pOutDev, NULL, NULL, NULL, rDestPt, rDestSz );
+        ImplDrawDefault( pOutDev, NULL, NULL, NULL, NULL, rDestPt, rDestSz );
     else
         mpImpGraphic->ImplDraw( pOutDev, rDestPt, rDestSz );
 }
@@ -612,7 +616,16 @@ void Graphic::Draw( OutputDevice* pOutDev, const String& rText,
                     Font& rFont, const Bitmap& rBitmap,
                     const Point& rDestPt, const Size& rDestSz )
 {
-    ImplDrawDefault( pOutDev, &rText, &rFont, &rBitmap, rDestPt, rDestSz );
+    ImplDrawDefault( pOutDev, &rText, &rFont, &rBitmap, NULL, rDestPt, rDestSz );
+}
+
+// ------------------------------------------------------------------------
+
+void Graphic::DrawEx( OutputDevice* pOutDev, const String& rText,
+                    Font& rFont, const BitmapEx& rBitmap,
+                    const Point& rDestPt, const Size& rDestSz )
+{
+    ImplDrawDefault( pOutDev, &rText, &rFont, NULL, &rBitmap, rDestPt, rDestSz );
 }
 
 // ------------------------------------------------------------------------
