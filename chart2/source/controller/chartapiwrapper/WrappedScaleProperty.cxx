@@ -4,9 +4,9 @@
  *
  *  $RCSfile: WrappedScaleProperty.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: vg $ $Date: 2007-05-22 17:22:43 $
+ *  last change: $Author: hr $ $Date: 2007-08-03 12:33:01 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -161,7 +161,7 @@ void WrappedScaleProperty::setPropertyValue( tScaleProperty eScaleProperty, cons
 
     chart2::ScaleData aScaleData( xAxis->getScaleData() );
 
-    sal_Bool bBool;
+    sal_Bool bBool = false;
     switch( eScaleProperty )
     {
         case SCALE_PROP_MAX:
@@ -192,7 +192,7 @@ void WrappedScaleProperty::setPropertyValue( tScaleProperty eScaleProperty, cons
                 if( rSubIncrements.getLength() == 0 )
                     rSubIncrements.realloc( 1 );
 
-                double fStepMain, fStepHelp;
+                double fStepMain = 0, fStepHelp = 0;
                 if( (rOuterValue >>= fStepHelp) &&
                     (aScaleData.IncrementData.Distance >>= fStepMain) &&
                     (fStepHelp != 0.0) )
@@ -355,8 +355,8 @@ Any WrappedScaleProperty::getPropertyValue( tScaleProperty eScaleProperty, const
                 Sequence< chart2::SubIncrement >& rSubIncrements( aScaleData.IncrementData.SubIncrements );
                 if( rSubIncrements.getLength() > 0 )
                 {
-                    double fStepMain;
-                    sal_Int32 nIntervalCount;
+                    double fStepMain = 0;
+                    sal_Int32 nIntervalCount = 0;
                     if( (aScaleData.IncrementData.Distance >>= fStepMain) &&
                         (rSubIncrements[ 0 ].IntervalCount >>= nIntervalCount) &&
                         nIntervalCount > 0 )
