@@ -4,9 +4,9 @@
  *
  *  $RCSfile: disas.cxx,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: hr $ $Date: 2007-06-27 14:17:37 $
+ *  last change: $Author: hr $ $Date: 2007-08-03 09:54:50 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -97,7 +97,8 @@ static const char* pOp1[] = {
     "LSET",             // Speichern Objekt TOS ==> TOS-1
     "RSET",             // Speichern Objekt TOS ==> TOS-1
     "REDIMP_ERASE",
-    "INITFOREACH"
+    "INITFOREACH",
+    "VBASET"
 };
 
 static const char* pOp2[] = {
