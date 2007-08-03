@@ -4,9 +4,9 @@
  *
  *  $RCSfile: unoshape.cxx,v $
  *
- *  $Revision: 1.162 $
+ *  $Revision: 1.163 $
  *
- *  last change: $Author: hr $ $Date: 2007-08-02 18:28:18 $
+ *  last change: $Author: hr $ $Date: 2007-08-03 10:21:22 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -4382,12 +4382,16 @@ SvxShapeText::~SvxShapeText() throw ()
         "svx::SvxShapeText::~SvxShapeText(), text shape with living text ranges destroyed!");
     if ( mpModel )
     {
-        const SvxUnoTextRangeBaseList& rRanges = GetEditSource()->getRanges();
-        SvxUnoTextRangeBaseList::const_iterator aIter;
-        for( aIter = rRanges.begin(); aIter != rRanges.end(); aIter++ )
+        SvxEditSource* pEditSource = GetEditSource();
+        if (pEditSource != NULL)
         {
-            SvxUnoTextRangeBase* pRange = (*aIter);
-            pRange = pRange;
+            const SvxUnoTextRangeBaseList& rRanges = pEditSource->getRanges();
+            SvxUnoTextRangeBaseList::const_iterator aIter;
+            for( aIter = rRanges.begin(); aIter != rRanges.end(); aIter++ )
+            {
+                SvxUnoTextRangeBase* pRange = (*aIter);
+                pRange = pRange;
+            }
         }
     }
 }
