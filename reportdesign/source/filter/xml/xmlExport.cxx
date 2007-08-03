@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xmlExport.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: hr $ $Date: 2007-08-02 14:32:49 $
+ *  last change: $Author: hr $ $Date: 2007-08-03 09:56:28 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -979,14 +979,14 @@ void ORptExport::exportContainer(const Reference< XSection>& _xSection)
                     if ( aColIter->xElement.is() )
                     {
                         // start <text:p>
-                        SvXMLElementExport aParagraphContent(*this,XML_NAMESPACE_TEXT, XML_P, sal_False, sal_False);
+                        SvXMLElementExport aParagraphContent(*this,XML_NAMESPACE_TEXT, XML_P, sal_True,sal_False);
                         Reference<XServiceInfo> xElement(aColIter->xElement,uno::UNO_QUERY);
                         Reference<XReportComponent> xReportComponent = aColIter->xElement;
 
                         if ( !bShapeHandled )
                         {
                             bShapeHandled = true;
-                            exportShapes(_xSection);
+                            exportShapes(_xSection,false);
                         }
                         uno::Reference< XShape > xShape(xElement,uno::UNO_QUERY);
                         uno::Reference< XFixedLine > xFixedLine(xElement,uno::UNO_QUERY);
@@ -1662,7 +1662,7 @@ XMLShapeExport* ORptExport::CreateShapeExport()
     return pShapeExport;
 }
 // -----------------------------------------------------------------------------
-void ORptExport::exportShapes(const Reference< XSection>& _xSection)
+void ORptExport::exportShapes(const Reference< XSection>& _xSection,bool _bAddParagraph)
 {
     UniReference< XMLShapeExport > xShapeExport = GetShapeExport();
     const sal_Int32 nCount = _xSection->getCount();
@@ -1673,9 +1673,95 @@ void ORptExport::exportShapes(const Reference< XSection>& _xSection)
         uno::Reference< XShape > xShape(_xSection->getByIndex(i),uno::UNO_QUERY);
         if ( xShape.is() )
         {
-            SvXMLElementExport aParagraphContent(*this,XML_NAMESPACE_TEXT, XML_P, sal_False, sal_False);
+            ::std::auto_ptr<SvXMLElementExport> pParagraphContent;
+            if ( _bAddParagraph )
+            {
+                pParagraphContent.reset(new SvXMLElementExport(*this,XML_NAMESPACE_TEXT, XML_P, sal_True, sal_False));
+            }
             AddAttribute( XML_NAMESPACE_TEXT, XML_ANCHOR_TYPE, XML_PARAGRAPH );
-            xShapeExport->exportShape(xShape.get(),SEF_DEFAULT,&aRefPoint);
+            xShapeExport->exportShape(xShape.get(),SEF_DEFAULT|SEF_EXPORT_NO_WS,&aRefPoint);
+        }
+    }
+}
+// -----------------------------------------------------------------------------
+void ORptExport::exportGroupsExpressionAsFunction(const Reference< XGroups>& _xGroups)
+{
+    if ( _xGroups.is() )
+    {
+        uno::Reference< XFunctions> xFunctions = _xGroups->getReportDefinition()->getFunctions();
+        const sal_Int32 nCount = _xGroups->getCount();
+        for (sal_Int32 i = 0; i < nCount; ++i)
+        {
+            uno::Reference< XGroup> xGroup(_xGroups->getByIndex(i),uno::UNO_QUERY_THROW);
+            const ::sal_Int16 nGroupOn = xGroup->getGroupOn();
+            if ( nGroupOn != report::GroupOn::DEFAULT )
+            {
+                uno::Reference< XFunction> xFunction = xFunctions->createFunction();
+                ::rtl::OUString sFunction,sPrefix,sPostfix;
+                ::rtl::OUString sExpression = xGroup->getExpression();
+                switch(nGroupOn)
+                {
+                    case report::GroupOn::PREFIX_CHARACTERS:
+                        sFunction = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("LEFT"));
+                        sPrefix = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(";")) + ::rtl::OUString::valueOf(xGroup->getGroupInterval());
+                        break;
+                    case report::GroupOn::YEAR:
+                        sFunction = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("YEAR"));
+                        break;
+                    case report::GroupOn::QUARTAL:
+                        sFunction = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("MONTH"));
+                        sPostfix = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("/4"));
+                        break;
+                    case report::GroupOn::MONTH:
+                        sFunction = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("MONTH"));
+                        break;
+                    case report::GroupOn::WEEK:
+                        sFunction = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("WEEK"));
+                        break;
+                    case report::GroupOn::DAY:
+                        sFunction = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("DAY"));
+                        break;
+                    case report::GroupOn::HOUR:
+                        sFunction = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("HOUR"));
+                        break;
+                    case report::GroupOn::MINUTE:
+                        sFunction = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("MINUTE"));
+                        break;
+                    case report::GroupOn::INTERVAL:
+                        {
+                            sFunction = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("INT"));
+                            uno::Reference< XFunction> xCountFunction = xFunctions->createFunction();
+                            xCountFunction->setInitialFormula(beans::Optional< ::rtl::OUString>(sal_True,::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("rpt:1"))));
+                            ::rtl::OUString sCountName = sFunction + ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("_count_")) + sExpression;
+                            xCountFunction->setName(sCountName);
+                            xCountFunction->setFormula(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("rpt:[")) + sCountName + ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("] + 1")));
+                            exportFunction(xCountFunction);
+                            sExpression = sCountName;
+                            sPrefix = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(" / ")) + ::rtl::OUString::valueOf(xGroup->getGroupInterval());
+                        }
+                        break;
+                    default:
+                        ;
+                }
+                if ( sFunction.getLength() )
+                {
+
+                    xFunction->setName(sFunction + ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("_")) + sExpression);
+                    sFunction = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("rpt:")) + sFunction;
+                    sFunction += ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("(["));
+                    sFunction += sExpression;
+                    sFunction += ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("]"));
+
+                    if ( sPrefix.getLength() )
+                        sFunction += sPrefix;
+                    sFunction += ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(")"));
+                    if ( sPostfix.getLength() )
+                        sFunction += sPostfix;
+                    xFunction->setFormula(sFunction);
+                    exportFunction(xFunction);
+                    m_aGroupFunctionMap.insert(TGroupFunctionMap::value_type(xGroup,xFunction));
+                }
+            }
         }
     }
 }
