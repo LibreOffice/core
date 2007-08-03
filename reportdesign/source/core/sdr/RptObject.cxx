@@ -4,9 +4,9 @@
  *
  *  $RCSfile: RptObject.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: hr $ $Date: 2007-08-02 14:32:23 $
+ *  last change: $Author: hr $ $Date: 2007-08-03 12:44:07 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -553,6 +553,7 @@ OCustomShape::OCustomShape(const uno::Reference< report::XReportComponent>& _xCo
     DBG_CTOR( rpt_OCustomShape, NULL);
     // start listening
     mxUnoShape = uno::Reference< uno::XInterface >(_xComponent,uno::UNO_QUERY);
+    m_bIsListening = sal_True;
 }
 //----------------------------------------------------------------------------
 OCustomShape::OCustomShape(const ::rtl::OUString& _sComponentName)
@@ -560,6 +561,7 @@ OCustomShape::OCustomShape(const ::rtl::OUString& _sComponentName)
           ,OObjectBase(_sComponentName)
 {
     DBG_CTOR( rpt_OCustomShape, NULL);
+    m_bIsListening = sal_True;
 }
 
 //----------------------------------------------------------------------------
@@ -595,6 +597,8 @@ void OCustomShape::NbcMove( const Size& rSize )
 
         if ( m_xReportComponent.is() )
         {
+            OReportModel* pRptModel = static_cast<OReportModel*>(GetModel());
+            OXUndoEnvironment::OUndoEnvLock aLock(pRptModel->GetUndoEnv());
             m_xReportComponent->setPositionX(m_xReportComponent->getPositionX() + rSize.A());
             m_xReportComponent->setPositionY(m_xReportComponent->getPositionY() + rSize.B());
         }
