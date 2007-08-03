@@ -4,9 +4,9 @@
  *
  *  $RCSfile: Section.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: hr $ $Date: 2007-08-02 14:30:39 $
+ *  last change: $Author: hr $ $Date: 2007-08-03 09:53:57 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -223,6 +223,17 @@ void SAL_CALL OSection::disposing()
     uno::Reference< report::XReportDefinition> xReport = getReportDefinition();
     ::boost::shared_ptr<rptui::OReportModel> pModel = OReportDefinition::getSdrModel(xReport);
     osl_incrementInterlockedCount( &m_refCount );
+    while( m_xDrawPage.is() && m_xDrawPage->hasElements() )
+    {
+        try
+        {
+            uno::Reference< drawing::XShape> xShape(m_xDrawPage->getByIndex(0),uno::UNO_QUERY);
+            m_xDrawPage->remove(xShape);
+            ::comphelper::disposeComponent(xShape);
+        }
+        catch(const uno::Exception&)
+        {}
+    }
     if ( pModel )
     {
         uno::Reference< report::XSection> xSection = this;
