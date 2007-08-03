@@ -4,9 +4,9 @@
  *
  *  $RCSfile: valueacc.cxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: hr $ $Date: 2007-06-27 21:26:24 $
+ *  last change: $Author: hr $ $Date: 2007-08-03 13:31:47 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -266,7 +266,11 @@ sal_Int16 SAL_CALL ValueSetAcc::getAccessibleRole()
     throw (uno::RuntimeException)
 {
     ThrowIfDisposed();
-    return accessibility::AccessibleRole::LIST;
+    // #i73746# As the Java Access Bridge (v 2.0.1) uses "managesDescendants"
+    // always if the role is LIST, we need a different role in this case
+    return (mbIsTransientChildrenDisabled
+            ? accessibility::AccessibleRole::PANEL
+            : accessibility::AccessibleRole::LIST );
 }
 
 // -----------------------------------------------------------------------------
