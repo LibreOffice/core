@@ -4,9 +4,9 @@
  *
  *  $RCSfile: VTitle.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: vg $ $Date: 2007-05-22 19:27:25 $
+ *  last change: $Author: hr $ $Date: 2007-08-03 12:37:36 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -283,7 +283,7 @@ void VTitle::createShapes(
 
         try
         {
-            double fAngleDegree;
+            double fAngleDegree = 0;
             xTitleProperties->getPropertyValue( C2U( "TextRotation" ) ) >>= fAngleDegree;
             m_fRotationAngleDegree += fAngleDegree;
         }
