@@ -4,9 +4,9 @@
  *
  *  $RCSfile: CondFormat.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2007-07-09 11:56:29 $
+ *  last change: $Author: hr $ $Date: 2007-08-03 09:59:41 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -69,6 +69,7 @@
 #include <comphelper/property.hxx>
 
 #include <algorithm>
+#include "UndoActions.hxx"
 
 // .............................................................................
 namespace rptui
@@ -109,6 +110,7 @@ namespace rptui
     //========================================================================
     // class ConditionalFormattingDialog
     //========================================================================
+    DBG_NAME(rpt_ConditionalFormattingDialog)
     ConditionalFormattingDialog::ConditionalFormattingDialog(
             Window* _pParent, const Reference< XReportControlModel >& _rxFormatConditions, ::rptui::OReportController& _rController )
         :ModalDialog( _pParent, ModuleRes(RID_CONDFORMAT) )
@@ -122,6 +124,7 @@ namespace rptui
         ,m_xFormatConditions( _rxFormatConditions )
         ,m_bDeletingCondition( false )
     {
+        DBG_CTOR(rpt_ConditionalFormattingDialog,NULL);
         OSL_ENSURE( m_xFormatConditions.is(), "ConditionalFormattingDialog::ConditionalFormattingDialog: ReportControlModel is NULL -> Prepare for GPF!" );
 
         m_xCopy.set( m_xFormatConditions->createClone(), UNO_QUERY_THROW );
@@ -137,6 +140,7 @@ namespace rptui
     ConditionalFormattingDialog::~ConditionalFormattingDialog()
     {
         m_aConditions.clear();
+        DBG_DTOR(rpt_ConditionalFormattingDialog,NULL);
     }
 
     // -----------------------------------------------------------------------------
@@ -473,8 +477,8 @@ namespace rptui
         short nRet = ModalDialog::Execute();
         if ( nRet == RET_OK )
         {
-            String sUndoAction( String( ModuleRes( RID_STR_UNDO_CONDITIONAL_FORMATTING ) ) );
-            m_rController.getUndoMgr()->EnterListAction( sUndoAction, String() );
+            String sUndoAction( ModuleRes( RID_STR_UNDO_CONDITIONAL_FORMATTING ) );
+            UndoManagerListAction aListAction(*m_rController.getUndoMgr(),sUndoAction);
             try
             {
                 sal_Int32 j(0), i(0);;
@@ -513,7 +517,6 @@ namespace rptui
                 DBG_UNHANDLED_EXCEPTION();
                 nRet = RET_NO;
             }
-            m_rController.getUndoMgr()->LeaveListAction();
         }
         return nRet;
     }
