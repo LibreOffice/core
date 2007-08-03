@@ -4,9 +4,9 @@
  *
  *  $RCSfile: num.hxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: hr $ $Date: 2006-08-14 17:43:25 $
+ *  last change: $Author: hr $ $Date: 2007-08-03 13:42:16 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -66,11 +66,7 @@
 #ifndef _NUMPREVW_HXX
 #include <numprevw.hxx>
 #endif
-//CHINA001 #ifndef _SVX_NUMPAGES_HXX
-//CHINA001 #include <svx/numpages.hxx>
-//CHINA001 #endif
 #include "numrule.hxx"
-#include "bmpwin.hxx" // BmpWindow
 
 class SwWrtShell;
 class SvxBrushItem;
