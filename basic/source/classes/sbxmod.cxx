@@ -4,9 +4,9 @@
  *
  *  $RCSfile: sbxmod.cxx,v $
  *
- *  $Revision: 1.37 $
+ *  $Revision: 1.38 $
  *
- *  last change: $Author: hr $ $Date: 2007-06-27 14:19:36 $
+ *  last change: $Author: hr $ $Date: 2007-08-03 09:55:16 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -690,6 +690,8 @@ void ClearUnoObjectsInRTL_Impl( StarBASIC* pBasic )
 USHORT SbModule::Run( SbMethod* pMeth )
 {
     static USHORT nMaxCallLevel = 0;
+    static String aMSOMacroRuntimeLibName = String::CreateFromAscii( "Launcher" );
+    static String aMSOMacroRuntimeAppSymbol = String::CreateFromAscii( "Application" );
 
     USHORT nRes = 0;
     BOOL bDelInst = BOOL( pINST == NULL );
@@ -700,6 +702,25 @@ USHORT SbModule::Run( SbMethod* pMeth )
         xBasic = (StarBASIC*) GetParent();
 
         pINST = new SbiInstance( (StarBASIC*) GetParent() );
+
+        // Launcher problem
+        SbxVariable* pMSOMacroRuntimeLibVar = Find( aMSOMacroRuntimeLibName, SbxCLASS_OBJECT );
+        if( pMSOMacroRuntimeLibVar )
+        {
+            StarBASIC* pMSOMacroRuntimeLib = PTR_CAST(StarBASIC,pMSOMacroRuntimeLibVar);
+            if( pMSOMacroRuntimeLib )
+            {
+                USHORT nGblFlag = pMSOMacroRuntimeLib->GetFlags() & SBX_GBLSEARCH;
+                pMSOMacroRuntimeLib->ResetFlag( SBX_GBLSEARCH );
+                SbxVariable* pAppSymbol = pMSOMacroRuntimeLib->Find( aMSOMacroRuntimeAppSymbol, SbxCLASS_METHOD );
+                pMSOMacroRuntimeLib->SetFlag( nGblFlag );
+                if( pAppSymbol )
+                {
+                    pMSOMacroRuntimeLib->SetFlag( SBX_EXTSEARCH );      // Could have been disabled before
+                    GetSbData()->pMSOMacroRuntimLib = pMSOMacroRuntimeLib;
+                }
+            }
+        }
 
         // Error-Stack loeschen
         SbErrorStack*& rErrStack = GetSbData()->pErrStack;
@@ -2047,7 +2068,8 @@ void SbMethod::Broadcast( ULONG nHintId )
         if( mpPar.Is() )
         {
             // this, als Element 0 eintragen, aber den Parent nicht umsetzen!
-            mpPar->PutDirect( pThisCopy, 0 );
+            if( GetType() != SbxVOID )
+                mpPar->PutDirect( pThisCopy, 0 );
                SetParameters( NULL );
         }
 
