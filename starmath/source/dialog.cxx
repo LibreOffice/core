@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dialog.cxx,v $
  *
- *  $Revision: 1.39 $
+ *  $Revision: 1.40 $
  *
- *  last change: $Author: rt $ $Date: 2007-05-31 10:03:40 $
+ *  last change: $Author: hr $ $Date: 2007-08-03 13:53:58 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -2189,6 +2189,8 @@ SmSymDefineDialog::SmSymDefineDialog(Window * pParent,
     aChangeBtn          (this, SmResId(2)),
     aDeleteBtn          (this, SmResId(3)),
     aRightArrow         (this, SmResId(1)),
+    aRigthArrow_Im      (SmResId(1)),
+    aRigthArrow_Im_HC   (SmResId(2)),   // hi-contrast version
     rSymSetMgr          (rMgr),
     pSubsetMap          (NULL),
     pFontList           (NULL)
@@ -2239,7 +2241,6 @@ SmSymDefineDialog::~SmSymDefineDialog()
     delete pOrigSymbol;
 }
 
-
 void SmSymDefineDialog::InitColor_Impl()
 {
 #if OSL_DEBUG_LEVEL > 1
@@ -2247,7 +2248,8 @@ void SmSymDefineDialog::InitColor_Impl()
 #endif
     ColorData   nBgCol  = COL_WHITE,
                 nTxtCol = COL_BLACK;
-    if (GetDisplayBackground().GetColor().IsDark())
+    BOOL bHighContrast = GetDisplayBackground().GetColor().IsDark() != 0;
+    if (bHighContrast)
     {
         const StyleSettings &rS = GetSettings().GetStyleSettings();
         nBgCol  = rS.GetFieldColor().GetColor();
@@ -2263,6 +2265,9 @@ void SmSymDefineDialog::InitColor_Impl()
     aOldSymbolDisplay.SetTextColor( aTxtColor );
     aSymbolDisplay   .SetBackground( aWall );
     aSymbolDisplay   .SetTextColor( aTxtColor );
+
+    const Image &rArrowRight = bHighContrast ? aRigthArrow_Im_HC : aRigthArrow_Im;
+    aRightArrow.SetImage( rArrowRight );
 }
 
 
