@@ -4,9 +4,9 @@
  *
  *  $RCSfile: documen5.cxx,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: vg $ $Date: 2007-05-22 19:42:04 $
+ *  last change: $Author: hr $ $Date: 2007-08-03 13:07:18 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -67,6 +67,7 @@
 #include "drwlayer.hxx"
 #include "chartarr.hxx"
 #include "chartlis.hxx"
+#include "chartlock.hxx"
 #include "refupdat.hxx"
 #ifndef _GLOBNAME_HXX
 #include <tools/globname.hxx>
@@ -442,6 +443,8 @@ void ScDocument::UpdateChart( const String& rChartName )
                     try
                     {
                         uno::Reference< util::XModifiable > xModif( xIPObj->getComponent(), uno::UNO_QUERY_THROW );
+                        if( apTemporaryChartLock.get() )
+                            apTemporaryChartLock->AlsoLockThisChart( uno::Reference< frame::XModel >( xModif, uno::UNO_QUERY ) );
                         xModif->setModified( sal_True );
                     }
                     catch ( uno::Exception& )
