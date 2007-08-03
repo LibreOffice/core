@@ -4,9 +4,9 @@
  *
  *  $RCSfile: implrenderer.cxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: obo $ $Date: 2007-07-17 15:24:30 $
+ *  last change: $Author: hr $ $Date: 2007-08-03 11:56:05 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -294,6 +294,8 @@ namespace
         {
             const ::cppcanvas::internal::OutDevState& rState( getState( rParms.mrStates ) );
 
+            // TODO(F1): Interpret OutDev::GetRefPoint() for the start of the dashing.
+
             // interpret dash info only if explicitely enabled as
             // style
             const ::basegfx::B2DSize aDistance( rLineInfo.GetDistance(), 0 );
@@ -350,6 +352,112 @@ namespace
         aSolid.Erase( rMaskColor );
 
         return BitmapEx( aSolid, aMask );
+    }
+
+    /** Shameless rip from vcl/source/gdi/outdev3.cxx
+
+        Should consolidate, into something like basetxt...
+     */
+    sal_Unicode getLocalizedChar( sal_Unicode nChar, LanguageType eLang )
+    {
+        // currently only conversion from ASCII digits is interesting
+        if( (nChar < '0') || ('9' < nChar) )
+            return nChar;
+
+        sal_Unicode nOffset(0);
+        switch( eLang )
+        {
+            default:
+                break;
+
+            case LANGUAGE_ARABIC:
+                // FALLTHROUGS intended
+            case LANGUAGE_ARABIC_SAUDI_ARABIA:
+            case LANGUAGE_ARABIC_IRAQ:
+            case LANGUAGE_ARABIC_EGYPT:
+            case LANGUAGE_ARABIC_LIBYA:
+            case LANGUAGE_ARABIC_ALGERIA:
+            case LANGUAGE_ARABIC_MOROCCO:
+            case LANGUAGE_ARABIC_TUNISIA:
+            case LANGUAGE_ARABIC_OMAN:
+            case LANGUAGE_ARABIC_YEMEN:
+            case LANGUAGE_ARABIC_SYRIA:
+            case LANGUAGE_ARABIC_JORDAN:
+            case LANGUAGE_ARABIC_LEBANON:
+            case LANGUAGE_ARABIC_KUWAIT:
+            case LANGUAGE_ARABIC_UAE:
+            case LANGUAGE_ARABIC_BAHRAIN:
+            case LANGUAGE_ARABIC_QATAR:
+            case LANGUAGE_URDU:
+            case LANGUAGE_URDU_PAKISTAN:
+            case LANGUAGE_URDU_INDIA:
+            case LANGUAGE_PUNJABI: //???
+                nOffset = 0x0660 - '0';  // arabic/persian/urdu
+                break;
+            case LANGUAGE_BENGALI:
+                nOffset = 0x09E6 - '0';  // bengali
+                break;
+            case LANGUAGE_HINDI:
+                nOffset = 0x0966 - '0';  // devanagari
+                break;
+            case LANGUAGE_GUJARATI:
+                nOffset = 0x0AE6 - '0';  // gujarati
+                break;
+            case LANGUAGE_KANNADA:
+                nOffset = 0x0CE6 - '0';  // kannada
+                break;
+            case LANGUAGE_KHMER:
+                nOffset = 0x17E0 - '0';  // khmer
+                break;
+            case LANGUAGE_LAO:
+                nOffset = 0x0ED0 - '0';  // lao
+                break;
+            case LANGUAGE_MALAYALAM:
+                nOffset = 0x0D66 - '0';   // malayalam
+                break;
+            case LANGUAGE_MONGOLIAN:
+                nOffset = 0x1810 - '0';   // mongolian
+                break;
+            case LANGUAGE_ORIYA:
+                nOffset = 0x0B66 - '0';   // oriya
+                break;
+            case LANGUAGE_TAMIL:
+                nOffset = 0x0BE7 - '0';   // tamil
+                break;
+            case LANGUAGE_TELUGU:
+                nOffset = 0x0C66 - '0';   // telugu
+                break;
+            case LANGUAGE_THAI:
+                nOffset = 0x0E50 - '0';   // thai
+                break;
+            case LANGUAGE_TIBETAN:
+                nOffset = 0x0F20 - '0';   // tibetan
+                break;
+        }
+
+        nChar = sal::static_int_cast<sal_Unicode>(nChar + nOffset);
+        return nChar;
+    }
+
+    void convertToLocalizedNumerals( XubString&   rStr,
+                                     LanguageType eTextLanguage )
+    {
+        const sal_Unicode* pBase = rStr.GetBuffer();
+        const sal_Unicode* pBegin = pBase + 0;
+        const xub_StrLen nEndIndex = rStr.Len();
+        const sal_Unicode* pEnd = pBase + nEndIndex;
+
+        for( ; pBegin < pEnd; ++pBegin )
+        {
+            // TODO: are there non-digit localizations?
+            if( (*pBegin >= '0') && (*pBegin <= '9') )
+            {
+                // translate characters to local preference
+                sal_Unicode cChar = getLocalizedChar( *pBegin, eTextLanguage );
+                if( cChar != *pBegin )
+                    rStr.SetChar( sal::static_int_cast<USHORT>(pBegin - pBase), cChar );
+            }
+        }
     }
 }
 
@@ -1251,6 +1359,12 @@ namespace cppcanvas
                         popState( rStates );
                         break;
 
+                    case META_TEXTLANGUAGE_ACTION:
+                        // FALLTHROUGH intended
+                    case META_REFPOINT_ACTION:
+                        // handled via pCurrAct->Execute( &rVDev )
+                        break;
+
                     case META_MAPMODE_ACTION:
                         // modify current mapModeTransformation
                         // transformation, such that subsequent
@@ -1454,14 +1568,6 @@ namespace cppcanvas
                         // TODO(F2): NYI
                         break;
 
-                    case META_REFPOINT_ACTION:
-                        // TODO(F2): NYI
-                        break;
-
-                    case META_TEXTLANGUAGE_ACTION:
-                        // TODO(F2): NYI
-                        break;
-
                     case META_LAYOUTMODE_ACTION:
                     {
                         // TODO(F2): A lot is missing here
@@ -1544,14 +1650,13 @@ namespace cppcanvas
                         const Size aMtfSizePix( ::std::max( aMtfSizePixPre.Width(), 1L ),
                                                 ::std::max( aMtfSizePixPre.Height(), 1L ) );
 
-                        const Point aEmptyPt;
-                        const Point aMtfOriginPix( rVDev.LogicToPixel( aEmptyPt,
-                                                                       rSubstitute.GetPrefMapMode() ) );
-
                         // Setup local transform, such that the
                         // metafile renders itself into the given
                         // output rectangle
                         pushState( rStates, PUSH_ALL );
+
+                        rVDev.Push();
+                        rVDev.SetMapMode( rSubstitute.GetPrefMapMode() );
 
                         const ::Point& rPos( rVDev.LogicToPixel( pAct->GetPoint() ) );
                         const ::Size&  rSize( rVDev.LogicToPixel( pAct->GetSize() ) );
@@ -1560,9 +1665,6 @@ namespace cppcanvas
                                                                  rPos.Y() );
                         getState( rStates ).transform.scale( (double)rSize.Width() / aMtfSizePix.Width(),
                                                              (double)rSize.Height() / aMtfSizePix.Height() );
-
-                        rVDev.Push();
-                        rVDev.SetMapMode( rSubstitute.GetPrefMapMode() );
 
                         createActions( const_cast<GDIMetaFile&>(pAct->GetSubstitute()),
                                        rFactoryParms,
@@ -2404,10 +2506,14 @@ namespace cppcanvas
                     case META_TEXT_ACTION:
                     {
                         MetaTextAction* pAct = static_cast<MetaTextAction*>(pCurrAct);
+                        XubString sText = XubString( pAct->GetText() );
+
+                        if( rVDev.GetDigitLanguage())
+                            convertToLocalizedNumerals ( sText,rVDev.GetDigitLanguage() );
 
                         createTextAction(
                             pAct->GetPoint(),
-                            pAct->GetText(),
+                            sText,
                             pAct->GetIndex(),
                             pAct->GetLen() == (USHORT)STRING_LEN ? pAct->GetText().Len() - pAct->GetIndex() : pAct->GetLen(),
                             NULL,
@@ -2419,10 +2525,14 @@ namespace cppcanvas
                     case META_TEXTARRAY_ACTION:
                     {
                         MetaTextArrayAction* pAct = static_cast<MetaTextArrayAction*>(pCurrAct);
+                        XubString sText = XubString( pAct->GetText() );
+
+                        if( rVDev.GetDigitLanguage())
+                            convertToLocalizedNumerals ( sText,rVDev.GetDigitLanguage() );
 
                         createTextAction(
                             pAct->GetPoint(),
-                            pAct->GetText(),
+                            sText,
                             pAct->GetIndex(),
                             pAct->GetLen() == (USHORT)STRING_LEN ? pAct->GetText().Len() - pAct->GetIndex() : pAct->GetLen(),
                             pAct->GetDXArray(),
@@ -2494,6 +2604,10 @@ namespace cppcanvas
                     case META_STRETCHTEXT_ACTION:
                     {
                         MetaStretchTextAction* pAct = static_cast<MetaStretchTextAction*>(pCurrAct);
+                        XubString sText = XubString( pAct->GetText() );
+
+                        if( rVDev.GetDigitLanguage())
+                            convertToLocalizedNumerals ( sText,rVDev.GetDigitLanguage() );
 
                         const USHORT nLen( pAct->GetLen() == (USHORT)STRING_LEN ?
                                            pAct->GetText().Len() - pAct->GetIndex() : pAct->GetLen() );
@@ -2529,7 +2643,7 @@ namespace cppcanvas
 
                         createTextAction(
                             pAct->GetPoint(),
-                            pAct->GetText(),
+                            sText,
                             pAct->GetIndex(),
                             pAct->GetLen() == (USHORT)STRING_LEN ? pAct->GetText().Len() - pAct->GetIndex() : pAct->GetLen(),
                             pDXArray.get(),
