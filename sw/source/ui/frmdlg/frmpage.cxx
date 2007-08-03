@@ -4,9 +4,9 @@
  *
  *  $RCSfile: frmpage.cxx,v $
  *
- *  $Revision: 1.62 $
+ *  $Revision: 1.63 $
  *
- *  last change: $Author: ihi $ $Date: 2007-07-12 10:50:42 $
+ *  last change: $Author: hr $ $Date: 2007-08-03 13:41:17 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -2415,7 +2415,7 @@ void SwFrmPage::SetFormatUsed(BOOL bFmt)
 
 SwGrfExtPage::SwGrfExtPage(Window *pParent, const SfxItemSet &rSet) :
     SfxTabPage( pParent, SW_RES(TP_GRF_EXT), rSet ),
-    aBmpWin                 (this, WN_BMP, Graphic(), Bitmap(SW_RES(BMP_EXAMPLE)) ),
+    aBmpWin                 (this, WN_BMP, Graphic(), BitmapEx(SW_RES(BMP_EXAMPLE)), BitmapEx(SW_RES(BMP_EXAMPLE_HC)) ),
     aConnectFL              (this, SW_RES( FL_CONNECT )),
     aConnectFT              (this, SW_RES( FT_CONNECT )),
     aConnectED              (this, SW_RES( ED_CONNECT )),
@@ -2432,6 +2432,7 @@ SwGrfExtPage::SwGrfExtPage(Window *pParent, const SfxItemSet &rSet) :
     pGrfDlg( 0 )
 {
     FreeResource();
+
     SetExchangeSupport();
     aMirrorHorzBox.SetClickHdl( LINK(this, SwGrfExtPage, MirrorHdl));
     aMirrorVertBox.SetClickHdl( LINK(this, SwGrfExtPage, MirrorHdl));
@@ -2694,11 +2695,12 @@ IMPL_LINK( SwGrfExtPage, MirrorHdl, CheckBox *, EMPTYARG )
     Beschreibung: BeispielWindow
  --------------------------------------------------------------------*/
 
-BmpWindow::BmpWindow(Window* pPar, USHORT nId,
-                    const Graphic& rGraphic, const Bitmap& rBmp) :
+BmpWindow::BmpWindow( Window* pPar, USHORT nId,
+                        const Graphic& rGraphic, const BitmapEx& rBmp, const BitmapEx& rBmpHC ) :
     Window(pPar, SW_RES(nId)),
     aGraphic(rGraphic),
     aBmp(rBmp),
+    aBmpHC(rBmpHC),
     bHorz(FALSE),
     bVert(FALSE),
     bGraphic(FALSE),
@@ -2740,10 +2742,14 @@ void BmpWindow::Paint( const Rectangle& )
         aPntPos.X()--;
         aPntSz.Width()  *= -1;
     }
-    if(bGraphic)
-        aGraphic.Draw(this, aPntPos, aPntSz);
+
+    if ( bGraphic )
+        aGraphic.Draw( this, aPntPos, aPntSz );
     else
-        DrawBitmap( aPntPos, aPntSz, aBmp );
+    {
+        bool bIsDark = ( GetSettings().GetStyleSettings().GetWindowColor().IsDark() != FALSE );
+        DrawBitmapEx( aPntPos, aPntSz, bIsDark ? aBmpHC : aBmp );
+    }
 }
 
 BmpWindow::~BmpWindow()
