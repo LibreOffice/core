@@ -4,9 +4,9 @@
  *
  *  $RCSfile: rcid.hrc,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: vg $ $Date: 2007-05-22 16:20:20 $
+ *  last change: $Author: hr $ $Date: 2007-08-03 13:39:06 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -238,7 +238,7 @@
 
 // Gemeinsame Core-Strings
 #define RC_COMCORE_BEGIN            (RC_COMMON_CORE)
-#define RC_COMCORE_END              (RC_COMMON_CORE + 49)
+#define RC_COMCORE_END              (RC_COMMON_CORE + 59)
 
 // Shell-Verzeichnis
 #define RC_SHELLS_BEGIN             RC_SHELLS
