@@ -4,9 +4,9 @@
 #
 #   $RCSfile: unxmacx.mk,v $
 #
-#   $Revision: 1.18 $
+#   $Revision: 1.19 $
 #
-#   last change: $Author: rt $ $Date: 2007-07-05 09:04:21 $
+#   last change: $Author: hr $ $Date: 2007-08-03 12:28:15 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -150,11 +150,7 @@ CFLAGSWERRCC=-Werror
 # settings.mk):
 MODULES_WITH_WARNINGS := \
     autodoc \
-    b_server \
-    chart2 \
-    devtools \
     extensions \
-    r_tools \
     sw
 
 # Currently, there is no nas support for OS X...
