@@ -4,9 +4,9 @@
  *
  *  $RCSfile: rtl_OUStringBuffer.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 09:02:35 $
+ *  last change: $Author: hr $ $Date: 2007-08-03 09:46:46 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -205,6 +205,28 @@ static sal_Bool SAL_CALL test_rtl_OUStringBuffer_ctor_004(
     );
 }
 
+static sal_Bool SAL_CALL test_rtl_OUStringBuffer_ctor_005(
+                                               hTestResult hRtlTestResult)
+{
+    ::rtl::OUStringBuffer aUStrBuftmp( aUStr1 );
+    ::rtl::OUString aUStrtmp = aUStrBuftmp.makeStringAndClear();
+    ::rtl::OUStringBuffer aUStrBuf( aUStrBuftmp );
+    sal_Bool res = cmpustr(aUStrBuftmp.getStr(),aUStrBuf.getStr());
+    sal_Int32 leg = aUStrBuf.getLength();
+    return
+    (
+        c_rtl_tres_state
+        (
+            hRtlTestResult,
+            aUStrBuf.getLength()==aUStrBuftmp.getLength() &&
+            aUStrBuf.getCapacity() == aUStrBuftmp.getCapacity() &&
+            res && leg == 0,
+            "New OUStringBuffer from another OUStringBuffer after makeClearFromString",
+            "ctor_005"
+        )
+    );
+}
+
 extern "C" void /* sal_Bool */ SAL_CALL test_rtl_OUStringBuffer_ctors(
                                               hTestResult hRtlTestResult )
 {
@@ -214,6 +236,7 @@ extern "C" void /* sal_Bool */ SAL_CALL test_rtl_OUStringBuffer_ctors(
     bTSState &= test_rtl_OUStringBuffer_ctor_002( hRtlTestResult);
     bTSState &= test_rtl_OUStringBuffer_ctor_003( hRtlTestResult);
     bTSState &= test_rtl_OUStringBuffer_ctor_004( hRtlTestResult);
+    bTSState &= test_rtl_OUStringBuffer_ctor_005( hRtlTestResult);
 
     c_rtl_tres_state_end( hRtlTestResult, "ctors");
 //    return( bTSState );
