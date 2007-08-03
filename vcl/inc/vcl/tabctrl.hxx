@@ -4,9 +4,9 @@
  *
  *  $RCSfile: tabctrl.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: vg $ $Date: 2007-04-11 18:13:52 $
+ *  last change: $Author: hr $ $Date: 2007-08-03 14:05:34 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -93,7 +93,7 @@ private:
     SAL_DLLPRIVATE void         ImplScrollBtnsColor();
     SAL_DLLPRIVATE void         ImplSetScrollBtnsState();
     SAL_DLLPRIVATE void         ImplPosScrollBtns();
-    SAL_DLLPRIVATE Size         ImplGetItemSize( ImplTabItem* pItem, long nMaxWidth ) const;
+    SAL_DLLPRIVATE Size         ImplGetItemSize( ImplTabItem* pItem, long nMaxWidth );
     SAL_DLLPRIVATE Rectangle    ImplGetTabRect( USHORT nPos, long nWidth = -1, long nHeight = -1 );
     SAL_DLLPRIVATE void         ImplChangeTabPage( USHORT nId, USHORT nOldId );
     SAL_DLLPRIVATE BOOL         ImplPosCurTabPage();
