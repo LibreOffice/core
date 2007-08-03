@@ -4,9 +4,9 @@
  *
  *  $RCSfile: OfficeNamespaces.java,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2007-07-09 11:56:04 $
+ *  last change: $Author: hr $ $Date: 2007-08-03 09:48:43 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -73,7 +73,6 @@ public class OfficeNamespaces
   public static final String OOREPORT_NS = "http://openoffice.org/2005/report";
   public static final String CONFIG = "urn:oasis:names:tc:opendocument:xmlns:config:1.0";
   public static final String INTERNAL_NS = "http://reporting.pentaho.org/namespaces/engine";
-  public static final String MANIFEST_NS = "urn:oasis:names:tc:opendocument:xmlns:manifest:1.0";
   /**
    * @deprecated
    */
