@@ -4,9 +4,9 @@
  *
  *  $RCSfile: salgdi.cxx,v $
  *
- *  $Revision: 1.63 $
+ *  $Revision: 1.64 $
  *
- *  last change: $Author: rt $ $Date: 2007-07-05 15:56:55 $
+ *  last change: $Author: hr $ $Date: 2007-08-03 14:02:18 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -94,7 +94,13 @@ ImplMacFontData::ImplMacFontData( const ImplDevFontAttributes& rDFA, ATSUFontID 
 :   ImplFontData( rDFA, 0 )
 ,   mnFontId( nFontId )
 ,   mpCharMap( NULL )
+,   mbOs2Read( false )
+,   mbHasOs2Table( false )
+,   mbCmapEncodingRead( false )
+,   mbHasCJKSupport( false )
 {}
+
+// -----------------------------------------------------------------------
 
 ImplMacFontData::~ImplMacFontData()
 {
@@ -102,10 +108,14 @@ ImplMacFontData::~ImplMacFontData()
         mpCharMap->DeReference();
 }
 
+// -----------------------------------------------------------------------
+
 sal_IntPtr ImplMacFontData::GetFontId() const
 {
     return (sal_IntPtr)mnFontId;
 }
+
+// -----------------------------------------------------------------------
 
 ImplFontData* ImplMacFontData::Clone() const
 {
@@ -114,6 +124,8 @@ ImplFontData* ImplMacFontData::Clone() const
         mpCharMap->AddReference();
     return pClone;
 }
+
+// -----------------------------------------------------------------------
 
 ImplFontEntry* ImplMacFontData::CreateFontInstance(ImplFontSelectData& rFSD) const
 {
@@ -126,6 +138,9 @@ inline FourCharCode GetTag(const char aTagName[5])
 {
     return (aTagName[0]<<24)+(aTagName[1]<<16)+(aTagName[2]<<8)+(aTagName[3]);
 }
+
+static unsigned GetUShort( const unsigned char* p ){return((p[0]<<8)+p[1]);}
+static unsigned GetUInt( const unsigned char* p ) { return((p[0]<<24)+(p[1]<<16)+(p[2]<<8)+p[3]);}
 
 ImplFontCharMap* ImplMacFontData::GetImplFontCharMap() const
 {
@@ -167,6 +182,112 @@ ImplFontCharMap* ImplMacFontData::GetImplFontCharMap() const
     return mpCharMap;
 }
 
+// -----------------------------------------------------------------------
+
+void ImplMacFontData::ReadOs2Table( void ) const
+{
+    // read this only once per font
+    if( mbOs2Read )
+        return;
+    mbOs2Read = true;
+
+    // prepare to get the OS/2 table raw data
+    ATSFontRef rFont = FMGetATSFontRefFromFont( mnFontId );
+    ByteCount nBufSize = 0;
+    OSStatus eStatus = ATSFontGetTable( rFont, GetTag("OS/2"), 0, 0, NULL, &nBufSize );
+    DBG_ASSERT( (eStatus==noErr), "ImplMacFontData::ReadOs2Table : ATSFontGetTable1 failed!\n");
+    if( eStatus != noErr )
+        return;
+
+    // allocate a buffer for the OS/2 raw data
+    ByteVector aBuffer;
+    aBuffer.resize( nBufSize );
+
+    // get the OS/2 raw data
+    ByteCount nRawLength = 0;
+    eStatus = ATSFontGetTable( rFont, GetTag("OS/2"), 0, nBufSize, (void*)&aBuffer[0], &nRawLength );
+    DBG_ASSERT( (eStatus==noErr), "ImplMacFontData::ReadOs2Table : ATSFontGetTable2 failed!\n");
+    if( eStatus != noErr )
+        return;
+    DBG_ASSERT( (nBufSize==nRawLength), "ImplMacFontData::ReadOs2Table : ByteCount mismatch!\n");
+    mbHasOs2Table = true;
+
+    // parse the OS/2 raw data
+    // TODO: also analyze panose info, etc.
+
+    // check if the fonts needs the "CJK extra leading" heuristic
+    const unsigned char* pOS2map = &aBuffer[0];
+    const sal_uInt32 nVersion = GetUShort( pOS2map );
+    if( nVersion >= 0x0001 )
+    {
+        sal_uInt32 ulUnicodeRange2 = GetUInt( pOS2map + 46 );
+        if( ulUnicodeRange2 & 0x2DF00000 )
+            mbHasCJKSupport = true;
+    }
+}
+
+void ImplMacFontData::ReadMacCmapEncoding( void ) const
+{
+    // read this only once per font
+    if( mbCmapEncodingRead )
+        return;
+    mbCmapEncodingRead = true;
+
+    ATSFontRef rFont = FMGetATSFontRefFromFont( mnFontId );
+    ByteCount nBufSize = 0;
+    OSStatus eStatus = ATSFontGetTable( rFont, GetTag("cmap"), 0, 0, NULL, &nBufSize );
+    DBG_ASSERT( (eStatus==noErr), "ImplMacFontData::ReadMacCmapEncoding : ATSFontGetTable1 failed!\n");
+    if( eStatus != noErr )
+        return;
+
+    ByteVector aBuffer;
+    aBuffer.resize( nBufSize );
+
+    ByteCount nRawLength = 0;
+    eStatus = ATSFontGetTable( rFont, GetTag("cmap"), 0, nBufSize, (void*)&aBuffer[0], &nRawLength );
+    DBG_ASSERT( (eStatus==noErr), "ImplMacFontData::ReadMacCmapEncoding : ATSFontGetTable2 failed!\n");
+    if( eStatus != noErr )
+        return;
+    DBG_ASSERT( (nBufSize==nRawLength), "ImplMacFontData::ReadMacCmapEncoding : ByteCount mismatch!\n");
+
+    const unsigned char* pCmap = &aBuffer[0];
+
+    if (nRawLength < 24 )
+        return;
+    if( GetUShort( pCmap ) != 0x0000 )
+        return;
+
+    // check if the fonts needs the "CJK extra leading" heuristic
+    int nSubTables = GetUShort( pCmap + 2 );
+
+    for( const unsigned char* p = pCmap + 4; --nSubTables >= 0; p += 8 )
+    {
+        int nPlatform = GetUShort( p );
+        if( nPlatform == kFontMacintoshPlatform ) {
+            int nEncoding = GetUShort (p + 2 );
+            if( nEncoding == kFontJapaneseScript ||
+                nEncoding == kFontTraditionalChineseScript ||
+                nEncoding == kFontKoreanScript ||
+                nEncoding == kFontSimpleChineseScript )
+            {
+                mbHasCJKSupport = true;
+                break;
+            }
+        }
+    }
+}
+
+// -----------------------------------------------------------------------
+
+bool ImplMacFontData::HasCJKSupport( void ) const
+{
+    ReadOs2Table();
+    if( !mbHasOs2Table )
+        ReadMacCmapEncoding();
+
+    return mbHasCJKSupport;
+}
+
 // =======================================================================
 
 AquaSalGraphics::AquaSalGraphics()
@@ -176,7 +297,6 @@ AquaSalGraphics::AquaSalGraphics()
     , mnDPIX( 72 )          // since Quartz only knows point units instead of pixel units
     , mnDPIY( 72 )          // faking the resolution to point==pixel is beneficial
     , mrClippingPath( 0 )
-    , mrRGBColorSpace( CGColorSpaceCreateWithName( kCGColorSpaceGenericRGB ) )
     , mbXORMode( false )
     , mpMacFontData( NULL )
     , mnATSUIRotation( 0 )
@@ -209,7 +329,6 @@ AquaSalGraphics::~AquaSalGraphics()
         Application::RemoveUserEvent( mnUpdateGraphicsEvent );
     }
 */
-    CGColorSpaceRelease( mrRGBColorSpace );
     CGPathRelease( mrClippingPath );
     ATSUDisposeStyle( maATSUStyle );
 
@@ -479,7 +598,8 @@ void AquaSalGraphics::drawLine( long nX1, long nY1, long nX2, long nY2 )
 
     Rectangle aRefreshRect( nX1, nY1, nX2, nY2 );
     aRefreshRect.Justify();
-    RefreshRect( aRefreshRect.Left(), aRefreshRect.Top(), aRefreshRect.GetWidth(), aRefreshRect.GetHeight() );
+    // magical offsets: protect against rounding issues between context and real pixels
+    RefreshRect( aRefreshRect.Left()-1, aRefreshRect.Top()-1, aRefreshRect.GetWidth()+1, aRefreshRect.GetHeight()+1 );
 }
 
 // -----------------------------------------------------------------------
@@ -1091,14 +1211,48 @@ bool AquaSalGraphics::drawAlphaRect( long nX, long nY, long nWidth,
 {
     if ( CheckContext() )
     {
+        CGPathDrawingMode eMode;
+        if( mpFillColor[3] > 0.0 && mpLineColor[3] > 0.0 )
+            eMode = kCGPathEOFillStroke;
+        else if( mpLineColor[3] > 0.0 )
+            eMode = kCGPathStroke;
+        else if( mpFillColor[3] > 0.0 )
+            eMode = kCGPathEOFill;
+        else
+            return false;
+
+        // save the current state
         CGContextSaveGState(mrContext);
-        float oldAlpha = mpFillColor[3]; //  save the old alpha
-        // OOo transparency value of 0 corresponds to the Quartz transparency value of 1,
-        // and the OOo transparency value of 255 corresponds to the quartz transparency value of 0
-        mpFillColor[3] =  ((float)255-nTransparency) / 255; //  set the new alpha
-        CGContextSetFillColor( mrContext, mpFillColor ); // using our color and new alpha
-        mpFillColor[3] = oldAlpha; // reset the old value
-        CGContextFillRect( mrContext, CGRectMake(nX, nY, nWidth, nHeight) );
+
+        // set transparent fill/line colors
+        if( mpFillColor[3] > 0.0 )
+        {
+            float fOldFillAlpha = mpFillColor[3]; //  save the old alpha
+            // OOo transparency value of 0 corresponds to the Quartz transparency value of 1,
+            // and the OOo transparency value of 255 corresponds to the quartz transparency value of 0
+            mpFillColor[3] =  ((float)255-nTransparency) / 255; //  set the new alpha
+            CGContextSetFillColor( mrContext, mpFillColor ); // using our color and new alpha
+            mpFillColor[3] = fOldFillAlpha; // reset the old value
+        }
+        if( mpLineColor[3] )
+        {
+            float fOldLineAlpha = mpLineColor[3];
+            mpLineColor[3] = ((float)255-nTransparency) / 255;
+            CGContextSetStrokeColor( mrContext, mpLineColor );
+            mpLineColor[3] = fOldLineAlpha;
+        }
+
+
+        CGContextBeginPath( mrContext );
+        CGRect aRect;
+        aRect.origin.x    = nX;
+        aRect.origin.y    = nY+1;
+        aRect.size.width  = nWidth-1;
+        aRect.size.height = nHeight-1;
+        CGContextAddRect( mrContext, aRect );
+        CGContextDrawPath( mrContext, eMode );
+
+        // restore state
         CGContextRestoreGState(mrContext);
         RefreshRect(nX, nY, nWidth, nHeight);
         return TRUE;
@@ -1147,6 +1301,11 @@ void AquaSalGraphics::GetFontMetric( ImplFontMetricData* pMetric )
     if( err != noErr )
         return;
 
+    // all ATS fonts are scalable fonts
+    pMetric->mbScalableFont = true;
+    // TODO: check if any kerning is possible
+    pMetric->mbKernableFont = true;
+
     // convert into VCL font metrics (in unscaled pixel units)
 
     Fixed ptSize;
@@ -1166,6 +1325,22 @@ void AquaSalGraphics::GetFontMetric( ImplFontMetricData* pMetric )
     // setting this width to the pixel height of the fontsize is good enough
     // it also makes the calculation of the stretch factor simple
     pMetric->mnWidth        = fPixelSize + 0.5;
+
+    // apply the "CJK needs extra leading" heuristic if needed
+    if( mpMacFontData->HasCJKSupport() )
+    {
+        pMetric->mnIntLeading   += pMetric->mnExtLeading;
+
+        const long nHalfTmpExtLeading = pMetric->mnExtLeading / 2;
+        const long nOtherHalfTmpExtLeading = pMetric->mnExtLeading - nHalfTmpExtLeading;
+
+        long nCJKExtLeading = static_cast<long>(0.30 * (pMetric->mnAscent + pMetric->mnDescent));
+        nCJKExtLeading -= pMetric->mnExtLeading;
+        pMetric->mnExtLeading = (nCJKExtLeading > 0) ? nCJKExtLeading : 0;
+
+        pMetric->mnAscent   += nHalfTmpExtLeading;
+        pMetric->mnDescent  += nOtherHalfTmpExtLeading;
+    }
 }
 
 // -----------------------------------------------------------------------
