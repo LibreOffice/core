@@ -4,9 +4,9 @@
  *
  *  $RCSfile: UndoActions.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: hr $ $Date: 2007-08-02 14:27:39 $
+ *  last change: $Author: hr $ $Date: 2007-08-03 09:47:39 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -158,6 +158,23 @@ namespace rptui
         inline ::com::sun::star::uno::Reference< ::com::sun::star::report::XSection > getDetail()       { return m_xReport->getDetail(); }
 
         static ::std::mem_fun_t< ::com::sun::star::uno::Reference< ::com::sun::star::report::XSection> , OReportHelper> getMemberFunction(const ::com::sun::star::uno::Reference< ::com::sun::star::report::XSection >& _xSection);
+    };
+
+    class REPORTDESIGN_DLLPUBLIC UndoManagerListAction
+    {
+    private:
+        SfxUndoManager& m_rManager;
+
+    public:
+        UndoManagerListAction( SfxUndoManager& _rManager, const String& _rListActionComment )
+            :m_rManager( _rManager )
+        {
+            m_rManager.EnterListAction( _rListActionComment, String() );
+        }
+        ~UndoManagerListAction()
+        {
+            m_rManager.LeaveListAction();
+        }
     };
 
     class REPORTDESIGN_DLLPUBLIC OCommentUndoAction : public SdrUndoAction
