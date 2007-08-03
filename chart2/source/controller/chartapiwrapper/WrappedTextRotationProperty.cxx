@@ -4,9 +4,9 @@
  *
  *  $RCSfile: WrappedTextRotationProperty.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: vg $ $Date: 2007-05-22 17:25:08 $
+ *  last change: $Author: hr $ $Date: 2007-08-03 12:34:18 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -58,7 +58,7 @@ WrappedTextRotationProperty::~WrappedTextRotationProperty()
 Any WrappedTextRotationProperty::convertInnerToOuterValue( const Any& rInnerValue ) const
 {
     Any aRet;
-    double fVal;
+    double fVal = 0;
     if( rInnerValue >>= fVal )
     {
         sal_Int32 n100thDegrees = static_cast< sal_Int32 >( fVal * 100.0 );
@@ -69,7 +69,7 @@ Any WrappedTextRotationProperty::convertInnerToOuterValue( const Any& rInnerValu
 Any WrappedTextRotationProperty::convertOuterToInnerValue( const Any& rOuterValue ) const
 {
     Any aRet;
-    sal_Int32 nVal;
+    sal_Int32 nVal = 0;
     if( rOuterValue >>= nVal )
     {
         double fDoubleDegrees = ( static_cast< double >( nVal ) / 100.0 );
