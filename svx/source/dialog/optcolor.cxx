@@ -4,9 +4,9 @@
  *
  *  $RCSfile: optcolor.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: rt $ $Date: 2007-07-06 07:33:51 $
+ *  last change: $Author: hr $ $Date: 2007-08-03 11:54:31 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -303,6 +303,9 @@ sal_Bool lcl_isGroupVisible( sal_Int32 _nGroup, const SvtModuleOptions& _rModOpt
 
 sal_Int16 lcl_getGroup( sal_Int32 _nFeature )
 {
+    if ( _nFeature >= ColorConfigEntryCount )
+        return GROUP_COUNT; // feature of an extension
+
     sal_Int16 nRet = GROUP_UNKNOWN;
 
     switch ( _nFeature )
@@ -643,11 +646,23 @@ ColorConfigWindow_Impl::ColorConfigWindow_Impl(Window* pParent, const ResId& rRe
     aChapters.push_back(&aDrawFT);    aChapterWins.push_back(&aDrawBackWN);
     aChapters.push_back(&aBasicFT);   aChapterWins.push_back(&aBasicBackWN);
 
+    // calculate heights of groups which can be hidden
+    aChapters[GROUP_WRITER  ]->SetGroupHeight( aChapters[GROUP_HTML]->GetPosPixel().Y() -  aChapters[GROUP_WRITER]->GetPosPixel().Y() );
+    aChapters[GROUP_HTML    ]->SetGroupHeight( aChapters[GROUP_CALC]->GetPosPixel().Y() -  aChapters[GROUP_HTML]->GetPosPixel().Y() );
+    aChapters[GROUP_CALC    ]->SetGroupHeight( aChapters[GROUP_DRAW]->GetPosPixel().Y() -  aChapters[GROUP_CALC]->GetPosPixel().Y() );
+    aChapters[GROUP_DRAW    ]->SetGroupHeight( aChapters[GROUP_BASIC]->GetPosPixel().Y() - aChapters[GROUP_DRAW]->GetPosPixel().Y() );
+
     ExtendedColorConfig aExtConfig;
     sal_Int32 nExtCount = aExtConfig.GetComponentCount();
     if ( nExtCount )
     {
-        sal_Int32 nLineNum = 43;
+        // calculate position behind last chapter
+        sal_Int32 nLastY = aBasicErrorWN.GetPosPixel().Y() + aBasicErrorWN.GetSizePixel().Height();
+        nLastY = nLastY + LogicToPixel( Size( 0, 3 ), MAP_APPFONT ).Height();
+        // to calculate the number of lines
+        sal_Int32 nHeight = LogicToPixel( Size( 0, _LINE_HEIGHT ), MAP_APPFONT ).Height();
+        sal_Int32 nLineNum = nLastY / nHeight;
+
         Point aFixedPos = LogicToPixel( Point( _FT_XPOS, nLineNum * _LINE_HEIGHT ), MAP_APPFONT );
         Point aLBPos = LogicToPixel( Point( _LB_XPOS, nLineNum * _LINE_HEIGHT ), MAP_APPFONT );
         Size aFixedSize = LogicToPixel( Size( _FT_WIDTH , _FT_HEIGHT ), MAP_APPFONT );
