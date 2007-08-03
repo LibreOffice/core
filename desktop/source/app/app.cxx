@@ -4,9 +4,9 @@
  *
  *  $RCSfile: app.cxx,v $
  *
- *  $Revision: 1.208 $
+ *  $Revision: 1.209 $
  *
- *  last change: $Author: obo $ $Date: 2007-07-18 09:03:37 $
+ *  last change: $Author: hr $ $Date: 2007-08-03 14:12:15 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -2835,6 +2835,36 @@ void Desktop::HandleAppEvent( const ApplicationEvent& rAppEvent )
         OUString aHelpURL(rAppEvent.GetData().GetBuffer());
         Help *pHelp = Application::GetHelp();
         pHelp->Start(aHelpURL, NULL);
+    }
+    else if ( rAppEvent.GetEvent() == APPEVENT_OPEN_STRING )
+    {
+        OUString aOpenURL(rAppEvent.GetData().GetBuffer());
+
+        CommandLineArgs* pCmdLine = GetCommandLineArgs();
+        if ( !pCmdLine->IsInvisible() && !pCmdLine->IsTerminateAfterInit() )
+        {
+            ProcessDocumentsRequest* pDocsRequest = new ProcessDocumentsRequest;
+            pDocsRequest->aOpenList = aOpenURL;
+            pDocsRequest->pcProcessed = NULL;
+
+            OfficeIPCThread::ExecuteCmdLineRequests( *pDocsRequest );
+            delete pDocsRequest;
+        }
+    }
+    else if ( rAppEvent.GetEvent() == APPEVENT_PRINT_STRING )
+    {
+        OUString aPrintURL(rAppEvent.GetData().GetBuffer());
+
+        CommandLineArgs* pCmdLine = GetCommandLineArgs();
+        if ( !pCmdLine->IsInvisible() && !pCmdLine->IsTerminateAfterInit() )
+        {
+            ProcessDocumentsRequest* pDocsRequest = new ProcessDocumentsRequest;
+            pDocsRequest->aPrintList = aPrintURL;
+            pDocsRequest->pcProcessed = NULL;
+
+            OfficeIPCThread::ExecuteCmdLineRequests( *pDocsRequest );
+            delete pDocsRequest;
+        }
     }
 #ifndef UNX
     else if ( rAppEvent.GetEvent() == "HELP" )
