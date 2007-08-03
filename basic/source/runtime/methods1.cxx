@@ -4,9 +4,9 @@
  *
  *  $RCSfile: methods1.cxx,v $
  *
- *  $Revision: 1.33 $
+ *  $Revision: 1.34 $
  *
- *  last change: $Author: hr $ $Date: 2007-06-27 14:26:12 $
+ *  last change: $Author: hr $ $Date: 2007-08-03 09:55:57 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -244,25 +244,11 @@ RTLFUNC(CDbl)  // JSM
         SbxVariable *pSbxVariable = rPar.Get(1);
         if( pSbxVariable->GetType() == SbxSTRING )
         {
-            SbxError eOld = SbxBase::GetError();
-            if( eOld != SbxERR_OK )
-                SbxBase::ResetError();
-
-            // AB #42529 , zunaechst Wandlung in Date versuchen
-            // Wenn erfolgreich, ist das das Ergebnis
-            nVal = pSbxVariable->GetDate();
-            if( SbxBase::GetError() != SbxERR_OK )
-            {
-                SbxBase::ResetError();
-                if( eOld != SbxERR_OK )
-                    SbxBase::SetError( eOld );
-
-                // AB #41690 , String holen
-                String aScanStr = pSbxVariable->GetString();
-                SbError Error = SbxValue::ScanNumIntnl( aScanStr, nVal );
-                if( Error != SbxERR_OK )
-                    StarBASIC::Error( Error );
-            }
+            // AB #41690 , String holen
+            String aScanStr = pSbxVariable->GetString();
+            SbError Error = SbxValue::ScanNumIntnl( aScanStr, nVal );
+            if( Error != SbxERR_OK )
+                StarBASIC::Error( Error );
         }
         else
         {
@@ -320,25 +306,12 @@ RTLFUNC(CSng)  // JSM
         SbxVariable *pSbxVariable = rPar.Get(1);
         if( pSbxVariable->GetType() == SbxSTRING )
         {
-            SbxError eOld = SbxBase::GetError();
-            if( eOld != SbxERR_OK )
-                SbxBase::ResetError();
-
-            // AB #42529 , zunaechst Wandlung in Date versuchen
-            // Wenn erfolgreich, ist das das Ergebnis
-            double dVal = pSbxVariable->GetDate();
-            if( SbxBase::GetError() != SbxERR_OK )
-            {
-                SbxBase::ResetError();
-                if( eOld != SbxERR_OK )
-                    SbxBase::SetError( eOld );
-
-                // AB #41690 , String holen
-                String aScanStr = pSbxVariable->GetString();
-                SbError Error = SbxValue::ScanNumIntnl( aScanStr, dVal, /*bSingle=*/TRUE );
-                if( SbxBase::GetError() == SbxERR_OK && Error != SbxERR_OK )
-                    StarBASIC::Error( Error );
-            }
+            // AB #41690 , String holen
+            double dVal = 0.0;
+            String aScanStr = pSbxVariable->GetString();
+            SbError Error = SbxValue::ScanNumIntnl( aScanStr, dVal, /*bSingle=*/TRUE );
+            if( SbxBase::GetError() == SbxERR_OK && Error != SbxERR_OK )
+                StarBASIC::Error( Error );
             nVal = (float)dVal;
         }
         else
