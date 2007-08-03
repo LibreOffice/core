@@ -4,9 +4,9 @@
  *
  *  $RCSfile: newfrm.cxx,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: obo $ $Date: 2006-10-11 08:49:52 $
+ *  last change: $Author: hr $ $Date: 2007-08-03 13:39:58 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -109,9 +109,6 @@ BOOL           SwRootFrm::bInPaint = FALSE;
 BOOL           SwRootFrm::bNoVirDev = FALSE;
 
 SwCache *SwFrm::pCache = 0;
-
-Bitmap* SwNoTxtFrm::pErrorBmp = 0;
-Bitmap* SwNoTxtFrm::pReplaceBmp = 0;
 
 long FirstMinusSecond( long nFirst, long nSecond )
     { return nFirst - nSecond; }
