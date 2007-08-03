@@ -4,9 +4,9 @@
  *
  *  $RCSfile: GraphicPropertyItemConverter.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: rt $ $Date: 2007-07-25 08:40:50 $
+ *  last change: $Author: hr $ $Date: 2007-08-03 12:35:04 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -835,7 +835,7 @@ bool GraphicPropertyItemConverter::ApplySpecialItem(
                     OSL_ENSURE( ! aValue.isExtractableTo(
                                     ::getCppuType( reinterpret_cast< const sal_Int16 * >(0))),
                                 "TransparenceItem QueryValue bug is fixed. Remove hack." );
-                    sal_Int32 nValue;
+                    sal_Int32 nValue = 0;
                     if( aValue >>= nValue )
                     {
                         OSL_ENSURE( nValue < SAL_MAX_INT16, "Transparency value too large" );
@@ -872,7 +872,7 @@ bool GraphicPropertyItemConverter::ApplySpecialItem(
                     OSL_ENSURE( ! aValue.isExtractableTo(
                                     ::getCppuType( reinterpret_cast< const sal_Int16 * >(0))),
                                 "TransparenceItem QueryValue bug is fixed. Remove hack." );
-                    sal_Int32 nValue;
+                    sal_Int32 nValue = 0;
                     if( aValue >>= nValue )
                     {
                         OSL_ENSURE( nValue < SAL_MAX_INT16, "Transparency value too large" );

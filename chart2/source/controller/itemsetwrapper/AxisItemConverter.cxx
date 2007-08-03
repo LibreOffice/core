@@ -4,9 +4,9 @@
  *
  *  $RCSfile: AxisItemConverter.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: rt $ $Date: 2007-07-25 08:40:16 $
+ *  last change: $Author: hr $ $Date: 2007-08-03 12:34:42 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -334,7 +334,7 @@ void AxisItemConverter::FillSpecialItem( USHORT nWhichId, SfxItemSet & rOutItemS
         case SCHATTR_TEXT_DEGREES:
         {
             // convert double to int (times 100)
-            double fVal;
+            double fVal = 0;
 
             if( GetPropertySet()->getPropertyValue( C2U( "TextRotation" )) >>= fVal )
             {
