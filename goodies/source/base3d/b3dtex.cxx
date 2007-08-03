@@ -4,9 +4,9 @@
  *
  *  $RCSfile: b3dtex.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: vg $ $Date: 2007-02-05 12:51:00 $
+ *  last change: $Author: hr $ $Date: 2007-08-03 11:53:12 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1304,12 +1304,11 @@ void B3dTextureOpenGL::CreateOpenGLTexture(OpenGL& rOpenGL)
 
             rtl_freeMemory(pBuffer);
         }
-
-        // Lesezugriff freigeben
-        aLocalBitmap.ReleaseAccess(pLocalReadAccess);
-        if(bUsesAlpha)
-            aTransAlphaMask.ReleaseAccess(pLocalAlphaReadAccess);
     }
+
+    // Lesezugriff freigeben
+    if (pLocalReadAccess) aLocalBitmap.ReleaseAccess(pLocalReadAccess);
+    if (pLocalAlphaReadAccess) aTransAlphaMask.ReleaseAccess(pLocalAlphaReadAccess);
 
     // Hinweis auf Veraenderung der Texturart auf jeden Fall elliminieren
     bTextureKindChanged = sal_False;
