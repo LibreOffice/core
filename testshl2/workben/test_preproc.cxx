@@ -4,9 +4,9 @@
  *
  *  $RCSfile: test_preproc.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: obo $ $Date: 2007-01-22 14:37:23 $
+ *  last change: $Author: hr $ $Date: 2007-08-03 10:16:48 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -58,6 +58,6 @@ int main( int /* argc */, char* /* argv */ [] )
 {
     cout << "test preprocessor: " << endl;
     atest(fuck);
-    atest();
+    // atest(); compiler error, use "" instead
     atest("");
 }
