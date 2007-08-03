@@ -4,9 +4,9 @@
  *
  *  $RCSfile: basidesh.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: obo $ $Date: 2007-07-17 13:22:25 $
+ *  last change: $Author: hr $ $Date: 2007-08-03 10:00:00 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -57,6 +57,11 @@
 #include <sfx2/viewsh.hxx>
 #endif
 #include <svx/ifaceids.hxx>
+
+#ifndef _COM_SUN_STAR_IO_XINPUTSTREAMPROVIDER_HXX_
+#include <com/sun/star/io/XInputStreamProvider.hpp>
+#endif
+
 
 //----------------------------------------------------------------------------
 
@@ -217,6 +222,12 @@ public:
 
     BOOL                IsAppBasicModified() const { return m_bAppBasicModified; }
     void                SetAppBasicModified( BOOL bModified = TRUE ) { m_bAppBasicModified = bModified; }
+
+    // For Dialog Drag&Drop in Dialog Organizer
+    static void CopyDialogResources(
+        ::com::sun::star::uno::Reference< ::com::sun::star::io::XInputStreamProvider >& io_xISP,
+        const ScriptDocument& rSourceDoc, const String& rSourceLibName, const ScriptDocument& rDestDoc,
+        const String& rDestLibName, const String& rDlgName );
 };
 
 #endif // _BASIDESH_HXX
