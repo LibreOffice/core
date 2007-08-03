@@ -4,9 +4,9 @@
  *
  *  $RCSfile: OfficeDocumentReportTarget.java,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2007-07-09 11:56:07 $
+ *  last change: $Author: hr $ $Date: 2007-08-03 09:50:45 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -126,6 +126,7 @@ public abstract class OfficeDocumentReportTarget extends AbstractReportTarget
   public static final int STATE_IN_GROUP_BODY = 4;
   public static final int STATE_IN_SECTION = 5;
   public static final int STATE_IN_OTHER = 6;
+  public static final int STATE_IN_GROUP_INSTANCE = 7;
 
   protected static class BufferState
   {
@@ -189,6 +190,7 @@ public abstract class OfficeDocumentReportTarget extends AbstractReportTarget
   {
     private GroupContext parent;
     private int iterationCount;
+    private boolean groupWithRepeatingSection;
 
     protected GroupContext(final GroupContext parent)
     {
@@ -205,9 +207,29 @@ public abstract class OfficeDocumentReportTarget extends AbstractReportTarget
       return iterationCount;
     }
 
-    public void iterationFinished()
+    public void setIterationCount(final int iterationCount)
     {
-      iterationCount += 1;
+      this.iterationCount = iterationCount;
+    }
+
+    public boolean isGroupWithRepeatingSection()
+    {
+      return groupWithRepeatingSection;
+    }
+
+    public void setGroupWithRepeatingSection(final boolean groupWithRepeatingSection)
+    {
+      this.groupWithRepeatingSection = groupWithRepeatingSection;
+    }
+
+
+    public String toString()
+    {
+      return "GroupContext{" +
+          "parent=" + parent +
+          ", iterationCount=" + iterationCount +
+          ", groupWithRepeatingSection=" + groupWithRepeatingSection +
+          '}';
     }
   }
 
@@ -246,7 +268,7 @@ public abstract class OfficeDocumentReportTarget extends AbstractReportTarget
   private GroupContext groupContext;
   private static final boolean DEBUG_ELEMENTS =
       JFreeReportBoot.getInstance().getExtendedConfig().getBoolProperty
-      ("com.sun.star.report.pentaho.output.DebugElements");
+          ("com.sun.star.report.pentaho.output.DebugElements");
 
   protected OfficeDocumentReportTarget(final ReportJob reportJob,
                                        final ResourceManager resourceManager,
@@ -313,7 +335,7 @@ public abstract class OfficeDocumentReportTarget extends AbstractReportTarget
     final DefaultTagDescription tagDescription = createTagDescription();
     try
     {
-      final OutputStream outputStream = outputRepository.createOutputStream(target,"text/xml");
+      final OutputStream outputStream = outputRepository.createOutputStream(target, "text/xml");
       final Writer writer = new OutputStreamWriter(outputStream, "UTF-8");
 
       this.rootXmlWriter = new XmlWriter(writer, tagDescription);
@@ -513,17 +535,57 @@ public abstract class OfficeDocumentReportTarget extends AbstractReportTarget
           return;
         }
         case OfficeDocumentReportTarget.STATE_IN_CONTENT:
-        case OfficeDocumentReportTarget.STATE_IN_GROUP:
-        case OfficeDocumentReportTarget.STATE_IN_GROUP_BODY:
         {
+          // Either a ordinary section or a group ..
           // A group.
-          if (ReportTargetUtil.isElementOfType(OfficeNamespaces.INTERNAL_NS, "group-body", attrs) ||
-              ReportTargetUtil.isElementOfType(OfficeNamespaces.INTERNAL_NS, "report-body", attrs))
+          if (ReportTargetUtil.isElementOfType(OfficeNamespaces.INTERNAL_NS, "report-body", attrs))
           {
             states.push(IntegerCache.getInteger(OfficeDocumentReportTarget.STATE_IN_GROUP_BODY));
             startGroupBody(attrs);
           }
-          else if (ReportTargetUtil.isElementOfType(OfficeNamespaces.OOREPORT_NS, "group", attrs))
+          else
+          {
+            // Either a template-section, page-header, page-footer, report-header, report-footer
+            // or variables-section
+            states.push(IntegerCache.getInteger(OfficeDocumentReportTarget.STATE_IN_SECTION));
+            if (ReportTargetUtil.isElementOfType(OfficeNamespaces.INTERNAL_NS, "template", attrs))
+            {
+              currentRole = OfficeDocumentReportTarget.ROLE_TEMPLATE;
+            }
+            else if (ReportTargetUtil.isElementOfType(OfficeNamespaces.OOREPORT_NS, "page-header", attrs))
+            {
+              currentRole = OfficeDocumentReportTarget.ROLE_PAGE_HEADER;
+            }
+            else if (ReportTargetUtil.isElementOfType(OfficeNamespaces.OOREPORT_NS, "page-footer", attrs))
+            {
+              currentRole = OfficeDocumentReportTarget.ROLE_PAGE_FOOTER;
+            }
+            else if (ReportTargetUtil.isElementOfType(OfficeNamespaces.OOREPORT_NS, "report-header", attrs))
+            {
+              currentRole = OfficeDocumentReportTarget.ROLE_REPORT_HEADER;
+            }
+            else if (ReportTargetUtil.isElementOfType(OfficeNamespaces.OOREPORT_NS, "report-footer", attrs))
+            {
+              currentRole = OfficeDocumentReportTarget.ROLE_REPORT_FOOTER;
+            }
+            else if (ReportTargetUtil.isElementOfType(OfficeNamespaces.INTERNAL_NS, "variables-section", attrs))
+            {
+              currentRole = OfficeDocumentReportTarget.ROLE_VARIABLES;
+            }
+            else
+            {
+              throw new IllegalStateException("Expected either 'template', 'report-body', " +
+                  "'report-header', 'report-footer', 'variables-section', 'page-header' or 'page-footer'");
+            }
+            startReportSection(attrs, currentRole);
+          }
+          return;
+        }
+        case OfficeDocumentReportTarget.STATE_IN_GROUP_BODY:
+        {
+          // We now expect either an other group or a detail band.
+
+          if (ReportTargetUtil.isElementOfType(OfficeNamespaces.OOREPORT_NS, "group", attrs))
           {
             states.push(IntegerCache.getInteger(OfficeDocumentReportTarget.STATE_IN_GROUP));
             groupContext = new GroupContext(groupContext);
@@ -531,10 +593,82 @@ public abstract class OfficeDocumentReportTarget extends AbstractReportTarget
           }
           else
           {
-            // Either a page-header, page-footer, report-header, report-footer
-            // or detail-band or variables-section
+            // Either a variables-section, or a detail-band
             states.push(IntegerCache.getInteger(OfficeDocumentReportTarget.STATE_IN_SECTION));
-            currentRole = computeRoleForSection(attrs);
+            if (ReportTargetUtil.isElementOfType(OfficeNamespaces.OOREPORT_NS, "detail", attrs))
+            {
+              currentRole = OfficeDocumentReportTarget.ROLE_DETAIL;
+            }
+            else if (ReportTargetUtil.isElementOfType(OfficeNamespaces.INTERNAL_NS, "variables-section", attrs))
+            {
+              currentRole = OfficeDocumentReportTarget.ROLE_VARIABLES;
+            }
+            else
+            {
+              throw new IllegalStateException("Expected either 'group', 'detail' or 'variables-section'");
+            }
+            startReportSection(attrs, currentRole);
+          }
+          return;
+        }
+        case OfficeDocumentReportTarget.STATE_IN_GROUP:
+        {
+          // A group can carry a repeating group header/footer or a group-instance section.
+          if (ReportTargetUtil.isElementOfType(OfficeNamespaces.INTERNAL_NS, "group-instance", attrs))
+          {
+            states.push(IntegerCache.getInteger(OfficeDocumentReportTarget.STATE_IN_GROUP_INSTANCE));
+            startGroupInstance(attrs);
+          }
+          else
+          {
+            // repeating group header/footer, but *no* variables section
+            states.push(IntegerCache.getInteger(OfficeDocumentReportTarget.STATE_IN_SECTION));
+            if (ReportTargetUtil.isElementOfType(OfficeNamespaces.OOREPORT_NS, "group-header", attrs) &&
+                "true".equals(attrs.getAttribute(OfficeNamespaces.INTERNAL_NS, "repeated-section")))
+            {
+              currentRole = OfficeDocumentReportTarget.ROLE_REPEATING_GROUP_HEADER;
+            }
+            else if (ReportTargetUtil.isElementOfType(OfficeNamespaces.OOREPORT_NS, "group-footer", attrs) &&
+                     "true".equals(attrs.getAttribute(OfficeNamespaces.INTERNAL_NS, "repeated-section")))
+            {
+              currentRole = OfficeDocumentReportTarget.ROLE_REPEATING_GROUP_FOOTER;
+            }
+            else
+            {
+              throw new IllegalStateException("Expected either 'group-instance', " +
+                  "'repeating group-header' or 'repeating group-footer'");
+            }
+            startReportSection(attrs, currentRole);
+          }
+          return;
+        }
+        case OfficeDocumentReportTarget.STATE_IN_GROUP_INSTANCE:
+        {
+          if (ReportTargetUtil.isElementOfType(OfficeNamespaces.INTERNAL_NS, "group-body", attrs))
+          {
+            states.push(IntegerCache.getInteger(OfficeDocumentReportTarget.STATE_IN_GROUP_BODY));
+            startGroupBody(attrs);
+          }
+          else
+          {
+            // Either a group-header or group-footer or variables-section
+            states.push(IntegerCache.getInteger(OfficeDocumentReportTarget.STATE_IN_SECTION));
+            if (ReportTargetUtil.isElementOfType(OfficeNamespaces.OOREPORT_NS, "group-header", attrs))
+            {
+              currentRole = OfficeDocumentReportTarget.ROLE_GROUP_HEADER;
+            }
+            else if (ReportTargetUtil.isElementOfType(OfficeNamespaces.OOREPORT_NS, "group-footer", attrs))
+            {
+              currentRole = OfficeDocumentReportTarget.ROLE_GROUP_FOOTER;
+            }
+            else if (ReportTargetUtil.isElementOfType(OfficeNamespaces.INTERNAL_NS, "variables-section", attrs))
+            {
+              currentRole = OfficeDocumentReportTarget.ROLE_VARIABLES;
+            }
+            else
+            {
+              throw new IllegalStateException("Expected either 'group-body', 'group-header', 'group-footer' or 'variables-section'");
+            }
             startReportSection(attrs, currentRole);
           }
           return;
@@ -623,57 +757,6 @@ public abstract class OfficeDocumentReportTarget extends AbstractReportTarget
     }
   }
 
-
-  private int computeRoleForSection(final AttributeMap attrs)
-  {
-    if (ReportTargetUtil.isElementOfType(OfficeNamespaces.INTERNAL_NS, "template", attrs))
-    {
-      return OfficeDocumentReportTarget.ROLE_TEMPLATE;
-    }
-    if (ReportTargetUtil.isElementOfType(OfficeNamespaces.OOREPORT_NS, "group-header", attrs))
-    {
-      if ("true".equals(attrs.getAttribute(OfficeNamespaces.INTERNAL_NS, "repeated-section")))
-      {
-        return OfficeDocumentReportTarget.ROLE_REPEATING_GROUP_HEADER;
-      }
-      return OfficeDocumentReportTarget.ROLE_GROUP_HEADER;
-    }
-    if (ReportTargetUtil.isElementOfType(OfficeNamespaces.OOREPORT_NS, "group-footer", attrs))
-    {
-      if ("true".equals(attrs.getAttribute(OfficeNamespaces.INTERNAL_NS, "repeated-section")))
-      {
-        return OfficeDocumentReportTarget.ROLE_REPEATING_GROUP_FOOTER;
-      }
-      return OfficeDocumentReportTarget.ROLE_GROUP_FOOTER;
-    }
-    if (ReportTargetUtil.isElementOfType(OfficeNamespaces.OOREPORT_NS, "page-header", attrs))
-    {
-      return OfficeDocumentReportTarget.ROLE_PAGE_HEADER;
-    }
-    if (ReportTargetUtil.isElementOfType(OfficeNamespaces.OOREPORT_NS, "page-footer", attrs))
-    {
-      return OfficeDocumentReportTarget.ROLE_PAGE_FOOTER;
-    }
-    if (ReportTargetUtil.isElementOfType(OfficeNamespaces.OOREPORT_NS, "report-header", attrs))
-    {
-      return OfficeDocumentReportTarget.ROLE_REPORT_HEADER;
-    }
-    if (ReportTargetUtil.isElementOfType(OfficeNamespaces.OOREPORT_NS, "report-footer", attrs))
-    {
-      return OfficeDocumentReportTarget.ROLE_REPORT_FOOTER;
-    }
-    if (ReportTargetUtil.isElementOfType(OfficeNamespaces.OOREPORT_NS, "detail", attrs))
-    {
-      return OfficeDocumentReportTarget.ROLE_DETAIL;
-    }
-    if (ReportTargetUtil.isElementOfType(OfficeNamespaces.INTERNAL_NS, "variables-section", attrs))
-    {
-      return OfficeDocumentReportTarget.ROLE_VARIABLES;
-    }
-    throw new IllegalStateException();
-    //return OfficeDocumentReportTarget.ROLE_NONE;
-  }
-
   protected void startBody(final AttributeMap attrs)
       throws IOException
   {
@@ -697,6 +780,24 @@ public abstract class OfficeDocumentReportTarget extends AbstractReportTarget
   protected void startGroup(final AttributeMap attrs)
       throws IOException, DataSourceException, ReportProcessingException
   {
+    final Object repeatingHeaderOrFooter = attrs.getAttribute(OfficeNamespaces.INTERNAL_NS, "repeating-header-or-footer");
+    if ("true".equals(repeatingHeaderOrFooter))
+    {
+      getGroupContext().setGroupWithRepeatingSection(true);
+    }
+
+    final Object iterationCount = attrs.getAttribute(OfficeNamespaces.INTERNAL_NS, "iteration-count");
+    if (iterationCount instanceof Number)
+    {
+      final Number itNumber = (Number) iterationCount;
+      getGroupContext().setIterationCount(itNumber.intValue());
+    }
+  }
+
+  protected void startGroupInstance(final AttributeMap attrs)
+      throws IOException, DataSourceException, ReportProcessingException
+  {
+
   }
 
   protected void startGroupBody(final AttributeMap attrs)
@@ -795,7 +896,7 @@ public abstract class OfficeDocumentReportTarget extends AbstractReportTarget
   }
 
 
-  public void endElement(final AttributeMap attrs)
+  public final void endElement(final AttributeMap attrs)
       throws DataSourceException, ReportProcessingException
   {
     // final int oldState = getCurrentState();
@@ -819,7 +920,11 @@ public abstract class OfficeDocumentReportTarget extends AbstractReportTarget
         {
           endGroup(attrs);
           groupContext = groupContext.getParent();
-          groupContext.iterationFinished();
+          return;
+        }
+        case OfficeDocumentReportTarget.STATE_IN_GROUP_INSTANCE:
+        {
+          endGroupInstance(attrs);
           return;
         }
         case OfficeDocumentReportTarget.STATE_IN_GROUP_BODY:
@@ -867,6 +972,12 @@ public abstract class OfficeDocumentReportTarget extends AbstractReportTarget
   }
 
   protected void endGroupBody(final AttributeMap attrs)
+      throws IOException, DataSourceException, ReportProcessingException
+  {
+
+  }
+
+  protected void endGroupInstance(final AttributeMap attrs)
       throws IOException, DataSourceException, ReportProcessingException
   {
 
@@ -924,7 +1035,7 @@ public abstract class OfficeDocumentReportTarget extends AbstractReportTarget
       this.rootXmlWriter.writeStream(state.getXmlAsReader());
 
       final OutputStream stylesOutStream =
-          outputRepository.createOutputStream("styles.xml","text/xml");
+          outputRepository.createOutputStream("styles.xml", "text/xml");
       final OutputStreamWriter osw =
           new OutputStreamWriter(stylesOutStream, "UTF-8");
       final StylesWriter stylesWriter = new StylesWriter(osw);
@@ -1141,7 +1252,11 @@ public abstract class OfficeDocumentReportTarget extends AbstractReportTarget
       final CSSNumericValue width = image.getWidth(); // always in 100th of a mm
       final CSSNumericValue height = image.getHeight(); // always in 100th of a mm
 
-      Log.debug ("Image " + imageData + " Width: " + width + ", Height: " + height);
+      Log.debug("Image " + imageData + " Width: " + width + ", Height: " + height);
+      if (width == null || height == null)
+      {
+        return;
+      }
 
       CSSNumericValue imageAreaWidthVal;
       CSSNumericValue imageAreaHeightVal;
@@ -1151,80 +1266,88 @@ public abstract class OfficeDocumentReportTarget extends AbstractReportTarget
         imageAreaWidthVal = computeImageWidth(imageContext);
         imageAreaHeightVal = computeImageHeight(imageContext);
 
-        // compute the clip-area ..
-        final CSSNumericValue normalizedImageWidth =
-            CSSValueResolverUtility.convertLength(width, imageAreaWidthVal.getType());
-        final CSSNumericValue normalizedImageHeight =
-            CSSValueResolverUtility.convertLength(height, imageAreaHeightVal.getType());
-
-        final boolean scale = "true".equals(attrs.getAttribute(OfficeNamespaces.INTERNAL_NS, "scale"));
-        if (scale == false && normalizedImageWidth.getValue() > 0 && normalizedImageHeight.getValue() > 0)
+        if (imageAreaWidthVal == null || imageAreaHeightVal == null)
         {
-          final double clipWidth = normalizedImageWidth.getValue() - imageAreaWidthVal.getValue();
-          final double clipHeight = normalizedImageHeight.getValue() - imageAreaHeightVal.getValue();
-          if (clipWidth > 0 && clipHeight > 0)
-          {
-            final OfficeStyle imageStyle = deriveStyle("graphic", "Graphics");
-            final Element graphProperties = produceFirstChild(imageStyle, OfficeNamespaces.STYLE_NS, "graphic-properties");
-            final StringBuffer buffer = new StringBuffer();
-            buffer.append("rect(");
-            buffer.append(clipHeight / 2);
-            buffer.append(imageAreaHeightVal.getType().getType());
-            buffer.append(" ");
-            buffer.append(clipWidth / 2);
-            buffer.append(imageAreaWidthVal.getType().getType());
-            buffer.append(" ");
-            buffer.append(clipHeight / 2);
-            buffer.append(imageAreaHeightVal.getType().getType());
-            buffer.append(" ");
-            buffer.append(clipWidth / 2);
-            buffer.append(imageAreaWidthVal.getType().getType());
-            buffer.append(")");
-            graphProperties.setAttribute(OfficeNamespaces.FO_NS, "clip", buffer.toString());
+          Log.debug ("Image data returned from context is invalid. Maybe this is not an image?");
+          return;
+        }
+        else
+        {
+          // compute the clip-area ..
+          final CSSNumericValue normalizedImageWidth =
+              CSSValueResolverUtility.convertLength(width, imageAreaWidthVal.getType());
+          final CSSNumericValue normalizedImageHeight =
+              CSSValueResolverUtility.convertLength(height, imageAreaHeightVal.getType());
 
-            styleName = imageStyle.getStyleName();
-            getStylesCollection().getAutomaticStyles().addStyle(imageStyle);
-          }
-          else if (clipWidth > 0)
+          final boolean scale = "true".equals(attrs.getAttribute(OfficeNamespaces.INTERNAL_NS, "scale"));
+          if (scale == false && normalizedImageWidth.getValue() > 0 && normalizedImageHeight.getValue() > 0)
           {
-            final OfficeStyle imageStyle = deriveStyle("graphic", "Graphics");
-            final Element graphProperties = produceFirstChild(imageStyle, OfficeNamespaces.STYLE_NS, "graphic-properties");
-            final StringBuffer buffer = new StringBuffer();
-            buffer.append("rect(0cm ");
-            buffer.append(clipWidth / 2);
-            buffer.append(imageAreaWidthVal.getType().getType());
-            buffer.append(" 0cm ");
-            buffer.append(clipWidth / 2);
-            buffer.append(imageAreaWidthVal.getType().getType());
-            buffer.append(")");
-            graphProperties.setAttribute(OfficeNamespaces.FO_NS, "clip", buffer.toString());
+            final double clipWidth = normalizedImageWidth.getValue() - imageAreaWidthVal.getValue();
+            final double clipHeight = normalizedImageHeight.getValue() - imageAreaHeightVal.getValue();
+            if (clipWidth > 0 && clipHeight > 0)
+            {
+              final OfficeStyle imageStyle = deriveStyle("graphic", "Graphics");
+              final Element graphProperties = produceFirstChild(imageStyle, OfficeNamespaces.STYLE_NS, "graphic-properties");
+              final StringBuffer buffer = new StringBuffer();
+              buffer.append("rect(");
+              buffer.append(clipHeight / 2);
+              buffer.append(imageAreaHeightVal.getType().getType());
+              buffer.append(" ");
+              buffer.append(clipWidth / 2);
+              buffer.append(imageAreaWidthVal.getType().getType());
+              buffer.append(" ");
+              buffer.append(clipHeight / 2);
+              buffer.append(imageAreaHeightVal.getType().getType());
+              buffer.append(" ");
+              buffer.append(clipWidth / 2);
+              buffer.append(imageAreaWidthVal.getType().getType());
+              buffer.append(")");
+              graphProperties.setAttribute(OfficeNamespaces.FO_NS, "clip", buffer.toString());
 
-            styleName = imageStyle.getStyleName();
-            getStylesCollection().getAutomaticStyles().addStyle(imageStyle);
-            imageAreaHeightVal = normalizedImageHeight;
-          }
-          else if (clipHeight > 0)
-          {
-            final OfficeStyle imageStyle = deriveStyle("graphic", "Graphics");
-            final Element graphProperties = produceFirstChild(imageStyle, OfficeNamespaces.STYLE_NS, "graphic-properties");
-            final StringBuffer buffer = new StringBuffer();
-            buffer.append("rect(");
-            buffer.append(clipHeight / 2);
-            buffer.append(imageAreaHeightVal.getType().getType());
-            buffer.append(" 0cm ");
-            buffer.append(clipHeight / 2);
-            buffer.append(imageAreaHeightVal.getType().getType());
-            buffer.append(" 0cm)");
-            graphProperties.setAttribute(OfficeNamespaces.FO_NS, "clip", buffer.toString());
+              styleName = imageStyle.getStyleName();
+              getStylesCollection().getAutomaticStyles().addStyle(imageStyle);
+            }
+            else if (clipWidth > 0)
+            {
+              final OfficeStyle imageStyle = deriveStyle("graphic", "Graphics");
+              final Element graphProperties = produceFirstChild(imageStyle, OfficeNamespaces.STYLE_NS, "graphic-properties");
+              final StringBuffer buffer = new StringBuffer();
+              buffer.append("rect(0cm ");
+              buffer.append(clipWidth / 2);
+              buffer.append(imageAreaWidthVal.getType().getType());
+              buffer.append(" 0cm ");
+              buffer.append(clipWidth / 2);
+              buffer.append(imageAreaWidthVal.getType().getType());
+              buffer.append(")");
+              graphProperties.setAttribute(OfficeNamespaces.FO_NS, "clip", buffer.toString());
 
-            styleName = imageStyle.getStyleName();
-            getStylesCollection().getAutomaticStyles().addStyle(imageStyle);
-            imageAreaWidthVal = normalizedImageWidth;
-          }
-          else
-          {
-            imageAreaWidthVal = normalizedImageWidth;
-            imageAreaHeightVal = normalizedImageHeight;
+              styleName = imageStyle.getStyleName();
+              getStylesCollection().getAutomaticStyles().addStyle(imageStyle);
+              imageAreaHeightVal = normalizedImageHeight;
+            }
+            else if (clipHeight > 0)
+            {
+              final OfficeStyle imageStyle = deriveStyle("graphic", "Graphics");
+              final Element graphProperties = produceFirstChild(imageStyle, OfficeNamespaces.STYLE_NS, "graphic-properties");
+              final StringBuffer buffer = new StringBuffer();
+              buffer.append("rect(");
+              buffer.append(clipHeight / 2);
+              buffer.append(imageAreaHeightVal.getType().getType());
+              buffer.append(" 0cm ");
+              buffer.append(clipHeight / 2);
+              buffer.append(imageAreaHeightVal.getType().getType());
+              buffer.append(" 0cm)");
+              graphProperties.setAttribute(OfficeNamespaces.FO_NS, "clip", buffer.toString());
+
+              styleName = imageStyle.getStyleName();
+              getStylesCollection().getAutomaticStyles().addStyle(imageStyle);
+              imageAreaWidthVal = normalizedImageWidth;
+            }
+            else
+            {
+              imageAreaWidthVal = normalizedImageWidth;
+              imageAreaHeightVal = normalizedImageHeight;
+            }
           }
         }
         // If we do scale, then we simply use the given image-area-size as valid image size and dont
@@ -1232,7 +1355,7 @@ public abstract class OfficeDocumentReportTarget extends AbstractReportTarget
       }
       else
       {
-        Log.debug ("There is no image-context, so we have to rely on the image's natural bounds. " +
+        Log.debug("There is no image-context, so we have to rely on the image's natural bounds. " +
             "This may go awfully wrong.");
         imageAreaWidthVal = image.getWidth();
         imageAreaHeightVal = image.getHeight();
@@ -1249,7 +1372,7 @@ public abstract class OfficeDocumentReportTarget extends AbstractReportTarget
       frameList.setAttribute(OfficeNamespaces.SVG_NS, "x", "0cm");
       frameList.setAttribute(OfficeNamespaces.SVG_NS, "y", "0cm");
 
-      Log.debug ("Image " + imageData + " A-Width: " + imageAreaWidthVal + ", A-Height: " + imageAreaHeightVal);
+      Log.debug("Image " + imageData + " A-Width: " + imageAreaWidthVal + ", A-Height: " + imageAreaHeightVal);
 
       if (imageAreaWidthVal != null)
       {
