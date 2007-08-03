@@ -4,9 +4,9 @@
  *
  *  $RCSfile: GeometryHandler.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: hr $ $Date: 2007-08-02 14:38:38 $
+ *  last change: $Author: hr $ $Date: 2007-08-03 12:45:21 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -295,12 +295,13 @@ void lcl_convertFormulaTo(const uno::Any& _aPropertyValue,uno::Any& _rControlVal
     aParser = ReportFormula( bIsField || bIsParam ? ReportFormula::Field : ReportFormula::Expression, sName );
     return aParser.getCompleteFormula();
 }
-
+DBG_NAME(rpt_GeometryHandler)
 GeometryHandler::GeometryHandler(uno::Reference< uno::XComponentContext > const & context) :
     GeometryHandler_Base(m_aMutex),
     m_xContext(context),
     m_pInfoService(new OPropertyInfoService())
 {
+    DBG_CTOR(rpt_GeometryHandler,NULL);
     try
     {
         uno::Reference< lang::XMultiComponentFactory > xFac = m_xContext->getServiceManager();
@@ -311,7 +312,11 @@ GeometryHandler::GeometryHandler(uno::Reference< uno::XComponentContext > const 
     {
     }
 }
-
+// -----------------------------------------------------------------------------
+GeometryHandler::~GeometryHandler()
+{
+    DBG_DTOR(rpt_GeometryHandler,NULL);
+}
 //------------------------------------------------------------------------
 ::rtl::OUString SAL_CALL GeometryHandler::getImplementationName(  ) throw(uno::RuntimeException)
 {
@@ -355,7 +360,15 @@ uno::Reference< uno::XInterface > SAL_CALL GeometryHandler::create( const uno::R
 // disposed, do it here.
 void SAL_CALL GeometryHandler::disposing()
 {
-    ::comphelper::disposeComponent(m_xFormComponentHandler);
+    try
+    {
+        ::comphelper::disposeComponent(m_xFormComponentHandler);
+        ::comphelper::disposeComponent(m_xTypeConverter);
+        m_xReportComponent.clear();
+        m_xRowSet.clear();
+    }
+    catch(uno::Exception&)
+    {}
 }
 void SAL_CALL GeometryHandler::addEventListener(const uno::Reference< lang::XEventListener > & xListener) throw (uno::RuntimeException)
 {
@@ -658,9 +671,8 @@ inspection::LineDescriptor SAL_CALL GeometryHandler::describePropertyLine(const 
         if ( nDisplayUnit != -1 )
             xNumericControl->setDisplayUnit( nDisplayUnit );
         uno::Reference< report::XReportComponent> xComp(m_xReportComponent,uno::UNO_QUERY);
-        if ( xComp.is() )
+        if ( xComp.is() && xComp->getSection().is() )
         {
-            OSL_ENSURE(xComp->getSection().is(),"No Section!");
             uno::Reference< report::XReportDefinition > xReport = xComp->getSection()->getReportDefinition();
             OSL_ENSURE(xReport.is(),"Why is the report definition NULL!");
             if ( xReport.is() )
@@ -832,7 +844,8 @@ uno::Any SAL_CALL GeometryHandler::convertToPropertyValue(const ::rtl::OUString 
                 sal_Int32 nPosX = 0;
                 aPropertyValue >>= nPosX;
                 uno::Reference< report::XReportComponent> xSourceReportComponent(m_xReportComponent,uno::UNO_QUERY);
-                nPosX += getStyleProperty<sal_Int32>(xSourceReportComponent->getSection()->getReportDefinition(),PROPERTY_LEFTMARGIN);
+                if ( xSourceReportComponent->getSection().is() )
+                    nPosX += getStyleProperty<sal_Int32>(xSourceReportComponent->getSection()->getReportDefinition(),PROPERTY_LEFTMARGIN);
                 aPropertyValue <<= nPosX;
             }
             break;
@@ -921,7 +934,8 @@ uno::Any SAL_CALL GeometryHandler::convertToControlValue(const ::rtl::OUString &
                 sal_Int32 nPosX = 0;
                 aPropertyValue >>= nPosX;
                 uno::Reference< report::XReportComponent> xSourceReportComponent(m_xReportComponent,uno::UNO_QUERY);
-                nPosX -= getStyleProperty<sal_Int32>(xSourceReportComponent->getSection()->getReportDefinition(),PROPERTY_LEFTMARGIN);
+                if ( xSourceReportComponent->getSection().is() )
+                    nPosX -= getStyleProperty<sal_Int32>(xSourceReportComponent->getSection()->getReportDefinition(),PROPERTY_LEFTMARGIN);
                 aPropertyValue <<= nPosX;
                 aControlValue = m_xFormComponentHandler->convertToControlValue(PropertyName, aPropertyValue, _rControlValueType);
             }
@@ -1167,7 +1181,8 @@ bool GeometryHandler::impl_dialogFilter_nothrow( ::rtl::OUString& _out_rSelected
             return false;
         }
 
-        const ::rtl::OUString sPropertyUIName( String(ModuleRes(RID_STR_FILTER)) );
+        String aGcc3WorkaroundTemporary( ModuleRes(RID_STR_FILTER));
+        const ::rtl::OUString sPropertyUIName( aGcc3WorkaroundTemporary );
         // initialize the dialog
         uno::Reference< beans::XPropertySet > xDialogProps( xDialog, uno::UNO_QUERY_THROW );
         xDialogProps->setPropertyValue( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "QueryComposer" ) ), uno::makeAny( xComposer ) );
