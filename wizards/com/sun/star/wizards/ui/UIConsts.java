@@ -21,6 +21,7 @@ public interface UIConsts {
     public static final int RID_TABLE = 2500;
     public static final int RID_IMG_REPORT = 1000;
     public static final int RID_IMG_FORM = 1100;
+    public static final int RID_IMG_WEB = 1200;
     public static final Integer INVISIBLESTEP = new Integer(99);
     public static final String  INFOIMAGEURL = "private:resource/dbu/image/19205";
     public static final String  INFOIMAGEURL_HC = "private:resource/dbu/image/19230";
