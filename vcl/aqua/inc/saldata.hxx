@@ -5,9 +5,9 @@
  *
  *  $RCSfile: saldata.hxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: rt $ $Date: 2007-07-05 10:00:34 $
+ *  last change: $Author: hr $ $Date: 2007-08-03 13:58:06 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -43,7 +43,7 @@
 
 
 #ifndef _SV_SV_H
-    #include <vcl/sv.h>
+#include <vcl/sv.h>
 #endif
 
 #ifndef _SV_SVDATA_HXX
@@ -97,6 +97,8 @@ struct SalData
     SalPrinter                                   *mpFirstPrinter;   // first printing printer
     SystemFontList                               *mpFontList;
 
+    CGColorSpaceRef                               mxRGBSpace;
+    CGColorSpaceRef                               mxGraySpace;
 
     /*
      * SalTimer related members
@@ -117,6 +119,8 @@ struct SalData
         mpFirstVD( NULL ),
         mpFirstPrinter( NULL ),
         mpFontList( NULL ),
+        mxRGBSpace( CGColorSpaceCreateWithName(kCGColorSpaceGenericRGB) ),
+        mxGraySpace( CGColorSpaceCreateWithName(kCGColorSpaceGenericGray) ),
         mbInTimerProc( FALSE ),
         mbTimerInstalled( FALSE ),
         mnTimerMS( 0 ),
@@ -124,6 +128,12 @@ struct SalData
         mrTimerRef( 0 ),
         mrTimerUPP( 0 )
     {}
+
+    ~SalData()
+    {
+        CFRelease( mxRGBSpace );
+        CFRelease( mxGraySpace );
+    }
 };
 
 void AquaLog( const char* pFormat, ... );
