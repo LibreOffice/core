@@ -4,9 +4,9 @@
  *
  *  $RCSfile: edtwin3.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: kz $ $Date: 2007-05-10 16:16:59 $
+ *  last change: $Author: hr $ $Date: 2007-08-03 13:41:01 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -215,6 +215,7 @@ void SwEditWin::DataChanged( const DataChangedEvent& rDCEvt )
         {
             pSh->LockPaint();
             bUnlockPaint = TRUE;
+            ViewShell::DeleteReplacementBitmaps();
             GetView().InvalidateBorder();               //Scrollbarbreiten
         }
         break;
@@ -232,5 +233,4 @@ void SwEditWin::DataChanged( const DataChangedEvent& rDCEvt )
     if( bUnlockPaint )
         pSh->UnlockPaint();
 }
-
 
