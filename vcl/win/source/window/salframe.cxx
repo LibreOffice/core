@@ -4,9 +4,9 @@
  *
  *  $RCSfile: salframe.cxx,v $
  *
- *  $Revision: 1.145 $
+ *  $Revision: 1.146 $
  *
- *  last change: $Author: rt $ $Date: 2007-07-24 10:34:02 $
+ *  last change: $Author: hr $ $Date: 2007-08-03 14:10:54 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -4102,12 +4102,7 @@ static bool ImplHandlePaintMsg( HWND hWnd )
 
             if ( bMutex )
             {
-                SalPaintEvent aPEvt;
-                aPEvt.mnBoundX          = aUpdateRect.left;
-                aPEvt.mnBoundY          = aUpdateRect.top;
-                aPEvt.mnBoundWidth      = aUpdateRect.right-aUpdateRect.left;
-                aPEvt.mnBoundHeight     = aUpdateRect.bottom-aUpdateRect.top;
-
+                SalPaintEvent aPEvt( aUpdateRect.left, aUpdateRect.top, aUpdateRect.right-aUpdateRect.left, aUpdateRect.bottom-aUpdateRect.top );
                 pFrame->CallCallback( SALEVENT_PAINT, &aPEvt );
             }
             else
@@ -4144,12 +4139,7 @@ static void ImplHandlePaintMsg2( HWND hWnd, RECT* pRect )
         WinSalFrame* pFrame = GetWindowPtr( hWnd );
         if ( pFrame )
         {
-            SalPaintEvent aPEvt;
-            aPEvt.mnBoundX          = pRect->left;
-            aPEvt.mnBoundY          = pRect->top;
-            aPEvt.mnBoundWidth      = pRect->right-pRect->left;
-            aPEvt.mnBoundHeight     = pRect->bottom-pRect->top;
-
+            SalPaintEvent aPEvt( pRect->left, pRect->top, pRect->right-pRect->left, pRect->bottom-pRect->top );
             pFrame->CallCallback( SALEVENT_PAINT, &aPEvt );
         }
         ImplSalYieldMutexRelease();
