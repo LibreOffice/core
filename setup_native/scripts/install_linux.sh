@@ -228,7 +228,7 @@ FAKEDBRPM=/tmp/fake-db-1.0-$$.noarch.rpm
 linenum=???
 tail +$linenum $0 > $FAKEDBRPM
 
-rpm --upgrade --justdb --ignoresize --dbpath $RPM_DB_PATH $FAKEDBRPM
+rpm --upgrade --ignoresize --dbpath $RPM_DB_PATH $FAKEDBRPM
 
 rm -f $FAKEDBRPM
 
