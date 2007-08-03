@@ -4,9 +4,9 @@
  *
  *  $RCSfile: gencoll_rule.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: kz $ $Date: 2006-12-12 16:15:22 $
+ *  last change: $Author: hr $ $Date: 2007-08-03 12:34:03 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -44,6 +44,8 @@
 #include <rtl/ustrbuf.hxx>
 
 #include "warnings_guard_unicode_tblcoll.h"
+
+U_CAPI void U_EXPORT2 uprv_free(void *mem);
 
 using namespace ::rtl;
 
@@ -133,6 +135,8 @@ SAL_IMPLEMENT_MAIN_WITH_ARGS(argc, argv)
         else {
             printf("Could not get rule data from collator\n");
         }
+
+    if (data) uprv_free(data);
     } else {
         printf("\nRule parsering error\n");
     }
