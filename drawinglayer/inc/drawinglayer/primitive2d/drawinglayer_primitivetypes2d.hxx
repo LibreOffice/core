@@ -4,9 +4,9 @@
  *
  *  $RCSfile: drawinglayer_primitivetypes2d.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: aw $ $Date: 2007-08-02 11:43:43 $
+ *  last change: $Author: aw $ $Date: 2007-08-03 10:43:04 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -84,7 +84,10 @@
 #define PRIMITIVE2D_ID_TRANSFORMPRIMITIVE2D                 (PRIMITIVE2D_ID_RANGE_DRAWINGLAYER| 35)
 #define PRIMITIVE2D_ID_UNIFIEDALPHAPRIMITIVE2D              (PRIMITIVE2D_ID_RANGE_DRAWINGLAYER| 36)
 #define PRIMITIVE2D_ID_POINTARRAYPRIMITIVE2D                (PRIMITIVE2D_ID_RANGE_DRAWINGLAYER| 37)
-#define PRIMITIVE2D_ID_TEXTFIELDPRIMITIVE2D                 (PRIMITIVE2D_ID_RANGE_DRAWINGLAYER| 38)
+#define PRIMITIVE2D_ID_TEXTHIERARCHYFIELDPRIMITIVE2D        (PRIMITIVE2D_ID_RANGE_DRAWINGLAYER| 38)
+#define PRIMITIVE2D_ID_TEXTHIERARCHYLINEPRIMITIVE2D         (PRIMITIVE2D_ID_RANGE_DRAWINGLAYER| 39)
+#define PRIMITIVE2D_ID_TEXTHIERARCHYPARAGRAPHPRIMITIVE2D    (PRIMITIVE2D_ID_RANGE_DRAWINGLAYER| 40)
+#define PRIMITIVE2D_ID_TEXTHIERARCHYBLOCKPRIMITIVE2D        (PRIMITIVE2D_ID_RANGE_DRAWINGLAYER| 41)
 
 //////////////////////////////////////////////////////////////////////////////
 

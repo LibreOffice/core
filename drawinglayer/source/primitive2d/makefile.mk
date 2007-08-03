@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.5 $
+#   $Revision: 1.6 $
 #
-#   last change: $Author: aw $ $Date: 2007-08-02 11:43:44 $
+#   last change: $Author: aw $ $Date: 2007-08-03 10:43:04 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -73,7 +73,7 @@ SLOFILES= \
         $(SLO)$/textlayoutdevice.obj			\
         $(SLO)$/textprimitive2d.obj				\
         $(SLO)$/textdecoratedprimitive2d.obj	\
-        $(SLO)$/textfieldprimitive2d.obj		\
+        $(SLO)$/texthierarchyprimitive2d.obj	\
         $(SLO)$/transformprimitive2d.obj		\
         $(SLO)$/unifiedalphaprimitive2d.obj
 

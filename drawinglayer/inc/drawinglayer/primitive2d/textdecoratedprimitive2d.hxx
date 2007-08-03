@@ -4,9 +4,9 @@
  *
  *  $RCSfile: textdecoratedprimitive2d.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: aw $ $Date: 2007-08-02 11:43:43 $
+ *  last change: $Author: aw $ $Date: 2007-08-03 10:43:04 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -133,8 +133,6 @@ namespace drawinglayer
             unsigned                                    mbEmphasisMarkAbove : 1;
             unsigned                                    mbEmphasisMarkBelow : 1;
             unsigned                                    mbShadow : 1;
-            unsigned                                    mbEndOfLine: 1;
-            unsigned                                    mbEndOfParagraph : 1;
 
         protected:
             // local decomposition.
@@ -162,8 +160,6 @@ namespace drawinglayer
                 bool bEmphasisMarkBelow = false,
                 FontRelief eFontRelief = FONT_RELIEF_NONE,
                 bool bShadow = false,
-                bool bEndOfLine = false,
-                bool bEndOfParagraph = false,
                 const WrongSpellVector& rWrongSpellVector = WrongSpellVector());
 
             // get data
@@ -179,8 +175,6 @@ namespace drawinglayer
             bool getEmphasisMarkAbove() const { return mbEmphasisMarkAbove; }
             bool getEmphasisMarkBelow() const { return mbEmphasisMarkBelow; }
             bool getShadow() const { return mbShadow; }
-            bool getEndOfLine() const { return mbEndOfLine; }
-            bool getEndOfParagraph() const { return mbEndOfParagraph; }
 
             // compare operator
             virtual bool operator==( const BasePrimitive2D& rPrimitive ) const;

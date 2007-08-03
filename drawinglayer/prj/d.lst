@@ -36,7 +36,7 @@ mkdir: %_DEST%\inc%_EXT%\drawinglayer\primitive2d
 ..\inc\drawinglayer\primitive2d\textlayoutdevice.hxx %_DEST%\inc%_EXT%\drawinglayer\primitive2d\textlayoutdevice.hxx
 ..\inc\drawinglayer\primitive2d\textprimitive2d.hxx %_DEST%\inc%_EXT%\drawinglayer\primitive2d\textprimitive2d.hxx
 ..\inc\drawinglayer\primitive2d\textdecoratedprimitive2d.hxx %_DEST%\inc%_EXT%\drawinglayer\primitive2d\textdecoratedprimitive2d.hxx
-..\inc\drawinglayer\primitive2d\textfieldprimitive2d.hxx %_DEST%\inc%_EXT%\drawinglayer\primitive2d\textfieldprimitive2d.hxx
+..\inc\drawinglayer\primitive2d\texthierarchyprimitive2d.hxx %_DEST%\inc%_EXT%\drawinglayer\primitive2d\texthierarchyprimitive2d.hxx
 ..\inc\drawinglayer\primitive2d\transformprimitive2d.hxx %_DEST%\inc%_EXT%\drawinglayer\primitive2d\transformprimitive2d.hxx
 ..\inc\drawinglayer\primitive2d\unifiedalphaprimitive2d.hxx %_DEST%\inc%_EXT%\drawinglayer\primitive2d\unifiedalphaprimitive2d.hxx
 

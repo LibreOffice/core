@@ -4,9 +4,9 @@
  *
  *  $RCSfile: textdecoratedprimitive2d.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: aw $ $Date: 2007-08-02 11:43:44 $
+ *  last change: $Author: aw $ $Date: 2007-08-03 10:43:04 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -377,8 +377,6 @@ namespace drawinglayer
             bool bEmphasisMarkBelow,
             FontRelief eFontRelief,
             bool bShadow,
-            bool bEndOfLine,
-            bool bEndOfParagraph,
             const WrongSpellVector& rWrongSpellVector)
         :   TextSimplePortionPrimitive2D(rNewTransform, rText, rDXArray, rFontAttributes, rLocale, rFontColor),
             maTextlineColor(rTextlineColor),
@@ -391,9 +389,7 @@ namespace drawinglayer
             mbWordLineMode(bWordLineMode),
             mbEmphasisMarkAbove(bEmphasisMarkAbove),
             mbEmphasisMarkBelow(bEmphasisMarkBelow),
-            mbShadow(bShadow),
-            mbEndOfLine(bEndOfLine),
-            mbEndOfParagraph(bEndOfParagraph)
+            mbShadow(bShadow)
         {
         }
 
@@ -413,9 +409,7 @@ namespace drawinglayer
                     && getWordLineMode() == rCompare.getWordLineMode()
                     && getEmphasisMarkAbove() == rCompare.getEmphasisMarkAbove()
                     && getEmphasisMarkBelow() == rCompare.getEmphasisMarkBelow()
-                    && getShadow() == rCompare.getShadow()
-                    && getEndOfLine() == rCompare.getEndOfLine()
-                    && getEndOfParagraph() == rCompare.getEndOfParagraph());
+                    && getShadow() == rCompare.getShadow());
             }
 
             return false;

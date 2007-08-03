@@ -4,9 +4,9 @@
  *
  *  $RCSfile: vclmetafileprocessor2d.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: aw $ $Date: 2007-08-02 11:43:45 $
+ *  last change: $Author: aw $ $Date: 2007-08-03 10:43:05 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -137,8 +137,8 @@
 #include <vcl/metaact.hxx>
 #endif
 
-#ifndef INCLUDED_DRAWINGLAYER_PRIMITIVE2D_TEXTFIELDPRIMITIVE2D_HXX
-#include <drawinglayer/primitive2d/textfieldprimitive2d.hxx>
+#ifndef INCLUDED_DRAWINGLAYER_PRIMITIVE2D_TEXTHIERARCHYPRIMITIVE2D_HXX
+#include <drawinglayer/primitive2d/texthierarchyprimitive2d.hxx>
 #endif
 
 #ifndef INCLUDED_DRAWINGLAYER_PRIMITIVE_TEXTDECORATEDPRIMITIVE2D_HXX
@@ -474,38 +474,18 @@ namespace drawinglayer
             This can be done hierarchical, too.
             Okay, base implementation done based on those three primitives.
 
-
-
-
-
-
-            To be done:
-
-
-
-
-
-
-
-
             FIELD_SEQ_BEGIN, FIELD_SEQ_END
+
             Used from slideshow for URLs, created from diverse SvxField implementations inside
             createBeginComment()/createEndComment(). createBeginComment() is used from editeng\impedit3.cxx
             inside ImpEditEngine::Paint.
-            Created TextFieldPrimitive2D and added needed infos there; it is an group primitive and wraps
-            text primitives (but is not limited to that). It contains the Prolog string (normally FIELD_SEQ_BEGIN,
-            but there are others), the Epilog string and the URL if it was an URL field.
+            Created TextHierarchyFieldPrimitive2D and added needed infos there; it is an group primitive and wraps
+            text primitives (but is not limited to that). It contains the field type if special actions for the
+            support of FIELD_SEQ_BEGIN/END are needed; this is the case for Page and URL fields. If more is
+            needed, it may be supported there.
             FIELD_SEQ_BEGIN;PageField
             FIELD_SEQ_END
-
-
-
-
-
-
-            EPSReplacementGraphic
-
-
+            Okay, these are now completely supported by TextHierarchyFieldPrimitive2D. URL works, too.
 
             XTEXT
 
@@ -515,19 +495,39 @@ namespace drawinglayer
             this three are with index and are created with the help of a i18n::XBreakIterator in
             ImplDrawWithComments. Simplifying, moving out text painting, reworking to create some
             data structure for holding those TEXT infos.
+            Supported directly by TextSimplePortionPrimitive2D with adding a Locale to the basic text
+            primitive. In the MetaFileRenderer, the creation is now done (see below). This has the advantage
+            that this creations do not need to be done for all paints all the time. This would be
+            expensive since the BreakIterator and it's usage is expensive and for each paint also the
+            whole character stops would need to be created.
+            Created only for TextDecoratedPortionPrimitive2D due to XTEXT_EOL and XTEXT_EOP (see below)
 
             XTEXT_EOL() end of line
             XTEXT_EOP() end of paragraph
-            this two are boolean marks, created by the loop in ImpEditEngine::Paint
+            First try with boolean marks at TextDecoratedPortionPrimitive2D did not work too well,
+            i decided to solve it with structure. I added the TextHierarchyPrimitives for this,
+            namely:
+            - TextHierarchyLinePrimitive2D: Encapsulates single line
+            - TextHierarchyParagraphPrimitive2D: Encapsulates single paragraph
+            - TextHierarchyBlockPrimitive2D: encapsulates object texts (only one ATM)
+            Those are now supported in hierarchy. This means the MetaFile renderer will support them
+            by using them, reculrively using their content and adding MetaFile comments as needed.
+            This also means that when another text layouter will be used it will be necessary to
+            create/support the same HierarchyPrimitives to support users.
+            To transport the information using this hierarchy is best suited to all future needs;
+            the slideshow will be able to profit from it directly when using primitives; all other
+            renderers not interested in the text structure will just ignore the encapsulations.
+
+            XTEXT_PAINTSHAPE_BEGIN, XTEXT_PAINTSHAPE_END
+            Supported now by the TextHierarchyBlockPrimitive2D.
 
 
 
+            To be done:
 
 
+            EPSReplacementGraphic
 
-
-            XTEXT_PAINTSHAPE_BEGIN
-            XTEXT_PAINTSHAPE_END
 
             XTEXT_SCROLLRECT
             XTEXT_PAINTRECT
@@ -548,36 +548,75 @@ namespace drawinglayer
         {
             switch(rCandidate.getPrimitiveID())
             {
-                case PRIMITIVE2D_ID_TEXTFIELDPRIMITIVE2D :
+                case PRIMITIVE2D_ID_TEXTHIERARCHYFIELDPRIMITIVE2D :
                 {
                     // support for FIELD_SEQ_BEGIN, FIELD_SEQ_END and URL. It wraps text primitives (but is not limited to)
-                    // thus do the extra stuff but handle recursively.
-                    const primitive2d::TextFieldPrimitive2D& rTextFieldPrimitive = static_cast< const primitive2d::TextFieldPrimitive2D& >(rCandidate);
-                    const bool bUsePrologEpilog(0 != rTextFieldPrimitive.getProlog().Len() || 0 != rTextFieldPrimitive.getEpilog().Len());
-                    const bool bIsURL(0 != rTextFieldPrimitive.getURL().Len());
+                    // thus do the MetafileAction embedding stuff but just handle recursively.
+                    const primitive2d::TextHierarchyFieldPrimitive2D& rFieldPrimitive = static_cast< const primitive2d::TextHierarchyFieldPrimitive2D& >(rCandidate);
+                    static const ByteString aCommentStringCommon("FIELD_SEQ_BEGIN");
+                    static const ByteString aCommentStringPage("FIELD_SEQ_BEGIN;PageField");
+                    static const ByteString aCommentStringEnd("FIELD_SEQ_END");
 
-                    if(bUsePrologEpilog)
+                    switch(rFieldPrimitive.getType())
                     {
-                        if(bIsURL)
+                        default : // case drawinglayer::primitive2d::FIELD_TYPE_COMMON :
                         {
-                            const String& rURL = rTextFieldPrimitive.getURL();
-                            mrMetaFile.AddAction(new MetaCommentAction(rTextFieldPrimitive.getProlog(),
-                                0,  reinterpret_cast<const BYTE*>(rURL.GetBuffer()),
-                                2 * rURL.Len()));
+                            mrMetaFile.AddAction(new MetaCommentAction(aCommentStringCommon));
+                            break;
                         }
-                        else
+                        case drawinglayer::primitive2d::FIELD_TYPE_PAGE :
                         {
-                            mrMetaFile.AddAction(new MetaCommentAction(rTextFieldPrimitive.getProlog()));
+                            mrMetaFile.AddAction(new MetaCommentAction(aCommentStringPage));
+                            break;
+                        }
+                        case drawinglayer::primitive2d::FIELD_TYPE_URL :
+                        {
+                            const String& rURL = rFieldPrimitive.getString();
+                            mrMetaFile.AddAction(new MetaCommentAction(aCommentStringCommon, 0, reinterpret_cast< const BYTE* >(rURL.GetBuffer()), 2 * rURL.Len()));
+                            break;
                         }
                     }
 
                     // process recursively
-                    process(rTextFieldPrimitive.get2DDecomposition(getViewInformation2D()));
+                    process(rFieldPrimitive.get2DDecomposition(getViewInformation2D()));
 
-                    if(bUsePrologEpilog)
-                    {
-                        mrMetaFile.AddAction(new MetaCommentAction(rTextFieldPrimitive.getEpilog()));
-                    }
+                    // for the end comment the type is not relevant yet, they are all the same. Just add.
+                    mrMetaFile.AddAction(new MetaCommentAction(aCommentStringEnd));
+
+                    break;
+                }
+                case PRIMITIVE2D_ID_TEXTHIERARCHYLINEPRIMITIVE2D :
+                {
+                    const primitive2d::TextHierarchyLinePrimitive2D& rLinePrimitive = static_cast< const primitive2d::TextHierarchyLinePrimitive2D& >(rCandidate);
+                    static const ByteString aCommentString("XTEXT_EOL");
+
+                    // process recursively and add MetaFile comment
+                    process(rLinePrimitive.get2DDecomposition(getViewInformation2D()));
+                    mrMetaFile.AddAction(new MetaCommentAction(aCommentString));
+
+                    break;
+                }
+                case PRIMITIVE2D_ID_TEXTHIERARCHYPARAGRAPHPRIMITIVE2D :
+                {
+                    const primitive2d::TextHierarchyParagraphPrimitive2D& rParagraphPrimitive = static_cast< const primitive2d::TextHierarchyParagraphPrimitive2D& >(rCandidate);
+                    static const ByteString aCommentString("XTEXT_EOP");
+
+                    // process recursively and add MetaFile comment
+                    process(rParagraphPrimitive.get2DDecomposition(getViewInformation2D()));
+                    mrMetaFile.AddAction(new MetaCommentAction(aCommentString));
+
+                    break;
+                }
+                case PRIMITIVE2D_ID_TEXTHIERARCHYBLOCKPRIMITIVE2D :
+                {
+                    const primitive2d::TextHierarchyBlockPrimitive2D& rBlockPrimitive = static_cast< const primitive2d::TextHierarchyBlockPrimitive2D& >(rCandidate);
+                    static const ByteString aCommentStringA("XTEXT_PAINTSHAPE_BEGIN");
+                    static const ByteString aCommentStringB("XTEXT_PAINTSHAPE_END");
+
+                    // add MetaFile comment, process recursively and add MetaFile comment
+                    mrMetaFile.AddAction(new MetaCommentAction(aCommentStringA));
+                    process(rBlockPrimitive.get2DDecomposition(getViewInformation2D()));
+                    mrMetaFile.AddAction(new MetaCommentAction(aCommentStringB));
 
                     break;
                 }
@@ -613,37 +652,30 @@ namespace drawinglayer
                                 sal_Int32 nNextCellBreak(mxBreakIterator->nextCharacters(rTxt, 0, rLocale, ::com::sun::star::i18n::CharacterIteratorMode::SKIPCELL, 0, nDone));
                                 ::com::sun::star::i18n::Boundary nNextWordBoundary(mxBreakIterator->getWordBoundary(rTxt, 0, rLocale, ::com::sun::star::i18n::WordType::ANY_WORD, sal_True));
                                 sal_Int32 nNextSentenceBreak(mxBreakIterator->endOfSentence(rTxt, 0, rLocale));
+                                static const ByteString aCommentStringA("XTEXT_EOC");
+                                static const ByteString aCommentStringB("XTEXT_EOW");
+                                static const ByteString aCommentStringC("XTEXT_EOS");
 
                                 for(sal_Int32 i(0); i < nLen; i++)
                                 {
                                     // create the entries for the respective break positions
                                     if(i == nNextCellBreak)
                                     {
-                                        mrMetaFile.AddAction(new MetaCommentAction("XTEXT_EOC", i));
+                                        mrMetaFile.AddAction(new MetaCommentAction(aCommentStringA, i));
                                         nNextCellBreak = mxBreakIterator->nextCharacters(rTxt, i, rLocale, ::com::sun::star::i18n::CharacterIteratorMode::SKIPCELL, 1, nDone);
                                     }
                                     if(i == nNextWordBoundary.endPos)
                                     {
-                                        mrMetaFile.AddAction(new MetaCommentAction("XTEXT_EOW", i));
+                                        mrMetaFile.AddAction(new MetaCommentAction(aCommentStringB, i));
                                         nNextWordBoundary = mxBreakIterator->getWordBoundary(rTxt, i + 1, rLocale, ::com::sun::star::i18n::WordType::ANY_WORD, sal_True);
                                     }
                                     if(i == nNextSentenceBreak)
                                     {
-                                        mrMetaFile.AddAction(new MetaCommentAction("XTEXT_EOS", i));
+                                        mrMetaFile.AddAction(new MetaCommentAction(aCommentStringC, i));
                                         nNextSentenceBreak = mxBreakIterator->endOfSentence(rTxt, i + 1, rLocale);
                                     }
                                 }
                             }
-                        }
-
-                        if(pTextDecoratedCandidate->getEndOfLine())
-                        {
-                            mrMetaFile.AddAction( new MetaCommentAction( "XTEXT_EOL" ) );
-                        }
-
-                        if(pTextDecoratedCandidate->getEndOfParagraph())
-                        {
-                            mrMetaFile.AddAction( new MetaCommentAction( "XTEXT_EOP" ) );
                         }
                     }
 
