@@ -4,9 +4,9 @@
  *
  *  $RCSfile: notxtfrm.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 03:51:52 $
+ *  last change: $Author: hr $ $Date: 2007-08-03 13:39:45 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -47,8 +47,7 @@ struct SwCrsrMoveState;
 
 class SwNoTxtFrm: public SwCntntFrm
 {
-    friend void _FrmFinit();    //erase pErrorBmp and pReplaceBmp
-    static Bitmap *pErrorBmp, *pReplaceBmp;
+    friend void _FrmFinit();
 
     short    nWeight;                   // "Wichtigkeit" der Grafik
 
@@ -83,9 +82,7 @@ public:
 
     // Routinen fuer den Grafik-Cache
     USHORT GetWeight() { return nWeight; }
-
-    static const Bitmap& GetBitmap( BOOL bError );
 };
 
-
 #endif
+
