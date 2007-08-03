@@ -4,9 +4,9 @@
  *
  *  $RCSfile: disas.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: vg $ $Date: 2006-11-01 16:15:15 $
+ *  last change: $Author: hr $ $Date: 2007-08-03 09:55:30 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -40,7 +40,7 @@
 #include "opcodes.hxx"
 // find a place for this limit ( also used in
 class SvStream;
-#define MAX_LABELS 0x20000000L
+#define MAX_LABELS 0x2000L
 class SbiDisas {
     const SbiImage& rImg;
     SbModule* pMod;
