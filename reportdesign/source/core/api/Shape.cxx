@@ -4,9 +4,9 @@
  *
  *  $RCSfile: Shape.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2007-07-09 11:56:14 $
+ *  last change: $Author: hr $ $Date: 2007-08-03 09:54:09 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -257,40 +257,40 @@ uno::Any SAL_CALL OShape::getPropertyValue( const ::rtl::OUString& PropertyName 
 void SAL_CALL OShape::addPropertyChangeListener( const ::rtl::OUString& aPropertyName, const uno::Reference< beans::XPropertyChangeListener >& xListener ) throw (beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException)
 {
     getInfoHelper();
-    if( m_pAggHelper->classifyProperty(aPropertyName) == OPropertyArrayAggregationHelper::AGGREGATE_PROPERTY )
+    if( m_pAggHelper->classifyProperty(aPropertyName) == OPropertyArrayAggregationHelper::AGGREGATE_PROPERTY || !aPropertyName.getLength() )
         m_aProps.aComponent.m_xProperty->addPropertyChangeListener( aPropertyName, xListener);
     // can be in both
-    if( m_pAggHelper->classifyProperty(aPropertyName) == OPropertyArrayAggregationHelper::DELEGATOR_PROPERTY )
+    if( m_pAggHelper->classifyProperty(aPropertyName) == OPropertyArrayAggregationHelper::DELEGATOR_PROPERTY || !aPropertyName.getLength() )
         ShapePropertySet::addPropertyChangeListener( aPropertyName, xListener );
 }
 // -----------------------------------------------------------------------------
 void SAL_CALL OShape::removePropertyChangeListener( const ::rtl::OUString& aPropertyName, const uno::Reference< beans::XPropertyChangeListener >& aListener ) throw (beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException)
 {
     getInfoHelper();
-    if( m_pAggHelper->classifyProperty(aPropertyName) == OPropertyArrayAggregationHelper::AGGREGATE_PROPERTY )
+    if( m_pAggHelper->classifyProperty(aPropertyName) == OPropertyArrayAggregationHelper::AGGREGATE_PROPERTY || !aPropertyName.getLength() )
         m_aProps.aComponent.m_xProperty->removePropertyChangeListener( aPropertyName, aListener );
     // can be in both
-    if( m_pAggHelper->classifyProperty(aPropertyName) == OPropertyArrayAggregationHelper::DELEGATOR_PROPERTY )
+    if( m_pAggHelper->classifyProperty(aPropertyName) == OPropertyArrayAggregationHelper::DELEGATOR_PROPERTY || !aPropertyName.getLength() )
         ShapePropertySet::removePropertyChangeListener( aPropertyName, aListener );
 }
 // -----------------------------------------------------------------------------
 void SAL_CALL OShape::addVetoableChangeListener( const ::rtl::OUString& PropertyName, const uno::Reference< beans::XVetoableChangeListener >& aListener ) throw (beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException)
 {
     getInfoHelper();
-    if( m_pAggHelper->classifyProperty(PropertyName) == OPropertyArrayAggregationHelper::AGGREGATE_PROPERTY )
+    if( m_pAggHelper->classifyProperty(PropertyName) == OPropertyArrayAggregationHelper::AGGREGATE_PROPERTY || !PropertyName.getLength() )
         m_aProps.aComponent.m_xProperty->addVetoableChangeListener( PropertyName, aListener );
     // can be in both
-    if( m_pAggHelper->classifyProperty(PropertyName) == OPropertyArrayAggregationHelper::DELEGATOR_PROPERTY )
+    if( m_pAggHelper->classifyProperty(PropertyName) == OPropertyArrayAggregationHelper::DELEGATOR_PROPERTY || !PropertyName.getLength() )
         ShapePropertySet::addVetoableChangeListener( PropertyName, aListener );
 }
 // -----------------------------------------------------------------------------
 void SAL_CALL OShape::removeVetoableChangeListener( const ::rtl::OUString& PropertyName, const uno::Reference< beans::XVetoableChangeListener >& aListener ) throw (beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException)
 {
     getInfoHelper();
-    if( m_pAggHelper->classifyProperty(PropertyName) == OPropertyArrayAggregationHelper::AGGREGATE_PROPERTY )
+    if( m_pAggHelper->classifyProperty(PropertyName) == OPropertyArrayAggregationHelper::AGGREGATE_PROPERTY || !PropertyName.getLength() )
         m_aProps.aComponent.m_xProperty->removeVetoableChangeListener( PropertyName, aListener );
     // can be in both
-    if( m_pAggHelper->classifyProperty(PropertyName) == OPropertyArrayAggregationHelper::DELEGATOR_PROPERTY )
+    if( m_pAggHelper->classifyProperty(PropertyName) == OPropertyArrayAggregationHelper::DELEGATOR_PROPERTY || !PropertyName.getLength() )
         ShapePropertySet::removeVetoableChangeListener( PropertyName, aListener );
 }
 // -----------------------------------------------------------------------------
