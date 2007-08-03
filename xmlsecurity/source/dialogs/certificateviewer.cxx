@@ -4,9 +4,9 @@
  *
  *  $RCSfile: certificateviewer.cxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: rt $ $Date: 2007-04-26 08:17:15 $
+ *  last change: $Author: hr $ $Date: 2007-08-03 13:54:33 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -130,6 +130,9 @@ CertificateViewerGeneralTP::CertificateViewerGeneralTP( Window* _pParent, Certif
     ,maKeyImg               ( this, XMLSEC_RES( IMG_KEY ) )
     ,maHintCorrespPrivKeyFI ( this, XMLSEC_RES( FI_CORRPRIVKEY ) )
 {
+    if ( GetSettings().GetStyleSettings().GetWindowColor().IsDark() )
+        maKeyImg.SetImage( Image( XMLSEC_RES( IMG_KEY_HC ) ) );
+
     //Verify the certificate
     sal_Int32 certStatus = mpDlg->mxSecurityEnvironment->verifyCertificate(mpDlg->mxCert);
     //We currently have two status
@@ -143,11 +146,15 @@ CertificateViewerGeneralTP::CertificateViewerGeneralTP( Window* _pParent, Certif
     sal_Int32 certErrors = certStatus & mask;
     bool bCertValid = certErrors > 0 ? false : true;
 
+    bool bIsDark = ( GetSettings().GetStyleSettings().GetWindowColor().IsDark() != FALSE );
     if ( !bCertValid )
     {
-        maCertImg.SetImage( Image( XMLSEC_RES( IMG_STATE_NOT_VALIDATED ) ) );
+        maCertImg.SetImage(
+            Image( XMLSEC_RES( bIsDark ? IMG_STATE_NOT_VALIDATED_HC : IMG_STATE_NOT_VALIDATED ) ) );
         maHintNotTrustedFI.SetText( String( XMLSEC_RES( STR_CERTIFICATE_NOT_VALIDATED ) ) );
     }
+    else if ( bIsDark )
+        maCertImg.SetImage( Image( XMLSEC_RES( IMG_STATE_CERIFICATED_HC ) ) );
 
     FreeResource();
 
@@ -426,6 +433,11 @@ CertificateViewerCertPathTP::CertificateViewerCertPathTP( Window* _pParent, Cert
     ,msCertNotValidated     ( XMLSEC_RES( STR_PATH_CERT_NOT_VALIDATED ) )
 
 {
+    if ( GetSettings().GetStyleSettings().GetWindowColor().IsDark() )
+    {
+        maCertImage = Image( XMLSEC_RES( IMG_CERT_SMALL_HC ) );
+        maCertNotValidatedImage = Image( XMLSEC_RES( IMG_CERT_NOTVALIDATED_SMALL_HC ) );
+    }
 
     FreeResource();
 
