@@ -6,9 +6,9 @@
  *
  *  $RCSfile: dlgedfunc.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: hr $ $Date: 2007-08-02 14:38:02 $
+ *  last change: $Author: hr $ $Date: 2007-08-03 12:44:57 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -48,6 +48,7 @@ namespace rptui
 {
 
 class OReportSection;
+class OSectionView;
 
 //============================================================================
 // DlgEdFunc
@@ -59,6 +60,7 @@ class DlgEdFunc /* : public LinkHdl */
     void operator =(const DlgEdFunc&);
 protected:
     OReportSection* pParent;
+    OSectionView*   pView;
     Timer           aScrollTimer;
     Point           m_aMDPos;
 
@@ -102,8 +104,9 @@ public:
     * \param rMEvt
     * \return <TRUE/> if overlapping, otherwise <FALSE/>
     */
-    bool    isOverlapping(const MouseEvent& rMEvt);
+    bool isOverlapping(const MouseEvent& rMEvt);
     void setOverlappedControlColor(sal_Int32 _nColor);
+    void stopScrollTimer();
 protected:
     void colorizeOverlappedObject(SdrObject* _pOverlappedObj);
     void unColorizeOverlappedObj();
@@ -137,9 +140,6 @@ public:
 
 class DlgEdFuncSelect : public DlgEdFunc
 {
-protected:
-    BOOL    bMarkAction;
-
 public:
     DlgEdFuncSelect( OReportSection* pParent );
     ~DlgEdFuncSelect();
