@@ -4,9 +4,9 @@
  *
  *  $RCSfile: GeometryHandler.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2007-07-09 11:56:30 $
+ *  last change: $Author: hr $ $Date: 2007-08-03 10:01:09 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -152,7 +152,7 @@ namespace rptui
         virtual ::sal_Bool SAL_CALL suspend(::sal_Bool Suspend) throw (::com::sun::star::uno::RuntimeException);
 
     protected:
-        virtual ~GeometryHandler() {}
+        virtual ~GeometryHandler();
     private:
         GeometryHandler(GeometryHandler &); // not defined
         void operator =(GeometryHandler &); // not defined
