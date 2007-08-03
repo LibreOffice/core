@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.3 $
+#   $Revision: 1.4 $
 #
-#   last change: $Author: hr $ $Date: 2007-08-02 14:12:23 $
+#   last change: $Author: hr $ $Date: 2007-08-03 12:46:45 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -54,7 +54,10 @@ TARFILE_NAME=$(TARGET)
 
 TARFILE_ROOTDIR=$(TARGET)
 
-CONVERTFILES=ant$/build.xml
+PATCH_FILE_NAME=patches/$(TARGET).patch
+
+CONVERTFILES=ant$/build.xml\
+                ant$/build.properties
 
 .IF "$(JAVACISGCJ)"=="yes"
 JAVA_HOME=
