@@ -4,9 +4,9 @@
  *
  *  $RCSfile: fmPropBrw.cxx,v $
  *
- *  $Revision: 1.31 $
+ *  $Revision: 1.32 $
  *
- *  last change: $Author: hr $ $Date: 2007-06-27 18:11:20 $
+ *  last change: $Author: hr $ $Date: 2007-08-03 10:20:28 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -376,6 +376,20 @@ FmPropBrw::~FmPropBrw()
 {
     if (m_xBrowserController.is())
         implDetachController();
+    try
+    {
+        Reference<XNameContainer> xName(m_xInspectorContext,uno::UNO_QUERY);
+        if ( xName.is() )
+        {
+            const ::rtl::OUString pProps[] = { ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "ContextDocument" ) )
+                                            ,  ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "DialogParentWindow" ) )
+                                            , ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "ControlContext" ) )};
+            for (size_t i = 0; i < sizeof(pProps)/sizeof(pProps[0]); ++i)
+                xName->removeByName(pProps[i]);
+        }
+    }
+    catch(Exception&)
+    {}
 
     DBG_DTOR(FmPropBrw,NULL);
 }
@@ -648,7 +662,7 @@ void FmPropBrw::impl_createPropertyBrowser_throw( FmFormShell* _pFormShell )
         ::cppu::ContextEntry_Init( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "DialogParentWindow" ) ), makeAny( xParentWindow ) ),
         ::cppu::ContextEntry_Init( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "ControlContext" ) ), makeAny( xControlContext ) )
     };
-    Reference< XComponentContext > xInspectorContext(
+    m_xInspectorContext.set(
         ::cppu::createComponentContext( aHandlerContextInfo, sizeof( aHandlerContextInfo ) / sizeof( aHandlerContextInfo[0] ),
         xOwnContext ) );
 
@@ -657,13 +671,13 @@ void FmPropBrw::impl_createPropertyBrowser_throw( FmFormShell* _pFormShell )
     // an object inspector model
     m_xInspectorModel =
             bEnableHelpSection
-        ?   DefaultFormComponentInspectorModel::createWithHelpSection( xInspectorContext, 3, 5 )
-        :   DefaultFormComponentInspectorModel::createDefault( xInspectorContext );
+        ?   DefaultFormComponentInspectorModel::createWithHelpSection( m_xInspectorContext, 3, 5 )
+        :   DefaultFormComponentInspectorModel::createDefault( m_xInspectorContext );
 
     // an object inspector
     m_xBrowserController = m_xBrowserController.query(
         ObjectInspector::createWithModel(
-            xInspectorContext, m_xInspectorModel
+            m_xInspectorContext, m_xInspectorModel
         ) );
 
     if ( !m_xBrowserController.is() )
@@ -682,7 +696,7 @@ void FmPropBrw::impl_createPropertyBrowser_throw( FmFormShell* _pFormShell )
     {
         Reference< XObjectInspector > xInspector( m_xBrowserController, UNO_QUERY_THROW );
         Reference< XObjectInspectorUI > xInspectorUI( xInspector->getInspectorUI() );
-        Reference< XInterface > xDefaultHelpProvider( DefaultHelpProvider::create( xInspectorContext, xInspectorUI ) );
+        Reference< XInterface > xDefaultHelpProvider( DefaultHelpProvider::create( m_xInspectorContext, xInspectorUI ) );
     }
 }
 
