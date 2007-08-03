@@ -4,9 +4,9 @@
  *
  *  $RCSfile: invader.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: rt $ $Date: 2007-04-26 10:01:45 $
+ *  last change: $Author: hr $ $Date: 2007-08-03 12:29:08 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -144,8 +144,6 @@ MyWindow::~MyWindow()
     delete pBitWelcome2;
     delete pScoreWindow;
     delete pPauseWindow;
-
-    delete pRes;
 }
 
 void MyWindow::Paint(const Rectangle&)
@@ -575,7 +573,12 @@ void MyWindow::MouseMove(const MouseEvent& rMEvt)
 BOOL MyWindow::Close()
 {
     Hide();
+#ifdef TEST
+    pApplication->Quit();
+#else
     delete this;
+#endif
+
     return TRUE;
 }
 
@@ -607,6 +610,10 @@ void MyApp::Main()
     ResMgr *pMyResMgr = ResMgr::CreateResMgr(aRes.GetBuffer());
 
     MyWindow aWindow( NULL, pMyResMgr);
+
+#ifdef TEST
+    aWindow.setApplication(this);
+#endif
 
     Execute();
 
