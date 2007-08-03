@@ -4,9 +4,9 @@
  *
  *  $RCSfile: swparrtf.hxx,v $
  *
- *  $Revision: 1.29 $
+ *  $Revision: 1.30 $
  *
- *  last change: $Author: hr $ $Date: 2006-08-14 17:10:44 $
+ *  last change: $Author: hr $ $Date: 2007-08-03 11:00:25 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -415,6 +415,7 @@ class SwRTFParser : public SvxRTFParser
     void SetStyleAttr( SfxItemSet& rCollSet,
                         const SfxItemSet& rStyleSet,
                         const SfxItemSet& rDerivedSet );
+    String XlateFmtColName( const String &rName );  //Takashi Ono for CJK
     SwTxtFmtColl* MakeStyle( USHORT nNo, const SvxRTFStyleType& rStyle );
     SwCharFmt* MakeCharStyle( USHORT nNo, const SvxRTFStyleType& rStyle );
     void MakeStyleTab();
