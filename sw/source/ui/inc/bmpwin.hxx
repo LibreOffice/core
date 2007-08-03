@@ -4,9 +4,9 @@
  *
  *  $RCSfile: bmpwin.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 09:01:03 $
+ *  last change: $Author: hr $ $Date: 2007-08-03 13:42:01 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -39,13 +39,12 @@
 #ifndef _GRAPH_HXX //autogen
 #include <vcl/graph.hxx>
 #endif
-#ifndef _BITMAP_HXX //autogen
-#include <vcl/bitmap.hxx>
+#ifndef _BITMAPEX_HXX
+#include <vcl/bitmapex.hxx>
 #endif
 #ifndef _WINDOW_HXX //autogen
 #include <vcl/window.hxx>
 #endif
-
 
 /*--------------------------------------------------------------------
     Beschreibung:   Extended Page fuer Grafiken
@@ -53,17 +52,21 @@
 
 class BmpWindow : public Window
 {
+private:
+    Graphic     aGraphic;
+    BitmapEx    aBmp;
+    BitmapEx    aBmpHC;
+
+    BOOL        bHorz : 1;
+    BOOL        bVert : 1;
+    BOOL        bGraphic : 1;
+    BOOL        bLeftAlign : 1;
+
     void Paint(const Rectangle& rRect);
-    Graphic aGraphic;
-    Bitmap  aBmp;
-    BOOL    bHorz : 1;
-    BOOL    bVert : 1;
-    BOOL    bGraphic : 1;
-    BOOL    bLeftAlign : 1;
 
 public:
     BmpWindow(Window* pPar, USHORT nId,
-                const Graphic& rGraphic, const Bitmap& rBmp);
+                const Graphic& rGraphic, const BitmapEx& rBmp, const BitmapEx& rBmpHC);
     BmpWindow(Window* pParent, const ResId rResId) :
         Window(pParent, rResId), bLeftAlign(TRUE),
         bHorz(FALSE), bVert(FALSE),bGraphic(FALSE){}
@@ -71,7 +74,6 @@ public:
     void MirrorVert(BOOL bMirror) { bVert = bMirror; Invalidate(); }
     void MirrorHorz(BOOL bMirror) { bHorz = bMirror; Invalidate(); }
     void SetGraphic(const Graphic& rGrf);
-
 };
 
 #endif
