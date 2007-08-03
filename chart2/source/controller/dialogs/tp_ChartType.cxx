@@ -4,9 +4,9 @@
  *
  *  $RCSfile: tp_ChartType.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2007-07-25 08:36:20 $
+ *  last change: $Author: hr $ $Date: 2007-08-03 13:36:45 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
