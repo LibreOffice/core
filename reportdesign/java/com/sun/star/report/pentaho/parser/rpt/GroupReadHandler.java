@@ -4,9 +4,9 @@
  *
  *  $RCSfile: GroupReadHandler.java,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2007-07-09 11:56:09 $
+ *  last change: $Author: hr $ $Date: 2007-08-03 09:51:33 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -39,16 +39,13 @@ package com.sun.star.report.pentaho.parser.rpt;
 
 import java.util.ArrayList;
 
-import com.sun.star.report.pentaho.model.OfficeGroup;
-import com.sun.star.report.pentaho.parser.ElementReadHandler;
-import com.sun.star.report.pentaho.parser.StarXmlFactoryModule;
 import com.sun.star.report.pentaho.OfficeNamespaces;
+import com.sun.star.report.pentaho.model.OfficeGroup;
+import com.sun.star.report.pentaho.model.OfficeGroupInstanceSection;
+import com.sun.star.report.pentaho.parser.ElementReadHandler;
 import org.jfree.report.expressions.FormulaExpression;
-import org.jfree.report.structure.Group;
-import org.jfree.report.structure.Node;
 import org.jfree.report.structure.Element;
 import org.jfree.report.structure.Section;
-import org.jfree.report.JFreeReportInfo;
 import org.jfree.xmlns.parser.XmlReadHandler;
 import org.xml.sax.Attributes;
 import org.xml.sax.SAXException;
@@ -59,12 +56,17 @@ public class GroupReadHandler extends ElementReadHandler
   private GroupSectionReadHandler groupFooter;
   private GroupReadHandler childGroup;
   private RootTableReadHandler detailSection;
-  private Group group;
+  private OfficeGroup group;
+  private OfficeGroupInstanceSection groupInstanceSection;
   private ArrayList functionHandlers;
 
   public GroupReadHandler()
   {
     group = new OfficeGroup();
+    groupInstanceSection = new OfficeGroupInstanceSection();
+    groupInstanceSection.setNamespace(OfficeNamespaces.INTERNAL_NS);
+    groupInstanceSection.setType("group-instance");
+    group.addNode(groupInstanceSection);
     functionHandlers = new ArrayList();
   }
 
@@ -84,7 +86,7 @@ public class GroupReadHandler extends ElementReadHandler
     {
       final FormulaExpression function = new FormulaExpression();
       function.setFormula(groupExpr);
-      group.setGroupingExpression(function);
+      groupInstanceSection.setGroupingExpression(function);
     }
   }
 
@@ -145,18 +147,18 @@ public class GroupReadHandler extends ElementReadHandler
     {
       final FunctionReadHandler handler =
           (FunctionReadHandler) functionHandlers.get(i);
-      group.addExpression(handler.getExpression());
+      groupInstanceSection.addExpression(handler.getExpression());
     }
 
     if (groupHeader != null)
     {
-      group.addNode(groupHeader.getElement());
+      groupInstanceSection.addNode(groupHeader.getElement());
     }
 
     final Section groupBody = new Section();
     groupBody.setNamespace(OfficeNamespaces.INTERNAL_NS);
     groupBody.setType("group-body");
-    group.addNode(groupBody);
+    groupInstanceSection.addNode(groupBody);
     // XOR: Either the detail or the group section can be set ..
     if (detailSection != null)
     {
@@ -169,7 +171,7 @@ public class GroupReadHandler extends ElementReadHandler
 
     if (groupFooter != null)
     {
-      group.addNode(groupFooter.getElement());
+      groupInstanceSection.addNode(groupFooter.getElement());
     }
   }
 
