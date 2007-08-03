@@ -4,9 +4,9 @@
  *
  *  $RCSfile: PieChartTypeTemplate.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: rt $ $Date: 2007-07-25 08:54:31 $
+ *  last change: $Author: hr $ $Date: 2007-08-03 12:35:50 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -440,7 +440,7 @@ sal_Bool SAL_CALL PieChartTypeTemplate::matchesTemplate(
     {
         uno::Reference< beans::XPropertySet > xCTProp(
             DiagramHelper::getChartTypeByIndex( xDiagram, 0 ), uno::UNO_QUERY_THROW );
-        sal_Bool bUseRings;
+        sal_Bool bUseRings = false;
         if( xCTProp->getPropertyValue( C2U( "UseRings" )) >>= bUseRings )
         {
             bResult = ( bTemplateUsesRings == bUseRings );

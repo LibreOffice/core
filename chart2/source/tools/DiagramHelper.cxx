@@ -4,9 +4,9 @@
  *
  *  $RCSfile: DiagramHelper.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: rt $ $Date: 2007-07-25 08:56:49 $
+ *  last change: $Author: hr $ $Date: 2007-08-03 12:36:38 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -274,7 +274,7 @@ bool DiagramHelper::getVertical( const uno::Reference< chart2::XDiagram > & xDia
             Reference< beans::XPropertySet > xProp( aCooSys[i], uno::UNO_QUERY );
             if( xProp.is())
             {
-                bool bCurrent;
+                bool bCurrent = false;
                 if( xProp->getPropertyValue( C2U("SwapXAndYAxis") ) >>= bCurrent )
                 {
                     if( !rbFound )
