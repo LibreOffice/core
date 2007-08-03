@@ -4,9 +4,9 @@
  *
  *  $RCSfile: rtfitem.cxx,v $
  *
- *  $Revision: 1.33 $
+ *  $Revision: 1.34 $
  *
- *  last change: $Author: hr $ $Date: 2007-06-27 19:13:49 $
+ *  last change: $Author: hr $ $Date: 2007-08-03 11:01:49 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -195,11 +195,19 @@ void SvxRTFParser::SetScriptAttr( RTF_CharTypeDef eType, SfxItemSet& rSet,
     }
     else
     {
-        if( LOW_CHARTYPE == eType || HIGH_CHARTYPE == eType )
+        if( LOW_CHARTYPE == eType )
         {
             if( *pNormal )
             {
                 rItem.SetWhich( *pNormal );
+                rSet.Put( rItem );
+            }
+        }
+        else if( HIGH_CHARTYPE == eType )
+        {
+            if( *pCTL )
+            {
+                rItem.SetWhich( *pCTL );
                 rSet.Put( rItem );
             }
         }
