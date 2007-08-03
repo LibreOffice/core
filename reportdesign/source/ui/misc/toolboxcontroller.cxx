@@ -4,9 +4,9 @@
  *
  *  $RCSfile: toolboxcontroller.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2007-07-09 11:56:32 $
+ *  last change: $Author: hr $ $Date: 2007-08-03 10:03:22 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -158,11 +158,13 @@ Reference< XInterface > OToolboxController::create(Reference< XComponentContext 
     return *(new OToolboxController(Reference< XMultiServiceFactory >(xContext->getServiceManager(),UNO_QUERY)));
 }
 // -----------------------------------------------------------------------------
+DBG_NAME(rpt_OToolboxController)
 OToolboxController::OToolboxController(const Reference< XMultiServiceFactory >& _rxORB)
     : m_pToolbarController(NULL)
     ,m_nToolBoxId(1)
     ,m_nSlotId(0)
 {
+    DBG_CTOR(rpt_OToolboxController,NULL);
     osl_incrementInterlockedCount(&m_refCount);
     m_xServiceManager = _rxORB;
     osl_decrementInterlockedCount(&m_refCount);
@@ -171,6 +173,7 @@ OToolboxController::OToolboxController(const Reference< XMultiServiceFactory >& 
 // -----------------------------------------------------------------------------
 OToolboxController::~OToolboxController()
 {
+    DBG_DTOR(rpt_OToolboxController,NULL);
 }
 // -----------------------------------------------------------------------------
 // XInterface
@@ -325,7 +328,8 @@ void SAL_CALL OToolboxController::statusChanged( const FeatureStateEvent& Event 
                     {
                         util::Color nColor(COL_TRANSPARENT);
                         Event.State >>= nColor;
-                        SvxColorItem aColorItem(::Color(nColor),1);
+                        ::Color aGcc3WorkaroundTemporary( nColor);
+                        SvxColorItem aColorItem(aGcc3WorkaroundTemporary,1);
                         if ( SID_ATTR_CHAR_COLOR2 == m_nSlotId )
                             static_cast<SvxFontColorExtToolBoxControl*>(m_pToolbarController.get())->StateChanged(m_nSlotId,Event.IsEnabled ? SFX_ITEM_SET : SFX_ITEM_DISABLED,&aColorItem);
                         else
