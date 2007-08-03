@@ -4,9 +4,9 @@
  *
  *  $RCSfile: baside2.cxx,v $
  *
- *  $Revision: 1.41 $
+ *  $Revision: 1.42 $
  *
- *  last change: $Author: obo $ $Date: 2007-03-15 15:52:11 $
+ *  last change: $Author: hr $ $Date: 2007-08-03 09:57:30 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -124,9 +124,7 @@ using namespace ::com::sun::star::uno;
 
 #define VALIDWINDOW     0x1234
 
-#if defined(MAC)
-#define FILTERMASK_ALL "****"
-#elif defined(OW) || defined(MTF)
+#if defined(OW) || defined(MTF)
 #define FILTERMASK_ALL "*"
 #elif defined(PM2)
 #define FILTERMASK_ALL ""
