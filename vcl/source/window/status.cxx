@@ -4,9 +4,9 @@
  *
  *  $RCSfile: status.cxx,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: rt $ $Date: 2007-07-27 07:43:18 $
+ *  last change: $Author: hr $ $Date: 2007-08-03 14:08:49 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -515,8 +515,55 @@ void StatusBar::ImplDrawItem( BOOL bOffScreen, USHORT nPos, BOOL bDrawText, BOOL
 
 void DrawProgress( Window* pWindow, const Point& rPos,
                    long nOffset, long nPrgsWidth, long nPrgsHeight,
-                   USHORT nPercent1, USHORT nPercent2, USHORT nPercentCount )
+                   USHORT nPercent1, USHORT nPercent2, USHORT nPercentCount,
+                   const Rectangle& rFramePosSize
+                   )
 {
+    if( pWindow->IsNativeControlSupported( CTRL_PROGRESS, PART_ENTIRE_CONTROL ) )
+    {
+        bool bNeedErase = ImplGetSVData()->maNWFData.mbProgressNeedsErase;
+
+        long nFullWidth = (nPrgsWidth + nOffset) * (10000 / nPercentCount);
+        long nPerc = (nPercent2 > 10000) ? 10000 : nPercent2;
+        ImplControlValue aValue( nFullWidth * (long)nPerc / 10000 );
+        Rectangle aDrawRect( rPos, Size( nFullWidth, nPrgsHeight ) );
+        Region aControlRegion( aDrawRect );
+        if( bNeedErase )
+        {
+            Window* pEraseWindow = pWindow;
+            while( pEraseWindow->IsPaintTransparent()                         &&
+                   ! pEraseWindow->ImplGetWindowImpl()->mbFrame )
+            {
+                pEraseWindow = pEraseWindow->ImplGetWindowImpl()->mpParent;
+            }
+            if( pEraseWindow == pWindow )
+                // restore background of pWindow
+                pEraseWindow->Erase( rFramePosSize );
+            else
+            {
+                // restore transparent background
+                Point aTL( pWindow->OutputToAbsoluteScreenPixel( rFramePosSize.TopLeft() ) );
+                aTL = pEraseWindow->AbsoluteScreenToOutputPixel( aTL );
+                Rectangle aRect( aTL, rFramePosSize.GetSize() );
+                pEraseWindow->Invalidate( aRect, INVALIDATE_NOCHILDREN     |
+                                                 INVALIDATE_NOCLIPCHILDREN |
+                                                 INVALIDATE_TRANSPARENT );
+                pEraseWindow->Update();
+            }
+            pWindow->Push( PUSH_CLIPREGION );
+            pWindow->IntersectClipRegion( rFramePosSize );
+        }
+        BOOL bNativeOK = pWindow->DrawNativeControl( CTRL_PROGRESS, PART_ENTIRE_CONTROL, aControlRegion,
+                                                     CTRL_STATE_ENABLED, aValue, rtl::OUString() );
+        if( bNeedErase )
+            pWindow->Pop();
+        if( bNativeOK )
+        {
+            pWindow->Flush();
+            return;
+        }
+    }
+
     // Werte vorberechnen
     USHORT nPerc1 = nPercent1 / nPercentCount;
     USHORT nPerc2 = nPercent2 / nPercentCount;
@@ -587,43 +634,52 @@ void DrawProgress( Window* pWindow, const Point& rPos,
 void StatusBar::ImplDrawProgress( BOOL bPaint,
                                   USHORT nPercent1, USHORT nPercent2 )
 {
-    // Wenn Paint, dann muss auch Text und Frame gemalt werden
+    bool bNative = IsNativeControlSupported( CTRL_PROGRESS, PART_ENTIRE_CONTROL );
+    // bPaint: draw text also, else only update progress
     if ( bPaint )
     {
         DrawText( maPrgsTxtPos, maPrgsTxt );
-        DecorationView aDecoView( this );
-        aDecoView.DrawFrame( maPrgsFrameRect, FRAME_DRAW_IN );
+        if( ! bNative )
+        {
+            DecorationView aDecoView( this );
+            aDecoView.DrawFrame( maPrgsFrameRect, FRAME_DRAW_IN );
+        }
     }
 
     Point aPos( maPrgsFrameRect.Left()+STATUSBAR_PRGS_OFFSET,
                 maPrgsFrameRect.Top()+STATUSBAR_PRGS_OFFSET );
-    DrawProgress( this, aPos, mnPrgsSize/2, mnPrgsSize, mnPrgsSize,
-                  nPercent1*100, nPercent2*100, mnPercentCount );
+    long nPrgsHeight = mnPrgsSize;
+    if( bNative )
+    {
+        aPos = maPrgsFrameRect.TopLeft();
+        nPrgsHeight += STATUSBAR_PRGS_OFFSET;
+    }
+    DrawProgress( this, aPos, mnPrgsSize/2, mnPrgsSize, nPrgsHeight,
+                  nPercent1*100, nPercent2*100, mnPercentCount, maPrgsFrameRect );
 }
 
 // -----------------------------------------------------------------------
 
 void StatusBar::ImplCalcProgressRect()
 {
-    // Groessen berechnen
+    // calculate text size
     Size aPrgsTxtSize( GetTextWidth( maPrgsTxt ), GetTextHeight() );
     maPrgsTxtPos.X()    = STATUSBAR_OFFSET_X+1;
-    maPrgsTxtPos.Y()    = mnTextY;
 
-    // Progress-Frame berechnen
+    // calculate progress frame
     maPrgsFrameRect.Left()      = maPrgsTxtPos.X()+aPrgsTxtSize.Width()+STATUSBAR_OFFSET;
     maPrgsFrameRect.Top()       = mnItemY;
     maPrgsFrameRect.Bottom()    = mnCalcHeight - STATUSBAR_OFFSET_Y;
     if( IsTopBorder() )
         maPrgsFrameRect.Bottom()+=2;
 
-    // Dabei die Breite des Fensters berechnen
+    // calculate size of progress rects
     mnPrgsSize = maPrgsFrameRect.Bottom()-maPrgsFrameRect.Top()-(STATUSBAR_PRGS_OFFSET*2);
     USHORT nMaxPercent = STATUSBAR_PRGS_COUNT;
 
     long nMaxWidth = mnDX-STATUSBAR_OFFSET-1;
 
-    // Wenn es zu viele Percent-Rects sind, verkuerzen wir
+    // make smaller if there are too many rects
     while ( maPrgsFrameRect.Left()+ImplCalcProgessWidth( nMaxPercent, mnPrgsSize ) > nMaxWidth )
     {
         nMaxPercent--;
@@ -631,8 +687,27 @@ void StatusBar::ImplCalcProgressRect()
             break;
     }
     maPrgsFrameRect.Right() = maPrgsFrameRect.Left() + ImplCalcProgessWidth( nMaxPercent, mnPrgsSize );
-    // Fuer die weitere Berechnung brauchen wir den Teiler
+
+    // save the divisor for later
     mnPercentCount = 10000 / nMaxPercent;
+    BOOL bNativeOK = FALSE;
+    if( IsNativeControlSupported( CTRL_PROGRESS, PART_ENTIRE_CONTROL ) )
+    {
+        ImplControlValue aValue;
+        Region aControlRegion( Rectangle( Point(), maPrgsFrameRect.GetSize() ) );
+        Region aNativeControlRegion, aNativeContentRegion;
+        if( (bNativeOK = GetNativeControlRegion( CTRL_PROGRESS, PART_ENTIRE_CONTROL, aControlRegion,
+                                                 CTRL_STATE_ENABLED, aValue, rtl::OUString(),
+                                                 aNativeControlRegion, aNativeContentRegion ) ) != FALSE )
+        {
+            long nProgressHeight = aNativeControlRegion.GetBoundRect().GetHeight();
+            maPrgsTxtPos.Y() = mnItemY + (nProgressHeight - GetTextHeight())/2;
+        }
+    }
+    if( ! bNativeOK )
+        maPrgsTxtPos.Y()    = mnTextY;
+
+
 }
 
 // -----------------------------------------------------------------------
@@ -746,10 +821,12 @@ void StatusBar::Resize()
     if ( IsBottomBorder() )
         mnCalcHeight -= 2;
 
+    mnItemY = STATUSBAR_OFFSET_Y;
+    if( IsTopBorder() )
+        mnItemY += 2;
     mnTextY = (mnCalcHeight-GetTextHeight())/2;
     if( IsTopBorder() )
         mnTextY += 2;
-    mnItemY = mnTextY - 1;
 
     // Formatierung neu ausloesen
     mbFormat = TRUE;
@@ -1606,7 +1683,25 @@ Size StatusBar::CalcWindowSizePixel() const
         i++;
     }
 
-    nCalcHeight = GetTextHeight()+(STATUSBAR_OFFSET_TEXTY*2);
+    long nMinHeight = GetTextHeight();
+    // FIXME: IsNativeControlSupported and GetNativeControlRegion should be const ?
+    StatusBar* pThis = const_cast<StatusBar*>( this );
+    if( pThis->IsNativeControlSupported( CTRL_PROGRESS, PART_ENTIRE_CONTROL ) )
+    {
+        ImplControlValue aValue;
+        Region aControlRegion( Rectangle( Point(), Size( nCalcWidth, nMinHeight ) ) );
+        Region aNativeControlRegion, aNativeContentRegion;
+        if( pThis->GetNativeControlRegion( CTRL_PROGRESS, PART_ENTIRE_CONTROL, aControlRegion,
+                                           CTRL_STATE_ENABLED, aValue, rtl::OUString(),
+                                           aNativeControlRegion, aNativeContentRegion ) )
+        {
+            long nProgressHeight = aNativeControlRegion.GetBoundRect().GetHeight();
+            if( nProgressHeight > nMinHeight )
+                nMinHeight = nProgressHeight;
+        }
+    }
+
+    nCalcHeight = nMinHeight+(STATUSBAR_OFFSET_TEXTY*2);
     // add border
     if( IsTopBorder() )
         nCalcHeight += 2;
