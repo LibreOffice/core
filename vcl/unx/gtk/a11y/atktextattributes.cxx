@@ -4,9 +4,9 @@
  *
  *  $RCSfile: atktextattributes.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: hr $ $Date: 2007-06-27 20:37:47 $
+ *  last change: $Author: hr $ $Date: 2007-08-03 13:36:08 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -165,11 +165,10 @@ get_value( const uno::Sequence< beans::PropertyValue >& rAttributeList,
 
 #define get_bool_value( list, index ) get_value( list, index, Bool2String )
 #define get_short_value( list, index ) get_value( list, index, Short2String )
-#define get_long_value( list, index ) get_value( list, index, Long2String )
+//#define get_long_value( list, index ) get_value( list, index, Long2String ) pb: not used (warning on linux)
 #define get_height_value( list, index ) get_value( list, index, Float2String )
 #define get_justification_value( list, index ) get_value( list, index, Adjust2Justification )
-#define get_margin_height_value( list, index ) get_value( list, index, MarginHeight2Pixel )
-#define get_margin_width_value( list, index ) get_value( list, index, MarginWidth2Pixel )
+#define get_cmm_value( list, index ) get_value( list, index, CMM2UnitString )
 #define get_scale_width( list, index ) get_value( list, index, Scale2String )
 #define get_strikethrough_value( list, index ) get_value( list, index, Strikeout2String )
 #define get_string_value( list, index ) get_value( list, index, GetString )
@@ -276,7 +275,7 @@ String2Short( uno::Any& rAny, const gchar * value )
 */
 
 /*****************************************************************************/
-
+/* pb: not used (warning on linux)
 static gchar*
 Long2String(const uno::Any& rAny)
 {
@@ -294,7 +293,7 @@ String2Long( uno::Any& rAny, const gchar * value )
     rAny = uno::makeAny( lval );
     return true;
 }
-
+*/
 /*****************************************************************************/
 
 static accessibility::XAccessibleComponent*
@@ -525,13 +524,25 @@ Justification2Adjust( uno::Any& rAny, const gchar * value )
 
 /*****************************************************************************/
 
+const gchar * font_strikethrough[] = {
+    "none",   // FontStrikeout::NONE
+    "single", // FontStrikeout::SINGLE
+    "double", // FontStrikeout::DOUBLE
+    NULL,     // FontStrikeout::DONTKNOW
+    "bold",   // FontStrikeout::BOLD
+    "with /", // FontStrikeout::SLASH
+    "with X"  // FontStrikeout::X
+};
+
+const sal_Int16 n_strikeout_constants = sizeof(font_strikethrough) / sizeof(gchar*);
+
 static gchar*
 Strikeout2String(const uno::Any& rAny)
 {
-    sal_Int16 nStrikeout = rAny.get<sal_Int16>();
+    sal_Int16 n = rAny.get<sal_Int16>();
 
-    if( nStrikeout != 3 ) // DONTKNOW
-        return g_strdup( nStrikeout ? "true" : "false" );
+    if( n >= 0 && n < n_strikeout_constants )
+        return g_strdup( font_strikethrough[n] );
 
     return NULL;
 }
@@ -539,17 +550,17 @@ Strikeout2String(const uno::Any& rAny)
 static bool
 String2Strikeout( uno::Any& rAny, const gchar * value )
 {
-    sal_Int16 nStrikeout;
+    for( sal_Int16 n=0; n < n_strikeout_constants; ++n )
+    {
+        if( ( NULL != font_strikethrough[n] ) &&
+            0 == strncmp( value, font_strikethrough[n], strlen( font_strikethrough[n] ) ) )
+        {
+            rAny = uno::makeAny( n );
+            return true;
+        }
+    }
 
-    if( strncmp( value, STRNCMP_PARAM( "true" ) ) )
-        nStrikeout = awt::FontStrikeout::SINGLE;
-    else if( strncmp( value, STRNCMP_PARAM( "false" ) ) )
-        nStrikeout = awt::FontStrikeout::NONE;
-    else
-        return false;
-
-    rAny = uno::makeAny( nStrikeout );
-    return true;
+    return false;
 }
 
 /*****************************************************************************/
@@ -630,57 +641,29 @@ SetString( uno::Any& rAny, const gchar * value )
 
 /*****************************************************************************/
 
-static inline Size
-LogicToPixel( long margin_x, long margin_y )
-{
-    OutputDevice * pOutputDevice = Application::GetDefaultDevice();
-    return pOutputDevice->LogicToPixel( Size( margin_x, margin_y ), MapMode( MAP_100TH_MM ) );
-}
+// @see http://developer.gnome.org/doc/API/2.0/atk/AtkText.html#AtkTextAttribute
 
-static inline Size
-PixelToLogic( long margin_x, long margin_y )
-{
-    OutputDevice * pOutputDevice = Application::GetDefaultDevice();
-    return pOutputDevice->PixelToLogic( Size( margin_x, margin_y ), MapMode( MAP_100TH_MM ) );
-}
-
+// CMM = 100th of mm
 static gchar*
-MarginHeight2Pixel(const uno::Any& rAny)
+CMM2UnitString(const uno::Any& rAny)
 {
-    Size aMargin = LogicToPixel( 0, rAny.get<sal_Int32>() );
-    return g_strdup_printf( "%ld",  aMargin.getHeight() );
+    double fValue = rAny.get<sal_Int32>();
+    fValue = fValue * 0.01;
+
+    return g_strdup_printf( "%gmm", fValue );
 }
 
 static bool
-Pixel2MarginHeight( uno::Any& rAny, const gchar * value )
+UnitString2CMM( uno::Any& rAny, const gchar * value )
 {
-    sal_Int32 nHeight;
+    float fValue = 0.0; // pb: dont use double here because of warning on linux
 
-    if( 1 != sscanf( value, "%ld", &nHeight ) )
+    if( 1 != sscanf( value, "%gmm", &fValue ) )
         return false;
 
-    Size aMargin = PixelToLogic( 0, nHeight );
-    rAny = uno::makeAny( (sal_Int32) aMargin.getHeight() );
-    return true;
-}
+    fValue = fValue * 100;
 
-static gchar*
-MarginWidth2Pixel(const uno::Any& rAny)
-{
-    Size aMargin = LogicToPixel( rAny.get<sal_Int32>(), 0 );
-    return g_strdup_printf( "%ld",  aMargin.getWidth() );
-}
-
-static bool
-Pixel2MarginWidth( uno::Any& rAny, const gchar * value )
-{
-    sal_Int32 nWidth;
-
-    if( 1 != sscanf( value, "%ld", &nWidth ) )
-        return false;
-
-    Size aMargin = PixelToLogic( nWidth, 0 );
-    rAny = uno::makeAny( (sal_Int32) aMargin.getWidth() );
+    rAny = uno::makeAny( (sal_Int32) fValue);
     return true;
 }
 
@@ -1169,19 +1152,19 @@ attribute_set_new_from_property_values(
         return attribute_set;
 
     attribute_set = attribute_set_prepend(attribute_set, ATK_TEXT_ATTR_LEFT_MARGIN,
-        get_margin_width_value(rAttributeList, aIndexList[TEXT_ATTRIBUTE_LEFT_MARGIN]));
+        get_cmm_value(rAttributeList, aIndexList[TEXT_ATTRIBUTE_LEFT_MARGIN]));
 
     attribute_set = attribute_set_prepend(attribute_set, ATK_TEXT_ATTR_RIGHT_MARGIN,
-        get_margin_width_value(rAttributeList, aIndexList[TEXT_ATTRIBUTE_RIGHT_MARGIN]));
+        get_cmm_value(rAttributeList, aIndexList[TEXT_ATTRIBUTE_RIGHT_MARGIN]));
 
     attribute_set = attribute_set_prepend(attribute_set, ATK_TEXT_ATTR_INDENT,
-        get_long_value(rAttributeList, aIndexList[TEXT_ATTRIBUTE_FIRST_LINE_INDENT]));
+        get_cmm_value(rAttributeList, aIndexList[TEXT_ATTRIBUTE_FIRST_LINE_INDENT]));
 
     attribute_set = attribute_set_prepend(attribute_set, ATK_TEXT_ATTR_PIXELS_ABOVE_LINES,
-        get_margin_height_value(rAttributeList, aIndexList[TEXT_ATTRIBUTE_TOP_MARGIN]));
+        get_cmm_value(rAttributeList, aIndexList[TEXT_ATTRIBUTE_TOP_MARGIN]));
 
     attribute_set = attribute_set_prepend(attribute_set, ATK_TEXT_ATTR_PIXELS_BELOW_LINES,
-        get_margin_height_value(rAttributeList, aIndexList[TEXT_ATTRIBUTE_BOTTOM_MARGIN]));
+        get_cmm_value(rAttributeList, aIndexList[TEXT_ATTRIBUTE_BOTTOM_MARGIN]));
 
     attribute_set = attribute_set_prepend(attribute_set, ATK_TEXT_ATTR_JUSTIFICATION,
         get_justification_value(rAttributeList, aIndexList[TEXT_ATTRIBUTE_JUSTIFICATION]));
@@ -1213,13 +1196,13 @@ struct AtkTextAttrMapping
 const AtkTextAttrMapping g_TextAttrMap[] =
 {
     { "", InvalidValue },                       // ATK_TEXT_ATTR_INVALID = 0
-    { "ParaLeftMargin", Pixel2MarginWidth },    // ATK_TEXT_ATTR_LEFT_MARGIN
-    { "ParaRightMargin", Pixel2MarginWidth },   // ATK_TEXT_ATTR_RIGHT_MARGIN
-    { "ParaFirstLineIndent", String2Long },     // ATK_TEXT_ATTR_INDENT
+    { "ParaLeftMargin", UnitString2CMM },       // ATK_TEXT_ATTR_LEFT_MARGIN
+    { "ParaRightMargin", UnitString2CMM },      // ATK_TEXT_ATTR_RIGHT_MARGIN
+    { "ParaFirstLineIndent", UnitString2CMM },  // ATK_TEXT_ATTR_INDENT
     { "CharHidden", String2Bool },              // ATK_TEXT_ATTR_INVISIBLE
     { "", InvalidValue },                       // ATK_TEXT_ATTR_EDITABLE
-    { "ParaTopMargin", Pixel2MarginHeight },    // ATK_TEXT_ATTR_PIXELS_ABOVE_LINES
-    { "ParaBottomMargin", Pixel2MarginHeight }, // ATK_TEXT_ATTR_PIXELS_BELOW_LINES
+    { "ParaTopMargin", UnitString2CMM },        // ATK_TEXT_ATTR_PIXELS_ABOVE_LINES
+    { "ParaBottomMargin", UnitString2CMM },     // ATK_TEXT_ATTR_PIXELS_BELOW_LINES
     { "", InvalidValue },                       // ATK_TEXT_ATTR_PIXELS_INSIDE_WRAP
     { "", InvalidValue },                       // ATK_TEXT_ATTR_BG_FULL_HEIGHT
     { "", InvalidValue },                       // ATK_TEXT_ATTR_RISE
