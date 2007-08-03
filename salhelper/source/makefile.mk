@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.27 $
+#   $Revision: 1.28 $
 #
-#   last change: $Author: vg $ $Date: 2007-05-25 10:55:32 $
+#   last change: $Author: hr $ $Date: 2007-08-03 12:32:52 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -80,16 +80,8 @@ DEF1NAME=	$(SHL1TARGET)
 SHL1VERSIONMAP=msci.map
 .ELIF "$(COMNAME)"=="sunpro5"
 SHL1VERSIONMAP=sols.map
-.ELIF "$(OS)$(CPU)$(COMNAME)"=="LINUXIgcc3"
-SHL1VERSIONMAP=gcc3_linux_intel.map
-.ELIF "$(OS)$(CPU)$(COMNAME)"=="FREEBSDIgcc3"
-SHL1VERSIONMAP=gcc3_linux_intel.map
-.ELIF "$(OS)$(CPU)$(COMNAME)"=="LINUXSgcc3"
-SHL1VERSIONMAP=gcc3_linux_intel.map
-.ELIF "$(OS)$(CPU)$(COMNAME)"=="MACOSXIgcc3"
-SHL1VERSIONMAP=gcc3_linux_intel.map
-.ELIF "$(GUI)$(COM)"=="WNTGCC"
-SHL1VERSIONMAP=mingw_intel.map
+.ELIF "$(COMNAME)"=="gcc3"
+SHL1VERSIONMAP=gcc3.map
 .ENDIF
 
 # --- Targets ------------------------------------------------------
