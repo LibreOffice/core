@@ -4,9 +4,9 @@
  *
  *  $RCSfile: brdwin.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2007-07-24 09:58:00 $
+ *  last change: $Author: hr $ $Date: 2007-08-03 14:04:29 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -317,6 +317,7 @@ class ImplSmallBorderWindowView : public ImplBorderWindowView
     sal_Int32               mnTopBorder;
     sal_Int32               mnRightBorder;
     sal_Int32               mnBottomBorder;
+    bool                    mbNWFBorder;
 
 public:
                             ImplSmallBorderWindowView( ImplBorderWindow* pBorderWindow );
