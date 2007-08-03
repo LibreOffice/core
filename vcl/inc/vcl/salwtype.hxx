@@ -4,9 +4,9 @@
  *
  *  $RCSfile: salwtype.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2007-07-05 08:35:14 $
+ *  last change: $Author: hr $ $Date: 2007-08-03 14:04:59 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -173,10 +173,17 @@ struct SalKeyModEvent
 // PAINT
 struct SalPaintEvent
 {
-    long            mnBoundX;       // BoundRect - X
-    long            mnBoundY;       // BoundRect - Y
-    long            mnBoundWidth;   // BoundRect - Width
-    long            mnBoundHeight;  // BoundRect - Height
+    long            mnBoundX;           // BoundRect - X
+    long            mnBoundY;           // BoundRect - Y
+    long            mnBoundWidth;       // BoundRect - Width
+    long            mnBoundHeight;      // BoundRect - Height
+    bool            mbImmediateUpdate;  // set to true to force an immediate update
+
+    SalPaintEvent( long x, long y, long w, long h, bool bImmediate = false ) :
+        mnBoundX( x ), mnBoundY( y ),
+        mnBoundWidth( w ), mnBoundHeight( h ),
+        mbImmediateUpdate( bImmediate )
+    {}
 };
 
 // USEREVENT
