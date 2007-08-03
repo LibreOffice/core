@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xmlImage.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2007-07-09 11:56:18 $
+ *  last change: $Author: hr $ $Date: 2007-08-03 09:57:31 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -109,14 +109,7 @@ OXMLImage::OXMLImage( ORptFilter& rImport,
                     _xComponent->setScaleImage(s_sTRUE == sValue);
                     break;
                 case XML_TOK_DATA_FORMULA:
-                    {
-                        sal_Int32 nLen = sValue.getLength();
-                        if ( nLen )
-                        {
-                            sValue = sValue.copy(5,nLen-6);
-                            _xComponent->setDataField(sValue);
-                        }
-                    }
+                    _xComponent->setDataField(ORptFilter::convertFormula(sValue));
                     break;
                 default:
                     break;
