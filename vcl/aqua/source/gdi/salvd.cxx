@@ -4,9 +4,9 @@
  *
  *  $RCSfile: salvd.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: rt $ $Date: 2007-07-05 10:22:43 $
+ *  last change: $Author: hr $ $Date: 2007-08-03 14:03:27 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -167,9 +167,7 @@ BOOL AquaSalVirtualDevice::SetSize( long nDX, long nDY )
     void* pData = malloc( nDX * 4 * nDY );
     if (pData)
     {
-        CGColorSpaceRef xColorSpace( CGColorSpaceCreateWithName(kCGColorSpaceGenericRGB) );
-        mxContext = CGBitmapContextCreate( pData, nDX, nDY, 8, nDX * 4, xColorSpace, kCGImageAlphaNoneSkipFirst );
-        CFRelease( xColorSpace );
+        mxContext = CGBitmapContextCreate( pData, nDX, nDY, 8, nDX * 4, GetSalData()->mxRGBSpace, kCGImageAlphaNoneSkipFirst );
 
         if( mxContext )
         {
