@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xsdvalidationpropertyhandler.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: rt $ $Date: 2007-04-26 08:09:17 $
+ *  last change: $Author: hr $ $Date: 2007-08-03 13:53:19 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -387,13 +387,9 @@ namespace pcr
 
             aDescriptor.PrimaryButtonId = UID_PROP_ADD_DATA_TYPE;
             aDescriptor.SecondaryButtonId = UID_PROP_REMOVE_DATA_TYPE;
-            {
-                PcrRes aResId( RID_RSC_BUTTON_IMAGES );
-                ::svt::OLocalResourceAccess aEnumStrings( aResId, RSC_RESOURCE );
-                aDescriptor.HasPrimaryButton = aDescriptor.HasSecondaryButton = sal_True;
-                aDescriptor.PrimaryButtonImage = Image( PcrRes( IMG_PLUS ) ).GetXGraphic();
-                aDescriptor.SecondaryButtonImage = Image( PcrRes( IMG_MINUS ) ).GetXGraphic();
-            }
+            aDescriptor.HasPrimaryButton = aDescriptor.HasSecondaryButton = sal_True;
+            aDescriptor.PrimaryButtonImageURL = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "private:graphicrepository/extensions/res/buttonplus.png" ) );
+            aDescriptor.SecondaryButtonImageURL = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "private:graphicrepository/extensions/res/buttonminus.png" ) );
             break;
 
         case PROPERTY_ID_XSD_WHITESPACES:
