@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ViewsWindow.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: hr $ $Date: 2007-08-02 14:41:16 $
+ *  last change: $Author: hr $ $Date: 2007-08-03 12:46:04 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -37,6 +37,8 @@
 #ifndef RPTUI_VIEWSWINDOW_HXX
 #include "ViewsWindow.hxx"
 #endif
+#include "ScrollHelper.hxx"
+#include "UndoActions.hxx"
 #ifndef RPTUI_REPORT_WINDOW_HXX
 #include "ReportWindow.hxx"
 #endif
@@ -92,11 +94,13 @@
 
 #include "helpids.hrc"
 #include <svx/svdundo.hxx>
+#include <toolkit/helper/convert.hxx>
 #include <algorithm>
 
 namespace rptui
 {
 #define SECTION_OFFSET  3
+#define DEFAUL_MOVE_SIZE    100
 
 using namespace ::com::sun::star;
 using namespace ::comphelper;
@@ -122,89 +126,91 @@ bool lcl_getNewRectSize(const Rectangle& _aObjRect,long& _nXMov, long& _nYMov,Sd
                     aNewRect.Move(_nXMov,_nYMov);
                     break;
             }
-
-            pOverlappedObj = isOver(aNewRect,*_pObj->GetPage(),*_pView,true,_pObj);
-            if ( pOverlappedObj && _pObj != pOverlappedObj )
+            if ( dynamic_cast<OUnoObject*>(_pObj) )
             {
-                Rectangle aOverlappingRect = (_bBoundRects ? pOverlappedObj->GetCurrentBoundRect() : pOverlappedObj->GetSnapRect());
-                sal_Int32 nXTemp = _nXMov;
-                sal_Int32 nYTemp = _nYMov;
-                switch(_nControlModification)
+                pOverlappedObj = isOver(aNewRect,*_pObj->GetPage(),*_pView,true,_pObj);
+                if ( pOverlappedObj && _pObj != pOverlappedObj )
                 {
-                    case ControlModification::LEFT:
-                        nXTemp += aOverlappingRect.Right() - aNewRect.Left();
-                        bMoveAllowed = _nXMov != nXTemp;
-                        break;
-                    case ControlModification::RIGHT:
-                        nXTemp += aOverlappingRect.Left() - aNewRect.Right();
-                        bMoveAllowed = _nXMov != nXTemp;
-                        break;
-                    case ControlModification::TOP:
-                        nYTemp += aOverlappingRect.Bottom() - aNewRect.Top();
-                        bMoveAllowed = _nYMov != nYTemp;
-                        break;
-                    case ControlModification::BOTTOM:
-                        nYTemp += aOverlappingRect.Top() - aNewRect.Bottom();
-                        bMoveAllowed = _nYMov != nYTemp;
-                        break;
-                    case ControlModification::CENTER_HORIZONTAL:
-                        if ( _aObjRect.Left() < aOverlappingRect.Left() )
-                            nXTemp += aOverlappingRect.Left() - aNewRect.Left() - aNewRect.getWidth();
-                        else
+                    Rectangle aOverlappingRect = (_bBoundRects ? pOverlappedObj->GetCurrentBoundRect() : pOverlappedObj->GetSnapRect());
+                    sal_Int32 nXTemp = _nXMov;
+                    sal_Int32 nYTemp = _nYMov;
+                    switch(_nControlModification)
+                    {
+                        case ControlModification::LEFT:
                             nXTemp += aOverlappingRect.Right() - aNewRect.Left();
-                        bMoveAllowed = _nXMov != nXTemp;
-                        break;
-                    case ControlModification::CENTER_VERTICAL:
-                        if ( _aObjRect.Top() < aOverlappingRect.Top() )
-                            nYTemp += aOverlappingRect.Top() - aNewRect.Top() - aNewRect.getHeight();
-                        else
+                            bMoveAllowed = _nXMov != nXTemp;
+                            break;
+                        case ControlModification::RIGHT:
+                            nXTemp += aOverlappingRect.Left() - aNewRect.Right();
+                            bMoveAllowed = _nXMov != nXTemp;
+                            break;
+                        case ControlModification::TOP:
                             nYTemp += aOverlappingRect.Bottom() - aNewRect.Top();
-                        bMoveAllowed = _nYMov != nYTemp;
-                        break;
-                    case ControlModification::HEIGHT_GREATEST:
-                    case ControlModification::WIDTH_GREATEST:
-                        {
-                            Rectangle aIntersectionRect = aNewRect.GetIntersection(aOverlappingRect);
-                            if ( !aIntersectionRect.IsEmpty() )
+                            bMoveAllowed = _nYMov != nYTemp;
+                            break;
+                        case ControlModification::BOTTOM:
+                            nYTemp += aOverlappingRect.Top() - aNewRect.Bottom();
+                            bMoveAllowed = _nYMov != nYTemp;
+                            break;
+                        case ControlModification::CENTER_HORIZONTAL:
+                            if ( _aObjRect.Left() < aOverlappingRect.Left() )
+                                nXTemp += aOverlappingRect.Left() - aNewRect.Left() - aNewRect.getWidth();
+                            else
+                                nXTemp += aOverlappingRect.Right() - aNewRect.Left();
+                            bMoveAllowed = _nXMov != nXTemp;
+                            break;
+                        case ControlModification::CENTER_VERTICAL:
+                            if ( _aObjRect.Top() < aOverlappingRect.Top() )
+                                nYTemp += aOverlappingRect.Top() - aNewRect.Top() - aNewRect.getHeight();
+                            else
+                                nYTemp += aOverlappingRect.Bottom() - aNewRect.Top();
+                            bMoveAllowed = _nYMov != nYTemp;
+                            break;
+                        case ControlModification::HEIGHT_GREATEST:
+                        case ControlModification::WIDTH_GREATEST:
                             {
-                                if ( _nControlModification == ControlModification::WIDTH_GREATEST )
+                                Rectangle aIntersectionRect = aNewRect.GetIntersection(aOverlappingRect);
+                                if ( !aIntersectionRect.IsEmpty() )
                                 {
-                                    if ( aNewRect.Left() < aIntersectionRect.Left() )
+                                    if ( _nControlModification == ControlModification::WIDTH_GREATEST )
                                     {
-                                        aNewRect.Right() = aIntersectionRect.Left();
+                                        if ( aNewRect.Left() < aIntersectionRect.Left() )
+                                        {
+                                            aNewRect.Right() = aIntersectionRect.Left();
+                                        }
+                                        else if ( aNewRect.Left() < aIntersectionRect.Right() )
+                                        {
+                                            aNewRect.Left() = aIntersectionRect.Right();
+                                        }
                                     }
-                                    else if ( aNewRect.Left() < aIntersectionRect.Right() )
+                                    else if ( _nControlModification == ControlModification::HEIGHT_GREATEST )
                                     {
-                                        aNewRect.Left() = aIntersectionRect.Right();
+                                        if ( aNewRect.Top() < aIntersectionRect.Top() )
+                                        {
+                                            aNewRect.Bottom() = aIntersectionRect.Top();
+                                        }
+                                        else if ( aNewRect.Top() < aIntersectionRect.Bottom() )
+                                        {
+                                            aNewRect.Top() = aIntersectionRect.Bottom();
+                                        }
                                     }
+                                    nYTemp = aNewRect.getHeight();
+                                    bMoveAllowed = _nYMov != nYTemp;
+                                    nXTemp = aNewRect.getWidth();
+                                    bMoveAllowed = bMoveAllowed && _nXMov != nXTemp;
                                 }
-                                else if ( _nControlModification == ControlModification::HEIGHT_GREATEST )
-                                {
-                                    if ( aNewRect.Top() < aIntersectionRect.Top() )
-                                    {
-                                        aNewRect.Bottom() = aIntersectionRect.Top();
-                                    }
-                                    else if ( aNewRect.Top() < aIntersectionRect.Bottom() )
-                                    {
-                                        aNewRect.Top() = aIntersectionRect.Bottom();
-                                    }
-                                }
-                                nYTemp = aNewRect.getHeight();
-                                bMoveAllowed = _nYMov != nYTemp;
-                                nXTemp = aNewRect.getWidth();
-                                bMoveAllowed = bMoveAllowed && _nXMov != nXTemp;
                             }
-                        }
-                        break;
-                    default:
-                        break;
-                }
+                            break;
+                        default:
+                            break;
+                    }
 
-                _nXMov = nXTemp;
-                _nYMov = nYTemp;
+                    _nXMov = nXTemp;
+                    _nYMov = nYTemp;
+                }
+                else
+                    pOverlappedObj = NULL;
             }
-            else
-                pOverlappedObj = NULL;
         }
         while ( pOverlappedObj && bMoveAllowed );
     }
@@ -416,7 +422,7 @@ sal_Int32 OViewsWindow::getSplitterHeight() const
 //-----------------------------------------------------------------------------
 IMPL_LINK( OViewsWindow, StartSplitHdl, Splitter*,  )
 {
-    const String sEmpty(String(ModuleRes(RID_STR_UNDO_CHANGE_SIZE)));
+    const String sEmpty(ModuleRes(RID_STR_UNDO_CHANGE_SIZE));
     getView()->getReportView()->getController()->getUndoMgr()->EnterListAction(sEmpty,String());
     return 0L;
 }
@@ -706,7 +712,7 @@ void OViewsWindow::Notify(SfxBroadcaster & /*rBc*/, SfxHint const & rHint)
         Invalidate();
     }
 }
-//----------------------------------------------------------------------------
+// -----------------------------------------------------------------------------
 void OViewsWindow::MouseButtonDown( const MouseEvent& rMEvt )
 {
     if ( rMEvt.IsLeft() )
@@ -868,6 +874,7 @@ void OViewsWindow::collectRectangles(TRectangleMap& _rSortRectangles,  bool _bBo
 // -----------------------------------------------------------------------------
 void OViewsWindow::collectBoundResizeRect(const TRectangleMap& _rSortRectangles,sal_Int32 _nControlModification,bool _bAlignAtSection, bool _bBoundRects,Rectangle& _rBound,Rectangle& _rResize)
 {
+    bool bOnlyOnce = false;
     TRectangleMap::const_iterator aRectIter = _rSortRectangles.begin();
     TRectangleMap::const_iterator aRectEnd = _rSortRectangles.end();
     for (;aRectIter != aRectEnd ; ++aRectIter)
@@ -905,16 +912,20 @@ void OViewsWindow::collectBoundResizeRect(const TRectangleMap& _rSortRectangles,
         {
             if ( _bAlignAtSection || _rSortRectangles.size() == 1 )
             { // einzelnes Obj an der Seite ausrichten
-                OReportSection* pReportSection = aRectIter->second.second->getSectionWindow();
-                uno::Reference< report::XSection> xSection = pReportSection->getSection();
-                try
+                if ( ! bOnlyOnce )
                 {
-                    uno::Reference<report::XReportDefinition> xReportDefinition = xSection->getReportDefinition();
-                    _rBound.Union(Rectangle(getStyleProperty<sal_Int32>(xReportDefinition,PROPERTY_LEFTMARGIN),0,
-                                        getStyleProperty<awt::Size>(xReportDefinition,PROPERTY_PAPERSIZE).Width  - getStyleProperty<sal_Int32>(xReportDefinition,PROPERTY_RIGHTMARGIN),
-                                        xSection->getHeight()));
+                    bOnlyOnce = true;
+                    OReportSection* pReportSection = aRectIter->second.second->getSectionWindow();
+                    uno::Reference< report::XSection> xSection = pReportSection->getSection();
+                    try
+                    {
+                        uno::Reference<report::XReportDefinition> xReportDefinition = xSection->getReportDefinition();
+                        _rBound.Union(Rectangle(getStyleProperty<sal_Int32>(xReportDefinition,PROPERTY_LEFTMARGIN),0,
+                                            getStyleProperty<awt::Size>(xReportDefinition,PROPERTY_PAPERSIZE).Width  - getStyleProperty<sal_Int32>(xReportDefinition,PROPERTY_RIGHTMARGIN),
+                                            xSection->getHeight()));
+                    }
+                    catch(uno::Exception){}
                 }
-                catch(uno::Exception){}
             }
             else
             {
@@ -1019,7 +1030,7 @@ void OViewsWindow::alignMarkedObjects(sal_Int32 _nControlModification,bool _bAli
                 TRectangleMap::iterator aInterSectRectIter = aSortRectangles.begin();
                 for (; aInterSectRectIter != aRectIter; ++aInterSectRectIter)
                 {
-                    if ( pView == aInterSectRectIter->second.second )
+                    if ( pView == aInterSectRectIter->second.second && dynamic_cast<OUnoObject*>(aInterSectRectIter->second.first) )
                     {
                         SdrObject* pPreviousObj = aInterSectRectIter->second.first;
                         Rectangle aIntersectRect = aTest.GetIntersection(_bBoundRects ? pPreviousObj->GetCurrentBoundRect() : pPreviousObj->GetSnapRect());
@@ -1144,29 +1155,16 @@ USHORT OViewsWindow::getPosition(const OReportSection* _pSection) const
     return aReturn;
 }
 // -----------------------------------------------------------------------------
-void OViewsWindow::breakAction()
-{
-    ::std::for_each(m_aSections.begin(),m_aSections.end(),
-        ::std::compose1(::boost::bind(&OReportSection::breakAction,_1),TReportPairHelper()));
-}
-// -----------------------------------------------------------------------------
-void OViewsWindow::BegDragObj(const Point& _aPnt, SdrHdl* _pHdl)
-{
-    const short nDrgLog = static_cast<short>(PixelToLogic(Size(3,0)).Width());
-    TSectionsMap::iterator aIter = m_aSections.begin();
-    TSectionsMap::iterator aEnd = m_aSections.end();
-    for (; aIter != aEnd; ++aIter)
-        aIter->first.first->getView()->BegDragObj(_aPnt, (OutputDevice*)NULL, _pHdl, nDrgLog,NULL);
-}
-
-// -----------------------------------------------------------------------------
 namespace
 {
     enum SectionViewAction
     {
         eEndDragObj,
         eEndAction,
-        eMoveAction
+        eMoveAction,
+        eMarkAction,
+        eForceToAnotherPage,
+        eBreakAction
     };
     struct ApplySectionViewAction : public ::std::unary_function< OViewsWindow::TSectionsMap::value_type, void >
     {
@@ -1177,8 +1175,8 @@ namespace
 
     public:
         ApplySectionViewAction( sal_Bool _bCopy ) : m_eAction( eEndDragObj ), m_bCopy( _bCopy ) { }
-        ApplySectionViewAction() : m_eAction( eEndAction ) { }
-        ApplySectionViewAction( const Point& _rPoint ) : m_eAction( eMoveAction ), m_bCopy( sal_False ), m_aPoint( _rPoint ) { }
+        ApplySectionViewAction(SectionViewAction _eAction = eEndAction ) : m_eAction( _eAction ) { }
+        ApplySectionViewAction( const Point& _rPoint, SectionViewAction _eAction = eMoveAction ) : m_eAction( _eAction ), m_bCopy( sal_False ), m_aPoint( _rPoint ) { }
 
         void operator() ( const OViewsWindow::TSectionsMap::value_type& _rhs )
         {
@@ -1186,17 +1184,210 @@ namespace
             switch ( m_eAction )
             {
             case eEndDragObj:   rView.EndDragObj( m_bCopy  ); break;
-            case eEndAction:    rView.EndAction (          ); break;
+            case eEndAction:    if ( rView.IsAction() )
+                                    rView.EndAction (      );
+                                break;
             case eMoveAction:   rView.MovAction ( m_aPoint ); break;
+            case eMarkAction:   rView.BegMarkObj ( m_aPoint ); break;
+            case eForceToAnotherPage: rView.ForceMarkedToAnotherPage(); break;
+            case eBreakAction:  if ( rView.IsAction() )
+                                    rView.BrkAction (      );
+                                break;
             }
         }
     };
 }
+// -----------------------------------------------------------------------------
+void OViewsWindow::BrkAction()
+{
+    ::std::for_each( m_aSections.begin(), m_aSections.end(), ApplySectionViewAction(eBreakAction) );
+}
+// -----------------------------------------------------------------------------
+void OViewsWindow::BegDragObj(const Point& _aPnt, SdrHdl* _pHdl,const OSectionView* _pSection)
+{
+    const short nDrgLog = static_cast<short>(PixelToLogic(Size(3,0)).Width());
+    Point aNewPos = _aPnt;
+    /*if ( _pHdl )
+        aNewPos = _pHdl->GetPos();*/
+    TSectionsMap::iterator aIter = m_aSections.begin();
+    TSectionsMap::iterator aEnd = m_aSections.end();
+    /*for (; aIter != aEnd; ++aIter)
+    {
+        ::boost::shared_ptr<OReportSection> pReportSection = aIter->first.first;
+        if ( pReportSection->getView() == _pSection )
+            break;
+        aNewPos.Y() += pReportSection->PixelToLogic(pReportSection->GetOutputSizePixel()).Height();
+    }*/
+
+    for (aIter = m_aSections.begin(); aIter != aEnd; ++aIter)
+    {
+        ::boost::shared_ptr<OReportSection> pReportSection = aIter->first.first;
+        SdrHdl* pHdl = _pHdl;
+        if ( pHdl )
+        {
+            if ( pReportSection->getView() != _pSection )
+            {
+                const SdrHdlList& rHdlList = pReportSection->getView()->GetHdlList();
+                pHdl = rHdlList.GetHdl(_pHdl->GetKind());
+            }
+        }
+        pReportSection->getView()->BegDragObj(aNewPos, (OutputDevice*)NULL, pHdl, nDrgLog,NULL);
+        //aNewPos.Y() -= pReportSection->PixelToLogic(pReportSection->GetOutputSizePixel()).Height();
+    }
+}
 
 // -----------------------------------------------------------------------------
-void OViewsWindow::EndDragObj(BOOL _bCopy)
+void OViewsWindow::ForceMarkedToAnotherPage()
 {
-    ::std::for_each( m_aSections.begin(), m_aSections.end(), ApplySectionViewAction( _bCopy ) );
+    ::std::for_each( m_aSections.begin(), m_aSections.end(), ApplySectionViewAction(eForceToAnotherPage ) );
+}
+// -----------------------------------------------------------------------------
+void OViewsWindow::BegMarkObj(const Point& _aPnt,const OSectionView* _pSection)
+{
+    bool bAdd = true;
+
+    Point aNewPos = _aPnt;
+    TSectionsMap::iterator aIter = m_aSections.begin();
+    TSectionsMap::iterator aEnd = m_aSections.end();
+    for (; aIter != aEnd; ++aIter)
+    {
+        ::boost::shared_ptr<OReportSection> pReportSection = aIter->first.first;
+        const long nSectionHeight = pReportSection->PixelToLogic(pReportSection->GetOutputSizePixel()).Height();
+        if ( pReportSection->getView() == _pSection )
+        {
+            bAdd = false;
+            aNewPos = _aPnt;
+        }
+        else if ( bAdd )
+        {
+            aNewPos.Y() += nSectionHeight;
+        }
+        else
+        {
+            aNewPos.Y() -= nSectionHeight;
+        }
+        pReportSection->getView()->BegMarkObj ( aNewPos );
+    }
+    //::std::for_each( m_aSections.begin(), m_aSections.end(), ApplySectionViewAction( _aPnt , eMarkAction) );
+}
+// -----------------------------------------------------------------------------
+OSectionView* OViewsWindow::getSectionRelativeToPosition(const OSectionView* _pSection,Point& _rPnt)
+{
+    OSectionView* pSection = NULL;
+    sal_Int32 nCount = 0;
+    TSectionsMap::iterator aIter = m_aSections.begin();
+    const TSectionsMap::iterator aEnd = m_aSections.end();
+    for (; aIter != aEnd ; ++aIter,++nCount)
+    {
+        ::boost::shared_ptr<OReportSection> pReportSection = aIter->first.first;
+        if ( pReportSection->getView() == _pSection)
+            break;
+    }
+    OSL_ENSURE(aIter != aEnd,"This can never happen!");
+    if ( _rPnt.Y() < 0 )
+    {
+        --aIter;
+        for (; nCount && (_rPnt.Y() < 0); --nCount)
+        {
+            ::boost::shared_ptr<OReportSection> pReportSection = aIter->first.first;
+            _rPnt.Y() += pReportSection->PixelToLogic(pReportSection->GetOutputSizePixel()).Height();
+            if ( (nCount -1) > 0 && (_rPnt.Y() < 0) )
+                --aIter;
+        }
+        if ( nCount == 0 )
+            pSection = m_aSections.begin()->first.first->getView();
+        else
+            pSection = aIter->first.first->getView();
+    }
+    else
+    {
+        for (; aIter != aEnd; ++aIter)
+        {
+            ::boost::shared_ptr<OReportSection> pReportSection = aIter->first.first;
+            const long nHeight = pReportSection->PixelToLogic(pReportSection->GetOutputSizePixel()).Height();
+            if ( (_rPnt.Y() - nHeight) < 0  )
+                break;
+            _rPnt.Y() -= nHeight;
+        }
+        if ( aIter != aEnd )
+            pSection = aIter->first.first->getView();
+        else
+            pSection = (aEnd-1)->first.first->getView();
+    }
+
+    return pSection;
+}
+// -----------------------------------------------------------------------------
+void OViewsWindow::EndDragObj(BOOL _bDragIntoNewSection,const OSectionView* _pSection,const Point& _aPnt)
+{
+    const String sUndoAction = String((ModuleRes(RID_STR_UNDO_CHANGEPOSITION)));
+    UndoManagerListAction aListAction(*getView()->getReportView()->getController()->getUndoMgr(),sUndoAction);
+    if ( _bDragIntoNewSection )
+    {
+        Point aNewPos = _aPnt;
+        OSectionView* pInSection = getSectionRelativeToPosition(_pSection,aNewPos);
+        uno::Sequence< beans::NamedValue > aAllreadyCopiedObjects;
+        TSectionsMap::iterator aIter = m_aSections.begin();
+        const TSectionsMap::iterator aEnd = m_aSections.end();
+        for (; aIter != aEnd; ++aIter)
+        {
+            ::boost::shared_ptr<OReportSection> pReportSection = aIter->first.first;
+            if ( pInSection != pReportSection->getView() )
+            {
+                pReportSection->getView()->BrkAction();
+                pReportSection->Copy(aAllreadyCopiedObjects,true);
+            }
+            else
+                pInSection->EndDragObj(FALSE);
+        }
+        if ( aAllreadyCopiedObjects.getLength() )
+        {
+            beans::NamedValue* pIter = aAllreadyCopiedObjects.getArray();
+            const beans::NamedValue* pEnd = pIter + aAllreadyCopiedObjects.getLength();
+            try
+            {
+                uno::Reference<report::XReportDefinition> xReportDefinition = getView()->getReportView()->getController()->getReportDefinition();
+                const sal_Int32 nLeftMargin  = getStyleProperty<sal_Int32>(xReportDefinition,PROPERTY_LEFTMARGIN);
+                const sal_Int32 nRightMargin = getStyleProperty<sal_Int32>(xReportDefinition,PROPERTY_RIGHTMARGIN);
+                const sal_Int32 nPaperWidth  = getStyleProperty<awt::Size>(xReportDefinition,PROPERTY_PAPERSIZE).Width;
+
+                Point aPrevious;
+                for (; pIter != pEnd; ++pIter)
+                {
+                    uno::Sequence< uno::Reference<util::XCloneable> > aClones;
+                    pIter->Value >>= aClones;
+                    uno::Reference<util::XCloneable>* pColIter = aClones.getArray();
+                    const uno::Reference<util::XCloneable>* pColEnd = pColIter + aClones.getLength();
+                    for (; pColIter != pColEnd; ++pColIter)
+                    {
+                        uno::Reference< report::XReportComponent> xRC(*pColIter,uno::UNO_QUERY);
+                        aPrevious = VCLPoint(xRC->getPosition());
+                        awt::Size aSize = xRC->getSize();
+                        if ( aNewPos.X() < nLeftMargin )
+                            aNewPos.X() = nLeftMargin;
+                        else if ( (aNewPos.X() + aSize.Width) > (nPaperWidth - nRightMargin) )
+                            aNewPos.X() = nPaperWidth - nRightMargin - aSize.Width;
+                        if ( aNewPos.Y() < 0 )
+                            aNewPos.Y() = 0;
+                        xRC->setPosition(AWTPoint(aNewPos));
+                        if ( (pColIter+1) != pColEnd )
+                        {
+                            uno::Reference< report::XReportComponent> xRCNext(*pColIter,uno::UNO_QUERY);
+                            aNewPos += (VCLPoint(xRCNext->getPosition()) - aPrevious);
+                        }
+                    }
+
+                }
+            }
+            catch(uno::Exception&)
+            {
+            }
+            pInSection->getSectionWindow()->Paste(aAllreadyCopiedObjects,true);
+        }
+        getView()->getReportView()->getController()->getUndoMgr()->LeaveListAction();
+    }
+    else
+        ::std::for_each( m_aSections.begin(), m_aSections.end(), ApplySectionViewAction( FALSE ) );
 }
 // -----------------------------------------------------------------------------
 void OViewsWindow::EndAction()
@@ -1204,9 +1395,65 @@ void OViewsWindow::EndAction()
     ::std::for_each( m_aSections.begin(), m_aSections.end(), ApplySectionViewAction() );
 }
 // -----------------------------------------------------------------------------
-void OViewsWindow::MovAction(const Point& rPnt)
+void OViewsWindow::MovAction(const Point& _aPnt,const OSectionView* _pSection,bool _bMove)
 {
-    ::std::for_each( m_aSections.begin(), m_aSections.end(), ApplySectionViewAction( rPnt ) );
+    Point aNewPos = _aPnt;
+    Point aHdlPos;
+    SdrHdl* pHdl = _pSection->GetDragHdl();
+    if ( pHdl )
+    {
+        aHdlPos = pHdl->GetPos();
+    }
+    TSectionsMap::iterator aIter = m_aSections.begin();
+    TSectionsMap::iterator aEnd = m_aSections.end();
+    if ( _bMove )
+    {
+        for (; aIter != aEnd; ++aIter)
+        {
+            ::boost::shared_ptr<OReportSection> pReportSection = aIter->first.first;
+            if ( pReportSection->getView() == _pSection )
+                break;
+            aNewPos.Y() += pReportSection->PixelToLogic(pReportSection->GetOutputSizePixel()).Height();
+        }
+    }
+
+    for (aIter = m_aSections.begin(); aIter != aEnd; ++aIter)
+    {
+        ::boost::shared_ptr<OReportSection> pReportSection = aIter->first.first;
+        SdrHdl* pCurrentHdl = pReportSection->getView()->GetDragHdl();
+        if ( pCurrentHdl )
+        {
+            aNewPos = _aPnt + pCurrentHdl->GetPos() - aHdlPos;
+        }
+        pReportSection->getView()->MovAction ( aNewPos );
+        if ( _bMove )
+            aNewPos.Y() -= pReportSection->PixelToLogic(pReportSection->GetOutputSizePixel()).Height();
+    }
+}
+// -----------------------------------------------------------------------------
+BOOL OViewsWindow::IsAction() const
+{
+    BOOL bAction = FALSE;
+    TSectionsMap::const_iterator aIter = m_aSections.begin();
+    TSectionsMap::const_iterator aEnd = m_aSections.end();
+    for (; !bAction && aIter != aEnd; ++aIter)
+        bAction = aIter->first.first->getView()->IsAction();
+    return bAction;
+}
+// -----------------------------------------------------------------------------
+BOOL OViewsWindow::IsDragObj() const
+{
+    BOOL bAction = FALSE;
+    TSectionsMap::const_iterator aIter = m_aSections.begin();
+    TSectionsMap::const_iterator aEnd = m_aSections.end();
+    for (; !bAction && aIter != aEnd; ++aIter)
+        bAction = aIter->first.first->getView()->IsAction();
+    return bAction;
+}
+// -----------------------------------------------------------------------------
+void OViewsWindow::setPoint(const Point& _aPnt)
+{
+    m_aPoint = _aPnt;
 }
 // -----------------------------------------------------------------------------
 sal_uInt32 OViewsWindow::getMarkedObjectCount() const
@@ -1217,6 +1464,181 @@ sal_uInt32 OViewsWindow::getMarkedObjectCount() const
     for (; aIter != aEnd; ++aIter)
         nCount += aIter->first.first->getView()->GetMarkedObjectCount();
     return nCount;
+}
+// -----------------------------------------------------------------------------
+void OViewsWindow::handleKey(const KeyCode& _rCode)
+{
+    const USHORT nCode = _rCode.GetCode();
+    if ( _rCode.IsMod1() )
+    {
+        // scroll page
+        OScrollWindowHelper* pScrollWindow = getView()->getScrollWindow();
+        ScrollBar* pScrollBar = ( nCode == KEY_LEFT || nCode == KEY_RIGHT ) ? pScrollWindow->GetHScroll() : pScrollWindow->GetVScroll();
+        if ( pScrollBar && pScrollBar->IsVisible() )
+            pScrollBar->DoScrollAction(( nCode == KEY_RIGHT || nCode == KEY_UP ) ? SCROLL_LINEUP : SCROLL_LINEDOWN );
+        return;
+    }
+    TSectionsMap::const_iterator aIter = m_aSections.begin();
+    TSectionsMap::const_iterator aEnd = m_aSections.end();
+    for (; aIter != aEnd; ++aIter)
+    {
+        ::boost::shared_ptr<OReportSection> pReportSection = aIter->first.first;
+        long nX = 0;
+        long nY = 0;
+
+        if ( nCode == KEY_UP )
+            nY = -1;
+        else if ( nCode == KEY_DOWN )
+            nY =  1;
+        else if ( nCode == KEY_LEFT )
+            nX = -1;
+        else if ( nCode == KEY_RIGHT )
+            nX =  1;
+
+        if ( pReportSection->getView()->AreObjectsMarked() )
+        {
+            if ( _rCode.IsMod2() )
+            {
+                // move in 1 pixel distance
+                const Size aPixelSize = pReportSection->PixelToLogic( Size( 1, 1 ) );
+                nX *= aPixelSize.Width();
+                nY *= aPixelSize.Height();
+            }
+            else
+            {
+                // move in 1 mm distance
+                nX *= DEFAUL_MOVE_SIZE;
+                nY *= DEFAUL_MOVE_SIZE;
+            }
+
+            OSectionView* pView = pReportSection->getView();
+            const SdrHdlList& rHdlList = pView->GetHdlList();
+            SdrHdl* pHdl = rHdlList.GetFocusHdl();
+
+            if ( pHdl == 0 )
+            {
+                // no handle selected
+                if ( pView->IsMoveAllowed() )
+                {
+                    // restrict movement to work area
+                    const Rectangle& rWorkArea = pView->GetWorkArea();
+
+                    if ( !rWorkArea.IsEmpty() )
+                    {
+                        Rectangle aMarkRect( pView->GetMarkedObjRect() );
+                        aMarkRect.Move( nX, nY );
+
+                        if ( !rWorkArea.IsInside( aMarkRect ) )
+                        {
+                            if ( aMarkRect.Left() < rWorkArea.Left() )
+                                nX += rWorkArea.Left() - aMarkRect.Left();
+
+                            if ( aMarkRect.Right() > rWorkArea.Right() )
+                                nX -= aMarkRect.Right() - rWorkArea.Right();
+
+                            if ( aMarkRect.Top() < rWorkArea.Top() )
+                                nY += rWorkArea.Top() - aMarkRect.Top();
+
+                            if ( aMarkRect.Bottom() > rWorkArea.Bottom() )
+                                nY -= aMarkRect.Bottom() - rWorkArea.Bottom();
+                        }
+                        bool bCheck = false;
+                        const SdrMarkList& rMarkList = pView->GetMarkedObjectList();
+                        for (sal_uInt32 i =  0; !bCheck && i < rMarkList.GetMarkCount();++i )
+                        {
+                            SdrMark* pMark = rMarkList.GetMark(i);
+                            bCheck = dynamic_cast<OUnoObject*>(pMark->GetMarkedSdrObj()) != NULL;
+                        }
+
+                        if ( bCheck && isOver(aMarkRect,*pReportSection->getPage(),*pView) )
+                            break;
+                    }
+
+                    if ( nX != 0 || nY != 0 )
+                    {
+                        pView->MoveAllMarked( Size( nX, nY ) );
+                        pView->MakeVisible( pView->GetAllMarkedRect(), *pReportSection);
+                    }
+                }
+            }
+            else
+            {
+                // move the handle
+                if ( pHdl && ( nX || nY ) )
+                {
+                    const Point aStartPoint( pHdl->GetPos() );
+                    const Point aEndPoint( pHdl->GetPos() + Point( nX, nY ) );
+                    const SdrDragStat& rDragStat = pView->GetDragStat();
+
+                    // start dragging
+                    pView->BegDragObj( aStartPoint, 0, pHdl, 0 );
+
+                    if ( pView->IsDragObj() )
+                    {
+                        const FASTBOOL bWasNoSnap = rDragStat.IsNoSnap();
+                        const BOOL bWasSnapEnabled = pView->IsSnapEnabled();
+
+                        // switch snapping off
+                        if ( !bWasNoSnap )
+                            ((SdrDragStat&)rDragStat).SetNoSnap( TRUE );
+                        if ( bWasSnapEnabled )
+                            pView->SetSnapEnabled( FALSE );
+
+                        Rectangle aNewRect;
+                        bool bCheck = false;
+                        const SdrMarkList& rMarkList = pView->GetMarkedObjectList();
+                        for (sal_uInt32 i =  0; !bCheck && i < rMarkList.GetMarkCount();++i )
+                        {
+                            SdrMark* pMark = rMarkList.GetMark(i);
+                            bCheck = dynamic_cast<OUnoObject*>(pMark->GetMarkedSdrObj()) != NULL;
+                            if ( bCheck )
+                                aNewRect.Union(pMark->GetMarkedSdrObj()->GetLastBoundRect());
+                        }
+
+                        switch(pHdl->GetKind())
+                        {
+                            case HDL_LEFT:
+                            case HDL_UPLFT:
+                            case HDL_LWLFT:
+                            case HDL_UPPER:
+                                aNewRect.Left() += nX;
+                                aNewRect.Top()  += nY;
+                                break;
+                            case HDL_UPRGT:
+                            case HDL_RIGHT:
+                            case HDL_LWRGT:
+                            case HDL_LOWER:
+                                aNewRect.setWidth(aNewRect.getWidth() + nX);
+                                aNewRect.setHeight(aNewRect.getHeight() + nY);
+                                break;
+                            default:
+                                break;
+                        }
+                        if ( !(bCheck && isOver(aNewRect,*pReportSection->getPage(),*pView)) )
+                            pView->MovAction(aEndPoint);
+                        pView->EndDragObj();
+
+                        // restore snap
+                        if ( !bWasNoSnap )
+                            ((SdrDragStat&)rDragStat).SetNoSnap( bWasNoSnap );
+                        if ( bWasSnapEnabled )
+                            pView->SetSnapEnabled( bWasSnapEnabled );
+                    }
+
+                    // make moved handle visible
+                    const Rectangle aVisRect( aEndPoint - Point( DEFAUL_MOVE_SIZE, DEFAUL_MOVE_SIZE ), Size( 200, 200 ) );
+                    pView->MakeVisible( aVisRect, *pReportSection);
+                }
+            }
+            pView->AdjustMarkHdl();
+        }
+    }
+}
+// -----------------------------------------------------------------------------
+void OViewsWindow::stopScrollTimer()
+{
+    ::std::for_each(m_aSections.begin(),m_aSections.end(),
+        ::std::compose1(::boost::mem_fn(&OReportSection::stopScrollTimer),TReportPairHelper()));
 }
 //==============================================================================
 } // rptui
