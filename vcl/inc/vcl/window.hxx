@@ -4,9 +4,9 @@
  *
  *  $RCSfile: window.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: vg $ $Date: 2007-04-11 18:16:53 $
+ *  last change: $Author: hr $ $Date: 2007-08-03 14:06:01 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -325,6 +325,7 @@ typedef USHORT StateChangedType;
 #define WINDOW_BORDER_DOUBLEOUT         ((USHORT)0x0008)
 #define WINDOW_BORDER_MENU              ((USHORT)0x0010)
 #define WINDOW_BORDER_NOBORDER          ((USHORT)0x1000)
+#define WINDOW_BORDER_REMOVEBORDER      ((USHORT)0x2000)
 
 // DialogControl-Flags
 #define WINDOW_DLGCTRL_RETURN           ((USHORT)0x0001)

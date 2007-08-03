@@ -4,9 +4,9 @@
  *
  *  $RCSfile: status.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: vg $ $Date: 2007-04-11 18:12:20 $
+ *  last change: $Author: hr $ $Date: 2007-08-03 14:05:11 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -54,7 +54,9 @@ class ImplStatusItemList;
 
 void VCL_DLLPUBLIC DrawProgress( Window* pWindow, const Point& rPos,
                                  long nOffset, long nPrgsWidth, long nPrgsHeight,
-                                 USHORT nPercent1, USHORT nPercent2, USHORT nPercentCount );
+                                 USHORT nPercent1, USHORT nPercent2, USHORT nPercentCount,
+                                 const Rectangle& rFramePosSize
+                                 );
 
 // ---------------------
 // - StatusBarItemBits -
