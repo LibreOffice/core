@@ -4,9 +4,9 @@
  *
  *  $RCSfile: macbelayer.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: ihi $ $Date: 2007-04-16 11:53:33 $
+ *  last change: $Author: hr $ $Date: 2007-08-03 12:29:44 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -118,7 +118,10 @@ Boolean GetProxySetting(ServiceType sType, char *host, size_t hostSize, UInt16 *
         result = (portNum != NULL) && (CFGetTypeID(portNum) == CFNumberGetTypeID());
     }
     else
+    {
+        CFRelease(proxyDict);
         return false;
+    }
 
     if (result)
         result = CFNumberGetValue(portNum, kCFNumberIntType, &portInt);
@@ -136,20 +139,6 @@ Boolean GetProxySetting(ServiceType sType, char *host, size_t hostSize, UInt16 *
     }
 
     return result;
-}
-
-/*
- * Get the list of proxy exceptions
- */
-
-CFArrayRef GetExceptionsListSetting()
-{
-    CFDictionaryRef rProxyDict = SCDynamicStoreCopyProxies(NULL);
-
-    if (!rProxyDict)
-        return false;
-    else
-        return (CFArrayRef) CFDictionaryGetValue(rProxyDict, kSCPropNetProxiesExceptionsList);
 }
 
 } // end private namespace
@@ -205,7 +194,13 @@ void SAL_CALL MacOSXLayer::readData(
     {
         rtl::OUString aProxyBypassList;
 
-        CFArrayRef rExceptionsList = GetExceptionsListSetting();
+        CFArrayRef rExceptionsList;
+        CFDictionaryRef rProxyDict = SCDynamicStoreCopyProxies(NULL);
+
+        if (!rProxyDict)
+            rExceptionsList = false;
+        else
+            rExceptionsList = (CFArrayRef) CFDictionaryGetValue(rProxyDict, kSCPropNetProxiesExceptionsList);
 
         if (rExceptionsList)
         {
@@ -219,6 +214,9 @@ void SAL_CALL MacOSXLayer::readData(
                 aProxyBypassList += CFStringToOUString(rException);
             }
         }
+
+        if (rProxyDict)
+            CFRelease(rProxyDict);
 
         // override default for ProxyType, which is "0" meaning "No proxies".
         uno::Sequence<backend::PropertyInfo> aPropInfoList(6);
