@@ -4,9 +4,9 @@
  *
  *  $RCSfile: enhwmf.cxx,v $
  *
- *  $Revision: 1.34 $
+ *  $Revision: 1.35 $
  *
- *  last change: $Author: rt $ $Date: 2006-12-04 16:07:09 $
+ *  last change: $Author: hr $ $Date: 2007-08-03 11:50:55 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -733,7 +733,14 @@ BOOL EnhWMFReader::ReadEnhWMF()
             {
                 UINT32 nStartX, nStartY, nEndX, nEndY;
                 *pWMF >> nX32 >> nY32 >> nx32 >> ny32 >> nStartX >> nStartY >> nEndX >> nEndY;
-                pOut->DrawPie( ReadRectangle( nX32, nY32, nx32, ny32 ), Point( nStartX, nStartY ), Point( nEndX, nEndY ) );
+                const Rectangle aRect( ReadRectangle( nX32, nY32, nx32, ny32 ));
+
+                // #i73608# OutputDevice deviates from WMF
+                // semantics. start==end means full ellipse here.
+                if( nStartX == nEndX && nStartY == nEndY )
+                    pOut->DrawEllipse( aRect );
+                else
+                    pOut->DrawPie( aRect, Point( nStartX, nStartY ), Point( nEndX, nEndY ) );
             }
             break;
 
