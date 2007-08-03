@@ -4,9 +4,9 @@
  *
  *  $RCSfile: OOo2Oasis.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: hr $ $Date: 2007-06-27 16:21:57 $
+ *  last change: $Author: hr $ $Date: 2007-08-03 10:22:25 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1202,7 +1202,7 @@ void XMLDocumentTransformerContext_Impl::StartElement(
 
             pMutableAttrList = new XMLMutableAttributeList( xAttrList );
             xAttrList = pMutableAttrList;
-            OUString sMime(RTL_CONSTASCII_USTRINGPARAM("application/x-vnd.oasis.openoffice.") );
+            OUString sMime(RTL_CONSTASCII_USTRINGPARAM("application/vnd.oasis.opendocument.") );
             sMime += rValue;
             pMutableAttrList->SetValueByIndex( i, sMime );
             OUString aNewAttrQName( GetTransformer().GetNamespaceMap().GetQNameByKey( XML_NAMESPACE_OFFICE, ::xmloff::token::GetXMLToken( XML_MIMETYPE ) ) );
