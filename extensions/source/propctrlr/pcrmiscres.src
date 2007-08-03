@@ -4,9 +4,9 @@
  *
  *  $RCSfile: pcrmiscres.src,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: ihi $ $Date: 2007-04-19 11:48:02 $
+ *  last change: $Author: hr $ $Date: 2007-08-03 13:53:07 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -40,8 +40,6 @@
 #include "formlocalid.hrc"
 #endif
 
-#define STD_MASK_COLOR MaskColor = Color { Red = 0xFFFF; Green = 0x0000; Blue = 0xFFFF; };
-
 String RID_STR_CONFIRM_DELETE_DATA_TYPE
 {
     Text [ en-US ] = "Do you want to delete the data type '#type#' from the model?\n"
@@ -53,12 +51,18 @@ Resource RID_RSC_BUTTON_IMAGES
     Image IMG_PLUS
     {
         ImageBitmap = Bitmap{ file = "buttonplus.png"; };
-        STD_MASK_COLOR
     };
     Image IMG_MINUS
     {
         ImageBitmap = Bitmap{ file = "buttonminus.png"; };
-        STD_MASK_COLOR
+    };
+    Image IMG_PLUS_HC
+    {
+        ImageBitmap = Bitmap{ file = "buttonplus_hc.png"; };
+    };
+    Image IMG_MINUS_HC
+    {
+        ImageBitmap = Bitmap{ file = "buttonminus_hc.png"; };
     };
 };
 
