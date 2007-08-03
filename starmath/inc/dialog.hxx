@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dialog.hxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: vg $ $Date: 2007-05-25 12:08:44 $
+ *  last change: $Author: hr $ $Date: 2007-08-03 13:53:46 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -34,6 +34,8 @@
  ************************************************************************/
 #ifndef DIALOG_HXX
 #define DIALOG_HXX
+
+#include <vcl/image.hxx>
 
 #ifndef _SV_DIALOG_HXX //autogen
 #include <vcl/dialog.hxx>
@@ -498,6 +500,8 @@ class SmSymDefineDialog : public ModalDialog
     PushButton      aChangeBtn;
     PushButton      aDeleteBtn;
     FixedImage      aRightArrow;
+    Image           aRigthArrow_Im;
+    Image           aRigthArrow_Im_HC;     // hi-contrast version
 
     SmSymSetManager     aSymSetMgrCopy,
                        &rSymSetMgr;
