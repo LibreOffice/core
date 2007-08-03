@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xmlexpit.hxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: obo $ $Date: 2005-11-16 13:54:09 $
+ *  last change: $Author: hr $ $Date: 2007-08-03 12:58:44 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -70,14 +70,16 @@ protected:
     SvXMLItemMapEntriesRef mrMapEntries;
 
     /** fills the given attribute list with the items in the given set */
-    void exportXML( SvXMLAttributeList& rAttrList,
+    void exportXML( const SvXMLExport& rExport,
+                    SvXMLAttributeList& rAttrList,
                     const SfxItemSet& rSet,
                     const SvXMLUnitConverter& rUnitConverter,
                     const SvXMLNamespaceMap& rNamespaceMap,
                     sal_uInt16 nFlags,
                     SvUShorts* pIndexArray ) const;
 
-    void exportXML( SvXMLAttributeList& rAttrList,
+    void exportXML( const SvXMLExport& rExport,
+                    SvXMLAttributeList& rAttrList,
                     const SfxPoolItem& rItem,
                     const SvXMLItemMapEntry &rEntry,
                     const SvXMLUnitConverter& rUnitConverter,
