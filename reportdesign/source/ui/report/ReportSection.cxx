@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ReportSection.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: hr $ $Date: 2007-08-02 14:40:24 $
+ *  last change: $Author: hr $ $Date: 2007-08-03 10:03:52 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -71,6 +71,7 @@
 #ifndef _SVX_ADJITEM_HXX
 #include <svx/adjitem.hxx>
 #endif
+#include <svx/sdrpaintwindow.hxx>
 #ifndef _COM_SUN_STAR_DATATRANSFER_CLIPBOARD_XCLIPBOARD_HPP_
 #include <com/sun/star/datatransfer/clipboard/XClipboard.hpp>
 #endif
@@ -150,7 +151,6 @@ OReportSection::OReportSection(OViewsWindow* _pParent,const uno::Reference< repo
     EnableChildTransparentMode();
     SetHelpId(HID_REPORTSECTION);
     SetMapMode( MapMode( MAP_100TH_MM ) );
-    m_pFunc.reset(new DlgEdFuncSelect( this ));
     try
     {
         fill();
@@ -160,6 +160,9 @@ OReportSection::OReportSection(OViewsWindow* _pParent,const uno::Reference< repo
     {
         OSL_ENSURE(0,"Exception catched!");
     }
+
+    m_pFunc.reset(new DlgEdFuncSelect( this ));
+    m_pFunc->setOverlappedControlColor(lcl_getOverlappedControlColor( /* m_pParent->getView()->getReportView()->getController()->getORB() */ ) );
 
     Show();
 }
@@ -189,6 +192,31 @@ void OReportSection::Paint( const Rectangle& rRect )
 {
     if ( m_pView )
     {
+         // repaint, get PageView and prepare Region
+        SdrPageView* pPgView = m_pView->GetSdrPageView();
+        const Region aPaintRectRegion(rRect);
+
+        // #i74769#
+        SdrPaintWindow* pTargetPaintWindow = 0;
+
+        // mark repaint start
+        if(pPgView)
+        {
+            pTargetPaintWindow = pPgView->GetView().BeginDrawLayers(this, aPaintRectRegion);
+            OSL_ENSURE(pTargetPaintWindow, "BeginDrawLayers: Got no SdrPaintWindow (!)");
+            // draw background self using wallpaper
+            OutputDevice& rTargetOutDev = pTargetPaintWindow->GetTargetOutputDevice();
+            rTargetOutDev.DrawWallpaper(rRect, Wallpaper(Color(m_xSection->getBackColor())));
+        }
+
+        // do paint (unbuffered) and mark repaint end
+        if(pPgView)
+        {
+            pPgView->DrawLayer(0, this);
+            pPgView->GetView().EndDrawLayers(*pTargetPaintWindow);
+        }
+
+
         const Region aReg(rRect);
         m_pView->CompleteRedraw(this,aReg);
     }
@@ -200,9 +228,8 @@ void OReportSection::Resize()
     if ( m_xSection.is() && m_pPage && m_pView )
     {
         uno::Reference<report::XReportDefinition> xReportDefinition = m_xSection->getReportDefinition();
-        m_pPage->SetSize( Size( getStyleProperty<awt::Size>(xReportDefinition,PROPERTY_PAPERSIZE).Width,2*m_xSection->getHeight()) );
+        m_pPage->SetSize( Size( getStyleProperty<awt::Size>(xReportDefinition,PROPERTY_PAPERSIZE).Width,5*m_xSection->getHeight()) );
         const Size aPageSize = m_pPage->GetSize();
-
         const sal_Int32 nLeftMargin = getStyleProperty<sal_Int32>(xReportDefinition,PROPERTY_LEFTMARGIN);
         const sal_Int32 nRightMargin = getStyleProperty<sal_Int32>(xReportDefinition,PROPERTY_RIGHTMARGIN);
         m_pView->SetWorkArea( Rectangle( Point( nLeftMargin, 0), Size(aPageSize.Width() - nLeftMargin - nRightMargin,aPageSize.Height()) ) );
@@ -373,8 +400,13 @@ void OReportSection::SetMode( DlgEdMode eNewMode )
         m_eMode = eNewMode;
     }
 }
-//----------------------------------------------------------------------------
+// -----------------------------------------------------------------------------
 void OReportSection::Copy(uno::Sequence< beans::NamedValue >& _rAllreadyCopiedObjects)
+{
+    Copy(_rAllreadyCopiedObjects,false);
+}
+//----------------------------------------------------------------------------
+void OReportSection::Copy(uno::Sequence< beans::NamedValue >& _rAllreadyCopiedObjects,bool _bEraseAnddNoClone)
 {
     OSL_ENSURE(m_xSection.is(),"Why is the section here NULL!");
     if( !m_pView->AreObjectsMarked() || !m_xSection.is() )
@@ -390,15 +422,25 @@ void OReportSection::Copy(uno::Sequence< beans::NamedValue >& _rAllreadyCopiedOb
     ::std::vector< uno::Reference<util::XCloneable> > aCopies;
     aCopies.reserve(nMark);
 
-    for( ULONG i = 0; i < nMark; i++ )
+    SdrUndoFactory& rUndo = m_pView->GetModel()->GetSdrUndoFactory();
+
+    for( ULONG i = nMark; i > 0; )
     {
-        OObjectBase* pObj = dynamic_cast<OObjectBase*>(rMarkedList.GetMark(i)->GetMarkedSdrObj());
+        --i;
+        SdrObject* pSdrObject = rMarkedList.GetMark(i)->GetMarkedSdrObj();
+        OObjectBase* pObj = dynamic_cast<OObjectBase*>(pSdrObject);
         if ( pObj  )
         {
             try
             {
                 uno::Reference<report::XReportComponent> xComponent = pObj->getReportComponent();
                 aCopies.push_back(xComponent->createClone());
+                if ( _bEraseAnddNoClone )
+                {
+                    m_pView->AddUndo( rUndo.CreateUndoDeleteObject( *pSdrObject ) );
+                    m_pPage->RemoveObject(pSdrObject->GetOrdNum());
+                }
+
             }
             catch(uno::Exception&)
             {
@@ -409,6 +451,7 @@ void OReportSection::Copy(uno::Sequence< beans::NamedValue >& _rAllreadyCopiedOb
 
     if ( !aCopies.empty() )
     {
+        ::std::reverse(aCopies.begin(),aCopies.end());
         const sal_Int32 nLength = _rAllreadyCopiedObjects.getLength();
         _rAllreadyCopiedObjects.realloc( nLength + 1);
         beans::NamedValue* pNewValue = _rAllreadyCopiedObjects.getArray() + nLength;
@@ -737,7 +780,7 @@ sal_Int8 OReportSection::ExecuteDrop( const ExecuteDropEvent& _rEvt )
         OReportExchange::TSectionElements aCopies = OReportExchange::extractCopies(aDropped);
         Paste(aCopies,true);
         nDropOption = DND_ACTION_COPYMOVE;
-        m_pParent->breakAction();
+        m_pParent->BrkAction();
         m_pParent->unmarkAllObjects(m_pView);
         //m_pParent->getView()->setMarked(m_pView,sal_True);
     } // if ( OReportExchange::canExtract(rFlavors) )
@@ -775,11 +818,11 @@ sal_Int8 OReportSection::ExecuteDrop( const ExecuteDropEvent& _rEvt )
     return nDropOption;
 }
 // -----------------------------------------------------------------------------
-void OReportSection::breakAction()
+void OReportSection::stopScrollTimer()
 {
-    if( m_pView && m_pView->IsAction() )
-        m_pView->BrkAction();
+    m_pFunc->stopScrollTimer();
 }
+// -----------------------------------------------------------------------------
 // =============================================================================
 }
 // =============================================================================
