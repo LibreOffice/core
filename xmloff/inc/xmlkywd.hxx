@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xmlkywd.hxx,v $
  *
- *  $Revision: 1.173 $
+ *  $Revision: 1.174 $
  *
- *  last change: $Author: rt $ $Date: 2007-07-06 12:08:43 $
+ *  last change: $Author: hr $ $Date: 2007-08-03 12:52:18 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1999,5 +1999,7 @@ XML_CONSTASCII_ACTION( sXML_script_data, "script-data" );
 XML_CONSTASCII_ACTION( sXML_libraries, "libraries" );
 XML_CONSTASCII_ACTION( sXML_source_code, "source-code" );
 XML_CONSTASCII_ACTION( sXML_readonly, "readonly" );
+
+XML_CONSTASCII_ACTION( sXML_page_continuation, "page-continuation" );
 
 #endif
