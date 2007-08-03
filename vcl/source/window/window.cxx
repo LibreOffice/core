@@ -4,9 +4,9 @@
  *
  *  $RCSfile: window.cxx,v $
  *
- *  $Revision: 1.262 $
+ *  $Revision: 1.263 $
  *
- *  last change: $Author: hr $ $Date: 2007-07-31 16:09:47 $
+ *  last change: $Author: hr $ $Date: 2007-08-03 14:09:04 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -2479,9 +2479,6 @@ void Window::ImplCallPaint( const Region* pRegion, USHORT nPaintFlags )
 
     if ( pChildRegion )
         delete pChildRegion;
-
-    if( mpWindowImpl->mbFrame && mpWindowImpl->mnNativeBackground )
-        Flush();
 }
 
 // -----------------------------------------------------------------------
@@ -5584,10 +5581,38 @@ void Window::SetBorderStyle( USHORT nBorderStyle )
 
     if ( mpWindowImpl->mpBorderWindow )
     {
-        if ( mpWindowImpl->mpBorderWindow->GetType() == WINDOW_BORDERWINDOW )
-             ((ImplBorderWindow*)mpWindowImpl->mpBorderWindow)->SetBorderStyle( nBorderStyle );
+        if( nBorderStyle == WINDOW_BORDER_REMOVEBORDER &&
+            ! mpWindowImpl->mpBorderWindow->mpWindowImpl->mbFrame &&
+            mpWindowImpl->mpBorderWindow->mpWindowImpl->mpParent
+            )
+        {
+            // this is a little awkward: some controls (e.g. svtools ProgressBar)
+            // cannot avoid getting constructed with WB_BORDER but want to disable
+            // borders in case of NWF drawing. So they need a method to remove their border window
+            Window* pBorderWin = mpWindowImpl->mpBorderWindow;
+            // remove us as border window's client
+            pBorderWin->mpWindowImpl->mpClientWindow = NULL;
+            mpWindowImpl->mpBorderWindow = NULL;
+            mpWindowImpl->mpRealParent = pBorderWin->mpWindowImpl->mpParent;
+            // reparent us above the border window
+            SetParent( pBorderWin->mpWindowImpl->mpParent );
+            // set us to the position and size of our previous border
+            Point aBorderPos( pBorderWin->GetPosPixel() );
+            Size aBorderSize( pBorderWin->GetSizePixel() );
+            SetPosSizePixel( aBorderPos.X(), aBorderPos.Y(), aBorderSize.Width(), aBorderSize.Height() );
+            // release border window
+            delete pBorderWin;
+
+            // set new style bits
+            SetStyle( GetStyle() & (~WB_BORDER) );
+        }
         else
-            mpWindowImpl->mpBorderWindow->SetBorderStyle( nBorderStyle );
+        {
+            if ( mpWindowImpl->mpBorderWindow->GetType() == WINDOW_BORDERWINDOW )
+                 ((ImplBorderWindow*)mpWindowImpl->mpBorderWindow)->SetBorderStyle( nBorderStyle );
+            else
+                mpWindowImpl->mpBorderWindow->SetBorderStyle( nBorderStyle );
+        }
     }
 }
 
