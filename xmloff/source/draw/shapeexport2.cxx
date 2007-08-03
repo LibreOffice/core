@@ -4,9 +4,9 @@
  *
  *  $RCSfile: shapeexport2.cxx,v $
  *
- *  $Revision: 1.62 $
+ *  $Revision: 1.63 $
  *
- *  last change: $Author: hr $ $Date: 2007-08-02 17:23:07 $
+ *  last change: $Author: hr $ $Date: 2007-08-03 12:54:17 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1240,7 +1240,9 @@ void XMLShapeExport::ImpExportGraphicObjectShape(
         SvXMLElementExport aElem( mrExport, XML_NAMESPACE_DRAW,
                                   XML_FRAME, bCreateNewline, sal_True );
 
-        if( !bIsEmptyPresObj || !mrExport.isExperimentalOdfExportEnabled() )
+        const bool bSaveBackwardsCompatible = ( mrExport.getExportFlags() & EXPORT_SAVEBACKWARDCOMPATIBLE );
+
+        if( !bIsEmptyPresObj || bSaveBackwardsCompatible )
         {
             if( !bIsEmptyPresObj )
             {
@@ -1675,7 +1677,9 @@ void XMLShapeExport::ImpExportOLE2Shape(
         SvXMLElementExport aElement( mrExport, XML_NAMESPACE_DRAW,
                                   XML_FRAME, bCreateNewline, sal_True );
 
-        if( !bIsEmptyPresObj || !mrExport.isExperimentalOdfExportEnabled() )
+        const bool bSaveBackwardsCompatible = ( mrExport.getExportFlags() & EXPORT_SAVEBACKWARDCOMPATIBLE );
+
+        if( !bIsEmptyPresObj || bSaveBackwardsCompatible )
         {
             if (pAttrList)
             {
