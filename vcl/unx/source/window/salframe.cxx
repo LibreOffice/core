@@ -4,9 +4,9 @@
  *
  *  $RCSfile: salframe.cxx,v $
  *
- *  $Revision: 1.217 $
+ *  $Revision: 1.218 $
  *
- *  last change: $Author: hr $ $Date: 2007-08-03 12:30:50 $
+ *  last change: $Author: hr $ $Date: 2007-08-03 14:10:18 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -3329,12 +3329,7 @@ long X11SalFrame::HandleExposeEvent( XEvent *pEvent )
         // if a completed graphics expose sequence is available
         return 1;
 
-    SalPaintEvent aPEvt;
-
-    aPEvt.mnBoundX          = maPaintRegion.Left();
-    aPEvt.mnBoundY          = maPaintRegion.Top();
-    aPEvt.mnBoundWidth      = maPaintRegion.GetWidth();
-    aPEvt.mnBoundHeight     = maPaintRegion.GetHeight();
+    SalPaintEvent aPEvt( maPaintRegion.Left(), maPaintRegion.Top(), maPaintRegion.GetWidth(), maPaintRegion.GetHeight() );
 
      CallCallback( SALEVENT_PAINT, &aPEvt );
     maPaintRegion = Rectangle();
