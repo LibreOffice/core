@@ -4,9 +4,9 @@
  *
  *  $RCSfile: txtimp.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: hr $ $Date: 2007-07-31 17:35:14 $
+ *  last change: $Author: hr $ $Date: 2007-08-03 12:52:30 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -263,6 +263,7 @@ enum XMLTextPElemTokens
     XML_TOK_DRAW_HEADER,
     XML_TOK_DRAW_FOOTER,
     XML_TOK_DRAW_DATE_TIME,
+    XML_TOK_TEXT_PAGE_CONTINUATION,
 
     XML_TOK_TEXT_P_ELEM_END=XML_TOK_UNKNOWN
 };
