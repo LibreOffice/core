@@ -4,9 +4,9 @@
  *
  *  $RCSfile: prgsbar.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 14:39:31 $
+ *  last change: $Author: hr $ $Date: 2007-08-03 13:54:58 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -63,11 +63,23 @@ void ProgressBar::ImplInit()
     ImplInitSettings( TRUE, TRUE, TRUE );
 }
 
+static WinBits clearProgressBarBorder( Window* pParent, WinBits nOrgStyle )
+{
+    WinBits nOutStyle = nOrgStyle;
+    if( pParent && (nOrgStyle & WB_BORDER) != 0 )
+    {
+        if( pParent->IsNativeControlSupported( CTRL_PROGRESS, PART_ENTIRE_CONTROL ) )
+            nOutStyle &= WB_BORDER;
+    }
+    return nOutStyle;
+}
+
 // -----------------------------------------------------------------------
 
 ProgressBar::ProgressBar( Window* pParent, WinBits nWinStyle ) :
-    Window( pParent, nWinStyle )
+    Window( pParent, clearProgressBarBorder( pParent, nWinStyle ) )
 {
+    DBG_ERROR( "no ResId constructor\n" );
     SetOutputSizePixel( Size( 150, 20 ) );
     ImplInit();
 }
@@ -77,6 +89,7 @@ ProgressBar::ProgressBar( Window* pParent, WinBits nWinStyle ) :
 ProgressBar::ProgressBar( Window* pParent, const ResId& rResId ) :
     Window( pParent, rResId )
 {
+    DBG_ERROR( "ResId constructor\n" );
     ImplInit();
 }
 
@@ -106,12 +119,25 @@ void ProgressBar::ImplInitSettings( BOOL bFont,
 
     if ( bBackground )
     {
-        Color aColor;
-        if ( IsControlBackground() )
-            aColor = GetControlBackground();
+        if( !IsControlBackground() &&
+            IsNativeControlSupported( CTRL_PROGRESS, PART_ENTIRE_CONTROL ) )
+        {
+            if( (GetStyle() & WB_BORDER) )
+                SetBorderStyle( WINDOW_BORDER_REMOVEBORDER );
+            EnableChildTransparentMode( TRUE );
+            SetPaintTransparent( TRUE );
+            SetBackground();
+            SetParentClipMode( PARENTCLIPMODE_NOCLIP );
+        }
         else
-            aColor = rStyleSettings.GetFaceColor();
-        SetBackground( aColor );
+        {
+            Color aColor;
+            if ( IsControlBackground() )
+                aColor = GetControlBackground();
+            else
+                aColor = rStyleSettings.GetFaceColor();
+            SetBackground( aColor );
+        }
     }
 
     if ( bForeground || bFont )
@@ -162,7 +188,8 @@ void ProgressBar::ImplDrawProgress( USHORT nOldPerc, USHORT nNewPerc )
     }
 
     ::DrawProgress( this, maPos, PROGRESSBAR_OFFSET, mnPrgsWidth, mnPrgsHeight,
-                    nOldPerc*100, nNewPerc*100, mnPercentCount );
+                    nOldPerc*100, nNewPerc*100, mnPercentCount,
+                    Rectangle( Point(), GetSizePixel() ) );
 }
 
 // -----------------------------------------------------------------------
