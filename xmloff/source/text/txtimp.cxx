@@ -4,9 +4,9 @@
  *
  *  $RCSfile: txtimp.cxx,v $
  *
- *  $Revision: 1.130 $
+ *  $Revision: 1.131 $
  *
- *  last change: $Author: hr $ $Date: 2007-07-31 17:35:40 $
+ *  last change: $Author: hr $ $Date: 2007-08-03 12:55:38 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -423,6 +423,7 @@ static __FAR_DATA SvXMLTokenMapEntry aTextPElemTokenMap[] =
     { XML_NAMESPACE_PRESENTATION, XML_HEADER, XML_TOK_DRAW_HEADER },
     { XML_NAMESPACE_PRESENTATION, XML_FOOTER, XML_TOK_DRAW_FOOTER },
     { XML_NAMESPACE_PRESENTATION, XML_DATE_TIME, XML_TOK_DRAW_DATE_TIME },
+    { XML_NAMESPACE_TEXT, XML_PAGE_CONTINUATION, XML_TOK_TEXT_PAGE_CONTINUATION },
 
     XML_TOKEN_MAP_END
 };
@@ -1103,6 +1104,7 @@ OUString XMLTextImportHelper::SetStyleAndAttrs(
 
             // #i36217# for impress/draw hard set the IsNumbering property
             // since we may not export it in future versions
+/* remove this fix as we also export paragraphs with numbering level > 0 withoud IsNumbering
             {
                 static const OUString sIsNumbering( RTL_CONSTASCII_USTRINGPARAM( "IsNumbering" ) );
                 if( xPropSetInfo->hasPropertyByName( sIsNumbering ) )
@@ -1111,7 +1113,7 @@ OUString XMLTextImportHelper::SetStyleAndAttrs(
                     xPropSet->setPropertyValue( sIsNumbering, Any( bTmp ) );
                 }
             }
-
+*/
             if( pListBlock->IsRestartNumbering() )
             {
                 // TODO: property missing
