@@ -4,9 +4,9 @@
  *
  *  $RCSfile: GroupsSorting.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: hr $ $Date: 2007-08-02 14:36:30 $
+ *  last change: $Author: hr $ $Date: 2007-08-03 10:00:35 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -85,6 +85,7 @@
 #ifndef RPTUI_TOOLS_HXX
 #include "UITools.hxx"
 #endif
+#include "UndoActions.hxx"
 #ifndef REPORTDESIGN_SHARED_UISTRINGS_HRC
 #include "uistrings.hrc"
 #endif
@@ -330,35 +331,36 @@ void OFieldExpressionControl::moveGroups(const uno::Sequence<uno::Any>& _aGroups
     if ( _aGroups.getLength() )
     {
         m_bIgnoreEvent = true;
-        sal_Int32 nRow = _nRow;
-        String sUndoAction(String(ModuleRes(RID_STR_UNDO_MOVE_GROUP)));
-        m_pParent->m_pController->getUndoMgr()->EnterListAction( sUndoAction, String() );
-
-        uno::Reference< report::XGroups> xGroups = m_pParent->getGroups();
-        const uno::Any* pIter = _aGroups.getConstArray();
-        const uno::Any* pEnd  = pIter + _aGroups.getLength();
-        for(;pIter != pEnd;++pIter)
         {
-            uno::Reference< report::XGroup> xGroup(*pIter,uno::UNO_QUERY);
-            if ( xGroup.is() )
+            sal_Int32 nRow = _nRow;
+            String sUndoAction(ModuleRes(RID_STR_UNDO_MOVE_GROUP));
+            UndoManagerListAction aListAction(*m_pParent->m_pController->getUndoMgr(),sUndoAction);
+
+            uno::Reference< report::XGroups> xGroups = m_pParent->getGroups();
+            const uno::Any* pIter = _aGroups.getConstArray();
+            const uno::Any* pEnd  = pIter + _aGroups.getLength();
+            for(;pIter != pEnd;++pIter)
             {
-                uno::Sequence< beans::PropertyValue > aArgs(1);
-                aArgs[0].Name = PROPERTY_GROUP;
-                aArgs[0].Value <<= xGroup;
-                // we use this way to create undo actions
-                m_pParent->m_pController->executeChecked(SID_GROUP_REMOVE,aArgs);
-                aArgs.realloc(2);
-                if ( nRow > xGroups->getCount() )
-                    nRow = xGroups->getCount();
-                if ( _bSelect )
-                    SelectRow(nRow);
-                aArgs[1].Name = PROPERTY_POSITIONY;
-                aArgs[1].Value <<= nRow;
-                m_pParent->m_pController->executeChecked(SID_GROUP_APPEND,aArgs);
-                ++nRow;
-            }
-        } // for(;pIter != pEnd;++pIter)
-        m_pParent->m_pController->getUndoMgr()->LeaveListAction();
+                uno::Reference< report::XGroup> xGroup(*pIter,uno::UNO_QUERY);
+                if ( xGroup.is() )
+                {
+                    uno::Sequence< beans::PropertyValue > aArgs(1);
+                    aArgs[0].Name = PROPERTY_GROUP;
+                    aArgs[0].Value <<= xGroup;
+                    // we use this way to create undo actions
+                    m_pParent->m_pController->executeChecked(SID_GROUP_REMOVE,aArgs);
+                    aArgs.realloc(2);
+                    if ( nRow > xGroups->getCount() )
+                        nRow = xGroups->getCount();
+                    if ( _bSelect )
+                        SelectRow(nRow);
+                    aArgs[1].Name = PROPERTY_POSITIONY;
+                    aArgs[1].Value <<= nRow;
+                    m_pParent->m_pController->executeChecked(SID_GROUP_APPEND,aArgs);
+                    ++nRow;
+                }
+            } // for(;pIter != pEnd;++pIter)
+        }
         m_bIgnoreEvent = false;
         Invalidate();
     } // if ( _aGroups.getLength() )
@@ -475,7 +477,7 @@ BOOL OFieldExpressionControl::SaveModified(bool _bAppendRow)
             if ( m_aGroupPositions[nRow] == NO_GROUP )
             {
                 bAppend = sal_True;
-                String sUndoAction(String(ModuleRes(RID_STR_UNDO_APPEND_GROUP)));
+                String sUndoAction(ModuleRes(RID_STR_UNDO_APPEND_GROUP));
                 m_pParent->m_pController->getUndoMgr()->EnterListAction( sUndoAction, String() );
                 xGroup = m_pParent->getGroups()->createGroup();
                 xGroup->setHeaderOn(sal_True);
@@ -824,7 +826,7 @@ void OFieldExpressionControl::DeleteRows()
             if ( bFirstTime )
             {
                 bFirstTime = false;
-                String sUndoAction(String(ModuleRes(RID_STR_UNDO_REMOVE_SELECTION)));
+                String sUndoAction(ModuleRes(RID_STR_UNDO_REMOVE_SELECTION));
                 m_pParent->m_pController->getUndoMgr()->EnterListAction( sUndoAction, String() );
             }
 
@@ -930,40 +932,41 @@ void OFieldExpressionControl::InsertRows( long nRow )
         if( (aTransferData.GetAny(aFlavor) >>= aGroups) && aGroups.getLength() )
         {
             m_bIgnoreEvent = false;
-            String sUndoAction(String(ModuleRes(RID_STR_UNDO_APPEND_GROUP)));
-            m_pParent->m_pController->getUndoMgr()->EnterListAction( sUndoAction, String() );
-
-            uno::Reference<report::XGroups> xGroups = m_pParent->getGroups();
-            sal_Int32 nGroupPos = 0;
-            ::std::vector<sal_Int32>::iterator aIter = m_aGroupPositions.begin();
-            ::std::vector<sal_Int32>::size_type nRowPos = static_cast< ::std::vector<sal_Int32>::size_type >(nRow);
-            if ( nRowPos < m_aGroupPositions.size() )
             {
-                ::std::vector<sal_Int32>::iterator aEnd  = m_aGroupPositions.begin() + nRowPos;
-                for(;aIter != aEnd;++aIter)
+                String sUndoAction(ModuleRes(RID_STR_UNDO_APPEND_GROUP));
+                UndoManagerListAction aListAction(*m_pParent->m_pController->getUndoMgr(),sUndoAction);
+
+                uno::Reference<report::XGroups> xGroups = m_pParent->getGroups();
+                sal_Int32 nGroupPos = 0;
+                ::std::vector<sal_Int32>::iterator aIter = m_aGroupPositions.begin();
+                ::std::vector<sal_Int32>::size_type nRowPos = static_cast< ::std::vector<sal_Int32>::size_type >(nRow);
+                if ( nRowPos < m_aGroupPositions.size() )
                 {
-                    if ( *aIter != NO_GROUP )
-                        nGroupPos = *aIter;
+                    ::std::vector<sal_Int32>::iterator aEnd  = m_aGroupPositions.begin() + nRowPos;
+                    for(;aIter != aEnd;++aIter)
+                    {
+                        if ( *aIter != NO_GROUP )
+                            nGroupPos = *aIter;
+                    }
+                }
+                for(sal_Int32 i=0;i < aGroups.getLength();++i,++nSize)
+                {
+                    uno::Sequence< beans::PropertyValue > aArgs(2);
+                    aArgs[0].Name = PROPERTY_GROUP;
+                    aArgs[0].Value = aGroups[i];
+                    aArgs[1].Name = PROPERTY_POSITIONY;
+                    aArgs[1].Value <<= nGroupPos;
+                    m_pParent->m_pController->executeChecked(SID_GROUP_APPEND,aArgs);
+
+                    ::std::vector<sal_Int32>::iterator aInsertPos = m_aGroupPositions.insert(aIter,nGroupPos);
+                    ++aInsertPos;
+                    aIter = aInsertPos;
+                    ::std::vector<sal_Int32>::iterator aEnd  = m_aGroupPositions.end();
+                    for(;aInsertPos != aEnd;++aInsertPos)
+                        if ( *aInsertPos != NO_GROUP )
+                            ++*aInsertPos;
                 }
             }
-            for(sal_Int32 i=0;i < aGroups.getLength();++i,++nSize)
-            {
-                uno::Sequence< beans::PropertyValue > aArgs(2);
-                aArgs[0].Name = PROPERTY_GROUP;
-                aArgs[0].Value = aGroups[i];
-                aArgs[1].Name = PROPERTY_POSITIONY;
-                aArgs[1].Value <<= nGroupPos;
-                m_pParent->m_pController->executeChecked(SID_GROUP_APPEND,aArgs);
-
-                ::std::vector<sal_Int32>::iterator aInsertPos = m_aGroupPositions.insert(aIter,nGroupPos);
-                ++aInsertPos;
-                aIter = aInsertPos;
-                ::std::vector<sal_Int32>::iterator aEnd  = m_aGroupPositions.end();
-                for(;aInsertPos != aEnd;++aInsertPos)
-                    if ( *aInsertPos != NO_GROUP )
-                        ++*aInsertPos;
-            }
-            m_pParent->m_pController->getUndoMgr()->LeaveListAction();
             m_bIgnoreEvent = true;
         }
     }
@@ -1261,6 +1264,8 @@ IMPL_LINK( OGroupsSortingDialog, LBChangeHdl, ListBox*, pListBox )
         {
             if ( pListBox && pListBox->GetSavedValue() != pListBox->GetSelectEntryPos() )
                 SaveData(nRow);
+            if ( pListBox == &m_aGroupOnLst )
+                m_aGroupIntervalEd.Enable( pListBox->GetSelectEntryPos() != 0 );
         }
         else if ( nGroupPos != NO_GROUP )
         {
@@ -1382,6 +1387,7 @@ void OGroupsSortingDialog::displayGroup(const uno::Reference<report::XGroup>& _x
     m_aGroupOnLst.SelectEntryPos(nPos);
     m_aGroupIntervalEd.SetText(String::CreateFromInt32(_xGroup->getGroupInterval()));
     m_aGroupIntervalEd.SaveValue();
+    m_aGroupIntervalEd.Enable( nPos != 0 );
     m_aKeepTogetherLst.SelectEntryPos(_xGroup->getKeepTogether());
     m_aOrderLst.SelectEntryPos(_xGroup->getSortAscending() ? 0 : 1);
 
