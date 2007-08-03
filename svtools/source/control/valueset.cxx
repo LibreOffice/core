@@ -4,9 +4,9 @@
  *
  *  $RCSfile: valueset.cxx,v $
  *
- *  $Revision: 1.32 $
+ *  $Revision: 1.33 $
  *
- *  last change: $Author: obo $ $Date: 2007-07-18 08:54:08 $
+ *  last change: $Author: hr $ $Date: 2007-08-03 13:32:02 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -119,22 +119,26 @@ void ValueSet::ImplInit()
 
 // -----------------------------------------------------------------------
 
-ValueSet::ValueSet( Window* pParent, WinBits nWinStyle ) :
+ValueSet::ValueSet( Window* pParent, WinBits nWinStyle, bool bDisableTransientChildren ) :
     Control( pParent, nWinStyle ),
     maVirDev( *this ),
     maColor( COL_TRANSPARENT )
 {
     ImplInit();
+    if( mpImpl )
+        mpImpl->mbIsTransientChildrenDisabled = bDisableTransientChildren;
 }
 
 // -----------------------------------------------------------------------
 
-ValueSet::ValueSet( Window* pParent, const ResId& rResId ) :
+ValueSet::ValueSet( Window* pParent, const ResId& rResId, bool bDisableTransientChildren ) :
     Control( pParent, rResId ),
     maVirDev( *this ),
     maColor( COL_TRANSPARENT )
 {
     ImplInit();
+    if( mpImpl )
+        mpImpl->mbIsTransientChildrenDisabled = bDisableTransientChildren;
 }
 
 // -----------------------------------------------------------------------
@@ -2257,8 +2261,17 @@ void ValueSet::SelectItem( USHORT nItemId )
                     if( pItemAcc )
                     {
                         ::com::sun::star::uno::Any aOldAny, aNewAny;
-                        aOldAny <<= mpImpl->mpItemList->GetObject( nPos )->GetAccessible( mpImpl->mbIsTransientChildrenDisabled );
-                        ImplFireAccessibleEvent (::com::sun::star::accessibility::AccessibleEventId::ACTIVE_DESCENDANT_CHANGED, aOldAny, aNewAny );
+                        if( !mpImpl->mbIsTransientChildrenDisabled)
+                        {
+                            aOldAny <<= ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >(
+                                static_cast< ::cppu::OWeakObject* >( pItemAcc ));
+                            ImplFireAccessibleEvent (::com::sun::star::accessibility::AccessibleEventId::ACTIVE_DESCENDANT_CHANGED, aOldAny, aNewAny );
+                        }
+                        else
+                        {
+                            aOldAny <<= ::com::sun::star::accessibility::AccessibleStateType::FOCUSED;
+                            pItemAcc->FireAccessibleEvent( ::com::sun::star::accessibility::AccessibleEventId::STATE_CHANGED, aOldAny, aNewAny );
+                        }
                     }
                 }
             }
@@ -2279,8 +2292,17 @@ void ValueSet::SelectItem( USHORT nItemId )
             if( pItemAcc )
             {
                 ::com::sun::star::uno::Any aOldAny, aNewAny;
-                aNewAny <<= pItem->GetAccessible( mpImpl->mbIsTransientChildrenDisabled );
-                ImplFireAccessibleEvent( ::com::sun::star::accessibility::AccessibleEventId::ACTIVE_DESCENDANT_CHANGED, aOldAny, aNewAny );
+                if( !mpImpl->mbIsTransientChildrenDisabled)
+                {
+                    aNewAny <<= ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >(
+                        static_cast< ::cppu::OWeakObject* >( pItemAcc ));
+                    ImplFireAccessibleEvent( ::com::sun::star::accessibility::AccessibleEventId::ACTIVE_DESCENDANT_CHANGED, aOldAny, aNewAny );
+                }
+                else
+                {
+                    aNewAny <<= ::com::sun::star::accessibility::AccessibleStateType::FOCUSED;
+                    pItemAcc->FireAccessibleEvent( ::com::sun::star::accessibility::AccessibleEventId::STATE_CHANGED, aOldAny, aNewAny );
+                }
             }
 
             // selection event
@@ -2749,13 +2771,6 @@ void ValueSet::HideDropPos()
         ImplDrawDropPos( FALSE );
         mbDropPos = FALSE;
     }
-}
-
-// -----------------------------------------------------------------------
-
-void ValueSet::DisableTransientChildren()
-{
-    mpImpl->mbIsTransientChildrenDisabled = true;
 }
 
 // -----------------------------------------------------------------------
