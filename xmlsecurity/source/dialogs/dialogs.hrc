@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dialogs.hrc,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: rt $ $Date: 2005-11-11 09:18:32 $
+ *  last change: $Author: hr $ $Date: 2007-08-03 13:55:00 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -182,6 +182,9 @@
 #define FI_CORRPRIVKEY                  14
 #define STR_CERTIFICATE_NOT_VALIDATED   15
 #define IMG_STATE_NOT_VALIDATED         16
+#define IMG_STATE_CERIFICATED_HC        17
+#define IMG_STATE_NOT_VALIDATED_HC      18
+#define IMG_KEY_HC                      19
 
 #define IMG1_WIDTH                      33
 #define IMG1_HEIGHT                     22
@@ -241,9 +244,11 @@
 #define FT_CERTSTATUS                   2
 #define ML_CERTSTATUS                   3
 #define IMG_CERT_SMALL                  4
-#define IMG_CERT_NOTVALIDATED_SMALL     5
-#define STR_PATH_CERT_OK                6
-#define STR_PATH_CERT_NOT_VALIDATED     7
+#define IMG_CERT_SMALL_HC               5
+#define IMG_CERT_NOTVALIDATED_SMALL     6
+#define IMG_CERT_NOTVALIDATED_SMALL_HC  7
+#define STR_PATH_CERT_OK                8
+#define STR_PATH_CERT_NOT_VALIDATED     9
 
 #define CVP_ROW_0                       RSC_SP_TBPG_INNERBORDER_TOP
 #define CVP_ROW_1                       (CVP_ROW_0+RSC_CD_FIXEDTEXT_HEIGHT+RSC_SP_CTRL_DESC_Y)
