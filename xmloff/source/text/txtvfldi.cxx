@@ -4,9 +4,9 @@
  *
  *  $RCSfile: txtvfldi.cxx,v $
  *
- *  $Revision: 1.32 $
+ *  $Revision: 1.33 $
  *
- *  last change: $Author: hr $ $Date: 2007-06-27 16:18:40 $
+ *  last change: $Author: hr $ $Date: 2007-08-03 12:56:03 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -681,12 +681,8 @@ XMLVariableGetFieldImportContext::XMLVariableGetFieldImportContext(
 void XMLVariableGetFieldImportContext::PrepareField(
         const Reference<XPropertySet> & xPropertySet)
 {
-    // set type; IsStringValue() defaults to false
-      Any aAny;
-    aAny <<= (IsStringValue() ? SetVariableType::STRING : SetVariableType::VAR);
-    xPropertySet->setPropertyValue(sPropertySubType, aAny);
-
     // set name
+      Any aAny;
     aAny <<= GetName();
     xPropertySet->setPropertyValue(sPropertyContent, aAny);
 
