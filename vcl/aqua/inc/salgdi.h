@@ -4,9 +4,9 @@
  *
  *  $RCSfile: salgdi.h,v $
  *
- *  $Revision: 1.31 $
+ *  $Revision: 1.32 $
  *
- *  last change: $Author: rt $ $Date: 2007-07-05 16:02:37 $
+ *  last change: $Author: hr $ $Date: 2007-08-03 13:58:36 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -77,11 +77,19 @@ public:
     virtual sal_IntPtr      GetFontId() const;
 
     ImplFontCharMap*        GetImplFontCharMap() const;
-    bool                    HasChar(sal_uInt32 cChar) const;
+    bool                    HasChar( sal_uInt32 cChar ) const;
+
+    void                    ReadOs2Table() const;
+    void                    ReadMacCmapEncoding() const;
+    bool                    HasCJKSupport() const;
 
 private:
     const ATSUFontID            mnFontId;
     mutable ImplFontCharMap*    mpCharMap;
+    mutable bool                mbOs2Read;       // true if OS2-table related info is valid
+    mutable bool                mbHasOs2Table;
+    mutable bool                mbCmapEncodingRead; // true if cmap encoding of Mac font is read
+    mutable bool                mbHasCJKSupport; // #i78970# CJK fonts need extra leading
 };
 
 
@@ -112,10 +120,7 @@ protected:
     CGMutablePathRef                        mrClippingPath;
     std::vector< CGRect >                   maClippingRects;
 
-    // Drawing colors
-
-    /// the RGB color space
-    CGColorSpaceRef                         mrRGBColorSpace;
+    /// Drawing colors
     /// pen color RGBA
     float                                   mpLineColor[4];
     /// brush color RGBA
