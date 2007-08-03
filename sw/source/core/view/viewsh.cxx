@@ -4,9 +4,9 @@
  *
  *  $RCSfile: viewsh.cxx,v $
  *
- *  $Revision: 1.74 $
+ *  $Revision: 1.75 $
  *
- *  last change: $Author: hr $ $Date: 2007-07-31 17:43:00 $
+ *  last change: $Author: hr $ $Date: 2007-08-03 13:40:32 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -147,6 +147,9 @@
 #ifndef _STATSTR_HRC
 #include <statstr.hrc>
 #endif
+#ifndef _COMCORE_HRC
+#include <comcore.hrc>
+#endif
 // OD 14.01.2003 #103492#
 #ifndef _PAGEPREVIEWLAYOUT_HXX
 #include <pagepreviewlayout.hxx>
@@ -164,6 +167,8 @@
 #include <vcl/virdev.hxx>
 #endif
 
+#include <vcl/svapp.hxx>
+
 // #i74769#
 #ifndef _SDRPAINTWINDOW_HXX
 #include <svx/sdrpaintwindow.hxx>
@@ -172,6 +177,8 @@
 BOOL ViewShell::bLstAct = FALSE;
 ShellResource *ViewShell::pShellRes = 0;
 Window *ViewShell::pCareWindow = 0;
+BitmapEx* ViewShell::pErrorBmp = NULL;
+BitmapEx* ViewShell::pReplaceBmp = NULL;
 
 FASTBOOL bInSizeNotify = FALSE;
 
@@ -2579,6 +2586,41 @@ sal_Int32 ViewShell::GetPageNumAndSetOffsetForPDF( OutputDevice& rOut, const SwR
     }
 
     return nRet;
+}
+// <--
+
+// --> PB 2007-05-30 #146850#
+const BitmapEx& ViewShell::GetReplacementBitmap( bool bIsErrorState )
+{
+    BitmapEx** ppRet;
+    USHORT nResId = 0, nHCResId = 0;
+    if( bIsErrorState )
+    {
+        ppRet = &pErrorBmp;
+        nResId = RID_GRAPHIC_ERRORBMP;
+        nHCResId = RID_GRAPHIC_ERRORBMP_HC;
+    }
+    else
+    {
+        ppRet = &pReplaceBmp;
+        nResId = RID_GRAPHIC_REPLACEBMP;
+        nHCResId = RID_GRAPHIC_REPLACEBMP_HC;
+    }
+
+    if( !*ppRet )
+    {
+        USHORT nBmpResId =
+            Application::GetSettings().GetStyleSettings().GetWindowColor().IsDark()
+                ? nHCResId : nResId;
+        *ppRet = new BitmapEx( SW_RES( nBmpResId ) );
+    }
+    return **ppRet;
+}
+
+void ViewShell::DeleteReplacementBitmaps()
+{
+    DELETEZ( pErrorBmp );
+    DELETEZ( pReplaceBmp );
 }
 // <--
 
