@@ -4,9 +4,9 @@
  *
  *  $RCSfile: acctable.hxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: hr $ $Date: 2006-08-14 15:47:22 $
+ *  last change: $Author: hr $ $Date: 2007-08-03 13:34:49 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -75,6 +75,16 @@ protected:
     virtual void GetStates( ::utl::AccessibleStateSetHelper& rStateSet );
 
     virtual ~SwAccessibleTable();
+
+    // --> OD 2007-06-27 #i77106#
+    inline void SetDesc( ::rtl::OUString sNewDesc )
+    {
+        sDesc = sNewDesc;
+    }
+
+    // --> OD 2007-06-28 #i77106#
+    virtual SwAccessibleTableData_Impl* CreateNewTableData();
+    // <--
 
     // force update of table data
     void UpdateTableData();
@@ -265,5 +275,66 @@ inline SwAccessibleTableData_Impl& SwAccessibleTable::GetTableData()
     return *mpTableData;
 }
 
-#endif
+// --> OD 2007-06-28 #i77106#
+// subclass to represent table column headers
+class SwAccessibleTableColHeaders : public SwAccessibleTable
+{
+protected:
 
+    virtual ~SwAccessibleTableColHeaders()
+    {}
+
+    virtual SwAccessibleTableData_Impl* CreateNewTableData();
+
+public:
+
+    SwAccessibleTableColHeaders( SwAccessibleMap *pMap, const SwTabFrm *pTabFrm );
+
+    virtual void Modify( SfxPoolItem *pOld, SfxPoolItem *pNew);
+
+    //=====  XInterface  ======================================================
+
+    virtual ::com::sun::star::uno::Any SAL_CALL queryInterface(
+        const ::com::sun::star::uno::Type& aType )
+        throw (::com::sun::star::uno::RuntimeException);
+
+    virtual void SAL_CALL acquire(  ) throw ()
+        { SwAccessibleContext::acquire(); };
+
+    virtual void SAL_CALL release(  ) throw ()
+        { SwAccessibleContext::release(); };
+
+    //=====  XAccessibleContext  ==============================================
+
+    /// Return the number of currently visible children.
+    virtual sal_Int32 SAL_CALL getAccessibleChildCount (void)
+        throw (::com::sun::star::uno::RuntimeException);
+
+    /// Return the specified child or NULL if index is invalid.
+    virtual ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible> SAL_CALL
+        getAccessibleChild (sal_Int32 nIndex)
+        throw (::com::sun::star::uno::RuntimeException,
+                ::com::sun::star::lang::IndexOutOfBoundsException);
+
+    //=====  XAccessibleTable  ================================================
+
+    virtual ::com::sun::star::uno::Reference<
+                ::com::sun::star::accessibility::XAccessibleTable >
+        SAL_CALL getAccessibleRowHeaders(  )
+        throw (::com::sun::star::uno::RuntimeException);
+    virtual ::com::sun::star::uno::Reference<
+                ::com::sun::star::accessibility::XAccessibleTable >
+        SAL_CALL getAccessibleColumnHeaders(  )
+        throw (::com::sun::star::uno::RuntimeException);
+
+    //=====  XServiceInfo  ====================================================
+
+    /** Returns an identifier for the implementation of this object.
+    */
+    virtual ::rtl::OUString SAL_CALL
+        getImplementationName (void)
+        throw (::com::sun::star::uno::RuntimeException);
+
+};
+// <--
+#endif
