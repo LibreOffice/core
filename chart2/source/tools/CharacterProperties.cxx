@@ -4,9 +4,9 @@
  *
  *  $RCSfile: CharacterProperties.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2007-07-25 08:55:28 $
+ *  last change: $Author: hr $ $Date: 2007-08-03 12:36:13 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -658,7 +658,7 @@ awt::FontDescriptor CharacterProperties::createFontDescriptorFromPropertySet(
     aValues[ i++ ]  >>= aResult.Name;
     aValues[ i++ ]  >>= aResult.Pitch;
     aValues[ i++ ]  >>= aResult.StyleName;
-    float fCharHeight;
+    float fCharHeight = 0;
     aValues[ i++ ]  >>= fCharHeight;
     aResult.Height = static_cast< sal_Int16 >( fCharHeight );
     aValues[ i++ ]  >>= aResult.Slant;
