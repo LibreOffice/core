@@ -4,9 +4,9 @@
  *
  *  $RCSfile: browserline.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: obo $ $Date: 2007-06-12 05:37:26 $
+ *  last change: $Author: hr $ $Date: 2007-08-03 13:52:21 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -44,17 +44,19 @@
 #ifndef _COM_SUN_STAR_INSPECTION_PROPERTYLINEELEMENT_HPP_
 #include <com/sun/star/inspection/PropertyLineElement.hpp>
 #endif
+#ifndef _COM_SUN_STAR_GRAPHIC_XGRAPHICPROVIDER_HPP_
+#include <com/sun/star/graphic/XGraphicProvider.hpp>
+#endif
 /** === end UNO includes === **/
 
-#ifndef _SV_SVAPP_HXX
 #include <vcl/svapp.hxx>
-#endif
-#ifndef _TOOLS_DEBUG_HXX
 #include <tools/debug.hxx>
-#endif
-#ifndef _TOOLKIT_HELPER_VCLUNOHELPER_HXX_
+#include <tools/diagnose_ex.h>
+#include <tools/urlobj.hxx>
 #include <toolkit/helper/vclunohelper.hxx>
-#endif
+
+#include <comphelper/processfactory.hxx>
+#include <comphelper/componentcontext.hxx>
 
 //............................................................................
 namespace pcr
@@ -67,6 +69,10 @@ namespace pcr
     using ::com::sun::star::inspection::XPropertyControlContext;
     using ::com::sun::star::uno::UNO_QUERY_THROW;
     using ::com::sun::star::uno::Exception;
+    using ::com::sun::star::graphic::XGraphicProvider;
+    using ::com::sun::star::uno::Sequence;
+    using ::com::sun::star::beans::PropertyValue;
+    using ::com::sun::star::graphic::XGraphic;
     /** === end UNO using === **/
 
     namespace PropertyLineElement = ::com::sun::star::inspection::PropertyLineElement;
@@ -444,7 +450,7 @@ namespace pcr
     }
 
     //------------------------------------------------------------------
-    void OBrowserLine::ShowBrowseButton( const Image& _rImage, sal_Bool _bPrimary )
+    PushButton& OBrowserLine::impl_ensureButton( bool _bPrimary )
     {
         PushButton*& rpButton = _bPrimary ? m_pBrowseButton : m_pAdditionalBrowseButton;
 
@@ -453,15 +459,79 @@ namespace pcr
             rpButton = new PushButton( m_pTheParent, WB_NOPOINTERFOCUS );
             rpButton->SetGetFocusHdl( LINK( this, OBrowserLine, OnButtonFocus ) );
             rpButton->SetClickHdl( LINK( this, OBrowserLine, OnButtonClicked ) );
-            rpButton->SetData( (void*)this );
-            if ( !_rImage )
-                rpButton->SetText( String::CreateFromAscii( "..." ) );
-            else
-                rpButton->SetModeImage( _rImage );
+            rpButton->SetText( String::CreateFromAscii( "..." ) );
         }
+
         rpButton->Show();
 
         impl_layoutComponents();
+
+        return *rpButton;
+    }
+
+    //------------------------------------------------------------------
+    void OBrowserLine::impl_getImagesFromURL_nothrow( const ::rtl::OUString& _rImageURL, Image& _out_rImage, Image& _out_rHCImage )
+    {
+        try
+        {
+            ::comphelper::ComponentContext aContext( ::comphelper::getProcessServiceFactory() );
+            Reference< XGraphicProvider > xGraphicProvider( aContext.createComponent( "com.sun.star.graphic.GraphicProvider" ), UNO_QUERY_THROW );
+
+            Sequence< PropertyValue > aMediaProperties(1);
+            aMediaProperties[0].Name = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "URL" ) );
+            aMediaProperties[0].Value <<= _rImageURL;
+
+            Reference< XGraphic > xGraphic( xGraphicProvider->queryGraphic( aMediaProperties ), UNO_QUERY_THROW );
+            _out_rImage = _out_rHCImage = Image( xGraphic );
+
+            // see if we find an HC version beside the normal graphic
+            INetURLObject aURL( _rImageURL );
+            ::rtl::OUString sBaseName( aURL.getBase() );
+            aURL.setBase( sBaseName + ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "_hc" ) ) );
+            ::rtl::OUString sHCImageURL( aURL.GetMainURL( INetURLObject::NO_DECODE ) );
+
+            Reference< XGraphic > xHCGraphic;
+            try
+            {
+                aMediaProperties[0].Value <<= sHCImageURL;
+                xHCGraphic = xGraphicProvider->queryGraphic( aMediaProperties );
+            }
+            catch( const Exception& ) { }
+
+            if ( xHCGraphic.is() )
+                _out_rHCImage = Image( xHCGraphic );
+        }
+        catch( const Exception& )
+        {
+            DBG_UNHANDLED_EXCEPTION();
+        }
+    }
+
+    //------------------------------------------------------------------
+    void OBrowserLine::ShowBrowseButton( const ::rtl::OUString& _rImageURL, sal_Bool _bPrimary )
+    {
+        PushButton& rButton( impl_ensureButton( _bPrimary ) );
+
+        OSL_PRECOND( _rImageURL.getLength(), "OBrowserLine::ShowBrowseButton: use the other version if you don't have an image!" );
+        Image aImage, aHCImage;
+        impl_getImagesFromURL_nothrow( _rImageURL, aImage, aHCImage );
+
+        rButton.SetModeImage( aImage, BMP_COLOR_NORMAL );
+        rButton.SetModeImage( aHCImage, BMP_COLOR_HIGHCONTRAST );
+    }
+
+    //------------------------------------------------------------------
+    void OBrowserLine::ShowBrowseButton( const Image& _rImage, sal_Bool _bPrimary )
+    {
+        PushButton& rButton( impl_ensureButton( _bPrimary ) );
+        if ( !!_rImage )
+            rButton.SetModeImage( _rImage );
+    }
+
+    //------------------------------------------------------------------
+    void OBrowserLine::ShowBrowseButton( sal_Bool _bPrimary )
+    {
+        impl_ensureButton( _bPrimary );
     }
 
     //------------------------------------------------------------------
