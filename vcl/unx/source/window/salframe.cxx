@@ -4,9 +4,9 @@
  *
  *  $RCSfile: salframe.cxx,v $
  *
- *  $Revision: 1.216 $
+ *  $Revision: 1.217 $
  *
- *  last change: $Author: hr $ $Date: 2007-06-27 20:52:25 $
+ *  last change: $Author: hr $ $Date: 2007-08-03 12:30:50 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -3442,6 +3442,37 @@ long X11SalFrame::HandleSizeEvent( XConfigureEvent *pEvent )
     {
         if( maGeometry.nX != pEvent->x || maGeometry.nY != pEvent->y )
         {
+#ifdef MACOSX
+            // #i68019#: Apple X11 doesn't draw offscreen...
+            // Better would be to test if the X server we are running on is Apple X11, but ...
+
+            Size aScreenSize = GetDisplay()->GetScreenSize( m_nScreen );
+            unsigned int nScreenWidth  = aScreenSize.Width();
+            unsigned int nScreenHeight = aScreenSize.Height();
+
+            // Repaint the window if it was possible to draw outside of the screen (in theory)
+            // 1. the window was below the screen and the window was moved up
+            // 2. the window was above the screen and the window was moved down
+            // 3. the window was out of the screen on the right side and the window was moved left
+            // 4. the window's left part was out of the screen and the window was moved right
+            if ( ( maGeometry.nY+maGeometry.nHeight > nScreenHeight &&
+                   pEvent->y < maGeometry.nY ) ||
+                 ( maGeometry.nY < 0 && pEvent->y > maGeometry.nY ) ||
+                 ( maGeometry.nX+maGeometry.nWidth  > nScreenWidth  &&
+                   pEvent->x < maGeometry.nX ) ||
+                 ( maGeometry.nX < 0 && pEvent->x > maGeometry.nX) )
+                {
+                    XEvent aEvent;
+                    aEvent.xexpose.type     = Expose;
+                    aEvent.xexpose.display  = pDisplay_->GetDisplay();
+                    aEvent.xexpose.x        = 0;
+                    aEvent.xexpose.y        = 0;
+                    aEvent.xexpose.width    = maGeometry.nWidth;
+                    aEvent.xexpose.height   = maGeometry.nHeight;
+                    aEvent.xexpose.count    = 0;
+                    HandleExposeEvent(&aEvent);
+                }
+#endif
             maGeometry.nX = pEvent->x;
             maGeometry.nY = pEvent->y;
             CallCallback( SALEVENT_MOVE, NULL );
