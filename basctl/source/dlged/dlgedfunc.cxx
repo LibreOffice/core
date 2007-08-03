@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dlgedfunc.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: vg $ $Date: 2007-01-16 16:35:04 $
+ *  last change: $Author: hr $ $Date: 2007-08-03 09:59:31 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -137,9 +137,6 @@ DlgEdFunc::~DlgEdFunc()
 
 BOOL DlgEdFunc::MouseButtonDown( const MouseEvent& )
 {
-#ifdef MAC
-    pParent->GetWindow()->GrabFocus();
-#endif
     return TRUE;
 }
 
@@ -418,9 +415,6 @@ BOOL DlgEdFuncInsert::MouseButtonDown( const MouseEvent& rMEvt )
     USHORT nHitLog = USHORT ( pWindow->PixelToLogic(Size(3,0)).Width() );
     USHORT nDrgLog = USHORT ( pWindow->PixelToLogic(Size(3,0)).Width() );
 
-#ifdef MAC
-    pWindow->GrabFocus();
-#endif
     pWindow->CaptureMouse();
 
     if ( rMEvt.IsLeft() && rMEvt.GetClicks() == 1 )
@@ -535,9 +529,6 @@ BOOL DlgEdFuncSelect::MouseButtonDown( const MouseEvent& rMEvt )
 
     if ( rMEvt.IsLeft() && rMEvt.GetClicks() == 1 )
     {
-#ifdef MAC
-        pWindow->GrabFocus();
-#endif
         SdrHdl* pHdl = pView->PickHandle(aMDPos);
         SdrObject* pObj;
         SdrPageView* pPV;
