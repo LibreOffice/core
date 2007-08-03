@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.68 $
+#   $Revision: 1.69 $
 #
-#   last change: $Author: obo $ $Date: 2007-06-11 13:59:00 $
+#   last change: $Author: hr $ $Date: 2007-08-03 11:23:21 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -69,7 +69,7 @@ ENABLE_DOWNLOADSETS=TRUE
 .IF "$(OS)"=="LINUX"
 DONT_REMOVE_PACKAGE:=TRUE
 .EXPORT: DONT_REMOVE_PACKAGE
-.ENDIF          # "$(OS)"=="LINUX"	
+.ENDIF          # "$(OS)"=="LINUX"
 
 .INCLUDE .IGNORE: $(SRC_ROOT)$/cwsname.mk
 
@@ -167,12 +167,14 @@ MSIURETEMPLATEDIR=$(MSIURETEMPLATESOURCE)
 .ELSE			# "$(BUILD_SPECIAL)"!=""
 NOLOGOSPLASH:=$(BIN)$/intro.zip
 DEVNOLOGOSPLASH:=$(BIN)$/dev$/intro.zip
+BROFFICENOLOGOSPLASH:=$(BIN)$/broffice$/intro.zip
+BROFFICEDEVNOLOGOSPLASH:=$(BIN)$/broffice_dev$/intro.zip
 MSIOFFICETEMPLATEDIR=$(MISC)$/openoffice$/msi_templates
 MSILANGPACKTEMPLATEDIR=$(MISC)$/ooolangpack$/msi_templates
 MSIURETEMPLATEDIR=$(MISC)$/ure$/msi_templates
 MSISDKOOTEMPLATEDIR=$(MISC)$/sdkoo$/msi_templates
 
-ADDDEPS=$(NOLOGOSPLASH) $(DEVNOLOGOSPLASH)
+ADDDEPS=$(NOLOGOSPLASH) $(DEVNOLOGOSPLASH) $(BROFFICENOLOGOSPLASH) $(BROFFICEDEVNOLOGOSPLASH)
 .IF "$(OS)" == "WNT"
 ADDDEPS+=hack_msitemplates
 .ENDIF
@@ -232,7 +234,7 @@ openoffice_% :
     cd $(subst,$(@:s/_/ /:1)_,$(OUT)$/OpenOffice$/install$/ $(@:b)) && hdiutil makehybrid -hfs -hfs-openfolder staging staging \
     -hfs-volume-name OpenOffice.org -ov -o tmp && hdiutil convert -ov -format UDZO tmp.dmg \
     -o $(subst,$(@:s/_/ /:1),OpenOffice.org-$(shell sed -n '/^OpenOffice$$/,/^}$$/ s/.*PACKAGEVERSION //p' openoffice.lst) $(@:b)) && $(RM:s/+//) tmp.dmg
-    
+
 .ENDIF                  # "$(OS)"!="MACOSX" || "$(PKGFORMAT)"!=""
 
 .IF "$(PKGFORMAT)"!=""
@@ -302,7 +304,7 @@ broffice_% :
     +cd $(subst,$(@:s/_/ /:1)_,$(OUT)$/BrOffice$/install$/ $(@:b)) && hdiutil makehybrid -hfs -hfs-openfolder staging staging \
     -hfs-volume-name BrOffice.org -ov -o tmp && hdiutil convert -ov -format UDZO tmp.dmg \
     -o $(subst,$(@:s/_/ /:1),BrOffice.org-$(shell sed -n '/^BrOffice$$/,/^}$$/ s/.*PACKAGEVERSION //p' openoffice.lst) $(@:b)) && $(RM) tmp.dmg
-    
+
 .ENDIF                  # "$(OS)"!="MACOSX" || "$(PKGFORMAT)"!=""
 
 .IF "$(PKGFORMAT)"!=""
@@ -467,9 +469,9 @@ $(MISC)$/ure$/services.rdb .ERRREMOVE:
 
 .IF "$(LOCALPYFILES)"!=""
 .IF "$(PKGFORMAT)"==""
-$(foreach,i,$(alllangiso) openoffice_$i openofficewithjre_$i openofficedev_$i openofficedevarchive_$i ooolanguagepack_$i sdkoo_$i) updatepack : $(LOCALPYFILES) $(BIN)$/cp1251.py $(BIN)$/iso8859_1.py
+$(foreach,i,$(alllangiso) openoffice_$i openofficewithjre_$i openofficedev_$i broffice_$i brofficewithjre_$i brofficedev_$i openofficedevarchive_$i ooolanguagepack_$i sdkoo_$i) updatepack : $(LOCALPYFILES) $(BIN)$/cp1251.py $(BIN)$/iso8859_1.py
 .ELSE			# "$(PKGFORMAT)"==""
-$(foreach,i,$(alllangiso) openoffice_$i{$(PKGFORMAT:^".")} openofficewithjre_$i{$(PKGFORMAT:^".")} openofficedev_$i{$(PKGFORMAT:^".")} openofficedevarchive_$i ooolanguagepack_$i{$(PKGFORMAT:^".")} sdkoo_$i{$(PKGFORMAT:^".")}) updatepack : $(LOCALPYFILES) $(BIN)$/cp1251.py $(BIN)$/iso8859_1.py
+$(foreach,i,$(alllangiso) openoffice_$i{$(PKGFORMAT:^".")} openofficewithjre_$i{$(PKGFORMAT:^".")} openofficedev_$i{$(PKGFORMAT:^".")} broffice_$i{$(PKGFORMAT:^".")} brofficewithjre_$i{$(PKGFORMAT:^".")} brofficedev_$i{$(PKGFORMAT:^".")} openofficedevarchive_$i ooolanguagepack_$i{$(PKGFORMAT:^".")} sdkoo_$i{$(PKGFORMAT:^".")}) updatepack : $(LOCALPYFILES) $(BIN)$/cp1251.py $(BIN)$/iso8859_1.py
 .ENDIF			# "$(PKGFORMAT)"==""
 .ENDIF			# "$(LOCALPYFILES)"!=""
 
@@ -482,9 +484,9 @@ $(BIN)$/cp1251.py : $(SOLARLIBDIR)$/python$/encodings$/cp1251.py
 $(BIN)$/iso8859_1.py : $(SOLARLIBDIR)$/python$/encodings$/iso8859_1.py
     @$(COPY) $< $@
 .ELSE
-$(BIN)$/cp1251.py : 
+$(BIN)$/cp1251.py :
     @echo "Using system python - nothing more to do here"
-$(BIN)$/iso8859_1.py : 
+$(BIN)$/iso8859_1.py :
     @echo "Using system python - nothing more to do here"
 .ENDIF
 
@@ -492,6 +494,14 @@ $(BIN)$/intro.zip : $(SOLARCOMMONPCKDIR)$/openoffice_nologo$/intro.zip
     $(COPY) $< $@
 
 $(BIN)$/dev$/intro.zip : $(SOLARCOMMONPCKDIR)$/openoffice_dev_nologo$/intro.zip
+    @-$(MKDIR) $(@:d)
+    $(COPY) $< $@
+
+$(BIN)$/broffice_dev$/intro.zip : $(SOLARCOMMONPCKDIR)$/broffice_dev_nologo$/intro.zip
+    @-$(MKDIR) $(@:d)
+    $(COPY) $< $@
+
+$(BIN)$/broffice$/intro.zip : $(SOLARCOMMONPCKDIR)$/broffice_nologo$/intro.zip
     @-$(MKDIR) $(@:d)
     $(COPY) $< $@
 
