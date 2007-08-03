@@ -6,9 +6,9 @@
  *
  *  $RCSfile: ReportSection.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: hr $ $Date: 2007-08-02 14:37:14 $
+ *  last change: $Author: hr $ $Date: 2007-08-03 12:44:40 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -122,6 +122,8 @@ namespace rptui
         */
         void Copy(::com::sun::star::uno::Sequence< ::com::sun::star::beans::NamedValue >& _rAllreadyCopiedObjects);
 
+        void Copy(::com::sun::star::uno::Sequence< ::com::sun::star::beans::NamedValue >& _rAllreadyCopiedObjects,bool _bEraseAnddNoClone);
+
         /** paste a new control in this section
             @param  _aAllreadyCopiedObjects objects to paste into the section. Only objects are pasted where the name is equal to the section name.
             @param  _bForce If set to <TRUE/> than the objects will be copied into this section. The name is not compared in this case.
@@ -199,11 +201,7 @@ namespace rptui
         * \param _pObj
         */
         void createDefault(const ::rtl::OUString& _sType,SdrObject* _pObj);
-
-        /** calls on the section BrkAction
-        *
-        */
-        void breakAction();
+        void stopScrollTimer();
     };
 //==================================================================
 }   //rptui
