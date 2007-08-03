@@ -4,9 +4,9 @@
  *
  *  $RCSfile: onefuncstarter.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 03:49:28 $
+ *  last change: $Author: hr $ $Date: 2007-08-03 10:17:13 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -147,6 +147,8 @@ int main( int argc, char* argv[] )
 int _cdecl main( int argc, char* argv[] )
 #endif
 {
+    (void) argc;
+    (void) argv;
 //  test_link_at_compiletime();
     test_link_at_runtime();
     return 0;
