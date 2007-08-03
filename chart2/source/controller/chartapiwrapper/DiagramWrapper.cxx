@@ -4,9 +4,9 @@
  *
  *  $RCSfile: DiagramWrapper.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: rt $ $Date: 2007-07-25 08:26:58 $
+ *  last change: $Author: hr $ $Date: 2007-08-03 12:31:55 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1233,7 +1233,7 @@ bool WrappedStackingProperty::detectInnerValue( StackMode& eStackMode ) const
 void WrappedStackingProperty::setPropertyValue( const Any& rOuterValue, const Reference< beans::XPropertySet >& /*xInnerPropertySet*/ ) const
                 throw (beans::UnknownPropertyException, beans::PropertyVetoException, lang::IllegalArgumentException, lang::WrappedTargetException, uno::RuntimeException)
 {
-    sal_Bool bNewValue;
+    sal_Bool bNewValue = false;
     if( ! (rOuterValue >>= bNewValue) )
         throw lang::IllegalArgumentException( C2U("Stacking Properties require boolean values"), 0, 0 );
 
@@ -1321,7 +1321,7 @@ WrappedDim3DProperty::~WrappedDim3DProperty()
 void WrappedDim3DProperty::setPropertyValue( const Any& rOuterValue, const Reference< beans::XPropertySet >& /*xInnerPropertySet*/ ) const
                 throw (beans::UnknownPropertyException, beans::PropertyVetoException, lang::IllegalArgumentException, lang::WrappedTargetException, uno::RuntimeException)
 {
-    sal_Bool bNew3D;
+    sal_Bool bNew3D = false;
     if( ! (rOuterValue >>= bNew3D) )
         throw lang::IllegalArgumentException( C2U("Property Dim3D requires boolean value"), 0, 0 );
 
@@ -1396,7 +1396,7 @@ WrappedVerticalProperty::~WrappedVerticalProperty()
 void WrappedVerticalProperty::setPropertyValue( const Any& rOuterValue, const Reference< beans::XPropertySet >& /*xInnerPropertySet*/ ) const
                 throw (beans::UnknownPropertyException, beans::PropertyVetoException, lang::IllegalArgumentException, lang::WrappedTargetException, uno::RuntimeException)
 {
-    sal_Bool bNewVertical;
+    sal_Bool bNewVertical = false;
     if( ! (rOuterValue >>= bNewVertical) )
         throw lang::IllegalArgumentException( C2U("Property Dim3D requires boolean value"), 0, 0 );
 
@@ -1536,7 +1536,7 @@ void WrappedNumberOfLinesProperty::setPropertyValue( const Any& rOuterValue, con
                 xTemplate.set( aTemplateAndService.first );
                 try
                 {
-                    sal_Int32 nOldValue;
+                    sal_Int32 nOldValue = 0;
                     uno::Reference< beans::XPropertySet > xProp( xTemplate, uno::UNO_QUERY );
                     xProp->getPropertyValue( m_aOuterName ) >>= nOldValue;
                     if( nOldValue == nNewValue )

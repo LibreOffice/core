@@ -4,9 +4,9 @@
  *
  *  $RCSfile: DataSeriesPointWrapper.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: rt $ $Date: 2007-07-26 08:06:45 $
+ *  last change: $Author: hr $ $Date: 2007-08-03 12:31:40 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -293,7 +293,7 @@ WrappedSegmentOffsetProperty::~WrappedSegmentOffsetProperty()
 Any WrappedSegmentOffsetProperty::convertInnerToOuterValue( const Any& rInnerValue ) const
 {
     // convert new double offset to former integer segment-offset
-    double fOffset;
+    double fOffset = 0;
     Any aResult( rInnerValue );
 
     if( rInnerValue >>= fOffset )
@@ -305,7 +305,7 @@ Any WrappedSegmentOffsetProperty::convertInnerToOuterValue( const Any& rInnerVal
 Any WrappedSegmentOffsetProperty::convertOuterToInnerValue( const Any& rOuterValue ) const
 {
     // convert former integer segment-offset to new double offset
-    sal_Int32 nOffset;
+    sal_Int32 nOffset = 0;
     Any aResult( rOuterValue );
 
     if( rOuterValue >>= nOffset )
