@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xmlbahdl.cxx,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: hr $ $Date: 2007-06-27 15:46:33 $
+ *  last change: $Author: hr $ $Date: 2007-08-03 12:54:42 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -917,5 +917,48 @@ sal_Bool XMLNumberWithoutZeroPropHdl::exportXML( OUString& rStrExpValue, const A
     }
 
     return bRet;
+}
+
+///////////////////////////////////////////////////////////////////////////////
+// class XMLNumberWithAutoInsteadZeroPropHdl
+//
+
+XMLNumberWithAutoInsteadZeroPropHdl::~XMLNumberWithAutoInsteadZeroPropHdl()
+{
+}
+
+sal_Bool XMLNumberWithAutoInsteadZeroPropHdl::importXML(
+    const OUString& rStrImpValue,
+    Any& rValue,
+    const SvXMLUnitConverter& ) const
+{
+    sal_Int32 nValue = 0;
+    sal_Bool bRet = SvXMLUnitConverter::convertNumber( nValue, rStrImpValue );
+    if( bRet )
+        lcl_xmloff_setAny( rValue, nValue, 2 );
+    else if( rStrImpValue == GetXMLToken( XML_AUTO ) )
+    {
+        rValue <<= (sal_Int16)nValue;
+        bRet = sal_True;
+    }
+    return bRet;
+}
+
+sal_Bool XMLNumberWithAutoInsteadZeroPropHdl::exportXML( OUString& rStrExpValue, const Any& rValue, const SvXMLUnitConverter& ) const
+{
+
+    sal_Int32 nValue = 0;
+    lcl_xmloff_getAny( rValue, nValue, 2 );
+
+    if( 0 == nValue )
+        rStrExpValue = GetXMLToken( XML_AUTO );
+    else
+    {
+        OUStringBuffer aBuffer;
+        SvXMLUnitConverter::convertNumber( aBuffer, nValue );
+        rStrExpValue = aBuffer.makeStringAndClear();
+    }
+
+    return sal_True;
 }
 
