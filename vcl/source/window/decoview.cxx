@@ -4,9 +4,9 @@
  *
  *  $RCSfile: decoview.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: hr $ $Date: 2007-06-27 20:29:09 $
+ *  last change: $Author: hr $ $Date: 2007-08-03 14:08:13 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -896,7 +896,15 @@ static void ImplDrawFrame( OutputDevice* pDev, Rectangle& rRect,
 
     if ( nStyle & FRAME_DRAW_NODRAW )
     {
-        if ( nStyle & FRAME_DRAW_MONO )
+        ImplControlValue aControlValue((bMenuStyle) ? nStyle | FRAME_DRAW_MENU : nStyle);
+        Region aBound, aContent;
+        Region aNatRgn( rRect );
+        if(pWin && pWin->GetNativeControlRegion(CTRL_FRAME, PART_BORDER,
+            aNatRgn, 0, aControlValue, rtl::OUString(), aBound, aContent) )
+        {
+            rRect = aContent.GetBoundRect();
+        }
+        else if ( nStyle & FRAME_DRAW_MONO )
             ImplDrawDPILineRect( pDev, rRect, NULL, bRound );
         else
         {
@@ -928,6 +936,21 @@ static void ImplDrawFrame( OutputDevice* pDev, Rectangle& rRect,
     }
     else
     {
+        ImplControlValue aControlValue((bMenuStyle) ? nStyle | FRAME_DRAW_MENU : nStyle);
+        Region aBound, aContent;
+        Region aNatRgn( rRect );
+        if(pWin && pWin->IsNativeControlSupported(CTRL_FRAME, PART_BORDER) &&
+            pWin->GetNativeControlRegion(CTRL_FRAME, PART_BORDER,
+                aNatRgn, 0, aControlValue, rtl::OUString(), aBound, aContent) )
+        {
+            if( pWin->DrawNativeControl( CTRL_FRAME, PART_BORDER, aContent, CTRL_STATE_ENABLED,
+                         aControlValue, rtl::OUString()) )
+            {
+                rRect = aContent.GetBoundRect();
+                return;
+            }
+        }
+
         if ( nStyle & FRAME_DRAW_MONO )
         {
             Color aColor = bRound ? rStyleSettings.GetShadowColor()
