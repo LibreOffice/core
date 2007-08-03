@@ -4,9 +4,9 @@
  *
  *  $RCSfile: docsh.cxx,v $
  *
- *  $Revision: 1.91 $
+ *  $Revision: 1.92 $
  *
- *  last change: $Author: hr $ $Date: 2007-06-26 16:07:45 $
+ *  last change: $Author: hr $ $Date: 2007-08-03 13:08:10 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1265,6 +1265,7 @@ BOOL __EXPORT ScDocShell::Save()
     ScChartListenerCollection* pCharts = aDocument.GetChartListenerCollection();
     if (pCharts)
         pCharts->UpdateDirtyCharts();                   // Charts, die noch upgedated werden muessen
+    aDocument.StopTemporaryChartLock();
     if (pAutoStyleList)
         pAutoStyleList->ExecuteAllNow();                // Vorlagen-Timeouts jetzt ausfuehren
     if (GetCreateMode()== SFX_CREATE_MODE_STANDARD)
@@ -1289,6 +1290,7 @@ BOOL __EXPORT ScDocShell::SaveAs( SfxMedium& rMedium )
     ScChartListenerCollection* pCharts = aDocument.GetChartListenerCollection();
     if (pCharts)
         pCharts->UpdateDirtyCharts();                   // Charts, die noch upgedated werden muessen
+    aDocument.StopTemporaryChartLock();
     if (pAutoStyleList)
         pAutoStyleList->ExecuteAllNow();                // Vorlagen-Timeouts jetzt ausfuehren
     if (GetCreateMode()== SFX_CREATE_MODE_STANDARD)
