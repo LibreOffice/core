@@ -4,9 +4,9 @@
  *
  *  $RCSfile: StartMarker.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2007-07-09 11:56:33 $
+ *  last change: $Author: hr $ $Date: 2007-08-03 10:04:34 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -148,7 +148,8 @@ void OStartMarker::Paint( const Rectangle& rRect )
     SetClipRegion(Region(Rectangle(Point(),Size( nSize,aSize.Height()))));
     aSize.Width() += m_nCornerSize;
 
-    Rectangle aWholeRect(Point(),aSize);
+    Point aGcc3WorkaroundTemporary;
+    Rectangle aWholeRect(aGcc3WorkaroundTemporary,aSize);
     {
         const ColorChanger aColors( this, m_nTextBoundaries, m_nColor );
 
