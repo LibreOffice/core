@@ -4,9 +4,9 @@
  *
  *  $RCSfile: unotest.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 03:51:19 $
+ *  last change: $Author: hr $ $Date: 2007-08-03 10:17:52 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -117,6 +117,7 @@ namespace unotest
 
 void RegisterAdditionalFunctions(FktRegFuncPtr _pFunc)
 {
+    (void) _pFunc;
     uno::Reference<lang::XMultiServiceFactory> xMS;
 
     try
