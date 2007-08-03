@@ -4,9 +4,9 @@
  *
  *  $RCSfile: classids.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2007-07-06 10:18:05 $
+ *  last change: $Author: hr $ $Date: 2007-08-03 10:24:46 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -572,6 +572,6 @@
 
 #define SO3_RPT_CLASSID_90 \
     0xd7896d52, 0xb7af, 0x4820, \
-    0x9d, 0xfe, 0xd4, 0x4, 0xd0, 0x15, 0x96, 0xf
+    0x9d, 0xfe, 0xd4, 0x04, 0xd0, 0x15, 0x96, 0x0f
 
 #endif
