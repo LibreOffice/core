@@ -4,9 +4,9 @@
  *
  *  $RCSfile: sbintern.hxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: hr $ $Date: 2007-06-27 14:22:17 $
+ *  last change: $Author: hr $ $Date: 2007-08-03 09:55:43 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -125,6 +125,7 @@ struct SbiGlobals
     ::utl::TransliterationWrapper* pTransliterationWrapper;    // For StrComp
     BOOL            bBlockCompilerError;
     BasicManager*   pAppBasMgr;
+    StarBASIC*      pMSOMacroRuntimLib; // Lib containing MSO Macro Runtime API entry symbols
 
     SbiGlobals();
     ~SbiGlobals();
