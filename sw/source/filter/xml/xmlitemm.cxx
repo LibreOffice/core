@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xmlitemm.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: rt $ $Date: 2007-04-18 07:52:31 $
+ *  last change: $Author: hr $ $Date: 2007-08-03 12:58:58 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -212,7 +212,7 @@ SvXMLItemMapEntry aXMLTableRowItemMap[] =
     // RES_EDIT_IN_READONLY
     // not required
     // RES_LAYOUT_SPLIT
-    M_E( STYLE, KEEP_TOGETHER, RES_ROW_SPLIT, 0 ),
+    M_E_SE( STYLE, KEEP_TOGETHER, RES_ROW_SPLIT, 0 ),
     M_E_SE( FO, KEEP_TOGETHER, RES_ROW_SPLIT, 0 ),
     // RES_CHAIN
     // not required
