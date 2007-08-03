@@ -4,9 +4,9 @@
  *
  *  $RCSfile: formlocalid.hrc,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: vg $ $Date: 2006-03-14 11:24:17 $
+ *  last change: $Author: hr $ $Date: 2007-08-03 13:52:56 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -39,7 +39,9 @@
 #define TABPAGE_CHARACTERS      1
 #define TABPAGE_CHARACTERS_EXT  2
 
-#define IMG_PLUS    1
-#define IMG_MINUS   2
+#define IMG_PLUS        1
+#define IMG_MINUS       2
+#define IMG_PLUS_HC     3
+#define IMG_MINUS_HC    4
 
 #endif // _EXTENSIONS_PROPCTRLR_FORMLOCALID_HRC_
