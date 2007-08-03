@@ -4,9 +4,9 @@
  *
  *  $RCSfile: sequentialtimecontainer.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: obo $ $Date: 2007-07-17 14:50:28 $
+ *  last change: $Author: hr $ $Date: 2007-08-03 11:54:59 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -119,11 +119,13 @@ bool SequentialTimeContainer::resolveChild(
 
         // event that will deactivate the resolved/running child:
         mpCurrentSkipEvent = makeEvent(
-            boost::bind( &SequentialTimeContainer::skipEffect, this,
+            boost::bind( &SequentialTimeContainer::skipEffect,
+                         boost::dynamic_pointer_cast<SequentialTimeContainer>( getSelf() ),
                          pChildNode ) );
         // event that will reresolve the resolved/activated child:
         mpCurrentRewindEvent = makeEvent(
-            boost::bind( &SequentialTimeContainer::rewindEffect, this,
+            boost::bind( &SequentialTimeContainer::rewindEffect,
+                         boost::dynamic_pointer_cast<SequentialTimeContainer>( getSelf() ),
                          pChildNode ) );
 
         // deactivate child node when skip event occurs:
