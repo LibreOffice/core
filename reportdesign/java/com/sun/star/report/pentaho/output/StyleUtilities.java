@@ -4,9 +4,9 @@
  *
  *  $RCSfile: StyleUtilities.java,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2007-07-09 11:56:07 $
+ *  last change: $Author: hr $ $Date: 2007-08-03 09:50:59 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -510,4 +510,53 @@ public class StyleUtilities
           "Deriving the style failed. Clone error: ", e);
     }
   }
+
+  public static String queryStyle (final OfficeStylesCollection predefCollection,
+                                   final String styleFamily,
+                                   final String styleName,
+                                   final String sectionName,
+                                   final String propertyNamespace,
+                                   final String propertyName)
+  {
+    return queryStyle(predefCollection, styleFamily,
+        styleName, sectionName, propertyNamespace, propertyName, new HashSet());
+  }
+
+  private static String queryStyle (final OfficeStylesCollection predefCollection,
+                                   final String styleFamily,
+                                   final String styleName,
+                                   final String sectionName,
+                                   final String propertyNamespace,
+                                   final String propertyName,
+                                   final HashSet seenStyles)
+  {
+    if (seenStyles.contains(styleName))
+    {
+      return null;
+    }
+    seenStyles.add(styleName);
+
+    final OfficeStyle style = predefCollection.getStyle(styleFamily, styleName);
+    if (style == null)
+    {
+      return null; // no such style
+    }
+    final Element section = style.findFirstChild(OfficeNamespaces.STYLE_NS, sectionName);
+    if (section != null)
+    {
+      final Object attribute = section.getAttribute(propertyNamespace, propertyName);
+      if (attribute != null)
+      {
+        return String.valueOf(attribute);
+      }
+    }
+    final String parent = style.getStyleParent();
+    if (parent == null)
+    {
+      return null;
+    }
+    return queryStyle(predefCollection, styleFamily, parent, sectionName, propertyNamespace, propertyName, seenStyles);
+  }
+
+
 }

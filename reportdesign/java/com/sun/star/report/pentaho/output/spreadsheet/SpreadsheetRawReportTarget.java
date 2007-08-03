@@ -4,9 +4,9 @@
  *
  *  $RCSfile: SpreadsheetRawReportTarget.java,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2007-07-09 11:56:07 $
+ *  last change: $Author: hr $ $Date: 2007-08-03 09:51:10 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -53,6 +53,7 @@ import com.sun.star.report.pentaho.model.OfficeStylesCollection;
 import com.sun.star.report.pentaho.model.OfficeMasterPage;
 import com.sun.star.report.pentaho.model.OfficeMasterStyles;
 import com.sun.star.report.pentaho.output.OfficeDocumentReportTarget;
+import com.sun.star.report.pentaho.output.StyleUtilities;
 import com.sun.star.report.pentaho.output.text.MasterPageFactory;
 import org.jfree.layouting.util.AttributeMap;
 import org.jfree.layouting.input.style.values.CSSNumericValue;
@@ -81,24 +82,20 @@ import org.jfree.xmlns.writer.XmlWriterSupport;
  */
 public class SpreadsheetRawReportTarget extends OfficeDocumentReportTarget
 {
+  private String tableBackgroundColor; // null means transparent ...
+
   private static final ColumnBoundary[] EMPTY_COLBOUNDS = new ColumnBoundary[0];
 
   private boolean elementBoundaryCollectionPass;
-
   private List columnBoundaryList;
-
   private float currentRowBoundaryMarker;
 
   private ColumnBoundary[] sortedBoundaryArray;
-
   private ColumnBoundary[] boundariesForTableArray;
 
   private int tableCounter;
-
   private int columnCounter;
-
   private int columnSpanCounter;
-
   private String unitsOfMeasure;
 
   public SpreadsheetRawReportTarget(final ReportJob reportJob,
@@ -122,6 +119,7 @@ public class SpreadsheetRawReportTarget extends OfficeDocumentReportTarget
     {
       return;
     }
+
     final String elementType = ReportTargetUtil.getElemenTypeFromAttribute(attrs);
     // if this is the report namespace, write out a table definition ..
     if (OfficeNamespaces.TABLE_NS.equals(namespace) && "table".equals(elementType))
@@ -130,6 +128,7 @@ public class SpreadsheetRawReportTarget extends OfficeDocumentReportTarget
       // this is used to keep tracked of the boundary conditions per table
       tableCounter++;
     }
+
     if (isElementBoundaryCollectionPass())
     {
       collectBoundaryForElement(attrs);
@@ -157,6 +156,25 @@ public class SpreadsheetRawReportTarget extends OfficeDocumentReportTarget
     {
       // a new table means we must clear our "calculated" table boundary array cache
       boundariesForTableArray = null;
+
+      final String tableStyle = (String) attrs.getAttribute(OfficeNamespaces.TABLE_NS, "style-name");
+      if (tableStyle == null)
+      {
+        tableBackgroundColor = null;
+      }
+      else
+      {
+        final Object raw = StyleUtilities.queryStyle(getPredefinedStylesCollection(), "table", tableStyle,
+            "table-properties", OfficeNamespaces.FO_NS, "background-color");
+        if (raw == null || "transparent".equals(raw))
+        {
+          tableBackgroundColor = null;
+        }
+        else
+        {
+          tableBackgroundColor = String.valueOf(raw);
+        }
+      }
       return;
     }
 
@@ -194,6 +212,30 @@ public class SpreadsheetRawReportTarget extends OfficeDocumentReportTarget
     {
       // a new row means our column counter gets reset
       columnCounter = 0;
+      // Lets make sure the color of the table is ok ..
+      if (tableBackgroundColor != null)
+      {
+        final String styleName = (String) attrs.getAttribute(OfficeNamespaces.TABLE_NS, "style-name");
+        final OfficeStyle style = deriveStyle("table-row", styleName);
+        Element tableRowProperties = style.getTableRowProperties();
+        if (tableRowProperties == null)
+        {
+          tableRowProperties = new Section();
+          tableRowProperties.setNamespace(OfficeNamespaces.STYLE_NS);
+          tableRowProperties.setType("table-row-properties");
+          tableRowProperties.setAttribute(OfficeNamespaces.FO_NS, "background-color", tableBackgroundColor);
+          style.addNode(tableRowProperties);
+        }
+        else
+        {
+          final Object oldValue = tableRowProperties.getAttribute(OfficeNamespaces.FO_NS, "background-color");
+          if (oldValue == null || "transparent".equals(oldValue))
+          {
+            tableRowProperties.setAttribute(OfficeNamespaces.FO_NS, "background-color", tableBackgroundColor);
+          }
+        }
+        attrs.setAttribute(OfficeNamespaces.TABLE_NS, "style-name", style.getStyleName());
+      }
     }
     else if (ReportTargetUtil.isElementOfType(OfficeNamespaces.TABLE_NS, "table-cell", attrs))
     {
