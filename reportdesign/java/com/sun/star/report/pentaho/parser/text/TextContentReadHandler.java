@@ -4,9 +4,9 @@
  *
  *  $RCSfile: TextContentReadHandler.java,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2007-07-09 11:56:12 $
+ *  last change: $Author: hr $ $Date: 2007-08-03 09:52:07 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -36,19 +36,8 @@
 
 package com.sun.star.report.pentaho.parser.text;
 
-import java.util.ArrayList;
-
-import com.sun.star.report.pentaho.parser.ElementReadHandler;
-import com.sun.star.report.pentaho.parser.StarXmlFactoryModule;
-import com.sun.star.report.pentaho.parser.rpt.FixedContentReadHandler;
-import com.sun.star.report.pentaho.parser.rpt.FormattedTextReadHandler;
-import com.sun.star.report.pentaho.parser.rpt.ImageReadHandler;
-import com.sun.star.report.pentaho.OfficeNamespaces;
-import org.jfree.report.structure.Element;
 import org.jfree.report.structure.Section;
 import org.jfree.report.structure.StaticText;
-import org.jfree.xmlns.parser.XmlReadHandler;
-import org.xml.sax.Attributes;
 import org.xml.sax.SAXException;
 
 /**
@@ -57,90 +46,20 @@ import org.xml.sax.SAXException;
  *
  * @author Thomas Morgner
  */
-public class TextContentReadHandler extends ElementReadHandler
+public class TextContentReadHandler extends NoCDATATextContentReadHandler
 {
-  private Section section;
-  private ArrayList children;
-  private boolean copyType;
-
-  public TextContentReadHandler(final Section section,
-                                final boolean copyType)
+  public TextContentReadHandler(final Section section, final boolean copyType)
   {
-    this.children = new ArrayList();
-    this.section = section;
-    this.copyType = copyType;
+    super(section, copyType);
   }
 
   public TextContentReadHandler(final Section section)
   {
-    this (section, false);
+    super(section);
   }
 
   public TextContentReadHandler()
   {
-    this(new Section(), true);
-  }
-
-
-  /**
-   * Starts parsing.
-   *
-   * @param attrs the attributes.
-   * @throws org.xml.sax.SAXException if there is a parsing error.
-   */
-  protected void startParsing(final Attributes attrs) throws SAXException
-  {
-    super.startParsing(attrs);
-    final Element element = getElement();
-    if (copyType)
-    {
-      copyElementType(element);
-    }
-    copyAttributes(attrs, element);
-  }
-
-  /**
-   * Returns the handler for a child element.
-   *
-   * @param tagName the tag name.
-   * @param atts    the attributes.
-   * @return the handler or null, if the tagname is invalid.
-   * @throws org.xml.sax.SAXException if there is a parsing error.
-   */
-  protected XmlReadHandler getHandlerForChild(final String uri,
-                                              final String tagName,
-                                              final Attributes atts)
-      throws SAXException
-  {
-    if (OfficeNamespaces.OOREPORT_NS.equals(uri))
-    {
-      if ("fixed-content".equals(tagName))
-      {
-        final FixedContentReadHandler fixedContentReadHandler = new FixedContentReadHandler();
-        children.add(fixedContentReadHandler);
-        return fixedContentReadHandler;
-      }
-      if ("formatted-text".equals(tagName))
-      {
-        final FormattedTextReadHandler formattedTextReadHandler = new FormattedTextReadHandler();
-        children.add(formattedTextReadHandler);
-        return formattedTextReadHandler;
-      }
-      if ("image".equals(tagName))
-      {
-        final ImageReadHandler imageReadHandler = new ImageReadHandler();
-        children.add(imageReadHandler);
-        return imageReadHandler;
-      }
-      if ("sub-document".equals(tagName))
-      {
-        return null;
-      }
-    }
-
-    final TextContentReadHandler readHandler = new TextContentReadHandler();
-    children.add(readHandler);
-    return readHandler;
   }
 
   /**
@@ -154,34 +73,6 @@ public class TextContentReadHandler extends ElementReadHandler
   public void characters(final char[] ch, final int start, final int length)
       throws SAXException
   {
-    children.add(new StaticText(new String(ch, start, length)));
-  }
-
-  /**
-   * Done parsing.
-   *
-   * @throws org.xml.sax.SAXException if there is a parsing error.
-   */
-  protected void doneParsing() throws SAXException
-  {
-    for (int i = 0; i < children.size(); i++)
-    {
-      final Object o = children.get(i);
-      if (o instanceof ElementReadHandler)
-      {
-        final ElementReadHandler handler = (ElementReadHandler) o;
-        section.addNode(handler.getElement());
-      }
-      else if (o instanceof StaticText)
-      {
-        section.addNode((StaticText) o);
-      }
-    }
-  }
-
-
-  public Element getElement()
-  {
-    return section;
+    getChildren().add(new StaticText(new String(ch, start, length)));
   }
 }
