@@ -4,9 +4,9 @@
  *
  *  $RCSfile: paintfrm.cxx,v $
  *
- *  $Revision: 1.104 $
+ *  $Revision: 1.105 $
  *
- *  last change: $Author: hr $ $Date: 2007-06-26 11:57:26 $
+ *  last change: $Author: hr $ $Date: 2007-08-03 13:40:17 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -2058,10 +2058,9 @@ void MA_FASTCALL DrawGraphic( const SvxBrushItem *pBrush,
 
     if( bReplaceGrfNum )
     {
-        const Bitmap& rBmp = SwNoTxtFrm::GetBitmap( FALSE );
+        const BitmapEx& rBmp = ViewShell::GetReplacementBitmap( false );
         Font aTmp( pOutDev->GetFont() );
-        ((Graphic*)0)->Draw( pOutDev, aEmptyStr, aTmp, rBmp,
-                             rOrg.Pos(), rOrg.SSize() );
+        Graphic::DrawEx( pOutDev, aEmptyStr, aTmp, rBmp, rOrg.Pos(), rOrg.SSize() );
     }
 }
 
