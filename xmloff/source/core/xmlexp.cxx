@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xmlexp.cxx,v $
  *
- *  $Revision: 1.131 $
+ *  $Revision: 1.132 $
  *
- *  last change: $Author: hr $ $Date: 2007-08-03 10:21:53 $
+ *  last change: $Author: hr $ $Date: 2007-08-03 12:53:22 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -77,6 +77,10 @@
 #ifndef _COMPHELPER_PROCESSFACTORY_HXX_
 #include <comphelper/processfactory.hxx>
 #endif
+#ifndef _COMPHELPER_CONFIGURATIONHELPER_HXX_
+#include <comphelper/configurationhelper.hxx>
+#endif
+
 #ifndef _XMLOFF_ATTRLIST_HXX
 #include <xmloff/attrlist.hxx>
 #endif
@@ -236,7 +240,9 @@ sal_Char __READONLY_DATA sXML_1_0[] = "1.0";
 #define XML_MODEL_SERVICE_MATH      "com.sun.star.formula.FormulaProperties"
 #define XML_MODEL_SERVICE_CHART     "com.sun.star.chart.ChartDocument"
 
-#define XML_USEPRETTYPRINTING "UsePrettyPrinting"
+#define XML_USEPRETTYPRINTING       "UsePrettyPrinting"
+
+#define C2U(cChar) OUString( RTL_CONSTASCII_USTRINGPARAM(cChar) )
 
 struct XMLServiceMapEntry_Impl
 {
@@ -305,16 +311,22 @@ public:
     SvXMLExport_Impl();
 
     ::comphelper::UnoInterfaceToUniqueIdentifierMapper  maInterfaceToIdentifierMapper;
-    uno::Reference< uri::XUriReferenceFactory > mxUriReferenceFactory;
-    rtl::OUString                               msPackageURI;
+    uno::Reference< uri::XUriReferenceFactory >         mxUriReferenceFactory;
+    rtl::OUString                                       msPackageURI;
     // --> OD 2006-09-27 #i69627#
-    sal_Bool mbOutlineStyleAsNormalListStyle;
+    sal_Bool                                            mbOutlineStyleAsNormalListStyle;
     // <--
-
+    // --> PB 2007-07-06 #i146851#
+    sal_Bool                                            mbSaveBackwardCompatibleODF;
+    // <--
 };
+
 SvXMLExport_Impl::SvXMLExport_Impl()
     // --> OD 2006-09-27 #i69627#
     : mbOutlineStyleAsNormalListStyle( false )
+    // <--
+    // --> PB 2007-07-06 #i146851#
+        ,mbSaveBackwardCompatibleODF( sal_True )
     // <--
 {
     mxUriReferenceFactory = uri::UriReferenceFactory::create(
@@ -408,6 +420,22 @@ void SvXMLExport::_InitCtor()
     // <--
 
     mbEnableExperimentalOdfExport = getenv("ENABLE_EXPERIMENTAL_ODF_EXPORT") != NULL;
+
+    // --> PB 2007-07-06 #146851# - load mbSaveBackwardCompatibleODF from configuration
+
+    // cl: but only if we do export to current oasis format, old openoffice format *must* always be compatible
+    if( (getExportFlags() & EXPORT_OASIS) != 0 )
+    {
+        sal_Bool bTemp = sal_True;
+        if ( ::comphelper::ConfigurationHelper::readDirectKey(
+                getServiceFactory(),
+                C2U("org.openoffice.Office.Common/"), C2U("Save/Document"), C2U("SaveBackwardCompatibleODF"),
+                ::comphelper::ConfigurationHelper::E_READONLY ) >>= bTemp )
+        {
+            mpImpl->mbSaveBackwardCompatibleODF = bTemp;
+        }
+    }
+    // <--
 }
 
 // --> OD 2006-03-14 #i51726#
@@ -657,6 +685,7 @@ void SAL_CALL SvXMLExport::setSourceDocument( const uno::Reference< lang::XCompo
                 else
                     mnExportFlags &= ~EXPORT_PRETTY;
             }
+
             if (mpNumExport && (mnExportFlags & (EXPORT_AUTOSTYLES | EXPORT_STYLES)))
             {
                 OUString sWrittenNumberFormats(RTL_CONSTASCII_USTRINGPARAM(XML_WRITTENNUMBERSTYLES));
@@ -670,6 +699,13 @@ void SAL_CALL SvXMLExport::setSourceDocument( const uno::Reference< lang::XCompo
             }
         }
     }
+
+    // --> PB 2007-07-06 #i146851#
+    if ( mpImpl->mbSaveBackwardCompatibleODF )
+        mnExportFlags |= EXPORT_SAVEBACKWARDCOMPATIBLE;
+    else
+        mnExportFlags &= ~EXPORT_SAVEBACKWARDCOMPATIBLE;
+    // <--
 
     // namespaces for user defined attributes
     Reference< XMultiServiceFactory > xFactory( mxModel,    UNO_QUERY );
