@@ -4,9 +4,9 @@
  *
  *  $RCSfile: unopage.cxx,v $
  *
- *  $Revision: 1.42 $
+ *  $Revision: 1.43 $
  *
- *  last change: $Author: rt $ $Date: 2007-07-06 07:44:59 $
+ *  last change: $Author: hr $ $Date: 2007-08-03 10:21:08 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -116,12 +116,13 @@ extern SfxItemPropertyMap* ImplGetSvxPageShapePropertyMap();
 **********************************************************************/
 
 UNO3_GETIMPLEMENTATION_IMPL( SvxDrawPage );
-
+DBG_NAME(SvxDrawPage)
 SvxDrawPage::SvxDrawPage( SdrPage* pInPage ) throw()
 : mrBHelper( getMutex() )
 , mpPage( pInPage )
 , mpModel( 0 )
 {
+    DBG_CTOR(SvxDrawPage,NULL);
     // Am Broadcaster anmelden
     if( mpPage )
         mpModel = mpPage->GetModel();
@@ -144,6 +145,7 @@ SvxDrawPage::SvxDrawPage() throw()
 , mpModel( NULL )
 , mpView( NULL )
 {
+    DBG_CTOR(SvxDrawPage,NULL);
 }
 
 //----------------------------------------------------------------------
@@ -152,6 +154,7 @@ SvxDrawPage::~SvxDrawPage() throw()
     DBG_ASSERT( mrBHelper.bDisposed, "SvxDrawPage must be disposed!" );
     if( !mrBHelper.bDisposed )
         disposing();
+    DBG_DTOR(SvxDrawPage,NULL);
 }
 
 //----------------------------------------------------------------------
