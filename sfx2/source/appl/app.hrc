@@ -4,9 +4,9 @@
  *
  *  $RCSfile: app.hrc,v $
  *
- *  $Revision: 1.43 $
+ *  $Revision: 1.44 $
  *
- *  last change: $Author: hr $ $Date: 2007-06-27 22:54:17 $
+ *  last change: $Author: hr $ $Date: 2007-08-03 13:57:25 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -185,12 +185,14 @@
 #define IMG_HELP_TOOLBOX_COPY                   (RID_SFX_APP_START+118)
 
 #define IMG_HELP_CONTENT_BOOK_OPEN              (RID_SFX_APP_START+120)
-#define IMG_HELP_CONTENT_BOOK_CLOSED            (RID_SFX_APP_START+121)
-#define IMG_HELP_CONTENT_CHAPTER_OPEN           (RID_SFX_APP_START+122)
-#define IMG_HELP_CONTENT_CHAPTER_CLOSED         (RID_SFX_APP_START+123)
+#define IMG_HELP_CONTENT_BOOK_OPEN_HC           (RID_SFX_APP_START+121)
+#define IMG_HELP_CONTENT_BOOK_CLOSED            (RID_SFX_APP_START+122)
+#define IMG_HELP_CONTENT_BOOK_CLOSED_HC         (RID_SFX_APP_START+123)
 #define IMG_HELP_CONTENT_DOC                    (RID_SFX_APP_START+124)
 
-#define STR_HELP_WINDOW_TITLE                   (RID_SFX_APP_START+125)
+#define IMG_HELP_CONTENT_DOC_HC                 (RID_SFX_APP_START+125) // image
+#define STR_HELP_WINDOW_TITLE                   (RID_SFX_APP_START+125) // string
+
 #define STR_HELP_BUTTON_INDEX_ON                (RID_SFX_APP_START+126)
 #define STR_HELP_BUTTON_START                   (RID_SFX_APP_START+127)
 #define STR_HELP_BUTTON_PREV                    (RID_SFX_APP_START+128)
