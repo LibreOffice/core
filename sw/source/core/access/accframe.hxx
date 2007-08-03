@@ -4,9 +4,9 @@
  *
  *  $RCSfile: accframe.hxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: hr $ $Date: 2006-08-14 15:43:20 $
+ *  last change: $Author: hr $ $Date: 2007-08-03 13:33:54 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -54,9 +54,13 @@ class SwAccessibleFrame
     const SwFrm* mpFrm;
     const sal_Bool mbIsInPagePreview;
 
+protected:
+    // --> OD 2007-06-29 #i77106#
+    // method needs to be called by new class <SwAccessibleTableColHeaders>
     static sal_Int32 GetChildCount( const SwRect& rVisArea,
                                     const SwFrm *pFrm,
                                     sal_Bool bInPagePreview );
+private:
     static SwFrmOrObj GetChild( const SwRect& rVisArea,
                                   const SwFrm *pFrm,
                                   sal_Int32& rPos,
