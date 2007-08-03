@@ -4,9 +4,9 @@
  *
  *  $RCSfile: basidesh.cxx,v $
  *
- *  $Revision: 1.43 $
+ *  $Revision: 1.44 $
  *
- *  last change: $Author: hr $ $Date: 2007-06-26 16:52:02 $
+ *  last change: $Author: hr $ $Date: 2007-08-03 09:58:04 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1018,11 +1018,16 @@ void BasicIDEShell::SetCurLibForLocalization( const ScriptDocument& rDocument, S
     // Create LocalizationMgr
     delete m_pCurLocalizationMgr;
     Reference< resource::XStringResourceManager > xStringResourceManager;
-    if( aLibName.Len() )
+    try
     {
-        Reference< container::XNameContainer > xDialogLib( rDocument.getLibrary( E_DIALOGS, aLibName, TRUE ) );
-        xStringResourceManager = LocalizationMgr::getStringResourceFromDialogLibrary( xDialogLib );
+        if( aLibName.Len() )
+        {
+            Reference< container::XNameContainer > xDialogLib( rDocument.getLibrary( E_DIALOGS, aLibName, TRUE ) );
+            xStringResourceManager = LocalizationMgr::getStringResourceFromDialogLibrary( xDialogLib );
+        }
     }
+    catch ( container::NoSuchElementException& )
+    {}
     m_pCurLocalizationMgr = new LocalizationMgr
         ( this, rDocument, aLibName, xStringResourceManager );
 
