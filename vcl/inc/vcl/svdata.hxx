@@ -4,9 +4,9 @@
  *
  *  $RCSfile: svdata.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2007-07-05 08:35:44 $
+ *  last change: $Author: hr $ $Date: 2007-08-03 14:05:22 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -314,6 +314,11 @@ struct ImplSVNWFData
                                                           // in menubar if not transparent
     bool                    mbOpenMenuOnF10;              // on gnome the first menu opens on F10
     bool                    mbNoFocusRects;               // on Aqua focus rects are not used
+    bool                    mbNoBoldTabFocus;             // on Aqua and Gnome the focused tab has not bold text
+    bool                    mbCenteredTabs;               // on Aqua, tabs are centered
+    bool                    mbProgressNeedsErase;         // set true for platforms that should draw the
+                                                          // window background before drawing the native
+                                                          // progress bar
 };
 
 
