@@ -4,9 +4,9 @@
  *
  *  $RCSfile: mythes.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 16:13:38 $
+ *  last change: $Author: hr $ $Date: 2007-08-03 12:31:01 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -74,7 +74,6 @@ int MyThes::thInitialize(const char* idxpath, const char* datpath)
     // open the index file
     FILE * pifile = fopen(idxpath,"r");
     if (!pifile) {
-        pifile = NULL;
         return 0;
     }
 
@@ -84,6 +83,7 @@ int MyThes::thInitialize(const char* idxpath, const char* datpath)
     if (!wrd) {
        fprintf(stderr,"Error - bad memory allocation\n");
        fflush(stderr);
+       fclose(pifile);
        return 0;
     }
     int len = readLine(pifile,wrd,MAX_WD_LEN);
@@ -99,6 +99,7 @@ int MyThes::thInitialize(const char* idxpath, const char* datpath)
     if ( (!(list)) || (!(offst)) ) {
        fprintf(stderr,"Error - bad memory allocation\n");
        fflush(stderr);
+       fclose(pifile);
        return 0;
     }
 
@@ -114,6 +115,7 @@ int MyThes::thInitialize(const char* idxpath, const char* datpath)
                 if (!list[nw]) {
                     fprintf(stderr,"Error - bad memory allocation\n");
                     fflush(stderr);
+                    fclose(pifile);
                     return 0;
                 }
                 memcpy((list[nw]),wrd,np);
@@ -126,12 +128,10 @@ int MyThes::thInitialize(const char* idxpath, const char* datpath)
 
     free((void *)wrd);
     fclose(pifile);
-    pifile=NULL;
 
     /* next open the data file */
     pdfile = fopen(datpath,"r");
     if (!pdfile) {
-        pdfile = NULL;
         return 0;
     }
 
@@ -147,17 +147,20 @@ void MyThes::thCleanup()
         pdfile=NULL;
     }
 
-    /* now free up all the allocated strings on the list */
-    for (int i=0; i < nw; i++)
+    if (list)
     {
-        if (list[i]) {
-            free(list[i]);
-            list[i] = 0;
+        /* now free up all the allocated strings on the list */
+        for (int i=0; i < nw; i++)
+        {
+            if (list[i]) {
+                free(list[i]);
+                list[i] = 0;
+            }
         }
+        free((void*)list);
     }
 
     if (encoding) free((void*)encoding);
-    if (list)  free((void*)list);
     if (offst) free((void*)offst);
 
     encoding = NULL;
