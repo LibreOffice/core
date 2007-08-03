@@ -4,9 +4,9 @@
  *
  *  $RCSfile: propbrw.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2007-07-09 11:56:33 $
+ *  last change: $Author: hr $ $Date: 2007-08-03 10:05:03 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -37,7 +37,6 @@
 #ifndef _REPORT_PROPBRW_HXX
 #include "propbrw.hxx"
 #endif
-
 #ifndef _REPORT_RPTUIOBJ_HXX
 #include "RptObject.hxx"
 #endif
@@ -178,7 +177,6 @@ namespace
     }
 }
 //-----------------------------------------------------------------------
-
 //============================================================================
 // PropBrw
 //============================================================================
@@ -217,38 +215,35 @@ PropBrw::PropBrw(const Reference< XMultiServiceFactory >&   _xORB,Window* pParen
 
     if (m_xMeAsFrame.is())
     {
+        Reference< XComponentContext > xOwnContext;
         try
         {
-            Sequence< Any > aArgs(1);
-            aArgs[0] <<= PropertyValue(
-                ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("DialogParentWindow")),
-                0,
-                makeAny(VCLUnoHelper::GetInterface ( this )),
-                PropertyState_DIRECT_VALUE
-            );
             // our own component context
             Reference< XPropertySet > xFactoryProperties( m_xORB, UNO_QUERY_THROW );
-            Reference< XComponentContext > xOwnContext(
+            xOwnContext.set(
                 xFactoryProperties->getPropertyValue( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "DefaultContext" ) ) ),
                 UNO_QUERY_THROW );
 
+            /*uno::Reference< XComponent> xModel = new OContextHelper(m_xORB,uno::Reference< XComponent>(m_pDesignView->getController()->getModel(),uno::UNO_QUERY) );
+            uno::Reference< XComponent> xDialogParentWindow = new OContextHelper(m_xORB,uno::Reference< XComponent>(VCLUnoHelper::GetInterface ( this ),uno::UNO_QUERY) );
+            uno::Reference< XComponent> xConnection = new OContextHelper(m_xORB,uno::Reference< XComponent>(m_pDesignView->getController()->getConnection(),uno::UNO_QUERY) );*/
             // a ComponentContext for the
             ::cppu::ContextEntry_Init aHandlerContextInfo[] =
             {
-                ::cppu::ContextEntry_Init( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "ContextDocument" ) ), makeAny( m_pDesignView->getController()->getModel() ) ),
-                ::cppu::ContextEntry_Init( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "DialogParentWindow" ) ), makeAny( VCLUnoHelper::GetInterface ( this ) ) ),
+                ::cppu::ContextEntry_Init( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "ContextDocument" ) ), makeAny( m_pDesignView->getController()->getModel() )),
+                ::cppu::ContextEntry_Init( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "DialogParentWindow" ) ), makeAny( VCLUnoHelper::GetInterface ( this ) )),
                 ::cppu::ContextEntry_Init( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "ActiveConnection" ) ), makeAny( m_pDesignView->getController()->getConnection() ) ),
             };
-            Reference< XComponentContext > xInspectorContext(
+            m_xInspectorContext.set(
                 ::cppu::createComponentContext( aHandlerContextInfo, sizeof( aHandlerContextInfo ) / sizeof( aHandlerContextInfo[0] ),
                 xOwnContext ) );
             // create a property browser controller
             bool bEnableHelpSection = lcl_shouldEnableHelpSection( m_xORB );
             Reference< inspection::XObjectInspectorModel> xInspectorModel( bEnableHelpSection
-                ?   report::inspection::DefaultComponentInspectorModel::createWithHelpSection( xInspectorContext, 3, 8 )
-                :   report::inspection::DefaultComponentInspectorModel::createDefault( xInspectorContext ) );
+                ?   report::inspection::DefaultComponentInspectorModel::createWithHelpSection( m_xInspectorContext, 3, 8 )
+                :   report::inspection::DefaultComponentInspectorModel::createDefault( m_xInspectorContext ) );
 
-            m_xBrowserController = inspection::ObjectInspector::createWithModel(xInspectorContext, xInspectorModel);
+            m_xBrowserController = inspection::ObjectInspector::createWithModel(m_xInspectorContext, xInspectorModel);
             if ( !m_xBrowserController.is() )
             {
                 const ::rtl::OUString sServiceName( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.inspection.ObjectInspector" ) );
@@ -263,9 +258,10 @@ PropBrw::PropBrw(const Reference< XMultiServiceFactory >&   _xORB,Window* pParen
                 {
                     uno::Reference< inspection::XObjectInspector > xInspector( m_xBrowserController, uno::UNO_QUERY_THROW );
                     uno::Reference< inspection::XObjectInspectorUI > xInspectorUI( xInspector->getInspectorUI() );
-                    uno::Reference< uno::XInterface > xDefaultHelpProvider( inspection::DefaultHelpProvider::create( xInspectorContext, xInspectorUI ) );
+                    uno::Reference< uno::XInterface > xDefaultHelpProvider( inspection::DefaultHelpProvider::create( m_xInspectorContext, xInspectorUI ) );
                 }
             }
+            xFactoryProperties->setPropertyValue( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "DefaultContext" ) ) ,makeAny(xOwnContext));
         }
         catch (Exception&)
         {
@@ -274,6 +270,9 @@ PropBrw::PropBrw(const Reference< XMultiServiceFactory >&   _xORB,Window* pParen
             {
                 ::comphelper::disposeComponent(m_xBrowserController);
                 ::comphelper::disposeComponent(m_xBrowserComponentWindow);
+                Reference< XPropertySet > xFactoryProperties( m_xORB, UNO_QUERY_THROW );
+                if ( xOwnContext.is() )
+                    xFactoryProperties->setPropertyValue( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "DefaultContext" ) ) ,makeAny(xOwnContext));
             }
             catch(Exception&) { }
             m_xBrowserController.clear();
@@ -299,6 +298,21 @@ PropBrw::~PropBrw()
     if (m_xBrowserController.is())
         implDetachController();
 
+    try
+    {
+        uno::Reference<container::XNameContainer> xName(m_xInspectorContext,uno::UNO_QUERY);
+        if ( xName.is() )
+        {
+            const ::rtl::OUString pProps[] = { ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "ContextDocument" ) )
+                                            ,  ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "DialogParentWindow" ) )
+                                            , ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "ActiveConnection" ) )};
+            for (size_t i = 0; i < sizeof(pProps)/sizeof(pProps[0]); ++i)
+                xName->removeByName(pProps[i]);
+        }
+    }
+    catch(Exception&)
+    {}
+
     ::rptui::notifySystemWindow(this,this,::comphelper::mem_fun(&TaskPaneList::RemoveWindow));
 
     DBG_DTOR( rpt_PropBrw,NULL);
@@ -317,8 +331,9 @@ void PropBrw::implDetachController()
     if ( m_xBrowserController.is() )
         m_xBrowserController->attachFrame( NULL );
 
-    m_xBrowserController.clear();
     m_xMeAsFrame.clear();
+    m_xBrowserController.clear();
+    m_xBrowserComponentWindow.clear();
 }
 //-----------------------------------------------------------------------
 ::rtl::OUString PropBrw::getCurrentPage() const
