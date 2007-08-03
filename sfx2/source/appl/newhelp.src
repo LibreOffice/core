@@ -1,12 +1,12 @@
-/*************************************************************************
+﻿/*************************************************************************
  *
  *  OpenOffice.org - a multi-platform office productivity suite
  *
  *  $RCSfile: newhelp.src,v $
  *
- *  $Revision: 1.95 $
+ *  $Revision: 1.96 $
  *
- *  last change: $Author: ihi $ $Date: 2007-04-19 17:06:24 $
+ *  last change: $Author: hr $ $Date: 2007-08-03 13:58:07 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -260,24 +260,29 @@ Image IMG_HELP_CONTENT_BOOK_OPEN
     ImageBitmap = Bitmap { File = "hlpbookopen.bmp" ; };
     MASKCOLOR_MAGENTA
 };
+Image IMG_HELP_CONTENT_BOOK_OPEN_HC
+{
+    ImageBitmap = Bitmap { File = "hlpbookopen_h.bmp" ; };
+    MASKCOLOR_MAGENTA
+};
 Image IMG_HELP_CONTENT_BOOK_CLOSED
 {
     ImageBitmap = Bitmap { File = "hlpbookclosed.bmp" ; };
     MASKCOLOR_MAGENTA
 };
-Image IMG_HELP_CONTENT_CHAPTER_OPEN
+Image IMG_HELP_CONTENT_BOOK_CLOSED_HC
 {
-    ImageBitmap = Bitmap { File = "hlpbookopen.bmp" ; };
-    MASKCOLOR_MAGENTA
-};
-Image IMG_HELP_CONTENT_CHAPTER_CLOSED
-{
-    ImageBitmap = Bitmap { File = "hlpbookclosed.bmp" ; };
+    ImageBitmap = Bitmap { File = "hlpbookclosed_h.bmp" ; };
     MASKCOLOR_MAGENTA
 };
 Image IMG_HELP_CONTENT_DOC
 {
     ImageBitmap = Bitmap { File = "hlpdoc.bmp" ; };
+    MASKCOLOR_MAGENTA
+};
+Image IMG_HELP_CONTENT_DOC_HC
+{
+    ImageBitmap = Bitmap { File = "hlpdoc_h.bmp" ; };
     MASKCOLOR_MAGENTA
 };
 
