@@ -4,9 +4,9 @@
  *
  *  $RCSfile: LineDescriptor.idl,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: vg $ $Date: 2006-03-31 12:02:17 $
+ *  last change: $Author: hr $ $Date: 2007-08-03 13:50:43 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -82,10 +82,52 @@ struct LineDescriptor
     /** detetrmines whether a button exists which can be used for a more complex, interactive
         property value input.
 
+        <p>If no image for the primary button is specified, but a primary button is present,
+        the three dots will be displayed on the button.</p>
+
         @see XPropertyHandler::onInteractivePropertySelection
         @see HasSecondaryButton
+        @see PrimaryButtonImageURL
+        @see PrimaryButtonImage
     */
     boolean HasPrimaryButton;
+
+    /** describes a unique id to associate with the primary button
+
+        <p>In OpenOffice.org, UI elements sometimes require a so-called UniqueID, which can be
+        used to uniquely (within the whole application) identify this UI element. For instance,
+        automating the OpenOffice.org UI via a dedicated separate application ("TestTool") requires
+        such IDs.</p>
+
+        <p>If a primary button exists for a property's UI representation (<member>HasPrimaryButton</member>),
+        it gets the ID specified herein.</p>
+    */
+    long PrimaryButtonId;
+
+    /** describes the URL of an image to display on the primary button, if any.
+
+        <p>This URL will be used to obtain an actual <type scope="com::sun::star::graphic">XGraphic</type>
+        object from an <type scope="com::sun::star::graphic">GraphicProvider</type>.</p>
+
+        <p>The property will be ignored if <member>HasPrimaryButton</member> is <FALSE/>.</p>
+
+        <p>If you need to specify a graphic which does not have an URL, but is available as
+        <type scope="com::sun::star::graphic">XGraphic</type> only, then you must leave
+        <code>PrimaryButtonImageURL</code> empty, and use the <member>PrimaryButtonImage</member> property.
+
+        @see PrimaryButtonImage
+    */
+    string  PrimaryButtonImageURL;
+
+    /** describes a graphics to display at the primary button, if any.
+
+        <p>The property will be ignored if <member>HasPrimaryButton</member> is <FALSE/>, or
+        if <member>PrimaryButtonImageURL</member> is a non-empty string.</p>
+
+        @see HasPrimaryButton
+        @see PrimaryButtonImageURL
+    */
+    com::sun::star::graphic::XGraphic PrimaryButtonImage;
 
     /** detetrmines whether a secondary button exists which can be used for a more complex, interactive
         property value input.
@@ -100,18 +142,6 @@ struct LineDescriptor
 
     /** describes a unique id to associate with the primary button
 
-        <p>In OpenOffice.org, UI elements sometimes require a so-called UniqueID, which can be
-        used to uniquely (within the whole application) identify this UI element. For instance,
-        automating the OpenOffice.org UI via a dedicated separate application ("TestTool") requires
-        such IDs.</p>
-
-        <p>If a primary button exists for a property's UI representation (<member>HasPrimaryButton</member>),
-        it gets the ID specified herein.</p>
-    */
-    long PrimaryButtonId;
-
-    /** describes a unique id to associate with the primary button
-
         <p>If a secondary button exists for a property's UI representation (<member>HasSecondaryButton</member>),
         it gets the ID specified herein.</p>
 
@@ -119,21 +149,28 @@ struct LineDescriptor
     */
     long SecondaryButtonId;
 
-    /** describes a graphics to display at the primary button, if any.
+    /** describes the URL of an image to display on the secondary button, if any.
 
-        <p>If no image for the primary button is specified, but a primary button is present,
-        the three dots will be displayed on the button.</p>
+        <p>This URL will be used to obtain an actual <type scope="com::sun::star::graphic">XGraphic</type>
+        object from an <type scope="com::sun::star::graphic">GraphicProvider</type>.</p>
 
-        @see HasPrimaryButton
+        <p>The property will be ignored if <member>HasSecondaryButton</member> is <FALSE/>.</p>
+
+        <p>If you need to specify a graphic which does not have an URL, but is available as
+        <type scope="com::sun::star::graphic">XGraphic</type> only, then you must leave
+        <code>SecondaryButtonImageURL</code> empty, and use the <member>SecondaryButtonImage</member> property.
+
+        @see SecondaryButtonImage
     */
-    com::sun::star::graphic::XGraphic PrimaryButtonImage;
+    string  SecondaryButtonImageURL;
 
-    /** describes a graphics to display at the primary button, if any.
+    /** describes a graphics to display at the secondary button, if any.
 
-        <p>If no image for the secondary button is specified, but a secondary button is present,
-        the three dots will be displayed on the button.</p>
+        <p>The property will be ignored if <member>HasSecondaryButton</member> is <FALSE/>, or
+        if <member>SecondaryButtonImageURL</member> is a non-empty string.</p>
 
         @see HasSecondaryButton
+        @see SecondaryButtonImageURL
     */
     com::sun::star::graphic::XGraphic SecondaryButtonImage;
 
