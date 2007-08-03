@@ -4,9 +4,9 @@
  *
  *  $RCSfile: valueset.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: vg $ $Date: 2007-05-22 19:32:22 $
+ *  last change: $Author: hr $ $Date: 2007-08-03 13:31:34 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -336,8 +336,8 @@ protected:
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible > CreateAccessible();
 
 public:
-                    ValueSet( Window* pParent, WinBits nWinStyle = WB_ITEMBORDER );
-                    ValueSet( Window* pParent, const ResId& rResId );
+                    ValueSet( Window* pParent, WinBits nWinStyle = WB_ITEMBORDER, bool bDisableTransientChildren = false );
+                    ValueSet( Window* pParent, const ResId& rResId, bool bDisableTransientChildren = false );
                     ~ValueSet();
 
     virtual void    MouseButtonDown( const MouseEvent& rMEvt );
@@ -436,11 +436,6 @@ public:
     const Link&     GetSelectHdl() const { return maSelectHdl; }
     void            SetDoubleClickHdl( const Link& rLink ) { maDoubleClickHdl = rLink; }
     const Link&     GetDoubleClickHdl() const { return maDoubleClickHdl; }
-
-    /** Disable the transient state (accessibility::AccessibleStateType::TRANSIENT)
-        of the accessible items.
-     */
-    void            DisableTransientChildren();
 
 private:
     /** Determine whether RTL (right to left writing) is active.  For this
