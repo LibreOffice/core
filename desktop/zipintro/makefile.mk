@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.3 $
+#   $Revision: 1.4 $
 #
-#   last change: $Author: hjs $ $Date: 2007-06-25 11:57:21 $
+#   last change: $Author: hr $ $Date: 2007-08-03 11:24:14 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -41,7 +41,7 @@ TARGET=zipintro
 
 .INCLUDE :  settings.mk
 
-DEFAULT_FLAVOURS=dev dev_nologo nologo broffice dev_broffice intro
+DEFAULT_FLAVOURS=dev dev_nologo nologo broffice dev_broffice nologo_broffice nologo_dev_broffice intro
 
 ZIP1LIST= \
     $(null,$(INTRO_BITMAPS) $(SOLARSRC)$/ooo_custom_images$/dev$/introabout$/intro.bmp $(INTRO_BITMAPS)) \
@@ -61,6 +61,12 @@ ZIP5LIST= \
 ZIP6LIST= \
     $(null,$(INTRO_BITMAPS) $(SOLARSRC)$/ooo_custom_images$/broffice$/introabout$/intro.bmp $(INTRO_BITMAPS)) \
     $(null,$(ABOUT_BITMAPS) $(SOLARSRC)$/ooo_custom_images$/broffice$/introabout$/about.bmp $(ABOUT_BITMAPS))
+ZIP7LIST= \
+        $(null,$(INTRO_BITMAPS) $(SOLARSRC)$/ooo_custom_images$/nologo_broffice$/introabout$/intro.bmp $(INTRO_BITMAPS)) \
+        $(null,$(ABOUT_BITMAPS) $(SOLARSRC)$/ooo_custom_images$/broffice$/introabout$/about.bmp $(ABOUT_BITMAPS))
+ZIP8LIST= \
+        $(null,$(INTRO_BITMAPS) $(SOLARSRC)$/ooo_custom_images$/dev_nologo_broffice$/introabout$/intro.bmp $(INTRO_BITMAPS)) \
+        $(null,$(ABOUT_BITMAPS) $(SOLARSRC)$/ooo_custom_images$/broffice$/introabout$/about.bmp $(ABOUT_BITMAPS))
 
 ZIP1TARGET=dev_intro
 
@@ -73,6 +79,10 @@ ZIP4TARGET=intro_intro
 ZIP5TARGET=dev_broffice_intro
 
 ZIP6TARGET=broffice_intro
+
+ZIP7TARGET=nologo_broffice_intro
+
+ZIP8TARGET=nologo_dev_broffice_intro
 
 .INCLUDE :  target.mk
 
@@ -100,9 +110,18 @@ $(COMMONBIN)$/broffice$/intro.zip : $(COMMONBIN)$/broffice_intro.zip
     @$(COPY) $< $@
 
 $(COMMONBIN)$/dev_broffice$/intro.zip : $(COMMONBIN)$/dev_broffice_intro.zip
-    @@-$(MKDIR) $(@:d)
-    @$(COPY) $< $@
+        @@-$(MKDIR) $(@:d)
+        @$(COPY) $< $@
+
+$(COMMONBIN)$/nologo_broffice$/intro.zip : $(COMMONBIN)$/nologo_broffice_intro.zip
+        @@-$(MKDIR) $(@:d)
+        @$(COPY) $< $@
+
+$(COMMONBIN)$/nologo_dev_broffice$/intro.zip : $(COMMONBIN)$/nologo_dev_broffice_intro.zip
+        @@-$(MKDIR) $(@:d)
+        @$(COPY) $< $@
 
 $(COMMONBIN)$/intro$/intro.zip : $(COMMONBIN)$/intro_intro.zip
     @@-$(MKDIR) $(@:d)
     @$(COPY) $< $@
+
