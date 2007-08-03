@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.8 $
+#   $Revision: 1.9 $
 #
-#   last change: $Author: obo $ $Date: 2007-07-25 07:16:43 $
+#   last change: $Author: hr $ $Date: 2007-08-03 12:41:11 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -78,22 +78,29 @@ BUILD_ACTION=nmake
 BUILD_DIR=$(CONFIGURE_DIR)
 .ENDIF
 .ELSE
+
+.IF "$(OS)$(COM)"=="LINUXGCC" || "$(OS)$(COM)"=="FREEBSDGCC"
+LDFLAGS:=-Wl,-rpath,'$$$$ORIGIN' -Wl,-noinhibit-exec -Wl,-z,noexecstack
+.ENDIF                  # "$(OS)$(COM)"=="LINUXGCC"
+.IF "$(OS)$(COM)"=="SOLARISC52"
+LDFLAGS:=-Wl,-R'$$$$ORIGIN'
+.ENDIF                  # "$(OS)$(COM)"=="SOLARISC52"
+
 .IF "$(SYSBASE)"!=""
 xslt_CFLAGS+=-I$(SYSBASE)$/usr$/include -I$(SOLARINCDIR)$/external
 .IF "$(OS)"=="SOLARIS" || "$(OS)"=="LINUX"
-xslt_LDFLAGS+=-L$(SYSBASE)$/lib -L$(SYSBASE)$/usr$/lib -L$(SOLARLIBDIR) -lpthread -ldl
+LDFLAGS+=-L$(SYSBASE)$/lib -L$(SYSBASE)$/usr$/lib -L$(SOLARLIBDIR) -lpthread -ldl
 .ENDIF
 .ENDIF			# "$(SYSBASE)"!=""
+
+.EXPORT: LDFLAGS
+
 .IF "$(COMNAME)"=="sunpro5"
 xslt_CFLAGS+=-xc99=none
 .ENDIF                  # "$(COMNAME)"=="sunpro5"
 CONFIGURE_DIR=
-xslt_LDFLAGS+=-lxml2 -lz
-.IF "$(OS)"=="FREEBSD"
-xslt_LDFLAGS+=-L$(SOLARLIBDIR)
-.ENDIF
 CONFIGURE_ACTION=chmod 777 libxml2-config && .$/configure
-CONFIGURE_FLAGS=--enable-ipv6=no --without-crypto --without-python --enable-static=no --with-sax1=yes CFLAGS="$(xslt_CFLAGS)" LDFLAGS="$(xslt_LDFLAGS)" 
+CONFIGURE_FLAGS=--enable-ipv6=no --without-crypto --without-python --enable-static=no --with-sax1=yes CFLAGS="$(xslt_CFLAGS)" LIBXML2LIB=$(LIBXML2LIB) ZLIB3RDLIB=$(ZLIB3RDLIB)
 BUILD_ACTION=$(GNUMAKE)
 BUILD_FLAGS+= -j$(EXTMAXPROCESS)
 BUILD_DIR=$(CONFIGURE_DIR)
