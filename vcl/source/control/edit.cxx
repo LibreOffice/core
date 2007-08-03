@@ -4,9 +4,9 @@
  *
  *  $RCSfile: edit.cxx,v $
  *
- *  $Revision: 1.87 $
+ *  $Revision: 1.88 $
  *
- *  last change: $Author: rt $ $Date: 2007-07-24 10:06:15 $
+ *  last change: $Author: hr $ $Date: 2007-08-03 14:07:02 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1891,6 +1891,19 @@ void Edit::Draw( OutputDevice* pDev, const Point& rPos, const Size& rSize, ULONG
 
 // -----------------------------------------------------------------------
 
+static void ImplInvalidateOutermostBorder( Window* pWin )
+{
+    // allow control to show focused state
+    Window *pInvalWin = pWin, *pBorder = pWin;
+    while( ( pBorder = pInvalWin->GetWindow( WINDOW_BORDER ) ) != pInvalWin && pBorder &&
+           pInvalWin->ImplGetFrame() == pBorder->ImplGetFrame() )
+    {
+        pInvalWin = pBorder;
+    }
+
+    pInvalWin->Invalidate( INVALIDATE_CHILDREN | INVALIDATE_UPDATE );
+}
+
 void Edit::GetFocus()
 {
     if ( mpSubEdit )
@@ -1921,7 +1934,15 @@ void Edit::GetFocus()
 
         ImplShowCursor();
 
-        if ( maSelection.Len() )
+        // FIXME: this is currently only on aqua
+        // check for other platforms that need similar handling
+        if( ImplGetSVData()->maNWFData.mbNoFocusRects &&
+            IsNativeWidgetEnabled() &&
+            IsNativeControlSupported( CTRL_EDITBOX, PART_ENTIRE_CONTROL ) )
+        {
+            ImplInvalidateOutermostBorder( this );
+        }
+        else if ( maSelection.Len() )
         {
             // Selektion malen
             if ( !HasPaintEvent() )
@@ -1952,6 +1973,15 @@ void Edit::LoseFocus()
 {
     if ( !mpSubEdit )
     {
+        // FIXME: this is currently only on aqua
+        // check for other platforms that need similar handling
+        if( ImplGetSVData()->maNWFData.mbNoFocusRects &&
+            IsNativeWidgetEnabled() &&
+            IsNativeControlSupported( CTRL_EDITBOX, PART_ENTIRE_CONTROL ) )
+        {
+            ImplInvalidateOutermostBorder( this );
+        }
+
         if ( !mbActivePopup && !( GetStyle() & WB_NOHIDESELECTION ) && maSelection.Len() )
             ImplInvalidateOrRepaint();    // Selektion malen
     }
