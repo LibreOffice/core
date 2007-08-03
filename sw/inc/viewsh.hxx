@@ -4,9 +4,9 @@
  *
  *  $RCSfile: viewsh.hxx,v $
  *
- *  $Revision: 1.57 $
+ *  $Revision: 1.58 $
  *
- *  last change: $Author: ihi $ $Date: 2007-07-10 14:58:56 $
+ *  last change: $Author: hr $ $Date: 2007-08-03 13:39:19 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -103,6 +103,7 @@ class SwPagePreviewLayout;
 // --> OD 2005-12-01 #i27138#
 class SwTxtFrm;
 // <--
+class BitmapEx;
 
 struct SwAccessibilityOptions;
 class Region;
@@ -131,6 +132,11 @@ class SW_DLLPUBLIC ViewShell : public Ring
     //Umsetzen der SwVisArea, damit vor dem Drucken sauber formatiert
     //werden kann.
     friend void SetSwVisArea( ViewShell *pSh, const SwRect &, BOOL bPDFExport = FALSE );
+
+    // --> PB 2007-05-30 #146850#
+    static BitmapEx*    pReplaceBmp;    // replaced display of still loaded images
+    static BitmapEx*    pErrorBmp;      // error display of missed images
+    // <--
 
     static sal_Bool bLstAct;            // sal_True wenn Das EndAction der letzten Shell
                                     // laeuft; also die EndActions der
@@ -576,6 +582,11 @@ public:
     // <--
 
     inline bool IsInConstructor() const { return mbInConstructor; }
+
+    // --> PB 2007-05-30 #146850#
+    static const BitmapEx& GetReplacementBitmap( bool bIsErrorState );
+    static void DeleteReplacementBitmaps();
+    // <--
 };
 
 //---- class CurrShell verwaltet den globalen ShellPointer -------------------
