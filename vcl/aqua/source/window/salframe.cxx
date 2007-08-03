@@ -4,9 +4,9 @@
  *
  *  $RCSfile: salframe.cxx,v $
  *
- *  $Revision: 1.50 $
+ *  $Revision: 1.51 $
  *
- *  last change: $Author: rt $ $Date: 2007-07-05 10:24:01 $
+ *  last change: $Author: hr $ $Date: 2007-08-03 14:03:49 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -68,6 +68,9 @@
 
 #include <string>
 #include <boost/assert.hpp>
+#include <vcl/svapp.hxx>
+
+#include <rtl/ustrbuf.hxx>
 
 using namespace std;
 
@@ -309,12 +312,7 @@ void AquaSalFrame::initShow()
 
 void AquaSalFrame::SendPaintEvent()
 {
-    SalPaintEvent aPaintEvt;
-    aPaintEvt.mnBoundX = 0;
-    aPaintEvt.mnBoundY = 0;
-    aPaintEvt.mnBoundWidth = maGeometry.nWidth;
-    aPaintEvt.mnBoundHeight = maGeometry.nHeight;
-
+    SalPaintEvent aPaintEvt( 0, 0, maGeometry.nWidth, maGeometry.nHeight, true );
     CallCallback(SALEVENT_PAINT, &aPaintEvt);
 }
 
@@ -326,10 +324,15 @@ void AquaSalFrame::Show(BOOL bVisible, BOOL bNoActivate)
 
     AquaLog( ">*>_> %s(%s) %p (%ldx%ld)\n",__func__, bVisible ? "true" : "false", this, mnWidth, mnHeight );
 
+    mbShown = bVisible;
     if(bVisible)
     {
         if( mbInitShow )
             initShow();
+
+        // trigger filling our backbuffer
+        SendPaintEvent();
+
         ShowWindow(mrWindow);
         if(!bNoActivate)
             SelectWindow(mrWindow); //ActivateWindow(mrWindow, true);
@@ -348,13 +351,9 @@ void AquaSalFrame::Show(BOOL bVisible, BOOL bNoActivate)
             AquaSalMenu *pAquaSalMenu = (AquaSalMenu *) mpMenu;
             SetRootMenu(pAquaSalMenu->mrMenuRef);
         }
-
-        // trigger filling our backbuffer
-        SendPaintEvent();
     }
     else
         HideWindow(mrWindow);
-    mbShown = bVisible;
 }
 
 // -----------------------------------------------------------------------
@@ -427,12 +426,16 @@ void AquaSalFrame::SetClientSize( long nWidth, long nHeight )
     {
         Rect bounds;
         GetWindowBounds( mrWindow, kWindowContentRgn, &bounds );
-        bounds.right = bounds.left + nWidth;
-        bounds.bottom = bounds.top + nHeight;
-        SetWindowBounds( mrWindow, kWindowContentRgn, &bounds );
-        if( mbShown )
-            // trigger filling our backbuffer
-            SendPaintEvent();
+        if( bounds.right - bounds.left != nWidth ||
+            bounds.bottom - bounds.top != nHeight )
+        {
+            bounds.right = bounds.left + nWidth;
+            bounds.bottom = bounds.top + nHeight;
+            SetWindowBounds( mrWindow, kWindowContentRgn, &bounds );
+            if( mbShown )
+                // trigger filling our backbuffer
+                SendPaintEvent();
+        }
     }
 }
 
@@ -793,7 +796,195 @@ XubString AquaSalFrame::GetSymbolKeyName( const XubString&, USHORT nKeyCode )
     return GetKeyName( nKeyCode );
 }
 
+// we have to get Quartz color in preferences, and convert them into sal colors
+static short getHighlightColorFromPrefs( Color* pColor )
+{
+    // get the key in ~/Library/Preferences/.GlobalPreferences.plist
+    CFStringRef aHighLightColor = ( (CFStringRef)CFPreferencesCopyAppValue( CFSTR("AppleHighlightColor" ), kCFPreferencesCurrentApplication ) );
+
+    if (aHighLightColor == NULL)  // default, when never modified
+    {
+        // default value is light blue ( 0.7098 , 0.8353 , 1.00 )
+        pColor->SetRed( static_cast<UINT8>( 0.7098*255) );
+        pColor->SetGreen( static_cast<UINT8>( 0.8353*255) );
+        pColor->SetBlue( static_cast<UINT8>( 1.0000*255) );
+
+    }
+    else
+    {
+        // create a CFArray containing all the values, as CFString
+        CFArrayRef aCFArray = CFStringCreateArrayBySeparatingStrings ( kCFAllocatorDefault, aHighLightColor, CFSTR(" ") );
+
+        // we no longer need aHighlightColor
+        CFRelease(aHighLightColor);
+
+        // create an array of double, containing Quartz values
+        double aColorArray[3];
+
+        short i;
+        for (i=0; i<3 ; i++)
+        {
+            aColorArray[i] = CFStringGetDoubleValue ( (CFStringRef)CFArrayGetValueAtIndex(aCFArray, i) );
+        }
+
+        AquaLog( ">*>_> %s R %f V %f B %f \n",__func__, aColorArray[0],aColorArray[1],aColorArray[2]);
+
+        // we no longer need The CFArray
+        CFRelease(aCFArray);
+
+        // the colors (uff)
+        pColor->SetRed( static_cast<UINT8>( aColorArray[0]*255) );
+        pColor->SetGreen( static_cast<UINT8>( aColorArray[1]*255) );
+        pColor->SetBlue( static_cast<UINT8>( aColorArray[2]*255) );
+    }
+    return 0;
+}
+
 // -----------------------------------------------------------------------
+
+OSStatus AquaGetThemeFont( ThemeFontID eThemeFontID, ScriptCode eScriptCode, Str255 aFontFamilyName, SInt16 *nFontSize, Str255 aFontStyleName ) {
+
+    OSStatus eStatus = ::GetThemeFont( eThemeFontID, eScriptCode, aFontFamilyName, nFontSize, aFontStyleName );
+
+    // #i78983# GetThemeFont doesn't return its corresponding Font
+    // with script code for some languages
+    switch ( eScriptCode ) {
+    case kFontArabicScript:
+        strcpy( (char *)&aFontFamilyName[1], "Geeza Pro" );
+        aFontFamilyName[0] = strlen( (char *)&aFontFamilyName[1] );
+    break;
+    // TODO: any other language?
+    default:
+    break;
+    }
+
+    return eStatus;
+}
+
+static std::hash_map<rtl::OUString, ScriptCode, rtl::OUStringHash> LocaleScriptMapInit() {
+    std::hash_map <rtl::OUString, ScriptCode, rtl::OUStringHash> m;
+
+    // FIXME: the mapping mechanism leads to unsuitable fonts in some languages (e.g. cs)
+    // need to check each language and add the correct mapping
+    #if 0
+    m[rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "en" ) )] = kFontRomanScript;
+    m[rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "es" ) )] = kFontRomanScript;
+    m[rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "de" ) )] = kFontRomanScript;
+    m[rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "fr" ) )] = kFontRomanScript;
+    m[rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "it" ) )] = kFontRomanScript;
+    m[rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "ca" ) )] = kFontRomanScript;
+    m[rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "gl" ) )] = kFontRomanScript;
+    m[rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "da" ) )] = kFontRomanScript;
+    m[rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "fi" ) )] = kFontRomanScript;
+    m[rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "is" ) )] = kFontRomanScript;
+    m[rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "nl" ) )] = kFontRomanScript;
+    m[rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "no" ) )] = kFontRomanScript;
+    #endif
+
+    m[rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "ja" ) )] = kFontJapaneseScript;
+
+    m[rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "zh_HK" ) )] = kFontTraditionalChineseScript;
+    m[rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "zh_MO" ) )] = kFontTraditionalChineseScript;
+    m[rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "zh_SG" ) )] = kFontTraditionalChineseScript;
+    m[rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "zh_TW" ) )] = kFontTraditionalChineseScript;
+
+    m[rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "ko" ) )] = kFontKoreanScript;
+
+    #if 0
+    m[rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "ar" ) )] = kFontArabicScript;
+    m[rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "he" ) )] = kFontHebrewScript;
+    m[rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "el" ) )] = kFontGreekScript;
+
+    m[rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "be" ) )] = kFontCyrillicScript;
+    m[rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "bg" ) )] = kFontCyrillicScript;
+    m[rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "cv" ) )] = kFontCyrillicScript;
+    m[rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "ky" ) )] = kFontCyrillicScript;
+    m[rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "mk" ) )] = kFontCyrillicScript;
+    m[rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "ru" ) )] = kFontCyrillicScript;
+    m[rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "sh" ) )] = kFontCyrillicScript;
+    m[rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "sr" ) )] = kFontCyrillicScript;
+
+    m[rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "hi" ) )] = kFontDevanagariScript;
+    m[rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "pa" ) )] = kFontGurmukhiScript;
+    m[rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "gu" ) )] = kFontGujaratiScript;
+    m[rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "or" ) )] = kFontOriyaScript;
+    m[rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "bn" ) )] = kFontBengaliScript;
+    m[rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "ta" ) )] = kFontTamilScript;
+    m[rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "te" ) )] = kFontTeluguScript;
+    m[rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "kn" ) )] = kFontKannadaScript;
+    m[rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "ml" ) )] = kFontMalayalamScript;
+    // kFontSinhaleseScript; // si
+    // kFontBurmeseScript; // my
+    m[rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "hm" ) )] = kFontKhmerScript;
+    m[rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "th" ) )] = kFontThaiScript;
+    m[rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "lo" ) )] = kFontLaotianScript;
+    m[rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "ka" ) )] = kFontGeorgianScript;
+    m[rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "hy" ) )] = kFontArmenianScript;
+    m[rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "zh_CN" ) )] = kFontSimpleChineseScript;
+
+    // kFontTibetanScript; // bo
+    // kFontMongolianScript; // mm
+    // kFontGeezScript; // gez in ISO 639-2
+    // kFontSlavicScript; // sla in ISO 639-2
+    m[rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "bs" ) )] = kFontSlavicScript;
+    m[rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "cs" ) )] = kFontSlavicScript;
+    m[rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "hr" ) )] = kFontSlavicScript;
+    m[rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "lv" ) )] = kFontSlavicScript;
+    m[rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "mk" ) )] = kFontSlavicScript;
+    m[rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "pl" ) )] = kFontSlavicScript;
+    m[rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "sk" ) )] = kFontSlavicScript;
+    m[rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "sl" ) )] = kFontSlavicScript;
+
+    m[rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "vi" ) )] = kFontVietnameseScript;
+    // kFontExtendedArabicScript; // ??
+    // kFontSindhiScript; // sd
+    #endif
+
+    return m;
+}
+
+static ScriptCode GetScriptCodeForUiLocale()
+{
+    static std::hash_map<rtl::OUString, ScriptCode, rtl::OUStringHash> aLocaleScriptMap( LocaleScriptMapInit() );
+
+    const com::sun::star::lang::Locale& rLocale = Application::GetSettings().GetUILocale();
+    rtl::OUString aLocaleStr( rLocale.Language );
+    ScriptCode eScriptCode = smSystemScript;
+
+    // special case for zh
+    if ( aLocaleStr.equalsAscii( "zh" ) )
+    {
+        rtl::OUString aCountryStr( rLocale.Country );
+        rtl::OUStringBuffer aBuf( 8 );
+        aBuf.append( aLocaleStr );
+        if ( aCountryStr.equalsAscii("TW") ||
+             aCountryStr.equalsAscii("HK") ||
+             aCountryStr.equalsAscii("MO") ||
+             aCountryStr.equalsAscii("SG") )
+        {
+            aBuf.appendAscii( "_" );
+            aBuf.append( aCountryStr );
+        }
+        else
+        {
+            aBuf.appendAscii( "_CN" );
+        }
+        aLocaleStr = aBuf.makeStringAndClear();
+    }
+
+    std::hash_map<rtl::OUString, ScriptCode, rtl::OUStringHash>::const_iterator it;
+    it = aLocaleScriptMap.find( aLocaleStr );
+    if ( it != aLocaleScriptMap.end() )
+    {
+        eScriptCode = it->second;
+    }
+    else
+    {
+        eScriptCode = smSystemScript;
+    }
+
+    return eScriptCode;
+}
 
 static bool GetSystemFontSetting( ThemeFontID eThemeFontID, Font* pFont )
 {
@@ -801,10 +992,11 @@ static bool GetSystemFontSetting( ThemeFontID eThemeFontID, Font* pFont )
     Str255 aFontFamilyName = "";
     Str255 aFontStyleName = "";
     SInt16 nFontSize;
-    const ScriptCode eScriptCode = smSystemScript;
     const rtl_TextEncoding eNameEncoding = RTL_TEXTENCODING_APPLE_ROMAN;
-    OSStatus eStatus = ::GetThemeFont( eThemeFontID, eScriptCode, aFontFamilyName, &nFontSize, aFontStyleName );
-    AquaLog("GetSystemFontSetting(%d) => err=%d => (\"%s\", \"%s\", h=%d)\n",eThemeFontID,eStatus,aFontFamilyName,aFontStyleName,nFontSize);
+
+    ScriptCode eScriptCode = GetScriptCodeForUiLocale();
+    OSStatus eStatus = AquaGetThemeFont( eThemeFontID, eScriptCode, aFontFamilyName, &nFontSize, aFontStyleName );
+    AquaLog("GetSystemFontSetting(%d) => err=%d => (\"%s\", \"%s\", h=%d)\n",eThemeFontID,eStatus,aFontFamilyName+1,aFontStyleName+1,nFontSize);
     if( eStatus != noErr )
         return false;
 
@@ -870,47 +1062,53 @@ void AquaSalFrame::UpdateSettings( AllSettings& rSettings )
     aStyleSettings.SetDialogColor( aBackgroundColor );
     aStyleSettings.SetLightBorderColor( aBackgroundColor );
 
-    // Selected Background Color
-    Color aSelectBackgroundColor = Color( 0x34, 0x70, 0xCC );
-    aStyleSettings.SetHighlightColor( aSelectBackgroundColor );
-
     // get the system font settings
     Font aFont = aStyleSettings.GetAppFont();
     if( GetSystemFontSetting( kThemeApplicationFont, &aFont ) )
     {
         // TODO: better mapping of aqua<->ooo font settings
-        aStyleSettings.SetAppFont( aFont );
-        aStyleSettings.SetHelpFont( aFont );
-        aStyleSettings.SetTitleFont( aFont );
-        aStyleSettings.SetFloatTitleFont( aFont );
+    aStyleSettings.SetAppFont( aFont );
+    aStyleSettings.SetHelpFont( aFont );
+    aStyleSettings.SetTitleFont( aFont );
+    aStyleSettings.SetFloatTitleFont( aFont );
 
-        GetSystemFontSetting( kThemeMenuItemFont, &aFont );
-        aStyleSettings.SetMenuFont( aFont );
+    GetSystemFontSetting( kThemeMenuItemFont, &aFont );
+    aStyleSettings.SetMenuFont( aFont );
 
-        GetSystemFontSetting( kThemeToolbarFont, &aFont );
-        aStyleSettings.SetToolFont( aFont );
+    GetSystemFontSetting( kThemeToolbarFont, &aFont );
+    aStyleSettings.SetToolFont( aFont );
 
-        GetSystemFontSetting( kThemeLabelFont, &aFont );
-        aStyleSettings.SetLabelFont( aFont );
-        aStyleSettings.SetInfoFont( aFont );
-        aStyleSettings.SetRadioCheckFont( aFont );
-        aStyleSettings.SetFieldFont( aFont );
-        aStyleSettings.SetGroupFont( aFont );
-        aStyleSettings.SetIconFont( aFont );
+    GetSystemFontSetting( kThemeLabelFont, &aFont );
+    aStyleSettings.SetLabelFont( aFont );
+    aStyleSettings.SetInfoFont( aFont );
+    aStyleSettings.SetRadioCheckFont( aFont );
+    aStyleSettings.SetFieldFont( aFont );
+    aStyleSettings.SetGroupFont( aFont );
+    aStyleSettings.SetIconFont( aFont );
 
-        GetSystemFontSetting( kThemePushButtonFont, &aFont );
-        aStyleSettings.SetPushButtonFont( aFont );
+    GetSystemFontSetting( kThemePushButtonFont, &aFont );
+    aStyleSettings.SetPushButtonFont( aFont );
+    }
+
+    Color aSelectTextBackgroundColor;
+    if( getHighlightColorFromPrefs( &aSelectTextBackgroundColor ) == 0 )
+    {
+        aStyleSettings.SetHighlightTextColor( Color(0x0,0x0,0x0) );
+        aStyleSettings.SetHighlightColor( aSelectTextBackgroundColor );
     }
 
     Color aColor = aStyleSettings.GetMenuTextColor();
     if( GetSystemFontColor( kThemeTextColorRootMenuActive, &aColor ) )
     {
-        // TODO: better mapping of aqua<->ooo color settings
-        aStyleSettings.SetMenuTextColor( aColor );
-        // TODO: ...
+    // TODO: better mapping of aqua<->ooo color settings
+    aStyleSettings.SetMenuTextColor( aColor );
+    // TODO: ...
     }
 
     aStyleSettings.SetCursorBlinkTime( 500 );
+
+    // no mnemonics on aqua
+    aStyleSettings.SetOptions( aStyleSettings.GetOptions() | STYLE_OPTION_NOMNEMONICS );
 
     rSettings.SetStyleSettings( aStyleSettings );
 }
@@ -977,6 +1175,14 @@ void AquaSalFrame::SetPosSize(long nX, long nY, long nWidth, long nHeight, USHOR
     else
         ImplSalCalcFullScreenSize( this, &parentContentRect); // use screen if no parent
 
+    bool bPaint = false;
+    if( (nFlags & (SAL_FRAME_POSSIZE_WIDTH | SAL_FRAME_POSSIZE_HEIGHT)) != 0 )
+    {
+        if( nWidth != currentContentRect.right - currentContentRect.left ||
+            nHeight != currentContentRect.bottom - currentContentRect.top )
+            bPaint = true;
+    }
+
     // use old window pos if no new pos requested
     if (!(nFlags & SAL_FRAME_POSSIZE_X))
         nX = currentWindowRect.left;
@@ -992,22 +1198,34 @@ void AquaSalFrame::SetPosSize(long nX, long nY, long nWidth, long nHeight, USHOR
     if (!(nFlags & SAL_FRAME_POSSIZE_WIDTH))
         nWidth = currentContentRect.right - currentContentRect.left;
 
-    // always add the decoration as nWidth concerns only the content rect
-    nWidth += maGeometry.nLeftDecoration + maGeometry.nRightDecoration;
-
     // use old window height if no new height requested
     if (!(nFlags & SAL_FRAME_POSSIZE_HEIGHT))
         nHeight = currentContentRect.bottom - currentContentRect.top;
 
-    // always add the decoration as nHeight concerns only the content rect
-    nHeight += maGeometry.nTopDecoration + maGeometry.nBottomDecoration;
+    // --- RTL --- (mirror window pos)
+    if( mpParent && Application::GetSettings().GetLayoutRTL() )
+    {
+        // undo the change above
+        if( nFlags & SAL_FRAME_POSSIZE_X )
+            nX -= parentContentRect.left;
+        // mirror
+        nX = parentContentRect.right - nWidth - nX;
+    }
 
     Rect newWindowRect;
 
     newWindowRect.left = nX;
     newWindowRect.top = nY;
+
     newWindowRect.right = nX + nWidth;
+    // always add the decoration as nWidth concerns only the content rect
+    newWindowRect.right += maGeometry.nLeftDecoration + maGeometry.nRightDecoration;
+
     newWindowRect.bottom = nY + nHeight;
+    // always add the decoration as nHeight concerns only the content rect
+    newWindowRect.bottom += maGeometry.nTopDecoration + maGeometry.nBottomDecoration;
+
+
 
     /*
     AquaLog( "SetPosSize: Old rect (x: %d, y: %d, w: %d, h: %d)\n",
@@ -1018,7 +1236,7 @@ void AquaSalFrame::SetPosSize(long nX, long nY, long nWidth, long nHeight, USHOR
 
     UpdateFrameGeometry();
 
-    if( mbShown )
+    if( mbShown && bPaint )
         // trigger filling our backbuffer
         SendPaintEvent();
 
@@ -1594,9 +1812,14 @@ OSStatus HandleMouseEvent(EventHandlerCallRef inHandlerCallRef, EventRef inEvent
     GetEventParameter(inEvent, kEventParamMouseLocation, typeQDPoint, NULL, sizeof(aPt), NULL, &aPt);
 
     SalMouseEvent aMouseEvt;
-    aMouseEvt.mnX = aPt.h - bounds.left;
-    aMouseEvt.mnY = aPt.v - bounds.top;
 
+    // --- RTL --- (mirror mouse pos)
+    if( Application::GetSettings().GetLayoutRTL() )
+        aMouseEvt.mnX = bounds.right - aPt.h;
+    else
+        aMouseEvt.mnX = aPt.h - bounds.left;
+
+    aMouseEvt.mnY = aPt.v - bounds.top;
     aMouseEvt.mnCode = 0;
     aMouseEvt.mnTime = static_cast<ULONG>(GetEventTime(inEvent) * 1000);
 
@@ -1693,7 +1916,12 @@ OSStatus HandleMouseWheelMovedEvent(EventHandlerCallRef inHandlerCallRef, EventR
     GetEventParameter(inEvent, kEventParamMouseLocation, typeQDPoint, NULL, sizeof(aPt), NULL, &aPt);
 
     SalWheelMouseEvent aWheelEvt;
-    aWheelEvt.mnX = aPt.h - bounds.left;
+    // --- RTL --- (mirror mouse pos)
+    if( Application::GetSettings().GetLayoutRTL() )
+        aWheelEvt.mnX = bounds.right - aPt.h;
+    else
+        aWheelEvt.mnX = aPt.h - bounds.left;
+
     aWheelEvt.mnY = aPt.v - bounds.top;
 
     aWheelEvt.mnCode = 0;
@@ -2148,7 +2376,7 @@ OSStatus HandleUpdateActiveInputArea(EventHandlerCallRef inHandlerCallRef, Event
                                 nAttr = SAL_EXTTEXTINPUT_ATTR_UNDERLINE;
                                 break;
                             case kTSMHiliteSelectedRawText:
-                                nAttr = SAL_EXTTEXTINPUT_ATTR_DOTTEDUNDERLINE;
+                                nAttr = SAL_EXTTEXTINPUT_ATTR_HIGHLIGHT;
                                 break;
                             case kTSMHiliteConvertedText:
                                 nAttr = SAL_EXTTEXTINPUT_ATTR_UNDERLINE;
