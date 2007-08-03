@@ -91,10 +91,14 @@ mkdir: %COMMON_DEST%\pck%_EXT%\openoffice_dev_nologo
 mkdir: %COMMON_DEST%\pck%_EXT%\openoffice_nologo
 mkdir: %COMMON_DEST%\pck%_EXT%\broffice_dev
 mkdir: %COMMON_DEST%\pck%_EXT%\broffice
+mkdir: %COMMON_DEST%\pck%_EXT%\broffice_dev_nologo
+mkdir: %COMMON_DEST%\pck%_EXT%\broffice_nologo
 ..\%__SRC%\bin\intro\intro.zip %COMMON_DEST%\pck%_EXT%\intro.zip
 ..\%__SRC%\bin\dev\intro.zip %COMMON_DEST%\pck%_EXT%\openoffice_dev\intro.zip
 ..\%__SRC%\bin\dev_nologo\intro.zip %COMMON_DEST%\pck%_EXT%\openoffice_dev_nologo\intro.zip
 ..\%__SRC%\bin\nologo\intro.zip %COMMON_DEST%\pck%_EXT%\openoffice_nologo\intro.zip
 ..\%__SRC%\bin\dev_broffice\intro.zip %COMMON_DEST%\pck%_EXT%\broffice_dev\intro.zip
 ..\%__SRC%\bin\broffice\intro.zip %COMMON_DEST%\pck%_EXT%\broffice\intro.zip
+..\%__SRC%\bin\nologo_dev_broffice\intro.zip %COMMON_DEST%\pck%_EXT%\broffice_dev_nologo\intro.zip
+..\%__SRC%\bin\nologo_broffice\intro.zip %COMMON_DEST%\pck%_EXT%\broffice_nologo\intro.zip
 
