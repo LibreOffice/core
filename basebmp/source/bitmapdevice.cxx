@@ -4,9 +4,9 @@
  *
  *  $RCSfile: bitmapdevice.cxx,v $
  *
- *  $Revision: 1.29 $
+ *  $Revision: 1.30 $
  *
- *  last change: $Author: obo $ $Date: 2007-07-18 11:00:18 $
+ *  last change: $Author: hr $ $Date: 2007-08-03 12:27:01 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1464,7 +1464,8 @@ void BitmapDevice::drawMaskedColor( Color                        aSrcColor,
             BitmapDeviceSharedPtr pAlphaCopy(
                 cloneBitmapDevice( aSize,
                                    shared_from_this()) );
-            const basegfx::B2IRange aAlphaRange( basegfx::B2ITuple(),
+            basegfx::B2ITuple aGcc3WorkaroundTemporary;
+            const basegfx::B2IRange aAlphaRange( aGcc3WorkaroundTemporary,
                                                  aSize );
             pAlphaCopy->drawBitmap(rAlphaMask,
                                    aSrcRange,
@@ -1516,7 +1517,8 @@ void BitmapDevice::drawMaskedColor( Color                        aSrcColor,
                 BitmapDeviceSharedPtr pAlphaCopy(
                     cloneBitmapDevice( aSize,
                                        shared_from_this()) );
-                const basegfx::B2IRange aAlphaRange( basegfx::B2ITuple(),
+                basegfx::B2ITuple aGcc3WorkaroundTemporary;
+                const basegfx::B2IRange aAlphaRange( aGcc3WorkaroundTemporary,
                                                      aSize );
                 pAlphaCopy->drawBitmap(rAlphaMask,
                                        aSrcRange,
