@@ -4,9 +4,9 @@
  *
  *  $RCSfile: AppController.cxx,v $
  *
- *  $Revision: 1.43 $
+ *  $Revision: 1.44 $
  *
- *  last change: $Author: hr $ $Date: 2007-08-02 14:25:50 $
+ *  last change: $Author: hr $ $Date: 2007-08-03 12:47:47 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -178,6 +178,7 @@
 #ifndef _DBAUI_LISTVIEWITEMS_HXX_
 #include "listviewitems.hxx"
 #endif
+#include "ExtensionNotPresent.hxx"
 #ifndef DBAUI_APPDETAILVIEW_HXX
 #include "AppDetailView.hxx"
 #endif
@@ -256,8 +257,6 @@
 
 #include <algorithm>
 #include <functional>
-
-#include "ExtensionNotPresent.hxx"
 
 #define APP_SIZE_WIDTH  350
 #define APP_SIZE_HEIGHT 250
@@ -1683,30 +1682,6 @@ Reference< XComponent > OApplicationController::openElement(const ::rtl::OUStrin
     switch ( _eType )
     {
         case E_REPORT:
-            {
-                Reference< XContentEnumerationAccess > xEnumAccess(m_xServiceFactory, UNO_QUERY);
-                static ::rtl::OUString s_sReportDesign(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.report.pentaho.SOReportJobFactory"));
-                Reference< XEnumeration > xEnumDrivers = xEnumAccess->createContentEnumeration(s_sReportDesign);
-                if ( !xEnumDrivers.is() || !xEnumDrivers->hasMoreElements() )
-                {
-                    //OExtensionNotPresentDialog aDlg(getView(), getORB());
-                    //aDlg.Execute();
-                     // is there no report designer available?
-                    static const ::rtl::OUString sStatus = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("S1000"));
-                    String sMsg = String( ModuleRes( RID_STR_ERROR_NO_REPORT_INSTALLED ) );
-                    // sMsg.SearchAndReplace('#',e.Message);
-                    SQLExceptionInfo aInfo;
-
-                    SQLException aSQLException;
-                    aSQLException.Message = sMsg;
-                    // // aSQLException.Context = e.Context;
-                    aInfo = SQLExceptionInfo(aSQLException);
-                    //
-                    showError(aInfo);
-
-                    break;
-                }
-            }// run through
         case E_FORM:
             {
                 ::std::auto_ptr<OLinkedDocumentsAccess> aHelper = getDocumentsAccess(_eType);
