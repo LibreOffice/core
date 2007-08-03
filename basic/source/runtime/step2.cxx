@@ -4,9 +4,9 @@
  *
  *  $RCSfile: step2.cxx,v $
  *
- *  $Revision: 1.30 $
+ *  $Revision: 1.31 $
  *
- *  last change: $Author: ihi $ $Date: 2007-06-05 15:11:21 $
+ *  last change: $Author: hr $ $Date: 2007-08-03 09:56:23 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -117,8 +117,13 @@ SbxVariable* VBAFind( const String& rName, SbxClassType t )
 SbxVariable* SbiRuntime::FindElement
     ( SbxObject* pObj, UINT32 nOp1, UINT32 nOp2, SbError nNotFound, BOOL bLocal )
 {
-
     bool bIsVBAInterOp = SbiRuntime::isVBAEnabled();
+    if( bIsVBAInterOp )
+    {
+        StarBASIC* pMSOMacroRuntimeLib = GetSbData()->pMSOMacroRuntimLib;
+        if( pMSOMacroRuntimeLib != NULL )
+            pMSOMacroRuntimeLib->ResetFlag( SBX_EXTSEARCH );
+    }
 
     SbxVariable* pElem = NULL;
     if( !pObj )
