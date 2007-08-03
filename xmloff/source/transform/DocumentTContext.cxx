@@ -4,9 +4,9 @@
  *
  *  $RCSfile: DocumentTContext.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: hr $ $Date: 2007-06-27 16:20:13 $
+ *  last change: $Author: hr $ $Date: 2007-08-03 10:22:07 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -113,16 +113,22 @@ void XMLDocumentTransformerContext::StartElement( const Reference< XAttributeLis
             IsXMLToken( aLocalName, XML_MIMETYPE ) )
         {
             const OUString& rValue = xAttrList->getValueByIndex( i );
-            OUString aTmp( RTL_CONSTASCII_USTRINGPARAM("application/vnd.oasis.openoffice.") );
-            if( 0 == rValue.compareTo( aTmp, aTmp.getLength() ) )
+            static const char * aTmp[] =
             {
-                aClass = rValue.copy( aTmp.getLength() );
-            }
-            else
+                "application/vnd.oasis.openoffice.",
+                "application/x-vnd.oasis.openoffice.",
+                "application/vnd.oasis.opendocument.",
+                "application/x-vnd.oasis.document.",
+                NULL
+            };
+            for (int k=0; aTmp[k]; k++)
             {
-                aTmp = OUString( RTL_CONSTASCII_USTRINGPARAM("application/x-vnd.oasis.openoffice.") );
-                if( 0 == rValue.compareTo( aTmp, aTmp.getLength() ) )
-                    aClass = rValue.copy( aTmp.getLength() );
+                ::rtl::OUString sTmpString = ::rtl::OUString::createFromAscii(aTmp[k]);
+                if( rValue.matchAsciiL( aTmp[k], sTmpString.getLength() ) )
+                {
+                    aClass = rValue.copy( sTmpString.getLength() );
+                    break;
+                }
             }
 
             if( !pMutableAttrList )
