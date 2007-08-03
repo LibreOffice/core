@@ -4,9 +4,9 @@
  *
  *  $RCSfile: invader.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 03:06:53 $
+ *  last change: $Author: hr $ $Date: 2007-08-03 12:29:20 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -142,6 +142,9 @@ class MyWindow : public FloatingWindow
                 void    EndLevel();
                 void    Kollision();
         ResMgr*         GetResMgr(){return pRes;}
+
+        void    setApplication(MyApp *rApplication) { pApplication = rApplication; };
+        MyApp *pApplication;
 };
 
 #endif
