@@ -4,9 +4,9 @@
  *
  *  $RCSfile: browserlistbox.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: kz $ $Date: 2007-05-10 10:46:38 $
+ *  last change: $Author: hr $ $Date: 2007-08-03 13:52:45 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1128,14 +1128,6 @@ namespace pcr
             #endif
             }
         }
-
-        //..............................................................
-        Image lcl_getImageFromPossiblyEmptyGraphics( const Reference< XGraphic >& _rxGraphic )
-        {
-            if ( _rxGraphic.is() )
-                return Image( _rxGraphic );
-            return Image();
-        }
     }
 
     //------------------------------------------------------------------
@@ -1232,10 +1224,22 @@ namespace pcr
 
             if ( _rPropertyData.HasPrimaryButton )
             {
-                rLine.pLine->ShowBrowseButton( lcl_getImageFromPossiblyEmptyGraphics( _rPropertyData.PrimaryButtonImage ), true );
+                if ( _rPropertyData.PrimaryButtonImageURL.getLength() )
+                    rLine.pLine->ShowBrowseButton( _rPropertyData.PrimaryButtonImageURL, true );
+                else if ( _rPropertyData.PrimaryButtonImage.is() )
+                    rLine.pLine->ShowBrowseButton( Image( _rPropertyData.PrimaryButtonImage ), true );
+                else
+                    rLine.pLine->ShowBrowseButton( true );
 
                 if ( _rPropertyData.HasSecondaryButton )
-                    rLine.pLine->ShowBrowseButton( lcl_getImageFromPossiblyEmptyGraphics( _rPropertyData.SecondaryButtonImage ), false );
+                {
+                    if ( _rPropertyData.SecondaryButtonImageURL.getLength() )
+                        rLine.pLine->ShowBrowseButton( _rPropertyData.SecondaryButtonImageURL, false );
+                    else if ( _rPropertyData.SecondaryButtonImage.is() )
+                        rLine.pLine->ShowBrowseButton( Image( _rPropertyData.SecondaryButtonImage ), false );
+                    else
+                        rLine.pLine->ShowBrowseButton( false );
+                }
                 else
                     rLine.pLine->HideBrowseButton( false );
 
