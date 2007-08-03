@@ -4,9 +4,9 @@
  *
  *  $RCSfile: baside3.cxx,v $
  *
- *  $Revision: 1.39 $
+ *  $Revision: 1.40 $
  *
- *  last change: $Author: rt $ $Date: 2007-07-03 13:02:16 $
+ *  last change: $Author: hr $ $Date: 2007-08-03 09:57:52 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -472,9 +472,6 @@ void __EXPORT DialogWindow::ExecuteCommand( SfxRequest& rReq )
             }
             break;
         case SID_DELETE:
-#ifdef MAC
-        case SID_BACKSPACE:
-#endif
             if ( !IsReadOnly() )
             {
                 GetEditor()->Delete();
