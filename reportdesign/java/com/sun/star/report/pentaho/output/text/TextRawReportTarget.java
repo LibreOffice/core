@@ -4,9 +4,9 @@
  *
  *  $RCSfile: TextRawReportTarget.java,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2007-07-09 11:56:08 $
+ *  last change: $Author: hr $ $Date: 2007-08-03 09:51:21 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -71,6 +71,7 @@ import org.jfree.resourceloader.ResourceKey;
 import org.jfree.resourceloader.ResourceManager;
 import org.jfree.util.FastStack;
 import org.jfree.util.ObjectUtilities;
+//import org.jfree.util.Log;
 import org.jfree.xmlns.common.AttributeList;
 import org.jfree.xmlns.writer.XmlWriter;
 import org.jfree.xmlns.writer.XmlWriterSupport;
@@ -128,6 +129,7 @@ public class TextRawReportTarget extends OfficeDocumentReportTarget
   private int tableLayoutConfig;
   private int expectedTableRowCount;
   private boolean firstCellSeen;
+  private boolean cellEmpty;
 
   public TextRawReportTarget(final ReportJob reportJob,
                              final ResourceManager resourceManager,
@@ -313,6 +315,8 @@ public class TextRawReportTarget extends OfficeDocumentReportTarget
       }
       else
       {
+        // reuse the existing one ..
+        currentMasterPage = masterPage;
         masterPageName = currentMasterPage.getStyleName();
       }
     }
@@ -617,7 +621,7 @@ public class TextRawReportTarget extends OfficeDocumentReportTarget
     {
       // This cannot happen as long as the report sections only contain tables. But at some point in the
       // future they will be made of paragraphs, and then we are prepared ..
-//      Log.debug("Variables-Section in own paragraph " + variables);
+      // Log.debug("Variables-Section in own paragraph " + variables);
 
       StyleUtilities.copyStyle("paragraph",
           TextRawReportTarget.VARIABLES_HIDDEN_STYLE_WITH_KEEPWNEXT, getStylesCollection(),
@@ -629,23 +633,97 @@ public class TextRawReportTarget extends OfficeDocumentReportTarget
       variables = null;
     }
 
-    // todo: If keep-together is active and the modify the paragraph's style ..
+    if (ReportTargetUtil.isElementOfType(OfficeNamespaces.TABLE_NS, "table-cell", attrs))
+    {
+      cellEmpty = true;
+    }
+
+    boolean keepTogetherOnParagraph = true;
+
+    if (keepTogetherOnParagraph)
+    {
+      if (ReportTargetUtil.isElementOfType(OfficeNamespaces.TEXT_NS, "p", attrs))
+      {
+        cellEmpty = false;
+        if (firstCellSeen == false && sectionKeepTogether)
+        {
+          final String styleName = (String) attrs.getAttribute(OfficeNamespaces.TEXT_NS, "style-name");
+          final OfficeStyle style = deriveStyle("paragraph", styleName);
+          // Lets set the 'keep-together' flag..
+
+          Element paragraphProps = style.getParagraphProperties();
+          if (paragraphProps == null)
+          {
+            paragraphProps = new Section();
+            paragraphProps.setNamespace(OfficeNamespaces.STYLE_NS);
+            paragraphProps.setType("paragraph-properties");
+            style.addNode(paragraphProps);
+          }
+          paragraphProps.setAttribute(OfficeNamespaces.FO_NS, "keep-together", "always");
+          final int keepTogetherState = getCurrentContext().getKeepTogether();
+          // We prevent pagebreaks within the two adjacent rows (this one and the next one) if
+          // either a group-wide keep-together is defined or if we haven't reached the end of the
+          // current section yet.
+          if (keepTogetherState == PageContext.KEEP_TOGETHER_GROUP || expectedTableRowCount > 0)
+          {
+            paragraphProps.setAttribute(OfficeNamespaces.FO_NS, "keep-with-next", "always");
+          }
+
+          attrs.setAttribute(OfficeNamespaces.TEXT_NS, "style-name", style.getStyleName());
+        }
+      }
+    }
+    else
+    {
+      if (ReportTargetUtil.isElementOfType(OfficeNamespaces.TABLE_NS, "table-cell", attrs))
+      {
+        cellEmpty = false;
+        if (firstCellSeen == false && sectionKeepTogether)
+        {
+          final String styleName = (String) attrs.getAttribute(OfficeNamespaces.TABLE_NS, "style-name");
+          final OfficeStyle style = deriveStyle("table-cell", styleName);
+          // Lets set the 'keep-together' flag..
+
+          Element paragraphProps = style.getParagraphProperties();
+          if (paragraphProps == null)
+          {
+            paragraphProps = new Section();
+            paragraphProps.setNamespace(OfficeNamespaces.STYLE_NS);
+            paragraphProps.setType("paragraph-properties");
+            style.addNode(paragraphProps);
+          }
+          paragraphProps.setAttribute(OfficeNamespaces.FO_NS, "keep-together", "always");
+          final int keepTogetherState = getCurrentContext().getKeepTogether();
+          // We prevent pagebreaks within the two adjacent rows (this one and the next one) if
+          // either a group-wide keep-together is defined or if we haven't reached the end of the
+          // current section yet.
+          if (keepTogetherState == PageContext.KEEP_TOGETHER_GROUP || expectedTableRowCount > 0)
+          {
+            paragraphProps.setAttribute(OfficeNamespaces.FO_NS, "keep-with-next", "always");
+          }
+
+          attrs.setAttribute(OfficeNamespaces.TABLE_NS, "style-name", style.getStyleName());
+        }
+      }
+    }
 
     // process the styles as usual
     performStyleProcessing(attrs);
 
     final AttributeList attrList = buildAttributeList(attrs);
-    xmlWriter.writeTag(namespace, elementType, attrList,
-        XmlWriterSupport.OPEN);
+    xmlWriter.writeTag(namespace, elementType, attrList, XmlWriterSupport.OPEN);
 
-    if (tableLayoutConfig != TABLE_LAYOUT_VARIABLES_PARAGRAPH &&
-        ReportTargetUtil.isElementOfType(OfficeNamespaces.TEXT_NS, "p", attrs))
+    if (ReportTargetUtil.isElementOfType(OfficeNamespaces.TEXT_NS, "p", attrs))
     {
-      if (variables != null)
+      cellEmpty = false;
+      if (tableLayoutConfig != TABLE_LAYOUT_VARIABLES_PARAGRAPH)
       {
-//        Log.debug("Variables-Section in existing cell " + variables);
-        xmlWriter.writeText(variables);
-        variables = null;
+        if (variables != null)
+        {
+          //Log.debug("Variables-Section in existing cell " + variables);
+          xmlWriter.writeText(variables);
+          variables = null;
+        }
       }
     }
 
@@ -661,17 +739,17 @@ public class TextRawReportTarget extends OfficeDocumentReportTarget
     // Log.debug("Adding row-Style: " + rowStyle + " " + rowHeight);
     sectionHeight.add(rowHeight);
 
-    if (expectedTableRowCount > 0)
-    {
-      // Some other row. Create a keep-together
-
-    }
-    else
-    {
-      // This is the last row before the section will end.
-      // or (in some weird cases) There is no information when the row will end.
-      // Anyway, if we are here, we do not create a keep-together style on the table-row ..
-    }
+//    if (expectedTableRowCount > 0)
+//    {
+//      // Some other row. Create a keep-together
+//
+//    }
+//    else
+//    {
+//      // This is the last row before the section will end.
+//      // or (in some weird cases) There is no information when the row will end.
+//      // Anyway, if we are here, we do not create a keep-together style on the table-row ..
+//    }
     // process the styles as usual
     performStyleProcessing(attrs);
 
@@ -737,30 +815,18 @@ public class TextRawReportTarget extends OfficeDocumentReportTarget
       {
         // no pagebreaks ..
       }
-      else if (currentMasterPage == null)
+      else if (currentMasterPage == null ||
+               isPagebreakPending())
       {
         // Must be the first table, as we have no master-page yet.
         masterPageName = createMasterPage(true, true);
+        setPagebreakDefinition(null);
         if (masterPageName == null)
         {
           // we should always have a master-page ...
           masterPageName = currentMasterPage.getStyleName();
         }
         breakDefinition = new PageBreakDefinition(isResetPageNumber());
-      }
-      else if (isPagebreakPending())
-      {
-        // Derive an automatic style for the pagebreak.
-//        Log.debug("Manual pagebreak at begin of section: " + getCurrentRole());
-        breakDefinition = getPagebreakDefinition();
-        setPagebreakDefinition(null);
-        masterPageName = createMasterPage(true, true);
-        if (masterPageName == null)
-        {
-          // we should always have a master-page ...
-          masterPageName = currentMasterPage.getStyleName();
-        }
-
       }
     }
     else if (isPagebreakPending() &&
@@ -948,7 +1014,6 @@ public class TextRawReportTarget extends OfficeDocumentReportTarget
     final String elementType = ReportTargetUtil.getElemenTypeFromAttribute(attrs);
     final AttributeList attrList = buildAttributeList(attrs);
     xmlWriter.writeTag(namespace, elementType, attrList, XmlWriterSupport.OPEN);
-
   }
 
   private boolean isTableMergeActive()
@@ -1090,10 +1155,23 @@ public class TextRawReportTarget extends OfficeDocumentReportTarget
     }
   }
 
+  protected void startGroupInstance(final AttributeMap attrs)
+      throws IOException, DataSourceException, ReportProcessingException
+  {
+    if (getGroupContext().isGroupWithRepeatingSection())
+    {
+      setPagebreakDefinition(new PageBreakDefinition(isResetPageNumber()));
+    }
+  }
 
   protected void endGroup(final AttributeMap attrs)
       throws IOException, DataSourceException, ReportProcessingException
   {
+    if (getGroupContext().isGroupWithRepeatingSection())
+    {
+      setPagebreakDefinition(new PageBreakDefinition(isResetPageNumber()));
+    }
+
     super.endGroup(attrs);
     finishSection();
 
@@ -1190,9 +1268,11 @@ public class TextRawReportTarget extends OfficeDocumentReportTarget
       final AttributeList rootAttributes = new AttributeList();
       rootAttributes.addNamespaceDeclaration("office", OfficeNamespaces.OFFICE_NS);
       rootAttributes.addNamespaceDeclaration("config", OfficeNamespaces.CONFIG);
+      rootAttributes.addNamespaceDeclaration("ooo", OfficeNamespaces.OO2004_NS);
       rootAttributes.setAttribute(OfficeNamespaces.OFFICE_NS, "version", "1.0");
       final OutputStream outputStream = getOutputRepository().createOutputStream("settings.xml","text/xml");
       final XmlWriter xmlWriter = new XmlWriter(new OutputStreamWriter(outputStream, "UTF-8"), createTagDescription());
+      xmlWriter.setAlwaysAddNamespace(true);
       xmlWriter.writeXmlDeclaration("UTF-8");
       xmlWriter.writeTag(OfficeNamespaces.OFFICE_NS, "document-settings", rootAttributes, XmlWriterSupport.OPEN);
       xmlWriter.writeTag(OfficeNamespaces.OFFICE_NS, "settings", XmlWriterSupport.OPEN);
@@ -1241,7 +1321,7 @@ public class TextRawReportTarget extends OfficeDocumentReportTarget
       {
         // This cannot happen as long as the report sections only contain tables. But at some point in the
         // future they will be made of paragraphs, and then we are prepared ..
-//        Log.debug("Variables-Section " + variables);
+        //Log.debug("Variables-Section " + variables);
         if (sectionKeepTogether == true && expectedTableRowCount > 0)
         {
           StyleUtilities.copyStyle("paragraph",
@@ -1266,7 +1346,8 @@ public class TextRawReportTarget extends OfficeDocumentReportTarget
         }
       }
       // Only generate the empty paragraph, if we have to add the keep-together ..
-      else if (expectedTableRowCount > 0 && sectionKeepTogether == true && firstCellSeen == false)
+      else if (cellEmpty && expectedTableRowCount > 0 &&
+          sectionKeepTogether == true && firstCellSeen == false)
       {
         // we have no variables ..
         StyleUtilities.copyStyle("paragraph",
