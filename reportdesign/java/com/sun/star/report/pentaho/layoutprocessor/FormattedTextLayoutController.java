@@ -4,9 +4,9 @@
  *
  *  $RCSfile: FormattedTextLayoutController.java,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2007-07-09 11:56:05 $
+ *  last change: $Author: hr $ $Date: 2007-08-03 09:49:15 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -64,42 +64,9 @@ import org.jfree.util.Log;
 public class FormattedTextLayoutController
     extends AbstractReportElementLayoutController
 {
-//  private Boolean inRepeatingSection;
-
   public FormattedTextLayoutController()
   {
   }
-
-//  private boolean isInRepeatingSection ()
-//  {
-//    if (inRepeatingSection == null)
-//    {
-//      LayoutController parent = getParent();
-//      while (parent != null && inRepeatingSection == null)
-//      {
-//        if (parent instanceof OfficeRepeatingStructureLayoutController)
-//        {
-//          final OfficeRepeatingStructureLayoutController orslc =
-//              (OfficeRepeatingStructureLayoutController) parent;
-//          if (orslc.isNormalFlowProcessing())
-//          {
-//            inRepeatingSection = Boolean.FALSE;
-//          }
-//          else
-//          {
-//            inRepeatingSection = Boolean.TRUE;
-//          }
-//        }
-//        parent = parent.getParent();
-//      }
-//
-//      if (inRepeatingSection == null)
-//      {
-//        inRepeatingSection = Boolean.FALSE;
-//      }
-//    }
-//    return inRepeatingSection.booleanValue();
-//  }
 
   private VariablesCollection getVariablesCollection()
   {
@@ -179,9 +146,9 @@ public class FormattedTextLayoutController
     LayoutController parent = getParent();
     while (parent != null)
     {
-      if (parent instanceof ElementLayoutController)
+      if (parent instanceof TableCellLayoutController)
       {
-        final ElementLayoutController cellController = (ElementLayoutController) parent;
+        final TableCellLayoutController cellController = (TableCellLayoutController) parent;
         return cellController.getElement();
       }
       parent = parent.getParent();
@@ -195,12 +162,13 @@ public class FormattedTextLayoutController
     if (tce == null)
     {
       // NO particular format means: Fallback to string and hope and pray ..
-      return "string";
+      throw new IllegalStateException("A formatted text element must be a child of a Table-Cell.");
     }
 
     final String type = (String) tce.getAttribute(OfficeNamespaces.OFFICE_NS, "value-type");
     if (type == null)
     {
+      Log.error ("The Table-Cell does not have a office:value attribute defined. Your content will be messed up.");
       return "string";
     }
     return type;
