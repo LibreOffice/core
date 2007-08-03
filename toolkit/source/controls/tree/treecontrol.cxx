@@ -4,9 +4,9 @@
  *
  *  $RCSfile: treecontrol.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: hr $ $Date: 2007-06-27 12:22:16 $
+ *  last change: $Author: hr $ $Date: 2007-08-03 12:28:41 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -197,7 +197,8 @@ void SAL_CALL UnoTreeControl::addSelectionChangeListener( const Reference< XSele
     {
         // maSelectionListeners acts as a proxy,
         // add it to the peer if this is the first listener added to that proxy
-        Reference< XTreeControl >( getPeer(), UNO_QUERY_THROW )->addSelectionChangeListener(&maSelectionListeners);
+        Reference< XWindowPeer > xGcc3WorkaroundTemporary( getPeer());
+        Reference< XTreeControl >( xGcc3WorkaroundTemporary, UNO_QUERY_THROW )->addSelectionChangeListener(&maSelectionListeners);
     }
 }
 
@@ -209,7 +210,8 @@ void SAL_CALL UnoTreeControl::removeSelectionChangeListener( const Reference< XS
     {
         // maSelectionListeners acts as a proxy,
         // remove it from the peer if this is the last listener removed from that proxy
-        Reference< XTreeControl >( getPeer(), UNO_QUERY_THROW )->removeSelectionChangeListener(&maSelectionListeners);
+        Reference< XWindowPeer > xGcc3WorkaroundTemporary( getPeer());
+        Reference< XTreeControl >( xGcc3WorkaroundTemporary, UNO_QUERY_THROW )->removeSelectionChangeListener(&maSelectionListeners);
     }
     maSelectionListeners.removeInterface( xListener );
 }
@@ -227,14 +229,16 @@ sal_Bool SAL_CALL UnoTreeControl::addSelection( const Any& rSelection ) throw (I
 
 void SAL_CALL UnoTreeControl::removeSelection( const Any& rSelection ) throw (IllegalArgumentException, RuntimeException)
 {
-    Reference< XTreeControl >( getPeer(), UNO_QUERY_THROW )->removeSelection(rSelection);
+    Reference< XWindowPeer > xGcc3WorkaroundTemporary( getPeer());
+    Reference< XTreeControl >( xGcc3WorkaroundTemporary, UNO_QUERY_THROW )->removeSelection(rSelection);
 }
 
 // -------------------------------------------------------------------
 
 void SAL_CALL UnoTreeControl::clearSelection() throw (RuntimeException)
 {
-    Reference< XTreeControl >( getPeer(), UNO_QUERY_THROW )->clearSelection();
+    Reference< XWindowPeer > xGcc3WorkaroundTemporary( getPeer());
+    Reference< XTreeControl >( xGcc3WorkaroundTemporary, UNO_QUERY_THROW )->clearSelection();
 }
 
 // -------------------------------------------------------------------
@@ -271,7 +275,8 @@ OUString SAL_CALL UnoTreeControl::getDefaultExpandedGraphicURL() throw (RuntimeE
 
 void SAL_CALL UnoTreeControl::setDefaultExpandedGraphicURL( const OUString& _defaultexpansiongraphicurl ) throw (RuntimeException)
 {
-    Reference< XTreeControl >( getPeer(), UNO_QUERY_THROW )->setDefaultExpandedGraphicURL(_defaultexpansiongraphicurl);
+    Reference< XWindowPeer > xGcc3WorkaroundTemporary( getPeer());
+    Reference< XTreeControl >( xGcc3WorkaroundTemporary, UNO_QUERY_THROW )->setDefaultExpandedGraphicURL(_defaultexpansiongraphicurl);
 }
 
 // -------------------------------------------------------------------
@@ -285,7 +290,8 @@ OUString SAL_CALL UnoTreeControl::getDefaultCollapsedGraphicURL() throw (Runtime
 
 void SAL_CALL UnoTreeControl::setDefaultCollapsedGraphicURL( const OUString& _defaultcollapsedgraphicurl ) throw (RuntimeException)
 {
-    Reference< XTreeControl >( getPeer(), UNO_QUERY_THROW )->setDefaultCollapsedGraphicURL(_defaultcollapsedgraphicurl);
+    Reference< XWindowPeer > xGcc3WorkaroundTemporary( getPeer());
+    Reference< XTreeControl >( xGcc3WorkaroundTemporary, UNO_QUERY_THROW )->setDefaultCollapsedGraphicURL(_defaultcollapsedgraphicurl);
 }
 
 // -------------------------------------------------------------------
@@ -306,7 +312,8 @@ sal_Bool SAL_CALL UnoTreeControl::isNodeCollapsed( const Reference< XTreeNode >&
 
 void SAL_CALL UnoTreeControl::makeNodeVisible( const Reference< XTreeNode >& xNode ) throw (RuntimeException, ExpandVetoException, IllegalArgumentException)
 {
-    Reference< XTreeControl >( getPeer(), UNO_QUERY_THROW )->makeNodeVisible(xNode);
+    Reference< XWindowPeer > xGcc3WorkaroundTemporary( getPeer());
+    Reference< XTreeControl >( xGcc3WorkaroundTemporary, UNO_QUERY_THROW )->makeNodeVisible(xNode);
 }
 
 // -------------------------------------------------------------------
@@ -320,14 +327,16 @@ sal_Bool SAL_CALL UnoTreeControl::isNodeVisible( const Reference< XTreeNode >& x
 
 void SAL_CALL UnoTreeControl::expandNode( const Reference< XTreeNode >& xNode ) throw (RuntimeException, ExpandVetoException, IllegalArgumentException)
 {
-    Reference< XTreeControl >( getPeer(), UNO_QUERY_THROW )->expandNode(xNode);
+    Reference< XWindowPeer > xGcc3WorkaroundTemporary( getPeer());
+    Reference< XTreeControl >( xGcc3WorkaroundTemporary, UNO_QUERY_THROW )->expandNode(xNode);
 }
 
 // -------------------------------------------------------------------
 
 void SAL_CALL UnoTreeControl::collapseNode( const Reference< XTreeNode >& xNode ) throw (RuntimeException, ExpandVetoException, IllegalArgumentException)
 {
-    Reference< XTreeControl >( getPeer(), UNO_QUERY_THROW )->collapseNode(xNode);
+    Reference< XWindowPeer > xGcc3WorkaroundTemporary( getPeer());
+    Reference< XTreeControl >( xGcc3WorkaroundTemporary, UNO_QUERY_THROW )->collapseNode(xNode);
 }
 
 // -------------------------------------------------------------------
@@ -339,7 +348,8 @@ void SAL_CALL UnoTreeControl::addTreeExpansionListener( const Reference< XTreeEx
     {
         // maSelectionListeners acts as a proxy,
         // add it to the peer if this is the first listener added to that proxy
-        Reference< XTreeControl >( getPeer(), UNO_QUERY_THROW )->addTreeExpansionListener(&maTreeExpansionListeners);
+        Reference< XWindowPeer > xGcc3WorkaroundTemporary( getPeer());
+        Reference< XTreeControl >( xGcc3WorkaroundTemporary, UNO_QUERY_THROW )->addTreeExpansionListener(&maTreeExpansionListeners);
     }
 }
 
@@ -351,7 +361,8 @@ void SAL_CALL UnoTreeControl::removeTreeExpansionListener( const Reference< XTre
     {
         // maSelectionListeners acts as a proxy,
         // remove it from the peer if this is the last listener removed from that proxy
-        Reference< XTreeControl >( getPeer(), UNO_QUERY_THROW )->removeTreeExpansionListener(&maTreeExpansionListeners);
+        Reference< XWindowPeer > xGcc3WorkaroundTemporary( getPeer());
+        Reference< XTreeControl >( xGcc3WorkaroundTemporary, UNO_QUERY_THROW )->removeTreeExpansionListener(&maTreeExpansionListeners);
     }
     maTreeExpansionListeners.removeInterface( xListener );
 }
@@ -388,14 +399,16 @@ sal_Bool SAL_CALL UnoTreeControl::stopEditing() throw (RuntimeException)
 
 void SAL_CALL UnoTreeControl::cancelEditing() throw (RuntimeException)
 {
-    Reference< XTreeControl >( getPeer(), UNO_QUERY_THROW )->cancelEditing();
+    Reference< XWindowPeer > xGcc3WorkaroundTemporary( getPeer());
+    Reference< XTreeControl >( xGcc3WorkaroundTemporary, UNO_QUERY_THROW )->cancelEditing();
 }
 
 // -------------------------------------------------------------------
 
 void SAL_CALL UnoTreeControl::startEditingAtNode( const Reference< XTreeNode >& xNode ) throw (IllegalArgumentException, RuntimeException)
 {
-    Reference< XTreeControl >( getPeer(), UNO_QUERY_THROW )->startEditingAtNode(xNode);
+    Reference< XWindowPeer > xGcc3WorkaroundTemporary( getPeer());
+    Reference< XTreeControl >( xGcc3WorkaroundTemporary, UNO_QUERY_THROW )->startEditingAtNode(xNode);
 }
 
 // -------------------------------------------------------------------
@@ -407,7 +420,8 @@ void SAL_CALL UnoTreeControl::addTreeEditListener( const Reference< XTreeEditLis
     {
         // maSelectionListeners acts as a proxy,
         // add it to the peer if this is the first listener added to that proxy
-        Reference< XTreeControl >( getPeer(), UNO_QUERY_THROW )->addTreeEditListener(&maTreeEditListeners);
+        Reference< XWindowPeer > xGcc3WorkaroundTemporary( getPeer());
+        Reference< XTreeControl >( xGcc3WorkaroundTemporary, UNO_QUERY_THROW )->addTreeEditListener(&maTreeEditListeners);
     }
 }
 
@@ -419,7 +433,8 @@ void SAL_CALL UnoTreeControl::removeTreeEditListener( const Reference< XTreeEdit
     {
         // maSelectionListeners acts as a proxy,
         // remove it from the peer if this is the last listener removed from that proxy
-        Reference< XTreeControl >( getPeer(), UNO_QUERY_THROW )->removeTreeEditListener(&maTreeEditListeners);
+        Reference< XWindowPeer > xGcc3WorkaroundTemporary( getPeer());
+        Reference< XTreeControl >( xGcc3WorkaroundTemporary, UNO_QUERY_THROW )->removeTreeEditListener(&maTreeEditListeners);
     }
     maTreeEditListeners.removeInterface( xListener );
 }
