@@ -4,9 +4,9 @@
  *
  *  $RCSfile: moduldlg.cxx,v $
  *
- *  $Revision: 1.31 $
+ *  $Revision: 1.32 $
  *
- *  last change: $Author: obo $ $Date: 2007-03-15 15:58:22 $
+ *  last change: $Author: hr $ $Date: 2007-08-03 09:59:04 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -46,6 +46,7 @@
 #include <basidesh.hrc>
 #include <basidesh.hxx>
 #include <bastypes.hxx>
+#include <baside3.hxx>
 #include <basobj.hxx>
 #include <baside2.hrc>
 #include <sbxitem.hxx>
@@ -60,6 +61,12 @@
 #ifndef _COM_SUN_STAR_SCRIPT_XLIBRARYCONTAINERPASSWORD_HPP_
 #include <com/sun/star/script/XLibraryContainerPassword.hpp>
 #endif
+#include <com/sun/star/resource/XStringResourceManager.hpp>
+#include <com/sun/star/lang/XMultiServiceFactory.hpp>
+#include <comphelper/processfactory.hxx>
+#include <xmlscript/xmldlg_imexp.hxx>
+
+#include "localizationmgr.hxx"
 
 #ifndef _SBXCLASS_HXX //autogen
 #include <basic/sbx.hxx>
@@ -71,6 +78,8 @@
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
+using namespace ::com::sun::star::lang;
+using namespace ::com::sun::star::resource;
 
 
 ExtBasicTreeListBox::ExtBasicTreeListBox( Window* pParent, const ResId& rRes )
@@ -175,13 +184,25 @@ DragDropMode __EXPORT ExtBasicTreeListBox::NotifyStartDrag( TransferDataContaine
             BasicEntryDescriptor aDesc( GetEntryDescriptor( pEntry ) );
             ScriptDocument aDocument( aDesc.GetDocument() );
             ::rtl::OUString aOULibName( aDesc.GetLibName() );
+            // allow MOVE mode only for libraries, which are not readonly
             Reference< script::XLibraryContainer2 > xModLibContainer( aDocument.getLibraryContainer( E_SCRIPTS ), UNO_QUERY );
             Reference< script::XLibraryContainer2 > xDlgLibContainer( aDocument.getLibraryContainer( E_DIALOGS ), UNO_QUERY );
             if ( !( ( xModLibContainer.is() && xModLibContainer->hasByName( aOULibName ) && xModLibContainer->isLibraryReadOnly( aOULibName ) ) ||
                     ( xDlgLibContainer.is() && xDlgLibContainer->hasByName( aOULibName ) && xDlgLibContainer->isLibraryReadOnly( aOULibName ) ) ) )
             {
-                // allow MOVE mode only for libraries, which are not readonly
-                nMode_ |= SV_DRAGDROP_CTRL_MOVE;
+                // Only allow copy for localized libraries
+                bool bAllowMove = true;
+                if ( xDlgLibContainer.is() && xDlgLibContainer->hasByName( aOULibName ) )
+                {
+                    // Get StringResourceManager
+                    Reference< container::XNameContainer > xDialogLib( aDocument.getLibrary( E_DIALOGS, aOULibName, TRUE ) );
+                    Reference< XStringResourceManager > xSourceMgr =
+                        LocalizationMgr::getStringResourceFromDialogLibrary( xDialogLib );
+                    if( xSourceMgr.is() )
+                        bAllowMove = ( xSourceMgr->getLocales().getLength() == 0 );
+                }
+                if( bAllowMove )
+                    nMode_ |= SV_DRAGDROP_CTRL_MOVE;
             }
         }
     }
@@ -273,6 +294,62 @@ BOOL __EXPORT ExtBasicTreeListBox::NotifyCopying( SvLBoxEntry* pTarget, SvLBoxEn
 }
 
 
+void BasicIDEShell::CopyDialogResources( Reference< io::XInputStreamProvider >& io_xISP,
+    const ScriptDocument& rSourceDoc, const String& rSourceLibName, const ScriptDocument& rDestDoc,
+    const String& rDestLibName, const String& rDlgName )
+{
+    if ( !io_xISP.is() )
+        return;
+
+    // Get StringResourceManager
+    Reference< container::XNameContainer > xSourceDialogLib( rSourceDoc.getLibrary( E_DIALOGS, rSourceLibName, TRUE ) );
+    Reference< XStringResourceManager > xSourceMgr =
+        LocalizationMgr::getStringResourceFromDialogLibrary( xSourceDialogLib );
+    if( !xSourceMgr.is() )
+        return;
+    bool bSourceLocalized = ( xSourceMgr->getLocales().getLength() > 0 );
+
+    Reference< container::XNameContainer > xDestDialogLib( rDestDoc.getLibrary( E_DIALOGS, rDestLibName, TRUE ) );
+    Reference< XStringResourceManager > xDestMgr =
+        LocalizationMgr::getStringResourceFromDialogLibrary( xDestDialogLib );
+    if( !xDestMgr.is() )
+        return;
+    bool bDestLocalized = ( xDestMgr->getLocales().getLength() > 0 );
+
+    if( !bSourceLocalized && !bDestLocalized )
+        return;
+
+    // create dialog model
+    Reference< lang::XMultiServiceFactory > xMSF = ::comphelper::getProcessServiceFactory();
+    Reference< container::XNameContainer > xDialogModel = Reference< container::XNameContainer >( xMSF->createInstance
+        ( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.awt.UnoControlDialogModel" ) ) ), UNO_QUERY );
+    Reference< io::XInputStream > xInput( io_xISP->createInputStream() );
+    Reference< XComponentContext > xContext;
+    Reference< beans::XPropertySet > xProps( xMSF, UNO_QUERY );
+    OSL_ASSERT( xProps.is() );
+    OSL_VERIFY( xProps->getPropertyValue( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("DefaultContext")) ) >>= xContext );
+    ::xmlscript::importDialogModel( xInput, xDialogModel, xContext );
+
+    if( xDialogModel.is() )
+    {
+        if( bSourceLocalized && bDestLocalized )
+        {
+            Reference< resource::XStringResourceResolver > xSourceStringResolver( xSourceMgr, UNO_QUERY );
+            LocalizationMgr::copyResourceForDroppedDialog( xDialogModel, rDlgName, xDestMgr, xSourceStringResolver );
+        }
+        else if( bSourceLocalized )
+        {
+            LocalizationMgr::resetResourceForDialog( xDialogModel, xSourceMgr );
+        }
+        else if( bDestLocalized )
+        {
+            LocalizationMgr::setResourceIDsForDialog( xDialogModel, xDestMgr );
+        }
+        io_xISP = ::xmlscript::exportDialogModel( xDialogModel, xContext );
+    }
+}
+
+
 BOOL __EXPORT ExtBasicTreeListBox::NotifyCopyingMoving( SvLBoxEntry* pTarget, SvLBoxEntry* pEntry,
                         SvLBoxEntry*& rpNewParent, ULONG& rNewChildPos, BOOL bMove )
 {
@@ -349,6 +426,9 @@ BOOL __EXPORT ExtBasicTreeListBox::NotifyCopyingMoving( SvLBoxEntry* pTarget, Sv
                 Reference< io::XInputStreamProvider > xISP;
                 if ( rSourceDoc.getDialog( aSourceLibName, aSourceName, xISP ) )
                 {
+                    BasicIDEShell::CopyDialogResources( xISP, rSourceDoc,
+                        aSourceLibName, rDestDoc, aDestLibName, aSourceName );
+
                     // remove dialog from source library
                     if ( BasicIDE::RemoveDialog( rSourceDoc, aSourceLibName, aSourceName ) )
                     {
@@ -387,6 +467,9 @@ BOOL __EXPORT ExtBasicTreeListBox::NotifyCopyingMoving( SvLBoxEntry* pTarget, Sv
                 Reference< io::XInputStreamProvider > xISP;
                 if ( rSourceDoc.getDialog( aSourceLibName, aSourceName, xISP ) )
                 {
+                    BasicIDEShell::CopyDialogResources( xISP, rSourceDoc,
+                        aSourceLibName, rDestDoc, aDestLibName, aSourceName );
+
                     // insert dialog into target library
                     if ( rDestDoc.insertDialog( aDestLibName, aSourceName, xISP ) )
                         BasicIDE::MarkDocumentModified( rDestDoc );
@@ -412,7 +495,6 @@ BOOL __EXPORT ExtBasicTreeListBox::NotifyCopyingMoving( SvLBoxEntry* pTarget, Sv
 
     return 2;   // Aufklappen...
 }
-
 
 OrganizeDialog::OrganizeDialog( Window* pParent, INT16 tabId, BasicEntryDescriptor& rDesc )
     :TabDialog( pParent, IDEResId( RID_TD_ORGANIZE ) )
