@@ -4,9 +4,9 @@
  *
  *  $RCSfile: canvashelper.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: obo $ $Date: 2007-07-17 14:25:40 $
+ *  last change: $Author: hr $ $Date: 2007-08-03 11:49:55 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -753,10 +753,9 @@ namespace vclcanvas
                     // GraphicObject only supports scaling, rotation
                     // and translation)
 
-                    // setup GraphicAttr
-                    aGrfAttr.SetMirrorFlags(
-                        ( aScale.getX() < 0.0 ? BMP_MIRROR_HORZ : 0 ) |
-                        ( aScale.getY() < 0.0 ? BMP_MIRROR_VERT : 0 ) );
+                    // #i75339# don't apply mirror flags, having
+                    // negative size values is enough to make
+                    // GraphicObject flip the bitmap
                     aGrfAttr.SetRotation( static_cast< USHORT >(::basegfx::fround( nRotate*10.0 )) );
 
                     pGrfObj.reset( new GraphicObject( aBmpEx ) );
