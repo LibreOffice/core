@@ -6,9 +6,9 @@
  *
  *  $RCSfile: xmlCell.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2007-07-09 11:56:17 $
+ *  last change: $Author: hr $ $Date: 2007-08-03 09:56:15 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -53,7 +53,8 @@ namespace rptxml
         OXMLCell*       m_pCell;
           ::rtl::OUString m_sStyleName;
         ::rtl::OUString m_sText;
-        bool            m_bShape;
+        sal_Int32       m_nCurrentCount;
+        bool            m_bContainsShape;
 
         ORptFilter& GetOwnImport();
         OXMLCell(const OXMLCell&);
