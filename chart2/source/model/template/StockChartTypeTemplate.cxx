@@ -4,9 +4,9 @@
  *
  *  $RCSfile: StockChartTypeTemplate.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: rt $ $Date: 2007-07-25 08:54:55 $
+ *  last change: $Author: hr $ $Date: 2007-08-03 12:36:02 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -492,12 +492,12 @@ sal_Bool SAL_CALL StockChartTypeTemplate::matchesTemplate(
             Reference< beans::XPropertySet > xCTProp( xCandleStickChartType, uno::UNO_QUERY );
             if( xCTProp.is())
             {
-                sal_Bool bJapaneseProp;
+                sal_Bool bJapaneseProp = false;
                 xCTProp->getPropertyValue( C2U("Japanese")) >>= bJapaneseProp;
                 bResult = bResult && ( bHasJapaneseStyle == bJapaneseProp );
 
                 // in old chart japanese == showFirst
-                sal_Bool bShowFirstProp;
+                sal_Bool bShowFirstProp = false;
                 xCTProp->getPropertyValue( C2U("ShowFirst")) >>= bShowFirstProp;
                 bResult = bResult && ( bHasOpenValue == bShowFirstProp );
             }
