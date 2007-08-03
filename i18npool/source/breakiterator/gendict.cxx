@@ -4,9 +4,9 @@
  *
  *  $RCSfile: gendict.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: rt $ $Date: 2007-07-26 09:08:39 $
+ *  last change: $Author: hr $ $Date: 2007-08-03 12:33:51 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -56,13 +56,17 @@ SAL_IMPLEMENT_MAIN_WITH_ARGS(argc, argv)
 
     sfp = fopen(argv[1], "rb"); // open the source file for read;
     if (sfp == NULL)
+    {
         printf("Open the dictionary source file failed.");
+        return -1;
+    }
 
     // create the C source file to write
     cfp = fopen(argv[2], "wb");
     if (cfp == NULL) {
         fclose(sfp);
         printf("Can't create the C source file.");
+        return -1;
     }
 
     fprintf(cfp, "/*\n");
