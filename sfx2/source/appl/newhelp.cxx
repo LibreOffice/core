@@ -4,9 +4,9 @@
  *
  *  $RCSfile: newhelp.cxx,v $
  *
- *  $Revision: 1.126 $
+ *  $Revision: 1.127 $
  *
- *  last change: $Author: rt $ $Date: 2007-07-06 12:31:23 $
+ *  last change: $Author: hr $ $Date: 2007-08-03 13:57:39 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -411,11 +411,16 @@ ContentListBox_Impl::ContentListBox_Impl( Window* pParent, const ResId& rResId )
 
     aOpenBookImage      ( SfxResId( IMG_HELP_CONTENT_BOOK_OPEN ) ),
     aClosedBookImage    ( SfxResId( IMG_HELP_CONTENT_BOOK_CLOSED ) ),
-    aOpenChapterImage   ( SfxResId( IMG_HELP_CONTENT_CHAPTER_OPEN ) ),
-    aClosedChapterImage ( SfxResId( IMG_HELP_CONTENT_CHAPTER_CLOSED ) ),
     aDocumentImage      ( SfxResId( IMG_HELP_CONTENT_DOC ) )
 
 {
+    if ( GetSettings().GetStyleSettings().GetWindowColor().IsDark() )
+    {
+        aOpenBookImage = Image( SfxResId( IMG_HELP_CONTENT_BOOK_OPEN_HC ) );
+        aClosedBookImage = Image( SfxResId( IMG_HELP_CONTENT_BOOK_CLOSED_HC ) );
+        aDocumentImage = Image( SfxResId( IMG_HELP_CONTENT_DOC_HC ) );
+    }
+
     SetWindowBits( WB_HIDESELECTION | WB_HSCROLL );
 
     SetEntryHeight( 16 );
@@ -511,7 +516,7 @@ void ContentListBox_Impl::RequestingChilds( SvLBoxEntry* pParent )
                     SvLBoxEntry* pEntry = NULL;
                     if ( bIsFolder )
                     {
-                        pEntry = InsertEntry( aTitle, aOpenChapterImage, aClosedChapterImage, pParent, TRUE );
+                        pEntry = InsertEntry( aTitle, aOpenBookImage, aClosedBookImage, pParent, TRUE );
                         pEntry->SetUserData( new ContentEntry_Impl( aURL, sal_True ) );
                     }
                     else
