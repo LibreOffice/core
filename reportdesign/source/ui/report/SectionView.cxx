@@ -4,9 +4,9 @@
  *
  *  $RCSfile: SectionView.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: hr $ $Date: 2007-08-02 14:41:03 $
+ *  last change: $Author: hr $ $Date: 2007-08-03 10:04:21 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -74,7 +74,7 @@ OSectionView::OSectionView( SdrModel* pModel, OReportSection* _pSectionWindow, O
     ,m_pSectionWindow(_pSectionWindow)
 {
     DBG_CTOR( rpt_OSectionView,NULL);
-    //SetBufferedOutputAllowed(true);
+    SetBufferedOutputAllowed(true);
     SetBufferedOverlayAllowed(true);
     SetPageBorderVisible(false);
     SetBordVisible();
@@ -156,6 +156,10 @@ void OSectionView::MakeVisible( const Rectangle& rRect, Window& rWin )
             const DlgEdHint aHint( RPTUI_HINT_WINDOWSCROLLED );
             m_pReportWindow->getReportView()->Broadcast( aHint );
         }
+    }
+    else
+    {
+        rWin.Invalidate(INVALIDATE_NOERASE);
     }
 }
 //------------------------------------------------------------------------------
