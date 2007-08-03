@@ -4,9 +4,9 @@
  *
  *  $RCSfile: VSeriesPlotter.cxx,v $
  *
- *  $Revision: 1.36 $
+ *  $Revision: 1.37 $
  *
- *  last change: $Author: rt $ $Date: 2007-07-25 09:05:19 $
+ *  last change: $Author: hr $ $Date: 2007-08-03 12:37:12 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -612,7 +612,7 @@ double lcl_getErrorBarLogicLength(
                 break;
             case ErrorBarStyle_RELATIVE:
             {
-                double fPercent;
+                double fPercent = 0;
                 if( xProp->getPropertyValue( bPositive
                                              ? C2U("PositiveError")
                                              : C2U("NegativeError")) >>= fPercent )
@@ -634,7 +634,7 @@ double lcl_getErrorBarLogicLength(
             case ErrorBarStyle_ERROR_MARGIN:
             {
                 // todo: check if this is really what's called error-margin
-                double fPercent;
+                double fPercent = 0;
                 if( xProp->getPropertyValue( bPositive
                                              ? C2U("PositiveError")
                                              : C2U("NegativeError")) >>= fPercent )
