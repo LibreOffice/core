@@ -4,9 +4,9 @@
  *
  *  $RCSfile: CGLayout.java,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: vg $ $Date: 2006-04-07 13:47:48 $
+ *  last change: $Author: hr $ $Date: 2007-08-03 13:56:21 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -33,6 +33,7 @@
  *
  ************************************************************************/package com.sun.star.wizards.web.data;
 
+import com.sun.star.wizards.ui.UIConsts;
 import java.util.Hashtable;
 import java.util.Map;
 
@@ -56,7 +57,7 @@ public class CGLayout extends ConfigSetItem {
 
         String workPath = getSettings().workPath;
         FileAccess fa = new FileAccess(xmsf);
-        String stylesheetPath = fa.getURL(getSettings().workPath,"layouts/"+cp_FSName);
+        String stylesheetPath = fa.getURL(getSettings().workPath,"layouts/"+ cp_FSName);
 
         String[] files  = fa.listFiles(stylesheetPath,false);
 
@@ -68,8 +69,8 @@ public class CGLayout extends ConfigSetItem {
 
     public Object[] getImageUrls() {
         Object[] sRetUrls = new Object[1];
-        sRetUrls[0] = FileAccess.connectURLs(getSettings().workPath, "layouts/" + cp_FSName + ".png");
-        return sRetUrls;
+        int ResId = UIConsts.RID_IMG_WEB + (cp_Index *2);
+        return new Integer[]{new Integer(ResId), new Integer(ResId + 1)};
     }
 
     public Map getTemplates(XMultiServiceFactory xmsf) throws Exception {
