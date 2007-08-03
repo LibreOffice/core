@@ -4,9 +4,9 @@
  *
  *  $RCSfile: svimpicn.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: obo $ $Date: 2007-07-18 08:52:40 $
+ *  last change: $Author: hr $ $Date: 2007-08-03 12:28:13 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -218,7 +218,7 @@ MultiTextLineInfo::~MultiTextLineInfo()
 {
     for ( USHORT i = 0; i < mnLines; i++ )
         delete mpLines[i];
-    delete mpLines;
+    delete [] mpLines;
 }
 
 void MultiTextLineInfo::AddLine( TextLineInfo* pLine )
