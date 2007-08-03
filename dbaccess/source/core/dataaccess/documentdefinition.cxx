@@ -4,9 +4,9 @@
  *
  *  $RCSfile: documentdefinition.cxx,v $
  *
- *  $Revision: 1.45 $
+ *  $Revision: 1.46 $
  *
- *  last change: $Author: hr $ $Date: 2007-08-02 14:25:26 $
+ *  last change: $Author: hr $ $Date: 2007-08-03 10:22:23 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -242,6 +242,10 @@
 #ifndef _COMPHELPER_STORAGEHELPER_HXX
 #include <comphelper/storagehelper.hxx>
 #endif
+#ifndef _COM_SUN_STAR_CONTAINER_XCONTENTENUMERATIONACCESS_HPP_
+#include <com/sun/star/container/XContentEnumerationAccess.hpp>
+#endif
+#include <com/sun/star/io/WrongFormatException.hpp>
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::view;
@@ -1298,14 +1302,28 @@ void ODocumentDefinition::loadEmbeddedObject(const Sequence< sal_Int8 >& _aClass
                 else
                 {
                     sDocumentService = GetDocumentServiceFromMediaType(xStorage,m_pImpl->m_aProps.sPersistentName,m_xORB,aClassID);
+                    // check if we are not a form and
+                    // the com.sun.star.report.pentaho.SOReportJobFactory is not present.
+                    if (m_bForm == 0 /* MAGIC! */ && !sDocumentService.equalsAscii("com.sun.star.text.TextDocument"))
+                    {
+                        // we seems to be a new report, check if report extension is present.
+                        Reference< XContentEnumerationAccess > xEnumAccess(m_xORB, UNO_QUERY);
+                        static ::rtl::OUString s_sReportDesign(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.report.pentaho.SOReportJobFactory"));
+                        Reference< XEnumeration > xEnumDrivers = xEnumAccess->createContentEnumeration(s_sReportDesign);
+                        if ( !xEnumDrivers.is() || !xEnumDrivers->hasMoreElements() )
+                        {
+                            com::sun::star::io::WrongFormatException aWFE;
+                            aWFE.Message = ::rtl::OUString::createFromAscii("Extension not present.");
+                            throw aWFE;
+                        }
+                    }
                     if ( !aClassID.getLength() )
                     {
                         if ( m_bForm )
                             aClassID = MimeConfigurationHelper::GetSequenceClassID(SO3_SW_CLASSID);
                         else
                         {
-                            ::comphelper::MimeConfigurationHelper aConfigHelper(m_xORB);
-                            aClassID = aConfigHelper.GetSequenceClassIDFromObjectName((::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Report"))));
+                            aClassID = MimeConfigurationHelper::GetSequenceClassID(SO3_RPT_CLASSID_90);
                         }
                     }
                 }
