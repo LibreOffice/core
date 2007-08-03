@@ -4,9 +4,9 @@
  *
  *  $RCSfile: browserline.hxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: kz $ $Date: 2007-05-10 10:46:25 $
+ *  last change: $Author: hr $ $Date: 2007-08-03 13:52:33 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -123,7 +123,9 @@ namespace pcr
         void                SetTabOrder(Window* pRefWindow, sal_uInt16 nFlags );
 
         sal_Bool            GrabFocus();
+        void                ShowBrowseButton( const ::rtl::OUString& _rImageURL, sal_Bool _bPrimary );
         void                ShowBrowseButton( const Image& _rImage, sal_Bool _bPrimary );
+        void                ShowBrowseButton( sal_Bool _bPrimary );
         void                HideBrowseButton( sal_Bool _bPrimary );
 
         void                EnablePropertyControls( sal_Int16 _nControls, bool _bEnable );
@@ -144,6 +146,9 @@ namespace pcr
         void    implUpdateEnabledDisabled();
 
         void    impl_layoutComponents();
+
+        PushButton& impl_ensureButton( bool _bPrimary );
+        void        impl_getImagesFromURL_nothrow( const ::rtl::OUString& _rImageURL, Image& _out_rImage, Image& _out_rHCImage );
     };
 
 //............................................................................
