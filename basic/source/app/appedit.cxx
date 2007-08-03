@@ -4,9 +4,9 @@
  *
  *  $RCSfile: appedit.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: hr $ $Date: 2007-06-27 14:12:35 $
+ *  last change: $Author: hr $ $Date: 2007-08-03 13:56:25 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -216,11 +216,14 @@ long AppEdit::InitMenu( Menu* pMenu )
 {
     AppWin::InitMenu (pMenu );
 
-    USHORT UndoCount = ((TextEdit*)pDataEdit)->aEdit.pTextEngine->GetUndoManager().GetUndoActionCount();
-    USHORT RedoCount = ((TextEdit*)pDataEdit)->aEdit.pTextEngine->GetUndoManager().GetRedoActionCount();
+    if( pDataEdit )
+    {
+        USHORT UndoCount = ((TextEdit*)pDataEdit)->aEdit.pTextEngine->GetUndoManager().GetUndoActionCount();
+        USHORT RedoCount = ((TextEdit*)pDataEdit)->aEdit.pTextEngine->GetUndoManager().GetRedoActionCount();
 
-    pMenu->EnableItem( RID_EDITUNDO,    UndoCount > 0 );
-    pMenu->EnableItem( RID_EDITREDO,    RedoCount > 0 );
+        pMenu->EnableItem( RID_EDITUNDO,    UndoCount > 0 );
+        pMenu->EnableItem( RID_EDITREDO,    RedoCount > 0 );
+    }
 
     return TRUE;
 }
