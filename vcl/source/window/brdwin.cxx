@@ -4,9 +4,9 @@
  *
  *  $RCSfile: brdwin.cxx,v $
  *
- *  $Revision: 1.30 $
+ *  $Revision: 1.31 $
  *
- *  last change: $Author: rt $ $Date: 2007-07-24 10:18:23 $
+ *  last change: $Author: hr $ $Date: 2007-08-03 14:08:02 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1125,6 +1125,7 @@ void ImplSmallBorderWindowView::Init( OutputDevice* pDev, long nWidth, long nHei
     mpOutDev    = pDev;
     mnWidth     = nWidth;
     mnHeight    = nHeight;
+    mbNWFBorder = false;
 
     USHORT nBorderStyle = mpBorderWindow->GetBorderStyle();
     if ( nBorderStyle & WINDOW_BORDER_NOBORDER )
@@ -1136,23 +1137,116 @@ void ImplSmallBorderWindowView::Init( OutputDevice* pDev, long nWidth, long nHei
     }
     else
     {
-        USHORT nStyle = FRAME_DRAW_NODRAW;
-        // Wenn Border umgesetzt wurde oder BorderWindow ein Frame-Fenster
-        // ist, dann Border nach aussen
-        if ( (nBorderStyle & WINDOW_BORDER_DOUBLEOUT) || mpBorderWindow->mbSmallOutBorder )
-            nStyle |= FRAME_DRAW_DOUBLEOUT;
-        else
-            nStyle |= FRAME_DRAW_DOUBLEIN;
-        if ( nBorderStyle & WINDOW_BORDER_MONO )
-            nStyle |= FRAME_DRAW_MONO;
+        // FIXME: this is currently only on aqua, check with other
+        // platforms
+        if( ImplGetSVData()->maNWFData.mbNoFocusRects )
+        {
+            // for native widget drawing we must find out what
+            // control this border belongs to
+            Window *pWin = NULL, *pCtrl = NULL;
+            if( mpOutDev->GetOutDevType() == OUTDEV_WINDOW )
+                pWin = (Window*) mpOutDev;
 
-        DecorationView  aDecoView( mpOutDev );
-        Rectangle       aRect( 0, 0, 10, 10 );
-        Rectangle       aCalcRect = aDecoView.DrawFrame( aRect, nStyle );
-        mnLeftBorder    = aCalcRect.Left();
-        mnTopBorder     = aCalcRect.Top();
-        mnRightBorder   = aRect.Right()-aCalcRect.Right();
-        mnBottomBorder  = aRect.Bottom()-aCalcRect.Bottom();
+            ControlType aCtrlType = 0;
+            if( pWin && (pCtrl = mpBorderWindow->GetWindow( WINDOW_CLIENT )) != NULL )
+            {
+                switch( pCtrl->GetType() )
+                {
+                    case WINDOW_MULTILINEEDIT:
+                        aCtrlType = CTRL_MULTILINE_EDITBOX;
+                        mbNWFBorder = true;
+                        break;
+                    case WINDOW_EDIT:
+                    case WINDOW_PATTERNFIELD:
+                    case WINDOW_METRICFIELD:
+                    case WINDOW_CURRENCYFIELD:
+                    case WINDOW_DATEFIELD:
+                    case WINDOW_TIMEFIELD:
+                    case WINDOW_LONGCURRENCYFIELD:
+                    case WINDOW_NUMERICFIELD:
+                    case WINDOW_SPINFIELD:
+                        if( pCtrl->GetStyle() & WB_SPIN )
+                            aCtrlType = CTRL_SPINBOX;
+                        // FIXME: suppoort spin buttons correctly in salnativewidgets.cxx
+                        else
+                        {
+                            aCtrlType = CTRL_EDITBOX;
+                            mbNWFBorder = true;
+                        }
+                        break;
+                    default:
+                        break;
+                }
+            }
+            if( mbNWFBorder )
+            {
+                ImplControlValue aControlValue;
+                Region aCtrlRegion( Rectangle( Point(), Size( mnWidth < 10 ? 10 : mnWidth, mnHeight < 10 ? 10 : mnHeight ) ) );
+                Region aBoundingRgn( aCtrlRegion );
+                Region aContentRgn( aCtrlRegion );
+                if( pWin->GetNativeControlRegion( aCtrlType, PART_ENTIRE_CONTROL, aCtrlRegion,
+                                                  CTRL_STATE_ENABLED, aControlValue, rtl::OUString(),
+                                                  aBoundingRgn, aContentRgn ) )
+                {
+                    Rectangle aBounds( aBoundingRgn.GetBoundRect() );
+                    Rectangle aContent( aContentRgn.GetBoundRect() );
+                    mnLeftBorder    = aContent.Left() - aBounds.Left();
+                    mnRightBorder   = aBounds.Right() - aContent.Right();
+                    mnTopBorder     = aContent.Top() - aBounds.Top();
+                    mnBottomBorder  = aBounds.Bottom() - aContent.Bottom();
+                    if( mnWidth && mnHeight )
+                    {
+
+                        mpBorderWindow->SetPaintTransparent( TRUE );
+                        mpBorderWindow->SetBackground();
+                        pCtrl->SetPaintTransparent( TRUE );
+
+                        Window* pCompoundParent = NULL;
+                        if( pWin->GetParent() && pWin->GetParent()->IsCompoundControl() )
+                            pCompoundParent = pWin->GetParent();
+
+                        if( pCompoundParent )
+                            pCompoundParent->SetPaintTransparent( TRUE );
+
+                        if( mnWidth < aBounds.GetWidth() || mnHeight < aBounds.GetHeight() )
+                        {
+                            if( ! pCompoundParent ) // compound controls have to fix themselves
+                            {
+                                Point aPos( mpBorderWindow->GetPosPixel() );
+                                if( mnWidth < aBounds.GetWidth() )
+                                    aPos.X() -= (aBounds.GetWidth() - mnWidth) / 2;
+                                if( mnHeight < aBounds.GetHeight() )
+                                    aPos.Y() -= (aBounds.GetHeight() - mnHeight) / 2;
+                                mpBorderWindow->SetPosSizePixel( aPos, aBounds.GetSize() );
+                            }
+                        }
+                    }
+                }
+                else
+                    mbNWFBorder = false;
+            }
+        }
+
+        if( ! mbNWFBorder )
+        {
+            USHORT nStyle = FRAME_DRAW_NODRAW;
+            // Wenn Border umgesetzt wurde oder BorderWindow ein Frame-Fenster
+            // ist, dann Border nach aussen
+            if ( (nBorderStyle & WINDOW_BORDER_DOUBLEOUT) || mpBorderWindow->mbSmallOutBorder )
+                nStyle |= FRAME_DRAW_DOUBLEOUT;
+            else
+                nStyle |= FRAME_DRAW_DOUBLEIN;
+            if ( nBorderStyle & WINDOW_BORDER_MONO )
+                nStyle |= FRAME_DRAW_MONO;
+
+            DecorationView  aDecoView( mpOutDev );
+            Rectangle       aRect( 0, 0, 10, 10 );
+            Rectangle       aCalcRect = aDecoView.DrawFrame( aRect, nStyle );
+            mnLeftBorder    = aCalcRect.Left();
+            mnTopBorder     = aCalcRect.Top();
+            mnRightBorder   = aRect.Right()-aCalcRect.Right();
+            mnBottomBorder  = aRect.Bottom()-aCalcRect.Bottom();
+        }
     }
 }
 
@@ -1263,6 +1357,25 @@ void ImplSmallBorderWindowView::DrawWindow( USHORT nDrawFlags, OutputDevice*, co
             nState &= ~CTRL_STATE_ENABLED;
         if ( pWin->HasFocus() )
             nState |= CTRL_STATE_FOCUSED;
+        else if( mbNWFBorder )
+        {
+            // FIXME: this is curently only on aqua, see if other platforms can profit
+
+            // FIXME: for aqua focus rings all controls need to support GetNativeControlRegion
+            // for the dropdown style
+            if( (pCtrl->GetStyle() & WB_DROPDOWN) == 0 )
+            {
+                if( pCtrl->HasFocus() )
+                    nState |= CTRL_STATE_FOCUSED;
+                else
+                {
+                    Edit* pEdit = dynamic_cast<Edit*>(pCtrl);
+                    if( pEdit && pEdit->GetSubEdit() && pEdit->GetSubEdit()->HasFocus() )
+                        nState |= CTRL_STATE_FOCUSED;
+                }
+            }
+        }
+
         BOOL bMouseOver = FALSE;
         Window *pCtrlChild = pCtrl->GetWindow( WINDOW_FIRSTCHILD );
         while( pCtrlChild && (bMouseOver = pCtrlChild->IsMouseOver()) == FALSE )
@@ -1273,6 +1386,14 @@ void ImplSmallBorderWindowView::DrawWindow( USHORT nDrawFlags, OutputDevice*, co
 
         Point aPoint;
         Region aCtrlRegion( Rectangle( aPoint, Size( mnWidth, mnHeight ) ) );
+
+        Region aBoundingRgn( Rectangle( aPoint, Size( mnWidth, mnHeight ) ) );
+        Region aContentRgn=aCtrlRegion;
+        if(pWin->GetNativeControlRegion( aCtrlType, aCtrlPart, aCtrlRegion,
+            nState, aControlValue, rtl::OUString(), aBoundingRgn, aContentRgn )) {
+                        aCtrlRegion=aContentRgn;
+        }
+
         bNativeOK = pWin->DrawNativeControl( aCtrlType, aCtrlPart, aCtrlRegion, nState,
                 aControlValue, rtl::OUString() );
 
