@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xmlSection.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2007-07-09 11:56:18 $
+ *  last change: $Author: hr $ $Date: 2007-08-03 09:58:01 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -119,6 +119,7 @@ OXMLSection::OXMLSection( ORptFilter& rImport,
     const SvXMLTokenMap& rTokenMap = rImport.GetSectionElemTokenMap();
 
     const sal_Int16 nLength = (m_xSection.is() && _xAttrList.is()) ? _xAttrList->getLength() : 0;
+    static const ::rtl::OUString s_sTRUE = ::xmloff::token::GetXMLToken(XML_TRUE);
     try
     {
         for(sal_Int16 i = 0; i < nLength; ++i)
@@ -136,6 +137,9 @@ OXMLSection::OXMLSection( ORptFilter& rImport,
                         m_xSection->getReportDefinition()->setPageHeaderOption(lcl_getReportPrintOption(sValue));
                     else
                         m_xSection->getReportDefinition()->setPageFooterOption(lcl_getReportPrintOption(sValue));
+                    break;
+                case XML_TOK_REPEAT_SECTION:
+                    m_xSection->setRepeatSection(sValue == s_sTRUE );
                     break;
 
                 default:
