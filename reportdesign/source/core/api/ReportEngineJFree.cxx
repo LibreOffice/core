@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ReportEngineJFree.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: hr $ $Date: 2007-08-02 14:30:29 $
+ *  last change: $Author: hr $ $Date: 2007-08-03 12:42:59 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -493,13 +493,17 @@ void SAL_CALL OReportEngineJFree::setActiveConnection( const uno::Reference< sdb
         ::rtl::OUString sExpression = xGroup->getExpression();
         if ( xColumns->hasByName(sExpression) )
             sExpression = ::dbtools::quoteName( sQuote, sExpression );
-        aOrder.append( sExpression );
-        if (aOrder.getLength() > 0)
-            aOrder.appendAscii( " " );
-        if ( !xGroup->getSortAscending() )
-            aOrder.appendAscii( "DESC" );
-        if ( (i+1) < nCount )
-            aOrder.appendAscii( "," );
+        sExpression = sExpression.trim(); // Trim away white spaces
+        if (sExpression.getLength() > 0)
+        {
+            aOrder.append( sExpression );
+            if (aOrder.getLength() > 0)
+                aOrder.appendAscii( " " );
+            if ( !xGroup->getSortAscending() )
+                aOrder.appendAscii( "DESC" );
+            if ( (i+1) < nCount )
+                aOrder.appendAscii( "," );
+        }
     }
 
     return aOrder.makeStringAndClear();
