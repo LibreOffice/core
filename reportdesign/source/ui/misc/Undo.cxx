@@ -4,9 +4,9 @@
  *
  *  $RCSfile: Undo.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: hr $ $Date: 2007-08-02 14:39:14 $
+ *  last change: $Author: hr $ $Date: 2007-08-03 10:02:57 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -136,6 +136,7 @@ namespace
 }
 //----------------------------------------------------------------------------
 TYPEINIT1( OSectionUndo,         OCommentUndoAction );
+DBG_NAME(rpt_OSectionUndo)
 //----------------------------------------------------------------------------
 OSectionUndo::OSectionUndo(OReportModel& _rMod
                            ,sal_uInt16 _nSlot
@@ -146,6 +147,7 @@ OSectionUndo::OSectionUndo(OReportModel& _rMod
 ,m_nSlot(_nSlot)
 ,m_bInserted(false)
 {
+    DBG_CTOR(rpt_OSectionUndo,NULL);
 }
 // -----------------------------------------------------------------------------
 OSectionUndo::~OSectionUndo()
@@ -175,6 +177,7 @@ OSectionUndo::~OSectionUndo()
             }
         }
     }
+    DBG_DTOR(rpt_OSectionUndo,NULL);
 }
 // -----------------------------------------------------------------------------
 void OSectionUndo::collectControls(const uno::Reference< report::XSection >& _xSection)
