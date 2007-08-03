@@ -4,9 +4,9 @@
  *
  *  $RCSfile: documen8.cxx,v $
  *
- *  $Revision: 1.48 $
+ *  $Revision: 1.49 $
  *
- *  last change: $Author: rt $ $Date: 2007-07-03 15:47:40 $
+ *  last change: $Author: hr $ $Date: 2007-08-03 13:07:31 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -90,6 +90,7 @@
 #include "progress.hxx"
 #include "document.hxx"
 #include "chartlis.hxx"
+#include "chartlock.hxx"
 #include "refupdat.hxx"
 #include "validat.hxx"      // fuer HasMacroCalls
 #include "markdata.hxx"
@@ -1536,6 +1537,8 @@ void ScDocument::KeyInput( const KeyEvent& )
 {
     if ( pChartListenerCollection->GetCount() )
         pChartListenerCollection->StartTimer();
+    if( apTemporaryChartLock.get() )
+        apTemporaryChartLock->StartOrContinueLocking();
 }
 
 //  ----------------------------------------------------------------------------
