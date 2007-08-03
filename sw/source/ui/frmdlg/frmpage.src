@@ -4,9 +4,9 @@
  *
  *  $RCSfile: frmpage.src,v $
  *
- *  $Revision: 1.65 $
+ *  $Revision: 1.66 $
  *
- *  last change: $Author: ihi $ $Date: 2007-04-19 13:12:44 $
+ *  last change: $Author: hr $ $Date: 2007-08-03 13:41:47 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -529,6 +529,10 @@ TabPage TP_GRF_EXT
     Bitmap BMP_EXAMPLE
     {
         File = "dog.bmp" ;
+    };
+    Bitmap BMP_EXAMPLE_HC
+    {
+        File = "dog_h.bmp" ;
     };
     FixedLine FL_CONNECT
     {
