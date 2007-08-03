@@ -4,9 +4,9 @@
  *
  *  $RCSfile: spinfld.cxx,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: hr $ $Date: 2007-06-27 20:08:36 $
+ *  last change: $Author: hr $ $Date: 2007-08-03 14:07:14 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -134,6 +134,14 @@ BOOL ImplDrawNativeSpinfield( Window *pWin, const SpinbuttonValue& rSpinbuttonVa
 
             Point aPt;
             Size aSize( pBorder->GetOutputSizePixel() );    // the size of the border window, i.e., the whole control
+            Region aBound, aContent;
+            Region aNatRgn( Rectangle( aPt, aSize ) );
+            if( pBorder->GetNativeControlRegion(CTRL_SPINBOX, PART_ENTIRE_CONTROL,
+                    aNatRgn, 0, aControlValue, rtl::OUString(), aBound, aContent) )
+            {
+                aSize = aContent.GetBoundRect().GetSize();
+            }
+
             Region aRgn( Rectangle( aPt, aSize ) );
             bNativeOK = pBorder->DrawNativeControl( CTRL_SPINBOX, PART_ENTIRE_CONTROL, aRgn, CTRL_STATE_ENABLED,
                         aControlValue, rtl::OUString() );
