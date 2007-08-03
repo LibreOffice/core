@@ -4,9 +4,9 @@
  *
  *  $RCSfile: animcore.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: hr $ $Date: 2007-08-02 18:25:21 $
+ *  last change: $Author: hr $ $Date: 2007-08-03 16:22:15 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -508,7 +508,7 @@ AnimationNode::AnimationNode( sal_Int16 nNodeType )
     mnIterateType( ::com::sun::star::presentation::ShapeAnimationSubType::AS_WHOLE ),
     mfIterateInterval(0.0)
 {
-    OSL_ENSURE(nNodeType < sizeof(mpTypes)/sizeof(Sequence<Type>*), "NodeType out of range");
+    OSL_ENSURE((sal_uInt32)nNodeType < sizeof(mpTypes)/sizeof(Sequence<Type>*), "NodeType out of range");
 }
 
 AnimationNode::AnimationNode( const AnimationNode& rNode )
