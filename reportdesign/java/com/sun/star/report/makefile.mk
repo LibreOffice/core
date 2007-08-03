@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.3 $
+#   $Revision: 1.4 $
 #
-#   last change: $Author: hr $ $Date: 2007-08-02 14:28:23 $
+#   last change: $Author: hr $ $Date: 2007-08-03 09:48:29 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -42,7 +42,7 @@ PACKAGE = com$/sun$/star$/report
 .INCLUDE: settings.mk
 #----- compile .java files -----------------------------------------
 
-JARFILES        = ridl.jar unoil.jar jurt.jar juh.jar jut.jar java_uno.jar jcommon-1.0.8.jar
+JARFILES        = ridl.jar unoil.jar jurt.jar juh.jar jut.jar java_uno.jar jcommon-1.0.10.jar
 JAVAFILES       :=	DataRow.java\
                     DataSource.java\
                     DataSourceException.java\

@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.3 $
+#   $Revision: 1.4 $
 #
-#   last change: $Author: hr $ $Date: 2007-08-02 14:28:46 $
+#   last change: $Author: hr $ $Date: 2007-08-03 09:52:41 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -42,7 +42,7 @@ PACKAGE = com$/sun$/star$/report$/util
 .INCLUDE: settings.mk
 #----- compile .java files -----------------------------------------
 
-JARFILES        = jcommon-1.0.8.jar
-JAVAFILES       = DefaultJobProperties.java DefaultParameterMap.java DefaultReportJobDefinition.java FileRepository.java
+JARFILES        = jcommon-1.0.10.jar libxml-0.9.5.jar jfreereport-0.9.0-05.jar
+JAVAFILES       = DefaultJobProperties.java DefaultParameterMap.java DefaultReportJobDefinition.java FileRepository.java ManifestWriter.java
 # --- Targets ------------------------------------------------------
 .INCLUDE :  target.mk
