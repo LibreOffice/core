@@ -4,9 +4,9 @@
  *
  *  $RCSfile: linkeddocuments.cxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: rt $ $Date: 2007-07-06 08:37:12 $
+ *  last change: $Author: hr $ $Date: 2007-08-03 10:23:25 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -144,6 +144,8 @@
 
 #include <connectivity/dbtools.hxx>
 #include <toolkit/helper/vclunohelper.hxx>
+#include <com/sun/star/io/WrongFormatException.hpp>
+#include "ExtensionNotPresent.hxx"
 
 //......................................................................
 namespace dbaui
@@ -357,10 +359,7 @@ namespace dbaui
                 aClassId = lcl_GetSequenceClassID(SO3_SIMPRESS_CLASSID);
                 break;
             case ID_REPORT_NEW_TEXT:
-                {
-                    ::comphelper::MimeConfigurationHelper aConfigHelper(m_xORB);
-                    aClassId = aConfigHelper.GetSequenceClassIDFromObjectName((::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Report"))));
-                }
+                aClassId = comphelper::MimeConfigurationHelper::GetSequenceClassID(SO3_RPT_CLASSID_90);
                 break;
 
             case SID_DB_FORM_NEW_PILOT:
@@ -432,6 +431,11 @@ namespace dbaui
             }
             return xRet;
         }
+        //catch (com::sun::star::io::WrongFormatException e)
+        //{
+        //  OExtensionNotPresentDialog aDlg(m_pDialogParent, m_xORB);
+  //          aDlg.Execute();
+        //}
         catch(Exception& e)
         {
             com::sun::star::sdbc::SQLException aSQLException;
