@@ -4,9 +4,9 @@
  *
  *  $RCSfile: tabctrl.cxx,v $
  *
- *  $Revision: 1.32 $
+ *  $Revision: 1.33 $
  *
- *  last change: $Author: hr $ $Date: 2007-07-31 16:08:07 $
+ *  last change: $Author: hr $ $Date: 2007-08-03 14:07:27 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -70,6 +70,8 @@
 #ifndef _VCL_CONTROLLAYOUT_HXX
 #include <vcl/controllayout.hxx>
 #endif
+
+#include <vcl/window.h>
 
 #include <hash_map>
 #include <vector>
@@ -226,6 +228,7 @@ void TabControl::ImplInitSettings( BOOL bFont,
             SetParentClipMode( PARENTCLIPMODE_NOCLIP );
             SetPaintTransparent( TRUE );
             SetBackground();
+            ImplGetWindowImpl()->mbUseNativeFocus = ImplGetSVData()->maNWFData.mbNoFocusRects;
         }
         else
         {
@@ -412,10 +415,22 @@ void TabControl::ImplPosScrollBtns()
 
 // -----------------------------------------------------------------------
 
-Size TabControl::ImplGetItemSize( ImplTabItem* pItem, long nMaxWidth ) const
+Size TabControl::ImplGetItemSize( ImplTabItem* pItem, long nMaxWidth )
 {
     pItem->maFormatText = pItem->maText;
     Size aSize( GetCtrlTextWidth( pItem->maFormatText ), GetTextHeight() );
+
+    Region aCtrlRegion(  Rectangle( Point( 0, 0 ), aSize ) );
+    Region aBoundingRgn, aContentRgn;
+    const ImplControlValue aControlValue( BUTTONVALUE_DONTKNOW, rtl::OUString(), 0 );
+    if(GetNativeControlRegion( CTRL_TAB_ITEM, PART_ENTIRE_CONTROL, aCtrlRegion,
+                                           CTRL_STATE_ENABLED, aControlValue, rtl::OUString(),
+                                           aBoundingRgn, aContentRgn ) )
+    {
+            Rectangle aCont(aContentRgn.GetBoundRect());
+            return aCont.GetSize();
+    }
+
     aSize.Width()  += TAB_TABOFFSET_X*2;
     aSize.Height() += TAB_TABOFFSET_Y*2;
     // For systems without synthetic bold support
@@ -489,7 +504,7 @@ Rectangle TabControl::ImplGetTabRect( USHORT nItemPos, long nWidth, long nHeight
         Font aFont( GetFont() );
         Font aLightFont = aFont;
         aFont.SetTransparent( TRUE );
-        aFont.SetWeight( WEIGHT_BOLD );
+        aFont.SetWeight( (!ImplGetSVData()->maNWFData.mbNoBoldTabFocus) ? WEIGHT_BOLD : WEIGHT_LIGHT );
         aLightFont.SetTransparent( TRUE );
         aLightFont.SetWeight( WEIGHT_LIGHT );
 
@@ -613,6 +628,24 @@ Rectangle TabControl::ImplGetTabRect( USHORT nItemPos, long nWidth, long nHeight
 
                     pItem = mpItemList->Next();
                     i++;
+                }
+            }
+            else {//only one line
+                if(ImplGetSVData()->maNWFData.mbCenteredTabs) {
+                    pItem = mpItemList->First();
+                    int nRightSpace=nMaxWidth;//space left on the right by the tabs
+                    while ( pItem )
+                    {
+                        nRightSpace-=pItem->maRect.Right()-pItem->maRect.Left();
+                        pItem = mpItemList->Next();
+                    }
+                    pItem = mpItemList->First();
+                    while ( pItem )
+                    {
+                        pItem->maRect.Left()+=(int) (nRightSpace/2);
+                        pItem->maRect.Right()+=(int) (nRightSpace/2);
+                        pItem = mpItemList->Next();
+                    }
                 }
             }
         }
@@ -782,7 +815,7 @@ void TabControl::ImplShowFocus()
 
     Font aOldFont( GetFont() );
     Font aFont( aOldFont );
-    aFont.SetWeight( WEIGHT_BOLD );
+    aFont.SetWeight( (!ImplGetSVData()->maNWFData.mbNoBoldTabFocus) ? WEIGHT_BOLD : WEIGHT_LIGHT );
     SetFont( aFont );
 
     USHORT          nCurPos     = GetPagePos( mnCurPageId );
@@ -971,7 +1004,7 @@ void TabControl::ImplDrawItem( ImplTabItem* pItem, const Rectangle& rCurRect, bo
     // we set the font attributes always before drawing to be re-entrant (DrawNativeControl may trigger additional paints)
     Font aFont( GetFont() );
     aFont.SetTransparent( TRUE );
-    aFont.SetWeight( bIsCurrentItem ? WEIGHT_BOLD : WEIGHT_LIGHT );
+    aFont.SetWeight( ((bIsCurrentItem) && (!ImplGetSVData()->maNWFData.mbNoBoldTabFocus)) ? WEIGHT_BOLD : WEIGHT_LIGHT );
     SetFont( aFont );
 
     Size aTabSize = aRect.GetSize();
@@ -1201,7 +1234,7 @@ void TabControl::ImplPaint( const Rectangle& rRect, bool bLayout )
         if( !rRect.IsEmpty() )
             aClipRgn.Intersect( rRect );
         if( bLayout || !aClipRgn.IsEmpty() )
-            ImplDrawItem( pCurItem, aCurRect, bLayout, (pCurItem==pFirstTab), (pItem==pLastTab), TRUE );
+            ImplDrawItem( pCurItem, aCurRect, bLayout, (pCurItem==pFirstTab), (pCurItem==pLastTab), TRUE );
     }
 
     if ( !bLayout && HasFocus() )
