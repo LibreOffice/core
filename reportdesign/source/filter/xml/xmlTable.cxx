@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xmlTable.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2007-07-09 11:56:18 $
+ *  last change: $Author: hr $ $Date: 2007-08-03 09:58:22 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -147,9 +147,7 @@ OXMLTable::OXMLTable( ORptFilter& rImport
                 case XML_TOK_KEEP_TOGETHER:
                     m_xSection->setKeepTogether(sValue == s_sTRUE);
                     break;
-                case XML_TOK_REPEAT_SECTION:
-                    m_xSection->setRepeatSection(sValue == s_sTRUE );
-                    break;
+
                 case XML_TOK_SECTION_NAME:
                     m_xSection->setName(sValue);
                     break;
@@ -251,53 +249,58 @@ void OXMLTable::EndElement()
                 for (sal_Int32 j = 0; aColIter != aColEnd; ++aColIter,++j)
                 {
                     TCell& rCell = *aColIter;
-                    if ( rCell.xElement.is())
+                    if ( !rCell.xElements.empty())
                     {
-                        uno::Reference<report::XShape> xShape(rCell.xElement,uno::UNO_QUERY);
-                        if ( xShape.is() )
+                        ::std::vector< uno::Reference< report::XReportComponent> >::iterator aCellIter = rCell.xElements.begin();
+                        const ::std::vector< uno::Reference< report::XReportComponent> >::iterator aCellEnd = rCell.xElements.end();
+                        for (;aCellIter != aCellEnd ; ++aCellIter)
                         {
-                            xShape->setPositionX(xShape->getPositionX() + nLeftMargin);
-                        }
-                        else
-                        {
-                            sal_Int32 nWidth = rCell.nWidth;
-                            sal_Int32 nColSpan = rCell.nColSpan;
-                            if ( nColSpan > 1 )
+                            uno::Reference<report::XShape> xShape(*aCellIter,uno::UNO_QUERY);
+                            if ( xShape.is() )
                             {
-                                ::std::vector<TCell>::iterator aWidthIter = aColIter + 1;
-                                while ( nColSpan > 1 )
-                                {
-                                    nWidth += (aWidthIter++)->nWidth;
-                                    --nColSpan;
-                                }
+                                xShape->setPositionX(xShape->getPositionX() + nLeftMargin);
                             }
-                            nHeight = rCell.nHeight;
-                            sal_Int32 nRowSpan = rCell.nRowSpan;
-                            if ( nRowSpan > 1 )
+                            else
                             {
-                                ::std::vector< ::std::vector<TCell> >::iterator aHeightIter = aRowIter + 1;
-                                while( nRowSpan > 1)
+                                sal_Int32 nWidth = rCell.nWidth;
+                                sal_Int32 nColSpan = rCell.nColSpan;
+                                if ( nColSpan > 1 )
                                 {
-                                    nHeight += (*aHeightIter)[j].nHeight;
-                                    ++aHeightIter;
-                                    --nRowSpan;
+                                    ::std::vector<TCell>::iterator aWidthIter = aColIter + 1;
+                                    while ( nColSpan > 1 )
+                                    {
+                                        nWidth += (aWidthIter++)->nWidth;
+                                        --nColSpan;
+                                    }
                                 }
-                            }
-                            Reference<XFixedLine> xFixedLine(rCell.xElement,uno::UNO_QUERY);
-                            if ( xFixedLine.is() && xFixedLine->getOrientation() == 1 ) // vertical
-                            {
-                                OSL_ENSURE(static_cast<sal_uInt32>(j+1) < m_aWidth.size(),"Illegal pos of col iter. There should be an empty cell for the next line part.");
-                                nWidth += m_aWidth[j+1];
+                                nHeight = rCell.nHeight;
+                                sal_Int32 nRowSpan = rCell.nRowSpan;
+                                if ( nRowSpan > 1 )
+                                {
+                                    ::std::vector< ::std::vector<TCell> >::iterator aHeightIter = aRowIter + 1;
+                                    while( nRowSpan > 1)
+                                    {
+                                        nHeight += (*aHeightIter)[j].nHeight;
+                                        ++aHeightIter;
+                                        --nRowSpan;
+                                    }
+                                }
+                                Reference<XFixedLine> xFixedLine(*aCellIter,uno::UNO_QUERY);
+                                if ( xFixedLine.is() && xFixedLine->getOrientation() == 1 ) // vertical
+                                {
+                                    OSL_ENSURE(static_cast<sal_uInt32>(j+1) < m_aWidth.size(),"Illegal pos of col iter. There should be an empty cell for the next line part.");
+                                    nWidth += m_aWidth[j+1];
 
-                            }
-                            try
-                            {
-                                rCell.xElement->setSize(awt::Size(nWidth,nHeight));
-                                rCell.xElement->setPosition(awt::Point(nPosX,nPosY));
-                            }
-                            catch(beans::PropertyVetoException)
-                            {
-                                OSL_ENSURE(0,"Could set the correct positions!");
+                                }
+                                try
+                                {
+                                    (*aCellIter)->setSize(awt::Size(nWidth,nHeight));
+                                    (*aCellIter)->setPosition(awt::Point(nPosX,nPosY));
+                                }
+                                catch(beans::PropertyVetoException)
+                                {
+                                    OSL_ENSURE(0,"Could set the correct positions!");
+                                }
                             }
                         }
                     }
@@ -315,19 +318,25 @@ void OXMLTable::EndElement()
 // -----------------------------------------------------------------------------
 void OXMLTable::addCell(const Reference<XReportComponent>& _xElement)
 {
+    uno::Reference<report::XShape> xShape(_xElement,uno::UNO_QUERY);
     OSL_ENSURE(static_cast<sal_uInt32>(m_nRowIndex-1 ) < m_aGrid.size() && static_cast<sal_uInt32>( m_nColumnIndex-1 ) < m_aGrid[m_nRowIndex-1].size(),
         "OXMLTable::addCell: Invalid column and row index");
     if ( static_cast<sal_uInt32>(m_nRowIndex-1 ) < m_aGrid.size() && static_cast<sal_uInt32>( m_nColumnIndex-1 ) < m_aGrid[m_nRowIndex-1].size() )
     {
         TCell& rCell = m_aGrid[m_nRowIndex-1][m_nColumnIndex-1];
-        rCell.xElement = _xElement;
-        rCell.nWidth   = m_aWidth[m_nColumnIndex-1];
-        rCell.nHeight  = m_aHeight[m_nRowIndex-1];
-        rCell.nColSpan = m_nColSpan;
-        rCell.nRowSpan = m_nRowSpan;
+        if ( _xElement.is() )
+            rCell.xElements.push_back( _xElement );
+        if ( !xShape.is() )
+        {
+            rCell.nWidth   = m_aWidth[m_nColumnIndex-1];
+            rCell.nHeight  = m_aHeight[m_nRowIndex-1];
+            rCell.nColSpan = m_nColSpan;
+            rCell.nRowSpan = m_nRowSpan;
+        }
     }
 
-    m_nColSpan = m_nRowSpan = 1;
+    if ( !xShape.is() )
+        m_nColSpan = m_nRowSpan = 1;
 }
 // -----------------------------------------------------------------------------
 void OXMLTable::incrementRowIndex()
