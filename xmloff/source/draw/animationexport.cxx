@@ -4,9 +4,9 @@
  *
  *  $RCSfile: animationexport.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: hr $ $Date: 2007-08-01 11:04:22 $
+ *  last change: $Author: hr $ $Date: 2007-08-03 12:53:48 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1138,7 +1138,7 @@ void AnimationsExporterImpl::exportContainer( const Reference< XTimeContainer >&
             double fTemp = xIter->getIterateInterval();
             if( fTemp )
             {
-                if( mrExport.isExperimentalOdfExportEnabled() )
+                if( 0 == ( mrExport.getExportFlags() & EXPORT_SAVEBACKWARDCOMPATIBLE ) )
                 {
                     // issue 146582
                     sal_Int32 nSecondsFraction = static_cast<sal_Int32>(fTemp * 1000 ) % 1000;
