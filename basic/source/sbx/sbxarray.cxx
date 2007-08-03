@@ -4,9 +4,9 @@
  *
  *  $RCSfile: sbxarray.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: hr $ $Date: 2007-06-27 14:27:37 $
+ *  last change: $Author: hr $ $Date: 2007-08-03 09:56:36 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -101,19 +101,18 @@ SbxArray& SbxArray::operator=( const SbxArray& rArray )
         for( UINT32 i = 0; i < pSrc->size(); i++ )
         {
             SbxVarEntryPtr pSrcRef = (*pSrc)[i];
+            const SbxVariable* pSrc_ = *pSrcRef;
+            if( !pSrc_ )
+                continue;
             SbxVarEntryPtr pDstRef = new SbxVarEntry;
             *((SbxVariableRef*) pDstRef) = *((SbxVariableRef*) pSrcRef);
             if( pSrcRef->pAlias )
                 pDstRef->pAlias = new XubString( *pSrcRef->pAlias );
-            const SbxVariable* pSrc_ = *pSrcRef;
-            if( pSrc_ )
-            {
-                if( eType != SbxVARIANT )
-                    // Keine Objekte konvertieren
-                    if( eType != SbxOBJECT || pSrc_->GetClass() != SbxCLASS_OBJECT )
-                        ((SbxVariable*) pSrc_)->Convert( eType );
-                pData->push_back( pDstRef );
-            }
+            if( eType != SbxVARIANT )
+                // Keine Objekte konvertieren
+                if( eType != SbxOBJECT || pSrc_->GetClass() != SbxCLASS_OBJECT )
+                    ((SbxVariable*) pSrc_)->Convert( eType );
+            pData->push_back( pDstRef );
         }
     }
     return *this;
