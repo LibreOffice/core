@@ -4,9 +4,9 @@
  *
  *  $RCSfile: salgdiutils.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: rt $ $Date: 2007-07-05 16:01:22 $
+ *  last change: $Author: hr $ $Date: 2007-08-03 14:02:31 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -81,8 +81,8 @@ void AquaSalGraphics::SetPrinterGraphics( CGContextRef xContext, long nDPIX, lon
 
     if( mrContext )
     {
-        CGContextSetFillColorSpace( mrContext, mrRGBColorSpace );
-        CGContextSetStrokeColorSpace( mrContext, mrRGBColorSpace );
+        CGContextSetFillColorSpace( mrContext, GetSalData()->mxRGBSpace );
+        CGContextSetStrokeColorSpace( mrContext, GetSalData()->mxRGBSpace );
         CGContextSaveGState( mrContext );
         SetState();
     }
@@ -106,8 +106,8 @@ void AquaSalGraphics::SetVirDevGraphics( CGContextRef xContext, bool bScreenComp
     if( mrContext )
     {
         pMemory = reinterpret_cast<sal_uInt8*>(CGBitmapContextGetData( mrContext ));
-        CGContextSetFillColorSpace( mrContext, mrRGBColorSpace );
-        CGContextSetStrokeColorSpace( mrContext, mrRGBColorSpace );
+        CGContextSetFillColorSpace( mrContext, GetSalData()->mxRGBSpace );
+        CGContextSetStrokeColorSpace( mrContext, GetSalData()->mxRGBSpace );
         CGContextSaveGState( mrContext );
         SetState();
     }
@@ -223,7 +223,7 @@ bool AquaSalGraphics::CheckContext()
                                    boost::bind( rtl_freeMemory, _1 ) );
             if( maContextMemory )
             {
-                mrContext = CGBitmapContextCreate( maContextMemory.get(), nWidth, nHeight, 8, nWidth * 4, mrRGBColorSpace, kCGImageAlphaNoneSkipFirst );
+                mrContext = CGBitmapContextCreate( maContextMemory.get(), nWidth, nHeight, 8, nWidth * 4, GetSalData()->mxRGBSpace, kCGImageAlphaNoneSkipFirst );
 
                 if( mrContext )
                 {
@@ -241,8 +241,8 @@ bool AquaSalGraphics::CheckContext()
 
                     CGContextTranslateCTM( mrContext, 0, nHeight );
                     CGContextScaleCTM( mrContext, 1.0, -1.0 );
-                    CGContextSetFillColorSpace( mrContext, mrRGBColorSpace );
-                    CGContextSetStrokeColorSpace( mrContext, mrRGBColorSpace );
+                    CGContextSetFillColorSpace( mrContext, GetSalData()->mxRGBSpace );
+                    CGContextSetStrokeColorSpace( mrContext, GetSalData()->mxRGBSpace );
                     CGContextSaveGState( mrContext );
                     SetState();
                 }
