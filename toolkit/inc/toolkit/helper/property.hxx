@@ -4,9 +4,9 @@
  *
  *  $RCSfile: property.hxx,v $
  *
- *  $Revision: 1.30 $
+ *  $Revision: 1.31 $
  *
- *  last change: $Author: rt $ $Date: 2007-07-06 14:26:28 $
+ *  last change: $Author: hr $ $Date: 2007-08-03 09:54:28 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -183,16 +183,16 @@ namespace rtl {
 
 //#define BASEPROPERTY_RESOURCERESOLVER      124  // css.resource.XStringResourceResolver
 
-#define BASEPROPERTY_TREE_START                     120
-#define BASEPROPERTY_TREE_SELECTIONTYPE             120
-#define BASEPROPERTY_TREE_EDITABLE                  121
-#define BASEPROPERTY_TREE_DATAMODEL                 122
-#define BASEPROPERTY_TREE_ROOTDISPLAYED             123
-#define BASEPROPERTY_TREE_SHOWSHANDLES              124
-#define BASEPROPERTY_TREE_SHOWSROOTHANDLES          125
-#define BASEPROPERTY_TREE_ROWHEIGHT                 126
-#define BASEPROPERTY_TREE_INVOKESSTOPNODEEDITING    127
-#define BASEPROPERTY_TREE_END                       127
+#define BASEPROPERTY_TREE_START                     124
+#define BASEPROPERTY_TREE_SELECTIONTYPE             124
+#define BASEPROPERTY_TREE_EDITABLE                  125
+#define BASEPROPERTY_TREE_DATAMODEL                 126
+#define BASEPROPERTY_TREE_ROOTDISPLAYED             127
+#define BASEPROPERTY_TREE_SHOWSHANDLES              128
+#define BASEPROPERTY_TREE_SHOWSROOTHANDLES          129
+#define BASEPROPERTY_TREE_ROWHEIGHT                 130
+#define BASEPROPERTY_TREE_INVOKESSTOPNODEEDITING    131
+#define BASEPROPERTY_TREE_END                       131
 
 // Keine gebundenen Properties, werden immer aus der Property BASEPROPERTY_FONTDESCRIPTOR entnommen.
 #define BASEPROPERTY_FONTDESCRIPTORPART_START           1000
