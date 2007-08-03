@@ -4,9 +4,9 @@
  *
  *  $RCSfile: salgdi2.cxx,v $
  *
- *  $Revision: 1.40 $
+ *  $Revision: 1.41 $
  *
- *  last change: $Author: hr $ $Date: 2007-06-27 20:49:47 $
+ *  last change: $Author: hr $ $Date: 2007-08-03 14:10:03 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -462,11 +462,7 @@ void X11SalGraphics::YieldGraphicsExpose( Display* pDisplay, SalFrame* pFrame, D
     XEvent aEvent;
     while( XCheckTypedWindowEvent( pDisplay, aWindow, Expose, &aEvent ) )
     {
-        SalPaintEvent aPEvt;
-        aPEvt.mnBoundX          = aEvent.xexpose.x;
-        aPEvt.mnBoundY          = aEvent.xexpose.y;
-        aPEvt.mnBoundWidth      = aEvent.xexpose.width+1;
-        aPEvt.mnBoundHeight     = aEvent.xexpose.height+1;
+        SalPaintEvent aPEvt( aEvent.xexpose.x, aEvent.xexpose.y, aEvent.xexpose.width+1, aEvent.xexpose.height+1 );
         pFrame->CallCallback( SALEVENT_PAINT, &aPEvt );
     }
 
@@ -495,11 +491,7 @@ void X11SalGraphics::YieldGraphicsExpose( Display* pDisplay, SalFrame* pFrame, D
 
         if( pFrame )
         {
-            SalPaintEvent aPEvt;
-            aPEvt.mnBoundX          = aEvent.xgraphicsexpose.x;
-            aPEvt.mnBoundY          = aEvent.xgraphicsexpose.y;
-            aPEvt.mnBoundWidth      = aEvent.xgraphicsexpose.width+1;
-            aPEvt.mnBoundHeight     = aEvent.xgraphicsexpose.height+1;
+            SalPaintEvent aPEvt( aEvent.xgraphicsexpose.x, aEvent.xgraphicsexpose.y, aEvent.xgraphicsexpose.width+1, aEvent.xgraphicsexpose.height+1 );
             pFrame->CallCallback( SALEVENT_PAINT, &aPEvt );
         }
     } while( aEvent.xgraphicsexpose.count != 0 );
