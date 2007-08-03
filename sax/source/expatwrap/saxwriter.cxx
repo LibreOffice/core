@@ -4,9 +4,9 @@
  *
  *  $RCSfile: saxwriter.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: hr $ $Date: 2006-06-19 23:07:40 $
+ *  last change: $Author: hr $ $Date: 2007-08-03 12:31:54 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -71,7 +71,6 @@ using namespace ::com::sun::star::io;
 #include "xml2utf.hxx"
 
 #define LINEFEED 10
-#define SAXWRITER_CHECK_FOR_INVALID_CHARS
 #define SEQUENCESIZE 1024
 #define MAXCOLUMNCOUNT 72
 
@@ -221,25 +220,23 @@ public:
     inline sal_Bool comment(const rtl::OUString& rComment) throw( SAXException );
 };
 
-const sal_Bool g_bValidCharsBelow32[31] =
+const sal_Bool g_bValidCharsBelow32[32] =
 {
 //  0 1 2 3 4 5 6 7
     0,0,0,0,0,0,0,0,  //0
     0,1,1,0,0,1,0,0,  //8
     0,0,0,0,0,0,0,0,  //16
-    0,0,0,0,0,0,0
+    0,0,0,0,0,0,0,0
 };
 
 inline sal_Bool IsInvalidChar(const sal_Unicode aChar)
 {
     sal_Bool bRet(sal_False);
-#ifdef SAXWRITER_CHECK_FOR_INVALID_CHARS
-        // check first for the most common characters
+    // check first for the most common characters
     if( aChar < 32 || aChar >= 0xd800 )
         bRet = ( (aChar < 32 && ! g_bValidCharsBelow32[aChar]) ||
             aChar == 0xffff ||
             aChar == 0xfffe );
-#endif
     return bRet;
 }
 
