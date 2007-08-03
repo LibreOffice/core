@@ -4,9 +4,9 @@
  *
  *  $RCSfile: wmfwr.cxx,v $
  *
- *  $Revision: 1.28 $
+ *  $Revision: 1.29 $
  *
- *  last change: $Author: rt $ $Date: 2007-01-29 14:47:57 $
+ *  last change: $Author: hr $ $Date: 2007-08-03 12:28:40 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1278,7 +1278,7 @@ void WMFWriter::WriteRecords( const GDIMetaFile & rMTF )
                     for ( i = 0; i < ( nLen - 1 ); i++ )
                         pDXAry[ i ] = pDXAry[ i ] * (sal_Int32)pA->GetWidth() / nNormSize;
                     if ( ( nLen <= 1 ) || ( (sal_Int32)pA->GetWidth() == nNormSize ) )
-                        delete pDXAry, pDXAry = NULL;
+                        delete[] pDXAry, pDXAry = NULL;
                     aSrcLineInfo = LineInfo();
                     SetAllAttr();
                     if ( !WMFRecord_Escape_Unicode( pA->GetPoint(), aTemp, pDXAry ) )
