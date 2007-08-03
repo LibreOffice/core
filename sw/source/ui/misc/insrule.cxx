@@ -4,9 +4,9 @@
  *
  *  $RCSfile: insrule.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: kz $ $Date: 2007-05-10 16:20:21 $
+ *  last change: $Author: hr $ $Date: 2007-08-03 13:42:30 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -56,6 +56,7 @@
 #ifndef SVTOOLS_URIHELPER_HXX
 #include <svtools/urihelper.hxx>
 #endif
+#include <vcl/graph.hxx>
 
 #include "swtypes.hxx"
 #include "docsh.hxx"
