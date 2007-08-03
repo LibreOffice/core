@@ -4,9 +4,9 @@
  *
  *  $RCSfile: document.hxx,v $
  *
- *  $Revision: 1.101 $
+ *  $Revision: 1.102 $
  *
- *  last change: $Author: hr $ $Date: 2007-06-27 13:41:42 $
+ *  last change: $Author: hr $ $Date: 2007-08-03 13:06:37 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -72,6 +72,8 @@
 #ifndef SC_TABOPPARAMS_HXX
 #include "tabopparams.hxx"
 #endif
+
+#include <memory>
 
 class KeyEvent;
 class OutputDevice;
@@ -156,6 +158,7 @@ struct ScTableInfo;
 struct ScTabOpParam;
 class VirtualDevice;
 class ScAutoNameCache;
+class ScTemporaryChartLock;
 
 namespace com { namespace sun { namespace star {
     namespace lang {
@@ -276,6 +279,7 @@ private:
     ScPivotCollection*  pPivotCollection;
     ScDPCollection*     pDPCollection;
     ScChartCollection*  pChartCollection;
+    std::auto_ptr< ScTemporaryChartLock > apTemporaryChartLock;
     ScPatternAttr*      pSelectionAttr;                 // Attribute eines Blocks
     SvxLinkManager*     pLinkManager;
     ScFormulaCell*      pFormulaTree;                   // Berechnungsbaum Start
@@ -495,6 +499,8 @@ SC_DLLPUBLIC    ScDBCollection* GetDBCollection() const;
 
     ScChartCollection*  GetChartCollection() const;
     void                SetChartCollection(ScChartCollection* pNewChartCollection);
+
+    void                StopTemporaryChartLock();
 
     void            EnsureGraphicNames();
 
