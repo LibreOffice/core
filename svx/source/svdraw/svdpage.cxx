@@ -4,9 +4,9 @@
  *
  *  $RCSfile: svdpage.cxx,v $
  *
- *  $Revision: 1.60 $
+ *  $Revision: 1.61 $
  *
- *  last change: $Author: rt $ $Date: 2007-07-06 07:42:36 $
+ *  last change: $Author: hr $ $Date: 2007-08-03 10:20:54 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -902,7 +902,7 @@ sdr::contact::ViewContact& SdrPage::GetViewContact() const
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 
 TYPEINIT1(SdrPage,SdrObjList);
-
+DBG_NAME(SdrPage)
 SdrPage::SdrPage(SdrModel& rNewModel, bool bMasterPage)
 :   SdrObjList(&rNewModel, this),
     mpViewContact(0L),
@@ -921,6 +921,7 @@ SdrPage::SdrPage(SdrModel& rNewModel, bool bMasterPage)
     bObjectsNotPersistent(sal_False),
     bSwappingLocked(sal_False)
 {
+    DBG_CTOR(SdrPage,NULL);
     aPrefVisiLayers.SetAll();
     eListKind = (bMasterPage) ? SDROBJLIST_MASTERPAGE : SDROBJLIST_DRAWPAGE;
 }
@@ -944,6 +945,7 @@ SdrPage::SdrPage(const SdrPage& rSrcPage)
     bObjectsNotPersistent(rSrcPage.bObjectsNotPersistent),
     bSwappingLocked(rSrcPage.bSwappingLocked)
 {
+    DBG_CTOR(SdrPage,NULL);
     aPrefVisiLayers.SetAll();
     eListKind = (bMaster) ? SDROBJLIST_MASTERPAGE : SDROBJLIST_DRAWPAGE;
 
@@ -986,6 +988,7 @@ SdrPage::~SdrPage()
         delete mpViewContact;
         mpViewContact = 0L;
     }
+    DBG_DTOR(SdrPage,NULL);
 }
 
 void SdrPage::operator=(const SdrPage& rSrcPage)
