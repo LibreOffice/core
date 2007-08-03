@@ -4,9 +4,9 @@
  *
  *  $RCSfile: AccessibleObjectFactory.java,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: vg $ $Date: 2006-11-01 15:06:59 $
+ *  last change: $Author: hr $ $Date: 2007-08-03 13:35:25 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -347,7 +347,12 @@ public class AccessibleObjectFactory {
                     xAccessible, xAccessibleContext);
                 break;
             case AccessibleRole.LIST:
-                c = new List(xAccessible, xAccessibleContext);
+                if (xAccessibleStateSet.contains(AccessibleStateType.MANAGES_DESCENDANTS)) {
+                    c = new List(xAccessible, xAccessibleContext);
+                } else {
+                    c = new Container(javax.accessibility.AccessibleRole.LIST,
+                        xAccessible, xAccessibleContext);
+                }
                 break;
             case AccessibleRole.MENU:
                 c = new Menu(xAccessible, xAccessibleContext);
