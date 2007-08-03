@@ -4,9 +4,9 @@
  *
  *  $RCSfile: txtparai.cxx,v $
  *
- *  $Revision: 1.62 $
+ *  $Revision: 1.63 $
  *
- *  last change: $Author: hr $ $Date: 2007-07-31 17:35:52 $
+ *  last change: $Author: hr $ $Date: 2007-08-03 12:47:13 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1696,6 +1696,10 @@ XMLParaContext::~XMLParaContext()
     Reference < XTextCursor > xAttrCursor(
         xTxtImport->GetText()->createTextCursorByRange( xStart ));
     xAttrCursor->gotoRange( xEnd, sal_True );
+
+    OUString sCellParaStyleName = xTxtImport->sCellParaStyleDefault;
+    if( sCellParaStyleName.getLength() > 0 )
+        xTxtImport->SetStyleAndAttrs( GetImport(), xAttrCursor, sCellParaStyleName, sal_True, bHeading ? nOutlineLevel : -1 );
 
     // #103445# for headings without style name, find the proper style
     if( bHeading && (sStyleName.getLength() == 0) )
