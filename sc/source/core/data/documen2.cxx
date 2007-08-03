@@ -4,9 +4,9 @@
  *
  *  $RCSfile: documen2.cxx,v $
  *
- *  $Revision: 1.65 $
+ *  $Revision: 1.66 $
  *
- *  last change: $Author: rt $ $Date: 2007-07-03 15:47:26 $
+ *  last change: $Author: hr $ $Date: 2007-08-03 13:06:51 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -261,6 +261,7 @@
 #include "stlsheet.hxx"
 #include "globstr.hrc"
 #include "chartarr.hxx"
+#include "chartlock.hxx"
 #include "rechead.hxx"
 #include "global.hxx"
 #include "brdcst.hxx"
@@ -410,6 +411,7 @@ ScDocument::ScDocument( ScDocumentMode  eMode,
     pPivotCollection = new ScPivotCollection(4, 4, this );
     pSelectionAttr = NULL;
     pChartCollection = new ScChartCollection;
+    apTemporaryChartLock = std::auto_ptr< ScTemporaryChartLock >( new ScTemporaryChartLock(this) );
     xColNameRanges = new ScRangePairList;
     xRowNameRanges = new ScRangePairList;
     ImplCreateOptions();
@@ -556,6 +558,7 @@ ScDocument::~ScDocument()
     delete pDBCollection;
     delete pPivotCollection;
     delete pSelectionAttr;
+    apTemporaryChartLock.reset();
     delete pChartCollection;
     DeleteDrawLayer();
     delete pFormatExchangeList;
