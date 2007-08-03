@@ -4,9 +4,9 @@
 *
 *  $RCSfile: salatslayout.cxx,v $
 *
-*  $Revision: 1.3 $
+*  $Revision: 1.4 $
 *
-*  last change: $Author: rt $ $Date: 2007-07-05 15:58:25 $
+*  last change: $Author: hr $ $Date: 2007-08-03 14:01:34 $
 *
 *  The Contents of this file are made available subject to
 *  the terms of GNU Lesser General Public License Version 2.1.
@@ -241,20 +241,26 @@ void ATSLayout::AdjustLayout( ImplLayoutArgs& rArgs )
     if( !nPixelWidth )
         return;
 
-    ATSUAttributeTag nTags[2];
-    ATSUAttributeValuePtr nVals[2];
-    ByteCount nBytes[2];
+    ATSUAttributeTag nTags[3];
+    ATSUAttributeValuePtr nVals[3];
+    ByteCount nBytes[3];
 
     Fixed nFixedWidth = FloatToFixed( nPixelWidth / mfFontScale );
     mnCachedWidth = nFixedWidth;
     Fract nFractFactor = kATSUFullJustification;
+    ATSLineLayoutOptions nLineLayoutOptions = kATSLineHasNoHangers;
+
     nTags[0] = kATSULineWidthTag;
     nVals[0] = &nFixedWidth;
     nBytes[0] = sizeof(Fixed);
-    nTags[1] = kATSULineJustificationFactorTag;
-    nVals[1] = &nFractFactor;
-    nBytes[1] = sizeof(Fract);
-    OSStatus eStatus = ATSUSetLayoutControls( maATSULayout, 2, nTags, nBytes, nVals );
+    nTags[1] = kATSULineLayoutOptionsTag;
+    nVals[1] = &nLineLayoutOptions;
+    nBytes[1] = sizeof(ATSLineLayoutOptions);
+    nTags[2] = kATSULineJustificationFactorTag;
+    nVals[2] = &nFractFactor;
+    nBytes[2] = sizeof(Fract);
+
+    OSStatus eStatus = ATSUSetLayoutControls( maATSULayout, 3, nTags, nBytes, nVals );
     if( eStatus != noErr )
         return;
 }
@@ -322,9 +328,18 @@ void ATSLayout::DrawText( SalGraphics& rGraphics ) const
         theErr = ATSUMeasureTextImage( maATSULayout,
             mnMinCharPos, mnCharCount, nFixedX, nFixedY, &drawRect );
         if( theErr == noErr )
-            mpGraphics->RefreshRect( drawRect.left, drawRect.bottom,
-                drawRect.right - drawRect.left,
-                drawRect.bottom - drawRect.top );
+        {
+            // FIXME: transformation from baseline to top left
+            // with the simple apporach below we invalidate too much
+            short d = drawRect.bottom - drawRect.top;
+            drawRect.top -= d;
+            drawRect.bottom += d;
+            CGRect aRect = CGRectMake( drawRect.left, drawRect.top,
+                                       drawRect.right - drawRect.left,
+                                       drawRect.bottom - drawRect.top );
+            aRect = CGContextConvertRectToDeviceSpace( mpGraphics->mrContext, aRect );
+            mpGraphics->RefreshRect( aRect.origin.x, aRect.origin.y, aRect.size.width+1, aRect.size.height+1 );
+        }
     }
 
     // restore the original graphic context transformations
