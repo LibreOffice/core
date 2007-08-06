@@ -4,9 +4,9 @@
  *
  *  $RCSfile: PropertyMap.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: os $ $Date: 2007-06-27 08:54:25 $
+ *  last change: $Author: hr $ $Date: 2007-08-06 11:38:51 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -160,7 +160,7 @@ template<class T>
 /*-- 13.12.2006 10:46:42---------------------------------------------------
 
   -----------------------------------------------------------------------*/
-void PropertyMap::insert( PropertyMapPtr pMap, bool bOverwrite )
+void PropertyMap::insert( const PropertyMapPtr pMap, bool bOverwrite )
 {
     if( pMap.get() )
     {
