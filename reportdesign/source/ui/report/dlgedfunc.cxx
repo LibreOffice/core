@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dlgedfunc.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: hr $ $Date: 2007-08-03 12:46:17 $
+ *  last change: $Author: hr $ $Date: 2007-08-06 10:49:22 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -461,26 +461,6 @@ void DlgEdFunc::checkMovementAllowed(const MouseEvent& rMEvt)
 // -----------------------------------------------------------------------------
 bool DlgEdFunc::isOnlyCustomShapeMarked()
 {
-    bool bReturn = true;
-    const SdrMarkList& rMarkList = pView->GetMarkedObjectList();
-    for (sal_uInt32 i =  0; i < rMarkList.GetMarkCount();++i )
-    {
-        SdrMark* pMark = rMarkList.GetMark(i);
-        // bCheck = dynamic_cast<OUnoObject*>(pMark->GetMarkedSdrObj()) != NULL;
-        SdrObject* pObj = pMark->GetMarkedSdrObj();
-        if (pObj->GetObjIdentifier() != OBJ_CUSTOMSHAPE)
-        {
-            // we found an object in the marked objects, which is not a custom shape.
-            bReturn = false;
-            break;
-        }
-    }
-    return bReturn;
-}
-// -----------------------------------------------------------------------------
-bool DlgEdFunc::isOnlyCustomShapeMarked()
-{
-    OSectionView* pView  = pParent->getView();
     bool bReturn = true;
     const SdrMarkList& rMarkList = pView->GetMarkedObjectList();
     for (sal_uInt32 i =  0; i < rMarkList.GetMarkCount();++i )
