@@ -4,9 +4,9 @@
  *
  *  $RCSfile: vclmetafileprocessor2d.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: aw $ $Date: 2007-08-06 14:15:00 $
+ *  last change: $Author: aw $ $Date: 2007-08-06 14:16:22 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -589,7 +589,12 @@ namespace drawinglayer
               May be added in primitive MetaFile renderer.
               Checking URL: Indeed, current version exports it, but it is missing in primitive
               CWS version. Adding support.
-              Okay, URLs work.
+              Okay, URLs work. Done.
+
+
+
+
+
 
             - UnoControlPDFExportContact is only created when PDFExtOutDevData is used at the
               target and uno control data is created in UnoControlPDFExportContact::doPaintObject.
@@ -600,18 +605,14 @@ namespace drawinglayer
               ::vcl::PDFWriter::AnyWidget is filled out, which is already part of vcl.
               Wrote an eMail to FS, he is on vacation currently. I see no reason why not to move
               that stuff to somewhere else, maybe tools or svtools ?!? We will see...
-
-
-
-
-
-
+              TODO!
 
             - In goodies, in GraphicObject::Draw, when the used Graphic is linked, infos are
               generated. I will need to check what happens here with primitives.
               To support, use of GraphicPrimitive2D (PRIMITIVE2D_ID_GRAPHICPRIMITIVE2D) may be needed.
-
-
+              Added support, but feature is broken in main version, so i cannot test at all.
+              Writing a bug to CL (or SJ) and seeing what happens (#i80380#) ...
+              TODO!
 
 
 
