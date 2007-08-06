@@ -4,9 +4,9 @@
  *
  *  $RCSfile: vclmetafileprocessor2d.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: aw $ $Date: 2007-08-02 11:43:44 $
+ *  last change: $Author: aw $ $Date: 2007-08-06 14:14:46 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -42,6 +42,13 @@
 
 #ifndef _COM_SUN_STAR_I18N_XBREAKITERATOR_HPP_
 #include <com/sun/star/i18n/XBreakIterator.hpp>
+#endif
+
+//////////////////////////////////////////////////////////////////////////////
+// vcl::PDFExtOutDevData support
+
+#ifndef _VCL_PDFEXTOUTDEVDATA_HXX
+#include <vcl/pdfextoutdevdata.hxx>
 #endif
 
 //////////////////////////////////////////////////////////////////////////////
@@ -107,6 +114,12 @@ namespace drawinglayer
             // constructed VclMetafileProcessor2D. It's still incarnated on demand,
             // but exists for OOo runtime now by purpose.
             static ::com::sun::star::uno::Reference< ::com::sun::star::i18n::XBreakIterator >   mxBreakIterator;
+
+            // vcl::PDFExtOutDevData support
+            // For the first step, some extra actions at vcl::PDFExtOutDevData need to
+            // be emulated with the VclMetafileProcessor2D. These are potentially temporarily
+            // since PDF export may use PrimitiveSequences one day directly.
+            vcl::PDFExtOutDevData*              mpPDFExtOutDevData;
 
         protected:
             // the local processor for BasePrinitive2D-Implementation based primitives,

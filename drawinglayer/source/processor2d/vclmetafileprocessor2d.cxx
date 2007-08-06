@@ -4,9 +4,9 @@
  *
  *  $RCSfile: vclmetafileprocessor2d.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: aw $ $Date: 2007-08-03 10:43:05 $
+ *  last change: $Author: aw $ $Date: 2007-08-06 14:15:00 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -159,6 +159,25 @@
 
 #ifndef _COM_SUN_STAR_I18N_WORDTYPE_HPP_
 #include <com/sun/star/i18n/WordType.hpp>
+#endif
+
+#ifndef INCLUDED_DRAWINGLAYER_PRIMITIVE2D_CONTROLPRIMITIVE2D_HXX
+#include <drawinglayer/primitive2d/controlprimitive2d.hxx>
+#endif
+
+#ifndef INCLUDED_DRAWINGLAYER_PRIMITIVE2D_GRAPHICPRIMITIVE2D_HXX
+#include <drawinglayer/primitive2d/graphicprimitive2d.hxx>
+#endif
+
+//////////////////////////////////////////////////////////////////////////////
+// for PDFExtOutDevData Graphic support
+
+#ifndef _SV_GRAPH_HXX
+#include <vcl/graph.hxx>
+#endif
+
+#ifndef _SV_SVAPP_HXX
+#include <vcl/svapp.hxx>
 #endif
 
 //////////////////////////////////////////////////////////////////////////////
@@ -410,7 +429,8 @@ namespace drawinglayer
             mrMetaFile(*rOutDev.GetConnectMetaFile()),
             mnSvtGraphicFillCount(0),
             mnSvtGraphicStrokeCount(0),
-            mfCurrentUnifiedTransparence(0.0)
+            mfCurrentUnifiedTransparence(0.0),
+            mpPDFExtOutDevData(dynamic_cast< vcl::PDFExtOutDevData* >(rOutDev.GetExtOutDevData()))
         {
             OSL_ENSURE(rOutDev.GetConnectMetaFile(), "VclMetafileProcessor2D: Used on OutDev which has no MetaFile Target (!)");
             // draw to logic coordinates, do not initialize maCurrentTransformation to viewTransformation,
@@ -521,33 +541,200 @@ namespace drawinglayer
             XTEXT_PAINTSHAPE_BEGIN, XTEXT_PAINTSHAPE_END
             Supported now by the TextHierarchyBlockPrimitive2D.
 
+            EPSReplacementGraphic:
+            Only used in goodies\source\filter.vcl\ieps\ieps.cxx and svx\source\xml\xmlgrhlp.cxx to
+            hold the original EPS which was imported in the same MetaFile as first 2 entries. Only
+            used to export the original again (if exists).
+            Not necessary to support with MetaFuleRenderer.
+
+            XTEXT_SCROLLRECT, XTEXT_PAINTRECT
+            Currently used to get extra MetaFile infos using GraphicExporter which again uses
+            SdrTextObj::GetTextScrollMetaFileAndRectangle(). ATM works with primitives since
+            the rectangle data is added directly by the GraphicsExporter as comment. Does not need
+            to be adapted at once.
+            When adapting later, the only user - the diashow - should directly use the provided
+            Anination infos in the appropriate primitives (e.g. AnimatedSwitchPrimitive2D)
+
+            PRNSPOOL_TRANSPARENTBITMAP_BEGIN, PRNSPOOL_TRANSPARENTBITMAP_END
+            VCL usage when printing PL -> THB. Okay, THB confirms that it is only used as
+            a fix (hack) while VCL printing. It is needed to not downscale a bitmap which
+            was explicitely created for the printer already again to some default maximum
+            bitmap sizes.
+            Nothing to do here for the primitive renderer.
+
+
 
 
             To be done:
 
 
-            EPSReplacementGraphic
-
-
-            XTEXT_SCROLLRECT
-            XTEXT_PAINTRECT
-
-
-
-            PRNSPOOL_TRANSPARENTBITMAP_BEGIN
-            PRNSPOOL_TRANSPARENTBITMAP_END
-
-
-
 
 
             Evtl. support for vcl::PDFExtOutDevData ?!?!
+
+            PL knows that SJ did that stuff, it's used to hold a pointer to PDFExtOutDevData at
+            the OutDev. When set, some extra data is written there. Trying simple PDF export and
+            watching if i get those infos.
+            Well, a PDF export does not use e.g. ImpEditEngine::Paint since the PdfFilter uses
+            the SdXImpressDocument::render and thus uses the VclMetafileProcessor2D. I will check
+            if i get a PDFExtOutDevData at the target output device.
+            Indeed, i get one. Checking what all may be done when that extra-device-info is there.
+
+            All in all i have to talk to SJ. I will need to emulate some of those actions, but
+            i need to discuss which ones.
+            In the future, all those infos would be taken from the primitive sequence anyways,
+            thus these extensions would potentially be temporary, too.
+
+            - In ImpEditEngine::Paint, paragraph infos and URL stuff is added.
+              May be added in primitive MetaFile renderer.
+              Checking URL: Indeed, current version exports it, but it is missing in primitive
+              CWS version. Adding support.
+              Okay, URLs work.
+
+            - UnoControlPDFExportContact is only created when PDFExtOutDevData is used at the
+              target and uno control data is created in UnoControlPDFExportContact::doPaintObject.
+              This may be added in primitive MetaFile renderer.
+              Adding support...
+              OOps, the necessary helper stuff is in svx/source/form/formpdxexport.cxx in namespace
+              svxform. Have to talk to FS if thhis has to be like that. Especially since
+              ::vcl::PDFWriter::AnyWidget is filled out, which is already part of vcl.
+              Wrote an eMail to FS, he is on vacation currently. I see no reason why not to move
+              that stuff to somewhere else, maybe tools or svtools ?!? We will see...
+
+
+
+
+
+
+
+            - In goodies, in GraphicObject::Draw, when the used Graphic is linked, infos are
+              generated. I will need to check what happens here with primitives.
+              To support, use of GraphicPrimitive2D (PRIMITIVE2D_ID_GRAPHICPRIMITIVE2D) may be needed.
+
+
+
+
+
         */
 
         void VclMetafileProcessor2D::processBasePrimitive2D(const primitive2d::BasePrimitive2D& rCandidate)
         {
             switch(rCandidate.getPrimitiveID())
             {
+                case PRIMITIVE2D_ID_GRAPHICPRIMITIVE2D :
+                {
+                    const primitive2d::GraphicPrimitive2D& rGraphicPrimitive = static_cast< const primitive2d::GraphicPrimitive2D& >(rCandidate);
+                    bool bUsingPDFExtOutDevData(false);
+                    basegfx::B2DVector aTranslate, aScale;
+                    static bool bSuppressPDFExtOutDevDataSupport(false);
+
+                    if(mpPDFExtOutDevData && !bSuppressPDFExtOutDevDataSupport)
+                    {
+                        // emulate data handling from UnoControlPDFExportContact, original see
+                        // goodies/source/graphic/grfmgr.cxx
+                        const Graphic& rGraphic = rGraphicPrimitive.getGraphicObject().GetGraphic();
+
+                        if(rGraphic.IsLink())
+                        {
+                            const GraphicAttr& rAttr = rGraphicPrimitive.getGraphicAttr();
+
+                            if(!rAttr.IsSpecialDrawMode() && !rAttr.IsMirrored() && !rAttr.IsRotated() && !rAttr.IsAdjusted())
+                            {
+                                const basegfx::B2DHomMatrix& rTransform = rGraphicPrimitive.getTransform();
+                                double fRotate, fShearX;
+                                rTransform.decompose(aScale, aTranslate, fRotate, fShearX);
+
+                                if(aScale.getX() > 0.0 && aScale.getY() > 0.0)
+                                {
+                                    bUsingPDFExtOutDevData = true;
+                                    mpPDFExtOutDevData->BeginGroup();
+                                }
+                            }
+                        }
+                    }
+
+                    // process recursively and add MetaFile comment
+                    process(rGraphicPrimitive.get2DDecomposition(getViewInformation2D()));
+
+                    if(bUsingPDFExtOutDevData)
+                    {
+                        // emulate data handling from UnoControlPDFExportContact, original see
+                        // goodies/source/graphic/grfmgr.cxx
+                        const basegfx::B2DRange aCurrentRange(
+                            aTranslate.getX(), aTranslate.getY(),
+                            aTranslate.getX() + aScale.getX(), aTranslate.getY() + aScale.getY());
+                        const Rectangle aCurrentRect(
+                            sal_Int32(floor(aCurrentRange.getMinX())), sal_Int32(floor(aCurrentRange.getMinY())),
+                            sal_Int32(ceil(aCurrentRange.getMaxX())), sal_Int32(ceil(aCurrentRange.getMaxY())));
+                        const GraphicAttr& rAttr = rGraphicPrimitive.getGraphicAttr();
+                        Rectangle aCropRect;
+
+                        if(rAttr.IsCropped())
+                        {
+                            // calculate scalings between real image size and logic object size. This
+                            // is necessary since the crop values are relative to original bitmap size
+                            double fFactorX(1.0);
+                            double fFactorY(1.0);
+
+                            {
+                                const MapMode aMapMode100thmm(MAP_100TH_MM);
+                                const Size aBitmapSize(Application::GetDefaultDevice()->LogicToLogic(
+                                    rGraphicPrimitive.getGraphicObject().GetPrefSize(),
+                                    rGraphicPrimitive.getGraphicObject().GetPrefMapMode(), aMapMode100thmm));
+                                const double fDivX(aBitmapSize.Width() - rAttr.GetLeftCrop() - rAttr.GetRightCrop());
+                                const double fDivY(aBitmapSize.Height() - rAttr.GetTopCrop() - rAttr.GetBottomCrop());
+
+                                if(!basegfx::fTools::equalZero(fDivX))
+                                {
+                                    fFactorX = aScale.getX() / fDivX;
+                                }
+
+                                if(!basegfx::fTools::equalZero(fDivY))
+                                {
+                                    fFactorY = aScale.getY() / fDivY;
+                                }
+                            }
+
+                            // calculate crop range and rect
+                            basegfx::B2DRange aCropRange;
+                            aCropRange.expand(aCurrentRange.getMinimum() - basegfx::B2DPoint(rAttr.GetLeftCrop() * fFactorX, rAttr.GetTopCrop() * fFactorY));
+                            aCropRange.expand(aCurrentRange.getMaximum() + basegfx::B2DPoint(rAttr.GetRightCrop() * fFactorX, rAttr.GetBottomCrop() * fFactorY));
+
+                            aCropRect = Rectangle(
+                                sal_Int32(floor(aCropRange.getMinX())), sal_Int32(floor(aCropRange.getMinY())),
+                                sal_Int32(ceil(aCropRange.getMaxX())), sal_Int32(ceil(aCropRange.getMaxY())));
+                        }
+
+                        mpPDFExtOutDevData->EndGroup(rGraphicPrimitive.getGraphicObject().GetGraphic(),
+                            rAttr.GetTransparency(),
+                            aCurrentRect,
+                            aCropRect);
+                    }
+
+                    break;
+                }
+                case PRIMITIVE2D_ID_CONTROLPRIMITIVE2D :
+                {
+                    const primitive2d::ControlPrimitive2D& rControlPrimitive = static_cast< const primitive2d::ControlPrimitive2D& >(rCandidate);
+
+                    if(mpPDFExtOutDevData && mpPDFExtOutDevData->GetIsExportFormFields())
+                    {
+                        // emulate data handling from UnoControlPDFExportContact
+                        // Looks like i would need the method "describePDFControl" which is
+                        // currently in svx/source/form/formpdfexport.cxx. Have to ask FS
+                        // why this is in svx.
+
+
+
+
+
+                    }
+
+                    // process recursively and add MetaFile comment
+                    process(rControlPrimitive.get2DDecomposition(getViewInformation2D()));
+
+                    break;
+                }
                 case PRIMITIVE2D_ID_TEXTHIERARCHYFIELDPRIMITIVE2D :
                 {
                     // support for FIELD_SEQ_BEGIN, FIELD_SEQ_END and URL. It wraps text primitives (but is not limited to)
@@ -578,10 +765,25 @@ namespace drawinglayer
                     }
 
                     // process recursively
-                    process(rFieldPrimitive.get2DDecomposition(getViewInformation2D()));
+                    const primitive2d::Primitive2DSequence rContent = rFieldPrimitive.get2DDecomposition(getViewInformation2D());
+                    process(rContent);
 
                     // for the end comment the type is not relevant yet, they are all the same. Just add.
                     mrMetaFile.AddAction(new MetaCommentAction(aCommentStringEnd));
+
+                    if(mpPDFExtOutDevData && drawinglayer::primitive2d::FIELD_TYPE_URL == rFieldPrimitive.getType())
+                    {
+                        // emulate data handling from ImpEditEngine::Paint
+                        const basegfx::B2DRange aViewRange(primitive2d::getB2DRangeFromPrimitive2DSequence(rContent, getViewInformation2D()));
+                        const Rectangle aRectLogic(
+                            (sal_Int32)floor(aViewRange.getMinX()), (sal_Int32)floor(aViewRange.getMinY()),
+                            (sal_Int32)ceil(aViewRange.getMaxX()), (sal_Int32)ceil(aViewRange.getMaxY()));
+                        vcl::PDFExtOutDevBookmarkEntry aBookmark;
+                        aBookmark.nLinkId = mpPDFExtOutDevData->CreateLink(aRectLogic);
+                        aBookmark.aBookmark = rFieldPrimitive.getString();
+                        std::vector< vcl::PDFExtOutDevBookmarkEntry >& rBookmarks = mpPDFExtOutDevData->GetBookmarks();
+                        rBookmarks.push_back( aBookmark );
+                    }
 
                     break;
                 }
@@ -601,9 +803,21 @@ namespace drawinglayer
                     const primitive2d::TextHierarchyParagraphPrimitive2D& rParagraphPrimitive = static_cast< const primitive2d::TextHierarchyParagraphPrimitive2D& >(rCandidate);
                     static const ByteString aCommentString("XTEXT_EOP");
 
+                    if(mpPDFExtOutDevData)
+                    {
+                        // emulate data handling from ImpEditEngine::Paint
+                        mpPDFExtOutDevData->BeginStructureElement( vcl::PDFWriter::Paragraph );
+                    }
+
                     // process recursively and add MetaFile comment
                     process(rParagraphPrimitive.get2DDecomposition(getViewInformation2D()));
                     mrMetaFile.AddAction(new MetaCommentAction(aCommentString));
+
+                    if(mpPDFExtOutDevData)
+                    {
+                        // emulate data handling from ImpEditEngine::Paint
+                        mpPDFExtOutDevData->EndStructureElement();
+                    }
 
                     break;
                 }
