@@ -14,7 +14,7 @@ dos: sh -c "if test %OS% = MACOSX; then create-bundle %_DEST%\lib%_EXT%\*.dylib;
 ..\%__SRC%\bin\rpt*.dll %_DEST%\bin%_EXT%\rpt*.dll
 ..\%__SRC%\lib\librpt*.so %_DEST%\lib%_EXT%\librpt*.so
 # ..\%__SRC%\lib\irpt*.lib %_DEST%\lib%_EXT%\irpt*.lib
-# ..\%__SRC%\lib\librpt*.dylib %_DEST%\lib%_EXT%\librpt*.dylib
+..\%__SRC%\lib\librpt*.dylib %_DEST%\lib%_EXT%\librpt*.dylib
 
 # Resources
 ..\%__SRC%\bin\*.res %_DEST%\bin%_EXT%\*.res
