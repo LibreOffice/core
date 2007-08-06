@@ -4,9 +4,9 @@
  *
  *  $RCSfile: viewsh.cxx,v $
  *
- *  $Revision: 1.76 $
+ *  $Revision: 1.77 $
  *
- *  last change: $Author: hr $ $Date: 2007-08-02 17:09:11 $
+ *  last change: $Author: hr $ $Date: 2007-08-06 10:34:37 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -81,6 +81,9 @@
 #endif
 #ifndef  _COM_SUN_STAR_CONTAINER_XCONTAINERQUERY_HPP_
 #include <com/sun/star/container/XContainerQuery.hpp>
+#endif
+#ifndef _COM_SUN_STAR_FRAME_XSTORABLE_HPP_
+#include <com/sun/star/frame/XStorable.hpp>
 #endif
 
 #include <osl/file.hxx>
