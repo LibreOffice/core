@@ -4,9 +4,9 @@
 #
 #  $RCSfile: makefile.mk,v $
 #
-#  $Revision: 1.7 $
+#  $Revision: 1.8 $
 #
-#  last change: $Author: hbrinkm $ $Date: 2007-06-29 07:57:05 $
+#  last change: $Author: hr $ $Date: 2007-08-06 12:58:42 $
 #
 #  The Contents of this file are made available subject to
 #  the terms of GNU Lesser General Public License Version 2.1.
@@ -49,6 +49,14 @@ CDEFS+=-DWRITERFILTER_DLLIMPLEMENTATION -DDEBUG_OOXML_ELEMENT
 
 
 # --- Files --------------------------------------------------------
+
+# SunStudio 8 x86: the optimizer pass (ube) uses up all available memory
+# and exits with a "out of memory" condition on this file (TokenMapInit.cxx). 
+# Remove if TokenMapInit.cxx is either restructured or a new compiler version
+# is used.
+.IF "$(OS)$(CPU)"=="SOLARISI"
+NOOPTFILES+=$(SLO)$/TokenMapInit.obj
+.ENDIF
 
 SLOFILES= \
     $(SLO)$/OOXMLresources.obj \
