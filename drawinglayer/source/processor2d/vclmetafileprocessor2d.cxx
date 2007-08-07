@@ -4,9 +4,9 @@
  *
  *  $RCSfile: vclmetafileprocessor2d.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: aw $ $Date: 2007-08-06 14:16:22 $
+ *  last change: $Author: aw $ $Date: 2007-08-07 15:48:40 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -178,6 +178,10 @@
 
 #ifndef _SV_SVAPP_HXX
 #include <vcl/svapp.hxx>
+#endif
+
+#ifndef _TOOLKIT_HELPER_FORM_FORMPDFEXPORT_HXX
+#include <toolkit/helper/formpdfexport.hxx>
 #endif
 
 //////////////////////////////////////////////////////////////////////////////
@@ -512,6 +516,7 @@ namespace drawinglayer
             XTEXT_EOC(i) end of character
             XTEXT_EOW(i) end of word
             XTEXT_EOS(i) end of sentence
+
             this three are with index and are created with the help of a i18n::XBreakIterator in
             ImplDrawWithComments. Simplifying, moving out text painting, reworking to create some
             data structure for holding those TEXT infos.
@@ -524,6 +529,7 @@ namespace drawinglayer
 
             XTEXT_EOL() end of line
             XTEXT_EOP() end of paragraph
+
             First try with boolean marks at TextDecoratedPortionPrimitive2D did not work too well,
             i decided to solve it with structure. I added the TextHierarchyPrimitives for this,
             namely:
@@ -591,11 +597,6 @@ namespace drawinglayer
               CWS version. Adding support.
               Okay, URLs work. Done.
 
-
-
-
-
-
             - UnoControlPDFExportContact is only created when PDFExtOutDevData is used at the
               target and uno control data is created in UnoControlPDFExportContact::doPaintObject.
               This may be added in primitive MetaFile renderer.
@@ -605,13 +606,23 @@ namespace drawinglayer
               ::vcl::PDFWriter::AnyWidget is filled out, which is already part of vcl.
               Wrote an eMail to FS, he is on vacation currently. I see no reason why not to move
               that stuff to somewhere else, maybe tools or svtools ?!? We will see...
-              TODO!
+              Moved to toolkit, so i have to link against it. I tried VCL first, but it did
+              not work since VCLUnoHelper::CreateFont is unresolved in VCL (!). Other then the name
+              may imply, it is defined in toolkit (!). Since toolkit is linked against VCL itself,
+              the lowest move,ment plave is toolkit.
+              Checked form control export, it works well. Done.
+
+
+
 
             - In goodies, in GraphicObject::Draw, when the used Graphic is linked, infos are
               generated. I will need to check what happens here with primitives.
               To support, use of GraphicPrimitive2D (PRIMITIVE2D_ID_GRAPHICPRIMITIVE2D) may be needed.
               Added support, but feature is broken in main version, so i cannot test at all.
               Writing a bug to CL (or SJ) and seeing what happens (#i80380#) ...
+              TODO!
+
+            - Maybe there are more places to take care of!
               TODO!
 
 
@@ -717,22 +728,45 @@ namespace drawinglayer
                 case PRIMITIVE2D_ID_CONTROLPRIMITIVE2D :
                 {
                     const primitive2d::ControlPrimitive2D& rControlPrimitive = static_cast< const primitive2d::ControlPrimitive2D& >(rCandidate);
+                    bool bDoProcessRecursively(true);
+                    static bool bSuppressPDFExtOutDevDataSupport(false);
 
-                    if(mpPDFExtOutDevData && mpPDFExtOutDevData->GetIsExportFormFields())
+                    if(mpPDFExtOutDevData && !bSuppressPDFExtOutDevDataSupport && mpPDFExtOutDevData->GetIsExportFormFields())
                     {
                         // emulate data handling from UnoControlPDFExportContact
-                        // Looks like i would need the method "describePDFControl" which is
-                        // currently in svx/source/form/formpdfexport.cxx. Have to ask FS
-                        // why this is in svx.
+                        // I have now moved describePDFControl to toolkit, thus i can implement the PDF
+                        // form control support now as follows
+                        ::std::auto_ptr< ::vcl::PDFWriter::AnyWidget > pPDFControl;
+                        ::toolkitform::describePDFControl( rControlPrimitive.getXControl(), pPDFControl );
 
+                        if(pPDFControl.get())
+                        {
+                            // still need to fill in the location (is a class Rectangle)
+                            const basegfx::B2DRange aRangeLogic(rControlPrimitive.getB2DRange(getViewInformation2D()));
+                            const Rectangle aRectLogic(
+                                (sal_Int32)floor(aRangeLogic.getMinX()), (sal_Int32)floor(aRangeLogic.getMinY()),
+                                (sal_Int32)ceil(aRangeLogic.getMaxX()), (sal_Int32)ceil(aRangeLogic.getMaxY()));
+                            pPDFControl->Location = aRectLogic;
 
+                            Size aFontSize(pPDFControl->TextFont.GetSize());
+                            aFontSize = mpOutputDevice->LogicToLogic(aFontSize, MapMode(MAP_POINT), mpOutputDevice->GetMapMode());
+                            pPDFControl->TextFont.SetSize(aFontSize);
 
+                            mpPDFExtOutDevData->BeginStructureElement(vcl::PDFWriter::Form);
+                            mpPDFExtOutDevData->CreateControl(*pPDFControl.get());
+                            mpPDFExtOutDevData->EndStructureElement();
 
-
+                            // no normal paint needed (see original UnoControlPDFExportContact::doPaintObject);
+                            // do not process recursively
+                            bDoProcessRecursively = false;
+                        }
                     }
 
                     // process recursively and add MetaFile comment
-                    process(rControlPrimitive.get2DDecomposition(getViewInformation2D()));
+                    if(bDoProcessRecursively)
+                    {
+                        process(rControlPrimitive.get2DDecomposition(getViewInformation2D()));
+                    }
 
                     break;
                 }
