@@ -4,9 +4,9 @@
  *
  *  $RCSfile: vclprocessor2d.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: aw $ $Date: 2007-08-02 11:43:45 $
+ *  last change: $Author: aw $ $Date: 2007-08-08 15:27:54 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -304,6 +304,65 @@ namespace drawinglayer
                     mpOutputDevice->DrawTextArray(aStartPoint, rTextCandidate.getText(),
                         aTransformedDXArray.size() ? &(aTransformedDXArray[0]) : NULL);
                     bPrimitiveAccepted = true;
+
+                    if(pTCPP && aTransformedDXArray.size())
+                    {
+                        // basic redlining support
+                        const primitive2d::WrongSpellVector& rWrongSpellVector = pTCPP->getWrongSpellVector();
+                        const sal_uInt32 nSpellVectorSize(rWrongSpellVector.size());
+                        const sal_uInt32 nDXCount(aTransformedDXArray.size());
+
+                        if(nSpellVectorSize && nDXCount)
+                        {
+                            const sal_uInt32 nFontPixelHeight(mpOutputDevice->LogicToPixel(Size(0, static_cast< sal_Int32 >(aScale.getY()))).Height());
+                            static const sal_uInt32 nMinimumFontHeight(5); // #define WRONG_SHOW_MIN         5
+                            static const sal_uInt32 nSmallFontHeight(11);  // #define WRONG_SHOW_SMALL      11
+                            static const sal_uInt32 nMediumFontHeight(15); // #define WRONG_SHOW_MEDIUM     15
+
+                            if(nFontPixelHeight > nMinimumFontHeight)
+                            {
+                                sal_uInt16 nWaveStyle(WAVE_FLAT);
+
+                                if(nFontPixelHeight > nMediumFontHeight)
+                                {
+                                    nWaveStyle = WAVE_NORMAL;
+                                }
+                                else if(nFontPixelHeight > nSmallFontHeight)
+                                {
+                                    nWaveStyle = WAVE_SMALL;
+                                }
+
+                                mpOutputDevice->SetLineColor(COL_LIGHTRED);
+                                mpOutputDevice->SetFillColor();
+
+                                for(sal_uInt32 a(0); a < nSpellVectorSize; a++)
+                                {
+                                    const primitive2d::WrongSpellEntry& rCandidate = rWrongSpellVector[a];
+
+                                    if(rCandidate.getStart() < rCandidate.getEnd())
+                                    {
+                                        Point aStart(aStartPoint);
+                                        Point aEnd(aStartPoint);
+
+                                        if(rCandidate.getStart() > 0 && rCandidate.getStart() - 1 < nDXCount)
+                                        {
+                                            aStart += Point(aTransformedDXArray[rCandidate.getStart() - 1], 0);
+                                        }
+
+                                        if(rCandidate.getEnd() > 0 && rCandidate.getEnd() - 1 < nDXCount)
+                                        {
+                                            aEnd += Point(aTransformedDXArray[rCandidate.getEnd() - 1], 0);
+                                        }
+
+                                        if(aStart != aEnd)
+                                        {
+                                            mpOutputDevice->DrawWaveLine(aStart, aEnd, nWaveStyle);
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
                 }
             }
 

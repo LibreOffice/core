@@ -4,9 +4,9 @@
  *
  *  $RCSfile: textdecoratedprimitive2d.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: aw $ $Date: 2007-08-03 10:43:04 $
+ *  last change: $Author: aw $ $Date: 2007-08-08 15:27:53 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -73,40 +73,57 @@ namespace drawinglayer
             const bool bNeedFontStrikeout(getFontStrikeout() != FONT_STRIKEOUT_NONE);
             const bool bNeedEmphasisMarkAbove(getEmphasisMarkAbove() != FONT_EMPHASISMARK_NONE);
             const bool bNeedEmphasisMarkBelow(getEmphasisMarkBelow() != FONT_EMPHASISMARK_NONE);
+            const sal_uInt32 nSpellVectorSize(maWrongSpellVector.size());
 
-            if(bNeedFontUnderline || bNeedFontStrikeout || bNeedEmphasisMarkAbove || bNeedEmphasisMarkBelow)
+            if(bNeedFontUnderline
+                || bNeedFontStrikeout
+                || bNeedEmphasisMarkAbove
+                || bNeedEmphasisMarkBelow
+                || 0 != nSpellVectorSize)
             {
-                // prepare transformation
+                // prepare transformations
                 basegfx::B2DVector aScale, aTranslate;
                 double fRotate, fShearX;
                 getTextTransform().decompose(aScale, aTranslate, fRotate, fShearX);
+
+                // unscaled transform is needed since the scale in the text transform describes the font size
                 basegfx::B2DHomMatrix aUnscaledTransform;
                 aUnscaledTransform.rotate( fRotate );
                 aUnscaledTransform.shearX( fShearX );
                 aUnscaledTransform.translate( aTranslate.getX(), aTranslate.getY() );
 
-                basegfx::B2DHomMatrix aUnrotatedTransform = getTextTransform();
-                aUnrotatedTransform.rotate( -fRotate );
-
-                // get metrics for text decorations like underline/strikeout/emphasis marks
+                // prepare TextLayouterDevice to get metrics for text decorations like
+                // underline/strikeout/emphasis marks from it
                 TextLayouterDevice aTextLayouter;
-                aTextLayouter.setFontAttributes(getFontAttributes(), aUnrotatedTransform );
 
-//              const double fLineHeight = aTextLayouter.getTextHeight();
-                double fUnderlineOffset = aTextLayouter.getUnderlineOffset();
-                double fUnderlineHeight = aTextLayouter.getUnderlineHeight();
-                basegfx::tools::B2DLineJoin eLineJoin = basegfx::tools::B2DLINEJOIN_NONE;
-                bool bDoubleLine = false;
-                bool bWaveLine = false;
+                {
+                    // unrotated transform is needed for TextLayouterDevice setup
+                    basegfx::B2DHomMatrix aUnrotatedTransform = getTextTransform();
+                    aUnrotatedTransform.rotate( -fRotate );
+                    aTextLayouter.setFontAttributes(getFontAttributes(), aUnrotatedTransform );
+                }
 
-                double fTextWidth = 0.0;
-                if( getDXArray().empty() )
+                // init metrics to defaults
+//              const double fLineHeight(aTextLayouter.getTextHeight());
+                double fUnderlineOffset(aTextLayouter.getUnderlineOffset());
+                double fUnderlineHeight(aTextLayouter.getUnderlineHeight());
+                basegfx::tools::B2DLineJoin eLineJoin(basegfx::tools::B2DLINEJOIN_NONE);
+                bool bDoubleLine(false);
+                bool bWaveLine(false);
+                double fTextWidth(0.0);
+
+                if(getDXArray().empty())
+                {
                     fTextWidth = aTextLayouter.getTextWidth( getText(), 0/*TODO*/, getText().Len()/*TODO*/ );
+                }
                 else
+                {
                     fTextWidth = getDXArray().back() * aScale.getX();
+                }
 
                 // prepare line styles for text decoration lines
-                const int* pDashDotArray = NULL;
+                const int* pDashDotArray(0);
+
                 static const int aDottedArray[]     = { 1, 1, 0};               // DOTTED LINE
                 static const int aDashDotArray[]    = { 1, 1, 4, 1, 0};         // DASHDOT
                 static const int aDashDotDotArray[] = { 1, 1, 1, 1, 4, 1, 0};   // DASHDOTDOT
@@ -179,9 +196,9 @@ namespace drawinglayer
                         break;
                 }
 
-                if( fUnderlineHeight > 0 )
+                if(fUnderlineHeight > 0.0)
                 {
-                    if( bDoubleLine )
+                    if(bDoubleLine)
                     {
                         fUnderlineOffset -= 0.50 * fUnderlineHeight;
                         fUnderlineHeight *= 0.64;
@@ -190,7 +207,8 @@ namespace drawinglayer
                     basegfx::B2DPolygon aUnderline;
                     ::basegfx::B2DPoint aPoint( 0.0, fUnderlineOffset );
                     aUnderline.append( aPoint );
-                    if( !bWaveLine )
+
+                    if(!bWaveLine)
                     {
                         // straight underline
                         aUnderline.append( aPoint + ::basegfx::B2DPoint( fTextWidth, 0.0 ) );
@@ -199,57 +217,71 @@ namespace drawinglayer
                     {
                         // wavy underline
                         basegfx::B2DPolygon& aWavePoly = aUnderline;
-                        double fWaveWidth = 4 * fUnderlineHeight;
-                        if( getFontUnderline() == primitive2d::FONT_UNDERLINE_SMALLWAVE )
+                        double fWaveWidth(4.0 * fUnderlineHeight);
+
+                        if(primitive2d::FONT_UNDERLINE_SMALLWAVE == getFontUnderline())
+                        {
                             fWaveWidth *= 0.7;
-                        const double fWaveHeight = 0.5 * fWaveWidth;
+                        }
+
+                        const double fWaveHeight(0.5 * fWaveWidth);
                         const ::basegfx::B2DPoint aCtrlOffset( fWaveWidth * 0.467308, fWaveHeight );
-                        for( double fPos = fWaveWidth; fPos < fTextWidth; fPos += fWaveWidth ) {
+
+                        for(double fPos = fWaveWidth; fPos < fTextWidth; fPos += fWaveWidth)
+                        {
                             // create a symmetrical wave using one cubic bezier curve
                             // with y==0 for {x==0, x==0.5*fW or x==1.0*fW}
                             // and ymin/ymax at {x=0.25*fW or 0.75*fW}
                             const int n = aWavePoly.count();
+
                             aWavePoly.setControlPointA( n-1, aPoint + aCtrlOffset );
-                            aWavePoly.append(               aPoint += ::basegfx::B2DPoint( fWaveWidth, 0.0 ) );
+                            aWavePoly.append(aPoint += ::basegfx::B2DPoint( fWaveWidth, 0.0 ) );
                             aWavePoly.setControlPointB( n-1, aPoint - aCtrlOffset );
                         }
+
                         // adjust stroke style
                         eLineJoin = basegfx::tools::B2DLINEJOIN_ROUND;
                         fUnderlineHeight *= 0.5;
                     }
 
                     const basegfx::BColor& rLineColor = getTextlineColor();
-                    attribute::StrokeAttribute aStrokeAttr( rLineColor, fUnderlineHeight, eLineJoin );
-                    if( pDashDotArray != NULL )
+                    attribute::StrokeAttribute aStrokeAttr(rLineColor, fUnderlineHeight, eLineJoin);
+
+                    if(pDashDotArray)
                     {
                         ::std::vector< double > aDoubleArray;
+
                         for( const int* p = pDashDotArray; *p; ++p )
+                        {
                             aDoubleArray.push_back( *p * fUnderlineHeight);
-                        const double fFullDashDotLen = ::std::accumulate(aDoubleArray.begin(), aDoubleArray.end(), 0.0);
-                        aStrokeAttr = attribute::StrokeAttribute( rLineColor,
-                            fUnderlineHeight, eLineJoin, aDoubleArray, fFullDashDotLen );
+                        }
+
+                        const double fFullDashDotLen(::std::accumulate(aDoubleArray.begin(), aDoubleArray.end(), 0.0));
+                        aStrokeAttr = attribute::StrokeAttribute(rLineColor, fUnderlineHeight, eLineJoin, aDoubleArray, fFullDashDotLen);
                     }
+
                     aUnderline.transform( aUnscaledTransform );
                     aNewPrimitives.push_back(new PolygonStrokePrimitive2D( aUnderline, aStrokeAttr ));
 
                     if( bDoubleLine )
                     {
                         // add another underline below the first underline
-                        const double fLineDist = (bWaveLine ? 3 : 2) * fUnderlineHeight;
+                        const double fLineDist((bWaveLine ? 3.0 : 2.0) * fUnderlineHeight);
                         ::basegfx::B2DVector aOffsetVector( 0.0, fLineDist );
-                        aOffsetVector = aUnscaledTransform * aOffsetVector;
                         basegfx::B2DHomMatrix aOffsetTransform;
+
+                        aOffsetVector = aUnscaledTransform * aOffsetVector;
                         aOffsetTransform.translate( aOffsetVector.getX(), aOffsetVector.getY() );
                         aUnderline.transform( aOffsetTransform );
                         aNewPrimitives.push_back(new PolygonStrokePrimitive2D( aUnderline, aStrokeAttr ));
                     }
                 }
 
-                double fStrikeoutHeight = aTextLayouter.getUnderlineHeight();
-                double fStrikeoutOffset = aTextLayouter.getStrikeoutOffset();
+                double fStrikeoutHeight(aTextLayouter.getUnderlineHeight());
+                double fStrikeoutOffset(aTextLayouter.getStrikeoutOffset());
                 eLineJoin = basegfx::tools::B2DLINEJOIN_NONE;
                 bDoubleLine = false;
-                sal_Unicode aStrikeoutChar = '\0';
+                sal_Unicode aStrikeoutChar('\0');
 
                 // set Underline attribute
                 switch( getFontStrikeout() )
@@ -276,9 +308,9 @@ namespace drawinglayer
                         aStrikeoutChar = 'X';
                         fStrikeoutHeight = 0;
                         break;
-                };
+                }
 
-                if( fStrikeoutHeight > 0 )
+                if(fStrikeoutHeight > 0.0)
                 {
                     if( bDoubleLine )
                     {
@@ -289,6 +321,7 @@ namespace drawinglayer
                     basegfx::B2DPolygon aStrikeoutLine;
                     basegfx::B2DPoint aPoint( 0.0, -fStrikeoutOffset );
                     aStrikeoutLine.append( aPoint );
+
                     if( 1/*####*/ )
                     {
                         // straight underline
@@ -297,16 +330,18 @@ namespace drawinglayer
 
                     const basegfx::BColor& rStrikeoutColor = getTextlineColor();
                     attribute::StrokeAttribute aStrokeAttr( rStrikeoutColor, fStrikeoutHeight, eLineJoin );
+
                     aStrikeoutLine.transform( aUnscaledTransform );
                     aNewPrimitives.push_back(new PolygonStrokePrimitive2D( aStrikeoutLine, aStrokeAttr ));
 
                     if( bDoubleLine )
                     {
                         // add another strikeout below the first strikeout
-                        const double fLineDist = 2 * fStrikeoutHeight;
+                        const double fLineDist(2.0 * fStrikeoutHeight);
                         ::basegfx::B2DVector aOffsetVector( 0.0, -fLineDist );
-                        aOffsetVector = aUnscaledTransform * aOffsetVector;
                         basegfx::B2DHomMatrix aOffsetTransform;
+
+                        aOffsetVector = aUnscaledTransform * aOffsetVector;
                         aOffsetTransform.translate( aOffsetVector.getX(), aOffsetVector.getY() );
                         aStrikeoutLine.transform( aOffsetTransform );
                         aNewPrimitives.push_back(new PolygonStrokePrimitive2D( aStrikeoutLine, aStrokeAttr ));
@@ -315,18 +350,23 @@ namespace drawinglayer
 
                 if( aStrikeoutChar != '\0' )
                 {
-                    String aString( &aStrikeoutChar, 1 );
-                    double fStrikeCharWidth = aTextLayouter.getTextWidth( aString, 0, 1 );
-                    double fStrikeCharCount = fTextWidth / fStrikeCharWidth;
-                    int nStrikeCharCount = static_cast<int>(fStrikeCharCount + 0.9);
-                    for( int i = 1; i < nStrikeCharCount; ++i )
-                        aString += aStrikeoutChar;
-                    std::vector<double> aDXArray( nStrikeCharCount );
-                    fStrikeCharWidth /= aScale.getX();
-                    for( int i = 0; i < nStrikeCharCount; ++i )
-                        aDXArray[i] = (i+1) * fStrikeCharWidth;
+                    const String aSingleCharString( &aStrikeoutChar, 1 );
+                    const double fStrikeCharWidth(aTextLayouter.getTextWidth( aSingleCharString, 0, 1 ));
+                    const double fStrikeCharCount(fabs(fTextWidth / fStrikeCharWidth));
+                    const sal_uInt32 nStrikeCharCount(static_cast< sal_uInt32 >(fStrikeCharCount + 0.9));
+                    const double fStrikeCharWidthUnscaled(aScale.getX() == 0.0 ? fStrikeCharWidth : fStrikeCharWidth / aScale.getX());
                     const basegfx::BColor& rStrikeoutColor = getFontColor();
-                    aNewPrimitives.push_back(new TextSimplePortionPrimitive2D(getTextTransform(), aString, aDXArray, getFontAttributes(), getLocale(), rStrikeoutColor ));
+
+                    std::vector<double> aDXArray(nStrikeCharCount);
+                    String aStrikeoutString;
+
+                    for(sal_uInt32 a(0); a < nStrikeCharCount; a++)
+                    {
+                        aStrikeoutString += aStrikeoutChar;
+                        aDXArray[a] = (a + 1) * fStrikeCharWidthUnscaled;
+                    }
+
+                    aNewPrimitives.push_back(new TextSimplePortionPrimitive2D(getTextTransform(), aStrikeoutString, aDXArray, getFontAttributes(), getLocale(), rStrikeoutColor ));
                 }
 
                 // TODO: need to take care of
@@ -335,14 +375,47 @@ namespace drawinglayer
                 // -shadow
                 // if( getWordLineMode() )
                 // if( getUnderlineAbove() )
-            }
 
-            if(maWrongSpellVector.size())
-            {
-                // TODO: take care of WrongSpellVector; create redlining (red wavelines) accordingly
+                if(nSpellVectorSize && !getDXArray().empty())
+                {
+                    // TODO: take care of WrongSpellVector; create redlining (red wavelines) accordingly.
+                    // For test purposes, create single lines as long as no waveline primitive is created
+                    const ::std::vector< double >& rDXArray = getDXArray();
+                    const sal_uInt32 nDXCount(rDXArray.size());
+                    const basegfx::BColor aSpellColor(1.0, 0.0, 0.0); // red
 
+                    for(sal_uInt32 a(0); a < nSpellVectorSize; a++)
+                    {
+                        const WrongSpellEntry& rCandidate = maWrongSpellVector[a];
 
+                        if(rCandidate.getStart() < rCandidate.getEnd())
+                        {
+                            ::basegfx::B2DPoint aStart;
+                            ::basegfx::B2DPoint aEnd;
 
+                            if(rCandidate.getStart() > 0 && rCandidate.getStart() - 1 < nDXCount)
+                            {
+                                aStart.setX(rDXArray[rCandidate.getStart() - 1] * aScale.getX());
+                            }
+
+                            if(rCandidate.getEnd() > 0 && rCandidate.getEnd() - 1 < nDXCount)
+                            {
+                                aEnd.setX(rDXArray[rCandidate.getEnd() - 1] * aScale.getX());
+                            }
+
+                            if(aStart != aEnd)
+                            {
+                                   basegfx::B2DPolygon aPolygon;
+
+                                aPolygon.append(aStart);
+                                aPolygon.append(aEnd);
+                                aPolygon.transform(aUnscaledTransform);
+
+                                aNewPrimitives.push_back(new PolygonHairlinePrimitive2D(aPolygon, aSpellColor));
+                            }
+                        }
+                    }
+                }
             }
 
             // prepare return sequence
