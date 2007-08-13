@@ -4,9 +4,9 @@
  *
  *  $RCSfile: checkdirectory.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2007-07-06 12:16:58 $
+ *  last change: $Author: obo $ $Date: 2007-08-13 10:56:36 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -33,6 +33,8 @@
  *
  ************************************************************************/
 
+#define _WIN32_WINNT 0x0401
+
 #pragma warning(push, 1) /* disable warnings within system headers */
 #define WIN32_LEAN_AND_MEAN
 #include <windows.h>
@@ -52,10 +54,6 @@
 #include <string>
 #include <queue>
 #include <stdio.h>
-
-#ifdef _WIN32_WINNT
-#error YES
-#endif
 
 #include <systools/win32/uwinapi.h>
 #include <../tools/seterror.hxx>
