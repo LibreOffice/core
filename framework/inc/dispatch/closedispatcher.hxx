@@ -4,9 +4,9 @@
  *
  *  $RCSfile: closedispatcher.hxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: ihi $ $Date: 2007-04-16 16:31:15 $
+ *  last change: $Author: jl $ $Date: 2007-08-13 14:15:18 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -268,7 +268,7 @@ class CloseDispatcher : public css::lang::XTypeProvider
         DECL_LINK( impl_asyncCallback, void* );
 
         //---------------------------------------
-        /** @short  close the document view of our m_xCloseFrame.
+        /** @short  prepare m_xCloseFrame so it should be closeable without problems.
 
             @descr  Thats needed to be shure, that the document cant disagree
                     later with e.g. an office termination.
@@ -288,8 +288,10 @@ class CloseDispatcher : public css::lang::XTypeProvider
             @return [boolean]
                     TRUE if closing was successfully.
          */
-        sal_Bool implts_closeView(sal_Bool bAllowSuspend         ,
-                                  sal_Bool bCloseAllOtherViewsToo);
+        sal_Bool implts_prepareFrameForClosing(const css::uno::Reference< css::frame::XFrame >& xFrame                ,
+                                                     sal_Bool                                   bAllowSuspend         ,
+                                                     sal_Bool                                   bCloseAllOtherViewsToo,
+                                                     sal_Bool&                                  bControllerSuspended  );
 
         //---------------------------------------
         /** @short  close the member m_xCloseFrame.
