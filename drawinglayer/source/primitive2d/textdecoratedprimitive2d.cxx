@@ -4,9 +4,9 @@
  *
  *  $RCSfile: textdecoratedprimitive2d.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: aw $ $Date: 2007-08-08 15:27:53 $
+ *  last change: $Author: aw $ $Date: 2007-08-13 15:30:25 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -234,9 +234,9 @@ namespace drawinglayer
                             // and ymin/ymax at {x=0.25*fW or 0.75*fW}
                             const int n = aWavePoly.count();
 
-                            aWavePoly.setControlPointA( n-1, aPoint + aCtrlOffset );
+                            aWavePoly.setNextControlPoint(  n-1, aPoint + aCtrlOffset );
                             aWavePoly.append(aPoint += ::basegfx::B2DPoint( fWaveWidth, 0.0 ) );
-                            aWavePoly.setControlPointB( n-1, aPoint - aCtrlOffset );
+                            aWavePoly.setPrevControlPoint(  n-1, aPoint - aCtrlOffset );
                         }
 
                         // adjust stroke style
