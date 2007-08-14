@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.54 $
+#   $Revision: 1.55 $
 #
-#   last change: $Author: rt $ $Date: 2007-07-03 14:26:59 $
+#   last change: $Author: obo $ $Date: 2007-08-14 13:47:44 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -62,7 +62,7 @@ SRC1FILES =  \
         ctredlin.src \
         measure.src \
         dstribut.src \
-        passwd.src      \
+        passwd.src \
         align.src \
         backgrnd.src \
         bbdlg.src \
@@ -104,24 +104,24 @@ SRC1FILES =  \
         textattr.src \
         thesdlg.src \
         txenctab.src \
-        zoom.src        \
+        zoom.src \
         dlgctrl.src \
         grfflt.src \
         langbox.src \
         frmdirlbox.src \
         hangulhanjadlg.src \
         commonlingui.src \
-        fontsubs.src                            \
-        readonlyimage.src           \
-        opthtml.src                                     \
-        optgdlg.src                                     \
-        optmemory.src                           \
-        treeopt.src                                     \
-        optfltr.src                                     \
-        connpooloptions.src                     \
-        dbregister.src                          \
-        doclinkdialog.src                       \
-        internationaloptions.src        \
+        fontsubs.src \
+        readonlyimage.src \
+        opthtml.src \
+        optgdlg.src \
+        optmemory.src \
+        treeopt.src \
+        optfltr.src \
+        connpooloptions.src \
+        dbregister.src \
+        doclinkdialog.src \
+        internationaloptions.src \
         macropg.src \
         eventdlg.src \
         cfg.src \
