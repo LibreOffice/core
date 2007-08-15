@@ -4,9 +4,9 @@
  *
  *  $RCSfile: optimizerdialogcontrols.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: sj $ $Date: 2007-07-10 16:16:25 $
+ *  last change: $Author: sj $ $Date: 2007-08-15 12:03:13 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -458,7 +458,7 @@ void OptimizerDialog::InitPage0()
     aControlList.push_back( InsertSeparator( *this, TKGet( TK_Separator1Pg0 ), 0, PAGE_POS_X + 6, DIALOG_HEIGHT - 66, PAGE_WIDTH - 12, 1 ) );
     aControlList.push_back( InsertFixedText( *this, TKGet( TK_FixedText2Pg0 ), getString( STR_CHOSE_SETTINGS ), PAGE_POS_X + 6, DIALOG_HEIGHT - 60, PAGE_WIDTH - 12, 8, sal_True, sal_False, mnTabIndex++ ) );
     aControlList.push_back( InsertListBox(  *this, TKGet( TK_ListBox0Pg0 ), mxActionListenerListBox0Pg0, sal_True, aItemList, PAGE_POS_X + 6, DIALOG_HEIGHT - 48, ( OD_DIALOG_WIDTH - 50 ) - ( PAGE_POS_X + 6 ), 12, mnTabIndex++ ) );
-    aControlList.push_back( InsertButton( *this, TKGet( TK_Button0Pg0 ), mxActionListener, OD_DIALOG_WIDTH - 46, DIALOG_HEIGHT - 48, 40, 14, mnTabIndex++, sal_True, STR_REMOVE, PushButtonType_STANDARD ) );
+    aControlList.push_back( InsertButton( *this, TKGet( TK_Button0Pg0 ), mxActionListener, OD_DIALOG_WIDTH - 46, DIALOG_HEIGHT - 49, 40, 14, mnTabIndex++, sal_True, STR_REMOVE, PushButtonType_STANDARD ) );
     maControlPages.push_back( aControlList );
     DeactivatePage( 0 );
     UpdateControlStatesPage0();
@@ -914,7 +914,7 @@ void OptimizerDialog::InitPage4()
     aControlList.push_back( InsertFixedText( *this, TKGet( TK_FixedText1Pg4 ), OUString(), PAGE_POS_X + 6, DIALOG_HEIGHT - 86, PAGE_WIDTH - 12, 8, sal_True, sal_False, mnTabIndex++ ) );
     aControlList.push_back( TKGet( TK_Progress ) );
     aControlList.push_back( InsertSeparator( *this, TKGet( TK_Separator1Pg4 ), 0, PAGE_POS_X + 6, DIALOG_HEIGHT - 58, PAGE_WIDTH - 12, 1 ) );
-    aControlList.push_back( InsertCheckBox(  *this, TKGet( TK_CheckBox1Pg4 ), mxItemListener, getString( STR_SAVE_SETTINGS ), PAGE_POS_X + 6, DIALOG_HEIGHT - 48, 100, 8, mnTabIndex++ ) );
+    aControlList.push_back( InsertCheckBox(  *this, TKGet( TK_CheckBox1Pg4 ), mxItemListener, getString( STR_SAVE_SETTINGS ), PAGE_POS_X + 6, DIALOG_HEIGHT - 47, 100, 8, mnTabIndex++ ) );
     aControlList.push_back( InsertComboBox(  *this, TKGet( TK_ComboBox0Pg4 ), xTextListener, sal_True, aItemList, PAGE_POS_X + 106, DIALOG_HEIGHT - 48, 100, 12, mnTabIndex++ ) );
     maControlPages.push_back( aControlList );
     DeactivatePage( 4 );
