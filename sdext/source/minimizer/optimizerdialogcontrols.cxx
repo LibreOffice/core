@@ -4,9 +4,9 @@
  *
  *  $RCSfile: optimizerdialogcontrols.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: sj $ $Date: 2007-08-15 12:03:13 $
+ *  last change: $Author: sj $ $Date: 2007-08-15 16:38:45 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -490,12 +490,10 @@ void OptimizerDialog::InitPage1()
     std::vector< rtl::OUString > aControlList;
     aControlList.push_back( InsertFixedText( *this, TKGet( TK_FixedText0Pg3 ), getString( STR_CHOOSE_SLIDES ), PAGE_POS_X, PAGE_POS_Y, PAGE_WIDTH, 8, sal_False, sal_True, mnTabIndex++ ) );
     aControlList.push_back( InsertCheckBox(  *this, TKGet( TK_CheckBox0Pg3 ), mxItemListener, getString( STR_DELETE_MASTER_PAGES ), PAGE_POS_X + 6, PAGE_POS_Y + 14, PAGE_WIDTH - 12, 8, mnTabIndex++ ) );
-    aControlList.push_back( InsertFixedText( *this, TKGet( TK_FixedText1Pg3 ), getString( STR_NOTES_PAGES ), PAGE_POS_X, PAGE_POS_Y + 28, PAGE_WIDTH, 8, sal_False, sal_False, mnTabIndex++ ) );
-    aControlList.push_back( InsertCheckBox(  *this, TKGet( TK_CheckBox1Pg3 ), mxItemListener, getString( STR_DELETE_NOTES_PAGES ), PAGE_POS_X + 6, PAGE_POS_Y + 42, PAGE_WIDTH - 12, 8, mnTabIndex++ ) );
-    aControlList.push_back( InsertFixedText( *this, TKGet( TK_FixedText2Pg3 ), getString( STR_SLIDES ), PAGE_POS_X, PAGE_POS_Y + 56, PAGE_WIDTH, 8, sal_False, sal_False, mnTabIndex++ ) );
-    aControlList.push_back( InsertCheckBox(  *this, TKGet( TK_CheckBox2Pg3 ), mxItemListener, getString( STR_DELETE_HIDDEN_SLIDES ), PAGE_POS_X + 6, PAGE_POS_Y + 70, PAGE_WIDTH - 12, 8, mnTabIndex++ ) );
-    aControlList.push_back( InsertCheckBox(  *this, TKGet( TK_CheckBox3Pg3 ), mxItemListener, getString( STR_CUSTOM_SHOW ), PAGE_POS_X + 6, PAGE_POS_Y + 84, PAGE_WIDTH - 12, 8, mnTabIndex++ ) );
-    aControlList.push_back( InsertListBox(  *this, TKGet( TK_ListBox0Pg3 ), mxActionListener, sal_True, aCustomShowList, PAGE_POS_X + 14, PAGE_POS_Y + 96, 150, 12, mnTabIndex++ ) );
+    aControlList.push_back( InsertCheckBox(  *this, TKGet( TK_CheckBox2Pg3 ), mxItemListener, getString( STR_DELETE_HIDDEN_SLIDES ), PAGE_POS_X + 6, PAGE_POS_Y + 28, PAGE_WIDTH - 12, 8, mnTabIndex++ ) );
+    aControlList.push_back( InsertCheckBox(  *this, TKGet( TK_CheckBox3Pg3 ), mxItemListener, getString( STR_CUSTOM_SHOW ), PAGE_POS_X + 6, PAGE_POS_Y + 42, PAGE_WIDTH - 12, 8, mnTabIndex++ ) );
+    aControlList.push_back( InsertListBox(  *this, TKGet( TK_ListBox0Pg3 ), mxActionListener, sal_True, aCustomShowList, PAGE_POS_X + 14, PAGE_POS_Y + 54, 150, 12, mnTabIndex++ ) );
+    aControlList.push_back( InsertCheckBox(  *this, TKGet( TK_CheckBox1Pg3 ), mxItemListener, getString( STR_DELETE_NOTES_PAGES ), PAGE_POS_X + 6, PAGE_POS_Y + 70, PAGE_WIDTH - 12, 8, mnTabIndex++ ) );
     maControlPages.push_back( aControlList );
     DeactivatePage( 1 );
 
@@ -605,10 +603,10 @@ void OptimizerDialog::InitPage3()
     std::vector< rtl::OUString > aControlList;
     aControlList.push_back( InsertFixedText( *this, TKGet( TK_FixedText0Pg2 ), getString( STR_OLE_OPTIMIZATION ), PAGE_POS_X, PAGE_POS_Y, PAGE_WIDTH, 8, sal_False, sal_True, mnTabIndex++ ) );
     aControlList.push_back( InsertCheckBox(  *this, TKGet( TK_CheckBox0Pg2 ), mxItemListener, getString( STR_OLE_REPLACE ), PAGE_POS_X + 6, PAGE_POS_Y + 14, PAGE_WIDTH - 12, 8, mnTabIndex++ ) );
-    aControlList.push_back( InsertRadioButton( *this, TKGet( TK_RadioButton0Pg2 ), mxItemListener, getString( STR_ALL_OLE_OBJECTS ), PAGE_POS_X + 14, PAGE_POS_Y + 28, ( PAGE_WIDTH - PAGE_POS_X ) - 22, 8, sal_False, mnTabIndex++ ) );
-    aControlList.push_back( InsertRadioButton( *this, TKGet( TK_RadioButton1Pg2 ), mxItemListener, getString( STR_ALIEN_OLE_OBJECTS_ONLY ), PAGE_POS_X + 14, PAGE_POS_Y + 40, ( PAGE_WIDTH - PAGE_POS_X ) - 22, 8, sal_False, mnTabIndex++ ) );
+    aControlList.push_back( InsertRadioButton( *this, TKGet( TK_RadioButton0Pg2 ), mxItemListener, getString( STR_ALL_OLE_OBJECTS ), PAGE_POS_X + 14, PAGE_POS_Y + 28, PAGE_WIDTH - 22, 8, sal_False, mnTabIndex++ ) );
+    aControlList.push_back( InsertRadioButton( *this, TKGet( TK_RadioButton1Pg2 ), mxItemListener, getString( STR_ALIEN_OLE_OBJECTS_ONLY ), PAGE_POS_X + 14, PAGE_POS_Y + 40, PAGE_WIDTH - 22, 8, sal_False, mnTabIndex++ ) );
     if ( !nOLECount )
-        aControlList.push_back( InsertFixedText( *this, TKGet( TK_FixedText1Pg2 ), getString( STR_NO_OLE_OBJECTS ), PAGE_POS_X + 6, PAGE_POS_Y + 64, PAGE_WIDTH - 22, 8, sal_True, sal_False, mnTabIndex++ ) );
+        aControlList.push_back( InsertFixedText( *this, TKGet( TK_FixedText1Pg2 ), getString( STR_NO_OLE_OBJECTS ), PAGE_POS_X + 6, PAGE_POS_Y + 64, PAGE_WIDTH - 22, 50, sal_True, sal_False, mnTabIndex++ ) );
     maControlPages.push_back( aControlList );
     DeactivatePage( 3 );
     UpdateControlStatesPage3();
@@ -874,10 +872,10 @@ void OptimizerDialog::InitPage4()
             TKGet( TK_Width ) };
 
         Any pValues[] = {
-            Any( (sal_Int32)8 ),
+            Any( (sal_Int32)12 ),
             Any( TKGet( STR_SAVE_AS ) ),
             Any( (sal_Int32)( PAGE_POS_X + 6 ) ),
-            Any( (sal_Int32)( DIALOG_HEIGHT - 74 ) ),
+            Any( (sal_Int32)( DIALOG_HEIGHT - 75 ) ),
             Any( (sal_Int32)( 0 ) ),
             Any( (sal_Int32)( 100 ) ),
             Any( (sal_Int32)( 0 ) ),
@@ -911,7 +909,7 @@ void OptimizerDialog::InitPage4()
 
     aControlList.push_back( InsertRadioButton( *this, TKGet( TK_RadioButton0Pg4 ), mxItemListener, getString(  STR_APPLY_TO_CURRENT ), PAGE_POS_X + 6, PAGE_POS_Y + 78, PAGE_WIDTH - 12, 8, sal_False, mnTabIndex++ ) );
     aControlList.push_back( InsertRadioButton( *this, TKGet( TK_RadioButton1Pg4 ), mxItemListener, getString( STR_SAVE_AS ), PAGE_POS_X + 6, PAGE_POS_Y + 90, PAGE_WIDTH - 12, 8, sal_False, mnTabIndex++ ) );
-    aControlList.push_back( InsertFixedText( *this, TKGet( TK_FixedText1Pg4 ), OUString(), PAGE_POS_X + 6, DIALOG_HEIGHT - 86, PAGE_WIDTH - 12, 8, sal_True, sal_False, mnTabIndex++ ) );
+    aControlList.push_back( InsertFixedText( *this, TKGet( TK_FixedText1Pg4 ), OUString(), PAGE_POS_X + 6, DIALOG_HEIGHT - 87, PAGE_WIDTH - 12, 8, sal_True, sal_False, mnTabIndex++ ) );
     aControlList.push_back( TKGet( TK_Progress ) );
     aControlList.push_back( InsertSeparator( *this, TKGet( TK_Separator1Pg4 ), 0, PAGE_POS_X + 6, DIALOG_HEIGHT - 58, PAGE_WIDTH - 12, 1 ) );
     aControlList.push_back( InsertCheckBox(  *this, TKGet( TK_CheckBox1Pg4 ), mxItemListener, getString( STR_SAVE_SETTINGS ), PAGE_POS_X + 6, DIALOG_HEIGHT - 47, 100, 8, mnTabIndex++ ) );

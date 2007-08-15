@@ -4,9 +4,9 @@
  *
  *  $RCSfile: pppoptimizertoken.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: sj $ $Date: 2007-05-24 10:08:36 $
+ *  last change: $Author: sj $ $Date: 2007-08-15 16:38:45 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -249,7 +249,6 @@ enum PPPOptimizerTokenEnum
     STR_CHOOSE_SLIDES,
     STR_MASTER_PAGES,
     STR_DELETE_MASTER_PAGES,
-    STR_NOTES_PAGES,
     STR_DELETE_NOTES_PAGES,
     STR_DELETE_HIDDEN_SLIDES,
     STR_CUSTOM_SHOW,

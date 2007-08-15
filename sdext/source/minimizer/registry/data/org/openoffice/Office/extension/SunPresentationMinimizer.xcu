@@ -56,8 +56,8 @@ At the last step of the wizard you can choose to apply the changes to the curren
 Im letzten Schritt können Sie entscheiden, ob die Änderungen am aktuellen Dokument durchgeführt werden sollen oder ob ein neues optimiertes Dokument angelegt werden soll.</value>
         </prop>
         <prop oor:name="STR_CHOSE_SETTINGS">
-            <value xml:lang="en-US">~Choose settings for the Presentation Minimization Wizard</value>
-            <value xml:lang="de">~Wählen Sie die Einstellungen für den Web-Assistenten Präsentations-Minimierungsassistenten aus</value>
+            <value xml:lang="en-US">~Choose settings for Sun Presentation Minimizer</value>
+            <value xml:lang="de">~Wählen Sie die Einstellungen für den Sun Presentation Minimizer</value>
         </prop>
         <prop oor:name="STR_REMOVE">
             <value xml:lang="en-US">~Delete</value>
@@ -80,8 +80,8 @@ Im letzten Schritt können Sie entscheiden, ob die Änderungen am aktuellen Doku
             <value xml:lang="de">~JPEG-Komprimierung</value>
         </prop>
         <prop oor:name="STR_QUALITY">
-            <value xml:lang="en-US">~Quality</value>
-            <value xml:lang="de">~Qualität</value>
+            <value xml:lang="en-US">~Quality in %</value>
+            <value xml:lang="de">~Qualität in %</value>
         </prop>
         <prop oor:name="STR_REMOVE_CROP_AREA">
             <value xml:lang="en-US">~Delete cropped graphic areas</value>
@@ -132,8 +132,12 @@ Im letzten Schritt können Sie entscheiden, ob die Änderungen am aktuellen Doku
             <value xml:lang="de">Fü~r OLE-Objekte, die nicht auf dem OpenDocument Format basieren</value>
         </prop>
         <prop oor:name="STR_NO_OLE_OBJECTS">
-            <value xml:lang="en-US">The current presentation contains no OLE objects.</value>
-            <value xml:lang="de">Die aktuelle Präsentation enthält keine OLE-Objekte.</value>
+            <value xml:lang="en-US">Object Linking and Embedding (OLE) is a technology that allows embedding and linking to documents and other objects.
+
+The current presentation contains OLE objects.</value>
+            <value xml:lang="de">Object Linking and Embedding (OLE) ist eine Methode zum Einbettern oder Verknüpfen von Dokumenten und Objekten in andere Dokumente.
+
+Die aktuelle Präsentation enthält OLE-Objekte.</value>
         </prop>
         <prop oor:name="STR_SLIDES">
             <value xml:lang="en-US">Slides</value>
@@ -151,13 +155,9 @@ Im letzten Schritt können Sie entscheiden, ob die Änderungen am aktuellen Doku
             <value xml:lang="en-US">Delete unused ~master pages</value>
             <value xml:lang="de">Nicht verwendete ~Masterseiten löschen</value>
         </prop>
-        <prop oor:name="STR_NOTES_PAGES">
-            <value xml:lang="en-US">Notes pages</value>
-            <value xml:lang="de">Notizseiten</value>
-        </prop>
         <prop oor:name="STR_DELETE_NOTES_PAGES">
-            <value xml:lang="en-US">Delete ~notes</value>
-            <value xml:lang="de">~Notizen löschen</value>
+            <value xml:lang="en-US">~Clear notes</value>
+            <value xml:lang="de">~Notizen entfernen</value>
         </prop>
         <prop oor:name="STR_DELETE_HIDDEN_SLIDES">
             <value xml:lang="en-US">Delete hidden ~slides</value>
@@ -200,7 +200,7 @@ Im letzten Schritt können Sie entscheiden, ob die Änderungen am aktuellen Doku
             <value xml:lang="de">~Dokument duplizieren bevor die Änderungen angewendet werden</value>
         </prop>
         <prop oor:name="STR_DELETE_SLIDES">
-            <value xml:lang="en-US">Delete %SLIDES slides</value>
+            <value xml:lang="en-US">Delete %SLIDES slides.</value>
             <value xml:lang="de">%SLIDES Folien löschen.</value>
         </prop>
         <prop oor:name="STR_OPTIMIZE_IMAGES">
@@ -224,8 +224,8 @@ Im letzten Schritt können Sie entscheiden, ob die Änderungen am aktuellen Doku
             <value xml:lang="de">%1 MB</value>
         </prop>
         <prop oor:name="MY_SETTINGS">
-            <value xml:lang="en-US">My Settings</value>
-            <value xml:lang="de">Meine Einstellungen</value>
+            <value xml:lang="en-US">My Settings </value>
+            <value xml:lang="de">Meine Einstellungen </value>
         </prop>
         <prop oor:name="STR_DEFAULT_SESSION">
             <value xml:lang="en-US">default session</value>

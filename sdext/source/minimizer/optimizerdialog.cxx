@@ -4,9 +4,9 @@
  *
  *  $RCSfile: optimizerdialog.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: sj $ $Date: 2007-06-13 09:07:51 $
+ *  last change: $Author: sj $ $Date: 2007-08-15 16:38:45 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -430,7 +430,10 @@ void OptimizerDialog::UpdateStatus( const com::sun::star::uno::Sequence< com::su
         {
             rtl::OUString sStatus;
             if ( *pVal >>= sStatus )
+            {
+                setControlProperty( TKGet( TK_FixedText1Pg4 ), TKGet( TK_Enabled ), Any( sal_True ) );
                 setControlProperty( TKGet( TK_FixedText1Pg4 ), TKGet( TK_Label ), Any( getString( TKGet( sStatus ) ) ) );
+            }
         }
         pVal = maStats.GetStatusValue( TK_Progress );
         if ( pVal )

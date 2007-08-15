@@ -206,11 +206,8 @@ At the last step of the wizard you can choose to apply the changes to the curren
 			<prop oor:name="STR_DELETE_MASTER_PAGES" oor:type="xs:string" oor:localized="true">
 				<value>Delete unused ~master pages</value>
 			</prop>
-			<prop oor:name="STR_NOTES_PAGES" oor:type="xs:string" oor:localized="true">
-				<value>Notes pages</value>
-			</prop>
 			<prop oor:name="STR_DELETE_NOTES_PAGES" oor:type="xs:string" oor:localized="true">
-				<value>Delete ~notes</value>
+				<value>~Clear notes</value>
 			</prop>
 			<prop oor:name="STR_DELETE_HIDDEN_SLIDES" oor:type="xs:string" oor:localized="true">
 				<value>Delete hidden ~slides</value>

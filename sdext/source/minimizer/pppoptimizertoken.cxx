@@ -4,9 +4,9 @@
  *
  *  $RCSfile: pppoptimizertoken.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: sj $ $Date: 2007-05-24 10:08:36 $
+ *  last change: $Author: sj $ $Date: 2007-08-15 16:38:45 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -273,7 +273,6 @@ static const TokenTable pTokenTableArray[] =
     { "STR_CHOOSE_SLIDES",          STR_CHOOSE_SLIDES },
     { "STR_MASTER_PAGES",           STR_MASTER_PAGES },
     { "STR_DELETE_MASTER_PAGES",    STR_DELETE_MASTER_PAGES },
-    { "STR_NOTES_PAGES",            STR_NOTES_PAGES },
     { "STR_DELETE_NOTES_PAGES",     STR_DELETE_NOTES_PAGES },
     { "STR_DELETE_HIDDEN_SLIDES",   STR_DELETE_HIDDEN_SLIDES },
     { "STR_CUSTOM_SHOW",            STR_CUSTOM_SHOW },
@@ -291,7 +290,7 @@ static const TokenTable pTokenTableArray[] =
     { "STR_CURRENT_FILESIZE",       STR_CURRENT_FILESIZE },
     { "STR_ESTIMATED_FILESIZE",     STR_ESTIMATED_FILESIZE },
     { "STR_MB",                     STR_MB },
-    { "MY_SETTINGS",            STR_MY_SETTINGS },
+    { "MY_SETTINGS",                STR_MY_SETTINGS },
     { "STR_DEFAULT_SESSION",        STR_DEFAULT_SESSION },
     { "STR_MODIFY_WARNING",         STR_MODIFY_WARNING },
     { "STR_YES",                    STR_YES },
