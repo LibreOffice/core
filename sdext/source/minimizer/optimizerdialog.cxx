@@ -4,9 +4,9 @@
  *
  *  $RCSfile: optimizerdialog.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: sj $ $Date: 2007-08-15 16:38:45 $
+ *  last change: $Author: sj $ $Date: 2007-08-16 14:33:00 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -308,6 +308,7 @@ OptimizerDialog::OptimizerDialog( const Reference< XComponentContext > &rxMSF, R
     mxActionListenerListBox0Pg0( new ActionListenerListBox0Pg0( *this ) ),
     mxTextListenerFormattedField0Pg1( new TextListenerFormattedField0Pg1( *this ) ),
     mxTextListenerComboBox0Pg1( new TextListenerComboBox0Pg1( *this ) ),
+    mxSpinListenerFormattedField0Pg1( new SpinListenerFormattedField0Pg1( *this ) ),
     mxStatusDispatcher( rxStatusDispatcher )
 {
     Reference< XStorable > xStorable( mxController->getModel(), UNO_QUERY_THROW );
@@ -847,6 +848,56 @@ void TextListenerComboBox0Pg1::disposing( const ::com::sun::star::lang::EventObj
     throw ( com::sun::star::uno::RuntimeException )
 {
 }
+
+// -----------------------------------------------------------------------------
+
+void SpinListenerFormattedField0Pg1::up( const SpinEvent& /* rEvent */ )
+    throw ( com::sun::star::uno::RuntimeException )
+{
+    double fDouble;
+    Any aAny = mrOptimizerDialog.getControlProperty( TKGet( TK_FormattedField0Pg1 ), TKGet( TK_EffectiveValue ) );
+    if ( aAny >>= fDouble )
+    {
+        fDouble += 9;
+        if ( fDouble > 100 )
+            fDouble = 100;
+        mrOptimizerDialog.setControlProperty( TKGet( TK_FormattedField0Pg1 ), TKGet( TK_EffectiveValue ), Any( fDouble ) );
+        mrOptimizerDialog.SetConfigProperty( TK_JPEGQuality, Any( (sal_Int32)fDouble ) );
+    }
+}
+void SpinListenerFormattedField0Pg1::down( const SpinEvent& /* rEvent */ )
+    throw ( com::sun::star::uno::RuntimeException )
+{
+    double fDouble;
+    Any aAny = mrOptimizerDialog.getControlProperty( TKGet( TK_FormattedField0Pg1 ), TKGet( TK_EffectiveValue ) );
+    if ( aAny >>= fDouble )
+    {
+        fDouble -= 9;
+        if ( fDouble < 0 )
+            fDouble = 0;
+        mrOptimizerDialog.setControlProperty( TKGet( TK_FormattedField0Pg1 ), TKGet( TK_EffectiveValue ), Any( fDouble ) );
+        mrOptimizerDialog.SetConfigProperty( TK_JPEGQuality, Any( (sal_Int32)fDouble ) );
+    }
+}
+void SpinListenerFormattedField0Pg1::first( const SpinEvent& /* rEvent */ )
+    throw ( com::sun::star::uno::RuntimeException )
+{
+    mrOptimizerDialog.setControlProperty( TKGet( TK_FormattedField0Pg1 ), TKGet( TK_EffectiveValue ), Any( static_cast< double >( 0 ) ) );
+    mrOptimizerDialog.SetConfigProperty( TK_JPEGQuality, Any( (sal_Int32)0 ) );
+}
+void SpinListenerFormattedField0Pg1::last( const SpinEvent& /* rEvent */ )
+    throw ( com::sun::star::uno::RuntimeException )
+{
+    mrOptimizerDialog.setControlProperty( TKGet( TK_FormattedField0Pg1 ), TKGet( TK_EffectiveValue ), Any( static_cast< double >( 100 ) ) );
+    mrOptimizerDialog.SetConfigProperty( TK_JPEGQuality, Any( (sal_Int32)100 ) );
+}
+void SpinListenerFormattedField0Pg1::disposing( const ::com::sun::star::lang::EventObject& /* Source */ )
+    throw ( com::sun::star::uno::RuntimeException )
+{
+}
+
+// -----------------------------------------------------------------------------
+
 void HelpCloseListener::addCloseListener( const Reference < XCloseListener >& ) throw( RuntimeException )
 {
 }

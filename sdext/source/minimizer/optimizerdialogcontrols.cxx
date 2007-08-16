@@ -4,9 +4,9 @@
  *
  *  $RCSfile: optimizerdialogcontrols.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: sj $ $Date: 2007-08-15 16:38:45 $
+ *  last change: $Author: sj $ $Date: 2007-08-16 14:33:00 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -234,7 +234,7 @@ rtl::OUString InsertCheckBox( OptimizerDialog& rOptimizerDialog, const OUString&
 // -----------------------------------------------------------------------------
 
 rtl::OUString InsertFormattedField( OptimizerDialog& rOptimizerDialog, const OUString& rControlName,
-        const Reference< XTextListener > xTextListener, sal_Int32 nXPos, sal_Int32 nYPos, sal_Int32 nWidth,
+        const Reference< XTextListener > xTextListener, const Reference< XSpinListener > xSpinListener, sal_Int32 nXPos, sal_Int32 nYPos, sal_Int32 nWidth,
             double fEffectiveMin, double fEffectiveMax, sal_Int16 nTabIndex )
 {
     OUString pNames[] = {
@@ -271,6 +271,11 @@ rtl::OUString InsertFormattedField( OptimizerDialog& rOptimizerDialog, const OUS
     Reference< XTextComponent > xTextComponent( rOptimizerDialog.insertFormattedField( rControlName, aNames, aValues ), UNO_QUERY_THROW );
     if ( xTextListener.is() )
         xTextComponent->addTextListener( xTextListener );
+    if ( xSpinListener.is() )
+    {
+        Reference< XSpinField > xSpinField( xTextComponent, UNO_QUERY_THROW );
+        xSpinField->addSpinListener( xSpinListener );
+    }
     return rControlName;
 }
 
@@ -559,7 +564,7 @@ void OptimizerDialog::InitPage2()
     aControlList.push_back( InsertRadioButton( *this, TKGet( TK_RadioButton0Pg1 ), mxItemListener, getString( STR_LOSSLESS_COMPRESSION ), PAGE_POS_X + 6, PAGE_POS_Y + 14, PAGE_WIDTH - 12, 8, sal_False, mnTabIndex++ ) );
     aControlList.push_back( InsertRadioButton( *this, TKGet( TK_RadioButton1Pg1 ), mxItemListener, getString( STR_JPEG_COMPRESSION ), PAGE_POS_X + 6, PAGE_POS_Y + 28, PAGE_WIDTH - 12, 8, sal_False, mnTabIndex++ ) );
     aControlList.push_back( InsertFixedText( *this, TKGet( TK_FixedText1Pg1 ), getString( STR_QUALITY ), PAGE_POS_X + 20, PAGE_POS_Y + 40, 72, 8, sal_False, sal_False, mnTabIndex++ ) );
-    aControlList.push_back( InsertFormattedField( *this, TKGet( TK_FormattedField0Pg1 ), mxTextListenerFormattedField0Pg1, PAGE_POS_X + 106, PAGE_POS_Y + 38, 50, 0, 100, mnTabIndex++ ) );
+    aControlList.push_back( InsertFormattedField( *this, TKGet( TK_FormattedField0Pg1 ), mxTextListenerFormattedField0Pg1, mxSpinListenerFormattedField0Pg1, PAGE_POS_X + 106, PAGE_POS_Y + 38, 50, 0, 100, mnTabIndex++ ) );
     aControlList.push_back( InsertFixedText( *this, TKGet( TK_FixedText2Pg1 ), getString( STR_IMAGE_RESOLUTION ), PAGE_POS_X + 6, PAGE_POS_Y + 54, 94, 8, sal_False, sal_False, mnTabIndex++ ) );
     aControlList.push_back( InsertComboBox(  *this, TKGet( TK_ComboBox0Pg1 ), mxTextListenerComboBox0Pg1, sal_True, aResolutionItemList, PAGE_POS_X + 106, PAGE_POS_Y + 52, 100, 12, mnTabIndex++ ) );
     aControlList.push_back( InsertCheckBox(  *this, TKGet( TK_CheckBox1Pg1 ), mxItemListener, getString( STR_REMOVE_CROP_AREA ), PAGE_POS_X + 6, PAGE_POS_Y + 68, PAGE_WIDTH - 12, 8, mnTabIndex++ ) );
