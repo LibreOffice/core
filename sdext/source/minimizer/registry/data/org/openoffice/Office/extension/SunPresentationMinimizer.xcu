@@ -299,6 +299,10 @@ Sun, Sun Microsystems, le logo Sun, Java et StarOffice sont des marques de fabri
             <value xml:lang="en-US">Creating replacement graphics for OLE objects...</value>
             <value xml:lang="de">Ersatzdarstellungen für OLE-Objekte erzeugen...</value>
         </prop>
+        <prop oor:name="STR_FILESIZESEPARATOR">
+            <value xml:lang="en-US">.</value>
+            <value xml:lang="de">,</value>
+        </prop>
     </node>
     <node oor:name="LastUsedSettings">
         <prop oor:name="Name">

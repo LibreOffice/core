@@ -311,6 +311,9 @@ This distribution may include materials developed by third parties. Sun, Sun Mic
             <prop oor:name="STR_CREATING_OLE_REPLACEMENTS" oor:type="xs:string" oor:localized="true">
                 <value>Creating replacement graphics for OLE objects...</value>
            </prop>
+			<prop oor:name="STR_FILESIZESEPARATOR" oor:type="xs:string" oor:localized="true">
+				<value>.</value>
+			</prop>
 		</group>
 		<node-ref oor:name="LastUsedSettings" oor:node-type="OptimizerSettings">
 			<info>

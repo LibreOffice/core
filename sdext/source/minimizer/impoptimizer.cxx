@@ -4,9 +4,9 @@
  *
  *  $RCSfile: impoptimizer.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: sj $ $Date: 2007-05-24 10:08:35 $
+ *  last change: $Author: sj $ $Date: 2007-08-16 16:08:04 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -578,7 +578,7 @@ ImpOptimizer::ImpOptimizer( const Reference< XComponentContext >& rxMSF, const R
     mbDeleteUnusedMasterPages   ( sal_False ),
     mbDeleteHiddenSlides        ( sal_False ),
     mbDeleteNotesPages          ( sal_False ),
-    mbOpenNewDocument           ( sal_False )
+    mbOpenNewDocument           ( sal_True )
 {
 }
 

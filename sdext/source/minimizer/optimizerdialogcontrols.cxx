@@ -4,9 +4,9 @@
  *
  *  $RCSfile: optimizerdialogcontrols.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: sj $ $Date: 2007-08-16 14:33:00 $
+ *  last change: $Author: sj $ $Date: 2007-08-16 16:08:04 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -619,15 +619,18 @@ void OptimizerDialog::InitPage3()
 
 // -----------------------------------------------------------------------------
 
-static OUString ImpValueOfInMB( const sal_Int64& rVal )
+static OUString ImpValueOfInMB( const sal_Int64& rVal, sal_Unicode nSeparator = '.' )
 {
     double fVal( static_cast<double>( rVal ) );
     fVal /= ( 1 << 20 );
     fVal += 0.05;
     rtl::OUStringBuffer aVal( OUString::valueOf( fVal ) );
     sal_Int32 nX( OUString( aVal.getStr() ).indexOf( '.', 0 ) );
-    if ( nX > 0 )
+    if ( nX >= 0 )
+    {
         aVal.setLength( nX + 2 );
+        aVal.setCharAt( nX, nSeparator );
+    }
     aVal.append( OUString::createFromAscii( " MB" ) );
     return aVal.makeStringAndClear();
 }
@@ -858,8 +861,12 @@ void OptimizerDialog::UpdateControlStatesPage4()
         }
         nEstimatedFileSize = static_cast< sal_Int64 >( fE );
     }
-    setControlProperty( TKGet( TK_FixedText7Pg4 ), TKGet( TK_Label ), Any( ImpValueOfInMB( nCurrentFileSize ) ) );
-    setControlProperty( TKGet( TK_FixedText8Pg4 ), TKGet( TK_Label ), Any( ImpValueOfInMB( nEstimatedFileSize ) ) );
+    sal_Unicode nSeparator = '.';
+    OUString aStr( getString( STR_FILESIZESEPARATOR ) );
+    if ( aStr.getLength() )
+        nSeparator = aStr[ 0 ];
+    setControlProperty( TKGet( TK_FixedText7Pg4 ), TKGet( TK_Label ), Any( ImpValueOfInMB( nCurrentFileSize, nSeparator ) ) );
+    setControlProperty( TKGet( TK_FixedText8Pg4 ), TKGet( TK_Label ), Any( ImpValueOfInMB( nEstimatedFileSize, nSeparator ) ) );
     SetConfigProperty( TK_EstimatedFileSize, Any( nEstimatedFileSize ) );
 }
 

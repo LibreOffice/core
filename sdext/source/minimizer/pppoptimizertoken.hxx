@@ -4,9 +4,9 @@
  *
  *  $RCSfile: pppoptimizertoken.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: sj $ $Date: 2007-08-15 16:38:45 $
+ *  last change: $Author: sj $ $Date: 2007-08-16 16:08:04 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -282,6 +282,7 @@ enum PPPOptimizerTokenEnum
     STR_DELETING_SLIDES,
     STR_OPTIMIZING_GRAPHICS,
     STR_CREATING_OLE_REPLACEMENTS,
+    STR_FILESIZESEPARATOR,
 
     TK_Last,
     TK_NotFound

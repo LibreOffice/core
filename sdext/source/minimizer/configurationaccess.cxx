@@ -4,9 +4,9 @@
  *
  *  $RCSfile: configurationaccess.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: sj $ $Date: 2007-05-24 10:08:35 $
+ *  last change: $Author: sj $ $Date: 2007-08-16 16:08:04 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -177,8 +177,8 @@ sal_Bool OptimizerSettings::operator==( const OptimizerSettings& rOptimizerSetti
         && ( rOptimizerSettings.mnOLEOptimizationType == mnOLEOptimizationType )
         && ( rOptimizerSettings.mbDeleteUnusedMasterPages == mbDeleteUnusedMasterPages )
         && ( rOptimizerSettings.mbDeleteHiddenSlides == mbDeleteHiddenSlides )
-        && ( rOptimizerSettings.mbDeleteNotesPages == mbDeleteNotesPages )
-        && ( rOptimizerSettings.mbOpenNewDocument == mbOpenNewDocument );
+        && ( rOptimizerSettings.mbDeleteNotesPages == mbDeleteNotesPages );
+//      && ( rOptimizerSettings.mbOpenNewDocument == mbOpenNewDocument );
 }
 
 
