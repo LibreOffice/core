@@ -4,9 +4,9 @@
  *
  *  $RCSfile: informationdialog.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: sj $ $Date: 2007-05-24 10:08:35 $
+ *  last change: $Author: sj $ $Date: 2007-08-16 17:12:26 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -290,9 +290,6 @@ void InformationDialog::InitDialog()
     Sequence< rtl::OUString >   aNames( pNames, nCount );
     Sequence< Any >             aValues( pValues, nCount );
 
-    sal_Bool bOpenNewDocument = mrbOpenNewDocument;
-    setControlProperty( TKGet( TK_OpenNewDocument ), TKGet( TK_State ), Any( (sal_Int16)bOpenNewDocument ) );
-
     mxDialogModelMultiPropertySet->setPropertyValues( aNames, aValues );
 
     sal_Int64 nSource = mnSourceSize;
@@ -359,6 +356,9 @@ void InformationDialog::InitDialog()
     if ( maSaveAsURL.getLength() )
         InsertCheckBox(  *this, TKGet( TK_OpenNewDocument ), xItemListener, getString( STR_AUTOMATICALLY_OPEN ), PAGE_POS_X, 42, PAGE_WIDTH, 8, 1 );
     InsertButton( *this, rtl::OUString( rtl::OUString::createFromAscii( "button" ) ), mxActionListener, DIALOG_WIDTH / 2 - 25, nDialogHeight - 20, 50, 14, 2, STR_OK );
+
+    sal_Bool bOpenNewDocument = mrbOpenNewDocument;
+    setControlProperty( TKGet( TK_OpenNewDocument ), TKGet( TK_State ), Any( (sal_Int16)bOpenNewDocument ) );
 }
 
 // -----------------------------------------------------------------------------

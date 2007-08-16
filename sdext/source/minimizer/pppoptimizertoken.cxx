@@ -4,9 +4,9 @@
  *
  *  $RCSfile: pppoptimizertoken.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: sj $ $Date: 2007-08-16 16:08:04 $
+ *  last change: $Author: sj $ $Date: 2007-08-16 17:12:26 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -104,7 +104,6 @@ static const TokenTable pTokenTableArray[] =
     { "Separator0Pg4",      TK_Separator0Pg4 },
     { "RadioButton0Pg4",    TK_RadioButton0Pg4 },
     { "RadioButton1Pg4",    TK_RadioButton1Pg4 },
-    { "CheckBox0Pg4",       TK_CheckBox0Pg4 },
     { "Separator1Pg4",      TK_Separator1Pg4 },
     { "FixedText0Pg4",      TK_FixedText0Pg4 },
     { "FixedText1Pg4",      TK_FixedText1Pg4 },

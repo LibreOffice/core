@@ -4,9 +4,9 @@
  *
  *  $RCSfile: optimizerdialog.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: sj $ $Date: 2007-08-16 14:33:00 $
+ *  last change: $Author: sj $ $Date: 2007-08-16 17:12:26 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -287,11 +287,6 @@ void OptimizerDialog::UpdateConfiguration()
             }
         }
     }
-
-    // page4
-//  aAny = getControlProperty( TKGet( TK_CheckBox0Pg4 ), TKGet( TK_State ) );
-//  if ( aAny >>= nInt16 )
-//      SetConfigProperty( TK_OpenNewDocument, Any( nInt16 != 0 ) );
 }
 
 // -----------------------------------------------------------------------------
@@ -443,6 +438,10 @@ void OptimizerDialog::UpdateStatus( const com::sun::star::uno::Sequence< com::su
             if ( *pVal >>= nProgress )
                 setControlProperty( TKGet( TK_Progress ), TKGet( TK_ProgressValue ), Any( nProgress ) );
         }
+        pVal = maStats.GetStatusValue( TK_OpenNewDocument );
+        if ( pVal )
+            SetConfigProperty( TK_OpenNewDocument, *pVal );
+
         mxReschedule->reschedule();
     }
 }
@@ -554,12 +553,6 @@ void ItemListener::itemStateChanged( const ItemEvent& Event )
                         mrOptimizerDialog.setControlProperty( TKGet( TK_ListBox0Pg3 ), TKGet( TK_Enabled ), Any( nState != 0 ) );
                 }
                 break;
-                case TK_CheckBox0Pg4 :
-                {
-                    if ( xPropertySet->getPropertyValue( TKGet( TK_State ) ) >>= nState )
-                        mrOptimizerDialog.SetConfigProperty( TK_OpenNewDocument, Any( nState != 0 ) );
-                }
-                break;
                 case TK_CheckBox1Pg4 :
                 {
                     if ( xPropertySet->getPropertyValue( TKGet( TK_State ) ) >>= nState )
@@ -570,10 +563,7 @@ void ItemListener::itemStateChanged( const ItemEvent& Event )
                 case TK_RadioButton1Pg4 :
                 {
                     if ( xPropertySet->getPropertyValue( TKGet( TK_State ) ) >>= nState )
-                    {
-                        mrOptimizerDialog.setControlProperty( TKGet( TK_CheckBox0Pg4 ), TKGet( TK_Enabled ), Any( eControl == TK_RadioButton1Pg4 ) );
                         mrOptimizerDialog.SetConfigProperty( TK_SaveAs, Any( eControl == TK_RadioButton1Pg4 ? nState != 0 : nState == 0 ) );
-                    }
                 }
                 break;
                 default:

@@ -4,9 +4,9 @@
  *
  *  $RCSfile: impoptimizer.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: sj $ $Date: 2007-08-16 16:08:04 $
+ *  last change: $Author: sj $ $Date: 2007-08-16 17:12:26 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -770,6 +770,8 @@ sal_Bool ImpOptimizer::Optimize( const Sequence< PropertyValue >& rArguments )
         {
             InformationDialog aInformationDialog( mxMSF, mxInformationDialog, maSaveAsURL, mbOpenNewDocument, nSourceSize, nDestSize, nEstimatedFileSize );
             aInformationDialog.execute();
+            SetStatusValue( TK_OpenNewDocument, Any( mbOpenNewDocument ) );
+            DispatchStatus();
         }
 
         if ( maSaveAsURL.getLength() )

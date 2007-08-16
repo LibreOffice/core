@@ -4,9 +4,9 @@
  *
  *  $RCSfile: optimizerdialogcontrols.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: sj $ $Date: 2007-08-16 16:08:04 $
+ *  last change: $Author: sj $ $Date: 2007-08-16 17:12:26 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -638,7 +638,6 @@ static OUString ImpValueOfInMB( const sal_Int64& rVal, sal_Unicode nSeparator = 
 void OptimizerDialog::UpdateControlStatesPage4()
 {
     sal_Bool bSaveAs( GetConfigProperty( TK_SaveAs, sal_True ) );
-    sal_Bool bOpenNew( GetConfigProperty( TK_OpenNewDocument, sal_True ) );
     if ( mbIsReadonly )
     {
         setControlProperty( TKGet( TK_RadioButton0Pg4 ), TKGet( TK_State ), Any( (sal_Int16)( sal_False ) ) );
@@ -649,8 +648,6 @@ void OptimizerDialog::UpdateControlStatesPage4()
         setControlProperty( TKGet( TK_RadioButton0Pg4 ), TKGet( TK_State ), Any( (sal_Int16)( bSaveAs == sal_False ) ) );
         setControlProperty( TKGet( TK_RadioButton1Pg4 ), TKGet( TK_State ), Any( (sal_Int16)( bSaveAs == sal_True ) ) );
     }
-    setControlProperty( TKGet( TK_CheckBox0Pg4 ), TKGet( TK_State ), Any( (sal_Int16)( bOpenNew ) ) );
-    setControlProperty( TKGet( TK_CheckBox0Pg4 ), TKGet( TK_Enabled ), Any( bSaveAs ) );
     setControlProperty( TKGet( TK_ComboBox0Pg4 ), TKGet( TK_Enabled ), Any( sal_False ) );
 
     sal_uInt32 w;
@@ -905,7 +902,6 @@ void OptimizerDialog::InitPage4()
     Sequence< OUString > aItemList;
     std::vector< rtl::OUString > aControlList;
     aControlList.push_back( InsertFixedText( *this, TKGet( TK_FixedText0Pg4 ), getString( STR_SUMMARY_TITLE ), PAGE_POS_X, PAGE_POS_Y, PAGE_WIDTH, 8, sal_False, sal_True, mnTabIndex++ ) );
-//  aControlList.push_back( InsertCheckBox(  *this, TKGet( TK_CheckBox0Pg4 ), mxItemListener, getString( STR_AUTOMATICALLY_OPEN ), PAGE_POS_X + 14, PAGE_POS_Y + 38, PAGE_WIDTH - 18, 8, mnTabIndex++ ) );
 //  aControlList.push_back( InsertSeparator( *this, TKGet( TK_Separator0Pg4 ), 0, PAGE_POS_X + 6, PAGE_POS_Y + 90, PAGE_WIDTH - 12, 1 ) );
 
     aControlList.push_back( InsertFixedText( *this, TKGet( TK_FixedText4Pg4 ), OUString(), PAGE_POS_X + 6, PAGE_POS_Y + 14, PAGE_WIDTH - 12, 8, sal_False, sal_False, mnTabIndex++ ) );

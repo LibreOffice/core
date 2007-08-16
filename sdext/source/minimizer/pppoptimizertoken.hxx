@@ -4,9 +4,9 @@
  *
  *  $RCSfile: pppoptimizertoken.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: sj $ $Date: 2007-08-16 16:08:04 $
+ *  last change: $Author: sj $ $Date: 2007-08-16 17:12:26 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -80,7 +80,6 @@ enum PPPOptimizerTokenEnum
     TK_Separator0Pg4,
     TK_RadioButton0Pg4,
     TK_RadioButton1Pg4,
-    TK_CheckBox0Pg4,
     TK_Separator1Pg4,
     TK_FixedText0Pg4,
     TK_FixedText1Pg4,
