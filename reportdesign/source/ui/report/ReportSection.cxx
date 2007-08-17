@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ReportSection.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: hr $ $Date: 2007-08-03 10:03:52 $
+ *  last change: $Author: ihi $ $Date: 2007-08-17 15:35:19 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -154,7 +154,6 @@ OReportSection::OReportSection(OViewsWindow* _pParent,const uno::Reference< repo
     try
     {
         fill();
-            m_pFunc->setOverlappedControlColor(lcl_getOverlappedControlColor( /* m_pParent->getView()->getReportView()->getController()->getORB() */ ) );
     }
     catch(uno::Exception&)
     {
