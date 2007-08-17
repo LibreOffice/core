@@ -4,9 +4,9 @@
  *
  *  $RCSfile: shutdown_quickstart.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-07 16:34:27 $
+ *  last change: $Author: ihi $ $Date: 2007-08-17 13:35:41 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -58,6 +58,15 @@ static BOOL CALLBACK EnumWindowsProc( HWND hWnd, LPARAM lParam )
 
                 if ( uMsgShutdownQuickstart )
                     SendMessageA( hWnd, uMsgShutdownQuickstart, 0, 0 );
+
+
+                HANDLE  hProcess = OpenProcess( SYNCHRONIZE, FALSE, dwProcessId );
+
+                if ( hProcess )
+                {
+                    WaitForSingleObject( hProcess, 30000 ); // Wait at most 30 seconds for process to terminate
+                    CloseHandle( hProcess );
+                }
 
                 return FALSE;
             }
