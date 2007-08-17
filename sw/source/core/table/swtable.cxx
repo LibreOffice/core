@@ -4,9 +4,9 @@
  *
  *  $RCSfile: swtable.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: rt $ $Date: 2007-07-25 08:15:28 $
+ *  last change: $Author: ihi $ $Date: 2007-08-17 13:59:41 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1490,7 +1490,10 @@ BOOL IsValidRowName( const String& rStr )
     return bIsValid;
 }
 
-USHORT SwTable::_GetBoxNum( String& rStr, BOOL bFirst )
+// --> OD 2007-08-03 #i80314#
+// add 3rd parameter and its handling
+USHORT SwTable::_GetBoxNum( String& rStr, BOOL bFirst,
+                            const bool bPerformValidCheck )
 {
     USHORT nRet = 0;
     xub_StrLen nPos = 0;
@@ -1517,22 +1520,30 @@ USHORT SwTable::_GetBoxNum( String& rStr, BOOL bFirst )
     else if( STRING_NOTFOUND == ( nPos = rStr.Search( aDotStr ) ))
     {
         nRet = 0;
-        if (IsValidRowName( rStr ))
+        if ( !bPerformValidCheck || IsValidRowName( rStr ) )
+        {
             nRet = static_cast<USHORT>(rStr.ToInt32());
+        }
         rStr.Erase();
     }
     else
     {
         nRet = 0;
         String aTxt( rStr.Copy( 0, nPos ) );
-        if (IsValidRowName( aTxt ))
+        if ( !bPerformValidCheck || IsValidRowName( aTxt ) )
+        {
             nRet = static_cast<USHORT>(aTxt.ToInt32());
+        }
         rStr.Erase( 0, nPos+1 );
     }
     return nRet;
 }
+// <--
 
-const SwTableBox* SwTable::GetTblBox( const String& rName ) const
+// --> OD 2007-08-03 #i80314#
+// add 2nd parameter and its handling
+const SwTableBox* SwTable::GetTblBox( const String& rName,
+                                      const bool bPerformValidCheck ) const
 {
     const SwTableBox* pBox = 0;
     const SwTableLine* pLine;
@@ -1543,7 +1554,7 @@ const SwTableBox* SwTable::GetTblBox( const String& rName ) const
     String aNm( rName );
     while( aNm.Len() )
     {
-        nBox = SwTable::_GetBoxNum( aNm, 0 == pBox );
+        nBox = SwTable::_GetBoxNum( aNm, 0 == pBox, bPerformValidCheck );
         // erste Box ?
         if( !pBox )
             pLines = &GetTabLines();
@@ -1554,7 +1565,7 @@ const SwTableBox* SwTable::GetTblBox( const String& rName ) const
                 --nBox;
         }
 
-        nLine = SwTable::_GetBoxNum( aNm );
+        nLine = SwTable::_GetBoxNum( aNm, FALSE, bPerformValidCheck );
 
         // bestimme die Line
         if( !nLine || nLine > pLines->Count() )
