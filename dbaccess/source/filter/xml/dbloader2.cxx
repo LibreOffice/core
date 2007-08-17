@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dbloader2.cxx,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: rt $ $Date: 2007-07-06 07:55:33 $
+ *  last change: $Author: ihi $ $Date: 2007-08-17 13:34:19 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -628,6 +628,9 @@ void SAL_CALL DBContentLoader::load(const Reference< XFrame > & rFrame, const ::
             const sal_Char* pEventName = bCreateNew && !bDidLoadExisting ? "OnNew" : "OnLoad";
             css::document::EventObject aEvent( xModel, ::rtl::OUString::createFromAscii( pEventName ) );
             xDocEventBroadcaster->notifyEvent(aEvent);
+            Reference< css::document::XEventListener > xGlobalDocEventBroadcaster(xModelCollection,UNO_QUERY_THROW);
+            aEvent.EventName = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("OnViewCreated"));
+            xGlobalDocEventBroadcaster->notifyEvent(aEvent);
         }
         catch(Exception)
         {
