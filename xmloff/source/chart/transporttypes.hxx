@@ -4,9 +4,9 @@
  *
  *  $RCSfile: transporttypes.hxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: vg $ $Date: 2007-05-22 16:09:07 $
+ *  last change: $Author: ihi $ $Date: 2007-08-17 12:06:32 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -160,6 +160,7 @@ struct DataRowPointStyle
     ::rtl::OUString msStyleName;
     ::rtl::OUString msSeriesStyleNameForDonuts;
     sal_Int32 mnAttachedAxis;
+    bool mbSymbolSizeForSeriesIsMissingInFile;
 
     DataRowPointStyle( StyleType eType
                        , const ::com::sun::star::uno::Reference<
@@ -174,7 +175,8 @@ struct DataRowPointStyle
             m_nPointIndex( nPointIndex ),
             m_nPointRepeat( nPointRepeat ),
             msStyleName( sStyleName ),
-            mnAttachedAxis( nAttachedAxis )
+            mnAttachedAxis( nAttachedAxis ),
+            mbSymbolSizeForSeriesIsMissingInFile( false )
         {}
 };
 
