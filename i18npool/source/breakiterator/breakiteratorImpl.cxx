@@ -4,9 +4,9 @@
  *
  *  $RCSfile: breakiteratorImpl.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: rt $ $Date: 2007-07-26 09:08:02 $
+ *  last change: $Author: ihi $ $Date: 2007-08-17 14:58:11 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -84,37 +84,33 @@ sal_Int32 SAL_CALL BreakIteratorImpl::previousCharacters( const OUString& Text, 
 
 static sal_Int32 skipSpace(const OUString& Text, sal_Int32 nPos, sal_Int32 len, sal_Int16 rWordType, sal_Bool bDirection)
 {
-        sal_uInt32 ch;
-        if (bDirection && nPos < len) {
-            ch=Text.iterateCodePoints(&nPos, 0);
-        } else if (!bDirection && nPos > 0) {
-            ch=Text.iterateCodePoints(&nPos, -1);
-        } else {
+        if (bDirection ? nPos >= len : nPos <= 0) {
             return nPos;
         }
+        sal_uInt32 ch=0;
         switch (rWordType) {
             case WordType::ANYWORD_IGNOREWHITESPACES:
                 if (bDirection)
-                    while (nPos < len && u_isWhitespace(ch)) ch=Text.iterateCodePoints(&nPos, 1);
+                    while (nPos < len && u_isWhitespace(Text.iterateCodePoints(&nPos, 1)));
                 else
-                    while (nPos > 0 && u_isWhitespace(ch)) ch=Text.iterateCodePoints(&nPos, -1);
+                    while (nPos > 0 && u_isWhitespace(Text.iterateCodePoints(&nPos, -1)));
             break;
             case WordType::DICTIONARY_WORD:
                 if (bDirection)
-                    while (nPos < len && (u_isWhitespace(ch) ||
-                            ! (ch == 0x002E || u_isalnum(ch)))) ch=Text.iterateCodePoints(&nPos, 1);
+                    while (nPos < len && (u_isWhitespace(ch = Text.iterateCodePoints(&nPos, 1)) ||
+                            ! (ch == 0x002E || u_isalnum(ch))));
                 else
-                    while (nPos > 0 && (u_isWhitespace(ch) ||
-                            ! (ch == 0x002E || u_isalnum(ch)))) ch=Text.iterateCodePoints(&nPos, -1);
+                    while (nPos > 0 && (u_isWhitespace(ch = Text.iterateCodePoints(&nPos, -1)) ||
+                            ! (ch == 0x002E || u_isalnum(ch))));
             break;
             case WordType::WORD_COUNT:
                 if (bDirection)
-                    while (nPos < len && (u_isWhitespace(ch) || ! u_isalnum(ch))) ch=Text.iterateCodePoints(&nPos, 1);
+                    while (nPos < len && (u_isWhitespace(ch = Text.iterateCodePoints(&nPos, 1)) || ! u_isalnum(ch)));
                 else
-                    while (nPos > 0 && (u_isWhitespace(ch) || ! u_isalnum(ch))) ch=Text.iterateCodePoints(&nPos, -1);
+                    while (nPos > 0 && (u_isWhitespace(ch = Text.iterateCodePoints(&nPos, -1)) || ! u_isalnum(ch)));
             break;
         }
-        if (!bDirection) Text.iterateCodePoints(&nPos, 1);
+        Text.iterateCodePoints(&nPos, bDirection ? -1 : 1);
         return nPos;
 }
 
@@ -266,6 +262,17 @@ sal_Int16 SAL_CALL BreakIteratorImpl::getScriptType( const OUString& Text, sal_I
                             getScriptClass(Text.iterateCodePoints(&nPos, 0));
 }
 
+static sal_Int32 SAL_CALL iterateCodePoints(const OUString& Text, sal_Int32 &nStartPos, sal_Int32 inc, sal_uInt32& ch) {
+        if (nStartPos + inc < 0 || nStartPos + inc >= Text.getLength()) {
+            ch = 0;
+            nStartPos = nStartPos + inc < 0 ? 0 : Text.getLength();
+        } else {
+            ch = Text.iterateCodePoints(&nStartPos, inc);
+            if (inc > 0) ch = Text.iterateCodePoints(&nStartPos, 0);
+        }
+        return nStartPos;
+}
+
 sal_Int32 SAL_CALL BreakIteratorImpl::beginOfScript( const OUString& Text,
         sal_Int32 nStartPos, sal_Int16 ScriptType ) throw(RuntimeException)
 {
@@ -275,9 +282,10 @@ sal_Int32 SAL_CALL BreakIteratorImpl::beginOfScript( const OUString& Text,
         if(ScriptType != getScriptClass(Text.iterateCodePoints(&nStartPos, 0)))
             return -1;
 
-        while (nStartPos > 0 && ScriptType == getScriptClass(Text.iterateCodePoints(&nStartPos, -1))) {}
+        sal_uInt32 ch=0;
+        while (iterateCodePoints(Text, nStartPos, -1, ch) >= 0 && ScriptType == getScriptClass(ch)) {}
 
-        return  nStartPos;
+        return  iterateCodePoints(Text, nStartPos, 1, ch);
 }
 
 sal_Int32 SAL_CALL BreakIteratorImpl::endOfScript( const OUString& Text,
@@ -290,8 +298,9 @@ sal_Int32 SAL_CALL BreakIteratorImpl::endOfScript( const OUString& Text,
             return -1;
 
         sal_Int32 strLen = Text.getLength();
-        while(++nStartPos < strLen ) {
-            sal_Int16 currentCharScriptType = getScriptClass(Text.iterateCodePoints(&nStartPos, 0));
+        sal_uInt32 ch=0;
+        while(iterateCodePoints(Text, nStartPos, 1, ch) < strLen ) {
+            sal_Int16 currentCharScriptType = getScriptClass(ch);
             if(ScriptType != currentCharScriptType && currentCharScriptType != ScriptType::WEAK)
                 break;
         }
@@ -308,15 +317,17 @@ sal_Int32  SAL_CALL BreakIteratorImpl::previousScript( const OUString& Text,
 
         sal_Int16 numberOfChange = (ScriptType == getScriptClass(Text.iterateCodePoints(&nStartPos, 0))) ? 3 : 2;
 
-        while (numberOfChange > 0 && nStartPos > 0) {
-            if ((((numberOfChange % 2) == 0) ^ (ScriptType != getScriptClass(Text.iterateCodePoints(&nStartPos, -1)))) || nStartPos == 0)
+        sal_uInt32 ch=0;
+        while (numberOfChange > 0 && iterateCodePoints(Text, nStartPos, -1, ch) >= 0) {
+            if ((((numberOfChange % 2) == 0) ^ (ScriptType != getScriptClass(ch))))
                 numberOfChange--;
+            else if (nStartPos == 0) {
+                if (numberOfChange > 0)
+                    numberOfChange--;
+                Text.iterateCodePoints(&nStartPos, -1);
+            }
         }
-        if (numberOfChange > 0 || nStartPos >= Text.getLength())
-            nStartPos=-1;
-        else if (ScriptType != getScriptClass(Text.iterateCodePoints(&nStartPos, 0)))
-            getScriptClass(Text.iterateCodePoints(&nStartPos, 1));
-        return nStartPos;
+        return numberOfChange == 0 ? iterateCodePoints(Text, nStartPos, 1, ch) : -1;
 }
 
 sal_Int32 SAL_CALL BreakIteratorImpl::nextScript( const OUString& Text, sal_Int32 nStartPos,
@@ -331,15 +342,15 @@ sal_Int32 SAL_CALL BreakIteratorImpl::nextScript( const OUString& Text, sal_Int3
 
         sal_Int16 numberOfChange = (ScriptType == getScriptClass(Text.iterateCodePoints(&nStartPos, 0))) ? 2 : 1;
 
-        while (numberOfChange > 0 && nStartPos < strLen - 1) {
-            sal_Int16 currentCharScriptType = getScriptClass(Text.iterateCodePoints(&nStartPos, 1));
+        sal_uInt32 ch=0;
+        while (numberOfChange > 0 && iterateCodePoints(Text, nStartPos, 1, ch) < strLen) {
+            sal_Int16 currentCharScriptType = getScriptClass(ch);
             if ((numberOfChange == 1) ? (ScriptType == currentCharScriptType) :
                     (ScriptType != currentCharScriptType && currentCharScriptType != ScriptType::WEAK))
                 numberOfChange--;
         }
         return numberOfChange == 0 ? nStartPos : -1;
 }
-
 
 sal_Int32 SAL_CALL BreakIteratorImpl::beginOfCharBlock( const OUString& Text, sal_Int32 nStartPos,
         const Locale& /*rLocale*/, sal_Int16 CharType ) throw(RuntimeException)
@@ -349,7 +360,7 @@ sal_Int32 SAL_CALL BreakIteratorImpl::beginOfCharBlock( const OUString& Text, sa
         if (CharType != (sal_Int16)u_charType( Text.iterateCodePoints(&nStartPos, 0))) return -1;
 
         sal_Int32 nPos=nStartPos;
-        while(nStartPos > 0 && CharType == (sal_Int16)u_charType(Text.iterateCodePoints(&nPos, -1))) {nStartPos=nPos;}
+        while(nStartPos > 0 && CharType == (sal_Int16)u_charType(Text.iterateCodePoints(&nPos, -1))) { nStartPos=nPos; }
         return nStartPos; // begin of char block is inclusive
 }
 
@@ -362,7 +373,8 @@ sal_Int32 SAL_CALL BreakIteratorImpl::endOfCharBlock( const OUString& Text, sal_
         if (nStartPos < 0 || nStartPos >= strLen) return -1;
         if (CharType != (sal_Int16)u_charType(Text.iterateCodePoints(&nStartPos, 0))) return -1;
 
-        while(nStartPos < strLen-1 && CharType == (sal_Int16)u_charType(Text.iterateCodePoints(&nStartPos, 1))) {}
+        sal_uInt32 ch=0;
+        while(iterateCodePoints(Text, nStartPos, 1, ch) < strLen && CharType == (sal_Int16)u_charType(ch)) {}
         return nStartPos; // end of char block is exclusive
 }
 
@@ -375,11 +387,12 @@ sal_Int32 SAL_CALL BreakIteratorImpl::nextCharBlock( const OUString& Text, sal_I
         sal_Int16 numberOfChange = (CharType == (sal_Int16)u_charType(Text.iterateCodePoints(&nStartPos, 0))) ? 2 : 1;
         sal_Int32 strLen = Text.getLength();
 
-        while (numberOfChange > 0 && nStartPos < strLen-1) {
-            if ((CharType != (sal_Int16)u_charType(Text.iterateCodePoints(&nStartPos, 1))) ^ (numberOfChange == 1))
-                numberOfChange--;
-        }
-        return numberOfChange == 0 ? nStartPos : -1;
+    sal_uInt32 ch=0;
+    while (numberOfChange > 0 && iterateCodePoints(Text, nStartPos, 1, ch) < strLen) {
+        if ((CharType != (sal_Int16)u_charType(ch)) ^ (numberOfChange == 1))
+            numberOfChange--;
+    }
+    return numberOfChange == 0 ? nStartPos : -1;
 }
 
 sal_Int32 SAL_CALL BreakIteratorImpl::previousCharBlock( const OUString& Text, sal_Int32 nStartPos,
@@ -390,19 +403,16 @@ sal_Int32 SAL_CALL BreakIteratorImpl::previousCharBlock( const OUString& Text, s
 
         sal_Int16 numberOfChange = (CharType == (sal_Int16)u_charType(Text.iterateCodePoints(&nStartPos, 0))) ? 3 : 2;
 
-        while (numberOfChange > 0 && nStartPos > 0) {
-            if (((numberOfChange % 2) == 0) ^ (CharType != (sal_Int16)u_charType(Text.iterateCodePoints(&nStartPos, -1))))
+        sal_uInt32 ch=0;
+        while (numberOfChange > 0 && iterateCodePoints(Text, nStartPos, -1, ch) >= 0) {
+            if (((numberOfChange % 2) == 0) ^ (CharType != (sal_Int16)u_charType(ch)))
                 numberOfChange--;
             if (nStartPos == 0 && numberOfChange > 0) {
                 numberOfChange--;
                 if (numberOfChange == 0) return nStartPos;
             }
         }
-        if (numberOfChange == 0) {
-            Text.iterateCodePoints(&nStartPos, 1);
-            return nStartPos;
-        }
-        return -1;
+        return numberOfChange == 0 ? iterateCodePoints(Text, nStartPos, 1, ch) : -1;
 }
 
 
