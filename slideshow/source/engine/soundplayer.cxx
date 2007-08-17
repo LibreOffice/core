@@ -4,9 +4,9 @@
  *
  *  $RCSfile: soundplayer.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: obo $ $Date: 2007-07-17 14:41:34 $
+ *  last change: $Author: ihi $ $Date: 2007-08-17 12:43:15 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -129,12 +129,15 @@ namespace slideshow
                     xFac->createInstanceWithContext(
                         ::rtl::OUString::createFromAscii( AVMEDIA_MANAGER_SERVICE_NAME ),
                         rComponentContext ),
-                    uno::UNO_QUERY_THROW );
+                    uno::UNO_QUERY );
 
-                const INetURLObject aURL( rSoundURL );
-                mxPlayer.set( xManager->createPlayer(
-                                aURL.GetMainURL( INetURLObject::DECODE_UNAMBIGUOUS ) ),
-                                uno::UNO_QUERY_THROW );
+                if( xManager.is() )
+                {
+                    const INetURLObject aURL( rSoundURL );
+                    mxPlayer.set( xManager->createPlayer(
+                                      aURL.GetMainURL( INetURLObject::DECODE_UNAMBIGUOUS ) ),
+                                  uno::UNO_QUERY );
+                }
             }
             catch( uno::RuntimeException& )
             {
@@ -142,11 +145,13 @@ namespace slideshow
             }
             catch( uno::Exception& )
             {
+            }
+
+            if( !mxPlayer.is() )
                 throw lang::NoSupportException(
                     rtl::OUString( RTL_CONSTASCII_USTRINGPARAM(
                                        "No sound support for ") ) + rSoundURL,
                     uno::Reference<uno::XInterface>() );
-            }
         }
 
         SoundPlayer::~SoundPlayer()
