@@ -4,9 +4,9 @@
  *
  *  $RCSfile: DiagramWrapper.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: hr $ $Date: 2007-08-03 12:31:55 $
+ *  last change: $Author: ihi $ $Date: 2007-08-17 12:11:52 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -559,8 +559,7 @@ namespace wrapper
 DiagramWrapper::DiagramWrapper(
     ::boost::shared_ptr< Chart2ModelContact > spChart2ModelContact ) :
         m_spChart2ModelContact( spChart2ModelContact ),
-        m_aEventListenerContainer( m_aMutex ),
-        m_bLinesAllowed(sal_True)
+        m_aEventListenerContainer( m_aMutex )
 {
 }
 
@@ -1732,33 +1731,6 @@ void SAL_CALL DiagramWrapper::setDiagram(
 }
 
 // ================================================================================
-
-// WrappedPropertySet
-void SAL_CALL DiagramWrapper::setPropertyValue( const ::rtl::OUString& rPropertyName, const Any& rValue ) throw (beans::UnknownPropertyException, beans::PropertyVetoException, lang::IllegalArgumentException, lang::WrappedTargetException, uno::RuntimeException)
-{
-    if(rPropertyName.equals(C2U("Lines")))
-    {
-        if( ! (rValue >>= m_bLinesAllowed) )
-            throw lang::IllegalArgumentException( C2U("Property Lines requires value of type sal_Bool"), 0, 0 );
-    }
-    WrappedPropertySet::setPropertyValue( rPropertyName, rValue );
-}
-
-Any SAL_CALL DiagramWrapper::getPropertyValue( const ::rtl::OUString& rPropertyName ) throw (beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException)
-{
-    if(rPropertyName.equals(C2U("Lines")))
-    {
-        if( !lcl_isXYChart( m_spChart2ModelContact->getChart2Diagram() ) )
-            return uno::makeAny( sal_True );
-
-        Any aAny( WrappedPropertySet::getPropertyValue( rPropertyName ) );
-        sal_Bool bHasLines = sal_False;
-        aAny >>= bHasLines;
-        return uno::makeAny( m_bLinesAllowed && bHasLines );
-    }
-    else
-        return WrappedPropertySet::getPropertyValue( rPropertyName );
-}
 
 Reference< beans::XPropertySet > DiagramWrapper::getInnerPropertySet()
 {
