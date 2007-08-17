@@ -4,9 +4,9 @@
  *
  *  $RCSfile: docprev.cxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: rt $ $Date: 2007-04-03 15:41:46 $
+ *  last change: $Author: ihi $ $Date: 2007-08-17 15:33:41 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -244,18 +244,13 @@ void SdDocPreviewWin::startPreview()
 
             if( pPage && (pPage->getTransitionType() != 0) )
             {
-                SfxViewFrame* pFrame = SfxViewFrame::Current();
-                if (pFrame != NULL)
-                {
-                    std::auto_ptr<sd::Slideshow> pSlideShow(
-                        new sd::Slideshow( 0, 0, pDoc, &pFrame->GetWindow() ) );
+                std::auto_ptr<sd::Slideshow> pSlideShow( new sd::Slideshow( 0, 0, pDoc, this ) );
 
-                    Reference< XDrawPage > xDrawPage( pPage->getUnoPage(), UNO_QUERY );
-                    Reference< XAnimationNode > xAnimationNode;
+                Reference< XDrawPage > xDrawPage( pPage->getUnoPage(), UNO_QUERY );
+                Reference< XAnimationNode > xAnimationNode;
 
-                    if (pSlideShow->startPreview( xDrawPage, xAnimationNode, this ))
-                        mpSlideShow = pSlideShow.release();
-                }
+                if (pSlideShow->startPreview( xDrawPage, xAnimationNode, this ))
+                    mpSlideShow = pSlideShow.release();
             }
         }
     }
