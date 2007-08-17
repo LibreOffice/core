@@ -4,9 +4,9 @@
  *
  *  $RCSfile: CustomAnimationList.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 03:34:56 $
+ *  last change: $Author: ihi $ $Date: 2007-08-17 15:33:15 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -118,14 +118,14 @@ public:
 
     bool isExpanded( const CustomAnimationEffectPtr& pEffect ) const;
 
+    /// clears all entries from the listbox
+    void clear();
+
 private:
     bool    mbIgnorePaint;
 
     /** appends the given effect to the list*/
     void append( CustomAnimationEffectPtr pEffect );
-
-    /// clears all entries from the listbox
-    void clear();
 
     ICustomAnimationListController* mpController;
 
