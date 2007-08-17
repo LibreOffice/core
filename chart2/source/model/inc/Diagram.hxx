@@ -4,9 +4,9 @@
  *
  *  $RCSfile: Diagram.hxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: vg $ $Date: 2007-05-22 18:29:39 $
+ *  last change: $Author: ihi $ $Date: 2007-08-17 12:13:53 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -190,10 +190,10 @@ protected:
 
     // ____ XTitled ____
     virtual ::com::sun::star::uno::Reference<
-        ::com::sun::star::chart2::XTitle > SAL_CALL getTitle()
+        ::com::sun::star::chart2::XTitle > SAL_CALL getTitleObject()
         throw (::com::sun::star::uno::RuntimeException);
-    virtual void SAL_CALL setTitle( const ::com::sun::star::uno::Reference<
-                                    ::com::sun::star::chart2::XTitle >& Title )
+    virtual void SAL_CALL setTitleObject( const ::com::sun::star::uno::Reference<
+                                          ::com::sun::star::chart2::XTitle >& Title )
         throw (::com::sun::star::uno::RuntimeException);
 
     // ____ XCloneable ____
