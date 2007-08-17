@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ObjectHierarchy.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: vg $ $Date: 2007-05-22 18:08:17 $
+ *  last change: $Author: ihi $ $Date: 2007-08-17 12:13:35 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -181,7 +181,7 @@ void ImplObjectHierarchy::createTree( const Reference< XChartDocument > & xChart
     Reference< XTitled > xDocTitled( xChartDocument, uno::UNO_QUERY );
     if( xDocTitled.is())
     {
-        Reference< XTitle > xMainTitle( xDocTitled->getTitle());
+        Reference< XTitle > xMainTitle( xDocTitled->getTitleObject());
         if( xMainTitle.is())
             aTopLevelContainer.push_back(
                 ObjectIdentifier::createClassifiedIdentifierForObject( xMainTitle, xModel ));
@@ -194,7 +194,7 @@ void ImplObjectHierarchy::createTree( const Reference< XChartDocument > & xChart
         Reference< XTitled > xDiaTitled( xDiagram, uno::UNO_QUERY );
         if( xDiaTitled.is())
         {
-            Reference< XTitle > xSubTitle( xDiaTitled->getTitle());
+            Reference< XTitle > xSubTitle( xDiaTitled->getTitleObject());
             if( xSubTitle.is())
                 aTopLevelContainer.push_back(
                     ObjectIdentifier::createClassifiedIdentifierForObject( xSubTitle, xModel ));
@@ -207,7 +207,7 @@ void ImplObjectHierarchy::createTree( const Reference< XChartDocument > & xChart
             Reference< XTitled > xAxisTitled( aAxes[i], uno::UNO_QUERY );
             if( xAxisTitled.is())
             {
-                Reference< XTitle > xAxisTitle( xAxisTitled->getTitle());
+                Reference< XTitle > xAxisTitle( xAxisTitled->getTitleObject());
                 if( xAxisTitle.is())
                     aTopLevelContainer.push_back(
                         ObjectIdentifier::createClassifiedIdentifierForObject( xAxisTitle, xModel ));
