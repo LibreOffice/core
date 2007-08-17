@@ -4,9 +4,9 @@
  *
  *  $RCSfile: Diagram.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: rt $ $Date: 2007-07-25 08:49:57 $
+ *  last change: $Author: ihi $ $Date: 2007-08-17 12:15:00 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -350,7 +350,7 @@ Sequence< Reference< chart2::data::XLabeledDataSequence > > SAL_CALL Diagram::ge
 }
 
 // ____ XTitled ____
-uno::Reference< chart2::XTitle > SAL_CALL Diagram::getTitle()
+uno::Reference< chart2::XTitle > SAL_CALL Diagram::getTitleObject()
     throw (uno::RuntimeException)
 {
     // /--
@@ -359,7 +359,7 @@ uno::Reference< chart2::XTitle > SAL_CALL Diagram::getTitle()
     // \--
 }
 
-void SAL_CALL Diagram::setTitle( const uno::Reference< chart2::XTitle >& Title )
+void SAL_CALL Diagram::setTitleObject( const uno::Reference< chart2::XTitle >& Title )
     throw (uno::RuntimeException)
 {
     // /--
