@@ -5,9 +5,9 @@
  *
  *  $RCSfile: unopkg_app.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: ihi $ $Date: 2007-04-17 10:32:57 $
+ *  last change: $Author: ihi $ $Date: 2007-08-17 11:52:20 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -51,9 +51,10 @@
 #include "com/sun/star/deployment/thePackageManagerFactory.hpp"
 #include "com/sun/star/deployment/ui/PackageManagerDialog.hpp"
 #include "com/sun/star/ui/dialogs/XExecutableDialog.hpp"
+#include "com/sun/star/lang/DisposedException.hpp"
 #include "boost/scoped_array.hpp"
 #include "com/sun/star/ui/dialogs/XDialogClosedListener.hpp"
-
+#include "com/sun/star/bridge/XBridgeFactory.hpp"
 #include <stdio.h>
 #include <vector>
 
@@ -64,7 +65,7 @@ using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
 using namespace ::unopkg;
 using ::rtl::OUString;
-
+namespace css = ::com::sun::star;
 namespace {
 
 //------------------------------------------------------------------------------
@@ -170,6 +171,38 @@ Reference<deployment::XPackage> findPackage(
 
 } // anon namespace
 
+
+//workaround for some reason the bridge threads which communicate with the uno.exe
+//process are not releases on time
+void disposeBridges(Reference<css::uno::XComponentContext> ctx)
+{
+    if (!ctx.is())
+        return;
+
+    Reference<css::bridge::XBridgeFactory> bridgeFac(
+        ctx->getServiceManager()->createInstanceWithContext(
+            OUSTR("com.sun.star.bridge.BridgeFactory"), ctx),
+        UNO_QUERY);
+
+    if (bridgeFac.is())
+    {
+        const Sequence< Reference<css::bridge::XBridge> >seqBridges = bridgeFac->getExistingBridges();
+        for (sal_Int32 i = 0; i < seqBridges.getLength(); i++)
+        {
+            Reference<css::lang::XComponent> comp(seqBridges[i], UNO_QUERY);
+            if (comp.is())
+            {
+                try {
+                    comp->dispose();
+                }
+                catch (css::lang::DisposedException& )
+                {
+                }
+            }
+        }
+    }
+}
+
 //##############################################################################
 SAL_IMPLEMENT_MAIN()
 {
@@ -201,6 +234,8 @@ SAL_IMPLEMENT_MAIN()
         s_option_infos, OUSTR("help") );
     OptionInfo const * info_version = getOptionInfo(
         s_option_infos, OUSTR("version") );
+
+    Reference<XComponentContext> xComponentContext;
 
     try {
         sal_uInt32 nPos = 0;
@@ -235,7 +270,8 @@ SAL_IMPLEMENT_MAIN()
             else if (!readOption( &option_verbose, info_verbose, &nPos ) &&
                      !readOption( &option_shared, info_shared, &nPos ) &&
                      !readOption( &option_force, info_force, &nPos ) &&
-                     !readArgument( &deploymentContext, info_context, &nPos ))
+                     !readArgument( &deploymentContext, info_context, &nPos ) &&
+                     !isBootstrapVariable(&nPos))
             {
                 oslProcessError rc = osl_getCommandArg( nPos, &cmdArg.pData );
                 if (rc != osl_Process_E_None )
@@ -269,8 +305,7 @@ SAL_IMPLEMENT_MAIN()
             }
         }
 
-        Reference<XComponentContext> xComponentContext(
-            getUNO( disposeGuard, option_verbose, subcmd_gui ) );
+        xComponentContext = getUNO( disposeGuard, option_verbose, subcmd_gui );
 
         if (deploymentContext.getLength() == 0) {
             deploymentContext = option_shared ? OUSTR("shared") : OUSTR("user");
@@ -407,6 +442,8 @@ SAL_IMPLEMENT_MAIN()
 
         if (option_verbose)
             printf( "\n%s done.\n", APP_NAME );
+        //Force to release all bridges which connect us to the child processes
+        disposeBridges(xComponentContext);
         return 0;
     }
     catch (ucb::CommandFailedException &) {
@@ -436,6 +473,8 @@ SAL_IMPLEMENT_MAIN()
             ::comphelper::anyToString(exc) : e.Message, textenc).getStr() );
     }
     fprintf( stderr, "\n%s failed.\n", APP_NAME );
+    disposeBridges(xComponentContext);
     return 1;
 }
+
 
