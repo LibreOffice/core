@@ -4,9 +4,9 @@
  *
  *  $RCSfile: swtable.hxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: obo $ $Date: 2007-07-18 14:45:01 $
+ *  last change: $Author: ihi $ $Date: 2007-08-17 13:59:29 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -255,9 +255,19 @@ public:
 
         // lese die 1. Nummer und loesche sie aus dem String
         // (wird von GetTblBox und SwTblFld benutzt)
-    static USHORT _GetBoxNum( String& rStr, BOOL bFirst = FALSE );
+    // --> OD 2007-08-03 #i80314#
+    // add 3rd parameter in order to control validation check on <rStr>
+    static USHORT _GetBoxNum( String& rStr,
+                              BOOL bFirst = FALSE,
+                              const bool bPerformValidCheck = false );
+    // <--
         // suche die Inhaltstragende Box mit dem Namen
-    const SwTableBox* GetTblBox( const String& rName ) const;
+    // --> OD 2007-08-03 #i80314#
+    // add 2nd parameter in order to control validation check in called method
+    // <_GetBoxNum(..)>
+    const SwTableBox* GetTblBox( const String& rName,
+                                 const bool bPerformValidCheck = false ) const;
+    // <--
         // kopiere die selektierten Boxen in ein anderes Dokument.
     BOOL MakeCopy( SwDoc*, const SwPosition&, const SwSelBoxes&,
                     BOOL bCpyNds = TRUE, BOOL bCpyName = FALSE ) const;
