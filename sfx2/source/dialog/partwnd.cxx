@@ -4,9 +4,9 @@
  *
  *  $RCSfile: partwnd.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: hr $ $Date: 2007-06-27 23:14:46 $
+ *  last change: $Author: ihi $ $Date: 2007-08-17 13:35:23 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -73,6 +73,9 @@
 #endif
 #ifndef _COM_SUN_STAR_FRAME_XCONTROLLER_HPP_
 #include <com/sun/star/frame/XController.hpp>
+#endif
+#ifndef _COM_SUN_STAR_BEANS_XPROPERTYSET_HPP_
+#include <com/sun/star/beans/XPropertySet.hpp>
 #endif
 #ifndef _COM_SUN_STAR_AWT_POSSIZE_HPP_
 #include <com/sun/star/awt/PosSize.hpp>
@@ -184,6 +187,28 @@ SfxPartDockWnd_Impl::SfxPartDockWnd_Impl
     ::com::sun::star::uno::Reference < ::com::sun::star::frame::XFrame > xFrame(
             ::comphelper::getProcessServiceFactory()->createInstance(
             DEFINE_CONST_UNICODE("com.sun.star.frame.Frame") ), ::com::sun::star::uno::UNO_QUERY );
+    ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet > xPropSet(
+        xFrame, ::com::sun::star::uno::UNO_QUERY );
+    try
+    {
+        const ::rtl::OUString aLayoutManager( RTL_CONSTASCII_USTRINGPARAM( "LayoutManager" ));
+        ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet > xLMPropSet;
+
+        ::com::sun::star::uno::Any a = xPropSet->getPropertyValue( aLayoutManager );
+        if ( a >>= xLMPropSet )
+        {
+            const ::rtl::OUString aAutomaticToolbars( RTL_CONSTASCII_USTRINGPARAM( "AutomaticToolbars" ));
+            xLMPropSet->setPropertyValue( aAutomaticToolbars, ::com::sun::star::uno::Any( sal_False ));
+        }
+    }
+    catch( ::com::sun::star::uno::RuntimeException& )
+    {
+        throw;
+    }
+    catch( ::com::sun::star::uno::Exception& )
+    {
+    }
+
     xFrame->initialize( VCLUnoHelper::GetInterface ( this ) );
     pChildWin->SetFrame( xFrame );
     if ( pBind->GetDispatcher() )
