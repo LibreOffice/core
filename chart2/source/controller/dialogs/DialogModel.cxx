@@ -4,9 +4,9 @@
  *
  *  $RCSfile: DialogModel.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2007-07-25 08:30:38 $
+ *  last change: $Author: ihi $ $Date: 2007-08-17 12:13:20 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -730,7 +730,7 @@ void DialogModel::restoreModel(
             // main title
             Reference< chart2::XTitled > xDestinationTitled( xDestination, uno::UNO_QUERY_THROW );
             Reference< chart2::XTitled > xSourceTitled( xSource, uno::UNO_QUERY_THROW );
-            xDestinationTitled->setTitle( xSourceTitled->getTitle());
+            xDestinationTitled->setTitleObject( xSourceTitled->getTitleObject());
 
             // page background
             PropertyHelper::copyProperties(
