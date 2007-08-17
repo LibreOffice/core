@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dbloader.cxx,v $
  *
- *  $Revision: 1.30 $
+ *  $Revision: 1.31 $
  *
- *  last change: $Author: hr $ $Date: 2007-08-02 14:26:15 $
+ *  last change: $Author: ihi $ $Date: 2007-08-17 13:34:32 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -69,6 +69,7 @@
 #ifndef _COM_SUN_STAR_LANG_XSINGLESERVICEFACTORY_HPP_
 #include <com/sun/star/lang/XSingleServiceFactory.hpp>
 #endif
+#include <com/sun/star/document/XEventListener.hpp>
 #ifndef _COM_SUN_STAR_CONTAINER_XSET_HPP_
 #include <com/sun/star/container/XSet.hpp>
 #endif
@@ -106,7 +107,7 @@
 #include "UITools.hxx"
 #endif
 
-
+using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::frame;
 using namespace ::com::sun::star::beans;
@@ -278,9 +279,9 @@ void SAL_CALL DBContentLoader::load(const Reference< XFrame > & rFrame, const ::
         OSL_ENSURE(0,"wrong dispatch url!");
 
     sal_Bool bSuccess = xController.is();
+    Reference<XModel> xModel;
     if(bSuccess)
     {
-        Reference<XModel> xModel;
         if ( bAttachModel )
         {
             PropertyValue aValue;
@@ -375,6 +376,9 @@ void SAL_CALL DBContentLoader::load(const Reference< XFrame > & rFrame, const ::
     {
         if ( xController.is() && rFrame.is() )
             xController->attachFrame(rFrame);
+        Reference< document::XEventListener > xGlobalDocEventBroadcaster(m_xServiceFactory->createInstance(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.frame.GlobalEventBroadcaster"))),UNO_QUERY_THROW);
+        document::EventObject aEvent( xModel, ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("OnViewCreated")) );
+        xGlobalDocEventBroadcaster->notifyEvent(aEvent);
         rListener->loadFinished(this);
     }
     else if (!bSuccess && rListener.is())
