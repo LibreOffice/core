@@ -4,9 +4,9 @@
  *
  *  $RCSfile: SchXMLPlotAreaContext.cxx,v $
  *
- *  $Revision: 1.40 $
+ *  $Revision: 1.41 $
  *
- *  last change: $Author: rt $ $Date: 2007-07-25 08:06:44 $
+ *  last change: $Author: ihi $ $Date: 2007-08-17 12:05:09 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -453,13 +453,21 @@ void SchXMLPlotAreaContext::StartElement( const uno::Reference< xml::sax::XAttri
                 const SvXMLStyleContext* pStyle = pStylesCtxt->FindStyleChildContext(
                     mrImportHelper.GetChartFamilyID(), msAutoStyleName );
 
-                if( pStyle && pStyle->ISA( XMLPropStyleContext ))
+                XMLPropStyleContext* pPropStyleContext =
+                    const_cast< XMLPropStyleContext * >(
+                        dynamic_cast< const XMLPropStyleContext * >( pStyle ) );
+                if( pPropStyleContext )
                 {
-                    (( XMLPropStyleContext* )pStyle )->FillPropertySet( xProp );
+                    pPropStyleContext->FillPropertySet( xProp );
 
                     // get the data row source that was set without having data
                     xProp->getPropertyValue( ::rtl::OUString::createFromAscii("DataRowSource"))
                         >>= mrDataRowSource;
+
+                    //lines on/off
+                    //this old property is not supported fully anymore with the new chart, so we need to get the information a little bit different from similar properties
+                    mrSeriesDefaultsAndStyles.maLinesOnProperty = SchXMLTools::getPropertyFromContext(
+                        ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Lines")), pPropStyleContext, pStylesCtxt );
                 }
             }
         }
@@ -488,9 +496,6 @@ void SchXMLPlotAreaContext::StartElement( const uno::Reference< xml::sax::XAttri
         mrSeriesDefaultsAndStyles.maPercentDefault = xProp->getPropertyValue(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Percent")));
         mrSeriesDefaultsAndStyles.maPercentDefault >>= mbPercentStacked;
         mrSeriesDefaultsAndStyles.maStackedBarsConnectedDefault = xProp->getPropertyValue(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("StackedBarsConnected")));
-
-        //lines on/off
-        mrSeriesDefaultsAndStyles.maLinesOnProperty = xProp->getPropertyValue(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Lines")));
 
         // deep
         uno::Any aDeepProperty( xProp->getPropertyValue(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Deep"))));
@@ -1362,12 +1367,14 @@ SchXMLDataPointContext::SchXMLDataPointContext(  SchXMLImportHelper& rImpHelper,
                                                  ::std::list< DataRowPointStyle >& rStyleList,
                                                  const ::com::sun::star::uno::Reference<
                                                     ::com::sun::star::chart2::XDataSeries >& xSeries,
-                                                 sal_Int32& rIndex ) :
+                                                 sal_Int32& rIndex,
+                                                 bool bSymbolSizeForSeriesIsMissingInFile ) :
         SvXMLImportContext( rImport, XML_NAMESPACE_CHART, rLocalName ),
         mrImportHelper( rImpHelper ),
         mrStyleList( rStyleList ),
         m_xSeries( xSeries ),
-        mrIndex( rIndex )
+        mrIndex( rIndex ),
+        mbSymbolSizeForSeriesIsMissingInFile( bSymbolSizeForSeriesIsMissingInFile )
 {
 }
 
@@ -1402,6 +1409,7 @@ void SchXMLDataPointContext::StartElement( const uno::Reference< xml::sax::XAttr
         DataRowPointStyle aStyle(
             DataRowPointStyle::DATA_POINT,
             m_xSeries, mrIndex, nRepeat, sAutoStyleName );
+        aStyle.mbSymbolSizeForSeriesIsMissingInFile = mbSymbolSizeForSeriesIsMissingInFile;
         mrStyleList.push_back( aStyle );
     }
     mrIndex += nRepeat;
