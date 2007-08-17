@@ -4,9 +4,9 @@
 #
 #   $RCSfile: udkversion.mk,v $
 #
-#   $Revision: 1.2 $
+#   $Revision: 1.3 $
 #
-#   last change: $Author: obo $ $Date: 2006-07-10 18:51:45 $
+#   last change: $Author: ihi $ $Date: 2007-08-17 13:06:52 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -38,4 +38,4 @@ UDK_MAJOR=3
 # minor 
 UDK_MINOR=2
 # micro 
-UDK_MICRO=0
+UDK_MICRO=7
