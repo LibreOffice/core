@@ -98,8 +98,8 @@
                                 <value>vnd.com.sun.star.comp.SunPresentationMinimizer:about</value>
                             </prop>
                             <prop oor:name="Title" oor:type="xs:string">
-                                <value xml:lang="en-US">~Info über Sun Presentation Minimizer</value>
-                                <value xml:lang="de">About Sun Presentation Minimizer</value>
+                                <value xml:lang="en-US">About Sun Presentation Minimizer</value>
+                                <value xml:lang="de">Info über Sun Presentation Minimizer</value>
                             </prop>
                             <prop oor:name="Target" oor:type="xs:string">
                                 <value>_self</value>
