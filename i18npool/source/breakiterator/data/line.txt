@@ -80,12 +80,13 @@ $NS = [:LineBreak =  Nonstarter:];
 $NU = [:LineBreak =  Numeric:];
 $OP = [:LineBreak =  Open_Punctuation:];
 $PO = [:LineBreak =  Postfix_Numeric:];
-$PR = [:LineBreak =  Prefix_Numeric:];
+$BS = \u005C;
+$PR = [[:LineBreak =  Prefix_Numeric:] - $BS];
 $QU = [:LineBreak =  Quotation:];
 $SA = [:LineBreak =  Complex_Context:];
 $SG = [:LineBreak =  Surrogate:];
 $SP = [:LineBreak =  Space:];
-$SY = [:LineBreak =  Break_Symbols:];
+$SY = [[:LineBreak =  Break_Symbols:] $BS];
 $WJ = [:LineBreak =  Word_Joiner:];
 $XX = [:LineBreak =  Unknown:];
 $ZW = [:LineBreak =  ZWSpace:];
@@ -104,7 +105,7 @@ $dictionary = [:LineBreak = Complex_Context:];
 #                               XX  (Unknown, unassigned)
 #                         as $AL  (Alphabetic)
 #
-$ALPlus = [$AL $AI $SA $SG $XX];
+$ALPlus = [$AL $AI $SA $SG $XX $HY];
 
 #
 #  Combining Marks.   X $CM*  behaves as if it were X.  Rule LB6.
