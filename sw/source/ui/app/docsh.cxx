@@ -4,9 +4,9 @@
  *
  *  $RCSfile: docsh.cxx,v $
  *
- *  $Revision: 1.71 $
+ *  $Revision: 1.72 $
  *
- *  last change: $Author: obo $ $Date: 2007-07-17 13:10:08 $
+ *  last change: $Author: ihi $ $Date: 2007-08-17 11:33:57 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -446,13 +446,14 @@ BOOL SwDocShell::ConvertFrom( SfxMedium& rMedium )
         if( pDoc )
             RemoveLink();
         pDoc = pRdr->GetDoc();
+
+        AddLink();
+
+        if ( !pBasePool )
+            pBasePool = new SwDocStyleSheetPool( *pDoc,
+                            SFX_CREATE_MODE_ORGANIZER == GetCreateMode() );
     }
 
-    AddLink();
-
-    ASSERT( !pBasePool, "wer hat seinen Pool nicht zerstoert?" );
-    pBasePool = new SwDocStyleSheetPool( *pDoc,
-                        SFX_CREATE_MODE_ORGANIZER == GetCreateMode() );
     UpdateFontList();
     InitDraw();
 
