@@ -4,9 +4,9 @@
  *
  *  $RCSfile: formres.src,v $
  *
- *  $Revision: 1.79 $
+ *  $Revision: 1.80 $
  *
- *  last change: $Author: hr $ $Date: 2007-07-31 14:08:06 $
+ *  last change: $Author: ihi $ $Date: 2007-08-17 11:29:17 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -188,12 +188,10 @@ Resource RID_RSC_ENUM_ICONSIZE_TYPE
 {
     String 1
     {
-        Text [ de ] = "Klein" ;
         Text [ en-US ] = "Small" ;
     };
     String 2
     {
-        Text [ de ] = "Groß" ;
         Text [ en-US ] = "Large" ;
     };
 };
@@ -466,17 +464,14 @@ Resource RID_RSC_ENUM_BORDER_TYPE
 {
     String 1
     {
-        Text [ de ] = "Ohne Rahmen" ;
         Text [ en-US ] = "Without frame" ;
     };
     String 2
     {
-        Text [ de ] = "3D-Look" ;
         Text [ en-US ] = "3D look" ;
     };
     String 3
     {
-        Text [ de ] = "Flach" ;
         Text [ en-US ] = "Flat" ;
     };
 };
@@ -485,32 +480,26 @@ Resource RID_RSC_ENUM_LISTSOURCE_TYPE
 {
     String 1
     {
-        Text [ de ] = "Werteliste";
         Text [ en-US ] = "Valuelist";
     };
     String 2
     {
-        Text [ de ] = "Tabelle";
         Text [ en-US ] = "Table";
     };
     String 3
     {
-        Text [ de ] = "Abfrage";
         Text [ en-US ] = "Query";
     };
     String 4
     {
-        Text [ de ] = "Sql";
         Text [ en-US ] = "Sql";
     };
     String 5
     {
-        Text [ de ] = "Sql [Native]";
         Text [ en-US ] = "Sql [Native]";
     };
     String 6
     {
-        Text [ de ] = "Tabellenfelder" ;
         Text [ en-US ] = "Tablefields" ;
     };
 };
@@ -518,17 +507,14 @@ Resource RID_RSC_ENUM_ALIGNMENT
 {
     String 1
     {
-        Text [ de ] = "Links";
         Text [ en-US ] = "Left";
     };
     String 2
     {
-        Text [ de ] = "Zentriert";
         Text [ en-US ] = "Center";
     };
     String 3
     {
-        Text [ de ] = "Rechts" ;
         Text [ en-US ] = "Right" ;
     };
 };
@@ -536,67 +522,54 @@ Resource RID_RSC_ENUM_BUTTONTYPE
 {
     String 1
     {
-        Text [ de ] = "Keine";
         Text [ en-US ] = "None";
     };
     String 2
     {
-        Text [ de ] = "Formular übertragen";
         Text [ en-US ] = "Submit form";
     };
     String 3
     {
-        Text [ de ] = "Formular zurücksetzen";
         Text [ en-US ] = "Reset form";
     };
     String 4
     {
-        Text [ de ] = "Dokument/Webseite öffnen";
         Text [ en-US ] = "Open document/web page";
     };
     String 5
     {
-        Text [ de ] = "Erster Datensatz";
         Text [ en-US ] = "First record";
     };
     String 6
     {
-        Text [ de ] = "Vorheriger Datensatz";
         Text [ en-US ] = "Previous record";
     };
     String 7
     {
-        Text [ de ] = "Nächster Datensatz";
         Text [ en-US ] = "Next record";
     };
     String 8
     {
-        Text [ de ] = "Letzter Datensatz";
         Text [ en-US ] = "Last record";
     };
     String 9
     {
-        Text [ de ] = "Datensatz speichern";
         Text [ en-US ] = "Save record";
     };
     String 10
     {
-        Text [ de ] = "Rückgängig: Dateneingabe";
         Text [ en-US ] = "Undo data entry";
     };
     String 11
     {
-        Text [ de ] = "Neuer Datensatz";
         Text [ en-US ] = "New record";
     };
     String 12
     {
-        Text [ de ] = "Datensatz löschen";
         Text [ en-US ] = "Delete record";
     };
     String 13
     {
-        Text [ de ] = "Formular aktualisieren";
         Text [ en-US ] = "Refresh form";
     };
 };
@@ -604,12 +577,10 @@ Resource RID_RSC_ENUM_SUBMIT_METHOD
 {
     String 1
     {
-        Text [ de ] = "Get";
         Text [ en-US ] = "Get";
     };
     String 2
     {
-        Text [ de ] = "Post" ;
         Text [ en-US ] = "Post" ;
     };
 };
@@ -617,17 +588,14 @@ Resource RID_RSC_ENUM_SUBMIT_ENCODING
 {
     String 1
     {
-        Text [ de ] = "URL";
         Text [ en-US ] = "URL";
     };
     String 2
     {
-        Text [ de ] = "Multipart";
         Text [ en-US ] = "Multipart";
     };
     String 3
     {
-        Text [ de ] = "Text" ;
         Text [ en-US ] = "Text" ;
     };
 };
@@ -635,62 +603,50 @@ Resource RID_RSC_ENUM_DATEFORMAT_LIST
 {
     String 1
     {
-        Text [ de ] = "Standard (kurz)";
         Text [ en-US ] = "Standard (short)";
     };
     String 2
     {
-        Text [ de ] = "Standard (kurz JJ)";
         Text [ en-US ] = "Standard (short YY)";
     };
     String 3
     {
-        Text [ de ] = "Standard (kurz JJJJ)";
         Text [ en-US ] = "Standard (short YYYY)";
     };
     String 4
     {
-        Text [ de ] = "Standard (lang)";
         Text [ en-US ] = "Standard (long)";
     };
     String 5
     {
-        Text [ de ] = "TT.MM.JJ";
         Text [ en-US ] = "DD/MM/YY";
     };
     String 6
     {
-        Text [ de ] = "MM.TT.JJ";
         Text [ en-US ] = "MM/DD/YY";
     };
     String 7
     {
-        Text [ de ] = "JJ.MM.TT";
         Text [ en-US ] = "YY/MM/DD";
     };
     String 8
     {
-        Text [ de ] = "TT.MM.JJJJ";
         Text [ en-US ] = "DD/MM/YYYY";
     };
     String 9
     {
-        Text [ de ] = "MM.TT.JJJJ";
         Text [ en-US ] = "MM/DD/YYYY";
     };
     String 10
     {
-        Text [ de ] = "JJJJ.MM.TT";
         Text [ en-US ] = "YYYY/MM/DD";
     };
     String 11
     {
-        Text [ de ] = "JJ-MM-TT (DIN5008)";
         Text [ en-US ] = "YY-MM-DD";
     };
     String 12
     {
-        Text [ de ] = "JJJJ-MM-TT (DIN5008)" ;
         Text [ en-US ] = "YYYY-MM-DD" ;
     };
 };
@@ -698,22 +654,18 @@ Resource RID_RSC_ENUM_TIMEFORMAT_LIST
 {
     String 1
     {
-        Text [ de ] = "13:45";
         Text [ en-US ] = "13:45";
     };
     String 2
     {
-        Text [ de ] = "13:45:00";
         Text [ en-US ] = "13:45:00";
     };
     String 3
     {
-        Text [ de ] = "01:45 PM";
         Text [ en-US ] = "01:45 PM";
     };
     String 4
     {
-        Text [ de ] = "01:45:00 PM" ;
         Text [ en-US ] = "01:45:00 PM" ;
     };
 };
@@ -721,17 +673,14 @@ Resource RID_RSC_ENUM_CHECKED
 {
     String 1
     {
-        Text [ de ] = "Nicht ausgewählt";
         Text [ en-US ] = "Not Selected";
     };
     String 2
     {
-        Text [ de ] = "Ausgewählt";
         Text [ en-US ] = "Selected";
     };
     String 3
     {
-        Text [ de ] = "Unbestimmt" ;
         Text [ en-US ] = "Not Defined" ;
     };
 };
@@ -739,17 +688,14 @@ Resource RID_RSC_ENUM_CYCLE
 {
     String 1
     {
-        Text [ de ] = "Alle Datensätze";
         Text [ en-US ] = "All records";
     };
     String 2
     {
-        Text [ de ] = "Aktueller Datensatz";
         Text [ en-US ] = "Active record";
     };
     String 3
     {
-        Text [ de ] = "Aktuelle Seite" ;
         Text [ en-US ] = "Current page" ;
     };
 };
@@ -757,17 +703,14 @@ Resource RID_RSC_ENUM_NAVIGATION
 {
     String 1
     {
-        Text [ de ] = "Nein";
         Text [ en-US ] = "No";
     };
     String 2
     {
-        Text [ de ] = "Ja";
         Text [ en-US ] = "Yes";
     };
     String 3
     {
-        Text [ de ] = "Übergeordnetes Formular" ;
         Text [ en-US ] = "Parent Form";
     };
 };
@@ -1008,12 +951,10 @@ Resource RID_RSC_ENUM_ORIENTATION
 {
     String 1
     {
-        Text [ de ] = "Horizontal";
         Text [ en-US ] = "Horizontal";
     };
     String 2
     {
-        Text [ de ] = "Vertikal" ;
         Text [ en-US ] = "Vertical";
     };
 };
@@ -1045,22 +986,18 @@ Resource RID_RSC_ENUM_PUSHBUTTONTYPE
 {
     String 1
     {
-        Text [ de ] = "Standard";
         Text [ en-US ] = "Default";
     };
     String 2
     {
-        Text [ de ] = "OK";
         Text [ en-US ] = "OK";
     };
     String 3
     {
-        Text [ de ] = "Abbrechen";
         Text [ en-US ] = "Cancel";
     };
     String 4
     {
-        Text [ de ] = "Hilfe" ;
         Text [ en-US ] = "Help";
     };
 };
@@ -1092,12 +1029,10 @@ Resource RID_RSC_ENUM_CELL_EXCHANGE_TYPE
 {
     String 1
     {
-        Text [ de ] = "Der ausgewählte Eintrag";
         Text [ en-US ] = "The selected entry";
     };
     String 2
     {
-        Text [ de ] = "Position des ausgewählten Eintrags";
         Text [ en-US ] = "Position of the selected entry";
     };
 };
