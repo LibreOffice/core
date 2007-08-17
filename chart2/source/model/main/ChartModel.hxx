@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ChartModel.hxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: rt $ $Date: 2007-07-25 08:49:18 $
+ *  last change: $Author: ihi $ $Date: 2007-08-17 12:14:47 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -534,10 +534,10 @@ public:
 
     // ____ XTitled ____
     virtual ::com::sun::star::uno::Reference<
-        ::com::sun::star::chart2::XTitle > SAL_CALL getTitle()
+        ::com::sun::star::chart2::XTitle > SAL_CALL getTitleObject()
         throw (::com::sun::star::uno::RuntimeException);
-    virtual void SAL_CALL setTitle( const ::com::sun::star::uno::Reference<
-                                    ::com::sun::star::chart2::XTitle >& Title )
+    virtual void SAL_CALL setTitleObject( const ::com::sun::star::uno::Reference<
+                                          ::com::sun::star::chart2::XTitle >& Title )
         throw (::com::sun::star::uno::RuntimeException);
 
     // ____ XInterface (for old API wrapper) ____
