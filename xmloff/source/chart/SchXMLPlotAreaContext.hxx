@@ -4,9 +4,9 @@
  *
  *  $RCSfile: SchXMLPlotAreaContext.hxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: hr $ $Date: 2007-06-27 14:49:11 $
+ *  last change: $Author: ihi $ $Date: 2007-08-17 12:05:23 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -194,13 +194,15 @@ private:
     ::com::sun::star::uno::Reference<
                 ::com::sun::star::chart2::XDataSeries > m_xSeries;
     sal_Int32& mrIndex;
+    bool mbSymbolSizeForSeriesIsMissingInFile;
 
 public:
     SchXMLDataPointContext(  SchXMLImportHelper& rImpHelper,
                              SvXMLImport& rImport, const rtl::OUString& rLocalName,
                              ::std::list< DataRowPointStyle >& rStyleList,
                              const ::com::sun::star::uno::Reference<
-                                ::com::sun::star::chart2::XDataSeries >& xSeries, sal_Int32& rIndex );
+                                ::com::sun::star::chart2::XDataSeries >& xSeries, sal_Int32& rIndex,
+                                bool bSymbolSizeForSeriesIsMissingInFile );
     virtual ~SchXMLDataPointContext();
 
     virtual void StartElement( const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XAttributeList >& xAttrList );
