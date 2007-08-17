@@ -4,9 +4,9 @@
  *
  *  $RCSfile: TitleHelper.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: vg $ $Date: 2007-05-22 19:05:41 $
+ *  last change: $Author: ihi $ $Date: 2007-08-17 12:15:52 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -176,7 +176,7 @@ uno::Reference< XTitle > TitleHelper::getTitle( TitleHelper::eTitleType nTitleIn
 {
     uno::Reference< XTitled > xTitled( lcl_getTitleParent( nTitleIndex, xModel ) );
     if( xTitled.is())
-        return xTitled->getTitle();
+        return xTitled->getTitleObject();
     return NULL;
 }
 
@@ -226,7 +226,7 @@ uno::Reference< XTitle > TitleHelper::createTitle(
             if( pRefSizeProvider )
                 pRefSizeProvider->setValuesAtTitle( xTitle );
 
-            xTitled->setTitle( xTitle );
+            xTitled->setTitleObject( xTitle );
 
             //default rotation 90 degree for y axis title in normal coordinatesystems or for x axis title for swapped coordinatesystems
             if( eTitleType == TitleHelper::X_AXIS_TITLE ||
@@ -324,7 +324,7 @@ void TitleHelper::removeTitle( TitleHelper::eTitleType nTitleIndex
     uno::Reference< XTitled > xTitled( lcl_getTitleParent( nTitleIndex, xModel ) );
     if( xTitled.is())
     {
-        xTitled->setTitle(NULL);
+        xTitled->setTitleObject(NULL);
     }
 }
 
