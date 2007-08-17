@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dlg_InsertTitle.src,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: vg $ $Date: 2007-05-22 17:36:49 $
+ *  last change: $Author: ihi $ $Date: 2007-08-17 15:05:46 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -34,7 +34,7 @@
  ************************************************************************/
 
 #include "dlg_InsertTitle.hrc"
-#include "res_Titles.src"
+#include "res_Titlesx.hrc"
 #include "SchSlotIds.hxx"
 #include "CommonResources.hrc"
 
