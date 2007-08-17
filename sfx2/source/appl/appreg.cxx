@@ -4,9 +4,9 @@
  *
  *  $RCSfile: appreg.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: hr $ $Date: 2007-06-27 22:57:04 $
+ *  last change: $Author: ihi $ $Date: 2007-08-17 13:20:40 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -73,7 +73,7 @@ void SfxApplication::Registrations_Impl()
 
     // ChildWindows
     SfxRecordingFloatWrapper_Impl::RegisterChildWindow();
-    SfxNavigatorWrapper::RegisterChildWindow();
+    SfxNavigatorWrapper::RegisterChildWindow( FALSE, NULL, SFX_CHILDWIN_NEVERHIDE );
     SfxPartChildWnd_Impl::RegisterChildWindow();
     SfxTemplateDialogWrapper::RegisterChildWindow(TRUE);
 
