@@ -4,9 +4,9 @@
  *
  *  $RCSfile: precompiled_slideshow.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 08:22:12 $
+ *  last change: $Author: ihi $ $Date: 2007-08-17 12:42:45 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -36,5 +36,25 @@
 // MARKER(update_precomp.py): Generated on 2006-09-01 17:50:01.139251
 
 #ifdef PRECOMPILED_HEADERS
+
+#include <canvas/debug.hxx>
+#include <tools/debug.hxx>
+#include <tools/diagnose_ex.h>
+
+#include <com/sun/star/rendering/XCanvas.hpp>
+
+#include <basegfx/point/b2dpoint.hxx>
+#include <basegfx/polygon/b2dpolygon.hxx>
+#include <basegfx/matrix/b2dhommatrix.hxx>
+#include <basegfx/polygon/b2dpolygontools.hxx>
+#include <basegfx/polygon/b2dpolypolygontools.hxx>
+#include <basegfx/tools/canvastools.hxx>
+
+#include <boost/noncopyable.hpp>
+#include <boost/bind.hpp>
+
+#include <vector>
+#include <algorithm>
+
 #endif
 
