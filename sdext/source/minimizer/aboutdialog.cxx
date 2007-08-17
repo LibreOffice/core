@@ -4,9 +4,9 @@
  *
  *  $RCSfile: aboutdialog.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: sj $ $Date: 2007-07-10 16:16:25 $
+ *  last change: $Author: sj $ $Date: 2007-08-17 15:10:57 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -61,7 +61,7 @@ using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::script;
 using namespace ::com::sun::star::container;
 
-#define ABOUT_DIALOG_WIDTH  220
+#define ABOUT_DIALOG_WIDTH  200
 #define ABOUT_DIALOG_HEIGHT 221
 
 // -----------------------------------------------------------------------------
@@ -146,7 +146,7 @@ rtl::OUString InsertImage( AboutDialog& rAboutDialog, const OUString& rControlNa
         Any( rURL ),
         Any( nPosX ),
         Any( nPosY ),
-        Any( sal_True ),
+        Any( sal_False ),
         Any( nWidth ) };
     sal_Int32 nCount = sizeof( pNames ) / sizeof( OUString );
 
@@ -223,13 +223,17 @@ void AboutDialog::InitDialog()
     rtl::OUString sURL( sBitmapPath += sBitmap );
 
     mxDialogModelMultiPropertySet->setPropertyValues( aNames, aValues );
+    sal_Int32 nWidth = getMapsFromPixels( 387 );
+    if ( nWidth )
+        mxDialogModelPropertySet->setPropertyValue( TKGet( TK_Width ), Any( nWidth ) );
+    else
+        nWidth = ABOUT_DIALOG_WIDTH;
 
-    int nWidth = (int) getMapsFromPixels( 387 );
 //    int nHeight = (int) getMapsFromPixels( 95 );
 
-    InsertImage( *this, rtl::OUString( rtl::OUString::createFromAscii( "aboutimage" ) ), sURL, 0, 0, ABOUT_DIALOG_WIDTH, 60 );
-    InsertFixedText( *this, rtl::OUString( rtl::OUString::createFromAscii( "fixedtext" ) ), getString( STR_ABOUT_PRN ), 9, 66, ABOUT_DIALOG_WIDTH - 18, 127, sal_True, 0 );
-    InsertSeparator( *this, rtl::OUString( rtl::OUString::createFromAscii( "separator" ) ), 0, 0, 196, ABOUT_DIALOG_WIDTH, 8 );
+    InsertImage( *this, rtl::OUString( rtl::OUString::createFromAscii( "aboutimage" ) ), sURL, 0, 0, nWidth, 60 );
+    InsertFixedText( *this, rtl::OUString( rtl::OUString::createFromAscii( "fixedtext" ) ), getString( STR_ABOUT_PRN ), 9, 66, nWidth - 18, 127, sal_True, 0 );
+    InsertSeparator( *this, rtl::OUString( rtl::OUString::createFromAscii( "separator" ) ), 0, 0, 196, nWidth, 8 );
     InsertButton( *this, rtl::OUString( rtl::OUString::createFromAscii( "button" ) ), mxActionListener, ( nWidth / 2 ) - 25, 204, 50, 14, 1, STR_OK );
 }
 
