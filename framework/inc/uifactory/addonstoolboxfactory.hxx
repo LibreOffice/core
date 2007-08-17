@@ -4,9 +4,9 @@
  *
  *  $RCSfile: addonstoolboxfactory.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: hr $ $Date: 2006-06-19 11:06:44 $
+ *  last change: $Author: ihi $ $Date: 2007-08-17 13:33:20 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -138,7 +138,7 @@ class AddonsToolBoxFactory :  public com::sun::star::lang::XTypeProvider        
         virtual ::com::sun::star::uno::Reference< ::com::sun::star::ui::XUIElement > SAL_CALL createUIElement( const ::rtl::OUString& ResourceURL, const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >& Args ) throw ( ::com::sun::star::container::NoSuchElementException, ::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::uno::RuntimeException );
 
         sal_Bool hasButtonsInContext( const ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue > >& rPropSeq,
-                                      const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XModel >& rModel );
+                                      const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >& rFrame );
 
     private:
         ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > m_xServiceManager;
