@@ -4,9 +4,9 @@
  *
  *  $RCSfile: Axis.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: vg $ $Date: 2007-05-22 18:31:08 $
+ *  last change: $Author: ihi $ $Date: 2007-08-17 12:14:21 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -154,9 +154,9 @@ protected:
 
     // ____ XTitled ____
     virtual ::com::sun::star::uno::Reference<
-                ::com::sun::star::chart2::XTitle > SAL_CALL getTitle()
+                ::com::sun::star::chart2::XTitle > SAL_CALL getTitleObject()
         throw (::com::sun::star::uno::RuntimeException);
-    virtual void SAL_CALL setTitle(
+    virtual void SAL_CALL setTitleObject(
         const ::com::sun::star::uno::Reference<
             ::com::sun::star::chart2::XTitle >& Title )
         throw (::com::sun::star::uno::RuntimeException);
