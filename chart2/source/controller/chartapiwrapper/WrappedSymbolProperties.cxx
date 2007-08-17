@@ -4,9 +4,9 @@
  *
  *  $RCSfile: WrappedSymbolProperties.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: hr $ $Date: 2007-08-03 12:34:05 $
+ *  last change: $Author: ihi $ $Date: 2007-08-17 12:12:54 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -40,6 +40,7 @@
 #include "WrappedSeriesOrDiagramProperty.hxx"
 #include "macros.hxx"
 #include "FastPropertyIdRanges.hxx"
+#include "ChartTypeHelper.hxx"
 
 #ifndef _COM_SUN_STAR_CHART2_SYMBOL_HPP_
 #include <com/sun/star/chart2/Symbol.hpp>
@@ -75,6 +76,10 @@
 #include <goodies/grfmgr.hxx>
 #endif
 
+#ifndef _SV_OUTDEV_HXX
+#include <vcl/outdev.hxx>
+#endif
+
 #include <comphelper/processfactory.hxx>
 
 using namespace ::com::sun::star;
@@ -101,8 +106,16 @@ public:
     virtual sal_Int32 getValueFromSeries( const Reference< beans::XPropertySet >& xSeriesPropertySet ) const;
     virtual void setValueToSeries( const Reference< beans::XPropertySet >& xSeriesPropertySet, sal_Int32 aNewValue ) const;
 
-    explicit WrappedSymbolTypeProperty( ::boost::shared_ptr< Chart2ModelContact > spChart2ModelContact );//if !spChart2ModelContact.get() this property does belong to a single series and not to the whole diagram
+    virtual Any getPropertyValue( const Reference< beans::XPropertySet >& xInnerPropertySet ) const
+                            throw ( beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException);
+    virtual beans::PropertyState getPropertyState( const Reference< beans::XPropertyState >& xInnerPropertyState ) const
+                        throw (beans::UnknownPropertyException, uno::RuntimeException);
+
+    explicit WrappedSymbolTypeProperty( ::boost::shared_ptr< Chart2ModelContact > spChart2ModelContact, bool bIsDiagramProperty );//if !bIsDiagramProperty this property does belong to a single series and not to the whole diagram
     virtual ~WrappedSymbolTypeProperty();
+
+private:
+    ::boost::shared_ptr< Chart2ModelContact >   m_spChart2ModelContactForUseForSingleSeriesOrPoint;
 };
 
 class WrappedSymbolBitmapURLProperty : public WrappedSeriesOrDiagramProperty< OUString >
@@ -126,6 +139,8 @@ class WrappedSymbolSizeProperty : public WrappedSeriesOrDiagramProperty< awt::Si
 public:
     virtual awt::Size getValueFromSeries( const Reference< beans::XPropertySet >& xSeriesPropertySet ) const;
     virtual void setValueToSeries( const Reference< beans::XPropertySet >& xSeriesPropertySet, awt::Size aNewSize ) const;
+    virtual beans::PropertyState getPropertyState( const Reference< beans::XPropertyState >& xInnerPropertyState ) const
+                        throw (beans::UnknownPropertyException, uno::RuntimeException);
 
     explicit WrappedSymbolSizeProperty( ::boost::shared_ptr< Chart2ModelContact > spChart2ModelContact );//if !spChart2ModelContact.get() this property does belong to a single series and not to the whole diagram
     virtual ~WrappedSymbolSizeProperty();
@@ -136,6 +151,8 @@ class WrappedSymbolAndLinesProperty : public WrappedSeriesOrDiagramProperty< sal
 public:
     virtual sal_Bool getValueFromSeries( const Reference< beans::XPropertySet >& xSeriesPropertySet ) const;
     virtual void setValueToSeries( const Reference< beans::XPropertySet >& xSeriesPropertySet, sal_Bool bDrawLines ) const;
+    virtual beans::PropertyState getPropertyState( const Reference< beans::XPropertyState >& xInnerPropertyState ) const
+                        throw (beans::UnknownPropertyException, uno::RuntimeException);
 
     explicit WrappedSymbolAndLinesProperty( ::boost::shared_ptr< Chart2ModelContact > spChart2ModelContact );//if !spChart2ModelContact.get() this property does belong to a single series and not to the whole diagram
     virtual ~WrappedSymbolAndLinesProperty();
@@ -198,11 +215,14 @@ void lcl_setSymbolTypeToSymbol( sal_Int32 nSymbolType, chart2::Symbol& rSymbol )
 }
 
 void lcl_addWrappedProperties( std::vector< WrappedProperty* >& rList
-                                    , ::boost::shared_ptr< Chart2ModelContact > spChart2ModelContact )
+                                    , ::boost::shared_ptr< Chart2ModelContact > spChart2ModelContact
+                                    , bool bDiagramProperty )
 {
-    //if !spChart2ModelContact.get() is then the created properties do belong to a single series or single datapoint
+    //if !bDiagramProperty then the created properties do belong to a single series or single datapoint
     //otherwise they do belong to the whole diagram
-    rList.push_back( new WrappedSymbolTypeProperty( spChart2ModelContact ) );
+    rList.push_back( new WrappedSymbolTypeProperty( spChart2ModelContact, bDiagramProperty ) );
+    if(!bDiagramProperty)
+        spChart2ModelContact.reset();
     rList.push_back( new WrappedSymbolBitmapURLProperty( spChart2ModelContact ) );
     rList.push_back( new WrappedSymbolSizeProperty( spChart2ModelContact ) );
     rList.push_back( new WrappedSymbolAndLinesProperty( spChart2ModelContact ) );
@@ -249,9 +269,10 @@ void WrappedSymbolProperties::addProperties( ::std::vector< Property > & rOutPro
 //-----------------------------------------------------------------------------
 
 //static
-void WrappedSymbolProperties::addWrappedPropertiesForSeries( std::vector< WrappedProperty* >& rList )
+void WrappedSymbolProperties::addWrappedPropertiesForSeries( std::vector< WrappedProperty* >& rList
+                                    , ::boost::shared_ptr< Chart2ModelContact > spChart2ModelContact )
 {
-    lcl_addWrappedProperties( rList, ::boost::shared_ptr< Chart2ModelContact >() );
+    lcl_addWrappedProperties( rList, spChart2ModelContact, false );
 }
 
 //-----------------------------------------------------------------------------
@@ -261,16 +282,18 @@ void WrappedSymbolProperties::addWrappedPropertiesForSeries( std::vector< Wrappe
 void WrappedSymbolProperties::addWrappedPropertiesForDiagram( std::vector< WrappedProperty* >& rList
                                     , ::boost::shared_ptr< Chart2ModelContact > spChart2ModelContact )
 {
-    lcl_addWrappedProperties( rList, spChart2ModelContact );
+    lcl_addWrappedProperties( rList, spChart2ModelContact, true );
 }
 
 //-----------------------------------------------------------------------------
 //-----------------------------------------------------------------------------
 //-----------------------------------------------------------------------------
 
-WrappedSymbolTypeProperty::WrappedSymbolTypeProperty( ::boost::shared_ptr< Chart2ModelContact > spChart2ModelContact )
+WrappedSymbolTypeProperty::WrappedSymbolTypeProperty( ::boost::shared_ptr< Chart2ModelContact > spChart2ModelContact, bool bIsDiagramProperty )
         : WrappedSeriesOrDiagramProperty< sal_Int32 >( C2U("SymbolType")
-            , uno::makeAny( ::com::sun::star::chart::ChartSymbolType::AUTO ), spChart2ModelContact )
+            , uno::makeAny( ::com::sun::star::chart::ChartSymbolType::NONE )
+            , bIsDiagramProperty ? spChart2ModelContact : ::boost::shared_ptr< Chart2ModelContact >() )
+        , m_spChart2ModelContactForUseForSingleSeriesOrPoint(spChart2ModelContact)
 {
 }
 WrappedSymbolTypeProperty::~WrappedSymbolTypeProperty()
@@ -297,6 +320,59 @@ void WrappedSymbolTypeProperty::setValueToSeries( const Reference< beans::XPrope
 
     lcl_setSymbolTypeToSymbol( nSymbolType, aSymbol );
     xSeriesPropertySet->setPropertyValue( C2U("Symbol"), uno::makeAny( aSymbol ) );
+}
+
+Any WrappedSymbolTypeProperty::getPropertyValue( const Reference< beans::XPropertySet >& xInnerPropertySet ) const
+                            throw ( beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException)
+{
+    //the old chart (< OOo 2.3) needs symbol-type="automatic" at the plot-area if any of the series should be able to have symbols
+    if( m_spChart2ModelContact.get() )//indicator for diagram properties
+    {
+        bool bHasAmbiguousValue = false;
+        sal_Int32 aValue = 0;
+        if( detectInnerValue( aValue, bHasAmbiguousValue ) )
+        {
+            if(bHasAmbiguousValue)
+            {
+                m_aOuterValue = uno::makeAny( ::com::sun::star::chart::ChartSymbolType::AUTO );
+            }
+            else
+            {
+                if( ::com::sun::star::chart::ChartSymbolType::NONE == aValue )
+                    m_aOuterValue = uno::makeAny( ::com::sun::star::chart::ChartSymbolType::NONE );
+                else
+                    m_aOuterValue = uno::makeAny( ::com::sun::star::chart::ChartSymbolType::AUTO );
+            }
+        }
+        return m_aOuterValue;
+    }
+    else
+    {
+        ::com::sun::star::uno::Any aRet( m_aDefaultValue );
+        aRet <<= getValueFromSeries( xInnerPropertySet );
+        return aRet;
+    }
+}
+
+beans::PropertyState WrappedSymbolTypeProperty::getPropertyState( const Reference< beans::XPropertyState >& xInnerPropertyState ) const
+                        throw (beans::UnknownPropertyException, uno::RuntimeException)
+{
+    //the special situation for this property here is that the diagram default can be
+    //different from the normal default and different from all sinlges series values
+    //so we need to return PropertyState_DIRECT_VALUE for more cases
+
+    if( !m_spChart2ModelContact.get() )//single series or point
+    {
+        if( m_spChart2ModelContactForUseForSingleSeriesOrPoint.get() )
+        {
+            Reference< chart2::XDiagram > xDiagram( m_spChart2ModelContactForUseForSingleSeriesOrPoint->getChart2Diagram() );
+            Reference< chart2::XDataSeries > xSeries( xInnerPropertyState, uno::UNO_QUERY );
+            Reference< chart2::XChartType > xChartType( DiagramHelper::getChartTypeOfSeries( xDiagram, xSeries ) );
+            if( ChartTypeHelper::isSupportingSymbolProperties( xChartType, 2 ) )
+                return beans::PropertyState_DIRECT_VALUE;
+        }
+    }
+    return WrappedProperty::getPropertyState( xInnerPropertyState );
 }
 
 //-----------------------------------------------------------------------------
@@ -376,9 +452,69 @@ void WrappedSymbolBitmapURLProperty::setValueToSeries(
 //-----------------------------------------------------------------------------
 //-----------------------------------------------------------------------------
 
+namespace
+{
+
+void lcl_correctSymbolSizeForBitmaps( chart2::Symbol& rSymbol )
+{
+    if( rSymbol.Style != chart2::SymbolStyle_GRAPHIC )
+        return;
+    if( rSymbol.Size.Width != -1 )
+        return;
+    if( rSymbol.Size.Height != -1 )
+        return;
+
+    //find a good automatic size
+    try
+    {
+        const awt::Size aDefaultSize(250,250);
+        awt::Size aSize = aDefaultSize;
+        uno::Reference< beans::XPropertySet > xProp( rSymbol.Graphic, uno::UNO_QUERY );
+        if( xProp.is() )
+        {
+            bool bFoundSize = false;
+            try
+            {
+                if( (xProp->getPropertyValue( C2U( "Size100thMM" ) ) >>= aSize) )
+                {
+                    if( aSize.Width == 0 && aSize.Height == 0 )
+                        aSize = aDefaultSize;
+                    else
+                        bFoundSize = true;
+                }
+            }
+            catch( uno::Exception& e )
+            {
+                ASSERT_EXCEPTION( e );
+            }
+
+            if(!bFoundSize)
+            {
+                awt::Size aAWTPixelSize(10,10);
+                if(  (xProp->getPropertyValue( C2U( "SizePixel" ) ) >>= aAWTPixelSize) )
+                {
+                    Size aPixelSize(aAWTPixelSize.Width,aAWTPixelSize.Height);
+                    Size aNewSize = ( OutputDevice::LogicToLogic( aPixelSize, MAP_PIXEL, MAP_100TH_MM ));
+                    aSize = awt::Size( aNewSize.Width(), aNewSize.Height() );
+
+                    if( aSize.Width == 0 && aSize.Height == 0 )
+                        aSize = aDefaultSize;
+                }
+            }
+        }
+        rSymbol.Size = aSize;
+    }
+    catch( uno::Exception& e )
+    {
+        ASSERT_EXCEPTION( e );
+    }
+}
+
+}//end anonymous namespace
+
 WrappedSymbolSizeProperty::WrappedSymbolSizeProperty( ::boost::shared_ptr< Chart2ModelContact > spChart2ModelContact )
         : WrappedSeriesOrDiagramProperty< awt::Size >( C2U("SymbolSize")
-            , uno::makeAny( awt::Size() ), spChart2ModelContact )
+            , uno::makeAny( awt::Size(250,250) ), spChart2ModelContact )
 {
 }
 
@@ -407,9 +543,35 @@ void WrappedSymbolSizeProperty::setValueToSeries(
     if( xSeriesPropertySet->getPropertyValue(C2U("Symbol")) >>= aSymbol )
     {
         aSymbol.Size = aNewSize;
+        lcl_correctSymbolSizeForBitmaps(aSymbol);
         xSeriesPropertySet->setPropertyValue( C2U("Symbol"), uno::makeAny( aSymbol ) );
     }
 }
+
+beans::PropertyState WrappedSymbolSizeProperty::getPropertyState( const Reference< beans::XPropertyState >& xInnerPropertyState ) const
+                        throw (beans::UnknownPropertyException, uno::RuntimeException)
+{
+    //only export symbol size if necessary
+    if( m_spChart2ModelContact.get() )
+        return beans::PropertyState_DEFAULT_VALUE;
+
+    try
+    {
+        chart2::Symbol aSymbol;
+        Reference< beans::XPropertySet > xSeriesPropertySet( xInnerPropertyState, uno::UNO_QUERY );
+        if( xSeriesPropertySet.is() && ( xSeriesPropertySet->getPropertyValue(C2U("Symbol")) >>= aSymbol ))
+        {
+            if(  chart2::SymbolStyle_NONE != aSymbol.Style )
+                return beans::PropertyState_DIRECT_VALUE;
+        }
+    }
+    catch( const uno::Exception & ex )
+    {
+        ASSERT_EXCEPTION( ex );
+    }
+    return beans::PropertyState_DEFAULT_VALUE;
+}
+
 //-----------------------------------------------------------------------------
 //-----------------------------------------------------------------------------
 //-----------------------------------------------------------------------------
@@ -424,16 +586,10 @@ WrappedSymbolAndLinesProperty::~WrappedSymbolAndLinesProperty()
 {
 }
 
-sal_Bool WrappedSymbolAndLinesProperty::getValueFromSeries( const Reference< beans::XPropertySet >& xSeriesPropertySet ) const
+sal_Bool WrappedSymbolAndLinesProperty::getValueFromSeries( const Reference< beans::XPropertySet >& /*xSeriesPropertySet*/ ) const
 {
-    sal_Bool bDrawLines = false;
-    m_aDefaultValue >>= bDrawLines;
-
-    drawing::LineStyle eLineStyle( drawing::LineStyle_NONE );
-    if( xSeriesPropertySet.is() && ( xSeriesPropertySet->getPropertyValue(C2U("LineStyle")) >>= eLineStyle ))
-        bDrawLines = ( eLineStyle != drawing::LineStyle_NONE );
-
-    return bDrawLines;
+    //do not export this property anymore, instead use a linestyle none for no lines
+    return sal_True;
 }
 
 void WrappedSymbolAndLinesProperty::setValueToSeries(
@@ -446,6 +602,14 @@ void WrappedSymbolAndLinesProperty::setValueToSeries(
     drawing::LineStyle eLineStyle( bDrawLines ? drawing::LineStyle_SOLID : drawing::LineStyle_NONE  );
     xSeriesPropertySet->setPropertyValue( C2U("LineStyle"), uno::makeAny( eLineStyle ) );
 }
+
+beans::PropertyState WrappedSymbolAndLinesProperty::getPropertyState( const Reference< beans::XPropertyState >& /*xInnerPropertyState*/ ) const
+                        throw (beans::UnknownPropertyException, uno::RuntimeException)
+{
+    //do not export this property anymore, instead use a linestyle none for no lines
+    return beans::PropertyState_DEFAULT_VALUE;
+}
+
 //-----------------------------------------------------------------------------
 //-----------------------------------------------------------------------------
 //-----------------------------------------------------------------------------
