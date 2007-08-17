@@ -4,9 +4,9 @@
  *
  *  $RCSfile: SchXMLTools.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: hr $ $Date: 2007-06-27 14:50:40 $
+ *  last change: $Author: ihi $ $Date: 2007-08-17 12:06:19 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -55,6 +55,9 @@ namespace com { namespace sun { namespace star {
     }
 }}}
 
+class XMLPropStyleContext;
+class SvXMLStylesContext;
+
 namespace SchXMLTools
 {
     enum SchXMLChartTypeEnum
@@ -93,6 +96,7 @@ namespace SchXMLTools
         sal_Int32 nDimensionIndex,
         tSchXMLLSequencesPerIndex * pLSequencesPerIndex = 0 );
 
+    ::com::sun::star::uno::Any getPropertyFromContext( const ::rtl::OUString& rPropertyName, const XMLPropStyleContext * pPropStyleContext, const SvXMLStylesContext* pStylesCtxt );
 }
 
 #endif  // SCH_XML_TOOLS_HXX_
