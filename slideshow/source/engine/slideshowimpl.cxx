@@ -4,9 +4,9 @@
  *
  *  $RCSfile: slideshowimpl.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: vg $ $Date: 2007-07-20 06:25:05 $
+ *  last change: $Author: ihi $ $Date: 2007-08-17 12:43:00 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -88,7 +88,6 @@
 #include "interruptabledelayevent.hxx"
 #include "slide.hxx"
 #include "shapemaps.hxx"
-#include "slideview.hxx"
 #include "slideview.hxx"
 #include "tools.hxx"
 #include "unoview.hxx"
