@@ -4,9 +4,9 @@
  *
  *  $RCSfile: SchXMLSeries2Context.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: hr $ $Date: 2007-06-27 14:49:26 $
+ *  last change: $Author: ihi $ $Date: 2007-08-17 12:05:37 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -40,6 +40,7 @@
 #include "SchXMLPlotAreaContext.hxx"
 #include "SchXMLSeriesHelper.hxx"
 #include "SchXMLTools.hxx"
+#include "PropertyMap.hxx"
 
 #ifndef _COM_SUN_STAR_CHART2_XCHARTDOCUMENT_HPP_
 #include <com/sun/star/chart2/XChartDocument.hpp>
@@ -60,11 +61,23 @@
 #ifndef _COM_SUN_STAR_CHART_CHARTAXISASSIGN_HPP_
 #include <com/sun/star/chart/ChartAxisAssign.hpp>
 #endif
+#ifndef _COM_SUN_STAR_CHART_CHARTSYMBOLTYPE_HPP_
+#include <com/sun/star/chart/ChartSymbolType.hpp>
+#endif
 #ifndef _COM_SUN_STAR_CONTAINER_XCHILD_HPP_
 #include <com/sun/star/container/XChild.hpp>
 #endif
+#ifndef _COM_SUN_STAR_CHART_CHARTLEGENDPOSITION_HPP_
+#include <com/sun/star/chart/ChartLegendPosition.hpp>
+#endif
 #ifndef _COM_SUN_STAR_DRAWING_LINESTYLE_HPP_
 #include <com/sun/star/drawing/LineStyle.hpp>
+#endif
+#ifndef _COM_SUN_STAR_EMBED_ASPECTS_HPP_
+#include <com/sun/star/embed/Aspects.hpp>
+#endif
+#ifndef _COM_SUN_STAR_EMBED_XVISUALOBJECT_HPP_
+#include <com/sun/star/embed/XVisualObject.hpp>
 #endif
 #ifndef _COM_SUN_STAR_UNO_XCOMPONENTCONTEXT_HPP_
 #include <com/sun/star/uno/XComponentContext.hpp>
@@ -94,6 +107,9 @@
 // header for class XMLPropStyleContext
 #ifndef _XMLOFF_PRSTYLEI_HXX_
 #include <xmloff/prstylei.hxx>
+#endif
+#ifndef _XMLOFF_PROPERTYSETMAPPER_HXX
+#include <xmloff/xmlprmap.hxx>
 #endif
 
 #include <typeinfo>
@@ -172,6 +188,73 @@ void SchXMLDomain2Context::StartElement( const uno::Reference< xml::sax::XAttrib
     }
 }
 
+void lcl_setAutomaticSymbolSize( const uno::Reference< beans::XPropertySet >& xSeriesOrPointProp, const SvXMLImport& rImport )
+{
+    awt::Size aSymbolSize(140,140);//old default for standard sized charts 7cm height
+
+    double fScale = 1;
+    uno::Reference< chart::XChartDocument > xChartDoc( rImport.GetModel(), uno::UNO_QUERY );
+    if( xChartDoc.is() )
+    {
+        uno::Reference< beans::XPropertySet > xLegendProp( xChartDoc->getLegend(), uno::UNO_QUERY );
+        chart::ChartLegendPosition aLegendPosition = chart::ChartLegendPosition_NONE;
+        if( xLegendProp.is() && (xLegendProp->getPropertyValue( OUString( RTL_CONSTASCII_USTRINGPARAM( "Alignment" ))) >>= aLegendPosition)
+            && chart::ChartLegendPosition_NONE != aLegendPosition )
+        {
+
+            double fFontHeight = 6.0;
+            if( xLegendProp->getPropertyValue( OUString( RTL_CONSTASCII_USTRINGPARAM( "CharHeight" ))) >>= fFontHeight )
+                fScale = 0.75*fFontHeight/6.0;
+        }
+        else
+        {
+            uno::Reference< embed::XVisualObject > xVisualObject( rImport.GetModel(), uno::UNO_QUERY );
+            if( xVisualObject.is() )
+            {
+                awt::Size aPageSize( xVisualObject->getVisualAreaSize( embed::Aspects::MSOLE_CONTENT ) );
+                fScale = aPageSize.Height/7000.0;
+            }
+        }
+        if( fScale>0 )
+        {
+            aSymbolSize.Height = static_cast<sal_Int32>( fScale * aSymbolSize.Height );
+            aSymbolSize.Width = aSymbolSize.Height;
+        }
+    }
+    xSeriesOrPointProp->setPropertyValue(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("SymbolSize")),uno::makeAny( aSymbolSize ));
+}
+
+void lcl_setSymbolSizeIfNeeded( const uno::Reference< beans::XPropertySet >& xSeriesOrPointProp, const SvXMLImport& rImport )
+{
+    if( !xSeriesOrPointProp.is() )
+        return;
+
+    sal_Int32 nSymbolType = chart::ChartSymbolType::NONE;
+    if( xSeriesOrPointProp.is() && ( xSeriesOrPointProp->getPropertyValue(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("SymbolType"))) >>= nSymbolType) )
+    {
+        if(chart::ChartSymbolType::NONE!=nSymbolType)
+        {
+            if( chart::ChartSymbolType::BITMAPURL==nSymbolType )
+            {
+                //set special size for graphics to indicate to use the bitmap size itself
+                xSeriesOrPointProp->setPropertyValue(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("SymbolSize")),uno::makeAny( awt::Size(-1,-1) ));
+            }
+            else
+            {
+                lcl_setAutomaticSymbolSize( xSeriesOrPointProp, rImport );
+            }
+        }
+    }
+}
+
+void lcl_resetSymbolSizeForPointsIfNecessary( const uno::Reference< beans::XPropertySet >& xPointProp, const SvXMLImport& rImport
+    , const XMLPropStyleContext * pPropStyleContext, const SvXMLStylesContext* pStylesCtxt )
+{
+    uno::Any aASymbolSize( SchXMLTools::getPropertyFromContext( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("SymbolSize")), pPropStyleContext, pStylesCtxt ) );
+    if( !aASymbolSize.hasValue() )
+        lcl_setSymbolSizeIfNeeded( xPointProp, rImport );
+}
+
 } // anonymous namespace
 
 // ================================================================================
@@ -213,7 +296,8 @@ SchXMLSeries2Context::SchXMLSeries2Context(
         m_bHasDomainContext(false),
         mrLSequencesPerIndex( rLSequencesPerIndex ),
         mrCurrentDataIndex( rCurrentDataIndex ),
-        mrGlobalChartTypeUsedBySeries( rGlobalChartTypeUsedBySeries )
+        mrGlobalChartTypeUsedBySeries( rGlobalChartTypeUsedBySeries ),
+        mbSymbolSizeIsMissingInFile(false)
 {
     if( 0 == aGlobalChartTypeName.reverseCompareToAsciiL( RTL_CONSTASCII_STRINGPARAM( "com.sun.star.chart2.DonutChartType" ) ) )
     {
@@ -429,6 +513,30 @@ void SchXMLSeries2Context::StartElement( const uno::Reference< xml::sax::XAttrib
                         ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( ", Message: " )) +
                         ex.Message, RTL_TEXTENCODING_ASCII_US ).getStr());
     }
+
+    //init mbSymbolSizeIsMissingInFile:
+    try
+    {
+        if( msAutoStyleName.getLength() )
+        {
+            const SvXMLStylesContext* pStylesCtxt = mrImportHelper.GetAutoStylesContext();
+            if( pStylesCtxt )
+            {
+                const SvXMLStyleContext* pStyle = pStylesCtxt->FindStyleChildContext(
+                    mrImportHelper.GetChartFamilyID(), msAutoStyleName );
+
+                const XMLPropStyleContext* pPropStyleContext = dynamic_cast< const XMLPropStyleContext * >( pStyle );
+
+                uno::Any aASymbolSize( SchXMLTools::getPropertyFromContext( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("SymbolSize"))
+                    , pPropStyleContext, pStylesCtxt ) );
+                mbSymbolSizeIsMissingInFile = !aASymbolSize.hasValue();
+            }
+        }
+    }
+    catch( uno::Exception & ex )
+    {
+        (void)ex; // avoid warning for pro build
+    }
 }
 
 void SchXMLSeries2Context::EndElement()
@@ -492,6 +600,7 @@ void SchXMLSeries2Context::EndElement()
                 m_xSeries,
                 -1, 1,
                 msAutoStyleName, mnAttachedAxis );
+            aStyle.mbSymbolSizeForSeriesIsMissingInFile=mbSymbolSizeIsMissingInFile;
             mrStyleList.push_back( aStyle );
         }
     }
@@ -626,7 +735,7 @@ SvXMLImportContext* SchXMLSeries2Context::CreateChildContext(
 
         case XML_TOK_SERIES_DATA_POINT:
             pContext = new SchXMLDataPointContext( mrImportHelper, GetImport(), rLocalName,
-                                                   mrStyleList, m_xSeries, mnDataPointIndex );
+                                                   mrStyleList, m_xSeries, mnDataPointIndex, mbSymbolSizeIsMissingInFile );
             break;
 
         default:
@@ -720,6 +829,7 @@ void SchXMLSeries2Context::setStylesToSeries( SeriesDefaultsAndStyles& rSeriesDe
         , const SvXMLStyleContext*& rpStyle
         , ::rtl::OUString& rCurrStyleName
         , SchXMLImportHelper& rImportHelper
+        , const SvXMLImport& rImport
         , bool bIsStockChart )
 {
     ::std::list< DataRowPointStyle >::iterator iStyle;
@@ -767,7 +877,11 @@ void SchXMLSeries2Context::setStylesToSeries( SeriesDefaultsAndStyles& rSeriesDe
                                 bIsMinMaxSeries = true;
                         }
                         if( !bIsMinMaxSeries )
+                        {
                             pPropStyleContext->FillPropertySet( xSeriesProp );
+                            if( iStyle->mbSymbolSizeForSeriesIsMissingInFile )
+                                lcl_setSymbolSizeIfNeeded( xSeriesProp, rImport );
+                        }
                     }
                 }
             }
@@ -861,7 +975,8 @@ void SchXMLSeries2Context::setStylesToDataPoints( SeriesDefaultsAndStyles& rSeri
         , const SvXMLStyleContext*& rpStyle
         , ::rtl::OUString& rCurrStyleName
         , SchXMLImportHelper& rImportHelper
-        , bool bIsStockChart, bool bIsDonutChart )
+        , const SvXMLImport& rImport
+        , bool bIsStockChart, bool bIsDonutChart, bool bSwitchOffLinesForScatter )
 {
     ::std::list< DataRowPointStyle >::iterator iStyle;
     for( iStyle = rSeriesDefaultsAndStyles.maSeriesStyleList.begin(); iStyle != rSeriesDefaultsAndStyles.maSeriesStyleList.end(); iStyle++ )
@@ -914,6 +1029,17 @@ void SchXMLSeries2Context::setStylesToDataPoints( SeriesDefaultsAndStyles& rSeri
                         pPropStyleContext->FillPropertySet( xPointProp );
                 }
 
+                try
+                {
+                    //need to set this explicitely here for old files as the new api does not support this property fully anymore
+                    if( bSwitchOffLinesForScatter )
+                        xPointProp->setPropertyValue(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Lines")),uno::makeAny(sal_False));
+                }
+                catch( uno::Exception & rEx )
+                {
+                    (void)rEx; // avoid warning for pro build
+                }
+
                 if( !rCurrStyleName.equals( iStyle->msStyleName ) )
                 {
                     rCurrStyleName = iStyle->msStyleName;
@@ -926,7 +1052,11 @@ void SchXMLSeries2Context::setStylesToDataPoints( SeriesDefaultsAndStyles& rSeri
                     const_cast< XMLPropStyleContext * >(
                         dynamic_cast< const XMLPropStyleContext * >( rpStyle ));
                 if( pPropStyleContext )
+                {
                     pPropStyleContext->FillPropertySet( xPointProp );
+                    if( iStyle->mbSymbolSizeForSeriesIsMissingInFile )
+                        lcl_resetSymbolSizeForPointsIfNecessary( xPointProp, rImport, pPropStyleContext, pStylesCtxt );
+                }
             }
             catch( uno::Exception & rEx )
             {
@@ -955,7 +1085,7 @@ void SchXMLSeries2Context::switchSeriesLinesOff( ::std::list< DataRowPointStyle 
             if( !xSeries.is() )
                 continue;
 
-            xSeries->setPropertyValue(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("LineStyle")), uno::makeAny(drawing::LineStyle_NONE));
+            xSeries->setPropertyValue(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Lines")),uno::makeAny(sal_False));
         }
         catch( uno::Exception &  )
         {
