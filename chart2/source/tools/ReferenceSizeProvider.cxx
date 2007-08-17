@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ReferenceSizeProvider.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: vg $ $Date: 2007-05-22 19:03:41 $
+ *  last change: $Author: ihi $ $Date: 2007-08-17 12:15:39 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -91,7 +91,7 @@ void ReferenceSizeProvider::impl_setValuesAtTitled(
 {
     if( xTitled.is())
     {
-        Reference< XTitle > xTitle( xTitled->getTitle());
+        Reference< XTitle > xTitle( xTitled->getTitleObject());
         if( xTitle.is())
             setValuesAtTitle( xTitle );
     }
@@ -257,7 +257,7 @@ void ReferenceSizeProvider::impl_getAutoResizeFromTitled(
 {
     if( xTitled.is())
     {
-        Reference< XTitle > xTitle( xTitled->getTitle());
+        Reference< XTitle > xTitle( xTitled->getTitleObject());
         if( xTitle.is())
             getAutoResizeFromTitle( xTitle, rInOutState );
     }
