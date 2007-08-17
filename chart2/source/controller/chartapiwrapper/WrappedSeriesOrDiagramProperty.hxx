@@ -4,9 +4,9 @@
  *
  *  $RCSfile: WrappedSeriesOrDiagramProperty.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: hr $ $Date: 2007-08-03 12:33:14 $
+ *  last change: $Author: ihi $ $Date: 2007-08-17 12:12:42 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -120,7 +120,7 @@ public:
             }
         }
     }
-    void setPropertyValue( const ::com::sun::star::uno::Any& rOuterValue, const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& xInnerPropertySet ) const
+    virtual void setPropertyValue( const ::com::sun::star::uno::Any& rOuterValue, const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& xInnerPropertySet ) const
                     throw (::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::beans::PropertyVetoException, ::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException)
     {
         PROPERTYTYPE aNewValue = PROPERTYTYPE();
@@ -145,7 +145,7 @@ public:
         }
     }
 
-    ::com::sun::star::uno::Any getPropertyValue( const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& xInnerPropertySet ) const
+    virtual ::com::sun::star::uno::Any getPropertyValue( const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& xInnerPropertySet ) const
                             throw (::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException)
     {
         if( m_spChart2ModelContact.get() )
@@ -154,7 +154,10 @@ public:
             PROPERTYTYPE aValue;
             if( detectInnerValue( aValue, bHasAmbiguousValue ) )
             {
-                m_aOuterValue <<= aValue;
+                if(bHasAmbiguousValue)
+                    m_aOuterValue <<= m_aDefaultValue;
+                else
+                    m_aOuterValue <<= aValue;
             }
             return m_aOuterValue;
         }
@@ -166,7 +169,7 @@ public:
         }
     }
 
-    ::com::sun::star::uno::Any getPropertyDefault( const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertyState >& /* xInnerPropertyState */ ) const
+    virtual ::com::sun::star::uno::Any getPropertyDefault( const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertyState >& /* xInnerPropertyState */ ) const
                             throw (::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException)
     {
         return m_aDefaultValue;
