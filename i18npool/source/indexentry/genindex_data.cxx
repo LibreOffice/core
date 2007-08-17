@@ -4,9 +4,9 @@
  *
  *  $RCSfile: genindex_data.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2007-07-26 09:09:26 $
+ *  last change: $Author: ihi $ $Date: 2007-08-17 14:59:12 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -85,7 +85,8 @@ SAL_IMPLEMENT_MAIN_WITH_ARGS(argc, argv)
             continue; // skip empty line.
 
         sal_Int32 nPos=0;
-        sal_uInt32 nChar = Ostr.iterateCodePoints(&nPos, 2);
+        Ostr.iterateCodePoints(&nPos, 2);
+        sal_uInt32 nChar = Ostr.iterateCodePoints(&nPos, 0);
         if (nChar > MAX_ADDRESS) {
             printf("Code point 0x%lx exceeds MAX_ADDRESS 0x%x, Please increase MAX_ADDRESS", nChar, MAX_ADDRESS);
             exit(1);
