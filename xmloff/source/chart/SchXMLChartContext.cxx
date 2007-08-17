@@ -4,9 +4,9 @@
  *
  *  $RCSfile: SchXMLChartContext.cxx,v $
  *
- *  $Revision: 1.37 $
+ *  $Revision: 1.38 $
  *
- *  last change: $Author: hr $ $Date: 2007-06-27 14:47:19 $
+ *  last change: $Author: ihi $ $Date: 2007-08-17 12:04:55 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -912,6 +912,19 @@ void SchXMLChartContext::EndElement()
         SchXMLSeries2Context::initSeriesPropertySets( maSeriesDefaultsAndStyles, uno::Reference< frame::XModel >(xDoc, uno::UNO_QUERY ) );
 
         //set defaults from diagram to the new series:
+        //check whether we need to remove lines from symbol only charts
+        bool bSwitchOffLinesForScatter = false;
+        {
+            bool bLinesOn = true;
+            if( (maSeriesDefaultsAndStyles.maLinesOnProperty >>= bLinesOn) && !bLinesOn )
+            {
+                if( 0 == maChartTypeServiceName.reverseCompareToAsciiL( RTL_CONSTASCII_STRINGPARAM( "com.sun.star.chart2.ScatterChartType" ) ) )
+                {
+                    bSwitchOffLinesForScatter = true;
+                    SchXMLSeries2Context::switchSeriesLinesOff( maSeriesDefaultsAndStyles.maSeriesStyleList );
+                }
+            }
+        }
         SchXMLSeries2Context::setDefaultsToSeries( maSeriesDefaultsAndStyles );
 
         // set autostyles for series and data points
@@ -926,7 +939,7 @@ void SchXMLChartContext::EndElement()
             if( !bSpecialHandlingForDonutChart )
             {
                 SchXMLSeries2Context::setStylesToSeries( maSeriesDefaultsAndStyles
-                            , pStylesCtxt, pStyle, sCurrStyleName, mrImportHelper, mbIsStockChart );
+                            , pStylesCtxt, pStyle, sCurrStyleName, mrImportHelper, GetImport(), mbIsStockChart );
                 // ... then set attributes for statistics (after their existence was set in the series)
                 SchXMLSeries2Context::setStylesToStatisticsObjects( maSeriesDefaultsAndStyles
                             , pStylesCtxt, pStyle, sCurrStyleName );
@@ -934,17 +947,7 @@ void SchXMLChartContext::EndElement()
 
             // ... then iterate over data-point attributes, so the latter are not overwritten
             SchXMLSeries2Context::setStylesToDataPoints( maSeriesDefaultsAndStyles
-                            , pStylesCtxt, pStyle, sCurrStyleName, mrImportHelper, mbIsStockChart, bSpecialHandlingForDonutChart );
-
-            //check whether we need to remove lines from symbol only charts
-            bool bLinesOn = true;
-            if( (maSeriesDefaultsAndStyles.maLinesOnProperty >>= bLinesOn) && !bLinesOn )
-            {
-                if( 0 == maChartTypeServiceName.reverseCompareToAsciiL( RTL_CONSTASCII_STRINGPARAM( "com.sun.star.chart2.ScatterChartType" ) ) )
-                {
-                    SchXMLSeries2Context::switchSeriesLinesOff( maSeriesDefaultsAndStyles.maSeriesStyleList );
-                }
-            }
+                            , pStylesCtxt, pStyle, sCurrStyleName, mrImportHelper, GetImport(), mbIsStockChart, bSpecialHandlingForDonutChart, bSwitchOffLinesForScatter );
         }
     }
 
@@ -1138,7 +1141,7 @@ void SchXMLChartContext::InitChart(
         xNewDoc->setFirstDiagram( 0 );
         uno::Reference< chart2::XTitled > xTitled( xNewDoc, uno::UNO_QUERY );
         if( xTitled.is())
-            xTitled->setTitle( 0 );
+            xTitled->setTitleObject( 0 );
     }
 
     //  Set the size of the draw page.
