@@ -4,9 +4,9 @@
  *
  *  $RCSfile: cclass_unicode.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: rt $ $Date: 2007-07-26 09:09:03 $
+ *  last change: $Author: ihi $ $Date: 2007-08-17 14:59:00 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -149,7 +149,9 @@ sal_Int32 SAL_CALL
 cclass_Unicode::getCharType( const OUString& Text, sal_Int32* nPos, sal_Int32 increment) {
     using namespace ::com::sun::star::i18n::KCharacterType;
 
-    switch ( u_charType( Text.iterateCodePoints(nPos, increment) ) ) {
+    sal_uInt32 ch = Text.iterateCodePoints(nPos, increment);
+    if (increment > 0) ch = Text.iterateCodePoints(nPos, 0);
+    switch ( u_charType(ch) ) {
     // Upper
     case U_UPPERCASE_LETTER :
         return UPPER|LETTER|PRINTABLE|BASE_FORM;
