@@ -4,9 +4,9 @@
  *
  *  $RCSfile: SlsScrollBarManager.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: kz $ $Date: 2006-12-12 18:28:03 $
+ *  last change: $Author: ihi $ $Date: 2007-08-17 14:26:47 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -91,16 +91,21 @@ ScrollBarManager::ScrollBarManager (
 
 ScrollBarManager::~ScrollBarManager (void)
 {
-    if (mpVerticalScrollBar != NULL)
-        mpVerticalScrollBar->SetScrollHdl (Link());
-    if (mpHorizontalScrollBar != NULL)
-        mpHorizontalScrollBar->SetScrollHdl (Link());
+    Disconnect();
 }
 
 
 
 
 void ScrollBarManager::LateInitialization (void)
+{
+    Connect();
+}
+
+
+
+
+void ScrollBarManager::Connect (void)
 {
     if (mpVerticalScrollBar != NULL)
         mpVerticalScrollBar->SetScrollHdl (
@@ -114,6 +119,17 @@ void ScrollBarManager::LateInitialization (void)
                 this,
                 ScrollBarManager,
                 HorizontalScrollBarHandler));
+}
+
+
+
+
+void ScrollBarManager::Disconnect (void)
+{
+    if (mpVerticalScrollBar != NULL)
+        mpVerticalScrollBar->SetScrollHdl (Link());
+    if (mpHorizontalScrollBar != NULL)
+        mpHorizontalScrollBar->SetScrollHdl (Link());
 }
 
 
