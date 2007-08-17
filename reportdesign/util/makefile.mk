@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.3 $
+#   $Revision: 1.4 $
 #
-#   last change: $Author: hr $ $Date: 2007-08-02 14:42:41 $
+#   last change: $Author: ihi $ $Date: 2007-08-17 11:27:38 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -213,15 +213,11 @@ ZIP1EXT=.oxt
 XMLFILES := $(ZIP1DIR)$/description.xml \
             $(ZIP1DIR)$/META-INF$/manifest.xml
 
-.IF "$(GUI)"!="WNT"
-TXTFILES:=$(foreach,i,$(WITH_LANG) $(ZIP1DIR)$/registration$/LICENSE_$i)
-LICLINES:=$(foreach,i,$(TXTFILES) 				<license-text xlink:href="registration/$(i:f)" lang="$(subst,LICENSE_, $(i:f))" />) 
-.ELSE			# "$(GUI)"!="WNT"
-TXTFILES:=$(foreach,i,$(WITH_LANG) $(ZIP1DIR)$/registration$/license_$i.txt)
-LICLINES:=$(foreach,i,$(TXTFILES) 				<license-text xlink:href="registration/$(i:f)" lang="$(subst,.txt, $(subst,license_, $(i:f)))" />) 
-.ENDIF			# "$(GUI)"!="WNT"
-
-HTMLFILES := $(ZIP1DIR)$/THIRDPARTYREADMELICENSE.html
+HTMLFILES := $(ZIP1DIR)$/THIRDPARTYREADMELICENSE.html \
+            $(ZIP1DIR)$/readme_en-US.html \
+            $(ZIP1DIR)$/readme_en-US.txt \
+            $(ZIP1DIR)$/license_en-US.html \
+            $(ZIP1DIR)$/registration$/license_en-US.txt
 
 REPRORTJARFILES := \
     $(ZIP1DIR)$/jcommon-1.0.10.jar										\
@@ -240,15 +236,14 @@ REPRORTJARFILES := \
 # --- Targets ----------------------------------
 .INCLUDE : target.mk
 
-.IF "$(ZIP1TARGETN)"!="
-$(ZIP1TARGETN) :  $(TXTFILES) $(XMLFILES) $(HTMLFILES) $(REPRORTJARFILES)
+.IF "$(ZIP1TARGETN)"!=""
+$(ZIP1TARGETN) :  $(XMLFILES) $(HTMLFILES) $(REPRORTJARFILES)
 .ENDIF          # "$(ZIP1TARGETN)"!="
 
 $(ZIP1DIR)$/description.xml : pre.xml post.xml
     @@-$(MKDIRHIER) $(@:d)
     @@-$(RM) $(ZIP1DIR)$/description.xml
     $(TYPE) pre.xml > $@
-    $(TYPE) $(mktmp  $(LICLINES)) >> $@
     $(TYPE) post.xml >> $@
 
 $(ZIP1DIR)$/%.xml : %.xml
@@ -267,15 +262,19 @@ $(ZIP1DIR)$/META-INF$/%.xml : %.xml
     @@-$(MKDIRHIER) $(@:d)
     $(COPY) $< $@
 
-$(ZIP1DIR)$/registration$/license_%.txt : $(SOLARBINDIR)$/osl$/license_%.txt
-    @@-$(MKDIRHIER) $(@:d)
+$(ZIP1DIR)$/readme_en-US.% : $(PRJ)$/license$/readme_en-US.%
+     @@-$(MKDIRHIER) $(@:d)
     $(COPY) $< $@
 
-$(ZIP1DIR)$/registration$/LICENSE_% : $(SOLARBINDIR)$/osl$/LICENSE_%
-    @@-$(MKDIRHIER) $(@:d)
+$(ZIP1DIR)$/registration$/license_en-US.txt : $(PRJ)$/license$/license_en-US.txt
+     @@-$(MKDIRHIER) $(@:d)
     $(COPY) $< $@
 
-$(ZIP1DIR)$/THIRDPARTYREADMELICENSE.html : THIRDPARTYREADMELICENSE.html
+$(ZIP1DIR)$/license_en-US.html : $(PRJ)$/license$/license_en-US.html
+     @@-$(MKDIRHIER) $(@:d)
+    $(COPY) $< $@
+
+$(ZIP1DIR)$/THIRDPARTYREADMELICENSE.html : $(PRJ)$/license$/THIRDPARTYREADMELICENSE.html
     @@-$(MKDIRHIER) $(@:d)
     $(COPY) $< $@
 
