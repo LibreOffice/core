@@ -4,9 +4,9 @@
  *
  *  $RCSfile: DiagramHelper.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: hr $ $Date: 2007-08-03 12:36:38 $
+ *  last change: $Author: ihi $ $Date: 2007-08-17 12:15:14 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -225,7 +225,7 @@ void DiagramHelper::setVertical(
                                     Reference< XTitled > xTitled( xAxis, uno::UNO_QUERY );
                                     if( xTitled.is())
                                     {
-                                        Reference< beans::XPropertySet > xTitleProps( xTitled->getTitle(), uno::UNO_QUERY );
+                                        Reference< beans::XPropertySet > xTitleProps( xTitled->getTitleObject(), uno::UNO_QUERY );
                                         if( !xTitleProps.is() )
                                             continue;
                                         double fAngleDegree = 0.0;
