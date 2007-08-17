@@ -4,9 +4,9 @@
  *
  *  $RCSfile: VTitle.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: hr $ $Date: 2007-08-03 12:37:36 $
+ *  last change: $Author: ihi $ $Date: 2007-08-17 12:16:40 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -136,8 +136,7 @@ void VTitle::changePosition( const awt::Point& rPos )
         //set position matrix
         //the matrix needs to be set at the end behind autogrow and such position influencing properties
         ::basegfx::B2DHomMatrix aM;
-        // aM.Scale( 1, 1 ); Oops? A scale with this parameters is neutral, line commented out
-        aM.rotate( m_fRotationAngleDegree*F_PI/180.0 );
+        aM.rotate( -m_fRotationAngleDegree*F_PI/180.0 );//#i78696#->#i80521#
         aM.translate( m_nXPos, m_nYPos);
         xShapeProp->setPropertyValue( C2U( "Transformation" ), uno::makeAny( B2DHomMatrixToHomogenMatrix3(aM) ) );
     }
@@ -297,8 +296,7 @@ void VTitle::createShapes(
         //set position matrix
         //the matrix needs to be set at the end behind autogrow and such position influencing properties
         ::basegfx::B2DHomMatrix aM;
-        // aM.Scale( 1, 1 ); Oops? A scale with this parameters is neutral, line commented out
-        aM.rotate( m_fRotationAngleDegree*F_PI/180.0 );
+        aM.rotate( -m_fRotationAngleDegree*F_PI/180.0 );//#i78696#->#i80521#
         aM.translate( m_nXPos, m_nYPos );
         xShapeProp->setPropertyValue( C2U( "Transformation" ), uno::makeAny( B2DHomMatrixToHomogenMatrix3(aM) ) );
     }
