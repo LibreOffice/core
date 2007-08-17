@@ -4,9 +4,9 @@
  *
  *  $RCSfile: TitleWrapper.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: rt $ $Date: 2007-07-25 08:27:35 $
+ *  last change: $Author: ihi $ $Date: 2007-08-17 12:12:17 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -252,7 +252,7 @@ TitleWrapper::~TitleWrapper()
 awt::Point SAL_CALL TitleWrapper::getPosition()
     throw (uno::RuntimeException)
 {
-    return m_spChart2ModelContact->GetTitlePosition( this->getTitle() );
+    return m_spChart2ModelContact->GetTitlePosition( this->getTitleObject() );
 }
 
 void SAL_CALL TitleWrapper::setPosition( const awt::Point& aPosition )
@@ -274,7 +274,7 @@ void SAL_CALL TitleWrapper::setPosition( const awt::Point& aPosition )
 awt::Size SAL_CALL TitleWrapper::getSize()
     throw (uno::RuntimeException)
 {
-    return m_spChart2ModelContact->GetTitleSize( this->getTitle() );
+    return m_spChart2ModelContact->GetTitleSize( this->getTitleObject() );
 }
 
 void SAL_CALL TitleWrapper::setSize( const awt::Size& /*aSize*/ )
@@ -324,7 +324,7 @@ Reference< beans::XPropertySet > TitleWrapper::getFirstCharacterPropertySet()
 {
     Reference< beans::XPropertySet > xProp;
 
-    Reference< chart2::XTitle > xTitle( this->getTitle() );
+    Reference< chart2::XTitle > xTitle( this->getTitleObject() );
     if( xTitle.is())
     {
         Sequence< Reference< chart2::XFormattedString > > aStrings( xTitle->getText());
@@ -363,7 +363,7 @@ void TitleWrapper::setFastCharacterPropertyValue(
     OSL_ASSERT( FAST_PROPERTY_ID_START_CHAR_PROP <= nHandle &&
                 nHandle < CharacterProperties::FAST_PROPERTY_ID_END_CHAR_PROP );
 
-    Reference< chart2::XTitle > xTitle( this->getTitle() );
+    Reference< chart2::XTitle > xTitle( this->getTitleObject() );
     if( xTitle.is())
     {
         Sequence< Reference< chart2::XFormattedString > > aStrings( xTitle->getText());
@@ -473,7 +473,7 @@ Any SAL_CALL TitleWrapper::getPropertyDefault( const OUString& rPropertyName )
 //ReferenceSizePropertyProvider
 void TitleWrapper::setCurrentSizeAsReference()
 {
-    Reference< beans::XPropertySet > xProp( this->getTitle(), uno::UNO_QUERY );
+    Reference< beans::XPropertySet > xProp( this->getTitleObject(), uno::UNO_QUERY );
     if( xProp.is() )
         xProp->setPropertyValue( C2U("ReferencePageSize"), uno::makeAny(
                             m_spChart2ModelContact->GetPageSize() ));
@@ -481,7 +481,7 @@ void TitleWrapper::setCurrentSizeAsReference()
 Any TitleWrapper::getReferenceSize()
 {
     Any aRet;
-    Reference< beans::XPropertySet > xProp( this->getTitle(), uno::UNO_QUERY );
+    Reference< beans::XPropertySet > xProp( this->getTitleObject(), uno::UNO_QUERY );
     if( xProp.is() )
         aRet = xProp->getPropertyValue( C2U("ReferencePageSize") );
 
@@ -494,7 +494,7 @@ awt::Size TitleWrapper::getCurrentSizeForReference()
 
 // ================================================================================
 
-Reference< chart2::XTitle > TitleWrapper::getTitle()
+Reference< chart2::XTitle > TitleWrapper::getTitleObject()
 {
     return TitleHelper::getTitle( m_eTitleType, m_spChart2ModelContact->getChartModel() );
 }
@@ -503,7 +503,7 @@ Reference< chart2::XTitle > TitleWrapper::getTitle()
 
 Reference< beans::XPropertySet > TitleWrapper::getInnerPropertySet()
 {
-    return Reference< beans::XPropertySet >( this->getTitle(), uno::UNO_QUERY );
+    return Reference< beans::XPropertySet >( this->getTitleObject(), uno::UNO_QUERY );
 }
 
 const Sequence< beans::Property >& TitleWrapper::getPropertySequence()
