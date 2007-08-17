@@ -4,9 +4,9 @@
  *
  *  $RCSfile: breakiterator_unicode.cxx,v $
  *
- *  $Revision: 1.31 $
+ *  $Revision: 1.32 $
  *
- *  last change: $Author: hr $ $Date: 2007-07-31 17:09:13 $
+ *  last change: $Author: ihi $ $Date: 2007-08-17 14:58:23 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -311,8 +311,9 @@ sal_Int32 SAL_CALL BreakIterator_Unicode::beginOfSentence( const OUString& Text,
             nStartPos = sentence.aBreakIterator->preceding(nStartPos);
 
         // skip preceding space.
-        sal_uInt32 ch = Text.iterateCodePoints(&nStartPos, 0);
+        sal_uInt32 ch = Text.iterateCodePoints(&nStartPos, 1);
         while (nStartPos < len && u_isWhitespace(ch)) ch = Text.iterateCodePoints(&nStartPos, 1);
+        Text.iterateCodePoints(&nStartPos, -1);
 
         return nStartPos;
 }
