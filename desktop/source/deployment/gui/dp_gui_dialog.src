@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dp_gui_dialog.src,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: rt $ $Date: 2007-07-06 12:34:04 $
+ *  last change: $Author: ihi $ $Date: 2007-08-17 12:49:06 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -92,7 +92,6 @@ ModelessDialog RID_DLG_PACKAGE_MANAGER
         Disable = TRUE;
         TabStop = TRUE;
         Text [ en-US ] = "~Options...";
-        Text [ de ] = "~Optionen...";
     };
 
 
