@@ -4,9 +4,9 @@
  *
  *  $RCSfile: DiagramWrapper.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: vg $ $Date: 2007-05-22 17:18:04 $
+ *  last change: $Author: ihi $ $Date: 2007-08-17 12:12:04 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -253,9 +253,6 @@ protected:
     virtual const std::vector< WrappedProperty* > createWrappedProperties();
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet > getInnerPropertySet();
 
-    virtual void SAL_CALL setPropertyValue( const ::rtl::OUString& aPropertyName, const ::com::sun::star::uno::Any& aValue ) throw (::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::beans::PropertyVetoException, ::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException);
-    virtual ::com::sun::star::uno::Any SAL_CALL getPropertyValue( const ::rtl::OUString& PropertyName ) throw (::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException);
-
 private:
     void updateFromModel();
 
@@ -323,8 +320,6 @@ private:
     ::com::sun::star::uno::Reference<
         ::com::sun::star::beans::XPropertySet >
                         m_xDownBarWrapper;
-
-    sal_Bool m_bLinesAllowed;
 };
 
 } //  namespace wrapper
