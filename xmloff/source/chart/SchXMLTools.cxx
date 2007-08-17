@@ -4,9 +4,9 @@
  *
  *  $RCSfile: SchXMLTools.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: hr $ $Date: 2007-06-27 14:50:27 $
+ *  last change: $Author: ihi $ $Date: 2007-08-17 12:06:06 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -61,65 +61,19 @@
 #ifndef _SOLAR_H
 #include <tools/solar.h>
 #endif
-/*
-// header for class ByteString
-#ifndef _STRING_HXX
-#include <tools/string.hxx>
-#endif
-#ifndef _COMPHELPER_PROCESSFACTORY_HXX_
-#include <comphelper/processfactory.hxx>
-#endif
 
-#ifndef _XMLOFF_XMLNMSPE_HXX
-#include "xmlnmspe.hxx"
+// header for class SvXMLImportPropertyMapper
+#ifndef _XMLOFF_XMLIMPPR_HXX
+#include <xmloff/xmlimppr.hxx>
 #endif
-#ifndef _XMLOFF_XMLUCONV_HXX
-#include <xmloff/xmluconv.hxx>
+// header for class XMLPropStyleContext
+#ifndef _XMLOFF_PRSTYLEI_HXX_
+#include <xmloff/prstylei.hxx>
 #endif
-#ifndef _XMLOFF_NMSPMAP_HXX
-#include <xmloff/nmspmap.hxx>
+// header for class XMLPropertySetMapper
+#ifndef _XMLOFF_PROPERTYSETMAPPER_HXX
+#include <xmloff/xmlprmap.hxx>
 #endif
-#ifndef _XMLOFF_XMLICTXT_HXX
-#include <xmloff/xmlictxt.hxx>
-#endif
-#ifndef _XMLOFF_XMLSTYLE_HXX
-#include <xmloff/xmlstyle.hxx>
-#endif
-
-#ifndef _COM_SUN_STAR_TASK_XSTATUSINDICATORSUPPLIER_HPP_
-#include <com/sun/star/task/XStatusIndicatorSupplier.hpp>
-#endif
-#ifndef _COM_SUN_STAR_CHART_XCHARTDOCUMENT_HPP_
-#include <com/sun/star/chart/XChartDocument.hpp>
-#endif
-#ifndef _COM_SUN_STAR_CHART_XCHARTDATAARRAY_HPP_
-#include <com/sun/star/chart/XChartDataArray.hpp>
-#endif
-#ifndef _COM_SUN_STAR_CHART_CHARTDATAROWSOURCE_HPP_
-#include <com/sun/star/chart/ChartDataRowSource.hpp>
-#endif
-#ifndef _COM_SUN_STAR_CONTAINER_XCHILD_HPP_
-#include <com/sun/star/container/XChild.hpp>
-#endif
-
-#ifndef _COM_SUN_STAR_CHART2_DATA_XDATARECEIVER_HPP_
-#include <com/sun/star/chart2/data/XDataReceiver.hpp>
-#endif
-#ifndef _COM_SUN_STAR_CHART2_DATA_XDATAPROVIDER_HPP_
-#include <com/sun/star/chart2/data/XDataProvider.hpp>
-#endif
-#ifndef _COM_SUN_STAR_CHART2_XCOORDINATESYSTEMCONTAINER_HPP_
-#include <com/sun/star/chart2/XCoordinateSystemContainer.hpp>
-#endif
-#ifndef _COM_SUN_STAR_CHART2_XCHARTTYPECONTAINER_HPP_
-#include <com/sun/star/chart2/XChartTypeContainer.hpp>
-#endif
-#ifndef _COM_SUN_STAR_CHART2_XDATASERIESCONTAINER_HPP_
-#include <com/sun/star/chart2/XDataSeriesContainer.hpp>
-#endif
-
-#include <typeinfo>
-*/
 
 #include <com/sun/star/uno/XComponentContext.hpp>
 #include <com/sun/star/chart2/data/XDataProvider.hpp>
@@ -429,6 +383,28 @@ void CreateCategories(
     {
         OSL_ENSURE( false, "Exception caught while creating Categories" );
     }
+}
+
+
+uno::Any getPropertyFromContext( const rtl::OUString& rPropertyName, const XMLPropStyleContext* pPropStyleContext, const SvXMLStylesContext* pStylesCtxt )
+{
+    uno::Any aRet;
+    if( !pPropStyleContext || !pStylesCtxt )
+        return aRet;
+    const ::std::vector< XMLPropertyState >& rProperties = pPropStyleContext->GetProperties();
+    const UniReference< XMLPropertySetMapper >& rMapper = pStylesCtxt->GetImportPropertyMapper( pPropStyleContext->GetFamily()/*XML_STYLE_FAMILY_SCH_CHART_ID*/ )->getPropertySetMapper();
+    ::std::vector< XMLPropertyState >::const_iterator aEnd( rProperties.end() );
+    ::std::vector< XMLPropertyState >::const_iterator aPropIter( rProperties.begin() );
+    for( aPropIter = rProperties.begin(); aPropIter != aEnd; ++aPropIter )
+    {
+        sal_Int32 nIdx = aPropIter->mnIndex;
+        if( nIdx == -1 )
+            continue;
+        OUString aPropName = rMapper->GetEntryAPIName( nIdx );
+        if(rPropertyName.equals(aPropName))
+            return aPropIter->maValue;
+    }
+    return aRet;
 }
 
 }
