@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ExtensionNotPresent.src,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: hr $ $Date: 2007-08-02 14:26:39 $
+ *  last change: $Author: ihi $ $Date: 2007-08-17 12:33:43 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -41,7 +41,6 @@
 
 String RID_STR_EXTENSION_NOT_PRESENT
 {
-    Text [ de ] = "Zum Öffnen eines Reports benötigen Sie die Extension %RPT_EXTENSION_NAME.\n\nKlicken Sie auf 'Herunterladen...', um die Extension herunterzuladen und zu installieren." ;
     Text [ en-US ] = "To open a report you require the extension %RPT_EXTENSION_NAME.\n\nClick 'Download...' to download and install the extension.";
 };
 // To open a report you require the extension Sun Report Designer weiss der Geier Hauptsache extra langer Name
@@ -55,7 +54,6 @@ ModalDialog RID_EXTENSION_NOT_PRESENT_DLG
     OutputSize = TRUE ;
     SVLook = TRUE ;
     Size = MAP_APPFONT ( DLG_WIDTH , DLG_HEIGHT ) ;
-    Text [ de ] = "%PRODUCTNAME %PRODUCTVERSION" ;
     Text [ en-US ] = "%PRODUCTNAME %PRODUCTVERSION" ;
     HelpId = HID_EXTENSION_NOT_PRESENT_DLG;
     Moveable = TRUE ;
@@ -84,7 +82,6 @@ ModalDialog RID_EXTENSION_NOT_PRESENT_DLG
         Size = MAP_APPFONT ( BUTTON_WIDTH , BUTTON_HEIGHT ) ;
         DefButton = TRUE ;
         TabStop = TRUE ;
-        Text [ de ] = "~Herunterladen..." ;
         Text [ en-US ] = "~Download..." ;
     };
 
