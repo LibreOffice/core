@@ -4,9 +4,9 @@
  *
  *  $RCSfile: unochart.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: hr $ $Date: 2007-08-02 13:57:30 $
+ *  last change: $Author: ihi $ $Date: 2007-08-17 13:59:52 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -473,7 +473,11 @@ static void GetFormatAndCreateCursorFromRangeRep(
             SwTable *pTable = pTblFmt ? SwTable::FindTable( pTblFmt ) : 0;
             // create new SwUnoCrsr spanning the specified range
             //! see also SwXTextTable::GetRangeByName
-            const SwTableBox* pTLBox = pTable ? pTable->GetTblBox( aStartCell ) : 0;
+            // --> OD 2007-08-03 #i80314#
+            // perform validation check. Thus, pass <true> as 2nd parameter to <SwTable::GetTblBox(..)>
+            const SwTableBox* pTLBox =
+                            pTable ? pTable->GetTblBox( aStartCell, true ) : 0;
+            // <--
             if(pTLBox)
             {
                 // hier muessen die Actions aufgehoben werden
@@ -484,7 +488,10 @@ static void GetFormatAndCreateCursorFromRangeRep(
                 SwUnoCrsr* pUnoCrsr = pTblFmt->GetDoc()->CreateUnoCrsr(aPos, sal_True);
                 pUnoCrsr->Move( fnMoveForward, fnGoNode );
                 pUnoCrsr->SetRemainInSection( sal_False );
-                const SwTableBox* pBRBox = pTable->GetTblBox( aEndCell );
+                // --> OD 2007-08-03 #i80314#
+                // perform validation check. Thus, pass <true> as 2nd parameter to <SwTable::GetTblBox(..)>
+                const SwTableBox* pBRBox = pTable->GetTblBox( aEndCell, true );
+                // <--
                 if(pBRBox)
                 {
                     pUnoCrsr->SetMark();
