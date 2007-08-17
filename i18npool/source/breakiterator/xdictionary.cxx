@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xdictionary.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: rt $ $Date: 2007-07-26 09:08:51 $
+ *  last change: $Author: ihi $ $Date: 2007-08-17 14:58:36 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -288,8 +288,9 @@ Boundary SAL_CALL xdictionary::nextWord(const OUString& rText, sal_Int32 anyPos,
         anyPos = boundary.endPos;
         if (anyPos < rText.getLength()) {
             // looknig for the first non-whitespace character from anyPos
-            sal_uInt32 ch = rText.iterateCodePoints(&anyPos, 0);
+            sal_uInt32 ch = rText.iterateCodePoints(&anyPos, 1);
             while (u_isWhitespace(ch)) ch=rText.iterateCodePoints(&anyPos, 1);
+            rText.iterateCodePoints(&anyPos, -1);
         }
 
         return getWordBoundary(rText, anyPos, wordType, true);
