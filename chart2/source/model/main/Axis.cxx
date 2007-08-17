@@ -4,9 +4,9 @@
  *
  *  $RCSfile: Axis.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: rt $ $Date: 2007-07-25 08:48:41 $
+ *  last change: $Author: ihi $ $Date: 2007-08-17 12:14:07 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -492,7 +492,7 @@ Sequence< Reference< beans::XPropertySet > > SAL_CALL Axis::getSubTickProperties
 
 
 // ____ XTitled ____
-Reference< chart2::XTitle > SAL_CALL Axis::getTitle()
+Reference< chart2::XTitle > SAL_CALL Axis::getTitleObject()
     throw (uno::RuntimeException)
 {
     // /--
@@ -501,7 +501,7 @@ Reference< chart2::XTitle > SAL_CALL Axis::getTitle()
     // \--
 }
 
-void SAL_CALL Axis::setTitle( const Reference< chart2::XTitle >& Title )
+void SAL_CALL Axis::setTitleObject( const Reference< chart2::XTitle >& Title )
     throw (uno::RuntimeException)
 {
     {
