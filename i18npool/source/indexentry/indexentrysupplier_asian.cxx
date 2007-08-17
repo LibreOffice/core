@@ -4,9 +4,9 @@
  *
  *  $RCSfile: indexentrysupplier_asian.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: rt $ $Date: 2007-07-26 09:09:38 $
+ *  last change: $Author: ihi $ $Date: 2007-08-17 14:59:24 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -135,8 +135,8 @@ IndexEntrySupplier_asian::getPhoneticCandidate( const OUString& rIndexEntry,
             sal_Int16 max_index;
             sal_uInt16** idx=func(&max_index);
             OUString aIndexEntry=rIndexEntry;
-            for (sal_Int32 i=0; i < rIndexEntry.getLength(); ) {
-                sal_uInt32 ch = rIndexEntry.iterateCodePoints(&i, 1);
+            for (sal_Int32 i=0,j=0; i < rIndexEntry.getLength(); i=j) {
+                sal_uInt32 ch = rIndexEntry.iterateCodePoints(&j, 1);
                 if (((sal_Int16)(ch>>8)) < max_index) {
                     sal_uInt16 address = idx[0][ch>>8];
                     if (address != 0xFFFF) {
