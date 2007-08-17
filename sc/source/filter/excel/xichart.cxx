@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xichart.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: rt $ $Date: 2007-07-03 13:25:14 $
+ *  last change: $Author: ihi $ $Date: 2007-08-17 12:08:05 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -3007,7 +3007,7 @@ void XclImpChAxesSet::ConvertAxis(
             {
                 Reference< XTitled > xTitled( xAxis, UNO_QUERY );
                 if( xTitled.is() )
-                    xTitled->setTitle( xChAxisTitle->CreateTitle() );
+                    xTitled->setTitleObject( xChAxisTitle->CreateTitle() );
             }
 
             // insert axis into coordinate system
@@ -3154,7 +3154,7 @@ void XclImpChChart::Convert( Reference< XChartDocument > xChartDoc, ScfProgressB
         Reference< XTitled > xTitled( xChartDoc, UNO_QUERY );
         Reference< XTitle > xTitle = mxTitle->CreateTitle();
         if( xTitled.is() && xTitle.is() )
-            xTitled->setTitle( xTitle );
+            xTitled->setTitleObject( xTitle );
     }
 
     /*  Create the diagram object and attach it to the chart document. Currently,
