@@ -4,9 +4,9 @@
  *
  *  $RCSfile: strings.src,v $
  *
- *  $Revision: 1.52 $
+ *  $Revision: 1.53 $
  *
- *  last change: $Author: kz $ $Date: 2007-05-10 10:14:53 $
+ *  last change: $Author: ihi $ $Date: 2007-08-17 12:32:06 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -207,43 +207,36 @@ String RID_STR_COMMAND_LEADING_TO_ERROR
 
 String RID_STR_STATEMENT_WITHOUT_RESULT_SET
 {
-    Text [ de ] = "Das SQL-Kommando beschreibt keine Ergebnismenge.";
     Text [ en-US ] = "The SQL command does not describe a result set.";
 };
 
 String RID_STR_NO_SLASH_IN_OBJECT_NAME
 {
-    Text [ de ] = "Der Name darf keinen Schrägstrich ('/') enthalten.";
-    Text [ en-uS ] = "The name must not contain any slashes ('/').";
+    Text [ en-US ] = "The name must not contain any slashes ('/').";
 };
 
 String RID_STR_NAME_MUST_NOT_BE_EMPTY
 {
-    Text [ de ] = "Der Name darf nicht leer sein.";
     Text [ en-US ] = "The name must not be empty.";
 };
 
 String RID_STR_NO_NULL_OBJECTS_IN_CONTAINER
 {
-    Text [ de ] = "Der Container kann keine NULL-Objekte enthalten.";
     Text [ en-US ] = "The container cannot contain NULL objects.";
 };
 
 String RID_STR_NAME_ALREADY_USED
 {
-    Text [ de ] = "Ein Objekt mit dem gegebenen Namen existiert bereits.";
     Text [ en-US ] = "There already is an object with the given name.";
 };
 
 String RID_STR_OBJECT_CONTAINER_MISMATCH
 {
-    Text [ de ] = "Das Objekt kann nicht Element dieses Containers sein.";
     Text [ en-US ] = "This object cannot be part of this container.";
 };
 
 String RID_STR_OBJECT_ALREADY_CONTAINED
 {
-    Text [ de ] = "Das Objekt ist bereits unter einem anderen Namen im Container enthalten.";
     Text [ en-US ] = "The object already is, with a different name, part of the container.";
 };
 
