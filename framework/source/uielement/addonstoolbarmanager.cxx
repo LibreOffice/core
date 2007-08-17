@@ -4,9 +4,9 @@
  *
  *  $RCSfile: addonstoolbarmanager.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: ihi $ $Date: 2007-07-10 15:09:39 $
+ *  last change: $Author: ihi $ $Date: 2007-08-17 13:33:33 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -192,26 +192,18 @@ AddonsToolBarManager::~AddonsToolBarManager()
 {
 }
 
-static BOOL IsCorrectContext( Reference< com::sun::star::frame::XModel >& rModel, const rtl::OUString& aContextList )
+static sal_Bool IsCorrectContext( const ::rtl::OUString& rModuleIdentifier, const ::rtl::OUString& aContextList )
 {
-    if ( rModel.is() )
-    {
-        Reference< com::sun::star::lang::XServiceInfo > xServiceInfo( rModel, UNO_QUERY );
-        if ( xServiceInfo.is() )
-        {
-            sal_Int32 nIndex = 0;
-            do
-            {
-                rtl::OUString aToken = aContextList.getToken( 0, ',', nIndex );
+    if ( aContextList.getLength() == 0 )
+        return sal_True;
 
-                if ( xServiceInfo->supportsService( aToken ))
-                    return TRUE;
-            }
-            while ( nIndex >= 0 );
-        }
+    if ( rModuleIdentifier.getLength() > 0 )
+    {
+        sal_Int32 nIndex = aContextList.indexOf( rModuleIdentifier );
+        return ( nIndex >= 0 );
     }
 
-    return ( aContextList.getLength() == 0 );
+    return sal_False;
 }
 
 static Image RetrieveImage( Reference< com::sun::star::frame::XFrame >& rFrame,
@@ -313,12 +305,15 @@ void AddonsToolBarManager::FillToolbar( const Sequence< Sequence< PropertyValue 
     m_pToolBar->Clear();
     m_aControllerMap.clear();
 
-    Reference< XModel > xModel;
-    if ( m_xFrame.is() )
+    ::rtl::OUString aModuleIdentifier;
+    try
     {
-        Reference< com::sun::star::frame::XController > xController( m_xFrame->getController(), UNO_QUERY );
-        if ( xController.is() )
-            xModel = Reference< com::sun::star::frame::XModel >( xController->getModel(), UNO_QUERY );
+        Reference< XModuleManager > xModuleManager(
+            m_xServiceManager->createInstance( SERVICENAME_MODULEMANAGER ), UNO_QUERY_THROW );
+        aModuleIdentifier = xModuleManager->identify( m_xFrame );
+    }
+    catch ( Exception& )
+    {
     }
 
     Reference< XMultiComponentFactory > xToolbarControllerFactory( m_xToolbarControllerRegistration, UNO_QUERY );
@@ -347,7 +342,7 @@ void AddonsToolBarManager::FillToolbar( const Sequence< Sequence< PropertyValue 
 
         ToolBarMerger::ConvertSequenceToValues( rSeq, aURL, aTitle, aImageId, aTarget, aContext, aControlType, nWidth );
 
-        if ( IsCorrectContext( xModel, aContext ))
+        if ( IsCorrectContext( aModuleIdentifier, aContext ))
         {
             if ( aURL.equalsAsciiL( TOOLBOXITEM_SEPARATOR_STR, TOOLBOXITEM_SEPARATOR_STR_LEN ))
             {
