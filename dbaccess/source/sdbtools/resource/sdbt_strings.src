@@ -4,9 +4,9 @@
  *
  *  $RCSfile: sdbt_strings.src,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: kz $ $Date: 2007-05-10 10:16:10 $
+ *  last change: $Author: ihi $ $Date: 2007-08-17 12:32:33 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -69,6 +69,5 @@ String STR_NO_VALID_SQL_NAME
 
 String STR_NO_SLASHES_IN_QUERY_NAMES
 {
-    Text [ de ] = "Der Name darf keinen Schrägstrich ('/') enthalten.";
-    Text [ en-uS ] = "The name must not contain any slashes ('/').";
+    Text [ en-US ] = "The name must not contain any slashes ('/').";
 };
