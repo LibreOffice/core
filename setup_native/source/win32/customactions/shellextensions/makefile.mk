@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.12 $
+#   $Revision: 1.13 $
 #
-#   last change: $Author: rt $ $Date: 2007-07-06 12:17:34 $
+#   last change: $Author: ihi $ $Date: 2007-08-17 11:48:53 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -71,7 +71,8 @@ SLOFILES = \
 STDSHL += \
     $(ADVAPI32LIB)\
     $(MSILIB)\
-    $(LIBSTLPORTST)								
+    $(LIBSTLPORTST)\
+        $(SHELL32LIB)								
 
 .IF "$(COM)"=="GCC"
 STDSHL+=	\
