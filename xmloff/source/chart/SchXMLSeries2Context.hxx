@@ -4,9 +4,9 @@
  *
  *  $RCSfile: SchXMLSeries2Context.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: hr $ $Date: 2007-06-27 14:49:43 $
+ *  last change: $Author: ihi $ $Date: 2007-08-17 12:05:51 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -90,6 +90,7 @@ private:
     sal_Int32& mrCurrentDataIndex;
     tSchXMLLSequencesPerIndex maPostponedSequences;
     bool& mrGlobalChartTypeUsedBySeries;
+    bool mbSymbolSizeIsMissingInFile;
 
 public:
     SchXMLSeries2Context( SchXMLImportHelper& rImpHelper,
@@ -128,6 +129,7 @@ public:
         , const SvXMLStyleContext*& rpStyle
         , ::rtl::OUString& rCurrStyleName
         , SchXMLImportHelper& rImportHelper
+        , const SvXMLImport& rImport
         , bool bIsStockChart );
 
     static void setStylesToStatisticsObjects( SeriesDefaultsAndStyles& rSeriesDefaultsAndStyles
@@ -140,7 +142,8 @@ public:
         , const SvXMLStyleContext*& rpStyle
         , ::rtl::OUString& rCurrStyleName
         , SchXMLImportHelper& rImportHelper
-        , bool bIsStockChart, bool bIsDonutChart );
+        , const SvXMLImport& rImport
+        , bool bIsStockChart, bool bIsDonutChart, bool bSwitchOffLinesForScatter );
 
     static void switchSeriesLinesOff( ::std::list< DataRowPointStyle >& rSeriesStyleList );
 };
