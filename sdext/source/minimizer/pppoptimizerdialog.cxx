@@ -4,9 +4,9 @@
  *
  *  $RCSfile: pppoptimizerdialog.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: sj $ $Date: 2007-05-11 13:59:48 $
+ *  last change: $Author: sj $ $Date: 2007-08-17 09:38:07 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -111,10 +111,8 @@ Reference< com::sun::star::frame::XDispatch > SAL_CALL PPPOptimizerDialog::query
 {
     Reference < XDispatch > xRet;
     if ( aURL.Protocol.compareToAscii( "vnd.com.sun.star.comp.SunPresentationMinimizer:" ) == 0 )
-    {
-//      if ( aURL.Path.compareToAscii( "Function1" ) == 0 )
         xRet = this;
-    }
+
     return xRet;
 }
 

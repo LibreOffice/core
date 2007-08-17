@@ -4,9 +4,9 @@
  *
  *  $RCSfile: optimizerdialog.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: sj $ $Date: 2007-08-16 17:12:26 $
+ *  last change: $Author: sj $ $Date: 2007-08-17 09:38:07 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -212,59 +212,6 @@ void OptimizerDialog::UpdateConfiguration()
             }
         }
     }
-
-    // page1
-//  aAny = getControlProperty( TKGet( TK_CheckBox0Pg1 ), TKGet( TK_State ) );
-//  if ( aAny >>= nInt16 )
-//      SetConfigProperty( TK_JPEGCompression, Any( nInt16 != 0 ) );
-
-//  aAny = getControlProperty( TKGet( TK_FormattedField0Pg1 ), TKGet( TK_EffectiveValue ) );
-//  if ( aAny >>= fDouble )
-//      SetConfigProperty( TK_JPEGQuality, Any( (sal_Int32)fDouble ) );
-
-//  aAny = getControlProperty( TKGet( TK_CheckBox1Pg1 ), TKGet( TK_State ) );
-//  if ( aAny >>= nInt16 )
-//      SetConfigProperty( TK_RemoveCropArea, Any( nInt16 != 0 ) );
-
-//  aAny = getControlProperty( TKGet( TK_ComboBox0Pg1 ), TKGet( TK_Text ) );
-//  if ( aAny >>= aString )
-//  {
-//      sal_Int32 nI0, nI1, nI2, nI3, nI4;
-//      nI0 = nI1 = nI2 = nI3 = nI4 = 0;
-//
-//      if ( getString( STR_IMAGE_RESOLUTION_0 ).getToken( 1, ';', nI0 ) == aString )
-//          aString = getString( STR_IMAGE_RESOLUTION_0 ).getToken( 0, ';', nI4 );
-//      else if ( getString( STR_IMAGE_RESOLUTION_1 ).getToken( 1, ';', nI1 ) == aString )
-//          aString = getString( STR_IMAGE_RESOLUTION_1 ).getToken( 0, ';', nI4 );
-//      else if ( getString( STR_IMAGE_RESOLUTION_2 ).getToken( 1, ';', nI2 ) == aString )
-//          aString = getString( STR_IMAGE_RESOLUTION_2 ).getToken( 0, ';', nI4 );
-//      else if ( getString( STR_IMAGE_RESOLUTION_3 ).getToken( 1, ';', nI3 ) == aString )
-//          aString = getString( STR_IMAGE_RESOLUTION_3 ).getToken( 0, ';', nI4 );
-//
-//      SetConfigProperty( TK_ImageResolution, Any( aString.toInt32() ) );
-//  }
-
-    // page2
-//  aAny = getControlProperty( TKGet( TK_CheckBox0Pg2 ), TKGet( TK_State ) );
-//  if ( aAny >>= nInt16 )
-//      SetConfigProperty( TK_OLEOptimization, Any( nInt16 != 0 ) );
-
-//  aAny = getControlProperty( TKGet( TK_RadioButton1Pg2 ), TKGet( TK_State ) );
-//  if ( aAny >>= nInt16 )
-//      SetConfigProperty( TK_OLEOptimizationType, Any( nInt16 ) );
-
-    // page3
-//  aAny = getControlProperty( TKGet( TK_CheckBox0Pg3 ), TKGet( TK_State ) );
-//  if ( aAny >>= nInt16 )
-//      SetConfigProperty( TK_DeleteUnusedMasterPages, Any( nInt16 != 0 ) );
-
-//  aAny = getControlProperty( TKGet( TK_CheckBox1Pg3 ), TKGet( TK_State ) );
-//  if ( aAny >>= nInt16 )
-//      SetConfigProperty( TK_DeleteNotesPages, Any( nInt16 != 0 ) );
-
-//  aAny = getControlProperty( TKGet( TK_CheckBox2Pg3 ), TKGet( TK_State ) );
-//  if ( aAny >>= nInt16 )
-//      SetConfigProperty( TK_DeleteHiddenSlides, Any( nInt16 != 0 ) );
 
     aAny = getControlProperty( TKGet( TK_CheckBox3Pg3 ), TKGet( TK_State ) );
     if ( aAny >>= nInt16 )
@@ -658,25 +605,30 @@ void ActionListener::actionPerformed( const ActionEvent& rEvent )
                 rtl::OUString aSaveAsURL;
                 FileOpenDialog aFileOpenDialog( ((UnoDialog&)mrOptimizerDialog).mxMSF );
 
-/*
                 // generating default file name
                 Reference< XStorable > xStorable( mrOptimizerDialog.mxController->getModel(), UNO_QUERY );
-                if ( xStorable.is() && xStorable.hasLocation() )
+                if ( xStorable.is() && xStorable->hasLocation() )
                 {
                     rtl::OUString aLocation( xStorable->getLocation() );
-                    sal_Int32 nIndex aLocation.lastIndexOf( '/', 0 );
-                    if ( nIndex >= 0 )
+                    if ( aLocation.getLength() )
                     {
-                        if ( nIndex < aLocation.getLenght() - 1 )
+                        sal_Int32 nIndex = aLocation.lastIndexOf( '/', aLocation.getLength() - 1 );
+                        if ( nIndex >= 0 )
                         {
+                            if ( nIndex < aLocation.getLength() - 1 )
+                                aLocation = aLocation.copy( nIndex + 1 );
 
+                            // remove extension
+                            nIndex = aLocation.lastIndexOf( '.', aLocation.getLength() - 1 );
+                            if ( nIndex >= 0 )
+                                aLocation = aLocation.copy( 0, nIndex );
 
+                            // adding .mini
+                            aLocation = aLocation.concat( OUString::createFromAscii( ".mini" ) );
+                            aFileOpenDialog.setDefaultName( aLocation );
                         }
                     }
-
-//                  aFileOpenDialog.setDefaultName( aLocation );
                 }
-*/
                  sal_Bool bDialogExecuted = aFileOpenDialog.execute() == dialogs::ExecutableDialogResults::OK;
                 if ( bDialogExecuted )
                 {

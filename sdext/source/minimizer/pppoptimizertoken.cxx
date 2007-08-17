@@ -4,9 +4,9 @@
  *
  *  $RCSfile: pppoptimizertoken.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: sj $ $Date: 2007-08-16 17:12:26 $
+ *  last change: $Author: sj $ $Date: 2007-08-17 09:38:07 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -267,7 +267,8 @@ static const TokenTable pTokenTableArray[] =
     { "STR_OLE_REPLACE",            STR_OLE_REPLACE },
     { "STR_ALL_OLE_OBJECTS",        STR_ALL_OLE_OBJECTS },
     { "STR_ALIEN_OLE_OBJECTS_ONLY", STR_ALIEN_OLE_OBJECTS_ONLY },
-    { "STR_NO_OLE_OBJECTS",         STR_NO_OLE_OBJECTS },
+    { "STR__OLE_OBJECTS_DESC",      STR_OLE_OBJECTS_DESC },
+    { "STR_NO_OLE_OBJECTS_DESC",    STR_NO_OLE_OBJECTS_DESC },
     { "STR_SLIDES",                 STR_SLIDES },
     { "STR_CHOOSE_SLIDES",          STR_CHOOSE_SLIDES },
     { "STR_MASTER_PAGES",           STR_MASTER_PAGES },

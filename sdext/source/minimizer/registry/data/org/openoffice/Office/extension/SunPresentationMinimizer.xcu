@@ -131,13 +131,21 @@ Im letzten Schritt können Sie entscheiden, ob die Änderungen am aktuellen Doku
             <value xml:lang="en-US">~For OLE objects not based on OpenDocument format</value>
             <value xml:lang="de">Fü~r OLE-Objekte, die nicht auf dem OpenDocument Format basieren</value>
         </prop>
-        <prop oor:name="STR_NO_OLE_OBJECTS">
+        <prop oor:name="STR_OLE_OBJECTS_DESC">
             <value xml:lang="en-US">Object Linking and Embedding (OLE) is a technology that allows embedding and linking to documents and other objects.
 
 The current presentation contains OLE objects.</value>
             <value xml:lang="de">Object Linking and Embedding (OLE) ist eine Methode zum Einbettern oder Verknüpfen von Dokumenten und Objekten in andere Dokumente.
 
 Die aktuelle Präsentation enthält OLE-Objekte.</value>
+        </prop>
+        <prop oor:name="STR_NO_OLE_OBJECTS_DESC">
+            <value xml:lang="en-US">Object Linking and Embedding (OLE) is a technology that allows embedding and linking to documents and other objects.
+
+The current presentation contains no OLE objects.</value>
+            <value xml:lang="de">Object Linking and Embedding (OLE) ist eine Methode zum Einbettern oder Verknüpfen von Dokumenten und Objekten in andere Dokumente.
+
+Die aktuelle Präsentation enthält keine OLE-Objekte.</value>
         </prop>
         <prop oor:name="STR_SLIDES">
             <value xml:lang="en-US">Slides</value>

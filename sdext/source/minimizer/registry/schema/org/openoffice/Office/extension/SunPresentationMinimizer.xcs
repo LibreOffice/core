@@ -191,8 +191,15 @@ At the last step of the wizard you can choose to apply the changes to the curren
 			<prop oor:name="STR_ALIEN_OLE_OBJECTS_ONLY" oor:type="xs:string" oor:localized="true">
 				<value>~For OLE objects not based on OpenDocument format</value>
 			</prop>
-			<prop oor:name="STR_NO_OLE_OBJECTS" oor:type="xs:string" oor:localized="true">
-				<value>The current presentation contains no OLE objects.</value>
+			<prop oor:name="STR_OLE_OBJECTS_DESC" oor:type="xs:string" oor:localized="true">
+				<value>Object Linking and Embedding (OLE) is a technology that allows embedding and linking to documents and other objects.
+
+The current presentation contains no OLE objects.</value>
+			</prop>
+			<prop oor:name="STR_NO_OLE_OBJECTS_DESC" oor:type="xs:string" oor:localized="true">
+				<value>Object Linking and Embedding (OLE) is a technology that allows embedding and linking to documents and other objects.
+
+The current presentation contains no OLE objects.</value>
 			</prop>
 			<prop oor:name="STR_SLIDES" oor:type="xs:string" oor:localized="true">
 				<value>Slides</value>
