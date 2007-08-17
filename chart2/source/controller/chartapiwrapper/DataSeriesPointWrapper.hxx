@@ -4,9 +4,9 @@
  *
  *  $RCSfile: DataSeriesPointWrapper.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: vg $ $Date: 2007-05-22 17:17:40 $
+ *  last change: $Author: ihi $ $Date: 2007-08-17 12:11:38 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -174,6 +174,8 @@ private:
     eType               m_eType;
     sal_Int32           m_nSeriesIndexInNewAPI;
     sal_Int32           m_nPointIndex;
+
+    sal_Bool            m_bLinesAllowed;
 
     //this should only be used, if the DataSeriesPointWrapper is initialized via the XInitialize interface
     //because a big change in the chartmodel may leed to an dataseriespointer thats not connected to the model anymore
