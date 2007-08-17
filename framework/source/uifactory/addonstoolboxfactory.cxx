@@ -4,9 +4,9 @@
  *
  *  $RCSfile: addonstoolboxfactory.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 14:26:51 $
+ *  last change: $Author: ihi $ $Date: 2007-08-17 13:33:47 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -148,26 +148,15 @@ AddonsToolBoxFactory::~AddonsToolBoxFactory()
 {
 }
 
-static sal_Bool IsCorrectContext( const Reference< com::sun::star::frame::XModel >& rModel, const rtl::OUString& aContextList )
+static sal_Bool IsCorrectContext( const ::rtl::OUString& rModuleIdentifier, const rtl::OUString& aContextList )
 {
     if ( aContextList.getLength() == 0 )
         return sal_True;
 
-    if ( rModel.is() )
+    if ( rModuleIdentifier.getLength() > 0 )
     {
-        Reference< com::sun::star::lang::XServiceInfo > xServiceInfo( rModel, UNO_QUERY );
-        if ( xServiceInfo.is() )
-        {
-            sal_Int32 nIndex = 0;
-            do
-            {
-                rtl::OUString aToken = aContextList.getToken( 0, ',', nIndex );
-
-                if ( xServiceInfo->supportsService( aToken ))
-                    return sal_True;
-            }
-            while ( nIndex >= 0 );
-        }
+        sal_Int32 nIndex = aContextList.indexOf( rModuleIdentifier );
+        return ( nIndex >= 0 );
     }
 
     return sal_False;
@@ -175,8 +164,21 @@ static sal_Bool IsCorrectContext( const Reference< com::sun::star::frame::XModel
 
 sal_Bool AddonsToolBoxFactory::hasButtonsInContext(
     const Sequence< Sequence< PropertyValue > >& rPropSeqSeq,
-    const Reference< XModel >& rModel )
+    const Reference< XFrame >& rFrame )
 {
+    ::rtl::OUString aModuleIdentifier;
+    try
+    {
+        aModuleIdentifier = m_xModuleManager->identify( rFrame );
+    }
+    catch ( RuntimeException& )
+    {
+        throw;
+    }
+    catch ( Exception& )
+    {
+    }
+
     // Check before we create a toolbar that we have at least one button in
     // the current frame context.
     for ( sal_uInt32 i = 0; i < (sal_uInt32)rPropSeqSeq.getLength(); i++ )
@@ -192,7 +194,7 @@ sal_Bool AddonsToolBoxFactory::hasButtonsInContext(
             {
                 OUString aContextList;
                 if ( rPropSeq[j].Value >>= aContextList )
-                    bIsCorrectContext = IsCorrectContext( rModel, aContextList );
+                    bIsCorrectContext = IsCorrectContext( aModuleIdentifier, aContextList );
                 nPropChecked++;
             }
             else if ( rPropSeq[j].Name.equalsAsciiL( "URL", 3 ))
@@ -239,24 +241,14 @@ throw ( ::com::sun::star::container::NoSuchElementException,
             Args[n].Value >>= aResourceURL;
     }
 
-    Reference< XModel > xModel;
     if ( aResourceURL.indexOf( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "private:resource/toolbar/addon_" ))) != 0 )
         throw IllegalArgumentException();
-    else
-    {
-        // Identify frame and determine document based ui configuration manager/module ui configuration manager
-        if ( xFrame.is() )
-        {
-            Reference< XController > xController = xFrame->getController();
-            if ( xController.is() )
-                xModel = xController->getModel();
-        }
-    }
 
+    // Identify frame and determine module identifier to look for context based buttons
     Reference< ::com::sun::star::ui::XUIElement > xToolBar;
     if ( xFrame.is() &&
          ( aConfigData.getLength()> 0 ) &&
-         hasButtonsInContext( aConfigData, xModel ))
+         hasButtonsInContext( aConfigData, xFrame ))
     {
         PropertyValue aPropValue;
         Sequence< Any > aPropSeq( 3 );
