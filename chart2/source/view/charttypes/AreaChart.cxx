@@ -4,9 +4,9 @@
  *
  *  $RCSfile: AreaChart.cxx,v $
  *
- *  $Revision: 1.48 $
+ *  $Revision: 1.49 $
  *
- *  last change: $Author: rt $ $Date: 2007-07-25 09:04:11 $
+ *  last change: $Author: ihi $ $Date: 2007-08-17 12:16:06 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -582,40 +582,60 @@ void AreaChart::createShapes()
     {
         ::std::vector< ::std::vector< VDataSeriesGroup > >::iterator             aZSlotIter = m_aZSlots.begin();
         const ::std::vector< ::std::vector< VDataSeriesGroup > >::const_iterator  aZSlotEnd = m_aZSlots.end();
-//=============================================================================
-        for( sal_Int32 nZ=1; aZSlotIter != aZSlotEnd; aZSlotIter++, nZ++ )
+
+        std::map< sal_Int32, double > aLogicYSumMap;//one for each different nAttachedAxisIndex
+        for( ; aZSlotIter != aZSlotEnd; aZSlotIter++ )
         {
             ::std::vector< VDataSeriesGroup >::iterator             aXSlotIter = aZSlotIter->begin();
             const ::std::vector< VDataSeriesGroup >::const_iterator aXSlotEnd = aZSlotIter->end();
-            //for the area chart there should be at most one x slot (no side by side stacking available)
-            //attention different: xSlots are always interpreted as independent areas one behind the other: @todo this doesn't work why not???
-            for( sal_Int32 nX=0; aXSlotIter != aXSlotEnd; aXSlotIter++, nX++ )
+
+            //iterate through all x slots in this category to get 100percent sum
+            for( ; aXSlotIter != aXSlotEnd; aXSlotIter++ )
             {
                 ::std::vector< VDataSeries* >* pSeriesList = &(aXSlotIter->m_aSeriesVector);
-
                 ::std::vector< VDataSeries* >::const_iterator       aSeriesIter = pSeriesList->begin();
                 const ::std::vector< VDataSeries* >::const_iterator aSeriesEnd  = pSeriesList->end();
 
-                std::map< sal_Int32, double > aLogicYForNextSeriesMap;//one for each different nAttachedAxisIndex
-                std::map< sal_Int32, double > aLogicYSumMap;//one for each different nAttachedAxisIndex
                 for( ; aSeriesIter != aSeriesEnd; aSeriesIter++ )
                 {
-                    sal_Int32 nAttachedAxisIndex = (*aSeriesIter)->getAttachedAxisIndex();
+                    VDataSeries* pSeries( *aSeriesIter );
+                    if(!pSeries)
+                        continue;
+
+                    sal_Int32 nAttachedAxisIndex = pSeries->getAttachedAxisIndex();
+                    if( aLogicYSumMap.find(nAttachedAxisIndex)==aLogicYSumMap.end() )
+                        aLogicYSumMap[nAttachedAxisIndex]=0.0;
+
                     PlottingPositionHelper* pPosHelper = &(this->getPlottingPositionHelper( nAttachedAxisIndex ));
                     if(!pPosHelper)
                         pPosHelper = m_pMainPosHelper;
                     PlotterBase::m_pPosHelper = pPosHelper;
 
-                    double fAdd = (*aSeriesIter)->getY( nIndex );
+                    double fAdd = pSeries->getY( nIndex );
                     impl_maybeReplaceNanWithZero( fAdd );
                     if( !::rtl::math::isNan(fAdd) && !::rtl::math::isInf(fAdd) )
-                    {
-                        if( pPosHelper->isPercentY() )
-                            fAdd = fabs( fAdd );
-                        aLogicYSumMap[nAttachedAxisIndex] += fAdd;
-                    }
+                        aLogicYSumMap[nAttachedAxisIndex] += fabs( fAdd );
                 }
-                aSeriesIter = pSeriesList->begin();
+            }
+        }
+
+//=============================================================================
+        aZSlotIter = m_aZSlots.begin();
+        for( sal_Int32 nZ=1; aZSlotIter != aZSlotEnd; aZSlotIter++, nZ++ )
+        {
+            ::std::vector< VDataSeriesGroup >::iterator             aXSlotIter = aZSlotIter->begin();
+            const ::std::vector< VDataSeriesGroup >::const_iterator aXSlotEnd = aZSlotIter->end();
+
+            //for the area chart there should be at most one x slot (no side by side stacking available)
+            //attention different: xSlots are always interpreted as independent areas one behind the other: @todo this doesn't work why not???
+            aXSlotIter = aZSlotIter->begin();
+            for( sal_Int32 nX=0; aXSlotIter != aXSlotEnd; aXSlotIter++, nX++ )
+            {
+                ::std::vector< VDataSeries* >* pSeriesList = &(aXSlotIter->m_aSeriesVector);
+                ::std::vector< VDataSeries* >::const_iterator       aSeriesIter = pSeriesList->begin();
+                const ::std::vector< VDataSeries* >::const_iterator aSeriesEnd  = pSeriesList->end();
+
+                std::map< sal_Int32, double > aLogicYForNextSeriesMap;//one for each different nAttachedAxisIndex
     //=============================================================================
                 //iterate through all series
                 for( sal_Int32 nSeriesIndex = 0; aSeriesIter != aSeriesEnd; aSeriesIter++, nSeriesIndex++ )
