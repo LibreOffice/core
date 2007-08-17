@@ -4,9 +4,9 @@
  *
  *  $RCSfile: module.c,v $
  *
- *  $Revision: 1.35 $
+ *  $Revision: 1.36 $
  *
- *  last change: $Author: rt $ $Date: 2007-07-03 12:48:42 $
+ *  last change: $Author: ihi $ $Date: 2007-08-17 11:50:25 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -278,22 +278,28 @@ sal_Bool SAL_CALL osl_getModuleURLFromAddress(void * addr, rtl_uString ** ppLibr
     {
         rtl_uString * workDir = NULL;
         osl_getProcessWorkingDir(&workDir);
-
+        if (workDir)
+        {
 #if OSL_DEBUG_LEVEL > 1
-        OSL_TRACE("module.c::osl_getModuleURLFromAddress - %s\n", dl_info.dli_fname);
+            OSL_TRACE("module.c::osl_getModuleURLFromAddress - %s\n", dl_info.dli_fname);
 #endif
-        rtl_string2UString(ppLibraryUrl,
-                           dl_info.dli_fname,
-                           strlen(dl_info.dli_fname),
-                           osl_getThreadTextEncoding(),
-                           OSTRING_TO_OUSTRING_CVTFLAGS);
+            rtl_string2UString(ppLibraryUrl,
+                               dl_info.dli_fname,
+                               strlen(dl_info.dli_fname),
+                               osl_getThreadTextEncoding(),
+                               OSTRING_TO_OUSTRING_CVTFLAGS);
 
-        OSL_ASSERT(*ppLibraryUrl != NULL);
-        osl_getFileURLFromSystemPath(*ppLibraryUrl, ppLibraryUrl);
-        osl_getAbsoluteFileURL(workDir, *ppLibraryUrl, ppLibraryUrl);
+            OSL_ASSERT(*ppLibraryUrl != NULL);
+            osl_getFileURLFromSystemPath(*ppLibraryUrl, ppLibraryUrl);
+            osl_getAbsoluteFileURL(workDir, *ppLibraryUrl, ppLibraryUrl);
 
-        rtl_uString_release(workDir);
-        result = sal_True;
+            rtl_uString_release(workDir);
+            result = sal_True;
+        }
+        else
+        {
+            result = sal_False;
+        }
     }
     return result;
 }
