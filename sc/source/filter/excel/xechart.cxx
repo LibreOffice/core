@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xechart.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2007-07-03 13:25:00 $
+ *  last change: $Author: ihi $ $Date: 2007-08-17 12:07:50 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1047,7 +1047,7 @@ XclExpChTextRef lclCreateTitle( const XclExpChRoot& rRoot, Reference< XTitled > 
 {
     Reference< XTitle > xTitle;
     if( xTitled.is() )
-        xTitle = xTitled->getTitle();
+        xTitle = xTitled->getTitleObject();
 
     XclExpChTextRef xText( new XclExpChText( rRoot ) );
     xText->ConvertTitle( xTitle, nTarget );
