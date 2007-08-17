@@ -4,9 +4,9 @@
  *
  *  $RCSfile: unopkg_shared.h,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: vg $ $Date: 2007-01-18 14:58:10 $
+ *  last change: $Author: ihi $ $Date: 2007-08-17 11:52:52 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -97,7 +97,12 @@ inline bool readOption(
     }
     return false;
 }
+//==============================================================================
 
+/** checks if an argument is a bootstrap variable. These start with -env:. For example
+    -env:UNO_JAVA_JFW_USER_DATA=file:///d:/user
+*/
+bool isBootstrapVariable(sal_uInt32 * pIndex);
 //==============================================================================
 ::rtl::OUString const & getExecutableDir();
 
