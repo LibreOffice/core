@@ -4,9 +4,9 @@
  *
  *  $RCSfile: XTitled.idl,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: vg $ $Date: 2007-05-22 15:05:52 $
+ *  last change: $Author: ihi $ $Date: 2007-08-17 12:09:45 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -50,15 +50,18 @@ module star
 module chart2
 {
 
+/** Interface to be implemented by objects that support having a title of type
+    <type>XTitle</type>.
+ */
 interface XTitled : ::com::sun::star::uno::XInterface
 {
-    /**
+    /** get the object holding the title's content and formatting
      */
-    XTitle getTitle();
+    XTitle getTitleObject();
 
-    /**
+    /** set a new title object replacing the former one
      */
-    void setTitle( [in] XTitle Title );
+    void setTitleObject( [in] XTitle Title );
 };
 
 } ; // chart2
