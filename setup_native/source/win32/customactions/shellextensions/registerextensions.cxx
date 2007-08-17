@@ -4,9 +4,9 @@
  *
  *  $RCSfile: registerextensions.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2007-07-06 12:17:47 $
+ *  last change: $Author: ihi $ $Date: 2007-08-17 11:49:06 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -42,6 +42,7 @@
 #define WIN32_LEAN_AND_MEAN
 #include <windows.h>
 #include <msiquery.h>
+#include <shellapi.h>
 #pragma warning(pop)
 
 #include <malloc.h>
@@ -56,6 +57,119 @@
 #endif
 #include <tchar.h>
 #include <string>
+
+/** creates a temporary folder with a unique name.
+
+    The returned string is a file URL.
+*/
+static std::_tstring createTempFolder()
+{
+    BOOL bExist = FALSE;
+    TCHAR szTempName[MAX_PATH];
+    do
+    {
+        bExist = FALSE;
+        // Get the temp path.
+        TCHAR lpPathBuffer[MAX_PATH];
+        DWORD dwRetVal = GetTempPath(MAX_PATH, lpPathBuffer);
+        if (dwRetVal > MAX_PATH || (dwRetVal == 0))
+        {
+            //fprintf (stderr, "GetTempPath failed with error %d.\n", GetLastError());
+            return TEXT("");
+        }
+        // Create a temporary file.
+        UINT uRetVal = GetTempFileName(lpPathBuffer, // directory for tmp files
+                                       "upg",        // temp file name prefix
+                                       0,            // create unique name
+                                       szTempName);  // buffer for name
+        if (uRetVal == 0)
+        {
+            //fprintf (stderr, "GetTempFileName failed with error %d.\n", GetLastError());
+            return TEXT("");
+        }
+        //Delete the file
+        BOOL bDel = DeleteFile(szTempName);
+        if (FALSE == bDel)
+        {
+            //fprintf(stderr, "Could not delete temp file. Error %d.\n", GetLastError());
+            return TEXT("");
+        }
+        // Create the directory
+        BOOL bDir = CreateDirectory(szTempName, NULL);
+        if (FALSE == bDir)
+        {
+            DWORD error =GetLastError();
+            if (ERROR_ALREADY_EXISTS == error)
+            {
+                bExist = TRUE;
+            }
+            else
+            {
+                //fprintf(stderr, "CreateDirectory failed with error %d.\n", error);
+                return TEXT("");
+            }
+        }
+    } while(bExist);
+
+    std::_tstring cur(szTempName);
+    //make a file URL from the path
+    std::_tstring ret(TEXT("file:///"));
+    for (std::_tstring::iterator i = cur.begin(); i != cur.end(); i++)
+    {
+        if (*i == '\\')
+            ret.append(TEXT("/"));
+        else
+            ret.push_back(*i);
+    }
+//    MessageBox(NULL, ret.c_str(), "createTempFolder", MB_OK);
+    return ret.c_str();
+}
+
+/** deletes the temporary folder.
+    The argument must be a file URL.
+*/
+static void deleteTempFolder(const std::_tstring& sTempFolder)
+{
+    if (sTempFolder.size() == 0)
+        return;
+    //convert the file URL to a path
+    const std::_tstring path(sTempFolder.substr(8));
+    std::_tstring path2;
+//    MessageBox(NULL, path.c_str(), "del1", MB_OK);
+    for (std::_tstring::const_iterator i = path.begin(); i != path.end(); i++)
+    {
+        if (*i == '/')
+            path2.append(TEXT("\\"));
+        else
+            path2.push_back(*i);
+    }
+
+    //We need a null terminated string with two nulls in the end
+    //for the SHFILEOPSTRUCT
+    const TCHAR * szTemp = path2.c_str();
+    size_t size = path2.size();
+    TCHAR * szTemp2 = new TCHAR[size + 2];
+    ZeroMemory(szTemp2, (size + 2) * sizeof(TCHAR));
+    memcpy(szTemp2, szTemp, size * sizeof(TCHAR));
+
+//    MessageBox(NULL, szTemp2, "del3", MB_OK);
+    SHFILEOPSTRUCT operation =
+        {
+            NULL,
+            FO_DELETE,
+            szTemp2,
+            NULL,
+            FOF_SILENT | FOF_NOCONFIRMATION | FOF_NOERRORUI | FOF_NOCONFIRMMKDIR,
+            FALSE,
+            NULL,
+            NULL
+        };
+
+    SHFileOperation( &operation);
+    delete [] szTemp2;
+}
+
+
 
 static std::_tstring GetMsiProperty( MSIHANDLE handle, const std::_tstring& sProperty )
 {
@@ -225,13 +339,18 @@ extern "C" UINT __stdcall RegisterExtensions(MSIHANDLE handle)
 
             do
             {
+                const std::_tstring sTempFolder(createTempFolder());
                 std::_tstring sOxtFile = sShareInstallDir + aFindFileData.cFileName;
-                std::_tstring sCommand = sUnoPkgFile + " add --shared " + "\"" + sOxtFile + "\"";
+                std::_tstring sCommand = sUnoPkgFile + " add --shared " + "\"" + sOxtFile + "\"" +
+                    TEXT(" -env:UNO_JAVA_JFW_INSTALL_DATA=$ORIGIN/../share/config/javasettingsunopkginstall.xml") +
+                    TEXT(" -env:UserInstallation=") + sTempFolder;
+
 
                 mystr = "Command: " + sCommand;
-                // MessageBox(NULL, mystr.c_str(), "Command", MB_OK);
+                //MessageBox(NULL, mystr.c_str(), "Command", MB_OK);
 
                 bool fSuccess = ExecuteCommand( sCommand.c_str(), TRUE );
+                deleteTempFolder(sTempFolder);
 
                 if ( fSuccess )
                 {
@@ -324,16 +443,20 @@ extern "C" UINT __stdcall DeregisterExtensions(MSIHANDLE handle)
 
             do
             {
+                const std::_tstring sTempFolder(createTempFolder());
                 // When removing extensions, only the oxt file name is required, without path
                 // Therefore no quoting is required
                 // std::_tstring sOxtFile = sShareInstallDir + aFindFileData.cFileName;
                 std::_tstring sOxtFile = aFindFileData.cFileName;
-                std::_tstring sCommand = sUnoPkgFile + " remove --shared " + "\"" + sOxtFile + "\"";
+                std::_tstring sCommand = sUnoPkgFile + " remove --shared " + "\"" + sOxtFile + "\"" +
+                    TEXT(" -env:UNO_JAVA_JFW_INSTALL_DATA=$ORIGIN/../share/config/javasettingsunopkginstall.xml") +
+                    TEXT(" -env:UserInstallation=") + sTempFolder;
 
                 mystr = "Command: " + sCommand;
-                // MessageBox(NULL, mystr.c_str(), "Command", MB_OK);
+                //MessageBox(NULL, mystr.c_str(), "Command", MB_OK);
 
                 bool fSuccess = ExecuteCommand( sCommand.c_str(), TRUE );
+                deleteTempFolder(sTempFolder);
 
                 if ( fSuccess )
                 {
