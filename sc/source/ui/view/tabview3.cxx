@@ -4,9 +4,9 @@
  *
  *  $RCSfile: tabview3.cxx,v $
  *
- *  $Revision: 1.57 $
+ *  $Revision: 1.58 $
  *
- *  last change: $Author: hr $ $Date: 2007-07-31 16:38:05 $
+ *  last change: $Author: ihi $ $Date: 2007-08-17 14:51:50 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -2105,6 +2105,10 @@ void ScTabView::PaintArea( SCCOL nStartCol, SCROW nStartRow, SCCOL nEndCol, SCRO
 
     // #i79909# Calling UpdateAllOverlays here isn't necessary and would lead to overlay calls from a timer,
     // with a wrong MapMode if editing in a cell (reference input).
+    // #i80499# Overlays need updates in a lot of cases, e.g. changing row/column size,
+    // or showing/hiding outlines. TODO: selections in inactive windows are vanishing.
+    if( eMode != SC_UPDATE_MARKS )
+        UpdateAllOverlays();
 }
 
 void ScTabView::PaintRangeFinder( long nNumber )
