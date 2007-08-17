@@ -4,9 +4,9 @@
  *
  *  $RCSfile: CustomAnimationPane.cxx,v $
  *
- *  $Revision: 1.28 $
+ *  $Revision: 1.29 $
  *
- *  last change: $Author: hr $ $Date: 2007-08-01 11:08:35 $
+ *  last change: $Author: ihi $ $Date: 2007-08-17 15:33:28 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -454,20 +454,25 @@ IMPL_LINK(CustomAnimationPane,EventMultiplexerListener,
             onChangeCurrentPage();
             break;
 
-        case tools::EventMultiplexerEvent::EID_MAIN_VIEW_REMOVED:
-            mxView = Reference<XDrawView>();
-            break;
-
         case tools::EventMultiplexerEvent::EID_MAIN_VIEW_ADDED:
             // At this moment the controller may not yet been set at model
             // or ViewShellBase.  Take it from the view shell passed with
             // the event.
             if (mrBase.GetMainViewShell() != NULL)
             {
-                mxView = Reference<XDrawView>::query(mrBase.GetDrawController());
-                onSelectionChanged();
-                onChangeCurrentPage();
+                if( mrBase.GetMainViewShell()->GetShellType() == ViewShell::ST_IMPRESS )
+                {
+                    mxView = Reference<XDrawView>::query(mrBase.GetDrawController());
+                    onSelectionChanged();
+                    onChangeCurrentPage();
+                    break;
+                }
             }
+        // fall through intended
+        case tools::EventMultiplexerEvent::EID_MAIN_VIEW_REMOVED:
+            mxView = 0;
+            mxCurrentPage = 0;
+            updateControls();
             break;
 
         case tools::EventMultiplexerEvent::EID_DISPOSING:
@@ -814,6 +819,34 @@ OUString getPropertyName( sal_Int32 nPropertyType )
 
 void CustomAnimationPane::updateControls()
 {
+    mpFLModify->Enable( mxView.is() );
+    mpFTSpeed->Enable( mxView.is() );
+    mpCBSpeed->Enable( mxView.is() );
+    mpCustomAnimationList->Enable( mxView.is() );
+    mpFTChangeOrder->Enable( mxView.is() );
+    mpPBMoveUp->Enable( mxView.is() );
+    mpPBMoveDown->Enable( mxView.is() );
+    mpFLSeperator1->Enable( mxView.is() );
+    mpPBPlay->Enable( mxView.is() );
+    mpPBSlideShow->Enable( mxView.is() );
+    mpFLSeperator2->Enable( mxView.is() );
+    mpCBAutoPreview->Enable( mxView.is() );
+
+    if( !mxView.is() )
+    {
+        mpPBAddEffect->Enable( FALSE );
+        mpPBChangeEffect->Enable( FALSE );
+        mpPBRemoveEffect->Enable( FALSE );
+        mpFLEffect->Enable( FALSE );
+        mpFTStart->Enable( FALSE );
+        mpLBStart->Enable( FALSE );
+        mpPBPropertyMore->Enable( FALSE );
+        mpLBProperty->Enable( FALSE );
+        mpFTProperty->Enable( FALSE );
+        mpCustomAnimationList->clear();
+        return;
+    }
+
     const int nSelectionCount = maListSelection.size();
 
     mpPBAddEffect->Enable( maViewSelection.hasValue() );
@@ -1070,9 +1103,12 @@ void CustomAnimationPane::updateMotionPathTags()
 
     ::sd::View* pView = 0;
 
-    ::boost::shared_ptr<ViewShell> xViewShell( mrBase.GetMainViewShell() );
-    if( xViewShell.get() )
-        pView = xViewShell->GetView();
+    if( mxView.is() )
+    {
+        ::boost::shared_ptr<ViewShell> xViewShell( mrBase.GetMainViewShell() );
+        if( xViewShell.get() )
+            pView = xViewShell->GetView();
+    }
 
     if( IsVisible() && mpMainSequence.get() && pView )
     {
