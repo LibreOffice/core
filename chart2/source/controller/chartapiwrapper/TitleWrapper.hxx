@@ -4,9 +4,9 @@
  *
  *  $RCSfile: TitleWrapper.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: vg $ $Date: 2007-05-22 17:19:37 $
+ *  last change: $Author: ihi $ $Date: 2007-08-17 12:12:30 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -144,7 +144,7 @@ protected:
     ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet > getFirstCharacterPropertySet();
 
 private:
-    ::com::sun::star::uno::Reference< ::com::sun::star::chart2::XTitle > getTitle();
+    ::com::sun::star::uno::Reference< ::com::sun::star::chart2::XTitle > getTitleObject();
 
 private:
     ::boost::shared_ptr< Chart2ModelContact >   m_spChart2ModelContact;
