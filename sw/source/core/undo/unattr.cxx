@@ -4,9 +4,9 @@
  *
  *  $RCSfile: unattr.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: rt $ $Date: 2007-07-26 08:20:06 $
+ *  last change: $Author: obo $ $Date: 2007-08-17 08:45:54 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -189,11 +189,11 @@ struct TxtNodeNumberingAttrs
           mbIsCounted( bIsCounted )
     {}
 
-    const ULONG mnTxtNodeIdx;
-    const int mnNumLvl;
-    const bool mbIsRestart;
-    const SwNodeNum::tSwNumTreeNumber mnRestartVal;
-    const bool mbIsCounted;
+    ULONG mnTxtNodeIdx;
+    int mnNumLvl;
+    bool mbIsRestart;
+    SwNodeNum::tSwNumTreeNumber mnRestartVal;
+    bool mbIsCounted;
 };
 // <--
 
