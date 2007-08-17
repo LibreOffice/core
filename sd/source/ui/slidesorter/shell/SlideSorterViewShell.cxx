@@ -4,9 +4,9 @@
  *
  *  $RCSfile: SlideSorterViewShell.cxx,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: rt $ $Date: 2007-04-03 16:18:50 $
+ *  last change: $Author: ihi $ $Date: 2007-08-17 14:27:14 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -432,6 +432,8 @@ void SlideSorterViewShell::SetupListeners (void)
                 controller::SlideSorterController,
                 TabBarHandler));
 
+    mpSlideSorterController->GetScrollBarManager().Connect();
+
     GetParentWindow()->AddEventListener(
         LINK(
             mpSlideSorterController.get(),
@@ -460,10 +462,7 @@ void SlideSorterViewShell::ReleaseListeners (void)
         mpTabBar.reset();
     }
 
-    if (GetVerticalScrollBar() != NULL)
-    {
-        GetVerticalScrollBar()->SetScrollHdl (Link());
-    }
+    mpSlideSorterController->GetScrollBarManager().Disconnect();
 
     GetActiveWindow()->RemoveEventListener(
         LINK(mpSlideSorterController.get(),
