@@ -4,9 +4,9 @@
  *
  *  $RCSfile: layermanager.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: obo $ $Date: 2007-07-17 14:56:36 $
+ *  last change: $Author: ihi $ $Date: 2007-08-17 12:44:18 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -76,7 +76,7 @@ namespace slideshow
             while( aIter != aEnd )
             {
                 LayerSharedPtr pLayer = aIter->mpLayer.lock();
-                if( pLayer != pCurrLayer )
+                if( pLayer && pLayer != pCurrLayer )
                 {
                     pCurrLayer = pLayer;
                     pCurrViewLayer = layerFunc(pCurrLayer);
@@ -750,8 +750,8 @@ namespace slideshow
         }
 
         void LayerManager::commitLayerChanges( std::size_t              nCurrLayerIndex,
-                                               LayerShapeSet::iterator  aFirstLayerShape,
-                                               LayerShapeSet::iterator  aEndLayerShapes )
+                                               LayerShapeSet::const_iterator  aFirstLayerShape,
+                                               LayerShapeSet::const_iterator  aEndLayerShapes )
         {
             const bool bLayerExists( maLayers.size() > nCurrLayerIndex );
             if( bLayerExists )
