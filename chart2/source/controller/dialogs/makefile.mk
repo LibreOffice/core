@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.12 $
+#   $Revision: 1.13 $
 #
-#   last change: $Author: rt $ $Date: 2007-07-25 08:33:54 $
+#   last change: $Author: ihi $ $Date: 2007-08-17 15:06:42 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -147,11 +147,13 @@ SRC1FILES=		\
 SRS1NAME=$(TARGET)
 
 # --- Targets -----------------------------------------------------------------
-LOCALIZE_ME=res_DataLabel_tmpl.hrc res_LegendPosition_tmpl.hrc res_Statistic_tmpl.hrc 
+LOCALIZE_ME=res_DataLabel_tmpl.hrc res_LegendPosition_tmpl.hrc res_Statistic_tmpl.hrc res_Titlesx_tmpl.hrc res_SecondaryAxisCheckBoxes_tmpl.hrc 
 .INCLUDE: target.mk
 $(SRS)$/chcdialogs.srs: $(INCCOM)$/res_DataLabel.hrc
 $(SRS)$/chcdialogs.srs: $(INCCOM)$/res_LegendPosition.hrc
 $(SRS)$/chcdialogs.srs: $(INCCOM)$/res_Statistic.hrc
+$(SRS)$/chcdialogs.srs: $(INCCOM)$/res_Titlesx.hrc
+$(SRS)$/chcdialogs.srs: $(INCCOM)$/res_SecondaryAxisCheckBoxes.hrc
 
 #dependencies:
 
@@ -170,7 +172,6 @@ $(SRS)$/chcdialogs.srs: \
         dlg_InsertStatistic.hrc \
         dlg_InsertTitle.hrc \
         dlg_View3D.hrc \
-        res_SecondaryAxisCheckBoxes.hrc \
         res_Titles.hrc \
         tp_3D_SceneAppearance.hrc \
         tp_3D_SceneGeometry.hrc \
