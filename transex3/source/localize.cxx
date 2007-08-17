@@ -4,9 +4,9 @@
  *
  *  $RCSfile: localize.cxx,v $
  *
- *  $Revision: 1.46 $
+ *  $Revision: 1.47 $
  *
- *  last change: $Author: hr $ $Date: 2007-06-27 22:29:37 $
+ *  last change: $Author: ihi $ $Date: 2007-08-17 12:42:21 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -93,6 +93,8 @@ const char *PositiveList[] = {
     "chart2/source/controller/dialogs/res_DataLabel_tmpl.hrc",
     "chart2/source/controller/dialogs/res_LegendPosition_tmpl.hrc",
     "chart2/source/controller/dialogs/res_Statistic_tmpl.hrc",
+    "chart2/source/controller/dialogs/res_Titlesx_tmpl.hrc",
+    "chart2/source/controller/dialogs/res_SecondaryAxisCheckBoxes_tmpl.hrc",
     "chart2/source/controller/menu/MenuItems_tmpl.hrc",
       "svx.lnk/inc/globlmn_tmpl.hrc",
     "sw.lnk/source/ui/inc/swmn_tmpl.hrc",
@@ -107,6 +109,8 @@ const char *PositiveList[] = {
     "chart2.lnk/source/controller/dialogs/res_DataLabel_tmpl.hrc",
     "chart2.lnk/source/controller/dialogs/res_LegendPosition_tmpl.hrc",
     "chart2.lnk/source/controller/dialogs/res_Statistic_tmpl.hrc",
+    "chart2.lnk/source/controller/dialogs/res_Titlesx_tmpl.hrc",
+    "chart2.lnk/source/controller/dialogs/res_SecondaryAxisCheckBoxes_tmpl.hrc",
     "chart2.lnk/source/controller/menu/MenuItems_tmpl.hrc",
     "NULL"
 };
