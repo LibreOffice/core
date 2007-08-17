@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dp_component.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: obo $ $Date: 2007-06-13 07:59:29 $
+ *  last change: $Author: ihi $ $Date: 2007-08-17 11:52:05 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -80,6 +80,23 @@ namespace {
 
 typedef ::std::list<OUString> t_stringlist;
 typedef ::std::vector< ::std::pair<OUString, OUString> > t_stringpairvec;
+
+/** return a vector of bootstrap variables which have been provided
+    as command arguments.
+*/
+::std::vector<OUString> getCmdBootstrapVariables()
+{
+    ::std::vector<OUString> ret;
+    sal_uInt32 count = osl_getCommandArgCount();
+    for (sal_uInt32 i = 0; i < count; i++)
+    {
+        OUString arg;
+        osl_getCommandArg(i, &arg.pData);
+        if (arg.matchAsciiL("-env:", 5))
+            ret.push_back(arg);
+    }
+    return ret;
+}
 
 bool jarManifestHeaderPresent(
     OUString const & url, OUString const & name,
@@ -885,6 +902,10 @@ Reference<XComponentContext> raise_uno_process(
     args.push_back( buf.makeStringAndClear() );
     // don't inherit from unorc:
     args.push_back( OUSTR("-env:INIFILENAME=") );
+
+    //now add the bootstrap variables which were supplied on the command line
+    ::std::vector<OUString> bootvars = getCmdBootstrapVariables();
+    args.insert(args.end(), bootvars.begin(), bootvars.end());
 
     oslProcess hProcess = raiseProcess(
         ProgramDir::get() + OUSTR("/uno"),
