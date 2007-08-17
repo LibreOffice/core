@@ -4,9 +4,9 @@
  *
  *  $RCSfile: drawshapesubsetting.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: obo $ $Date: 2007-07-17 14:52:26 $
+ *  last change: $Author: ihi $ $Date: 2007-08-17 12:43:43 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -398,7 +398,7 @@ namespace slideshow
             aEntry.mnStartActionIndex   = rEffectiveSubset.getStartIndex();
             aEntry.mnEndActionIndex     = rEffectiveSubset.getEndIndex();
 
-            ShapeSet::const_iterator aIter;
+            ShapeSet::iterator aIter;
             if( (aIter=maSubsetShapes.find( aEntry )) == maSubsetShapes.end() )
                 return false; // not found, subset was never queried
 
