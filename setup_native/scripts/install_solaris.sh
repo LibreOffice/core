@@ -232,7 +232,7 @@ export UserInstallation
 
 if [ -x /usr/bin/mktemp ]
 then
-  CMD=`/usr/bin/mktemp /tmp/userinstall.XXXXXX`
+  CMD=\`/usr/bin/mktemp /tmp/userinstall.XXXXXX\`
 else
   CMD=/tmp/userinstall.\$\$; echo "" > \$CMD
 fi
