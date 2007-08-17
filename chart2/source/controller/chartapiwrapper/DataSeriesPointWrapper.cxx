@@ -4,9 +4,9 @@
  *
  *  $RCSfile: DataSeriesPointWrapper.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: hr $ $Date: 2007-08-03 12:31:40 $
+ *  last change: $Author: ihi $ $Date: 2007-08-17 12:11:25 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -325,17 +325,11 @@ public:
     virtual void setPropertyValue( const Any& rOuterValue, const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& xInnerPropertySet ) const
                         throw (::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::beans::PropertyVetoException, ::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException);
 
-    virtual Any getPropertyValue( const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& xInnerPropertySet ) const
-                        throw (::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException);
-
     virtual void setPropertyToDefault( const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertyState >& xInnerPropertyState ) const
                         throw (::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::uno::RuntimeException);
 
     virtual ::com::sun::star::uno::Any getPropertyDefault( const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertyState >& xInnerPropertyState ) const
                         throw (::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException);
-
-    virtual ::com::sun::star::beans::PropertyState getPropertyState( const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertyState >& xInnerPropertyState ) const
-                        throw (::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::uno::RuntimeException);
 
 protected:
     DataSeriesPointWrapper* m_pDataSeriesPointWrapper;
@@ -354,15 +348,6 @@ WrappedLineColorProperty::WrappedLineColorProperty(
 
 WrappedLineColorProperty::~WrappedLineColorProperty()
 {
-}
-
-Any WrappedLineColorProperty::getPropertyValue( const Reference< beans::XPropertySet >& xInnerPropertySet ) const
-                        throw (beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException)
-{
-    if( m_pDataSeriesPointWrapper && m_pDataSeriesPointWrapper->isLinesForbidden() )
-        return m_aOuterValue;
-    else
-        return WrappedSeriesAreaOrLineProperty::getPropertyValue( xInnerPropertySet );
 }
 
 void WrappedLineColorProperty::setPropertyValue( const Any& rOuterValue, const Reference< beans::XPropertySet >& xInnerPropertySet ) const
@@ -392,20 +377,6 @@ Any WrappedLineColorProperty::getPropertyDefault( const Reference< beans::XPrope
         return WrappedSeriesAreaOrLineProperty::getPropertyDefault( xInnerPropertyState );
 }
 
-beans::PropertyState WrappedLineColorProperty::getPropertyState( const Reference< beans::XPropertyState >& xInnerPropertyState ) const
-                        throw (beans::UnknownPropertyException, uno::RuntimeException)
-{
-    if( m_pDataSeriesPointWrapper && !m_pDataSeriesPointWrapper->isSupportingAreaProperties() )
-    {
-        beans::PropertyState aState = beans::PropertyState_DIRECT_VALUE;
-        if( m_pDataSeriesPointWrapper->isLinesForbidden() && m_aOuterValue == m_aDefaultValue )
-            aState = beans::PropertyState_DEFAULT_VALUE;
-        return aState;
-    }
-    else
-        return WrappedSeriesAreaOrLineProperty::getPropertyState( xInnerPropertyState );
-}
-
 //----------------------------------------------------------------------------------------------------------------------
 
 class WrappedLineStyleProperty : public WrappedSeriesAreaOrLineProperty
@@ -417,16 +388,7 @@ public:
     virtual void setPropertyValue( const Any& rOuterValue, const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& xInnerPropertySet ) const
                         throw (::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::beans::PropertyVetoException, ::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException);
 
-    virtual Any getPropertyValue( const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& xInnerPropertySet ) const
-                        throw (::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException);
-
     virtual void setPropertyToDefault( const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertyState >& xInnerPropertyState ) const
-                        throw (::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::uno::RuntimeException);
-
-    virtual ::com::sun::star::uno::Any getPropertyDefault( const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertyState >& xInnerPropertyState ) const
-                        throw (::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException);
-
-    virtual ::com::sun::star::beans::PropertyState getPropertyState( const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertyState >& xInnerPropertyState ) const
                         throw (::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::uno::RuntimeException);
 
 protected:
@@ -446,15 +408,6 @@ WrappedLineStyleProperty::WrappedLineStyleProperty(
 
 WrappedLineStyleProperty::~WrappedLineStyleProperty()
 {
-}
-
-Any WrappedLineStyleProperty::getPropertyValue( const Reference< beans::XPropertySet >& xInnerPropertySet ) const
-                        throw (beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException)
-{
-    if( m_pDataSeriesPointWrapper && m_pDataSeriesPointWrapper->isLinesForbidden() )
-        return m_aOuterValue;
-    else
-        return WrappedSeriesAreaOrLineProperty::getPropertyValue( xInnerPropertySet );
 }
 
 void WrappedLineStyleProperty::setPropertyValue( const Any& rOuterValue, const Reference< beans::XPropertySet >& xInnerPropertySet ) const
@@ -478,29 +431,6 @@ void WrappedLineStyleProperty::setPropertyToDefault( const Reference< beans::XPr
         WrappedSeriesAreaOrLineProperty::setPropertyToDefault( xInnerPropertyState );
 }
 
-Any WrappedLineStyleProperty::getPropertyDefault( const Reference< beans::XPropertyState >& xInnerPropertyState ) const
-                        throw (beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException)
-{
-    if( m_pDataSeriesPointWrapper && m_pDataSeriesPointWrapper->isLinesForbidden() )
-        return m_aDefaultValue;
-    else
-        return WrappedSeriesAreaOrLineProperty::getPropertyDefault( xInnerPropertyState );
-}
-
-beans::PropertyState WrappedLineStyleProperty::getPropertyState( const Reference< beans::XPropertyState >& xInnerPropertyState ) const
-                        throw (beans::UnknownPropertyException, uno::RuntimeException)
-{
-    if( m_pDataSeriesPointWrapper && m_pDataSeriesPointWrapper->isLinesForbidden() )
-    {
-        beans::PropertyState aState = beans::PropertyState_DIRECT_VALUE;
-        if( m_aOuterValue == m_aDefaultValue )
-            aState = beans::PropertyState_DEFAULT_VALUE;
-        return aState;
-    }
-    else
-        return WrappedSeriesAreaOrLineProperty::getPropertyState( xInnerPropertyState );
-}
-
 //----------------------------------------------------------------------------------------------------------------------
 //----------------------------------------------------------------------------------------------------------------------
 //----------------------------------------------------------------------------------------------------------------------
@@ -521,6 +451,7 @@ DataSeriesPointWrapper::DataSeriesPointWrapper(
         , m_eType( DATA_SERIES )
         , m_nSeriesIndexInNewAPI( -1 )
         , m_nPointIndex( -1 )
+        , m_bLinesAllowed(sal_True)
         , m_xDataSeries(0)
 {
     //need initialize call afterwards
@@ -614,18 +545,7 @@ bool DataSeriesPointWrapper::isSupportingAreaProperties()
 
 bool DataSeriesPointWrapper::isLinesForbidden()
 {
-    sal_Bool bLinesForbidden = false;
-    Reference< ::com::sun::star::chart::XChartDocument > xChartDocument = Reference< ::com::sun::star::chart::XChartDocument >( m_spChart2ModelContact->getChartModel(), uno::UNO_QUERY );
-    if( xChartDocument.is() )
-    {
-        Reference< beans::XPropertySet > xDiaProp( xChartDocument->getDiagram(), uno::UNO_QUERY );
-        if( xDiaProp.is() )
-        {
-            xDiaProp->getPropertyValue( C2U("Lines") ) >>= bLinesForbidden;
-            bLinesForbidden = !bLinesForbidden;
-        }
-    }
-    return bLinesForbidden;
+    return !m_bLinesAllowed;
 }
 
 Reference< chart2::XDataSeries > DataSeriesPointWrapper::getDataSeries()
@@ -706,6 +626,10 @@ beans::PropertyState SAL_CALL DataSeriesPointWrapper::getPropertyState( const ::
                 && bVaryColorsByPoint )
                 return beans::PropertyState_DIRECT_VALUE;
         }
+        else if( rPropertyName.equals(C2U("Lines"))
+            ||  rPropertyName.equals(C2U("SymbolType"))
+            ||  rPropertyName.equals(C2U("SymbolSize")) )
+            return WrappedPropertySet::getPropertyState( rPropertyName );
 
         uno::Any aDefault( getPropertyDefault( rPropertyName ) );
         uno::Any aValue( getPropertyValue( rPropertyName ) );
@@ -779,7 +703,7 @@ const std::vector< WrappedProperty* > DataSeriesPointWrapper::createWrappedPrope
         aWrappedProperties.push_back( new WrappedAttachedAxisProperty( m_spChart2ModelContact ) );
     }
 
-    WrappedSymbolProperties::addWrappedPropertiesForSeries( aWrappedProperties );//for series and  points
+    WrappedSymbolProperties::addWrappedPropertiesForSeries( aWrappedProperties, m_spChart2ModelContact );//for series and  points
     WrappedDataCaptionProperties::addWrappedPropertiesForSeries( aWrappedProperties );//for series and  points
 
     //add unnamed fill properties (different inner names here)
@@ -832,6 +756,12 @@ const std::vector< WrappedProperty* > DataSeriesPointWrapper::createWrappedPrope
 void SAL_CALL DataSeriesPointWrapper::setPropertyValue( const ::rtl::OUString& rPropertyName, const Any& rValue )
                                     throw (beans::UnknownPropertyException, beans::PropertyVetoException, lang::IllegalArgumentException, lang::WrappedTargetException, uno::RuntimeException)
 {
+    if(rPropertyName.equals(C2U("Lines")))
+    {
+        if( ! (rValue >>= m_bLinesAllowed) )
+            throw lang::IllegalArgumentException( C2U("Property Lines requires value of type sal_Bool"), 0, 0 );
+    }
+
     sal_Int32 nHandle = getInfoHelper().getHandleByName( rPropertyName );
     static const sal_Int32 nErrorCategoryHandle = getInfoHelper().getHandleByName( C2U("ErrorCategory") );
     if( nErrorCategoryHandle == nHandle )
