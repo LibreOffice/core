@@ -7,9 +7,9 @@ eval 'exec perl -wS $0 ${1+"$@"}'
 #
 #   $RCSfile: smoketest.pl,v $
 #
-#   $Revision: 1.25 $
+#   $Revision: 1.26 $
 #
-#   last change: $Author: hr $ $Date: 2007-07-31 13:03:42 $
+#   last change: $Author: ihi $ $Date: 2007-08-17 13:41:16 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -235,6 +235,7 @@ else {
 }
 
 $installpath = $installpath_without . $PathSeparator;
+$installpath = glob $installpath;
 
 $ENV{STAR_REGISTRY}="";
 $milestone = "";
@@ -256,7 +257,7 @@ if ( $ARGV[0] ) {
 
 ( $script_name = $0 ) =~ s/^.*\b(\w+)\.pl$/$1/;
 
-$id_str = ' $Revision: 1.25 $ ';
+$id_str = ' $Revision: 1.26 $ ';
 $id_str =~ /Revision:\s+(\S+)\s+\$/
   ? ($script_rev = $1) : ($script_rev = "-");
 
@@ -591,34 +592,53 @@ sub doInstall {
             return "$sane_destdir/"
 
         } elsif ( (defined($system)) && ($system eq "Linux") ) {
-            $installsetpath .= "RPMS$PathSeparator";
+            if ($ENV{PKGFORMAT} eq "deb") { # default is rpm
+                $installsetpath .= "DEBS$PathSeparator";
             $optdir = "$dest_installdir" . "opt" . $PathSeparator;
-            $rpmdir = "$dest_installdir" . "rpm" . $PathSeparator;
-            createPath ($optdir, $error_setup);
-            createPath ($rpmdir, $error_setup);
-            $Command = "rpm --initdb --dbpath $rpmdir";
-            execute_Command ($Command, $error_setup, $show_Message, $command_withoutOutput);
-            $mask = "\\.rpm\$";
-            getSubFiles ("$installsetpath", \@DirArray, $mask);
-            if ($#DirArray == -1) {
-                            print_error ("Installationset in $installsetpath is incomplete", 2);
+                createPath ($optdir, $error_setup);
+                $mask = "\\.deb\$";
+                getSubFiles ("$installsetpath", \@DirArray, $mask);
+                if ($#DirArray == -1) {
+                       print_error ("Installationset in $installsetpath is incomplete", 2);
+                }
+                foreach $file (@DirArray) {
+                    if ( ($file =~ /-menus-/) or ($file =~ /^adabas/) or (/^j2re-/) or ($file =~ /-gnome-/) ) {
+                        next;
+                    }
+                    $Command = "dpkg-deb -x $installsetpath$file $dest_installdir";
+                    execute_Command ($Command, $error_setup, $show_Message, $command_withoutErrorcheck | $command_withoutOutput);
+                }
             }
-            foreach $file (@DirArray) {
-                if ( ($file =~ /-menus-/) or ($file =~ /^adabas/) or (/^j2re-/) or ($file =~ /-gnome-/) ) {
-                    next;
+            else {
+                $installsetpath .= "RPMS$PathSeparator";
+                $optdir = "$dest_installdir" . "opt" . $PathSeparator;
+                $rpmdir = "$dest_installdir" . "rpm" . $PathSeparator;
+                createPath ($optdir, $error_setup);
+                createPath ($rpmdir, $error_setup);
+                $Command = "rpm --initdb --dbpath $rpmdir";
+                execute_Command ($Command, $error_setup, $show_Message, $command_withoutOutput);
+                $mask = "\\.rpm\$";
+                getSubFiles ("$installsetpath", \@DirArray, $mask);
+                if ($#DirArray == -1) {
+                                print_error ("Installationset in $installsetpath is incomplete", 2);
                 }
-                $olddir = "/opt";
-                $newdir = $optdir;
-                $Command = "rpm -qlp $installsetpath$file";
-                $output_ref = execute_Command ($Command, $error_setup, $show_Message, $command_withoutOutput);
-                if (($#{@$output_ref} > -1) and ($$output_ref[0] ne "") ) {
-                    $olddir = $$output_ref[0];
-                    $newdir = $dest_installdir . $$output_ref[0];
-                    $newdir =~ s/\/\//\//;
-                    createPath ($newdir, $error_setup);
+                foreach $file (@DirArray) {
+                    if ( ($file =~ /-menus-/) or ($file =~ /^adabas/) or (/^j2re-/) or ($file =~ /-gnome-/) ) {
+                        next;
+                    }
+                    $olddir = "/opt";
+                    $newdir = $optdir;
+                    $Command = "rpm -qlp $installsetpath$file";
+                    $output_ref = execute_Command ($Command, $error_setup, $show_Message, $command_withoutOutput);
+                    if (($#{@$output_ref} > -1) and ($$output_ref[0] ne "") ) {
+                        $olddir = $$output_ref[0];
+                        $newdir = $dest_installdir . $$output_ref[0];
+                        $newdir =~ s/\/\//\//;
+                        createPath ($newdir, $error_setup);
+                    }
+                    $Command = "rpm --install --ignoresize --nodeps -vh --relocate $olddir=$newdir --dbpath $rpmdir $installsetpath$file";
+                    execute_Command ($Command, $error_setup, $show_Message, $command_withoutErrorcheck | $command_withoutOutput);
                 }
-                $Command = "rpm --install --ignoresize --nodeps -vh --relocate $olddir=$newdir --dbpath $rpmdir $installsetpath$file";
-                execute_Command ($Command, $error_setup, $show_Message, $command_withoutErrorcheck | $command_withoutOutput);
             }
         }
         elsif ( (defined($system)) && ($system eq "SunOS") ) {
