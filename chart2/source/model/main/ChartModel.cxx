@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ChartModel.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: rt $ $Date: 2007-07-25 08:49:07 $
+ *  last change: $Author: ihi $ $Date: 2007-08-17 12:14:34 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -986,7 +986,7 @@ sal_Bool SAL_CALL ChartModel::hasInternalDataProvider()
 }
 
 // ____ XTitled ____
-uno::Reference< chart2::XTitle > SAL_CALL ChartModel::getTitle()
+uno::Reference< chart2::XTitle > SAL_CALL ChartModel::getTitleObject()
     throw (uno::RuntimeException)
 {
     OSL_ASSERT( m_pImplChartModel.get() != 0 );
@@ -996,7 +996,7 @@ uno::Reference< chart2::XTitle > SAL_CALL ChartModel::getTitle()
     // \--
 }
 
-void SAL_CALL ChartModel::setTitle(
+void SAL_CALL ChartModel::setTitleObject(
     const uno::Reference<
     chart2::XTitle >& Title )
     throw (uno::RuntimeException)
