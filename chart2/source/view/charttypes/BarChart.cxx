@@ -4,9 +4,9 @@
  *
  *  $RCSfile: BarChart.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: rt $ $Date: 2007-07-25 09:04:22 $
+ *  last change: $Author: ihi $ $Date: 2007-08-17 12:16:18 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -383,7 +383,33 @@ void BarChart::createShapes()
     {
         ::std::vector< ::std::vector< VDataSeriesGroup > >::iterator             aZSlotIter = m_aZSlots.begin();
         const ::std::vector< ::std::vector< VDataSeriesGroup > >::const_iterator  aZSlotEnd = m_aZSlots.end();
+
+        //sum up the values for all series in a complete z zlot per attached axis
+        ::std::map< sal_Int32,  double > aLogicYSumMap;
+        for( ; aZSlotIter != aZSlotEnd; aZSlotIter++ )
+        {
+            ::std::vector< VDataSeriesGroup >::iterator             aXSlotIter = aZSlotIter->begin();
+            const ::std::vector< VDataSeriesGroup >::const_iterator aXSlotEnd = aZSlotIter->end();
+
+            for( aXSlotIter = aZSlotIter->begin(); aXSlotIter != aXSlotEnd; aXSlotIter++ )
+            {
+                sal_Int32 nAttachedAxisIndex = aXSlotIter->getAttachedAxisIndexForFirstSeries();
+                if( aLogicYSumMap.find(nAttachedAxisIndex)==aLogicYSumMap.end() )
+                    aLogicYSumMap[nAttachedAxisIndex]=0.0;
+
+                double fMinimumY = 0.0, fMaximumY = 0.0;
+                aXSlotIter->calculateYMinAndMaxForCategory( nCatIndex
+                    , isSeperateStackingForDifferentSigns( 1 ), fMinimumY, fMaximumY, nAttachedAxisIndex );
+
+                if( !::rtl::math::isNan( fMaximumY ) && fMaximumY > 0)
+                    aLogicYSumMap[nAttachedAxisIndex] += fMaximumY;
+                if( !::rtl::math::isNan( fMinimumY ) && fMinimumY < 0)
+                    aLogicYSumMap[nAttachedAxisIndex] += fabs(fMinimumY);
+            }
+        }
+
 //=============================================================================
+        aZSlotIter = m_aZSlots.begin();
         for( sal_Int32 nZ=1; aZSlotIter != aZSlotEnd; aZSlotIter++, nZ++ )
         {
             ::std::vector< VDataSeriesGroup >::iterator             aXSlotIter = aZSlotIter->begin();
@@ -391,7 +417,8 @@ void BarChart::createShapes()
 
 //=============================================================================
             //iterate through all x slots in this category
-            for( double fSlotX=0; aXSlotIter != aXSlotEnd; aXSlotIter++, fSlotX+=1.0 )
+            double fSlotX=0;
+            for( aXSlotIter = aZSlotIter->begin(); aXSlotIter != aXSlotEnd; aXSlotIter++, fSlotX+=1.0 )
             {
                 sal_Int32 nAttachedAxisIndex = 0;
                 BarPositionHelper* pPosHelper = m_pMainPosHelper;
@@ -739,7 +766,7 @@ void BarChart::createShapes()
                         //create data point label
                         if( (**aSeriesIter).getDataPointLabelIfLabel(nCatIndex) )
                         {
-                            double fLogicSum = bPositive ? fLogicPositiveYSum : fLogicNegativeYSum;
+                            double fLogicSum = aLogicYSumMap[nAttachedAxisIndex];
                             LabelAlignment eAlignment(pPosHelper->getLabelAlignmentForDimension( 1 ));
                             awt::Point aScreenPosition2D( this->getLabelScreenPositionAndAlignment(
                                 eAlignment, pSeriesList->size() > 1
