@@ -4,9 +4,9 @@
  *
  *  $RCSfile: layer.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: obo $ $Date: 2007-07-17 14:56:15 $
+ *  last change: $Author: ihi $ $Date: 2007-08-17 12:43:56 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -118,7 +118,7 @@ namespace slideshow
 
             ViewEntryVector::iterator       aIter;
             const ViewEntryVector::iterator aEnd( maViewEntries.end() );
-            if( (aIter=std::remove_if( maViewEntries.begin(),
+            if( (aIter=std::find_if( maViewEntries.begin(),
                                        aEnd,
                                        boost::bind<bool>(
                                            std::equal_to< ViewSharedPtr >(),
@@ -129,8 +129,16 @@ namespace slideshow
                 return ViewLayerSharedPtr();
             }
 
+            OSL_ENSURE( std::count_if( maViewEntries.begin(),
+                                       aEnd,
+                                       boost::bind<bool>(
+                                           std::equal_to< ViewSharedPtr >(),
+                                           boost::bind( &ViewEntry::getView, _1 ),
+                                           boost::cref( rView ))) == 1,
+                        "Layer::removeView(): view added multiple times" );
+
             ViewLayerSharedPtr pRet( aIter->mpViewLayer );
-            maViewEntries.erase(aIter,aEnd);
+            maViewEntries.erase(aIter);
 
             return pRet;
         }
