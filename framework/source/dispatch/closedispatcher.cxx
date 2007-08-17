@@ -4,9 +4,9 @@
  *
  *  $RCSfile: closedispatcher.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: obo $ $Date: 2007-08-13 14:24:15 $
+ *  last change: $Author: ihi $ $Date: 2007-08-17 15:49:06 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -45,10 +45,6 @@
 
 #ifndef __FRAMEWORK_PATTERN_FRAME_HXX_
 #include <pattern/frame.hxx>
-#endif
-
-#ifndef __FRAMEWORK_PATTERN_WINDOW_HXX_
-#include <pattern/window.hxx>
 #endif
 
 #ifndef __FRAMEWORK_THREADHELP_READGUARD_HXX_
@@ -306,7 +302,8 @@ IMPL_LINK( CloseDispatcher, impl_asyncCallback, void*, EMPTYARG )
     // Allow calling of XController->suspend() everytimes.
     // Dispatch is an UI functionality. We implement such dispatch object here.
     // And further XController->suspend() was designed to bring an UI ...
-    sal_Bool bAllowSuspend = sal_True;
+    sal_Bool bAllowSuspend        = sal_True;
+    sal_Bool bControllerSuspended = sal_False;
 
     // SAFE -> ----------------------------------
     ReadGuard aReadLock(m_aLock);
@@ -370,7 +367,7 @@ IMPL_LINK( CloseDispatcher, impl_asyncCallback, void*, EMPTYARG )
     // d) Otherwhise we have to: close all views to the same document, close the
     //    document inside our own frame and decide then again, what has to be done!
     {
-        if (implts_closeView(bAllowSuspend, bCloseAllViewsToo))
+        if (implts_prepareFrameForClosing(m_xCloseFrame, bAllowSuspend, bCloseAllViewsToo, bControllerSuspended))
         {
             // OK; this frame is empty now.
             // Check the environment again to decide, what is the next step.
@@ -419,6 +416,16 @@ IMPL_LINK( CloseDispatcher, impl_asyncCallback, void*, EMPTYARG )
     if (bTerminateApp)
         bSuccess = implts_terminateApplication();
 
+    if (
+        ( ! bSuccess             ) &&
+        (   bControllerSuspended )
+       )
+    {
+        css::uno::Reference< css::frame::XController > xController = xCloseFrame->getController();
+        if (xController.is())
+            xController->suspend(sal_False);
+    }
+
     // inform listener
     sal_Int16 nState = css::frame::DispatchResultState::FAILURE;
     if (bSuccess)
@@ -450,16 +457,11 @@ IMPL_LINK( CloseDispatcher, impl_asyncCallback, void*, EMPTYARG )
 }
 
 //-----------------------------------------------
-sal_Bool CloseDispatcher::implts_closeView(sal_Bool bAllowSuspend         ,
-                                           sal_Bool bCloseAllOtherViewsToo)
+sal_Bool CloseDispatcher::implts_prepareFrameForClosing(const css::uno::Reference< css::frame::XFrame >& xFrame                ,
+                                                              sal_Bool                                   bAllowSuspend         ,
+                                                              sal_Bool                                   bCloseAllOtherViewsToo,
+                                                              sal_Bool&                                  bControllerSuspended  )
 {
-    // SAFE -> ----------------------------------
-    ReadGuard aReadLock(m_aLock);
-    css::uno::Reference< css::lang::XMultiServiceFactory > xSMGR  = m_xSMGR;
-    css::uno::Reference< css::frame::XFrame >              xFrame (m_xCloseFrame.get(), css::uno::UNO_QUERY);
-    aReadLock.unlock();
-    // <- SAFE ----------------------------------
-
     // Frame already dead ... so this view is closed ... is closed ... is ... .-)
     if (! xFrame.is())
         return sal_True;
@@ -470,6 +472,12 @@ sal_Bool CloseDispatcher::implts_closeView(sal_Bool bAllowSuspend         ,
     // will show the "save/discard/cancel" dialog for the last view only!
     if (bCloseAllOtherViewsToo)
     {
+        // SAFE -> ----------------------------------
+        ReadGuard aReadLock(m_aLock);
+        css::uno::Reference< css::lang::XMultiServiceFactory > xSMGR  = m_xSMGR;
+        aReadLock.unlock();
+        // <- SAFE ----------------------------------
+
         css::uno::Reference< css::frame::XFramesSupplier > xDesktop(xSMGR->createInstance(SERVICENAME_DESKTOP), css::uno::UNO_QUERY_THROW);
         FrameListAnalyzer aCheck(xDesktop, xFrame, FrameListAnalyzer::E_ALL);
 
@@ -487,12 +495,11 @@ sal_Bool CloseDispatcher::implts_closeView(sal_Bool bAllowSuspend         ,
     if (bAllowSuspend)
     {
         css::uno::Reference< css::frame::XController > xController = xFrame->getController();
-        if (
-            (xController.is()               ) &&  // some views dont uses a controller .-( (e.g. the help window)
-            (!xController->suspend(sal_True))
-           )
+        if (xController.is()) // some views dont uses a controller .-( (e.g. the help window)
         {
-            return sal_False;
+            bControllerSuspended = xController->suspend(sal_True);
+            if (! bControllerSuspended)
+                return sal_False;
         }
     }
 
@@ -607,9 +614,24 @@ css::uno::Reference< css::frame::XFrame > CloseDispatcher::static_impl_searchRig
         if (xTarget->isTop())
             return xTarget;
 
-        // b) frames (not top by herself) containing a top level window must be closed also.
-        if (WindowHelper::isTopWindow(xTarget->getContainerWindow()))
-            return xTarget;
+        // b) even child frame containing top level windows (e.g. query designer of database) will be closed
+        css::uno::Reference< css::awt::XWindow >    xWindow        = xTarget->getContainerWindow();
+        css::uno::Reference< css::awt::XTopWindow > xTopWindowCheck(xWindow, css::uno::UNO_QUERY);
+        if (xTopWindowCheck.is())
+        {
+            // b1) Note: Toolkit interface XTopWindow sometimes is used by real VCL-child-windows also .-)
+            //     Be sure that these window is realy a "top system window".
+            //     Attention ! Checking Window->GetParent() isnt the right approach here.
+            //     Because sometimes VCL create "implicit border windows" as parents even we created
+            //     a simple XWindow using the toolkit only .-(
+            ::vos::OGuard aSolarLock(&Application::GetSolarMutex());
+            Window* pWindow = VCLUnoHelper::GetWindow( xWindow );
+            if (
+                (pWindow                  ) &&
+                (pWindow->IsSystemWindow())
+               )
+                return xTarget;
+        }
 
         // c) try to find better results on parent frame
         //    If no parent frame exists (because this frame is used outside the desktop tree)
