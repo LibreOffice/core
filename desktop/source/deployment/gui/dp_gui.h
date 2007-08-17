@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dp_gui.h,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: rt $ $Date: 2007-07-09 09:39:33 $
+ *  last change: $Author: ihi $ $Date: 2007-08-17 11:51:33 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -96,12 +96,18 @@ struct DialogImpl :
 
     struct SelectionBoxControl : public Control
     {
-        SelectionBoxControl( DialogImpl * dialog )
-            : Control( dialog, WB_BORDER | WB_TABSTOP ),
-              m_dialog(dialog)
-            {}
+    public:
+
+        SelectionBoxControl( DialogImpl * dialog );
+
         long Notify( NotifyEvent & rEvt );
 
+        /* Signals that the dialog (DialogImpl) is about to be destroyed.
+            In this case we must prevent to access members of the dialog,
+            which is the case in Notify. Notify may be called when the dialog
+            is being destructed.
+        */
+        bool m_bShutDown;
     private:
         DialogImpl * m_dialog;
     };
