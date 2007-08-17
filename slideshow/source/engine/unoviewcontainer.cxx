@@ -4,9 +4,9 @@
  *
  *  $RCSfile: unoviewcontainer.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: kz $ $Date: 2006-12-13 15:21:35 $
+ *  last change: $Author: ihi $ $Date: 2007-08-17 12:43:29 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -89,26 +89,35 @@ namespace slideshow
             UnoViewVector::iterator aIter;
 
             // added in the first place?
-            if( (aIter=::std::remove_if( maViews.begin(),
-                                         aEnd,
-                                         ::boost::bind(
-                                             ::std::equal_to< uno::Reference< presentation::XSlideShowView > >(),
-                                             ::boost::cref( xView ),
-                                             ::boost::bind(
-                                                 &UnoView::getUnoView,
-                                                 _1 ) ) ) ) == aEnd )
+            if( (aIter=::std::find_if( maViews.begin(),
+                                       aEnd,
+                                       ::boost::bind(
+                                           ::std::equal_to< uno::Reference< presentation::XSlideShowView > >(),
+                                           ::boost::cref( xView ),
+                                           ::boost::bind(
+                                               &UnoView::getUnoView,
+                                               _1 ) ) ) ) == aEnd )
             {
                 // nope, nothing to do
                 return UnoViewSharedPtr();
             }
 
-            OSL_ENSURE( ::std::distance( aIter, aEnd ) == 1,
-                        "UnoViewContainer::removeView(): View was added multiple times" );
+            OSL_ENSURE(
+                ::std::count_if(
+                    maViews.begin(),
+                    aEnd,
+                    ::boost::bind(
+                        ::std::equal_to< uno::Reference< presentation::XSlideShowView > >(),
+                        ::boost::cref( xView ),
+                        ::boost::bind(
+                            &UnoView::getUnoView,
+                            _1 ))) == 1,
+                "UnoViewContainer::removeView(): View was added multiple times" );
 
             UnoViewSharedPtr pView( *aIter );
 
             // actually erase from container
-            maViews.erase( aIter, aEnd );
+            maViews.erase( aIter );
 
             return pView;
         }
@@ -118,19 +127,21 @@ namespace slideshow
             // remove locally
             const UnoViewVector::iterator aEnd( maViews.end() );
             UnoViewVector::iterator aIter;
-            if( (aIter=::std::remove( maViews.begin(),
-                                      aEnd,
-                                      rView )) == aEnd )
+            if( (aIter=::std::find( maViews.begin(),
+                                    aEnd,
+                                    rView )) == aEnd )
             {
                 // view seemingly was not added, failed
                 return false;
             }
 
-            OSL_ENSURE( ::std::distance( aIter, aEnd ) == 1,
+            OSL_ENSURE( ::std::count( maViews.begin(),
+                                      aEnd,
+                                      rView ) == 1,
                         "UnoViewContainer::removeView(): View was added multiple times" );
 
             // actually erase from container
-            maViews.erase( aIter, aEnd );
+            maViews.erase( aIter );
 
             return true;
         }
