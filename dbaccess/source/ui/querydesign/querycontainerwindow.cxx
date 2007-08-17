@@ -4,9 +4,9 @@
  *
  *  $RCSfile: querycontainerwindow.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: kz $ $Date: 2007-05-10 10:40:27 $
+ *  last change: $Author: ihi $ $Date: 2007-08-17 13:34:49 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -69,6 +69,10 @@
 #ifndef _COM_SUN_STAR_UTIL_XCLOSEABLE_HPP_
 #include <com/sun/star/util/XCloseable.hpp>
 #endif
+#ifndef _COM_SUN_STAR_BEANS_XPROPERTYSET_HPP_
+#include <com/sun/star/beans/XPropertySet.hpp>
+#endif
+
 //.........................................................................
 namespace dbaui
 {
@@ -77,6 +81,7 @@ namespace dbaui
     using namespace ::com::sun::star::uno;
     using namespace ::com::sun::star::lang;
     using namespace ::com::sun::star::frame;
+    using namespace ::com::sun::star::beans;
 
     //=====================================================================
     //= OQueryContainerWindow
@@ -227,7 +232,27 @@ namespace dbaui
 
             ::dbaui::notifySystemWindow(this,m_pBeamer,::comphelper::mem_fun(&TaskPaneList::AddWindow));
 
-            m_xBeamer.set(m_pViewSwitch->getORB()->createInstance(::rtl::OUString::createFromAscii("com.sun.star.frame.Frame")),UNO_QUERY);
+            Reference < XFrame > xBeamerFrame( m_pViewSwitch->getORB()->createInstance(::rtl::OUString::createFromAscii("com.sun.star.frame.Frame")),UNO_QUERY );
+            m_xBeamer.set( xBeamerFrame );
+
+            // notify layout manager to not create internal toolbars
+            Reference < XPropertySet > xPropSet( xBeamerFrame, UNO_QUERY );
+            try
+            {
+                const ::rtl::OUString aLayoutManager( RTL_CONSTASCII_USTRINGPARAM( "LayoutManager" ));
+                Reference < XPropertySet > xLMPropSet;
+
+                Any a = xPropSet->getPropertyValue( aLayoutManager );
+                if ( a >>= xLMPropSet )
+                {
+                    const ::rtl::OUString aAutomaticToolbars( RTL_CONSTASCII_USTRINGPARAM( "AutomaticToolbars" ));
+                    xLMPropSet->setPropertyValue( aAutomaticToolbars, Any( sal_False ));
+                }
+            }
+            catch( Exception& )
+            {
+            }
+
             OSL_ENSURE(m_xBeamer.is(),"No frame created!");
             m_xBeamer->initialize( VCLUnoHelper::GetInterface ( m_pBeamer ) );
             m_xBeamer->setName(FRAME_NAME_QUERY_PREVIEW);
