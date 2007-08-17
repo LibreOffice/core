@@ -4,9 +4,9 @@
  *
  *  $RCSfile: SlsScrollBarManager.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 06:19:30 $
+ *  last change: $Author: ihi $ $Date: 2007-08-17 14:26:58 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -169,6 +169,14 @@ public:
     bool AutoScroll (const Point& rMouseWindowPosition);
 
     void StopAutoScroll (void);
+
+    /** Register listeners at the scroll bars.
+    */
+    void Connect (void);
+
+    /** Remove listeners from the scroll bars.
+    */
+    void Disconnect (void);
 
 private:
     SlideSorterController& mrController;
