@@ -4,9 +4,9 @@
  *
  *  $RCSfile: conn_shared_res.src,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: obo $ $Date: 2007-06-12 05:27:36 $
+ *  last change: $Author: ihi $ $Date: 2007-08-17 12:07:17 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -156,12 +156,10 @@ String STR_COULD_NOT_CONNECT_LDAP
 
 String STR_COULD_NOT_LOAD_FILE
 {
-    Text [ de ] = "Die Datei $filename$ konnte nicht geladen werden.";
     Text [ en-US ] = "The file $filename$ could not be loaded.";
 };
 
 String STR_LOAD_FILE_ERROR_MESSAGE
 {
-    Text [ de ] = "Der Versuch, die Datei zu laden, führte zu folgender Fehlermeldung ($exception_type$):\n\n$error_message$";
     Text [ en-US ] = "The attempt to load the file resulted in the following error message ($exception_type$):\n\n$error_message$";
 };
