@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dp_gui_treelb.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: ihi $ $Date: 2007-08-17 11:51:52 $
+ *  last change: $Author: ihi $ $Date: 2007-08-17 15:49:29 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -984,6 +984,9 @@ void DialogImpl::disposing( lang::EventObject const & evt )
 void DialogImpl::queryTermination( lang::EventObject const & )
     throw (frame::TerminationVetoException, RuntimeException)
 {
+    throw frame::TerminationVetoException(
+        OUSTR("The office cannot be closed while the Extension Manager is running"),
+        Reference<XInterface>(static_cast<frame::XTerminateListener*>(this), UNO_QUERY));
 }
 
 //______________________________________________________________________________
