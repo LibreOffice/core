@@ -4,9 +4,9 @@
  *
  *  $RCSfile: impoptimizer.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: sj $ $Date: 2007-08-16 17:12:26 $
+ *  last change: $Author: sj $ $Date: 2007-08-17 10:33:17 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -722,6 +722,9 @@ sal_Bool ImpOptimizer::Optimize( const Sequence< PropertyValue >& rArguments )
             Reference< XStorable >xStorable( mxModel, UNO_QUERY );
             if ( xStorable.is() )
             {
+                if ( xStorable->hasLocation() )
+                    nSourceSize = PPPOptimizer::GetFileSize( xStorable->getLocation() );
+
                 Sequence< PropertyValue > aArguments;
                 if ( maFilterName.getLength() )
                 {
@@ -731,8 +734,8 @@ sal_Bool ImpOptimizer::Optimize( const Sequence< PropertyValue >& rArguments )
                     aArguments[ nLength ].Value <<= maFilterName;
                 }
                 xStorable->storeToURL( maSaveAsURL, aArguments );
-
-                nSourceSize = PPPOptimizer::GetFileSize( maSaveAsURL );
+                if ( !nSourceSize )
+                    nSourceSize = PPPOptimizer::GetFileSize( maSaveAsURL );
 
                 SetStatusValue( TK_Progress, Any( static_cast< sal_Int32 >( 30 ) ) );
                 SetStatusValue( TK_Status, Any( TKGet( STR_DUPLICATING_PRESENTATION ) ) );
