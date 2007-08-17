@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dp_gui_treelb.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: rt $ $Date: 2007-07-26 08:53:32 $
+ *  last change: $Author: ihi $ $Date: 2007-08-17 11:51:52 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -372,12 +372,20 @@ DialogImpl::TreeListBoxImpl::~TreeListBoxImpl()
 }
 
 //______________________________________________________________________________
+DialogImpl::SelectionBoxControl::SelectionBoxControl( DialogImpl * dialog )
+    : Control( dialog, WB_BORDER | WB_TABSTOP ),
+    m_bShutDown(false),
+    m_dialog(dialog)
+{
+}
+
 long DialogImpl::SelectionBoxControl::Notify( NotifyEvent & rEvt )
 {
     const long nRet = Control::Notify( rEvt );
     if (IsReallyVisible() &&
         rEvt.GetType() == EVENT_GETFOCUS &&
-        rEvt.GetWindow() != static_cast<Window *>(m_dialog->m_treelb.get()))
+        rEvt.GetWindow() != static_cast<Window *>(m_dialog->m_treelb.get())
+        && ! m_bShutDown)
     {
         m_dialog->m_treelb->GrabFocus();
     }
@@ -954,7 +962,10 @@ void DialogImpl::disposing( lang::EventObject const & evt )
             }
 
             if (shutDown)
+            {
+                m_selectionBox->m_bShutDown = true;
                 s_dialog.clear();
+            }
         }
 
         if (m_xTdocRoot.is()) {
@@ -979,6 +990,9 @@ void DialogImpl::queryTermination( lang::EventObject const & )
 void DialogImpl::notifyTermination( lang::EventObject const & evt )
     throw (RuntimeException)
 {
+   if (m_updatability.get() != NULL)
+        m_updatability->stop();
+
     disposing( evt );
 }
 
