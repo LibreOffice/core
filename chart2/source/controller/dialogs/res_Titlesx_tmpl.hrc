@@ -1,0 +1,115 @@
+/*************************************************************************
+ *
+ *  OpenOffice.org - a multi-platform office productivity suite
+ *
+ *  $RCSfile: res_Titlesx_tmpl.hrc,v $
+ *
+ *  $Revision: 1.2 $
+ *
+ *  last change: $Author: ihi $ $Date: 2007-08-17 15:07:28 $
+ *
+ *  The Contents of this file are made available subject to
+ *  the terms of GNU Lesser General Public License Version 2.1.
+ *
+ *
+ *    GNU Lesser General Public License Version 2.1
+ *    =============================================
+ *    Copyright 2005 by Sun Microsystems, Inc.
+ *    901 San Antonio Road, Palo Alto, CA 94303, USA
+ *
+ *    This library is free software; you can redistribute it and/or
+ *    modify it under the terms of the GNU Lesser General Public
+ *    License version 2.1, as published by the Free Software Foundation.
+ *
+ *    This library is distributed in the hope that it will be useful,
+ *    but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ *    Lesser General Public License for more details.
+ *
+ *    You should have received a copy of the GNU Lesser General Public
+ *    License along with this library; if not, write to the Free Software
+ *    Foundation, Inc., 59 Temple Place, Suite 330, Boston,
+ *    MA  02111-1307  USA
+ *
+ ************************************************************************/
+#ifndef _CHART2_RES_TITLES_SRC
+#define _CHART2_RES_TITLES_SRC
+
+#include "res_Titles.hrc"
+#include "HelpIds.hrc"
+
+#define TITLES_HEIGHT 12
+
+#define TITLES( xpos, ypos, editwidth, namefieldwidth ) \
+Edit ED_MAINTITLE \
+{ \
+    HelpID = HID_SCH_TITLE_MAIN; \
+    Border = TRUE ; \
+    Pos = MAP_APPFONT ( xpos+namefieldwidth+4 , ypos  ) ; \
+    Size = MAP_APPFONT ( editwidth , TITLES_HEIGHT ) ; \
+    TabStop = TRUE ; \
+}; \
+Edit ED_SUBTITLE \
+{ \
+    HelpID = HID_SCH_TITLE_SUB; \
+    Border = TRUE ; \
+    Pos = MAP_APPFONT ( xpos+namefieldwidth+4 , ypos+TITLES_HEIGHT+4 ) ; \
+    Size = MAP_APPFONT ( editwidth , TITLES_HEIGHT ) ; \
+    TabStop = TRUE ; \
+}; \
+Edit ED_X_AXIS \
+{ \
+    HelpID = HID_SCH_TITLE_X; \
+    Border = TRUE ; \
+    Pos = MAP_APPFONT ( xpos+namefieldwidth+4 , ypos+2*(TITLES_HEIGHT+4)  ) ; \
+    Size = MAP_APPFONT ( editwidth , TITLES_HEIGHT ) ; \
+    TabStop = TRUE ; \
+}; \
+Edit ED_Y_AXIS \
+{ \
+    HelpID = HID_SCH_TITLE_Y; \
+    Border = TRUE ; \
+    Pos = MAP_APPFONT ( xpos+namefieldwidth+4 , ypos+3*(TITLES_HEIGHT+4)  ) ; \
+    Size = MAP_APPFONT ( editwidth , TITLES_HEIGHT ) ; \
+    TabStop = TRUE ; \
+}; \
+Edit ED_Z_AXIS \
+{ \
+    HelpID = HID_SCH_TITLE_Z; \
+    Border = TRUE ; \
+    Pos = MAP_APPFONT ( xpos+namefieldwidth+4 , ypos+4*(TITLES_HEIGHT+4)  ) ; \
+    Size = MAP_APPFONT ( editwidth , TITLES_HEIGHT ) ; \
+    TabStop = TRUE ; \
+}; \
+FixedText FT_MAINTITLE \
+{ \
+    Pos = MAP_APPFONT ( xpos , ypos+2  ) ; \
+    Size = MAP_APPFONT ( namefieldwidth , TITLES_HEIGHT ) ; \
+    Text [ en-US ] = "~Title" ; \
+}; \
+FixedText FT_SUBTITLE \
+{ \
+    Pos = MAP_APPFONT ( xpos , ypos+2+TITLES_HEIGHT+4  ) ; \
+    Size = MAP_APPFONT ( namefieldwidth , TITLES_HEIGHT ) ; \
+    Text [ en-US ] = "~Subtitle" ; \
+}; \
+FixedText FT_TITLE_X_AXIS \
+{ \
+    Pos = MAP_APPFONT ( xpos , ypos+2+2*(TITLES_HEIGHT+4)  ) ; \
+    Size = MAP_APPFONT ( namefieldwidth , TITLES_HEIGHT ) ; \
+    Text [ en-US ] = "~X axis" ; \
+}; \
+FixedText FT_TITLE_Y_AXIS \
+{ \
+    Pos = MAP_APPFONT ( xpos , ypos+2+3*(TITLES_HEIGHT+4)  ) ; \
+    Size = MAP_APPFONT ( namefieldwidth , TITLES_HEIGHT ) ; \
+    Text [ en-US ] = "~Y axis" ; \
+}; \
+FixedText FT_TITLE_Z_AXIS \
+{ \
+    Pos = MAP_APPFONT ( xpos , ypos+2+4*(TITLES_HEIGHT+4)  ) ; \
+    Size = MAP_APPFONT ( namefieldwidth , TITLES_HEIGHT ) ; \
+    Text [ en-US ] = "~Z axis" ; \
+};
+
+#endif
