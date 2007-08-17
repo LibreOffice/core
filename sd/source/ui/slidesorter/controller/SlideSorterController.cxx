@@ -4,9 +4,9 @@
  *
  *  $RCSfile: SlideSorterController.cxx,v $
  *
- *  $Revision: 1.40 $
+ *  $Revision: 1.41 $
  *
- *  last change: $Author: rt $ $Date: 2007-04-03 16:16:37 $
+ *  last change: $Author: ihi $ $Date: 2007-08-17 14:26:34 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -349,7 +349,7 @@ SdPage* SlideSorterController::GetActualPage (void)
     // (if we are that not ourself).
     if ( ! GetViewShell().IsMainViewShell())
     {
-        ViewShell* pMainViewShell =  GetViewShell().GetViewShellBase().GetMainViewShell().get();
+        ViewShell* pMainViewShell = GetViewShell().GetViewShellBase().GetMainViewShell().get();
         if (pMainViewShell != NULL)
             pCurrentPage = pMainViewShell->GetActualPage();
     }
@@ -424,7 +424,8 @@ bool SlideSorterController::Command (
             // Choose the popup menu depending on a) the type of the main
             // view shell, b) the edit mode, and c) on whether the selection
             // is empty or not.
-            ::boost::shared_ptr<ViewShell> pMainViewShell;
+            ::boost::shared_ptr<ViewShell> pMainViewShell(
+                GetViewShell().GetViewShellBase().GetMainViewShell());
             ViewShell::ShellType eMainViewShellType (ViewShell::ST_NONE);
             if (pMainViewShell.get() != NULL)
                 eMainViewShellType = pMainViewShell->GetShellType();
