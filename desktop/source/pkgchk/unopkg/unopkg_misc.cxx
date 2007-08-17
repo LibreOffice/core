@@ -4,9 +4,9 @@
  *
  *  $RCSfile: unopkg_misc.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: rt $ $Date: 2007-07-26 08:55:07 $
+ *  last change: $Author: ihi $ $Date: 2007-08-17 11:52:33 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -142,6 +142,21 @@ bool isOption( OptionInfo const * option_info, sal_uInt32 * pIndex )
 #if OSL_DEBUG_LEVEL > 1
         OSL_TRACE( __FILE__": identified option \'%s\'", option_info->m_name );
 #endif
+        return true;
+    }
+    return false;
+}
+//==============================================================================
+
+bool isBootstrapVariable(sal_uInt32 * pIndex)
+{
+    OSL_ASSERT(osl_getCommandArgCount() >=  *pIndex);
+
+    OUString arg;
+    osl_getCommandArg(*pIndex, &arg.pData);
+    if (arg.matchAsciiL("-env:", 5))
+    {
+        ++(*pIndex);
         return true;
     }
     return false;
@@ -352,14 +367,15 @@ Reference<XComponentContext> bootstrapStandAlone(
     // bootstrap standalone UNO using types.rdb and services.rdb
     // directly avoiding any rc entries
     Reference<beans::XPropertySet> xProps(
-        ::cppu::createRegistryServiceFactory(
-            getExecutableDir() + OUSTR("/types.rdb"),
-            getExecutableDir() + OUSTR("/services.rdb"),
-            true /* read-only */ ),
-        UNO_QUERY_THROW );
+       ::cppu::createRegistryServiceFactory(
+           getExecutableDir() + OUSTR("/types.rdb"),
+           getExecutableDir() + OUSTR("/services.rdb"),
+           true /* read-only */ ),
+       UNO_QUERY_THROW );
     Reference<XComponentContext> xContext(
-        xProps->getPropertyValue( OUSTR("DefaultContext") ),
-        UNO_QUERY_THROW );
+       xProps->getPropertyValue( OUSTR("DefaultContext") ),
+       UNO_QUERY_THROW );
+
     // assure disposing of local component context:
     disposeGuard.reset(
         Reference<lang::XComponent>( xContext, UNO_QUERY ) );
