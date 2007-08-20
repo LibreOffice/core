@@ -4,9 +4,9 @@
 #
 #   $RCSfile: regmerge.pm,v $
 #
-#   $Revision: 1.3 $
+#   $Revision: 1.4 $
 #
-#   last change: $Author: rt $ $Date: 2005-09-08 09:09:09 $
+#   last change: $Author: ihi $ $Date: 2007-08-20 15:26:18 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -279,10 +279,6 @@ sub merge_registration_files
     {
         # prepare registration
 
-        my $databasename = "starregistryrdb";
-        my $databasedir = installer::systemactions::create_directories($databasename, $languagestringref);
-        push(@installer::globals::removedirs, $databasedir);
-
         my $regmergefile = get_regmerge_file($includepatharrayref); # searching for regmerge (regcomplazy.exe)
 
         my $databasegids = collect_all_database_gids($regmergefiles);
@@ -294,6 +290,12 @@ sub merge_registration_files
         for ( my $i = 0; $i <= $#{$databasegids}; $i++ )
         {
             $databasegid = ${$databasegids}[$i];
+
+            # my $databasedirname = "starregistryrdb"; <- not unique!
+            my $databasedirname = $databasegid . "_rdb"; # <- unique!
+            my $databasedir = installer::systemactions::create_directories($databasedirname, $languagestringref);
+            push(@installer::globals::removedirs, $databasedir);
+
             my $databasefile = get_database_file($databasegid, $filesarrayref);
             my $databaseregisterfiles = collect_all_files_for_one_registry($regmergefiles, $databasegid);
 
