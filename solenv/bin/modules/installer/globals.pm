@@ -4,9 +4,9 @@
 #
 #   $RCSfile: globals.pm,v $
 #
-#   $Revision: 1.71 $
+#   $Revision: 1.72 $
 #
-#   last change: $Author: ihi $ $Date: 2007-07-11 14:40:26 $
+#   last change: $Author: ihi $ $Date: 2007-08-20 15:25:39 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -120,6 +120,7 @@ BEGIN
     $saved_packages_path = "";
     $max_lang_length = 50;
     $globalblock = "Globals";
+    $rootmodulegid = "";
 
     $is_special_epm = 0;
     $epm_in_path = 0;
