@@ -288,6 +288,11 @@
                     <value xml:lang="en-US">Select to Upper Block Margin</value>
                 </prop>
             </node>
+            <node oor:name=".uno:TextToColumns" oor:op="replace">
+                <prop oor:name="Label" oor:type="xs:string">
+                    <value xml:lang="en-US">Te~xt to Columns...</value>
+                </prop>
+            </node>
             <node oor:name=".uno:DataConsolidate" oor:op="replace">
                 <prop oor:name="Label" oor:type="xs:string">
                     <value xml:lang="en-US">~Consolidate...</value>
