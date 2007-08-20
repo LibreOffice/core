@@ -4,9 +4,9 @@
  *
  *  $RCSfile: scabstdlg.hxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: rt $ $Date: 2007-04-26 09:50:03 $
+ *  last change: $Author: ihi $ $Date: 2007-08-20 16:50:02 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -74,6 +74,7 @@ class AbstractScImportAsciiDlg : public VclAbstractDialog  //add for ScImportAsc
 {
 public:
     virtual void                        GetOptions( ScAsciiOptions& rOpt ) = 0;
+    virtual void                        SetTextToColumnsMode() = 0;
 };
 
 
