@@ -4,9 +4,9 @@
  *
  *  $RCSfile: shortcut_ooo.scp,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: kz $ $Date: 2007-06-18 16:37:26 $
+ *  last change: $Author: ihi $ $Date: 2007-08-20 13:23:17 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -74,7 +74,7 @@ Shortcut gid_Shortcut_Lib_Xslt
 #else
     Name = STRING(CONCAT3(libxslt,UNXSUFFIX,.1));
 #endif
-    Styles = (NETWORK,RELATIVE);
+    Styles = (NETWORK,RELATIVE,PATCH,FORCE_INTO_UPDATE_PACKAGE);
 End
 
 #endif
@@ -85,7 +85,7 @@ Shortcut gid_Shortcut_Lib_Xslt_2
     ShortcutID = gid_Shortcut_Lib_Xslt;
     Dir = gid_Dir_Program;
     Name = STRING(CONCAT2(libxslt,UNXSUFFIX));
-    Styles = (NETWORK,RELATIVE);
+    Styles = (NETWORK,RELATIVE,PATCH,FORCE_INTO_UPDATE_PACKAGE);
 End
 
 #endif
