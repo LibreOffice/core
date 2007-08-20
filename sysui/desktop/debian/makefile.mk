@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.21 $
+#   $Revision: 1.22 $
 #
-#   last change: $Author: ihi $ $Date: 2007-07-11 14:31:03 $
+#   last change: $Author: ihi $ $Date: 2007-08-20 14:08:41 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -73,7 +73,7 @@ ALLTAR : $(DEBFILES)
     /bin/sh -c -x "cd $(COMMONMISC)$/$(*:f:s/-/ /:1) && DESTDIR=$(shell cd $*; pwd) ICON_PREFIX=$(ICONPREFIX) KDEMAINDIR=/usr GNOMEDIR=/usr create_tree.sh"
         @cat openoffice.org-debian-menus | sed -e 's/%PRODUCTNAME/$(PRODUCTNAME.$(*:f:s/-/ /:1)) $(PRODUCTVERSION.$(*:f:s/-/ /:1))/' -e 's/%PREFIX/$(UNIXFILENAME.$(*:f:s/-/ /:1))/' -e 's/%ICONPREFIX/$(ICONPREFIX.$(*:f:s/-/ /:1))/' > $*$/usr/lib/menu/$(*:f:s/_/ /:1)
     echo "Package: $(*:f:s/_/ /:1)" > $@
-    cat $(@:f) | tr -d "\015" >> $@
+    cat $(@:f) | tr -d "\015" | sed "s/%productname/$(PRODUCTNAME.$(*:f:s/-/ /:1))/" >> $@
     echo "Version: $(PKGVERSION.$(*:f:s/-/ /:1))-$(PKGREV)" >> $@
     @du -k -s $* | awk -F ' ' '{ printf "Installed-Size: %s\n", $$1 ; }' >> $@
 
