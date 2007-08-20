@@ -173,6 +173,7 @@ URE
             PACKAGEVERSION 1.3
             PACKAGEREVISION 1
             LICENSENAME LGPL
+			SERVICESPROJEKT 1
             NOVERSIONINDIRNAME 1
             DOWNLOADBANNER urebanner.bmp
             DOWNLOADBITMAP urebitmap.bmp
