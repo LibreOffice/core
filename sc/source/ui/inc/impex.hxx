@@ -4,9 +4,9 @@
  *
  *  $RCSfile: impex.hxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: ihi $ $Date: 2006-10-18 11:47:17 $
+ *  last change: $Author: ihi $ $Date: 2007-08-20 16:51:55 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -75,6 +75,7 @@ class ScImportExport
     BOOL        bSingle;                // Einfachselektion
     BOOL        bUndo;                  // Mit Undo?
     BOOL        bOverflow;              // zuviele Zeilen/Spalten
+    bool        mbApi;
 
     ScAsciiOptions* pExtOptions;        // erweiterte Optionen
 
@@ -91,9 +92,6 @@ class ScImportExport
     BOOL ExtText2Doc( SvStream& );      // mit pExtOptions
     BOOL RTF2Doc( SvStream&, const String& rBaseURL );
     BOOL HTML2Doc( SvStream&, const String& rBaseURL );
-
-    //! only if stream is only used in own (!) memory
-    static  inline  void    SetNoEndianSwap( SvStream& rStrm );
 
 public:
     ScImportExport( ScDocument* );                  // Gesamtdokument
@@ -120,6 +118,9 @@ public:
     static  void    WriteUnicodeOrByteString( SvStream& rStrm, const String& rString, BOOL bZero = FALSE );
     static  void    WriteUnicodeOrByteEndl( SvStream& rStrm );
     static  inline  BOOL    IsEndianSwap( const SvStream& rStrm );
+
+    //! only if stream is only used in own (!) memory
+    static  inline  void    SetNoEndianSwap( SvStream& rStrm );
 
     sal_Unicode GetSeparator() const { return cSep; }
     void SetSeparator( sal_Unicode c ) { cSep = c; }
@@ -150,6 +151,9 @@ public:
     BOOL IsOverflow() const { return bOverflow; }       // nach dem Importieren
 
     const String& GetNonConvertibleChars() const { return aNonConvertibleChars; }
+
+    bool IsApi() const { return mbApi; }
+    void SetApi( bool bApi ) { mbApi = bApi; }
 };
 
 
@@ -160,6 +164,16 @@ inline BOOL ScImportExport::IsEndianSwap( const SvStream& rStrm )
     return rStrm.GetNumberFormatInt() != NUMBERFORMAT_INT_BIGENDIAN;
 #else
     return rStrm.GetNumberFormatInt() != NUMBERFORMAT_INT_LITTLEENDIAN;
+#endif
+}
+
+// static
+inline void ScImportExport::SetNoEndianSwap( SvStream& rStrm )
+{
+#ifdef OSL_BIGENDIAN
+    rStrm.SetNumberFormatInt( NUMBERFORMAT_INT_BIGENDIAN );
+#else
+    rStrm.SetNumberFormatInt( NUMBERFORMAT_INT_LITTLEENDIAN );
 #endif
 }
 
