@@ -4,9 +4,9 @@
 #
 #   $RCSfile: directory.pm,v $
 #
-#   $Revision: 1.22 $
+#   $Revision: 1.23 $
 #
-#   last change: $Author: gm $ $Date: 2007-05-10 10:59:51 $
+#   last change: $Author: ihi $ $Date: 2007-08-20 15:27:37 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -52,6 +52,8 @@ sub create_unique_directorynames
     {
         my $onedir = ${$directoryref}[$i];
         my $uniquename = $onedir->{'HostName'};
+        my $styles = "";
+        if ( $onedir->{'Styles'} ) { $styles = $onedir->{'Styles'}; }
         # get_path_from_fullqualifiedname(\$uniqueparentname);
         # making /registry/schema/org/openoffice/VCL.xcs to VCL.xcs
 
@@ -69,6 +71,9 @@ sub create_unique_directorynames
         {
             $uniqueparentname = "INSTALLLOCATION";
         }
+
+        if ( $styles =~ /\bPROGRAMFILESFOLDER\b/ ) { $uniqueparentname = $installer::globals::programfilesfolder; }
+
 
         $uniquename =~ s/\-/\_/g;           # making "-" to "_"
         $uniqueparentname =~ s/\-/\_/g;     # making "-" to "_"
