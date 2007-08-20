@@ -4,9 +4,9 @@
  *
  *  $RCSfile: XMLChangeTrackingExportHelper.cxx,v $
  *
- *  $Revision: 1.29 $
+ *  $Revision: 1.30 $
  *
- *  last change: $Author: vg $ $Date: 2007-05-22 20:01:24 $
+ *  last change: $Author: ihi $ $Date: 2007-08-20 16:33:30 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -241,7 +241,13 @@ void ScChangeTrackingExportHelper::WriteDepending(const ScChangeAction* pDependA
 {
     sal_uInt32 nActionNumber(pDependAction->GetActionNumber());
     rExport.AddAttribute(XML_NAMESPACE_TABLE, XML_ID, GetChangeID(nActionNumber));
-    SvXMLElementExport aDependElem(rExport, XML_NAMESPACE_TABLE, XML_DEPENDENCE, sal_True, sal_True);
+
+    // #i80033# save old "dependence" element if backward compatibility is requested,
+    // correct "dependency" element otherwise
+    const bool bSaveBackwardsCompatible = ( rExport.getExportFlags() & EXPORT_SAVEBACKWARDCOMPATIBLE );
+    SvXMLElementExport aDependElem(rExport, XML_NAMESPACE_TABLE,
+        bSaveBackwardsCompatible ? XML_DEPENDENCE : XML_DEPENDENCY,
+        sal_True, sal_True);
 }
 
 void ScChangeTrackingExportHelper::WriteDependings(ScChangeAction* pAction)
