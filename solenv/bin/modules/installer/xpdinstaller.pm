@@ -4,9 +4,9 @@
 #
 #   $RCSfile: xpdinstaller.pm,v $
 #
-#   $Revision: 1.4 $
+#   $Revision: 1.5 $
 #
-#   last change: $Author: ihi $ $Date: 2007-07-12 11:16:47 $
+#   last change: $Author: ihi $ $Date: 2007-08-20 15:27:24 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -158,7 +158,7 @@ sub get_display_tag
     if ( $styles =~ /\bHIDDEN_ROOT\b/ ) { $type = "hidden"; }
     else { $type = "show"; }
 
-    # special handling for "gid_Module_Root", which has no parent
+    # special handling for the root module, which has no parent
     my $parentgid = "";
     if ( $module->{'ParentID'} ) { $parentgid = $module->{'ParentID'}; }
     if ( $parentgid eq "" ) { $type = "hidden"; }
