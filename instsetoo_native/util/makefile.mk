@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.70 $
+#   $Revision: 1.71 $
 #
-#   last change: $Author: ihi $ $Date: 2007-08-20 15:32:56 $
+#   last change: $Author: ihi $ $Date: 2007-08-20 15:46:07 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -253,7 +253,7 @@ openofficedev_%{$(PKGFORMAT:^".")} :
 .ELSE			# "$(PKGFORMAT)"!=""
 openofficedev_% :
 .ENDIF			# "$(PKGFORMAT)"!=""
-    $(PERL) -w $(SOLARENV)$/bin$/make_installer.pl -f $(PRJ)$/util$/openoffice.lst -l $(subst,$(@:s/_/ /:1)_, $(@:b)) -p OpenOffice_Dev -packagelist $(PRJ)$/inc_openoffice$/unix$/packagelist.txt -u $(OUT) -buildid $(BUILD) -msitemplate $(MSIOFFICETEMPLATEDIR) -msilanguage $(COMMONMISC)$/win_ulffiles $(subst,xxx,$(@:e:s/.//) $(PKGFORMATSWITCH))
+    $(PERL) -w $(SOLARENV)$/bin$/make_installer.pl -f $(PRJ)$/util$/openoffice.lst -l $(subst,$(@:s/_/ /:1)_, $(@:b)) -p OpenOffice_Dev -packagelist $(PRJ)$/inc_openoffice$/unix$/packagelist.txt -u $(OUT) -buildid $(BUILD) -msitemplate $(MSIOFFICETEMPLATEDIR) -msilanguage $(COMMONMISC)$/win_ulffiles -addchildprojects $(subst,xxx,$(@:e:s/.//) $(PKGFORMATSWITCH))
     $(PERL) -w $(SOLARENV)$/bin$/gen_update_info.pl --buildid $(BUILD) --arch "$(RTL_ARCH)" --os "$(RTL_OS)" --lstfile $(PRJ)$/util$/openoffice.lst --product OpenOffice_Dev --languages $(subst,$(@:s/_/ /:1)_, $(@:b)) $(PRJ)$/util$/update.xml > $(MISC)/$(@:b)_$(RTL_OS)_$(RTL_ARCH).update.xml
 
 openofficedevarchive_% :
@@ -345,7 +345,7 @@ brofficedev_%{$(PKGFORMAT:^".")} :
 .ELSE			# "$(PKGFORMAT)"!=""
 brofficedev_% :
 .ENDIF			# "$(PKGFORMAT)"!=""
-    +$(PERL) -w $(SOLARENV)$/bin$/make_installer.pl -f $(PRJ)$/util$/openoffice.lst -l $(subst,$(@:s/_/ /:1)_, $(@:b)) -p BrOffice_Dev -packagelist $(PRJ)$/inc_openoffice$/unix$/packagelist.txt -u $(OUT) -buildid $(BUILD) -msitemplate $(MSIOFFICETEMPLATEDIR) -msilanguage $(COMMONMISC)$/win_ulffiles $(subst,xxx,$(@:e:s/.//) $(PKGFORMATSWITCH))
+    +$(PERL) -w $(SOLARENV)$/bin$/make_installer.pl -f $(PRJ)$/util$/openoffice.lst -l $(subst,$(@:s/_/ /:1)_, $(@:b)) -p BrOffice_Dev -packagelist $(PRJ)$/inc_openoffice$/unix$/packagelist.txt -u $(OUT) -buildid $(BUILD) -msitemplate $(MSIOFFICETEMPLATEDIR) -msilanguage $(COMMONMISC)$/win_ulffiles -addchildprojects $(subst,xxx,$(@:e:s/.//) $(PKGFORMATSWITCH))
 
 .IF "$(PKGFORMAT)"!=""
 $(foreach,i,$(alllangiso) broolanguagepack_$i) : $$@{$(PKGFORMAT:^".")}
