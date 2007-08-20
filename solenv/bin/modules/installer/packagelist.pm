@@ -4,9 +4,9 @@
 #
 #   $RCSfile: packagelist.pm,v $
 #
-#   $Revision: 1.10 $
+#   $Revision: 1.11 $
 #
-#   last change: $Author: ihi $ $Date: 2007-07-12 11:15:50 $
+#   last change: $Author: ihi $ $Date: 2007-08-20 15:26:05 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -377,7 +377,8 @@ sub find_links_for_package
 # Directories are included into the package, if they are needed
 # by a file or a link included into the package.
 # Attention: A directory with the flag CREATE, is only included
-# into the root module ($packagename eq gid_Module_Root)
+# into the root module:
+# ($packagename eq $installer::globals::rootmodulegid)
 #####################################################################
 
 sub find_dirs_for_package
@@ -448,9 +449,9 @@ sub find_dirs_for_package
             }
         }
 
-        # also investigating the flag CREATE (only added to gid_Module_Root)
+        # also investigating the flag CREATE (only added to $installer::globals::rootmodulegid)
 
-        if (( ! $includedir ) && ( $packagename eq "gid_Module_Root" ))
+        if (( ! $includedir ) && ( $packagename eq $installer::globals::rootmodulegid ))
         {
             my $styles = "";
 
