@@ -4,9 +4,9 @@
  *
  *  $RCSfile: cellsh2.cxx,v $
  *
- *  $Revision: 1.29 $
+ *  $Revision: 1.30 $
  *
- *  last change: $Author: rt $ $Date: 2007-04-26 09:56:02 $
+ *  last change: $Author: ihi $ $Date: 2007-08-20 16:52:35 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -89,6 +89,8 @@
 #include "validate.hrc" //CHINA001 add for ScValidationDlg
 #include "scui_def.hxx" //CHINA001
 #include "scabstdlg.hxx" //CHINA001
+#include "impex.hxx"
+#include "asciiopt.hxx"
 using namespace com::sun::star;
 
 //#include "strindlg.hxx"       //! Test !!!!!
@@ -100,6 +102,46 @@ using namespace com::sun::star;
     (pReqArgs->GetItemState((WhichId), TRUE, ppItem ) == SFX_ITEM_SET)
 
 //------------------------------------------------------------------
+
+bool lcl_GetTextToColumnsRange( const ScViewData* pData, ScRange& rRange )
+{
+    DBG_ASSERT( pData, "lcl_GetTextToColumnsRange: pData is null!" );
+
+    bool bRet = false;
+    const ScMarkData& rMark = pData->GetMarkData();
+
+    if ( rMark.IsMarked() )
+    {
+        if ( !rMark.IsMultiMarked() )
+        {
+            rMark.GetMarkArea( rRange );
+            if ( rRange.aStart.Col() == rRange.aEnd.Col() )
+            {
+                bRet = true;
+            }
+        }
+    }
+    else
+    {
+        const SCCOL nCol = pData->GetCurX();
+        const SCROW nRow = pData->GetCurY();
+        const SCTAB nTab = pData->GetTabNo();
+        rRange = ScRange( nCol, nRow, nTab, nCol, nRow, nTab );
+        bRet = true;
+    }
+
+    const ScDocument* pDoc = pData->GetDocument();
+    DBG_ASSERT( pDoc, "lcl_GetTextToColumnsRange: pDoc is null!" );
+
+    if ( bRet && pDoc->IsBlockEmpty( rRange.aStart.Tab(), rRange.aStart.Col(),
+                                     rRange.aStart.Row(), rRange.aEnd.Col(),
+                                     rRange.aEnd.Row() ) )
+    {
+        bRet = false;
+    }
+
+    return bRet;
+}
 
 void ScCellShell::ExecuteDB( SfxRequest& rReq )
 {
@@ -972,6 +1014,52 @@ void ScCellShell::ExecuteDB( SfxRequest& rReq )
                 }
             }
             break;
+
+        case SID_TEXT_TO_COLUMNS:
+            {
+                ScViewData* pData = GetViewData();
+                DBG_ASSERT( pData, "ScCellShell::ExecuteDB: SID_TEXT_TO_COLUMNS - pData is null!" );
+                ScRange aRange;
+
+                if ( lcl_GetTextToColumnsRange( pData, aRange ) )
+                {
+                    ScDocument* pDoc = pData->GetDocument();
+                    DBG_ASSERT( pDoc, "ScCellShell::ExecuteDB: SID_TEXT_TO_COLUMNS - pDoc is null!" );
+
+                    ScImportExport aExport( pDoc, aRange );
+                    SvMemoryStream aStream;
+                    aStream.SetStreamCharSet( RTL_TEXTENCODING_UNICODE );
+                    ScImportExport::SetNoEndianSwap( aStream );
+                    aExport.ExportStream( aStream, String(), FORMAT_STRING );
+
+                    ScAbstractDialogFactory* pFact = ScAbstractDialogFactory::Create();
+                    DBG_ASSERT( pFact, "ScCellShell::ExecuteDB: SID_TEXT_TO_COLUMNS - pFact is null!" );
+                    AbstractScImportAsciiDlg *pDlg = pFact->CreateScImportAsciiDlg(
+                        NULL, String(), &aStream, RID_SCDLG_ASCII );
+                    DBG_ASSERT( pDlg, "ScCellShell::ExecuteDB: SID_TEXT_TO_COLUMNS - pDlg is null!" );
+                    pDlg->SetTextToColumnsMode();
+
+                    if ( pDlg->Execute() == RET_OK )
+                    {
+                        ScDocShell* pDocSh = pData->GetDocShell();
+                        DBG_ASSERT( pDocSh, "ScCellShell::ExecuteDB: SID_TEXT_TO_COLUMNS - pDocSh is null!" );
+
+                        String aUndo = ScGlobal::GetRscString( STR_UNDO_TEXTTOCOLUMNS );
+                        pDocSh->GetUndoManager()->EnterListAction( aUndo, aUndo );
+
+                        ScImportExport aImport( pDoc, aRange.aStart );
+                        ScAsciiOptions aOptions;
+                        pDlg->GetOptions( aOptions );
+                        aImport.SetExtOptions( aOptions );
+                        aImport.SetApi( false );
+                        aStream.Seek( 0 );
+                        aImport.ImportStream( aStream, String(), FORMAT_STRING );
+
+                        pDocSh->GetUndoManager()->LeaveListAction();
+                    }
+                }
+            }
+            break;
         }
 }
 
@@ -1147,6 +1235,16 @@ void __EXPORT ScCellShell::GetDBState( SfxItemSet& rSet )
 
                     if ( !bAnyQuery )
                         rSet.DisableItem( nWhich );
+                }
+                break;
+
+            case SID_TEXT_TO_COLUMNS:
+                {
+                    ScRange aRange;
+                    if ( !lcl_GetTextToColumnsRange( pData, aRange ) )
+                    {
+                        rSet.DisableItem( nWhich );
+                    }
                 }
                 break;
         }
