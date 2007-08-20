@@ -4,9 +4,9 @@
 #
 #   $RCSfile: module.pm,v $
 #
-#   $Revision: 1.6 $
+#   $Revision: 1.7 $
 #
-#   last change: $Author: ihi $ $Date: 2007-07-12 11:17:28 $
+#   last change: $Author: ihi $ $Date: 2007-08-20 15:29:05 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -33,183 +33,211 @@
 #
 #*************************************************************************
 
-
 package par2script::module;
 
 use par2script::converter;
-use par2script::work;
+use par2script::exiter;
+
+###########################################
+# Removing undefined gids
+# from modules
+###########################################
+
+sub remove_from_modules
+{
+    my ($gid, $item) = @_;
+
+    my $counter = 0;
+
+    if ( ! exists($par2script::globals::searchkeys{$item}) ) { par2script::exiter::exit_program("ERROR: Unknown type \"$item\" at modules.", "remove_from_modules"); }
+    my $searchkey = $par2script::globals::searchkeys{$item};
+
+    my $allmodules = $par2script::globals::definitions{'Module'};
+
+    my $onemodule;
+    foreach $onemodule (keys %{$allmodules})
+    {
+        if (( exists($allmodules->{$onemodule}->{$searchkey}) ) && ( $allmodules->{$onemodule}->{$searchkey} =~ /\b$gid\b/ ))
+        {
+            my $infoline = "WARNING: Removing $gid because of missing definition\n";
+            # print $infoline;
+            push(@par2script::globals::logfileinfo, $infoline);
+
+            $allmodules->{$onemodule}->{$searchkey} =~ s/\b$gid\b//;
+            $allmodules->{$onemodule}->{$searchkey} =~ s/\,\s*\,/\,/;
+            $allmodules->{$onemodule}->{$searchkey} =~ s/\(\s*\,\s*/\(/;
+            $allmodules->{$onemodule}->{$searchkey} =~ s/\s*\,\s*\)/\)/;
+
+            if (( $allmodules->{$onemodule}->{$searchkey} =~ /\(\s*\,\s*\)/ ) ||
+                ( $allmodules->{$onemodule}->{$searchkey} =~ /\(\s*\)/ ))
+            {
+                delete($allmodules->{$onemodule}->{$searchkey});
+            }
+
+            $counter++;
+        }
+    }
+
+    return $counter;
+}
 
 ###########################################
 # Removing undefined gids automatically
 # from modules
 ###########################################
 
-sub remove_from_modules
+sub remove_undefined_gids_from_modules
 {
-    my ($script) = @_;
+    # If assigned gids for "File", "Directory" or "Unixlink" are not defined,
+    # they are automatically removed from the module
 
-    # if these 5 gids are not defined, they are automatically removed from the module
-
-    my $allfilegids = par2script::work::get_all_gids_from_script($script, "File");
-    my $allproceduregids = par2script::work::get_all_gids_from_script($script, "Procedure");
-    my $allcustomgids = par2script::work::get_all_gids_from_script($script, "Custom");
-    my $alldirectorygids = par2script::work::get_all_gids_from_script($script, "Directory");
-    my $allunixlinkgids = par2script::work::get_all_gids_from_script($script, "Unixlink");
-
-    for ( my $i = 0; $i <= $#{$script}; $i++ )
+    foreach $item ( @par2script::globals::items_assigned_at_modules )
     {
-        my $oneline = ${$script}[$i];
+        my $assignedgids = $par2script::globals::assignedgids{$item};
+        my $definedgids = $par2script::globals::definitions{$item};
 
-        my $modulename;
-
-        if ( $oneline =~ /^\s*Module\s+(\w+)\s*$/ )
+        my $gid;
+        foreach $gid ( keys %{$assignedgids} )
         {
-            $modulegid = $1;
-            next;
-        }
-
-        if ( $oneline =~ /^\s*(\w+?)\s*\=\s*\((.*?)\)\s*\;\s*$/ )
-        {
-            my $key = $1;
-            my $allassigneditemsstring = $2;
-            my $defineditemgids;
-
-            if ( $key eq "Files" ) { $defineditemgids = $allfilegids; }
-            elsif ( $key eq "Dirs" ) { $defineditemgids = $alldirectorygids; }
-            elsif ( $key eq "Procedures" ) { $defineditemgids = $allproceduregids; }
-            elsif ( $key eq "Customs" ) { $defineditemgids = $allcustomgids; }
-            elsif ( $key eq "Unixlinks" ) { $defineditemgids = $allunixlinkgids; }
-            else { next; }  # for instance "Styles"
-
-            my $allassigneditems = par2script::converter::convert_stringlist_into_array(\$allassigneditemsstring, ",");
-
-            for ( my $j = 0; $j <= $#{$allassigneditems}; $j++ )
+            if ( ! exists( $definedgids->{$gid} ))
             {
-                my $oneassigneditem = ${$allassigneditems}[$j];
-
-                # is there a definition for this assigned item?
-
-                my $itemisdefined = 0;
-
-                for ( my $k = 0; $k <= $#{$defineditemgids}; $k++ )
-                {
-                    if ( $oneassigneditem eq ${$defineditemgids}[$k] )
-                    {
-                        $itemisdefined = 1;
-                        last;
-                    }
-                }
-
-                if (! $itemisdefined)
-                {
-                    my $infoline = "WARNING: Removing $oneassigneditem from Module $modulegid\n";
-                    # print $infoline;
-                    push(@par2script::globals::logfileinfo, $infoline);
-
-                    ${$script}[$i] =~ s/\b$oneassigneditem\b//;
-                    ${$script}[$i] =~ s/\,\s*\,/\,/;
-                    ${$script}[$i] =~ s/\(\s*\,\s*/\(/;
-                    ${$script}[$i] =~ s/\s*\,\s*\)/\)/;
-
-                    if (( ${$script}[$i] =~ /\(\s*\,\s*\)/ ) || ( ${$script}[$i] =~ /\(\s*\)/ ))
-                    {
-                        # this line can be removed
-                        splice(@{$script}, $i, 1);
-                        $i--;       # decreasing the counter!
-                    }
-                }
+                # deleting entry in module definition
+                my $number_of_removals = remove_from_modules($gid, $item);
+                # decreasing counter in assignments
+                if ( $assignedgids->{$gid} > $number_of_removals ) { $assignedgids->{$gid} = $assignedgids->{$gid} - $number_of_removals; }
+                else { delete($assignedgids->{$gid}); }
             }
         }
     }
 }
 
-###########################################
-# Adding the collectors
-# to the root module
-###########################################
+############################################
+# Getting the gid of the root module. The
+# root module has no ParentID or an empty
+# ParentID.
+############################################
 
-sub create_rootmodule
+sub get_rootmodule_gid
 {
-    my ($rootmodule, $allitemgids, $itemname) = @_;
+    my $rootgid = "";
+    my $foundroot = 0;
 
-    if ( $#{$allitemgids} > -1 )
+    my $allmodules = $par2script::globals::definitions{'Module'};
+
+    my $modulegid = "";
+    foreach $modulegid (keys %{$allmodules} )
     {
-        my $oneline = "\t$itemname \= \(";
+        # print "Module $modulegid\n";
+        # my $content = "";
+        # foreach $content (sort keys %{$allmodules->{$modulegid}}) { print "\t$content = $allmodules->{$modulegid}->{$content};\n"; }
+        # print "End\n";
+        # print "\n";
 
-        for ( my $i = 0; $i <= $#{$allitemgids}; $i++ )
+        if (( ! exists($allmodules->{$modulegid}->{'ParentID'})) || ( $allmodules->{$modulegid}->{'ParentID'} eq "" ))
         {
-            my $onegid = ${$allitemgids}[$i];
+            if ( $foundroot ) { par2script::exiter::exit_program("ERROR: More than one Root module. Only one module without ParentID or with empty ParentID allowed ($rootgid and $modulegid).", "get_rootmodule_gid"); }
+            $rootgid = $modulegid;
+            $foundroot = 1;
+        }
+    }
 
-            my $infoline = "WARNING: Adding $onegid to root module\n";
-            # print $infoline;
+    if ( ! $foundroot ) { par2script::exiter::exit_program("ERROR: Could not find Root module. Did not find module without ParentID or with empty ParentID.", "get_rootmodule_gid"); }
 
-            if ($oneline eq "") { $oneline = "\t\t\t\t"; }
+    return $rootgid;
+}
 
-            $oneline .= $onegid;
+####################################
+# Adding defined items without
+# assignment to the root module.
+####################################
 
-            if ( $i == $#{$allitemgids} ) { $oneline .= "\)\;"; }
-            else { $oneline .= "\,"; }
+sub add_to_root_module
+{
+    # If defined gids for "File", "Directory" or "Unixlink" are not assigned,
+    # they are automatically assigned to the root module
 
-            if ( length($oneline) > 100 )
-            {
-                $oneline .= "\n";
-                push(@{$rootmodule}, $oneline);
-                $oneline = "";
-            }
+    my $rootmodulegid = get_rootmodule_gid();
 
+    my $item;
+    foreach $item ( @par2script::globals::items_assigned_at_modules )
+    {
+        my $assignedgids = $par2script::globals::assignedgids{$item};
+        my $definedgids = $par2script::globals::definitions{$item};
+
+        my $gidstring = "";
+
+        # Perhaps there are already items assigned to the root
+        if ( ! exists($par2script::globals::searchkeys{$item}) ) { par2script::exiter::exit_program("ERROR: Unknown type \"$item\" at modules.", "remove_from_modules"); }
+        my $modulekey = $par2script::globals::searchkeys{$item};
+        if ( exists($par2script::globals::definitions{'Module'}->{$rootmodulegid}->{$modulekey}) )
+        {
+            $gidstring = $par2script::globals::definitions{'Module'}->{$rootmodulegid}->{$modulekey};
+            $gidstring =~ s/\(//;
+            $gidstring =~ s/\)//;
         }
 
-        if (! $oneline =~ /^\s*$/ )
+        my $gid;
+        foreach $gid ( keys %{$definedgids} )
         {
-            $oneline .= "\n";
-            push(@{$rootmodule}, $oneline);
+            if ( ! exists( $assignedgids->{$gid} ))
+            {
+                if ( $gidstring eq "" )
+                {
+                    $gidstring = $gid;
+                }
+                else
+                {
+                    $gidstring = "$gidstring,$gid";
+                }
+
+                $assignedgids->{$gid} = 1;
+            }
+        }
+
+        if ( $gidstring ne "" )
+        {
+            $gidstring = "\($gidstring\)";
+            $par2script::globals::definitions{'Module'}->{$rootmodulegid}->{$modulekey} = $gidstring;
         }
     }
 }
 
-######################################################
-# Splitting one long line into several short lines
-######################################################
+###################################################
+# Including \n in a very long string
+###################################################
 
-sub make_multiliner
+sub include_linebreaks
 {
-    my ($itemname, $allgidstring) = @_;
+    my ($allgidstring) = @_;
 
-    my @newblock = ();
+    my $newline = "";
+    my $newlength = 0;
 
-    my $allitemgids = par2script::converter::convert_stringlist_into_array(\$allgidstring, ",");
+    $allgidstring =~ s/\(//;
+    $allgidstring =~ s/\)//;
 
-    if ( $#{$allitemgids} > -1 )
+    my $allgids = par2script::converter::convert_stringlist_into_array_2($allgidstring, ",");
+
+    if ( $#{$allgids} > -1 )
     {
-        my $oneline = "\t$itemname \= \(";
-
-        for ( my $i = 0; $i <= $#{$allitemgids}; $i++ )
+        my $onegid;
+        foreach $onegid ( @{$allgids} )
         {
-            my $onegid = ${$allitemgids}[$i];
+            $newline = "$newline$onegid,";
+            $newlength = $newlength + length($onegid) + 1; # +1 for the comma
 
-            if ($oneline eq "") { $oneline = "\t\t\t\t"; }
-
-            $oneline .= $onegid;
-
-            if ( $i == $#{$allitemgids} ) { $oneline .= "\)\;"; }
-            else { $oneline .= "\,"; }
-
-            if ( length($oneline) > 100 )
+            if ( $newlength > 80 )
             {
-                $oneline .= "\n";
-                push(@newblock, $oneline);
-                $oneline = "";
+                $newline = $newline . "\n\t\t\t\t";
+                $newlength = 0;
             }
-        }
-
-        if (! $oneline =~ /^\s*$/ )
-        {
-            $oneline .= "\n";
-            push(@newblock, $oneline);
         }
     }
 
-    return \@newblock;
+    $newline =~ s/,\s*$//;
+    $newline = "($newline)";
+
+    return $newline;
 }
 
 ###################################################
@@ -219,157 +247,26 @@ sub make_multiliner
 
 sub shorten_lines_at_modules
 {
-    my ($script) = @_;
-
-    my $ismoduleblock = 0;
-
-    for ( my $i = 0; $i <= $#{$script}; $i++ )
+    my $item;
+    foreach $item ( @par2script::globals::items_assigned_at_modules )
     {
-        my $oneline = ${$script}[$i];
+        if ( ! exists($par2script::globals::searchkeys{$item}) ) { par2script::exiter::exit_program("ERROR: Unknown type \"$item\" at modules.", "shorten_lines_at_modules"); }
+        my $searchkey = $par2script::globals::searchkeys{$item};
 
-        if ( $oneline =~ /^\s*Module\s+\w+\s*$/ ) { $ismoduleblock = 1; }
-        if (( $oneline =~ /^\s*End\s*$/ ) && ( $ismoduleblock )) { $ismoduleblock = 0; }
+        my $allmodules = $par2script::globals::definitions{'Module'};
 
-        if ( $ismoduleblock )
+        my $onemodule;
+        foreach $onemodule (keys %{$allmodules})
         {
-            if (( $oneline =~ /^\s*(\w+)\s*\=\s*\((.*)\)\s*\;\s*$/ ) && ( length($oneline) > 100 ))
+            if (( exists($allmodules->{$onemodule}->{$searchkey}) ) &&
+                ( length($allmodules->{$onemodule}->{$searchkey}) > 100 ))
             {
-                # this line has to be splitted in several lines
-                my $item = $1;
-                my $allgidstring = $2;
-
-                my $multilines = make_multiliner($item, $allgidstring);
-                splice(@{$script}, $i, 1, @{$multilines});
+                # including "\n\t\t\t\t"
+                my $newstring = include_linebreaks($allmodules->{$onemodule}->{$searchkey});
+                $allmodules->{$onemodule}->{$searchkey} = $newstring;
             }
         }
     }
-}
-
-###########################################
-# Adding defined gids automatically
-# to the root module
-###########################################
-
-sub add_to_root_module
-{
-    my ($script) = @_;
-
-    my $rootmodulestartline = "";
-
-    # if these 4 gids are defined and not added to another module, they are automatically added to the root module
-
-    my $allfilegids = par2script::work::get_all_gids_from_script($script, "File");
-    my $allproceduregids = par2script::work::get_all_gids_from_script($script, "Procedure");
-    my $allcustomgids = par2script::work::get_all_gids_from_script($script, "Custom");
-    my $alldirectorygids = par2script::work::get_all_gids_from_script($script, "Directory");
-    my $allunixlinkgids = par2script::work::get_all_gids_from_script($script, "Unixlink");
-
-    for ( my $i = 0; $i <= $#{$script}; $i++ )
-    {
-        my $oneline = ${$script}[$i];
-
-        if (( $oneline =~ /^\s*Module\s+\w+\s*$/ ) && ( $rootmodulestartline eq "" ))   # the first module is the root module
-        {
-            $rootmodulestartline = $i;
-        }
-
-        if ( $oneline =~ /^\s*(\w+?)\s*\=\s*\((.*?)\)\s*\;\s*$/ )
-        {
-            my $key = $1;
-            my $allassigneditemsstring = $2;
-            my $defineditemgids;
-
-            if ( $key eq "Files" ) { $defineditemgids = $allfilegids; }
-            elsif ( $key eq "Dirs" ) { $defineditemgids = $alldirectorygids; }
-            elsif ( $key eq "Procedures" ) { $defineditemgids = $allproceduregids; }
-            elsif ( $key eq "Customs" ) { $defineditemgids = $allcustomgids; }
-            elsif ( $key eq "Unixlinks" ) { $defineditemgids = $allunixlinkgids; }
-            else { next; }  # for instance "Styles"
-
-            my $allassigneditems = par2script::converter::convert_stringlist_into_array(\$allassigneditemsstring, ",");
-
-            for ( my $j = 0; $j <= $#{$allassigneditems}; $j++ )
-            {
-                my $oneassigneditem = ${$allassigneditems}[$j];
-
-                # this can be removed for the list for the root module
-
-                for ( my $k = 0; $k <= $#{$defineditemgids}; $k++ )
-                {
-                    if ( $oneassigneditem eq ${$defineditemgids}[$k] )
-                    {
-                        splice(@{$defineditemgids}, $k, 1);
-                        last;
-                    }
-                }
-            }
-        }
-    }
-
-    # Now the four collectors contain only gids, that have to be added to the root module
-    # The module begins at $rootmodulestartline
-
-    for ( my $i = $rootmodulestartline; $i <= $#{$script}; $i++ )
-    {
-        my $oneline = ${$script}[$i];
-
-        if ( $oneline =~ /^\s*End\s*$/ ) { last; }
-
-        if ( $oneline =~ /^\s*(\w+)\s+\=\s+\((.*)\)\s*\;\s*$/ )
-        {
-            my $key = $1;
-            my $allassigneditemsstring = $2;
-            my $defineditemgids;
-
-            if ( $key eq "Files" ) { $defineditemgids = $allfilegids; }
-            elsif ( $key eq "Dirs" ) { $defineditemgids = $alldirectorygids; }
-            elsif ( $key eq "Procedures" ) { $defineditemgids = $allproceduregids; }
-            elsif ( $key eq "Customs" ) { $defineditemgids = $allcustomgids; }
-            elsif ( $key eq "Unixlinks" ) { $defineditemgids = $allunixlinkgids; }
-            else { next; }  # for instance "Styles"
-
-            my $allassigneditems = par2script::converter::convert_stringlist_into_array(\$allassigneditemsstring, "\,");
-
-            # adding the root module items to the collectors
-
-            for ( my $j = 0; $j <= $#{$allassigneditems}; $j++ )
-            {
-                push(@{$defineditemgids}, ${$allassigneditems}[$j]);
-            }
-
-            # then the existing lines can be removed
-
-            splice(@{$script}, $i, 1);
-            $i--;       # decreasing the counter!
-        }
-    }
-
-    # creation of the new block
-
-    my @rootmodule = ();
-    my $rootmoduleref = \@rootmodule;
-
-    create_rootmodule($rootmoduleref, $alldirectorygids, "Dirs");
-    create_rootmodule($rootmoduleref, $allfilegids, "Files");
-    create_rootmodule($rootmoduleref, $allproceduregids, "Procedures");
-    create_rootmodule($rootmoduleref, $allcustomgids, "Customs");
-    create_rootmodule($rootmoduleref, $allunixlinkgids, "Unixlinks");
-
-    # and finally the new blocks can be inserted into the root module
-
-    my $insertline;
-
-    for ( my $i = $rootmodulestartline; $i <= $#{$script}; $i++ )
-    {
-        if ( ${$script}[$i] =~ /^\s*End\s*$/i )
-        {
-            $insertline = $i;
-            last;
-        }
-    }
-
-    splice(@{$script}, $insertline, 0, @{$rootmoduleref});
-
 }
 
 1;
