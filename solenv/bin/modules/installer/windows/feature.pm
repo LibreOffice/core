@@ -4,9 +4,9 @@
 #
 #   $RCSfile: feature.pm,v $
 #
-#   $Revision: 1.17 $
+#   $Revision: 1.18 $
 #
-#   last change: $Author: rt $ $Date: 2007-07-06 12:25:37 $
+#   last change: $Author: ihi $ $Date: 2007-08-20 15:27:52 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -79,7 +79,7 @@ sub get_feature_parent
     # Only then it is possible to make the "real" root module invisible by
     # setting the display to "0".
 
-    if ( $parentgid eq "gid_Module_Root" ) { $parentgid = ""; }
+    if ( $parentgid eq $installer::globals::rootmodulegid ) { $parentgid = ""; }
 
     # Attention: Maximum feature length is 38!
     installer::windows::idtglobal::shorten_feature_gid(\$parentgid);
@@ -121,7 +121,7 @@ sub get_feature_display
     my $styles = "";
     if ( $onefeature->{'Styles'} ) { $styles = $onefeature->{'Styles'}; }
 
-    if (( $parentid eq "gid_Module_Root" ) && ( $styles =~ /\bHIDDEN_ROOT\b/ ))
+    if (( $parentid eq $installer::globals::rootmodulegid ) && ( $styles =~ /\bHIDDEN_ROOT\b/ ))
     {
         $display = "0";
     }
@@ -175,18 +175,7 @@ sub get_feature_directory
 
     my $directory;
 
-    # my $parentid = "";
-
-    # if ( $onefeature->{'ParentID'} ) { $parentid = $onefeature->{'ParentID'}; }
-
-    # if (( $parentid eq "" ) || ( $parentid eq "gid_Module_Root" ))    # This is the root module and the modules directly below the root
-    # {
-        $directory = "INSTALLLOCATION";
-    # }
-    # else
-    # {
-    #   $directory = "";
-    # }
+    $directory = "INSTALLLOCATION";
 
     return $directory
 }
@@ -207,7 +196,7 @@ sub get_feature_attributes
     my $parentgid = "";
     if ( $onefeature->{'ParentID'} ) { $parentgid = $onefeature->{'ParentID'}; }
 
-    if (( $parentgid eq "" ) || ( $parentgid eq "gid_Module_Root" )) { $attributes = "8"; }
+    if (( $parentgid eq "" ) || ( $parentgid eq $installer::globals::rootmodulegid )) { $attributes = "8"; }
     else { $attributes = "10"; }
 
     return $attributes
