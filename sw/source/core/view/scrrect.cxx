@@ -4,9 +4,9 @@
  *
  *  $RCSfile: scrrect.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: hr $ $Date: 2007-07-31 17:42:46 $
+ *  last change: $Author: ihi $ $Date: 2007-08-20 13:43:04 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -742,37 +742,57 @@ void SwViewImp::_RefreshScrolledArea( const SwRect &rRect )
     }
 
     //Virtuelles Device erzeugen und einstellen.
-    OutputDevice *pOld = GetShell()->GetOut();
-    VirtualDevice *pVout = new VirtualDevice( *pOld );
-    MapMode aMapMode( pOld->GetMapMode() );
+    // --> OD 2007-08-16 #i80720#
+    // rename variable <pOld> to <pCurrentOut>
+    OutputDevice* pCurrentOut = GetShell()->GetOut();
+    VirtualDevice *pVout = new VirtualDevice( *pCurrentOut );
+    MapMode aMapMode( pCurrentOut->GetMapMode() );
     pVout->SetMapMode( aMapMode );
     Size aSize( aScRect.Width(), 0 );
-    lcl_CalcVirtHeight( pOld, aSize );
+    lcl_CalcVirtHeight( pCurrentOut, aSize );
     if ( aSize.Height() > aScRect.Height() )
         aSize.Height() = aScRect.Height() + 50;
 
     //unten in der Schleife lassen wir die Rechtecke ein wenig ueberlappen,
     //das muss auch bei der Groesse beruecksichtigt werden.
-    aSize = pOld->LogicToPixel( aSize );
+    aSize = pCurrentOut->LogicToPixel( aSize );
     aSize.Width() += 4; aSize.Height() += 4;
-    aSize = pOld->PixelToLogic( aSize );
+    aSize = pCurrentOut->PixelToLogic( aSize );
+    // <--
 
     const SwRootFrm* pLayout = GetShell()->GetLayout();
 
     // #i75172# Avoid VDev if PreRendering is active
     static bool bDoNotUseVDev(GetDrawView()->IsBufferedOutputAllowed());
 
-    if(!bDoNotUseVDev &&  pVout->SetOutputSize( aSize ) )
+    // --> OD 2007-08-16 #i80720#
+    // Enlarge paint rectangle also in case that "own" virtual device <pVout>
+    // isn't used. Refactor code a little bit to achieve this.
+    const bool bApplyVDev = !bDoNotUseVDev && pVout->SetOutputSize( aSize );
+
     {
-        pVout->SetLineColor( pOld->GetLineColor() );
-        pVout->SetFillColor( pOld->GetFillColor() );
+        if ( bApplyVDev )
+        {
+            // --> OD 2007-08-16 #i80720#
+            // rename variable <pOld> to <pCurrentOut>
+            pVout->SetLineColor( pCurrentOut->GetLineColor() );
+            pVout->SetFillColor( pCurrentOut->GetFillColor() );
+            // <--
+        }
 
         // #i72754# start Pre/PostPaint encapsulation before pOut is changed to the buffering VDev
         const Region aRepaintRegion(aScRect.SVRect());
         GetShell()->DLPrePaint2(aRepaintRegion);
 
         //Virtuelles Device in die ViewShell 'selektieren'
-        GetShell()->pOut = pVout;
+        // --> OD 2007-08-16 #i80720#
+        // remember current output device at this place
+        OutputDevice* pOldOut = GetShell()->GetOut();
+        // <--
+        if ( bApplyVDev )
+        {
+            GetShell()->pOut = pVout;
+        }
 
         const SwFrm *pPg = GetFirstVisPage();
         do
@@ -782,12 +802,13 @@ void SwViewImp::_RefreshScrolledArea( const SwRect &rRect )
             {
                 aRect._Intersection( aScRect );
                 do
-                {   Rectangle aTmp( aRect.SVRect() );
+                {
+                    Rectangle aTmp( aRect.SVRect() );
                     long nTmp = aTmp.Top() + aSize.Height();
                     if ( aTmp.Bottom() > nTmp )
                         aTmp.Bottom() = nTmp;
 
-                    aTmp = pOld->LogicToPixel( aTmp );
+                    aTmp = pOldOut->LogicToPixel( aTmp );
                     if( aRect.Top() > pPg->Frm().Top() )
                         aTmp.Top()  -= 2;
                     if( aRect.Top() + aRect.Height() < pPg->Frm().Top()
@@ -798,19 +819,25 @@ void SwViewImp::_RefreshScrolledArea( const SwRect &rRect )
                     if( aRect.Left() + aRect.Width() < pPg->Frm().Left()
                                                      + pPg->Frm().Width() )
                         aTmp.Right() += 2;
-                    aTmp = pOld->PixelToLogic( aTmp );
+                    aTmp = pOldOut->PixelToLogic( aTmp );
                     SwRect aTmp2( aTmp );
 
-                    // OD 12.11.2002 #96272# - use method to set mapping
-                    //Point aOrigin( aTmp2.Pos() );
-                    //aOrigin.X() = -aOrigin.X(); aOrigin.Y() = -aOrigin.Y();
-                    //aMapMode.SetOrigin( aOrigin );
-                    ::SetMappingForVirtDev( aTmp2.Pos(), &aMapMode, pOld, pVout );
-                    pVout->SetMapMode( aMapMode );
+                    if ( bApplyVDev )
+                    {
+                        // OD 12.11.2002 #96272# - use method to set mapping
+                        //Point aOrigin( aTmp2.Pos() );
+                        //aOrigin.X() = -aOrigin.X(); aOrigin.Y() = -aOrigin.Y();
+                        //aMapMode.SetOrigin( aOrigin );
+                        ::SetMappingForVirtDev( aTmp2.Pos(), &aMapMode, pOldOut, pVout );
+                        pVout->SetMapMode( aMapMode );
+                    }
 
                     pLayout->Paint( aTmp2 );
-                    pOld->DrawOutDev( aTmp2.Pos(), aTmp2.SSize(),
-                                      aTmp2.Pos(), aTmp2.SSize(), *pVout );
+                    if ( bApplyVDev )
+                    {
+                        pOldOut->DrawOutDev( aTmp2.Pos(), aTmp2.SSize(),
+                                          aTmp2.Pos(), aTmp2.SSize(), *pVout );
+                    }
 
                     aRect.Top( aRect.Top() + aSize.Height() );
                     aScRect.Top( aRect.Top() );
@@ -821,17 +848,16 @@ void SwViewImp::_RefreshScrolledArea( const SwRect &rRect )
 
         } while ( pPg && pPg->Frm().IsOver( GetShell()->VisArea() ) );
 
-        GetShell()->pOut = pOld;
+        if ( bApplyVDev )
+        {
+            GetShell()->pOut = pOldOut;
+        }
         delete pVout;
 
         // #i72754# end Pre/PostPaint encapsulation when pOut is back and content is painted
         GetShell()->DLPostPaint2();
     }
-    else
-    {
-        delete pVout;
-        pLayout->Paint( aScRect );
-    }
+    // <--
 
     if ( bShowCrsr )
         pWin->GetCursor()->Show();
