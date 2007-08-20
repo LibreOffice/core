@@ -7,9 +7,9 @@ eval 'exec perl -wS $0 ${1+"$@"}'
 #
 #   $RCSfile: checkdeliver.pl,v $
 #
-#   $Revision: 1.9 $
+#   $Revision: 1.10 $
 #
-#   last change: $Author: hr $ $Date: 2007-07-31 13:10:47 $
+#   last change: $Author: ihi $ $Date: 2007-08-20 15:43:18 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -212,22 +212,15 @@ sub check
         if ( -e $ofile && -e $sfile ) {
             my $orgfile_stats = stat($ofile);
             my $delivered_stats = stat($sfile);
-            if ( $platform =~ /^wntmsci/ ) {
-                # For windows 'rebase' may alter file dates, but file
-                # size should keep constant.
-                if ( $orgfile_stats->size ne $delivered_stats->size ) {
-                    print STDERR "\nError: ";
-                    print STDERR "file sizes differ for $ofile $sfile\n";
-                    $error ++;
-                }
-            } else {
-                # Unix like platforms strip binaries. Stripping reduces file
-                # size but does not change modification time.
-                if ( ( $orgfile_stats->mtime - $delivered_stats->mtime ) gt 1 ) {
-                    print STDERR "Error: ";
-                    print STDERR "file dates differ for $ofile $sfile\n";
-                    $error ++;
-                }
+            # Stripping (on unix like platforms) and signing (for windows)
+            # changes file size. Therefore we have to compare for file dates.
+            # File modification time also can change after deliver, f.e. by
+            # rebasing, but only increase. It must not happen that a file on
+            # solver is older than it's source.
+            if ( ( $orgfile_stats->mtime - $delivered_stats->mtime ) gt 1 ) {
+                print STDERR "Error: ";
+                print STDERR "delivered file is older than it's source '$ofile' $sfile\n";
+                $error ++;
             }
         } else {
             print STDERR "Error: no such file '$ofile'\n" if ( ! -e $ofile );
