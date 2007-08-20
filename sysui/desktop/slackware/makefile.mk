@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.4 $
+#   $Revision: 1.5 $
 #
-#   last change: $Author: kz $ $Date: 2007-05-10 15:00:58 $
+#   last change: $Author: ihi $ $Date: 2007-08-20 14:08:54 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -101,7 +101,7 @@ $(MISC)/$(TARGET)/usr/share/applications/ :
 
 $(MISC)/$(TARGET)/empty.tar :
     @$(MKDIRHIER) $(@:d)/empty
-    @tar -C $(MISC)/$(TARGET)/empty -cf $@ .
+    @tar -C $(MISC)/$(TARGET)/empty --owner=root --group=root --same-owner -cf $@ .
 
 
 # --- packaging ---------------------------------------------------
