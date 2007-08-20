@@ -4,9 +4,9 @@
  *
  *  $RCSfile: Oasis2OOo.cxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: hr $ $Date: 2007-06-27 16:22:13 $
+ *  last change: $Author: ihi $ $Date: 2007-08-20 16:32:44 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -581,6 +581,8 @@ static XMLTransformerActionInit aActionTable[] =
     // rename <table:dependencies> to <table:dependences>
     ENTRY1Q( TABLE, DEPENDENCIES, XML_ETACTION_RENAME_ELEM,
                         XML_NAMESPACE_TABLE, XML_DEPENDENCES ),
+    ENTRY1Q( TABLE, DEPENDENCY, XML_ETACTION_RENAME_ELEM,
+                        XML_NAMESPACE_TABLE, XML_DEPENDENCE ),
 
     // process table::conversion-mode
     ENTRY1( TABLE, CONVERSION_MODE, XML_ETACTION_PROC_ATTRS,
