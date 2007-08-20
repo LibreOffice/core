@@ -4,3 +4,4 @@ po	postprocess\checkxml		nmake	-	all	po_checkxml NULL
 po	postprocess\checkdeliver	nmake	-	all	po_checkdlv NULL
 po	postprocess\packconfig		nmake	-	all	po_packconfig po_checkxml NULL
 po	postprocess\rebase	    	nmake	-	w	po_rebase po_checkdlv NULL
+po	postprocess\signing	    	nmake	-	w,sign	po_signing po_rebase.w NULL
