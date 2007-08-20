@@ -4,9 +4,9 @@
  *
  *  $RCSfile: module_javafilter.scp,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 01:31:52 $
+ *  last change: $Author: ihi $ $Date: 2007-08-20 15:34:00 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -99,7 +99,6 @@ Module gid_Module_Optional_Javafilter_Pocketpc_Pocket_Word
     MOD_NAME_DESC(MODULE_OPTIONAL_JAVAFILTER_POCKETPC_POCKET_WORD);
     ParentID = gid_Module_Optional_Javafilter_Pocketpc;
     Files = ( gid_File_Lib_Xmergesync,gid_File_Jar_Pocketword,gid_File_Registry_Spool_Oo_TypeDetection_PocketWord_Types_Xcu,gid_File_Registry_Spool_Oo_TypeDetection_PocketWord_Filters_Xcu, gid_File_Tmp_Userinstall_Pocketpcword_Inf );
-    Procedures = ( gid_Procedure_Javafilter_Xmergesync_Pword_Reg_Install, gid_Procedure_Javafilter_Xmergesync_Pword_Reg_Uninstall );
     Minimal = NO;
     Default = NO;
     Styles (en-US) = ();
@@ -114,7 +113,6 @@ Module gid_Module_Optional_Javafilter_Pocketpc_Pocket_Excel
     MOD_NAME_DESC(MODULE_OPTIONAL_JAVAFILTER_POCKETPC_POCKET_EXCEL);
     ParentID = gid_Module_Optional_Javafilter_Pocketpc;
     Files = ( gid_File_Lib_Xmergesync,gid_File_Jar_Pexcel,gid_File_Registry_Spool_Oo_TypeDetection_PocketExcel_Types_Xcu,gid_File_Registry_Spool_Oo_TypeDetection_PocketExcel_Filters_Xcu, gid_File_Tmp_Userinstall_Pocketpcexcel_Inf );
-    Procedures = ( gid_Procedure_Javafilter_Xmergesync_Pexcel_Reg_Install, gid_Procedure_Javafilter_Xmergesync_Pexcel_Reg_Uninstall );
     Minimal = NO;
     Default = NO;
     Styles (en-US) = ();
