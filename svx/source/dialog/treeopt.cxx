@@ -4,9 +4,9 @@
  *
  *  $RCSfile: treeopt.cxx,v $
  *
- *  $Revision: 1.44 $
+ *  $Revision: 1.45 $
  *
- *  last change: $Author: hr $ $Date: 2007-06-27 17:51:14 $
+ *  last change: $Author: ihi $ $Date: 2007-08-20 13:48:35 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -975,7 +975,11 @@ void OfaTreeOptionsDialog::ApplyItemSets()
 void OfaTreeOptionsDialog::InitTreeAndHandler()
 {
     aTreeLB.SetNodeDefaultImages();
-    ResMgr* pIsoRes = SFX_APP()->GetLabelResManager();
+
+    String sResName = String::CreateFromAscii( "iso" );
+    sResName += String::CreateFromInt32(SOLARUPD); // current version
+    ResMgr* pIsoRes = ResMgr::CreateResMgr( ::rtl::OUStringToOString( sResName, RTL_TEXTENCODING_UTF8 ) );
+    //! ResMgr* pIsoRes = SFX_APP()->GetLabelResManager();
     ResId aImgLstRes( RID_IMGLIST_TREEOPT, *pIsoRes );
     aImgLstRes.SetRT( RSC_IMAGELIST );
     if ( pIsoRes->IsAvailable( aImgLstRes ) )
@@ -984,6 +988,8 @@ void OfaTreeOptionsDialog::InitTreeAndHandler()
     aImgLstHCRes.SetRT( RSC_IMAGELIST );
     if ( pIsoRes->IsAvailable( aImgLstHCRes ) )
         aPageImagesHC = ImageList( ResId( RID_IMGLIST_TREEOPT_HC, *pIsoRes ) );
+    delete pIsoRes;
+
     aTreeLB.SetHelpId( HID_OFADLG_TREELISTBOX );
     aTreeLB.SetWindowBits( WB_HASBUTTONS | WB_HASBUTTONSATROOT |
                            WB_HASLINES | WB_HASLINESATROOT |
@@ -2652,9 +2658,13 @@ void  OfaTreeOptionsDialog::InsertNodes( const VectorOfNodes& rNodeList )
 
 short OfaTreeOptionsDialog::Execute()
 {
-    // collect all DictionaryList Events while the dialog is executed
-    Reference<com::sun::star::linguistic2::XDictionaryList> xDictionaryList(SvxGetDictionaryList());
-    SvxDicListChgClamp aClamp( xDictionaryList );
+    ::std::auto_ptr< SvxDicListChgClamp > pClamp;
+    if ( !bIsFromExtensionManager )
+    {
+        // collect all DictionaryList Events while the dialog is executed
+        Reference<com::sun::star::linguistic2::XDictionaryList> xDictionaryList(SvxGetDictionaryList());
+        pClamp = ::std::auto_ptr< SvxDicListChgClamp >( new SvxDicListChgClamp( xDictionaryList ) );
+    }
     short nRet = SfxModalDialog::Execute();
 
     if( RET_OK == nRet )
