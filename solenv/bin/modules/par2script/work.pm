@@ -4,9 +4,9 @@
 #
 #   $RCSfile: work.pm,v $
 #
-#   $Revision: 1.6 $
+#   $Revision: 1.7 $
 #
-#   last change: $Author: ihi $ $Date: 2007-03-26 12:46:22 $
+#   last change: $Author: ihi $ $Date: 2007-08-20 15:29:46 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -97,7 +97,6 @@ sub setparfiles
     my ($filename) = @_;
 
     # input is the name of the list file
-
     $filename =~ s/\@//;    # removing the leading \@
 
     my $filecontent = par2script::files::read_file($filename);
@@ -105,13 +104,9 @@ sub setparfiles
     my @parfiles = ();
     my $parfilesref = \@parfiles;
 
-    for ( my $i = 0; $i <= $#{$filecontent}; $i++ )
-    {
-        my $oneline = ${$filecontent}[$i];
-        my $parfilesref = analyze_comma_separated_list($oneline, $parfilesref);
-    }
+    foreach ( @{$filecontent} ) { $parfilesref = analyze_comma_separated_list($_, $parfilesref); }
 
-    return \@parfiles;
+    return $parfilesref;
 }
 
 ############################################
@@ -123,18 +118,21 @@ sub make_complete_pathes_for_parfiles
 {
     my ($parfiles, $includes) = @_;
 
-    for ( my $i = 0; $i <= $#{$parfiles}; $i++ )
+    my $oneparfile;
+
+    foreach $oneparfile ( @{$parfiles} )
     {
         my $foundparfile = 0;
+        my $includepath;
 
-        for ( my $j = 0; $j <= $#{$includes}; $j++ )
+        foreach $includepath ( @{$includes} )
         {
-            my $parfile = ${$includes}[$j] . $par2script::globals::separator . ${$parfiles}[$i];
+            my $parfile = "$includepath/$oneparfile";
 
             if ( -f $parfile )
             {
                 $foundparfile = 1;
-                ${$parfiles}[$i] = $parfile;
+                $oneparfile = $parfile;
                 last;
             }
         }
@@ -147,546 +145,258 @@ sub make_complete_pathes_for_parfiles
 }
 
 ######################################################
-# collecting one special item in all par files and
-# including it into the script file
+# collecting one special item in the par files and
+# including it into the "definitions" hash
 ######################################################
 
-sub put_item_into_collector
+sub collect_definitions
 {
-    my ( $item, $parfile, $collector ) = @_;
+    my ($parfilecontent) = @_;
 
-    my $include = 0;
+    my $multidefinitionerror = 0;
+    my @multidefinitiongids = ();
 
-    for ( my $i = 0; $i <= $#{$parfile}; $i++ )
+
+    foreach $oneitem ( @par2script::globals::allitems )
     {
-        if ( ${$parfile}[$i] =~ /^\s*$item\s*\w+\s*$/ )
+        my $docollect = 0;
+        my $gid = "";
+        my %allitemhash = ();
+
+        for ( my $i = 0; $i <= $#{$parfilecontent}; $i++ )
         {
-            $include = 1;
-        }
+            my $line = ${$parfilecontent}[$i];
 
-        if ( $include )
-        {
-            push(@{$collector}, ${$parfile}[$i]);
-        }
-
-        if (( $include ) && ( ${$parfile}[$i] =~ /^\s*End\s*$/i ))
-        {
-            $include = 0;
-            push(@{$collector}, "\n");  # empty line at the end
-        }
-    }
-}
-
-######################################################
-# putting all collected items of one type
-# into the script file
-######################################################
-
-sub put_item_into_script
-{
-    my ($script, $itemcollector) = @_;
-
-    for ( my $i = 0; $i <= $#{$itemcollector}; $i++ )
-    {
-        push(@{$script}, ${$itemcollector}[$i]);
-    }
-}
-
-#######################################################################
-# Collecting all gids of the type "searchitem" from the setup script
-#######################################################################
-
-sub get_all_gids_from_script
-{
-    my ($itemcollector, $oneitem) = @_;
-
-    my @allgidarray = ();
-
-    for ( my $i = 0; $i <= $#{$itemcollector}; $i++ )
-    {
-        if ( ${$itemcollector}[$i] =~ /^\s*\Q$oneitem\E\s+(\S+)\s*$/ )
-        {
-            my $gid = $1;
-            push(@allgidarray, $gid);
-        }
-    }
-
-    return \@allgidarray;
-}
-
-#######################################################################
-# Collecting all items of the type "searchitem" from the setup script
-#######################################################################
-
-sub get_all_items_from_script
-{
-    my ($scriptref, $searchitem) = @_;
-
-    my @allitemarray = ();
-
-    my ($line, $gid, $counter, $itemkey, $itemvalue, $valuecounter);
-
-    for ( my $i = 0; $i <= $#{$scriptref}; $i++ )
-    {
-        $line = ${$scriptref}[$i];
-
-        if ( $line =~ /^\s*\Q$searchitem\E\s+(\S+)\s*$/ )
-        {
-            $gid = $1;
-            $counter = $i + 1;
-
-            my %oneitemhash = ();
-            $oneitemhash{'gid'} = $gid;
-
-            while  (!( $line =~ /^\s*End\s*$/ ))
+            if ( $line =~ /^\s*$oneitem\s+(\w+)\s*$/ )
             {
-                $line = ${$scriptref}[$counter];
-                $counter++;
+                $gid = $1;
+                $docollect = 1;
+            }
+            else
+            {
+                $docollect = 0;
+            }
 
-                if ( $line =~ /^\s*(.+?)\s*\=\s*(.+?)\s*\;\s*$/ )   # only oneliner!
+            if ( $docollect )
+            {
+                my $currentline = $i;
+                my %oneitemhash;
+
+                while (! ( ${$parfilecontent}[$currentline] =~ /^\s*End\s*$/i ) )
                 {
-                    $itemkey = $1;
-                    $itemvalue = $2;
+                    if ( ${$parfilecontent}[$currentline] =~ /^\s*(.+?)\s*\=\s*(.+?)\s*\;\s*$/ )    # only oneliner!
+                    {
+                        $itemkey = $1;
+                        $itemvalue = $2;
 
-                    par2script::remover::remove_leading_and_ending_quotationmarks(\$itemvalue);
+                        if ( $oneitem eq "Directory" ) { if ( $itemkey =~ "DosName" ) { $itemkey =~ s/DosName/HostName/; } }
+                        if (( $oneitem eq "Directory" ) || ( $oneitem eq "File" ) || ( $oneitem eq "Unixlink" )) { if ( $itemvalue eq "PD_PROGDIR" ) { $itemvalue = "PREDEFINED_PROGDIR"; }}
+                        if (( $itemkey eq "Styles" ) && ( $itemvalue =~ /^\s*(\w+)(\s*\;\s*)$/ )) { $itemvalue = "($1)$2"; }
 
-                    $oneitemhash{$itemkey} = $itemvalue;
+                        $oneitemhash{$itemkey} = $itemvalue;
+                    }
 
+                    $currentline++;
+                }
+
+                # no hyphen allowed in gids -> cannot happen here because (\w+) is required for gids
+                if ( $gid =~ /-/ ) { par2script::exiter::exit_program("ERROR: No hyphen allowed in global id: $gid", "test_of_hyphen"); }
+
+                # test of uniqueness
+                if ( exists($allitemhash{$gid}) )
+                {
+                    $multidefinitionerror = 1;
+                    push(@multidefinitiongids, $gid);
+                }
+
+                $allitemhash{$gid} = \%oneitemhash;
+            }
+        }
+
+        $par2script::globals::definitions{$oneitem} = \%allitemhash;
+    }
+
+    if ( $multidefinitionerror ) {  par2script::exiter::multidefinitionerror(\@multidefinitiongids); }
+
+    # foreach $key (keys %par2script::globals::definitions)
+    # {
+    #   print "Key: $key \n";
+    #
+    #   foreach $key (keys %{$par2script::globals::definitions{$key}})
+    #   {
+    #       print "\t$key \n";
+    #   }
+    # }
+}
+
+######################################################
+# Filling content into the script
+######################################################
+
+sub put_oneitem_into_script
+{
+    my ( $script, $item, $itemhash, $itemkey ) = @_;
+
+    push(@{$script}, "$item $itemkey\n" );
+    my $content = "";
+    foreach $content (sort keys %{$itemhash->{$itemkey}}) { push(@{$script}, "\t$content = $itemhash->{$itemkey}->{$content};\n" ); }
+    push(@{$script}, "End\n" );
+    push(@{$script}, "\n" );
+}
+
+######################################################
+# Creating the script
+######################################################
+
+sub create_script
+{
+    my @script = ();
+    my $oneitem;
+
+    foreach $oneitem ( @par2script::globals::allitems )
+    {
+        if ( exists($par2script::globals::definitions{$oneitem}) )
+        {
+            if ( $oneitem eq "Shortcut" ) { next; } # "Shortcuts" after "Files"
+
+            if (( $oneitem eq "Module" ) || ( $oneitem eq "Directory" )) { write_sorted_items(\@script, $oneitem); }
+            else { write_unsorted_items(\@script, $oneitem); }
+        }
+    }
+
+    return \@script;
+}
+
+######################################################
+# Adding script content for the unsorted items
+######################################################
+
+sub write_unsorted_items
+{
+    my ( $script, $oneitem ) = @_;
+
+    my $itemhash = $par2script::globals::definitions{$oneitem};
+
+    my $itemkey = "";
+    foreach $itemkey (sort keys %{$itemhash})
+    {
+        put_oneitem_into_script($script, $oneitem, $itemhash, $itemkey);
+
+        # special handling for Shortcuts after Files
+        if (( $oneitem eq "File" ) && ( exists($par2script::globals::definitions{"Shortcut"}) ))
+        {
+            my $shortcutkey;
+            foreach $shortcutkey ( keys %{$par2script::globals::definitions{"Shortcut"}} )
+            {
+                if ( $par2script::globals::definitions{"Shortcut"}->{$shortcutkey}->{'FileID'} eq $itemkey )
+                {
+                    put_oneitem_into_script($script, "Shortcut", $par2script::globals::definitions{"Shortcut"}, $shortcutkey);
+
+                    # and Shortcut to Shortcut also
+                    my $internshortcutkey;
+                    foreach $internshortcutkey ( keys %{$par2script::globals::definitions{"Shortcut"}} )
+                    {
+                        if ( $par2script::globals::definitions{"Shortcut"}->{$internshortcutkey}->{'ShortcutID'} eq $shortcutkey )
+                        {
+                            put_oneitem_into_script($script, "Shortcut", $par2script::globals::definitions{"Shortcut"}, $internshortcutkey);
+                        }
+                    }
                 }
             }
-
-            push(@allitemarray, \%oneitemhash);
         }
     }
-
-    return \@allitemarray;
 }
 
-########################################################
-# Recursively defined procedure to order
-# modules and directories
-########################################################
+######################################################
+# Collecting all children of a specified parent
+######################################################
 
-sub get_children
+sub collect_children
 {
-    my ($allitems, $startparent, $newitemorder) = @_;
+    my ( $itemhash, $parent, $order ) = @_;
 
-    for ( my $i = 0; $i <= $#{$allitems}; $i++ )
+    my $item;
+    foreach $item ( keys %{$itemhash} )
     {
-        my $gid = ${$allitems}[$i]->{'gid'};
-        my $parent = "";
-        if ( ${$allitems}[$i]->{'ParentID'} ) { $parent = ${$allitems}[$i]->{'ParentID'}; }
-
-        if ( $parent eq $startparent )
+        if ( $itemhash->{$item}->{'ParentID'} eq $parent )
         {
-            push(@{$newitemorder}, $gid);
-            my $parent = $gid;
-            get_children($allitems, $parent, $newitemorder);    # recursive!
+            push(@{$order}, $item);
+            my $newparent = $item;
+            collect_children($itemhash, $newparent, $order);
         }
     }
 }
 
-########################################################
-# Module and Directory have to be in the correct order
-# in the setup script. This is an requirement by the
-# old setup
-########################################################
+######################################################
+# Adding script content for the sorted items
+######################################################
 
-sub create_treestructure
+sub write_sorted_items
 {
-    my ($item, $allitems) = @_;
+    my ( $script, $oneitem ) = @_;
+
+    my $itemhash = $par2script::globals::definitions{$oneitem};
 
     my @itemorder = ();
-
     my @startparents = ();
 
-    if ( $item eq "Module" ) { push(@startparents, ""); }
-    if ( $item eq "Directory" )
-    {
-        push(@startparents, "PREDEFINED_PROGDIR");
-        push(@startparents, "PREDEFINED_KDEHOME");
-        push(@startparents, "PREDEFINED_HOMEDIR");
-    }
+    if ( $oneitem eq "Module" ) { push(@startparents, ""); }
+    elsif ( $oneitem eq "Directory" ) { push(@startparents, "PREDEFINED_PROGDIR"); }
+    else { die "ERROR: No root parent defined for item type $oneitem !\n"; }
 
-    for ( my $i = 0; $i <= $#startparents; $i++ )   # if there is more than one toplevel item
-    {
-        get_children($allitems, $startparents[$i], \@itemorder);
-    }
+    # supporting more than one toplevel item
+    my $parent;
+    foreach $parent ( @startparents ) { collect_children($itemhash, $parent, \@itemorder); }
 
-    return \@itemorder;
+    my $itemkey;
+    foreach $itemkey ( @itemorder ) { put_oneitem_into_script($script, $oneitem, $itemhash, $itemkey); }
 }
 
-########################################################
-# Creating the item collector for Module and
-# Directory in the new sorted order
-########################################################
+#######################################################################
+# Collecting all assigned gids of the type "item" from the modules
+# in the par files. Using a hash!
+#######################################################################
 
-sub create_sorted_itemcollector
+sub collect_assigned_gids
 {
-    my ($newitemorder, $collector, $oneitem) = @_;
+    my $allmodules = $par2script::globals::definitions{'Module'};
 
-    @newitemcollector = ();
-
-    for ( my $i = 0; $i <= $#{$newitemorder}; $i++ )
+    my $item;
+    foreach $item ( @par2script::globals::items_assigned_at_modules )
     {
-        my $gid = ${$newitemorder}[$i];
+        if ( ! exists($par2script::globals::searchkeys{$item}) ) { par2script::exiter::exit_program("ERROR: Unknown type \"$item\" at modules.", "collect_assigned_gids"); }
 
-        for ( my $j = 0; $j <= $#{$collector}; $j++ )
+        my $searchkey = $par2script::globals::searchkeys{$item};
+
+        my %assignitems = ();
+        my $modulegid = "";
+
+        foreach $modulegid (keys %{$allmodules} )
         {
-            my $line = ${$collector}[$j];
+            # print "Module $modulegid\n";
+            # my $content = "";
+            # foreach $content (sort keys %{$allmodules->{$modulegid}}) { print "\t$content = $allmodules->{$modulegid}->{$content};\n"; }
+            # print "End\n";
+            # print "\n";
 
-            if ( $line =~ /^\s*$oneitem\s+$gid\s*$/ )
+            if ( exists($allmodules->{$modulegid}->{$searchkey}) )
             {
-                $include = 1;
-            }
+                my $list = $allmodules->{$modulegid}->{$searchkey};
+                if ( $list =~ /^\s*\((.*?)\)\s*(.*?)\s*$/ ) { $list = $1; }
+                else { par2script::exiter::exit_program("ERROR: Invalid module list: $list", "collect_assigned_gids"); }
+                my $allassigneditems = par2script::converter::convert_stringlist_into_array_2($list, ",");
 
-            if ( $include )
-            {
-                push(@newitemcollector, $line);
-            }
-
-            if (($include) && ( $line =~ /^\s*End\s*$/i ))
-            {
-                $include = 0;
-                push(@newitemcollector, "\n");  # empty line at the end
-                last;
+                my $gid;
+                foreach $gid ( @{$allassigneditems} )
+                {
+                    if ( exists($assignitems{$gid}) ) { $assignitems{$gid} = $assignitems{$gid} + 1; }
+                    else { $assignitems{$gid} = 1; }
+                }
             }
         }
+
+        $par2script::globals::assignedgids{$item} = \%assignitems;
     }
-
-    return \@newitemcollector;
-}
-
-############################################
-# Every gid has to defined only once
-# in the par files
-############################################
-
-sub test_of_gid_uniqueness
-{
-    my ($allitems) = @_;
-
-    my @allgids = ();
-
-    for ( my $i = 0; $i <= $#{$allitems}; $i++ )
-    {
-        my $gid = ${$allitems}[$i];
-
-        if (! par2script::existence::exists_in_array($gid, \@allgids))
-        {
-            push(@allgids, $gid);
-        }
-        else
-        {
-            $par2script::globals::multidefinitionerror = 1;
-            push(@par2script::globals::multidefinitiongids, $gid);
-        }
-    }
-}
-
-############################################
-# gids must not cotain hyphens
-############################################
-
-sub test_of_hyphen
-{
-    my ($allitems) = @_;
-
-    for ( my $i = 0; $i <= $#{$allitems}; $i++ )
-    {
-        my $gid = ${$allitems}[$i];
-
-        if ( $gid =~ /\-/ )
-        {
-            par2script::exiter::exit_program("ERROR: No hyphen allowed in global id: $gid", "test_of_hyphen");
-        }
-    }
-}
-
-######################################################
-# This function exists for compatibility reasons:
-# In scp the string "DosName" is used, in the
-# created script this is "HostName"
-######################################################
-
-sub convert_dosname_to_hostname
-{
-    my ($collector) = @_;
-
-    for ( my $i = 0; $i <= $#{$collector}; $i++ )
-    {
-        ${$collector}[$i] =~ s/\bDosName\b/HostName/;
-    }
-}
-
-###########################################################
-# This function exists for compatibility reasons:
-# In scp the string "PD_PROGDIR" is often used, in the
-# created script this is "PREDEFINED_PROGDIR"
-###########################################################
-
-sub convert_pdprogdir_to_predefinedprogdir
-{
-    my ($collector) = @_;
-
-    for ( my $i = 0; $i <= $#{$collector}; $i++ )
-    {
-        ${$collector}[$i] =~ s/\bPD_PROGDIR\b/PREDEFINED_PROGDIR/;
-    }
-}
-
-######################################################
-# Single styles are in scp sometimes defined as:
-# "Styles = cfg_string;". This has to be replaced
-# in the script to
-# "Styles = (cfg_string);"
-######################################################
-
-sub setting_brackets_around_single_styles
-{
-    my ($collector) = @_;
-
-    for ( my $i = 0; $i <= $#{$collector}; $i++ )
-    {
-        if ( ${$collector}[$i] =~ /^(\s*styles\s*\=\s*)(\w+)(\s*\;\s*)$/i )
-        {
-            my $start = $1;
-            my $styles = $2;
-            my $end = $3;
-
-            my $newline = $start . "\(" . $styles . "\)" . $end;
-            ${$collector}[$i] = $newline;
-        }
-    }
-}
-
-######################################################
-# The scpzip and the setup require a script version
-# in the Installation object. This has to be included
-# for compatibility reasons. It will always be:
-# "ScriptVersion = 100;"
-######################################################
-
-sub set_scriptversion_into_installation_object
-{
-    my ($collector) = @_;
-
-    my $newline = "\tScriptVersion = 100\;\n";
-
-    # determining the last line
-
-    my $lastline;
-
-    for ( my $i = 0; $i <= $#{$collector}; $i++ )
-    {
-        if ( ${$collector}[$i] =~ /^\s*End\s*$/i )
-        {
-            $lastline = $i;
-            last;
-        }
-    }
-
-    splice(@{$collector}, $lastline, 0, $newline);
-
-}
-
-############################################
-# transferring the par file content
-# into the script file
-############################################
-
-sub collect_all_items
-{
-    my ($parfile) = @_;
-
-    my @setupscript = ();
-    my $setupscript = \@setupscript;
-
-    for ( my $i = 0; $i <= $#par2script::globals::allitems; $i++ )
-    {
-        my $oneitem = $par2script::globals::allitems[$i];
-
-        my @itemcollector = ();
-        my $itemcollector = \@itemcollector;
-
-        put_item_into_collector($oneitem, $parfile, $itemcollector);
-
-        # testing uniqueness of each gid
-
-        my $allgids = get_all_gids_from_script($itemcollector, $oneitem);
-
-        test_of_gid_uniqueness($allgids);
-
-        test_of_hyphen($allgids);
-
-        # renaming at directories "DosName" to "HostName" and "PD_PROGDIR" to "PREDEFINED_PROGDIR" (only for compatibility reasons)
-        if ( $oneitem eq "Directory" ) { convert_dosname_to_hostname($itemcollector); }
-        if (( $oneitem eq "Directory" ) || ( $oneitem eq "File" )) { convert_pdprogdir_to_predefinedprogdir($itemcollector); }
-
-        # sorting directories and modules (modules are also oneliner after pre2par!)
-
-        if (( $oneitem eq "Module" ) || ( $oneitem eq "Directory" ))
-        {
-            my $allitems = get_all_items_from_script($itemcollector, $oneitem);
-            $newitemorder = create_treestructure($oneitem, $allitems);
-            $itemcollector = create_sorted_itemcollector($newitemorder, $itemcollector, $oneitem);
-        }
-
-        # setting brackets around single styles: "styles = cfg_string;" -> "styles = (cfg_string);"
-
-        setting_brackets_around_single_styles($itemcollector);
-
-        # Installation objects need to get the script version (only for compatibility reasons)
-
-        if ( $oneitem eq "Installation" ) { set_scriptversion_into_installation_object($itemcollector); }
-
-        # putting the collector content into the setup script
-
-        put_item_into_script($setupscript, $itemcollector);
-
-    }
-
-    if ( $par2script::globals::multidefinitionerror ) { par2script::exiter::multidefinitionerror(); }
-
-    return $setupscript;
-}
-
-############################################
-# Returning a complete definition block
-# from the script
-############################################
-
-sub get_definitionblock_from_script
-{
-    my ($script, $gid) = @_;
-
-    my @codeblock = ();
-    my $startline = -1;
-
-    for ( my $i = 0; $i <= $#{$script}; $i++ )
-    {
-        if ( ${$script}[$i] =~ /^\s*\w+\s+$gid\s*$/ )
-        {
-            $startline = $i;
-            last;
-        }
-    }
-
-    if ( $startline != -1 )
-    {
-        while (! ( ${$script}[$startline] =~ /^\s*End\s*$/i ) )
-        {
-            push(@codeblock, ${$script}[$startline]);
-            $startline++;
-        }
-
-        push(@codeblock, ${$script}[$startline]);
-    }
-
-    return \@codeblock;
-}
-
-############################################
-# Adding a complete definition block
-# into the script
-############################################
-
-sub add_definitionblock_into_script
-{
-    my ($script, $newblock, $gid) = @_;
-
-    # adding the new block behind the block defined by $gid
-
-    my $insertline = -1;
-    my $count = 0;
-
-    for ( my $i = 0; $i <= $#{$script}; $i++ )
-    {
-        if ( ${$script}[$i] =~ /^\s*\w+\s+$gid\s*$/ )
-        {
-            $count = 1;
-        }
-
-        if (( $count ) && ( ${$script}[$i] =~ /^\s*End\s*$/i ))
-        {
-            $insertline = $i;
-            last;
-        }
-    }
-
-    if ( $insertline != -1 )
-    {
-        $insertline = $insertline + 2;
-        # inserting an empty line at the end of the block if required
-        if (!(${$newblock}[$#{$newblock}] =~ /^\s*$/)) { push(@{$newblock}, "\n"); }
-        # inserting the new block
-        splice( @{$script}, $insertline, 0, @{$newblock} );
-    }
-    else
-    {
-        die "ERROR: Could not include definition block. Found no definition of $gid!\n";
-    }
-
-}
-
-############################################
-# Removing a complete definition block
-# from the script
-############################################
-
-sub remove_definitionblock_from_script
-{
-    my ($script, $gid) = @_;
-
-    my $startline = -1;
-
-    for ( my $i = 0; $i <= $#{$script}; $i++ )
-    {
-        if ( ${$script}[$i] =~ /^\s*\w+\s+$gid\s*$/i )
-        {
-            $startline = $i;
-            last;
-        }
-    }
-
-    if ( $startline != -1 )
-    {
-        my $endline = $startline;
-
-        while (! ( ${$script}[$endline] =~ /^\s*End\s*$/i ) )
-        {
-            $endline++;
-        }
-
-        my $blocklength = $endline - $startline + 2;    # "+2" because of endline and emptyline
-        splice(@{$script}, $startline, $blocklength);
-    }
-}
-
-############################################
-# Returning the value for a given key
-# from a definition block
-############################################
-
-sub get_value_from_definitionblock
-{
-    my ($block, $key) = @_;
-
-    my $value = "";
-
-    for ( my $i = 0; $i <= $#{$block}; $i++ )
-    {
-        if ( ${$block}[$i] =~ /^\s*$key\s*\=\s*(.*?)\s*$/ )
-        {
-            $value = $1;
-            last;
-        }
-    }
-
-    par2script::remover::remove_leading_and_ending_whitespaces(\$value);
-    $value =~ s/\;\s*$//;   # removing ending semicolons
-
-    return $value;
 }
 
 ##################################################
@@ -699,167 +409,16 @@ sub read_all_parfiles
     my ($parfiles) = @_;
 
     my @parfilecontent = ();
+    my $parfilename;
 
-    for ( my $i = 0; $i <= $#{$parfiles}; $i++ )
+    foreach $parfilename ( @{$parfiles} )
     {
-        my $parfile = par2script::files::read_file(${$parfiles}[$i]);
-        add_array_into_array(\@parfilecontent, $parfile);
+        my $parfile = par2script::files::read_file($parfilename);
+        foreach ( @{$parfile} ) { push(@parfilecontent, $_); }
         push(@parfilecontent, "\n");
     }
 
     return \@parfilecontent;
-}
-
-##########################################################
-# Add the content of an array to another array
-##########################################################
-
-sub add_array_into_array
-{
-    my ($basearray, $newarray) = @_;
-
-    for ( my $i = 0; $i <= $#{$newarray}; $i++ )
-    {
-        push(@{$basearray}, ${$newarray}[$i]);
-    }
-}
-
-##########################################################
-# Collecting all subdirectories of a specified directory
-##########################################################
-
-sub collect_subdirectories
-{
-    my ($parfile, $directorygid, $collector) = @_;
-
-    my $isdirectory = 0;
-    my $currentgid = "";
-
-    for ( my $i = 0; $i <= $#{$parfile}; $i++ )
-    {
-        my $oneline = ${$parfile}[$i];
-
-        if ( $oneline =~ /^\s*Directory\s+(\w+)\s*$/ )
-        {
-            $currentgid = $1;
-            $isdirectory = 1;
-        }
-
-        if (( $isdirectory ) && ( $oneline =~ /^\s*End\s*$/ )) { $isdirectory = 0; }
-
-        if ( $isdirectory )
-        {
-            if ( $oneline =~ /^\s*ParentID\s*=\s*(\w+)\s*\;\s*$/ )
-            {
-                my $parentgid = $1;
-
-                if ( $parentgid eq $directorygid )
-                {
-                    # Found a child of the directory, that shall be removed
-
-                    my %removeitem = ();
-                    my $item = "Directory";
-                    $removeitem{'gid'} = $currentgid;
-                    $removeitem{'item'} = $item;
-
-                    push(@{$collector}, \%removeitem);
-
-                    # recursively checking additional children
-                    collect_subdirectories($parfile, $currentgid, $collector);
-                }
-            }
-        }
-    }
-}
-
-##########################################################
-# Collecting all items (Files and Shortcuts), that
-# are located in the list of directories.
-##########################################################
-
-sub get_all_items_in_directories
-{
-    my ($parfile, $directorygid, $item, $collector) = @_;
-
-    my $isitem = 0;
-    my $currentgid = "";
-
-    for ( my $i = 0; $i <= $#{$parfile}; $i++ )
-    {
-        my $oneline = ${$parfile}[$i];
-
-        if ( $oneline =~ /^\s*\Q$item\E\s+(\w+)\s*$/ )
-        {
-            $currentgid = $1;
-            $isitem = 1;
-        }
-
-        if (( $isitem ) && ( $oneline =~ /^\s*End\s*$/ )) { $isitem = 0; }
-
-        if ( $isitem )
-        {
-            if ( $oneline =~ /^\s*Dir\s*=\s*(\w+)\s*\;\s*$/ )
-            {
-                my $installdir = $1;
-
-                if ( $installdir eq $directorygid )
-                {
-                    # Found an item, that shall be installed in the specific directory
-
-                    my %removeitem = ();
-                    $removeitem{'gid'} = $currentgid;
-                    $removeitem{'item'} = $item;
-
-                    push(@{$collector}, \%removeitem);
-                }
-            }
-        }
-    }
-}
-
-##########################################################
-# Collecting all items (ProfileItems), that
-# are located in the list of Profiles.
-##########################################################
-
-sub get_all_items_in_profile
-{
-    my ($parfile, $profilegid, $item, $collector) = @_;
-
-    my $isitem = 0;
-    my $currentgid = "";
-
-    for ( my $i = 0; $i <= $#{$parfile}; $i++ )
-    {
-        my $oneline = ${$parfile}[$i];
-
-        if ( $oneline =~ /^\s*\Q$item\E\s+(\w+)\s*$/ )
-        {
-            $currentgid = $1;
-            $isitem = 1;
-        }
-
-        if (( $isitem ) && ( $oneline =~ /^\s*End\s*$/ )) { $isitem = 0; }
-
-        if ( $isitem )
-        {
-            if ( $oneline =~ /^\s*ProfileID\s*=\s*(\w+)\s*\;\s*$/ )
-            {
-                my $profilename = $1;
-
-                if ( $profilename eq $profilegid )
-                {
-                    # Found an item, that shall be installed in the specific directory
-
-                    my %removeitem = ();
-                    $removeitem{'gid'} = $currentgid;
-                    $removeitem{'item'} = $item;
-
-                    push(@{$collector}, \%removeitem);
-                }
-            }
-        }
-    }
 }
 
 1;
