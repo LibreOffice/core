@@ -4,9 +4,9 @@
  *
  *  $RCSfile: security.c,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: rt $ $Date: 2007-07-26 08:50:26 $
+ *  last change: $Author: ihi $ $Date: 2007-08-20 13:35:49 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -227,6 +227,33 @@ oslSecurityError SAL_CALL osl_loginUserOnFileServer(rtl_uString *strUserName,
 }
 
 
+static BOOL WINAPI CheckTokenMembership_Stub( HANDLE TokenHandle, PSID SidToCheck, PBOOL IsMember )
+{
+    typedef BOOL (WINAPI *CheckTokenMembership_PROC)( HANDLE, PSID, PBOOL );
+
+    static HMODULE  hModule = NULL;
+    static CheckTokenMembership_PROC    pCheckTokenMembership = NULL;
+
+    if ( !hModule )
+    {
+        /* SAL is always linked against ADVAPI32 so we can rely on that it is already mapped */
+
+        hModule = GetModuleHandleA( "ADVAPI32.DLL" );
+
+        pCheckTokenMembership = (CheckTokenMembership_PROC)GetProcAddress( hModule, "CheckTokenMembership" );
+    }
+
+    if ( pCheckTokenMembership )
+        return pCheckTokenMembership( TokenHandle, SidToCheck, IsMember );
+    else
+    {
+        SetLastError( ERROR_CALL_NOT_IMPLEMENTED );
+        return FALSE;
+    }
+
+}
+
+
 sal_Bool SAL_CALL osl_isAdministrator(oslSecurity Security)
 {
     if (Security != NULL)
@@ -270,7 +297,7 @@ sal_Bool SAL_CALL osl_isAdministrator(oslSecurity Security)
             {
                 BOOL    fSuccess = FALSE;
 
-                if ( CheckTokenMembership( hImpersonationToken, psidAdministrators, &fSuccess ) && fSuccess )
+                if ( CheckTokenMembership_Stub( hImpersonationToken, psidAdministrators, &fSuccess ) && fSuccess )
                     bSuccess = sal_True;
 
                 FreeSid(psidAdministrators);
