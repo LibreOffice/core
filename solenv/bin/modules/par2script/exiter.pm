@@ -4,9 +4,9 @@
 #
 #   $RCSfile: exiter.pm,v $
 #
-#   $Revision: 1.4 $
+#   $Revision: 1.5 $
 #
-#   last change: $Author: rt $ $Date: 2005-09-08 09:25:52 $
+#   last change: $Author: ihi $ $Date: 2007-08-20 15:28:32 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -83,17 +83,47 @@ sub exit_program
 
 sub multidefinitionerror
 {
-    my ($errorgids) = @_;
-
+    my ( $multidefinitiongids ) = @_;
     print "************************************************\n";
     print "ERROR: multiple definition of gids:\n";
     print "************************************************\n";
 
-    for ( my $i = 0; $i <= $#par2script::globals::multidefinitiongids; $i++ )
-    {
-        print "$par2script::globals::multidefinitiongids[$i]\n";
-    }
+    my $gid;
+    foreach $gid ( @{$multidefinitiongids} ) { print "\t$gid\n"; }
+    exit(-1);
+}
 
+#####################################
+# Error, because a gid is assigned
+# more than once
+#####################################
+
+sub multiassignmenterror
+{
+    my ( $multiassignmentgids ) = @_;
+    #print "************************************************\n";
+    #print "ERROR: multiple assignments of gids:\n";
+    #print "************************************************\n";
+
+    my $line;
+    foreach $line ( @{$multiassignmentgids} ) { print "\t$line\n"; }
+    # exit(-1);
+}
+
+#####################################
+# Error, because a defined gid
+# is not assigned
+#####################################
+
+sub missingassignmenterror
+{
+    my ( $missingassignmentgids ) = @_;
+    print "********************************************************\n";
+    print "ERROR: Missing assignments for the following GIDs:\n";
+    print "********************************************************\n";
+
+    my $gid;
+    foreach $gid ( @{$missingassignmentgids} ) { print "\t$gid\n"; }
     exit(-1);
 }
 

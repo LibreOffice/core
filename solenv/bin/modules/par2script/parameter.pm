@@ -4,9 +4,9 @@
 #
 #   $RCSfile: parameter.pm,v $
 #
-#   $Revision: 1.4 $
+#   $Revision: 1.5 $
 #
-#   last change: $Author: rt $ $Date: 2005-09-08 09:27:14 $
+#   last change: $Author: ihi $ $Date: 2007-08-20 15:29:18 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -142,35 +142,6 @@ sub control_parameter
     $par2script::globals::parfilelist = $par2script::globals::parfilelistorig;
     $par2script::globals::parfilelist =~ s/\@\@//;
     par2script::files::check_file($par2script::globals::parfilelist);
-}
-
-##########################################################
-# The path parameters can be relative or absolute.
-# This function creates absolute pathes.
-##########################################################
-
-sub make_path_absolute
-{
-    my ($pathref) = @_;
-
-    if ( $par2script::globals::isunix )
-    {
-        if (!($$pathref =~ /^\s*\//))   # this is a relative unix path
-        {
-            $$pathref = cwd() . $par2script::globals::separator . $$pathref;
-        }
-    }
-
-    if ( $par2script::globals::iswin )
-    {
-        if (!($$pathref =~ /^\s*\w\:/)) # this is a relative windows path
-        {
-            $$pathref = cwd() . $par2script::globals::separator . $$pathref;
-            $$pathref =~ s/\//\\/g;
-        }
-    }
-
-    $$pathref =~ s/\Q$par2script::globals::separator\E\s*$//;   # removing ending slashes
 }
 
 #####################################
