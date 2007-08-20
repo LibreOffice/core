@@ -4,9 +4,9 @@
  *
  *  $RCSfile: scdlgfact.hxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: rt $ $Date: 2007-04-26 09:50:52 $
+ *  last change: $Author: ihi $ $Date: 2007-08-20 16:50:53 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -122,6 +122,7 @@ class AbstractScImportAsciiDlg_Impl : public AbstractScImportAsciiDlg  //add for
 {
     DECL_ABSTDLG_BASE(AbstractScImportAsciiDlg_Impl, ScImportAsciiDlg)
     virtual void                        GetOptions( ScAsciiOptions& rOpt );
+    virtual void                        SetTextToColumnsMode();
 };
 
 class AbstractScAutoFormatDlg_Impl : public AbstractScAutoFormatDlg  //add for ScAutoFormatDlg
