@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.13 $
+#   $Revision: 1.14 $
 #
-#   last change: $Author: vg $ $Date: 2007-03-26 14:26:53 $
+#   last change: $Author: ihi $ $Date: 2007-08-20 13:36:11 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -60,6 +60,7 @@ LINK=$(WRAPCMD) "$(PSDK_HOME)$/Bin$/Win64$/LINK.EXE"
 .ENDIF
 
 SLOFILES=\
+        $(SLO)$/CheckTokenMembership.obj\
         $(SLO)$/CommandLineToArgvW.obj\
         $(SLO)$/CopyFileExA.obj\
         $(SLO)$/CopyFileExW.obj\
