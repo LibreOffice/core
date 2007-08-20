@@ -4,9 +4,9 @@
 #
 #   $RCSfile: epmfile.pm,v $
 #
-#   $Revision: 1.66 $
+#   $Revision: 1.67 $
 #
-#   last change: $Author: ihi $ $Date: 2007-07-12 11:15:36 $
+#   last change: $Author: ihi $ $Date: 2007-08-20 13:25:24 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -455,6 +455,13 @@ sub create_epm_header
     {
         $provides = "freebsdprovides";   # the name in the packagelist
         $requires = "freebsdrequires";   # the name in the packagelist
+    }
+    elsif (( $installer::globals::islinuxrpmbuild ) &&
+            ( $installer::globals::patch ) &&
+            ( exists($onepackage->{'linuxpatchrequires'}) ))
+    {
+        $provides = "provides";  # the name in the packagelist
+        $requires = "linuxpatchrequires";    # the name in the packagelist
     }
     else
     {
