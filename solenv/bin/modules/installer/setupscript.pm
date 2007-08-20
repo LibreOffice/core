@@ -4,9 +4,9 @@
 #
 #   $RCSfile: setupscript.pm,v $
 #
-#   $Revision: 1.12 $
+#   $Revision: 1.13 $
 #
-#   last change: $Author: rt $ $Date: 2007-07-27 14:29:17 $
+#   last change: $Author: ihi $ $Date: 2007-08-20 15:26:56 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -328,10 +328,6 @@ sub get_all_items_from_script
                                 installer::remover::remove_leading_and_ending_whitespaces(\$line);
                                 $itemvalue = $itemvalue . $line;
                             }
-
-                            # Not including these to itemvalues, makes the module collection readable in editor
-                            # if (($gid eq "gid_Module_Root") && ($itemkey eq "Files")) { $itemvalue = "rootfiles"; }
-                            # if (($gid eq "gid_Module_Root") && ($itemkey eq "Dirs")) { $itemvalue = "rootdirs"; }
 
                             # removing ending ";"
                             $itemvalue =~ s/\;\s*$//;
