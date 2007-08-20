@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xmltoken.cxx,v $
  *
- *  $Revision: 1.110 $
+ *  $Revision: 1.111 $
  *
- *  last change: $Author: hr $ $Date: 2007-08-03 12:53:36 $
+ *  last change: $Author: ihi $ $Date: 2007-08-20 16:32:17 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -2950,6 +2950,8 @@ namespace xmloff { namespace token {
         TOKEN( "right-angled-axes",      XML_RIGHT_ANGLED_AXES ),
         TOKEN( "soft-page-break",                 XML_SOFT_PAGE_BREAK ),
         TOKEN( "use-soft-page-breaks",            XML_USE_SOFT_PAGE_BREAKS ),
+
+        TOKEN( "dependency",             XML_DEPENDENCY ),
 
 #if OSL_DEBUG_LEVEL > 0
         { 0, NULL, NULL,                       XML_TOKEN_END }
