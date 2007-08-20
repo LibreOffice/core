@@ -393,6 +393,7 @@
             <menu:menuitem menu:id=".uno:Validation"/>
             <menu:menuseparator/>
             <menu:menuitem menu:id=".uno:TableOperationDialog"/>
+            <menu:menuitem menu:id=".uno:TextToColumns"/>
             <menu:menuitem menu:id=".uno:DataConsolidate"/>
             <menu:menu menu:id=".uno:GroupOutlineMenu">
                 <menu:menupopup>
