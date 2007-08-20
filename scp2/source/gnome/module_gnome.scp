@@ -4,9 +4,9 @@
  *
  *  $RCSfile: module_gnome.scp,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: rt $ $Date: 2007-07-03 12:06:27 $
+ *  last change: $Author: ihi $ $Date: 2007-08-20 15:33:47 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -41,6 +41,5 @@ Module gid_Module_Optional_Gnome
     MOD_NAME_DESC(MODULE_OPTIONAL_GNOME);
     Styles = (DONTSHOWINUSERINSTALL);
     Files = (gid_File_Lib_Gnomevfs, gid_File_Lib_Gconfbe, gid_File_Bin_Gnome_Set_Default_Application);
-    Dirs = ();
 End
 
