@@ -4,9 +4,9 @@
 #
 #   $RCSfile: scriptitems.pm,v $
 #
-#   $Revision: 1.37 $
+#   $Revision: 1.38 $
 #
-#   last change: $Author: rt $ $Date: 2007-07-03 11:46:07 $
+#   last change: $Author: ihi $ $Date: 2007-08-20 15:26:30 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -66,7 +66,7 @@ sub resolve_all_directory_names
         my $gid = $directoryhashref-> {'gid'};
         my $parentid = $directoryhashref-> {'ParentID'};
 
-        if (!( $parentid eq "PREDEFINED_PROGDIR" ))
+        if ( $parentid ne "PREDEFINED_PROGDIR" )
         {
             # find the array of the parentid, which has to be defined before in setup script
             # and is therefore listed before in this array
@@ -1682,6 +1682,7 @@ sub collect_directories_with_create_flag_from_directoryarray
     {
         my $onedir = ${$directoryarrayref}[$i];
         my $styles = "";
+        $newdirincluded = 0;
 
         if ( $onedir->{'Styles'} ) { $styles = $onedir->{'Styles'}; }
 
@@ -1727,6 +1728,35 @@ sub collect_directories_with_create_flag_from_directoryarray
                         if ( ! $installer::globals::iswindowsbuild ) { $directoryhash{'Styles'} = "(CREATE)"; }
 
                         push(@{$directoriesforepmarrayref}, \%directoryhash);
+
+                        $newdirincluded = 1;
+                    }
+                }
+            }
+        }
+
+        if (( ! $newdirincluded ) && ( $styles ne "" )) # saving the styles for already added directories
+        {
+            $styles =~ s/\bWORKSTATION\b//;
+            $styles =~ s/\bCREATE\b//;
+
+            if (( ! ( $styles =~ /^\s*\(\s*\)\s*$/ )) && ( ! ( $styles =~ /^\s*\(\s*\,\s*\)\s*$/ )) && ( ! ( $styles =~ /^\s*$/ ))) # checking, if there are styles left
+            {
+                my $directoryname = "";
+                if ( $onedir->{'HostName'} ) { $directoryname = $onedir->{'HostName'}; }
+                else { installer::exiter::exit_program("ERROR: No directory name (HostName) set for specified language in gid $onedir->{'gid'}", "assigning_modules_to_items"); }
+
+                my $alreadyincluded = installer::existence::exists_in_array_of_hashes($searchkey, $directoryname, $directoriesforepmarrayref);
+
+                if ( $alreadyincluded )
+                {
+                    for ( my $j = 0; $j <= $#{$directoriesforepmarrayref}; $j++ )
+                    {
+                        if ( ${$directoriesforepmarrayref}[$j]->{'HostName'} eq $directoryname )
+                        {
+                            ${$directoriesforepmarrayref}[$j]->{'Styles'} = $styles;
+                            last;
+                        }
                     }
                 }
             }
@@ -2059,6 +2089,8 @@ sub collect_all_parent_feature
 
     my @allparents = ();
 
+    my $found_root_module = 0;
+
     for ( my $i = 0; $i <= $#{$modulesref}; $i++ )
     {
         my $onefeature = ${$modulesref}[$i];
@@ -2076,6 +2108,20 @@ sub collect_all_parent_feature
                 push(@allparents, $parentgid);
             }
         }
+
+        # Setting the global root module
+
+        if ( $parentgid eq "" )
+        {
+            if ( $found_root_module ) { installer::exiter::exit_program("ERROR: Only one module without ParentID or with empty ParentID allowed ($installer::globals::rootmodulegid, $onefeature->{'gid'}).", "collect_all_parent_feature"); }
+            $installer::globals::rootmodulegid = $onefeature->{'gid'};
+            $found_root_module = 1;
+            $infoline = "Setting Root Module: $installer::globals::rootmodulegid\n";
+            push( @installer::globals::globallogfileinfo, $infoline);
+        }
+
+        if ( ! $found_root_module ) { installer::exiter::exit_program("ERROR: Could not define root module. No module without ParentID or with empty ParentID exists.", "collect_all_parent_feature"); }
+
     }
 
     return \@allparents;
