@@ -4,9 +4,9 @@
  *
  *  $RCSfile: XMLTrackedChangesContext.cxx,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: vg $ $Date: 2007-02-27 12:48:43 $
+ *  last change: $Author: ihi $ $Date: 2007-08-20 16:33:43 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -960,7 +960,8 @@ SvXMLImportContext *ScXMLDependingsContext::CreateChildContext( USHORT nPrefix,
 
     if (nPrefix == XML_NAMESPACE_TABLE)
     {
-        if (IsXMLToken(rLocalName, XML_DEPENDENCE))
+        // #i80033# read both old (dependence) and new (dependency) elements
+        if (IsXMLToken(rLocalName, XML_DEPENDENCE) || IsXMLToken(rLocalName, XML_DEPENDENCY))
             pContext = new ScXMLDependenceContext(GetScImport(), nPrefix, rLocalName, xAttrList, pChangeTrackingImportHelper);
     }
 
