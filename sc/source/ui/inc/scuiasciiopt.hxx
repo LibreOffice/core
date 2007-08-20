@@ -4,9 +4,9 @@
  *
  *  $RCSfile: scuiasciiopt.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 21:48:05 $
+ *  last change: $Author: ihi $ $Date: 2007-08-20 16:52:08 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -88,6 +88,7 @@ class ScImportAsciiDlg : public ModalDialog
     String                      aTextSepList;
     String                      maFieldSeparators;  // selected field separators
     sal_Unicode                 mcTextSep;
+    String                      maStrTextToColumns;
 
     CharSet                     meCharSet;          /// Selected char set.
     bool                        mbCharSetSystem;    /// Is System char set selected?
@@ -99,6 +100,7 @@ public:
                                 ~ScImportAsciiDlg();
 
     void                        GetOptions( ScAsciiOptions& rOpt );
+    void                        SetTextToColumnsMode();
 
 private:
     /** Sets the selected char set data to meCharSet and mbCharSetSystem. */
