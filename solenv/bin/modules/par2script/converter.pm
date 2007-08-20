@@ -4,9 +4,9 @@
 #
 #   $RCSfile: converter.pm,v $
 #
-#   $Revision: 1.3 $
+#   $Revision: 1.4 $
 #
-#   last change: $Author: rt $ $Date: 2005-09-08 09:25:06 $
+#   last change: $Author: ihi $ $Date: 2007-08-20 15:28:19 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -80,6 +80,30 @@ sub convert_hash_into_array
     }
 
     return \@array
+}
+
+sub convert_stringlist_into_array_2
+{
+    my ( $input, $separator ) = @_;
+
+    my @newarray = ();
+    my $first = "";
+    my $last = "";
+
+    $last = $input;
+
+    while ( $last =~ /^\s*(.+?)\s*\Q$separator\E\s*(.+)\s*$/)   # "$" for minimal matching
+    {
+        $first = $1;
+        $last = $2;
+        par2script::remover::remove_leading_and_ending_whitespaces(\$first);
+        if ( $first ) { push(@newarray, $first); }
+    }
+
+    par2script::remover::remove_leading_and_ending_whitespaces(\$last);
+    if ( $last ) { push(@newarray, $last); }
+
+    return \@newarray;
 }
 
 sub convert_stringlist_into_array
