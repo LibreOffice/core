@@ -4,9 +4,9 @@
  *
  *  $RCSfile: tabview3.cxx,v $
  *
- *  $Revision: 1.58 $
+ *  $Revision: 1.59 $
  *
- *  last change: $Author: ihi $ $Date: 2007-08-17 14:51:50 $
+ *  last change: $Author: ihi $ $Date: 2007-08-20 16:52:49 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -532,6 +532,7 @@ void ScTabView::SelectionChanged()
     rBindings.Invalidate( SID_OPENDLG_CONDFRMT );
     rBindings.Invalidate( FID_VALIDATION );
     rBindings.Invalidate( SID_EXTERNAL_SOURCE );
+    rBindings.Invalidate( SID_TEXT_TO_COLUMNS );
 
     if (aViewData.GetViewShell()->HasAccessibilityObjects())
         aViewData.GetViewShell()->BroadcastAccessibility(SfxSimpleHint(SC_HINT_ACC_CURSORCHANGED));
