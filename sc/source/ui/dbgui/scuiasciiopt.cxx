@@ -4,9 +4,9 @@
  *
  *  $RCSfile: scuiasciiopt.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: vg $ $Date: 2007-02-27 13:04:48 $
+ *  last change: $Author: ihi $ $Date: 2007-08-20 16:51:30 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -157,7 +157,8 @@ ScImportAsciiDlg::ScImportAsciiDlg( Window* pParent,String aDatName,
         aColumnUser ( ScResId( SCSTR_COLUMN_USER ) ),
         aFldSepList ( ScResId( SCSTR_FIELDSEP ) ),
         aTextSepList( ScResId( SCSTR_TEXTSEP ) ),
-        mcTextSep   ( ScAsciiOptions::cDefaultTextSep )
+        mcTextSep   ( ScAsciiOptions::cDefaultTextSep ),
+        maStrTextToColumns( ScResId( STR_TEXTTOCOLUMNS ) )
 {
     FreeResource();
 
@@ -359,6 +360,15 @@ void ScImportAsciiDlg::GetOptions( ScAsciiOptions& rOpt )
         rOpt.SetMergeSeps( aCkbAsOnce.IsChecked() );
         rOpt.SetTextSep( lcl_CharFromCombo( aCbTextSep, aTextSepList ) );
     }
+}
+
+void ScImportAsciiDlg::SetTextToColumnsMode()
+{
+    SetText( maStrTextToColumns );
+    aFtCharSet.Disable();
+    aLbCharSet.Disable();
+    aFtRow.Disable();
+    aNfRow.Disable();
 }
 
 void ScImportAsciiDlg::SetSelectedCharSet()
