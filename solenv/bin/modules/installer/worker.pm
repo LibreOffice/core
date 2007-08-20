@@ -4,9 +4,9 @@
 #
 #   $RCSfile: worker.pm,v $
 #
-#   $Revision: 1.52 $
+#   $Revision: 1.53 $
 #
-#   last change: $Author: ihi $ $Date: 2007-08-20 13:22:56 $
+#   last change: $Author: ihi $ $Date: 2007-08-20 15:27:11 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -916,6 +916,7 @@ sub write_content_into_inf_file
     # SHELLNEWFILESPLACEHOLDER
 
     my $rootmodule = 0;
+    # inf files can be assigned to "gid_Module_Root_Files_2"
     if ( $inffile->{'modules'} =~ /Module_Root/i ) { $rootmodule = 1; }
 
     if ( $rootmodule )
@@ -995,7 +996,8 @@ sub write_content_into_inf_file
         my $moduleid = ${$allmodules}[$j];
 
         my $inffilemodule = $inffile->{'modules'};
-        if ( $inffilemodule =~ /Module_Root/i ) { $inffilemodule = "gid_Module_Root"; }
+        # inf files can be assigned to "gid_Module_Root_Files_2", but RegistryItems to "gid_Module_Root"
+        if ( $inffilemodule =~ /Module_Root/i ) { $inffilemodule = $installer::globals::rootmodulegid; }
 
         if ( ! ( $moduleid eq $inffilemodule )) { next; }
 
@@ -1254,7 +1256,7 @@ sub analyze_patch_files
         if ( $installer::globals::iswindowsbuild )
         {
             # all files of the Windows patch belong to the root module
-            $onefile->{'modules'} = "gid_Module_Root";
+            $onefile->{'modules'} = $installer::globals::rootmodulegid;
         }
 
         push(@filesarray, $onefile);
