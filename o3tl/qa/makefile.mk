@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.2 $
+#   $Revision: 1.3 $
 #
-#   last change: $Author: kz $ $Date: 2006-10-05 10:59:14 $
+#   last change: $Author: ihi $ $Date: 2007-08-20 15:50:36 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -48,8 +48,10 @@ ENABLE_EXCEPTIONS=TRUE
 
 # BEGIN ----------------------------------------------------------------
 SHL1OBJS=  \
-    $(SLO)$/tests.obj	\
-    $(SLO)$/cow_wrapper_clients.obj
+    $(SLO)$/cow_wrapper_clients.obj     \
+    $(SLO)$/test-cow_wrapper.obj	    \
+    $(SLO)$/test-heap_ptr.obj           \
+    $(SLO)$/test-range.obj
 
 SHL1TARGET= tests
 SHL1STDLIBS= 	$(SALLIB)		 \
@@ -58,18 +60,18 @@ SHL1STDLIBS= 	$(SALLIB)		 \
 SHL1IMPLIB= i$(SHL1TARGET)
 
 DEF1NAME    =$(SHL1TARGET)
-SHL1VERSIONMAP = export.map 
+SHL1VERSIONMAP = export.map
 
 # END ------------------------------------------------------------------
 
 #------------------------------- All object files -------------------------------
 # do this here, so we get right dependencies
-SLOFILES=$(SHL1OBJS) 
+SLOFILES=$(SHL1OBJS)
 
 # --- Targets ------------------------------------------------------
 
 .INCLUDE : target.mk
-.INCLUDE : _cppunit.mk 
+.INCLUDE : _cppunit.mk
 
 # --- Enable test execution in normal build ------------------------
 
