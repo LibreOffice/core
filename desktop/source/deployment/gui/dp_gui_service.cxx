@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dp_gui_service.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: rt $ $Date: 2007-04-26 08:23:18 $
+ *  last change: $Author: ihi $ $Date: 2007-08-20 13:49:38 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -90,6 +90,61 @@ void MyApp::Main()
 
 //##############################################################################
 
+namespace
+{
+    struct ProductName
+        : public rtl::Static< String, ProductName > {};
+    struct Version
+        : public rtl::Static< String, Version > {};
+    struct AboutBoxVersion
+        : public rtl::Static< String, AboutBoxVersion > {};
+    struct Extension
+        : public rtl::Static< String, Extension > {};
+}
+
+void ReplaceProductNameHookProc( String& rStr )
+{
+    static int nAll = 0, nPro = 0;
+
+    nAll++;
+    if ( rStr.SearchAscii( "%PRODUCT" ) != STRING_NOTFOUND )
+    {
+        String &rProductName = ProductName::get();
+        String &rVersion = Version::get();
+        String &rAboutBoxVersion = AboutBoxVersion::get();
+        String &rExtension = Extension::get();
+
+        if ( !rProductName.Len() )
+        {
+            rtl::OUString aTmp;
+            Any aRet = ::utl::ConfigManager::GetDirectConfigProperty( ::utl::ConfigManager::PRODUCTNAME );
+            aRet >>= aTmp;
+            rProductName = aTmp;
+
+            aRet = ::utl::ConfigManager::GetDirectConfigProperty( ::utl::ConfigManager::PRODUCTVERSION );
+            aRet >>= aTmp;
+            rVersion = aTmp;
+
+            aRet = ::utl::ConfigManager::GetDirectConfigProperty( ::utl::ConfigManager::ABOUTBOXPRODUCTVERSION );
+            aRet >>= aTmp;
+            rAboutBoxVersion = aTmp;
+
+            if ( !rExtension.Len() )
+            {
+                aRet = ::utl::ConfigManager::GetDirectConfigProperty( ::utl::ConfigManager::PRODUCTEXTENSION );
+                aRet >>= aTmp;
+                rExtension = aTmp;
+            }
+        }
+
+        nPro++;
+        rStr.SearchAndReplaceAllAscii( "%PRODUCTNAME", rProductName );
+        rStr.SearchAndReplaceAllAscii( "%PRODUCTVERSION", rVersion );
+        rStr.SearchAndReplaceAllAscii( "%ABOUTBOXPRODUCTVERSION", rAboutBoxVersion );
+        rStr.SearchAndReplaceAllAscii( "%PRODUCTEXTENSION", rExtension );
+    }
+}
+
 //==============================================================================
 class ServiceImpl
     : public ::cppu::WeakImplHelper2<ui::dialogs::XAsynchronousExecutableDialog,
@@ -132,6 +187,9 @@ ServiceImpl::ServiceImpl( Sequence<Any> const& args,
     } catch (css::lang::IllegalArgumentException & ) {
     }
 
+    ResHookProc pProc = ResMgr::GetReadStringHook();
+    if ( !pProc )
+        ResMgr::SetReadStringHook( ReplaceProductNameHookProc );
 }
 
 // XAsynchronousExecutableDialog
