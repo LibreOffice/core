@@ -4,9 +4,9 @@
 #
 #   $RCSfile: par2script.pl,v $
 #
-#   $Revision: 1.7 $
+#   $Revision: 1.8 $
 #
-#   last change: $Author: ihi $ $Date: 2007-03-26 12:44:11 $
+#   last change: $Author: ihi $ $Date: 2007-08-20 15:25:05 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -41,7 +41,6 @@ use par2script::files;
 use par2script::globals;
 use par2script::parameter;
 use par2script::module;
-use par2script::shortcut;
 use par2script::undefine;
 use par2script::work;
 
@@ -58,37 +57,63 @@ my $parfiles = par2script::work::setparfiles($par2script::globals::parfilelist);
 
 par2script::work::make_complete_pathes_for_parfiles($parfiles, $includes);
 
+print "Reading par files\n";
 my $parfilecontent = par2script::work::read_all_parfiles($parfiles);
 
-my $setupscript = par2script::work::collect_all_items($parfilecontent);
+print "Collecting items\n";
+par2script::work::collect_definitions($parfilecontent);
 
-par2script::undefine::undefine_gids($setupscript, $parfilecontent);
+print "Collecting assigned items\n";
+par2script::work::collect_assigned_gids();
 
-par2script::undefine::remove_complete_dirs($setupscript, $parfilecontent);
-par2script::undefine::remove_complete_profile($setupscript, $parfilecontent);
+# print "First control of multiple assignments\n";
+# par2script::check::check_multiple_assignments();
 
-par2script::shortcut::shift_shortcut_positions($setupscript);
-par2script::module::remove_from_modules($setupscript);
-par2script::module::add_to_root_module($setupscript);
-par2script::module::shorten_lines_at_modules($setupscript);
+print "Searching for Undefinitions\n";
+par2script::undefine::undefine_gids($parfilecontent);
+par2script::undefine::remove_complete_item("Directory", $parfilecontent);
+par2script::undefine::remove_complete_item("Profile", $parfilecontent);
+
+print "Removing assigned GIDs without definitions\n";
+par2script::module::remove_undefined_gids_from_modules();
+
+print "Adding definitions without assignment to the root\n";
+par2script::module::add_to_root_module();
+
+print "Control of multiple assignments\n";
+par2script::check::check_multiple_assignments();
+
+print "Control of definitions with missing assignments\n";
+par2script::check::check_missing_assignments();
 
 # checking the setup script
+print "Checking directory definitions ...\n";
+par2script::check::check_needed_directories();
+par2script::check::check_directories_in_item_definitions();
+print "Checking module definitions ...\n";
+par2script::check::check_module_existence();
+print "Checking module assignments ...\n";
+par2script::check::check_moduleid_at_items();
+print "Checking StarRegistry ...\n";
+par2script::check::check_registry_at_files();
+print "Checking Root Module ...";
+par2script::check::check_rootmodule();
+print "Checking Shortcut assignments ...\n";
+par2script::check::check_shortcut_assignments();
+print "Checking missing parents ...\n";
+par2script::check::check_missing_parents();
 
-par2script::check::check_needed_directories($setupscript);
-par2script::check::check_directories_in_item_definitions($setupscript, "File");
-par2script::check::check_directories_in_item_definitions($setupscript, "Shortcut");
-par2script::check::check_directories_in_item_definitions($setupscript, "Profile");
-par2script::check::check_module_existence($setupscript);
-# par2script::check::check_registry_at_files($setupscript);
-par2script::check::check_moduleid_at_items($setupscript);
-par2script::check::check_semicolon($setupscript);
+print "Shorten lines at modules\n";
+par2script::module::shorten_lines_at_modules();
 
-# saving the script
+# Now the script can be created
+print "Creating setup script\n";
+my $setupscript = par2script::work::create_script();
 
+print "Saving script\n";
 par2script::files::save_file($par2script::globals::scriptname, $setupscript);
 
 # logging, if set
-
 if ($par2script::globals::logging)
 {
     par2script::files::save_file($par2script::globals::logfilename, \@par2script::globals::logfileinfo);
