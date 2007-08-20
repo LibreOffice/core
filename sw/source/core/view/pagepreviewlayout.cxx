@@ -4,9 +4,9 @@
  *
  *  $RCSfile: pagepreviewlayout.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 22:02:05 $
+ *  last change: $Author: ihi $ $Date: 2007-08-20 13:42:51 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1211,6 +1211,18 @@ bool SwPagePreviewLayout::Paint( const Rectangle  _aOutRect ) const
                 aPxPaintRect.Intersection( aPxOutRect );
                 Rectangle aPaintRect = pOutputDev->PixelToLogic( aPxPaintRect );
                 mrParentViewShell.Paint( aPaintRect );
+                // --> OD 2007-08-15 #i80691#
+                // paint page border and shadow
+                {
+                    SwRect aPageBorderRect;
+                    (*aPageIter)->pPage->GetBorderAndShadowBoundRect(
+                                SwRect( aPageRect ), &mrParentViewShell, aPageBorderRect );
+                    const Region aDLRegion(aPageBorderRect.SVRect());
+                    mrParentViewShell.DLPrePaint2(aDLRegion);
+                    (*aPageIter)->pPage->PaintBorderAndShadow( aPageRect, &mrParentViewShell );
+                    mrParentViewShell.DLPostPaint2();
+                }
+                // <--
             }
             // OD 07.11.2003 #i22014# - stop painting, because new print
             // preview layout is created during paint.
