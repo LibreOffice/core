@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.69 $
+#   $Revision: 1.70 $
 #
-#   last change: $Author: hr $ $Date: 2007-08-03 11:23:21 $
+#   last change: $Author: ihi $ $Date: 2007-08-20 15:32:56 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -142,6 +142,8 @@ openofficewithjre: $(foreach,i,$(alllangiso) openofficewithjre_$i)
 ooolanguagepack : $(foreach,i,$(alllangiso) ooolanguagepack_$i)
 
 sdkoo: $(foreach,i,$(alllangiso) sdkoo_$i)
+
+ure: $(foreach,i,$(alllangiso) ure_$i)
 
 broffice: $(foreach,i,$(alllangiso) broffice_$i)
 
@@ -281,6 +283,28 @@ sdkoo_% :
 .ENDIF                  # "$(OS)"!="MACOSX" || "$(PKGFORMAT)"!=""
 
 .IF "$(PKGFORMAT)"!=""
+$(foreach,i,$(alllangiso) ure_$i) : $$@{$(PKGFORMAT:^".")}
+ure_%{$(PKGFORMAT:^".")} :
+.ELSE			# "$(PKGFORMAT)"!=""
+ure_% :
+.ENDIF			# "$(PKGFORMAT)"!=""
+.IF "$(OS)"!="MACOSX" || "$(PKGFORMAT)"!="portable"
+    $(PERL) -w $(SOLARENV)$/bin$/make_installer.pl -f $(PRJ)$/util$/openoffice.lst \
+        -l $(subst,$(@:s/_/ /:1)_, $(@:b)) -p URE -u $(OUT) -buildid $(BUILD) $(subst,xxx,$(@:e:s/.//) $(PKGFORMATSWITCH)) \
+        -packagelist $(PRJ)$/inc_ure$/unix$/packagelist.txt \
+        -msitemplate $(MSIURETEMPLATEDIR) \
+        -msilanguage $(COMMONMISC)$/win_ulffiles
+.ELSE                   # "$(OS)"!="MACOSX" || "$(PKGFORMAT)"!=""
+    $(PERL) -w $(SOLARENV)$/bin$/make_installer.pl -f $(PRJ)$/util$/openoffice.lst \
+    -l $(subst,$(@:s/_/ /:1)_, $(@:b)) -p URE -u $(OUT) -buildid $(BUILD) \
+    -packagelist $(PRJ)$/inc_ure$/unix$/packagelist.txt \
+    -destdir $(subst,$(@:s/_/ /:1)_,$(OUT)$/URE$/install$/ $(@:b))_inprogress$/ -simple 'URE/OpenOffice.org URE'
+    $(RM) $(subst,$(@:s/_/ /:1)_,$(OUT)$/URE$/install$/ $(@:b))$/gid_*
+    rmdir $(subst,$(@:s/_/ /:1)_,$(OUT)$/URE$/install$/ $(@:b))$/URE/OpenOffice.org
+    cd $(subst,$(@:s/_/ /:1)_,$(OUT)$/URE$/install$/ $(@:b)) && hdiutil create -srcfolder 'URE' -volname 'OpenOffice.org URE' -ov -o $(subst,$(@:s/_/ /:1),OpenOffice.org-URE-$(shell sed -n '/^URE$$/,/^}$$/ s/.*PACKAGEVERSION //p' openoffice.lst) $(@:b))
+.ENDIF                  # "$(OS)"!="MACOSX" || "$(PKGFORMAT)"!=""
+
+.IF "$(PKGFORMAT)"!=""
 $(foreach,i,$(alllangiso) broffice_$i) : $$@{$(PKGFORMAT:^".")}
 .IF "$(MAKETARGETS)"!="" && "$(PKGFORMAT)"!=""
 .IF "$(MAKETARGETS:e)"=="" && "$(MAKETARGETS:s/_//)"!="$(MAKETARGETS)" && "$(MAKETARGETS:s/archive//)"=="$(MAKETARGETS)"
@@ -351,121 +375,6 @@ openoffice:
     @echo cannot pack nothing...
 
 .ENDIF			# "$(alllangiso)"!=""
-
-.IF "$(PKGFORMAT)"!=""
-ure_en-US: $$@{$(PKGFORMAT:^".")}
-ure_en-US{$(PKGFORMAT:^".")} : $(MISC)$/ure$/services.rdb
-.ELSE			# "$(PKGFORMAT)"!=""
-ure_en-US: $(MISC)$/ure$/services.rdb
-.ENDIF			# "$(PKGFORMAT)"!=""
-.IF "$(OS)"!="MACOSX" || "$(PKGFORMAT)"!="portable"
-    $(PERL) -w $(SOLARENV)$/bin$/make_installer.pl -f $(PRJ)$/util$/openoffice.lst \
-        -l en-US -p URE -u $(OUT) -buildid $(BUILD) $(subst,xxx,$(@:e:s/.//) $(PKGFORMATSWITCH)) \
-        -packagelist $(PRJ)$/inc_ure$/unix$/packagelist.txt \
-        -msitemplate $(MSIURETEMPLATEDIR) \
-        -msilanguage $(COMMONMISC)$/win_ulffiles
-.ELSE                   # "$(OS)"!="MACOSX" || "$(PKGFORMAT)"!=""
-    $(PERL) -w $(SOLARENV)$/bin$/make_installer.pl -f $(PRJ)$/util$/openoffice.lst \
-    -l en-US -p URE -u $(OUT) -buildid $(BUILD) \
-    -packagelist $(PRJ)$/inc_ure$/unix$/packagelist.txt \
-    -destdir $(subst,$(@:s/_/ /:1)_,$(OUT)$/URE$/install$/ $(@:b))_inprogress$/ -simple 'URE/OpenOffice.org URE'
-    $(RM) $(subst,$(@:s/_/ /:1)_,$(OUT)$/URE$/install$/ $(@:b))$/gid_*
-    rmdir $(subst,$(@:s/_/ /:1)_,$(OUT)$/URE$/install$/ $(@:b))$/URE/OpenOffice.org
-    cd $(subst,$(@:s/_/ /:1)_,$(OUT)$/URE$/install$/ $(@:b)) && hdiutil create -srcfolder 'URE' -volname 'OpenOffice.org URE' -ov -o $(subst,$(@:s/_/ /:1),OpenOffice.org-URE-$(shell sed -n '/^URE$$/,/^}$$/ s/.*PACKAGEVERSION //p' openoffice.lst) $(@:b))
-.ENDIF                  # "$(OS)"!="MACOSX" || "$(PKGFORMAT)"!=""
-
-.IF "$(USE_SHELL)"!="4nt"
-MY_Q = '
-.ELSE
-MY_Q =
-.ENDIF
-.IF "$(OS)" == "WNT"
-MY_URL = $(strip $(subst,\,/ file:///$(shell $(WRAPCMD) echo $(SOLARBINDIR))))
-.ELSE
-MY_URL = file://$(SOLARLIBDIR)
-.ENDIF
-$(MISC)$/ure$/services.rdb .ERRREMOVE:
-    - $(MKDIR) $(@:d)
-     $(REGCOMP) -register -r $@ -c \
-        $(MY_Q)vnd.sun.star.expand:$$URE_INTERNAL_LIB_DIR/acceptor.uno$(DLLPOST)$(MY_Q) \
-        -env:URE_INTERNAL_LIB_DIR=$(MY_URL)
-     $(REGCOMP) -register -r $@ -c \
-        $(MY_Q)vnd.sun.star.expand:$$URE_INTERNAL_LIB_DIR/bridgefac.uno$(DLLPOST)$(MY_Q) \
-        -env:URE_INTERNAL_LIB_DIR=$(MY_URL)
-     $(REGCOMP) -register -r $@ -c \
-        $(MY_Q)vnd.sun.star.expand:$$URE_INTERNAL_LIB_DIR/connector.uno$(DLLPOST)$(MY_Q) \
-        -env:URE_INTERNAL_LIB_DIR=$(MY_URL)
-     $(REGCOMP) -register -r $@ -c \
-        $(MY_Q)vnd.sun.star.expand:$$URE_INTERNAL_LIB_DIR/implreg.uno$(DLLPOST)$(MY_Q) \
-        -env:URE_INTERNAL_LIB_DIR=$(MY_URL)
-     $(REGCOMP) -register -r $@ -c \
-        $(MY_Q)vnd.sun.star.expand:$$URE_INTERNAL_LIB_DIR/introspection.uno$(DLLPOST)$(MY_Q) \
-        -env:URE_INTERNAL_LIB_DIR=$(MY_URL)
-     $(REGCOMP) -register -r $@ -c \
-        $(MY_Q)vnd.sun.star.expand:$$URE_INTERNAL_LIB_DIR/invocadapt.uno$(DLLPOST)$(MY_Q) \
-        -env:URE_INTERNAL_LIB_DIR=$(MY_URL)
-     $(REGCOMP) -register -r $@ -c \
-        $(MY_Q)vnd.sun.star.expand:$$URE_INTERNAL_LIB_DIR/invocation.uno$(DLLPOST)$(MY_Q) \
-        -env:URE_INTERNAL_LIB_DIR=$(MY_URL)
-.IF "$(SOLAR_JAVA)"!=""
-     $(REGCOMP) -register -r $@ -c \
-        $(MY_Q)vnd.sun.star.expand:$$URE_INTERNAL_LIB_DIR/javaloader.uno$(DLLPOST)$(MY_Q) \
-        -env:URE_INTERNAL_LIB_DIR=$(MY_URL)
-     $(REGCOMP) -register -r $@ -c \
-        $(MY_Q)vnd.sun.star.expand:$$URE_INTERNAL_LIB_DIR/javavm.uno$(DLLPOST)$(MY_Q) \
-        -env:URE_INTERNAL_LIB_DIR=$(MY_URL)
-.ENDIF
-     $(REGCOMP) -register -r $@ -c \
-        $(MY_Q)vnd.sun.star.expand:$$URE_INTERNAL_LIB_DIR/namingservice.uno$(DLLPOST)$(MY_Q) \
-        -env:URE_INTERNAL_LIB_DIR=$(MY_URL)
-     $(REGCOMP) -register -r $@ -c \
-        $(MY_Q)vnd.sun.star.expand:$$URE_INTERNAL_LIB_DIR/nestedreg.uno$(DLLPOST)$(MY_Q) \
-        -env:URE_INTERNAL_LIB_DIR=$(MY_URL)
-     $(REGCOMP) -register -r $@ -c \
-        $(MY_Q)vnd.sun.star.expand:$$URE_INTERNAL_LIB_DIR/proxyfac.uno$(DLLPOST)$(MY_Q) \
-        -env:URE_INTERNAL_LIB_DIR=$(MY_URL)
-     $(REGCOMP) -register -r $@ -c \
-        $(MY_Q)vnd.sun.star.expand:$$URE_INTERNAL_LIB_DIR/reflection.uno$(DLLPOST)$(MY_Q) \
-        -env:URE_INTERNAL_LIB_DIR=$(MY_URL)
-     $(REGCOMP) -register -r $@ -c \
-        $(MY_Q)vnd.sun.star.expand:$$URE_INTERNAL_LIB_DIR/regtypeprov.uno$(DLLPOST)$(MY_Q) \
-        -env:URE_INTERNAL_LIB_DIR=$(MY_URL)
-     $(REGCOMP) -register -r $@ -c \
-        $(MY_Q)vnd.sun.star.expand:$$URE_INTERNAL_LIB_DIR/remotebridge.uno$(DLLPOST)$(MY_Q) \
-        -env:URE_INTERNAL_LIB_DIR=$(MY_URL)
-     $(REGCOMP) -register -r $@ -c \
-        $(MY_Q)vnd.sun.star.expand:$$URE_INTERNAL_LIB_DIR/security.uno$(DLLPOST)$(MY_Q) \
-        -env:URE_INTERNAL_LIB_DIR=$(MY_URL)
-     $(REGCOMP) -register -r $@ -c \
-        $(MY_Q)vnd.sun.star.expand:$$URE_INTERNAL_LIB_DIR/servicemgr.uno$(DLLPOST)$(MY_Q) \
-        -env:URE_INTERNAL_LIB_DIR=$(MY_URL)
-     $(REGCOMP) -register -r $@ -c \
-        $(MY_Q)vnd.sun.star.expand:$$URE_INTERNAL_LIB_DIR/shlibloader.uno$(DLLPOST)$(MY_Q) \
-        -env:URE_INTERNAL_LIB_DIR=$(MY_URL)
-     $(REGCOMP) -register -r $@ -c \
-        $(MY_Q)vnd.sun.star.expand:$$URE_INTERNAL_LIB_DIR/simplereg.uno$(DLLPOST)$(MY_Q) \
-        -env:URE_INTERNAL_LIB_DIR=$(MY_URL)
-     $(REGCOMP) -register -r $@ -c \
-        $(MY_Q)vnd.sun.star.expand:$$URE_INTERNAL_LIB_DIR/streams.uno$(DLLPOST)$(MY_Q) \
-        -env:URE_INTERNAL_LIB_DIR=$(MY_URL)
-     $(REGCOMP) -register -r $@ -c \
-        $(MY_Q)vnd.sun.star.expand:$$URE_INTERNAL_LIB_DIR/textinstream.uno$(DLLPOST)$(MY_Q) \
-        -env:URE_INTERNAL_LIB_DIR=$(MY_URL)
-     $(REGCOMP) -register -r $@ -c \
-        $(MY_Q)vnd.sun.star.expand:$$URE_INTERNAL_LIB_DIR/textoutstream.uno$(DLLPOST)$(MY_Q) \
-        -env:URE_INTERNAL_LIB_DIR=$(MY_URL)
-     $(REGCOMP) -register -r $@ -c \
-        $(MY_Q)vnd.sun.star.expand:$$URE_INTERNAL_LIB_DIR/typeconverter.uno$(DLLPOST)$(MY_Q) \
-        -env:URE_INTERNAL_LIB_DIR=$(MY_URL)
-     $(REGCOMP) -register -r $@ -c \
-        $(MY_Q)vnd.sun.star.expand:$$URE_INTERNAL_LIB_DIR/typemgr.uno$(DLLPOST)$(MY_Q) \
-        -env:URE_INTERNAL_LIB_DIR=$(MY_URL)
-     $(REGCOMP) -register -r $@ -c \
-        $(MY_Q)vnd.sun.star.expand:$$URE_INTERNAL_LIB_DIR/uriproc.uno$(DLLPOST)$(MY_Q) \
-        -env:URE_INTERNAL_LIB_DIR=$(MY_URL)
-     $(REGCOMP) -register -r $@ -c \
-        $(MY_Q)vnd.sun.star.expand:$$URE_INTERNAL_LIB_DIR/uuresolver.uno$(DLLPOST)$(MY_Q) \
-        -env:URE_INTERNAL_LIB_DIR=$(MY_URL)
 
 .IF "$(LOCALPYFILES)"!=""
 .IF "$(PKGFORMAT)"==""
