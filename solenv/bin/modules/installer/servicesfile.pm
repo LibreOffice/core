@@ -4,9 +4,9 @@
 #
 #   $RCSfile: servicesfile.pm,v $
 #
-#   $Revision: 1.23 $
+#   $Revision: 1.24 $
 #
-#   last change: $Author: obo $ $Date: 2006-07-10 18:51:00 $
+#   last change: $Author: ihi $ $Date: 2007-08-20 15:26:43 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -429,7 +429,7 @@ sub register_pythoncomponents
 
 sub register_all_components
 {
-    my ( $filesarrayref, $regcompfileref, $servicesfile, $regcomprdb, $includepatharrayref ) = @_;
+    my ( $servicesgid, $filesarrayref, $regcompfileref, $servicesfile, $regcomprdb, $includepatharrayref ) = @_;
 
     my $registererrorflag = 0;
 
@@ -442,6 +442,11 @@ sub register_all_components
         my $onefile = ${$filesarrayref}[$i];
         my $styles = "";
         my $regmergefile = "";
+        my $registryid = "";
+
+        if ( $onefile->{'RegistryID'} ) { $registryid = $onefile->{'RegistryID'}; }
+
+        if ( $servicesgid ne $registryid ) { next; } # only registration for the current $servicesgid
 
         if ( $onefile->{'Regmergefile'} ) { $regmergefile = $onefile->{'Regmergefile'}; }
 
@@ -457,11 +462,11 @@ sub register_all_components
             }
             elsif( $filename =~ /\.py\s*$/ )    # python_component
             {
-                    push(@pythoncomponents, $onefile);
+                push(@pythoncomponents, $onefile);
             }
             else                            # uno component
             {
-                    push(@unocomponents, $onefile);
+                push(@unocomponents, $onefile);
             }
         }
     }
@@ -734,6 +739,151 @@ sub prepare_regcomp_rdb
 }
 
 ################################################################
+# Collecting all gids of the databases, that are part of
+# the file definition
+################################################################
+
+sub collect_all_services_gids
+{
+    my ($filesarrayref) = @_;
+
+    my @databasegids = ();
+    my $error_occured = 0;
+    my @error_files = ();
+
+    for ( my $i = 0; $i <= $#{$filesarrayref}; $i++ )
+    {
+        my $onefile = ${$filesarrayref}[$i];
+
+        if ( $onefile->{'RegistryID'} )
+        {
+            my $databasegid = $onefile->{'RegistryID'};
+            if (! installer::existence::exists_in_array($databasegid, \@databasegids)) { push(@databasegids, $databasegid); }
+        }
+        else
+        {
+            push(@error_files, $onefile->{'gid'});
+            $error_occured = 1;
+        }
+    }
+
+    if ( $error_occured )
+    {
+        my $infoline = "ERROR: Style UNO_COMPONENT is set, but no RegistryID is assigned!\n";
+        push( @installer::globals::logfileinfo, $infoline);
+        print $infoline;
+
+        for ( my $j = 0; $j <= $#error_files; $j++ )
+        {
+            $infoline = "$error_files[$j]\n";
+            push( @installer::globals::logfileinfo, $infoline);
+            print $infoline;
+        }
+
+        installer::exiter::exit_program("ERROR: File defintion error.", "collect_all_services_gids");
+    }
+
+    return \@databasegids;
+}
+
+######################################################################
+# All gids in $databasegids are as RegistryID assigned to files.
+# For all this Registry Files a definition has to exist.
+######################################################################
+
+sub check_defintion_of_databasegids
+{
+    my ($databasegids, $registryfiles) = @_;
+
+    my @registryfiles = ();
+
+    # First check: For all assigned Registry files, a definition of
+    # a file with flag STARREGISTRY has to exist.
+
+    for ( my $i = 0; $i <= $#{$databasegids}; $i++ )
+    {
+        my $onegid = ${$databasegids}[$i];
+        my $gid_defined = 0;
+
+        for ( my $j = 0; $j <= $#{$registryfiles}; $j++ )
+        {
+            my $registrygid = ${$registryfiles}[$j]->{'gid'};
+
+            if ( $onegid eq $registrygid )
+            {
+                $gid_defined = 1;
+                last;
+            }
+        }
+
+        if ( ! $gid_defined )
+        {
+            installer::exiter::exit_program("ERROR: Gid $onegid is assigned to file(s), but not defined!", "check_defintion_of_databasegids");
+        }
+    }
+
+    # Second check: If there is a file defined as StarRegistry, is a file with flag UNO_COMPONENT assigned?
+
+    for ( my $j = 0; $j <= $#{$registryfiles}; $j++ )
+    {
+        my $onefile = ${$registryfiles}[$j];
+        my $registrygid = $onefile->{'gid'};
+
+        my $gid_assigned = 0;
+
+        for ( my $i = 0; $i <= $#{$databasegids}; $i++ )
+        {
+            my $onegid = ${$databasegids}[$i];
+
+            if ( $onegid eq $registrygid )
+            {
+                $gid_assigned = 1;
+                last;
+            }
+        }
+
+        if ( ! $gid_assigned )
+        {
+            my $infoline = "Warning: $registrygid is defined with flag STARREGISTRY, but no file is assigned to the registry.\n";
+            push( @installer::globals::logfileinfo, $infoline);
+        }
+        else
+        {
+            push(@registryfiles, $onefile);
+        }
+    }
+
+    return \@registryfiles;
+}
+
+################################################################
+# Some files have flag UNO_COMPONENT, but are not registered
+# with regcomp. This files use the regmerge mechanism, that
+# is not used in this perl-file. Therefore this files
+# have to be filtered out here.
+################################################################
+
+sub filter_regmergefiles
+{
+    my ($unocomponentfiles) = @_;
+
+    my @regcompfiles = ();
+
+    for ( my $i = 0; $i <= $#{$unocomponentfiles}; $i++ )
+    {
+        my $onefile = ${$unocomponentfiles}[$i];
+        my $regmergefile = "";
+
+        if ( $onefile->{'Regmergefile'} ) { $regmergefile = $onefile->{'Regmergefile'}; }
+        if ( $regmergefile ne "" ) { next; }
+
+        push(@regcompfiles, $onefile);
+    }
+
+    return \@regcompfiles;
+}
+
+################################################################
 # Creating services.rdb file by registering all uno components
 ################################################################
 
@@ -741,122 +891,147 @@ sub create_services_rdb
 {
     my ($filesarrayref, $includepatharrayref, $languagestringref) = @_;
 
-    my $servicesname = "services.rdb";
+    # collecting all services files
+    my $unocomponentfiles = installer::worker::collect_all_items_with_special_flag($filesarrayref, "UNO_COMPONENT");
+    $unocomponentfiles = filter_regmergefiles($unocomponentfiles);
 
-    installer::logger::include_header_into_logfile("Creating $servicesname:");
-
-    my $servicesdir = installer::systemactions::create_directories($servicesname, $languagestringref);
-
-    if ( $^O =~ /cygwin/i && $ENV{'USE_SHELL'} eq "4nt" )
-    {   # $servicesdir is used as a parameter for regcomp and has to be DOS style
-        $servicesdir = qx{guw.pl echo "$servicesdir"};
-        chomp($servicesdir);
-        $servicesdir =~ s/\\/\//g;
-    }
-
-    push(@installer::globals::removedirs, $servicesdir);
-
-    my $servicesfile = $servicesdir . $installer::globals::separator . $servicesname;
-
-    # If there is an older version of this file, it has to be removed
-    if ( -f $servicesfile ) { unlink($servicesfile); }
-
-    # if ((-f $servicesfile) && (!($installer::globals::services_rdb_created))) { $installer::globals::services_rdb_created = 1; }
-
-    # if ((!($installer::globals::services_rdb_created)) && $installer::globals::servicesrdb_can_be_created )   # This has to be done once
-    if ( $installer::globals::servicesrdb_can_be_created )  # This has to be done always
+    if ( $#{$unocomponentfiles} > -1 )  # not empty -> at least one file with flag UNO_COMPONENT
     {
-        # Creating the services.rdb in directory "inprogress"
-        my $origservicesdir = $servicesdir;
-        $servicesdir = installer::systemactions::make_numbered_dir("inprogress", $servicesdir);
-        $servicesfile = $servicesdir . $installer::globals::separator . $servicesname;
+        my $databasegids = collect_all_services_gids($unocomponentfiles);
 
-        # determining the location of the file regcomp
-        # Because the program regcomp.exe (regcomp) is used now, it has to be taken the version
-        # from the platform, this script is running. It is not important, for which platform the
-        # product is built.
+        my $registryfiles = installer::worker::collect_all_items_with_special_flag($filesarrayref, "STARREGISTRY");
 
-        my $searchname;
+        $registryfiles = check_defintion_of_databasegids($databasegids, $registryfiles);
 
-        if ($installer::globals::isunix) { $searchname = "regcomp"; }
-        else { $searchname = "regcomp.exe"; }
+        # Now the creation of all files with flag STARREGISTRY can begin
 
-        $regcompfileref = installer::scriptitems::get_sourcepath_from_filename_and_includepath(\$searchname, $includepatharrayref, 1);
-        if ( $$regcompfileref eq "" ) { installer::exiter::exit_program("ERROR: Could not find file $searchname for registering uno components!", "create_services_rdb"); }
-
-        # For Windows the libraries included into the mozruntime.zip have to be added to the path
-        if ($installer::globals::iswin) { add_path_to_pathvariable_directory($filesarrayref, "mozruntime_zip"); }
-        if ($installer::globals::iswin) { add_path_to_pathvariable($filesarrayref, "msvcr70.dll"); }
-
-        # setting the LD_LIBRARY_PATH, needed by regcomp
-        # Linux: Take care of the lock daemon. He has to be started!
-        # For windows it is necessary that "msvcp7x.dll" and "msvcr7x.dll" are included into the path !
-
-        if ( $installer::globals::isunix ) { include_regcomp_into_ld_library_path($regcompfileref); }
-
-        my $regcomprdb = "";
-
-        if ( $installer::globals::solarjava )    # this is needed to register Java components
+        for ( my $i = 0; $i <= $#{$registryfiles}; $i++ )
         {
-            prepare_classpath_for_java_registration($includepatharrayref);
+            my $registryfile = ${$registryfiles}[$i];
 
-            if ( $installer::globals::isunix ) { add_jdklib_into_ld_library_path(); }
-            else { add_jrepath_into_path(); }
+            # my $servicesname = "services.rdb";
+            my $servicesname = $registryfile->{'Name'};  # not unique!
+            my $servicesgid = $registryfile->{'gid'};  # unique
+            # my $uniquedirname = $servicesgid . "_rdb";
+            my $uniquedirname = $servicesgid;
 
-            # Preparing a registry which regcomp can work on (types+java services).
-            # Copying the "udkapi.rdb", renaming it to "regcomp.rdb" and registering the
-            # libraries $(REGISTERLIBS_JAVA), which are javavm.uno.so and javaloader.uno.so
-            # or javavm.uno.dll and javaloader.uno.dll
+            installer::logger::include_header_into_logfile("Creating $servicesname ($servicesgid):");
 
-            $regcomprdb = prepare_regcomp_rdb($$regcompfileref, $servicesdir, $includepatharrayref);
-        }
+            # my $servicesdir = installer::systemactions::create_directories($servicesname, $languagestringref);
+            my $servicesdir = installer::systemactions::create_directories($uniquedirname, $languagestringref);
 
-        # and now iteration over all files
+            if ( $^O =~ /cygwin/i && $ENV{'USE_SHELL'} eq "4nt" )
+            {   # $servicesdir is used as a parameter for regcomp and has to be DOS style
+                $servicesdir = qx{guw.pl echo "$servicesdir"};
+                chomp($servicesdir);
+                $servicesdir =~ s/\\/\//g;
+            }
 
-        my $error_during_registration = register_all_components($filesarrayref, $regcompfileref, $servicesfile, $regcomprdb, $includepatharrayref);
-
-        # Dependent from the success, the registration directory can be renamed.
-
-        if ( $error_during_registration )
-        {
-            $servicesdir = installer::systemactions::rename_string_in_directory($servicesdir, "inprogress", "witherror");
             push(@installer::globals::removedirs, $servicesdir);
-            # and exiting the packaging process
-            installer::exiter::exit_program("ERROR: Could not register all components!", "create_services_rdb");
-        }
-        else
-        {
-            $servicesdir = installer::systemactions::rename_directory($servicesdir, $origservicesdir);
-        }
 
-        $servicesfile = $servicesdir . $installer::globals::separator . $servicesname;
+            my $servicesfile = $servicesdir . $installer::globals::separator . $servicesname;
+
+            # If there is an older version of this file, it has to be removed
+            if ( -f $servicesfile ) { unlink($servicesfile); }
+
+            # if ((-f $servicesfile) && (!($installer::globals::services_rdb_created))) { $installer::globals::services_rdb_created = 1; }
+            # if ((!($installer::globals::services_rdb_created)) && $installer::globals::servicesrdb_can_be_created )   # This has to be done once
+            if ( $installer::globals::servicesrdb_can_be_created )  # This has to be done always
+            {
+                # Creating the services.rdb in directory "inprogress"
+                my $origservicesdir = $servicesdir;
+                $servicesdir = installer::systemactions::make_numbered_dir("inprogress", $servicesdir);
+                $servicesfile = $servicesdir . $installer::globals::separator . $servicesname;
+
+                # determining the location of the file regcomp
+                # Because the program regcomp.exe (regcomp) is used now, it has to be taken the version
+                # from the platform, this script is running. It is not important, for which platform the
+                # product is built.
+
+                my $searchname;
+
+                if ($installer::globals::isunix) { $searchname = "regcomp"; }
+                else { $searchname = "regcomp.exe"; }
+
+                $regcompfileref = installer::scriptitems::get_sourcepath_from_filename_and_includepath(\$searchname, $includepatharrayref, 1);
+                if ( $$regcompfileref eq "" ) { installer::exiter::exit_program("ERROR: Could not find file $searchname for registering uno components!", "create_services_rdb"); }
+
+                # For Windows the libraries included into the mozruntime.zip have to be added to the path
+                if ($installer::globals::iswin) { add_path_to_pathvariable_directory($filesarrayref, "mozruntime_zip"); }
+                if ($installer::globals::iswin) { add_path_to_pathvariable($filesarrayref, "msvcr70.dll"); }
+
+                # setting the LD_LIBRARY_PATH, needed by regcomp
+                # Linux: Take care of the lock daemon. He has to be started!
+                # For windows it is necessary that "msvcp7x.dll" and "msvcr7x.dll" are included into the path !
+
+                if ( $installer::globals::isunix ) { include_regcomp_into_ld_library_path($regcompfileref); }
+
+                my $regcomprdb = "";
+
+                if ( $installer::globals::solarjava )    # this is needed to register Java components
+                {
+                    prepare_classpath_for_java_registration($includepatharrayref);
+
+                    if ( $installer::globals::isunix ) { add_jdklib_into_ld_library_path(); }
+                    else { add_jrepath_into_path(); }
+
+                    # Preparing a registry which regcomp can work on (types+java services).
+                    # Copying the "udkapi.rdb", renaming it to "regcomp.rdb" and registering the
+                    # libraries $(REGISTERLIBS_JAVA), which are javavm.uno.so and javaloader.uno.so
+                    # or javavm.uno.dll and javaloader.uno.dll
+
+                    $regcomprdb = prepare_regcomp_rdb($$regcompfileref, $servicesdir, $includepatharrayref);
+                }
+
+                # and now iteration over all files
+
+                # my $error_during_registration = register_all_components($filesarrayref, $regcompfileref, $servicesfile, $regcomprdb, $includepatharrayref);
+                my $error_during_registration = register_all_components($servicesgid, $unocomponentfiles, $regcompfileref, $servicesfile, $regcomprdb, $includepatharrayref);
+
+                # Dependent from the success, the registration directory can be renamed.
+
+                if ( $error_during_registration )
+                {
+                    $servicesdir = installer::systemactions::rename_string_in_directory($servicesdir, "inprogress", "witherror");
+                    push(@installer::globals::removedirs, $servicesdir);
+                    # and exiting the packaging process
+                    installer::exiter::exit_program("ERROR: Could not register all components for file $servicesname ($servicesgid)!", "create_services_rdb");
+                }
+                else
+                {
+                    $servicesdir = installer::systemactions::rename_directory($servicesdir, $origservicesdir);
+                }
+
+                $servicesfile = $servicesdir . $installer::globals::separator . $servicesname;
+            }
+            else
+            {
+                my $infoline;
+
+                if (!($installer::globals::servicesrdb_can_be_created))
+                {
+                    $infoline = "Warning: $servicesname was not created. Build platform and compiler do not match. Build platform: $installer::globals::plat, compiler : $installer::globals::compiler\n";
+                    push( @installer::globals::logfileinfo, $infoline);
+                }
+
+                if ( $installer::globals::services_rdb_created )
+                {
+                    $infoline = "Info: $servicesname was not created. $servicesfile already exists.\n";
+                    push( @installer::globals::logfileinfo, $infoline);
+                }
+
+                if ((!($installer::globals::servicesrdb_can_be_created)) && (!($installer::globals::services_rdb_created)))
+                {
+                    $infoline = "ERROR: $servicesname was not created and does not exist!\n";
+                    push( @installer::globals::logfileinfo, $infoline);
+                }
+            }
+
+            # Adding the new services file source path to the filearray
+            $registryfile->{'sourcepath'} = $servicesfile;  # setting the sourcepath!
+            # add_services_sourcepath_into_filearray( $filesarrayref, $servicesfile, $servicesname );
+        }
     }
-    else
-    {
-        my $infoline;
-
-        if (!($installer::globals::servicesrdb_can_be_created))
-        {
-            $infoline = "Warning: $servicesname was not created. Build platform and compiler do not match. Build platform: $installer::globals::plat, compiler : $installer::globals::compiler\n";
-            push( @installer::globals::logfileinfo, $infoline);
-        }
-
-        if ( $installer::globals::services_rdb_created )
-        {
-            $infoline = "Info: $servicesname was not created. $servicesfile already exists.\n";
-            push( @installer::globals::logfileinfo, $infoline);
-        }
-
-        if ((!($installer::globals::servicesrdb_can_be_created)) && (!($installer::globals::services_rdb_created)))
-        {
-            $infoline = "ERROR: $servicesname was not created and does not exist!\n";
-            push( @installer::globals::logfileinfo, $infoline);
-        }
-    }
-
-    # Adding the services.rdb to the filearray
-
-    add_services_sourcepath_into_filearray( $filesarrayref, $servicesfile, $servicesname );
 
     # Setting the global variable $installer::globals::services_rdb_created
 
