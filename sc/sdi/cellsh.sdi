@@ -4,9 +4,9 @@
  *
  *  $RCSfile: cellsh.sdi,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: vg $ $Date: 2007-05-22 19:40:41 $
+ *  last change: $Author: ihi $ $Date: 2007-08-20 16:50:15 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -71,6 +71,7 @@ interface CellSelection
     SID_SUBTOTALS           [ ExecMethod = ExecuteDB; StateMethod = GetDBState; ]
     SID_PIVOT_TABLE         [ ExecMethod = ExecuteDB; StateMethod = GetDBState; ]
     FID_VALIDATION          [ ExecMethod = ExecuteDB; StateMethod = GetBlockState; ]
+    SID_TEXT_TO_COLUMNS     [ ExecMethod = ExecuteDB; StateMethod = GetDBState; ]
 
     // } Datenbank-Operationen
 
