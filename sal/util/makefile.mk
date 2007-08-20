@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.42 $
+#   $Revision: 1.43 $
 #
-#   last change: $Author: ihi $ $Date: 2007-04-16 11:13:46 $
+#   last change: $Author: ihi $ $Date: 2007-08-20 13:36:35 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -103,6 +103,8 @@ SHL1IMPLIB= i$(TARGET)
 SHL1VERSIONMAP=	$(TARGET).map
 
 .IF "$(GUI)"=="WNT"
+UWINAPILIB=     $(LB)$/uwinapi.lib
+
 SHL1STDLIBS=	\
                 $(UWINAPILIB)\
                 $(ADVAPI32LIB)\
@@ -181,7 +183,11 @@ SHL1OBJS= \
 .ENDIF # UNX
 .ENDIF # lincinc
 
+.IF "$(GUI)"=="WNT"
+SHL1DEPN=	$(UWINAPILIB)
+.ELSE
 SHL1DEPN=
+.ENDIF
 SHL1DEF=    $(MISC)$/$(SHL1TARGET).def
 
 DEF1NAME= $(SHL1TARGET)
