@@ -4,9 +4,9 @@
 #
 #   $RCSfile: globals.pm,v $
 #
-#   $Revision: 1.8 $
+#   $Revision: 1.9 $
 #
-#   last change: $Author: ihi $ $Date: 2007-07-12 11:17:14 $
+#   last change: $Author: ihi $ $Date: 2007-08-20 15:28:51 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -49,19 +49,26 @@ BEGIN
     $parfilelistorig = "";
     $parfilelist = "";
 
-    @allitems = ("Installation", "ScpAction", "HelpText", "Directory", "DataCarrier", "StarRegistry", "File",
-                 "Shortcut", "Custom", "Unixlink" ,"Procedure", "Module", "Profile", "ProfileItem",
-                 "Folder", "FolderItem", "RegistryItem", "StarRegistryItem", "WindowsCustomAction");
+    @allitems = ("Installation", "ScpAction", "Directory", "File",
+                 "Shortcut", "Unixlink", "Module", "Profile", "ProfileItem",
+                 "Folder", "FolderItem", "RegistryItem", "WindowsCustomAction");
 
-    @items_with_moduleid = ("Profile", "ProfileItem",
-                             "FolderItem", "RegistryItem", "StarRegistryItem");
+    @items_assigned_at_modules = ("File", "Directory", "Unixlink");
+    @items_with_directories = ("File", "Profile", "Shortcut", "Unixlink");
+    @items_with_moduleid = ("Profile", "ProfileItem", "FolderItem", "RegistryItem");
+    @items_without_moduleid = ("File", "Directory", "Shortcut", "Unixlink");
+
+    %searchkeys = ("File" => "Files", "Directory" => "Dirs", "Unixlink" => "Unixlinks");
 
     $logging = 0;
     $logfilename = "logfile.log";   # the default logfile name for global errors
     @logfileinfo = ();
 
     $multidefinitionerror = 0;
-    @multidefinitiongids = ();
+    $multiassignmenterror = 0;
+
+    %definitions;
+    %assignedgids;
 
     $plat = $^O;
 
