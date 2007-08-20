@@ -4,9 +4,9 @@
 #
 #   $RCSfile: epmfile.pm,v $
 #
-#   $Revision: 1.67 $
+#   $Revision: 1.68 $
 #
-#   last change: $Author: ihi $ $Date: 2007-08-20 13:25:24 $
+#   last change: $Author: ihi $ $Date: 2007-08-20 15:25:19 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -1720,6 +1720,7 @@ sub prepare_packages
 
     if ( $installer::globals::islinuxrpmbuild )
     {
+        if ( $localrelocatablepath =~ /^\s*$/ ) { $localrelocatablepath = "/"; }; # at least the "/"
         $filename =  $packagename . ".spec";
         $newline = "Prefix\:\ " . $localrelocatablepath . "\n";
     }
