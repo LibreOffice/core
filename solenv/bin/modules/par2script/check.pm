@@ -4,9 +4,9 @@
 #
 #   $RCSfile: check.pm,v $
 #
-#   $Revision: 1.6 $
+#   $Revision: 1.7 $
 #
-#   last change: $Author: rt $ $Date: 2005-09-08 09:24:49 $
+#   last change: $Author: ihi $ $Date: 2007-08-20 15:28:06 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -33,12 +33,9 @@
 #
 #*************************************************************************
 
-
 package par2script::check;
 
-use par2script::existence;
 use par2script::globals;
-use par2script::work;
 
 ################################
 # Checks of the setup script
@@ -50,151 +47,103 @@ use par2script::work;
 
 sub check_needed_directories
 {
-    my ($setupscript) = @_;
-
-    print "Checking directories ... ";
-
-    my $allfiles = par2script::work::get_all_items_from_script($setupscript, "File");
-    my $alldirs = par2script::work::get_all_items_from_script($setupscript, "Directory");
+    my $allfiles = $par2script::globals::definitions{'File'};
+    my $alldirs = $par2script::globals::definitions{'Directory'};
 
     # checking if all defined directories are needed
 
-    for ( my $i = 0; $i <= $#{$alldirs}; $i++ )
+    my $dir;
+    foreach $dir ( keys %{$alldirs} )
     {
-        my $onedir = ${$alldirs}[$i];
-
         # I. directory has create flag
+        if (( exists($alldirs->{$dir}->{'Styles'}) ) && ( $alldirs->{$dir}->{'Styles'} =~ /\bCREATE\b/ )) { next; }
 
-        my $styles = "";
-        if ( $onedir->{'Styles'} ) { $styles = $onedir->{'Styles'} }
-
-        if ( $styles =~ /\bCREATE\b/ ) { next; }    # this is okay
-
-        my $dirgid = $onedir->{'gid'};
-        my $directory_required = 0;
-
-        # II. there are files in the directory
-
-        for ( my $j = 0; $j <= $#{$allfiles}; $j++ )
+        # II. there is at least one file in the directory
+        my $fileinside = 0;
+        my $file;
+        foreach $file ( keys %{$allfiles} )
         {
-            my $onefile = ${$allfiles}[$j];
-
-
-            my $filedir = "";
-            if ( $onefile->{'Dir'} ) { $filedir = $onefile->{'Dir'} }
-            my $filenetdir = "";
-            if ( $onefile->{'NetDir'} )  { $filedir = $onefile->{'NetDir'} }
-
-            if (( $dirgid eq $filedir ) || ( $dirgid eq $filenetdir ))
+            if (( $allfiles->{$file}->{'Dir'} eq $dir ) || ( $allfiles->{$file}->{'NetDir'} eq $dir ))
             {
-                $directory_required = 1;
+                $fileinside = 1;
                 last;
             }
         }
-
-        if ( $directory_required ) { next; };
+        if ( $fileinside ) { next; }
 
         # III. the directory is parent for another directory
-
-        for ( my $j = 0; $j <= $#{$alldirs}; $j++ )
+        my $isparent = 0;
+        my $onedir;
+        foreach $onedir ( keys %{$alldirs} )
         {
-            my $onedir = ${$alldirs}[$j];
-
-            my $parentid = $onedir->{'ParentID'};
-
-            if ( $dirgid eq $parentid )
+            if ( $alldirs->{$onedir}->{'ParentID'} eq $dir )
             {
-                $directory_required = 1;
+                $isparent = 1;
                 last;
             }
         }
+        if ( $isparent ) { next; }
 
-        if (! $directory_required)
-        {
-            my $infoline = "INFO: Directory definition $dirgid is superfluous\n";
-            # print $infoline;
-            push(@par2script::globals::logfileinfo, $infoline);
-        }
+        # no condition is true -> directory definition is superfluous
+        my $infoline = "\tINFO: Directory definition $dir is superfluous\n";
+        # print $infoline;
+        push(@par2script::globals::logfileinfo, $infoline);
     }
-
-    print "Done\n";
 }
 
 ##################################################
-# Checking if the directories in the file
+# Checking if the directories in the item
 # definitions are defined.
 ##################################################
 
 sub check_directories_in_item_definitions
 {
-    my ($setupscript, $item) = @_;
-
-    print "Checking $item ... ";
-
-    my $allfiles = par2script::work::get_all_items_from_script($setupscript, $item);
-    my $alldirectorygids = par2script::work::get_all_gids_from_script($setupscript, "Directory");
-
-    for ( my $i = 0; $i <= $#{$allfiles}; $i++ )
+    my $item;
+    foreach $item ( @par2script::globals::items_with_directories )
     {
-        my $onefile = ${$allfiles}[$i];
+        my $allitems = $par2script::globals::definitions{$item};
 
-        my $filedir = $onefile->{'Dir'};
-
-        # checking if $filedir is not empty or not defined
-
-        if ( $filedir eq "" ) { die "ERROR: No directory defined for file: $onefile->{'gid'}!\n"; }
-
-        if (( $filedir eq "PD_PROGDIR" ) || ( $filedir =~ /PREDEFINED_/ )) { next; }
-
-        # now checking if this directoryid exists
-
-        if ( ! par2script::existence::exists_in_array($filedir, $alldirectorygids) )
+        my $onegid;
+        foreach $onegid ( keys %{$allitems} )
         {
-            die "ERROR: Directory $filedir in $item $onefile->{'gid'} not defined!\n";
+            if ( ! exists($allitems->{$onegid}->{'Dir'}) ) { die "\nERROR: No directory defined for item: $onegid!\n\n"; }
+            my $dir = $allitems->{$onegid}->{'Dir'};
+            if (( $dir eq "PD_PROGDIR" ) || ( $dir =~ /PREDEFINED_/ )) { next; }
+
+            # checking if this directoryid is defined
+            if ( ! exists($par2script::globals::definitions{'Directory'}->{$dir}) )
+            {
+                die "\nERROR: Directory $dir in item $onegid not defined!\n\n";
+            }
         }
     }
-
-    print "Done\n";
 }
 
 ########################################################
 # Checking for all Items, that know their modules,
-# whether these modules exist. If not, this is a
-# script error.
+# whether these modules exist.
 ########################################################
 
 sub check_module_existence
 {
-    my ($script) = @_;
-
-    print "Checking modules ... ";
-
-    my $allmodulegids = par2script::work::get_all_gids_from_script($script, "Module");
-
-    for ( my $i = 0; $i <= $#par2script::globals::items_with_moduleid; $i++ )
+    my $item;
+    foreach $item ( @par2script::globals::items_with_moduleid )
     {
-        my $oneitem = $par2script::globals::items_with_moduleid[$i];
+        my $allitems = $par2script::globals::definitions{$item};
 
-        my $allitems = par2script::work::get_all_items_from_script($script, $oneitem);
-
-        for ( my $j = 0; $j <= $#{$allitems}; $j++ )
+        my $onegid;
+        foreach $onegid ( keys %{$allitems} )
         {
-            my $oneitem = ${$allitems}[$j];
+            if ( ! exists($allitems->{$onegid}->{'ModuleID'}) ) { die "\nERROR: No ModuleID defined for item: $onegid!\n\n"; }
+            my $moduleid = $allitems->{$onegid}->{'ModuleID'};
 
-            my $moduleid = $oneitem ->{'ModuleID'};
-
-            if ( $moduleid eq "" )  { die "ERROR: No ModuleID defined for item: $oneitem->{'gid'}!\n"; }
-
-            # now checking if this moduleid exists
-
-            if ( ! par2script::existence::exists_in_array($moduleid, $allmodulegids) )
+            # checking if this directoryid is defined
+            if ( ! exists($par2script::globals::definitions{'Module'}->{$moduleid}) )
             {
-                die "ERROR: ModuleID $moduleid in $oneitem->{'gid'} not defined!\n";
+                die "\nERROR: ModuleID $moduleid in item $onegid not defined!\n\n";
             }
         }
     }
-
-    print "Done\n";
 }
 
 ########################################################
@@ -204,127 +153,252 @@ sub check_module_existence
 
 sub check_registry_at_files
 {
-    my ($script) = @_;
+    my %starregistrygid = ();
 
-    print "Checking StarRegistry ... ";
-
-    my $allstarregistrygids = par2script::work::get_all_gids_from_script($script, "StarRegistry");
-    my $isfile = 0;
-
-    for ( my $i = 0; $i <= $#{$script}; $i++ )
+    my $item;
+    foreach $item ( keys %{$par2script::globals::definitions{'File'}} )
     {
-        if ( ${$script}[$i] =~ /^\s*File\s+\w+\s*$/ ) { $isfile = 1; }
-
-        if (( $isfile ) && ( ${$script}[$i] =~ /^\s*End\s*$/i )) { $isfile = 0; }
-
-        if (( $isfile ) && ( ${$script}[$i] =~ /^\s*RegistryID\s+\=\s+(\w+)\s*\;\s*$/ ))
+        if (( exists($par2script::globals::definitions{'File'}->{$item}->{'Styles'}) ) &&
+            ( $par2script::globals::definitions{'File'}->{$item}->{'Styles'} =~ /\bSTARREGISTRY\b/ ))
         {
-            my $registry = $1;
-            my $isdefinedregistry = 0;
-
-            for ( my $j = 0; $j <= $#{$allstarregistrygids}; $j++ )
-            {
-                if ( $registry eq ${$allstarregistrygids}[$j] ) { $isdefinedregistry = 1; }
-            }
-
-            # if no definition was found, the line "RegistryID = ..." can be removed
-
-            if (! $isdefinedregistry) { splice(@{$script}, $i, 1); }
+            $starregistrygid{$item} = 1;
         }
     }
 
-    print "Done\n";
+    foreach $item ( keys %{$par2script::globals::definitions{'File'}} )
+    {
+        if ( exists($par2script::globals::definitions{'File'}->{$item}->{'RegistryID'}) )
+        {
+            my $registryid = $par2script::globals::definitions{'File'}->{$item}->{'RegistryID'};
+            if ( ! exists($starregistrygid{$registryid}) )
+            {
+                die "\nERROR: No definition found for $registryid at file $item\n\n";
+            }
+
+            # if ( ! ( $par2script::globals::definitions{'File'}->{$item}->{'Styles'} =~ /\bUNO_COMPONENT\b/ ))
+            # {
+            #   die "\nERROR: Flag UNO_COMPONENT required for file $item\n\n";
+            # }
+            # -> also possible, that Regmergefile is defined (does not require flag UNO_COMPONENT)
+        }
+
+        # and also vice versa
+
+        if (( exists($par2script::globals::definitions{'File'}->{$item}->{'Styles'}) ) &&
+            ( $par2script::globals::definitions{'File'}->{$item}->{'Styles'} =~ /\bUNO_COMPONENT\b/ ))
+        {
+            if ( ! exists($par2script::globals::definitions{'File'}->{$item}->{'RegistryID'}) )
+            {
+                die "\nERROR: Flag UNO_COMPONENT defined, but no file as \"RegistryID\" at file $item !\n\n";
+            }
+        }
+    }
 }
 
 ########################################################
-# File, Shortcut, Directory, Procedure must not
+# Every script has to contain exactly one root module.
+# This module has no ParentID or an empty ParentID.
+########################################################
+
+sub check_rootmodule
+{
+    my $rootgid = "";
+    my $foundroot = 0;
+
+    my $allmodules = $par2script::globals::definitions{'Module'};
+
+    my $modulegid = "";
+    foreach $modulegid (keys %{$allmodules} )
+    {
+        if (( ! exists($allmodules->{$modulegid}->{'ParentID'}) ) || ( $allmodules->{$modulegid}->{'ParentID'} eq "" ))
+        {
+            if ( $foundroot )
+            {
+                die "\nERROR: More than one Root module. Only one module without ParentID or with empty ParentID allowed ($rootgid and $modulegid).\n";
+            }
+            $rootgid = $modulegid;
+            $foundroot = 1;
+        }
+    }
+
+    if ( ! $foundroot )
+    {
+        die "\nERROR: Could not find Root module. Did not find module without ParentID or with empty ParentID.\n";
+    }
+
+    print " $rootgid\n";
+
+}
+
+########################################################
+# File, Shortcut, Directory, Unixlink must not
 # contain a ModuleID
 ########################################################
 
 sub check_moduleid_at_items
 {
-    my ($script) = @_;
-
-    print "Checking module assignments ... ";
-
-    my @items = ("File", "Directory", "Shortcut", "Procedure");
-
-    for ( my $i = 0; $i <= $#items; $i++ )
+    my $item;
+    foreach $item ( @par2script::globals::items_without_moduleid )
     {
-        my $oneitem = $items[$i];
-        my $isitem = 0;
+        my $allitems = $par2script::globals::definitions{$item};
 
-        for ( my $j = 0; $j <= $#{$script}; $j++ )
+        my $onegid;
+        foreach $onegid ( keys %{$allitems} )
         {
-            if ( ${$script}[$j] =~ /^\s*$oneitem\s+(\w+)\s*$/ )
+            if ( exists($allitems->{$onegid}->{'ModuleID'}) )
             {
-                $gid = $1;
-                $isitem = 1;
-            }
-
-            if (( $isitem ) && ( ${$script}[$j] =~ /^\s*End\s*$/i )) { $isitem = 0; }
-
-            if (( $isitem ) && ( ${$script}[$j] =~ /^\s*ModuleID\s+\=/ ))
-            {
-                die "\nERROR: ModuleID assigned to $gid! No module assignment to $oneitem!\n\n";
+                die "\nERROR: ModuleID assigned to $onegid! No module assignment to $item!\n\n";
             }
         }
     }
-
-    print "Done\n";
 }
 
 ########################################################
-# File, Shortcut, Directory, Procedure must not
-# contain a ModuleID
+# Controlling existence of multi assignments
 ########################################################
 
-sub check_semicolon
+sub check_multiple_assignments
 {
-    my ($script) = @_;
+    my @multiassignments = ();
+    my $error;
 
-    print "Checking syntax ... ";
-
-    for ( my $i = 0; $i <= $#par2script::globals::allitems; $i++ )
+    my $topitem;
+    foreach $topitem ( keys %par2script::globals::assignedgids )
     {
-        my $oneitem = $par2script::globals::allitems[$i];
-
-        if ( $oneitem eq "Procedure" ) { next; }    # no syntax check for Procedure
-        if ( $oneitem eq "Custom" ) { next; }       # no syntax check for Custom
-        if ( $oneitem eq "Module" ) { next; }       # no syntax check for Module
-
-        my $isinsideitem = 0;
-        my $gid = "";
-        my $isstartline = 0;
-
-        for ( my $j = 0; $j <= $#{$script}; $j++ )
+        my $item;
+        foreach $item ( keys %{$par2script::globals::assignedgids{$topitem}} )
         {
-            my $scriptline = ${$script}[$j];
-
-            if ( $isstartline )
+            if ( $par2script::globals::assignedgids{$topitem}->{$item} > 1 )
             {
-                $isstartline = 0;
-                $isinsideitem = 1;
+                $error = 1;
+                my $string = "\tGID: $item Assignments: $par2script::globals::assignedgids{$topitem}->{$item}";
+                push(@multiassignments, $string);
             }
-
-            if ( $scriptline =~ /^\s*$oneitem\s+(\w+)\s*$/ )
-            {
-                $gid = $1;
-                $isstartline = 1;
-            }
-
-            if (( $isinsideitem ) && ( $scriptline =~ /^\s*End\s*$/i ))
-            {
-                $isinsideitem = 0;
-            }
-
-            # checking semicolon
-            if ( ($isinsideitem) && (!($scriptline =~ /\;\s*$/)) ) { die "\nERROR: Syntax error (missing semicolon) in $gid:\n$scriptline\n\n"; }
-            if ( ($isinsideitem) && ($scriptline =~ /\;\;\s*$/) ) { die "\nERROR: Syntax error (double semicolon) in $gid:\n$scriptline\n\n"; }
         }
     }
 
-    print "Done\n";
+    if ( $error ) { par2script::exiter::multiassignmenterror(\@multiassignments); }
+}
+
+########################################################
+# Check, if a defined directory has a flag CREATE
+########################################################
+
+sub contains_create_flag
+{
+    my ($gid) = @_;
+
+    my $createflag = 0;
+
+    if (( exists($par2script::globals::definitions{'Directory'}->{$gid}->{'Styles'}) ) &&
+        ( $par2script::globals::definitions{'Directory'}->{$gid}->{'Styles'} =~ /\bCREATE\b/ ))
+    {
+        $createflag = 1;
+    }
+
+    return $createflag;
+}
+
+########################################################
+# Controlling existence of definitions without
+# any assignment
+########################################################
+
+sub check_missing_assignments
+{
+    # If defined gids for "File", "Directory" or "Unixlink" are not assigned,
+    # this causes an error.
+    # Directories only have to be assigned, if they have the flag "CREATE".
+
+    my @missingassignments = ();
+    $error = 0;
+
+    my $item;
+    foreach $item ( @par2script::globals::items_assigned_at_modules )
+    {
+        my $assignedgids = $par2script::globals::assignedgids{$item};
+        my $definedgids = $par2script::globals::definitions{$item};
+
+        my $gid;
+        foreach $gid ( keys %{$definedgids} )
+        {
+            if ( $item eq "Directory" ) { if ( ! contains_create_flag($gid) ) { next; } }
+
+            if ( ! exists( $assignedgids->{$gid} ))
+            {
+                $error = 1;
+                push(@missingassignments, $gid);
+            }
+        }
+    }
+
+    if ( $error ) { par2script::exiter::missingassignmenterror(\@missingassignments); }
+}
+
+#############################################################
+# Controlling if for all shortcuts with file assignment
+# the file is defined. And for all shortcuts with
+# shortcut assignment the shortcut has to be defined.
+#############################################################
+
+sub check_shortcut_assignments
+{
+    my $allshortcuts = $par2script::globals::definitions{'Shortcut'};
+    my $allfiles = $par2script::globals::definitions{'File'};
+
+    my $shortcut;
+    foreach $shortcut ( keys %{$allshortcuts} )
+    {
+        if (( exists($allshortcuts->{$shortcut}->{'FileID'}) ) &&
+            ( ! exists($allfiles->{$allshortcuts->{$shortcut}->{'FileID'}}) ))
+        {
+            # die "\nERROR: FileID $allshortcuts->{$shortcut}->{'FileID'} has no definition at shortcut $shortcut !\n";
+            print "\n\tWARNING: FileID $allshortcuts->{$shortcut}->{'FileID'} has no definition at shortcut $shortcut !\n";
+        }
+
+        if (( exists($allshortcuts->{$shortcut}->{'ShortcutID'}) ) &&
+            ( ! exists($allshortcuts->{$allshortcuts->{$shortcut}->{'ShortcutID'}}) ))
+        {
+            die "\nERROR: ShortcutID $allshortcuts->{$shortcut}->{'ShortcutID'} has no definition at shortcut $shortcut !\n";
+        }
+
+        if (( ! exists($allshortcuts->{$shortcut}->{'ShortcutID'}) ) &&
+            ( ! exists($allshortcuts->{$shortcut}->{'FileID'}) ))
+        {
+            die "\nERROR: Shortcut requires assignment to \"ShortcutID\" or \"FileID\". Missing at shortcut $shortcut !\n";
+        }
+    }
+}
+
+#############################################################
+# Controlling if for Modules and Directories, the parents
+# are defined. If not, this can lead to a problem during
+# script creation, because only recursively added
+# Modules or Directories are added to the script.
+#############################################################
+
+sub check_missing_parents
+{
+    my @parentitems = ("Module", "Directory");
+    my %rootparents = ("PREDEFINED_PROGDIR" => "1");
+
+    my $oneitem;
+    foreach $oneitem ( @parentitems )
+    {
+        my $alldefinitions = $par2script::globals::definitions{$oneitem};
+
+        my $onegid;
+        foreach $onegid ( keys %{$alldefinitions} )
+        {
+            # If there is a ParentID used, it must be defined
+            if (( exists($alldefinitions->{$onegid}->{'ParentID'}) ) &&
+                ( ! exists($alldefinitions->{$alldefinitions->{$onegid}->{'ParentID'}}) ) &&
+                ( ! exists($rootparents{$alldefinitions->{$onegid}->{'ParentID'}}) ))
+            {
+                die "\nERROR: Parent \"$alldefinitions->{$onegid}->{'ParentID'}\" at $oneitem \"$onegid\" is not defined!\n";
+            }
+        }
+    }
 }
 
 1;
