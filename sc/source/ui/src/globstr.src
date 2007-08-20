@@ -4,9 +4,9 @@
  *
  *  $RCSfile: globstr.src,v $
  *
- *  $Revision: 1.68 $
+ *  $Revision: 1.69 $
  *
- *  last change: $Author: rt $ $Date: 2007-07-06 12:45:11 $
+ *  last change: $Author: ihi $ $Date: 2007-08-20 16:52:21 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1690,6 +1690,10 @@ Resource RID_GLOBSTR
     String STR_ERR_LONG_NESTED_ARRAY
     {
     Text [ en-US ] = "Nested arrays are not supported." ;
+    };
+    String STR_UNDO_TEXTTOCOLUMNS
+    {
+        Text [ en-US ] = "Text to Columns";
     };
 };
 
