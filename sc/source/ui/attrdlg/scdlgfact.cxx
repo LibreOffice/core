@@ -4,9 +4,9 @@
  *
  *  $RCSfile: scdlgfact.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: rt $ $Date: 2007-04-26 09:50:41 $
+ *  last change: $Author: ihi $ $Date: 2007-08-20 16:50:41 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -153,6 +153,11 @@ String AbstractTabDialog_Impl::GetText() const
 void AbstractScImportAsciiDlg_Impl::GetOptions( ScAsciiOptions& rOpt )
 {
     pDlg->GetOptions( rOpt );
+}
+
+void AbstractScImportAsciiDlg_Impl::SetTextToColumnsMode()
+{
+    pDlg->SetTextToColumnsMode();
 }
 
 // AbstractScImportAsciiDlg_Impl end
