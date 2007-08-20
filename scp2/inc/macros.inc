@@ -91,22 +91,13 @@
 #define EXTRAFILENAME(name,lang)              STRING(CONCAT3(name,lang,.zip))
 #define CONFIGLANGFILENAME(name,lang,ext)     STRING(CONCAT4(name,lang,.,ext))
 
-
-#define FILE_BODY \
-        Carrier      = gid_Datacarrier; \
-        Time         = "0200"; \
-        Date         = "29022004";
-
 #define BIN_FILE_BODY \
-        FILE_BODY \
         UnixRights   = 555
 
 #define TXT_FILE_BODY \
-        FILE_BODY \
         UnixRights   = 444
 
 #define USER_FILE_BODY \
-        FILE_BODY \
         UnixRights   = 644
 
 #define PACKED_TXT_FILE_BODY \
@@ -132,14 +123,6 @@
 #define ARCHIVE_SUBST_FILE_BODY_PATCH \
         TXT_FILE_BODY; \
         Styles = (ARCHIVE,SUBSTITUTE,PATCH)
-
-#define STD_SETUPZIP_BMP_FILE(id,name) \
-    File id \
-        TXT_FILE_BODY; \
-        Name      = DOSTRING(name); \
-        Styles    = (PACKED, SETUPZIP); \
-        Dir       = gid_Dir_Program; \
-    End
 
 #define PACKED_LIB_FILE_BODY \
         TXT_FILE_BODY; \
@@ -197,14 +180,6 @@
         Styles  = (PACKED,PATCH,PATCH_ONLY); \
     End
 
-#define STD_SETUPZIP_RES_FILE(id,name) \
-    File id \
-        TXT_FILE_BODY; \
-        RESFILE_ALL_LANG(name); \
-        Dir      = gid_Dir_Resource; \
-        Styles   = (PACKED, SETUPZIP); \
-    End
-
 #define STD_FILTER_FILE(id,name) \
     File id \
         PACKED_LIB_FILE_BODY; \
@@ -235,23 +210,49 @@
         NetDir   = gid_Dir_Winfonts; \
     End
 
-#define SETUP_FONTUNX_FILE(id,name,fontname) \
+#ifdef UNX
+#define STD_FONT_FILE(id,name,fontname) \
     File id \
         TXT_FILE_BODY; \
         Dir       = gid_Dir_Fonts_Truetype; \
-        Styles    = (PACKED, FONT_WARN_IF_EXISTS, SETUPZIP); \
+        Styles    = (PACKED, FONT_WARN_IF_EXISTS); \
         Name      = STRING(name) ; \
     End
+#endif
 
-#define SETUP_FONTWIN_FILE(id,name,fontname) \
+#ifdef UNX
+#define STD_FONT_FILE_DUO(id,name,unxfontname,winfontname) \
+    File id \
+        TXT_FILE_BODY; \
+        Dir       = gid_Dir_Fonts_Truetype; \
+        Styles    = (PACKED, FONT_WARN_IF_EXISTS); \
+        Name      = STRING(name) ; \
+    End
+#endif
+
+#ifdef WNT
+#define STD_FONT_FILE(id,name,fontname) \
     File id \
         TXT_FILE_BODY; \
         Dir      = PREDEFINED_OSSYSTEMFONTDIR; \
-        Styles   = (PACKED,FONT,DONT_DELETE,FONT_WARN_IF_EXISTS, SETUPZIP); \
+        Styles   = (PACKED,FONT,DONT_DELETE,FONT_WARN_IF_EXISTS); \
         Name     = STRING(name) ; \
         FontName = STRING(fontname) ; \
         NetDir   = gid_Dir_Winfonts; \
     End
+#endif
+
+#ifdef WNT
+#define STD_FONT_FILE_DUO(id,name,unxfontname,winfontname) \
+    File id \
+        TXT_FILE_BODY; \
+        Dir      = PREDEFINED_OSSYSTEMFONTDIR; \
+        Styles   = (PACKED,FONT,DONT_DELETE,FONT_WARN_IF_EXISTS); \
+        Name     = STRING(name) ; \
+        FontName = STRING(winfontname) ; \
+        NetDir   = gid_Dir_Winfonts; \
+    End
+#endif
 
 #define STD_JAR_FILE(id,name) \
     File id \
@@ -273,6 +274,7 @@
     File id \
         TXT_FILE_BODY; \
         Name     = STRING(CONCAT2(name,.jar)); \
+        RegistryID = gid_Starregistry_Services_Rdb; \
         Dir      = gid_Dir_Classes; \
         Styles   = (PACKED,DONT_OVERWRITE, UNO_COMPONENT); \
     End
@@ -281,6 +283,7 @@
     File id \
         TXT_FILE_BODY; \
         Name     = STRING(CONCAT2(name,.jar)); \
+        RegistryID = gid_Starregistry_Services_Rdb; \
         Dir      = gid_Dir_Classes; \
         Styles   = (PACKED,DONT_OVERWRITE,UNO_COMPONENT,PATCH); \
     End
@@ -335,23 +338,6 @@
         PACKED_UNO_LIB_FILE_BODY_PATCH; \
     End
 
-#define SETUPZIP_LIB_FILE(id,name) \
-    File id \
-        TXT_FILE_BODY; \
-        Name     = LIBNAME(name); \
-        Dir      = gid_Dir_Program;
-
-#define STD_SETUPZIP_LIB_FILE(id,name) \
-        SETUPZIP_LIB_FILE(id,name) \
-        Styles   = (PACKED, SETUPZIP); \
-    End
-
-#define UNO_SETUPZIP_LIB_FILE(id,name) \
-        SETUPZIP_LIB_FILE(id,name) \
-        RegistryID   = gid_Starregistry_Services_Rdb; \
-        Styles       = (PACKED, SETUPZIP, UNO_COMPONENT); \
-    End
-
 #define SPECIAL_UNO_COMPONENT_LIB_FILE(id,name) \
     File id \
         Name     = SPECIAL_COMPONENT_LIB_NAME(name); \
@@ -398,6 +384,26 @@
         Styles = (PACKED, NO_WARNING_IF_NOT_EXISTS, UNO_COMPONENT); \
         RegistryID = gid_Starregistry_Services_Rdb; \
     End
+
+#if defined WNT
+#define SCP2_URE_DL_DIR gid_Dir_Bin
+#define SCP2_URE_DL_NORMAL(n) STRING(CONCAT2(n, .dll))
+#define SCP2_URE_DL_BARE(n) STRING(CONCAT2(n, .dll))
+#define SCP2_URE_DL_VER(n, v) STRING(CONCAT3(n, v, .dll))
+#define SCP2_URE_DL_COMID_VER(n, v) STRING(CONCAT4(n, v, COMID, .dll))
+#define SCP2_URE_DL_UNO_VER(n, v) STRING(CONCAT3(n, v, .dll))
+#define SCP2_URE_DL_UNO_COMID_VER(n, v) STRING(CONCAT4(n, v, COMID, .dll))
+#define SCP2_URE_SHARE_DIR PREDEFINED_PROGDIR
+#else
+#define SCP2_URE_DL_DIR gid_Dir_Lib
+#define SCP2_URE_DL_NORMAL(n) STRING(CONCAT3(lib, n, UNXSUFFIX))
+#define SCP2_URE_DL_BARE(n) STRING(CONCAT2(n, UNXSUFFIX))
+#define SCP2_URE_DL_VER(n, v) STRING(CONCAT5(lib, n, UNXSUFFIX, ., v))
+#define SCP2_URE_DL_COMID_VER(n, v) STRING(CONCAT6(lib, n, COMID, UNXSUFFIX, ., v))
+#define SCP2_URE_DL_UNO_VER(n, v) STRING(CONCAT5(libuno_, n, UNXSUFFIX, ., v))
+#define SCP2_URE_DL_UNO_COMID_VER(n, v)	STRING(CONCAT6(libuno_, n, COMID, UNXSUFFIX, ., v))
+#define SCP2_URE_SHARE_DIR gid_Dir_Share
+#endif
 
 #include <langmacros.inc>
 
