@@ -138,10 +138,11 @@ OpenOffice_Dev
 			OPENSOURCE 1
 			OOODOWNLOADNAME 1
 			SUNDIR 0
-			XPDINSTALLER 0
+			XPDINSTALLER 1
 			BETAUPGRADECODE {8BC2B4E7-74CA-4A3A-B431-585A1ABEFA66}
 			CHANGETARGETDIR 1
 			USE_FILEVERSION 1
+			JAVAPRODUCT 1
 			LIBRARYVERSION 8.3.0
 			PATCHCODEFILE ooo_patchcodes.txt
 			CODEFILENAME codes_ooodev.txt
@@ -152,7 +153,7 @@ OpenOffice_Dev
 		}
 		active			1
 		compression		5
-		script			setup_osl
+		script			setup_osljre
 		downloadname	OOo-dev_{productversion}_{os}_install_{languages}
 		langpackdownloadname	OOo_{productversion}_languagepack_{os}_install_{languages}
 		include			.,{localpath}/bin/dev,{localcommonpath}/bin,{localpath}/bin,{solarpath}/bin.{minor}/osl,{solarpath}/bin.{minor},{solarpath}/lib.{minor},{solarpath}/pck.{minor}/openoffice,{solarpath}/pck.{minor},{solarpath}/xml.{minor}/office/instance,{solarpath}/xml.{minor},{solarcommonpath}/bin.{minor},{solarcommonpath}/pck.{minor}/openoffice_dev,{solarcommonpath}/pck.{minor}/openoffice,{solarcommonpath}/pck.{minor},../../external/common,{solarenvpath}/{os}/OOo_external
@@ -348,10 +349,11 @@ BrOffice_Dev
 			OPENSOURCE 1
 			OOODOWNLOADNAME 1
 			SUNDIR 0
-			XPDINSTALLER 0
+			XPDINSTALLER 1
 			BETAUPGRADECODE {8BC2B4E7-74CA-4A3A-B431-585A1ABEFA66}
 			CHANGETARGETDIR 1
 			USE_FILEVERSION 1
+			JAVAPRODUCT 1
 			LIBRARYVERSION 8.3.0
 			PATCHCODEFILE ooo_patchcodes.txt
 			CODEFILENAME codes_broodev.txt
@@ -362,7 +364,7 @@ BrOffice_Dev
 		}
 		active			1
 		compression		5
-		script			setup_osl
+		script			setup_osljre
 		downloadname	BrOo-dev_{productversion}_{os}_install_{languages}
 		langpackdownloadname	BrOo_{productversion}_languagepack_{os}_install_{languages}
 		include			.,{localpath}/bin/broffice_dev,{localcommonpath}/bin,{localpath}/bin,{solarpath}/bin.{minor}/broffice,{solarpath}/bin.{minor}/osl,{solarpath}/bin.{minor},{solarpath}/lib.{minor},{solarpath}/pck.{minor}/broffice,{solarpath}/pck.{minor}/openoffice,{solarpath}/pck.{minor},{solarpath}/xml.{minor}/office/instance,{solarpath}/xml.{minor},{solarcommonpath}/bin.{minor},{solarcommonpath}/pck.{minor}/broffice_dev,{solarcommonpath}/pck.{minor}/broffice,{solarcommonpath}/pck.{minor}/openoffice_dev,{solarcommonpath}/pck.{minor}/openoffice,{solarcommonpath}/pck.{minor},../../external/common,{solarenvpath}/{os}/OOo_external
