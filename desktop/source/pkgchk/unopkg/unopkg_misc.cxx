@@ -4,9 +4,9 @@
  *
  *  $RCSfile: unopkg_misc.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: ihi $ $Date: 2007-08-17 11:52:33 $
+ *  last change: $Author: ihi $ $Date: 2007-08-20 13:50:55 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -54,6 +54,7 @@
 #include "unotools/processfactory.hxx"
 #include "unotools/configmgr.hxx"
 #include "com/sun/star/beans/XPropertySet.hpp"
+#include "cppuhelper/bootstrap.hxx"
 #include <stdio.h>
 
 using ::rtl::OUString;
@@ -364,17 +365,8 @@ namespace {
 Reference<XComponentContext> bootstrapStandAlone(
     DisposeGuard & disposeGuard, bool /*verbose */)
 {
-    // bootstrap standalone UNO using types.rdb and services.rdb
-    // directly avoiding any rc entries
-    Reference<beans::XPropertySet> xProps(
-       ::cppu::createRegistryServiceFactory(
-           getExecutableDir() + OUSTR("/types.rdb"),
-           getExecutableDir() + OUSTR("/services.rdb"),
-           true /* read-only */ ),
-       UNO_QUERY_THROW );
-    Reference<XComponentContext> xContext(
-       xProps->getPropertyValue( OUSTR("DefaultContext") ),
-       UNO_QUERY_THROW );
+    Reference<XComponentContext> xContext =
+        ::cppu::defaultBootstrap_InitialComponentContext();
 
     // assure disposing of local component context:
     disposeGuard.reset(
