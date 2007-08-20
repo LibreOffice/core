@@ -4,9 +4,9 @@
 #
 #   $RCSfile: worker.pm,v $
 #
-#   $Revision: 1.51 $
+#   $Revision: 1.52 $
 #
-#   last change: $Author: hr $ $Date: 2007-07-31 13:59:14 $
+#   last change: $Author: ihi $ $Date: 2007-08-20 13:22:56 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -1373,33 +1373,72 @@ sub prepare_forced_linuxlinkfiles
 
         if ( $isforcedlink )
         {
-            my $fileid = $onelink->{'FileID'};
-            my $searchedlinkfile = find_file_by_id(\@installer::globals::allfilessav, $fileid);
+            my $fileid = "";
 
-            # making a copy!
+            if ( $onelink->{'ShortcutID'} )
+            {
+                $fileid = $onelink->{'ShortcutID'};
 
-            my %linkfilehash = ();
-            my $linkfile = \%linkfilehash;
-            installer::converter::copy_item_object($searchedlinkfile, $linkfile);
+                my $searchedlinkfile = find_file_by_id($linksref, $fileid);
 
-            $linkfile->{'Name'} = $onelink->{'Name'};
-            $linkfile->{'destinationfile'} = $linkfile->{'destination'};
-            my $linkdestination = $linkfile->{'destinationfile'};
-            installer::pathanalyzer::make_absolute_filename_to_relative_filename(\$linkdestination);
-            $linkfile->{'destinationfile'} = $linkdestination;
+                # making a copy!
+                my %linkfilehash = ();
+                my $linkfile = \%linkfilehash;
+                installer::converter::copy_item_object($searchedlinkfile, $linkfile);
 
-            my $localdestination = $linkfile->{'destination'};
-            # Getting the path
-            installer::pathanalyzer::get_path_from_fullqualifiedname(\$localdestination);
-            $localdestination =~ s/\Q$installer::globals::separator\E\s*$//;
-            $linkfile->{'destination'} = $localdestination . $installer::globals::separator . $onelink->{'Name'};
+                $linkfile->{'Name'} = $onelink->{'Name'};
+                $linkfile->{'destinationfile'} = $linkfile->{'destination'};
+                my $linkdestination = $linkfile->{'destinationfile'};
+                installer::pathanalyzer::make_absolute_filename_to_relative_filename(\$linkdestination);
+                $linkfile->{'destinationfile'} = $linkdestination;
 
-            $infoline = "Forced link into update file: $linkfile->{'destination'} pointing to $linkfile->{'destinationfile'} !\n";
-            push( @installer::globals::logfileinfo, $infoline);
+                my $localdestination = $linkfile->{'destination'};
+                # Getting the path
+                installer::pathanalyzer::get_path_from_fullqualifiedname(\$localdestination);
+                $localdestination =~ s/\Q$installer::globals::separator\E\s*$//;
+                $linkfile->{'destination'} = $localdestination . $installer::globals::separator . $onelink->{'Name'};
 
-            # The file, defined by the link, has to be included into the
-            # link array @installer::globals::linuxlinks
-            push( @installer::globals::linuxlinks, $linkfile );
+                $infoline = "Forced link into update file: $linkfile->{'destination'} pointing to $linkfile->{'destinationfile'} !\n";
+                push( @installer::globals::logfileinfo, $infoline);
+
+                # The file, defined by the link, has to be included into the
+                # link array @installer::globals::linuxlinks
+                push( @installer::globals::linuxlinks, $linkfile );
+            }
+
+            if ( $onelink->{'FileID'} )
+            {
+                $fileid = $onelink->{'FileID'};
+
+                my $searchedlinkfile = find_file_by_id(\@installer::globals::allfilessav, $fileid);
+
+                # making a copy!
+                my %linkfilehash = ();
+                my $linkfile = \%linkfilehash;
+                installer::converter::copy_item_object($searchedlinkfile, $linkfile);
+
+                $linkfile->{'Name'} = $onelink->{'Name'};
+                $linkfile->{'destinationfile'} = $linkfile->{'destination'};
+                my $linkdestination = $linkfile->{'destinationfile'};
+                installer::pathanalyzer::make_absolute_filename_to_relative_filename(\$linkdestination);
+                $linkfile->{'destinationfile'} = $linkdestination;
+
+                my $localdestination = $linkfile->{'destination'};
+                # Getting the path
+                installer::pathanalyzer::get_path_from_fullqualifiedname(\$localdestination);
+                $localdestination =~ s/\Q$installer::globals::separator\E\s*$//;
+                $linkfile->{'destination'} = $localdestination . $installer::globals::separator . $onelink->{'Name'};
+
+                $infoline = "Forced link into update file: $linkfile->{'destination'} pointing to $linkfile->{'destinationfile'} !\n";
+                push( @installer::globals::logfileinfo, $infoline);
+
+                # The file, defined by the link, has to be included into the
+                # link array @installer::globals::linuxlinks
+                push( @installer::globals::linuxlinks, $linkfile );
+             }
+
+            if ( $fileid eq "" ) { installer::exiter::exit_program("ERROR: No FileID assigned to forced link $onelink->{'gid'} !", "prepare_forced_linuxlinkfiles"); }
+
         }
         else
         {
