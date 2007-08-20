@@ -4,9 +4,9 @@
  *
  *  $RCSfile: impex.cxx,v $
  *
- *  $Revision: 1.39 $
+ *  $Revision: 1.40 $
  *
- *  last change: $Author: vg $ $Date: 2007-02-27 13:08:43 $
+ *  last change: $Author: ihi $ $Date: 2007-08-20 16:51:43 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -92,6 +92,7 @@ class StarBASIC;
 #include "scitems.hxx"
 #include "editable.hxx"
 #include "compiler.hxx"
+#include "warnbox.hxx"
 
 #include "impex.hxx"
 
@@ -119,7 +120,7 @@ ScImportExport::ScImportExport( ScDocument* p )
       nSizeLimit( 0 ), cSep( '\t' ), cStr( '"' ),
       bFormulas( FALSE ), bIncludeFiltered( TRUE ),
       bAll( TRUE ), bSingle( TRUE ), bUndo( FALSE ),
-      bOverflow( FALSE )
+      bOverflow( FALSE ), mbApi( true )
 {
     pUndoDoc = NULL;
     pExtOptions = NULL;
@@ -134,7 +135,7 @@ ScImportExport::ScImportExport( ScDocument* p, const ScAddress& rPt )
       nSizeLimit( 0 ), cSep( '\t' ), cStr( '"' ),
       bFormulas( FALSE ), bIncludeFiltered( TRUE ),
       bAll( FALSE ), bSingle( TRUE ), bUndo( BOOL( pDocSh != NULL ) ),
-      bOverflow( FALSE )
+      bOverflow( FALSE ), mbApi( true )
 {
     pUndoDoc = NULL;
     pExtOptions = NULL;
@@ -150,7 +151,7 @@ ScImportExport::ScImportExport( ScDocument* p, const ScRange& r )
       nSizeLimit( 0 ), cSep( '\t' ), cStr( '"' ),
       bFormulas( FALSE ), bIncludeFiltered( TRUE ),
       bAll( FALSE ), bSingle( FALSE ), bUndo( BOOL( pDocSh != NULL ) ),
-      bOverflow( FALSE )
+      bOverflow( FALSE ), mbApi( true )
 {
     pUndoDoc = NULL;
     pExtOptions = NULL;
@@ -167,7 +168,7 @@ ScImportExport::ScImportExport( ScDocument* p, const String& rPos )
       nSizeLimit( 0 ), cSep( '\t' ), cStr( '"' ),
       bFormulas( FALSE ), bIncludeFiltered( TRUE ),
       bAll( FALSE ), bSingle( TRUE ), bUndo( BOOL( pDocSh != NULL ) ),
-      bOverflow( FALSE )
+      bOverflow( FALSE ), mbApi( true )
 {
     pUndoDoc = NULL;
     pExtOptions = NULL;
@@ -362,17 +363,6 @@ BOOL ScImportExport::ExportData( const String& rMimeType,
         return TRUE;
     }
     return FALSE;
-}
-
-
-// static
-inline void ScImportExport::SetNoEndianSwap( SvStream& rStrm )
-{
-#ifdef OSL_BIGENDIAN
-    rStrm.SetNumberFormatInt( NUMBERFORMAT_INT_BIGENDIAN );
-#else
-    rStrm.SetNumberFormatInt( NUMBERFORMAT_INT_LITTLEENDIAN );
-#endif
 }
 
 
@@ -1218,6 +1208,19 @@ BOOL ScImportExport::ExtText2Doc( SvStream& rStrm )
         {
             aRange.aEnd.SetCol( nEndCol );
             aRange.aEnd.SetRow( nRow );
+
+            if ( !mbApi && nStartCol != nEndCol &&
+                 !pDoc->IsBlockEmpty( nTab, nStartCol + 1, nStartRow, nEndCol, nRow ) )
+            {
+                ScReplaceWarnBox aBox( pDocSh->GetActiveDialogParent() );
+                if ( aBox.Execute() != RET_YES )
+                {
+                    delete pEnglishTransliteration;
+                    delete pEnglishCalendar;
+                    return FALSE;
+                }
+            }
+
             rStrm.Seek( nOriginalStreamPos );
             nRow = nStartRow;
             if (!StartPaste())
