@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ww8par.cxx,v $
  *
- *  $Revision: 1.180 $
+ *  $Revision: 1.181 $
  *
- *  last change: $Author: obo $ $Date: 2007-07-18 14:46:00 $
+ *  last change: $Author: ihi $ $Date: 2007-08-21 11:53:04 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1547,6 +1547,11 @@ void SwWW8ImplReader::ImportDop()
     //
     // COMPATIBILITY FLAGS START
     //
+
+    // i#78951, remember the unknown compatability options
+    // so as to export them out
+    rDoc.Setn32DummyCompatabilityOptions1( pWDop->GetCompatabilityOptions());
+    rDoc.Setn32DummyCompatabilityOptions2( pWDop->GetCompatabilityOptions2());
 
     // Abstand zwischen zwei Absaetzen ist die SUMME von unterem
     // Abst. des ersten und oberem Abst. des zweiten
