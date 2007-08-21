@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xeformula.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: obo $ $Date: 2007-07-18 11:12:13 $
+ *  last change: $Author: ihi $ $Date: 2007-08-21 12:26:55 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -668,7 +668,7 @@ void XclExpFmlaCompImpl::AppendInlineArrays( ScfUInt8Vec & rExtensionTokens )
         {
             rExtensionTokens.push_back( nMaxC == 256 ? 0 : sal_uInt8(nMaxC) );
             rExtensionTokens.resize( rExtensionTokens.size() + 2 );
-            ShortToSVBT16( USHORT( nMaxR ), &*(rExtensionTokens.end() - 2) );
+            ShortToSVBT16( sal::static_int_cast< USHORT >( nMaxR ), &*(rExtensionTokens.end() - 2) );
         }
 
         for( nR = 0 ; nR < nMaxR ; nR++)
