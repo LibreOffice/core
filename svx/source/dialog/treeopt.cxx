@@ -4,17 +4,9 @@
  *
  *  $RCSfile: treeopt.cxx,v $
  *
-<<<<<<< treeopt.cxx
- *  $Revision: 1.46 $
-=======
- *  $Revision: 1.46 $
->>>>>>> 1.44.78.2
+ *  $Revision: 1.47 $
  *
-<<<<<<< treeopt.cxx
- *  last change: $Author: kz $ $Date: 2007-08-21 14:59:57 $
-=======
- *  last change: $Author: kz $ $Date: 2007-08-21 14:59:57 $
->>>>>>> 1.44.78.2
+ *  last change: $Author: kz $ $Date: 2007-08-21 15:01:39 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
