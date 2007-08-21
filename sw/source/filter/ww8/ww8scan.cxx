@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ww8scan.cxx,v $
  *
- *  $Revision: 1.132 $
+ *  $Revision: 1.133 $
  *
- *  last change: $Author: vg $ $Date: 2007-05-25 13:03:35 $
+ *  last change: $Author: ihi $ $Date: 2007-08-21 11:53:20 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -6517,7 +6517,10 @@ WW8Dop::WW8Dop(SvStream& rSt, INT16 nFib, INT32 nPos, sal_uInt32 nSize) : bUseTh
                 a32Bit = Get_Long( pData );
                 SetCompatabilityOptions(a32Bit);
                 a32Bit = Get_Long( pData );
-                fDontUseHTMLAutoSpacing = (a32Bit & 0x4) >> 2;
+
+                // i#78591#
+                // fDontUseHTMLAutoSpacing = (a32Bit & 0x4) >> 2;
+                SetCompatabilityOptions2(a32Bit);
             }
             if (nRead >= 600)
             {
@@ -6593,11 +6596,25 @@ void WW8Dop::SetCompatabilityOptions(UINT32 a32Bit)
     fTransparentMetafiles       = ( a32Bit &  0x00000200 ) >>  9 ;
     fShowBreaksInFrames         = ( a32Bit &  0x00000400 ) >> 10 ;
     fSwapBordersFacingPgs       = ( a32Bit &  0x00000800 ) >> 11 ;
+    fCompatabilityOptions_Unknown1_13       = ( a32Bit &  0x00001000 ) >> 12 ;
+    fCompatabilityOptions_Unknown1_14       = ( a32Bit &  0x00002000 ) >> 13 ;
+    fCompatabilityOptions_Unknown1_15       = ( a32Bit &  0x00004000 ) >> 14 ;
+    fCompatabilityOptions_Unknown1_16       = ( a32Bit &  0x00008000 ) >> 15 ;
     fSuppressTopSpacingMac5     = ( a32Bit &  0x00010000 ) >> 16 ;
     fTruncDxaExpand             = ( a32Bit &  0x00020000 ) >> 17 ;
     fPrintBodyBeforeHdr         = ( a32Bit &  0x00040000 ) >> 18 ;
     fNoLeading                  = ( a32Bit &  0x00080000 ) >> 19 ;
+    fCompatabilityOptions_Unknown1_21       = ( a32Bit &  0x00100000 ) >> 20 ;
     fMWSmallCaps                = ( a32Bit &  0x00200000 ) >> 21 ;
+    fCompatabilityOptions_Unknown1_23       = ( a32Bit &  0x00400000 ) >> 22 ;
+    fCompatabilityOptions_Unknown1_24       = ( a32Bit &  0x00800800 ) >> 23 ;
+    fCompatabilityOptions_Unknown1_25       = ( a32Bit &  0x01000000 ) >> 24 ;
+    fCompatabilityOptions_Unknown1_26       = ( a32Bit &  0x02000000 ) >> 25 ;
+    fCompatabilityOptions_Unknown1_27       = ( a32Bit &  0x04000000 ) >> 26 ;
+    fCompatabilityOptions_Unknown1_28       = ( a32Bit &  0x08000000 ) >> 27 ;
+    fCompatabilityOptions_Unknown1_29       = ( a32Bit &  0x10000000 ) >> 28 ;
+    fCompatabilityOptions_Unknown1_30       = ( a32Bit &  0x20000000 ) >> 29 ;
+    fCompatabilityOptions_Unknown1_31       = ( a32Bit &  0x40000000 ) >> 30 ;
 
     fUsePrinterMetrics          = ( a32Bit &  0x80000000 ) >> 31 ;
 }
@@ -6617,12 +6634,105 @@ UINT32 WW8Dop::GetCompatabilityOptions() const
     if (fTransparentMetafiles)          a32Bit |= 0x00000200;
     if (fShowBreaksInFrames)            a32Bit |= 0x00000400;
     if (fSwapBordersFacingPgs)          a32Bit |= 0x00000800;
+    if (fCompatabilityOptions_Unknown1_13)          a32Bit |= 0x00001000;
+    if (fCompatabilityOptions_Unknown1_14)          a32Bit |= 0x00002000;
+    if (fCompatabilityOptions_Unknown1_15)          a32Bit |= 0x00004000;
+    if (fCompatabilityOptions_Unknown1_16)          a32Bit |= 0x00008000;
     if (fSuppressTopSpacingMac5)        a32Bit |= 0x00010000;
     if (fTruncDxaExpand)                a32Bit |= 0x00020000;
     if (fPrintBodyBeforeHdr)            a32Bit |= 0x00040000;
     if (fNoLeading)                     a32Bit |= 0x00080000;
+    if (fCompatabilityOptions_Unknown1_21)          a32Bit |= 0x00100000;
     if (fMWSmallCaps)                   a32Bit |= 0x00200000;
+    if (fCompatabilityOptions_Unknown1_23)          a32Bit |= 0x00400000;
+    if (fCompatabilityOptions_Unknown1_24)          a32Bit |= 0x00800000;
+    if (fCompatabilityOptions_Unknown1_25)          a32Bit |= 0x01000000;
+    if (fCompatabilityOptions_Unknown1_26)          a32Bit |= 0x02000000;
+    if (fCompatabilityOptions_Unknown1_27)          a32Bit |= 0x04000000;
+    if (fCompatabilityOptions_Unknown1_28)          a32Bit |= 0x08000000;
+    if (fCompatabilityOptions_Unknown1_29)          a32Bit |= 0x10000000;
+    if (fCompatabilityOptions_Unknown1_30)          a32Bit |= 0x20000000;
+    if (fCompatabilityOptions_Unknown1_31)          a32Bit |= 0x40000000;
     if (fUsePrinterMetrics)             a32Bit |= 0x80000000;
+    return a32Bit;
+}
+
+// i#78591#
+void WW8Dop::SetCompatabilityOptions2(UINT32 a32Bit)
+{
+    fCompatabilityOptions_Unknown2_1                        = ( a32Bit &  0x00000001 );
+    fCompatabilityOptions_Unknown2_2                        = ( a32Bit &  0x00000002 ) >>  1 ;
+    fDontUseHTMLAutoSpacing     = ( a32Bit &  0x00000004 ) >>  2 ;
+    fCompatabilityOptions_Unknown2_4                    = ( a32Bit &  0x00000008 ) >>  3 ;
+       fCompatabilityOptions_Unknown2_5                 = ( a32Bit &  0x00000010 ) >>  4 ;
+       fCompatabilityOptions_Unknown2_6                 = ( a32Bit &  0x00000020 ) >>  5 ;
+       fCompatabilityOptions_Unknown2_7                 = ( a32Bit &  0x00000040 ) >>  6 ;
+       fCompatabilityOptions_Unknown2_8                 = ( a32Bit &  0x00000080 ) >>  7 ;
+       fCompatabilityOptions_Unknown2_9                 = ( a32Bit &  0x00000100 ) >>  8 ;
+       fCompatabilityOptions_Unknown2_10                    = ( a32Bit &  0x00000200 ) >>  9 ;
+       fCompatabilityOptions_Unknown2_11                    = ( a32Bit &  0x00000400 ) >> 10 ;
+       fCompatabilityOptions_Unknown2_12                    = ( a32Bit &  0x00000800 ) >> 11 ;
+    fCompatabilityOptions_Unknown2_13                   = ( a32Bit &  0x00001000 ) >> 12 ;
+    fCompatabilityOptions_Unknown2_14                   = ( a32Bit &  0x00002000 ) >> 13 ;
+    fCompatabilityOptions_Unknown2_15                   = ( a32Bit &  0x00004000 ) >> 14 ;
+    fCompatabilityOptions_Unknown2_16                   = ( a32Bit &  0x00008000 ) >> 15 ;
+       fCompatabilityOptions_Unknown2_17                    = ( a32Bit &  0x00010000 ) >> 16 ;
+       fCompatabilityOptions_Unknown2_18                    = ( a32Bit &  0x00020000 ) >> 17 ;
+       fCompatabilityOptions_Unknown2_19                    = ( a32Bit &  0x00040000 ) >> 18 ;
+       fCompatabilityOptions_Unknown2_20                    = ( a32Bit &  0x00080000 ) >> 19 ;
+    fCompatabilityOptions_Unknown2_21                   = ( a32Bit &  0x00100000 ) >> 20 ;
+       fCompatabilityOptions_Unknown2_22                    = ( a32Bit &  0x00200000 ) >> 21 ;
+    fCompatabilityOptions_Unknown2_23                   = ( a32Bit &  0x00400000 ) >> 22 ;
+    fCompatabilityOptions_Unknown2_24                   = ( a32Bit &  0x00800800 ) >> 23 ;
+    fCompatabilityOptions_Unknown2_25                   = ( a32Bit &  0x01000800 ) >> 24 ;
+    fCompatabilityOptions_Unknown2_26                   = ( a32Bit &  0x02000800 ) >> 25 ;
+    fCompatabilityOptions_Unknown2_27                   = ( a32Bit &  0x04000800 ) >> 26 ;
+    fCompatabilityOptions_Unknown2_28                   = ( a32Bit &  0x08000800 ) >> 27 ;
+    fCompatabilityOptions_Unknown2_29                   = ( a32Bit &  0x10000800 ) >> 28 ;
+    fCompatabilityOptions_Unknown2_30                   = ( a32Bit &  0x20000800 ) >> 29 ;
+    fCompatabilityOptions_Unknown2_31                   = ( a32Bit &  0x40000800 ) >> 30 ;
+       fCompatabilityOptions_Unknown2_32                    = ( a32Bit &  0x80000000 ) >> 31 ;
+}
+
+UINT32 WW8Dop::GetCompatabilityOptions2() const
+{
+    UINT32 a32Bit = 0;
+    if (fCompatabilityOptions_Unknown2_1)           a32Bit |= 0x00000001;
+    if (fCompatabilityOptions_Unknown2_2)           a32Bit |= 0x00000002;
+    if (fDontUseHTMLAutoSpacing)     a32Bit |= 0x00000004;
+    if (fCompatabilityOptions_Unknown2_4)           a32Bit |= 0x00000008;
+    if (fCompatabilityOptions_Unknown2_5)           a32Bit |= 0x00000010;
+    if (fCompatabilityOptions_Unknown2_6)           a32Bit |= 0x00000020;
+    if (fCompatabilityOptions_Unknown2_7)           a32Bit |= 0x00000040;
+    if (fCompatabilityOptions_Unknown2_8)           a32Bit |= 0x00000080;
+    if (fCompatabilityOptions_Unknown2_9)           a32Bit |= 0x00000100;
+    if (fCompatabilityOptions_Unknown2_10)          a32Bit |= 0x00000200;
+    if (fCompatabilityOptions_Unknown2_11)          a32Bit |= 0x00000400;
+    if (fCompatabilityOptions_Unknown2_12)          a32Bit |= 0x00000800;
+    if (fCompatabilityOptions_Unknown2_13)          a32Bit |= 0x00001000;
+    //#i42909# set thai "line breaking rules" compatibility option
+    // pflin, wonder whether bUseThaiLineBreakingRules is correct
+    // when importing word document.
+    if (bUseThaiLineBreakingRules)          a32Bit |= 0x00002000;
+    else if (fCompatabilityOptions_Unknown2_14)         a32Bit |= 0x00002000;
+    if (fCompatabilityOptions_Unknown2_15)          a32Bit |= 0x00004000;
+    if (fCompatabilityOptions_Unknown2_16)          a32Bit |= 0x00008000;
+    if (fCompatabilityOptions_Unknown2_17)          a32Bit |= 0x00010000;
+    if (fCompatabilityOptions_Unknown2_18)          a32Bit |= 0x00020000;
+    if (fCompatabilityOptions_Unknown2_19)          a32Bit |= 0x00040000;
+    if (fCompatabilityOptions_Unknown2_20)          a32Bit |= 0x00080000;
+    if (fCompatabilityOptions_Unknown2_21)          a32Bit |= 0x00100000;
+    if (fCompatabilityOptions_Unknown2_22)          a32Bit |= 0x00200000;
+    if (fCompatabilityOptions_Unknown2_23)          a32Bit |= 0x00400000;
+    if (fCompatabilityOptions_Unknown2_24)          a32Bit |= 0x00800000;
+    if (fCompatabilityOptions_Unknown2_25)          a32Bit |= 0x01000000;
+    if (fCompatabilityOptions_Unknown2_26)          a32Bit |= 0x02000000;
+    if (fCompatabilityOptions_Unknown2_27)          a32Bit |= 0x04000000;
+    if (fCompatabilityOptions_Unknown2_28)          a32Bit |= 0x08000000;
+    if (fCompatabilityOptions_Unknown2_29)          a32Bit |= 0x10000000;
+    if (fCompatabilityOptions_Unknown2_30)          a32Bit |= 0x20000000;
+    if (fCompatabilityOptions_Unknown2_31)          a32Bit |= 0x40000000;
+    if (fCompatabilityOptions_Unknown2_32)          a32Bit |= 0x80000000;
     return a32Bit;
 }
 
@@ -6806,13 +6916,17 @@ bool WW8Dop::Write(SvStream& rStrm, WW8Fib& rFib) const
         pData += 8;
         Set_UInt32(pData, GetCompatabilityOptions());
         sal_uInt32 a32Bit = 0;
-        if (bUseThaiLineBreakingRules)
-        {
-            a32Bit|=0x2000; //#i42909# set thai "line breaking rules" compatibility option
-        }
-        if (fDontUseHTMLAutoSpacing)
-            a32Bit |= 0x0004;
-        Set_UInt32(pData, a32Bit);
+
+        // i#78591#
+//      if (bUseThaiLineBreakingRules)
+//      {
+//          a32Bit|=0x2000; //#i42909# set thai "line breaking rules" compatibility option
+//      }
+//       if (fDontUseHTMLAutoSpacing)
+//            a32Bit |= 0x0004;
+        Set_UInt32(pData, GetCompatabilityOptions2());
+
+//        Set_UInt32(pData, a32Bit);
         pData += 82;
         a16Bit = 0x80;
         Set_UInt16(pData, a16Bit);
