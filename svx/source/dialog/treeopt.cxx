@@ -4,9 +4,17 @@
  *
  *  $RCSfile: treeopt.cxx,v $
  *
- *  $Revision: 1.45 $
+<<<<<<< treeopt.cxx
+ *  $Revision: 1.46 $
+=======
+ *  $Revision: 1.46 $
+>>>>>>> 1.44.78.2
  *
- *  last change: $Author: ihi $ $Date: 2007-08-20 13:48:35 $
+<<<<<<< treeopt.cxx
+ *  last change: $Author: kz $ $Date: 2007-08-21 14:59:57 $
+=======
+ *  last change: $Author: kz $ $Date: 2007-08-21 14:59:57 $
+>>>>>>> 1.44.78.2
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -979,6 +987,14 @@ void OfaTreeOptionsDialog::InitTreeAndHandler()
     String sResName = String::CreateFromAscii( "iso" );
     sResName += String::CreateFromInt32(SOLARUPD); // current version
     ResMgr* pIsoRes = ResMgr::CreateResMgr( ::rtl::OUStringToOString( sResName, RTL_TEXTENCODING_UTF8 ) );
+    if ( !pIsoRes )
+    {
+        // Fallback: Use ooo resource file
+        String sOOoName = String::CreateFromAscii( "ooo" );
+        sOOoName += String::CreateFromInt32(SOLARUPD); // current version
+        pIsoRes = ResMgr::CreateResMgr( ::rtl::OUStringToOString( sOOoName, RTL_TEXTENCODING_UTF8 ) );
+    }
+
     //! ResMgr* pIsoRes = SFX_APP()->GetLabelResManager();
     ResId aImgLstRes( RID_IMGLIST_TREEOPT, *pIsoRes );
     aImgLstRes.SetRT( RSC_IMAGELIST );
