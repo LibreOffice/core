@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ww8scan.hxx,v $
  *
- *  $Revision: 1.79 $
+ *  $Revision: 1.80 $
  *
- *  last change: $Author: hr $ $Date: 2007-01-03 11:32:33 $
+ *  last change: $Author: ihi $ $Date: 2007-08-21 11:53:35 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1602,15 +1602,26 @@ public:
     UINT32 fTransparentMetafiles            :1; // see above
     UINT32 fShowBreaksInFrames              :1; // see above
     UINT32 fSwapBordersFacingPgs            :1; // see above
-    UINT32                                                      :4; // reserved
+    UINT32 fCompatabilityOptions_Unknown1_13    :1; // #i78591#
+    UINT32 fCompatabilityOptions_Unknown1_14    :1; // #i78591#
+    UINT32 fCompatabilityOptions_Unknown1_15    :1; // #i78591#
+    UINT32 fCompatabilityOptions_Unknown1_16    :1; // #i78591#
     UINT32 fSuppressTopSpacingMac5      :1; // Suppress extra line spacing at top
                                                                                 // of page like MacWord 5.x
     UINT32 fTruncDxaExpand                      :1; // Expand/Condense by whole number of points
     UINT32 fPrintBodyBeforeHdr              :1; // Print body text before header/footer
     UINT32 fNoLeading                                   :1; // Don't add extra spacebetween rows of text
-    UINT32                                                      :1; // reserved
+    UINT32 fCompatabilityOptions_Unknown1_21    :1; // #i78591#
     UINT32 fMWSmallCaps : 1;    // Use larger small caps like MacWord 5.x
-    UINT32 : 9;                 // reserved
+    UINT32 fCompatabilityOptions_Unknown1_23    :1; // #i78591#
+    UINT32 fCompatabilityOptions_Unknown1_24    :1; // #i78591#
+    UINT32 fCompatabilityOptions_Unknown1_25    :1; // #i78591#
+    UINT32 fCompatabilityOptions_Unknown1_26    :1; // #i78591#
+    UINT32 fCompatabilityOptions_Unknown1_27    :1; // #i78591#
+    UINT32 fCompatabilityOptions_Unknown1_28    :1; // #i78591#
+    UINT32 fCompatabilityOptions_Unknown1_29    :1; // #i78591#
+    UINT32 fCompatabilityOptions_Unknown1_30    :1; // #i78591#
+    UINT32 fCompatabilityOptions_Unknown1_31    :1; // #i78591#
     UINT32 fUsePrinterMetrics : 1;  //The magic option
 
     // hier sollte bei nFib <= 105  Schluss sein, sonst ist Datei fehlerhaft!
@@ -1650,9 +1661,38 @@ public:
     INT16 hpsZoonFontPag;
     INT16 dywDispPag;
 
-    UINT32 fUnknown1:2;
+    UINT32 fCompatabilityOptions_Unknown2_1 :1; // #i78591#
+    UINT32 fCompatabilityOptions_Unknown2_2 :1; // #i78591#
     UINT32 fDontUseHTMLAutoSpacing:1;
-    UINT32 fUnknown2:29;
+    UINT32 fCompatabilityOptions_Unknown2_4 :1; // #i78591#
+    UINT32 fCompatabilityOptions_Unknown2_5 :1; // #i78591#
+    UINT32 fCompatabilityOptions_Unknown2_6 :1; // #i78591#
+    UINT32 fCompatabilityOptions_Unknown2_7 :1; // #i78591#
+    UINT32 fCompatabilityOptions_Unknown2_8 :1; // #i78591#
+    UINT32 fCompatabilityOptions_Unknown2_9 :1; // #i78591#
+    UINT32 fCompatabilityOptions_Unknown2_10    :1; // #i78591#
+    UINT32 fCompatabilityOptions_Unknown2_11    :1; // #i78591#
+    UINT32 fCompatabilityOptions_Unknown2_12    :1; // #i78591#
+    UINT32 fCompatabilityOptions_Unknown2_13    :1; // #i78591#
+    UINT32 fCompatabilityOptions_Unknown2_14    :1; // #i78591#
+    UINT32 fCompatabilityOptions_Unknown2_15    :1; // #i78591#
+    UINT32 fCompatabilityOptions_Unknown2_16    :1; // #i78591#
+    UINT32 fCompatabilityOptions_Unknown2_17    :1; // #i78591#
+    UINT32 fCompatabilityOptions_Unknown2_18    :1; // #i78591#
+    UINT32 fCompatabilityOptions_Unknown2_19    :1; // #i78591#
+    UINT32 fCompatabilityOptions_Unknown2_20    :1; // #i78591#
+    UINT32 fCompatabilityOptions_Unknown2_21    :1; // #i78591#
+    UINT32 fCompatabilityOptions_Unknown2_22    :1; // #i78591#
+    UINT32 fCompatabilityOptions_Unknown2_23    :1; // #i78591#
+    UINT32 fCompatabilityOptions_Unknown2_24    :1; // #i78591#
+    UINT32 fCompatabilityOptions_Unknown2_25    :1; // #i78591#
+    UINT32 fCompatabilityOptions_Unknown2_26    :1; // #i78591#
+    UINT32 fCompatabilityOptions_Unknown2_27    :1; // #i78591#
+    UINT32 fCompatabilityOptions_Unknown2_28    :1; // #i78591#
+    UINT32 fCompatabilityOptions_Unknown2_29    :1; // #i78591#
+    UINT32 fCompatabilityOptions_Unknown2_30    :1; // #i78591#
+    UINT32 fCompatabilityOptions_Unknown2_31    :1; // #i78591#
+    UINT32 fCompatabilityOptions_Unknown2_32    :1; // #i78591#
 
     UINT16 fUnknown3:15;
     UINT16 fUseBackGroundInAllmodes:1;
@@ -1668,9 +1708,12 @@ public:
     /* Constructs default DOP suitable for exporting */
     WW8Dop();
     bool Write(SvStream& rStrm, WW8Fib& rFib) const;
-private:
+public:
     UINT32 GetCompatabilityOptions() const;
     void SetCompatabilityOptions(UINT32 a32Bit);
+    // i#78591#
+    UINT32 GetCompatabilityOptions2() const;
+    void SetCompatabilityOptions2(UINT32 a32Bit);
 };
 
 class WW8PLCF_HdFt
