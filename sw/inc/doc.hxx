@@ -4,9 +4,9 @@
  *
  *  $RCSfile: doc.hxx,v $
  *
- *  $Revision: 1.140 $
+ *  $Revision: 1.141 $
  *
- *  last change: $Author: obo $ $Date: 2007-07-18 12:54:37 $
+ *  last change: $Author: ihi $ $Date: 2007-08-21 11:52:21 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -613,6 +613,9 @@ class SwDoc :
     bool mbUnixForceZeroExtLeading                  : 1;   // FME 2006-10-09 #i60945#
     bool mbOldPrinterMetrics                        : 1;   // FME 2007-05-14 #147385#
 
+    // #i78591#
+    sal_uInt32  n32DummyCompatabilityOptions1;
+    sal_uInt32  n32DummyCompatabilityOptions2;
     //
     // COMPATIBILITY FLAGS END
     //
@@ -1974,6 +1977,24 @@ public:
     }
     void SetApplyWorkaroundForB6375613( bool p_bApplyWorkaroundForB6375613 );
     // <--
+
+    // i#78591#
+    void Setn32DummyCompatabilityOptions1( sal_uInt32 CompatabilityOptions1 )
+    {
+        n32DummyCompatabilityOptions1 = CompatabilityOptions1;
+    }
+    sal_uInt32 Getn32DummyCompatabilityOptions1( )
+    {
+        return n32DummyCompatabilityOptions1;
+    }
+    void Setn32DummyCompatabilityOptions2( sal_uInt32 CompatabilityOptions2 )
+    {
+        n32DummyCompatabilityOptions2 = CompatabilityOptions2;
+    }
+    sal_uInt32 Getn32DummyCompatabilityOptions2( )
+    {
+        return n32DummyCompatabilityOptions2;
+    }
 };
 
 
