@@ -4,9 +4,9 @@
  *
  *  $RCSfile: docnew.cxx,v $
  *
- *  $Revision: 1.77 $
+ *  $Revision: 1.78 $
  *
- *  last change: $Author: obo $ $Date: 2007-07-18 13:29:46 $
+ *  last change: $Author: ihi $ $Date: 2007-08-21 11:52:36 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -337,7 +337,10 @@ SwDoc::SwDoc() :
     mbWinEncryption(sal_False),
     mbStartIdleTimer(sal_False),
     // --> OD 2005-02-11 #i38810#
-    mbLinksUpdated( sal_False )
+    mbLinksUpdated( sal_False ),
+    // i#78591#
+    n32DummyCompatabilityOptions1(0),
+    n32DummyCompatabilityOptions2(0)
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLog, "SW", "JP93722",  "SwDoc::SwDoc" );
 
