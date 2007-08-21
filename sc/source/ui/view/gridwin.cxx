@@ -4,9 +4,9 @@
  *
  *  $RCSfile: gridwin.cxx,v $
  *
- *  $Revision: 1.82 $
+ *  $Revision: 1.83 $
  *
- *  last change: $Author: hr $ $Date: 2007-06-26 11:51:14 $
+ *  last change: $Author: ihi $ $Date: 2007-08-21 12:27:31 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -483,6 +483,7 @@ ScGridWindow::ScGridWindow( Window* pParent, ScViewData* pData, ScSplitPos eWhic
             bPagebreakDrawn( FALSE ),
             nPageScript( 0 ),
             bDragRect( FALSE ),
+            meDragInsertMode( INS_NONE ),
             nCurrentPointer( 0 ),
             bIsInScroll( FALSE ),
             bIsInPaint( FALSE ),
@@ -3337,8 +3338,12 @@ sal_Int8 ScGridWindow::AcceptPrivateDrop( const AcceptDropEvent& rEvt )
         pViewData->GetPosFromPixel( aPos.X(), aPos.Y(), eWhich, nPosX, nPosY );
 
         ScRange aSourceRange = rData.pCellTransfer->GetRange();
-        SCCOL nSizeX = aSourceRange.aEnd.Col() - aSourceRange.aStart.Col() + 1;
-        SCROW nSizeY = aSourceRange.aEnd.Row() - aSourceRange.aStart.Row() + 1;
+        SCCOL nSourceStartX = aSourceRange.aStart.Col();
+        SCROW nSourceStartY = aSourceRange.aStart.Row();
+        SCCOL nSourceEndX = aSourceRange.aEnd.Col();
+        SCROW nSourceEndY = aSourceRange.aEnd.Row();
+        SCCOL nSizeX = nSourceEndX - nSourceStartX + 1;
+        SCROW nSizeY = nSourceEndY - nSourceStartY + 1;
 
         if ( rEvt.mnAction != DND_ACTION_MOVE )
             nSizeY = rData.pCellTransfer->GetNonFilteredRows();     // copy/link: no filtered rows
@@ -3367,9 +3372,55 @@ sal_Int8 ScGridWindow::AcceptPrivateDrop( const AcceptDropEvent& rEvt )
             return DND_ACTION_NONE;
         }
 
+        InsCellCmd eDragInsertMode = INS_NONE;
+        Window::PointerState aState = GetPointerState();
+        if ( aState.mnState & KEY_MOD2 )
+        {
+            if ( pThisDoc == pSourceDoc && nTab == aSourceRange.aStart.Tab() )
+            {
+                long nDeltaX = labs( static_cast< long >( nNewDragX - nSourceStartX ) );
+                long nDeltaY = labs( static_cast< long >( nNewDragY - nSourceStartY ) );
+                if ( nDeltaX <= nDeltaY )
+                {
+                    eDragInsertMode = INS_CELLSDOWN;
+                }
+                else
+                {
+                    eDragInsertMode = INS_CELLSRIGHT;
+                }
+
+                if ( ( eDragInsertMode == INS_CELLSDOWN && nNewDragY <= nSourceEndY &&
+                       ( nNewDragX + nSizeX - 1 ) >= nSourceStartX && nNewDragX <= nSourceEndX &&
+                       ( nNewDragX != nSourceStartX || nNewDragY >= nSourceStartY ) ) ||
+                     ( eDragInsertMode == INS_CELLSRIGHT && nNewDragX <= nSourceEndX &&
+                       ( nNewDragY + nSizeY - 1 ) >= nSourceStartY && nNewDragY <= nSourceEndY &&
+                       ( nNewDragY != nSourceStartY || nNewDragX >= nSourceStartX ) ) )
+                {
+                    if ( bDragRect )
+                    {
+                        bDragRect = FALSE;
+                        UpdateDragRectOverlay();
+                    }
+                    return DND_ACTION_NONE;
+                }
+            }
+            else
+            {
+                if ( static_cast< long >( nSizeX ) >= static_cast< long >( nSizeY ) )
+                {
+                    eDragInsertMode = INS_CELLSDOWN;
+
+                }
+                else
+                {
+                    eDragInsertMode = INS_CELLSRIGHT;
+                }
+            }
+        }
+
         if ( nNewDragX != (SCsCOL) nDragStartX || nNewDragY != (SCsROW) nDragStartY ||
              nDragStartX+nSizeX-1 != nDragEndX || nDragStartY+nSizeY-1 != nDragEndY ||
-             !bDragRect )
+             !bDragRect || eDragInsertMode != meDragInsertMode )
         {
             // if (bDragRect)
             //  pViewData->GetView()->DrawDragRect( nDragStartX, nDragStartY, nDragEndX, nDragEndY, eWhich );
@@ -3379,6 +3430,7 @@ sal_Int8 ScGridWindow::AcceptPrivateDrop( const AcceptDropEvent& rEvt )
             nDragEndX = nDragStartX+nSizeX-1;
             nDragEndY = nDragStartY+nSizeY-1;
             bDragRect = TRUE;
+            meDragInsertMode = eDragInsertMode;
 
             // pViewData->GetView()->DrawDragRect( nDragStartX, nDragStartY, nDragEndX, nDragEndY, eWhich );
 
@@ -3695,6 +3747,7 @@ sal_Int8 ScGridWindow::DropTransferObj( ScTransferObj* pTransObj, SCCOL nDestPos
         return 0;
 
     ScDocument* pSourceDoc = pTransObj->GetSourceDocument();
+    ScDocShell* pDocSh     = pViewData->GetDocShell();
     ScDocument* pThisDoc   = pViewData->GetDocument();
     ScViewFunc* pView      = pViewData->GetView();
     SCTAB       nThisTab   = pViewData->GetTabNo();
@@ -3702,6 +3755,15 @@ sal_Int8 ScGridWindow::DropTransferObj( ScTransferObj* pTransObj, SCCOL nDestPos
 
     BOOL bIsNavi = ( nFlags & SC_DROP_NAVIGATOR ) != 0;
     BOOL bIsMove = ( nDndAction == DND_ACTION_MOVE && !bIsNavi );
+
+    // workaround for wrong nDndAction on Windows when pressing solely
+    // the Alt key during drag and drop;
+    // can be removed after #i79215# has been fixed
+    if ( meDragInsertMode != INS_NONE )
+    {
+        bIsMove = ( nDndAction & DND_ACTION_MOVE && !bIsNavi );
+    }
+
     BOOL bIsLink = ( nDndAction == DND_ACTION_LINK );
 
     ScRange aSource = pTransObj->GetRange();
@@ -3711,6 +3773,11 @@ sal_Int8 ScGridWindow::DropTransferObj( ScTransferObj* pTransObj, SCCOL nDestPos
     SCTAB nSourceTab = pTransObj->GetVisibleTab();
     aSource.aStart.SetTab( nSourceTab );
     aSource.aEnd.SetTab( nSourceTab );
+
+    SCCOL nSizeX = aSource.aEnd.Col() - aSource.aStart.Col() + 1;
+    SCROW nSizeY = aSource.aEnd.Row() - aSource.aStart.Row() + 1;
+    ScRange aDest( nDestPosX, nDestPosY, nThisTab,
+                   nDestPosX + nSizeX - 1, nDestPosY + nSizeY - 1, nThisTab );
 
     BOOL bDone = FALSE;
 
@@ -3743,12 +3810,89 @@ sal_Int8 ScGridWindow::DropTransferObj( ScTransferObj* pTransObj, SCCOL nDestPos
             else if ( nDestPosX != aSource.aStart.Col() || nDestPosY != aSource.aStart.Row() ||
                         nSourceTab != nThisTab )
             {
-                //  call with bApi = TRUE to avoid error messages in drop handler
-                ScAddress aDest( nDestPosX, nDestPosY, nThisTab );
-                if ( bIsLink )
-                    bDone = pView->LinkBlock( aSource, aDest, TRUE );
-                else
-                    bDone = pView->MoveBlockTo( aSource, aDest, bIsMove, TRUE, TRUE, TRUE );
+                String aUndo = ScGlobal::GetRscString( bIsMove ? STR_UNDO_MOVE : STR_UNDO_COPY );
+                pDocSh->GetUndoManager()->EnterListAction( aUndo, aUndo );
+
+                bDone = TRUE;
+                if ( meDragInsertMode != INS_NONE )
+                {
+                    // call with bApi = TRUE to avoid error messages in drop handler
+                    bDone = pDocSh->GetDocFunc().InsertCells( aDest, meDragInsertMode, TRUE /*bRecord*/, TRUE /*bApi*/, TRUE /*bPartOfPaste*/ );
+                    if ( bDone )
+                    {
+                        if ( nThisTab == nSourceTab )
+                        {
+                            if ( meDragInsertMode == INS_CELLSDOWN &&
+                                 nDestPosX == aSource.aStart.Col() && nDestPosY < aSource.aStart.Row() )
+                            {
+                                bDone = aSource.Move( 0, nSizeY, 0, pSourceDoc );
+                            }
+                            else if ( meDragInsertMode == INS_CELLSRIGHT &&
+                                      nDestPosY == aSource.aStart.Row() && nDestPosX < aSource.aStart.Col() )
+                            {
+                                bDone = aSource.Move( nSizeX, 0, 0, pSourceDoc );
+                            }
+                        }
+                        pDocSh->UpdateOle( pViewData );
+                        pView->CellContentChanged();
+                    }
+                }
+
+                if ( bDone )
+                {
+                    if ( bIsLink )
+                    {
+                        // call with bApi = TRUE to avoid error messages in drop handler
+                        bDone = pView->LinkBlock( aSource, aDest.aStart, TRUE /*bApi*/ );
+                    }
+                    else
+                    {
+                        // call with bApi = TRUE to avoid error messages in drop handler
+                        bDone = pView->MoveBlockTo( aSource, aDest.aStart, bIsMove, TRUE /*bRecord*/, TRUE /*bPaint*/, TRUE /*bApi*/ );
+                    }
+                }
+
+                if ( bDone && meDragInsertMode != INS_NONE && bIsMove && nThisTab == nSourceTab )
+                {
+                    DelCellCmd eCmd = DEL_NONE;
+                    if ( meDragInsertMode == INS_CELLSDOWN )
+                    {
+                        eCmd = DEL_CELLSUP;
+                    }
+                    else if ( meDragInsertMode == INS_CELLSRIGHT )
+                    {
+                        eCmd = DEL_CELLSLEFT;
+                    }
+
+                    if ( ( eCmd == DEL_CELLSUP  && nDestPosX == aSource.aStart.Col() ) ||
+                         ( eCmd == DEL_CELLSLEFT && nDestPosY == aSource.aStart.Row() ) )
+                    {
+                        // call with bApi = TRUE to avoid error messages in drop handler
+                        bDone = pDocSh->GetDocFunc().DeleteCells( aSource, eCmd, TRUE /*bRecord*/, TRUE /*bApi*/ );
+                        if ( bDone )
+                        {
+                            if ( eCmd == DEL_CELLSUP && nDestPosY > aSource.aEnd.Row() )
+                            {
+                                bDone = aDest.Move( 0, -nSizeY, 0, pThisDoc );
+                            }
+                            else if ( eCmd == DEL_CELLSLEFT && nDestPosX > aSource.aEnd.Col() )
+                            {
+                                bDone = aDest.Move( -nSizeX, 0, 0, pThisDoc );
+                            }
+                            pDocSh->UpdateOle( pViewData );
+                            pView->CellContentChanged();
+                        }
+                    }
+                }
+
+                if ( bDone )
+                {
+                    pView->MarkRange( aDest, FALSE, FALSE );
+                    pView->SetCursor( aDest.aEnd.Col(), aDest.aEnd.Row() );
+                }
+
+                pDocSh->GetUndoManager()->LeaveListAction();
+
                 if (!bDone)
                     Sound::Beep();  // instead of error message in drop handler
             }
@@ -3803,30 +3947,51 @@ sal_Int8 ScGridWindow::DropTransferObj( ScTransferObj* pTransObj, SCCOL nDestPos
             DBG_ASSERT(pSourceSh, "drag document has no shell");
             if (pSourceSh)
             {
-                String aApp = Application::GetAppName();
-                String aTopic = pSourceSh->GetTitle( SFX_TITLE_FULLNAME );
-                String aItem;
-                aSource.Format( aItem, SCA_VALID | SCA_TAB_3D, pSourceDoc );
+                String aUndo = ScGlobal::GetRscString( STR_UNDO_COPY );
+                pDocSh->GetUndoManager()->EnterListAction( aUndo, aUndo );
 
-                //! use tokens
-                String aFormula( '=' );
-                aFormula += ScCompiler::pSymbolTableNative[SC_OPCODE_DDE];
-                aFormula.AppendAscii(RTL_CONSTASCII_STRINGPARAM("(\""));
-                aFormula += aApp;
-                aFormula.AppendAscii(RTL_CONSTASCII_STRINGPARAM("\";\""));
-                aFormula += aTopic;
-                aFormula.AppendAscii(RTL_CONSTASCII_STRINGPARAM("\";\""));
-                aFormula += aItem;
-                aFormula.AppendAscii(RTL_CONSTASCII_STRINGPARAM("\")"));
-
-                pView->DoneBlockMode();
-                pView->InitBlockMode( nDestPosX, nDestPosY, nThisTab );
-                pView->MarkCursor( nDestPosX + aSource.aEnd.Col() - aSource.aStart.Col(),
-                                   nDestPosY + aSource.aEnd.Row() - aSource.aStart.Row(), nThisTab );
-
-                pView->EnterMatrix( aFormula );
-                pView->CursorPosChanged();
                 bDone = TRUE;
+                if ( meDragInsertMode != INS_NONE )
+                {
+                    // call with bApi = TRUE to avoid error messages in drop handler
+                    bDone = pDocSh->GetDocFunc().InsertCells( aDest, meDragInsertMode, TRUE /*bRecord*/, TRUE /*bApi*/, TRUE /*bPartOfPaste*/ );
+                    if ( bDone )
+                    {
+                        pDocSh->UpdateOle( pViewData );
+                        pView->CellContentChanged();
+                    }
+                }
+
+                if ( bDone )
+                {
+                    String aApp = Application::GetAppName();
+                    String aTopic = pSourceSh->GetTitle( SFX_TITLE_FULLNAME );
+                    String aItem;
+                    aSource.Format( aItem, SCA_VALID | SCA_TAB_3D, pSourceDoc );
+
+                    //! use tokens
+                    String aFormula( '=' );
+                    aFormula += ScCompiler::pSymbolTableNative[SC_OPCODE_DDE];
+                    aFormula.AppendAscii(RTL_CONSTASCII_STRINGPARAM("(\""));
+                    aFormula += aApp;
+                    aFormula.AppendAscii(RTL_CONSTASCII_STRINGPARAM("\";\""));
+                    aFormula += aTopic;
+                    aFormula.AppendAscii(RTL_CONSTASCII_STRINGPARAM("\";\""));
+                    aFormula += aItem;
+                    aFormula.AppendAscii(RTL_CONSTASCII_STRINGPARAM("\")"));
+
+                    pView->DoneBlockMode();
+                    pView->InitBlockMode( nDestPosX, nDestPosY, nThisTab );
+                    pView->MarkCursor( nDestPosX + nSizeX - 1,
+                                       nDestPosY + nSizeY - 1, nThisTab );
+
+                    pView->EnterMatrix( aFormula );
+
+                    pView->MarkRange( aDest, FALSE, FALSE );
+                    pView->SetCursor( aDest.aEnd.Col(), aDest.aEnd.Row() );
+                }
+
+                pDocSh->GetUndoManager()->LeaveListAction();
             }
         }
         else
@@ -3834,14 +3999,37 @@ sal_Int8 ScGridWindow::DropTransferObj( ScTransferObj* pTransObj, SCCOL nDestPos
             //! HasSelectedBlockMatrixFragment without selected sheet?
             //! or don't start dragging on a part of a matrix
 
-            pView->Unmark();    // before SetCursor, so CheckSelectionTransfer isn't called with a selection
-            pView->SetCursor( nDestPosX, nDestPosY );
-            pView->PasteFromClip( IDF_ALL, pTransObj->GetDocument() );      // clip-doc
+            String aUndo = ScGlobal::GetRscString( bIsMove ? STR_UNDO_MOVE : STR_UNDO_COPY );
+            pDocSh->GetUndoManager()->EnterListAction( aUndo, aUndo );
+
+            bDone = TRUE;
+            if ( meDragInsertMode != INS_NONE )
+            {
+                // call with bApi = TRUE to avoid error messages in drop handler
+                bDone = pDocSh->GetDocFunc().InsertCells( aDest, meDragInsertMode, TRUE /*bRecord*/, TRUE /*bApi*/, TRUE /*bPartOfPaste*/ );
+                if ( bDone )
+                {
+                    pDocSh->UpdateOle( pViewData );
+                    pView->CellContentChanged();
+                }
+            }
+
+            if ( bDone )
+            {
+                pView->Unmark();  // before SetCursor, so CheckSelectionTransfer isn't called with a selection
+                pView->SetCursor( nDestPosX, nDestPosY );
+                bDone = pView->PasteFromClip( IDF_ALL, pTransObj->GetDocument() );  // clip-doc
+                if ( bDone )
+                {
+                    pView->MarkRange( aDest, FALSE, FALSE );
+                    pView->SetCursor( aDest.aEnd.Col(), aDest.aEnd.Row() );
+                }
+            }
+
+            pDocSh->GetUndoManager()->LeaveListAction();
 
             //  no longer call ResetMark here - the inserted block has been selected
             //  and may have been copied to primary selection
-
-            bDone = TRUE;
         }
     }
 
@@ -5258,10 +5446,27 @@ void ScGridWindow::UpdateDragRectOverlay()
             aRect.Right() = aScrPos.X();
         }
 
-        aPixelRects.push_back(Rectangle( aRect.Left(), aRect.Top(), aRect.Left()+2, aRect.Bottom() ));
-        aPixelRects.push_back(Rectangle( aRect.Right()-2, aRect.Top(), aRect.Right(), aRect.Bottom() ));
-        aPixelRects.push_back(Rectangle( aRect.Left()+3, aRect.Top(), aRect.Right()-3, aRect.Top()+2 ));
-        aPixelRects.push_back(Rectangle( aRect.Left()+3, aRect.Bottom()-2, aRect.Right()-3, aRect.Bottom() ));
+        if ( meDragInsertMode == INS_CELLSDOWN )
+        {
+            aPixelRects.push_back( Rectangle( aRect.Left()+1, aRect.Top()+3, aRect.Left()+1, aRect.Bottom()-2 ) );
+            aPixelRects.push_back( Rectangle( aRect.Right()-1, aRect.Top()+3, aRect.Right()-1, aRect.Bottom()-2 ) );
+            aPixelRects.push_back( Rectangle( aRect.Left()+1, aRect.Top(), aRect.Right()-1, aRect.Top()+2 ) );
+            aPixelRects.push_back( Rectangle( aRect.Left()+1, aRect.Bottom()-1, aRect.Right()-1, aRect.Bottom()-1 ) );
+        }
+        else if ( meDragInsertMode == INS_CELLSRIGHT )
+        {
+            aPixelRects.push_back( Rectangle( aRect.Left(), aRect.Top()+1, aRect.Left()+2, aRect.Bottom()-1 ) );
+            aPixelRects.push_back( Rectangle( aRect.Right()-1, aRect.Top()+1, aRect.Right()-1, aRect.Bottom()-1 ) );
+            aPixelRects.push_back( Rectangle( aRect.Left()+3, aRect.Top()+1, aRect.Right()-2, aRect.Top()+1 ) );
+            aPixelRects.push_back( Rectangle( aRect.Left()+3, aRect.Bottom()-1, aRect.Right()-2, aRect.Bottom()-1 ) );
+        }
+        else
+        {
+            aPixelRects.push_back( Rectangle( aRect.Left(), aRect.Top(), aRect.Left()+2, aRect.Bottom() ) );
+            aPixelRects.push_back( Rectangle( aRect.Right()-2, aRect.Top(), aRect.Right(), aRect.Bottom() ) );
+            aPixelRects.push_back( Rectangle( aRect.Left()+3, aRect.Top(), aRect.Right()-3, aRect.Top()+2 ) );
+            aPixelRects.push_back( Rectangle( aRect.Left()+3, aRect.Bottom()-2, aRect.Right()-3, aRect.Bottom() ) );
+        }
 
         //
         //  convert into logic units and create overlay object
