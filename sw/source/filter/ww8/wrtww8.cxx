@@ -4,9 +4,9 @@
  *
  *  $RCSfile: wrtww8.cxx,v $
  *
- *  $Revision: 1.83 $
+ *  $Revision: 1.84 $
  *
- *  last change: $Author: obo $ $Date: 2007-07-17 13:09:18 $
+ *  last change: $Author: ihi $ $Date: 2007-08-21 11:52:49 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -310,6 +310,10 @@ SV_IMPL_PTRARR( WW8_WrPcPtrs, WW8_WrPcPtr )
 static void WriteDop( SwWW8Writer& rWrt )
 {
     WW8Dop& rDop = *rWrt.pDop;
+
+    // i#78951#, store the value of  unknown compatability options
+    rDop.SetCompatabilityOptions( rWrt.pDoc->Getn32DummyCompatabilityOptions1());
+    rDop.SetCompatabilityOptions2( rWrt.pDoc->Getn32DummyCompatabilityOptions2());
 
     rDop.fNoLeading = !rWrt.pDoc->get(IDocumentSettingAccess::ADD_EXT_LEADING);
     rDop.fUsePrinterMetrics = !rWrt.pDoc->get(IDocumentSettingAccess::USE_VIRTUAL_DEVICE);
