@@ -4,9 +4,9 @@
  *
  *  $RCSfile: gridwin.hxx,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: rt $ $Date: 2007-07-06 12:44:27 $
+ *  last change: $Author: ihi $ $Date: 2007-08-21 12:27:08 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -227,6 +227,7 @@ private:
     SCROW                   nDragStartY;
     SCCOL                   nDragEndX;
     SCROW                   nDragEndY;
+    InsCellCmd              meDragInsertMode;
 
     USHORT                  nCurrentPointer;
 
