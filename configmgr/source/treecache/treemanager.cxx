@@ -4,9 +4,9 @@
  *
  *  $RCSfile: treemanager.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 15:27:00 $
+ *  last change: $Author: kz $ $Date: 2007-08-21 15:28:48 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -646,10 +646,10 @@ void TreeManager::nodeUpdated(TreeChangeList& _rChanges)
             AbsolutePath aSubtreeName = _rChanges.getRootNodePath();
 
             memory::Accessor aAccessor( aCache->getDataSegment(aSubtreeName) );
-            OSL_ENSURE(aAccessor.is(), "TreeManager::nodeUpdated : cannot access cache !");
+            //OSL_ENSURE(aAccessor.is(), "TreeManager::nodeUpdated : cannot access cache !");
 
             data::NodeAddress aCacheTree = aCache->findInnerNode(aAccessor,aSubtreeName);
-            OSL_ENSURE(aCacheTree.is(), "TreeManager::nodeUpdated : node not found in cache!");
+            //OSL_ENSURE(aCacheTree.is(), "TreeManager::nodeUpdated : node not found in cache!");
 
             if (aCacheTree.is())
                 this->fireChanges(aAccessor,_rChanges,false);
