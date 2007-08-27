@@ -4,9 +4,9 @@
 #
 #   $RCSfile: servicesfile.pm,v $
 #
-#   $Revision: 1.25 $
+#   $Revision: 1.26 $
 #
-#   last change: $Author: obo $ $Date: 2007-08-24 12:58:14 $
+#   last change: $Author: obo $ $Date: 2007-08-27 06:01:13 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -912,7 +912,7 @@ sub create_services_rdb
             # my $servicesname = "services.rdb";
             my $servicesname = $registryfile->{'Name'};  # not unique!
             my $servicesgid = $registryfile->{'gid'};  # unique
-            my $uniquedirname = $servicesgid . "_rdb";
+            my $uniquedirname = $servicesgid . "_servicesrdb";
             # my $uniquedirname = $servicesgid;
 
             installer::logger::include_header_into_logfile("Creating $servicesname ($servicesgid):");
