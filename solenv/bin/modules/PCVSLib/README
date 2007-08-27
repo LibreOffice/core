@@ -1,0 +1,62 @@
+PCVSLib version 0.02
+====================
+
+PCVSLib is a pure perl implementation of the CVS client protocol. 
+It currently supports only a subset of of the specified requests 
+and responses, just enough to support the OpenOffice.org CWS tools. 
+If it ever is complete and stable enough for general use, it might
+be worthwhile to submit it to CPAN.
+
+INSTALLATION
+
+To install this module type the following:
+
+   perl Makefile.PL
+   make
+   make test
+   make install
+
+DEPENDENCIES
+
+This module requires these other modules and libraries:
+
+  nothing which is not included in perl-5.6 or later,
+  a cvs command line client is needed for running the
+  test suite.
+
+COPYRIGHT AND LICENCE
+
+#*************************************************************************
+#
+#   OpenOffice.org - a multi-platform office productivity suite
+#
+#   $RCSfile: README,v $
+#
+#   $Revision: 1.2 $
+#
+#   last change: $Author: vg $ $Date: 2007-08-27 13:32:43 $
+#
+#   The Contents of this file are made available subject to
+#   the terms of GNU Lesser General Public License Version 2.1.
+#
+#
+#     GNU Lesser General Public License Version 2.1
+#     =============================================
+#     Copyright 2005 by Sun Microsystems, Inc.
+#     901 San Antonio Road, Palo Alto, CA 94303, USA
+#
+#     This library is free software; you can redistribute it and/or
+#     modify it under the terms of the GNU Lesser General Public
+#     License version 2.1, as published by the Free Software Foundation.
+#
+#     This library is distributed in the hope that it will be useful,
+#     but WITHOUT ANY WARRANTY; without even the implied warranty of
+#     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+#     Lesser General Public License for more details.
+#
+#     You should have received a copy of the GNU Lesser General Public
+#     License along with this library; if not, write to the Free Software
+#     Foundation, Inc., 59 Temple Place, Suite 330, Boston,
+#     MA  02111-1307  USA
+#
+#*************************************************************************
