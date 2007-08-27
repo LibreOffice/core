@@ -7,9 +7,9 @@ eval 'exec perl -wS $0 ${1+"$@"}'
 #
 #   $RCSfile: cwsresync.pl,v $
 #
-#   $Revision: 1.30 $
+#   $Revision: 1.31 $
 #
-#   last change: $Author: rt $ $Date: 2007-05-03 16:37:28 $
+#   last change: $Author: vg $ $Date: 2007-08-27 13:31:52 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -47,8 +47,9 @@ use File::Copy;
 use File::Find;
 use File::Glob;
 use File::Path;
-use Getopt::Long;
+use Getopt::Long qw(:config no_ignore_case);
 use IO::Handle;
+use IO::File;
 use Carp;
 
 #### module lookup
@@ -58,6 +59,7 @@ BEGIN {
         die "No environment found (environment variable SOLARENV is undefined)";
     }
     push(@lib_dirs, "$ENV{SOLARENV}/bin/modules");
+    push(@lib_dirs, "$ENV{SOLARENV}/bin/modules/PCVSLib/lib");
     push(@lib_dirs, "$ENV{COMMON_ENV_TOOLS}/modules") if defined($ENV{COMMON_ENV_TOOLS});
 }
 use lib (@lib_dirs);
@@ -71,17 +73,17 @@ eval {
     require EnvHelper; import EnvHelper;
     require CopyPrj; import CopyPrj;
 };
-use CvsModule;
 use Cvs;
 use GenInfoParser;
 use CwsConfig;
+use CwsCvsOps;
 
 #### script id #####
 
 ( my $script_name = $0 ) =~ s/^.*\b(\w+)\.pl$/$1/;
 
 my $script_rev;
-my $id_str = ' $Revision: 1.30 $ ';
+my $id_str = ' $Revision: 1.31 $ ';
 $id_str =~ /Revision:\s+(\S+)\s+\$/
   ? ($script_rev = $1) : ($script_rev = "-");
 
@@ -91,6 +93,14 @@ print "$script_name -- version: $script_rev\n";
 
 my @xtra_files = ( "*.mk", "*.flg", "libCrun*", "libCstd*", "libgcc*", "libstdc*" );
 my $platform_resynced_flag = ".cwsresync_complete";
+
+# ignore these files silently during resync
+my %resync_silent_ignore_files = ( 'wntmsci3' => 1,
+                                   'wntmsci7' => 1,
+                                   'wntmsci8' => 1 );
+
+# ignore these files silently during resync
+my %resync_always_move_tags = ( 'wntmsci10' => 1 );
 
 # modules to be obligatory copied to each cws
 my %obligatory_modules = ();
@@ -107,13 +117,15 @@ $obligatory_modules{'smoketestoo_native'}++;
 
 #### global #####
 
-my $is_debug         = 0;    # misc traces for debugging purposes
-my $opt_commit       = 0;    # commit changes
-my $opt_merge        = 0;    # merge from MWS into CWS
-my $opt_link         = 0;    # relink modules, update solver
-my $opt_remove_trees = 0;    # remove output trees & solver (OO option)
-my %global_stats     = ();   # some overall stats
-my @args_bak = @ARGV;        # store the @ARGS here for logging
+my $opt_debug            = 0;    # misc traces for debugging purposes
+my $opt_commit           = 0;    # commit changes
+my $opt_merge            = 0;    # merge from MWS into CWS
+my $opt_link             = 0;    # relink modules, update solver
+my $opt_remove_trees     = 0;    # remove output trees & solver (OO option)
+my $opt_complete_modules = 0;    # checkout complete modules for merge ops
+my @args_bak = @ARGV;            # store the @ARGS here for logging
+
+my @problem_log = ();
 
 my $umask = umask();
 if ( !defined($umask) ) {
@@ -121,6 +133,17 @@ if ( !defined($umask) ) {
 }
 my $opt_force_checkout = '';
 my $opt_skip_update = 0;
+
+# some overall stats
+my %global_stats = ('new'       => 0,
+                    'removed'   => 0,
+                    'merged'    => 0,
+                    'moved'     => 0,
+                    'anchor'    => 0,
+                    'conflict'  => 0,
+                    'alert'     => 0,
+                    'ignored'   => 0
+                   );
 
 #### main #####
 my $parameter_list = $log->array2string(";",@args_bak) if (defined $log);
@@ -132,6 +155,7 @@ if ( $milestone ) {
 }
 my @action_list = parse_args($cws, $dir, $milestone, @args);
 walk_action_list($cws, $dir, $milestone, @action_list);
+print_plog();
 log_stats();
 exit(0);
 
@@ -149,9 +173,10 @@ sub log_stats
     $statistic_log_message .= "removed: $global_stats{'removed'} " if $global_stats{'removed'};
     $statistic_log_message .= "merged: $global_stats{'merged'} " if $global_stats{'merged'};
     $statistic_log_message .= "moved: $global_stats{'moved'} " if $global_stats{'moved'};
+    $statistic_log_message .= "anchor: $global_stats{'anchor'} " if $global_stats{'anchor'};
     $statistic_log_message .= "conflicts: $global_stats{'conflict'} " if $global_stats{'conflict'};
     $statistic_log_message .= "alerts: $global_stats{'alert'} " if $global_stats{'alert'};
-    $statistic_log_message .= "failures: $global_stats{'failure'} " if $global_stats{'failure'};
+    $statistic_log_message .= "ignored: $global_stats{'ignored'} " if $global_stats{'ignored'};
     $log->end_log_extended($script_name,"unknown",$statistic_log_message) if (defined $log);
 }   ##create_log_stats
 
@@ -173,7 +198,7 @@ sub get_and_verify_cws
 
     # check if we got a valid child workspace
     my $id = $cws->eis_id();
-    print "Master: $masterws, Child: $childws, $id\n" if $is_debug;
+    print "Master: $masterws, Child: $childws, $id\n" if $opt_debug;
     if ( !$id ) {
         print_error("Child workspace $childws for master workspace $masterws not found in EIS database.", 2);
     }
@@ -184,10 +209,10 @@ sub get_and_verify_cws
 sub parse_options
 {   my $dir  = 0;
     my $help = 0;
-    my $success = GetOptions('h' => \$help, 'd=s' => \$dir,
+    my $success = GetOptions('h' => \$help, 'd=s' => \$dir, 'debug' => \$opt_debug,
                              'm=s' => \$opt_merge, 'c' => \$opt_commit, 'l=s' => \$opt_link,
                              'a' => \$opt_force_checkout, 'r' => \$opt_remove_trees,
-                             'f' => \$opt_skip_update );
+                             'f' => \$opt_skip_update, 'F' => \$opt_complete_modules );
     if ( !$success || $help ) {
         usage();
         exit(1);
@@ -228,6 +253,11 @@ sub parse_options
         exit(1);
     }
 
+    if ( $opt_complete_modules && !$opt_merge ) {
+        print_error("option '-F' requires merge step (option '-m milestone' must be set).", 0);
+        usage();
+        exit(1);
+    }
     $dir = $dir ? $dir : cwd();
 
     # check directory
@@ -353,13 +383,6 @@ sub check_or_exit
         print_error("make certain that all specified files/directories exist.", 2);
     }
 
-    foreach my $arg (@args) {
-        my $cvs_dir = "$dir/$arg";
-        $cvs_dir = dirname("$cvs_dir") if -f $cvs_dir;
-        if ( !check_sticky_tag($cws, $cvs_dir) ) {
-            print_error("'$cvs_dir' has not the required sticky tag.", 3);
-        }
-    }
     return;
 }
 
@@ -427,30 +450,22 @@ sub walk_action_list
         &{$entry_ref->[1]}($cws, $dir, $qualified_milestone, $entry_ref->[0]);
     }
 
-    # emit some stats
-    print_message(" ========== Totals: ==========") if scalar(%global_stats);
-    if ( $opt_merge) {
-        print_message("New file(s): $global_stats{'new'}") if $global_stats{'new'};
-        print_message("Remove file(s): $global_stats{'removed'}") if $global_stats{'removed'};
-        print_message("Merge file(s): $global_stats{'merged'}") if $global_stats{'merged'};
-        print_message("Conflict(s): $global_stats{'conflict'}") if $global_stats{'conflict'};
-        print_message("Move tag(s): $global_stats{'moved'}") if $global_stats{'moved'};
-        print_message("Alert(s): $global_stats{'alert'}") if $global_stats{'alert'};
-        print_message("Failure(s): $global_stats{'failure'}") if $global_stats{'failure'};
-    }
-    else {
-        print_message("New file(s): $global_stats{'new'}") if $global_stats{'new'};
-        print_message("Removed file(s): $global_stats{'removed'}") if $global_stats{'removed'};
-        print_message("Merged file(s): $global_stats{'merged'}") if $global_stats{'merged'};
-        print_message("Moved tag(s): $global_stats{'moved'}") if $global_stats{'moved'};
-        print_message("Failure(s): $global_stats{'failure'}") if $global_stats{'failure'};
+    if ( !$opt_link ) {
+        # emit some stats
+        print_message(" ========== Totals: ==========") if scalar(%global_stats);
+        print_message("New file(s)        : $global_stats{'new'}") if $global_stats{'new'};
+        print_message("Remove file(s)     : $global_stats{'removed'}") if $global_stats{'removed'};
+        print_message("Merge file(s)      : $global_stats{'merged'}") if $global_stats{'merged'};
+        print_message("Conflict(s)        : $global_stats{'conflict'}") if $global_stats{'conflict'};
+        print_message("Move branch tag(s) : $global_stats{'moved'}") if $global_stats{'moved'};
+        print_message("Move anchor(s)     : $global_stats{'anchor'}") if $global_stats{'anchor'};
+        print_message("Alert(s)           : $global_stats{'alert'}") if $global_stats{'alert'};
+        print_message("Ignored            : $global_stats{'ignored'}") if $global_stats{'ignored'};
     }
     return;
 }
 
-# Merge a whole module in scratch space. Please note that merging
-# a complete module is always done via resync_dir_action if it already
-# exists on disk.
+# Merge a whole module in scratch space.
 sub resync_module_action
 {
     my $cws                 = shift;
@@ -458,26 +473,39 @@ sub resync_module_action
     my $qualified_milestone = shift;
     my $module              = shift;
 
+    print_message("");
+    print_message(" ========== Merging '$module' ==========");
+    print_message("");
+
     my ($master_branch_tag, $cws_branch_tag, $cws_anchor_tag) = $cws->get_tags();
     my $milestone_tag = get_milestone_tag($cws, $qualified_milestone);
-    my $cvs_module = get_cvs_module($cws, $module);
-    if ( !defined($cvs_module) ) {
-        print_warning("This might happen if '$module' is obsolete.");
+    my $cvs_handle = get_cvs_handle($cws, 'config', $module);
+    if ( !defined($cvs_handle) ) {
         print_warning("Skipping '$module' ...");
+        print_warning("This might happen if '$module' is obsolete.");
         return;
     }
-    STDOUT->autoflush(1);
-    print_message("Check out module '$module' ...");
-    $cvs_module->verbose(1);
-    my $co_ref = $cvs_module->checkout($dir, $cws_branch_tag, '');
-    STDOUT->autoflush(0);
-    if ( !@{$co_ref} ) {
-        print_error("Was not able to checkout module '$module',", 0);
-        print_error("this might be caused by connection failures or authentification problems. That also can be caused by cvs mirror. If you recently added this module, please wait for your mirror server to syncronize", 0);
-        print_error("Please check your \$HOME/.cvspass for missing entries!", 50);
+    print_message("Retrieving changes for '$module' ...");
+    my $changes_ref = $cvs_handle->get_changed_files($module, $cws_anchor_tag, $milestone_tag);
+
+    my @files_to_checkout;
+    foreach (@{$changes_ref}) {
+        push(@files_to_checkout, $_->[0]);
     }
 
-    my $changes_ref = get_changed_files($cvs_module, $cws_anchor_tag, $milestone_tag);
+    my $nfiles_to_checkout = @files_to_checkout;
+    if ( $opt_complete_modules ) {
+        print_message("Check out module '$module' ...");
+        $cvs_handle->checkout($dir, $module, undef, $cws_branch_tag);
+    }
+    elsif ( $nfiles_to_checkout > 0 ) {
+        print_message("Check out $nfiles_to_checkout file(s) from module '$module' ...");
+        $cvs_handle->checkout($dir, $module, \@files_to_checkout, $cws_branch_tag);
+    }
+    else {
+        print_message("nothing to do for module '$module'");
+        return;
+    }
 
     my $save_dir = cwd();
     # chdir into module
@@ -485,27 +513,32 @@ sub resync_module_action
         print_error("Can't chdir() to '$dir/$module'", 6);
     }
 
-    my %stats;
-    foreach my $file_ref (@{$changes_ref}) {
-        my $rc = merge_file($cws_anchor_tag, $milestone_tag, $file_ref);
-        $stats{$rc}++;
-        $global_stats{$rc}++;
-    }
+    my $stats_ref = merge_files($cws_anchor_tag, $milestone_tag, $changes_ref, $cvs_handle, $module);
 
     # chdir back
     chdir($save_dir);
-    print_message(" ========== '$module' stats: ==========") if scalar(%stats);
-    print_message("New file(s): $stats{'new'}") if $stats{'new'};
-    print_message("Remove file(s): $stats{'removed'}") if $stats{'removed'};
-    print_message("Merge file(s): $stats{'merged'}") if $stats{'merged'};
-    print_message("Conflict(s): $stats{'conflict'}") if $stats{'conflict'};
-    print_message("Move tag(s): $stats{'moved'}") if $stats{'moved'};
-    print_message("Alert(s): $stats{'alert'}") if $stats{'alert'};
-    print_message("Failure(s): $stats{'failure'}") if $stats{'failure'};
+
+    $global_stats{'new'} += $stats_ref->{'new'};
+    $global_stats{'removed'} += $stats_ref->{'removed'};
+    $global_stats{'merged'} += $stats_ref->{'merged'};
+    $global_stats{'moved'} += $stats_ref->{'moved'};
+    $global_stats{'anchor'} += $stats_ref->{'anchor'};
+    $global_stats{'conflict'} += $stats_ref->{'conflict'};
+    $global_stats{'alert'} += $stats_ref->{'alert'};
+    $global_stats{'ignored'} += $stats_ref->{'ignored'};
+    print_message(" ---------- '$module' stats:-----------") if scalar(%{$stats_ref});
+    print_message("New file(s)    : $stats_ref->{'new'}") if $stats_ref->{'new'};
+    print_message("Remove file(s) : $stats_ref->{'removed'}") if $stats_ref->{'removed'};
+    print_message("Merge file(s)  : $stats_ref->{'merged'}") if $stats_ref->{'merged'};
+    print_message("Conflict(s)    : $stats_ref->{'conflict'}") if $stats_ref->{'conflict'};
+    print_message("Move tag(s)    : $stats_ref->{'moved'}") if $stats_ref->{'moved'};
+    print_message("Move anchor(s) : $stats_ref->{'anchor'}") if $stats_ref->{'anchor'};
+    print_message("Alert(s)       : $stats_ref->{'alert'}") if $stats_ref->{'alert'};
+    print_message("Ignored file(s): $stats_ref->{'ignored'}") if $stats_ref->{'ignored'};
     return;
 }
 
-# resync_dir_action: not yet implemented
+# resync_dir_action: not possible
 sub resync_dir_action
 {
     my $cws                 = shift;
@@ -513,9 +546,9 @@ sub resync_dir_action
     my $qualified_milestone = shift;
     my $cvs_dir             = shift;
 
-    print_error("Resyncing directories is not yet supported.", 0);
+    print_error("Resyncing directories is not possible.", 0);
     print_error("Please resync either complete modules in a scratch", 0);
-    print_error("directory or resync files,", 99);
+    print_error("directory or resync a list of files,", 99);
 
     return;
 }
@@ -523,55 +556,55 @@ sub resync_dir_action
 sub resync_file_action
 {
     my $cws                 = shift;
-    my $dir                 = shift;
+    my $dir                 = shift;  # unused, remove me
     my $qualified_milestone = shift;
     my $file                = shift;
 
+    if ( exists $resync_silent_ignore_files{basename($file)} ) {
+        print_error("Can't resync special file '$file'!", 33);
+    }
+
     my ($master_branch_tag, $cws_branch_tag, $cws_anchor_tag) = $cws->get_tags();
-    my $resync_tag;
+    my $milestone_tag;
     if ( $qualified_milestone eq 'HEAD' ) {
-        $resync_tag = $master_branch_tag ? $master_branch_tag : 'HEAD';
+        $milestone_tag = $master_branch_tag ? $master_branch_tag : 'HEAD';
     }
     else {
-        $resync_tag = get_milestone_tag($cws, $qualified_milestone);
-    }
-    my $cvs_archive = get_cvs_archive($file);
-
-    my $tags_ref = $cvs_archive->get_tags();
-    my $old_rev = $tags_ref->{$cws_anchor_tag};
-    my $new_rev;
-    if ( $qualified_milestone eq 'HEAD' ) {
-        if ( $resync_tag eq 'HEAD' ) {
-            # resyncing against trunk
-            $new_rev = $cvs_archive->get_head();
-        }
-        else {
-            # resycing against MWS on branch
-            $new_rev = $cvs_archive->get_latest_rev_on_branch($resync_tag);
-        }
-        # check if file is still alive on MWS
-        if ( $cvs_archive->get_data_by_rev->{$new_rev}->{STATE} eq 'dead' ) {
-            $new_rev = undef;
-        }
-
-    }
-    else {
-        $new_rev = $tags_ref->{$resync_tag};
+        $milestone_tag = get_milestone_tag($cws, $qualified_milestone);
     }
 
-    # File has been removed on master
-    if ( !$new_rev ) {
-        $old_rev = undef; # follow the example of get_changed_files() reg. removed files
+    my $directory = dirname($file);
+    my $cvs_handle = get_cvs_handle($cws, 'directory', $directory);
+    if ( !defined($cvs_handle) ) {
+        print_message("resync_file_action(): can't get cvs_handle");
     }
 
-    # skip files which are up to date with milestone
-    if ( $new_rev && ($old_rev eq $new_rev) ) {
-        print_message("\tResyncing '$file': skip (old rev. and new rev. are identical).");
-        return;
+    my $rep = $cvs_handle->get_relative_path($directory);
+
+    print_message("Retrieving changes for '$file' ...");
+    my $changes_ref = $cvs_handle->get_changed_files("$rep/$file", $cws_anchor_tag, $milestone_tag);
+
+    if ( !@{$changes_ref} ) {
+        print_warning("'$file' already on resync level '$milestone_tag'\n");
+        exit(0);
     }
 
-    my $rc = merge_file($cws_anchor_tag, $resync_tag, [$file, $old_rev, $new_rev], $cvs_archive);
-    $global_stats{$rc}++;
+    # changes_ref contains the path to the file relative to the module (including module prefix)
+    # replace with local path
+    $changes_ref->[0]->[0] = $file;
+
+    my $stats_ref = merge_files($cws_anchor_tag, $milestone_tag, $changes_ref, $cvs_handle, '');
+
+    $global_stats{'new'} += $stats_ref->{'new'};
+    $global_stats{'removed'} += $stats_ref->{'removed'};
+    $global_stats{'merged'} += $stats_ref->{'merged'};
+    $global_stats{'moved'} += $stats_ref->{'moved'};
+    $global_stats{'anchor'} += $stats_ref->{'anchor'};
+    print_message("New file(s): $stats_ref->{'new'}") if $stats_ref->{'new'};
+    print_message("Removed file(s): $stats_ref->{'removed'}") if $stats_ref->{'removed'};
+    print_message("Commit file(s): $stats_ref->{'merged'}") if $stats_ref->{'merged'};
+    print_message("Move branch tag(s): $stats_ref->{'moved'}") if $stats_ref->{'moved'};
+    print_message("Move anchor tags(s): $stats_ref->{'anchor'}") if $stats_ref->{'anchor'};
     return;
 }
 
@@ -586,10 +619,6 @@ sub commit_dir_action
 
     my $save_dir = cwd();
 
-    # what server/repository are we working on?
-    my $cvs_module = get_cvs_module($cws, $cvs_dir);
-    my $repository = $cvs_module->cvs_repository();
-
     # chdir into module
     if ( !chdir("$dir/$cvs_dir") ) {
         print_warning("Can't chdir() to '$cvs_dir'.");
@@ -600,22 +629,16 @@ sub commit_dir_action
     local @main::changed_files;
     find(\&wanted, '.');
 
-    my %stats;
-    my $rc;
-    foreach (@main::changed_files) {
-        $rc = commit_file($cws, $_, $repository);
-        $stats{$rc}++;
-        $global_stats{$rc}++;
-    }
-    # chdir back
+    my $stats_ref = commit_files($cws, \@main::changed_files, $cvs_dir);
     chdir($save_dir);
 
-    print_message(" ========== '$cvs_dir' stats: ==========") if scalar(%stats);
-    print_message("New file(s): $stats{'new'}") if $stats{'new'};
-    print_message("Remove file(s): $stats{'removed'}") if $stats{'removed'};
-    print_message("Merge file(s): $stats{'merged'}") if $stats{'merged'};
-    print_message("Move tag(s): $stats{'moved'}") if $stats{'moved'};
-    print_message("Failure(s): $stats{'failure'}") if $stats{'failure'};
+    $global_stats{'merged'} += $stats_ref->{'merged'};
+    $global_stats{'moved'} += $stats_ref->{'moved'};
+    $global_stats{'anchor'} += $stats_ref->{'anchor'};
+    print_message(" ========== '$cvs_dir' stats: ==========") if scalar(%{$stats_ref});
+    print_message("Commit file(s)     : $stats_ref->{'merged'}") if $stats_ref->{'merged'};
+    print_message("Move branch tag(s) : $stats_ref->{'moved'}") if $stats_ref->{'moved'};
+    print_message("Move anchor tags(s): $stats_ref->{'anchor'}") if $stats_ref->{'anchor'};
 
     return;
 }
@@ -624,19 +647,25 @@ sub commit_dir_action
 sub commit_file_action
 {
     my $cws                 = shift;
-    my $dir                 = shift;
+    my $dir                 = shift; # ununsed, remove me
     my $qualified_milestone = shift; # unused and not initialized
     my $file                = shift;
 
-    my $save_dir = cwd();
-    # chdir into the reference dir
-    if ( !chdir("$dir") ) {
-        print_error("Can't chdir() to '$dir'", 6);
+    my $cvs_dir = dirname($file);
+
+    if ( ! -e "$file.resync" ) {
+        print_error("Can't find '$file.resync'. Please use the 'cwsresync -m' step on file '$file' first.", 55)
     }
-    my $rc = commit_file($cws, $file, 'unknown');
-    $global_stats{$rc}++;
-    # chdir back
-    chdir($save_dir);
+
+    my $stats_ref = commit_files($cws, [$file], $cvs_dir);
+
+    $global_stats{'merged'} += $stats_ref->{'merged'};
+    $global_stats{'moved'} += $stats_ref->{'moved'};
+    $global_stats{'anchor'} += $stats_ref->{'anchor'};
+    print_message("Commit file(s)     : $stats_ref->{'merged'}") if $stats_ref->{'merged'};
+    print_message("Move branch tag(s) : $stats_ref->{'moved'}") if $stats_ref->{'moved'};
+    print_message("Move anchor tags(s): $stats_ref->{'anchor'}") if $stats_ref->{'anchor'};
+
     return;
 }
 
@@ -675,19 +704,19 @@ sub remove_module
     my $result = 0;
 
     if ( -l $module_p ) {
-        print "unlink module $module_p\n" if $is_debug;
+        print "unlink module $module_p\n" if $opt_debug;
         $result |= ! unlink $module_p;
     }
     if ( -l  $module_p.".lnk" ) {
-        print "unlink module $module_p.lnk\n" if $is_debug;
+        print "unlink module $module_p.lnk\n" if $opt_debug;
         $result |= ! unlink "$module_p.lnk";
     }
     if ( -d $module_p ) {
-        print "rm -rf $module_p\n" if $is_debug;
+        print "rm -rf $module_p\n" if $opt_debug;
         $result |= system("rm -rf $module_p");
 
     } elsif ( -e $module_p ) {
-        print "no idea what this is... $module_p\n" if $is_debug;
+        print "no idea what this is... $module_p\n" if $opt_debug;
         print_error("Couldn't remove $module_p\[.lnk\]. Giving up.", 1);
     }
     return $result;
@@ -925,18 +954,18 @@ sub relink_cws_action
     }
 
     #check if sourceroot points to mws location
-    print "$sourceroot <-> $mws_location\n" if $is_debug;
+    print "$sourceroot <-> $mws_location\n" if $opt_debug;
     my $mws_location_string = $mws_location;
     if ( $mws_location_string =~ /\/net/ ) {
         my @tmplst = split /\//, $mws_location;
-        print "list @tmplst\n" if $is_debug;
+        print "list @tmplst\n" if $opt_debug;
         shift @tmplst;
         shift @tmplst;
         shift @tmplst;
-        print "list @tmplst\n" if $is_debug;
+        print "list @tmplst\n" if $opt_debug;
         $mws_location_string = "/".join '/', @tmplst;
     }
-    print "$sourceroot <-> $mws_location_string\n" if $is_debug;
+    print "$sourceroot <-> $mws_location_string\n" if $opt_debug;
     if ( $sourceroot =~ /$mws_location_string/ ) {
         print_error ("Root dir of child workspace and master directory are too similar\n$sourceroot <-> *$mws_location_string", 1)
     }
@@ -1098,7 +1127,7 @@ sub relink_cws_action
     if ( $mws_accessible ) {
         # all but added modules
         my %modules_hash =();
-        print "debug: added modules: @added_modules\n" if $is_debug;
+        print "debug: added modules: @added_modules\n" if $opt_debug;
         $result = opendir( SOURCE, "$mws_location/".$new_master."/src.".$milestone);
         if ( !$result ){ print_error ("Source dir of master workspace not accessible: $!", 1) };
         my @mws_found_modules = readdir( SOURCE );
@@ -1113,7 +1142,7 @@ sub relink_cws_action
             print_error("No valid source tree to copy", 0);
             $success = 0;
         }
-        print "debug: number of modules left: ".scalar(keys(%modules_hash))."\n" if $is_debug;
+        print "debug: number of modules left: ".scalar(keys(%modules_hash))."\n" if $opt_debug;
         # now remove them
         print_message("Removing old modules");
         $dest_dir = "$sourceroot/".$cws_master."/src.".$cws->milestone();
@@ -1206,379 +1235,506 @@ sub relink_cws_action
 
 # Low level merge file routine:
 # Merge changes on master copy into the child copy of the file.
-# Parameter $cvs_archive is optional and can be used to pass already available
-# CVS archive objects to this routine. If not set it will create a new CVS
-# archive object from the file named in $file_ref[0].
-#
-# Note: The parameters are somewhat redundant.
-# We do need both, the tags and the revisions which corresponds to the tags as
-# parameter to this method. The tags are needed for proper CVS operation
-# (think of added and removed files), the corresponding revisions are needed for
-# informational purposes. It would be possible to look them up on a file by file
-# basis via the tags but this is quite expensive. Considers this an optimization
-# hack
-sub merge_file
+sub merge_files
 {
-    my $cws_anchor_tag = shift;
-    my $milestone_tag  = shift;
-    my $file_ref       = shift;
-    my $cvs_archive    = shift;
+    my $cws_anchor_tag    = shift;
+    my $milestone_tag     = shift;
+    my $changes_ref       = shift;
+    my $cvs_handle        = shift;
+    my $module            = shift; # needed for proper logging
 
-    my $file = $file_ref->[0];
-    my $old_rev = $file_ref->[1];
-    my $new_rev = $file_ref->[2];
+    my @new_files;
+    my @removed_files;
+    my @move_tags_files;
+    my @merge_candidates;
+    my %module_stats = ('new'       => 0,
+                        'removed'   => 0,
+                        'merged'    => 0,
+                        'moved'     => 0,
+                        'anchor'    => 0,
+                        'conflict'  => 0,
+                        'alert'     => 0,
+                        'ignored'   => 0
+                       );
 
-    my ($new_file, $removed_file);
-    print "\tResyncing '$file' ";
-    if ( !$old_rev && !$new_rev ) {
-        print "remove file: ";
-        $removed_file++;
-    }
-    elsif ( !$old_rev ) {
-        print "($new_rev) new file: ";
-        $new_file++;
-    }
-    else {
-        print "($old_rev-$new_rev): ";
-    }
+    foreach ( @${changes_ref} ) {
+        my $file = $_->[0];
+        my $old_rev = $_->[1];
+        my $new_rev = $_->[2];
 
-    # Initialize CVS archive object if not passed to routine
-    $cvs_archive = get_cvs_archive($file) if !$cvs_archive;
+        if ( exists $resync_silent_ignore_files{basename($file)} ) {
+            # skip it without any comment at all
+            next;
+        }
 
-    my ($status, $working_rev, $repository_rev, $sticky_tag, $branch_rev,
-                $sticky_date, $sticky_options);
-
-    # A fresh CVS checkout with a branch label is always 'pruned'. Sanitize
-    # CVS hierarchy so that we can write out our .resync-files in any case.
-    sanitize_cvs_hierarchy($file);
-    if ( $new_file ) {
-        # Check if file has been added on two CWSs, once in this CWS
-        # and once in an already integrated CWS.
-        if (  -e $file ) {
-            # We alert the user and skip the file.
-            print "file has been added independently in MWS and CWS. Skipping. Please check!.\n";
-            return 'alert';
+        # sort by type of merge action
+        if ( !$old_rev && !$new_rev ) {
+            push(@removed_files, $file);
+        }
+        elsif ( !$old_rev ) {
+            push(@new_files, [$file, $new_rev]);
         }
         else {
-            write_resync_comment($file, 'new', undef, $new_rev);
-            print "added, schedule move tag.\n";
-            return 'new';
-        }
-    }
-    elsif ( $removed_file ) {
-        my $rc = $cvs_archive->update("-j$cws_anchor_tag -j$milestone_tag");
-        if ( $rc eq 'success' ) {
-            print "removed, schedule commit.\n";
-            write_resync_comment($file, 'removed', undef, undef);
-            return 'removed';
-        }
-        else {
-            print "failure!\n";
-            print_error("INTERNAL ERROR: can't resync file.", 0);
-            return 'failure';
-        }
-    }
-    else{
-        # Get status of file to be merged
-        ($status, $working_rev, $repository_rev, $sticky_tag, $branch_rev,
-                $sticky_date, $sticky_options) = $cvs_archive->status();
-        if ( $status eq 'Up-to-date' && ! -e $file ) {
-            # Special case: file has been removed in CWS but there
-            # were changes between old and new MWS milestones.
-            # Resolution: Do nothing, skip this file. The file
-            # remains being removed on this CWS.
-            print "removed in CWS, but changes in MWS are pending. Please check!.\n";
-            return 'alert';
-        }
-        if ( $status eq 'unknownfailure' ) {
-            print_error("can't get status of '$file': $status", 0);
-            return 'failure';
-        }
-        if ( $status eq 'Locally Modified' ) {
-            print_error("Can't merge locally modified file!", 0);
-            return 'failure';
+            push(@merge_candidates, [$file, $old_rev, $new_rev]);
         }
     }
 
-    # Check if we can get by by just moving the branch and the anchor tag
-    if ( !$removed_file && !$new_file && defined($branch_rev)
-                        && $branch_rev =~ /$working_rev\.\d+/ ) {
-        write_resync_comment($file, 'moved', $old_rev, $new_rev);
-        print "schedule move tag.\n";
-        return 'moved';
-    }
-
-    my $rc;
-    my $success;
-    if ( $sticky_options eq 'kb' ) {
-        # We got changes pending in the MWS and we
-        # have changes in the CWS. Since we can't merge
-        # binary files we give up here. Sure, we could
-        # either favor the MWS or the CWS version, but
-        # there is no way to decide which one is better.
-        # We alert the user and skip the file.
-        if ( 1 ) { # TODO check for file mode with explicit version selection
-            print "binary file has been changed in CWS and in MWS. Skipping. Please check!.\n";
-            return 'alert';
-        }
-        else {
-            # TODO implement explicit retrieval of version if in file mode and
-            # user requested either the CWS or MWS version
-            $rc = $cvs_archive->update("-j$cws_anchor_tag -j$milestone_tag");
-            if ( $rc ne 'success' ) {
-                print "failure!\n";
-                print_error("INTERNAL ERROR: can't resync binary file.", 0);
-                return 'failure';
+    # Handle files which have recently been added on the MWS.
+    # For new files we don't need to check the status of the
+    # file in the CWS, just do a simple existence check.
+    my $n_new_files = @new_files;
+    if ( $n_new_files ) {
+        print "  ... processing $n_new_files new file(s) ...\n";
+        foreach ( @new_files ) {
+            my $file    = $_->[0];
+            my $new_rev = $_->[1];
+            # Check if file has been added on two CWSs, once in this CWS
+            # and once in an already integrated CWS.
+            if (  -e $file ) {
+                # We alert the user and skip the file.
+                print "\tA\t$file: has been added independently in MWS and CWS. Skipping. Please check!\n";
+                plog("A\t$module/$file: has been added independently in MWS and CWS. Skipping. Please check!");
+                $module_stats{'alert'}++;
+                $module_stats{'skipped'}++;
+                next;
             }
-            write_resync_comment($file, 'binary', undef, $new_rev);
-            print "binary, taking $new_rev.\n";
-            $success = 'binary';
+            write_resync_comment($file, 'new', $milestone_tag, undef, $new_rev);
+            print "\tN\t$file: added, schedule move tag\n";
+            $module_stats{'new'}++;
         }
     }
-    else {
-        # option -kk needed for clean merge in source files
-        $rc = $cvs_archive->update("-kk -j$cws_anchor_tag -j$milestone_tag");
-        if ( $rc eq 'success' ) {
-            print "merged, schedule commit.\n";
-            $success = 'merged'
+
+    # Handle files which have recently been removed on the MWS.
+    # We check the status of these files in the CWS to be able to warn
+    # if a file which to be removed which has been changed in the MWS
+    my $n_removed_files = @removed_files;
+    if ( $n_removed_files ) {
+        print "  ... processing $n_removed_files removed file(s) ...\n";
+        my $stati_ref = $cvs_handle->stati(\@removed_files);
+        # sanity check
+        my $n_stati_ref = @{$stati_ref};
+        if ( $n_stati_ref != $n_removed_files ) {
+            print_error("INTERNAL ERROR: can't fetch the status for all to be removed files", 8);
         }
-        elsif ( $rc eq 'conflict' ) {
-            print "conflict, schedule commit after resolution.\n";
-            $success = 'conflict';
+        my @rfiles;
+        for (my $i = 0; $i < $n_removed_files; $i++) {
+            my $file        = $removed_files[$i];
+            my $working_rev = $stati_ref->[$i][2];
+            my $branch_rev  = $stati_ref->[$i][4];
+            if ( !defined($working_rev) ) {
+                # File has already been removed on CWS, ignore.
+                print "\tI\t$file: file already removed on CWS, ignored.\n";
+                $module_stats{'ignored'}++;
+                next;
+            }
+            if ( $working_rev =~ /$branch_rev\.\d+/ ) {
+                # Example: working rev 1.5.260.1, branch rev 1.5.260
+                print "\tA\t$file: has been removed on MWS but is changed on CWS. Will remove file. Please check!\n";
+                plog("A\t$module/$file: has been removed on MWS but is changed on CWS. Will remove file. Please check!");
+                # Note: we still procceed with removing this file. Thus this file is counted
+                # as alerted and removed.
+                $module_stats{'alert'}++;
+            }
+            push(@rfiles, $file);
+        }
+        my $n_rfiles = @rfiles;
+        if ( $n_rfiles ) {
+             $cvs_handle->remove_files(\@rfiles);
+            foreach my $file ( @rfiles ) {
+                write_resync_comment($file, 'removed', $milestone_tag, undef, undef, );
+                print "\tR\t$file: removed, schedule commit\n";
+                $module_stats{'removed'}++;
+            }
+        }
+    }
+
+    # Handle files in the merge list. Fetch status first to check if we get
+    # away with "move tag". We also need to check for binary files and
+    # files which have been removed in the CWS.
+    my $n_merge_candidates = @merge_candidates;
+    if ( $n_merge_candidates ) {
+        print "  ... processing $n_merge_candidates merge candidate(s) ...\n";
+        my @stati_lists = ();
+        foreach (@merge_candidates) {
+            push(@stati_lists, $_->[0]);
+        }
+        my $stati_ref = $cvs_handle->stati(\@stati_lists);
+        # sanity check
+        my $n_stati_ref = @{$stati_ref};
+        if ( $n_stati_ref != $n_merge_candidates ) {
+            print_error("INTERNAL ERROR: can't fetch the status for all to be merged files", 8);
+        }
+        my @mfiles;
+        foreach (my $i = 0; $i < $n_merge_candidates; $i++) {
+            my $file        = $merge_candidates[$i][0];
+            my $old_rev     = $merge_candidates[$i][1];
+            my $new_rev     = $merge_candidates[$i][2];
+            my $status      = $stati_ref->[$i][1];
+            my $working_rev = $stati_ref->[$i][2];
+            my $branch_rev  = $stati_ref->[$i][4];
+            my $is_binary   = (defined($stati_ref->[$i][5]) && $stati_ref->[$i][5] =~ /kb/) ? 1 : 0;
+
+            if ( ($status eq 'Up-to-date' || $status eq 'Needs Checkout') && !defined($working_rev) ) {
+                # Special case: file has been removed in CWS but there
+                # were changes between old and new MWS milestones.
+                # Resolution: Do nothing, skip this file. The file
+                # remains being removed on this CWS.
+                print "\tA\t$file: has been removed in CWS, but changes in MWS are pending. Skipping. Please check!\n";
+                plog("A\t$module/$file: has been removed in CWS, but changes in MWS are pending. Skipping. Please check!");
+                $module_stats{'alert'}++;
+                $module_stats{'skipped'}++;
+                next;
+            }
+            # Sanity check
+            if ( !defined($branch_rev) || !defined($working_rev) ) {
+                print_error("Internal Error: merge_files(): branch_rev or working_rev undefined $file\n",77);
+            }
+            if ( exists $resync_always_move_tags{basename($file)} ) {
+                # Incredible HACK, always move both tags to the milestone for these files,
+                # REMOVE_ME: as soon we get rid of defs files on trunk this should be removed
+                write_resync_comment($file, 'moved',  $milestone_tag, $old_rev, $new_rev);
+                print "\tT\t$file: schedule move tag.\n";
+                $module_stats{'moved'}++;
+                next;
+            }
+            if ( $branch_rev =~ /$working_rev\.\d+/ ) {
+                # Example: branch rev 1.5.260, working rev 1.5
+                # Joy, we get away with just a "move tag".
+                write_resync_comment($file, 'moved',  $milestone_tag, $old_rev, $new_rev);
+                print "\tT\t$file: schedule move tag.\n";
+                $module_stats{'moved'}++;
+                next;
+            }
+            if ( $is_binary ) {
+                # We got changes pending in the MWS and we have changes in the CWS.
+                # Since we can't merge binary files we give up here. Sure, we could
+                # either favor the MWS or the CWS version, but there is no way to decide
+                # which one is better. We alert the user and skip the file.
+                print "\tA\t$file: binary file has been changed in CWS and in MWS. Skipping. Please check!\n";
+                plog("A\t$file: binary file has been changed in CWS and in MWS. Skipping. Please check!");
+                $module_stats{'alert'}++;
+                $module_stats{'skipped'}++;
+                next;
+            }
+            push (@mfiles, [$file, $old_rev, $new_rev]);
+        }
+
+        my $n_mfiles = @mfiles;
+        if ( $n_mfiles ) {
+            print "  ... do $n_mfiles actual merge(s) ...\n";
+
+            # the merge_files() API wants a reference to a plain list
+            my @to_be_merged_files;
+            foreach (@mfiles) {
+                push(@to_be_merged_files, $_->[0]);
+            }
+
+            my ($conflicts_ref, $already_merged_ref)
+                        = $cvs_handle->merge_files(\@to_be_merged_files, $cws_anchor_tag, $milestone_tag);
+
+            # for easier searching
+            my %conflicts_hash;
+            foreach (@{$conflicts_ref}) {
+                $conflicts_hash{$_}++;
+            }
+            my %already_merged_hash;
+            foreach (@{$already_merged_ref}) {
+                $already_merged_hash{$_}++;
+            }
+
+            foreach (@mfiles) {
+                my $file    = $_->[0];
+                my $old_rev = $_->[1];
+                my $new_rev = $_->[2];
+                if ( exists $already_merged_hash{$file} ) {
+                    print "\tT\t$file: contains differences, schedule move anchor\n";
+                    $module_stats{'anchor'}++;
+                    write_resync_comment($file, 'anchor', $milestone_tag, $old_rev, $new_rev);
+                }
+                elsif ( exists $conflicts_hash{$file} ) {
+                    print "\tC\t$file: conflict, schedule commit after resolution.\n";
+                    plog("C\t$module/$file: conflict, schedule commit after resolution.");
+                    write_resync_comment($file, 'merged', $milestone_tag, $old_rev, $new_rev);
+                    $module_stats{'conflict'}++;
+                }
+                else {
+                    print "\tM\t$file: merged, schedule commit.\n";
+                    $module_stats{'merged'}++;
+                    write_resync_comment($file, 'merged', $milestone_tag, $old_rev, $new_rev);
+                }
+            }
+        }
+    }
+    return \%module_stats;
+}
+
+# Low level commit_files routine:
+# Commits files to the childworkspace or move tags.
+# Requires a valid .resync files next to the CVS files
+sub commit_files
+{
+    my $cws       = shift;
+    my $files_ref = shift;
+    my $cvs_dir   = shift;
+
+    my %module_stats = (
+                        'merged' => 0, # aka commit
+                        'moved' => 0,
+                        'anchor' => 0
+                       );
+    my @ci_files;
+    my @remove_files;
+    my @move_both_tags_files;
+    my @move_anchor_tag_files;
+    my @move_anchor_to_master_head_files;
+    my @possible_conflict_files;
+
+    my $milestone_tag;
+    my $master_head;
+
+    # collect all *.resync files
+    foreach (@{$files_ref}) {
+        if ( !open(CHECKIN, "<$_.resync" ) ) {
+            print_error("can't open $_.resync: $!", 7);
+        }
+        my @resync_comment = <CHECKIN>;
+        close(CHECKIN);
+
+        my $type_line = shift(@resync_comment);
+
+        my ($type, $old_rev, $tag, $new_rev);
+        if ( $type_line =~ /^RESYNC (\w+) (\w+) ([\w\.]+) ([\w\.]+)/ ) {
+            $type    = lc($1);
+            $tag     = $2;
+            $old_rev = $3;
+            $new_rev = $4;
         }
         else {
-            print "failure!\n";
-            print_error("INTERNAL ERROR: can't resync file.", 0);
+            print_error("$_.resync has an invalid format", 8);
             return 'failure';
         }
-        write_resync_comment($file, 'merged', $old_rev, $new_rev);
-    }
-    return $success;
-}
 
-# Low level commit file routine:
-# Commits file to the childworkspace or move tags
-# Requires a valid .resync file next to the CVS file
-sub commit_file
-{
-    my $cws        = shift;
-    my $file       = shift;
-    my $repository = shift;
+        # shift the line with "Everything below this line will be added to the revision comment."
+        shift(@resync_comment);
 
-    if ( !open(CHECKIN, "<$file.resync" ) ) {
-        print_error("can't open $file.resync: $!", 0);
-        return 'failure';
-    }
-    my @resync_comment = <CHECKIN>;
-    close(CHECKIN);
-
-    my ($type, $old_rev, $new_rev);
-    if ( $resync_comment[0] =~ /^RESYNC (\w+) ([\w\.]+) ([\w\.]+)$/ ) {
-        $type = lc($1);
-        $old_rev = $2;
-        $new_rev = $3;
-    }
-    else {
-        print_error("$file.resync has an invalid format", 0);
-        return 'failure';
-    }
-
-    if ( $type eq 'moved' || $type eq 'new') {
-        # just move the tags, no cvs->commit()
-        print "\tCommit '$file': move tag: ";
-        my $rc = move_tags($cws, $file, $new_rev, $repository);
-        if ( $rc ) {
-            print_error("can't unlink $file.resync: $!.", 0) unless unlink("$file.resync");
+        # sanity checks to guard against a mix of resyncs targets
+        if ( $type ne 'dead' && defined($milestone_tag) && $tag ne $milestone_tag) {
+            print_error("detected more than one resync milestone tag: '$milestone_tag' and '$tag'", 9);
         }
-        return $rc ? 'moved' : 'failure';
+        if ( $type eq 'dead' && defined($master_head) && $tag ne $master_head ) {
+            print_error("detected more than one resync at master tags: '$master_head and '$tag'", 9);
+        }
+
+        # set target
+        if ( $type ne 'dead' && !defined($milestone_tag) ) {
+            $milestone_tag = $tag;
+        }
+        if ( $type eq 'dead' && !defined($master_head) ) {
+            $master_head = $tag;
+        }
+
+        if ( $type eq 'moved' || $type eq 'new') {
+            # just move both tags
+            push(@move_both_tags_files, $_);
+        }
+        elsif ( $type eq 'anchor' ) {
+            # just move the anchor tag
+            push(@move_anchor_tag_files, $_);
+        }
+        elsif ( $type eq 'merged' ) {
+            # commit and move anchor tags
+            push(@ci_files, [$_, $type, $old_rev, $new_rev, \@resync_comment]);
+            # these files need to be checked for conflict markers
+            push(@possible_conflict_files, $_);
+        }
+        elsif ( $type eq 'removed') {
+            # remove, commit and move anchor tags
+            push(@remove_files, $_);
+            push(@ci_files, [$_, $type, $old_rev, $new_rev, \@resync_comment]);
+        }
+        elsif ( $type eq 'dead' ) {
+            # can occur here only if there has been an interruption
+            # between the commit of removed files and the move
+            # of the anchor tag to the master head
+            push(@move_anchor_to_master_head_files, $_);
+        }
     }
-    else {
-        # cvs->commit()
-        my $comment;
-        if  ( $type eq 'merged' ) {
-            $comment = "RESYNC: ($old_rev-$new_rev); FILE MERGED\n";
+
+
+    check_for_conflict_markers(\@possible_conflict_files);
+
+    my $cvs_handle = get_cvs_handle($cws, 'directory', $cvs_dir);
+
+    my $n_remove_files = @remove_files;
+    if ( $n_remove_files ) {
+        print "  ... preparing removal of $n_remove_files file(s) ...\n";
+        my $n = unlink(@remove_files);
+        if ( $n != $n_remove_files) {
+            print_error("can't unlink() files scheduled for removal.", 22);
         }
-        elsif  ( $type eq 'binary' ) {
-            $comment = "RESYNC: ($new_rev); BINARY\n";
+        $cvs_handle->remove_files(\@remove_files);
+    }
+
+    # commit files
+    # we do single commits, because the comments are differing for each file
+
+    my $n_ci_files = @ci_files;
+
+    my ($master_branch_tag, $cws_branch_tag, $cws_anchor_tag) = $cws->get_tags();
+
+    if ( !defined($master_head) ) {
+        $master_head = $master_branch_tag ? $master_branch_tag : 'HEAD';
+    }
+
+    if ( $n_ci_files ) {
+        print "  ... commit $n_ci_files file(s) ...\n";
+    }
+    foreach (@ci_files) {
+        my ($file, $type, $old_rev, $new_rev, $resync_comment_ref) = @{$_};
+        my @comment;
+        if ( $type eq 'merged' ) {
+            @comment = ("RESYNC: ($old_rev-$new_rev); FILE MERGED", @{$resync_comment_ref});
         }
-        elsif  ( $type eq 'removed' ) {
-            $comment = "RESYNC:; FILE REMOVED\n";
+        elsif ( $type eq 'removed' ) {
+            @comment = ("RESYNC:; FILE REMOVED");
         }
         else {
-            # can't happen
-            print_error("internal_error commit_file(): unknown type: $type", 0);
+            print_error("INTERNAL ERROR: unknown commit type", 11);
         }
+        print "\t $file: commit ...\n";
+        $cvs_handle->commit_files([$file], \@comment);
+        if ( $type eq 'removed' ) {
+            # Uh oh, file has been removed in master workspace.
+            # We can't place the anchor tag on the milestone tag
+            # because it's simply not there. but we know that
+            # it must be the top level revision of the master branch.
+            # In this case we can set the Anchor tag to the revision
+            # which corresponds to the head of the master branch.
 
-        # prepare commit comment
-        shift(@resync_comment); shift(@resync_comment);
-        unshift(@resync_comment, $comment);
-
-        print "\tCommit '$file': ";
-        my $rc = ci_file($cws, $file, $new_rev, \@resync_comment);
-        if ( $rc ) {
-            print_error("can't unlink $file.resync: $!.", 0) unless unlink("$file.resync");
+            # overwrite .resync file with a 'dead' style request, in case
+            # of an interruption between commit and the move anchor tag step.
+            # $old_rev and $new_rev are just dummies, the $master_head is relevant
+            write_resync_comment($file, 'dead', $master_head, '0.0', '0.0');
+            push(@move_anchor_to_master_head_files, $file);
         }
-        return $rc ? $type : 'failure';
+        else {
+            # overwrite .resync file with a move anchor style request, in case
+            # of an interruption between commit and move anchor tag step.
+            # $old_rev and $new_rev are just dummies, the $milestone_tag is relevant
+            write_resync_comment($file, 'anchor', $milestone_tag, '0.0', '0.0');
+            push(@move_anchor_tag_files, $file);
+        }
+        $module_stats{'merged'}++;
     }
 
-    return 'failure'; # should never be reached
+
+    my $n_move_both_tags_files = @move_both_tags_files;
+    if ( $n_move_both_tags_files ) {
+        print "  ... move branch tag for $n_move_both_tags_files file(s) ...\n";
+
+        my $tagged_files_ref = $cvs_handle->tag_files(\@move_both_tags_files, $cws_branch_tag, 1,
+                                                        $milestone_tag);
+        my $n_tagged_files = @{$tagged_files_ref};
+        if ( $n_move_both_tags_files != $n_tagged_files ) {
+            print_warning("expected $n_move_both_tags_files tag operations, got $n_tagged_files.", 0);
+            plog("A\t $cvs_dir: expected $n_move_both_tags_files tag operations, got $n_tagged_files.");
+        }
+        # overwrite .resync file with a move anchor style request, in case
+        # of an interruption between commit and move anchor tag step.
+        foreach (@move_both_tags_files) {
+            write_resync_comment($_, 'anchor', $milestone_tag, '0.0', '0.0');
+        }
+        push(@move_anchor_tag_files, @move_both_tags_files);
+        $module_stats{'moved'} += $n_move_both_tags_files;
+    }
+
+    my $n_move_anchor_to_master_head_files = @move_anchor_to_master_head_files;
+
+    if ( $n_move_anchor_to_master_head_files ) {
+        print "  ... move anchor tag of removed files to to branch head '$master_head' for $n_move_anchor_to_master_head_files file(s) ...\n";
+
+        my $tagged_files_ref = $cvs_handle->tag_files(\@move_anchor_to_master_head_files,
+                                                        $cws_anchor_tag, 0, $master_head);
+        my $n_tagged_files = @{$tagged_files_ref};
+        if ( $n_move_anchor_to_master_head_files != $n_tagged_files ) {
+            print_warning("expected $n_move_anchor_to_master_head_files tag operations, got $n_tagged_files.", 0);
+            plog("A\t $cvs_dir: expected $n_move_anchor_to_master_head_files tag operations, got $n_tagged_files.");
+        }
+        $module_stats{'anchor'} += $n_move_anchor_to_master_head_files;
+        unlink_resync_comment_files(\@move_anchor_to_master_head_files);
+    }
+
+    my $n_move_anchor_tag_files = @move_anchor_tag_files;
+    if ( $n_move_anchor_tag_files ) {
+        print "  ... move anchor tag to milestone '$milestone_tag' for $n_move_anchor_tag_files file(s) ...\n";
+
+        my $tagged_files_ref = $cvs_handle->tag_files(\@move_anchor_tag_files, $cws_anchor_tag, 0,
+                                                    $milestone_tag);
+        my $n_tagged_files = @{$tagged_files_ref};
+        if ( $n_move_anchor_tag_files != $n_tagged_files ) {
+            print_warning("expected $n_move_anchor_tag_files tag operations, got $n_tagged_files.", 0);
+        }
+        $module_stats{'anchor'} += $n_move_anchor_tag_files;
+        unlink_resync_comment_files(\@move_anchor_tag_files);
+    }
+    return \%module_stats;
 }
 
-# Move CWS tags to new revision.
-sub move_tags
+sub check_for_conflict_markers
 {
-    my $cws        = shift;
-    my $file       = shift;
-    my $new_rev    = shift;
-    my $repository = shift;
+    my $files_ref = shift;
 
-    my ($master_branch_tag, $cws_branch_tag, $cws_anchor_tag) = $cws->get_tags();
-    my $cvs_archive = get_cvs_archive($file);
-
-    my $rc = $cvs_archive->update("-r$new_rev");
-    if ( $rc ne 'success' ) {
-        print_error("updating '$file' to new revision '$new_rev' failed.", 0);
-        return 0;
+    foreach my $file ( @{$files_ref} ) {
+        my $conflict = 0;
+        my $basename = basename($file);
+        open(MERGED_FILE, "<$file") or print_error("can't open '$file' for reading: $!.", 40);
+        while (<MERGED_FILE> ) {
+            chomp;
+            if ( /^<<<<<<< $basename$/ ) {
+                $conflict++;
+            }
+            if ( /^>>>>>>> 1\.\d[\d\.]*$/ ) {
+                $conflict++;
+            }
+        }
+        close(MERGED_FILE);
+        if ( $conflict ) {
+            print_error("found conflict marker in file '$file'", 99);
+        }
     }
-
-    my $tagoptions = '-F -b';
-    $tagoptions = '-B ' . $tagoptions unless ( $repository =~ /cvs_so/ );
-    $rc = $cvs_archive->tag($cws_branch_tag, $tagoptions);
-    if ( $rc ne 'success' ) {
-        print_error("Tagging '$file': tag operation returned: '$rc'.", 0);
-        print "failed!\n";
-        return 0;
-    }
-    $rc = $cvs_archive->tag($cws_anchor_tag, '-F');
-    if ( $rc ne 'success' ) {
-        print "failed!\n";
-        print_error("Tagging '$file': tag operation returned: '$rc'.", 0);
-        return 0;
-    }
-
-    $rc = $cvs_archive->update("-r$cws_branch_tag");
-    if ( $rc ne 'success' ) {
-        print "failed!\n";
-        print_error("updating '$file' to '$cws_branch_tag' failed.", 0);
-        return 0;
-    }
-    print "OK.\n";
-    return 1;
 }
 
-sub ci_file
+sub unlink_resync_comment_files
 {
-    my $cws         = shift;
-    my $file        = shift;
-    my $new_rev     = shift;
-    my $comment_ref = shift;
+    my $comment_files_ref = shift;
 
-    my ($master_branch_tag, $cws_branch_tag, $cws_anchor_tag) = $cws->get_tags();
-
-    my $cvs_archive = get_cvs_archive($file);
-
-    my ($rc, $rev);
-    my $skip_commit = 0;
-    if ( $new_rev eq 'none' && ! -e $file ) {
-        # check if file has been locally removed
-        my $status = $cvs_archive->status();
-        if ( $status eq 'Up-to-date' ) {
-            # Ok, file has been removed on MWS and it has been also
-            # removed on the CWS. A commit will fail in this case
-            # so we don't bother.
-            $rev = 'nothing to remove';
-            $skip_commit = 1;
+    foreach ( @{$comment_files_ref} ) {
+        if ( !unlink("$_.resync") ) {
+            print_error("can't unlink $_.cwsresync!", 30);
         }
     }
 
-    if ( !$skip_commit ) {
-        # comments may be huge, use a tempfile instead of passing
-        # them via the command line to the cvs client
-        if ( !open(COMMIT, ">$file.comment") ) {
-            print_error("can't open file '$file.comment'", 7);
-        }
-        print COMMIT @{$comment_ref};
-        close(COMMIT);
-        ($rc, $rev) = $cvs_archive->commit("-F $file.comment");
-        if ( !($rc eq 'success' || $rc eq 'nothingcommitted') ) { # nothingcommitted valid here
-            print "failed!\n";
-            print_error("can't commit file '$file': $rc", 0);
-            return 0;
-        }
-        print_error("can't unlink $file.comment: $!.", 0) unless unlink("$file.comment");
-        $rev = 'nothing to commit' if $rc eq 'nothingcommitted';
-    }
-
-    if ( $new_rev eq 'none' ) {
-        # Uh oh, file has been removed in master workspace.
-        # There is no easy way to find out in which revision
-        # exactly the file has been removed, but we know that
-        # it must be the top level revision of the master branch.
-        # In this case we can set the Anchor tag to the revision
-        # which corresponds to the head of the master branch.
-        $new_rev = $master_branch_tag ? $master_branch_tag : 'HEAD';
-    }
-
-    # tag with the anchor tag
-    $rc = $cvs_archive->tag("-F -r$new_rev $cws_anchor_tag");
-    if ( $rc ne 'success' ) {
-        print "failed!\n";
-        print_error("Tagging '$file': tag operation returned: '$rc'.", 0);
-        return 0;
-    }
-    print "$rev: OK.\n";
-    return 1;
 }
 
 sub write_resync_comment
 {
-    my $file    = shift;
-    my $type    = shift;
-    my $old_rev = shift || 'none';
-    my $new_rev = shift || 'none';
+    my $file          = shift;
+    my $type          = shift;
+    my $milestone_tag = shift;
+    my $old_rev       = shift;
+    my $new_rev       = shift;
 
     if ( !open(RESYNC_COMMENT, ">$file.resync") ) {
         print_error("can't open file '$file.resync'", 7);
     }
     my $uctype = uc($type);
-    print RESYNC_COMMENT "RESYNC $uctype $old_rev $new_rev\n";
-    if ( $type ne 'moved' ) {
+    $old_rev = 'none' if !defined($old_rev);
+    $new_rev = 'none' if !defined($new_rev);
+    print RESYNC_COMMENT "RESYNC $uctype $milestone_tag $old_rev $new_rev\n";
+    if ( $type eq 'removed' && $type eq 'merged' ) {
         print RESYNC_COMMENT "Everything below this line will be added to the revision comment.\n";
     }
     close(RESYNC_COMMENT);
-}
-
-# Check if the CVS subdir is available or
-# add it to the local CVS tree
-sub sanitize_cvs_hierarchy
-{
-    my $file = shift;
-
-    my $cvs_dir = dirname($file);
-    return if $cvs_dir eq '.'; # no need to check current dir
-    return if -d $cvs_dir;     # directory exists, nothing to do
-
-    my @elements = split(/\//, $cvs_dir);
-
-    my $save_dir = cwd();
-
-    my $config = CwsConfig::get_config();
-    my $cvs_binary = $config->cvs_binary();
-
-    foreach ( @elements ) {
-        if ( ! -d $_ ) {
-            my $rc = mkdir($_);
-            print_error("can create directory '$_': $!", 9) unless $rc;
-            # TODO use a Cvs method for this
-            system("$cvs_binary add $_ > /dev/null 2>&1 ");
-        }
-        if ( !chdir($_) ) {
-            print_error("Can't chdir() to '$_'", 9);
-        }
-    }
-
-    # chdir back
-    chdir($save_dir);
 }
 
 sub wanted {
@@ -1673,33 +1829,6 @@ sub get_milestone_tag
     }
 }
 
-# Returns changed files
-sub get_changed_files
-{
-    my $cvs_module = shift;
-    my $old_tag    = shift;
-    my $new_tag    = shift;
-
-    $cvs_module->verbose(1);
-    STDOUT->autoflush(1);
-    print_message("Retrieving changes ...");
-    my $changed_files_ref;
-    eval { $changed_files_ref = $cvs_module->changed_files($old_tag, $new_tag) };
-    if ( $@ ) {
-        if ( $@ =~ /server died silently/ ) {
-            my $time_str = localtime();
-            print_error("The CVS server has died silently on 'cvs rdiff' operation.", 0);
-            print_error("Please inform Release Engineering!", 0);
-            print_error("Time of failure: '$time_str'", 99);
-        }
-        else {
-            croak($@); # rethrow
-        }
-    }
-    STDOUT->autoflush(0);
-    return $changed_files_ref;
-}
-
 # Retrieve CvsModule object for passed module.
 sub get_cvs_module
 {
@@ -1733,19 +1862,58 @@ sub get_cvs_module
     return $cvs_module;
 }
 
-# Return Cvs object for passed file.
-sub get_cvs_archive
+# Retrieve CwsCvsOps object for passed module.
+sub get_cvs_handle
 {
-    my $file = shift;
+    my $cws           = shift;
+    my $from_config   = shift; # from config or from disk directory?
+    my $module_or_dir = shift;
 
-    my $cvs_archive = Cvs->new();
-    $cvs_archive->name($file);
+    my $server_type;
 
-    return $cvs_archive;
+    my  $config = CwsConfig::get_config();
+
+    if ( $from_config eq 'config' ) {
+        if ( defined($log) ) {
+            my ($method, $vcsid, $server, $repository) = get_cvs_root($cws, $module_or_dir);
+            my @elem = split(/\./, $server);
+            $server = $elem[0];
+            my $local_server = $config->cvs_local_root();
+
+            if ( $local_server =~ /$server/ ) {
+                $server_type = 'local';
+            }
+            else {
+                $server_type = 'remote';
+            }
+        }
+        else {
+            # For now just take the configured OOo sever. Later we might implement a mechanism were
+            # only known OOo modules are fetched from the OOo server, the rest from a local
+            # server
+            $server_type = 'remote';
+        }
+    }
+    else {
+        $server_type = 'directory';
+    }
+
+    return undef if !$server_type;
+
+    if ( $opt_debug ) {
+        my $log_file = IO::File->new('>>cwsresync.debug.log');
+        my $time = localtime();
+        $log_file->print("===== $time =====\n");
+        return CwsCvsOps->new($config, $server_type, $module_or_dir, $log_file);
+    }
+    else {
+        return CwsCvsOps->new($config, $server_type, $module_or_dir);
+    }
 }
 
 # Find out which CVS server holds the module, returns
 # the elements of CVSROOT.
+# TODO: simplify as soon get_cvs_module is gone
 sub get_cvs_root
 {
     my $cws    = shift;
@@ -1820,15 +1988,30 @@ sub print_error
     return;
 }
 
+sub plog
+{
+    my $message = shift;
+
+    push(@problem_log, $message);
+}
+
+sub print_plog
+{
+    if ( @problem_log ) {
+        print_message("========== Problem Log ==========");
+        foreach ( @problem_log ) {
+            print "\t$_\n";
+        }
+        print_message("========== End Problem Log ==========");
+    }
+}
+
 sub usage
 {
-    my $sw_force_update = defined($log) ? " [-a] " : " ";
     my $sw_skip_checkout = !defined($log) ? " [-f] " : " ";
     print STDERR "Usage:\n";
-    print STDERR "cwsresync [-h]" . $sw_force_update .
-                 "[-d dir] -m <milest.> <all|mod.|dir|file> [mod.|dir|file ...]\n";
-    print STDERR "cwsresync [-h]" . $sw_force_update .
-                 "[-d dir] -m HEAD <file> [file ...]\n";
+    print STDERR "cwsresync [-h] [-d dir] [-F] -m <milest.> <all|mod.|dir|file> [mod.|dir|file ...]\n";
+    print STDERR "cwsresync [-h] [-d dir] -m HEAD <file> [file ...]\n";
     print STDERR "cwsresync [-h] [-d dir] -r|-c <all|module|dir|file> [module|dir|file ...]\n";
     print STDERR "cwsresync [-h]" . $sw_skip_checkout ."-l <milestone>\n";
     print STDERR "Synchronize child workspace mod./dirs/files ";
@@ -1836,12 +2019,12 @@ sub usage
     print STDERR "Options:\n";
     print STDERR "\t-h\t\thelp\n";
     print STDERR "\t-d dir\t\toperate in directory dir\n";
+    print STDERR "\t-F\t\tforce checkout of complete modules\n";
     print STDERR "\t-m milestone\tmerge changes from MWS into CWS\n";
     print STDERR "\t-c\t\tcommit the merged files to CWS\n";
     print STDERR "\t-l milestone\trenew solver, relink modules to new milestone\n" if defined($log);
     print STDERR "\t-l milestone\tregister new milestone with database\n" if !defined($log);
     print STDERR "\t-r\t\tremove solver and module output trees, update milestone information\n" if !defined($log);
-    print STDERR "\t-a\t\tuse cvs checkout instead of copying\n" if defined($log);
     print STDERR "\t-f\t\tavoid updating entire tree\n" if !defined($log);
     print STDERR "Notes:\n";
     print STDERR "\tA Milestone on a different MWS can be specified as <MWS:milestone>.\n";
@@ -1851,3 +2034,5 @@ sub usage
     print STDERR "\tcwsresync -l SRX645:m1 \n" if defined($log);
     print STDERR "\tcwsresync -r\n" if !defined($log);
 }
+
+# vim: set ts=4 shiftwidth=4 expandtab syntax=perl:
