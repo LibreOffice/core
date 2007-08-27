@@ -1,0 +1,131 @@
+#!/usr/bin/perl -w
+#*************************************************************************
+#
+#   OpenOffice.org - a multi-platform office productivity suite
+#
+#   $RCSfile: codemo,v $
+#
+#   $Revision: 1.2 $
+#
+#   last change: $Author: vg $ $Date: 2007-08-27 13:36:01 $
+#
+#   The Contents of this file are made available subject to
+#   the terms of GNU Lesser General Public License Version 2.1.
+#
+#
+#     GNU Lesser General Public License Version 2.1
+#     =============================================
+#     Copyright 2005 by Sun Microsystems, Inc.
+#     901 San Antonio Road, Palo Alto, CA 94303, USA
+#
+#     This library is free software; you can redistribute it and/or
+#     modify it under the terms of the GNU Lesser General Public
+#     License version 2.1, as published by the Free Software Foundation.
+#
+#     This library is distributed in the hope that it will be useful,
+#     but WITHOUT ANY WARRANTY; without even the implied warranty of
+#     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+#     Lesser General Public License for more details.
+#
+#     You should have received a copy of the GNU Lesser General Public
+#     License along with this library; if not, write to the Free Software
+#     Foundation, Inc., 59 Temple Place, Suite 330, Boston,
+#     MA  02111-1307  USA
+#
+#*************************************************************************
+
+use lib ('../lib');
+
+use PCVSLib;
+use Getopt::Std;
+
+getopt('-d');
+
+if ( !$opt_d || $#ARGV < 0) {
+    print STDERR "usage: codemo < -d cvsroot > < module >\n";
+    exit(1);
+}
+
+# Create root object
+my $root = PCVSLib::Root->new($opt_d);
+
+# Read scrambled CVS password from $HOME/.cvspass.
+my $credentials = PCVSLib::Credentials->new();
+my $password = $credentials->get_password($root);
+
+# Create a connection to CVS server.
+my $connection = PCVSLib::Connection->new($root, $password);
+
+# Open the connection and insert loging handle
+my $log_handle = IO::File->new(">log");
+my $io_handle = $connection->open();
+$connection->io_handle(PCVSLib::LogHandle->new($io_handle, $log_handle));
+
+# Create client which takes the connection
+my $client = PCVSLib::Client->new($connection);
+
+# Create event handler.
+my $event_handler = PCVSLib::EventHandler->new();
+
+# Create a listener and register it with the event handler
+my $listener = CVSListener->new();
+$event_handler->add_listener($listener);
+
+# Create a command, fill in options and transfer it to client for
+# execution.
+my $command = PCVSLib::CheckoutCommand->new($event_handler);
+$command->file_list([@ARGV]);
+$client->execute_command($command);
+
+#  Remove listener form event handler and close connection
+$event_handler->remove_listener($listener);
+$connection->close();
+
+# Query the listener if the operation was succesful
+if ( $listener->is_success() ) {
+    print "checkout completed.\n";
+    exit(0);
+}
+else {
+    print "checkout failed!\n";
+    exit(1);
+}
+
+# Simple minded listener for listening on message events etc. Every client listener
+# should implement method 'notify()' and listen at least on 'PCVSLib::TerminatedEvent'.
+package CVSListener;
+
+sub new
+{
+    my $invocant = shift;
+    my $class = ref($invocant) || $invocant;
+    my $self = {};
+    $self->{is_success_} = 0;
+    bless ($self, $class);
+    return $self;
+}
+
+sub is_success
+{
+    my $self = shift;
+    return $self->{is_success_};
+}
+
+# 
+sub notify
+{
+    my $self  = shift;
+    my $event = shift;
+
+    if ( $event->isa(PCVSLib::ErrorMessageEvent) ) {
+         print $event->get_message() . "\n";
+    }
+    if ( $event->isa(PCVSLib::MessageEvent) ) {
+         print $event->get_message() . "\n";
+    }
+    if ( $event->isa(PCVSLib::TerminatedEvent) ) {
+        $self->{is_success_} = $event->is_success();
+    }
+}
+
+# vim: set ts=4 shiftwidth=4 expandtab syntax=perl:
