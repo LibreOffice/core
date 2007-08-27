@@ -4,9 +4,9 @@
  *
  *  $RCSfile: HDriver.cxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: obo $ $Date: 2007-03-12 10:40:59 $
+ *  last change: $Author: vg $ $Date: 2007-08-27 16:04:54 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -241,7 +241,15 @@ namespace connectivity
                 aConvertedProperties[nPos].Name = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("JavaDriverClass"));
                 aConvertedProperties[nPos++].Value <<= ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("org.hsqldb.jdbcDriver"));
                 aConvertedProperties[nPos].Name = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("JavaDriverClassPath"));
-                aConvertedProperties[nPos++].Value <<= ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("vnd.sun.star.expand:$ORIGIN/classes/hsqldb.jar vnd.sun.star.expand:$ORIGIN/classes/sdbc_hsqldb.jar"));
+                aConvertedProperties[nPos++].Value <<= ::rtl::OUString(
+#ifdef SYSTEM_HSQLDB
+                    RTL_CONSTASCII_USTRINGPARAM(HSQLDB_JAR
+                    " vnd.sun.star.expand:$ORIGIN/classes/sdbc_hsqldb.jar")
+#else
+                    RTL_CONSTASCII_USTRINGPARAM("vnd.sun.star.expand:$ORIGIN/classes/hsqldb.jar"
+                    " vnd.sun.star.expand:$ORIGIN/classes/sdbc_hsqldb.jar")
+#endif
+                );
                 aConvertedProperties[nPos].Name = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("IsAutoRetrievingEnabled"));
                 aConvertedProperties[nPos++].Value <<= sal_True;
                 aConvertedProperties[nPos].Name = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("AutoRetrievingStatement"));
