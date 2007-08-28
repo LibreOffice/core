@@ -4,9 +4,9 @@
  *
  *  $RCSfile: navigatr.hrc,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 05:46:02 $
+ *  last change: $Author: vg $ $Date: 2007-08-28 13:38:00 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -43,6 +43,7 @@
 #define TBI_EMBEDDED 8
 #define TBI_LINK 9
 #define TBI_HYPERLINK 10
+#define TBI_SHAPE_FILTER 11
 
 #define LB_DOCS 1
 
