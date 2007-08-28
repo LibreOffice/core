@@ -4,9 +4,9 @@
  *
  *  $RCSfile: FrameView.hxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: kz $ $Date: 2006-12-12 17:33:25 $
+ *  last change: $Author: vg $ $Date: 2007-08-28 13:37:48 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -193,6 +193,9 @@ public:
     void SetTabCtrlPercent( double nPercent ) { mnTabCtrlPercent = nPercent; }
     double GetTabCtrlPercent() const { return mnTabCtrlPercent; }
 
+    void SetIsNavigatorShowingAllShapes (const bool bIsNavigatorShowingAllShapes);
+    bool IsNavigatorShowingAllShapes (void) const;
+
     virtual void    WriteUserDataSequence ( ::com::sun::star::uno::Sequence < ::com::sun::star::beans::PropertyValue >&, sal_Bool bBrowse = sal_False );
     virtual void    ReadUserDataSequence ( const ::com::sun::star::uno::Sequence < ::com::sun::star::beans::PropertyValue >&, sal_Bool bBrowse = sal_False );
 
@@ -227,6 +230,10 @@ private:
     USHORT          mnSlidesPerRow;     // Dias pro Reihe auf dem Diatisch
     ULONG           mnDrawMode;        // Drawmode fuer das normale Fenster
     double          mnTabCtrlPercent;
+    /** Remember whether the navigator shows all shapes (<TRUE/>) or only
+        the names ones (<FALSE/>).  Not persistent.
+    */
+    bool            mbIsNavigatorShowingAllShapes;
 
     /** The type of the previous view shell.  The (default) value
         ViewShell::ST_NONE indicates that there was no previous view shell.
