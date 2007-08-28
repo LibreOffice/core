@@ -4,9 +4,9 @@
  *
  *  $RCSfile: helpids.h,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: kz $ $Date: 2006-10-06 09:51:05 $
+ *  last change: $Author: vg $ $Date: 2007-08-28 13:36:43 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -85,6 +85,7 @@
 #define HID_SD_NAVIGATOR_TBI_NEXT   (HID_SD_START + 36)
 #define HID_SD_NAVIGATOR_TBI_LAST   (HID_SD_START + 37)
 #define HID_SD_NAVIGATOR_TBI_DRAGTYPE   (HID_SD_START + 38)
+#define HID_SD_NAVIGATOR_TBI_SHAPE_FILTER (HID_SD_START + 39)
 
 // Toolboxen
 #define HID_SD_DRAW_DEFAULTTOOLBOX      (HID_SD_START + 40)
