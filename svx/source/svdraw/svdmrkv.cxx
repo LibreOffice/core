@@ -4,9 +4,9 @@
  *
  *  $RCSfile: svdmrkv.cxx,v $
  *
- *  $Revision: 1.34 $
+ *  $Revision: 1.35 $
  *
- *  last change: $Author: obo $ $Date: 2007-07-18 10:56:51 $
+ *  last change: $Author: vg $ $Date: 2007-08-28 13:50:49 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1316,7 +1316,9 @@ BOOL SdrMarkView::MarkNextObj(BOOL bPrev)
     if (nMarkAnz!=0) {
         nChgMarkNum=bPrev ? 0 : ULONG(nMarkAnz-1);
         SdrMark* pM=GetSdrMarkByIndex(nChgMarkNum);
-        nSearchObjNum=pM->GetMarkedSdrObj()->GetOrdNum();
+        OSL_ASSERT(pM!=NULL);
+        if (pM->GetMarkedSdrObj() != NULL)
+            nSearchObjNum = pM->GetMarkedSdrObj()->GetNavigationPosition();
     }
 
     SdrObject* pMarkObj=NULL;
@@ -1324,11 +1326,15 @@ BOOL SdrMarkView::MarkNextObj(BOOL bPrev)
     ULONG nObjAnz=pSearchObjList->GetObjCount();
     if (nObjAnz!=0) {
         if (nSearchObjNum>nObjAnz) nSearchObjNum=nObjAnz;
-        while (pMarkObj==NULL && ((!bPrev && nSearchObjNum>0) || (bPrev && nSearchObjNum<nObjAnz))) {
-            if (!bPrev) nSearchObjNum--;
-            SdrObject* pSearchObj=pSearchObjList->GetObj(nSearchObjNum);
-            if (IsObjMarkable(pSearchObj,pPageView)) {
-                if (TryToFindMarkedObject(pSearchObj)==CONTAINER_ENTRY_NOTFOUND) {
+        while (pMarkObj==NULL && ((!bPrev && nSearchObjNum>0) || (bPrev && nSearchObjNum<nObjAnz)))
+        {
+            if (!bPrev)
+                nSearchObjNum--;
+            SdrObject* pSearchObj = pSearchObjList->GetObjectForNavigationPosition(nSearchObjNum);
+            if (IsObjMarkable(pSearchObj,pPageView))
+            {
+                if (TryToFindMarkedObject(pSearchObj)==CONTAINER_ENTRY_NOTFOUND)
+                {
                     pMarkObj=pSearchObj;
                 }
             }
