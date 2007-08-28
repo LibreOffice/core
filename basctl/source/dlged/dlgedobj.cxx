@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dlgedobj.cxx,v $
  *
- *  $Revision: 1.51 $
+ *  $Revision: 1.52 $
  *
- *  last change: $Author: rt $ $Date: 2007-07-03 13:03:35 $
+ *  last change: $Author: vg $ $Date: 2007-08-28 09:51:15 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -657,22 +657,24 @@ void DlgEdObj::UpdateStep()
     sal_Int32 nCurStep = GetDlgEdForm()->GetStep();
     sal_Int32 nStep = GetStep();
 
+    SdrLayerAdmin& rLayerAdmin = GetModel()->GetLayerAdmin();
+    SdrLayerID nHiddenLayerId   = rLayerAdmin.GetLayerID( String( RTL_CONSTASCII_USTRINGPARAM( "HiddenLayer" ) ), FALSE );
+    SdrLayerID nControlLayerId   = rLayerAdmin.GetLayerID( rLayerAdmin.GetControlLayerName(), sal_False );
+
     if( nCurStep )
     {
-        SdrLayerAdmin& rLayerAdmin = GetModel()->GetLayerAdmin();
-        SdrLayerID      nLayerId   = rLayerAdmin.GetLayerID( String( RTL_CONSTASCII_USTRINGPARAM( "HiddenLayer" ) ), FALSE );
         if ( nStep && (nStep != nCurStep) )
         {
-            SetLayer( nLayerId );
+            SetLayer( nHiddenLayerId );
         }
         else
         {
-            SetLayer( 0 );
+            SetLayer( nControlLayerId );
         }
     }
     else
     {
-        SetLayer( 0 );
+        SetLayer( nControlLayerId );
     }
 }
 
@@ -1325,15 +1327,17 @@ void SAL_CALL DlgEdObj::_propertyChange( const  ::com::sun::star::beans::Propert
 {
     if (isListening())
     {
+        DlgEdForm* pRealDlgEdForm = dynamic_cast< DlgEdForm* >(this);
+        if( pRealDlgEdForm == 0 )
+            pRealDlgEdForm = GetDlgEdForm();
+
+        DlgEditor* pDlgEditor = pRealDlgEdForm ? pRealDlgEdForm->GetDlgEditor() : 0;
+
+        if( !pDlgEditor || pDlgEditor->isInPaint() )
+            return;
+
         // dialog model changed
-        if ( ISA(DlgEdForm) )
-        {
-            ((DlgEdForm*)this)->GetDlgEditor()->SetDialogModelChanged(TRUE);
-        }
-        else
-        {
-            GetDlgEdForm()->GetDlgEditor()->SetDialogModelChanged(TRUE);
-        }
+        pDlgEditor->SetDialogModelChanged(TRUE);
 
         // update position and size
         if ( evt.PropertyName == DLGED_PROP_POSITIONX || evt.PropertyName == DLGED_PROP_POSITIONY ||
