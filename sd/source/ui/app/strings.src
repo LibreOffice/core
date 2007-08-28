@@ -4,9 +4,9 @@
  *
  *  $RCSfile: strings.src,v $
  *
- *  $Revision: 1.118 $
+ *  $Revision: 1.119 $
  *
- *  last change: $Author: ihi $ $Date: 2007-04-19 12:22:05 $
+ *  last change: $Author: vg $ $Date: 2007-08-28 13:36:57 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -2466,5 +2466,15 @@ String STR_GRAPHICS_STYLE_FAMILY
 {
     Text [ en-US ] = "Graphics Styles";
 };
-
-
+String STR_NAVIGATOR_SHOW_NAMED_SHAPES
+{
+    Text [ en-US ] = "Named shapes";
+};
+String STR_NAVIGATOR_SHOW_ALL_SHAPES
+{
+    Text [ en-US ] = "All shapes";
+};
+String STR_NAVIGATOR_SHAPE_BASE_NAME
+{
+    Text [ en-US ] = "Shape %1";
+};
