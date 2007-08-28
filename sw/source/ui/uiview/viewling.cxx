@@ -4,9 +4,9 @@
  *
  *  $RCSfile: viewling.cxx,v $
  *
- *  $Revision: 1.33 $
+ *  $Revision: 1.34 $
  *
- *  last change: $Author: hr $ $Date: 2007-06-27 13:27:36 $
+ *  last change: $Author: vg $ $Date: 2007-08-28 08:32:38 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -818,7 +818,7 @@ sal_Bool SwView::ExecSpellPopup(const Point& rPt)
                     if ( pMenu )
                     {
                         USHORT nId = ((PopupMenu*)pMenu)->Execute(pEditWin, aPixPos);
-                        if(!ExecuteMenuCommand( *static_cast<PopupMenu*>(pMenu), *GetViewFrame(), nId ))
+                        if(!ExecuteMenuCommand( *dynamic_cast<PopupMenu*>(pMenu), *GetViewFrame(), nId ))
                             aPopup.Execute(nId);
                     }
                     else
