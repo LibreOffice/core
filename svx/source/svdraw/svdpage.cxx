@@ -4,9 +4,9 @@
  *
  *  $RCSfile: svdpage.cxx,v $
  *
- *  $Revision: 1.61 $
+ *  $Revision: 1.62 $
  *
- *  last change: $Author: hr $ $Date: 2007-08-03 10:20:54 $
+ *  last change: $Author: vg $ $Date: 2007-08-28 13:45:36 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -110,14 +110,45 @@
 
 using namespace ::com::sun::star;
 
+
+namespace {
+void DumpObjectList (const ::std::vector<SdrObjectWeakRef>& rContainer)
+{
+    ::std::vector<SdrObjectWeakRef>::const_iterator iObject (rContainer.begin());
+    ::std::vector<SdrObjectWeakRef>::const_iterator iEnd (rContainer.end());
+    for (int nIndex=0 ; iObject!=iEnd; ++iObject,++nIndex)
+    {
+        const SdrObject* pObject = iObject->get();
+        OSL_TRACE("%d : %x, %s", nIndex,
+            pObject,
+            ::rtl::OUStringToOString(pObject->GetName(),RTL_TEXTENCODING_UTF8).getStr());
+    }
+}
+}
+
+
+class SdrObjList::WeakSdrObjectContainerType
+    : public ::std::vector<SdrObjectWeakRef>
+{
+public:
+    WeakSdrObjectContainerType (const sal_Int32 nInitialSize)
+        : ::std::vector<SdrObjectWeakRef>(nInitialSize) {};
+};
+
+
+
+static const sal_Int32 InitialObjectContainerCapacity (64);
 DBG_NAME(SdrObjList)
 
 TYPEINIT0(SdrObjList);
 
 SdrObjList::SdrObjList(SdrModel* pNewModel, SdrPage* pNewPage, SdrObjList* pNewUpList):
-    maList(1024,64,64)
+    maList(),
+    mpNavigationOrder(),
+    mbIsNavigationOrderDirty(false)
 {
     DBG_CTOR(SdrObjList,NULL);
+    maList.reserve(InitialObjectContainerCapacity);
     pModel=pNewModel;
     pPage=pNewPage;
     pUpList=pNewUpList;
@@ -128,9 +159,12 @@ SdrObjList::SdrObjList(SdrModel* pNewModel, SdrPage* pNewPage, SdrObjList* pNewU
 }
 
 SdrObjList::SdrObjList(const SdrObjList& rSrcList):
-    maList(1024,64,64)
+    maList(),
+    mpNavigationOrder(),
+    mbIsNavigationOrderDirty(false)
 {
     DBG_CTOR(SdrObjList,NULL);
+    maList.reserve(InitialObjectContainerCapacity);
     pModel=NULL;
     pPage=NULL;
     pUpList=NULL;
@@ -257,10 +291,11 @@ void SdrObjList::Clear()
     // #110094#-9
     sal_Bool bObjectsRemoved(sal_False);
 
-    while(maList.Count())
+    while( ! maList.empty())
     {
         // remove last object from list
-        SdrObject* pObj = (SdrObject*)maList.Remove(maList.Count() - 1L);
+        SdrObject* pObj = maList.back();
+        RemoveObjectFromContainer(maList.size()-1);
 
         // #110094#
         pObj->ActionRemoved();
@@ -361,7 +396,7 @@ void SdrObjList::NbcInsertObject(SdrObject* pObj, ULONG nPos, const SdrInsertRea
         DBG_ASSERT(!pObj->IsInserted(),"ZObjekt hat bereits Inserted-Status");
         ULONG nAnz=GetObjCount();
         if (nPos>nAnz) nPos=nAnz;
-        maList.Insert(pObj,nPos);
+        InsertObjectIntoContainer(*pObj,nPos);
 
         if (nPos<nAnz) bObjOrdNumsDirty=TRUE;
         pObj->SetOrdNum(nPos);
@@ -424,8 +459,15 @@ void SdrObjList::InsertObject(SdrObject* pObj, ULONG nPos, const SdrInsertReason
 
 SdrObject* SdrObjList::NbcRemoveObject(ULONG nObjNum)
 {
+    if (nObjNum >= maList.size())
+    {
+        OSL_ASSERT(nObjNum<maList.size());
+        return NULL;
+    }
+
     ULONG nAnz=GetObjCount();
-    SdrObject* pObj=(SdrObject*)maList.Remove(nObjNum);
+    SdrObject* pObj=maList[nObjNum];
+    RemoveObjectFromContainer(nObjNum);
 
     // #110094#
     pObj->ActionRemoved();
@@ -448,8 +490,15 @@ SdrObject* SdrObjList::NbcRemoveObject(ULONG nObjNum)
 
 SdrObject* SdrObjList::RemoveObject(ULONG nObjNum)
 {
+    if (nObjNum >= maList.size())
+    {
+        OSL_ASSERT(nObjNum<maList.size());
+        return NULL;
+    }
+
     ULONG nAnz=GetObjCount();
-    SdrObject* pObj=(SdrObject*)maList.Remove(nObjNum);
+    SdrObject* pObj=maList[nObjNum];
+    RemoveObjectFromContainer(nObjNum);
 
     DBG_ASSERT(pObj!=NULL,"Object zum Removen nicht gefunden");
     if (pObj!=NULL) {
@@ -485,14 +534,21 @@ SdrObject* SdrObjList::RemoveObject(ULONG nObjNum)
 
 SdrObject* SdrObjList::NbcReplaceObject(SdrObject* pNewObj, ULONG nObjNum)
 {
-    SdrObject* pObj=(SdrObject*)maList.GetObject(nObjNum);
+    if (nObjNum >= maList.size() || pNewObj == NULL)
+    {
+        OSL_ASSERT(nObjNum<maList.size());
+        OSL_ASSERT(pNewObj!=NULL);
+        return NULL;
+    }
+
+    SdrObject* pObj=maList[nObjNum];
     DBG_ASSERT(pObj!=NULL,"SdrObjList::ReplaceObject: Object zum Removen nicht gefunden");
     if (pObj!=NULL) {
         DBG_ASSERT(pObj->IsInserted(),"SdrObjList::ReplaceObject: ZObjekt hat keinen Inserted-Status");
         pObj->SetInserted(FALSE);
         pObj->SetObjList(NULL);
         pObj->SetPage(NULL);
-        maList.Replace(pNewObj,nObjNum);
+        ReplaceObjectInContainer(*pNewObj,nObjNum);
 
         // #110094#
         pObj->ActionRemoved();
@@ -512,8 +568,18 @@ SdrObject* SdrObjList::NbcReplaceObject(SdrObject* pNewObj, ULONG nObjNum)
 
 SdrObject* SdrObjList::ReplaceObject(SdrObject* pNewObj, ULONG nObjNum)
 {
-    //ULONG nAnz=GetObjCount();
-    SdrObject* pObj=(SdrObject*)maList.GetObject(nObjNum);
+    if (nObjNum >= maList.size())
+    {
+        OSL_ASSERT(nObjNum<maList.size());
+        return NULL;
+    }
+    if (pNewObj == NULL)
+    {
+        OSL_ASSERT(pNewObj!=NULL);
+        return NULL;
+    }
+
+    SdrObject* pObj=maList[nObjNum];
     DBG_ASSERT(pObj!=NULL,"SdrObjList::ReplaceObject: Object zum Removen nicht gefunden");
     if (pObj!=NULL) {
         DBG_ASSERT(pObj->IsInserted(),"SdrObjList::ReplaceObject: ZObjekt hat keinen Inserted-Status");
@@ -528,7 +594,7 @@ SdrObject* SdrObjList::ReplaceObject(SdrObject* pNewObj, ULONG nObjNum)
         pObj->SetInserted(FALSE);
         pObj->SetObjList(NULL);
         pObj->SetPage(NULL);
-        maList.Replace(pNewObj,nObjNum);
+        ReplaceObjectInContainer(*pNewObj,nObjNum);
 
         // #110094#
         pObj->ActionRemoved();
@@ -557,17 +623,24 @@ SdrObject* SdrObjList::ReplaceObject(SdrObject* pNewObj, ULONG nObjNum)
 
 SdrObject* SdrObjList::NbcSetObjectOrdNum(ULONG nOldObjNum, ULONG nNewObjNum)
 {
-    SdrObject* pObj=(SdrObject*)maList.GetObject(nOldObjNum);
+    if (nOldObjNum >= maList.size() || nNewObjNum >= maList.size())
+    {
+        OSL_ASSERT(nOldObjNum<maList.size());
+        OSL_ASSERT(nNewObjNum<maList.size());
+        return NULL;
+    }
+
+    SdrObject* pObj=maList[nOldObjNum];
     if (nOldObjNum==nNewObjNum) return pObj;
     DBG_ASSERT(pObj!=NULL,"SdrObjList::NbcSetObjectOrdNum: Object nicht gefunden");
     if (pObj!=NULL) {
         DBG_ASSERT(pObj->IsInserted(),"SdrObjList::NbcSetObjectOrdNum: ZObjekt hat keinen Inserted-Status");
-        maList.Remove(nOldObjNum);
+        RemoveObjectFromContainer(nOldObjNum);
 
         // #110094#
         pObj->ActionRemoved();
 
-        maList.Insert(pObj,nNewObjNum);
+        InsertObjectIntoContainer(*pObj,nNewObjNum);
 
         // #110094#
         pObj->ActionInserted();
@@ -580,17 +653,24 @@ SdrObject* SdrObjList::NbcSetObjectOrdNum(ULONG nOldObjNum, ULONG nNewObjNum)
 
 SdrObject* SdrObjList::SetObjectOrdNum(ULONG nOldObjNum, ULONG nNewObjNum)
 {
-    SdrObject* pObj=(SdrObject*)maList.GetObject(nOldObjNum);
+    if (nOldObjNum >= maList.size() || nNewObjNum >= maList.size())
+    {
+        OSL_ASSERT(nOldObjNum<maList.size());
+        OSL_ASSERT(nNewObjNum<maList.size());
+        return NULL;
+    }
+
+    SdrObject* pObj=maList[nOldObjNum];
     if (nOldObjNum==nNewObjNum) return pObj;
     DBG_ASSERT(pObj!=NULL,"SdrObjList::SetObjectOrdNum: Object nicht gefunden");
     if (pObj!=NULL) {
         DBG_ASSERT(pObj->IsInserted(),"SdrObjList::SetObjectOrdNum: ZObjekt hat keinen Inserted-Status");
-        maList.Remove(nOldObjNum);
+        RemoveObjectFromContainer(nOldObjNum);
 
         // #110094#
         pObj->ActionRemoved();
 
-        maList.Insert(pObj,nNewObjNum);
+        InsertObjectIntoContainer(*pObj,nNewObjNum);
 
         // #110094#
         pObj->ActionInserted();
@@ -754,6 +834,29 @@ FASTBOOL SdrObjList::GetFillColor(const Point& rPnt, const SetOfByte& rVisLayers
     return bRet;
 }
 
+
+ULONG SdrObjList::GetObjCount() const
+{
+    return maList.size();
+}
+
+
+
+
+SdrObject* SdrObjList::GetObj(ULONG nNum) const
+{
+    if (nNum >= maList.size())
+    {
+        OSL_ASSERT(nNum<maList.size());
+        return NULL;
+    }
+    else
+        return maList[nNum];
+}
+
+
+
+
 FASTBOOL SdrObjList::IsReadOnly() const
 {
     FASTBOOL bRet=FALSE;
@@ -852,6 +955,261 @@ void SdrObjList::UnGroupObj( ULONG nObjNum )
         DBG_ERROR("SdrObjList::UnGroupObj: object index invalid");
 #endif
 }
+
+
+
+
+bool SdrObjList::HasObjectNavigationOrder (void) const
+{
+    return mpNavigationOrder.get() != NULL;
+}
+
+
+
+
+void SdrObjList::SetObjectNavigationPosition (
+    SdrObject& rObject,
+    const sal_uInt32 nNewPosition)
+{
+    // When the navigation order container has not yet been created then
+    // create one now.  It is initialized with the z-order taken from
+    // maList.
+    if (mpNavigationOrder.get() == NULL)
+    {
+        mpNavigationOrder.reset(new WeakSdrObjectContainerType(maList.size()));
+        ::std::copy(
+            maList.begin(),
+            maList.end(),
+            mpNavigationOrder->begin());
+    }
+    OSL_ASSERT(mpNavigationOrder.get()!=NULL);
+    OSL_ASSERT( mpNavigationOrder->size() == maList.size());
+
+    SdrObjectWeakRef aReference (&rObject);
+
+    // Look up the object whose navigation position is to be changed.
+    WeakSdrObjectContainerType::iterator iObject (::std::find(
+        mpNavigationOrder->begin(),
+        mpNavigationOrder->end(),
+        aReference));
+    if (iObject == mpNavigationOrder->end())
+    {
+        // The given object is not a member of the navigation order.
+        return;
+    }
+
+    // Move the object to its new position.
+    const sal_uInt32 nOldPosition = ::std::distance(mpNavigationOrder->begin(), iObject);
+    if (nOldPosition != nNewPosition)
+    {
+        mpNavigationOrder->erase(iObject);
+        sal_uInt32 nInsertPosition (nNewPosition);
+        // Adapt insertion position for the just erased object.
+        if (nNewPosition >= nOldPosition)
+            nInsertPosition -= 1;
+        if (nInsertPosition >= mpNavigationOrder->size())
+            mpNavigationOrder->push_back(aReference);
+        else
+            mpNavigationOrder->insert(mpNavigationOrder->begin()+nInsertPosition, aReference);
+
+        mbIsNavigationOrderDirty = true;
+
+        // The navigation order is written out to file so mark the model as modified.
+        if (pModel != NULL)
+            pModel->SetChanged();
+    }
+}
+
+
+
+
+SdrObject* SdrObjList::GetObjectForNavigationPosition (const sal_uInt32 nNavigationPosition) const
+{
+    if (HasObjectNavigationOrder())
+    {
+        // There is a user defined navigation order.  Make sure the object
+        // index is correct and look up the object in mpNavigationOrder.
+        if (nNavigationPosition >= mpNavigationOrder->size())
+        {
+            OSL_ASSERT(nNavigationPosition < mpNavigationOrder->size());
+        }
+        else
+            return (*mpNavigationOrder)[nNavigationPosition].get();
+    }
+    else
+    {
+        // There is no user defined navigation order.  Use the z-order
+        // instead.
+        if (nNavigationPosition >= maList.size())
+        {
+            OSL_ASSERT(nNavigationPosition < maList.size());
+        }
+        else
+            return maList[nNavigationPosition];
+    }
+    return NULL;
+}
+
+
+
+
+void SdrObjList::ClearObjectNavigationOrder (void)
+{
+    mpNavigationOrder.reset();
+    mbIsNavigationOrderDirty = true;
+}
+
+
+
+
+bool SdrObjList::RecalcNavigationPositions (void)
+{
+    bool bUpToDate (false);
+
+    if (mbIsNavigationOrderDirty)
+    {
+        if (mpNavigationOrder.get() != NULL)
+        {
+            mbIsNavigationOrderDirty = false;
+
+            WeakSdrObjectContainerType::iterator iObject;
+            WeakSdrObjectContainerType::const_iterator iEnd (mpNavigationOrder->end());
+            sal_uInt32 nIndex (0);
+            for (iObject=mpNavigationOrder->begin(); iObject!=iEnd; ++iObject,++nIndex)
+                (*iObject)->SetNavigationPosition(nIndex);
+
+            bUpToDate = true;
+        }
+    }
+
+    return mpNavigationOrder.get() != NULL;
+}
+
+
+
+
+void SdrObjList::SetNavigationOrder (const uno::Reference<container::XIndexAccess>& rxOrder)
+{
+    if (rxOrder.is())
+    {
+        const sal_Int32 nCount = rxOrder->getCount();
+        if ((sal_uInt32)nCount != maList.size())
+            return;
+
+        if (mpNavigationOrder.get() == NULL)
+            mpNavigationOrder.reset(new WeakSdrObjectContainerType(nCount));
+
+        for (sal_Int32 nIndex=0; nIndex<nCount; ++nIndex)
+        {
+            uno::Reference<uno::XInterface> xShape (rxOrder->getByIndex(nIndex), uno::UNO_QUERY);
+            SdrObject* pObject = SdrObject::getSdrObjectFromXShape(xShape);
+            if (pObject == NULL)
+                break;
+            (*mpNavigationOrder)[nIndex] = pObject;
+        }
+
+        mbIsNavigationOrderDirty = true;
+    }
+    else
+        ClearObjectNavigationOrder();
+}
+
+
+
+
+void SdrObjList::InsertObjectIntoContainer (
+    SdrObject& rObject,
+    const sal_uInt32 nInsertPosition)
+{
+    OSL_ASSERT(nInsertPosition<=maList.size());
+
+    // Update the navigation positions.
+    if (HasObjectNavigationOrder())
+    {
+        // The new object does not have a user defined position so append it
+        // to the list.
+        rObject.SetNavigationPosition(mpNavigationOrder->size());
+        mpNavigationOrder->push_back(&rObject);
+    }
+
+    // Insert object into object list.  Because the insert() method requires
+    // a valid iterator as insertion position, we have to use push_back() to
+    // insert at the end of the list.
+    if (nInsertPosition >= maList.size())
+        maList.push_back(&rObject);
+    else
+        maList.insert(maList.begin()+nInsertPosition, &rObject);
+    bObjOrdNumsDirty=TRUE;
+}
+
+
+
+
+void SdrObjList::ReplaceObjectInContainer (
+    SdrObject& rNewObject,
+    const sal_uInt32 nObjectPosition)
+{
+    if (nObjectPosition >= maList.size())
+    {
+        OSL_ASSERT(nObjectPosition<maList.size());
+        return;
+    }
+
+    // Update the navigation positions.
+    if (HasObjectNavigationOrder())
+    {
+        // A user defined position of the object that is to be replaced is
+        // not transferred to the new object so erase the former and append
+        // the later object from/to the navigation order.
+        OSL_ASSERT(nObjectPosition < maList.size());
+        SdrObjectWeakRef aReference (maList[nObjectPosition]);
+        WeakSdrObjectContainerType::iterator iObject (::std::find(
+            mpNavigationOrder->begin(),
+            mpNavigationOrder->end(),
+            aReference));
+        if (iObject != mpNavigationOrder->end())
+            mpNavigationOrder->erase(iObject);
+
+        mpNavigationOrder->push_back(&rNewObject);
+
+        mbIsNavigationOrderDirty = true;
+    }
+
+    maList[nObjectPosition] = &rNewObject;
+    bObjOrdNumsDirty=TRUE;
+}
+
+
+
+
+void SdrObjList::RemoveObjectFromContainer (
+    const sal_uInt32 nObjectPosition)
+{
+    if (nObjectPosition >= maList.size())
+    {
+        OSL_ASSERT(nObjectPosition<maList.size());
+        return;
+    }
+
+    // Update the navigation positions.
+    if (HasObjectNavigationOrder())
+    {
+        SdrObjectWeakRef aReference (maList[nObjectPosition]);
+        WeakSdrObjectContainerType::iterator iObject (::std::find(
+            mpNavigationOrder->begin(),
+            mpNavigationOrder->end(),
+            aReference));
+        if (iObject != mpNavigationOrder->end())
+            mpNavigationOrder->erase(iObject);
+        mbIsNavigationOrderDirty = true;
+    }
+
+    maList.erase(maList.begin()+nObjectPosition);
+    bObjOrdNumsDirty=TRUE;
+}
+
+
+
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 
