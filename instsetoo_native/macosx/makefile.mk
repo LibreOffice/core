@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.3 $
+#   $Revision: 1.4 $
 #
-#   last change: $Author: ihi $ $Date: 2007-06-05 11:51:39 $
+#   last change: $Author: vg $ $Date: 2007-08-28 09:18:12 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -53,9 +53,11 @@ BUNDLE = $(MISC)$/OpenOffice.org.app
 CONTENTS = $(BUNDLE)$/Contents
 VERSIONED = $(MISC)$/versioned
 
+.IF "$(GUIBASE)"!="aqua"
 scriptfiles = \
     $(CONTENTS)$/Resources$/Scripts$/main.scpt	\
     $(CONTENTS)$/Resources$/Scripts$/PostInstall.scpt
+.ENDIF
 
 plistfiles  = $(CONTENTS)$/Info.plist 
 
@@ -80,6 +82,7 @@ $(ZIP1TARGETN) : $(scriptfiles) $(plistfiles)
 
 $(plistfiles) : $(scriptfiles)
 
+.IF "$(GUIBASE)"!="aqua"
 # create application bundle from apple script source
 # Info.plist will be deleted to trigger copy rule of our own Info.plist  
 $(CONTENTS)$/Resources$/Scripts$/main.scpt : application/main.applescript
@@ -93,6 +96,7 @@ $(CONTENTS)$/Resources$/Scripts$/%.scpt : application/%.applescript
     make_versioned.sh "$<" "$(VERSIONED)/$<"
     osacompile -d -o "$@" "$(VERSIONED)/$<"
     $(RM) "$(VERSIONED)/$<"
+.ENDIF # "$(GUIBASE)"!="aqua"
 
 # Info.plist is just versioned and copied into the bundle	
 $(CONTENTS)$/%.plist : application/%.plist
