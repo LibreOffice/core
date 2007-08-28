@@ -4,9 +4,9 @@
  *
  *  $RCSfile: frmview.cxx,v $
  *
- *  $Revision: 1.34 $
+ *  $Revision: 1.35 $
  *
- *  last change: $Author: rt $ $Date: 2007-04-03 16:30:48 $
+ *  last change: $Author: vg $ $Date: 2007-08-28 13:39:32 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -104,9 +104,10 @@ namespace sd {
 
 FrameView::FrameView(SdDrawDocument* pDrawDoc, FrameView* pFrameView /* = NULK */)
   : SdrView(pDrawDoc, (OutputDevice*) NULL),
-  mnRefCount(0),
-  mnPresViewShellId(SID_VIEWSHELL0),
-  mnSlotId(SID_OBJECT_SELECT)
+    mnRefCount(0),
+    mnPresViewShellId(SID_VIEWSHELL0),
+    mnSlotId(SID_OBJECT_SELECT),
+    mbIsNavigatorShowingAllShapes(false)
 {
     EndListening(*pDrawDoc);
 
@@ -258,6 +259,7 @@ FrameView::FrameView(SdDrawDocument* pDrawDoc, FrameView* pFrameView /* = NULK *
         mnSlidesPerRow = pFrameView->GetSlidesPerRow();
         mnDrawMode = pFrameView->GetDrawMode();
         mnTabCtrlPercent = pFrameView->GetTabCtrlPercent();
+        mbIsNavigatorShowingAllShapes = pFrameView->IsNavigatorShowingAllShapes();
         SetPreviousViewShellType (pFrameView->GetPreviousViewShellType());
         SetViewShellTypeOnLoad (pFrameView->GetViewShellTypeOnLoad());
     }
@@ -294,6 +296,7 @@ FrameView::FrameView(SdDrawDocument* pDrawDoc, FrameView* pFrameView /* = NULK *
             mnDrawMode = bUseContrast ? OUTPUT_DRAWMODE_CONTRAST : OUTPUT_DRAWMODE_COLOR;
         }
         mnTabCtrlPercent = 0.0;
+        mbIsNavigatorShowingAllShapes = false;
         SetPreviousViewShellType (ViewShell::ST_NONE);
         SetViewShellTypeOnLoad (ViewShell::ST_IMPRESS);
 
@@ -1233,5 +1236,22 @@ const USHORT FrameView::GetSelectedPage (void) const
 {
     return mnSelectedPage;
 }
+
+
+
+
+void FrameView::SetIsNavigatorShowingAllShapes (const bool bIsNavigatorShowingAllShapes)
+{
+    mbIsNavigatorShowingAllShapes = bIsNavigatorShowingAllShapes;
+}
+
+
+
+
+bool FrameView::IsNavigatorShowingAllShapes (void) const
+{
+    return mbIsNavigatorShowingAllShapes;
+}
+
 
 } // end of namespace sd
