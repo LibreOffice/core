@@ -105,7 +105,7 @@ $dictionary = [:LineBreak = Complex_Context:];
 #                               XX  (Unknown, unassigned)
 #                         as $AL  (Alphabetic)
 #
-$ALPlus = [$AL $AI $SA $SG $XX $HY];
+$ALPlus = [$AL $AI $SA $SG $XX];
 
 #
 #  Combining Marks.   X $CM*  behaves as if it were X.  Rule LB6.
@@ -363,7 +363,7 @@ $ALcm $ALcm;
 $CM+ $ALcm;      # The $CM+ is from rule 10, and unattached CM is treated as AL
 
 # LB 29
-($IScm | $HYcm) $ALcm;
+$IScm $ALcm;
 
 #
 # Rule 30   Do not break between letters, numbers or ordinary symbols
@@ -560,6 +560,7 @@ $CM* $ID $CM* $PR;
 $CM* $ALPlus $CM* $PR;
 $CM* $ALPlus $CM* $PO;
 
+$CM* $ALPlus $CM* $HY / $SP;
 
 # LB 25
 ($CM* ($PR | $PO))? ($CM* $CL)? ($CM* ($NU | $IS | $SY))* $CM* $NU ($CM* ($OP | $HY))? ($CM* ($PR | $PO))?;
@@ -579,7 +580,7 @@ $CM* $ALPlus $CM* $ALPlus;
 
 
 # LB 29
-$CM* $ALPlus $CM* ($IS | HY);
+$CM* $ALPlus $CM* $IS;
 
 # LB 30
 $CM* $OP $CM* ($NU | $ALPlus);
