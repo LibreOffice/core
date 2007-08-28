@@ -4,9 +4,9 @@
  *
  *  $RCSfile: documentbuilder.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: hr $ $Date: 2006-06-20 00:44:46 $
+ *  last change: $Author: vg $ $Date: 2007-08-28 10:11:38 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -71,7 +71,6 @@ namespace DOM
 
         // ctor
         CDocumentBuilder(const Reference< XMultiServiceFactory >& xFactory);
-        static sal_Bool m_bXmlInit;
 
         // call for factory
         static Reference< XInterface > getInstance(const Reference < XMultiServiceFactory >& xFactory);
