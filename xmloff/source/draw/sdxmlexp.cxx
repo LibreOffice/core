@@ -4,9 +4,9 @@
  *
  *  $RCSfile: sdxmlexp.cxx,v $
  *
- *  $Revision: 1.113 $
+ *  $Revision: 1.114 $
  *
- *  last change: $Author: hr $ $Date: 2007-06-27 15:32:18 $
+ *  last change: $Author: vg $ $Date: 2007-08-28 13:34:22 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -2046,6 +2046,11 @@ void SdXMLExport::_ExportContent()
             if( IsImpress() )
                 ImplExportHeaderFooterDeclAttributes( maDrawPagesHeaderFooterSettings[nPageInd] );
 
+
+            OUString sNavigationOrder( getNavigationOrder( xDrawPage ) );
+            if( sNavigationOrder.getLength() != 0 )
+                AddAttribute ( XML_NAMESPACE_DRAW, XML_NAV_ORDER, sNavigationOrder );
+
             UniReference< xmloff::AnimationsExporter >  xAnimationsExporter;
             uno::Reference< ::com::sun::star::animations::XAnimationNodeSupplier > xAnimNodeSupplier;
 
@@ -2804,6 +2809,41 @@ OUString SdXMLExport::getDataStyleName(const sal_Int32 nNumberFormat, sal_Bool b
     {
         return SdXMLNumberStylesExporter::getDateStyleName( nNumberFormat );
     }
+}
+
+OUString SdXMLExport::getNavigationOrder( const Reference< XDrawPage >& xDrawPage )
+{
+    OUStringBuffer sNavOrder;
+    try
+    {
+        Reference< XPropertySet > xSet( xDrawPage, UNO_QUERY_THROW );
+        Reference< XIndexAccess > xNavOrder( xSet->getPropertyValue( OUString( RTL_CONSTASCII_USTRINGPARAM( "NavigationOrder" ) ) ), UNO_QUERY_THROW );
+
+        Reference< XIndexAccess > xZOrderAccess( xDrawPage, UNO_QUERY );
+
+        // only export navigation order if it is different from the z-order
+        if( (xNavOrder.get() != xZOrderAccess.get()) && (xNavOrder->getCount() == xDrawPage->getCount())  )
+        {
+            sal_Int32 nIndex;
+            const sal_Int32 nCount = xNavOrder->getCount();
+            for( nIndex = 0; nIndex < nCount; ++nIndex )
+            {
+                OUString sId( getInterfaceToIdentifierMapper().registerReference( Reference< XInterface >( xNavOrder->getByIndex( nIndex ), UNO_QUERY ) ) );
+                if( sId.getLength() != 0 )
+                {
+                    if( sNavOrder.getLength() != 0 )
+                        sNavOrder.append( (sal_Unicode)' ' );
+                    sNavOrder.append( sId );
+                }
+            }
+        }
+    }
+    catch( Exception& )
+    {
+        DBG_ERROR("xmloff::SdXMLExport::getNavigationOrder(), exception caught while creating navigation order!");
+    }
+
+    return sNavOrder.makeStringAndClear();
 }
 
 //////////////////////////////////////////////////////////////////////////////
