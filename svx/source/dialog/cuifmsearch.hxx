@@ -4,9 +4,9 @@
  *
  *  $RCSfile: cuifmsearch.hxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: hr $ $Date: 2007-08-03 15:50:03 $
+ *  last change: $Author: vg $ $Date: 2007-08-28 10:24:48 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -132,6 +132,8 @@ class FmSearchDialog : public ModalDialog
     PushButton      m_pbSearchAgain;
     CancelButton    m_pbClose;
     HelpButton      m_pbHelp;
+    String          m_sSearch;
+    String          m_sCancel;
 
     Window*         m_pPreSearchFocus;
 
