@@ -104,6 +104,20 @@ inline sal_Bool WeakReference< reference_type >::operator>(const WeakReference<r
 }
 
 template< class reference_type >
+inline WeakReference<reference_type>& WeakReference<reference_type>::operator= (
+    const WeakReference<reference_type>& rReference)
+{
+    if (&rReference != this)
+    {
+        mpWeakConnection->release();
+
+        mpWeakConnection = rReference.mpWeakConnection;
+        mpWeakConnection->acquire();
+    }
+    return *this;
+}
+
+template< class reference_type >
 inline WeakBase< reference_type >::WeakBase()
 {
     mpWeakConnection = 0;
