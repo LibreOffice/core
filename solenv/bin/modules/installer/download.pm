@@ -4,9 +4,9 @@
 #
 #   $RCSfile: download.pm,v $
 #
-#   $Revision: 1.31 $
+#   $Revision: 1.32 $
 #
-#   last change: $Author: hr $ $Date: 2007-06-27 17:48:32 $
+#   last change: $Author: vg $ $Date: 2007-08-28 09:27:12 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -761,6 +761,21 @@ sub put_website_into_template
     my $website = "http\:\/\/www\.sun\.com\/staroffice";
 
     replace_one_variable($templatefile, "WEBSITEPLACEHOLDER", $website);
+}
+
+##################################################################
+# Windows: Including the Java file name into nsi template
+##################################################################
+
+sub put_javafilename_into_template
+{
+    my ($templatefile, $variableshashref) = @_;
+
+    my $javaversion = "";
+
+    if ( $variableshashref->{'WINDOWSJAVAFILENAME'} ) { $javaversion = $variableshashref->{'WINDOWSJAVAFILENAME'}; }
+
+    replace_one_variable($templatefile, "WINDOWSJAVAFILENAMEPLACEHOLDER", $javaversion);
 }
 
 ##################################################################
@@ -1535,6 +1550,7 @@ sub create_download_sets
         put_setup_ico_into_template($templatefile, $includepatharrayref, $allvariableshashref);
         put_publisher_into_template($templatefile);
         put_website_into_template($templatefile);
+        put_javafilename_into_template($templatefile, $allvariableshashref);
         put_windows_productversion_into_template($templatefile, $allvariableshashref);
         put_windows_productpath_into_template($templatefile, $allvariableshashref);
         put_outputfilename_into_template($templatefile, $downloadname);
