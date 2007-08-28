@@ -4,9 +4,9 @@
  *
  *  $RCSfile: svditer.hxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 18:45:36 $
+ *  last change: $Author: vg $ $Date: 2007-08-28 13:44:06 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -63,10 +63,18 @@ class SVX_DLLPUBLIC SdrObjListIter
     sal_uInt32                  mnIndex;
     BOOL                        mbReverse;
 
-    void ImpProcessObjectList(const SdrObjList& rObjList, SdrIterMode eMode);
+    void ImpProcessObjectList(const SdrObjList& rObjList, SdrIterMode eMode, BOOL bUseZOrder);
 
 public:
     SdrObjListIter(const SdrObjList& rObjList, SdrIterMode eMode = IM_DEEPNOGROUPS, BOOL bReverse = FALSE);
+    /** This variant lets the user choose the order in which to travel over
+        the objects.
+        @param bUseZOrder
+            When <TRUE/> then the z-order defines the order of iteration.
+            Otherwise the navigation position as returned by
+            SdrObject::GetNavigationPosition() is used.
+    */
+    SdrObjListIter(const SdrObjList& rObjList, BOOL bUseZOrder, SdrIterMode eMode = IM_DEEPNOGROUPS, BOOL bReverse = FALSE);
 
     /* SJ: the following function can now be used with every
        SdrObject and is no longer limited to group objects */
