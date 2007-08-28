@@ -4,9 +4,9 @@
  *
  *  $RCSfile: svdobj.cxx,v $
  *
- *  $Revision: 1.91 $
+ *  $Revision: 1.92 $
  *
- *  last change: $Author: rt $ $Date: 2007-07-06 07:41:10 $
+ *  last change: $Author: vg $ $Date: 2007-08-28 13:51:05 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -482,6 +482,7 @@ SdrObject::SdrObject()
     pUserCall(NULL),
     pPlusData(NULL),
     nOrdNum(0),
+    mnNavigationPosition(SAL_MAX_UINT32),
     mnLayerID(0),
     mpSvxShape(0)
 {
@@ -892,6 +893,30 @@ UINT32 SdrObject::GetOrdNum() const
     } else ((SdrObject*)this)->nOrdNum=0;
     return nOrdNum;
 }
+
+
+
+
+sal_uInt32 SdrObject::GetNavigationPosition (void)
+{
+    if (pObjList!=NULL && pObjList->RecalcNavigationPositions())
+    {
+        return mnNavigationPosition;
+    }
+    else
+        return GetOrdNum();
+}
+
+
+
+
+void SdrObject::SetNavigationPosition (const sal_uInt32 nNewPosition)
+{
+    mnNavigationPosition = nNewPosition;
+}
+
+
+
 
 // #111111#
 // To make clearer that this method may trigger RecalcBoundRect and thus may be
