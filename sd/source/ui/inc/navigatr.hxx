@@ -4,9 +4,9 @@
  *
  *  $RCSfile: navigatr.hxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: kz $ $Date: 2006-12-12 17:44:36 $
+ *  last change: $Author: vg $ $Date: 2007-08-28 13:38:13 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -156,6 +156,11 @@ private:
     ImageList                   maImageList;
     ImageList                   maImageListH;
 
+    /** This flag controls whether all shapes or only the named shapes are
+        shown.
+    */
+    bool                        mbShowAllShapes;
+
     USHORT                      GetDragTypeSdResId( NavigatorDragType eDT, BOOL bImage = FALSE );
     NavDocInfo*                 GetDocInfo();
 
@@ -167,6 +172,7 @@ private:
                                 DECL_LINK( ClickObjectHdl, void * );
                                 DECL_LINK( SelectDocumentHdl, void * );
                                 DECL_LINK( MenuSelectHdl, Menu * );
+                                DECL_LINK( ShapeFilterCallback, Menu * );
 
     virtual void                DataChanged( const DataChangedEvent& rDCEvt );
     void                        SetDragImage();
