@@ -4,9 +4,9 @@
  *
  *  $RCSfile: file_jre_ooo.scp,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: ihi $ $Date: 2007-07-11 12:33:11 $
+ *  last change: $Author: vg $ $Date: 2007-08-28 09:28:56 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -39,7 +39,7 @@ File gid_File_Exe_Java
     BIN_FILE_BODY;
 	Styles = (DONT_PACK,JAVAFILE);
 	Dir = gid_Dir_Program;
-	Name = "jre-6u2-windows-i586-p.exe";
-	Javaversion = "1.6.0_02";
+	Name = "${WINDOWSJAVAFILENAME}";
+	Javaversion = "${WINDOWSJAVAREGISTRYENTRY}";
 	Subdir = "java";
 End
