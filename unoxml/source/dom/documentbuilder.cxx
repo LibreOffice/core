@@ -4,9 +4,9 @@
  *
  *  $RCSfile: documentbuilder.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 09:58:28 $
+ *  last change: $Author: vg $ $Date: 2007-08-28 10:11:22 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -37,35 +37,15 @@
 #include "node.hxx"
 #include "document.hxx"
 
-#include <rtl/alloc.h>
-#include <rtl/memory.h>
-
 namespace DOM
 {
-    extern "C" {
-        //char *strdup(const char *s);
-        static char* strdupfunc(const char* s)
-        {
-            sal_Int32 len = 0;
-            while (s[len] != '\0') len++;
-            char *newStr = (char*)rtl_allocateMemory(len+1);
-            if (newStr != NULL)
-                rtl_copyMemory(newStr, s, len+1);
-            return newStr;
-        }
-    }
-    sal_Bool CDocumentBuilder::m_bXmlInit = sal_False;
     CDocumentBuilder::CDocumentBuilder(const Reference< XMultiServiceFactory >& xFactory)
         : m_aFactory(xFactory)
     {
-        // init libxml
-        if (! m_bXmlInit)
-        {
-            xmlMemSetup(rtl_freeMemory, (xmlMallocFunc)rtl_allocateMemory,
-                (xmlReallocFunc)rtl_reallocateMemory, strdupfunc);
-            xmlInitParser();
-            m_bXmlInit = sal_True;
-        }
+        // init libxml. libxml will protect itself against multiple
+        // initializations so there is no problem here if this gets
+        // called multiple times.
+        xmlInitParser();
     }
 
     Reference< XInterface > CDocumentBuilder::_getInstance(const Reference< XMultiServiceFactory >& rSMgr)
