@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dlged.hxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: kz $ $Date: 2007-06-20 10:39:53 $
+ *  last change: $Author: vg $ $Date: 2007-08-28 09:51:31 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -152,6 +152,7 @@ protected:
     Rectangle           aPaintRect;
     BOOL                bDialogModelChanged;
     Timer               aMarkTimer;
+    long                mnPaintGuard;
 
 public:
     DlgEditor();
@@ -225,6 +226,8 @@ public:
     void            PrintData( Printer*, const String& rTitle );    // not working yet
 
     bool            AdjustPageSize();
+
+    bool            isInPaint() const { return mnPaintGuard > 0; }
 };
 
 #endif //_BASCTL_DLGED_HXX
