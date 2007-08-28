@@ -4,9 +4,9 @@
  *
  *  $RCSfile: navigatr.cxx,v $
  *
- *  $Revision: 1.36 $
+ *  $Revision: 1.37 $
  *
- *  last change: $Author: hr $ $Date: 2007-06-27 12:42:23 $
+ *  last change: $Author: vg $ $Date: 2007-08-28 13:37:10 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -101,9 +101,13 @@
 #ifndef _SD_SLIDESHOW_HXX
 #include "slideshow.hxx"
 #endif
+#include "FrameView.hxx"
 #include "helpids.h"
 
-
+namespace {
+static const sal_uInt16 nShowNamedShapesFilter=1;
+static const sal_uInt16 nShowAllShapesFilter=2;
+};
 
 /*************************************************************************
 |*  SdNavigatorWin - FloatingWindow
@@ -142,6 +146,11 @@ SdNavigatorWin::SdNavigatorWin(
     maToolbox.SetClickHdl( LINK( this, SdNavigatorWin, ClickToolboxHdl ) );
     maToolbox.SetDropdownClickHdl( LINK(this, SdNavigatorWin, DropdownClickToolBoxHdl) );
     maToolbox.SetItemBits( TBI_DRAGTYPE, maToolbox.GetItemBits( TBI_DRAGTYPE ) | TIB_DROPDOWNONLY );
+
+    // Shape filter drop down menu.
+    maToolbox.SetItemImage(TBI_SHAPE_FILTER, BitmapEx(SdResId(BMP_GRAPHIC_H)));
+    maToolbox.SetItemBits(TBI_SHAPE_FILTER,
+        maToolbox.GetItemBits(TBI_SHAPE_FILTER) | TIB_DROPDOWNONLY);
 
     // TreeListBox
     // set position below toolbox
@@ -203,6 +212,23 @@ void SdNavigatorWin::InitTreeLB( const SdDrawDocument* pDoc )
     SdDrawDocument* pNonConstDoc = (SdDrawDocument*) pDoc; // const as const can...
     ::sd::DrawDocShell* pDocShell = pNonConstDoc->GetDocSh();
     String aDocShName( pDocShell->GetName() );
+    ::sd::ViewShell* pViewShell = pDocShell->GetViewShell();
+
+    // Restore the 'ShowAllShapes' flag from the last time (in this session)
+    // that the navigator was shown.
+    if (pViewShell != NULL)
+    {
+        ::sd::FrameView* pFrameView = pViewShell->GetFrameView();
+        if (pFrameView != NULL)
+            maTlbObjects.SetShowAllShapes(pFrameView->IsNavigatorShowingAllShapes(), false);
+    }
+
+    // Disable the shape filter drop down menu when there is a running slide
+    // show.
+    if (pViewShell!=NULL && pViewShell->GetSlideShow()!=NULL)
+        maToolbox.EnableItem(TBI_SHAPE_FILTER, FALSE);
+    else
+        maToolbox.EnableItem(TBI_SHAPE_FILTER);
 
     if( !maTlbObjects.IsEqualToDoc( pDoc ) )
     {
@@ -226,7 +252,6 @@ void SdNavigatorWin::InitTreeLB( const SdDrawDocument* pDoc )
         }
     }
 
-    ::sd::ViewShell* pViewShell = pDocShell->GetViewShell();
     SfxViewFrame* pViewFrame = ( ( pViewShell && pViewShell->GetViewFrame() ) ? pViewShell->GetViewFrame() : SfxViewFrame::Current() );
     if( pViewFrame )
         pViewFrame->GetBindings().Invalidate(SID_NAVIGATOR_PAGENAME, TRUE, TRUE);
@@ -357,6 +382,29 @@ IMPL_LINK( SdNavigatorWin, DropdownClickToolBoxHdl, ToolBox*, pBox )
             //pBox->Invalidate();
         }
         break;
+
+        case TBI_SHAPE_FILTER:
+        {
+            PopupMenu *pMenu = new PopupMenu;
+
+            pMenu->InsertItem(
+                nShowNamedShapesFilter,
+                String(SdResId(STR_NAVIGATOR_SHOW_NAMED_SHAPES)));
+            pMenu->InsertItem(
+                nShowAllShapesFilter,
+                String(SdResId(STR_NAVIGATOR_SHOW_ALL_SHAPES)));
+
+            if (maTlbObjects.GetShowAllShapes())
+                pMenu->CheckItem(nShowAllShapesFilter);
+            else
+                pMenu->CheckItem(nShowNamedShapesFilter);
+            pMenu->SetSelectHdl( LINK( this, SdNavigatorWin, ShapeFilterCallback ) );
+
+            pMenu->Execute( this, maToolbox.GetItemRect( nId ), POPUPMENU_EXECUTE_DOWN );
+            pBox->EndSelection();
+            delete pMenu;
+        }
+        break;
     }
     return 0;
 }
@@ -480,6 +528,56 @@ IMPL_LINK( SdNavigatorWin, MenuSelectHdl, Menu *, pMenu )
         }
     }
     return( 0 );
+}
+
+
+
+
+IMPL_LINK( SdNavigatorWin, ShapeFilterCallback, Menu *, pMenu )
+{
+    if (pMenu != NULL)
+    {
+        bool bShowAllShapes (maTlbObjects.GetShowAllShapes());
+        USHORT nMenuId (pMenu->GetCurItemId());
+        switch (nMenuId)
+        {
+            case nShowNamedShapesFilter:
+                bShowAllShapes = false;
+                break;
+
+            case nShowAllShapesFilter:
+                bShowAllShapes = true;
+                break;
+
+            default:
+                OSL_ENSURE(
+                    false, "SdNavigatorWin::ShapeFilterCallback called for unknown menu entry");
+                break;
+        }
+
+        maTlbObjects.SetShowAllShapes(bShowAllShapes, true);
+
+        // Remember the selection in the FrameView.
+        NavDocInfo* pInfo = GetDocInfo();
+        if (pInfo != NULL)
+        {
+            ::sd::DrawDocShell* pDocShell = pInfo->mpDocShell;
+            if (pDocShell != NULL)
+            {
+                ::sd::ViewShell* pViewShell = pDocShell->GetViewShell();
+                if (pViewShell != NULL)
+                {
+                    ::sd::FrameView* pFrameView = pViewShell->GetFrameView();
+                    if (pFrameView != NULL)
+                    {
+                        pFrameView->SetIsNavigatorShowingAllShapes(bShowAllShapes);
+                    }
+                }
+            }
+        }
+    }
+
+    return 0;
 }
 
 // -----------------------------------------------------------------------
