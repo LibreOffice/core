@@ -100,6 +100,9 @@ public:
     /** only needed for using this class with stl containers */
     inline sal_Bool operator> (const WeakReference<reference_type> & handle) const;
 
+    /** the assignment operator */
+    inline WeakReference<reference_type>& operator= (const WeakReference<reference_type> & handle);
+
 private:
     WeakConnection< reference_type >* mpWeakConnection;
 };
