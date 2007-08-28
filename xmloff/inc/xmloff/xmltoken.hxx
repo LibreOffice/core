@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xmltoken.hxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: ihi $ $Date: 2007-08-20 16:31:50 $
+ *  last change: $Author: vg $ $Date: 2007-08-28 13:49:45 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -2952,6 +2952,7 @@ namespace xmloff { namespace token {
         XML_SOFT_PAGE_BREAK,
         XML_USE_SOFT_PAGE_BREAKS,
         XML_DEPENDENCY,
+        XML_NAV_ORDER,
         XML_TOKEN_END
     };
 
