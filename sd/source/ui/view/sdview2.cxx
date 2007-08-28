@@ -4,9 +4,9 @@
  *
  *  $RCSfile: sdview2.cxx,v $
  *
- *  $Revision: 1.56 $
+ *  $Revision: 1.57 $
  *
- *  last change: $Author: rt $ $Date: 2007-04-26 08:40:46 $
+ *  last change: $Author: vg $ $Date: 2007-08-28 13:39:44 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -709,6 +709,15 @@ sal_Int8 View::AcceptDrop( const AcceptDropEvent& rEvt, DropTargetHelper& rTarge
 
                     if( bDrawing || bGraphic || bMtf || bBitmap || bBookmark || bFile || bXFillExchange || bSBAFormat || bEditEngine || bString || bRTF )
                         nRet = nDropAction;
+
+                    // For entries from the navigator, change action copy.
+                    if (bBookmark
+                        && rTargetHelper.IsDropFormatSupported(
+                            SdPageObjsTLB::SdPageObjsTransferable::GetListBoxDropFormatId())
+                        && (nDropAction & DND_ACTION_MOVE)!=0)
+                    {
+                        nRet = DND_ACTION_COPY;
+                    }
                 }
             }
         }
