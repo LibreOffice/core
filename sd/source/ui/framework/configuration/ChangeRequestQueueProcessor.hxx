@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ChangeRequestQueueProcessor.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2007-04-03 15:44:28 $
+ *  last change: $Author: vg $ $Date: 2007-08-28 11:15:47 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -109,7 +109,7 @@ private:
         so that a pending user event can be removed whent he queue processor
         is destroyed.
     */
-    sal_uInt32 mnUserEventId;
+    sal_uIntPtr mnUserEventId;
 
     ::com::sun::star::uno::Reference<
         ::com::sun::star::drawing::framework::XConfiguration> mxConfiguration;
