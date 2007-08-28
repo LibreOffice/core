@@ -4,9 +4,9 @@
  *
  *  $RCSfile: unoobj.cxx,v $
  *
- *  $Revision: 1.57 $
+ *  $Revision: 1.58 $
  *
- *  last change: $Author: vg $ $Date: 2007-01-09 11:35:02 $
+ *  last change: $Author: vg $ $Date: 2007-08-28 13:38:51 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -208,6 +208,8 @@ static SdTypesCache gImplTypesCache;
 #define WID_ISPRESOBJ       21
 #define WID_MASTERDEPEND    22
 
+#define WID_NAVORDER        23
+
 #define WID_THAT_NEED_ANIMINFO 19
 
 const SfxItemPropertyMap* ImplGetShapePropertyMap( sal_Bool bImpress, sal_Bool bGraphicObj )
@@ -236,6 +238,7 @@ const SfxItemPropertyMap* ImplGetShapePropertyMap( sal_Bool bImpress, sal_Bool b
         { MAP_CHAR_LEN(UNO_NAME_OBJ_BLUESCREEN),    WID_BLUESCREEN,      &::getCppuType((const sal_Int32*)0),                       0, 0},
         { MAP_CHAR_LEN(UNO_NAME_OBJ_VERB),          WID_VERB,            &::getCppuType((const sal_Int32*)0),                       0, 0},
         { MAP_CHAR_LEN("IsAnimation"),              WID_ISANIMATION,     &::getBooleanCppuType(),                                   0, 0},
+        { MAP_CHAR_LEN("NavigationOrder"),          WID_NAVORDER,        &::getCppuType((const sal_Int32*)0),                       0, 0},
         { 0,0,0,0,0,0}
     };
 
@@ -245,6 +248,7 @@ const SfxItemPropertyMap* ImplGetShapePropertyMap( sal_Bool bImpress, sal_Bool b
         { MAP_CHAR_LEN(UNO_NAME_OBJ_BOOKMARK),      WID_BOOKMARK,       &::getCppuType((const OUString*)0),                 0, 0},
         { MAP_CHAR_LEN(UNO_NAME_OBJ_CLICKACTION),   WID_CLICKACTION,    &::getCppuType((const presentation::ClickAction*)0),0, 0},
         { MAP_CHAR_LEN(UNO_NAME_OBJ_STYLE),         WID_STYLE,          &ITYPE(style::XStyle),                              ::com::sun::star::beans::PropertyAttribute::MAYBEVOID, 0},
+        { MAP_CHAR_LEN("NavigationOrder"),          WID_NAVORDER,        &::getCppuType((const sal_Int32*)0),                       0, 0},
         { 0,0,0,0,0,0}
     };
 
@@ -490,6 +494,18 @@ void SAL_CALL SdXShape::setPropertyValue( const ::rtl::OUString& aPropertyName, 
 
             switch(pMap->nWID)
             {
+                case WID_NAVORDER:
+                {
+                    sal_Int32 nNavOrder = 0;
+                    if(!(aValue >>= nNavOrder))
+                        throw lang::IllegalArgumentException();
+
+                    SdrObjList* pObjList = pObj->GetObjList();
+                    if( pObjList )
+                        pObjList->SetObjectNavigationPosition( *pObj, (nNavOrder < 0) ? SAL_MAX_UINT32 : static_cast< sal_uInt32 >( nNavOrder ) );
+                    break;
+                }
+
                 case WID_EFFECT:
                 {
                     AnimationEffect eEffect;
@@ -739,6 +755,12 @@ void SAL_CALL SdXShape::setPropertyValue( const ::rtl::OUString& aPropertyName, 
 
         switch(pMap->nWID)
         {
+        case WID_NAVORDER:
+            {
+                const sal_uInt32 nNavOrder = mpShape->GetSdrObject()->GetNavigationPosition();
+                aRet <<= nNavOrder == SAL_MAX_UINT32 ? static_cast<sal_Int32>(-1) : static_cast< sal_Int32 >(nNavOrder);
+            }
+            break;
         case WID_EFFECT:
             aRet <<= EffectMigration::GetAnimationEffect( mpShape );
             break;
