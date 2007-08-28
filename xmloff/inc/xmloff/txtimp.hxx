@@ -4,9 +4,9 @@
  *
  *  $RCSfile: txtimp.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: hr $ $Date: 2007-08-03 12:52:30 $
+ *  last change: $Author: vg $ $Date: 2007-08-28 12:25:10 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -614,6 +614,8 @@ public:
                             ::com::sun::star::text::XTextContent > & xContent);
 
     // --> OD 2007-07-25 #i73509# - add parameter <bOutlineLevelAttrFound>
+    // --> OD 2007-08-17 #i80724#
+    // add parameter <bSetListAttrs> in order to suppress the handling of the list attributes
     ::rtl::OUString SetStyleAndAttrs(
             SvXMLImport& rImport,
             const ::com::sun::star::uno::Reference <
@@ -621,7 +623,8 @@ public:
             const ::rtl::OUString& rStyleName,
             sal_Bool bPara,
             sal_Bool bOutlineLevelAttrFound = sal_False,
-            sal_Int8 nOutlineLevel = -1 );
+            sal_Int8 nOutlineLevel = -1,
+            sal_Bool bSetListAttrs = sal_True );
     // <--
 
     /** Find a suitable name for the given outline level.
