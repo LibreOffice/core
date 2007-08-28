@@ -223,23 +223,23 @@ fi
 # This script must exist to make extension registration work
 # always overwrite to get the latest version.
 mkdir -p ${INSTALL_ROOT}/usr/lib
-cat > ${INSTALL_ROOT}/usr/lib/postrun << EOF
+cat > ${INSTALL_ROOT}/usr/lib/postrun << \EOF
 #!/bin/sh
 
 # Override UserInstallation in bootstraprc for unopkg ..
-UserInstallation='\$ORIGIN/../UserInstallation'
+UserInstallation='$ORIGIN/../UserInstallation'
 export UserInstallation
 
 if [ -x /usr/bin/mktemp ]
 then
-  CMD=\`/usr/bin/mktemp /tmp/userinstall.XXXXXX\`
+  CMD=`/usr/bin/mktemp /tmp/userinstall.XXXXXX`
 else
-  CMD=/tmp/userinstall.\$\$; echo "" > \$CMD
+  CMD=/tmp/userinstall.$$; echo "" > $CMD
 fi
 
-sed -e "s|^/|${INSTALL_ROOT}/|" -e "s| /| ${INSTALL_ROOT}/|g" > \$CMD
-/bin/sh \$CMD
-rm -f \$CMD
+sed -e 's|"/|"${PKG_INSTALL_ROOT}/|g' > $CMD
+/bin/sh $CMD
+rm -f $CMD
 EOF
 chmod +x ${INSTALL_ROOT}/usr/lib/postrun 2>/dev/null
 
