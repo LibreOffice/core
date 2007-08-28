@@ -74,7 +74,7 @@ OpenOffice_wJRE
 			BASEPRODUCTVERSION 2.0
 			REGISTRATIONURL http://www.openoffice.org/welcome/registration20.html
 			UPDATEURL http://update23.services.openoffice.org/ProductUpdateService/check.Update
-			ADD_INCLUDE_FILES cliureversion.mk
+			ADD_INCLUDE_FILES cliureversion.mk,javaversion.dat
 			EVAL
 			FILEFORMATNAME OpenOffice.org
 			FILEFORMATVERSION 1.0
@@ -285,7 +285,7 @@ BrOffice_wJRE
 			ABOUTBOXPRODUCTVERSION 2.3.0
 			REGISTRATIONURL http://www.openoffice.org/welcome/registration20.html
 			UPDATEURL http://update.services.openoffice.org/ProductUpdateService/check.Update
-			ADD_INCLUDE_FILES cliureversion.mk
+			ADD_INCLUDE_FILES cliureversion.mk,javaversion.dat
 			EVAL
 			FILEFORMATNAME OpenOffice.org
 			FILEFORMATVERSION 1.0
