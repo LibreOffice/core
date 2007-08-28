@@ -4,9 +4,9 @@
  *
  *  $RCSfile: svdobj.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: ihi $ $Date: 2007-07-12 13:56:39 $
+ *  last change: $Author: vg $ $Date: 2007-08-28 13:44:21 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -579,6 +579,10 @@ protected:
     SdrObjPlusData*             pPlusData;    // Broadcaster, UserData, Konnektoren, ... (Das ist der Bitsack)
 
     sal_uInt32                  nOrdNum;      // Rangnummer des Obj in der Liste
+
+    /** Position in the navigation order.  SAL_MAX_UINT32 when not used.
+    */
+    sal_uInt32                  mnNavigationPosition;
     SdrLayerID                  mnLayerID;
 
     // Objekt zeigt nur auf ein Anderes
@@ -758,6 +762,25 @@ public:
     // Das Setzen der Ordnungsnummer sollte nur vom Model bzw. von der Page
     // geschehen.
     void SetOrdNum(UINT32 nNum) { nOrdNum=nNum; }
+
+    /** Return the position in the navigation order for the called object.
+        Note that this method may update the navigation position of the
+        called and of other SdrObjects.  Therefore this method can not be
+        const.
+        @return
+            If no navigation position has been explicitly defined then the
+            result of GetOrdNum() is returned.
+    */
+    sal_uInt32 GetNavigationPosition (void);
+
+    /** Set the position in the navigation position to the given value.
+        This method is typically used only by the model after a change to
+        the navigation order.
+        This method does not change the navigation position of other
+        objects.
+        Use SdrObjList::SetObjectNavigationPosition() instead.
+    */
+    void SetNavigationPosition (const sal_uInt32 nPosition);
 
     const AutoTimer* GetAutoTimer() const { return pPlusData!=NULL ? pPlusData->pAutoTimer : NULL; }
     AutoTimer* GetAutoTimer() { return pPlusData!=NULL ? pPlusData->pAutoTimer : NULL; }
@@ -1201,6 +1224,8 @@ public:
     // access to the UNO representation of the shape
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > getUnoShape();
     ::com::sun::star::uno::WeakReference< ::com::sun::star::uno::XInterface > getWeakUnoShape() { return mxUnoShape; }
+
+    static SdrObject* getSdrObjectFromXShape( const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >& xInt );
 
     // helper struct for granting access exclusive to SvxShape
     struct GrantXShapeAccess
