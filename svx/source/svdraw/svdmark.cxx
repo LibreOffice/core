@@ -4,9 +4,9 @@
  *
  *  $RCSfile: svdmark.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: hr $ $Date: 2007-08-02 18:27:46 $
+ *  last change: $Author: vg $ $Date: 2007-08-28 13:50:32 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -348,7 +348,7 @@ class ImpSdrMarkListSorter: public ContainerSorter
 {
 public:
     ImpSdrMarkListSorter(Container& rNewCont)
-    :   ContainerSorter(rNewCont)
+        :   ContainerSorter(rNewCont)
     {}
 
     virtual int Compare(const void* pElem1, const void* pElem2) const;
@@ -356,15 +356,18 @@ public:
 
 int ImpSdrMarkListSorter::Compare(const void* pElem1, const void* pElem2) const
 {
-    const SdrObject* pObj1 = ((SdrMark*)pElem1)->GetMarkedSdrObj();
-    const SdrObject* pObj2 = ((SdrMark*)pElem2)->GetMarkedSdrObj();
-    const SdrObjList* pOL1 = (pObj1) ? pObj1->GetObjList() : 0L;
-    const SdrObjList* pOL2 = (pObj2) ? pObj2->GetObjList() : 0L;
+    SdrObject* pObj1 = ((SdrMark*)pElem1)->GetMarkedSdrObj();
+    SdrObject* pObj2 = ((SdrMark*)pElem2)->GetMarkedSdrObj();
+    SdrObjList* pOL1 = (pObj1) ? pObj1->GetObjList() : 0L;
+    SdrObjList* pOL2 = (pObj2) ? pObj2->GetObjList() : 0L;
 
-    if(pOL1 == pOL2)
+    if (pOL1 == pOL2)
     {
-        ULONG nObjOrd1((pObj1) ? pObj1->GetOrdNum() : 0);
-        ULONG nObjOrd2((pObj2) ? pObj2->GetOrdNum() : 0);
+        // AF: Note that I reverted a change from sal_uInt32 to ULONG (made
+        // for 64bit compliance, #i78198#) because internally in SdrObject
+        // both nOrdNum and mnNavigationPosition are stored as sal_uInt32.
+        sal_uInt32 nObjOrd1((pObj1) ? pObj1->GetNavigationPosition() : 0);
+        sal_uInt32 nObjOrd2((pObj2) ? pObj2->GetNavigationPosition() : 0);
 
         return (nObjOrd1 < nObjOrd2 ? -1 : 1);
     }
