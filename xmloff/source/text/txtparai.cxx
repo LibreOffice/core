@@ -4,9 +4,9 @@
  *
  *  $RCSfile: txtparai.cxx,v $
  *
- *  $Revision: 1.63 $
+ *  $Revision: 1.64 $
  *
- *  last change: $Author: hr $ $Date: 2007-08-03 12:47:13 $
+ *  last change: $Author: vg $ $Date: 2007-08-28 12:25:34 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1699,18 +1699,29 @@ XMLParaContext::~XMLParaContext()
 
     OUString sCellParaStyleName = xTxtImport->sCellParaStyleDefault;
     if( sCellParaStyleName.getLength() > 0 )
-        xTxtImport->SetStyleAndAttrs( GetImport(), xAttrCursor, sCellParaStyleName, sal_True, bHeading ? nOutlineLevel : -1 );
+    {
+        // --> OD 2007-08-16 #i80724#
+        // suppress handling of outline and list attributes,
+        // because of side effects of method <SetStyleAndAttrs(..)>
+        xTxtImport->SetStyleAndAttrs( GetImport(), xAttrCursor,
+                                      sCellParaStyleName,
+                                      sal_True,
+                                      sal_False, -1, // suppress outline handling
+                                      sal_False );   // suppress list attributes handling
+        // <--
+    }
 
     // #103445# for headings without style name, find the proper style
     if( bHeading && (sStyleName.getLength() == 0) )
         xTxtImport->FindOutlineStyleName( sStyleName, nOutlineLevel );
 
-    if( sStyleName.getLength() == 0 )
-        sStyleName = xTxtImport->sCellParaStyleDefault;
-
     // set style and hard attributes at the previous paragraph
     // --> OD 2007-07-25 #i73509# - add paramter <mbOutlineLevelAttrFound>
-    sStyleName = xTxtImport->SetStyleAndAttrs( GetImport(), xAttrCursor, sStyleName, sal_True, mbOutlineLevelAttrFound, bHeading ? nOutlineLevel : -1 );
+    sStyleName = xTxtImport->SetStyleAndAttrs( GetImport(), xAttrCursor,
+                                               sStyleName,
+                                               sal_True,
+                                               mbOutlineLevelAttrFound,
+                                               bHeading ? nOutlineLevel : -1 );
     // <--
 
     // handle list style header
