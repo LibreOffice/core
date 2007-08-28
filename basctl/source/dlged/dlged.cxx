@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dlged.cxx,v $
  *
- *  $Revision: 1.51 $
+ *  $Revision: 1.52 $
  *
- *  last change: $Author: hr $ $Date: 2007-08-03 09:59:18 $
+ *  last change: $Author: vg $ $Date: 2007-08-28 09:51:02 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -320,13 +320,14 @@ DlgEditor::DlgEditor()
     ,bGridSnap(TRUE)
     ,bCreateOK(TRUE)
     ,bDialogModelChanged(FALSE)
+    ,mnPaintGuard(0)
 {
     pDlgEdModel = new DlgEdModel();
     pDlgEdModel->GetItemPool().FreezeIdRanges();
     pDlgEdModel->SetScaleUnit( MAP_100TH_MM );
 
     SdrLayerAdmin& rAdmin = pDlgEdModel->GetLayerAdmin();
-    rAdmin.NewStandardLayer();
+    rAdmin.NewLayer( rAdmin.GetControlLayerName() );
     rAdmin.NewLayer( UniString::CreateFromAscii( RTL_CONSTASCII_STRINGPARAM( "HiddenLayer" ) ) );
 
     pDlgEdPage = new DlgEdPage( *pDlgEdModel );
@@ -641,11 +642,10 @@ void DlgEditor::Paint( const Rectangle& rRect )
 
 IMPL_LINK( DlgEditor, PaintTimeout, Timer *, EMPTYARG )
 {
-    static int nInPaint = FALSE;
     if( !pDlgEdView )
         return 0;
 
-    nInPaint = TRUE;
+    mnPaintGuard++;
 
     Size aMacSize;
     if( bFirstDraw &&
@@ -718,6 +718,7 @@ IMPL_LINK( DlgEditor, PaintTimeout, Timer *, EMPTYARG )
     SdrPageView* pPgView = pDlgEdView->GetSdrPageView();
     const Region aPaintRectRegion(aPaintRect);
 
+
     // #i74769#
     SdrPaintWindow* pTargetPaintWindow = 0;
 
@@ -730,7 +731,7 @@ IMPL_LINK( DlgEditor, PaintTimeout, Timer *, EMPTYARG )
 
     // draw background self using wallpaper
     // #i79128# ...and use correct OutDev for that
-    if(pWindow)
+    if(pTargetPaintWindow)
     {
         OutputDevice& rTargetOutDev = pTargetPaintWindow->GetTargetOutputDevice();
         rTargetOutDev.DrawWallpaper(aPaintRect, Wallpaper(Color(COL_WHITE)));
@@ -739,11 +740,11 @@ IMPL_LINK( DlgEditor, PaintTimeout, Timer *, EMPTYARG )
     // do paint (unbuffered) and mark repaint end
     if(pPgView)
     {
-        pPgView->DrawLayer(0, pWindow);
+        // paint of control layer is done in EndDrawLayers anyway...
         pPgView->GetView().EndDrawLayers(*pTargetPaintWindow);
     }
 
-    nInPaint = FALSE;
+    mnPaintGuard--;
 
     DBG_ASSERT(pWindow,"Window not set");
     return 0;
