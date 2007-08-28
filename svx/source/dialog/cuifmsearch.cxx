@@ -4,9 +4,9 @@
  *
  *  $RCSfile: cuifmsearch.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: hr $ $Date: 2007-07-31 13:56:19 $
+ *  last change: $Author: vg $ $Date: 2007-08-28 10:24:36 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -195,6 +195,8 @@ FmSearchDialog::FmSearchDialog(Window* pParent, const UniString& sInitialText, c
     ,m_pbSearchAgain            (this, SVX_RES(PB_SEARCH))
     ,m_pbClose                  (this, SVX_RES(1))
     ,m_pbHelp                   (this, SVX_RES(1))
+    ,m_sSearch                  ( m_pbSearchAgain.GetText() )
+    ,m_sCancel                  ( Button::GetStandardText( BUTTON_CANCEL ) )
     ,m_pPreSearchFocus( NULL )
     ,m_lnkContextSupplier(lnkContextSupplier)
     ,m_pConfig( NULL )
@@ -693,8 +695,8 @@ void FmSearchDialog::EnableSearchUI(sal_Bool bEnable)
     }
 
     // der Suchen-Button hat einen Doppelfunktion, seinen Text entsprechend anpassen
-    UniString strButtonText(SVX_RES(RID_STR_RECORDSEARCH_BUTTONS));
-    m_pbSearchAgain.SetText(strButtonText.GetToken(bEnable ? 2 : 3));
+    String sButtonText( bEnable ? m_sSearch : m_sCancel );
+    m_pbSearchAgain.SetText( sButtonText );
 
     // jetzt Controls en- oder disablen
     if (m_pSearchEngine->GetSearchMode() != SM_BRUTE)
