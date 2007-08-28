@@ -214,7 +214,8 @@ case `basename "$MAILER" | sed 's/-.*$//'` in
                     shift
                     ;;
                 --body)
-                    BODY=$(mktemp -q -t $(basename $0).mutt.XXXXXXXX)
+                    TEMPLATE="`basename $0`.mutt.XXXXXXXX"
+                    BODY=`mktemp -q -t ${TEMPLATE}`
                     echo "$2" > $BODY
                     shift
                     ;;
