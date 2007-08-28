@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ximppage.hxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: hr $ $Date: 2007-06-27 15:11:06 $
+ *  last change: $Author: vg $ $Date: 2007-08-28 13:34:59 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -73,6 +73,7 @@ protected:
     rtl::OUString               maUseHeaderDeclName;
     rtl::OUString               maUseFooterDeclName;
     rtl::OUString               maUseDateTimeDeclName;
+    rtl::OUString               msNavOrder;
 
     void SetLocalShapesContext(com::sun::star::uno::Reference< com::sun::star::drawing::XShapes >& rNew)
         { mxShapes = rNew; }
@@ -91,6 +92,8 @@ protected:
 
     /** sets the properties from a page master style with the given name on this contexts page */
     void SetPageMaster( rtl::OUString& rsPageMasterName );
+
+    void SetNavigationOrder();
 
 public:
     TYPEINFO();
