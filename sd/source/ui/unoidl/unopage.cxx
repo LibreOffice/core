@@ -4,9 +4,9 @@
  *
  *  $RCSfile: unopage.cxx,v $
  *
- *  $Revision: 1.88 $
+ *  $Revision: 1.89 $
  *
- *  last change: $Author: rt $ $Date: 2007-07-09 13:06:35 $
+ *  last change: $Author: vg $ $Date: 2007-08-28 13:39:06 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -66,7 +66,6 @@
 #ifndef _COM_SUN_STAR_LANG_DISPOSEDEXCEPTION_HPP_
 #include <com/sun/star/lang/DisposedException.hpp>
 #endif
-
 #ifndef _COMPHELPER_PROCESSFACTORY_HXX_
 #include <comphelper/processfactory.hxx>
 #endif
@@ -181,6 +180,9 @@ using namespace ::vos;
 using namespace ::osl;
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
+using namespace ::com::sun::star::lang;
+using namespace ::com::sun::star::container;
+using namespace ::com::sun::star::drawing;
 
 /* this are the ids for page properties */
 enum WID_PAGE
@@ -193,7 +195,8 @@ enum WID_PAGE
     WID_PAGE_HEADERVISIBLE, WID_PAGE_HEADERTEXT, WID_PAGE_FOOTERVISIBLE, WID_PAGE_FOOTERTEXT,
     WID_PAGE_PAGENUMBERVISIBLE, WID_PAGE_DATETIMEVISIBLE, WID_PAGE_DATETIMEFIXED,
     WID_PAGE_DATETIMETEXT, WID_PAGE_DATETIMEFORMAT, WID_TRANSITION_TYPE, WID_TRANSITION_SUBTYPE,
-    WID_TRANSITION_DIRECTION, WID_TRANSITION_FADE_COLOR, WID_TRANSITION_DURATION, WID_LOOP_SOUND
+    WID_TRANSITION_DIRECTION, WID_TRANSITION_FADE_COLOR, WID_TRANSITION_DURATION, WID_LOOP_SOUND,
+    WID_NAVORDER
 };
 
 #ifndef SEQTYPE
@@ -249,6 +252,7 @@ const SfxItemPropertyMap* ImplGetDrawPagePropertyMap( sal_Bool bImpress, PageKin
         { MAP_CHAR_LEN("TransitionFadeColor"),          WID_TRANSITION_FADE_COLOR, &::getCppuType((const sal_Int32*)0),         0,  0},
         { MAP_CHAR_LEN("TransitionDuration"),           WID_TRANSITION_DURATION, &::getCppuType((const double*)0),          0,  0},
         { MAP_CHAR_LEN("LoopSound"),                    WID_LOOP_SOUND, &::getBooleanCppuType(),                    0, 0},
+        { MAP_CHAR_LEN("NavigationOrder"),              WID_NAVORDER, &::com::sun::star::container::XIndexAccess::static_type(),0,  0},
         {0,0,0,0,0,0}
     };
 
@@ -278,6 +282,7 @@ const SfxItemPropertyMap* ImplGetDrawPagePropertyMap( sal_Bool bImpress, PageKin
         { MAP_CHAR_LEN("IsDateTimeFixed"),              WID_PAGE_DATETIMEFIXED, &::getBooleanCppuType(),                    0, 0},
         { MAP_CHAR_LEN("DateTimeText"),                 WID_PAGE_DATETIMETEXT, &::getCppuType((const OUString*)0),              0,  0},
         { MAP_CHAR_LEN("DateTimeFormat"),               WID_PAGE_DATETIMEFORMAT, &::getCppuType((const sal_Int32*)0),           0,  0},
+        { MAP_CHAR_LEN("NavigationOrder"),              WID_NAVORDER, &::com::sun::star::container::XIndexAccess::static_type(),0,  0},
 
         {0,0,0,0,0,0}
     };
@@ -300,6 +305,7 @@ const SfxItemPropertyMap* ImplGetDrawPagePropertyMap( sal_Bool bImpress, PageKin
         { MAP_CHAR_LEN(sUNO_Prop_UserDefinedAttributes),WID_PAGE_USERATTRIBS, &::getCppuType((const Reference< ::com::sun::star::container::XNameContainer >*)0)  ,         0,     0},
         { MAP_CHAR_LEN(sUNO_Prop_BookmarkURL),          WID_PAGE_BOOKMARK,  &::getCppuType((const OUString*)0),             0,  0},
         { MAP_CHAR_LEN("IsBackgroundDark" ),            WID_PAGE_ISDARK,    &::getBooleanCppuType(),                        beans::PropertyAttribute::READONLY, 0},
+        { MAP_CHAR_LEN("NavigationOrder"),              WID_NAVORDER, &::com::sun::star::container::XIndexAccess::static_type(),0,  0},
         {0,0,0,0,0,0}
     };
 
@@ -573,6 +579,9 @@ void SAL_CALL SdGenericDrawPage::setPropertyValue( const OUString& aPropertyName
 
     switch( pMap ? pMap->nWID : -1 )
     {
+        case WID_NAVORDER:
+            setNavigationOrder( aValue );
+            break;
         case WID_PAGE_LEFT:
         case WID_PAGE_RIGHT:
         case WID_PAGE_TOP:
@@ -966,6 +975,9 @@ Any SAL_CALL SdGenericDrawPage::getPropertyValue( const OUString& PropertyName )
 
     switch( pMap ? pMap->nWID : -1 )
     {
+    case WID_NAVORDER:
+        aAny = getNavigationOrder();
+        break;
     case WID_PAGE_LEFT:
         aAny <<= (sal_Int32)( GetPage()->GetLftBorder() );
         break;
@@ -2487,6 +2499,98 @@ void SdDrawPage::getBackground( Any& rValue ) throw()
     }
 }
 
+void SdGenericDrawPage::setNavigationOrder( const Any& rValue )
+{
+    Reference< XIndexAccess > xIA( rValue, UNO_QUERY );
+    if( xIA.is() )
+    {
+        if( dynamic_cast< SdDrawPage* >( xIA.get() ) == this )
+        {
+            if( GetPage()->HasObjectNavigationOrder() )
+                GetPage()->ClearObjectNavigationOrder();
+
+            return;
+        }
+        else if( xIA->getCount() == static_cast< sal_Int32 >( GetPage()->GetObjCount() ) )
+        {
+            GetPage()->SetNavigationOrder(xIA);
+            return;
+        }
+    }
+    throw IllegalArgumentException();
+}
+
+class NavigationOrderAccess : public ::cppu::WeakImplHelper1< XIndexAccess >
+{
+public:
+    NavigationOrderAccess( SdrPage* pPage );
+
+    // XIndexAccess
+    virtual sal_Int32 SAL_CALL getCount(  ) throw (RuntimeException);
+    virtual Any SAL_CALL getByIndex( sal_Int32 Index ) throw (IndexOutOfBoundsException, WrappedTargetException, RuntimeException);
+
+    // XElementAccess
+    virtual Type SAL_CALL getElementType(  ) throw (RuntimeException);
+    virtual sal_Bool SAL_CALL hasElements(  ) throw (RuntimeException);
+
+private:
+    std::vector< Reference< XShape > > maShapes;
+};
+
+NavigationOrderAccess::NavigationOrderAccess( SdrPage* pPage )
+: maShapes( static_cast< sal_uInt32 >( pPage ? pPage->GetObjCount() : 0 ) )
+{
+    if( pPage )
+    {
+        sal_uInt32 nIndex;
+        const sal_uInt32 nCount = static_cast< sal_uInt32 >( pPage->GetObjCount() );
+        for( nIndex = 0; nIndex < nCount; ++nIndex )
+        {
+            SdrObject* pObj = pPage->GetObj( nIndex );
+            sal_uInt32 nNavPos = pObj->GetNavigationPosition();
+            DBG_ASSERT( !maShapes[nNavPos].is(), "sd::NavigationOrderAccess::NavigationOrderAccess(), duplicate navigation positions from core!" );
+            maShapes[nNavPos] = Reference< XShape >( pObj->getUnoShape(), UNO_QUERY );
+        }
+    }
+}
+
+// XIndexAccess
+sal_Int32 SAL_CALL NavigationOrderAccess::getCount(  ) throw (RuntimeException)
+{
+    return static_cast< sal_Int32 >( maShapes.size() );
+}
+
+Any SAL_CALL NavigationOrderAccess::getByIndex( sal_Int32 Index ) throw (IndexOutOfBoundsException, WrappedTargetException, RuntimeException)
+{
+    if( (Index < 0) || (Index > getCount()) )
+        throw IndexOutOfBoundsException();
+
+    return Any( maShapes[Index] );
+}
+
+// XElementAccess
+Type SAL_CALL NavigationOrderAccess::getElementType(  ) throw (RuntimeException)
+{
+    return XShape::static_type();
+}
+
+sal_Bool SAL_CALL NavigationOrderAccess::hasElements(  ) throw (RuntimeException)
+{
+    return maShapes.empty() ? sal_False : sal_True;
+}
+
+Any SdGenericDrawPage::getNavigationOrder()
+{
+    if( GetPage()->HasObjectNavigationOrder() )
+    {
+        return Any( Reference< XIndexAccess >( new NavigationOrderAccess( GetPage() ) ) );
+    }
+    else
+    {
+        return Any( Reference< XIndexAccess >( this ) );
+    }
+}
+
 //========================================================================
 // class SdMasterPage
 //========================================================================
@@ -2984,4 +3088,3 @@ Reference< uno::XInterface > createUnoPageImpl( SdPage* pPage )
 
     return xPage;
 }
-
