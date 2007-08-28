@@ -4,9 +4,9 @@
  *
  *  $RCSfile: txtimp.cxx,v $
  *
- *  $Revision: 1.131 $
+ *  $Revision: 1.132 $
  *
- *  last change: $Author: hr $ $Date: 2007-08-03 12:55:38 $
+ *  last change: $Author: vg $ $Date: 2007-08-28 12:25:23 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -987,7 +987,10 @@ OUString XMLTextImportHelper::SetStyleAndAttrs(
         const OUString& rStyleName,
         sal_Bool bPara,
         sal_Bool bOutlineLevelAttrFound,
-        sal_Int8 nOutlineLevel )
+        sal_Int8 nOutlineLevel,
+        // --> OD 2007-08-17 #i80724#
+        sal_Bool bSetListAttrs )
+        // <--
 {
     const sal_uInt16 nFamily = bPara ? XML_STYLE_FAMILY_TEXT_PARAGRAPH
                                      : XML_STYLE_FAMILY_TEXT_TEXT;
@@ -1023,7 +1026,9 @@ OUString XMLTextImportHelper::SetStyleAndAttrs(
             sStyleName = OUString();
     }
 
-    if( bPara && xPropSetInfo->hasPropertyByName( sNumberingRules )  )
+    // --> OD 2007-08-17 #i80724#
+    if ( bSetListAttrs && bPara && xPropSetInfo->hasPropertyByName( sNumberingRules )  )
+    // <--
     {
         // Set numbering rules
         Reference < XIndexReplace > xNumRules(xPropSet->getPropertyValue( sNumberingRules ), UNO_QUERY);
