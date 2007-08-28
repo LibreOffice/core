@@ -346,7 +346,7 @@ Section -Post
     nopostremovesilent:
       StrCmp $R9 "true" installjava1 dontinstalljava1 
       installjava1:
-        ExecWait '$INSTDIR\java\jre-6-windows-i586.exe /s /v"/qn REBOOT=Suppress"'
+        ExecWait '$INSTDIR\java\WINDOWSJAVAFILENAMEPLACEHOLDER /s /v"/qn REBOOT=Suppress"'
       dontinstalljava1:
       ExecWait "$INSTDIR\setup.exe -lang $LANGUAGE $3 $4 $5 $6 $7 -ignore_running" $0
       SetErrorLevel $0
@@ -355,7 +355,7 @@ Section -Post
     postremovesilent:
       StrCmp $R9 "true" installjava2 dontinstalljava2 
       installjava2:
-        ExecWait '$INSTDIR\java\jre-6-windows-i586.exe /s /v"/qn REBOOT=Suppress"'
+        ExecWait '$INSTDIR\java\WINDOWSJAVAFILENAMEPLACEHOLDER /s /v"/qn REBOOT=Suppress"'
       dontinstalljava2:
       ExecWait "$INSTDIR\setup.exe -lang $LANGUAGE $3 $4 $5 $6 $7 -ignore_running" $0
       RMDir /r $INSTDIR
@@ -379,7 +379,7 @@ Section -Post
     postremove:
       StrCmp $R9 "true" installjava3 dontinstalljava3 
       installjava3:
-        ExecWait '$INSTDIR\java\jre-6-windows-i586.exe /s /v"/qr REBOOT=Suppress"'
+        ExecWait '$INSTDIR\java\WINDOWSJAVAFILENAMEPLACEHOLDER /s /v"/qr REBOOT=Suppress"'
       dontinstalljava3:
       ExecWait "$INSTDIR\setup.exe -lang $LANGUAGE $3 $4 $5 $6" $0
       RMDir /r $INSTDIR
