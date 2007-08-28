@@ -4,9 +4,9 @@
  *
  *  $RCSfile: svditer.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: hr $ $Date: 2007-06-27 19:02:58 $
+ *  last change: $Author: vg $ $Date: 2007-08-28 13:44:51 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -62,7 +62,16 @@ SdrObjListIter::SdrObjListIter(const SdrObjList& rObjList, SdrIterMode eMode, BO
     mnIndex(0L),
     mbReverse(bReverse)
 {
-    ImpProcessObjectList(rObjList, eMode);
+    ImpProcessObjectList(rObjList, eMode, TRUE);
+    Reset();
+}
+
+SdrObjListIter::SdrObjListIter(const SdrObjList& rObjList, BOOL bUseZOrder, SdrIterMode eMode, BOOL bReverse)
+:   maObjList(1024, 64, 64),
+    mnIndex(0L),
+    mbReverse(bReverse)
+{
+    ImpProcessObjectList(rObjList, eMode, bUseZOrder);
     Reset();
 }
 
@@ -72,17 +81,27 @@ SdrObjListIter::SdrObjListIter( const SdrObject& rObj, SdrIterMode eMode, BOOL b
     mbReverse(bReverse)
 {
     if ( rObj.ISA( SdrObjGroup ) )
-        ImpProcessObjectList(*rObj.GetSubList(), eMode);
+        ImpProcessObjectList(*rObj.GetSubList(), eMode, TRUE);
     else
         maObjList.Insert( (void*)&rObj, LIST_APPEND );
     Reset();
 }
 
-void SdrObjListIter::ImpProcessObjectList(const SdrObjList& rObjList, SdrIterMode eMode)
+void SdrObjListIter::ImpProcessObjectList(const SdrObjList& rObjList, SdrIterMode eMode, BOOL bUseZOrder)
 {
     for(sal_uInt32 a(0L); a < rObjList.GetObjCount(); a++)
     {
-        SdrObject* pObj = rObjList.GetObj(a);
+        SdrObject* pObj = NULL;
+        if (bUseZOrder)
+            pObj = rObjList.GetObj(a);
+        else
+            pObj = rObjList.GetObjectForNavigationPosition(a);
+        if (pObj == NULL)
+        {
+            OSL_ASSERT(pObj!=NULL);
+            continue;
+        }
+
         sal_Bool bIsGroup(pObj->IsGroupObject());
 
         // #99190# 3D objects are no group objects, IsGroupObject()
@@ -94,7 +113,7 @@ void SdrObjListIter::ImpProcessObjectList(const SdrObjList& rObjList, SdrIterMod
             maObjList.Insert(pObj, LIST_APPEND);
 
         if(bIsGroup && eMode != IM_FLAT)
-            ImpProcessObjectList(*pObj->GetSubList(), eMode);
+            ImpProcessObjectList(*pObj->GetSubList(), eMode, bUseZOrder);
     }
 }
 
