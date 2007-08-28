@@ -4,9 +4,9 @@
  *
  *  $RCSfile: vclxwindow.cxx,v $
  *
- *  $Revision: 1.77 $
+ *  $Revision: 1.78 $
  *
- *  last change: $Author: hr $ $Date: 2007-08-02 14:18:21 $
+ *  last change: $Author: vg $ $Date: 2007-08-28 09:50:40 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -2399,7 +2399,12 @@ void VCLXWindow::draw( sal_Int32 nX, sal_Int32 nY ) throw(::com::sun::star::uno:
             }
             else
             {
+                BOOL bOldNW =pWindow->IsNativeWidgetEnabled();
+                if( bOldNW )
+                    pWindow->EnableNativeWidget(FALSE);
                 pWindow->PaintToDevice( pDev, aP, aSz );
+                if( bOldNW )
+                    pWindow->EnableNativeWidget(TRUE);
             }
         }
     }
