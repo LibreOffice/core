@@ -4,9 +4,9 @@
  *
  *  $RCSfile: svdpage.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: vg $ $Date: 2007-04-11 16:26:36 $
+ *  last change: $Author: vg $ $Date: 2007-08-28 13:44:36 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -88,6 +88,10 @@
 #include "svx/svxdllapi.h"
 #endif
 
+#include <com/sun/star/container/XIndexAccess.hpp>
+#include <svx/svdobj.hxx>
+#include <boost/scoped_ptr.hpp>
+
 // #110094#
 namespace sdr
 {
@@ -111,7 +115,6 @@ namespace sdr
 
 //#endif // __PRIVATE
 
-class SdrObject;
 class SdrPage;
 class XOutputDevice;
 class SdrPaintInfoRec;
@@ -144,10 +147,13 @@ public:
 };
 
 class SVX_DLLPUBLIC SdrObjList {
+private:
+    typedef ::std::vector<SdrObject*> SdrObjectContainerType;
+    SdrObjectContainerType maList;
+
 protected:
 friend class SdrObjListIter;
 friend class SdrEditView;
-    Container   maList;
     SdrObjList* pUpList;   // Vaterliste
     SdrModel*   pModel;    // Diese Liste gehoert zu diesem Model (Layer,ItemPool,Storage).
     SdrPage*    pPage;     // Page, in die Liste haengt. Kann auch this sein.
@@ -247,8 +253,8 @@ public:
     FASTBOOL GetFillColor(const Point& rPnt, const SetOfByte& rVisLayers,
         /* FASTBOOL bLayerSorted, */ Color& rCol) const;
 
-    ULONG      GetObjCount() const           { return maList.Count(); }
-    SdrObject* GetObj(ULONG nNum) const { return (SdrObject*)maList.GetObject(nNum); }
+    ULONG      GetObjCount() const;
+    SdrObject* GetObj(ULONG nNum) const;
 
     // Gelinkte Seite oder gelinktes Gruppenobjekt
     virtual FASTBOOL IsReadOnly() const;
@@ -282,6 +288,111 @@ public:
         the given object contains no groups afterwards.
      */
     virtual void UnGroupObj( ULONG nObjNum );
+
+    /** Return whether there is an explicit, user defined, object navigation
+        order.  When there is one this method returns <TRUE/> and the
+        GetObjectForNavigationPosition() and
+        SdrObject::GetNavigationPosition() methods will return values
+        different from those returne by SdrObject::GetOrdNum() and
+        GetObj().
+    */
+    bool HasObjectNavigationOrder (void) const;
+
+    /** Set the navigation position of the given object to the specified
+        value.  Note that this changes the navigation position for all
+        objects on or following the old or new position.
+    */
+    void SetObjectNavigationPosition (
+        SdrObject& rObject,
+        const sal_uInt32 nNewNavigationPosition);
+
+    /** Return the object for the given navigation position.  When there is
+        a user defined navigation order, i.e. mpNavigationOrder is not NULL,
+        then that is used to look up the object.  Otherwise the z-order is
+        used by looking up the object in maList.
+        @param nNavigationPosition
+            Valid values include 0 and are smaller than the number of
+            objects as returned by GetObjCount().
+        @return
+            The returned pointer is NULL for invalid positions.
+    */
+    SdrObject* GetObjectForNavigationPosition (const sal_uInt32 nNavigationPosition) const;
+
+    /** Restore the navigation order to that defined by the z-order.
+    */
+    void ClearObjectNavigationOrder (void);
+
+    /** Set the navigation position of all SdrObjects to their position in
+        the mpNavigationOrder list.  This method returns immediately when no
+        update is necessary.
+        @return
+            This method returns <TRUE/> when the navigation positions stored
+            in SdrObjects are up to date.
+            It returns <FALSE/> when teh navigation positions are not valid,
+            for example because no explicit navigation order has been
+            defined, i.e. HasObjectNavigationOrder() would return <FALSE/>.
+    */
+    bool RecalcNavigationPositions (void);
+
+    /** Set the navigation order to the one defined by the given list of
+        XShape objects.
+        @param rxOrder
+            When this is an empty reference then the navigation order is
+            reset to the z-order. The preferred way to do this, however, is
+            to call ClearObjectNavigationOrder().
+            Otherwise this list is expected to contain all the shapes in the
+            called SdrObjList.
+    */
+    void SetNavigationOrder (const ::com::sun::star::uno::Reference<
+        ::com::sun::star::container::XIndexAccess>& rxOrder);
+
+private:
+    class WeakSdrObjectContainerType;
+    /// This list, if it exists, defines the navigation order.  It it does
+    /// not exist then maList defines the navigation order.
+    ::boost::scoped_ptr<WeakSdrObjectContainerType> mpNavigationOrder;
+
+    /// This flag is <TRUE/> when the mpNavigation list has been changed but
+    /// the indices of the referenced SdrObjects still have their old values.
+    bool mbIsNavigationOrderDirty;
+
+    /** Insert an SdrObject into maList.  Do not modify the maList member
+        directly.
+        @param rObject
+            The object to insert into the object list.
+        @param nInsertPosition
+            The given object is inserted before the object at this
+            position.  Valid values include 0 (the object is inserted at the
+            head of the list) and the number of objects in the list as
+            returned by GetObjCount() (the object is inserted at the end of
+            the list.)
+    */
+    void InsertObjectIntoContainer (
+        SdrObject& rObject,
+        const sal_uInt32 nInsertPosition);
+
+    /** Replace an object in the object list.
+        @param rObject
+            The new object that replaces the one in the list at the
+            specified position.
+        @param nObjectPosition
+            The object at this position in the object list is replaced by
+            the given object.  Valid values include 0 and are smaller than
+            the number of objects in the list.
+    */
+    void ReplaceObjectInContainer (
+        SdrObject& rObject,
+        const sal_uInt32 nObjectPosition);
+
+    /** Remove an object from the object list.
+        The object list has to contain at least one element.
+        @param nObjectPosition
+            The object at this position is removed from the object list.
+            Valid values include 0 and are smaller than the number of
+            objects in the list.
+    */
+    void RemoveObjectFromContainer (
+        const sal_uInt32 nObjectPosition);
 };
 
 /*
