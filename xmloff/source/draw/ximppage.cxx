@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ximppage.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: hr $ $Date: 2007-06-27 15:10:49 $
+ *  last change: $Author: vg $ $Date: 2007-08-28 13:34:48 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -39,6 +39,8 @@
 #ifndef _TOOLS_DEBUG_HXX
 #include <tools/debug.hxx>
 #endif
+
+#include <cppuhelper/implbase1.hxx>
 
 #ifndef _XMLOFF_NUMBERSTYLESIMPORT_HXX
 #include "XMLNumberStylesImport.hxx"
@@ -92,12 +94,18 @@
 #include "PropertySetMerger.hxx"
 #endif
 
+#include "unointerfacetouniqueidentifiermapper.hxx"
+#include <xmloff/xmluconv.hxx>
+
 using namespace ::rtl;
 using namespace ::com::sun::star;
 using namespace ::xmloff::token;
 
-using ::com::sun::star::uno::Reference;
-using ::com::sun::star::uno::makeAny;
+using namespace ::com::sun::star::uno;
+using namespace ::com::sun::star::lang;
+using namespace ::com::sun::star::beans;
+using namespace ::com::sun::star::drawing;
+using namespace ::com::sun::star::container;
 
 //////////////////////////////////////////////////////////////////////////////
 
@@ -106,11 +114,24 @@ TYPEINIT1( SdXMLGenericPageContext, SvXMLImportContext );
 SdXMLGenericPageContext::SdXMLGenericPageContext(
     SvXMLImport& rImport,
     USHORT nPrfx, const OUString& rLocalName,
-    const Reference< xml::sax::XAttributeList>&,
+    const Reference< xml::sax::XAttributeList>& xAttrList,
     Reference< drawing::XShapes >& rShapes)
 :   SvXMLImportContext( rImport, nPrfx, rLocalName ),
     mxShapes( rShapes )
 {
+    sal_Int16 nAttrCount = xAttrList.is() ? xAttrList->getLength() : 0;
+
+    for(sal_Int16 i=0; i < nAttrCount; i++)
+    {
+        OUString sAttrName = xAttrList->getNameByIndex( i );
+        OUString aLocalName;
+        USHORT nPrefix = GetSdImport().GetNamespaceMap().GetKeyByAttrName( sAttrName, &aLocalName );
+        if( (nPrefix == XML_NAMESPACE_DRAW) && IsXMLToken( aLocalName, XML_NAV_ORDER ) )
+        {
+            msNavOrder = xAttrList->getValueByIndex( i );
+            break;
+        }
+    }
 }
 
 //////////////////////////////////////////////////////////////////////////////
@@ -236,6 +257,8 @@ void SdXMLGenericPageContext::EndElement()
             DBG_ERROR("xmloff::SdXMLGenericPageContext::EndElement(), unexpected exception cought!");
         }
     }
+
+    SetNavigationOrder();
 }
 
 void SdXMLGenericPageContext::SetStyle( rtl::OUString& rStyleName )
@@ -429,5 +452,90 @@ void SdXMLGenericPageContext::SetPageMaster( OUString& rsPageMasterName )
             }
         }
 
+    }
+}
+
+class NavigationOrderAccess : public ::cppu::WeakImplHelper1< XIndexAccess >
+{
+public:
+    NavigationOrderAccess( std::vector< Reference< XShape > >& rShapes );
+
+    // XIndexAccess
+    virtual sal_Int32 SAL_CALL getCount(  ) throw (RuntimeException);
+    virtual Any SAL_CALL getByIndex( sal_Int32 Index ) throw (IndexOutOfBoundsException, WrappedTargetException, RuntimeException);
+
+    // XElementAccess
+    virtual Type SAL_CALL getElementType(  ) throw (RuntimeException);
+    virtual sal_Bool SAL_CALL hasElements(  ) throw (RuntimeException);
+
+private:
+    std::vector< Reference< XShape > > maShapes;
+};
+
+NavigationOrderAccess::NavigationOrderAccess( std::vector< Reference< XShape > >& rShapes )
+{
+    maShapes.swap( rShapes );
+}
+
+// XIndexAccess
+sal_Int32 SAL_CALL NavigationOrderAccess::getCount(  ) throw (RuntimeException)
+{
+    return static_cast< sal_Int32 >( maShapes.size() );
+}
+
+Any SAL_CALL NavigationOrderAccess::getByIndex( sal_Int32 Index ) throw (IndexOutOfBoundsException, WrappedTargetException, RuntimeException)
+{
+    if( (Index < 0) || (Index > getCount()) )
+        throw IndexOutOfBoundsException();
+
+    return Any( maShapes[Index] );
+}
+
+// XElementAccess
+Type SAL_CALL NavigationOrderAccess::getElementType(  ) throw (RuntimeException)
+{
+    return XShape::static_type();
+}
+
+sal_Bool SAL_CALL NavigationOrderAccess::hasElements(  ) throw (RuntimeException)
+{
+    return maShapes.empty() ? sal_False : sal_True;
+}
+
+void SdXMLGenericPageContext::SetNavigationOrder()
+{
+    if( msNavOrder.getLength() != 0 ) try
+    {
+        sal_uInt32 nIndex;
+        const sal_uInt32 nCount = static_cast< sal_uInt32 >( mxShapes->getCount() );
+        std::vector< Reference< XShape > > aShapes( nCount );
+
+        ::comphelper::UnoInterfaceToUniqueIdentifierMapper& rIdMapper = GetSdImport().getInterfaceToIdentifierMapper();
+        SvXMLTokenEnumerator aEnumerator( msNavOrder );
+        OUString sId;
+        for( nIndex = 0; nIndex < nCount; ++nIndex )
+        {
+            if( !aEnumerator.getNextToken(sId) )
+                break;
+
+            aShapes[nIndex] = Reference< XShape >( rIdMapper.getReference( sId ), UNO_QUERY );
+        }
+
+        for( nIndex = 0; nIndex < nCount; ++nIndex )
+        {
+            if( !aShapes[nIndex].is() )
+            {
+                DBG_ERROR("xmloff::SdXMLGenericPageContext::SetNavigationOrder(), draw:nav-order attribute incomplete!");
+                // todo: warning?
+                return;
+            }
+        }
+
+        Reference< XPropertySet > xSet( mxShapes, UNO_QUERY_THROW );
+        xSet->setPropertyValue( OUString( RTL_CONSTASCII_USTRINGPARAM( "NavigationOrder" ) ), Any( Reference< XIndexAccess >( new NavigationOrderAccess( aShapes ) ) ) );
+    }
+    catch( uno::Exception& )
+    {
+        DBG_ERROR("xmloff::SdXMLGenericPageContext::SetNavigationOrder(), unexpected exception cought while importing shape navigation order!");
     }
 }
