@@ -4,9 +4,9 @@
  *
  *  $RCSfile: paintfrm.cxx,v $
  *
- *  $Revision: 1.106 $
+ *  $Revision: 1.107 $
  *
- *  last change: $Author: ihi $ $Date: 2007-08-20 13:42:36 $
+ *  last change: $Author: vg $ $Date: 2007-08-28 10:05:50 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -2896,6 +2896,12 @@ void SwRootFrm::Paint( const SwRect& rRect ) const
                     (pPage->Frm().*fnRect->fnGetWidth)() );
                 aPaintRect._Intersection( pSh->VisArea() );
             }
+
+            // --> OD 2007-08-20 #i80793#
+            // enlarge paint rectangle for objects overlapping the same pixel
+            // in all cases and before the DrawingLayer overlay is initialized.
+            lcl_AdjustRectToPixelSize( aPaintRect, *(pSh->GetOut()) );
+            // <--
 
             // #i68597#
             // moved paint pre-process for DrawingLayer overlay here since the above
