@@ -4,9 +4,9 @@
  *
  *  $RCSfile: module_java.ulf,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: kz $ $Date: 2007-05-10 13:23:57 $
+ *  last change: $Author: vg $ $Date: 2007-08-28 09:29:32 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -34,7 +34,7 @@
  ************************************************************************/
 
 [STR_NAME_MODULE_OPTIONAL_JAVA]
-en-US = "Java Runtime Environment"
+en-US = "Java Runtime Environment (%JAVAVERSION)"
 
 [STR_DESC_MODULE_OPTIONAL_JAVA]
 en-US = "Component for setting up the Java Environment"
