@@ -4,9 +4,9 @@
  *
  *  $RCSfile: SlideSorterViewShell.cxx,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: ihi $ $Date: 2007-08-17 14:27:14 $
+ *  last change: $Author: vg $ $Date: 2007-08-28 11:30:47 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -234,7 +234,7 @@ SlideSorterViewShell* SlideSorterViewShell::GetSlideSorter (ViewShellBase& rBase
                     ResourceId::create(
                         comphelper_getProcessComponentContext(),
                         aPaneURLs[i]));
-                Reference<XView> xView (xViewController->getView(xPaneId));
+                Reference<XView> xView (xViewController->getFirstViewForAnchor(xPaneId));
                 if (xView.is()
                     && xView->getResourceId()->getResourceURL().equals(
                         FrameworkHelper::msSlideSorterURL))
