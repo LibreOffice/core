@@ -22,6 +22,7 @@ mkdir: %_DEST%\bin%_EXT%\userscripts
 ..\source\win32\nsis\*.bmp %_DEST%\bin%_EXT%\*.bmp
 ..\source\linux\*.dat %_DEST%\bin%_EXT%\*.dat
 ..\source\java\openofficeorg_setup.gif %_DEST%\bin%_EXT%\osl\Setup.gif
+..\source\java\javaversion.dat %_DEST%\bin%_EXT%\javaversion.dat
 
 ..\%__SRC%\lib\getuid.so %_DEST%\bin%_EXT%\getuid.so
 
