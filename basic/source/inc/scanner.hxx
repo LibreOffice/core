@@ -4,9 +4,9 @@
  *
  *  $RCSfile: scanner.hxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: hr $ $Date: 2007-06-27 14:23:24 $
+ *  last change: $Author: vg $ $Date: 2007-08-30 10:01:17 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -79,7 +79,8 @@ protected:
     BOOL   bHash;                       // TRUE: # eingelesen
     BOOL   bError;                      // TRUE: Fehler generieren
     BOOL   bUsedForHilite;              // TRUE: Nutzung fuer Highlighting
-    BOOL   bCompatible;                 // TRUE: OPTION Compatible
+    BOOL   bCompatible;                 // TRUE: OPTION Compatibl
+    BOOL   bVBASupportOn;               // TRUE: OPTION VBASupport 1 otherwise default False
     BOOL   bPrevLineExtentsComment;     // TRUE: Previous line is comment and ends on "... _"
 
     void   GenError( SbError );
@@ -91,6 +92,8 @@ public:
     BOOL  IsHash()                  { return bHash;   }
     BOOL  IsCompatible()            { return bCompatible; }
     void  SetCompatible( bool b )   { bCompatible = b; }        // #118206
+    BOOL  IsVBASupportOn()          { return bVBASupportOn; }
+    void  SetVBASupportOn( bool b ) { bVBASupportOn = b; }
     BOOL  WhiteSpace()              { return bSpaces; }
     short GetErrors()               { return nErrors; }
     short GetLine()                 { return nLine;   }
