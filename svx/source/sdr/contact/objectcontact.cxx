@@ -4,9 +4,9 @@
  *
  *  $RCSfile: objectcontact.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: hr $ $Date: 2007-06-27 18:43:59 $
+ *  last change: $Author: vg $ $Date: 2007-08-30 16:37:26 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -159,6 +159,8 @@ namespace sdr
         // Clear Draw Hierarchy data.
         void ObjectContact::ClearDrawHierarchy()
         {
+            MarkDrawHierarchyInvalid();
+
             // throw away old hierarchy info
             while(maDrawHierarchy.Count())
             {
