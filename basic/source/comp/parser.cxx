@@ -4,9 +4,9 @@
  *
  *  $RCSfile: parser.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: hr $ $Date: 2007-06-27 14:20:42 $
+ *  last change: $Author: vg $ $Date: 2007-08-30 10:00:07 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -152,7 +152,6 @@ SbiParser::SbiParser( StarBASIC* pb, SbModule* pm )
     bSingleLineIf =
     bExplicit = FALSE;
     bClassModule = FALSE;
-    bVBASupportOn = FALSE;
     pPool    = &aPublics;
     for( short i = 0; i < 26; i++ )
         eDefTypes[ i ] = SbxVARIANT;    // Kein expliziter Defaulttyp
@@ -609,7 +608,12 @@ void SbiParser::Set()
         // ( its necessary for vba objects where set is object
         // specific and also doesn't involve processing default params )
         if( pDef->GetTypeId() )
-            aGen.Gen( _SETCLASS, pDef->GetTypeId() );
+        {
+            if ( bVBASupportOn )
+                aGen.Gen( _VBASETCLASS, pDef->GetTypeId() );
+            else
+                aGen.Gen( _SETCLASS, pDef->GetTypeId() );
+        }
         else
         {
             if ( bVBASupportOn )
